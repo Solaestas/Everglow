@@ -57,6 +57,12 @@ public class TsunamiShark_marking : ModProjectile, IWarpProjectile
 				}
 			}
 		}
+		float valueLight = Projectile.timeLeft / 600f;
+		for(int x = 0;x < value / 10f;x++)
+		{
+			Vector2 radious = new Vector2(0, value * 1.6f).RotatedBy(x * 10f / value * 2f * Math.PI);
+			Lighting.AddLight(Projectile.Center + radious, 0, valueLight * valueLight, valueLight);
+		}
 	}
 	public override void Kill(int timeLeft)
 	{

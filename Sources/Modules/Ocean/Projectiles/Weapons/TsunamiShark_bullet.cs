@@ -38,6 +38,7 @@ public class TsunamiShark_bullet : ModProjectile
 		if (TimeTokill <= 15 && TimeTokill > 0)
 			Projectile.velocity = Projectile.oldVelocity;
 		TimeTokill--;
+		float valueLight = 0.4f;
 		if (TimeTokill >= 0)
 		{
 			if (TimeTokill < 10)
@@ -46,7 +47,9 @@ public class TsunamiShark_bullet : ModProjectile
 				Projectile.friendly = false;
 			}
 			Projectile.velocity *= 0f;
+			valueLight = TimeTokill / 20f;
 		}
+		Lighting.AddLight(Projectile.Center, 0, valueLight * valueLight * 0.1f, valueLight);
 	}
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{

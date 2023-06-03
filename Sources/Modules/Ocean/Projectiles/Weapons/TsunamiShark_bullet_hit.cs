@@ -67,25 +67,6 @@ public class TsunamiShark_bullet_hit : ModProjectile, IWarpProjectile
 		if (ring.Count > 2)
 			spriteBatch.Draw(tex, ring, PrimitiveType.TriangleStrip);
 	}
-	private static void DrawTexRing_VFXBatch_II(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double rotation, float process)
-	{
-		var ring = new List<Vertex2D>();
-		int precision = 60;
-		for (int h = 0; h <= precision; h++)
-		{
-			float ratioOfInEx = 1f;
-			float internalHalfWidth = width * ratioOfInEx;
-			Vector2 radialVector = new Vector2(0, Math.Max(radious, 0)).RotatedBy(h / (float)precision * Math.PI * 2 + rotation);
-			Vector2 radialHalfWidth = new Vector2(0, Math.Max(radious - internalHalfWidth, 0)).RotatedBy(h / (float)precision * Math.PI * 2 + rotation);
-			float xProcession = h / (float)precision;
-			float sinProcession = (MathF.Sin(xProcession * MathF.PI * 4 + 4.71f) + 1) * 0.5f;
-
-			ring.Add(new Vertex2D(center + radialVector, color * sinProcession, new Vector3(xProcession, 0, 0)));
-			ring.Add(new Vertex2D(center + radialHalfWidth, color * sinProcession, new Vector3(xProcession, 1, 0)));
-		}
-		if (ring.Count > 2)
-			spriteBatch.Draw(tex, ring, PrimitiveType.TriangleStrip);
-	}
 	public override bool PreDraw(ref Color lightColor)
 	{
 		float value = (114 - Projectile.timeLeft) / 114f;
@@ -96,9 +77,7 @@ public class TsunamiShark_bullet_hit : ModProjectile, IWarpProjectile
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.Default, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
-		DrawTexRing_VFXBatch(Ins.Batch, value * 76, width, new Color(0, colorV * colorV * 3.8f, colorV * 12f, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)(Main.time) * 0.01f + Projectile.whoAmI * 2.45396f);
-		Texture2D rainbow = ModAsset.Rainbow.Value;
-		//DrawTexRing_VFXBatch_II(Ins.Batch, value * 108, width , new Color(lightColor.R, lightColor.G, lightColor.B, 0f) * 0.2f, Projectile.Center - Main.screenPosition, rainbow, Projectile.ai[1], (float)(Main.time) * 0.01f + Projectile.whoAmI * 2.45396f);
+		DrawTexRing_VFXBatch(Ins.Batch, value * 76, width, new Color(colorV * 0.6f, colorV * colorV * 3.8f, colorV * 12f, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)(Main.time) * 0.01f + Projectile.whoAmI * 2.45396f);
 		Ins.Batch.End();
 
 		return false;

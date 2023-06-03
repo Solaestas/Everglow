@@ -167,8 +167,9 @@ public class TsunamiShark : ModProjectile
 		Vector2 toMouse = Projectile.Center - player.MountedCenter;
 		if (player.controlUseItem)
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(toMouse.Y, toMouse.X) - Math.PI / 2d));
-		Texture2D texMain = ModAsset.TsunamiShark_proj.Value;
 
+		Texture2D texMain = ModAsset.TsunamiShark_proj.Value;
+		Texture2D texMainGlow = ModAsset.TsunamiShark_proj_glow.Value;
 		SpriteEffects se = SpriteEffects.None;
 		Vector2 origin = new Vector2(texMain.Size().X * 0.3f, texMain.Size().Y * 0.6f);
 		if (Projectile.Center.X < player.Center.X)
@@ -184,6 +185,7 @@ public class TsunamiShark : ModProjectile
 		Vector2 random = new Vector2(0, Main.rand.NextFloat(1)).RotatedByRandom(6.283);
 		var offset = new Vector2(0, -5);
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition + offset - random, null, lightColor, Projectile.rotation - (float)(Math.PI * 0.25), origin, 1f, se, 0);
+		Main.spriteBatch.Draw(texMainGlow, Projectile.Center - Main.screenPosition + offset - random, null, new Color(1f, 1f, 1f, 0), Projectile.rotation - (float)(Math.PI * 0.25), origin, 1f, se, 0);
 
 
 		Texture2D texMark = ModAsset.TsunamiShark_mark.Value;
