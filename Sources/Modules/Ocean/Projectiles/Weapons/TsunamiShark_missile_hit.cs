@@ -26,7 +26,7 @@ public class TsunamiShark_missile_hit : ModProjectile, IWarpProjectile
 		}
 		float valueLight = Projectile.timeLeft / 600f;
 		float value = (200 - Projectile.timeLeft) / 200f;
-		value = MathF.Sqrt(value) * 320f;
+		value = MathF.Sqrt(value) * 160f;
 		for (int x = 0; x < value / 10f; x++)
 		{
 			Vector2 radious = new Vector2(0, value * 1.6f).RotatedBy(x * 10f / value * 2f * Math.PI);
@@ -37,7 +37,7 @@ public class TsunamiShark_missile_hit : ModProjectile, IWarpProjectile
 	{
 		bool checkCenter(Vector2 pos)
 		{
-			return (pos - projHitbox.Center()).Length() < (208 - Projectile.timeLeft) * 30;
+			return (pos - projHitbox.Center()).Length() < (208 - Projectile.timeLeft) * 16;
 		}
 		return checkCenter(targetHitbox.TopLeft()) || checkCenter(targetHitbox.TopRight()) || checkCenter(targetHitbox.BottomLeft()) || checkCenter(targetHitbox.BottomRight());
 	}

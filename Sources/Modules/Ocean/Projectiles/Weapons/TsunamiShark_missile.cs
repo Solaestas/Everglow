@@ -182,7 +182,7 @@ public class TsunamiShark_missile : ModProjectile
 	}
 	public void GenerateVFXKill(int Frequency)
 	{
-		float mulVelocity = 7.5f;
+		float mulVelocity = 4.5f;
 		for (int g = 0; g < Frequency; g++)
 		{
 			Vector2 afterVelocity = new Vector2(0, 2f).RotatedBy(g / (float)Frequency * 2 * Math.PI);
@@ -197,7 +197,7 @@ public class TsunamiShark_missile : ModProjectile
 			};
 			Ins.VFXManager.Add(wave);
 		}
-		mulVelocity = 4.6f;
+		mulVelocity = 2.6f;
 		for (int g = 0; g < Frequency; g++)
 		{
 			Vector2 afterVelocity = new Vector2(0, 2f).RotatedBy(g / (float)Frequency * 2 * Math.PI);
