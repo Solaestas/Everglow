@@ -13,10 +13,6 @@ public class DarkCocoon : ModTile
 		DustType = 191;
 		AddMapEntry(new Color(17, 16, 17));
 	}
-	public override void NearbyEffects(int i, int j, bool closer)
-	{
-	}
-
 	public override void RandomUpdate(int i, int j)
 	{
 		var thisTile = Main.tile[i, j];

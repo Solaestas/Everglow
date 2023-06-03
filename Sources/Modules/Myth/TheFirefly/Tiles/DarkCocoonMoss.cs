@@ -8,9 +8,9 @@ public class DarkCocoonMoss : ModTile
 	{
 		Main.tileSolid[Type] = true;
 		Main.tileMergeDirt[Type] = true;
-		Main.tileMerge[Type][ModContent.TileType<DarkCocoon>()] = true;
 		Main.tileBlockLight[Type] = true;
-		Main.tileMoss[Type] = true;
+		Main.tileMerge[Type][ModContent.TileType<DarkCocoon>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<DarkCocoonSpecial>()] = true;
 		MinPick = 175;
 		DustType = 191;
 		AddMapEntry(new Color(35, 49, 122));
