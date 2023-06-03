@@ -15,15 +15,6 @@ public class DarkCocoonMoss : ModTile
 		DustType = 191;
 		AddMapEntry(new Color(35, 49, 122));
 	}
-
-	public override void NearbyEffects(int i, int j, bool closer)
-	{
-		Lighting.AddLight(i, j, 0.02f, 0.1f, 0.24f);
-		RandomUpdate(i, j);//TODO:为了让这玩意效果正常强行采取的暴力措施，如果sublib更新了就删掉
-
-		base.NearbyEffects(i, j, closer);
-	}
-
 	public override void RandomUpdate(int i, int j)
 	{
 		if (Main.rand.NextBool(2))//黑萤苔藓
@@ -67,7 +58,7 @@ public class DarkCocoonMoss : ModTile
 
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
-		Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/DarkCocoonMossGlow");
+		Texture2D tex = ModAsset.DarkCocoonMossGlow.Value;
 
 		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(55, 55, 55, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 
