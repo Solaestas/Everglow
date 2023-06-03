@@ -7,6 +7,6 @@ public class ThatchedWall : ModWall
 		Main.wallHouse[Type] = true;
 		DustType = ModContent.DustType<Dusts.ThatchedDust>();
 		HitSound = SoundID.Grass;
-		AddMapEntry(new Color(60, 33, 16));
+		AddMapEntry(new Color(179, 123, 72));
 	}
 }
