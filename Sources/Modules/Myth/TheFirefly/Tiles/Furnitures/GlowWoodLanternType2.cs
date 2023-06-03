@@ -1,6 +1,7 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly;
 using Everglow.Myth.TheFirefly.Dusts;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -113,7 +114,7 @@ public class GlowWoodLanternType2 : ModTile
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i, j - tile.TileFrameY / 18);
 			Texture2D tex = ModAsset.GlowWoodLanternType2Draw.Value;
-			tileSpin.DrawRotatedLamp(i, j - tile.TileFrameY / 18, tex, 8, TileObjectData.GetTileData(tile).DrawYOffset, 16);
+			tileSpin.DrawRotatedLamp(spriteBatch, i, j - tile.TileFrameY / 18, tex, 8, TileObjectData.GetTileData(tile).DrawYOffset, 16);
 		}
 		return false;
 	}

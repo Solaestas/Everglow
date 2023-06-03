@@ -108,7 +108,7 @@ public class GlowWoodChandelier : ModTile
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
 			Texture2D tex = ModAsset.Tiles_GlowWoodChandelier.Value;
-			tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
+			tileSpin.DrawRotatedChandelier(spriteBatch, - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
 
 			ulong randSeed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i); // Don't remove any casts.
 			var color = new Color(30, 30, 30, 0);
@@ -118,7 +118,7 @@ public class GlowWoodChandelier : ModTile
 				{
 					float xx = Utils.RandomInt(ref randSeed, -10, 11) * 0.15f;
 					float yy = Utils.RandomInt(ref randSeed, -10, 1) * 0.35f;
-					tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, flameTexture.Value, xx + 8, yy * 0.6f - 2, -1, -1, 54, 48, true, color);
+					tileSpin.DrawRotatedChandelier(spriteBatch, - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, flameTexture.Value, xx + 8, yy * 0.6f - 2, -1, -1, 54, 48, true, color);
 				}
 			}
 		}

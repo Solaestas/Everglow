@@ -106,7 +106,7 @@ public class GlowWoodChandelierType3 : ModTile
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
 			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChandelierType3");
-			tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
+			tileSpin.DrawRotatedChandelier(spriteBatch, - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
 		}
 		//Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		//if (Main.drawToScreen)

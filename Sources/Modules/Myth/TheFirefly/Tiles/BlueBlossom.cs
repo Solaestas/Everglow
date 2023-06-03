@@ -98,9 +98,9 @@ public class BlueBlossom : ModTile
 			tileSpin.UpdateBlackShrub(i, j - tile.TileFrameY / 16, 0, 0.13f, new Vector2(0, -20), 0, 24);
 			tileSpin.Update(i, j - tile.TileFrameY / 16 + 1);
 			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/BlueBlossomDraw");
-			tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 0, 120, 108), new Vector2(60, 108), 16, 54, false);
+			tileSpin.DrawRotatedTile(spriteBatch, i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 0, 120, 108), new Vector2(60, 108), 16, 54, false);
 			tex = MythContent.QuickTexture("TheFirefly/Tiles/BlueBlossomGlow");
-			tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 0, 120, 108), new Vector2(60, 108), 16, 54, true, new Color(5, 5, 5, 0));
+			tileSpin.DrawRotatedTile(spriteBatch, i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 0, 120, 108), new Vector2(60, 108), 16, 54, true, new Color(5, 5, 5, 0));
 		}
 		return false;
 	}

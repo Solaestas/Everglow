@@ -1,9 +1,10 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
+using Terraria.DataStructures;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
-public class EoWPostAndBead : ModTile
+public class CorruptOrbStonePost : ModTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -24,6 +25,7 @@ public class EoWPostAndBead : ModTile
 			16,
 			18
 		};
+		TileObjectData.newTile.Origin = new Point16(0, 8);
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.addTile(Type);
 
@@ -37,7 +39,7 @@ public class EoWPostAndBead : ModTile
 
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
-		Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/EoWPostAndBead_glow");
+		Texture2D tex = ModAsset.CorruptOrbStonePost_glow.Value;
 
 		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 

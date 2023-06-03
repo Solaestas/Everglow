@@ -122,16 +122,16 @@ public class GlowingDrop : ModTile
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
 			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowingDrop");
-			tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, new Rectangle(30 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 22), 10, 48), new Vector2(5, 0), 16, -2, 1);
+			tileSpin.DrawRotatedTile(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, new Rectangle(30 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 22), 10, 48), new Vector2(5, 0), 16, -2, 1);
 
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18);
-			tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18, tex, new Rectangle(40 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 14), 10, 48), new Vector2(5, 0), 10, -2, 1);
+			tileSpin.DrawRotatedTile(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18, tex, new Rectangle(40 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 14), 10, 48), new Vector2(5, 0), 10, -2, 1);
 
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1);
-			tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1, tex, new Rectangle(18 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 14), 10, 48), new Vector2(5, 0), 4, -18, 1);
+			tileSpin.DrawRotatedTile(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1, tex, new Rectangle(18 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 14), 10, 48), new Vector2(5, 0), 4, -18, 1);
 
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18);
-			tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18, tex, new Rectangle(6 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 26), 10, 48), new Vector2(5, 0), 8, -2, 1);
+			tileSpin.DrawRotatedTile(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18, tex, new Rectangle(6 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 26), 10, 48), new Vector2(5, 0), 8, -2, 1);
 		}
 
 		return false;

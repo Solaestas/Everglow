@@ -1,5 +1,6 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.Localization;
@@ -109,7 +110,7 @@ public class GlowWoodChandelierType4 : ModTile
 			{
 				frameX = 60;
 			}
-			tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2, frameX, 0, 58, 36);
+			tileSpin.DrawRotatedChandelier(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2, frameX, 0, 58, 36);
 		}
 		return false;
 	}

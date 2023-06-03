@@ -111,7 +111,7 @@ public class GlowWoodLantern : ModTile
 			tileSpin.Update(i, j - tile.TileFrameY / 18);
 			Texture2D tex = ModAsset.GlowWoodLanternDraw.Value;
 			var tileUp = Main.tile[i, j - 1];
-			tileSpin.DrawRotatedLamp(i, j - tile.TileFrameY / 18, tex, 8, TileObjectData.GetTileData(tile).DrawYOffset, 16);
+			tileSpin.DrawRotatedLamp(spriteBatch, i, j - tile.TileFrameY / 18, tex, 8, TileObjectData.GetTileData(tile).DrawYOffset, 16);
 		}
 		return false;
 	}
