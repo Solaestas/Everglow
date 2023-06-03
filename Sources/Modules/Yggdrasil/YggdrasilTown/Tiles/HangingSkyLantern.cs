@@ -206,19 +206,19 @@ public class HangingSkyLantern : ModTile
 			Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/HangingSkyLantern_Depart");
 
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j + 2);
-			tileSpin.DrawRotatedTilePrecise(i - (tile.TileFrameX % 54 - 18) / 18, j + 2, tex, new Rectangle(144 + Adx, 0, 36, 62), new Vector2(18, 0), 10, -34, 1);
+			tileSpin.DrawRotatedTilePrecise(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j + 2, tex, new Rectangle(144 + Adx, 0, 36, 62), new Vector2(18, 0), 10, -34, 1);
 
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j);
-			tileSpin.DrawRotatedTilePrecise(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j, tex, new Rectangle(108 + Adx, 0, 36, 62), new Vector2(18, 0), 26, -2, 1);
+			tileSpin.DrawRotatedTilePrecise(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18 - 1, j, tex, new Rectangle(108 + Adx, 0, 36, 62), new Vector2(18, 0), 26, -2, 1);
 
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j + 1);
-			tileSpin.DrawRotatedTilePrecise(i - (tile.TileFrameX % 54 - 18) / 18, j + 1, tex, new Rectangle(72 + Adx, 0, 36, 62), new Vector2(18, 0), 10, -18, 1);
+			tileSpin.DrawRotatedTilePrecise(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j + 1, tex, new Rectangle(72 + Adx, 0, 36, 62), new Vector2(18, 0), 10, -18, 1);
 
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j);
-			tileSpin.DrawRotatedTilePrecise(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j, tex, new Rectangle(36 + Adx, 0, 36, 62), new Vector2(20, 0), -6, -2, 1);
+			tileSpin.DrawRotatedTilePrecise(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18 + 1, j, tex, new Rectangle(36 + Adx, 0, 36, 62), new Vector2(20, 0), -6, -2, 1);
 
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j);
-			tileSpin.DrawRotatedTilePrecise(i - (tile.TileFrameX % 54 - 18) / 18, j, tex, new Rectangle(0 + Adx, 0, 36, 62), new Vector2(18, 0), 10, -2, 1);
+			tileSpin.DrawRotatedTilePrecise(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j, tex, new Rectangle(0 + Adx, 0, 36, 62), new Vector2(18, 0), 10, -2, 1);
 
 		}
 		return false;

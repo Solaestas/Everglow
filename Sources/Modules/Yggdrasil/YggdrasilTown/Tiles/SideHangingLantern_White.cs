@@ -133,7 +133,7 @@ public class SideHangingLantern_White : ModTile
 			int FrameX = 0;
 			if (tile.TileFrameY == 54)
 				FrameX = 26;
-			tileSpin.DrawRotatedTile(i, j, tex, new Rectangle(FrameX, 0, 26, 36), new Vector2(13, 0), 16, 6);
+			tileSpin.DrawRotatedTile(spriteBatch,i, j, tex, new Rectangle(FrameX, 0, 26, 36), new Vector2(13, 0), 16, 6);
 			if (tile.TileFrameY == 0)
 			{
 				Lighting.AddLight(i, j, 0.8f, 0.6f, 0.4f);

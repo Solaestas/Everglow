@@ -107,7 +107,7 @@ public class ChinesePartitionLamp : ModTile
 			float OffsetX = 1;
 			if (tile.TileFrameY != 0)
 				OffsetX = 15;
-			tileSpin.DrawRotatedTile(i, j, tex, new Rectangle(tile.TileFrameX / 48 * 30, tile.TileFrameY / 72 * 32, 30, 32), new Vector2(15, 0), OffsetX, 2);
+			tileSpin.DrawRotatedTile(spriteBatch,i, j, tex, new Rectangle(tile.TileFrameX / 48 * 30, tile.TileFrameY / 72 * 32, 30, 32), new Vector2(15, 0), OffsetX, 2);
 			if (tile.TileFrameX == 0)
 			{
 				Lighting.AddLight(i, j, 0.8f, 0.75f, 0.4f);

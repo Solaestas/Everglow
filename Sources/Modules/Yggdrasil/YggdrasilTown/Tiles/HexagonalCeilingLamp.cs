@@ -95,8 +95,8 @@ public class HexagonalCeilingLamp : ModTile
 		{
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
-			Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/HexagonalCeilingLamp");
-			tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
+			Texture2D tex = ModAsset.Tiles_HexagonalCeilingLamp.Value;
+			tileSpin.DrawRotatedChandelier(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
 		}
 		return false;
 	}

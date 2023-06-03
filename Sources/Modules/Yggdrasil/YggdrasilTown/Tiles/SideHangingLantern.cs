@@ -133,11 +133,11 @@ public class SideHangingLantern : ModTile
 			int FrameX = 0;
 			if (tile.TileFrameY == 54)
 				FrameX = 26;
-			tileSpin.DrawRotatedTile(i, j, tex, new Rectangle(FrameX, 0, 26, 36), new Vector2(13, 0), 16, 6);
+			tileSpin.DrawRotatedTile(spriteBatch,i, j, tex, new Rectangle(FrameX, 0, 26, 36), new Vector2(13, 0), 16, 6);
 			if (tile.TileFrameY == 0)
 			{
 				Texture2D texGlow = ModAsset.SideHangingLantern_Lantern_glow.Value;
-				tileSpin.DrawRotatedTile(i, j, texGlow, new Rectangle(FrameX, 0, 26, 36), new Vector2(13, 0), 16, 6, true, new Color(155,155,155,0));
+				tileSpin.DrawRotatedTile(spriteBatch,i, j, texGlow, new Rectangle(FrameX, 0, 26, 36), new Vector2(13, 0), 16, 6, true, new Color(155,155,155,0));
 				Lighting.AddLight(i, j, 1f, 0.45f, 0.15f);
 				Lighting.AddLight(i, j + 1, 1f, 0.45f, 0.15f);
 			}

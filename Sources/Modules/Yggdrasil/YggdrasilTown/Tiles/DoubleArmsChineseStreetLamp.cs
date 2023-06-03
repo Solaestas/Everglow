@@ -117,15 +117,15 @@ public class DoubleArmsChineseStreetLamp : ModTile
 			Texture2D tex = ModAsset.LargeLantern_Lantern.Value;
 			float OffsetX = -8;
 			tileSpin.Update(i, j);
-			tileSpin.DrawThreeLanternsString(i, j, tex, new Rectangle(tile.TileFrameX / 54 * 18 + 2, 2, 14, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 4, 12, 10, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 6, 22, 6, 8), new Vector2(7, 5), new Vector2(5, 5), new Vector2(3, 4), OffsetX, 23);
+			tileSpin.DrawThreeLanternsString(spriteBatch, i, j, tex, new Rectangle(tile.TileFrameX / 54 * 18 + 2, 2, 14, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 4, 12, 10, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 6, 22, 6, 8), new Vector2(7, 5), new Vector2(5, 5), new Vector2(3, 4), OffsetX, 23);
 			tileSpin.Update(i, j + 1);
-			tileSpin.DrawThreeLanternsString(i, j + 1, tex, new Rectangle(tile.TileFrameX / 54 * 18 + 2, 2, 14, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 4, 12, 10, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 6, 22, 6, 8), new Vector2(7, 5), new Vector2(5, 5), new Vector2(3, 4), OffsetX + 32, 7);
+			tileSpin.DrawThreeLanternsString(spriteBatch, i, j + 1, tex, new Rectangle(tile.TileFrameX / 54 * 18 + 2, 2, 14, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 4, 12, 10, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 6, 22, 6, 8), new Vector2(7, 5), new Vector2(5, 5), new Vector2(3, 4), OffsetX + 32, 7);
 
 			if (tile.TileFrameX == 0)
 			{
 				Texture2D texGlow = ModAsset.LargeLantern_Lantern_glow.Value;
-				tileSpin.DrawThreeLanternsString(i, j, texGlow, new Rectangle(tile.TileFrameX / 54 * 18 + 2, 2, 14, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 4, 12, 10, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 6, 22, 6, 8), new Vector2(7, 5), new Vector2(5, 5), new Vector2(3, 4), OffsetX, 23,1, true, new Color(255, 255, 255, 0));
-				tileSpin.DrawThreeLanternsString(i, j + 1, texGlow, new Rectangle(tile.TileFrameX / 54 * 18 + 2, 2, 14, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 4, 12, 10, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 6, 22, 6, 8), new Vector2(7, 5), new Vector2(5, 5), new Vector2(3, 4), OffsetX + 32, 7,1, true, new Color(255, 255, 255, 0));
+				tileSpin.DrawThreeLanternsString(spriteBatch, i, j, texGlow, new Rectangle(tile.TileFrameX / 54 * 18 + 2, 2, 14, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 4, 12, 10, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 6, 22, 6, 8), new Vector2(7, 5), new Vector2(5, 5), new Vector2(3, 4), OffsetX, 23,1, true, new Color(255, 255, 255, 0));
+				tileSpin.DrawThreeLanternsString(spriteBatch, i, j + 1, texGlow, new Rectangle(tile.TileFrameX / 54 * 18 + 2, 2, 14, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 4, 12, 10, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 6, 22, 6, 8), new Vector2(7, 5), new Vector2(5, 5), new Vector2(3, 4), OffsetX + 32, 7,1, true, new Color(255, 255, 255, 0));
 				Lighting.AddLight(i, j, 1f, 0.45f, 0.15f);
 				Lighting.AddLight(i, j + 1, 1f, 0.45f, 0.15f);
 			}
