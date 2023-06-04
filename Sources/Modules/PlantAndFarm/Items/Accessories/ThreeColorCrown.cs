@@ -1,9 +1,11 @@
-﻿using Everglow.PlantAndFarm.Items.Materials;
+using Everglow.PlantAndFarm.Items.Materials;
+using Terraria.ID;
 
 namespace Everglow.PlantAndFarm.Items.Accessories;
 
 public class ThreeColorCrown : ModItem
 {
+	int Timer;
 	public override void SetStaticDefaults()
 	{
 		//DisplayName.SetDefault("Three-colored Wreath");
@@ -19,61 +21,106 @@ public class ThreeColorCrown : ModItem
 		Item.accessory = true;
 		Item.rare = 3;
 	}
+	public void Tigger()
+	{
+		if (Timer == 0)
+		{
+			Timer = Main.rand.Next(1, 4) * 1000 + 421;
+		}
+	}
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
+		player.GetModPlayer<PAFPlayer>().ThreeColorCrown = this;
+		if (Timer < 0)
+		{
+			Timer++;
+		}
+		else
+		{
+			switch (Timer / 1000)
+			{
+				case 1:
+					{
+						player.GetDamage(DamageClass.Generic) += 0.22f;
+						player.GetCritChance(DamageClass.Generic) += 11;
+						break;
+					}
+				case 2:
+					{
+						int l = player.buffImmune.Length;
+						for (int i = 0; i < l; i++)
+						{
+							if (Main.debuff[i])
+							{
+								player.buffImmune[i] = true;
+							}
+						}
+						break;
+					}
+				case 3:
+					{
+						player.statManaMax2 += 300;
+						break;
+					}
+			}
+			if (Timer % 1000 == 1)
+			{
+				Timer = -1380;
+			}
+		}
 		//MythPlayer.ThreeColorCrown = 2;
 		//if (MythPlayer.ThreeColorCrownBuff1 > 0)
 		//{
-		player.GetDamage(DamageClass.Generic) *= 1.22f;
-		player.GetCritChance(DamageClass.Generic) += 11;
-		if (Main.rand.Next(6) == 0)
-		{
-			int R = 255;
-			int G = 0;
-			int B = 0;
-			int num90 = Dust.NewDust(player.Center - new Vector2(37.5f, 27.5f), 60, 80, ModContent.DustType<Dusts.PFMBuff>(), 0f, 0f, 0, new Color(R, G, B, 0), Main.rand.NextFloat(0.4f, 0.8f));
-			Main.dust[num90].noGravity = true;
-			Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(-6f, -3f));
-		}
+		//player.GetDamage(DamageClass.Generic) *= 1.22f;
+		//player.GetCritChance(DamageClass.Generic) += 11;
+		//if (Main.rand.Next(6) == 0)
+		//{
+		//	int R = 255;
+		//	int G = 0;
+		//	int B = 0;
+		//	int num90 = Dust.NewDust(player.Center - new Vector2(37.5f, 27.5f), 60, 80, ModContent.DustType<Dusts.PFMBuff>(), 0f, 0f, 0, new Color(R, G, B, 0), Main.rand.NextFloat(0.4f, 0.8f));
+		//	Main.dust[num90].noGravity = true;
+		//	Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(-6f, -3f));
+		//}
 		//}
 		//if (MythPlayer.ThreeColorCrownBuff2 > 0)
 		//{
-		for (int i = 0; i < player.buffType.Length; i++)
-		{
-			if (Main.debuff[player.buffType[i]])
-			{
-				player.buffImmune[i] = true;
-				player.ClearBuff(player.buffType[i]);
-			}
+		//for (int i = 0; i < player.buffType.Length; i++)
+		//{
+		//	if (Main.debuff[player.buffType[i]])
+		//	{
+		//		player.buffImmune[i] = true;
+		//		player.ClearBuff(player.buffType[i]);
+		//	}
 
-		}
-		if (Main.rand.Next(3) == 0)
-		{
-			int R = 160;
-			int G = 0;
-			int B = 160;
-			int num90 = Dust.NewDust(player.Center - new Vector2(37.5f, 27.5f), 60, 80, ModContent.DustType<Dusts.PFMBuff>(), 0f, 0f, 0, new Color(R, G, B, 0), Main.rand.NextFloat(0.4f, 0.8f));
-			Main.dust[num90].noGravity = true;
-			Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(-6f, -3f));
-		}
+		//}
+		//if (Main.rand.Next(3) == 0)
+		//{
+		//	int R = 160;
+		//	int G = 0;
+		//	int B = 160;
+		//	int num90 = Dust.NewDust(player.Center - new Vector2(37.5f, 27.5f), 60, 80, ModContent.DustType<Dusts.PFMBuff>(), 0f, 0f, 0, new Color(R, G, B, 0), Main.rand.NextFloat(0.4f, 0.8f));
+		//	Main.dust[num90].noGravity = true;
+		//	Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(-6f, -3f));
+		//}
 		//}
 		//if (MythPlayer.ThreeColorCrownBuff3 > 0)
 		//{
-		player.statManaMax2 += 300;
+		//player.statManaMax2 += 300;
 		//if (MythPlayer.ThreeColorCrownBuff3 >= 419)
 		//{
-		player.statMana = player.statManaMax2;
+		//player.statMana = player.statManaMax2;
 		//}
-		if (Main.rand.Next(3) == 0)
-		{
-			int R = 0;
-			int G = 0;
-			int B = 255;
-			int num90 = Dust.NewDust(player.Center - new Vector2(37.5f, 27.5f), 60, 80, ModContent.DustType<Dusts.PFMBuff>(), 0f, 0f, 0, new Color(R, G, B, 0), Main.rand.NextFloat(0.4f, 0.8f));
+		//if (Main.rand.Next(3) == 0)
+		//{
+		//	int R = 0;
+		//	int G = 0;
+		//	int B = 255;
+		//	int num90 = Dust.NewDust(player.Center - new Vector2(37.5f, 27.5f), 60, 80, ModContent.DustType<Dusts.PFMBuff>(), 0f, 0f, 0, new Color(R, G, B, 0), Main.rand.NextFloat(0.4f, 0.8f));
 
-			Main.dust[num90].noGravity = true;
-			Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(-6f, -3f));
-		}
+		//	Main.dust[num90].noGravity = true;
+		//	Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(-6f, -3f));
+		//}
 		//}
 	}
 	public override void AddRecipes()
@@ -81,7 +128,7 @@ public class ThreeColorCrown : ModItem
 		CreateRecipe()
 			.AddIngredient(ModContent.ItemType<WindMoveSeed>(), 15)
 			.AddIngredient(ModContent.ItemType<PurplePhantom>(), 24)
-			.AddTile(304)
+			.AddTile(TileID.LivingLoom)
 			.Register();
 	}
 }
