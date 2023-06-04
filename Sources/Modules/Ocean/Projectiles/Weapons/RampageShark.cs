@@ -4,6 +4,7 @@ using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Ocean.Common;
 using Everglow.Ocean.Dusts;
 using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace Everglow.Ocean.Projectiles.Weapons;
 
@@ -20,6 +21,11 @@ public class RampageShark : ModProjectile
 		Projectile.DamageType = DamageClass.Ranged;
 	}
 	internal float Power = 0;
+	internal IEntitySource shootSource = null;
+	public override void OnSpawn(IEntitySource source)
+	{
+		shootSource = source;
+	}
 	private void Shoot()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -45,7 +51,7 @@ public class RampageShark : ModProjectile
 					SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/SharkGun0").WithVolumeScale(0.4f), Projectile.Center);
 				}
 				Vector2 newvelocity = velocity.RotatedBy(Main.rand.NextFloat(-Power / 244f, Power / 244f));
-				Projectile p = Projectile.NewProjectileDirect(item.GetSource_ReleaseEntity(), Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockBack, player.whoAmI);
+				Projectile p = Projectile.NewProjectileDirect(shootSource, Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockBack, player.whoAmI);
 				p.CritChance = (int)(item.crit + player.GetCritChance(DamageClass.Generic));
 
 				Dust d = Dust.NewDustDirect(Projectile.Center + offset + velocity * 0.7f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<BulletShell>(), velocity.X, velocity.Y, 0, default, 1f);
@@ -56,7 +62,7 @@ public class RampageShark : ModProjectile
 				Dust smog = Dust.NewDustDirect(Projectile.Center + offset + velocity * 1.3f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<MothSmog>(), 0, -2f, 0, default, 2f);
 				smog.alpha = 180;
 				float rot = newvelocity.ToRotation();
-				Projectile.NewProjectile(item.GetSource_ReleaseEntity(), Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.06f, rot);
+				Projectile.NewProjectile(shootSource, Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.06f, rot);
 			}
 			else
 			{
@@ -68,7 +74,7 @@ public class RampageShark : ModProjectile
 				for (int i = 0; i < Times; i++)
 				{
 					Vector2 newvelocity = velocity.RotatedBy(Main.rand.NextFloat(-Power / 66f, Power / 66f));
-					Projectile p = Projectile.NewProjectileDirect(item.GetSource_ReleaseEntity(), Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockBack, player.whoAmI);
+					Projectile p = Projectile.NewProjectileDirect(shootSource, Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockBack, player.whoAmI);
 					p.CritChance = (int)(item.crit + player.GetCritChance(DamageClass.Generic));
 					Dust d = Dust.NewDustDirect(Projectile.Center + offset + velocity * 0.7f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<BulletShell>(), velocity.X, velocity.Y, 0, default, 1f);
 					d.velocity = velocity.RotatedBy(-1.57 * player.direction - Main.rand.NextFloat(1.25f, 1.75f) * player.direction) * 0.4f * (24 + Power) / 54f;
@@ -77,7 +83,7 @@ public class RampageShark : ModProjectile
 					Dust smog = Dust.NewDustDirect(Projectile.Center + offset + velocity * 1.3f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<MothSmog>(), velocity.X * 0.15f, -2f, 0, default, 2.5f);
 					smog.alpha = 180;
 					float rot = newvelocity.ToRotation();
-					Projectile.NewProjectile(item.GetSource_ReleaseEntity(), Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.12f, rot);
+					Projectile.NewProjectile(shootSource, Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.12f, rot);
 				}
 
 			}

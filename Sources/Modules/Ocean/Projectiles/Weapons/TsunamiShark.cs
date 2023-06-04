@@ -24,8 +24,10 @@ public class TsunamiShark : ModProjectile
 	}
 	private int UseCount = 0;
 	private int overridedamage;
+	internal IEntitySource shootSource = null;
 	public override void OnSpawn(IEntitySource source)
 	{
+		shootSource = source;
 		if (source is EntitySource_ItemUse_WithAmmo withammo && withammo.Entity is Player owner)
 		{
 			var modifer = owner.GetTotalDamage(withammo.Item.DamageType);
@@ -55,7 +57,7 @@ public class TsunamiShark : ModProjectile
 			SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/WaterGun").WithVolumeScale(0.4f), Projectile.Center);
 
 
-			Projectile p = Projectile.NewProjectileDirect(item.GetSource_ReleaseEntity(),
+			Projectile p = Projectile.NewProjectileDirect(shootSource,
                 Projectile.Center + toMuzzle + random, 
 				velocity,
 				ModContent.ProjectileType<TsunamiShark_bullet>(),
@@ -66,7 +68,7 @@ public class TsunamiShark : ModProjectile
 
 			float rot = velocity.ToRotation();
 			//TODO:子弹伤害校正，要求和被消耗的弹药种类挂钩
-			Projectile.NewProjectile(item.GetSource_ReleaseEntity(),
+			Projectile.NewProjectile(shootSource,
 				Projectile.Center + toMuzzle * 1.5f + velocity * 2.2f + random,
 				Vector2.Zero,
 				ModContent.ProjectileType<TsunamiShark_flame>(),
@@ -81,7 +83,7 @@ public class TsunamiShark : ModProjectile
 		{
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<TsunamiShark_missile>()] < 20)
 			{
-				Projectile.NewProjectileDirect(item.GetSource_ReleaseEntity(), Projectile.Center + toMuzzle, velocity.RotatedBy(-Main.rand.NextFloat(-0.2f, 0.4f) * player.direction) * 2.4f, ModContent.ProjectileType<TsunamiShark_missile>(), (int)((overridedamage == -1 ? item.damage : overridedamage) * 3.64f), item.knockBack, player.whoAmI, Main.rand.NextFloat(0.6f, 1.4f));
+				Projectile.NewProjectileDirect(shootSource, Projectile.Center + toMuzzle, velocity.RotatedBy(-Main.rand.NextFloat(-0.2f, 0.4f) * player.direction) * 2.4f, ModContent.ProjectileType<TsunamiShark_missile>(), (int)((overridedamage == -1 ? item.damage : overridedamage) * 3.64f), item.knockBack, player.whoAmI, Main.rand.NextFloat(0.6f, 1.4f));
 			}
 			UseCount = 0;
 		}
