@@ -1,3 +1,5 @@
+using System;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheFirefly.Items.Weapons;
@@ -19,7 +21,6 @@ public class DustOfCorrupt : ModItem
 		Item.knockBack = 2.5f;
 		Item.value = Item.sellPrice(0, 0, 20, 0);
 		Item.rare = ItemRarityID.Green;
-		Item.UseSound = SoundID.Item20;
 		Item.autoReuse = true;
 		Item.shoot = ModContent.ProjectileType<Projectiles.CorruptDust>();
 		Item.shootSpeed = 17f;

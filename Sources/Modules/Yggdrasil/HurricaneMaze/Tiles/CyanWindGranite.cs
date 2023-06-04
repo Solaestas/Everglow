@@ -6,7 +6,6 @@ public class CyanWindGranite : ModTile
 	{
 		Main.tileSolid[Type] = true;
 		DustType = DustID.Silver;
-		ItemDrop = ModContent.ItemType<Items.CyanWindGranite>();
 		AddMapEntry(new Color(65, 84, 63));
 	}
 	public override bool CanExplode(int i, int j)

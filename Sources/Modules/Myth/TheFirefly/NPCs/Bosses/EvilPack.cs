@@ -10,7 +10,12 @@ namespace Everglow.Myth.TheFirefly.NPCs.Bosses;
 public class EvilPack : ModNPC
 {
 	public ulong SteamID64 = GetSteamID().m_SteamID;
-	public override void SetStaticDefaults() => Main.npcFrameCount[NPC.type] = 7;
+  
+	public override void SetStaticDefaults()
+	{
+		Main.npcFrameCount[NPC.type] = 7;
+	}
+  
 	public override void SetDefaults()
 	{
 		NPC.damage = 0;
@@ -79,8 +84,10 @@ public class EvilPack : ModNPC
 					}
 					if (!NPC.AnyNPCs(ModContent.NPCType<CorruptMoth>()))
 					{
-						if ((SteamID64 == 76561198074262598 /*Cataclysmic Armageddon*/ || SteamID64 == 76561198300589095 /*Setnour6*/)/* && EverglowConfig.DebugMode*/)
+						if (Main.LocalPlayer.name is "Cataclysmic Armageddon" or "Setnour6")
+						{
 							Main.NewText("Cataclysmic Armageddon's Long Lost Older Cousin Calamatious Annihilation the Corrupted Moth " + $"{Language.GetTextValue(Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken"))}", 175, 75, 255);
+						}
 						else
 						{
 							Main.NewText($"{Language.GetTextValue("Mods.Everglow.NPCName.CorruptMoth")} {Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken")}", 175, 75, 255);

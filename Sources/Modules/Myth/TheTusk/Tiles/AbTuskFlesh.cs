@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
+using Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
 using Everglow.Myth.TheTusk.Walls;
 
 namespace Everglow.Myth.TheTusk.Tiles;
@@ -13,7 +13,6 @@ public class AbTuskFlesh : ModTile
 		Main.tileBlockLight[Type] = true;
 
 		DustType = 5;
-		ItemDrop = ModContent.ItemType<Items.TuskFlesh>();
 		AddMapEntry(new Color(219, 41, 47));
 		HitSound = SoundID.Grass;
 	}

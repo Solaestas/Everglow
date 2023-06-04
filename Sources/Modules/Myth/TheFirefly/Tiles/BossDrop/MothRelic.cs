@@ -68,27 +68,6 @@ public class MothRelic : ModTile
 		// "MapObject.Relic" refers to the translation key for the vanilla "Relic" text
 		AddMapEntry(new Color(233, 207, 94), Language.GetText("MapObject.Relic"));
 	}
-
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-		// This code here infers the placeStyle the tile was placed with. Only required if you go the Item.placeStyle approach. You just need Item.NewItem otherwise
-		// The placeStyle calculated here corresponds to whatever placeStyle you specified on your items that place this tile (Either through Item.placeTile or Item.DefaultToPlacableTile)
-		int placeStyle = frameX / FrameWidth;
-
-		int itemType = 0;
-		switch (placeStyle)
-		{
-			case 0:
-				itemType = ModContent.ItemType<Items.BossDrop.MothRelic>();
-				break;
-				// Optional: Add more cases here
-		}
-
-		if (itemType > 0)
-			// Spawn the item
-			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 32, itemType);
-	}
-
 	public override bool CreateDust(int i, int j, ref int type)
 	{
 		return false;
@@ -158,19 +137,3 @@ public class MothRelic : ModTile
 		}
 	}
 }
-
-// If you want to make more relics but do not go the optional way, you can use inheritance to avoid using duplicate code:
-// Your tile code would then inherit from the MinionBossRelic class (which you should make abstract) and should look like this:
-/*
-public class MyBossRelic : MinionBossRelic
-{
-	public override string RelicTextureName => "ExampleMod/Content/Tiles/Furniture/MyBossRelic";
-
-	public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-		Item.NewItem(i * 16, j * 16, 32, 32, ModContent.ItemType<Items.Placeable.Furniture.MyBossRelic>());
-	}
-}
-*/
-
-// Your item code would then just use the MyBossRelic tile type, and keep placeStyle on 0
-// The textures for MyBossRelic item/tile have to be supplied separately
