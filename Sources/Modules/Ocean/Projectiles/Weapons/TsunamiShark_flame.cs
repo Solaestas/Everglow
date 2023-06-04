@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
@@ -5,9 +6,9 @@ using Everglow.Ocean.Common;
 
 namespace Everglow.Ocean.Projectiles.Weapons;
 
-public class RampageSharkHit : ModProjectile, IWarpProjectile, IBloomProjectile
+public class TsunamiShark_flame : ModProjectile, IWarpProjectile, IBloomProjectile
 {
-	public override string Texture => "Everglow/Ocean/Projectiles/Weapons/RampageShark/RampageShark_gun";
+	public override string Texture => "Everglow/Ocean/Projectiles/Weapons/TsunamiShark/TsunamiShark_proj";
 	public override void SetDefaults()
 	{
 		Projectile.width = 32;
@@ -95,7 +96,7 @@ public class RampageSharkHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;
 		Ins.Batch.Begin();
-		DrawTexFlame_VFXBatch(Ins.Batch, value * 1370 * Projectile.ai[0], width * 0.2f, new Color(colorV * 12f, colorV * colorV * 1.6f, 0, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)-Main.timeForVisualEffects * 0.32f + 1000000 + Projectile.ai[1] * 200);
+		DrawTexFlame_VFXBatch(Ins.Batch, value * 1370 * Projectile.ai[0], width * 0.2f, new Color(0, colorV * colorV * 1.6f, colorV * 12f, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)-Main.timeForVisualEffects * 0.32f + 1000000 + Projectile.ai[1] * 200);
 		Ins.Batch.End();
 		return false;
 	}
@@ -109,7 +110,7 @@ public class RampageSharkHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;
 
-		DrawWarpTexCircle_VFXBatch(spriteBatch, value * 160 * Projectile.ai[0], width * 0.2f, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+		DrawWarpTexCircle_VFXBatch(spriteBatch, value * 160 * Projectile.ai[0], width * 0.2f, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition + new Vector2(30, 0).RotatedBy(Projectile.ai[1]), t);
 	}
 	public void DrawBloom()
 	{
@@ -121,7 +122,7 @@ public class RampageSharkHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;
 		Ins.Batch.Begin();
-		DrawTexFlame_VFXBatch(Ins.Batch, value * 1370 * Projectile.ai[0], width * 0.2f, new Color(colorV * 12f, colorV * colorV * 1.6f, 0, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)-Main.timeForVisualEffects * 0.32f + 1000000 + Projectile.ai[1] * 200);
+		DrawTexFlame_VFXBatch(Ins.Batch, value * 1370 * Projectile.ai[0], width * 0.2f, new Color(0, colorV * colorV * 1.6f, colorV * 12f, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)-Main.timeForVisualEffects * 0.32f + 1000000 + Projectile.ai[1] * 200);
 		Ins.Batch.End();
 	}
 }
