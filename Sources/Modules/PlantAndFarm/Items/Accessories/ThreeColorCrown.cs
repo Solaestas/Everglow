@@ -21,7 +21,7 @@ public class ThreeColorCrown : ModItem
 		Item.accessory = true;
 		Item.rare = 3;
 	}
-	public void Tigger()
+	public void Trigger()
 	{
 		if (Timer == 0)
 		{

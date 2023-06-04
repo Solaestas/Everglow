@@ -13,10 +13,10 @@ public class PAFPlayer:ModPlayer
 	}
 	public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		ThreeColorCrown?.Tigger();
+		ThreeColorCrown?.Trigger();
 	}
 	public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		ThreeColorCrown?.Tigger();
+		ThreeColorCrown?.Trigger();
 	}
 }

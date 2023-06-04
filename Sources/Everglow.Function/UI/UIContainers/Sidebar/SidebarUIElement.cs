@@ -2,7 +2,7 @@ using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.UI.UIContainers.Sidebar
 {
-	internal delegate void HandleTigger(SidebarUIElement quickElement);
+	internal delegate void HandleTrigger(SidebarUIElement quickElement);
 
 	internal abstract class SidebarUIElement : UIImage
 	{
@@ -14,7 +14,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 		public Vector2 Center = Vector2.Zero;
 		public string Tooltip = string.Empty;
 
-		public event HandleTigger OnTigger;
+		public event HandleTrigger OnTrigger;
 
 		public SidebarUIElement(Texture2D texture, Color color) : base(texture, color)
 		{
@@ -34,7 +34,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 			mouseDown = false;
 			if (!IsMoveing)
 			{
-				OnTigger?.Invoke(this);
+				OnTrigger?.Invoke(this);
 			}
 		}
 
