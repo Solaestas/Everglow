@@ -4,6 +4,7 @@ using Everglow.Commons.Interfaces;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
+using Terraria.Graphics.Effects;
 using Terraria.Graphics.Renderers;
 
 namespace Everglow.Commons.Hooks;
@@ -59,20 +60,14 @@ public record HookHandler(CodeLayer Layer, dynamic Hook, string Name) : IHookHan
 	public bool Enable { get; set; } = true;
 }
 
-public class HookManager : ModSystem, IHookManager
+public class HookManager : ModSystem 
 {
 	private TrueHookManager _manager;
-
-	public static void Initialize()
-	{
-		Ins.Set<IHookManager>(new TrueHookManager());
-	}
 
 	public HookManager()
 	{
 		_manager = Ins.HookManager as TrueHookManager;
 		Debug.Assert(_manager is not null);
-		Ins.Set<IHookManager>(this);
 	}
 
 	public static void ClearReflectionCache()
@@ -80,37 +75,6 @@ public class HookManager : ModSystem, IHookManager
 		ReflectionHelper.AssemblyCache.Clear();
 		ReflectionHelper.AssembliesCache.Clear();
 		ReflectionHelper.ResolveReflectionCache.Clear();
-	}
-
-	public IHookHandler AddHook(CodeLayer layer, Delegate hook, string name = null)
-	{
-		return _manager.AddHook(layer, hook, name);
-	}
-
-	public IHookHandler AddHook(MethodInfo target, Delegate hook)
-	{
-		return _manager.AddHook(target, hook);
-	}
-
-	public IHookHandler AddHook(MethodInfo target, ILContext.Manipulator hook)
-	{
-		return _manager.AddHook(target, hook);
-	}
-
-	public void Disable(TerrariaFunction function)
-	{
-		_manager.Disable(function);
-	}
-
-	public void Dispose()
-	{
-		_manager.Dispose();
-		GC.SuppressFinalize(this);
-	}
-
-	public void Enable(TerrariaFunction function)
-	{
-		_manager.Enable(function);
 	}
 
 	public void Invoke(CodeLayer layer)
@@ -132,7 +96,6 @@ public class HookManager : ModSystem, IHookManager
 
 	public override void Load()
 	{
-		IL_Main.DoDraw += Main_DoDraw;
 		On_Main.DrawDust += Main_DrawDust;
 		On_Main.DrawProjectiles += Main_DrawProjectiles;
 		On_Main.DrawNPCs += Main_DrawNPCs;
@@ -145,7 +108,14 @@ public class HookManager : ModSystem, IHookManager
 		On_Main.DrawBG += Main_DrawBG;
 		On_Main.DrawBackground += Main_DrawBackground;
 		On_Main.DoDraw_WallsTilesNPCs += Main_DoDraw_WallsTilesNPCs;
+		On_FilterManager.EndCapture += On_FilterManager_EndCapture;
 		Main.OnResolutionChanged += Main_OnResolutionChanged;
+	}
+
+	private void On_FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
+	{
+		Invoke(CodeLayer.PreDrawFilter);
+		orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
 	}
 
 	public override void PostDrawTiles()
@@ -190,7 +160,6 @@ public class HookManager : ModSystem, IHookManager
 
 	public override void Unload()
 	{
-		IL_Main.DoDraw -= Main_DoDraw;
 		On_Main.DrawDust -= Main_DrawDust;
 		On_Main.DrawProjectiles -= Main_DrawProjectiles;
 		On_Main.DrawNPCs -= Main_DrawNPCs;
@@ -204,7 +173,6 @@ public class HookManager : ModSystem, IHookManager
 		On_Main.DrawBackground -= Main_DrawBackground;
 		On_Main.DoDraw_WallsTilesNPCs -= Main_DoDraw_WallsTilesNPCs;
 		Main.OnResolutionChanged -= Main_OnResolutionChanged;
-		Dispose();
 	}
 
 	private void LegacyPlayerRenderer_DrawPlayers(On_LegacyPlayerRenderer.orig_DrawPlayers orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, IEnumerable<Player> players)
@@ -213,7 +181,7 @@ public class HookManager : ModSystem, IHookManager
 		Invoke(CodeLayer.PostDrawPlayers);
 	}
 
-	// TODO 不要给这种大函数直接IL了
+	[Obsolete]
 	private void Main_DoDraw(ILContext il)
 	{
 		var cursor = new ILCursor(il);
@@ -325,7 +293,7 @@ public class HookManager : ModSystem, IHookManager
 		Invoke(CodeLayer.PostEnterWorld_Server);
 	}
 
-	private class TrueHookManager : IHookManager
+	public class TrueHookManager : IHookManager
 	{
 		public TerrariaFunction disableFlags;
 
@@ -333,7 +301,7 @@ public class HookManager : ModSystem, IHookManager
 
 		private static readonly CodeLayer[] validLayers = new CodeLayer[]
 		{
-			CodeLayer.PostDrawFilter,
+			CodeLayer.PreDrawFilter,
 			CodeLayer.PostDrawTiles,
 			CodeLayer.PostDrawProjectiles,
 			CodeLayer.PostDrawDusts,

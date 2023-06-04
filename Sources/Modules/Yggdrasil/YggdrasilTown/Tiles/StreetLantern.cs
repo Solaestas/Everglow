@@ -12,6 +12,7 @@ public class StreetLantern : ModTile
 	{
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
+
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Height = 6;
 		TileObjectData.newTile.Width = 1;
@@ -26,6 +27,7 @@ public class StreetLantern : ModTile
 		};
 		TileObjectData.newTile.CoordinateWidth = 48;
 		TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
+		TileObjectData.newTile.Origin = new Point16(0, 5);
 		TileObjectData.newTile.CoordinatePaddingFix = new Point16(0, -2);
 		// The following 3 lines are needed if you decide to add more styles and stack them vertically
 		TileObjectData.newTile.StyleWrapLimit = 2;
@@ -35,10 +37,15 @@ public class StreetLantern : ModTile
 		TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
 		TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
 		TileObjectData.addAlternate(1); // Facing right will use the second texture style
+		TileObjectData.newTile.Origin = new Point16(0, 5);
 		TileObjectData.addTile(Type);
 
 		DustType = DustID.DynastyWood;
 		AddMapEntry(new Color(151, 31, 32));
+	}
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
 	}
 	public override void HitWire(int i, int j)
 	{
@@ -82,7 +89,7 @@ public class StreetLantern : ModTile
 	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Texture2D tPostTexture = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/StreetLantern_Post");
+		Texture2D tPostTexture = ModAsset.StreetLantern_Post.Value;
 		var rt = new Rectangle(i * 16 - 16, j * 16, 48, 16);
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
@@ -99,13 +106,20 @@ public class StreetLantern : ModTile
 		{
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i, j);
-			Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/StreetLantern_Lantern");
+			Texture2D tex = ModAsset.StreetLantern_Lantern.Value;
+			Texture2D texBone = ModAsset.StreetLantern_Lantern_bone.Value;
+			Texture2D texGlow = ModAsset.StreetLantern_Lantern_glow.Value;
 			float OffsetX = 4;
 			if (tile.TileFrameY != 0)
 				OffsetX = 14;
-			tileSpin.DrawRotatedTile(i, j, tex, new Rectangle(tile.TileFrameX / 48 * 36, tile.TileFrameY / 108 * 32, 36, 32), new Vector2(18, 0), OffsetX, 8);
+			tileSpin.DrawRotatedTile(spriteBatch,i, j, tex, new Rectangle(tile.TileFrameX / 48 * 36, tile.TileFrameY / 108 * 32, 36, 30), new Vector2(18, 0), OffsetX, 8);
+			
 			if (tile.TileFrameX == 0)
 			{
+				float rot = TileSpin.TileRotation[(i, j)].Y;
+				Main.spriteBatch.Draw(texGlow, new Vector2(i * 16 + OffsetX, j * 16 + 8) + zero - Main.screenPosition + new Vector2(0, 14).RotatedBy(rot), null, new Color(255, 255, 255, 0), rot * 0.16f, texGlow.Size() / 2f, 1f, SpriteEffects.None, 0f);
+				tileSpin.DrawRotatedTile(spriteBatch,i, j, texBone, new Rectangle(tile.TileFrameX / 48 * 36, tile.TileFrameY / 108 * 32, 36, 30), new Vector2(18, 0), OffsetX, 8);
+
 				Lighting.AddLight(i, j, 1f, 0.45f, 0.15f);
 				Lighting.AddLight(i, j + 1, 1f, 0.45f, 0.15f);
 			}
