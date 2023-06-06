@@ -30,14 +30,19 @@ namespace Everglow.Myth.TheFirefly.Items.Armors
 		}
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Increases dealt damage by 20%";
+			player.setBonus = "Increases dealt damage by 20%"; //TODO: Use Localization Keys Instead
 			player.GetDamage(DamageClass.Generic) += 0.2f;
+		}
+		public override void UpdateEquip(Player player)
+		{
+			player.magicCrit += 2;
 		}
 		public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient<GlowWood>(33);
-			recipe.AddIngredient<BlackStarShrub>(11);
+			recipe.AddIngredient<GlowWood>(30);
+			recipe.AddIngredient<BlackStarShrub>(10);
+			recipe.AddIngredient<GlowingPedal>(5);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.Register();
 		}
