@@ -3,10 +3,15 @@ using Terraria.Enums;
 using Terraria.ObjectData;
 using Everglow.Yggdrasil.Common.Utils;
 using Everglow.Yggdrasil.Common;
+using Everglow.Commons.TileHelper;
+using Terraria.GameContent.Drawing;
+using System.Runtime.Intrinsics.X86;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
-public class HangingSkyLantern : ModTile
+public class HangingSkyLantern : ModTile, ITileFluentlyDrawn
 {
 	public override void SetStaticDefaults()
 	{
@@ -194,33 +199,54 @@ public class HangingSkyLantern : ModTile
 			}
 		}
 	}
+
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
-		int Adx = 0;
-		if (tile.TileFrameX > 54)
-			Adx = 180;
-		if (tile.TileFrameX % 54 == 18 && tile.TileFrameY == 0)
-		{
-			var tileSpin = new TileSpin();
-			Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/HangingSkyLantern_Depart");
-
-			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j + 2);
-			tileSpin.DrawRotatedTilePrecise(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j + 2, tex, new Rectangle(144 + Adx, 0, 36, 62), new Vector2(18, 0), 10, -34, 1);
-
-			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j);
-			tileSpin.DrawRotatedTilePrecise(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18 - 1, j, tex, new Rectangle(108 + Adx, 0, 36, 62), new Vector2(18, 0), 26, -2, 1);
-
-			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j + 1);
-			tileSpin.DrawRotatedTilePrecise(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j + 1, tex, new Rectangle(72 + Adx, 0, 36, 62), new Vector2(18, 0), 10, -18, 1);
-
-			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j);
-			tileSpin.DrawRotatedTilePrecise(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18 + 1, j, tex, new Rectangle(36 + Adx, 0, 36, 62), new Vector2(20, 0), -6, -2, 1);
-
-			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j);
-			tileSpin.DrawRotatedTilePrecise(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j, tex, new Rectangle(0 + Adx, 0, 36, 62), new Vector2(18, 0), 10, -2, 1);
-
+		if (tile.TileFrameX % 54 == 18 && tile.TileFrameY == 0) {
+			TileFluentDrawManager.AddFluentPoint(this, i, j);
 		}
 		return false;
+	}
+
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
+		var tile = Main.tile[pos];
+		var drawCenterPos = pos.ToWorldCoordinates(autoAddY: 0) - screenPosition;
+		int Adx = 0;
+		if (tile.TileFrameX > 54)
+			Adx = 70; // 改了下贴图，所以是70
+		// 对了：要给卷筒纸吊灯用油漆的话，卷筒纸贴图估计得分开很多份（对应不同物块位置的油漆）
+		// 不过如果只考虑中心物块漆的话就会省事很多。或者分成三份三个位置的油漆也可以
+		DrawLanternPiece(42 + Adx, 58, 0.15f, -2, pos, drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(56 + Adx, 44, 0.11f, -4, pos, drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(28 + Adx, 40, 0.13f, 2, pos, drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(14 + Adx, 44, 0.09f, 8, pos + new Point(1, 0), drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(0 + Adx, 48, 0.09f, -8, pos + new Point(-1, 0), drawCenterPos, spriteBatch, tileDrawing);
+	}
+
+	/// <summary>
+	/// 绘制灯的一个小Piece
+	/// </summary>
+	private void DrawLanternPiece(int frameX, int frameHeight, float swayCoefficient, int offsetX, Point tilePos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
+		Texture2D tex = ModAsset.HangingSkyLantern_Depart.Value;
+		var frame = new Rectangle(frameX, 0, 12, frameHeight);
+
+		int sizeX = 1;
+		int sizeY = 2;
+
+		float windCycle = 0;
+		if (tileDrawing.InAPlaceWithWind(tilePos.X, tilePos.Y, sizeX, sizeY))
+			windCycle = tileDrawing.GetWindCycle(tilePos.X, tilePos.Y, tileDrawing._sunflowerWindCounter);
+
+		int totalPushTime = 60;
+		float pushForcePerFrame = 1.26f;
+		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X, tilePos.Y, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+		windCycle += highestWindGridPushComplex;
+		
+		Color tileLight = Lighting.GetColor(tilePos);
+		float rotation = -windCycle * swayCoefficient;
+		var origin = new Vector2(6, 0);
+		var tileSpriteEffect = SpriteEffects.None;
+		spriteBatch.Draw(tex, drawCenterPos + new Vector2(offsetX, -2), frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
 	}
 }

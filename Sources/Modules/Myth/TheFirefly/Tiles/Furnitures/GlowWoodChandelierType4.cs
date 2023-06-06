@@ -1,6 +1,8 @@
+using System;
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.Localization;
@@ -12,6 +14,8 @@ public class GlowWoodChandelierType4 : ModTile
 {
 	public override void SetStaticDefaults()
 	{
+		On_Main.DoDraw_WallsTilesNPCs += On_Main_DoDraw_WallsTilesNPCs;
+
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
 		Main.tileLavaDeath[Type] = true;
@@ -38,6 +42,12 @@ public class GlowWoodChandelierType4 : ModTile
 		LocalizedText name = CreateMapEntryName();
 		AddMapEntry(new Color(69, 36, 78), name);
 	}
+
+	private void On_Main_DoDraw_WallsTilesNPCs(On_Main.orig_DoDraw_WallsTilesNPCs orig, Main self)
+	{
+	orig.Invoke(self);
+	}
+
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
 		num = 0;
@@ -97,21 +107,30 @@ public class GlowWoodChandelierType4 : ModTile
 		}
 	}
 
-	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+	public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
 	{
 		var tile = Main.tile[i, j];
 		if (tile.TileFrameX % 54 == 18 && tile.TileFrameY == 0)
 		{
-			var tileSpin = new TileSpin();
-			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
-			Texture2D tex = ModAsset.Tiles_GlowWoodChandelierType4.Value;
-			int frameX = tile.TileFrameX - 18;
-			if(frameX >= 54)
-			{
-				frameX = 60;
-			}
-			tileSpin.DrawRotatedChandelier(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2, frameX, 0, 58, 36);
+			Main.instance.TilesRenderer.AddSpecialLegacyPoint(i, j);
 		}
-		return false;
+	}
+
+	public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch) {
+		var tile = Main.tile[i, j];
+		var tileSpin = new TileSpin();
+		tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
+		Texture2D tex = ModAsset.Tiles_GlowWoodChandelierType4.Value;
+		int frameX = tile.TileFrameX - 18;
+		if(frameX >= 54)
+		{
+			frameX = 60;
+		}
+		tileSpin.DrawRotatedChandelier(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2, frameX, 0, 58, 36);
+	}
+
+	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+	{
+		return true;
 	}
 }

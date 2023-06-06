@@ -1,3 +1,4 @@
+using Everglow.Commons.TileHelper;
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly;
 using Everglow.Myth.TheFirefly.Dusts;
@@ -5,12 +6,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
 
-public class GlowWoodLanternType2 : ModTile
+public class GlowWoodLanternType2 : ModTile, ITileFluentlyDrawn
 {
 	public override void SetStaticDefaults()
 	{
@@ -29,17 +31,7 @@ public class GlowWoodLanternType2 : ModTile
 		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2Top);
 		TileObjectData.newTile.AnchorBottom = default;
-
-		TileObjectData.newAlternate.CopyFrom(TileObjectData.Style1x2Top);
-		TileObjectData.newAlternate.AnchorTop = new AnchorData(AnchorType.SolidTile & AnchorType.SolidBottom, TileObjectData.newTile.Width, 0);
-		TileObjectData.newAlternate.DrawYOffset = -4;
-		TileObjectData.addAlternate(1);
-
-		TileObjectData.newAlternate.CopyFrom(TileObjectData.Style1x2Top);
-		TileObjectData.newAlternate.AnchorTop = new AnchorData(AnchorType.Platform, TileObjectData.newTile.Width, 0);
-		TileObjectData.newAlternate.DrawYOffset = -10;
-		TileObjectData.addAlternate(0);
-
+		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile & AnchorType.SolidBottom & AnchorType.Platform, TileObjectData.newTile.Width, 0);
 		TileObjectData.addTile(Type);
 
 		LocalizedText name = CreateMapEntryName();
@@ -108,14 +100,42 @@ public class GlowWoodLanternType2 : ModTile
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
-
-		if (tile.TileFrameY == 0)
-		{
-			var tileSpin = new TileSpin();
-			tileSpin.Update(i, j - tile.TileFrameY / 18);
-			Texture2D tex = ModAsset.GlowWoodLanternType2Draw.Value;
-			tileSpin.DrawRotatedLamp(spriteBatch, i, j - tile.TileFrameY / 18, tex, 8, TileObjectData.GetTileData(tile).DrawYOffset, 16);
+		if (tile.TileFrameY == 0) {
+			TileFluentDrawManager.AddFluentPoint(this, i, j);
 		}
 		return false;
+	}
+
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
+		var tile = Main.tile[pos];
+		Texture2D tex = ModAsset.GlowWoodLanternType2Draw.Value;
+
+		int offsetX = 8;
+		int offsetY = -2;
+		if (WorldGen.IsBelowANonHammeredPlatform(pos.X, pos.Y)) {
+			offsetY -= 8;
+		}
+
+		int sizeX = 1;
+		int sizeY = 2;
+
+		float windCycle = 0;
+		if (tileDrawing.InAPlaceWithWind(pos.X, pos.Y, sizeX, sizeY))
+			windCycle = tileDrawing.GetWindCycle(pos.X, pos.Y, tileDrawing._sunflowerWindCounter);
+
+		int totalPushTime = 60;
+		float pushForcePerFrame = 1.26f;
+		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(pos.X, pos.Y, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+		windCycle += highestWindGridPushComplex;
+		
+		short tileFrameX = tile.frameX;
+		short tileFrameY = tile.frameY;
+
+		Rectangle rectangle = new Rectangle(tileFrameX, tileFrameY, sizeX * 16, sizeY * 16);
+		Color tileLight = Lighting.GetColor(pos);
+		float rotation = -windCycle * 0.15f;
+		var origin = new Vector2(sizeX * 16 / 2f, 0);
+		var tileSpriteEffect = SpriteEffects.None;
+		spriteBatch.Draw(tex, pos.ToWorldCoordinates(0, 0) + new Vector2(offsetX, offsetY) - screenPosition, rectangle, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
 	}
 }

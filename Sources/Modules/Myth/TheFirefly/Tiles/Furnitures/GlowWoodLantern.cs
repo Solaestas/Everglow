@@ -1,13 +1,18 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Commons.TileHelper;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.Localization;
 using Terraria.ObjectData;
+using static Terraria.ModLoader.Default.LegacyUnloadedTilesSystem;
+using Terraria.GameContent.Drawing;
+using Everglow.Commons.DataStructures;
+using Terraria;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
 
-public class GlowWoodLantern : ModTile
+public class GlowWoodLantern : ModTile, ITileFluentlyDrawn
 {
 	public override void SetStaticDefaults()
 	{
@@ -26,17 +31,7 @@ public class GlowWoodLantern : ModTile
 		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2Top);
 		TileObjectData.newTile.AnchorBottom = default;
-
-		TileObjectData.newAlternate.CopyFrom(TileObjectData.Style1x2Top);
-		TileObjectData.newAlternate.AnchorTop = new AnchorData(AnchorType.SolidTile & AnchorType.SolidBottom, TileObjectData.newTile.Width, 0);
-		TileObjectData.newAlternate.DrawYOffset = -2;
-		TileObjectData.addAlternate(1);
-
-		TileObjectData.newAlternate.CopyFrom(TileObjectData.Style1x2Top);
-		TileObjectData.newAlternate.AnchorTop = new AnchorData(AnchorType.Platform, TileObjectData.newTile.Width, 0);
-		TileObjectData.newAlternate.DrawYOffset = -8;
-		TileObjectData.addAlternate(0);
-
+		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile & AnchorType.SolidBottom & AnchorType.Platform, TileObjectData.newTile.Width, 0);
 		TileObjectData.addTile(Type);
 
 		LocalizedText name = CreateMapEntryName();
@@ -105,14 +100,54 @@ public class GlowWoodLantern : ModTile
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
-		if (tile.TileFrameY == 0)
-		{
-			var tileSpin = new TileSpin();
-			tileSpin.Update(i, j - tile.TileFrameY / 18);
-			Texture2D tex = ModAsset.GlowWoodLanternDraw.Value;
-			var tileUp = Main.tile[i, j - 1];
-			tileSpin.DrawRotatedLamp(spriteBatch, i, j - tile.TileFrameY / 18, tex, 8, TileObjectData.GetTileData(tile).DrawYOffset, 16);
-		}
+			TileFluentDrawManager.AddFluentPoint(this, i, j);
 		return false;
+	}
+
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
+		var tile = Main.tile[pos];
+		// 这就是油漆的奥秘，大概就是根据你给出的pos上的油漆给你这个物块的贴图上shader
+		// 你可以把里面的代码抄来，把方法里面那个贴图改成一个参数，就可以做到给任意贴图上相应世界物块上的漆了
+		Texture2D tex = tileDrawing.GetTileDrawTexture(tile, pos.X, pos.Y);
+		
+		short tileFrameX = tile.frameX;
+		short tileFrameY = tile.frameY;
+
+		int offsetX = 8;
+		int offsetY = -2;
+		// 锤子是这样的
+		if (WorldGen.IsBelowANonHammeredPlatform(pos.X, pos.Y - tileFrameY / 18)) {
+			offsetY -= 8;
+		}
+
+		// 物块的size
+		int sizeX = 1;
+		int sizeY = 2;
+
+		float windCycle = 0;
+		if (tileDrawing.InAPlaceWithWind(pos.X, pos.Y, sizeX, sizeY))
+			windCycle = tileDrawing.GetWindCycle(pos.X, pos.Y, tileDrawing._sunflowerWindCounter);
+
+		// 普通源码罢了
+		int totalPushTime = 60;
+		float pushForcePerFrame = 1.26f;
+		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(pos.X, pos.Y, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+		windCycle += highestWindGridPushComplex;
+
+		Rectangle rectangle = new Rectangle(tileFrameX, tileFrameY, 16, 16);
+		Color tileLight = Lighting.GetColor(pos);
+
+		// 由于是分节绘制，对于除第一节外的其他节，这里乘上一个长这样的系数来修正rotation
+		float num = (tileFrameY / 18 + 1) / (float)sizeY;
+		float rotation = -windCycle * 0.15f * num;
+
+		var origin = new Vector2(sizeX * 16 / 2f, 0);
+		var tileSpriteEffect = SpriteEffects.None;
+
+		var drawPos = pos.ToWorldCoordinates(0, tileFrameY / 18 * -16) + new Vector2(offsetX, offsetY) - screenPosition;
+		// 同样地，根据节修正position。11是magicNumber，并没有在3节及以上的悬挂物块试用过，先不要管
+		drawPos += (Vector2.One * tileFrameY / 18 * 11).RotatedBy(rotation + 0.785f);
+		
+		spriteBatch.Draw(tex, drawPos, rectangle, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
 	}
 }
