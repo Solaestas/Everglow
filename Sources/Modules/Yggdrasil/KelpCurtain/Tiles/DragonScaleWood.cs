@@ -1,4 +1,4 @@
-﻿namespace Everglow.Yggdrasil.KelpCurtain.Tiles;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles;
 
 public class DragonScaleWood : ModTile
 {
@@ -14,8 +14,6 @@ public class DragonScaleWood : ModTile
 		DustType = DustID.BorealWood;
 		MinPick = 300;
 		HitSound = SoundID.Dig;
-
-		ItemDrop = ModContent.ItemType<Items.DragonScaleWood>();
 		AddMapEntry(new Color(86, 62, 44));
 	}
 	public override bool CanExplode(int i, int j)

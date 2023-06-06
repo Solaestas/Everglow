@@ -21,11 +21,13 @@ public class TuskKillEffect : ModNPC
 		NPCID.Sets.TrailingMode[NPC.type] = 0;
 		NPCID.Sets.TrailCacheLength[NPC.type] = 40;
 	}
-	bool Start = false;
-	Vector2 Cent;
-	Vector2 Acc;
-	float Ome = 0;
-	float kx = 1;
+
+	private bool Start = false;
+	private Vector2 Cent;
+	private Vector2 Acc;
+	private float Ome = 0;
+	private float kx = 1;
+
 	public override void AI()
 	{
 		if (!Start)
@@ -62,17 +64,20 @@ public class TuskKillEffect : ModNPC
 			}
 		}
 	}
+
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		return false;
 	}
+
 	private Effect ef;
+
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 		var bars = new List<VertexBase.CustomVertexInfo>();
-		ef = ModContent.Request<Effect>("Everglow/Myth/Effects/Trail").Value;
+		ef = ModAsset.Trail.Value;
 		Vector2 v = Cent - NPC.Center;
 		int width = (int)(4 * kx);
 		for (int i = 1; i < NPC.oldPos.Length - 1; ++i)

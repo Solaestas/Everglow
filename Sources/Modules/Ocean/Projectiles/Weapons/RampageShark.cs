@@ -4,6 +4,7 @@ using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Ocean.Common;
 using Everglow.Ocean.Dusts;
 using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace Everglow.Ocean.Projectiles.Weapons;
 
@@ -20,6 +21,11 @@ public class RampageShark : ModProjectile
 		Projectile.DamageType = DamageClass.Ranged;
 	}
 	internal float Power = 0;
+	internal IEntitySource shootSource = null;
+	public override void OnSpawn(IEntitySource source)
+	{
+		shootSource = source;
+	}
 	private void Shoot()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -45,7 +51,7 @@ public class RampageShark : ModProjectile
 					SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/SharkGun0").WithVolumeScale(0.4f), Projectile.Center);
 				}
 				Vector2 newvelocity = velocity.RotatedBy(Main.rand.NextFloat(-Power / 244f, Power / 244f));
-				Projectile p = Projectile.NewProjectileDirect(item.GetSource_ItemUse(item), Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockBack, player.whoAmI);
+				Projectile p = Projectile.NewProjectileDirect(shootSource, Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockBack, player.whoAmI);
 				p.CritChance = (int)(item.crit + player.GetCritChance(DamageClass.Generic));
 
 				Dust d = Dust.NewDustDirect(Projectile.Center + offset + velocity * 0.7f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<BulletShell>(), velocity.X, velocity.Y, 0, default, 1f);
@@ -56,7 +62,7 @@ public class RampageShark : ModProjectile
 				Dust smog = Dust.NewDustDirect(Projectile.Center + offset + velocity * 1.3f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<MothSmog>(), 0, -2f, 0, default, 2f);
 				smog.alpha = 180;
 				float rot = newvelocity.ToRotation();
-				Projectile.NewProjectile(item.GetSource_ItemUse(item), Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.06f, rot);
+				Projectile.NewProjectile(shootSource, Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.06f, rot);
 			}
 			else
 			{
@@ -68,7 +74,7 @@ public class RampageShark : ModProjectile
 				for (int i = 0; i < Times; i++)
 				{
 					Vector2 newvelocity = velocity.RotatedBy(Main.rand.NextFloat(-Power / 66f, Power / 66f));
-					Projectile p = Projectile.NewProjectileDirect(item.GetSource_ItemUse(item), Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockBack, player.whoAmI);
+					Projectile p = Projectile.NewProjectileDirect(shootSource, Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockBack, player.whoAmI);
 					p.CritChance = (int)(item.crit + player.GetCritChance(DamageClass.Generic));
 					Dust d = Dust.NewDustDirect(Projectile.Center + offset + velocity * 0.7f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<BulletShell>(), velocity.X, velocity.Y, 0, default, 1f);
 					d.velocity = velocity.RotatedBy(-1.57 * player.direction - Main.rand.NextFloat(1.25f, 1.75f) * player.direction) * 0.4f * (24 + Power) / 54f;
@@ -77,7 +83,7 @@ public class RampageShark : ModProjectile
 					Dust smog = Dust.NewDustDirect(Projectile.Center + offset + velocity * 1.3f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<MothSmog>(), velocity.X * 0.15f, -2f, 0, default, 2.5f);
 					smog.alpha = 180;
 					float rot = newvelocity.ToRotation();
-					Projectile.NewProjectile(item.GetSource_ItemUse(item), Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.12f, rot);
+					Projectile.NewProjectile(shootSource, Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.12f, rot);
 				}
 
 			}
@@ -133,8 +139,8 @@ public class RampageShark : ModProjectile
 		if (player.controlUseItem)
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(toMouse.Y, toMouse.X) - Math.PI / 2d));
 
-		Texture2D TexMain = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_gun");
-		Texture2D TexMainG = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_glow");
+		Texture2D texMain = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_gun");
+		Texture2D texMainG = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_glow");
 		Texture2D TexEye = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_redEye");
 		Texture2D TexStar = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/HitStar");
 		var gunTexRectangle = new Rectangle(0, 0, 72, 34);
@@ -154,9 +160,9 @@ public class RampageShark : ModProjectile
 		if (Power >= 16)
 			new Vector2(0, Main.rand.NextFloat(Power)).RotatedByRandom(6.283);
 		var offset = new Vector2(0, -5);
-		Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition + offset - random, gunTexRectangle, lightColor, Projectile.rotation - (float)(Math.PI * 0.25), new Vector2(TexMain.Size().X / 2f, TexMain.Size().Y / 8f), 1f, se, 0);
+		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition + offset - random, gunTexRectangle, lightColor, Projectile.rotation - (float)(Math.PI * 0.25), new Vector2(texMain.Size().X / 2f, texMain.Size().Y / 8f), 1f, se, 0);
 		float glow = Power / 16f;
-		Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition + offset - random, null, new Color(glow, glow * 0.2f, glow * 0.2f, 0), Projectile.rotation - (float)(Math.PI * 0.25), TexMainG.Size() / 2f, 1f, se, 0);
+		Main.spriteBatch.Draw(texMainG, Projectile.Center - Main.screenPosition + offset - random, null, new Color(glow, glow * 0.2f, glow * 0.2f, 0), Projectile.rotation - (float)(Math.PI * 0.25), texMainG.Size() / 2f, 1f, se, 0);
 		if (Power >= 15 && Power < 16)
 		{
 			if (Power < 15 + 1 / 30f)
@@ -173,7 +179,7 @@ public class RampageShark : ModProjectile
 			Main.spriteBatch.Draw(TexStar, StarCenter, null, new Color(1f, 0, 0, 0), Projectile.rotation + progress * 1f - MathF.PI * 0.5f, TexStar.Size() / 2f, new Vector2(progress * 2, powerII * powerII) * 0.36f, se, 0);
 
 			Ins.Batch.Begin();
-			DrawTexCircle_VFXBatch(Ins.Batch, progress * 120f, (1f - progress) * 10, new Color(1f - progress, 0, 0, 0), StarCenter, OceanContent.QuickTexture("Projectiles/Textures/FogTraceLight"));
+			DrawTexCircle_VFXBatch(Ins.Batch, progress * 120f, (1f - progress) * 10, new Color(1f - progress, 0, 0, 0), StarCenter, ModAsset.FogTraceLight.Value);
 			Ins.Batch.End();
 		}
 		else if (Power >= 16)

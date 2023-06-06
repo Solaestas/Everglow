@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly;
 using Terraria.ObjectData;
 
@@ -30,15 +30,6 @@ public class BlackStarShrubSmall : ModTile
 	{
 		num = fail ? 1 : 3;
 	}
-
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-		//for (int x = 0; x < 2; x++)
-		//{
-		//    Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.BlackStarShrub>());
-		//}
-	}
-
 	public override void PlaceInWorld(int i, int j, Item item)
 	{
 		short num = (short)Main.rand.Next(0, 6);

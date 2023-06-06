@@ -16,26 +16,23 @@ public class HexagonalCeilingLamp : ModTile
 		Main.tileLighted[Type] = true;
 		Main.tileSolid[Type] = false;
 		Main.tileNoFail[Type] = true;
-		TileID.Sets.HasOutlines[Type] = true;
-		TileID.Sets.CanBeSleptIn[Type] = true; // Facilitates calling ModifySleepingTargetInfo
-		TileID.Sets.InteractibleByNPCs[Type] = true; // Town NPCs will palm their hand at this tile
-		TileID.Sets.IsValidSpawnPoint[Type] = true;
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
 		DustType = DustID.Pearlwood;
 		AdjTiles = new int[] { TileID.Chandeliers };
-
-		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
 		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
 		TileObjectData.newTile.AnchorBottom = default;
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
+		TileObjectData.newTile.Origin = new Point16(1, 0);
 		TileObjectData.addTile(Type);
-
 		// Etc
-		var name = CreateMapEntryName();
-		AddMapEntry(new Color(216, 172, 125), name);
+		AddMapEntry(new Color(135, 103, 90));
+	}
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
 	}
 	public override void HitWire(int i, int j)
 	{
@@ -98,13 +95,9 @@ public class HexagonalCeilingLamp : ModTile
 		{
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
-			Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/HexagonalCeilingLamp");
-			tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
+			Texture2D tex = ModAsset.Tiles_HexagonalCeilingLamp.Value;
+			tileSpin.DrawRotatedChandelier(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
 		}
 		return false;
-	}
-	public override void KillMultiTile(int x, int y, int frameX, int frameY)
-	{
-		Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.HexagonalCeilingLamp>());
 	}
 }

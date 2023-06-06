@@ -32,13 +32,9 @@ public class StoneTuskSmall : ModTile
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
 	}
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		for (int x = 0; x < 2; x++)
-		{
-			Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 60f)).RotatedByRandom(3.14159);
-			Item.NewItem(null, i * 16 + (int)v.X, j * 16 + (int)v.Y, 16, 32, ModContent.ItemType<Items.StoneTusk>());
-		}
+		yield return new Item(ModContent.ItemType<Items.StoneTusk>(), 2);
 	}
 	public override void PlaceInWorld(int i, int j, Item item)
 	{
