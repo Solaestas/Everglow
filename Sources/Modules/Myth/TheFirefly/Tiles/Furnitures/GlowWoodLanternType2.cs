@@ -45,7 +45,6 @@ public class GlowWoodLanternType2 : ModTile, ITileFluentlyDrawn
 	{
 		FurnitureUtils.LightHitwire(i, j, Type, 1, 2);
 	}
-
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{
 		Tile tile = Main.tile[i, j];
@@ -62,57 +61,25 @@ public class GlowWoodLanternType2 : ModTile, ITileFluentlyDrawn
 			b = 0f;
 		}
 	}
-
-	public override void NearbyEffects(int i, int j, bool closer)
-	{
-		if (closer)
-		{
-			var tile = Main.tile[i, j];
-			foreach (Player player in Main.player)
-			{
-				if (player.Hitbox.Intersects(new Rectangle(i * 16, j * 16, 16, 16)))
-				{
-					if (!TileSpin.TileRotation.ContainsKey((i, j - tile.TileFrameY / 18)))
-						TileSpin.TileRotation.Add((i, j - tile.TileFrameY / 18), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-					else
-					{
-						float rot;
-						float omega;
-						omega = TileSpin.TileRotation[(i, j - tile.TileFrameY / 18)].X;
-						rot = TileSpin.TileRotation[(i, j - tile.TileFrameY / 18)].Y;
-						float mass = 15f;
-						float MaxSpeed = Math.Abs(Math.Clamp(player.velocity.X / mass, -0.5f, 0.5f));
-						if (Math.Abs(omega) < MaxSpeed && Math.Abs(rot) < MaxSpeed)
-							TileSpin.TileRotation[(i, j - tile.TileFrameY / 18)] = new Vector2(omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
-						if (Math.Abs(omega) < 0.001f && Math.Abs(rot) < 0.001f)
-							TileSpin.TileRotation.Remove((i, j - tile.TileFrameY / 18));
-					}
-				}
-			}
-			if (tile.WallType == 0)
-			{
-				if (!TileSpin.TileRotation.ContainsKey((i, j - tile.TileFrameY / 18)))
-					TileSpin.TileRotation.Add((i, j - tile.TileFrameY / 18), new Vector2(Main.windSpeedCurrent * 0.2f, 0));
-			}
-		}
-	}
-
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
-		if (tile.TileFrameY == 0) {
+		if (tile.TileFrameY == 0)
+		{
 			TileFluentDrawManager.AddFluentPoint(this, i, j);
 		}
 		return false;
 	}
 
-	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	{
 		var tile = Main.tile[pos];
 		Texture2D tex = ModAsset.GlowWoodLanternType2Draw.Value;
 
 		int offsetX = 8;
 		int offsetY = -2;
-		if (WorldGen.IsBelowANonHammeredPlatform(pos.X, pos.Y)) {
+		if (WorldGen.IsBelowANonHammeredPlatform(pos.X, pos.Y))
+		{
 			offsetY -= 8;
 		}
 
@@ -127,7 +94,7 @@ public class GlowWoodLanternType2 : ModTile, ITileFluentlyDrawn
 		float pushForcePerFrame = 1.26f;
 		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(pos.X, pos.Y, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
 		windCycle += highestWindGridPushComplex;
-		
+
 		short tileFrameX = tile.frameX;
 		short tileFrameY = tile.frameY;
 
