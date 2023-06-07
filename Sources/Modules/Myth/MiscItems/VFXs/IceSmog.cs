@@ -3,7 +3,7 @@ internal class IceSmogPipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModAsset.VFXs_Ice;
+		effect = ModAsset.IceSmog;
 		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_spiderNet.Value);
 		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_ice.Value);
 	}
