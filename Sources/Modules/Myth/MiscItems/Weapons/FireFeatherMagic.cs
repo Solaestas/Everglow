@@ -1,4 +1,4 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Myth.MiscItems.Weapons;
@@ -23,7 +23,6 @@ public class FireFeatherMagic : ModItem
 		Item.knockBack = 8;
 		Item.value = 2000;
 		Item.rare = ItemRarityID.LightRed;
-		Item.UseSound = SoundID.Item71;
 		Item.autoReuse = true;
 		Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Magic.FireFeather>();
 		Item.shootSpeed = 8;
@@ -36,12 +35,10 @@ public class FireFeatherMagic : ModItem
 		for (int k = 0; k < 3; k++)
 		{
 			Vector2 v2 = v.RotatedBy(Main.rand.NextFloat(-0.42f, 0.42f)) * Main.rand.NextFloat(0.9f, 1.1f);
-			int u = Projectile.NewProjectile(source, position + velocity * 2f, v2, type, damage, knockback, player.whoAmI, Item.crit + player.GetCritChance(DamageClass.Magic));
+			int u = Projectile.NewProjectile(source, position + velocity * 2f, v2, type, damage, knockback, player.whoAmI, Main.rand.NextFloat(1f));
 			Main.projectile[u].hostile = false;
 			Main.projectile[u].friendly = true;
 		}
-		//VisualSystem.CreatVisual(new NormalFlameDust(position, velocity, 120)); //VisualSystem for Myth Content is Not Implemented
-
 		return false;
 	}
 	public override void AddRecipes()
