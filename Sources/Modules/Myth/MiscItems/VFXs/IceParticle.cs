@@ -14,7 +14,7 @@ internal class IceParticlePipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D halo = Commons.ModAsset.Point.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
-		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
@@ -61,8 +61,8 @@ internal class IceParticleDust : Visual
 			timer += 20;
 		}
 		float pocession = 1 - timer / maxTime;
-		float c = pocession * scale * 0.3f;
-		Lighting.AddLight(position, c * 0.1f, c * 0.1f, c * 0.15f);
+		//float c = pocession * scale * 0.3f;
+		//Lighting.AddLight(position, c * 0.1f, c * 0.1f, c * 0.15f);
 	}
 
 	public override void Draw()
@@ -72,11 +72,11 @@ internal class IceParticleDust : Visual
 		Color lightColor = Lighting.GetColor((int)(position.X / 16f), (int)(position.Y / 16f));
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + toCorner,new Color(0, 0,pocession, 0.0f), lightColor.ToVector3()),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 1, pocession, 0.0f), lightColor.ToVector3()),
+			new Vertex2D(position + toCorner,new Color(0, 0.5f,pocession, 0.0f), lightColor.ToVector3()),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 0.5f, pocession, 0.0f), lightColor.ToVector3()),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0 ,pocession, 0.0f), lightColor.ToVector3()),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession, 0.0f), lightColor.ToVector3())
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0.5f ,pocession, 0.0f), lightColor.ToVector3()),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 0.5f, pocession, 0.0f), lightColor.ToVector3())
 		};
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);

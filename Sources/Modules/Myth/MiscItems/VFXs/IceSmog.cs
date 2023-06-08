@@ -36,7 +36,16 @@ internal class IceSmogDust : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-
+	public IceSmogDust() { }
+	public IceSmogDust(int maxTime, Vector2 position, Vector2 velocity, float scale, float rotation, params float[] ai)
+	{
+		this.maxTime = maxTime;
+		this.position = position;
+		this.velocity = velocity;
+		this.scale = scale;
+		this.rotation = rotation;
+		this.ai = ai;
+	}
 	public override void Update()
 	{
 		position += velocity;
@@ -84,7 +93,16 @@ internal class IceSmogDust2 : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-
+	public IceSmogDust2() { }
+	public IceSmogDust2(int maxTime, Vector2 position, Vector2 velocity, float scale, float rotation, params float[] ai)
+	{
+		this.maxTime = maxTime;
+		this.position = position;
+		this.velocity = velocity;
+		this.scale = scale;
+		this.rotation = rotation;
+		this.ai = ai;
+	}
 	public override void Update()
 	{
 		position += velocity;

@@ -1,5 +1,3 @@
-using ReLogic.Content;
-
 namespace Everglow.Myth.MiscItems.VFXs;
 internal class FireSparkPipeline : Pipeline
 {
@@ -16,11 +14,10 @@ internal class FireSparkPipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D halo = Commons.ModAsset.Point.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
-		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
-
 	public override void EndRender()
 	{
 		Ins.Batch.End();

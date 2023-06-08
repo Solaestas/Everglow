@@ -21,7 +21,7 @@ public class FireFeatherMagic : ModItem
 		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.noMelee = true;
 		Item.knockBack = 8;
-		Item.value = 2000;
+		Item.value = 2354;
 		Item.rare = ItemRarityID.LightRed;
 		Item.autoReuse = true;
 		Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Magic.FireFeather>();
@@ -31,13 +31,10 @@ public class FireFeatherMagic : ModItem
 	}
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		Vector2 v = velocity;
 		for (int k = 0; k < 3; k++)
 		{
-			Vector2 v2 = v.RotatedBy(Main.rand.NextFloat(-0.42f, 0.42f)) * Main.rand.NextFloat(0.9f, 1.1f);
-			int u = Projectile.NewProjectile(source, position + velocity * 2f, v2, type, damage, knockback, player.whoAmI, Main.rand.NextFloat(1f));
-			Main.projectile[u].hostile = false;
-			Main.projectile[u].friendly = true;
+			Vector2 v2 = velocity.RotatedBy(Main.rand.NextFloat(-0.42f, 0.42f)) * Main.rand.NextFloat(0.9f, 1.1f);
+			Projectile.NewProjectile(source, position + velocity * 2f, v2, type, damage, knockback, player.whoAmI, Main.rand.NextFloat(1f));
 		}
 		return false;
 	}
