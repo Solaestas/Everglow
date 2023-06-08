@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria.GameContent;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles;

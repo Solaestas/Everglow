@@ -1,3 +1,4 @@
+using Everglow.Myth.MagicWeaponsReplace.GlobalItems;
 using Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
@@ -32,12 +33,34 @@ public class FreezeFeatherMagic : ModItem
 	}
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		for (int k = 0; k < 3; k++)
+		if (player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
 		{
-			Vector2 v2 = velocity.RotatedBy(Main.rand.NextFloat(-0.24f, 0.24f)) * Main.rand.NextFloat(0.9f, 1.1f);
-			Projectile.NewProjectile(source, position + velocity * 2f, v2, type, damage, knockback, player.whoAmI, Main.rand.NextFloat(0f, 5000f), 10);
+			return false;
+		}
+		else
+		{
+			for (int k = 0; k < 3; k++)
+			{
+				Vector2 v2 = velocity.RotatedBy(Main.rand.NextFloat(-0.42f, 0.42f)) * Main.rand.NextFloat(0.9f, 1.1f);
+				Projectile.NewProjectile(source, position + velocity * 2f, v2, type, damage, knockback, player.whoAmI, Main.rand.NextFloat(1f));
+			}
+			useSpeed = Item.useTime / 17f;
 		}
 		return false;
+	}
+	float useSpeed = -1f;
+	public override void HoldItem(Player player)
+	{
+		if (player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
+		{
+			if (useSpeed == -1)
+			{
+				useSpeed = Item.useTime / 17f;
+			}
+			Item.useTime = (int)(8 * useSpeed);
+			Item.useAnimation = (int)(8 * useSpeed);
+			Item.shootSpeed = 22f;
+		}
 	}
 	public override void AddRecipes()
 	{

@@ -1,5 +1,6 @@
 using Everglow.Myth.MiscItems.Buffs;
 using Everglow.Myth.MiscItems.VFXs;
+using SteelSeries.GameSense;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
@@ -62,7 +63,7 @@ public class FreezeFeather : ModProjectile
 			Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 2)).RotatedByRandom(MathHelper.TwoPi);
 		    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.FreezeFeather>(), v.X, v.Y, 150, default, Main.rand.NextFloat(0.8f, 1.7f));
 		}
-		if (Main.rand.NextBool(2))
+		for (int g = 0; g < 3; g++)
 		{
 			Vector2 iceV = new Vector2(0, Main.rand.NextFloat(0, 0.9f)).RotatedByRandom(MathHelper.TwoPi);
 			Dust ice = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.IceCrystal>(), iceV.X, iceV.Y, 150, default, Main.rand.NextFloat(0.2f, 0.6f));
@@ -102,23 +103,7 @@ public class FreezeFeather : ModProjectile
 			};
 			Ins.VFXManager.Add(smog);
 		}
-		//if (Main.rand.NextBool(2))
-		//{
-		//	Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 0.6f)).RotatedByRandom(MathHelper.TwoPi);
-		//	var smog = new IceParticleDust
-		//	{
-		//		velocity = newVelocity + Projectile.velocity * Main.rand.NextFloat(0f, 0.03f),
-		//		Active = true,
-		//		Visible = true,
-		//		position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
-		//		maxTime = Main.rand.Next(237, 345),
-		//		scale = Main.rand.NextFloat(1f, 12f),
-		//		rotation = Main.rand.NextFloat(6.283f),
-		//		ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.005f, 0.005f) }
-		//	};
-		//	Ins.VFXManager.Add(smog);
-		//}
-		if (Main.rand.NextBool(2))
+		if (Main.rand.NextBool(1))
 		{
 			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 0.6f)).RotatedByRandom(MathHelper.TwoPi);
 			var smog = new SnowPieceDust
@@ -129,7 +114,7 @@ public class FreezeFeather : ModProjectile
 				coord0 = new Vector2(Main.rand.NextFloat(0.1f, 0.2f), 0).RotatedByRandom(6.283),
 				coord1 = new Vector2(Main.rand.NextFloat(0.1f, 0.2f), 0).RotatedByRandom(6.283),
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
-				maxTime = Main.rand.Next(37, 85),
+				maxTime = Main.rand.Next(37, 125),
 				scale = Main.rand.NextFloat(2f, 8f),
 				rotation = Main.rand.NextFloat(6.283f),
 				rotation2 = Main.rand.NextFloat(6.283f),
@@ -224,6 +209,13 @@ public class FreezeFeather : ModProjectile
 			Vector2 v = new Vector2(0, Main.rand.NextFloat(2f, 4.6f)).RotatedByRandom(MathHelper.TwoPi);
 			Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.IceCrystal2>(), v.X, v.Y, 150, default, Main.rand.NextFloat(0.6f, 1.4f));
 			d.velocity = v;
+		}
+		for (int j = 0; j < 60; j++)
+		{
+			Vector2 v = new Vector2(0, Main.rand.NextFloat(1f, 2.6f)).RotatedByRandom(MathHelper.TwoPi);
+			Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.IceCrystal>(), v.X, v.Y, 150, default, Main.rand.NextFloat(0.4f, 0.6f));
+			d.velocity = v;
+			d.color.G = 120;
 		}
 		GenerateSmog(4);
 	}
