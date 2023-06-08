@@ -42,6 +42,7 @@ public class FreezeFeather : ModDust
 	}
 	public override Color? GetAlpha(Dust dust, Color lightColor)
 	{
-		return lightColor;
+		float light = (lightColor.R + lightColor.G + lightColor.B) / 765f;
+		return Color.Lerp(lightColor, new Color(light, light, light, 1), 0.9f);
 	}
 }

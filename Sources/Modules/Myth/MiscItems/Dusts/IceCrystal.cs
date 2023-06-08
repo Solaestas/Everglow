@@ -12,8 +12,8 @@ public class IceCrystal : ModDust
 	{
 		dust.position += dust.velocity;
 		dust.rotation += Main.rand.NextFloat(-0.3f, 0.3f);
-		dust.scale *= 0.995f;
-		dust.velocity *= 0.97f;
+		dust.scale *= 0.98f;
+		dust.velocity *= 0.99f;
 		dust.velocity = dust.velocity.RotatedBy((dust.color.G - 120) / 2550f);
 		if(Main.rand.NextBool(6) && !Main.gamePaused)
 		{
@@ -53,15 +53,17 @@ public class IceCrystal : ModDust
 	}
 	public override Color? GetAlpha(Dust dust, Color lightColor)
 	{
-		if(dust.frame.Y == 18)
+		float light = (lightColor.R + lightColor.G + lightColor.B) / 765f;
+		Color c0 = Color.Lerp(lightColor, new Color(light, light, light, 1), 0.9f);
+		if (dust.frame.Y == 18)
 		{
-			return lightColor * 3;
+			return c0 * 1.2f;
 		}
 		if (dust.frame.Y == 9)
 		{
-			return lightColor * 1.2f;
+			return c0 * 0.4f;
 		}
-		return lightColor * 0.6f;
+		return c0 * 0.2f;
 	}
 }
 
@@ -82,8 +84,8 @@ public class IceCrystal2 : ModDust
 	{
 		dust.position += dust.velocity;
 		dust.rotation += Main.rand.NextFloat(-0.3f, 0.3f);
-		dust.scale *= 0.995f;
-		dust.velocity *= 0.97f;
+		dust.scale *= 0.98f;
+		dust.velocity *= 0.99f;
 		if (Main.rand.NextBool(6) && !Main.gamePaused)
 		{
 			if (dust.frame.Y < 18)
@@ -122,14 +124,16 @@ public class IceCrystal2 : ModDust
 	}
 	public override Color? GetAlpha(Dust dust, Color lightColor)
 	{
+		float light = (lightColor.R + lightColor.G + lightColor.B) / 765f;
+		Color c0 = Color.Lerp(lightColor, new Color(light, light, light, 1), 0.9f);
 		if (dust.frame.Y == 18)
 		{
-			return lightColor * 3;
+			return c0 * 1.2f;
 		}
 		if (dust.frame.Y == 9)
 		{
-			return lightColor * 1.2f;
+			return c0 * 0.4f;
 		}
-		return lightColor * 0.6f;
+		return c0 * 0.2f;
 	}
 }

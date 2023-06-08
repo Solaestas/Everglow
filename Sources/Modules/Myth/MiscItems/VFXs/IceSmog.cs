@@ -6,6 +6,7 @@ internal class IceSmogPipeline : Pipeline
 		effect = ModAsset.IceSmog;
 		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_spiderNet.Value);
 		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_ice.Value);
+		Ins.Batch.RegisterVertex<Vertex2DSmog>(2048, 3072);
 	}
 	public override void BeginRender()
 	{
@@ -14,7 +15,7 @@ internal class IceSmogPipeline : Pipeline
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D halo = Commons.ModAsset.Point.Value;
-		Ins.Batch.BindTexture<Vertex2D>(halo);
+		Ins.Batch.BindTexture<Vertex2DSmog>(halo);
 		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
@@ -68,15 +69,19 @@ internal class IceSmogDust : Visual
 	public override void Draw()
 	{
 		float pocession = timer / maxTime;
+		pocession = MathF.Pow(pocession, 0.3f);
+		pocession = 1 - MathF.Sin(pocession * MathF.PI);
 		float timeValue = (float)(Main.time * 0.0003f);
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
-		List<Vertex2D> bars = new List<Vertex2D>()
+		Color lightColor = Lighting.GetColor((int)(position.X / 16f), (int)(position.Y / 16f));
+		Vector3 drawC = lightColor.ToVector3() * 0.2f + new Vector3(lightColor.ToVector3().Length() / 3f);
+		List<Vertex2DSmog> bars = new List<Vertex2DSmog>()
 		{
-			new Vertex2D(position + toCorner,new Color(0, 0,pocession, 0), new Vector3(ai[0],timeValue,0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 1, pocession, 0), new Vector3(ai[0], timeValue + 0.4f * scale / 70f, 0)),
+			new Vertex2DSmog(position + toCorner,new Color(0, 0,pocession, 0), new Vector3(ai[0],timeValue,0), drawC),
+			new Vertex2DSmog(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(1, 0, pocession, 0), new Vector3(ai[0] + 0.4f * scale / 70f, timeValue, 0), drawC),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0 ,pocession, 0), new Vector3(ai[0] + 0.4f * scale / 70f, timeValue, 0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession, 0), new Vector3(ai[0] + 0.4f* scale / 70f, timeValue + 0.4f * scale / 70f, 0))
+			new Vertex2DSmog(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(0, 1 ,pocession, 0), new Vector3(ai[0], timeValue + 0.4f * scale / 70f, 0), drawC),
+			new Vertex2DSmog(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession, 0), new Vector3(ai[0] + 0.4f* scale / 70f, timeValue + 0.4f * scale / 70f, 0), drawC)
 		};
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
@@ -125,17 +130,56 @@ internal class IceSmogDust2 : Visual
 	public override void Draw()
 	{
 		float pocession = timer / maxTime;
+		pocession = MathF.Pow(pocession, 0.3f);
+		pocession = 1 - MathF.Sin(pocession * MathF.PI);
 		float timeValue = (float)(Main.time * 0.0003f);
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
-		List<Vertex2D> bars = new List<Vertex2D>()
+		Vector2 pos0 = position + toCorner;
+		Vector2 pos1 = position + toCorner.RotatedBy(Math.PI * 0.5);
+		Vector2 pos2 = position + toCorner.RotatedBy(Math.PI * 1.5);
+		Vector2 pos3 = position + toCorner.RotatedBy(Math.PI * 1.0);
+		Color lightColor0 = Lighting.GetColor((int)(pos0.X / 16f), (int)(pos0.Y / 16f));
+		Color lightColor1 = Lighting.GetColor((int)(pos1.X / 16f), (int)(pos1.Y / 16f));
+		Color lightColor2 = Lighting.GetColor((int)(pos2.X / 16f), (int)(pos2.Y / 16f));
+		Color lightColor3 = Lighting.GetColor((int)(pos3.X / 16f), (int)(pos3.Y / 16f));
+		List<Vertex2DSmog> bars = new List<Vertex2DSmog>()
 		{
-			new Vertex2D(position + toCorner,new Color(0, 0,pocession, 0), new Vector3(ai[0],timeValue,0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 1, pocession, 0), new Vector3(ai[0], timeValue + 0.4f * scale / 70f, 0)),
+			new Vertex2DSmog(pos0,new Color(0, 0,pocession, 0), new Vector3(ai[0],timeValue,0), lightColor0.ToVector3() * 0.2f + new Vector3(lightColor0.ToVector3().Length() / 3f)),
+			new Vertex2DSmog(pos1,new Color(0, 1, pocession, 0), new Vector3(ai[0] + 0.4f * scale / 70f, timeValue, 0), lightColor1.ToVector3() * 0.2f + new Vector3(lightColor1.ToVector3().Length() / 3f)),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0 ,pocession, 0), new Vector3(ai[0] + 0.4f * scale / 70f, timeValue, 0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession, 0), new Vector3(ai[0] + 0.4f * scale / 70f, timeValue + 0.4f * scale / 70f, 0))
+			new Vertex2DSmog(pos2,new Color(1, 0 ,pocession, 0), new Vector3(ai[0], timeValue + 0.4f * scale / 70f, 0), lightColor2.ToVector3() * 0.2f + new Vector3(lightColor2.ToVector3().Length() / 3f)),
+			new Vertex2DSmog(pos3,new Color(1, 1, pocession, 0), new Vector3(ai[0] + 0.4f * scale / 70f, timeValue + 0.4f * scale / 70f, 0), lightColor3.ToVector3() * 0.2f + new Vector3(lightColor3.ToVector3().Length() / 3f))
 		};
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
+}
+public struct Vertex2DSmog : IVertexType
+{
+	private static VertexDeclaration _vertexDeclaration = new(new VertexElement[4]
+	{
+		new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.Position, 0),
+		new VertexElement(8, VertexElementFormat.Color, VertexElementUsage.Color, 0),
+		new VertexElement(12, VertexElementFormat.Vector3, VertexElementUsage.TextureCoordinate, 0),
+		new VertexElement(24, VertexElementFormat.Vector3, VertexElementUsage.TextureCoordinate, 1)
+	});
+	public Vector2 position;
+	public Color color;
+	public Vector3 texCoord;
+	public Vector3 texCoord2;
+
+	public Vertex2DSmog(Vector2 position, Color color, Vector3 texCoord, Vector3 texCoord2)
+	{
+		this.position = position;
+		this.color = color;
+		this.texCoord = texCoord;
+		this.texCoord2 = texCoord2;
+	}
+
+	public override string ToString()
+	{
+		return $"[{position}, {color}, {texCoord}, {texCoord2}]";
+	}
+
+	public VertexDeclaration VertexDeclaration => _vertexDeclaration;
 }

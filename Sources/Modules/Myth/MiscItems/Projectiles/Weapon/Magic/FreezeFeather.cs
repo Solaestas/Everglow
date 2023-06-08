@@ -79,7 +79,7 @@ public class FreezeFeather : ModProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
-				maxTime = Main.rand.Next(237, 345),
+				maxTime = Main.rand.Next(137, 245),
 				scale = Main.rand.NextFloat(18f, 45f),
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.005f, 0.005f) }
@@ -95,28 +95,49 @@ public class FreezeFeather : ModProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
-				maxTime = Main.rand.Next(237, 345),
+				maxTime = Main.rand.Next(137, 245),
 				scale = Main.rand.NextFloat(18f, 45f),
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.005f, 0.005f) }
 			};
 			Ins.VFXManager.Add(smog);
 		}
-		if(Main.rand.NextBool(2))
+		//if (Main.rand.NextBool(2))
+		//{
+		//	Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 0.6f)).RotatedByRandom(MathHelper.TwoPi);
+		//	var smog = new IceParticleDust
+		//	{
+		//		velocity = newVelocity + Projectile.velocity * Main.rand.NextFloat(0f, 0.03f),
+		//		Active = true,
+		//		Visible = true,
+		//		position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
+		//		maxTime = Main.rand.Next(237, 345),
+		//		scale = Main.rand.NextFloat(1f, 12f),
+		//		rotation = Main.rand.NextFloat(6.283f),
+		//		ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.005f, 0.005f) }
+		//	};
+		//	Ins.VFXManager.Add(smog);
+		//}
+		if (Main.rand.NextBool(2))
 		{
-			//Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 0.6f)).RotatedByRandom(MathHelper.TwoPi);
-			//var smog = new IceParticleDust
-			//{
-			//	velocity = newVelocity + Projectile.velocity * Main.rand.NextFloat(0f, 0.03f),
-			//	Active = true,
-			//	Visible = true,
-			//	position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
-			//	maxTime = Main.rand.Next(237, 345),
-			//	scale = Main.rand.NextFloat(1f, 15f),
-			//	rotation = Main.rand.NextFloat(6.283f),
-			//	ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.005f, 0.005f) }
-			//};
-			//Ins.VFXManager.Add(smog);
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 0.6f)).RotatedByRandom(MathHelper.TwoPi);
+			var smog = new SnowPieceDust
+			{
+				velocity = newVelocity + Projectile.velocity * Main.rand.NextFloat(0f, 0.03f),
+				Active = true,
+				Visible = true,
+				coord0 = new Vector2(Main.rand.NextFloat(0.1f, 0.2f), 0).RotatedByRandom(6.283),
+				coord1 = new Vector2(Main.rand.NextFloat(0.1f, 0.2f), 0).RotatedByRandom(6.283),
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
+				maxTime = Main.rand.Next(37, 85),
+				scale = Main.rand.NextFloat(2f, 8f),
+				rotation = Main.rand.NextFloat(6.283f),
+				rotation2 = Main.rand.NextFloat(6.283f),
+				omega = Main.rand.NextFloat(-10f, 10f),
+				phi = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0f, 1f), Main.rand.NextFloat(0f, 1f), Main.rand.NextFloat(-0.005f, 0.005f) }
+			};
+			Ins.VFXManager.Add(smog);
 		}
 		if (Projectile.timeLeft <= 100 && TimeTokill < 0)
 		{
@@ -140,7 +161,7 @@ public class FreezeFeather : ModProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity * 16,
-				maxTime = Main.rand.Next(337, 445),
+				maxTime = Main.rand.Next(237, 345),
 				scale = Main.rand.NextFloat(320f, 435f),
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
@@ -156,12 +177,33 @@ public class FreezeFeather : ModProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity * 16,
-				maxTime = Main.rand.Next(337, 445),
+				maxTime = Main.rand.Next(237, 345),
 				scale = Main.rand.NextFloat(220f, 235f),
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
 			};
 			Ins.VFXManager.Add(somg);
+		}
+		for (int g = 0; g < Frequency * 6; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 4.6f)).RotatedByRandom(MathHelper.TwoPi);
+			var smog = new SnowPieceDust
+			{
+				velocity = newVelocity + Projectile.velocity * Main.rand.NextFloat(0f, 0.03f),
+				Active = true,
+				Visible = true,
+				coord0 = new Vector2(Main.rand.NextFloat(0.1f, 0.2f), 0).RotatedByRandom(6.283),
+				coord1 = new Vector2(Main.rand.NextFloat(0.1f, 0.2f), 0).RotatedByRandom(6.283),
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
+				maxTime = Main.rand.Next(47, 85),
+				scale = Main.rand.NextFloat(2f, 12f),
+				rotation = Main.rand.NextFloat(6.283f),
+				rotation2 = Main.rand.NextFloat(6.283f),
+				omega = Main.rand.NextFloat(-10f, 10f),
+				phi = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0f, 1f), Main.rand.NextFloat(0f, 1f), Main.rand.NextFloat(-0.005f, 0.005f) }
+			};
+			Ins.VFXManager.Add(smog);
 		}
 	}
 	public virtual void AmmoHit()

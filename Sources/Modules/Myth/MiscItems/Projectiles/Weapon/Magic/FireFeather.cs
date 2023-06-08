@@ -70,7 +70,7 @@ public class FireFeather : ModProjectile
 			Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 2)).RotatedByRandom(MathHelper.TwoPi);
 			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.FireFeather>(), v.X, v.Y, 150, default, Main.rand.NextFloat(0.8f, 1.7f));
 		}
-		if(Main.rand.NextBool(1))
+		if(Main.rand.NextBool(2))
 		{
 			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 0.6f)).RotatedByRandom(MathHelper.TwoPi);
 			var spark = new FireSparkDust

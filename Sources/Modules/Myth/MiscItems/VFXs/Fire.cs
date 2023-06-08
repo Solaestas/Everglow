@@ -36,7 +36,7 @@ internal class FireDust : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-
+	public FireDust() { }
 	public override void Update()
 	{
 		position += velocity;

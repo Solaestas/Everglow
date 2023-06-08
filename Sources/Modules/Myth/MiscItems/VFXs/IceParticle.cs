@@ -1,3 +1,5 @@
+using Everglow.Myth.Common;
+
 namespace Everglow.Myth.MiscItems.VFXs;
 internal class IceParticlePipeline : Pipeline
 {
@@ -35,6 +37,7 @@ internal class IceParticleDust : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
+	public IceParticleDust() { }
 	public override void Update()
 	{
 		ai[1] *= 0.99f;
@@ -72,11 +75,11 @@ internal class IceParticleDust : Visual
 		Color lightColor = Lighting.GetColor((int)(position.X / 16f), (int)(position.Y / 16f));
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + toCorner,new Color(0, 0.5f,pocession, 0.0f), lightColor.ToVector3()),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 0.5f, pocession, 0.0f), lightColor.ToVector3()),
+			new Vertex2D(position + toCorner,new Color(0, 0f,pocession, 0.0f), lightColor.ToVector3()),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 1f, pocession, 0.0f), lightColor.ToVector3()),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0.5f ,pocession, 0.0f), lightColor.ToVector3()),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 0.5f, pocession, 0.0f), lightColor.ToVector3())
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0f ,pocession, 0.0f), lightColor.ToVector3()),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1f, pocession, 0.0f), lightColor.ToVector3())
 		};
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);

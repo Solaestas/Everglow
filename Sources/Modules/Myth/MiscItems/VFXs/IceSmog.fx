@@ -32,6 +32,7 @@ struct VSInput
     float2 Pos : POSITION0;
     float4 Color : COLOR0;
     float3 Texcoord : TEXCOORD0;
+    float3 Texcoord2 : TEXCOORD1;
 };
 
 struct PSInput
@@ -39,6 +40,7 @@ struct PSInput
     float4 Pos : SV_POSITION;
     float4 Color : COLOR0;
     float3 Texcoord : TEXCOORD0;
+    float3 Texcoord2 : TEXCOORD1;
 };
 
 PSInput VertexShaderFunction(VSInput input)
@@ -46,6 +48,7 @@ PSInput VertexShaderFunction(VSInput input)
     PSInput output;
     output.Color = input.Color;
     output.Texcoord = input.Texcoord;
+    output.Texcoord2 = input.Texcoord2;
     output.Pos = mul(float4(input.Pos, 0, 1), uTransform);
     return output;
 }
@@ -56,6 +59,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     float4 colorHalo = tex2D(uImage, input.Color.xy);
     float light = 1 - colorHalo.r * colorNoise.r * (1 - input.Color.b);
     float4 colorHeatMap = tex2D(uHeatMapSampler, float2(light, 0));
+    colorHeatMap.rgb *= input.Texcoord2.rgb;
     colorHeatMap.w *= input.Color.a;
     return colorHeatMap;
 }

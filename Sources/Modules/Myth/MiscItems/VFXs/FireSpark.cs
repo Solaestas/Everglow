@@ -34,6 +34,7 @@ internal class FireSparkDust : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
+	public FireSparkDust() { }
 	public override void Update()
 	{
 		ai[1] *= 0.99f;
