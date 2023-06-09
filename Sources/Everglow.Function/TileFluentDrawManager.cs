@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Everglow.Commons.TileHelper;
+using Terraria;
 using Terraria.GameContent.Drawing;
+using Terraria.ObjectData;
 
 namespace Everglow.Commons;
 

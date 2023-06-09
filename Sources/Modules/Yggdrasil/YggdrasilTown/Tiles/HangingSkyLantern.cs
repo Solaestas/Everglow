@@ -217,18 +217,35 @@ public class HangingSkyLantern : ModTile, ITileFluentlyDrawn
 			Adx = 70; // 改了下贴图，所以是70
 		// 对了：要给卷筒纸吊灯用油漆的话，卷筒纸贴图估计得分开很多份（对应不同物块位置的油漆）
 		// 不过如果只考虑中心物块漆的话就会省事很多。或者分成三份三个位置的油漆也可以
-		DrawLanternPiece(42 + Adx, 58, 0.15f, -2, pos, drawCenterPos, spriteBatch, tileDrawing);
-		DrawLanternPiece(56 + Adx, 44, 0.11f, -4, pos, drawCenterPos, spriteBatch, tileDrawing);
-		DrawLanternPiece(28 + Adx, 40, 0.13f, 2, pos, drawCenterPos, spriteBatch, tileDrawing);
-		DrawLanternPiece(14 + Adx, 44, 0.09f, 8, pos + new Point(1, 0), drawCenterPos, spriteBatch, tileDrawing);
-		DrawLanternPiece(0 + Adx, 48, 0.09f, -8, pos + new Point(-1, 0), drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(42 + Adx, 58, 0.15f, -2, pos, pos, 0, drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(56 + Adx, 44, 0.11f, -4, pos, pos + new Point(-1, 0), 1, drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(28 + Adx, 40, 0.13f, 2, pos, pos + new Point(1, 0), 2, drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(14 + Adx, 44, 0.09f, 8, pos + new Point(1, 0), pos + new Point(1, 1), 3, drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(0 + Adx, 48, 0.09f, -8, pos + new Point(-1, 0), pos + new Point(-1, 1), 4, drawCenterPos, spriteBatch, tileDrawing);
 	}
 
 	/// <summary>
 	/// 绘制灯的一个小Piece
 	/// </summary>
-	private void DrawLanternPiece(int frameX, int frameHeight, float swayCoefficient, int offsetX, Point tilePos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
-		Texture2D tex = ModAsset.HangingSkyLantern_Depart.Value;
+	/// <param name="frameX">卷筒纸在贴图中的帧的X坐标</param>
+	/// <param name="frameHeight">卷筒纸的高度</param>
+	/// <param name="swayCoefficient">摇摆系数，为了让各卷筒纸摇晃不完全一致而设置的</param>
+	/// <param name="offsetX">绘制偏移</param>
+	/// <param name="tilePos">用于进行摇晃和风速判定的物块的坐标</param>
+	/// <param name="paintPos">用于应用漆的物块的坐标，让五个卷筒纸都可以获得不同的漆</param>
+	/// <param name="style">用于标识不同漆的值，保证每个卷筒纸的值不一致即可</param>
+	/// <param name="drawCenterPos">绘制中心的坐标（各个卷筒纸共享一个值）</param>
+	/// <param name="spriteBatch">批量雪碧（各个卷筒纸共享一个值）</param>
+	/// <param name="tileDrawing">原版TileDrawing类的实例，有很多好用的方法（各个卷筒纸共享一个值）</param>
+	private void DrawLanternPiece(int frameX, int frameHeight, float swayCoefficient, int offsetX, Point tilePos, Point paintPos, int style, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
+		// 回声涂料	
+		if (!tileDrawing.IsVisible(Main.tile[paintPos])) return;	
+		
+		var tile = Main.tile[tilePos];
+		ushort type = tile.TileType;
+		int paint = Main.tile[paintPos].TileColor;
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.HangingSkyLantern_DepartPath, type, frameX, paint, tileDrawing);
+		tex ??= ModAsset.HangingSkyLantern_Depart.Value;
 		var frame = new Rectangle(frameX, 0, 12, frameHeight);
 
 		int sizeX = 1;
@@ -238,12 +255,16 @@ public class HangingSkyLantern : ModTile, ITileFluentlyDrawn
 		if (tileDrawing.InAPlaceWithWind(tilePos.X, tilePos.Y, sizeX, sizeY))
 			windCycle = tileDrawing.GetWindCycle(tilePos.X, tilePos.Y, tileDrawing._sunflowerWindCounter);
 
-		int totalPushTime = 60;
+		int totalPushTime = 80;
 		float pushForcePerFrame = 1.26f;
 		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X, tilePos.Y, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
 		windCycle += highestWindGridPushComplex;
 		
+		// 支持发光涂料
 		Color tileLight = Lighting.GetColor(tilePos);
+		tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(tilePos.X, tilePos.Y, tile, type, 0, 0, ref tileLight, tileDrawing._rand.NextBool(4));
+		tileLight = tileDrawing.DrawTiles_GetLightOverride(tilePos.Y, tilePos.X, tile, type, 0, 0, tileLight);
+		
 		float rotation = -windCycle * swayCoefficient;
 		var origin = new Vector2(6, 0);
 		var tileSpriteEffect = SpriteEffects.None;

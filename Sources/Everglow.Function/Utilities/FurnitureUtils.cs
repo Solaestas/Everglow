@@ -1,11 +1,78 @@
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 
 namespace Everglow.Commons.Utilities;
 
 public static class FurnitureUtils
 {
+	/// <summary>
+	/// 用于宽度为1的Lantern的FluentDraw，用于带摆动绘制，适配油漆 <br/>
+	/// 也可以用于旗帜，原版旗帜的摆动绘制和挂灯其实是有区别的，将风速调至最大对比一下就会发现，所以加了isBanner参数
+	/// </summary>
+	public static void LanternFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing, int sizeY = 2, bool isBanner = false)
+	{
+		var tile = Main.tile[pos];
+
+		if (!tileDrawing.IsVisible(tile)) return;
+
+		// 这就是油漆的奥秘，大概就是根据你给出的pos上的油漆给你这个物块的贴图上shader
+		// 你可以把里面的代码抄来，把方法里面那个贴图改成一个参数，就可以做到给任意贴图上相应世界物块上的漆了
+		Texture2D tex = tileDrawing.GetTileDrawTexture(tile, pos.X, pos.Y);
+		
+		short tileFrameX = tile.frameX;
+		short tileFrameY = tile.frameY;
+
+		int layer = tileFrameY / 18; // 这格物块处于整体的第几层（最上面的是第零层，往下递增）
+
+		// 用于风速、推力等一系列判定的物块坐标，通常来说是挂在墙上的那一格
+		int topTileX = pos.X;
+		int topTileY = pos.Y - layer;
+
+		int offsetX = 8;
+		int offsetY = -2 - layer * 16;
+		// 锤子是这样的
+		if (WorldGen.IsBelowANonHammeredPlatform(topTileX, topTileY)) {
+			offsetY -= 8;
+		}
+
+		// 物块的size
+		int sizeX = 1;
+
+		float windCycle = 0;
+		if (tileDrawing.InAPlaceWithWind(topTileX, topTileY, sizeX, sizeY))
+			windCycle = tileDrawing.GetWindCycle(topTileX, topTileY, tileDrawing._sunflowerWindCounter);
+
+		// 普通源码罢了
+		int totalPushTime = 60;
+		float pushForcePerFrame = 1.26f;
+		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(topTileX, topTileY, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+		windCycle += highestWindGridPushComplex;
+
+		Rectangle rectangle = new Rectangle(tileFrameX, tileFrameY, 16, 16);
+		Color tileLight = Lighting.GetColor(pos);
+		tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(pos.X, pos.Y, tile, tile.type, tileFrameX, tileFrameY, ref tileLight, tileDrawing._rand.NextBool(4));
+		tileLight = tileDrawing.DrawTiles_GetLightOverride(pos.Y, pos.X, tile, tile.type, tileFrameX, tileFrameY, tileLight);
+		
+		// 对于旗帜需要乘上一个长这样的系数来修正rotation
+		float num = isBanner ? (tileFrameY / 18 + 1) / (float)sizeY : 1;
+		float rotation = -windCycle * 0.15f * num;
+
+		var origin = new Vector2(sizeX * 16 / 2f, 0);
+		var tileSpriteEffect = SpriteEffects.None;
+
+		var drawPos = pos.ToWorldCoordinates(0, 0) + new Vector2(offsetX, offsetY) - screenPosition;
+		// 根据节修正position
+		drawPos += new Vector2(0f, 16f).RotatedBy(rotation) * layer;
+
+		// 原版中旗帜的旋转角越大，绘制向上偏移就越大，为了防止两个物块间贴图连不起来
+		if (isBanner)
+			drawPos.Y -= Math.Abs(rotation) * layer * 4;
+		
+		spriteBatch.Draw(tex, drawPos, rectangle, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
+	}
+
 	public static bool BedRightClick(int i, int j)
 	{
 		Player player = Main.LocalPlayer;
