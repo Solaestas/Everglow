@@ -52,7 +52,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
 {
     float4 colorNoise = tex2D(uNoiseSampler, input.Texcoord.xy);
     float4 colorHalo = tex2D(uImage, input.Color.xy);
-    float light = 1 - colorHalo.r * colorNoise.r;
+    float light = colorHalo.r * colorNoise.r * 2;
     float4 colorHeatMap = tex2D(uHeatMapSampler, float2(light, input.Color.b));
     colorHeatMap.w *= input.Color.a;
     return colorHeatMap;

@@ -38,12 +38,13 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 		Projectile.penetrate = -1;
 		Projectile.timeLeft = 10000;
 		Projectile.tileCollide = false;
+		base.SetDefaults();
 	}
 
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
-		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
+		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(-player.direction * 22, -12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
 		Projectile.spriteDirection = player.direction;
 		Projectile.velocity *= 0;
 		if (player.itemTime > 0 && player.HeldItem.type == ModContent.ItemType<MiscItems.Weapons.FreezeFeatherMagic>())
@@ -94,7 +95,6 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 			bars.Add(new Vertex2D(Projectile.Center + radious + normalizedRadious, new Color(x / 40f, 0, pocession, 0.0f), new Vector3(0 + (float)Main.time * 0.03f, x / 15f, 0)));
 			bars.Add(new Vertex2D(Projectile.Center + radious, new Color(x / 40f, 1, pocession, 0.0f), new Vector3(0.2f + (float)Main.time * 0.03f, x / 15f, 0)));
 		}
-
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
 }
