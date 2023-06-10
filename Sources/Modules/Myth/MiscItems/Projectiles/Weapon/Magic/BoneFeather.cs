@@ -119,6 +119,19 @@ public class BoneFeather : ModProjectile
 			Projectile.velocity.X = (Projectile.velocity.X * 90f + num9) / 91f;
 			Projectile.velocity.Y = (Projectile.velocity.Y * 90f + num10) / 91f;
 		}
+
+
+
+
+
+		if (Projectile.position.X <= 320 || Projectile.position.X >= Main.maxTilesX * 16 - 320)
+		{
+			Projectile.Kill();
+		}
+		if (Projectile.position.Y <= 320 || Projectile.position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			Projectile.Kill();
+		}
 	}
 	public override void Kill(int timeLeft)
 	{

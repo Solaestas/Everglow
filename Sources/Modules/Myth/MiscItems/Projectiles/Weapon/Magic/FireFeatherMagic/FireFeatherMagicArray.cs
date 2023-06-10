@@ -46,6 +46,7 @@ internal class FireFeatherMagicArray : VisualProjectile
 		base.SetDefaults();
 	}
 	public float WingPower = 0;
+	public FlameWingSlot FlameWing = new FlameWingSlot();
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -91,20 +92,45 @@ internal class FireFeatherMagicArray : VisualProjectile
 				{
 					player.wingTime += 1;
 					WingPower -= 0.1666666f;
-					player.noFallDmg= true;
-					player.wings = 9;
-					player.wingTimeMax = 60;
-					player.wingsLogic = 9;
-					ArmorIDs.Wing.Sets.Stats[9] = new WingStats(1, -1, 1, false, 1, 1);
-					
+
+					FlameWing.FunctionalItem = new Item(ItemID.FlameWings, 1);
+					FlameWing.valid = true;
+					//TODO:即便这样子都用不了
+					FlameWing.ApplyEquipEffects();
+					Main.NewText(FlameWing.IsEnabled());
+					//player.noFallDmg= true;
+					//player.wings = 9;
+					//player.wingTimeMax = 60;
+					//player.wingsLogic = 9;
+					//player.extraAccessory = true;
+					//player.extraAccessorySlots = 1;
+					//player.equippedWings = new Item(ItemID.FlameWings, 1);
+					//player.armor.SetValue(new Item(ItemID.FlameWings , 1), player.armor.Length - 12);
+					//player.velocity.Y -= 0.3f;
+					//player.WingMovement();
+					//player.WingAirLogicTweaks();
+					//player.WingAirVisuals();
+					//player.WingFrame(true, true);
+					//player.GetWingStats(9);
+				}
+				else
+				{
+					FlameWing.valid = false;
+					FlameWing.FunctionalItem.SetDefaults();
 				}
 			}
 			else
 			{
 				player.noFallDmg = false;
+				FlameWing.valid = false;
+				FlameWing.FunctionalItem.SetDefaults();
 			}
 		}
-		//Main.NewText(player.equippedWings.wingSlot);
+		else
+		{
+			FlameWing.valid = false;
+			FlameWing.FunctionalItem.SetDefaults();
+		}
 	}
 	internal int Timer = 0;
 	internal Vector2 RingPos = Vector2.Zero;
@@ -132,5 +158,28 @@ internal class FireFeatherMagicArray : VisualProjectile
 			bars.Add(new Vertex2D(Projectile.Center + radious, new Color(x / 40f, 0.8f, pocession, 0.0f), new Vector3(x / 25f, 0.5f + (float)Main.time * 0.009f, 0)));
 		}
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+	}
+}
+//TODO:为什么这饰品栏无效
+public class FlameWingSlot : ModAccessorySlot
+{
+	public bool valid = false;
+	public override bool IsEnabled() => valid;
+	public override bool IsHidden() => false;
+	public override bool CanAcceptItem(Item checkItem, AccessorySlotType context)
+	{
+		if (checkItem.wingSlot > 0) // if is Wing, then can go in slot
+			return true;
+
+		return false; // Otherwise nothing in slot
+	}
+
+	// Designates our slot to be a priority for putting wings in to. NOTE: use ItemLoader.CanEquipAccessory if aiming for restricting other slots from having wings!
+	public override bool ModifyDefaultSwapSlot(Item item, int accSlotToSwapTo)
+	{
+		if (item.wingSlot > 0) // If is Wing, then we want to prioritize it to go in to our slot.
+			return true;
+
+		return false;
 	}
 }

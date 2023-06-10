@@ -1,3 +1,6 @@
+using static Terraria.ModLoader.PlayerDrawLayer;
+using Terraria.Map;
+
 namespace Everglow.Myth.MiscItems.Dusts;
 
 public class FreezeFeather : ModDust
@@ -15,6 +18,14 @@ public class FreezeFeather : ModDust
 		dust.rotation += MathF.Sin((float)(Main.time * 0.3 + dust.color.R)) * 0.7f;
 		dust.scale *= 0.97f;
 		dust.velocity *= MathF.Pow(0.97f, dust.velocity.Length());
+		if (dust.position.X <= 320 || dust.position.X >= Main.maxTilesX * 16 - 320)
+		{
+			dust.active = false;
+		}
+		if (dust.position.Y <= 320 || dust.position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			dust.active = false;
+		}
 		if (Collision.SolidCollision(dust.position, 8, 8))
 		{
 			Vector2 v0 = dust.velocity;

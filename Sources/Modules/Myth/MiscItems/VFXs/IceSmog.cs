@@ -50,6 +50,14 @@ internal class IceSmogDust : Visual
 	public override void Update()
 	{
 		position += velocity;
+		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
+		{
+			timer = maxTime;
+		}
+		if (position.Y <= 320 || position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			timer = maxTime;
+		}
 		velocity *= 0.9f;
 		velocity += new Vector2(Main.windSpeedCurrent * 0.02f, 0.01f);
 		if (scale < 160)
@@ -111,6 +119,14 @@ internal class IceSmogDust2 : Visual
 	public override void Update()
 	{
 		position += velocity;
+		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
+		{
+			timer = maxTime;
+		}
+		if (position.Y <= 320 || position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			timer = maxTime;
+		}
 		velocity *= 0.9f;
 		velocity += new Vector2(Main.windSpeedCurrent * 0.02f, 0.01f);
 		if (scale < 160)

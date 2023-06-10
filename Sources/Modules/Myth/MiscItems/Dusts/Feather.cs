@@ -19,6 +19,14 @@ public class Feather : ModDust
 		dust.scale *= 0.97f;
 		dust.velocity *= MathF.Pow(0.97f, dust.velocity.Length());
 		Lighting.AddLight(dust.position, dust.scale * 0.85f, dust.scale * 0.25f, 0);
+		if (dust.position.X <= 320 || dust.position.X >= Main.maxTilesX * 16 - 320)
+		{
+			dust.active = false;
+		}
+		if (dust.position.Y <= 320 || dust.position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			dust.active = false;
+		}
 		if (Collision.SolidCollision(dust.position, 8, 8))
 		{
 			Vector2 v0 = dust.velocity;

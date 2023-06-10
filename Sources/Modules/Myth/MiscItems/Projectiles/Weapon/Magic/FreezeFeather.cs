@@ -128,6 +128,14 @@ public class FreezeFeather : ModProjectile
 		{
 			AmmoHit();
 		}
+		if (Projectile.position.X <= 320 || Projectile.position.X >= Main.maxTilesX * 16 - 320)
+		{
+			Projectile.Kill();
+		}
+		if (Projectile.position.Y <= 320 || Projectile.position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			Projectile.Kill();
+		}
 	}
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{

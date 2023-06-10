@@ -32,6 +32,14 @@ public class FireFeather : ModDust
 			dust.velocity.Y -= 0.03f;
 
 		}
+		if (dust.position.X <= 320 || dust.position.X >= Main.maxTilesX * 16 - 320)
+		{
+			dust.active = false;
+		}
+		if (dust.position.Y <= 320 || dust.position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			dust.active = false;
+		}
 		if (Collision.SolidCollision(dust.position, 8, 8))
 		{
 			Vector2 v0 = dust.velocity;

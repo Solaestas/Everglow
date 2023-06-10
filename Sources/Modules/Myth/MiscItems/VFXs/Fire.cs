@@ -40,6 +40,14 @@ internal class FireDust : Visual
 	public override void Update()
 	{
 		position += velocity;
+		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
+		{
+			timer = maxTime;
+		}
+		if (position.Y <= 320 || position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			timer = maxTime;
+		}
 		velocity *= 0.9f;
 		velocity += new Vector2(Main.windSpeedCurrent * 0.1f, -0.1f);
 		if (scale < 160)

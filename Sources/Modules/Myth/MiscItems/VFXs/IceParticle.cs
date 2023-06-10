@@ -42,6 +42,14 @@ internal class IceParticleDust : Visual
 	{
 		ai[1] *= 0.99f;
 		position += velocity;
+		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
+		{
+			timer = maxTime;
+		}
+		if (position.Y <= 320 || position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			timer = maxTime;
+		}
 		velocity *= 0.98f;
 		velocity += new Vector2(Main.windSpeedCurrent * 0.1f, 0.01f * scale);
 		scale *= 0.96f;

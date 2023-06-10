@@ -4,6 +4,8 @@ using Everglow.Myth.MiscItems.VFXs;
 using SteelSeries.GameSense;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using static Terraria.ModLoader.PlayerDrawLayer;
+using Terraria.Map;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
 
@@ -142,6 +144,14 @@ public class FireFeather : ModProjectile
 				arrayProj.WingPower += 0.1f;
 			}
 			AmmoHit();
+		}
+		if (Projectile.position.X <= 320 || Projectile.position.X >= Main.maxTilesX * 16 - 320)
+		{
+			Projectile.Kill();
+		}
+		if (Projectile.position.Y <= 320 || Projectile.position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			Projectile.Kill();
 		}
 	}
 	public void GenerateSmog(int Frequency)
