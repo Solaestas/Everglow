@@ -27,7 +27,10 @@ public class GlowWoodClock : ModTile
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16, 18 };
 		TileObjectData.addTile(Type);
 	}
-
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+	}
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 	{
 		return true;
@@ -36,11 +39,6 @@ public class GlowWoodClock : ModTile
 	public override bool RightClick(int x, int y)
 	{
 		return FurnitureUtils.ClockRightClick();
-	}
-
-	public override void NumDust(int i, int j, bool fail, ref int num)
-	{
-		num = fail ? 1 : 3;
 	}
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
