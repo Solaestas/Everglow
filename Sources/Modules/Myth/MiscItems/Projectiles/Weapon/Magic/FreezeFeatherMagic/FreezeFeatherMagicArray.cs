@@ -28,7 +28,7 @@ internal class FrozenRingPipeline : Pipeline
 	}
 }
 [Pipeline(typeof(FrozenRingPipeline))]
-//TODO:紫幽看看这个Visual类不正常
+//TODO:紫幽看看这个Visual类不正常，使用水晶颅骨升级冰火羽毛魔法书触发
 internal class FreezeFeatherMagicArray : VisualProjectile
 {
 	public float WingPower = 0;
