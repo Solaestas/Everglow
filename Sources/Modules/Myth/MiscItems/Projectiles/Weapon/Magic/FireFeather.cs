@@ -1,11 +1,7 @@
-using System;
 using Everglow.Myth.MiscItems.Projectiles.Weapon.Magic.FireFeatherMagic;
 using Everglow.Myth.MiscItems.VFXs;
-using SteelSeries.GameSense;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using static Terraria.ModLoader.PlayerDrawLayer;
-using Terraria.Map;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
 
@@ -25,42 +21,23 @@ public class FireFeather : ModProjectile
 		Projectile.localNPCHitCooldown = 2;
 	}
 	internal int TimeTokill = -1;
-	ModProjectile array = null;
+	ModProjectile MagicArray = null;
 	public override void OnSpawn(IEntitySource source)
 	{
-		foreach(Projectile projectile in Main.projectile)
+		foreach (Projectile projectile in Main.projectile)
 		{
-			if(projectile.active)
+			if (projectile.active)
 			{
 				if (projectile.type == ModContent.ProjectileType<FireFeatherMagicArray>())
 				{
 					if (projectile.owner == Projectile.owner)
 					{
-						array = projectile.ModProjectile; break;
+						MagicArray = projectile.ModProjectile;
+						break;
 					}
 				}
 			}
 		}
-	}
-	public override bool OnTileCollide(Vector2 oldVelocity)
-	{
-		if(array != null)
-		{
-			var arrayProj = array as FireFeatherMagicArray;
-			arrayProj.WingPower += 0.1f;
-		}
-		AmmoHit();
-		return false;
-	}
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
-		if (array != null)
-		{
-			var arrayProj = array as FireFeatherMagicArray;
-			arrayProj.WingPower += 2f;
-		}
-		target.AddBuff(24, 600);
-		AmmoHit();
 	}
 	public override void AI()
 	{
@@ -81,13 +58,13 @@ public class FireFeather : ModProjectile
 		else
 		{
 			Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-			if(Projectile.timeLeft >= 320)
+			if (Projectile.timeLeft >= 320)
 			{
 				Projectile.velocity *= 1.01f;
 			}
 			else
 			{
-				if(Projectile.wet)
+				if (Projectile.wet)
 				{
 					Projectile.velocity.Y += 0.1f;
 				}
@@ -95,7 +72,7 @@ public class FireFeather : ModProjectile
 				{
 					Projectile.velocity.Y -= 0.4f;
 					Projectile.velocity *= 0.96f;
-					Projectile.timeLeft -= Main.rand.Next(40,80);
+					Projectile.timeLeft -= Main.rand.Next(40, 80);
 				}
 			}
 		}
@@ -104,7 +81,7 @@ public class FireFeather : ModProjectile
 			Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 2)).RotatedByRandom(MathHelper.TwoPi);
 			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.FireFeather>(), v.X, v.Y, 150, default, Main.rand.NextFloat(0.8f, 1.7f));
 		}
-		if(Main.rand.NextBool(2))
+		if (Main.rand.NextBool(2))
 		{
 			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 0.6f)).RotatedByRandom(MathHelper.TwoPi);
 			var spark = new FireSparkDust
@@ -138,9 +115,9 @@ public class FireFeather : ModProjectile
 		}
 		if (Projectile.timeLeft <= 100 && TimeTokill < 0)
 		{
-			if (array != null)
+			if (MagicArray != null)
 			{
-				var arrayProj = array as FireFeatherMagicArray;
+				var arrayProj = MagicArray as FireFeatherMagicArray;
 				arrayProj.WingPower += 0.1f;
 			}
 			AmmoHit();
@@ -154,12 +131,92 @@ public class FireFeather : ModProjectile
 			Projectile.Kill();
 		}
 	}
+	public override bool PreDraw(ref Color lightColor)
+	{
+		return false;
+	}
+	public override void PostDraw(Color lightColor)
+	{
+		if (TimeTokill >= 0)
+		{
+			return;
+		}
+		SpriteEffects spriteEffects = SpriteEffects.None;
+		if (Projectile.spriteDirection == -1)
+			spriteEffects = SpriteEffects.FlipHorizontally;
+		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+		int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+		int startY = frameHeight * Projectile.frame;
+		var sourceRectangle = new Rectangle(0, startY, texture.Width, frameHeight);
+		Vector2 origin = sourceRectangle.Size() / 2f;
+		float offsetX = 20f;
+		origin.X = Projectile.spriteDirection == 1 ? sourceRectangle.Width - offsetX : offsetX;
+		float amount = 1f;
+		if (Projectile.timeLeft >= 1040)
+		{
+			amount = (1080 - Projectile.timeLeft) / 40f;
+		}
+		Color aimColor = new Color(1f, 1f, 1f, 1f);
+		Color drawColor = Color.Lerp(lightColor, aimColor, amount);
+		if (Projectile.wet)
+		{
+			float value = 0.6f;
+			if (Projectile.timeLeft < 700)
+			{
+				value = (Projectile.timeLeft - 100) / 1000f;
+			}
+			aimColor = new Color(value, value / 12f, 0f, 1f);
+			drawColor = aimColor;
+		}
+
+		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), sourceRectangle, drawColor, Projectile.rotation, origin, Projectile.scale, spriteEffects, 0);
+	}
+	public override bool OnTileCollide(Vector2 oldVelocity)
+	{
+		if (MagicArray != null)
+		{
+			var arrayProj = MagicArray as FireFeatherMagicArray;
+			arrayProj.WingPower += 0.1f;
+		}
+		AmmoHit();
+		return false;
+	}
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		if (MagicArray != null)
+		{
+			var arrayProj = MagicArray as FireFeatherMagicArray;
+			arrayProj.WingPower += 2f;
+		}
+		target.AddBuff(24, 600);
+		AmmoHit();
+	}
+	public virtual void AmmoHit()
+	{
+		TimeTokill = 20;
+		Projectile.tileCollide = false;
+		Projectile.ignoreWater = true;
+		Projectile.velocity = Projectile.oldVelocity;
+
+		SoundEngine.PlaySound((SoundID.DD2_BetsyFlameBreath.WithVolume(0.3f)).WithPitchOffset(0.8f), Projectile.Center);
+		for (int j = 0; j < 4; j++)
+		{
+			Vector2 v = new Vector2(0, Main.rand.NextFloat(7, 20)).RotatedByRandom(MathHelper.TwoPi);
+			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.FireFeather>(), v.X, v.Y, 150, default, Main.rand.NextFloat(1.8f, 3.7f));
+		}
+		GenerateFire(3);
+		GenerateSmog(3);
+		if (!Projectile.wet)
+		{
+			GenerateSpark(48);
+		}
+	}
 	public void GenerateSmog(int Frequency)
 	{
 		float mulVelocity = 1f;
 		for (int g = 0; g < Frequency; g++)
 		{
-			Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(2f,4f)).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(2f, 4f)).RotatedByRandom(MathHelper.TwoPi);
 			var somg = new FireSmogDust
 			{
 				velocity = newVelocity,
@@ -213,65 +270,5 @@ public class FireFeather : ModProjectile
 			};
 			Ins.VFXManager.Add(spark);
 		}
-	}
-	public virtual void AmmoHit()
-	{
-		TimeTokill = 20;
-		Projectile.tileCollide = false;
-		Projectile.ignoreWater = true;
-		Projectile.velocity = Projectile.oldVelocity;
-
-		SoundEngine.PlaySound((SoundID.DD2_BetsyFlameBreath.WithVolume(0.3f)).WithPitchOffset(0.8f), Projectile.Center);
-		for (int j = 0; j < 4; j++)
-		{
-			Vector2 v = new Vector2(0, Main.rand.NextFloat(7, 20)).RotatedByRandom(MathHelper.TwoPi);
-			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.FireFeather>(), v.X, v.Y, 150, default, Main.rand.NextFloat(1.8f, 3.7f));
-		}
-		GenerateFire(3);
-		GenerateSmog(3);
-		if (!Projectile.wet)
-		{
-			GenerateSpark(48);
-		}
-	}
-	public override bool PreDraw(ref Color lightColor)
-	{
-		return false;
-	}
-	public override void PostDraw(Color lightColor)
-	{
-		if (TimeTokill >= 0)
-		{
-			return;
-		}
-		SpriteEffects spriteEffects = SpriteEffects.None;
-		if (Projectile.spriteDirection == -1)
-			spriteEffects = SpriteEffects.FlipHorizontally;
-		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		int frameHeight = texture.Height / Main.projFrames[Projectile.type];
-		int startY = frameHeight * Projectile.frame;
-		var sourceRectangle = new Rectangle(0, startY, texture.Width, frameHeight);
-		Vector2 origin = sourceRectangle.Size() / 2f;
-		float offsetX = 20f;
-		origin.X = Projectile.spriteDirection == 1 ? sourceRectangle.Width - offsetX : offsetX;
-		float amount = 1f;
-		if (Projectile.timeLeft >= 1040)
-		{
-			amount = (1080 - Projectile.timeLeft) / 40f;
-		}
-		Color aimColor = new Color(1f, 1f, 1f, 1f);
-		Color drawColor = Color.Lerp(lightColor, aimColor, amount);
-		if (Projectile.wet)
-		{
-			float value = 0.6f;
-			if(Projectile.timeLeft < 700)
-			{
-				value = (Projectile.timeLeft - 100) / 1000f;
-			}
-			aimColor = new Color(value, value / 12f, 0f, 1f);
-			drawColor = aimColor;
-		}
-
-		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), sourceRectangle, drawColor, Projectile.rotation, origin, Projectile.scale, spriteEffects, 0);
 	}
 }

@@ -62,10 +62,10 @@ internal class FireFeatherMagicArray : VisualProjectile
 			    {			
 					Timer++;
 				}
-				Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
-				player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.timeForVisualEffects / 18d) * 0.6 + 1.2) * -player.direction);
+				Player.CompositeArmStretchAmount playerCASA = Player.CompositeArmStretchAmount.Full;
+				player.SetCompositeArmFront(true, playerCASA, (float)(-Math.Sin(Main.timeForVisualEffects / 18d) * 0.6 + 1.2) * -player.direction);
 				Vector2 vTOMouse = Main.MouseWorld - player.Center;
-				player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
+				player.SetCompositeArmBack(true, playerCASA, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
 			}
 			else
 			{

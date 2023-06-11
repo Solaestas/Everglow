@@ -33,11 +33,11 @@ internal class FireFeatherMagicBook : MagicBookProjectile
 			if (Timer < 0)
 				Projectile.Kill();
 		}
-		Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;//玩家动作
+		Player.CompositeArmStretchAmount playerCASA = Player.CompositeArmStretchAmount.Full;//玩家动作
 
-		player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.timeForVisualEffects / 18d) * 0.6 + 1.2) * -player.direction);
+		player.SetCompositeArmFront(true, playerCASA, (float)(-Math.Sin(Main.timeForVisualEffects / 18d) * 0.6 + 1.2) * -player.direction);
 		Vector2 vTOMouse = Main.MouseWorld - player.Center;
-		player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
+		player.SetCompositeArmBack(true, playerCASA, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
 		Projectile.rotation = player.fullRotation;
 		SpecialAI();
 		if (ProjType == -1)
