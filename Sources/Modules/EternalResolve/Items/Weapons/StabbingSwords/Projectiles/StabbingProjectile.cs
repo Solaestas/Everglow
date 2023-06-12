@@ -97,7 +97,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
             Projectile.soundDelay--;
             if (Projectile.soundDelay <= 0)
             {
-                SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.Item1.WithVolumeScale(0.5f).WithPitchOffset(Main.rand.NextFloat(-0.6f, 0.6f)), Projectile.Center);
                 Projectile.soundDelay = SoundTimer;
             }
 
@@ -136,6 +136,11 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			UpdateItemDraw();
 			UpdateDarkDraw();
 			UpdateLightDraw();
+		}
+		public virtual void HitTileSound(float scale)
+		{
+			SoundEngine.PlaySound((SoundID.NPCHit4.WithVolume(1 - scale / 2.42f)).WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
+			Projectile.soundDelay = SoundTimer;
 		}
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
@@ -220,7 +225,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			float drawRotation = Projectile.rotation + rndDirction * (MathF.PI * 2f) * 0.03f;
 			float additiveDrawPos = MaxLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
 			Vector2 drawPos = Pos + drawRotation.ToRotationVector2() * additiveDrawPos + rand.NextVector2Circular(20f, 20f);
-			while (!Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice, 0, 0))
+			bool canHit = Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice, 0, 0);
+			while (!canHit)
 			{
 				rndRange *= 0.9f;
 				drawPos -= Projectile.velocity * 0.2f;
@@ -228,6 +234,10 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				{
 					break;
 				}
+			}
+			if (!Main.gamePaused && !canHit)
+			{
+				HitTileSound(rndRange);
 			}
 			Vector2 drawSize = new Vector2(rndRange, DrawWidth) * lerpedTwice;
 			if (TradeLength > 0)

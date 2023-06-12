@@ -1,5 +1,6 @@
 using Everglow.Commons.Vertex;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 
@@ -113,6 +114,11 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * Color.R / 255f, lightColor.G / 255f * Color.G / 255f, lightColor.B / 255f * Color.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 				}
 			}
+		}
+		public override void HitTileSound(float scale)
+		{
+			SoundEngine.PlaySound((SoundID.Dig.WithVolume(1 - scale / 2.42f)).WithPitchOffset(Main.rand.NextFloat(0.6f, 1f)), Projectile.Center);
+			Projectile.soundDelay = SoundTimer;
 		}
 	}
 }
