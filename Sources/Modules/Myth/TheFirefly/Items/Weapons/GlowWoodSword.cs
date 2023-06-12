@@ -1,4 +1,4 @@
-using Everglow.Myth.TheFirefly.Items.Accessories;
+﻿using Everglow.Myth.TheFirefly.Items.Accessories;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheFirefly.Items.Weapons;
@@ -12,6 +12,7 @@ public class GlowWoodSword : ModItem
 	}
 	public override void SetDefaults()
 	{
+		
 		Item.damage = 13;
 		Item.DamageType = DamageClass.Melee;
 		Item.width = 56;

@@ -69,7 +69,7 @@ internal class FlameDust : ShaderDraw
 		if (timer > maxTime)
 			Active = false;
 		velocity = velocity.RotatedBy(ai[1]);
-		velocity.Y += 0.2f;
+
 		for (int f = oldPos.Count - 1; f > 0; f--)
 		{
 			if (oldPos[f] != Vector2.Zero)
