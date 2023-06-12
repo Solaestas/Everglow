@@ -1,4 +1,4 @@
-﻿using Everglow.Ocean.Common;
+using Everglow.Ocean.Common;
 using Terraria.DataStructures;
 
 namespace Everglow.Ocean.Items.Weapons;
@@ -81,10 +81,10 @@ public class RampageShark : ModItem
 	}
 	public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
 	{
-		Texture2D TexMainG = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_glow");
+		Texture2D texMainG = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_glow");
 		Texture2D TexEye = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_redEye");
 		float glow = CrazyValue / 16f;
-		spriteBatch.Draw(TexMainG, position, frame, new Color(glow, glow * 0.2f, glow * 0.2f, 0), 0, origin, scale, SpriteEffects.None, 0);
+		spriteBatch.Draw(texMainG, position, frame, new Color(glow, glow * 0.2f, glow * 0.2f, 0), 0, origin, scale, SpriteEffects.None, 0);
 		if (CrazyValue >= 15 && CrazyValue < 16)
 		{
 			float progress = CrazyValue - 15f;
@@ -97,19 +97,19 @@ public class RampageShark : ModItem
 	}
 	public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
 	{
-		Texture2D TexMainG = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_glow");
+		Texture2D texMainG = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_glow");
 		Texture2D TexEye = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_redEye");
 		float glow = CrazyValue / 16f;
-		spriteBatch.Draw(TexMainG, Item.Center - Main.screenPosition, null, new Color(glow, glow * 0.2f, glow * 0.2f, 0), rotation, TexMainG.Size() / 2f, scale, SpriteEffects.None, rotation);
+		spriteBatch.Draw(texMainG, Item.Center - Main.screenPosition, null, new Color(glow, glow * 0.2f, glow * 0.2f, 0), rotation, texMainG.Size() / 2f, scale, SpriteEffects.None, rotation);
 		if (CrazyValue >= 15 && CrazyValue < 16)
 		{
 			float progress = CrazyValue - 15f;
-			Main.spriteBatch.Draw(TexEye, Item.Center - Main.screenPosition, null, new Color(progress, progress, progress, progress), rotation, TexMainG.Size() / 2f, scale, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(TexEye, Item.Center - Main.screenPosition, null, new Color(progress, progress, progress, progress), rotation, texMainG.Size() / 2f, scale, SpriteEffects.None, 0);
 
 		}
 		else if (CrazyValue >= 16)
 		{
-			Main.spriteBatch.Draw(TexEye, Item.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), rotation, TexMainG.Size() / 2f, scale, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(TexEye, Item.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), rotation, texMainG.Size() / 2f, scale, SpriteEffects.None, 0);
 		}
 		if (!Main.gamePaused)
 		{

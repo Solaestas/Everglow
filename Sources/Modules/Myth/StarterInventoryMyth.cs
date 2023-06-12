@@ -5,7 +5,6 @@ namespace Everglow.Myth;
 
 public class StarterInventoryMyth : ModPlayer
 {
-	public ulong SteamID64 = GetSteamID().m_SteamID;
 	public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
 	{
 		//if (mediumCoreDeath)
@@ -15,7 +14,7 @@ public class StarterInventoryMyth : ModPlayer
 		//        new Item(ItemID.HealingPotion)
 		//    };
 		//}
-		if (SteamID64 is 76561199058565968 /*Omnielement*/)
+		if (Main.LocalPlayer.name is "Omnielement" or "万象元素")
 		{
 			return new[]
 			{
@@ -25,6 +24,6 @@ public class StarterInventoryMyth : ModPlayer
 		return new[]
 		{
 		new Item(ItemID.CopperCoin, 0), // stack of 0 means you don't start with it. This code is needed.
-            };
+        };
 	}
 }

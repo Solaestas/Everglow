@@ -125,14 +125,12 @@ public class FlamingDashCore : ModNPC
 				ColorShine = NPC.color;
 				//MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
 				//mplayer.Shake = 3;
-				//ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
-				//mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
-				ShakerManager.AddShaker(UndirectedShakerInfo.Create(Main.LocalPlayer.Center, 56));
+				ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
+				mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
 
 				if ((player.Center - NPC.Center).Length() > 100)
 					Str = 100 / (player.Center - NPC.Center).Length();
-				//mplayer.DirFlyCamPosStrength = Str; //Using Direct FlyCamPosition because FlyCamPosition itself being used causes errors (see ScreenShaker ModPlayer) ~Setnour6
-				ShakerManager.AddShaker(UndirectedShakerInfo.Create(Main.LocalPlayer.Center, Str));
+				mplayer.DirFlyCamPosStrength = Str; //Using Direct FlyCamPosition because FlyCamPosition itself being used causes errors (see ScreenShaker ModPlayer) ~Setnour6
 				SoundEngine.PlaySound(SoundID.Item36, NPC.Center);//特效
 				Vector2 vn = new Vector2(0, -20).RotatedBy(NPC.localAI[0] / 90d);
 				for (int h = 0; h < 6; h++)
