@@ -96,7 +96,7 @@ public class LanternBombRemoteControl : ModItem
 		for (int j = 0; j < 100; j++)
 		{
 			Vector2 v2 = new Vector2(0, Main.rand.Next(Main.rand.Next(0, 1200), 1200)).RotatedByRandom(Math.PI * 2);
-			Projectile p = Projectile.NewProjectileDirect(Item.GetSource_ItemUse(Item), v2 + Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBomb2>(), 50, 0f, Main.myPlayer, 0, 0);
+			Projectile p = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), v2 + Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBomb2>(), 50, 0f, Main.myPlayer, 0, 0);
 			p.friendly = true;
 			p.hostile = false;
 		}
