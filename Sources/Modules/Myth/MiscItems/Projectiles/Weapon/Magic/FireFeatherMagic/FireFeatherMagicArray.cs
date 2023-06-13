@@ -1,8 +1,3 @@
-using Everglow.Commons.DataStructures;
-using static Terraria.ModLoader.PlayerDrawLayer;
-using Terraria.Map;
-using Terraria.DataStructures;
-
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic.FireFeatherMagic;
 internal class FlameRingPipeline : Pipeline
 {
@@ -181,5 +176,32 @@ public class FlameWingSlot : ModAccessorySlot
 			return true;
 
 		return false;
+	}
+	public override bool IsVisibleWhenNotEnabled()
+	{
+		return false; // We set to false to just not display if not Enabled. NOTE: this does not affect behavour when mod is unloaded!
+	}
+}
+
+public class ExampleCustomLocationAndTextureSlot : ModAccessorySlot
+{
+	// We will place the slot to be at the center of the map, making the decision not to follow the internal UI handling
+	public override Vector2? CustomLocation => new Vector2(Main.screenWidth / 2, 3 * Main.screenHeight / 4);
+
+	// We will draw the vanity slot when there's a dye
+	public override bool DrawVanitySlot => !DyeItem.IsAir;
+
+	//     We will use our 'custom' textures
+	// Background Textures -> In general, you can use most of the existing vanilla ones to get different colours
+	public override string VanityBackgroundTexture => "Terraria/Images/Inventory_Back14"; // yellow
+	public override string FunctionalBackgroundTexture => "Terraria/Images/Inventory_Back7"; // pale blue
+
+	// Icon textures. Nominal image size is 32x32. Piggy bank is 16x24 but it still works as it's drawn centered.
+	public override string VanityTexture => "Terraria/Images/Item_" + ItemID.PiggyBank;
+
+	// We will keep it hidden most of the time so that it isn't an intrusive example
+	public override bool IsHidden()
+	{
+		return IsEmpty; // Only show when it contains an item, items can end up in functional slots via quick swap (right click accessory)
 	}
 }
