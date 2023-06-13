@@ -90,7 +90,7 @@ internal class FireFeatherMagicArray : VisualProjectile
 
 					FlameWing.FunctionalItem = new Item(ItemID.FlameWings, 1);
 					FlameWing.valid = true;
-					//TODO:即便这样子都用不了
+					//TODO:即便这样子都用不了；如果你已经有一个翅膀，可以飞，且飞行的时候会替换为火焰翅膀，这是我期望中的效果。但是没有翅膀的时候真的怎么写都飞不了。
 					FlameWing.ApplyEquipEffects();
 					Main.NewText(FlameWing.IsEnabled());
 					//player.noFallDmg= true;
@@ -180,28 +180,5 @@ public class FlameWingSlot : ModAccessorySlot
 	public override bool IsVisibleWhenNotEnabled()
 	{
 		return false; // We set to false to just not display if not Enabled. NOTE: this does not affect behavour when mod is unloaded!
-	}
-}
-
-public class ExampleCustomLocationAndTextureSlot : ModAccessorySlot
-{
-	// We will place the slot to be at the center of the map, making the decision not to follow the internal UI handling
-	public override Vector2? CustomLocation => new Vector2(Main.screenWidth / 2, 3 * Main.screenHeight / 4);
-
-	// We will draw the vanity slot when there's a dye
-	public override bool DrawVanitySlot => !DyeItem.IsAir;
-
-	//     We will use our 'custom' textures
-	// Background Textures -> In general, you can use most of the existing vanilla ones to get different colours
-	public override string VanityBackgroundTexture => "Terraria/Images/Inventory_Back14"; // yellow
-	public override string FunctionalBackgroundTexture => "Terraria/Images/Inventory_Back7"; // pale blue
-
-	// Icon textures. Nominal image size is 32x32. Piggy bank is 16x24 but it still works as it's drawn centered.
-	public override string VanityTexture => "Terraria/Images/Item_" + ItemID.PiggyBank;
-
-	// We will keep it hidden most of the time so that it isn't an intrusive example
-	public override bool IsHidden()
-	{
-		return IsEmpty; // Only show when it contains an item, items can end up in functional slots via quick swap (right click accessory)
 	}
 }
