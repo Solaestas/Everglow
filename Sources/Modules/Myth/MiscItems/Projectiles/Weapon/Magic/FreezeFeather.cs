@@ -12,14 +12,14 @@ public class FreezeFeather : ModProjectile
 	{
 		Projectile.width = 10;
 		Projectile.height = 10;
-		Projectile.aiStyle = -1;
 		Projectile.friendly = true;
-		Projectile.DamageType = DamageClass.Magic;
 		Projectile.ignoreWater = false;
+		Projectile.DamageType = DamageClass.Magic;
 		Projectile.tileCollide = true;
-		Projectile.timeLeft = 1080;
-		Projectile.alpha = 0;
-		Projectile.penetrate = 3;
+		Projectile.timeLeft = 360;
+		Projectile.penetrate = 1;
+		Projectile.usesLocalNPCImmunity = true;
+		Projectile.localNPCHitCooldown = 2;
 	}
 	internal int TimeTokill = -1;
 	ModProjectile MagicArray = null;

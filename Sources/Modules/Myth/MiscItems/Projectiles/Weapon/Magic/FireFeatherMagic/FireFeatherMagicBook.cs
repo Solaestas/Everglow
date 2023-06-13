@@ -12,8 +12,12 @@ internal class FireFeatherMagicBook : MagicBookProjectile
 		ItemType = ModContent.ItemType<Weapons.FireFeatherMagic>();
 		MulStartPosByVelocity = 2f;
 		UseGlow = false;
-		GlowPath = "MiscItems/Weapons/FireFeatherMagic";
+		GlowPath = "MiscItems/Weapons/Sunflower_Glow";
 		effectColor = new Color(105, 75, 45, 100);
+		TexCoordTop = new Vector2(15, 11);
+		TexCoordLeft = new Vector2(4, 32);
+		TexCoordDown = new Vector2(27, 45);
+		TexCoordRight = new Vector2(40, 19);
 	}
 	public override void AI()
 	{
@@ -44,10 +48,15 @@ internal class FireFeatherMagicBook : MagicBookProjectile
 			return;
 		if (player.itemTime == player.itemTimeMax - 2 && player.HeldItem.type == ItemType)
 		{
-			Vector2 velocity = vTOMouse.SafeNormalize(Vector2.Zero) * player.HeldItem.shootSpeed;
-			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * MulStartPosByVelocity, velocity * MulVelocity, ProjType, (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);
-			p.CritChance = player.GetWeaponCrit(player.HeldItem);
-			p.extraUpdates = 2;
+			for(int x = 0;x < 4;x++)
+			{
+				Vector2 velocity = vTOMouse.SafeNormalize(Vector2.Zero) * player.HeldItem.shootSpeed;
+				velocity = velocity.RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f));
+				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * MulStartPosByVelocity, velocity * MulVelocity, ProjType, (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);
+				p.CritChance = player.GetWeaponCrit(player.HeldItem);
+				p.extraUpdates = 2;
+			}
 		}
+		//Main.NewText(player.itemTime);
 	}
 }

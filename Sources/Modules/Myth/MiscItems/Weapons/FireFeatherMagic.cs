@@ -57,8 +57,6 @@ public class FireFeatherMagic : ModItem
 			{
 				useSpeed = Item.useTime / 17f;
 			}
-			Item.useTime = (int)(8 * useSpeed);
-			Item.useAnimation = (int)(8 * useSpeed);
 		}
 	}
 	public override void AddRecipes()

@@ -1,3 +1,5 @@
+using Everglow.Myth.MagicWeaponsReplace.GlobalItems;
+
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic.FireFeatherMagic;
 internal class FlameRingPipeline : Pipeline
 {
@@ -28,6 +30,10 @@ internal class FlameRingPipeline : Pipeline
 [Pipeline(typeof(FlameRingPipeline), typeof(BloomPipeline))]
 internal class FireFeatherMagicArray : VisualProjectile
 {
+	public float WingPower = 0;
+	public bool OldControlUp = false;
+	public int Timer = 0;
+	public Vector2 RingPos = Vector2.Zero;
 	public override string Texture => "Everglow/" + ModAsset.FireFeatherMagicPath;
 	public override void SetDefaults()
 	{
@@ -36,19 +42,17 @@ internal class FireFeatherMagicArray : VisualProjectile
 		Projectile.friendly = true;
 		Projectile.hostile = false;
 		Projectile.penetrate = -1;
-		Projectile.timeLeft = 10000;
+		Projectile.timeLeft = 100000;
 		Projectile.tileCollide = false;
 		base.SetDefaults();
 	}
-	public float WingPower = 0;
-	public FlameWingSlot FlameWing = new FlameWingSlot();
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
 		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(-player.direction * 22, -12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
 		Projectile.spriteDirection = player.direction;
 		Projectile.velocity *= 0;
-		if (player.HeldItem.type == ModContent.ItemType<MiscItems.Weapons.FireFeatherMagic>())
+		if (player.HeldItem.type == ModContent.ItemType<MiscItems.Weapons.FireFeatherMagic>() && player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
 		{
 			Projectile.timeLeft = player.itemTime + 60;
 			if (player.itemTime > 0)
@@ -79,62 +83,49 @@ internal class FireFeatherMagicArray : VisualProjectile
 		
 		Projectile.rotation = player.fullRotation;
 		RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
-		if(player.wingTime <= 1 && !player.mount._active)
+
+
+		FireFeatherOwner mplayer = player.GetModPlayer<FireFeatherOwner>();
+		mplayer.HasFlameWing = false;
+		if ((player.wingTime <= 0 || player.wings == 0) && !player.mount._active)
 		{
 			if(WingPower > 0)
 			{
-				if(player.controlUp)
+				if(player.controlUp && player.velocity.Y != 0)
 				{
-					player.wingTime += 1;
-					WingPower -= 0.1666666f;
-
-					FlameWing.FunctionalItem = new Item(ItemID.FlameWings, 1);
-					FlameWing.valid = true;
-					//TODO:即便这样子都用不了；如果你已经有一个翅膀，可以飞，且飞行的时候会替换为火焰翅膀，这是我期望中的效果。但是没有翅膀的时候真的怎么写都飞不了。
-					FlameWing.ApplyEquipEffects();
-					Main.NewText(FlameWing.IsEnabled());
-					//player.noFallDmg= true;
-					//player.wings = 9;
-					//player.wingTimeMax = 60;
-					//player.wingsLogic = 9;
-					//player.extraAccessory = true;
-					//player.extraAccessorySlots = 1;
-					//player.equippedWings = new Item(ItemID.FlameWings, 1);
-					//player.armor.SetValue(new Item(ItemID.FlameWings , 1), player.armor.Length - 12);
-					//player.velocity.Y -= 0.3f;
-					//player.WingMovement();
-					//player.WingAirLogicTweaks();
-					//player.WingAirVisuals();
-					//player.WingFrame(true, true);
-					//player.GetWingStats(9);
+					mplayer.HasFlameWing = true;
+					WingPower -= 0.8f;
+					Item item = new Item();
+					item.SetDefaults(ItemID.FlameWings);
+					player.equippedWings = item;
+					player.wings = item.wingSlot;
+					player.wingsLogic = item.wingSlot;
 				}
-				else
-				{
-					FlameWing.valid = false;
-					FlameWing.FunctionalItem.SetDefaults();
-				}
-			}
-			else
-			{
-				player.noFallDmg = false;
-				FlameWing.valid = false;
-				FlameWing.FunctionalItem.SetDefaults();
 			}
 		}
-		else
+		if(player.controlUp && player.velocity.Y != 0)
 		{
-			FlameWing.valid = false;
-			FlameWing.FunctionalItem.SetDefaults();
+			if ((!OldControlUp && player.wingTime <= 0) || player.wingTime == 2)
+			{
+				for (int j = 0; j < 16; j++)
+				{
+					Vector2 v = new Vector2(0, Main.rand.NextFloat(7, 20)).RotatedByRandom(MathHelper.TwoPi);
+					Dust.NewDust(player.position, player.width, player.height, ModContent.DustType<Dusts.FireFeather>(), v.X, v.Y, 150, default, Main.rand.NextFloat(1.8f, 3.7f));
+				}
+			}
 		}
+		if (WingPower >= 210)
+		{
+			WingPower = 210;
+		}
+		OldControlUp = player.controlUp && player.velocity.Y != 0;
 	}
-	internal int Timer = 0;
-	internal Vector2 RingPos = Vector2.Zero;
-	public override CodeLayer DrawLayer => CodeLayer.PostDrawTiles;
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Projectile.hide = false;
 		return false;
 	}
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawTiles;
 	public override void Draw()
 	{
 		Vector2 toBottom = new Vector2(0, 40);
@@ -155,30 +146,25 @@ internal class FireFeatherMagicArray : VisualProjectile
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
 }
-//TODO:为什么这饰品栏无效
-public class FlameWingSlot : ModAccessorySlot
+class FireFeatherOwner : ModPlayer
 {
-	public bool valid = false;
-	public override bool IsEnabled() => valid;
-	public override bool IsHidden() => false;
-	public override bool CanAcceptItem(Item checkItem, AccessorySlotType context)
+	public bool HasFlameWing = false;
+	public override void PostUpdateMiscEffects()
 	{
-		if (checkItem.wingSlot > 0) // if is Wing, then can go in slot
-			return true;
-
-		return false; // Otherwise nothing in slot
-	}
-
-	// Designates our slot to be a priority for putting wings in to. NOTE: use ItemLoader.CanEquipAccessory if aiming for restricting other slots from having wings!
-	public override bool ModifyDefaultSwapSlot(Item item, int accSlotToSwapTo)
-	{
-		if (item.wingSlot > 0) // If is Wing, then we want to prioritize it to go in to our slot.
-			return true;
-
-		return false;
-	}
-	public override bool IsVisibleWhenNotEnabled()
-	{
-		return false; // We set to false to just not display if not Enabled. NOTE: this does not affect behavour when mod is unloaded!
+		if(HasFlameWing)
+		{
+			if (Player.ownedProjectileCounts[ModContent.ProjectileType<FireFeatherMagicArray>()] < 1)
+			{
+				HasFlameWing = false;
+				return;
+			}
+			Item item = new Item();
+			item.SetDefaults(ItemID.FlameWings);
+			Player.equippedWings = item;
+			Player.wings = item.wingSlot;
+			Player.wingsLogic = item.wingSlot;
+			Player.wingTime += 1;
+		}
 	}
 }
+

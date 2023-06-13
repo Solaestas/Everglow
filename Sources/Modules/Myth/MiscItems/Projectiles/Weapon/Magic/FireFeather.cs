@@ -16,7 +16,7 @@ public class FireFeather : ModProjectile
 		Projectile.DamageType = DamageClass.Magic;
 		Projectile.tileCollide = true;
 		Projectile.timeLeft = 360;
-		Projectile.penetrate = 2;
+		Projectile.penetrate = 1;
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 2;
 	}
@@ -208,7 +208,7 @@ public class FireFeather : ModProjectile
 		GenerateSmog(3);
 		if (!Projectile.wet)
 		{
-			GenerateSpark(48);
+			GenerateSpark(14);
 		}
 	}
 	public void GenerateSmog(int Frequency)

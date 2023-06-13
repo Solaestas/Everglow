@@ -11,7 +11,7 @@ internal class FreezeFeatherMagicBook : MagicBookProjectile
 		ItemType = ModContent.ItemType<Weapons.FreezeFeatherMagic>();
 		MulStartPosByVelocity = 2f;
 		UseGlow = true;
-		GlowPath = "MiscItems/Weapons/FreezeFeatherMagic";
+		GlowPath = "MiscItems/Weapons/Sunflower_Glow";
 		effectColor = new Color(95, 100, 125, 100);
 	}
 	public override void AI()
@@ -43,10 +43,14 @@ internal class FreezeFeatherMagicBook : MagicBookProjectile
 			return;
 		if (player.itemTime == player.itemTimeMax - 2 && player.HeldItem.type == ItemType)
 		{
-			Vector2 velocity = vTOMouse.SafeNormalize(Vector2.Zero) * player.HeldItem.shootSpeed;
-			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * MulStartPosByVelocity, velocity * MulVelocity, ProjType, (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);
-			p.CritChance = player.GetWeaponCrit(player.HeldItem);
-			p.extraUpdates = 2;
+			for (int x = 0; x < 4; x++)
+			{
+				Vector2 velocity = vTOMouse.SafeNormalize(Vector2.Zero) * player.HeldItem.shootSpeed;
+				velocity = velocity.RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f));
+				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * MulStartPosByVelocity, velocity * MulVelocity, ProjType, (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);
+				p.CritChance = player.GetWeaponCrit(player.HeldItem);
+				p.extraUpdates = 2;
+			}
 		}
 	}
 }

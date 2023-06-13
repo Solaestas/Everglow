@@ -32,7 +32,10 @@ internal class FrozenRingPipeline : Pipeline
 internal class FreezeFeatherMagicArray : VisualProjectile
 {
 	public float WingPower = 0;
-	public FrozenWingSlot FrozenWing = new FrozenWingSlot();
+	public bool OldControlUp = false;
+	public int Timer = 0;
+	public Vector2 RingPos = Vector2.Zero;
+
 	public override string Texture => "Everglow/" + ModAsset.FreezeFeatherMagicPath;
 	public override void SetDefaults()
 	{
@@ -41,11 +44,10 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 		Projectile.friendly = true;
 		Projectile.hostile = false;
 		Projectile.penetrate = -1;
-		Projectile.timeLeft = 10000;
+		Projectile.timeLeft = 100000;
 		Projectile.tileCollide = false;
 		base.SetDefaults();
 	}
-
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -83,69 +85,48 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 
 		Projectile.rotation = player.fullRotation;
 		RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
-		if (player.wingTime <= 1 && !player.mount._active)
+
+		IceFeatherOwner mplayer = player.GetModPlayer<IceFeatherOwner>();
+		mplayer.HasFreezeWing = false;
+		if ((player.wingTime <= 0 || player.wings == 0) && !player.mount._active)
 		{
 			if (WingPower > 0)
 			{
-				if (player.controlUp)
+				if (player.controlUp && player.velocity.Y != 0)
 				{
-					player.wingTime += 1;
-					WingPower -= 0.1666666f;
-
-					FrozenWing.FunctionalItem = new Item(ItemID.FrozenWings, 1);
-					FrozenWing.valid = true;
-					//TODO:即便这样子都用不了
-					FrozenWing.ApplyEquipEffects();
-					Main.NewText(FrozenWing.IsEnabled());
-					//player.noFallDmg= true;
-					//player.wings = 9;
-					//player.wingTimeMax = 60;
-					//player.wingsLogic = 9;
-					//player.extraAccessory = true;
-					//player.extraAccessorySlots = 1;
-					//player.equippedWings = new Item(ItemID.FrozenWings, 1);
-					//player.armor.SetValue(new Item(ItemID.FrozenWings , 1), player.armor.Length - 12);
-					//player.velocity.Y -= 0.3f;
-					//player.WingMovement();
-					//player.WingAirLogicTweaks();
-					//player.WingAirVisuals();
-					//player.WingFrame(true, true);
-					//player.GetWingStats(9);
+					mplayer.HasFreezeWing = true;
+					WingPower -= 0.8f;
+					Item item = new Item();
+					item.SetDefaults(ItemID.FrozenWings);
+					player.equippedWings = item;
+					player.wings = item.wingSlot;
+					player.wingsLogic = item.wingSlot;
 				}
-				else
-				{
-					FrozenWing.valid = false;
-					FrozenWing.FunctionalItem.SetDefaults();
-				}
-			}
-			else
-			{
-				player.noFallDmg = false;
-				FrozenWing.valid = false;
-				FrozenWing.FunctionalItem.SetDefaults();
 			}
 		}
-		else
+		if (player.controlUp && player.velocity.Y != 0)
 		{
-			FrozenWing.valid = false;
-			FrozenWing.FunctionalItem.SetDefaults();
+			if ((!OldControlUp && player.wingTime <= 0) || player.wingTime == 2)
+			{
+				for (int j = 0; j < 16; j++)
+				{
+					Vector2 v = new Vector2(0, Main.rand.NextFloat(7, 20)).RotatedByRandom(MathHelper.TwoPi);
+					Dust.NewDust(player.position, player.width, player.height, ModContent.DustType<Dusts.FreezeFeather>(), v.X, v.Y, 150, default, Main.rand.NextFloat(1.8f, 3.7f));
+				}
+			}
 		}
+		if (WingPower >= 210)
+		{
+			WingPower = 210;
+		}
+		OldControlUp = player.controlUp && player.velocity.Y != 0;
 	}
-
-	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
-	{
-		behindNPCs.Add(index);
-	}
-
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Projectile.hide = false;
 		return false;
 	}
-
-	internal int Timer = 0;
-	internal Vector2 RingPos = Vector2.Zero;
-
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawTiles;
 	public override void Draw()
 	{
 		Vector2 toBottom = new Vector2(0, 40);
@@ -166,25 +147,24 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
 }
-public class FrozenWingSlot : ModAccessorySlot
+class IceFeatherOwner : ModPlayer
 {
-	public bool valid = false;
-	public override bool IsEnabled() => valid;
-	public override bool IsHidden() => false;
-	public override bool CanAcceptItem(Item checkItem, AccessorySlotType context)
+	public bool HasFreezeWing = false;
+	public override void PostUpdateMiscEffects()
 	{
-		if (checkItem.wingSlot > 0) // if is Wing, then can go in slot
-			return true;
-
-		return false; // Otherwise nothing in slot
-	}
-
-	// Designates our slot to be a priority for putting wings in to. NOTE: use ItemLoader.CanEquipAccessory if aiming for restricting other slots from having wings!
-	public override bool ModifyDefaultSwapSlot(Item item, int accSlotToSwapTo)
-	{
-		if (item.wingSlot > 0) // If is Wing, then we want to prioritize it to go in to our slot.
-			return true;
-
-		return false;
+		if (HasFreezeWing)
+		{
+			if (Player.ownedProjectileCounts[ModContent.ProjectileType<FreezeFeatherMagicArray>()] < 1)
+			{
+				HasFreezeWing = false;
+				return;
+			}
+			Item item = new Item();
+			item.SetDefaults(ItemID.FrozenWings);
+			Player.equippedWings = item;
+			Player.wings = item.wingSlot;
+			Player.wingsLogic = item.wingSlot;
+			Player.wingTime += 1;
+		}
 	}
 }
