@@ -16,7 +16,7 @@ class VFXGenerator : ModItem
 	public override bool CanUseItem(Player player)
 	{
 		float mulVelocity = 1f;
-		int type = Main.rand.Next(10, 11);
+		int type = Main.rand.Next(1, 11);
 
 		switch (type)
 		{
