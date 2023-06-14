@@ -14,7 +14,9 @@ class VFXGenerator : ModItem
 	public override bool CanUseItem(Player player)
 	{
 		float mulVelocity = 1f;
-		switch (Main.rand.Next(6))
+		int type = Main.rand.Next(8, 9);
+
+		switch (type)
 		{
 			case 0:
 				for (int g = 0; g < 20; g++)
@@ -127,6 +129,60 @@ class VFXGenerator : ModItem
 						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.13f, 0.13f) }
 					};
 					Ins.VFXManager.Add(spark);
+				}
+				break;
+			case 6:
+				for (int g = 0; g < 40; g++)
+				{
+					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 7f)).RotatedByRandom(MathHelper.TwoPi);
+					var fire = new CurseFlameDust
+					{
+						velocity = newVelocity,
+						Active = true,
+						Visible = true,
+						position = player.Center + new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) + newVelocity * 3,
+						maxTime = Main.rand.Next(16, 45),
+						scale = Main.rand.NextFloat(20f, 60f),
+						rotation = Main.rand.NextFloat(6.283f),
+						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+					};
+					Ins.VFXManager.Add(fire);
+				}
+				break;
+			case 7:
+				for (int g = 0; g < 500; g++)
+				{
+					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(2f, 6f)).RotatedByRandom(MathHelper.TwoPi);
+					var spark = new CurseFlameSparkDust
+					{
+						velocity = newVelocity,
+						Active = true,
+						Visible = true,
+						position = player.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - player.velocity + newVelocity * 3,
+						maxTime = Main.rand.Next(137, 245),
+						scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 47.0f)),
+						rotation = Main.rand.NextFloat(6.283f),
+						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.13f, 0.13f) }
+					};
+					Ins.VFXManager.Add(spark);
+				}
+				break;
+			case 8:
+				for (int g = 0; g < 20; g++)
+				{
+					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
+					var somg = new VaporDust
+					{
+						velocity = newVelocity,
+						Active = true,
+						Visible = true,
+						position = player.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity * 16,
+						maxTime = Main.rand.Next(104, 220),
+						scale = Main.rand.NextFloat(320f, 435f),
+						rotation = Main.rand.NextFloat(6.283f),
+						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+					};
+					Ins.VFXManager.Add(somg);
 				}
 				break;
 		}

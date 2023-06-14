@@ -1,15 +1,16 @@
 using Everglow.Commons.Enums;
+using Everglow.Commons.Interfaces;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
-internal class FirePipeline : Pipeline
+internal class CurseFlamePipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModAsset.Fire;
+		effect = ModAsset.CurseFlame;
 		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
-		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_fire.Value);
+		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_curseFlame.Value);
 	}
 	public override void BeginRender()
 	{
@@ -17,6 +18,20 @@ internal class FirePipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.Parameters["uTexcoordY"].SetValue(0.2f);
+		Texture2D halo = Commons.ModAsset.Point.Value;
+		Ins.Batch.BindTexture<Vertex2D>(halo);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		effect.CurrentTechnique.Passes[0].Apply();
+	}
+	private void BeginRender2()
+	{
+		var effect = this.effect.Value;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.Parameters["uTexcoordY"].SetValue(0.8f);
 		Texture2D halo = Commons.ModAsset.Point.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
@@ -28,9 +43,25 @@ internal class FirePipeline : Pipeline
 	{
 		Ins.Batch.End();
 	}
+	public override void Render(IEnumerable<IVisual> visuals)
+	{
+		BeginRender2();
+		foreach (var visual in visuals)
+		{
+			visual.Draw();
+		}
+		EndRender();
+
+		BeginRender();
+		foreach (var visual in visuals)
+		{
+			visual.Draw();
+		}
+		EndRender();
+	}
 }
-[Pipeline(typeof(FirePipeline), typeof(BloomPipeline))]
-internal class FireDust : Visual
+[Pipeline(typeof(CurseFlamePipeline), typeof(BloomPipeline))]
+internal class CurseFlameDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public Vector2 position;
@@ -40,7 +71,7 @@ internal class FireDust : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-	public FireDust() { }
+	public CurseFlameDust() { }
 	public override void Update()
 	{
 		position += velocity;
@@ -68,7 +99,7 @@ internal class FireDust : Visual
 		}
 		float pocession = 1 - timer / maxTime;
 		float c = pocession * scale * 0.02f;
-		Lighting.AddLight(position, c, c * 0.2f, 0);
+		Lighting.AddLight(position, c * 0.7f, c * 0.9f, c * 0.2f);
 	}
 
 	public override void Draw()
@@ -78,11 +109,11 @@ internal class FireDust : Visual
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + toCorner,new Color(0, 0,pocession, 0f), new Vector3(ai[0],timeValue,0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 1, pocession, 0f), new Vector3(ai[0], timeValue + 0.4f, 0)),
+			new Vertex2D(position + toCorner,new Color(0, 0,pocession, 0f), new Vector3(ai[0],timeValue,0.8f)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 1, pocession, 0f), new Vector3(ai[0], timeValue + 0.4f, 0.8f)),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0 ,pocession, 0f), new Vector3(ai[0] + 0.4f, timeValue, 0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession, 0f), new Vector3(ai[0] + 0.4f, timeValue + 0.4f, 0))
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0 ,pocession, 0f), new Vector3(ai[0] + 0.4f, timeValue, 0.8f)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession, 0f), new Vector3(ai[0] + 0.4f, timeValue + 0.4f, 0.8f))
 		};
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);

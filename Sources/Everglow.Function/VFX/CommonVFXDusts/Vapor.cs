@@ -2,13 +2,13 @@ using Everglow.Commons.Enums;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
-internal class IceSmogPipeline : Pipeline
+internal class VaporPipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModAsset.IceSmog;
-		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_spiderNet.Value);
-		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_ice.Value);
+		effect = ModAsset.Vapor;
+		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
+		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_vapor.Value);
 		Ins.Batch.RegisterVertex<Vertex2DSmog>(2048, 3072);
 	}
 	public override void BeginRender()
@@ -29,8 +29,8 @@ internal class IceSmogPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
-[Pipeline(typeof(IceSmogPipeline), typeof(HaloPipeline))]
-internal class IceSmogDust : Visual
+[Pipeline(typeof(VaporPipeline), typeof(VaporHaloPipeline))]
+internal class VaporDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawBG;
 	public Vector2 position;
@@ -40,8 +40,8 @@ internal class IceSmogDust : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-	public IceSmogDust() { }
-	public IceSmogDust(int maxTime, Vector2 position, Vector2 velocity, float scale, float rotation, params float[] ai)
+	public VaporDust() { }
+	public VaporDust(int maxTime, Vector2 position, Vector2 velocity, float scale, float rotation, params float[] ai)
 	{
 		this.maxTime = maxTime;
 		this.position = position;
@@ -62,7 +62,7 @@ internal class IceSmogDust : Visual
 			timer = maxTime;
 		}
 		velocity *= 0.9f;
-		velocity += new Vector2(Main.windSpeedCurrent * 0.02f, 0.01f);
+		velocity += new Vector2(Main.windSpeedCurrent * 0.02f, -0.04f);
 		if (scale < 160)
 		{
 			scale += 0.1f;
@@ -89,17 +89,17 @@ internal class IceSmogDust : Visual
 		List<Vertex2DSmog> bars = new List<Vertex2DSmog>()
 		{
 			new Vertex2DSmog(position + toCorner,new Color(0, 0,pocession, 0), new Vector3(ai[0],timeValue,0), drawC),
-			new Vertex2DSmog(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(1, 0, pocession, 0), new Vector3(ai[0] + 0.4f * scale / 70f, timeValue, 0), drawC),
+			new Vertex2DSmog(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(1, 0, pocession, 0), new Vector3(ai[0] + 0.2f * scale / 70f, timeValue, 0), drawC),
 
-			new Vertex2DSmog(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(0, 1 ,pocession, 0), new Vector3(ai[0], timeValue + 0.4f * scale / 70f, 0), drawC),
-			new Vertex2DSmog(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession, 0), new Vector3(ai[0] + 0.4f* scale / 70f, timeValue + 0.4f * scale / 70f, 0), drawC)
+			new Vertex2DSmog(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(0, 1 ,pocession, 0), new Vector3(ai[0], timeValue + 0.2f * scale / 70f, 0), drawC),
+			new Vertex2DSmog(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession, 0), new Vector3(ai[0] + 0.2f* scale / 70f, timeValue + 0.2f * scale / 70f, 0), drawC)
 		};
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
 }
-[Pipeline(typeof(IceSmogPipeline), typeof(HaloPipeline))]
-internal class IceSmogDust2 : Visual
+[Pipeline(typeof(VaporPipeline), typeof(VaporHaloPipeline))]
+internal class VaporDust2 : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawTiles;
 	public Vector2 position;
@@ -109,8 +109,8 @@ internal class IceSmogDust2 : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-	public IceSmogDust2() { }
-	public IceSmogDust2(int maxTime, Vector2 position, Vector2 velocity, float scale, float rotation, params float[] ai)
+	public VaporDust2() { }
+	public VaporDust2(int maxTime, Vector2 position, Vector2 velocity, float scale, float rotation, params float[] ai)
 	{
 		this.maxTime = maxTime;
 		this.position = position;
@@ -172,33 +172,4 @@ internal class IceSmogDust2 : Visual
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
-}
-public struct Vertex2DSmog : IVertexType
-{
-	private static VertexDeclaration _vertexDeclaration = new(new VertexElement[4]
-	{
-		new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.Position, 0),
-		new VertexElement(8, VertexElementFormat.Color, VertexElementUsage.Color, 0),
-		new VertexElement(12, VertexElementFormat.Vector3, VertexElementUsage.TextureCoordinate, 0),
-		new VertexElement(24, VertexElementFormat.Vector3, VertexElementUsage.TextureCoordinate, 1)
-	});
-	public Vector2 position;
-	public Color color;
-	public Vector3 texCoord;
-	public Vector3 texCoord2;
-
-	public Vertex2DSmog(Vector2 position, Color color, Vector3 texCoord, Vector3 texCoord2)
-	{
-		this.position = position;
-		this.color = color;
-		this.texCoord = texCoord;
-		this.texCoord2 = texCoord2;
-	}
-
-	public override string ToString()
-	{
-		return $"[{position}, {color}, {texCoord}, {texCoord2}]";
-	}
-
-	public VertexDeclaration VertexDeclaration => _vertexDeclaration;
 }
