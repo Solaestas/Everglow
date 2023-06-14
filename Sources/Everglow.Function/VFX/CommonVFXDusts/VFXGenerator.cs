@@ -1,3 +1,5 @@
+using SteelSeries.GameSense;
+
 namespace Everglow.Commons.VFX.CommonVFXDusts;
 class VFXGenerator : ModItem
 {
@@ -14,7 +16,7 @@ class VFXGenerator : ModItem
 	public override bool CanUseItem(Player player)
 	{
 		float mulVelocity = 1f;
-		int type = Main.rand.Next(9, 10);
+		int type = Main.rand.Next(10, 11);
 
 		switch (type)
 		{
@@ -201,6 +203,22 @@ class VFXGenerator : ModItem
 						ai = new float[] { Main.rand.NextFloat(0.0f, Main.rand.NextFloat(0.0f, 1.0f)), Main.rand.NextFloat(-0.03f, 0.03f)}
 					};
 					Ins.VFXManager.Add(spark);
+				}
+				break;
+			case 10:
+				for (int g = 0; g < 30; g++)
+				{
+					Vector2 afterVelocity = new Vector2(0, 2f).RotatedBy(g / 60f * Math.PI);
+					var blood = new BloodLiquidDust
+					{
+						velocity = afterVelocity * mulVelocity + player.velocity.SafeNormalize(new Vector2(0, -1)),
+						Active = true,
+						Visible = true,
+						position = player.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - player.velocity * Main.rand.NextFloat(3f, 14f),
+						maxTime = Main.rand.Next(42, 64),
+						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(6f, 12f) }
+					};
+					Ins.VFXManager.Add(blood);
 				}
 				break;
 		}
