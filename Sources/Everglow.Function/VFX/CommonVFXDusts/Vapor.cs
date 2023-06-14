@@ -131,7 +131,7 @@ internal class VaporDust2 : Visual
 			timer = maxTime;
 		}
 		velocity *= 0.9f;
-		velocity += new Vector2(Main.windSpeedCurrent * 0.02f, 0.01f);
+		velocity += new Vector2(Main.windSpeedCurrent * 0.02f, -0.04f);
 		if (scale < 160)
 		{
 			scale += 0.1f;

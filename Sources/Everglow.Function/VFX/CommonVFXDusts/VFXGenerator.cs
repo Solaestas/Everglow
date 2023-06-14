@@ -14,7 +14,7 @@ class VFXGenerator : ModItem
 	public override bool CanUseItem(Player player)
 	{
 		float mulVelocity = 1f;
-		int type = Main.rand.Next(8, 9);
+		int type = Main.rand.Next(9, 10);
 
 		switch (type)
 		{
@@ -183,6 +183,24 @@ class VFXGenerator : ModItem
 						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
 					};
 					Ins.VFXManager.Add(somg);
+				}
+				break;
+			case 9:
+				for (int g = 0; g < 200; g++)
+				{
+					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(2f, 6f)).RotatedByRandom(MathHelper.TwoPi);
+					var spark = new JungleSporeDust
+					{
+						velocity = newVelocity,
+						Active = true,
+						Visible = true,
+						position = player.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - player.velocity + newVelocity * 3,
+						maxTime = Main.rand.Next(137, 245),
+						scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 47.0f)),
+						rotation = Main.rand.NextFloat(6.283f),
+						ai = new float[] { Main.rand.NextFloat(0.0f, Main.rand.NextFloat(0.0f, 1.0f)), Main.rand.NextFloat(-0.03f, 0.03f)}
+					};
+					Ins.VFXManager.Add(spark);
 				}
 				break;
 		}

@@ -50,7 +50,7 @@ PSInput VertexShaderFunction(VSInput input)
 float4 HaloRing(PSInput input) : COLOR0
 {
     float4 color = tex2D(uImage0, input.Texcoord);
-    color = tex2D(uHeatMapTex, 1 - color.r);
+    color = tex2D(uHeatMapTex, 1 - color.r * color.r);
     float2 toSun = input.Texcoord - uSunMoonPos;
     toSun.x *= uScreenYDevideByX;
     float4 rainbow = tex2D(uRainbowTex, float2(0.5, length(toSun) * uHaloSize) - uHaloRange) * uSunMoonLight;
