@@ -16,7 +16,7 @@ class VFXGenerator : ModItem
 	public override bool CanUseItem(Player player)
 	{
 		float mulVelocity = 1f;
-		int type = 11;//Main.rand.Next(12);
+		int type = Main.rand.Next(13);//Main.rand.Next(12);
 
 		switch (type)
 		{
@@ -190,7 +190,7 @@ class VFXGenerator : ModItem
 			case 9://丛林孢子
 				for (int g = 0; g < 200; g++)
 				{
-					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(2f, 6f)).RotatedByRandom(MathHelper.TwoPi);
+					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(2f, 26f)).RotatedByRandom(MathHelper.TwoPi);
 					var spark = new JungleSporeDust
 					{
 						velocity = newVelocity,
@@ -198,7 +198,7 @@ class VFXGenerator : ModItem
 						Visible = true,
 						position = player.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - player.velocity + newVelocity * 3,
 						maxTime = Main.rand.Next(137, 245),
-						scale = Main.rand.NextFloat(12f, Main.rand.NextFloat(12f, 27.0f)),
+						scale = Main.rand.NextFloat(12f, Main.rand.NextFloat(12f, 37.0f)),
 						rotation = Main.rand.NextFloat(6.283f),
 						ai = new float[] { Main.rand.NextFloat(0.0f, Main.rand.NextFloat(0.5f, 1.0f)), Main.rand.NextFloat(-0.03f, 0.03f)}
 					};
@@ -271,6 +271,40 @@ class VFXGenerator : ModItem
 						ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 }
 					};
 					Ins.VFXManager.Add(blood);
+				}
+				break;
+			case 12://电流
+				for (int g = 0; g < 40; g++)
+				{
+					float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(20f, 40f));
+					Vector2 afterVelocity = new Vector2(0, size * 1.3f).RotatedByRandom(MathHelper.TwoPi);
+					var electric = new ElectricCurrent
+					{
+						velocity = afterVelocity * mulVelocity,
+						Active = true,
+						Visible = true,
+						position = player.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - player.velocity * Main.rand.NextFloat(3f, 14f),
+						maxTime = size * size / 16f,
+						scale = size,
+						ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size / 2, Main.rand.NextFloat(0.8f, 1.2f) }
+					};
+					Ins.VFXManager.Add(electric);
+				}
+				for (int g = 0; g < 120; g++)
+				{
+					float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(8f, 18f));
+					Vector2 afterVelocity = new Vector2(0, size * 1.3f).RotatedByRandom(MathHelper.TwoPi);
+					var electric = new ElectricCurrent
+					{
+						velocity = afterVelocity * mulVelocity,
+						Active = true,
+						Visible = true,
+						position = player.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - player.velocity * Main.rand.NextFloat(3f, 14f),
+						maxTime = size * size / 4f,
+						scale = size,
+						ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size, Main.rand.NextFloat(1.3f, Main.rand.NextFloat(1.3f, 4f)) }
+					};
+					Ins.VFXManager.Add(electric);
 				}
 				break;
 		}
