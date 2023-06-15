@@ -16,7 +16,7 @@ class VFXGenerator : ModItem
 	public override bool CanUseItem(Player player)
 	{
 		float mulVelocity = 1f;
-		int type = Main.rand.Next(1, 11);
+		int type = Main.rand.Next(9, 10);
 
 		switch (type)
 		{
@@ -170,7 +170,7 @@ class VFXGenerator : ModItem
 				}
 				break;
 			case 8:
-				for (int g = 0; g < 20; g++)
+				for (int g = 0; g < 10; g++)
 				{
 					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
 					var somg = new VaporDust
@@ -182,7 +182,7 @@ class VFXGenerator : ModItem
 						maxTime = Main.rand.Next(104, 220),
 						scale = Main.rand.NextFloat(320f, 435f),
 						rotation = Main.rand.NextFloat(6.283f),
-						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+						ai = new float[] { Main.rand.NextFloat(-0.05f, -0.01f), 0 }
 					};
 					Ins.VFXManager.Add(somg);
 				}
@@ -198,25 +198,60 @@ class VFXGenerator : ModItem
 						Visible = true,
 						position = player.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - player.velocity + newVelocity * 3,
 						maxTime = Main.rand.Next(137, 245),
-						scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 47.0f)),
+						scale = Main.rand.NextFloat(12f, Main.rand.NextFloat(12f, 27.0f)),
 						rotation = Main.rand.NextFloat(6.283f),
-						ai = new float[] { Main.rand.NextFloat(0.0f, Main.rand.NextFloat(0.0f, 1.0f)), Main.rand.NextFloat(-0.03f, 0.03f)}
+						ai = new float[] { Main.rand.NextFloat(0.0f, Main.rand.NextFloat(0.5f, 1.0f)), Main.rand.NextFloat(-0.03f, 0.03f)}
 					};
 					Ins.VFXManager.Add(spark);
 				}
 				break;
 			case 10:
-				for (int g = 0; g < 30; g++)
+				for (int g = 0; g < 100; g++)
 				{
-					Vector2 afterVelocity = new Vector2(0, 2f).RotatedBy(g / 60f * Math.PI);
-					var blood = new BloodLiquidDust
+					Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(80f)).RotatedByRandom(MathHelper.TwoPi);
+					float mulScale = Main.rand.NextFloat(6f, 25f);
+					var blood = new BloodDrop
 					{
-						velocity = afterVelocity * mulVelocity + player.velocity.SafeNormalize(new Vector2(0, -1)),
+						velocity = afterVelocity * mulVelocity / mulScale,
 						Active = true,
 						Visible = true,
 						position = player.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - player.velocity * Main.rand.NextFloat(3f, 14f),
-						maxTime = Main.rand.Next(42, 64),
-						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(6f, 12f) }
+						maxTime = Main.rand.Next(82, 164),
+						scale = mulScale,
+						rotation = Main.rand.NextFloat(6.283f),
+						ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
+					};
+					Ins.VFXManager.Add(blood);
+				}
+				for (int g = 0; g < 40; g++)
+				{
+					Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(5f)).RotatedByRandom(MathHelper.TwoPi);
+					var blood = new BloodSplash
+					{
+						velocity = afterVelocity * mulVelocity,
+						Active = true,
+						Visible = true,
+						position = player.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - player.velocity * Main.rand.NextFloat(3f, 14f),
+						maxTime = Main.rand.Next(42, 78),
+						scale = Main.rand.NextFloat(6f, 18f),
+						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(20.0f, 40.0f) }
+					};
+					Ins.VFXManager.Add(blood);
+				}
+				break;
+			case 11:
+				for (int g = 0; g < 30; g++)
+				{
+					Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(3f)).RotatedByRandom(MathHelper.TwoPi);
+					var blood = new IchorSplash
+					{
+						velocity = afterVelocity * mulVelocity,
+						Active = true,
+						Visible = true,
+						position = player.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - player.velocity * Main.rand.NextFloat(3f, 14f),
+						maxTime = Main.rand.Next(42, 164),
+						scale = Main.rand.NextFloat(6f, 12f),
+						ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0}
 					};
 					Ins.VFXManager.Add(blood);
 				}

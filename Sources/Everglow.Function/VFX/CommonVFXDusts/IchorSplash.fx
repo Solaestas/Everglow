@@ -10,10 +10,7 @@ sampler_state
     AddressU = WRAP;
     AddressV = WRAP;
 };
-//valueC由Color.r代替
-//float valueC;
-//utime由Color.g代替
-//float utime;
+
 float4x4 uTransform;
 
 struct VSInput
@@ -42,10 +39,10 @@ PSInput VertexShaderFunction(VSInput input)
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
     float4 color = tex2D(uNoiseSampler, input.Texcoord.xy);
-    float light = min((1 - color.r) * (1 - input.Color.r) + input.Color.r, 1);
+    float light = color.r - input.Texcoord.z - abs(input.Texcoord.x - input.Color.r) * 0.3;
     float4 flame = tex2D(uImage, float2(light, 0.5));
-    float4 mulColor = float4(input.Color.gba, input.Texcoord.z);
-    return flame * mulColor;
+    flame.a *= 0.6;
+    return flame;
 }
 technique Technique1
 {
