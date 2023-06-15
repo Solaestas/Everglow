@@ -16,11 +16,11 @@ class VFXGenerator : ModItem
 	public override bool CanUseItem(Player player)
 	{
 		float mulVelocity = 1f;
-		int type = Main.rand.Next(1, 12);
+		int type = 11;//Main.rand.Next(12);
 
 		switch (type)
 		{
-			case 0:
+			case 0://冰雾
 				for (int g = 0; g < 20; g++)
 				{
 					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
@@ -38,7 +38,7 @@ class VFXGenerator : ModItem
 					Ins.VFXManager.Add(somg);
 				}
 				break;
-			case 1:
+			case 1://冰粒
 				for (int g = 0; g < 80; g++)
 				{
 					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 12f)).RotatedByRandom(MathHelper.TwoPi);
@@ -56,7 +56,7 @@ class VFXGenerator : ModItem
 					Ins.VFXManager.Add(somg);
 				}
 				break;
-			case 2:
+			case 2://雪花
 				for (int g = 0; g < 380; g++)
 				{
 					Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 9.6f)).RotatedByRandom(MathHelper.TwoPi);
@@ -79,7 +79,7 @@ class VFXGenerator : ModItem
 					Ins.VFXManager.Add(smog);
 				}
 				break;
-			case 3:
+			case 3://黑烟
 				for (int g = 0; g < 40; g++)
 				{
 					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(2f, 4f)).RotatedByRandom(MathHelper.TwoPi);
@@ -97,7 +97,7 @@ class VFXGenerator : ModItem
 					Ins.VFXManager.Add(somg);
 				}
 				break;
-			case 4:
+			case 4://火焰
 				for (int g = 0; g < 40; g++)
 				{
 					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 7f)).RotatedByRandom(MathHelper.TwoPi);
@@ -115,7 +115,7 @@ class VFXGenerator : ModItem
 					Ins.VFXManager.Add(fire);
 				}
 				break;
-			case 5:
+			case 5://火花
 				for (int g = 0; g < 720; g++)
 				{
 					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(2f, 6f)).RotatedByRandom(MathHelper.TwoPi);
@@ -133,7 +133,7 @@ class VFXGenerator : ModItem
 					Ins.VFXManager.Add(spark);
 				}
 				break;
-			case 6:
+			case 6://诅咒焰
 				for (int g = 0; g < 40; g++)
 				{
 					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 7f)).RotatedByRandom(MathHelper.TwoPi);
@@ -151,7 +151,7 @@ class VFXGenerator : ModItem
 					Ins.VFXManager.Add(fire);
 				}
 				break;
-			case 7:
+			case 7://诅咒火花
 				for (int g = 0; g < 500; g++)
 				{
 					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(2f, 6f)).RotatedByRandom(MathHelper.TwoPi);
@@ -169,7 +169,7 @@ class VFXGenerator : ModItem
 					Ins.VFXManager.Add(spark);
 				}
 				break;
-			case 8:
+			case 8://水气
 				for (int g = 0; g < 10; g++)
 				{
 					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
@@ -187,7 +187,7 @@ class VFXGenerator : ModItem
 					Ins.VFXManager.Add(somg);
 				}
 				break;
-			case 9:
+			case 9://丛林孢子
 				for (int g = 0; g < 200; g++)
 				{
 					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(2f, 6f)).RotatedByRandom(MathHelper.TwoPi);
@@ -205,7 +205,7 @@ class VFXGenerator : ModItem
 					Ins.VFXManager.Add(spark);
 				}
 				break;
-			case 10:
+			case 10://血
 				for (int g = 0; g < 100; g++)
 				{
 					Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(80f)).RotatedByRandom(MathHelper.TwoPi);
@@ -239,7 +239,24 @@ class VFXGenerator : ModItem
 					Ins.VFXManager.Add(blood);
 				}
 				break;
-			case 11:
+			case 11://灵液
+				for (int g = 0; g < 60; g++)
+				{
+					Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(40f)).RotatedByRandom(MathHelper.TwoPi);
+					float mulScale = Main.rand.NextFloat(6f, 14f);
+					var blood = new IchorDrop
+					{
+						velocity = afterVelocity * mulVelocity / mulScale,
+						Active = true,
+						Visible = true,
+						position = player.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - player.velocity * Main.rand.NextFloat(3f, 14f),
+						maxTime = Main.rand.Next(82, 164),
+						scale = mulScale,
+						rotation = Main.rand.NextFloat(6.283f),
+						ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
+					};
+					Ins.VFXManager.Add(blood);
+				}
 				for (int g = 0; g < 30; g++)
 				{
 					Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(3f)).RotatedByRandom(MathHelper.TwoPi);
@@ -251,7 +268,7 @@ class VFXGenerator : ModItem
 						position = player.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - player.velocity * Main.rand.NextFloat(3f, 14f),
 						maxTime = Main.rand.Next(42, 164),
 						scale = Main.rand.NextFloat(6f, 12f),
-						ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0}
+						ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 }
 					};
 					Ins.VFXManager.Add(blood);
 				}
