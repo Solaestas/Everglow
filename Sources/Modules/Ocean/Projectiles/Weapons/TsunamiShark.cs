@@ -1,9 +1,3 @@
-using System;
-using Everglow.Commons.Vertex;
-using Everglow.Commons.VFX;
-using Everglow.Myth.TheFirefly.Dusts;
-using Everglow.Ocean.Common;
-using Everglow.Ocean.Dusts;
 using Everglow.Ocean.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -33,7 +27,7 @@ public class TsunamiShark : ModProjectile
 			var modifer = owner.GetTotalDamage(withammo.Item.DamageType);
 			modifer.CombineWith(owner.bulletDamage);
 			CombinedHooks.ModifyWeaponDamage(owner, withammo.Item, ref modifer);
-			overridedamage = Math.Max(1, 
+			overridedamage = Math.Max(1,
 				(int)modifer.ApplyTo(withammo.Item.damage + ContentSamples.ItemsByType[withammo.AmmoItemIdUsed].damage));
 		}
 		else
@@ -58,7 +52,7 @@ public class TsunamiShark : ModProjectile
 
 
 			Projectile p = Projectile.NewProjectileDirect(shootSource,
-                Projectile.Center + toMuzzle + random, 
+				Projectile.Center + toMuzzle + random,
 				velocity,
 				ModContent.ProjectileType<TsunamiShark_bullet>(),
 				overridedamage == -1 ? item.damage : overridedamage,
@@ -79,7 +73,7 @@ public class TsunamiShark : ModProjectile
 				rot);
 		}
 		UseCount++;
-		if(UseCount == 12)
+		if (UseCount == 12)
 		{
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<TsunamiShark_missile>()] < 20)
 			{
@@ -105,9 +99,9 @@ public class TsunamiShark : ModProjectile
 			Projectile.Center = player.MountedCenter + Vector2.Normalize(toMouse) * 6;
 			if (Main.mouseRight)
 			{
-				if(tsunamiS.MarkedTarget != null)
+				if (tsunamiS.MarkedTarget != null)
 				{
-					if(Collision.CanHit(tsunamiS.MarkedTarget, Projectile))
+					if (Collision.CanHit(tsunamiS.MarkedTarget, Projectile))
 					{
 						Vector2 toTarget = tsunamiS.MarkedTarget.Center + tsunamiS.MarkedTarget.velocity - player.MountedCenter;
 						toTarget = Vector2.Normalize(toTarget);
@@ -194,9 +188,9 @@ public class TsunamiShark : ModProjectile
 		var tsunamiS = player.HeldItem.ModItem as Items.Weapons.TsunamiShark;
 		if (tsunamiS != null)
 		{
-			if(tsunamiS.MarkedTarget != null)
+			if (tsunamiS.MarkedTarget != null)
 			{
-				if(tsunamiS.MarkedTarget.active)
+				if (tsunamiS.MarkedTarget.active)
 				{
 					Main.spriteBatch.Draw(texMark, tsunamiS.MarkedTarget.Center - Main.screenPosition, null, new Color(105, 105, 105, 0), 0, texMark.Size() / 2f, 1f, SpriteEffects.None, 0);
 				}
