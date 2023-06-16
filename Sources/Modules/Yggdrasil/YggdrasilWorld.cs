@@ -6,9 +6,6 @@ namespace Everglow.Yggdrasil;
 
 internal class YggdrasilWorld : Subworld
 {
-	public override bool ShouldSave => true;
-
-	public override bool NoPlayerSaving => false;
 	public override int Width => 1200;
 	public override int Height => 12000;
 	public override List<GenPass> Tasks => new List<GenPass>()

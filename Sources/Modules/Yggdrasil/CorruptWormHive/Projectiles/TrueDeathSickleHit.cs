@@ -1,6 +1,3 @@
-using Everglow.Commons.Vertex;
-using Everglow.Commons.VFX;
-using Everglow.Myth.Common;
 using Everglow.Yggdrasil.Common;
 
 namespace Everglow.Yggdrasil.CorruptWormHive.Projectiles;
@@ -108,8 +105,8 @@ public class TrueDeathSickleHit : ModProjectile, IWarpProjectile, IBloomProjecti
 		float size = Math.Clamp(Projectile.timeLeft / 8f - 10, 0f, 20f);
 		if (size > 0)
 		{
-			DrawSpark(Color.White, size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkDark"));
-			DrawSpark(new Color(131, 0, 255, 0), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
+			DrawSpark(Color.White, size, ModAsset.SparkDark.Value);
+			DrawSpark(new Color(131, 0, 255, 0), size, ModAsset.SparkLight.Value);
 		}
 		return false;
 	}
@@ -195,7 +192,7 @@ public class TrueDeathSickleHit : ModProjectile, IWarpProjectile, IBloomProjecti
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
 			colorV *= Projectile.ai[0] / 10f;
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/EShoot");
+		Texture2D t = Commons.ModAsset.Trail_1.Value;
 		float width = 100;
 		if (Projectile.timeLeft < 180)
 			width = (Projectile.timeLeft - 130) * 2;
@@ -207,6 +204,6 @@ public class TrueDeathSickleHit : ModProjectile, IWarpProjectile, IBloomProjecti
 	{
 		float size = Math.Clamp(Projectile.timeLeft / 8f - 60, 0f, 20f);
 		if (size > 0)
-			DrawSpark(new Color(255, 255, 255, 0), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
+			DrawSpark(new Color(255, 255, 255, 0), size, ModAsset.SparkLight.Value);
 	}
 }
