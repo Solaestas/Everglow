@@ -54,6 +54,6 @@ public class FireflyPiranhaBanner : ModTile, ITileFluentlyDrawn
 
 	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) 
 	{
-		FurnitureUtils.LanternFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, 3, true);
+		FurnitureUtils.BannerFluentDraw(screenPosition, pos, spriteBatch, tileDrawing);
 	}
 }

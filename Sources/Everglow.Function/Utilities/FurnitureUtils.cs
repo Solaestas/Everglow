@@ -1,47 +1,74 @@
+using Everglow.Commons.TileHelper;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.Localization;
+using Terraria.ObjectData;
 
 namespace Everglow.Commons.Utilities;
 
 public static class FurnitureUtils
 {
+
+	#region Swingable Object Drawing
+	
+	public static void BannerFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	{
+		int top = pos.Y - Main.tile[pos].TileFrameY / 18;
+		SwingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(pos.X, top), -4);
+	}
+	
+	public static void LanternFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	{
+		int top = pos.Y - Main.tile[pos].TileFrameY / 18;
+		SwingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(pos.X, top), 0);
+	}
+	
+	public static void Chandelier3x3FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	{
+		int left = Main.tile[pos].TileFrameX / 18;
+		left %= 3;
+		left = pos.X - left;
+		int top = pos.Y - Main.tile[pos].TileFrameY / 18;
+		SwingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(left, top), 0);
+	}
+
 	/// <summary>
-	/// 用于宽度为1的Lantern的FluentDraw，用于带摆动绘制，适配油漆 <br/>
-	/// 也可以用于旗帜，原版旗帜的摆动绘制和挂灯其实是有区别的，将风速调至最大对比一下就会发现，所以加了isBanner参数
+	/// 用于悬挂类物块的FluentDraw，用于带摆动绘制，适配油漆
 	/// </summary>
-	public static void LanternFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing, int sizeY = 2, bool isBanner = false)
+	/// <param name="screenPosition">屏幕坐标</param>
+	/// <param name="pos">该格物块的物块坐标</param>
+	/// <param name="spriteBatch">批量雪碧</param>
+	/// <param name="tileDrawing">TileDrawing工具类实例</param>
+	/// <param name="topLeft">物块整体左上角的坐标</param>
+	/// <param name="swayOffset">用于旗帜类物块，摇曳时底部物块会有类似“卷起来”的效果，对于吊灯应直接设置为0</param>
+	public static void SwingObjectFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing, Point topLeft, float swayOffset = -4f)
 	{
 		var tile = Main.tile[pos];
+        var tileData = TileObjectData.GetTileData(tile.type, 0);
 
-		if (!tileDrawing.IsVisible(tile)) return;
+		if (!tileDrawing.IsVisible(tile) || tileData is null) return;
 
-		// 这就是油漆的奥秘，大概就是根据你给出的pos上的油漆给你这个物块的贴图上shader
-		// 你可以把里面的代码抄来，把方法里面那个贴图改成一个参数，就可以做到给任意贴图上相应世界物块上的漆了
+		// 油漆
 		Texture2D tex = tileDrawing.GetTileDrawTexture(tile, pos.X, pos.Y);
 		
 		short tileFrameX = tile.frameX;
 		short tileFrameY = tile.frameY;
 
-		int layer = tileFrameY / 18; // 这格物块处于整体的第几层（最上面的是第零层，往下递增）
+		// 用于风速、推力等一系列判定的物块坐标，通常来说是挂在墙上的那一格（这边是origin格）
+		int topTileX = topLeft.X + tileData.Origin.X;
+		int topTileY = topLeft.Y + tileData.Origin.Y;
+		int sizeX = tileData.Width;
+		int sizeY = tileData.Height;
 
-		// 用于风速、推力等一系列判定的物块坐标，通常来说是挂在墙上的那一格
-		int topTileX = pos.X;
-		int topTileY = pos.Y - layer;
-
-		int offsetX = 8;
-		int offsetY = -2 - layer * 16;
+		int offsetY = tileData.DrawYOffset;
 		// 锤子是这样的
 		if (WorldGen.IsBelowANonHammeredPlatform(topTileX, topTileY)) {
 			offsetY -= 8;
 		}
 
-		// 物块的size
-		int sizeX = 1;
-
 		float windCycle = 0;
-		if (tileDrawing.InAPlaceWithWind(topTileX, topTileY, sizeX, sizeY))
+		if (tileDrawing.InAPlaceWithWind(topLeft.X, topLeft.Y, sizeX, sizeY))
 			windCycle = tileDrawing.GetWindCycle(topTileX, topTileY, tileDrawing._sunflowerWindCounter);
 
 		// 普通源码罢了
@@ -50,28 +77,51 @@ public static class FurnitureUtils
 		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(topTileX, topTileY, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
 		windCycle += highestWindGridPushComplex;
 
+		// 适配反色涂料
 		Rectangle rectangle = new Rectangle(tileFrameX, tileFrameY, 16, 16);
 		Color tileLight = Lighting.GetColor(pos);
 		tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(pos.X, pos.Y, tile, tile.type, tileFrameX, tileFrameY, ref tileLight, tileDrawing._rand.NextBool(4));
 		tileLight = tileDrawing.DrawTiles_GetLightOverride(pos.Y, pos.X, tile, tile.type, tileFrameX, tileFrameY, tileLight);
-		
-		// 对于旗帜需要乘上一个长这样的系数来修正rotation
-		float num = isBanner ? (tileFrameY / 18 + 1) / (float)sizeY : 1;
-		float rotation = -windCycle * 0.15f * num;
 
-		var origin = new Vector2(sizeX * 16 / 2f, 0);
-		var tileSpriteEffect = SpriteEffects.None;
+		// 基础的坐标
+		Vector2 center = new Vector2(topTileX, topTileY).ToWorldCoordinates(autoAddY: 0) - screenPosition;
+		Vector2 offset = new Vector2(0f, offsetY);
+		center += offset;
 
-		var drawPos = pos.ToWorldCoordinates(0, 0) + new Vector2(offsetX, offsetY) - screenPosition;
-		// 根据节修正position
-		drawPos += new Vector2(0f, 16f).RotatedBy(rotation) * layer;
+		// heightStrength是用于旗帜类物块的，根据高度来决定该格物块的摇曳力度
+		float heightStrength = (pos.Y - topLeft.Y + 1) / (float)sizeY;
+		if (heightStrength == 0f)
+			heightStrength = 0.1f;
 
-		// 原版中旗帜的旋转角越大，绘制向上偏移就越大，为了防止两个物块间贴图连不起来
-		if (isBanner)
-			drawPos.Y -= Math.Abs(rotation) * layer * 4;
-		
-		spriteBatch.Draw(tex, drawPos, rectangle, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
+		// 计算绘制坐标和origin，原版代码
+		Vector2 tileCoordPos = pos.ToWorldCoordinates(0, 0) - screenPosition;
+		tileCoordPos += offset;
+		// 用于旗帜
+		float swayCorrection = Math.Abs(windCycle) * swayOffset * heightStrength;
+		Vector2 finalOrigin = center - tileCoordPos;
+		Vector2 finalDrawPos = center + new Vector2(0, swayCorrection);
+
+		// 旋转角度
+		if (swayOffset == 0f)
+			heightStrength = 1f;
+		float rotation = -windCycle * 0.15f * heightStrength;
+
+		// 绘制
+		spriteBatch.Draw(tex, finalDrawPos, rectangle, tileLight, rotation, finalOrigin, 1f, SpriteEffects.None, 0f);
+	
+		// 有火的话绘制火
+		if (TileLoader.GetTile(tile.type) is not ITileFlameData tileFlame) return;
+
+		TileDrawing.TileFlameData tileFlameData = tileFlame.GetTileFlameData(pos.X, pos.Y, tile.type, tileFrameY);
+		ulong seed = tileFlameData.flameSeed is 0 ? Main.TileFrameSeed ^ (ulong)(((long)pos.X << 32) | (uint)pos.Y) : tileFlameData.flameSeed;
+		for (int k = 0; k < tileFlameData.flameCount; k++) {
+			float x = Utils.RandomInt(ref seed, tileFlameData.flameRangeXMin, tileFlameData.flameRangeXMax) * tileFlameData.flameRangeMultX;
+			float y = Utils.RandomInt(ref seed, tileFlameData.flameRangeYMin, tileFlameData.flameRangeYMax) * tileFlameData.flameRangeMultY;
+			Main.spriteBatch.Draw(tileFlameData.flameTexture, finalDrawPos + new Vector2(x, y), rectangle, tileFlameData.flameColor, rotation, finalOrigin, 1f, SpriteEffects.None, 0f);
+		}
 	}
+
+	#endregion
 
 	public static bool BedRightClick(int i, int j)
 	{

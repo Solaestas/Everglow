@@ -1,12 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Everglow.Commons.TileHelper;
-using Terraria;
 using Terraria.GameContent.Drawing;
-using Terraria.ObjectData;
 
 namespace Everglow.Commons;
 
@@ -20,7 +13,6 @@ public class TileFluentDrawManager : ModSystem
 	/// <summary>
 	/// 在每次非solidLayer的常规物块绘制（即15times/tick的绘制）前清除 <br/>
 	/// 即与原版 TileDrawing._specialsCount 清除时机相同 <br/>
-	/// 
 	/// </summary>
 	private static List<(ModTile, Point)> _fluentTiles = new List<(ModTile, Point)>();
 
