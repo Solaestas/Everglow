@@ -79,11 +79,11 @@ public class HangingSkyLantern : ModTile, ITileFluentlyDrawn
 		int Adx = 0;
 		if (tile.TileFrameX > 54)
 			Adx = 70; // 改了下贴图，所以是70
-		DrawLanternPiece(42 + Adx, 58, 0.15f, -2, pos, pos, 0, drawCenterPos, spriteBatch, tileDrawing);
-		DrawLanternPiece(56 + Adx, 44, 0.11f, -4, pos, pos + new Point(-1, 0), 1, drawCenterPos, spriteBatch, tileDrawing);
-		DrawLanternPiece(28 + Adx, 40, 0.13f, 2, pos, pos + new Point(1, 0), 2, drawCenterPos, spriteBatch, tileDrawing);
-		DrawLanternPiece(14 + Adx, 44, 0.09f, 8, pos + new Point(1, 0), pos + new Point(1, 1), 3, drawCenterPos, spriteBatch, tileDrawing);
-		DrawLanternPiece(0 + Adx, 48, 0.09f, -8, pos + new Point(-1, 0), pos + new Point(-1, 1), 4, drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(42 + Adx, 58, 0.15f, -2, pos, pos, drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(56 + Adx, 44, 0.11f, -4, pos, pos + new Point(-1, 0), drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(28 + Adx, 40, 0.13f, 2, pos, pos + new Point(1, 0), drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(14 + Adx, 44, 0.09f, 8, pos + new Point(1, 0), pos + new Point(1, 1), drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(0 + Adx, 48, 0.09f, -8, pos + new Point(-1, 0), pos + new Point(-1, 1), drawCenterPos, spriteBatch, tileDrawing);
 	}
 
 	/// <summary>
@@ -95,11 +95,10 @@ public class HangingSkyLantern : ModTile, ITileFluentlyDrawn
 	/// <param name="offsetX">绘制偏移</param>
 	/// <param name="tilePos">用于进行摇晃和风速判定的物块的坐标</param>
 	/// <param name="paintPos">用于应用漆的物块的坐标，让五个卷筒纸都可以获得不同的漆</param>
-	/// <param name="style">用于标识不同漆的值，保证每个卷筒纸的值不一致即可</param>
 	/// <param name="drawCenterPos">绘制中心的坐标（各个卷筒纸共享一个值）</param>
 	/// <param name="spriteBatch">批量雪碧（各个卷筒纸共享一个值）</param>
 	/// <param name="tileDrawing">原版TileDrawing类的实例，有很多好用的方法（各个卷筒纸共享一个值）</param>
-	private void DrawLanternPiece(int frameX, int frameHeight, float swayCoefficient, int offsetX, Point tilePos, Point paintPos, int style, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
+	private void DrawLanternPiece(int frameX, int frameHeight, float swayCoefficient, int offsetX, Point tilePos, Point paintPos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
 		// 回声涂料	
 		if (!tileDrawing.IsVisible(Main.tile[paintPos])) return;	
 		

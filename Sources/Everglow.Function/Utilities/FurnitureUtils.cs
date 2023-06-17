@@ -1,4 +1,5 @@
 using Everglow.Commons.TileHelper;
+using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
@@ -9,19 +10,18 @@ namespace Everglow.Commons.Utilities;
 
 public static class FurnitureUtils
 {
-
 	#region Swingable Object Drawing
 	
 	public static void BannerFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		int top = pos.Y - Main.tile[pos].TileFrameY / 18;
-		SwingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(pos.X, top), -4);
+		HangingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(pos.X, top), -4);
 	}
 	
 	public static void LanternFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		int top = pos.Y - Main.tile[pos].TileFrameY / 18;
-		SwingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(pos.X, top), 0);
+		HangingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(pos.X, top), 0);
 	}
 	
 	public static void Chandelier3x3FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
@@ -30,7 +30,7 @@ public static class FurnitureUtils
 		left %= 3;
 		left = pos.X - left;
 		int top = pos.Y - Main.tile[pos].TileFrameY / 18;
-		SwingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(left, top), 0);
+		HangingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(left, top), 0, 0.11f);
 	}
 
 	/// <summary>
@@ -42,7 +42,7 @@ public static class FurnitureUtils
 	/// <param name="tileDrawing">TileDrawing工具类实例</param>
 	/// <param name="topLeft">物块整体左上角的坐标</param>
 	/// <param name="swayOffset">用于旗帜类物块，摇曳时底部物块会有类似“卷起来”的效果，对于吊灯应直接设置为0</param>
-	public static void SwingObjectFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing, Point topLeft, float swayOffset = -4f)
+	public static void HangingObjectFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing, Point topLeft, float swayOffset = -4f, float swayStrength = 0.15f)
 	{
 		var tile = Main.tile[pos];
         var tileData = TileObjectData.GetTileData(tile.type, 0);
@@ -77,7 +77,7 @@ public static class FurnitureUtils
 		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(topTileX, topTileY, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
 		windCycle += highestWindGridPushComplex;
 
-		// 适配反色涂料
+		// 适配发光涂料
 		Rectangle rectangle = new Rectangle(tileFrameX, tileFrameY, 16, 16);
 		Color tileLight = Lighting.GetColor(pos);
 		tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(pos.X, pos.Y, tile, tile.type, tileFrameX, tileFrameY, ref tileLight, tileDrawing._rand.NextBool(4));
@@ -104,7 +104,7 @@ public static class FurnitureUtils
 		// 旋转角度
 		if (swayOffset == 0f)
 			heightStrength = 1f;
-		float rotation = -windCycle * 0.15f * heightStrength;
+		float rotation = -windCycle * swayStrength * heightStrength;
 
 		// 绘制
 		spriteBatch.Draw(tex, finalDrawPos, rectangle, tileLight, rotation, finalOrigin, 1f, SpriteEffects.None, 0f);
@@ -118,6 +118,64 @@ public static class FurnitureUtils
 			float x = Utils.RandomInt(ref seed, tileFlameData.flameRangeXMin, tileFlameData.flameRangeXMax) * tileFlameData.flameRangeMultX;
 			float y = Utils.RandomInt(ref seed, tileFlameData.flameRangeYMin, tileFlameData.flameRangeYMax) * tileFlameData.flameRangeMultY;
 			Main.spriteBatch.Draw(tileFlameData.flameTexture, finalDrawPos + new Vector2(x, y), rectangle, tileFlameData.flameColor, rotation, finalOrigin, 1f, SpriteEffects.None, 0f);
+		}
+	}
+
+	public static void MultiTileGrassFluentDraw(Vector2 screenPosition, TileDrawing tileDrawing, SpriteBatch spriteBatch, Point topLeft, Texture2D glowmask = null)
+	{
+		var tileTopLeft = Main.tile[topLeft];
+        var tileData = TileObjectData.GetTileData(tileTopLeft.type, 0);
+
+		if (tileData is null) return;
+
+		int bottomTileX = topLeft.X + tileData.Origin.X;
+		int bottomTileY = topLeft.Y + tileData.Origin.Y;
+		int sizeX = tileData.Width;
+		int sizeY = tileData.Height;
+
+		float windCycle = 0;
+		if (tileDrawing.InAPlaceWithWind(topLeft.X, topLeft.Y, sizeX, sizeY))
+			windCycle = tileDrawing.GetWindCycle(bottomTileX, bottomTileY, tileDrawing._sunflowerWindCounter);
+
+		// 原版灌木并不考虑推力
+		// int totalPushTime = 60;
+		// float pushForcePerFrame = 1.26f;
+		// float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(topLeft.X, topLeft.Y, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+		// windCycle += highestWindGridPushComplex;
+
+		Vector2 center = topLeft.ToWorldCoordinates(16f * sizeX * 0.5f, 16f * sizeY) - screenPosition;
+		float num = 0.15f;
+		ushort type = Main.tile[topLeft].type;
+
+		for (int i = topLeft.X; i < topLeft.X + sizeX; i++) {
+			for (int j = topLeft.Y; j < topLeft.Y + sizeY; j++) {
+				Tile tile = Main.tile[i, j];
+				if (tile.type != type || !tileDrawing.IsVisible(tile))
+					continue;
+
+				short tileFrameX = tile.frameX;
+				short tileFrameY = tile.frameY;
+
+				float heightStrength = 1f - (j - topLeft.Y + 1) / (float)sizeY;
+				if (heightStrength == 0f)
+					heightStrength = 0.1f;
+
+				tileDrawing.GetTileDrawData(i, j, tile, type, ref tileFrameX, ref tileFrameY, out var tileWidth, out var tileHeight, out var tileTop, out var halfBrickHeight, out var addFrX, out var addFrY, out var tileSpriteEffect, out var _, out var _, out var _);
+
+				Color tileLight = Lighting.GetColor(i, j);
+				tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(i, j, tile, type, tileFrameX, tileFrameY, ref tileLight, false);
+				tileLight = tileDrawing.DrawTiles_GetLightOverride(j, i, tile, type, tileFrameX, tileFrameY, tileLight);
+
+				Vector2 vector2 = new Vector2(i * 16, j * 16 + tileTop) - screenPosition;
+				float swayCorrection = Math.Abs(windCycle) * 2f * heightStrength;
+				Vector2 origin = center - vector2;
+				Texture2D tileDrawTexture = tileDrawing.GetTileDrawTexture(tile, i, j);
+				if (tileDrawTexture != null) {
+					spriteBatch.Draw(tileDrawTexture, center + new Vector2(0f, swayCorrection), new Rectangle(tileFrameX, tileFrameY, tileWidth, tileHeight - halfBrickHeight), tileLight, windCycle * num * heightStrength, origin, 1f, tileSpriteEffect, 0f);
+					if (glowmask != null)
+						spriteBatch.Draw(glowmask, center + new Vector2(0f, swayCorrection), new Rectangle(tileFrameX, tileFrameY, tileWidth, tileHeight - halfBrickHeight), Color.White, windCycle * num * heightStrength, origin, 1f, tileSpriteEffect, 0f);
+				}
+			}
 		}
 	}
 
