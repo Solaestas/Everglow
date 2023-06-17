@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<RootNamespace>Everglow.Commons</RootNamespace>
 		<AssetsPrefix>Commons</AssetsPrefix>
+		<Solaestas-AssetPrefix>$(AssetsPrefix)</Solaestas-AssetPrefix>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
