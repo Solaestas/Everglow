@@ -9,7 +9,6 @@ internal class VaporPipeline : Pipeline
 		effect = ModAsset.Vapor;
 		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
 		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_vapor.Value);
-		Ins.Batch.RegisterVertex<Vertex2DSmog>(2048, 3072);
 	}
 	public override void BeginRender()
 	{

@@ -1,15 +1,4 @@
 ﻿sampler2D uImage : register(s0);
-texture uNoise;
-sampler uNoiseSampler =
-sampler_state
-{
-    Texture = <uNoise>;
-    MipFilter = LINEAR;
-    MinFilter = LINEAR;
-    MagFilter = LINEAR;
-    AddressU = WRAP;
-    AddressV = WRAP;
-};
 texture uHeatMap;
 sampler uHeatMapSampler =
 sampler_state
@@ -50,7 +39,6 @@ PSInput VertexShaderFunction(VSInput input)
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
-    float4 color1 = tex2D(uNoiseSampler, input.Texcoord.xy);
     float4 color2 = tex2D(uImage, float2(0.5, input.Texcoord.z));
     float light = color2.r;
 
