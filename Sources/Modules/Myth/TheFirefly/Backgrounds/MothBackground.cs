@@ -14,7 +14,7 @@ public class MothBackground : ModSystem
 
 	public List<GHang> GPosSec = new List<GHang>();
 
-	private float backgroundAplha = 0f;
+	private float backgroundAlpha = 0f;
 
 	private float luminance = 1f;//发光物亮度，boss战时变暗
 
@@ -76,23 +76,23 @@ public class MothBackground : ModSystem
 		if (GlowingFlowerLandActive() && Main.BackgroundEnabled)
 		{
 			ropeManager?.Update(0.5f);
-			if (backgroundAplha < 1)
-				backgroundAplha += increase;
+			if (backgroundAlpha < 1)
+				backgroundAlpha += increase;
 			else
 			{
-				backgroundAplha = 1;
+				backgroundAlpha = 1;
 				Ins.HookManager.Disable(TerrariaFunction.DrawBackground);
 			}
 		}
 		else
 		{
-			if (backgroundAplha > 0)
+			if (backgroundAlpha > 0)
 			{
-				backgroundAplha -= increase;
+				backgroundAlpha -= increase;
 			}
 			else
 			{
-				backgroundAplha = 0;
+				backgroundAlpha = 0;
 			}
 			Ins.HookManager.Enable(TerrariaFunction.DrawBackground);
 		}
@@ -206,7 +206,7 @@ public class MothBackground : ModSystem
 				var sRtLine = new Rectangle(GPos[x].Type * 20, 10, 20, 20);
 				var sRtDrop = new Rectangle(GPos[x].Type * 20, 65, 20, 35);
 				float Dlength = (float)(GPos[x].Length + Math.Sin(Main.timeForVisualEffects / 128d + GPos[x].Pos.X / 70d + GPos[x].Pos.Y / 120d) * GPos[x].Length * 0.2f);
-				Color color = GetLuminace(Color.White * backgroundAplha);
+				Color color = GetLuminace(Color.White * backgroundAlpha);
 				Main.spriteBatch.Draw(texGlow, dPos, sRtTop, color, 0, new Vector2(10, 0), GPos[x].Size, SpriteEffects.None, 0);
 				Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 10 + Dlength) * GPos[x].Size, sRtLine, color, 0, new Vector2(10, 10), new Vector2(1f, Dlength / 10f) * GPos[x].Size, SpriteEffects.None, 0);
 				Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 27.5f + Dlength * 2) * GPos[x].Size, sRtDrop, color, 0, new Vector2(10, 17.5f), GPos[x].Size, SpriteEffects.None, 0);
@@ -242,7 +242,7 @@ public class MothBackground : ModSystem
 				var sRtTop = new Rectangle(GPosSec[x].Type * 10, 0, 10, 3);
 				var sRtLine = new Rectangle(GPosSec[x].Type * 10, 3, 10, 5);
 				var sRtDrop = new Rectangle(GPosSec[x].Type * 10, 10, 10, 15);
-				Color color = GetLuminace(Color.White * backgroundAplha);
+				Color color = GetLuminace(Color.White * backgroundAlpha);
 				float Dlength = (float)(GPosSec[x].Length + Math.Sin(Main.timeForVisualEffects / 128d + GPosSec[x].Pos.X / 70d + GPosSec[x].Pos.Y / 120d) * GPosSec[x].Length * 0.2f);
 				Main.spriteBatch.Draw(texGlow, dPos, sRtTop, color, 0, new Vector2(5, 0), GPosSec[x].Size, SpriteEffects.None, 0);
 				Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 3 + Dlength) * GPosSec[x].Size, sRtLine, color, 0, new Vector2(5, 2.5f), new Vector2(1f, Dlength / 2.5f) * GPosSec[x].Size, SpriteEffects.None, 0);
@@ -361,7 +361,7 @@ public class MothBackground : ModSystem
 				float scale = 1f + j / 7f;
 				Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
 				float rotation = vector.ToRotation() - MathHelper.PiOver2;
-				Color color = GetLuminace(new Color(0, 0.15f * j, 0.2f * j, 0.1f * j) * backgroundAplha * 5);
+				Color color = GetLuminace(new Color(0, 0.15f * j, 0.2f * j, 0.1f * j) * backgroundAlpha * 5);
 
 				var pos = ImageSpaceToCloseTextureSpace(mass.position, texClose.Size());
 
@@ -377,7 +377,7 @@ public class MothBackground : ModSystem
 		Rectangle rvcII = GetDrawRect(texCloseII.Size(), 0.57f, false);
 		rvcII.Y -= 300;
 		rvcII.X += 300;
-		Color colorCloseII = GetLuminace(Color.White * backgroundAplha);
+		Color colorCloseII = GetLuminace(Color.White * backgroundAlpha);
 		float UpY = rvcII.Y / (float)texCloseII.Height;
 		float DownY = (rvcII.Y + rvcII.Height) / (float)texCloseII.Height;
 		var CloseII = new List<Vertex2D>
@@ -417,7 +417,7 @@ public class MothBackground : ModSystem
 	/// </summary>
 	private void DrawBackground()
 	{
-		if(backgroundAplha > 0)
+		if(backgroundAlpha > 0)
 		{
 			if (ropeManager is null)
 			{
@@ -430,7 +430,7 @@ public class MothBackground : ModSystem
 					() => Vector2.Zero);
 			}
 
-			Color baseColor = Color.White * backgroundAplha;
+			Color baseColor = Color.White * backgroundAlpha;
 			DrawFarBG(baseColor);
 			DrawCloseBG(baseColor);
 		}
