@@ -68,6 +68,12 @@ internal class ElectricCurrent : Visual
 			Active = false;
 		if (Collision.SolidCollision(position, 0, 0))
 		{
+			if (velocity.Length() > 1)
+			{
+				//This like a chemical reaction intermediate.We can't add new Visual in Ins.Update.
+				Dust d = Dust.NewDustDirect(position - velocity * 1f, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
+				d.scale = Main.rand.NextFloat(0.85f, 1.15f) * scale / 140f;
+			}
 			velocity *= 0;
 			scale *= 0.9f;
 		}
@@ -78,6 +84,8 @@ internal class ElectricCurrent : Visual
 			Vector2 newPosX = position + new Vector2(velocity.X, 0);
 			if (Main.tile[(int)(newPosX.X / 16f), (int)(newPosX.Y / 16f)].LiquidAmount <= 0)
 			{
+				Dust d = Dust.NewDustDirect(position - velocity * 1f, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
+				d.scale = Main.rand.NextFloat(0.85f, 1.15f) * scale / 300f;
 				velocity.X *= -1;
 				position += velocity * 2;
 			}
@@ -85,6 +93,8 @@ internal class ElectricCurrent : Visual
 			Vector2 newPosY = position + new Vector2(0, velocity.Y);
 			if (Main.tile[(int)(newPosY.X / 16f), (int)(newPosY.Y / 16f)].LiquidAmount <= 0 || newPosY.Y % 16 > Main.tile[(int)(newPosY.X / 16f), (int)(newPosY.Y / 16f)].LiquidAmount / 16f)
 			{
+				Dust d = Dust.NewDustDirect(position - velocity * 1f, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
+				d.scale = Main.rand.NextFloat(0.85f, 1.15f) * scale / 300f;
 				velocity.Y *= -1;
 				position += velocity * 2;
 			}
@@ -168,7 +178,7 @@ internal class ElectricCurrentDust : Visual
 		if (Collision.SolidCollision(position, 0, 0))
 		{
 			velocity *= 0;
-			scale *= 0.9f;
+			scale *= 0.9f;	
 		}
 		if (Main.tile[(int)(position.X / 16f), (int)(position.Y / 16f)].LiquidAmount > 0)
 		{

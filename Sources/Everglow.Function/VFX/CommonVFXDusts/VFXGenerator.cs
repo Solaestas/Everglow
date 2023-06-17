@@ -16,7 +16,7 @@ class VFXGenerator : ModItem
 	public override bool CanUseItem(Player player)
 	{
 		float mulVelocity = 1f;
-		int type = 12;//Main.rand.Next(12);
+		int type = Main.rand.Next(13);
 
 		switch (type)
 		{
@@ -303,22 +303,6 @@ class VFXGenerator : ModItem
 						maxTime = size * size / 4f,
 						scale = size,
 						ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size, Main.rand.NextFloat(1.3f, Main.rand.NextFloat(1.3f, 4f)) }
-					};
-					Ins.VFXManager.Add(electric);
-				}
-				for (int g = 0; g < 90; g++)
-				{
-					float size = Main.rand.NextFloat(3f, 12f);
-					Vector2 afterVelocity = new Vector2(0, size * 0.4f).RotatedByRandom(MathHelper.TwoPi);
-					var electric = new ElectricCurrentDust
-					{
-						velocity = afterVelocity * mulVelocity,
-						Active = true,
-						Visible = true,
-						position = player.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - player.velocity * Main.rand.NextFloat(3f, 14f),
-						maxTime = Main.rand.NextFloat(15, 105),
-						scale = size,
-						ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size, Main.rand.NextFloat(0.1f,0.12f) }
 					};
 					Ins.VFXManager.Add(electric);
 				}
