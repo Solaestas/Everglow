@@ -1,11 +1,11 @@
-﻿namespace Everglow.Yggdrasil.Common;
+namespace Everglow.Yggdrasil.Common;
 
 public sealed class YggdrasilManualMusicRegistration : ILoadable
 {
 	public void Load(Mod mod)
 	{
 		MusicLoader.AddMusic(mod, "Yggdrasil/Musics/KelpCurtainBGM");
-		MusicLoader.AddMusic(mod, "Yggdrasil/Musics/YggdrasilTownBGM");
+		MusicLoader.AddMusic(mod, "Yggdrasil/Musics/NewYggdrasilTownBGM");
 	}
 
 	public void Unload()

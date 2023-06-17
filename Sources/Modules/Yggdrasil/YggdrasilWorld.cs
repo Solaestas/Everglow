@@ -8,6 +8,7 @@ internal class YggdrasilWorld : Subworld
 {
 	public override int Width => 1200;
 	public override int Height => 12000;
+	public override bool NormalUpdates => true;
 	public override List<GenPass> Tasks => new List<GenPass>()
 	{
 		new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass()
@@ -18,9 +19,8 @@ internal class YggdrasilWorld : Subworld
 	}
 	public override void OnLoad()
 	{
-		Main.worldSurface = 20;
-		Main.rockLayer = 150;
-		GenVars.waterLine = Main.maxTilesY;
+		Main.worldSurface = Main.maxTilesY - 1000;
+		Main.rockLayer = Main.maxTilesY - 500;
 	}
 	public override void Load()
 	{
