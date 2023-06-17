@@ -4,7 +4,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown;
 
 public class YggdrasilTownBiome : ModBiome
 {
-	public override int Music => Common.YggdrasilContent.QuickMusic("NewYggdrasilTownBGM");
+	public override int Music => !Main.dayTime ? Common.YggdrasilContent.QuickMusic("NewYggdrasilTownBGM") : Common.YggdrasilContent.QuickMusic("YggdrasilTownBGM");
 	public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 	public override string BestiaryIcon => "Everglow/Yggdrasil/YggdrasilTown/YggdrasilTownIcon";
 	public override string BackgroundPath => base.BackgroundPath;
