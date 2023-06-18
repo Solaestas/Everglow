@@ -67,7 +67,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			{
 				if(Main.rand.NextBool(Math.Max(150 - HoverTimer, 1)))
 				{
-					if(!(!Target.active || Target == null))
+					if(Target.active || Target != null)
 					{
 						if ((Target.Center - Projectile.Center).Length() < 100f)
 						{
