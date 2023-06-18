@@ -1,3 +1,5 @@
+using Everglow.Myth.TheFirefly.WorldGeneration;
+using SubworldLibrary;
 using Terraria.ObjectData;
 using Windows.Win32.Foundation;
 
@@ -88,17 +90,7 @@ public class MothWorldDoor : ModTile
 		Player player = Main.LocalPlayer;
 		if ((player.Center - new Vector2(i * 16, j * 16)).Length() < 12)
 		{
-			//if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
-			//{
-			//	player.position.X -= 256;
-			//	player.position.Y -= 128;
-			//	SubWorldModule.SubworldSystem.Exit();
-			//}
-			//else
-			//{
-			//	if (!SubWorldModule.SubworldSystem.Enter<MothWorld>())
-			//		Main.NewText("Fail!");
-			//}
+			
 		}
 		base.NearbyEffects(i, j, closer);
 	}
@@ -111,6 +103,13 @@ public class MothWorldDoor : ModTile
 	}
 	public override bool RightClick(int i, int j)
 	{
+		if (SubworldSystem.IsActive<MothWorld>())
+			SubworldSystem.Exit();
+		else
+		{
+			if (!SubworldSystem.Enter<MothWorld>())
+				Main.NewText("Fail!");
+		}
 		return base.RightClick(i, j);
 	}
 }

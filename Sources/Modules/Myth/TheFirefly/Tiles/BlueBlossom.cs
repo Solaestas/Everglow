@@ -1,11 +1,8 @@
 using Everglow.Commons.TileHelper;
-using Everglow.Myth.Common;
-using Everglow.Myth.TheFirefly;
 using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Items;
 using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;
-using static Everglow.Myth.TheFirefly.Tiles.BlackStarShrub;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
@@ -64,7 +61,8 @@ public class BlueBlossom : ModTile, ITileFluentlyDrawn
 	private static double _oldWindCounter = 0;
 	private static double _ooldWindCounter = 0;
 
-	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	{
 		var drawCenterPos = pos.ToWorldCoordinates(autoAddY: 16) - screenPosition;
 		DrawBlossomPiece(ModAsset.BlueBlossomDrawPath, pos, drawCenterPos, spriteBatch, tileDrawing);
 		DrawBlossomPiece(ModAsset.BlueBlossomGlowPath, pos, drawCenterPos, spriteBatch, tileDrawing, new Color(5, 5, 5, 0));
@@ -73,14 +71,16 @@ public class BlueBlossom : ModTile, ITileFluentlyDrawn
 	/// <summary>
 	/// 绘制花花的一个小Piece
 	/// </summary>
-	private void DrawBlossomPiece(string texPath, Point tilePos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing, Color? specialColor = null) {
+	private void DrawBlossomPiece(string texPath, Point tilePos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing, Color? specialColor = null)
+	{
 		var tile = Main.tile[tilePos];
 		ushort type = tile.TileType;
 		var frame = new Rectangle(tile.TileFrameX, 0, 120, 108);
 
 		// 回声涂料
-		if (!tileDrawing.IsVisible(tile)) return;
-		
+		if (!tileDrawing.IsVisible(tile))
+			return;
+
 		int paint = Main.tile[tilePos].TileColor;
 		int textureStyle = tile.TileFrameX + (specialColor is null).ToInt() * 4;
 		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(texPath, type, textureStyle, paint, tileDrawing);
@@ -100,15 +100,16 @@ public class BlueBlossom : ModTile, ITileFluentlyDrawn
 		float rotation = windCycle * 0.07f;
 
 		// 角速度计算，源码乱抄与瞎写代码的结合，用于抖花粉
-        float factor = tilePos.X + tilePos.Y / 100;
-        float radiusNow = (float) Math.Cos(tileDrawing._sunflowerWindCounter * Math.PI * 2.0 + (double) factor);
-        float radiusPrev = (float) Math.Cos(_ooldWindCounter * Math.PI * 2.0 + (double) factor);
+		float factor = tilePos.X + tilePos.Y / 100;
+		float radiusNow = (float)Math.Cos(tileDrawing._sunflowerWindCounter * Math.PI * 2.0 + (double)factor);
+		float radiusPrev = (float)Math.Cos(_ooldWindCounter * Math.PI * 2.0 + (double)factor);
 		float angularVelocity = highestWindGridPushComplex + radiusNow - radiusPrev;
 
 		// 颜色
 		Color tileLight = Lighting.GetColor(tilePos);
 		// 万象写的specialColor特效，似乎是摇曳越强越亮
-		if (specialColor is not null) {
+		if (specialColor is not null)
+		{
 			float maxC = Math.Max(specialColor.Value.R / 255f, Math.Abs(rotation * 6) + 0.5f);
 			maxC = Math.Clamp(maxC, 0, 1);
 			tileLight = new Color(maxC, maxC, maxC, 0);
@@ -116,11 +117,11 @@ public class BlueBlossom : ModTile, ITileFluentlyDrawn
 		// 支持发光涂料
 		tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(tilePos.X, tilePos.Y, tile, type, 0, 0, ref tileLight, tileDrawing._rand.NextBool(4));
 		tileLight = tileDrawing.DrawTiles_GetLightOverride(tilePos.Y, tilePos.X, tile, type, 0, 0, tileLight);
-		
+
 		var origin = new Vector2(54, 108);
 		var tileSpriteEffect = SpriteEffects.None;
 		spriteBatch.Draw(tex, drawCenterPos + new Vector2(0, 4), frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
-		
+
 		// 抖落蓝色荧光花粉
 		if (Math.Abs(angularVelocity) > 0.04 && Main.rand.NextBool(Math.Clamp((int)(100 - Math.Abs(angularVelocity) * 40f), 1, 900)))
 		{

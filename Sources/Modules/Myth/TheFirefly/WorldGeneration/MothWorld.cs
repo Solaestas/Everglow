@@ -19,6 +19,6 @@ internal class MothWorld : Subworld
 	{
 		Main.worldSurface = 20;
 		Main.rockLayer = 150;
-		GenVars.waterLine = Main.maxTilesY;
+		GenVars.waterLine = 50;
 	}
 }
