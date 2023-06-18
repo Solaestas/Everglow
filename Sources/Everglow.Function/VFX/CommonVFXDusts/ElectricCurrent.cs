@@ -3,7 +3,7 @@ using Everglow.Commons.Vertex;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
 
-internal class ElectricCurrentPipeline : Pipeline
+public class ElectricCurrentPipeline : Pipeline
 {
 	public override void Load()
 	{
@@ -30,7 +30,7 @@ internal class ElectricCurrentPipeline : Pipeline
 	}
 }
 [Pipeline(typeof(ElectricCurrentPipeline))]
-internal class ElectricCurrent : Visual
+public class ElectricCurrent : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public List<Vector2> oldPos = new List<Vector2>();
@@ -138,7 +138,7 @@ internal class ElectricCurrent : Visual
 	}
 }
 [Pipeline(typeof(ElectricCurrentPipeline))]
-internal class ElectricCurrentDust : Visual
+public class ElectricCurrentDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public List<Vector2> oldPos = new List<Vector2>();

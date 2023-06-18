@@ -4,7 +4,7 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
-internal class CurseFlamePipeline : Pipeline
+public class CurseFlamePipeline : Pipeline
 {
 	public override void Load()
 	{
@@ -61,7 +61,7 @@ internal class CurseFlamePipeline : Pipeline
 	}
 }
 [Pipeline(typeof(CurseFlamePipeline), typeof(BloomPipeline))]
-internal class CurseFlameDust : Visual
+public class CurseFlameDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public Vector2 position;

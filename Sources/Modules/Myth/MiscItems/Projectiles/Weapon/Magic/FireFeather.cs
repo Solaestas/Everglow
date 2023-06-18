@@ -1,5 +1,5 @@
 using Everglow.Myth.MiscItems.Projectiles.Weapon.Magic.FireFeatherMagic;
-using Everglow.Myth.MiscItems.VFXs;
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Terraria.Audio;
 using Terraria.DataStructures;
 

@@ -1,6 +1,6 @@
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.MiscItems.Buffs;
 using Everglow.Myth.MiscItems.Projectiles.Weapon.Magic.FreezeFeatherMagic;
-using Everglow.Myth.MiscItems.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -80,7 +80,7 @@ public class FreezeFeather : ModProjectile
 		if (Main.rand.NextBool(6))
 		{
 			Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 2)).RotatedByRandom(MathHelper.TwoPi);
-		    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.FreezeFeather>(), v.X, v.Y, 150, default, Main.rand.NextFloat(0.8f, 1.7f));
+			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.FreezeFeather>(), v.X, v.Y, 150, default, Main.rand.NextFloat(0.8f, 1.7f));
 		}
 		for (int g = 0; g < 3; g++)
 		{
