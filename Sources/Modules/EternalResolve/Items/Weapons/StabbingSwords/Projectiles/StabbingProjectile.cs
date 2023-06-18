@@ -97,7 +97,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
             Projectile.soundDelay--;
             if (Projectile.soundDelay <= 0)
             {
-                SoundEngine.PlaySound(SoundID.Item1.WithVolumeScale(0.5f).WithPitchOffset(Main.rand.NextFloat(-0.6f, 0.6f)), Projectile.Center);
+				//SoundStyle ss = new SoundStyle("Everglow/EternalResolve/Items/Weapons/StabbingSwords/Sounds/stabbing");
+				SoundEngine.PlaySound(SoundID.Item1.WithVolumeScale(0.5f).WithPitchOffset(Main.rand.NextFloat(-0.6f, 0.6f)), Projectile.Center);
                 Projectile.soundDelay = SoundTimer;
             }
 
@@ -139,7 +140,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public virtual void HitTileSound(float scale)
 		{
-			SoundEngine.PlaySound((SoundID.NPCHit4.WithVolume(1 - scale / 2.42f)).WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
+			//SoundStyle ss = new SoundStyle("Everglow/EternalResolve/Items/Weapons/StabbingSwords/Sounds/StabCollide");
+			SoundEngine.PlaySound((SoundID.NPCHit4.WithVolume((1 - scale / 2.42f) * 0.3f)).WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
 			Projectile.soundDelay = SoundTimer;
 		}
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -226,20 +228,25 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			float additiveDrawPos = MaxLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
 			Vector2 drawPos = Pos + drawRotation.ToRotationVector2() * additiveDrawPos + rand.NextVector2Circular(20f, 20f);
 			bool canHit = Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice, 0, 0);
-			while (!canHit)
-			{
-				rndRange *= 0.9f;
-				drawPos -= Projectile.velocity * 0.2f;
-				if (rndRange < 0.3f)
-				{
-					break;
-				}
-			}
+
+			float volumn = rndRange;
 			if (!Main.gamePaused && !canHit)
 			{
-				HitTileSound(rndRange);
+				while (!canHit)
+				{
+					volumn *= 0.9f;
+					drawPos -= Projectile.velocity * 0.2f;
+					if (volumn < 0.3f)
+					{
+						break;
+					}
+				}
+				Vector2 ij = drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice + Projectile.velocity;
+				ij /= 16f;
+				WorldGen.KillTile((int)(ij.X), (int)(ij.Y), true, false, true);
+				HitTileSound(volumn);
 			}
-			Vector2 drawSize = new Vector2(rndRange, DrawWidth) * lerpedTwice;
+			Vector2 drawSize = new Vector2(volumn, DrawWidth) * lerpedTwice;
 			if (TradeLength > 0)
 			{
 				for (int f = TradeLength - 1; f > 0; f--)
