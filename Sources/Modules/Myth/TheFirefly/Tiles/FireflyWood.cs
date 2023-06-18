@@ -9,7 +9,6 @@ public class FireflyWood : ModTile
 		Main.tileSolid[Type] = true;
 		Main.tileMergeDirt[Type] = true;
 		Main.tileBlockLight[Type] = true;
-		MinPick = 175;
 		DustType = 191;
 		AddMapEntry(new Color(37, 46, 47));
 	}
