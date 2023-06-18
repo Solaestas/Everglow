@@ -1,5 +1,10 @@
 
     <Project Sdk="Microsoft.NET.Sdk">
       <Import Project="..\Module.props" />
+	<ItemGroup>
+	  <Reference Include="SubworldLibrary">
+	    <HintPath>..\..\..\Libraries\SubworldLibrary.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
     </Project>
     
