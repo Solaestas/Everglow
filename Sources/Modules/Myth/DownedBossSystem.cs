@@ -1,4 +1,4 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Myth;
@@ -13,9 +13,11 @@ public class DownedBossSystem : ModSystem
 	public static bool downedTusk = false;
 	public static bool downedMoth = false;
 	public static bool downedAcytaea = false;
+	public static bool downedBottle = false;
 	public static string TuskName;
 	public static string MothName;
 	public static string AcyName;
+	public static string BottleName;
 	// public static bool downedOtherBoss = false;
 	public override void OnWorldLoad()
 	{
@@ -24,16 +26,19 @@ public class DownedBossSystem : ModSystem
 			TuskName = "鲜血獠牙";
 			MothName = "腐檀巨蛾";
 			AcyName = "雅思塔亚";
+			BottleName = "封魔石瓶";
 		}
 		else
 		{
 			TuskName = "Bloody Tusk";
 			MothName = "Corrupt Moth";
 			AcyName = "Acytaea";
+			BottleName = "Stone Urn";
 		}
 		downedTusk = false;
 		downedMoth = false;
 		downedAcytaea = false;
+		downedBottle = false;
 		// downedOtherBoss = false;
 	}
 
@@ -42,6 +47,7 @@ public class DownedBossSystem : ModSystem
 		downedTusk = false;
 		downedMoth = false;
 		downedAcytaea = false;
+		downedBottle = false;
 		// downedOtherBoss = false;
 	}
 
@@ -52,6 +58,7 @@ public class DownedBossSystem : ModSystem
 		downedTusk = tag.ContainsKey("downedTusk");
 		downedMoth = tag.ContainsKey("downedMoth");
 		downedAcytaea = tag.ContainsKey("downedAcytaea");
+		downedBottle = tag.ContainsKey("downedBottle");
 		// downedOtherBoss = tag.ContainsKey("downedOtherBoss");
 	}
 	public override void SaveWorldData(TagCompound tag)
@@ -62,6 +69,8 @@ public class DownedBossSystem : ModSystem
 			tag["downedMoth"] = true;
 		if (downedAcytaea)
 			tag["downedAcytaea"] = true;
+		if (downedBottle)
+			tag["downedBottle"] = true;
 
 		// if (downedOtherBoss) {
 		//	tag["downedOtherBoss"] = true;
