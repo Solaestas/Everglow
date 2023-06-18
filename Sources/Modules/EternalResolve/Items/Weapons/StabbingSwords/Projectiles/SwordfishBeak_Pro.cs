@@ -28,6 +28,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			else
 			{
 				modifiers.FinalDamage.Multiplicative *= 0.6f;
+				modifiers.CritDamage *= 1.4f;
+				modifiers.ArmorPenetration += 4;
 			}
 		}
 		public override void AI()
