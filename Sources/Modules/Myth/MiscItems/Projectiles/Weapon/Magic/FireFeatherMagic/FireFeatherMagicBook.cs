@@ -13,11 +13,14 @@ internal class FireFeatherMagicBook : MagicBookProjectile
 		MulStartPosByVelocity = 2f;
 		UseGlow = false;
 		GlowPath = "MiscItems/Weapons/Sunflower_Glow";
+		FrontTexPath = "MiscItems/Projectiles/Weapon/Magic/FireFeatherMagic/FireFeatherMagic_front";
+		PaperTexPath = "MiscItems/Projectiles/Weapon/Magic/FireFeatherMagic/FireFeatherMagic_paper";
 		effectColor = new Color(105, 75, 45, 100);
-		TexCoordTop = new Vector2(15, 11);
-		TexCoordLeft = new Vector2(4, 32);
-		TexCoordDown = new Vector2(27, 45);
-		TexCoordRight = new Vector2(40, 19);
+		TexCoordTop = new Vector2(16, -1);
+		TexCoordLeft = new Vector2(-1, 29);
+		TexCoordDown = new Vector2(28, 37);
+		TexCoordRight = new Vector2(41, 10);
+		
 	}
 	public override void AI()
 	{
@@ -57,6 +60,86 @@ internal class FireFeatherMagicBook : MagicBookProjectile
 				p.extraUpdates = 2;
 			}
 		}
-		//Main.NewText(player.itemTime);
+	}
+	/// <summary>
+	/// 对于书本前部的绘制
+	/// </summary>
+	/// <param name="tex"></param>
+	/// <param name="Glowing"></param>
+	public override void DrawFront(Texture2D tex, int GlowType = 0, float MulSize = 1f)
+	{
+		Player player = Main.player[Projectile.owner];
+		Vector2 x0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.5f * MulSize;
+		Vector2 y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f * MulSize;
+		Color c0 = glowColor;
+		if (GlowType == 0)
+			c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
+		if (GlowType == 2)
+			c0 = effectColor;
+		var bars = new List<Vertex2D>();
+		for (int i = 0; i < 10; ++i)
+		{
+			double rot = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
+			rot += Projectile.rotation;
+			Vector2 basePos = Projectile.Center + x0 - x0.RotatedBy(rot) * i / 4.5f - y0 * 0.05f - x0 * 0.02f;
+
+			float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
+			float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
+			var Up = new Vector2(UpX, UpY);
+			Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
+			Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
+			var Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
+			if (Math.Abs(rot) > Math.PI / 2d)
+			{
+				if (player.direction * player.gravDir == 1)
+				{
+					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+				}
+				else
+				{
+					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+				}
+			}
+			else
+			{
+				if (player.direction * player.gravDir == 1)
+				{
+					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+				}
+				else
+				{
+					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+				}
+			}
+		}
+		if (bars.Count > 0)
+		{
+			Main.graphics.GraphicsDevice.Textures[0] = tex;
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+		Vector2 basePos2 = Projectile.Center - y0 * 0.05f - x0 * 0.02f;
+		bars = new List<Vertex2D>();
+		bars.Add(new Vertex2D(basePos2 + new Vector2(17 * player.direction, -11) - Main.screenPosition, c0, new Vector3(0, 0, 0)));
+		if(player.direction * player.gravDir == 1)
+		{
+			bars.Add(new Vertex2D(basePos2 + new Vector2(24 * player.direction, 0) - Main.screenPosition, c0, new Vector3(1, 0, 0)));
+			bars.Add(new Vertex2D(basePos2 + new Vector2(0 * player.direction, 0) - Main.screenPosition, c0, new Vector3(0, 1, 0)));
+		}
+		else
+		{
+			bars.Add(new Vertex2D(basePos2 + new Vector2(0 * player.direction, 0) - Main.screenPosition, c0, new Vector3(0, 1, 0)));
+			bars.Add(new Vertex2D(basePos2 + new Vector2(24 * player.direction, 0) - Main.screenPosition, c0, new Vector3(1, 0, 0)));
+		}
+		bars.Add(new Vertex2D(basePos2 + new Vector2(7 * player.direction, 11) - Main.screenPosition, c0, new Vector3(1, 1, 0)));
+
+		if (bars.Count > 0)
+		{
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.FireFeatherMagic_feather.Value;
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
 	}
 }
