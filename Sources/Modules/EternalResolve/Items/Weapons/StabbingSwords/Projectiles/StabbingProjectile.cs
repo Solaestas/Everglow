@@ -139,7 +139,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public virtual void HitTileSound(float scale)
 		{
-			SoundEngine.PlaySound((SoundID.NPCHit4.WithVolume(1 - scale / 2.42f)).WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
+			SoundEngine.PlaySound((SoundID.NPCHit4.WithVolume(0.5f - scale / 2.42f)).WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
 			Projectile.soundDelay = SoundTimer;
 		}
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
