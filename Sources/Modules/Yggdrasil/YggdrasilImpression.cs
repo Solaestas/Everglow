@@ -1,17 +1,13 @@
-using Everglow.Myth.TheFirefly.WorldGeneration;
 using SubworldLibrary;
+namespace Everglow.Yggdrasil;
 
-namespace Everglow.Myth.TheFirefly.Items;
-
-public class FireflyCapital : ModItem
+public class YggdrasilImpression : ModItem
 {
 	public override void SetDefaults()
 	{
-		Item.width = 20;
-		Item.height = 20;
-		Item.maxStack = 999;
+		Item.width = 50;
+		Item.height = 50;
 		Item.useTurn = true;
-		Item.autoReuse = true;
 		Item.useAnimation = 15;
 		Item.useTime = 7;
 		Item.useStyle = ItemUseStyleID.Swing;
@@ -19,16 +15,22 @@ public class FireflyCapital : ModItem
 	}
 	public override bool? UseItem(Player player)
 	{
+		// TODO world
 		if (player.itemAnimation == player.itemAnimationMax)
 		{
-			if (SubworldSystem.IsActive<MothWorld>())
+			if (SubworldSystem.IsActive<YggdrasilWorld>())
 				SubworldSystem.Exit();
 			else
 			{
-				if (!SubworldSystem.Enter<MothWorld>())
+				if (!SubworldSystem.Enter<YggdrasilWorld>())
 					Main.NewText("Fail!");
 			}
 		}
 		return base.UseItem(player);
+	}
+	public override void AddRecipes()
+	{
+		CreateRecipe()
+			.Register();
 	}
 }
