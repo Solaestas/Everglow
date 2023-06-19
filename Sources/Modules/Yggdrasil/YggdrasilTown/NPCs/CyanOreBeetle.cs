@@ -1,4 +1,4 @@
-﻿using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
@@ -9,7 +9,7 @@ public class CyanOreBeetle : ModNPC
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 5;
-		YggdrasilTownNPC.RegisterMothLandNPC(Type);
+		YggdrasilTownNPC.RegisterYggdrasilTownNPC(Type);
 	}
 	public override void SetDefaults()
 	{

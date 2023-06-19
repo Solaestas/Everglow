@@ -32,7 +32,10 @@ public class MineRoadBackground : ModSystem
 	private static void TileLightScanner_GetTileLight(On_TileLightScanner.orig_GetTileLight orig, Terraria.Graphics.Light.TileLightScanner self, int x, int y, out Vector3 outputColor)
 	{
 		orig(self, x, y, out outputColor);
-		outputColor += BiomeActive() ? new Vector3(0.001f, 0.001f, 0.05f) : Vector3.Zero;
+		if(BiomeActive())
+		{
+			outputColor *= new Vector3(0.1f, 0.1f, 0.2f);
+		}
 	}
 	private float alpha = 0f;
 	public override void PostUpdateEverything()//开启地下背景

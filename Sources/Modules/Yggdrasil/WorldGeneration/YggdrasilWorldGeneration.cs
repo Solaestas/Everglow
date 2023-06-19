@@ -8,6 +8,7 @@ using Everglow.Yggdrasil.HurricaneMaze.Tiles;
 using Everglow.Yggdrasil.CorruptWormHive.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 using Everglow.Commons.TileHelper;
+using static Everglow.Yggdrasil.WorldGeneration.YggdrasilTownGeneration;
 
 namespace Everglow.Yggdrasil.WorldGeneration;
 
@@ -23,13 +24,31 @@ public class YggdrasilWorldGeneration : ModSystem
 		{
 			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildtheTreeWorld");
 			BuildtheTreeWorld();
+			Main.spawnTileX = 600;
+			Main.spawnTileY = 11630;
+			BuildYggdrasilTown();
+		}
+	}
+    public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type, int startX = 0, int startY = 0)
+	{
+		if (x > Main.maxTilesX - width || x < 0 || y > Main.maxTilesY - height || y < 0)
+			return;
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				Tile tile = Main.tile[x + i, y + j];
+				tile.TileType = (ushort)type;
+				tile.TileFrameX = (short)(i * 18 + startX);
+				tile.TileFrameY = (short)(j * 18 + startY);
+				tile.HasTile = true;
+			}
 		}
 	}
 	public static Tile SafeGetTile(int i, int j)
 	{
-		return Main.tile[Math.Clamp(i, 1, Main.maxTilesX - 1), Math.Clamp(j, 1, Main.maxTilesY - 1)];
+		return Main.tile[Math.Clamp(i, 20, Main.maxTilesX - 20), Math.Clamp(j, 20, Main.maxTilesY - 20)];
 	}
-	//public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new YggdrasilWorldGenPass());
 	/// <summary>
 	/// type = 0:Kill,type = 1:place Tiles,type = 2:place Walls
 	/// </summary>
@@ -206,477 +225,7 @@ public class YggdrasilWorldGeneration : ModSystem
 			}
 		});
 	}
-	public static void PlaceLargeCyanVineOre(int i, int j)
-	{
-		switch (Main.rand.Next(2))
-		{
-			case 0:
-				for (int x = 0; x < 5; x++)
-				{
-					for (int y = 0; y < 3; y++)
-					{
-						var tile = SafeGetTile(i + x, j + y);
-						if (x == 0 && y == 0)
-							continue;
-						if (x == 4 && y == 0)
-							continue;
-						if (x == 4 && y == 1)
-							continue;
-						if (x == 0 && y == 1)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-							tile.IsHalfBlock = true;
-							tile.TileFrameX = (short)(x * 18);
-							tile.TileFrameY = (short)(y * 18);
-							tile.HasTile = true;
-							continue;
-						}
-						if (x == 4 && y == 2)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-							tile.Slope = SlopeType.SlopeDownLeft;
-							tile.TileFrameX = (short)(x * 18);
-							tile.TileFrameY = (short)(y * 18);
-							tile.HasTile = true;
-							continue;
-						}
-						if (x == 1 && y == 2)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreLarge>();
-							tile.TileFrameX = 36;
-							tile.TileFrameY = 54;
-							tile.HasTile = true;
-							continue;
-						}
-						tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-						tile.TileFrameX = (short)(x * 18);
-						tile.TileFrameY = (short)(y * 18);
-						tile.HasTile = true;
-					}
-				}
-				break;
-			case 1:
-				for (int x = 1; x < 4; x++)
-				{
-					for (int y = 1; y < 3; y++)
-					{
-						var tile = SafeGetTile(i + x, j + y);
-						if (x == 4 && y == 1)
-							continue;
-						if (x == 2 && y == 2)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreLarge>();
-							tile.TileFrameX = 144;
-							tile.TileFrameY = 54;
-							tile.HasTile = true;
-							continue;
-						}
-						if (x == 1 && y == 1)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-							tile.IsHalfBlock = true;
-							tile.TileFrameX = (short)(x * 18);
-							tile.TileFrameY = (short)(y * 18);
-							tile.HasTile = true;
-							continue;
-						}
-						tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-						tile.TileFrameX = (short)(x * 18);
-						tile.TileFrameY = (short)(y * 18);
-						tile.HasTile = true;
-					}
-				}
-				break;
-		}
-	}
-	public static void PlaceMiddleCyanVineOre(int i, int j)
-	{
-		switch (Main.rand.Next(4))
-		{
-			case 0:
-				for (int x = 0; x < 3; x++)
-				{
-					for (int y = 0; y < 3; y++)
-					{
-						var tile = SafeGetTile(i + x, j + y);
-						if (x == 0 && y == 0)
-							continue;
-						if (x == 1 && y == 0)
-							continue;
-						if (x == 0 && y == 1)
-							continue;
-						if (x == 2 && y == 0)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-							tile.Slope = SlopeType.SlopeDownRight;
-							tile.TileFrameX = (short)(x * 18);
-							tile.TileFrameY = (short)(y * 18);
-							tile.HasTile = true;
-							continue;
-						}
-						if (x == 1 && y == 2)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreMiddle>();
-							tile.TileFrameX = 18;
-							tile.TileFrameY = 54;
-							tile.HasTile = true;
-							continue;
-						}
-						tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-						tile.TileFrameX = (short)(x * 18);
-						tile.TileFrameY = (short)(y * 18);
-						tile.HasTile = true;
-					}
-				}
-				break;
-			case 1:
-				for (int x = 0; x < 3; x++)
-				{
-					for (int y = 1; y < 3; y++)
-					{
-						var tile = SafeGetTile(i + x, j + y);
 
-						if (x == 0 && y == 1)
-							continue;
-						if (x == 2 && y == 1)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-							tile.Slope = SlopeType.SlopeDownLeft;
-							tile.TileFrameX = (short)(x * 18);
-							tile.TileFrameY = (short)(y * 18);
-							tile.HasTile = true;
-							continue;
-						}
-						if (x == 1 && y == 2)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreMiddle>();
-							tile.TileFrameX = 90;
-							tile.TileFrameY = 54;
-							tile.HasTile = true;
-							continue;
-						}
-						tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-						tile.TileFrameX = (short)(x * 18);
-						tile.TileFrameY = (short)(y * 18);
-						tile.HasTile = true;
-					}
-				}
-				break;
-			case 2:
-				for (int x = 1; x < 4; x++)
-				{
-					for (int y = 1; y < 3; y++)
-					{
-						var tile = SafeGetTile(i + x, j + y);
-
-						if (x == 3 && y == 1)
-							continue;
-						if (x == 1 && y == 2)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreMiddle>();
-							tile.TileFrameX = 162;
-							tile.TileFrameY = 54;
-							tile.HasTile = true;
-							continue;
-						}
-						tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-						tile.TileFrameX = (short)(x * 18);
-						tile.TileFrameY = (short)(y * 18);
-						tile.HasTile = true;
-					}
-				}
-				break;
-			case 3:
-				for (int x = 0; x < 3; x++)
-				{
-					for (int y = 1; y < 3; y++)
-					{
-						var tile = SafeGetTile(i + x, j + y);
-
-						if (x == 0 && y == 1)
-							continue;
-						if (x == 0 && y == 2)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-							tile.Slope = SlopeType.SlopeDownRight;
-							tile.TileFrameX = (short)(x * 18);
-							tile.TileFrameY = (short)(y * 18);
-							tile.HasTile = true;
-							continue;
-						}
-						if (x == 2 && y == 1)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-							tile.IsHalfBlock = true;
-							tile.TileFrameX = (short)(x * 18);
-							tile.TileFrameY = (short)(y * 18);
-							tile.HasTile = true;
-							continue;
-						}
-						if (x == 1 && y == 2)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreMiddle>();
-							tile.TileFrameX = 234;
-							tile.TileFrameY = 54;
-							tile.HasTile = true;
-							continue;
-						}
-						tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-						tile.TileFrameX = (short)(x * 18);
-						tile.TileFrameY = (short)(y * 18);
-						tile.HasTile = true;
-					}
-				}
-				break;
-		}
-	}
-	public static void PlaceSmallCyanVineOre(int i, int j)
-	{
-		switch (Main.rand.Next(3))
-		{
-			case 0:
-				for (int x = 0; x < 2; x++)
-				{
-					for (int y = 0; y < 2; y++)
-					{
-						var tile = SafeGetTile(i + x, j + y);
-						if (x == 0 && y == 0)
-							continue;
-						if (x == 0 && y == 1)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmall>();
-							tile.TileFrameX = 0;
-							tile.TileFrameY = 36;
-							tile.HasTile = true;
-							continue;
-						}
-						tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-						tile.TileFrameX = (short)(x * 18);
-						tile.TileFrameY = (short)(y * 18);
-						tile.HasTile = true;
-					}
-				}
-				break;
-			case 1:
-				for (int x = 0; x < 2; x++)
-				{
-					for (int y = 0; y < 2; y++)
-					{
-						var tile = SafeGetTile(i + x, j + y);
-
-						if (x == 0 && y == 0)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-							tile.Slope = SlopeType.SlopeDownRight;
-							tile.TileFrameX = (short)(x * 18);
-							tile.TileFrameY = (short)(y * 18);
-							tile.HasTile = true;
-							continue;
-						}
-						if (x == 1 && y == 0)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-							tile.Slope = SlopeType.SlopeDownLeft;
-							tile.TileFrameX = (short)(x * 18);
-							tile.TileFrameY = (short)(y * 18);
-							tile.HasTile = true;
-							continue;
-						}
-						if (x == 0 && y == 1)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmall>();
-							tile.TileFrameX = 54;
-							tile.TileFrameY = 36;
-							tile.HasTile = true;
-							continue;
-						}
-						tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-						tile.TileFrameX = (short)(x * 18);
-						tile.TileFrameY = (short)(y * 18);
-						tile.HasTile = true;
-					}
-				}
-				break;
-			case 2:
-				for (int x = 0; x < 3; x++)
-				{
-					for (int y = 0; y < 2; y++)
-					{
-						var tile = SafeGetTile(i + x, j + y);
-
-						if (x == 0 && y == 0)
-							continue;
-						if (x == 2 && y == 0)
-							continue;
-						if (x == 2 && y == 1)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-							tile.Slope = SlopeType.SlopeDownLeft;
-							tile.TileFrameX = (short)(x * 18);
-							tile.TileFrameY = (short)(y * 18);
-							tile.HasTile = true;
-							continue;
-						}
-						if (x == 0 && y == 1)
-						{
-							tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmall>();
-							tile.Slope = SlopeType.SlopeDownRight;
-							tile.TileFrameX = 108;
-							tile.TileFrameY = 36;
-							tile.HasTile = true;
-							continue;
-						}
-						tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-						tile.TileFrameX = (short)(x * 18);
-						tile.TileFrameY = (short)(y * 18);
-						tile.HasTile = true;
-					}
-				}
-				break;
-		}
-	}
-	public static void PlaceSmallUpCyanVineOre(int i, int j)
-	{
-		switch (Main.rand.Next(4))
-		{
-			case 0:
-				{
-					var tile = SafeGetTile(i + 1, j);
-					tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
-					tile.TileFrameX = 18;
-					tile.TileFrameY = 0;
-					tile.HasTile = true;
-
-					var tileII = SafeGetTile(i + 1, j + 1);
-					tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-					tileII.TileFrameX = 18;
-					tileII.TileFrameY = 18;
-					tileII.Slope = SlopeType.SlopeUpRight;
-					tileII.HasTile = true;
-				}
-
-				break;
-			case 1:
-				{
-					var tile = SafeGetTile(i + 1, j);
-					tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
-					tile.TileFrameX = 72;
-					tile.TileFrameY = 0;
-					tile.HasTile = true;
-
-					var tileII = SafeGetTile(i + 1, j + 1);
-					tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-					tileII.TileFrameX = 18;
-					tileII.TileFrameY = 18;
-					tileII.HasTile = true;
-				}
-				break;
-			case 2:
-				{
-					var tile = SafeGetTile(i + 1, j);
-					tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
-					tile.TileFrameX = 126;
-					tile.TileFrameY = 0;
-					tile.HasTile = true;
-
-					var tileII = SafeGetTile(i + 1, j + 1);
-					tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-					tileII.TileFrameX = 18;
-					tileII.TileFrameY = 18;
-					tileII.HasTile = true;
-
-					var tileIII = SafeGetTile(i, j);
-					tileIII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-					tileIII.TileFrameX = 0;
-					tileIII.TileFrameY = 0;
-					tileIII.Slope = SlopeType.SlopeUpRight;
-					tileIII.HasTile = true;
-
-					var tileIV = SafeGetTile(i + 2, j);
-					tileIV.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-					tileIV.TileFrameX = 36;
-					tileIV.TileFrameY = 0;
-					tileIV.Slope = SlopeType.SlopeUpLeft;
-					tileIV.HasTile = true;
-				}
-				break;
-			case 3:
-				{
-					var tile = SafeGetTile(i + 1, j);
-					tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
-					tile.TileFrameX = 180;
-					tile.TileFrameY = 0;
-					tile.HasTile = true;
-
-					var tileII = SafeGetTile(i + 1, j + 1);
-					tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-					tileII.TileFrameX = 18;
-					tileII.TileFrameY = 18;
-					tileII.Slope = SlopeType.SlopeUpRight;
-					tileII.HasTile = true;
-
-					var tileIII = SafeGetTile(i, j);
-					tileIII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-					tileIII.TileFrameX = 0;
-					tileIII.TileFrameY = 0;
-					tileIII.HasTile = true;
-
-					var tileIV = SafeGetTile(i + 2, j);
-					tileIV.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-					tileIV.TileFrameX = 36;
-					tileIV.TileFrameY = 0;
-					tileIV.Slope = SlopeType.SlopeUpLeft;
-					tileIV.HasTile = true;
-				}
-				break;
-		}
-	}
-	public static void PlaceLargeUpCyanVineOre(int i, int j)
-	{
-		for (int x = 1; x < 5; x++)
-		{
-			for (int y = 0; y < 3; y++)
-			{
-				var tile = SafeGetTile(i + x, j + y);
-				if (x == 1 && y == 2)
-					continue;
-				if (x == 3 && y == 2)
-					continue;
-				if (x == 4 && y == 2)
-					continue;
-				if (x == 1 && y == 1)
-				{
-					tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-					tile.Slope = SlopeType.SlopeUpRight;
-					tile.TileFrameX = (short)(x * 18);
-					tile.TileFrameY = (short)(y * 18);
-					tile.HasTile = true;
-					continue;
-				}
-				if (x == 4 && y == 1)
-				{
-					tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-					tile.Slope = SlopeType.SlopeUpLeft;
-					tile.TileFrameX = (short)(x * 18);
-					tile.TileFrameY = (short)(y * 18);
-					tile.HasTile = true;
-					continue;
-				}
-				if (x == 2 && y == 0)
-				{
-					tile.TileType = (ushort)ModContent.TileType<CyanVineOreLargeUp>();
-					tile.TileFrameX = 36;
-					tile.TileFrameY = 0;
-					tile.HasTile = true;
-					continue;
-				}
-				tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-				tile.TileFrameX = (short)(x * 18);
-				tile.TileFrameY = (short)(y * 18);
-				tile.HasTile = true;
-			}
-		}
-	}
 	public static void QuickBuild(int x, int y, string Path)
 	{
 		var mapIO = new MapIO(x, y);
@@ -695,29 +244,51 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// </summary>
 	public static void BuildtheTreeWorld()
 	{
-		Main.statusText = "YggdrasilStart";
-		ShapeTile("Tree.bmp", 0, 0, 1);
-		Main.statusText = "YggdrasilWall";
-		ShapeTile("TreeWall.bmp", 0, 0, 2);
-		SmoothTile();
+		//Main.statusText = "YggdrasilStart";
+		//ShapeTile("Tree.bmp", 0, 0, 1);
+		//Main.statusText = "YggdrasilWall";
+		//ShapeTile("TreeWall.bmp", 0, 0, 2);
+		//SmoothTile();
 
-		Main.statusText = "YggdrasilTown";
-		ShapeTile("Tree.bmp", 0, 0, 3);
-		Main.statusText = "YggdrasilOre";
-		ShapeTile("Tree.bmp", 0, 0, 4);
+		//Main.statusText = "YggdrasilTown";
+		//ShapeTile("Tree.bmp", 0, 0, 3);
+		//Main.statusText = "YggdrasilOre";
+		//ShapeTile("Tree.bmp", 0, 0, 4);
 	}
-	private static void SmoothTile(int a = 0, int b = 0, int c = 0, int d = 0)
+	//平坦化,x0左y0上x1右y1下
+	public static void SmoothTile(int x0, int y0, int x1, int y1)
 	{
-		for (int x = 20 + b; x < 980 - d; x += 1)
+		x0 = Math.Clamp(x0, 20, Main.maxTilesX - 20);
+		x1 = Math.Clamp(x1, 20, Main.maxTilesX - 20);
+		y0 = Math.Clamp(y0, 20, Main.maxTilesY - 20);
+		y1 = Math.Clamp(y1, 20, Main.maxTilesY - 20);
+		for (int x = x0; x <= x1; x += 1)
 		{
-			for (int y = 20 + a; y < 11980 - c; y += 1)
+			for (int y = y0; y <= y1; y += 1)
 			{
-
-				Tile.SmoothSlope(x + a, y + b, false);
-				WorldGen.TileFrame(x + a, y + b, true, false);
-				WorldGen.SquareWallFrame(x + a, y + b, true);
+				Tile.SmoothSlope(x, y, false);
+				WorldGen.TileFrame(x, y, true, false);
+				WorldGen.SquareWallFrame(x, y, true);
 			}
 		}
+	}
+	//放置一个矩形区域的物块,x0左y0上x1右y1下
+	public static void PlaceRectangleAreaOfBlock(int x0, int y0, int x1, int y1, int type)
+	{
+		x0 = Math.Clamp(x0, 20, Main.maxTilesX - 20);
+		x1 = Math.Clamp(x1, 20, Main.maxTilesX - 20);
+		y0 = Math.Clamp(y0, 20, Main.maxTilesY - 20);
+		y1 = Math.Clamp(y1, 20, Main.maxTilesY - 20);
+		for (int x = x0; x <= x1; x += 1)
+		{
+			for (int y = y0; y <= y1; y += 1)
+			{
+				Tile tile = Main.tile[x, y];
+				tile.TileType = (ushort)type;
+				tile.HasTile = true;
+			}
+		}
+		SmoothTile(x0, y0, x1, y1);
 	}
 }
 
