@@ -13,6 +13,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.Graphics.Capture;
 using Everglow.Myth.Common;
+using Terraria.GameContent;
 
 namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
 {
@@ -207,9 +208,9 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
 				Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
-                //Main.graphics.GraphicsDevice.Textures[0] = Main.magicPixel;
-                //Main.graphics.GraphicsDevice.Textures[1] = Main.magicPixel;
-                //Main.graphics.GraphicsDevice.Textures[2] = Main.magicPixel;
+                //Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
+                //Main.graphics.GraphicsDevice.Textures[1] = TextureAssets.MagicPixel.Value;
+                //Main.graphics.GraphicsDevice.Textures[2] = TextureAssets.MagicPixel.Value;
 
                 DefaultEffectB2.CurrentTechnique.Passes[0].Apply();
 

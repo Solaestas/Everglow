@@ -32,7 +32,7 @@ namespace Everglow.Myth.Bosses.EvilBottle.Items
 			base.Item.rare = 3;
 			base.Item.UseSound = SoundID.Item60;
 			base.Item.autoReuse = true;
-            Item.shoot = Mod.Find<ModProjectile>("DarkStaff").Type;
+            Item.shoot = ModContent.ProjectileType<Projectiles.DarkStaff>();
             base.Item.shootSpeed = 6f;
 		}
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

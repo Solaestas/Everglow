@@ -9,6 +9,7 @@ using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ID;
 using Everglow.Myth.Common;
+using Terraria.GameContent;
 //using TemplateMod2.Utils;
 
 
@@ -142,14 +143,14 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
         }
         public override void PostDraw(Color lightColor)
         {
-			Effect DefaultEffectDarkRedGold2 = MythContent.QuickEffect("Effects/TrailDarkRedGold2");
+			Effect DefaultEffectDarkRedGold2 = ModContent.Request<Effect>("Everglow/Myth/Effects/TrailDarkRedGold2", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 			List<CustomVertexInfo> bars = new List<CustomVertexInfo>();
 
             // 0„30Š00100·350106¦09¡§0…70100·370100·34010¡­80106¦02010¡­80100”70010¡­90106¥940106¦07¡§0…5010¡­60106¦07010¡­60106§820106¥98010¡­70106¥75010¡­10„30Š0010¡­70100·390100·390106¦09010¡­60100·34¡§¡ã
             for (int i = 2; i < Projectile.oldPos.Length - 1; ++i)
             {
                 if (Projectile.oldPos[i] == Vector2.Zero) break;
-                //spriteBatch.Draw(Main.magicPixel, projectile.oldPos[i] - Main.screenPosition,
+                //spriteBatch.Draw(TextureAssets.MagicPixel.Value, projectile.oldPos[i] - Main.screenPosition,
                 //    new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0.5f, 0.5f), 5f, SpriteEffects.None, 0f);
 
                 int width = 30;
@@ -211,9 +212,9 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
 				Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
-                //Main.graphics.GraphicsDevice.Textures[0] = Main.magicPixel;
-                //Main.graphics.GraphicsDevice.Textures[1] = Main.magicPixel;
-                //Main.graphics.GraphicsDevice.Textures[2] = Main.magicPixel;
+                //Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
+                //Main.graphics.GraphicsDevice.Textures[1] = TextureAssets.MagicPixel.Value;
+                //Main.graphics.GraphicsDevice.Textures[2] = TextureAssets.MagicPixel.Value;
 
                 DefaultEffectDarkRedGold2.CurrentTechnique.Passes[0].Apply();
 

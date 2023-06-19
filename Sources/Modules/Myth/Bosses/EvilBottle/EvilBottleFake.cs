@@ -55,7 +55,7 @@ namespace Everglow.Myth.Bosses.EvilBottle
         }
         public override void HitEffect(NPC.HitInfo hit)
         {
-            //EvilBottle.Addlig = 2;
+            EvilBottle.Addlig = 2;
             if (base.NPC.life <= 0)
             {
             }

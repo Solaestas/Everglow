@@ -52,7 +52,7 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
                 {
                     if (Main.rand.Next(20) == 1)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), base.Projectile.Center.X, base.Projectile.Center.Y, 0, 0, base.Mod.Find<ModProjectile>("EvilLightingbolt3").Type, base.Projectile.damage * 4, base.Projectile.knockBack, base.Projectile.owner, Main.npc[Ix[j]].Center.X, Main.npc[Ix[j]].Center.Y);
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), base.Projectile.Center.X, base.Projectile.Center.Y, 0, 0, ModContent.ProjectileType<EvilLightingbolt3>(), base.Projectile.damage * 4, base.Projectile.knockBack, base.Projectile.owner, Main.npc[Ix[j]].Center.X, Main.npc[Ix[j]].Center.Y);
                         Main.npc[Ix[j]].AddBuff(153, 300);
                         Main.npc[Ix[j]].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.65f,1.05f)), 0, Projectile.direction, Main.rand.NextFloat(0f, 1f) > 0.75f ? false : true);
                         for (int z = 0; z < 15; z++)

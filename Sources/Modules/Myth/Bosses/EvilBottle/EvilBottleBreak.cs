@@ -15,6 +15,8 @@ using Terraria.GameInput;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
+using Terraria.GameContent;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.Bosses.EvilBottle
 {
@@ -68,14 +70,15 @@ namespace Everglow.Myth.Bosses.EvilBottle
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            for (int i = 1; i < 40; ++i)
+			Effect DefaultEffectDarkRedGold = ModContent.Request<Effect>("Everglow/Myth/Effects/TrailDarkRedGold", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			for (int i = 1; i < 40; ++i)
             {
                 List<CustomVertexInfo> bars = new List<CustomVertexInfo>();
                 for (int j = 1; j < 15; ++j)
                 {
                     if (Pm[i, j] == Vector2.Zero) break;
-                    //spriteBatch.Draw(mod.GetTexture("UIImages/Star"), projectile.position + projectile.velocity.RotatedBy(Math.PI / 2d * Dir) * 20 - Main.screenPosition, null, new Color(0.2f, 0f, 0f, 0f), 0f, new Vector2(36f, 36f), (float)Math.Sin(projectile.timeLeft / 30d * Math.PI) * 0.2f, SpriteEffects.None, 0f);
-                    //spriteBatch.Draw(mod.GetTexture("UIImages/Star"), projectile.position + projectile.velocity.RotatedBy(Math.PI / 2d * Dir) * 20 - Main.screenPosition, null, new Color(0.2f, 0f, 0f, 0f), (float)(Math.PI / 2d), new Vector2(36f, 36f), (float)Math.Sin(projectile.timeLeft / 30d * Math.PI) * 0.6f, SpriteEffects.None, 0f);
+                    //spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/Star"), projectile.position + projectile.velocity.RotatedBy(Math.PI / 2d * Dir) * 20 - Main.screenPosition, null, new Color(0.2f, 0f, 0f, 0f), 0f, new Vector2(36f, 36f), (float)Math.Sin(projectile.timeLeft / 30d * Math.PI) * 0.2f, SpriteEffects.None, 0f);
+                    //spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/Star"), projectile.position + projectile.velocity.RotatedBy(Math.PI / 2d * Dir) * 20 - Main.screenPosition, null, new Color(0.2f, 0f, 0f, 0f), (float)(Math.PI / 2d), new Vector2(36f, 36f), (float)Math.Sin(projectile.timeLeft / 30d * Math.PI) * 0.6f, SpriteEffects.None, 0f);
 
                     int width = 0;
                     width = (int)(j * 4f + 20);
@@ -142,20 +145,20 @@ namespace Everglow.Myth.Bosses.EvilBottle
                     var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0));
 
                     // 把变换和所需信息丢给shader
-                    //MythMod.DefaultEffectDarkRedGold.Parameters["uTransform"].SetValue(model * projection);
-                    //MythMod.DefaultEffectDarkRedGold.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
-                    //Main.graphics.GraphicsDevice.Textures[0] = MythMod.MainColorColdPurple;
-                    //Main.graphics.GraphicsDevice.Textures[1] = MythMod.MainShape;
-                    //Main.graphics.GraphicsDevice.Textures[2] = MythMod.MaskColor;
-                    Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+                    DefaultEffectDarkRedGold.Parameters["uTransform"].SetValue(model * projection);
+                    DefaultEffectDarkRedGold.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
+					Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIImages/VisualTextures/heatmapDarkRedGold");
+					Main.graphics.GraphicsDevice.Textures[1] = MythContent.QuickTexture("UIImages/VisualTextures/Lightline");
+					Main.graphics.GraphicsDevice.Textures[2] = MythContent.QuickTexture("UIImages/VisualTextures/FogTrace");
+					Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
                     Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
                     Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
 
-                    //Main.graphics.GraphicsDevice.Textures[0] = Main.magicPixel;
-                    //Main.graphics.GraphicsDevice.Textures[1] = Main.magicPixel;
-                    //Main.graphics.GraphicsDevice.Textures[2] = Main.magicPixel;
+                    //Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
+                    //Main.graphics.GraphicsDevice.Textures[1] = TextureAssets.MagicPixel.Value;
+                    //Main.graphics.GraphicsDevice.Textures[2] = TextureAssets.MagicPixel.Value;
 
-                    //MythMod.DefaultEffectDarkRedGold.CurrentTechnique.Passes[0].Apply();
+                    DefaultEffectDarkRedGold.CurrentTechnique.Passes[0].Apply();
 
 
                     Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);

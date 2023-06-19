@@ -39,8 +39,8 @@ namespace Everglow.Myth.Bosses.EvilBottle
 			{
 				NPC.lifeMax = 8000;
 				NPC.defense = 40;
-				base.NPC.value = (float)Item.buyPrice(0, 2, 0, 0);
 			}
+			base.NPC.value = (float)Item.buyPrice(0, 2, 0, 0);
 			//if (Main.masterMode)
 			//{
 			//    base.NPC.lifeMax = 17000;
@@ -337,14 +337,14 @@ namespace Everglow.Myth.Bosses.EvilBottle
 						Projectile.NewProjectile(NPC.Center.X + v.X, NPC.Center.Y - 200 + v.Y, 0, 0, ModContent.ProjectileType<>("DarkFlameMagicTriangle"), Dam, 0f, Main.myPlayer, 0f, 0f);
 					}*/
 				}
-				/*if (NPC.localAI[0] >= 1200 && NPC.localAI[0] < 2400)
+				if (NPC.localAI[0] >= 1200 && NPC.localAI[0] < 2400)
 				{
 					if (NPC.localAI[0] % 90 == 0)
 					{
 						Vector2 v = new Vector2(Main.rand.Next(-400, 400) * NPC.spriteDirection, Main.rand.Next(-1300, -600)).RotatedBy(Main.rand.NextFloat(-0.75f, 0.75f)) * 0.01f;
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, NPC.Center.Y - 35, v.X, v.Y - 4, ModContent.ProjectileType<>("DarkFlameball"), 70, 0f, Main.myPlayer, 0f, 0f);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, NPC.Center.Y - 35, v.X, v.Y - 4, ModContent.ProjectileType<DarkFlameball>(), 70, 0f, Main.myPlayer, 0f, 0f);
 					}
-				}*/
+				}
 				if (NPC.localAI[0] > 2400 && NPC.localAI[0] < 3600)
 				{
 					Vector2 v8 = player.Center;
@@ -391,14 +391,14 @@ namespace Everglow.Myth.Bosses.EvilBottle
 				{
 					Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, NPC.Center.Y - 95, 0, 0, ModContent.ProjectileType<DarkLazerBall>(), 50, 0f, Main.myPlayer, 0, 0f);
 				}
-				/*if (NPC.localAI[0] >= 0 && NPC.localAI[0] < 3600)
+				if (NPC.localAI[0] >= 0 && NPC.localAI[0] < 3600)
 				{
 					if (NPC.localAI[0] % 6 == 0)
 					{
 						Vector2 v = new Vector2(Main.rand.Next(-4, 4) * NPC.spriteDirection, Main.rand.Next(-800, -790)) * 0.01f;
-						Projectile.NewProjectile(NPC.Center.X - 5, NPC.Center.Y - 58, v.X, v.Y - 4, ModContent.ProjectileType<>("DarkFlame2"), 150, 0f, Main.myPlayer, 0f, 0f);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X - 5, NPC.Center.Y - 58, v.X, v.Y - 4, ModContent.ProjectileType<DarkFlame2>(), 150, 0f, Main.myPlayer, 0f, 0f);
 					}
-				}*/
+				}
 				if (NPC.localAI[0] >= 4211)
 				{
 					NPC.localAI[0] = 0;
@@ -781,7 +781,7 @@ namespace Everglow.Myth.Bosses.EvilBottle
                     break;
             }
             //Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y - 40, base.NPC.width, base.NPC.height, type2, 1, false, 0, false, false);
-            //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, NPC.Center.Y - 95, 0, 0, ModContent.ProjectileType<>("EvilBottleKill").Type, 200, 0f, Main.myPlayer, 0f, 0f);
+            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, NPC.Center.Y - 95, 0, 0, ModContent.ProjectileType<EvilBottleKill>(), 200, 0f, Main.myPlayer, 0f, 0f);
             if (!DownedBossSystem.downedBottle)
             {
                 DownedBossSystem.downedBottle = true;

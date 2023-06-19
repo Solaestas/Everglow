@@ -27,7 +27,7 @@ namespace Everglow.Myth.Bosses.EvilBottle.Items
         }
         public override bool CanUseItem(Player player)
         {
-            return !NPC.AnyNPCs(base.Mod.Find<ModNPC>("EvilBottle").Type);
+            return !NPC.AnyNPCs(ModContent.NPCType<EvilBottle>());
         }
         public override void AddRecipes()
         {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -26,7 +26,7 @@ namespace Everglow.Myth.Bosses.EvilBottle.Items
             Item.UseSound = SoundID.Item1;
             Item.DamageType = DamageClass.Melee/* tModPorter Suggestion: Consider MeleeNoSpeed for no attack speed scaling */;
             Item.channel = true;
-            Item.shoot = Mod.Find<ModProjectile>("ShadowYoyo").Type;
+            Item.shoot = ModContent.ProjectileType<Projectiles.ShadowYoyo>();
             Item.useAnimation = 5;
             Item.useTime = 14;
             Item.shootSpeed = 0f;

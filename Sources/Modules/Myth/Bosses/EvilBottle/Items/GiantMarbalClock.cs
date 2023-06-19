@@ -28,7 +28,7 @@ namespace Everglow.Myth.Bosses.EvilBottle.Items
             base.Item.height = 40;
             base.Item.rare = 8;
             base.Item.scale = 1f;
-            //base.Item.createTile = base.Mod.Find<ModTile>("GiantMarbalClock").Type;
+            base.Item.createTile = ModContent.TileType<Tiles.GiantMarbalClock>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;

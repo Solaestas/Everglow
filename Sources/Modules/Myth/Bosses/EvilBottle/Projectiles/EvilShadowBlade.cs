@@ -39,6 +39,8 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
             base.Projectile.usesLocalNPCImmunity = true;
             base.Projectile.localNPCHitCooldown = 400;
             base.Projectile.tileCollide = false;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 20;
         }
         private float lig = 0;
         private double Rot = 0;
@@ -95,7 +97,7 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
             if(!Main.gamePaused)
             {
                 Vector2 v = (Projectile.Center - p.Center) / 25f;
-				Projectile.NewProjectile(null, p.Center.X, p.Center.Y, v.X, v.Y, Mod.Find<ModProjectile>("littleEvilfire0").Type, Projectile.damage, 0f, Main.myPlayer, 0, 0f); //TODO: Find the actual source if there is any. Currently null.
+				Projectile.NewProjectile(null, p.Center.X, p.Center.Y, v.X, v.Y, ModContent.ProjectileType<littleEvilfire0>(), Projectile.damage, 0f, Main.myPlayer, 0, 0f); //TODO: Find the actual source if there is any. Currently null.
             }
             return false;
         }

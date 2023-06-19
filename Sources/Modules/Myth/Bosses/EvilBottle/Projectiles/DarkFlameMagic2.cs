@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Everglow.Myth.Common;
+using Terraria.GameContent;
 
 namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
 {
@@ -109,7 +110,7 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
             // 把所有的点都生成出来，按照顺序
             for (int i = 1; i <= 4; ++i)
             {
-                //spriteBatch.Draw(Main.magicPixel, projectile.oldPos[i] - Main.screenPosition,
+                //spriteBatch.Draw(TextureAssets.MagicPixel.Value, projectile.oldPos[i] - Main.screenPosition,
                 //    new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0.5f, 0.5f), 5f, SpriteEffects.None, 0f);
 
                 int width = 30;
@@ -174,9 +175,9 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
 				Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
-                //Main.graphics.GraphicsDevice.Textures[0] = Main.magicPixel;
-                //Main.graphics.GraphicsDevice.Textures[1] = Main.magicPixel;
-                //Main.graphics.GraphicsDevice.Textures[2] = Main.magicPixel;
+                //Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
+                //Main.graphics.GraphicsDevice.Textures[1] = TextureAssets.MagicPixel.Value;
+                //Main.graphics.GraphicsDevice.Textures[2] = TextureAssets.MagicPixel.Value;
 
                 DefaultEffectB2.CurrentTechnique.Passes[0].Apply();
 

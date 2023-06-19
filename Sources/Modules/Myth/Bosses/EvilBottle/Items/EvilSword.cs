@@ -27,7 +27,7 @@ namespace Everglow.Myth.Bosses.EvilBottle.Items
             Item.crit = 8;
             Item.value = 6000;
             Item.scale = 1f;
-            Item.shoot = base.Mod.Find<ModProjectile>("EvilSword").Type;
+            Item.shoot = ModContent.ProjectileType<Projectiles.EvilSword>();
             Item.shootSpeed = 4f;
 
         }

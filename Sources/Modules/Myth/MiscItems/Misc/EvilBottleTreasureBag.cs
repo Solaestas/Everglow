@@ -1,18 +1,3 @@
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Terraria;
-using System;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
-using Terraria.Localization;
-using System.Collections.Generic;
-using System.IO;
-using Terraria.GameInput;
-using Terraria.Graphics.Effects;
-using Terraria.Graphics.Shaders;
-using Terraria.ModLoader.IO;
-using Terraria.GameContent.Achievements;
 namespace Everglow.Myth.MiscItems.Misc
 {
     public class EvilBottleTreasureBag : ModItem

@@ -15,6 +15,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Everglow.Myth.Common;
+using Terraria.GameContent;
 
 namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
 {
@@ -94,7 +95,7 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
             {
                 if (Projectile.oldPos[i] == Vector2.Zero) break;
-                //spriteBatch.Draw(Main.magicPixel, projectile.oldPos[i] - Main.screenPosition,
+                //spriteBatch.Draw(TextureAssets.MagicPixel.Value, projectile.oldPos[i] - Main.screenPosition,
                 //    new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0.5f, 0.5f), 5f, SpriteEffects.None, 0f);
 
                 int width = 0;
@@ -170,9 +171,9 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
 				Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
-                //Main.graphics.GraphicsDevice.Textures[0] = Main.magicPixel;
-                //Main.graphics.GraphicsDevice.Textures[1] = Main.magicPixel;
-                //Main.graphics.GraphicsDevice.Textures[2] = Main.magicPixel;
+                //Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
+                //Main.graphics.GraphicsDevice.Textures[1] = TextureAssets.MagicPixel.Value;
+                //Main.graphics.GraphicsDevice.Textures[2] = TextureAssets.MagicPixel.Value;
 
                 DefaultEffectB2.CurrentTechnique.Passes[0].Apply();
 
