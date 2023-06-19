@@ -54,9 +54,12 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
         private float N = 0;
         public override void AI()
         {
-            if(Projectile.timeLeft == 899)
+			SoundStyle 雷击 = new SoundStyle("Everglow/Myth/Sounds/雷击");
+			雷击.MaxInstances = 10;
+
+			if (Projectile.timeLeft == 899)
             {
-                SoundEngine.PlaySound(new SoundStyle("Sounds/雷击"), (int)Projectile.Center.X, (int)Projectile.Center.Y);
+                SoundEngine.PlaySound(雷击, (int)Projectile.Center.X, (int)Projectile.Center.Y);
             }
             if (Projectile.timeLeft < 872)
             {

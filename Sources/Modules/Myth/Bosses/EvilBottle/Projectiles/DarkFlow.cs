@@ -143,7 +143,7 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
         }
         public override void PostDraw(Color lightColor)
         {
-			Effect DefaultEffectDarkRedGold2 = ModContent.Request<Effect>("Everglow/Myth/Effects/TrailDarkRedGold2", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			//Effect DefaultEffectDarkRedGold2 = ModContent.Request<Effect>("Everglow/Myth/Effects/TrailDarkRedGold2", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 			List<CustomVertexInfo> bars = new List<CustomVertexInfo>();
 
             // 0„30Š00100·350106¦09¡§0…70100·370100·34010¡­80106¦02010¡­80100”70010¡­90106¥940106¦07¡§0…5010¡­60106¦07010¡­60106§820106¥98010¡­70106¥75010¡­10„30Š0010¡­70100·390100·390106¦09010¡­60100·34¡§¡ã
@@ -204,8 +204,8 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
                 var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0));
 
                 // 0„30Š00100·350„30†80100”710106¥930106¥930106¥920100·310106¦09¡§0…70100·34¡§¡§0100·340106¦030100·330106¥74010¡­90106¥790106¥900106§83shader
-                DefaultEffectDarkRedGold2.Parameters["uTransform"].SetValue(model * projection);
-                DefaultEffectDarkRedGold2.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
+                //DefaultEffectDarkRedGold2.Parameters["uTransform"].SetValue(model * projection);
+                //DefaultEffectDarkRedGold2.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
                 Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIImages/VisualTextures/heatmapDarkRedGold");
 				Main.graphics.GraphicsDevice.Textures[1] = MythContent.QuickTexture("UIImages/VisualTextures/Lightline");
 				Main.graphics.GraphicsDevice.Textures[2] = MythContent.QuickTexture("UIImages/VisualTextures/FogTrace");
@@ -216,7 +216,7 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
                 //Main.graphics.GraphicsDevice.Textures[1] = TextureAssets.MagicPixel.Value;
                 //Main.graphics.GraphicsDevice.Textures[2] = TextureAssets.MagicPixel.Value;
 
-                DefaultEffectDarkRedGold2.CurrentTechnique.Passes[0].Apply();
+                //DefaultEffectDarkRedGold2.CurrentTechnique.Passes[0].Apply();
 
 
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);

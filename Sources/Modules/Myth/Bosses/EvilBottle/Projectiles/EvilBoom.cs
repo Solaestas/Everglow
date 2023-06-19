@@ -51,7 +51,10 @@ namespace Everglow.Myth.Bosses.EvilBottle.Projectiles
         }
         public override void Kill(int timeLeft)
         {
-            SoundEngine.PlaySound(new SoundStyle("Sounds/烟花爆炸"), (int)Projectile.Center.X, (int)Projectile.Center.Y);
+			SoundStyle 烟花爆炸 = new SoundStyle("Everglow/Myth/Sounds/烟花爆炸");
+			烟花爆炸.MaxInstances = 10;
+
+			SoundEngine.PlaySound(烟花爆炸, (int)Projectile.Center.X, (int)Projectile.Center.Y);
             for (int i = 0; i < 120; i++)
             {
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(2.9f, (float)(2.4 * Math.Log10(Projectile.damage)))).RotatedByRandom(Math.PI * 2);

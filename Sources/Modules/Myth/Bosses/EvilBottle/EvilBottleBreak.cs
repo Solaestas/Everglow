@@ -70,7 +70,7 @@ namespace Everglow.Myth.Bosses.EvilBottle
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-			Effect DefaultEffectDarkRedGold = ModContent.Request<Effect>("Everglow/Myth/Effects/TrailDarkRedGold", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			//Effect DefaultEffectDarkRedGold = ModContent.Request<Effect>("Everglow/Myth/Effects/TrailDarkRedGold", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 			for (int i = 1; i < 40; ++i)
             {
                 List<CustomVertexInfo> bars = new List<CustomVertexInfo>();
@@ -145,8 +145,8 @@ namespace Everglow.Myth.Bosses.EvilBottle
                     var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0));
 
                     // 把变换和所需信息丢给shader
-                    DefaultEffectDarkRedGold.Parameters["uTransform"].SetValue(model * projection);
-                    DefaultEffectDarkRedGold.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
+                    //DefaultEffectDarkRedGold.Parameters["uTransform"].SetValue(model * projection);
+                    //DefaultEffectDarkRedGold.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
 					Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIImages/VisualTextures/heatmapDarkRedGold");
 					Main.graphics.GraphicsDevice.Textures[1] = MythContent.QuickTexture("UIImages/VisualTextures/Lightline");
 					Main.graphics.GraphicsDevice.Textures[2] = MythContent.QuickTexture("UIImages/VisualTextures/FogTrace");
@@ -158,7 +158,7 @@ namespace Everglow.Myth.Bosses.EvilBottle
                     //Main.graphics.GraphicsDevice.Textures[1] = TextureAssets.MagicPixel.Value;
                     //Main.graphics.GraphicsDevice.Textures[2] = TextureAssets.MagicPixel.Value;
 
-                    DefaultEffectDarkRedGold.CurrentTechnique.Passes[0].Apply();
+                    //DefaultEffectDarkRedGold.CurrentTechnique.Passes[0].Apply();
 
 
                     Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);

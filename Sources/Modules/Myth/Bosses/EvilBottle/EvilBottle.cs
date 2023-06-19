@@ -169,7 +169,7 @@ namespace Everglow.Myth.Bosses.EvilBottle
 					Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, NPC.Center.Y - 200, 0, 0, ModContent.ProjectileType<DarkFlameMagic0>(), Dam, 0f, Main.myPlayer, 0f, 0f); // was ModContent.ProjectileType<DarkFlameMagic0>(). TODO: Test other DarkFlameMagic Projectiles.
 				}
 			}
-			if (NPC.localAI[0] >= 2400)
+			if (NPC.localAI[0] >= 2400 && !Main.expertMode)
 			{
 				NPC.localAI[0] = 0;
 			}
@@ -393,11 +393,11 @@ namespace Everglow.Myth.Bosses.EvilBottle
 				}
 				if (NPC.localAI[0] >= 0 && NPC.localAI[0] < 3600)
 				{
-					if (NPC.localAI[0] % 6 == 0)
+					/*if (NPC.localAI[0] % 6 == 0)
 					{
 						Vector2 v = new Vector2(Main.rand.Next(-4, 4) * NPC.spriteDirection, Main.rand.Next(-800, -790)) * 0.01f;
 						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X - 5, NPC.Center.Y - 58, v.X, v.Y - 4, ModContent.ProjectileType<DarkFlame2>(), 150, 0f, Main.myPlayer, 0f, 0f);
-					}
+					}*/
 				}
 				if (NPC.localAI[0] >= 4211)
 				{
@@ -586,10 +586,24 @@ namespace Everglow.Myth.Bosses.EvilBottle
             }
             return true;
         }
-
-        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+		public Vector2[] Pm = new Vector2[1024];
+		public int Wo = 0;
+		public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            for (int im = 0; im < 10; im += 2)
+			if (Lowerthan12000)
+			{
+				if (NPC.localAI[0] < 0)
+				{
+					float xd = (NPC.localAI[0] + 300) / 300f * 1.625f;
+					float St = (float)(Math.Log(3 * xd + 1 + Math.Sin(xd * 5) * 2)) * 0.49f;
+					Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Myth/Bosses/EvilBottle/EvilBottleGlow"), -Main.screenPosition + NPC.Center + new Vector2(0, 4), null, new Color(St, St, St, 0), 0, new Vector2(60f, 80f), 1, SpriteEffects.None, 0f);
+				}
+				else
+				{
+					Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Myth/Bosses/EvilBottle/EvilBottleGlow"), -Main.screenPosition + NPC.Center + new Vector2(0, 4), null, new Color(1f, 1f, 1f, 0), 0, new Vector2(60f, 80f), 1, SpriteEffects.None, 0f);
+				}
+			}
+			for (int im = 0; im < 10; im += 2)
             {
                 float size = 0;
                 for (float i = im; i < im + 1.2f; i += 0.01f)
@@ -651,48 +665,111 @@ namespace Everglow.Myth.Bosses.EvilBottle
                 }
             }
 
-            /*string key = Wo.ToString();
+			List<CustomVertexInfo> bars = new List<CustomVertexInfo>();
+			/*string key = Wo.ToString();
             Main.NewText(Language.GetTextValue(key), Color.Purple);*/
-            // 把所有的点都生成出来，按照顺序
+			// 把所有的点都生成出来，按照顺序
+			for (int i = 1; i < Wo; ++i)
+			{
+				if (Pm[i] == Vector2.Zero)
+					break;
+				//spriteBatch.Draw(mod.GetTexture("UIImages/Star"), projectile.position + projectile.velocity.RotatedBy(Math.PI / 2d * Dir) * 20 - Main.screenPosition, null, new Color(0.2f, 0f, 0f, 0f), 0f, new Vector2(36f, 36f), (float)Math.Sin(projectile.timeLeft / 30d * Math.PI) * 0.2f, SpriteEffects.None, 0f);
+				//spriteBatch.Draw(mod.GetTexture("UIImages/Star"), projectile.position + projectile.velocity.RotatedBy(Math.PI / 2d * Dir) * 20 - Main.screenPosition, null, new Color(0.2f, 0f, 0f, 0f), (float)(Math.PI / 2d), new Vector2(36f, 36f), (float)Math.Sin(projectile.timeLeft / 30d * Math.PI) * 0.6f, SpriteEffects.None, 0f);
 
-            List<CustomVertexInfo> triangleList = new List<CustomVertexInfo>();
+				int width = 0;
+				width = (int)(i / 2f + 20);
+				var normalDir = Pm[i] - Pm[i - 1];
+				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
+
+				var alpha = (float)0;
+				if (i < Wo - 80)
+				{
+					alpha = 0;
+				}
+				else
+				{
+					alpha = (i - Wo + 80) / 80f;
+				}
+				var factor = i / (float)Wo;
+				var color = Color.Lerp(Color.White, Color.Blue, factor);
+				var w = MathHelper.Lerp(1f, 0.05f, alpha);
+
+				/*if(i > 2)
+                {
+                    for (int j = 1; j < 9; ++j)
+                    {
+                        float t = j / 10f;
+                        float ti = t - 0.1f;
+                        Vector2 vk0 = (projectile.oldPos[i - 2] * (1 - t) * (1 - t) + projectile.oldPos[i - 1] * t * 2 * (1 - t) + projectile.oldPos[i] * t * t);
+                        Vector2 vk1 = (projectile.oldPos[i - 2] * (1 - ti) * (1 - ti) + projectile.oldPos[i - 1] * ti * 2 * (1 - ti) + projectile.oldPos[i] * ti * ti);
+                        normalDir = vk1 - vk0;
+                        normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
+                        bars.Add(new CustomVertexInfo(vk0 + normalDir * width, color, new Vector3((float)Math.Sqrt(factor), 1, w)));
+                        bars.Add(new CustomVertexInfo(vk0 + normalDir * -width, color, new Vector3((float)Math.Sqrt(factor), 0, w)));
+                    }
+                }*/
+
+				bars.Add(new CustomVertexInfo(Pm[i] + normalDir * width, color, new Vector3((float)Math.Sqrt(factor), 1, w)));
+				bars.Add(new CustomVertexInfo(Pm[i] + normalDir * -width, color, new Vector3((float)Math.Sqrt(factor), 0, w)));
+			}
+
+			List<CustomVertexInfo> triangleList = new List<CustomVertexInfo>();
+
+			if (bars.Count > 2)
+			{
+
+				// 按照顺序连接三角形
+				triangleList.Add(bars[0]);
+				var vertex = new CustomVertexInfo((bars[0].Position + bars[1].Position) * 0.5f, Color.White, new Vector3(0, 0.5f, 1));
+				triangleList.Add(bars[1]);
+				triangleList.Add(vertex);
+				for (int i = 0; i < bars.Count - 2; i += 2)
+				{
+					triangleList.Add(bars[i]);
+					triangleList.Add(bars[i + 2]);
+					triangleList.Add(bars[i + 1]);
+
+					triangleList.Add(bars[i + 1]);
+					triangleList.Add(bars[i + 2]);
+					triangleList.Add(bars[i + 3]);
+				}
+
+				// 按照顺序连接三角形
+				spriteBatch.End();
+				spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone);
+				RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
+				// 干掉注释掉就可以只显示三角形栅格
+				//RasterizerState rasterizerState = new RasterizerState();
+				//rasterizerState.CullMode = CullMode.None;
+				//rasterizerState.FillMode = FillMode.WireFrame;
+				//Main.graphics.GraphicsDevice.RasterizerState = rasterizerState;
+
+				var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+				var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0));
+
+				// 把变换和所需信息丢给shader
+				//MythMod.DefaultEffectDarkRedGold.Parameters["uTransform"].SetValue(model * projection);
+				//MythMod.DefaultEffectDarkRedGold.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
+				//Main.graphics.GraphicsDevice.Textures[0] = MythMod.MainColorColdPurple;
+				//Main.graphics.GraphicsDevice.Textures[1] = MythMod.MainShape;
+				//Main.graphics.GraphicsDevice.Textures[2] = MythMod.MaskColor;
+				Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+				Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
+				Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
+
+				//Main.graphics.GraphicsDevice.Textures[0] = Main.magicPixel;
+				//Main.graphics.GraphicsDevice.Textures[1] = Main.magicPixel;
+				//Main.graphics.GraphicsDevice.Textures[2] = Main.magicPixel;
+
+				//MythMod.DefaultEffectDarkRedGold.CurrentTechnique.Passes[0].Apply();
 
 
-                // 按照顺序连接三角形
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone);
-                RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-                // 干掉注释掉就可以只显示三角形栅格
-                //RasterizerState rasterizerState = new RasterizerState();
-                //rasterizerState.CullMode = CullMode.None;
-                //rasterizerState.FillMode = FillMode.WireFrame;
-                //Main.graphics.GraphicsDevice.RasterizerState = rasterizerState;
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
 
-                var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-                var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0));
-
-                // 把变换和所需信息丢给shader
-                //MythMod.DefaultEffectDarkRedGold.Parameters["uTransform"].SetValue(model * projection);
-                //MythMod.DefaultEffectDarkRedGold.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
-                //Main.graphics.GraphicsDevice.Textures[0] = MythMod.MainColorColdPurple;
-                //Main.graphics.GraphicsDevice.Textures[1] = MythMod.MainShape;
-                //Main.graphics.GraphicsDevice.Textures[2] = MythMod.MaskColor;
-                Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-                Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
-                Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
-
-                //Main.graphics.GraphicsDevice.Textures[0] = Main.magicPixel;
-                //Main.graphics.GraphicsDevice.Textures[1] = Main.magicPixel;
-                //Main.graphics.GraphicsDevice.Textures[2] = Main.magicPixel;
-
-                //MythMod.DefaultEffectDarkRedGold.CurrentTechnique.Passes[0].Apply();
-
-
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
-
-                Main.graphics.GraphicsDevice.RasterizerState = originalState;
-                spriteBatch.End();
-                spriteBatch.Begin();
+				Main.graphics.GraphicsDevice.RasterizerState = originalState;
+				spriteBatch.End();
+				spriteBatch.Begin();
+			}
         }
 
 
@@ -726,8 +803,7 @@ namespace Everglow.Myth.Bosses.EvilBottle
         }
         public override void OnKill()
         {
-            bool expertMode = Main.expertMode;
-            if (expertMode)
+            if (Main.expertMode)
             {
                 //Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y - 40, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("EvilBottleTreasureBag").Type, 1, false, 0, false, false);
             }
