@@ -67,7 +67,7 @@ public abstract class MagicBookProjectile : ModProjectile
 	/// <summary>
 	/// 封面荧光的颜色
 	/// </summary>
-	internal Color glowColor = new Color(255, 255, 255, 0);
+	internal Color GlowColor = new Color(255, 255, 255, 0);
 	/// <summary>
 	/// 环绕魔法光效的颜色
 	/// </summary>
@@ -216,7 +216,7 @@ public abstract class MagicBookProjectile : ModProjectile
 		Player player = Main.player[Projectile.owner];
 		Vector2 x0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.45f * MulSize;//把书本贴图（有内容部分）算作一个矩形，这里表示这个矩形的半宽。玩家朝右，重力方向朝下时指向右下
 		Vector2 y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.64f * MulSize;//把书本贴图（有内容部分）算作一个矩形，这里表示这个矩形的半长，方向与x0垂直，玩家朝右，重力方向朝下时指向右上
-		Color c0 = glowColor;
+		Color c0 = GlowColor;
 		if (GlowType == 0)//如果GlowType = 0不开荧光，取光照色
 			c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
 		if (GlowType == 2)//如果GlowType = 2，取光效色
@@ -232,38 +232,38 @@ public abstract class MagicBookProjectile : ModProjectile
 				rot += Projectile.rotation;//当然也收到弹幕本身的旋转角度影响
 				Vector2 basePos = Projectile.Center + x0 - x0.RotatedBy(rot) * i / 4.5f;//【矩形长条】长轴的中点，借x0遍历经过弯曲的宽轴【-x0,x0】，如果你意识到了x0是半宽轴，这里就不会有什么疑问
 
-				float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);//纹理坐标的横向插值
-				float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);//纹理坐标的纵向插值
-				var Up = new Vector2(UpX, UpY);//合并
-				Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
-				Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
-				var Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
+				float upX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);//纹理坐标的横向插值
+				float upY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);//纹理坐标的纵向插值
+				var upPos = new Vector2(upX, upY);//合并
+				Vector2 downLeft = upPos + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
+				Vector2 downRight = upPos + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
+				var downPos = Vector2.Lerp(downLeft, downRight, i / 9f);
 				//上面这几行如果看不懂，就看这个目录下的BookDrawPrinciple.png
 
 				if (Math.Abs(rot) > Math.PI / 2d)//TR不支持禁用背景剔除，只能这样取巧
 				{
 					if (player.direction * player.gravDir == 1)//分向讨论
 					{
-						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
+						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
 					}
 					else
 					{
-						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
+						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
 					}
 				}
 				else
 				{
 					if (player.direction * player.gravDir == 1)
 					{
-						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
+						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
 					}
 					else
 					{
-						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
+						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
 					}
 				}
 			}
@@ -288,36 +288,36 @@ public abstract class MagicBookProjectile : ModProjectile
 			rotIV += Projectile.rotation;
 			Vector2 basePos = Projectile.Center + x0 - x0.RotatedBy(rotIV) * i / 4.5f - y0 * 0.05f - x0 * 0.02f;//前半部分已经讲过了，至于为什么多出来【- y0 * 0.05f - x0 * 0.02f】，是因为要凸显出正在被翻起的那一页
 
-			float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
-			float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
-			var Up = new Vector2(UpX, UpY);
-			Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
-			Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
-			var Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
+			float upX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
+			float upY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
+			var upPos = new Vector2(upX, upY);
+			Vector2 downLeft = upPos + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
+			Vector2 downRight = upPos + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
+			var downPos = Vector2.Lerp(downLeft, downRight, i / 9f);
 			if (Math.Abs(rotIV) > Math.PI / 2d)
 			{
 				if (player.direction == 1)
 				{
-					barsII.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-					barsII.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+					barsII.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
+					barsII.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
 				}
 				else
 				{
-					barsII.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-					barsII.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+					barsII.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
+					barsII.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
 				}
 			}
 			else
 			{
 				if (player.direction * player.gravDir == 1)
 				{
-					barsII.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-					barsII.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+					barsII.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
+					barsII.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
 				}
 				else
 				{
-					barsII.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-					barsII.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+					barsII.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
+					barsII.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
 				}
 			}
 		}
@@ -337,36 +337,36 @@ public abstract class MagicBookProjectile : ModProjectile
 				rot += Projectile.rotation;
 				Vector2 basePos = Projectile.Center + x0 - x0.RotatedBy(rot) * i / 4.5f - y0 * 0.05f - x0 * 0.02f;//【- y0 * 0.05f - x0 * 0.02f】再现，为了不让翻起的那一页到前面时凸出来
 
-				float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
-				float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
-				var Up = new Vector2(UpX, UpY);
-				Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
-				Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
-				var Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
+				float upX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
+				float upY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
+				var upPos = new Vector2(upX, upY);
+				Vector2 downLeft = upPos + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
+				Vector2 downRight = upPos + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
+				var downPos = Vector2.Lerp(downLeft, downRight, i / 9f);
 				if (Math.Abs(rot) > Math.PI / 2d)
 				{
 					if (player.direction * player.gravDir == 1)
 					{
-						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
+						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
 					}
 					else
 					{
-						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
+						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
 					}
 				}
 				else
 				{
 					if (player.direction * player.gravDir == 1)
 					{
-						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
+						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
 					}
 					else
 					{
-						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+						bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
+						bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
 					}
 				}
 			}
@@ -389,7 +389,7 @@ public abstract class MagicBookProjectile : ModProjectile
 		Player player = Main.player[Projectile.owner];
 		Vector2 x0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.5f * MulSize;
 		Vector2 y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f * MulSize;
-		Color c0 = glowColor;
+		Color c0 = GlowColor;
 		if (GlowType == 0)
 			c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
 		if (GlowType == 2)
@@ -400,37 +400,37 @@ public abstract class MagicBookProjectile : ModProjectile
 			double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4);
 			Vector2 basePos = Projectile.Center + x0 - x0.RotatedBy(rot) * i / 4.5f;
 
-			float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
-			float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
-			var Up = new Vector2(UpX, UpY);
-			Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
-			Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
-			var Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
+			float upX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
+			float upY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
+			var upPos = new Vector2(upX, upY);
+			Vector2 downLeft = upPos + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
+			Vector2 downRight = upPos + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
+			var downPos = Vector2.Lerp(downLeft, downRight, i / 9f);
 			rot += Projectile.rotation;
 			if (Math.Abs(rot) > Math.PI / 2d)
 			{
 				if (player.direction * player.gravDir == 1)
 				{
-					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
+					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
 				}
 				else
 				{
-					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
+					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
 				}
 			}
 			else
 			{
 				if (player.direction * player.gravDir == 1)
 				{
-					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
+					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
 				}
 				else
 				{
-					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
+					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
 				}
 			}
 		}
@@ -450,7 +450,7 @@ public abstract class MagicBookProjectile : ModProjectile
 		Player player = Main.player[Projectile.owner];
 		Vector2 x0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.5f * MulSize;
 		Vector2 y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f * MulSize;
-		Color c0 = glowColor;
+		Color c0 = GlowColor;
 		if (GlowType == 0)
 			c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
 		if (GlowType == 2)
@@ -462,36 +462,36 @@ public abstract class MagicBookProjectile : ModProjectile
 			rot += Projectile.rotation;
 			Vector2 basePos = Projectile.Center + x0 - x0.RotatedBy(rot) * i / 4.5f - y0 * 0.05f - x0 * 0.02f;
 
-			float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
-			float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
-			var Up = new Vector2(UpX, UpY);
-			Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
-			Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
-			var Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
+			float upX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
+			float upY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
+			var upPos = new Vector2(upX, upY);
+			Vector2 downLeft = upPos + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
+			Vector2 downRight = upPos + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
+			var downPos = Vector2.Lerp(downLeft, downRight, i / 9f);
 			if (Math.Abs(rot) > Math.PI / 2d)
 			{
 				if (player.direction * player.gravDir == 1)
 				{
-					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
+					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
 				}
 				else
 				{
-					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
+					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
 				}
 			}
 			else
 			{
 				if (player.direction * player.gravDir == 1)
 				{
-					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
+					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
 				}
 				else
 				{
-					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+					bars.Add(new Vertex2D(basePos - y0 - Main.screenPosition, c0, new Vector3(downPos, 0)));
+					bars.Add(new Vertex2D(basePos + y0 - Main.screenPosition, c0, new Vector3(upPos, 0)));
 				}
 			}
 		}

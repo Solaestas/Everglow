@@ -12,7 +12,13 @@ internal class FreezeFeatherMagicBook : MagicBookProjectile
 		MulStartPosByVelocity = 2f;
 		UseGlow = true;
 		GlowPath = "MiscItems/Weapons/Sunflower_Glow";
+		FrontTexPath = "MiscItems/Projectiles/Weapon/Magic/FreezeFeatherMagic/FreezeFeatherMagic_bool";
+		PaperTexPath = "MiscItems/Projectiles/Weapon/Magic/FireFeatherMagic/FireFeatherMagic_paper";
 		effectColor = new Color(95, 100, 125, 100);
+		TexCoordTop = new Vector2(25, 0);
+		TexCoordLeft = new Vector2(1, 24);
+		TexCoordDown = new Vector2(32, 32);
+		TexCoordRight = new Vector2(57, 10);
 	}
 	public override void AI()
 	{
@@ -47,7 +53,7 @@ internal class FreezeFeatherMagicBook : MagicBookProjectile
 			{
 				Vector2 velocity = vTOMouse.SafeNormalize(Vector2.Zero) * player.HeldItem.shootSpeed;
 				velocity = velocity.RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f));
-				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * MulStartPosByVelocity, velocity * MulVelocity, ProjType, (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);
+				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * MulStartPosByVelocity, velocity * MulVelocity, ProjType, (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI, 0, Main.rand.Next(12));
 				p.CritChance = player.GetWeaponCrit(player.HeldItem);
 				p.extraUpdates = 2;
 			}

@@ -85,7 +85,7 @@ public class CurseFlameDust : Visual
 		}
 		velocity *= 0.9f;
 		velocity += new Vector2(Main.windSpeedCurrent * 0.1f, -0.1f);
-		if (scale < 160)
+		if (scale < 160 * ai[2])
 		{
 			scale += 2f;
 		}

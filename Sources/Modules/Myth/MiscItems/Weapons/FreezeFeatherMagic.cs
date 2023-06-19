@@ -42,7 +42,7 @@ public class FreezeFeatherMagic : ModItem
 			for (int k = 0; k < 3; k++)
 			{
 				Vector2 v2 = velocity.RotatedBy(Main.rand.NextFloat(-0.42f, 0.42f)) * Main.rand.NextFloat(0.9f, 1.1f);
-				Projectile.NewProjectile(source, position + velocity * 2f, v2, type, damage, knockback, player.whoAmI, Main.rand.NextFloat(1f));
+				Projectile.NewProjectile(source, position + velocity * 2f, v2, type, damage, knockback, player.whoAmI, Main.rand.NextFloat(1f), Main.rand.Next(Main.rand.Next(8)));
 			}
 			useSpeed = Item.useTime / 17f;
 		}
