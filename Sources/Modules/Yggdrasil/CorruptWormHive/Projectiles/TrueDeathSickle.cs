@@ -45,12 +45,12 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 		//DrawEffect(Ins.Batch);
 		Ins.Batch.End();
 		Player player = Main.player[Projectile.owner];
-		Texture2D tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Handle");
+		Texture2D tex = ModAsset.TrueDeathSickle_Handle.Value;
 		if (attackType == 1 && timer > 18)
-			tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Handle_Filp");
+			tex = ModAsset.TrueDeathSickle_Handle_Filp.Value;
 		if (attackType == 2)
 		{
-			tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle");
+			tex = ModAsset.Projectiles_TrueDeathSickle.Value;
 			Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation + (float)(Math.PI / 4d) * player.direction - 0.25f, new Vector2(0, player.direction == -1 ? 0 : tex.Height), 1.22f, player.direction == -1 ? SpriteEffects.FlipVertically : SpriteEffects.None, 0);
 			return;
 		}
@@ -125,12 +125,12 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 	{
 		var lightColor = new Color(0, 0, 0, 255);
 		Player player = Main.player[Projectile.owner];
-		Texture2D tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Shade_Handle");
+		Texture2D tex = ModAsset.TrueDeathSickle_Shade_Handle.Value;
 		if (attackType == 1)
-			tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Shade_Handle_Flip");
+			tex = ModAsset.TrueDeathSickle_Shade_Handle_Flip.Value;
 		if (attackType == 2)
 		{
-			tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Shade");
+			tex = ModAsset.TrueDeathSickle_Shade.Value;
 			Vector2 drawCenter3 = Projectile.Center - Main.screenPosition;
 			var origin2 = new Vector2(tex.Width, tex.Height);
 			if (player.direction == -1)
@@ -448,7 +448,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 	public void DrawBloom()
 	{
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
-		Effect MeleeTrail = YggdrasilContent.QuickEffect("Effects/FlameTrail");
+		Effect MeleeTrail = ModAsset.FlameTrail.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
@@ -460,7 +460,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 
 
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
-		Effect effect = YggdrasilContent.QuickEffect("Effects/Null");
+		Effect effect = ModAsset.Null.Value;
 		model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.CurrentTechnique.Passes[0].Apply();

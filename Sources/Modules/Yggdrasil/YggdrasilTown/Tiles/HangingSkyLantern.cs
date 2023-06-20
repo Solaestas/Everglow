@@ -78,7 +78,7 @@ public class HangingSkyLantern : ModTile, ITileFluentlyDrawn
 		var drawCenterPos = pos.ToWorldCoordinates(autoAddY: 0) - screenPosition;
 		int Adx = 0;
 		if (tile.TileFrameX > 54)
-			Adx = 70; // 改了下贴图，所以是70
+			Adx = 70; // ��������ͼ��������70
 		DrawLanternPiece(42 + Adx, 58, 0.15f, -2, pos, pos, drawCenterPos, spriteBatch, tileDrawing);
 		DrawLanternPiece(56 + Adx, 44, 0.11f, -4, pos, pos + new Point(-1, 0), drawCenterPos, spriteBatch, tileDrawing);
 		DrawLanternPiece(28 + Adx, 40, 0.13f, 2, pos, pos + new Point(1, 0), drawCenterPos, spriteBatch, tileDrawing);
@@ -121,7 +121,7 @@ public class HangingSkyLantern : ModTile, ITileFluentlyDrawn
 		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X, tilePos.Y, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
 		windCycle += highestWindGridPushComplex;
 		
-		// 支持发光涂料
+		// ֧�ַ���Ϳ��
 		Color tileLight = Lighting.GetColor(tilePos);
 		tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(tilePos.X, tilePos.Y, tile, type, 0, 0, ref tileLight, tileDrawing._rand.NextBool(4));
 		tileLight = tileDrawing.DrawTiles_GetLightOverride(tilePos.Y, tilePos.X, tile, type, 0, 0, tileLight);

@@ -1,4 +1,4 @@
-﻿using Everglow.Yggdrasil.Common;
+using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.Audio;
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -54,7 +54,7 @@ public class CyanVineThrowingSpear : ModProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Projectiles/CyanVineThrowingSpear");
+		Texture2D tex = ModAsset.Projectiles_CyanVineThrowingSpear.Value;
 		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, tex.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		return false;
 	}

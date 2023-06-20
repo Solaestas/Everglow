@@ -1,5 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
+using Terraria;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 namespace Everglow.Yggdrasil.WorldGeneration;
 public class YggdrasilTownGeneration
@@ -7,15 +8,16 @@ public class YggdrasilTownGeneration
 	public static void BuildYggdrasilTown()
 	{
 		Main.statusText = "Yggdrasil Town Bark Cliff";
-		PlaceRectangleAreaOfBlock(50, 10650, 130, 12000, ModContent.TileType<StoneScaleWood>());
-		PlaceRectangleAreaOfBlock(1070, 10650, 1150, 12000, ModContent.TileType<StoneScaleWood>());
+		PlaceRectangleAreaOfBlock(50, 10650, 155, 12000, ModContent.TileType<StoneScaleWood>());
+		PlaceRectangleAreaOfBlock(1045, 10650, 1150, 12000, ModContent.TileType<StoneScaleWood>());
 		PlaceRectangleAreaOfBlock(0, 11700, 1200, 12000, ModContent.TileType<StoneScaleWood>());
 		Main.statusText = "Midnight Bayou";
 		BuildMidnightBayou();
 		Main.statusText = "Origin Pylon Squire";
 		PlaceRectangleAreaOfBlock(540, 11633, 660, 11640, TileID.RedBrick);
-		PlaceFrameImportantTiles(595, 11620, 11, 13, ModContent.TileType<OriginPylon>());
+		PlaceFrameImportantTiles(595, 11621, 16, 12, ModContent.TileType<OriginPylon>());
 
+		BuildHeavenlyPortal();
 	}
 	public static void BuildMidnightBayou()
 	{
@@ -58,6 +60,70 @@ public class YggdrasilTownGeneration
 				{
 					tile.LiquidType = LiquidID.Water;
 					tile.LiquidAmount = 255;
+				}
+			}
+		}
+	}
+	public static void BuildHeavenlyPortal()
+	{
+		int x0 = 155;
+		int x1 = 1045;
+		int y0 = 11200;
+		for (int y = 11200; y < 11650; y++)
+		{
+			if(y > 11650)
+			{
+				break;
+			}
+			for (int x = 156;x <= 1044;x++)
+		    {
+				Tile tile = SafeGetTile(x, y);
+				if(tile.HasTile)
+				{
+					if(x > 155 && x < 400)
+					{
+						x0 = x;
+					}
+					if (x > 800)
+					{
+						x1 = x;
+						y0 = y;
+						y = 11651;
+						break;
+					}
+				}
+			}
+		}
+		int xLength0 = x0 - 155;
+		int yLength = y0 - 11111;
+		for (int y = y0; y > 11111; y--)
+		{
+			for (int x = 155; x < x0; x++)
+			{
+				Tile tile = SafeGetTile(x, y);
+				if (!tile.HasTile)
+				{
+					if((x - 155) / (float)xLength0 < (y - 11111) / (float)yLength)
+					{
+						tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+						tile.HasTile = true;
+					}
+				}
+			}
+		}
+		int xLength1 = 1045 - x1;
+		for (int y = y0; y > 11111; y--)
+		{
+			for (int x = x1; x < 1045; x++)
+			{
+				Tile tile = SafeGetTile(x, y);
+				if (!tile.HasTile)
+				{
+					if ((1045 - x) / (float)xLength1 < (y - 11111) / (float)yLength)
+					{
+						tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+						tile.HasTile = true;
+					}
 				}
 			}
 		}

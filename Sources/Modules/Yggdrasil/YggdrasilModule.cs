@@ -81,7 +81,7 @@ internal class YggdrasilModule : EverglowModule
 	{
 		spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
 
-		Effect effect = YggdrasilContent.QuickEffect("Effects/Null");
+		Effect effect = ModAsset.Null.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
@@ -106,7 +106,7 @@ internal class YggdrasilModule : EverglowModule
 	{
 		spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
 
-		Effect MeleeTrail = YggdrasilContent.QuickEffect("Effects/FlameTrail");
+		Effect MeleeTrail = ModAsset.FlameTrail.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);

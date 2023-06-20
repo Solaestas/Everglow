@@ -307,7 +307,7 @@ public class SquamousShell : ModNPC
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		Player player = Main.player[NPC.target];
-		Texture2D tex0 = YggdrasilContent.QuickTexture("YggdrasilTown/NPCs/SquamousShell/SquamousShell_Boss");
+		Texture2D tex0 = ModAsset.SquamousShell_Boss.Value;
 		Vector2 Cen = NPC.Center - Main.screenPosition;
 		Color DrawC = Lighting.GetColor((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16);
 		Vector2 BodyLT = Cen + new Vector2(-75, -51).RotatedBy(NPC.rotation);
