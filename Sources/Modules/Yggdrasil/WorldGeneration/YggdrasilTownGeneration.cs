@@ -1,5 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
+using NVorbis.Contracts;
 using Terraria;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 namespace Everglow.Yggdrasil.WorldGeneration;
@@ -7,6 +8,7 @@ public class YggdrasilTownGeneration
 {
 	public static void BuildYggdrasilTown()
 	{
+		FillPerlinPixel();
 		Main.statusText = "Yggdrasil Town Bark Cliff";
 		PlaceRectangleAreaOfBlock(50, 10650, 155, 12000, ModContent.TileType<StoneScaleWood>());
 		PlaceRectangleAreaOfBlock(1045, 10650, 1150, 12000, ModContent.TileType<StoneScaleWood>());
@@ -19,13 +21,14 @@ public class YggdrasilTownGeneration
 
 		BuildHeavenlyPortal();
 	}
-	public static void BuildMidnightBayou()
+	public static int[,] PerlinPixelR = new int[513, 513];
+	public static int[,] PerlinPixelG = new int[513, 513];
+	public static int[,] PerlinPixelB = new int[513, 513];
+	public static int[,] PerlinPixel2 = new int[513, 513];
+	public static void FillPerlinPixel()
 	{
-		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_perlin.bmp");
+		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_rgb.bmp");
 		Vector2 perlinCoordCenter = new Vector2(WorldGen.genRand.NextFloat(0f, 1f), WorldGen.genRand.NextFloat(0f, 1f));
-		Point center = new Point(600, 11640);
-		int radious = 300;
-		int[,] perlinPixel = new int[513, 513];
 		imageData.ProcessPixelRows(accessor =>
 		{
 			for (int y = 0; y < accessor.Height; y++)
@@ -36,16 +39,41 @@ public class YggdrasilTownGeneration
 				{
 					int newX = (int)(accessor.Width * perlinCoordCenter.X + x) % accessor.Width;
 					ref var pixel = ref pixelRow[newX];
-					perlinPixel[x, y] = pixel.R;
+					PerlinPixelR[x, y] = pixel.R;
+					PerlinPixelG[x, y] = pixel.G;
+					PerlinPixelB[x, y] = pixel.B;
 				}
 			}
 		});
+
+		imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_perlin.bmp");
+		perlinCoordCenter = new Vector2(WorldGen.genRand.NextFloat(0f, 1f), WorldGen.genRand.NextFloat(0f, 1f));
+		imageData.ProcessPixelRows(accessor =>
+		{
+			for (int y = 0; y < accessor.Height; y++)
+			{
+				int newY = (int)(accessor.Height * perlinCoordCenter.Y + y) % accessor.Height;
+				var pixelRow = accessor.GetRowSpan(newY);
+				for (int x = 0; x < pixelRow.Length; x++)
+				{
+					int newX = (int)(accessor.Width * perlinCoordCenter.X + x) % accessor.Width;
+					ref var pixel = ref pixelRow[newX];
+					PerlinPixel2[x, y] = pixel.R;
+				}
+			}
+		});
+	}
+	public static void BuildMidnightBayou()
+	{
+		Point center = new Point(600, 11640);
+		int radious = 300;
+				
 		for (int x = (int)(center.X - radious * 1.5); x < (int)(center.X + radious * 1.5); x++)
 		{
 			for (int y = center.Y - 60; y < center.Y + radious; y++)
 			{
 				Tile tile = SafeGetTile(x, y);
-				float color = perlinPixel[Math.Clamp((int)(x - center.X + radious * 1.5f) / 3, 0, 512), Math.Clamp((y - center.Y + radious) / 2, 0, 512)] / 255f;
+				float color = PerlinPixel2[Math.Clamp((int)(x - center.X + radious * 1.5f) / 3, 0, 512), Math.Clamp((y - center.Y + radious) / 2, 0, 512)] / 255f;
 				float distance = new Vector2((x - center.X) * 0.6667f, y - center.Y).Length() / 200f;
 				if (color + distance > 1.5f)
 				{
@@ -96,6 +124,8 @@ public class YggdrasilTownGeneration
 		}
 		int xLength0 = x0 - 155;
 		int yLength = y0 - 11111;
+		int y0CoordPerlin = WorldGen.genRand.Next(512);
+		int y1CoordPerlin = WorldGen.genRand.Next(512);
 		for (int y = y0; y > 11111; y--)
 		{
 			for (int x = 155; x < x0; x++)
@@ -103,7 +133,9 @@ public class YggdrasilTownGeneration
 				Tile tile = SafeGetTile(x, y);
 				if (!tile.HasTile)
 				{
-					if((x - 155) / (float)xLength0 < (y - 11111) / (float)yLength)
+					float colorPerlinValue = (x - 155f) * (x0 - x) / (x0 - 155 + 0.01f) / (x0 - 155 + 0.01f);
+					float xValue = (x - 155) / (float)xLength0 + PerlinPixelB[x % 513, y0CoordPerlin] * colorPerlinValue / 255f * 0.3f * 300f / (x0 - 155 + 0.1f);
+					if (xValue < (y - 11111) / (float)yLength)
 					{
 						tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 						tile.HasTile = true;
@@ -119,7 +151,26 @@ public class YggdrasilTownGeneration
 				Tile tile = SafeGetTile(x, y);
 				if (!tile.HasTile)
 				{
-					if ((1045 - x) / (float)xLength1 < (y - 11111) / (float)yLength)
+					float colorPerlinValue = (x - x1) * (1045 - x) / (x - x1 + 0.01f) / (1045 - x + 0.01f);
+					float xValue = (1045 - x) / (float)xLength1 + PerlinPixelB[x % 513, y1CoordPerlin] * colorPerlinValue / 255f * 0.3f * 300f / (1045 - x0 + 0.1f);
+					if (xValue < (y - 11111) / (float)yLength)
+					{
+						tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+						tile.HasTile = true;
+					}
+				}
+			}
+		}
+		for (int y = y0; y > 11111; y--)
+		{
+			for (int x = x1; x < 1045; x++)
+			{
+				Tile tile = SafeGetTile(x, y);
+				if (!tile.HasTile)
+				{
+					float colorPerlinValue = (x - x1) * (1045 - x) / (x - x1 + 0.01f) / (1045 - x + 0.01f);
+					float xValue = (1045 - x) / (float)xLength1 + PerlinPixelB[x % 513, y1CoordPerlin] * colorPerlinValue / 255f * 0.3f * 300f / (1045 - x0 + 0.1f);
+					if (xValue < (y - 11111) / (float)yLength)
 					{
 						tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 						tile.HasTile = true;
