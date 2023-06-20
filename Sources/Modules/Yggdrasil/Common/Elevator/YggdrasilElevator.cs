@@ -195,19 +195,19 @@ internal class YggdrasilElevator : DBlock
 		if (position.X / 16f < Main.maxTilesX - 28 && position.Y / 16f < Main.maxTilesY - 28 && position.X / 16f > 28 && position.Y / 16f > 28)
 		{
 			Color drawc = Lighting.GetColor((int)(Center.X / 16f), (int)(Center.Y / 16f) - 3);
-			Main.spriteBatch.Draw(YggdrasilContent.QuickTexture("Common/Elevator/SkyTreeLift"), position - Main.screenPosition, new Rectangle(0, 0, (int)size.X, (int)size.Y), drawc);
-			Texture2D LiftFramework = YggdrasilContent.QuickTexture("Common/Elevator/Textures/SkyTreeLiftShellLightOff");
+			Main.spriteBatch.Draw(ModAsset.SkyTreeLift.Value, position - Main.screenPosition, new Rectangle(0, 0, (int)size.X, (int)size.Y), drawc);
+			Texture2D LiftFramework = ModAsset.SkyTreeLiftShellLightOff.Value;
 
 			if (LampOn)
 				Lighting.AddLight((int)(position.X / 16f) + 1, (int)(position.Y / 16f) - 3, 1f, 0.8f, 0f);
 
 			var drawcLampGlow = new Color(255, 255, 255, 0);
 
-			Texture2D LiftLampOff = YggdrasilContent.QuickTexture("Common/Elevator/Textures/SkyTreeLiftShellLightOff");
-			Texture2D LiftLampOn = YggdrasilContent.QuickTexture("Common/Elevator/Textures/SkyTreeLiftShellLampOn");
-			Texture2D LiftLampGlow = YggdrasilContent.QuickTexture("Common/Elevator/Textures/SkyTreeLiftShellLampOnGlow");
-			Texture2D LiftRopeTop = YggdrasilContent.QuickTexture("Common/Elevator/Textures/SkyTreeLiftRope");
-			Texture2D LiftRope = YggdrasilContent.QuickTexture("Common/Elevator/Textures/Rope");
+			Texture2D LiftLampOff = ModAsset.SkyTreeLiftShellLightOff.Value;
+			Texture2D LiftLampOn = ModAsset.SkyTreeLiftShellLampOn.Value;
+			Texture2D LiftLampGlow = ModAsset.SkyTreeLiftShellLampOnGlow.Value;
+			Texture2D LiftRopeTop = ModAsset.SkyTreeLiftRope.Value;
+			Texture2D LiftRope = ModAsset.Rope.Value;
 
 			Main.spriteBatch.Draw(LiftFramework, Center - Main.screenPosition + new Vector2(0, -46), null, drawc, 0, new Vector2(48, 54), 1, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(LiftRopeTop, Center - Main.screenPosition + new Vector2(0, -110), null, drawc, 0, new Vector2(48, 15), 1, SpriteEffects.None, 0);
@@ -250,9 +250,9 @@ internal class YggdrasilElevator : DBlock
 			{
 				if (Main.SmartCursorIsUsed)
 				{
-					Texture2D LiftButtomHighLight = YggdrasilContent.QuickTexture("Common/Elevator/Textures/SkyTreeLiftShellMiddleButtomHightLight");
+					Texture2D LiftButtomHighLight = ModAsset.SkyTreeLiftShellMiddleButtomHightLight.Value;
 					if (LampOn)
-						LiftButtomHighLight = YggdrasilContent.QuickTexture("Common/Elevator/Textures/SkyTreeLiftShellMiddleButtomOnHightLight");
+						LiftButtomHighLight = ModAsset.SkyTreeLiftShellMiddleButtomOnHightLight.Value;
 					Main.spriteBatch.Draw(LiftButtomHighLight, Center - Main.screenPosition + new Vector2(0, -46), null, Color.White, 0, new Vector2(48, 54), 1, SpriteEffects.None, 0);
 				}
 				if (Main.mouseRight && Main.mouseRightRelease)

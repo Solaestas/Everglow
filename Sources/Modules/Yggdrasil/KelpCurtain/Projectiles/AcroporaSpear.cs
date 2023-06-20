@@ -291,12 +291,12 @@ public class AcroporaSpear : MeleeProj
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 
-		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrailFade", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-		Main.graphics.GraphicsDevice.Textures[0] = YggdrasilContent.QuickTexture("KelpCurtain/Projectiles/Acropora_RedColor");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Acropora_RedColor.Value;
 		float k0 = timer / 80f + 0.3f;
 		MeleeTrail.Parameters["FadeValue"].SetValue(MathF.Sqrt(k0 * 1.2f));
-		MeleeTrail.Parameters["tex1"].SetValue(YggdrasilContent.QuickTexture("KelpCurtain/Projectiles/texBlood"));
+		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.texBlood.Value);
 		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);

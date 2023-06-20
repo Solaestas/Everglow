@@ -86,7 +86,7 @@ public class ChinesePartitionLamp : ModTile
 	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Texture2D tPostTexture = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/ChinesePartitionLamp_Partition");
+		Texture2D tPostTexture = ModAsset.ChinesePartitionLamp_Partition.Value;
 		var rt = new Rectangle(i * 16 - 16, j * 16, 48, 16);
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
@@ -103,7 +103,7 @@ public class ChinesePartitionLamp : ModTile
 		{
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i, j);
-			Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/ChinesePartitionLamp_Lamp");
+			Texture2D tex = ModAsset.ChinesePartitionLamp_Lamp.Value;
 			float OffsetX = 1;
 			if (tile.TileFrameY != 0)
 				OffsetX = 15;

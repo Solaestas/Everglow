@@ -203,7 +203,7 @@ public class HangingSkyLantern : ModTile
 		if (tile.TileFrameX % 54 == 18 && tile.TileFrameY == 0)
 		{
 			var tileSpin = new TileSpin();
-			Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/HangingSkyLantern_Depart");
+			Texture2D tex = ModAsset.HangingSkyLantern_Depart.Value;
 
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j + 2);
 			tileSpin.DrawRotatedTilePrecise(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j + 2, tex, new Rectangle(144 + Adx, 0, 36, 62), new Vector2(18, 0), 10, -34, 1);

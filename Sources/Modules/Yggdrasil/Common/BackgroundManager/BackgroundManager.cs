@@ -4,14 +4,14 @@ public class BackgroundManager
 {
 	public class WorldBackground
 	{
-		public float Layer = 2;//»æÖÆ²ã,¾°Éî
-		public int Priority = 0;//Í¬²ãÏÂ»æÖÆÓÅÏÈ¼¶
-		public Vector2 Center;//ÖÐÐÄ×ø±ê
-		public Color Color;//ÑÕÉ«
-		public Rectangle DrawRectangle;//»æÖÆÓò
-		public bool Active;//ÊÇ·ñ»æÖÆ£¬ÓÅÏÈ¼¶×î¸ß
-		public Texture2D Texture;//Í¼Æ¬
-		public float scale = 1;//´óÐ¡
+		public float Layer = 2;//ç»˜åˆ¶å±‚,æ™¯æ·±
+		public int Priority = 0;//åŒå±‚ä¸‹ç»˜åˆ¶ä¼˜å…ˆçº§
+		public Vector2 Center;//ä¸­å¿ƒåæ ‡
+		public Color Color;//é¢œè‰²
+		public Rectangle DrawRectangle;//ç»˜åˆ¶åŸŸ
+		public bool Active;//æ˜¯å¦ç»˜åˆ¶ï¼Œä¼˜å…ˆçº§æœ€é«˜
+		public Texture2D Texture;//å›¾ç‰‡
+		public float scale = 1;//å¤§å°
 	}
 	public class BoardBackground : WorldBackground
 	{
@@ -39,13 +39,13 @@ public class BackgroundManager
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		Effect bgW = YggdrasilContent.QuickEffect("Common/BackgroundManager/BackgroundXWarp");
+		Effect bgW = ModAsset.BackgroundXWarp.Value;
 		if (Xclamp && Yclamp)
-			bgW = YggdrasilContent.QuickEffect("Common/BackgroundManager/BackgroundXYClamp");
+			bgW = ModAsset.BackgroundXYClamp.Value;
 		if (Xclamp && !Yclamp)
-			bgW = YggdrasilContent.QuickEffect("Common/BackgroundManager/BackgroundYWarp");
+			bgW = ModAsset.BackgroundYWarp.Value;
 		if (!Xclamp && !Yclamp)
-			bgW = YggdrasilContent.QuickEffect("Common/BackgroundManager/BackgroundXYWarp");
+			bgW = ModAsset.BackgroundXYWarp.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		if (Main.LocalPlayer.gravDir == -1)
 			projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, 0, Main.screenHeight, 0, 1);
@@ -54,7 +54,7 @@ public class BackgroundManager
 		bgW.Parameters["uTime"].SetValue(0.34f);
 		bgW.CurrentTechnique.Passes[0].Apply();
 
-		//´¦Àíµô³¬³öµØÍ¼½çÏÞµÄ²¿·Ö
+		//å¤„ç†æŽ‰è¶…å‡ºåœ°å›¾ç•Œé™çš„éƒ¨åˆ†
 		int DrawMaxY = Main.screenHeight;
 		int DrawMinY = 0;
 		float YSqueezeValueUp = 0f;
@@ -100,7 +100,7 @@ public class BackgroundManager
 		if (Xclamp)
 		{
 			if (Yclamp)
-				drawWaterfall(DrawCenter, Width, Height, baseColor, Ymin, Ymax);
+				DrawWaterfall(DrawCenter, Width, Height, baseColor, Ymin, Ymax);
 			else
 			{
 				Vector2 dCenter = DrawCenter;
@@ -110,7 +110,7 @@ public class BackgroundManager
 				}
 				while (dCenter.Y >= -Height && dCenter.Y <= Main.screenHeight + 160)
 				{
-					drawWaterfall(dCenter, Width, Height, baseColor, Ymin, Ymax);
+					DrawWaterfall(dCenter, Width, Height, baseColor, Ymin, Ymax);
 					dCenter.Y -= textureSize.Y;
 				}
 
@@ -123,7 +123,7 @@ public class BackgroundManager
 				}
 				while (dCenter.Y >= -Height && dCenter.Y <= Main.screenHeight + 160)
 				{
-					drawWaterfall(dCenter, Width, Height, baseColor, Ymin, Ymax);
+					DrawWaterfall(dCenter, Width, Height, baseColor, Ymin, Ymax);
 					dCenter.Y += textureSize.Y;
 				}
 			}
@@ -137,7 +137,7 @@ public class BackgroundManager
 			}
 			while (dCenter.X >= -Width && dCenter.X <= Main.screenWidth + Width)
 			{
-				drawWaterfall(dCenter, Width, Height, baseColor, Ymin, Ymax);
+				DrawWaterfall(dCenter, Width, Height, baseColor, Ymin, Ymax);
 				dCenter.X -= textureSize.X;
 
 			}
@@ -150,7 +150,7 @@ public class BackgroundManager
 			}
 			while (dCenter.X >= -Width && dCenter.X <= Main.screenWidth + Width)
 			{
-				drawWaterfall(dCenter, Width, Height, baseColor, Ymin, Ymax);
+				DrawWaterfall(dCenter, Width, Height, baseColor, Ymin, Ymax);
 				dCenter.X += textureSize.X;
 			}
 		}
@@ -170,7 +170,7 @@ public class BackgroundManager
 				}
 				while (ddCenter.Y >= -Height && ddCenter.Y <= Main.screenHeight + 160)
 				{
-					drawWaterfall(ddCenter, Width, Height, baseColor, Ymin, Ymax);
+					DrawWaterfall(ddCenter, Width, Height, baseColor, Ymin, Ymax);
 					ddCenter.Y -= textureSize.Y;
 				}
 				ddCenter = dCenter;
@@ -183,7 +183,7 @@ public class BackgroundManager
 				while (ddCenter.Y >= -Height && ddCenter.Y <= Main.screenHeight + 160)
 				{
 					ddCenter.Y += textureSize.Y;
-					drawWaterfall(ddCenter, Width, Height, baseColor, Ymin, Ymax);
+					DrawWaterfall(ddCenter, Width, Height, baseColor, Ymin, Ymax);
 				}
 				dCenter.X -= textureSize.X;
 			}
@@ -203,7 +203,7 @@ public class BackgroundManager
 				}
 				while (ddCenter.Y >= -Height && ddCenter.Y <= Main.screenHeight + 160)
 				{
-					drawWaterfall(ddCenter, Width, Height, baseColor, Ymin, Ymax);
+					DrawWaterfall(ddCenter, Width, Height, baseColor, Ymin, Ymax);
 					ddCenter.Y -= textureSize.Y;
 				}
 				ddCenter = dCenter;
@@ -216,20 +216,20 @@ public class BackgroundManager
 				while (ddCenter.Y >= -Height && ddCenter.Y <= Main.screenHeight + 160)
 				{
 					ddCenter.Y += textureSize.Y;
-					drawWaterfall(ddCenter, Width, Height, baseColor, Ymin, Ymax);
+					DrawWaterfall(ddCenter, Width, Height, baseColor, Ymin, Ymax);
 				}
 				dCenter.X += textureSize.X;
 			}
 		}
 	}
-	public static void drawWaterfall(Vector2 drawCenter, float width, float height, Color baseColor, int Ymin, int Ymax)
+	public static void DrawWaterfall(Vector2 drawCenter, float width, float height, Color baseColor, int Ymin, int Ymax)
 	{
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		if (Main.LocalPlayer.gravDir == -1)
 			projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, 0, Main.screenHeight, 0, 1);
-		Effect bgW = YggdrasilContent.QuickEffect("Common/BackgroundManager/BackgroundYWarp");
+		Effect bgW = ModAsset.BackgroundYWarp.Value;
 		bgW.Parameters["uTransform"].SetValue(projection);
 		bgW.Parameters["uTime"].SetValue(0.34f);
 		bgW.CurrentTechnique.Passes[0].Apply();
@@ -249,7 +249,7 @@ public class BackgroundManager
 		}
 		if (WaterFallVertex.Count > 2)
 		{
-			Main.graphics.GraphicsDevice.Textures[0] = YggdrasilContent.QuickTexture("YggdrasilTown/Background/WaterFall");
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.WaterFall.Value;
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, WaterFallVertex.ToArray(), 0, WaterFallVertex.Count - 2);
 		}
@@ -268,7 +268,7 @@ public class BackgroundManager
 		}
 		if (WaterFallVertexII.Count > 2)
 		{
-			Main.graphics.GraphicsDevice.Textures[0] = YggdrasilContent.QuickTexture("YggdrasilTown/Background/WaterFall");
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.WaterFall.Value;
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, WaterFallVertexII.ToArray(), 0, WaterFallVertexII.Count - 2);
 		}
