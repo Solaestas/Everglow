@@ -59,15 +59,25 @@ public class FreezeFeather : ModProjectile
 		else
 		{
 			Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-			if (Projectile.wet)
+			if (Projectile.timeLeft >= 320)
 			{
-				Projectile.velocity.Y += 0.1f;
+				Projectile.velocity *= 1.01f;
 			}
-			if (Projectile.wet)
+			else
 			{
-				Projectile.velocity.Y -= 0.4f;
-				Projectile.velocity *= 0.96f;
-				Projectile.timeLeft -= Main.rand.Next(40, 80);
+				if (Projectile.wet)
+				{
+					Projectile.velocity.Y -= 0.3f;
+					Projectile.velocity *= 0.96f;
+					Projectile.timeLeft -= Main.rand.Next(40, 80);
+				}
+				if (Projectile.timeLeft < 300)
+				{
+					if (Projectile.extraUpdates == 0)
+					{
+						Projectile.velocity.Y += 0.1f;
+					}
+				}
 			}
 		}
 		if (Main.rand.NextBool(6))
@@ -211,38 +221,24 @@ public class FreezeFeather : ModProjectile
 	{
 		if (target.type is not NPCID.MoonLordHead and not NPCID.MoonLordHand and not NPCID.MoonLordCore)
 		{
-			if (!target.HasBuff(ModContent.BuffType<Freeze>()))
+			if (!target.HasBuff(BuffID.Frostburn) && !target.HasBuff(BuffID.Frostburn2))
 			{
 				target.AddBuff(ModContent.BuffType<Freeze>(), (int)Projectile.ai[1]);
-				target.AddBuff(ModContent.BuffType<Freeze2>(), (int)Projectile.ai[1] + 2);
-			}
-		}
-		if (target.type == NPCID.WallofFlesh)
-		{
-			for (int i = 0; i < 200; i++)
-			{
-				if (Main.npc[i].type is 113 or 114)
+				if (Main.rand.NextBool(17))
 				{
-					if (!target.HasBuff(ModContent.BuffType<Freeze>()))
+					if (MagicArray == null)
 					{
-						target.AddBuff(ModContent.BuffType<Freeze>(), (int)Projectile.ai[1]);
-						target.AddBuff(ModContent.BuffType<Freeze2>(), (int)Projectile.ai[1] + 2);
+						target.AddBuff(BuffID.Frostburn, (int)Projectile.ai[1] * 37);
+					}
+					else
+					{
+						target.AddBuff(BuffID.Frostburn2, (int)Projectile.ai[1] * 37);
 					}
 				}
 			}
-		}
-		if (target.type == NPCID.WallofFleshEye)
-		{
-			for (int i = 0; i < 200; i++)
+			else
 			{
-				if (Main.npc[i].type is 113 or 114)
-				{
-					if (!target.HasBuff(ModContent.BuffType<Freeze>()))
-					{
-						target.AddBuff(ModContent.BuffType<Freeze>(), (int)Projectile.ai[1]);
-						target.AddBuff(ModContent.BuffType<Freeze2>(), (int)Projectile.ai[1] + 2);
-					}
-				}
+				target.AddBuff(ModContent.BuffType<Freeze>(), (int)Projectile.ai[1] * 3);
 			}
 		}
 		if (MagicArray != null)
@@ -252,7 +248,7 @@ public class FreezeFeather : ModProjectile
 		}
 		AmmoHit();
 	}
-	public virtual void AmmoHit()
+	public  void AmmoHit()
 	{
 		TimeTokill = 20;
 		Projectile.tileCollide = false;

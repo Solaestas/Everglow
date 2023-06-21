@@ -1,3 +1,4 @@
+using Everglow.Commons.Coroutines;
 using Everglow.Myth.MagicWeaponsReplace.GlobalItems;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
@@ -34,6 +35,7 @@ internal class FireFeatherMagicArray : VisualProjectile
 	public bool OldControlUp = false;
 	public int Timer = 0;
 	public Vector2 RingPos = Vector2.Zero;
+	//private CoroutineManager _coroutineManager = new CoroutineManager();
 	public override string Texture => "Everglow/" + ModAsset.FireFeatherMagicPath;
 	public override void SetDefaults()
 	{
@@ -46,8 +48,27 @@ internal class FireFeatherMagicArray : VisualProjectile
 		Projectile.tileCollide = false;
 		base.SetDefaults();
 	}
+	//private IEnumerator<ICoroutineInstruction> RightClick(int times)
+	//{
+	//	for (int x = 0; x < times; x++)
+	//	{
+	//		WingPower -= 21;
+	//		if (WingPower < 0)
+	//		{
+	//			WingPower = 0;
+	//			yield break;
+	//		}
+	//		Player player = Main.player[Projectile.owner];
+	//		Vector2 pos = Projectile.Center + new Vector2(Main.rand.NextFloat(-600, 600), -1600);
+	//		Vector2 vel = Vector2.Normalize(Main.MouseWorld - pos) * 60;
+	//		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), pos, vel, ModContent.ProjectileType<GiantFireFeather>(), player.HeldItem.damage * 5, 10, Projectile.owner);
+	//		Timer = 30;
+	//		yield return new WaitForFrames((uint)Main.rand.Next(5, 9));
+	//	}
+	//}
 	public override void AI()
 	{
+		//_coroutineManager.Update();
 		Player player = Main.player[Projectile.owner];
 		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(-player.direction * 22, -12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
 		Projectile.spriteDirection = player.direction;
@@ -58,7 +79,7 @@ internal class FireFeatherMagicArray : VisualProjectile
 			if (player.itemTime > 0)
 			{
 				if (Timer < 30)
-			    {			
+				{
 					Timer++;
 				}
 				Player.CompositeArmStretchAmount playerCASA = Player.CompositeArmStretchAmount.Full;
@@ -80,7 +101,7 @@ internal class FireFeatherMagicArray : VisualProjectile
 			if (Timer < 0)
 				Projectile.Kill();
 		}
-		
+
 		Projectile.rotation = player.fullRotation;
 		RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
 
@@ -89,9 +110,9 @@ internal class FireFeatherMagicArray : VisualProjectile
 		mplayer.HasFlameWing = false;
 		if ((player.wingTime <= 0 || player.wings == 0) && !player.mount._active)
 		{
-			if(WingPower > 0)
+			if (WingPower > 0)
 			{
-				if(player.controlUp && player.velocity.Y != 0)
+				if (player.controlUp && player.velocity.Y != 0)
 				{
 					mplayer.HasFlameWing = true;
 					WingPower -= 0.8f;
@@ -103,7 +124,7 @@ internal class FireFeatherMagicArray : VisualProjectile
 				}
 			}
 		}
-		if(player.controlUp && player.velocity.Y != 0)
+		if (player.controlUp && player.velocity.Y != 0)
 		{
 			if ((!OldControlUp && player.wingTime <= 0) || player.wingTime == 2)
 			{
@@ -119,6 +140,19 @@ internal class FireFeatherMagicArray : VisualProjectile
 			WingPower = 210;
 		}
 		OldControlUp = player.controlUp && player.velocity.Y != 0;
+		if (Main.mouseRight && Main.mouseRightRelease)
+		{
+			//_coroutineManager.StartCoroutine(new Coroutine(RightClick((int)(WingPower / 21))));
+			if (WingPower < 21)
+			{
+				return;
+			}
+			WingPower -= 21;
+			Vector2 pos = Projectile.Center + new Vector2(Main.rand.NextFloat(-600, 600), -1600);
+			Vector2 vel = Vector2.Normalize(Main.MouseWorld - pos) * 60;
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), pos, vel, ModContent.ProjectileType<GiantFireFeather>(), player.HeldItem.damage * 5, 10, Projectile.owner);
+			Timer = 30;
+		}
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -130,12 +164,12 @@ internal class FireFeatherMagicArray : VisualProjectile
 	{
 		Vector2 toBottom = new Vector2(0, 40);
 		List<Vertex2D> bars = new List<Vertex2D>();
-		for(int x = 0;x < 40; x++)
+		for (int x = 0; x < 40; x++)
 		{
 			float pocession = 1 - Timer / 30f;
 			Vector2 radious = toBottom.RotatedBy(x / 20d * Math.PI);
 			float width = 75f;
-			if(x / 40f > WingPower / 210f)
+			if (x / 40f > WingPower / 210f)
 			{
 				pocession += 0.7f;
 			}
@@ -151,7 +185,7 @@ class FireFeatherOwner : ModPlayer
 	public bool HasFlameWing = false;
 	public override void PostUpdateMiscEffects()
 	{
-		if(HasFlameWing)
+		if (HasFlameWing)
 		{
 			if (Player.ownedProjectileCounts[ModContent.ProjectileType<FireFeatherMagicArray>()] < 1)
 			{

@@ -1,3 +1,4 @@
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 
@@ -23,7 +24,6 @@ public class FeatherMagic : ModItem
 		Item.knockBack = 1;
 		Item.value = 800;
 		Item.rare = ItemRarityID.Orange;
-		Item.UseSound = SoundID.Item71;
 		Item.autoReuse = true;
 		Item.shoot = ProjectileID.HarpyFeather;
 		Item.shootSpeed = 5.3f;
@@ -33,6 +33,7 @@ public class FeatherMagic : ModItem
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
 		Vector2 v = velocity;
+		SoundEngine.PlaySound(SoundID.Item39, position);
 		for (int k = 0; k < 4; k++)
 		{
 			Vector2 v2 = v.RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f)) * Main.rand.NextFloat(0.9f, 1.1f);

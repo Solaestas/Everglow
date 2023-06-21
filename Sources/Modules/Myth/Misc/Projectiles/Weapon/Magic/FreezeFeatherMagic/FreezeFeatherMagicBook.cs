@@ -1,4 +1,6 @@
 using Everglow.Myth.MagicWeaponsReplace.Projectiles;
+using static Terraria.ModLoader.PlayerDrawLayer;
+using Terraria.Audio;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FreezeFeatherMagic;
 internal class FreezeFeatherMagicBook : MagicBookProjectile
@@ -49,6 +51,7 @@ internal class FreezeFeatherMagicBook : MagicBookProjectile
 			return;
 		if (player.itemTime == player.itemTimeMax - 2 && player.HeldItem.type == ItemType)
 		{
+			SoundEngine.PlaySound(SoundID.Item71, Projectile.position);
 			for (int x = 0; x < 4; x++)
 			{
 				Vector2 velocity = vTOMouse.SafeNormalize(Vector2.Zero) * player.HeldItem.shootSpeed;

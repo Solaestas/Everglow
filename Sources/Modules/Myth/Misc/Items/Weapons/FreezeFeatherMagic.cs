@@ -1,5 +1,6 @@
 using Everglow.Myth.MagicWeaponsReplace.GlobalItems;
 using Everglow.Myth.Misc.Projectiles.Weapon.Magic;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 
@@ -38,6 +39,7 @@ public class FreezeFeatherMagic : ModItem
 		}
 		else
 		{
+			SoundEngine.PlaySound(SoundID.Item39, position);
 			for (int k = 0; k < 3; k++)
 			{
 				Vector2 v2 = velocity.RotatedBy(Main.rand.NextFloat(-0.42f, 0.42f)) * Main.rand.NextFloat(0.9f, 1.1f);

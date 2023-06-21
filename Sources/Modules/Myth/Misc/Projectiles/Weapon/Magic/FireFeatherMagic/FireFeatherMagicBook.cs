@@ -1,4 +1,6 @@
 using Everglow.Myth.MagicWeaponsReplace.Projectiles;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
+using Terraria.Audio;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 
@@ -51,6 +53,7 @@ internal class FireFeatherMagicBook : MagicBookProjectile
 			return;
 		if (player.itemTime == player.itemTimeMax - 2 && player.HeldItem.type == ItemType)
 		{
+			SoundEngine.PlaySound(SoundID.Item71, Projectile.position);
 			for (int x = 0; x < 4; x++)
 			{
 				Vector2 velocity = vTOMouse.SafeNormalize(Vector2.Zero) * player.HeldItem.shootSpeed;
@@ -58,6 +61,8 @@ internal class FireFeatherMagicBook : MagicBookProjectile
 				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * MulStartPosByVelocity, velocity * MulVelocity, ProjType, (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);
 				p.CritChance = player.GetWeaponCrit(player.HeldItem);
 				p.extraUpdates = 2;
+				var p2 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, -4) + new Vector2(0, Main.rand.NextFloat(30f)).RotateRandom(6.283), Vector2.Zero, ModContent.ProjectileType<FlameShoot>(), (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI, Main.rand.NextFloat(0.5f, 2.5f));
+				p2.timeLeft = Main.rand.Next(200, 300);
 			}
 		}
 	}

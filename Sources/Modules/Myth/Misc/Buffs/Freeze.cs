@@ -1,6 +1,3 @@
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
-
 namespace Everglow.Myth.Misc.Buffs;
 
 public class Freeze : ModBuff
@@ -24,7 +21,7 @@ public class FrozenNPC : GlobalNPC
 	}
 	public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		if (npc.HasBuff(ModContent.BuffType<Freeze>()) || npc.HasBuff(ModContent.BuffType<Freeze2>()))
+		if (npc.HasBuff(ModContent.BuffType<Freeze>()))
 		{
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -38,7 +35,7 @@ public class FrozenNPC : GlobalNPC
 	}
 	public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		if (npc.HasBuff(ModContent.BuffType<Freeze>()) || npc.HasBuff(ModContent.BuffType<Freeze2>()))
+		if (npc.HasBuff(ModContent.BuffType<Freeze>()))
 		{
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -47,7 +44,7 @@ public class FrozenNPC : GlobalNPC
 	}
 	public override void FindFrame(NPC npc, int frameHeight)
 	{
-		if (npc.HasBuff(ModContent.BuffType<Freeze>()) || npc.HasBuff(ModContent.BuffType<Freeze2>()))
+		if (npc.HasBuff(ModContent.BuffType<Freeze>()))
 		{
 			npc.frameCounter = 0;
 		}
@@ -55,7 +52,7 @@ public class FrozenNPC : GlobalNPC
 	}
 	public override bool PreAI(NPC npc)
 	{
-		if (npc.HasBuff(ModContent.BuffType<Freeze>()) || npc.HasBuff(ModContent.BuffType<Freeze2>()))
+		if (npc.HasBuff(ModContent.BuffType<Freeze>()))
 		{
 			npc.velocity *= 0;
 		}
