@@ -88,28 +88,47 @@ public class OriginPylon : ModTile
 				new Vertex2D(zero + new Vector2(i, j + 12) * 16 - Main.screenPosition, color2,new Vector3(0, 1, 0)),
 				new Vertex2D(zero + new Vector2(i + 16, j + 12) * 16- Main.screenPosition, color3,new Vector3(1, 1, 0)),
 			};
-			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.OriginPylon_glow_color.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.OriginPylon_glow.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
 			bars = new List<Vertex2D>()
 			{
-				new Vertex2D(zero + new Vector2(i - 4, j - 4) * 16 - Main.screenPosition, color0 * 0.7f,new Vector3(0, 0, 0)),
-				new Vertex2D(zero + new Vector2(i + 20, j - 4) * 16- Main.screenPosition, color1* 0.7f,new Vector3(1, 0, 0)),
-				new Vertex2D(zero + new Vector2(i - 4, j + 12) * 16 - Main.screenPosition, color2* 0.7f,new Vector3(0, 1, 0)),
-				new Vertex2D(zero + new Vector2(i + 20, j + 12) * 16- Main.screenPosition, color3* 0.7f,new Vector3(1, 1, 0)),
+				new Vertex2D(zero + new Vector2(i - 4, j - 4) * 16 - Main.screenPosition, color0 * 0.4f,new Vector3(0, 0, 0)),
+				new Vertex2D(zero + new Vector2(i + 20, j - 4) * 16- Main.screenPosition, color1* 0.4f,new Vector3(1, 0, 0)),
+				new Vertex2D(zero + new Vector2(i - 4, j + 12) * 16 - Main.screenPosition, color2* 0.4f,new Vector3(0, 1, 0)),
+				new Vertex2D(zero + new Vector2(i + 20, j + 12) * 16- Main.screenPosition, color3* 0.4f,new Vector3(1, 1, 0)),
 			};
-			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.OriginPylon_halo_color.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.OriginPylon_halo.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
+			float timeValue = (float)(Main.time * 0.0004f) % 1;
 			bars = new List<Vertex2D>()
 			{
-				new Vertex2D(zero + new Vector2(i + 3, j - 24) * 16 - Main.screenPosition, color0 * 0.7f,new Vector3(0, 0, 0)),
-				new Vertex2D(zero + new Vector2(i + 13, j - 24) * 16- Main.screenPosition, color1 * 0.7f,new Vector3(1, 0, 0)),
-				new Vertex2D(zero + new Vector2(i + 3, j + 12) * 16 - Main.screenPosition, color2 * 0.7f,new Vector3(0, 1, 0)),
-				new Vertex2D(zero + new Vector2(i + 13, j + 12) * 16- Main.screenPosition, color3 * 0.7f,new Vector3(1, 1, 0)),
+				new Vertex2D(zero + new Vector2(i - 1, j + 12) * 16 - Main.screenPosition, color0 * 0.0f,new Vector3(0.1f, timeValue, 0)),
+				new Vertex2D(zero + new Vector2(i - 1, j - 10) * 16 - Main.screenPosition, color0 * 0.0f,new Vector3(0.1f, timeValue, 0)),
+				new Vertex2D(zero + new Vector2(i + 3, j + 12) * 16 - Main.screenPosition, color2 * 0.7f,new Vector3(0.2f, timeValue, 0)),
+				new Vertex2D(zero + new Vector2(i + 3, j - 28) * 16 - Main.screenPosition, color0 * 0.0f,new Vector3(0.2f, timeValue, 0)),
+				new Vertex2D(zero + new Vector2(i + 13, j + 12) * 16- Main.screenPosition, color3 * 0.7f,new Vector3(0.4f, timeValue, 0)),
+				new Vertex2D(zero + new Vector2(i + 13, j - 28) * 16- Main.screenPosition, color1 * 0.0f,new Vector3(0.4f, timeValue, 0)),
+				new Vertex2D(zero + new Vector2(i + 17, j + 12) * 16 - Main.screenPosition, color0 * 0.0f,new Vector3(0.5f, timeValue, 0)),
+				new Vertex2D(zero + new Vector2(i + 17, j - 10) * 16 - Main.screenPosition, color0 * 0.0f,new Vector3(0.5f, timeValue, 0))
 			};
-			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.OriginPylon_lightPost.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_perlin.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+
+			//bars = new List<Vertex2D>()
+			//{
+			//	new Vertex2D(zero + new Vector2(i - 15, j + 12) * 16 - Main.screenPosition, color0 * 0.0f,new Vector3(0.1f, timeValue, 0)),
+			//	new Vertex2D(zero + new Vector2(i - 15, j + 6) * 16 - Main.screenPosition, color0 * 0.0f,new Vector3(0.1f, timeValue + 0.2f, 0)),
+			//	new Vertex2D(zero + new Vector2(i + 3, j + 12) * 16 - Main.screenPosition, new Color(0, 255, 255, 0),new Vector3(0.2f, timeValue, 0)),
+			//	new Vertex2D(zero + new Vector2(i + 3, j - 0) * 16 - Main.screenPosition, color0 * 0.0f,new Vector3(0.2f, timeValue + 0.2f, 0)),
+			//	new Vertex2D(zero + new Vector2(i + 13, j + 12) * 16- Main.screenPosition, new Color(255, 255, 0, 0),new Vector3(0.4f, timeValue, 0)),
+			//	new Vertex2D(zero + new Vector2(i + 13, j - 0) * 16- Main.screenPosition, color1 * 0.0f,new Vector3(0.4f, timeValue + 0.2f, 0)),
+			//	new Vertex2D(zero + new Vector2(i + 31, j + 12) * 16 - Main.screenPosition, color0 * 0.0f,new Vector3(0.5f, timeValue, 0)),
+			//	new Vertex2D(zero + new Vector2(i + 31, j + 6) * 16 - Main.screenPosition, color0 * 0.0f,new Vector3(0.5f, timeValue + 0.2f, 0))
+			//};
+			//Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_perlin.Value;
+			//Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
 		return base.PreDraw(i, j, spriteBatch);
 	}
@@ -117,7 +136,7 @@ public class OriginPylon : ModTile
 	{
 		if(!Main.gamePaused)
 		{
-			if(Main.rand.NextBool(100))
+			if (Main.rand.NextBool(600))
 			{
 				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(MathHelper.TwoPi);
 				Vector2 pos = new Vector2(i, j) * 16;
@@ -127,7 +146,7 @@ public class OriginPylon : ModTile
 				size *= (130 - Math.Abs(addPos.X)) / 120f;
 				addPos.X += 16;
 				pos += addPos;
-				if(Collision.SolidCollision(pos, 0, 0))
+				if (Collision.SolidCollision(pos, 0, 0))
 				{
 					return;
 				}
@@ -137,7 +156,7 @@ public class OriginPylon : ModTile
 					Active = true,
 					Visible = true,
 					position = pos,
-					maxTime = Main.rand.Next(50, 92),
+					maxTime = Main.rand.Next(50, 192),
 					scale = 0,
 					rotation = Main.rand.NextFloat(6.283f),
 					ai = new float[] { Main.rand.NextFloat(4.0f, 14.5f) * size, Main.rand.NextFloat(-0.03f, 0.03f) }
