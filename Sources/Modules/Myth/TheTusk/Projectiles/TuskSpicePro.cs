@@ -1,5 +1,4 @@
-using Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan;
-using Terraria;
+using Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
 
 namespace Everglow.Myth.TheTusk.Projectiles;
 

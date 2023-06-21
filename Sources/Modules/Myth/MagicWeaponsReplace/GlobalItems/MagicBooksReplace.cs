@@ -7,8 +7,8 @@ using Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.WaterBolt;
-using Everglow.Myth.MiscItems.Projectiles.Weapon.Magic.FireFeatherMagic;
-using Everglow.Myth.MiscItems.Projectiles.Weapon.Magic.FreezeFeatherMagic;
+using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
+using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FreezeFeatherMagic;
 using Terraria.DataStructures;
 using Terraria.Localization;
 
@@ -89,9 +89,9 @@ public class MagicBooksReplace : GlobalItem
 				item.noUseGraphic = false;
 			if (item.type == ModContent.ItemType<TheFirefly.Items.Weapons.DreamWeaver>())
 				item.noUseGraphic = false;
-			if (item.type == ModContent.ItemType<MiscItems.Weapons.FireFeatherMagic>())
+			if (item.type == ModContent.ItemType<Misc.Items.Weapons.FireFeatherMagic>())
 				item.noUseGraphic = false;
-			if (item.type == ModContent.ItemType<MiscItems.Weapons.FreezeFeatherMagic>())
+			if (item.type == ModContent.ItemType<Misc.Items.Weapons.FreezeFeatherMagic>())
 				item.noUseGraphic = false;
 			return base.UseItem(item, player);
 		}
@@ -121,9 +121,9 @@ public class MagicBooksReplace : GlobalItem
 			item.noUseGraphic = true;
 		if (item.type == ModContent.ItemType<TheFirefly.Items.Weapons.DreamWeaver>())
 			item.noUseGraphic = true;
-		if (item.type == ModContent.ItemType<MiscItems.Weapons.FireFeatherMagic>())
+		if (item.type == ModContent.ItemType<Misc.Items.Weapons.FireFeatherMagic>())
 			item.noUseGraphic = true;
-		if (item.type == ModContent.ItemType<MiscItems.Weapons.FreezeFeatherMagic>())
+		if (item.type == ModContent.ItemType<Misc.Items.Weapons.FreezeFeatherMagic>())
 			item.noUseGraphic = true;
 		// Aim Types
 		if (item.type == ItemID.WaterBolt)
@@ -213,7 +213,7 @@ public class MagicBooksReplace : GlobalItem
 			if (player.ownedProjectileCounts[aimType] < 1)
 				Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
 		}
-		if (item.type == ModContent.ItemType<MiscItems.Weapons.FireFeatherMagic>())
+		if (item.type == ModContent.ItemType<Misc.Items.Weapons.FireFeatherMagic>())
 		{
 			int aimType = ModContent.ProjectileType<FireFeatherMagicBook>();
 			if (player.ownedProjectileCounts[aimType] < 1)
@@ -224,7 +224,7 @@ public class MagicBooksReplace : GlobalItem
 				Projectile p = Projectile.NewProjectileDirect(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
 			}
 		}
-		if (item.type == ModContent.ItemType<MiscItems.Weapons.FreezeFeatherMagic>())
+		if (item.type == ModContent.ItemType<Misc.Items.Weapons.FreezeFeatherMagic>())
 		{
 			int aimType = ModContent.ProjectileType<FreezeFeatherMagicBook>();
 			if (player.ownedProjectileCounts[aimType] < 1)

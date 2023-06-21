@@ -1,4 +1,4 @@
-using Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan;
+using Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
 
 namespace Everglow.Myth.Common;
 
