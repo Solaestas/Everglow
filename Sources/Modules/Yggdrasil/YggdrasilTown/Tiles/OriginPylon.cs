@@ -57,7 +57,11 @@ public class OriginPylon : ModTile
 	{
 		return false;
 	}
-
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+		base.NumDust(i, j, fail, ref num);
+	}
 	public override bool CanKillTile(int i, int j, ref bool blockDamaged)
 	{
 		return false;
