@@ -102,7 +102,7 @@ public abstract class MagicBookProjectile : ModProjectile
 		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;//书跟着玩家飞
 		Projectile.spriteDirection = player.direction;
 		Projectile.velocity *= 0;
-		if (player.itemTime > 0 && player.HeldItem.type == ItemType)//检测手持物品
+		if (player.itemTime > 0 && player.HeldItem.type == ItemType && player.active && !player.dead)//检测手持物品
 		{
 			Projectile.timeLeft = player.itemTime + 60;
 			if (Timer < 30)

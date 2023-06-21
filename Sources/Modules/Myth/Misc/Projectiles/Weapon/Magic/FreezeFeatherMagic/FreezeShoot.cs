@@ -1,8 +1,8 @@
 using Terraria.Audio;
 
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
+namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FreezeFeatherMagic;
 
-public class FlameShoot : ModProjectile, IWarpProjectile
+public class FreezeShoot : ModProjectile, IWarpProjectile
 { 
 	public override void SetDefaults()
 	{
@@ -19,13 +19,13 @@ public class FlameShoot : ModProjectile, IWarpProjectile
 
 	public override void AI()
 	{
-		if (Projectile.timeLeft == 199)
+		if(Projectile.timeLeft == 199)
 		{
 			SoundEngine.PlaySound(SoundID.Item71.WithVolume(Projectile.ai[0] / 5f), Projectile.position);
 			Vector2 vTOMouse = Main.MouseWorld - Projectile.Center;
 			Vector2 velocity = vTOMouse.SafeNormalize(Vector2.Zero) * Projectile.ai[2];
 			velocity = velocity.RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f));
-			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, velocity, ModContent.ProjectileType<FireFeather>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, Main.rand.Next(12));
+			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, velocity, ModContent.ProjectileType<FreezeFeather>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, Main.rand.Next(12));
 			p.CritChance = Projectile.CritChance;
 			p.extraUpdates = 2;
 		}
@@ -41,9 +41,9 @@ public class FlameShoot : ModProjectile, IWarpProjectile
 		}
 		Texture2D Shadow = ModAsset.CursedHitLight.Value;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.5f, 0, 0) * dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 10f * dark, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(0.7f, 0.9f, 1, 0) * dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark, SpriteEffects.None, 0);
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
-		DrawTexCircle(timeValue * 24 * Projectile.ai[0], 8 * (1 - timeValue) * Projectile.ai[0], new Color(1f * (1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 0f, 0f), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
+		DrawTexCircle(timeValue * 24 * Projectile.ai[0], 8 * (1 - timeValue) * Projectile.ai[0], new Color(1f * (1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 1.5f * (1 - timeValue), 0f), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -53,11 +53,11 @@ public class FlameShoot : ModProjectile, IWarpProjectile
 		}
 		Texture2D shadow = ModAsset.CursedHit.Value;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 10f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f, SpriteEffects.None, 0);
 		Texture2D light = ModAsset.CursedHitStar.Value;
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f * (1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 0f, 0f), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * Projectile.ai[0] * 0.17f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f * (1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 0f, 0f), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * Projectile.ai[0] * 0.17f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f * (1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 1f, 0f), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * Projectile.ai[0] * 0.17f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f * (1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 1f, 0f), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * Projectile.ai[0] * 0.17f, SpriteEffects.None, 0);
 
 		return false;
 	}

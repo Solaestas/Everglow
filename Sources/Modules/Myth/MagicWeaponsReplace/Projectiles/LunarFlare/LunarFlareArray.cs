@@ -22,7 +22,7 @@ internal class LunarFlareArray : ModProjectile
 		Player player = Main.player[Projectile.owner];
 		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
 		Projectile.spriteDirection = player.direction;
-		if (player.itemTime > 0 && player.HeldItem.type == ItemID.LunarFlareBook)
+		if (player.itemTime > 0 && player.HeldItem.type == ItemID.LunarFlareBook && player.active && !player.dead)
 		{
 			Projectile.timeLeft = player.itemTime + 99;
 			if (Timer < 99)

@@ -30,7 +30,7 @@ internal class FireFeatherMagicBook : MagicBookProjectile
 		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;//书跟着玩家飞
 		Projectile.spriteDirection = player.direction;
 		Projectile.velocity *= 0;
-		if (player.itemTime > 0 && player.HeldItem.type == ItemType)//检测手持物品
+		if (player.itemTime > 0 && player.HeldItem.type == ItemType && player.active && !player.dead)//检测手持物品
 		{
 			Projectile.timeLeft = player.itemTime + 60;
 			if (Timer < 30)
@@ -53,15 +53,9 @@ internal class FireFeatherMagicBook : MagicBookProjectile
 			return;
 		if (player.itemTime == player.itemTimeMax - 2 && player.HeldItem.type == ItemType)
 		{
-			SoundEngine.PlaySound(SoundID.Item71, Projectile.position);
 			for (int x = 0; x < 4; x++)
 			{
-				Vector2 velocity = vTOMouse.SafeNormalize(Vector2.Zero) * player.HeldItem.shootSpeed;
-				velocity = velocity.RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f));
-				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * MulStartPosByVelocity, velocity * MulVelocity, ProjType, (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);
-				p.CritChance = player.GetWeaponCrit(player.HeldItem);
-				p.extraUpdates = 2;
-				var p2 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, -4) + new Vector2(0, Main.rand.NextFloat(30f)).RotateRandom(6.283), Vector2.Zero, ModContent.ProjectileType<FlameShoot>(), (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI, Main.rand.NextFloat(0.5f, 2.5f));
+				var p2 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, -4) + new Vector2(0, Main.rand.NextFloat(50f)).RotateRandom(6.283) + Vector2.Normalize(vTOMouse) * 12, Vector2.Zero, ModContent.ProjectileType<FlameShoot>(), (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI, Main.rand.NextFloat(0.5f, 2.5f), 0, player.HeldItem.shootSpeed);
 				p2.timeLeft = Main.rand.Next(200, 300);
 			}
 		}

@@ -51,40 +51,44 @@ public class GiantFireFeather : ModProjectile
 			{
 				Projectile.tileCollide = true;
 			}
-		}
-		if (Main.rand.NextBool(6))
-		{
-			Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 2)).RotatedByRandom(MathHelper.TwoPi);
-			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.FireFeather>(), v.X, v.Y, 150, default, Main.rand.NextFloat(0.8f, 1.7f));
-		}
-		Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 0.6f)).RotatedByRandom(MathHelper.TwoPi);
-		var spark = new FireSparkDust
-		{
-			velocity = newVelocity + Projectile.velocity * Main.rand.NextFloat(0.7f, 2.9f),
-			Active = true,
-			Visible = true,
-			position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
-			maxTime = Main.rand.Next(37, 45),
-			scale = Main.rand.NextFloat(0.1f, 12.0f),
-			rotation = Main.rand.NextFloat(6.283f),
-			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) }
-		};
-		Ins.VFXManager.Add(spark);
-		for(int x = 0;x < 6;x++)
-		{
-			var spark2 = new FireSparkDust
+			if (Projectile.Center.X > Main.screenPosition.X - 100 && Projectile.Center.X < Main.screenPosition.X + Main.screenWidth + 100 && Projectile.Center.Y > Main.screenPosition.Y - 100 && Projectile.Center.Y < Main.screenPosition.Y + Main.screenWidth + 100)
 			{
-				velocity = newVelocity + Projectile.velocity * Main.rand.NextFloat(0.0f, 0.2f),
-				Active = true,
-				Visible = true,
-				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
-				maxTime = Main.rand.Next(27, 35),
-				scale = Main.rand.NextFloat(0.1f, 12.0f),
-				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) }
-			};
-			Ins.VFXManager.Add(spark2);
+				if (Main.rand.NextBool(6))
+				{
+					Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 2)).RotatedByRandom(MathHelper.TwoPi);
+					Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.FireFeather>(), v.X, v.Y, 150, default, Main.rand.NextFloat(0.8f, 1.7f));
+				}
+				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 0.6f)).RotatedByRandom(MathHelper.TwoPi);
+				var spark = new FireSparkDust
+				{
+					velocity = newVelocity + Projectile.velocity * Main.rand.NextFloat(0.7f, 2.9f),
+					Active = true,
+					Visible = true,
+					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
+					maxTime = Main.rand.Next(37, 45),
+					scale = Main.rand.NextFloat(0.1f, 12.0f),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) }
+				};
+				Ins.VFXManager.Add(spark);
+				for (int x = 0; x < 6; x++)
+				{
+					var spark2 = new FireSparkDust
+					{
+						velocity = newVelocity + Projectile.velocity * Main.rand.NextFloat(0.0f, 0.2f),
+						Active = true,
+						Visible = true,
+						position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
+						maxTime = Main.rand.Next(27, 35),
+						scale = Main.rand.NextFloat(0.1f, 12.0f),
+						rotation = Main.rand.NextFloat(6.283f),
+						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) }
+					};
+					Ins.VFXManager.Add(spark2);
+				}
+			}
 		}
+		
 		if (Projectile.position.X <= 320 || Projectile.position.X >= Main.maxTilesX * 16 - 320)
 		{
 			Projectile.Kill();
@@ -268,8 +272,8 @@ public class GiantFireFeather : ModProjectile
 				velocity = newVelocity,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity * 3,
-				maxTime = Main.rand.Next(9, 25),
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity * 8,
+				maxTime = Main.rand.Next(9, 55),
 				scale = Main.rand.NextFloat(20f, 130f),
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }

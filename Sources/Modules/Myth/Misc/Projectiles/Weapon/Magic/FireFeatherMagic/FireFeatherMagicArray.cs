@@ -73,7 +73,7 @@ internal class FireFeatherMagicArray : VisualProjectile
 		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(-player.direction * 22, -12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
 		Projectile.spriteDirection = player.direction;
 		Projectile.velocity *= 0;
-		if (player.HeldItem.type == ModContent.ItemType<Items.Weapons.FireFeatherMagic>() && player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
+		if (player.HeldItem.type == ModContent.ItemType<Items.Weapons.FireFeatherMagic>() && player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1 && player.active && !player.dead)
 		{
 			Projectile.timeLeft = player.itemTime + 60;
 			if (player.itemTime > 0)

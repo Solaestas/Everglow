@@ -1,5 +1,3 @@
-using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FreezeFeatherMagic;
 internal class FrozenRingPipeline : Pipeline
 {
@@ -28,7 +26,6 @@ internal class FrozenRingPipeline : Pipeline
 	}
 }
 [Pipeline(typeof(FrozenRingPipeline))]
-//TODO:紫幽看看这个Visual类不正常，使用水晶颅骨升级冰火羽毛魔法书触发
 internal class FreezeFeatherMagicArray : VisualProjectile
 {
 	public float WingPower = 0;
@@ -54,7 +51,7 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(-player.direction * 22, -12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
 		Projectile.spriteDirection = player.direction;
 		Projectile.velocity *= 0;
-		if (player.HeldItem.type == ModContent.ItemType<Misc.Items.Weapons.FreezeFeatherMagic>())
+		if (player.HeldItem.type == ModContent.ItemType<Misc.Items.Weapons.FreezeFeatherMagic>() && player.active && !player.dead)
 		{
 			Projectile.timeLeft = player.itemTime + 60;
 			if (player.itemTime > 0)
@@ -120,6 +117,18 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 			WingPower = 210;
 		}
 		OldControlUp = player.controlUp && player.velocity.Y != 0;
+		if (Main.mouseRight && Main.mouseRightRelease)
+		{
+			if (WingPower < 21)
+			{
+				return;
+			}
+			WingPower -= 21;
+			Vector2 pos = Projectile.Center + new Vector2(Main.rand.NextFloat(-600, 600), -1600);
+			Vector2 vel = Vector2.Normalize(Main.MouseWorld - pos) * 60;
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), pos, vel, ModContent.ProjectileType<GiantFreezeFeather>(), player.HeldItem.damage * 5, 10, Projectile.owner);
+			Timer = 30;
+		}
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
