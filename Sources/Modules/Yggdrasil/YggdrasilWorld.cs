@@ -6,6 +6,7 @@ namespace Everglow.Yggdrasil;
 
 internal class YggdrasilWorld : Subworld
 {
+	public static float YggdrasilTimer = 0;
 	public override int Width => 1200;
 	public override int Height => 12000;
 	public override bool NormalUpdates => true;
@@ -17,6 +18,7 @@ internal class YggdrasilWorld : Subworld
 	public override void OnEnter()
 	{
 		SubworldSystem.hideUnderworld = true;
+		YggdrasilTimer = 0;
 	}
 	public override void OnLoad()
 	{
@@ -56,4 +58,13 @@ internal class YggdrasilWorld : Subworld
 		Main.maxSectionsY = (Main.maxTilesY - 1) / 150 + 1;
 	}
 }
+class YggdrasilTimerSystem : ModSystem
+{
+	public override void PostUpdateEverything()
+	{
+		YggdrasilWorld.YggdrasilTimer++;
+		base.PostUpdateEverything();
+	}
+}
+
 
