@@ -27,7 +27,13 @@ public class YggdrasilWorldGeneration : ModSystem
 			Main.spawnTileX = 600;
 			Main.spawnTileY = 11630;
 			BuildYggdrasilTown();
+			EndGenPass();
+			Main.statusText = "";
 		}
+	}
+	public static void EndGenPass()
+	{
+		Main.statusText = "Finished";
 	}
     public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type, int startX = 0, int startY = 0)
 	{
