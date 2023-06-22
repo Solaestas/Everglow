@@ -3,7 +3,7 @@ using Everglow.Commons.Vertex;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
 
-internal class IchorSplashPipeline : Pipeline
+public class IchorSplashPipeline : Pipeline
 {
 	public override void Load()
 	{
@@ -29,7 +29,7 @@ internal class IchorSplashPipeline : Pipeline
 	}
 }
 [Pipeline(typeof(IchorSplashPipeline))]
-internal class IchorSplash : Visual
+public class IchorSplash : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public List<Vector2> oldPos = new List<Vector2>();

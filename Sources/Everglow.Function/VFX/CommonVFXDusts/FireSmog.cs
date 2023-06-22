@@ -2,7 +2,7 @@ using Everglow.Commons.Enums;
 using Everglow.Commons.Vertex;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
-internal class FireSmogPipeline : Pipeline
+public class FireSmogPipeline : Pipeline
 {
 	public override void Load()
 	{
@@ -29,7 +29,7 @@ internal class FireSmogPipeline : Pipeline
 	}
 }
 [Pipeline(typeof(FireSmogPipeline))]
-internal class FireSmogDust : Visual
+public class FireSmogDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawNPCs;
 	public Vector2 position;

@@ -3,7 +3,7 @@ using Everglow.Commons.Vertex;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
 
-internal class BloodSplashPipeline : Pipeline
+public class BloodSplashPipeline : Pipeline
 {
 	public override void Load()
 	{
@@ -31,7 +31,7 @@ internal class BloodSplashPipeline : Pipeline
 	}
 }
 [Pipeline(typeof(BloodSplashPipeline))]
-internal class BloodSplash : Visual
+public class BloodSplash : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public List<Vector2> oldPos = new List<Vector2>();

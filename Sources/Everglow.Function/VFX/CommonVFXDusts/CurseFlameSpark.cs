@@ -3,7 +3,7 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
-internal class CurseFlameSparkPipeline : Pipeline
+public class CurseFlameSparkPipeline : Pipeline
 {
 	public override void Load()
 	{
@@ -28,7 +28,7 @@ internal class CurseFlameSparkPipeline : Pipeline
 	}
 }
 [Pipeline(typeof(CurseFlameSparkPipeline), typeof(BloomPipeline))]
-internal class CurseFlameSparkDust : Visual
+public class CurseFlameSparkDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public Vector2 position;
@@ -52,8 +52,8 @@ internal class CurseFlameSparkDust : Visual
 			timer = maxTime;
 		}
 		velocity *= 0.98f;
-		velocity += new Vector2(Main.windSpeedCurrent * 0.4f, 0.01f);
-		scale *= 0.96f;
+
+		scale *= 0.97f;
 		timer++;
 		if (timer > maxTime)
 			Active = false;
@@ -62,11 +62,6 @@ internal class CurseFlameSparkDust : Visual
 		{
 			velocity *= -0.2f;
 			timer += 10;
-		}
-		var tile = Main.tile[(int)(position.X / 16), (int)(position.Y / 16)];
-		if(position.Y % 1 < tile.LiquidAmount / 256f)
-		{
-			timer += 120;
 		}
 		if(scale < 0.5f)
 		{

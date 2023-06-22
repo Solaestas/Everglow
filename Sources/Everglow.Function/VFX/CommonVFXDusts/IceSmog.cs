@@ -2,7 +2,7 @@ using Everglow.Commons.Enums;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
-internal class IceSmogPipeline : Pipeline
+public class IceSmogPipeline : Pipeline
 {
 	public override void Load()
 	{
@@ -30,7 +30,7 @@ internal class IceSmogPipeline : Pipeline
 	}
 }
 [Pipeline(typeof(IceSmogPipeline), typeof(HaloPipeline))]
-internal class IceSmogDust : Visual
+public class IceSmogDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawBG;
 	public Vector2 position;
@@ -99,7 +99,7 @@ internal class IceSmogDust : Visual
 	}
 }
 [Pipeline(typeof(IceSmogPipeline), typeof(HaloPipeline))]
-internal class IceSmogDust2 : Visual
+public class IceSmogDust2 : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawTiles;
 	public Vector2 position;
