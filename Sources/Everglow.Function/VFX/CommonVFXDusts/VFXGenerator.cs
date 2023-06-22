@@ -146,7 +146,7 @@ class VFXGenerator : ModItem
 						maxTime = Main.rand.Next(16, 45),
 						scale = Main.rand.NextFloat(20f, 60f),
 						rotation = Main.rand.NextFloat(6.283f),
-						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, 1f }
 					};
 					Ins.VFXManager.Add(fire);
 				}
@@ -164,7 +164,7 @@ class VFXGenerator : ModItem
 						maxTime = Main.rand.Next(137, 245),
 						scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 47.0f)),
 						rotation = Main.rand.NextFloat(6.283f),
-						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.13f, 0.13f) }
+						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.13f, 0.13f)}
 					};
 					Ins.VFXManager.Add(spark);
 				}

@@ -3,7 +3,7 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
-internal class FirePipeline : Pipeline
+public class FirePipeline : Pipeline
 {
 	public override void Load()
 	{
@@ -30,7 +30,7 @@ internal class FirePipeline : Pipeline
 	}
 }
 [Pipeline(typeof(FirePipeline), typeof(BloomPipeline))]
-internal class FireDust : Visual
+public class FireDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public Vector2 position;
