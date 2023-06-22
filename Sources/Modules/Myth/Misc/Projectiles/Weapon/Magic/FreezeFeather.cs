@@ -224,7 +224,7 @@ public class FreezeFeather : ModProjectile
 			if (!target.HasBuff(BuffID.Frostburn) && !target.HasBuff(BuffID.Frostburn2))
 			{
 				target.AddBuff(ModContent.BuffType<Freeze>(), (int)Projectile.ai[1]);
-				if (Main.rand.NextBool(17))
+				if (Main.rand.NextBool(7))
 				{
 					if (MagicArray == null)
 					{
@@ -238,7 +238,10 @@ public class FreezeFeather : ModProjectile
 			}
 			else
 			{
-				target.AddBuff(ModContent.BuffType<Freeze>(), (int)Projectile.ai[1] * 3);
+				if (Main.rand.NextBool(6))
+				{
+					target.AddBuff(ModContent.BuffType<Freeze>(), (int)Projectile.ai[1] * 4);
+				}
 			}
 		}
 		if (MagicArray != null)

@@ -246,9 +246,9 @@ public class GiantFreezeFeather : ModProjectile
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		target.AddBuff(BuffID.Frostburn2, 1200);
-		target.AddBuff(ModContent.BuffType<Buffs.Freeze>(), 180);
 		AmmoHit();
+		target.AddBuff(BuffID.Frostburn2, 1200);
+		target.AddBuff(ModContent.BuffType<Buffs.Freeze>(), 60);
 	}
 	public void AmmoHit()
 	{
@@ -263,26 +263,27 @@ public class GiantFreezeFeather : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.velocity = Projectile.oldVelocity;
 		SoundEngine.PlaySound((SoundID.DD2_WitherBeastCrystalImpact.WithVolume(0.3f)).WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
-		for (int j = 0; j < 4; j++)
+		for (int j = 0; j < 40; j++)
 		{
-			Vector2 v = new Vector2(0, Main.rand.NextFloat(7, 20)).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 v = new Vector2(0, Main.rand.NextFloat(7, 120)).RotatedByRandom(MathHelper.TwoPi);
 			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.FreezeFeather>(), v.X, v.Y, 150, default, Main.rand.NextFloat(1.8f, 3.7f));
 		}
 		for (int j = 0; j < 20; j++)
 		{
-			Vector2 v = new Vector2(0, Main.rand.NextFloat(2f, 4.6f)).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 v = new Vector2(0, Main.rand.NextFloat(2f, 14.6f)).RotatedByRandom(MathHelper.TwoPi);
 			Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.IceCrystal2>(), v.X, v.Y, 150, default, Main.rand.NextFloat(0.6f, 1.4f));
 			d.velocity = v;
 		}
 		for (int j = 0; j < 60; j++)
 		{
-			Vector2 v = new Vector2(0, Main.rand.NextFloat(1f, 2.6f)).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 v = new Vector2(0, Main.rand.NextFloat(1f, 12.6f)).RotatedByRandom(MathHelper.TwoPi);
 			Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.IceCrystal>(), v.X, v.Y, 150, default, Main.rand.NextFloat(0.4f, 0.6f));
 			d.velocity = v;
 			d.color.G = 120;
 		}
 		GenerateSmog(20);
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, -4) + new Vector2(0, Main.rand.NextFloat(30f)).RotateRandom(6.283), Vector2.Zero, ModContent.ProjectileType<GiantFreezeFeatherExplosion>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 8);
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<GiantFreezeFeatherExplosion>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 8);
+		Projectile.position -= Projectile.velocity;
 	}
 	public void GenerateSmog(int Frequency)
 	{

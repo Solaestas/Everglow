@@ -228,9 +228,9 @@ public class GiantFireFeather : ModProjectile
 		Projectile.tileCollide = false;
 		Projectile.ignoreWater = true;
 		Projectile.velocity = Projectile.oldVelocity;
-		for (int j = 0; j < 4; j++)
+		for (int j = 0; j < 40; j++)
 		{
-			Vector2 v = new Vector2(0, Main.rand.NextFloat(7, 20)).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 v = new Vector2(0, Main.rand.NextFloat(7, 120)).RotatedByRandom(MathHelper.TwoPi);
 			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.FireFeather>(), v.X, v.Y, 150, default, Main.rand.NextFloat(1.8f, 3.7f));
 		}
 		GenerateFire(23);
@@ -239,7 +239,8 @@ public class GiantFireFeather : ModProjectile
 		{
 			GenerateSpark(140);
 		}
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, -4) + new Vector2(0, Main.rand.NextFloat(30f)).RotateRandom(6.283), Vector2.Zero, ModContent.ProjectileType<GiantFireFeatherExplosion>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 8);
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<GiantFireFeatherExplosion>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 8);
+		Projectile.position -= Projectile.velocity;
 	}
 	public void GenerateSmog(int Frequency)
 	{

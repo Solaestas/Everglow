@@ -105,7 +105,7 @@ public class GiantFreezeFeatherExplosion : ModProjectile, IWarpProjectile
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(BuffID.Frostburn2, 1200);
-		target.AddBuff(ModContent.BuffType<Buffs.Freeze>(), 180);
+		target.AddBuff(ModContent.BuffType<Buffs.Freeze>(), 20);
 	}
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{

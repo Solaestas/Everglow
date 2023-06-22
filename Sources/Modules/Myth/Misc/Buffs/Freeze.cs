@@ -10,7 +10,6 @@ public class Freeze : ModBuff
 	}
 	public override void Update(NPC npc, ref int buffIndex)
 	{
-		npc.noGravity = false;
 		base.Update(npc, ref buffIndex);
 	}
 }

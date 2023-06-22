@@ -63,10 +63,10 @@ public class GiantFireFeatherExplosion : ModProjectile, IWarpProjectile
 		Texture2D Shadow = ModAsset.CursedHit.Value;
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * Dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * Dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] * 0.2f, SpriteEffects.None, 0);
 		Texture2D light = ModAsset.CursedHitStar.Value;
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f * (1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 0f, 0f), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) * Projectile.ai[0] / 14f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f * (1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 0f, 0f), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, Dark) * Projectile.ai[0] / 14f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f * (1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 0f, 0f), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f * (1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 0f, 0f), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, Dark) * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
 		return false;
 	}
 	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
