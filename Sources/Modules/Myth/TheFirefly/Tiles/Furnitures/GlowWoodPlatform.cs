@@ -23,8 +23,7 @@ public class GlowWoodPlatform : ModTile
 		AddMapEntry(new Color(0, 14, 175));
 
 		DustType = ModContent.DustType<BlueGlow>();
-		ItemDrop = ModContent.ItemType<Items.Furnitures.GlowWoodPlatform>();
-		AdjTiles = new int[] { TileID.Platforms };
+				AdjTiles = new int[] { TileID.Platforms };
 
 		// Placement
 		TileObjectData.newTile.CoordinateHeights = new[] { 16 };

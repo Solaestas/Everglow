@@ -1,9 +1,7 @@
-using Terraria.DataStructures;
-using Terraria.Audio;
-using Terraria.Localization;
 using Everglow.Food.Buffs.VanillaFoodBuffs;
-using Everglow.Myth.TheFirefly.Dusts;
-using Everglow.Myth.TheFirefly.Projectiles;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.Localization;
 
 namespace Everglow.Food.Buffs;
 
@@ -35,9 +33,9 @@ public class FoodBuffGlobalNPC : GlobalNPC
 	//		if (player.GetModPlayer<FoodBuffModPlayer>().StrawberryIcecreamBuff)
 	//			damage = Math.Clamp(Math.Log((double)1 / ((npc.Center - player.Center).Length() / 100) + 2.5), 1, 1.33f) * damage;
 	//		/*if (灯笼月 && PiercoldWindBuff)
- //            {
- //                damage *= 5;
- //            }*/
+	//            {
+	//                damage *= 5;
+	//            }*/
 	//	}
 
 	//	return base.StrikeNPC(npc, ref damage, defense, ref knockback, hitDirection, ref crit);
@@ -55,17 +53,17 @@ public class FoodBuffGlobalNPC : GlobalNPC
 	{
 		if (npc.HasBuff(ModContent.BuffType<CherryBuff>()))
 		{
-			SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode);
-			Projectile.NewProjectile(npc.GetSource_Death("CherryBuff"), npc.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, npc.whoAmI, 0.4f, 2f);
+			//SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode);
+			//Projectile.NewProjectile(npc.GetSource_Death("CherryBuff"), npc.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, npc.whoAmI, 0.4f, 2f);
 			float k1 = Math.Clamp(npc.velocity.Length(), 1, 3);
 			float k2 = Math.Clamp(npc.velocity.Length(), 6, 10);
 			float k0 = 1f / 4 * k2;
 			for (int j = 0; j < 16 * k0; j++)
 			{
-				Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-				int dust1 = Dust.NewDust(npc.Center - Vector2.Normalize(v0).RotatedBy(Math.PI / 4) * 32, 0, 0, ModContent.DustType<MothSmog>(), Vector2.Normalize(v0).X * 5, Vector2.Normalize(v0).Y * 10, 100, default, Main.rand.NextFloat(5.1f, 7.5f));
-				Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 25);
-				Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+				//Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
+				//int dust1 = Dust.NewDust(npc.Center - Vector2.Normalize(v0).RotatedBy(Math.PI / 4) * 32, 0, 0, ModContent.DustType<MothSmog>(), Vector2.Normalize(v0).X * 5, Vector2.Normalize(v0).Y * 10, 100, default, Main.rand.NextFloat(5.1f, 7.5f));
+				//Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 25);
+				//Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
 			}
 			foreach (NPC target in Main.npc)
 			{

@@ -1,4 +1,4 @@
-﻿using Terraria.ObjectData;
+using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
@@ -19,14 +19,6 @@ public class BlackFren : ModTile
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
 		num = fail ? 1 : 3;
-	}
-
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-		//for (int x = 0; x < 2; x++)
-		//{
-		//    Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.BlackStarShrub>());
-		//}
 	}
 
 	public override void PlaceInWorld(int i, int j, Item item)

@@ -1,18 +1,18 @@
-﻿namespace Everglow.Myth.TheFirefly.Dusts;
+namespace Everglow.Myth.TheFirefly.Dusts;
 
 public class BlueGlowAppearStoppedByTile : ModDust
 {
 	public override void OnSpawn(Dust dust)
 	{
 		dust.noGravity = true;
-		dust.frame = new Rectangle(0, 0, 16, 16);
+		dust.frame = new Rectangle(0, 0, 8, 8);
 		dust.alpha = 0;
 		dust.rotation = dust.scale * 0.3f;//用旋转角度存尺寸极值
 	}
 
 	public override bool Update(Dust dust)
 	{
-		dust.alpha += 3;
+		dust.alpha += 6;
 		dust.position += dust.velocity;
 		dust.velocity += new Vector2(0, 0.015f).RotatedByRandom(MathHelper.Pi * 2d);
 		dust.velocity *= 0.95f;

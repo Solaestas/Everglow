@@ -6,8 +6,9 @@ public enum CodeLayer
 	PostSetupContent,
 
 	//绘制
+	PreDrawFilter,
+	[Obsolete("换用PreDrawFilter")]
 	PostDrawFilter,
-
 	PostDrawTiles,
 	PostDrawProjectiles,
 	PostDrawDusts,

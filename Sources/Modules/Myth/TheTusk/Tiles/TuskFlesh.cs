@@ -12,8 +12,7 @@ public class TuskFlesh : ModTile
 		Main.tileBlockLight[Type] = true;
 		MinPick = 60;
 		DustType = DustID.Blood;
-		ItemDrop = ModContent.ItemType<Items.TuskFlesh>();
-		AddMapEntry(new Color(219, 41, 47));
+				AddMapEntry(new Color(219, 41, 47));
 		HitSound = SoundID.Grass;
 	}
 	public override bool CanExplode(int i, int j)

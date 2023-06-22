@@ -1,4 +1,4 @@
-﻿namespace Everglow.Minortopography.GiantPinetree.TilesAndWalls;
+namespace Everglow.Minortopography.GiantPinetree.TilesAndWalls;
 
 public class PineWood : ModTile
 {
@@ -10,7 +10,6 @@ public class PineWood : ModTile
 		Main.tileMerge[TileID.PineTree][Type] = true;
 		DustType = DustID.Ebonwood;
 		HitSound = SoundID.Dig;
-		ItemDrop = ItemID.PineTreeBlock;
 		AddMapEntry(new Color(45, 15, 3));
 	}
 }

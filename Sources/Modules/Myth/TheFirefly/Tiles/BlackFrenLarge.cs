@@ -1,4 +1,4 @@
-﻿using Terraria.ObjectData;
+using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
@@ -20,11 +20,6 @@ public class BlackFrenLarge : ModTile
 	{
 		num = fail ? 1 : 3;
 	}
-
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-	}
-
 	public override void PlaceInWorld(int i, int j, Item item)
 	{
 		short num = (short)Main.rand.Next(0, 6);

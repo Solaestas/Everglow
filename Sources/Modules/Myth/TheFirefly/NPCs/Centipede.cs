@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -21,7 +21,7 @@ internal class CentipedeHead : FireWormHead
 	{
 		var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
 		{
-			CustomTexturePath = "TheFirefly/NPCs/FireflyCentipede_Bestiary",
+			CustomTexturePath = "Everglow/Myth/TheFirefly/NPCs/FireflyCentipede_Bestiary",
 			Position = new Vector2(40f, 24f),
 			PortraitPositionXOverride = 0f,
 			PortraitPositionYOverride = 12f
