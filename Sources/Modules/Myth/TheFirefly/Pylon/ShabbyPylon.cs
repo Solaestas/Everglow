@@ -100,7 +100,7 @@ internal class ShabbyPylonUpdate : GlobalNPC
 	{
 		if (npc.type is NPCID.BrainofCthulhu or NPCID.EaterofWorldsHead)
 		{
-			if (!PylonSystem.Instance.shabbyPylonEnable && !NPC.downedBoss2)
+			if (!PylonSystem.Instance.shabbyPylonEnable && NPC.downedBoss2)
 			{
 				PylonSystem.Instance.shabbyPylonEnable = true;
 				PylonSystem.Instance.firstEnableAnimation = true;

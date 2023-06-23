@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\Module.props" />
 	<ItemGroup>
-	  <ProjectReference Include="..\Myth\Everglow.Myth.csproj" />
+	  <Reference Include="SubworldLibrary">
+	    <HintPath>..\..\..\Libraries\SubworldLibrary.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 </Project>

@@ -1,3 +1,4 @@
-﻿displayName = Everglow | 流光无际 [Early Access]
+﻿displayName = Everglow | 流光无际 [Demonstration]
 author = Dream Chaser Group | 孤舟逐梦团队
-version = 0.1
+version = 0.2
+modReferences = SubworldLibrary

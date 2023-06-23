@@ -1,6 +1,6 @@
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
-using Everglow.Myth.Common;
+using Everglow.Ocean.Common;
 using ReLogic.Content;
 
 namespace Everglow.Ocean.VFXs;
@@ -65,7 +65,7 @@ internal class WaveSprayDust : ShaderDraw
 		if (Collision.SolidCollision(position, 0, 0) || Main.tile[(int)(position.X / 16f), (int)(position.Y / 16f)].LiquidAmount > 0)
 		{
 			velocity *= 0.2f;
-			if(velocity.Length() < 0.02f)
+			if (velocity.Length() < 0.02f)
 			{
 				Active = false;
 			}
@@ -96,7 +96,7 @@ internal class WaveSprayDust : ShaderDraw
 			Vector2 pointDown = oldPos[i] - normal * width;
 			Vector2 widthUp = new Vector2(normal.X * width, 0);
 			Vector2 widthDown = -new Vector2(normal.X * width, 0);
-			
+
 			float drawAlpha = MathF.Pow(1 - alpha, 3f);
 			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width + widthUp, drawcRope, new Vector3(0 + ai[0], (i + 15 - len) / 30f + timer / 1500f * velocity.Length() * drawAlpha, drawAlpha));
 			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width + widthDown, drawcRope, new Vector3(0.4f + ai[0], (i + 15 - len) / 30f + timer / 1500f * velocity.Length() * drawAlpha, drawAlpha));
