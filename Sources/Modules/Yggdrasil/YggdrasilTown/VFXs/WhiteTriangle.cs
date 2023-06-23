@@ -48,8 +48,7 @@ internal class WhiteTriangle : Visual
 	{
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
 		Color lightColor = Color.White;
-		Color color1 = new Color(81, 255, 255);
-		Color color2 = new Color(255, 248, 122);
+		Ins.Batch.BindTexture<Vertex2D>(Terraria.GameContent.TextureAssets.MagicPixel.Value);
 		//lightColor = Color.Lerp(color2, color1, Math.Clamp((606 * 16 - position.X) / (8f * 16),0, 1));
 		int maxLength = 15;
 		for (int y = 0; y < maxLength; y++)

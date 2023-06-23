@@ -1,3 +1,5 @@
+using Terraria;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
 public class DarkMud : ModTile
@@ -5,15 +7,12 @@ public class DarkMud : ModTile
 	public override void PostSetDefaults()
 	{
 		Main.tileSolid[Type] = true;
-		Main.tileMergeDirt[Type] = false;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<StoneScaleWood>()] = false;
-		Main.tileBlendAll[Type] = false;
+		Main.tileMerge[Type][(ushort)ModContent.TileType<StoneScaleWood>()] = true;
+		Main.tileMerge[(ushort)ModContent.TileType<StoneScaleWood>()][Type] = true;
 		Main.tileBlockLight[Type] = true;
-		Main.tileShine2[Type] = false;
 
-		Main.ugBackTransition = 1000;
 		DustType = DustID.BorealWood;
-		MinPick = 150;
+		MinPick = 250;
 		HitSound = SoundID.Dig;
 		AddMapEntry(new Color(31, 26, 45));
 
@@ -22,38 +21,31 @@ public class DarkMud : ModTile
 	{
 		return false;
 	}
-	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+	public override void FloorVisuals(Player player)
 	{
+		player.velocity *= 0.1f;
+		//player.position += new Vector2(0, player.gravDir * 15f);
+		player.AddBuff(BuffID.Shimmer, 60);
 	}
 	public override void RandomUpdate(int i, int j)
 	{
-		int CountNoneA = 0;
-		int CountA = 0;
-		for (int x = -1; x < 2; x++)
+		Tile thisTile = Main.tile[i, j];
+		updateTileFrameX(thisTile);
+		if(i >= 24 && i <= Main.maxTilesX - 24)
 		{
-			for (int y = -4; y < 0; y++)
+			for(int x = -5;x <=5;x+=2)
 			{
-				if (Main.tile[i + x, j + y].HasTile)
-					CountNoneA++;
+				Tile otherTile = Main.tile[i + x, j];
+				updateTileFrameX(otherTile);
 			}
 		}
-		for (int x = -1; x < 2; x++)
+		void updateTileFrameX(Tile tile)
 		{
-			if (Main.tile[i + x, j].HasTile)
-				CountA++;
-		}
-		if (!Main.tile[i - 5, j - 1].HasTile && !Main.tile[i + 5, j - 1].HasTile && !Main.tile[i - 2, j - 1].HasTile && !Main.tile[i + 2, j - 1].HasTile && !Main.tile[i + 3, j - 1].HasTile && !Main.tile[i - 3, j - 1].HasTile && !Main.tile[i - 4, j - 1].HasTile && !Main.tile[i + 4, j - 1].HasTile)
-		{
-			if (Main.rand.NextBool(8))
+			if (tile.TileFrameY == 0)
 			{
-				if (CountNoneA == 0)
+				if (tile.TileFrameX >= 18 && tile.TileFrameX <= 54)
 				{
-					if (CountA == 3)
-					{
-						//int Dy = Main.rand.Next(5);
-						//WorldGen.Place3x4(i, j - 1, (ushort)ModContent.TileType<OceanMod.Tiles.Tree1.CyanVineOre>(), 0);
-						//CombatText.NewText(new Rectangle(i * 16, j * 16, 16, 16), Color.Cyan, Dy);
-					}
+					tile.TileFrameX = (short)(Main.rand.Next(1, 4) * 18);
 				}
 			}
 		}
