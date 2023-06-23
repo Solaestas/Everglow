@@ -1,6 +1,6 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.Items;
 
-public class ShoreMud : ModItem
+public class DarkMud : ModItem
 {
 	public override void SetDefaults()
 	{

@@ -9,7 +9,6 @@ public class WCSPipeline : Pipeline
 {
 	public override void BeginRender()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(Terraria.GameContent.TextureAssets.MagicPixel.Value);
 		Ins.Batch.Begin();
 		effect.Value.Parameters["uTransform"].SetValue(
 			Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) *
