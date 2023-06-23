@@ -62,7 +62,7 @@ public class YggdrasilTownBackground : ModSystem
 	/// <returns></returns>
 	public static bool BiomeActive()
 	{
-		if (Main.screenPosition.Y > 172200)
+		if (Main.screenPosition.Y > 170200)
 		{
 			if (SubworldSystem.IsActive<YggdrasilWorld>())
 				return true;
