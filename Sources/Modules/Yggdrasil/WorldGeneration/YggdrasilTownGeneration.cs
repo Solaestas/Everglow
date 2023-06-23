@@ -1,7 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
-using Terraria;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 namespace Everglow.Yggdrasil.WorldGeneration;
 public class YggdrasilTownGeneration
@@ -9,7 +8,7 @@ public class YggdrasilTownGeneration
 	public static void BuildYggdrasilTown()
 	{
 		Initialize();
-		Main.statusText = "Yggdrasil Town Bark Cliff";
+		Main.statusText = "Yggdrasil Town Bark Cliff...";
 		PlaceRectangleAreaOfBlock(20, 10650, 155, 12000, ModContent.TileType<StoneScaleWood>());
 		PlaceRectangleAreaOfBlock(1045, 10650, 1180, 12000, ModContent.TileType<StoneScaleWood>());
 		PlaceRectangleAreaOfBlock(0, 11700, 1200, 12000, ModContent.TileType<StoneScaleWood>());
@@ -17,20 +16,25 @@ public class YggdrasilTownGeneration
 		PlaceRectangleAreaOfWall(20, 10650, 155, 12000, ModContent.WallType<StoneDragonScaleWoodWall>());
 		PlaceRectangleAreaOfWall(1045, 10650, 1180, 12000, ModContent.WallType<StoneDragonScaleWoodWall>());
 		PlaceRectangleAreaOfWall(0, 11700, 1200, 12000, ModContent.WallType<StoneDragonScaleWoodWall>());
-		Main.statusText = "Midnight Bayou";
+		Main.statusText = "Filling Midnight Bayou With Mud...";
 		BuildMidnightBayou();
-		Main.statusText = "Origin Pylon Squire";
 		PlaceRectangleAreaOfBlock(540, 11633, 660, 11635, TileID.GrayBrick);
 		PlaceFrameImportantTiles(595, 11621, 16, 12, ModContent.TileType<OriginPylon>());
+		Main.statusText = "Carving The Heavenly Portal...";
 		BuildHeavenlyPortal();
+		Main.statusText = "Flooding The Azure Grotto...";
 		BuildAzureGrotto();
+		Main.statusText = "Digging The Tangled Submine...";
 		BuildTangledSubmine();
+		Main.statusText = "Constructing The Yggdrasil Town Below...";
+		BuildTownBelow();
 	}
 	public static int[,] PerlinPixelR = new int[512, 512];
 	public static int[,] PerlinPixelG = new int[512, 512];
 	public static int[,] PerlinPixelB = new int[512, 512];
 	public static int[,] PerlinPixel2 = new int[512, 512];
 	public static int AzureGrottoCenterX;
+	public static List<YggdrasilTownStreetElement> ConstructorsSheet;
 	/// <summary>
 	/// 初始化
 	/// </summary>
@@ -38,6 +42,18 @@ public class YggdrasilTownGeneration
 	{
 		AzureGrottoCenterX = WorldGen.genRand.Next(-170, 170) + 600;
 		FillPerlinPixel();
+		ConstructorsSheet = new List<YggdrasilTownStreetElement>()
+    	{
+	    	new Lamppost(),
+	    	new Bench(),
+		    new Crate(),
+		    new ThreeCrate(),
+			new FolkHouseofChineseStyle(),
+			new FolkHouseofWoodStoneStruture(),
+			new FolkHouseofWoodStruture(),
+			new TwoStoriedFolkHouse(),
+			new SmithyType()
+	    };
 	}
 	/// <summary>
 	/// 噪声信息获取
@@ -340,7 +356,7 @@ public class YggdrasilTownGeneration
 	{
 		if (AzureGrottoCenterX > 600)
 		{
-			for(int x = 0;x < 110;x++)
+			for (int x = 0; x < 110; x++)
 			{
 				WorldGen.digTunnel((WorldGen.genRand.NextFloat(AzureGrottoCenterX + 90, 1140)), WorldGen.genRand.NextFloat(11120, 11600), WorldGen.genRand.NextFloat(-1, 1), WorldGen.genRand.NextFloat(0, 1), WorldGen.genRand.Next(27, 72), WorldGen.genRand.Next(3, 7));
 			}
@@ -350,14 +366,14 @@ public class YggdrasilTownGeneration
 			}
 			for (int x = 0; x < 30; x++)
 			{
-				WorldGen.digTunnel((WorldGen.genRand.NextFloat(AzureGrottoCenterX + 160, 1140)), WorldGen.genRand.NextFloat(11140, 11500), WorldGen.genRand.NextFloat(-1, 1), WorldGen.genRand.NextFloat(-1, 1), WorldGen.genRand.Next(81,144), WorldGen.genRand.Next(8, 12));
+				WorldGen.digTunnel((WorldGen.genRand.NextFloat(AzureGrottoCenterX + 160, 1140)), WorldGen.genRand.NextFloat(11140, 11500), WorldGen.genRand.NextFloat(-1, 1), WorldGen.genRand.NextFloat(-1, 1), WorldGen.genRand.Next(81, 144), WorldGen.genRand.Next(8, 12));
 			}
 		}
 		else
 		{
 			for (int x = 0; x < 110; x++)
 			{
-				WorldGen.digTunnel((WorldGen.genRand.NextFloat(60 , AzureGrottoCenterX - 90)), WorldGen.genRand.NextFloat(11120, 11600), WorldGen.genRand.NextFloat(-1, 1), WorldGen.genRand.NextFloat(0, 1), WorldGen.genRand.Next(27, 72), WorldGen.genRand.Next(3, 7));
+				WorldGen.digTunnel((WorldGen.genRand.NextFloat(60, AzureGrottoCenterX - 90)), WorldGen.genRand.NextFloat(11120, 11600), WorldGen.genRand.NextFloat(-1, 1), WorldGen.genRand.NextFloat(0, 1), WorldGen.genRand.Next(27, 72), WorldGen.genRand.Next(3, 7));
 			}
 			for (int x = 0; x < 30; x++)
 			{
@@ -376,7 +392,7 @@ public class YggdrasilTownGeneration
 				Tile tileUp = SafeGetTile(x, y - 1);
 				if (tile.LiquidAmount < tileUp.LiquidAmount)
 				{
-					for(int y1 = 0;y1 < 8;y1++)
+					for (int y1 = 0; y1 < 8; y1++)
 					{
 						Tile newTile = SafeGetTile(x, y + y1);
 						newTile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
@@ -385,170 +401,348 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
-		if (AzureGrottoCenterX > 600)
+		int mineLeft = AzureGrottoCenterX + 90;
+		int mineRight = 1140;
+		if (AzureGrottoCenterX < 600)
 		{
-			for (int x = AzureGrottoCenterX + 90; x < 1140; x++)
+			mineLeft = 60;
+			mineRight = AzureGrottoCenterX - 90;
+		}
+		for (int x = mineLeft; x < mineRight; x++)
+		{
+			for (int y = 11000; y < 11680; y++)
 			{
-				for (int y = 11000; y < 11680; y++)
+				Tile tile = SafeGetTile(x, y);
+				Tile tileUp = SafeGetTile(x, y - 1);
+				Tile tileUp1 = SafeGetTile(x - 1, y - 1);
+				Tile tileUp2 = SafeGetTile(x - 2, y - 1);
+				Tile tileUp3 = SafeGetTile(x - 3, y - 1);
+				Tile tileUp4 = SafeGetTile(x - 4, y - 1);
+				Tile tileLeft1 = SafeGetTile(x - 1, y);
+				Tile tileLeft2 = SafeGetTile(x - 2, y);
+				Tile tileLeft3 = SafeGetTile(x - 3, y);
+				Tile tileLeft4 = SafeGetTile(x - 4, y);
+				if (tile.LiquidAmount > 0 || tileUp.LiquidAmount > 0 || tileUp1.LiquidAmount > 0 || tileUp2.LiquidAmount > 0 || tileUp3.LiquidAmount > 0 || tileUp4.LiquidAmount > 0 || tileLeft1.LiquidAmount > 0 || tileLeft1.LiquidAmount > 0 || tileLeft2.LiquidAmount > 0 || tileLeft3.LiquidAmount > 0 || tileLeft4.LiquidAmount > 0)
 				{
-					Tile tile = SafeGetTile(x, y);
-					Tile tileUp = SafeGetTile(x, y - 1);
-					Tile tileUp1 = SafeGetTile(x - 1, y - 1);
-					Tile tileUp2 = SafeGetTile(x - 2, y - 1);
-					Tile tileUp3 = SafeGetTile(x - 3, y - 1);
-					Tile tileUp4 = SafeGetTile(x - 4, y - 1);
-					Tile tileLeft1 = SafeGetTile(x - 1, y);
-					Tile tileLeft2 = SafeGetTile(x - 2, y);
-					Tile tileLeft3 = SafeGetTile(x - 3, y);
-					Tile tileLeft4 = SafeGetTile(x - 4, y);
-					if(tile.LiquidAmount > 0 || tileUp.LiquidAmount > 0 || tileUp1.LiquidAmount > 0 || tileUp2.LiquidAmount > 0 || tileUp3.LiquidAmount > 0 || tileUp4.LiquidAmount > 0 || tileLeft1.LiquidAmount > 0 || tileLeft1.LiquidAmount > 0 || tileLeft2.LiquidAmount > 0 || tileLeft3.LiquidAmount > 0 || tileLeft4.LiquidAmount > 0)
+					continue;
+				}
+				if (tileLeft1.HasTile && tileLeft2.HasTile && tileLeft3.HasTile && tileLeft4.HasTile && tile.HasTile && !tileUp.HasTile && !tileUp4.HasTile)
+				{
+					if (tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft3.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft4.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
 					{
-						continue;
-					}
-					if (tileLeft1.HasTile && tileLeft2.HasTile && tileLeft3.HasTile && tileLeft4.HasTile && tile.HasTile && !tileUp.HasTile && !tileUp4.HasTile)
-					{
-						if(tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft3.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft4.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
+						if (WorldGen.genRand.NextBool(3))
 						{
-							if (WorldGen.genRand.NextBool(3))
-							{
-								PlaceLargeCyanVineOre(x - 4, y - 3);
-							}
+							PlaceLargeCyanVineOre(x - 4, y - 3);
 						}
 					}
-					if (tileLeft1.HasTile && tileLeft2.HasTile && tile.HasTile && !tileUp2.HasTile)
+				}
+				if (tileLeft1.HasTile && tileLeft2.HasTile && tile.HasTile && !tileUp2.HasTile)
+				{
+					if (tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
 					{
-						if (tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
+						if (WorldGen.genRand.NextBool(12))
 						{
-							if (WorldGen.genRand.NextBool(12))
-							{
-								PlaceMiddleCyanVineOre(x - 2, y - 2);
-							}
+							PlaceMiddleCyanVineOre(x - 2, y - 2);
 						}
 					}
-					if (tileLeft1.HasTile && tileLeft2.HasTile && tile.HasTile && !tileUp1.HasTile)
+				}
+				if (tileLeft1.HasTile && tileLeft2.HasTile && tile.HasTile && !tileUp1.HasTile)
+				{
+					if (tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
 					{
-						if (tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
+						if (WorldGen.genRand.NextBool(12))
 						{
-							if (WorldGen.genRand.NextBool(12))
-							{
-								PlaceSmallCyanVineOre(x - 2, y - 2);
-							}
+							PlaceSmallCyanVineOre(x - 2, y - 2);
 						}
 					}
-					if (!tileLeft1.HasTile && tileUp.HasTile && tileUp1.HasTile && tileUp2.HasTile)
+				}
+				if (!tileLeft1.HasTile && tileUp.HasTile && tileUp1.HasTile && tileUp2.HasTile)
+				{
+					if (tileUp1.TileType == ModContent.TileType<StoneScaleWood>() && tileUp2.TileType == ModContent.TileType<StoneScaleWood>() && tileUp.TileType == ModContent.TileType<StoneScaleWood>())
 					{
-						if (tileUp1.TileType == ModContent.TileType<StoneScaleWood>() && tileUp2.TileType == ModContent.TileType<StoneScaleWood>() && tileUp.TileType == ModContent.TileType<StoneScaleWood>())
+						if (WorldGen.genRand.NextBool(6))
 						{
-							if (WorldGen.genRand.NextBool(6))
-							{
-								PlaceSmallUpCyanVineOre(x - 2, y);
-							}
+							PlaceSmallUpCyanVineOre(x - 2, y);
 						}
 					}
-					if (!tile.HasTile && !tileLeft4.HasTile && tileUp.HasTile && tileUp1.HasTile && tileUp2.HasTile && tileUp3.HasTile && tileUp4.HasTile)
+				}
+				if (!tile.HasTile && !tileLeft4.HasTile && tileUp.HasTile && tileUp1.HasTile && tileUp2.HasTile && tileUp3.HasTile && tileUp4.HasTile)
+				{
+					if (tileUp1.TileType == ModContent.TileType<StoneScaleWood>() && tileUp2.TileType == ModContent.TileType<StoneScaleWood>() && tileUp.TileType == ModContent.TileType<StoneScaleWood>())
 					{
-						if (tileUp1.TileType == ModContent.TileType<StoneScaleWood>() && tileUp2.TileType == ModContent.TileType<StoneScaleWood>() && tileUp.TileType == ModContent.TileType<StoneScaleWood>())
+						if (WorldGen.genRand.NextBool(3))
 						{
-							if (WorldGen.genRand.NextBool(3))
-							{
-								PlaceLargeUpCyanVineOre(x - 4, y);
-							}
+							PlaceLargeUpCyanVineOre(x - 4, y);
 						}
 					}
 				}
 			}
 		}
-		else
-		{
-			for (int x = 60; x < AzureGrottoCenterX - 90; x++)
-			{
-				for (int y = 11000; y < 11680; y++)
-				{
-					Tile tile = SafeGetTile(x, y);
-					Tile tileUp = SafeGetTile(x, y - 1);
-					Tile tileUp1 = SafeGetTile(x - 1, y - 1);
-					Tile tileUp2 = SafeGetTile(x - 2, y - 1);
-					Tile tileUp3 = SafeGetTile(x - 3, y - 1);
-					Tile tileUp4 = SafeGetTile(x - 4, y - 1);
-					Tile tileLeft1 = SafeGetTile(x - 1, y);
-					Tile tileLeft2 = SafeGetTile(x - 2, y);
-					Tile tileLeft3 = SafeGetTile(x - 3, y);
-					Tile tileLeft4 = SafeGetTile(x - 4, y);
-					if (tile.LiquidAmount > 0 || tileUp.LiquidAmount > 0 || tileUp1.LiquidAmount > 0 || tileUp2.LiquidAmount > 0 || tileUp3.LiquidAmount > 0 || tileUp4.LiquidAmount > 0 || tileLeft1.LiquidAmount > 0 || tileLeft1.LiquidAmount > 0 || tileLeft2.LiquidAmount > 0 || tileLeft3.LiquidAmount > 0 || tileLeft4.LiquidAmount > 0)
-					{
-						continue;
-					}
-					if (tileLeft1.HasTile && tileLeft2.HasTile && tileLeft3.HasTile && tileLeft4.HasTile && tile.HasTile && !tileUp.HasTile && !tileUp4.HasTile)
-					{
-						if (tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft3.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft4.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
-						{
-							if (WorldGen.genRand.NextBool(3))
-							{
-								PlaceLargeCyanVineOre(x - 4, y - 3);
-							}
-						}
-					}
-					if (tileLeft1.HasTile && tileLeft2.HasTile && tile.HasTile && !tileUp2.HasTile)
-					{
-						if (tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
-						{
-							if (WorldGen.genRand.NextBool(12))
-							{
-								PlaceMiddleCyanVineOre(x - 2, y - 2);
-							}
-						}
-					}
-					if (tileLeft1.HasTile && tileLeft2.HasTile && tile.HasTile && !tileUp1.HasTile)
-					{
-						if (tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
-						{
-							if (WorldGen.genRand.NextBool(12))
-							{
-								PlaceSmallCyanVineOre(x - 2, y - 2);
-							}
-						}
-					}
-					if (!tileLeft1.HasTile && tileUp.HasTile && tileUp1.HasTile && tileUp2.HasTile)
-					{
-						if (tileUp1.TileType == ModContent.TileType<StoneScaleWood>() && tileUp2.TileType == ModContent.TileType<StoneScaleWood>() && tileUp.TileType == ModContent.TileType<StoneScaleWood>())
-						{
-							if (WorldGen.genRand.NextBool(6))
-							{
-								PlaceSmallUpCyanVineOre(x - 2, y);
-							}
-						}
-					}
-					if (!tile.HasTile && !tileLeft4.HasTile && tileUp.HasTile && tileUp1.HasTile && tileUp2.HasTile && tileUp3.HasTile && tileUp4.HasTile)
-					{
-						if (tileUp1.TileType == ModContent.TileType<StoneScaleWood>() && tileUp2.TileType == ModContent.TileType<StoneScaleWood>() && tileUp.TileType == ModContent.TileType<StoneScaleWood>())
-						{
-							if (WorldGen.genRand.NextBool(3))
-							{
-								PlaceLargeUpCyanVineOre(x - 4, y);
-							}
-						}
-					}
-				}
-			}
-		}
+
 		for (int x = 60; x < 1140; x++)
 		{
 			for (int y = 11000; y < 12000; y++)
 			{
-				if(WorldGen.genRand.NextBool(1500))
+				if (WorldGen.genRand.NextBool(1500))
 				{
 					Tile tile = SafeGetTile(x, y);
 					Tile tileUp = SafeGetTile(x, y - 1);
 					Tile tileDown = SafeGetTile(x, y + 1);
 					Tile tileLeft = SafeGetTile(x - 1, y);
 					Tile tileRight = SafeGetTile(x + 1, y);
-					if(tile.HasTile && tile.TileType == ModContent.TileType<StoneScaleWood>())
+					if (tile.HasTile && tile.TileType == ModContent.TileType<StoneScaleWood>())
 					{
-						if(tileUp.LiquidAmount <= 0 && tileDown.LiquidAmount <= 0 && tileLeft.LiquidAmount <= 0 && tileRight.LiquidAmount <= 0)
+						if (tileUp.LiquidAmount <= 0 && tileDown.LiquidAmount <= 0 && tileLeft.LiquidAmount <= 0 && tileRight.LiquidAmount <= 0)
 						{
 							WorldGen.TileRunner(x, y, WorldGen.genRand.NextFloat(2f, 6f), WorldGen.genRand.Next(4, 18), ModContent.TileType<CyanVineStone>());
 						}
 					}
+				}
+			}
+		}
+	}
+	/// <summary>
+	/// 下天穹镇
+	/// </summary>
+	public static void BuildTownBelow()
+	{
+		for (int y = 11140; y < 11470; y++)
+		{
+			int randX = WorldGen.genRand.Next(AzureGrottoCenterX + 60, 1050);
+			if (AzureGrottoCenterX > 600)
+			{
+				randX = WorldGen.genRand.Next(150, AzureGrottoCenterX - 60);
+			}
+			int maxLeft = -90;
+			int maxRight = 90;
+			for (int x0 = 0; x0 < 90; x0++)
+			{
+				Tile tile = SafeGetTile(x0 + randX, y);
+				if (tile.HasTile || tile.LiquidAmount > 0)
+				{
+					maxRight = x0;
+					break;
+				}
+			}
+			for (int x0 = 0; x0 > -90; x0--)
+			{
+				Tile tile = SafeGetTile(x0 + randX, y);
+				if (tile.HasTile || tile.LiquidAmount > 0)
+				{
+					maxLeft = x0;
+					break;
+				}
+			}
+			if (maxLeft >= -5 || maxRight <= 5)
+			{
+				continue;
+			}
+			else
+			{
+				if (!WorldGen.genRand.NextBool(6))
+				{
+					maxLeft = WorldGen.genRand.Next(maxLeft, 0);
+				}
+				if (!WorldGen.genRand.NextBool(6))
+				{
+					maxRight = WorldGen.genRand.Next(0, maxRight);
+				}
+				for (int checkX = maxLeft; checkX < maxRight; checkX++)
+				{
+					for (int checkY = 8; checkY > -20; checkY--)
+					{
+						Tile tile = SafeGetTile(checkX + randX, checkY + y);
+						if ((tile.HasTile && tile.TileType == TileID.GrayBrick) || (tile.LiquidAmount > 0 && Math.Abs(checkY) < 4))
+						{
+							if (checkX < 0)
+							{
+								maxLeft = checkX + 12;
+								break;
+							}
+							if (checkX > 0)
+							{
+								maxRight = checkX - 12;
+								break;
+							}
+						}
+					}
+				}
+				if (maxRight - maxLeft < 10)
+				{
+					continue;
+				}
+				if (maxLeft >= -5 || maxRight <= 5)
+				{
+					continue;
+				}
+				CreatStreet(maxLeft + randX, y, maxRight + randX, y + 2);
+				if (WorldGen.genRand.NextBool(3))
+				{
+					y -= 2;
+				}
+				else
+				{
+					y += WorldGen.genRand.Next(8, 11);
+				}
+			}
+		}
+	}
+	/// <summary>
+	/// 上天穹镇
+	/// </summary>
+	public static void BuildTownUpper()
+	{
+		for (int y = 10800; y < 11100; y++)
+		{
+			int randX = WorldGen.genRand.Next(150, 1050);
+			int maxLeft = -90;
+			int maxRight = 90;
+			for (int x0 = 0; x0 < 90; x0++)
+			{
+				Tile tile = SafeGetTile(x0 + randX, y);
+				if (tile.HasTile || tile.LiquidAmount > 0)
+				{
+					maxRight = x0;
+					break;
+				}
+			}
+			for (int x0 = 0; x0 > -90; x0--)
+			{
+				Tile tile = SafeGetTile(x0 + randX, y);
+				if (tile.HasTile || tile.LiquidAmount > 0)
+				{
+					maxLeft = x0;
+					break;
+				}
+			}
+			if (maxLeft >= -5 || maxRight <= 5)
+			{
+				continue;
+			}
+			else
+			{
+				if (!WorldGen.genRand.NextBool(6))
+				{
+					maxLeft = WorldGen.genRand.Next(maxLeft, 0);
+				}
+				if (!WorldGen.genRand.NextBool(6))
+				{
+					maxRight = WorldGen.genRand.Next(0, maxRight);
+				}
+				for (int checkX = maxLeft; checkX < maxRight; checkX++)
+				{
+					for (int checkY = 8; checkY > -20; checkY--)
+					{
+						Tile tile = SafeGetTile(checkX + randX, checkY + y);
+						if ((tile.HasTile && tile.TileType == TileID.GrayBrick) || (tile.LiquidAmount > 0 && Math.Abs(checkY) < 4))
+						{
+							if (checkX < 0)
+							{
+								maxLeft = checkX + 12;
+								break;
+							}
+							if (checkX > 0)
+							{
+								maxRight = checkX - 12;
+								break;
+							}
+						}
+					}
+				}
+				if (maxRight - maxLeft < 10)
+				{
+					continue;
+				}
+				if (maxLeft >= -5 || maxRight <= 5)
+				{
+					continue;
+				}
+				CreatStreet(maxLeft + randX, y, maxRight + randX, y + 2);
+				if (WorldGen.genRand.NextBool(3))
+				{
+					y -= 2;
+				}
+				else
+				{
+					y += WorldGen.genRand.Next(8, 11);
+				}
+			}
+		}
+	}
+	/// <summary>
+	/// 隐天光之障
+	/// </summary>
+	public static void BuildDuskfallBarrier()
+	{
+
+	}
+
+
+
+
+
+	/// <summary>
+	/// 造一条街
+	/// </summary>
+	/// <param name="startX"></param>
+	/// <param name="startY"></param>
+	/// <param name="direction"></param>
+	/// <param name="step"></param>
+	/// <param name="thick"></param>
+	public static void CreatStreet(int startX, int startY, int endX, int endY)
+	{
+		PlaceRectangleAreaOfBlock(startX, startY, endX, endY, TileID.GrayBrick);
+		int x = startX + 1;
+		int y = startY;
+		while (x + 1 < endX)
+		{
+			float totalRare = 0;
+			foreach(YggdrasilTownStreetElement element in ConstructorsSheet)
+			{
+				if(element.Width <= endX - (x + 1))
+				{
+					if (element.Cooling == 0)
+					{
+						totalRare += 1 / element.Rare;
+					}
+				}		
+			}
+			if(totalRare == 0)
+			{
+				foreach (YggdrasilTownStreetElement element in ConstructorsSheet)
+				{
+					if (element.Cooling > 0)
+					{
+						element.Update();
+					}
+				}
+				x++;
+				continue;
+			}
+			float buildIndex = WorldGen.genRand.NextFloat(totalRare);
+			float rareIndex = 0;
+			int width = 0;
+			foreach (YggdrasilTownStreetElement element in ConstructorsSheet)
+			{
+				if (element.Width <= endX - (x + 1))
+				{
+					if (element.Cooling == 0)
+					{
+						rareIndex += 1 / element.Rare;
+					}
+					if (rareIndex - 1 / element.Rare < buildIndex && rareIndex >= buildIndex)
+					{
+						element.Build(ref x, y);
+						width = element.Width;
+						break;
+					}
+				}
+			}
+			foreach (YggdrasilTownStreetElement element in ConstructorsSheet)
+			{
+				if (element.Cooling == 0)
+				{
+					element.Update(width);
 				}
 			}
 		}

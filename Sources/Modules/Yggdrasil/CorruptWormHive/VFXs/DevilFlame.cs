@@ -1,8 +1,3 @@
-using Everglow.Commons.Enums;
-using Everglow.Commons.Vertex;
-using Everglow.Commons.VFX;
-using Everglow.Commons.VFX.Pipelines;
-using Everglow.Yggdrasil.Common;
 using ReLogic.Content;
 
 namespace Everglow.Yggdrasil.CorruptWormHive.VFXs;
