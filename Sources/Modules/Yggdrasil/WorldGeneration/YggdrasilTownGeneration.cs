@@ -26,7 +26,7 @@ public class YggdrasilTownGeneration
 		Main.statusText = "Digging The Tangled Submine...";
 		BuildTangledSubmine();
 		Main.statusText = "Another Side, The Fossilized Mine Road...";
-		FossilizedMineRoad();
+		BuildFossilizedMineRoad();
 		Main.statusText = "Constructing The Yggdrasil Town Below...";
 		BuildTownBelow();
 		Main.statusText = "Constructing The Yggdrasil Town Upper...";
@@ -564,7 +564,7 @@ public class YggdrasilTownGeneration
 	/// <summary>
 	/// 石化古道
 	/// </summary>
-	public static void FossilizedMineRoad()
+	public static void BuildFossilizedMineRoad()
 	{
 		int deltaX = 120;
 		if (AzureGrottoCenterX > 600)
