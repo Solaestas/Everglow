@@ -266,3 +266,21 @@ public class TwoStoriedFolkHouse : YggdrasilTownStreetElement
 		base.Build(ref x, y);
 	}
 }
+/// <summary>
+/// 铁匠铺
+/// </summary>
+public class BlacksmithForge: YggdrasilTownStreetElement
+{
+	public override int Width => 23;
+	public override int Height => 13;
+	public override int MinimumDistance => 27;
+	public override float Rare => 12.0f;
+	public override void Build(ref int x, int y)
+	{
+		if (Cooling > 0)
+		{
+			return;
+		}
+		base.Build(ref x, y);
+	}
+}

@@ -1,7 +1,9 @@
 using Everglow.Commons.Modules;
-using Everglow.Commons.VFX;
-using Everglow.Yggdrasil.Common;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
+using SubworldLibrary;
 using Terraria.Graphics.Effects;
+using Terraria.Map;
 
 namespace Everglow.Yggdrasil;
 
@@ -13,15 +15,78 @@ internal class YggdrasilModule : EverglowModule
 
 	private Effect ScreenOcclusion;
 
+
 	public override void Load()
 	{
 		if (!Main.dedServ)
 		{
 			On_FilterManager.EndCapture += FilterManager_EndCapture;
+			On_WorldGen.oceanDepths += WorldGen_oceanDepths;
 			ScreenOcclusion = ModContent.Request<Effect>("Everglow/Yggdrasil/Effects/Occlusion", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			IL_Main.DrawToMap += IL_Main_DrawToMap;
+			IL_Main.DrawToMap_Section += IL_Main_DrawToMap_Section;
 		}
 	}
-
+	private bool WorldGen_oceanDepths(On_WorldGen.orig_oceanDepths orig, int x, int y)
+	{
+		if (SubworldSystem.IsActive<YggdrasilWorld>())
+		{
+			return false;
+		}
+		return orig(x, y);
+	}
+	private void IL_Main_DrawToMap_Section(ILContext il)
+	{
+		ILCursor c = new(il);
+		if (!c.TryGotoNext(MoveType.After, i => i.MatchCall(typeof(MapHelper), nameof(MapHelper.GetMapTileXnaColor))))
+		{
+			throw new OperationCanceledException("fail to il drawtomap_section");
+		}
+		c.Emit(OpCodes.Ldloc, 12);
+		c.Emit(OpCodes.Ldloc, 11);
+		c.EmitDelegate(ILHook_DrawToMap_Section_ChangeMapTargetColor);
+	}
+	static Color ILHook_DrawToMap_Section_ChangeMapTargetColor(Color color, int x, int y)
+	{
+		ILHook_DrawToMap_ChangeMapTargetColor(ref color, x, y);
+		return color;
+	}
+	private void IL_Main_DrawToMap(ILContext il)
+	{
+		ILCursor c = new(il);
+		if (!c.TryGotoNext(MoveType.After, i => i.MatchStloc(23)))
+		{
+			throw new OperationCanceledException("fail to il drawtomap");
+		}
+		c.Emit(OpCodes.Ldloca, 23);
+		c.Emit(OpCodes.Ldloc, 16);
+		c.Emit(OpCodes.Ldloc, 17);
+		c.EmitDelegate(ILHook_DrawToMap_ChangeMapTargetColor);
+	}
+	static void ILHook_DrawToMap_ChangeMapTargetColor(ref Color color, int x, int y)
+	{
+		if(!SubworldSystem.IsActive<YggdrasilWorld>())
+		{
+			return;
+		}
+		//修改小地图绘制颜色在这里写
+		Tile tile = Main.tile[x, y];
+		if (tile.HasTile || tile.wall > 0 || tile.LiquidAmount > 0)
+		{
+			return;
+		}
+		if(y > 10600)
+		{
+			color = new Color(0, 0, 0);
+			return;
+		}
+		else if(y <= 10600 && y > 9600)
+		{
+			color = new Color(73, 99, 62);
+			return;
+		}
+		color = Color.Lerp(Color.Green, Color.Red, (float)y / Main.maxTilesY);
+	}
 	private void FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
 	{
 		// 直接从RT池子里取
