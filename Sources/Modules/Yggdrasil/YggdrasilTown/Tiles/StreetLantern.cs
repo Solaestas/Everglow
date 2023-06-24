@@ -1,8 +1,7 @@
-using Terraria.ObjectData;
-using Terraria.Enums;
-using Terraria.DataStructures;
 using Everglow.Yggdrasil.Common.Utils;
-using Everglow.Yggdrasil.Common;
+using Terraria.DataStructures;
+using Terraria.Enums;
+using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
@@ -112,13 +111,13 @@ public class StreetLantern : ModTile
 			float OffsetX = 4;
 			if (tile.TileFrameY != 0)
 				OffsetX = 14;
-			tileSpin.DrawRotatedTile(spriteBatch,i, j, tex, new Rectangle(tile.TileFrameX / 48 * 36, tile.TileFrameY / 108 * 32, 36, 30), new Vector2(18, 0), OffsetX, 8);
-			
+			tileSpin.DrawRotatedTile(spriteBatch, i, j, tex, new Rectangle(tile.TileFrameX / 48 * 36, tile.TileFrameY / 108 * 32, 36, 30), new Vector2(18, 0), OffsetX, 8);
+
 			if (tile.TileFrameX == 0)
 			{
 				float rot = TileSpin.TileRotation[(i, j)].Y;
 				Main.spriteBatch.Draw(texGlow, new Vector2(i * 16 + OffsetX, j * 16 + 8) + zero - Main.screenPosition + new Vector2(0, 14).RotatedBy(rot), null, new Color(255, 255, 255, 0), rot * 0.16f, texGlow.Size() / 2f, 1f, SpriteEffects.None, 0f);
-				tileSpin.DrawRotatedTile(spriteBatch,i, j, texBone, new Rectangle(tile.TileFrameX / 48 * 36, tile.TileFrameY / 108 * 32, 36, 30), new Vector2(18, 0), OffsetX, 8);
+				tileSpin.DrawRotatedTile(spriteBatch, i, j, texBone, new Rectangle(tile.TileFrameX / 48 * 36, tile.TileFrameY / 108 * 32, 36, 30), new Vector2(18, 0), OffsetX, 8);
 
 				Lighting.AddLight(i, j, 1f, 0.45f, 0.15f);
 				Lighting.AddLight(i, j + 1, 1f, 0.45f, 0.15f);

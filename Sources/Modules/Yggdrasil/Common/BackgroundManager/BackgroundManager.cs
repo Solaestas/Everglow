@@ -49,7 +49,6 @@ public class BackgroundManager
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		if (Main.LocalPlayer.gravDir == -1)
 			projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, 0, Main.screenHeight, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		bgW.Parameters["uTransform"].SetValue(projection);
 		bgW.Parameters["uTime"].SetValue(0.34f);
 		bgW.CurrentTechnique.Passes[0].Apply();

@@ -86,22 +86,21 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// <param name="x1"></param>
 	/// <param name="y1"></param>
 	/// <param name="type"></param>
-	public static void PlaceRectangleAreaOfBlock(int x0, int y0, int x1, int y1, int type)
+	public static void PlaceRectangleAreaOfBlock(int x0, int y0, int x1, int y1, int type, bool smooth = true)
 	{
-		x0 = Math.Clamp(x0, 20, Main.maxTilesX - 20);
-		x1 = Math.Clamp(x1, 20, Main.maxTilesX - 20);
-		y0 = Math.Clamp(y0, 20, Main.maxTilesY - 20);
-		y1 = Math.Clamp(y1, 20, Main.maxTilesY - 20);
 		for (int x = x0; x <= x1; x += 1)
 		{
 			for (int y = y0; y <= y1; y += 1)
 			{
-				Tile tile = Main.tile[x, y];
+				Tile tile = SafeGetTile(x, y);
 				tile.TileType = (ushort)type;
 				tile.HasTile = true;
 			}
 		}
-		SmoothTile(x0, y0, x1, y1);
+		if(smooth)
+		{
+			SmoothTile(x0, y0, x1, y1);
+		}
 	}
 	/// <summary>
 	/// 放置一个矩形区域的墙壁,x0左y0上x1右y1下
@@ -113,16 +112,72 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// <param name="type"></param>
 	public static void PlaceRectangleAreaOfWall(int x0, int y0, int x1, int y1, int type)
 	{
-		x0 = Math.Clamp(x0, 20, Main.maxTilesX - 20);
-		x1 = Math.Clamp(x1, 20, Main.maxTilesX - 20);
-		y0 = Math.Clamp(y0, 20, Main.maxTilesY - 20);
-		y1 = Math.Clamp(y1, 20, Main.maxTilesY - 20);
 		for (int x = x0; x <= x1; x += 1)
 		{
 			for (int y = y0; y <= y1; y += 1)
 			{
-				Tile tile = Main.tile[x, y];
+				Tile tile = SafeGetTile(x, y);
 				tile.wall = (ushort)type;
+			}
+		}
+		SmoothTile(x0, y0, x1, y1);
+	}
+	/// <summary>
+	/// 清除给定区域的一切,x0左y0上x1右y1下
+	/// </summary>
+	/// <param name="x0"></param>
+	/// <param name="y0"></param>
+	/// <param name="x1"></param>
+	/// <param name="y1"></param>
+	/// <param name="type"></param>
+	public static void ClearRectangleArea(int x0, int y0, int x1, int y1)
+	{
+		for (int x = x0; x <= x1; x += 1)
+		{
+			for (int y = y0; y <= y1; y += 1)
+			{
+				Tile tile = SafeGetTile(x, y);
+				tile.ClearEverything();
+			}
+		}
+		SmoothTile(x0, y0, x1, y1);
+	}
+	/// <summary>
+	/// 清除给定区域的物块,x0左y0上x1右y1下
+	/// </summary>
+	/// <param name="x0"></param>
+	/// <param name="y0"></param>
+	/// <param name="x1"></param>
+	/// <param name="y1"></param>
+	/// <param name="type"></param>
+	public static void KillRectangleAreaOfTile(int x0, int y0, int x1, int y1)
+	{
+		for (int x = x0; x <= x1; x += 1)
+		{
+			for (int y = y0; y <= y1; y += 1)
+			{
+				Tile tile = SafeGetTile(x, y);
+				tile.HasTile = false;
+			}
+		}
+		SmoothTile(x0, y0, x1, y1);
+	}
+	/// <summary>
+	/// 清除给定区域的墙壁,x0左y0上x1右y1下
+	/// </summary>
+	/// <param name="x0"></param>
+	/// <param name="y0"></param>
+	/// <param name="x1"></param>
+	/// <param name="y1"></param>
+	/// <param name="type"></param>
+	public static void KillRectangleAreaOfWall(int x0, int y0, int x1, int y1)
+	{
+		for (int x = x0; x <= x1; x += 1)
+		{
+			for (int y = y0; y <= y1; y += 1)
+			{
+				Tile tile = SafeGetTile(x, y);
+				tile.wall = 0;
 			}
 		}
 		SmoothTile(x0, y0, x1, y1);

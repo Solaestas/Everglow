@@ -79,10 +79,10 @@ public class YggdrasilTownBackground : ModSystem
 		var texC3 = ModAsset.YggdrasilTownBackgroundC3.Value;
 		var texBound = ModAsset.KelpCurtainBound.Value;
 
-		BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, true), baseColor, 173400, 200000);
-		BackgroundManager.QuickDrawBG(texC3, GetDrawRect(texClose.Size(), 0.05f, true), baseColor, 173400, 200000, false, false);
-		BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texClose.Size(), 0.10f, true), baseColor, 173400, 200000, false, false);
-		BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texClose.Size(), 0.15f, true), baseColor, 173400, 200000, false, true);
+		BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, Vector2.Zero), baseColor, 173400, 200000);
+		BackgroundManager.QuickDrawBG(texC3, GetDrawRect(texClose.Size(), 0.05f, Vector2.Zero), baseColor, 173400, 200000, false, false);
+		BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texClose.Size(), 0.10f, Vector2.Zero), baseColor, 173400, 200000, false, false);
+		BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texClose.Size(), 0.15f, new Vector2(0, 7200)), baseColor, 173400, 200000, false, true);
 
 		Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
 		Vector2 deltaPos = DCen - BiomeCenter;
@@ -97,10 +97,10 @@ public class YggdrasilTownBackground : ModSystem
 			if (DrawCenter.X >= -60 && DrawCenter.X <= Main.screenWidth + 60)
 				BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.15f, DrawCenter, 20f, 750f, baseColor * 0.06f, 173400, 200000, texC1.Size(), false, false);
 		}
-		BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f, true), baseColor, 173400, 200000);
+		BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f, Vector2.Zero), baseColor, 173400, 200000);
 
 		BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.35f, new Vector2(-650, -400), 60f, 550f, baseColor * 0.12f, 173400, 200000, texClose.Size());
-		BackgroundManager.QuickDrawBG(texBound, GetDrawRect(texBound.Size(), 1f, true), baseColor, 173280, 173580, false, false);
+		BackgroundManager.QuickDrawBG(texBound, GetDrawRect(texBound.Size(), 1f, Vector2.Zero), baseColor, 173280, 173580, false, false);
 	}
 
 	/// <summary>
@@ -119,24 +119,17 @@ public class YggdrasilTownBackground : ModSystem
 	/// <param name="texSize"></param>
 	/// <param name="MoveStep"></param>
 	/// <returns></returns>
-	public Rectangle GetDrawRect(Vector2 texSize, float MoveStep, bool Correction)
+	public Rectangle GetDrawRect(Vector2 texSize, float moveStep, Vector2 correction = new Vector2())
 	{
 		Vector2 sampleTopleft = Vector2.Zero;
 		Vector2 sampleCenter = sampleTopleft + texSize / 2;
 		var screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
-		Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
-		Vector2 deltaPos = DCen - BiomeCenter;
-		deltaPos *= MoveStep;
-		Vector2 Cor = GetZoomByScreenSize();
+		Vector2 drawCenter = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
+		Vector2 deltaPos = drawCenter - (BiomeCenter + correction);
+		deltaPos *= moveStep;
 		int RX = (int)(sampleCenter.X - screenSize.X / 2f + deltaPos.X);
 		int RY = (int)(sampleCenter.Y - screenSize.Y / 2f + deltaPos.Y);
-		if (Correction)
-		{
-			RX = (int)(sampleCenter.X - screenSize.X / 2f / Cor.X + deltaPos.X);
-			RY = (int)(sampleCenter.Y - screenSize.Y / 2f / Cor.Y + deltaPos.Y);
-			screenSize.X /= Cor.X;
-			screenSize.Y /= Cor.Y;
-		}
+
 		return new Rectangle(RX, RY, (int)screenSize.X, (int)screenSize.Y);
 	}
 

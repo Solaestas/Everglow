@@ -18,16 +18,21 @@ public class YggdrasilTownGeneration
 		PlaceRectangleAreaOfWall(0, 11700, 1200, 12000, ModContent.WallType<StoneDragonScaleWoodWall>());
 		Main.statusText = "Filling Midnight Bayou With Mud...";
 		BuildMidnightBayou();
-		PlaceRectangleAreaOfBlock(540, 11633, 660, 11635, TileID.GrayBrick);
-		PlaceFrameImportantTiles(595, 11621, 16, 12, ModContent.TileType<OriginPylon>());
+
 		Main.statusText = "Carving The Heavenly Portal...";
 		BuildHeavenlyPortal();
 		Main.statusText = "Flooding The Azure Grotto...";
 		BuildAzureGrotto();
 		Main.statusText = "Digging The Tangled Submine...";
 		BuildTangledSubmine();
+		Main.statusText = "Another Side, The Fossilized Mine Road...";
+		FossilizedMineRoad();
 		Main.statusText = "Constructing The Yggdrasil Town Below...";
 		BuildTownBelow();
+		Main.statusText = "Constructing The Yggdrasil Town Upper...";
+		BuildTownUpper();
+		Main.statusText = "The Barrier To 2rd Floor Of Yggdrasil...";
+		BuildDuskfallBarrier();
 	}
 	public static int[,] PerlinPixelR = new int[512, 512];
 	public static int[,] PerlinPixelG = new int[512, 512];
@@ -131,6 +136,61 @@ public class YggdrasilTownGeneration
 						tile.TileType = (ushort)ModContent.TileType<DarkMud>();
 						tile.HasTile = true;
 					}
+				}
+			}
+		}
+		int deltaX = 40;
+		if(AzureGrottoCenterX > 600)
+		{
+			deltaX = -40;
+		}
+		int leftBound = WorldGen.genRand.Next(380, 400) + deltaX;
+		int rightBound = WorldGen.genRand.Next(800, 820) + deltaX;
+		int startY = 11632;
+		PlaceRectangleAreaOfBlock(leftBound, startY + 1, rightBound, startY + 3, TileID.GrayBrick);
+		PlaceFrameImportantTiles(595, startY - 11, 16, 12, ModContent.TileType<OriginPylon>());
+		for(int x = leftBound + 5; x < rightBound - 5; x++)
+		{
+			Tile tile = SafeGetTile(x, startY);
+			Tile tileLeft = SafeGetTile(x - 1, startY);
+			Tile tileRight = SafeGetTile(x + 1, startY);
+			tile.wall = WallID.IronFence;
+			if(x % 12 == 0)
+			{
+				if(!tile.HasTile && !tileLeft.HasTile && !tileRight.HasTile)
+				{
+					for(int y = 1;y < 7;y++)
+					{
+						Tile tile2 = SafeGetTile(x, startY - y);
+						tile2.wall = WallID.IronFence;
+						if(y == 6)
+						{
+							Tile tile2Left = SafeGetTile(x + 1, startY - y);
+							Tile tile2Right = SafeGetTile(x - 1, startY - y);
+							tile2.TileType = TileID.Platforms;
+							tile2.TileFrameY = 162;
+							tile2.HasTile = true;
+							tile2Left.TileType = TileID.Platforms;
+							tile2Left.TileFrameY = 162;
+							tile2Left.HasTile = true;
+							tile2Right.TileType = TileID.Platforms;
+							tile2Right.TileFrameY = 162;
+							tile2Right.HasTile = true;
+
+							PlaceFrameImportantTiles(x - 1, startY - y + 1, 1, 2, TileID.HangingLanterns, 0, 72);
+							PlaceFrameImportantTiles(x + 1, startY - y + 1, 1, 2, TileID.HangingLanterns, 0, 72);
+						}
+					}
+				}
+			}
+			if (x % 40 == 0 && x > leftBound + 20 && x < rightBound - 20)
+			{
+				PlaceFrameImportantTiles(x - 6, 11636, 13, 8, ModContent.TileType<PierWithSlabsTop>());
+				int y = 11644;
+				while(!SafeGetTile(x, y).HasTile)
+				{
+					PlaceFrameImportantTiles(x - 1, y, 3, 3, ModContent.TileType<PierWithSlabs>());
+					y += 3;
 				}
 			}
 		}
@@ -239,7 +299,7 @@ public class YggdrasilTownGeneration
 		}
 	}
 	/// <summary>
-	/// 还没想好叫什么湖
+	/// 靛琉璃海
 	/// </summary>
 	public static void BuildAzureGrotto()
 	{
@@ -502,6 +562,100 @@ public class YggdrasilTownGeneration
 		}
 	}
 	/// <summary>
+	/// 石化古道
+	/// </summary>
+	public static void FossilizedMineRoad()
+	{
+		int deltaX = 120;
+		if (AzureGrottoCenterX > 600)
+		{
+			deltaX = -120;
+		}
+		int step = Math.Sign(deltaX);
+		int startX = 600 + deltaX;
+		int startY = 11632;
+		while(SafeGetTile(startX, startY + 1).TileType == TileID.GrayBrick)
+		{
+			startX += step;
+		}
+		int lengthX = WorldGen.genRand.Next(140, 152);
+		for (int x0 = 0; x0 < lengthX; x0++)
+		{
+			KillRectangleAreaOfTile(x0 * step + startX, startY - 17, x0 * step + startX, startY);
+			PlaceRectangleAreaOfBlock(x0 * step + startX, startY + 1, x0 * step + startX, startY + 3, TileID.GrayBrick, false);
+		}
+		int continueEmpty = 0;
+		float radius = 5f;
+		Vector2 velocity = new Vector2(step, 0);
+		Vector2 position = new Vector2(startX + lengthX, startY - radius);
+		int times = 0;
+		int coordY = WorldGen.genRand.Next(512);
+		int rotatedTimes = 0;
+		int noRotatedTimes = 0;
+		while (continueEmpty < 15)
+		{
+			times++;
+			velocity = Vector2.Normalize(velocity);
+			position += velocity;
+			int x = (int)position.X;
+			int y = (int)position.Y;
+			for (int x0 = -10; x0 <= 10; x0++)
+			{
+				for (int y0 = -10; y0 <= 10; y0++)
+				{
+					if (new Vector2(x0, y0).Length() < radius)
+					{
+						Tile tile = SafeGetTile(x0 + x, y0 + y);
+						tile.HasTile = false;
+					}
+				}
+			}
+			if (rotatedTimes > 0)
+			{
+				rotatedTimes--;
+				velocity = velocity.RotatedBy(step * Math.PI / 40d);
+				noRotatedTimes = 0;
+			}
+			else
+			{
+				rotatedTimes = 0;
+				Vector2 probePos = position + velocity * 50;
+				if ((!SafeGetTile((int)probePos.X, (int)(probePos.Y)).HasTile && position.Y > 11451) || probePos.X > 1200 || probePos.X < 0)
+				{
+					rotatedTimes = 40;
+					step *= -1;
+					continue;
+				}
+				velocity = velocity.RotatedBy((PerlinPixelG[times % 512, coordY] - 127.5) * 0.0002);
+				velocity.Y -= 0.015f;
+				noRotatedTimes++;
+				if(noRotatedTimes > 80)
+				{
+					if(WorldGen.genRand.NextBool(60))
+					{
+						rotatedTimes = 40;
+						step *= -1;
+					}
+				}
+				velocity.X *= 1.12f;
+			}
+			Vector2 probePosII = position + velocity * 5;
+			if (SafeGetTile((int)probePosII.X, (int)(probePosII.Y)).TileType != ModContent.TileType<StoneScaleWood>() && y < 11451)
+			{
+				continueEmpty++;
+			}
+			else
+			{
+				continueEmpty = 0;
+			}
+			if(times > 8000)
+			{
+				break;
+			}
+		}
+
+	}
+	/// <summary>
 	/// 下天穹镇
 	/// </summary>
 	public static void BuildTownBelow()
@@ -518,7 +672,7 @@ public class YggdrasilTownGeneration
 			for (int x0 = 0; x0 < 90; x0++)
 			{
 				Tile tile = SafeGetTile(x0 + randX, y);
-				if (tile.HasTile || tile.LiquidAmount > 0)
+				if (tile.HasTile || tile.LiquidAmount > 0 || tile.wall > 0)
 				{
 					maxRight = x0;
 					break;
@@ -527,7 +681,7 @@ public class YggdrasilTownGeneration
 			for (int x0 = 0; x0 > -90; x0--)
 			{
 				Tile tile = SafeGetTile(x0 + randX, y);
-				if (tile.HasTile || tile.LiquidAmount > 0)
+				if (tile.HasTile || tile.LiquidAmount > 0 || tile.wall > 0)
 				{
 					maxLeft = x0;
 					break;
@@ -595,8 +749,8 @@ public class YggdrasilTownGeneration
 		for (int y = 10800; y < 11100; y++)
 		{
 			int randX = WorldGen.genRand.Next(150, 1050);
-			int maxLeft = -90;
-			int maxRight = 90;
+			int maxLeft = -120;
+			int maxRight = 120;
 			for (int x0 = 0; x0 < 90; x0++)
 			{
 				Tile tile = SafeGetTile(x0 + randX, y);
@@ -670,13 +824,28 @@ public class YggdrasilTownGeneration
 		}
 	}
 	/// <summary>
-	/// 隐天光之障
+	/// 隐天玄壁
 	/// </summary>
 	public static void BuildDuskfallBarrier()
 	{
-
+		int centerY = 10700;
+		int coordX = WorldGen.genRand.Next(512);
+		int coordY = WorldGen.genRand.Next(100, 612);
+		for(int x = 0;x < 1200;x++)
+		{
+			for (int y = -150; y < 150; y++)
+			{
+				float thick = (x - 600) * (x - 600) / 2400f + 30f;
+				thick += PerlinPixelR[(x + coordX) % 512, (y + coordY) % 512] / 25f;
+				if(Math.Abs(y) < thick)
+				{
+					Tile tile = SafeGetTile(x, y + centerY);
+					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+					tile.HasTile = true;
+				}
+			}
+		}
 	}
-
 
 
 
@@ -754,7 +923,7 @@ public class YggdrasilTownGeneration
 	/// <param name="j"></param>
 	public static void PlaceLargeCyanVineOre(int i, int j)
 	{
-		switch (Main.rand.Next(2))
+		switch (WorldGen.genRand.Next(2))
 		{
 			case 0:
 				for (int x = 0; x < 5; x++)
@@ -848,7 +1017,7 @@ public class YggdrasilTownGeneration
 	/// <param name="j"></param>
 	public static void PlaceMiddleCyanVineOre(int i, int j)
 	{
-		switch (Main.rand.Next(4))
+		switch (WorldGen.genRand.Next(4))
 		{
 			case 0:
 				for (int x = 0; x < 3; x++)
@@ -994,7 +1163,7 @@ public class YggdrasilTownGeneration
 	/// <param name="j"></param>
 	public static void PlaceSmallCyanVineOre(int i, int j)
 	{
-		switch (Main.rand.Next(3))
+		switch (WorldGen.genRand.Next(3))
 		{
 			case 0:
 				for (int x = 0; x < 2; x++)
@@ -1104,7 +1273,7 @@ public class YggdrasilTownGeneration
 	/// <param name="j"></param>
 	public static void PlaceSmallUpCyanVineOre(int i, int j)
 	{
-		switch (Main.rand.Next(4))
+		switch (WorldGen.genRand.Next(4))
 		{
 			case 0:
 				{
