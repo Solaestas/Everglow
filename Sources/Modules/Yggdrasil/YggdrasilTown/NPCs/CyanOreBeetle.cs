@@ -46,7 +46,14 @@ public class CyanOreBeetle : ModNPC
 	{
 		NPC.TargetClosest();
 		Player player = Main.player[NPC.target];
-
+		if(NPC.Center.X > Main.maxTilesX * 16 - 320 || NPC.Center.X < 320)
+		{
+			NPC.active = false;
+		}
+		if (NPC.Center.Y > Main.maxTilesY * 16 - 320 || NPC.Center.Y < 320)
+		{
+			NPC.active = false;
+		}
 		if (Main.rand.NextBool(840) || (NPC.Center - player.Center).Length() > 400)
 			NPC.spriteDirection = Math.Sign((player.Center - NPC.Center).X);
 		NPC.localAI[0] += 1;
