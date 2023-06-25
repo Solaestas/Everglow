@@ -1,3 +1,4 @@
+using System.Net;
 using Everglow.Commons.CustomTiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
@@ -825,6 +826,7 @@ public class YggdrasilTownGeneration
 			CreateBoxRoom(x - leftX, randY - firstFloorHeight, x + rightX, randY, TileID.DynastyWood, WallID.Ebonwood);
 		}
 		//堆箱子算法
+		List<int> platformYs = new List<int>();
 		for (int times = 0; times <= 54; times++)
 		{
 			int height = GenRand.Next(7, 12);
@@ -845,7 +847,7 @@ public class YggdrasilTownGeneration
 			}
 			int leftX = GenRand.Next(4, 12);
 			int rightX = GenRand.Next(4, 12);
-			if(!GenRand.NextBool(8))
+			if(!GenRand.NextBool(5))
 			{
 				for (int x1 = 0; x1 <= leftX; x1++)
 				{
@@ -884,8 +886,8 @@ public class YggdrasilTownGeneration
 			{
 				//创建一个平截面
 				height = 2;
-				leftX = GenRand.Next(7, 32);
-				rightX = GenRand.Next(7, 32);
+				leftX = GenRand.Next(17, 45);
+				rightX = GenRand.Next(17, 45);
 				for (int x1 = 0; x1 <= leftX; x1++)
 				{
 					for (int y0 = 0; y0 < height; y0++)
@@ -917,7 +919,28 @@ public class YggdrasilTownGeneration
 					times--;
 					continue;
 				}
+				if (y > randY - 20)
+				{
+					times--;
+					continue;
+				}
+				bool canPlace = true;
+				foreach(int y1 in platformYs)
+				{
+					if(Math.Abs(y - y1) <= 12)
+					{
+						times--;
+						canPlace = false;
+						break;
+					}
+				}
+				if(!canPlace)
+				{
+					times--;
+					continue;
+				}
 				PlaceRectangleAreaOfBlock(x - leftX, y - height, x + rightX, y, TileID.DynastyWood);
+				platformYs.Add(y);
 			}
 		}
 		//随机向上排布
@@ -930,6 +953,11 @@ public class YggdrasilTownGeneration
 
 			int leftX = GenRand.Next(4, 12);
 			int rightX = GenRand.Next(4, 12);
+			if(SafeGetTile(x, y).wall != 0)
+			{
+				times--;
+				continue;
+			}
 			for (int x1 = 0; x1 <= leftX; x1++)
 			{
 				for (int y0 = 0; y0 < height; y0++)
@@ -962,7 +990,7 @@ public class YggdrasilTownGeneration
 				continue;
 			}
 
-			int leftWallPostX = x - leftX + (rightX + leftX) / 3;
+			int leftWallPostX = (int)(x - leftX + (rightX + leftX) / 3f);
 			Tile wallLeft = SafeGetTile(leftWallPostX, y + 1);
 
 			int y1 = 2;
@@ -974,7 +1002,7 @@ public class YggdrasilTownGeneration
 				}
 				y1++;
 			}
-			int rightWallPostX = x - leftX + (rightX + leftX) / 3 * 2;
+			int rightWallPostX = (int)(x - leftX + (rightX + leftX) / 3f * 2f);
 			Tile wallRight = SafeGetTile(rightWallPostX, y + 1);
 			
 			int y2 = 2;
@@ -987,37 +1015,194 @@ public class YggdrasilTownGeneration
 				y2++;
 			}
 
-			if(y1 > 20 || y2 > 20)
+			if(y1 > 20 && y2 > 20)
+			{
+				times--;
+				continue;
+			}
+			if (y1 < 4 && y2 < 4)
+			{
+				times--;
+				continue;
+			}
+			if (y1 < 2 || y2 < 2)
 			{
 				times--;
 				continue;
 			}
 
 			//保障安全之后
-			wallLeft.wall = WallID.Ebonwood;
-			wallRight.wall = WallID.Ebonwood;
+			if(wallLeft.wall == 0)
+			{
+				wallLeft.wall = (ushort)(ModContent.WallType<IronTrackScaffolding>());
+			}
+			if(wallRight.wall == 0)
+			{
+				wallRight.wall = (ushort)(ModContent.WallType<IronTrackScaffolding>());
+			}
 			CreateChineseFolkBox(x - leftX, y - height, x + rightX, y);
 			y1 = 2;
-			while (!SafeGetTile(leftWallPostX, y + y1).HasTile)
+			while (!SafeGetTile(leftWallPostX, y + y1).HasTile && SafeGetTile(leftWallPostX, y + y1).wall == 0)
 			{
-				SafeGetTile(leftWallPostX, y + y1).wall = WallID.Ebonwood;
+				SafeGetTile(leftWallPostX, y + y1).wall = (ushort)ModContent.WallType<IronTrackScaffolding>();
 				if (y1 > 500)
 				{
 					break;
 				}
 				y1++;
 			}
-			y2 = 2;
-			wallRight.wall = WallID.Ebonwood;
 			y1 = 2;
-			while (!SafeGetTile(rightWallPostX, y + y1).HasTile)
+			while (!SafeGetTile(rightWallPostX, y + y1).HasTile && SafeGetTile(rightWallPostX, y + y1).wall == 0)
 			{
-				SafeGetTile(rightWallPostX, y + y1).wall = WallID.Ebonwood;
+				SafeGetTile(rightWallPostX, y + y1).wall = (ushort)ModContent.WallType<IronTrackScaffolding>();
 				if (y1 > 500)
 				{
 					break;
 				}
 				y1++;
+			}
+		}
+		//盖上瓦片
+		for(int x0 = - 10;x0 < randLength + 30;x0++)
+		{
+			for(int y = randY - 200; y < randY - 3;y++)
+			{
+				int x = startX - x0 * step;
+				Tile tile = SafeGetTile(x, y);
+				Tile tileUp = SafeGetTile(x, y - 1);
+				Tile tileDown = SafeGetTile(x, y + 1);
+				Tile tileLeftDown = SafeGetTile(x - 1, y + 1);
+				Tile tileRightDown = SafeGetTile(x + 1, y + 1);
+				if (tile.TileType == TileID.DynastyWood)
+				{
+					if(tileUp.wall != WallID.Ebonwood && !tileUp.HasTile)
+					{
+						if ((tileDown.wall == WallID.Ebonwood && !tileDown.HasTile) || (tileLeftDown.wall == WallID.Ebonwood && !tileLeftDown.HasTile) || (tileRightDown.wall == WallID.Ebonwood && !tileRightDown.HasTile))
+						{
+							tile.HasTile = true;
+							tile.TileType = (ushort)ModContent.TileType<YellowDynastyShingles>();
+							tileUp.HasTile= true;
+							tileUp.TileType = (ushort)ModContent.TileType<YellowDynastyShingles>();
+						}
+					}
+				}
+			}
+		}
+		//构造桥梁
+		int successCount = 0;
+		for(int times = 0;times < 10000;times++)
+		{
+			int x0 = GenRand.Next(-10, randLength + 30) + startX;
+			int y0 = GenRand.Next(randY - 200, randY - 10);
+			int diretion = -1;
+			if(GenRand.NextBool(2))
+			{
+				diretion = 1;
+			}
+			int continueDynastyWood = 0;
+			int middleEmptyBlock = 0;
+			Point firstPoint = new Point(0, 0);
+
+			bool firstPhraseEnough = false;
+			for (int x1 = -40; x1 < 140; x1++)
+			{
+				int x = x0 + x1 * diretion;
+				Tile tile = SafeGetTile(x, y0);
+				if (tile.HasTile && tile.TileType == TileID.DynastyWood)
+				{
+					continueDynastyWood++;
+					if (continueDynastyWood > 10)
+					{
+						firstPhraseEnough = true;
+					}
+				}
+				else if(!(!tile.HasTile && tile.wall == 0))
+				{
+					continueDynastyWood = 0;
+					if(firstPhraseEnough)
+					{
+						firstPhraseEnough = false;
+					}
+				}
+
+				if (!tile.HasTile && tile.wall == 0)
+				{
+					continueDynastyWood = 0;
+					if (firstPhraseEnough)
+					{
+						middleEmptyBlock++;
+						if (middleEmptyBlock > 10)
+						{
+							firstPoint = new Point(x - 10 * diretion, y0);
+							break;
+						}
+					}
+				}
+				else
+				{
+					if (firstPhraseEnough)
+					{
+						middleEmptyBlock = 0;
+					}
+				}
+			}
+			Point secondPoint = new Point(0, 0);
+			if (firstPoint != new Point(0, 0))
+			{
+				for (int y2 = -4; y2 <= 4; y2++)
+				{
+					if (secondPoint != new Point(0, 0))
+					{
+						break;
+					}
+					int continueCount = 0;
+					for (int x2 = 10; x2 < 140; x2++)
+					{
+						int x = firstPoint.X + x2 * diretion;
+						int y = firstPoint.Y + y2;
+						Tile tile = SafeGetTile(x, y);
+						if(tile.HasTile && tile.TileType == TileID.DynastyWood)
+						{
+							continueCount++;
+							if (continueCount >= 10)
+							{
+								secondPoint = new Point(x - 10 * diretion, y);
+								break;
+							}
+						}
+						else if(!(!tile.HasTile && tile.wall == 0))
+						{
+							break;
+						}
+					}
+				}
+			}
+
+			if (secondPoint != new Point(0, 0))
+			{
+				Point startPoint = firstPoint;
+				Point endPoint = secondPoint;
+				if (endPoint.X < startPoint.X)
+				{
+					(startPoint, endPoint) = (endPoint, startPoint);
+				}
+				int thick = 2;
+				for(int x = startPoint.X; x <= endPoint.X; x++)
+				{
+					for(int y3 = 0;y3 < thick;y3++)
+					{
+						float value = (x - startPoint.X) / (float)(endPoint.X - startPoint.X);
+						float archHeight = 0;
+						int y = (int)(startPoint.Y * (1 - value) + endPoint.Y * value + y3 - archHeight);
+						Tile tile = SafeGetTile(x, y);
+						tile.HasTile = true;
+					}
+				}
+				successCount++;
+			}
+			if(successCount > 10)
+			{
+				break;
 			}
 		}
 	}
@@ -1138,7 +1323,7 @@ public class YggdrasilTownGeneration
 	/// <param name="endY"></param>
 	public static void CreateChineseFolkBox(int startX, int startY, int endX, int endY)
 	{
-		CreateBoxRoom(startX, startY, endX, endY, TileID.DynastyWood, WallID.Ebonwood);
+		CreateBoxRoom(startX, startY, endX, endY, TileID.DynastyWood, WallID.Ebonwood, true);
 		//PlaceRectangleAreaOfBlock(startX - 1, startY, endX + 1, startY, ModContent.TileType<YellowDynastyShingles>());
 		PlaceRectangleAreaOfBlock(startX - 1, startY , startX - 1, startY , ModContent.TileType<YellowDynastyShingles>());
 		PlaceRectangleAreaOfBlock(endX + 1, startY, endX + 1, startY, ModContent.TileType<YellowDynastyShingles>());
