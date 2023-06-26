@@ -10,7 +10,7 @@ public class PierWithSlabsTop : ModTile
 	{
 		Main.tileFrameImportant[Type] = true;
 		Main.tileSolid[Type] = true;
-
+		Main.tileBlockLight[Type] = false;
 		DustType = DustID.Stone;
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Height = 8;
