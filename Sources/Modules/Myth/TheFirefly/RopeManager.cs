@@ -214,13 +214,22 @@ internal class RopeManager
 
 	public void Update(float deltaTime)
 	{
+		var drawRange = new Rectangle((int)Main.screenPosition.X - 32, (int)Main.screenPosition.Y - 32,
+			Main.screenWidth + 32 * 2, Main.screenHeight + 32 * 2);
 		for (int i = 0; i < ropes.Count; i++)
 		{
 			var rope = ropes[i];
-			foreach (var s in rope.spring)
+			bool inSight = false;
+			foreach (var m in rope.mass)
 			{
-				//s.ApplyForce(deltaTime);
+				if (drawRange.Contains((int)m.position.X, (int)m.position.Y))
+				{
+					inSight = true;
+					break;
+				}
 			}
+			if (!inSight)
+				continue;
 			foreach (var m in rope.mass)
 			{
 				m.force += new Vector2(0.12f * (float)Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d) + Main.windSpeedCurrent * 0.13f, 0)
