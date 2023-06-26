@@ -20,8 +20,11 @@ public abstract class Pipeline : IPipeline
 	public virtual void Load()
 	{
 	}
-
-	public void Render(IEnumerable<IVisual> visuals)
+	/// <summary>
+	/// 渲染和绘制,经过调整后可以重写
+	/// </summary>
+	/// <param name="visuals"></param>
+	public virtual void Render(IEnumerable<IVisual> visuals)
 	{
 		BeginRender();
 		foreach (var visual in visuals)

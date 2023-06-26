@@ -1,10 +1,5 @@
-using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
-using Everglow.Commons.VFX;
-using Everglow.Myth.Common;
-using Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles;
 using Everglow.Ocean.VFXs;
-using Terraria.Audio;
 
 namespace Everglow.Ocean.Projectiles.Weapons;
 
@@ -67,7 +62,7 @@ public class TsunamiShark_bullet : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.velocity = Projectile.oldVelocity;
 		GenerateVFXKill(6);
-		if(!Projectile.wet)
+		if (!Projectile.wet)
 		{
 			for (int x = 0; x < 3; x++)
 			{
@@ -192,7 +187,7 @@ public class TsunamiShark_bullet : ModProjectile
 			normalDir = new Vector2(-normalDir.Y, normalDir.X).SafeNormalize(Vector2.Zero);
 
 			var factor = i / (float)TrueL;
-			var color = Color.Lerp(new Color(0,  (1 - factor) * 0.4f, (1 - factor * factor) * 2f, 0), new Color(0, 0, 0, 0), factor);
+			var color = Color.Lerp(new Color(0, (1 - factor) * 0.4f, (1 - factor * factor) * 2f, 0), new Color(0, 0, 0, 0), factor);
 
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(5) - Main.screenPosition, color, new Vector3(factor, 0, 0)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(5) - Main.screenPosition, color, new Vector3(factor, 1, 0)));
