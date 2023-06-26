@@ -20,7 +20,7 @@
 		<Publicize Include="MonoMod.RuntimeDetour" />
 		<Publicize Include="MonoMod.Utils" />
 		<Publicize Include="FNA" />
-		<ResourceFile Include="**\*.bmp" />
-		<ResourceFile Include="**\*.mapio" />
+		<Solaestas-ResourceFile Include="**\*.bmp" />
+		<Solaestas-ResourceFile Include="**\*.mapio" />
 	</ItemGroup>
 </Project>

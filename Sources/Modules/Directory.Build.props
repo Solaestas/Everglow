@@ -12,6 +12,8 @@
 			Include="$(MSBuildThisFileDirectory)\..\Everglow.Core\Everglow.Core.csproj" />
 		<ProjectReference
 			Include="$(MSBuildThisFileDirectory)\..\Everglow.Function\Everglow.Function.csproj" />
+
+		<Reference Include="$(MSBuildThisFileDirectory)\..\..\Libraries\*.dll" />
 		<Using Include="Terraria" />
 		<Using Include="Terraria.ModLoader" />
 		<Using Include="Terraria.ID" />
