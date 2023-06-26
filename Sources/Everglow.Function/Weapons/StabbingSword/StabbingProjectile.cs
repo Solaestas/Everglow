@@ -4,7 +4,7 @@ using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.Utilities;
 
-namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
+namespace Everglow.Commons.Weapons
 {
 	public abstract class StabbingProjectile : ModProjectile
     {
@@ -56,7 +56,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		/// 荧光颜色缩变,小于1
 		/// </summary>
 		public float FadeGlowColorValue = 0f;
-		public override string Texture => "Everglow/EternalResolve/Items/Weapons/StabbingSwords/StabbingProjectile";
+		public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
 		/// <summary>
 		/// 宽度width会影响伤害判定(斜矩形)的宽度,高度会影响判定的长度
 		/// </summary>

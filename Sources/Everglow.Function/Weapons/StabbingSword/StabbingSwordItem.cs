@@ -1,6 +1,6 @@
 using Terraria.DataStructures;
 
-namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
+namespace Everglow.Commons.Weapons
 {
     public abstract class StabbingSwordItem : ModItem
     {
