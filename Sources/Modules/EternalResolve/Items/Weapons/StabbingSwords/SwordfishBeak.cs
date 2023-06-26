@@ -15,5 +15,12 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			PowerfulStabProj = 1;
 			base.SetDefaults();
 		}
+		public override void AddRecipes()
+		{
+			CreateRecipe()
+				.AddIngredient(ItemID.Swordfish)
+				.AddTile(TileID.Sawmill)
+				.Register();
+		}
 	}
 }
