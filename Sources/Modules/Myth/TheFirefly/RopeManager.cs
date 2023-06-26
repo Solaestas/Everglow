@@ -37,6 +37,33 @@ internal class Rope
 		GetOffset = offset;
 	}
 
+	public void Update(float deltaTime)
+	{
+		for(int i = 0; i < mass.Length; i++)
+		{
+			mass[i].oldPos = mass[i].position;
+			mass[i].Update(deltaTime);
+		}
+		for(int i = 0; i < 2; i++)
+		{
+			for (int j = 0; j < spring.Length; j++)
+			{
+				float weightA = spring[j].mass1.isStatic ? 0 : 1;
+				float weightB = spring[j].mass2.isStatic ? 0 : 1;
+				weightB = weightA / (weightA + weightB);
+				weightA = 1 - weightB;
+				var center = spring[j].mass1.position * weightA + spring[j].mass2.position * weightB;
+				var unit = (spring[j].mass1.position - spring[j].mass2.position).SafeNormalize(Vector2.Zero);
+				spring[j].mass1.position = center + spring[j].restLength * weightB * unit;
+				spring[j].mass2.position = center - spring[j].restLength * weightA * unit;
+			}
+		}
+		for (int i = 0; i < mass.Length; i++)
+		{
+			mass[i].velocity = (mass[i].position - mass[i].oldPos) / deltaTime;
+		}
+	}
+
 	public Rope Clone(Vector2 deltaPosition)
 	{
 		var clone = new Rope
@@ -192,14 +219,14 @@ internal class RopeManager
 			var rope = ropes[i];
 			foreach (var s in rope.spring)
 			{
-				s.ApplyForce(deltaTime);
+				//s.ApplyForce(deltaTime);
 			}
 			foreach (var m in rope.mass)
 			{
 				m.force += new Vector2(0.12f * (float)Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d) + Main.windSpeedCurrent * 0.13f, 0)
 					+ new Vector2(0, gravity * m.mass);
-				m.Update(deltaTime);
 			}
+			rope.Update(deltaTime);
 		}
 	}
 

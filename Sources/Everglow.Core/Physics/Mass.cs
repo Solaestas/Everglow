@@ -27,11 +27,14 @@ public class Mass
 	/// </summary>
 	public bool isStatic;
 
+	public Vector2 oldPos;
+
 	public Mass(float mass, Vector2 position, bool isStatic)
 	{
 		this.mass = mass;
 		velocity = Vector2.Zero;
 		force = Vector2.Zero;
+		this.oldPos = position;
 		this.position = position;
 		this.isStatic = isStatic;
 	}
