@@ -98,7 +98,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
             if (Projectile.soundDelay <= 0)
             {
 				//SoundStyle ss = new SoundStyle("Everglow/EternalResolve/Items/Weapons/StabbingSwords/Sounds/stabbing");
-				SoundEngine.PlaySound(SoundID.Item1.WithVolumeScale(0.5f).WithPitchOffset(Main.rand.NextFloat(-0.6f, 0.6f)), Projectile.Center);
+				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
                 Projectile.soundDelay = SoundTimer;
             }
 
@@ -140,8 +140,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public virtual void HitTileSound(float scale)
 		{
-			//SoundStyle ss = new SoundStyle("Everglow/EternalResolve/Items/Weapons/StabbingSwords/Sounds/StabCollide");
-			SoundEngine.PlaySound((SoundID.NPCHit4.WithVolume((1 - scale / 2.42f) * 0.3f)).WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
+			SoundStyle ss = new SoundStyle("Everglow/EternalResolve/Items/Weapons/StabbingSwords/Sounds/StabCollide");
+			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
 			Projectile.soundDelay = SoundTimer;
 		}
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
