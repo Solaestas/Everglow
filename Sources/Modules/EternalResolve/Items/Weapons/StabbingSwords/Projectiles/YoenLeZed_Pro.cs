@@ -1,3 +1,4 @@
+using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Buffs;
 using Everglow.EternalResolve.VFXs;
 using Terraria;
@@ -96,8 +97,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Lighting.AddLight(Projectile.Center + Projectile.velocity, 0.2f * Projectile.timeLeft / TradeLength, 0.24f * Projectile.timeLeft / TradeLength, 0.3f * Projectile.timeLeft / TradeLength);
 			Player player = Main.player[Projectile.owner];
 			Texture2D itemTexture = TextureAssets.Item[Main.player[Projectile.owner].HeldItem.type].Value;
-			Texture2D Shadow = ModAsset.StabbingProjectileShade.Value;
-			Texture2D light = ModAsset.StabbingProjectile.Value;
+			Texture2D Shadow = Commons.ModAsset.StabbingProjectileShade.Value;
+			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
 			Main.spriteBatch.Draw(itemTexture, ItemDraw.Postion - Main.screenPosition + Projectile.velocity, null, lightColor, ItemDraw.Rotation, itemTexture.Size() / 2f, ItemDraw.Size, ItemDraw.SpriteEffect, 0f);

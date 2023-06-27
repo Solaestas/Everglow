@@ -58,7 +58,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				new Vertex2D(Projectile.Center + normalize - Main.screenPosition, shadow, new Vector3(1,0,0)),
 				new Vertex2D(Projectile.Center - normalize - Main.screenPosition,shadow, new Vector3(1,1,0))
 			};
-			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.StabbingProjectileShade.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StabbingProjectileShade.Value;
 			if (bars.Count > 3)
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			Color light = new Color(0.45f * lightColor.R / 255f, 0.45f * lightColor.G / 255f, 1f * lightColor.B / 255f, 0);
@@ -70,7 +70,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				new Vertex2D(Projectile.Center + normalize - Main.screenPosition, light, new Vector3(1,0,0)),
 				new Vertex2D(Projectile.Center - normalize - Main.screenPosition, light, new Vector3(1,1,0))
 			};
-			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.StabbingProjectile.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StabbingProjectile.Value;
 			if (bars.Count > 3)
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			return false;

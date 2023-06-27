@@ -1,14 +1,14 @@
+using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
-using Terraria.ModLoader;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class MachanicMosquito_Pro : StabbingProjectile
-    {
+	public class MachanicMosquito_Pro : StabbingProjectile
+	{
 		public int ProjTarget = -1;
-        public override void SetDefaults()
-        {
-            Color = new Color(187, 196, 196);
+		public override void SetDefaults()
+		{
+			Color = new Color(187, 196, 196);
 			TradeLength = 4;
 			TradeShade = 0.4f;
 			Shade = 0.5f;
@@ -21,8 +21,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void DrawEffect(Color lightColor)
 		{
-			Texture2D Shadow = ModAsset.StabbingProjectileShade.Value;
-			Texture2D light = ModAsset.StabbingProjectile.Value;
+			Texture2D Shadow = Commons.ModAsset.StabbingProjectileShade.Value;
+			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
 			if (TradeShade > 0)
@@ -55,7 +55,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			Player player = Main.player[Projectile.owner];
 			int mosq = ModContent.ProjectileType<MachanicMosquito_Mosquito>();
-			if(ProjTarget != -1)
+			if (ProjTarget != -1)
 			{
 				if (Projectile.frameCounter % 15 == 0)
 				{
@@ -71,7 +71,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))
 			{
 				int type = ModContent.DustType<MosquitoLight>();
-				if(Main.rand.NextBool(4))
+				if (Main.rand.NextBool(4))
 				{
 					type = ModContent.DustType<BloodShine>();
 				}

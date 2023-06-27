@@ -4,7 +4,7 @@ using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.Utilities;
 
-namespace Everglow.Commons.Weapons
+namespace Everglow.Commons.Weapons.StabbingSwords
 {
 	public abstract class StabbingProjectile : ModProjectile
     {
@@ -97,7 +97,6 @@ namespace Everglow.Commons.Weapons
             Projectile.soundDelay--;
             if (Projectile.soundDelay <= 0)
             {
-				//SoundStyle ss = new SoundStyle("Everglow/EternalResolve/Items/Weapons/StabbingSwords/Sounds/stabbing");
 				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
                 Projectile.soundDelay = SoundTimer;
             }
@@ -140,7 +139,8 @@ namespace Everglow.Commons.Weapons
 		}
 		public virtual void HitTileSound(float scale)
 		{
-			SoundStyle ss = new SoundStyle("Everglow/EternalResolve/Items/Weapons/StabbingSwords/Sounds/StabCollide");
+			//SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/StabCollide");
+			SoundStyle ss = SoundID.NPCHit4;
 			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
 			Projectile.soundDelay = SoundTimer;
 		}
