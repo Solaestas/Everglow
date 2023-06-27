@@ -7,7 +7,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
     public class RottenGoldBayonet_Slash : ModProjectile
     {
-		public override string Texture => "Everglow/EternalResolve/Items/Weapons/StabbingSwords/StabbingProjectile";
+		public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
 		private Vector2 StartCenter;
 		public override void OnSpawn(IEntitySource source)
 		{
