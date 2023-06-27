@@ -11,5 +11,9 @@ public class EternalResolveContentGlobalNPC : GlobalNPC
 		{
 			shop.Add<CrutchBayonet>();
 		}
+		if (shop.NpcType == NPCID.Mechanic)
+		{
+			shop.Add<MechanicMosquito>();
+		}
 	}
 }

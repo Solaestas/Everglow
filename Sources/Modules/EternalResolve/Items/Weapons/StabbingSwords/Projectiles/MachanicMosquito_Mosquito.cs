@@ -4,7 +4,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class MachanicMosquito_Mosquito : ModProjectile
+    public class MechanicMosquito_Mosquito : ModProjectile
     {
 		public NPC Target;
 		public Projectile Owner;
@@ -26,7 +26,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			foreach(Projectile projectile in Main.projectile)
 			{
-				if(projectile.type == ModContent.ProjectileType<MachanicMosquito_Pro>())
+				if(projectile.type == ModContent.ProjectileType<MechanicMosquito_Pro>())
 				{
 					if(projectile.owner == Projectile.owner)
 					{
@@ -41,23 +41,23 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void AI()
 		{
-			if(!Owner.active || Owner == null || Owner.type != ModContent.ProjectileType<MachanicMosquito_Pro>() || Owner.owner != Projectile.owner)
+			if(!Owner.active || Owner == null || Owner.type != ModContent.ProjectileType<MechanicMosquito_Pro>() || Owner.owner != Projectile.owner)
 			{
 				Projectile.Kill();
 				return;
 			}
-			MachanicMosquito_Pro machanicMosquito_Pro = Owner.ModProjectile as MachanicMosquito_Pro;
-			if (machanicMosquito_Pro == null)
+			MechanicMosquito_Pro MechanicMosquito_Pro = Owner.ModProjectile as MechanicMosquito_Pro;
+			if (MechanicMosquito_Pro == null)
 			{
 				Projectile.Kill();
 				return;
 			}
-			if (machanicMosquito_Pro.ProjTarget == -1)
+			if (MechanicMosquito_Pro.ProjTarget == -1)
 			{
 				Projectile.Kill();
 				return;
 			}
-			Target = Main.npc[machanicMosquito_Pro.ProjTarget];
+			Target = Main.npc[MechanicMosquito_Pro.ProjTarget];
 			if(HoverTimer < 30)
 			{
 				Hover();
@@ -128,8 +128,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					}
 				}
 			}
-			Main.EntitySpriteDraw(ModAsset.MachanicMosquito_Mosquito.Value,Projectile.Center - Main.screenPosition, new Rectangle(0, 18 * Projectile.frame, 24, 18),lightColor, Projectile.rotation, new Vector2(12, 9), Projectile.scale, Projectile.velocity.X > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically);
-			Main.EntitySpriteDraw(ModAsset.MachanicMosquito_Mosquito_glow.Value, Projectile.Center - Main.screenPosition, new Rectangle(0, 18 * Projectile.frame, 24, 18), new Color(1f, 1f, 1f, 0), Projectile.rotation, new Vector2(12, 9), Projectile.scale, Projectile.velocity.X > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically);
+			Main.EntitySpriteDraw(ModAsset.MechanicMosquito_Mosquito.Value,Projectile.Center - Main.screenPosition, new Rectangle(0, 18 * Projectile.frame, 24, 18),lightColor, Projectile.rotation, new Vector2(12, 9), Projectile.scale, Projectile.velocity.X > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically);
+			Main.EntitySpriteDraw(ModAsset.MechanicMosquito_Mosquito_glow.Value, Projectile.Center - Main.screenPosition, new Rectangle(0, 18 * Projectile.frame, 24, 18), new Color(1f, 1f, 1f, 0), Projectile.rotation, new Vector2(12, 9), Projectile.scale, Projectile.velocity.X > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically);
 			
 			return false;
 		}

@@ -3,7 +3,7 @@ using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-	public class MachanicMosquito_Pro : StabbingProjectile
+	public class MechanicMosquito_Pro : StabbingProjectile
 	{
 		public int ProjTarget = -1;
 		public override void SetDefaults()
@@ -54,7 +54,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		public override void AI()
 		{
 			Player player = Main.player[Projectile.owner];
-			int mosq = ModContent.ProjectileType<MachanicMosquito_Mosquito>();
+			int mosq = ModContent.ProjectileType<MechanicMosquito_Mosquito>();
 			if (ProjTarget != -1)
 			{
 				if (Projectile.frameCounter % 15 == 0)
