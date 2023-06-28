@@ -45,6 +45,7 @@ public class YggdrasilTownGeneration
 	public static int AzureGrottoCenterX;
 	public static UnifiedRandom GenRand = new UnifiedRandom();
 	public static List<YggdrasilTownStreetElement> StreetConstructorsSheet;
+	public static List<YggdrasilTownStreetElement> InDoorChineseStyleHangingSheet;
 	/// <summary>
 	/// 初始化
 	/// </summary>
@@ -65,6 +66,41 @@ public class YggdrasilTownGeneration
 			new TwoStoriedFolkHouse(),
 			new SmithyType()
 	    };
+		InDoorChineseStyleHangingSheet = new List<YggdrasilTownStreetElement>()
+		{
+			new BambooChandelier(),
+			new CrystalChandelier(),
+			new CylinderChandelierGroup(),
+			new DynasticChandelier(),
+			new EvilChandelier(),
+			new GoldenChandelier(),
+			new GraniteChandelier(),
+			new GreenDungeonChandelier(),
+			new HexagonalCeilingChandelier(),
+			new MetalChandelier(),
+			new PalmChandelier(),
+			new RichMahoganyChandelier(),
+
+			new DiscoBall(),
+
+			new FireflyBottle(),
+			new LavaFlyBottle(),
+			new LightningBugBottle(),
+			new SoulBottle(),
+
+			new BambooLantern(),
+			new BowlLantern(),
+			new ChineseLantern(),
+			new DynasticLantern(),
+			new FleshLantern(),
+			new GlassLantern(),
+			new LivingWoodLantern(),
+			new MetalLantern(),
+			new SpellLantern(),
+			new BurningBowl(),
+			new PlantBowl(),
+			new EmptyAnchoredTop()
+		};
 	}
 	/// <summary>
 	/// 噪声信息获取
@@ -828,9 +864,9 @@ public class YggdrasilTownGeneration
 		}
 		//堆箱子算法
 		List<int> platformYs = new List<int>();
-		for (int times = 0; times <= 54; times++)
+		for (int times = 0; times <= 27; times++)
 		{
-			int height = GenRand.Next(7, 12);
+			int height = GenRand.Next(7, 17);
 			int x0 = GenRand.Next(10, randLength + 20);
 			int x = startX - x0 * step;
 			int y = randY - 150;
@@ -846,8 +882,8 @@ public class YggdrasilTownGeneration
 			{
 				continue;
 			}
-			int leftX = GenRand.Next(4, 12);
-			int rightX = GenRand.Next(4, 12);
+			int leftX = GenRand.Next(9, 22);
+			int rightX = GenRand.Next(9, 22);
 			if(!GenRand.NextBool(5))
 			{
 				for (int x1 = 0; x1 <= leftX; x1++)
@@ -947,13 +983,13 @@ public class YggdrasilTownGeneration
 		//随机向上排布
 		for (int times = 0; times <= 12; times++)
 		{
-			int height = GenRand.Next(7, 12);
+			int height = GenRand.Next(7, 17);
 			int x0 = GenRand.Next(10, randLength);
 			int x = startX - x0 * step;
 			int y = GenRand.Next(randY - 170, randY - 40);
 
-			int leftX = GenRand.Next(4, 12);
-			int rightX = GenRand.Next(4, 12);
+			int leftX = GenRand.Next(8, 22);
+			int rightX = GenRand.Next(8, 22);
 			if(SafeGetTile(x, y).wall != 0)
 			{
 				times--;
@@ -1035,17 +1071,17 @@ public class YggdrasilTownGeneration
 			//保障安全之后
 			if(wallLeft.wall == 0)
 			{
-				wallLeft.wall = (ushort)(ModContent.WallType<IronTrackScaffolding>());
+				wallLeft.wall = (ushort)(WallID.Shadewood);
 			}
 			if(wallRight.wall == 0)
 			{
-				wallRight.wall = (ushort)(ModContent.WallType<IronTrackScaffolding>());
+				wallRight.wall = (ushort)(WallID.Shadewood);
 			}
 			CreateChineseFolkBox(x - leftX, y - height, x + rightX, y);
 			y1 = 2;
 			while (!SafeGetTile(leftWallPostX, y + y1).HasTile && SafeGetTile(leftWallPostX, y + y1).wall == 0)
 			{
-				SafeGetTile(leftWallPostX, y + y1).wall = (ushort)ModContent.WallType<IronTrackScaffolding>();
+				SafeGetTile(leftWallPostX, y + y1).wall = WallID.Shadewood;
 				if (y1 > 500)
 				{
 					break;
@@ -1055,7 +1091,7 @@ public class YggdrasilTownGeneration
 			y1 = 2;
 			while (!SafeGetTile(rightWallPostX, y + y1).HasTile && SafeGetTile(rightWallPostX, y + y1).wall == 0)
 			{
-				SafeGetTile(rightWallPostX, y + y1).wall = (ushort)ModContent.WallType<IronTrackScaffolding>();
+				SafeGetTile(rightWallPostX, y + y1).wall = WallID.Shadewood;
 				if (y1 > 500)
 				{
 					break;
@@ -1137,7 +1173,6 @@ public class YggdrasilTownGeneration
 				bool checked3 = !tileUp3.HasTile || !Main.tileSolid[tileUp3.TileType] || tileUp3.TileType == ModContent.TileType<YellowDynastyShingles>();
 				if (!tile.HasTile && tile.wall == 0 && ((checked1 && checked2 && checked3) || middleEmptyBlock <= 1))
 				{
-					continueDynastyWood = 0;
 					middleEmptyBlock++;
 					if (middleEmptyBlock >= 10)
 					{
@@ -1348,12 +1383,26 @@ public class YggdrasilTownGeneration
 				{
 					if ((tileUp.wall != WallID.Ebonwood && !tileUp.HasTile) && (tileLeftUp.wall != WallID.Ebonwood && (!tileLeftUp.HasTile || tileLeftUp.TileType == ModContent.TileType<YellowDynastyShingles>())) && (tileRightUp.wall != WallID.Ebonwood && (!tileRightUp.HasTile || tileRightUp.TileType == ModContent.TileType<YellowDynastyShingles>())))
 					{
-						if ((tileDown.wall == WallID.Ebonwood && !tileDown.HasTile) || (tileLeftDown.wall == WallID.Ebonwood && !tileLeftDown.HasTile) || (tileRightDown.wall == WallID.Ebonwood && !tileRightDown.HasTile))
+						if ((tileDown.wall == WallID.Ebonwood && (!Main.tileSolid[tileDown.TileType] || !tileDown.HasTile))
+							|| (tileLeftDown.wall == WallID.Ebonwood && (!Main.tileSolid[tileLeftDown.TileType] || !tileLeftDown.HasTile)) 
+							|| (tileRightDown.wall == WallID.Ebonwood && (!Main.tileSolid[tileRightDown.TileType] || !tileRightDown.HasTile)))
 						{
-							tile.HasTile = true;
-							tile.TileType = (ushort)ModContent.TileType<YellowDynastyShingles>();
-							tileUp.HasTile = true;
-							tileUp.TileType = (ushort)ModContent.TileType<YellowDynastyShingles>();
+							bool canPlace = true;
+							for(int x1 = -4;x1 < 4;x1++)
+							{
+								Tile tileUpX = SafeGetTile(x + x1, y - 1);
+								if(tileUpX.TileType == TileID.ClosedDoor)
+								{
+									canPlace = false;
+								}
+							}
+							if(canPlace)
+							{
+								tile.HasTile = true;
+								tile.TileType = (ushort)ModContent.TileType<YellowDynastyShingles>();
+								tileUp.HasTile = true;
+								tileUp.TileType = (ushort)ModContent.TileType<YellowDynastyShingles>();
+							}
 						}
 					}
 				}
@@ -1538,6 +1587,110 @@ public class YggdrasilTownGeneration
 	/// <param name="endY"></param>
 	public static void CreateChineseFolkBox(int startX, int startY, int endX, int endY)
 	{
+		int width = Math.Abs(endX - startX);
+		int height = Math.Abs(endY - startY);
+		int squire = width * height;
+		if (!GenRand.NextBool(4))
+		{
+			switch (WorldGen.genRand.Next(5))
+			{
+				case 0:
+					if (width >= 26 && height > 10)
+					{
+						switch (WorldGen.genRand.Next(2))
+						{
+							case 0:
+								QuickBuild(startX, endY - 11, "YggdrasilTown/MapIOs/1FolkHouseofChineseStyleTypeA28x11.mapio");
+								break;
+							case 1:
+								QuickBuild(startX, endY - 11, "YggdrasilTown/MapIOs/1FolkHouseofChineseStyleTypeB28x11.mapio");
+								break;
+						}
+						return;
+					}
+					else
+						break;
+				case 1:
+					if (width >= 20 && height > 8)
+					{
+						switch (WorldGen.genRand.Next(2))
+						{
+							case 0:
+								QuickBuild(startX, endY - 8, "YggdrasilTown/MapIOs/3SmithyTypeA22x8.mapio");
+								break;
+							case 1:
+								QuickBuild(startX, endY - 8, "YggdrasilTown/MapIOs/3SmithyTypeB22x8.mapio");
+								break;
+						}			
+						return;
+					}
+					else
+						break;
+				case 2:
+					if (width >= 26 && height > 10)
+					{
+						switch (WorldGen.genRand.Next(4))
+						{
+							case 0:
+								QuickBuild(startX, endY - 11, "YggdrasilTown/MapIOs/2FolkHouseofWoodAndStoneStrutureTypeA28x11.mapio");
+								break;
+							case 1:
+								QuickBuild(startX, endY - 11, "YggdrasilTown/MapIOs/2FolkHouseofWoodAndStoneStrutureTypeB28x11.mapio");
+								break;
+							case 2:
+								QuickBuild(startX, endY - 11, "YggdrasilTown/MapIOs/2FolkHouseofWoodStoneStrutureTypeA28x11.mapio");
+								break;
+							case 3:
+								QuickBuild(startX, endY - 11, "YggdrasilTown/MapIOs/2FolkHouseofWoodStoneStrutureTypeB28x11.mapio");
+								break;
+						}
+						return;
+					}
+					else
+						break;
+				case 3:
+					if (width >= 20 && height > 9)
+					{
+						switch (WorldGen.genRand.Next(4))
+						{
+							case 0:
+								QuickBuild(startX, endY - 10, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeA22x10.mapio");
+								break;
+							case 1:
+								QuickBuild(startX, endY - 10, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeB22x10.mapio");
+								break;
+							case 2:
+								QuickBuild(startX, endY - 10, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeC22x10.mapio");
+								break;
+							case 3:
+								QuickBuild(startX, endY - 10, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeD22x10.mapio");
+								break;
+						}
+						return;
+					}
+					else
+						break;
+				case 4:
+					if (width >= 21 && height > 12)
+					{
+						switch (WorldGen.genRand.Next(3))
+						{
+							case 0:
+								QuickBuild(startX, endY - 13, "YggdrasilTown/MapIOs/5TwoStoriedFolkHouseTypeA23x13.mapio");
+								break;
+							case 1:
+								QuickBuild(startX, endY - 13, "YggdrasilTown/MapIOs/5TwoStoriedFolkHouseTypeB23x13.mapio");
+								break;
+							case 2:
+								QuickBuild(startX, endY - 13, "YggdrasilTown/MapIOs/5TwoStoriedFolkHouseTypeC23x13.mapio");
+								break;
+						}
+						return;
+					}
+					else
+						break;
+			}
+		}
 		//本体
 		CreateBoxRoom(startX, startY, endX, endY, TileID.DynastyWood, WallID.Ebonwood, true);
 		//黄色的屋檐
@@ -1560,32 +1713,58 @@ public class YggdrasilTownGeneration
 			}
 			int placeY = startY;
 			//左侧
+			bool canPlaceLeft = true;
 			while(SafeGetTile(startX - 1, placeY).HasTile)
 			{
 				placeY++;
 				if(placeY - startY > 5)
 				{
+					canPlaceLeft = false;
 					break;
 				}
 			}
-			if(placeY - startY <= 5)
+			for(int x = startX - 2;x <= startX - 1;x++)
+			{
+				for (int y = placeY; y <= placeY + 2; y++)
+				{
+					Tile check = SafeGetTile(x, y);
+					if(check.HasTile)
+					{
+						canPlaceLeft = false;
+					}
+				}
+			}
+			if(canPlaceLeft)
 			{
 				PlaceFrameImportantTiles(startX - 2, placeY, 2, 3, type);
 			}
 			//右侧
+			bool canPlaceRight = true;
 			placeY = startY;
 			while (SafeGetTile(endX + 1, placeY).HasTile)
 			{
 				placeY++;
 				if (placeY - startY > 5)
 				{
+					canPlaceRight = false;
 					break;
 				}
 			}
-			if (placeY - startY <= 5)
+			for (int x = endX + 1; x <= endX + 2; x++)
+			{
+				for (int y = placeY; y <= placeY + 2; y++)
+				{
+					Tile check = SafeGetTile(x, y);
+					if (check.HasTile)
+					{
+						canPlaceRight = false;
+					}
+				}
+			}
+			if (canPlaceRight)
 			{
 				PlaceFrameImportantTiles(endX + 1, placeY, 2, 3, type, 36);
-			}		
+			}
 		}
 		//判定是否应该有门
 		bool hasEndXDoor = true;
@@ -1708,21 +1887,23 @@ public class YggdrasilTownGeneration
 				int y = endY;
 				Tile tile = SafeGetTile(x, y);
 				tile.TileType = TileID.Platforms;
-				tile.TileFrameY = 336;
+				tile.TileFrameY = 342;
 				tile.TileFrameX = 0;
 				if (continuePlatforms[createPlatformIndex][0] == x)
 				{
-					tile.TileFrameX = 36;
+					tile.TileFrameX = 252;
 				}
 				if (continuePlatforms[createPlatformIndex][continuePlatforms[createPlatformIndex].Length - 1] == x)
 				{
-					tile.TileFrameX = 18;
+					tile.TileFrameX = 216;
 				}
 				
 
 				tile.wall = SafeGetTile(x, y - 1).wall;
 			}
 		}
+		//Hanging Tiles
+		PlaceARowOfHangingItems(startX, endX, startY + 1);
 	}
 	/// <summary>
 	/// 建造一个火柴盒
@@ -1827,7 +2008,7 @@ public class YggdrasilTownGeneration
 				for (int y0 = 0; y0 < count; y0++)
 				{
 					Tile tile3 = SafeGetTile(x + direction, y - y0);
-					tile3.wall = (ushort)ModContent.WallType<IronTrackScaffolding>();
+					tile3.wall = WallID.Shadewood;
 					if (y0 % (density * 2) == density - 1 && !(SafeGetTile(x + direction, y - y0).HasTile))
 					{
 						CreateSlantCable(x + direction, y - y0, direction, type, density, density - 1);
@@ -1837,6 +2018,68 @@ public class YggdrasilTownGeneration
 			}
 			x += direction;
 			y += 1;
+		}
+	}
+	/// <summary>
+	/// 排布一行悬挂物
+	/// </summary>
+	/// <param name="startX"></param>
+	/// <param name="endX"></param>
+	/// <param name="y"></param>
+	public static void PlaceARowOfHangingItems(int startX, int endX, int y)
+	{
+		int x = startX + 1;
+		while (x + 1 < endX)
+		{
+			float totalRare = 0;
+			foreach (YggdrasilTownStreetElement element in InDoorChineseStyleHangingSheet)
+			{
+				if (element.Width <= endX - (x + 1))
+				{
+					if (element.Cooling == 0)
+					{
+						totalRare += 1 / element.Rare;
+					}
+				}
+			}
+			if (totalRare == 0)
+			{
+				foreach (YggdrasilTownStreetElement element in InDoorChineseStyleHangingSheet)
+				{
+					if (element.Cooling > 0)
+					{
+						element.Update();
+					}
+				}
+				x++;
+				continue;
+			}
+			float buildIndex = GenRand.NextFloat(totalRare);
+			float rareIndex = 0;
+			int width = 0;
+			foreach (YggdrasilTownStreetElement element in InDoorChineseStyleHangingSheet)
+			{
+				if (element.Width <= endX - (x + 1))
+				{
+					if (element.Cooling == 0)
+					{
+						rareIndex += 1 / element.Rare;
+					}
+					if (rareIndex - 1 / element.Rare < buildIndex && rareIndex >= buildIndex)
+					{
+						element.Build(ref x, y);
+						width = element.Width;
+						break;
+					}
+				}
+			}
+			foreach (YggdrasilTownStreetElement element in InDoorChineseStyleHangingSheet)
+			{
+				if (element.Cooling == 0)
+				{
+					element.Update(width);
+				}
+			}
 		}
 	}
 	/// <summary>
