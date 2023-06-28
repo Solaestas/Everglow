@@ -1,6 +1,6 @@
 ﻿<Project>
 	<PropertyGroup>
-<Modules>ZY;MEAC;CagedDomain;Example;Minortopography;Food;Ocean;Plant;PlantAndFarm;TwilightForest;Yggdrasil;EternalResolve</Modules>
+<Modules>MEAC;CagedDomain;EternalResolve;Example;ZY;Plant;PlantAndFarm;Minortopography;TwilightForest;Food;Yggdrasil;Myth</Modules>
 		<DefineConstants>$(DefineConstants);$(Modules)</DefineConstants>
 	</PropertyGroup>
 	<ItemGroup>
