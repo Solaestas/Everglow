@@ -9,6 +9,7 @@ using Everglow.Yggdrasil.CorruptWormHive.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 using Everglow.Commons.TileHelper;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilTownGeneration;
+using static Everglow.Yggdrasil.WorldGeneration.KelpCurtainGeneration;
 
 namespace Everglow.Yggdrasil.WorldGeneration;
 
@@ -27,6 +28,7 @@ public class YggdrasilWorldGeneration : ModSystem
 			Main.spawnTileX = 600;
 			Main.spawnTileY = 11630;
 			BuildYggdrasilTown();
+			BuildKelpCurtain();
 			EndGenPass();
 			Main.statusText = "";
 		}
