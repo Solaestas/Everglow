@@ -9,7 +9,7 @@ public static class PlayerUtils
 		List<string> devPlayerNames = new List<string>(){
 		
 		/*Mr. Skirt | DXTST*/
-		"Mr. Skirt","Mr Skirt","DXTsT",
+		"Mr. Skirt","Mr Skirt","DXTsT", "CXUtk",
 		/*Dirty Octopus | 脏渔歌*/
 		"Dirty Octopus","脏渔歌",
 		/*u_silver | 新萌の绿草*/
