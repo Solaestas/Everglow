@@ -1,4 +1,4 @@
-namespace Everglow.Myth.MiscItems.Misc
+namespace Everglow.Myth.TheMarbleRemains.Items
 {
     public class EvilBottleTreasureBag : ModItem
 	{

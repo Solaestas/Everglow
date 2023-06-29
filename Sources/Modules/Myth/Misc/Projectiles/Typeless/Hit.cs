@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 
-namespace Everglow.Myth.MiscItems.Projectiles.Typeless
+namespace Everglow.Myth.Misc.Projectiles.Typeless
 {
     public class Hit : ModProjectile
 	{

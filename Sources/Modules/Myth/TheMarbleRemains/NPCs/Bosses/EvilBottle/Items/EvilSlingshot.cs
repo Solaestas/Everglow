@@ -1,5 +1,5 @@
 using System;
-using Everglow.Myth.MiscItems.Weapons.Slingshots;
+using Everglow.Myth.Misc.Items.Weapons.Slingshots;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
@@ -18,7 +18,6 @@ public class EvilSlingshot : SlingshotItem
 	public override void SetDef()
 	{
 		Item.damage = 22;
-		Item.channel = true;
 		Item.crit = 6;
 		Item.width = 38;
 		Item.height = 36;

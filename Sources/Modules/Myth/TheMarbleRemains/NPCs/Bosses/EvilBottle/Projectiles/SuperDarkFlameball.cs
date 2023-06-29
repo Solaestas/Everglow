@@ -16,7 +16,7 @@ using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Everglow.Myth.Common;
 using Everglow.Myth.TheMarbleRemains.NPCs.Bosses.EvilBottle.Dusts;
-using Everglow.Myth.MiscItems.Projectiles.Typeless;
+using Everglow.Myth.Misc.Projectiles.Typeless;
 
 namespace Everglow.Myth.TheMarbleRemains.NPCs.Bosses.EvilBottle.Projectiles
 {

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Localization;
 using System;
-using Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
+using Everglow.Myth.Misc.Projectiles.Weapon.Magic;
 using Everglow.Myth.TheMarbleRemains.NPCs.Bosses.EvilBottle.Projectiles;
 
 namespace Everglow.Myth.TheMarbleRemains.NPCs.Bosses.EvilBottle.Items

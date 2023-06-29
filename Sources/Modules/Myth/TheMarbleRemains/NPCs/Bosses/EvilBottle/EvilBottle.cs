@@ -1,7 +1,7 @@
 using System.IO;
 using Everglow.Myth.TheMarbleRemains.NPCs.Bosses.EvilBottle.Projectiles;
 using Everglow.Myth.Common;
-using Everglow.Myth.MiscItems.Misc;
+using Everglow.Myth.TheMarbleRemains.Items;
 using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Myth.TheMarbleRemains.NPCs.Bosses.EvilBottle
@@ -431,7 +431,7 @@ namespace Everglow.Myth.TheMarbleRemains.NPCs.Bosses.EvilBottle
         }
 		public override void ModifyNPCLoot(NPCLoot npcLoot)
 		{
-			npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<MiscItems.Misc.EvilBottleTreasureBag>()));
+			npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<EvilBottleTreasureBag>()));
 		}
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

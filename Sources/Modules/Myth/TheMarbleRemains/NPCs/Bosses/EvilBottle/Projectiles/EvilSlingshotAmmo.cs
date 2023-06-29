@@ -1,5 +1,5 @@
 using System;
-using Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles;
+using Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
