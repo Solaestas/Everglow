@@ -97,7 +97,9 @@ namespace Everglow.Commons.Weapons.StabbingSwords
             Projectile.soundDelay--;
             if (Projectile.soundDelay <= 0)
             {
-				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
+				SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
+				//SoundStyle ss = SoundID.Item1;
+				SoundEngine.PlaySound(ss, Projectile.Center);
                 Projectile.soundDelay = SoundTimer;
             }
 

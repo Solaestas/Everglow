@@ -1,18 +1,19 @@
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Buffs;
-using Everglow.EternalResolve.VFXs;
-using Terraria;
+using SteelSeries.GameSense;
 using Terraria.Audio;
 using Terraria.GameContent;
+using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class YoenLeZed_Pro : StabbingProjectile
-    {
-        public override void SetDefaults()
-        {
-            Color = new Color(100, 180, 255);
-            base.SetDefaults();
+	public class YoenLeZed_Pro : StabbingProjectile
+	{
+		public override void SetDefaults()
+		{
+			Color = new Color(100, 180, 255);
+			base.SetDefaults();
 			TradeLength = 6;
 			TradeShade = 0.2f;
 			Shade = 0.2f;
@@ -27,17 +28,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			base.AI();
 			GenerateVFX(1);
-			if(Projectile.wet)
-			{
-				GenerateVFX(2);
-			}
-			Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustID.Electric);
-			Vector2 addPos = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(-0.1f, 12.4f);
-			dust.position += addPos;
-			dust.velocity = new Vector2(0, Main.rand.NextFloat(5f)).RotatedByRandom(6.283);
-			dust.scale = Main.rand.NextFloat(0.55f, 0.85f) * (300 - addPos.Length()) / 300f;
-			dust.noGravity = true;
-			if(Main.timeForVisualEffects % 10 == 0)
+			SplitVFX(2);
+
+			if (Main.timeForVisualEffects % 10 == 0)
 			{
 				SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f), Projectile.Center);
 			}
@@ -52,23 +45,22 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public void GenerateVFX(int Frequency)
 		{
-			float mulVelocity = 1f;
+			float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
 			for (int g = 0; g < Frequency; g++)
 			{
-
+				float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(8f, 16f));
 				Vector2 afterVelocity = Projectile.velocity;
-				afterVelocity.RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f));
-				float mulWidth = 1f;
-				var yoenLeZedElecticFlowDust = new YoenLeZedElecticFlowDust
+				var electric = new ElectricCurrent
 				{
-					velocity = afterVelocity * Main.rand.NextFloat(1.5f,1.6f) * mulVelocity,
+					velocity = afterVelocity * mulVelocity,
 					Active = true,
 					Visible = true,
-					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-2.0f, -1.2f),
-					maxTime = Main.rand.Next(6, 11),
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.08f, 0.08f), Main.rand.NextFloat(26.6f, 28f) * mulWidth, Projectile.owner }
+					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
+					maxTime = size * size / 8f,
+					scale = size,
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size / 2, 0 }
 				};
-				Ins.VFXManager.Add(yoenLeZedElecticFlowDust);
+				Ins.VFXManager.Add(electric);
 			}
 		}
 		public void SplitVFX(int Frequency)
@@ -76,20 +68,19 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			float mulVelocity = 1f;
 			for (int g = 0; g < Frequency; g++)
 			{
-
+				float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(4f, 10f));
 				Vector2 afterVelocity = Projectile.velocity;
-				afterVelocity.RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f));
-				float mulWidth = 1f;
-				var yoenLeZedElecticFlowDust = new YoenLeZedElecticFlowDust
+				var electric = new ElectricCurrent
 				{
-					velocity = afterVelocity * Main.rand.NextFloat(1.5f, 1.6f) * mulVelocity,
+					velocity = afterVelocity * mulVelocity,
 					Active = true,
 					Visible = true,
-					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-2.0f, -1.2f),
-					maxTime = Main.rand.Next(6, 11),
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.08f, 0.08f), Main.rand.NextFloat(26.6f, 28f) * mulWidth, Projectile.owner }
+					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * MathF.Sqrt(Main.rand.NextFloat(1f)) * 6f,
+					maxTime = size * size / 8f,
+					scale = size,
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size, Main.rand.NextFloat(0.2f, Main.rand.NextFloat(0.2f, 0.4f)) }
 				};
-				Ins.VFXManager.Add(yoenLeZedElecticFlowDust);
+				Ins.VFXManager.Add(electric);
 			}
 		}
 		public override void PostDraw(Color lightColor)
@@ -114,7 +105,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, fadeLight, DarkDraw[f].Rotation, drawOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
 					if (GlowColor != Color.Transparent)
 					{
-						Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, light.Frame(1,6,1,1), GlowColor * MathF.Pow(FadeGlowColorValue, f), DarkDraw[f].Rotation, drawShadowOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
+						Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, light.Frame(1, 6, 1, 1), GlowColor * MathF.Pow(FadeGlowColorValue, f), DarkDraw[f].Rotation, drawShadowOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
 					}
 				}
 			}
@@ -138,6 +129,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
+			Dust d = Dust.NewDustDirect(target.Center, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
+			d.scale = Main.rand.NextFloat(0.85f, 1.15f) * 0.1f;
 			target.AddBuff(ModContent.BuffType<OnElectric>(), 180);
 			base.OnHitNPC(target, hit, damageDone);
 		}
