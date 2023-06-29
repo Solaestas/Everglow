@@ -1,5 +1,9 @@
 using Everglow.Myth.Common;
+using Everglow.Myth.TheMarbleRemains.Tiles;
+using Terraria.DataStructures;
+using Terraria.IO;
 using Terraria.ModLoader;
+using Terraria.WorldBuilding;
 
 namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 {
@@ -18,128 +22,257 @@ namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 				WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 			}
 		}
-		//public override void PostWorldGen()
+		internal class WorldMarbleTempleGenPass : GenPass
+		{
+			public WorldMarbleTempleGenPass() : base("MarbleTempleLand", 500)//TODO:给大地安装血肉之颌
+			{
+			}
+
+			public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+			{
+				Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildWorldMarbleTempleTable");
+				BuildTempleLand();
+			}
+		}
+		public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
+		{
+			tasks.Add(new WorldMarbleTempleGenPass());
+		}
+		public static void ShapeTile(string Shapepath, int a, int b, int type)
+		{
+			var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Myth/TheMarbleRemains/WorldGeneration/" + Shapepath);
+			imageData.ProcessPixelRows(accessor =>
+			{
+				for (int y = 0; y < accessor.Height; y++)
+				{
+					var pixelRow = accessor.GetRowSpan(y);
+					if (y + b < 20)
+					{
+						continue;
+					}
+
+					if (y + b > Main.maxTilesY - 20)
+					{
+						break;
+					}
+
+					for (int x = 0; x < pixelRow.Length; x++)
+					{
+						if (x + a < 20)
+						{
+							continue;
+						}
+
+						if (x + a > Main.maxTilesX - 20)
+						{
+							break;
+						}
+
+						ref var pixel = ref pixelRow[x];
+						Tile tile = Main.tile[x + a, y + b];
+						switch (type)//21是箱子
+						{
+							case 0: //Kill
+								if (pixel.R == 255 && pixel.G == 0 && pixel.B == 0)
+								{
+									if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+									{
+										tile.ClearEverything();
+									}
+								}
+								break;
+
+							case 1: //Tiles
+								var Plc = new Vector2[30];
+								var Plc2 = new Vector2[60];
+								if (pixel.R == 168 && pixel.G == 178 && pixel.B == 204)
+								{
+									if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+									{
+										tile.TileType = 357;
+										tile.HasTile = true;
+									}
+								}
+								if (pixel.R == 63 && pixel.G == 89 && pixel.B == 255)
+								{
+									if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+									{
+										tile.TileType = (ushort)ModContent.TileType<GiantMarbalClock>();
+										tile.HasTile = true;
+									}
+								}
+								if (pixel.R == 226 && pixel.G == 109 && pixel.B == 140)
+								{
+									if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+									{
+										tile.TileType = 19;
+										tile.HasTile = true;
+									}
+								}
+								break;
+
+							case 2: //Walls
+								if (pixel.R == 111 && pixel.G == 117 && pixel.B == 135)
+								{
+									if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+									{
+										tile.WallType = 179;
+										tile.active(false);
+									}
+								}
+								break;
+							case 3: //Liquid
+								if (pixel.R == 0 && pixel.G == 0 && pixel.B == 255)
+								{
+									if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+									{
+										tile.LiquidType = LiquidID.Water;
+										tile.LiquidAmount = 50;
+										tile.HasTile = false;
+										//WorldGen.PlaceLiquid(x, y, byte.MaxValue, 255);
+									}
+								}
+								break;
+						}
+					}
+				}
+			});
+		}
+		public int templeCenterX = 400;
+		public int templeCenterY = 300;
+		public static void BuildTempleLand()
+		{
+			Point16 abPos = GetTempleLandPosition();
+			int a = abPos.X;
+			int b = abPos.Y;
+			Main.statusText = "TempleStart";
+			ShapeTile("MarbleTempleTile.bmp", a, b, 1);
+			Main.statusText = "TempleWaterStart";
+			ShapeTile("MarbleTempleLiquid.bmp", a, b, 3);
+			Main.statusText = "TempleWallStart";
+			ShapeTile("MarbleTempleWall.bmp", a, b, 2);
+			SmoothTempleTile(a, b, 160, 80);
+			//MarbleTempleGen marbleTempleGen = ModContent.GetInstance<MarbleTempleGen>();
+			//marbleTempleGen.templeCenterX = a + 80;
+			//marbleTempleGen.templeCenterY = b + 10;
+			//BuildTempleArray(a, b);
+		}
+		//public static void BuildTempleArray(int x, int y)
 		//{
-		//	//NPC.NewNPC(Main.maxTilesX * 8, 200, ModContent.NPCType("Yasitaya"), 0, 0f, 0f, 0f, 0f, 255);
-		//	int Xd = 2000;
-		//	int Yd = 600;
-		//	if (Main.maxTilesX == 6400)
+		//	x += 80;
+		//	y += 120;
+		//	for (int Dy = 0; Dy < 300; Dy++)
 		//	{
-		//		Xd = 3000;
-		//		Yd = 900;
+		//		if (Main.tile[x, y + Dy].HasTile)
+		//		{
+		//			y += Dy + 12;
+		//			break;
+		//		}
 		//	}
-		//	if (Main.maxTilesX == 8400)
+		//	for (int i = -30; i < 31; i++)
 		//	{
-		//		Xd = 4000;
-		//		Yd = 1200;
+		//		for (int j = -30; j < 31; j++)
+		//		{
+		//			float Length = new Vector2(i, j).Length();
+		//			var tile = Main.tile[x + i, y + j];
+		//			if (Length is < 30f and > 18f)
+		//			{
+		//				if (tile.HasTile)
+		//				{
+		//					if (Main.tileSolid[tile.TileType])
+		//					{
+		//						tile.TileType = 357;
+		//					}
+		//					else
+		//					{
+		//						tile.ClearEverything();
+		//					}
+		//				}
+		//				if (Length is < 24f and > 20f && j > -7)
+		//				{
+		//					tile.TileType = 357;
+		//					tile.HasTile = true;
+		//				}
+		//			}
+		//			if (Length < 19f)
+		//			{
+		//				if (tile.HasTile)
+		//				{
+		//					tile.HasTile = false;
+		//				}
+		//			}
+		//			if (Length < 28f)
+		//			{
+		//				if (tile.WallType != 0 || (Length < 22f && j > -5))
+		//				{
+		//					tile.WallType = 179;
+		//				}
+		//			}
+		//		}
 		//	}
-		//	Texture2D tex = MythContent.QuickTexture("TheMarbleRemains/WorldGeneration/MarbleTempleKill");
-		//	Color[] colorTex = new Color[tex.Width * tex.Height];
-		//	tex.GetData(colorTex);
 
-		//	for (int y = 0; y < tex.Height; y += 1)
-		//	{
-		//		for (int x = 0; x < tex.Width; x += 1)
-		//		{
-		//			if (new Color(colorTex[x + y * tex.Width].R, colorTex[x + y * tex.Width].G, colorTex[x + y * tex.Width].B) == new Color(255, 0, 0))
-		//			{
-		//				//WorldGen.PlaceTile(x + 2000, y + 100, mod.TileType("朽木"));
-		//				Main.tile[x + Xd, y + Yd].ClearEverything();
-		//			}
-		//		}
-		//	}
-		//	Texture2D tex1 = MythContent.QuickTexture("TheMarbleRemains/WorldGeneration/MarbleTempleWall");
-		//	Color[] colorTex1 = new Color[tex1.Width * tex1.Height];
-		//	tex1.GetData(colorTex);
-
-		//	for (int y = 0; y < tex1.Height; y += 1)
-		//	{
-		//		for (int x = 0; x < tex1.Width; x += 1)
-		//		{
-		//			if (new Color(colorTex[x + y * tex1.Width].R, colorTex[x + y * tex1.Width].G, colorTex[x + y * tex1.Width].B) == new Color(111, 117, 135))
-		//			{
-		//				Main.tile[x + Xd, y + Yd].wall = 179;
-		//				Main.tile[x + Xd, y + Yd].active(false);
-		//			}
-		//		}
-		//	}
-		//	Texture2D tex2 = MythContent.QuickTexture("TheMarbleRemains/WorldGeneration/MarbleTempleTile");
-		//	Color[] colortex2 = new Color[tex2.Width * tex2.Height];
-		//	tex2.GetData(colorTex);
-
-		//	for (int y = 0; y < tex2.Height; y += 1)
-		//	{
-		//		for (int x = 0; x < tex2.Width; x += 1)
-		//		{
-		//			if (new Color(colorTex[x + y * tex2.Width].R, colorTex[x + y * tex2.Width].G, colorTex[x + y * tex2.Width].B) == new Color(168, 178, 204))
-		//			{
-		//				Main.tile[x + Xd, y + Yd].type = 357;
-		//				Main.tile[x + Xd, y + Yd].active(true);
-		//			}
-		//			if (new Color(colorTex[x + y * tex2.Width].R, colorTex[x + y * tex2.Width].G, colorTex[x + y * tex2.Width].B) == new Color(63, 89, 255))
-		//			{
-		//				Main.tile[x + Xd, y + Yd].type = (ushort)ModContent.TileType<Tiles.GiantMarbalClock>();
-		//				Main.tile[x + Xd, y + Yd].active(true);
-		//			}
-		//			if (new Color(colorTex[x + y * tex2.Width].R, colorTex[x + y * tex2.Width].G, colorTex[x + y * tex2.Width].B) == new Color(226, 109, 140))
-		//			{
-		//				Main.tile[x + Xd, y + Yd].type = 19;
-		//				Main.tile[x + Xd, y + Yd].active(true);
-		//				Main.tile[x + Xd, y + Yd].frameY = 522;
-		//				WorldGen.SlopeTile(x + Xd, y + Yd, 1);
-		//			}
-		//			if (new Color(colorTex[x + y * tex2.Width].R, colorTex[x + y * tex2.Width].G, colorTex[x + y * tex2.Width].B) == new Color(226, 109, 70))
-		//			{
-		//				Main.tile[x + Xd, y + Yd].type = 19;
-		//				Main.tile[x + Xd, y + Yd].active(true);
-		//				Main.tile[x + Xd, y + Yd].frameY = 522;
-		//				WorldGen.SlopeTile(x + Xd, y + Yd, 2);
-		//			}
-		//			if (new Color(colorTex[x + y * tex2.Width].R, colorTex[x + y * tex2.Width].G, colorTex[x + y * tex2.Width].B) == new Color(204, 99, 127))
-		//			{
-		//				Main.tile[x + Xd, y + Yd].type = 19;
-		//				Main.tile[x + Xd, y + Yd].active(true);
-		//				Main.tile[x + Xd, y + Yd].frameY = 522;
-		//			}
-		//		}
-		//	}
-		//	for (int y = 0; y < tex2.Height; y += 1)
-		//	{
-		//		for (int x = 0; x < tex2.Width; x += 1)
-		//		{
-		//			if (new Color(colorTex[x + y * tex2.Width].R, colorTex[x + y * tex2.Width].G, colorTex[x + y * tex2.Width].B) == new Color(255, 13, 5))
-		//			{
-		//				WorldGen.PlaceTile(x + Xd, y + Yd, ModContent.TileType<Tiles.MarbleFragment>(), false, true, -1, 0);
-		//			}
-		//			if (new Color(colorTex[x + y * tex2.Width].R, colorTex[x + y * tex2.Width].G, colorTex[x + y * tex2.Width].B) == new Color(255, 162, 22))
-		//			{
-		//				WorldGen.PlaceTile(x + Xd, y + Yd, 34, false, true, -1, 37);
-		//				Main.tile[x + Xd - 1, y + Yd - 1].frameX += 54;
-		//				Main.tile[x + Xd, y + Yd - 1].frameX += 54;
-		//				Main.tile[x + Xd + 1, y + Yd - 1].frameX += 54;
-		//				Main.tile[x + Xd - 1, y + Yd].frameX += 54;
-		//				Main.tile[x + Xd, y + Yd].frameX += 54;
-		//				Main.tile[x + Xd + 1, y + Yd].frameX += 54;
-		//				Main.tile[x + Xd - 1, y + Yd + 1].frameX += 54;
-		//				Main.tile[x + Xd, y + Yd + 1].frameX += 54;
-		//				Main.tile[x + Xd + 1, y + Yd + 1].frameX += 54;
-		//			}
-		//		}
-		//	}
-		//	Texture2D tex3 = MythContent.QuickTexture("TheMarbleRemains/WorldGeneration/MarbleTempleLiquid");
-		//	Color[] colortex3 = new Color[tex3.Width * tex3.Height];
-		//	tex3.GetData(colorTex);
-
-		//	for (int y = 0; y < tex3.Height; y += 1)
-		//	{
-		//		for (int x = 0; x < tex3.Width; x += 1)
-		//		{
-		//			if (new Color(colorTex[x + y * tex3.Width].R, colorTex[x + y * tex3.Width].G, colorTex[x + y * tex3.Width].B) == new Color(0, 13, 204))
-		//			{
-		//				Main.tile[x + Xd, y + Yd].liquid = byte.MaxValue;
-		//			}
-		//		}
-		//	}
+		//	//var tileWheel = Main.tile[x, y + 14];
+		//	//tileWheel.TileType = (ushort)ModContent.TileType<BloodyMossWheel>();
+		//	//tileWheel.HasTile = true;
 		//}
+		public static Point16 GetTempleLandPosition()
+		{
+			int a = (int)(Main.maxTilesX * 0.3);
+			int b = (int)(Main.maxTilesY * 0.3);
+			while (!CanPlaceTemple(new Point(a, b)))
+			{
+				a = (int)(Main.maxTilesX * Main.rand.NextFloat(0.1f, 0.88f));
+				while (Math.Abs(a - Main.maxTilesX * 0.5f) < Main.maxTilesX * 0.1f)
+				{
+					a = (int)(Main.maxTilesX * Main.rand.NextFloat(0.1f, 0.88f));
+				}
+
+				b = (int)(Main.maxTilesY * Main.rand.NextFloat(0.11f, 0.31f));
+			}
+			return new Point16(a, b);
+		}
+		public static bool CanPlaceTemple(Point position)
+		{
+			if (position.X < 20 || position.Y - 60 < 20)
+			{
+				return false;
+			}
+
+			if (position.X + 160 > Main.maxTilesX - 20 || position.Y + 80 > Main.maxTilesY - 20)
+			{
+				return false;
+			}
+
+			for (int x = 0; x < 161; x++)
+			{
+				for (int y = -60; y < 81; y++)
+				{
+					if (Main.tile[x + position.X, y + position.Y].HasTile)
+					{
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		private static void SmoothTempleTile(int a, int b, int width = 256, int height = 512)
+		{
+			for (int y = 0; y < width; y += 1)
+			{
+				for (int x = 0; x < height; x += 1)
+				{
+					if (Main.tile[x + a, y + b].TileType == 357)
+					{
+						Tile.SmoothSlope(x + a, y + b, false);
+						WorldGen.TileFrame(x + a, y + b, true, false);
+					}
+					else
+					{
+						WorldGen.TileFrame(x + a, y + b, true, false);
+					}
+					WorldGen.SquareWallFrame(x + a, y + b, true);
+				}
+			}
+		}
 	}
 }
