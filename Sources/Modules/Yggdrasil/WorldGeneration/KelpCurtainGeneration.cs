@@ -1,3 +1,4 @@
+using Everglow.Commons.Skeleton2D;
 using Everglow.Yggdrasil.KelpCurtain.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Walls;
 using Terraria.Utilities;
@@ -9,11 +10,12 @@ public class KelpCurtainGeneration
 	{
 		Initialize();
 		Main.statusText = "Kelp Curtain Bark Cliff...";
-		PlaceRectangleAreaOfBlock(20, 9600, 155, 10650, ModContent.TileType<DragonScaleWood>());
-		PlaceRectangleAreaOfBlock(1045, 9600, 1180, 10650, ModContent.TileType<DragonScaleWood>());
+		UnforcablePlaceAreaOfTile(20, 9600, 155, 10650, ModContent.TileType<DragonScaleWood>());
+		UnforcablePlaceAreaOfTile(1045, 9600, 1180, 10650, ModContent.TileType<DragonScaleWood>());
 
 		PlaceRectangleAreaOfWall(20, 9600, 155, 10650, ModContent.WallType<DragonScaleWoodWall>());
 		PlaceRectangleAreaOfWall(1045, 9600, 1180, 10650, ModContent.WallType<DragonScaleWoodWall>());
+		BuildDeathJadeLake();
 	}
 	public static int[,] PerlinPixelR = new int[512, 512];
 	public static int[,] PerlinPixelG = new int[512, 512];
@@ -71,6 +73,166 @@ public class KelpCurtainGeneration
 				}
 			}
 		});
+	}
+	/// <summary>
+	/// 亡碧湖
+	/// </summary>
+	public static void BuildDeathJadeLake()
+	{
+		int startY = 10000;
+		int startX = GenRand.Next(60, 90);
+		int direction = 1;
+		if (GenRand.NextBool(2))
+		{
+			direction = -1;
+		}
+		startX *= direction;
+		startX += 600;
+		while (startY < 12000)
+		{
+			startY++;
+			Tile tile = SafeGetTile(startX, startY);
+			if (tile.HasTile)
+			{
+				startY -= 20;
+				break;
+			}
+		}
+		int randY = GenRand.Next(512);
+		int randX = GenRand.Next(512);
+		int bankWidth = GenRand.Next(220, 240);
+		int peakHeight = 0;//记录一个连续的高度
+		//湖堤
+		for (int step = 0; step < bankWidth; step++)
+		{
+			int height = (int)(step * step / 400f + PerlinPixelB[(step + randX) % 512, randY] / 30f) - 24;
+			for (int deltaY = 0; deltaY < step; deltaY++)
+			{
+				int x = startX + step * direction;
+				int y = startY - height;
+				while (!SafeGetTile(x, y).HasTile)
+				{
+					Tile tile = SafeGetTile(x, y);
+					tile.TileType = (ushort)ModContent.TileType<OldMoss>();
+					tile.HasTile = true;
+					y++;
+				}
+			}
+			if (height > peakHeight)
+			{
+				peakHeight = height;
+			}
+		}
+		//湖水
+		if (direction == 1)
+		{
+			for (int x = 50; x <= startX + bankWidth; x++)
+			{
+				int y = startY - peakHeight + 7;
+				while (!SafeGetTile(x, y).HasTile)
+				{
+					Tile tile = SafeGetTile(x, y);
+					tile.LiquidType = LiquidID.Water;
+					tile.LiquidAmount = 255;
+					y++;
+				}
+			}
+		}
+		else
+		{
+			for (int x = startX - bankWidth; x <= 1150; x++)
+			{
+				int y = startY - peakHeight + 7;
+				while (!SafeGetTile(x, y).HasTile)
+				{
+					Tile tile = SafeGetTile(x, y);
+					tile.LiquidType = LiquidID.Water;
+					tile.LiquidAmount = 255;
+					y++;
+				}
+			}
+		}
+		int lakePeakX = startX + bankWidth * direction;
+		randY = GenRand.Next(512);
+		randX = GenRand.Next(512);
+		for (int step = 0; step < 30; step++)
+		{
+			int thick = (int)((30 - step) * (30 - step) / 26d + PerlinPixelB[(step + randX) % 512, randY] / 30f);
+	    	for (int deltaY = 0; deltaY < thick; deltaY++)
+			{
+				int x = lakePeakX + step * direction;
+				int y = startY - peakHeight + deltaY;
+				Tile tile = SafeGetTile(x, y);
+				tile.TileType = (ushort)ModContent.TileType<OldMoss>();
+				tile.HasTile = true;
+			}
+		}
+		if (direction == 1)
+		{
+			randY = GenRand.Next(512);
+			randX = GenRand.Next(512);
+			for (int step = 0; step < 30; step++)
+			{
+				int thick = (int)((30 - step) * (30 - step) / 26d + PerlinPixelB[(step + randX) % 512, randY] / 30f);
+				for (int deltaY = 0; deltaY < thick; deltaY++)
+				{
+					int x = 1045 - step * direction;
+					int y = startY - peakHeight + deltaY;
+					Tile tile = SafeGetTile(x, y);
+					tile.TileType = (ushort)ModContent.TileType<OldMoss>();
+					tile.HasTile = true;
+				}
+			}
+		}
+		else
+		{
+			randY = GenRand.Next(512);
+			randX = GenRand.Next(512);
+			for (int step = 0; step < 30; step++)
+			{
+				int thick = (int)((30 - step) * (30 - step) / 26d + PerlinPixelB[(step + randX) % 512, randY] / 30f);
+				for (int deltaY = 0; deltaY < thick; deltaY++)
+				{
+					int x = 155 + step * direction;
+					int y = startY - peakHeight + deltaY;
+					Tile tile = SafeGetTile(x, y);
+					tile.TileType = (ushort)ModContent.TileType<OldMoss>();
+					tile.HasTile = true;
+				}
+			}
+		}
+	}
+	/// <summary>
+	/// 森雨幽谷
+	/// </summary>
+	public static void BuildRainValley()
+	{
+		int startY = 10000;
+		while (startY < 12000)
+		{
+			startY++;
+			Tile tile = SafeGetTile(600, startY);
+			if (tile.HasTile)
+			{
+				break;
+			}
+		}
+
+	}
+	public static void UnforcablePlaceAreaOfTile(int x0, int y0, int x1, int y1, int type)
+	{
+		for (int x = x0; x <= x1; x += 1)
+		{
+			for (int y = y0; y <= y1; y += 1)
+			{
+				Tile tile = SafeGetTile(x, y);
+				if(!tile.HasTile)
+				{
+					tile.TileType = (ushort)type;
+					tile.HasTile = true;
+				}
+			}
+		}
 	}
 }
 

@@ -1511,12 +1511,14 @@ public class YggdrasilTownGeneration
 					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 					tile.HasTile = true;
 				}
+				if (Math.Abs(y) < thick - 4)
+				{
+					Tile tile = SafeGetTile(x, y + centerY);
+					tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+				}
 			}
 		}
 	}
-
-
-
 
 	/// <summary>
 	/// 建造一个灯柱
