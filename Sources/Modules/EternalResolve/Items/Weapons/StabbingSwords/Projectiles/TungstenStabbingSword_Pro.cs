@@ -1,3 +1,5 @@
+using Everglow.Commons.Weapons.StabbingSwords;
+
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
     public class TungstenStabbingSword_Pro : StabbingProjectile

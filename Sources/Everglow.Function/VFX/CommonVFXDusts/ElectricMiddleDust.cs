@@ -1,6 +1,6 @@
 namespace Everglow.Commons.VFX.CommonVFXDusts;
 
-class ElectricMiddleDust : ModDust
+public class ElectricMiddleDust : ModDust
 {
 	public override string Texture => "Terraria/Images/Projectile_0";
 	public override void OnSpawn(Dust dust)
@@ -13,7 +13,7 @@ class ElectricMiddleDust : ModDust
 		{
 			for (int g = 0; g < dust.scale * 70f; g++)
 			{
-				float size = Main.rand.NextFloat(3f, 12f);
+				float size = Main.rand.NextFloat(3f, 12f) * dust.scale * 10f;
 				Vector2 afterVelocity = new Vector2(0, size * dust.scale * 3).RotatedByRandom(MathHelper.TwoPi);
 				var electric = new ElectricCurrentDust
 				{

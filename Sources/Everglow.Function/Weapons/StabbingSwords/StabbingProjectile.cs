@@ -4,7 +4,7 @@ using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.Utilities;
 
-namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
+namespace Everglow.Commons.Weapons.StabbingSwords
 {
 	public abstract class StabbingProjectile : ModProjectile
     {
@@ -56,7 +56,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		/// 荧光颜色缩变,小于1
 		/// </summary>
 		public float FadeGlowColorValue = 0f;
-		public override string Texture => "Everglow/EternalResolve/Items/Weapons/StabbingSwords/StabbingProjectile";
+		public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
 		/// <summary>
 		/// 宽度width会影响伤害判定(斜矩形)的宽度,高度会影响判定的长度
 		/// </summary>
@@ -97,7 +97,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
             Projectile.soundDelay--;
             if (Projectile.soundDelay <= 0)
             {
-                SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
+				//SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
+				SoundStyle ss = SoundID.Item1;
+				SoundEngine.PlaySound(ss, Projectile.Center);
                 Projectile.soundDelay = SoundTimer;
             }
 
@@ -136,6 +138,13 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			UpdateItemDraw();
 			UpdateDarkDraw();
 			UpdateLightDraw();
+		}
+		public virtual void HitTileSound(float scale)
+		{
+			//SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/StabCollide");
+			SoundStyle ss = SoundID.NPCHit4;
+			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
+			Projectile.soundDelay = SoundTimer;
 		}
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
@@ -220,16 +229,26 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			float drawRotation = Projectile.rotation + rndDirction * (MathF.PI * 2f) * 0.03f;
 			float additiveDrawPos = MaxLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
 			Vector2 drawPos = Pos + drawRotation.ToRotationVector2() * additiveDrawPos + rand.NextVector2Circular(20f, 20f);
-			while (!Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice, 0, 0))
+			bool canHit = Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice, 0, 0);
+
+			float volumn = rndRange;
+			if (!Main.gamePaused && !canHit)
 			{
-				rndRange *= 0.9f;
-				drawPos -= Projectile.velocity * 0.2f;
-				if (rndRange < 0.3f)
+				while (!canHit)
 				{
-					break;
+					volumn *= 0.9f;
+					drawPos -= Projectile.velocity * 0.2f;
+					if (volumn < 0.3f)
+					{
+						break;
+					}
 				}
+				Vector2 ij = drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice + Projectile.velocity;
+				ij /= 16f;
+				WorldGen.KillTile((int)(ij.X), (int)(ij.Y), true, false, true);
+				HitTileSound(volumn);
 			}
-			Vector2 drawSize = new Vector2(rndRange, DrawWidth) * lerpedTwice;
+			Vector2 drawSize = new Vector2(volumn, DrawWidth) * lerpedTwice;
 			if (TradeLength > 0)
 			{
 				for (int f = TradeLength - 1; f > 0; f--)
