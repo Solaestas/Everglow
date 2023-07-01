@@ -68,7 +68,9 @@
 		BeforeTargets="BuildMod">
 		<ItemGroup>
 			<AssetLists Include="@(ModuleReference->'$(BaseIntermediateOutputPath)%(Filename).asset.list')" />
+			<AssetLists Include="$(BaseIntermediateOutputPath)Commons.asset.list" />
 			<ResourceLists Include="@(ModuleReference->'$(BaseIntermediateOutputPath)%(Filename).resource.list')" />
+			<ResourceLists Include="$(BaseIntermediateOutputPath)Commons.resource.list" />
 		</ItemGroup>
 		<ReadAssets AssetLists="@(AssetLists)"
 			AssetPath="$(OutputPath)Assets\">
