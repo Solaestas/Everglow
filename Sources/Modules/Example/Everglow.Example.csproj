@@ -1,6 +1,3 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <Solaestas-EffectFile Remove="VFX\Default.fx" />
-  </ItemGroup>
 </Project>
     
