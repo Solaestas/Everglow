@@ -67,8 +67,10 @@
 	<Target Name="PrepareBuildEverglow"
 		BeforeTargets="BuildMod">
 		<ItemGroup>
-			<AssetLists Include="$(BaseIntermediateOutputPath)*.asset.list" />
-			<ResourceLists Include="$(BaseIntermediateOutputPath)*.resource.list" />
+			<AssetLists Include="@(ModuleReference->'$(BaseIntermediateOutputPath)%(Filename).asset.list')" />
+			<AssetLists Include="$(BaseIntermediateOutputPath)Commons.asset.list" />
+			<ResourceLists Include="@(ModuleReference->'$(BaseIntermediateOutputPath)%(Filename).resource.list')" />
+			<ResourceLists Include="$(BaseIntermediateOutputPath)Commons.resource.list" />
 		</ItemGroup>
 		<ReadAssets AssetLists="@(AssetLists)"
 			AssetPath="$(OutputPath)Assets\">
