@@ -1,8 +1,5 @@
 
     <Project Sdk="Microsoft.NET.Sdk">
       <Import Project="..\Module.props" />
-      <ItemGroup>
-        <None Remove="NonTrueMeleeProj\PlanetBeFall.png" />
-      </ItemGroup>
     </Project>
     
