@@ -23,20 +23,36 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		public int PowerfulStabProj;
 		public override bool AltFunctionUse(Player player)
 		{
-			return player.ownedProjectileCounts[PowerfulStabProj] < 1;
+			foreach (Projectile proj in Main.projectile)
+			{
+				if (proj.owner == player.whoAmI && proj.timeLeft > 1 && proj.type == PowerfulStabProj)
+				{
+					return false;
+				}
+			}
+			return true;
 		}
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			if (player.altFunctionUse == 2)
 			{
 				Projectile.NewProjectile(source, position, Vector2.Zero, PowerfulStabProj, damage, knockback, player.whoAmI, 0f, 0f);
+				player.itemTime = Item.useTime / 4;
+				player.itemAnimation = Item.useAnimation / 4;
 				return false;
 			}
 			return true;
 		}
 		public override bool CanUseItem(Player player)
 		{
-			return player.ownedProjectileCounts[PowerfulStabProj] < 1;
+			foreach (Projectile proj in Main.projectile)
+			{
+				if (proj.owner == player.whoAmI && proj.timeLeft > 1 && proj.type == PowerfulStabProj)
+				{
+					return false;
+				}
+			}
+			return true;
 		}
 	}
 }
