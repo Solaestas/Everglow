@@ -1,0 +1,21 @@
+Common: {
+	Hour: hour
+	Minute: minute
+	Second: second
+	Duration: duration
+	
+	DebugItem:
+		'''
+		! Debug item !
+		Use on your own risk
+		'''
+}
+
+Items: {
+	TreePlacer.DisplayName: Tree Placer
+	TwilightWood.DisplayName: Twilight Wood
+}
+
+MapEntry: {
+	TwilightTree: Mods.Everglow.MapEntry.TwilightTree
+}

@@ -1,0 +1,41 @@
+Common: {
+	Hour: 小时
+	Minute: 分钟
+	Second: 秒
+	Duration: 持续时间
+	
+	DebugItem:
+	'''
+	! 调试物品 !
+	后果自负
+	'''
+}
+
+Items: {
+	CactusBall: {
+		# Plant Module Items
+		DisplayName: 仙人球棍
+		#Plant Module Items
+		Tooltip:
+			'''
+			旋转并掷出你的仙人掌球！
+			击碎敌人护甲，并让它们流血
+			'''
+	}
+}
+
+Buffs: {
+	CactusBallBuff: {
+		DisplayName: 重击
+		Description:
+			'''
+			你的护甲已被击毁
+			持续流失生命，防御减少12
+			'''
+	}
+}
+
+Projectiles: {
+	CactusBallProj.DisplayName: 仙人掌球
+	CactusBallSpike.DisplayName: 仙人掌刺
+}

@@ -1,0 +1,21 @@
+Common: {
+	Hour: hour
+	Minute: minute
+	Second: second
+	Duration: duration
+	
+	DebugItem:
+		'''
+		! Debug item !
+		Use on your own risk
+		'''
+}
+
+Items: {
+	RampageShark.DisplayName: Rampage Shark
+}
+
+Projectiles: {
+	RampageShark.DisplayName: Rampage Shark
+	RampageSharkHit.DisplayName: Rampage Shark Hit
+}

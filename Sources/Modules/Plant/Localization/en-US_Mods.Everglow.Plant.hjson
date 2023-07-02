@@ -1,0 +1,41 @@
+Common: {
+	Hour: hour
+	Minute: minute
+	Second: second
+	Duration: duration
+	
+	DebugItem:
+		'''
+		! Debug item !
+		Use on your own risk
+		'''
+}
+
+Items: {
+	CactusBall: {
+		# Plant Module Items
+		DisplayName: Cactus Rod
+		#Plant Module Items
+		Tooltip:
+			'''
+			Spin and throw a cactus ball!
+			Shred victims' armour and bleed them
+			'''
+	}
+}
+
+Buffs: {
+	CactusBallBuff: {
+	//	DisplayName: 重击
+	/*	Description:
+			'''
+			你的护甲已被击毁
+			持续流失生命，防御减少12
+			''' */
+	}
+}
+
+Projectiles: {
+	// CactusBallProj.DisplayName: 仙人掌球
+	// CactusBallSpike.DisplayName: 仙人掌刺
+}

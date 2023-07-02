@@ -1,0 +1,118 @@
+Common: {
+	Hour: 小时
+	Minute: 分钟
+	Second: 秒
+	Duration: 持续时间
+	NotActivated: 未激活
+	
+	DebugItem:
+		'''
+		! 调试物品 !
+		后果自负
+		'''
+}
+
+NPCs: {
+	// CyanOreBeetle.DisplayName: Cyan Ore Beetle
+	SquamousShell.DisplayName: 龙鳞古壳
+	// TestNPC.DisplayName: Test N P C
+}
+
+Items: {
+	Acropora.DisplayName: 花鹿角珊瑚
+	Basalt.DisplayName: 玄武岩
+	DragonScaleWood.DisplayName: 龙鳞木
+	GoldGorgonianBranch.DisplayName: 金柳珊瑚枝
+	GorgonianPiece.DisplayName: 柳珊瑚片
+	OldMoss.DisplayName: 苍苔
+	Chinalamp1.DisplayName: 古韵台灯
+	Chinalamp2.DisplayName: 古韵台灯
+	LanternCrystal.DisplayName: 皇城晶塔
+	LanternPost1.DisplayName: 灯笼柱
+	LanternPost2.DisplayName: 灯笼柱
+
+	YggdrasilCapital: {
+		# Yggdrasil Items
+		DisplayName: "'天穹印象'"
+		# 天穹树系列物品
+		Tooltip:
+			'''
+			带你到天穹树
+			{$Mods.Everglow.Common.DebugItem}
+			'''
+	}
+
+	DiscordBallF1.DisplayName: 混沌晶球·天穹古道
+	LiftLamp.DisplayName: 电梯指示灯
+
+	TestItem: {
+		DisplayName: 木制升降梯
+		# LiftLamp
+		// Tooltip: "{$Mods.Everglow.Common.DebugItem}"
+	}
+
+	#Yggdrasil Town
+	ChinesePartitionLamp.DisplayName: 中式屏风灯
+	ChineseStyleFloorLamp.DisplayName: 中式落地灯
+	CyanVineBar.DisplayName: 青缎钢锭
+	CyanVineOre.DisplayName: 青缎矿
+	DoubleArmsChineseStreetLamp.DisplayName: 中式双臂街灯
+	HangingSkyLantern.DisplayName: 吊挂式孔明灯
+	HexagonalCeilingLamp.DisplayName: 六角宫灯
+	ShoreMud.DisplayName: 深色淤泥
+	SideHangingLantern.DisplayName: 侧挂式灯笼
+	StoneDragonScaleWood.DisplayName: 石化龙鳞木
+	StreetLantern.DisplayName: 灯笼街灯
+	YellowDynastyShingles.DisplayName: 黄王朝瓦
+
+	CyanVinePickaxe: {
+		DisplayName: 青缎镐
+		# 天穹树小镇
+		Tooltip:
+			'''
+			允许你破坏石化龙鳞木
+			加速破坏青缎矿
+			'''
+	}
+
+	// LiftWinch.DisplayName: Lift Winch
+	// BloodLightCrystal.DisplayName: Blood Light Crystal
+	// TrueDeathSickle.DisplayName: True Death Sickle
+	// CyanWindGranite.DisplayName: Cyan Wind Granite
+	// DragonScaleWoodWall.DisplayName: Dragon Scale Wood Wall
+	// AcroporaSpear.DisplayName: Acropora Spear
+	// YggdrasilDirt.DisplayName: Yggdrasil Dirt
+	// StoneDragonScaleWoodWall.DisplayName: Stone Dragon Scale Wood Wall
+	// CyanVineAxe.DisplayName: Cyan Vine Axe
+	// CyanVineHammer.DisplayName: Cyan Vine Hammer
+	// CyanVineSword.DisplayName: Cyan Vine Sword
+	// CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
+	// YggdrasilAmber.DisplayName: Yggdrasil Amber
+
+}
+
+MapEntry: {
+	SideHangingLantern: 侧挂式灯笼
+}
+
+Projectiles: {
+	// TrueDeathSickle.DisplayName: True Death Sickle
+	// TrueDeathSickleHit.DisplayName: Navy Thunder Bomb
+	// AcroporaSpear.DisplayName: Acropora Spear
+	// AcroporaThumpEff.DisplayName: Acropora Thump Eff
+	// CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
+}
+
+Biomes: {
+	// KelpCurtainBiome.DisplayName: Kelp Curtain
+	// YggdrasilTownBiome.DisplayName: Yggdrasil Town
+}
+
+Tiles: {
+	LiftLamp.MapEntry: 电梯指示灯
+	// CyanVineBar.MapEntry: Metal Bar
+	CyanVineOreTile.MapEntry: Çà¶Ð¿ó
+	CyanVineStone.MapEntry: 青缎矿
+	// HangingSkyLantern.MapEntry: Chandelier
+	// HexagonalCeilingLamp.MapEntry: Chandelier
+}
