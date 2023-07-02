@@ -1,10 +1,6 @@
 using Terraria.Localization;
 
-<<<<<<<< HEAD:Sources/Modules/PlantAndFarm/Projectiles/PurpleBallEffect.cs
-namespace Everglow.PlantAndFarm.Projectiles;
-========
 namespace Everglow.Myth.Misc.Projectiles.Typeless;
->>>>>>>> master:Sources/Modules/Myth/Misc/Projectiles/Typeless/PurpleBallEffect.cs
 
 public class PurpleBallEffect : ModProjectile
 {
