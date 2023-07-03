@@ -1,14 +1,14 @@
-using Everglow.Commons.Vertex;
+using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
+using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class VegetationBayonet_Pro : StabbingProjectile
-    {
-        public override void SetDefaults()
-        {
+	public class VegetationBayonet_Pro : StabbingProjectile
+	{
+		public override void SetDefaults()
+		{
 			base.SetDefaults();
 			Color = new Color(66, 137, 58);
 			TradeLength = 4;
@@ -75,18 +75,18 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 			float scale = MathF.Sin((float)Main.time * 0.8f);
 			DrawGlowBerry(lightColor, -5, 11, ModAsset.VegetationBayonet_flag.Value, scale);
-			DrawGlowBerry(new Color(255,255,255,0), -5, 11, ModAsset.VegetationBayonet_flag.Value, scale);
+			DrawGlowBerry(new Color(255, 255, 255, 0), -5, 11, ModAsset.VegetationBayonet_flag.Value, scale);
 		}
 		public void DrawGlowBerry(Color lightColor, float flagLeftX, float flagTopY, Texture2D flagTexture, float addRotation = 0f)
 		{
 			float flagTopCenter = flagLeftX + flagTexture.Width / 2f;
-			Main.spriteBatch.Draw(flagTexture,ItemDraw.Postion + new Vector2(flagTopCenter, flagTopY).RotatedBy(ItemDraw.Rotation) - Main.screenPosition, null,lightColor, addRotation, new Vector2(0, flagTexture.Width / 2f),Projectile.scale,SpriteEffects.None,0);
+			Main.spriteBatch.Draw(flagTexture, ItemDraw.Postion + new Vector2(flagTopCenter, flagTopY).RotatedBy(ItemDraw.Rotation) - Main.screenPosition, null, lightColor, addRotation, new Vector2(0, flagTexture.Width / 2f), Projectile.scale, SpriteEffects.None, 0);
 		}
 		public override void PostDraw(Color lightColor)
 		{
 			Player player = Main.player[Projectile.owner];
-			Texture2D Shadow = ModAsset.StabbingProjectileShade.Value;
-			Texture2D light = ModAsset.StabbingProjectile.Value;
+			Texture2D Shadow = Commons.ModAsset.StabbingProjectileShade.Value;
+			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
 			DrawItem(lightColor);
@@ -113,6 +113,11 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * Color.R / 255f, lightColor.G / 255f * Color.G / 255f, lightColor.B / 255f * Color.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 				}
 			}
+		}
+		public override void HitTileSound(float scale)
+		{
+			SoundEngine.PlaySound((SoundID.Dig.WithVolume(1 - scale / 2.42f)).WithPitchOffset(Main.rand.NextFloat(0.6f, 1f)), Projectile.Center);
+			Projectile.soundDelay = SoundTimer;
 		}
 	}
 }

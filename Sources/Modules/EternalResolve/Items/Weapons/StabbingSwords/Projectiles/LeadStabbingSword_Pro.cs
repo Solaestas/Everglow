@@ -1,3 +1,4 @@
+using Everglow.Commons.Weapons.StabbingSwords;
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
     public class LeadStabbingSword_Pro : StabbingProjectile
