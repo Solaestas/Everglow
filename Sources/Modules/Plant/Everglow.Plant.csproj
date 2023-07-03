@@ -1,5 +1,3 @@
-
-    <Project Sdk="Microsoft.NET.Sdk">
-      <Import Project="..\Module.props" />
-    </Project>
+<Project Sdk="Microsoft.NET.Sdk">
+</Project>
     
