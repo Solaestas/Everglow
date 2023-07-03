@@ -1,11 +1,9 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MEACModule;
-using Everglow.Sources.Modules.MEACModule.Items;
-using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.MEAC;
 using Terraria.GameContent;
 
 
-namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.PlanetBefallArray
+namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 {
     public class PlanetBefallArray : ModProjectile ,IBloomProjectile
     {

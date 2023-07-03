@@ -1,21 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Commons.Function.Curves;
 using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.GameContent.Shaders;
-using Everglow.Sources.Commons.Core.VFX;
-using Everglow.Sources.Commons.Function.IIIDModelReader;
-using Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall;
+using Everglow.Commons.VFX;
 using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 
-namespace Everglow.Sources.Modules.IIIDModule.Projectiles
+namespace Everglow.Commons.IIID
 {
     public abstract class IIIDProj : ModProjectile
     {

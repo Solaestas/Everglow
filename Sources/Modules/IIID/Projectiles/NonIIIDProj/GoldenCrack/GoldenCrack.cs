@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,19 +11,19 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
-using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Commons.Vertex;
 using Terraria.ID;
-using Everglow.Sources.Modules.MEACModule;
+using Everglow.Commons.MEAC;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Graphics.Effects;
 using ReLogic.Content;
-using static Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack.Tree;
+using static Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack.Tree;
 
 
-namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack
+namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 {
     public class Tree
     {

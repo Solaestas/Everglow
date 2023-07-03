@@ -6,6 +6,15 @@
 		<Solaestas-AssetPrefix>$(AssetsPrefix)</Solaestas-AssetPrefix>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Solaestas-EffectFile Remove="IIID\Effects\Bloom.fx" />
+	  <Solaestas-EffectFile Remove="IIID\Effects\GoldenCrack.fx" />
+	  <Solaestas-EffectFile Remove="IIID\Effects\IIIDEffects\Filters.fx" />
+	  <Solaestas-EffectFile Remove="IIID\Effects\IIIDEffects\GBufferPass.fx" />
+	  <Solaestas-EffectFile Remove="IIID\Effects\IIIDEffects\MeshTest.fx" />
+	  <Solaestas-EffectFile Remove="IIID\Effects\IIIDEffects\PixelArt.fx" />
+	  <Solaestas-EffectFile Remove="IIID\Effects\IIIDEffects\ToneMapping.fx" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
 		<ProjectReference Include="..\Everglow.Core\Everglow.Core.csproj" />
 	</ItemGroup>

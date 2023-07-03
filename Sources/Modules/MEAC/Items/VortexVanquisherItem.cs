@@ -1,16 +1,16 @@
 using Everglow.MEAC.Projectiles;
-using Everglow.Sources.Commons.Core.Utils;
-using Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack;
-using Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.PlanetBefallArray;
-using Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall;
-using Everglow.Sources.Modules.MEACModule.Projectiles;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
+//using Everglow.Sources.Commons.Core.Utils;
+using Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack;
+using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray;
+using Everglow.IIID.Projectiles.PlanetBefall;
 using ReLogic.Graphics;
 using System.Security.AccessControl;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
-using static Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack.Tree;
+using static Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack.Tree;
+using Everglow.IIID;
+using Everglow.MEAC.NonTrueMeleeProj;
 
 namespace Everglow.Sources.Modules.MEACModule.Items
 {
@@ -122,7 +122,7 @@ namespace Everglow.Sources.Modules.MEACModule.Items
 						bool HasProj = false;
 						foreach (Projectile proj in Main.projectile)
 						{
-							if (proj.owner == player.whoAmI && proj.type == ModContent.ProjectileType<NonTrueMeleeProj.GoldShield>() && proj.active)
+							if (proj.owner == player.whoAmI && proj.type == ModContent.ProjectileType<GoldShield>() && proj.active)
 							{
 								proj.timeLeft = 1200;
 								proj.ai[1] = 150;//盾量
@@ -131,7 +131,7 @@ namespace Everglow.Sources.Modules.MEACModule.Items
 						}
 						if (!HasProj)
 						{
-							Projectile proj2 = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<NonTrueMeleeProj.GoldShield>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
+							Projectile proj2 = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<GoldShield>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
 							proj2.ai[1] = 150;//盾量
 						}
 						Vector2 CheckPoint = Main.MouseWorld;
@@ -185,7 +185,7 @@ namespace Everglow.Sources.Modules.MEACModule.Items
 							return;
 						}
 
-						int f = Projectile.NewProjectile(player.GetSource_ItemUse(Item), CheckPoint, Vector2.Zero, ModContent.ProjectileType<NonTrueMeleeProj.StonePost>(), Item.damage, 0, player.whoAmI, 1);
+						int f = Projectile.NewProjectile(player.GetSource_ItemUse(Item), CheckPoint, Vector2.Zero, ModContent.ProjectileType<StonePost>(), Item.damage, 0, player.whoAmI, 1);
 						float Angle = (float)Math.Atan2(TotalVector.Y, TotalVector.X);
 						Main.projectile[f].rotation = (float)(Angle - Math.PI * 1.5);
 					}
@@ -220,47 +220,5 @@ namespace Everglow.Sources.Modules.MEACModule.Items
 
 		}
 	}
-	public class PlanetBeFallScreenMovePlayer : ModPlayer
-	{
-		public int AnimationTimer = 0;
-		public bool PlanetBeFallAnimation = false;
-		public Projectile proj;
-		const float MaxTime = 180;
-		public override void ModifyScreenPosition()
-		{
-			Vector2 target;
-			if (proj != null)
-			{
-				if (proj.owner == Player.whoAmI)
-				{
-					target = proj.Center - Main.ScreenSize.ToVector2() / 2;
-					if (PlanetBeFallAnimation)
-					{
 
-						AnimationTimer += 10;
-						float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
-						if (AnimationTimer >= 60 && AnimationTimer < 120)
-						{
-							AnimationTimer -= 6;
-							Value = 1;
-						}
-						if (AnimationTimer >= 120)
-						{
-							AnimationTimer -= 7;
-							Value = (1 + MathF.Cos((AnimationTimer - 120) / 60f * MathF.PI)) / 2f;
-						}
-
-						if (AnimationTimer >= MaxTime)
-						{
-							AnimationTimer = (int)MaxTime;
-							PlanetBeFallAnimation = false;
-						}
-						Player.immune = true;
-						Player.immuneTime = 1;
-						Main.screenPosition = (Value).Lerp(Main.screenPosition, target);
-					}
-				}
-			}
-		}
-	}
 }

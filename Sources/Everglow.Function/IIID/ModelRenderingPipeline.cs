@@ -1,11 +1,11 @@
-﻿using ReLogic.Content;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
+namespace Everglow.Commons.IIID
 {
     public struct BloomParams
     {
@@ -70,7 +70,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             m_toneMapping = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/IIIDEffects/ToneMapping");
             m_pixelArt = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/IIIDEffects/PixelArt");
             Main.OnResolutionChanged += Main_OnResolutionChanged;
-            Everglow.MainThreadContext.AddTask(() =>
+			Ins.MainThread.AddTask(() =>
             {
                 m_fakeScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, RenderTargetSize, RenderTargetSize, false,
                     SurfaceFormat.HdrBlendable, DepthFormat.Depth24Stencil8, 1, RenderTargetUsage.PreserveContents);

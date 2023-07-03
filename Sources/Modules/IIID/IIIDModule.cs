@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Commons.Core.ModuleSystem;
-using Everglow.Sources.Commons.Function.ObjectPool;
-using Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack;
-using Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall;
+using Everglow.Commons.Modules;
+using Everglow.Commons.ObjectPool;
+using Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack;
+using Everglow.IIID.Projectiles.PlanetBefall;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,23 +11,23 @@ using Terraria.Graphics.Effects;
 
 namespace Everglow.Sources.Modules.IIIDModule
 {
-    internal class ZIIIDModule : IModule
-    {
+    /*internal class IIIDModule : EverglowModule
+	{
         RenderTarget2D render;
         RenderTarget2D screen;
         RenderTarget2D bloom1;
         RenderTarget2D bloom2;
         Effect Bloom,GoldenCrackVFX;
-        string IModule.Name => "ZIIID";
-        void IModule.Load()
-        {
+		public override string Name => "IIID";
+		public override void Load()
+		{
             Bloom = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/Bloom1").Value;
             GoldenCrackVFX = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/GoldenCrack").Value;
-            On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;//原版绘制场景的最后部分——滤镜。在这里运用render保证不会与原版冲突
+			On_FilterManager.EndCapture += FilterManager_EndCapture;//原版绘制场景的最后部分——滤镜。在这里运用render保证不会与原版冲突
             Main.OnResolutionChanged += Main_OnResolutionChanged;
             On.Terraria.Main.LoadWorlds += Main_OnLoadWorlds;
         }        
-        void IModule.Unload()
+        public override void Unload()
         {
             On.Terraria.Graphics.Effects.FilterManager.EndCapture -= FilterManager_EndCapture;
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
@@ -42,8 +42,8 @@ namespace Everglow.Sources.Modules.IIIDModule
             }
         }
 
-        private void FilterManager_EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, Microsoft.Xna.Framework.Graphics.RenderTarget2D finalTexture, Microsoft.Xna.Framework.Graphics.RenderTarget2D screenTarget1, Microsoft.Xna.Framework.Graphics.RenderTarget2D screenTarget2, Microsoft.Xna.Framework.Color clearColor)
-        {
+		private void FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
+		{
             GraphicsDevice gd = Main.instance.GraphicsDevice;
             SpriteBatch sb = Main.spriteBatch;
 
@@ -87,7 +87,7 @@ namespace Everglow.Sources.Modules.IIIDModule
                    node.num,
                    true, false);*/
 
-            gd.SetRenderTarget(bloom1);
+           /* gd.SetRenderTarget(bloom1);
             gd.Clear(Color.Transparent);
             Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
             Bloom.CurrentTechnique.Passes["GlurH"].Apply();
@@ -177,5 +177,5 @@ namespace Everglow.Sources.Modules.IIIDModule
             bloom2 = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 3, Main.screenHeight / 3);
         }
 
-    }
+    }*/
 }
