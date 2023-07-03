@@ -24,9 +24,12 @@ namespace Everglow.Commons.IIID
 		public static Model LoadFile(string fileName)
 		{
 			Model mesh = new Model();
-			if (fileName != null)
+			var bytes = ModContent.GetFileBytes(fileName);
+			//string path = new MemoryStream(bytes);
+			if (new MemoryStream(bytes) != null)
 			{
-				using (StreamReader objReader = new StreamReader(fileName
+				using (StreamReader objReader = new StreamReader(
+					new MemoryStream(bytes)
 				))
 				{
 
