@@ -1,7 +1,7 @@
 using Everglow.Commons.Vertex;
 using Everglow.Commons.MEAC;
 using Terraria.GameContent;
-using Everglow.Commons.Utilities;
+
 
 namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 {
@@ -24,9 +24,9 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 		{
 			Player player = Main.player[Projectile.owner];
 			Projectile.velocity *= 0;
-			if (Timer < 20)
+			if (Timer < 40)
 			{
-				Timer = 0.25f.Lerp(Timer, 20);
+				Timer+=0.5f;
 			}
 			if (Projectile.timeLeft < 60)
 			{
