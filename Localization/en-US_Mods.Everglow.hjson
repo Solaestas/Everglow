@@ -1,0 +1,3113 @@
+Tiles: {
+	BottleOfNutShellFlowers.MapEntry: Bottle Of Nut Shell Flowers
+	PlumBlossomInABowl.MapEntry: Plum Blossom In A Bowl
+	WhiteLotusBonsai.MapEntry: White Lotus Bonsai
+	BloodifyPlatform.MapEntry: Bloodify Platform
+	BloodyMossWheel.MapEntry: Bloody Moss Wheel
+	BloodyMossWheelFinished.MapEntry: Bloody Moss Wheel Finished
+	StoneTusk.MapEntry: Stone Tusk
+	StoneTuskSmall.MapEntry: Stone Tusk Small
+	StrangeTuskStone.MapEntry: Strange Tusk Stone
+	StrangeTuskStone1.MapEntry: Strange Tusk Stone1
+	StrangeTuskStone2.MapEntry: Strange Tusk Stone2
+	StrangeTuskStone3.MapEntry: Strange Tusk Stone3
+	StrangeTuskStone4.MapEntry: Strange Tusk Stone4
+	TuskRelic.MapEntry: Tusk Relic
+	BlackFren.MapEntry: Black Fren
+	BlackFrenLarge.MapEntry: Black Fren Large
+	BlackStarShrub.MapEntry: Black Star Shrub
+	BlackStarShrubSmall.MapEntry: Black Star Shrub Small
+	BlackVine.MapEntry: Black Vine
+	BlueBlossom.MapEntry: Blue Blossom
+	CocoonRock.MapEntry: Cocoon Rock
+	GlowingReed.MapEntry: Glowing Reed
+	LampLotus.MapEntry: Lamp Lotus
+	MothWorldDoor.MapEntry: Moth World Door
+	CyanVineBar.MapEntry: Cyan Vine Bar
+	CyanVineOreTile.MapEntry: Cyan Vine Ore Tile
+	CyanVineStone.MapEntry: Cyan Vine Stone
+	LiftLamp.MapEntry: Lift Lamp
+}
+
+Biomes: {
+	TuskBiome: {
+		DisplayName: Tusk Biome
+		TownNPCDialogueName: the Tusk Biome
+	}
+
+	TuskSurfaceBiome: {
+		DisplayName: Tusk Surface Biome
+		TownNPCDialogueName: the Tusk Surface Biome
+	}
+
+	FireflyBiome: {
+		DisplayName: Firefly Biome
+		TownNPCDialogueName: the Firefly Biome
+	}
+
+	YggdrasilTownBiome: {
+		DisplayName: Yggdrasil Town Biome
+		TownNPCDialogueName: the Yggdrasil Town Biome
+	}
+
+	KelpCurtainBiome: {
+		DisplayName: Kelp Curtain Biome
+		TownNPCDialogueName: the Kelp Curtain Biome
+	}
+}
+
+MapEntry.FluorescentTree: Mods.Everglow.MapEntry.FluorescentTree
+
+Buffs: {
+	BloodSwordStrikeBuff: {
+		DisplayName: Blood Sword Strike Buff
+		Description: Mods.Everglow.Buffs.BloodSwordStrikeBuff.Description
+	}
+
+	LifeRotten: {
+		DisplayName: Life Rotten
+		Description: Mods.Everglow.Buffs.LifeRotten.Description
+	}
+
+	OnElectric: {
+		DisplayName: On Electric
+		Description: Mods.Everglow.Buffs.OnElectric.Description
+	}
+
+	StarCrack: {
+		DisplayName: Star Crack
+		Description: Mods.Everglow.Buffs.StarCrack.Description
+	}
+
+	AppleBuff: {
+		DisplayName: Apple Buff
+		Description: Mods.Everglow.Buffs.AppleBuff.Description
+	}
+
+	ApplePieBuff: {
+		DisplayName: Apple Pie Buff
+		Description: Mods.Everglow.Buffs.ApplePieBuff.Description
+	}
+
+	ApricotBuff: {
+		DisplayName: Apricot Buff
+		Description: Mods.Everglow.Buffs.ApricotBuff.Description
+	}
+
+	BaconBuff: {
+		DisplayName: Bacon Buff
+		Description: Mods.Everglow.Buffs.BaconBuff.Description
+	}
+
+	BananaBuff: {
+		DisplayName: Banana Buff
+		Description: Mods.Everglow.Buffs.BananaBuff.Description
+	}
+
+	BananaSplitBuff: {
+		DisplayName: Banana Split Buff
+		Description: Mods.Everglow.Buffs.BananaSplitBuff.Description
+	}
+
+	BBQRibsBuff: {
+		DisplayName: B B Q Ribs Buff
+		Description: Mods.Everglow.Buffs.BBQRibsBuff.Description
+	}
+
+	BlackCurrantBuff: {
+		DisplayName: Black Currant Buff
+		Description: Mods.Everglow.Buffs.BlackCurrantBuff.Description
+	}
+
+	BloodOrangeBuff: {
+		DisplayName: Blood Orange Buff
+		Description: Mods.Everglow.Buffs.BloodOrangeBuff.Description
+	}
+
+	BowlofSoupBuff: {
+		DisplayName: Bowlof Soup Buff
+		Description: Mods.Everglow.Buffs.BowlofSoupBuff.Description
+	}
+
+	BunnyStewBuff: {
+		DisplayName: Bunny Stew Buff
+		Description: Mods.Everglow.Buffs.BunnyStewBuff.Description
+	}
+
+	BurgerBuff: {
+		DisplayName: Burger Buff
+		Description: Mods.Everglow.Buffs.BurgerBuff.Description
+	}
+
+	CherryBuff: {
+		DisplayName: Cherry Buff
+		Description: Mods.Everglow.Buffs.CherryBuff.Description
+	}
+
+	ChickenNuggetBuff: {
+		DisplayName: Chicken Nugget Buff
+		Description: Mods.Everglow.Buffs.ChickenNuggetBuff.Description
+	}
+
+	ChocolateChipCookieBuff: {
+		DisplayName: Chocolate Chip Cookie Buff
+		Description: Mods.Everglow.Buffs.ChocolateChipCookieBuff.Description
+	}
+
+	ChristmasPuddingBuff: {
+		DisplayName: Christmas Pudding Buff
+		Description: Mods.Everglow.Buffs.ChristmasPuddingBuff.Description
+	}
+
+	CoconutBuff: {
+		DisplayName: Coconut Buff
+		Description: Mods.Everglow.Buffs.CoconutBuff.Description
+	}
+
+	CookedFishBuff: {
+		DisplayName: Cooked Fish Buff
+		Description: Mods.Everglow.Buffs.CookedFishBuff.Description
+	}
+
+	CookedMarshmallowBuff: {
+		DisplayName: Cooked Marshmallow Buff
+		Description: Mods.Everglow.Buffs.CookedMarshmallowBuff.Description
+	}
+
+	CookedShrimpBuff: {
+		DisplayName: Cooked Shrimp Buff
+		Description: Mods.Everglow.Buffs.CookedShrimpBuff.Description
+	}
+
+	DragonfruitBuff: {
+		DisplayName: Dragonfruit Buff
+		Description: Mods.Everglow.Buffs.DragonfruitBuff.Description
+	}
+
+	ElderberryBuff: {
+		DisplayName: Elderberry Buff
+		Description: Mods.Everglow.Buffs.ElderberryBuff.Description
+	}
+
+	EscargotBuff: {
+		DisplayName: Escargot Buff
+		Description: Mods.Everglow.Buffs.EscargotBuff.Description
+	}
+
+	FriedEggBuff: {
+		DisplayName: Fried Egg Buff
+		Description: Mods.Everglow.Buffs.FriedEggBuff.Description
+	}
+
+	FriesBuff: {
+		DisplayName: Fries Buff
+		Description: Mods.Everglow.Buffs.FriesBuff.Description
+	}
+
+	FroggleBunwichBuff: {
+		DisplayName: Froggle Bunwich Buff
+		Description: Mods.Everglow.Buffs.FroggleBunwichBuff.Description
+	}
+
+	FruitSaladBuff: {
+		DisplayName: Fruit Salad Buff
+		Description: Mods.Everglow.Buffs.FruitSaladBuff.Description
+	}
+
+	GingerbreadCookieBuff: {
+		DisplayName: Gingerbread Cookie Buff
+		Description: Mods.Everglow.Buffs.GingerbreadCookieBuff.Description
+	}
+
+	GoldenDelightBuff: {
+		DisplayName: Golden Delight Buff
+		Description: Mods.Everglow.Buffs.GoldenDelightBuff.Description
+	}
+
+	GrapefruitBuff: {
+		DisplayName: Grapefruit Buff
+		Description: Mods.Everglow.Buffs.GrapefruitBuff.Description
+	}
+
+	GrapesBuff: {
+		DisplayName: Grapes Buff
+		Description: Mods.Everglow.Buffs.GrapesBuff.Description
+	}
+
+	GrilledSquirrelBuff: {
+		DisplayName: Grilled Squirrel Buff
+		Description: Mods.Everglow.Buffs.GrilledSquirrelBuff.Description
+	}
+
+	GrubSoupBuff: {
+		DisplayName: Grub Soup Buff
+		Description: Mods.Everglow.Buffs.GrubSoupBuff.Description
+	}
+
+	HotdogBuff: {
+		DisplayName: Hotdog Buff
+		Description: Mods.Everglow.Buffs.HotdogBuff.Description
+	}
+
+	IceCreamBuff: {
+		DisplayName: Ice Cream Buff
+		Description: Mods.Everglow.Buffs.IceCreamBuff.Description
+	}
+
+	LemonBuff: {
+		DisplayName: Lemon Buff
+		Description: Mods.Everglow.Buffs.LemonBuff.Description
+	}
+
+	LobsterTailBuff: {
+		DisplayName: Lobster Tail Buff
+		Description: Mods.Everglow.Buffs.LobsterTailBuff.Description
+	}
+
+	MangoBuff: {
+		DisplayName: Mango Buff
+		Description: Mods.Everglow.Buffs.MangoBuff.Description
+	}
+
+	MarshmallowBuff: {
+		DisplayName: Marshmallow Buff
+		Description: Mods.Everglow.Buffs.MarshmallowBuff.Description
+	}
+
+	MonsterLasagnaBuff: {
+		DisplayName: Monster Lasagna Buff
+		Description: Mods.Everglow.Buffs.MonsterLasagnaBuff.Description
+	}
+
+	NachosBuff: {
+		DisplayName: Nachos Buff
+		Description: Mods.Everglow.Buffs.NachosBuff.Description
+	}
+
+	PadThaiBuff: {
+		DisplayName: Pad Thai Buff
+		Description: Mods.Everglow.Buffs.PadThaiBuff.Description
+	}
+
+	PeachBuff: {
+		DisplayName: Peach Buff
+		Description: Mods.Everglow.Buffs.PeachBuff.Description
+	}
+
+	PhoBuff: {
+		DisplayName: Pho Buff
+		Description: Mods.Everglow.Buffs.PhoBuff.Description
+	}
+
+	PineappleBuff: {
+		DisplayName: Pineapple Buff
+		Description: Mods.Everglow.Buffs.PineappleBuff.Description
+	}
+
+	PizzaBuff: {
+		DisplayName: Pizza Buff
+		Description: Mods.Everglow.Buffs.PizzaBuff.Description
+	}
+
+	PlumBuff: {
+		DisplayName: Plum Buff
+		Description: Mods.Everglow.Buffs.PlumBuff.Description
+	}
+
+	PotatoChipsBuff: {
+		DisplayName: Potato Chips Buff
+		Description: Mods.Everglow.Buffs.PotatoChipsBuff.Description
+	}
+
+	PumpkinPieBuff: {
+		DisplayName: Pumpkin Pie Buff
+		Description: Mods.Everglow.Buffs.PumpkinPieBuff.Description
+	}
+
+	RambutanBuff: {
+		DisplayName: Rambutan Buff
+		Description: Mods.Everglow.Buffs.RambutanBuff.Description
+	}
+
+	RoastedBirdBuff: {
+		DisplayName: Roasted Bird Buff
+		Description: Mods.Everglow.Buffs.RoastedBirdBuff.Description
+	}
+
+	RoastedDuckBuff: {
+		DisplayName: Roasted Duck Buff
+		Description: Mods.Everglow.Buffs.RoastedDuckBuff.Description
+	}
+
+	SashimiBuff: {
+		DisplayName: Sashimi Buff
+		Description: Mods.Everglow.Buffs.SashimiBuff.Description
+	}
+
+	SauteedFrogLegsBuff: {
+		DisplayName: Sauteed Frog Legs Buff
+		Description: Mods.Everglow.Buffs.SauteedFrogLegsBuff.Description
+	}
+
+	SeafoodDinnerBuff: {
+		DisplayName: Seafood Dinner Buff
+		Description: Mods.Everglow.Buffs.SeafoodDinnerBuff.Description
+	}
+
+	ShrimpPoBoyBuff: {
+		DisplayName: Shrimp Po Boy Buff
+		Description: Mods.Everglow.Buffs.ShrimpPoBoyBuff.Description
+	}
+
+	ShuckedOysterBuff: {
+		DisplayName: Shucked Oyster Buff
+		Description: Mods.Everglow.Buffs.ShuckedOysterBuff.Description
+	}
+
+	SpaghettiBuff: {
+		DisplayName: Spaghetti Buff
+		Description: Mods.Everglow.Buffs.SpaghettiBuff.Description
+	}
+
+	StarfruitBuff: {
+		DisplayName: Starfruit Buff
+		Description: Mods.Everglow.Buffs.StarfruitBuff.Description
+	}
+
+	SteakBuff: {
+		DisplayName: Steak Buff
+		Description: Mods.Everglow.Buffs.SteakBuff.Description
+	}
+
+	SugarCookieBuff: {
+		DisplayName: Sugar Cookie Buff
+		Description: Mods.Everglow.Buffs.SugarCookieBuff.Description
+	}
+
+	AleBuff: {
+		DisplayName: Ale Buff
+		Description: Mods.Everglow.Buffs.AleBuff.Description
+	}
+
+	AppleJuiceBuff: {
+		DisplayName: Apple Juice Buff
+		Description: Mods.Everglow.Buffs.AppleJuiceBuff.Description
+	}
+
+	BananaDaiquiriBuff: {
+		DisplayName: Banana Daiquiri Buff
+		Description: Mods.Everglow.Buffs.BananaDaiquiriBuff.Description
+	}
+
+	BloodyMoscatoBuff: {
+		DisplayName: Bloody Moscato Buff
+		Description: Mods.Everglow.Buffs.BloodyMoscatoBuff.Description
+	}
+
+	CoffeeCupBuff: {
+		DisplayName: Coffee Cup Buff
+		Description: Mods.Everglow.Buffs.CoffeeCupBuff.Description
+	}
+
+	CreamSodaBuff: {
+		DisplayName: Cream Soda Buff
+		Description: Mods.Everglow.Buffs.CreamSodaBuff.Description
+	}
+
+	FruitJuiceBuff: {
+		DisplayName: Fruit Juice Buff
+		Description: Mods.Everglow.Buffs.FruitJuiceBuff.Description
+	}
+
+	GrapeJuiceBuff: {
+		DisplayName: Grape Juice Buff
+		Description: Mods.Everglow.Buffs.GrapeJuiceBuff.Description
+	}
+
+	LemonadeBuff: {
+		DisplayName: Lemonade Buff
+		Description: Mods.Everglow.Buffs.LemonadeBuff.Description
+	}
+
+	MilkCartonBuff: {
+		DisplayName: Milk Carton Buff
+		Description: Mods.Everglow.Buffs.MilkCartonBuff.Description
+	}
+
+	MilkshakeBuff: {
+		DisplayName: Milkshake Buff
+		Description: Mods.Everglow.Buffs.MilkshakeBuff.Description
+	}
+
+	PeachSangriaBuff: {
+		DisplayName: Peach Sangria Buff
+		Description: Mods.Everglow.Buffs.PeachSangriaBuff.Description
+	}
+
+	PinaColadaBuff: {
+		DisplayName: Pina Colada Buff
+		Description: Mods.Everglow.Buffs.PinaColadaBuff.Description
+	}
+
+	PrismaticPunchBuff: {
+		DisplayName: Prismatic Punch Buff
+		Description: Mods.Everglow.Buffs.PrismaticPunchBuff.Description
+	}
+
+	SakeBuff: {
+		DisplayName: Sake Buff
+		Description: Mods.Everglow.Buffs.SakeBuff.Description
+	}
+
+	SmoothieofDarknessBuff: {
+		DisplayName: Smoothieof Darkness Buff
+		Description: Mods.Everglow.Buffs.SmoothieofDarknessBuff.Description
+	}
+
+	TeacupBuff: {
+		DisplayName: Teacup Buff
+		Description: Mods.Everglow.Buffs.TeacupBuff.Description
+	}
+
+	TropicalSmoothieBuff: {
+		DisplayName: Tropical Smoothie Buff
+		Description: Mods.Everglow.Buffs.TropicalSmoothieBuff.Description
+	}
+
+	ArcticshellfishWarshipBuff: {
+		DisplayName: Arcticshellfish Warship Buff
+		Description: Mods.Everglow.Buffs.ArcticshellfishWarshipBuff.Description
+	}
+
+	BakedMusselBuff: {
+		DisplayName: Baked Mussel Buff
+		Description: Mods.Everglow.Buffs.BakedMusselBuff.Description
+	}
+
+	BakedOysterBuff: {
+		DisplayName: Baked Oyster Buff
+		Description: Mods.Everglow.Buffs.BakedOysterBuff.Description
+	}
+
+	CantaloupeJellyBuff: {
+		DisplayName: Cantaloupe Jelly Buff
+		Description: Mods.Everglow.Buffs.CantaloupeJellyBuff.Description
+	}
+
+	CaramelPuddingBuff: {
+		DisplayName: Caramel Pudding Buff
+		Description: Mods.Everglow.Buffs.CaramelPuddingBuff.Description
+	}
+
+	CrabseedWarshipBuff: {
+		DisplayName: Crabseed Warship Buff
+		Description: Mods.Everglow.Buffs.CrabseedWarshipBuff.Description
+	}
+
+	DurianBuff: {
+		DisplayName: Durian Buff
+		Description: Mods.Everglow.Buffs.DurianBuff.Description
+	}
+
+	EggTartBuff: {
+		DisplayName: Egg Tart Buff
+		Description: Mods.Everglow.Buffs.EggTartBuff.Description
+	}
+
+	KiwiFruitBuff: {
+		DisplayName: Kiwi Fruit Buff
+		Description: Mods.Everglow.Buffs.KiwiFruitBuff.Description
+	}
+
+	KiwiIceCreamBuff: {
+		DisplayName: Kiwi Ice Cream Buff
+		Description: Mods.Everglow.Buffs.KiwiIceCreamBuff.Description
+	}
+
+	MangosteenBuff: {
+		DisplayName: Mangosteen Buff
+		Description: Mods.Everglow.Buffs.MangosteenBuff.Description
+	}
+
+	OrangeIcecreamBuff: {
+		DisplayName: Orange Icecream Buff
+		Description: Mods.Everglow.Buffs.OrangeIcecreamBuff.Description
+	}
+
+	SalmonInPepperBuff: {
+		DisplayName: Salmon In Pepper Buff
+		Description: Mods.Everglow.Buffs.SalmonInPepperBuff.Description
+	}
+
+	SalmonWarshipBuff: {
+		DisplayName: Salmon Warship Buff
+		Description: Mods.Everglow.Buffs.SalmonWarshipBuff.Description
+	}
+
+	SeafoodPizzaBuff: {
+		DisplayName: Seafood Pizza Buff
+		Description: Mods.Everglow.Buffs.SeafoodPizzaBuff.Description
+	}
+
+	StinkyTofuBuff: {
+		DisplayName: Stinky Tofu Buff
+		Description: Mods.Everglow.Buffs.StinkyTofuBuff.Description
+	}
+
+	StrawberryBuff: {
+		DisplayName: Strawberry Buff
+		Description: Mods.Everglow.Buffs.StrawberryBuff.Description
+	}
+
+	StrawberryIcecreamBuff: {
+		DisplayName: Strawberry Icecream Buff
+		Description: Mods.Everglow.Buffs.StrawberryIcecreamBuff.Description
+	}
+
+	SweetshrimpSushiBuff: {
+		DisplayName: Sweetshrimp Sushi Buff
+		Description: Mods.Everglow.Buffs.SweetshrimpSushiBuff.Description
+	}
+
+	TamakoSushiBuff: {
+		DisplayName: Tamako Sushi Buff
+		Description: Mods.Everglow.Buffs.TamakoSushiBuff.Description
+	}
+
+	WakameWarshipBuff: {
+		DisplayName: Wakame Warship Buff
+		Description: Mods.Everglow.Buffs.WakameWarshipBuff.Description
+	}
+
+	WatermelonBuff: {
+		DisplayName: Watermelon Buff
+		Description: Mods.Everglow.Buffs.WatermelonBuff.Description
+	}
+
+	WatermelonPlateBuff: {
+		DisplayName: Watermelon Plate Buff
+		Description: Mods.Everglow.Buffs.WatermelonPlateBuff.Description
+	}
+
+	BlueHawaiiBuff: {
+		DisplayName: Blue Hawaii Buff
+		Description: Mods.Everglow.Buffs.BlueHawaiiBuff.Description
+	}
+
+	B_52Buff: {
+		DisplayName: B_52 Buff
+		Description: Mods.Everglow.Buffs.B_52Buff.Description
+	}
+
+	DreamYearningBuff: {
+		DisplayName: Dream Yearning Buff
+		Description: Mods.Everglow.Buffs.DreamYearningBuff.Description
+	}
+
+	DryMartiniBuff: {
+		DisplayName: Dry Martini Buff
+		Description: Mods.Everglow.Buffs.DryMartiniBuff.Description
+	}
+
+	GreenStormBuff: {
+		DisplayName: Green Storm Buff
+		Description: Mods.Everglow.Buffs.GreenStormBuff.Description
+	}
+
+	KiwiJuiceBuff: {
+		DisplayName: Kiwi Juice Buff
+		Description: Mods.Everglow.Buffs.KiwiJuiceBuff.Description
+	}
+
+	LonelyJellyfishBuff: {
+		DisplayName: Lonely Jellyfish Buff
+		Description: Mods.Everglow.Buffs.LonelyJellyfishBuff.Description
+	}
+
+	OrangeJuiceBuff: {
+		DisplayName: Orange Juice Buff
+		Description: Mods.Everglow.Buffs.OrangeJuiceBuff.Description
+	}
+
+	PiercoldWindBuff: {
+		DisplayName: Piercold Wind Buff
+		Description: Mods.Everglow.Buffs.PiercoldWindBuff.Description
+	}
+
+	PurpleHooterBuff: {
+		DisplayName: Purple Hooter Buff
+		Description: Mods.Everglow.Buffs.PurpleHooterBuff.Description
+	}
+
+	QuinceMarryBuff: {
+		DisplayName: Quince Marry Buff
+		Description: Mods.Everglow.Buffs.QuinceMarryBuff.Description
+	}
+
+	RedWineBuff: {
+		DisplayName: Red Wine Buff
+		Description: Mods.Everglow.Buffs.RedWineBuff.Description
+	}
+
+	SunriseBuff: {
+		DisplayName: Sunrise Buff
+		Description: Mods.Everglow.Buffs.SunriseBuff.Description
+	}
+
+	TricolourBuff: {
+		DisplayName: Tricolour Buff
+		Description: Mods.Everglow.Buffs.TricolourBuff.Description
+	}
+
+	WaterMelonJuiceBuff: {
+		DisplayName: Water Melon Juice Buff
+		Description: Mods.Everglow.Buffs.WaterMelonJuiceBuff.Description
+	}
+
+	TuskStaff: {
+		DisplayName: Tusk Staff
+		Description: Mods.Everglow.Buffs.TuskStaff.Description
+	}
+
+	GlowMothBuff: {
+		DisplayName: Glow Moth Buff
+		Description: Mods.Everglow.Buffs.GlowMothBuff.Description
+	}
+
+	OnMoth: {
+		DisplayName: On Moth
+		Description: Mods.Everglow.Buffs.OnMoth.Description
+	}
+
+	Freeze: {
+		DisplayName: Freeze
+		Description: Mods.Everglow.Buffs.Freeze.Description
+	}
+
+	LaserWormBuff: {
+		DisplayName: Laser Worm Buff
+		Description: Mods.Everglow.Buffs.LaserWormBuff.Description
+	}
+
+	ShadowSupervisor: {
+		DisplayName: Shadow Supervisor
+		Description: Mods.Everglow.Buffs.ShadowSupervisor.Description
+	}
+
+	MoonAndFragrans: {
+		DisplayName: Moon And Fragrans
+		Description: Mods.Everglow.Buffs.MoonAndFragrans.Description
+	}
+
+	MoonAndFragransII: {
+		DisplayName: Moon And Fragrans I I
+		Description: Mods.Everglow.Buffs.MoonAndFragransII.Description
+	}
+
+	MoonAndFragransIII: {
+		DisplayName: Moon And Fragrans I I I
+		Description: Mods.Everglow.Buffs.MoonAndFragransIII.Description
+	}
+
+	WaterBoltII: {
+		DisplayName: Water Bolt I I
+		Description: Mods.Everglow.Buffs.WaterBoltII.Description
+	}
+
+	BlueImmune: {
+		DisplayName: Blue Immune
+		Description: Mods.Everglow.Buffs.BlueImmune.Description
+	}
+
+	BrownImmune: {
+		DisplayName: Brown Immune
+		Description: Mods.Everglow.Buffs.BrownImmune.Description
+	}
+
+	GreenImmune: {
+		DisplayName: Green Immune
+		Description: Mods.Everglow.Buffs.GreenImmune.Description
+	}
+
+	PinkImmune: {
+		DisplayName: Pink Immune
+		Description: Mods.Everglow.Buffs.PinkImmune.Description
+	}
+
+	PurpleImmune: {
+		DisplayName: Purple Immune
+		Description: Mods.Everglow.Buffs.PurpleImmune.Description
+	}
+
+	RedImmune: {
+		DisplayName: Red Immune
+		Description: Mods.Everglow.Buffs.RedImmune.Description
+	}
+
+	WhiteImmune: {
+		DisplayName: White Immune
+		Description: Mods.Everglow.Buffs.WhiteImmune.Description
+	}
+
+	YellowImmune: {
+		DisplayName: Yellow Immune
+		Description: Mods.Everglow.Buffs.YellowImmune.Description
+	}
+
+	CactusBallBuff: {
+		DisplayName: Cactus Ball Buff
+		Description: Mods.Everglow.Buffs.CactusBallBuff.Description
+	}
+
+	DeathFlame: {
+		DisplayName: Death Flame
+		Description: Mods.Everglow.Buffs.DeathFlame.Description
+	}
+}
+
+Items: {
+	BottleOfNutShellFlowers: {
+		DisplayName: Bottle Of Nut Shell Flowers
+		Tooltip: ""
+	}
+
+	PlumBlossomInABowl: {
+		DisplayName: Plum Blossom In A Bowl
+		Tooltip: ""
+	}
+
+	WhiteLotusBonsai: {
+		DisplayName: White Lotus Bonsai
+		Tooltip: ""
+	}
+
+	BloodGoldBayonet: {
+		DisplayName: Blood Gold Bayonet
+		Tooltip: ""
+	}
+
+	BlossomThorn: {
+		DisplayName: Blossom Thorn
+		Tooltip: ""
+	}
+
+	BlueRibbonBayonet: {
+		DisplayName: Blue Ribbon Bayonet
+		Tooltip: ""
+	}
+
+	CopperBayonet: {
+		DisplayName: Copper Bayonet
+		Tooltip: ""
+	}
+
+	CrutchBayonet: {
+		DisplayName: Crutch Bayonet
+		Tooltip: ""
+	}
+
+	DreamStar: {
+		DisplayName: Dream Star
+		Tooltip: ""
+	}
+
+	EnchantedBayonet: {
+		DisplayName: Enchanted Bayonet
+		Tooltip: ""
+	}
+
+	EternalNight: {
+		DisplayName: Eternal Night
+		Tooltip: ""
+	}
+
+	GoldenStabbingSword: {
+		DisplayName: Golden Stabbing Sword
+		Tooltip: ""
+	}
+
+	HolyBayonet: {
+		DisplayName: Holy Bayonet
+		Tooltip: ""
+	}
+
+	IronStabbingSword: {
+		DisplayName: Iron Stabbing Sword
+		Tooltip: ""
+	}
+
+	LeadStabbingSword: {
+		DisplayName: Lead Stabbing Sword
+		Tooltip: ""
+	}
+
+	MechanicMosquito: {
+		DisplayName: Mechanic Mosquito
+		Tooltip: ""
+	}
+
+	PlatinumStabbingSword: {
+		DisplayName: Platinum Stabbing Sword
+		Tooltip: ""
+	}
+
+	PrisonFireBayonet: {
+		DisplayName: Prison Fire Bayonet
+		Tooltip: ""
+	}
+
+	RedRibbonBayonet: {
+		DisplayName: Red Ribbon Bayonet
+		Tooltip: ""
+	}
+
+	RottenGoldBayonet: {
+		DisplayName: Rotten Gold Bayonet
+		Tooltip: ""
+	}
+
+	SilverStabbingSword: {
+		DisplayName: Silver Stabbing Sword
+		Tooltip: ""
+	}
+
+	SwordfishBeak: {
+		DisplayName: Swordfish Beak
+		Tooltip: ""
+	}
+
+	TinStabbingSword: {
+		DisplayName: Tin Stabbing Sword
+		Tooltip: ""
+	}
+
+	TungstenStabbingSword: {
+		DisplayName: Tungsten Stabbing Sword
+		Tooltip: ""
+	}
+
+	VegetationBayonet: {
+		DisplayName: Vegetation Bayonet
+		Tooltip: ""
+	}
+
+	VertebralSpur: {
+		DisplayName: Vertebral Spur
+		Tooltip: ""
+	}
+
+	YoenLeZed: {
+		DisplayName: Yoen Le Zed
+		Tooltip: ""
+	}
+
+	StarSeed: {
+		DisplayName: Star Seed
+		Tooltip: ""
+	}
+
+	FryingPanItem: {
+		DisplayName: Frying Pan Item
+		Tooltip: ""
+	}
+
+	BloodGlucoseMonitor: {
+		DisplayName: Blood Glucose Monitor
+		Tooltip: ""
+	}
+
+	OsmoticPressureMonitor: {
+		DisplayName: Osmotic Pressure Monitor
+		Tooltip: ""
+	}
+
+	ArcticshellfishWarship: {
+		DisplayName: Arcticshellfish Warship
+		Tooltip: ""
+	}
+
+	BakedMussel: {
+		DisplayName: Baked Mussel
+		Tooltip: ""
+	}
+
+	BakedOyster: {
+		DisplayName: Baked Oyster
+		Tooltip: ""
+	}
+
+	CantaloupeJelly: {
+		DisplayName: Cantaloupe Jelly
+		Tooltip: ""
+	}
+
+	CaramelPudding: {
+		DisplayName: Caramel Pudding
+		Tooltip: ""
+	}
+
+	CrabseedWarship: {
+		DisplayName: Crabseed Warship
+		Tooltip: ""
+	}
+
+	Durian: {
+		DisplayName: Durian
+		Tooltip: ""
+	}
+
+	EggTart: {
+		DisplayName: Egg Tart
+		Tooltip: ""
+	}
+
+	KiwiFruit: {
+		DisplayName: Kiwi Fruit
+		Tooltip: ""
+	}
+
+	KiwiIceCream: {
+		DisplayName: Kiwi Ice Cream
+		Tooltip: ""
+	}
+
+	Mangosteen: {
+		DisplayName: Mangosteen
+		Tooltip: ""
+	}
+
+	OrangeIcecream: {
+		DisplayName: Orange Icecream
+		Tooltip: ""
+	}
+
+	SalmonInPepper: {
+		DisplayName: Salmon In Pepper
+		Tooltip: ""
+	}
+
+	SalmonWarship: {
+		DisplayName: Salmon Warship
+		Tooltip: ""
+	}
+
+	SeafoodPizza: {
+		DisplayName: Seafood Pizza
+		Tooltip: ""
+	}
+
+	StinkyTofu: {
+		DisplayName: Stinky Tofu
+		Tooltip: ""
+	}
+
+	Strawberry: {
+		DisplayName: Strawberry
+		Tooltip: ""
+	}
+
+	StrawberryIcecream: {
+		DisplayName: Strawberry Icecream
+		Tooltip: ""
+	}
+
+	SweetshrimpSushi: {
+		DisplayName: Sweetshrimp Sushi
+		Tooltip: ""
+	}
+
+	TamakoSushi: {
+		DisplayName: Tamako Sushi
+		Tooltip: ""
+	}
+
+	WakameWarship: {
+		DisplayName: Wakame Warship
+		Tooltip: ""
+	}
+
+	Watermelon: {
+		DisplayName: Watermelon
+		Tooltip: ""
+	}
+
+	WatermelonPlate: {
+		DisplayName: Watermelon Plate
+		Tooltip: ""
+	}
+
+	BlueHawaii: {
+		DisplayName: Blue Hawaii
+		Tooltip: ""
+	}
+
+	B_52: {
+		DisplayName: B_52
+		Tooltip: ""
+	}
+
+	DreamYearning: {
+		DisplayName: Dream Yearning
+		Tooltip: ""
+	}
+
+	DryMartini: {
+		DisplayName: Dry Martini
+		Tooltip: ""
+	}
+
+	GreenStorm: {
+		DisplayName: Green Storm
+		Tooltip: ""
+	}
+
+	KiwiJuice: {
+		DisplayName: Kiwi Juice
+		Tooltip: ""
+	}
+
+	LonelyJellyfish: {
+		DisplayName: Lonely Jellyfish
+		Tooltip: ""
+	}
+
+	OrangeJuice: {
+		DisplayName: Orange Juice
+		Tooltip: ""
+	}
+
+	PiercoldWind: {
+		DisplayName: Piercold Wind
+		Tooltip: ""
+	}
+
+	PurpleHooter: {
+		DisplayName: Purple Hooter
+		Tooltip: ""
+	}
+
+	QuinceMarry: {
+		DisplayName: Quince Marry
+		Tooltip: ""
+	}
+
+	RedWine: {
+		DisplayName: Red Wine
+		Tooltip: ""
+	}
+
+	Sunrise: {
+		DisplayName: Sunrise
+		Tooltip: ""
+	}
+
+	Tricolour: {
+		DisplayName: Tricolour
+		Tooltip: ""
+	}
+
+	WaterMelonJuice: {
+		DisplayName: Water Melon Juice
+		Tooltip: ""
+	}
+
+	VFXGenerator: {
+		DisplayName: V F X Generator
+		Tooltip: ""
+	}
+
+	AirTileItem: {
+		DisplayName: Air Tile Item
+		Tooltip: ""
+	}
+
+	AirWallItem: {
+		DisplayName: Air Wall Item
+		Tooltip: ""
+	}
+
+	VortexVanquisherItem: {
+		DisplayName: Vortex Vanquisher Item
+		Tooltip: ""
+	}
+
+	Tester: {
+		DisplayName: Tester
+		Tooltip: ""
+	}
+
+	BloodMossStone: {
+		DisplayName: Blood Moss Stone
+		Tooltip: ""
+	}
+
+	BloodyStoneWall: {
+		DisplayName: Bloody Stone Wall
+		Tooltip: ""
+	}
+
+	StoneTusk: {
+		DisplayName: Stone Tusk
+		Tooltip: ""
+	}
+
+	TuskFlesh: {
+		DisplayName: Tusk Flesh
+		Tooltip: ""
+	}
+
+	TuskStatusI: {
+		DisplayName: Tusk Status I
+		Tooltip: ""
+	}
+
+	TuskStatusII: {
+		DisplayName: Tusk Status I I
+		Tooltip: ""
+	}
+
+	TuskStatusIII: {
+		DisplayName: Tusk Status I I I
+		Tooltip: ""
+	}
+
+	TuskStatusIV: {
+		DisplayName: Tusk Status I V
+		Tooltip: ""
+	}
+
+	BloodyBoneYoyo: {
+		DisplayName: Bloody Bone Yoyo
+		Tooltip: ""
+	}
+
+	SpineGun: {
+		DisplayName: Spine Gun
+		Tooltip: ""
+	}
+
+	ToothBow: {
+		DisplayName: Tooth Bow
+		Tooltip: ""
+	}
+
+	ToothKnife: {
+		DisplayName: Tooth Knife
+		Tooltip: ""
+	}
+
+	ToothMagicBall: {
+		DisplayName: Tooth Magic Ball
+		Tooltip: ""
+	}
+
+	ToothSpear: {
+		DisplayName: Tooth Spear
+		Tooltip: ""
+	}
+
+	ToothStaff: {
+		DisplayName: Tooth Staff
+		Tooltip: ""
+	}
+
+	BloodyTuskTrophy: {
+		DisplayName: Bloody Tusk Trophy
+		Tooltip: ""
+	}
+
+	TuskRelic: {
+		DisplayName: Tusk Relic
+		Tooltip: ""
+	}
+
+	TuskTreasureBag: {
+		DisplayName: Tusk Treasure Bag
+		Tooltip: ""
+	}
+
+	TuskLace: {
+		DisplayName: Tusk Lace
+		Tooltip: ""
+	}
+
+	FireflyPylonItem: {
+		DisplayName: Firefly Pylon Item
+		Tooltip: ""
+	}
+
+	ShabbyPylonItem: {
+		DisplayName: Shabby Pylon Item
+		Tooltip: ""
+	}
+
+	BlackStarShrub: {
+		DisplayName: Black Star Shrub
+		Tooltip: ""
+	}
+
+	DarkCocoon: {
+		DisplayName: Dark Cocoon
+		Tooltip: ""
+	}
+
+	DarkCocoonWall: {
+		DisplayName: Dark Cocoon Wall
+		Tooltip: ""
+	}
+
+	EvilCocoon: {
+		DisplayName: Evil Cocoon
+		Tooltip: ""
+	}
+
+	FireflyCapital: {
+		DisplayName: Firefly Capital
+		Tooltip: ""
+	}
+
+	FireflyMoss: {
+		DisplayName: Firefly Moss
+		Tooltip: ""
+	}
+
+	FireflyPigment: {
+		DisplayName: Firefly Pigment
+		Tooltip: ""
+	}
+
+	GlowCrystal: {
+		DisplayName: Glow Crystal
+		Tooltip: ""
+	}
+
+	GlowingFirefly: {
+		DisplayName: Glowing Firefly
+		Tooltip: ""
+	}
+
+	GlowingPedal: {
+		DisplayName: Glowing Pedal
+		Tooltip: ""
+	}
+
+	GlowMetal: {
+		DisplayName: Glow Metal
+		Tooltip: ""
+	}
+
+	GlowStone: {
+		DisplayName: Glow Stone
+		Tooltip: ""
+	}
+
+	GlowWood: {
+		DisplayName: Glow Wood
+		Tooltip: ""
+	}
+
+	LiveFluorescentLeafWall: {
+		DisplayName: Live Fluorescent Leaf Wall
+		Tooltip: ""
+	}
+
+	LiveFluorescentWoodWall: {
+		DisplayName: Live Fluorescent Wood Wall
+		Tooltip: ""
+	}
+
+	MothScaleDust: {
+		DisplayName: Moth Scale Dust
+		Tooltip: ""
+	}
+
+	DarknessFan: {
+		DisplayName: Darkness Fan
+		Tooltip: ""
+	}
+
+	DreamWeaver: {
+		DisplayName: Dream Weaver
+		Tooltip: ""
+	}
+
+	DustOfCorrupt: {
+		DisplayName: Dust Of Corrupt
+		Tooltip: ""
+	}
+
+	EvilChrysalis: {
+		DisplayName: Evil Chrysalis
+		Tooltip: ""
+	}
+
+	FlowLightMissile: {
+		DisplayName: Flow Light Missile
+		Tooltip: ""
+	}
+
+	GlowBeadGun: {
+		DisplayName: Glow Bead Gun
+		Tooltip: ""
+	}
+
+	GlowWoodSword: {
+		DisplayName: Glow Wood Sword
+		Tooltip: ""
+	}
+
+	MothYoyo: {
+		DisplayName: Moth Yoyo
+		Tooltip: ""
+	}
+
+	NavyThunder: {
+		DisplayName: Navy Thunder
+		Tooltip: ""
+	}
+
+	PhosphorescenceGun: {
+		DisplayName: Phosphorescence Gun
+		Tooltip: ""
+	}
+
+	ScaleWingBlade: {
+		DisplayName: Scale Wing Blade
+		Tooltip: ""
+	}
+
+	ShadowWingBow: {
+		DisplayName: Shadow Wing Bow
+		Tooltip: ""
+	}
+
+	FluorescentLeafStaff: {
+		DisplayName: Fluorescent Leaf Staff
+		Tooltip: ""
+	}
+
+	FluorescentWoodStaff: {
+		DisplayName: Fluorescent Wood Staff
+		Tooltip: ""
+	}
+
+	GlowingDrop: {
+		DisplayName: Glowing Drop
+		Tooltip: ""
+	}
+
+	GlowWoodBed: {
+		DisplayName: Glow Wood Bed
+		Tooltip: ""
+	}
+
+	GlowWoodBookcase: {
+		DisplayName: Glow Wood Bookcase
+		Tooltip: ""
+	}
+
+	GlowWoodBookcaseType2: {
+		DisplayName: Glow Wood Bookcase Type2
+		Tooltip: ""
+	}
+
+	GlowWoodCampfire: {
+		DisplayName: Glow Wood Campfire
+		Tooltip: ""
+	}
+
+	GlowWoodCandelabra: {
+		DisplayName: Glow Wood Candelabra
+		Tooltip: ""
+	}
+
+	GlowWoodCandle: {
+		DisplayName: Glow Wood Candle
+		Tooltip: ""
+	}
+
+	GlowWoodChair: {
+		DisplayName: Glow Wood Chair
+		Tooltip: ""
+	}
+
+	GlowWoodChandelier: {
+		DisplayName: Glow Wood Chandelier
+		Tooltip: ""
+	}
+
+	GlowWoodChandelierType2: {
+		DisplayName: Glow Wood Chandelier Type2
+		Tooltip: ""
+	}
+
+	GlowWoodChandelierType3: {
+		DisplayName: Glow Wood Chandelier Type3
+		Tooltip: ""
+	}
+
+	GlowWoodChandelierType4: {
+		DisplayName: Glow Wood Chandelier Type4
+		Tooltip: ""
+	}
+
+	GlowWoodChest: {
+		DisplayName: Glow Wood Chest
+		Tooltip: ""
+	}
+
+	GlowWoodClock: {
+		DisplayName: Glow Wood Clock
+		Tooltip: ""
+	}
+
+	GlowWoodDoor: {
+		DisplayName: Glow Wood Door
+		Tooltip: ""
+	}
+
+	GlowWoodDoorType2: {
+		DisplayName: Glow Wood Door Type2
+		Tooltip: ""
+	}
+
+	GlowWoodDresser: {
+		DisplayName: Glow Wood Dresser
+		Tooltip: ""
+	}
+
+	GlowWoodDresserType2: {
+		DisplayName: Glow Wood Dresser Type2
+		Tooltip: ""
+	}
+
+	GlowWoodLamp: {
+		DisplayName: Glow Wood Lamp
+		Tooltip: ""
+	}
+
+	GlowWoodLantern: {
+		DisplayName: Glow Wood Lantern
+		Tooltip: ""
+	}
+
+	GlowWoodLanternType2: {
+		DisplayName: Glow Wood Lantern Type2
+		Tooltip: ""
+	}
+
+	GlowWoodMusicBox: {
+		DisplayName: Glow Wood Music Box
+		Tooltip: ""
+	}
+
+	GlowWoodPiano: {
+		DisplayName: Glow Wood Piano
+		Tooltip: ""
+	}
+
+	GlowWoodPlatform: {
+		DisplayName: Glow Wood Platform
+		Tooltip: ""
+	}
+
+	GlowWoodSink: {
+		DisplayName: Glow Wood Sink
+		Tooltip: ""
+	}
+
+	GlowWoodSinkType2: {
+		DisplayName: Glow Wood Sink Type2
+		Tooltip: ""
+	}
+
+	GlowWoodSofa: {
+		DisplayName: Glow Wood Sofa
+		Tooltip: ""
+	}
+
+	GlowWoodSofaType2: {
+		DisplayName: Glow Wood Sofa Type2
+		Tooltip: ""
+	}
+
+	GlowWoodTable: {
+		DisplayName: Glow Wood Table
+		Tooltip: ""
+	}
+
+	GlowWoodTorch: {
+		DisplayName: Glow Wood Torch
+		Tooltip: ""
+	}
+
+	GlowWoodWorkBench: {
+		DisplayName: Glow Wood Work Bench
+		Tooltip: ""
+	}
+
+	CorruptMothTreasureBag: {
+		DisplayName: Corrupt Moth Treasure Bag
+		Tooltip: ""
+	}
+
+	MothRelic: {
+		DisplayName: Moth Relic
+		Tooltip: ""
+	}
+
+	FireflyBorageBadge: {
+		DisplayName: Firefly Borage Badge
+		Tooltip: ""
+	}
+
+	MothEye: {
+		DisplayName: Moth Eye
+		Tooltip: ""
+	}
+
+	LilyHarp: {
+		DisplayName: Lily Harp
+		Tooltip: ""
+	}
+
+	BlueflowerBra: {
+		DisplayName: Blueflower Bra
+		Tooltip: ""
+	}
+
+	BlueflowerCap: {
+		DisplayName: Blueflower Cap
+		Tooltip: ""
+	}
+
+	BlueflowerDress: {
+		DisplayName: Blueflower Dress
+		Tooltip: ""
+	}
+
+	AshBone: {
+		DisplayName: Ash Bone
+		Tooltip: ""
+	}
+
+	BoneFeatherMagic: {
+		DisplayName: Bone Feather Magic
+		Tooltip: ""
+	}
+
+	CloudGun: {
+		DisplayName: Cloud Gun
+		Tooltip: ""
+	}
+
+	ComingGhost: {
+		DisplayName: Coming Ghost
+		Tooltip: ""
+	}
+
+	CyanFrost: {
+		DisplayName: Cyan Frost
+		Tooltip: ""
+	}
+
+	FeatherMagic: {
+		DisplayName: Feather Magic
+		Tooltip: ""
+	}
+
+	FireFeatherMagic: {
+		DisplayName: Fire Feather Magic
+		Tooltip: ""
+	}
+
+	FreezeFeatherMagic: {
+		DisplayName: Freeze Feather Magic
+		Tooltip: ""
+	}
+
+	GoldRoundYoyo: {
+		DisplayName: Gold Round Yoyo
+		Tooltip: ""
+	}
+
+	GoldRound: {
+		DisplayName: Gold Round
+		Tooltip: ""
+	}
+
+	Hepuyuan: {
+		DisplayName: Hepuyuan
+		Tooltip: ""
+	}
+
+	SilveralGun: {
+		DisplayName: Silveral Gun
+		Tooltip: ""
+	}
+
+	SilveralRifle: {
+		DisplayName: Silveral Rifle
+		Tooltip: ""
+	}
+
+	Sunflower: {
+		DisplayName: Sunflower
+		Tooltip: ""
+	}
+
+	ThunderFlower: {
+		DisplayName: Thunder Flower
+		Tooltip: ""
+	}
+
+	World: {
+		DisplayName: World
+		Tooltip: ""
+	}
+
+	XmasWhip: {
+		DisplayName: Xmas Whip
+		Tooltip: ""
+	}
+
+	AmbiguousNight: {
+		DisplayName: Ambiguous Night
+		Tooltip: ""
+	}
+
+	AmethystSlingshot: {
+		DisplayName: Amethyst Slingshot
+		Tooltip: ""
+	}
+
+	BorealWoodSlingshot: {
+		DisplayName: Boreal Wood Slingshot
+		Tooltip: ""
+	}
+
+	CactusSlingShot: {
+		DisplayName: Cactus Sling Shot
+		Tooltip: ""
+	}
+
+	DiamondSlingshot: {
+		DisplayName: Diamond Slingshot
+		Tooltip: ""
+	}
+
+	EbonwoodSlingshot: {
+		DisplayName: Ebonwood Slingshot
+		Tooltip: ""
+	}
+
+	EmeraldSlingshot: {
+		DisplayName: Emerald Slingshot
+		Tooltip: ""
+	}
+
+	GelSlingshot: {
+		DisplayName: Gel Slingshot
+		Tooltip: ""
+	}
+
+	JungleSlingshot: {
+		DisplayName: Jungle Slingshot
+		Tooltip: ""
+	}
+
+	PalmWoodSlingshot: {
+		DisplayName: Palm Wood Slingshot
+		Tooltip: ""
+	}
+
+	PearlwoodSlingshot: {
+		DisplayName: Pearlwood Slingshot
+		Tooltip: ""
+	}
+
+	RichMahoganySlingshot: {
+		DisplayName: Rich Mahogany Slingshot
+		Tooltip: ""
+	}
+
+	RubySlingshot: {
+		DisplayName: Ruby Slingshot
+		Tooltip: ""
+	}
+
+	SapphireSlingshot: {
+		DisplayName: Sapphire Slingshot
+		Tooltip: ""
+	}
+
+	ShadewoodSlingShot: {
+		DisplayName: Shadewood Sling Shot
+		Tooltip: ""
+	}
+
+	StarSlingshot: {
+		DisplayName: Star Slingshot
+		Tooltip: ""
+	}
+
+	TopazSlingshot: {
+		DisplayName: Topaz Slingshot
+		Tooltip: ""
+	}
+
+	WoodSlingshot: {
+		DisplayName: Wood Slingshot
+		Tooltip: ""
+	}
+
+	AdamantiteClub: {
+		DisplayName: Adamantite Club
+		Tooltip: ""
+	}
+
+	BorealWoodClub: {
+		DisplayName: Boreal Wood Club
+		Tooltip: ""
+	}
+
+	CactusClub: {
+		DisplayName: Cactus Club
+		Tooltip: ""
+	}
+
+	ChlorophyteClub: {
+		DisplayName: Chlorophyte Club
+		Tooltip: ""
+	}
+
+	CobaltClub: {
+		DisplayName: Cobalt Club
+		Tooltip: ""
+	}
+
+	CopperClub: {
+		DisplayName: Copper Club
+		Tooltip: ""
+	}
+
+	CorruptClub: {
+		DisplayName: Corrupt Club
+		Tooltip: ""
+	}
+
+	CrimsonClub: {
+		DisplayName: Crimson Club
+		Tooltip: ""
+	}
+
+	CrystalClub: {
+		DisplayName: Crystal Club
+		Tooltip: ""
+	}
+
+	CurseClub: {
+		DisplayName: Curse Club
+		Tooltip: ""
+	}
+
+	EbonwoodClub: {
+		DisplayName: Ebonwood Club
+		Tooltip: ""
+	}
+
+	GoldClub: {
+		DisplayName: Gold Club
+		Tooltip: ""
+	}
+
+	IchorClub: {
+		DisplayName: Ichor Club
+		Tooltip: ""
+	}
+
+	IronClub: {
+		DisplayName: Iron Club
+		Tooltip: ""
+	}
+
+	LeadClub: {
+		DisplayName: Lead Club
+		Tooltip: ""
+	}
+
+	MeteorClub: {
+		DisplayName: Meteor Club
+		Tooltip: ""
+	}
+
+	MithrilClub: {
+		DisplayName: Mithril Club
+		Tooltip: ""
+	}
+
+	OrichalcumClub: {
+		DisplayName: Orichalcum Club
+		Tooltip: ""
+	}
+
+	PalladiumClub: {
+		DisplayName: Palladium Club
+		Tooltip: ""
+	}
+
+	PalmWoodClub: {
+		DisplayName: Palm Wood Club
+		Tooltip: ""
+	}
+
+	PearlwoodClub: {
+		DisplayName: Pearlwood Club
+		Tooltip: ""
+	}
+
+	PlatinumClub: {
+		DisplayName: Platinum Club
+		Tooltip: ""
+	}
+
+	RichMahoganyClub: {
+		DisplayName: Rich Mahogany Club
+		Tooltip: ""
+	}
+
+	ShadewoodClub: {
+		DisplayName: Shadewood Club
+		Tooltip: ""
+	}
+
+	SilverClub: {
+		DisplayName: Silver Club
+		Tooltip: ""
+	}
+
+	SpikeClub: {
+		DisplayName: Spike Club
+		Tooltip: ""
+	}
+
+	StarDancer: {
+		DisplayName: Star Dancer
+		Tooltip: ""
+	}
+
+	TinClub: {
+		DisplayName: Tin Club
+		Tooltip: ""
+	}
+
+	TitaniumClub: {
+		DisplayName: Titanium Club
+		Tooltip: ""
+	}
+
+	TungstenClub: {
+		DisplayName: Tungsten Club
+		Tooltip: ""
+	}
+
+	WoodenClub: {
+		DisplayName: Wooden Club
+		Tooltip: ""
+	}
+
+	CloudBall: {
+		DisplayName: Cloud Ball
+		Tooltip: ""
+	}
+
+	BlueGel: {
+		DisplayName: Blue Gel
+		Tooltip: ""
+	}
+
+	CorruptEye: {
+		DisplayName: Corrupt Eye
+		Tooltip: ""
+	}
+
+	DukeTooth: {
+		DisplayName: Duke Tooth
+		Tooltip: ""
+	}
+
+	GoldLiquidPupil: {
+		DisplayName: Gold Liquid Pupil
+		Tooltip: ""
+	}
+
+	GreenGel: {
+		DisplayName: Green Gel
+		Tooltip: ""
+	}
+
+	JungleVitamin: {
+		DisplayName: Jungle Vitamin
+		Tooltip: ""
+	}
+
+	Odd8Ring: {
+		DisplayName: Odd8 Ring
+		Tooltip: ""
+	}
+
+	RedGel: {
+		DisplayName: Red Gel
+		Tooltip: ""
+	}
+
+	SilverWing: {
+		DisplayName: Silver Wing
+		Tooltip: ""
+	}
+
+	WalnutClip: {
+		DisplayName: Walnut Clip
+		Tooltip: ""
+	}
+
+	FixCoinCrit1: {
+		DisplayName: Fix Coin Crit1
+		Tooltip: ""
+	}
+
+	FixCoinCrit2: {
+		DisplayName: Fix Coin Crit2
+		Tooltip: ""
+	}
+
+	FixCoinCrit3: {
+		DisplayName: Fix Coin Crit3
+		Tooltip: ""
+	}
+
+	FixCoinCrit4: {
+		DisplayName: Fix Coin Crit4
+		Tooltip: ""
+	}
+
+	FixCoinCrit5: {
+		DisplayName: Fix Coin Crit5
+		Tooltip: ""
+	}
+
+	FixCoinDamage1: {
+		DisplayName: Fix Coin Damage1
+		Tooltip: ""
+	}
+
+	FixCoinDamage2: {
+		DisplayName: Fix Coin Damage2
+		Tooltip: ""
+	}
+
+	FixCoinDamage3: {
+		DisplayName: Fix Coin Damage3
+		Tooltip: ""
+	}
+
+	FixCoinDamage4: {
+		DisplayName: Fix Coin Damage4
+		Tooltip: ""
+	}
+
+	FixCoinDamage5: {
+		DisplayName: Fix Coin Damage5
+		Tooltip: ""
+	}
+
+	FixCoinDefense1: {
+		DisplayName: Fix Coin Defense1
+		Tooltip: ""
+	}
+
+	FixCoinDefense2: {
+		DisplayName: Fix Coin Defense2
+		Tooltip: ""
+	}
+
+	FixCoinDefense3: {
+		DisplayName: Fix Coin Defense3
+		Tooltip: ""
+	}
+
+	FixCoinDefense4: {
+		DisplayName: Fix Coin Defense4
+		Tooltip: ""
+	}
+
+	FixCoinDefense5: {
+		DisplayName: Fix Coin Defense5
+		Tooltip: ""
+	}
+
+	FixCoinMelee1: {
+		DisplayName: Fix Coin Melee1
+		Tooltip: ""
+	}
+
+	FixCoinMelee2: {
+		DisplayName: Fix Coin Melee2
+		Tooltip: ""
+	}
+
+	FixCoinMelee3: {
+		DisplayName: Fix Coin Melee3
+		Tooltip: ""
+	}
+
+	FixCoinSpeed1: {
+		DisplayName: Fix Coin Speed1
+		Tooltip: ""
+	}
+
+	FixCoinSpeed2: {
+		DisplayName: Fix Coin Speed2
+		Tooltip: ""
+	}
+
+	FixCoinSpeed3: {
+		DisplayName: Fix Coin Speed3
+		Tooltip: ""
+	}
+
+	CrystalSkull: {
+		DisplayName: Crystal Skull
+		Tooltip: ""
+	}
+
+	BloodLamp: {
+		DisplayName: Blood Lamp
+		Tooltip: ""
+	}
+
+	LanternBombRemoteControl: {
+		DisplayName: Lantern Bomb Remote Control
+		Tooltip: ""
+	}
+
+	RampageShark: {
+		DisplayName: Rampage Shark
+		Tooltip: ""
+	}
+
+	TsunamiShark: {
+		DisplayName: Tsunami Shark
+		Tooltip: ""
+	}
+
+	CactusBall: {
+		DisplayName: Cactus Ball
+		Tooltip: ""
+	}
+
+	BlueFreeze: {
+		DisplayName: Blue Freeze
+		Tooltip: ""
+	}
+
+	BluePedal: {
+		DisplayName: Blue Pedal
+		Tooltip: ""
+	}
+
+	CyanHyacinth: {
+		DisplayName: Cyan Hyacinth
+		Tooltip: ""
+	}
+
+	DarkPoppy: {
+		DisplayName: Dark Poppy
+		Tooltip: ""
+	}
+
+	FlowerBrochure: {
+		DisplayName: Flower Brochure
+		Tooltip: ""
+	}
+
+	GoldCup: {
+		DisplayName: Gold Cup
+		Tooltip: ""
+	}
+
+	GoldWhip: {
+		DisplayName: Gold Whip
+		Tooltip: ""
+	}
+
+	HotPinkTulip: {
+		DisplayName: Hot Pink Tulip
+		Tooltip: ""
+	}
+
+	Lavender: {
+		DisplayName: Lavender
+		Tooltip: ""
+	}
+
+	LightChrysanthemum: {
+		DisplayName: Light Chrysanthemum
+		Tooltip: ""
+	}
+
+	LightPurpleBalls: {
+		DisplayName: Light Purple Balls
+		Tooltip: ""
+	}
+
+	OrangeSausage: {
+		DisplayName: Orange Sausage
+		Tooltip: ""
+	}
+
+	OrangeTulip: {
+		DisplayName: Orange Tulip
+		Tooltip: ""
+	}
+
+	PinkSun: {
+		DisplayName: Pink Sun
+		Tooltip: ""
+	}
+
+	PurplePhantom: {
+		DisplayName: Purple Phantom
+		Tooltip: ""
+	}
+
+	PurpleTail: {
+		DisplayName: Purple Tail
+		Tooltip: ""
+	}
+
+	RedFlame: {
+		DisplayName: Red Flame
+		Tooltip: ""
+	}
+
+	ShallowNight: {
+		DisplayName: Shallow Night
+		Tooltip: ""
+	}
+
+	SilverClock: {
+		DisplayName: Silver Clock
+		Tooltip: ""
+	}
+
+	WhiteStar: {
+		DisplayName: White Star
+		Tooltip: ""
+	}
+
+	WhiteTulip: {
+		DisplayName: White Tulip
+		Tooltip: ""
+	}
+
+	WindMoveSeed: {
+		DisplayName: Wind Move Seed
+		Tooltip: ""
+	}
+
+	BlueTorchFlower: {
+		DisplayName: Blue Torch Flower
+		Tooltip: ""
+	}
+
+	CyanBranch: {
+		DisplayName: Cyan Branch
+		Tooltip: ""
+	}
+
+	CyanPedal: {
+		DisplayName: Cyan Pedal
+		Tooltip: ""
+	}
+
+	DarkHat: {
+		DisplayName: Dark Hat
+		Tooltip: ""
+	}
+
+	HotPinkCrown: {
+		DisplayName: Hot Pink Crown
+		Tooltip: ""
+	}
+
+	LightPurplePen: {
+		DisplayName: Light Purple Pen
+		Tooltip: ""
+	}
+
+	ManyWhiteFlower: {
+		DisplayName: Many White Flower
+		Tooltip: ""
+	}
+
+	OrangeCrown: {
+		DisplayName: Orange Crown
+		Tooltip: ""
+	}
+
+	OrangeStick: {
+		DisplayName: Orange Stick
+		Tooltip: ""
+	}
+
+	PinkFourPedal: {
+		DisplayName: Pink Four Pedal
+		Tooltip: ""
+	}
+
+	PurpleBall: {
+		DisplayName: Purple Ball
+		Tooltip: ""
+	}
+
+	PurpleReedHalo: {
+		DisplayName: Purple Reed Halo
+		Tooltip: ""
+	}
+
+	RedTriangle: {
+		DisplayName: Red Triangle
+		Tooltip: ""
+	}
+
+	SilverCupFlower: {
+		DisplayName: Silver Cup Flower
+		Tooltip: ""
+	}
+
+	ThreeColorCrown: {
+		DisplayName: Three Color Crown
+		Tooltip: ""
+	}
+
+	WhiteCrown: {
+		DisplayName: White Crown
+		Tooltip: ""
+	}
+
+	WhitePedal: {
+		DisplayName: White Pedal
+		Tooltip: ""
+	}
+
+	WhiteWoodFlower: {
+		DisplayName: White Wood Flower
+		Tooltip: ""
+	}
+
+	YellowBellFlower: {
+		DisplayName: Yellow Bell Flower
+		Tooltip: ""
+	}
+
+	TreePlacer: {
+		DisplayName: Tree Placer
+		Tooltip: ""
+	}
+
+	TwilightWood: {
+		DisplayName: Twilight Wood
+		Tooltip: ""
+	}
+
+	YggdrasilImpression: {
+		DisplayName: Yggdrasil Impression
+		Tooltip: ""
+	}
+
+	ChinesePartitionLamp: {
+		DisplayName: Chinese Partition Lamp
+		Tooltip: ""
+	}
+
+	ChineseStyleFloorLamp: {
+		DisplayName: Chinese Style Floor Lamp
+		Tooltip: ""
+	}
+
+	CyanVineBar: {
+		DisplayName: Cyan Vine Bar
+		Tooltip: ""
+	}
+
+	CyanVineOre: {
+		DisplayName: Cyan Vine Ore
+		Tooltip: ""
+	}
+
+	DoubleArmsChineseStreetLamp: {
+		DisplayName: Double Arms Chinese Street Lamp
+		Tooltip: ""
+	}
+
+	HangingSkyLantern: {
+		DisplayName: Hanging Sky Lantern
+		Tooltip: ""
+	}
+
+	HexagonalCeilingLamp: {
+		DisplayName: Hexagonal Ceiling Lamp
+		Tooltip: ""
+	}
+
+	ShoreMud: {
+		DisplayName: Shore Mud
+		Tooltip: ""
+	}
+
+	SideHangingLantern: {
+		DisplayName: Side Hanging Lantern
+		Tooltip: ""
+	}
+
+	SideHangingLantern_White: {
+		DisplayName: Side Hanging Lantern_ White
+		Tooltip: ""
+	}
+
+	StoneDragonScaleWood: {
+		DisplayName: Stone Dragon Scale Wood
+		Tooltip: ""
+	}
+
+	StoneDragonScaleWoodWall: {
+		DisplayName: Stone Dragon Scale Wood Wall
+		Tooltip: ""
+	}
+
+	StreetLantern: {
+		DisplayName: Street Lantern
+		Tooltip: ""
+	}
+
+	YellowDynastyShingles: {
+		DisplayName: Yellow Dynasty Shingles
+		Tooltip: ""
+	}
+
+	YggdrasilAmber: {
+		DisplayName: Yggdrasil Amber
+		Tooltip: ""
+	}
+
+	CyanVineAxe: {
+		DisplayName: Cyan Vine Axe
+		Tooltip: ""
+	}
+
+	CyanVineHammer: {
+		DisplayName: Cyan Vine Hammer
+		Tooltip: ""
+	}
+
+	CyanVinePickaxe: {
+		DisplayName: Cyan Vine Pickaxe
+		Tooltip: ""
+	}
+
+	CyanVineSword: {
+		DisplayName: Cyan Vine Sword
+		Tooltip: ""
+	}
+
+	CyanVineThrowingSpear: {
+		DisplayName: Cyan Vine Throwing Spear
+		Tooltip: ""
+	}
+
+	DragonScaleWood: {
+		DisplayName: Dragon Scale Wood
+		Tooltip: ""
+	}
+
+	DragonScaleWoodWall: {
+		DisplayName: Dragon Scale Wood Wall
+		Tooltip: ""
+	}
+
+	OldMoss: {
+		DisplayName: Old Moss
+		Tooltip: ""
+	}
+
+	YggdrasilDirt: {
+		DisplayName: Yggdrasil Dirt
+		Tooltip: ""
+	}
+
+	AcroporaSpear: {
+		DisplayName: Acropora Spear
+		Tooltip: ""
+	}
+
+	CyanWindGranite: {
+		DisplayName: Cyan Wind Granite
+		Tooltip: ""
+	}
+
+	BloodLightCrystal: {
+		DisplayName: Blood Light Crystal
+		Tooltip: ""
+	}
+
+	TrueDeathSickle: {
+		DisplayName: True Death Sickle
+		Tooltip: ""
+	}
+
+	LiftLamp: {
+		DisplayName: Lift Lamp
+		Tooltip: ""
+	}
+
+	LiftWinch: {
+		DisplayName: Lift Winch
+		Tooltip: ""
+	}
+
+	HardmodeItem: {
+		DisplayName: Hardmode Item
+		Tooltip: ""
+	}
+
+	SightOfTile: {
+		DisplayName: Sight Of Tile
+		Tooltip: ""
+	}
+
+	TestItem: {
+		DisplayName: Test Item
+		Tooltip: ""
+	}
+}
+
+NPCs: {
+	TuskKillEffect.DisplayName: Tusk Kill Effect
+	TuskWall.DisplayName: Tusk Wall
+	BloodTusk.DisplayName: Blood Tusk
+	BloodyMouth1.DisplayName: Bloody Mouth1
+	BloodyMouth2.DisplayName: Bloody Mouth2
+	CrimsonTusk.DisplayName: Crimson Tusk
+	CrimsonTusk1.DisplayName: Crimson Tusk1
+	CrimsonTuskControlable.DisplayName: Crimson Tusk Controlable
+	CrimsonTuskFireWork.DisplayName: Crimson Tusk Fire Work
+	HugeMouth.DisplayName: Huge Mouth
+	LargeTusk.DisplayName: Large Tusk
+	LargeTusk2.DisplayName: Large Tusk2
+	LittleMouth.DisplayName: Little Mouth
+	LittleTusk.DisplayName: Little Tusk
+	TuskCooling.DisplayName: Tusk Cooling
+	TuskPoolWave.DisplayName: Tusk Pool Wave
+	TuskRedLight.DisplayName: Tusk Red Light
+	TuskWallLeft.DisplayName: Tusk Wall Left
+	TuskWallRight.DisplayName: Tusk Wall Right
+	TuskWave.DisplayName: Tusk Wave
+	TuskWaveHuge.DisplayName: Tusk Wave Huge
+	GlowingHeal.DisplayName: Glowing Heal
+	BlackStarFruit.DisplayName: Black Star Fruit
+	CentipedeHead.DisplayName: Centipede Head
+	CentipedeBody.DisplayName: Centipede Body
+	CentipedeTail.DisplayName: Centipede Tail
+	Dendroid_normal.DisplayName: Dendroid_normal
+	FireflyPiranha.DisplayName: Firefly Piranha
+	FireflyPiranhaInfected.DisplayName: Firefly Piranha Infected
+	FireflyPiranhaInfected_small.DisplayName: Firefly Piranha Infected_small
+	FireflyPiranha_small.DisplayName: Firefly Piranha_small
+	GlowingFirefly.DisplayName: Glowing Firefly
+	LargeFireBulb.DisplayName: Large Fire Bulb
+	LittleFireBulb.DisplayName: Little Fire Bulb
+	Butterfly.DisplayName: Butterfly
+	CorruptMoth.DisplayName: Corrupt Moth
+	EvilPack.DisplayName: Evil Pack
+	MothSummonEffect.DisplayName: Moth Summon Effect
+	FloatLantern.DisplayName: Float Lantern
+	RedPackBomber.DisplayName: Red Pack Bomber
+	LanternGhostKing.DisplayName: Lantern Ghost King
+	BlueCore.DisplayName: Blue Core
+	FlamingDashCore.DisplayName: Flaming Dash Core
+	GreenCore.DisplayName: Green Core
+	RedCore.DisplayName: Red Core
+	YellowCore.DisplayName: Yellow Core
+
+	Acytaea: {
+		DisplayName: Acytaea
+
+		TownNPCMood: {
+			Content: 我很满足。
+			NoHome: 我讨厌没有家。
+			FarFromHome: 我离家太远了。
+			LoveSpace: 我非常喜欢有这么大的空间。
+			DislikeCrowded: 我不喜欢这么拥挤。
+			HateCrowded: 我讨厌这么拥挤。
+			LikeNPC_Princess: I like {NPCName}.
+			Princess_LovesNPC: I like {NPCName}.
+		}
+	}
+
+	AcytaeaShadow.DisplayName: Acytaea Shadow
+	AcytaeaShadow2.DisplayName: Acytaea Shadow2
+	AcytaeaShadow3.DisplayName: Acytaea Shadow3
+	FakeAcytaea.DisplayName: Fake Acytaea
+	CyanOreBeetle.DisplayName: Cyan Ore Beetle
+	SquamousShell.DisplayName: Squamous Shell
+	TestNPC.DisplayName: Test N P C
+}
+
+Prefixes: {
+	Accurate.DisplayName: Accurate
+	Aimed.DisplayName: Aimed
+}
+
+Projectiles: {
+	BloodGoldBayonet_Pro.DisplayName: Blood Gold Bayonet_ Pro
+	BlossomThorn_Pro.DisplayName: Blossom Thorn_ Pro
+	BlossomThorn_Spike.DisplayName: Blossom Thorn_ Spike
+	BlueRibbonBayonet_Pro.DisplayName: Blue Ribbon Bayonet_ Pro
+	CopperStabbingSword_Pro.DisplayName: Copper Stabbing Sword_ Pro
+	CrutchBayonet_Pro.DisplayName: Crutch Bayonet_ Pro
+	DreamStar_Explosion.DisplayName: Dream Star_ Explosion
+	DreamStar_Pro.DisplayName: Dream Star_ Pro
+	EnchantedBayonet_Pro.DisplayName: Enchanted Bayonet_ Pro
+	EternalNight_Pro.DisplayName: Eternal Night_ Pro
+	GoldenStabbingSword_Pro.DisplayName: Golden Stabbing Sword_ Pro
+	HolyBayonet_Pro.DisplayName: Holy Bayonet_ Pro
+	IronStabbingSword_Pro.DisplayName: Iron Stabbing Sword_ Pro
+	LeadStabbingSword_Pro.DisplayName: Lead Stabbing Sword_ Pro
+	MechanicMosquito_Mosquito.DisplayName: Mechanic Mosquito_ Mosquito
+	MechanicMosquito_Pro.DisplayName: Mechanic Mosquito_ Pro
+	PlatinumStabbingSword_Pro.DisplayName: Platinum Stabbing Sword_ Pro
+	PrisonFireBayonet_Pro.DisplayName: Prison Fire Bayonet_ Pro
+	RedRibbonBayonet_Pro.DisplayName: Red Ribbon Bayonet_ Pro
+	RottenGoldBayonet_Mark.DisplayName: Rotten Gold Bayonet_ Mark
+	RottenGoldBayonet_Pro.DisplayName: Rotten Gold Bayonet_ Pro
+	RottenGoldBayonet_Slash.DisplayName: Rotten Gold Bayonet_ Slash
+	SilverStabbingSword_Pro.DisplayName: Silver Stabbing Sword_ Pro
+	SwordfishBeak_Pro.DisplayName: Swordfish Beak_ Pro
+	TinStabbingSword_Pro.DisplayName: Tin Stabbing Sword_ Pro
+	TungstenStabbingSword_Pro.DisplayName: Tungsten Stabbing Sword_ Pro
+	VegetationBayonet_Pro.DisplayName: Vegetation Bayonet_ Pro
+	VertebralSpur_Pro.DisplayName: Vertebral Spur_ Pro
+	YoenLeZed_Pro.DisplayName: Yoen Le Zed_ Pro
+	FryingPan.DisplayName: Frying Pan
+	PlanetBeFall.DisplayName: Planet Be Fall
+	PlanetBefallWave.DisplayName: Planet Befall Wave
+	PlanetBefallArray.DisplayName: Planet Befall Array
+	GoldenCrack.DisplayName: Golden Crack
+	ButterflyDreamFriendly.DisplayName: Butterfly Dream Friendly
+	ButterflyDream.DisplayName: Butterfly Dream
+	DashingLightEff.DisplayName: Dashing Light Eff
+	VortexVanquisher.DisplayName: Vortex Vanquisher
+	VortexVanquisher2.DisplayName: Vortex Vanquisher2
+	VortexVanquisher3.DisplayName: Vortex Vanquisher3
+	VortexVanquisherThump.DisplayName: Vortex Vanquisher Thump
+	GoldShield.DisplayName: Gold Shield
+	StonePost.DisplayName: Stone Post
+	CrimsonTuskProj.DisplayName: Crimson Tusk Proj
+	CrimsonTuskProjGra.DisplayName: Crimson Tusk Proj Gra
+	EarthTusk.DisplayName: Earth Tusk
+	EarthTuskHostile.DisplayName: Earth Tusk Hostile
+	TuskCrack.DisplayName: Tusk Crack
+	TuskCurse.DisplayName: Tusk Curse
+	TuskSpice.DisplayName: Tusk Spice
+	TuskSpiceBlack.DisplayName: Tusk Spice Black
+	TuskSpicePro.DisplayName: Tusk Spice Pro
+	Tusk.DisplayName: Tusk
+	BloodyBoneYoyo.DisplayName: Bloody Bone Yoyo
+	LittleTusk.DisplayName: Little Tusk
+	LittleTusk0.DisplayName: Little Tusk0
+	SpineGun.DisplayName: Spine Gun
+	SplieSpineBullet.DisplayName: Splie Spine Bullet
+	ToothMagic.DisplayName: Tooth Magic
+	ToothMagicBall.DisplayName: Tooth Magic Ball
+	ToothMagicHit.DisplayName: Tooth Magic Hit
+	ToothMagicSplit.DisplayName: Tooth Magic Split
+	ToothMagicSplit2.DisplayName: Tooth Magic Split2
+	ToothSpear.DisplayName: Tooth Spear
+	Tusk0.DisplayName: Tusk0
+	TuskArrow.DisplayName: Tusk Arrow
+	TuskSpear3.DisplayName: Tusk Spear3
+	TuskSpear4.DisplayName: Tusk Spear4
+	TuskSummon.DisplayName: Tusk Summon
+	BeadShakeWave.DisplayName: Bead Shake Wave
+	BlackCorruptRain.DisplayName: Black Corrupt Rain
+	BlackCorruptRain3.DisplayName: Black Corrupt Rain3
+	BlackCorruptRain3Friendly.DisplayName: Black Corrupt Rain3 Friendly
+	BlackCorruptRainFriendly.DisplayName: Black Corrupt Rain Friendly
+	BlueMissil.DisplayName: Blue Missil
+	BlueMissilFriendly.DisplayName: Blue Missil Friendly
+	BombShakeWave.DisplayName: Bomb Shake Wave
+	CorMoth4DProj.DisplayName: Cor Moth4 D Proj
+	CorruptDust.DisplayName: Corrupt Dust
+	DarkEffect.DisplayName: Dark Effect
+	DarkFan.DisplayName: Dark Fan
+	DarkFanFly.DisplayName: Dark Fan Fly
+	DreamWeaver.DisplayName: Dream Weaver
+	EvilChrysalis.DisplayName: Evil Chrysalis
+	EvilChrysalisRightClick.DisplayName: Evil Chrysalis Right Click
+	FanHit.DisplayName: Fan Hit
+	FlowLightMissile.DisplayName: Flow Light Missile
+	FruitBomb.DisplayName: Fruit Bomb
+	GlowBeadGun.DisplayName: Glow Bead Gun
+	GlowBeadGunShootFlame.DisplayName: Glow Bead Gun Shoot Flame
+	GlowingButterfly.DisplayName: Glowing Butterfly
+	GlowMoth.DisplayName: Glow Moth
+	GlowStar.DisplayName: Glow Star
+	GlowStarExplosion.DisplayName: Glow Star Explosion
+	GlowWoodSword.DisplayName: Glow Wood Sword
+	MissileProj.DisplayName: Missile Proj
+	MissileProjHostile.DisplayName: Missile Proj Hostile
+	MothArrow.DisplayName: Moth Arrow
+	MothBall.DisplayName: Moth Ball
+	MothGrey.DisplayName: Moth Grey
+	MothMagicArray.DisplayName: Moth Magic Array
+	MothYoyoProjectile.DisplayName: Moth Yoyo Projectile
+	MothYoyoSub.DisplayName: Moth Yoyo Sub
+	NavyThunder.DisplayName: Navy Thunder
+	NavyThunderBomb.DisplayName: Navy Thunder Bomb
+	PhantomMoth.DisplayName: Phantom Moth
+	PhosphorescenceBullet.DisplayName: Phosphorescence Bullet
+	PhosphorescenceGun.DisplayName: Phosphorescence Gun
+	ScaleWingBladeProj.DisplayName: Scale Wing Blade Proj
+	ShadowWingBow.DisplayName: Shadow Wing Bow
+	StaffOfCorruptDust.DisplayName: Staff Of Corrupt Dust
+	LilyHarpNote.DisplayName: Lily Harp Note
+	LilyHarpNoteKill.DisplayName: Lily Harp Note Kill
+	LilyHarpProj.DisplayName: Lily Harp Proj
+	LilyHarpWave.DisplayName: Lily Harp Wave
+	VineProj.DisplayName: Vine Proj
+	VineProj2.DisplayName: Vine Proj2
+	CloudBall.DisplayName: Cloud Ball
+	MagicHit.DisplayName: Magic Hit
+	AshBone.DisplayName: Ash Bone
+	XmasWhip.DisplayName: Xmas Whip
+	AmbiguousLine.DisplayName: Ambiguous Line
+	AmbiguousNight.DisplayName: Ambiguous Night
+	AmbiguousNightAmmo.DisplayName: Ambiguous Night Ammo
+	AmbiguousNightHit.DisplayName: Ambiguous Night Hit
+	AmethystBead.DisplayName: Amethyst Bead
+	AmethystSlingshot.DisplayName: Amethyst Slingshot
+	BorealWoodSlingshot.DisplayName: Boreal Wood Slingshot
+	CactusSlingShot.DisplayName: Cactus Sling Shot
+	DiamondBead.DisplayName: Diamond Bead
+	DiamondSlingshot.DisplayName: Diamond Slingshot
+	EbonwoodSlingshot.DisplayName: Ebonwood Slingshot
+	EmeraldBead.DisplayName: Emerald Bead
+	EmeraldSlingshot.DisplayName: Emerald Slingshot
+	GelBall.DisplayName: Gel Ball
+	GelSlingshot.DisplayName: Gel Slingshot
+	GlowSporeBead.DisplayName: Glow Spore Bead
+	JungleSlingshot.DisplayName: Jungle Slingshot
+	JungleSlingshotHit.DisplayName: Jungle Slingshot Hit
+	KSSlingshotHit.DisplayName: K S Slingshot Hit
+	KSSlingshotHitPink.DisplayName: K S Slingshot Hit Pink
+	NormalAmmo.DisplayName: Normal Ammo
+	NormalHit.DisplayName: Normal Hit
+	PalmWoodSlingshot.DisplayName: Palm Wood Slingshot
+	PearlwoodSlingshot.DisplayName: Pearlwood Slingshot
+	RichMahoganySlingshot.DisplayName: Rich Mahogany Slingshot
+	RubyBead.DisplayName: Ruby Bead
+	RubySlingshot.DisplayName: Ruby Slingshot
+	SapphireBead.DisplayName: Sapphire Bead
+	SapphireSlingshot.DisplayName: Sapphire Slingshot
+	ShadewoodSlingShot.DisplayName: Shadewood Sling Shot
+	StarAmmo.DisplayName: Star Ammo
+	StarSlingshot.DisplayName: Star Slingshot
+	TopazBead.DisplayName: Topaz Bead
+	TopazSlingshot.DisplayName: Topaz Slingshot
+	WoodSlingshot.DisplayName: Wood Slingshot
+	ComingGhost.DisplayName: Coming Ghost
+	ComingGhost2.DisplayName: Coming Ghost2
+	GhostHit.DisplayName: Ghost Hit
+	GoldRound.DisplayName: Gold Round
+	GoldRoundYoyo.DisplayName: Gold Round Yoyo
+	MeleeHit.DisplayName: Melee Hit
+	MeleeHit2.DisplayName: Melee Hit2
+	Sunflower.DisplayName: Sunflower
+	SunFlowerpetal.DisplayName: Sun Flowerpetal
+	World.DisplayName: World
+	WorldHit.DisplayName: World Hit
+	Hepuyuan.DisplayName: Hepuyuan
+	HepuyuanDown.DisplayName: Hepuyuan Down
+	HepuyuanShake.DisplayName: Hepuyuan Shake
+	HepuyuanSpice.DisplayName: Hepuyuan Spice
+	XiaoBlackWave.DisplayName: Xiao Black Wave
+	XiaoHit.DisplayName: Xiao Hit
+	AdamantiteClub.DisplayName: Adamantite Club
+	BorealWoodClub.DisplayName: Boreal Wood Club
+	CactusClub.DisplayName: Cactus Club
+	ChlorophyteClub.DisplayName: Chlorophyte Club
+	ChlorophyteClub_fly.DisplayName: Chlorophyte Club_fly
+	ChlorophyteClub_VFX.DisplayName: Chlorophyte Club_ V F X
+	CobaltClub.DisplayName: Cobalt Club
+	CopperClub.DisplayName: Copper Club
+	CorruptClub.DisplayName: Corrupt Club
+	CrimsonClub.DisplayName: Crimson Club
+	CrystalClub.DisplayName: Crystal Club
+	CrystalClub_fly.DisplayName: Crystal Club_fly
+	CurseClub.DisplayName: Curse Club
+	CurseClub_fly.DisplayName: Curse Club_fly
+	EbonwoodClub.DisplayName: Ebonwood Club
+	GoldClub.DisplayName: Gold Club
+	IchorClub.DisplayName: Ichor Club
+	IchorClub_fly.DisplayName: Ichor Club_fly
+	IronClub.DisplayName: Iron Club
+	LeadClub.DisplayName: Lead Club
+	MeteorClub.DisplayName: Meteor Club
+	MithrilClub.DisplayName: Mithril Club
+	OrichalcumClub.DisplayName: Orichalcum Club
+	PalladiumClub.DisplayName: Palladium Club
+	PalmWoodClub.DisplayName: Palm Wood Club
+	PearlwoodClub.DisplayName: Pearlwood Club
+	PlatinumClub.DisplayName: Platinum Club
+	RichMahoganyClub.DisplayName: Rich Mahogany Club
+	ShadewoodClub.DisplayName: Shadewood Club
+	SilverClub.DisplayName: Silver Club
+	SpikeClub.DisplayName: Spike Club
+	StarDancer.DisplayName: Star Dancer
+	TinClub.DisplayName: Tin Club
+	TitaniumClub.DisplayName: Titanium Club
+	TungstenClub.DisplayName: Tungsten Club
+	WoodenClub.DisplayName: Wooden Club
+	BoneFeather.DisplayName: Bone Feather
+	EndlessCurseFlame.DisplayName: Endless Curse Flame
+	FireFeather.DisplayName: Fire Feather
+	FreezeFeather.DisplayName: Freeze Feather
+	ThunderBall.DisplayName: Thunder Ball
+	ThunderBall2.DisplayName: Thunder Ball2
+	ThunderBallToNPC.DisplayName: Thunder Ball To N P C
+	FreezeFeatherMagicArray.DisplayName: Freeze Feather Magic Array
+	FreezeFeatherMagicBook.DisplayName: Freeze Feather Magic Book
+	FreezeShoot.DisplayName: Freeze Shoot
+	GiantFreezeFeather.DisplayName: Giant Freeze Feather
+	GiantFreezeFeatherExplosion.DisplayName: Giant Freeze Feather Explosion
+	FireFeatherMagicArray.DisplayName: Fire Feather Magic Array
+	FireFeatherMagicBook.DisplayName: Fire Feather Magic Book
+	FlameShoot.DisplayName: Flame Shoot
+	GiantFireFeather.DisplayName: Giant Fire Feather
+	GiantFireFeatherExplosion.DisplayName: Giant Fire Feather Explosion
+	FlowerPetalPurple.DisplayName: Flower Petal Purple
+	PurpleBallEffect.DisplayName: Purple Ball Effect
+	FixCoinCrit1.DisplayName: Fix Coin Crit1
+	FixCoinCrit2.DisplayName: Fix Coin Crit2
+	FixCoinCrit3.DisplayName: Fix Coin Crit3
+	FixCoinCrit4.DisplayName: Fix Coin Crit4
+	FixCoinCrit5.DisplayName: Fix Coin Crit5
+	FixCoinDamage1.DisplayName: Fix Coin Damage1
+	FixCoinDamage2.DisplayName: Fix Coin Damage2
+	FixCoinDamage3.DisplayName: Fix Coin Damage3
+	FixCoinDamage4.DisplayName: Fix Coin Damage4
+	FixCoinDamage5.DisplayName: Fix Coin Damage5
+	FixCoinDefense1.DisplayName: Fix Coin Defense1
+	FixCoinDefense2.DisplayName: Fix Coin Defense2
+	FixCoinDefense3.DisplayName: Fix Coin Defense3
+	FixCoinDefense4.DisplayName: Fix Coin Defense4
+	FixCoinDefense5.DisplayName: Fix Coin Defense5
+	FixCoinMelee1.DisplayName: Fix Coin Melee1
+	FixCoinMelee2.DisplayName: Fix Coin Melee2
+	FixCoinMelee3.DisplayName: Fix Coin Melee3
+	FixCoinSpeed1.DisplayName: Fix Coin Speed1
+	FixCoinSpeed2.DisplayName: Fix Coin Speed2
+	FixCoinSpeed3.DisplayName: Fix Coin Speed3
+	IchorRing.DisplayName: Ichor Ring
+	NewWaterBolt.DisplayName: New Water Bolt
+	WaterBoltArray.DisplayName: Water Bolt Array
+	WaterBoltBook.DisplayName: Water Bolt Book
+	WaterTeleport.DisplayName: Water Teleport
+	HurricaneMask.DisplayName: Hurricane Mask
+	RazorbladeTyphoonArray.DisplayName: Razorblade Typhoon Array
+	RazorbladeTyphoonBook.DisplayName: Razorblade Typhoon Book
+	TyphoonII.DisplayName: Typhoon I I
+	MagnetSphereArray.DisplayName: Magnet Sphere Array
+	MagnetSphereBook.DisplayName: Magnet Sphere Book
+	MagnetSphereHit.DisplayName: Magnet Sphere Hit
+	MagnetSphereII.DisplayName: Magnet Sphere I I
+	MagnetSphereLighting.DisplayName: Magnet Sphere Lighting
+	LunarFlareArray.DisplayName: Lunar Flare Array
+	LunarFlareBook.DisplayName: Lunar Flare Book
+	LunarFlareHit.DisplayName: Lunar Flare Hit
+	LunarFlareII.DisplayName: Lunar Flare I I
+	StarProj.DisplayName: Star Proj
+	GoldenShowerArray.DisplayName: Golden Shower Array
+	GoldenShowerBomb.DisplayName: Golden Shower Bomb
+	GoldenShowerBook.DisplayName: Golden Shower Book
+	GoldenShowerII.DisplayName: Golden Shower I I
+	DreamWeaverBook.DisplayName: Dream Weaver Book
+	DreamWeaverII.DisplayName: Dream Weaver I I
+	DemoHit.DisplayName: Demo Hit
+	DemonScytheArray.DisplayName: Demon Scythe Array
+	DemonScytheBook.DisplayName: Demon Scythe Book
+	DemonScythePlus.DisplayName: Demon Scythe Plus
+	DemonScythePlusCrack.DisplayName: Demon Scythe Plus Crack
+	DemoSpark.DisplayName: Demo Spark
+	CursedFlameHit.DisplayName: Cursed Flame Hit
+	CursedFlamesArray.DisplayName: Cursed Flames Array
+	CursedFlamesBook.DisplayName: Cursed Flames Book
+	CursedFlamesII.DisplayName: Cursed Flames I I
+	CrystalStormArray.DisplayName: Crystal Storm Array
+	CrystalStormBook.DisplayName: Crystal Storm Book
+	CrystalStormII.DisplayName: Crystal Storm I I
+	CrystalWind.DisplayName: Crystal Wind
+	LargeCrystal.DisplayName: Large Crystal
+	Storm.DisplayName: Storm
+	BoneSpike.DisplayName: Bone Spike
+	BookofSkullsArray.DisplayName: Bookof Skulls Array
+	BookofSkullsBook.DisplayName: Bookof Skulls Book
+	SkullHand.DisplayName: Skull Hand
+	SkullII.DisplayName: Skull I I
+	BlackHole.DisplayName: Black Hole
+	BloodLampProj.DisplayName: Blood Lamp Proj
+	LBloodEffect.DisplayName: L Blood Effect
+	LBloodEffectGra.DisplayName: L Blood Effect Gra
+	LMeteor.DisplayName: L Meteor
+	RainbowWave.DisplayName: Rainbow Wave
+	DarkLantern.DisplayName: Dark Lantern
+	DarkLantern3.DisplayName: Dark Lantern3
+	DarkLanternBomb2.DisplayName: Dark Lantern Bomb2
+	DarkLanternBombExplosion.DisplayName: Dark Lantern Bomb Explosion
+	DarkLanternBombExplosion_II.DisplayName: Dark Lantern Bomb Explosion_ I I
+	ExplodeLantern.DisplayName: Explode Lantern
+	floatLantern.DisplayName: float Lantern
+	floatLantern2.DisplayName: float Lantern2
+	floatLantern3.DisplayName: float Lantern3
+	floatLantern4.DisplayName: float Lantern4
+	floatLantern5.DisplayName: float Lantern5
+	GoldLantern.DisplayName: Gold Lantern
+	GoldLanternLine.DisplayName: Gold Lantern Line
+	GoldLanternLine2.DisplayName: Gold Lantern Line2
+	GoldLanternLine3.DisplayName: Gold Lantern Line3
+	GoldLanternLine4.DisplayName: Gold Lantern Line4
+	GoldLanternLine5.DisplayName: Gold Lantern Line5
+	GoldLanternLine6.DisplayName: Gold Lantern Line6
+	GoldLanternLine7.DisplayName: Gold Lantern Line7
+	GoldLanternLine8.DisplayName: Gold Lantern Line8
+	GoldLanternRay.DisplayName: Gold Lantern Ray
+	GoldLanternStar.DisplayName: Gold Lantern Star
+	Redlight.DisplayName: Redlight
+	StrikePlayer.DisplayName: Strike Player
+	BlueFlame0.DisplayName: Blue Flame0
+	BlueFlame0Little.DisplayName: Blue Flame0 Little
+	BlueFlame0LittleSoon.DisplayName: Blue Flame0 Little Soon
+	BlueFlame1Boom.DisplayName: Blue Flame1 Boom
+	BlueStarTrail.DisplayName: Blue Star Trail
+	BrownFlame0.DisplayName: Brown Flame0
+	BrownFlame0Little.DisplayName: Brown Flame0 Little
+	GoldDashLine.DisplayName: Gold Dash Line
+	GreenFlame0.DisplayName: Green Flame0
+	GreenFlame0Little.DisplayName: Green Flame0 Little
+	GreenFlame0Split.DisplayName: Green Flame0 Split
+	GreenFlame1Split.DisplayName: Green Flame1 Split
+	ImmuneCircle.DisplayName: Immune Circle
+	PinkFlame0.DisplayName: Pink Flame0
+	PinkFlame0Little.DisplayName: Pink Flame0 Little
+	PurpleFlame0.DisplayName: Purple Flame0
+	PurpleFlame0Little.DisplayName: Purple Flame0 Little
+	PurpleGreenFlame0.DisplayName: Purple Green Flame0
+	PurpleGreenFlame0Little.DisplayName: Purple Green Flame0 Little
+	RedFlame0.DisplayName: Red Flame0
+	RedFlame0Little.DisplayName: Red Flame0 Little
+	RedFlame0Split.DisplayName: Red Flame0 Split
+	RedFlame1Split.DisplayName: Red Flame1 Split
+	RedFlame2Split.DisplayName: Red Flame2 Split
+	YellowFlame0.DisplayName: Yellow Flame0
+	YellowFlame0Little.DisplayName: Yellow Flame0 Little
+	YellowFlame0LittleShine.DisplayName: Yellow Flame0 Little Shine
+	YellowFlame0Shine.DisplayName: Yellow Flame0 Shine
+	YellowToRedFlame0Little.DisplayName: Yellow To Red Flame0 Little
+	AcytaeaArrow.DisplayName: Acytaea Arrow
+	AcytaeaArrow2.DisplayName: Acytaea Arrow2
+	AcytaeaArrow3.DisplayName: Acytaea Arrow3
+	AcytaeaArrowGra.DisplayName: Acytaea Arrow Gra
+	AcytaeaBow.DisplayName: Acytaea Bow
+	AcytaeaBow2.DisplayName: Acytaea Bow2
+	AcytaeaCenterBow.DisplayName: Acytaea Center Bow
+	AcytaeaEffect.DisplayName: Acytaea Effect
+	AcytaeaEffectUp.DisplayName: Acytaea Effect Up
+	AcytaeaLaser.DisplayName: Acytaea Laser
+	AcytaeaLaserBall.DisplayName: Acytaea Laser Ball
+	AcytaeaLaserLight.DisplayName: Acytaea Laser Light
+	AcytaeaLight.DisplayName: Acytaea Light
+	AcytaeaMagicBook.DisplayName: Acytaea Magic Book
+	AcytaeaTornado.DisplayName: Acytaea Tornado
+	AcytaeaTornado2.DisplayName: Acytaea Tornado2
+	AcytaeaTornado3.DisplayName: Acytaea Tornado3
+	AcytaeaTornado4.DisplayName: Acytaea Tornado4
+	AcytaeaTornado5.DisplayName: Acytaea Tornado5
+	AcytaeaTornadoHit.DisplayName: Acytaea Tornado Hit
+	AcytaeaWarningArrow.DisplayName: Acytaea Warning Arrow
+	BloodBlade.DisplayName: Blood Blade
+	BloodBlade2.DisplayName: Blood Blade2
+	BloodBladeShadow.DisplayName: Blood Blade Shadow
+	BrokenAcytaea.DisplayName: Broken Acytaea
+	BrokenAcytaea2.DisplayName: Broken Acytaea2
+	Metero.DisplayName: Metero
+	Metero2.DisplayName: Metero2
+	Metero3.DisplayName: Metero3
+	Metero4.DisplayName: Metero4
+	MeteroFri.DisplayName: Metero Fri
+	playerHit.DisplayName: player Hit
+	RampageShark.DisplayName: Rampage Shark
+	RampageSharkHit.DisplayName: Rampage Shark Hit
+	TsunamiShark.DisplayName: Tsunami Shark
+	TsunamiShark_bullet.DisplayName: Tsunami Shark_bullet
+	TsunamiShark_bullet_hit.DisplayName: Tsunami Shark_bullet_hit
+	TsunamiShark_flame.DisplayName: Tsunami Shark_flame
+	TsunamiShark_marking.DisplayName: Tsunami Shark_marking
+	TsunamiShark_missile.DisplayName: Tsunami Shark_missile
+	TsunamiShark_missile_hit.DisplayName: Tsunami Shark_missile_hit
+	CactusBallProj.DisplayName: Cactus Ball Proj
+	CactusBallSpike.DisplayName: Cactus Ball Spike
+	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
+	AcroporaSpear.DisplayName: Acropora Spear
+	AcroporaThumpEff.DisplayName: Acropora Thump Eff
+	TrueDeathSickle.DisplayName: True Death Sickle
+	TrueDeathSickleHit.DisplayName: True Death Sickle Hit
+	SightOfTileProj.DisplayName: Sight Of Tile Proj
+	SightOfTileProjRead.DisplayName: Sight Of Tile Proj Read
+}
+
+Configs: {
+	EverglowConfig: {
+		DisplayName: Everglow Config
+
+		debugMode: {
+			Label: Enable Debug Mode
+			Tooltip: "[For developers] Enable debug mode to allow debug functions to run"
+		}
+	}
+
+	EverglowClientConfig: {
+		DisplayName: Everglow Client Config
+
+		TextureReplace: {
+			Label: "{$Mods.Everglow.Config.TextureReplace.Label}"
+			Tooltip: "{$Mods.Everglow.Config.TextureReplace.Tooltip}"
+		}
+
+		ItemPickSoundReplace: {
+			Label: "{$Mods.Everglow.Config.ItemPickSoundReplace.Label}"
+			Tooltip: ""
+		}
+
+		MothAudioReplace: {
+			Label: "{$Mods.Everglow.Config.MothAudioReplace.Label}"
+			Tooltip: "{$Mods.Everglow.Config.MothAudioReplace.Tooltip}"
+		}
+
+		TuskAudioReplace: {
+			Label: "{$Mods.Everglow.Config.TuskAudioReplace.Label}"
+			Tooltip: "{$Mods.Everglow.Config.TuskAudioReplace.Tooltip}"
+		}
+	}
+
+	TextureReplaceMode: {
+		Tooltip: ""
+		Terraria.Label: Terraria
+		EternalResolve.Label: Eternal Resolve
+		Myth.Label: Myth
+	}
+
+	MothAudioReplaceMode: {
+		Tooltip: ""
+		MothFighting.Label: Original
+		AltMothFighting.Label: Alternate
+		OldMothFighting.Label: Old
+	}
+
+	TuskAudioReplaceMode: {
+		Tooltip: ""
+		TuskFighting.Label: Original
+		OldTuskFighting.Label: Old
+	}
+
+	FogConfigs: {
+		DisplayName: Fog Configs
+
+		EnableScattering: {
+			Label: 开启雾效
+			Tooltip: 是否开启参与介质散射
+		}
+
+		EnableLightUpload: {
+			Label: 【性能测试】开启光源数据
+			Tooltip: 是否启用发光体数据上传（CPU到GPU）
+		}
+
+		MaxBloomRadius: {
+			Label: 模糊半径
+			Tooltip: 光效的最大溢出半径，最终半径是以2为底的指数，越大越影响性能
+		}
+
+		BloomIntensity: {
+			Label: 光效强度
+			Tooltip: 光效的强度，用于放大亮度
+		}
+
+		OffscreenTiles: {
+			Label: 离屏物块渲染数量
+			Tooltip: 光效需要计算超出屏幕的物块数量
+		}
+
+		LightLuminanceThreashold: {
+			Label: 光源阈值
+			Tooltip: 可以调整原版点亮物块的光源阈值
+		}
+
+		GaussianKernel: {
+			Label: 是否开启高斯卷积核
+			Tooltip: 更柔和的效果，但是性能较差
+		}
+
+		FogAbsorptionR: {
+			Label: 雾吸收率（R）
+			Tooltip: 雾吸收红色通道直接光的比率，越大则越暗淡
+		}
+
+		FogAbsorptionG: {
+			Label: 雾吸收率（G）
+			Tooltip: 雾吸收绿色通道直接光的比率，越大则越暗淡
+		}
+
+		FogAbsorptionB: {
+			Label: 雾吸收率（B）
+			Tooltip: 雾吸收蓝色通道直接光的比率，越大则越暗淡
+		}
+
+		FogScatterWithDistance: {
+			Label: 扩散率随距离增大
+			Tooltip: 是否让散射效果随着距离增大而增大
+		}
+
+		FogBloomRate: {
+			Label: 雾散射扩散率
+			Tooltip: 散射光的扩散比率
+		}
+
+		FogBloomAbsorptionFactor: {
+			Label: 雾散射能见度影响系数
+			Tooltip: 散射光受到能见度影响的比率，0为不受能见度影响，1完全受能见度影响
+		}
+
+		EnableTemporalInterp: {
+			Label: 开启Temporal插值
+			Tooltip: 是否允许光照结果进行帧间插值来平滑
+		}
+	}
+}
+
+Config: {
+	Header: {
+		TextureReplace: Texture Replace Header
+		AudioReplace: Item Pick Sound Replace Header
+	}
+}

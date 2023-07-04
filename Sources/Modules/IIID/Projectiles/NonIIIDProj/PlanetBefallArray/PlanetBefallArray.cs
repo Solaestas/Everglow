@@ -89,6 +89,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+			CombatText.NewText(Main.LocalPlayer.Hitbox, Color.Yellow, circle.Count, true);
 			if (circle.Count > 0)
 			{
 				Main.graphics.GraphicsDevice.Textures[0] = tex;
