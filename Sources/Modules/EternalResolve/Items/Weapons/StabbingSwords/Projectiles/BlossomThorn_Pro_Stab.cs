@@ -22,5 +22,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			base.DrawEffect(lightColor);
 		}
+		public override void AI()
+		{
+			base.AI();
+		}
 	}
 }

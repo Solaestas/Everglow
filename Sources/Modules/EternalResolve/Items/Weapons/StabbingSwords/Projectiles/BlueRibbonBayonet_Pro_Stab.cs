@@ -13,8 +13,16 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.4f;
-			MaxLength = 0.88f;
+			MaxLength = 1.25f;
 			DrawWidth = 0.4f;
+		}
+		public override void DrawEffect(Color lightColor)
+		{
+			base.DrawEffect(lightColor);
+		}
+		public override void AI()
+		{
+			base.AI();
 		}
 	}
 }

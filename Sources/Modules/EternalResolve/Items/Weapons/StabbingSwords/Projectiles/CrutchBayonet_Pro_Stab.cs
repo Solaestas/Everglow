@@ -26,5 +26,13 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 			base.ModifyHitNPC(target, ref modifiers);
 		}
+		public override void DrawEffect(Color lightColor)
+		{
+			base.DrawEffect(lightColor);
+		}
+		public override void AI()
+		{
+			base.AI();
+		}
 	}
 }
