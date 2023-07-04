@@ -16,7 +16,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.White;
 			Item.value = Item.sellPrice(0, 1, 2, 0);
 			Item.shoot = ModContent.ProjectileType<BloodGoldBayonet_Pro>();
-			PowerfulStabProj = 1;
+			StabMulDamage = 4f;
+			PowerfulStabProj = ModContent.ProjectileType<BloodGoldBayonet_Pro_Stab>();
 			base.SetDefaults();
 		}
 		public override void AddRecipes()

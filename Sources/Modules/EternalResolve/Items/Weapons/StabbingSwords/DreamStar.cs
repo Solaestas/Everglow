@@ -20,7 +20,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.LightRed;
 			Item.value = Item.sellPrice(0, 2, 27, 15);
 			Item.shoot = ModContent.ProjectileType<DreamStar_Pro>();
-			PowerfulStabProj = 1;
+			StabMulDamage = 4f;
+			PowerfulStabProj = ModContent.ProjectileType<DreamStar_Pro_Stab>();
 			base.SetDefaults();
 		}
 	}
