@@ -18,19 +18,19 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			Projectile.DamageType = DamageClass.Magic;
 			Projectile.tileCollide = false;
 		}
-		internal int Timer = 0;
+		internal float Timer = 0;
 		internal float alpha = 1;
 		public override void AI()
 		{
 			Player player = Main.player[Projectile.owner];
 			Projectile.velocity *= 0;
-			if (Timer < 20)
+			if (Timer < 40)
 			{
-				Timer++;
+				Timer+=0.5f;
 			}
 			if (Projectile.timeLeft < 60)
 			{
-				alpha *= 0.8f;
+				alpha *= 0.9f;
 			}
 		}
 
@@ -41,7 +41,9 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Projectile.hide = false;
-			DrawMagicArray(Color.Black);
+			
+			DrawMagicArray();
+			
 			return false;
 		}
 		public void DrawBloom()
@@ -51,7 +53,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 		}
 
 
-		public void DrawMagicArray(Color c0)
+		public void DrawMagicArray( )
 		{
 			Player player = Main.player[Projectile.owner];
 			Texture2D PlantBeFallIn = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/NonIIIDProj/PlanetBefallArray/PlantBeFallIn").Value;
@@ -59,6 +61,9 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			Texture2D GeoElement = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/NonIIIDProj/PlanetBefallArray/GeoElement").Value;
 			Vector2 p = Projectile.Center - Main.screenPosition - new Vector2(GeoElement.Width, GeoElement.Height) / 8;
 			Main.spriteBatch.Draw(GeoElement, new Rectangle((int)p.X, (int)p.Y, GeoElement.Width / 4, GeoElement.Height / 4), Color.White * alpha);
+
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			DrawTexCircle(Timer * 30f, 100, Color.Gold * alpha, Projectile.Center - Main.screenPosition, PlantBeFallOut, Main.timeForVisualEffects / 1500 + MathHelper.PiOver4);
 			List<Vertex2D> In = new List<Vertex2D>();
 
@@ -75,6 +80,8 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 				Main.graphics.GraphicsDevice.Textures[0] = PlantBeFallIn;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, In.ToArray(), 0, 2);
 			}
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
 
 		private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
