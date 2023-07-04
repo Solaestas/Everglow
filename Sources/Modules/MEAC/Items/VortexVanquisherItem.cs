@@ -42,8 +42,8 @@ namespace Everglow.Sources.Modules.MEACModule.Items
 			Vector2 slotSize = new Vector2(52f, 52f);
 			position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
 			Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f;
-			Texture2D RArr1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/Post").Value;
-			Texture2D RArr2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/PlanetBeFall").Value;
+			Texture2D RArr1 = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/Post").Value;
+			Texture2D RArr2 = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/PlanetBeFall").Value;
 			if (!Main.gamePaused)
 			{
 				if (CoolTimeForE > 0)

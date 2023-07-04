@@ -112,10 +112,10 @@ namespace Everglow.Commons.IIID
             ModelEntity entity = new ModelEntity
             {
                 Vertices = vertices,
-                Texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/PlanetBefall/PlanetBeFallTexture").Value,
+                Texture = ModContent.Request<Texture2D>("Everglow/Modules/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture").Value,
                 NormalTexture = NormalMap.Value,
                 MaterialTexture = TextureAssets.MagicPixel.Value,//ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/PlanetBefall/PlanetBeFallTexture").Value,
-                EmissionTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/PlanetBefall/PlanetBeFallEmission").Value,
+                EmissionTexture = ModContent.Request<Texture2D>("Everglow/Modules/IIID/Projectiles/PlanetBefall/PlanetBeFallEmission").Value,
                 ModelTransform = modelMatrix,
             };
 
