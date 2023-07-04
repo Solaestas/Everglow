@@ -215,7 +215,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 
 
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		/*Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect Post = ModContent.Request<Effect>("Everglow/MEAC/Effects/Post", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		Post.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.003));
 		Post.CurrentTechnique.Passes[0].Apply();
@@ -277,7 +277,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 			DrawDoubleLine(DrawCen + new Vector2(-k0 * 60, k0 * 60) * WaveRange, DrawCen + new Vector2(-k0 * 120, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		}
+		}*/
 		return false;
 	}
 }
