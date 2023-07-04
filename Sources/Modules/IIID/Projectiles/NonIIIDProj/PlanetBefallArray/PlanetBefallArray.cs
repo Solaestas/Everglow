@@ -59,7 +59,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			Texture2D GeoElement = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/NonIIIDProj/PlanetBefallArray/GeoElement").Value;
 			Vector2 p = Projectile.Center - Main.screenPosition - new Vector2(GeoElement.Width, GeoElement.Height) / 8;
 			Main.spriteBatch.Draw(GeoElement, new Rectangle((int)p.X, (int)p.Y, GeoElement.Width / 4, GeoElement.Height / 4), Color.White * alpha);
-			DrawTexCircle(Timer* 30f, 100, Color.Gold * alpha, Projectile.Center - Main.screenPosition, PlantBeFallOut, Main.timeForVisualEffects / 1500 + MathHelper.PiOver4);
+			DrawTexCircle(Timer * 30f, 100, Color.Gold * alpha, Projectile.Center - Main.screenPosition, PlantBeFallOut, Main.timeForVisualEffects / 1500 + MathHelper.PiOver4);
 			List<Vertex2D> In = new List<Vertex2D>();
 
 			Vector2 Point1 = Projectile.Center - Main.screenPosition + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 0 - Main.timeForVisualEffects / 500);
@@ -70,11 +70,11 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			In.Add(new Vertex2D(Point2, Color.Gold * alpha, new Vector3(1, 0, 0)));
 			In.Add(new Vertex2D(Point4, Color.Gold * alpha, new Vector3(0, 1, 0)));
 			In.Add(new Vertex2D(Point3, Color.Gold * alpha, new Vector3(1, 1, 0)));
-			/* if (In.Count > 0)
-			 {
-			   //  Main.graphics.GraphicsDevice.[0] = PlantBeFallIn;
-			   //  Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, In.ToArray(), 0, In.Count - 2);
-			 }*/
+			if (In.Count > 0)
+			{
+				Main.graphics.GraphicsDevice.Textures[0] = PlantBeFallIn;
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, In.ToArray(), 0, 2);
+			}
 		}
 
 		private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
@@ -92,7 +92,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			if (circle.Count > 0)
 			{
 				Main.graphics.GraphicsDevice.Textures[0] = tex;
-				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count-2);
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 4);
 			}
 		}
 	}
