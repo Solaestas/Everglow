@@ -26,7 +26,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			Projectile.velocity *= 0;
 			if (Timer < 40)
 			{
-				Timer+=0.5f;
+				Timer = 0.25f.Lerp(Timer, 20);
 			}
 			if (Projectile.timeLeft < 60)
 			{
