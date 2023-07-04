@@ -1,7 +1,7 @@
 using Everglow.Commons.Vertex;
 using Everglow.Commons.MEAC;
 using Terraria.GameContent;
-
+using Everglow.Commons.Utilities;
 
 namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 {
@@ -24,16 +24,16 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 		{
 			Player player = Main.player[Projectile.owner];
 			Projectile.velocity *= 0;
+			float f = 0.025f;
 			if (Timer < 40)
 			{
-				Timer = 0.25f.Lerp(Timer, 20);
+				Timer = f.Lerp(Timer, 20);
 			}
 			if (Projectile.timeLeft < 60)
 			{
 				alpha *= 0.9f;
 			}
 		}
-
 		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 		{
 			overPlayers.Add(index);
@@ -63,7 +63,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			Main.spriteBatch.Draw(GeoElement, new Rectangle((int)p.X, (int)p.Y, GeoElement.Width / 4, GeoElement.Height / 4), Color.White * alpha);
 
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			DrawTexCircle(Timer * 30f, 100, Color.Gold * alpha, Projectile.Center - Main.screenPosition, PlantBeFallOut, Main.timeForVisualEffects / 1500 + MathHelper.PiOver4);
 			List<Vertex2D> In = new List<Vertex2D>();
 
@@ -96,7 +96,6 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
-			CombatText.NewText(Main.LocalPlayer.Hitbox, Color.Yellow, circle.Count, true);
 			if (circle.Count > 0)
 			{
 				Main.graphics.GraphicsDevice.Textures[0] = tex;
