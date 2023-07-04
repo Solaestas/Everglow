@@ -37,7 +37,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		public float DrawWidth = 1f;
 		/// <summary>
 		/// 重影深度缩变,小于1
-		/// </summary>
+		/// </summary>  
 		public float FadeTradeShade = 0f;
 		/// <summary>
 		/// 重影彩色部分亮度缩变,小于1
@@ -84,7 +84,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
 			float point = 0;
-			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
+			Vector2 end = Projectile.Center + Projectile.velocity * 90 * MaxLength;
 			if (endPos != Vector2.zeroVector)
 			{
 				end = endPos;
@@ -146,26 +146,30 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			{
 				if (endPos == Vector2.zeroVector)
 				{
-					SoundStyle ss = SoundID.NPCHit4;
-					SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
 					endPos = end;
-					for (int g = 0; g < 20; g++)
-					{
-						Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(MathHelper.TwoPi);
-						var spark = new FireSparkDust
-						{
-							velocity = newVelocity,
-							Active = true,
-							Visible = true,
-							position = endPos,
-							maxTime = Main.rand.Next(1, 25),
-							scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(0.1f, 17.0f)),
-							rotation = Main.rand.NextFloat(6.283f),
-							ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.13f, 0.13f) }
-						};
-						Ins.VFXManager.Add(spark);
-					}
+					HitTile();
 				}
+			}
+		}
+		public virtual void HitTile() 
+		{
+			SoundStyle ss = SoundID.NPCHit4;
+			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);	
+			for (int g = 0; g < 20; g++)
+			{
+				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(MathHelper.TwoPi);
+				var spark = new FireSparkDust
+				{
+					velocity = newVelocity,
+					Active = true,
+					Visible = true,
+					position = endPos,
+					maxTime = Main.rand.Next(1, 25),
+					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(0.1f, 17.0f)),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.13f, 0.13f) }
+				};
+				Ins.VFXManager.Add(spark);
 			}
 		}
 		private void ProduceWaterRipples(Vector2 beamDims)

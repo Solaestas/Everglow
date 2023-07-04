@@ -397,21 +397,21 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 				for (int f = TradeLength - 1; f > -1; f--)
 				{
 					Vector2 center = DarkDraw[f].Postion - Main.screenPosition;
-					Vector2 normal = new Vector2(0, 10).RotatedBy(DarkDraw[f].Rotation) * DarkDraw[f].Size.Y;
-					Vector2 normalY = new Vector2(0, 40).RotatedBy(DarkDraw[f].Rotation).RotatedBy(-Math.PI / 2) * DarkDraw[f].Size.X;
-					Vector2 start = center - normalY;
+					Vector2 normalX = new Vector2(0, 40).RotatedBy(LightDraw.Rotation).RotatedBy(-Math.PI / 2) * LightDraw.Size.X;
+					Vector2 normalY = new Vector2(0, 15).RotatedBy(LightDraw.Rotation) * LightDraw.Size.Y;
+					Vector2 start = center - normalX * 0.4f;
 					Vector2 middle = center;
-					Vector2 end = center + normalY;
+					Vector2 end = center + normalX;
 					Color alphaColor = Color;
 					alphaColor.A = 0;
 					alphaColor.R = (byte)(((DarkDraw[f].Rotation + 6.283 + Math.PI) % 6.283) / 6.283 * 255);
 					alphaColor.G = (byte)(DarkDraw[f].Color.A);
 					List<Vertex2D> bars = new List<Vertex2D>
 		        	{
-			        	new Vertex2D(start - normal,new Color(alphaColor.R, alphaColor.G / 9, 0, 0),new Vector3(1 + time, 0, 0)),
-			        	new Vertex2D(start + normal,new Color(alphaColor.R, alphaColor.G / 9, 0, 0),new Vector3(1 + time, 1, 0)),
-			        	new Vertex2D(middle - normal,new Color(alphaColor.R, alphaColor.G / 3, 0, 0),new Vector3(0.5f + time, 0, 0.5f)),
-			        	new Vertex2D(middle + normal,new Color(alphaColor.R, alphaColor.G / 3, 0, 0),new Vector3(0.5f + time, 1, 0.5f)),
+			        	new Vertex2D(start - normalY,new Color(alphaColor.R, alphaColor.G / 9, 0, 0),new Vector3(1 + time, 0, 0)),
+			        	new Vertex2D(start + normalY,new Color(alphaColor.R, alphaColor.G / 9, 0, 0),new Vector3(1 + time, 1, 0)),
+			        	new Vertex2D(middle - normalY,new Color(alphaColor.R, alphaColor.G / 3, 0, 0),new Vector3(0.5f + time, 0, 0.5f)),
+			        	new Vertex2D(middle + normalY,new Color(alphaColor.R, alphaColor.G / 3, 0, 0),new Vector3(0.5f + time, 1, 0.5f)),
 			        	new Vertex2D(end,alphaColor,new Vector3(0f + time, 0.5f, 1)),
 			        	new Vertex2D(end,alphaColor,new Vector3(0f + time, 0.5f, 1))
 		        	};
@@ -421,24 +421,24 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			if(TradeShade > 0)
 			{
 				Vector2 center = LightDraw.Postion - Main.screenPosition;
-				Vector2 normal = new Vector2(0, 10).RotatedBy(LightDraw.Rotation) * LightDraw.Size.Y;
-				Vector2 normalY = new Vector2(0, 40).RotatedBy(LightDraw.Rotation).RotatedBy(-Math.PI / 2) * LightDraw.Size.X;
-				Vector2 start = center - normalY;
+				Vector2 normalX = new Vector2(0, 45).RotatedBy(LightDraw.Rotation).RotatedBy(-Math.PI / 2) * LightDraw.Size.X;
+				Vector2 normalY = new Vector2(0, 20).RotatedBy(LightDraw.Rotation) * LightDraw.Size.Y;
+				Vector2 start = center - normalX * 0.4f;
 				Vector2 middle = center;
-				Vector2 end = center + normalY;
+				Vector2 end = center + normalX;
 				Color alphaColor = Color;
 				alphaColor.A = 0;
 				alphaColor.R = (byte)((LightDraw.Rotation + 6.283 + Math.PI) % 6.283 / 6.283 * 255);
 				alphaColor.G = 200;
 				List<Vertex2D> bars = new List<Vertex2D>
-					{
-						new Vertex2D(start - normal,new Color(alphaColor.R, 20, 0, 0),new Vector3(1 + time, 0, 0)),
-						new Vertex2D(start + normal,new Color(alphaColor.R, 20, 0, 0),new Vector3(1 + time, 1, 0)),
-						new Vertex2D(middle - normal,new Color(alphaColor.R, 50, 0, 0),new Vector3(0.5f + time, 0, 0.5f)),
-						new Vertex2D(middle + normal,new Color(alphaColor.R, 50, 0, 0),new Vector3(0.5f + time, 1, 0.5f)),
+				{
+						new Vertex2D(start - normalY,new Color(alphaColor.R, alphaColor.G / 9, 0, 0),new Vector3(1 + time, 0, 0)),
+						new Vertex2D(start + normalY,new Color(alphaColor.R, alphaColor.G / 9, 0, 0),new Vector3(1 + time, 1, 0)),
+						new Vertex2D(middle - normalY,new Color(alphaColor.R, alphaColor.G / 3, 0, 0),new Vector3(0.5f + time, 0, 0.5f)),
+						new Vertex2D(middle + normalY,new Color(alphaColor.R, alphaColor.G / 3, 0, 0),new Vector3(0.5f + time, 1, 0.5f)),
 						new Vertex2D(end,alphaColor,new Vector3(0f + time, 0.5f, 1)),
 						new Vertex2D(end,alphaColor,new Vector3(0f + time, 0.5f, 1))
-					};
+				};
 				sb.Draw(ModAsset.Trail_1.Value, bars, PrimitiveType.TriangleStrip);
 			}
 		}
