@@ -54,9 +54,9 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
         public void DrawMagicArray(Color c0)
         {
             Player player = Main.player[Projectile.owner];
-            Texture2D PlantBeFallIn = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/PlanetBefallArray/PlantBeFallIn").Value;
-            Texture2D PlantBeFallOut = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/PlanetBefallArray/PlantBeFallOut").Value;
-            Texture2D GeoElement = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/PlanetBefallArray/GeoElement").Value;
+            Texture2D PlantBeFallIn = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/NonIIIDProj/PlanetBefallArray/PlantBeFallIn").Value;
+            Texture2D PlantBeFallOut = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/NonIIIDProj/PlanetBefallArray/PlantBeFallOut").Value;
+            Texture2D GeoElement = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/NonIIIDProj/PlanetBefallArray/GeoElement").Value;
             Vector2 p = Projectile.Center - Main.screenPosition - new Vector2(GeoElement.Width, GeoElement.Height) / 8;
             Main.spriteBatch.Draw(GeoElement,new Rectangle((int)p.X, (int)p.Y, GeoElement.Width/4, GeoElement.Height/4) ,Color.White* alpha);
             DrawTexCircle(Timer* 30f, 100, Color.Gold * alpha, Projectile.Center - Main.screenPosition, PlantBeFallOut, Main.timeForVisualEffects / 1500 + MathHelper.PiOver4);
