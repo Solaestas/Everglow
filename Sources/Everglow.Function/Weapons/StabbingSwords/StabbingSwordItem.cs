@@ -21,6 +21,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			Item.useTime = 24;
 		}
 		public int PowerfulStabProj;
+		public float StabMulDamage = 4f;
 		public override bool AltFunctionUse(Player player)
 		{
 			foreach (Projectile proj in Main.projectile)
@@ -36,7 +37,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		{
 			if (player.altFunctionUse == 2)
 			{
-				Projectile.NewProjectile(source, position, Vector2.Zero, PowerfulStabProj, damage, knockback, player.whoAmI, 0f, 0f);
+				Projectile.NewProjectile(source, position, Vector2.Zero, PowerfulStabProj, (int)(damage * StabMulDamage), knockback, player.whoAmI, 0f, 0f);
 				player.itemTime = Item.useTime / 4;
 				player.itemAnimation = Item.useAnimation / 4;
 				return false;
