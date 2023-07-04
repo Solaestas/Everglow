@@ -306,16 +306,5 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 				}
 			}
 		}
-		public class TestProjModelSystem : ModSystem
-		{
-
-			public override void OnModLoad()
-			{
-				PlanetBeFall.model = ObjReader.LoadFile("Everglow/Sources/Modules/IIID/Projectiles/PlanetBefall/PlanetBeFall.obj");
-				PlanetBeFall.NormalMap = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIID/Projectiles/PlanetBefall/PlanetBeFallNormal");
-				base.OnModLoad();
-			}
-
-		}
 	}
 }

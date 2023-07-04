@@ -65,10 +65,10 @@ namespace Everglow.Commons.IIID
         }
         public override void OnModLoad()
         {
-            m_gbufferPassEffect = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/IIIDEffects/GBufferPass"); 
-            m_filtersEffect = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/IIIDEffects/Filters");
-            m_toneMapping = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/IIIDEffects/ToneMapping");
-            m_pixelArt = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/IIIDEffects/PixelArt");
+            m_gbufferPassEffect = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/GBufferPass"); 
+            m_filtersEffect = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/Filters");
+            m_toneMapping = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/ToneMapping");
+            m_pixelArt = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/PixelArt");
             Main.OnResolutionChanged += Main_OnResolutionChanged;
 			Ins.MainThread.AddTask(() =>
             {
