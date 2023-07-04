@@ -5,7 +5,7 @@ using Everglow.Commons.Utilities;
 
 namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 {
-	public class PlanetBefallArray : ModProjectile //,IBloomProjectile
+	public class PlanetBefallArray : ModProjectile ,IBloomProjectile
 	{
 		public override void SetDefaults()
 		{
@@ -31,7 +31,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			}
 			if (Projectile.timeLeft < 60)
 			{
-				alpha *= 0.9f;
+				alpha *= 0.95f;
 			}
 		}
 		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
