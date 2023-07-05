@@ -28,11 +28,8 @@ namespace Everglow.Commons.IIID
 			Stream path = new MemoryStream(bytes);
 			if (path != null)
 			{
-				using (StreamReader objReader = new StreamReader(
-					path
-				))
+				using ( StreamReader objReader = new StreamReader(path) )
 				{
-
 					mesh.positions.Add(Vector3.Zero);
 					mesh.texCoords.Add(Vector2.Zero);
 					mesh.normals.Add(Vector3.Zero);
