@@ -25,7 +25,7 @@ namespace Everglow.Commons.IIID
 		{
 			Model mesh = new Model();
 			var bytes = ModContent.GetFileBytes(fileName);
-			if (new MemoryStream(bytes) != null)
+			if (bytes != null)
 			{
 				using ( StreamReader objReader = new StreamReader(new MemoryStream(bytes)) )
 				{
