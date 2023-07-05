@@ -269,7 +269,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 
 		public override void OnModLoad()
 		{
-			PlanetBeFall.model = ObjReader.LoadFile("Everglow/Resources/IIIDModel/PlanetBeFall.obj");
+			PlanetBeFall.model = ObjReader.LoadFile("Everglow/Resources/IIIDModel/PlanetBeFallmodel.obj");
 			PlanetBeFall.NormalMap = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallNormal");
 			base.OnModLoad();
 		}
