@@ -25,120 +25,117 @@ namespace Everglow.Commons.IIID
 		{
 			Model mesh = new Model();
 			var bytes = ModContent.GetFileBytes(fileName);
-			if (bytes != null)
+			using (StreamReader objReader = new StreamReader(new MemoryStream(bytes)))
 			{
-				using ( StreamReader objReader = new StreamReader(new MemoryStream(bytes)) )
+				mesh.positions.Add(Vector3.Zero);
+				mesh.texCoords.Add(Vector2.Zero);
+				mesh.normals.Add(Vector3.Zero);
+				int s = 0;
+				int Texturetype = 0;
+				bool newModel = false;
+				bool hasPos = false, hasTex = false, hasNormal = false;
+				while (objReader.Peek() != -1)
 				{
-					mesh.positions.Add(Vector3.Zero);
-					mesh.texCoords.Add(Vector2.Zero);
-					mesh.normals.Add(Vector3.Zero);
-					int s = 0;
-					int Texturetype = 0;
-					bool newModel = false;
-					bool hasPos = false, hasTex = false, hasNormal = false;
-					while (objReader.Peek() != -1)
+					s++;
+					string text = objReader.ReadLine();
+					if (text.Length < 2)
 					{
-						s++;
-						string text = objReader.ReadLine();
-						if (text.Length < 2)
+						continue;
+					}
+					string[] tempArray;
+					if (text.IndexOf("usemtl") == 0)
+					{
+						Texturetype++;
+						continue;
+					}
+					else if (text.IndexOf("v") == 0)
+					{
+						if (!newModel)
 						{
-							continue;
+							hasPos = hasTex = hasNormal = false;
+							newModel = true;
 						}
-						string[] tempArray;
-						if (text.IndexOf("usemtl") == 0)
+						if (text.IndexOf("t") == 1)//vt 0.581151 0.979929 纹理
 						{
-							Texturetype++;
-							continue;
+							hasTex = true;
+							tempArray = text.Split(' ');
+							mesh.texCoords.Add(new Vector2(float.Parse(tempArray[1]), float.Parse(tempArray[2])));
 						}
-						else if (text.IndexOf("v") == 0)
+						else if (text.IndexOf("n") == 1)//vn 0.637005 -0.0421857 0.769705 法向量
 						{
-							if (!newModel)
+							hasNormal = true;
+							tempArray = text.Split(new char[] { '/', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+							if (tempArray[3] != "\\")
 							{
-								hasPos = hasTex = hasNormal = false;
-								newModel = true;
-							}
-							if (text.IndexOf("t") == 1)//vt 0.581151 0.979929 纹理
-							{
-								hasTex = true;
-								tempArray = text.Split(' ');
-								mesh.texCoords.Add(new Vector2(float.Parse(tempArray[1]), float.Parse(tempArray[2])));
-							}
-							else if (text.IndexOf("n") == 1)//vn 0.637005 -0.0421857 0.769705 法向量
-							{
-								hasNormal = true;
-								tempArray = text.Split(new char[] { '/', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-								if (tempArray[3] != "\\")
-								{
-									mesh.normals.Add(new Vector3(float.Parse(tempArray[1]), float.Parse(tempArray[2]), float.Parse(tempArray[3])));
-								}
-								else
-								{
-									text = objReader.ReadLine();
-									mesh.normals.Add(new Vector3(float.Parse(tempArray[1]), float.Parse(tempArray[2]), float.Parse(text)));
-								}
+								mesh.normals.Add(new Vector3(float.Parse(tempArray[1]), float.Parse(tempArray[2]), float.Parse(tempArray[3])));
 							}
 							else
-							{//v -53.0413 158.84 -135.806 点
-								hasPos = true;
-								tempArray = text.Split(' ');
-								mesh.positions.Add(new Vector3(float.Parse(tempArray[1]), float.Parse(tempArray[2]), float.Parse(tempArray[3])));
-							}
-						}
-						else if (text.IndexOf("f") == 0)
-						{
-							newModel = false;
-							//f 2443//2656 2442//2656 2444//2656 面
-							var componentArray = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-							// componentArray[0] 是 f
-							// componentArray[1 ~ n] 是组成顶点的信息列表
-							Face face = new Face();
-
-							// 只允许读取三角网格，多边形网格请先三角化
-							Debug.Assert(componentArray.Length == 4, "We only support triangle meshes");
-							for (int i = 1; i < componentArray.Length; i++)
 							{
-								var components = componentArray[i].Split('/');
-
-								if (int.TryParse(components[0], out int idPos))
-								{
-									face.Positions.Add(idPos);
-								}
-
-								if (int.TryParse(components[1], out int idTex))
-								{
-									face.TextureCoords.Add(idTex);
-								}
-
-								if (int.TryParse(components[2], out int idNormal))
-								{
-									face.Normals.Add(idNormal);
-								}
+								text = objReader.ReadLine();
+								mesh.normals.Add(new Vector3(float.Parse(tempArray[1]), float.Parse(tempArray[2]), float.Parse(text)));
 							}
-							face.TextureType = Texturetype;
-							// Debug.Assert(face.Positions.Count == 3 && face.Normals.Count == 3, "We only support triangle meshes");
-
-							//int k = 1;
-							//for (int i = 0; i < 3; i++)
-							//{
-							//    if (hasPos)
-							//    {
-							//        face.V[i] = int.Parse(tempArray[k]) - 1;
-							//        k++;
-							//    }
-							//    if (hasTex)
-							//    {
-							//        face.T[i] = int.Parse(tempArray[k]) - 1;
-							//        k++;
-							//    }
-							//    if (hasNormal)
-							//    {
-							//        face.N[i] = int.Parse(tempArray[k]) - 1;
-							//        k++;
-							//    }
-							//}
-							mesh.faces.Add(face);
 						}
+						else
+						{//v -53.0413 158.84 -135.806 点
+							hasPos = true;
+							tempArray = text.Split(' ');
+							mesh.positions.Add(new Vector3(float.Parse(tempArray[1]), float.Parse(tempArray[2]), float.Parse(tempArray[3])));
+						}
+					}
+					else if (text.IndexOf("f") == 0)
+					{
+						newModel = false;
+						//f 2443//2656 2442//2656 2444//2656 面
+						var componentArray = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+						// componentArray[0] 是 f
+						// componentArray[1 ~ n] 是组成顶点的信息列表
+						Face face = new Face();
+
+						// 只允许读取三角网格，多边形网格请先三角化
+						Debug.Assert(componentArray.Length == 4, "We only support triangle meshes");
+						for (int i = 1; i < componentArray.Length; i++)
+						{
+							var components = componentArray[i].Split('/');
+
+							if (int.TryParse(components[0], out int idPos))
+							{
+								face.Positions.Add(idPos);
+							}
+
+							if (int.TryParse(components[1], out int idTex))
+							{
+								face.TextureCoords.Add(idTex);
+							}
+
+							if (int.TryParse(components[2], out int idNormal))
+							{
+								face.Normals.Add(idNormal);
+							}
+						}
+						face.TextureType = Texturetype;
+						// Debug.Assert(face.Positions.Count == 3 && face.Normals.Count == 3, "We only support triangle meshes");
+
+						//int k = 1;
+						//for (int i = 0; i < 3; i++)
+						//{
+						//    if (hasPos)
+						//    {
+						//        face.V[i] = int.Parse(tempArray[k]) - 1;
+						//        k++;
+						//    }
+						//    if (hasTex)
+						//    {
+						//        face.T[i] = int.Parse(tempArray[k]) - 1;
+						//        k++;
+						//    }
+						//    if (hasNormal)
+						//    {
+						//        face.N[i] = int.Parse(tempArray[k]) - 1;
+						//        k++;
+						//    }
+						//}
+						mesh.faces.Add(face);
 					}
 				}
 			}
