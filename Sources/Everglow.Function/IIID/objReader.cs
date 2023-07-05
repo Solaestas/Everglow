@@ -26,10 +26,10 @@ namespace Everglow.Commons.IIID
 			Model mesh = new Model();
 			var bytes = ModContent.GetFileBytes(fileName);
 			//string path = new MemoryStream(bytes);
-			if (new MemoryStream(bytes) != null)
+			if (fileName != null)
 			{
 				using (StreamReader objReader = new StreamReader(
-					new MemoryStream(bytes)
+					fileName
 				))
 				{
 
