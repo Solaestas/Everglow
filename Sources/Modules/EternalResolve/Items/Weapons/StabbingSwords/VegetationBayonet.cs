@@ -1,10 +1,9 @@
 using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
-using Terraria.Audio;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
-    public class VegetationBayonet : StabbingSwordItem
+	public class VegetationBayonet : StabbingSwordItem
 	{
 		//TODO:翻译
 		//会造成中毒
@@ -18,7 +17,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.White;
 			Item.value = Item.sellPrice(0, 0, 90, 0);
 			Item.shoot = ModContent.ProjectileType<VegetationBayonet_Pro>();
-			PowerfulStabProj = 1;
+			StabMulDamage = 4f;
+			PowerfulStabProj = ModContent.ProjectileType<VertebralSpur_Pro_Stab>();
 			base.SetDefaults();
 		}
 		public override void AddRecipes()
