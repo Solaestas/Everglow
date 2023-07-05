@@ -25,10 +25,9 @@ namespace Everglow.Commons.IIID
 		{
 			Model mesh = new Model();
 			var bytes = ModContent.GetFileBytes(fileName);
-			Stream path = new MemoryStream(bytes);
-			if (path != null)
+			if (new MemoryStream(bytes) != null)
 			{
-				using ( StreamReader objReader = new StreamReader(path) )
+				using ( StreamReader objReader = new StreamReader(new MemoryStream(bytes)) )
 				{
 					mesh.positions.Add(Vector3.Zero);
 					mesh.texCoords.Add(Vector2.Zero);
