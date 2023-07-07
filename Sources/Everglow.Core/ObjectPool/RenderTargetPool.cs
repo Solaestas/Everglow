@@ -1,4 +1,5 @@
 using Everglow.Commons.Enums;
+using Everglow.Commons.Interfaces;
 
 namespace Everglow.Commons.ObjectPool;
 
@@ -11,13 +12,13 @@ public class RenderTargetPool
 	private LinkedList<int> m_renderTargetsFreeList;
 	private GraphicsDevice m_graphicsDevice;
 
-	public RenderTargetPool()
+	public RenderTargetPool(IHookManager hookManager)
 	{
 		m_renderTargetsPool = new List<RenderTarget2D>();
 		m_renderTargetsFreeList = new LinkedList<int>();
 		m_graphicsDevice = Ins.Device;
 
-		Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, Main_OnResolutionChanged);
+		hookManager.AddHook(CodeLayer.ResolutionChanged, Main_OnResolutionChanged);
 	}
 
 	/// <summary>

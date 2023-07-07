@@ -11,7 +11,6 @@ public class DarkCocoon : ModTile
 		Main.tileMerge[Type][ModContent.TileType<DarkCocoonSpecial>()] = true;
 		MinPick = 175;
 		DustType = 191;
-		ItemDrop = ModContent.ItemType<Items.DarkCocoon>();
 		AddMapEntry(new Color(17, 16, 17));
 	}
 	public override void NearbyEffects(int i, int j, bool closer)

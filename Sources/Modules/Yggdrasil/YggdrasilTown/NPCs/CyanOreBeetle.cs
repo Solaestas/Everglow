@@ -1,4 +1,4 @@
-﻿using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 

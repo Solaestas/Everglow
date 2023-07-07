@@ -1,4 +1,3 @@
-using Everglow.Commons.CustomTiles;
 using Everglow.Commons.Hooks;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;

@@ -22,8 +22,7 @@ public class GlowWoodTorch : ModTile
 		TileID.Sets.DisableSmartCursor[Type] = true;
 		TileID.Sets.Torch[Type] = true;
 
-		ItemDrop = ModContent.ItemType<Items.Furnitures.GlowWoodTorch>();
-		DustType = ModContent.DustType<Dusts.BlueToPurpleSpark>();
+				DustType = ModContent.DustType<Dusts.BlueToPurpleSpark>();
 		AdjTiles = new int[] { TileID.Torches };
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);

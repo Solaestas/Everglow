@@ -1,5 +1,3 @@
-using Everglow.Myth.TheFirefly.Tiles;
-
 namespace Everglow.TwilightForest.Items;
 
 public class TwilightWood : ModItem
@@ -16,6 +14,5 @@ public class TwilightWood : ModItem
 		Item.useTime = 10;
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.consumable = true;
-		Item.createTile = ModContent.TileType<FireflyWood>();
 	}
 }

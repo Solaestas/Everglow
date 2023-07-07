@@ -269,7 +269,7 @@ public class BloodTusk : ModNPC
 			}
 			/*if (!lockBlood)
                 {
-                    if (MiscItems.Projectiles.Weapon.Fragrans.Fragrans.DefTusk)
+                    if (Misc.Projectiles.Weapon.Fragrans.Fragrans.DefTusk)
                     {
                         lockBlood = true;
                     }
