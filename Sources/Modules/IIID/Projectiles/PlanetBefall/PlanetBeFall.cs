@@ -90,18 +90,10 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, player.Center);
 			ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 150).RotatedByRandom(6.283);
-			//Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Projectile.owner, 6, 10f);
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<PlanetBefallWave>(), 0, 0, Projectile.owner, 4f);
 			float k1 = Math.Clamp(Projectile.velocity.Length(), 1, 3);
 			float k2 = Math.Clamp(Projectile.velocity.Length(), 6, 10);
 			float k0 = 1f / 4 * k2;
-			for (int j = 0; j < 16 * k0; j++)
-			{
-				Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-				//int dust1 = Dust.NewDust(Projectile.Center - (Vector2.Normalize(v0).RotatedBy(Math.PI / 4) * 200), 0, 0, ModContent.DustType<MothSmog>(), Vector2.Normalize(v0).X * 5, Vector2.Normalize(v0).Y * 10, 100, default, Main.rand.NextFloat(20f, 30f));
-			//	Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 7.5f);
-				//Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
-			}
 			foreach (NPC target in Main.npc)
 			{
 				float Dis = (target.Center - Projectile.Center).Length();
@@ -266,7 +258,6 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 	}
 	public class TestProjModelSystem : ModSystem
 	{
-
 		public override void OnModLoad()
 		{
 			PlanetBeFall.model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallModel.obj");
