@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
-using Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack;
+using Everglow.IIID.Projectiles.NonIIIDProj;
 using Terraria.Audio;
 using Mono.Cecil;
 using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallWave;

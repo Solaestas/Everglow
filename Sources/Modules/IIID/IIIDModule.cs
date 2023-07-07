@@ -1,6 +1,6 @@
 using Everglow.Commons.Modules;
 using Everglow.Commons.ObjectPool;
-using Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack;
+using Everglow.IIID.Projectiles.NonIIIDProj;
 using Everglow.IIID.Projectiles.PlanetBefall;
 using System;
 using System.Collections.Generic;
