@@ -23,7 +23,7 @@ using ReLogic.Content;
 using  Everglow.IIID.Projectiles;
 using Everglow.IIID.Projectiles.PlanetBefall;
 
-namespace Everglow.IIID.NonIIIDProj.GoldenCrack
+namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 {
 	public class Tree
 	{
@@ -275,8 +275,8 @@ namespace Everglow.IIID.NonIIIDProj.GoldenCrack
 		public override string Name => "IIID";
 		public override void Load()
 		{
-			Bloom = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/Bloom1").Value;
-			GoldenCrackVFX = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/GoldenCrack").Value;
+			Bloom = ModContent.Request<Effect>("Everglow/IIID/Effects/Bloom1").Value;
+			GoldenCrackVFX = ModContent.Request<Effect>("Everglow/IIID/Effects/GoldenCrack").Value;
 			On_FilterManager.EndCapture += FilterManager_EndCapture;//原版绘制场景的最后部分——滤镜。在这里运用render保证不会与原版冲突
 			Main.OnResolutionChanged += Main_OnResolutionChanged;
 		}
