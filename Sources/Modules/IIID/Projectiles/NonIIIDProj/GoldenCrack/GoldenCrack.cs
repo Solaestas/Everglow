@@ -330,7 +330,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 				}
 				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBefallArray.PlanetBefallArray>())
 				{
-					(proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).DrawBloom();
+					//(proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).DrawBloom();
 					if (BloomIntensity <= (proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).BloomIntensity)
 					{
 						BloomIntensity = (proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).BloomIntensity;

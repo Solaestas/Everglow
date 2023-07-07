@@ -5,7 +5,7 @@ using Everglow.Commons.Utilities;
 
 namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 {
-	public class PlanetBefallArray : ModProjectile ,IBloomProjectile
+	public class PlanetBefallArray : ModProjectile// ,IBloomProjectile
 	{
 		public override void SetDefaults()
 		{
