@@ -283,16 +283,16 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 					if (PlanetBeFallAnimation)
 					{
 
-						AnimationTimer += 8;
+						AnimationTimer += 3 n;
 						float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
 						if (AnimationTimer >= 60 && AnimationTimer < 120)
 						{
-							AnimationTimer -= 6;
+							AnimationTimer -= 1;
 							Value = 1;
 						}
 						if (AnimationTimer >= 120)
 						{
-							AnimationTimer -= 7;
+							AnimationTimer -= 1;
 							Value = (1 + MathF.Cos((AnimationTimer - 120) / 60f * MathF.PI)) / 2f;
 						}
 
