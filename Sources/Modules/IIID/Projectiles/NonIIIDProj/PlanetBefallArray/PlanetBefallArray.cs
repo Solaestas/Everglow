@@ -20,6 +20,8 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 		}
 		internal float Timer = 0;
 		internal float alpha = 1;
+		public float BloomIntensity = 1;
+		public bool BloomIntensityChange = false;
 		public override void AI()
 		{
 			Player player = Main.player[Projectile.owner];
@@ -32,6 +34,12 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			if (Projectile.timeLeft < 60)
 			{
 				alpha *= 0.95f;
+			}
+			
+			if (BloomIntensityChange)
+			{
+				Projectile.ai[0]++;
+				BloomIntensity = 5 * MathF.Sin((float)(Projectile.ai[0] / (6 * Math.PI)));
 			}
 		}
 		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -51,7 +59,6 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			Color c = Color.White;
 			PreDraw(ref c);
 		}
-
 
 		public void DrawMagicArray( )
 		{
@@ -102,5 +109,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 4);
 			}
 		}
+
+
 	}
 }

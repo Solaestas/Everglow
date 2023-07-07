@@ -18,6 +18,7 @@ using Mono.Cecil;
 using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallWave;
 using Everglow.Commons.Utilities;
 using System.Diagnostics;
+using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray;
 
 namespace Everglow.IIID.Projectiles.PlanetBefall
 {
@@ -26,6 +27,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 	{
 		public Vector2 target;
 		public Vector2 spawnposition;
+		public int Array;
 		public override void SetDefaults()
 		{
 
@@ -44,18 +46,28 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 		}
 		public override void OnSpawn(IEntitySource source)
 		{
+			Player player = Main.player[Projectile.owner];
+			Array = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
+			Main.projectile[Array].Center = Main.MouseWorld;
+			Projectile.ai[0] = Main.projectile[Array].Center.X;
+			Projectile.ai[1] = Main.projectile[Array].Center.Y;
+			Projectile.velocity = Vector2.Normalize(Main.projectile[Array].Center - new Vector2(player.Center.X, Main.MouseWorld.Y - 1500)) / 4;
+
 			for (int i = 0; i < 16; i++)
 			{
 				Vector2 v = new Vector2(0.001f, 0);
-				Projectile.NewProjectile(null, new Vector2(Projectile.Center.X, Projectile.Center.Y), v.RotatedBy(Math.PI * i / 8).RotatedByRandom(Math.PI * i / 100), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
+				Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X, Projectile.Center.Y), v.RotatedBy(Math.PI * i / 8).RotatedByRandom(Math.PI * i / 100), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
 			}
 
-			Player player = Main.player[Projectile.owner];
 			PlanetBeFallScreenMovePlayer PlanetBeFallScreenMovePlayer = player.GetModPlayer<PlanetBeFallScreenMovePlayer>();
 			PlanetBeFallScreenMovePlayer.PlanetBeFallAnimation = true;
 			PlanetBeFallScreenMovePlayer.proj = Projectile;
 
 			target = new Vector2(Projectile.ai[0], Projectile.ai[1]);
+
+
+
+
 			base.OnSpawn(source);
 		}
 		public override void AI()
@@ -80,6 +92,14 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 		}
 		public override void Kill(int timeLeft)
 		{
+			foreach (Projectile proj in Main.projectile)
+			{
+				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBefallArray>() && proj == Main.projectile[Array])
+				{
+					(proj.ModProjectile as PlanetBefallArray).BloomIntensityChange = true;
+				}
+			}
+
 			Player player = Main.player[Projectile.owner];
 			PlanetBeFallScreenMovePlayer PlanetBeFallScreenMovePlayer = player.GetModPlayer<PlanetBeFallScreenMovePlayer>();
 			PlanetBeFallScreenMovePlayer.PlanetBeFallAnimation = false;
