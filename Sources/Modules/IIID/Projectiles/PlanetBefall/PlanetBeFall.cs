@@ -50,10 +50,10 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 				Projectile.NewProjectile(null, new Vector2(Projectile.Center.X, Projectile.Center.Y), v.RotatedBy(Math.PI * i / 8).RotatedByRandom(Math.PI * i / 100), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
 			}
 
-			/*Player player = Main.player[Projectile.owner];
+			Player player = Main.player[Projectile.owner];
 			PlanetBeFallScreenMovePlayer PlanetBeFallScreenMovePlayer = player.GetModPlayer<PlanetBeFallScreenMovePlayer>();
 			PlanetBeFallScreenMovePlayer.PlanetBeFallAnimation = true;
-			PlanetBeFallScreenMovePlayer.proj = Projectile;*/
+			PlanetBeFallScreenMovePlayer.proj = Projectile;
 
 			target = new Vector2(Projectile.ai[0], Projectile.ai[1]);
 			base.OnSpawn(source);
@@ -283,7 +283,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 					if (PlanetBeFallAnimation)
 					{
 
-						AnimationTimer += 10;
+						AnimationTimer += 8;
 						float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
 						if (AnimationTimer >= 60 && AnimationTimer < 120)
 						{
