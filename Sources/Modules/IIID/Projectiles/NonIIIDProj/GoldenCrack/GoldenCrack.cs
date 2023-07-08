@@ -310,6 +310,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 				return;
 			}
 
+			Bloom1 = ModContent.Request<Effect>("Everglow/IIID/Effects/Bloom1").Value;
 			gd.SetRenderTarget(Main.screenTargetSwap);
 			gd.Clear(Color.Transparent);
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -353,7 +354,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 			Bloom1.Parameters["uScreenResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight) / 3f);
 			Bloom1.Parameters["uRange"].SetValue(1.5f);//范围
-			Bloom1.Parameters["uIntensity"].SetValue(0.97f);//发光强度
+			Bloom1.Parameters["uIntensity"].SetValue(BloomIntensity);//发光强度
 			for (int i = 0; i < 2; i++)//交替使用两个RenderTarget2D，进行多次模糊
 			{
 				Bloom1.CurrentTechnique.Passes["GlurV"].Apply();//横向
