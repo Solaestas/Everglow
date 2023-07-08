@@ -1,4 +1,6 @@
 using Everglow.Commons.FeatureFlags;
+using Terraria.DataStructures;
+using Terraria.ID;
 
 namespace Everglow.Myth.TheFirefly.Buffs;
 
@@ -30,5 +32,31 @@ public class ShadowPotionBuff : ModBuff
 			player.nightVision = true;
 		}
 		if (LightTime > 20) { LightTime = 20; }
+
+	}
+}
+public class ShadowPotionPlayer : ModPlayer
+{
+	internal static int alpha = 0;
+	public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
+	{
+		if (Player.HasBuff(ModContent.BuffType<ShadowPotionBuff>()))
+		{
+			if (alpha < 155)
+				alpha++;
+			else
+				alpha--;
+
+			Dust dust = Dust.NewDustDirect(Player.position, Player.width, Player.height, DustID.Shadowflame, 0f, 0f, 155, default, 1.5f);
+			dust.noGravity = true;
+			dust.velocity *= 0.5f;
+			dust.velocity.Y -= 1f;
+
+			Color shadowSkinColor = new(80, 0, 120, alpha);
+
+			drawInfo.colorBodySkin = shadowSkinColor;
+			Player.skinColor = shadowSkinColor;
+		}
+		base.DrawEffects(drawInfo, ref r, ref g, ref b, ref a, ref fullBright);
 	}
 }
