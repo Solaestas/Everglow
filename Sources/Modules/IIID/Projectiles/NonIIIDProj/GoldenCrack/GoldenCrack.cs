@@ -300,7 +300,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 		{
 			GraphicsDevice gd = Main.instance.GraphicsDevice;
 			SpriteBatch sb = Main.spriteBatch;
-
+			BloomIntensity = 1;
 			if (render == null)
 			{
 				CreateRender();
