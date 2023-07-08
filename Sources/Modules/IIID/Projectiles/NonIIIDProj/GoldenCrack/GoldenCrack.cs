@@ -342,7 +342,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend);
 			Bloom1.Parameters["uScreenResolution"].SetValue(new Vector2((float)Main.screenWidth, (float)Main.screenHeight) / 3f);
 			Bloom1.Parameters["uRange"].SetValue(1.5f);
-			Bloom1.Parameters["uIntensity"].SetValue(1.5f* BloomIntensity);
+			Bloom1.Parameters["uIntensity"].SetValue(BloomIntensity);
 			Bloom1.CurrentTechnique.Passes["GlurV"].Apply();
 			/*CombatText.NewText(new Rectangle((int)Main.LocalPlayer.position.X, (int)Main.LocalPlayer.position.Y, Main.LocalPlayer.width, Main.LocalPlayer.height),
                    new Color(255, 0, 0),
