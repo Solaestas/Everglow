@@ -310,7 +310,74 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 				return;
 			}
 
-			Bloom1 = ModContent.Request<Effect>("Everglow/IIID/Effects/Bloom1").Value;
+			gd.SetRenderTarget(Main.screenTargetSwap);
+			gd.Clear(Color.Transparent);
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+			Main.spriteBatch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+			Main.spriteBatch.End();
+
+			//在screen上绘制发光部分
+			gd.SetRenderTarget(screen);
+			gd.Clear(Color.Transparent);
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			foreach (Projectile proj in Main.projectile)
+			{
+				if (proj.active && proj.type == ModContent.ProjectileType<GoldenCrack>())
+				{
+					Color c3 = Color.Gold;
+					(proj.ModProjectile as GoldenCrack).PreDraw(ref c3);
+				}
+				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBefallArray.PlanetBefallArray>())
+				{
+					(proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).DrawBloom();
+					if (BloomIntensity <= (proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).BloomIntensity)
+					{
+						BloomIntensity = (proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).BloomIntensity;
+					}
+				}
+			}
+			Main.spriteBatch.End();
+
+			//取样
+
+			gd.SetRenderTarget(bloom2);
+			gd.Clear(Color.Transparent);
+			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+			Bloom1.CurrentTechnique.Passes[0].Apply();//取亮度超过m值的部分
+			Bloom1.Parameters["m"].SetValue(0.5f);
+			Main.spriteBatch.Draw(screen, new Rectangle(0, 0, Main.screenWidth / 3, Main.screenHeight / 3), Color.White);
+			Main.spriteBatch.End();
+
+			//处理
+
+			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+			Bloom1.Parameters["uScreenResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight) / 3f);
+			Bloom1.Parameters["uRange"].SetValue(1.5f);//范围
+			Bloom1.Parameters["uIntensity"].SetValue(0.97f);//发光强度
+			for (int i = 0; i < 2; i++)//交替使用两个RenderTarget2D，进行多次模糊
+			{
+				Bloom1.CurrentTechnique.Passes["GlurV"].Apply();//横向
+				gd.SetRenderTarget(bloom1);
+				gd.Clear(Color.Transparent);
+				Main.spriteBatch.Draw(bloom2, Vector2.Zero, Color.White);
+
+				Bloom1.CurrentTechnique.Passes["GlurH"].Apply();//纵向
+				gd.SetRenderTarget(bloom2);
+				gd.Clear(Color.Transparent);
+				Main.spriteBatch.Draw(bloom1, Vector2.Zero, Color.White);
+			}
+			Main.spriteBatch.End();
+
+			gd.SetRenderTarget(Main.screenTarget);
+			gd.Clear(Color.Transparent);
+
+			//叠加
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+			Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+			Main.spriteBatch.Draw(bloom2, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
+			Main.spriteBatch.End();
+			/////////////////////////////////
+			/*Bloom1 = ModContent.Request<Effect>("Everglow/IIID/Effects/Bloom1").Value;
 			gd.SetRenderTarget(Main.screenTargetSwap);
 			gd.Clear(Color.Transparent);
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -349,7 +416,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
                    node.num,
                    true, false);*/
 
-			gd.SetRenderTarget(bloom1);
+			/*gd.SetRenderTarget(bloom1);
 			gd.Clear(Color.Transparent);
 			Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
 			Bloom1.CurrentTechnique.Passes["GlurH"].Apply();
@@ -364,7 +431,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive);
 			Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
 			Main.spriteBatch.Draw(bloom2, new Rectangle(0, 0, Main.screenWidth * 3, Main.screenHeight * 3), Color.White);
-			Main.spriteBatch.End();
+			Main.spriteBatch.End();*/
 
 			// UseCosmic(gd);
 			GoldenCrackVFX = ModContent.Request<Effect>("Everglow/IIID/Effects/GoldenCrack").Value;
