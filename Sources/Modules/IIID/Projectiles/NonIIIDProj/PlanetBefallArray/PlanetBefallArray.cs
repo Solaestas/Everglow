@@ -5,7 +5,7 @@ using Everglow.Commons.Utilities;
 
 namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 {
-	public class PlanetBefallArray : ModProjectile ,IBloomProjectile
+	public class PlanetBefallArray : ModProjectile //,IBloomProjectile
 	{
 		public override void SetDefaults()
 		{
@@ -39,7 +39,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			if (BloomIntensityChange)
 			{
 				Projectile.ai[0]++;
-				BloomIntensity = 5 * MathF.Sin((float)(Projectile.ai[0] / (6 * Math.PI)));
+				BloomIntensity = 0.75f*MathF.Sin((float)(Projectile.ai[0] / (24 * Math.PI)))+1;
 			}
 		}
 		public override void Kill(int timeLeft)
