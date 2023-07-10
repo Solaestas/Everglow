@@ -1,3 +1,4 @@
+using Everglow.Commons.Weapons.StabbingSwords;
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
     public class HolyBayonet_Pro : StabbingProjectile
@@ -18,8 +19,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void DrawEffect(Color lightColor)
 		{
-			Texture2D Shadow = ModAsset.StabbingProjectileShade.Value;
-			Texture2D light = ModAsset.StabbingProjectile.Value;
+			Texture2D Shadow = Commons.ModAsset.StabbingProjectileShade.Value;
+			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
 			if (TradeShade > 0)
