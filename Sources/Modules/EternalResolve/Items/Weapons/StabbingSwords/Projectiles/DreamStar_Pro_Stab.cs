@@ -19,7 +19,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			MaxLength = 1.05f;
 			DrawWidth = 0.4f;
 			base.SetDefaults();
-		}
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 1000;
+        }
 		public override void HitTile()
 		{
 			for (int x = 0; x < 24; x++)
@@ -51,7 +53,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			ContinuousHit++;
-			Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 2.20 * (ContinuousHit / 5f + 0.10f)), Projectile.knockBack * 2.20f * (ContinuousHit / 5f + 0.05f), Projectile.owner, ContinuousHit / 5f + 0.05f);
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center-new Vector2(Main.rand.NextFloat(-200,200),800), new Vector2(Main.rand.NextFloat(-5,5),20), ModContent.ProjectileType<DreamStar_FallenStar>(), (int)(Projectile.damage * 2), Projectile.knockBack * 2.20f,Projectile.owner, target.whoAmI);
+            //Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 2.20 * (ContinuousHit / 5f + 0.10f)), Projectile.knockBack * 2.20f * (ContinuousHit / 5f + 0.05f), Projectile.owner, ContinuousHit / 5f + 0.05f);
 		}
 		public override void DrawEffect(Color lightColor)
 		{

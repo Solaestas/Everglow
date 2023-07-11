@@ -14,6 +14,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.value = Item.sellPrice(0, 1, 14, 0);
 			Item.shoot = ModContent.ProjectileType<MechanicMosquito_Pro>();
 			StabMulDamage = 4f;
+			staminaCost = 0.25f;//机械剑省力，很合理（）
 			PowerfulStabProj = ModContent.ProjectileType<MechanicMosquito_Pro_Stab>();
 			base.SetDefaults();
 		}

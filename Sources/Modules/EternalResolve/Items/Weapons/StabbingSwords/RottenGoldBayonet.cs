@@ -30,12 +30,17 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 				Register();
 			base.AddRecipes();
 		}
+		public override bool AltFunctionUse(Player player)
+		{
+			return NPC.downedBoss1 && base.AltFunctionUse(player);
+		}
 		public override void UpdateInventory(Player player)
 		{
 			if (specialDelay > 0)
 			{
 				specialDelay--;
 			}
+			base.UpdateInventory(player);
 		}
 	}
 }

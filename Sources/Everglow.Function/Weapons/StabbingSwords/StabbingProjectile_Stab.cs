@@ -2,11 +2,11 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.EternalResolve.Items.Weapons.StabbingSwords.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
-
 namespace Everglow.Commons.Weapons.StabbingSwords
 {
 	public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
@@ -50,7 +50,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
 		public override void SetDefaults()
 		{
-			Projectile.width = 24;
+			Projectile.width = 50;
 			Projectile.height = 24;
 			Projectile.netImportant = true;
 			Projectile.friendly = true;
@@ -59,12 +59,14 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			Projectile.timeLeft = 15;
 			Projectile.extraUpdates = 5;
 			Projectile.tileCollide = false;
+			Projectile.ArmorPenetration = 20;
 		}
 		public Vector2 StartCenter = Vector2.zeroVector;
 		public Vector2 EndPos = Vector2.zeroVector;
 		public int ToKill = 120;
 		public override void OnSpawn(IEntitySource source)
 		{
+			
 			Player player = Main.player[Projectile.owner];
 			Vector2 toMouse = Main.MouseWorld - player.RotatedRelativePoint(player.MountedCenter);
 			toMouse.Normalize();
@@ -77,7 +79,42 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 				Projectile.netUpdate = true;
 			}
 			Projectile.velocity = toMouse;
-			SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
+           
+			//---特效
+			
+            StabVFX v = new StabVFX() {
+				pos = Projectile.Center + Projectile.velocity*MaxLength*140,
+				vel=toMouse,
+				color=Color.Lerp(Color,Color.White,0.2f),
+				scale=10,
+				maxtime=10,
+				timeleft=10
+			};
+			Ins.VFXManager.Add(v);
+            v = new StabVFX()
+            {
+                pos = Projectile.Center + Projectile.velocity * MaxLength * 70,
+                vel = toMouse,
+                color = Color.Lerp(Color, Color.White, 0.4f),
+				scale=15,
+            };
+            Ins.VFXManager.Add(v);
+
+            
+			/*
+            for (int i=0;i<10;i++)
+			{
+				StabLightDust v1;
+                v1 = new StabLightDust()
+                {
+                    Center = Projectile.Center +0* Projectile.velocity * MaxLength * 130 * i/10f +Main.rand.NextVector2Unit()*20,
+                    Velocity = toMouse*20*Main.rand.NextFloatDirection(),
+                    color = Color.Lerp(Color, Color.White, 0.6f),
+                };
+                Ins.VFXManager.Add(v1);
+            }*/
+			//---
+            SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
 			SoundEngine.PlaySound(ss, Projectile.Center);
 			StartCenter = Projectile.Center;
 		}
@@ -100,16 +137,17 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		}
 		public override void AI()
 		{
-			Player player = Main.player[Projectile.owner];
+            Player player = Main.player[Projectile.owner];
 			ProduceWaterRipples(new Vector2(Projectile.velocity.Length(), 30));
-			if (Projectile.timeLeft <= 1)
+
+            if (Projectile.timeLeft <= 1)
 			{
 				ToKill--;
 				if (ToKill > 0)
 				{
 					Projectile.timeLeft++;
 					float value = (Projectile.timeLeft + ToKill) / 135f;
-					float BodyRotation = MathF.Sin(value * MathF.PI) * player.direction * 0.5f;
+					float BodyRotation = MathF.Sin(value * MathF.PI) * player.direction * 0.2f;
 					TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
 					Tplayer.HeadRotation = 0;
 					Tplayer.HideLeg = true;
@@ -130,19 +168,20 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 					player.legPosition = Vector2.Zero;
 				}
 			}
-			if (ToKill >= 120)
+            
+            if (ToKill >= 120)
 			{
-				Projectile.position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f + Projectile.velocity * (15 - Projectile.timeLeft) * 2;
-				Projectile.rotation = Projectile.velocity.ToRotation();
-				Projectile.spriteDirection = Projectile.direction;
-
-			}
+                Projectile.position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f + Projectile.velocity * (15 - Projectile.timeLeft) * 2;
+                Projectile.rotation = Projectile.velocity.ToRotation();
+                Projectile.spriteDirection = Projectile.direction;
+            }
 			else
 			{
+
 				Projectile.extraUpdates = 24;
 			}
 			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
-			if (!Collision.CanHit(StartCenter, 0, 0, end, 0, 0))
+			if (!Collision.CanHitLine(StartCenter,1,1,end,1,1))
 			{
 				if (EndPos == Vector2.zeroVector)
 				{
@@ -201,15 +240,16 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		}
 		public virtual void DrawEffect(Color lightColor)
 		{
-			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 50 * ToKill / 120f * DrawWidth;
+
+            Vector2 normalized =Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 50 * ToKill / 120f * DrawWidth;
 			Vector2 start = StartCenter;
 			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
 			if(EndPos != Vector2.Zero)
 			{
 				end = EndPos;
 			}
-			float value = (Projectile.timeLeft + ToKill) / 135f;
-			Vector2 middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
+            float value = (Projectile.timeLeft + ToKill) / 135f;
+            Vector2 middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
 			float time = (float)(Main.time * 0.03);
 			float dark = MathF.Sin(value * MathF.PI) * 4;
 			List<Vertex2D> bars = new List<Vertex2D>

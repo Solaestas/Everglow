@@ -40,7 +40,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 			if(Projectile.timeLeft == 114)
 			{
-				SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/Slash").WithVolumeScale(0.5f), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/Slash").WithVolumeScale(0.33f), Projectile.Center);
 			}
 		}
 		public override bool PreDraw(ref Color lightColor)
@@ -82,7 +82,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			float time = (float)(Main.time * 0.03);
 			float value0 = (120 - Projectile.timeLeft) / 120f;
 			float value1 = MathF.Pow(value0, 0.5f);
-			float width = (1 - MathF.Cos(value1 * 2f * MathF.PI)) * 2f;
+			float width = (1 - MathF.Cos(value1 * 2f * MathF.PI)) * 5f;
 			Vector2 normalizedVelocity = Utils.SafeNormalize(Projectile.velocity, Vector2.zeroVector);
 			Vector2 normalize = normalizedVelocity.RotatedBy(Math.PI / 2d) * width;
 			Vector2 start = StartCenter - Main.screenPosition;

@@ -49,7 +49,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			{
 				sourceItem.specialDelay = 60;
 				target.defense -= 1;
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<RottenGoldBayonet_Mark>(), (int)(Projectile.damage * 2.97f), Projectile.knockBack * 2.97f, Projectile.owner);
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<RottenGoldBayonet_Mark>(), (int)(Projectile.damage * 1f), Projectile.knockBack * 2.97f, Projectile.owner,0,target.whoAmI);
 			}
 		}
 		float bottomPos1 = 0f;

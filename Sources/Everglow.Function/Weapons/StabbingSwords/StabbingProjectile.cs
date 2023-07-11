@@ -88,6 +88,12 @@ namespace Everglow.Commons.Weapons.StabbingSwords
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
+
+			if (player.HeldItem.ModItem is StabbingSwordItem modItem)
+			{
+				if (!player.GetModPlayer<PlayerStamina>().CheckStamina(modItem.staminaCost))
+					return;
+			}
             int animation = 9;
             float rotationRange = Main.rand.NextFloatDirection() * (MathF.PI * 2f) * 0.05f;
 			Projectile.ai[0] += 1f;
@@ -145,7 +151,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		{
 			//SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/StabCollide");
 			SoundStyle ss = SoundID.NPCHit4;
-			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
+			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)).WithVolume(0.3f), Projectile.Center);
 			Projectile.soundDelay = SoundTimer;
 		}
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

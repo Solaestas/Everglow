@@ -22,6 +22,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.shoot = ModContent.ProjectileType<DreamStar_Pro>();
 			StabMulDamage = 2.2f;
 			PowerfulStabProj = ModContent.ProjectileType<DreamStar_Pro_Stab>();
+			staminaCost -= 0.1f;
 			base.SetDefaults();
 		}
 	}

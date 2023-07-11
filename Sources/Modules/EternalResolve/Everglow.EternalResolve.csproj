@@ -1,3 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Myth\Everglow.Myth.csproj" />
+  </ItemGroup>
 </Project>
     
