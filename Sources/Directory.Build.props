@@ -15,7 +15,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
-		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.0.2.9" />
+		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.1.0.0" />
 		<Publicize Include="ReLogic" />
 		<Publicize Include="MonoMod.RuntimeDetour" />
 		<Publicize Include="MonoMod.Utils" />
