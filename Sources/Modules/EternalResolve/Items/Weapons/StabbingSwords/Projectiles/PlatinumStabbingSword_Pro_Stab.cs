@@ -17,13 +17,5 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			MaxLength = 0.90f;
 			DrawWidth = 0.4f;
 		}
-		public override void DrawEffect(Color lightColor)
-		{
-			base.DrawEffect(lightColor);
-		}
-		public override void AI()
-		{
-			base.AI();
-		}
 	}
 }

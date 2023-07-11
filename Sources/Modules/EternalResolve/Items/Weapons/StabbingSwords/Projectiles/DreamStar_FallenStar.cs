@@ -34,13 +34,17 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
             }
             array[0] = curValue;
         }
-        public override void AI()
+		public override void OnSpawn(IEntitySource source)
+		{
+			SoundEngine.PlaySound(SoundID.Item9);
+			base.OnSpawn(source);
+		}
+		public override void AI()
 		{
 			TrackOldValue(oldPos,Projectile.Center);
 			Projectile.rotation += 0.2f;
 
             NPC target = Main.npc[(int)Projectile.ai[0]];
-
             if(target.active)
             {
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity,Projectile.DirectionTo(target.Center)*15,0.1f);
