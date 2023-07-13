@@ -60,6 +60,10 @@ public class RampageSharkHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		flame.Add(new Vertex2D(center - new Vector2(0, width / 2f).RotatedBy(rotation), Color.Transparent, new Vector3(process % 1f, 0.2f, 0)));
 		for (int h = 1; h < length; h += 6)
 		{
+			if (Collision.SolidCollision(center + Main.screenPosition + new Vector2(h, 0).RotatedBy(rotation), 0, 0))
+			{
+				break;
+			}
 			float widthII = width;
 			if (length - h < 120)
 				widthII = width * (length - h) / 120f;
@@ -86,7 +90,7 @@ public class RampageSharkHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		float value = (200 - Projectile.timeLeft) / 200f;
 		value = MathF.Sqrt(value);
 		float colorV = 0.9f * (1 - value);
-		Texture2D t = OceanContent.QuickTexture("Projectiles/Textures/FogTraceLight");
+		Texture2D t = ModAsset.FogTraceLight.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;
@@ -100,7 +104,7 @@ public class RampageSharkHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		float value = (200 - Projectile.timeLeft) / 200f;
 		value = MathF.Sqrt(value);
 		float colorV = 0.9f * (1 - value);
-		Texture2D t = OceanContent.QuickTexture("Projectiles/Textures/FogTraceLight");
+		Texture2D t = ModAsset.FogTraceLight.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;
@@ -112,7 +116,7 @@ public class RampageSharkHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		float value = (200 - Projectile.timeLeft) / 200f;
 		value = MathF.Sqrt(value);
 		float colorV = 0.9f * (1 - value);
-		Texture2D t = OceanContent.QuickTexture("Projectiles/Textures/FogTraceLight");
+		Texture2D t = ModAsset.FogTraceLight.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;

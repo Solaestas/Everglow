@@ -59,7 +59,7 @@ public class TwilightTree : ModTile
 
 	public void InsertOneTreeRope(int xTS, int yTS, int style)
 	{
-		Texture2D treeTexture = TwilightForestContent.QuickTexture("Tiles/TwilightTree");
+		Texture2D treeTexture = ModAsset.TwilightTree.Value;
 
 
 		var point = new Point(xTS, yTS);
@@ -301,7 +301,7 @@ public class TwilightTree : ModTile
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 
-		Texture2D treeTexture = TwilightForestContent.QuickTexture("Tiles/TwilightTree");
+		Texture2D treeTexture = ModAsset.TwilightTree.Value;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;

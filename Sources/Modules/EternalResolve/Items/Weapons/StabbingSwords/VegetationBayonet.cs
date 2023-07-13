@@ -1,4 +1,6 @@
+using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
+using Terraria.Audio;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {

@@ -1,15 +1,14 @@
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Buffs;
+using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 using Terraria.DataStructures;
-using Terraria.Utilities;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class RottenGoldBayonet_Pro : StabbingProjectile
-    {
-        public override void SetDefaults()
-        {
-            base.SetDefaults();
+	public class RottenGoldBayonet_Pro : StabbingProjectile
+	{
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
 			Color = new Color(105, 105, 255);
 			TradeLength = 8;
 			TradeShade = 0.7f;
@@ -24,10 +23,10 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		RottenGoldBayonet sourceItem = null;
 		public override void OnSpawn(IEntitySource source)
 		{
-			if(source is EntitySource_ItemUse_WithAmmo eiw)
+			if (source is EntitySource_ItemUse_WithAmmo eiw)
 			{
 				sourceItem = eiw.Item.ModItem as RottenGoldBayonet;
-				if(sourceItem is null)
+				if (sourceItem is null)
 				{
 					Projectile.Kill();
 				}
@@ -69,7 +68,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				bottomPos2 = bottomPos2 * 0.9f;
 			}
 			float scale = MathF.Sin((float)Main.timeForVisualEffects);
-			DrawFlags(lightColor, -12, 12, ModAsset.RottenGoldBayonet_flag.Value, bottomPos1 * scale, bottomPos2 * scale);
+			DrawFlags(lightColor, -13, 14, ModAsset.RottenGoldBayonet_flag.Value, bottomPos1 * scale, bottomPos2 * scale);
 
 			Texture2D itemTexture = ModAsset.RottenGoldBayonet_withouFlag.Value;
 			Main.spriteBatch.Draw(itemTexture, ItemDraw.Postion - Main.screenPosition, null, lightColor, ItemDraw.Rotation, itemTexture.Size() / 2f, ItemDraw.Size, ItemDraw.SpriteEffect, 0f);

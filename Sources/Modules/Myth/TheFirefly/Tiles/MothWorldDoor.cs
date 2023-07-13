@@ -1,5 +1,6 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.WorldGeneration;
+using SubworldLibrary;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
@@ -58,17 +59,13 @@ public class MothWorldDoor : ModTile
 		Player player = Main.LocalPlayer;
 		if ((player.Center - new Vector2(i * 16, j * 16)).Length() < 12)
 		{
-			//if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
-			//{
-			//	player.position.X -= 256;
-			//	player.position.Y -= 128;
-			//	SubWorldModule.SubworldSystem.Exit();
-			//}
-			//else
-			//{
-			//	if (!SubWorldModule.SubworldSystem.Enter<MothWorld>())
-			//		Main.NewText("Fail!");
-			//}
+			if (SubworldSystem.IsActive<MothWorld>())
+				SubworldSystem.Exit();
+			else
+			{
+				if (!SubworldSystem.Enter<MothWorld>())
+					Main.NewText("Fail!");
+			}
 		}
 		base.NearbyEffects(i, j, closer);
 	}
