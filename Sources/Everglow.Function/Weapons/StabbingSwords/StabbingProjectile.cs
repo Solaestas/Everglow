@@ -89,11 +89,6 @@ namespace Everglow.Commons.Weapons.StabbingSwords
         {
             Player player = Main.player[Projectile.owner];
 
-			if (player.HeldItem.ModItem is StabbingSwordItem modItem)
-			{
-				if (!player.GetModPlayer<PlayerStamina>().CheckStamina(modItem.staminaCost))
-					return;
-			}
             int animation = 9;
             float rotationRange = Main.rand.NextFloatDirection() * (MathF.PI * 2f) * 0.05f;
 			Projectile.ai[0] += 1f;
@@ -134,6 +129,11 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			if (!player.controlUseItem && Projectile.timeLeft > TradeLength)
 			{
 				Projectile.timeLeft = TradeLength;
+			}
+			if (player.HeldItem.ModItem is StabbingSwordItem modItem)
+			{
+				if (!player.GetModPlayer<PlayerStamina>().CheckStamina(modItem.staminaCost))
+					Projectile.Kill();//Return一堆怪问题，杀了就好了
 			}
 			Projectile.position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f;
             Projectile.rotation = Projectile.velocity.ToRotation();
