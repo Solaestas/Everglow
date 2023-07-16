@@ -49,7 +49,7 @@ public class BlueBlossom : ModTile
 
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
-		Lighting.AddLight(i, j, 0.1f, 0.5f, 1.2f);
+		Lighting.AddLight(i, j, 0.1f, 0.5f, 3.6f);
 		if (closer)
 		{
 			var tile = Main.tile[i, j];

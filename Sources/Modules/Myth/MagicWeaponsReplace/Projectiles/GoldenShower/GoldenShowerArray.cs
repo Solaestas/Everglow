@@ -22,7 +22,7 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
 		Projectile.spriteDirection = player.direction;
 		Projectile.velocity *= 0;
-		if (player.itemTime > 0 && player.HeldItem.type == ItemID.GoldenShower)
+		if (player.itemTime > 0 && player.HeldItem.type == ItemID.GoldenShower && player.active && !player.dead)
 		{
 			Projectile.timeLeft = player.itemTime + 60;
 			if (Timer < 30)
@@ -54,8 +54,7 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		Projectile.hide = false;
 		float k0 = (31 - Timer) / 30f;
 		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1 - k0, 1 - k0, 1 - k0, 1 - k0), true);
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 		Effect Fade = MythContent.QuickEffect("Effects/Fade");
 
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
@@ -65,8 +64,7 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		Fade.Parameters["tex0"].SetValue(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/GoldenShower/Golden"));
 		Fade.CurrentTechnique.Passes[0].Apply();
 		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color(255, 199, 0, 0));
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 		return false;
 	}
 
@@ -133,6 +131,6 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-		DrawMagicArray(spriteBatch, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color((int)(255 * (Math.Sin(Main.timeForVisualEffects * 0.12f) + 1) / 2d), 69, 0, 0), true);
+		DrawMagicArray(spriteBatch, ModAsset.Projectiles_WaterLine.Value, new Color((int)(255 * (Math.Sin(Main.timeForVisualEffects * 0.12f) + 1) / 2d), 69, 0, 0), true);
 	}
 }

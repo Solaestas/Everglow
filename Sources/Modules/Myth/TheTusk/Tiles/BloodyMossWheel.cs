@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.MiscItems.FixCoins;
+﻿using Everglow.Myth.Misc.FixCoins;
 using Terraria.Audio;
 using Terraria.Localization;
 using Terraria.ObjectData;

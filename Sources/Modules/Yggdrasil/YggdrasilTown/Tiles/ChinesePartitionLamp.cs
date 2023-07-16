@@ -20,11 +20,11 @@ public class ChinesePartitionLamp : ModTile
 			16,
 			16,
 			16,
-			18
+			16
 		};
 		TileObjectData.newTile.CoordinateWidth = 48;
 		TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
-		TileObjectData.newTile.CoordinatePaddingFix = new Point16(0, -2);
+		TileObjectData.newTile.Origin = new Point16(0, 3);
 		// The following 3 lines are needed if you decide to add more styles and stack them vertically
 		TileObjectData.newTile.StyleWrapLimit = 2;
 		TileObjectData.newTile.StyleMultiplier = 2;
@@ -33,12 +33,16 @@ public class ChinesePartitionLamp : ModTile
 		TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
 		TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
 		TileObjectData.addAlternate(1); // Facing right will use the second texture style
+		TileObjectData.newTile.Origin = new Point16(0, 3);
 		TileObjectData.addTile(Type);
 
 		DustType = DustID.DynastyWood;
-		AddMapEntry(new Color(151, 31, 32));
+		AddMapEntry(new Color(135, 103, 90));
 	}
-
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+	}
 	public override void HitWire(int i, int j)
 	{
 		FurnitureUtils.LightHitwire(i, j, Type, 1, 4, 48);
@@ -103,7 +107,7 @@ public class ChinesePartitionLamp : ModTile
 			float OffsetX = 1;
 			if (tile.TileFrameY != 0)
 				OffsetX = 15;
-			tileSpin.DrawRotatedTile(i, j, tex, new Rectangle(tile.TileFrameX / 48 * 30, tile.TileFrameY / 72 * 32, 30, 32), new Vector2(15, 0), OffsetX, 2);
+			tileSpin.DrawRotatedTile(spriteBatch,i, j, tex, new Rectangle(tile.TileFrameX / 48 * 30, tile.TileFrameY / 72 * 32, 30, 32), new Vector2(15, 0), OffsetX, 2);
 			if (tile.TileFrameX == 0)
 			{
 				Lighting.AddLight(i, j, 0.8f, 0.75f, 0.4f);
