@@ -1,4 +1,6 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Minortopography.GiantPinetree.Dusts;
+using Terraria.Audio;
 
 namespace Everglow.Minortopography.GiantPinetree.Projectiles;
 
@@ -20,7 +22,7 @@ public class FrostBall : ModProjectile
 	public override void AI()
 	{
 		Projectile.rotation += 0.3f;
-
+		
 		if (Projectile.Center.X > Main.screenPosition.X - 100 && Projectile.Center.X < Main.screenPosition.X + Main.screenWidth + 100 && Projectile.Center.Y > Main.screenPosition.Y - 100 && Projectile.Center.Y < Main.screenPosition.Y + Main.screenWidth + 100)
 		{
 			if (Main.rand.NextBool(2))
@@ -78,6 +80,8 @@ public class FrostBall : ModProjectile
 			}
 		}
 
+		Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4),0,0,DustID.Ice, 0, 0, 0, default, Main.rand.NextFloat(0.75f, 1.25f));
+		dust.noGravity = true;
 		if (Projectile.position.X <= 320 || Projectile.position.X >= Main.maxTilesX * 16 - 320)
 		{
 			Projectile.Kill();
@@ -85,6 +89,13 @@ public class FrostBall : ModProjectile
 		if (Projectile.position.Y <= 320 || Projectile.position.Y >= Main.maxTilesY * 16 - 320)
 		{
 			Projectile.Kill();
+		}
+
+		//超过一定时间开始下坠
+		if(Projectile.timeLeft < 320)
+		{
+			Projectile.velocity.Y += 0.25f;
+			Projectile.velocity *= 0.98f;
 		}
 	}
 	public override bool PreDraw(ref Color lightColor)
@@ -102,6 +113,11 @@ public class FrostBall : ModProjectile
 	public override void Kill(int timeLeft)
 	{
 		GenerateSmog(6);
+		for (int g = 0; g < 18; g++)
+		{
+			Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<IceParticle>(), 0, 0, 0, default, Main.rand.NextFloat(0.75f, 1.75f));
+			dust.velocity = new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 8f).RotatedByRandom(MathHelper.TwoPi);
+		}
 		//for (int g = 0; g < 18; g++)
 		//{
 		//	Vector2 iceV = new Vector2(0, Main.rand.NextFloat(0, 0.9f)).RotatedByRandom(MathHelper.TwoPi);
@@ -116,6 +132,7 @@ public class FrostBall : ModProjectile
 		//	ice.velocity = iceV;
 		//	ice.color.G = (byte)Main.rand.Next(240);
 		//}
+		SoundEngine.PlaySound(SoundID.Shatter, Projectile.Center);
 	}
 	public void GenerateSmog(int Frequency)
 	{
