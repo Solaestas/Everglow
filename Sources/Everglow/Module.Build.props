@@ -1,7 +1,6 @@
 <Project>
   <PropertyGroup>
-    <Modules>
-    </Modules>
+    <Modules>Example</Modules>
     <DefineConstants>$(DefineConstants);$(Modules)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>

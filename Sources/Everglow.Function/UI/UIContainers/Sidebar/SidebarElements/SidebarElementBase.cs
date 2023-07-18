@@ -1,6 +1,6 @@
 namespace Everglow.Commons.UI.UIContainers.Sidebar.SidebarElements;
 
-internal abstract class SidebarElementBase
+public abstract class SidebarElementBase
 {
 	/// <summary>
 	/// 快捷栏元素的标识
@@ -17,5 +17,6 @@ internal abstract class SidebarElementBase
 	/// </summary>
 	public virtual void Invoke()
 	{
+
 	}
 }
