@@ -32,4 +32,9 @@ public class CyanFrost : ModItem
 
 		return base.Shoot(player, source, position, velocity, type, damage, knockback);
 	}
+	public override void AddRecipes()
+	{
+		CreateRecipe().AddIngredient(ItemID.CobaltBar, 6).AddIngredient(ItemID.IceBlade).AddIngredient(ItemID.FrostCore).AddTile(TileID.MythrilAnvil).Register();
+		CreateRecipe().AddIngredient(ItemID.PalladiumBar, 6).AddIngredient(ItemID.IceBlade).AddIngredient(ItemID.FrostCore).AddTile(TileID.MythrilAnvil).Register();
+	}
 }

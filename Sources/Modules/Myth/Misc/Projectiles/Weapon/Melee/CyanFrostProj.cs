@@ -1,7 +1,10 @@
 using Everglow.Commons.FeatureFlags;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
+using Terraria.GameContent.NetModules;
+using Terraria.Graphics.Renderers;
 using Terraria.ID;
+using Terraria.Net;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
 // This is a copy of the Excalibur's projectile
@@ -70,8 +73,8 @@ public class CyanFrostProj : ModProjectile
 		float adjustedRotation = MathHelper.Pi * direction * percentageOfLife + velocityRotation + direction * MathHelper.Pi + player.fullRotation;
 		Projectile.rotation = adjustedRotation; // Set the rotation to our to the new rotation we calculated.
 
-		float scaleMulti = 0.6f; // Excalibur, Terra Blade, and The Horseman's Blade is 0.6f; True Excalibur is 1f; default is 0.2f 
-		float scaleAdder = 1f; // Excalibur, Terra Blade, and The Horseman's Blade is 1f; True Excalibur is 1.2f; default is 1f 
+		float scaleMulti = 1.2f; // Excalibur, Terra Blade, and The Horseman's Blade is 0.6f; True Excalibur is 1f; default is 0.2f 
+		float scaleAdder = 1.2f; // Excalibur, Terra Blade, and The Horseman's Blade is 1f; True Excalibur is 1.2f; default is 1f 
 
 		Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) - Projectile.velocity;
 		Projectile.scale = scaleAdder + percentageOfLife * scaleMulti;
@@ -95,8 +98,9 @@ public class CyanFrostProj : ModProjectile
 
 		if (Main.rand.NextFloat() * 1.5f < Projectile.Opacity)
 		{
+			// This dust spawns on the swinging arc, or just on the perimeter of the projectile arc.
 			// Original Excalibur color: Color.White
-			Dust.NewDustPerfect(dustPosition, DustID.TintableDustLighted, dustVelocity, 100, Color.SkyBlue * Projectile.Opacity, 1.2f * Projectile.Opacity);
+			Dust.NewDustPerfect(dustPosition, DustID.Frost, dustVelocity, 100, Color.SkyBlue * Projectile.Opacity, 1.2f * Projectile.Opacity);
 		}
 
 		Projectile.scale *= Projectile.ai[2]; // Set the scale of the projectile to the scale of the item.
@@ -130,13 +134,6 @@ public class CyanFrostProj : ModProjectile
 		float maximumAngle = MathHelper.PiOver4; // The maximumAngle is used to limit the rotation to create a dead zone.
 		float coneRotation = Projectile.rotation + collisionRotation;
 
-		// Uncomment this line for a visual representation of the cone. The dusts are not perfect, but it gives a general idea.
-		if (EverglowConfig.DebugMode)
-		{
-			Dust.NewDustPerfect(Projectile.Center + coneRotation.ToRotationVector2() * coneLength, DustID.Pixie, Vector2.Zero);
-			Dust.NewDustPerfect(Projectile.Center, DustID.BlueFairy, new Vector2((float)Math.Cos(maximumAngle) * Projectile.ai[0], (float)Math.Sin(maximumAngle)) * 5f); // Assumes collisionRotation was not changed
-		}
-
 		// First, we check to see if our first cone intersects the target.
 		if (targetHitbox.IntersectsConeSlowMoreAccurate(Projectile.Center, coneLength, coneRotation, maximumAngle))
 		{
@@ -148,13 +145,6 @@ public class CyanFrostProj : ModProjectile
 		if (backOfTheSwing > 0f)
 		{
 			float coneRotation2 = coneRotation - MathHelper.PiOver4 * Projectile.ai[0] * backOfTheSwing;
-
-			// Uncomment this line for a visual representation of the cone. The dusts are not perfect, but it gives a general idea.
-			if (EverglowConfig.DebugMode)
-			{
-				Dust.NewDustPerfect(Projectile.Center + coneRotation2.ToRotationVector2() * coneLength, DustID.Enchanted_Pink, Vector2.Zero);
-				Dust.NewDustPerfect(Projectile.Center, DustID.BlueFairy, new Vector2((float)Math.Cos(backOfTheSwing) * -Projectile.ai[0], (float)Math.Sin(backOfTheSwing)) * 5f); // Assumes collisionRotation was not changed
-			}
 
 			if (targetHitbox.IntersectsConeSlowMoreAccurate(Projectile.Center, coneLength, coneRotation2, maximumAngle))
 			{
@@ -176,19 +166,17 @@ public class CyanFrostProj : ModProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		// Vanilla has several particles that can easily be used anywhere.
-		// The particles from the Particle Orchestra are predefined by vanilla and most can not be customized that much.
-		// Use auto complete to see the other ParticleOrchestraType types there are.
-		// Here we are spawning the Excalibur particle randomly inside of the target's hitbox.
-		ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
-			new ParticleOrchestraSettings { PositionInWorld = Main.rand.NextVector2FromRectangle(target.Hitbox) },
-			Projectile.owner);
-
-		// You could also spawn dusts at the enemy position. Here is simple an example:
-		// Dust.NewDust(Main.rand.NextVector2FromRectangle(target.Hitbox), 0, 0, ModContent.DustType<Content.Dusts.Sparkle>());
+	//	ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
+	//			new ParticleOrchestraSettings { PositionInWorld = Main.rand.NextVector2FromRectangle(target.Hitbox) },
+	//			Projectile.owner);
+		Spawn_CustomColorExcalibur(new ParticleOrchestraSettings { PositionInWorld = Main.rand.NextVector2FromRectangle(target.Hitbox) }, new Color(0f, 0.5f, 0.6f, 0.5f), new Color(0f, 0.82f, 0.82f, 1f));
 
 		// Set the target's hit direction to away from the player so the knockback is in the correct direction.
 		hit.HitDirection = (Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1);
+
+		target.AddBuff(BuffID.Chilled, 100);
+		if (Main.rand.NextBool(10))
+			target.AddBuff(BuffID.Frostburn, 100);
 	}
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
@@ -278,4 +266,89 @@ public class CyanFrostProj : ModProjectile
 		Main.EntitySpriteDraw(sparkleTexture, drawpos, null, smallColor, MathHelper.PiOver2 + rotation, origin, scaleLeftRight * 0.6f, dir);
 		Main.EntitySpriteDraw(sparkleTexture, drawpos, null, smallColor, 0f + rotation, origin, scaleUpDown * 0.6f, dir);
 	}
+
+	// Copied from Terraria.GameContent.Drawing.ParticleOrchestra.Spawn_Excalibur which is private
+	private static PrettySparkleParticle GetNewPrettySparkleParticle() => new PrettySparkleParticle();
+	private static ParticlePool<PrettySparkleParticle> _poolPrettySparkle = new ParticlePool<PrettySparkleParticle>(200, GetNewPrettySparkleParticle);
+	/// <summary>
+	/// A custom version of Spawn_Excalibur from Terraria.GameContent.Drawing.ParticleOrchestra
+	/// </summary>
+	/// <param name="settings">The Particle Orchestra Settings</param>
+	/// <param name="colorTint1">The First Color Tint of the Sparkle</param>
+	/// <param name="colorTint2">The Second Color Tint of the Sparkle. Leave empty to default to colorTint1</param>
+	internal static void Spawn_CustomColorExcalibur(ParticleOrchestraSettings settings, Color colorTint1, Color colorTint2 = default)
+	{
+		if (colorTint2 == default)
+			colorTint2 = colorTint1;
+		float num = 30f;
+		float num2 = 0f;
+		for (float num3 = 0f; num3 < 4f; num3 += 1f)
+		{
+			PrettySparkleParticle prettySparkleParticle = _poolPrettySparkle.RequestParticle();
+			Vector2 vector = ((float)Math.PI / 2f * num3 + num2).ToRotationVector2() * 2f; // Was 4f;
+			prettySparkleParticle.ColorTint = colorTint1; // Originally new Color(0.9f, 0.85f, 0.4f, 0.5f);
+			prettySparkleParticle.LocalPosition = settings.PositionInWorld;
+			prettySparkleParticle.Rotation = vector.ToRotation();
+			prettySparkleParticle.Scale = new Vector2((num3 % 2f == 0f) ? 2f : 4f, 0.5f) * 1.1f;
+			prettySparkleParticle.FadeInNormalizedTime = 5E-06f;
+			prettySparkleParticle.FadeOutNormalizedTime = 0.95f;
+			prettySparkleParticle.TimeToLive = num;
+			prettySparkleParticle.FadeOutEnd = num;
+			prettySparkleParticle.FadeInEnd = num / 2f;
+			prettySparkleParticle.FadeOutStart = num / 2f;
+			prettySparkleParticle.AdditiveAmount = 0.35f;
+			prettySparkleParticle.Velocity = -vector * 0.2f;
+			prettySparkleParticle.DrawVerticalAxis = false;
+			if (num3 % 2f == 1f)
+			{
+				prettySparkleParticle.Scale *= 1.5f;
+				prettySparkleParticle.Velocity *= 1.5f;
+			}
+
+			Main.ParticleSystem_World_OverPlayers.Add(prettySparkleParticle);
+		}
+
+		for (float num4 = 0f; num4 < 4f; num4 += 1f)
+		{
+			PrettySparkleParticle prettySparkleParticle2 = _poolPrettySparkle.RequestParticle();
+			Vector2 vector2 = ((float)Math.PI / 2f * num4 + num2).ToRotationVector2() * 2f; // Was 4f;
+			prettySparkleParticle2.ColorTint = colorTint2; // Originally new Color(1f, 1f, 0.2f, 1f)
+			prettySparkleParticle2.LocalPosition = settings.PositionInWorld;
+			prettySparkleParticle2.Rotation = vector2.ToRotation();
+			prettySparkleParticle2.Scale = new Vector2((num4 % 2f == 0f) ? 2f : 4f, 0.5f) * 0.7f;
+			prettySparkleParticle2.FadeInNormalizedTime = 5E-06f;
+			prettySparkleParticle2.FadeOutNormalizedTime = 0.95f;
+			prettySparkleParticle2.TimeToLive = num;
+			prettySparkleParticle2.FadeOutEnd = num;
+			prettySparkleParticle2.FadeInEnd = num / 2f;
+			prettySparkleParticle2.FadeOutStart = num / 2f;
+			prettySparkleParticle2.Velocity = vector2 * 0.2f;
+			prettySparkleParticle2.DrawVerticalAxis = false;
+			if (num4 % 2f == 1f)
+			{
+				prettySparkleParticle2.Scale *= 1.5f;
+				prettySparkleParticle2.Velocity *= 1.5f;
+			}
+
+			Main.ParticleSystem_World_OverPlayers.Add(prettySparkleParticle2);
+			for (int i = 0; i < 1; i++)
+			{
+				Dust dust = Dust.NewDustPerfect(settings.PositionInWorld, 92, vector2.RotatedBy(Main.rand.NextFloatDirection() * ((float)Math.PI * 2f) * 0.025f) * Main.rand.NextFloat());
+				dust.noGravity = true;
+				dust.scale = 1.4f;
+				Dust dust2 = Dust.NewDustPerfect(settings.PositionInWorld, 92, -vector2.RotatedBy(Main.rand.NextFloatDirection() * ((float)Math.PI * 2f) * 0.025f) * Main.rand.NextFloat());
+				dust2.noGravity = true;
+				dust2.scale = 1.4f;
+			}
+		}
+	}
+	// Do we need this:
+	//internal static void Spawn_CustomColorExcaliburWithRequests(bool clientOnly, ParticleOrchestraType type, ParticleOrchestraSettings settings, int? overrideInvokingPlayerIndex = null)
+	//{
+	//	if (clientOnly)
+	//		ParticleOrchestrator.SpawnParticlesDirect(type, settings);
+	//	else
+	//		NetManager.Instance.SendToServerAndSelf(NetParticlesModule.Serialize(type, settings));
+	//	Spawn_CustomColorExcalibur(settings, new Color(0f, 0.56f, 0.6f, 0.5f));
+	//}
 }
