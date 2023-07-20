@@ -1,21 +1,52 @@
+using Everglow.Commons.TileHelper;
+
 namespace Everglow.Example.TileLayers;
+public struct TileClone
+{
+	public int I { get; set; }
+	public int J { get; set; }
+	public int WallFrameX { get; set; }
+	public int WallFrameY { get; set; }
+	public ushort TileType { get; set; }
+	public ushort Wall { get; set; }
+	public short TileFrameX { get; set; }
+	public short TileFrameY { get; set; }
+	public byte Liquid { get; set; }
+	public byte LiquidAmount { get; set; }
+	public byte TileColor { get; set; }
+	public byte WallColor { get; set; }
+	public bool HasTile { get; set; }
+	public bool RedWire { get; set; }
+	public bool GreenWire { get; set; }
+	public bool BlueWire { get; set; }
+	public bool YellowWire { get; set; }
+	public SlopeType SlopeType { get; set; }
+	public BlockType BlockType { get; set; }
+
+}
 public class TileLayerSystem : ModSystem
 {
 	/// <summary>
-	/// (xy坐标，层)的物块
+	/// (x坐标，y坐标，层)的物块
 	/// </summary>
-	public static Dictionary<(int, int, int), Tile> LayerTile = new Dictionary<(int, int, int), Tile>();
+	public static Dictionary<(int, int, int), TileClone> LayerTile = new Dictionary<(int, int, int), TileClone>();
 
 	/// <summary>
 	/// 玩家所在层
 	/// </summary>
-	public static List<int> PlayerZoneLayer = new List<int>();
-
+	public static int[] PlayerZoneLayer = new int[256];
 	/// <summary>
-	/// 正在层级切换的物块
+	/// 正在层级向内切换的物块的坐标
 	/// </summary>
-	public static List<Tile> SwitchingTiles = new List<Tile>();
-
+	public static List<(int, int)> InSwitchingTileCoords = new List<(int, int)>();
+	/// <summary>
+	/// 正在层级向外切换的物块的坐标
+	/// </summary>
+	public static List<(int, int)> OutSwitchingTileCoords = new List<(int, int)>();
+	/// <summary>
+	/// (层)的房间区域集合
+	/// </summary>
+	public static Dictionary<int, List<(int, int)>> RoomsInsideLayers = new Dictionary<int, List<(int, int)>>();
 	/// <summary>
 	/// 层级切换计时器
 	/// </summary>
@@ -29,31 +60,73 @@ public class TileLayerSystem : ModSystem
 
 	}
 	/// <summary>
+	/// 返回上一层
+	/// </summary>
+	public static void LayerShallower(Player player, int x, int y, int step = 1)
+	{
+		int layer = PlayerZoneLayer[player.whoAmI];
+		LayerChange(player, x, y, layer + step);
+	}
+	/// <summary>
 	/// 深入下一层
 	/// </summary>
 	public static void LayerDeeper(Player player, int x, int y, int step = 1)
 	{
-		if(SwitchingTimer == 0)
+		int layer = PlayerZoneLayer[player.whoAmI];
+		LayerChange(player, x, y, layer - step);
+	}
+	/// <summary>
+	/// 切换层
+	/// </summary>
+	public static void LayerChange(Player player, int x, int y, int destinationLayer)
+	{
+		if (SwitchingTimer == 0)
 		{
-			int nextLayer = TileLayerSystem.PlayerZoneLayer[player.whoAmI] - step;
-			if(LayerTile.ContainsKey((x, y, nextLayer)))
+			int layer = PlayerZoneLayer[player.whoAmI];
+
+			if (destinationLayer < 0)
 			{
-				CheckAreaInLayer(x, y, nextLayer);
+				ChangeArea(InSwitchingTileCoords, layer, 0);
+				InSwitchingTileCoords = new List<(int, int)>();
+				if (LayerTile.ContainsKey((x, y, destinationLayer)))
+				{
+					CheckAreaInLayer(x, y, destinationLayer);
+				}
+				RoomsInsideLayers[destinationLayer] = InSwitchingTileCoords;
+				SwitchingTimer = 60;
+				ChangeArea(InSwitchingTileCoords, 0, destinationLayer);
+				PlayerZoneLayer[player.whoAmI] = destinationLayer;
 			}
-			SwitchingTimer = 60;
+			else
+			{
+				SwitchingTimer = 60;
+				ChangeArea(InSwitchingTileCoords, layer, destinationLayer);
+				PlayerZoneLayer[player.whoAmI] = destinationLayer;
+			}
 		}
 		else
 		{
 			return;
 		}
 	}
+	private static void ChangeArea(List<(int, int)> coords, int oldLayer, int newLayer)
+	{
+		foreach(var point in coords)
+		{
+			int x = point.Item1;
+			int y = point.Item2;
+			WriteToLayerTile(x, y, oldLayer);
+			ReadFromLayerTile(x, y, newLayer);
+		}
+	}
 	private static void CheckAreaInLayer(int x, int y, int layer)
 	{
 		if (LayerTile.ContainsKey((x, y, layer)))
 		{
-			if(!SwitchingTiles.Contains(LayerTile[(x, y, layer)]))
+			var target = LayerTile[(x, y, layer)];
+			if (!InSwitchingTileCoords.Contains((x, y)) && target.TileType != ModContent.TileType<AirTile>())
 			{
-				SwitchingTiles.Add(LayerTile[(x, y, layer)]);
+				InSwitchingTileCoords.Add((x, y));
 				CheckAreaInLayer(x + 1, y, layer);
 				CheckAreaInLayer(x, y + 1, layer);
 				CheckAreaInLayer(x - 1, y, layer);
@@ -70,31 +143,86 @@ public class TileLayerSystem : ModSystem
 		}
 		
 	}
-	/// <summary>
-	/// 返回上一层
-	/// </summary>
-	public static void LayerShallower(Player player, int x, int y, int step = 1)
-	{
-		if (SwitchingTimer == 0)
-		{
-
-		}
-		else
-		{
-			return;
-		}
-	}
-
-
 	public override void OnWorldLoad()
 	{
+		PlayerZoneLayer[Main.LocalPlayer.whoAmI] = 0;
 		//0层的初始化
-		for(int x = 0;x < Main.maxTilesX;x++)
+		//for(int x = 0;x < Main.maxTilesX;x++)
+		//{
+		//	for (int y = 0; y < Main.maxTilesY; y++)
+		//	{
+		//		var myTile = new TileClone();
+		//		var tile = Main.tile[x, y];
+		//		myTile.I = x;
+		//		myTile.J = y;
+
+		//		myTile.TileType = tile.TileType;
+		//		myTile.TileFrameX = tile.TileFrameX;
+		//		myTile.TileFrameY = tile.TileFrameY;
+		//		myTile.WallFrameX = tile.WallFrameX;
+		//		myTile.WallFrameY = tile.WallFrameY;
+		//		myTile.BlockType = tile.BlockType;
+		//		myTile.SlopeType = tile.Slope;
+		//		myTile.Liquid = tile.liquid;
+		//		myTile.LiquidAmount = tile.LiquidAmount;
+		//		myTile.RedWire = tile.RedWire;
+		//		myTile.GreenWire = tile.GreenWire;
+		//		myTile.BlueWire = tile.BlueWire;
+		//		myTile.YellowWire = tile.YellowWire;
+		//		myTile.WallColor = tile.WallColor;
+		//		myTile.TileColor = tile.TileColor;
+		//		myTile.HasTile = tile.HasTile;
+		//		LayerTile[(x, y, 0)] = myTile;
+		//	}
+		//}
+	}
+	public static void WriteToLayerTile(int x, int y, int layer)
+	{
+		var myTile = new TileClone();
+		var tile = Main.tile[x, y];
+		myTile.I = x;
+		myTile.J = y;
+		myTile.TileType = tile.TileType;
+		myTile.TileFrameX = tile.TileFrameX;
+		myTile.TileFrameY = tile.TileFrameY;
+		myTile.WallFrameX = tile.WallFrameX;
+		myTile.WallFrameY = tile.WallFrameY;
+		myTile.BlockType = tile.BlockType;
+		myTile.SlopeType = tile.Slope;
+		myTile.Liquid = tile.liquid;
+		myTile.LiquidAmount = tile.LiquidAmount;
+		myTile.HasTile = tile.HasTile;
+		myTile.RedWire = tile.RedWire;
+		myTile.GreenWire = tile.GreenWire;
+		myTile.BlueWire = tile.BlueWire;
+		myTile.YellowWire = tile.YellowWire;
+		myTile.WallColor = tile.WallColor;
+		myTile.TileColor = tile.TileColor;
+		LayerTile[(x, y, layer)] = myTile;
+	}
+	public static void ReadFromLayerTile(int x, int y, int layer)
+	{
+		if (LayerTile.ContainsKey((x, y, layer)))
 		{
-			for (int y = 0; y < Main.maxTilesY; y++)
-			{
-				LayerTile.Add((x, y, 0), Main.tile[x, y]);
-			}
+			var myTile = LayerTile[(x, y, layer)];
+			var tile = Main.tile[x, y];
+
+			tile.TileType = myTile.TileType;
+			tile.TileFrameX = myTile.TileFrameX;
+			tile.TileFrameY = myTile.TileFrameY;
+			tile.WallFrameX = myTile.WallFrameX;
+			tile.WallFrameY = myTile.WallFrameY;
+			tile.BlockType = myTile.BlockType;
+			tile.Slope = myTile.SlopeType;
+			tile.liquid = myTile.Liquid;
+			tile.LiquidAmount = myTile.LiquidAmount;
+			tile.RedWire = myTile.RedWire;
+			tile.GreenWire = myTile.GreenWire;
+			tile.BlueWire = myTile.BlueWire;
+			tile.YellowWire = myTile.YellowWire;
+			tile.HasTile = myTile.HasTile;
+			tile.WallColor = myTile.WallColor;
+			tile.TileColor = myTile.TileColor;
 		}
 	}
 	public override void PostUpdateEverything()
@@ -107,7 +235,32 @@ public class TileLayerSystem : ModSystem
 		else
 		{
 			SwitchingTimer = 0;
-			SwitchingTiles = new List<Tile>();
+		}
+		Player player = Main.LocalPlayer;
+		int layer = PlayerZoneLayer[player.whoAmI];
+		if (PlayerZoneLayer[player.whoAmI] != 0 && SwitchingTimer == 0)
+		{
+			bool saft = false;
+			foreach ((int, int) coord in RoomsInsideLayers[layer])
+			{
+				Rectangle roomArea = new Rectangle(coord.Item1 * 16, coord.Item2 * 16, 16, 16);
+				if(roomArea.Intersects(player.Hitbox))
+				{
+					saft= true;
+					break;
+				}
+			}
+			if(!saft && SwitchingTimer == 0)
+			{
+				int x = (int)((player.oldPosition.X - player.velocity.X) / 16);
+				int y = (int)((player.oldPosition.Y - player.velocity.Y) / 16);
+				LayerShallower(player, x, y);
+				Main.NewText("fail");
+			}
+		}
+		if(Main.time % 60 == 0)
+		{
+			Main.NewText(PlayerZoneLayer[player.whoAmI]);
 		}
 	}
 }

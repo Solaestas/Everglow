@@ -8,7 +8,10 @@ internal class GetOutOfTheRoom : SidebarElementBase
 	public override void Invoke()
 	{
 		base.Invoke();
-
+		Player player = Main.LocalPlayer;
+		int x = (int)(player.Center.X / 16);
+		int y = (int)(player.Center.Y / 16);
+		TileLayerSystem.LayerChange(Main.LocalPlayer, x, y, TileLayerSystem.PlayerZoneLayer[player.whoAmI] + 1);
 		Main.NewText("已离开房间");
 	}
 }
