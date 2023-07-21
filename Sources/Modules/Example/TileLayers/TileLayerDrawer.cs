@@ -11,7 +11,7 @@ public class TileDrawer : ModSystem
 	{
 		if (Main.netMode != NetmodeID.Server)
 		{
-			Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, BlackTileDraw);
+			Ins.HookManager.AddHook(CodeLayer.PostDrawDusts, BlackTileDraw);
 		}
 	}
 	public static List<Vertex2D> BlackArea = new List<Vertex2D>();

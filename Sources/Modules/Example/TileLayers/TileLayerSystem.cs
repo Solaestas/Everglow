@@ -109,6 +109,12 @@ public class TileLayerSystem : ModSystem
 			return;
 		}
 	}
+	/// <summary>
+	/// 把一个区域从一层切换到另一层
+	/// </summary>
+	/// <param name="coords"></param>
+	/// <param name="oldLayer"></param>
+	/// <param name="newLayer"></param>
 	private static void ChangeArea(List<(int, int)> coords, int oldLayer, int newLayer)
 	{
 		foreach(var point in coords)
@@ -119,6 +125,12 @@ public class TileLayerSystem : ModSystem
 			ReadFromLayerTile(x, y, newLayer);
 		}
 	}
+	/// <summary>
+	/// 根据一个起始点判连续
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="layer"></param>
 	private static void CheckAreaInLayer(int x, int y, int layer)
 	{
 		if (LayerTile.ContainsKey((x, y, layer)))
@@ -143,39 +155,19 @@ public class TileLayerSystem : ModSystem
 		}
 		
 	}
+	/// <summary>
+	/// 简单的初始化
+	/// </summary>
 	public override void OnWorldLoad()
 	{
 		PlayerZoneLayer[Main.LocalPlayer.whoAmI] = 0;
-		//0层的初始化
-		//for(int x = 0;x < Main.maxTilesX;x++)
-		//{
-		//	for (int y = 0; y < Main.maxTilesY; y++)
-		//	{
-		//		var myTile = new TileClone();
-		//		var tile = Main.tile[x, y];
-		//		myTile.I = x;
-		//		myTile.J = y;
-
-		//		myTile.TileType = tile.TileType;
-		//		myTile.TileFrameX = tile.TileFrameX;
-		//		myTile.TileFrameY = tile.TileFrameY;
-		//		myTile.WallFrameX = tile.WallFrameX;
-		//		myTile.WallFrameY = tile.WallFrameY;
-		//		myTile.BlockType = tile.BlockType;
-		//		myTile.SlopeType = tile.Slope;
-		//		myTile.Liquid = tile.liquid;
-		//		myTile.LiquidAmount = tile.LiquidAmount;
-		//		myTile.RedWire = tile.RedWire;
-		//		myTile.GreenWire = tile.GreenWire;
-		//		myTile.BlueWire = tile.BlueWire;
-		//		myTile.YellowWire = tile.YellowWire;
-		//		myTile.WallColor = tile.WallColor;
-		//		myTile.TileColor = tile.TileColor;
-		//		myTile.HasTile = tile.HasTile;
-		//		LayerTile[(x, y, 0)] = myTile;
-		//	}
-		//}
 	}
+	/// <summary>
+	/// 写入房间信息
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="layer"></param>
 	public static void WriteToLayerTile(int x, int y, int layer)
 	{
 		var myTile = new TileClone();
@@ -183,6 +175,7 @@ public class TileLayerSystem : ModSystem
 		myTile.I = x;
 		myTile.J = y;
 		myTile.TileType = tile.TileType;
+		myTile.Wall = tile.wall;
 		myTile.TileFrameX = tile.TileFrameX;
 		myTile.TileFrameY = tile.TileFrameY;
 		myTile.WallFrameX = tile.WallFrameX;
@@ -200,6 +193,12 @@ public class TileLayerSystem : ModSystem
 		myTile.TileColor = tile.TileColor;
 		LayerTile[(x, y, layer)] = myTile;
 	}
+	/// <summary>
+	/// 读取房间信息
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="layer"></param>
 	public static void ReadFromLayerTile(int x, int y, int layer)
 	{
 		if (LayerTile.ContainsKey((x, y, layer)))
@@ -208,6 +207,7 @@ public class TileLayerSystem : ModSystem
 			var tile = Main.tile[x, y];
 
 			tile.TileType = myTile.TileType;
+			tile.wall = myTile.Wall;
 			tile.TileFrameX = myTile.TileFrameX;
 			tile.TileFrameY = myTile.TileFrameY;
 			tile.WallFrameX = myTile.WallFrameX;
@@ -225,6 +225,31 @@ public class TileLayerSystem : ModSystem
 			tile.TileColor = myTile.TileColor;
 		}
 	}
+	private static void CheckOutOfTheRoom()
+	{
+		Player player = Main.LocalPlayer;
+		int layer = PlayerZoneLayer[player.whoAmI];
+		if (PlayerZoneLayer[player.whoAmI] != 0 && SwitchingTimer == 0)
+		{
+			bool saft = false;
+			foreach ((int, int) coord in RoomsInsideLayers[layer])
+			{
+				Rectangle roomArea = new Rectangle(coord.Item1 * 16, coord.Item2 * 16, 16, 16);
+				if (roomArea.Intersects(player.Hitbox))
+				{
+					saft = true;
+					break;
+				}
+			}
+			if (!saft && SwitchingTimer == 0)
+			{
+				int x = (int)((player.oldPosition.X - player.velocity.X) / 16);
+				int y = (int)((player.oldPosition.Y - player.velocity.Y) / 16);
+				LayerShallower(player, x, y);
+				Main.NewText("Attempt to leave the room illegally.", Color.Red);
+			}
+		}
+	}
 	public override void PostUpdateEverything()
 	{
 		base.PostUpdateEverything();
@@ -236,31 +261,10 @@ public class TileLayerSystem : ModSystem
 		{
 			SwitchingTimer = 0;
 		}
-		Player player = Main.LocalPlayer;
-		int layer = PlayerZoneLayer[player.whoAmI];
-		if (PlayerZoneLayer[player.whoAmI] != 0 && SwitchingTimer == 0)
-		{
-			bool saft = false;
-			foreach ((int, int) coord in RoomsInsideLayers[layer])
-			{
-				Rectangle roomArea = new Rectangle(coord.Item1 * 16, coord.Item2 * 16, 16, 16);
-				if(roomArea.Intersects(player.Hitbox))
-				{
-					saft= true;
-					break;
-				}
-			}
-			if(!saft && SwitchingTimer == 0)
-			{
-				int x = (int)((player.oldPosition.X - player.velocity.X) / 16);
-				int y = (int)((player.oldPosition.Y - player.velocity.Y) / 16);
-				LayerShallower(player, x, y);
-				Main.NewText("fail");
-			}
-		}
-		if(Main.time % 60 == 0)
-		{
-			Main.NewText(PlayerZoneLayer[player.whoAmI]);
-		}
+		CheckOutOfTheRoom();
+		//if(Main.time % 60 == 0)
+		//{
+		//	Main.NewText(PlayerZoneLayer[player.whoAmI]);
+		//}
 	}
 }
