@@ -1,7 +1,5 @@
 using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.HurricaneMaze.Background;
-using Terraria;
-using Terraria.Graphics.Light;
 
 namespace Everglow.Yggdrasil.HurricaneMaze;
 
