@@ -2,7 +2,7 @@ using Everglow.Commons.Enums;
 using Everglow.Commons.Vertex;
 using Terraria.GameContent;
 
-namespace Everglow.Example.TileLayers;
+namespace Everglow.Commons.TileHelper.TileLayers;
 public class TileDrawer : ModSystem
 {
 	public static int Layer => TileLayerSystem.PlayerZoneLayer[Main.LocalPlayer.whoAmI];

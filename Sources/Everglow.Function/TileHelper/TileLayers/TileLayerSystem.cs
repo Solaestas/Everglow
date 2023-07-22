@@ -1,6 +1,6 @@
 using Everglow.Commons.TileHelper;
 
-namespace Everglow.Example.TileLayers;
+namespace Everglow.Commons.TileHelper.TileLayers;
 public struct TileClone
 {
 	public int I { get; set; }

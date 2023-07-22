@@ -1,6 +1,6 @@
 using Terraria.ObjectData;
 
-namespace Everglow.Example.TileLayers;
+namespace Everglow.Commons.TileHelper.TileLayers;
 
 public abstract class LayerDeeperTriggerTile : ModTile
 {

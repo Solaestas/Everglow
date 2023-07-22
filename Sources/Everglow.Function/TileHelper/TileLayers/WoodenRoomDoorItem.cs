@@ -1,4 +1,4 @@
-namespace Everglow.Example.TileLayers;
+namespace Everglow.Commons.TileHelper.TileLayers;
 
 public class WoodenRoomDoorItem : ModItem
 {

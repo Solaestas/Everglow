@@ -58,7 +58,6 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 				open = !open;
 			};
 			mainPanel.Register(image);
-
 		}
 
 		private void LoadSidebarElement(SidebarList quickBar)

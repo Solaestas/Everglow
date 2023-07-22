@@ -1,7 +1,7 @@
 using SixLabors.ImageSharp.ColorSpaces;
 using Terraria.ObjectData;
 
-namespace Everglow.Example.TileLayers;
+namespace Everglow.Commons.TileHelper.TileLayers;
 
 public class WoodenRoomDoor : LayerDeeperTriggerTile
 {
