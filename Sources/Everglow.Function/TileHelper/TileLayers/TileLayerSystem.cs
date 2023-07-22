@@ -1,4 +1,6 @@
 using Everglow.Commons.TileHelper;
+using Newtonsoft.Json;
+using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.TileHelper.TileLayers;
 public struct TileClone
@@ -161,6 +163,18 @@ public class TileLayerSystem : ModSystem
 	public override void OnWorldLoad()
 	{
 		PlayerZoneLayer[Main.LocalPlayer.whoAmI] = 0;
+	}
+	//储存
+	public override void SaveWorldData(TagCompound tag)
+	{
+		string json = JsonConvert.SerializeObject(LayerTile);
+		File.WriteAllText(Main.worldName + "LayerSystemDatas.json", json);
+	}
+	//读取
+	public override void LoadWorldData(TagCompound tag)
+	{
+		string json = File.ReadAllText(Main.worldName + "LayerSystemDatas.json");
+		LayerTile = JsonConvert.DeserializeObject<Dictionary<(int, int, int), TileClone>>(json);
 	}
 	/// <summary>
 	/// 写入房间信息
