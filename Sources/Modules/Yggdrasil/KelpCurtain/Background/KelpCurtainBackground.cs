@@ -61,7 +61,7 @@ public class KelpCurtainBackground : ModSystem
 	public static bool BiomeActive()
 	{
 
-		if (Main.screenPosition.Y > 148000 && Main.screenPosition.Y < 171200)
+		if (Main.screenPosition.Y > 148000 && Main.screenPosition.Y < 170700)
 		{
 			if (SubworldSystem.IsActive<YggdrasilWorld>())
 				return true;
