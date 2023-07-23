@@ -79,28 +79,10 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 				Projectile.netUpdate = true;
 			}
 			Projectile.velocity = toMouse;
-           
-			//---特效
-			
-            StabVFX v = new StabVFX() {
-				pos = Projectile.Center + Projectile.velocity*MaxLength*140,
-				vel=toMouse,
-				color=Color.Lerp(Color,Color.White,0.2f),
-				scale=10,
-				maxtime=10,
-				timeleft=10
-			};
-			Ins.VFXManager.Add(v);
-            v = new StabVFX()
-            {
-                pos = Projectile.Center + Projectile.velocity * MaxLength * 70,
-                vel = toMouse,
-                color = Color.Lerp(Color, Color.White, 0.4f),
-				scale=15,
-            };
-            Ins.VFXManager.Add(v);
 
-            
+
+			GenerateVFXWhenSpawn(toMouse);
+
 			/*
             for (int i=0;i<10;i++)
 			{
@@ -114,9 +96,32 @@ namespace Everglow.Commons.Weapons.StabbingSwords
                 Ins.VFXManager.Add(v1);
             }*/
 			//---
-            SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
+			SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
 			SoundEngine.PlaySound(ss, Projectile.Center);
 			StartCenter = Projectile.Center;
+		}
+		public virtual void GenerateVFXWhenSpawn(Vector2 velocity)
+		{
+			//---特效
+
+			StabVFX v = new StabVFX()
+			{
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 140,
+				vel = velocity,
+				color = Color.Lerp(Color, Color.White, 0.2f),
+				scale = 10,
+				maxtime = 10,
+				timeleft = 10
+			};
+			Ins.VFXManager.Add(v);
+			v = new StabVFX()
+			{
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 70,
+				vel = velocity,
+				color = Color.Lerp(Color, Color.White, 0.4f),
+				scale = 15,
+			};
+			Ins.VFXManager.Add(v);
 		}
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
