@@ -3,7 +3,7 @@ using Everglow.Commons.Vertex;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
 
-internal class IchorDropPipeline : Pipeline
+public class IchorDropPipeline : Pipeline
 {
 	public override void Load()
 	{
@@ -30,7 +30,7 @@ internal class IchorDropPipeline : Pipeline
 	}
 }
 [Pipeline(typeof(IchorDropPipeline))]
-internal class IchorDrop : Visual
+public class IchorDrop : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public Vector2 position;

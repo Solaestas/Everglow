@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 
@@ -22,7 +22,7 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
 		Projectile.spriteDirection = player.direction;
 		Projectile.velocity *= 0;
-		if (player.itemTime > 0 && player.HeldItem.type == ItemID.CursedFlames)
+		if (player.itemTime > 0 && player.HeldItem.type == ItemID.CursedFlames && player.active && !player.dead)
 		{
 			Projectile.timeLeft = player.itemTime + 60;
 			if (Timer < 30)

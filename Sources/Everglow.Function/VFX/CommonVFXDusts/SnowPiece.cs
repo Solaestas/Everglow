@@ -2,7 +2,7 @@ using Everglow.Commons.Enums;
 using Everglow.Commons.Vertex;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
-internal class SnowPiecePipeline : Pipeline
+public class SnowPiecePipeline : Pipeline
 {
 	public override void Load()
 	{
@@ -28,7 +28,7 @@ internal class SnowPiecePipeline : Pipeline
 	}
 }
 [Pipeline(typeof(SnowPiecePipeline))]
-internal class SnowPieceDust : Visual
+public class SnowPieceDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public Vector2 position;

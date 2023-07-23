@@ -3,7 +3,7 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
-internal class JungleSporePipeline : Pipeline
+public class JungleSporePipeline : Pipeline
 {
 	public override void Load()
 	{
@@ -28,7 +28,7 @@ internal class JungleSporePipeline : Pipeline
 	}
 }
 [Pipeline(typeof(JungleSporePipeline), typeof(BloomPipeline))]
-internal class JungleSporeDust : Visual
+public class JungleSporeDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public Vector2 position;

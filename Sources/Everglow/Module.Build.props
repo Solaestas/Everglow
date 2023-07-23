@@ -1,10 +1,11 @@
-﻿<Project>
-	<PropertyGroup>
-<Modules>MEAC;CagedDomain;EternalResolve;Example;ZY;Plant;PlantAndFarm;Minortopography;TwilightForest;Food;Yggdrasil;Myth</Modules>
-		<DefineConstants>$(DefineConstants);$(Modules)</DefineConstants>
-	</PropertyGroup>
-	<ItemGroup>
-		<ModuleReference Include="$(Modules.Split(';'))" />
-		<ProjectReference Include="@(ModuleReference->'..\Modules\%(Filename)\Everglow.%(Filename).csproj')" />
-	</ItemGroup>
+<Project>
+  <PropertyGroup>
+    <Modules>
+    </Modules>
+    <DefineConstants>$(DefineConstants);$(Modules)</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <ModuleReference Include="$(Modules.Split(';'))" />
+    <ProjectReference Include="@(ModuleReference-&gt;'..\Modules\%(Filename)\Everglow.%(Filename).csproj')" />
+  </ItemGroup>
 </Project>
