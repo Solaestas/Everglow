@@ -1,3 +1,4 @@
+using System.Runtime.Intrinsics.X86;
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.CustomTiles;
 using Terraria.Audio;
@@ -22,7 +23,7 @@ public class SquamousShell : ModNPC
 		NPC.lifeMax = 6000;
 		NPC.knockBackResist = 0;
 		NPC.lavaImmune = true;
-		NPC.noGravity = false;
+		NPC.noGravity = true;
 		NPC.noTileCollide = false;
 		NPC.HitSound = SoundID.NPCHit1;
 		NPC.DeathSound = SoundID.NPCDeath1;
@@ -35,11 +36,19 @@ public class SquamousShell : ModNPC
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
+		NPC.velocity.Y = 2f;
 		_coroutineManager.StartCoroutine(new Coroutine(Landing()));
+	}
+	public override void AI()
+	{
+		NPC.localAI[0] += 1;
+		NPC.TargetClosest(false);
+		Player player = Main.player[NPC.target];
+		_coroutineManager.Update();
 	}
 	private IEnumerator<ICoroutineInstruction> Landing()
 	{
-		while (!NPC.collideY)
+		while (NPC.velocity.Y != 0)
 		{
 			NPC.velocity.Y += 0.2f;
 			yield return new SkipThisFrame();
@@ -47,21 +56,6 @@ public class SquamousShell : ModNPC
 		//这里需要一个震屏
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact);
 		_coroutineManager.StartCoroutine(new Coroutine(Wake()));
-	}
-	private IEnumerator<ICoroutineInstruction> Rush(int direction, float acceleration = 0.2f)
-	{
-		while (!Collision.SolidCollision(new Vector2(NPC.Center.X + direction * 60, NPC.Center.Y), 0, 0))
-		{
-			if(Math.Abs(NPC.velocity.X) < 20)
-			{
-				NPC.velocity.X += direction * acceleration;
-			}
-			yield return new SkipThisFrame();
-		}
-		//这里需要一个震屏
-		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact);
-		yield return new WaitForFrames(30);
-		_coroutineManager.StartCoroutine(new Coroutine(Rush(direction)));
 	}
 	private IEnumerator<ICoroutineInstruction> Wake()
 	{
@@ -71,28 +65,94 @@ public class SquamousShell : ModNPC
 			yield return new SkipThisFrame();
 		}
 		int direction = 1;
-		if(Main.player[NPC.target].Center.X < NPC.Center.X)
+		if (Main.player[NPC.target].Center.X < NPC.Center.X)
 		{
 			direction = -1;
 		}
 		_coroutineManager.StartCoroutine(new Coroutine(Rush(direction)));
 	}
-	public override void AI()
+	private IEnumerator<ICoroutineInstruction> Rush(int direction, float acceleration = 0.2f)
 	{
-		NPC.localAI[0] += 1;
-		NPC.TargetClosest(false);
-		Player player = Main.player[NPC.target];
+		while (!NPC.collideX || NPC.velocity.Y != 0)
+		{
+			if(Math.Abs(NPC.velocity.X) < 20)
+			{
+				if(Collision.SolidCollision(NPC.Center + new Vector2(50, 80), 0, 0))
+				{
+					NPC.velocity.X += direction * acceleration / 3f;
+				}
+				if (Collision.SolidCollision(NPC.Center + new Vector2(0, 80), 0, 0))
+				{
+					NPC.velocity.X += direction * acceleration / 3f;
+				}
+				if (Collision.SolidCollision(NPC.Center + new Vector2(-50, 80), 0, 0))
+				{
+					NPC.velocity.X += direction * acceleration / 3f;
+				}
+				NPC.velocity.X += direction * acceleration / 2f;
+			}
+			if(NPC.collideX)
+			{
+				NPC.velocity.Y -= 16;
+			}
+			if(!NPC.collideY)
+			{
+				NPC.velocity.Y += 0.6f;
+			}
+			NPC.spriteDirection = direction;
+			if(Math.Abs(Main.player[NPC.target].Center.X - NPC.Center.X) > 1000)
+			{
+				direction *= -1;
+				NPC.velocity *= 0;
+				NPC.position.X += direction * 20;
+			}
+			if (Math.Abs(Main.player[NPC.target].Center.X - NPC.Center.X) > 800)
+			{
+				NPC.velocity *= 0.95f;
+			}
+			if (NPC.velocity.Y < -20)
+			{
+				NPC.velocity.Y = -20;
+			}
+			NPC.rotation = (float)GetVector2Rot(GetRotationVec());
+			yield return new SkipThisFrame();
+		}
+		//这里需要一个震屏
+		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact);
+		yield return new WaitForFrames(30);
+		int newDirection = 1;
+		if (Main.player[NPC.target].Center.X < NPC.Center.X)
+		{
+			newDirection = -1;
+		}
+		if(newDirection == direction)
+		{
+			NPC.velocity.Y -= 16f;
+			NPC.position.Y -= 40f;
+		}
+		NPC.position.X += newDirection * 20;
+		_coroutineManager.StartCoroutine(new Coroutine(Rush(newDirection)));
+		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction * 2, 0), ModContent.ProjectileType<Projectiles.SquamousRollingStone>(), 60, 6);
 	}
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		Texture2D mainTex = ModAsset.SquamousShell.Value;
+		SpriteEffects spe = SpriteEffects.None;
+		float drawRot = NPC.rotation * NPC.spriteDirection;
+		if (NPC.spriteDirection == -1)
+		{
+			spe = SpriteEffects.FlipHorizontally;
+			drawRot += MathF.PI;
+		}
+
+
+		spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, null, drawColor, drawRot, mainTex.Size() * 0.5f, NPC.scale, spe, 0);
 		if (WakingTimer < 180)
 		{
 			Texture2D deadShell = ModAsset.DeadSquamousShell.Value;
 			float fade = 1 - WakingTimer / 180f;
-			spriteBatch.Draw(deadShell, NPC.Center, null, drawColor * fade, NPC.rotation, deadShell.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
+			spriteBatch.Draw(deadShell, NPC.Center - Main.screenPosition, null, drawColor * fade, drawRot, deadShell.Size() * 0.5f, NPC.scale, spe, 0);
 		}
-		spriteBatch.Draw(mainTex, NPC.Center, null, drawColor, NPC.rotation, mainTex.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
 		return false;
 	}
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -103,6 +163,15 @@ public class SquamousShell : ModNPC
 	//--------------------------以下为辅助功能模块-------------------------------------------------以下为辅助功能模块-------------------------------------------------以下为辅助功能模块-------------------------------------------------以下为辅助功能模块-------------------------------------------------以下为辅助功能模块-------------------------------------------------
 	public double GetVector2Rot(Vector2 value)
 	{
+		if (value == Vector2.zeroVector)
+		{
+			double value1 = 0;	
+			if (NPC.spriteDirection == -1)
+			{
+				value1 = Math.PI;
+			}
+			return value1;
+		}
 		return Math.Atan2(value.Y, value.X) * NPC.spriteDirection + Math.PI / 2d;
 	}
 	public double CheckRotDir(double OldRot)
@@ -128,6 +197,10 @@ public class SquamousShell : ModNPC
 					outValue -= Vector2.Normalize(new Vector2(0, rad).RotatedBy(value * MathHelper.TwoPi)) / rad;
 				}
 			}
+		}
+		if(outValue.Length() < 0.005)
+		{
+			outValue= Vector2.Zero;
 		}
 		return Utils.SafeNormalize(outValue, Vector2.Zero);
 	}
