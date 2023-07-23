@@ -1,14 +1,18 @@
+using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
+using Everglow.EternalResolve.VFXs;
+using SteelSeries.GameSense;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class PrisonFireBayonet_Pro : StabbingProjectile
-    {
-        public override void SetDefaults()
-        {
-            Color = Color.Orange;
+	public class PrisonFireBayonet_Pro : StabbingProjectile
+	{
+		public override void SetDefaults()
+		{
+			Color = Color.Orange;
 			base.SetDefaults();
 			TradeLength = 6;
 			TradeShade = 1f;
@@ -31,6 +35,26 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			else
 			{
 				SuddenCooling = 60;
+			}
+		}
+		public void GenerateSmoke(int frequency)
+		{
+			for (int g = 0; g < frequency; g++)
+			{
+				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi) + new Vector2(0, -4f);
+				;
+				var somg = new VaporDust
+				{
+					velocity = newVelocity,
+					Active = true,
+					Visible = true,
+					position = Projectile.Center + new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) + newVelocity * 3 + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.24f, 0.24f)) * MathF.Sqrt(Main.rand.NextFloat(1f)) * 9f,
+					maxTime = Main.rand.Next(10, 90),
+					scale = Main.rand.NextFloat(20f, 135f),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { Main.rand.NextFloat(-0.05f, -0.01f), 0 }
+				};
+				Ins.VFXManager.Add(somg);
 			}
 		}
 		public override void AI()
@@ -57,8 +81,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 						Vector2 velII = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.08f) + new Vector2(Main.rand.NextFloat(-1f, 1f), -SuddenCooling / 12f);
 						if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, posII + velII, 0, 0))
 						{
-							Dust dust = Dust.NewDustDirect(posII, Projectile.width, Projectile.height, DustID.Smoke, 0, 0, 180, default, Main.rand.NextFloat(0.95f, 3.7f));
-							dust.velocity = velII;
+							GenerateSmoke(1);
 						}
 					}
 					SuddenCooling -= 1;
@@ -67,6 +90,19 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				{
 					SuddenCooling = 0;
 				}
+				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 2f)).RotatedByRandom(MathHelper.TwoPi) + Projectile.velocity * 0.2f + player.velocity * 0.5f;
+				var fire = new BayonetFlameDust
+				{
+					velocity = newVelocity,
+					Active = true,
+					Visible = true,
+					position = player.Center + new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) + newVelocity * 3 + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.24f, 0.24f)) * MathF.Sqrt(Main.rand.NextFloat(1f)) * 6f,
+					maxTime = Main.rand.Next(6, 25),
+					scale = Main.rand.NextFloat(10f, 50f),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+				};
+				Ins.VFXManager.Add(fire);
 			}
 			else
 			{
@@ -74,8 +110,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.08f);
 				if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))
 				{
-					Dust dust = Dust.NewDustDirect(pos, Projectile.width, Projectile.height, DustID.Smoke, 0, 0, 200, default, Main.rand.NextFloat(0.95f, 1.7f));
-					dust.velocity = vel;
+					GenerateSmoke(1);
 				}
 				if (SuddenCooling < 60)
 				{
@@ -86,11 +121,10 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 						Vector2 velII = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.08f) + new Vector2(Main.rand.NextFloat(-1f, 1f), (SuddenCooling - 60f) / 12f);
 						if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, posII + velII, 0, 0))
 						{
-							Dust dust = Dust.NewDustDirect(posII, Projectile.width, Projectile.height, DustID.Smoke, 0, 0, 180, default, Main.rand.NextFloat(0.95f, 3.7f));
-							dust.velocity = velII;
+							GenerateSmoke(1);
 						}
 					}
-					if(SuddenCooling == 1)
+					if (SuddenCooling == 1)
 					{
 						SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/CoolingSword"), Projectile.Center);
 					}
@@ -108,7 +142,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			{
 				target.AddBuff(BuffID.OnFire, 150);
 			}
-        }
+		}
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
 			Player player = Main.player[Projectile.owner];
@@ -122,13 +156,13 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Player player = Main.player[Projectile.owner];
 			base.PostDraw(lightColor);
 			Lighting.AddLight(Projectile.Center + Projectile.velocity, 1f * Projectile.timeLeft / TradeLength, 0.4f * Projectile.timeLeft / TradeLength, 0f);
-			Texture2D light = ModAsset.StabbingProjectile.Value;
+			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			if (Main.myPlayer == Projectile.owner)
 			{
 				if (player.channel && !player.noItems && !player.CCed)
 				{
-					if(!player.wet || player.lavaWet)
+					if (!player.wet || player.lavaWet)
 					{
 						Color = Color.Orange;
 						TradeLength = 6;
