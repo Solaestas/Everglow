@@ -4,8 +4,8 @@ public class SquamousRollingStone : ModProjectile
 {
 	public override void SetDefaults()
 	{
-		Projectile.friendly = true;
-		Projectile.hostile = false;
+		Projectile.friendly = false;
+		Projectile.hostile = true;
 		Projectile.width = 100;
 		Projectile.height = 100;
 		Projectile.tileCollide = true;
@@ -16,15 +16,20 @@ public class SquamousRollingStone : ModProjectile
 	{
 		Projectile.velocity.X += Projectile.direction * 0.04f;
 		Projectile.velocity.Y += 0.2f;
+		Projectile.rotation += Projectile.velocity.X * 0.04f;
 	}
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
-		if(!Collision.SolidCollision(Projectile.Center + new Vector2(60 * Projectile.direction, 0), 0, 0))
+		if(Collision.SolidCollision(Projectile.Center + new Vector2(60 * Projectile.direction, 0), 0, 0))
 		{
 			Projectile.velocity.Y -= Main.rand.NextFloat(3f, 9f);
 			return false;
 		}
-		return true;
+		if((Projectile.velocity - oldVelocity).Length() > 8)
+		{
+			return true;
+		}
+		return false;
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
