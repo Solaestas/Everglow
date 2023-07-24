@@ -4,7 +4,6 @@ using Terraria;
 using Terraria.Graphics.Capture;
 using Terraria.ModLoader;
 using Everglow.TwilightForest.Tiles;
-using Everglow.Myth.TheFirefly.Water;
 using System.Threading.Tasks;
 using Terraria.Graphics.Effects;
 using Everglow.TwilightForest.Common;
