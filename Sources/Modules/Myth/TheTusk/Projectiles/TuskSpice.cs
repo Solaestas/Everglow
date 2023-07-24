@@ -117,8 +117,6 @@ public class TuskSpice : ModProjectile
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, colorz, Projectile.rotation, new Vector2(12f, 25f), Projectile.scale, SpriteEffects.None, 0);
 		if (!Down)
 			return;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 		if (Projectile.alpha == 0)
 		{
 			for (int f = 0; f < Projectile.oldPos.Length; f++)

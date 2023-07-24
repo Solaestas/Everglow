@@ -13,6 +13,6 @@
 		<ProjectReference Include="..\Everglow.Function\Everglow.Function.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Update="Solaestas.tModLoader.ModBuilder" Version="1.0.3" />
+	  <PackageReference Update="Solaestas.tModLoader.ModBuilder" Version="1.1.2" />
 	</ItemGroup>
 </Project>
