@@ -2,24 +2,23 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.Commons.Weapons.StabbingSwords.VFX;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
-using SteelSeries.GameSense;
+using Everglow.EternalResolve.Buffs;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-	public class PrisonFireBayonet_Pro_Stab : StabbingProjectile_Stab
+	public class IchorBayonet_Pro_Stab : StabbingProjectile_Stab
 	{
 		public override void SetDefaults()
 		{
-			Color = new Color(255, 120, 0);
+			Color = new Color(247, 197, 0);
 			base.SetDefaults();
-			TradeShade = 1f;
-			Shade = 0.65f;
-			FadeTradeShade = 0.84f;
+			TradeShade = 0.2f;
+			Shade = 0.2f;
+			FadeTradeShade = 0.74f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
-			FadeLightColorValue = 0.4f;
-			MaxLength = 1.40f;
+			FadeLightColorValue = 0.8f;
+			MaxLength = 1.9f;
 			DrawWidth = 0.4f;
 		}
 		public override void GenerateVFXWhenSpawn(Vector2 velocity)
@@ -142,63 +141,57 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			}
 		}
-		public override void AI()
-		{
-			if (Main.rand.NextBool(2))
-				GenerateVFX(1);
-			Lighting.AddLight(Projectile.Center, new Vector3(1f, 0.8f, 0) * (ToKill / 120f));
-			Vector2 pos = Projectile.position + Projectile.velocity * Main.rand.NextFloat(0.4f, 160f);
-			Vector2 vel = Projectile.velocity * Main.rand.NextFloat(1f, 14f);
-			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))
-			{
-				Dust dust = Dust.NewDustDirect(pos, Projectile.width, Projectile.height, ModContent.DustType<FlameShine>(), 0, 0, 0, default, Main.rand.NextFloat(0.35f, 2f) * (ToKill / 200f));
-				dust.velocity = vel;
-			}
-			base.AI();
-		}
 		public void GenerateVFX(int Frequency)
 		{
-			int x = (int)(Projectile.Center.X / 16f);
-			int y = (int)(Projectile.Center.Y / 16f);
-			if (Main.tile[x, y].LiquidAmount / 16f> Projectile.Center.Y % 16)
+			float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
+			for (int g = 0; g < Frequency * 2; g++)
 			{
-				for (int g = 0; g < Frequency; g++)
+				Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(40f)).RotatedByRandom(MathHelper.TwoPi);
+				float mulScale = Main.rand.NextFloat(6f, 14f);
+				var blood = new IchorDrop
 				{
-					Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi) + new Vector2(0, -4f);
-					;
-					var somg = new VaporDust
-					{
-						velocity = newVelocity,
-						Active = true,
-						Visible = true,
-						position = Projectile.Center,
-						maxTime = Main.rand.Next(10, 90),
-						scale = Main.rand.NextFloat(20f, 135f),
-						rotation = Main.rand.NextFloat(6.283f),
-						ai = new float[] { Main.rand.NextFloat(-0.05f, -0.01f), 0 }
-					};
-					Ins.VFXManager.Add(somg);
-				}
+					velocity = afterVelocity * mulVelocity / mulScale + Projectile.velocity * Main.rand.NextFloat(7f),
+					Active = true,
+					Visible = true,
+					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(70f),
+					maxTime = Main.rand.Next(32, 64) * (ToKill / 200f),
+					scale = mulScale,
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
+				};
+				Ins.VFXManager.Add(blood);
 			}
-			else
+			for (int g = 0; g < Frequency; g++)
 			{
-				for (int g = 0; g < Frequency; g++)
+				Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(3f)).RotatedByRandom(MathHelper.TwoPi);
+				var blood = new IchorSplash
 				{
-					Vector2 newVelocity = Projectile.velocity * Main.rand.NextFloat(8f);
-					var fire = new FireDust
-					{
-						velocity = newVelocity,
-						Active = true,
-						Visible = true,
-						position = Projectile.Center + Projectile.velocity * Main.rand.NextFloat(140, 160f) * (1 - ToKill / 140f),
-						maxTime = Main.rand.Next(6, 25) * (ToKill / 100f),
-						scale = Main.rand.NextFloat(10f, 50f) * (ToKill / 100f),
-						rotation = Main.rand.NextFloat(6.283f),
-						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
-					};
-					Ins.VFXManager.Add(fire);
-				}
+					velocity = afterVelocity * mulVelocity + Projectile.velocity * Main.rand.NextFloat(7f),
+					Active = true,
+					Visible = true,
+					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(70f),
+					maxTime = Main.rand.Next(32, 64) * (ToKill / 200f),
+					scale = Main.rand.NextFloat(6f, 12f),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 }
+				};
+				Ins.VFXManager.Add(blood);
 			}
+		}
+		public override void AI()
+		{
+			if (Main.rand.NextBool(9))
+				GenerateVFX(1);
+			Lighting.AddLight(Projectile.Center, new Vector3(1f, 0.7f, 0) * (ToKill / 120f));
+			base.AI();
+		}
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+		{
+			target.AddBuff(BuffID.Ichor, 600);
+			base.OnHitNPC(target, hit, damageDone);
+		}
+		public override void HitTile()
+		{
+			base.HitTile();
 		}
 	}
 }

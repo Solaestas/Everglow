@@ -1,20 +1,17 @@
-using Everglow.Commons;
 using Everglow.Commons.Enums;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 
-namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.VFX;
+namespace Everglow.Commons.Weapons.StabbingSwords.VFX;
 public class Draw3DPipieline : Pipeline
 {
 
 	public override void BeginRender()
 	{
 		Ins.Batch.Begin(BlendState.AlphaBlend);
-
 	}
 	public override void EndRender()
 	{
-
 		var camPos = new Vector3(Main.screenWidth / 2 + Main.screenPosition.X, Main.screenHeight / 2 + Main.screenPosition.Y, 0);
 		var matrix = Matrix.CreateLookAt(camPos, new Vector3(camPos.X, camPos.Y, 1), Vector3.Down);
 		matrix *= Matrix.CreatePerspectiveFieldOfView(MathHelper.Pi / 2f, Main.graphics.GraphicsDevice.Viewport.AspectRatio, 1, 2000);
@@ -28,7 +25,7 @@ public class Draw3DPipieline : Pipeline
 	}
 	public override void Load()
 	{
-		effect = ModContent.Request<Effect>("Everglow/Myth/Effects/DrawPrim3D", ReLogic.Content.AssetRequestMode.ImmediateLoad);
+		effect = ModAsset.DrawPrim3D;
 		Ins.Batch.RegisterVertex<Vertex3D_2>();
 	}
 }
@@ -56,8 +53,8 @@ public class StabVFX : Visual
 		float cos = (float)Math.Cos(ang);
 		return v * cos + Vector3.Dot(v, u) * u * (1 - cos) + Vector3.Cross(u, v) * (float)Math.Sin(ang);
 	}
-	float speed = 1f;
-	float randomRot = 0;
+	public float speed = 1f;
+	public float randomRot = 0;
 	public override void Update()
 	{
 		if (timeleft < maxtime * 2f / 3f)
@@ -73,6 +70,64 @@ public class StabVFX : Visual
 
 		scale += 0.6f;
 	}
+	public override void Draw()
+	{
+		List<Vertex3D_2> vertices = new();
+		Color c = color * alpha;
+		Color lightC = Lighting.GetColor((int)(pos.X / 16), (int)(pos.Y / 16));
+		c.R = (byte)(lightC.R * c.R / 255f);
+		c.G = (byte)(lightC.G * c.G / 255f);
+		c.B = (byte)(lightC.B * c.B / 255f);
+		c.A = 0;
+		float ssc = Main.Transform.M11;
+		for (int i = 0; i <= 30; i++)
+		{
+			float a = i * MathHelper.TwoPi / 30f;
+			Vector3 v = RotatedBy(Vector3.unitZ, new Vector3(vel.X, vel.Y, 0), a);
+			Vector3 rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
+			v = RotatedBy(v, rAix, randomRot);
+			Vector3 p = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale;
+			vertices.Add(new(p, new Vector3(i / 30f, 0, 0), c));
+			vertices.Add(new(p - new Vector3(vel.X, vel.Y, 0) * width * 2, new Vector3(i / 30f, 1, 0), c));
+		}
+		Ins.Batch.Draw(ModAsset.Trail_0.Value, vertices, PrimitiveType.TriangleStrip);
+	}
+}
+public class BloodGoldStabVFX : StabVFX
+{
+	public override void Draw()
+	{
+		List<Vertex3D_2> vertices = new();
+		Color c = color * alpha;
+		c.A = 0;
+		float ssc = Main.Transform.M11;
+		for (int i = 0; i <= 30; i++)
+		{
+			float a = i * MathHelper.TwoPi / 30f;
+			Vector3 v = RotatedBy(Vector3.unitZ, new Vector3(vel.X, vel.Y, 0), a);
+			Vector3 rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
+			v = RotatedBy(v, rAix, randomRot);
+			Vector3 p = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale;
+			vertices.Add(new(p, new Vector3(i / 30f, 0.5f, 0), Color.White * 0.4f));
+			vertices.Add(new(p - new Vector3(vel.X, vel.Y, 0) * width * 2, new Vector3(i / 30f, 1, 0), Color.White * 0.4f));
+		}
+		Ins.Batch.Draw(ModAsset.Trail_0_blackWhite.Value, vertices, PrimitiveType.TriangleStrip);
+		vertices = new();
+		for (int i = 0; i <= 30; i++)
+		{
+			float a = i * MathHelper.TwoPi / 30f;
+			Vector3 v = RotatedBy(Vector3.unitZ, new Vector3(vel.X, vel.Y, 0), a);
+			Vector3 rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
+			v = RotatedBy(v, rAix, randomRot);
+			Vector3 p = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale;
+			vertices.Add(new(p, new Vector3(i / 30f, 0, 0), c));
+			vertices.Add(new(p - new Vector3(vel.X, vel.Y, 0) * width * 2, new Vector3(i / 30f, 0.5f, 0), c));
+		}
+		Ins.Batch.Draw(ModAsset.Trail_0_blackWhite.Value, vertices, PrimitiveType.TriangleStrip);
+	}
+}
+public class SelfLightingStabVFX : StabVFX
+{
 	public override void Draw()
 	{
 		List<Vertex3D_2> vertices = new();

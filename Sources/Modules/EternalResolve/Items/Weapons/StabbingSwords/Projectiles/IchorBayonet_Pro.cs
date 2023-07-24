@@ -6,15 +6,15 @@ using Terraria.GameContent;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-	public class YoenLeZed_Pro : StabbingProjectile
+	public class IchorBayonet_Pro : StabbingProjectile
 	{
 		public override void SetDefaults()
 		{
-			Color = new Color(100, 180, 255);
+			Color = new Color(247, 197, 0);
 			base.SetDefaults();
 			TradeLength = 6;
-			TradeShade = 0.2f;
-			Shade = 0.2f;
+			TradeShade = 0.3f;
+			Shade = 0.6f;
 			FadeTradeShade = 0.74f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
@@ -25,60 +25,47 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		public override void AI()
 		{
 			base.AI();
-			GenerateVFX(1);
-			SplitVFX(2);
-
-			if (Main.timeForVisualEffects % 10 == 0)
-			{
-				SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f), Projectile.Center);
-			}
+			if (Main.rand.NextBool(2))
+				GenerateVFX(1);
 		}
 		public override void Kill(int timeLeft)
 		{
-			ActiveSound sound = SoundEngine.FindActiveSound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f));
-			if (sound != null)
-			{
-				sound.Stop();
-			}
+
 		}
 		public void GenerateVFX(int Frequency)
 		{
 			float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
-			for (int g = 0; g < Frequency; g++)
+			for (int g = 0; g < Frequency * 2; g++)
 			{
-				float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(8f, 16f));
-				Vector2 afterVelocity = Projectile.velocity;
-				var electric = new ElectricCurrent
+				Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(40f)).RotatedByRandom(MathHelper.TwoPi);
+				float mulScale = Main.rand.NextFloat(6f, 14f);
+				var blood = new IchorDrop
 				{
-					velocity = afterVelocity * mulVelocity,
+					velocity = afterVelocity * mulVelocity / mulScale + Projectile.velocity * Main.rand.NextFloat(0.17f),
 					Active = true,
 					Visible = true,
-					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
-					maxTime = size * size / 8f,
-					scale = size,
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size / 2, 0 }
+					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0, 8f),
+					maxTime = Main.rand.Next(6, 32),
+					scale = mulScale,
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
 				};
-				Ins.VFXManager.Add(electric);
+				Ins.VFXManager.Add(blood);
 			}
-		}
-		public void SplitVFX(int Frequency)
-		{
-			float mulVelocity = 1f;
 			for (int g = 0; g < Frequency; g++)
 			{
-				float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(4f, 10f));
-				Vector2 afterVelocity = Projectile.velocity;
-				var electric = new ElectricCurrent
+				Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(3f)).RotatedByRandom(MathHelper.TwoPi);
+				var blood = new IchorSplash
 				{
-					velocity = afterVelocity * mulVelocity,
+					velocity = afterVelocity * mulVelocity + Projectile.velocity * Main.rand.NextFloat(0.17f),
 					Active = true,
 					Visible = true,
-					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * MathF.Sqrt(Main.rand.NextFloat(1f)) * 6f,
-					maxTime = size * size / 8f,
-					scale = size,
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size, Main.rand.NextFloat(0.2f, Main.rand.NextFloat(0.2f, 0.4f)) }
+					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0, 8f),
+					maxTime = Main.rand.Next(6, 32),
+					scale = Main.rand.NextFloat(6f, 12f),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 }
 				};
-				Ins.VFXManager.Add(electric);
+				Ins.VFXManager.Add(blood);
 			}
 		}
 		public override void PostDraw(Color lightColor)
@@ -127,9 +114,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			Dust d = Dust.NewDustDirect(target.Center, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
-			d.scale = Main.rand.NextFloat(0.85f, 1.15f) * 0.1f;
-			target.AddBuff(ModContent.BuffType<OnElectric>(), 180);
+			target.AddBuff(BuffID.Ichor, 600);
 			base.OnHitNPC(target, hit, damageDone);
 		}
 	}

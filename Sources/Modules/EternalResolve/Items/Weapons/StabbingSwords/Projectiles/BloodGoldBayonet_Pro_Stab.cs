@@ -1,8 +1,7 @@
 using Everglow.Commons.Weapons.StabbingSwords;
+using Everglow.Commons.Weapons.StabbingSwords.VFX;
 using Everglow.EternalResolve.Buffs;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
-using Everglow.Myth.Common;
-using Everglow.Myth.TheFirefly.Buffs;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
@@ -25,9 +24,32 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			base.DrawEffect(lightColor);
 		}
+		public override void GenerateVFXWhenSpawn(Vector2 velocity)
+		{
+			//---特效
+
+			StabVFX v = new BloodGoldStabVFX()
+			{
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 140,
+				vel = velocity,
+				color = Color.Lerp(Color, Color.White, 0.2f),
+				scale = 10,
+				maxtime = 10,
+				timeleft = 10
+			};
+			Ins.VFXManager.Add(v);
+			v = new BloodGoldStabVFX()
+			{
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 70,
+				vel = velocity,
+				color = Color.Lerp(Color, Color.White, 0.4f),
+				scale = 15,
+			};
+			Ins.VFXManager.Add(v);
+		}
 		public override void AI()
 		{
-			if(Main.rand.NextBool(6))
+			if (Main.rand.NextBool(6))
 			{
 				Vector2 end = Projectile.Center + Projectile.velocity * 80 * MaxLength;
 				if (EndPos != Vector2.zeroVector)
@@ -42,7 +64,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			if(target.type != NPCID.TargetDummy)
+			if (target.type != NPCID.TargetDummy)
 			{
 				target.AddBuff(ModContent.BuffType<BloodDrinking>(), 180);
 			}
@@ -54,30 +76,30 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
 			base.PostDraw(npc, spriteBatch, screenPos, drawColor);
-			if(npc.HasBuff(ModContent.BuffType<BloodDrinking>()))
+			if (npc.HasBuff(ModContent.BuffType<BloodDrinking>()))
 			{
-				float light = 0;
-				float dark = 0;
-				for (int t = 0; t < 5; t++)
+				float light = 1;
+				float dark = 1;
+				int indexBuff = npc.FindBuffIndex(ModContent.BuffType<BloodDrinking>());
+				int restTime = npc.buffTime[indexBuff];
+				if (restTime < 30)
 				{
-					if (npc.buffType[t] == ModContent.BuffType<OnMoth>())
-					{
-						light = Math.Clamp((npc.buffTime[t] - 280) / 20f, 0, 1);
-						dark = Math.Clamp(npc.buffTime[t] / 120f, 0, 0.3f) * 0.5f;
-						break;
-					}
+					light = restTime / 30f;
+					dark = restTime / 6f;
 				}
 				Texture2D bloodMark = ModAsset.BloodDrinkingMark.Value;
 				Texture2D bloodMarkBlack = ModAsset.BloodDrinkingMark_dark.Value;
 				if (4f * npc.width * npc.height / 10300f * npc.scale > 1.5f)
 				{
-					spriteBatch.Draw(bloodMark, npc.Center - Main.screenPosition, null, new Color(light, light, light, 0), 0, bloodMark.Size(), 3f, SpriteEffects.None, 0f);
-					spriteBatch.Draw(bloodMarkBlack, npc.Center - Main.screenPosition, null, new Color(dark, dark, dark, 0), 0, bloodMark.Size(), 3f, SpriteEffects.None, 0f);
+					spriteBatch.Draw(bloodMarkBlack, npc.Center - Main.screenPosition, null, new Color(dark, dark, dark, dark), 0, bloodMark.Size() * 0.5f, 3f, SpriteEffects.None, 0f);
+					spriteBatch.Draw(bloodMark, npc.Center - Main.screenPosition, null, new Color(light, light, light, 0), 0, bloodMark.Size() * 0.5f, 3f, SpriteEffects.None, 0f);
+
 				}
 				else
 				{
-					spriteBatch.Draw(bloodMark, npc.Center - Main.screenPosition, null, new Color(light, light, light, 0), 0, bloodMark.Size(), 4f * npc.width * npc.height / 10300f * npc.scale * 2, SpriteEffects.None, 0f);
-					spriteBatch.Draw(bloodMarkBlack, npc.Center - Main.screenPosition, null, new Color(dark, dark, dark, 0), 0, bloodMark.Size(), 4f * npc.width * npc.height / 10300f * npc.scale * 2, SpriteEffects.None, 0f);
+					spriteBatch.Draw(bloodMarkBlack, npc.Center - Main.screenPosition, null, new Color(dark, dark, dark, dark), 0, bloodMark.Size() * 0.5f, 4f * npc.width * npc.height / 10300f * npc.scale * 2, SpriteEffects.None, 0f);
+					spriteBatch.Draw(bloodMark, npc.Center - Main.screenPosition, null, new Color(light, light, light, 0), 0, bloodMark.Size() * 0.5f, 4f * npc.width * npc.height / 10300f * npc.scale * 2, SpriteEffects.None, 0f);
+
 				}
 			}
 		}

@@ -2,7 +2,7 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.VFX;
+using Everglow.Commons.Weapons.StabbingSwords.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -66,7 +66,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		public int ToKill = 120;
 		public override void OnSpawn(IEntitySource source)
 		{
-			
+
 			Player player = Main.player[Projectile.owner];
 			Vector2 toMouse = Main.MouseWorld - player.RotatedRelativePoint(player.MountedCenter);
 			toMouse.Normalize();
@@ -142,10 +142,10 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		}
 		public override void AI()
 		{
-            Player player = Main.player[Projectile.owner];
+			Player player = Main.player[Projectile.owner];
 			ProduceWaterRipples(new Vector2(Projectile.velocity.Length(), 30));
 
-            if (Projectile.timeLeft <= 1)
+			if (Projectile.timeLeft <= 1)
 			{
 				ToKill--;
 				if (ToKill > 0)
@@ -173,20 +173,20 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 					player.legPosition = Vector2.Zero;
 				}
 			}
-            
-            if (ToKill >= 120)
+
+			if (ToKill >= 120)
 			{
-                Projectile.position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f + Projectile.velocity * (15 - Projectile.timeLeft) * 2;
-                Projectile.rotation = Projectile.velocity.ToRotation();
-                Projectile.spriteDirection = Projectile.direction;
-            }
+				Projectile.position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f + Projectile.velocity * (15 - Projectile.timeLeft) * 2;
+				Projectile.rotation = Projectile.velocity.ToRotation();
+				Projectile.spriteDirection = Projectile.direction;
+			}
 			else
 			{
 
 				Projectile.extraUpdates = 24;
 			}
 			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
-			if (!Collision.CanHitLine(StartCenter,1,1,end,1,1))
+			if (!Collision.CanHitLine(StartCenter, 1, 1, end, 1, 1))
 			{
 				if (EndPos == Vector2.zeroVector)
 				{
@@ -195,10 +195,10 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 				}
 			}
 		}
-		public virtual void HitTile() 
+		public virtual void HitTile()
 		{
 			SoundStyle ss = SoundID.NPCHit4;
-			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);	
+			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
 			for (int g = 0; g < 20; g++)
 			{
 				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(MathHelper.TwoPi);
@@ -246,15 +246,15 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		public virtual void DrawEffect(Color lightColor)
 		{
 
-            Vector2 normalized =Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 50 * ToKill / 120f * DrawWidth;
+			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 50 * ToKill / 120f * DrawWidth;
 			Vector2 start = StartCenter;
 			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
-			if(EndPos != Vector2.Zero)
+			if (EndPos != Vector2.Zero)
 			{
 				end = EndPos;
 			}
-            float value = (Projectile.timeLeft + ToKill) / 135f;
-            Vector2 middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
+			float value = (Projectile.timeLeft + ToKill) / 135f;
+			Vector2 middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
 			float time = (float)(Main.time * 0.03);
 			float dark = MathF.Sin(value * MathF.PI) * 4;
 			List<Vertex2D> bars = new List<Vertex2D>
@@ -369,7 +369,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 				new Vertex2D(end - Main.screenPosition,alphaColor,new Vector3(0f + time, 0.5f, 1)),
 				new Vertex2D(end - Main.screenPosition,alphaColor,new Vector3(0f + time, 0.5f, 1))
 			};
-			sb.Draw(ModAsset.Trail_1.Value,bars, PrimitiveType.TriangleStrip);
+			sb.Draw(ModAsset.Trail_1.Value, bars, PrimitiveType.TriangleStrip);
 		}
 	}
 }
