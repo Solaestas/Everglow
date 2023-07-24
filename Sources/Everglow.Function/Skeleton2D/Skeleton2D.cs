@@ -1,4 +1,3 @@
-using System.Drawing;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Terraria.GameContent;

@@ -1,0 +1,40 @@
+using Everglow.Commons.Weapons.StabbingSwords;
+using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
+
+namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
+{
+	//TODO:翻译
+	//i:命中后削弱目标1点防御力
+	//ii:延时一秒在命中处生成三道200%倍率的魔金剑光
+	//对于1个魔金刺剑,i效果和ii效果一秒最多触发一次,但是总数没有上限
+	//它会腐化你的骨髓
+	public class RottenGoldBayonet : StabbingSwordItem
+	{
+		internal int specialDelay = 0;
+		public override void SetDefaults()
+		{
+			Item.damage = 10;
+			Item.knockBack = 1.52f;
+			Item.rare = ItemRarityID.White;
+			Item.value = Item.sellPrice(0, 1, 0, 0);
+			Item.shoot = ModContent.ProjectileType<RottenGoldBayonet_Pro>();
+			PowerfulStabProj = 1;
+			base.SetDefaults();
+		}
+		public override void AddRecipes()
+		{
+			CreateRecipe().
+				AddIngredient(ItemID.DemoniteBar, 17).
+				AddTile(TileID.Anvils).
+				Register();
+			base.AddRecipes();
+		}
+		public override void UpdateInventory(Player player)
+		{
+			if (specialDelay > 0)
+			{
+				specialDelay--;
+			}
+		}
+	}
+}

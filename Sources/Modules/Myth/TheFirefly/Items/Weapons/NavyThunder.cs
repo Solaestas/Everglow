@@ -1,4 +1,4 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
@@ -6,13 +6,11 @@ public class NavyThunder : ModItem
 {
 	public override void SetStaticDefaults()
 	{
-		
 		Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(6, 5));
 	}
 
 	public override void SetDefaults()
 	{
-		
 		Item.damage = 78;
 		Item.DamageType = DamageClass.Magic;
 		Item.mana = 10;
@@ -35,7 +33,10 @@ public class NavyThunder : ModItem
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
 		if (player.ownedProjectileCounts[type] > 0)
+		{
 			return false;
+		}
+
 		return true;
 	}
 }

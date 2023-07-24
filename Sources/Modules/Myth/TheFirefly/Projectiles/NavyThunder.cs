@@ -1,4 +1,3 @@
-﻿using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 
@@ -14,78 +13,92 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 		Projectile.height = 84;
 		Projectile.friendly = false;
 		Projectile.hostile = false;
-		Projectile.timeLeft = 90000;
+		Projectile.timeLeft = 10;
 		Projectile.tileCollide = false;
 		Projectile.DamageType = DamageClass.Magic;
 	}
-
-	private bool Release = true;
-	private Vector2 oldPo = Vector2.Zero;
-	private int addi = 0;
-
 	public override void AI()
 	{
-		addi++;
-		Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
-		if (Main.mouseLeft && Release)
+		ref float ai0 = ref Projectile.ai[0];
+		ref float ai1 = ref Projectile.ai[1];
+
+		Player player = Main.player[Projectile.owner];
+		Projectile.frame = (int)(Main.timeForVisualEffects % 25 / 5f);
+		Projectile.Center = Projectile.Center * 0.7f + player.Center * 0.3f;
+
+		// 面朝方向 X 轴偏移
+		Projectile.position.X += player.direction * 32 * 0.3f;
+		Projectile.position.Y += -22 * player.gravDir * (float)(1.2 + Math.Sin(Main.time / 18d) / 8d) * 0.3f;
+
+		// 防止玩家移动的时候，弹幕贴脸，XY 轴都会因为移动一点点，但是不会很多
+		Projectile.position += player.velocity * 0.7f;
+		Projectile.position -= Vector2.Clamp(player.velocity * 0.1f, new Vector2(-10), new Vector2(10));
+
+		Projectile.spriteDirection = player.direction;
+		Projectile.velocity *= 0;
+
+		if (!player.controlUseItem)
 		{
-			Player player = Main.player[Projectile.owner];
-			Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 32, -22 * player.gravDir * (float)(1.2 + Math.Sin(Main.time / 18d) / 8d))) * 0.3f;
-			Projectile.spriteDirection = player.direction;
-			Projectile.velocity *= 0;
-		}
-		if (!Main.mouseLeft && Release)
-		{
-			if (Projectile.ai[1] > 0)
+			if (ai1 > 0)
 			{
-				Projectile.ai[0] *= 0.9f;
-				Projectile.ai[1] -= 1f;
-				Projectile.Center = Main.player[Projectile.owner].MountedCenter + Vector2.Normalize(v0).RotatedBy(Projectile.ai[0] / 4d) * (8f - Projectile.ai[0] * 4);
+				ai0 *= 0.9f;
+				ai1 -= 1f;
+				Vector2 toMouse = Main.MouseWorld - player.MountedCenter;
+				Projectile.Center = player.MountedCenter + Vector2.Normalize(toMouse).RotatedBy(ai0 / 4d) * (8f - ai0 * 4);
 			}
 			else
 			{
-				if (Projectile.timeLeft > 21)
-					Projectile.timeLeft = 20;
+				if (Projectile.timeLeft > player.itemTime + 1)
+				{
+					Projectile.timeLeft = player.itemTime;
+				}
 				for (int j = 0; j < 16; j++)
 				{
-					Vector2 v1 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale;
-					int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<MothSmog>(), v1.X, v1.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * 0.13f);
-					Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 0.3);
-					Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+					Vector2 velocity = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale;
+					Dust dust = Dust.NewDustDirect(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<MothSmog>(), 0, 0, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * 0.13f);
+					dust.alpha = (int)(dust.scale * 0.3);
+					dust.rotation = Main.rand.NextFloat(0, 6.283f);
+					dust.velocity = velocity;
 				}
 			}
 		}
-		if (Main.player[Projectile.owner].itemTime == 2)
+		else
+		{
+			Projectile.timeLeft = player.itemTime;
+		}
+		if (Projectile.timeLeft == 2)
+		{
 			Shoot();
+		}
 	}
 
 	private void Shoot()
 	{
 		SoundEngine.PlaySound(SoundID.DD2_FlameburstTowerShot, Projectile.Center);
 		Player player = Main.player[Projectile.owner];
-		var v0 = new Vector2(Math.Sign((Main.MouseWorld - Main.player[Projectile.owner].MountedCenter).X), 0.6f * player.gravDir);
-		Vector2 ShootCenter = Projectile.Center + new Vector2(0, 16f * player.gravDir);
+		var shootVelocity = new Vector2(Math.Sign((Main.MouseWorld - Main.player[Projectile.owner].MountedCenter).X), 0.6f * player.gravDir);
+		Vector2 shootCenter = Projectile.Center + new Vector2(0, 16f * player.gravDir);
 		ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 2).RotatedByRandom(6.283);
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), ShootCenter, v0 * 3, ModContent.ProjectileType<NavyThunderBomb>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 0, 0);
-		Vector2 newVelocity = v0;
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), shootCenter, shootVelocity * 3, ModContent.ProjectileType<NavyThunderBomb>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 0, 0);
+		Vector2 newVelocity = shootVelocity;
 		newVelocity *= 1f - Main.rand.NextFloat(0.3f);
 		newVelocity *= 2f;
 
 		for (int j = 0; j < 30; j++)
 		{
-			Vector2 v = newVelocity / 27f * j;
-			Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
-			int num20 = Dust.NewDust(ShootCenter, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v1.X, v1.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * 0.4f);
-			Main.dust[num20].noGravity = true;
+			Vector2 baseVelocity = newVelocity / 27f * j;
+			Vector2 velocity = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + baseVelocity;
+			Dust dust = Dust.NewDustDirect(shootCenter, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), velocity.X, velocity.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * 0.4f);
+			dust.noGravity = true;
 		}
 		for (int j = 0; j < 30; j++)
 		{
-			Vector2 v = newVelocity / 54f * j;
-			Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
+			Vector2 baseVelocity = newVelocity / 54f * j;
+			Vector2 velocity = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + baseVelocity;
 			float Scale = Main.rand.NextFloat(3.7f, 5.1f);
-			int num21 = Dust.NewDust(ShootCenter + new Vector2(4, 4.5f), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v1.X, v1.Y, 100, default, Scale);
-			Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
+			Dust dust = Dust.NewDustDirect(shootCenter + new Vector2(4, 4.5f), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), velocity.X, velocity.Y, 100, default, Scale);
+			dust.alpha = (int)(dust.scale * 50);
 		}
 	}
 
@@ -96,71 +109,44 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 
 	public override void PostDraw(Color lightColor)
 	{
-		if (!Release)
-			return;
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
-		Vector2 v0 = Projectile.Center - player.MountedCenter;
-		if (Main.mouseLeft)
-			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
-
-		Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/NavyThunderTex/FlameSkull");
-		Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/NavyThunderTex/FlameSkullGlow");
-
-		Projectile.frame = (int)(addi % 25 / 5f);
-		var DrawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
-
-		Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
-		SpriteEffects se = SpriteEffects.None;
-		if (player.direction == 1)
-			se = SpriteEffects.FlipHorizontally;
-
-		Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition, DrawRect, drawColor, Projectile.rotation, new Vector2(27, 42), 1f, se, 0);
-		Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition, DrawRect, new Color(255, 255, 255, 0), Projectile.rotation, new Vector2(27, 42), 1f, se, 0);
-	}
-
-	public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
-	{
-		float Wid = 6f;
-		Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
-
-		var vertex2Ds = new List<Vertex2D>();
-
-		for (int x = 0; x < 3; x++)
+		Vector2 toProjectile = Projectile.Center - player.MountedCenter;
+		
+		if (player.controlUseItem)
 		{
-			float Value0 = (float)(Main.time / 291d + 20) % 1f;
-			float Value1 = (float)(Main.time / 291d + 20.03) % 1f;
-			vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
-
-			vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 1, 0)));
-			vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
+			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(toProjectile.Y, toProjectile.X) - Math.PI / 2d));
 		}
 
-		Main.graphics.GraphicsDevice.Textures[0] = tex;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
-	}
+		Texture2D texMain = ModAsset.FlameSkull.Value;
+		Texture2D texMainG = ModAsset.FlameSkullGlow.Value;
 
+		var drawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
+
+		Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
+		SpriteEffects effect = SpriteEffects.None;
+		if (player.direction == 1)
+			effect = SpriteEffects.FlipHorizontally;
+		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition, drawRect, drawColor, Projectile.rotation, drawRect.Size() / 2f, 1f, effect, 0);
+		Main.spriteBatch.Draw(texMainG, Projectile.Center - Main.screenPosition, drawRect, new Color(255, 255, 255, 0), Projectile.rotation, drawRect.Size() / 2f, 1f, effect, 0);
+	}
 	public void DrawWarp(VFXBatch sb)
 	{
-		if (!Release)
-			return;
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
-		Vector2 v0 = Projectile.Center - player.MountedCenter;
-		if (Main.mouseLeft)
-			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
+		Vector2 toProjectile = Projectile.Center - player.MountedCenter;
 
-		Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/NavyThunderTex/FlameSkullWarp");
+		if (player.controlUseItem)
+		{
+			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(toProjectile.Y, toProjectile.X) - Math.PI / 2d));
+		}
 
-		Projectile.frame = (int)(addi % 25 / 5f);
-		var DrawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
+		Texture2D texMainG = ModAsset.FlameSkullWarp.Value;
+		var drawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
 
-		SpriteEffects se = SpriteEffects.None;
+		SpriteEffects effect = SpriteEffects.None;
 		if (player.direction == 1)
-			se = SpriteEffects.FlipHorizontally;
-		sb.Draw(TexMainG, Projectile.Center - Main.screenPosition, DrawRect, new Color(0.3f, 0.3f, 0.2f, 0), Projectile.rotation, new Vector2(27, 42), 1f, se);
+			effect = SpriteEffects.FlipHorizontally;
+		sb.Draw(texMainG, Projectile.Center - Main.screenPosition, drawRect, new Color(0.3f, 0.3f, 0.2f, 0), Projectile.rotation, drawRect.Size() / 2f, 1f, effect);
 	}
 }

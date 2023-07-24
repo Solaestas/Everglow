@@ -226,7 +226,7 @@ internal class RopeManager
 		sb.End();
 		sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
 				Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
-		Texture2D dropTexture = TwilightForestContent.QuickTexture("Tiles/TwilightTree");
+		Texture2D dropTexture = ModAsset.TwilightTree.Value;
 
 		var bars = new List<Vertex2D>();
 		for (int i = 0; i < ropes.Count; i++)
