@@ -28,8 +28,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		public int stabCDMax = 30;
 		public float staminaCost = 1f;
 		public override void UpdateInventory(Player player)
-		{
-			
+		{		
 			if (stabCD > 0)
 				stabCD--;
 			else

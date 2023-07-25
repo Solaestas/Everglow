@@ -32,6 +32,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		}
 		public override void UpdateInventory(Player player)
 		{
+			base.UpdateInventory(player);
 			if (specialDelay > 360)
 			{
 				player.AddBuff(BuffID.Rabies, 2);
