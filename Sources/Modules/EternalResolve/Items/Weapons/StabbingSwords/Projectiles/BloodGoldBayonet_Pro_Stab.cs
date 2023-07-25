@@ -1,3 +1,4 @@
+using Everglow.Commons.Coroutines;
 using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.Commons.Weapons.StabbingSwords.VFX;
 using Everglow.EternalResolve.Buffs;
@@ -24,28 +25,36 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			base.DrawEffect(lightColor);
 		}
-		public override void GenerateVFXWhenSpawn(Vector2 velocity)
+		public override IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)
 		{
-			//---特效
-
+			yield return new WaitForFrames(45);
 			StabVFX v = new BloodGoldStabVFX()
 			{
-				pos = Projectile.Center + Projectile.velocity * MaxLength * 140,
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
 				vel = velocity,
-				color = Color.Lerp(Color, Color.White, 0.2f),
-				scale = 10,
+				color = Color * 0.4f,
+				scale = 25,
 				maxtime = 10,
 				timeleft = 10
 			};
-			Ins.VFXManager.Add(v);
+			if (EndPos == Vector2.Zero)
+			{
+				Ins.VFXManager.Add(v);
+			}
+			yield return new WaitForFrames(40);
 			v = new BloodGoldStabVFX()
 			{
-				pos = Projectile.Center + Projectile.velocity * MaxLength * 70,
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
 				vel = velocity,
-				color = Color.Lerp(Color, Color.White, 0.4f),
+				color = Color * 0.4f,
 				scale = 15,
+				maxtime = 10,
+				timeleft = 10
 			};
-			Ins.VFXManager.Add(v);
+			if (EndPos == Vector2.Zero)
+			{
+				Ins.VFXManager.Add(v);
+			}
 		}
 		public override void AI()
 		{
@@ -89,7 +98,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				}
 				Texture2D bloodMark = ModAsset.BloodDrinkingMark.Value;
 				Texture2D bloodMarkBlack = ModAsset.BloodDrinkingMark_dark.Value;
-				if (4f * npc.width * npc.height / 10300f * npc.scale > 1.5f)
+				if (4f * npc.width * npc.height / 5000f * npc.scale > 1.5f)
 				{
 					spriteBatch.Draw(bloodMarkBlack, npc.Center - Main.screenPosition, null, new Color(dark, dark, dark, dark), 0, bloodMark.Size() * 0.5f, 3f, SpriteEffects.None, 0f);
 					spriteBatch.Draw(bloodMark, npc.Center - Main.screenPosition, null, new Color(light, light, light, 0), 0, bloodMark.Size() * 0.5f, 3f, SpriteEffects.None, 0f);
@@ -97,8 +106,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				}
 				else
 				{
-					spriteBatch.Draw(bloodMarkBlack, npc.Center - Main.screenPosition, null, new Color(dark, dark, dark, dark), 0, bloodMark.Size() * 0.5f, 4f * npc.width * npc.height / 10300f * npc.scale * 2, SpriteEffects.None, 0f);
-					spriteBatch.Draw(bloodMark, npc.Center - Main.screenPosition, null, new Color(light, light, light, 0), 0, bloodMark.Size() * 0.5f, 4f * npc.width * npc.height / 10300f * npc.scale * 2, SpriteEffects.None, 0f);
+					spriteBatch.Draw(bloodMarkBlack, npc.Center - Main.screenPosition, null, new Color(dark, dark, dark, dark), 0, bloodMark.Size() * 0.5f, 4f * npc.width * npc.height / 5000f * npc.scale * 2, SpriteEffects.None, 0f);
+					spriteBatch.Draw(bloodMark, npc.Center - Main.screenPosition, null, new Color(light, light, light, 0), 0, bloodMark.Size() * 0.5f, 4f * npc.width * npc.height / 5000f * npc.scale * 2, SpriteEffects.None, 0f);
 
 				}
 			}

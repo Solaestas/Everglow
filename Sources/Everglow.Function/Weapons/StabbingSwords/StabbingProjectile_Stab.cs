@@ -1,3 +1,4 @@
+using Everglow.Commons.Coroutines;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
@@ -47,6 +48,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		/// 表示刺剑攻击长度,标准长度1
 		/// </summary>
 		public float MaxLength = 1f;
+		private CoroutineManager _coroutineManager = new CoroutineManager();
 		public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
 		public override void SetDefaults()
 		{
@@ -58,6 +60,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			Projectile.penetrate = -1;
 			Projectile.timeLeft = 15;
 			Projectile.extraUpdates = 5;
+			//Projectile.extraUpdates = 0;
 			Projectile.tileCollide = false;
 			Projectile.ArmorPenetration = 20;
 		}
@@ -80,8 +83,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			}
 			Projectile.velocity = toMouse;
 
-
-			GenerateVFXWhenSpawn(toMouse);
+			_coroutineManager.StartCoroutine(new Coroutine(Generate3DRingVFX(toMouse)));
 
 			/*
             for (int i=0;i<10;i++)
@@ -100,29 +102,6 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			SoundEngine.PlaySound(ss, Projectile.Center);
 			StartCenter = Projectile.Center;
 		}
-		public virtual void GenerateVFXWhenSpawn(Vector2 velocity)
-		{
-			//---特效
-
-			StabVFX v = new StabVFX()
-			{
-				pos = Projectile.Center + Projectile.velocity * MaxLength * 140,
-				vel = velocity,
-				color = Color.Lerp(Color, Color.White, 0.2f),
-				scale = 10,
-				maxtime = 10,
-				timeleft = 10
-			};
-			Ins.VFXManager.Add(v);
-			v = new StabVFX()
-			{
-				pos = Projectile.Center + Projectile.velocity * MaxLength * 70,
-				vel = velocity,
-				color = Color.Lerp(Color, Color.White, 0.4f),
-				scale = 15,
-			};
-			Ins.VFXManager.Add(v);
-		}
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
 			float point = 0;
@@ -140,11 +119,46 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			}
 			return false;
 		}
+		/// <summary>
+		/// 用协程管理环状特效
+		/// </summary>
+		/// <returns></returns>
+		public virtual IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)
+		{
+			yield return new WaitForFrames(40);
+			StabVFX v = new StabVFX()
+			{
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
+				vel = velocity,
+				color = Color.Lerp(Color, Color.Transparent, 0.4f),
+				scale = 26,
+				maxtime = (int)(240 / (float)(Projectile.extraUpdates + 1)),
+				timeleft = (int)(240 / (float)(Projectile.extraUpdates + 1))
+			};
+			if (EndPos == Vector2.Zero)
+			{
+				Ins.VFXManager.Add(v);
+			}
+			yield return new WaitForFrames(40);
+			v = new StabVFX()
+			{
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
+				vel = velocity,
+				color = Color.Lerp(Color, Color.Transparent, 0.56f),
+				scale = 15,
+				maxtime = (int)(240 / (float)(Projectile.extraUpdates + 1)),
+				timeleft = (int)(240 / (float)(Projectile.extraUpdates + 1))
+			};
+			if (EndPos == Vector2.Zero)
+			{
+				Ins.VFXManager.Add(v);
+			}
+		}
 		public override void AI()
 		{
 			Player player = Main.player[Projectile.owner];
 			ProduceWaterRipples(new Vector2(Projectile.velocity.Length(), 30));
-
+			_coroutineManager.Update();
 			if (Projectile.timeLeft <= 1)
 			{
 				ToKill--;
@@ -182,8 +196,8 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			}
 			else
 			{
-
 				Projectile.extraUpdates = 24;
+				//Projectile.extraUpdates = 0;
 			}
 			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
 			if (!Collision.CanHitLine(StartCenter, 1, 1, end, 1, 1))

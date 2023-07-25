@@ -3,25 +3,24 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.Commons.Weapons.StabbingSwords.VFX;
-using Everglow.EternalResolve.Buffs;
-using SteelSeries.GameSense;
+using Everglow.EternalResolve.VFXs;
 using Terraria.Audio;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-	public class YoenLeZed_Pro_Stab : StabbingProjectile_Stab
+	public class CurseFlameStabbingSword_Pro_Stab : StabbingProjectile_Stab
 	{
 		public override void SetDefaults()
 		{
-			Color = new Color(100, 180, 255);
+			Color = new Color(87, 224, 0);
 			base.SetDefaults();
-			TradeShade = 0.2f;
-			Shade = 0.2f;
+			TradeShade = 0.9f;
+			Shade = 0.9f;
 			FadeTradeShade = 0.74f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.8f;
-			MaxLength = 1.15f;
+			MaxLength = 1.9f;
 			DrawWidth = 0.4f;
 		}
 		public override IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)
@@ -32,9 +31,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
 				vel = velocity,
 				color = Color.Lerp(Color, Color.White, 0.2f),
-				scale = 30,
-				maxtime = 10,
-				timeleft = 10
+				scale = 40,
+				maxtime = (int)(220 / (float)(Projectile.extraUpdates + 1)),
+				timeleft = (int)(220 / (float)(Projectile.extraUpdates + 1))
 			};
 			if (EndPos == Vector2.Zero)
 			{
@@ -46,9 +45,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
 				vel = velocity,
 				color = Color.Lerp(Color, Color.White, 0.4f),
-				scale = 15,
-				maxtime = 10,
-				timeleft = 10
+				scale = 25,
+				maxtime = (int)(144 / (float)(Projectile.extraUpdates + 1)),
+				timeleft = (int)(144 / (float)(Projectile.extraUpdates + 1))
 			};
 			if (EndPos == Vector2.Zero)
 			{
@@ -154,82 +153,74 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			}
 		}
-        public void GenerateVFX(int Frequency)
-        {
-            float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
-            for (int g = 0; g < Frequency; g++)
-            {
-                float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(8f, 16f));
-                Vector2 afterVelocity = Projectile.velocity;
-                var electric = new ElectricCurrent
-                {
-                    velocity = afterVelocity * mulVelocity,
-                    Active = true,
-                    Visible = true,
-                    position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
-                    maxTime = size * size / 8f,
-                    scale = size,
-                    ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size / 2, 0 }
-                };
-                Ins.VFXManager.Add(electric);
-            }
-        }
-        public void SplitVFX(int Frequency)
-        {
-            float mulVelocity = 1f;
-            for (int g = 0; g < Frequency; g++)
-            {
-                float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(4f, 10f));
-                Vector2 afterVelocity = Projectile.velocity*10;
-                var electric = new ElectricCurrent
-                {
-                    velocity = afterVelocity * mulVelocity,
-                    Active = true,
-                    Visible = true,
-                    position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * MathF.Sqrt(Main.rand.NextFloat(1f)) * 10,
-                    maxTime = size * size / 8f,
-                    scale = size,
-                    ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size, Main.rand.NextFloat(0.2f, Main.rand.NextFloat(0.2f, 0.4f)) }
-                };
-                Ins.VFXManager.Add(electric);
-            }
-        }
-        public override void AI()
+		public void GenerateVFX(int Frequency)
 		{
-            //GenerateVFX(1);
-            if(Main.rand.NextBool(2))
-			SplitVFX(1);
-			Lighting.AddLight(Projectile.Center,new Vector3(0.5f,0.8f,1f)*(ToKill/120f));
+			float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
+			for (int g = 0; g < Frequency; g++)
+			{
+				Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 7f)).RotatedByRandom(MathHelper.TwoPi);
+				var fire = new CurseFlameDust
+				{
+					velocity = newVelocity,
+					Active = true,
+					Visible = true,
+					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(70f),
+					maxTime = Main.rand.Next(16, 55) * (ToKill / 200f),
+					scale = Main.rand.NextFloat(20f, 60f),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, 1f }
+				};
+				Ins.VFXManager.Add(fire);
+			}
+			for (int g = 0; g < Frequency * 2; g++)
+			{
+				Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi) + Projectile.velocity * Main.rand.NextFloat(12f);
+				var spark = new CurseFlameSparkDust
+				{
+					velocity = newVelocity,
+					Active = true,
+					Visible = true,
+					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(120f),
+					maxTime = Main.rand.Next(37, 145) * (ToKill / 200f),
+					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 17.0f)),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f) }
+				};
+				Ins.VFXManager.Add(spark);
+			}
+		}
+		public override void AI()
+		{
+			if (Main.rand.NextBool(9))
+				GenerateVFX(1);
+			Lighting.AddLight(Projectile.Center, new Vector3(1f, 0.7f, 0) * (ToKill / 120f));
 			base.AI();
 		}
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			Dust d = Dust.NewDustDirect(target.Center, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
-			d.scale = Main.rand.NextFloat(0.85f, 1.15f) * 0.1f;
-			target.AddBuff(ModContent.BuffType<OnElectric>(), 240);
+			target.AddBuff(BuffID.CursedInferno, 600);
 			base.OnHitNPC(target, hit, damageDone);
 		}
 		public override void HitTile()
 		{
-			base.HitTile();
-			float scale = (260 - (EndPos - StartCenter).Length()) / 9f;
+			SoundStyle ss = SoundID.NPCHit4;
+			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
 			for (int g = 0; g < 20; g++)
 			{
-				float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(8f, 16f));
-				Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(12, 15)).RotatedByRandom(6.283);
-				var electric = new ElectricCurrent
+				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(MathHelper.TwoPi);
+				var spark = new Spark_CursedStabDust
 				{
-					velocity = afterVelocity * scale * 0.06f,
+					velocity = newVelocity,
 					Active = true,
 					Visible = true,
-					position = EndPos + Vector2.Normalize(StartCenter - EndPos) * 20,
-					maxTime = size * size / 8f,
-					scale = size,
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size / 2, 0 }
+					position = EndPos,
+					maxTime = Main.rand.Next(1, 25),
+					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(0.1f, 17.0f)),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.13f, 0.13f) }
 				};
-				Ins.VFXManager.Add(electric);
+				Ins.VFXManager.Add(spark);
 			}
-			Projectile.NewProjectile(Projectile.GetSource_FromAI(), EndPos, Vector2.zeroVector, ModContent.ProjectileType<YoenLeZed_Pro_Stab_HitTile>(), 1, 0, Projectile.owner, scale);
 		}
 	}
 }

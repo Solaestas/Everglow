@@ -39,7 +39,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			{
 				return false;
 			}
-			player.Hurt(PlayerDeathReason.ByPlayerItem(0, Item), 15, 1, false, true, false, 0);
+			player.Hurt(PlayerDeathReason.ByPlayerItem(0, Item), 15, 0, false, true, false, 0);
 			return true;
 		}
 		public override void AddRecipes()

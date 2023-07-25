@@ -1,3 +1,4 @@
+using Everglow.Commons.Coroutines;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Commons.Weapons.StabbingSwords;
@@ -22,26 +23,36 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			MaxLength = 1.40f;
 			DrawWidth = 0.4f;
 		}
-		public override void GenerateVFXWhenSpawn(Vector2 velocity)
+		public override IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)
 		{
+			yield return new WaitForFrames(40);
 			StabVFX v = new SelfLightingStabVFX()
 			{
-				pos = Projectile.Center + Projectile.velocity * MaxLength * 140,
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
 				vel = velocity,
 				color = Color.Lerp(Color, Color.White, 0.2f),
-				scale = 20,
+				scale = 30,
 				maxtime = 10,
 				timeleft = 10
 			};
-			Ins.VFXManager.Add(v);
+			if (EndPos == Vector2.Zero)
+			{
+				Ins.VFXManager.Add(v);
+			}
+			yield return new WaitForFrames(40);
 			v = new SelfLightingStabVFX()
 			{
-				pos = Projectile.Center + Projectile.velocity * MaxLength * 70,
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
 				vel = velocity,
 				color = Color.Lerp(Color, Color.White, 0.4f),
-				scale = 30,
+				scale = 15,
+				maxtime = 10,
+				timeleft = 10
 			};
-			Ins.VFXManager.Add(v);
+			if (EndPos == Vector2.Zero)
+			{
+				Ins.VFXManager.Add(v);
+			}
 		}
 		public override void DrawEffect(Color lightColor)
 		{
@@ -144,16 +155,20 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void AI()
 		{
-			if (Main.rand.NextBool(2))
+			if (Main.rand.NextBool(4))
 				GenerateVFX(1);
 			Lighting.AddLight(Projectile.Center, new Vector3(1f, 0.8f, 0) * (ToKill / 120f));
-			Vector2 pos = Projectile.position + Projectile.velocity * Main.rand.NextFloat(0.4f, 160f);
-			Vector2 vel = Projectile.velocity * Main.rand.NextFloat(1f, 14f);
-			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))
+			Vector2 pos = Projectile.position + Projectile.velocity * Main.rand.NextFloat(0.4f, 80f);
+			Vector2 vel = Projectile.velocity * Main.rand.NextFloat(0f, 4f) + new Vector2(0, Main.rand.NextFloat(5f)).RotatedByRandom(6.283);
+			if (Main.rand.NextBool(4))
 			{
-				Dust dust = Dust.NewDustDirect(pos, Projectile.width, Projectile.height, ModContent.DustType<FlameShine>(), 0, 0, 0, default, Main.rand.NextFloat(0.35f, 2f) * (ToKill / 200f));
-				dust.velocity = vel;
+				if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))
+				{
+					Dust dust = Dust.NewDustDirect(pos, Projectile.width, Projectile.height, ModContent.DustType<FlameShine>(), 0, 0, 0, default, Main.rand.NextFloat(0.35f, 2f) * (ToKill / 200f));
+					dust.velocity = vel;
+				}
 			}
+
 			base.AI();
 		}
 		public void GenerateVFX(int Frequency)
@@ -190,7 +205,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 						velocity = newVelocity,
 						Active = true,
 						Visible = true,
-						position = Projectile.Center + Projectile.velocity * Main.rand.NextFloat(140, 160f) * (1 - ToKill / 140f),
+						position = Projectile.Center + Projectile.velocity * Main.rand.NextFloat(70, 100f) * (1 - ToKill / 140f),
 						maxTime = Main.rand.Next(6, 25) * (ToKill / 100f),
 						scale = Main.rand.NextFloat(10f, 50f) * (ToKill / 100f),
 						rotation = Main.rand.NextFloat(6.283f),

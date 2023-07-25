@@ -1,3 +1,4 @@
+using Everglow.Commons.Coroutines;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Commons.Weapons.StabbingSwords;
@@ -21,26 +22,36 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			MaxLength = 1.9f;
 			DrawWidth = 0.4f;
 		}
-		public override void GenerateVFXWhenSpawn(Vector2 velocity)
+		public override IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)
 		{
+			yield return new WaitForFrames(40);
 			StabVFX v = new SelfLightingStabVFX()
 			{
-				pos = Projectile.Center + Projectile.velocity * MaxLength * 140,
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
 				vel = velocity,
 				color = Color.Lerp(Color, Color.White, 0.2f),
-				scale = 20,
-				maxtime = 10,
-				timeleft = 10
+				scale = 30,
+				maxtime = (int)(240 / (float)(Projectile.extraUpdates + 1)),
+				timeleft = (int)(240 / (float)(Projectile.extraUpdates + 1))
 			};
-			Ins.VFXManager.Add(v);
+			if (EndPos == Vector2.Zero)
+			{
+				Ins.VFXManager.Add(v);
+			}
+			yield return new WaitForFrames(40);
 			v = new SelfLightingStabVFX()
 			{
-				pos = Projectile.Center + Projectile.velocity * MaxLength * 70,
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
 				vel = velocity,
 				color = Color.Lerp(Color, Color.White, 0.4f),
-				scale = 30,
+				scale = 15,
+				maxtime = (int)(240 / (float)(Projectile.extraUpdates + 1)),
+				timeleft = (int)(240 / (float)(Projectile.extraUpdates + 1))
 			};
-			Ins.VFXManager.Add(v);
+			if (EndPos == Vector2.Zero)
+			{
+				Ins.VFXManager.Add(v);
+			}
 		}
 		public override void DrawEffect(Color lightColor)
 		{
