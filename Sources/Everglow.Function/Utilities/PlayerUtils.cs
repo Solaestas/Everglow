@@ -13,7 +13,7 @@ public static class PlayerUtils
 		/*Dirty Octopus | 脏渔歌*/
 		"Dirty Octopus","脏渔歌",
 		/*u_silver | 新萌の绿草*/
-		"u_silver", "usilver", "新萌の绿草",
+		"u_silver", "usilver", "新萌の绿草", "Uin",
 		/*ju_zhang | 太阳照常升起*/
 		"ju_zhang","太阳照常升起","ju zhang",
 		/*ye_you | 夜谷紫幽*/
@@ -41,13 +41,13 @@ public static class PlayerUtils
 		/*Setnour6*/
 		"Setnour6",
 		/*Nomis*/
-		"Nomis",
+		"Nomis", "NomisPrime",
 		/*DomesticFoxcy*/
 		"DomesticFoxcy","DomesticFoxy",
 		/*Plantare*/
 		"Plantare", "世纪小花",
 		/* */
-		"青枫"
+		"青枫", "陌林", "京墨"
 		};
 
 		return devPlayerNames;
