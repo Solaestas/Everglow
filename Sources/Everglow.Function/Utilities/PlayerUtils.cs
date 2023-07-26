@@ -47,7 +47,7 @@ public static class PlayerUtils
 		/*Plantare*/
 		"Plantare", "世纪小花",
 		/* */
-		"青枫", "陌林", "京墨"
+		"青枫", "陌林", "京墨", "鸭子ceo"
 		};
 
 		return devPlayerNames;
