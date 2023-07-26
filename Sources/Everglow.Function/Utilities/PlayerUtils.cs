@@ -45,7 +45,9 @@ public static class PlayerUtils
 		/*DomesticFoxcy*/
 		"DomesticFoxcy","DomesticFoxy",
 		/*Plantare*/
-		"Plantare", "世纪小花"
+		"Plantare", "世纪小花",
+		/* */
+		"青枫"
 		};
 
 		return devPlayerNames;
