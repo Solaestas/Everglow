@@ -51,6 +51,7 @@ public class SquamousShell : ModNPC
 		while (NPC.velocity.Y != 0)
 		{
 			NPC.velocity.Y += 0.2f;
+			NPC.spriteDirection= 1;
 			yield return new SkipThisFrame();
 		}
 		//这里需要一个震屏

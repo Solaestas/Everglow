@@ -1553,6 +1553,10 @@ public class YggdrasilTownGeneration
 				Tile target = SafeGetTile(x, y);
 				target.HasTile = true;
 				target.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+				if(y <= startY + valueY - 6)
+				{
+					target.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+				}
 			}
 		}
 		int tunnelLength = GenRand.Next(487, 526);
@@ -1582,8 +1586,8 @@ public class YggdrasilTownGeneration
 			if(count > tunnelLength - 200)
 			{
 				float valueX = tunnelLength - count;
-				float deltaY = 80 - (valueX - 40) * (valueX - 40) / 50f;
-				deltaY += PerlinPixelB[(randX + count) % 512, randY];
+				float deltaY = 80 - (valueX - 100) * (valueX - 100) / 450f;
+				deltaY += PerlinPixelB[(randX + count) % 512, randY] / 90f;
 				for (int y = startY2 - (int)deltaY; y <= startY2; y++)
 				{
 					Tile target = SafeGetTile(x, y);
