@@ -375,7 +375,7 @@ namespace Everglow.Myth.TheMarbleRemains.NPCs.Bosses.EvilBottle
 						if (NPC.localAI[0] % 6 == 0)
 						{
 							Vector2 va = new Vector2(0, Main.rand.NextFloat(60f, 600f)).RotatedByRandom(Math.PI * 2d);
-							if (Main.tile[(int)((v8.X + va.X) / 16), (int)((v8.Y + va.Y) / 16)].active())
+							if (Main.tile[(int)((v8.X + va.X) / 16), (int)((v8.Y + va.Y) / 16)].HasTile)
 							{
 								va = new Vector2(0, Main.rand.NextFloat(60f, 900f)).RotatedByRandom(Math.PI * 2d);
 							}
@@ -749,11 +749,11 @@ namespace Everglow.Myth.TheMarbleRemains.NPCs.Bosses.EvilBottle
 				var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0));
 
 				// 把变换和所需信息丢给shader
-				//MythMod.DefaultEffectDarkRedGold.Parameters["uTransform"].SetValue(model * projection);
-				//MythMod.DefaultEffectDarkRedGold.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
-				//Main.graphics.GraphicsDevice.Textures[0] = MythMod.MainColorColdPurple;
-				//Main.graphics.GraphicsDevice.Textures[1] = MythMod.MainShape;
-				//Main.graphics.GraphicsDevice.Textures[2] = MythMod.MaskColor;
+				//MythEffectContent.DefaultEffectDarkRedGold.Parameters["uTransform"].SetValue(model * projection);
+				//MythEffectContent.DefaultEffectDarkRedGold.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
+				Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIImages/VisualTextures/heatmapColdPurple"); // Was heatmapDarkRedGold
+				Main.graphics.GraphicsDevice.Textures[1] = MythContent.QuickTexture("UIImages/VisualTextures/Lightline");
+				Main.graphics.GraphicsDevice.Textures[2] = MythContent.QuickTexture("UIImages/VisualTextures/FogTrace");
 				Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 				Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
 				Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
@@ -762,7 +762,7 @@ namespace Everglow.Myth.TheMarbleRemains.NPCs.Bosses.EvilBottle
 				//Main.graphics.GraphicsDevice.Textures[1] = Main.magicPixel;
 				//Main.graphics.GraphicsDevice.Textures[2] = Main.magicPixel;
 
-				//MythMod.DefaultEffectDarkRedGold.CurrentTechnique.Passes[0].Apply();
+				//MythEffectContent.DefaultEffectDarkRedGold.CurrentTechnique.Passes[0].Apply();
 
 
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);

@@ -142,23 +142,23 @@ namespace Everglow.Myth.TheMarbleRemains.NPCs.Bosses.EvilBottle
                     //Main.graphics.GraphicsDevice.RasterizerState = rasterizerState;
 
                     var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-                    var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0));
+                    var model = Matrix.CreateTranslation(screenPos.X, screenPos.Y, 0/*new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)*/);
 
                     // 把变换和所需信息丢给shader
                     //DefaultEffectDarkRedGold.Parameters["uTransform"].SetValue(model * projection);
-                    //DefaultEffectDarkRedGold.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
-					Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIImages/VisualTextures/heatmapDarkRedGold");
+					//DefaultEffectDarkRedGold.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
+					Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIImages/VisualTextures/heatmapColdPurple");
 					Main.graphics.GraphicsDevice.Textures[1] = MythContent.QuickTexture("UIImages/VisualTextures/Lightline");
 					Main.graphics.GraphicsDevice.Textures[2] = MythContent.QuickTexture("UIImages/VisualTextures/FogTrace");
 					Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
                     Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
                     Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
 
-                    //Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
-                    //Main.graphics.GraphicsDevice.Textures[1] = TextureAssets.MagicPixel.Value;
-                    //Main.graphics.GraphicsDevice.Textures[2] = TextureAssets.MagicPixel.Value;
+					//Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
+					//Main.graphics.GraphicsDevice.Textures[1] = TextureAssets.MagicPixel.Value;
+					//Main.graphics.GraphicsDevice.Textures[2] = TextureAssets.MagicPixel.Value;
 
-                    //DefaultEffectDarkRedGold.CurrentTechnique.Passes[0].Apply();
+					//DefaultEffectDarkRedGold.CurrentTechnique.Passes[0].Apply();
 
 
                     Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);

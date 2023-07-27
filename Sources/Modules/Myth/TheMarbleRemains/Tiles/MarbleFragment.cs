@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Everglow.Myth.TheMarbleRemains.NPCs.Bosses.EvilBottle;
 using Everglow.Myth.TheMarbleRemains.NPCs.Bosses.EvilBottle.Items;
 using Microsoft.Xna.Framework;
@@ -54,7 +54,7 @@ namespace Everglow.Myth.TheMarbleRemains.Tiles
         public override void PlaceInWorld(int i, int j, Item item)
         {
             short num = (short)(Main.rand.Next(0, 2));
-            Main.tile[i, j].frameX = (short)(num * 64);
+            Main.tile[i, j].TileFrameX = (short)(num * 64);
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {

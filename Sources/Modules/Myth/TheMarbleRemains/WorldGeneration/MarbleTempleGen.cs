@@ -1,4 +1,4 @@
-using Everglow.Myth.Common;
+﻿using Everglow.Myth.Common;
 using Everglow.Myth.TheMarbleRemains.Tiles;
 using Terraria.DataStructures;
 using Terraria.IO;
@@ -117,7 +117,7 @@ namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 									if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 									{
 										tile.WallType = 179;
-										tile.active(false);
+										tile.HasTile = false;
 									}
 								}
 								break;

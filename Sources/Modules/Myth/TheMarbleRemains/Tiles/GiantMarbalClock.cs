@@ -44,7 +44,7 @@ namespace Everglow.Myth.TheMarbleRemains.Tiles
             float P0 = Pos % 80 - 40;
             Vector2 v = new Vector2(P0, P0);
             float L = (float)Math.Sqrt(86 * 86 - v.Length() * v.Length()) - 18;
-            Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/NPCs/Bosses/EvilBottle/Tiles/GiantMarbalClockBack"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + Vector2.Zero + new Vector2(204, 204), new Rectangle(0, 0, 172, 172), color, 0f, new Vector2(86, 86), 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/Tiles/GiantMarbalClockBack"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + Vector2.Zero + new Vector2(204, 204), new Rectangle(0, 0, 172, 172), color, 0f, new Vector2(86, 86), 1f, SpriteEffects.None, 0f);
             for (int x = 0; x < 150; x += 8)
             {
                 for (int y = 0; y < 150; y += 8)
@@ -55,31 +55,31 @@ namespace Everglow.Myth.TheMarbleRemains.Tiles
                         float S = (float)(Math.Sqrt(Math.Sqrt((x - 75) * (x - 75) + (y - 75) * (y - 75)) + 0.05f)) / 12f;
                         if (colorP[x, y] != new Color(0, 0, 0))
                         {
-                            Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/NPCs/Bosses/EvilBottle/Tiles/GiantMarbalClockBackDot"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + new Vector2(204, 204) + new Vector2(x - 75, y - 75) * 1.2f, new Rectangle(0, 0, 16, 16), new Color(colorP[x, y].R * S / 255f, colorP[x, y].G * S / 255f, colorP[x, y].B * S / 255f, 0), 0, new Vector2(8, 8), 10f / (float)(Math.Sqrt(Math.Sqrt((x - 75) * (x - 75) + (y - 75) * (y - 75)) + 1)), SpriteEffects.None, 0f);
+                            Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/Tiles/GiantMarbalClockBackDot"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + new Vector2(204, 204) + new Vector2(x - 75, y - 75) * 1.2f, new Rectangle(0, 0, 16, 16), new Color(colorP[x, y].R * S / 255f, colorP[x, y].G * S / 255f, colorP[x, y].B * S / 255f, 0), 0, new Vector2(8, 8), 10f / (float)(Math.Sqrt(Math.Sqrt((x - 75) * (x - 75) + (y - 75) * (y - 75)) + 1)), SpriteEffects.None, 0f);
                             if ((x - 75) * (x - 75) + (y - 75) * (y - 75) < 1000)
                             {
                                 float Ro = 0;
                                 for (float u = colorP[x, y].R * S / 255f + colorP[x, y].G * S / 255f + colorP[x, y].B * S / 255f; u > 0; u -= 0.04f)
                                 {
                                     Ro += 0.05f;
-                                    Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/NPCs/Bosses/EvilBottle/Tiles/GiantMarbalClockBackDot"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + new Vector2(204, 204) - new Vector2(x - 75, y - 75).RotatedBy(Ro) * 2.4f, new Rectangle(0, 0, 16, 16), new Color(colorP[x, y].R * S / 255f, colorP[x, y].G * S / 255f, colorP[x, y].B * S / 255f, 0), 0, new Vector2(8, 8), 10f / (float)(Math.Sqrt(Math.Sqrt((x - 75) * (x - 75) + (y - 75) * (y - 75)) + 1)) * u, SpriteEffects.None, 0f);
-                                    Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/NPCs/Bosses/EvilBottle/Tiles/GiantMarbalClockBackDot"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + new Vector2(204, 204) - new Vector2(x - 75, y - 75).RotatedBy(-Ro) * 2.4f, new Rectangle(0, 0, 16, 16), new Color(colorP[x, y].R * S / 255f, colorP[x, y].G * S / 255f, colorP[x, y].B * S / 255f, 0), 0, new Vector2(8, 8), 10f / (float)(Math.Sqrt(Math.Sqrt((x - 75) * (x - 75) + (y - 75) * (y - 75)) + 1)) * u, SpriteEffects.None, 0f);
+                                    Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/Tiles/GiantMarbalClockBackDot"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + new Vector2(204, 204) - new Vector2(x - 75, y - 75).RotatedBy(Ro) * 2.4f, new Rectangle(0, 0, 16, 16), new Color(colorP[x, y].R * S / 255f, colorP[x, y].G * S / 255f, colorP[x, y].B * S / 255f, 0), 0, new Vector2(8, 8), 10f / (float)(Math.Sqrt(Math.Sqrt((x - 75) * (x - 75) + (y - 75) * (y - 75)) + 1)) * u, SpriteEffects.None, 0f);
+                                    Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/Tiles/GiantMarbalClockBackDot"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + new Vector2(204, 204) - new Vector2(x - 75, y - 75).RotatedBy(-Ro) * 2.4f, new Rectangle(0, 0, 16, 16), new Color(colorP[x, y].R * S / 255f, colorP[x, y].G * S / 255f, colorP[x, y].B * S / 255f, 0), 0, new Vector2(8, 8), 10f / (float)(Math.Sqrt(Math.Sqrt((x - 75) * (x - 75) + (y - 75) * (y - 75)) + 1)) * u, SpriteEffects.None, 0f);
                                 }
                             }
                         }
                     }
                 }
             }
-            /*for (int z = 0; z < L; z += 6)
+			/*for (int z = 0; z < L; z += 6)
             {
                 Main.spriteBatch.Draw(MythContent.QuickTexture("Tiles/GiantMarbalClockBackHalo"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + new Vector2(z / 1.4142135623731f, -z / 1.4142135623731f) + new Vector2(22, 22) + v + new Vector2(188, 188), new Rectangle(0, 0, 6, 24), color, (float)Math.PI * 0.75f, new Vector2(3, 3), 1f, SpriteEffects.None, 0f);
             }
             for (int z = 0; z < L; z += 6)
             {
-                Main.spriteBatch.Draw(MythContent.QuickTexture("Tiles/GiantMarbalClockBackHalo"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) - new Vector2(z / 1.4142135623731f, -z / 1.4142135623731f) + new Vector2(22, 22) + v + new Vector2(188, 188), new Rectangle(0, 0, 6, 24), color, (float)Math.PI * 0.75f, new Vector2(3, 3), 1f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/Tiles/GiantMarbalClockBackHalo"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) - new Vector2(z / 1.4142135623731f, -z / 1.4142135623731f) + new Vector2(22, 22) + v + new Vector2(188, 188), new Rectangle(0, 0, 6, 24), color, (float)Math.PI * 0.75f, new Vector2(3, 3), 1f, SpriteEffects.None, 0f);
             }*/
-            Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/NPCs/Bosses/EvilBottle/Tiles/GiantMarbalClockC"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + Vector2.Zero + new Vector2(204, 204), new Rectangle(0, 0, 172, 172), color, 0f, new Vector2(86, 86), 1f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/NPCs/Bosses/EvilBottle/Tiles/HourPin"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + Vector2.Zero + new Vector2(204, 204), new Rectangle(0, 0, 172, 172), color, Tiome / 12f, new Vector2(86, 86), 1f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/Tiles/GiantMarbalClockC"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + Vector2.Zero + new Vector2(204, 204), new Rectangle(0, 0, 172, 172), color, 0f, new Vector2(86, 86), 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/Tiles/HourPin"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + Vector2.Zero + new Vector2(204, 204), new Rectangle(0, 0, 172, 172), color, Tiome / 12f, new Vector2(86, 86), 1f, SpriteEffects.None, 0f);
             Color[] colorU = new Color[50];
             Vector2 vH = new Vector2(32, 0).RotatedBy(Tiome / 12f + Math.PI / 2d);
             for (int e = 0;e < 5;e++)
@@ -97,8 +97,8 @@ namespace Everglow.Myth.TheMarbleRemains.Tiles
                 HB += colorU[f].B;
             }
             Color C = new Color(HR / 1020f, HG / 1020f,HB / 1020f,0);
-            Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/NPCs/Bosses/EvilBottle/Tiles/HourPinGlow"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + Vector2.Zero + new Vector2(204, 204), new Rectangle(0, 0, 172, 172), C, Tiome / 12f, new Vector2(86, 86), 1f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/NPCs/Bosses/EvilBottle/Tiles/MinutePin"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + Vector2.Zero + new Vector2(204, 204), new Rectangle(0, 0, 172, 172), color, Tiome, new Vector2(86, 86), 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/Tiles/HourPinGlow"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + Vector2.Zero + new Vector2(204, 204), new Rectangle(0, 0, 172, 172), C, Tiome / 12f, new Vector2(86, 86), 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/Tiles/MinutePin"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + Vector2.Zero + new Vector2(204, 204), new Rectangle(0, 0, 172, 172), color, Tiome, new Vector2(86, 86), 1f, SpriteEffects.None, 0f);
             Color[] colorV = new Color[50];
             Vector2 vM = new Vector2(0, -32).RotatedBy(Tiome / 12f + Math.PI / 2d);
             for (int e = 0; e < 5; e++)
@@ -116,7 +116,7 @@ namespace Everglow.Myth.TheMarbleRemains.Tiles
                 MB += colorV[f].B;
             }
             Color C0 = new Color(MR / 1020f, MG / 1020f, MB / 1020f, 0);
-            Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/NPCs/Bosses/EvilBottle/Tiles/MinutePinGlow"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + Vector2.Zero + new Vector2(204, 204), new Rectangle(0, 0, 172, 172), C0, Tiome, new Vector2(86, 86), 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(MythContent.QuickTexture("TheMarbleRemains/Tiles/MinutePinGlow"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + Vector2.Zero + new Vector2(204, 204), new Rectangle(0, 0, 172, 172), C0, Tiome, new Vector2(86, 86), 1f, SpriteEffects.None, 0f);
         }
     }
 }
