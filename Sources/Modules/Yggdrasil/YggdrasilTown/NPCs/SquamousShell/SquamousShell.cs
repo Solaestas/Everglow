@@ -132,8 +132,36 @@ public class SquamousShell : ModNPC
 			NPC.position.Y -= 40f;
 		}
 		NPC.position.X += newDirection * 20;
+		_coroutineManager.StartCoroutine(new Coroutine(RollingARock(newDirection)));
+	}
+	private IEnumerator<ICoroutineInstruction> RollingARock(int direction)
+	{
+		Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction * 2, 0), ModContent.ProjectileType<Projectiles.SquamousRollingStone>(), 60, 6);
+		rock.scale = 0;
+		for(int x = 0;x < 100;x++)
+		{
+			NPC.rotation -= 0.05f;
+			rock.scale += 0.01f;
+			yield return new SkipThisFrame();
+		}
+
+
+	}
+	private IEnumerator<ICoroutineInstruction> NextAttack(int direction)
+	{
+		int newDirection = 1;
+		if (Main.player[NPC.target].Center.X < NPC.Center.X)
+		{
+			newDirection = -1;
+		}
+		if (newDirection == direction)
+		{
+			NPC.velocity.Y -= 16f;
+			NPC.position.Y -= 40f;
+		}
+		NPC.position.X += newDirection * 20;
 		_coroutineManager.StartCoroutine(new Coroutine(Rush(newDirection)));
-		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction * 2, 0), ModContent.ProjectileType<Projectiles.SquamousRollingStone>(), 60, 6);
+		yield break;
 	}
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
