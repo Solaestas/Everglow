@@ -21,15 +21,17 @@ namespace Everglow.Myth.TheFirefly.Items.Armors
 
 		public override void UpdateEquip(Player player)
 		{
-			player.buffImmune[BuffID.OnFire] = true;
+			player.buffImmune[BuffID.ManaSickness] = true; // Was BuffID.OnFire
 			player.statManaMax2 += 20;
 			player.maxMinions++;
 		}
 		public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient<GlowWood>(44);
-			recipe.AddIngredient<GlowingPedal>(22);
+			recipe.AddIngredient<GlowWood>(50);
+			recipe.AddIngredient<BlackStarShrub>(10);
+			recipe.AddIngredient<GlowingPedal>(15);
+			recipe.AddIngredient<FireflyMoss>(5);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.Register();
 		}
