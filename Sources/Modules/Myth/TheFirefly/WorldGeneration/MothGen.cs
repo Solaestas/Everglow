@@ -3,7 +3,6 @@ using Everglow.Myth.MagicWeaponsReplace.Items;
 using Everglow.Myth.TheFirefly.Pylon;
 using Everglow.Myth.TheFirefly.Tiles;
 using Everglow.Myth.TheFirefly.Walls;
-using Everglow.Commons.TileHelper;
 using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.ModLoader.Default;
@@ -738,7 +737,7 @@ public class MothLand : ModSystem
 						break;
 
 					case 6:
-						WorldGen.Place2x2(i - 1, j - 1, (ushort)ModContent.TileType<BlackFren>(), Main.rand.Next(3));
+						WorldGen.Place2x2Horizontal(i - 1, j - 1, (ushort)ModContent.TileType<BlackFren>(), Main.rand.Next(3));
 						break;
 
 					case 7:
@@ -746,7 +745,7 @@ public class MothLand : ModSystem
 						break;
 
 					case 8:
-						WorldGen.Place2x2(i - 1, j - 1, (ushort)ModContent.TileType<BlackFren>(), Main.rand.Next(3));
+						WorldGen.Place2x2Horizontal(i - 1, j - 1, (ushort)ModContent.TileType<BlackFren>(), Main.rand.Next(3));
 						break;
 
 					case 9:

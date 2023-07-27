@@ -65,7 +65,7 @@ public class BlueBlossom : ModTile, ITileFluentlyDrawn
 	{
 		var drawCenterPos = pos.ToWorldCoordinates(autoAddY: 16) - screenPosition;
 		DrawBlossomPiece(ModAsset.BlueBlossomDrawPath, pos, drawCenterPos, spriteBatch, tileDrawing);
-		DrawBlossomPiece(ModAsset.BlueBlossomGlowPath, pos, drawCenterPos, spriteBatch, tileDrawing, new Color(5, 5, 5, 0));
+		DrawBlossomPiece(ModAsset.BlueBlossomGlowPath, pos, drawCenterPos, spriteBatch, tileDrawing, new Color(15, 15, 15, 0));
 	}
 
 	/// <summary>
