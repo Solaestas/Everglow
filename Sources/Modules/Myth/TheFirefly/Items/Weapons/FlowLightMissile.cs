@@ -1,4 +1,4 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
@@ -16,8 +16,8 @@ public class FlowLightMissile : ModItem
 		Item.mana = 4;
 		Item.width = 60;
 		Item.height = 60;
-		Item.useTime = 7;
-		Item.useAnimation = 7;
+		Item.useTime = 21;
+		Item.useAnimation = 21;
 		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.noMelee = true;
 		Item.noUseGraphic = true;
