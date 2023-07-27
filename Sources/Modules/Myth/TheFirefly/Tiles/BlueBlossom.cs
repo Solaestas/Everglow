@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly;
 using Everglow.Myth.TheFirefly.Items;
 using Terraria.ObjectData;
@@ -32,15 +32,14 @@ public class BlueBlossom : ModTile
 	{
 		num = fail ? 1 : 3;
 	}
-
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		for (int x = 0; x < 5; x++)
-		{
-			Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<GlowingPedal>());
-		}
+		yield return new Item(ModContent.ItemType<GlowingPedal>());
+		yield return new Item(ModContent.ItemType<GlowingPedal>());
+		yield return new Item(ModContent.ItemType<GlowingPedal>());
+		yield return new Item(ModContent.ItemType<GlowingPedal>());
+		yield return new Item(ModContent.ItemType<GlowingPedal>());
 	}
-
 	public override void PlaceInWorld(int i, int j, Item item)
 	{
 		short num = (short)Main.rand.Next(0, 6);
@@ -50,7 +49,7 @@ public class BlueBlossom : ModTile
 
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
-		Lighting.AddLight(i, j, 0.1f, 0.5f, 1.2f);
+		Lighting.AddLight(i, j, 0.1f, 0.5f, 3.6f);
 		if (closer)
 		{
 			var tile = Main.tile[i, j];

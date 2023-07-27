@@ -26,10 +26,6 @@ public class TuskRelic : ModTile
 		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(233, 207, 94), modTranslation);
 	}
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-		Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.BossDrop.TuskRelic>());
-	}
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
 		num = fail ? 1 : 3;

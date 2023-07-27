@@ -1,0 +1,37 @@
+﻿<Project>
+	<Target Condition="'$(AssetsPrefix)' != ''" Name="Solaestas-BuildImage"
+		BeforeTargets="BuildMod" Inputs="@(Solaestas-ImageFile)"
+		Outputs="@(Solaestas-ImageFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).rawimg')">
+		<BuildImage InputFiles="@(Solaestas-ImageFile)"
+			OutputDirectory="$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\" />
+	</Target>
+
+	<Target Condition="'$(AssetsPrefix)' != ''" Name="Solaestas-BuildEffect"
+		BeforeTargets="BuildMod" Inputs="@(Solaestas-EffectFile)"
+		Outputs="@(Solaestas-EffectFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).xnb')">
+		<BuildEffect BuilderDirectory="$(Solaestas-ShaderBuilderDirectory)"
+			InputFiles="@(Solaestas-EffectFile)"
+			TargetPlatform="Windows" TargetProfile="HiDef" BuildConfiguration="Debug"
+			IntermediateDirectory="$(IntermediateOutputPath)Assets\"
+			OutputDirectory="$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\" />
+	</Target>
+
+	<Target Name="AssetList" BeforeTargets="Build" Condition="'$(AssetsPrefix)' != ''">
+		<WriteLinesToFile File="$(EverglowDirectory)obj\$(AssetsPrefix).asset.list"
+			Lines="@(Solaestas-EffectFile);@(Solaestas-ImageFile)"
+			Overwrite="true" />
+	</Target>
+	<Target Name="ResourceList" BeforeTargets="Build" Condition="'$(AssetsPrefix)' != ''">
+		<WriteLinesToFile File="$(EverglowDirectory)obj\$(AssetsPrefix).resource.list"
+			Lines="@(Solaestas-ResourceFile)"
+			Overwrite="true" />
+	</Target>
+	<Target Name="CleanAsset" BeforeTargets="Clean">
+		<Delete
+			Files="@(Solaestas-ImageFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).rawimg')" />
+		<Delete
+			Files="@(Solaestas-EffectFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).xnb')" />
+		<Delete Files="$(IntermediateOutputPath)$(AssetsPrefix).asset.list" />
+		<Delete Files="$(IntermediateOutputPath)$(AssetsPrefix).resource.list" />
+	</Target>
+</Project>

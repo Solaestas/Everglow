@@ -1,4 +1,3 @@
-using Everglow.Commons.CustomTiles;
 using Everglow.Commons.CustomTiles.Tiles;
 using Terraria.DataStructures;
 
