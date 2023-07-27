@@ -1,15 +1,17 @@
+using Everglow.Commons.TileHelper;
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
 
-public class GlowingDrop : ModTile
+public class GlowingDrop : ModTile, ITileFluentlyDrawn
 {
 	public override void SetStaticDefaults()
 	{
@@ -64,76 +66,66 @@ public class GlowingDrop : ModTile
 		}
 	}
 
-	public override void NearbyEffects(int i, int j, bool closer)
-	{
-		if (closer)
-		{
-			var tile = Main.tile[i, j];
-			bool windSway = tile.wall <= 0;
-			if (tile.TileFrameX % 54 == 18 && tile.TileFrameY == 0)
-			{
-				if(windSway && !Main.gamePaused)
-				{
-					if (tile.WallType == 0)
-					{
-						if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)))
-							TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18), new Vector2(Main.windSpeedCurrent * 0.2f, 0));
-						if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)))
-							TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18), new Vector2(Main.windSpeedCurrent * 0.2f, 0));
-						if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)))
-							TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1), new Vector2(Main.windSpeedCurrent * 0.2f, 0));
-						if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)))
-							TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18), new Vector2(Main.windSpeedCurrent * 0.2f, 0));
-					}
-				}
-				foreach (Player player in Main.player)
-				{
-					if (player.Hitbox.Intersects(new Rectangle(i * 16 + 11, j * 16 + 32, 10, 12)))
-					{
-						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18), player.velocity.X * 0.1f);
-					}
-
-					if (player.Hitbox.Intersects(new Rectangle(i * 16 + 21, j * 16 + 12, 10, 12)))
-					{
-						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18), player.velocity.X * 0.1f);
-					}
-
-					if (player.Hitbox.Intersects(new Rectangle(i * 16 - 1, j * 16 + 18, 10, 12)))
-					{
-						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1), player.velocity.X * 0.1f);
-					}
-
-					if (player.Hitbox.Intersects(new Rectangle(i * 16 - 13, j * 16 + 26, 10, 12)))
-					{
-						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18), player.velocity.X * 0.1f);
-					}
-				}
-			}
-		}
-	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
-		int Adx = 0;
-		if (tile.TileFrameX > 54)
-			Adx = 54;
 		if (tile.TileFrameX % 54 == 18 && tile.TileFrameY == 0)
 		{
-			var tileSpin = new TileSpin();
-			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
-			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowingDrop");
-			tileSpin.DrawRotatedTile(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, new Rectangle(30 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 22), 10, 48), new Vector2(5, 0), 16, -2, 1);
-
-			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18);
-			tileSpin.DrawRotatedTile(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18, tex, new Rectangle(40 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 14), 10, 48), new Vector2(5, 0), 10, -2, 1);
-
-			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1);
-			tileSpin.DrawRotatedTile(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1, tex, new Rectangle(18 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 14), 10, 48), new Vector2(5, 0), 4, -18, 1);
-
-			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18);
-			tileSpin.DrawRotatedTile(spriteBatch, i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18, tex, new Rectangle(6 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 26), 10, 48), new Vector2(5, 0), 8, -2, 1);
+			TileFluentDrawManager.AddFluentPoint(this, i, j);
 		}
-
 		return false;
+	}
+
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	{
+		var tile = Main.tile[pos];
+		var drawCenterPos = pos.ToWorldCoordinates(autoAddY: 0) - screenPosition;
+		int Adx = 0;
+		if (tile.TileFrameX > 54)
+			Adx = 46; // 改了下贴图，所以是46
+		DrawLanternPiece(0 + Adx, 40, (int)((Math.Sin(pos.X + pos.Y) * 100 + 100) % 26), -10, pos + new Point(-1, 0), pos, drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(12 + Adx, 32, (int)((Math.Sin(pos.X + pos.Y) * 100 + 100) % 14), -4, pos + new Point(0, 1), pos + new Point(-1, 0), drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(24 + Adx, 46, (int)((Math.Sin(pos.X + pos.Y) * 100 + 100) % 22), 14, pos, pos + new Point(-1, 0), drawCenterPos, spriteBatch, tileDrawing);
+		DrawLanternPiece(34 + Adx, 26, (int)((Math.Sin(pos.X + pos.Y) * 100 + 100) % 14), 6, pos + new Point(1, 0), pos + new Point(-1, 0), drawCenterPos, spriteBatch, tileDrawing);
+	}
+
+	/// <summary>
+	/// 绘制灯的一个小Piece
+	/// </summary>
+	private void DrawLanternPiece(int frameX, int frameHeight, int frameY, int offsetX, Point tilePos, Point paintPos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	{
+		// 回声涂料	
+		if (!tileDrawing.IsVisible(Main.tile[paintPos]))
+			return;
+
+		var tile = Main.tile[tilePos];
+		ushort type = tile.TileType;
+		int paint = Main.tile[paintPos].TileColor;
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.Tiles_GlowingDropPath, type, frameX, paint, tileDrawing);
+		tex ??= ModAsset.Tiles_GlowingDrop.Value;
+		var frame = new Rectangle(frameX, frameY, 10, frameHeight);
+
+		int sizeX = 1;
+		int sizeY = 2;
+
+		float windCycle = 0;
+		if (tileDrawing.InAPlaceWithWind(tilePos.X, tilePos.Y, sizeX, sizeY))
+			windCycle = tileDrawing.GetWindCycle(tilePos.X, tilePos.Y, tileDrawing._sunflowerWindCounter);
+
+		int totalPushTime = 80;
+		float pushForcePerFrame = 1.26f;
+		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X, tilePos.Y, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+		windCycle += highestWindGridPushComplex;
+
+		// 支持发光涂料
+		Color tileLight = Lighting.GetColor(tilePos);
+		tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(tilePos.X, tilePos.Y, tile, type, 0, 0, ref tileLight, tileDrawing._rand.NextBool(4));
+		tileLight = tileDrawing.DrawTiles_GetLightOverride(tilePos.Y, tilePos.X, tile, type, 0, 0, tileLight);
+
+		float swayCoefficient = 0.12f;
+		float rotation = -windCycle * swayCoefficient;
+		var origin = new Vector2(6, 0);
+		var tileSpriteEffect = SpriteEffects.None;
+		spriteBatch.Draw(tex, drawCenterPos + new Vector2(offsetX, -2), frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
 	}
 }
