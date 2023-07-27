@@ -4,6 +4,7 @@ using Terraria.ObjectData;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
 using Everglow.Commons.TileHelper;
+using Terraria.ID;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
@@ -39,17 +40,23 @@ public class BlackVine : ModTile
 				break;
 			}
 		}
-		if(deltaY > 15 + Math.Sin(i + j) * 3)
+		if (deltaY > 15 + Math.Sin(i + j) * 3)
 		{
 			return;
 		}
-		if(Main.rand.NextBool(Math.Max(1, deltaY * deltaY - 40)))
+		if (Main.rand.NextBool(Math.Max(1, deltaY * deltaY - 40)))
 		{
 			var tileBelow = Main.tile[i, j + 1];
 			if (!tileBelow.HasTile)
 			{
 				tileBelow.TileType = Type;
 				tileBelow.HasTile = true;
+				// 与原版一致，漆与涂料继承
+				tileBelow.CopyPaintAndCoating(Main.tile[i, j]);
+				// frame调整与联机同步
+				WorldGen.SquareTileFrame(i, j + 1);
+				if (Main.netMode is NetmodeID.Server)
+					NetMessage.SendTileSquare(-1, i, j + 1);
 			}
 		}
 		base.RandomUpdate(i, j);

@@ -737,7 +737,7 @@ public class MothLand : ModSystem
 						break;
 
 					case 6:
-						WorldGen.Place2x2Horizontal(i - 1, j - 1, (ushort)ModContent.TileType<BlackFren>(), Main.rand.Next(3));
+						WorldGen.Place2x2Horizontal(i, j - 1, (ushort)ModContent.TileType<BlackFren>(), Main.rand.Next(3));
 						break;
 
 					case 7:
@@ -745,7 +745,7 @@ public class MothLand : ModSystem
 						break;
 
 					case 8:
-						WorldGen.Place2x2Horizontal(i - 1, j - 1, (ushort)ModContent.TileType<BlackFren>(), Main.rand.Next(3));
+						WorldGen.Place2x2Horizontal(i, j - 1, (ushort)ModContent.TileType<BlackFren>(), Main.rand.Next(3));
 						break;
 
 					case 9:
