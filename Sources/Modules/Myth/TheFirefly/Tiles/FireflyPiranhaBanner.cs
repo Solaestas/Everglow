@@ -18,10 +18,6 @@ public class FireflyPiranhaBanner : ModTile, ITileFluentlyDrawn
 		Main.tileLighted[Type] = true;
 		Main.tileSolid[Type] = false;
 		Main.tileNoFail[Type] = true;
-		
-		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
-
-		AdjTiles = new int[] { TileID.HangingLanterns };
 
 		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2Top);
