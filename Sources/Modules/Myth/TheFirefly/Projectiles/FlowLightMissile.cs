@@ -1,4 +1,3 @@
-using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 
@@ -13,7 +12,7 @@ internal class FlowLightMissile : ModProjectile
 		Projectile.width = 36;
 		Projectile.height = 36;
 		Projectile.aiStyle = -1;
-		Projectile.timeLeft = 350;
+		Projectile.timeLeft = 360000;
 		Projectile.tileCollide = false;
 		Projectile.DamageType = DamageClass.Magic;
 	}
@@ -31,6 +30,7 @@ internal class FlowLightMissile : ModProjectile
 	{
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
+		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathF.PI * 0.75f);
 		if (Projectile.timeLeft % 5 == 0)
 			player.statMana--;
 		energy += 2;
@@ -59,7 +59,9 @@ internal class FlowLightMissile : ModProjectile
 				Shoot();
 			}
 		}
-		if (energy >= 450 || player.statMana <= 0)
+		if (energy > 450)
+			energy = 450;
+		if (player.statMana <= 0)
 			Shoot();
 		if (energy >= 180)
 		{
@@ -95,7 +97,7 @@ internal class FlowLightMissile : ModProjectile
 
 		Projectile.velocity = Projectile.oldVelocity;
 		Projectile.friendly = false;
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<MissileExplosion>(), (int)(Projectile.damage * (energy + 150) / 600f), Projectile.knockBack * 0.4f, Projectile.owner, energy / 5f);
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<MissileExplosion>(), (int)(Projectile.damage * (energy + 150) / 100f), Projectile.knockBack * 0.4f, Projectile.owner, energy / 15f + 5f);
 		Projectile.Kill();
 	}
 	private void Shoot()
@@ -105,12 +107,12 @@ internal class FlowLightMissile : ModProjectile
 		v0 = Vector2.Normalize(v0);
 		Player player = Main.player[Projectile.owner];
 
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v0 * 62, v0 * (energy + 20) / 9f, ModContent.ProjectileType<MissileProj>(), (int)(Projectile.damage * (energy + 150) / 200f), Projectile.knockBack, player.whoAmI, energy, 0);
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v0 * 62, v0 * (energy + 20) / 9f, ModContent.ProjectileType<MissileProj>(), (int)(Projectile.damage * (energy + 150) / 100f), Projectile.knockBack, player.whoAmI, energy / 5f + 10, 0);
 
 		Vector2 newVelocity = v0;
 		newVelocity *= 1f - Main.rand.NextFloat(0.3f);
 		newVelocity *= Math.Clamp(energy / 18f, 0.2f, 10f);
-		Vector2 basePos = Projectile.Center + newVelocity * 3.7f + v0 * 62;
+		Vector2 basePos = Projectile.Center + newVelocity * 3.7f + v0 * 62 - new Vector2(0, 6);
 
 		for (int j = 0; j < energy * 2; j++)
 		{
@@ -153,18 +155,60 @@ internal class FlowLightMissile : ModProjectile
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
 		Vector2 v0 = Projectile.Center - player.MountedCenter;
-		if (Main.mouseLeft)
+
+
+
+		if (player.controlUseTile)
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
 
 		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
 		Texture2D texMainG = ModAsset.FlowLightMissileGlow.Value;
+		Texture2D texMainBloom = ModAsset.FixCoinLight3.Value;
 
 		Projectile.frame = (int)(energy % 45 / 5f);
 		Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 		SpriteEffects se = SpriteEffects.None;
 		if (player.direction == -1)
 			se = SpriteEffects.FlipVertically;
-		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - new Vector2(0, 6), null, drawColor, Projectile.rotation - (float)(Math.PI * 0.25) + MathF.PI * 0.36f * player.direction, texMain.Size() / 2f, 1f, se, 0);
-		Main.spriteBatch.Draw(texMainG, Projectile.Center - Main.screenPosition - new Vector2(0, 6), null, new Color(energy, energy, energy, 0), Projectile.rotation - (float)(Math.PI * 0.25) + MathF.PI * 0.36f * player.direction, texMain.Size() / 2f, 1f, se, 0);
+		float rot0 = Projectile.rotation - (float)(Math.PI * 0.25) + MathF.PI * 0.36f * player.direction;
+		float rot1 = Projectile.rotation - (float)(Math.PI * 0.25);
+		//Main.spriteBatch.Draw(texMainBloom, Projectile.Center + new Vector2(56, 0).RotatedBy(rot1) - Main.screenPosition - new Vector2(0, 6), null, new Color(energy, energy, energy, 0) * MathF.Sin(0.4f * (float)Main.time), rot0, texMainBloom.Size() / 2f, 0.6f, se, 0);
+		DrawPowerEffect();
+		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - new Vector2(0, 6), null, drawColor, rot0, texMain.Size() / 2f, 1f, se, 0);
+		Main.spriteBatch.Draw(texMainG, Projectile.Center - Main.screenPosition - new Vector2(0, 6), null, new Color(energy, energy, energy, 0), rot0, texMainG.Size() / 2f, 1f, se, 0);
+
+	}
+	public void DrawPowerEffect()
+	{
+		float rot0 = Projectile.rotation - (float)(Math.PI * 0.25);
+		Vector2 bulbPos = Projectile.Center + new Vector2(56, 0).RotatedBy(rot0) - new Vector2(0, 6);
+		float energyValue = energy / 250f;
+		Color c0 = new Color(0, energyValue * energyValue * 0.2f, energyValue, 0);
+		float timeValue = (float)Main.time * 0.004f;
+		List<Vertex2D> bars = new List<Vertex2D>();
+		float accuracy = 16;
+		List<Vertex2D> bars2 = new List<Vertex2D>();
+		for (int t = 0; t <= accuracy; t++)
+		{
+			Vector2 v0 = new Vector2(0, MathF.Sqrt(energy + 15) * 3).RotatedBy(t / (accuracy * 0.5) * Math.PI);
+			bars2.Add(new Vertex2D(bulbPos - Main.screenPosition, Color.White * energyValue, new Vector3(timeValue * 0.7f, 0.5f, 0)));
+			bars2.Add(new Vertex2D(bulbPos + v0 * 0.7f - Main.screenPosition, c0, new Vector3(timeValue * 0.7f + 0.9f, 0.5f + (t % 2 - 1) * 0.4f, 0)));
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_cell_black.Value;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		if (bars2.Count > 3)
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
+
+		for (int t = 0; t <= accuracy; t++)
+		{
+			Vector2 v0 = new Vector2(0, MathF.Sqrt(energy + 15) * 3).RotatedBy(t / (accuracy * 0.5) * Math.PI);
+			bars.Add(new Vertex2D(bulbPos - Main.screenPosition, c0, new Vector3(timeValue, 0.5f, 0)));
+			bars.Add(new Vertex2D(bulbPos + v0 - Main.screenPosition, Color.Transparent, new Vector3(timeValue + 0.5f, 0.5f + (t % 2 - 1) * 0.1f, 0)));
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_hiveCyber.Value;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		if (bars.Count > 3)
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+
 	}
 }

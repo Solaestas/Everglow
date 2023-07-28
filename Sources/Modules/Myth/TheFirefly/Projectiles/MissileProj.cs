@@ -100,17 +100,7 @@ public class MissileProj : ModProjectile, IWarpProjectile
 		timeTokill--;
 		if (timeTokill < 0)
 		{
-			if(Main.mouseRight)
-			{
-				Vector2 v0 = Main.MouseWorld - Projectile.Center;
-				Projectile.velocity += Vector2.Normalize(v0).RotatedBy(Projectile.ai[1]) * 0.5f;
-
-				Projectile.velocity = Vector2.Normalize(Projectile.velocity) * Math.Max(startSpeed, 5);
-			}
-			else
-			{
-				ChaseTarget();
-			}
+			ChaseTarget();
 		}
 		else
 		{
@@ -171,7 +161,7 @@ public class MissileProj : ModProjectile, IWarpProjectile
 			trueLength++;
 		}
 
-		float velocityValue = Projectile.velocity.Length() / 20f;
+		float velocityValue = Projectile.ai[0] / 100f;
 		colorValue0 *= velocityValue;
 		var c0 = new Color(0, colorValue0 * colorValue0 * 0.3f, colorValue0 * 1f, 0);
 
@@ -220,8 +210,8 @@ public class MissileProj : ModProjectile, IWarpProjectile
 			barsDark.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c1, new Vector3(x0, 1, w)));
 			barsDark.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c1, new Vector3(x0, 0, w)));
 		}
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		//Main.spriteBatch.End();
+		//Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Texture2D t = Commons.ModAsset.Trail_4.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
@@ -231,17 +221,20 @@ public class MissileProj : ModProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (barsDark.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, barsDark.ToArray(), 0, barsDark.Count - 2);
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		//Main.spriteBatch.End();
+		//Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawTrail();
 		Texture2D star = ModAsset.MissileProj.Value;
-		if(timeTokill < 0)
+		Texture2D star2 = ModAsset.MissileProj_glow.Value;
+		if (timeTokill < 0)
 		{
+			float light = Projectile.ai[0] * Projectile.ai[0] / 30000f;
 			Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition - Projectile.velocity, null, new Color(250, 250, 250, 150), Projectile.rotation + 1.145f, star.Size() / 2f, 1f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(star2, Projectile.Center - Main.screenPosition - Projectile.velocity, null, new Color(light, light, light, 0), Projectile.rotation + 1.145f, star.Size() / 2f, 1f, SpriteEffects.None, 0);
 		}
 		return false;
 	}

@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
@@ -10,81 +10,93 @@ public class FanHit : ModProjectile, IWarpProjectile
 
 	public override void SetDefaults()
 	{
-		Projectile.extraUpdates = 1;
-		Projectile.width = 24;
-		Projectile.height = 24;
+		Projectile.width = 200;
+		Projectile.height = 200;
+		Projectile.friendly = false;
 		Projectile.hostile = false;
-		Projectile.friendly = true;
-		Projectile.ignoreWater = true;
-		Projectile.tileCollide = false;
-		Projectile.penetrate = 1;
-		Projectile.timeLeft = 200;
 		Projectile.aiStyle = -1;
+		Projectile.penetrate = -1;
+		Projectile.timeLeft = 200;
+		Projectile.tileCollide = false;
+		Projectile.extraUpdates = 6;
+		Projectile.usesLocalNPCImmunity = true;
+		Projectile.localNPCHitCooldown = 20;
+		Projectile.DamageType = DamageClass.Magic;
 	}
 
 	public override void AI()
 	{
-		Projectile.hide = true;
 	}
-
-	public override bool PreDraw(ref Color lightColor)
-	{
-		float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
-
-		if (value < 1)
-			DrawCircle(value * 110 * Projectile.ai[0], 15 * (1 - value) + 3, new Color((1 - value) * 0.4f, (1 - value) * 0.4f, (1 - value) * 0.4f, (1 - value) * 0.4f), Projectile.Center - Main.screenPosition, true);
-		return false;
-	}
-
-	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
-	{
-		behindProjectiles.Add(index);
-	}
-
-	private static void DrawCircle(float radious, float width, Color color, Vector2 center, bool Black = false)
+	private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
 		for (int h = 0; h < radious / 2; h++)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 0, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 24 / radious % 1, 0.8f, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 24 / radious % 1, 0.5f, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, radious), color, new Vector3(0.5f, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + width), color, new Vector3(0.5f, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 0.8f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0.5f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.5f, 0)));
 		if (circle.Count > 0)
 		{
-			Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
-			if (Black)
-				t = MythContent.QuickTexture("OmniElementItems/Projectiles/WaveBlack");
-			Main.graphics.GraphicsDevice.Textures[0] = t;
+			Main.graphics.GraphicsDevice.Textures[0] = tex;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}
-	private static void DrawCircle(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, bool Black = false)
+	public override void PostDraw(Color lightColor)
+	{
+		Texture2D shadow = ModAsset.CursedHitLight.Value;
+		float timeValue = (200 - Projectile.timeLeft) / 200f;
+		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
+		Color c = new Color(0.2f * MathF.Sqrt(1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 3f * (1 - timeValue), 0f);
+		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, c * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark, SpriteEffects.None, 0);
+		Color cDark = new Color(0, 0, 0, 1f - timeValue);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 20 * (1 - timeValue) * Projectile.ai[0], cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
+		//DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 4 * (1 - timeValue) * Projectile.ai[0], c * 0.4f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
+	}
+	public override bool PreDraw(ref Color lightColor)
+	{
+		Texture2D shadow = ModAsset.CursedHit.Value;
+		float timeValue = (200 - Projectile.timeLeft) / 200f;
+		float dark = Math.Max((Projectile.timeLeft - 100) / 100f, 0);
+		Color c = new Color(0.2f * MathF.Sqrt(1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 3f * (1 - timeValue), 0f);
+		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
+		Texture2D light = ModAsset.CursedHitStar.Value;
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * Projectile.ai[0] * 0.03f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * Projectile.ai[0] * 0.03f, SpriteEffects.None, 0);
+		return false;
+	}
+	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radious / 2; h += 5)
-		{
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 0, 0)));
-		}
-		circle.Add(new Vertex2D(center + new Vector2(0, radious), color, new Vector3(0.5f, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + width), color, new Vector3(0.5f, 0, 0)));
-		if (circle.Count > 0)
-		{
-			Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
-			if (Black)
-				t = MythContent.QuickTexture("OmniElementItems/Projectiles/WaveBlack");
-			Main.graphics.GraphicsDevice.Textures[0] = t;
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
-		}
-	}
-	public void DrawWarp(VFXBatch sb)
-	{
 
-		float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
-		value -= 0.01f;
-		if (value < 1)
-			DrawCircle(sb, value * 110 * Projectile.ai[0], 15 * (1 - value) + 3, new Color(0.4f * (1 - value), 0.4f * (1 - value), 0.4f * (1 - value), 0f), Projectile.Center - Main.screenPosition);
+		Color c0 = color;
+		c0.R = 0;
+		for (int h = 0; h < radious / 2; h += 1)
+		{
+
+			c0.R = (byte)(h / radious * 2 * 255);
+			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radious, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radious, 0.5f, 0)));
+		}
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), c0, new Vector3(1, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), c0, new Vector3(1, 0.5f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), c0, new Vector3(0, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), c0, new Vector3(0, 0.5f, 0)));
+		if (circle.Count > 2)
+			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+	}
+	public void DrawWarp(VFXBatch spriteBatch)
+	{
+		float value = (200 - Projectile.timeLeft) / 200f;
+		float colorV = 0.9f * (1 - value);
+		if (Projectile.ai[0] >= 10)
+			colorV *= Projectile.ai[0] / 10f;
+		Texture2D t = Commons.ModAsset.Trail.Value;
+
+
+		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 11f * Projectile.ai[0], 12 * (1 - value) * Projectile.ai[0], new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 }

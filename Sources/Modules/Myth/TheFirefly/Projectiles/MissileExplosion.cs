@@ -1,5 +1,6 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
+using Everglow.Myth.TheFirefly.Buffs;
 using Everglow.Myth.TheFirefly.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -25,6 +26,7 @@ public class MissileExplosion : ModProjectile, IWarpProjectile
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
+		//Need a sound effect about crystal explosion
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.8f), Projectile.Center);
 
 		GenerateSmog((int)(1.3 * Projectile.ai[0]));
@@ -183,6 +185,7 @@ public class MissileExplosion : ModProjectile, IWarpProjectile
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
+		target.AddBuff(ModContent.BuffType<FireflyInferno>(), (int)(Projectile.ai[0] * 10f));
 	}
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
