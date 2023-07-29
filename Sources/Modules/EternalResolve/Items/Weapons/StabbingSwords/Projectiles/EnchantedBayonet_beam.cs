@@ -69,7 +69,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					velocity = newVelocity,
 					Active = true,
 					Visible = true,
-					position = EndPos,
+					position = Vector2.zeroVector, // EndPos was not defined
 					maxTime = Main.rand.Next(1, 25),
 					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(0.1f, 17.0f)),
 					rotation = Main.rand.NextFloat(6.283f),
