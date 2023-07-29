@@ -2,29 +2,29 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
-namespace MythMod.Items.Corals
+namespace Everglow.Ocean.Items.Corals
 {
     public class HugeOrangeStarfish : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("大橙色海星");
+            // DisplayName.SetDefault("´ó³ÈÉ«º£ÐÇ");
         }
         public override void SetDefaults()
         {
-            base.item.width = 16;
-            base.item.height = 16;
-            base.item.rare = 2;
-            base.item.scale = 1f;
-            base.item.createTile = base.mod.TileType("大橙色海星");
-            base.item.useStyle = 1;
-            base.item.useTurn = true;
-            base.item.useAnimation = 15;
-            base.item.useTime = 10;
-            base.item.autoReuse = true;
-            base.item.consumable = true;
-            base.item.maxStack = 999;
-            base.item.value = 3000;
+            base.Item.width = 16;
+            base.Item.height = 16;
+            base.Item.rare = 2;
+            base.Item.scale = 1f;
+            base.Item.createTile = base.Mod.Find<ModTile>("´ó³ÈÉ«º£ÐÇ").Type;
+            base.Item.useStyle = 1;
+            base.Item.useTurn = true;
+            base.Item.useAnimation = 15;
+            base.Item.useTime = 10;
+            base.Item.autoReuse = true;
+            base.Item.consumable = true;
+            base.Item.maxStack = 999;
+            base.Item.value = 3000;
         }
     }
 }

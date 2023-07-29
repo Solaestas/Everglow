@@ -1,7 +1,7 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace MythMod.OceanMod.Tiles
+namespace Everglow.Ocean.Tiles
 {
     public class Alcyonarian : ModTile
     {
@@ -35,7 +35,7 @@ namespace MythMod.OceanMod.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<OceanMod.Items.Alcyonarian>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.Alcyonarian>());
         }
         public override void PlaceInWorld(int i, int j, Item item)
         {

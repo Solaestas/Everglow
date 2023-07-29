@@ -5,44 +5,44 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-namespace MythMod.NPCs
+namespace Everglow.Ocean.NPCs
 {
     public class WaterBomb : ModNPC
 	{
 		public override void SetStaticDefaults()
 		{
-			base.DisplayName.SetDefault("WaterBoom");
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "水雷");
-			Main.npcFrameCount[base.npc.type] = 3;
+			// // base.DisplayName.SetDefault("WaterBoom");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "水雷");
+			Main.npcFrameCount[base.NPC.type] = 3;
 		}
 		public override void SetDefaults()
 		{
-			base.npc.damage = 120;
-			base.npc.width = 54;
-			base.npc.height = 54;
-			base.npc.defense = 0;
-            base.npc.lifeMax = 1;
-			base.npc.knockBackResist = 0f;
-			base.npc.alpha = 0;
-			base.npc.noGravity = true;
-			base.npc.noTileCollide = true;
+			base.NPC.damage = 120;
+			base.NPC.width = 54;
+			base.NPC.height = 54;
+			base.NPC.defense = 0;
+            base.NPC.lifeMax = 1;
+			base.NPC.knockBackResist = 0f;
+			base.NPC.alpha = 0;
+			base.NPC.noGravity = true;
+			base.NPC.noTileCollide = true;
 		}
         private int u = 0;
 
         public override void AI()
         {
-            base.npc.spriteDirection = -1;
+            base.NPC.spriteDirection = -1;
             u += 1;
-            base.npc.velocity.Y = (float)Math.Sin((float)u / 105f * Math.PI);
+            base.NPC.velocity.Y = (float)Math.Sin((float)u / 105f * Math.PI);
         }
         public override void FindFrame(int frameHeight)
 		{
-			base.npc.frameCounter += 0;
-			base.npc.frameCounter %= (double)Main.npcFrameCount[base.npc.type];
-			int num = (int)base.npc.frameCounter;
-			base.npc.frame.Y = num * frameHeight;
+			base.NPC.frameCounter += 0;
+			base.NPC.frameCounter %= (double)Main.npcFrameCount[base.NPC.type];
+			int num = (int)base.NPC.frameCounter;
+			base.NPC.frame.Y = num * frameHeight;
 		}
-		public override void ModifyHitByProjectile(Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
 		{
 			if (projectile.penetrate == -1)
 			{
@@ -56,24 +56,24 @@ namespace MythMod.NPCs
 			}
 			projectile.penetrate = 1;
 		}
-        public override void OnHitPlayer(Player player, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
-            player.velocity = (npc.velocity - player.velocity) / (npc.velocity - player.velocity).Length() * 5;
-            Projectile.NewProjectile(base.npc.position.X + (float)base.npc.width * 0.5f, base.npc.position.Y + (float)base.npc.height * 0.5f, 0f, 0f, 164, 10, 4f, Main.myPlayer, 0f, 0f);
+            player.velocity = (NPC.velocity - player.velocity) / (NPC.velocity - player.velocity).Length() * 5;
+            Projectile.NewProjectile(base.NPC.position.X + (float)base.NPC.width * 0.5f, base.NPC.position.Y + (float)base.NPC.height * 0.5f, 0f, 0f, 164, 10, 4f, Main.myPlayer, 0f, 0f);
             float scaleFactor = (float)(Main.rand.Next(-200, 200) / 100);
-            Gore.NewGore(base.npc.position, base.npc.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/水雷碎块1"), 1f);
-            Gore.NewGore(base.npc.position, base.npc.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/水雷碎块2"), 1f);
-            Gore.NewGore(base.npc.position, base.npc.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/水雷碎块3"), 1f);
-            Gore.NewGore(base.npc.position, base.npc.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/水雷碎块4"), 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块1"), 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块2"), 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块3"), 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块4"), 1f);
         }
-        public override void HitEffect(int hitDirection, double damage)
+        public override void HitEffect(NPC.HitInfo hit)
         {
-            Projectile.NewProjectile(base.npc.position.X + (float)base.npc.width * 0.5f, base.npc.position.Y + (float)base.npc.height * 0.5f, 0f, 0f, 164, 150, 4f, Main.myPlayer, 0f, 0f);
+            Projectile.NewProjectile(base.NPC.position.X + (float)base.NPC.width * 0.5f, base.NPC.position.Y + (float)base.NPC.height * 0.5f, 0f, 0f, 164, 150, 4f, Main.myPlayer, 0f, 0f);
             float scaleFactor = (float)(Main.rand.Next(-200, 200) / 100);
-            Gore.NewGore(base.npc.position, base.npc.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/水雷碎块1"), 1f);
-            Gore.NewGore(base.npc.position, base.npc.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/水雷碎块2"), 1f);
-            Gore.NewGore(base.npc.position, base.npc.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/水雷碎块3"), 1f);
-            Gore.NewGore(base.npc.position, base.npc.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/水雷碎块4"), 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块1"), 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块2"), 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块3"), 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块4"), 1f);
         }
 		public override bool CheckActive()
 		{
@@ -81,11 +81,11 @@ namespace MythMod.NPCs
 		}
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
-			if (spawnInfo.playerSafe)
+			if (spawnInfo.PlayerSafe)
 			{
 				return 0f;
 			}
-			if (spawnInfo.player.GetModPlayer<MythPlayer>().ZoneOcean && spawnInfo.water)
+			if (spawnInfo.Player.GetModPlayer<OceanContentPlayer>().ZoneOcean && spawnInfo.Water)
 			{
 				return 0.7f;
 			}
@@ -94,7 +94,7 @@ namespace MythMod.NPCs
                 return 0f;
             }
 		}
-		public override bool PreNPCLoot()
+		public override bool PreKill()
 		{
 			return false;
 		}

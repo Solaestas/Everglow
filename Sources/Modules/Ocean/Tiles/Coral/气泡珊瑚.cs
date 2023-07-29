@@ -6,11 +6,11 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace MythMod.Tiles.Ocean
+namespace Everglow.Ocean.Tiles.Ocean
 {
 	public class 气泡珊瑚 : ModTile
 	{
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
             Main.tileLighted[Type] = true;
             Main.tileFrameImportant[(int)base.Type] = true;
@@ -24,12 +24,12 @@ namespace MythMod.Tiles.Ocean
             };
             TileObjectData.newTile.CoordinateWidth = 36;
             TileObjectData.addTile(Type);
-			this.dustType = 253;
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
-            modTranslation.SetDefault("");
+			this.DustType = 253;
+            LocalizedText modTranslation = base.CreateMapEntryName(null);
+            // modTranslation.SetDefault("");
             base.AddMapEntry(new Color(145, 208, 213), modTranslation);
-			this.mineResist = 3f;
-			base.SetDefaults();
+			this.MineResist = 3f;
+			base.SetStaticDefaults();
 			modTranslation.AddTranslation(GameCulture.Chinese, "");
 		}
 
@@ -49,7 +49,7 @@ namespace MythMod.Tiles.Ocean
 		}
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, base.mod.ItemType("BubbleCoral"));
+            Item.NewItem(i * 16, j * 16, 16, 32, base.Mod.Find<ModItem>("BubbleCoral").Type);
         }
     }
 }

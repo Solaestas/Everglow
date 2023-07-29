@@ -2,23 +2,23 @@
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
-namespace MythMod.Items.UnderSea
+namespace Everglow.Ocean.Items.UnderSea
 {
     public class BladeScale : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("利刃鳞");
-            Tooltip.SetDefault("");
+            // DisplayName.SetDefault("利刃鳞");
+            // Tooltip.SetDefault("");
         }
         public override void SetDefaults()
         {
             Item refItem = new Item();
-            item.width = refItem.width;
-            item.height = refItem.height;
-            item.maxStack = 999;
-            item.value = 2000;
-            item.rare = 8;
+            Item.width = refItem.width;
+            Item.height = refItem.height;
+            Item.maxStack = 999;
+            Item.value = 2000;
+            Item.rare = 8;
         }
     }
 }

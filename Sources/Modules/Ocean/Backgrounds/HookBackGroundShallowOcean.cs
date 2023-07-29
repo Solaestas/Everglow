@@ -1,18 +1,18 @@
-﻿//using On.Terraria;
+//using On.Terraria;
 
-namespace MythMod.OceanMod.Backgrounds
+namespace Everglow.Ocean.Backgrounds
 {
     public class HookBackGroundShallowOcean
     {
         public static void Load()
         {
-            On.Terraria.Main.DoDraw_WallsAndBlacks += Main_DrawBackground;
+            Terraria.On_Main.DoDraw_WallsAndBlacks += Main_DrawBackground;
         }
         public static void UnLoad()
         {
             //On.Terraria.Main.DoDraw_WallsAndBlacks -= Main_DrawBackground;
         }
-        private static void Main_DrawBackground(On.Terraria.Main.orig_DoDraw_WallsAndBlacks orig, Terraria.Main self)
+        private static void Main_DrawBackground(Terraria.On_Main.orig_DoDraw_WallsAndBlacks orig, Terraria.Main self)
         {
             Player player = Main.LocalPlayer;
             bool b1 = Main.ActiveWorldFileData.Path.Contains("OcEaNMyTh");
@@ -27,7 +27,7 @@ namespace MythMod.OceanMod.Backgrounds
                 float DeltaSizY = 360;
                 float MoveSize = 5f;
                 Effect ef;
-                ef = (Effect)ModContent.Request<Effect>("MythMod/Effects/ef3/OcenaUBG").Value;
+                ef = (Effect)ModContent.Request<Effect>("Everglow/Ocean/Effects/OcenaUBG").Value;
                 float SxF0 = (Main.LocalPlayer.Center.X - DeltaSizX * 16f) / MoveSize + 320;//1620
                 float SyF0 = (Main.LocalPlayer.Center.Y - DeltaSizY * 16f) / MoveSize - 200;//1210
                 float OceanY = (228 * 16 - Main.screenPosition.Y);
@@ -35,7 +35,7 @@ namespace MythMod.OceanMod.Backgrounds
                 float DeltaPlOceanY = (TrueOceanY - player.Center.Y) / MoveSize;
                 /*Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);*/
-                Terraria.Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/OceanMod/Backgrounds/CoralFar").Value, new Vector2(0, OceanY), new Rectangle((int)(SxF0), (int)(Math.Clamp(SyF0 - OceanY, 0, 20000) + DeltaPlOceanY), Terraria.Main.screenWidth, Terraria.Main.screenHeight + 600), new Color(LigR, LigG, LigB, 1f), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                Terraria.Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Ocean/Backgrounds/CoralFar").Value, new Vector2(0, OceanY), new Rectangle((int)(SxF0), (int)(Math.Clamp(SyF0 - OceanY, 0, 20000) + DeltaPlOceanY), Terraria.Main.screenWidth, Terraria.Main.screenHeight + 600), new Color(LigR, LigG, LigB, 1f), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
                 /*Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
                 ef.Parameters["uOCY"].SetValue(OceanY);

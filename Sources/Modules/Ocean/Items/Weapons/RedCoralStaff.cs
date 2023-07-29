@@ -13,47 +13,46 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
-namespace MythMod.Items.Weapons.OceanWeapons
+namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 {
     public class RedCoralStaff : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-            base.DisplayName.SetDefault("红珊瑚法杖");
-			Item.staff[base.item.type] = true;
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "红珊瑚法杖");
+            // // base.DisplayName.SetDefault("红珊瑚法杖");
+			Item.staff[base.Item.type] = true;
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "红珊瑚法杖");
 		}
 		public override void SetDefaults()
 		{
-			base.item.damage = 200;
-			base.item.magic = true;
-			base.item.mana = 8;
-			base.item.width = 54;
-			base.item.height = 54;
-			base.item.useTime = 26;
-			base.item.useAnimation = 20;
-			base.item.useStyle = 5;
-			base.item.noMelee = true;
-			base.item.knockBack = 0.5f;
-			base.item.value = 12000;
-			base.item.rare = 3;
-			base.item.UseSound = SoundID.Item60;
-			base.item.autoReuse = true;
-            base.item.shoot = base.mod.ProjectileType("珊瑚");
-			base.item.shootSpeed = 1f;
+			base.Item.damage = 200;
+			base.Item.DamageType = DamageClass.Magic;
+			base.Item.mana = 8;
+			base.Item.width = 54;
+			base.Item.height = 54;
+			base.Item.useTime = 26;
+			base.Item.useAnimation = 20;
+			base.Item.useStyle = 5;
+			base.Item.noMelee = true;
+			base.Item.knockBack = 0.5f;
+			base.Item.value = 12000;
+			base.Item.rare = 3;
+			base.Item.UseSound = SoundID.Item60;
+			base.Item.autoReuse = true;
+            base.Item.shoot =ModContent.ProjectileType<Everglow.Ocean.Projectiles.珊瑚>();
+			base.Item.shootSpeed = 1f;
 		}
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile.NewProjectile(position.X, position.Y, speedX, speedY, base.mod.ProjectileType("红珊瑚"), damage, knockBack, player.whoAmI, 0f, 0f);
+            Projectile.NewProjectile(position.X, position.Y, speedX, speedY,ModContent.ProjectileType<Everglow.Ocean.Projectiles.红珊瑚>(), damage, knockBack, player.whoAmI, 0f, 0f);
             return false;
         }
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe(1);
             recipe.AddIngredient(null, "RedCoral", 4);
             recipe.requiredTile[0] = 412;
-            recipe.SetResult(this, 1);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

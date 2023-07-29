@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Capture;
 
 
-namespace MythMod.Tiles.Ocean
+namespace Everglow.Ocean.Tiles.Ocean
 {
 	// Token: 0x02000E8F RID: 3727
     public class 青纽扣珊瑚 : ModTile
@@ -15,43 +15,43 @@ namespace MythMod.Tiles.Ocean
 		private float num5 = 0;
 		private int num6 = 0;
 		// Token: 0x060045D6 RID: 17878 RVA: 0x0027A6F0 File Offset: 0x002788F0
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
 			Main.tileSolid[(int)base.Type] = true;
 			Main.tileMergeDirt[(int)base.Type] = true;
 			Main.tileBlendAll[(int)base.Type] = true;
 			Main.tileBlockLight[(int)base.Type] = true;
 			Main.tileShine2[(int)base.Type] = true;
-			Main.tileValue[(int)base.Type] = 1300;
-			this.minPick = 200;
-			this.dustType = 183;
-			this.soundType = 21;
-			this.soundStyle = 2;
-            this.drop = base.mod.ItemType("CyanZoanthid");
+			Main.tileOreFinderPriority[(int)base.Type] = 1300;
+			this.MinPick = 200;
+			this.DustType = 183;
+			this.HitSound = 21;
+			this.soundStyle/* tModPorter Note: Removed. Integrate into HitSound */ = 2;
+            this.ItemDrop/* tModPorter Note: Removed. Tiles and walls will drop the item which places them automatically. Use RegisterItemDrop to alter the automatic drop if necessary. */ = base.Mod.Find<ModItem>("CyanZoanthid").Type;
 			Main.tileSpelunker[(int)base.Type] = true;
-			ModTranslation modTranslation = base.CreateMapEntryName(null);
+			LocalizedText modTranslation = base.CreateMapEntryName(null);
 			base.AddMapEntry(new Color(37, 91, 67), modTranslation);
-            modTranslation.SetDefault("");
+            // modTranslation.SetDefault("");
             modTranslation.AddTranslation(GameCulture.Chinese, "");
 		}
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 		{
 			num5 += 0.3f;
-			ModTranslation modTranslation = base.CreateMapEntryName(null);
+			LocalizedText modTranslation = base.CreateMapEntryName(null);
 			base.AddMapEntry(new Color(159 * (int)(Math.Sin(num5 / 10000f) * 0.5 + 1), 101, 196), modTranslation);
 			if (!Lighting.NotRetro)
 			{
 				return;
 			}
-			int num = (int)Main.tile[i, j].frameX;
-			int num2 = (int)Main.tile[i, j].frameY;
+			int num = (int)Main.tile[i, j].TileFrameX;
+			int num2 = (int)Main.tile[i, j].TileFrameY;
 			int num3 = i % 1;
 			int num4 = j % 1;
 			num3 *= 288;
 			num4 *= 270;
 			num += num3;
 			num2 += num4;
-			Texture2D texture = base.mod.GetTexture("Tiles/Ocean/青纽扣珊瑚Glow");
+			Texture2D texture = base.Mod.GetTexture("Tiles/Ocean/青纽扣珊瑚Glow");
 			Vector2 position = new Vector2((float)(i * 16) - Main.screenPosition.X + (float)this.GetDrawOffset(), (float)(j * 16) - Main.screenPosition.Y + (float)this.GetDrawOffset());
 			if (CaptureManager.Instance.IsCapturing)
 			{

@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace MythMod.OceanMod.Tiles
+namespace Everglow.Ocean.Tiles
 {
     public class DarkSeaOre : ModTile
     {
@@ -16,7 +16,7 @@ namespace MythMod.OceanMod.Tiles
             MinPick = 240;
             SoundType = SoundID.Grass;
             SoundStyle = 2;
-            ItemDrop = ModContent.ItemType<OceanMod.Items.Ores.DarkSeaOre>();
+            ItemDrop/* tModPorter Note: Removed. Tiles and walls will drop the item which places them automatically. Use RegisterItemDrop to alter the automatic drop if necessary. */ = ModContent.ItemType<Items.Ores.DarkSeaOre>();
             Main.tileSpelunker[(int)base.Type] = true;
             ModTranslation modTranslation = base.CreateMapEntryName(null);
             AddMapEntry(new Color(3, 0, 105), modTranslation);

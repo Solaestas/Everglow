@@ -1,7 +1,7 @@
 ﻿using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace MythMod.OceanMod.Tiles
+namespace Everglow.Ocean.Tiles
 {
     public class MarbleCono : ModTile
     {
@@ -28,7 +28,7 @@ namespace MythMod.OceanMod.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<OceanMod.Items.MarbleCono>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.MarbleCono>());
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
         {

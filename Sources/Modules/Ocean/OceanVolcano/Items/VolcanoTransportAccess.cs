@@ -7,33 +7,33 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MythMod.Items.Volcano
+namespace Everglow.Ocean.OceanVolcano.Items
 {
     public class VolcanoTransportAccess : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-            base.DisplayName.SetDefault("火山传送门");
-            base.Tooltip.SetDefault("");
-            GetGlowMask = MythMod.SetStaticDefaultsGlowMask(this);
+            // // base.DisplayName.SetDefault("火山传送门");
+            // base.Tooltip.SetDefault("");
+            GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
         public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            item.glowMask = GetGlowMask;
-            base.item.width = 76;
-			base.item.height = 68;
-            base.item.rare = 0;
-            base.item.useAnimation = 15;
-            base.item.useTime = 10;
-            base.item.useStyle = 1;
-            base.item.consumable = true;
-            base.item.useTurn = true;
-            base.item.autoReuse = true;
-            base.item.createTile = base.mod.TileType("火山传送门");
-            base.item.UseSound = SoundID.Item8;
-			base.item.consumable = true;
-            base.item.maxStack = 200;
+            Item.glowMask = GetGlowMask;
+            base.Item.width = 76;
+			base.Item.height = 68;
+            base.Item.rare = 0;
+            base.Item.useAnimation = 15;
+            base.Item.useTime = 10;
+            base.Item.useStyle = 1;
+            base.Item.consumable = true;
+            base.Item.useTurn = true;
+            base.Item.autoReuse = true;
+            base.Item.createTile = base.Mod.Find<ModTile>("火山传送门").Type;
+            base.Item.UseSound = SoundID.Item8;
+			base.Item.consumable = true;
+            base.Item.maxStack = 200;
 		}
     }
 }

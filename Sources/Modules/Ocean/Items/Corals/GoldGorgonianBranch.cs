@@ -1,13 +1,13 @@
 ﻿using Terraria.Localization;
 
-namespace MythMod.OceanMod.Items
+namespace Everglow.Ocean.Items
 {
     public class GoldGorgonianBranch : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("GoldGorgonianBranch");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "金柳珊瑚枝");
+            // DisplayName.SetDefault("GoldGorgonianBranch");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "金柳珊瑚枝");
         }
         public override void SetDefaults()
         {
@@ -22,7 +22,7 @@ namespace MythMod.OceanMod.Items
             Item.consumable = true;
             Item.useTurn = true;
             Item.autoReuse = true;
-            //Item.createTile = ModContent.TileType<OceanMod.Tiles.GoldGorgonianLarge>();
+            //Item.createTile = ModContent.TileType<Tiles.GoldGorgonianLarge>();
         }
     }
 }

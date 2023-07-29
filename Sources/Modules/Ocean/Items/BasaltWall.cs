@@ -1,36 +1,36 @@
 ﻿using System;
+using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace MythMod.Items.Walls
+namespace Everglow.Ocean.Items.Walls
 {
     public class BasaltWall : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			base.DisplayName.SetDefault("VolcanoStone Wall");
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩墙");
+			// // base.DisplayName.SetDefault("VolcanoStone Wall");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩墙");
 		}
 		public override void SetDefaults()
 		{
-			base.item.width = 12;
-			base.item.height = 12;
-			base.item.maxStack = 999;
-			base.item.useTurn = true;
-			base.item.autoReuse = true;
-			base.item.useAnimation = 15;
-			base.item.useTime = 7;
-			base.item.useStyle = 1;
-			base.item.consumable = true;
-            base.item.createWall = base.mod.WallType("BackGWall");
+			base.Item.width = 12;
+			base.Item.height = 12;
+			base.Item.maxStack = 999;
+			base.Item.useTurn = true;
+			base.Item.autoReuse = true;
+			base.Item.useAnimation = 15;
+			base.Item.useTime = 7;
+			base.Item.useStyle = 1;
+			base.Item.consumable = true;
+            base.Item.createWall = base.Mod.Find<ModWall>("BackGWall").Type;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe modRecipe = new ModRecipe(base.mod);
+			Recipe modRecipe = /* base */Recipe.Create(this.Type, 4);
             modRecipe.AddIngredient(null, "Basalt", 1);
 			modRecipe.AddTile(18);
-			modRecipe.SetResult(this, 4);
-			modRecipe.AddRecipe();
+			modRecipe.Register();
 		}
 	}
 }

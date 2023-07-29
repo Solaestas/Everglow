@@ -13,37 +13,37 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
-namespace MythMod.Items.Weapons.OceanWeapons
+namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 {
     public class AquamarineMiniGun : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			base.DisplayName.SetDefault("");
-			base.Tooltip.SetDefault("");
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石迷你机枪");
+			// // base.DisplayName.SetDefault("");
+			// base.Tooltip.SetDefault("");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石迷你机枪");
 			base.Tooltip.AddTranslation(GameCulture.Chinese, "这东西太贵重了,只好做成这个尺寸了\n 66%不消耗弹药");
 		}
 		public override void SetDefaults()
 		{
-			base.item.damage = 200;
-			base.item.width = 62;
-			base.item.height = 44;
-			base.item.useTime = 5;
-			base.item.useAnimation = 5;
-			base.item.useStyle = 5;
-			base.item.noMelee = true;
-			base.item.ranged = true;
-			base.item.knockBack = 1f;
-			base.item.value = 100000;
-			base.item.rare = 11;
-			base.item.UseSound = SoundID.Item31;
-			base.item.autoReuse = true;
-            base.item.shoot = 14;
-			base.item.shootSpeed = 20f;
-			base.item.useAmmo = AmmoID.Bullet;
+			base.Item.damage = 200;
+			base.Item.width = 62;
+			base.Item.height = 44;
+			base.Item.useTime = 5;
+			base.Item.useAnimation = 5;
+			base.Item.useStyle = 5;
+			base.Item.noMelee = true;
+			base.Item.DamageType = DamageClass.Ranged;
+			base.Item.knockBack = 1f;
+			base.Item.value = 100000;
+			base.Item.rare = 11;
+			base.Item.UseSound = SoundID.Item31;
+			base.Item.autoReuse = true;
+            base.Item.shoot = 14;
+			base.Item.shootSpeed = 20f;
+			base.Item.useAmmo = AmmoID.Bullet;
 		}
-		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
             Projectile.NewProjectile(position.X, position.Y + Main.rand.Next(-1, 2) * 6f, speedX, speedY, type, damage, knockBack, player.whoAmI, 0f, 0f);
             if((int)(Main.time / 5f) % 5 == 0)
@@ -54,7 +54,7 @@ namespace MythMod.Items.Weapons.OceanWeapons
             }
             return false;
 		}
-		public override bool ConsumeAmmo(Player player)
+		public override bool CanConsumeAmmo(Item ammo, Player player)
 		{
 			return Main.rand.Next(0, 100) > 66;
 		}
@@ -64,12 +64,11 @@ namespace MythMod.Items.Weapons.OceanWeapons
         }
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe(1);
             recipe.AddIngredient(null, "Aquamarine", 7);
             recipe.AddIngredient(null, "RedCoral", 1);
             recipe.requiredTile[0] = 412;
-            recipe.SetResult(this, 1);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

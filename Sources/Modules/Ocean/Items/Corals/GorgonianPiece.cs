@@ -1,13 +1,13 @@
 ﻿using Terraria.Localization;
 
-namespace MythMod.OceanMod.Items
+namespace Everglow.Ocean.Items
 {
     public class GorgonianPiece : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Gorgonian Piece");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "柳珊瑚片");
+            // DisplayName.SetDefault("Gorgonian Piece");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "柳珊瑚片");
         }
         public override void SetDefaults()
         {
@@ -22,7 +22,7 @@ namespace MythMod.OceanMod.Items
             Item.consumable = true;
             Item.useTurn = true;
             Item.autoReuse = true;
-            //Item.createTile = ModContent.TileType<OceanMod.Tiles.LargeGorgonian>();
+            //Item.createTile = ModContent.TileType<Tiles.LargeGorgonian>();
         }
     }
 }

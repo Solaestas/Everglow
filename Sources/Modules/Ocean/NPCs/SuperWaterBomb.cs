@@ -1,11 +1,12 @@
 ﻿using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-namespace MythMod.NPCs
+namespace Everglow.Ocean.NPCs
 {
 	// Token: 0x020004FC RID: 1276
     public class SuperWaterBomb : ModNPC
@@ -13,34 +14,34 @@ namespace MythMod.NPCs
 		// Token: 0x06001BA4 RID: 7076 RVA: 0x0000B6E0 File Offset: 0x000098E0
 		public override void SetStaticDefaults()
 		{
-			base.DisplayName.SetDefault("SuperWaterBomb");
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "超级水雷");
-			Main.npcFrameCount[base.npc.type] = 1;
+			// // base.DisplayName.SetDefault("SuperWaterBomb");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "超级水雷");
+			Main.npcFrameCount[base.NPC.type] = 1;
 		}
 
 		// Token: 0x06001BA5 RID: 7077 RVA: 0x001539E4 File Offset: 0x00151BE4
 		public override void SetDefaults()
 		{
-			base.npc.damage = 1000;
-			base.npc.width = 212;
-			base.npc.height = 210;
-			base.npc.defense = 0;
-            base.npc.lifeMax = 1;
-			base.npc.knockBackResist = 0f;
-			base.npc.alpha = 0;
-			base.npc.noGravity = true;
-			base.npc.noTileCollide = true;
+			base.NPC.damage = 1000;
+			base.NPC.width = 212;
+			base.NPC.height = 210;
+			base.NPC.defense = 0;
+            base.NPC.lifeMax = 1;
+			base.NPC.knockBackResist = 0f;
+			base.NPC.alpha = 0;
+			base.NPC.noGravity = true;
+			base.NPC.noTileCollide = true;
 		}
         private int u = 0;
 
 		public override void AI()
 		{
-            base.npc.spriteDirection = -1;
+            base.NPC.spriteDirection = -1;
             u += 1;
-            base.npc.velocity.Y = (float)Math.Sin((float)u / 105f * Math.PI);
+            base.NPC.velocity.Y = (float)Math.Sin((float)u / 105f * Math.PI);
         }
 
-		public override void ModifyHitByProjectile(Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
 		{
 			if (projectile.penetrate == -1)
 			{
@@ -55,48 +56,48 @@ namespace MythMod.NPCs
 			projectile.penetrate = 1;
 		}
         // Token: 0x02000413 RID: 1043
-        public override void OnHitPlayer(Player player, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Item, "Sounds/Item/烟花爆炸"), (int)npc.Center.X, (int)npc.Center.Y);
-            player.velocity = (npc.velocity - player.velocity) / (npc.velocity - player.velocity).Length() * 54;
-            Projectile.NewProjectile(base.npc.position.X + (float)base.npc.width * 0.5f, base.npc.position.Y + (float)base.npc.height * 0.5f, 0f, 0f, 164, 10, 4f, Main.myPlayer, 0f, 0f);
+            SoundEngine.PlaySound(Mod.GetLegacySoundSlot(SoundType.Item, "Sounds/Item/烟花爆炸"), (int)NPC.Center.X, (int)NPC.Center.Y);
+            player.velocity = (NPC.velocity - player.velocity) / (NPC.velocity - player.velocity).Length() * 54;
+            Projectile.NewProjectile(base.NPC.position.X + (float)base.NPC.width * 0.5f, base.NPC.position.Y + (float)base.NPC.height * 0.5f, 0f, 0f, 164, 10, 4f, Main.myPlayer, 0f, 0f);
             for (int k = 0; k <= 10; k++)
             {
                 Vector2 v = new Vector2(0, Main.rand.Next(16,160)).RotatedByRandom(Math.PI * 2);
-                Gore.NewGore(base.npc.Center, v, base.mod.GetGoreSlot("Gores/超级水雷碎块"), 1f);
+                Gore.NewGore(base.NPC.Center, v, base.Mod.GetGoreSlot("Gores/超级水雷碎块"), 1f);
             }
             for (int k = 0; k <= 10; k++)
             {
                 Vector2 v = new Vector2(0, Main.rand.Next(16, 160)).RotatedByRandom(Math.PI * 2);
-                Gore.NewGore(base.npc.Center, v, base.mod.GetGoreSlot("Gores/超级水雷碎块2"), 1f);
+                Gore.NewGore(base.NPC.Center, v, base.Mod.GetGoreSlot("Gores/超级水雷碎块2"), 1f);
             }
             for (int k = 0; k <= 30; k++)
             {
                 Vector2 v = new Vector2(0, Main.rand.Next(0, 140)).RotatedByRandom(Math.PI * 2);
-                int num4 = Projectile.NewProjectile(npc.Center.X + v.X, npc.Center.Y + v.Y, 0, 0, base.mod.ProjectileType("熔炉烈焰"), 1000, 0, Main.myPlayer, Main.rand.Next(1000, 3000) / 700f, 0f);
+                int num4 = Projectile.NewProjectile(NPC.Center.X + v.X, NPC.Center.Y + v.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.熔炉烈焰>(), 1000, 0, Main.myPlayer, Main.rand.Next(1000, 3000) / 700f, 0f);
                 Main.projectile[num4].hostile = true;
             }
         }
         // Token: 0x02000413 RID: 1043
-        public override void HitEffect(int hitDirection, double damage)
+        public override void HitEffect(NPC.HitInfo hit)
         {
             Player player = Main.player[Main.myPlayer];
-            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Item, "Sounds/Item/烟花爆炸"), (int)npc.Center.X, (int)npc.Center.Y);
-            Projectile.NewProjectile(base.npc.position.X + (float)base.npc.width * 0.5f, base.npc.position.Y + (float)base.npc.height * 0.5f, 0f, 0f, 164, 10, 4f, Main.myPlayer, 0f, 0f);
+            SoundEngine.PlaySound(Mod.GetLegacySoundSlot(SoundType.Item, "Sounds/Item/烟花爆炸"), (int)NPC.Center.X, (int)NPC.Center.Y);
+            Projectile.NewProjectile(base.NPC.position.X + (float)base.NPC.width * 0.5f, base.NPC.position.Y + (float)base.NPC.height * 0.5f, 0f, 0f, 164, 10, 4f, Main.myPlayer, 0f, 0f);
             for (int k = 0; k <= 10; k++)
             {
                 Vector2 v = new Vector2(0, Main.rand.Next(16,160)).RotatedByRandom(Math.PI * 2);
-                Gore.NewGore(base.npc.position, v, base.mod.GetGoreSlot("Gores/超级水雷碎块"), 1f);
+                Gore.NewGore(base.NPC.position, v, base.Mod.GetGoreSlot("Gores/超级水雷碎块"), 1f);
             }
             for (int k = 0; k <= 10; k++)
             {
                 Vector2 v = new Vector2(0, Main.rand.Next(16,160)).RotatedByRandom(Math.PI * 2);
-                Gore.NewGore(base.npc.position, v, base.mod.GetGoreSlot("Gores/超级水雷碎块2"), 1f);
+                Gore.NewGore(base.NPC.position, v, base.Mod.GetGoreSlot("Gores/超级水雷碎块2"), 1f);
             }
             for (int k = 0; k <= 30; k++)
             {
                 Vector2 v = new Vector2(0, Main.rand.Next(0, 140)).RotatedByRandom(Math.PI * 2);
-                int num4 = Projectile.NewProjectile(npc.Center.X + v.X, npc.Center.Y + v.Y, 0, 0, base.mod.ProjectileType("熔炉烈焰"), 1000, 0, Main.myPlayer, Main.rand.Next(1000, 3000) / 700f, 0f);
+                int num4 = Projectile.NewProjectile(NPC.Center.X + v.X, NPC.Center.Y + v.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.熔炉烈焰>(), 1000, 0, Main.myPlayer, Main.rand.Next(1000, 3000) / 700f, 0f);
                 Main.projectile[num4].hostile = true;
             }
         }
@@ -107,11 +108,11 @@ namespace MythMod.NPCs
 		}
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
-			if (spawnInfo.playerSafe)
+			if (spawnInfo.PlayerSafe)
 			{
 				return 0f;
 			}
-			if (spawnInfo.player.GetModPlayer<MythPlayer>().ZoneOcean && spawnInfo.water)
+			if (spawnInfo.Player.GetModPlayer<OceanContentPlayer>().ZoneOcean && spawnInfo.Water)
 			{
 				return 0.01f;
 			}
@@ -121,7 +122,7 @@ namespace MythMod.NPCs
             }
 		}
 		// Token: 0x06001BA9 RID: 7081 RVA: 0x000037AF File Offset: 0x000019AF
-		public override bool PreNPCLoot()
+		public override bool PreKill()
 		{
 			return false;
 		}

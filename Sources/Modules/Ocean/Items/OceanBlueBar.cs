@@ -1,12 +1,12 @@
-﻿using Terraria.Localization;
-namespace MythMod.OceanMod.Items.Ores
+using Terraria.Localization;
+namespace Everglow.Ocean.Items.Ores
 {
     public class OceanBlueBar : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Current Bar");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "沧流锭");
+            // DisplayName.SetDefault("Current Bar");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "沧流锭");
         }
         public override void SetDefaults()
         {
@@ -27,7 +27,7 @@ namespace MythMod.OceanMod.Items.Ores
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<OceanMod.Items.Ores.OceanBlueOre>(), 3)
+                .AddIngredient(ModContent.ItemType<Items.Ores.OceanBlueOre>(), 3)
                 .AddTile(17)
                 .Register();
         }

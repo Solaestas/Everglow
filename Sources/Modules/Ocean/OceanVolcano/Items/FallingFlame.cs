@@ -1,4 +1,4 @@
-using Terraria.ID;
+﻿using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -17,45 +17,45 @@ using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
 using Terraria.Graphics.Shaders;
 
-namespace MythMod.Items.Volcano
+namespace Everglow.Ocean.OceanVolcano.Items
 {
     public class FallingFlame : ModItem
     {
         public override void SetStaticDefaults()
         {
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "天火");
-            Tooltip.SetDefault("");
-            GetGlowMask = MythMod.SetStaticDefaultsGlowMask(this);
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "天火");
+            // Tooltip.SetDefault("");
+            GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
         public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            item.ranged = true;
-            item.width = 34;
-            item.height = 76;
-            item.useTime = 7;
-            item.useAnimation = 7;
-            item.damage = 350;
-            item.UseSound = SoundID.Item11;
-            item.autoReuse = true;
-            item.crit = 4;
-            item.value = 30000;
-            item.scale = 1f;
-            item.rare = 11;
-            item.useStyle = 5;
-            item.knockBack = 1;
-            item.shoot = 1;
-            item.useAmmo = 40;
-            item.noMelee = true;
-            item.shootSpeed = 20f;
-            item.reuseDelay = 14;
-            item.glowMask = GetGlowMask;
+            Item.DamageType = DamageClass.Ranged;
+            Item.width = 34;
+            Item.height = 76;
+            Item.useTime = 7;
+            Item.useAnimation = 7;
+            Item.damage = 350;
+            Item.UseSound = SoundID.Item11;
+            Item.autoReuse = true;
+            Item.crit = 4;
+            Item.value = 30000;
+            Item.scale = 1f;
+            Item.rare = 11;
+            Item.useStyle = 5;
+            Item.knockBack = 1;
+            Item.shoot = 1;
+            Item.useAmmo = 40;
+            Item.noMelee = true;
+            Item.shootSpeed = 20f;
+            Item.reuseDelay = 14;
+            Item.glowMask = GetGlowMask;
         }
         public override Vector2? HoldoutOffset()
         {
             return new Vector2(-12.0f, 0.0f);
         }
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             Vector2 v = new Vector2(speedX, speedY);
             int num = Main.rand.Next(2, 6);
@@ -74,12 +74,11 @@ namespace MythMod.Items.Volcano
         }
         public override void AddRecipes()
         {
-            ModRecipe modRecipe = new ModRecipe(base.mod);
+            Recipe modRecipe = /* base */Recipe.Create(this.Type, 1);
             modRecipe.AddIngredient(null, "LavaCrystal", 20);
             modRecipe.AddIngredient(null, "LavaStone", 20);
             modRecipe.requiredTile[0] = 412;
-            modRecipe.SetResult(this, 1);
-            modRecipe.AddRecipe();
+            modRecipe.Register();
         }
     }
 }

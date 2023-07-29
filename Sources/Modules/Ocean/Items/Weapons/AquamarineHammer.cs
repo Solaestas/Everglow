@@ -1,6 +1,5 @@
-using MythMod.NPCs;
+﻿using Everglow.Ocean.NPCs;
 using Terraria.GameContent.Generation;
-using Terraria.World.Generation;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -16,42 +15,42 @@ using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
 using Terraria.Graphics.Shaders;
+using Terraria.WorldBuilding;
 
-namespace MythMod.Items.Weapons.OceanWeapons
+namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 {
 	public class AquamarineHammer : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("");
+			// Tooltip.SetDefault("");
 		}
 
 		public override void SetDefaults()
 		{
-			item.damage = 85;
-			item.crit = 4;
-			item.melee = true;
-			item.width = 68;
-			item.height = 68;
-			item.useTime = 25;
-			item.useAnimation = 25;
-			item.hammer = 120;		//How much hammer power the weapon has
-			item.useStyle = 1;
-			item.knockBack = 6;
-			item.value = 45000;
-			item.rare = 7;
-			item.UseSound = SoundID.Item1;
-			item.autoReuse = true;
+			Item.damage = 85;
+			Item.crit = 4;
+			Item.DamageType = DamageClass.Melee/* tModPorter Suggestion: Consider MeleeNoSpeed for no attack speed scaling */;
+			Item.width = 68;
+			Item.height = 68;
+			Item.useTime = 25;
+			Item.useAnimation = 25;
+			Item.hammer = 120;		//How much hammer power the weapon has
+			Item.useStyle = 1;
+			Item.knockBack = 6;
+			Item.value = 45000;
+			Item.rare = 7;
+			Item.UseSound = SoundID.Item1;
+			Item.autoReuse = true;
 		}
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe(1);//制作一个材料
             recipe.AddIngredient(null, "Aquamarine", 7); //要用一个泥土制作，1是数量，ItemID.DirtBlock是泥土
             recipe.AddIngredient(null, "RedCoral", 1); //要用一个泥土制作，1是数量，ItemID.DirtBlock是泥土
             recipe.requiredTile[0] = 412;
-            recipe.SetResult(this, 1);//制作一个材料
-            recipe.AddRecipe();
+            recipe.Register();
         }
 
         // Token: 0x060002D2 RID: 722 RVA: 0x000354AC File Offset: 0x000336AC

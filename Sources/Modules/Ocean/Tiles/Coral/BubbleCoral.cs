@@ -1,7 +1,7 @@
 ﻿using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace MythMod.OceanMod.Tiles
+namespace Everglow.Ocean.Tiles
 {
     public class BubbleCoral : ModTile
     {
@@ -33,7 +33,7 @@ namespace MythMod.OceanMod.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<OceanMod.Items.BlueTreeCoral>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.BlueTreeCoral>());
         }
         public override void PlaceInWorld(int i, int j, Item item)
         {

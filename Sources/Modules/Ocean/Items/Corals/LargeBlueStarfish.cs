@@ -1,12 +1,12 @@
 ﻿using Terraria.Localization;
-namespace MythMod.OceanMod.Items
+namespace Everglow.Ocean.Items
 {
     public class LargeBlueStarfish : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Large Blue Starfish");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "大蓝色海星");
+            // DisplayName.SetDefault("Large Blue Starfish");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "大蓝色海星");
         }
         public override void SetDefaults()
         {
@@ -14,7 +14,7 @@ namespace MythMod.OceanMod.Items
             Item.height = 42;
             Item.rare = 1;
             Item.scale = 1f;
-            Item.createTile = ModContent.TileType<OceanMod.Tiles.LargeBlueStarfish>();
+            Item.createTile = ModContent.TileType<Tiles.LargeBlueStarfish>();
             Item.useStyle = 1;
             Item.useTurn = true;
             Item.useAnimation = 15;

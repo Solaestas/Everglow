@@ -1,39 +1,39 @@
 ﻿using System;
+using Terraria;
 using Terraria.ModLoader;
 using Terraria.Localization;
 
-namespace MythMod.Items.Furnitures
+namespace Everglow.Ocean.Items.Furnitures
 {
 	public class BasaltBed : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-            DisplayName.SetDefault("BasaltBed");
-            DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩床");
+            // DisplayName.SetDefault("BasaltBed");
+            // DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩床");
         }
 		public override void SetDefaults()
 		{
-			item.SetNameOverride("玄武岩床");
-			item.width = 28;
-			item.height = 20;
-			item.maxStack = 999;
-			item.useTurn = true;
-			item.autoReuse = true;
-			item.useAnimation = 15;
-			item.useTime = 10;
-			item.useStyle = 1;
-			item.value = 0;
-			item.consumable = true;
-			item.createTile = mod.TileType("玄武岩床");
+			Item.SetNameOverride("玄武岩床");
+			Item.width = 28;
+			Item.height = 20;
+			Item.maxStack = 999;
+			Item.useTurn = true;
+			Item.autoReuse = true;
+			Item.useAnimation = 15;
+			Item.useTime = 10;
+			Item.useStyle = 1;
+			Item.value = 0;
+			Item.consumable = true;
+			Item.createTile = Mod.Find<ModTile>("玄武岩床").Type;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe modRecipe = new ModRecipe(mod);
+			Recipe modRecipe = CreateRecipe(1);
 			modRecipe.AddIngredient(null, "Basalt", 15);
             modRecipe.AddIngredient(225, 5);
-            modRecipe.SetResult(this, 1);
 			modRecipe.AddTile(16);
-			modRecipe.AddRecipe();
+			modRecipe.Register();
 		}
 	}
 }

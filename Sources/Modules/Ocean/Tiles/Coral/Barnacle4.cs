@@ -1,7 +1,7 @@
 ﻿using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace MythMod.OceanMod.Tiles
+namespace Everglow.Ocean.Tiles
 {
     public class Barnacle4 : ModTile
     {
@@ -20,7 +20,7 @@ namespace MythMod.OceanMod.Tiles
             TileObjectData.newTile.CoordinateWidth = 36;
             TileObjectData.addTile((int)base.Type);
             DustType = 7;
-            ItemDrop = ModContent.ItemType<OceanMod.Items.Barnacle>();
+            ItemDrop/* tModPorter Note: Removed. Tiles and walls will drop the item which places them automatically. Use RegisterItemDrop to alter the automatic drop if necessary. */ = ModContent.ItemType<Items.Barnacle>();
             ModTranslation modTranslation = base.CreateMapEntryName(null);
             modTranslation.SetDefault("Barnacle");
             modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "藤壶");
@@ -28,7 +28,7 @@ namespace MythMod.OceanMod.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(null, i * 16, j * 16, 48, 48, ModContent.ItemType<OceanMod.Items.Barnacle>(), 2, false, 0, false, false);
+            Item.NewItem(null, i * 16, j * 16, 48, 48, ModContent.ItemType<Items.Barnacle>(), 2, false, 0, false, false);
         }
         public override void PlaceInWorld(int i, int j, Item item)
         {

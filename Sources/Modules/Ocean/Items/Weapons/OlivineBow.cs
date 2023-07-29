@@ -14,57 +14,56 @@ using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
 
-namespace MythMod.Items.Weapons.OceanWeapons
+namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 {
     public class OlivineBow : ModItem
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("");
-            DisplayName.AddTranslation(GameCulture.Chinese, "éÏé­Ê¯¹­");
+            // Tooltip.SetDefault("");
+            // DisplayName.AddTranslation(GameCulture.Chinese, "éÏé­Ê¯¹­");
         }
         public override void SetDefaults()
         {
-            item.ranged = true;
-            item.width = 38;
-            item.height = 82;
-            item.useTime = 8;
-            item.useAnimation = 8;
-            item.damage = 285;
-            item.UseSound = SoundID.Item11;
-            item.autoReuse = true;
-            item.crit = 7;
-            item.value = 16000;
-            item.scale = 1f;
-            item.rare = 11;
-            item.useStyle = 5;
-            item.knockBack = 1;
-            item.useAmmo = 40;
-            item.noMelee = true;
-            item.shoot = mod.ProjectileType("OlivineArrow");
-            item.shootSpeed = 13f;
-            item.reuseDelay = 14;
+            Item.DamageType = DamageClass.Ranged;
+            Item.width = 38;
+            Item.height = 82;
+            Item.useTime = 8;
+            Item.useAnimation = 8;
+            Item.damage = 285;
+            Item.UseSound = SoundID.Item11;
+            Item.autoReuse = true;
+            Item.crit = 7;
+            Item.value = 16000;
+            Item.scale = 1f;
+            Item.rare = 11;
+            Item.useStyle = 5;
+            Item.knockBack = 1;
+            Item.useAmmo = 40;
+            Item.noMelee = true;
+            Item.shoot = ModContent.ProjectileType<Everglow.Ocean.Projectiles.OlivineArrow>();
+            Item.shootSpeed = 13f;
+            Item.reuseDelay = 14;
         }
-        public override bool ConsumeAmmo(Player player)
+        public override bool CanConsumeAmmo(Item ammo, Player player)
         {
-            return !(player.itemAnimation < item.useAnimation - 2);
+            return !(player.itemAnimation < Item.useAnimation - 2);
         }
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(1));
             speedX = perturbedSpeed.X;
             speedY = perturbedSpeed.Y;
-            Projectile.NewProjectile(position.X, position.Y, speedX, speedY, mod.ProjectileType("OlivineArrow"), damage, knockBack, player.whoAmI);
+            Projectile.NewProjectile(position.X, position.Y, speedX, speedY, ModContent.ProjectileType<Everglow.Ocean.Projectiles.OlivineArrow>(), damage, knockBack, player.whoAmI);
             return false;
         }
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe(1);
             recipe.AddIngredient(null, "Olivine", 8);
             recipe.requiredTile[0] = 412;
             recipe.AddIngredient(null, "GoldGorgonianBranch", 15);
-            recipe.SetResult(this, 1);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

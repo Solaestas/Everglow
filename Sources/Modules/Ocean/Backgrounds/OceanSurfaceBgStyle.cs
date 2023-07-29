@@ -1,4 +1,4 @@
-namespace MythMod.OceanMod.Backgrounds
+namespace Everglow.Ocean.Backgrounds
 {
     public class OceanSurfaceBgStyle : ModSurfaceBackgroundStyle
     {
@@ -26,16 +26,16 @@ namespace MythMod.OceanMod.Backgrounds
         }
         public override int ChooseFarTexture()
         {
-            return BackgroundTextureLoader.GetBackgroundSlot("MythMod/OceanMod/Backgrounds/OceanSurfaceFar");
+            return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Ocean/Backgrounds/OceanSurfaceFar");
         }
         public override int ChooseMiddleTexture()
         {
-            return BackgroundTextureLoader.GetBackgroundSlot("MythMod/OceanMod/Backgrounds/OceanSurfaceMiddle");
+            return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Ocean/Backgrounds/OceanSurfaceMiddle");
         }
         public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b)
         {
             //b = -900;
-            return BackgroundTextureLoader.GetBackgroundSlot("MythMod/OceanMod/Backgrounds/OceanSurfaceClose");
+            return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Ocean/Backgrounds/OceanSurfaceClose");
         }
     }
 }

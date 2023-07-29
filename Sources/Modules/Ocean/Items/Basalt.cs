@@ -1,12 +1,12 @@
-﻿using Terraria.Localization;
-namespace MythMod.OceanMod.Items
+using Terraria.Localization;
+namespace Everglow.Ocean.Items
 {
     public class Basalt : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Basalt");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "玄武岩");
+            // DisplayName.SetDefault("Basalt");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "玄武岩");
         }
         public override void SetDefaults()
         {
@@ -14,7 +14,7 @@ namespace MythMod.OceanMod.Items
             Item.height = 16;
             Item.rare = 0;
             Item.scale = 1f;
-            Item.createTile = ModContent.TileType<OceanMod.Tiles.Basalt>();
+            Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.Basalt>();
             Item.useStyle = 1;
             Item.useTurn = true;
             Item.useAnimation = 15;

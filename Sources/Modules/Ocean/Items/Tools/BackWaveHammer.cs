@@ -1,42 +1,41 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria.Localization;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace MythMod.Items
+namespace Everglow.Ocean.Items
 {
 	public class BackWaveHammer : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("");
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "回流锤");
+			// Tooltip.SetDefault("");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "回流锤");
         }
 		public override void SetDefaults()
 		{
-			item.damage = 84;
-			item.crit = 4;
-			item.melee = true;
-			item.width = 36;
-			item.height = 34;
-			item.useTime = 20;
-			item.useAnimation = 20;
-			item.hammer = 110;
-			item.useStyle = 1;
-			item.knockBack = 4;
-			item.value = 40000;
-			item.rare = 8;
-			item.UseSound = SoundID.Item1;
-			item.autoReuse = true;
+			Item.damage = 84;
+			Item.crit = 4;
+			Item.DamageType = DamageClass.Melee/* tModPorter Suggestion: Consider MeleeNoSpeed for no attack speed scaling */;
+			Item.width = 36;
+			Item.height = 34;
+			Item.useTime = 20;
+			Item.useAnimation = 20;
+			Item.hammer = 110;
+			Item.useStyle = 1;
+			Item.knockBack = 4;
+			Item.value = 40000;
+			Item.rare = 8;
+			Item.UseSound = SoundID.Item1;
+			Item.autoReuse = true;
 		}
         public override void AddRecipes()
         {
-            ModRecipe modRecipe = new ModRecipe(base.mod);
+            Recipe modRecipe = /* base */Recipe.Create(this.Type, 1);
             modRecipe.AddIngredient(null, "OceanBlueBar", 12);
             modRecipe.requiredTile[0] = 412;
-            modRecipe.SetResult(this, 1);
-            modRecipe.AddRecipe();
+            modRecipe.Register();
         }
         public override void MeleeEffects(Player player, Rectangle hitbox)
 		{

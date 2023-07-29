@@ -13,40 +13,40 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
-namespace MythMod.Items.Volcano
+namespace Everglow.Ocean.OceanVolcano.Items
 {
     public class CalciningFire : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			base.DisplayName.SetDefault("");
-			base.Tooltip.SetDefault("");
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "灼烧之怒");
+			// // base.DisplayName.SetDefault("");
+			// base.Tooltip.SetDefault("");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "灼烧之怒");
 			base.Tooltip.AddTranslation(GameCulture.Chinese, "");
-            GetGlowMask = MythMod.SetStaticDefaultsGlowMask(this);
+            GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
         public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            item.glowMask = GetGlowMask;
-            base.item.damage = 300;
-			base.item.width = 52;
-			base.item.height = 28;
-			base.item.useTime = 5;
-			base.item.useAnimation = 5;
-			base.item.useStyle = 5;
-			base.item.noMelee = true;
-			base.item.ranged = true;
-			base.item.knockBack = 1f;
-			base.item.value = 50000;
-			base.item.rare = 11;
-			base.item.UseSound = SoundID.Item31;
-			base.item.autoReuse = true;
-            base.item.shoot = 14;
-			base.item.shootSpeed = 20f;
-			base.item.useAmmo = AmmoID.Bullet;
+            Item.glowMask = GetGlowMask;
+            base.Item.damage = 300;
+			base.Item.width = 52;
+			base.Item.height = 28;
+			base.Item.useTime = 5;
+			base.Item.useAnimation = 5;
+			base.Item.useStyle = 5;
+			base.Item.noMelee = true;
+			base.Item.DamageType = DamageClass.Ranged;
+			base.Item.knockBack = 1f;
+			base.Item.value = 50000;
+			base.Item.rare = 11;
+			base.Item.UseSound = SoundID.Item31;
+			base.Item.autoReuse = true;
+            base.Item.shoot = 14;
+			base.Item.shootSpeed = 20f;
+			base.Item.useAmmo = AmmoID.Bullet;
 		}
-		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
             Projectile.NewProjectile(position.X, position.Y + Main.rand.Next(-1, 2) * 6f, speedX, speedY, type, damage, knockBack, player.whoAmI, 0f, 0f);
             if((int)(Main.time / 5f) % 5 == 0)
@@ -58,7 +58,7 @@ namespace MythMod.Items.Volcano
             }
             return false;
 		}
-		public override bool ConsumeAmmo(Player player)
+		public override bool CanConsumeAmmo(Item ammo, Player player)
 		{
 			return Main.rand.Next(0, 100) > 66;
 		}

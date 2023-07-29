@@ -1,12 +1,12 @@
 ﻿using Terraria.Localization;
-namespace MythMod.OceanMod.Items
+namespace Everglow.Ocean.Items
 {
     public class Barnacle : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Barnacle");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "藤壶");
+            // DisplayName.SetDefault("Barnacle");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "藤壶");
         }
         public override void SetDefaults()
         {
@@ -32,19 +32,19 @@ namespace MythMod.OceanMod.Items
             int ty = (int)((Math.Sin(Main.mouseX) * 200) % 4);
             if (ty == 0)
             {
-                Item.createTile = ModContent.TileType<OceanMod.Tiles.SparseBarnacle1>();
+                Item.createTile = ModContent.TileType<Tiles.SparseBarnacle1>();
             }
             if (ty == 1)
             {
-                Item.createTile = ModContent.TileType<OceanMod.Tiles.SparseBarnacle2>();
+                Item.createTile = ModContent.TileType<Tiles.SparseBarnacle2>();
             }
             if (ty == 2)
             {
-                Item.createTile = ModContent.TileType<OceanMod.Tiles.SparseBarnacle3>();
+                Item.createTile = ModContent.TileType<Tiles.SparseBarnacle3>();
             }
             if (ty == 3)
             {
-                Item.createTile = ModContent.TileType<OceanMod.Tiles.SparseBarnacle4>();
+                Item.createTile = ModContent.TileType<Tiles.SparseBarnacle4>();
             }
             base.UpdateInventory(player);
         }

@@ -13,32 +13,32 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
-namespace MythMod.Items.Drawings
+namespace Everglow.Ocean.Items.Drawings
 {
     public class BurningRainbow : ModItem
 	{
 		// Token: 0x060009BA RID: 2490 RVA: 0x00005A27 File Offset: 0x00003C27
 		public override void SetStaticDefaults()
 		{
-			base.DisplayName.SetDefault("烈焰彩虹");
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "烈焰彩虹");
+			// // base.DisplayName.SetDefault("烈焰彩虹");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "烈焰彩虹");
 		}
 
 		// Token: 0x060009BB RID: 2491 RVA: 0x000500EC File Offset: 0x0004E2EC
 		public override void SetDefaults()
 		{
-			base.item.width = 80;
-			base.item.height = 80;
-			base.item.maxStack = 99;
-			base.item.useTurn = true;
-			base.item.autoReuse = true;
-			base.item.useAnimation = 15;
-			base.item.useTime = 10;
-			base.item.useStyle = 1;
-			base.item.consumable = true;
-			base.item.value = 50000;
-			base.item.rare = 1;
-			base.item.createTile = base.mod.TileType("烈焰彩虹");
+			base.Item.width = 80;
+			base.Item.height = 80;
+			base.Item.maxStack = 99;
+			base.Item.useTurn = true;
+			base.Item.autoReuse = true;
+			base.Item.useAnimation = 15;
+			base.Item.useTime = 10;
+			base.Item.useStyle = 1;
+			base.Item.consumable = true;
+			base.Item.value = 50000;
+			base.Item.rare = 1;
+			base.Item.createTile = base.Mod.Find<ModTile>("烈焰彩虹").Type;
 		}
 	}
 }

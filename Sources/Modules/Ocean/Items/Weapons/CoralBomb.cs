@@ -13,42 +13,41 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
-namespace MythMod.Items.Weapons.OceanWeapons
+namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 {
     public class CoralBomb : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-            base.DisplayName.SetDefault("");
-			Item.staff[base.item.type] = true;
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "柳珊瑚水雷");
+            // // base.DisplayName.SetDefault("");
+			Item.staff[base.Item.type] = true;
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "柳珊瑚水雷");
 		}
 		public override void SetDefaults()
 		{
-			base.item.damage = 200;
-			base.item.width = 88;
-			base.item.height = 86;
-			base.item.useTime = 36;
-			base.item.useAnimation = 36;
-			base.item.useStyle = 5;
-			base.item.noMelee = true;
-			base.item.knockBack = 1.5f;
-			base.item.value = 3000;
-			base.item.rare = 11;
-            base.item.noUseGraphic = true;
-            base.item.UseSound = SoundID.Item60;
-			base.item.autoReuse = true;
-			base.item.shootSpeed = 6f;
-            base.item.shoot = base.mod.ProjectileType("GorgonianWaterBomb");
+			base.Item.damage = 200;
+			base.Item.width = 88;
+			base.Item.height = 86;
+			base.Item.useTime = 36;
+			base.Item.useAnimation = 36;
+			base.Item.useStyle = 5;
+			base.Item.noMelee = true;
+			base.Item.knockBack = 1.5f;
+			base.Item.value = 3000;
+			base.Item.rare = 11;
+            base.Item.noUseGraphic = true;
+            base.Item.UseSound = SoundID.Item60;
+			base.Item.autoReuse = true;
+			base.Item.shootSpeed = 6f;
+            base.Item.shoot =ModContent.ProjectileType<Everglow.Ocean.Projectiles.GorgonianWaterBomb>();
         }
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe(1);//制作一个武器
             recipe.AddIngredient(null, "GorgonianPiece", 30); //需要一个材料
             recipe.AddIngredient(null, "BladeScale", 8); //需要一个材料
             recipe.requiredTile[0] = 412;
-            recipe.SetResult(this, 1); //制作一个武器
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

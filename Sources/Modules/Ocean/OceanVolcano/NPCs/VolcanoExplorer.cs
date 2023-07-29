@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using Everglow.Ocean.Common;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Events;
@@ -7,42 +8,42 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace MythMod.NPCs.TownNPCs
+namespace Everglow.Ocean.NPCs.TownNPCs
 {
 	[AutoloadHead]
 	public class VolcanoExplorer : ModNPC
 	{
 		public override void SetStaticDefaults()
 		{
-			base.DisplayName.SetDefault("VolcanoExplorer");
-			Main.npcFrameCount[base.npc.type] = 23;
-			NPCID.Sets.ExtraFramesCount[base.npc.type] = 9;
-			NPCID.Sets.AttackFrameCount[base.npc.type] = 4;
-			NPCID.Sets.DangerDetectRange[base.npc.type] = 400;
-			NPCID.Sets.AttackType[base.npc.type] = 0;
-			NPCID.Sets.AttackTime[base.npc.type] = 60;
-			NPCID.Sets.AttackAverageChance[base.npc.type] = 15;
-			base.DisplayName.AddTranslation(GameCulture.Chinese, "火山探险家");
+			// // base.DisplayName.SetDefault("VolcanoExplorer");
+			Main.npcFrameCount[base.NPC.type] = 23;
+			NPCID.Sets.ExtraFramesCount[base.NPC.type] = 9;
+			NPCID.Sets.AttackFrameCount[base.NPC.type] = 4;
+			NPCID.Sets.DangerDetectRange[base.NPC.type] = 400;
+			NPCID.Sets.AttackType[base.NPC.type] = 0;
+			NPCID.Sets.AttackTime[base.NPC.type] = 60;
+			NPCID.Sets.AttackAverageChance[base.NPC.type] = 15;
+			// base.// DisplayName.AddTranslation(GameCulture.Chinese, "火山探险家");
 		}
 		public override void SetDefaults()
 		{
-			base.npc.townNPC = true;
-			base.npc.friendly = true;
-			base.npc.width = 18;
-			base.npc.height = 40;
-			base.npc.aiStyle = 7;
-			base.npc.damage = 10;
-			base.npc.defense = 15;
-			base.npc.lifeMax = 250;
-			base.npc.HitSound = SoundID.NPCHit1;
-			base.npc.DeathSound = SoundID.NPCDeath6;
-			base.npc.knockBackResist = 0.5f;
-			this.animationType = 22;
+			base.NPC.townNPC = true;
+			base.NPC.friendly = true;
+			base.NPC.width = 18;
+			base.NPC.height = 40;
+			base.NPC.aiStyle = 7;
+			base.NPC.damage = 10;
+			base.NPC.defense = 15;
+			base.NPC.lifeMax = 250;
+			base.NPC.HitSound = SoundID.NPCHit1;
+			base.NPC.DeathSound = SoundID.NPCDeath6;
+			base.NPC.knockBackResist = 0.5f;
+			this.AnimationType = 22;
 		}
 
-		public override bool CanTownNPCSpawn(int numTownNPCs, int money)
+		public override bool CanTownNPCSpawn(int numTownNPCs)/* tModPorter Suggestion: Copy the implementation of NPC.SpawnAllowed_Merchant in vanilla if you to count money, and be sure to set a flag when unlocked, so you don't count every tick. */
 		{
-            MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
+            OceanContentPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<OceanContentPlayer>();
             if (mplayer.ZoneVolcano)
             {
                 return true;
@@ -50,27 +51,17 @@ namespace MythMod.NPCs.TownNPCs
 			return false;
 		}
 
-		public override string TownNPCName()
+		public override List<string> SetNPCNameList()/* tModPorter Suggestion: Return a list of names */ // TODO: Localize/Translate
 		{
-            string [] npcName = new string[12];
-            npcName[1] = "Brown";
-            npcName[2] = "Clark";
-            npcName[3] = "Davis";
-            npcName[4] = "Harris";
-            npcName[5] = "Jackson";
-            npcName[6] = "Lewis";
-            npcName[7] = "Miller";
-            npcName[8] = "Smith";
-            npcName[9] = "Thomas";
-            npcName[10] = "Wilson";
-            npcName[11] = "Adams";
-            npcName[12] = "Alexander";
-            return npcName[Main.rand.Next(1, 13)];
+			List<string> npcName = new List<string>() {
+				"Brown", "Clark", "Davis", "Harris", "Jackson", "Lewis", "Miller", "Smith", "Thomas", "Wilson", "Adams", "Alexander", "Felix"
+			};
+            return npcName;
 		}
 
 		public override string GetChat()
 		{
-			if (npc.homeless)
+			if (NPC.homeless)
 			{
 				if (Main.rand.Next(2) == 0)
 				{
@@ -121,20 +112,29 @@ namespace MythMod.NPCs.TownNPCs
 			button = Language.GetTextValue("商店");
 			button2 = Language.GetTextValue("关闭");
 		}
-		public override void OnChatButtonClicked(bool firstButton, ref bool shop)
+		//public override void OnChatButtonClicked(bool firstButton, ref string shopName)
+		//{
+		//	if (firstButton)
+		//	{
+		//		shop = true;
+		//		return;
+		//	}
+		//	shop = false;
+		//}
+		//public override void ModifyActiveShop(string shopName, Item[] items)
+		//{
+		//	shopName.items[nextSlot].SetDefaults(base.Mod.Find<ModItem>("StarMark").Type, false);
+		//	shopName.items[nextSlot].shopCustomPrice = new int?(Item.buyPrice(0, 70, 0, 0));
+		//	nextSlot++;
+		//}
+		public override void AddShops()
 		{
-			if (firstButton)
-			{
-				shop = true;
-				return;
-			}
-			shop = false;
-		}
-		public override void SetupShop(Chest shop, ref int nextSlot)
-		{
-			shop.item[nextSlot].SetDefaults(base.mod.ItemType("StarMark"), false);
-			shop.item[nextSlot].shopCustomPrice = new int?(Item.buyPrice(0, 70, 0, 0));
-			nextSlot++;
+			var shop = new NPCShop(Type, "VolcanoExplorerShop"); // You can have different internal names for your shop
+			shop.Add<Items.Weapons.StarMark>();
+
+			//shop.Add(ModContent.ItemType<ExampleSoul>(), NPCShop.Condition.BloodMoon); // Puts an item if its Blood Moon.
+
+			shop.Register();
 		}
 		public override void TownNPCAttackStrength(ref int damage, ref float knockback)
 		{

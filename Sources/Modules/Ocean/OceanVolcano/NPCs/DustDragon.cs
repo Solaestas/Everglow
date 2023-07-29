@@ -5,37 +5,37 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace MythMod.NPCs.VolCano
+namespace Everglow.Ocean.NPCs.VolCano
 {
     public class DustDragon : ModNPC
 	{
         public override void SetStaticDefaults()
         {
-            base.DisplayName.SetDefault("燃烬飞龙");
-            Main.npcFrameCount[base.npc.type] = 5;
+            // // base.DisplayName.SetDefault("燃烬飞龙");
+            Main.npcFrameCount[base.NPC.type] = 5;
         }
 		public override void SetDefaults()
 		{
-			base.npc.aiStyle = 14;
-			base.npc.damage = 150;
-			base.npc.width = 40;
-			base.npc.height = 30;
-			base.npc.defense = 5;
-			base.npc.lifeMax = 2300;
-			base.npc.knockBackResist = 0.8f;
-			this.animationType = 121;
-			base.npc.alpha = 75;
-			base.npc.lavaImmune = false;
-			base.npc.noGravity = false;
-			base.npc.noTileCollide = false;
+			base.NPC.aiStyle = 14;
+			base.NPC.damage = 150;
+			base.NPC.width = 40;
+			base.NPC.height = 30;
+			base.NPC.defense = 5;
+			base.NPC.lifeMax = 2300;
+			base.NPC.knockBackResist = 0.8f;
+			this.AnimationType = 121;
+			base.NPC.alpha = 75;
+			base.NPC.lavaImmune = false;
+			base.NPC.noGravity = false;
+			base.NPC.noTileCollide = false;
 			//base.npc.HitSound = SoundID.NPCHit1;
-			base.npc.DeathSound = SoundID.NPCDeath1;
-            npc.value = 2000;
-            base.npc.buffImmune[24] = true;
+			base.NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.value = 2000;
+            base.NPC.buffImmune[24] = true;
 		}
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.player.GetModPlayer<MythPlayer>().ZoneVolcano)
+            if (spawnInfo.Player.GetModPlayer<OceanContentPlayer>().ZoneVolcano)
             {
                 return 5f;
             }
@@ -44,9 +44,9 @@ namespace MythMod.NPCs.VolCano
         private int numk = 0;
 		public override void AI()
 		{
-            NPC npc = base.npc;
+            NPC npc = base.NPC;
             float num = 1.0025f;
-			NPC npc2 = base.npc;
+			NPC npc2 = base.NPC;
 			if(Math.Abs(npc.velocity.X) <= 1.5f)
 			{
 				npc.velocity.X = npc.velocity.X * num;
@@ -65,20 +65,20 @@ namespace MythMod.NPCs.VolCano
 			}
             npc.localAI[0] += 1;
 		}
-		public override bool PreNPCLoot()
+		public override bool PreKill()
 		{
             if(Main.rand.Next(100) == 1)
             {
-                Item.NewItem((int)base.npc.position.X, (int)base.npc.position.Y, base.npc.width, base.npc.height, mod.ItemType("MeltingStaff"), 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, Mod.Find<ModItem>("MeltingStaff").Type, 1, false, 0, false, false);
             }
-            Item.NewItem((int)base.npc.position.X, (int)base.npc.position.Y, base.npc.width, base.npc.height, mod.ItemType("LavaStone"), Main.rand.Next(1, 4), false, 0, false, false);
+            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, Mod.Find<ModItem>("LavaStone").Type, Main.rand.Next(1, 4), false, 0, false, false);
             return true;
 		}
-		public override void HitEffect(int hitDirection, double damage)
+		public override void HitEffect(NPC.HitInfo hit)
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				Dust.NewDust(base.npc.position, base.npc.width, base.npc.height, 4, (float)hitDirection, -1f, 0, default(Color), 1f);
+				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 4, (float)hitDirection, -1f, 0, default(Color), 1f);
 			}
 		}
 	}

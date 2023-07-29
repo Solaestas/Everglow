@@ -6,7 +6,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace MythMod.Items.Weapons.OceanWeapons
+namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 {
 	// Token: 0x020000AF RID: 175
     public class AquamarineAxe : ModItem
@@ -14,29 +14,29 @@ namespace MythMod.Items.Weapons.OceanWeapons
 		// Token: 0x060002CE RID: 718 RVA: 0x0003529C File Offset: 0x0003349C
 		public override void SetStaticDefaults()
 		{
-            base.DisplayName.SetDefault("海蓝宝石斧");
-			base.Tooltip.SetDefault("brush!");
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石斧");
+            // // base.DisplayName.SetDefault("海蓝宝石斧");
+			// base.Tooltip.SetDefault("brush!");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石斧");
 			base.Tooltip.AddTranslation(GameCulture.Chinese, "");
 		}
 
 		// Token: 0x060002CF RID: 719 RVA: 0x000352F4 File Offset: 0x000334F4
 		public override void SetDefaults()
 		{
-			base.item.damage = 155;
-			base.item.melee = true;
-			base.item.width = 66;
-			base.item.height = 74;
-			base.item.useTime = 18;
-			base.item.useAnimation = 18;
-			base.item.useTurn = true;
-			base.item.axe = 47;	
-			base.item.useStyle = 1;
-			base.item.knockBack = 9f;
-			base.item.value = 80000;
-			base.item.UseSound = SoundID.Item1;
-			base.item.autoReuse = true;
-            base.item.rare = 11;
+			base.Item.damage = 155;
+			base.Item.DamageType = DamageClass.Melee/* tModPorter Suggestion: Consider MeleeNoSpeed for no attack speed scaling */;
+			base.Item.width = 66;
+			base.Item.height = 74;
+			base.Item.useTime = 18;
+			base.Item.useAnimation = 18;
+			base.Item.useTurn = true;
+			base.Item.axe = 47;	
+			base.Item.useStyle = 1;
+			base.Item.knockBack = 9f;
+			base.Item.value = 80000;
+			base.Item.UseSound = SoundID.Item1;
+			base.Item.autoReuse = true;
+            base.Item.rare = 11;
 		}
 
 		// Token: 0x060002D0 RID: 720 RVA: 0x000353C8 File Offset: 0x000335C8
@@ -69,12 +69,11 @@ namespace MythMod.Items.Weapons.OceanWeapons
         public override void AddRecipes()
         {
             {//合成表1
-                ModRecipe recipe = new ModRecipe(mod);
+                Recipe recipe = CreateRecipe(1);//制作一个材料
                 recipe.AddIngredient(null, "Aquamarine", 7); //要用一个泥土制作，1是数量，ItemID.DirtBlock是泥土
                 recipe.AddIngredient(null, "RedCoral", 1); //要用一个泥土制作，1是数量，ItemID.DirtBlock是泥土
                 recipe.requiredTile[0] = 412;
-                recipe.SetResult(this, 1);//制作一个材料
-                recipe.AddRecipe();
+                recipe.Register();
             }
         }
     }

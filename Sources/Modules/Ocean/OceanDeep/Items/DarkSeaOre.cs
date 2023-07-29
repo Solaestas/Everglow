@@ -1,12 +1,12 @@
 ﻿using Terraria.Localization;
-namespace MythMod.OceanMod.Items.Ores
+namespace Everglow.Ocean.Items.Ores
 {
     public class DarkSeaOre : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Abyssal Ore");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "深焚石");
+            // DisplayName.SetDefault("Abyssal Ore");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "深焚石");
         }
         public override void SetDefaults()
         {

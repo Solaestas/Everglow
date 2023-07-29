@@ -1,7 +1,7 @@
 ﻿using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace MythMod.OceanMod.Tiles
+namespace Everglow.Ocean.Tiles
 {
     public class GoldGorgonianLarge : ModTile
     {
@@ -42,7 +42,7 @@ namespace MythMod.OceanMod.Tiles
             for (int x = 0; x < 6; x++)
             {
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 60f)).RotatedByRandom(3.14159);
-                Item.NewItem(null, i * 16 + (int)v.X, j * 16 + (int)v.Y, 16, 32, ModContent.ItemType<OceanMod.Items.GoldGorgonianBranch>());
+                Item.NewItem(null, i * 16 + (int)v.X, j * 16 + (int)v.Y, 16, 32, ModContent.ItemType<Items.GoldGorgonianBranch>());
             }
         }
         public override void PlaceInWorld(int i, int j, Item item)

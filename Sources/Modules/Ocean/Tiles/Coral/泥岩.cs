@@ -6,13 +6,13 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 
-namespace MythMod.Tiles.Ocean
+namespace Everglow.Ocean.Tiles.Ocean
 {
 	// Token: 0x02000EBF RID: 3775
 	public class 泥岩 : ModTile
 	{
 		// Token: 0x06004756 RID: 18262 RVA: 0x0028BA28 File Offset: 0x00289C28
-		public override void SetDefaults()
+		public override void SetStaticDefaults()
 		{
 			Main.tileFrameImportant[(int)base.Type] = true;
 			Main.tileNoAttach[(int)base.Type] = true;
@@ -23,14 +23,14 @@ namespace MythMod.Tiles.Ocean
 				16
 			};
 			TileObjectData.addTile((int)base.Type);
-			ModTranslation modTranslation = base.CreateMapEntryName(null);
-			modTranslation.SetDefault("");
+			LocalizedText modTranslation = base.CreateMapEntryName(null);
+			// modTranslation.SetDefault("");
 			modTranslation.AddTranslation(GameCulture.English, "");
 			AddMapEntry(new Color(148, 107, 74), modTranslation);
-			this.dustType = 37;
-			this.soundType = 0;
-			this.soundStyle = 0;
-			this.disableSmartCursor = true;
+			this.DustType = 37;
+			this.HitSound = 0;
+			this.soundStyle/* tModPorter Note: Removed. Integrate into HitSound */ = 0;
+			this.disableSmartCursor/* tModPorter Note: Removed. Use TileID.Sets.DisableSmartCursor instead */ = true;
 		}
 
 

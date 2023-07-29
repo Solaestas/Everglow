@@ -1,13 +1,13 @@
 ﻿using Terraria.Localization;
 
-namespace MythMod.OceanMod.Items
+namespace Everglow.Ocean.Items
 {
     public class MarbleCono : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("MarbleCono");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "大理石芋螺");
+            // DisplayName.SetDefault("MarbleCono");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "大理石芋螺");
         }
         public override void SetDefaults()
         {
@@ -24,7 +24,7 @@ namespace MythMod.OceanMod.Items
             Item.consumable = true;
             Item.useTurn = true;
             Item.autoReuse = true;
-            Item.createTile = ModContent.TileType<OceanMod.Tiles.MarbleCono>();
+            Item.createTile = ModContent.TileType<Tiles.MarbleCono>();
         }
     }
 }

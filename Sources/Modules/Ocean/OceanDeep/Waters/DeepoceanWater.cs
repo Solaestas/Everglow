@@ -1,23 +1,23 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace MythMod.Waters
+namespace Everglow.Ocean.Waters
 {
 	// Token: 0x02000E0B RID: 3595
 	public class DeepoceanWater : ModWaterStyle
 	{
 		// Token: 0x06004983 RID: 18819 RVA: 0x0001442F File Offset: 0x0001262F
-		public override bool ChooseWaterStyle()
-		{
-			return Main.LocalPlayer.GetModPlayer<MythPlayer>().ZoneDeepocean;
-		}
+		//public override bool ChooseWaterStyle()
+		//{
+		//	return Main.LocalPlayer.GetModPlayer<OceanContentPlayer>().ZoneDeepocean;
+		//}
 
 		// Token: 0x06004984 RID: 18820 RVA: 0x00014446 File Offset: 0x00012646
 		public override int ChooseWaterfallStyle()
 		{
-			return base.mod.GetWaterfallStyleSlot("DeepoceanWaterflow");
+			return ModContent.Find<ModWaterfallStyle>("Everglow.Ocean.OceanDeep.Waters.DeepoceanWaterflow").Slot;
 		}
 
 		// Token: 0x06004985 RID: 18821 RVA: 0x00014458 File Offset: 0x00012658

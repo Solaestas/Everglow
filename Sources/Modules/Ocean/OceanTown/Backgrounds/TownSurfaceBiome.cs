@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace MythMod.OceanMod.Backgrounds
+namespace Everglow.Ocean.Backgrounds
 {
     //Shows setting up two basic biomes. For a more complicated example, please request.
     public class TownSurfaceBiome : ModBiome
@@ -8,8 +8,8 @@ namespace MythMod.OceanMod.Backgrounds
         //public override bool IsPrimaryBiome => true; // Allows this biome to impact NPC prices
 
         // Select all the scenery
-        public override ModWaterStyle WaterStyle => ModContent.Find<ModWaterStyle>("MythMod/OceanWaterStyle"); // Sets a water style for when inside this biome
-        public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.Find<ModSurfaceBackgroundStyle>("MythMod/TownSurfaceBackgroundStyle");
+        public override ModWaterStyle WaterStyle => ModContent.Find<ModWaterStyle>("Everglow.Ocean.OceanWaterStyle"); // Sets a water style for when inside this biome
+        public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.Find<ModSurfaceBackgroundStyle>("Everglow.Ocean.TownSurfaceBackgroundStyle");
         //public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Crimson;
 
         // Select Music
@@ -22,8 +22,8 @@ namespace MythMod.OceanMod.Backgrounds
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Marine Town");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "海滨渔村");
+            // DisplayName.SetDefault("Marine Town");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "海滨渔村");
         }
 
         // Calculate when the biome is active.

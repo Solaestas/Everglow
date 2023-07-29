@@ -1,18 +1,18 @@
 ﻿using Terraria.Localization;
 
-namespace MythMod.OceanMod.Backgrounds
+namespace Everglow.Ocean.Backgrounds
 {
     public class VolcanoSurfaceBiome : ModBiome
     {
         //public override bool IsPrimaryBiome => true; // Allows this biome to impact NPC prices
 
         // Select all the scenery
-        public override ModWaterStyle WaterStyle => ModContent.Find<ModWaterStyle>("MythMod/OceanWaterStyle"); // Sets a water style for when inside this biome
-        public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.Find<ModSurfaceBackgroundStyle>("MythMod/VolcanoSurfaceBackgroundStyle");
+        public override ModWaterStyle WaterStyle => ModContent.Find<ModWaterStyle>("Everglow.Ocean.OceanWaterStyle"); // Sets a water style for when inside this biome
+        public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.Find<ModSurfaceBackgroundStyle>("Everglow.Ocean.VolcanoSurfaceBackgroundStyle");
         //public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Crimson;
 
         // Select Music
-        public override int Music => MusicLoader.GetMusicSlot("MythMod/Musics/VolcanoSurface");
+        public override int Music => MusicLoader.GetMusicSlot("Everglow.Ocean.Musics/VolcanoSurface");
 
         // Populate the Bestiary Filter
         public override string BestiaryIcon => base.BestiaryIcon;
@@ -22,8 +22,8 @@ namespace MythMod.OceanMod.Backgrounds
         // Use SetStaticDefaults to assign the display name
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Volcano");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "火山");
+            // DisplayName.SetDefault("Volcano");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "火山");
         }
 
         // Calculate when the biome is active.
@@ -34,11 +34,11 @@ namespace MythMod.OceanMod.Backgrounds
             bool b2 = ModContent.GetInstance<Common.Systems.VolcanoTileCount>().volcanoBlockCount >= 40;
             if (b1 && b2)
             {
-                Common.Players.MythPlayer.ZoneVolcano = true;
+                Common.Players.OceanContentPlayer.ZoneVolcano = true;
             }
             else
             {
-                Common.Players.MythPlayer.ZoneVolcano = false;
+                Common.Players.OceanContentPlayer.ZoneVolcano = false;
             }
             return b1 && b2;
         }

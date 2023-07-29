@@ -6,31 +6,31 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-namespace MythMod.Items.Shells
+namespace Everglow.Ocean.Items.Shells
 {
     public class ShellBell : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-            base.DisplayName.SetDefault("贝壳风铃");
-            base.Tooltip.SetDefault("");
+            // // base.DisplayName.SetDefault("贝壳风铃");
+            // base.Tooltip.SetDefault("");
 		}
 		public override void SetDefaults()
 		{
-			base.item.width = 28;
-			base.item.height = 28;
-			base.item.useAnimation = 20;
-			base.item.useTime = 20;
-            base.item.maxStack = 999;
-            base.item.rare = 3;
-            base.item.value = Item.sellPrice(0, 5, 0, 0);
-            base.item.useAnimation = 15;
-            base.item.useTime = 10;
-            base.item.useStyle = 1;
-            base.item.consumable = true;
-            base.item.useTurn = true;
-            base.item.autoReuse = true;
-            base.item.createTile = base.mod.TileType("贝壳风铃");
+			base.Item.width = 28;
+			base.Item.height = 28;
+			base.Item.useAnimation = 20;
+			base.Item.useTime = 20;
+            base.Item.maxStack = 999;
+            base.Item.rare = 3;
+            base.Item.value = Item.sellPrice(0, 5, 0, 0);
+            base.Item.useAnimation = 15;
+            base.Item.useTime = 10;
+            base.Item.useStyle = 1;
+            base.Item.consumable = true;
+            base.Item.useTurn = true;
+            base.Item.autoReuse = true;
+            base.Item.createTile = base.Mod.Find<ModTile>("贝壳风铃").Type;
         }
 	}
 }

@@ -13,38 +13,38 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
-namespace MythMod.Items.Pickaxes
+namespace Everglow.Ocean.Items.Pickaxes
 {
     public class AbyssPickaxe : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-            base.DisplayName.SetDefault("渊影镐");
-			base.Tooltip.SetDefault("crash!");
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "渊影镐");
+            // // base.DisplayName.SetDefault("渊影镐");
+			// base.Tooltip.SetDefault("crash!");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "渊影镐");
 			base.Tooltip.AddTranslation(GameCulture.Chinese, "深渊的炽岩，具有灼热的破坏力");
-            GetGlowMask = MythMod.SetStaticDefaultsGlowMask(this);
+            GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
         public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            item.glowMask = GetGlowMask;
-            base.item.damage = 100;
-			base.item.melee = true;
-			base.item.width = 46;
-			base.item.height = 46;
-			base.item.useTime = 12;
-			base.item.useAnimation = 12;
-			base.item.useTurn = true;
-			base.item.pick = 265;
-			base.item.useStyle = 1;
-			base.item.knockBack = 1f;
-			base.item.value = 45000;
-			base.item.UseSound = SoundID.Item1;
-			base.item.autoReuse = true;
-			base.item.tileBoost += 4;
-			base.item.crit = 5;
-            base.item.rare = 10;
+            Item.glowMask = GetGlowMask;
+            base.Item.damage = 100;
+			base.Item.DamageType = DamageClass.Melee/* tModPorter Suggestion: Consider MeleeNoSpeed for no attack speed scaling */;
+			base.Item.width = 46;
+			base.Item.height = 46;
+			base.Item.useTime = 12;
+			base.Item.useAnimation = 12;
+			base.Item.useTurn = true;
+			base.Item.pick = 265;
+			base.Item.useStyle = 1;
+			base.Item.knockBack = 1f;
+			base.Item.value = 45000;
+			base.Item.UseSound = SoundID.Item1;
+			base.Item.autoReuse = true;
+			base.Item.tileBoost += 4;
+			base.Item.crit = 5;
+            base.Item.rare = 10;
 		}
 
 		// Token: 0x060002D0 RID: 720 RVA: 0x000353C8 File Offset: 0x000335C8
@@ -52,11 +52,10 @@ namespace MythMod.Items.Pickaxes
 		// Token: 0x060002D1 RID: 721 RVA: 0x00035450 File Offset: 0x00033650
 		public override void AddRecipes()
 		{
-			ModRecipe modRecipe = new ModRecipe(base.mod);
+			Recipe modRecipe = /* base */Recipe.Create(this.Type, 1);
 			modRecipe.AddIngredient(null, "DarkSeaBar", 15);
             modRecipe.requiredTile[0] = 412;
-			modRecipe.SetResult(this, 1);
-			modRecipe.AddRecipe();
+			modRecipe.Register();
 		}
 
 		// Token: 0x060002D2 RID: 722 RVA: 0x000354AC File Offset: 0x000336AC

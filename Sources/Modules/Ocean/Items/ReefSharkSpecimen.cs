@@ -1,13 +1,13 @@
 ﻿using Terraria.Localization;
 
-namespace MythMod.OceanMod.Items
+namespace Everglow.Ocean.Items
 {
     public class ReefSharkSpecimen : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Reefshark Specimen");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "礁鲨标本");
+            // DisplayName.SetDefault("Reefshark Specimen");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "礁鲨标本");
         }
         public override void SetDefaults()
         {
@@ -24,7 +24,7 @@ namespace MythMod.OceanMod.Items
             Item.consumable = true;
             Item.useTurn = true;
             Item.autoReuse = true;
-            Item.createTile = ModContent.TileType<OceanMod.Tiles.ReefSharkSpecimen>();
+            Item.createTile = ModContent.TileType<Tiles.ReefSharkSpecimen>();
         }
     }
 }

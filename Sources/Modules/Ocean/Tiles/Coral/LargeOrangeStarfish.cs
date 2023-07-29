@@ -1,7 +1,7 @@
 ﻿using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace MythMod.OceanMod.Tiles
+namespace Everglow.Ocean.Tiles
 {
     public class LargeOrangeStarfish : ModTile
     {
@@ -21,7 +21,7 @@ namespace MythMod.OceanMod.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(null, i * 16, j * 16, 48, 48, ModContent.ItemType<OceanMod.Items.LargeOrangeStarfish>(), 1, false, 0, false, false);
+            Item.NewItem(null, i * 16, j * 16, 48, 48, ModContent.ItemType<Items.LargeOrangeStarfish>(), 1, false, 0, false, false);
         }
     }
 }

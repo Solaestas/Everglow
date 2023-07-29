@@ -1,4 +1,4 @@
-namespace MythMod.OceanMod.Backgrounds.Ocean
+namespace Everglow.Ocean.Backgrounds.Ocean
 {
     public class OceanWaterfallStyle : ModWaterfallStyle
     {

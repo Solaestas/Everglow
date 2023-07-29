@@ -15,7 +15,7 @@ using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
 using Terraria.ObjectData;
 
-namespace MythMod.Tiles.Ocean
+namespace Everglow.Ocean.Tiles.Ocean
 {
 	public class 棕榈木风向标 : ModTile
 	{
@@ -23,7 +23,7 @@ namespace MythMod.Tiles.Ocean
         private int num2 = 0;
         private bool num3 = false;
         private bool flag2 = false;
-        public override void SetDefaults()
+        public override void SetStaticDefaults()
         {
             Main.tileFrameImportant[(int)base.Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
@@ -38,8 +38,8 @@ namespace MythMod.Tiles.Ocean
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.addTile((int)base.Type);
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
-            modTranslation.SetDefault("");
+            LocalizedText modTranslation = base.CreateMapEntryName(null);
+            // modTranslation.SetDefault("");
             base.AddMapEntry(new Color(36, 100, 100), modTranslation);
 		}
 		public override bool CreateDust(int i, int j, ref int type)
@@ -52,16 +52,16 @@ namespace MythMod.Tiles.Ocean
             Player player = Main.player[Main.myPlayer];
             if(Main.windSpeed > 0)
             {
-                Main.tile[i, j].frameX = (short)(x * 40);
+                Main.tile[i, j].TileFrameX = (short)(x * 40);
             }
             else
             {
-                Main.tile[i, j].frameX = (short)((5 + x) * 40);
+                Main.tile[i, j].TileFrameX = (short)((5 + x) * 40);
             }
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, base.mod.ItemType("PalmWoodWind"));
+            Item.NewItem(i * 16, j * 16, 16, 32, base.Mod.Find<ModItem>("PalmWoodWind").Type);
         }
     }
 }

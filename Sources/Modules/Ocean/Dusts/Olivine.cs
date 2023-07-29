@@ -3,7 +3,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 
-namespace MythMod.Dusts
+namespace Everglow.Ocean.Dusts
 {
     public class Olivine : ModDust
 	{

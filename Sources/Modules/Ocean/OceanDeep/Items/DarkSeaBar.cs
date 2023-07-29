@@ -1,12 +1,12 @@
 ﻿using Terraria.Localization;
-namespace MythMod.OceanMod.Items.Ores
+namespace Everglow.Ocean.Items.Ores
 {
     public class DarkSeaBar : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Abyssal Bar");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "深焚锭");
+            // DisplayName.SetDefault("Abyssal Bar");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "深焚锭");
         }
         public override void SetDefaults()
         {
@@ -27,7 +27,7 @@ namespace MythMod.OceanMod.Items.Ores
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<OceanMod.Items.Ores.DarkSeaOre>(), 3)
+                .AddIngredient(ModContent.ItemType<Items.Ores.DarkSeaOre>(), 3)
                 .AddTile(17)
                 .Register();
         }

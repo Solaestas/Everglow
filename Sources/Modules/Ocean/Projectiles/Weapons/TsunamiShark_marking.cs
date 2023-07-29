@@ -1,10 +1,11 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.ID;
 using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace Everglow.Ocean.Projectiles.Weapons;
@@ -50,7 +51,7 @@ public class TsunamiShark_marking : ModProjectile, IWarpProjectile
 					{
 						if(!PotentialTargets.Contains(npc))
 						{
-							SoundEngine.PlaySound(25, npc.Center);
+							SoundEngine.PlaySound(SoundID.MaxMana, npc.Center);
 							PotentialTargets.Add(npc);
 						}
 					}

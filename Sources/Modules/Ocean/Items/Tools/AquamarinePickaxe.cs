@@ -6,34 +6,34 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace MythMod.Items.Pickaxes
+namespace Everglow.Ocean.Items.Pickaxes
 {
     public class AquamarinePickaxe : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-            base.DisplayName.SetDefault("海蓝宝石镐");
-			base.Tooltip.SetDefault("");
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石镐");
+            // // base.DisplayName.SetDefault("海蓝宝石镐");
+			// base.Tooltip.SetDefault("");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石镐");
 			base.Tooltip.AddTranslation(GameCulture.Chinese, "");
 		}
 		public override void SetDefaults()
 		{
-			base.item.damage = 111;
-			base.item.melee = true;
-			base.item.width = 52;
-			base.item.height = 52;
-			base.item.useTime = 4;
-			base.item.useAnimation = 10;
-			base.item.useTurn = true;
-			base.item.pick = 235;
-			base.item.useStyle = 1;
-			base.item.knockBack = 9f;
-			base.item.value = 80000;
-			base.item.UseSound = SoundID.Item1;
-			base.item.autoReuse = true;
-			base.item.tileBoost += 4;
-            base.item.rare = 11;
+			base.Item.damage = 111;
+			base.Item.DamageType = DamageClass.Melee/* tModPorter Suggestion: Consider MeleeNoSpeed for no attack speed scaling */;
+			base.Item.width = 52;
+			base.Item.height = 52;
+			base.Item.useTime = 4;
+			base.Item.useAnimation = 10;
+			base.Item.useTurn = true;
+			base.Item.pick = 235;
+			base.Item.useStyle = 1;
+			base.Item.knockBack = 9f;
+			base.Item.value = 80000;
+			base.Item.UseSound = SoundID.Item1;
+			base.Item.autoReuse = true;
+			base.Item.tileBoost += 4;
+            base.Item.rare = 11;
 		}
 		public override void MeleeEffects(Player player, Rectangle hitbox)
 		{
@@ -57,12 +57,11 @@ namespace MythMod.Items.Pickaxes
 		}
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe(1);
             recipe.AddIngredient(null, "Aquamarine", 7);
             recipe.AddIngredient(null, "RedCoral", 1);
             recipe.requiredTile[0] = 412;
-            recipe.SetResult(this, 1);
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

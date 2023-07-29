@@ -1,13 +1,13 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 
-namespace MythMod.OceanMod.Items
+namespace Everglow.Ocean.Items
 {
     public class Alcyonarian : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Alcyonarian");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "海鸡冠");
+            // DisplayName.SetDefault("Alcyonarian");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "海鸡冠");
         }
         public override void SetDefaults()
         {
@@ -22,7 +22,7 @@ namespace MythMod.OceanMod.Items
             Item.consumable = true;
             Item.useTurn = true;
             Item.autoReuse = true;
-            Item.createTile = ModContent.TileType<OceanMod.Tiles.Alcyonarian>();
+            Item.createTile = ModContent.TileType<Tiles.Alcyonarian>();
         }
     }
 }

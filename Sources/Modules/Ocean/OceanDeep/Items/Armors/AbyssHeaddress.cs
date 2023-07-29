@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace MythMod.Items.Armors
+namespace Everglow.Ocean.Items.Armors
 {
 	[AutoloadEquip(new EquipType[]
 	{
@@ -13,37 +13,36 @@ namespace MythMod.Items.Armors
 	{
 		public override void SetStaticDefaults()
 		{
-			base.DisplayName.SetDefault("");
-			base.Tooltip.SetDefault("");
-			base.DisplayName.AddTranslation(GameCulture.Chinese, "渊海头饰");
+			// // base.DisplayName.SetDefault("");
+			// base.Tooltip.SetDefault("");
+			// base.// DisplayName.AddTranslation(GameCulture.Chinese, "渊海头饰");
 			base.Tooltip.AddTranslation(GameCulture.Chinese, "魔法伤害和暴击各增加18%,法力上限增加120");
 		}
 		public override void SetDefaults()
 		{
-			base.item.width = 18;
-			base.item.height = 18;
-			base.item.value = Item.buyPrice(0, 30, 0, 0);
-			base.item.rare = 11;
-			base.item.defense = 18;
+			base.Item.width = 18;
+			base.Item.height = 18;
+			base.Item.value = Item.buyPrice(0, 30, 0, 0);
+			base.Item.rare = 11;
+			base.Item.defense = 18;
         }
         public override void AddRecipes()
         {
-            ModRecipe modRecipe = new ModRecipe(base.mod);
+            Recipe modRecipe = /* base */Recipe.Create(this.Type, 1);
             modRecipe.AddIngredient(null, "DarkSeaBar", 12);
             modRecipe.requiredTile[0] = 412;
-            modRecipe.SetResult(this, 1);
-            modRecipe.AddRecipe();
+            modRecipe.Register();
         }
         public override void UpdateEquip(Player player)
         {
-            MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
+            OceanContentPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<OceanContentPlayer>();
             player.statManaMax += 120;
-            player.magicCrit += 18;
-            player.magicDamage *= 1.18f;
+            player.GetCritChance(DamageClass.Magic) += 18;
+            player.GetDamage(DamageClass.Magic) *= 1.18f;
         }
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == base.mod.ItemType("AbyssBreastplate") && legs.type == base.mod.ItemType("AbyssLegging");
+            return body.type == base.Mod.Find<ModItem>("AbyssBreastplate").Type && legs.type == base.Mod.Find<ModItem>("AbyssLegging").Type;
         }
         public override void ArmorSetShadows(Player player)
         {
@@ -51,11 +50,11 @@ namespace MythMod.Items.Armors
         }
         public override void UpdateArmorSet(Player player)
         {
-            MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
+            OceanContentPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<OceanContentPlayer>();
             player.setBonus = "水下受到伤害减半\n魔法伤害提高15%,魔力消耗减少21%,魔法暴击率提高15%";
             mplayer.ab = 2;
-            player.magicCrit += 15;
-            player.magicDamage *= 1.15f;
+            player.GetCritChance(DamageClass.Magic) += 15;
+            player.GetDamage(DamageClass.Magic) *= 1.15f;
             player.manaCost *= 0.79f;
         }
     }

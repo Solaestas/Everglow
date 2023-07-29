@@ -1,13 +1,13 @@
 ﻿using Terraria.Localization;
 
-namespace MythMod.OceanMod.Items
+namespace Everglow.Ocean.Items
 {
     public class BarrelSponge : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Barrel Sponge");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "桶海绵");
+            // DisplayName.SetDefault("Barrel Sponge");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "桶海绵");
         }
         public override void SetDefaults()
         {
@@ -22,7 +22,7 @@ namespace MythMod.OceanMod.Items
             Item.consumable = true;
             Item.useTurn = true;
             Item.autoReuse = true;
-            Item.createTile = ModContent.TileType<OceanMod.Tiles.BarrelSponge>();
+            Item.createTile = ModContent.TileType<Tiles.BarrelSponge>();
         }
     }
 }

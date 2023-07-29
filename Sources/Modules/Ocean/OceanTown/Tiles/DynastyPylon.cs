@@ -1,7 +1,7 @@
 ﻿using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace MythMod.OceanMod.Tiles.Town
+namespace Everglow.Ocean.Tiles.Town
 {
     public class LanternCrystal : ModTile
     {
@@ -30,7 +30,7 @@ namespace MythMod.OceanMod.Tiles.Town
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<OceanMod.Items.Town.LanternCrystal>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.Town.LanternCrystal>());
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
@@ -64,8 +64,8 @@ namespace MythMod.OceanMod.Tiles.Town
 
                 if (tile != null && tile.HasTile)
                 {
-                    Texture2D value = ModContent.Request<Texture2D>("MythMod/OceanMod/Tiles/Town/RedLanternCrystal").Value;
-                    Texture2D valueB = ModContent.Request<Texture2D>("MythMod/OceanMod/Tiles/Town/RedLanternCrystalBound").Value;
+                    Texture2D value = ModContent.Request<Texture2D>("Everglow.Ocean.OceanMod/Tiles/Town/RedLanternCrystal").Value;
+                    Texture2D valueB = ModContent.Request<Texture2D>("Everglow.Ocean.OceanMod/Tiles/Town/RedLanternCrystalBound").Value;
                     int frameY = (int)(tile.TileFrameX / 54);
                     bool flag = tile.TileFrameY / 72 != 0;
                     int horizontalFrames = 1;
@@ -122,7 +122,7 @@ namespace MythMod.OceanMod.Tiles.Town
         {
             Player player = Main.LocalPlayer;
             player.cursorItemIconEnabled = true;
-            player.cursorItemIconID = ModContent.ItemType<OceanMod.Items.Town.LanternCrystal>();
+            player.cursorItemIconID = ModContent.ItemType<Items.Town.LanternCrystal>();
         }
     }
 }

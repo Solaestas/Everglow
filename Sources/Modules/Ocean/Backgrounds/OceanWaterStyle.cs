@@ -1,14 +1,14 @@
 using static Terraria.ModLoader.ModContent;
 
-namespace MythMod.OceanMod.Backgrounds.Ocean
+namespace Everglow.Ocean.Backgrounds.Ocean
 {
     public class OceanWaterStyle : ModWaterStyle
     {
-        public override int ChooseWaterfallStyle() => Find<ModWaterfallStyle>("MythMod/OceanWaterfallStyle").Slot;
+		public override int ChooseWaterfallStyle() => Find<ModWaterfallStyle>("Everglow.Ocean.OceanWaterfallStyle").Slot;
 
-        public override int GetSplashDust() => DustType<Dusts.Snow>();
+		public override int GetSplashDust() => DustID.Snow;
 
-        public override int GetDropletGore() => Find<ModGore>("MythMod/AncientTangerineTreeGore5").Type;
+        public override int GetDropletGore() => Find<ModGore>("Everglow.Ocean.AncientTangerineTreeGore5").Type;
 
         public override void LightColorMultiplier(ref float r, ref float g, ref float b)
         {

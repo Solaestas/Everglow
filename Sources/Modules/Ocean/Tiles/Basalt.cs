@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace MythMod.OceanMod.Tiles
+namespace Everglow.Ocean.Tiles
 {
     public class Basalt : ModTile
     {
@@ -15,7 +15,7 @@ namespace MythMod.OceanMod.Tiles
             MinPick = 270;
             SoundType = 21;
             SoundStyle = 2;
-            ItemDrop = ModContent.ItemType<OceanMod.Items.Basalt>();
+            ItemDrop/* tModPorter Note: Removed. Tiles and walls will drop the item which places them automatically. Use RegisterItemDrop to alter the automatic drop if necessary. */ = ModContent.ItemType<Items.Basalt>();
             Main.tileSpelunker[(int)base.Type] = true;
             ModTranslation modTranslation = base.CreateMapEntryName(null);
             AddMapEntry(new Color(28, 28, 28), modTranslation);
@@ -40,7 +40,7 @@ namespace MythMod.OceanMod.Tiles
             num4 *= 270;
             num += num3;
             num2 += num4;
-            Texture2D texture = ModContent.Request<Texture2D>("MythMod/OceanMod/Tiles/BasaltGlow").Value;
+            Texture2D texture = ModContent.Request<Texture2D>("Everglow.Ocean.OceanMod/Tiles/BasaltGlow").Value;
             Vector2 position = new Vector2((float)(i * 16) - Main.screenPosition.X + (float)this.GetDrawOffset(), (float)(j * 16) - Main.screenPosition.Y + (float)this.GetDrawOffset());
             if (CaptureManager.Instance.IsCapturing)
             {

@@ -1,12 +1,12 @@
 ﻿using Terraria.Localization;
-namespace MythMod.OceanMod.Items.Ores
+namespace Everglow.Ocean.Items.Ores
 {
     public class OceanBlueOre : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Current Ore");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "沧流矿");
+            // DisplayName.SetDefault("Current Ore");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "沧流矿");
         }
         public override void SetDefaults()
         {

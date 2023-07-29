@@ -1,13 +1,13 @@
 ﻿using Terraria.Localization;
 
-namespace MythMod.OceanMod.Items
+namespace Everglow.Ocean.Items
 {
     public class BubbleCoral : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Bubble Coral");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "气泡珊瑚");
+            // DisplayName.SetDefault("Bubble Coral");
+            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "气泡珊瑚");
         }
         public override void SetDefaults()
         {
@@ -22,7 +22,7 @@ namespace MythMod.OceanMod.Items
             Item.consumable = true;
             Item.useTurn = true;
             Item.autoReuse = true;
-            Item.createTile = ModContent.TileType<OceanMod.Tiles.BubbleCoral>();
+            Item.createTile = ModContent.TileType<Tiles.BubbleCoral>();
         }
     }
 }

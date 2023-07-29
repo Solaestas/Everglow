@@ -2,7 +2,7 @@
 using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace MythMod.OceanMod.Tiles
+namespace Everglow.Ocean.Tiles
 {
     public class SparseBarnacle1 : ModTile
     {
@@ -22,7 +22,7 @@ namespace MythMod.OceanMod.Tiles
             TileObjectData.newTile.CoordinateWidth = 36;
             TileObjectData.addTile((int)base.Type);
             DustType = 7;
-            ItemDrop = ModContent.ItemType<OceanMod.Items.Barnacle>();
+            ItemDrop/* tModPorter Note: Removed. Tiles and walls will drop the item which places them automatically. Use RegisterItemDrop to alter the automatic drop if necessary. */ = ModContent.ItemType<Items.Barnacle>();
             ModTranslation modTranslation = base.CreateMapEntryName(null);
             modTranslation.SetDefault("Barnacle");
             modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "藤壶");
@@ -30,7 +30,7 @@ namespace MythMod.OceanMod.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(null, i * 16, j * 16, 48, 48, ModContent.ItemType<OceanMod.Items.Barnacle>(), 1, false, 0, false, false);
+            Item.NewItem(null, i * 16, j * 16, 48, 48, ModContent.ItemType<Items.Barnacle>(), 1, false, 0, false, false);
         }
 
         public override void RandomUpdate(int i, int j)
@@ -39,19 +39,19 @@ namespace MythMod.OceanMod.Tiles
             int Typ = 0;
             if (ty == 0)
             {
-                Typ = ModContent.TileType<OceanMod.Tiles.Barnacle1>();
+                Typ = ModContent.TileType<Tiles.Barnacle1>();
             }
             if (ty == 1)
             {
-                Typ = ModContent.TileType<OceanMod.Tiles.Barnacle2>();
+                Typ = ModContent.TileType<Tiles.Barnacle2>();
             }
             if (ty == 2)
             {
-                Typ = ModContent.TileType<OceanMod.Tiles.Barnacle3>();
+                Typ = ModContent.TileType<Tiles.Barnacle3>();
             }
             if (ty == 3)
             {
-                Typ = ModContent.TileType<OceanMod.Tiles.Barnacle4>();
+                Typ = ModContent.TileType<Tiles.Barnacle4>();
             }
             Main.tile[i, j].TileType = (ushort)Typ;
         }

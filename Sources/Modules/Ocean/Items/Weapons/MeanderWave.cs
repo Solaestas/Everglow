@@ -17,35 +17,35 @@ using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
 
 
-namespace MythMod.Items.Weapons
+namespace Everglow.Ocean.Items.Weapons
 {
     public class MeanderWave : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			base.DisplayName.SetDefault(".");
-			base.Tooltip.SetDefault(".");
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "海波粼粼");
+			// // base.DisplayName.SetDefault(".");
+			// base.Tooltip.SetDefault(".");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海波粼粼");
 			base.Tooltip.AddTranslation(GameCulture.Chinese, "打出海浪的光波");
 		}
 		public override void SetDefaults()
 		{
-			base.item.damage = 180;
-			base.item.magic = true;
-			base.item.mana = 20;
-			base.item.width = 28;
-			base.item.height = 30;
-			base.item.useTime = 25;
-			base.item.useAnimation = 25;
-			base.item.useStyle = 5;
-			base.item.noMelee = true;
-			base.item.knockBack = 6f;
-			base.item.value = 10000;
-			base.item.rare = 11;
-			base.item.UseSound = SoundID.Item14;
-			base.item.autoReuse = true;
-			base.item.shoot = base.mod.ProjectileType("OceanWave2");
-			base.item.shootSpeed = 14f;
+			base.Item.damage = 180;
+			base.Item.DamageType = DamageClass.Magic;
+			base.Item.mana = 20;
+			base.Item.width = 28;
+			base.Item.height = 30;
+			base.Item.useTime = 25;
+			base.Item.useAnimation = 25;
+			base.Item.useStyle = 5;
+			base.Item.noMelee = true;
+			base.Item.knockBack = 6f;
+			base.Item.value = 10000;
+			base.Item.rare = 11;
+			base.Item.UseSound = SoundID.Item14;
+			base.Item.autoReuse = true;
+			base.Item.shoot =ModContent.ProjectileType<Everglow.Ocean.Projectiles.OceanWave2>();
+			base.Item.shootSpeed = 14f;
         }
 	}
 }

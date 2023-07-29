@@ -13,38 +13,38 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
-namespace MythMod.Items.Weapons.OceanWeapons
+namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 {
     public class PurpleSeaanemoneStaff : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-            base.DisplayName.SetDefault("");
-			Item.staff[base.item.type] = true;
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "紫点海葵召唤杖");
+            // // base.DisplayName.SetDefault("");
+			Item.staff[base.Item.type] = true;
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "紫点海葵召唤杖");
 		}
 		public override void SetDefaults()
 		{
-			base.item.damage = 200;
-			base.item.magic = true;
-			base.item.mana = 3;
-			base.item.width = 88;
-			base.item.height = 86;
-			base.item.useTime = 24;
-			base.item.useAnimation = 24;
-			base.item.useStyle = 5;
-			base.item.noMelee = true;
-			base.item.knockBack = 1.5f;
-			base.item.value = 3000;
-			base.item.rare = 11;
-			base.item.UseSound = SoundID.Item60;
-			base.item.autoReuse = true;
-			base.item.shootSpeed = 1f;
-            base.item.shoot = base.mod.ProjectileType("紫点海葵");
+			base.Item.damage = 200;
+			base.Item.DamageType = DamageClass.Magic;
+			base.Item.mana = 3;
+			base.Item.width = 88;
+			base.Item.height = 86;
+			base.Item.useTime = 24;
+			base.Item.useAnimation = 24;
+			base.Item.useStyle = 5;
+			base.Item.noMelee = true;
+			base.Item.knockBack = 1.5f;
+			base.Item.value = 3000;
+			base.Item.rare = 11;
+			base.Item.UseSound = SoundID.Item60;
+			base.Item.autoReuse = true;
+			base.Item.shootSpeed = 1f;
+            base.Item.shoot =ModContent.ProjectileType<Everglow.Ocean.Projectiles.紫点海葵>();
         }
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            float shootSpeed = base.item.shootSpeed;
+            float shootSpeed = base.Item.shootSpeed;
             Vector2 vector = player.RotatedRelativePoint(player.MountedCenter, true);
             float num = (float)Main.mouseX + Main.screenPosition.X - vector.X;
             float num2 = (float)Main.mouseY + Main.screenPosition.Y - vector.Y;
@@ -65,17 +65,16 @@ namespace MythMod.Items.Weapons.OceanWeapons
             num2 = 0f;
             vector.X = (float)Main.mouseX + Main.screenPosition.X;
             vector.Y = (float)Main.mouseY + Main.screenPosition.Y;
-            Projectile.NewProjectile(vector.X, vector.Y, num, num2, base.mod.ProjectileType("紫点海葵"), damage, knockBack, player.whoAmI, 0f, 0f);
+            Projectile.NewProjectile(vector.X, vector.Y, num, num2,ModContent.ProjectileType<Everglow.Ocean.Projectiles.紫点海葵>(), damage, knockBack, player.whoAmI, 0f, 0f);
             return false;
         }
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
+            Recipe recipe = CreateRecipe(1);//制作一个武器
             recipe.AddIngredient(null, "PurpleSeaAnemone", 8); //需要一个材料
             recipe.AddIngredient(null, "OceanDustCore", 8); //需要一个材料
             recipe.requiredTile[0] = 412;
-            recipe.SetResult(this, 1); //制作一个武器
-            recipe.AddRecipe();
+            recipe.Register();
         }
     }
 }

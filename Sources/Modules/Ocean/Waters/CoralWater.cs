@@ -1,23 +1,20 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace MythMod.Waters
+namespace Everglow.Ocean.Waters
 {
 	public class CoralWater : ModWaterStyle
 	{
-		public override bool ChooseWaterStyle()
-		{
-			return Main.LocalPlayer.GetModPlayer<MythPlayer>().ZoneDeepocean;
-		}
-		public override int ChooseWaterfallStyle()
-		{
-			return base.mod.GetWaterfallStyleSlot("CoralWaterflow");
-		}
+		//public override bool ChooseWaterStyle()
+		//{
+		//	return Main.LocalPlayer.GetModPlayer<OceanContentPlayer>().ZoneDeepocean;
+		//}
+		public override int ChooseWaterfallStyle() => ModContent.Find<ModWaterfallStyle>("Everglow.Ocean.Waters.CoralWaterflow").Slot;
 		public override int GetSplashDust()
 		{
-			return mod.DustType("Wave");
+			return ModContent.DustType<Everglow.Ocean.Dusts.Wave>();
 		}
 		public override int GetDropletGore()
 		{

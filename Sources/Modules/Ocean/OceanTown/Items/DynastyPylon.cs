@@ -6,7 +6,7 @@ namespace Everglow.Ocean.Items.Town
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("Dynasty Pylon");
-            //DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "皇城晶塔");
+            //// DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "皇城晶塔");
         }
         public override void SetDefaults()
         {

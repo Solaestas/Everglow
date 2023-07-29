@@ -1,9 +1,11 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,7 +15,7 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
-namespace MythMod.Projectiles.projectile2
+namespace Everglow.Ocean.Projectiles.projectile2
 {
     //135596
     public class OceanSealBroken3 : ModProjectile
@@ -21,49 +23,49 @@ namespace MythMod.Projectiles.projectile2
         //4444444
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("海洋封印碎块");
+            // DisplayName.SetDefault("海洋封印碎块");
         }
         //7359668
         public override void SetDefaults()
         {
-            projectile.width = 44;
-            projectile.height = 44;
-            projectile.aiStyle = -1;
-            projectile.friendly = false;
-            projectile.ignoreWater = true;
-            projectile.tileCollide = true;
-            projectile.timeLeft = 900;
-            projectile.hostile = false;
-            projectile.penetrate = 1;
-            projectile.scale = 1f;
-            this.cooldownSlot = 1;
+            Projectile.width = 44;
+            Projectile.height = 44;
+            Projectile.aiStyle = -1;
+            Projectile.friendly = false;
+            Projectile.ignoreWater = true;
+            Projectile.tileCollide = true;
+            Projectile.timeLeft = 900;
+            Projectile.hostile = false;
+            Projectile.penetrate = 1;
+            Projectile.scale = 1f;
+            this.CooldownSlot = 1;
         }
         //55555
         private bool initialization = true;
         private float b;
         public override void AI()
         {
-            projectile.velocity.Y += 0.1f;
-            base.projectile.rotation += (float)System.Math.Atan2((double)projectile.velocity.Y, (double)projectile.velocity.X) / 35f;
+            Projectile.velocity.Y += 0.1f;
+            base.Projectile.rotation += (float)System.Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) / 35f;
         }
         //14141414141414
         public override void Kill(int timeLeft)
         {
-            Main.PlaySound(2, (int)base.projectile.position.X, (int)base.projectile.position.Y, 27, 1f, 0f);
+            SoundEngine.PlaySound(SoundID.Item27, new Vector2(base.Projectile.position.X, base.Projectile.position.Y));
             float scaleFactor = (float)(Main.rand.Next(-200, 200) / 100);
-            Gore.NewGore(base.projectile.position, base.projectile.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/海洋晶石1"), 1f);
-            Gore.NewGore(base.projectile.position, base.projectile.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/海洋晶石2"), 1f);
-            Gore.NewGore(base.projectile.position, base.projectile.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/海洋晶石5"), 1f);
-            Gore.NewGore(base.projectile.position, base.projectile.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/海洋晶石5"), 1f);
-            Gore.NewGore(base.projectile.position, base.projectile.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/海洋晶石5"), 1f);
-            Gore.NewGore(base.projectile.position, base.projectile.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/海洋晶石5"), 1f);
-            Gore.NewGore(base.projectile.position, base.projectile.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/海洋晶石3"), 1f);
-            Gore.NewGore(base.projectile.position, base.projectile.velocity * scaleFactor, base.mod.GetGoreSlot("Gores/海洋晶石4"), 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石1"), 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石2"), 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石5"), 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石5"), 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石5"), 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石5"), 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石3"), 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石4"), 1f);
             for (int a = 0; a < 90; a++)
             {
-                Vector2 vector = projectile.position;
+                Vector2 vector = Projectile.position;
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(6f, 7.5f)).RotatedByRandom(Math.PI * 2);
-                int num = Dust.NewDust(vector - new Vector2(4, 4), projectile.width, projectile.height, mod.DustType("Crystal2"), v.X, v.Y, 0, default(Color), 1.4f);
+                int num = Dust.NewDust(vector - new Vector2(4, 4), Projectile.width, Projectile.height, ModContent.DustType<Everglow.Ocean.Dusts.Crystal2>(), v.X, v.Y, 0, default(Color), 1.4f);
                 Main.dust[num].noGravity = false;
                 Main.dust[num].fadeIn = 1f + (float)Main.rand.NextFloat(-0.5f, 0.5f) * 0.1f;
             }

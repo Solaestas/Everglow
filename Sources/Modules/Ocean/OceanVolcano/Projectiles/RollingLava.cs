@@ -1,30 +1,32 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MythMod.Projectiles.projectile3
+namespace Everglow.Ocean.Projectiles.projectile3
 {
     public class RollingLava : ModProjectile
 	{
 		public override void SetStaticDefaults()
 		{
-            base.DisplayName.SetDefault("熔岩滚石");
+            // // base.DisplayName.SetDefault("熔岩滚石");
 		}
         private float num = 0;
         public override void SetDefaults()
 		{
-			base.projectile.width = 100;
-			base.projectile.height = 100;
-			base.projectile.friendly = true;
-            base.projectile.hostile = true;
-            base.projectile.alpha = 0;
-			base.projectile.penetrate = 4;
-			base.projectile.tileCollide = true;
-			base.projectile.timeLeft = 900;
-            base.projectile.ranged = true;
-            base.projectile.aiStyle = 25;
+			base.Projectile.width = 100;
+			base.Projectile.height = 100;
+			base.Projectile.friendly = true;
+            base.Projectile.hostile = true;
+            base.Projectile.alpha = 0;
+			base.Projectile.penetrate = 4;
+			base.Projectile.tileCollide = true;
+			base.Projectile.timeLeft = 900;
+            base.Projectile.DamageType = DamageClass.Ranged;
+            base.Projectile.aiStyle = 25;
 		}
         float timer = 0;
         static float j = 0;
@@ -34,43 +36,43 @@ namespace MythMod.Projectiles.projectile3
         Vector2 pc2 = Vector2.Zero;
         public override void AI()
         {
-            if(projectile.velocity.Length() >= 6)
+            if(Projectile.velocity.Length() >= 6)
             {
-                projectile.velocity *= 0.99f;
+                Projectile.velocity *= 0.99f;
             }
-            if(projectile.velocity.Length() < 0.1f && projectile.timeLeft < 895)
+            if(Projectile.velocity.Length() < 0.1f && Projectile.timeLeft < 895)
             {
-                projectile.Kill();
+                Projectile.Kill();
             }
             if(Main.rand.Next(3) == 2)
             {
-                Dust.NewDust(new Vector2((float)projectile.position.X, (float)projectile.position.Y), projectile.width, projectile.height, 6, 0f, 0f, 0, default(Color), Main.rand.NextFloat(0.9f, 1.6f));
+                Dust.NewDust(new Vector2((float)Projectile.position.X, (float)Projectile.position.Y), Projectile.width, Projectile.height, 6, 0f, 0f, 0, default(Color), Main.rand.NextFloat(0.9f, 1.6f));
             }
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            projectile.rotation -= projectile.velocity.X / 27f;
-            if (base.projectile.penetrate <= 0)
+            Projectile.rotation -= Projectile.velocity.X / 27f;
+            if (base.Projectile.penetrate <= 0)
             {
-                base.projectile.Kill();
+                base.Projectile.Kill();
             }
             else
             {
-                if(projectile.velocity.Length() > 0.5f)
+                if(Projectile.velocity.Length() > 0.5f)
                 {
-                    if (base.projectile.velocity.X != oldVelocity.X)
+                    if (base.Projectile.velocity.X != oldVelocity.X)
                     {
-                        base.projectile.velocity.X = -oldVelocity.X * 0.8f;
+                        base.Projectile.velocity.X = -oldVelocity.X * 0.8f;
                     }
-                    if (base.projectile.velocity.Y != oldVelocity.Y)
+                    if (base.Projectile.velocity.Y != oldVelocity.Y)
                     {
-                        base.projectile.velocity.Y = -oldVelocity.Y * 0.4f;
+                        base.Projectile.velocity.Y = -oldVelocity.Y * 0.4f;
                     }
                 }
                 else
                 {
-                    base.projectile.velocity.Y *= 0;
-                    base.projectile.velocity.X *= 0;
+                    base.Projectile.velocity.Y *= 0;
+                    base.Projectile.velocity.X *= 0;
                     x = true;
                 }
             }
@@ -78,24 +80,24 @@ namespace MythMod.Projectiles.projectile3
         }
         public override void Kill(int timeLeft)
         {
-            Main.PlaySound(2, (int)base.projectile.position.X, (int)base.projectile.position.Y, 14, 1f, 0f);
+            SoundEngine.PlaySound(SoundID.Item14, new Vector2(base.Projectile.position.X, base.Projectile.position.Y));
             for (int i = 0; i < 10; i++)
             {
                 float scaleFactor5 = (float)(Main.rand.Next(-20, 20) / 100f);
-                Gore.NewGore(base.projectile.position, base.projectile.velocity * scaleFactor5, base.mod.GetGoreSlot("Gores/火山浮石碎块" + (i % 5 + 1).ToString()), 0.8f);
+                Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor5, base.Mod.GetGoreSlot("Gores/火山浮石碎块" + (i % 5 + 1).ToString()), 0.8f);
             }
             for (int i = 0; i < 5; i++)
             {
                 float scaleFactor5 = (float)(Main.rand.Next(-20, 20) / 100f);
-                Gore.NewGore(base.projectile.position, base.projectile.velocity * scaleFactor5, base.mod.GetGoreSlot("Gores/火山浮石碎块" + (i % 2 + 6).ToString()), 0.8f);
+                Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor5, base.Mod.GetGoreSlot("Gores/火山浮石碎块" + (i % 2 + 6).ToString()), 0.8f);
             }
         }
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 		}
-        public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override void PostDraw(Color lightColor)
         {
-            spriteBatch.Draw(base.mod.GetTexture("Projectiles/projectile3/熔岩滚石Glow"), base.projectile.Center - Main.screenPosition, null, new Color(255,255,255,0), base.projectile.rotation, new Vector2(50f, 50f), 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(base.Mod.GetTexture("Projectiles/projectile3/熔岩滚石Glow"), base.Projectile.Center - Main.screenPosition, null, new Color(255,255,255,0), base.Projectile.rotation, new Vector2(50f, 50f), 1f, SpriteEffects.None, 0f);
         }
     }
 }

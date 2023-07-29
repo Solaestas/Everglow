@@ -13,35 +13,35 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
-namespace MythMod.Items.Weapons
+namespace Everglow.Ocean.Items.Weapons
 {
     public class VolcanoBlade : ModItem
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("���е����и��������һ�ը");
-            GetGlowMask = MythMod.SetStaticDefaultsGlowMask(this);
+            // Tooltip.SetDefault("0†3¡Â0‰00ˆ40…80ˆ40‡60‡90ˆ70ˆ40†00‡30‡00‡80ˆ60‹5¡¤0„40†90ˆ60†30Š8¡À0…10ˆ9¡§");
+            //GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
-        public static short GetGlowMask = 0;
+        //public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            item.glowMask = GetGlowMask;
-            item.damage = 185;
-            item.melee = true;
-            item.width = 62;
-            item.height = 68;
-            item.useTime = 6;
-            item.rare = 4;
-            item.useAnimation = 14;
-            item.useStyle = 1;
-            item.knockBack = 9;
-            item.UseSound = SoundID.Item1;
-            item.autoReuse = true;
-            item.crit = 15;
-            item.value = 60000;
-            item.scale = 1f;//��С
+            //Item.glowMask = GetGlowMask;
+            Item.damage = 185;
+            Item.DamageType = DamageClass.Melee/* tModPorter Suggestion: Consider MeleeNoSpeed for no attack speed scaling */;
+            Item.width = 62;
+            Item.height = 68;
+            Item.useTime = 6;
+            Item.rare = 4;
+            Item.useAnimation = 14;
+            Item.useStyle = 1;
+            Item.knockBack = 9;
+            Item.UseSound = SoundID.Item1;
+            Item.autoReuse = true;
+            Item.crit = 15;
+            Item.value = 60000;
+            Item.scale = 1f;//0…7¨®0ˆ40„3
         }
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             for (int i = 0; i < 48; i++)
             {
@@ -52,15 +52,15 @@ namespace MythMod.Items.Weapons
             {
                 return;
             }
-            float num1 = (float)damage * 0.04f;
+            float num1 = (float)damageDone * 0.04f;
             if ((int)num1 == 0)
             {
                 return;
             }
-            if (Main.rand.Next(5) == 1)
-            {
-                Projectile.NewProjectile(target.Center.X, target.Center.Y, 2f, 2f, base.mod.ProjectileType("��ɽ��ը"), damage * 3, knockback, player.whoAmI, 0f, 0f);
-            }
+            //if (Main.rand.Next(5) == 1)
+            //{
+            //    Projectile.NewProjectile(target.Center.X, target.Center.Y, 2f, 2f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.>(), damageDone * 3, hit.Knockback, player.whoAmI, 0f, 0f);
+            //}
             target.AddBuff(24, 600);
         }
         //15343648

@@ -1,6 +1,5 @@
-﻿using MythMod.NPCs;
+﻿using Everglow.Ocean.NPCs;
 using Terraria.GameContent.Generation;
-using Terraria.World.Generation;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -14,46 +13,46 @@ using Terraria.GameInput;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
+using Terraria.WorldBuilding;
 
-namespace MythMod.Items
+namespace Everglow.Ocean.Items
 {
     public class DarkSeaAxe : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-            base.DisplayName.SetDefault("炽海巨斧");
-			base.Tooltip.SetDefault("crash!");
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "炽海巨斧");
+            // // base.DisplayName.SetDefault("炽海巨斧");
+			// base.Tooltip.SetDefault("crash!");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "炽海巨斧");
 			base.Tooltip.AddTranslation(GameCulture.Chinese, "深渊的炽岩，具有灼热的破坏力");
-            GetGlowMask = MythMod.SetStaticDefaultsGlowMask(this);
+            GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
         public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            item.glowMask = GetGlowMask;
-            base.item.damage = 129;
-			base.item.melee = true;
-			base.item.crit = 5;
-			base.item.width = 64;
-			base.item.height = 64;
-			base.item.useTime = 25;
-			base.item.useAnimation = 25;
-			base.item.useTurn = true;
-			base.item.axe = 36;	
-			base.item.useStyle = 1;
-			base.item.knockBack = 9f;
-			base.item.value = 45000;
-			base.item.UseSound = SoundID.Item1;
-			base.item.autoReuse = true;
-            base.item.rare = 10;
+            Item.glowMask = GetGlowMask;
+            base.Item.damage = 129;
+			base.Item.DamageType = DamageClass.Melee/* tModPorter Suggestion: Consider MeleeNoSpeed for no attack speed scaling */;
+			base.Item.crit = 5;
+			base.Item.width = 64;
+			base.Item.height = 64;
+			base.Item.useTime = 25;
+			base.Item.useAnimation = 25;
+			base.Item.useTurn = true;
+			base.Item.axe = 36;	
+			base.Item.useStyle = 1;
+			base.Item.knockBack = 9f;
+			base.Item.value = 45000;
+			base.Item.UseSound = SoundID.Item1;
+			base.Item.autoReuse = true;
+            base.Item.rare = 10;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe modRecipe = new ModRecipe(base.mod);
+			Recipe modRecipe = /* base */Recipe.Create(this.Type, 1);
 			modRecipe.AddIngredient(null, "DarkSeaBar", 12);
             modRecipe.requiredTile[0] = 412;
-			modRecipe.SetResult(this, 1);
-			modRecipe.AddRecipe();
+			modRecipe.Register();
 		}
 		public override void MeleeEffects(Player player, Rectangle hitbox)
 		{

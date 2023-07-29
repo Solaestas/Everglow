@@ -1,6 +1,5 @@
-using MythMod.NPCs;
+﻿using Everglow.Ocean.NPCs;
 using Terraria.GameContent.Generation;
-using Terraria.World.Generation;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -16,45 +15,45 @@ using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
 using Terraria.Graphics.Shaders;
+using Terraria.WorldBuilding;
 
-namespace MythMod.Items
+namespace Everglow.Ocean.Items
 {
 	public class DarkSeaHammer : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("深渊的炽岩，具有灼热的破坏力");
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "暗影重锤");
+			// Tooltip.SetDefault("深渊的炽岩，具有灼热的破坏力");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "暗影重锤");
             base.Tooltip.AddTranslation(GameCulture.Chinese, "深渊的炽岩，具有灼热的破坏力");
-            GetGlowMask = MythMod.SetStaticDefaultsGlowMask(this);
+            GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
         public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            item.glowMask = GetGlowMask;
-            item.damage = 92;
-			item.crit = 4;
-			item.melee = true;
-			item.width = 60;
-			item.height = 64;
-			item.useTime = 25;
-			item.useAnimation = 25;
-            item.hammer = 120;
-			item.useStyle = 1;
-			item.knockBack = 6;
-			item.value = 45000;
-			item.rare = 10;
-			item.UseSound = SoundID.Item1;
-			item.autoReuse = true;
+            Item.glowMask = GetGlowMask;
+            Item.damage = 92;
+			Item.crit = 4;
+			Item.DamageType = DamageClass.Melee/* tModPorter Suggestion: Consider MeleeNoSpeed for no attack speed scaling */;
+			Item.width = 60;
+			Item.height = 64;
+			Item.useTime = 25;
+			Item.useAnimation = 25;
+            Item.hammer = 120;
+			Item.useStyle = 1;
+			Item.knockBack = 6;
+			Item.value = 45000;
+			Item.rare = 10;
+			Item.UseSound = SoundID.Item1;
+			Item.autoReuse = true;
 		}
 
 		public override void AddRecipes()
 		{
-			ModRecipe modRecipe = new ModRecipe(base.mod);
+			Recipe modRecipe = /* base */Recipe.Create(this.Type, 1);
 			modRecipe.AddIngredient(null, "DarkSeaBar", 12);
             modRecipe.requiredTile[0] = 412;
-			modRecipe.SetResult(this, 1);
-			modRecipe.AddRecipe();
+			modRecipe.Register();
 		}
 		public override void MeleeEffects(Player player, Rectangle hitbox)
 		{

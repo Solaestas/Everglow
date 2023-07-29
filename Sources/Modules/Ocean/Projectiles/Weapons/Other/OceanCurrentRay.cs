@@ -3,57 +3,57 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace MythMod.Projectiles.projectile3
+namespace Everglow.Ocean.Projectiles.projectile3
 {
 	public class OceanCurrentRay : ModProjectile
 	{
 		public override void SetStaticDefaults()
 		{
-			base.DisplayName.SetDefault("洋流射线");
+			// // base.DisplayName.SetDefault("洋流射线");
 		}
 		public override void SetDefaults()
 		{
-			base.projectile.width = 14;
-			base.projectile.height = 14;
-			base.projectile.friendly = true;
-			base.projectile.alpha = 255;
-			base.projectile.penetrate = 5;
-			base.projectile.timeLeft = 1080;
-			base.projectile.magic = true;
-            projectile.extraUpdates = 100;
+			base.Projectile.width = 14;
+			base.Projectile.height = 14;
+			base.Projectile.friendly = true;
+			base.Projectile.alpha = 255;
+			base.Projectile.penetrate = 5;
+			base.Projectile.timeLeft = 1080;
+			base.Projectile.DamageType = DamageClass.Magic;
+            Projectile.extraUpdates = 100;
 
         }
 		public override void AI()
 		{
-			Projectile projectile = base.projectile;
+			Projectile projectile = base.Projectile;
 			projectile.velocity.X = projectile.velocity.X * 1.01f;
-			Projectile projectile2 = base.projectile;
+			Projectile projectile2 = base.Projectile;
 			projectile2.velocity.Y = projectile2.velocity.Y * 1.01f;
-			if (base.projectile.ai[0] == 0f)
+			if (base.Projectile.ai[0] == 0f)
 			{
-				base.projectile.ai[0] = base.projectile.velocity.X;
-				base.projectile.ai[1] = base.projectile.velocity.Y;
+				base.Projectile.ai[0] = base.Projectile.velocity.X;
+				base.Projectile.ai[1] = base.Projectile.velocity.Y;
 			}
-			if (Math.Sqrt((double)(base.projectile.velocity.X * base.projectile.velocity.X + base.projectile.velocity.Y * base.projectile.velocity.Y)) > 2.0)
+			if (Math.Sqrt((double)(base.Projectile.velocity.X * base.Projectile.velocity.X + base.Projectile.velocity.Y * base.Projectile.velocity.Y)) > 2.0)
 			{
-				base.projectile.velocity *= 0.98f;
+				base.Projectile.velocity *= 0.98f;
 			}
             if(projectile.timeLeft < 1067)
             {
-                int i = Dust.NewDust(projectile.Center, 0, 0, mod.DustType("Aquamarine"), 0f, 0f, 0, default(Color), 2f);
+                int i = Dust.NewDust(projectile.Center, 0, 0, ModContent.DustType<Everglow.Ocean.Dusts.Aquamarine>(), 0f, 0f, 0, default(Color), 2f);
                 Main.dust[i].velocity *= 0;
             }
-            float num20 = base.projectile.Center.X;
-            float num30 = base.projectile.Center.Y;
+            float num20 = base.Projectile.Center.X;
+            float num30 = base.Projectile.Center.Y;
             float num4 = 400f;
             bool flag = false;
             for (int j = 0; j < 200; j++)
             {
-                if (Main.npc[j].CanBeChasedBy(base.projectile, false) && Collision.CanHit(base.projectile.Center, 1, 1, Main.npc[j].Center, 1, 1))
+                if (Main.npc[j].CanBeChasedBy(base.Projectile, false) && Collision.CanHit(base.Projectile.Center, 1, 1, Main.npc[j].Center, 1, 1))
                 {
                     float num5 = Main.npc[j].position.X + (float)(Main.npc[j].width / 2);
                     float num6 = Main.npc[j].position.Y + (float)(Main.npc[j].height / 2);
-                    float num7 = Math.Abs(base.projectile.position.X + (float)(base.projectile.width / 2) - num5) + Math.Abs(base.projectile.position.Y + (float)(base.projectile.height / 2) - num6);
+                    float num7 = Math.Abs(base.Projectile.position.X + (float)(base.Projectile.width / 2) - num5) + Math.Abs(base.Projectile.position.Y + (float)(base.Projectile.height / 2) - num6);
                     if (num7 < num4)
                     {
                         num4 = num7;
@@ -75,7 +75,7 @@ namespace MythMod.Projectiles.projectile3
             if (flag)
             {
                 float num8 = 20f;
-                Vector2 vector1 = new Vector2(base.projectile.position.X + (float)base.projectile.width * 0.5f, base.projectile.position.Y + (float)base.projectile.height * 0.5f);
+                Vector2 vector1 = new Vector2(base.Projectile.position.X + (float)base.Projectile.width * 0.5f, base.Projectile.position.Y + (float)base.Projectile.height * 0.5f);
                 float num9 = num20 - vector1.X;
                 float num10 = num30 - vector1.Y;
                 Vector2 v = new Vector2(num20, num30) - projectile.Center;
@@ -83,8 +83,8 @@ namespace MythMod.Projectiles.projectile3
                 num11 = num8 / num11;
                 num9 *= num11;
                 num10 *= num11;
-                base.projectile.velocity.X = (base.projectile.velocity.X * v.Length() * 2 + num9) / (v.Length() * 2 + 1);
-                base.projectile.velocity.Y = (base.projectile.velocity.Y * v.Length() * 2 + num10) / (v.Length() * 2 + 1);
+                base.Projectile.velocity.X = (base.Projectile.velocity.X * v.Length() * 2 + num9) / (v.Length() * 2 + 1);
+                base.Projectile.velocity.Y = (base.Projectile.velocity.Y * v.Length() * 2 + num10) / (v.Length() * 2 + 1);
             }
         }
 	}

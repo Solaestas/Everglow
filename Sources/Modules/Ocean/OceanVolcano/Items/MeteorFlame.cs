@@ -6,40 +6,40 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 using Terraria.Localization;
-namespace MythMod.Items.Volcano
+namespace Everglow.Ocean.OceanVolcano.Items
 {
     public class MeteorFlame : ModItem
     {
         public override void SetStaticDefaults()
         {
-            base.DisplayName.SetDefault("火陨之杖");
-            Item.staff[base.item.type] = true;
-            base.DisplayName.AddTranslation(GameCulture.Chinese, "火陨之杖");
-            GetGlowMask = MythMod.SetStaticDefaultsGlowMask(this);
+            // // base.DisplayName.SetDefault("火陨之杖");
+            Item.staff[base.Item.type] = true;
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "火陨之杖");
+            GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
         public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            item.glowMask = GetGlowMask;
-            base.item.damage = 210;
-            base.item.magic = true;
-            base.item.mana = 5;
-            base.item.width = 54;
-            base.item.height = 54;
-            base.item.useTime = 30;
-            base.item.useAnimation = 30;
-            item.crit = 22;
-            base.item.useStyle = 5;
-            base.item.noMelee = true;
-            base.item.knockBack = 0.5f;
-            base.item.value = 12000;
-            base.item.rare = 11;
-            base.item.UseSound = SoundID.Item60;
-            base.item.autoReuse = true;
-            base.item.shoot = base.mod.ProjectileType("MeteorFlame");
-            base.item.shootSpeed = 2f;
+            Item.glowMask = GetGlowMask;
+            base.Item.damage = 210;
+            base.Item.DamageType = DamageClass.Magic;
+            base.Item.mana = 5;
+            base.Item.width = 54;
+            base.Item.height = 54;
+            base.Item.useTime = 30;
+            base.Item.useAnimation = 30;
+            Item.crit = 22;
+            base.Item.useStyle = 5;
+            base.Item.noMelee = true;
+            base.Item.knockBack = 0.5f;
+            base.Item.value = 12000;
+            base.Item.rare = 11;
+            base.Item.UseSound = SoundID.Item60;
+            base.Item.autoReuse = true;
+            base.Item.shoot =ModContent.ProjectileType<Everglow.Ocean.Projectiles.MeteorFlame>();
+            base.Item.shootSpeed = 2f;
         }
-        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             float X = Main.rand.NextFloat(-250, 250);
             float Y = Main.rand.NextFloat(-250, 250);

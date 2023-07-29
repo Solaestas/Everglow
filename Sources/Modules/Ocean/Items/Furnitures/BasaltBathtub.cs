@@ -1,38 +1,38 @@
 ﻿using System;
+using Terraria;
 using Terraria.ModLoader;
 using Terraria.Localization;
 
-namespace MythMod.Items.Furnitures
+namespace Everglow.Ocean.Items.Furnitures
 {
 
 	public class BasaltBathtub : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-            DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩浴缸");
+            // DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩浴缸");
         }
 		public override void SetDefaults()
 		{
-			base.item.SetNameOverride("玄武岩浴缸");
-			base.item.width = 28;
-			base.item.height = 20;
-			base.item.maxStack = 999;
-			base.item.useTurn = true;
-			base.item.autoReuse = true;
-			base.item.useAnimation = 15;
-			base.item.useTime = 10;
-			base.item.useStyle = 1;
-			base.item.value = 0;
-			base.item.consumable = true;
-			base.item.createTile = base.mod.TileType("玄武岩浴缸");
+			base.Item.SetNameOverride("玄武岩浴缸");
+			base.Item.width = 28;
+			base.Item.height = 20;
+			base.Item.maxStack = 999;
+			base.Item.useTurn = true;
+			base.Item.autoReuse = true;
+			base.Item.useAnimation = 15;
+			base.Item.useTime = 10;
+			base.Item.useStyle = 1;
+			base.Item.value = 0;
+			base.Item.consumable = true;
+			base.Item.createTile = base.Mod.Find<ModTile>("玄武岩浴缸").Type;
 		}
 		public override void AddRecipes()
 		{
-			ModRecipe modRecipe = new ModRecipe(base.mod);
+			Recipe modRecipe = /* base */Recipe.Create(this.Type, 1);
 			modRecipe.AddIngredient(null, "Basalt", 14);
-			modRecipe.SetResult(this, 1);
 			modRecipe.AddTile(16);
-			modRecipe.AddRecipe();
+			modRecipe.Register();
 		}
 	}
 }

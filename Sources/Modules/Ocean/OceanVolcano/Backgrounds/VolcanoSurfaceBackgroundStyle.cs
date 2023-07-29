@@ -1,4 +1,4 @@
-namespace MythMod.OceanMod.Backgrounds
+namespace Everglow.Ocean.Backgrounds
 {
     public class VolcanoSurfaceBackgroundStyle : ModSurfaceBackgroundStyle
     {
@@ -26,18 +26,18 @@ namespace MythMod.OceanMod.Backgrounds
         }
         public override int ChooseFarTexture()
         {
-            return BackgroundTextureLoader.GetBackgroundSlot("MythMod/OceanMod/Backgrounds/VolcanoSurfaceFar");
+            return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Ocean/Backgrounds/VolcanoSurfaceFar");
         }
         private static int SurfaceFrameCounter;
         private static int SurfaceFrame;
         public override int ChooseMiddleTexture()
         {
-            return BackgroundTextureLoader.GetBackgroundSlot("MythMod/OceanMod/Backgrounds/VolcanoSurfaceMiddle");
+            return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Ocean/Backgrounds/VolcanoSurfaceMiddle");
         }
         public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b)
         {
             //b = 2000;
-            return BackgroundTextureLoader.GetBackgroundSlot("MythMod/OceanMod/Backgrounds/VolcanoSurfaceClose");
+            return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Ocean/Backgrounds/VolcanoSurfaceClose");
         }
     }
 }
