@@ -35,8 +35,9 @@ public class GlowingButterfly : ModProjectile
 		Projectile.alpha = 255;
 	}
 
-	private float Ome = 0;
+	private float omega = 0;
 
+	private int useStyle = 0;
 	public override void AI()
 	{
 		Player owner = Main.player[Projectile.owner];
@@ -45,13 +46,13 @@ public class GlowingButterfly : ModProjectile
 
 			if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
 			{
-				if (y == 0)
+				if (useStyle == 0)
 				{
 					Projectile.timeLeft = Main.rand.Next(135, 185);
 					Projectile.frame = Main.rand.Next(6);
-					Ome = Main.rand.NextFloat(-0.02f, 0.02f);
+					omega = Main.rand.NextFloat(-0.02f, 0.02f);
 					Projectile.scale = Main.rand.NextFloat(0.6f, 1.0f);
-					y = ItemUseStyleID.Swing;
+					useStyle = ItemUseStyleID.Swing;
 				}
 				if (Projectile.timeLeft > 100 && Projectile.alpha >= 8)
 					Projectile.alpha -= 4;
@@ -66,13 +67,13 @@ public class GlowingButterfly : ModProjectile
 			}
 			else
 			{
-				if (y == 0)
+				if (useStyle == 0)
 				{
 					Projectile.timeLeft = Main.rand.Next(85, 135);
 					Projectile.frame = Main.rand.Next(6);
-					Ome = Main.rand.NextFloat(-0.02f, 0.02f);
+					omega = Main.rand.NextFloat(-0.02f, 0.02f);
 					Projectile.scale = Main.rand.NextFloat(0.6f, 1.0f);
-					y = ItemUseStyleID.Swing;
+					useStyle = ItemUseStyleID.Swing;
 				}
 				if (Projectile.timeLeft > 50 && Projectile.alpha >= 8)
 					Projectile.alpha -= 8;
@@ -89,8 +90,8 @@ public class GlowingButterfly : ModProjectile
 
 		//Projectile.spriteDirection = Projectile.velocity.X > 0 ? -1 : 1;
 		Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.75);
-		Projectile.velocity = Projectile.velocity.RotatedBy(Ome);
-		Ome += Math.Sign(Ome) * 0.001f;
+		Projectile.velocity = Projectile.velocity.RotatedBy(omega);
+		omega += Math.Sign(omega) * 0.001f;
 		if (Projectile.frame != 5)
 			Projectile.velocity *= 1.04f;
 		else
@@ -99,8 +100,6 @@ public class GlowingButterfly : ModProjectile
 		}
 		if (Collision.SolidCollision(Projectile.Center - Projectile.velocity, 1, 1))
 			Projectile.tileCollide = true;
-		Stre = Math.Clamp((100 - Projectile.timeLeft) / 10f, 0, 1f);
-
 		if (Projectile.timeLeft % 5 == 0)
 		{
 			if (Projectile.frame != 5)
@@ -116,7 +115,12 @@ public class GlowingButterfly : ModProjectile
 		Projectile.velocity.Y *= 0.96f;
 		if (Projectile.timeLeft % 12 == 0)
 		{
-			Dust dust = Dust.NewDustDirect(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.9f, 2.2f));
+			int type = ModContent.DustType<BlackScaleAppear>();
+			if (Projectile.ai[0] == 0)
+			{
+				type = ModContent.DustType<BlueGlowAppear_dark>();
+			}
+			Dust dust = Dust.NewDustDirect(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, type, 0f, 0f, 100, default, Main.rand.NextFloat(0.9f, 2.2f));
 			dust.velocity = Projectile.velocity * 0.5f;
 		}
 		GeneralBehavior(owner, out Vector2 vectorToIdlePosition, out float distanceToIdlePosition);
@@ -291,9 +295,6 @@ public class GlowingButterfly : ModProjectile
 		Lighting.AddLight(Projectile.Center, new Vector3(0, 0.05f * (255 - Projectile.alpha) / 255f, 0.12f * (255 - Projectile.alpha) / 255f));
 	}
 
-	private int y = 0;
-	private float Stre;
-
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
@@ -303,9 +304,24 @@ public class GlowingButterfly : ModProjectile
 		if (Projectile.alpha > 180)
 			return;
 	}
-
-	public override Color? GetAlpha(Color lightColor)
+	public override bool PreDraw(ref Color lightColor)
 	{
-		return new Color(55 - Projectile.alpha, 55 - Projectile.alpha, 255 - Projectile.alpha, (255 - Projectile.alpha) / 2);
+		Texture2D tex = ModAsset.GlowingButterfly.Value;
+		Texture2D texDark = ModAsset.GlowingButterfly_dark.Value;
+		Color lightC = new Color(55 - Projectile.alpha, 55 - Projectile.alpha, 255 - Projectile.alpha, (255 - Projectile.alpha) / 2);
+		if(Projectile.ai[0] == 1)
+		{
+			lightC = Color.Transparent;
+		}
+		if (Projectile.ai[0] == 2)
+		{
+			lightC = new Color(55 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, (255 - Projectile.alpha) / 2);
+		}
+		float colorValue = (255 - Projectile.alpha) / 255f;
+		Rectangle frame = new Rectangle(0, Projectile.frame * 46, 46, 46);
+		Main.spriteBatch.Draw(texDark, Projectile.Center - Main.screenPosition, frame, Color.White * colorValue, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, frame, lightC, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+
+		return false;
 	}
 }

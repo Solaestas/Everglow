@@ -31,8 +31,6 @@ internal class FlowLightMissile : ModProjectile
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
 		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathF.PI * 0.75f);
-		if (Projectile.timeLeft % 5 == 0)
-			player.statMana--;
 		energy += 2;
 		Vector2 MouseToPlayer = Main.MouseWorld - player.MountedCenter;
 		MouseToPlayer = Vector2.Normalize(MouseToPlayer);
@@ -106,8 +104,12 @@ internal class FlowLightMissile : ModProjectile
 		Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
 		v0 = Vector2.Normalize(v0);
 		Player player = Main.player[Projectile.owner];
-
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v0 * 62, v0 * (energy + 20) / 9f, ModContent.ProjectileType<MissileProj>(), (int)(Projectile.damage * (energy + 150) / 100f), Projectile.knockBack, player.whoAmI, energy / 5f + 10, 0);
+		float ai1 = 1.57f;
+		if(Main.rand.NextBool(2))
+		{
+			ai1 *= -1;
+		}
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v0 * 62, v0 * (energy + 20) / 9f, ModContent.ProjectileType<MissileProj>(), (int)(Projectile.damage * (energy + 150) / 100f), Projectile.knockBack, player.whoAmI, energy / 5f + 10, ai1);
 
 		Vector2 newVelocity = v0;
 		newVelocity *= 1f - Main.rand.NextFloat(0.3f);

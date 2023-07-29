@@ -13,7 +13,7 @@ internal class DarkFanFly : ModProjectile
 		Projectile.friendly = true;
 		Projectile.hostile = false;
 		Projectile.penetrate = -1;
-		Projectile.timeLeft = 250;
+		Projectile.timeLeft = 450;
 		Projectile.extraUpdates = 1;
 		Projectile.tileCollide = true;
 		Projectile.DamageType = DamageClass.Summon;
@@ -33,13 +33,6 @@ internal class DarkFanFly : ModProjectile
 			if (target.active)
 				Main.player[Projectile.owner].MinionAttackTargetNPC = target.whoAmI;
 		}
-		int Count = player.maxMinions / 3;
-		for (int g = 0; g < Count; g++)
-		{
-			Vector2 va = new Vector2(0, Main.rand.NextFloat(9f, 11f)).RotatedByRandom(Math.PI * 2);
-			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), target.Center + va, va, ModContent.ProjectileType<GlowingButterfly>(), Projectile.damage / 3, Projectile.knockBack, player.whoAmI, player.GetCritChance(DamageClass.Summon) + 8, 0f);
-		}
-
 		target.AddBuff(ModContent.BuffType<OnMoth>(), 300);
 
 		if (MothBuffTarget.mothStack[target.whoAmI] < 5)
@@ -59,10 +52,10 @@ internal class DarkFanFly : ModProjectile
 		Vector2 v2 = player.Center + v1 - Projectile.Center;
 		Vector2 v3 = Vector2.Normalize(v2) * 0.48f;
 		Projectile.velocity += v3;
-		if (Projectile.timeLeft is < 180 and > 60)
+		if (Projectile.timeLeft is < 380 and > 60)
 		{
 			if (v0.Length() < 48)
-				Projectile.timeLeft = 60;
+				Projectile.timeLeft = 20;
 		}
 		Projectile.velocity *= 0.99f;
 		for (int x = 58; x >= 0; x--)
@@ -76,10 +69,13 @@ internal class DarkFanFly : ModProjectile
 			OldScale[x + 1] = OldScale[x];
 		}
 		OldScale[0] = Projectile.scale;
-		if (Projectile.timeLeft < 100)
+		if (Projectile.timeLeft < 300)
 			Projectile.tileCollide = false;
 		if (Projectile.timeLeft < 60)
 			Projectile.timeLeft -= 4;
+		int frequency = 70 / (2 + player.maxMinions);
+		if (Projectile.timeLeft % frequency == 0)
+			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Projectile.velocity * 0.3f, ModContent.ProjectileType<GlowingButterfly>(), Projectile.damage / 3, Projectile.knockBack, player.whoAmI, Main.rand.Next(2), 0f);
 	}
 
 	public override void Kill(int timeLeft)
@@ -116,9 +112,9 @@ internal class DarkFanFly : ModProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = tex;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex.ToArray(), 0, vertex.Count / 3);
 
-		vertex.Add(new Vertex2D(Projectile.Center + v0 * Projectile.scale - Main.screenPosition, new Color(0, 0, 255, 0), new Vector3(84f / 200f, 0f / 200f, 0)));
-		vertex.Add(new Vertex2D(Projectile.Center + v1 * Projectile.scale - Main.screenPosition, new Color(0, 0, 255, 0), new Vector3(200f / 200f, 100f / 200f, 0)));
-		vertex.Add(new Vertex2D(Projectile.Center + v2 * Projectile.scale - Main.screenPosition, new Color(0, 0, 255, 0), new Vector3(0f / 200f, 200f / 200f, 0)));
+		vertex.Add(new Vertex2D(Projectile.Center + v0 * Projectile.scale - Main.screenPosition, new Color(0, 100, 255, 0), new Vector3(84f / 200f, 0f / 200f, 0)));
+		vertex.Add(new Vertex2D(Projectile.Center + v1 * Projectile.scale - Main.screenPosition, new Color(0, 100, 255, 0), new Vector3(200f / 200f, 100f / 200f, 0)));
+		vertex.Add(new Vertex2D(Projectile.Center + v2 * Projectile.scale - Main.screenPosition, new Color(0, 100, 255, 0), new Vector3(0f / 200f, 200f / 200f, 0)));
 		Main.graphics.GraphicsDevice.Textures[0] = texG;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex.ToArray(), 0, vertex.Count / 3);
 	}

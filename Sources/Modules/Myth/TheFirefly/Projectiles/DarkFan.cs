@@ -31,7 +31,7 @@ internal class DarkFan : ModProjectile
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Player player = Main.player[Projectile.owner];
-		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<FanHit>(), 0, 0, player.whoAmI, 5f);
+		Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<FanHit>(), 0, 0, player.whoAmI, 10, Main.rand.NextFloat(6.283f));
 		int[] array = Projectile.localNPCImmunity;
 		bool flag = !Projectile.usesLocalNPCImmunity && !Projectile.usesIDStaticNPCImmunity || Projectile.usesLocalNPCImmunity && array[target.whoAmI] == 0 || Projectile.usesIDStaticNPCImmunity && Projectile.IsNPCIndexImmuneToProjectileType(Projectile.type, target.whoAmI);
 		if (target.active && !target.dontTakeDamage && flag && (target.aiStyle != 112 || target.ai[2] <= 1f))
@@ -100,9 +100,9 @@ internal class DarkFan : ModProjectile
 			ExtraKnife = true;
 			Projectile.timeLeft = 70;
 		}
-		int Freq = 270 / (2 + player.maxMinions);
-		if (Projectile.timeLeft % Freq == 0)
-			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), player.Center, (v1 + new Vector2(29, 29)) / 8f, ModContent.ProjectileType<GlowingButterfly>(), Projectile.damage / 3 * 2, Projectile.knockBack, player.whoAmI, player.GetCritChance(DamageClass.Summon) + 8, 0f);
+		int frequency = 270 / (2 + player.maxMinions);
+		if (Projectile.timeLeft % frequency == 0)
+			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), player.Center, (v1 + new Vector2(29, 29)) / 8f, ModContent.ProjectileType<GlowingButterfly>(), Projectile.damage / 3 * 2, Projectile.knockBack, player.whoAmI, Main.rand.Next(2), 0f);
 	}
 
 	public override bool PreDraw(ref Color lightColor)

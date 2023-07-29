@@ -26,9 +26,17 @@ public class MothBuffTarget : GlobalNPC
 	{
 		if (npc.HasBuff(ModContent.BuffType<OnMoth>()))
 		{
-			if (projectile.type == ModContent.ProjectileType<DarkFanFly>() || projectile.type == ModContent.ProjectileType<GlowingButterfly>())
-				modifiers.FinalDamage *= (int)(1.0f + mothStack[npc.whoAmI] / 10f);
+			if(projectile.DamageType == DamageClass.Summon)
+			{
+				float velocityValue = MathF.Log(npc.velocity.Length() + 1) / 10f;
+				if(!npc.collideX && !npc.collideY)
+				{
+
+				}
+				modifiers.FinalDamage = modifiers.FinalDamage * (1 + mothStack[npc.whoAmI] * 0.1f + velocityValue);
+			}
 		}
+		base.ModifyHitByProjectile(npc, projectile, ref modifiers);
 	}
 
 	public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

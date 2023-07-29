@@ -57,10 +57,11 @@ public class MissileProj : ModProjectile, IWarpProjectile
 		if (targetNPC != -1)
 		{
 			NPC npc = Main.npc[targetNPC];
-			if (npc.active && (npc.Center - Projectile.Center).Length() < 350)
+			Vector2 v0 = npc.Center - Projectile.Center - Projectile.velocity;
+			if (npc.active && v0.Length() < 750)
 			{
-				Vector2 v0 = npc.Center - Projectile.Center;
-				Projectile.velocity += Vector2.Normalize(v0).RotatedBy(Projectile.ai[1]) * 0.5f;
+
+				Projectile.velocity += Vector2.Normalize(v0);
 
 				Projectile.velocity = Vector2.Normalize(Projectile.velocity) * Math.Max(startSpeed, 5);
 			}
@@ -85,10 +86,11 @@ public class MissileProj : ModProjectile, IWarpProjectile
 	}
 	private void AddLight()
 	{
-		float kTime = 1f;
-		if (Projectile.timeLeft < 90f)
-			kTime = Projectile.timeLeft / 90f;
-		Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0.32f * kTime, 0.23f * kTime, 0);
+		if(timeTokill < 0)
+		{
+			Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0, Projectile.ai[0] * Projectile.ai[0] * 0.0003f, Projectile.ai[0] * 0.03f);
+		}
+		
 	}
 	public override void AI()
 	{
