@@ -65,7 +65,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			{
 				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),
 	Projectile.Center
-	, Projectile.velocity * 9, ModContent.ProjectileType<EnchantedBayonet_beam>()
+	, Projectile.velocity * 10, ModContent.ProjectileType<EnchantedBayonet_beam>()
 	, Projectile.damage, Projectile.knockBack * 0.6f, Projectile.owner, -1);
 				Main.NewText(p0.velocity);
 			}

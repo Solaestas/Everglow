@@ -31,8 +31,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			float time = (float)(Main.time * 0.03);
 			List<Vertex2D> bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,new Color(0, 0, 255, 0),new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(0, 0, 255, 0),new Vector3(1 + time, 1, 0)),
+				new Vertex2D(start + normalized,new Color(20, 150, 255, 0),new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized,new Color(20, 150, 255, 0),new Vector3(1 + time, 1, 0)),
 				new Vertex2D(end + normalized, Color.Transparent,new Vector3(0f + time, 0, 1)),
 				new Vertex2D(end - normalized, Color.Transparent,new Vector3(0f + time, 1, 1))
 			};
