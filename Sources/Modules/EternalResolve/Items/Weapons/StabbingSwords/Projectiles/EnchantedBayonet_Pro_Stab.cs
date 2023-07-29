@@ -3,6 +3,7 @@ using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 using Everglow.EternalResolve.VFXs;
 using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
@@ -60,7 +61,20 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				dust.noGravity= true;
 				dust.velocity = new Vector2(0, Main.rand.NextFloat(6f)).RotateRandom(6.283);
 			}
+			if(ToKill == 40)
+			{
+				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),
+	Projectile.Center
+	, Projectile.velocity * 9, ModContent.ProjectileType<EnchantedBayonet_beam>()
+	, Projectile.damage, Projectile.knockBack * 0.6f, Projectile.owner, -1);
+				Main.NewText(p0.velocity);
+			}
 			base.AI();
+		}
+		public override void OnSpawn(IEntitySource source)
+		{
+			
+			base.OnSpawn(source);
 		}
 	}
 }

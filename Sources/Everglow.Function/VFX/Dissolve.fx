@@ -11,6 +11,7 @@ sampler_state
     AddressV = WRAP;
 };
 float duration;
+float uNoiseSize;//不允许填0
 float4 uDissolveColor;
 float4x4 uTransform;
 
@@ -39,7 +40,7 @@ PSInput VertexShaderFunction(VSInput input)
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
-    float4 colorNoise = tex2D(uNoiseSampler, input.Texcoord.xy);
+    float4 colorNoise = tex2D(uNoiseSampler, input.Texcoord.xy / uNoiseSize);
     float4 mainTex = tex2D(uImage, input.Texcoord.xy);
     if (!any(mainTex))
         return float4(0, 0, 0, 0);

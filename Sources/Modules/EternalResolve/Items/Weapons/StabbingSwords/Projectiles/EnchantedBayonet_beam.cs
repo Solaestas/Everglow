@@ -1,7 +1,4 @@
 using Everglow.Commons.Vertex;
-using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.Weapons.StabbingSwords;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 using Everglow.EternalResolve.VFXs;
 using Terraria.Audio;
 
@@ -11,10 +8,14 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 	{
 		public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
 		public override void SetDefaults()
-        {
+		{
+			Projectile.width = 10;
+			Projectile.height = 10;
+			Projectile.netImportant = true;
+			Projectile.aiStyle = -1;
 			Projectile.friendly = true;
 			Projectile.hostile = false;
-			Projectile.ignoreWater= true;
+			Projectile.ignoreWater = true;
 			Projectile.tileCollide = true;
 			Projectile.timeLeft = 3600;
 		}
@@ -26,7 +27,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 50;
 			Vector2 start = Projectile.Center;
-			Vector2 end = Projectile.Center - Projectile.velocity * 30f;
+			Vector2 end = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 90f;
 			float time = (float)(Main.time * 0.03);
 			List<Vertex2D> bars = new List<Vertex2D>
 			{
@@ -69,7 +70,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					velocity = newVelocity,
 					Active = true,
 					Visible = true,
-					position = EndPos,
+					position = Projectile.Center,
 					maxTime = Main.rand.Next(1, 25),
 					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(0.1f, 17.0f)),
 					rotation = Main.rand.NextFloat(6.283f),
