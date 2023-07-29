@@ -20,6 +20,11 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			base.DrawEffect(lightColor);
 		}
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+		{
+			target.buffImmune[BuffID.Poisoned] = false;
+			target.AddBuff(BuffID.Poisoned, 360);
+		}
 		public override void AI()
 		{
 			base.AI();

@@ -198,7 +198,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			target.AddBuff(BuffID.CursedInferno, 600);
+			target.AddBuff(BuffID.CursedInferno, 900);
 			base.OnHitNPC(target, hit, damageDone);
 		}
 		public override void HitTile()

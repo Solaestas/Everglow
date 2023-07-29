@@ -69,6 +69,11 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.LifeRotten.Description
 	}
 
+	BloodDrinking: {
+		DisplayName: Blood Drinking
+		Description: Mods.Everglow.Buffs.BloodDrinking.Description
+	}
+
 	OnElectric: {
 		DisplayName: On Electric
 		Description: Mods.Everglow.Buffs.OnElectric.Description
@@ -806,6 +811,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	CurseFlameStabbingSword: {
+		DisplayName: Curse Flame Stabbing Sword
+		Tooltip: ""
+	}
+
 	DreamStar: {
 		DisplayName: Dream Star
 		Tooltip: ""
@@ -828,6 +838,11 @@ Items: {
 
 	HolyBayonet: {
 		DisplayName: Holy Bayonet
+		Tooltip: ""
+	}
+
+	IchorBayonet: {
+		DisplayName: Ichor Bayonet
 		Tooltip: ""
 	}
 
@@ -898,6 +913,11 @@ Items: {
 
 	YoenLeZed: {
 		DisplayName: Yoen Le Zed
+		Tooltip: ""
+	}
+
+	StaminaItem: {
+		DisplayName: Stamina Item
 		Tooltip: ""
 	}
 
@@ -2544,12 +2564,12 @@ NPCs: {
 		DisplayName: Acytaea
 
 		TownNPCMood: {
-			Content: 我很满足。
-			NoHome: 我讨厌没有家。
-			FarFromHome: 我离家太远了。
-			LoveSpace: 我非常喜欢有这么大的空间。
-			DislikeCrowded: 我不喜欢这么拥挤。
-			HateCrowded: 我讨厌这么拥挤。
+			Content: I am content.
+			NoHome: I hate not having a home.
+			FarFromHome: I am too far from home.
+			LoveSpace: I love having so much space.
+			DislikeCrowded: I dislike how crowded I am.
+			HateCrowded: I hate how crowded I am.
 			LikeNPC_Princess: I like {NPCName}.
 			Princess_LovesNPC: I like {NPCName}.
 		}
@@ -2581,18 +2601,24 @@ Projectiles: {
 	CopperStabbingSword_Pro_Stab.DisplayName: Copper Stabbing Sword_ Pro_ Stab
 	CrutchBayonet_Pro.DisplayName: Crutch Bayonet_ Pro
 	CrutchBayonet_Pro_Stab.DisplayName: Crutch Bayonet_ Pro_ Stab
+	CurseFlameStabbingSword_Pro.DisplayName: Curse Flame Stabbing Sword_ Pro
+	CurseFlameStabbingSword_Pro_Stab.DisplayName: Curse Flame Stabbing Sword_ Pro_ Stab
 	DreamStar_Explosion.DisplayName: Dream Star_ Explosion
 	DreamStar_FallenStar.DisplayName: Dream Star_ Fallen Star
 	DreamStar_Pro.DisplayName: Dream Star_ Pro
 	DreamStar_Pro_Stab.DisplayName: Dream Star_ Pro_ Stab
+	EnchantedBayonet_beam.DisplayName: Enchanted Bayonet_beam
 	EnchantedBayonet_Pro.DisplayName: Enchanted Bayonet_ Pro
 	EnchantedBayonet_Pro_Stab.DisplayName: Enchanted Bayonet_ Pro_ Stab
 	EternalNight_Pro.DisplayName: Eternal Night_ Pro
 	EternalNight_Pro_Stab.DisplayName: Eternal Night_ Pro_ Stab
+	EternalNight_shadow.DisplayName: Eternal Night_shadow
 	GoldenStabbingSword_Pro.DisplayName: Golden Stabbing Sword_ Pro
 	GoldenStabbingSword_Pro_Stab.DisplayName: Golden Stabbing Sword_ Pro_ Stab
 	HolyBayonet_Pro.DisplayName: Holy Bayonet_ Pro
 	HolyBayonet_Pro_Stab.DisplayName: Holy Bayonet_ Pro_ Stab
+	IchorBayonet_Pro.DisplayName: Ichor Bayonet_ Pro
+	IchorBayonet_Pro_Stab.DisplayName: Ichor Bayonet_ Pro_ Stab
 	IronStabbingSword_Pro.DisplayName: Iron Stabbing Sword_ Pro
 	IronStabbingSword_Pro_Stab.DisplayName: Iron Stabbing Sword_ Pro_ Stab
 	LeadStabbingSword_Pro.DisplayName: Lead Stabbing Sword_ Pro
@@ -2624,6 +2650,7 @@ Projectiles: {
 	VertebralSpur_Pro_Stab.DisplayName: Vertebral Spur_ Pro_ Stab
 	YoenLeZed_Pro.DisplayName: Yoen Le Zed_ Pro
 	YoenLeZed_Pro_Stab.DisplayName: Yoen Le Zed_ Pro_ Stab
+	YoenLeZed_Pro_Stab_HitTile.DisplayName: Yoen Le Zed_ Pro_ Stab_ Hit Tile
 	FryingPan.DisplayName: Frying Pan
 	ButterflyDreamFriendly.DisplayName: Butterfly Dream Friendly
 	ButterflyDream.DisplayName: Butterfly Dream

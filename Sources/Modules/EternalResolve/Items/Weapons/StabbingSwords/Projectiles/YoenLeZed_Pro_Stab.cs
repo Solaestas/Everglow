@@ -206,7 +206,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			Dust d = Dust.NewDustDirect(target.Center, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
 			d.scale = Main.rand.NextFloat(0.85f, 1.15f) * 0.1f;
-			target.AddBuff(ModContent.BuffType<OnElectric>(), 240);
+			target.AddBuff(ModContent.BuffType<OnElectric>(), 270);
 			base.OnHitNPC(target, hit, damageDone);
 		}
 		public override void HitTile()
