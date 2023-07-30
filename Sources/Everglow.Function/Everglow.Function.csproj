@@ -9,8 +9,5 @@
 		<PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
 		<ProjectReference Include="..\Everglow.Core\Everglow.Core.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-	  <PackageReference Update="Solaestas.tModLoader.ModBuilder" Version="1.0.2.9" />
-	</ItemGroup>
 
 </Project>

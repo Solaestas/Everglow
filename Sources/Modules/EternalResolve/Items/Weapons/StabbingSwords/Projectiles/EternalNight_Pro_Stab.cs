@@ -1,3 +1,4 @@
+using Everglow.Commons.Vertex;
 using Everglow.Commons.Weapons.StabbingSwords;
 using Terraria.DataStructures;
 
@@ -9,18 +10,151 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
         {
             base.SetDefaults();
 			Color = new Color(119, 34, 255);
-			TradeShade = 0.8f;
-			Shade = 0.9f;
-			FadeTradeShade = 0.7f;
+			TradeShade = 1f;
+			Shade = 1f;
+			FadeTradeShade =1f;
 			FadeScale = 0.7f;
 			TradeLightColorValue = 0.6f;
 			FadeLightColorValue = 0.1f;
-			MaxLength = 1.20f;
+			MaxLength = 1.40f;
 			DrawWidth = 0.4f;
 		}
 		public override void DrawEffect(Color lightColor)
 		{
-			base.DrawEffect(lightColor);
+			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 60 * ToKill / 120f * DrawWidth;
+			Vector2 start = StartCenter;
+			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
+			if (EndPos != Vector2.Zero)
+			{
+				end = EndPos;
+			}
+			float value = (Projectile.timeLeft + ToKill) / 135f;
+			Vector2 middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
+			float time = (float)(Main.time * 0.03);
+			float dark = MathF.Sin(value * MathF.PI) * 4;
+			List<Vertex2D> bars = new List<Vertex2D>
+			{
+				new Vertex2D(start + normalized,new Color(120, 120, 120, 120) * 0.9f * Shade,new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized,new Color(120, 120, 120, 120)* 0.9f* Shade,new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized,Color.White* 0.8f * dark* Shade,new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized,Color.White* 0.8f * dark* Shade,new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized,Color.White* 0.9f * dark* Shade,new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized,Color.White* 0.9f * dark* Shade,new Vector3(0f + time, 1, 1))
+			};
+			if (bars.Count >= 3)
+			{
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+				Effect effect = Commons.ModAsset.StabSwordEffect.Value;
+				var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+				var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
+				effect.Parameters["uTransform"].SetValue(model * projection);
+				effect.Parameters["uProcession"].SetValue(0.5f);
+				effect.CurrentTechnique.Passes[0].Apply();
+				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_black_thick.Value;
+				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			}
+			Color alphaColor = Color;
+			alphaColor.A = 0;
+			alphaColor.R = (byte)(alphaColor.R * lightColor.R / 255f);
+			alphaColor.G = (byte)(alphaColor.G * lightColor.G / 255f);
+			alphaColor.B = (byte)(alphaColor.B * lightColor.B / 255f);
+
+			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 96 * ToKill / 120f * DrawWidth;
+			bars = new List<Vertex2D>
+			{
+				new Vertex2D(start + normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized,alphaColor * 1.2f,new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized,alphaColor * 1.2f,new Vector3(0f + time, 1, 1))
+			};
+			if (bars.Count >= 3)
+			{
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+				Effect effect = Commons.ModAsset.StabSwordEffect.Value;
+				var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+				var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
+				effect.Parameters["uTransform"].SetValue(model * projection);
+				effect.Parameters["uProcession"].SetValue(value * 1.1f);
+				effect.CurrentTechnique.Passes[0].Apply();
+				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_1.Value;
+				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			}
+
+			alphaColor.A = 0;
+			alphaColor.R = (byte)(565 * lightColor.R / 255f);
+			alphaColor.G = (byte)(565 * lightColor.G / 255f);
+			alphaColor.B = (byte)(565 * lightColor.B / 255f);
+			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 96 * ToKill / 120f * DrawWidth;
+			bars = new List<Vertex2D>
+			{
+				new Vertex2D(start + normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized,alphaColor,new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized,alphaColor,new Vector3(0f + time, 1, 1))
+			};
+			if (bars.Count >= 3)
+			{
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+				Effect effect = Commons.ModAsset.StabSwordEffect.Value;
+				var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+				var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
+				effect.Parameters["uTransform"].SetValue(model * projection);
+				effect.Parameters["uProcession"].SetValue(value * 0.6f + 0.4f);
+				effect.CurrentTechnique.Passes[0].Apply();
+				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail.Value;
+				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			}
+
+
+			if (EndPos != Vector2.Zero)
+			{
+				end = EndPos;
+			}
+			value = (Projectile.timeLeft + ToKill) / 135f;
+			middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
+			time = (float)(Main.time * 0.03);
+			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 20 * ToKill / 120f * DrawWidth;
+			bars = new List<Vertex2D>
+			{
+				new Vertex2D(start + normalized,Color.White,new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized,Color.White,new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized,Color.White,new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized,Color.White,new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized,Color.White,new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized,Color.White,new Vector3(0f + time, 1, 1))
+			};
+			if (bars.Count >= 3)
+			{
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+				Effect effect = Commons.ModAsset.StabSwordEffect.Value;
+				var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+				var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
+				effect.Parameters["uTransform"].SetValue(model * projection);
+				effect.Parameters["uProcession"].SetValue(0.21f);
+				effect.CurrentTechnique.Passes[0].Apply();
+				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_7_black.Value;
+				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			}
 		}
 		public override void AI()
 		{
