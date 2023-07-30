@@ -51,7 +51,7 @@ public class GlowingButterfly : ModProjectile
 					Projectile.timeLeft = Main.rand.Next(135, 185);
 					Projectile.frame = Main.rand.Next(6);
 					omega = Main.rand.NextFloat(-0.02f, 0.02f);
-					Projectile.scale = Main.rand.NextFloat(0.6f, 1.0f);
+					Projectile.scale = Main.rand.NextFloat(0.4f, 0.7f);
 					useStyle = ItemUseStyleID.Swing;
 				}
 				if (Projectile.timeLeft > 100 && Projectile.alpha >= 8)
@@ -115,11 +115,11 @@ public class GlowingButterfly : ModProjectile
 		Projectile.velocity.Y *= 0.96f;
 		if (Projectile.timeLeft % 12 == 0)
 		{
-			int type = ModContent.DustType<BlackScaleAppear>();
-			if (Projectile.ai[0] == 0)
-			{
-				type = ModContent.DustType<BlueGlowAppear_dark>();
-			}
+			int type = ModContent.DustType<BlueGlowAppear>();
+			//if (Projectile.ai[0] == 0)
+			//{
+			//	type = ModContent.DustType<BlueGlowAppear_dark>();
+			//}
 			Dust dust = Dust.NewDustDirect(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, type, 0f, 0f, 100, default, Main.rand.NextFloat(0.9f, 2.2f));
 			dust.velocity = Projectile.velocity * 0.5f;
 		}
@@ -307,21 +307,23 @@ public class GlowingButterfly : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D tex = ModAsset.GlowingButterfly.Value;
-		Texture2D texDark = ModAsset.GlowingButterfly_dark.Value;
-		Color lightC = new Color(55 - Projectile.alpha, 55 - Projectile.alpha, 255 - Projectile.alpha, (255 - Projectile.alpha) / 2);
-		if(Projectile.ai[0] == 1)
-		{
-			lightC = Color.Transparent;
-		}
-		if (Projectile.ai[0] == 2)
-		{
-			lightC = new Color(55 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, (255 - Projectile.alpha) / 2);
-		}
-		float colorValue = (255 - Projectile.alpha) / 255f;
+		//Texture2D texDark = ModAsset.GlowingButterfly_dark.Value;
+		//Texture2D texBound = ModAsset.GlowingButterfly_bound.Value;
+		Color lightC = new Color(55 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, (255 - Projectile.alpha) / 2);
+		//if(Projectile.ai[0] == 1)
+		//{
+		//	lightC = Color.Transparent;
+		//}
+		//if (Projectile.ai[0] == 2)
+		//{
+		//	lightC = new Color(55 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, (255 - Projectile.alpha) / 2);
+		//}
+		//float colorValue = (255 - Projectile.alpha) / 255f;
 		Rectangle frame = new Rectangle(0, Projectile.frame * 46, 46, 46);
-		Main.spriteBatch.Draw(texDark, Projectile.Center - Main.screenPosition, frame, Color.White * colorValue, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+		//Main.spriteBatch.Draw(texDark, Projectile.Center - Main.screenPosition, frame, Color.White * colorValue, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+		//Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, frame, lightC, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+		//Main.spriteBatch.Draw(texBound, Projectile.Center - Main.screenPosition, frame, Color.White * ((255 - Projectile.alpha) / 400f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, frame, lightC, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
-
 		return false;
 	}
 }
