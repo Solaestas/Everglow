@@ -6,12 +6,10 @@
 		<Solaestas-NotMod>false</Solaestas-NotMod>
 		<Solaestas-UseAssetPath>false</Solaestas-UseAssetPath>
 		<AssemblyName>$(MSBuildProjectName)</AssemblyName>
+		<AssetsPrefix>.</AssetsPrefix>
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Everglow.Core\Everglow.Core.csproj" />
 		<ProjectReference Include="..\Everglow.Function\Everglow.Function.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <PackageReference Update="Solaestas.tModLoader.ModBuilder" Version="1.1.1.1" />
 	</ItemGroup>
 </Project>
