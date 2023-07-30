@@ -38,7 +38,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					maxTime = Main.rand.Next(1, 25),
 					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(0.1f, 17.0f)),
 					rotation = Main.rand.NextFloat(6.283f),
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.13f, 0.13f) }
+					noGravity = false,
+					ai = new float[] { Main.rand.Next(3), Main.rand.NextFloat(-0.13f, 0.13f) }
 				};
 				Ins.VFXManager.Add(spark);
 			}
@@ -61,13 +62,12 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				dust.noGravity= true;
 				dust.velocity = new Vector2(0, Main.rand.NextFloat(6f)).RotateRandom(6.283);
 			}
-			if(ToKill == 40)
+			if(ToKill == 90)
 			{
-				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),
-	Projectile.Center
-	, Projectile.velocity * 9, ModContent.ProjectileType<EnchantedBayonet_beam>()
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),
+	Projectile.Center + Projectile.velocity * 150f
+	, Projectile.velocity * 27, ModContent.ProjectileType<EnchantedBayonet_beam>()
 	, Projectile.damage, Projectile.knockBack * 0.6f, Projectile.owner, -1);
-				Main.NewText(p0.velocity);
 			}
 			base.AI();
 		}
