@@ -47,7 +47,7 @@ public class ScaleWingBladeProj : MeleeProj
 				int counts = Main.rand.Next(4, 9);
 				for (int i = 0; i < counts; i++)
 				{
-					Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDream>(), Projectile.damage / 4, 0, Main.myPlayer, target.whoAmI);
+					Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDreamFriendly>(), Projectile.damage / 4, 0, Main.myPlayer, target.whoAmI);
 					proj.netUpdate2 = true;
 					proj.CritChance = Projectile.CritChance;
 				}
@@ -61,7 +61,7 @@ public class ScaleWingBladeProj : MeleeProj
 				int counts = Main.rand.Next(1, 3);
 				for (int i = 0; i < counts; i++)
 				{
-					Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDream>(), Projectile.damage / 4, 0, Main.myPlayer, target.whoAmI);
+					Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDreamFriendly>(), Projectile.damage / 4, 0, Main.myPlayer, target.whoAmI);
 					proj.netUpdate2 = true;
 					proj.CritChance = Projectile.CritChance;
 
@@ -252,7 +252,7 @@ public class ScaleWingBladeProj : MeleeProj
 						for (int i = Main.rand.Next(2); i < 2; i++)
 						{
 							var vel = new Vector2(Projectile.spriteDirection * 10, 0);
-							Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel, vel + Main.rand.NextVector2Unit() * 5, ModContent.ProjectileType<ButterflyDream>(), Projectile.damage / 2, 0, Main.myPlayer, target.whoAmI);
+							Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel, vel + Main.rand.NextVector2Unit() * 5, ModContent.ProjectileType<ButterflyDreamFriendly>(), Projectile.damage / 2, 0, Main.myPlayer, target.whoAmI);
 							proj.netUpdate2 = true;
 							proj.CritChance = Projectile.CritChance;
 						}
