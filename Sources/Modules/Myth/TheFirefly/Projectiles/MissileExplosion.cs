@@ -27,8 +27,14 @@ public class MissileExplosion : ModProjectile, IWarpProjectile
 	public override void OnSpawn(IEntitySource source)
 	{
 		//Need a sound effect about crystal explosion
-		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.8f), Projectile.Center);
-
+		if (Projectile.ai[0] <=20)
+		{
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Crystal_Burst_Normal").WithVolumeScale(Projectile.ai[0] / 20f + 0.2f), Projectile.Center);
+		}
+		else
+		{
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Crystal_Burst_Strong"), Projectile.Center);
+		}
 		GenerateSmog((int)(1.3 * Projectile.ai[0]));
 		GenerateFire((int)(2.3 * Projectile.ai[0]));
 		GenerateSmog((int)(1.3 * Projectile.ai[0]));
@@ -100,7 +106,7 @@ public class MissileExplosion : ModProjectile, IWarpProjectile
 	public override void AI()
 	{
 		Projectile.velocity *= 0;
-		if (Projectile.timeLeft <= 198)
+		if (Projectile.timeLeft <= 199)
 			Projectile.friendly = false;
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
