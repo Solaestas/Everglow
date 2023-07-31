@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria.Localization;
 
 namespace Everglow.Myth.OmniElementItems.Vanities;
@@ -29,6 +29,7 @@ public class BlueflowerCap : ModItem
 
 	private static void DrawDress(On_Main.orig_DrawPlayers_BehindNPCs orig, Main self)
 	{
+		orig(self);
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		/*for (int d = 0; d < Main.player.Length; d++)
             {
