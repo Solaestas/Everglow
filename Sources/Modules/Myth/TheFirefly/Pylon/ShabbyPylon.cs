@@ -16,6 +16,7 @@ internal class ShabbyPylon : BaseModPylon<ShabbyPylonTileEntity>
 	public override void PostSetDefaults()
 	{
 		DustType = DustID.Lead;
+		AddMapEntry(new Color(105, 113, 105));
 	}
 	public override int DropItemType => ModContent.ItemType<ShabbyPylonItem>();
 
