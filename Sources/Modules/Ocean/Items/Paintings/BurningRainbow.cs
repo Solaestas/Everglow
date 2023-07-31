@@ -20,8 +20,8 @@ namespace Everglow.Ocean.Items.Drawings
 		// Token: 0x060009BA RID: 2490 RVA: 0x00005A27 File Offset: 0x00003C27
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("烈焰彩虹");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "烈焰彩虹");
+			// base.DisplayName.SetDefault("烈焰彩虹");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "烈焰彩虹");
 		}
 
 		// Token: 0x060009BB RID: 2491 RVA: 0x000500EC File Offset: 0x0004E2EC
@@ -38,7 +38,7 @@ namespace Everglow.Ocean.Items.Drawings
 			base.Item.consumable = true;
 			base.Item.value = 50000;
 			base.Item.rare = 1;
-			base.Item.createTile = base.Mod.Find<ModTile>("烈焰彩虹").Type;
+			base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.烈焰彩虹>();
 		}
 	}
 }

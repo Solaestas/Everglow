@@ -28,10 +28,10 @@ namespace Everglow.Ocean.Tiles
             TileObjectData.newTile.AnchorTop = new AnchorData((Terraria.Enums.AnchorType)1, 1, 1);
             TileObjectData.addTile((int)base.Type);
             DustType = 7;
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
-            modTranslation.SetDefault("ReefSharkSpecimen");
+            var modTranslation = base.CreateMapEntryName();
+            // modTranslation.SetDefault("ReefSharkSpecimen");
             base.AddMapEntry(new Color(99, 71, 50), modTranslation);
-            modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "礁鲨标本");
+            // modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "礁鲨标本");
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {

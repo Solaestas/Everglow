@@ -13,9 +13,9 @@ namespace Everglow.Ocean.NPCs.VolCano
     {
         public override void SetStaticDefaults()
         {
-            // // base.DisplayName.SetDefault("Abyss slime");
+            // base.DisplayName.SetDefault("Abyss slime");
             Main.npcFrameCount[base.NPC.type] = 2;
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "火山史莱姆");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "火山史莱姆");
         }
         public override void SetDefaults()
         {
@@ -36,7 +36,7 @@ namespace Everglow.Ocean.NPCs.VolCano
             base.NPC.HitSound = SoundID.NPCHit1;
             base.NPC.DeathSound = SoundID.NPCDeath1;
             this.Banner = base.NPC.type;
-            this.BannerItem = base.Mod.Find<ModItem>("AbyssSlimeBanner").Type;
+            this.BannerItem = ModContent.ItemType<Everglow.Ocean.Items.AbyssSlimeBanner>();
         }
         public override void AI()
         {
@@ -67,10 +67,10 @@ namespace Everglow.Ocean.NPCs.VolCano
             Vector2 value = new Vector2(base.NPC.Center.X, base.NPC.Center.Y);
             Vector2 vector = new Vector2((float)(TextureAssets.Npc[base.NPC.type].Value.Width / 2), (float)(TextureAssets.Npc[base.NPC.type].Value.Height / Main.npcFrameCount[base.NPC.type] / 2));
             Vector2 vector2 = value - Main.screenPosition;
-            vector2 -= new Vector2((float)base.Mod.GetTexture("NPCs/火山史莱姆Glow").Width, (float)(base.Mod.GetTexture("NPCs/火山史莱姆Glow").Height / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
+            vector2 -= new Vector2((float)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/火山史莱姆Glow").Width(), (float)(ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/火山史莱姆Glow").Height() / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
             vector2 += vector * 1f + new Vector2(0f, 4f + base.NPC.gfxOffY);
             Color color = new Color(0.49f, 0.49f, 0.49f, 0);
-            Main.spriteBatch.Draw(base.Mod.GetTexture("NPCs/火山史莱姆Glow"), vector2, new Rectangle?(base.NPC.frame), color, base.NPC.rotation, vector, 1f, effects, 0f);
+            Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/火山史莱姆Glow"), vector2, new Rectangle?(base.NPC.frame), color, base.NPC.rotation, vector, 1f, effects, 0f);
         }
         public override void HitEffect(NPC.HitInfo hit)
         {
@@ -90,9 +90,9 @@ namespace Everglow.Ocean.NPCs.VolCano
         {
             if (Main.rand.Next(100) == 1)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, Mod.Find<ModItem>("MeteorFlame").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.MeteorFlame>(), 1, false, 0, false, false);
             }
-            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, Mod.Find<ModItem>("LavaStone").Type, Main.rand.Next(1, 4), false, 0, false, false);
+            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.LavaStone>(), Main.rand.Next(1, 4), false, 0, false, false);
         }
     }
 }

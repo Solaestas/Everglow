@@ -15,7 +15,7 @@ namespace Everglow.Ocean.Projectiles.projectile2
         private int num18 = 0;
         public override void SetStaticDefaults()
         {
-            // // base.DisplayName.SetDefault("熔岩灌顶");
+            // base.DisplayName.SetDefault("熔岩灌顶");
             ProjectileID.Sets.MinionSacrificable[base.Projectile.type] = true;
             ProjectileID.Sets.MinionTargettingFeature[base.Projectile.type] = true;
             Main.projFrames[base.Projectile.type] = 1;
@@ -130,7 +130,7 @@ namespace Everglow.Ocean.Projectiles.projectile2
         }
         public override void PostDraw(Color lightColor)
         {
-            spriteBatch.Draw(base.Mod.GetTexture("Projectiles/projectile2/LavaCupGlow"), base.Projectile.Center - Main.screenPosition, null, Color.White * 0.7f, base.Projectile.rotation, new Vector2(21f, 21f), 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/projectile2/LavaCupGlow"), base.Projectile.Center - Main.screenPosition, null, Color.White * 0.7f, base.Projectile.rotation, new Vector2(21f, 21f), 1f, SpriteEffects.None, 0f);
         }
     }
 }

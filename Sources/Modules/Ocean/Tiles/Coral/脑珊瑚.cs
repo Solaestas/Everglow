@@ -27,12 +27,12 @@ namespace Everglow.Ocean.Tiles.Ocean
             TileObjectData.newTile.CoordinateWidth = 54;
             TileObjectData.addTile((int)base.Type);
 			this.DustType = 253;
-            LocalizedText modTranslation = base.CreateMapEntryName(null);
+            LocalizedText modTranslation = base.CreateMapEntryName();
             // modTranslation.SetDefault("");
             base.AddMapEntry(new Color(42, 91, 10), modTranslation);
 			this.MineResist = 3f;
 			base.SetStaticDefaults();
-			modTranslation.AddTranslation(GameCulture.Chinese, "");
+			// modTranslation.AddTranslation(GameCulture.Chinese, "");
 		}
 
 		// Token: 0x06004869 RID: 18537 RVA: 0x000138D5 File Offset: 0x00011AD5
@@ -53,7 +53,7 @@ namespace Everglow.Ocean.Tiles.Ocean
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, base.Mod.Find<ModItem>("Meandrina").Type);
+            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.Meandrina>());
         }
         // Token: 0x0600486A RID: 18538 RVA: 0x003488D0 File Offset: 0x00346AD0
         public override void NearbyEffects(int i, int j, bool closer)

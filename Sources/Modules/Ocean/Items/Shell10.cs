@@ -14,7 +14,7 @@ namespace Everglow.Ocean.Items.Shells
 		// Token: 0x060005E3 RID: 1507 RVA: 0x00041728 File Offset: 0x0003F928
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("鹦鹉螺");
+            // base.DisplayName.SetDefault("鹦鹉螺");
             // base.Tooltip.SetDefault("");
 		}
 
@@ -32,7 +32,7 @@ namespace Everglow.Ocean.Items.Shells
             base.Item.consumable = true;
             base.Item.useTurn = true;
             base.Item.autoReuse = true;
-            base.Item.createTile = base.Mod.Find<ModTile>("鹦鹉螺").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.鹦鹉螺>();
         }
 	}
 }

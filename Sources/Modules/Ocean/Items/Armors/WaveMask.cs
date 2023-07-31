@@ -13,10 +13,10 @@ namespace Everglow.Ocean.Items.Armors
 	{
         public override void SetStaticDefaults()
         {
-            // // base.DisplayName.SetDefault("");
+            // base.DisplayName.SetDefault("");
             // base.Tooltip.SetDefault("");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝面具");
-            base.Tooltip.AddTranslation(GameCulture.Chinese, "近战伤害和暴击各增加10%");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝面具");
+            // base.Tooltip.AddTranslation(GameCulture.Chinese, "近战伤害和暴击各增加10%");
         }
         public override void SetDefaults()
         {
@@ -44,7 +44,7 @@ namespace Everglow.Ocean.Items.Armors
         }
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == base.Mod.Find<ModItem>("WaveBreastplate").Type && legs.type == base.Mod.Find<ModItem>("WaveLegging").Type;
+            return body.type == ModContent.ItemType<Everglow.Ocean.Items.WaveBreastplate>() && legs.type == ModContent.ItemType<Everglow.Ocean.Items.WaveLegging>();
         }
         public override void ArmorSetShadows(Player player)
         {

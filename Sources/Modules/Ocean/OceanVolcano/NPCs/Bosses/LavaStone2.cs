@@ -17,8 +17,8 @@ namespace Everglow.Ocean.NPCs.VolCano
 		private int num2;
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("熔岩巨石怪");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "熔岩巨石怪");
+            // base.DisplayName.SetDefault("熔岩巨石怪");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "熔岩巨石怪");
 		}
 		public override void SetDefaults()
 		{
@@ -123,10 +123,10 @@ namespace Everglow.Ocean.NPCs.VolCano
             Vector2 value = new Vector2(base.NPC.Center.X, base.NPC.Center.Y);
             Vector2 vector = new Vector2((float)(TextureAssets.Npc[base.NPC.type].Value.Width / 2), (float)(TextureAssets.Npc[base.NPC.type].Value.Height / Main.npcFrameCount[base.NPC.type] / 2));
             Vector2 vector2 = value - Main.screenPosition;
-            vector2 -= new Vector2((float)base.Mod.GetTexture("NPCs/VolCano/熔岩巨石怪2Glow").Width, (float)(base.Mod.GetTexture("NPCs/VolCano/熔岩巨石怪2Glow").Height / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
+            vector2 -= new Vector2((float)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/VolCano/熔岩巨石怪2Glow").Width(), (float)(ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/VolCano/熔岩巨石怪2Glow").Height() / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
             vector2 += vector * 1f + new Vector2(0f, 4f + base.NPC.gfxOffY);
             Color color = Utils.MultiplyRGBA(new Color(97 - base.NPC.alpha, 97 - base.NPC.alpha, 97 - base.NPC.alpha, 0), Color.White);
-            Main.spriteBatch.Draw(base.Mod.GetTexture("NPCs/VolCano/熔岩巨石怪2Glow"), vector2, new Rectangle?(base.NPC.frame), color, base.NPC.rotation, vector, 1f, effects, 0f);
+            Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/VolCano/熔岩巨石怪2Glow"), vector2, new Rectangle?(base.NPC.frame), color, base.NPC.rotation, vector, 1f, effects, 0f);
         }
 		public override void HitEffect(NPC.HitInfo hit)
         {
@@ -150,15 +150,15 @@ namespace Everglow.Ocean.NPCs.VolCano
                 {
                     float scaleFactor5 = (float)(Main.rand.Next(-20, 20) / 100f);
                     Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor5, base.Mod.GetGoreSlot("Gores/火山浮石碎块" + (i % 2 + 6).ToString()), 1f);
-                    NPC.NewNPC((int)NPC.Center.X, (int)NPC.Center.Y, Mod.Find<ModNPC>("火山浮石").Type, 0, 0, Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.Next(0, 60), 255);
+                    NPC.NewNPC((int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Ocean.NPCs.火山浮石>(), 0, 0, Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.Next(0, 60), 255);
                 }
-                if (NPC.CountNPCS(Mod.Find<ModNPC>("熔岩巨石怪2").Type) <= 1)
+                if (NPC.CountNPCS(ModContent.NPCType<Everglow.Ocean.NPCs.熔岩巨石怪2>()) <= 1)
                 {
                     Color messageColor = Color.MediumPurple;
                     Main.NewText(Language.GetTextValue("熔岩巨石怪已被打败!"), messageColor);
                     if (Main.expertMode)
                     {
-                        Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, Mod.Find<ModItem>("LavaStoneTreasureBag").Type, 1, false, 0, false, false);
+                        Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.LavaStoneTreasureBag>(), 1, false, 0, false, false);
                     }
                     if (Main.maxTilesX == 4200)
                     {
@@ -166,7 +166,7 @@ namespace Everglow.Ocean.NPCs.VolCano
                         {
                             for (int j = (int)(Main.maxTilesY * 0.67f - 110); j < (int)(Main.maxTilesY * 0.67f - 60); j++)
                             {
-                                if (Main.tile[i, j].TileType == Mod.Find<ModTile>("LavaStone").Type || Main.tile[i, j].TileType == Mod.Find<ModTile>("Basalt").Type)
+                                if (Main.tile[i, j].TileType == ModContent.TileType<Everglow.Ocean.Tiles.LavaStone>() || Main.tile[i, j].TileType == ModContent.TileType<Everglow.Ocean.Tiles.Basalt>())
                                 {
                                     WorldGen.KillTile(i, j, false, false, true);
                                 }
@@ -179,7 +179,7 @@ namespace Everglow.Ocean.NPCs.VolCano
                         {
                             for (int j = (int)(Main.maxTilesY * 0.67f - 140); j < (int)(Main.maxTilesY * 0.67f - 90); j++)
                             {
-                                if (Main.tile[i, j].TileType == Mod.Find<ModTile>("LavaStone").Type || Main.tile[i, j].TileType == Mod.Find<ModTile>("Basalt").Type)
+                                if (Main.tile[i, j].TileType == ModContent.TileType<Everglow.Ocean.Tiles.LavaStone>() || Main.tile[i, j].TileType == ModContent.TileType<Everglow.Ocean.Tiles.Basalt>())
                                 {
                                     WorldGen.KillTile(i, j, false, false, true);
                                 }
@@ -192,7 +192,7 @@ namespace Everglow.Ocean.NPCs.VolCano
                         {
                             for (int j = (int)(Main.maxTilesY * 0.67f - 180); j < (int)(Main.maxTilesY * 0.67f - 120); j++)
                             {
-                                if (Main.tile[i, j].TileType == Mod.Find<ModTile>("LavaStone").Type || Main.tile[i, j].TileType == Mod.Find<ModTile>("Basalt").Type)
+                                if (Main.tile[i, j].TileType == ModContent.TileType<Everglow.Ocean.Tiles.LavaStone>() || Main.tile[i, j].TileType == ModContent.TileType<Everglow.Ocean.Tiles.Basalt>())
                                 {
                                     WorldGen.KillTile(i, j, false, false, true);
                                 }

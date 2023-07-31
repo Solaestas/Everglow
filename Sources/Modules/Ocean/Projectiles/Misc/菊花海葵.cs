@@ -13,7 +13,7 @@ namespace Everglow.Ocean.Projectiles
 		// Token: 0x06001EC3 RID: 7875 RVA: 0x0000C81D File Offset: 0x0000AA1D
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("菊花海葵");
+            // base.DisplayName.SetDefault("菊花海葵");
 			Main.projFrames[base.Projectile.type] = 4;
 		}
         private bool A = true;
@@ -37,7 +37,7 @@ namespace Everglow.Ocean.Projectiles
             int num17 = TextureAssets.Projectile[base.Projectile.type].Value.Height / Main.projFrames[base.Projectile.type];
             int y = num17 * base.Projectile.frame;
             Vector2 origin = new Vector2(16f, 17f);
-            spriteBatch.Draw(base.Mod.GetTexture("Projectiles/菊花海葵Glow"), base.Projectile.Center - Main.screenPosition, new Rectangle?(new Rectangle(0, y, texture2D.Width, num17)), new Color(255,255,255,base.Projectile.alpha), base.Projectile.rotation, origin, base.Projectile.scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/菊花海葵Glow"), base.Projectile.Center - Main.screenPosition, new Rectangle?(new Rectangle(0, y, texture2D.Width, num17)), new Color(255,255,255,base.Projectile.alpha), base.Projectile.rotation, origin, base.Projectile.scale, SpriteEffects.None, 0f);
         }
         // Token: 0x06001EC5 RID: 7877 RVA: 0x0018AA00 File Offset: 0x00188C00
         public override void AI()

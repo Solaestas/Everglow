@@ -31,15 +31,15 @@ namespace Everglow.Ocean.Tiles
 			TileObjectData.addTile((int)base.Type);
 			this.DustType = 7;
 			this.disableSmartCursor/* tModPorter Note: Removed. Use TileID.Sets.DisableSmartCursor instead */ = true;
-			LocalizedText modTranslation = base.CreateMapEntryName(null);
+			LocalizedText modTranslation = base.CreateMapEntryName();
 			// modTranslation.SetDefault("珊瑚浅滩");
 			base.AddMapEntry(new Color(69, 125, 134), modTranslation);
-			modTranslation.AddTranslation(GameCulture.Chinese, "珊瑚浅滩");
+			// modTranslation.AddTranslation(GameCulture.Chinese, "珊瑚浅滩");
 		}
         // Token: 0x06004028 RID: 16424 RVA: 0x00322D58 File Offset: 0x00320F58
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-			Item.NewItem(i * 16, j * 16, 48, 48, Mod.Find<ModItem>("ShallowBeach").Type, 1, false, 0, false, false);
+			Item.NewItem(i * 16, j * 16, 48, 48, ModContent.ItemType<Everglow.Ocean.Items.ShallowBeach>(), 1, false, 0, false, false);
 		}
 	}
 }

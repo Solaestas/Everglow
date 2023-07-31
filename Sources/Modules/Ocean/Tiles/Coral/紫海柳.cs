@@ -27,16 +27,16 @@ namespace Everglow.Ocean.Tiles.Ocean
             TileObjectData.newTile.CoordinateWidth = 36;
             TileObjectData.addTile((int)base.Type);
 			this.DustType = 253;
-            LocalizedText modTranslation = base.CreateMapEntryName(null);
+            LocalizedText modTranslation = base.CreateMapEntryName();
             // modTranslation.SetDefault("");
             base.AddMapEntry(new Color(86, 54, 130), modTranslation);
             this.MineResist = 3f;
 			base.SetStaticDefaults();
-			modTranslation.AddTranslation(GameCulture.Chinese, "");
+			// modTranslation.AddTranslation(GameCulture.Chinese, "");
 		}
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, base.Mod.Find<ModItem>("PurpleSeaWillow").Type);
+            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.PurpleSeaWillow>());
         }
         // Token: 0x0600489D RID: 18589 RVA: 0x000138D5 File Offset: 0x00011AD5
         public override void NumDust(int i, int j, bool fail, ref int num)

@@ -14,7 +14,7 @@ namespace Everglow.Ocean.Items.Shells
 		// Token: 0x060005E3 RID: 1507 RVA: 0x00041728 File Offset: 0x0003F928
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("旋梯螺");
+            // base.DisplayName.SetDefault("旋梯螺");
             // base.Tooltip.SetDefault("");
 		}
 

@@ -22,7 +22,7 @@ namespace Everglow.Ocean.Items.Furnitures
 			Item.useTime = 10;
 			Item.useStyle = 1;
 			Item.consumable = true;
-			Item.createTile = Mod.Find<ModTile>("玄武岩平台").Type;
+			Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.玄武岩平台>();
 		}
 
 		public override void AddRecipes()

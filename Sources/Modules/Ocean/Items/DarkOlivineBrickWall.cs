@@ -11,8 +11,8 @@ namespace Everglow.Ocean.Items.Walls
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "黯淡橄榄石晶莹宝石墙");
+			// base.DisplayName.SetDefault("");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "黯淡橄榄石晶莹宝石墙");
 		}
 		public override void SetDefaults()
 		{
@@ -25,7 +25,7 @@ namespace Everglow.Ocean.Items.Walls
 			base.Item.useTime = 7;
 			base.Item.useStyle = 1;
 			base.Item.consumable = true;
-            base.Item.createWall = base.Mod.Find<ModWall>("黯淡橄榄石晶莹宝石墙").Type;
+            base.Item.createWall = ModContent.WallType<Everglow.Ocean.Walls.黯淡橄榄石晶莹宝石墙>();
 		}
 		public override void AddRecipes()
 		{

@@ -16,7 +16,7 @@ namespace Everglow.Ocean.Projectiles.Ocean
         // Token: 0x06001DC0 RID: 7616 RVA: 0x0000C2EA File Offset: 0x0000A4EA
         public override void SetStaticDefaults()
         {
-            // // base.DisplayName.SetDefault("火山生成");
+            // base.DisplayName.SetDefault("火山生成");
         }
 
         // Token: 0x06001DC1 RID: 7617 RVA: 0x0017F224 File Offset: 0x0017D424
@@ -47,35 +47,35 @@ namespace Everglow.Ocean.Projectiles.Ocean
         {
             OceanContentPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<OceanContentPlayer>();
             int num = 0;
-            if (!Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16].HasTile && Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16].WallType != Mod.Find<ModWall>("熔岩石墙").Type)
+            if (!Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16].HasTile && Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16].WallType != ModContent.WallType<Everglow.Ocean.Walls.熔岩石墙>())
             {
                 int ix = (int)Projectile.position.X / 16, jx = (int)Projectile.position.Y / 16 + 1;
                 num = Main.rand.Next(3440, 5120);
-                if (num < 4240 && num >= 3440 && Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1].TileType == Mod.Find<ModTile>("玄武岩礁石").Type)
+                if (num < 4240 && num >= 3440 && Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1].TileType == ModContent.TileType<Everglow.Ocean.Tiles.玄武岩礁石>())
                 {
-                    WorldGen.PlaceTile((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16, (ushort)Mod.Find<ModTile>("小硫磺石").Type, true, false, -1, 0);
+                    WorldGen.PlaceTile((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16, (ushort)ModContent.TileType<Everglow.Ocean.Tiles.小硫磺石>(), true, false, -1, 0);
                     int i = (int)Projectile.position.X / 16, j = (int)Projectile.position.Y / 16;
                     short num8 = (short)(Main.rand.Next(0, 6));
-                    if (Main.tile[i, j].TileType == (ushort)Mod.Find<ModTile>("小硫磺石").Type)
+                    if (Main.tile[i, j].TileType == (ushort)ModContent.TileType<Everglow.Ocean.Tiles.小硫磺石>())
                     {
                         Main.tile[i, j].TileFrameX = (short)(num8 * 36);
                         Main.tile[i, j - 1].TileFrameX = (short)(num8 * 36);
                     }
                 }
-                if (num < 5040 && num >= 4240 && Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1].TileType == Mod.Find<ModTile>("玄武岩礁石").Type)//橄榄石晶体
+                if (num < 5040 && num >= 4240 && Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1].TileType == ModContent.TileType<Everglow.Ocean.Tiles.玄武岩礁石>())//橄榄石晶体
                 {
-                    WorldGen.PlaceTile((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16, (ushort)Mod.Find<ModTile>("小橄榄石晶体").Type, true, false, -1, 0);
+                    WorldGen.PlaceTile((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16, (ushort)ModContent.TileType<Everglow.Ocean.Tiles.小橄榄石晶体>(), true, false, -1, 0);
                     int i = (int)Projectile.position.X / 16, j = (int)Projectile.position.Y / 16;
                     short num8 = (short)(Main.rand.Next(0, 6));
-                    if (Main.tile[i, j].TileType == (ushort)Mod.Find<ModTile>("小橄榄石晶体").Type)
+                    if (Main.tile[i, j].TileType == (ushort)ModContent.TileType<Everglow.Ocean.Tiles.小橄榄石晶体>())
                     {
                         Main.tile[i, j].TileFrameX = (short)(num8 * 36);
                         Main.tile[i, j - 1].TileFrameX = (short)(num8 * 36);
                     }
                 }
-                if (num < 5120 && num >= 5040 && Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1].TileType == Mod.Find<ModTile>("玄武岩礁石").Type)//熔岩心石
+                if (num < 5120 && num >= 5040 && Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1].TileType == ModContent.TileType<Everglow.Ocean.Tiles.玄武岩礁石>())//熔岩心石
                 {
-                    WorldGen.PlaceTile((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16, (ushort)Mod.Find<ModTile>("熔岩心石").Type, true, false, -1, 0);
+                    WorldGen.PlaceTile((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16, (ushort)ModContent.TileType<Everglow.Ocean.Tiles.熔岩心石>(), true, false, -1, 0);
                 }
             }
         }

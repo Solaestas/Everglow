@@ -55,7 +55,7 @@ namespace Everglow.Ocean.Tiles.Ocean
 				21
 			};
             TileID.Sets.BasicChest[Type]/* tModPorter Note: Removed. Override DefaultContainerName and use TileID.Sets.BasicChest instead */ = true;
-            //modTranslation.AddTranslation(GameCulture.Chinese, "砗磲商店");
+            //// modTranslation.AddTranslation(GameCulture.Chinese, "砗磲商店");
 		}
         // Token: 0x06004653 RID: 18003 RVA: 0x0027286C File Offset: 0x00270A6C
 
@@ -67,11 +67,11 @@ namespace Everglow.Ocean.Tiles.Ocean
 		}
         //public override void NearbyEffects(int i, int j, bool closer)
         //{
-        //    int num5 = (int)Player.FindClosest(new Vector2(i * 16, j * 16), 1, 1);
-        //    if (closer && NPC.CountNPCS(Mod.Find<ModNPC>("砗磲商店").Type) < 1 && (new Vector2(i * 16, j * 16) - Main.player[num5].Center).Length() < 2500)
-        //    {
-        //        NPC.NewNPC((int)i * 16, (int)j * 16, Mod.Find<ModNPC>("砗磲商店").Type, 0, 0f, 0f, 0f, 0f, 255);
-        //    }
+        //   int num5 = (int)Player.FindClosest(new Vector2(i * 16, j * 16), 1, 1);
+        //   if (closer && NPC.CountNPCS(ModContent.NPCType<Everglow.Ocean.NPCs.砗磲商店>()) < 1 && (new Vector2(i * 16, j * 16) - Main.player[num5].Center).Length() < 2500)
+        //   {
+        //       NPC.NewNPC((int)i * 16, (int)j * 16, ModContent.NPCType<Everglow.Ocean.NPCs.砗磲商店>(), 0, 0f, 0f, 0f, 0f, 255);
+        //   }
         //}
         // Token: 0x06004656 RID: 18006 RVA: 0x00272914 File Offset: 0x00270B14
         public override bool RightClick(int i, int j) // TODO: Test this

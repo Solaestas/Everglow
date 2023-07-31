@@ -20,10 +20,10 @@ namespace Everglow.Ocean.Items.Weapons
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("");
+			// base.DisplayName.SetDefault("");
 			// base.Tooltip.SetDefault("");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "碧海长矛");
-			base.Tooltip.AddTranslation(GameCulture.Chinese, "让海潮伴我来守护你");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "碧海长矛");
+			// base.Tooltip.AddTranslation(GameCulture.Chinese, "让海潮伴我来守护你");
 		}
 		public override void SetDefaults()
 		{

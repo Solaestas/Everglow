@@ -12,9 +12,9 @@ namespace Everglow.Ocean.OceanVolcano.Items
     {
         public override void SetStaticDefaults()
         {
-            // // base.DisplayName.SetDefault("火陨之杖");
+            // base.DisplayName.SetDefault("火陨之杖");
             Item.staff[base.Item.type] = true;
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "火陨之杖");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "火陨之杖");
             GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
         public static short GetGlowMask = 0;

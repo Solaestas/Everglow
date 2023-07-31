@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Localization;
@@ -27,17 +27,17 @@ namespace Everglow.Ocean.Tiles.Ocean
 			this.DustType = 183;
 			this.HitSound = 21;
 			this.soundStyle/* tModPorter Note: Removed. Integrate into HitSound */ = 2;
-            this.ItemDrop/* tModPorter Note: Removed. Tiles and walls will drop the item which places them automatically. Use RegisterItemDrop to alter the automatic drop if necessary. */ = base.Mod.Find<ModItem>("CyanZoanthid").Type;
+            this.RegisterItemDrop(ModContent.ItemType<Everglow.Ocean.Items.CyanZoanthid>());
 			Main.tileSpelunker[(int)base.Type] = true;
-			LocalizedText modTranslation = base.CreateMapEntryName(null);
+			LocalizedText modTranslation = base.CreateMapEntryName();
 			base.AddMapEntry(new Color(37, 91, 67), modTranslation);
             // modTranslation.SetDefault("");
-            modTranslation.AddTranslation(GameCulture.Chinese, "");
+            // modTranslation.AddTranslation(GameCulture.Chinese, "");
 		}
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 		{
 			num5 += 0.3f;
-			LocalizedText modTranslation = base.CreateMapEntryName(null);
+			LocalizedText modTranslation = base.CreateMapEntryName();
 			base.AddMapEntry(new Color(159 * (int)(Math.Sin(num5 / 10000f) * 0.5 + 1), 101, 196), modTranslation);
 			if (!Lighting.NotRetro)
 			{
@@ -51,7 +51,7 @@ namespace Everglow.Ocean.Tiles.Ocean
 			num4 *= 270;
 			num += num3;
 			num2 += num4;
-			Texture2D texture = base.Mod.GetTexture("Tiles/Ocean/青纽扣珊瑚Glow");
+			Texture2D texture = ModContent.Request<Texture2D>("Everglow/Ocean/Tiles/Ocean/青纽扣珊瑚Glow");
 			Vector2 position = new Vector2((float)(i * 16) - Main.screenPosition.X + (float)this.GetDrawOffset(), (float)(j * 16) - Main.screenPosition.Y + (float)this.GetDrawOffset());
 			if (CaptureManager.Instance.IsCapturing)
 			{

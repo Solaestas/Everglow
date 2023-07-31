@@ -10,11 +10,11 @@ namespace Everglow.Ocean.Items.Shore
         public override void SetStaticDefaults()
         {
             //Tooltip.SetDefault("它长满了海藻");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "滨岸木");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "滨岸木");
         }
         public override void SetDefaults()
         {
-            base.Item.createTile = base.Mod.Find<ModTile>("ShoreWood").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.ShoreWood>();
             base.Item.useStyle = 1;
 			base.Item.useTurn = true;
             base.Item.useAnimation = 15;

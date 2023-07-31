@@ -9,7 +9,7 @@ namespace Everglow.Ocean.Projectiles.projectile3
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("洋流射线");
+			// base.DisplayName.SetDefault("洋流射线");
 		}
 		public override void SetDefaults()
 		{

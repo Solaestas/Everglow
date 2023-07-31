@@ -13,7 +13,7 @@ namespace Everglow.Ocean.OceanVolcano.Items
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("熔岩心石");
+            // base.DisplayName.SetDefault("熔岩心石");
             // base.Tooltip.SetDefault("在火山区域内生命上限永久提升5点");
 		}
 		public override void SetDefaults()
@@ -31,7 +31,7 @@ namespace Everglow.Ocean.OceanVolcano.Items
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             Vector2 origin = new Vector2(15f, 13f);
-            spriteBatch.Draw(base.Mod.GetTexture("Items/Volcano/熔岩心石Glow"), base.Item.Center - Main.screenPosition, null, Color.White, rotation, origin, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/Items/Volcano/熔岩心石Glow"), base.Item.Center - Main.screenPosition, null, Color.White, rotation, origin, 1f, SpriteEffects.None, 0f);
         }
         public override bool? UseItem(Player player)/* tModPorter Suggestion: Return null instead of false */
         {

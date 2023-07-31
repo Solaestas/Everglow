@@ -11,9 +11,9 @@ namespace Everglow.Ocean.NPCs
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("海蓝史莱姆前置");
+            // base.DisplayName.SetDefault("海蓝史莱姆前置");
 			Main.npcFrameCount[base.NPC.type] = 4;
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝史莱姆");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝史莱姆");
 		}
 		public override void SetDefaults()
 		{
@@ -69,7 +69,7 @@ namespace Everglow.Ocean.NPCs
 			if (Main.netMode != 1 && base.NPC.life <= 0)
 			{
 				Vector2 vector = base.NPC.Center + new Vector2(0f, (float)base.NPC.height / 2f);
-				NPC.NewNPC((int)vector.X, (int)vector.Y, base.Mod.Find<ModNPC>("OceanSlime").Type, 0, 0f, 0f, 0f, 0f, 255);
+				NPC.NewNPC((int)vector.X, (int)vector.Y, ModContent.NPCType<Everglow.Ocean.NPCs.OceanSlime>(), 0, 0f, 0f, 0f, 0f, 255);
 			}
 			for (int i = 0; i < 5; i++)
 			{

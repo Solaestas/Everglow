@@ -16,9 +16,9 @@ namespace Everglow.Ocean.NPCs
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("星渊水母");
+            // base.DisplayName.SetDefault("星渊水母");
 			Main.npcFrameCount[base.NPC.type] = 5;
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "星渊水母");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "星渊水母");
 		}
         private bool initialization = true;
         private bool canDespawn;
@@ -743,14 +743,14 @@ namespace Everglow.Ocean.NPCs
                 if(NPC.life <= NPC.lifeMax * 0.35f && MythWorld.Myth && npclocalai100 % 480 == 0)
                 {
                     Vector2 vector = NPC.Center + new Vector2(0f, (float)NPC.height / 2f);
-                    NPC.NewNPC((int)vector.X, (int)vector.Y, Mod.Find<ModNPC>("StarHydra").Type, 0, 0f, 0f, 0f, 0f, 255);
+                    NPC.NewNPC((int)vector.X, (int)vector.Y, ModContent.NPCType<Everglow.Ocean.NPCs.StarHydra>(), 0, 0f, 0f, 0f, 0f, 255);
                 }
                 if(NPC.life <= NPC.lifeMax * 0.05f && MythWorld.Myth && num20)
                 {
                     for (int j = 0; j < 18; j++)
                     {
                         Vector2 vector = NPC.Center + new Vector2(0f, (float)NPC.height / 2f);
-                        NPC.NewNPC((int)vector.X, (int)vector.Y, Mod.Find<ModNPC>("StarHydra").Type, 0, 0f, 0f, 0f, 0f, 255);
+                        NPC.NewNPC((int)vector.X, (int)vector.Y, ModContent.NPCType<Everglow.Ocean.NPCs.StarHydra>(), 0, 0f, 0f, 0f, 0f, 255);
                     }
                     num20 = false;
                 }
@@ -758,7 +758,7 @@ namespace Everglow.Ocean.NPCs
 		    	{
 			     	this.canDespawn = false;
 		    	}
-                if(NPC.CountNPCS(Mod.Find<ModNPC>("StarHydra").Type) > 7 || !player.wet)      
+                if(NPC.CountNPCS(ModContent.NPCType<Everglow.Ocean.NPCs.StarHydra>()) > 7 || !player.wet)      
                 {
                     NPC.dontTakeDamage = true;
                 }
@@ -843,7 +843,7 @@ namespace Everglow.Ocean.NPCs
             //{
 				//Vector2 drawPos = npc.oldPos[k] - Main.screenPosition + vector + new Vector2(0f, npc.gfxOffY);
                 //Color color = npc.GetAlpha(lightColor) * ((float)(npc.oldPos.Length - k) / (float)npc.oldPos.Length);
-                //spriteBatch.Draw(base.mod.GetTexture("NPCs/星渊水母触手"), drawPos, new Rectangle(0 ,frameHeight * (2 - (((int)npc.frameCounter + (int)(k / 1.58333333f)) % 3)), (int)(base.mod.GetTexture("NPCs/星渊水母触手").Width) ,frameHeight), color, (float)npc.oldRot[k], vector, npc.scale, effects, 0f);
+                //spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/星渊水母触手"), drawPos, new Rectangle(0 ,frameHeight * (2 - (((int)npc.frameCounter + (int)(k / 1.58333333f)) % 3)), (int)(ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/星渊水母触手").Width()) ,frameHeight), color, (float)npc.oldRot[k], vector, npc.scale, effects, 0f);
             //}
             //return true;
         //}
@@ -861,10 +861,10 @@ namespace Everglow.Ocean.NPCs
             Vector2 value = new Vector2(base.NPC.Center.X, base.NPC.Center.Y);
             Vector2 vector = new Vector2((float)(TextureAssets.Npc[base.NPC.type].Value.Width / 2), (float)(TextureAssets.Npc[base.NPC.type].Value.Height / Main.npcFrameCount[base.NPC.type] / 2));
             Vector2 vector2 = value - Main.screenPosition;
-            vector2 -= new Vector2((float)base.Mod.GetTexture("NPCs/星渊水母光辉").Width, (float)(base.Mod.GetTexture("NPCs/星渊水母光辉").Height / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
+            vector2 -= new Vector2((float)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/星渊水母光辉").Width(), (float)(ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/星渊水母光辉").Height() / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
             vector2 += vector * 1f + new Vector2(0f, 4f + base.NPC.gfxOffY);
             Color color = Utils.MultiplyRGBA(new Color(297 - base.NPC.alpha, 297 - base.NPC.alpha, 297 - base.NPC.alpha, 0), Color.White);
-            Main.spriteBatch.Draw(base.Mod.GetTexture("NPCs/星渊水母光辉"), vector2, new Rectangle?(base.NPC.frame), color, base.NPC.rotation, vector, 1f, effects, 0f);
+            Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/星渊水母光辉"), vector2, new Rectangle?(base.NPC.frame), color, base.NPC.rotation, vector, 1f, effects, 0f);
         }
 		// Token: 0x0600147B RID: 5243 RVA: 0x000A99DC File Offset: 0x000A7BDC
 		public override void HitEffect(NPC.HitInfo hit)
@@ -886,30 +886,30 @@ namespace Everglow.Ocean.NPCs
         {
             if (Main.expertMode)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("StarJellyFishTreasureBag").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.StarJellyFishTreasureBag>(), 1, false, 0, false, false);
                 return;
             }
             else
             {
                 if (Main.rand.Next(9) == 0)
                 {
-                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("StarJellyFishPlatf").Type, 1, false, 0, false, false);
+                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.StarJellyFishPlatf>(), 1, false, 0, false, false);
                 }
                 if (Main.rand.Next(3) == 0)
                 {
-                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("TentacleBow").Type, 1, false, 0, false, false);
+                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.TentacleBow>(), 1, false, 0, false, false);
                 }
                 if (Main.rand.Next(3) == 0)
                 {
-                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("GlowingJellyStaff").Type, 1, false, 0, false, false);
+                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.GlowingJellyStaff>(), 1, false, 0, false, false);
                 }
                 if (Main.rand.Next(3) == 0)
                 {
-                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("CarmineBlade").Type, 1, false, 0, false, false);
+                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.CarmineBlade>(), 1, false, 0, false, false);
                 }
                 if (Main.rand.Next(3) == 0)
                 {
-                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("RedGlassSpear").Type, 1, false, 0, false, false);
+                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.RedGlassSpear>(), 1, false, 0, false, false);
                 }
             }
             if (!MythWorld.downedXYSM)

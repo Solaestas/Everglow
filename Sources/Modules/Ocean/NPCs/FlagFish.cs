@@ -13,9 +13,9 @@ namespace Everglow.Ocean.NPCs
 		// Token: 0x0600147D RID: 5245 RVA: 0x0000832F File Offset: 0x0000652F
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("Sailfish");
+			// base.DisplayName.SetDefault("Sailfish");
 			Main.npcFrameCount[base.NPC.type] = 4;
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "旗鱼");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "旗鱼");
 		}
 
 		// Token: 0x0600147E RID: 5246 RVA: 0x000B4364 File Offset: 0x000B2564
@@ -268,11 +268,11 @@ namespace Everglow.Ocean.NPCs
         {
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("空灵泡").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.空灵泡>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("利刃鳞").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.利刃鳞>(), 1, false, 0, false, false);
             }
         }
         public bool hasBeenHit;

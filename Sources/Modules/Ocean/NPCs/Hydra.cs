@@ -14,9 +14,9 @@ namespace Everglow.Ocean.NPCs
 		// Token: 0x06001475 RID: 5237 RVA: 0x000082F6 File Offset: 0x000064F6
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("babyjellyfish");
+            // base.DisplayName.SetDefault("babyjellyfish");
 			Main.npcFrameCount[base.NPC.type] = 4;
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "水螅");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "水螅");
 		}
 
 		// Token: 0x06001476 RID: 5238 RVA: 0x000B399C File Offset: 0x000B1B9C
@@ -117,7 +117,7 @@ namespace Everglow.Ocean.NPCs
         public override bool PreAI()
         {
             Player player = Main.player[base.NPC.target];
-			NPC npc = Main.npc[NPC.FindFirstNPC(base.Mod.Find<ModNPC>("StarJellyfish").Type)];
+			NPC npc = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Everglow.Ocean.NPCs.StarJellyfish>())];
 			double num22 = (double)base.NPC.ai[1];
 			double num23 = num22 * 0.017453292519943295;
 			double num24 = 150.0;
@@ -166,7 +166,7 @@ namespace Everglow.Ocean.NPCs
         {
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("VoidBubble").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.VoidBubble>(), 1, false, 0, false, false);
             }
         }
 	}

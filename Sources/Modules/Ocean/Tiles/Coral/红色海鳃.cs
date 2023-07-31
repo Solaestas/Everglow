@@ -30,12 +30,12 @@ namespace Everglow.Ocean.Tiles.Ocean
             TileObjectData.newTile.CoordinateWidth = 72;
             TileObjectData.addTile((int)base.Type);
 			this.DustType = 25;
-            LocalizedText modTranslation = base.CreateMapEntryName(null);
+            LocalizedText modTranslation = base.CreateMapEntryName();
             // modTranslation.SetDefault("");
             base.AddMapEntry(new Color(99, 10, 10), modTranslation);
 			this.MineResist = 3f;
 			base.SetStaticDefaults();
-			modTranslation.AddTranslation(GameCulture.Chinese, "");
+			// modTranslation.AddTranslation(GameCulture.Chinese, "");
 		}
 		public override void NumDust(int i, int j, bool fail, ref int num)
 		{
@@ -52,7 +52,7 @@ namespace Everglow.Ocean.Tiles.Ocean
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, base.Mod.Find<ModItem>("RedSeaPen").Type);
+            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.RedSeaPen>());
         }
         public override void PlaceInWorld(int i, int j, Item item)
         {

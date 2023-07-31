@@ -11,8 +11,8 @@ namespace Everglow.Ocean.Items.Bricks
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石晶莹宝石块");
+			// base.DisplayName.SetDefault("");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石晶莹宝石块");
 		}
 		public override void SetDefaults()
 		{
@@ -27,7 +27,7 @@ namespace Everglow.Ocean.Items.Bricks
 			base.Item.useTime = 10;
 			base.Item.useStyle = 1;
 			base.Item.consumable = true;
-            base.Item.createTile = base.Mod.Find<ModTile>("海蓝宝石晶莹宝石块").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.海蓝宝石晶莹宝石块>();
 		}
         public override void PostUpdate()
         {

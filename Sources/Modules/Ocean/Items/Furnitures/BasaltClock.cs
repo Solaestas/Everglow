@@ -24,7 +24,7 @@ namespace Everglow.Ocean.Items.Furnitures
 			Item.useStyle = 1;
 			Item.consumable = true;
 			Item.value = 0;
-			Item.createTile = Mod.Find<ModTile>("玄武岩时钟").Type;
+			Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.玄武岩时钟>();
 		}
 		public override void AddRecipes()
 		{

@@ -12,7 +12,7 @@ namespace Everglow.Ocean.Projectiles.Ocean
 		// Token: 0x06001EC3 RID: 7875 RVA: 0x0000C81D File Offset: 0x0000AA1D
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("海蛇尾触手");
+            // base.DisplayName.SetDefault("海蛇尾触手");
 			Main.projFrames[base.Projectile.type] = 2;
 		}
 
@@ -32,7 +32,7 @@ namespace Everglow.Ocean.Projectiles.Ocean
 		// Token: 0x06001EC5 RID: 7877 RVA: 0x0018AA00 File Offset: 0x00188C00
 		public override void AI()
 		{
-            if (NPC.CountNPCS(Mod.Find<ModNPC>("海蛇尾").Type) < 1)
+            if (NPC.CountNPCS(ModContent.NPCType<Everglow.Ocean.NPCs.海蛇尾>()) < 1)
             {
                 Projectile.timeLeft = 0;
             }

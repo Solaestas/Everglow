@@ -13,8 +13,8 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("黄色海绵炮");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "黄色海绵炮");
+            // base.DisplayName.SetDefault("黄色海绵炮");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "黄色海绵炮");
 		}
 		public override void SetDefaults()
 		{

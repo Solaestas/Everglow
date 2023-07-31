@@ -13,9 +13,9 @@ namespace Everglow.Ocean.NPCs
 		// Token: 0x0600147D RID: 5245 RVA: 0x0000832F File Offset: 0x0000652F
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("Sailfish");
+			// base.DisplayName.SetDefault("Sailfish");
 			Main.npcFrameCount[base.NPC.type] = 4;
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "小丑鱼");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "小丑鱼");
 		}
         private bool flag = true;
         private int num = 0;

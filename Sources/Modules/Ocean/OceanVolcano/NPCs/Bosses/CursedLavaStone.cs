@@ -17,8 +17,8 @@ namespace Everglow.Ocean.NPCs.VolCano
 		private int num2;
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("诅咒熔岩巨石怪");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "诅咒熔岩巨石怪");
+            // base.DisplayName.SetDefault("诅咒熔岩巨石怪");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "诅咒熔岩巨石怪");
 		}
 		public override void SetDefaults()
 		{
@@ -48,7 +48,7 @@ namespace Everglow.Ocean.NPCs.VolCano
             Player player = Main.player[Main.myPlayer];
             Vector2 playerposition = Main.screenPosition + new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
             Vector2 vector = new Vector2(base.NPC.position.X + (float)base.NPC.width * 0.5f, base.NPC.position.Y + (float)base.NPC.height * 0.5f);
-            if (player.behindBackWall && Main.tile[(int)(player.Center.X / 16), (int)(player.Center.Y / 16)].WallType == Mod.Find<ModWall>("熔岩石墙").Type && mplayer.ZoneVolcano)
+            if (player.behindBackWall && Main.tile[(int)(player.Center.X / 16), (int)(player.Center.Y / 16)].WallType == ModContent.WallType<Everglow.Ocean.Walls.熔岩石墙>() && mplayer.ZoneVolcano)
             {
                 Vector2 v3 = new Vector2(300, 0).RotatedBy(Xa / 200f);
                 float num4 = player.Center.X + v3.X - vector.X;
@@ -110,10 +110,10 @@ namespace Everglow.Ocean.NPCs.VolCano
             Vector2 value = new Vector2(base.NPC.Center.X, base.NPC.Center.Y);
             Vector2 vector = new Vector2((float)(TextureAssets.Npc[base.NPC.type].Value.Width / 2), (float)(TextureAssets.Npc[base.NPC.type].Value.Height / Main.npcFrameCount[base.NPC.type] / 2));
             Vector2 vector2 = value - Main.screenPosition;
-            vector2 -= new Vector2((float)base.Mod.GetTexture("NPCs/VolCano/熔岩巨石怪2Glow").Width, (float)(base.Mod.GetTexture("NPCs/VolCano/熔岩巨石怪2Glow").Height / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
+            vector2 -= new Vector2((float)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/VolCano/熔岩巨石怪2Glow").Width(), (float)(ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/VolCano/熔岩巨石怪2Glow").Height() / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
             vector2 += vector * 1f + new Vector2(0f, 4f + base.NPC.gfxOffY);
             Color color = Utils.MultiplyRGBA(new Color(97 - base.NPC.alpha, 97 - base.NPC.alpha, 97 - base.NPC.alpha, 0), Color.White);
-            Main.spriteBatch.Draw(base.Mod.GetTexture("NPCs/VolCano/熔岩巨石怪2Glow"), vector2, new Rectangle?(base.NPC.frame), color, base.NPC.rotation, vector, 1f, effects, 0f);
+            Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/VolCano/熔岩巨石怪2Glow"), vector2, new Rectangle?(base.NPC.frame), color, base.NPC.rotation, vector, 1f, effects, 0f);
         }
 		public override void HitEffect(NPC.HitInfo hit)
         {
@@ -137,10 +137,10 @@ namespace Everglow.Ocean.NPCs.VolCano
                 {
                     float scaleFactor5 = (float)(Main.rand.Next(-20, 20) / 100f);
                     Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor5, base.Mod.GetGoreSlot("Gores/火山浮石碎块" + (i % 2 + 6).ToString()), 1f);
-                    NPC.NewNPC((int)NPC.Center.X, (int)NPC.Center.Y, Mod.Find<ModNPC>("火山浮石").Type, 0, 0, Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.Next(0, 60), 255);
+                    NPC.NewNPC((int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Ocean.NPCs.火山浮石>(), 0, 0, Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.Next(0, 60), 255);
                 }
             }
-            if(NPC.CountNPCS(Mod.Find<ModNPC>("LavaStone2").Type) <= 1)
+            if(NPC.CountNPCS(ModContent.NPCType<Everglow.Ocean.NPCs.LavaStone2>()) <= 1)
             {
                 if (!MythWorld.downedVol)
                 {
@@ -148,7 +148,7 @@ namespace Everglow.Ocean.NPCs.VolCano
                     {
                         for (int j = (int)(Main.maxTilesY * 0.67f - 80); j < (int)(Main.maxTilesY * 0.67f - 60); j++)
                         {
-                            if (Main.tile[i, j].TileType == Mod.Find<ModTile>("熔岩石").Type)
+                            if (Main.tile[i, j].TileType == ModContent.TileType<Everglow.Ocean.Tiles.熔岩石>())
                             {
                                 WorldGen.KillTile(i, j, false, false, true);
                             }

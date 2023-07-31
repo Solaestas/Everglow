@@ -13,9 +13,9 @@ namespace Everglow.Ocean.NPCs.Ocean
 		// Token: 0x06001B17 RID: 6935 RVA: 0x0000B428 File Offset: 0x00009628
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("深海蟹");
+            // base.DisplayName.SetDefault("深海蟹");
 			Main.npcFrameCount[base.NPC.type] = 8;
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "深海蟹");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "深海蟹");
 		}
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{

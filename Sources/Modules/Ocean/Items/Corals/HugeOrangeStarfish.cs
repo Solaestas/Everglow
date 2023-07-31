@@ -16,7 +16,7 @@ namespace Everglow.Ocean.Items.Corals
             base.Item.height = 16;
             base.Item.rare = 2;
             base.Item.scale = 1f;
-            base.Item.createTile = base.Mod.Find<ModTile>("´ó³ÈÉ«º£ÐÇ").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.´ó³ÈÉ«º£ÐÇ>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;

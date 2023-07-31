@@ -11,10 +11,10 @@ namespace Everglow.Ocean.OceanVolcano.Items
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("");
+			// base.DisplayName.SetDefault("");
 			// base.Tooltip.SetDefault("");
-			// base.// DisplayName.AddTranslation(GameCulture.Chinese, "恶魔之吻");
-			base.Tooltip.AddTranslation(GameCulture.Chinese, "击中怪物造成毁灭一般的伤害,有概率直接爆炸");
+			// base.DisplayName.AddTranslation(GameCulture.Chinese, "恶魔之吻");
+			// base.Tooltip.AddTranslation(GameCulture.Chinese, "击中怪物造成毁灭一般的伤害,有概率直接爆炸");
             GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
         public static short GetGlowMask = 0;

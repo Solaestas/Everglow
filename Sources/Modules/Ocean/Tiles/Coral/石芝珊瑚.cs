@@ -28,12 +28,12 @@ namespace Everglow.Ocean.Tiles.Ocean
             TileObjectData.newTile.CoordinateWidth = 54;
             TileObjectData.addTile((int)base.Type);
 			this.DustType = 72;
-            LocalizedText modTranslation = base.CreateMapEntryName(null);
+            LocalizedText modTranslation = base.CreateMapEntryName();
             // modTranslation.SetDefault("");
             base.AddMapEntry(new Color(143, 73, 95), modTranslation);
 			this.MineResist = 3f;
 			base.SetStaticDefaults();
-			modTranslation.AddTranslation(GameCulture.Chinese, "");
+			// modTranslation.AddTranslation(GameCulture.Chinese, "");
 		}
 
 		// Token: 0x06004869 RID: 18537 RVA: 0x000138D5 File Offset: 0x00011AD5
@@ -54,7 +54,7 @@ namespace Everglow.Ocean.Tiles.Ocean
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, base.Mod.Find<ModItem>("石芝珊瑚").Type);
+            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.石芝珊瑚>());
         }
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {

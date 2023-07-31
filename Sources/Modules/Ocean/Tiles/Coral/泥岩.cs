@@ -23,9 +23,9 @@ namespace Everglow.Ocean.Tiles.Ocean
 				16
 			};
 			TileObjectData.addTile((int)base.Type);
-			LocalizedText modTranslation = base.CreateMapEntryName(null);
+			LocalizedText modTranslation = base.CreateMapEntryName();
 			// modTranslation.SetDefault("");
-			modTranslation.AddTranslation(GameCulture.English, "");
+			// modTranslation.AddTranslation(GameCulture.English, "");
 			AddMapEntry(new Color(148, 107, 74), modTranslation);
 			this.DustType = 37;
 			this.HitSound = 0;

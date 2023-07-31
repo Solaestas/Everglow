@@ -54,9 +54,9 @@ namespace Everglow.Ocean.Common
 		}
 		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
 		{
-			//Texture2D texture = base.mod.GetTexture("UIImages/Life");
+			//Texture2D texture = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/Life");
 			//Main.heartTexture = texture;
-			//Main.heart2Texture = base.mod.GetTexture("UIImages/Life2");
+			//Main.heart2Texture = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/Life2");
 		}
 		public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
 		{
@@ -211,48 +211,48 @@ namespace Everglow.Ocean.Common
 					Player.statLifeMax2 += 300;
 				}
 			}
-			//Texture2D texture2 = base.mod.GetTexture("UIImages/Mana");
+			//Texture2D texture2 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/Mana");
 			//Main.manaTexture = texture2;
 
-			//Texture2D texture3 = base.mod.GetTexture("UIImages/MiniMapFrame");
+			//Texture2D texture3 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/MiniMapFrame");
 			//Main.miniMapFrameTexture = texture3;
-			//Texture2D texture4 = base.mod.GetTexture("UIImages/MiniMapFrame2");
+			//Texture2D texture4 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/MiniMapFrame2");
 			//Main.miniMapFrame2Texture = texture4;
-			//Texture2D texture5 = base.mod.GetTexture("UIImages/Text_Back");
+			//Texture2D texture5 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/Text_Back");
 			//Main.textBackTexture = texture5;
-			//Texture2D texture6 = base.mod.GetTexture("UIImages/Map");
+			//Texture2D texture6 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/Map");
 			//Main.mapTexture = texture6;
-			//Texture2D texture7 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back");
+			//Texture2D texture7 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back");
 			//Main.inventoryBackTexture = texture7;
-			//Texture2D texture8 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back2");
+			//Texture2D texture8 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back2");
 			// Main.inventoryBack2Texture = texture8;
-			//Texture2D texture9 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back3");
+			//Texture2D texture9 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back3");
 			// Main.inventoryBack3Texture = texture9;
-			//Texture2D texture10 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back4");
+			//Texture2D texture10 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back4");
 			//Main.inventoryBack4Texture = texture10;
-			//Texture2D texture11 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back5");
+			//Texture2D texture11 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back5");
 			//Main.inventoryBack5Texture = texture11;
-			//Texture2D texture12 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back6");
+			//Texture2D texture12 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back6");
 			//Main.inventoryBack6Texture = texture12;
-			//Texture2D texture13 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back7");
+			//Texture2D texture13 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back7");
 			//Main.inventoryBack7Texture = texture13;
-			//Texture2D texture14 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back8");
+			//Texture2D texture14 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back8");
 			//Main.inventoryBack8Texture = texture14;
-			//Texture2D texture15 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back9");
+			//Texture2D texture15 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back9");
 			//Main.inventoryBack9Texture = texture15;
-			// Texture2D texture16 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back10");
+			// Texture2D texture16 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back10");
 			//Main.inventoryBack10Texture = texture16;
-			//Texture2D texture17 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back11");
+			//Texture2D texture17 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back11");
 			//Main.inventoryBack11Texture = texture17;
-			//Texture2D texture18 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back12");
+			//Texture2D texture18 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back12");
 			//Main.inventoryBack12Texture = texture18;
-			//Texture2D texture19 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back13");
+			//Texture2D texture19 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back13");
 			//Main.inventoryBack13Texture = texture19;
-			//Texture2D texture20 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back14");
+			//Texture2D texture20 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back14");
 			//Main.inventoryBack14Texture = texture20;
-			//Texture2D texture21 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back15");
+			//Texture2D texture21 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back15");
 			//Main.inventoryBack15Texture = texture21;
-			//Texture2D texture22 = base.mod.GetTexture("UIImages/皮肤1/Inventory_Back16");
+			//Texture2D texture22 = ModContent.Request<Texture2D>("Everglow/Ocean/UIImages/皮肤1/Inventory_Back16");
 			//Main.inventoryBack16Texture = texture22;
 		}
 		public override void SaveData(TagCompound tag)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Localization;
@@ -25,8 +25,8 @@ namespace Everglow.Ocean.Tiles.Ocean
             TileObjectData.newTile.StyleHorizontal = true;
 			TileObjectData.newTile.LavaDeath = false;
 			TileObjectData.addTile((int)base.Type);
-            this.ItemDrop/* tModPorter Note: Removed. Tiles and walls will drop the item which places them automatically. Use RegisterItemDrop to alter the automatic drop if necessary. */ = base.Mod.Find<ModItem>("AnnularCoral").Type;
-            LocalizedText modTranslation = base.CreateMapEntryName(null);
+            this.RegisterItemDrop(ModContent.ItemType<Everglow.Ocean.Items.AnnularCoral>());
+            LocalizedText modTranslation = base.CreateMapEntryName();
             // modTranslation.SetDefault("");
             base.AddMapEntry(new Color(63, 187, 161), modTranslation);
 		}

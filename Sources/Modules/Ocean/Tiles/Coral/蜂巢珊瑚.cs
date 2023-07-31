@@ -27,12 +27,12 @@ namespace Everglow.Ocean.Tiles.Ocean
             TileObjectData.newTile.CoordinateWidth = 54;
             TileObjectData.addTile((int)base.Type);
 			this.DustType = 253;
-            LocalizedText modTranslation = base.CreateMapEntryName(null);
+            LocalizedText modTranslation = base.CreateMapEntryName();
             // modTranslation.SetDefault("");
             base.AddMapEntry(new Color(42, 91, 10), modTranslation);
 			this.MineResist = 3f;
 			base.SetStaticDefaults();
-			modTranslation.AddTranslation(GameCulture.Chinese, "");
+			// modTranslation.AddTranslation(GameCulture.Chinese, "");
 		}
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {
@@ -62,7 +62,7 @@ namespace Everglow.Ocean.Tiles.Ocean
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 48, 48, Mod.Find<ModItem>("Favosites").Type, 1, false, 0, false, false);
+            Item.NewItem(i * 16, j * 16, 48, 48, ModContent.ItemType<Everglow.Ocean.Items.Favosites>(), 1, false, 0, false, false);
         }
     }
 }

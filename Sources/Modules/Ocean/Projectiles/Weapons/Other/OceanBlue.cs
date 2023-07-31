@@ -9,7 +9,7 @@ public class OceanBlue : ModProjectile
 {
 	public override void SetStaticDefaults()
 	{
-		// // base.DisplayName.SetDefault("海蓝");
+		// base.DisplayName.SetDefault("海蓝");
 	}
 	public override void SetDefaults()
 	{

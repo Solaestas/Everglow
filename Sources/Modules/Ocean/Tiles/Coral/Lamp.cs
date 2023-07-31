@@ -36,14 +36,14 @@ namespace Everglow.Ocean.Tiles.Ocean
             TileObjectData.newTile.AnchorTop = new AnchorData((Terraria.Enums.AnchorType)1, 1, 1);
             TileObjectData.addTile((int)base.Type);
             base.AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
-            LocalizedText modTranslation = base.CreateMapEntryName(null);
+            LocalizedText modTranslation = base.CreateMapEntryName();
             // modTranslation.SetDefault("灯塔巨灯");
             base.AddMapEntry(new Color(191, 142, 111), modTranslation);
             this.AdjTiles = new int[]
             {
                 4
             };
-            modTranslation.AddTranslation(GameCulture.Chinese, "灯塔巨灯");
+            // modTranslation.AddTranslation(GameCulture.Chinese, "灯塔巨灯");
         }
         private int D = 0;
         private int E = 0;
@@ -57,7 +57,7 @@ namespace Everglow.Ocean.Tiles.Ocean
                 {
                     for (int Y = j - 6; Y < j + 6; Y++)
                     {
-                        if(Main.tile[X,Y].TileType == Mod.Find<ModTile>("Lamp").Type)
+                        if(Main.tile[X,Y].TileType == ModContent.TileType<Everglow.Ocean.Tiles.Lamp>())
                         {
                             Main.tile[X, Y].TileFrameY -= (short)((((Main.tile[X, Y].TileFrameY + 45) / 90) - 1) * 90);
                         }
@@ -71,7 +71,7 @@ namespace Everglow.Ocean.Tiles.Ocean
                 {
                     for (int Y = j - 6; Y < j + 6; Y++)
                     {
-                        if (Main.tile[X, Y].TileType == Mod.Find<ModTile>("Lamp").Type && Main.tile[X, Y].TileFrameY < 90)
+                        if (Main.tile[X, Y].TileType == ModContent.TileType<Everglow.Ocean.Tiles.Lamp>() && Main.tile[X, Y].TileFrameY < 90)
                         {
                             Main.tile[X, Y].TileFrameY += 90;
                         }
@@ -85,7 +85,7 @@ namespace Everglow.Ocean.Tiles.Ocean
                 {
                     for (int Y = j - 6; Y < j + 6; Y++)
                     {
-                        if (Main.tile[X, Y].TileType == Mod.Find<ModTile>("Lamp").Type && Main.tile[X, Y].TileFrameY < 180)
+                        if (Main.tile[X, Y].TileType == ModContent.TileType<Everglow.Ocean.Tiles.Lamp>() && Main.tile[X, Y].TileFrameY < 180)
                         {
                             Main.tile[X, Y].TileFrameY += 90;
                         }
@@ -99,7 +99,7 @@ namespace Everglow.Ocean.Tiles.Ocean
                 {
                     for (int Y = j - 6; Y < j + 6; Y++)
                     {
-                        if (Main.tile[X, Y].TileType == Mod.Find<ModTile>("Lamp").Type && Main.tile[X, Y].TileFrameY < 270)
+                        if (Main.tile[X, Y].TileType == ModContent.TileType<Everglow.Ocean.Tiles.Lamp>() && Main.tile[X, Y].TileFrameY < 270)
                         {
                             Main.tile[X, Y].TileFrameY += 90;
                         }
@@ -113,7 +113,7 @@ namespace Everglow.Ocean.Tiles.Ocean
                 {
                     for (int Y = j - 6; Y < j + 6; Y++)
                     {
-                        if (Main.tile[X, Y].TileType == Mod.Find<ModTile>("Lamp").Type && Main.tile[X, Y].TileFrameY < 360)
+                        if (Main.tile[X, Y].TileType == ModContent.TileType<Everglow.Ocean.Tiles.Lamp>() && Main.tile[X, Y].TileFrameY < 360)
                         {
                             Main.tile[X, Y].TileFrameY += 90;
                         }
@@ -127,7 +127,7 @@ namespace Everglow.Ocean.Tiles.Ocean
                 {
                     for (int Y = j - 6; Y < j + 6; Y++)
                     {
-                        if (Main.tile[X, Y].TileType == Mod.Find<ModTile>("Lamp").Type && Main.tile[X, Y].TileFrameY < 450)
+                        if (Main.tile[X, Y].TileType == ModContent.TileType<Everglow.Ocean.Tiles.Lamp>() && Main.tile[X, Y].TileFrameY < 450)
                         {
                             Main.tile[X, Y].TileFrameY += 90;
                         }
@@ -141,7 +141,7 @@ namespace Everglow.Ocean.Tiles.Ocean
                 {
                     for (int Y = j - 6; Y < j + 6; Y++)
                     {
-                        if (Main.tile[X, Y].TileType == Mod.Find<ModTile>("Lamp").Type && Main.tile[X, Y].TileFrameY < 540)
+                        if (Main.tile[X, Y].TileType == ModContent.TileType<Everglow.Ocean.Tiles.Lamp>() && Main.tile[X, Y].TileFrameY < 540)
                         {
                             Main.tile[X, Y].TileFrameY += 90;
                         }
@@ -155,7 +155,7 @@ namespace Everglow.Ocean.Tiles.Ocean
                 {
                     for (int Y = j - 6; Y < j + 6; Y++)
                     {
-                        if (Main.tile[X, Y].TileType == Mod.Find<ModTile>("Lamp").Type && Main.tile[X, Y].TileFrameY < 630)
+                        if (Main.tile[X, Y].TileType == ModContent.TileType<Everglow.Ocean.Tiles.Lamp>() && Main.tile[X, Y].TileFrameY < 630)
                         {
                             Main.tile[X, Y].TileFrameY -= 450;
                         }
@@ -184,7 +184,7 @@ namespace Everglow.Ocean.Tiles.Ocean
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, base.Mod.Find<ModItem>("LighthouseLamp").Type);
+            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.LighthouseLamp>());
         }
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -15,9 +15,9 @@ namespace Everglow.Ocean.NPCs
 		// Token: 0x06001475 RID: 5237 RVA: 0x000082F6 File Offset: 0x000064F6
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("jellyfish");
+            // base.DisplayName.SetDefault("jellyfish");
 			Main.npcFrameCount[base.NPC.type] = 5;
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "警报水母");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "警报水母");
 		}
 		// Token: 0x06001B17 RID: 6935 RVA: 0x0000B428 File Offset: 0x00009628
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -52,7 +52,7 @@ namespace Everglow.Ocean.NPCs
 			base.NPC.HitSound = SoundID.NPCHit25;
 			base.NPC.DeathSound = SoundID.NPCDeath28;
 			this.Banner = base.NPC.type;
-			this.BannerItem = base.Mod.Find<ModItem>("AlarmJellyfishBanner").Type;
+			this.BannerItem = ModContent.ItemType<Everglow.Ocean.Items.AlarmJellyfishBanner>();
 		}
 
 		// Token: 0x06001477 RID: 5239 RVA: 0x000B3A6C File Offset: 0x000B1C6C
@@ -230,10 +230,10 @@ namespace Everglow.Ocean.NPCs
             Vector2 value = new Vector2(base.NPC.Center.X, base.NPC.Center.Y);
             Vector2 vector = new Vector2((float)(TextureAssets.Npc[base.NPC.type].Value.Width / 2), (float)(TextureAssets.Npc[base.NPC.type].Value.Height / Main.npcFrameCount[base.NPC.type] / 2));
             Vector2 vector2 = value - Main.screenPosition;
-            vector2 -= new Vector2((float)base.Mod.GetTexture("NPCs/警报水母光辉").Width, (float)(base.Mod.GetTexture("NPCs/警报水母光辉").Height / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
+            vector2 -= new Vector2((float)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/警报水母光辉").Width(), (float)(ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/警报水母光辉").Height() / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
             vector2 += vector * 1f + new Vector2(0f, 4f + base.NPC.gfxOffY);
             Color color = Utils.MultiplyRGBA(new Color(297 - base.NPC.alpha, 297 - base.NPC.alpha, 297 - base.NPC.alpha, 0), Color.Blue);
-            Main.spriteBatch.Draw(base.Mod.GetTexture("NPCs/警报水母光辉"), vector2, new Rectangle?(base.NPC.frame), color, base.NPC.rotation, vector, 1f, effects, 0f);
+            Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/警报水母光辉"), vector2, new Rectangle?(base.NPC.frame), color, base.NPC.rotation, vector, 1f, effects, 0f);
         }
 
 		// Token: 0x06001479 RID: 5241 RVA: 0x000B4268 File Offset: 0x000B2468
@@ -264,15 +264,15 @@ namespace Everglow.Ocean.NPCs
         {
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("空灵泡").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.空灵泡>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("海因子").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.海因子>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(175) == 0 && Main.hardMode)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("幽渊之光").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.幽渊之光>(), 1, false, 0, false, false);
             }
         }
 	}

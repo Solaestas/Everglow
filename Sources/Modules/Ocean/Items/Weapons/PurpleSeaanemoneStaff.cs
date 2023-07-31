@@ -19,9 +19,9 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("");
+            // base.DisplayName.SetDefault("");
 			Item.staff[base.Item.type] = true;
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "紫点海葵召唤杖");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "紫点海葵召唤杖");
 		}
 		public override void SetDefaults()
 		{

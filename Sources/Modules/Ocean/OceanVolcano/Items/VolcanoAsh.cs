@@ -8,8 +8,8 @@ namespace Everglow.Ocean.Items.Bricks
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("Volcano ask");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "火山灰");
+			// base.DisplayName.SetDefault("Volcano ask");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "火山灰");
 		}
 		public override void SetDefaults()
 		{
@@ -24,7 +24,7 @@ namespace Everglow.Ocean.Items.Bricks
 			base.Item.useTime = 10;
 			base.Item.useStyle = 1;
 			base.Item.consumable = true;
-            base.Item.createTile = base.Mod.Find<ModTile>("VolcanoAsh").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.VolcanoAsh>();
 		}
 	}
 }

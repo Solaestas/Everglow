@@ -22,10 +22,10 @@ namespace Everglow.Ocean.Tiles
             TileObjectData.newTile.CoordinateWidth = 36;
             TileObjectData.addTile((int)base.Type);
             DustType = 7;
-            RegisterItemDrop(ModContent.ItemType<Items.Barnacle>())/* tModPorter Note: Removed. Tiles and walls will drop the item which places them automatically. Use RegisterItemDrop to alter the automatic drop if necessary. */;
+            RegisterItemDrop(ModContent.ItemType<Items.Barnacle>());
             LocalizedText modTranslation = base.CreateMapEntryName();
-            //modTranslation.SetDefault("Barnacle");
-            //modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "藤壶");
+            //// modTranslation.SetDefault("Barnacle");
+            //// modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "藤壶");
             base.AddMapEntry(new Color(108, 108, 78), modTranslation);
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)

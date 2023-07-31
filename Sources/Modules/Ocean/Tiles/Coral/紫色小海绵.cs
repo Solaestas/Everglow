@@ -38,7 +38,7 @@ namespace Everglow.Ocean.Tiles.Ocean
                 15
             };
             this.DustType = 50;
-            LocalizedText modTranslation = base.CreateMapEntryName(null);
+            LocalizedText modTranslation = base.CreateMapEntryName();
             // modTranslation.SetDefault("");
             base.AddMapEntry(new Color(153, 107, 0), modTranslation);
 		}
@@ -50,7 +50,7 @@ namespace Everglow.Ocean.Tiles.Ocean
 		}
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, base.Mod.Find<ModItem>("PurpleLittleSponge").Type);
+            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.PurpleLittleSponge>());
         }
         // Token: 0x0600400D RID: 16397 RVA: 0x00013946 File Offset: 0x00011B46
         // Token: 0x0600400E RID: 16398 RVA: 0x00013956 File Offset: 0x00011B56

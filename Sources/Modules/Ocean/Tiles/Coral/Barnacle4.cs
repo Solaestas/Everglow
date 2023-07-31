@@ -1,4 +1,4 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Ocean.Tiles
@@ -20,10 +20,10 @@ namespace Everglow.Ocean.Tiles
             TileObjectData.newTile.CoordinateWidth = 36;
             TileObjectData.addTile((int)base.Type);
             DustType = 7;
-            ItemDrop/* tModPorter Note: Removed. Tiles and walls will drop the item which places them automatically. Use RegisterItemDrop to alter the automatic drop if necessary. */ = ModContent.ItemType<Items.Barnacle>();
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
-            modTranslation.SetDefault("Barnacle");
-            modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "藤壶");
+            RegisterItemDrop(ModContent.ItemType<Items.Barnacle>());
+            var modTranslation = base.CreateMapEntryName();
+            // modTranslation.SetDefault("Barnacle");
+            // modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "藤壶");
             base.AddMapEntry(new Color(178, 178, 138), modTranslation);
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)

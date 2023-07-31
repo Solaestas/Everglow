@@ -31,7 +31,7 @@ namespace Everglow.Ocean.Items
             base.Item.height = 40;
             base.Item.rare = 8;
             base.Item.scale = 1f;
-            base.Item.createTile = base.Mod.Find<ModTile>("AbyssOre").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.AbyssOre>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;
@@ -46,7 +46,7 @@ namespace Everglow.Ocean.Items
         // Token: 0x0600462B RID: 17963 RVA: 0x0027BBA8 File Offset: 0x00279DA8
         public override void AddRecipes()
         {
-            Recipe recipe = Recipe.Create(Mod.Find<ModItem>("DarkSeaBar").Type, 1);//制作一个武器
+            Recipe recipe = Recipe.Create(ModContent.ItemType<Everglow.Ocean.Items.DarkSeaBar>(), 1);//制作一个武器
             recipe.AddIngredient(null, "AbyssOre", 4); //需要一个材料
             recipe.requiredTile[0] = 412;
             recipe.Register();

@@ -13,7 +13,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
     {
         public override void SetStaticDefaults()
         {
-            // // base.DisplayName.SetDefault("花鹿角珊瑚刃");
+            // base.DisplayName.SetDefault("花鹿角珊瑚刃");
         }
         private int num = 0;
         private bool k = true;
@@ -53,7 +53,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
             Vector2 v = new Vector2(speedX, speedY);
             v = v.RotatedBy(Math.PI * (2 - (num % 5)) / 5f * -player.direction);
             //顶上的不要改，不然会鬼畜
-            int num3 = Projectile.NewProjectile(pc.X, pc.Y, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.鹿角珊瑚>(), damage, knockBack, player.whoAmI);//195是特效代码，这里指发射物会发射到鼠标位置，34是伤害，10是击退
+            int num3 = Projectile.NewProjectile(pc.X, pc.Y, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.鹿角珊瑚>(), damage, knockBack, player.whoAmI);//195是特效代码，这里指发射物会发射到鼠标位置，34是伤害，10是击退
             Main.projectile[num3].ai[0] = 3;
             if (num >= 4)
             {

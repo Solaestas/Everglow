@@ -14,9 +14,9 @@ namespace Everglow.Ocean.Tiles
             TileObjectData.newTile.StyleWrapLimit = 36;
             TileObjectData.addTile((int)base.Type);
             DustType = 7;
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
-            modTranslation.SetDefault("Large Blue Starfish");
-            modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "大蓝色海星");
+            var modTranslation = base.CreateMapEntryName();
+            // modTranslation.SetDefault("Large Blue Starfish");
+            // modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "大蓝色海星");
             base.AddMapEntry(new Color(43, 36, 136), modTranslation);
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)

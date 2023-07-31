@@ -24,10 +24,10 @@ namespace Everglow.Ocean.Items.Weapons
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault(".");
+			// base.DisplayName.SetDefault(".");
 			// base.Tooltip.SetDefault(".");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "幽渊之光");
-			base.Tooltip.AddTranslation(GameCulture.Chinese, "深渊之下,点点磷光");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "幽渊之光");
+			// base.Tooltip.AddTranslation(GameCulture.Chinese, "深渊之下,点点磷光");
             GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
         public static short GetGlowMask = 0;

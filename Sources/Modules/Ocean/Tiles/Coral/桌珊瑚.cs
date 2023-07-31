@@ -25,9 +25,9 @@ namespace Everglow.Ocean.Tiles.Ocean
 			TileObjectData.newTile.AnchorRight = new AnchorData((Terraria.Enums.AnchorType)1, 2, 0);
 			TileObjectData.addTile((int)base.Type);
 			this.DustType = 1;
-            LocalizedText modTranslation = base.CreateMapEntryName(null);
+            LocalizedText modTranslation = base.CreateMapEntryName();
             // modTranslation.SetDefault("");
-            modTranslation.AddTranslation(GameCulture.Chinese, "");
+            // modTranslation.AddTranslation(GameCulture.Chinese, "");
             base.AddMapEntry(new Color(158, 197, 212), modTranslation);
 			this.MineResist = 3f;
 			base.SetStaticDefaults();
@@ -40,7 +40,7 @@ namespace Everglow.Ocean.Tiles.Ocean
 		}
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, base.Mod.Find<ModItem>("MiddleTableCoral").Type);
+            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.MiddleTableCoral>());
         }
     }
 }

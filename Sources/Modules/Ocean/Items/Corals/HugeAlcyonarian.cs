@@ -19,7 +19,7 @@ namespace Everglow.Ocean.Items.Corals//????????????mod????????
             base.Item.height = 44;//????
             base.Item.rare = 2;//??????
             base.Item.scale = 1f;//????С
-            base.Item.createTile = base.Mod.Find<ModTile>("巨大海鸡冠").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.巨大海鸡冠>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;

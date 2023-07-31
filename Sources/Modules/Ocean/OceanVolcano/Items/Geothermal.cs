@@ -21,7 +21,7 @@ namespace Everglow.Ocean.OceanVolcano.Items
     {
         public override void SetStaticDefaults()
         {
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "地炎");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "地炎");
             // Tooltip.SetDefault("灼热导致它真实伤害远远高于面板");
             GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }

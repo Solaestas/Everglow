@@ -14,7 +14,7 @@ namespace Everglow.Ocean.Items.Shells
 		// Token: 0x060005E3 RID: 1507 RVA: 0x00041728 File Offset: 0x0003F928
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("珍珠");
+            // base.DisplayName.SetDefault("珍珠");
             // base.Tooltip.SetDefault("");
 		}
 
@@ -31,7 +31,7 @@ namespace Everglow.Ocean.Items.Shells
 		}
         public override void AddRecipes()
         {
-            Recipe recipe = Recipe.Create(Mod.Find<ModItem>("ShinyPearl").Type, 1);//制作一个武器
+            Recipe recipe = Recipe.Create(ModContent.ItemType<Everglow.Ocean.Items.ShinyPearl>(), 1);//制作一个武器
             recipe.AddIngredient(null, "Pearl", 1); //需要一个材料
             recipe.AddIngredient(513, 5); //需要一个材料          
             recipe.AddIngredient(75, 3); //需要一个材料    

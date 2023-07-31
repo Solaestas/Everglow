@@ -10,7 +10,7 @@ namespace Everglow.Ocean.Items.Furnitures
 		public override void SetStaticDefaults()
 		{
 			// Tooltip.SetDefault("");
-			Tooltip.AddTranslation(GameCulture.Chinese, "玄武岩工作台");
+			// Tooltip.AddTranslation(GameCulture.Chinese, "玄武岩工作台");
 		}
         public override void SetDefaults()
 		{
@@ -24,7 +24,7 @@ namespace Everglow.Ocean.Items.Furnitures
 			Item.useStyle = 1;
 			Item.consumable = true;
 			Item.value = 0;
-			Item.createTile = Mod.Find<ModTile>("玄武岩水槽").Type;
+			Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.玄武岩水槽>();
 		}
 		public override void AddRecipes()
 		{

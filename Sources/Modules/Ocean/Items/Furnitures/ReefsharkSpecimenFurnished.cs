@@ -18,7 +18,7 @@ namespace Everglow.Ocean.Items.Furnitures//制作是mod名字
             base.Item.height = 64;//高
             base.Item.rare = 2;//品质
             base.Item.scale = 1f;//大小
-            base.Item.createTile = base.Mod.Find<ModTile>("礁鲨标本").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.礁鲨标本>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;

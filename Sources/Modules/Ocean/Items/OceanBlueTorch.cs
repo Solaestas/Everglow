@@ -20,7 +20,7 @@ namespace Everglow.Ocean.Items
 			Item.useTime = 10;
 			Item.useStyle = 1;
 			Item.consumable = true;
-			Item.createTile = Mod.Find<ModTile>("OceanBlueTorch").Type;
+			Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.OceanBlueTorch>();
 			Item.flame = true;
 			Item.value = 50;
 			ItemID.Sets.Torches[Type] = true;

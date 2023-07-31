@@ -11,7 +11,7 @@ namespace Everglow.Ocean.Items
 		public override void SetStaticDefaults()
 		{
 			// Tooltip.SetDefault("");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "回流锤");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "回流锤");
         }
 		public override void SetDefaults()
 		{

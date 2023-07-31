@@ -11,8 +11,8 @@ namespace Everglow.Ocean.NPCs
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("WaterBoom");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "水雷");
+			// base.DisplayName.SetDefault("WaterBoom");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "水雷");
 			Main.npcFrameCount[base.NPC.type] = 3;
 		}
 		public override void SetDefaults()

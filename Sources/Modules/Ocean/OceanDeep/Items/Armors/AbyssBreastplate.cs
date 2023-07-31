@@ -13,10 +13,10 @@ namespace Everglow.Ocean.Items.Armors
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("");
+            // base.DisplayName.SetDefault("");
             // base.Tooltip.SetDefault("");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "渊海重甲");
-            base.Tooltip.AddTranslation(GameCulture.Chinese, "伤害和暴击各增加15%,增加7%闪避");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "渊海重甲");
+            // base.Tooltip.AddTranslation(GameCulture.Chinese, "伤害和暴击各增加15%,增加7%闪避");
         }
         public override void AddRecipes()
         {

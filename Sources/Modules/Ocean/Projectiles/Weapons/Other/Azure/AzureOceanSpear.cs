@@ -18,7 +18,7 @@ namespace Everglow.Ocean.Projectiles.Weapons.Other.Azure
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("碧海长矛");
+            // base.DisplayName.SetDefault("碧海长矛");
 		}
 		public override void SetDefaults()
 		{

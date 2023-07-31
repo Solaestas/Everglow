@@ -15,7 +15,7 @@ namespace Everglow.Ocean.NPCs.TownNPCs
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("VolcanoExplorer");
+			// base.DisplayName.SetDefault("VolcanoExplorer");
 			Main.npcFrameCount[base.NPC.type] = 23;
 			NPCID.Sets.ExtraFramesCount[base.NPC.type] = 9;
 			NPCID.Sets.AttackFrameCount[base.NPC.type] = 4;
@@ -23,7 +23,7 @@ namespace Everglow.Ocean.NPCs.TownNPCs
 			NPCID.Sets.AttackType[base.NPC.type] = 0;
 			NPCID.Sets.AttackTime[base.NPC.type] = 60;
 			NPCID.Sets.AttackAverageChance[base.NPC.type] = 15;
-			// base.// DisplayName.AddTranslation(GameCulture.Chinese, "火山探险家");
+			// base.DisplayName.AddTranslation(GameCulture.Chinese, "火山探险家");
 		}
 		public override void SetDefaults()
 		{
@@ -123,7 +123,7 @@ namespace Everglow.Ocean.NPCs.TownNPCs
 		//}
 		//public override void ModifyActiveShop(string shopName, Item[] items)
 		//{
-		//	shopName.items[nextSlot].SetDefaults(base.Mod.Find<ModItem>("StarMark").Type, false);
+		//	shopName.items[nextSlot].SetDefaults(ModContent.ItemType<Everglow.Ocean.Items.StarMark>(), false);
 		//	shopName.items[nextSlot].shopCustomPrice = new int?(Item.buyPrice(0, 70, 0, 0));
 		//	nextSlot++;
 		//}

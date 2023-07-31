@@ -12,9 +12,9 @@ namespace Everglow.Ocean.OceanVolcano.Items
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("熔烬法杖");
+            // base.DisplayName.SetDefault("熔烬法杖");
 			Item.staff[base.Item.type] = true;
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "熔烬法杖");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "熔烬法杖");
         }
         public override void SetDefaults()
         {

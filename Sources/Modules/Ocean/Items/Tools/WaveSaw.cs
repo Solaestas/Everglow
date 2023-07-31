@@ -10,8 +10,8 @@ namespace Everglow.Ocean.Items
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("Wave Chainsaw");
-			// base.// DisplayName.AddTranslation(GameCulture.English, "流波电锯");
+			// base.DisplayName.SetDefault("Wave Chainsaw");
+			// base.DisplayName.AddTranslation(GameCulture.English, "流波电锯");
 		}
 		public override void SetDefaults()
 		{

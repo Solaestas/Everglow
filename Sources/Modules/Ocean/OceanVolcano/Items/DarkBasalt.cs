@@ -10,7 +10,7 @@ namespace Everglow.Ocean.OceanVolcano.Items
         public override void SetStaticDefaults()
         {
             // Tooltip.SetDefault("");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩");
         }
         public override void SetDefaults()
         {
@@ -18,7 +18,7 @@ namespace Everglow.Ocean.OceanVolcano.Items
             base.Item.height = 40;
             base.Item.rare = 8;
             base.Item.scale = 1f;
-            base.Item.createTile = base.Mod.Find<ModTile>("Basalt").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.Basalt>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;

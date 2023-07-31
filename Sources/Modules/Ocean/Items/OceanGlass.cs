@@ -8,8 +8,8 @@ namespace Everglow.Ocean.Items
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("Shining Jelly Brick");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "幻海琉璃瓦");
+			// base.DisplayName.SetDefault("Shining Jelly Brick");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "幻海琉璃瓦");
 		}
 		public override void SetDefaults()
 		{
@@ -24,7 +24,7 @@ namespace Everglow.Ocean.Items
 			base.Item.useTime = 10;
 			base.Item.useStyle = 1;
 			base.Item.consumable = true;
-            base.Item.createTile = base.Mod.Find<ModTile>("幻海琉璃瓦").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.幻海琉璃瓦>();
 		}
 	}
 }

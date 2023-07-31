@@ -14,7 +14,7 @@ namespace Everglow.Ocean.Projectiles.projectile2
 		// Token: 0x06001F14 RID: 7956 RVA: 0x0000C97C File Offset: 0x0000AB7C
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("海洋波纹");
+            // base.DisplayName.SetDefault("海洋波纹");
 			Main.projFrames[base.Projectile.type] = 1;
 		}
         private Vector2 v3 = new Vector2(0, 0);
@@ -80,7 +80,7 @@ namespace Everglow.Ocean.Projectiles.projectile2
                     Vector2 v2 = (Projectile.Center - v3) * num100 * 1.2f * (float)Math.Sin(Projectile.timeLeft / 10f + 0.25f * k) * ((60 - k) / 30f);
                     Vector2 drawPos = Projectile.Center + v2 - v - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                     Color color = new Color(100 * Projectile.timeLeft / 24f + 155, 100 * Projectile.timeLeft / 24f + 155, 100 * Projectile.timeLeft / 24f + 155, base.Projectile.alpha) * ((60 - k) / 60f) * (Projectile.timeLeft / (Projectile.timeLeft < 120 ? 450f * (125 - Projectile.timeLeft) * (125 - Projectile.timeLeft) / 25f : 450f));
-                    spriteBatch.Draw(base.Mod.GetTexture("Projectiles/海洋波纹~"), drawPos, new Rectangle(0, frameHeight * Projectile.frame, base.Mod.GetTexture("Projectiles/海洋波纹~").Width, frameHeight), color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/海洋波纹~"), drawPos, new Rectangle(0, frameHeight * Projectile.frame, ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/海洋波纹~").Width(), frameHeight), color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
                 }
                 for (int k = 0; k < 60; k++)
                 {
@@ -89,7 +89,7 @@ namespace Everglow.Ocean.Projectiles.projectile2
                     Vector2 v2 = (Projectile.Center - v3) * num100 * 1.2f * (float)Math.Sin(Projectile.timeLeft / 10f + 0.25f * -k) * ((60 - k) / 30f);
                     Vector2 drawPos = Projectile.Center + v2 + v - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                     Color color = new Color(100 * Projectile.timeLeft / 24f + 155, 100 * Projectile.timeLeft / 24f + 155, 100 * Projectile.timeLeft / 24f + 155, base.Projectile.alpha) * ((60 - k) / 60f) * (Projectile.timeLeft / (Projectile.timeLeft < 120 ? 450f * (125 - Projectile.timeLeft) * (125 - Projectile.timeLeft) / 25f: 450f));
-                    spriteBatch.Draw(base.Mod.GetTexture("Projectiles/海洋波纹~"), drawPos, new Rectangle(0, frameHeight * Projectile.frame, base.Mod.GetTexture("Projectiles/海洋波纹~").Width, frameHeight), color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/海洋波纹~"), drawPos, new Rectangle(0, frameHeight * Projectile.frame, ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/海洋波纹~").Width(), frameHeight), color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
                 }
             }
             return true;

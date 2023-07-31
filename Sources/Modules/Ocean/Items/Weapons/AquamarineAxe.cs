@@ -14,10 +14,10 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		// Token: 0x060002CE RID: 718 RVA: 0x0003529C File Offset: 0x0003349C
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("海蓝宝石斧");
+            // base.DisplayName.SetDefault("海蓝宝石斧");
 			// base.Tooltip.SetDefault("brush!");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石斧");
-			base.Tooltip.AddTranslation(GameCulture.Chinese, "");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石斧");
+			// base.Tooltip.AddTranslation(GameCulture.Chinese, "");
 		}
 
 		// Token: 0x060002CF RID: 719 RVA: 0x000352F4 File Offset: 0x000334F4

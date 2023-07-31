@@ -12,8 +12,8 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		// Token: 0x060019F2 RID: 6642 RVA: 0x00008ED2 File Offset: 0x000070D2
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("橄榄石法杖");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "橄榄石法杖");
+            // base.DisplayName.SetDefault("橄榄石法杖");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "橄榄石法杖");
 		}
 
 		// Token: 0x060019F3 RID: 6643 RVA: 0x000A88D0 File Offset: 0x000A6AD0

@@ -26,14 +26,14 @@ namespace Everglow.Ocean.Tiles.Ocean
 			TileObjectData.addTile((int)base.Type);
 			this.DustType = 7;
 			this.disableSmartCursor/* tModPorter Note: Removed. Use TileID.Sets.DisableSmartCursor instead */ = true;
-			LocalizedText modTranslation = base.CreateMapEntryName(null);
+			LocalizedText modTranslation = base.CreateMapEntryName();
 			// modTranslation.SetDefault("鲨鱼骸骨");
 			base.AddMapEntry(new Color(0, 24, 123), modTranslation);
-			modTranslation.AddTranslation(GameCulture.Chinese, "鲨鱼骸骨");
+			// modTranslation.AddTranslation(GameCulture.Chinese, "鲨鱼骸骨");
 		}
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-			Item.NewItem(i * 16, j * 16, 48, 48, Mod.Find<ModItem>("SharkBone").Type, 1, false, 0, false, false);
+			Item.NewItem(i * 16, j * 16, 48, 48, ModContent.ItemType<Everglow.Ocean.Items.SharkBone>(), 1, false, 0, false, false);
 		}
 	}
 }

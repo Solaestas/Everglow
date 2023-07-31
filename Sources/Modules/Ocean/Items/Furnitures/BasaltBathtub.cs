@@ -25,7 +25,7 @@ namespace Everglow.Ocean.Items.Furnitures
 			base.Item.useStyle = 1;
 			base.Item.value = 0;
 			base.Item.consumable = true;
-			base.Item.createTile = base.Mod.Find<ModTile>("玄武岩浴缸").Type;
+			base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.玄武岩浴缸>();
 		}
 		public override void AddRecipes()
 		{

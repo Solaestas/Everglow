@@ -33,12 +33,12 @@ namespace Everglow.Ocean.Tiles.Ocean
             TileObjectData.newTile.AnchorTop = default(AnchorData);
             TileObjectData.addTile((int)base.Type);
             this.DustType = 51;
-            LocalizedText modTranslation = base.CreateMapEntryName(null);
+            LocalizedText modTranslation = base.CreateMapEntryName();
             // modTranslation.SetDefault("");
             base.AddMapEntry(new Color(160, 180, 143), modTranslation);
             this.MineResist = 3f;
             base.SetStaticDefaults();
-            modTranslation.AddTranslation(GameCulture.Chinese, "");
+            // modTranslation.AddTranslation(GameCulture.Chinese, "");
         }
 
         // Token: 0x06004869 RID: 18537 RVA: 0x000138D5 File Offset: 0x00011AD5
@@ -52,7 +52,7 @@ namespace Everglow.Ocean.Tiles.Ocean
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, base.Mod.Find<ModItem>("LobophylliaCorymbosa").Type);
+            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.LobophylliaCorymbosa>());
         }
         public override void PlaceInWorld(int i, int j, Item item)
         {

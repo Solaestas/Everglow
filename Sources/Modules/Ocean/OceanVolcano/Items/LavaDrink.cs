@@ -11,7 +11,7 @@ namespace Everglow.Ocean.Items.Weapons
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("熔岩畅饮");
+            // base.DisplayName.SetDefault("熔岩畅饮");
             // base.Tooltip.SetDefault("");
             GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }

@@ -15,7 +15,7 @@ namespace Everglow.Ocean.Projectiles.Ocean
     {
         public override void SetStaticDefaults()
         {
-            // // base.DisplayName.SetDefault("火山生成");
+            // base.DisplayName.SetDefault("火山生成");
         }
         public override void SetDefaults()
         {
@@ -44,12 +44,12 @@ namespace Everglow.Ocean.Projectiles.Ocean
             {
                 if (!Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16].HasTile)
                 {
-                    WorldGen.PlaceTile((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16, (ushort)Mod.Find<ModTile>("熔岩心石").Type, true, false, -1, 0);
+                    WorldGen.PlaceTile((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16, (ushort)ModContent.TileType<Everglow.Ocean.Tiles.熔岩心石>(), true, false, -1, 0);
                 }
             }
             else
             {
-                WorldGen.PlaceTile((int)Projectile.position.X / 16 - 1, (int)Projectile.position.Y / 16 - 1, (ushort)Mod.Find<ModTile>("地热").Type, true, false, -1, 0);
+                WorldGen.PlaceTile((int)Projectile.position.X / 16 - 1, (int)Projectile.position.Y / 16 - 1, (ushort)ModContent.TileType<Everglow.Ocean.Tiles.地热>(), true, false, -1, 0);
             }
         }
     }

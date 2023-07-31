@@ -24,8 +24,8 @@ namespace Everglow.Ocean.Items
 		public override void SetStaticDefaults()
 		{
 			// Tooltip.SetDefault("深渊的炽岩，具有灼热的破坏力");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "暗影重锤");
-            base.Tooltip.AddTranslation(GameCulture.Chinese, "深渊的炽岩，具有灼热的破坏力");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "暗影重锤");
+            // base.Tooltip.AddTranslation(GameCulture.Chinese, "深渊的炽岩，具有灼热的破坏力");
             GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
         public static short GetGlowMask = 0;

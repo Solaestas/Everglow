@@ -12,7 +12,7 @@ namespace Everglow.Ocean.Items.Shells
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("唐冠螺");
+            // base.DisplayName.SetDefault("唐冠螺");
             // base.Tooltip.SetDefault("");
 		}
 		public override void SetDefaults()
@@ -28,7 +28,7 @@ namespace Everglow.Ocean.Items.Shells
             base.Item.consumable = true;
             base.Item.useTurn = true;
             base.Item.autoReuse = true;
-            base.Item.createTile = base.Mod.Find<ModTile>("唐冠螺").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.唐冠螺>();
         }
 	}
 }

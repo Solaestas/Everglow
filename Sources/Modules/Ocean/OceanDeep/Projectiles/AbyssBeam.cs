@@ -16,7 +16,7 @@ namespace Everglow.Ocean.OceanDeep.Projectiles
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("深渊剑气");
+            // base.DisplayName.SetDefault("深渊剑气");
 		}
 		public override void SetDefaults()
 		{

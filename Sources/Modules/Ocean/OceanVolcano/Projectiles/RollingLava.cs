@@ -12,7 +12,7 @@ namespace Everglow.Ocean.Projectiles.projectile3
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("熔岩滚石");
+            // base.DisplayName.SetDefault("熔岩滚石");
 		}
         private float num = 0;
         public override void SetDefaults()
@@ -97,7 +97,7 @@ namespace Everglow.Ocean.Projectiles.projectile3
 		}
         public override void PostDraw(Color lightColor)
         {
-            spriteBatch.Draw(base.Mod.GetTexture("Projectiles/projectile3/熔岩滚石Glow"), base.Projectile.Center - Main.screenPosition, null, new Color(255,255,255,0), base.Projectile.rotation, new Vector2(50f, 50f), 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/projectile3/熔岩滚石Glow"), base.Projectile.Center - Main.screenPosition, null, new Color(255,255,255,0), base.Projectile.rotation, new Vector2(50f, 50f), 1f, SpriteEffects.None, 0f);
         }
     }
 }

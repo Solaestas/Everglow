@@ -38,7 +38,7 @@ namespace Everglow.Ocean.Tiles.Ocean
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.addTile((int)base.Type);
-            LocalizedText modTranslation = base.CreateMapEntryName(null);
+            LocalizedText modTranslation = base.CreateMapEntryName();
             // modTranslation.SetDefault("");
             base.AddMapEntry(new Color(36, 100, 100), modTranslation);
 		}
@@ -72,18 +72,18 @@ namespace Everglow.Ocean.Tiles.Ocean
                     Main.tile[i, j].TileFrameX -= 40;
                 }
             }
-            if(Main.tile[i, j + 1].TileType == base.Mod.Find<ModTile>("红色海葵").Type)
+            if(Main.tile[i, j + 1].TileType == ModContent.TileType<Everglow.Ocean.Tiles.红色海葵>())
             {
                 Main.tile[i, j + 1].TileFrameX = Main.tile[i, j].TileFrameX;
             }
-            if (Main.tile[i, j - 1].TileType == base.Mod.Find<ModTile>("红色海葵").Type)
+            if (Main.tile[i, j - 1].TileType == ModContent.TileType<Everglow.Ocean.Tiles.红色海葵>())
             {
                 Main.tile[i, j - 1].TileFrameX = Main.tile[i, j].TileFrameX;
             }
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, base.Mod.Find<ModItem>("RedSeaAnemone").Type);
+            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.RedSeaAnemone>());
         }
     }
 }

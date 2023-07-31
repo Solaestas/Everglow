@@ -17,7 +17,7 @@ namespace Everglow.Ocean.Items.Corals
             base.Item.height = 14;
             base.Item.rare = 0;
             base.Item.scale = 1f;
-            base.Item.createTile = base.Mod.Find<ModTile>("鲨鱼骸骨").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.鲨鱼骸骨>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;

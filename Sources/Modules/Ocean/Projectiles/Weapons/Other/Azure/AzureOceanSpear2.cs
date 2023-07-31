@@ -13,7 +13,7 @@ namespace Everglow.Ocean.Projectiles
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("碧海长矛");
+            // base.DisplayName.SetDefault("碧海长矛");
 		}
         private bool initialization = true;
         private float X;

@@ -16,9 +16,9 @@ namespace Everglow.Ocean.NPCs.OceanCrystal
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("湛海魔晶");
+            // base.DisplayName.SetDefault("湛海魔晶");
 			Main.npcFrameCount[base.NPC.type] = 3;
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "湛海魔晶");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "湛海魔晶");
 		}
         private int a = 0;
         private bool down = true;
@@ -247,10 +247,10 @@ namespace Everglow.Ocean.NPCs.OceanCrystal
                 if(flag2s)
                 {
                     NPC.localAI[0] = 0;
-                    NPC.NewNPC((int)base.NPC.Center.X - 10, (int)base.NPC.Center.Y + 43, base.Mod.Find<ModNPC>("OceanCrystalEye1").Type, 0, 0f, 0f, 0f, 0f, 255);
-                    NPC.NewNPC((int)base.NPC.Center.X + 30, (int)base.NPC.Center.Y + 43, base.Mod.Find<ModNPC>("OceanCrystalEye1").Type, 0, 0f, 0f, 0f, 0f, 255);
-                    NPC.NewNPC((int)base.NPC.Center.X - 25, (int)base.NPC.Center.Y + 45, base.Mod.Find<ModNPC>("OceanCrystalEye1").Type, 0, 0f, 0f, 0f, 0f, 255);
-                    NPC.NewNPC((int)base.NPC.Center.X + 45, (int)base.NPC.Center.Y + 45, base.Mod.Find<ModNPC>("OceanCrystalEye1").Type, 0, 0f, 0f, 0f, 0f, 255);
+                    NPC.NewNPC((int)base.NPC.Center.X - 10, (int)base.NPC.Center.Y + 43, ModContent.NPCType<Everglow.Ocean.NPCs.OceanCrystalEye1>(), 0, 0f, 0f, 0f, 0f, 255);
+                    NPC.NewNPC((int)base.NPC.Center.X + 30, (int)base.NPC.Center.Y + 43, ModContent.NPCType<Everglow.Ocean.NPCs.OceanCrystalEye1>(), 0, 0f, 0f, 0f, 0f, 255);
+                    NPC.NewNPC((int)base.NPC.Center.X - 25, (int)base.NPC.Center.Y + 45, ModContent.NPCType<Everglow.Ocean.NPCs.OceanCrystalEye1>(), 0, 0f, 0f, 0f, 0f, 255);
+                    NPC.NewNPC((int)base.NPC.Center.X + 45, (int)base.NPC.Center.Y + 45, ModContent.NPCType<Everglow.Ocean.NPCs.OceanCrystalEye1>(), 0, 0f, 0f, 0f, 0f, 255);
                     float scaleFactor = (float)(Main.rand.Next(-200, 200) / 100f);
                     Gore.NewGore(base.NPC.Center, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋封印碎块"), 1f);
                     Gore.NewGore(base.NPC.Center, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋封印碎块2"), 1f);
@@ -267,7 +267,7 @@ namespace Everglow.Ocean.NPCs.OceanCrystal
                 if(flag2a)
                 {
                     down = true;
-                    if (NPC.CountNPCS(base.Mod.Find<ModNPC>("OceanCrystalEye1").Type) < 1 && NPC.CountNPCS(base.Mod.Find<ModNPC>("OceanCrystalEye1").Type) < 1)
+                    if (NPC.CountNPCS(ModContent.NPCType<Everglow.Ocean.NPCs.OceanCrystalEye1>()) < 1 && NPC.CountNPCS(ModContent.NPCType<Everglow.Ocean.NPCs.OceanCrystalEye1>()) < 1)
                     {
                         flag2a = false;
                         NPC.dontTakeDamage = false;
@@ -647,41 +647,41 @@ namespace Everglow.Ocean.NPCs.OceanCrystal
                 Vector2 value = new Vector2(base.NPC.Center.X, base.NPC.Center.Y);
                 Vector2 vector = new Vector2((float)(TextureAssets.Npc[base.NPC.type].Value.Width / 2), (float)(TextureAssets.Npc[base.NPC.type].Value.Height / Main.npcFrameCount[base.NPC.type] / 2));
                 Vector2 vector2 = value - Main.screenPosition;
-                vector2 -= new Vector2((float)base.Mod.GetTexture("NPCs/OceanCrystal/海洋封印Glow").Width, (float)(base.Mod.GetTexture("NPCs/OceanCrystal/海洋封印Glow").Height / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
+                vector2 -= new Vector2((float)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/OceanCrystal/海洋封印Glow").Width(), (float)(ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/OceanCrystal/海洋封印Glow").Height() / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
                 vector2 += vector * 1f + new Vector2(0f, 4f + base.NPC.gfxOffY);
                 Color color = Utils.MultiplyRGBA(new Color(297 - base.NPC.alpha, 297 - base.NPC.alpha, 297 - base.NPC.alpha, 0), Color.Blue);
-                Main.spriteBatch.Draw(base.Mod.GetTexture("NPCs/OceanCrystal/海洋封印Glow"), vector2, new Rectangle?(base.NPC.frame), color, base.NPC.rotation, vector, 1f, effects, 0f);
+                Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/OceanCrystal/海洋封印Glow"), vector2, new Rectangle?(base.NPC.frame), color, base.NPC.rotation, vector, 1f, effects, 0f);
             }
-            //Main.spriteBatch.Draw(base.mod.GetTexture("NPCs/OceanCrystal/海洋封印眼睛"), vector2, new Rectangle(0, 0, 10, 10), new Color(100, 100, 100, 0), base.npc.rotation, vector, 1f, effects, 0f);
+            //Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/OceanCrystal/海洋封印眼睛"), vector2, new Rectangle(0, 0, 10, 10), new Color(100, 100, 100, 0), base.npc.rotation, vector, 1f, effects, 0f);
         }
         public override void OnKill()
         {
             if (Main.expertMode)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("OceanCrystalTreasureBag").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.OceanCrystalTreasureBag>(), 1, false, 0, false, false);
                 return;
             }
             else
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("Aquamarine").Type, Main.rand.Next(Main.rand.Next(14, 75), 80), false, 0, false, false);
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("MysteriesPearl").Type, Main.rand.Next(Main.rand.Next(10,20), 40), false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.Aquamarine>(), Main.rand.Next(Main.rand.Next(14, 75), 80), false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.MysteriesPearl>(), Main.rand.Next(Main.rand.Next(10,20), 40), false, 0, false, false);
                 int type = 0;
                 switch (Main.rand.Next(1, 6))
                 {
                     case 1:
-                        type = base.Mod.Find<ModItem>("OceanBubble").Type;
+                        type = ModContent.ItemType<Everglow.Ocean.Items.OceanBubble>();
                         break;
                     case 2:
-                        type = base.Mod.Find<ModItem>("OceanEverStone").Type;
+                        type = ModContent.ItemType<Everglow.Ocean.Items.OceanEverStone>();
                         break;
                     case 3:
-                        type = base.Mod.Find<ModItem>("OceanCurrentRay").Type;
+                        type = ModContent.ItemType<Everglow.Ocean.Items.OceanCurrentRay>();
                         break;
                     case 4:
-                        type = base.Mod.Find<ModItem>("OceanCrystalClub").Type;
+                        type = ModContent.ItemType<Everglow.Ocean.Items.OceanCrystalClub>();
                         break;
                     case 5:
-                        type = base.Mod.Find<ModItem>("OceanCrystalShield").Type;
+                        type = ModContent.ItemType<Everglow.Ocean.Items.OceanCrystalShield>();
                         break;
                 }
                 Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, type, Main.rand.Next(Main.rand.Next(14, 75), 80), false, 0, false, false);

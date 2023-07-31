@@ -17,7 +17,7 @@ namespace Everglow.Ocean.Items.Furnitures
             Item.height = 64;
             Item.rare = 2;
             Item.scale = 1f;
-            Item.createTile = Mod.Find<ModTile>("玄武岩电梯楼层显示标").Type;
+            Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.玄武岩电梯楼层显示标>();
             Item.useStyle = 1;
             Item.useTurn = true;
             Item.useAnimation = 15;

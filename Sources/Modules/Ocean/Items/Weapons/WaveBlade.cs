@@ -10,8 +10,8 @@ namespace Everglow.Ocean.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "浪花之刃");
-            base.Tooltip.AddTranslation(GameCulture.Chinese, "浪花之刃");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "浪花之刃");
+            // base.Tooltip.AddTranslation(GameCulture.Chinese, "浪花之刃");
         }
         public override void AddRecipes()
         {

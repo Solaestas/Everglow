@@ -20,8 +20,8 @@ namespace Everglow.Ocean.Items.Drawings
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("珊瑚浅滩");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "珊瑚浅滩");
+			// base.DisplayName.SetDefault("珊瑚浅滩");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "珊瑚浅滩");
 		}
 		public override void SetDefaults()
 		{
@@ -36,7 +36,7 @@ namespace Everglow.Ocean.Items.Drawings
 			base.Item.consumable = true;
 			base.Item.value = 50000;
 			base.Item.rare = 1;
-			base.Item.createTile = base.Mod.Find<ModTile>("珊瑚浅滩").Type;
+			base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.珊瑚浅滩>();
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Localization;
@@ -27,12 +27,12 @@ namespace Everglow.Ocean.Tiles.Ocean
 			this.DustType = 183;
 			this.HitSound = 21;
 			this.soundStyle/* tModPorter Note: Removed. Integrate into HitSound */ = 2;
-            this.ItemDrop/* tModPorter Note: Removed. Tiles and walls will drop the item which places them automatically. Use RegisterItemDrop to alter the automatic drop if necessary. */ = base.Mod.Find<ModItem>("OceanGlass").Type;
+            this.RegisterItemDrop(ModContent.ItemType<Everglow.Ocean.Items.OceanGlass>());
 			Main.tileSpelunker[(int)base.Type] = true;
-			LocalizedText modTranslation = base.CreateMapEntryName(null);
+			LocalizedText modTranslation = base.CreateMapEntryName();
 			base.AddMapEntry(new Color(0,115,231), modTranslation);
             // modTranslation.SetDefault("");
-            modTranslation.AddTranslation(GameCulture.Chinese, "");
+            // modTranslation.AddTranslation(GameCulture.Chinese, "");
 		}
 		public override void NearbyEffects(int i, int j, bool closer)
 		{

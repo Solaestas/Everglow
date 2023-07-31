@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,8 +72,8 @@ namespace Everglow.Ocean.Projectiles.Weapons.Other
             bool flag = false;
             if (Projectile.timeLeft == 24)
             {
-                Projectile.NewProjectile(base.Projectile.Center.X, base.Projectile.Center.Y, v.X, v.Y, base.Mod.Find<ModProjectile>("鹿角珊瑚").Type, base.Projectile.damage, base.Projectile.knockBack, Main.myPlayer, Projectile.ai[0] - 1, 0f);
-                Projectile.NewProjectile(base.Projectile.Center.X, base.Projectile.Center.Y, v2.X, v2.Y, base.Mod.Find<ModProjectile>("鹿角珊瑚").Type, base.Projectile.damage, base.Projectile.knockBack, Main.myPlayer, Projectile.ai[0] - 1, 0f);
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), base.Projectile.Center.X, base.Projectile.Center.Y, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.鹿角珊瑚>(), base.Projectile.damage, base.Projectile.knockBack, Main.myPlayer, Projectile.ai[0] - 1, 0f);
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), base.Projectile.Center.X, base.Projectile.Center.Y, v2.X, v2.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.鹿角珊瑚>(), base.Projectile.damage, base.Projectile.knockBack, Main.myPlayer, Projectile.ai[0] - 1, 0f);
                 Projectile.velocity *= 0.1f;
             }
         }
@@ -100,7 +100,7 @@ namespace Everglow.Ocean.Projectiles.Weapons.Other
                 {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                     Color color = Projectile.GetAlpha(lightColor) * (((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length) / 80f * (float)Projectile.timeLeft);
-                    spriteBatch.Draw(base.Mod.GetTexture("Projectiles/紫灰色"), drawPos, new Rectangle(0, frameHeight * Projectile.frame, base.Mod.GetTexture("Projectiles/红色").Width, frameHeight), color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+                    Main.EntitySpriteDraw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/紫灰色"), drawPos, new Rectangle(0, frameHeight * Projectile.frame, ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/红色").Width(), frameHeight), color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
                 }
             }
             else
@@ -109,7 +109,7 @@ namespace Everglow.Ocean.Projectiles.Weapons.Other
                 {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                     Color color = Projectile.GetAlpha(lightColor) * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                    spriteBatch.Draw(base.Mod.GetTexture("Projectiles/紫灰色"), drawPos, new Rectangle(0, frameHeight * Projectile.frame, base.Mod.GetTexture("Projectiles/红色").Width, frameHeight), color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+                    Main.EntitySpriteDraw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/紫灰色"), drawPos, new Rectangle(0, frameHeight * Projectile.frame, ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/红色").Width(), frameHeight), color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
                 }
             }
             return true;

@@ -16,7 +16,7 @@ namespace Everglow.Ocean.Projectiles.Ocean
 		// Token: 0x06001DC0 RID: 7616 RVA: 0x0000C2EA File Offset: 0x0000A4EA
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("珊瑚");
+            // base.DisplayName.SetDefault("珊瑚");
 		}
 
 		// Token: 0x06001DC1 RID: 7617 RVA: 0x0017F224 File Offset: 0x0017D424
@@ -48,7 +48,7 @@ namespace Everglow.Ocean.Projectiles.Ocean
         public override void Kill(int timeLeft)
         {
 
-                WorldGen.PlaceTile((int)Projectile.position.X / 16 - 4, (int)Projectile.position.Y / 16 - 5, (ushort)Mod.Find<ModTile>("巨大柳珊瑚").Type, true, false, -1, 0);
+                WorldGen.PlaceTile((int)Projectile.position.X / 16 - 4, (int)Projectile.position.Y / 16 - 5, (ushort)ModContent.TileType<Everglow.Ocean.Tiles.巨大柳珊瑚>(), true, false, -1, 0);
         }
     }
 }

@@ -8,10 +8,10 @@ namespace Everglow.Ocean.Items
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("Turquoise Gem Lock");
+			// base.DisplayName.SetDefault("Turquoise Gem Lock");
 			// base.Tooltip.SetDefault("Right click to place or remove Large Turquoises");
-			// base.// DisplayName.AddTranslation(GameCulture.English, "橄榄石宝石锁");
-			base.Tooltip.AddTranslation(GameCulture.English, "右键镶嵌或取下大橄榄石宝石锁");
+			// base.DisplayName.AddTranslation(GameCulture.English, "橄榄石宝石锁");
+			// base.Tooltip.AddTranslation(GameCulture.English, "右键镶嵌或取下大橄榄石宝石锁");
 		}
 		public override void SetDefaults()
 		{
@@ -24,7 +24,7 @@ namespace Everglow.Ocean.Items
 			base.Item.useTime = 10;
 			base.Item.useStyle = 1;
 			base.Item.consumable = true;
-			base.Item.createTile = base.Mod.Find<ModTile>("橄榄石宝石锁s").Type;
+			base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.橄榄石宝石锁s>();
 			base.Item.flame = true;
 			base.Item.value = 500;
 		}

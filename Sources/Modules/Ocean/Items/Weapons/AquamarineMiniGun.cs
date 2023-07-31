@@ -19,10 +19,10 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("");
+			// base.DisplayName.SetDefault("");
 			// base.Tooltip.SetDefault("");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石迷你机枪");
-			base.Tooltip.AddTranslation(GameCulture.Chinese, "这东西太贵重了,只好做成这个尺寸了\n 66%不消耗弹药");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石迷你机枪");
+			// base.Tooltip.AddTranslation(GameCulture.Chinese, "这东西太贵重了,只好做成这个尺寸了\n 66%不消耗弹药");
 		}
 		public override void SetDefaults()
 		{

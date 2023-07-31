@@ -14,7 +14,7 @@ namespace Everglow.Ocean.Projectiles.Ocean
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("珊瑚");
+            // base.DisplayName.SetDefault("珊瑚");
 		}
 		public override void SetDefaults()
 		{
@@ -42,7 +42,7 @@ namespace Everglow.Ocean.Projectiles.Ocean
         {
             if (Main.tile[(int)Projectile.position.X / 16 - 1, (int)Projectile.position.Y / 16 + 1].TileType == 396 && Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1].TileType == 396 && Main.tile[(int)Projectile.position.X / 16 + 1, (int)Projectile.position.Y / 16 + 1].TileType == 396 && Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 2].TileType <= 396 && Main.tile[(int)Projectile.position.X / 16 - 1, (int)Projectile.position.Y / 16 - 1].TileType <= 396)
             {
-                WorldGen.PlaceTile((int)Projectile.position.X / 16 - 1, (int)Projectile.position.Y / 16 - 1, (ushort)Mod.Find<ModTile>("伞房叶状珊瑚").Type, true, false, -1, 0);
+                WorldGen.PlaceTile((int)Projectile.position.X / 16 - 1, (int)Projectile.position.Y / 16 - 1, (ushort)ModContent.TileType<Everglow.Ocean.Tiles.伞房叶状珊瑚>(), true, false, -1, 0);
             }
         }
     }

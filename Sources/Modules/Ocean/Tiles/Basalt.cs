@@ -1,4 +1,4 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 
 namespace Everglow.Ocean.Tiles
 {
@@ -13,14 +13,14 @@ namespace Everglow.Ocean.Tiles
             Main.tileShine2[(int)base.Type] = false;
             DustType = 6;
             MinPick = 270;
-            SoundType = 21;
-            SoundStyle = 2;
-            ItemDrop/* tModPorter Note: Removed. Tiles and walls will drop the item which places them automatically. Use RegisterItemDrop to alter the automatic drop if necessary. */ = ModContent.ItemType<Items.Basalt>();
+            HitSound = SoundID.Tink;
+            // SoundStyle = 2;
+            RegisterItemDrop(ModContent.ItemType<Items.Basalt>());
             Main.tileSpelunker[(int)base.Type] = true;
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
+            var modTranslation = base.CreateMapEntryName();
             AddMapEntry(new Color(28, 28, 28), modTranslation);
-            modTranslation.SetDefault("");
-            modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "");
+            // modTranslation.SetDefault("");
+            // modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "");
         }
         public override bool CanExplode(int i, int j)
         {

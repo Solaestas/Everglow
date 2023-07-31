@@ -11,7 +11,7 @@ namespace Everglow.Ocean.NPCs.VolCano
 	{
         public override void SetStaticDefaults()
         {
-            // // base.DisplayName.SetDefault("燃烬飞龙");
+            // base.DisplayName.SetDefault("燃烬飞龙");
             Main.npcFrameCount[base.NPC.type] = 5;
         }
 		public override void SetDefaults()
@@ -69,9 +69,9 @@ namespace Everglow.Ocean.NPCs.VolCano
 		{
             if(Main.rand.Next(100) == 1)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, Mod.Find<ModItem>("MeltingStaff").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.MeltingStaff>(), 1, false, 0, false, false);
             }
-            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, Mod.Find<ModItem>("LavaStone").Type, Main.rand.Next(1, 4), false, 0, false, false);
+            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.LavaStone>(), Main.rand.Next(1, 4), false, 0, false, false);
             return true;
 		}
 		public override void HitEffect(NPC.HitInfo hit)

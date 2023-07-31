@@ -17,7 +17,7 @@ namespace Everglow.Ocean.Items.Gems
         // Token: 0x0600462B RID: 17963 RVA: 0x0027BBA8 File Offset: 0x00279DA8
         public override void SetDefaults()
         {
-            base.Item.createTile = base.Mod.Find<ModTile>("橄榄石矿").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.橄榄石矿>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;

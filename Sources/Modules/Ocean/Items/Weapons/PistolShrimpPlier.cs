@@ -27,10 +27,10 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		// Token: 0x06001381 RID: 4993 RVA: 0x0008E404 File Offset: 0x0008C604
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault(".");
+			// base.DisplayName.SetDefault(".");
 			// base.Tooltip.SetDefault(".");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "爆音虾钳");
-			base.Tooltip.AddTranslation(GameCulture.Chinese, "打碎敌人的耳膜,放出200分贝的音波\n静止的敌人高概率闪避,移动的敌人更容易被击中\n距离越近命中率越高");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "爆音虾钳");
+			// base.Tooltip.AddTranslation(GameCulture.Chinese, "打碎敌人的耳膜,放出200分贝的音波\n静止的敌人高概率闪避,移动的敌人更容易被击中\n距离越近命中率越高");
 		}
 
 		// Token: 0x06001382 RID: 4994 RVA: 0x0008E45C File Offset: 0x0008C65C

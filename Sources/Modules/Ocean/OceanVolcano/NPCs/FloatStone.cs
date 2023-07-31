@@ -16,8 +16,8 @@ namespace Everglow.Ocean.NPCs
 		private int num2;
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("火山浮石");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "火山浮石");
+            // base.DisplayName.SetDefault("火山浮石");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "火山浮石");
 		}
 		public override void SetDefaults()
 		{
@@ -85,10 +85,10 @@ namespace Everglow.Ocean.NPCs
             Vector2 value = new Vector2(base.NPC.Center.X, base.NPC.Center.Y);
             Vector2 vector = new Vector2((float)(TextureAssets.Npc[base.NPC.type].Value.Width / 2), (float)(TextureAssets.Npc[base.NPC.type].Value.Height / Main.npcFrameCount[base.NPC.type] / 2));
             Vector2 vector2 = value - Main.screenPosition;
-            vector2 -= new Vector2((float)base.Mod.GetTexture("NPCs/火山浮石发光部分").Width, (float)(base.Mod.GetTexture("NPCs/火山浮石发光部分").Height / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
+            vector2 -= new Vector2((float)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/火山浮石发光部分").Width(), (float)(ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/火山浮石发光部分").Height() / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
             vector2 += vector * 1f + new Vector2(0f, 4f + base.NPC.gfxOffY);
             Color color = Utils.MultiplyRGBA(new Color(97 - base.NPC.alpha, 97 - base.NPC.alpha, 97 - base.NPC.alpha, 0), Color.White);
-            Main.spriteBatch.Draw(base.Mod.GetTexture("NPCs/火山浮石发光部分"), vector2, new Rectangle?(base.NPC.frame), color, base.NPC.rotation, vector, 1f, effects, 0f);
+            Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/火山浮石发光部分"), vector2, new Rectangle?(base.NPC.frame), color, base.NPC.rotation, vector, 1f, effects, 0f);
         }
 		public override void HitEffect(NPC.HitInfo hit)
         {
@@ -127,9 +127,9 @@ namespace Everglow.Ocean.NPCs
         {
             if (Main.rand.Next(100) == 1)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, Mod.Find<ModItem>("FlameEdge").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.FlameEdge>(), 1, false, 0, false, false);
             }
-            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, Mod.Find<ModItem>("LavaStone").Type, Main.rand.Next(1, 4), false, 0, false, false);
+            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.LavaStone>(), Main.rand.Next(1, 4), false, 0, false, false);
         }
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 		{

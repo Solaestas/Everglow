@@ -14,8 +14,8 @@ namespace Everglow.Ocean.NPCs
 		// Token: 0x06001475 RID: 5237 RVA: 0x00082F6 File Offset: 0x00064F6
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("Stone");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蛇尾");
+            // base.DisplayName.SetDefault("Stone");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蛇尾");
 		}
 		private bool canDespawn;
 		private float M = 0.04f;
@@ -43,7 +43,7 @@ namespace Everglow.Ocean.NPCs
             }
             if (spawnInfo.Player.GetModPlayer<OceanContentPlayer>().ZoneDeepocean && spawnInfo.Water)
             {
-                if (NPC.CountNPCS(Mod.Find<ModNPC>("海蛇尾").Type) > 0)
+                if (NPC.CountNPCS(ModContent.NPCType<Everglow.Ocean.NPCs.海蛇尾>()) > 0)
                 {
                     return 0f;
                 }
@@ -164,11 +164,11 @@ namespace Everglow.Ocean.NPCs
         {
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("BladeScale").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.BladeScale>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("OceanDustCore").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.OceanDustCore>(), 1, false, 0, false, false);
             }
         }
     }

@@ -10,8 +10,8 @@ namespace Everglow.Ocean.Items
 		// Token: 0x06001CB0 RID: 7344 RVA: 0x00009BBE File Offset: 0x00007DBE
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("Waveblue Block");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海洋石砖");
+			// base.DisplayName.SetDefault("Waveblue Block");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海洋石砖");
 		}
 
 		// Token: 0x06001CB1 RID: 7345 RVA: 0x000B5F1C File Offset: 0x000B411C
@@ -28,7 +28,7 @@ namespace Everglow.Ocean.Items
 			base.Item.useTime = 10;
 			base.Item.useStyle = 1;
 			base.Item.consumable = true;
-            base.Item.createTile = base.Mod.Find<ModTile>("海洋石砖").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.海洋石砖>();
 		}
 
 		// Token: 0x06001CB2 RID: 7346 RVA: 0x000B5FD0 File Offset: 0x000B41D0

@@ -9,7 +9,7 @@ namespace Everglow.Ocean.Items.Gems
     {
         public override void SetStaticDefaults()
         {
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石");
             // Tooltip.SetDefault("非常好看的宝石");
         }
         public override void SetDefaults()

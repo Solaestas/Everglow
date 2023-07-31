@@ -34,16 +34,16 @@ namespace Everglow.Ocean.Tiles.Ocean
             TileObjectData.newTile.AnchorTop = default(AnchorData);
             TileObjectData.addTile((int)base.Type);
 			this.DustType = 123;
-            LocalizedText modTranslation = base.CreateMapEntryName(null);
+            LocalizedText modTranslation = base.CreateMapEntryName();
             base.AddMapEntry(new Color(193, 131, 139), modTranslation);
             // modTranslation.SetDefault("");
             this.MineResist = 3f;
 			base.SetStaticDefaults();
-			modTranslation.AddTranslation(GameCulture.Chinese, "");
+			// modTranslation.AddTranslation(GameCulture.Chinese, "");
 		}
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, base.Mod.Find<ModItem>("HugeAlcyonarian").Type);
+            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.HugeAlcyonarian>());
         }
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {

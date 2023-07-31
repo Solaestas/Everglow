@@ -1,4 +1,4 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 
 namespace Everglow.Ocean.Tiles
 {
@@ -15,13 +15,13 @@ namespace Everglow.Ocean.Tiles
             DustType = DustID.BorealWood;
             MinPick = 200;
             SoundType = SoundID.Grass;
-            SoundStyle = 2;
-            ItemDrop/* tModPorter Note: Removed. Tiles and walls will drop the item which places them automatically. Use RegisterItemDrop to alter the automatic drop if necessary. */ = ModContent.ItemType<Items.Ores.OceanBlueOre>();
+            // SoundStyle = 2;
+            RegisterItemDrop(ModContent.ItemType<Items.Ores.OceanBlueOre>());
             Main.tileSpelunker[(int)base.Type] = true;
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
+            var modTranslation = base.CreateMapEntryName();
             AddMapEntry(new Color(35, 126, 168), modTranslation);
-            modTranslation.SetDefault("Ocean Blue Ore");
-            modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "沧流矿");
+            // modTranslation.SetDefault("Ocean Blue Ore");
+            // modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "沧流矿");
         }
         public override bool CanExplode(int i, int j)
         {

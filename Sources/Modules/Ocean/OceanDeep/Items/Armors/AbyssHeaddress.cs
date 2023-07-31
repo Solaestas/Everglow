@@ -13,10 +13,10 @@ namespace Everglow.Ocean.Items.Armors
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("");
+			// base.DisplayName.SetDefault("");
 			// base.Tooltip.SetDefault("");
-			// base.// DisplayName.AddTranslation(GameCulture.Chinese, "渊海头饰");
-			base.Tooltip.AddTranslation(GameCulture.Chinese, "魔法伤害和暴击各增加18%,法力上限增加120");
+			// base.DisplayName.AddTranslation(GameCulture.Chinese, "渊海头饰");
+			// base.Tooltip.AddTranslation(GameCulture.Chinese, "魔法伤害和暴击各增加18%,法力上限增加120");
 		}
 		public override void SetDefaults()
 		{
@@ -42,7 +42,7 @@ namespace Everglow.Ocean.Items.Armors
         }
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == base.Mod.Find<ModItem>("AbyssBreastplate").Type && legs.type == base.Mod.Find<ModItem>("AbyssLegging").Type;
+            return body.type == ModContent.ItemType<Everglow.Ocean.Items.AbyssBreastplate>() && legs.type == ModContent.ItemType<Everglow.Ocean.Items.AbyssLegging>();
         }
         public override void ArmorSetShadows(Player player)
         {

@@ -20,10 +20,10 @@ namespace Everglow.Ocean.Tiles
             TileObjectData.newTile.CoordinateWidth = 36;
             TileObjectData.addTile((int)base.Type);
             DustType = 51;
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
+            var modTranslation = base.CreateMapEntryName();
             AddMapEntry(new Color(200, 158, 180), modTranslation);
-            modTranslation.SetDefault("Staghorn Coral");
-            modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "花鹿角珊瑚");
+            // modTranslation.SetDefault("Staghorn Coral");
+            // modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "花鹿角珊瑚");
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
         {

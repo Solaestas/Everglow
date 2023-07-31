@@ -19,7 +19,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
     {
         public override void SetStaticDefaults()
         {
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "粉红伊人");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "粉红伊人");
             // Tooltip.SetDefault("射出正二十面体结晶");
         }
         public override void SetDefaults()
@@ -48,7 +48,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
             recipe.AddIngredient(2436, 7);
             recipe.AddIngredient(2438, 7);
             recipe.AddIngredient(3741, 12);
-            recipe.AddIngredient(Mod.Find<ModItem>("VoidBubble").Type, 15);
+            recipe.AddIngredient(ModContent.ItemType<Everglow.Ocean.Items.VoidBubble>(), 15);
             recipe.requiredTile[0] = 412;
             recipe.Register();
         }

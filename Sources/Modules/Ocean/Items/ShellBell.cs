@@ -12,7 +12,7 @@ namespace Everglow.Ocean.Items.Shells
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("贝壳风铃");
+            // base.DisplayName.SetDefault("贝壳风铃");
             // base.Tooltip.SetDefault("");
 		}
 		public override void SetDefaults()
@@ -30,7 +30,7 @@ namespace Everglow.Ocean.Items.Shells
             base.Item.consumable = true;
             base.Item.useTurn = true;
             base.Item.autoReuse = true;
-            base.Item.createTile = base.Mod.Find<ModTile>("贝壳风铃").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.贝壳风铃>();
         }
 	}
 }

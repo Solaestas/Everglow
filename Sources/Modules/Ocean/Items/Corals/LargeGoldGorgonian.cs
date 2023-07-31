@@ -17,7 +17,7 @@ namespace Everglow.Ocean.Items.Corals
             base.Item.height = 92;
             base.Item.rare = 2;
             base.Item.scale = 1f;
-            base.Item.createTile = base.Mod.Find<ModTile>("大金柳珊瑚").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.大金柳珊瑚>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;

@@ -12,9 +12,9 @@ namespace Everglow.Ocean.NPCs
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("枪虾");
+			// base.DisplayName.SetDefault("枪虾");
 			Main.npcFrameCount[base.NPC.type] = 4;
-			// base.// DisplayName.AddTranslation(GameCulture.Chinese, "枪虾");
+			// base.DisplayName.AddTranslation(GameCulture.Chinese, "枪虾");
 		}
 		public override void SetDefaults()
 		{
@@ -30,7 +30,7 @@ namespace Everglow.Ocean.NPCs
 			base.NPC.DeathSound = SoundID.NPCDeath1;
 			base.NPC.buffImmune[189] = true;
 			this.Banner = base.NPC.type;
-			this.BannerItem = base.Mod.Find<ModItem>("BombshrimpBanner").Type;
+			this.BannerItem = ModContent.ItemType<Everglow.Ocean.Items.BombshrimpBanner>();
 		}
 		public override void AI()
 		{
@@ -118,15 +118,15 @@ namespace Everglow.Ocean.NPCs
 		{
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("VoidBubble").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.VoidBubble>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("BladeScale").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.BladeScale>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(150) == 0 && Main.hardMode)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("PistolShrimpPlier").Type, 1, false, 0, false, false);
+                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.PistolShrimpPlier>(), 1, false, 0, false, false);
 			}
 		}
 	}

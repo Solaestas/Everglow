@@ -10,7 +10,7 @@ namespace Everglow.Ocean.OceanVolcano.Items
         public override void SetStaticDefaults()
         {
             // Tooltip.SetDefault("");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "石膏");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "石膏");
         }
         public override void SetDefaults()
         {
@@ -18,7 +18,7 @@ namespace Everglow.Ocean.OceanVolcano.Items
             base.Item.height = 40;
             base.Item.rare = 8;
             base.Item.scale = 1f;
-            base.Item.createTile = base.Mod.Find<ModTile>("Gypsum").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.Gypsum>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;

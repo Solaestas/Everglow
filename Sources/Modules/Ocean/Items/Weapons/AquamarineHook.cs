@@ -10,8 +10,8 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("海蓝宝石钩");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石钩");
+            // base.DisplayName.SetDefault("海蓝宝石钩");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石钩");
 		}
 		public override void SetDefaults()
 		{

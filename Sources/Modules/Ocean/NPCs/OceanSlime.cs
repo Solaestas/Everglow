@@ -11,9 +11,9 @@ namespace Everglow.Ocean.NPCs
     {
         public override void SetStaticDefaults()
         {
-            // // base.DisplayName.SetDefault("Ocean Slime");
+            // base.DisplayName.SetDefault("Ocean Slime");
             Main.npcFrameCount[base.NPC.type] = 2;
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝史莱姆");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝史莱姆");
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
@@ -47,7 +47,7 @@ namespace Everglow.Ocean.NPCs
             base.NPC.HitSound = SoundID.NPCHit1;
             base.NPC.DeathSound = SoundID.NPCDeath1;
             this.Banner = base.NPC.type;
-            this.BannerItem = base.Mod.Find<ModItem>("OceanSlimeBanner").Type;
+            this.BannerItem = ModContent.ItemType<Everglow.Ocean.Items.OceanSlimeBanner>();
         }
         public override void HitEffect(NPC.HitInfo hit)
         {
@@ -69,7 +69,7 @@ namespace Everglow.Ocean.NPCs
         }
         public override void OnKill()
         {
-            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("OceanBlueOre").Type, Main.rand.Next(7, 13), false, 0, false, false);
+            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.OceanBlueOre>(), Main.rand.Next(7, 13), false, 0, false, false);
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {

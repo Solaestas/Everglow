@@ -59,7 +59,7 @@ namespace Everglow.Ocean.Items.Weapons
             }
             //if (Main.rand.Next(5) == 1)
             //{
-            //    Projectile.NewProjectile(target.Center.X, target.Center.Y, 2f, 2f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.>(), damageDone * 3, hit.Knockback, player.whoAmI, 0f, 0f);
+            //   Projectile.NewProjectile(target.Center.X, target.Center.Y, 2f, 2f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.>(), damageDone * 3, hit.Knockback, player.whoAmI, 0f, 0f);
             //}
             target.AddBuff(24, 600);
         }

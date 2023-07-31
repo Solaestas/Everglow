@@ -131,7 +131,7 @@ namespace Everglow.Ocean.Projectiles.projectile4
                 {
                     if (Projectile.oldPos[i] == Vector2.Zero) break;
                     //Main.spriteBatch.Draw(Main.magicPixel, projectile.oldPos[i] - Main.screenPosition,
-                    //    new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0.5f, 0.5f), 5f, SpriteEffects.None, 0f);
+                    //   new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0.5f, 0.5f), 5f, SpriteEffects.None, 0f);
 
                     int width = 92;
                     var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
@@ -175,7 +175,7 @@ namespace Everglow.Ocean.Projectiles.projectile4
                 {
                     if (Projectile.oldPos[i] == Vector2.Zero) break;
                     //Main.spriteBatch.Draw(Main.magicPixel, projectile.oldPos[i] - Main.screenPosition,
-                    //    new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0.5f, 0.5f), 5f, SpriteEffects.None, 0f);
+                    //   new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0.5f, 0.5f), 5f, SpriteEffects.None, 0f);
 
                     int width = 92;
                     var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];

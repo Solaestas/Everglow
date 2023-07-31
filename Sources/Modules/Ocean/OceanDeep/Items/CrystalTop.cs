@@ -28,7 +28,7 @@ namespace Everglow.Ocean.Items.UnderSea
             base.Item.height = 40;//高
             base.Item.rare = 8;//品质
             base.Item.scale = 1f;//大小
-            base.Item.createTile = base.Mod.Find<ModTile>("CrystalTop").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.CrystalTop>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;

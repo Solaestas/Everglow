@@ -27,7 +27,7 @@ namespace Everglow.Ocean.Items
         public override void SetDefaults()
         {
             Item.glowMask = GetGlowMask;
-            base.Item.createTile = base.Mod.Find<ModTile>("MeltingLava").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.MeltingLava>();
 			base.Item.useStyle = 1;
 			base.Item.useTurn = true;
             base.Item.useAnimation = 15;

@@ -13,7 +13,7 @@ namespace Everglow.Ocean.OceanDeep.Projectiles
 		// Token: 0x06001C81 RID: 7297 RVA: 0x0000BBD6 File Offset: 0x00009DD6
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("渊海爆炸");
+            // base.DisplayName.SetDefault("渊海爆炸");
             Main.projFrames[Projectile.type] = 1; /*【帧数为6】对应的贴图也要画6帧哦*/
 		}
 

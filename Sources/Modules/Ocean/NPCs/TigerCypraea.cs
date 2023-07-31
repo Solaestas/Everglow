@@ -11,9 +11,9 @@ namespace Everglow.Ocean.NPCs
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("Shell");
+			// base.DisplayName.SetDefault("Shell");
 			Main.npcFrameCount[base.NPC.type] = 6;
-			// base.// DisplayName.AddTranslation(GameCulture.Chinese, "黑星宝螺");
+			// base.DisplayName.AddTranslation(GameCulture.Chinese, "黑星宝螺");
 		}
 		public override void SetDefaults()
 		{
@@ -48,7 +48,7 @@ namespace Everglow.Ocean.NPCs
         }
         public override void OnKill()
 		{
-			Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, base.Mod.Find<ModItem>("Shell3").Type, 1, false, 0, false, false);
+			Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.Shell3>(), 1, false, 0, false, false);
 		}
 	}
 }

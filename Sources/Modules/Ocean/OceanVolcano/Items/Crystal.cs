@@ -28,7 +28,7 @@ namespace Everglow.Ocean.OceanVolcano.Items
             base.Item.height = 40;//高
             base.Item.rare = 8;//品质
             base.Item.scale = 1f;//大小
-            base.Item.createTile = base.Mod.Find<ModTile>("Crystal").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.Crystal>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;

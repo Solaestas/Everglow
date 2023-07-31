@@ -15,9 +15,9 @@ namespace Everglow.Ocean.NPCs.OceanCrystal
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("海洋封印之眼");
+            // base.DisplayName.SetDefault("海洋封印之眼");
 			Main.npcFrameCount[base.NPC.type] = 1;
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海洋封印之眼");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海洋封印之眼");
 		}
         private int a = 0;
         private bool down = true;
@@ -143,11 +143,11 @@ namespace Everglow.Ocean.NPCs.OceanCrystal
             Vector2 value = new Vector2(base.NPC.Center.X, base.NPC.Center.Y);
             Vector2 vector = new Vector2((float)(TextureAssets.Npc[base.NPC.type].Value.Width / 2), (float)(TextureAssets.Npc[base.NPC.type].Value.Height / Main.npcFrameCount[base.NPC.type] / 2));
             Vector2 vector2 = value - Main.screenPosition;
-            vector2 -= new Vector2((float)base.Mod.GetTexture("NPCs/OceanCrystal/海洋封印之眼2Glow").Width, (float)(base.Mod.GetTexture("NPCs/OceanCrystal/海洋封印之眼2Glow").Height / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
+            vector2 -= new Vector2((float)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/OceanCrystal/海洋封印之眼2Glow").Width(), (float)(ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/OceanCrystal/海洋封印之眼2Glow").Height() / Main.npcFrameCount[base.NPC.type])) * 1f / 2f;
             vector2 += vector * 1f + new Vector2(0f, 4f + base.NPC.gfxOffY);
             Color color = Utils.MultiplyRGBA(new Color(297 - base.NPC.alpha, 297 - base.NPC.alpha, 297 - base.NPC.alpha, 0), Color.Blue);
-            Main.spriteBatch.Draw(base.Mod.GetTexture("NPCs/OceanCrystal/海洋封印之眼2Glow"), vector2, new Rectangle?(base.NPC.frame), color, z, vector, 1f, effects, 0f);
-            Main.spriteBatch.Draw(base.Mod.GetTexture("NPCs/OceanCrystal/海洋封印之眼2Glow"), vector2, new Rectangle?(base.NPC.frame), color, -z, vector, 1f, effects, 0f);
+            Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/OceanCrystal/海洋封印之眼2Glow"), vector2, new Rectangle?(base.NPC.frame), color, z, vector, 1f, effects, 0f);
+            Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/NPCs/OceanCrystal/海洋封印之眼2Glow"), vector2, new Rectangle?(base.NPC.frame), color, -z, vector, 1f, effects, 0f);
         }
         public override bool CheckActive()
 		{

@@ -12,10 +12,10 @@ namespace Everglow.Ocean.Items.Pickaxes
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("海蓝宝石镐");
+            // base.DisplayName.SetDefault("海蓝宝石镐");
 			// base.Tooltip.SetDefault("");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石镐");
-			base.Tooltip.AddTranslation(GameCulture.Chinese, "");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石镐");
+			// base.Tooltip.AddTranslation(GameCulture.Chinese, "");
 		}
 		public override void SetDefaults()
 		{

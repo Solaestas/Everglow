@@ -9,10 +9,10 @@ namespace Everglow.Ocean.Items.Gems
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("大海蓝宝石");
+            // base.DisplayName.SetDefault("大海蓝宝石");
 			// base.Tooltip.SetDefault("For Capture the Gem. It drops when you die");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "大海蓝宝石");
-			base.Tooltip.AddTranslation(GameCulture.Chinese, "适合夺取宝石。你死后掉落");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "大海蓝宝石");
+			// base.Tooltip.AddTranslation(GameCulture.Chinese, "适合夺取宝石。你死后掉落");
 		}
 		public override void SetDefaults()
 		{

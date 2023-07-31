@@ -19,7 +19,7 @@ namespace Everglow.Ocean.Projectiles.projectile3
     {
         public override void SetStaticDefaults()
         {
-            // // base.DisplayName.SetDefault("波动");
+            // base.DisplayName.SetDefault("波动");
         }
 
         public override void SetDefaults()

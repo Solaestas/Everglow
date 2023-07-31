@@ -11,7 +11,7 @@ namespace Everglow.Ocean.Projectiles.projectile2
 	{
 		public override void SetStaticDefaults()
 		{
-            // // base.DisplayName.SetDefault("海洋射线");
+            // base.DisplayName.SetDefault("海洋射线");
 		}
 		public override void SetDefaults()
 		{

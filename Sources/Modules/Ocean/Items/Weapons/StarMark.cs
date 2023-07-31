@@ -19,7 +19,7 @@ namespace Everglow.Ocean.Items.Weapons
             ItemID.Sets.GamepadExtraRange[Type] = 15;
             ItemID.Sets.GamepadSmartQuickReach[Type] = true;
             Main.RegisterItemAnimation(Type, new DrawAnimationVertical(4, 4));
-            //base.Tooltip.AddTranslation(GameCulture.Chinese, "骸骨制成");
+            //// base.Tooltip.AddTranslation(GameCulture.Chinese, "骸骨制成");
         }
         public override void SetDefaults()
         {

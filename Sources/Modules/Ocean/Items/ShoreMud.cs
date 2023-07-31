@@ -29,7 +29,7 @@ namespace Everglow.Ocean.Items.Shore
             base.Item.height = 40;
             base.Item.rare = 0;
             base.Item.scale = 1f;
-            base.Item.createTile = base.Mod.Find<ModTile>("ShoreMud").Type;
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.ShoreMud>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;

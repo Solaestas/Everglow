@@ -21,9 +21,9 @@ namespace Everglow.Ocean.Tiles
             TileObjectData.newTile.CoordinateWidth = 54;
             TileObjectData.addTile((int)base.Type);
             DustType = 59;
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
-            modTranslation.SetDefault("Marble Cono");
-            modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "大理石芋螺");
+            var modTranslation = base.CreateMapEntryName();
+            // modTranslation.SetDefault("Marble Cono");
+            // modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "大理石芋螺");
             base.AddMapEntry(new Color(114, 92, 82), modTranslation);
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)

@@ -19,10 +19,10 @@ namespace Everglow.Ocean.OceanVolcano.Items
 	{
 		public override void SetStaticDefaults()
 		{
-			// // base.DisplayName.SetDefault("");
+			// base.DisplayName.SetDefault("");
 			// base.Tooltip.SetDefault("");
-            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "灼烧之怒");
-			base.Tooltip.AddTranslation(GameCulture.Chinese, "");
+            // base.DisplayName.AddTranslation(GameCulture.Chinese, "灼烧之怒");
+			// base.Tooltip.AddTranslation(GameCulture.Chinese, "");
             GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
         public static short GetGlowMask = 0;

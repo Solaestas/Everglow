@@ -23,9 +23,9 @@ namespace Everglow.Ocean.Tiles.Town
 
             DustType = DustID.Gold;
             AdjTiles = new int[] { Type };
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
-            modTranslation.SetDefault("Royal City Pylon");
-            modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "皇城晶塔");
+            var modTranslation = base.CreateMapEntryName();
+            // modTranslation.SetDefault("Royal City Pylon");
+            // modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "皇城晶塔");
             base.AddMapEntry(new Color(114, 92, 82), modTranslation);
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
