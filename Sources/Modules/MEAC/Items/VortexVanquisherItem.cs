@@ -1,4 +1,4 @@
-﻿using Everglow.MEAC.Projectiles;
+using Everglow.MEAC.Projectiles;
 using ReLogic.Graphics;
 using Terraria.GameContent;
 
@@ -28,7 +28,7 @@ public class VortexVanquisherItem : ModItem
 	private int CoolTimeForE = 0;
 	public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
 	{
-		var slotSize = new Vector2(52f, 52f);
+		var slotSize = new Vector2(42f, 42f);
 		position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
 		Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f;
 		Texture2D RArr = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/Post").Value;
@@ -37,13 +37,13 @@ public class VortexVanquisherItem : ModItem
 			if (CoolTimeForE > 0)
 			{
 				CoolTimeForE--;
-				spriteBatch.Draw(RArr, drawPos + new Vector2(26.73f) * scale + new Vector2(4, 4), null, new Color(0, 0, 0, 255), 0f, RArr.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
-				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (CoolTimeForE / 60f).ToString("#.#"), drawPos + new Vector2(22.91f) * scale, Color.White, 0f, Vector2.Zero, scale * 1.91f, SpriteEffects.None, 0);
+				spriteBatch.Draw(RArr, drawPos + new Vector2(6.23f) * scale + Vector2.Zero, null, new Color(0, 0, 0, 255), 0f, RArr.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (CoolTimeForE / 60f).ToString("#.#"), drawPos + new Vector2(6.23f) * scale, Color.White, 0f, Vector2.Zero, scale * 1.91f, SpriteEffects.None, 0);
 			}
 			else
 			{
 				CoolTimeForE = 0;
-				spriteBatch.Draw(RArr, drawPos + new Vector2(26.73f) * scale + new Vector2(4, 4), null, new Color(155, 155, 155, 50), 0f, RArr.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+				spriteBatch.Draw(RArr, drawPos + new Vector2(6.73f) * scale + Vector2.Zero, null, new Color(155, 155, 155, 50), 0f, RArr.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
 			}
 		}
 	}

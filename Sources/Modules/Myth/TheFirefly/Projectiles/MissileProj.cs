@@ -103,6 +103,8 @@ public class MissileProj : ModProjectile, IWarpProjectile
 		if (timeTokill < 0)
 		{
 			ChaseTarget();
+			if (Projectile.timeLeft == 2310)
+				Projectile.friendly = true;
 		}
 		else
 		{
@@ -115,8 +117,7 @@ public class MissileProj : ModProjectile, IWarpProjectile
 		}
 		AddLight();
 		GenerateDust();
-		if (Projectile.timeLeft == 2310)
-			Projectile.friendly = true;
+
 	}
 	private int timeTokill = -1;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -137,7 +138,7 @@ public class MissileProj : ModProjectile, IWarpProjectile
 	{
 		Player player = Main.player[Projectile.owner];
 		ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
-		
+
 		Projectile.velocity = Projectile.oldVelocity;
 		Projectile.friendly = false;
 		if (timeTokill < 0)
