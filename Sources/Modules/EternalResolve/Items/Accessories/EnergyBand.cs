@@ -19,5 +19,10 @@ namespace Everglow.EternalResolve.Items.Accessories
 			PlayerStamina pPlayer = player.GetModPlayer<PlayerStamina>();
 			pPlayer.staminaDecreasingSpeed *= 0.75f;
 		}
+		public override void AddRecipes()
+		{
+			CreateRecipe().AddIngredient(ItemID.GoldBar, 4).AddIngredient(ItemID.Wire).AddTile(TileID.Anvils).Register();
+			base.AddRecipes();
+		}
 	}
 }

@@ -33,5 +33,12 @@ namespace Everglow.EternalResolve.Items.Potions
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
 		}
+		public override void AddRecipes()
+		{
+			CreateRecipe().AddIngredient(ItemID.Bottle).AddRecipeGroup(RecipeGroupID.Fruit).AddTile(TileID.CookingPots).AddCondition(Condition.NearHoney).Register();
+			CreateRecipe().AddIngredient(ItemID.Bottle).AddRecipeGroup(RecipeGroupID.Fruit).AddTile(TileID.CookingPots).AddIngredient(ItemID.HoneyBlock).Register();
+			CreateRecipe().AddIngredient(ItemID.Bottle).AddRecipeGroup(RecipeGroupID.Fruit).AddTile(TileID.CookingPots).AddIngredient(ItemID.SugarPlum).Register();
+			base.AddRecipes();
+		}
 	}
 }

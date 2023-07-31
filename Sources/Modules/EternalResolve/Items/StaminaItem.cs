@@ -17,6 +17,9 @@ namespace Everglow.EternalResolve.Items.StaminaItem
 		{
 			PlayerStamina staminaPlayer = Main.LocalPlayer.GetModPlayer<PlayerStamina>();
 			staminaPlayer.staminaRecoveryValue = 100f;
+			staminaPlayer.extraStamina += 500f;
+			staminaPlayer.mulStaminaRecoveryValue += 100f;
+			staminaPlayer.staminaDecreasingSpeed *= 0.8f;
 			stamTestItemEquipped = true;
 		}
 
