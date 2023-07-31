@@ -73,10 +73,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			if (target.type != NPCID.TargetDummy)
-			{
-				target.AddBuff(ModContent.BuffType<BloodDrinking>(), 180);
-			}
+			target.AddBuff(ModContent.BuffType<BloodDrinking>(), 180);
 			base.OnHitNPC(target, hit, damageDone);
 		}
 	}

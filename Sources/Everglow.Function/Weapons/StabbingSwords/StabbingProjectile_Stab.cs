@@ -52,7 +52,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
 		public override void SetDefaults()
 		{
-			Projectile.width = 50;
+			Projectile.width = 24;
 			Projectile.height = 24;
 			Projectile.netImportant = true;
 			Projectile.friendly = true;

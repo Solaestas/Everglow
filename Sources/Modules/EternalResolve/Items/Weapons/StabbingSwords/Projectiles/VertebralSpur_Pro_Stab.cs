@@ -86,36 +86,6 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			}
-
-			alphaColor.A = 0;
-			alphaColor.R = (byte)(565 * lightColor.R / 255f);
-			alphaColor.G = (byte)(565 * lightColor.G / 255f);
-			alphaColor.B = (byte)(565 * lightColor.B / 255f);
-			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 72 * ToKill / 120f * DrawWidth;
-			bars = new List<Vertex2D>
-			{
-				new Vertex2D(start + normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized,alphaColor,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized,alphaColor,new Vector3(0f + time, 1, 1))
-			};
-			if (bars.Count >= 3)
-			{
-				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
-				Effect effect = ModAsset.VertebralSpurEffect.Value;
-				var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-				var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
-				effect.Parameters["uTransform"].SetValue(model * projection);
-				effect.Parameters["uProcession"].SetValue(0.5f);
-				effect.CurrentTechnique.Passes[0].Apply();
-				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_7.Value;
-				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			}
 		}
 		public override void AI()
 		{

@@ -1,5 +1,8 @@
+using Everglow.Commons.Coroutines;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.Weapons.StabbingSwords;
+using Everglow.Commons.Weapons.StabbingSwords.VFX;
+using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 using Terraria.DataStructures;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
@@ -18,6 +21,37 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			FadeLightColorValue = 0.1f;
 			MaxLength = 1.40f;
 			DrawWidth = 0.4f;
+		}
+		public override IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)
+		{
+			yield return new WaitForFrames(45);
+			StabVFX v = new NightStabVFX()
+			{
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
+				vel = velocity,
+				color = Color * 0.4f,
+				scale = 25,
+				maxtime = 10,
+				timeleft = 10
+			};
+			if (EndPos == Vector2.Zero)
+			{
+				Ins.VFXManager.Add(v);
+			}
+			yield return new WaitForFrames(40);
+			v = new NightStabVFX()
+			{
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
+				vel = velocity,
+				color = Color * 0.4f,
+				scale = 15,
+				maxtime = 10,
+				timeleft = 10
+			};
+			if (EndPos == Vector2.Zero)
+			{
+				Ins.VFXManager.Add(v);
+			}
 		}
 		public override void DrawEffect(Color lightColor)
 		{
@@ -89,9 +123,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 
 			alphaColor.A = 0;
-			alphaColor.R = (byte)(565 * lightColor.R / 255f);
-			alphaColor.G = (byte)(565 * lightColor.G / 255f);
-			alphaColor.B = (byte)(565 * lightColor.B / 255f);
+			alphaColor.R = (byte)(184 * lightColor.R / 255f);
+			alphaColor.G = (byte)(0 * lightColor.G / 255f);
+			alphaColor.B = (byte)(378 * lightColor.B / 255f);
 			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 96 * ToKill / 120f * DrawWidth;
 			bars = new List<Vertex2D>
 			{
@@ -158,6 +192,17 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void AI()
 		{
+			if(Main.rand.NextBool(7))
+			{
+				Vector2 end = Projectile.Center + Projectile.velocity * 80 * MaxLength;
+				if (EndPos != Vector2.zeroVector)
+				{
+					end = EndPos;
+				}
+				Dust dust = Dust.NewDustDirect(Vector2.Lerp(StartCenter, end, Main.rand.NextFloat(0.3f, 1f)) - new Vector2(4), 0, 0, ModContent.DustType<NightDust>(), 0, 0, 0, default, Main.rand.NextFloat(0.85f, 1.2f));
+				dust.velocity = new Vector2(0, Main.rand.NextFloat(2f)).RotateRandom(6.283);
+				dust.noGravity = true;
+			}
 			base.AI();
 		}
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -167,7 +212,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),
 					target.Center - new Vector2(0, Main.rand.NextFloat(115, 180) * Main.player[Projectile.owner].gravDir).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f))
 					, Vector2.zeroVector, ModContent.ProjectileType<EternalNight_shadow>()
-					, Projectile.damage / 3, Projectile.knockBack * 0.6f, Projectile.owner, target.whoAmI);
+					, Projectile.damage / 7, Projectile.knockBack * 0.6f, Projectile.owner, target.whoAmI);
 				p0.timeLeft = 240 + k * 5;
 
 			}
@@ -181,7 +226,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),
 					Projectile.Center + Projectile.velocity * k * 25f - new Vector2(0, Main.rand.NextFloat(80, 180) * Main.player[Projectile.owner].gravDir).RotatedBy(Main.rand.NextFloat(-0.7f, 0.7f))
 					, Vector2.zeroVector, ModContent.ProjectileType<EternalNight_shadow>()
-					, Projectile.damage / 3, Projectile.knockBack * 0.6f, Projectile.owner, -1);
+					, Projectile.damage / 7, Projectile.knockBack * 0.6f, Projectile.owner, -1);
 				p0.timeLeft = 240 + k * 4;
 				p0.rotation = MathF.PI * 0.75f + Main.rand.NextFloat(-1f, 1f);
 			}

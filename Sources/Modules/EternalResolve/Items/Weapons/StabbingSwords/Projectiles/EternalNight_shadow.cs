@@ -1,6 +1,7 @@
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
+using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -37,6 +38,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			targetNPC = (int)Projectile.ai[0];
 			startCenter = Projectile.Center;
+			Projectile.ai[1] = Main.rand.NextFloat(1f);
+			Projectile.ai[2] = Main.rand.NextFloat(1f);
 		}
 		public void UpdateTarget()
 		{
@@ -121,15 +124,33 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					{
 						Projectile.Center += Utils.SafeNormalize(toTarget, new Vector2(0, 1));
 						endCenter = Projectile.Center;
+						if (Main.rand.NextBool(7))
+						{
+							Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<NightDust>(), 0, 0, 0, default, Main.rand.NextFloat(0.85f, 1.6f));
+							dust.velocity = new Vector2(0, Main.rand.NextFloat(2f)).RotateRandom(6.283);
+							dust.noGravity = true;
+						}
 						if (Projectile.Center.X <= 320 || Projectile.Center.X >= Main.maxTilesX * 16 - 320 || Projectile.Center.Y <= 320 || Projectile.Center.Y >= Main.maxTilesY * 16 - 320)
 						{
 							break;
 						}
 					}
+					for (int x = 0; x < 15; x++)
+					{
+						Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<NightDust>(), 0, 0, 0, default, Main.rand.NextFloat(0.85f, 1.6f));
+						dust.velocity = new Vector2(0, Main.rand.NextFloat(2f, 3f)).RotateRandom(6.283);
+						dust.noGravity = true;
+					}
 					SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/Slash").WithVolumeScale(0.33f).WithPitchOffset(1f), Projectile.Center);
 				}
 				if (Projectile.timeLeft < 180)
 				{
+					if (Main.rand.NextBool(7))
+					{
+						Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<NightDust>(), 0, 0, 0, default, Main.rand.NextFloat(0.85f, 1.6f));
+						dust.velocity = new Vector2(0, Main.rand.NextFloat(2f)).RotateRandom(6.283);
+						dust.noGravity = true;
+					}
 					Projectile.velocity *= 0;
 					Projectile.friendly = false;
 					if (stickNPC != -1)
@@ -178,7 +199,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 			float coordY = 0.6f;
-			if((endCenter - Projectile.Center).Length() > 1)
+			if((endCenter - Projectile.Center).Length() > 10)
 			{
 				coordY = 0.9f;
 			}
@@ -243,6 +264,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			dissolve.Parameters["duration"].SetValue(dissolveDuration);
 			dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.3f, 0, 0.5f, 1f));
 			dissolve.Parameters["uNoiseSize"].SetValue(4f);
+			dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(Projectile.ai[1], Projectile.ai[2]));
 			dissolve.CurrentTechnique.Passes[0].Apply();
 
 			Texture2D tex = ModAsset.EternalNight_shadow.Value;
