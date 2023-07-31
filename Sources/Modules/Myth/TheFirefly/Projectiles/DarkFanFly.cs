@@ -8,8 +8,8 @@ internal class DarkFanFly : ModProjectile
 {
 	public override void SetDefaults()
 	{
-		Projectile.width = 58;
-		Projectile.height = 58;
+		Projectile.width = 16;
+		Projectile.height = 16;
 		Projectile.friendly = true;
 		Projectile.hostile = false;
 		Projectile.penetrate = -1;

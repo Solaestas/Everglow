@@ -116,16 +116,16 @@ internal class FlowLightMissile : ModProjectile
 		newVelocity *= Math.Clamp(energy / 18f, 0.2f, 10f);
 		Vector2 basePos = Projectile.Center + newVelocity * 3.7f + v0 * 62 - new Vector2(0, 6);
 
-		for (int j = 0; j < energy * 2; j++)
+		for (int j = 0; j < energy; j++)
 		{
-			Vector2 v = newVelocity / 27f * j;
+			Vector2 v = newVelocity / 108f * j;
 			Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
 			int num20 = Dust.NewDust(basePos, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v1.X, v1.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * 0.4f);
 			Main.dust[num20].noGravity = true;
 		}
-		for (int j = 0; j < energy * 2; j++)
+		for (int j = 0; j < energy; j++)
 		{
-			Vector2 v = newVelocity / 54f * j;
+			Vector2 v = newVelocity / 216f * j;
 			Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
 			float Scale = Main.rand.NextFloat(3.7f, 5.1f);
 			int num21 = Dust.NewDust(basePos + new Vector2(4, 4.5f), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v1.X, v1.Y, 100, default, Scale);
@@ -133,7 +133,7 @@ internal class FlowLightMissile : ModProjectile
 		}
 		for (int j = 0; j < 16; j++)
 		{
-			Vector2 v = newVelocity / 54f * j;
+			Vector2 v = newVelocity / 216f * j;
 			Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
 			v1 *= 0.2f;
 			float Scale = Main.rand.NextFloat(3.7f, 5.1f);
