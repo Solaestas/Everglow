@@ -1,4 +1,6 @@
-namespace Everglow.MEAC.Projectiles;
+using Everglow.Myth.TheFirefly.Items.Accessories;
+
+namespace Everglow.Myth.TheFirefly.Projectiles;
 
 
 public class ButterflyDreamFriendly : ModProjectile
@@ -34,45 +36,45 @@ public class ButterflyDreamFriendly : ModProjectile
 	public override void AI()
 	{
 		// TODO None
-		//FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
+		FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
 
-		//Projectile.spriteDirection = Projectile.velocity.X > 0 ? -1 : 1;
-		//if (Projectile.timeLeft < 260)
-		//{
-		//	Projectile.friendly = true;
-		//	NPC target = Main.npc[(int)Projectile.ai[0]];
-		//	if (!target.active && Projectile.timeLeft > 10)
-		//		Projectile.timeLeft = 10;
-		//	else//追踪目标
-		//	{
-		//		if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
-		//		{
-		//			if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
-		//				Projectile.velocity = Vector2.Lerp(Projectile.velocity * 1.06f, Projectile.DirectionTo(target.Center) * 15, 0.05f);
-		//			Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(target.Center) * 15, 0.05f);
-		//		}
-		//		//else
+		Projectile.spriteDirection = Projectile.velocity.X > 0 ? -1 : 1;
+		if (Projectile.timeLeft < 260)
+		{
+			Projectile.friendly = true;
+			NPC target = Main.npc[(int)Projectile.ai[0]];
+			if (!target.active && Projectile.timeLeft > 10)
+				Projectile.timeLeft = 10;
+			else//追踪目标
+			{
+				if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+				{
+					if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+						Projectile.velocity = Vector2.Lerp(Projectile.velocity * 1.06f, Projectile.DirectionTo(target.Center) * 15, 0.05f);
+					Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(target.Center) * 15, 0.05f);
+				}
+				//else
 
-		//	}
-		//}
-		//else
-		//{
-		//	Projectile.velocity *= 0.98f;
-		//}
-		//if (Projectile.timeLeft < 10)
-		//	Projectile.scale -= 0.1f;
-		//if (Projectile.timeLeft == 300)
-		//	Projectile.frame = Main.rand.Next(3);
-		//if (Projectile.frame > 3)
-		//	Projectile.frame = 0;
-		//if (Projectile.timeLeft % 6 == 0)
-		//	Projectile.frame++;
-		//if (Projectile.timeLeft % 3 == 0)
-		//{
-		//	int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f));
-		//	Main.dust[index].velocity = Projectile.velocity * 0.5f;
-		//}
-		//int index2 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueParticleDark2>(), 0f, 0f, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
+			}
+		}
+		else
+		{
+			Projectile.velocity *= 0.98f;
+		}
+		if (Projectile.timeLeft < 10)
+			Projectile.scale -= 0.1f;
+		if (Projectile.timeLeft == 300)
+			Projectile.frame = Main.rand.Next(3);
+		if (Projectile.frame > 3)
+			Projectile.frame = 0;
+		if (Projectile.timeLeft % 6 == 0)
+			Projectile.frame++;
+		if (Projectile.timeLeft % 3 == 0)
+		{
+			int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<Dusts.BlueGlowAppear>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f));
+			Main.dust[index].velocity = Projectile.velocity * 0.5f;
+		}
+		//int index2 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<Dusts.BlueParticleDark2>(), 0f, 0f, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
 		//Main.dust[index2].velocity = Projectile.velocity * 0.5f;
 		//Main.dust[index2].alpha = (int)(Main.dust[index2].scale * 50);
 	}
