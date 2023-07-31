@@ -259,8 +259,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		}
 		public virtual void DrawEffect(Color lightColor)
 		{
-
-			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 50 * ToKill / 120f * DrawWidth;
+			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 90 * ToKill / 120f * DrawWidth;
 			Vector2 start = StartCenter;
 			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
 			if (EndPos != Vector2.Zero)
@@ -273,8 +272,8 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			float dark = MathF.Sin(value * MathF.PI) * 4;
 			List<Vertex2D> bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,new Color(0, 0, 0, 120) * 0.4f * Shade,new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(0, 0, 0, 120)* 0.4f* Shade,new Vector3(1 + time, 1, 0)),
+				new Vertex2D(start + normalized,new Color(0, 0, 0, 120) * Shade,new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized,new Color(0, 0, 0, 120) * Shade,new Vector3(1 + time, 1, 0)),
 				new Vertex2D(middle + normalized,Color.White* 0.4f * dark* Shade,new Vector3(0.5f + time, 0, 0.5f)),
 				new Vertex2D(middle - normalized,Color.White* 0.4f * dark* Shade,new Vector3(0.5f + time, 1, 0.5f)),
 				new Vertex2D(end + normalized,Color.White* 0.9f * dark* Shade,new Vector3(0f + time, 0, 1)),
@@ -328,18 +327,18 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			}
 
 			alphaColor.A = 0;
-			alphaColor.R = (byte)(565 * lightColor.R / 255f);
-			alphaColor.G = (byte)(565 * lightColor.G / 255f);
-			alphaColor.B = (byte)(565 * lightColor.B / 255f);
+			alphaColor.R = (byte)(Color.R * 2 * lightColor.R / 255f);
+			alphaColor.G = (byte)(Color.G * 2 * lightColor.G / 255f);
+			alphaColor.B = (byte)(Color.B * 2 * lightColor.B / 255f);
 			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 24 * ToKill / 120f * DrawWidth;
 			bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 1, 0)),
+				new Vertex2D(start + normalized,alphaColor * 0.4f,new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized,alphaColor * 0.4f,new Vector3(1 + time, 1, 0)),
 				new Vertex2D(middle + normalized,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
 				new Vertex2D(middle - normalized,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized,alphaColor,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized,alphaColor,new Vector3(0f + time, 1, 1))
+				new Vertex2D(end + normalized,alphaColor * 2,new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized,alphaColor * 2,new Vector3(0f + time, 1, 1))
 			};
 			if (bars.Count >= 3)
 			{
@@ -351,7 +350,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 				effect.Parameters["uTransform"].SetValue(model * projection);
 				effect.Parameters["uProcession"].SetValue(value * 0.6f + 0.4f);
 				effect.CurrentTechnique.Passes[0].Apply();
-				Main.graphics.graphicsDevice.Textures[0] = ModAsset.Trail.Value;
+				Main.graphics.graphicsDevice.Textures[0] = ModAsset.Trail_7.Value;
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);

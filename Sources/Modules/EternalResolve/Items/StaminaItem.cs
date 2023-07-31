@@ -1,7 +1,4 @@
-using Everglow.Commons;
-using Everglow.Commons.FeatureFlags;
 using Everglow.Commons.Weapons.StabbingSwords;
-using Terraria.DataStructures;
 
 namespace Everglow.EternalResolve.Items.StaminaItem
 {

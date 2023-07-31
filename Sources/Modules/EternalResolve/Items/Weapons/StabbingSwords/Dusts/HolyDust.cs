@@ -1,23 +1,16 @@
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 {
-    public class NightDust : ModDust
+    public class HolyDust : ModDust
 	{
 		public override bool Update(Dust dust)
 		{
-			if (dust.frame.Y == 0)
-			{
-				Lighting.AddLight(dust.position, dust.scale * 0.1f, 0, dust.scale * 0.4f);
-			}
+			Lighting.AddLight(dust.position, dust.scale * 0.6f, dust.scale * 0.5f, 0);
 			return true;
 		}
 		public override Color? GetAlpha(Dust dust, Color lightColor)
 		{
 			Color c0 = Color.White * 0.5f;
-			c0.A = 150;
-			if (dust.frame.Y == 0)
-			{
-				c0.A = 40;
-			}
+			c0.A = 50;
 			return c0;
 		}
 		public override void OnSpawn(Dust dust)

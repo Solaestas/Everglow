@@ -15,6 +15,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.value = Item.sellPrice(0, 15, 27, 86);
 			Item.shoot = ModContent.ProjectileType<IchorBayonet_Pro>();
 			StabMulDamage = 4f;
+			staminaCost = 0.82f;
 			PowerfulStabProj = ModContent.ProjectileType<IchorBayonet_Pro_Stab>();
 			base.SetDefaults();
 		}

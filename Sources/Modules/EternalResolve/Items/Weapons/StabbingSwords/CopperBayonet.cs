@@ -13,7 +13,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.White;
 			Item.value = Item.sellPrice(0, 0, 12, 0);
 			Item.shoot = ModContent.ProjectileType<CopperStabbingSword_Pro>();
-			StabMulDamage = 6f;
+			StabMulDamage = 4f;
 			PowerfulStabProj = ModContent.ProjectileType<CopperStabbingSword_Pro_Stab>();
 			base.SetDefaults();
 		}

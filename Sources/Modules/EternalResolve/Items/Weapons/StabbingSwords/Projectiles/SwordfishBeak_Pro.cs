@@ -43,6 +43,15 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Dust dust = Dust.NewDustDirect(pos, Projectile.width, Projectile.height, ModContent.DustType<SeaWater>(), 0, 0, 0, default, Main.rand.NextFloat(0.95f, 1.7f));
 				dust.velocity = vel;
 			}
+			Player player = Main.player[Projectile.owner];
+			if(player.wet)
+			{
+				MaxLength = 1.125f;
+			}
+			else
+			{
+				MaxLength = 0.75f;
+			}
 		}
 		public override void HitTileSound(float scale)
 		{

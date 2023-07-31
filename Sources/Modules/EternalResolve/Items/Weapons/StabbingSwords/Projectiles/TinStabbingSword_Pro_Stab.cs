@@ -6,7 +6,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
         public override void SetDefaults()
         {
 			base.SetDefaults();
-			Color = new Color(196, 176, 117);
+			Color = new Color(65, 44, 30);
 			TradeShade = 0.7f;
 			Shade = 0.2f;
 			FadeTradeShade = 0.64f;

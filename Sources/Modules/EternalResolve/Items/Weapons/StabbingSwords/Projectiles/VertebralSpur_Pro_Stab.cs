@@ -1,5 +1,6 @@
 using Everglow.Commons.Vertex;
 using Everglow.Commons.Weapons.StabbingSwords;
+using Terraria.Audio;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
@@ -96,6 +97,10 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Player player = Main.player[Projectile.owner];
 			float distanceValue = (player.Center - target.Center).Length();
 			modifiers.FinalDamage += Math.Max(0, 180 - distanceValue) / 180f;
+		}
+		public override void HitTile()
+		{
+			SoundEngine.PlaySound(SoundID.Dig.WithPitchOffset(Main.rand.NextFloat(0.6f, 1f)), Projectile.Center);
 		}
 	}
 }
