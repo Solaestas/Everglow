@@ -1,4 +1,6 @@
+using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.GameContent;
@@ -6,7 +8,7 @@ using Terraria.Utilities;
 
 namespace Everglow.Commons.Weapons.StabbingSwords
 {
-	public abstract class StabbingProjectile : ModProjectile
+	public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
     {
 		/// <summary>
 		/// 常规颜色
@@ -86,6 +88,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
+
             int animation = 9;
             float rotationRange = Main.rand.NextFloatDirection() * (MathF.PI * 2f) * 0.05f;
 			Projectile.ai[0] += 1f;
@@ -127,6 +130,11 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			{
 				Projectile.timeLeft = TradeLength;
 			}
+			if (player.HeldItem.ModItem is StabbingSwordItem modItem)
+			{
+				if (!player.GetModPlayer<PlayerStamina>().CheckStamina(modItem.staminaCost))
+					Projectile.Kill();//Return一堆怪问题，杀了就好了
+			}
 			Projectile.position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f;
             Projectile.rotation = Projectile.velocity.ToRotation();
             Projectile.spriteDirection = Projectile.direction;
@@ -143,7 +151,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		{
 			//SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/StabCollide");
 			SoundStyle ss = SoundID.NPCHit4;
-			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
+			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)).WithVolume(0.3f), Projectile.Center);
 			Projectile.soundDelay = SoundTimer;
 		}
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -243,9 +251,6 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 						break;
 					}
 				}
-				Vector2 ij = drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice + Projectile.velocity;
-				ij /= 16f;
-				WorldGen.KillTile((int)(ij.X), (int)(ij.Y), true, false, true);
 				HitTileSound(volumn);
 			}
 			Vector2 drawSize = new Vector2(volumn, DrawWidth) * lerpedTwice;
@@ -389,6 +394,59 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			DrawItem(lightColor);
 			DrawAfterItem();
 			DrawEffect(lightColor);
+		}
+		public void DrawWarp(VFXBatch sb)
+		{
+			float time = (float)(Main.time * 0.03);
+			if (TradeShade > 0)
+			{
+				for (int f = TradeLength - 1; f > -1; f--)
+				{
+					Vector2 center = DarkDraw[f].Postion - Main.screenPosition;
+					Vector2 normalX = new Vector2(0, 40).RotatedBy(LightDraw.Rotation).RotatedBy(-Math.PI / 2) * LightDraw.Size.X;
+					Vector2 normalY = new Vector2(0, 15).RotatedBy(LightDraw.Rotation) * LightDraw.Size.Y;
+					Vector2 start = center - normalX * 0.4f;
+					Vector2 middle = center;
+					Vector2 end = center + normalX;
+					Color alphaColor = Color;
+					alphaColor.A = 0;
+					alphaColor.R = (byte)(((DarkDraw[f].Rotation + 6.283 + Math.PI) % 6.283) / 6.283 * 255);
+					alphaColor.G = (byte)(DarkDraw[f].Color.A);
+					List<Vertex2D> bars = new List<Vertex2D>
+		        	{
+			        	new Vertex2D(start - normalY,new Color(alphaColor.R, alphaColor.G / 9, 0, 0),new Vector3(1 + time, 0, 0)),
+			        	new Vertex2D(start + normalY,new Color(alphaColor.R, alphaColor.G / 9, 0, 0),new Vector3(1 + time, 1, 0)),
+			        	new Vertex2D(middle - normalY,new Color(alphaColor.R, alphaColor.G / 3, 0, 0),new Vector3(0.5f + time, 0, 0.5f)),
+			        	new Vertex2D(middle + normalY,new Color(alphaColor.R, alphaColor.G / 3, 0, 0),new Vector3(0.5f + time, 1, 0.5f)),
+			        	new Vertex2D(end,alphaColor,new Vector3(0f + time, 0.5f, 1)),
+			        	new Vertex2D(end,alphaColor,new Vector3(0f + time, 0.5f, 1))
+		        	};
+					sb.Draw(ModAsset.Trail_1.Value, bars, PrimitiveType.TriangleStrip);
+				}
+			}
+			if(TradeShade > 0)
+			{
+				Vector2 center = LightDraw.Postion - Main.screenPosition;
+				Vector2 normalX = new Vector2(0, 45).RotatedBy(LightDraw.Rotation).RotatedBy(-Math.PI / 2) * LightDraw.Size.X;
+				Vector2 normalY = new Vector2(0, 20).RotatedBy(LightDraw.Rotation) * LightDraw.Size.Y;
+				Vector2 start = center - normalX * 0.4f;
+				Vector2 middle = center;
+				Vector2 end = center + normalX;
+				Color alphaColor = Color;
+				alphaColor.A = 0;
+				alphaColor.R = (byte)((LightDraw.Rotation + 6.283 + Math.PI) % 6.283 / 6.283 * 255);
+				alphaColor.G = 200;
+				List<Vertex2D> bars = new List<Vertex2D>
+				{
+						new Vertex2D(start - normalY,new Color(alphaColor.R, alphaColor.G / 9, 0, 0),new Vector3(1 + time, 0, 0)),
+						new Vertex2D(start + normalY,new Color(alphaColor.R, alphaColor.G / 9, 0, 0),new Vector3(1 + time, 1, 0)),
+						new Vertex2D(middle - normalY,new Color(alphaColor.R, alphaColor.G / 3, 0, 0),new Vector3(0.5f + time, 0, 0.5f)),
+						new Vertex2D(middle + normalY,new Color(alphaColor.R, alphaColor.G / 3, 0, 0),new Vector3(0.5f + time, 1, 0.5f)),
+						new Vertex2D(end,alphaColor,new Vector3(0f + time, 0.5f, 1)),
+						new Vertex2D(end,alphaColor,new Vector3(0f + time, 0.5f, 1))
+				};
+				sb.Draw(ModAsset.Trail_1.Value, bars, PrimitiveType.TriangleStrip);
+			}
 		}
 	}
 }

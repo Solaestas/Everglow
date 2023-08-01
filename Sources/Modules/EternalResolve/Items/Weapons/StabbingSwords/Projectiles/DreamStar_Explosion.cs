@@ -18,6 +18,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Projectile.aiStyle = -1;
 			Projectile.width = 60;
 			Projectile.height = 60;
+
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 10;
 		}
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
