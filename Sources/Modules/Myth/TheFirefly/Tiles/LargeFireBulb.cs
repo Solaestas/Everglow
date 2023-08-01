@@ -41,6 +41,7 @@ internal class LargeFireBulb : ModTile
 		Main.tileNoAttach[Type] = true;
 		Main.tileSolid[Type] = false;
 		Main.tileNoFail[Type] = true;
+		Main.tileLighted[Type] = true;
 
 		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
