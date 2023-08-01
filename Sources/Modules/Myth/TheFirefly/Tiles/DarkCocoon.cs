@@ -52,6 +52,7 @@ public class DarkCocoon : ModTile
 			tile.HasTile = true;
 			tile.TileFrameX = (short)(28 * Main.rand.Next(8));
 		}
+
 		//黑萤藤蔓
 		if (Main.rand.NextBool(6))
 		{
@@ -96,6 +97,55 @@ public class DarkCocoon : ModTile
 					{
 						canPlace1x1 = false;
 					}
+				}
+			}
+		}
+		if (Main.rand.NextBool(16))//巨型萤火吊
+		{
+			int count = 0;
+			float length = 0;
+			for (int x = 0; x <= 1; x++)
+			{
+				for (int y = 0; y <= 4; y++)
+				{
+					Tile t0 = Main.tile[i + x, j + y];
+					if (y == 0)
+					{
+						if (!t0.HasTile || t0.TileType != (ushort)ModContent.TileType<DarkCocoon>() || t0.IsHalfBlock)
+						{
+							count++;
+						}
+					}
+					else
+					{
+						if (t0.HasTile)
+						{
+							count++;
+						}
+					}
+				}
+			}
+			if (count == 0)
+			{
+				for (int y = 4; y <= 80; y++)
+				{
+					for (int x = 0; x <= 1; x++)
+					{
+						Tile t0 = Main.tile[i + x, j + y];
+						if (!t0.HasTile)
+						{
+							length += 1 / 8f;
+						}
+						else
+						{
+							y = 81;
+							break;
+						}
+					}
+				}
+				if (Main.netMode != NetmodeID.Server)
+				{
+					LargeFireBulb.PlaceMe(i, j, (ushort)Main.rand.Next((int)Math.Floor(length)));
 				}
 			}
 		}

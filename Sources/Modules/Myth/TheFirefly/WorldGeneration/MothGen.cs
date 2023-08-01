@@ -292,6 +292,14 @@ public class MothLand : ModSystem
 									//WorldGen.PlaceLiquid(x, y, byte.MaxValue, 255);
 								}
 							}
+							if(pixel.R == 28 && pixel.G == 198 && pixel.B == 255)
+							{
+								LargeFireBulb.PlaceMe(x + a, y + b, (ushort)Main.rand.Next(16));
+							}
+							if (pixel.R == 28 && pixel.G == 132 && pixel.B == 255)
+							{
+								LargeFireBulb.PlaceMe(x + a, y + b, (ushort)Main.rand.Next(4));
+							}
 							break;
 
 						case 2:
@@ -658,6 +666,55 @@ public class MothLand : ModSystem
 			if (count == 0)
 				MythUtils.PlaceFrameImportantTiles(i - 1, j + 1, 3, 3, ModContent.TileType<Tiles.Furnitures.GlowingDrop>());
 
+		}
+		if (Main.rand.NextBool(16))//巨型萤火吊
+		{
+			int count = 0;
+			float length = 0;
+			for (int x = 0; x <= 1; x++)
+			{
+				for (int y = 0; y <= 4; y++)
+				{
+					Tile t0 = Main.tile[i + x, j + y];
+					if (y == 0)
+					{
+						if(!t0.HasTile || t0.TileType !=(ushort)ModContent.TileType<DarkCocoon>() || t0.IsHalfBlock)
+						{
+							count++;
+						}
+					}
+					else
+					{
+						if (t0.HasTile)
+						{
+							count++;
+						}
+					}
+				}
+			}
+			if (count == 0)
+			{
+				for (int y = 4; y <= 80; y++)
+				{
+					for (int x = 0; x <= 1; x++)
+			    	{	
+						Tile t0 = Main.tile[i + x, j + y];
+						if (!t0.HasTile)
+						{
+							length+= 1 / 8f;
+						}
+						else
+						{
+							y = 81;
+							break;
+						}
+					}
+				}
+				if (Main.netMode != NetmodeID.Server)
+				{
+					LargeFireBulb.PlaceMe(i, j, (ushort)Main.rand.Next((int)Math.Floor(length)));
+				}
+			}
 		}
 		if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid)//黑萤苣
 		{

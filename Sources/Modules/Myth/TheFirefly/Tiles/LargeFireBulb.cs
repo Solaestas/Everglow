@@ -1,9 +1,6 @@
-using Terraria.DataStructures;
-using Terraria.Enums;
+using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ObjectData;
-using Terraria.ID;
-using Terraria.GameContent;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
@@ -60,7 +57,7 @@ internal class LargeFireBulb : ModTile
 		TileObjectData.addTile(Type);
 
 		LocalizedText name = CreateMapEntryName();
-		AddMapEntry(new Color(251, 235, 127), name);
+		AddMapEntry(new Color(28, 132, 255), name);
 	}
 
 	/// <summary>
@@ -93,7 +90,7 @@ internal class LargeFireBulb : ModTile
 				return false;
 			height += 4;
 		}
-		
+
 		// 果实1
 		succeed &= modTile.TryGrow(x, y + height, broadcast);
 		height += 4;
@@ -256,5 +253,29 @@ internal class LargeFireBulb : ModTile
 			spriteBatch.Draw(glow, position, glowColor);
 
 		return false;
+	}
+	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+	{
+		if (HasSameTileAt(i, j - 4)) // 上面有同样物块，不是根
+		{
+			if (!HasSameTileAt(i, j + 4)) // 下面没有同样物块，是果实2
+			{
+				r = 0;
+				g = 1;
+				b = 1;
+			}
+			else if (!HasSameTileAt(i, j + 8)) // 下面有同样物块，但下面第二格有，是果实1
+			{
+				r = 0;
+				g = 1;
+				b = 1;
+			}
+			else // 下面有同样物块，下面第二格也有，是茎
+			{
+				r = 0;
+				g = 0;
+				b = 0;
+			}
+		}
 	}
 }
