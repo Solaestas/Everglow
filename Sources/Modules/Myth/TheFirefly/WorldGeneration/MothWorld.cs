@@ -7,6 +7,7 @@ internal class MothWorld : Subworld
 	public override int Width => 800;
 	public override int Height => 600;
 	public override bool NormalUpdates => true;
+	public override bool ShouldSave => true;
 	public override List<GenPass> Tasks => new List<GenPass>()
 	{
 		new MothLand.MothLandGenPass()
