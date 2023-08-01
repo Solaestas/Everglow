@@ -1,4 +1,4 @@
-﻿using Terraria.GameContent.Creative;
+using Terraria.GameContent.Creative;
 
 namespace Everglow.Myth.TheFirefly.Items.Furnitures;
 
@@ -11,17 +11,10 @@ public class GlowWoodSinkType2 : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.useStyle = ItemUseStyleID.Swing;
-		Item.useTurn = true;
-		Item.useAnimation = 15;
-		Item.useTime = 10;
-		Item.autoReuse = true;
-		Item.maxStack = 999;
-		Item.consumable = true;
-		Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodSinkType2>();
-		Item.width = 24;
-		Item.height = 30;
-		Item.value = 3000;
+		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodSinkType2>());
+		Item.width = 30;
+		Item.height = 34;
+		Item.value = 2000;
 	}
 
 	public override void AddRecipes()

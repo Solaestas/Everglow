@@ -11,17 +11,10 @@ public class GlowWoodDresser : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.width = 26;
-		Item.height = 22;
-		Item.maxStack = 99;
-		Item.useTurn = true;
-		Item.autoReuse = true;
-		Item.useAnimation = 15;
-		Item.useTime = 10;
-		Item.useStyle = ItemUseStyleID.Swing;
-		Item.consumable = true;
-		Item.value = 500;
-		Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodDresser>();
+		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodDresser>());
+		Item.width = 38;
+		Item.height = 24;
+		Item.value = 2000;
 	}
 
 	public override void AddRecipes()

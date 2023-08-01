@@ -1,14 +1,7 @@
-﻿using Everglow.Myth;
-
 namespace Everglow.Myth.TheFirefly.Items;
 
 public class BlackStarShrub : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		
-	}
-
 	public override void SetDefaults()
 	{
 		
