@@ -11,9 +11,9 @@ public sealed class MythManualMusicRegistration : ILoadable
 		MusicLoader.AddMusic(mod, "Myth/Musics/MothBiome");
 		MusicLoader.AddMusic(mod, "Myth/Musics/MothFighting");
 		// Other Moth Music
-		//MusicLoader.AddMusic(mod, "Myth/Musics/MothFightingAlt");
+		MusicLoader.AddMusic(mod, "Myth/Musics/MothFightingAlt");
 		//MusicLoader.AddMusic(mod, "Myth/Musics/MothFightingOld");
-		//MusicLoader.AddMusic(mod, "Myth/Musics/MothFightingOld2");
+		MusicLoader.AddMusic(mod, "Myth/Musics/MothFightingOld2");
 		// Acytaea
 		MusicLoader.AddMusic(mod, "Myth/Musics/AcytaeaFighting");
 

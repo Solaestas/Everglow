@@ -1,5 +1,5 @@
 using System.ComponentModel;
-
+using Everglow.Commons.AssetReplace.UIReplace;
 using Terraria.ModLoader.Config;
 
 namespace Everglow.Commons.FeatureFlags;
@@ -63,16 +63,16 @@ public class EverglowClientConfig : ModConfig
 
 	public override void OnChanged()
 	{
-		if ((int)TextureReplace >= 3)
+		if ((int)TextureReplace >= 4)
 			TextureReplace = TextureReplaceMode.Terraria;
 		if ((int)MothAudioReplace >= 3)
 			MothAudioReplace = MothAudioReplaceMode.MothFighting;
 		if ((int)TuskAudioReplace >= 2)
 			TuskAudioReplace = TuskAudioReplaceMode.TuskFighting;
-		//if (AssetReplaceModule.IsLoaded)
-		//{
-		//	AssetReplaceModule.ReplaceTextures(TextureReplace);
-		//}
+		if (UIReplaceModule.IsLoaded)
+		{
+			UIReplaceModule.ReplaceTextures(TextureReplace);
+		}
 
 		base.OnChanged();
 	}
@@ -92,6 +92,7 @@ public enum TextureReplaceMode
 	[Label("Eternal Resolve")]
 	EternalResolve,
 	Myth,
+	Default,
 }
 public enum MothAudioReplaceMode
 {

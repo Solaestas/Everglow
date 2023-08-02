@@ -1,3 +1,4 @@
+using Everglow.Commons.FeatureFlags;
 using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 using Everglow.Myth.TheFirefly.Dusts;
@@ -129,7 +130,18 @@ public class CorruptMoth : ModNPC
 		//NPCID.Sets.TrailingMode[NPC.type] = 0;
 		if (!Main.dedServ)
 		{
-			Music = MythContent.QuickMusic("MothFighting");
+			if (EverglowClientConfig.ReplaceMothAudio == 0) //ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace == MothAudioReplaceMode.MothFighting
+			{
+				Music = MythContent.QuickMusic("MothFighting");
+			}
+			else if (EverglowClientConfig.ReplaceMothAudio == 1)
+			{
+				Music = MythContent.QuickMusic("MothFightingAlt");
+			}
+			else if (EverglowClientConfig.ReplaceMothAudio == 2)
+			{
+				Music = MythContent.QuickMusic("MothFightingOld2");
+			}
 		}
 	}
 	public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
