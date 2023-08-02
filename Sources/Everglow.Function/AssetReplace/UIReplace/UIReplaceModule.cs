@@ -21,6 +21,7 @@ public class UIReplaceModule : IModule
 	internal static EternalAssets EternalAssets = new();
 	internal static MythAssets MythAssets = new();
 	internal static DefaultAssets DefaultAssets = new();
+	internal static EverglowAssets EverglowAssets = new();
 
 	public static bool IsLoaded = false;
 
@@ -37,6 +38,7 @@ public class UIReplaceModule : IModule
 		EternalAssets.LoadTextures();
 		MythAssets.LoadTextures();
 		DefaultAssets.LoadTextures();
+		EverglowAssets.LoadTextures();
 		// ReplaceTextures(ModContent.GetInstance<EverglowClientConfig>().TextureReplace); // object reference error
 		IsLoaded = true;
 	}
@@ -57,9 +59,12 @@ public class UIReplaceModule : IModule
 			case TextureReplaceMode.Default:
 				DefaultAssets.Apply();
 				break;
+			case TextureReplaceMode.Everglow:
+				EverglowAssets.Apply();
+				break;
 			// 有人直接改config配置文件？
 			default:
-				TerrariaAssets.Apply();
+				DefaultAssets.Apply();
 				break;
 		}
 	}

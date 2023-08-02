@@ -63,7 +63,7 @@ public class EverglowClientConfig : ModConfig
 
 	public override void OnChanged()
 	{
-		if ((int)TextureReplace >= 4)
+		if ((int)TextureReplace >= 5)
 			TextureReplace = TextureReplaceMode.Terraria;
 		if ((int)MothAudioReplace >= 3)
 			MothAudioReplace = MothAudioReplaceMode.MothFighting;
@@ -89,10 +89,11 @@ public class EverglowClientConfig : ModConfig
 public enum TextureReplaceMode
 {
 	Terraria,
+	Default,
 	[Label("Eternal Resolve")]
 	EternalResolve,
+	Everglow,
 	Myth,
-	Default,
 }
 public enum MothAudioReplaceMode
 {
