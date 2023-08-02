@@ -7,51 +7,83 @@ using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
-public class MissileExplosion : ModProjectile, IWarpProjectile
+public class MothBallExplosion : ModProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
 	{
 		Projectile.width = 120;
 		Projectile.height = 120;
-		Projectile.friendly = true;
-		Projectile.hostile = false;
+		Projectile.friendly =  false;
+		Projectile.hostile = true;
 		Projectile.aiStyle = -1;
 		Projectile.penetrate = -1;
 		Projectile.timeLeft = 200;
 		Projectile.tileCollide = false;
-		Projectile.extraUpdates = 6;
+		Projectile.extraUpdates = 2;
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 20;
 		Projectile.DamageType = DamageClass.Magic;
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
-		if (Projectile.ai[0] <=20)
-		{
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Crystal_Burst_Normal").WithVolumeScale(Projectile.ai[0] / 20f + 0.2f), Projectile.Center);
-		}
-		else
-		{
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Crystal_Burst_Strong"), Projectile.Center);
-		}
+		ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
+		mplayer.FlyCamPosition = new Vector2(0, 48).RotatedByRandom(6.283);
+		SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/MothBallExplosion"), Projectile.Center);
 		GenerateSmog((int)(1.3 * Projectile.ai[0]));
 		GenerateFire((int)(2.3 * Projectile.ai[0]));
 		GenerateSmog((int)(1.3 * Projectile.ai[0]));
-		GenerateSpark((int)(7 * Projectile.ai[0]));
+		GenerateElectronic((int)(0.5f * Projectile.ai[0]));
+		GenerateSpark((int)(20 * Projectile.ai[0]));
+	}
+	public void GenerateElectronic(int Frequency)
+	{
+		float mulVelocity = 1;
+		for (int g = 0; g < Frequency; g++)
+		{
+			float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(20f, 40f));
+			Vector2 afterVelocity = new Vector2(0, size * 1.3f).RotatedByRandom(MathHelper.TwoPi);
+			var electric = new ElectricCurrent
+			{
+				velocity = afterVelocity * mulVelocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
+				maxTime = Main.rand.Next(60, 120),
+				scale = size,
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size / 2, Main.rand.NextFloat(0.8f, 1.2f) }
+			};
+			Ins.VFXManager.Add(electric);
+		}
+		for (int g = 0; g < Frequency * 3; g++)
+		{
+			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(20f, 30f)).RotatedByRandom(MathHelper.TwoPi);
+			var electric = new MothBallCurrent
+			{
+				velocity = afterVelocity * mulVelocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
+				maxTime = Main.rand.Next(20, 50),
+				scale = Main.rand.NextFloat(18, 19),
+				ai = new float[] { 0, 0, 0 }
+			};
+			Ins.VFXManager.Add(electric);
+		}
 	}
 	public void GenerateSmog(int Frequency)
 	{
 		float mulVelocity = Projectile.ai[0] / 5f;
 		for (int g = 0; g < Frequency; g++)
 		{
-			Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(2f, 4f)).RotatedByRandom(MathHelper.TwoPi);
+			float sqrtRand = MathF.Pow(Main.rand.NextFloat(1), 0.4f);
+			Vector2 newVelocity = new Vector2(0, mulVelocity * sqrtRand * 6).RotatedByRandom(MathHelper.TwoPi);
 			var somg = new FireSmogDust
 			{
 				velocity = newVelocity,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity * 4,
-				maxTime = Main.rand.Next(37, 85),
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity * 1,
+				maxTime = Main.rand.Next(75, 125),
 				scale = Main.rand.NextFloat(2f, 7f) * Projectile.ai[0],
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
@@ -64,14 +96,15 @@ public class MissileExplosion : ModProjectile, IWarpProjectile
 		float mulVelocity = Projectile.ai[0] / 5f;
 		for (int g = 0; g < Frequency; g++)
 		{
-			Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
+			float sqrtRand = MathF.Pow(Main.rand.NextFloat(1), 0.4f);
+			Vector2 newVelocity = new Vector2(0, mulVelocity * sqrtRand * 6).RotatedByRandom(MathHelper.TwoPi);
 			var fire = new MothBlueFireDust
 			{
 				velocity = newVelocity,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity * 4,
-				maxTime = Main.rand.Next(9, 55),
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity,
+				maxTime = Main.rand.Next(49, 125),
 				scale = Main.rand.NextFloat(2f, 7f) * Projectile.ai[0],
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
@@ -81,9 +114,11 @@ public class MissileExplosion : ModProjectile, IWarpProjectile
 	}
 	public void GenerateSpark(int Frequency)
 	{
+		float mulVelocity = Projectile.ai[0] / 5f;
 		for (int g = 0; g < Frequency; g++)
 		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 7.6f)).RotatedByRandom(MathHelper.TwoPi) * Projectile.ai[0] / 10f;
+			float sqrtRand = MathF.Pow(Main.rand.NextFloat(1), 0.4f);
+			Vector2 newVelocity = new Vector2(0, mulVelocity * sqrtRand * 6).RotatedByRandom(MathHelper.TwoPi);
 			var smog = new MothShimmerScaleDust
 			{
 				velocity = newVelocity,
@@ -91,8 +126,8 @@ public class MissileExplosion : ModProjectile, IWarpProjectile
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
 				coord = new Vector2(Main.rand.NextFloat(1f), Main.rand.NextFloat(1f)),
-				maxTime = Main.rand.Next(20, 85),
-				scale = Main.rand.NextFloat(0.4f, 8.4f),
+				maxTime = Main.rand.Next(120, 185),
+				scale = Main.rand.NextFloat(3.4f, 18.4f),
 				rotation = Main.rand.NextFloat(6.283f),
 				rotation2 = Main.rand.NextFloat(6.283f),
 				omega = Main.rand.NextFloat(-30f, 30f),
@@ -142,8 +177,8 @@ public class MissileExplosion : ModProjectile, IWarpProjectile
 		Color c = new Color(0.2f * MathF.Sqrt(1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 3f * (1 - timeValue), 0f);
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null,c * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark, SpriteEffects.None, 0);
 		Color cDark = new Color(0, 0, 0, 1f - timeValue);
-		DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 20 * (1 - timeValue) * Projectile.ai[0], cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
-		DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 4 * (1 - timeValue) * Projectile.ai[0], c * 0.4f , Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 20 * (1 - timeValue) * Projectile.ai[0], cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 4 * (1 - timeValue) * Projectile.ai[0], c * 0.4f , Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -168,12 +203,12 @@ public class MissileExplosion : ModProjectile, IWarpProjectile
 
 			c0.R = (byte)(h / radious * 2 * 255);
 			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radious, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radious, 0.5f, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radious, 0, 0)));
 		}
 		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), c0, new Vector3(1, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), c0, new Vector3(1, 0.5f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), c0, new Vector3(1, 0, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), c0, new Vector3(0, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), c0, new Vector3(0, 0.5f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), c0, new Vector3(0, 0, 0)));
 		if (circle.Count > 2)
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
 	}
@@ -186,7 +221,7 @@ public class MissileExplosion : ModProjectile, IWarpProjectile
 		Texture2D t = Commons.ModAsset.Trail.Value;
 
 
-		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 11f * Projectile.ai[0], 12 * (1 - value) * Projectile.ai[0], new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 30f * Projectile.ai[0], 40 * (1 - value) * Projectile.ai[0], new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
