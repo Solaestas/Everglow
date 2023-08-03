@@ -8,17 +8,10 @@ public class GlowWoodDoor : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.width = 14;
-		Item.height = 28;
-		Item.maxStack = 99;
-		Item.useTurn = true;
-		Item.autoReuse = true;
-		Item.useAnimation = 15;
-		Item.useTime = 10;
-		Item.useStyle = ItemUseStyleID.Swing;
-		Item.consumable = true;
-		Item.value = 150;
-		Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodDoorClosed>();
+		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodDoorClosed>());
+		Item.width = 18;
+		Item.height = 32;
+		Item.value = 2000;
 	}
 
 	public override void AddRecipes()

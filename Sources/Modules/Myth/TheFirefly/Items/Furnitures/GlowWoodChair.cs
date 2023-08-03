@@ -12,10 +12,10 @@ public class GlowWoodChair : ModItem
 	public override void SetDefaults()
 	{
 		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodChair>());
-		Item.value = 150;
+		Item.value = 1500;
 		Item.maxStack = 99;
-		Item.width = 12;
-		Item.height = 30;
+		Item.width = 20;
+		Item.height = 36;
 	}
 
 	public override void AddRecipes()
