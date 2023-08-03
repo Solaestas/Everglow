@@ -46,6 +46,10 @@ public class SquamousShell : ModNPC
 		Player player = Main.player[NPC.target];
 		_coroutineManager.Update();
 	}
+	/// <summary>
+	/// 落地
+	/// </summary>
+	/// <returns></returns>
 	private IEnumerator<ICoroutineInstruction> Landing()
 	{
 		while (NPC.velocity.Y != 0)
@@ -58,6 +62,10 @@ public class SquamousShell : ModNPC
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact);
 		_coroutineManager.StartCoroutine(new Coroutine(Wake()));
 	}
+	/// <summary>
+	/// 苏醒
+	/// </summary>
+	/// <returns></returns>
 	private IEnumerator<ICoroutineInstruction> Wake()
 	{
 		for (int x = 0; x <= 180; x++)
@@ -72,6 +80,12 @@ public class SquamousShell : ModNPC
 		}
 		_coroutineManager.StartCoroutine(new Coroutine(Rush(direction)));
 	}
+	/// <summary>
+	/// 冲撞
+	/// </summary>
+	/// <param name="direction"></param>
+	/// <param name="acceleration"></param>
+	/// <returns></returns>
 	private IEnumerator<ICoroutineInstruction> Rush(int direction, float acceleration = 0.2f)
 	{
 		while (!NPC.collideX || NPC.velocity.Y != 0)
@@ -132,8 +146,13 @@ public class SquamousShell : ModNPC
 			NPC.position.Y -= 40f;
 		}
 		NPC.position.X += newDirection * 20;
-		_coroutineManager.StartCoroutine(new Coroutine(RollingARock(newDirection)));
+		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(newDirection)));
 	}
+	/// <summary>
+	/// 滚石
+	/// </summary>
+	/// <param name="direction"></param>
+	/// <returns></returns>
 	private IEnumerator<ICoroutineInstruction> RollingARock(int direction)
 	{
 		Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction * 2, 0), ModContent.ProjectileType<Projectiles.SquamousRollingStone>(), 60, 6);
@@ -144,9 +163,30 @@ public class SquamousShell : ModNPC
 			rock.scale += 0.01f;
 			yield return new SkipThisFrame();
 		}
-
-
+		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
 	}
+	/// <summary>
+	/// 撼地跳
+	/// </summary>
+	/// <param name="direction"></param>
+	/// <returns></returns>
+	private IEnumerator<ICoroutineInstruction> JumpAndShake(int direction)
+	{
+		Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction * 2, 0), ModContent.ProjectileType<Projectiles.SquamousRollingStone>(), 60, 6);
+		rock.scale = 0;
+		for (int x = 0; x < 100; x++)
+		{
+			NPC.rotation -= 0.05f;
+			rock.scale += 0.01f;
+			yield return new SkipThisFrame();
+		}
+		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
+	}
+	/// <summary>
+	/// 下一个技能
+	/// </summary>
+	/// <param name="direction"></param>
+	/// <returns></returns>
 	private IEnumerator<ICoroutineInstruction> NextAttack(int direction)
 	{
 		int newDirection = 1;
@@ -160,7 +200,15 @@ public class SquamousShell : ModNPC
 			NPC.position.Y -= 40f;
 		}
 		NPC.position.X += newDirection * 20;
-		_coroutineManager.StartCoroutine(new Coroutine(Rush(newDirection)));
+		float randAttack = Main.rand.NextFloat(5f);
+		if(randAttack <= 3)
+		{
+			_coroutineManager.StartCoroutine(new Coroutine(Rush(newDirection)));
+		}
+		if (randAttack > 3 && randAttack <= 5)
+		{
+			_coroutineManager.StartCoroutine(new Coroutine(RollingARock(newDirection)));
+		}
 		yield break;
 	}
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
