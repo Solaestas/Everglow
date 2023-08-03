@@ -1,14 +1,10 @@
 using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Items.BossDrop;
 using Everglow.Myth.TheFirefly.Items.Weapons;
 using Everglow.Myth.TheFirefly.Projectiles;
 using Everglow.Myth.TheFirefly.VFXs;
-using SteelSeries.GameSense;
-using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
@@ -1244,12 +1240,12 @@ public class CorruptMoth : ModNPC
 				float rotatedVelocity = Main.rand.NextFloat(-0.2f, 0.2f);
 				var gFL = new GrayFlowLine
 				{
-					velocity = NPC.velocity.RotatedBy(rotatedVelocity) * Main.rand.NextFloat(0.85f,1.15f) * mulVelocity + NPC.velocity.SafeNormalize(new Vector2(0, -1)),
+					velocity = NPC.velocity.RotatedBy(rotatedVelocity) * Main.rand.NextFloat(0.85f, 1.15f) * mulVelocity + NPC.velocity.SafeNormalize(new Vector2(0, -1)),
 					Active = true,
 					Visible = true,
 					position = NPC.Center + new Vector2(Main.rand.NextFloat(-50f, 50f), 0).RotatedByRandom(6.283) - NPC.velocity * 12,
 					maxTime = Main.rand.Next(25, 40),
-					ai = new float[] { Main.rand.NextFloat(-1f, 1f), -rotatedVelocity * 0.2f * Main.rand.NextFloat(0.5f, 1.5f), Main.rand.NextFloat(1.8f, 2f)}
+					ai = new float[] { Main.rand.NextFloat(-1f, 1f), -rotatedVelocity * 0.2f * Main.rand.NextFloat(0.5f, 1.5f), Main.rand.NextFloat(1.8f, 2f) }
 				};
 				Ins.VFXManager.Add(gFL);
 			}
