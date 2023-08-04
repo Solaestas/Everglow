@@ -1,6 +1,4 @@
-using Everglow.Commons.Enums;
-using Everglow.Commons.Vertex;
-
+namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 [Pipeline(typeof(WCSPipeline))]
 internal class WhiteTriangle : Visual
 {
@@ -27,7 +25,7 @@ internal class WhiteTriangle : Visual
 		velocity *= 0.99f;
 		velocity += new Vector2(0, Main.rand.NextFloat(0.04f)).RotatedByRandom(6.283);
 		velocity.Y -= 0.01f;
-		if(velocity.Y > 0)
+		if (velocity.Y > 0)
 		{
 			velocity.Y *= 0.8f;
 		}
@@ -53,18 +51,18 @@ internal class WhiteTriangle : Visual
 		int maxLength = 15;
 		for (int y = 0; y < maxLength; y++)
 		{
-			if(y == 1)
+			if (y == 1)
 			{
 				lightColor *= 0.4f;
 			}
 			Vector2 deltaY = new Vector2(0, -y * 2);
 			lightColor *= 0.8f;
 			List<Vertex2D> bars = new List<Vertex2D>()
-		    {
-		    	new Vertex2D(position + deltaY,lightColor, new Vector3(0, 0, 0)),
-		    	new Vertex2D(position + deltaY + toCorner.RotatedBy(Math.PI * 0.5 + rotation),lightColor, new Vector3(0, 1, 0)),
-	    		new Vertex2D(position + deltaY + toCorner.RotatedBy(Math.PI * 0+ rotation),lightColor, new Vector3(1, 0, 0))
-	    	};
+			{
+				new Vertex2D(position + deltaY,lightColor, new Vector3(0, 0, 0)),
+				new Vertex2D(position + deltaY + toCorner.RotatedBy(Math.PI * 0.5 + rotation),lightColor, new Vector3(0, 1, 0)),
+				new Vertex2D(position + deltaY + toCorner.RotatedBy(Math.PI * 0+ rotation),lightColor, new Vector3(1, 0, 0))
+			};
 			Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
 		}
 	}

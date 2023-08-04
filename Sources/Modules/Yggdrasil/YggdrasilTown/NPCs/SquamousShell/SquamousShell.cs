@@ -1,6 +1,7 @@
 using System.Runtime.Intrinsics.X86;
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.CustomTiles;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -30,6 +31,8 @@ public class SquamousShell : ModNPC
 		NPC.value = 20000;
 		NPC.localAI[0] = 0;
 	}
+	public bool Flying = false;
+	public float PhantomValue = 0f;
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
 		return 0f;
@@ -38,6 +41,7 @@ public class SquamousShell : ModNPC
 	{
 		NPC.velocity.Y = 2f;
 		_coroutineManager.StartCoroutine(new Coroutine(Landing()));
+		_coroutineManager.StartCoroutine(new Coroutine(FlyingFrame()));
 	}
 	public override void AI()
 	{
@@ -59,7 +63,7 @@ public class SquamousShell : ModNPC
 			yield return new SkipThisFrame();
 		}
 		//这里需要一个震屏
-		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact);
+		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact, NPC.Center);
 		_coroutineManager.StartCoroutine(new Coroutine(Wake()));
 	}
 	/// <summary>
@@ -120,6 +124,8 @@ public class SquamousShell : ModNPC
 				direction *= -1;
 				NPC.velocity *= 0;
 				NPC.position.X += direction * 20;
+				_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
+				yield break;
 			}
 			if (Math.Abs(Main.player[NPC.target].Center.X - NPC.Center.X) > 800)
 			{
@@ -133,7 +139,7 @@ public class SquamousShell : ModNPC
 			yield return new SkipThisFrame();
 		}
 		//这里需要一个震屏
-		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact);
+		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolume(0.6f), NPC.Center);
 		yield return new WaitForFrames(30);
 		int newDirection = 1;
 		if (Main.player[NPC.target].Center.X < NPC.Center.X)
@@ -155,12 +161,64 @@ public class SquamousShell : ModNPC
 	/// <returns></returns>
 	private IEnumerator<ICoroutineInstruction> RollingARock(int direction)
 	{
-		Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction * 2, 0), ModContent.ProjectileType<Projectiles.SquamousRollingStone>(), 60, 6);
-		rock.scale = 0;
-		for(int x = 0;x < 100;x++)
+		yield return new WaitForFrames(5);
+		int waitCount = 0;
+		while(NPC.collideY)
 		{
-			NPC.rotation -= 0.05f;
-			rock.scale += 0.01f;
+			NPC.position.Y -= 1;
+		}
+		while (NPC.velocity != NPC.oldVelocity)
+		{
+			waitCount++;
+			if(waitCount > 600)
+			{
+				break;
+			}
+			NPC.velocity *= 0.95f;
+			NPC.velocity.Y += 0.6f;
+			yield return new SkipThisFrame();
+		}
+		NPC.velocity *= 0;
+		Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction * 4, 0), ModContent.ProjectileType<Projectiles.SquamousRollingStone>(), 60, 6);
+		rock.scale = 0;
+		NPC.spriteDirection = direction;
+		NPC.rotation = 0;
+		if(NPC.spriteDirection == -1)
+		{
+			NPC.rotation = MathF.PI;
+		}
+		rock.direction = direction;
+		for(int x = 0;x < 20;x++)
+		{
+			NPC.rotation -= 0.04f;
+			rock.scale += 0.05f;
+			rock.Center = NPC.Center + new Vector2(135 *direction, 20);
+			NPC.velocity *= 0.95f;
+			if (!NPC.collideY)
+			{
+				NPC.velocity.Y += 0.6f;
+			}
+			yield return new SkipThisFrame();
+		}
+		for (int x = 0; x < 5; x++)
+		{
+			NPC.rotation += 0.2f;
+			NPC.velocity *= 0.95f;
+			if (!NPC.collideY)
+			{
+				NPC.velocity.Y += 0.6f;
+			}
+			yield return new SkipThisFrame();
+		}
+		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolume(0.4f), NPC.Center);
+		for (int x = 0; x < 20; x++)
+		{
+			NPC.rotation -= 0.01f;
+			NPC.velocity *= 0.95f;
+			if (!NPC.collideY)
+			{
+				NPC.velocity.Y += 0.6f;
+			}
 			yield return new SkipThisFrame();
 		}
 		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
@@ -172,12 +230,175 @@ public class SquamousShell : ModNPC
 	/// <returns></returns>
 	private IEnumerator<ICoroutineInstruction> JumpAndShake(int direction)
 	{
-		Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction * 2, 0), ModContent.ProjectileType<Projectiles.SquamousRollingStone>(), 60, 6);
-		rock.scale = 0;
+		NPC.spriteDirection = direction;
+		NPC.rotation = 0;
+		if (NPC.spriteDirection == -1)
+		{
+			NPC.rotation = MathF.PI;
+		}
+		NPC.velocity = new Vector2(direction * 4, -7);
+		Player player = Main.player[NPC.target];
+		for (int x = 0; x < 300; x++)
+		{
+			if ((player.Center - NPC.Center).X * direction < 0)
+			{
+				NPC.velocity.Y += 0.4f;
+				if (x > 30)
+				{
+					break;
+				}
+			}
+			if (NPC.Center.Y - player.Center.Y < -300)
+			{
+				if ((player.Center - NPC.Center).X * direction > 0)
+				{
+					if (Math.Abs(NPC.velocity.X) < 16)
+					{
+						NPC.velocity.X += direction * 0.2f;
+					}
+				}
+				else
+				{
+					NPC.velocity.X *= 0;
+					break;
+				}
+				if (!Flying)
+				{
+					Flying = true;
+					NPC.frame = new Rectangle(0, 0, 244, 130);
+				}
+				if(NPC.velocity.Y < (player.Center.Y - NPC.Center.Y) / 60f)
+				{
+					NPC.velocity.Y += 1f;
+				}
+			}
+			else
+			{
+				NPC.velocity.Y -= 0.4f;
+			}
+			yield return new SkipThisFrame();
+		}
+		//短暂悬停
+		Flying = false;
+		NPC.velocity *= 0;
+		NPC.velocity.Y = -2;
+		PhantomValue = 1;
+		for (int x = 0; x < 16; x++)
+		{
+			PhantomValue = 1 - x / 16f;
+			yield return new SkipThisFrame();
+		}
+		PhantomValue = 0;
 		for (int x = 0; x < 100; x++)
 		{
-			NPC.rotation -= 0.05f;
-			rock.scale += 0.01f;
+			NPC.velocity.X = 0;
+			NPC.velocity.Y = 40;
+			if (NPC.collideY)
+			{
+				SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact, NPC.Center);
+				break;
+			}
+			yield return new SkipThisFrame();
+		}
+		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
+	}
+	/// <summary>
+	/// 飞天月刃
+	/// </summary>
+	/// <param name="direction"></param>
+	/// <returns></returns>
+	private IEnumerator<ICoroutineInstruction> FlyingMoonBlade(int direction)
+	{
+		NPC.spriteDirection = direction;
+		NPC.rotation = 0;
+		if (NPC.spriteDirection == -1)
+		{
+			NPC.rotation = MathF.PI;
+		}
+		NPC.velocity = new Vector2(direction * 4, -7);
+		Player player = Main.player[NPC.target];
+		Flying = true;
+		for (int x = 0; x < 100; x++)
+		{
+			Vector2 aimPos = player.Center + new Vector2(-400 *direction, -300);
+			Vector2 toTarget = aimPos - NPC.Center - NPC.velocity;
+			NPC.velocity = NPC.velocity * 0.8f + toTarget * 0.2f * 0.1f;
+			if((NPC.Center - aimPos).Length() < 50)
+			{
+				break;
+			}
+			yield return new SkipThisFrame();
+		}
+		//减速
+		for (int x = 0; x < 12; x++)
+		{
+			NPC.velocity *= 0.8f;
+			yield return new SkipThisFrame();
+		}
+		//出刀
+		Vector2 playerPos = player.Center;
+		for (int x = 0; x < 140; x++)
+		{
+			if (x % 20 == 0)
+			{
+				playerPos = player.Center;
+			}
+			if (playerPos.X < NPC.Center.X)
+			{
+				direction = -1;
+			}
+			else
+			{
+				direction = 1;
+			}
+			if(NPC.spriteDirection > direction)
+			{
+				NPC.rotation += MathF.PI;
+				NPC.spriteDirection = direction;
+			}
+			if (NPC.spriteDirection < direction)
+			{
+				NPC.rotation -= MathF.PI;
+				NPC.spriteDirection = direction;
+			}
+			Vector2 aimPos = playerPos + new Vector2(-400 * direction, -300);
+			Vector2 toTarget = aimPos - NPC.Center - NPC.velocity;
+			NPC.velocity = NPC.velocity * 0.995f + toTarget * 0.005f * 0.1f;
+			NPC.rotation -= 0.09f;
+			if(x % 20 == 16)
+			{
+				NPC.rotation = 1;
+				if(direction == -1)
+				{
+					NPC.rotation = MathF.PI + 1;
+				}
+				Vector2 toPlayer = playerPos - NPC.Center;
+				int projDir = 1;
+				if(Main.rand.NextBool(2))
+				{
+					projDir = -1;
+				}
+				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Normalize(toPlayer) * 4f, ModContent.ProjectileType<YggdrasilMoonBlade>(), 40, 2, -1, 10, projDir);
+			}
+			yield return new SkipThisFrame();
+		}
+		//落地
+		NPC.rotation = 0;
+		if (direction == -1)
+		{
+			NPC.rotation = MathF.PI;
+		}
+		Flying = false;
+		for(int x = 0;x < 300;x++)
+		{
+			if(!NPC.collideY)
+			{
+				NPC.velocity.Y += 1f;
+			}
+			else
+			{
+				break;
+			}
 			yield return new SkipThisFrame();
 		}
 		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
@@ -196,20 +417,56 @@ public class SquamousShell : ModNPC
 		}
 		if (newDirection == direction)
 		{
-			NPC.velocity.Y -= 16f;
 			NPC.position.Y -= 40f;
 		}
 		NPC.position.X += newDirection * 20;
-		float randAttack = Main.rand.NextFloat(5f);
-		if(randAttack <= 3)
+		float randAttack = Main.rand.NextFloat(10f);
+		if (randAttack <= 3)
 		{
+			NPC.velocity.Y -= 16f;
 			_coroutineManager.StartCoroutine(new Coroutine(Rush(newDirection)));
 		}
 		if (randAttack > 3 && randAttack <= 5)
 		{
 			_coroutineManager.StartCoroutine(new Coroutine(RollingARock(newDirection)));
 		}
+		if (randAttack > 5 && randAttack <= 8)
+		{
+			_coroutineManager.StartCoroutine(new Coroutine(JumpAndShake(newDirection)));
+		}
+		if (randAttack > 8 && randAttack <= 10)
+		{
+			_coroutineManager.StartCoroutine(new Coroutine(FlyingMoonBlade(newDirection)));
+		}
+
 		yield break;
+	}
+	private IEnumerator<ICoroutineInstruction> FlyingFrame()
+	{
+		while (NPC.active)
+		{
+			if (Flying)
+			{
+				NPC.frameCounter++;
+				if (NPC.frameCounter > 6)
+				{
+					NPC.frameCounter = 0;
+					if (NPC.frame.Y == 130)
+					{
+						NPC.frame.Y = 0;
+					}
+					else
+					{
+						NPC.frame.Y += 130;
+					}
+				}
+				yield return new SkipThisFrame();
+			}
+			else
+			{
+				yield return new SkipThisFrame();
+			}
+		}
 	}
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
@@ -221,15 +478,27 @@ public class SquamousShell : ModNPC
 			spe = SpriteEffects.FlipHorizontally;
 			drawRot += MathF.PI;
 		}
+		if(Flying)
+		{
+			mainTex = ModAsset.SquamousShell_fly.Value;
+			spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, NPC.frame, drawColor, drawRot, NPC.frame.Size() * 0.5f, NPC.scale, spe, 0);
+		}
+		else
+		{
+			spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, null, drawColor, drawRot, mainTex.Size() * 0.5f, NPC.scale, spe, 0);
+			if (PhantomValue > 0)
+			{
+				spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, null, drawColor * (1 - PhantomValue), drawRot, mainTex.Size() * 0.5f, NPC.scale + PhantomValue, spe, 0);
+			}
+		}
 
-
-		spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, null, drawColor, drawRot, mainTex.Size() * 0.5f, NPC.scale, spe, 0);
 		if (WakingTimer < 180)
 		{
 			Texture2D deadShell = ModAsset.DeadSquamousShell.Value;
 			float fade = 1 - WakingTimer / 180f;
 			spriteBatch.Draw(deadShell, NPC.Center - Main.screenPosition, null, drawColor * fade, drawRot, deadShell.Size() * 0.5f, NPC.scale, spe, 0);
 		}
+		
 		return false;
 	}
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

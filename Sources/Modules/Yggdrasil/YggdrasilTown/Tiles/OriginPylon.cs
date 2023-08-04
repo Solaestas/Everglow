@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.WorldGeneration;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using SubworldLibrary;
 using Terraria.ObjectData;
 
