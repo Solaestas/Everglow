@@ -25,23 +25,34 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 		SoundEngine.PlaySound(SoundID.Shatter, Projectile.Center);
 
 		GenerateSpark(140);
-		GenerateSmog(80);
+		GenerateSmog(20);
+		float mulWidth = Main.rand.NextFloat(146.6f, 178f);
+		var darknessNight = new Smog_MoonBladeWave
+		{
+			velocity = Vector2.zeroVector,
+			Active = true,
+			Visible = true,
+			position = Projectile.Center,
+			maxTime = 60,
+			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 6, mulWidth }
+		};
+		Ins.VFXManager.Add(darknessNight);
 	}
 	public void GenerateSmog(int Frequency)
 	{
 		for (int g = 0; g < Frequency; g++)
 		{
-			Vector2 vel = new Vector2(0, Main.rand.NextFloat(6.6f, 18f)).RotateRandom(MathHelper.TwoPi);
-			float mulWidth = Main.rand.NextFloat(6.6f, 18f);
+			Vector2 vel = new Vector2(0, Main.rand.NextFloat(12.6f, 18f)).RotateRandom(MathHelper.TwoPi);
+			float mulWidth = Main.rand.NextFloat(16.6f, 78f);
 			var darknessNight = new Smog_MoonBladeDust
 			{
 				velocity = vel,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
+				position = Projectile.Center,
 				maxTime = Main.rand.Next(27, 72),
 				scale = mulWidth,
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.07f, 0.07f) }
 			};
 			Ins.VFXManager.Add(darknessNight);
 		}

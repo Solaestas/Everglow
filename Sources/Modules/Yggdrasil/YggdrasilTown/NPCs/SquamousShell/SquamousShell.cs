@@ -165,7 +165,7 @@ public class SquamousShell : ModNPC
 		int waitCount = 0;
 		while(NPC.collideY)
 		{
-			NPC.position.Y -= 1;
+			NPC.position.Y -= 10;
 		}
 		while (NPC.velocity != NPC.oldVelocity)
 		{
@@ -300,6 +300,7 @@ public class SquamousShell : ModNPC
 			}
 			yield return new SkipThisFrame();
 		}
+		yield return new WaitForFrames(120);
 		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
 	}
 	/// <summary>
@@ -421,16 +422,16 @@ public class SquamousShell : ModNPC
 		}
 		NPC.position.X += newDirection * 20;
 		float randAttack = Main.rand.NextFloat(10f);
-		if (randAttack <= 3)
+		if (randAttack <= 1)
 		{
 			NPC.velocity.Y -= 16f;
 			_coroutineManager.StartCoroutine(new Coroutine(Rush(newDirection)));
 		}
-		if (randAttack > 3 && randAttack <= 5)
+		if (randAttack > 1 && randAttack <= 6)
 		{
 			_coroutineManager.StartCoroutine(new Coroutine(RollingARock(newDirection)));
 		}
-		if (randAttack > 5 && randAttack <= 8)
+		if (randAttack > 6 && randAttack <= 8)
 		{
 			_coroutineManager.StartCoroutine(new Coroutine(JumpAndShake(newDirection)));
 		}
@@ -438,7 +439,6 @@ public class SquamousShell : ModNPC
 		{
 			_coroutineManager.StartCoroutine(new Coroutine(FlyingMoonBlade(newDirection)));
 		}
-
 		yield break;
 	}
 	private IEnumerator<ICoroutineInstruction> FlyingFrame()

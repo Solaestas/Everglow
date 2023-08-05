@@ -4,7 +4,7 @@ public class Smog_MoonBladePipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.Smog_MoonBlade;
-		effect.Value.Parameters["uHeatMap"].SetValue(Commons.ModAsset.Noise_perlin.Value);
+		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
 		effect.Value.Parameters["uPowder"].SetValue(Commons.ModAsset.Noise_Sand.Value);
 	}
 	public override void BeginRender()
@@ -44,7 +44,8 @@ public class Smog_MoonBladeDust : Visual
 	public override void Update()
 	{
 		position += velocity;
-		velocity.Y += 0.045f;
+		velocity *= 0.96f;
+
 		oldPos.Add(position);
 		if (oldPos.Count > 15)
 			oldPos.RemoveAt(0);
@@ -53,7 +54,7 @@ public class Smog_MoonBladeDust : Visual
 			Active = false;
 		velocity = velocity.RotatedBy(ai[1]);
 		float pocession = 1 - timer / maxTime;
-		float c = pocession * scale * 0.1f;
+		float c = pocession * scale * 0.01f;
 		Lighting.AddLight(position, c * 0.14f, c * 0.47f, c * 0.97f);
 	}
 
@@ -106,8 +107,6 @@ public class Smog_MoonBladeWave : Visual
 		timer++;
 		if (timer > maxTime)
 			Active = false;
-
-
 		float delC = ai[2] * 0.05f * (float)Math.Sin((maxTime - timer) / maxTime * Math.PI);
 		Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.015f * delC, 0, 0.45f * delC);
 	}
