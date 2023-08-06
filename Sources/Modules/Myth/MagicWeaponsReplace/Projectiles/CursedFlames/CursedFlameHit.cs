@@ -25,14 +25,8 @@ public class CursedFlameHit : ModProjectile, IWarpProjectile
 
 	public override void AI()
 	{
-		Projectile.velocity *= 0.95f;
-
 		if (Projectile.timeLeft <= 198)
 			Projectile.friendly = false;
-
-
-		int MaxC = (int)(Projectile.ai[0] / 6 + 5);
-		MaxC = Math.Min(26, MaxC);
 		Projectile.velocity *= 0;
 	}
 
@@ -50,28 +44,7 @@ public class CursedFlameHit : ModProjectile, IWarpProjectile
 		Texture2D light = ModAsset.CursedHitStar.Value;
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(55, 255, 0, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) * Projectile.ai[0] / 40f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(55, 255, 0, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, Dark) * Projectile.ai[0] / 40f, SpriteEffects.None, 0);
-		float size = Math.Clamp(Projectile.timeLeft / 8f - 10, 0f, 20f);
 		return false;
-	}
-	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
-	{
-		var circle = new List<Vertex2D>();
-
-		Color c0 = color;
-		c0.R = 0;
-		for (int h = 0; h < radious / 2; h += 1)
-		{
-
-			c0.R = (byte)(h / radious * 2 * 255);
-			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radious, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radious, 0, 0)));
-		}
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), c0, new Vector3(1, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), c0, new Vector3(1, 0, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), c0, new Vector3(0, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), c0, new Vector3(0, 0, 0)));
-		if (circle.Count > 2)
-			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
 	}
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
@@ -84,7 +57,7 @@ public class CursedFlameHit : ModProjectile, IWarpProjectile
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft;
 
-		DrawTexCircle_VFXBatch(spriteBatch, value * 27 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		MythUtils.DrawTexCircle_Warp(spriteBatch, value * 27 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{

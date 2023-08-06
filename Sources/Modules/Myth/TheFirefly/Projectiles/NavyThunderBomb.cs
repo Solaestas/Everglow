@@ -202,7 +202,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
 			colorV *= 10;
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Vague");
+		Texture2D t = ModAsset.SparkLight.Value;
 		float width = 60;
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft;

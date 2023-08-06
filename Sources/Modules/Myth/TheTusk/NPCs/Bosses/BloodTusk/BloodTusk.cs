@@ -394,17 +394,17 @@ public class BloodTusk : ModNPC
 						fx1 = Math.Sin(1.6 * Math.PI) * Math.PI / 2d;
 
 					Mouth1[0] = NPC.Center + new Vector2(0, 75);
-					int MaxCountMouth1 = 0;//最大数量
+					int maxCountMouth1 = 0;//最大数量
 
 					for (int f = Mouth1.Length - 1; f > 0; f--)//逐级检测
 					{
 						if (Mouth1[f - 1] != Vector2.Zero)//空值时,记录长度
 						{
-							MaxCountMouth1 = f;
+							maxCountMouth1 = f;
 							break;
 						}
 					}
-					if (MaxCountMouth1 < 399)
+					if (maxCountMouth1 < 399)
 					{
 						for (int f = Mouth1.Length - 1; f > 0; f--)//逐级伸展
 						{
@@ -414,9 +414,9 @@ public class BloodTusk : ModNPC
 								break;
 							}
 						}
-						for (int i = 0; i < MaxCountMouth1; i++)//摇摆
+						for (int i = 0; i < maxCountMouth1; i++)//摇摆
 						{
-							float Shake = (float)((Math.Cos(i / (float)MaxCountMouth1 * Math.PI) + 1) * Math.Sin(i / 50f + Main.time * 0.05));
+							float Shake = (float)((Math.Cos(i / (float)maxCountMouth1 * Math.PI) + 1) * Math.Sin(i / 50f + Main.time * 0.05));
 							Mouth1[i] += Shake * new Vector2(0, -0.15f);
 						}
 					}
@@ -424,20 +424,20 @@ public class BloodTusk : ModNPC
 					{
 						if (OldMouth1[0] == Vector2.Zero && NPC.localAI[0] <= 491)
 						{
-							for (int i = 0; i < MaxCountMouth1; i++)
+							for (int i = 0; i < maxCountMouth1; i++)
 							{
 								OldMouth1[i] = Mouth1[i];
 							}
 						}
-						for (int i = 0; i < MaxCountMouth1; i++)
+						for (int i = 0; i < maxCountMouth1; i++)
 						{
 							Mouth1[i] = NPC.Center + new Vector2(0, 75) + (OldMouth1[i] - (NPC.Center + new Vector2(0, 75))).RotatedBy(-fx1);
 						}
 					}
 
-					if (MaxCountMouth1 > 380 && MaxCountMouth1 != 399)//上翘
+					if (maxCountMouth1 > 380 && maxCountMouth1 != 399)//上翘
 						Mouth1Vel = Mouth1Vel.RotatedBy(-0.1);
-					if (MaxCountMouth1 > 300)
+					if (maxCountMouth1 > 300)
 					{
 						if (Mouth1Vel.Length() < 3)
 							Mouth1Vel *= 1.02f;
@@ -450,17 +450,17 @@ public class BloodTusk : ModNPC
 
 
 					Mouth2[0] = NPC.Center + new Vector2(0, 75);
-					int MaxCountMouth2 = 0;//最大数量
+					int maxCountMouth2 = 0;//最大数量
 
 					for (int f = Mouth2.Length - 1; f > 0; f--)//逐级检测
 					{
 						if (Mouth2[f - 1] != Vector2.Zero)//空值时,记录长度
 						{
-							MaxCountMouth2 = f;
+							maxCountMouth2 = f;
 							break;
 						}
 					}
-					if (MaxCountMouth2 < 399)
+					if (maxCountMouth2 < 399)
 					{
 						for (int f = Mouth2.Length - 1; f > 0; f--)//逐级伸展
 						{
@@ -470,9 +470,9 @@ public class BloodTusk : ModNPC
 								break;
 							}
 						}
-						for (int i = 0; i < MaxCountMouth2; i++)
+						for (int i = 0; i < maxCountMouth2; i++)
 						{
-							float Shake = (float)((Math.Cos(i / (float)MaxCountMouth2 * Math.PI) + 1) * Math.Sin(i / 50f + Main.time * 0.05));
+							float Shake = (float)((Math.Cos(i / (float)maxCountMouth2 * Math.PI) + 1) * Math.Sin(i / 50f + Main.time * 0.05));
 							Mouth2[i] += Shake * new Vector2(0, -0.15f);//摇摆
 						}
 					}
@@ -480,20 +480,20 @@ public class BloodTusk : ModNPC
 					{
 						if (OldMouth2[0] == Vector2.Zero && NPC.localAI[0] <= 491)
 						{
-							for (int i = 0; i < MaxCountMouth1; i++)
+							for (int i = 0; i < maxCountMouth1; i++)
 							{
 								OldMouth2[i] = Mouth2[i];
 							}
 						}
-						for (int i = 0; i < MaxCountMouth1; i++)//旋转
+						for (int i = 0; i < maxCountMouth1; i++)//旋转
 						{
 							Mouth2[i] = NPC.Center + new Vector2(0, 75) + (OldMouth2[i] - (NPC.Center + new Vector2(0, 75))).RotatedBy(fx1);
 						}
 					}
-					if (MaxCountMouth2 > 380 && MaxCountMouth1 != 399)//上翘
+					if (maxCountMouth2 > 380 && maxCountMouth1 != 399)//上翘
 						Mouth2Vel = Mouth2Vel.RotatedBy(0.1);
 
-					if (MaxCountMouth2 > 300)
+					if (maxCountMouth2 > 300)
 					{
 						if (Mouth2Vel.Length() < 3)
 							Mouth2Vel *= 1.02f;

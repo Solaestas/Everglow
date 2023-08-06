@@ -30,18 +30,18 @@ public class DemoHit : ModProjectile, IWarpProjectile, IBloomProjectile
 			Projectile.friendly = false;
 
 
-		int MaxC = (int)(Projectile.ai[0] / 6 + 5);
-		MaxC = Math.Min(26, MaxC);
+		int maxC = (int)(Projectile.ai[0] / 6 + 5);
+		maxC = Math.Min(26, maxC);
 		if (Projectile.timeLeft >= 200)
 		{
-			for (int x = 0; x < MaxC; x++)
+			for (int x = 0; x < maxC; x++)
 			{
 				SparkVelocity[x] = new Vector2(0, Projectile.ai[0] * 1.6f).RotatedByRandom(6.283) * Main.rand.NextFloat(0.05f, 1.2f);
 				SparkOldPos[x, 0] = Projectile.Center;
 			}
 		}
 
-		for (int x = 0; x < MaxC; x++)
+		for (int x = 0; x < maxC; x++)
 		{
 			for (int y = 39; y > 0; y--)
 			{
@@ -61,23 +61,23 @@ public class DemoHit : ModProjectile, IWarpProjectile, IBloomProjectile
 	}
 	public override void PostDraw(Color lightColor)
 	{
-		Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitLight");
+		Texture2D Shadow = ModAsset.CursedHitLight.Value;
 		float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(55, 0, 145, 0) * Dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * Dark, SpriteEffects.None, 0);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHit");
+		Texture2D Shadow = ModAsset.CursedHit.Value;
 		float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * Dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f, SpriteEffects.None, 0);
-		Texture2D light = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitStar");
+		Texture2D light = ModAsset.CursedHitStar.Value;
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(55, 0, 145, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(55, 0, 145, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, Dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
 		float size = Math.Clamp(Projectile.timeLeft / 8f - 10, 0f, 20f) * 1.6f;
 		if (size > 0)
 		{
-			DrawSpark(Color.White * 0.5f, size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkDark"));
-			DrawSpark(new Color(55, 0, 145, 0), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
+			DrawSpark(Color.White * 0.5f, size, ModAsset.SparkDark.Value);
+			DrawSpark(new Color(55, 0, 145, 0), size, ModAsset.SparkLight.Value);
 		}
 		return false;
 	}
@@ -86,10 +86,10 @@ public class DemoHit : ModProjectile, IWarpProjectile, IBloomProjectile
 	private Vector2[] SparkVelocity = new Vector2[27];
 	internal void DrawSpark(Color c0, float width, Texture2D tex)
 	{
-		int MaxC = (int)(Projectile.ai[0] / 6 + 5);
-		MaxC = Math.Min(26, MaxC);
+		int maxC = (int)(Projectile.ai[0] / 6 + 5);
+		maxC = Math.Min(26, maxC);
 		var bars = new List<Vertex2D>();
-		for (int x = 0; x < MaxC; x++)
+		for (int x = 0; x < maxC; x++)
 		{
 			int TrueL = 0;
 			for (int i = 1; i < 40; ++i)
@@ -144,7 +144,7 @@ public class DemoHit : ModProjectile, IWarpProjectile, IBloomProjectile
             float size = Math.Clamp(Projectile.timeLeft / 8f - 60, 0f, 20f);
             if (size > 0)
             {
-                DrawSpark(new Color(255, 255, 255, 0), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
+                DrawSpark(new Color(255, 255, 255, 0), size, ModAsset.SparkLight.Value);
             }*/
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

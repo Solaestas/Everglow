@@ -53,7 +53,7 @@ internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 	{
 		Projectile.hide = false;
 		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Vague"), new Color(0, 255, 174, 0));
+		DrawMagicArray(ModAsset.SparkLight.Value, new Color(0, 255, 174, 0));
 		return false;
 	}
 

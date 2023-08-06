@@ -76,7 +76,7 @@ public class MagnetSphereLighting : ModProjectile, IWarpProjectile
 
 	public override void PostDraw(Color lightColor)
 	{
-		Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitLight");
+		Texture2D Shadow = ModAsset.CursedHitLight.Value;
 		float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0) * Dark, 0, Shadow.Size() / 2f, 22 / 15f * Dark, SpriteEffects.None, 0);
 	}
@@ -85,10 +85,10 @@ public class MagnetSphereLighting : ModProjectile, IWarpProjectile
 		DrawLightingBolt(Color.White * 0.3f);
 		DrawLightingBolt(new Color(0, 255, 199, 0));
 
-		Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHit");
+		Texture2D Shadow = ModAsset.CursedHit.Value;
 		float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * Dark, 0, Shadow.Size() / 2f, 22f / 15f, SpriteEffects.None, 0);
-		Texture2D light = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitStar");
+		Texture2D light = ModAsset.CursedHitStar.Value;
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) / 2f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.8f, Dark / 2f), SpriteEffects.None, 0);
 

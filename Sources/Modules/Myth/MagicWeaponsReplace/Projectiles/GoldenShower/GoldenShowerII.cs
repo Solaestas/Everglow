@@ -208,7 +208,10 @@ public class GoldenShowerII : VisualProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f), c0, new Vector3(x0, 0, 0)));
 		}
 		Texture2D t = ModAsset.Projectiles_GoldLine.Value;
-		Ins.Batch.BindTexture<Vertex2D>(t);
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+		if (bars.Count > 2)
+		{
+			Ins.Batch.BindTexture<Vertex2D>(t);
+			Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+		}
 	}
 }
