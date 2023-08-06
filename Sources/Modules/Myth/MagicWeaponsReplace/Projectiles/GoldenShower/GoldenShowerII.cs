@@ -1,11 +1,31 @@
-using Everglow.Myth.Common;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
+public class GoldenShowerPipeline : Pipeline
+{
+	public override void BeginRender()
+	{
+		Ins.Batch.Begin();
+		effect.Value.Parameters["uTransform"].SetValue(
+			Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) *
+			Main.GameViewMatrix.ZoomMatrix *
+			Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
+		effect.Value.CurrentTechnique.Passes[0].Apply();
+	}
 
-public class GoldenShowerII : ModProjectile, IWarpProjectile
+	public override void EndRender()
+	{
+		Ins.Batch.End();
+	}
+
+	public override void Load()
+	{
+		effect = ModAsset.GoldenShowerII_shader;
+	}
+}
+
+[Pipeline(typeof(GoldenShowerPipeline))]
+public class GoldenShowerII : VisualProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
 	{
@@ -24,8 +44,8 @@ public class GoldenShowerII : ModProjectile, IWarpProjectile
 		Projectile.DamageType = DamageClass.Magic;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
+		base.SetDefaults();
 	}
-
 	public override void AI()
 	{
 		float kTime = 1f;
@@ -97,54 +117,6 @@ public class GoldenShowerII : ModProjectile, IWarpProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		float k1 = 60f;
-		float k0 = (240 - Projectile.timeLeft) / k1;
-
-		if (Projectile.timeLeft <= 240 - k1)
-			k0 = 1;
-
-		var c0 = new Color(k0 * 0.8f + 0.2f, k0 * k0 * 0.4f + 0.2f, 0f, 0);
-		int trueL = 0;
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
-		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
-
-			trueL++;
-		}
-		
-		var bars = new List<Vertex2D>();
-		for (int i = 1; i < trueL; ++i)
-		{
-			float width = 36;
-			if (Projectile.timeLeft <= 40)
-				width = Projectile.timeLeft * 0.9f;
-			if (i < 10)
-				width *= i / 10f;
-			if (Projectile.ai[0] == 3)
-				width *= 0.5f;
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
-
-			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-			var factor = i / (float)trueL;
-			float x0 = factor * 0.6f - (float)(Main.time * 0.03);
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, 0)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, 0)));
-		}
-		Texture2D t = ModAsset.Projectiles_GoldLine.Value;
-		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-		Main.graphics.GraphicsDevice.Textures[0] = t;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		if (bars.Count > 3)
-		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		}
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		return false;
 	}
 	public void DrawWarp(VFXBatch spriteBatch)
@@ -195,9 +167,48 @@ public class GoldenShowerII : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(x0, 1, 0)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(x0, 0, 0)));
 		}
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
+	}
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawTiles;
+	public override void Draw()
+	{
+		float k1 = 60f;
+		float k0 = (240 - Projectile.timeLeft) / k1;
 
-		//if (bars.Count > 3)
-		//	spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
+		if (Projectile.timeLeft <= 240 - k1)
+			k0 = 1;
+
+		var c0 = new Color(k0 * 0.8f + 0.2f, k0 * k0 * 0.4f + 0.2f, 0f, 0);
+		int trueL = 0;
+		for (int i = 1; i < Projectile.oldPos.Length; ++i)
+		{
+			if (Projectile.oldPos[i] == Vector2.Zero)
+				break;
+
+			trueL++;
+		}
+
+		var bars = new List<Vertex2D>();
+		for (int i = 1; i < trueL; ++i)
+		{
+			float width = 36;
+			if (Projectile.timeLeft <= 40)
+				width = Projectile.timeLeft * 0.9f;
+			if (i < 10)
+				width *= i / 10f;
+			if (Projectile.ai[0] == 3)
+				width *= 0.5f;
+			if (Projectile.oldPos[i] == Vector2.Zero)
+				break;
+
+			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
+			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
+			var factor = i / (float)trueL;
+			float x0 = factor * 0.6f + (float)(Main.time * 0.03);
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f), c0, new Vector3(x0, 1, 0)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f), c0, new Vector3(x0, 0, 0)));
+		}
+		Texture2D t = ModAsset.Projectiles_GoldLine.Value;
+		Ins.Batch.BindTexture<Vertex2D>(t);
+		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
 }
