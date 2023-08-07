@@ -1,7 +1,6 @@
-using static Everglow.Myth.Common.MythUtils;
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
 
-public class GoldenShowerBomb : ModProjectile, IWarpProjectile, IBloomProjectile
+public class GoldenShowerBomb : ModProjectile, IBloomProjectile
 {
 	public override void SetDefaults()
 	{
@@ -109,15 +108,15 @@ public class GoldenShowerBomb : ModProjectile, IWarpProjectile, IBloomProjectile
 				float x0 = 1 - factor;
 				if (i == 1)
 				{
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
+					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
+					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
 				}
-				bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
-				bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
+				bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width - Main.screenPosition, c0, new Vector3(x0, 1, w)));
+				bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width - Main.screenPosition, c0, new Vector3(x0, 0, w)));
 				if (i == 39)
 				{
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
+					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
+					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
 				}
 			}
 			Texture2D t = tex;
@@ -126,21 +125,10 @@ public class GoldenShowerBomb : ModProjectile, IWarpProjectile, IBloomProjectile
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 	}
-
-	public void DrawWarp(VFXBatch spriteBatch)
-	{
-		Main.NewText(Projectile.whoAmI);
-		float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
-		float colorV = 0.9f * (1 - value);
-		if (Projectile.ai[0] >= 10)
-			colorV *= Projectile.ai[0] / 10f;
-		Texture2D t = ModAsset.Wave.Value;
-		//DrawTexCircle_Warp(spriteBatch, value * 16 * Projectile.ai[0], 100, new Color(colorV, colorV * 0.4f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
-	}
 	public void DrawBloom()
 	{
 		float size = Math.Clamp(Projectile.timeLeft / 8f - 60, 0f, 20f);
 		if (size > 0)
-			DrawSpark(new Color(255, 2255, 225, 0), size, ModAsset.SparkLight.Value);
+			DrawSpark(new Color(255, 255, 225, 0), size, ModAsset.SparkLight.Value);
 	}
 }
