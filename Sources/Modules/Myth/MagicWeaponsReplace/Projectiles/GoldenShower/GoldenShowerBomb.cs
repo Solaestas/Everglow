@@ -21,11 +21,8 @@ public class GoldenShowerBomb : ModProjectile, IBloomProjectile
 	public override void AI()
 	{
 		Projectile.velocity *= 0.95f;
-
 		if (Projectile.timeLeft <= 198)
 			Projectile.friendly = false;
-
-
 		int maxC = (int)(Projectile.ai[0] / 6 + 5);
 		maxC = Math.Min(26, maxC);
 		if (Projectile.timeLeft >= 200)
@@ -36,7 +33,6 @@ public class GoldenShowerBomb : ModProjectile, IBloomProjectile
 				SparkOldPos[x, 0] = Projectile.Center;
 			}
 		}
-
 		for (int x = 0; x < maxC; x++)
 		{
 			for (int y = 39; y > 0; y--)
@@ -55,7 +51,6 @@ public class GoldenShowerBomb : ModProjectile, IBloomProjectile
 		}
 		Projectile.velocity *= 0;
 	}
-
 	public override void PostDraw(Color lightColor)
 	{
 		Texture2D Shadow = ModAsset.CursedHitLight.Value;
@@ -78,7 +73,6 @@ public class GoldenShowerBomb : ModProjectile, IBloomProjectile
 		}
 		return false;
 	}
-
 	private Vector2[,] SparkOldPos = new Vector2[27, 40];
 	private Vector2[] SparkVelocity = new Vector2[27];
 	internal void DrawSpark(Color c0, float width, Texture2D tex)
