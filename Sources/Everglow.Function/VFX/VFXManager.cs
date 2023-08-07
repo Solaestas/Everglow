@@ -96,7 +96,7 @@ public class VFXManager : IVFXManager
 
 	public void Draw(CodeLayer layer)
 	{
-		var visuals = this.visuals[layer];
+        var visuals = this.visuals[layer];
 		int nextPipelineIndex = -1;
 		foreach (var innerVisuals in visuals)
 		{
@@ -125,7 +125,7 @@ public class VFXManager : IVFXManager
 					rt2DIndex = !rt2DIndex;
 				}
 			}
-
+			
 			pipelineInstances[pipelineIndex.index].Render(visibles);
 		}
 

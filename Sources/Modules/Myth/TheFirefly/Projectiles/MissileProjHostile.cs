@@ -188,7 +188,7 @@ public class MissileProjHostile : ModProjectile, IWarpProjectile
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/GoldLine");
+		Texture2D t = Commons.ModAsset.Trail_4.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -199,7 +199,7 @@ public class MissileProjHostile : ModProjectile, IWarpProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawTrail();
-		Texture2D star = MythContent.QuickTexture("TheFirefly/Projectiles/MissileProj");
+		Texture2D star = ModAsset.MissileProj.Value;
 
 		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition - Projectile.velocity, null, new Color(150, 150, 150, 0), Projectile.rotation + 1.2f, star.Size() / 2f, 1f, SpriteEffects.None, 0);
 		return false;
@@ -266,8 +266,7 @@ public class MissileProjHostile : ModProjectile, IWarpProjectile
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/GoldLine");
-
+		Texture2D t = Commons.ModAsset.Trail_4.Value;
 		if (bars.Count > 3)
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
 	}
