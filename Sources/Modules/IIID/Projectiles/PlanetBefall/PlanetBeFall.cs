@@ -47,13 +47,13 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 		public override void OnSpawn(IEntitySource source)
 		{
 			Player player = Main.player[Projectile.owner];
-			Array = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
-			Main.projectile[Array].Center = Main.MouseWorld;
-			Projectile.ai[0] = Main.projectile[Array].Center.X;
-			Projectile.ai[1] = Main.projectile[Array].Center.Y;
-			Projectile.velocity = Vector2.Normalize(Main.projectile[Array].Center - new Vector2(player.Center.X, Main.MouseWorld.Y - 1500)) / 4;
+			//Array = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
+			//Main.projectile[Array].Center = Main.MouseWorld;
+			//Projectile.ai[0] = Main.projectile[Array].Center.X;
+			//Projectile.ai[1] = Main.projectile[Array].Center.Y;
+			//Projectile.velocity = Vector2.Normalize(Main.projectile[Array].Center - new Vector2(player.Center.X, Main.MouseWorld.Y - 1500)) / 4;
 
-			for (int i = 0; i < 16; i++)
+			/*for (int i = 0; i < 16; i++)
 			{
 				Vector2 v = new Vector2(0.001f, 0);
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X, Projectile.Center.Y), v.RotatedBy(Math.PI * i / 8).RotatedByRandom(Math.PI * i / 100), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
@@ -63,7 +63,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			PlanetBeFallScreenMovePlayer.PlanetBeFallAnimation = true;
 			PlanetBeFallScreenMovePlayer.proj = Projectile;
 
-			target = new Vector2(Projectile.ai[0], Projectile.ai[1]);
+			target = new Vector2(Projectile.ai[0], Projectile.ai[1]);*/
 
 
 

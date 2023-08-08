@@ -13,16 +13,45 @@ Tiles: {
 	StrangeTuskStone3.MapEntry: Strange Tusk Stone3
 	StrangeTuskStone4.MapEntry: Strange Tusk Stone4
 	TuskRelic.MapEntry: Tusk Relic
-	BlackFren.MapEntry: Black Fren
-	BlackFrenLarge.MapEntry: Black Fren Large
 	BlackStarShrub.MapEntry: Black Star Shrub
 	BlackStarShrubSmall.MapEntry: Black Star Shrub Small
 	BlackVine.MapEntry: Black Vine
 	BlueBlossom.MapEntry: Blue Blossom
-	CocoonRock.MapEntry: Cocoon Rock
+	DarkCocoonGrass.MapEntry: Dark Cocoon Grass
+	FireflyPiranhaBanner.MapEntry: Firefly Piranha Banner
 	GlowingReed.MapEntry: Glowing Reed
 	LampLotus.MapEntry: Lamp Lotus
+	LargeFireBulb.MapEntry: Large Fire Bulb
 	MothWorldDoor.MapEntry: Moth World Door
+	GlowingDrop.MapEntry: Glowing Drop
+	GlowWoodBathtub.MapEntry: Glow Wood Bathtub
+	GlowWoodBed.MapEntry: Glow Wood Bed
+	GlowWoodCampfire.MapEntry: Glow Wood Campfire
+	GlowWoodCandelabra.MapEntry: Glow Wood Candelabra
+	GlowWoodCandle.MapEntry: Glow Wood Candle
+	GlowWoodChair.MapEntry: Glow Wood Chair
+	GlowWoodChandelier.MapEntry: Glow Wood Chandelier
+	GlowWoodChandelierType2.MapEntry: Glow Wood Chandelier Type2
+	GlowWoodChandelierType3.MapEntry: Glow Wood Chandelier Type3
+	GlowWoodChandelierType4.MapEntry: Glow Wood Chandelier Type4
+	GlowWoodChest.MapEntry: Glow Wood Chest
+	GlowWoodDoorClosed.MapEntry: Glow Wood Door Closed
+	GlowWoodDoorClosedType2.MapEntry: Glow Wood Door Closed Type2
+	GlowWoodDoorOpened.MapEntry: Glow Wood Door Opened
+	GlowWoodDoorOpenedType2.MapEntry: Glow Wood Door Opened Type2
+	GlowWoodDresser.MapEntry: Glow Wood Dresser
+	GlowWoodDresserType2.MapEntry: Glow Wood Dresser Type2
+	GlowWoodLantern.MapEntry: Glow Wood Lantern
+	GlowWoodLanternType2.MapEntry: Glow Wood Lantern Type2
+	GlowWoodMusicBox.MapEntry: Glow Wood Music Box
+	GlowWoodPiano.MapEntry: Glow Wood Piano
+	GlowWoodPlatform.MapEntry: Glow Wood Platform
+	GlowWoodSink.MapEntry: Glow Wood Sink
+	GlowWoodSinkType2.MapEntry: Glow Wood Sink Type2
+	GlowWoodSofa.MapEntry: Glow Wood Sofa
+	GlowWoodTable.MapEntry: Glow Wood Table
+	GlowWoodTorch.MapEntry: Glow Wood Torch
+	GlowWoodWorkBench.MapEntry: Glow Wood Work Bench
 	CyanVineBar.MapEntry: Cyan Vine Bar
 	CyanVineOreTile.MapEntry: Cyan Vine Ore Tile
 	CyanVineStone.MapEntry: Cyan Vine Stone
@@ -77,6 +106,11 @@ Buffs: {
 	OnElectric: {
 		DisplayName: On Electric
 		Description: Mods.Everglow.Buffs.OnElectric.Description
+	}
+
+	StaminaEnergyBuff: {
+		DisplayName: Stamina Energy Buff
+		Description: Mods.Everglow.Buffs.StaminaEnergyBuff.Description
 	}
 
 	StarCrack: {
@@ -674,6 +708,11 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.TuskStaff.Description
 	}
 
+	FireflyInferno: {
+		DisplayName: Firefly Inferno
+		Description: Mods.Everglow.Buffs.FireflyInferno.Description
+	}
+
 	GlowMothBuff: {
 		DisplayName: Glow Moth Buff
 		Description: Mods.Everglow.Buffs.GlowMothBuff.Description
@@ -682,6 +721,11 @@ Buffs: {
 	OnMoth: {
 		DisplayName: On Moth
 		Description: Mods.Everglow.Buffs.OnMoth.Description
+	}
+
+	ShadowPotionBuff: {
+		DisplayName: Shadow Potion Buff
+		Description: Mods.Everglow.Buffs.ShadowPotionBuff.Description
 	}
 
 	Freeze: {
@@ -921,8 +965,18 @@ Items: {
 		Tooltip: ""
 	}
 
+	EnergyDrink: {
+		DisplayName: Energy Drink
+		Tooltip: ""
+	}
+
 	StarSeed: {
 		DisplayName: Star Seed
+		Tooltip: ""
+	}
+
+	EnergyBand: {
+		DisplayName: Energy Band
 		Tooltip: ""
 	}
 
@@ -1251,6 +1305,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	LargeFireBulbTestItem: {
+		DisplayName: Large Fire Bulb Test Item
+		Tooltip: ""
+	}
+
 	FireflyPylonItem: {
 		DisplayName: Firefly Pylon Item
 		Tooltip: ""
@@ -1263,6 +1322,21 @@ Items: {
 
 	BlackStarShrub: {
 		DisplayName: Black Star Shrub
+		Tooltip: ""
+	}
+
+	BlackVine: {
+		DisplayName: Black Vine
+		Tooltip: ""
+	}
+
+	CorruptOrbStonePost: {
+		DisplayName: Corrupt Orb Stone Post
+		Tooltip: ""
+	}
+
+	CrimsonOrbStonePost: {
+		DisplayName: Crimson Orb Stone Post
 		Tooltip: ""
 	}
 
@@ -1281,8 +1355,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	FireflyCapital: {
-		DisplayName: Firefly Capital
+	FireflyImpression: {
+		DisplayName: Firefly Impression
 		Tooltip: ""
 	}
 
@@ -1293,6 +1367,11 @@ Items: {
 
 	FireflyPigment: {
 		DisplayName: Firefly Pigment
+		Tooltip: ""
+	}
+
+	FireflyPiranhaBanner: {
+		DisplayName: Firefly Piranha Banner
 		Tooltip: ""
 	}
 
@@ -1311,18 +1390,18 @@ Items: {
 		Tooltip: ""
 	}
 
-	GlowMetal: {
-		DisplayName: Glow Metal
-		Tooltip: ""
-	}
-
-	GlowStone: {
-		DisplayName: Glow Stone
+	GlowingReedSeed: {
+		DisplayName: Glowing Reed Seed
 		Tooltip: ""
 	}
 
 	GlowWood: {
 		DisplayName: Glow Wood
+		Tooltip: ""
+	}
+
+	GlowWoodWall: {
+		DisplayName: Glow Wood Wall
 		Tooltip: ""
 	}
 
@@ -1401,6 +1480,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	ShadowPotion: {
+		DisplayName: Shadow Potion
+		Tooltip: ""
+	}
+
 	FluorescentLeafStaff: {
 		DisplayName: Fluorescent Leaf Staff
 		Tooltip: ""
@@ -1416,6 +1500,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	GlowWoodBathtub: {
+		DisplayName: Glow Wood Bathtub
+		Tooltip: ""
+	}
+
 	GlowWoodBed: {
 		DisplayName: Glow Wood Bed
 		Tooltip: ""
@@ -1423,11 +1512,6 @@ Items: {
 
 	GlowWoodBookcase: {
 		DisplayName: Glow Wood Bookcase
-		Tooltip: ""
-	}
-
-	GlowWoodBookcaseType2: {
-		DisplayName: Glow Wood Bookcase Type2
 		Tooltip: ""
 	}
 
@@ -1546,13 +1630,13 @@ Items: {
 		Tooltip: ""
 	}
 
-	GlowWoodSofaType2: {
-		DisplayName: Glow Wood Sofa Type2
+	GlowWoodTable: {
+		DisplayName: Glow Wood Table
 		Tooltip: ""
 	}
 
-	GlowWoodTable: {
-		DisplayName: Glow Wood Table
+	GlowWoodToilet: {
+		DisplayName: Glow Wood Toilet
 		Tooltip: ""
 	}
 
@@ -1573,6 +1657,21 @@ Items: {
 
 	MothRelic: {
 		DisplayName: Moth Relic
+		Tooltip: ""
+	}
+
+	FireflywoodBreastplate: {
+		DisplayName: Fireflywood Breastplate
+		Tooltip: ""
+	}
+
+	FireflywoodHelmet: {
+		DisplayName: Fireflywood Helmet
+		Tooltip: ""
+	}
+
+	FireflywoodLeggings: {
+		DisplayName: Fireflywood Leggings
 		Tooltip: ""
 	}
 
@@ -2564,12 +2663,12 @@ NPCs: {
 		DisplayName: Acytaea
 
 		TownNPCMood: {
-			Content: I am content.
-			NoHome: I hate not having a home.
-			FarFromHome: I am too far from home.
-			LoveSpace: I love having so much space.
-			DislikeCrowded: I dislike how crowded I am.
-			HateCrowded: I hate how crowded I am.
+			Content: 我很满足。
+			NoHome: 我讨厌没有家。
+			FarFromHome: 我离家太远了。
+			LoveSpace: 我非常喜欢有这么大的空间。
+			DislikeCrowded: 我不喜欢这么拥挤。
+			HateCrowded: 我讨厌这么拥挤。
 			LikeNPC_Princess: I like {NPCName}.
 			Princess_LovesNPC: I like {NPCName}.
 		}
@@ -2617,6 +2716,7 @@ Projectiles: {
 	GoldenStabbingSword_Pro_Stab.DisplayName: Golden Stabbing Sword_ Pro_ Stab
 	HolyBayonet_Pro.DisplayName: Holy Bayonet_ Pro
 	HolyBayonet_Pro_Stab.DisplayName: Holy Bayonet_ Pro_ Stab
+	HolyBayonet_Slash.DisplayName: Holy Bayonet_ Slash
 	IchorBayonet_Pro.DisplayName: Ichor Bayonet_ Pro
 	IchorBayonet_Pro_Stab.DisplayName: Ichor Bayonet_ Pro_ Stab
 	IronStabbingSword_Pro.DisplayName: Iron Stabbing Sword_ Pro
@@ -2652,8 +2752,10 @@ Projectiles: {
 	YoenLeZed_Pro_Stab.DisplayName: Yoen Le Zed_ Pro_ Stab
 	YoenLeZed_Pro_Stab_HitTile.DisplayName: Yoen Le Zed_ Pro_ Stab_ Hit Tile
 	FryingPan.DisplayName: Frying Pan
-	ButterflyDreamFriendly.DisplayName: Butterfly Dream Friendly
-	ButterflyDream.DisplayName: Butterfly Dream
+	PlanetBeFall.DisplayName: Planet Be Fall
+	PlanetBefallWave.DisplayName: Planet Befall Wave
+	PlanetBefallArray.DisplayName: Planet Befall Array
+	GoldenCrack.DisplayName: Golden Crack
 	DashingLightEff.DisplayName: Dashing Light Eff
 	VortexVanquisher.DisplayName: Vortex Vanquisher
 	VortexVanquisher2.DisplayName: Vortex Vanquisher2
@@ -2695,6 +2797,8 @@ Projectiles: {
 	BlueMissil.DisplayName: Blue Missil
 	BlueMissilFriendly.DisplayName: Blue Missil Friendly
 	BombShakeWave.DisplayName: Bomb Shake Wave
+	ButterflyDream.DisplayName: Butterfly Dream
+	ButterflyDreamFriendly.DisplayName: Butterfly Dream Friendly
 	CorMoth4DProj.DisplayName: Cor Moth4 D Proj
 	CorruptDust.DisplayName: Corrupt Dust
 	DarkEffect.DisplayName: Dark Effect
@@ -2713,6 +2817,7 @@ Projectiles: {
 	GlowStar.DisplayName: Glow Star
 	GlowStarExplosion.DisplayName: Glow Star Explosion
 	GlowWoodSword.DisplayName: Glow Wood Sword
+	MissileExplosion.DisplayName: Missile Explosion
 	MissileProj.DisplayName: Missile Proj
 	MissileProjHostile.DisplayName: Missile Proj Hostile
 	MothArrow.DisplayName: Moth Arrow
@@ -2776,6 +2881,7 @@ Projectiles: {
 	WoodSlingshot.DisplayName: Wood Slingshot
 	ComingGhost.DisplayName: Coming Ghost
 	ComingGhost2.DisplayName: Coming Ghost2
+	CyanFrostProj.DisplayName: Cyan Frost Proj
 	GhostHit.DisplayName: Ghost Hit
 	GoldRound.DisplayName: Gold Round
 	GoldRoundYoyo.DisplayName: Gold Round Yoyo
