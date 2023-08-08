@@ -299,7 +299,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 		private void FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
 		{
 			GraphicsDevice gd = Main.instance.GraphicsDevice;
-			SpriteBatch sb = Main.spriteBatch; = 1;
+			SpriteBatch sb = Main.spriteBatch; 
 			if (render == null)
 			{
 				CreateRender();
@@ -377,7 +377,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			Main.spriteBatch.Draw(bloom2, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
 			Main.spriteBatch.End();
 			
-			/*GoldenCrackVFX = ModContent.Request<Effect>("Everglow/IIID/Effects/GoldenCrack").Value;
+			GoldenCrackVFX = ModContent.Request<Effect>("Everglow/IIID/Effects/GoldenCrack").Value;
 			gd.SetRenderTarget(Main.screenTargetSwap);
 			gd.Clear(Color.Transparent);
 			sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -429,7 +429,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 					(proj.ModProjectile as PlanetBeFall).DrawIIIDProj();
 				}
 			}
-			Main.spriteBatch.End();*/
+			Main.spriteBatch.End();
 
 			orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
 		}
