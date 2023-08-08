@@ -299,8 +299,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 		private void FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
 		{
 			GraphicsDevice gd = Main.instance.GraphicsDevice;
-			SpriteBatch sb = Main.spriteBatch;
-			BloomIntensity = 1;
+			SpriteBatch sb = Main.spriteBatch; = 1;
 			if (render == null)
 			{
 				CreateRender();
@@ -377,65 +376,8 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
 			Main.spriteBatch.Draw(bloom2, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
 			Main.spriteBatch.End();
-			/////////////////////////////////
-			/*Bloom1 = ModContent.Request<Effect>("Everglow/IIID/Effects/Bloom1").Value;
-			gd.SetRenderTarget(Main.screenTargetSwap);
-			gd.Clear(Color.Transparent);
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-			Main.spriteBatch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
-			Main.spriteBatch.End();
-
-			gd.SetRenderTarget(screen);
-			gd.Clear(Color.Transparent);
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-
-			foreach (Projectile proj in Main.projectile)
-			{
-				if (proj.active && proj.type == ModContent.ProjectileType<GoldenCrack>())
-				{
-					Color c3 = Color.Gold;
-					(proj.ModProjectile as GoldenCrack).PreDraw(ref c3);
-				}
-				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBefallArray.PlanetBefallArray>())
-				{
-					(proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).DrawBloom();
-					if (BloomIntensity <= (proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).BloomIntensity)
-					{
-						BloomIntensity = (proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).BloomIntensity;
-					}
-				}
-			}
-			Main.spriteBatch.End();
-
-			Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend);
-			Bloom1.Parameters["uScreenResolution"].SetValue(new Vector2((float)Main.screenWidth, (float)Main.screenHeight) / 3f);
-			Bloom1.Parameters["uRange"].SetValue(1.5f);
-			Bloom1.Parameters["uIntensity"].SetValue(BloomIntensity);
-			Bloom1.CurrentTechnique.Passes["GlurV"].Apply();
-			/*CombatText.NewText(new Rectangle((int)Main.LocalPlayer.position.X, (int)Main.LocalPlayer.position.Y, Main.LocalPlayer.width, Main.LocalPlayer.height),
-                   new Color(255, 0, 0),
-                   node.num,
-                   true, false);*/
-
-			/*gd.SetRenderTarget(bloom1);
-			gd.Clear(Color.Transparent);
-			Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
-			Bloom1.CurrentTechnique.Passes["GlurH"].Apply();
-
-			gd.SetRenderTarget(bloom2);
-			gd.Clear(Color.Transparent);
-			Main.spriteBatch.Draw(bloom1, Vector2.Zero, Color.White);
-			Main.spriteBatch.End();
-
-			gd.SetRenderTarget(Main.screenTarget);
-			gd.Clear(Color.Transparent);
-			Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive);
-			Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
-			Main.spriteBatch.Draw(bloom2, new Rectangle(0, 0, Main.screenWidth * 3, Main.screenHeight * 3), Color.White);
-			Main.spriteBatch.End();*/
-
-			// UseCosmic(gd);
-			GoldenCrackVFX = ModContent.Request<Effect>("Everglow/IIID/Effects/GoldenCrack").Value;
+			
+			/*GoldenCrackVFX = ModContent.Request<Effect>("Everglow/IIID/Effects/GoldenCrack").Value;
 			gd.SetRenderTarget(Main.screenTargetSwap);
 			gd.Clear(Color.Transparent);
 			sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -487,7 +429,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 					(proj.ModProjectile as PlanetBeFall).DrawIIIDProj();
 				}
 			}
-			Main.spriteBatch.End();
+			Main.spriteBatch.End();*/
 
 			orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
 		}
