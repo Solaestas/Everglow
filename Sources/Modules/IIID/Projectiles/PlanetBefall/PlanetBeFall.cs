@@ -195,8 +195,8 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			var modelMatrix =
 			  // Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
 			   //* Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
-			    Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1.3f, (Projectile.Center.Y - lookat.Y) / -1.3f, 0),
-									 new Vector3((Projectile.Center.X - lookat.X) / -1.3f, (Projectile.Center.Y - lookat.Y) / -1.3f, 600),
+			    Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1.35f, (Projectile.Center.Y - lookat.Y) / -1.35f, 0),
+									 new Vector3((Projectile.Center.X - lookat.X) / -1.35f, (Projectile.Center.Y - lookat.Y) / -1.35f, 600),
 									 new Vector3(0, -1, 0))
 
 			   * Matrix.CreateScale(s)
