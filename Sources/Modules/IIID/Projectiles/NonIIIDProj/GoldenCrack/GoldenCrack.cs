@@ -20,7 +20,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Graphics.Effects;
 using ReLogic.Content;
-using  Everglow.IIID.Projectiles;
+using Everglow.IIID.Projectiles;
 using Everglow.IIID.Projectiles.PlanetBefall;
 using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray;
 
@@ -299,7 +299,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 		private void FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
 		{
 			GraphicsDevice gd = Main.instance.GraphicsDevice;
-			SpriteBatch sb = Main.spriteBatch; 
+			SpriteBatch sb = Main.spriteBatch;
 			if (render == null)
 			{
 				CreateRender();
@@ -333,6 +333,10 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 					if (BloomIntensity <= (proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).BloomIntensity)
 					{
 						BloomIntensity = (proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).BloomIntensity;
+					}
+					else
+					{
+						BloomIntensity = 1;
 					}
 				}
 			}
@@ -376,7 +380,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
 			Main.spriteBatch.Draw(bloom2, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
 			Main.spriteBatch.End();
-			
+
 			GoldenCrackVFX = ModContent.Request<Effect>("Everglow/IIID/Effects/GoldenCrack").Value;
 			gd.SetRenderTarget(Main.screenTargetSwap);
 			gd.Clear(Color.Transparent);
