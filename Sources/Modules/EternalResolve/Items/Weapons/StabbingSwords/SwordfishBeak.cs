@@ -5,7 +5,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
     public class SwordfishBeak : StabbingSwordItem
 	{
-		//TODO:长喙剑鱼\n对于水里的敌人造成伤害下降40%，对于干燥的敌人伤害提高40%
+		//TODO:长喙剑鱼\n对于水里的敌人造成伤害下降40%,但是潮湿状态下攻击范围扩大50%,且体力消耗降低35%,对于干燥的敌人伤害提高40%
 		public override void SetDefaults()
 		{
 			Item.damage = 10;
@@ -13,8 +13,21 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.Blue;
 			Item.value = Item.sellPrice(0, 2, 14, 0);
 			Item.shoot = ModContent.ProjectileType<SwordfishBeak_Pro>();
-			PowerfulStabProj = 1;
+			StabMulDamage = 4f;
+			staminaCost = 0.75f;
+			PowerfulStabProj = ModContent.ProjectileType<SwordfishBeak_Pro_Stab>();
 			base.SetDefaults();
+		}
+		public override void UpdateVanitySet(Player player)
+		{
+			if(player.wet)
+			{
+				staminaCost = 0.4875f;
+			}
+			else
+			{
+				staminaCost = 0.75f;
+			}
 		}
 		public override void AddRecipes()
 		{

@@ -1,14 +1,15 @@
 using Everglow.Commons.Weapons.StabbingSwords;
+using Everglow.EternalResolve.Buffs;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class BloodGoldBayonet_Pro : StabbingProjectile
-    {
+	public class BloodGoldBayonet_Pro : StabbingProjectile
+	{
 		public NPC ProjTarget;
-        public override void SetDefaults()
-        {
-            Color = Color.Red;
+		public override void SetDefaults()
+		{
+			Color = Color.Red;
 			TradeLength = 8;
 			TradeShade = 0.7f;
 			Shade = 0.5f;
@@ -34,7 +35,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			{
 				player.ClearBuff(ModContent.BuffType<Buffs.BloodSwordStrikeBuff>());
 			}
-			else if(!ProjTarget.active)
+			else if (!ProjTarget.active)
 			{
 				player.ClearBuff(ModContent.BuffType<Buffs.BloodSwordStrikeBuff>());
 			}
@@ -54,9 +55,16 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					Projectile.NewProjectile(Projectile.GetItemSource_OnHit(target, ModContent.ItemType<BloodGoldBayonet>()), target.Center, Vector2.Zero, ProjectileID.VampireHeal, 5, 0, Projectile.owner, Projectile.owner, damageDone * 0.3f);
 				}
 			}
+			if (target.HasBuff(ModContent.BuffType<BloodDrinking>()))
+			{
+				if (target.type != NPCID.TargetDummy)
+				{
+					Projectile.NewProjectile(Projectile.GetItemSource_OnHit(target, ModContent.ItemType<BloodGoldBayonet>()), target.Center, Vector2.Zero, ProjectileID.VampireHeal, 5, 0, Projectile.owner, Projectile.owner, 1);
+				}
+			}
 			ProjTarget = target;
 			Player player = Main.player[Projectile.owner];
-			if(target.life <= 0 || damageDone >= target.life)
+			if (target.life <= 0 || damageDone >= target.life)
 			{
 				player.ClearBuff(ModContent.BuffType<Buffs.BloodSwordStrikeBuff>());
 			}
