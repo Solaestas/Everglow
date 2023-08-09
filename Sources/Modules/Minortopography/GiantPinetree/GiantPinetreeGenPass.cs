@@ -1,9 +1,10 @@
+using Everglow.Minortopography.Common;
+using Everglow.Minortopography.Common.Elevator.Tiles;
+using Everglow.Minortopography.GiantPinetree.Items;
+using Everglow.Minortopography.GiantPinetree.TilesAndWalls;
 using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.WorldBuilding;
-using Everglow.Minortopography.GiantPinetree.TilesAndWalls;
-using Everglow.Minortopography.Common.Elevator.Tiles;
-using Everglow.Minortopography.Common;
 
 namespace Everglow.Minortopography.GiantPinetree;
 
@@ -12,7 +13,7 @@ public class GiantPinetree : ModSystem
 	private class GiantPinetreeGenPass : GenPass
 	{
 		public GiantPinetreeGenPass() : base("GiantPinetree", 300)
-		{	
+		{
 		}
 
 		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
@@ -42,13 +43,13 @@ public class GiantPinetree : ModSystem
 					for (int j = 0; j < 100; j++)
 					{
 						Tile tileCheckCloud = SafeGetTile(i, buildCoordY - j);
-						if(tileCheckCloud.TileType == TileID.Cloud)
+						if (tileCheckCloud.TileType == TileID.Cloud)
 						{
 							hasAirIsland = true;
 							break;
 						}
 					}
-					if(hasAirIsland)
+					if (hasAirIsland)
 					{
 						break;
 					}
@@ -65,7 +66,7 @@ public class GiantPinetree : ModSystem
 			if (point.Y <= minYCoord + 30)
 				newAimPoint.Add(point);
 		}
-		if(newAimPoint.Count == 0)
+		if (newAimPoint.Count == 0)
 		{
 			return new Point16(0, 0);
 		}
@@ -78,7 +79,7 @@ public class GiantPinetree : ModSystem
 	{
 
 		Point16 centerPoint = RandomPointInSurfaceSnow();
-		if(centerPoint == new Point16(0, 0))
+		if (centerPoint == new Point16(0, 0))
 		{
 			return;
 		}
@@ -112,7 +113,7 @@ public class GiantPinetree : ModSystem
 				Tile tile = SafeGetTile(i + positonX, killCoordY + positonY);
 				if (i > -trunkWidth + 4 || i < trunkWidth - 4 || trunkWidth < 4)
 				{
-					if(Main.rand.Next(Math.Abs(i)) < trunkWidth - 6)
+					if (Main.rand.Next(Math.Abs(i)) < trunkWidth - 6)
 					{
 						tile.wall = (ushort)ModContent.WallType<PineLeavesWall>();
 					}
@@ -127,9 +128,9 @@ public class GiantPinetree : ModSystem
 		GenerateTrunkWall(new Point16(positonX, positonY + 6), 7, 66);
 		GenerateBranch(new Point16(positonX, positonY - 20), -1.4f, 26);
 		GenerateBranch(new Point16(positonX, positonY - 36), 1.4f, 20);
-		GeneratePineTreeHouse(new Point16(positonX - 15, positonY - 22), Main.rand.Next(11, 15), Main.rand.Next(11, 15), 13, new int[] { 0, Main.rand.Next(5, 7), Main.rand.Next(1620, 1980), 185 ,-1, 255, Main.rand.Next(5, 7) ,0});
-		GeneratePineTreeHouse(new Point16(positonX + 12, positonY - 38), Main.rand.Next(11, 15), Main.rand.Next(11, 15), 13, new int[] { 1, Main.rand.Next(5, 7), Main.rand.Next(1620, 1980), 185 ,1, -8, 0, 0 });
-		GeneratePineTreeHouse(new Point16(positonX + Main.rand.Next(-3, 4), positonY - 68), 5, 4, 9, new int[] { 0, Main.rand.Next(3, 5), Main.rand.Next(810, 1000), 185, 0 ,255, 0, 1 });
+		GeneratePineTreeHouse(new Point16(positonX - 15, positonY - 22), Main.rand.Next(11, 15), Main.rand.Next(11, 15), 13, new int[] { 0, Main.rand.Next(5, 7), Main.rand.Next(1620, 1980), 185, -1, 255, Main.rand.Next(5, 7), 0 });
+		GeneratePineTreeHouse(new Point16(positonX + 12, positonY - 38), Main.rand.Next(11, 15), Main.rand.Next(11, 15), 13, new int[] { 1, Main.rand.Next(5, 7), Main.rand.Next(1620, 1980), 185, 1, -8, 0, 0 });
+		GeneratePineTreeHouse(new Point16(positonX + Main.rand.Next(-3, 4), positonY - 68), 5, 4, 9, new int[] { 0, Main.rand.Next(3, 5), Main.rand.Next(810, 1000), 185, 0, 255, 0, 1 });
 		//平滑木头部分
 		SmoothTile(positonX - 60, positonY - 20, 120, 250, ModContent.TileType<PineWood>());
 		DistributePineCone(new Point16(positonX, positonY - 10), 40, 40);
@@ -401,7 +402,7 @@ public class GiantPinetree : ModSystem
 			{
 				branchVelocity = branchVelocity * 0.8f + new Vector2(Math.Sign(branchVelocity.X), 0) * 0.2f;
 			}
-			
+
 			if (trunkWidth < 0.8f)//太细了，准备破
 			{
 				if (trunkWidth < 0.8f)//破掉吧
@@ -562,7 +563,7 @@ public class GiantPinetree : ModSystem
 			int length = rightWidth + leftWidth + styleSeed[1] * 2;
 			float maxHeight = styleSeed[2] / 100f;
 			float baseHeight = (length / 2f - Math.Abs(i - origin.X)) / (length / 2f);
-			if(baseHeight <= 0)
+			if (baseHeight <= 0)
 			{
 				baseHeight = 0;
 			}
@@ -570,7 +571,7 @@ public class GiantPinetree : ModSystem
 			for (int j = origin.Y - height - domeHeight; j <= origin.Y - height; j++)
 			{
 				Tile tile = SafeGetTile(i, j);
-				if(j <= origin.Y - height - domeHeight + 2)
+				if (j <= origin.Y - height - domeHeight + 2)
 				{
 					tile.TileType = (ushort)ModContent.TileType<PineWood>();
 					tile.HasTile = true;
@@ -589,7 +590,7 @@ public class GiantPinetree : ModSystem
 		if (Math.Abs(styleSeed[5]) < 255)
 		{
 			int addJ = 0;
-			while(SafeGetTile(origin.X + styleSeed[5], origin.Y + 2 + addJ).TileType == ModContent.TileType<PineWood>())
+			while (SafeGetTile(origin.X + styleSeed[5], origin.Y + 2 + addJ).TileType == ModContent.TileType<PineWood>())
 			{
 				addJ++;
 				if (addJ > 20)
@@ -597,7 +598,7 @@ public class GiantPinetree : ModSystem
 					break;
 				}
 			}
-			if(addJ != 21)
+			if (addJ != 21)
 			{
 				for (int addJJ = 0; addJJ < 12; addJJ++)
 				{
@@ -617,7 +618,7 @@ public class GiantPinetree : ModSystem
 		{
 			int top = topY + 2;
 			int left = leftX + styleSeed[6];
-			for(int times = 0; times < 4;times++)
+			for (int times = 0; times < 4; times++)
 			{
 				switch (times)
 				{
@@ -630,7 +631,7 @@ public class GiantPinetree : ModSystem
 					case 3:
 						top -= 4;
 						break;
-					default: 
+					default:
 						break;
 				}
 
@@ -649,6 +650,61 @@ public class GiantPinetree : ModSystem
 		{
 			TileUtils.PlaceFrameImportantTiles(leftX + 2, topY + 2, 6, 6, (ushort)ModContent.TileType<GiantPineCone_0>());
 		}
+		PlacePineChest((rightX + leftX) / 2, positonY - 2);
+	}
+	public static void PlacePineChest(int x, int y)
+	{
+		List<Item> chestContents = new List<Item>();
+
+		int maxCount = Main.rand.Next(8, 14);
+		switch (Main.rand.Next(5))
+		{
+			case 0:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<FrostBomb>(), 1));
+				break;
+			case 1:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<BurningFrozenHeart>(), 1));
+				break;
+			case 2:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<PearlOfCyan>(), 1));
+				break;
+			case 3:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<SnowPineLockBox>(), 1));
+				break;
+			case 4:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<HarvestingClaw>(), 1));
+				break;
+		}
+		if (Main.rand.NextBool(3))
+		{
+			chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<SnowPineLeaveStaff>(), 1));
+			chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<SnowPineWoodStaff>(), 1));
+		}
+		if (Main.rand.NextBool(7))
+		{
+			chestContents.Add(new Item(setDefaultsToType: ItemID.HerbBag, Main.rand.Next(1, 4)));
+		}
+		if (Main.rand.NextBool(7))
+		{
+			chestContents.Add(new Item(setDefaultsToType: ItemID.CanOfWorms, Main.rand.Next(2, 5)));
+		}
+		if (Main.rand.NextBool(2))
+		{
+			chestContents.Add(new Item(setDefaultsToType: ItemID.BorealWood, Main.rand.Next(50, 151)));
+		}
+		if (Main.rand.NextBool(7))
+		{
+			chestContents.Add(new Item(setDefaultsToType: ItemID.FrostDaggerfish, Main.rand.Next(80, 201)));
+		}
+		if (Main.rand.NextBool(7))
+		{
+			chestContents.Add(new Item(setDefaultsToType: ItemID.FrostburnArrow, Main.rand.Next(80, 201)));
+		}
+		if (Main.rand.NextBool(5))
+		{
+			chestContents.Add(new Item(setDefaultsToType: ItemID.GoldCoin, Main.rand.Next(1, 3)));
+		}
+		WorldGenMisc.PlaceChest(x, y, (ushort)ModContent.TileType<TilesAndWalls.SnowPineChest>(), chestContents);
 	}
 	/// <summary>
 	/// 随机生成小松塔
@@ -658,11 +714,11 @@ public class GiantPinetree : ModSystem
 	/// <param name="range"></param>
 	public static void DistributePineCone(Point16 position, int leftWidth, int rightWidth)
 	{
-		for(int time = -leftWidth; time < rightWidth; time++)
+		for (int time = -leftWidth; time < rightWidth; time++)
 		{
-			int addJ = 0;	
+			int addJ = 0;
 			Point16 newPos = position + new Point16(time, 0);
-			while(!SafeGetTile(newPos.X, newPos.Y + addJ).HasTile)
+			while (!SafeGetTile(newPos.X, newPos.Y + addJ).HasTile)
 			{
 				addJ++;
 			}
@@ -679,16 +735,16 @@ public class GiantPinetree : ModSystem
 					}
 					if (tile.HasTile && j == 2)
 					{
-						if(tile.blockType() == 0 && Main.tileSolid[tile.type])
+						if (tile.blockType() == 0 && Main.tileSolid[tile.type])
 						{
 							valid--;
 						}
 					}
 				}
 			}
-			if(valid == 0)
+			if (valid == 0)
 			{
-				TileUtils.PlaceFrameImportantTiles(newPos.X - 1, newPos.Y, 3, 2, ModContent.TileType<TilesAndWalls.PineCone>(),54 * Main.rand.Next(3));
+				TileUtils.PlaceFrameImportantTiles(newPos.X - 1, newPos.Y, 3, 2, ModContent.TileType<TilesAndWalls.PineCone>(), 54 * Main.rand.Next(3));
 				time += Main.rand.Next(4);
 			}
 		}
@@ -842,16 +898,16 @@ public class GiantPinetree : ModSystem
 		{
 			for (int i = 0; i < width; i++)
 			{
-				if(!Main.rand.NextBool(25))
+				if (!Main.rand.NextBool(25))
 				{
 					continue;
 				}
 				Tile tile = SafeGetTile(i + position.X, j + position.Y);
-				if(tile.HasTile)
+				if (tile.HasTile)
 				{
-					if(tile.TileType == ModContent.TileType<TilesAndWalls.PineWood>())
+					if (tile.TileType == ModContent.TileType<TilesAndWalls.PineWood>())
 					{
-						if(tile.blockType() == 0)
+						if (tile.blockType() == 0)
 						{
 							Tile tileUp = SafeGetTile(i + position.X, j + position.Y - 1);
 							if (!tileUp.HasTile)
@@ -930,7 +986,7 @@ public class GiantPinetree : ModSystem
 			}
 			for (int j = 0; j < height; j += 1)
 			{
-				if(j + y > Main.maxTilesY - 20)
+				if (j + y > Main.maxTilesY - 20)
 				{
 					break;
 				}
@@ -956,7 +1012,7 @@ public class GiantPinetree : ModSystem
 			}
 		}
 	}
-	public static Tile SafeGetTile(int i, int j) 
+	public static Tile SafeGetTile(int i, int j)
 	{
 		return (Main.tile[Math.Clamp(i, 20, Main.maxTilesX - 20), Math.Clamp(j, 20, Main.maxTilesY - 20)]);
 	}
