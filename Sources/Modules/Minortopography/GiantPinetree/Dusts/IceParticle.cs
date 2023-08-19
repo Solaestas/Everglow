@@ -22,13 +22,13 @@ public class IceParticle : ModDust
 		if (Collision.SolidCollision(dust.position - Vector2.One * 5f + new Vector2(dust.velocity.X, 0), 10, 10))
 		{
 			dust.alpha += 5;
-			dust.velocity.X *= -1;
+			dust.velocity.X *= -0.6f;
 			dust.velocity *= Main.rand.NextFloat(0.4f, 0.9f);
 		}
 		if (Collision.SolidCollision(dust.position - Vector2.One * 5f + new Vector2(0, dust.velocity.Y), 10, 10))
 		{
 			dust.alpha += 5;
-			dust.velocity.Y *= -1;
+			dust.velocity.Y *= -0.6f;
 			dust.velocity *= Main.rand.NextFloat(0.4f, 0.9f);
 		}
 		if (Collision.SolidCollision(dust.position - Vector2.One * 5f, 10, 10))

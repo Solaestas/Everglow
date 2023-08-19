@@ -23,11 +23,18 @@ public class FrostBomb : ModItem
 		Item.shootSpeed = 7f;
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.DamageType = DamageClass.Magic;
+		Item.mana = 14;
 	}
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
 		if (player.altFunctionUse == 2)
 		{
+			if(player.statMana < Item.mana * 2)
+			{
+				return false;
+			}
+			Projectile.NewProjectile(source, position,velocity, ModContent.ProjectileType<Projectiles.FrostBomb>(), damage * 2, knockback, player.whoAmI, 1);
+			player.statMana -= Item.mana;
 			return false;
 		}
 		return base.Shoot(player, source, position, velocity, type, damage, knockback);
