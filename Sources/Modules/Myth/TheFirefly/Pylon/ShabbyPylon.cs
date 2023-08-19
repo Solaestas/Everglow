@@ -100,12 +100,13 @@ internal class ShabbyPylonUpdate : GlobalNPC
 	{
 		if (npc.type is NPCID.BrainofCthulhu or NPCID.EaterofWorldsHead)
 		{
-			if (!PylonSystem.Instance.shabbyPylonEnable && NPC.downedBoss2)
+			do
 			{
 				PylonSystem.Instance.shabbyPylonEnable = true;
 				PylonSystem.Instance.firstEnableAnimation = true;
 				Main.NewText(Language.GetTextValue("Mods.Everglow.Common.PylonSystem.ShabbyPylonRepairedTip"));
 			}
+			while (!PylonSystem.Instance.shabbyPylonEnable && NPC.downedBoss2);
 		}
 	}
 }
