@@ -33,7 +33,8 @@ public class FrostBomb : ModItem
 			{
 				return false;
 			}
-			Projectile.NewProjectile(source, position,velocity, ModContent.ProjectileType<Projectiles.FrostBomb>(), damage * 2, knockback, player.whoAmI, 1);
+			Projectile p0 =  Projectile.NewProjectileDirect(source, position,velocity, ModContent.ProjectileType<Projectiles.FrostBomb>(), damage * 2, knockback, player.whoAmI, 1);
+			p0.rotation = Main.rand.NextFloat(6.283f);
 			player.statMana -= Item.mana;
 			return false;
 		}

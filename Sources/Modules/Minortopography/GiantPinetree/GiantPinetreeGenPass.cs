@@ -656,7 +656,6 @@ public class GiantPinetree : ModSystem
 	{
 		List<Item> chestContents = new List<Item>();
 
-		int maxCount = Main.rand.Next(8, 14);
 		switch (Main.rand.Next(5))
 		{
 			case 0:
@@ -675,34 +674,81 @@ public class GiantPinetree : ModSystem
 				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<HarvestingClaw>(), 1));
 				break;
 		}
+		//生命针叶魔杖
 		if (Main.rand.NextBool(3))
 		{
 			chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<SnowPineLeaveStaff>(), 1));
 			chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<SnowPineWoodStaff>(), 1));
 		}
+		//草药袋
 		if (Main.rand.NextBool(7))
 		{
 			chestContents.Add(new Item(setDefaultsToType: ItemID.HerbBag, Main.rand.Next(1, 4)));
 		}
+		//蠕虫桶
 		if (Main.rand.NextBool(7))
 		{
 			chestContents.Add(new Item(setDefaultsToType: ItemID.CanOfWorms, Main.rand.Next(2, 5)));
 		}
+		//针叶木
 		if (Main.rand.NextBool(2))
 		{
 			chestContents.Add(new Item(setDefaultsToType: ItemID.BorealWood, Main.rand.Next(50, 151)));
 		}
+		//冰雪飞鱼
 		if (Main.rand.NextBool(7))
 		{
 			chestContents.Add(new Item(setDefaultsToType: ItemID.FrostDaggerfish, Main.rand.Next(80, 201)));
 		}
+		//霜火箭
 		if (Main.rand.NextBool(7))
 		{
 			chestContents.Add(new Item(setDefaultsToType: ItemID.FrostburnArrow, Main.rand.Next(80, 201)));
 		}
+		//金币
 		if (Main.rand.NextBool(5))
 		{
 			chestContents.Add(new Item(setDefaultsToType: ItemID.GoldCoin, Main.rand.Next(1, 3)));
+		}
+		//绳子
+		chestContents.Add(new Item(setDefaultsToType: ItemID.Rope, Main.rand.Next(70, 151)));
+		//药水
+		int potionType = 1;
+		switch (Main.rand.Next(5))
+		{
+			case 0:
+				potionType = ItemID.WarmthPotion;
+				break;
+			case 1:
+				potionType = ItemID.GillsPotion;
+				break;
+			case 2:
+				potionType = ItemID.WaterWalkingPotion;
+				break;
+			case 3:
+				potionType = ItemID.SpelunkerPotion;
+				break;
+			case 4:
+				potionType = ItemID.MiningPotion;
+				break;
+		}
+		chestContents.Add(new Item(setDefaultsToType: potionType, Main.rand.Next(1, 4)));
+		//冰雪火把
+		if (Main.rand.NextBool(2))
+		{
+			chestContents.Add(new Item(setDefaultsToType: ItemID.IceTorch, Main.rand.Next(40, 91)));
+		}
+		//荧光棒
+		if (Main.rand.NextBool(2))
+		{
+			if(Main.rand.NextBool(5))
+			{
+				chestContents.Add(new Item(setDefaultsToType: ItemID.StickyGlowstick, Main.rand.Next(20, 61)));
+			}
+			else
+			{
+				chestContents.Add(new Item(setDefaultsToType: ItemID.Glowstick, Main.rand.Next(20, 61)));
+			}
 		}
 		WorldGenMisc.PlaceChest(x, y, (ushort)ModContent.TileType<TilesAndWalls.SnowPineChest>(), chestContents);
 	}

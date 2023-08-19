@@ -98,6 +98,13 @@ public class FrostBall : ModProjectile
 			Projectile.velocity.Y += 0.25f;
 			Projectile.velocity *= 0.98f;
 		}
+		if (Projectile.lavaWet)
+		{
+			if (Projectile.timeLeft > 2)
+			{
+				Projectile.timeLeft = 2;
+			}
+		}
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{

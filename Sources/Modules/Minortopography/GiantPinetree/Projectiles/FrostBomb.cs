@@ -43,6 +43,13 @@ public class FrostBomb : ModProjectile
 			Projectile.velocity.Y += 0.25f;
 			Projectile.velocity *= 0.98f;
 		}
+		if(Projectile.lavaWet)
+		{
+			if(Projectile.timeLeft > 2)
+			{
+				Projectile.timeLeft = 2;
+			}
+		}
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
@@ -55,6 +62,11 @@ public class FrostBomb : ModProjectile
 			return bool0 || bool1 || bool2 || bool3;
 		}
 		return base.Colliding(projHitbox, targetHitbox);
+	}
+	public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+	{
+		fallThrough = false;
+		return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
 	}
 	public void GenerateDust()
 	{
@@ -125,14 +137,7 @@ public class FrostBomb : ModProjectile
 	}
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
-		if (Collision.SolidCollision(Projectile.position + new Vector2(Projectile.velocity.X, 0), Projectile.width, Projectile.height))
-		{
-			Projectile.velocity.X *= -0.7f;
-		}
-		if (Collision.SolidCollision(Projectile.position + new Vector2(0, Projectile.velocity.Y), Projectile.width, Projectile.height))
-		{
-			Projectile.velocity.Y *= -0.7f;
-		}
+		Projectile.velocity *= 0f;
 		Projectile.position += Projectile.velocity;
 		return false;
 	}
