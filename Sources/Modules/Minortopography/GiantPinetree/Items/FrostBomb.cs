@@ -12,7 +12,7 @@ public class FrostBomb : ModItem
 	{
 		Item.width = 44;
 		Item.height = 56;
-		Item.damage = 24;
+		Item.damage = 10;
 		Item.rare = ItemRarityID.Green;
 		Item.useTime = 24;
 		Item.useAnimation = 24;
