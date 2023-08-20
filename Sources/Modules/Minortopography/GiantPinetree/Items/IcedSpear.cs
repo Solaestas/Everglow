@@ -15,7 +15,8 @@ public class IcedSpear : ModItem
 		Item.value = 36;
 		Item.autoReuse = false;
 		Item.DamageType = DamageClass.Ranged;
-
+		Item.consumable= true;
+		Item.maxStack = 9999;
 		Item.noMelee = true;
 		Item.noUseGraphic = true;
 

@@ -16,7 +16,7 @@ public class IcedSpear : ModProjectile
 		Projectile.aiStyle = -1;
 		Projectile.penetrate= -1;
 		Projectile.usesLocalNPCImmunity = true;
-		Projectile.localNPCHitCooldown = 4;
+		Projectile.localNPCHitCooldown = 15;
 	}
 	internal bool shot = false;
 	internal int power = 0;

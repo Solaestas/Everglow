@@ -680,10 +680,20 @@ public class GiantPinetree : ModSystem
 			chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<SnowPineLeaveStaff>(), 1));
 			chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<SnowPineWoodStaff>(), 1));
 		}
+		//冰矛
+		if (Main.rand.NextBool(2))
+		{
+			chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<IcedSpear>(), Main.rand.Next(80, 201)));
+		}
 		//草药袋
 		if (Main.rand.NextBool(7))
 		{
 			chestContents.Add(new Item(setDefaultsToType: ItemID.HerbBag, Main.rand.Next(1, 4)));
+		}
+		//甜品袋
+		if (Main.rand.NextBool(3))
+		{
+			chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<DessertBag_Snow>(), Main.rand.Next(2, 5)));
 		}
 		//蠕虫桶
 		if (Main.rand.NextBool(7))
