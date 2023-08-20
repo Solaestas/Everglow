@@ -1,3 +1,4 @@
+using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
@@ -6,6 +7,8 @@ public class GoldenShowerPipeline : Pipeline
 	public override void BeginRender()
 	{
 		Ins.Batch.Begin();
+		Texture2D t = ModAsset.Projectiles_GoldLine.Value;
+		Ins.Batch.BindTexture<Vertex2D>(t);
 		effect.Value.Parameters["uTransform"].SetValue(
 			Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) *
 			Main.GameViewMatrix.ZoomMatrix *
@@ -42,6 +45,7 @@ public class GoldenShowerII : VisualProjectile, IWarpProjectile
 		Projectile.penetrate = 1;
 		Projectile.scale = 1f;
 		Projectile.DamageType = DamageClass.Magic;
+		Projectile.ai[1] = 0;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
 		base.SetDefaults();
@@ -63,7 +67,7 @@ public class GoldenShowerII : VisualProjectile, IWarpProjectile
 			{
 				Projectile.velocity *= 0.1f;
 
-				if (Projectile.extraUpdates == 1)
+				if (Projectile.ai[1] == 0)
 				{
 					for (int x = 0; x < 15; x++)
 					{
@@ -76,19 +80,19 @@ public class GoldenShowerII : VisualProjectile, IWarpProjectile
 						for (int x = 0; x < 3; x++)
 						{
 							Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
-							var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 2, velocity, ModContent.ProjectileType<GoldenShowerII>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+							var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 2, velocity, Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
 							p.friendly = false;
 							p.CritChance = Projectile.CritChance;
 						}
 					}
-					Projectile.extraUpdates = 2;
+					Projectile.ai[1] = 1;
 					SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
 				}
 			}
 			else
 			{
-				if (Projectile.extraUpdates == 2)
-					Projectile.extraUpdates = 1;
+				if (Projectile.ai[1] == 1)
+					Projectile.extraUpdates = 0;
 			}
 		}
 		if (Projectile.timeLeft == 210)
@@ -207,10 +211,8 @@ public class GoldenShowerII : VisualProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f), c0, new Vector3(x0, 1, 0)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f), c0, new Vector3(x0, 0, 0)));
 		}
-		Texture2D t = ModAsset.Projectiles_GoldLine.Value;
 		if (bars.Count > 2)
 		{
-			Ins.Batch.BindTexture<Vertex2D>(t);
 			Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 		}
 	}
