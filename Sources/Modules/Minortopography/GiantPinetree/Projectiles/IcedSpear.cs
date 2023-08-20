@@ -11,10 +11,10 @@ public class IcedSpear : ModProjectile
 		Projectile.hostile = false;
 		Projectile.width = 20;
 		Projectile.height = 20;
-		Projectile.tileCollide = false;
+		Projectile.tileCollide = true;
 		Projectile.timeLeft = 240;
 		Projectile.aiStyle = -1;
-		Projectile.penetrate= -1;
+		Projectile.penetrate = -1;
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 15;
 	}
@@ -48,11 +48,10 @@ public class IcedSpear : ModProjectile
 			}
 			else
 			{
-				Projectile.tileCollide = true;
 				if (Collide(Projectile.Center))
 				{
 					Projectile.damage = (int)(Projectile.damage * 0.1f);
-					if(Projectile.damage == 0)
+					if (Projectile.damage == 0)
 					{
 						Projectile.damage = 1;
 					}
@@ -60,6 +59,7 @@ public class IcedSpear : ModProjectile
 				}
 				else if (!Collision.SolidCollision(Projectile.Center, 0, 0))
 				{
+					Projectile.tileCollide = true;
 					Projectile.velocity.Y += 0.25f;
 					Projectile.velocity *= 0.995f;
 					Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
@@ -185,7 +185,7 @@ public class IcedSpear : ModProjectile
 		Texture2D texIce = ModAsset.IcedSpear_ice.Value;
 		Main.spriteBatch.Draw(texStick, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texStick.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		Color iceColor = lightColor;
-		if(Projectile.timeLeft < 180)
+		if (Projectile.timeLeft < 180)
 		{
 			iceColor *= Projectile.timeLeft / 180f;
 		}
