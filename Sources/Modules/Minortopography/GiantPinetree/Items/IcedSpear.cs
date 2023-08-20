@@ -25,7 +25,7 @@ public class IcedSpear : ModItem
 	}
 	public override void AddRecipes()
 	{
-		CreateRecipe()
+		CreateRecipe(8)
 			.AddIngredient(ItemID.BorealWood, 2)
 			.AddIngredient(ItemID.IceBlock, 1)
 			.AddTile(TileID.IceBlock)
