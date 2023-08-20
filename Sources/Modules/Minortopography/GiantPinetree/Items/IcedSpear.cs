@@ -9,7 +9,7 @@ public class IcedSpear : ModItem
 		Item.useAnimation = 16;
 		Item.useTime = 16;
 		Item.knockBack = 3f;
-		Item.damage = 10;
+		Item.damage = 9;
 		Item.rare = ItemRarityID.White;
 		Item.UseSound = SoundID.Item1;
 		Item.value = 36;
@@ -19,15 +19,16 @@ public class IcedSpear : ModItem
 		Item.maxStack = 9999;
 		Item.noMelee = true;
 		Item.noUseGraphic = true;
-
+		Item.channel = true;
 
 		Item.shoot = ModContent.ProjectileType<Projectiles.IcedSpear>();
 	}
 	public override void AddRecipes()
 	{
-		CreateRecipe(20)
+		CreateRecipe()
 			.AddIngredient(ItemID.BorealWood, 2)
-			.AddTile(ItemID.IceBlock)
+			.AddIngredient(ItemID.IceBlock, 1)
+			.AddTile(TileID.IceBlock)
 			.Register();
 	}
 }

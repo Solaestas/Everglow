@@ -11,7 +11,7 @@ public class IcedSpear : ModProjectile
 		Projectile.hostile = false;
 		Projectile.width = 20;
 		Projectile.height = 20;
-		Projectile.tileCollide = true;
+		Projectile.tileCollide = false;
 		Projectile.timeLeft = 240;
 		Projectile.aiStyle = -1;
 		Projectile.penetrate= -1;
@@ -48,7 +48,8 @@ public class IcedSpear : ModProjectile
 			}
 			else
 			{
-				if(Collide(Projectile.Center))
+				Projectile.tileCollide = true;
+				if (Collide(Projectile.Center))
 				{
 					Projectile.damage = (int)(Projectile.damage * 0.1f);
 					if(Projectile.damage == 0)
@@ -59,7 +60,6 @@ public class IcedSpear : ModProjectile
 				}
 				else if (!Collision.SolidCollision(Projectile.Center, 0, 0))
 				{
-					Projectile.tileCollide = true;
 					Projectile.velocity.Y += 0.25f;
 					Projectile.velocity *= 0.995f;
 					Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
