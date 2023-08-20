@@ -23,6 +23,7 @@ public class IcedSpear : ModProjectile
 	public int stickNPC = -1;
 	public float relativeAngle = 0;
 	public float hitTargetAngle = 0;
+	public float hitTargetScale = 1;
 	public Vector2 relativePos = Vector2.zeroVector;
 	public override void AI()
 	{
@@ -32,13 +33,22 @@ public class IcedSpear : ModProjectile
 			playerDir = 1;
 		if (shot)
 		{
+			if(Projectile.wet)
+			{
+				Projectile.timeLeft -= 2;
+			}
+			if (Projectile.lavaWet)
+			{
+				Projectile.timeLeft -= 24;
+			}
+
 			if (stickNPC != -1)
 			{
 				NPC stick = Main.npc[stickNPC];
 				if (stick != null && stick.active)
 				{
 					Projectile.rotation = stick.rotation + relativeAngle;
-					Projectile.Center = stick.Center + relativePos.RotatedBy(stick.rotation + relativeAngle - hitTargetAngle);
+					Projectile.Center = stick.Center + relativePos.RotatedBy(stick.rotation + relativeAngle - hitTargetAngle) * stick.scale / hitTargetScale;
 					stick.AddBuff(BuffID.Frostburn, 5);
 				}
 				else
@@ -68,7 +78,7 @@ public class IcedSpear : ModProjectile
 		}
 		else
 		{
-			Projectile.timeLeft = 1500;
+			Projectile.timeLeft = 240;
 			Projectile.velocity = Utils.SafeNormalize(Main.MouseWorld - player.Center, new Vector2(0, -1 * player.gravDir));
 			Projectile.Center = player.Center + Projectile.velocity.RotatedBy(Math.PI * -0.5) * 20 * playerDir - Projectile.velocity * (power / 3f - 16);
 			Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
@@ -168,6 +178,7 @@ public class IcedSpear : ModProjectile
 					relativeAngle = Projectile.rotation - npc.rotation;
 					hitTargetAngle = Projectile.rotation;
 					relativePos = Projectile.Center - npc.Center;
+					hitTargetScale = npc.scale;
 					stickNPC = npc.whoAmI;
 					return true;
 				}
@@ -194,15 +205,20 @@ public class IcedSpear : ModProjectile
 	}
 	public override void Kill(int timeLeft)
 	{
-		for (int x = 0; x < 16; x++)
+		if(timeLeft > 60)
 		{
-			Dust d = Dust.NewDustDirect(Projectile.position, 40, 40, ModContent.DustType<IceParticle>());
-			d.velocity *= Projectile.velocity.Length() / 10f;
+			for (int x = 0; x < 16; x++)
+			{
+				Dust d = Dust.NewDustDirect(Projectile.position, 40, 40, ModContent.DustType<IceParticle>());
+				d.velocity *= Projectile.velocity.Length() / 10f;
+			}
+			SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);
 		}
-		SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);
 
 		Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.283d) * Projectile.velocity.Length() / 10f;
-		Gore.NewGore(null, Projectile.Center + v, v, ModContent.Find<ModGore>("Everglow/IcedSpear_gore").Type, 1f);
+		Gore gore =  Gore.NewGoreDirect(null, Projectile.Center + v, v, ModContent.Find<ModGore>("Everglow/IcedSpear_gore").Type, 1f);
+		gore.velocity = Projectile.velocity;
+		gore.rotation = Projectile.rotation - MathF.PI / 4f;
 	}
 }
 
