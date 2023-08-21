@@ -19,6 +19,7 @@ using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallWave;
 using Everglow.Commons.Utilities;
 using System.Diagnostics;
 using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray;
+using Everglow.Commons.Skeleton2D;
 
 namespace Everglow.IIID.Projectiles.PlanetBefall
 {
@@ -47,13 +48,13 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 		public override void OnSpawn(IEntitySource source)
 		{
 			Player player = Main.player[Projectile.owner];
-			//Array = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
-			//Main.projectile[Array].Center = Main.MouseWorld;
-			//Projectile.ai[0] = Main.projectile[Array].Center.X;
-			//Projectile.ai[1] = Main.projectile[Array].Center.Y;
-			//Projectile.velocity = Vector2.Normalize(Main.projectile[Array].Center - new Vector2(player.Center.X, Main.MouseWorld.Y - 1500)) / 4;
+			Array = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
+			Main.projectile[Array].Center = Main.MouseWorld;
+			Projectile.ai[0] = Main.projectile[Array].Center.X;
+			Projectile.ai[1] = Main.projectile[Array].Center.Y;
+			Projectile.velocity = Vector2.Normalize(Main.projectile[Array].Center - new Vector2(player.Center.X, Main.MouseWorld.Y - 1500)) / 10;
 
-			/*for (int i = 0; i < 16; i++)
+			for (int i = 0; i < 16; i++)
 			{
 				Vector2 v = new Vector2(0.001f, 0);
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X, Projectile.Center.Y), v.RotatedBy(Math.PI * i / 8).RotatedByRandom(Math.PI * i / 100), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
@@ -63,7 +64,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			PlanetBeFallScreenMovePlayer.PlanetBeFallAnimation = true;
 			PlanetBeFallScreenMovePlayer.proj = Projectile;
 
-			target = new Vector2(Projectile.ai[0], Projectile.ai[1]);*/
+			target = new Vector2(Projectile.ai[0], Projectile.ai[1]);
 
 
 
@@ -85,8 +86,8 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 				{
 					Projectile.velocity *= 1.05f;
 				}
-				if (s < 0.5f)
-					s += 0.005f;
+				if (s < 9000)
+					s = MathUtils.Lerp(0.05f, s, 9000);
 			}
 			player.heldProj = Projectile.whoAmI;
 		}
@@ -146,8 +147,8 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 		{
 			//overPlayers.Add(index);
 		}
-		float s = 0f;
-		public void DrawIIIDProj()
+		float s = 5000f;
+		public void DrawIIIDProj(ViewProjectionParams viewProjectionParams)
 		{
 			Viewport viewport = Main.graphics.GraphicsDevice.Viewport;
 			List<VertexRP> vertices = new List<VertexRP>();
@@ -189,18 +190,17 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 
 			// 用这个函数创建透视投影，需要FOV和屏幕宽高比
 			var projection = Matrix.CreatePerspectiveFieldOfView(MathF.PI / 3f, 1.0f, 1f, 1200f);
-			var t = new Vector3(0, 0, -600);
-			t.Y = -t.Y;
+			var t = new Vector3(0, 0, 10000 - s);
 			Vector2 lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
 			var modelMatrix =
-			  // Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
-			   //* Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
-			    Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0),
+						   Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
+						   * Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
+			* Matrix.CreateTranslation(t)
+			* Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0),
 									 new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 500),
 									 new Vector3(0, -1, 0))
+		   * Matrix.CreateScale(0.5f);
 
-			   * Matrix.CreateScale(s)
-			   * Matrix.CreateTranslation(t);
 
 
 
@@ -225,14 +225,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 				BlurIntensity = 1.0f,
 				BlurRadius = 1.0f
 			};
-			ViewProjectionParams viewProjectionParams = new ViewProjectionParams
-			{
-				ViewTransform = Matrix.Identity,
-				FieldOfView = MathF.PI / 3f,
-				AspectRatio = 1.0f,
-				ZNear = 1f,
-				ZFar = 1200f
-			};
+
 			ArtParameters artParameters = new ArtParameters
 			{
 				EnableOuterEdge = false
@@ -244,7 +237,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			modelPipeline.EndCapture();
 
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 			Main.spriteBatch.Draw(modelPipeline.ModelTarget, Vector2.Lerp(Projectile.Center, lookat, 1f) - Main.screenPosition - new Vector2(1000, 1000),
 				null, Color.White, 0, Vector2.One * 0.5f, 2f, SpriteEffects.None, 0);
 
@@ -303,7 +296,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 					if (PlanetBeFallAnimation)
 					{
 
-						AnimationTimer += 1 ;
+						AnimationTimer += 1;
 						float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
 						if (AnimationTimer >= 60 && AnimationTimer < 120)
 						{

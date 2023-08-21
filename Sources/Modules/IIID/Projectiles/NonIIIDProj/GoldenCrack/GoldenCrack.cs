@@ -23,6 +23,7 @@ using ReLogic.Content;
 using Everglow.IIID.Projectiles;
 using Everglow.IIID.Projectiles.PlanetBefall;
 using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray;
+using Everglow.Commons.IIID;
 
 namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 {
@@ -272,6 +273,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 		RenderTarget2D screen;
 		RenderTarget2D bloom1;
 		RenderTarget2D bloom2;
+		RenderTarget2D GoldenCrack;
 		Effect Bloom1, GoldenCrackVFX;
 
 		public override string Name => "IIID";
@@ -296,6 +298,22 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			}
 		}
 
+		ViewProjectionParams viewProjectionParams = new ViewProjectionParams
+		{
+			ViewTransform = Matrix.Identity,
+			FieldOfView = MathF.PI / 3f,
+			AspectRatio = 1.0f,
+			ZNear = 1f,
+			ZFar = 700f
+		};
+		ViewProjectionParams POVinGoldencrack = new ViewProjectionParams
+		{
+			ViewTransform = Matrix.Identity,
+			FieldOfView = MathF.PI / 3f,
+			AspectRatio = 1.0f,
+			ZNear = 700f,
+			ZFar = 10000f
+		};
 		private void FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
 		{
 			GraphicsDevice gd = Main.instance.GraphicsDevice;
@@ -309,7 +327,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 				return;
 			}
 
-			/*Bloom1 = ModContent.Request<Effect>("Everglow/IIID/Effects/Bloom1").Value;
+			Bloom1 = ModContent.Request<Effect>("Everglow/IIID/Effects/Bloom1").Value;
 			gd.SetRenderTarget(Main.screenTargetSwap);
 			gd.Clear(Color.Transparent);
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -399,6 +417,19 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 					(proj.ModProjectile as GoldenCrack).PreDraw(ref c3);
 				}
 			}
+
+			sb.End();
+
+			gd.SetRenderTarget(GoldenCrack);
+			gd.Clear(Color.Transparent);
+			Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive);
+			foreach (Projectile proj in Main.projectile)
+			{
+				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBeFall>())
+				{
+					(proj.ModProjectile as PlanetBeFall).DrawIIIDProj(POVinGoldencrack);
+				}
+			}	
 			sb.End();
 
 			gd.SetRenderTarget(Main.screenTarget);
@@ -406,15 +437,15 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 			sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
 			sb.End();
+
 			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+			gd.Textures[0] = GoldenCrack;
 			gd.Textures[1] = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/NonIIIDProj/GoldenCrack/GoldenCrack").Value;
-
-
 			GoldenCrackVFX.CurrentTechnique.Passes["Tentacle"].Apply();
 			GoldenCrackVFX.Parameters["m"].SetValue(0.0f);
 			GoldenCrackVFX.Parameters["n"].SetValue(0.00f);
 			sb.Draw(render, Vector2.Zero, Color.White);
-			sb.End();*/
+			sb.End();
 
 			gd.SetRenderTarget(Main.screenTargetSwap);
 			gd.Clear(Color.Transparent);
@@ -430,7 +461,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			{
 				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBeFall>())
 				{
-					(proj.ModProjectile as PlanetBeFall).DrawIIIDProj();
+					(proj.ModProjectile as PlanetBeFall).DrawIIIDProj(viewProjectionParams);
 				}
 			}
 			Main.spriteBatch.End();
@@ -449,6 +480,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 		{
 			render = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
 			screen = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
+			GoldenCrack = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
 			bloom1 = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 3, Main.screenHeight / 3);
 			bloom2 = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 3, Main.screenHeight / 3);
 		}

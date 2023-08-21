@@ -38,7 +38,7 @@ namespace Everglow.Commons.IIID
         private RenderTarget2D[] m_blurRenderTargets;
 
         private const int MAX_BLUR_LEVELS = 5;
-        private const int RenderTargetSize = 1024;
+        private const int RenderTargetSize = 1000;
 
         //private RenderTarget2D m_albedoTarget;
         //private RenderTarget2D m_normalTarget;
