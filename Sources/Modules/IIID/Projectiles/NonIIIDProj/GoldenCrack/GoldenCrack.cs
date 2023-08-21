@@ -309,7 +309,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 				return;
 			}
 
-			Bloom1 = ModContent.Request<Effect>("Everglow/IIID/Effects/Bloom1").Value;
+			/*Bloom1 = ModContent.Request<Effect>("Everglow/IIID/Effects/Bloom1").Value;
 			gd.SetRenderTarget(Main.screenTargetSwap);
 			gd.Clear(Color.Transparent);
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -414,7 +414,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			GoldenCrackVFX.Parameters["m"].SetValue(0.0f);
 			GoldenCrackVFX.Parameters["n"].SetValue(0.00f);
 			sb.Draw(render, Vector2.Zero, Color.White);
-			sb.End();
+			sb.End();*/
 
 			gd.SetRenderTarget(Main.screenTargetSwap);
 			gd.Clear(Color.Transparent);
