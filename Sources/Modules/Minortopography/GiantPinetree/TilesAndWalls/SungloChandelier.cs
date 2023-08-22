@@ -31,7 +31,7 @@ public class SungloChandelier : ModTile, ITileFluentlyDrawn, ITileFlameData
 	}
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		yield return new Item(ModContent.ItemType<Items.SungloChandelier>());
+		yield break;
 	}
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{
@@ -42,6 +42,25 @@ public class SungloChandelier : ModTile, ITileFluentlyDrawn, ITileFlameData
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
+		if(!Main.gamePaused)
+		{
+			Tile tile = Main.tile[i, j];
+			if (tile.TileFrameX == 0 && tile.TileFrameY % 54 == 0)
+			{
+				for (int x = 0; x < 3; x++)
+				{
+					for (int y = 0; y < 3; y++)
+					{
+						Tile newTile = Main.tile[i + x, j + y];
+						newTile.TileFrameY += 54;
+						if (newTile.TileFrameY - y * 18 > 320)
+						{
+							newTile.TileFrameY = (short)(y * 18);
+						}
+					}
+				}
+			}
+		}
 		TileFluentDrawManager.AddFluentPoint(this, i, j);
 		return false;
 	}
