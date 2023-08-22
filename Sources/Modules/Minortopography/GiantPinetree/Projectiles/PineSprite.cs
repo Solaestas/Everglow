@@ -71,6 +71,9 @@ public class PineSprite : ModProjectile
 		{
 			Projectile.Kill();
 		}
+		Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(4)/*Half size of a dust texture*/ + new Vector2(0, -8),0, 0, DustID.IceTorch);
+		d.noGravity = true;
+		d.scale = Main.rand.NextFloat(0.85f, 1.15f);
 	}
 	private IEnumerator<ICoroutineInstruction> ChasePlayer()
 	{
@@ -123,5 +126,13 @@ public class PineSprite : ModProjectile
 			Projectile.velocity = Projectile.velocity * 0.95f + finalVelocity * 0.05f;
 			yield return new SkipThisFrame();
 		}
+	}
+	public override bool PreDraw(ref Color lightColor)
+	{
+		Texture2D mainTex = ModAsset.PineSprite.Value;
+		Texture2D glowTex = ModAsset.PineSprite_glow.Value;
+		Main.spriteBatch.Draw(mainTex, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, mainTex.Size() / 2f, 1f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(glowTex, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0f), Projectile.rotation, glowTex.Size() / 2f, 1f, SpriteEffects.None, 0);
+		return false;
 	}
 }

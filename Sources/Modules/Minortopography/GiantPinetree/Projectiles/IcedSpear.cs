@@ -170,7 +170,7 @@ public class IcedSpear : ModProjectile
 	{
 		foreach (NPC npc in Main.npc)
 		{
-			if (npc.active && !npc.dontTakeDamage)
+			if (npc.active && !npc.dontTakeDamage && !npc.friendly && !npc.townNPC)
 			{
 				if ((new Rectangle((int)Projectile.Center.X, (int)Projectile.Center.Y, 1, 1)).Intersects(npc.Hitbox))
 				{
@@ -212,7 +212,7 @@ public class IcedSpear : ModProjectile
 				Dust d = Dust.NewDustDirect(Projectile.position, 40, 40, ModContent.DustType<IceParticle>());
 				d.velocity *= Projectile.velocity.Length() / 10f;
 			}
-			SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);
+			SoundEngine.PlaySound(SoundID.Shatter, Projectile.Center);
 		}
 
 		Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.283d) * Projectile.velocity.Length() / 10f;
