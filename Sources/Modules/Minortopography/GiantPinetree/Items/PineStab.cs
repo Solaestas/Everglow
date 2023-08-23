@@ -11,7 +11,7 @@ namespace Everglow.Minortopography.GiantPinetree.Items
 		public override void SetDefaults()
 		{
 			staminaCost = 0.72f;
-			Item.damage = 18;
+			Item.damage = 8;
 			Item.knockBack = 1f;
 			Item.rare = ItemRarityID.White;
 			Item.value = Item.sellPrice(0, 2, 45, 0);
@@ -23,7 +23,8 @@ namespace Everglow.Minortopography.GiantPinetree.Items
 		public override void AddRecipes()
 		{
 			CreateRecipe().
-				AddIngredient(ItemID.CopperBar, 17).
+				AddIngredient(ItemID.BorealWood, 14).
+				AddIngredient(ItemID.PineTreeBlock, 3).
 				AddTile(TileID.Anvils).
 				Register();
 			base.AddRecipes();

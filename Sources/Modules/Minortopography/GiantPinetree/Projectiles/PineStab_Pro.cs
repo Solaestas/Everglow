@@ -26,8 +26,7 @@ namespace Everglow.Minortopography.GiantPinetree.Projectiles
 		}
 		public override void HitTileSound(float scale)
 		{
-			SoundStyle ss = SoundID.Grass;
-			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)).WithVolume(0.3f), Projectile.Center);
+			SoundEngine.PlaySound(SoundID.Grass.WithVolume(1 - scale / 2.42f).WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
 			Projectile.soundDelay = SoundTimer;
 		}
 	}
