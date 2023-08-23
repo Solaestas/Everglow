@@ -1,3 +1,4 @@
+using Terraria.Audio;
 using Terraria.ObjectData;
 
 namespace Everglow.Minortopography.GiantPinetree.TilesAndWalls;
@@ -23,7 +24,7 @@ public class GiantPineCone_0 : ModTile
 		TileObjectData.newTile.CoordinateWidth = 16;
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.addTile(Type);
-
+s
 		AddMapEntry(new Color(119, 77, 63));
 	}
 }

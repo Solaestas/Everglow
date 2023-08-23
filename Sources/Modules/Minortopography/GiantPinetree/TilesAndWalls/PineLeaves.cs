@@ -1,3 +1,5 @@
+using Everglow.Minortopography.GiantPinetree.Dusts;
+
 namespace Everglow.Minortopography.GiantPinetree.TilesAndWalls;
 
 public class PineLeaves : ModTile
@@ -8,7 +10,7 @@ public class PineLeaves : ModTile
 		Main.tileBlockLight[Type] = true;
 		Main.tileMerge[Type][TileID.PineTree] = true;
 		Main.tileMerge[TileID.PineTree][Type] = true;
-		DustType = DustID.GreenMoss;
+		DustType = ModContent.DustType<PineDust>();
 		HitSound = SoundID.Grass;
 		AddMapEntry(new Color(36, 64, 50));
 	}

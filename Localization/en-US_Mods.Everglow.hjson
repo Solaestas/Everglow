@@ -1240,6 +1240,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	PineStab: {
+		DisplayName: Pine Stab
+		Tooltip: ""
+	}
+
 	SnowPineChest: {
 		DisplayName: Snow Pine Chest
 		Tooltip: ""
@@ -2864,6 +2869,8 @@ Projectiles: {
 	FrostSpice.DisplayName: Frost Spice
 	IcedSpear.DisplayName: Iced Spear
 	PineSprite.DisplayName: Pine Sprite
+	PineStab_Pro.DisplayName: Pine Stab_ Pro
+	PineStab_Pro_Stab.DisplayName: Pine Stab_ Pro_ Stab
 	CrimsonTuskProj.DisplayName: Crimson Tusk Proj
 	CrimsonTuskProjGra.DisplayName: Crimson Tusk Proj Gra
 	EarthTusk.DisplayName: Earth Tusk

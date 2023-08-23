@@ -650,13 +650,46 @@ public class GiantPinetree : ModSystem
 		{
 			TileUtils.PlaceFrameImportantTiles(leftX + 2, topY + 2, 6, 6, (ushort)ModContent.TileType<GiantPineCone_0>());
 		}
-		PlacePineChest((rightX + leftX) / 2, positonY - 2);
+		int placeX = Main.rand.Next(leftX + 3, rightX - 3);
+		int placeY = positonY - 8;
+		for(int y = 0;y < 15;y++)
+		{
+			Tile checkTile = SafeGetTile(placeX, placeY + y);
+			if(checkTile.HasTile)
+			{
+				Tile checkTile2 = SafeGetTile(placeX + 1, placeY + y);
+				if (checkTile2.HasTile)
+				{
+					PlacePineChest(placeX, placeY + y - 1);
+					break;
+				}
+				else
+				{
+					checkTile2.TileType = (ushort)ModContent.TileType<PineWood>();
+					checkTile2.HasTile = true;
+					PlacePineChest(placeX, placeY + y - 1);
+					break;
+				}
+			}
+		}
+
 	}
 	public static void PlacePineChest(int x, int y)
 	{
+		for (int i = 0;i < 2;i++)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				Tile tile = SafeGetTile(i + x, y - j);
+				if(tile.HasTile)
+				{
+					tile.ClearEverything();
+				}
+			}
+		}
 		List<Item> chestContents = new List<Item>();
 
-		switch (Main.rand.Next(5))
+		switch (Main.rand.Next(6))
 		{
 			case 0:
 				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<FrostBomb>(), 1));
@@ -672,6 +705,9 @@ public class GiantPinetree : ModSystem
 				break;
 			case 4:
 				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<HarvestingClaw>(), 1));
+				break;
+			case 5:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<PineStab>(), 1));
 				break;
 		}
 		//生命针叶魔杖
@@ -760,7 +796,21 @@ public class GiantPinetree : ModSystem
 				chestContents.Add(new Item(setDefaultsToType: ItemID.Glowstick, Main.rand.Next(20, 61)));
 			}
 		}
-		WorldGenMisc.PlaceChest(x, y, (ushort)ModContent.TileType<TilesAndWalls.SnowPineChest>(), chestContents);
+		int type = Main.rand.Next(3);
+		switch (type)
+		{
+			case 0:
+				type = ModContent.TileType<TilesAndWalls.SnowPineChest>();
+				break;
+			case 1:
+				type = ModContent.TileType<TilesAndWalls.SnowPineChest_fresh>();
+				break;
+			case 2:
+				type = ModContent.TileType<TilesAndWalls.SnowPineChest_gold>();
+				break;
+		}
+
+		WorldGenMisc.PlaceChest(x, y, (ushort)type, chestContents);
 	}
 	/// <summary>
 	/// 随机生成小松塔
