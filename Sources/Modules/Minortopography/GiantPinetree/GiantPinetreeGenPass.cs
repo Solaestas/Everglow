@@ -20,9 +20,10 @@ public class GiantPinetree : ModSystem
 		{
 			//TODO:翻译：建造巨大的雪松
 			BuildGiantPinetree();
+			HasBeenLootChest = new List<int>();
 		}
 	}
-
+	public static List<int> HasBeenLootChest = new List<int>();
 	public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) => tasks.Add(new GiantPinetreeGenPass());
 	/// <summary>
 	/// 在雪地表面随机获取一点
@@ -70,7 +71,7 @@ public class GiantPinetree : ModSystem
 		{
 			return new Point16(0, 0);
 		}
-		return newAimPoint[Main.rand.Next(newAimPoint.Count)];
+		return newAimPoint[WorldGen.genRand.Next(newAimPoint.Count)];
 	}
 	/// <summary>
 	/// 建造巨大的雪松
@@ -89,7 +90,7 @@ public class GiantPinetree : ModSystem
 		//降低高度
 		int positonY = centerPoint.Y - 8;
 
-		float treeSize = Main.rand.NextFloat(16f, 20f);
+		float treeSize = WorldGen.genRand.NextFloat(16f, 20f);
 		//PlacePineLeaves(positonX, positonY, 0, treeSize * 7.5f, new Vector2(0, -1));
 		PlacePineLeavesStyleII(positonX, positonY - 16);
 		if (Main.snowBG[2] == 260)//在这种条件下，背景符合这段代码生成的松树
@@ -113,11 +114,11 @@ public class GiantPinetree : ModSystem
 				Tile tile = SafeGetTile(i + positonX, killCoordY + positonY);
 				if (i > -trunkWidth + 4 || i < trunkWidth - 4 || trunkWidth < 4)
 				{
-					if (Main.rand.Next(Math.Abs(i)) < trunkWidth - 6)
+					if (WorldGen.genRand.Next(Math.Abs(i)) < trunkWidth - 6)
 					{
 						tile.wall = (ushort)ModContent.WallType<PineLeavesWall>();
 					}
-					if (Main.rand.Next(Math.Abs(i)) < trunkWidth - 6)
+					if (WorldGen.genRand.Next(Math.Abs(i)) < trunkWidth - 6)
 					{
 						tile.HasTile = false;
 					}
@@ -128,9 +129,9 @@ public class GiantPinetree : ModSystem
 		GenerateTrunkWall(new Point16(positonX, positonY + 6), 7, 66);
 		GenerateBranch(new Point16(positonX, positonY - 20), -1.4f, 26);
 		GenerateBranch(new Point16(positonX, positonY - 36), 1.4f, 20);
-		GeneratePineTreeHouse(new Point16(positonX - 15, positonY - 22), Main.rand.Next(11, 15), Main.rand.Next(11, 15), 13, new int[] { 0, Main.rand.Next(5, 7), Main.rand.Next(1620, 1980), 185, -1, 255, Main.rand.Next(5, 7), 0 });
-		GeneratePineTreeHouse(new Point16(positonX + 12, positonY - 38), Main.rand.Next(11, 15), Main.rand.Next(11, 15), 13, new int[] { 1, Main.rand.Next(5, 7), Main.rand.Next(1620, 1980), 185, 1, -8, 0, 0 });
-		GeneratePineTreeHouse(new Point16(positonX + Main.rand.Next(-3, 4), positonY - 68), 5, 4, 9, new int[] { 0, Main.rand.Next(3, 5), Main.rand.Next(810, 1000), 185, 0, 255, 0, 1 });
+		GeneratePineTreeHouse(new Point16(positonX - 15, positonY - 22), WorldGen.genRand.Next(11, 15), WorldGen.genRand.Next(11, 15), 13, new int[] { 0, WorldGen.genRand.Next(5, 7), WorldGen.genRand.Next(1620, 1980), 185, -1, 255, WorldGen.genRand.Next(5, 7), 0 });
+		GeneratePineTreeHouse(new Point16(positonX + 12, positonY - 38), WorldGen.genRand.Next(11, 15), WorldGen.genRand.Next(11, 15), 13, new int[] { 1, WorldGen.genRand.Next(5, 7), WorldGen.genRand.Next(1620, 1980), 185, 1, -8, 0, 0 });
+		GeneratePineTreeHouse(new Point16(positonX + WorldGen.genRand.Next(-3, 4), positonY - 68), 5, 4, 9, new int[] { 0, WorldGen.genRand.Next(3, 5), WorldGen.genRand.Next(810, 1000), 185, 0, 255, 0, 1 });
 		//平滑木头部分
 		SmoothTile(positonX - 60, positonY - 20, 120, 250, ModContent.TileType<PineWood>());
 		DistributePineCone(new Point16(positonX, positonY - 10), 40, 40);
@@ -152,14 +153,14 @@ public class GiantPinetree : ModSystem
 	{
 		int positonX = startPoint.X;
 		int positonY = startPoint.Y;
-		float trunkWidth = Main.rand.NextFloat(8f, 10f);//随机摇宽度
+		float trunkWidth = WorldGen.genRand.NextFloat(8f, 10f);//随机摇宽度
 		var rootPosition = new Vector2(0, 0);
 		Vector2 rootVelocity = new Vector2(0, 1).RotatedBy(startRotation);//根系当前速度
 		Vector2 rootTrendVelocity = new Vector2(0, 1).RotatedBy(trendRotation);//根系稳定趋势速度
-		float omega = Main.rand.NextFloat(-0.2f, 0.2f);//末端旋转的角速度
+		float omega = WorldGen.genRand.NextFloat(-0.2f, 0.2f);//末端旋转的角速度
 		if (!naturalCurve)//如果禁止了自然旋转,角速度=0
 			omega = 0;
-		float startToRotatedByOmega = Main.rand.NextFloat(1.81f, 3.62f);//算作末端的起始位置，这里用剩余宽度统计
+		float startToRotatedByOmega = WorldGen.genRand.NextFloat(1.81f, 3.62f);//算作末端的起始位置，这里用剩余宽度统计
 		while (trunkWidth > 0)
 		{
 			for (int a = (int)-trunkWidth; a <= (int)trunkWidth; a++)
@@ -282,11 +283,11 @@ public class GiantPinetree : ModSystem
 				tile.TileType = (ushort)type;
 				tile.HasTile = true;
 				tile.wall = (ushort)ModContent.WallType<PineLeavesWall>();
-				tile = SafeGetTile(p.X + (int)(vel.X * i) + Main.rand.Next(-1, 2), p.Y + (int)(vel.Y * i) + Main.rand.Next(-1, 2));
+				tile = SafeGetTile(p.X + (int)(vel.X * i) + WorldGen.genRand.Next(-1, 2), p.Y + (int)(vel.Y * i) + WorldGen.genRand.Next(-1, 2));
 				tile.wall = (ushort)ModContent.WallType<PineLeavesWall>();
 				if (i <= length - 1)
 				{
-					if (Main.rand.NextBool(2))
+					if (WorldGen.genRand.NextBool(2))
 					{
 						tile = SafeGetTile(p.X + (int)(vel.X * i), p.Y + (int)(vel.Y * i) + 1);
 						tile.TileType = (ushort)type;
@@ -299,7 +300,7 @@ public class GiantPinetree : ModSystem
 				}
 				if (i <= length - 3)
 				{
-					if (Main.rand.NextBool(2))
+					if (WorldGen.genRand.NextBool(2))
 					{
 						tile = SafeGetTile(p.X + (int)(vel.X * i), p.Y + (int)(vel.Y * i) + 1);
 						tile.TileType = (ushort)type;
@@ -336,7 +337,7 @@ public class GiantPinetree : ModSystem
 			ang += 0.005f; //角度变化
 			length *= 0.75f;//长度衰减
 
-			if (Main.rand.Next(100) < 40 && length < mainWidth * factor)
+			if (WorldGen.genRand.Next(100) < 40 && length < mainWidth * factor)
 			{
 				length += 60 * factor;
 			}
@@ -363,7 +364,7 @@ public class GiantPinetree : ModSystem
 	{
 		int positonX = startPoint.X;
 		int positonY = startPoint.Y;
-		float trunkWidth = Main.rand.NextFloat(2f, 3f);//随机摇宽度
+		float trunkWidth = WorldGen.genRand.NextFloat(2f, 3f);//随机摇宽度
 		var branchPosition = new Vector2(0, 0);
 		Vector2 branchVelocity = new Vector2(0, -1).RotatedBy(startRotation);//根系当前速度
 		Vector2 branchTrendVelocity = branchVelocity;//根系稳定趋势速度
@@ -650,7 +651,7 @@ public class GiantPinetree : ModSystem
 		{
 			TileUtils.PlaceFrameImportantTiles(leftX + 2, topY + 2, 6, 6, (ushort)ModContent.TileType<GiantPineCone_0>());
 		}
-		int placeX = Main.rand.Next(leftX + 3, rightX - 3);
+		int placeX = WorldGen.genRand.Next(leftX + 3, rightX - 3);
 		int placeY = positonY - 8;
 		for(int y = 0;y < 15;y++)
 		{
@@ -688,8 +689,20 @@ public class GiantPinetree : ModSystem
 			}
 		}
 		List<Item> chestContents = new List<Item>();
-
-		switch (Main.rand.Next(6))
+		int mainItem = WorldGen.genRand.Next(6);
+		int counts = 0;
+		//尽可能出现不同奖励
+		while(HasBeenLootChest.Contains(mainItem))
+		{
+			mainItem = WorldGen.genRand.Next(6);
+			counts++;
+			if(counts > 10)
+			{
+				break;
+			}
+		}
+		HasBeenLootChest.Add(mainItem);
+		switch (mainItem)
 		{
 			case 0:
 				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<FrostBomb>(), 1));
@@ -711,56 +724,56 @@ public class GiantPinetree : ModSystem
 				break;
 		}
 		//生命针叶魔杖
-		if (Main.rand.NextBool(3))
+		if (WorldGen.genRand.NextBool(3))
 		{
 			chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<SnowPineLeaveStaff>(), 1));
 			chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<SnowPineWoodStaff>(), 1));
 		}
 		//冰矛
-		if (Main.rand.NextBool(2))
+		if (WorldGen.genRand.NextBool(2))
 		{
-			chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<IcedSpear>(), Main.rand.Next(80, 201)));
+			chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<IcedSpear>(), WorldGen.genRand.Next(80, 201)));
 		}
 		//草药袋
-		if (Main.rand.NextBool(7))
+		if (WorldGen.genRand.NextBool(7))
 		{
-			chestContents.Add(new Item(setDefaultsToType: ItemID.HerbBag, Main.rand.Next(1, 4)));
+			chestContents.Add(new Item(setDefaultsToType: ItemID.HerbBag, WorldGen.genRand.Next(1, 4)));
 		}
 		//甜品袋
-		if (Main.rand.NextBool(3))
+		if (WorldGen.genRand.NextBool(3))
 		{
-			chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<DessertBag_Snow>(), Main.rand.Next(2, 5)));
+			chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<DessertBag_Snow>(), WorldGen.genRand.Next(2, 5)));
 		}
 		//蠕虫桶
-		if (Main.rand.NextBool(7))
+		if (WorldGen.genRand.NextBool(7))
 		{
-			chestContents.Add(new Item(setDefaultsToType: ItemID.CanOfWorms, Main.rand.Next(2, 5)));
+			chestContents.Add(new Item(setDefaultsToType: ItemID.CanOfWorms, WorldGen.genRand.Next(2, 5)));
 		}
 		//针叶木
-		if (Main.rand.NextBool(2))
+		if (WorldGen.genRand.NextBool(2))
 		{
-			chestContents.Add(new Item(setDefaultsToType: ItemID.BorealWood, Main.rand.Next(50, 151)));
+			chestContents.Add(new Item(setDefaultsToType: ItemID.BorealWood, WorldGen.genRand.Next(50, 151)));
 		}
 		//冰雪飞鱼
-		if (Main.rand.NextBool(7))
+		if (WorldGen.genRand.NextBool(7))
 		{
-			chestContents.Add(new Item(setDefaultsToType: ItemID.FrostDaggerfish, Main.rand.Next(80, 201)));
+			chestContents.Add(new Item(setDefaultsToType: ItemID.FrostDaggerfish, WorldGen.genRand.Next(80, 201)));
 		}
 		//霜火箭
-		if (Main.rand.NextBool(7))
+		if (WorldGen.genRand.NextBool(7))
 		{
-			chestContents.Add(new Item(setDefaultsToType: ItemID.FrostburnArrow, Main.rand.Next(80, 201)));
+			chestContents.Add(new Item(setDefaultsToType: ItemID.FrostburnArrow, WorldGen.genRand.Next(80, 201)));
 		}
 		//金币
-		if (Main.rand.NextBool(5))
+		if (WorldGen.genRand.NextBool(5))
 		{
-			chestContents.Add(new Item(setDefaultsToType: ItemID.GoldCoin, Main.rand.Next(1, 3)));
+			chestContents.Add(new Item(setDefaultsToType: ItemID.GoldCoin, WorldGen.genRand.Next(1, 3)));
 		}
 		//绳子
-		chestContents.Add(new Item(setDefaultsToType: ItemID.Rope, Main.rand.Next(70, 151)));
+		chestContents.Add(new Item(setDefaultsToType: ItemID.Rope, WorldGen.genRand.Next(70, 151)));
 		//药水
 		int potionType = 1;
-		switch (Main.rand.Next(5))
+		switch (WorldGen.genRand.Next(5))
 		{
 			case 0:
 				potionType = ItemID.WarmthPotion;
@@ -778,25 +791,25 @@ public class GiantPinetree : ModSystem
 				potionType = ItemID.MiningPotion;
 				break;
 		}
-		chestContents.Add(new Item(setDefaultsToType: potionType, Main.rand.Next(1, 4)));
+		chestContents.Add(new Item(setDefaultsToType: potionType, WorldGen.genRand.Next(1, 4)));
 		//冰雪火把
-		if (Main.rand.NextBool(2))
+		if (WorldGen.genRand.NextBool(2))
 		{
-			chestContents.Add(new Item(setDefaultsToType: ItemID.IceTorch, Main.rand.Next(40, 91)));
+			chestContents.Add(new Item(setDefaultsToType: ItemID.IceTorch, WorldGen.genRand.Next(40, 91)));
 		}
 		//荧光棒
-		if (Main.rand.NextBool(2))
+		if (WorldGen.genRand.NextBool(2))
 		{
-			if(Main.rand.NextBool(5))
+			if(WorldGen.genRand.NextBool(5))
 			{
-				chestContents.Add(new Item(setDefaultsToType: ItemID.StickyGlowstick, Main.rand.Next(20, 61)));
+				chestContents.Add(new Item(setDefaultsToType: ItemID.StickyGlowstick, WorldGen.genRand.Next(20, 61)));
 			}
 			else
 			{
-				chestContents.Add(new Item(setDefaultsToType: ItemID.Glowstick, Main.rand.Next(20, 61)));
+				chestContents.Add(new Item(setDefaultsToType: ItemID.Glowstick, WorldGen.genRand.Next(20, 61)));
 			}
 		}
-		int type = Main.rand.Next(3);
+		int type = WorldGen.genRand.Next(3);
 		switch (type)
 		{
 			case 0:
@@ -850,8 +863,8 @@ public class GiantPinetree : ModSystem
 			}
 			if (valid == 0)
 			{
-				TileUtils.PlaceFrameImportantTiles(newPos.X - 1, newPos.Y, 3, 2, ModContent.TileType<TilesAndWalls.PineCone>(), 54 * Main.rand.Next(3));
-				time += Main.rand.Next(4);
+				TileUtils.PlaceFrameImportantTiles(newPos.X - 1, newPos.Y, 3, 2, ModContent.TileType<TilesAndWalls.PineCone>(), 54 * WorldGen.genRand.Next(3));
+				time += WorldGen.genRand.Next(4);
 			}
 		}
 	}
@@ -893,8 +906,8 @@ public class GiantPinetree : ModSystem
 			}
 			if (valid == 0)
 			{
-				TileUtils.PlaceFrameImportantTiles(newPos.X - 1, newPos.Y, 3, 1, ModContent.TileType<TilesAndWalls.DryPineNeedles>(), 54 * Main.rand.Next(3));
-				time += Main.rand.Next(4);
+				TileUtils.PlaceFrameImportantTiles(newPos.X - 1, newPos.Y, 3, 1, ModContent.TileType<TilesAndWalls.DryPineNeedles>(), 54 * WorldGen.genRand.Next(3));
+				time += WorldGen.genRand.Next(4);
 			}
 		}
 	}
@@ -908,7 +921,7 @@ public class GiantPinetree : ModSystem
 	{
 		for (int time = 0; time < length; time++)
 		{
-			Vector2 addPos = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(0, range), range)).RotatedBy(Main.rand.NextFloat(-1.57f, 1.57f)) / 16f;
+			Vector2 addPos = new Vector2(0, WorldGen.genRand.NextFloat(WorldGen.genRand.NextFloat(0, range), range)).RotatedBy(WorldGen.genRand.NextFloat(-1.57f, 1.57f)) / 16f;
 			Point16 newPos = position + new Point16((int)(addPos.X), (int)(addPos.Y));
 			Tile tile = SafeGetTile(newPos.X, newPos.Y);
 			if (!tile.HasTile)
@@ -952,7 +965,7 @@ public class GiantPinetree : ModSystem
 				}
 				if (direction.Count > 0)
 				{
-					int frameType = direction[Main.rand.Next(direction.Count)];
+					int frameType = direction[WorldGen.genRand.Next(direction.Count)];
 					tile.TileType = (ushort)ModContent.TileType<PineCone_little>();
 					tile.HasTile = true;
 					switch (frameType)
@@ -1004,7 +1017,7 @@ public class GiantPinetree : ModSystem
 		{
 			for (int i = 0; i < width; i++)
 			{
-				if (!Main.rand.NextBool(25))
+				if (!WorldGen.genRand.NextBool(25))
 				{
 					continue;
 				}
@@ -1020,7 +1033,7 @@ public class GiantPinetree : ModSystem
 							{
 								tileUp.TileType = (ushort)ModContent.TileType<SaffronMilkCap>();
 								tileUp.HasTile = true;
-								tileUp.frameX = (short)(18 * Main.rand.Next(6));
+								tileUp.frameX = (short)(18 * WorldGen.genRand.Next(6));
 								tileUp.frameY = 0;
 							}
 						}

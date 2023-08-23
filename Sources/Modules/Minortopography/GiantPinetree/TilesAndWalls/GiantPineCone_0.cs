@@ -24,7 +24,11 @@ public class GiantPineCone_0 : ModTile
 		TileObjectData.newTile.CoordinateWidth = 16;
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.addTile(Type);
-s
+		HitSound = new SoundStyle("Everglow/Minortopography/GiantPinetree/Sounds/PineconeCollapse");
 		AddMapEntry(new Color(119, 77, 63));
+	}
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
+	{
+		yield return new Item(ModContent.ItemType<Items.PineNut>(), Main.rand.Next(27, 54));
 	}
 }

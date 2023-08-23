@@ -1240,6 +1240,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	PineNut: {
+		DisplayName: Pine Nut
+		Tooltip: ""
+	}
+
 	PineStab: {
 		DisplayName: Pine Stab
 		Tooltip: ""
