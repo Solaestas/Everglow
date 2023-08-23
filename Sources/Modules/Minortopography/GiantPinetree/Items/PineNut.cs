@@ -18,16 +18,18 @@ namespace Everglow.Minortopography.GiantPinetree.Items
 
 		public override void SetDefaults()
 		{
-			Item.CloneDefaults(ItemID.LifeFruit);
+			Item.CloneDefaults(ItemID.LifeCrystal);
 			Item.width = 14;
 			Item.height = 20;
 			Item.rare = ItemRarityID.Green;
+			Item.value = 8000;
+			Item.useStyle = ItemUseStyleID.EatFood;
 		}
 
 		public override bool CanUseItem(Player player)
 		{
 			// This check prevents this item from being used before vanilla health upgrades are maxed out.
-			return player.ConsumedLifeCrystals == Player.LifeCrystalMax && player.ConsumedLifeFruit == Player.LifeFruitMax;
+			return true;
 		}
 
 		public override bool? UseItem(Player player)
