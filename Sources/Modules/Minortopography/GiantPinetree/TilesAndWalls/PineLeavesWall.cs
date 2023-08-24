@@ -6,10 +6,7 @@ public class PineLeavesWall : ModWall
 	{
 		Main.wallHouse[Type] = true;
 		DustType = DustID.GreenMoss;
+		HitSound = SoundID.Grass;
 		AddMapEntry(new Color(0, 32, 22));
-	}
-	public override bool CanExplode(int i, int j)
-	{
-		return false;
 	}
 }
