@@ -29,6 +29,10 @@ public class SungloChandelier : ModTile, ITileFluentlyDrawn, ITileFlameData
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
 		TileObjectData.addTile(Type);
 	}
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
+	{
+		yield return new Item(ModContent.ItemType<Items.SungloChandelier>());
+	}
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{
 		r = 1.2f;
