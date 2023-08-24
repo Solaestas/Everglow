@@ -34,6 +34,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		public Vector2 startCenter = Vector2.zeroVector;
 		public Vector2 endCenter = Vector2.zeroVector;
 		public Vector2 flashVelocity = Vector2.zeroVector;
+		public float hitTargetAngle = 0;
 		public override void OnSpawn(IEntitySource source)
 		{
 			targetNPC = (int)Projectile.ai[0];
@@ -159,7 +160,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 						if (stick != null && stick.active)
 						{
 							Projectile.rotation = stick.rotation + relativeAngle;
-							Projectile.Center = stick.Center + relativePos.RotatedBy(stick.rotation - relativeAngle);
+							Projectile.Center = stick.Center + relativePos.RotatedBy(stick.rotation + relativeAngle - hitTargetAngle);
 						}
 						else
 						{
@@ -185,6 +186,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					if ((new Rectangle((int)Projectile.Center.X, (int)Projectile.Center.Y, 1, 1)).Intersects(npc.Hitbox))
 					{
 						relativeAngle = Projectile.rotation - npc.rotation;
+						hitTargetAngle = Projectile.rotation;
 						relativePos = Projectile.Center - npc.Center;
 						stickNPC = npc.whoAmI;
 						return true;
