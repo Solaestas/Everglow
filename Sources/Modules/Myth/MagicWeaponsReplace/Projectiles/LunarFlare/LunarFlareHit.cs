@@ -110,15 +110,15 @@ public class LunarFlareHit : ModProjectile, IWarpProjectile, IBloomProjectile
 				float x0 = 1 - factor;
 				if (i == 1)
 				{
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + tex.Size() * 0.5f - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + tex.Size() * 0.5f - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
+					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
+					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
 				}
-				bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + tex.Size() * 0.5f - Main.screenPosition, c0, new Vector3(x0, 1, w)));
-				bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + tex.Size() * 0.5f - Main.screenPosition, c0, new Vector3(x0, 0, w)));
+				bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width - Main.screenPosition, c0, new Vector3(x0, 1, w)));
+				bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width - Main.screenPosition, c0, new Vector3(x0, 0, w)));
 				if (i == 39)
 				{
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + tex.Size() * 0.5f - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + tex.Size() * 0.5f - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
+					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
+					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
 				}
 			}
 			Main.graphics.GraphicsDevice.Textures[0] = tex;

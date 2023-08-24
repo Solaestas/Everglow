@@ -6,6 +6,7 @@ namespace Everglow.Myth.TheFirefly.Projectiles;
 
 public class MothBall : ModProjectile
 {
+	private float subscale = 0f;
 	public override void SetDefaults()
 	{
 		Projectile.width = 32;
@@ -37,6 +38,12 @@ public class MothBall : ModProjectile
 	public override void AI()
 	{
 		Player player = Main.player[Player.FindClosest(Projectile.position, Projectile.width, Projectile.height)];
+		if (Projectile.timeLeft > 240)
+			subscale += 1f;
+		if (Projectile.timeLeft is <= 240 and >= 60)
+			subscale = 60 + (float)(10 * Math.Sin((Projectile.timeLeft - 60) / 60d * Math.PI));
+		if (Projectile.timeLeft < 60 && subscale > 0.5f)
+			subscale -= 1f;
 		if (Projectile.timeLeft < 50)
 		{
 			Projectile.velocity *= 0.95f;
@@ -120,13 +127,13 @@ public class MothBall : ModProjectile
 		int frameY = (Projectile.frame - frameX) / 6;
 		int frameSideX = 270;
 		int frameSideY = 290;
-		Main.spriteBatch.Draw(ModContent.Request<Texture2D>(Texture).Value, Projectile.Center - Main.screenPosition, new Rectangle(frameX * frameSideX, frameY * frameSideY + 10, 270, 270), new Color(1f, 1f, 1f, 0), Projectile.rotation, new Vector2(135f), Projectile.scale, SpriteEffects.None, 0f);
+		Main.spriteBatch.Draw(ModContent.Request<Texture2D>(Texture).Value, Projectile.Center - Main.screenPosition, new Rectangle(frameX * frameSideX, frameY * frameSideY + 10, 270, 270), new Color(1f, 1f, 1f, 0), Projectile.rotation, new Vector2(135f), Projectile.scale * subscale / 60f, SpriteEffects.None, 0f);
 		//for (int g = 0; g < 15; g++)
 		//{
 		//	SpriteEffects eff = SpriteEffects.None;
 		//	if (vloB[g].X > 0)
 		//		eff = SpriteEffects.FlipHorizontally;
-		//	Main.spriteBatch.Draw(Common.MythContent.QuickTexture("TheFirefly/Projectiles/ButterflyDream"), Projectile.Center + vB[g] * r / 60f - Main.screenPosition, new Rectangle(0, yB[g], 36, 34), new Color(0.2f, 0.5f, 1f, 0), Projectile.rotation, new Vector2(18f, 17f), r / 60f, eff, 0f);
+		//	Main.spriteBatch.Draw(Common.MythContent.QuickTexture("TheFirefly/Projectiles/ButterflyDream"), Projectile.Center * subscale / 60f - Main.screenPosition, new Rectangle(0, yB[g], 36, 34), new Color(0.2f, 0.5f, 1f, 0), Projectile.rotation, new Vector2(18f, 17f), subscale / 60f, eff, 0f);
 		//}
 		if (Projectile.timeLeft < 60)
 			Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, Light.Size() / 2f, (60 - Projectile.timeLeft) / 30f, SpriteEffects.None, 0);
