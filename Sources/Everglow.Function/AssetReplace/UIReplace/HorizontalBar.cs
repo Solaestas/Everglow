@@ -1,5 +1,6 @@
 using System.Reflection;
 using ReLogic.Content;
+using Terraria.GameContent.UI.ResourceSets;
 
 namespace Everglow.Commons.AssetReplace.UIReplace;
 
@@ -34,27 +35,26 @@ public class HorizontalBar
 
 	public void ReplaceTextures()
 	{
-		if (UIReplaceModule.PlayerResourceSets.TryGetValue("HorizontalBars", out var value))
+		ReplaceForInstance(UIReplaceModule.PlayerResourceSets["HorizontalBars"]);
+		ReplaceForInstance(UIReplaceModule.PlayerResourceSets["HorizontalBarsWithText"]);
+		ReplaceForInstance(UIReplaceModule.PlayerResourceSets["HorizontalBarsWithFullText"]);
+	}
+
+	private void ReplaceForInstance(IPlayerResourcesDisplaySet resourceBar)
+	{
+		if (resourceBar is not HorizontalBarsPlayerResourcesDisplaySet instance)
 		{
-			// 获取Fields
-			var type = value.GetType();
-			var Fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-			var field = new Dictionary<string, FieldInfo>();
-			foreach (var f in Fields)
-			{
-				field[f.Name] = f;
-			}
-			// 设置贴图
-			field["_hpFill"].SetValue(value, HpFill);
-			field["_hpFillHoney"].SetValue(value, HpFillGold);
-			field["_mpFill"].SetValue(value, MpFill);
-			field["_panelLeft"].SetValue(value, PanelLeft);
-			field["_panelMiddleHP"].SetValue(value, HpPanelMiddle);
-			field["_panelRightHP"].SetValue(value, HpPanelRight);
-			field["_panelMiddleMP"].SetValue(value, MpPanelMiddle);
-			field["_panelRightMP"].SetValue(value, MpPanelRight);
+			Ins.Logger.Warn("HorizontalBar sprites replacement loading failed, sprite replacement would not work.");
 			return;
 		}
-		Ins.Logger.Warn("HorizontalBar sprites replacement loading failed, sprite replacement would not work.");
+
+		instance._hpFill = HpFill;
+		instance._hpFillHoney = HpFillGold;
+		instance._mpFill = MpFill;
+		instance._panelLeft = PanelLeft;
+		instance._panelMiddleHP = HpPanelMiddle;
+		instance._panelRightHP = HpPanelRight;
+		instance._panelMiddleMP = MpPanelMiddle;
+		instance._panelRightMP = MpPanelRight;
 	}
 }

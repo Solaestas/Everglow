@@ -10,14 +10,13 @@ public class UIReplaceModule : IModule
 {
 	public string Name => "UI Assets Replacement";
 
-	public static Dictionary<string, IPlayerResourcesDisplaySet> PlayerResourceSets =>
-		(Dictionary<string, IPlayerResourcesDisplaySet>)typeof(PlayerResourceSetsManager).GetField("_sets", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Main.ResourceSetsManager);
+	public static Dictionary<string, IPlayerResourcesDisplaySet> PlayerResourceSets => Main.ResourceSetsManager._sets;
 
 	public Assembly Code { get; }
 
 	public bool Condition => true;
 
-	internal static TerrariaAssets TerrariaAssets = new();
+	public static TerrariaAssets TerrariaAssets = new();
 	internal static EternalAssets EternalAssets = new();
 	internal static MythAssets MythAssets = new();
 	internal static DefaultAssets DefaultAssets = new();

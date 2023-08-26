@@ -1,5 +1,6 @@
 using System.Reflection;
 using ReLogic.Content;
+using Terraria.GameContent.UI.ResourceSets;
 
 namespace Everglow.Commons.AssetReplace.UIReplace;
 
@@ -40,30 +41,28 @@ public class FancyBar
 
 	public void ReplaceTextures()
 	{
-		if (UIReplaceModule.PlayerResourceSets.TryGetValue("New", out var value))
+		ReplaceForInstance(UIReplaceModule.PlayerResourceSets["New"]);
+		ReplaceForInstance(UIReplaceModule.PlayerResourceSets["NewWithText"]);
+	}
+
+	private void ReplaceForInstance(IPlayerResourcesDisplaySet resourceBar)
+	{
+		if (resourceBar is not FancyClassicPlayerResourcesDisplaySet instance)
 		{
-			// 获取Fields
-			var type = value.GetType();
-			var Fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-			var field = new Dictionary<string, FieldInfo>();
-			foreach (var f in Fields)
-			{
-				field[f.Name] = f;
-			}
-			// 设置贴图
-			field["_heartLeft"].SetValue(value, HeartLeft);
-			field["_heartMiddle"].SetValue(value, HeartMiddle);
-			field["_heartRight"].SetValue(value, HeartRight);
-			field["_heartRightFancy"].SetValue(value, HeartRightFancy);
-			field["_heartFill"].SetValue(value, HeartFillRed);
-			field["_heartFillHoney"].SetValue(value, HeartFillGold);
-			field["_starTop"].SetValue(value, StarA);
-			field["_starMiddle"].SetValue(value, StarB);
-			field["_starBottom"].SetValue(value, StarC);
-			field["_starSingle"].SetValue(value, StarSingle);
-			field["_starFill"].SetValue(value, StarFill);
+			Ins.Logger.Warn("FancyBar sprites replacement loading failed, sprite replacement would not work.");
 			return;
 		}
-		Ins.Logger.Warn("FancyBar sprites replacement loading failed, sprite replacement would not work.");
+
+		instance._heartLeft = HeartLeft;
+		instance._heartMiddle = HeartMiddle;
+		instance._heartRight = HeartRight;
+		instance._heartRightFancy = HeartRightFancy;
+		instance._heartFill = HeartFillRed;
+		instance._heartFillHoney = HeartFillGold;
+		instance._starTop = StarA;
+		instance._starMiddle = StarB;
+		instance._starBottom = StarC;
+		instance._starSingle = StarSingle;
+		instance._starFill = StarFill;
 	}
 }

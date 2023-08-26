@@ -36,28 +36,21 @@ public class EverglowClientConfig : ModConfig
 	/// </summary>
 	public override ConfigScope Mode => ConfigScope.ClientSide;
 
-	[Header("$Mods.Everglow.Config.Header.TextureReplace")]
+	[Header("TextureReplace")]
 	[DefaultValue(TextureReplaceMode.Terraria)]
-	[Label("$Mods.Everglow.Config.TextureReplace.Label")]
-	[Tooltip("$Mods.Everglow.Config.TextureReplace.Tooltip")]
 	[DrawTicks]
 	public TextureReplaceMode TextureReplace;
 
-	[Header("$Mods.Everglow.Config.Header.AudioReplace")]
+	[Header("AudioReplace")]
 
 	[DefaultValue(true)]
-	[Label("$Mods.Everglow.Config.ItemPickSoundReplace.Label")]
 	public bool ItemPickSoundReplace;
 
 	[DefaultValue(MothAudioReplaceMode.MothFighting)]
-	[Label("$Mods.Everglow.Config.MothAudioReplace.Label")]
-	[Tooltip("$Mods.Everglow.Config.MothAudioReplace.Tooltip")]
 	[DrawTicks]
 	public MothAudioReplaceMode MothAudioReplace;
 
 	[DefaultValue(TuskAudioReplaceMode.TuskFighting)]
-	[Label("$Mods.Everglow.Config.TuskAudioReplace.Label")]
-	[Tooltip("$Mods.Everglow.Config.TuskAudioReplace.Tooltip")]
 	[DrawTicks]
 	public TuskAudioReplaceMode TuskAudioReplace;
 
@@ -90,24 +83,18 @@ public enum TextureReplaceMode
 {
 	Terraria,
 	Default,
-	[Label("Eternal Resolve")]
 	EternalResolve,
 	Everglow,
-	Myth,
+	Myth
 }
 public enum MothAudioReplaceMode
 {
-	[Label("Original")]
 	MothFighting,
-	[Label("Alternate")]
 	AltMothFighting,
-	[Label("Old")]
 	OldMothFighting,
 }
 public enum TuskAudioReplaceMode
 {
-	[Label("Original")]
 	TuskFighting,
-	[Label("Old")]
 	OldTuskFighting,
 }

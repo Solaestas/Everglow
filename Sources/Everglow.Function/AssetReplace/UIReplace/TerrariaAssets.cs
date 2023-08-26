@@ -3,7 +3,7 @@ using Terraria.GameContent;
 
 namespace Everglow.Commons.AssetReplace.UIReplace;
 
-internal class TerrariaAssets
+public class TerrariaAssets
 {
 	public Asset<Texture2D>[] InventoryBacks = new Asset<Texture2D>[18];
 	public ClassicBar ClassicBar = new();
