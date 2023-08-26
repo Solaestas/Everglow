@@ -27,6 +27,8 @@ public class SungloChandelier : ModTile, ITileFluentlyDrawn, ITileFlameData
 		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
 		TileObjectData.newTile.AnchorBottom = default;
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
+		TileObjectData.newTile.Origin = new Point16(1, 0);
+		TileObjectData.newTile.DrawYOffset = -2;
 		TileObjectData.addTile(Type);
 	}
 	public override IEnumerable<Item> GetItemDrops(int i, int j)

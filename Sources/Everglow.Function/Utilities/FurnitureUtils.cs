@@ -5,6 +5,7 @@ using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 using Terraria.ObjectData;
+using static Terraria.ModLoader.Default.LegacyUnloadedTilesSystem;
 
 namespace Everglow.Commons.Utilities;
 
@@ -29,7 +30,9 @@ public static class FurnitureUtils
 		int left = Main.tile[pos].TileFrameX / 18;
 		left %= 3;
 		left = pos.X - left;
-		int top = pos.Y - Main.tile[pos].TileFrameY / 18;
+		int top = Main.tile[pos].TileFrameY / 18;
+		top %= 3;
+		top = pos.Y - top;
 		HangingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(left, top), 0, 0.11f);
 	}
 
