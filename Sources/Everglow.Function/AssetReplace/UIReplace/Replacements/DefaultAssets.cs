@@ -1,24 +1,28 @@
+using Everglow.Commons.AssetReplace.UIReplace.Core;
 using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.AssetReplace.UIReplace;
+namespace Everglow.Commons.AssetReplace.UIReplace.Replacements;
 
-internal class MythAssets
+internal class DefaultAssets
 {
-	public Asset<Texture2D>[] InventoryBacks = new Asset<Texture2D>[18];
+	public Asset<Texture2D>[] InventoryBacks = new Asset<Texture2D>[17];
 	public ClassicBar ClassicBar = new();
 	public FancyBar FancyBar = new();
 	public HorizontalBar HorizontalBar = new();
 
 	public void LoadTextures()
 	{
-		for (int i = 2; i <= 18; i++)
-			InventoryBacks[i - 1] = UIReplaceModule.GetTexture($"UISkinMyth/Inventory/Inventory_Back{i}");
-		InventoryBacks[0] = UIReplaceModule.GetTexture($"UISkinMyth/Inventory/Inventory_BackX");
+		for (int i = 1; i <= 17; i++)
+		{
+			if (i is 16)
+				continue;
+			InventoryBacks[i - 1] = UIReplaceModule.GetTexture($"UISkinDefault/Inventory/Inventory_Back{i}");
+		}
 
-		ClassicBar.LoadTextures("UISkinMyth");
-		FancyBar.LoadTextures("UISkinMyth");
-		HorizontalBar.LoadTextures("UISkinMyth");
+		//ClassicBar.LoadTextures("UISkinMyth");
+		//FancyBar.LoadTextures("UISkinMyth");
+		//HorizontalBar.LoadTextures("UISkinMyth");
 	}
 
 	public void Apply()
@@ -38,12 +42,15 @@ internal class MythAssets
 		TextureAssets.InventoryBack13 = InventoryBacks[12];
 		TextureAssets.InventoryBack14 = InventoryBacks[13];
 		TextureAssets.InventoryBack15 = InventoryBacks[14];
-		TextureAssets.InventoryBack16 = InventoryBacks[15];
+		TextureAssets.InventoryBack16 = InventoryBacks[0];
 		TextureAssets.InventoryBack17 = InventoryBacks[16];
-		TextureAssets.InventoryBack18 = InventoryBacks[17];
+		TextureAssets.InventoryBack18 = InventoryBacks[0];
 
-		ClassicBar.ReplaceTextures();
-		FancyBar.ReplaceTextures();
-		HorizontalBar.ReplaceTextures();
+		UIReplaceModule.TerrariaAssets.ClassicBar.ReplaceTextures();
+		UIReplaceModule.TerrariaAssets.FancyBar.ReplaceTextures();
+		UIReplaceModule.TerrariaAssets.HorizontalBar.ReplaceTextures();
+		//ClassicBar.ReplaceTextures();
+		//FancyBar.ReplaceTextures();
+		//HorizontalBar.ReplaceTextures();
 	}
 }

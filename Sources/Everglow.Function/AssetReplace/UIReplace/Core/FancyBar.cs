@@ -2,7 +2,7 @@ using System.Reflection;
 using ReLogic.Content;
 using Terraria.GameContent.UI.ResourceSets;
 
-namespace Everglow.Commons.AssetReplace.UIReplace;
+namespace Everglow.Commons.AssetReplace.UIReplace.Core;
 
 public class FancyBar
 {
@@ -41,28 +41,6 @@ public class FancyBar
 
 	public void ReplaceTextures()
 	{
-		ReplaceForInstance(UIReplaceModule.PlayerResourceSets["New"]);
-		ReplaceForInstance(UIReplaceModule.PlayerResourceSets["NewWithText"]);
-	}
-
-	private void ReplaceForInstance(IPlayerResourcesDisplaySet resourceBar)
-	{
-		if (resourceBar is not FancyClassicPlayerResourcesDisplaySet instance)
-		{
-			Ins.Logger.Warn("FancyBar sprites replacement loading failed, sprite replacement would not work.");
-			return;
-		}
-
-		instance._heartLeft = HeartLeft;
-		instance._heartMiddle = HeartMiddle;
-		instance._heartRight = HeartRight;
-		instance._heartRightFancy = HeartRightFancy;
-		instance._heartFill = HeartFillRed;
-		instance._heartFillHoney = HeartFillGold;
-		instance._starTop = StarA;
-		instance._starMiddle = StarB;
-		instance._starBottom = StarC;
-		instance._starSingle = StarSingle;
-		instance._starFill = StarFill;
+		VanillaResourceOverlay.FancyBar = this;
 	}
 }

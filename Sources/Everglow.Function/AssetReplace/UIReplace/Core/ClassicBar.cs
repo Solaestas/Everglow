@@ -1,7 +1,7 @@
 using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.AssetReplace.UIReplace;
+namespace Everglow.Commons.AssetReplace.UIReplace.Core;
 
 public class ClassicBar
 {
@@ -22,15 +22,6 @@ public class ClassicBar
 
 	public void ReplaceTextures()
 	{
-		TextureAssets.Mana = BlueStar;
-		TextureAssets.Heart = RedHeart;
-		TextureAssets.Heart2 = GoldHeart;
+		VanillaResourceOverlay.ClassicBar = this;
 	}
-
-	// 非static不需要Unload
-	//public void UnloadTextures() {
-	//    BlueStar = null;
-	//    RedHeart = null;
-	//    GoldHeart = null;
-	//}
 }

@@ -1,7 +1,8 @@
+using Everglow.Commons.AssetReplace.UIReplace.Core;
 using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.AssetReplace.UIReplace;
+namespace Everglow.Commons.AssetReplace.UIReplace.Replacements;
 
 internal class EternalAssets
 {

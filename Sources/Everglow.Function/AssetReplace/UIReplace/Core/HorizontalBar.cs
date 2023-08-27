@@ -2,7 +2,7 @@ using System.Reflection;
 using ReLogic.Content;
 using Terraria.GameContent.UI.ResourceSets;
 
-namespace Everglow.Commons.AssetReplace.UIReplace;
+namespace Everglow.Commons.AssetReplace.UIReplace.Core;
 
 public class HorizontalBar
 {
@@ -35,26 +35,6 @@ public class HorizontalBar
 
 	public void ReplaceTextures()
 	{
-		ReplaceForInstance(UIReplaceModule.PlayerResourceSets["HorizontalBars"]);
-		ReplaceForInstance(UIReplaceModule.PlayerResourceSets["HorizontalBarsWithText"]);
-		ReplaceForInstance(UIReplaceModule.PlayerResourceSets["HorizontalBarsWithFullText"]);
-	}
-
-	private void ReplaceForInstance(IPlayerResourcesDisplaySet resourceBar)
-	{
-		if (resourceBar is not HorizontalBarsPlayerResourcesDisplaySet instance)
-		{
-			Ins.Logger.Warn("HorizontalBar sprites replacement loading failed, sprite replacement would not work.");
-			return;
-		}
-
-		instance._hpFill = HpFill;
-		instance._hpFillHoney = HpFillGold;
-		instance._mpFill = MpFill;
-		instance._panelLeft = PanelLeft;
-		instance._panelMiddleHP = HpPanelMiddle;
-		instance._panelRightHP = HpPanelRight;
-		instance._panelMiddleMP = MpPanelMiddle;
-		instance._panelRightMP = MpPanelRight;
+		VanillaResourceOverlay.HorizontalBar = this;
 	}
 }

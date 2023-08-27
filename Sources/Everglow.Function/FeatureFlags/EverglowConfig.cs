@@ -1,5 +1,5 @@
 using System.ComponentModel;
-using Everglow.Commons.AssetReplace.UIReplace;
+using Everglow.Commons.AssetReplace.UIReplace.Core;
 using Terraria.ModLoader.Config;
 
 namespace Everglow.Commons.FeatureFlags;

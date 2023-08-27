@@ -1,5 +1,5 @@
 using System.Reflection;
-using Everglow.Commons.AssetReplace.UIReplace;
+using Everglow.Commons.AssetReplace.UIReplace.Core;
 using Everglow.Commons.FeatureFlags;
 using Everglow.Commons.Modules;
 using MonoMod.Cil;
