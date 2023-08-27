@@ -1,4 +1,3 @@
-using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.Audio;
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;

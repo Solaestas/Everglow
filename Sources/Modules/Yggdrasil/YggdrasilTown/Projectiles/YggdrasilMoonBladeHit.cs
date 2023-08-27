@@ -1,5 +1,4 @@
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using SteelSeries.GameSense;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -23,39 +22,7 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 	public override void OnSpawn(IEntitySource source)
 	{
 		SoundEngine.PlaySound(SoundID.Shatter, Projectile.Center);
-
 		GenerateSpark(140);
-		GenerateSmog(20);
-		float mulWidth = Main.rand.NextFloat(146.6f, 178f);
-		var darknessNight = new Smog_MoonBladeWave
-		{
-			velocity = Vector2.zeroVector,
-			Active = true,
-			Visible = true,
-			position = Projectile.Center,
-			maxTime = 60,
-			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 6, mulWidth }
-		};
-		Ins.VFXManager.Add(darknessNight);
-	}
-	public void GenerateSmog(int Frequency)
-	{
-		for (int g = 0; g < Frequency; g++)
-		{
-			Vector2 vel = new Vector2(0, Main.rand.NextFloat(12.6f, 18f)).RotateRandom(MathHelper.TwoPi);
-			float mulWidth = Main.rand.NextFloat(16.6f, 78f);
-			var darknessNight = new Smog_MoonBladeDust
-			{
-				velocity = vel,
-				Active = true,
-				Visible = true,
-				position = Projectile.Center,
-				maxTime = Main.rand.Next(27, 72),
-				scale = mulWidth,
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.07f, 0.07f) }
-			};
-			Ins.VFXManager.Add(darknessNight);
-		}
 	}
 	public void GenerateSpark(int Frequency)
 	{
@@ -128,8 +95,6 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 		dissolve.Parameters["duration"].SetValue(MathF.Pow(1f - timeValue, 5));
 		dissolve.CurrentTechnique.Passes[0].Apply();
 		DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 24 * Projectile.ai[0], c, Projectile.Center, Commons.ModAsset.Trail_0.Value);
-		DrawTexCircle(MathF.Sqrt(timeValue) * 16 * Projectile.ai[0], 24 * Projectile.ai[0], new Color(0, 200, 255, 0), Projectile.Center, Commons.ModAsset.Trail_6.Value);
-
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
