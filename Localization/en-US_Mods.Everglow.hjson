@@ -83,6 +83,11 @@ Biomes: {
 		DisplayName: Kelp Curtain Biome
 		TownNPCDialogueName: the Kelp Curtain Biome
 	}
+
+	HurricaneMazeBiome: {
+		DisplayName: Hurricane Maze Biome
+		TownNPCDialogueName: the Hurricane Maze Biome
+	}
 }
 
 MapEntry.FluorescentTree: Mods.Everglow.MapEntry.FluorescentTree
@@ -2575,6 +2580,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	DarkMud: {
+		DisplayName: Dark Mud
+		Tooltip: ""
+	}
+
 	DoubleArmsChineseStreetLamp: {
 		DisplayName: Double Arms Chinese Street Lamp
 		Tooltip: ""
@@ -2590,8 +2600,18 @@ Items: {
 		Tooltip: ""
 	}
 
-	ShoreMud: {
-		DisplayName: Shore Mud
+	IronTrackScaffolding: {
+		DisplayName: Iron Track Scaffolding
+		Tooltip: ""
+	}
+
+	PierWithSlabs: {
+		DisplayName: Pier With Slabs
+		Tooltip: ""
+	}
+
+	PierWithSlabsTop: {
+		DisplayName: Pier With Slabs Top
 		Tooltip: ""
 	}
 
@@ -2670,6 +2690,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	YggdrasilCyatheaWood: {
+		DisplayName: Yggdrasil Cyathea Wood
+		Tooltip: ""
+	}
+
 	YggdrasilDirt: {
 		DisplayName: Yggdrasil Dirt
 		Tooltip: ""
@@ -2707,6 +2732,11 @@ Items: {
 
 	HardmodeItem: {
 		DisplayName: Hardmode Item
+		Tooltip: ""
+	}
+
+	ScreenPositionPrintItem: {
+		DisplayName: Screen Position Print Item
 		Tooltip: ""
 	}
 
@@ -3235,6 +3265,15 @@ Projectiles: {
 	CactusBallProj.DisplayName: Cactus Ball Proj
 	CactusBallSpike.DisplayName: Cactus Ball Spike
 	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
+	SquamousAirProj.DisplayName: Squamous Air Proj
+	SquamousRockExplosion.DisplayName: Squamous Rock Explosion
+	SquamousRockProj.DisplayName: Squamous Rock Proj
+	SquamousRockProj_small.DisplayName: Squamous Rock Proj_small
+	SquamousRockSpike.DisplayName: Squamous Rock Spike
+	SquamousRollingStone.DisplayName: Squamous Rolling Stone
+	Squamous_HitTile.DisplayName: Squamous_ Hit Tile
+	YggdrasilMoonBlade.DisplayName: Yggdrasil Moon Blade
+	YggdrasilMoonBladeHit.DisplayName: Yggdrasil Moon Blade Hit
 	AcroporaSpear.DisplayName: Acropora Spear
 	AcroporaThumpEff.DisplayName: Acropora Thump Eff
 	TrueDeathSickle.DisplayName: True Death Sickle
