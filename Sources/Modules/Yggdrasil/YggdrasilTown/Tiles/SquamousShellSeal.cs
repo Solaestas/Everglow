@@ -62,10 +62,10 @@ public class SquamousShellSeal : ModTile
 			Texture2D deadS = ModAsset.DeadSquamousShell.Value;
 			if (ReSpawnTimer <= 0)
 			{
-				spriteBatch.Draw(deadS, new Vector2(i, j) * 16 - Main.screenPosition + zero, null, lightColor, 0, deadS.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+				spriteBatch.Draw(deadS, new Vector2(i, j) * 16 - Main.screenPosition + zero, null, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
 			}
 		}
-		return base.PreDraw(i, j, spriteBatch);
+		return false;
 	}
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
