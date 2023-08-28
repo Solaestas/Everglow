@@ -10,6 +10,18 @@ public class SquamousRollingStone : ModProjectile
 	public override void OnSpawn(IEntitySource source)
 	{
 		StartDirection = Math.Sign(Projectile.ai[0]);
+		for(int t = 0;t < 100;t++)
+		{
+			if(Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height))
+			{
+				Projectile.position.Y -= 1;
+			}
+			else
+			{
+				Projectile.position.Y -= 5;
+				break;
+			}
+		}
 	}
 	public override void SetDefaults()
 	{
