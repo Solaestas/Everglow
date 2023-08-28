@@ -1595,6 +1595,19 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
+		int sealX = AzureGrottoCenterX + (count - 100) * step;
+		int sealY = startY2 - 20;
+		int sealCountY = 0;
+		while(!SafeGetTile(sealX, sealY + sealCountY).HasTile)
+		{
+			sealCountY++;
+			if(sealCountY > 100)
+			{
+				break;
+			}
+		}
+		sealY = sealY + sealCountY - 10;
+		PlaceFrameImportantTiles(sealX,sealY,20,10, ModContent.TileType<SquamousShellSeal>());
 	}
 	/// <summary>
 	/// 建造一个灯柱

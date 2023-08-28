@@ -202,9 +202,15 @@ public class SquamousShell : ModNPC
 	{
 		yield return new WaitForFrames(5);
 		int waitCount = 0;
-		while(NPC.collideY)
+		int count = 0;
+		while (Collision.SolidCollision(NPC.BottomLeft, NPC.width, 1))
 		{
-			NPC.position.Y -= 10;
+			count++;
+			NPC.position.Y -= 2f;
+			if (count > 100)
+			{
+				break;
+			}
 		}
 		while (NPC.velocity != NPC.oldVelocity)
 		{
