@@ -1,15 +1,4 @@
 ﻿sampler2D uImage : register(s0);
-texture uHeatMap;
-sampler uHeatMapSampler =
-sampler_state
-{
-    Texture = <uHeatMap>;
-    MipFilter = LINEAR;
-    MinFilter = LINEAR;
-    MagFilter = LINEAR;
-    AddressU = CLAMP;
-    AddressV = CLAMP;
-};
 texture uNoise;
 sampler uNoiseSampler =
 sampler_state
@@ -21,10 +10,11 @@ sampler_state
     AddressU = WRAP;
     AddressV = WRAP;
 };
-//Noise_x由Color.r代替
-//Noise_y由Color.g代替
-//utime由Color.b代替
-
+float duration;
+float uNoiseSize;//不允许填0
+float4 uDissolveColor;
+float4 uLightColor;
+float2 uNoiseXY;
 float4x4 uTransform;
 
 struct VSInput
@@ -52,12 +42,15 @@ PSInput VertexShaderFunction(VSInput input)
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
-    float4 colorNoise = tex2D(uNoiseSampler, input.Texcoord.xy);
-    float4 colorHalo = tex2D(uImage, input.Color.xy);
-    float light = 1 - colorHalo.r * colorNoise.r * (1 - input.Color.b);
-    float4 colorHeatMap = tex2D(uHeatMapSampler, float2(light, 0));
-    colorHeatMap *= float4(input.Texcoord.zzz, 1);
-    return colorHeatMap;
+    float4 colorNoise = tex2D(uNoiseSampler, input.Texcoord.xy / uNoiseSize + uNoiseXY);
+    float4 mainTex = tex2D(uImage, input.Texcoord.xy);
+    if (!any(mainTex))
+        return float4(0, 0, 0, 0);
+    if (colorNoise.r < duration)
+        return mainTex * uLightColor;
+    if (colorNoise.r < duration + 0.2)
+        return uDissolveColor;
+    return float4(0, 0, 0, 0);
 }
 
 technique Technique1

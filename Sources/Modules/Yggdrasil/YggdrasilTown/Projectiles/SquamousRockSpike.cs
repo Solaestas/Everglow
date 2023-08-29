@@ -48,9 +48,9 @@ public class SquamousRockSpike : ModProjectile
 			{
 				if (Projectile.timeLeft < 3500)
 				{
-					if (Projectile.velocity.Length() < 40f)
+					if (Projectile.velocity.Length() < 10f)
 					{
-						Projectile.velocity *= 40f / Projectile.velocity.Length();
+						Projectile.velocity *= 10f / Projectile.velocity.Length();
 					}
 				}
 			}
@@ -108,7 +108,7 @@ public class SquamousRockSpike : ModProjectile
 			return false;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect dissolve = Commons.ModAsset.Dissolve.Value;
+		Effect dissolve = Commons.ModAsset.DissolveWithLight.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		float dissolveDuration = (3600 - Projectile.timeLeft) / 80f * 1.2f - 0.2f;
@@ -119,6 +119,7 @@ public class SquamousRockSpike : ModProjectile
 		dissolve.Parameters["uTransform"].SetValue(model * projection);
 		dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_cell.Value);
 		dissolve.Parameters["duration"].SetValue(dissolveDuration);
+		dissolve.Parameters["uLightColor"].SetValue(lightColor.ToVector4());
 		dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.2f, 0.6f, 0.7f, 1f));
 		dissolve.Parameters["uNoiseSize"].SetValue(2f);
 		dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(Projectile.ai[1], Projectile.ai[2]));

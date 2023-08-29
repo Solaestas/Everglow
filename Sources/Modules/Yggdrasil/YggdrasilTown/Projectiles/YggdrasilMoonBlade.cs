@@ -52,7 +52,7 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 		}
 		if (Projectile.timeLeft < 260)
 		{
-			Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 80f;
+			Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 20f;
 		}
 		//Dust dust = Dust.NewDustDirect(Projectile.Bottom, 0, 0, DustID.CoralTorch, Projectile.velocity.X * Main.rand.NextFloat(0.3f, 0.6f), Projectile.velocity.Y * Main.rand.NextFloat(0.3f, 0.6f), 0, default, Main.rand.NextFloat(0.9f, 1.6f));
 		//dust.noGravity = true;
