@@ -28,7 +28,7 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 	{
 		for (int g = 0; g < Frequency; g++)
 		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(20f, 24f)).RotatedByRandom(MathHelper.TwoPi) + Projectile.velocity * Main.rand.NextFloat(12f);
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(10f, 14f)).RotatedByRandom(MathHelper.TwoPi);
 			var spark = new Spark_MoonBladeDust
 			{
 				velocity = newVelocity,

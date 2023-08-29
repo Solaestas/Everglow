@@ -52,7 +52,7 @@ public class SquamousShellSeal : ModTile
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		Tile tile = Main.tile[i, j];
-		if(tile.TileFrameX == 0 && tile.TileFrameY == 0)
+		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
 		{
 			Color lightColor = Lighting.GetColor(i + 10, j + 5);
 			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -62,7 +62,20 @@ public class SquamousShellSeal : ModTile
 			Texture2D deadS = ModAsset.DeadSquamousShell.Value;
 			if (ReSpawnTimer <= 0)
 			{
-				spriteBatch.Draw(deadS, new Vector2(i, j) * 16 - Main.screenPosition + zero, null, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
+				spriteBatch.Draw(deadS, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(8), null, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
+			}
+			else if (ReSpawnTimer < 300)
+			{
+				Vector2 dive = new Vector2(0, ReSpawnTimer);
+				spriteBatch.Draw(deadS, new Vector2(i, j) * 16 - Main.screenPosition + zero + dive + new Vector2(8), null, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
+			}
+			if (NPC.CountNPCS(ModContent.NPCType<SquamousShell>()) == 0)
+			{
+				if (ReSpawnTimer > 300)
+				{
+					ReSpawnTimer = 300;
+				}
+				ReSpawnTimer--;
 			}
 		}
 		return false;
@@ -79,8 +92,21 @@ public class SquamousShellSeal : ModTile
 	{
 		if(NPC.CountNPCS(ModContent.NPCType<SquamousShell>()) == 0)
 		{
-			NPC.NewNPC(null, i * 16, j * 16, ModContent.NPCType<SquamousShell>());
-			ReSpawnTimer = 360000;
+			for(int x = -20;x <=20;x++)
+			{
+				for (int y = -10; y <= 10; y++)
+				{
+					Tile tile = Main.tile[i + x, j + y];
+					if (tile.TileType == Type)
+					{
+					    if(tile.TileFrameX == 180 && tile.TileFrameY == 162)
+						{
+							NPC.NewNPC(null, (i + x) * 16 + 18, (j + y) * 16 + 14, ModContent.NPCType<SquamousShell>());
+							ReSpawnTimer = 360000;
+						}
+					}
+				}
+			}
 		}
 		return base.RightClick(i, j);
 	}

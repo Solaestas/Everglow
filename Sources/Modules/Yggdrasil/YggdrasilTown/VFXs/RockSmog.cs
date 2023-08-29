@@ -74,13 +74,15 @@ public class RockSmogDust : Visual
 		float pocession = timer / maxTime;
 		float timeValue = (float)(Main.time * 0.002);
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
+		Vector3 lightValue = Lighting.GetColor(position.ToTileCoordinates()).ToVector3();
+		float light = (lightValue.Length());
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + toCorner,new Color(0, 0,pocession), new Vector3(ai[0],timeValue,0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 1, pocession), new Vector3(ai[0], timeValue + 0.4f, 0)),
+			new Vertex2D(position + toCorner,new Color(0, 0,pocession), new Vector3(ai[0],timeValue,light)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 1, pocession), new Vector3(ai[0], timeValue + 0.4f, light)),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0 ,pocession), new Vector3(ai[0] + 0.4f, timeValue, 0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession), new Vector3(ai[0] + 0.4f, timeValue + 0.4f, 0))
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0 ,pocession), new Vector3(ai[0] + 0.4f, timeValue, light)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession), new Vector3(ai[0] + 0.4f, timeValue + 0.4f, light))
 		};
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}

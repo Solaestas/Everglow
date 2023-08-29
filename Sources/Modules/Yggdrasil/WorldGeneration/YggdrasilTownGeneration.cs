@@ -41,6 +41,7 @@ public class YggdrasilTownGeneration
 	public static int[,] PerlinPixelG = new int[512, 512];
 	public static int[,] PerlinPixelB = new int[512, 512];
 	public static int[,] PerlinPixel2 = new int[512, 512];
+	public static int[,] CellPixel = new int[512, 512];
 	public static int AzureGrottoCenterX;
 	public static UnifiedRandom GenRand = new UnifiedRandom();
 	public static List<YggdrasilTownStreetElement> StreetConstructorsSheet;
@@ -138,6 +139,23 @@ public class YggdrasilTownGeneration
 					int newX = (int)(accessor.Width * perlinCoordCenter.X + x) % accessor.Width;
 					ref var pixel = ref pixelRow[newX];
 					PerlinPixel2[x, y] = pixel.R;
+				}
+			}
+		});
+
+		imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_cell.bmp");
+		perlinCoordCenter = new Vector2(GenRand.NextFloat(0f, 1f), GenRand.NextFloat(0f, 1f));
+		imageData.ProcessPixelRows(accessor =>
+		{
+			for (int y = 0; y < accessor.Height; y++)
+			{
+				int newY = (int)(accessor.Height * perlinCoordCenter.Y + y) % accessor.Height;
+				var pixelRow = accessor.GetRowSpan(newY);
+				for (int x = 0; x < pixelRow.Length; x++)
+				{
+					int newX = (int)(accessor.Width * perlinCoordCenter.X + x) % accessor.Width;
+					ref var pixel = ref pixelRow[newX];
+					CellPixel[x, y] = pixel.R;
 				}
 			}
 		});
@@ -1559,10 +1577,25 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
-		int tunnelLength = GenRand.Next(487, 526);
+		int tunnelLength = GenRand.Next(447, 528);
 		x = AzureGrottoCenterX;
+		if(step > 0)
+		{
+			while (x + tunnelLength > Main.maxTilesX - 50)
+			{
+				tunnelLength--;
+			}
+		}
+		else
+		{
+			while (x - tunnelLength < 50)
+			{
+				tunnelLength--;
+			}
+		}
 		int count = 0;
 		int startY2 = startY + 170;
+		int cageMiddleX = AzureGrottoCenterX + (tunnelLength - 100) * step;
 		randX = GenRand.Next(512);
 		randY = GenRand.Next(512);
 		while (count <= tunnelLength)
@@ -1586,19 +1619,26 @@ public class YggdrasilTownGeneration
 			if(count > tunnelLength - 200)
 			{
 				float valueX = tunnelLength - count;
-				float deltaY = 80 - (valueX - 100) * (valueX - 100) / 450f;
+				valueX -= 100;
+				float deltaY = 80 - valueX * valueX / 450f;
 				deltaY += PerlinPixelB[(randX + count) % 512, randY] / 90f;
-				for (int y = startY2 - (int)deltaY; y <= startY2; y++)
+				for (int y = startY2 - (int)deltaY; y <= startY2 + 8; y++)
 				{
 					Tile target = SafeGetTile(x, y);
 					target.HasTile = false;
+					Vector2 centerPoint = new Vector2(cageMiddleX, startY2 - deltaY * 0.5f);
+					float colorValue = 1 - CellPixel[(x * 4 + randX) % 512, (y * 4 + randY) % 512] / 255f;
+					colorValue *= colorValue * 2;
+					if (colorValue > (centerPoint - new Vector2(x, y)).Length() / 100f - 0.7f)
+					{
+						target.ClearEverything();
+					}
 				}
 			}
 		}
-		int sealX = AzureGrottoCenterX + (count - 100) * step;
 		int sealY = startY2 - 20;
 		int sealCountY = 0;
-		while(!SafeGetTile(sealX, sealY + sealCountY).HasTile)
+		while(!SafeGetTile(cageMiddleX, sealY + sealCountY).HasTile)
 		{
 			sealCountY++;
 			if(sealCountY > 100)
@@ -1607,7 +1647,45 @@ public class YggdrasilTownGeneration
 			}
 		}
 		sealY = sealY + sealCountY - 10;
-		PlaceFrameImportantTiles(sealX,sealY,20,10, ModContent.TileType<SquamousShellSeal>());
+		PlaceFrameImportantTiles(cageMiddleX, sealY, 20, 10, ModContent.TileType<SquamousShellSeal>());
+		Point centerOfCage = new Point(cageMiddleX, startY2 - 40);
+		randX = GenRand.Next(512);
+		randY = GenRand.Next(512);
+		int startX = Math.Max(cageMiddleX - 300, 0);
+		int endX = Math.Min(cageMiddleX + 300, Main.maxTilesX);
+		for (int x0 = startX;x0 <= endX; x0++)
+		{
+			for (int y = centerOfCage.Y - 200; y <= centerOfCage.Y + 30; y++)
+			{
+				Tile target = SafeGetTile(x0, y);
+				if(target.TileType == ModContent.TileType<StoneScaleWood>() && target.HasTile)
+				{
+					Vector2 dis = (new Vector2(x0, y) - new Vector2(centerOfCage.X, centerOfCage.Y + 40));
+					dis.X *= 2;
+					float myLength = dis.Length();
+					float cellC = 1 - CellPixel[(int)(x0 * 3.5f + randX) % 512, (int)(myLength * 3 + randY) % 512] / 255f;
+					float xValue = Math.Abs(x0 - cageMiddleX) / 300f;
+					xValue = 1 - xValue;
+					xValue *= 3;
+					xValue = Math.Min(xValue, 1);
+					float lengthValue = myLength / 400f;
+					if (cellC > lengthValue / (xValue + 0.001f))
+					{
+						target.ClearEverything();
+						target.TileType = (ushort)(ModContent.TileType<YggdrasilAmber>());
+						target.HasTile = true;
+					}
+				}
+			}
+		}
+		if(SubworldLibrary.SubworldSystem.Current != null)
+		{
+			YggdrasilWorld yWorld = SubworldLibrary.SubworldSystem.Current as YggdrasilWorld;
+			if (yWorld != null)
+			{
+				yWorld.StoneCageOfChallengesCenter = new Vector2(cageMiddleX, startY2 - 40) * 16;
+			}
+		}
 	}
 	/// <summary>
 	/// 建造一个灯柱

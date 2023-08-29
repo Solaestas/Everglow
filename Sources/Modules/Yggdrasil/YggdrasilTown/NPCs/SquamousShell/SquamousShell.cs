@@ -421,8 +421,8 @@ public class SquamousShell : ModNPC
 			Vector2 aimPos = playerPos + new Vector2(-400 * direction, -300);
 			Vector2 toTarget = aimPos - NPC.Center - NPC.velocity;
 			NPC.velocity = NPC.velocity * 0.995f + toTarget * 0.005f * 0.1f;
-			NPC.rotation -= 0.09f;
-			if(x % 20 == 16)
+			NPC.rotation -= 0.03f;
+			if(x % 60 == 16)
 			{
 				NPC.rotation = 1;
 				if(direction == -1)

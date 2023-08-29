@@ -7,7 +7,8 @@ namespace Everglow.Yggdrasil;
 internal class YggdrasilWorld : Subworld
 {
 	public static float YggdrasilTimer = 0;
-	public override int Width => 1200;
+	public Vector2 StoneCageOfChallengesCenter = Vector2.zeroVector;
+    public override int Width => 1200;
 	public override int Height => 12000;
 	public override bool NormalUpdates => true;
 	public override bool ShouldSave => true;
