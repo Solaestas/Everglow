@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  
   <ItemGroup>
     <ProjectReference Include="..\Myth\Everglow.Myth.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Solaestas.tModLoader.ModBuilder" Version="1.1.0" />
   </ItemGroup>
 </Project>
     
