@@ -1,8 +1,9 @@
+using Everglow.Commons.Coroutines;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.VFX;
+using Everglow.Commons.Weapons.StabbingSwords.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -47,10 +48,11 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		/// 表示刺剑攻击长度,标准长度1
 		/// </summary>
 		public float MaxLength = 1f;
+		private CoroutineManager _coroutineManager = new CoroutineManager();
 		public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
 		public override void SetDefaults()
 		{
-			Projectile.width = 50;
+			Projectile.width = 24;
 			Projectile.height = 24;
 			Projectile.netImportant = true;
 			Projectile.friendly = true;
@@ -58,6 +60,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			Projectile.penetrate = -1;
 			Projectile.timeLeft = 15;
 			Projectile.extraUpdates = 5;
+			//Projectile.extraUpdates = 0;
 			Projectile.tileCollide = false;
 			Projectile.ArmorPenetration = 20;
 		}
@@ -66,7 +69,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		public int ToKill = 120;
 		public override void OnSpawn(IEntitySource source)
 		{
-			
+
 			Player player = Main.player[Projectile.owner];
 			Vector2 toMouse = Main.MouseWorld - player.RotatedRelativePoint(player.MountedCenter);
 			toMouse.Normalize();
@@ -79,28 +82,9 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 				Projectile.netUpdate = true;
 			}
 			Projectile.velocity = toMouse;
-           
-			//---特效
-			
-            StabVFX v = new StabVFX() {
-				pos = Projectile.Center + Projectile.velocity*MaxLength*140,
-				vel=toMouse,
-				color=Color.Lerp(Color,Color.White,0.2f),
-				scale=10,
-				maxtime=10,
-				timeleft=10
-			};
-			Ins.VFXManager.Add(v);
-            v = new StabVFX()
-            {
-                pos = Projectile.Center + Projectile.velocity * MaxLength * 70,
-                vel = toMouse,
-                color = Color.Lerp(Color, Color.White, 0.4f),
-				scale=15,
-            };
-            Ins.VFXManager.Add(v);
 
-            
+			_coroutineManager.StartCoroutine(new Coroutine(Generate3DRingVFX(toMouse)));
+
 			/*
             for (int i=0;i<10;i++)
 			{
@@ -114,7 +98,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
                 Ins.VFXManager.Add(v1);
             }*/
 			//---
-            SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
+			SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
 			SoundEngine.PlaySound(ss, Projectile.Center);
 			StartCenter = Projectile.Center;
 		}
@@ -135,12 +119,47 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			}
 			return false;
 		}
+		/// <summary>
+		/// 用协程管理环状特效
+		/// </summary>
+		/// <returns></returns>
+		public virtual IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)
+		{
+			yield return new WaitForFrames(40);
+			StabVFX v = new StabVFX()
+			{
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
+				vel = velocity,
+				color = Color.Lerp(Color, Color.Transparent, 0.4f),
+				scale = 26,
+				maxtime = (int)(240 / (float)(Projectile.extraUpdates + 1)),
+				timeleft = (int)(240 / (float)(Projectile.extraUpdates + 1))
+			};
+			if (EndPos == Vector2.Zero)
+			{
+				Ins.VFXManager.Add(v);
+			}
+			yield return new WaitForFrames(40);
+			v = new StabVFX()
+			{
+				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
+				vel = velocity,
+				color = Color.Lerp(Color, Color.Transparent, 0.56f),
+				scale = 15,
+				maxtime = (int)(240 / (float)(Projectile.extraUpdates + 1)),
+				timeleft = (int)(240 / (float)(Projectile.extraUpdates + 1))
+			};
+			if (EndPos == Vector2.Zero)
+			{
+				Ins.VFXManager.Add(v);
+			}
+		}
 		public override void AI()
 		{
-            Player player = Main.player[Projectile.owner];
+			Player player = Main.player[Projectile.owner];
 			ProduceWaterRipples(new Vector2(Projectile.velocity.Length(), 30));
-
-            if (Projectile.timeLeft <= 1)
+			_coroutineManager.Update();
+			if (Projectile.timeLeft <= 1)
 			{
 				ToKill--;
 				if (ToKill > 0)
@@ -168,20 +187,20 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 					player.legPosition = Vector2.Zero;
 				}
 			}
-            
-            if (ToKill >= 120)
+
+			if (ToKill >= 120)
 			{
-                Projectile.position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f + Projectile.velocity * (15 - Projectile.timeLeft) * 2;
-                Projectile.rotation = Projectile.velocity.ToRotation();
-                Projectile.spriteDirection = Projectile.direction;
-            }
+				Projectile.position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f + Projectile.velocity * (15 - Projectile.timeLeft) * 2;
+				Projectile.rotation = Projectile.velocity.ToRotation();
+				Projectile.spriteDirection = Projectile.direction;
+			}
 			else
 			{
-
 				Projectile.extraUpdates = 24;
+				//Projectile.extraUpdates = 0;
 			}
 			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
-			if (!Collision.CanHitLine(StartCenter,1,1,end,1,1))
+			if (!Collision.CanHitLine(StartCenter, 1, 1, end, 1, 1))
 			{
 				if (EndPos == Vector2.zeroVector)
 				{
@@ -190,10 +209,10 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 				}
 			}
 		}
-		public virtual void HitTile() 
+		public virtual void HitTile()
 		{
 			SoundStyle ss = SoundID.NPCHit4;
-			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);	
+			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
 			for (int g = 0; g < 20; g++)
 			{
 				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(MathHelper.TwoPi);
@@ -240,22 +259,21 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		}
 		public virtual void DrawEffect(Color lightColor)
 		{
-
-            Vector2 normalized =Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 50 * ToKill / 120f * DrawWidth;
+			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 90 * ToKill / 120f * DrawWidth;
 			Vector2 start = StartCenter;
 			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
-			if(EndPos != Vector2.Zero)
+			if (EndPos != Vector2.Zero)
 			{
 				end = EndPos;
 			}
-            float value = (Projectile.timeLeft + ToKill) / 135f;
-            Vector2 middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
+			float value = (Projectile.timeLeft + ToKill) / 135f;
+			Vector2 middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
 			float time = (float)(Main.time * 0.03);
 			float dark = MathF.Sin(value * MathF.PI) * 4;
 			List<Vertex2D> bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,new Color(0, 0, 0, 120) * 0.4f * Shade,new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(0, 0, 0, 120)* 0.4f* Shade,new Vector3(1 + time, 1, 0)),
+				new Vertex2D(start + normalized,new Color(0, 0, 0, 120) * Shade,new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized,new Color(0, 0, 0, 120) * Shade,new Vector3(1 + time, 1, 0)),
 				new Vertex2D(middle + normalized,Color.White* 0.4f * dark* Shade,new Vector3(0.5f + time, 0, 0.5f)),
 				new Vertex2D(middle - normalized,Color.White* 0.4f * dark* Shade,new Vector3(0.5f + time, 1, 0.5f)),
 				new Vertex2D(end + normalized,Color.White* 0.9f * dark* Shade,new Vector3(0f + time, 0, 1)),
@@ -309,18 +327,18 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			}
 
 			alphaColor.A = 0;
-			alphaColor.R = (byte)(565 * lightColor.R / 255f);
-			alphaColor.G = (byte)(565 * lightColor.G / 255f);
-			alphaColor.B = (byte)(565 * lightColor.B / 255f);
+			alphaColor.R = (byte)(Color.R * 2 * lightColor.R / 255f);
+			alphaColor.G = (byte)(Color.G * 2 * lightColor.G / 255f);
+			alphaColor.B = (byte)(Color.B * 2 * lightColor.B / 255f);
 			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 24 * ToKill / 120f * DrawWidth;
 			bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 1, 0)),
+				new Vertex2D(start + normalized,alphaColor * 0.4f,new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized,alphaColor * 0.4f,new Vector3(1 + time, 1, 0)),
 				new Vertex2D(middle + normalized,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
 				new Vertex2D(middle - normalized,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized,alphaColor,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized,alphaColor,new Vector3(0f + time, 1, 1))
+				new Vertex2D(end + normalized,alphaColor * 2,new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized,alphaColor * 2,new Vector3(0f + time, 1, 1))
 			};
 			if (bars.Count >= 3)
 			{
@@ -332,7 +350,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 				effect.Parameters["uTransform"].SetValue(model * projection);
 				effect.Parameters["uProcession"].SetValue(value * 0.6f + 0.4f);
 				effect.CurrentTechnique.Passes[0].Apply();
-				Main.graphics.graphicsDevice.Textures[0] = ModAsset.Trail.Value;
+				Main.graphics.graphicsDevice.Textures[0] = ModAsset.Trail_7.Value;
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -364,7 +382,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 				new Vertex2D(end - Main.screenPosition,alphaColor,new Vector3(0f + time, 0.5f, 1)),
 				new Vertex2D(end - Main.screenPosition,alphaColor,new Vector3(0f + time, 0.5f, 1))
 			};
-			sb.Draw(ModAsset.Trail_1.Value,bars, PrimitiveType.TriangleStrip);
+			sb.Draw(ModAsset.Trail_1.Value, bars, PrimitiveType.TriangleStrip);
 		}
 	}
 }

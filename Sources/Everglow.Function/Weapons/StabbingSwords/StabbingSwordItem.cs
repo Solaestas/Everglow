@@ -1,3 +1,4 @@
+using Everglow.Commons.FeatureFlags;
 using Terraria.DataStructures;
 
 namespace Everglow.Commons.Weapons.StabbingSwords
@@ -27,8 +28,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		public int stabCDMax = 30;
 		public float staminaCost = 1f;
 		public override void UpdateInventory(Player player)
-		{
-			
+		{		
 			if (stabCD > 0)
 				stabCD--;
 			else
@@ -57,6 +57,14 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 				Projectile.NewProjectile(source, position, Vector2.Zero, PowerfulStabProj, (int)(damage * StabMulDamage), knockback*2, player.whoAmI, 0f, 0f);
 				player.itemTime = Item.useTime / 4;
 				player.itemAnimation = Item.useAnimation / 4;
+
+				if (!EverglowConfig.DebugMode) // TODO: Test to see if velocity changes after stab attack is good. If not, delete the entire statement
+				{
+					if (player.direction == 1)
+						player.velocity.X += 1f;
+					else
+						player.velocity.X -= 1f;
+				}
 				return false;
 			}
 			return true;

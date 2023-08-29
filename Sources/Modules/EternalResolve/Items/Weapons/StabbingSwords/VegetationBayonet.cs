@@ -18,7 +18,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.value = Item.sellPrice(0, 0, 90, 0);
 			Item.shoot = ModContent.ProjectileType<VegetationBayonet_Pro>();
 			StabMulDamage = 4f;
-			PowerfulStabProj = ModContent.ProjectileType<VertebralSpur_Pro_Stab>();
+			PowerfulStabProj = ModContent.ProjectileType<VegetationBayonet_Pro_Stab>();
 			base.SetDefaults();
 		}
 		public override void AddRecipes()
@@ -32,6 +32,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		}
 		public override void UpdateInventory(Player player)
 		{
+			base.UpdateInventory(player);
 			if (specialDelay > 360)
 			{
 				player.AddBuff(BuffID.Rabies, 2);
