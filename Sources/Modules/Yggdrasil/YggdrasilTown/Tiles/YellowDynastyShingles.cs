@@ -18,8 +18,4 @@ public class YellowDynastyShingles : ModTile
 		AddMapEntry(new Color(229, 128, 4));
 
 	}
-	public override bool CanExplode(int i, int j)
-	{
-		return false;
-	}
 }
