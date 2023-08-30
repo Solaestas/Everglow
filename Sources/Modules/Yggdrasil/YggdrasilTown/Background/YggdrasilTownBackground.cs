@@ -95,7 +95,7 @@ public class YggdrasilTownBackground : ModSystem
 						Vector2 correction = yWorld.StoneCageOfChallengesCenter + new Vector2(0, -8000) - BiomeCenter;
 						BackgroundManager.QuickDrawBG(stoneSky, GetDrawRect(stoneSky.Size(), 0f, correction, 1.5f), baseColor, 171400, 200000, true, true);
 						BackgroundManager.QuickDrawBG(stoneFar, GetDrawRect(stoneFar.Size(), 0.05f, correction, 1.5f), baseColor, 171400, 200000, true, true);
-						BackgroundManager.QuickDrawBG(stoneMiddle, GetDrawRect(stoneMiddle.Size(), 0.10f, correction, 1.5f), baseColor, 171400, 200000, true, true);
+						BackgroundManager.QuickDrawBG(stoneMiddle, GetDrawRect(stoneMiddle.Size(), 0.10f, correction + new Vector2(0, 3000), 1.5f), baseColor, 171400, 200000, true, true);
 						return;
 					}
 				}

@@ -1,5 +1,6 @@
 using System.Reflection;
 using SubworldLibrary;
+using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
 
 namespace Everglow.Yggdrasil;
@@ -59,12 +60,44 @@ internal class YggdrasilWorld : Subworld
 		Main.maxSectionsY = (Main.maxTilesY - 1) / 150 + 1;
 	}
 }
-class YggdrasilTimerSystem : ModSystem
+class YggdrasilWorldSystem : ModSystem
 {
 	public override void PostUpdateEverything()
 	{
 		YggdrasilWorld.YggdrasilTimer++;
 		base.PostUpdateEverything();
+		//if(Main.mouseLeft && Main.mouseLeftRelease)
+		//{
+		//	Subworld sWorld = SubworldSystem.Current;
+		//	if (sWorld != null)
+		//	{
+		//		YggdrasilWorld yWorld = sWorld as YggdrasilWorld;
+		//		if (yWorld != null)
+		//		{
+		//			Main.NewText(Main.worldPathName);
+		//		}
+		//	}
+		//}
+	}
+	public override void LoadWorldData(TagCompound tag)
+	{
+		Subworld sWorld = SubworldSystem.Current;
+		if (sWorld is YggdrasilWorld)
+		{
+			YggdrasilWorld yWorld = sWorld as YggdrasilWorld;
+			tag.TryGet("scocCenterX", out yWorld.StoneCageOfChallengesCenter.X);
+			tag.TryGet("scocCenterY", out yWorld.StoneCageOfChallengesCenter.Y);
+		}
+	}
+	public override void SaveWorldData(TagCompound tag)
+	{
+		Subworld sWorld = SubworldSystem.Current;
+		if (sWorld is YggdrasilWorld)
+		{
+			YggdrasilWorld yWorld = sWorld as YggdrasilWorld;
+			tag["scocCenterX"] = yWorld.StoneCageOfChallengesCenter.X;
+			tag["scocCenterY"] = yWorld.StoneCageOfChallengesCenter.Y;
+		}
 	}
 }
 
