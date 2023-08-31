@@ -23,6 +23,7 @@ public class YggdrasilTownBiome : ModBiome
 
 	public override void OnInBiome(Player player)
 	{
+		Main.raining = false;
 		base.OnInBiome(player);
 	}
 }
