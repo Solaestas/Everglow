@@ -1661,14 +1661,14 @@ public class YggdrasilTownGeneration
 				if(target.TileType == ModContent.TileType<StoneScaleWood>() && target.HasTile)
 				{
 					Vector2 dis = (new Vector2(x0, y) - new Vector2(centerOfCage.X, centerOfCage.Y + 40));
-					dis.X *= 2;
+					dis.X *= 0.5f;
 					float myLength = dis.Length();
 					float cellC = 1 - CellPixel[(int)(x0 * 3.5f + randX) % 512, (int)(myLength * 3 + randY) % 512] / 255f;
 					float xValue = Math.Abs(x0 - cageMiddleX) / 300f;
 					xValue = 1 - xValue;
 					xValue *= 3;
 					xValue = Math.Min(xValue, 1);
-					float lengthValue = myLength / 400f;
+					float lengthValue = myLength / 300f;
 					if (cellC > lengthValue / (xValue + 0.001f))
 					{
 						target.ClearEverything();

@@ -54,8 +54,20 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 		{
 			Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 20f;
 		}
-		//Dust dust = Dust.NewDustDirect(Projectile.Bottom, 0, 0, DustID.CoralTorch, Projectile.velocity.X * Main.rand.NextFloat(0.3f, 0.6f), Projectile.velocity.Y * Main.rand.NextFloat(0.3f, 0.6f), 0, default, Main.rand.NextFloat(0.9f, 1.6f));
-		//dust.noGravity = true;
+		Lighting.AddLight(Projectile.Center, 0.14f, 0.47f, 0.97f);
+		Vector2 newVelocity = Projectile.velocity + new Vector2(0, Main.rand.NextFloat(1.0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
+		var spark = new Spark_MoonBladeDust
+		{
+			velocity = newVelocity,
+			Active = true,
+			Visible = true,
+			position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
+			maxTime = Main.rand.Next(7, 45),
+			scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 7.0f)),
+			rotation = Main.rand.NextFloat(6.283f),
+			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f) }
+		};
+		Ins.VFXManager.Add(spark);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{

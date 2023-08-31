@@ -1,6 +1,7 @@
 using Everglow.Yggdrasil.Common.BackgroundManager;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using SubworldLibrary;
-using Terraria.Graphics.Light;
+using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Background;
 
@@ -82,20 +83,45 @@ public class YggdrasilTownBackground : ModSystem
 		Vector2 screenCenter = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f;
 		if (SubworldSystem.Current != null)
 		{
-			YggdrasilWorld yWorld = SubworldLibrary.SubworldSystem.Current as YggdrasilWorld;
+			YggdrasilWorld yWorld = SubworldSystem.Current as YggdrasilWorld;
 			if (yWorld != null)
 			{
+				if(yWorld.StoneCageOfChallengesCenter == Vector2.zeroVector)
+				{
+					for (int x = 50; x < Main.maxTilesX - 50; x++)
+					{
+						for (int y = 50; y < Main.maxTilesY - 50; y++)
+						{
+							Tile tile = SafeGetTile(x, y);
+							if (tile.TileType == ModContent.TileType<SquamousShellSeal>())
+							{
+								if (tile.TileFrameX == 180 && tile.TileFrameY == 162)
+								{
+									yWorld.StoneCageOfChallengesCenter = new Vector2(x, y - 40) * 16;
+									Main.NewText((x, y));
+									x = Main.maxTilesX - 50;
+									break;
+								}
+							}
+						}
+					}
+				}
 				if (Math.Abs(yWorld.StoneCageOfChallengesCenter.X - screenCenter.X) < 240 * 16)
 				{
 					if (Math.Abs(yWorld.StoneCageOfChallengesCenter.Y - screenCenter.Y) < 60 * 16)
 					{
+						var stoneClose2 = ModAsset.StoneCageOfChallengesClose2.Value;
+						var stoneClose = ModAsset.StoneCageOfChallengesClose.Value;
 						var stoneMiddle = ModAsset.StoneCageOfChallengesMiddle.Value;
 						var stoneFar = ModAsset.StoneCageOfChallengesFar.Value;
 						var stoneSky = ModAsset.StoneCageOfChallengesSky.Value;
 						Vector2 correction = yWorld.StoneCageOfChallengesCenter + new Vector2(0, -8000) - BiomeCenter;
-						BackgroundManager.QuickDrawBG(stoneSky, GetDrawRect(stoneSky.Size(), 0f, correction, 1.5f), baseColor, 171400, 200000, true, true);
-						BackgroundManager.QuickDrawBG(stoneFar, GetDrawRect(stoneFar.Size(), 0.05f, correction, 1.5f), baseColor, 171400, 200000, true, true);
-						BackgroundManager.QuickDrawBG(stoneMiddle, GetDrawRect(stoneMiddle.Size(), 0.10f, correction + new Vector2(0, 3000), 1.5f), baseColor, 171400, 200000, true, true);
+						float setSize = 1f;
+						BackgroundManager.QuickDrawBG(stoneSky, GetDrawRect(stoneSky.Size(), 0f, correction, setSize), baseColor, 171400, 200000, true, true);
+						BackgroundManager.QuickDrawBG(stoneFar, GetDrawRect(stoneFar.Size(), 0.05f, correction, setSize), baseColor, 171400, 200000, true, true);
+						BackgroundManager.QuickDrawBG(stoneMiddle, GetDrawRect(stoneMiddle.Size(), 0.10f, correction + new Vector2(0, 5000), setSize), baseColor, 171400, 200000, true, true);
+						BackgroundManager.QuickDrawBG(stoneClose, GetDrawRect(stoneFar.Size(), 0.15f, correction + new Vector2(0, 6000), setSize), baseColor, 171400, 200000, true, true);
+						BackgroundManager.QuickDrawBG(stoneClose2, GetDrawRect(stoneMiddle.Size(), 0.20f, correction + new Vector2(0, 7000), setSize), baseColor, 171400, 200000, true, true);
 						return;
 					}
 				}

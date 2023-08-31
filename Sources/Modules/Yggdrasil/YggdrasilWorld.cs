@@ -1,15 +1,13 @@
 using System.Reflection;
 using SubworldLibrary;
-using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
 
 namespace Everglow.Yggdrasil;
-
 internal class YggdrasilWorld : Subworld
 {
 	public static float YggdrasilTimer = 0;
 	public Vector2 StoneCageOfChallengesCenter = Vector2.zeroVector;
-    public override int Width => 1200;
+	public override int Width => 1200;
 	public override int Height => 12000;
 	public override bool NormalUpdates => true;
 	public override bool ShouldSave => true;
@@ -19,6 +17,7 @@ internal class YggdrasilWorld : Subworld
 	};
 	public override void OnEnter()
 	{
+
 		SubworldSystem.hideUnderworld = true;
 		YggdrasilTimer = 0;
 	}
@@ -79,26 +78,26 @@ class YggdrasilWorldSystem : ModSystem
 		//	}
 		//}
 	}
-	public override void LoadWorldData(TagCompound tag)
-	{
-		Subworld sWorld = SubworldSystem.Current;
-		if (sWorld is YggdrasilWorld)
-		{
-			YggdrasilWorld yWorld = sWorld as YggdrasilWorld;
-			tag.TryGet("scocCenterX", out yWorld.StoneCageOfChallengesCenter.X);
-			tag.TryGet("scocCenterY", out yWorld.StoneCageOfChallengesCenter.Y);
-		}
-	}
-	public override void SaveWorldData(TagCompound tag)
-	{
-		Subworld sWorld = SubworldSystem.Current;
-		if (sWorld is YggdrasilWorld)
-		{
-			YggdrasilWorld yWorld = sWorld as YggdrasilWorld;
-			tag["scocCenterX"] = yWorld.StoneCageOfChallengesCenter.X;
-			tag["scocCenterY"] = yWorld.StoneCageOfChallengesCenter.Y;
-		}
-	}
+	//public override void LoadWorldData(TagCompound tag)
+	//{
+	//	Subworld sWorld = SubworldSystem.Current;
+	//	if (sWorld is YggdrasilWorld)
+	//	{
+	//		YggdrasilWorld yWorld = sWorld as YggdrasilWorld;
+	//		tag.TryGet("scocCenterX", out yWorld.StoneCageOfChallengesCenter.X);
+	//		tag.TryGet("scocCenterY", out yWorld.StoneCageOfChallengesCenter.Y);
+	//	}
+	//}
+	//public override void SaveWorldData(TagCompound tag)
+	//{
+	//	Subworld sWorld = SubworldSystem.Current;
+	//	if (sWorld is YggdrasilWorld)
+	//	{
+	//		YggdrasilWorld yWorld = sWorld as YggdrasilWorld;
+	//		tag["scocCenterX"] = yWorld.StoneCageOfChallengesCenter.X;
+	//		tag["scocCenterY"] = yWorld.StoneCageOfChallengesCenter.Y;
+	//	}
+	//}
 }
 
 
