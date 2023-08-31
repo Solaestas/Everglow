@@ -1,7 +1,4 @@
-using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.NPCs.SquamousShell;
-using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using SubworldLibrary;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
@@ -56,7 +53,7 @@ public class SquamousShellSeal : ModTile
 		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
 		{
 			Color lightColor = Lighting.GetColor(i + 10, j + 5);
-			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange);
 			if (Main.drawToScreen)
 				zero = Vector2.Zero;
 
@@ -64,71 +61,59 @@ public class SquamousShellSeal : ModTile
 			Texture2D frontSeal = ModAsset.SquamousShellSeal_front.Value;
 			Texture2D backSeal = ModAsset.SquamousShellSeal_back.Value;
 			Texture2D lightEffect = ModAsset.SquamousShellSeal.Value;
+			Rectangle firstSealRect = new Rectangle(0, 0, 342, 152);
 			if (ReSpawnTimer <= 0)
 			{
-				spriteBatch.Draw(backSeal, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(8), null, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
-				spriteBatch.Draw(lightEffect, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(8), null, new Color(1f, 1f, 1f, 0), 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
+				spriteBatch.Draw(backSeal, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(8), firstSealRect, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
+				spriteBatch.Draw(lightEffect, new Vector2(i - 5, j) * 16 - Main.screenPosition + zero + new Vector2(8), null, new Color(1f, 1f, 1f, 0), 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
 				spriteBatch.Draw(deadS, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(8), null, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
-				spriteBatch.Draw(frontSeal, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(8), null, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
+				spriteBatch.Draw(frontSeal, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(8), firstSealRect, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
 			}
 			else if (ReSpawnTimer < 300)
 			{
 				Vector2 dive = new Vector2(0, ReSpawnTimer);
-				spriteBatch.Draw(backSeal, new Vector2(i, j) * 16 - Main.screenPosition + zero + dive + new Vector2(8), null, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
+				spriteBatch.Draw(backSeal, new Vector2(i, j) * 16 - Main.screenPosition + zero + dive + new Vector2(8), firstSealRect, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
 				float colorValue = (150 - ReSpawnTimer) / 150f;
 				colorValue = Math.Max(0, colorValue);
-				spriteBatch.Draw(lightEffect, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(8), null, new Color(colorValue, colorValue, colorValue, 0), 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
+				spriteBatch.Draw(lightEffect, new Vector2(i - 5, j) * 16 - Main.screenPosition + zero + new Vector2(8), null, new Color(colorValue, colorValue, colorValue, 0), 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
 				spriteBatch.Draw(deadS, new Vector2(i, j) * 16 - Main.screenPosition + zero + dive + new Vector2(8), null, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
-				spriteBatch.Draw(frontSeal, new Vector2(i, j) * 16 - Main.screenPosition + zero + dive + new Vector2(8), null, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
+				spriteBatch.Draw(frontSeal, new Vector2(i, j) * 16 - Main.screenPosition + zero + dive + new Vector2(8), firstSealRect, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
 			}
 			if (NPC.CountNPCS(ModContent.NPCType<SquamousShell>()) == 0)
 			{
-				if (ReSpawnTimer > 300)
+				if (!Main.gamePaused)
 				{
-					ReSpawnTimer = 300;
+					if (ReSpawnTimer > 300)
+					{
+						ReSpawnTimer = 300;
+					}
+					ReSpawnTimer--;
 				}
-				ReSpawnTimer--;
 			}
 			if (DissolveTimer > 0)
 			{
 				float colorValue = DissolveTimer / 60f;
-				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-				Effect dissolve = Commons.ModAsset.DissolveWithLight.Value;
-				var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-				var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-				float dissolveDuration = colorValue * 1.2f - 0.2f;
-				dissolve.Parameters["uTransform"].SetValue(model * projection);
-				dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_cell.Value);
-				dissolve.Parameters["duration"].SetValue(dissolveDuration);
-				dissolve.Parameters["uLightColor"].SetValue(lightColor.ToVector4());
-				dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.2f, 0.6f, 0.7f, 1f));
-				dissolve.Parameters["uNoiseSize"].SetValue(2f);
-				dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(0.5f, 0.3f));
-				dissolve.CurrentTechnique.Passes[0].Apply();
-				spriteBatch.Draw(backSeal, new Vector2(i, j) * 16 + zero + new Vector2(8), null, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
-				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
-				spriteBatch.Draw(lightEffect, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(8), null, new Color(colorValue, colorValue, colorValue, 0), 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
-				if(DissolveTimer > 30)
+				int frontValue = 60 - DissolveTimer;
+				int backValue = 60 - DissolveTimer;
+				Rectangle backSealRect = new Rectangle(0, backValue * 152, 342, 152);
+				Rectangle frontSealRect = new Rectangle(0, frontValue * 152, 342, 152);
+				if(backValue < 7)
+				{
+					spriteBatch.Draw(backSeal, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(8), backSealRect, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
+				}
+				spriteBatch.Draw(lightEffect, new Vector2(i - 5, j) * 16 - Main.screenPosition + zero + new Vector2(8), null, new Color(colorValue, colorValue, colorValue, 0), 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
+				if (DissolveTimer > 30)
 				{
 					spriteBatch.Draw(deadS, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(8), null, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
 				}
-				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
-				dissolve.Parameters["uTransform"].SetValue(model * projection);
-				dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_cell.Value);
-				dissolve.Parameters["duration"].SetValue(dissolveDuration);
-				dissolve.Parameters["uLightColor"].SetValue(lightColor.ToVector4());
-				dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.2f, 0.6f, 0.7f, 1f));
-				dissolve.Parameters["uNoiseSize"].SetValue(2f);
-				dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(0.5f, 0.3f));
-				dissolve.CurrentTechnique.Passes[0].Apply();
-				spriteBatch.Draw(frontSeal, new Vector2(i, j) * 16 + zero + new Vector2(8), null, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
-				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
-				DissolveTimer--;
+				if (frontValue < 14)
+				{
+					spriteBatch.Draw(frontSeal, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(8), frontSealRect, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
+				}
+				if (!Main.gamePaused)
+				{
+					DissolveTimer--;
+				}
 			}
 			else
 			{
