@@ -8,8 +8,12 @@ public class PineWood : ModTile
 		Main.tileBlockLight[Type] = true;
 		Main.tileMerge[Type][TileID.PineTree] = true;
 		Main.tileMerge[TileID.PineTree][Type] = true;
-		DustType = DustID.Ebonwood;
+		DustType = DustID.BorealWood;
 		HitSound = SoundID.Dig;
-		AddMapEntry(new Color(45, 15, 3));
+		AddMapEntry(new Color(60, 45, 39));
+	}
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
+	{
+		yield break;
 	}
 }
