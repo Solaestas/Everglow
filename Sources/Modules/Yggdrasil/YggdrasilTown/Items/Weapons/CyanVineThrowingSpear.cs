@@ -27,7 +27,8 @@ public class CyanVineThrowingSpear : ModItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ModContent.ItemType<CyanVineBar>(), 12)
+			.AddIngredient(ModContent.ItemType<CyanVineBar>(), 14)
+			.AddIngredient(ModContent.ItemType<StoneDragonScaleWood>(), 26)
 			.AddTile(TileID.WorkBenches)
 			.Register();
 	}

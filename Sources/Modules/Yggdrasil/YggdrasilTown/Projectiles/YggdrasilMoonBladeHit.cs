@@ -28,15 +28,15 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 	{
 		for (int g = 0; g < Frequency; g++)
 		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(10f, 14f)).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(10f, 14f) * Projectile.ai[0] / 16f).RotatedByRandom(MathHelper.TwoPi);
 			var spark = new Spark_MoonBladeDust
 			{
 				velocity = newVelocity,
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
-				maxTime = Main.rand.Next(37, 145),
-				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 17.0f)),
+				maxTime = Main.rand.Next(37, 145) * Projectile.ai[0] / 10f,
+				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 17.0f)) * Projectile.ai[0] / 10f,
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f) }
 			};
@@ -105,9 +105,20 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 		Color c = new Color(0f, 1f, 0.7f, 0f);
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, shadow.Size() / 2f, 0.2f * Projectile.ai[0], SpriteEffects.None, 0);
 		Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0, light.Size() / 2f, new Vector2(1f, dark * dark * 0.4f) * Projectile.ai[0] * 0.04f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f, light.Size() / 2f, new Vector2(0.5f, dark * 0.4f) * Projectile.ai[0] * 0.04f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, Projectile.ai[1] + 1.57f, light.Size() / 2f, new Vector2(1f, dark * dark * 0.2f) * Projectile.ai[0] * 0.2f, SpriteEffects.None, 0);
+
+		if(Projectile.hostile)
+		{
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0, light.Size() / 2f, new Vector2(1f, dark * dark * 0.4f) * Projectile.ai[0] * 0.04f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f, light.Size() / 2f, new Vector2(0.5f, dark * 0.4f) * Projectile.ai[0] * 0.04f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, Projectile.ai[1] + 1.57f, light.Size() / 2f, new Vector2(1f, dark * dark * 0.2f) * Projectile.ai[0] * 0.2f, SpriteEffects.None, 0);
+		}
+		else
+		{
+			dark = Math.Max((Projectile.timeLeft) / 200f, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0, light.Size() / 2f, new Vector2(1f, dark * dark * 0.4f) * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f, light.Size() / 2f, new Vector2(0.5f, dark * 0.4f) * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, Projectile.ai[1] + 1.57f, light.Size() / 2f, new Vector2(1f, dark * dark * 0.2f) * Projectile.ai[0] * 0.4f, SpriteEffects.None, 0);
+		}
 		return false;
 	}
 	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
