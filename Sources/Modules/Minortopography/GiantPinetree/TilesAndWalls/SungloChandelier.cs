@@ -18,6 +18,8 @@ public class SungloChandelier : ModTile, ITileFluentlyDrawn, ITileFlameData
 		TileID.Sets.HasOutlines[Type] = true;
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
+		var modTranslation = CreateMapEntryName();
+		AddMapEntry(new Color(120, 120, 65), modTranslation);
 
 		DustType = DustID.BrownMoss;
 		AdjTiles = new int[] { TileID.Chandeliers };
