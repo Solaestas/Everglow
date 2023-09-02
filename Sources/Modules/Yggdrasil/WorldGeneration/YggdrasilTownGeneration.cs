@@ -1558,7 +1558,7 @@ public class YggdrasilTownGeneration
 		{
 			step = 1;
 		}
-		int x = AzureGrottoCenterX - step * 170;
+		int x = AzureGrottoCenterX - step * 240;
 		while(x >= 50 && x <= 1150)
 		{
 			x += step;
@@ -1661,15 +1661,17 @@ public class YggdrasilTownGeneration
 				if(target.TileType == ModContent.TileType<StoneScaleWood>() && target.HasTile)
 				{
 					Vector2 dis = (new Vector2(x0, y) - new Vector2(centerOfCage.X, centerOfCage.Y + 40));
-					dis.X *= 0.5f;
+					dis.X *= 1f;
 					float myLength = dis.Length();
 					float cellC = 1 - CellPixel[(int)(x0 * 3.5f + randX) % 512, (int)(myLength * 3 + randY) % 512] / 255f;
-					float xValue = Math.Abs(x0 - cageMiddleX) / 300f;
-					xValue = 1 - xValue;
-					xValue *= 3;
-					xValue = Math.Min(xValue, 1);
+					//float xValue = Math.Abs(x0 - cageMiddleX) / 300f;
+					//xValue = 1 - xValue;
+					//xValue *= 3;
+					//xValue = Math.Min(xValue, 1);
+					Vector2 angle = new Vector2(Math.Abs(x0 - cageMiddleX), y - startY2);
+					float xValue = angle.X / angle.Length();
 					float lengthValue = myLength / 300f;
-					if (cellC > lengthValue / (xValue + 0.001f))
+					if (cellC > lengthValue + xValue)
 					{
 						target.ClearEverything();
 						target.TileType = (ushort)(ModContent.TileType<YggdrasilAmber>());

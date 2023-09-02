@@ -27,19 +27,19 @@ public static class ProjectileUtils
 		public override void AI()
 		{
 			UpdateSticking();
-		}
+	}
 		public virtual void UpdateSticking()
 		{
 			if (StuckNPC >= 0 && StuckNPC < Main.maxNPCs)
 			{
 				NPC target = Main.npc[StuckNPC];
 				if (target == null || !target.active)
-				{
+	{
 					StuckNPC = -2;
 					return;
 				}
 				else
-				{
+		{
 					Projectile.rotation = target.rotation + RelativeAngle;
 					float scaleRate = target.scale / HitTargetScale;
 					Projectile.Center = target.Center + RelativePos.RotatedBy(target.rotation + RelativeAngle - HitTargetAngle) * scaleRate;
