@@ -1,4 +1,4 @@
-﻿namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
 public class CyanVineThrowingSpear : ModItem
 {
@@ -16,6 +16,7 @@ public class CyanVineThrowingSpear : ModItem
 		Item.value = 3600;
 		Item.autoReuse = false;
 		Item.DamageType = DamageClass.Melee;
+		Item.channel = true;
 
 		Item.noMelee = true;
 		Item.noUseGraphic = true;

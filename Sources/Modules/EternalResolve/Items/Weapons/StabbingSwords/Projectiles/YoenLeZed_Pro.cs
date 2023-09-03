@@ -1,10 +1,8 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Buffs;
-using SteelSeries.GameSense;
 using Terraria.Audio;
 using Terraria.GameContent;
-using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {

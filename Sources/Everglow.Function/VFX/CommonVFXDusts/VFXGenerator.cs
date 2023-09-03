@@ -17,7 +17,6 @@ class VFXGenerator : ModItem
 	{
 		float mulVelocity = 1f;
 		int type = Main.rand.Next(13);
-
 		switch (type)
 		{
 			case 0://冰雾

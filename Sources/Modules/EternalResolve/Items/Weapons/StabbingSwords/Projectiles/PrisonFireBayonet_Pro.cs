@@ -2,7 +2,6 @@ using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 using Everglow.EternalResolve.VFXs;
-using SteelSeries.GameSense;
 using Terraria.Audio;
 using Terraria.DataStructures;
 

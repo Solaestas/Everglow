@@ -12,70 +12,71 @@ public class OnMoth : ModBuff
 		Main.buffNoSave[Type] = true;
 	}
 
-	public override void Update(NPC npc, ref int buffIndex)
+	public override void Update(NPC npc, ref int buffindex)
 	{
-		for (int t = 0; t < 5; t++)
-		{
-			if (npc.buffType[t] == ModContent.BuffType<OnMoth>())
-			{
-				if (npc.buffTime[t] < 10)
-				{
-					var mothBuffTarget = new MothBuffTarget
-					{
-						MothStack = 0
-					};
-				}
-				break;
-			}
-		}
 	}
 }
 
 public class MothBuffTarget : GlobalNPC
 {
-	public int MothStack = 0; //TODO: Have this increase. Currently stays at 0
+	public static int[] mothStack = new int[256]; //TODO: Have this increase. Currently stays at 0
 	public override bool InstancePerEntity => true;
 
 	public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
 	{
 		if (npc.HasBuff(ModContent.BuffType<OnMoth>()))
 		{
-			if (projectile.type == ModContent.ProjectileType<DarkFanFly>() || projectile.type == ModContent.ProjectileType<GlowingButterfly>())
-				modifiers.FinalDamage *= (int)(1.0f + MothStack / 10f);
+			if(projectile.DamageType == DamageClass.Summon)
+			{
+				float velocityValue = MathF.Log(npc.velocity.Length() + 1) / 10f;
+				if(!npc.collideX && !npc.collideY)
+				{
+
+				}
+				modifiers.FinalDamage = modifiers.FinalDamage * (1 + mothStack[npc.whoAmI] * 0.1f + velocityValue);
+			}
 		}
+		base.ModifyHitByProjectile(npc, projectile, ref modifiers);
 	}
 
 	public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		if (npc.HasBuff(ModContent.BuffType<OnMoth>()))
 		{
-			float Stre = 0;
-			float Stre2 = 0;
-			for (int t = 0; t < 5; t++)
+			float colorValue = 1;
+
+			int buffIndex = npc.FindBuffIndex(ModContent.BuffType<OnMoth>());
+			if(npc.buffTime[buffIndex] < 72)
 			{
-				if (npc.buffType[t] == ModContent.BuffType<OnMoth>())
-				{
-					Stre = Math.Clamp((npc.buffTime[t] - 280) / 20f, 0, 1);
-					Stre2 = Math.Clamp(npc.buffTime[t] / 120f, 0, 0.3f);
-					break;
-				}
+				colorValue = npc.buffTime[buffIndex] / 60f - 0.2f;
 			}
-			int Index = MothStack;
-			Texture2D Number = MythContent.QuickTexture("TheFirefly/Projectiles/GlowFanTex/" + Index.ToString());
-			Texture2D Butterfly = MythContent.QuickTexture("TheFirefly/Projectiles/GlowFanTex/BlueFly");
-			Texture2D ButterflyD = MythContent.QuickTexture("TheFirefly/Projectiles/GlowFanTex/BlueFlyD");
-			if (4f * npc.width * npc.height / 10300f * npc.scale > 1.5f)
+			if (npc.buffTime[buffIndex] <= 1)
 			{
-				spriteBatch.Draw(Butterfly, npc.Center - Main.screenPosition, null, new Color(Stre, Stre, Stre, 0), 0, new Vector2(33, 33), 3f, SpriteEffects.None, 0f);
-				spriteBatch.Draw(ButterflyD, npc.Center - Main.screenPosition, null, new Color(Stre2 * 0.5f, Stre2 * 0.5f, Stre2 * 0.5f, 0), 0, new Vector2(33, 33), 3f, SpriteEffects.None, 0f);
-				spriteBatch.Draw(Number, npc.Center - Main.screenPosition, null, new Color(Stre2 * 2, Stre2 * 2, Stre2 * 2, 0), 0, new Vector2(Number.Width / 2f, Number.Height / 2f), 3f, SpriteEffects.None, 0f);
+				mothStack[npc.whoAmI] = 0;
 			}
-			else
-			{
-				spriteBatch.Draw(Butterfly, npc.Center - Main.screenPosition, null, new Color(Stre, Stre, Stre, 0), 0, new Vector2(33, 33), 4f * npc.width * npc.height / 10300f * npc.scale * 2, SpriteEffects.None, 0f);
-				spriteBatch.Draw(ButterflyD, npc.Center - Main.screenPosition, null, new Color(Stre2 * 0.5f, Stre2 * 0.5f, Stre2 * 0.5f, 0), 0, new Vector2(33, 33), 4f * npc.width * npc.height / 10300f * npc.scale * 2, SpriteEffects.None, 0f);
-				spriteBatch.Draw(Number, npc.Center - Main.screenPosition, null, new Color(Stre2 * 2, Stre2 * 2, Stre2 * 2, 0), 0, new Vector2(Number.Width / 2f, Number.Height / 2f), 4f * npc.width * npc.height / 10300f * npc.scale * 2, SpriteEffects.None, 0f);
-			}
+			int index = mothStack[npc.whoAmI];
+			Texture2D number = MythContent.QuickTexture("TheFirefly/Projectiles/GlowFanTex/" + index.ToString());
+			Texture2D butterfly = ModAsset.BlueFly.Value;
+			//Texture2D butterflyD = ModAsset.BlueFlyD.Value;
+
+			spriteBatch.End();
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Effect mothMarkEff = ModAsset.MothMark.Value;
+			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+			mothMarkEff.Parameters["uTransform"].SetValue(model * projection);
+			mothMarkEff.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_spiderNet.Value);
+			mothMarkEff.Parameters["duration"].SetValue(colorValue);
+			mothMarkEff.CurrentTechnique.Passes[0].Apply();
+
+			spriteBatch.Draw(butterfly, npc.Top - new Vector2(0, 30), null, new Color(1, 1, 1, 0), 0, butterfly.Size() * 0.5f, 0.75f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(number, npc.Top - new Vector2(0, 60), null, new Color(1, 1, 1, 0), 0, number.Size() * 0.5f, 1, SpriteEffects.None, 0f);
+
+			//spriteBatch.Draw(butterfly, npc.Center - Main.screenPosition, null, new Color(1, 1, 1, 0), 0, butterfly.Size() * 0.5f, 0.5f, SpriteEffects.None, 0f);
+			//spriteBatch.Draw(number, npc.Center- Main.screenPosition, null, new Color(1, 1, 1, 0), 0, number.Size() * 0.5f, 0.5f, SpriteEffects.None, 0f);
+
+			spriteBatch.End();
+			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
 	}
 }

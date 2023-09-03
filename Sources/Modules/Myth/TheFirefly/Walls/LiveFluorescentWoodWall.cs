@@ -1,5 +1,4 @@
 using Everglow.Myth.TheFirefly.Dusts;
-using Everglow.Myth.TheFirefly.Items;
 
 namespace Everglow.Myth.TheFirefly.Walls;
 

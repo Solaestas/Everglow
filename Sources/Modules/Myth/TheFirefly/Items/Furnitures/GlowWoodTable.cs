@@ -13,10 +13,8 @@ public class GlowWoodTable : ModItem
 	public override void SetDefaults()
 	{
 		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodTable>());
-		Item.value = 150;
-		Item.maxStack = 99;
-		Item.width = 38;
-		Item.height = 24;
+		Item.width = 32;
+		Item.height = 22;
 	}
 
 	public override void AddRecipes()

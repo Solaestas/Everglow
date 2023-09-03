@@ -1,6 +1,7 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.DataStructures;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -23,16 +24,18 @@ public class GlowWoodPiano : ModTile
 
 		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
-		TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16 };
+		TileObjectData.newTile.CoordinateHeights = new int[] { 16, 18 };
 		TileObjectData.newTile.CoordinatePaddingFix = new Point16(0, -2);
 		TileObjectData.addTile(Type);
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
-	}
 
-	public override void NumDust(int x, int y, bool fail, ref int num)
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
+	}
+	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
-		num = fail ? 1 : 3;
+		num = 0;
 	}
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
@@ -41,7 +44,7 @@ public class GlowWoodPiano : ModTile
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
 		Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodPianoGlow");
-		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
+		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.2f, 0.2f, 0.2f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 
 		base.PostDraw(i, j, spriteBatch);
 	}

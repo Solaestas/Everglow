@@ -39,8 +39,14 @@ public class GlowWoodDresserType2 : ModTile
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
 		TileObjectData.addTile(Type);
-	}
 
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
+	}
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+	}
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
 	public override bool RightClick(int i, int j)
@@ -60,11 +66,6 @@ public class GlowWoodDresserType2 : ModTile
 	//	string chestName = ContainerName.GetDefault();
 	//	FurnitureUtils.ChestMouseFar<Items.Furnitures.GlowWoodChest>(chestName, i, j);
 	//}
-
-	public override void NumDust(int i, int j, bool fail, ref int num)
-	{
-		num = fail ? 1 : 3;
-	}
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
