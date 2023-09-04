@@ -11,7 +11,7 @@ public class YggdrasilMoonBlade_friendly : ModProjectile, IWarpProjectile
 		Projectile.hostile = false;
 		Projectile.width = 30;
 		Projectile.height = 30;
-		Projectile.tileCollide = true;
+		Projectile.tileCollide = false;
 		Projectile.timeLeft = 300;
 		Projectile.aiStyle = -1;
 		Projectile.penetrate = 1;
@@ -19,6 +19,7 @@ public class YggdrasilMoonBlade_friendly : ModProjectile, IWarpProjectile
 	public Vector2 startVelocity;
 	public override void OnSpawn(IEntitySource source)
 	{
+		Projectile.ai[0] = Main.rand.NextFloat(0.7f, 1.4f);
 		startVelocity = Vector2.Normalize(Projectile.velocity);
 		base.OnSpawn(source);
 	}
@@ -52,6 +53,7 @@ public class YggdrasilMoonBlade_friendly : ModProjectile, IWarpProjectile
 		}
 		if(Projectile.timeLeft == 270)
 		{
+			Projectile.tileCollide = true;
 			Projectile.extraUpdates = 0;
 		}
 		if (Projectile.timeLeft < 260)
@@ -93,28 +95,55 @@ public class YggdrasilMoonBlade_friendly : ModProjectile, IWarpProjectile
 			colorValue = 1f;
 		}
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float timeValue = (float)Main.timeForVisualEffects * 0.002f + Projectile.whoAmI;
-		List<Vertex2D> bars = new List<Vertex2D>();
-		for (int x = -20; x <= maxLength; x++)
-		{
-			Vector2 v0 = startVelocity.RotatedBy(x / 20f * Projectile.ai[0]) * 60f;
-			Vector2 pos = Projectile.Center + v0 - Main.screenPosition - startVelocity * 40f;
-			bars.Add(pos, new Color(81, 81, 255, 0), new Vector3(0.2f + timeValue, x / 12f + Projectile.whoAmI * 0.5f, 0));
-			bars.Add(pos - startVelocity * 80f * (2 - Math.Abs(x) / 20f) * colorValue, Color.Transparent, new Vector3(0 + timeValue, x / 12f + Projectile.whoAmI * 0.5f, 0));
-		}
-		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_longitudinalFold.Value;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		List<Vertex2D> bars;
+
+
 		bars = new List<Vertex2D>();
 		for (int x = -20; x <= maxLength; x++)
 		{
 			Vector2 v0 = startVelocity.RotatedBy(x / 20f * Projectile.ai[0]) * 60f;
+			v0.X *= Projectile.ai[1];
+			v0.Y /= Projectile.ai[1];
+			Vector2 pos = Projectile.Center + v0 - Main.screenPosition - startVelocity * 40f;
+			bars.Add(pos, new Color(255, 255, 255, 255) * colorValue, new Vector3(0, 0.5f, 0));
+			bars.Add(pos - startVelocity * 80f * (1 - Math.Abs(x) / 20f), new Color(255, 255, 255, 0) * 0.5f * colorValue, new Vector3(0, 0, 0));
+		}
+		Main.graphics.GraphicsDevice.BlendState = BlendState.NonPremultiplied;
+		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_black.Value;
+		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+
+		bars = new List<Vertex2D>();
+		for (int x = -20; x <= maxLength; x++)
+		{
+			Vector2 v0 = startVelocity.RotatedBy(x / 20f * Projectile.ai[0]) * 60f;
+			v0.X *= Projectile.ai[1];
+			v0.Y /= Projectile.ai[1];
+			Vector2 pos = Projectile.Center + v0 - Main.screenPosition - startVelocity * 40f;
+			bars.Add(pos, new Color(81, 81, 255, 0), new Vector3(0.2f + timeValue, x / 12f + Projectile.whoAmI * 0.5f, 0));
+			bars.Add(pos - startVelocity * 40f * (2 - Math.Abs(x) / 20f) * colorValue, Color.Transparent, new Vector3(0 + timeValue, x / 12f + Projectile.whoAmI * 0.5f, 0));
+		}
+		Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_longitudinalFold.Value;
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		
+		bars = new List<Vertex2D>();
+		for (int x = -20; x <= maxLength; x++)
+		{
+			Vector2 v0 = startVelocity.RotatedBy(x / 20f * Projectile.ai[0]) * 60f;
+			v0.X *= Projectile.ai[1];
+			v0.Y /= Projectile.ai[1];
 			Vector2 pos = Projectile.Center + v0 - Main.screenPosition - startVelocity * 40f;
 			bars.Add(pos, new Color(33, 232, 255, 0) * colorValue, new Vector3(0, 0.5f, 0));
 			bars.Add(pos - startVelocity * 80f * (1 - Math.Abs(x) / 20f), new Color(100, 30, 255, 0) * 0.5f * colorValue, new Vector3(0, 0, 0));
 		}
+		Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail.Value;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -129,8 +158,10 @@ public class YggdrasilMoonBlade_friendly : ModProjectile, IWarpProjectile
 		for (int x = -20; x <= maxLength; x++)
 		{
 			Vector2 v0 = startVelocity.RotatedBy(x / 20f * Projectile.ai[0]) * 60f;
+			v0.X *= Projectile.ai[1];
+			v0.Y /= Projectile.ai[1];
 			Vector2 pos = Projectile.Center + v0 - Main.screenPosition - startVelocity * 40f;
-			bars.Add(pos, new Color(redValue, 0.02f * (Math.Abs(x)+12), 0, 0), new Vector3(0.2f + timeValue, x / 35f, 0));
+			bars.Add(pos, new Color(redValue, 0.01f * (Math.Abs(x)+12), 0, 0), new Vector3(0.2f + timeValue, x / 35f, 0));
 			bars.Add(pos - startVelocity * Math.Min(250f, (300f - Projectile.timeLeft) * 14), new Color(redValue, 0, 0, 0), new Vector3(0 + timeValue, x / 35f, 0));
 		}
 		Texture2D t = Commons.ModAsset.Noise_melting.Value;
@@ -148,7 +179,7 @@ public class YggdrasilMoonBlade_friendly : ModProjectile, IWarpProjectile
 	}
 	public override void Kill(int timeLeft)
 	{
-		Projectile p =  Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity, Vector2.zeroVector, ModContent.ProjectileType<YggdrasilMoonBladeHit>(), Projectile.damage / 2, 0, Projectile.owner, 9, startVelocity.ToRotation());
+		Projectile p =  Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + Projectile.velocity, Vector2.zeroVector, ModContent.ProjectileType<YggdrasilMoonBladeHit>(), Projectile.damage / 2, 0, Projectile.owner, 9, startVelocity.ToRotation());
 		p.friendly = true;
 		p.hostile = false;
 	}
