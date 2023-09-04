@@ -2768,6 +2768,16 @@ Items: {
 		Tooltip: ""
 	}
 
+	RockArrow: {
+		DisplayName: Rock Arrow
+		Tooltip: ""
+	}
+
+	RockSpikeBallista: {
+		DisplayName: Rock Spike Ballista
+		Tooltip: ""
+	}
+
 	DragonScaleWood: {
 		DisplayName: Dragon Scale Wood
 		Tooltip: ""
@@ -3437,6 +3447,8 @@ Projectiles: {
 	BlackHole.DisplayName: Black Hole
 	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
 	DragonScaleHammerProj.DisplayName: Dragon Scale Hammer Proj
+	RockArrow.DisplayName: Rock Arrow
+	RockExplosion_friendly.DisplayName: Rock Explosion_friendly
 	SquamousAirProj.DisplayName: Squamous Air Proj
 	SquamousRockExplosion.DisplayName: Squamous Rock Explosion
 	SquamousRockProj.DisplayName: Squamous Rock Proj
