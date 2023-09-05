@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheMarbleRemains.Tiles;
 using Terraria.DataStructures;
 using Terraria.IO;
@@ -22,9 +22,9 @@ namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 				WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 			}
 		}
-		internal class WorldMarbleTempleGenPass : GenPass
+		internal class MarbleTempleGenPass : GenPass
 		{
-			public WorldMarbleTempleGenPass() : base("MarbleTempleLand", 500)//TODO:给大地安装血肉之颌
+			public MarbleTempleGenPass() : base("MarbleTempleLand", 500)//TODO:给大地安装血肉之颌
 			{
 			}
 
@@ -34,10 +34,20 @@ namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 				BuildTempleLand();
 			}
 		}
-		public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
+		internal class WorldMarbleTempleGenPass : GenPass
 		{
-			tasks.Add(new WorldMarbleTempleGenPass());
+			public WorldMarbleTempleGenPass() : base("MarbleTempleLand", 500)//TODO:给大地安装血肉之颌
+			{
+			}
+
+			public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+			{
+				Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildWorldMarbleTempleTable");
+				BuildWorldTempleLand();
+			}
 		}
+		public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) => tasks.Add(new WorldMarbleTempleGenPass());
+
 		public static void ShapeTile(string Shapepath, int a, int b, int type)
 		{
 			var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Myth/TheMarbleRemains/WorldGeneration/" + Shapepath);
@@ -89,7 +99,7 @@ namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 								{
 									if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 									{
-										tile.TileType = 357;
+										tile.TileType = 357; // Marble Block
 										tile.HasTile = true;
 									}
 								}
@@ -101,11 +111,19 @@ namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 										tile.HasTile = true;
 									}
 								}
+								//if (pixel.R == 255 && pixel.G == 13 && pixel.B == 255)
+								//{
+								//	if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+								//	{
+								//		tile.TileType = (ushort)ModContent.TileType<MarbleTemplePylon>();
+								//		tile.HasTile = true;
+								//	}
+								//}
 								if (pixel.R == 226 && pixel.G == 109 && pixel.B == 140)
 								{
 									if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 									{
-										tile.TileType = 19;
+										tile.TileType = 19; // Platforms
 										tile.HasTile = true;
 									}
 								}
@@ -116,7 +134,7 @@ namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 								{
 									if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 									{
-										tile.WallType = 179;
+										tile.WallType = 179; // Marble Block Wall
 										tile.HasTile = false;
 									}
 								}
@@ -140,6 +158,22 @@ namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 		}
 		public int templeCenterX = 400;
 		public int templeCenterY = 300;
+		public static void BuildWorldTempleLand()
+		{
+			Point16 abPos = GetWorldTempleLandPosition();
+			int a = abPos.X;
+			int b = abPos.Y;
+			Main.statusText = "WorldTempleWallStart";
+			ShapeTile("WorldMarbleTempleWall.bmp", a, b, 2);
+			Main.statusText = "WorldTempleStart";
+			ShapeTile("WorldMarbleTempleTile.bmp", a, b, 1);
+
+			SmoothTempleTile(a, b, 160, 80);
+			//MarbleTempleGen marbleTempleGen = ModContent.GetInstance<MarbleTempleGen>();
+			//marbleTempleGen.templeCenterX = a + 80;
+			//marbleTempleGen.templeCenterY = b + 10;
+			//BuildTempleArray(a, b);
+		}
 		public static void BuildTempleLand()
 		{
 			Point16 abPos = GetTempleLandPosition();
@@ -216,6 +250,22 @@ namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 		//	//tileWheel.HasTile = true;
 		//}
 		public static Point16 GetTempleLandPosition()
+		{
+			int a = (int)(Main.maxTilesX * 0.3);
+			int b = (int)(Main.maxTilesY * 0.3);
+			while (!CanPlaceTemple(new Point(a, b)))
+			{
+				a = (int)(Main.maxTilesX * Main.rand.NextFloat(0.1f, 0.88f));
+				while (Math.Abs(a - Main.maxTilesX * 0.5f) < Main.maxTilesX * 0.1f)
+				{
+					a = (int)(Main.maxTilesX * Main.rand.NextFloat(0.1f, 0.88f));
+				}
+
+				b = (int)(Main.maxTilesY * Main.rand.NextFloat(0.11f, 0.31f));
+			}
+			return new Point16(a, b);
+		}
+		public static Point16 GetWorldTempleLandPosition()
 		{
 			int a = (int)(Main.maxTilesX * 0.3);
 			int b = (int)(Main.maxTilesY * 0.3);
