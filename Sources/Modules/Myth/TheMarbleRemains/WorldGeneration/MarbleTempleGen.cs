@@ -3,6 +3,7 @@ using Everglow.Myth.TheMarbleRemains.Tiles;
 using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
 
 namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
@@ -48,6 +49,27 @@ namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 		}
 		public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) => tasks.Add(new WorldMarbleTempleGenPass());
 
+		/// <summary>
+		/// 地形中心坐标
+		/// </summary>
+		public int templeCenterX = 400;
+
+		public int templeCenterY = 300;
+
+		/// <summary>
+		/// 这里偷懒,用固定点标记獠牙的生物群系
+		/// </summary>
+		/// <param name="tag"></param>
+		public override void SaveWorldData(TagCompound tag)
+		{
+			tag["TEMPLEcenterX"] = templeCenterX;
+			tag["TEMPLEcenterY"] = templeCenterY;
+		}
+		public override void LoadWorldData(TagCompound tag)
+		{
+			templeCenterX = tag.GetAsInt("TEMPLEcenterX");
+			templeCenterY = tag.GetAsInt("TEMPLEcenterY");
+		}
 		public static void ShapeTile(string Shapepath, int a, int b, int type)
 		{
 			var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Myth/TheMarbleRemains/WorldGeneration/" + Shapepath);
@@ -156,22 +178,22 @@ namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 				}
 			});
 		}
-		public int templeCenterX = 400;
-		public int templeCenterY = 300;
 		public static void BuildWorldTempleLand()
 		{
 			Point16 abPos = GetWorldTempleLandPosition();
 			int a = abPos.X;
 			int b = abPos.Y;
+			MarbleTempleGen marbleTempleGen = ModContent.GetInstance<MarbleTempleGen>();
+			marbleTempleGen.templeCenterX = a;
+			marbleTempleGen.templeCenterY = b;
+			Main.statusText = "WorldTempleKillStart";
+			ShapeTile("WorldMarbleTempleKill.bmp", a, b, 0);
 			Main.statusText = "WorldTempleWallStart";
 			ShapeTile("WorldMarbleTempleWall.bmp", a, b, 2);
-			Main.statusText = "WorldTempleStart";
+			Main.statusText = "WorldTempleTileStart";
 			ShapeTile("WorldMarbleTempleTile.bmp", a, b, 1);
-
 			SmoothTempleTile(a, b, 160, 80);
-			//MarbleTempleGen marbleTempleGen = ModContent.GetInstance<MarbleTempleGen>();
-			//marbleTempleGen.templeCenterX = a + 80;
-			//marbleTempleGen.templeCenterY = b + 10;
+			
 			//BuildTempleArray(a, b);
 		}
 		public static void BuildTempleLand()
@@ -265,21 +287,23 @@ namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 			}
 			return new Point16(a, b);
 		}
-		public static Point16 GetWorldTempleLandPosition()
+		public static Point16 GetWorldTempleLandPosition() //TODO: Make the temple generate farther from the jungle
 		{
-			int a = (int)(Main.maxTilesX * 0.3);
-			int b = (int)(Main.maxTilesY * 0.3);
-			while (!CanPlaceTemple(new Point(a, b)))
-			{
-				a = (int)(Main.maxTilesX * Main.rand.NextFloat(0.1f, 0.88f));
-				while (Math.Abs(a - Main.maxTilesX * 0.5f) < Main.maxTilesX * 0.1f)
-				{
-					a = (int)(Main.maxTilesX * Main.rand.NextFloat(0.1f, 0.88f));
-				}
+			//int a = (int)(Main.maxTilesX * 0.3);
+			//int b = (int)(Main.maxTilesY * 0.3);
+			//while (!CanPlaceTemple(new Point(a, b)))
+			//{
+			//	a = (int)(Main.maxTilesX * Main.rand.NextFloat(0.1f, 0.88f));
+			//	while (Math.Abs(a - Main.maxTilesX * 0.5f) < Main.maxTilesX * 0.1f)
+			//	{
+			//		a = (int)(Main.maxTilesX * Main.rand.NextFloat(0.1f, 0.88f));
+			//	}
 
-				b = (int)(Main.maxTilesY * Main.rand.NextFloat(0.11f, 0.31f));
-			}
-			return new Point16(a, b);
+			//	b = (int)(Main.maxTilesY * Main.rand.NextFloat(0.11f, 0.31f));
+			//}
+			int PoX = Main.rand.Next(300, Main.maxTilesX - 600);
+			int PoY = Main.rand.Next(500, Main.maxTilesY - 700);
+			return new Point16(PoX/*a*/, PoY/*b*/);
 		}
 		public static bool CanPlaceTemple(Point position)
 		{
