@@ -1,9 +1,9 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Localization;
 using Terraria;
-namespace Everglow.Ocean.Items.Shore
+namespace Everglow.Ocean.Items
 {
     public class ShoreWood : ModItem
     {

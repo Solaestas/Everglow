@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -14,7 +14,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
 
-namespace Everglow.Ocean.Items.Shore
+namespace Everglow.Ocean.Items
 {
     public class ShoreMud : ModItem
     {
