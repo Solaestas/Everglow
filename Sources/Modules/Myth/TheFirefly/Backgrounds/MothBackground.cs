@@ -33,7 +33,6 @@ public class MothBackground : ModSystem
 			Terraria.Graphics.Light.On_TileLightScanner.GetTileLight += TileLightScanner_GetTileLight;
 		}
 	}
-
 	/// <summary>
 	/// 荧光悬挂物的数据结构
 	/// </summary>
@@ -55,7 +54,6 @@ public class MothBackground : ModSystem
 			Type = type;
 		}
 	}
-
 	/// <summary>
 	/// 环境光的钩子
 	/// </summary>
@@ -69,7 +67,6 @@ public class MothBackground : ModSystem
 		orig(self, x, y, out outputColor);
 		outputColor += ambient;
 	}
-
 	public override void PostUpdateEverything()//开启地下背景
 	{
 		const float increase = 0.02f;
@@ -106,7 +103,6 @@ public class MothBackground : ModSystem
 		}
 
 	}
-
 	/// <summary>
 	/// 判定是否开启地形
 	/// </summary>
@@ -115,7 +111,6 @@ public class MothBackground : ModSystem
 	{
 		return SubworldSystem.IsActive<MothWorld>();
 	}
-
 	/// <summary>
 	/// 判定是否开启高级背景
 	/// </summary>
@@ -130,7 +125,6 @@ public class MothBackground : ModSystem
 		// TODO World
 		return v0.Length() < 2200 && SubworldSystem.IsActive<MothWorld>();
 	}
-
 	/// <summary>
 	/// 获取荧光悬挂物点位
 	/// </summary>
@@ -153,7 +147,6 @@ public class MothBackground : ModSystem
 			}
 		});
 	}
-
 	/// <summary>
 	/// 获取第二层荧光悬挂物点位
 	/// </summary>
@@ -176,7 +169,6 @@ public class MothBackground : ModSystem
 			}
 		});
 	}
-
 	/// <summary>
 	/// 绘制荧光
 	/// </summary>
@@ -213,7 +205,6 @@ public class MothBackground : ModSystem
 			}
 		}
 	}
-
 	/// <summary>
 	/// 绘制第二层荧光
 	/// </summary>
@@ -250,7 +241,6 @@ public class MothBackground : ModSystem
 			}
 		}
 	}
-
 	/// <summary>
 	/// 获取绘制矩形
 	/// </summary>
@@ -285,7 +275,6 @@ public class MothBackground : ModSystem
 		Vector2 mappedIS = posIS + new Vector2(0, 465);
 		return mappedIS / texSize;
 	}
-
 	private void DrawFarBG(Color baseColor)
 	{
 		var texSky = ModAsset.FireflySky.Value;
@@ -311,7 +300,6 @@ public class MothBackground : ModSystem
 			 ScreenCen, 1f, SpriteEffects.None, 0);
 		DrawGlow(texClose.Size(), 0.25f);
 	}
-
 	private void DrawCloseBG(Color baseColor)
 	{
 		var texClose = ModAsset.FireflyClose.Value;
@@ -411,7 +399,6 @@ public class MothBackground : ModSystem
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
-
 	/// <summary>
 	/// 当然是绘制主体啦
 	/// </summary>
@@ -434,10 +421,12 @@ public class MothBackground : ModSystem
 			DrawFarBG(baseColor);
 			DrawCloseBG(baseColor);
 		}
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		if(Main.spriteBatch.beginCalled)
+		{
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		}
 	}
-
 	private Color GetLuminace(Color color)
 	{
 		if (luminance != 1)

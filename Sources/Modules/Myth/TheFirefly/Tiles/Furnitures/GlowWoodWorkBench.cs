@@ -1,6 +1,7 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.DataStructures;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -27,11 +28,13 @@ public class GlowWoodWorkBench : ModTile
 		TileObjectData.addTile(Type);
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
-	}
 
-	public override void NumDust(int x, int y, bool fail, ref int num)
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
+	}
+	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
-		num = fail ? 1 : 3;
+		num = 0;
 	}
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{

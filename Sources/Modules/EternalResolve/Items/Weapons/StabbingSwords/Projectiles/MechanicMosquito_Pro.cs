@@ -70,11 +70,6 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.08f);
 			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))
 			{
-				int type = ModContent.DustType<MosquitoLight>();
-				if (Main.rand.NextBool(4))
-				{
-					type = ModContent.DustType<BloodShine>();
-				}
 				Dust dust = Dust.NewDustDirect(pos, Projectile.width, Projectile.height, ModContent.DustType<MosquitoLight>(), 0, 0, 0, default, Main.rand.NextFloat(0.45f, 0.9f));
 				dust.velocity = vel;
 			}

@@ -1,5 +1,6 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -23,7 +24,7 @@ public class GlowWoodPlatform : ModTile
 		AddMapEntry(new Color(0, 14, 175));
 
 		DustType = ModContent.DustType<BlueGlow>();
-				AdjTiles = new int[] { TileID.Platforms };
+		AdjTiles = new int[] { TileID.Platforms };
 
 		// Placement
 		TileObjectData.newTile.CoordinateHeights = new[] { 16 };
@@ -35,8 +36,10 @@ public class GlowWoodPlatform : ModTile
 		TileObjectData.newTile.UsesCustomCanPlace = false;
 		TileObjectData.newTile.LavaDeath = true;
 		TileObjectData.addTile(Type);
-	}
 
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
+	}
 	public override void PostSetDefaults() => Main.tileNoSunLight[Type] = false;
 
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
@@ -48,7 +51,7 @@ public class GlowWoodPlatform : ModTile
 
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
-		Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodPlatformGlow");
+		Texture2D tex = ModAsset.GlowWoodPlatformGlow.Value;
 		Player player = Main.player[Player.FindClosest(new Vector2(i * 16, j * 16), 16, 16)];
 		float dis = Math.Clamp((player.Center - new Vector2(i * 16, j * 16)).Length() / 480f, 0f, 10f);
 		dis = Math.Clamp(dis + (float)Math.Sin(dis * 14d - Main.timeForVisualEffects / 25f) / 2f, 0f, 1f);

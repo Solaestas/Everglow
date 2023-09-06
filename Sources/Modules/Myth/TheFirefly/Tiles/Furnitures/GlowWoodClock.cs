@@ -46,9 +46,16 @@ public class GlowWoodClock : ModTile
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
-		Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodClockGlow");
+		Texture2D tex = ModAsset.GlowWoodClockGlow.Value;
 		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
-
+		if(tile.TileFrameX == 18 && tile.TileFrameY == 72)
+		{
+			Vector2 offset = new Vector2(3.5f, -47);
+			Texture2D hourHand = ModAsset.GlowWoodClock_hourNeedle.Value;
+			Texture2D minuteHand = ModAsset.GlowWoodClock_minuteNeedle.Value;
+			spriteBatch.Draw(hourHand, new Vector2(i * 16, j * 16) - Main.screenPosition + zero + offset, null, Color.White, MythUtils.GetHourHandRotation(), new Vector2(0.5f, 6f), 2, SpriteEffects.None, 0);
+			spriteBatch.Draw(minuteHand, new Vector2(i * 16, j * 16) - Main.screenPosition + zero + offset, null, Color.White, MythUtils.GetMinuteHandRotation(), new Vector2(0.5f, 6f), 1.8f, SpriteEffects.None, 0);
+		}
 		base.PostDraw(i, j, spriteBatch);
 	}
 }

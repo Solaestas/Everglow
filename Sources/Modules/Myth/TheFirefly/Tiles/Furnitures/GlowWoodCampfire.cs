@@ -2,6 +2,7 @@ using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -33,8 +34,14 @@ public class GlowWoodCampfire : ModTile
 		TileObjectData.addTile(Type);
 
 		AnimationFrameHeight = 36;
-	}
 
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
+	}
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+	}
 	public override void AnimateTile(ref int frame, ref int frameCounter)
 	{
 		frameCounter++;

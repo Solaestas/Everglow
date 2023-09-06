@@ -4,14 +4,13 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
 
 public class GlowWoodSofa : ModTile
 {
-	public const int NextStyleHeight = 40; // Calculated by adding all CoordinateHeights + CoordinatePaddingFix.Y applied to all of them + 2
-
 	public override void SetStaticDefaults()
 	{
 		// Properties
@@ -41,27 +40,17 @@ public class GlowWoodSofa : ModTile
 		TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
 		TileObjectData.addAlternate(1); // Facing right will use the second texture style
 		TileObjectData.addTile(Type);
-	}
 
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
+	}
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
-		num = fail ? 1 : 3;
+		num = 0;
 	}
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 	{
 		return settings.player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance); // Avoid being able to trigger it from long range
-	}
-
-	public override void ModifySittingTargetInfo(int i, int j, ref TileRestingInfo info)
-	{
-		// It is very important to know that this is called on both players and NPCs, so do not use Main.LocalPlayer for example, use info.restingEntity
-		Tile tile = Framing.GetTileSafely(i, j);
-
-		info.AnchorTilePosition.X = i;
-		info.AnchorTilePosition.Y = j;
-
-		if (tile.TileFrameY % NextStyleHeight == 0)
-			info.AnchorTilePosition.Y++;
 	}
 
 	public override bool RightClick(int i, int j)
@@ -80,7 +69,7 @@ public class GlowWoodSofa : ModTile
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
-		Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodSofaGlow");
+		Texture2D tex = ModAsset.GlowWoodSofaGlow.Value;
 		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 
 		base.PostDraw(i, j, spriteBatch);
