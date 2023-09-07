@@ -1,19 +1,19 @@
 sampler2D uImage0 : register(s0);
 
 float4x4 uTransform;
-
+float uTime;
 struct VSInput
 {
     float2 Pos : POSITION0;
     float4 Color : COLOR0;
-    float2 Texcoord : TEXCOORD0;
+    float4 Texcoord : TEXCOORD0;
 };
 
 struct PSInput
 {
     float4 Pos : SV_POSITION;
     float4 Color : COLOR0;
-    float2 Texcoord : TEXCOORD0;
+    float4 Texcoord : TEXCOORD0;
 };
 
 PSInput VertexShaderFunction(VSInput input)
@@ -27,7 +27,12 @@ PSInput VertexShaderFunction(VSInput input)
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
-    return tex2D(uImage0, input.Texcoord) * input.Color;
+    float2 newCoord = input.Texcoord - float2(0.5, 0.5);
+    newCoord.y /= input.Texcoord.z;
+    newCoord += float2(0.5, 0.5);
+    newCoord.y = clamp(newCoord.y, 0, 1);
+    newCoord.x += uTime;
+    return tex2D(uImage0, newCoord) * input.Color;
 }
 
 technique Technique1

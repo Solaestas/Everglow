@@ -138,8 +138,8 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 		DrawTexCircle(132, 32, new Color(0, 0.45f * value0, 1f * value0, 0), Projectile.Center - Main.screenPosition, Water, Main.time / 17);
 		DrawTexCircle(122, 42, new Color(0, 0.15f * value0, 0.33f * value0, 0), Projectile.Center - Main.screenPosition, Water, -Main.time / 17);
 
-		Texture2D Dark = ModAsset.BlueFlameDark.Value;
-		Main.spriteBatch.Draw(Dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, Dark.Size() / 2f, SparkleStrength / 60f, SpriteEffects.None, 0f);
+		Texture2D dark = ModAsset.BlueFlameDark.Value;
+		Main.spriteBatch.Draw(dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, dark.Size() / 2f, SparkleStrength / 60f, SpriteEffects.None, 0f);
 		Texture2D Light = ModAsset.CorruptLight.Value;
 		if (lightValue > 0)
 		{
@@ -156,7 +156,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 			}
 			else
 			{
-				Main.spriteBatch.Draw(Dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, Dark.Size() / 2f, k3, SpriteEffects.None, 0);
+				Main.spriteBatch.Draw(dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, dark.Size() / 2f, k3, SpriteEffects.None, 0);
 
 			}
 			Texture2D Star = ModAsset.LineLight.Value;
@@ -166,7 +166,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 		}
 		else if(Projectile.timeLeft <= 5)
 		{
-			Main.spriteBatch.Draw(Dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, Dark.Size() / 2f, Projectile.timeLeft / 5f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, dark.Size() / 2f, Projectile.timeLeft / 5f, SpriteEffects.None, 0f);
 			Texture2D Star = ModAsset.LineLight.Value;
 			Main.spriteBatch.Draw(Star, Projectile.Center - Main.screenPosition, null, new Color(0f, 1f, 1f, 0), 0, Star.Size() / 2f, new Vector2(0.75f, 0.4f * Projectile.timeLeft / 10f), SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(Star, Projectile.Center - Main.screenPosition, null, new Color(0f, 1f, 1f, 0), MathF.PI / 2, Star.Size() / 2, new Vector2(0.52f, 0.4f * Projectile.timeLeft / 10f), SpriteEffects.None, 0);

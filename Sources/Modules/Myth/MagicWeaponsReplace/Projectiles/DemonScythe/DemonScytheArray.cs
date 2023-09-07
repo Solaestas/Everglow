@@ -41,7 +41,7 @@ internal class DemonScytheArray : ModProjectile, IWarpProjectile
 		player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
 		Projectile.rotation = player.fullRotation;
 
-		RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
+		ringPos = ringPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
 	}
 
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -59,7 +59,7 @@ internal class DemonScytheArray : ModProjectile, IWarpProjectile
 	}
 
 	internal int Timer = 0;
-	internal Vector2 RingPos = Vector2.Zero;
+	internal Vector2 ringPos = Vector2.Zero;
 
 	public void DrawMagicArray(Texture2D tex, Color c0)
 	{
@@ -69,14 +69,14 @@ internal class DemonScytheArray : ModProjectile, IWarpProjectile
 		var c2 = new Color(c0.R * 0.09f / 255f, c0.G * 0.09f / 255f, c0.B * 0.09f / 255f, c0.A * 0.09f / 255f);
 		float Size0 = (float)(Math.Sin(Main.timeForVisualEffects / 12) / 7d + 1);
 		float Size1 = (float)(Math.Sin((Main.timeForVisualEffects + 40) / 24) / 7d + 1);
-		DrawTexCircle(Timer * 1.6f * Size0, 25, c0, player.Center + RingPos - Main.screenPosition, Water, Main.timeForVisualEffects / 17);
-		DrawTexCircle(Timer * 1.5f * Size0, 15, c1, player.Center + RingPos - Main.screenPosition, Water, Main.timeForVisualEffects / 57);
-		DrawTexCircle(Timer * 1.4f * Size0, 15, c2, player.Center + RingPos - Main.screenPosition, Water, Main.timeForVisualEffects / 227);
-		DrawTexMoon(Timer * 1.6f * Size0, 25, c0, player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.timeForVisualEffects / 3);
-		DrawTexCircle(Timer * 0.8f, 25, c0 * Size1, player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), Water, -Main.timeForVisualEffects / 7);
-		DrawTexCircle(Timer * 0.7f, 12, c1 * Size1, player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), Water, -Main.timeForVisualEffects / 27);
-		DrawTexCircle(Timer * 0.63f, 12, c2 * Size1, player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), Water, -Main.timeForVisualEffects / 127);
-		DrawTexMoon(Timer * 0.8f, 25, c0 * Size1, player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
+		DrawTexCircle(Timer * 1.6f * Size0, 25, c0, player.Center + ringPos - Main.screenPosition, Water, Main.timeForVisualEffects / 17);
+		DrawTexCircle(Timer * 1.5f * Size0, 15, c1, player.Center + ringPos - Main.screenPosition, Water, Main.timeForVisualEffects / 57);
+		DrawTexCircle(Timer * 1.4f * Size0, 15, c2, player.Center + ringPos - Main.screenPosition, Water, Main.timeForVisualEffects / 227);
+		DrawTexMoon(Timer * 1.6f * Size0, 25, c0, player.Center + ringPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.timeForVisualEffects / 3);
+		DrawTexCircle(Timer * 0.8f, 25, c0 * Size1, player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), Water, -Main.timeForVisualEffects / 7);
+		DrawTexCircle(Timer * 0.7f, 12, c1 * Size1, player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), Water, -Main.timeForVisualEffects / 27);
+		DrawTexCircle(Timer * 0.63f, 12, c2 * Size1, player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), Water, -Main.timeForVisualEffects / 127);
+		DrawTexMoon(Timer * 0.8f, 25, c0 * Size1, player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
 	}
 
 	private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
@@ -154,8 +154,8 @@ internal class DemonScytheArray : ModProjectile, IWarpProjectile
 	{
 
 		Player player = Main.player[Projectile.owner];
-		//DrawTexCircle(Timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
-		DrawTexMoon(spriteBatch, Timer * 1.4f, 35, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.timeForVisualEffects / 3);
-		DrawTexMoon(spriteBatch, Timer * 0.65f, 35, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
+		//DrawTexCircle(Timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
+		DrawTexMoon(spriteBatch, Timer * 1.4f, 35, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.timeForVisualEffects / 3);
+		DrawTexMoon(spriteBatch, Timer * 0.65f, 35, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
 	}
 }

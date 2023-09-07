@@ -41,7 +41,7 @@ internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 		player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
 		Projectile.rotation = player.fullRotation;
 
-		RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
+		ringPos = ringPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
 	}
 
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -58,29 +58,29 @@ internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 	}
 
 	internal int Timer = 0;
-	internal Vector2 RingPos = Vector2.Zero;
+	internal Vector2 ringPos = Vector2.Zero;
 
 	public void DrawMagicArray(Texture2D tex, Color c0)
 	{
 		Player player = Main.player[Projectile.owner];
 		Texture2D Water = tex;
 		var c1 = new Color(c0.R * 0.39f / 255f, c0.G * 0.39f / 255f, c0.B * 0.39f / 255f, c0.A * 0.39f / 255f);
-		DrawTexCircle(Timer * 1.6f, 22, c0, player.Center + RingPos - Main.screenPosition, Water, Main.timeForVisualEffects / 17);
-		DrawTexCircle(Timer * 1.3f, 32, c1, player.Center + RingPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 17);
+		DrawTexCircle(Timer * 1.6f, 22, c0, player.Center + ringPos - Main.screenPosition, Water, Main.timeForVisualEffects / 17);
+		DrawTexCircle(Timer * 1.3f, 32, c1, player.Center + ringPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 17);
 
 		float timeRot = (float)(Main.timeForVisualEffects / 57d);
-		Vector2 Point0 = player.Center + RingPos - Main.screenPosition;
-		Vector2 Point1 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 0 + timeRot);
-		Vector2 Point2 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 2 / 3d + timeRot);
-		Vector2 Point3 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 4 / 3d - timeRot);
+		Vector2 Point0 = player.Center + ringPos - Main.screenPosition;
+		Vector2 Point1 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 0 + timeRot);
+		Vector2 Point2 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 2 / 3d + timeRot);
+		Vector2 Point3 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 4 / 3d - timeRot);
 
-		Vector2 Point4 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 1 / 3d + timeRot * 2.4f);
-		Vector2 Point5 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 3 / 3d - timeRot * 0.8f);
-		Vector2 Point6 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 5 / 3d - timeRot);
+		Vector2 Point4 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 1 / 3d + timeRot * 2.4f);
+		Vector2 Point5 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 3 / 3d - timeRot * 0.8f);
+		Vector2 Point6 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 5 / 3d - timeRot);
 
-		Vector2 Point7 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 1 / 3d + timeRot * 2);
-		Vector2 Point8 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 3 / 3d - timeRot * 1.6f);
-		Vector2 Point9 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 5 / 3d - timeRot * 1.1f);
+		Vector2 Point7 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 1 / 3d + timeRot * 2);
+		Vector2 Point8 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 3 / 3d - timeRot * 1.6f);
+		Vector2 Point9 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 5 / 3d - timeRot * 1.1f);
 
 
 		float Light1 = (float)(Math.Sin(Main.timeForVisualEffects / 3f + Math.PI / 3d * 1) + 0.2) / 1.4f;
@@ -114,6 +114,6 @@ internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 	{
 
 		Player player = Main.player[Projectile.owner];
-		DrawTexCircle(spriteBatch, Timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
+		DrawTexCircle(spriteBatch, Timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
 	}
 }

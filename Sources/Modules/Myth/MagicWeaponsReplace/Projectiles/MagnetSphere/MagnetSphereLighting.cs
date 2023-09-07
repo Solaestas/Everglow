@@ -77,8 +77,8 @@ public class MagnetSphereLighting : ModProjectile, IWarpProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		Texture2D Shadow = ModAsset.CursedHitLight.Value;
-		float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0) * Dark, 0, Shadow.Size() / 2f, 22 / 15f * Dark, SpriteEffects.None, 0);
+		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
+		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0) * dark, 0, Shadow.Size() / 2f, 22 / 15f * dark, SpriteEffects.None, 0);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -86,11 +86,11 @@ public class MagnetSphereLighting : ModProjectile, IWarpProjectile
 		DrawLightingBolt(new Color(0, 255, 199, 0));
 
 		Texture2D Shadow = ModAsset.CursedHit.Value;
-		float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * Dark, 0, Shadow.Size() / 2f, 22f / 15f, SpriteEffects.None, 0);
+		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
+		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, Shadow.Size() / 2f, 22f / 15f, SpriteEffects.None, 0);
 		Texture2D light = ModAsset.CursedHitStar.Value;
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) / 2f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.8f, Dark / 2f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) / 2f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.8f, dark / 2f), SpriteEffects.None, 0);
 
 		float value = (480 - Projectile.timeLeft * 2.4f) / Projectile.timeLeft * 1.4f;
 		if (value < 0)
@@ -100,8 +100,8 @@ public class MagnetSphereLighting : ModProjectile, IWarpProjectile
 		Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
 		DrawTexCircle(value * 160, 10 * value * value, new Color(0, colorV, colorV * 0.7f, 0f), Projectile.Center - Main.screenPosition, t);
 
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), (float)(Math.PI / 4d) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, Dark / 2f), SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), (float)(Math.PI / 4d * 3) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, Dark / 0f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), (float)(Math.PI / 4d) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, dark / 2f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), (float)(Math.PI / 4d * 3) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, dark / 0f), SpriteEffects.None, 0);
 		return false;
 	}
 	internal Vector2[] LightPos = new Vector2[30];

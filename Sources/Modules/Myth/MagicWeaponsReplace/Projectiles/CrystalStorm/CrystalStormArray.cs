@@ -41,7 +41,7 @@ internal class CrystalStormArray : ModProjectile
 		player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
 		Projectile.rotation = player.fullRotation;
 
-		RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
+		ringPos = ringPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
 	}
 
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -61,7 +61,7 @@ internal class CrystalStormArray : ModProjectile
 	}
 
 	internal int Timer = 0;
-	internal Vector2 RingPos = Vector2.Zero;
+	internal Vector2 ringPos = Vector2.Zero;
 
 	public void DrawMagicArray(Texture2D tex, Color c0)
 	{
@@ -76,34 +76,34 @@ internal class CrystalStormArray : ModProjectile
 		}
 		var c1 = new Color(155, 0, 225, 0);
 		var c2 = new Color(0, 0, 255, 0);
-		DrawTexSquire(Timer * 2.88f, 11, c0, player.Center + RingPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 300);
-		DrawTexSquire(Timer * 3.1f, 24, c2, player.Center + RingPos - Main.screenPosition, Crystalline, -Main.timeForVisualEffects / 300);
+		DrawTexSquire(Timer * 2.88f, 11, c0, player.Center + ringPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 300);
+		DrawTexSquire(Timer * 3.1f, 24, c2, player.Center + ringPos - Main.screenPosition, Crystalline, -Main.timeForVisualEffects / 300);
 
 
-		DrawTexSquire(Timer * 3.18f, 11, c0, player.Center + RingPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 300 + MathHelper.PiOver4);
-		DrawTexSquire(Timer * 3.3f, 24, c0, player.Center + RingPos - Main.screenPosition, Crystalline, -Main.timeForVisualEffects / 300 + MathHelper.PiOver4);
+		DrawTexSquire(Timer * 3.18f, 11, c0, player.Center + ringPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 300 + MathHelper.PiOver4);
+		DrawTexSquire(Timer * 3.3f, 24, c0, player.Center + ringPos - Main.screenPosition, Crystalline, -Main.timeForVisualEffects / 300 + MathHelper.PiOver4);
 
-		DrawTexCircle(Timer * 2.67f, 75, c0, player.Center + RingPos - Main.screenPosition, Crystalline, Main.timeForVisualEffects / 400 + MathHelper.PiOver4);
-		DrawTexCircle(Timer * 1.3f, 30, c1, player.Center + RingPos - Main.screenPosition, Crystalline, Main.timeForVisualEffects / 400 + MathHelper.PiOver4);
+		DrawTexCircle(Timer * 2.67f, 75, c0, player.Center + ringPos - Main.screenPosition, Crystalline, Main.timeForVisualEffects / 400 + MathHelper.PiOver4);
+		DrawTexCircle(Timer * 1.3f, 30, c1, player.Center + ringPos - Main.screenPosition, Crystalline, Main.timeForVisualEffects / 400 + MathHelper.PiOver4);
 
 		float timeRot = (float)(Main.timeForVisualEffects / 240d);
-		Vector2 Point1 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 0 + timeRot);
-		Vector2 Point2 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 1 / 4d + timeRot);
-		Vector2 Point3 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 2 / 4d + timeRot);
-		Vector2 Point4 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 3 / 4d + timeRot);
-		Vector2 Point5 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 4 / 4d + timeRot);
-		Vector2 Point6 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 5 / 4d + timeRot);
-		Vector2 Point7 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 6 / 4d + timeRot);
-		Vector2 Point8 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 7 / 4d + timeRot);
+		Vector2 Point1 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 0 + timeRot);
+		Vector2 Point2 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 1 / 4d + timeRot);
+		Vector2 Point3 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 2 / 4d + timeRot);
+		Vector2 Point4 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 3 / 4d + timeRot);
+		Vector2 Point5 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 4 / 4d + timeRot);
+		Vector2 Point6 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 5 / 4d + timeRot);
+		Vector2 Point7 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 6 / 4d + timeRot);
+		Vector2 Point8 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 7 / 4d + timeRot);
 
-		Vector2 Point1_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 0 + timeRot + 0.2);
-		Vector2 Point2_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 1 / 4d + timeRot + 0.2);
-		Vector2 Point3_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 2 / 4d + timeRot + 0.2);
-		Vector2 Point4_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 3 / 4d + timeRot + 0.2);
-		Vector2 Point5_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 4 / 4d + timeRot + 0.2);
-		Vector2 Point6_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 5 / 4d + timeRot + 0.2);
-		Vector2 Point7_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 6 / 4d + timeRot + 0.2);
-		Vector2 Point8_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 7 / 4d + timeRot + 0.2);
+		Vector2 Point1_ = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 0 + timeRot + 0.2);
+		Vector2 Point2_ = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 1 / 4d + timeRot + 0.2);
+		Vector2 Point3_ = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 2 / 4d + timeRot + 0.2);
+		Vector2 Point4_ = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 3 / 4d + timeRot + 0.2);
+		Vector2 Point5_ = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 4 / 4d + timeRot + 0.2);
+		Vector2 Point6_ = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 5 / 4d + timeRot + 0.2);
+		Vector2 Point7_ = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 6 / 4d + timeRot + 0.2);
+		Vector2 Point8_ = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 7 / 4d + timeRot + 0.2);
 
 
 		DrawTexLine(Point1_, Point3, c0, c0, CrystalLight, 0.1f);

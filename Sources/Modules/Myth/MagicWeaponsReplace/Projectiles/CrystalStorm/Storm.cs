@@ -147,5 +147,5 @@ internal class Storm : ModProjectile
 	}
 
 	internal int Intensity = 0;
-	internal Vector2 RingPos = Vector2.Zero;
+	internal Vector2 ringPos = Vector2.Zero;
 }

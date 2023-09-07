@@ -53,8 +53,8 @@ internal class LunarFlareArray : ModProjectile
 
 		if (Lighting.Mode is not Terraria.Graphics.Light.LightMode.Color and not Terraria.Graphics.Light.LightMode.White)
 			return;
-		RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
-		Projectile.velocity = RingPos;
+		ringPos = ringPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
+		Projectile.velocity = ringPos;
 		for (int x = (int)(-Timer * 3.5f); x <= Timer * 3.5f; x += 8)
 		{
 			for (int y = (int)(-Timer * 3.5f); y <= Timer * 3.5f; y += 8)
@@ -96,7 +96,7 @@ internal class LunarFlareArray : ModProjectile
 	}
 
 	internal int Timer = 0;
-	internal Vector2 RingPos = Vector2.Zero;
+	internal Vector2 ringPos = Vector2.Zero;
 	internal List<SubStar> SubStars = new();
 	internal class SubStar
 	{

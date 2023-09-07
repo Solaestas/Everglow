@@ -41,7 +41,7 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 		player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
 		Projectile.rotation = player.fullRotation;
 
-		RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
+		ringPos = ringPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
 		//GenerateVFX(12, new Vector2(0, Timer * 1.45f).RotatedByRandom(6.283));
 	}
 	public void GenerateVFX(int Frequency, Vector2 ringPos)
@@ -55,7 +55,7 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 				velocity = ringPos * mulVelocity * 0.1f + player.velocity,
 				Active = true,
 				Visible = true,
-				position = player.Center + RingPos + ringPos,
+				position = player.Center + ringPos + ringPos,
 				maxTime = Main.rand.Next(18, 40),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(4f, 12f) * ringPos.Length() / 30f }
 			};
@@ -78,26 +78,26 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 	}
 
 	internal int Timer = 0;
-	internal Vector2 RingPos = Vector2.Zero;
+	internal Vector2 ringPos = Vector2.Zero;
 
 	public void DrawMagicArray(Texture2D tex, Color c0)
 	{
 		Player player = Main.player[Projectile.owner];
 		Texture2D Water = tex;
 		var c1 = new Color(c0.R * 0.39f / 255f, c0.G * 0.39f / 255f, c0.B * 0.39f / 255f, c0.A * 0.39f / 255f);
-		DrawTexCircle(Timer * 1.6f, 22, c0, player.Center + RingPos - Main.screenPosition, Water, Main.timeForVisualEffects / 12f);
-		DrawTexCircle(Timer * 1.3f, 32, c1, player.Center + RingPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 36f);
+		DrawTexCircle(Timer * 1.6f, 22, c0, player.Center + ringPos - Main.screenPosition, Water, Main.timeForVisualEffects / 12f);
+		DrawTexCircle(Timer * 1.3f, 32, c1, player.Center + ringPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 36f);
 
 		float timeRot = (float)(Main.timeForVisualEffects / 57d);
-		Vector2 Point1 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 0 + timeRot);
-		Vector2 Point2 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 2 / 4d + timeRot);
-		Vector2 Point3 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 4 / 4d + timeRot);
-		Vector2 Point4 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 6 / 4d + timeRot);
+		Vector2 Point1 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 0 + timeRot);
+		Vector2 Point2 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 2 / 4d + timeRot);
+		Vector2 Point3 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 4 / 4d + timeRot);
+		Vector2 Point4 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 6 / 4d + timeRot);
 
-		Vector2 Point5 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 1 / 4d + timeRot);
-		Vector2 Point6 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 3 / 4d + timeRot);
-		Vector2 Point7 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 5 / 4d + timeRot);
-		Vector2 Point8 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 7 / 4d + timeRot);
+		Vector2 Point5 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 1 / 4d + timeRot);
+		Vector2 Point6 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 3 / 4d + timeRot);
+		Vector2 Point7 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 5 / 4d + timeRot);
+		Vector2 Point8 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 7 / 4d + timeRot);
 		DrawTexLine(Point1, Point6, c1, c1, Water);
 		DrawTexLine(Point6, Point4, c1, c1, Water);
 		DrawTexLine(Point4, Point5, c1, c1, Water);
@@ -194,6 +194,6 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch sb)
 	{
 		Player player = Main.player[Projectile.owner];
-		DrawTexCircle(sb, Timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTrace"), Main.timeForVisualEffects / 17);
+		DrawTexCircle(sb, Timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTrace"), Main.timeForVisualEffects / 17);
 	}
 }

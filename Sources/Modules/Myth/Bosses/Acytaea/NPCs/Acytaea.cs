@@ -2041,7 +2041,7 @@ public class Acytaea : VisualNPC
 				if (NPC.CountNPCS(22) != 0)
 					list.Add("Btw, you should be thankful to the Guide");
 				if (NPC.CountNPCS(54) != 0)
-					list.Add("The Clothier was actually a Senior Dark Mage");
+					list.Add("The Clothier was actually a Senior dark Mage");
 				list.Add("Don't bother me if you only tell nonsense");
 				list.Add("What's up?");
 				list.Add("Err, well, I am a little grumpy");
@@ -2057,7 +2057,7 @@ public class Acytaea : VisualNPC
 				if (NPC.CountNPCS(22) != 0)
 					list.Add("Btw, you should be thankful to the Guide");
 				if (NPC.CountNPCS(54) != 0)
-					list.Add("The Clothier was actually a Senior Dark Mage");
+					list.Add("The Clothier was actually a Senior dark Mage");
 				list.Add("Don't bother me if you only tell nonsense");
 				list.Add("What's up?");
 				list.Add("Err, well, I am a little grumpy");
@@ -2109,7 +2109,7 @@ public class Acytaea : VisualNPC
 				if (NPC.CountNPCS(22) != 0)
 					list.Add("Btw, you should be thankful to the Guide");
 				if (NPC.CountNPCS(54) != 0)
-					list.Add("The Clothier was actually a Senior Dark Mage");
+					list.Add("The Clothier was actually a Senior dark Mage");
 				list.Add("Don't bother me if you only tell nonsense");
 				list.Add("What's up?");
 				list.Add("Err, well, I am a little grumpy");
@@ -2125,7 +2125,7 @@ public class Acytaea : VisualNPC
 				if (NPC.CountNPCS(22) != 0)
 					list.Add("Btw, you should be thankful to the Guide");
 				if (NPC.CountNPCS(54) != 0)
-					list.Add("The Clothier was actually a Senior Dark Mage");
+					list.Add("The Clothier was actually a Senior dark Mage");
 				list.Add("Don't bother me if you only tell nonsense");
 				list.Add("What's up?");
 				list.Add("Err, well, I am a little grumpy");

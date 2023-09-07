@@ -313,7 +313,7 @@ public class MothBackground : ModSystem
 
 		//便于合批，顶点绘制分开处置
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D VineTexture = ModAsset.Dark.Value;
+		Texture2D VineTexture = ModAsset.dark.Value;
 		for (int i = 0; i < ropes.Count; i++)
 		{
 			var branch = new List<Vertex2D>();

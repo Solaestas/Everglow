@@ -31,7 +31,7 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 	public float WingPower = 0;
 	public bool OldControlUp = false;
 	public int Timer = 0;
-	public Vector2 RingPos = Vector2.Zero;
+	public Vector2 ringPos = Vector2.Zero;
 
 	public override string Texture => "Everglow/" + ModAsset.FreezeFeatherMagicPath;
 	public override void SetDefaults()
@@ -81,7 +81,7 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 		}
 
 		Projectile.rotation = player.fullRotation;
-		RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
+		ringPos = ringPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
 
 		IceFeatherOwner mplayer = player.GetModPlayer<IceFeatherOwner>();
 		mplayer.HasFreezeWing = false;

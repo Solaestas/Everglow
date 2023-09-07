@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -26,35 +26,18 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 	public override void SpecialAI()
 	{
 		Player player = Main.player[Projectile.owner];
-		ConstantUsingTime++;
+		constantUsingTime++;
 
 		if (player.itemTime <= 0 || player.HeldItem.type != ItemID.GoldenShower)
 		{
 			if (Timer < 0)
 			{
-				int Rain = Math.Min(ConstantUsingTime / 6, 120);
-				for (int d = 0; d < Rain; d++)
-				{
-					Vector2 velocity = new Vector2(0, Main.rand.NextFloat(-16f, -12f)).RotatedBy(Main.rand.NextFloat(-(Rain / 120f), Rain / 120f));
-					var p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
-					p0.CritChance = player.GetWeaponCrit(player.HeldItem);
-				}
-
-				for (int i = 0; i < 15 + ConstantUsingTime / 15; ++i)
-				{
-					Vector2 BasePos = Projectile.Center;
-					var d0 = Dust.NewDustDirect(BasePos, 0, 0, DustType);
-					d0.noGravity = true;
-					d0.velocity = ConstantUsingTime / 80f * new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(6.283);
-					var d1 = Dust.NewDustDirect(BasePos, 0, 0, DustType);
-					d1.noGravity = true;
-					d1.velocity = ConstantUsingTime / 80f * new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(6.283);
-				}
-				ConstantUsingTime = 0;
+				float rain = Math.Min(constantUsingTime / 6f, 120);
+				constantUsingTime = 0;
 				SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
-				int HitType = ModContent.ProjectileType<GoldenShowerBomb>();
-				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack * 6, Projectile.owner, Rain / 4f, Projectile.rotation + Main.rand.NextFloat(6.283f));
-				p.CritChance = player.GetWeaponCrit(player.HeldItem);
+				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<GoldenShowerBomb>(), 1, 0, player.whoAmI, 0);
+				p.timeLeft = 1;
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<GoldenShowerBomb>(), 1, 0, player.whoAmI, rain / 4f);
 				Projectile.Kill();
 			}
 		}
@@ -62,7 +45,7 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 		{
 			if (Main.mouseRight)
 			{
-				ConstantUsingTime += 3;
+				constantUsingTime += 3;
 				player.statMana -= 7;
 				for (int d = 0; d < 2; d++)
 				{
@@ -89,14 +72,14 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -20), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
 		}
 	}
-	internal int ConstantUsingTime = 0;
+	internal int constantUsingTime = 0;
 
 	public override void SpecialDraw()
 	{
-		if (Timer < 24 && ConstantUsingTime > 150)
+		if (Timer < 24 && constantUsingTime > 150)
 		{
 			float tTimer = Timer - 6;
-			float Rain = Math.Min(ConstantUsingTime / 6, 120) / 120f;
+			float Rain = Math.Min(constantUsingTime / 6, 120) / 120f;
 			float Fade = (24 - tTimer) / 24f;
 			if (Fade < 0)
 				Fade = 0;
@@ -105,9 +88,9 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 			DrawTexCircle(tTimer * 24 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightlineWave"), 0);
 		}
 
-		if (Timer < 12 && ConstantUsingTime > 150)
+		if (Timer < 12 && constantUsingTime > 150)
 		{
-			float Rain = Math.Min(ConstantUsingTime / 6, 120) / 120f;
+			float Rain = Math.Min(constantUsingTime / 6, 120) / 120f;
 			float Fade = (12 - Timer) / 12f;
 			Rain *= Fade;
 			DrawTexCircle(Timer * 40 * Rain / Fade, 184 * Fade, new Color(Rain, Rain, Rain, Rain), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/DarklineWave"), 0);
@@ -149,10 +132,10 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 	}
 	public void DrawWarp(VFXBatch sb)
 	{
-		if (Timer < 24 && ConstantUsingTime > 150)
+		if (Timer < 24 && constantUsingTime > 150)
 		{
 			float tTimer = Timer - 6;
-			float Rain = Math.Min(ConstantUsingTime / 6, 120) / 120f;
+			float Rain = Math.Min(constantUsingTime / 6, 120) / 120f;
 			float Fade = (24 - tTimer) / 24f;
 			if (Fade < 0)
 				Fade = 0;
@@ -160,9 +143,9 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 			DrawTexCircle(sb, tTimer * 24 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightlineWave"), 0);
 		}
 
-		if (Timer < 22 && ConstantUsingTime > 150)
+		if (Timer < 22 && constantUsingTime > 150)
 		{
-			float Rain = Math.Min(ConstantUsingTime / 6, 120) / 120f;
+			float Rain = Math.Min(constantUsingTime / 6, 120) / 120f;
 			float Fade = (22 - Timer) / 22f;
 			Rain *= Fade;
 			DrawTexCircle(sb, Timer * 40 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightlineWave"), 0);
