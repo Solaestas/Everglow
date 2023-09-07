@@ -1,9 +1,11 @@
 using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Pylon;
 using Everglow.Myth.TheMarbleRemains.Tiles;
 using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terraria.ObjectData;
 using Terraria.WorldBuilding;
 
 namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
@@ -22,6 +24,34 @@ namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 				WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 				WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 			}
+		}
+		public static void BuildShabbyCastle()
+		{
+			Point16 tlpos = GetTempleLandPosition();
+			string Path = "TheMarbleRemains/MapIOs/MarbleTemple234x97.mapio";
+			var mapIO = new Commons.TileHelper.MapIO(tlpos.X, tlpos.Y);
+			int Height = mapIO.ReadHeight(ModIns.Mod.GetFileStream("Myth/" + Path));
+			QuickBuild(tlpos.X, tlpos.Y - Height / 2, Path);
+			
+			//TODO:有概率会爆掉，需要修复
+			//switch (Main.rand.Next(5))
+			//{
+			//    case 0:
+			//        QuickBuild(tlpos.X, tlpos.Y - 13, "MapIOResources/ShabbyPylonWithCastle20x23Style2.mapio");
+			//        break;
+			//    case 1:
+			//        QuickBuild(tlpos.X, tlpos.Y - 13, "MapIOResources/ShabbyPylonWithCastle21x26Style1.mapio");
+			//        break;
+			//    case 2:
+			//        QuickBuild(tlpos.X, tlpos.Y - 13, "MapIOResources/ShabbyPylonWithCastle22x22Style0.mapio");
+			//        break;
+			//    case 3:
+			//        QuickBuild(tlpos.X, tlpos.Y - 13, "MapIOResources/ShabbyPylonWithCastle22x26Style3.mapio");
+			//        break;
+			//    case 4:
+			//        QuickBuild(tlpos.X, tlpos.Y - 13, "MapIOResources/ShabbyPylonWithCastle22x26Style4.mapio");
+			//        break;
+			//}
 		}
 		internal class MarbleTempleGenPass : GenPass
 		{
@@ -47,7 +77,7 @@ namespace Everglow.Myth.TheMarbleRemains.WorldGeneration
 				BuildWorldTempleLand();
 			}
 		}
-		public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) => tasks.Add(new WorldMarbleTempleGenPass());
+		//public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) => tasks.Add(new WorldMarbleTempleGenPass());
 
 		/// <summary>
 		/// 地形中心坐标
