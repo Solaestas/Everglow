@@ -30,15 +30,14 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 
 		if (player.itemTime <= 0 || player.HeldItem.type != ItemID.GoldenShower)
 		{
-			if (Timer < 0)
+			if (timer < 0)
 			{
 				float rain = Math.Min(constantUsingTime / 6f, 120);
 				constantUsingTime = 0;
 				SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
-				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<GoldenShowerBomb>(), 1, 0, player.whoAmI, 0);
-				p.timeLeft = 1;
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<GoldenShowerBomb>(), 1, 0, player.whoAmI, rain / 4f);
+
 				Projectile.Kill();
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<GoldenShowerBomb>(), 1, 0, player.whoAmI, rain / 4f);
 			}
 		}
 		if (player.itemTime == 2 && player.HeldItem.type == ItemType)
@@ -76,9 +75,9 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 
 	public override void SpecialDraw()
 	{
-		if (Timer < 24 && constantUsingTime > 150)
+		if (timer < 24 && constantUsingTime > 150)
 		{
-			float tTimer = Timer - 6;
+			float tTimer = timer - 6;
 			float Rain = Math.Min(constantUsingTime / 6, 120) / 120f;
 			float Fade = (24 - tTimer) / 24f;
 			if (Fade < 0)
@@ -88,13 +87,13 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 			DrawTexCircle(tTimer * 24 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightlineWave"), 0);
 		}
 
-		if (Timer < 12 && constantUsingTime > 150)
+		if (timer < 12 && constantUsingTime > 150)
 		{
 			float Rain = Math.Min(constantUsingTime / 6, 120) / 120f;
-			float Fade = (12 - Timer) / 12f;
+			float Fade = (12 - timer) / 12f;
 			Rain *= Fade;
-			DrawTexCircle(Timer * 40 * Rain / Fade, 184 * Fade, new Color(Rain, Rain, Rain, Rain), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/DarklineWave"), 0);
-			DrawTexCircle(Timer * 40 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightlineWave"), 0);
+			DrawTexCircle(timer * 40 * Rain / Fade, 184 * Fade, new Color(Rain, Rain, Rain, Rain), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/DarklineWave"), 0);
+			DrawTexCircle(timer * 40 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightlineWave"), 0);
 		}
 	}
 	private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
@@ -132,9 +131,9 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 	}
 	public void DrawWarp(VFXBatch sb)
 	{
-		if (Timer < 24 && constantUsingTime > 150)
+		if (timer < 24 && constantUsingTime > 150)
 		{
-			float tTimer = Timer - 6;
+			float tTimer = timer - 6;
 			float Rain = Math.Min(constantUsingTime / 6, 120) / 120f;
 			float Fade = (24 - tTimer) / 24f;
 			if (Fade < 0)
@@ -143,12 +142,12 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 			DrawTexCircle(sb, tTimer * 24 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightlineWave"), 0);
 		}
 
-		if (Timer < 22 && constantUsingTime > 150)
+		if (timer < 22 && constantUsingTime > 150)
 		{
 			float Rain = Math.Min(constantUsingTime / 6, 120) / 120f;
-			float Fade = (22 - Timer) / 22f;
+			float Fade = (22 - timer) / 22f;
 			Rain *= Fade;
-			DrawTexCircle(sb, Timer * 40 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightlineWave"), 0);
+			DrawTexCircle(sb, timer * 40 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightlineWave"), 0);
 		}
 	}
 }

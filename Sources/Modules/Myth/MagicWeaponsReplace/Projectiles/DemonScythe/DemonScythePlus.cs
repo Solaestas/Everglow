@@ -24,8 +24,8 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 	public override void AI()
 	{
 		Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0.22f, 0f, 0.9f);
-		if (Timer < 30)
-			Timer += 2;
+		if (timer < 30)
+			timer += 2;
 		if (Projectile.velocity.Length() < 48f)
 			Projectile.velocity *= 1.05f;
 		float vL = Projectile.velocity.Length() * 0.1f;
@@ -83,7 +83,7 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 		return false;
 	}
 
-	internal int Timer = 0;
+	internal int timer = 0;
 
 	public void DrawMagicArray(Texture2D tex, Color c0)
 	{
@@ -91,7 +91,7 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 		var c1 = new Color(c0.R * 0.19f / 255f, c0.G * 0.19f / 255f, c0.B * 0.19f / 255f, c0.A * 0.19f / 255f);
 		var c2 = new Color(c0.R * 0.09f / 255f, c0.G * 0.09f / 255f, c0.B * 0.09f / 255f, c0.A * 0.09f / 255f);
 		float Size1 = (float)(Math.Sin((Main.timeForVisualEffects + 40) / 24) / 7d + 1);
-		float Size2 = Timer / 30f;
+		float Size2 = timer / 30f;
 		DrawTexCircle(24, 25 * Size2, c0 * Size1, Projectile.Center - Main.screenPosition, Water, -Main.timeForVisualEffects / 7);
 		DrawTexCircle(22, 12 * Size2, c1 * Size1, Projectile.Center - Main.screenPosition, Water, -Main.timeForVisualEffects / 27);
 		DrawTexCircle(20, 12 * Size2, c2 * Size1, Projectile.Center - Main.screenPosition, Water, -Main.timeForVisualEffects / 127);

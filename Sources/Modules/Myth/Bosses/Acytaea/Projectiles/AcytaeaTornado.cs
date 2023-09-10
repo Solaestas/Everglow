@@ -37,7 +37,7 @@ internal class AcytaeaTornado : VisualProjectile
 		}
 		if (AIMNpc >= 0)
 			Projectile.Center = Main.npc[AIMNpc].Center;
-		Timer = Projectile.timeLeft / 15f;
+		timer = Projectile.timeLeft / 15f;
 		WHOAMI = Projectile.whoAmI;
 		Typ = Projectile.type;
 	}
@@ -47,7 +47,7 @@ internal class AcytaeaTornado : VisualProjectile
 		return false;
 	}
 
-	public static float Timer = 0;
+	public static float timer = 0;
 	public static int WHOAMI = -1;
 	public static int Typ = -1;
 
@@ -60,10 +60,10 @@ internal class AcytaeaTornado : VisualProjectile
 			for (int h = 0; h < 60; h++)
 			{
 				float MinCosZ = (float)(2.4 - Math.Cos(z / 30d * Math.PI)) / 2.4f;
-				Vector2 vBla = new Vector2(120 * MinCosZ, 0).RotatedBy(Timer - h * 0.1f + z * z);
+				Vector2 vBla = new Vector2(120 * MinCosZ, 0).RotatedBy(timer - h * 0.1f + z * z);
 				vBla.Y *= 0.3f;
 				Vector2 vb = Main.projectile[WHOAMI].Center + vBla + new Vector2(0, -80);
-				Vector2 vCla = new Vector2(120 * MinCosZ, 0).RotatedBy(Timer - 0.1f - h * 0.1f + z * z);
+				Vector2 vCla = new Vector2(120 * MinCosZ, 0).RotatedBy(timer - 0.1f - h * 0.1f + z * z);
 				vCla.Y *= 0.3f;
 				Vector2 vc = Main.projectile[WHOAMI].Center + vCla + new Vector2(0, -80);
 				var color3 = new Color(255, 255, 255, 0);

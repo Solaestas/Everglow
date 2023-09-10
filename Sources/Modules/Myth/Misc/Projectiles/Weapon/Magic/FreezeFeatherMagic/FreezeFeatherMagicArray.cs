@@ -30,7 +30,7 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 {
 	public float WingPower = 0;
 	public bool OldControlUp = false;
-	public int Timer = 0;
+	public int timer = 0;
 	public Vector2 ringPos = Vector2.Zero;
 
 	public override string Texture => "Everglow/" + ModAsset.FreezeFeatherMagicPath;
@@ -56,9 +56,9 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 			Projectile.timeLeft = player.itemTime + 60;
 			if (player.itemTime > 0)
 			{
-				if (Timer < 30)
+				if (timer < 30)
 				{
-					Timer++;
+					timer++;
 				}
 				Player.CompositeArmStretchAmount playerCASA = Player.CompositeArmStretchAmount.Full;
 				player.SetCompositeArmFront(true, playerCASA, (float)(-Math.Sin(Main.timeForVisualEffects / 18d) * 0.6 + 1.2) * -player.direction);
@@ -67,16 +67,16 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 			}
 			else
 			{
-				if (Timer > 15)
+				if (timer > 15)
 				{
-					Timer--;
+					timer--;
 				}
 			}
 		}
 		else
 		{
-			Timer--;
-			if (Timer < 0)
+			timer--;
+			if (timer < 0)
 				Projectile.Kill();
 		}
 
@@ -127,7 +127,7 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 			Vector2 pos = Projectile.Center + new Vector2(Main.rand.NextFloat(-600, 600), -1600);
 			Vector2 vel = Vector2.Normalize(Main.MouseWorld - pos) * 60;
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), pos, vel, ModContent.ProjectileType<GiantFreezeFeather>(), player.HeldItem.damage * 5, 10, Projectile.owner);
-			Timer = 30;
+			timer = 30;
 		}
 	}
 	public override bool PreDraw(ref Color lightColor)
@@ -142,7 +142,7 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int x = 0; x < 40; x++)
 		{
-			float pocession = 1 - Timer / 30f;
+			float pocession = 1 - timer / 30f;
 			Vector2 radious = toBottom.RotatedBy(x / 20d * Math.PI);
 			float width = 75f;
 			if (x / 40f > WingPower / 210f)

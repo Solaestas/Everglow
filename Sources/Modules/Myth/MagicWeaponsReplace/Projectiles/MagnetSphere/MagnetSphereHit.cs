@@ -94,7 +94,7 @@ public class MagnetSphereHit : ModProjectile, IWarpProjectile
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
 			colorV *= Projectile.ai[0] / 10f;
-		Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+		Texture2D t = ModAsset.Wave.Value;
 		DrawTexCircle(value * 7 * Projectile.ai[0], 10 * value * value, new Color(0, colorV, colorV * 0.7f, 0f), Projectile.Center - Main.screenPosition, t);
 
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), (float)(Math.PI / 4d) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, dark * Projectile.ai[0] / 20f), SpriteEffects.None, 0);
@@ -121,15 +121,15 @@ public class MagnetSphereHit : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
-		value = MathF.Sqrt(value);
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
 			colorV *= Projectile.ai[0] / 10f;
-		Texture2D t = ModAsset.SparkLight.Value;
+		Texture2D t = Commons.ModAsset.Trail.Value;
 		float width = 60;
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft;
 
-		DrawTexCircle_VFXBatch(spriteBatch, value * 12 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+		DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 12 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 1.4f * value
+			, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 }

@@ -5,7 +5,7 @@ public class Butterfly : ModNPC
 {
 	public Vector2 targetPos;
 
-	private int Timer
+	private int timer
 	{
 		get => (int)NPC.ai[1];
 		set => NPC.ai[1] = value;
@@ -69,7 +69,7 @@ public class Butterfly : ModNPC
 		{
 			NPC.spriteDirection = Math.Sign(NPC.velocity.X);
 			NPC.dontTakeDamage = false;
-			Timer++;
+			timer++;
 			if (NPC.alpha > 0)
 				NPC.alpha -= 2;
 
@@ -84,7 +84,7 @@ public class Butterfly : ModNPC
 		{
 			NPC.spriteDirection = Math.Sign(NPC.velocity.X);
 			NPC.dontTakeDamage = true;
-			Timer++;
+			timer++;
 			if (NPC.alpha < 120)
 				NPC.alpha += 2;
 
@@ -102,25 +102,25 @@ public class Butterfly : ModNPC
 			NPC.spriteDirection = Math.Sign(NPC.velocity.X);
 			NPC.TargetClosest(false);
 			Player player = Main.player[NPC.target];
-			if (Timer < 30)
+			if (timer < 30)
 				NPC.dontTakeDamage = true;
 			else
 			{
 				NPC.dontTakeDamage = false;
 			}
 
-			if (Timer == 0)
+			if (timer == 0)
 			{
 				NPC.ai[2] = Main.rand.Next(60, 200);
 				NPC.frame.Y = Main.rand.Next(3) * 34;
 				NPC.netUpdate2 = true;
 			}
-			if (++Timer > NPC.ai[2] && Timer < NPC.ai[2] + 350)//追踪玩家
+			if (++timer > NPC.ai[2] && timer < NPC.ai[2] + 350)//追踪玩家
 			{
 				NPC.TargetClosest(false);
 				MoveTo(player.Center, 8, 80);
 			}
-			if (Timer > NPC.ai[2] + 600)
+			if (timer > NPC.ai[2] + 600)
 			{
 				NPC.scale -= 0.05f;
 				if (NPC.scale < 0)
@@ -137,25 +137,25 @@ public class Butterfly : ModNPC
 			CheckOwnerActive();
 
 			Player player = Main.player[Owner.target];
-			if (Timer == 0)
+			if (timer == 0)
 			{
 				NPC.dontTakeDamage = true;
 				NPC.ai[2] = -1.57f;
 				NPC.velocity = Vector2.Zero;
 			}
-			if (++Timer < 60)
+			if (++timer < 60)
 			{
 				NPC.alpha += 2;
 				NPC.friendly = true;
 				MoveTo(trueTargetPos, 10, 40);
 			}
-			if (Timer is > 60 and < 120)
+			if (timer is > 60 and < 120)
 			{
 				NPC.alpha -= 2;
 				NPC.ai[2] = NPC.ai[2].AngleLerp(Owner.DirectionTo(player.Center).ToRotation(), 0.1f);
 				NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.1f);
 			}
-			if (Timer > 120)
+			if (timer > 120)
 			{
 				NPC.friendly = false;
 				NPC.ai[2] = NPC.ai[2].AngleLerp(Owner.DirectionTo(player.Center + player.velocity * 20).ToRotation(), 0.15f);
@@ -169,26 +169,26 @@ public class Butterfly : ModNPC
 			NPC.spriteDirection = Math.Sign(NPC.velocity.X);
 			Vector2 trueTargetPos = Owner.Center + targetPos.RotatedBy(NPC.ai[2]);
 			Player player = Main.player[Owner.target];
-			if (Timer == 0)
+			if (timer == 0)
 			{
 				NPC.dontTakeDamage = true;
 				NPC.ai[2] = -1.57f;
 				NPC.localAI[0] = 0;
 				NPC.velocity = Vector2.Zero;
 			}
-			if (++Timer < 60)
+			if (++timer < 60)
 			{
 				NPC.alpha += 2;
 				NPC.friendly = true;
 				MoveTo(trueTargetPos, 10, 40);
 			}
-			if (Timer is > 60 and < 120)
+			if (timer is > 60 and < 120)
 			{
 				NPC.alpha -= 2;
 				NPC.ai[2] = NPC.ai[2].AngleLerp(Owner.DirectionTo(player.Center).ToRotation(), 0.1f);
 				NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.1f);
 			}
-			if (Timer is > 120 and < 160)
+			if (timer is > 120 and < 160)
 			{
 				NPC.friendly = false;
 				Vector2 d = Owner.DirectionTo(player.Center + player.velocity * 20);
@@ -196,63 +196,63 @@ public class Butterfly : ModNPC
 				NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.4f) + d * NPC.localAI[0];
 				NPC.localAI[0] = MathHelper.Lerp(NPC.localAI[0], -60, 0.05f);
 			}
-			if (Timer == 160)
+			if (timer == 160)
 				NPC.velocity = NPC.ai[2].ToRotationVector2() * 30;
-			if (Timer == 220)
+			if (timer == 220)
 			{
 				NPC.velocity *= 0.5f;
 				NPC.velocity += Main.rand.NextVector2Unit() * 10;
 				NPC.friendly = true;
 				NPC.netUpdate2 = true;
 			}
-			if (Timer > 240)
-				Timer = 0;
+			if (timer > 240)
+				timer = 0;
 		}
 		if (NPC.ai[0] == 3)//剑
 		{
 			CheckOwnerActive();
 
 			Vector2 trueTargetPos = Owner.Center + targetPos.RotatedBy(NPC.ai[2]);
-			if (Timer == 0)
+			if (timer == 0)
 			{
 				NPC.friendly = true;
 				NPC.dontTakeDamage = true;
 				NPC.ai[2] = -1.57f;
 				NPC.velocity = Vector2.Zero;
 			}
-			if (++Timer < 60)
+			if (++timer < 60)
 			{
 				NPC.alpha = (int)MathHelper.Lerp(NPC.alpha, 120, 0.1f);
 				MoveTo(trueTargetPos, 10, 40);
 				NPC.localAI[0] = Owner.spriteDirection * -1;
 			}
-			if (Timer is > 60 and < 120)
+			if (timer is > 60 and < 120)
 			{
 				NPC.alpha = (int)MathHelper.Lerp(NPC.alpha, 0, 0.1f);
 				NPC.ai[2] = NPC.ai[2].AngleLerp(-1.57f, 0.1f);
 				NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.15f);
 			}
-			if (Timer is > 120 and < 180)
+			if (timer is > 120 and < 180)
 			{
 				NPC.friendly = false;
 				NPC.alpha = (int)MathHelper.Lerp(NPC.alpha, 0, 0.1f);
 				NPC.ai[2] = NPC.ai[2].AngleLerp(-1.57f + NPC.localAI[0] * 1f, 0.05f);
 				NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.5f);
 			}
-			if (Timer is > 180 and < 220)
+			if (timer is > 180 and < 220)
 			{
 				NPC.ai[2] -= NPC.localAI[0] * 0.12f;
 				NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.5f);
 			}
-			if (Timer == 220)
+			if (timer == 220)
 			{
 				NPC.velocity = Main.rand.NextVector2Unit() * 10f;
 				NPC.netUpdate2 = true;
 			}
-			if (Timer > 250)
+			if (timer > 250)
 			{
 				NPC.ai[0] = -1;
-				Timer = 0;
+				timer = 0;
 			}
 		}
 		if (NPC.ai[0] == 4)//拳
@@ -262,26 +262,26 @@ public class Butterfly : ModNPC
 			NPC.spriteDirection = Math.Sign(NPC.velocity.X);
 			Vector2 trueTargetPos = Owner.Center + targetPos.RotatedBy(NPC.ai[2]);
 			Player player = Main.player[Owner.target];
-			if (Timer == 0)
+			if (timer == 0)
 			{
 				NPC.dontTakeDamage = true;
 				NPC.ai[2] = 0f;
 				NPC.localAI[0] = 0;
 				NPC.velocity = Vector2.Zero;
 			}
-			if (++Timer < 60)
+			if (++timer < 60)
 			{
 				NPC.alpha += 2;
 				NPC.friendly = true;
 				MoveTo(trueTargetPos, 10, 40);
 			}
-			if (Timer is > 60 and < 120)
+			if (timer is > 60 and < 120)
 			{
 				NPC.alpha -= 2;
 				NPC.ai[2] = NPC.ai[2].AngleLerp(Owner.DirectionTo(player.Center).ToRotation(), 0.1f);
 				NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.1f);
 			}
-			if (Timer is > 120 and < 160)
+			if (timer is > 120 and < 160)
 			{
 				NPC.friendly = false;
 				Vector2 d = Owner.DirectionTo(player.Center);
@@ -289,12 +289,12 @@ public class Butterfly : ModNPC
 				NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.4f) + d * NPC.localAI[0];
 				NPC.localAI[0] = MathHelper.Lerp(NPC.localAI[0], -70, 0.05f);
 			}
-			if (Timer == 160)
+			if (timer == 160)
 				NPC.velocity = NPC.ai[2].ToRotationVector2() * 40;
-			if (Timer == 200)
+			if (timer == 200)
 			{
 				NPC.velocity = Main.rand.NextVector2Unit() * Main.rand.Next(2, 10);
-				Timer = 0;
+				timer = 0;
 				NPC.ai[0] = 0;
 				NPC.dontTakeDamage = false;
 				NPC.netUpdate2 = true;
@@ -313,10 +313,10 @@ public class Butterfly : ModNPC
 		if (NPC.frame.Y > 102)
 			NPC.frame.Y = 0;
 
-		if (Timer % 10 == 0)
+		if (timer % 10 == 0)
 			NPC.frame.Y += 34;
 
-		if (Timer % 16 == 0 && NPC.alpha < 20)
+		if (timer % 16 == 0 && NPC.alpha < 20)
 		{
 			int index = Dust.NewDust(NPC.position - new Vector2(8), NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f));
 			Main.dust[index].velocity = NPC.velocity * 0.5f;

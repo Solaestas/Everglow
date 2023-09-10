@@ -25,13 +25,13 @@ internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 		if (player.itemTime > 0 && player.HeldItem.type == ItemID.RazorbladeTyphoon && player.active && !player.dead)
 		{
 			Projectile.timeLeft = player.itemTime + 60;
-			if (Timer < 30)
-				Timer++;
+			if (timer < 30)
+				timer++;
 		}
 		else
 		{
-			Timer--;
-			if (Timer < 0)
+			timer--;
+			if (timer < 0)
 				Projectile.Kill();
 		}
 		Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
@@ -59,7 +59,7 @@ internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 		return false;
 	}
 
-	internal int Timer = 0;
+	internal int timer = 0;
 	internal Vector2 ringPos = Vector2.Zero;
 
 	public void DrawMagicArray(Texture2D tex, Color c0)
@@ -67,17 +67,17 @@ internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 		Player player = Main.player[Projectile.owner];
 		Texture2D Water = tex;
 		var c1 = new Color(c0.R * 0.39f / 255f, c0.G * 0.39f / 255f, c0.B * 0.39f / 255f, c0.A * 0.39f / 255f);
-		DrawTexCircle(Timer * 1.6f, 32, c0, player.Center + ringPos - Main.screenPosition, Water, Main.timeForVisualEffects / 4);
-		DrawTexCircle(Timer * 1.3f, 32, c1, player.Center + ringPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 4);
+		DrawTexCircle(timer * 1.6f, 32, c0, player.Center + ringPos - Main.screenPosition, Water, Main.timeForVisualEffects / 4);
+		DrawTexCircle(timer * 1.3f, 32, c1, player.Center + ringPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 4);
 
 		float timeRot = (float)(Main.timeForVisualEffects / 17d);
-		Vector2 Point1 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 0 + timeRot);
-		Vector2 Point2 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 2 / 3d + timeRot);
-		Vector2 Point3 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 4 / 3d + timeRot);
+		Vector2 Point1 = player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 1.8f).RotatedBy(Math.PI * 0 + timeRot);
+		Vector2 Point2 = player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 1.8f).RotatedBy(Math.PI * 2 / 3d + timeRot);
+		Vector2 Point3 = player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 1.8f).RotatedBy(Math.PI * 4 / 3d + timeRot);
 
-		Vector2 Point4 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 1 / 3d + timeRot);
-		Vector2 Point5 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 3 / 3d + timeRot);
-		Vector2 Point6 = player.Center + ringPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 5 / 3d + timeRot);
+		Vector2 Point4 = player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 1.8f).RotatedBy(Math.PI * 1 / 3d + timeRot);
+		Vector2 Point5 = player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 1.8f).RotatedBy(Math.PI * 3 / 3d + timeRot);
+		Vector2 Point6 = player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 1.8f).RotatedBy(Math.PI * 5 / 3d + timeRot);
 		DrawTexLine(Point1, Point2, c1, c1, Water);
 		DrawTexLine(Point2, Point3, c1, c1, Water);
 		DrawTexLine(Point3, Point1, c1, c1, Water);
@@ -139,6 +139,6 @@ internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 	{
 
 		Player player = Main.player[Projectile.owner];
-		DrawTexCircle(spriteBatch, Timer * 1.2f, 82, new Color((int)(255 * (Math.Sin(Main.timeForVisualEffects * 0.12f) + 1) / 2d), 150, 255, 0), player.Center + ringPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 6);
+		DrawTexCircle(spriteBatch, timer * 1.2f, 82, new Color((int)(255 * (Math.Sin(Main.timeForVisualEffects * 0.12f) + 1) / 2d), 150, 255, 0), player.Center + ringPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 6);
 	}
 }

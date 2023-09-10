@@ -39,7 +39,7 @@ class GoldLanternRay : ModProjectile
 	{
 		return false;
 	}
-	public static float Timer = 0;
+	public static float timer = 0;
 	public static int WHOAMI = -1;
 	public static int Typ = -1;
 	int TrueL = 1;

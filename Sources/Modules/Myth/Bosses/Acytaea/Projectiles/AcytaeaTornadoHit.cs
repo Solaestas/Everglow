@@ -39,7 +39,7 @@ internal class AcytaeaTornadoHit : ModProjectile
 		}
 		if (AIMNpc >= 0)
 			Projectile.Center = Main.npc[AIMNpc].Center;
-		Timer = Projectile.timeLeft / 15f;
+		timer = Projectile.timeLeft / 15f;
 		WHOAMI = Projectile.whoAmI;
 		Typ = Projectile.type;
 	}
@@ -49,7 +49,7 @@ internal class AcytaeaTornadoHit : ModProjectile
 		return false;
 	}
 
-	public static float Timer = 0;
+	public static float timer = 0;
 	public static int WHOAMI = -1;
 	public static int Typ = -1;
 }

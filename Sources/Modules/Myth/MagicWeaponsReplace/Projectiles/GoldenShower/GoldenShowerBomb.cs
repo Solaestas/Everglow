@@ -92,7 +92,7 @@ public class GoldenShowerBomb : ModProjectile, IWarpProjectile
 		Texture2D Shadow = ModAsset.CursedHit.Value;
 		float dark = Math.Max((Projectile.timeLeft - 120) / 80f, 0);
 		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f, SpriteEffects.None, 0);
-		Texture2D light = Commons.ModAsset.Star.Value;
+		Texture2D light = ModAsset.LineLight_2.Value;
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(255, 205, 0, 0), 1.57f, light.Size() / 2f, new Vector2(0.5f, dark) * Projectile.ai[0] * 0.2f, SpriteEffects.None, 0);
 		return false;
 	}
@@ -125,7 +125,8 @@ public class GoldenShowerBomb : ModProjectile, IWarpProjectile
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft;
 
-		MythUtils.DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 36 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.6f * value, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		MythUtils.DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 36 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.6f * value
+			, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
