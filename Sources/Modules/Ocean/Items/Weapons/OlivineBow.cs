@@ -21,7 +21,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
         public override void SetStaticDefaults()
         {
             // Tooltip.SetDefault("");
-            // DisplayName.AddTranslation(GameCulture.Chinese, "ÈœÈ≠ Øπ≠");
+            // // DisplayName.AddTranslation(GameCulture.Chinese, "√©√è√©¬≠√ä¬Ø¬π¬≠");
         }
         public override void SetDefaults()
         {
@@ -51,10 +51,10 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(1));
-            speedX = perturbedSpeed.X;
-            speedY = perturbedSpeed.Y;
-            Projectile.NewProjectile(position.X, position.Y, speedX, speedY, ModContent.ProjectileType<Everglow.Ocean.Projectiles.OlivineArrow>(), damage, knockBack, player.whoAmI);
+            Vector2 perturbedSpeed = new Vector2(velocity.X, velocity.Y).RotatedByRandom(MathHelper.ToRadians(1));
+			velocity.X = perturbedSpeed.X;
+			velocity.Y = perturbedSpeed.Y;
+            Projectile.NewProjectile(null, position.X, position.Y, velocity.X, velocity.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.OlivineArrow>(), damage, knockback, player.whoAmI);
             return false;
         }
         public override void AddRecipes()

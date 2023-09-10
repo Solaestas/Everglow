@@ -1,4 +1,4 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
@@ -13,7 +13,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
         public override void SetStaticDefaults()
         {
             // Tooltip.SetDefault("");
-            // DisplayName.AddTranslation(GameCulture.Chinese, "波江");
+            // // DisplayName.AddTranslation(GameCulture.Chinese, "波江");
         }
         private int num = 0;
         private bool k = true;
@@ -41,12 +41,12 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
         {
             if(Main.rand.Next(100) > 10)
             {
-                int num = Projectile.NewProjectile(target.Center.X, target.Center.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.WaveBallMini>(), Item.damage * 2, Item.knockBack, Main.myPlayer, 0f, 0f);
+                int num = Projectile.NewProjectile(null, target.Center.X, target.Center.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.WaveBallMini>(), Item.damage * 2, Item.knockBack, Main.myPlayer, 0f, 0f);
                 Main.projectile[num].timeLeft = 1;
             }
             else
             {
-                int num = Projectile.NewProjectile(target.Center.X, target.Center.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.WaveBall>(), Item.damage * 10, Item.knockBack, Main.myPlayer, 0f, 0f);
+                int num = Projectile.NewProjectile(null, target.Center.X, target.Center.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.WaveBall>(), Item.damage * 10, Item.knockBack, Main.myPlayer, 0f, 0f);
                 Main.projectile[num].timeLeft = 1;
             }
         }
@@ -58,7 +58,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
         {
             Vector2 vp0 = new Vector2(-100f * player.direction + player.width / 2f, -50f).RotatedBy(0) + player.position;
             Vector2 pc = player.position + new Vector2(player.width, player.height) / 2;
-            Projectile.NewProjectile(pc.X, pc.Y, 0, 0, ModContent.ProjectileType<Everglow.Ocean.Projectiles.WaveShader>(), 0, 0, player.whoAmI);
+            Projectile.NewProjectile(source, pc.X, pc.Y, 0, 0, ModContent.ProjectileType<Everglow.Ocean.Projectiles.WaveShader>(), 0, 0, player.whoAmI);
             return false;
         }
     }

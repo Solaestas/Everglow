@@ -15,7 +15,7 @@ using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
 using Terraria.ObjectData;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
 	public class 棕榈木风向标 : ModTile
 	{
@@ -38,8 +38,8 @@ namespace Everglow.Ocean.Tiles.Ocean
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.addTile((int)base.Type);
-            LocalizedText modTranslation = base.CreateMapEntryName();
-            // modTranslation.SetDefault("");
+            var modTranslation = base.CreateMapEntryName();
+            //modTranslation.SetDefault("");
             base.AddMapEntry(new Color(36, 100, 100), modTranslation);
 		}
 		public override bool CreateDust(int i, int j, ref int type)
@@ -50,7 +50,7 @@ namespace Everglow.Ocean.Tiles.Ocean
         {
             int x = (int)(2 + 1.45 * Math.Sin(Main.time / 24d));
             Player player = Main.player[Main.myPlayer];
-            if(Main.windSpeed > 0)
+            if(Main.windSpeedCurrent > 0)
             {
                 Main.tile[i, j].TileFrameX = (short)(x * 40);
             }
@@ -61,7 +61,7 @@ namespace Everglow.Ocean.Tiles.Ocean
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.PalmWoodWind>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.Furnitures.PalmWoodWind>());
         }
     }
 }

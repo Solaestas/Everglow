@@ -8,7 +8,7 @@ namespace Everglow.Ocean.Items.Furnitures
 	{
 		public override void SetStaticDefaults()
 		{
-            // DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩书架");
+            // // DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩书架");
         }
 		public override void SetDefaults()
 		{

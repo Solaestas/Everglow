@@ -56,7 +56,7 @@ public class TsunamiShark : ModProjectile
 				velocity,
 				ModContent.ProjectileType<TsunamiShark_bullet>(),
 				overridedamage == -1 ? item.damage : overridedamage,
-				item.knockBack,
+				item.knockback,
 				player.whoAmI);
 			p.CritChance = (int)(item.crit + player.GetCritChance(DamageClass.Generic));
 
@@ -67,7 +67,7 @@ public class TsunamiShark : ModProjectile
 				Vector2.Zero,
 				ModContent.ProjectileType<TsunamiShark_flame>(),
 				overridedamage == -1 ? item.damage : overridedamage,
-				item.knockBack,
+				item.knockback,
 				player.whoAmI,
 				0.36f,
 				rot);
@@ -77,7 +77,7 @@ public class TsunamiShark : ModProjectile
 		{
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<TsunamiShark_missile>()] < 20)
 			{
-				Projectile.NewProjectileDirect(shootSource, Projectile.Center + toMuzzle, velocity.RotatedBy(-Main.rand.NextFloat(-0.2f, 0.4f) * player.direction) * 2.4f, ModContent.ProjectileType<TsunamiShark_missile>(), (int)((overridedamage == -1 ? item.damage : overridedamage) * 3.64f), item.knockBack, player.whoAmI, Main.rand.NextFloat(0.6f, 1.4f));
+				Projectile.NewProjectileDirect(shootSource, Projectile.Center + toMuzzle, velocity.RotatedBy(-Main.rand.NextFloat(-0.2f, 0.4f) * player.direction) * 2.4f, ModContent.ProjectileType<TsunamiShark_missile>(), (int)((overridedamage == -1 ? item.damage : overridedamage) * 3.64f), item.knockback, player.whoAmI, Main.rand.NextFloat(0.6f, 1.4f));
 			}
 			UseCount = 0;
 		}

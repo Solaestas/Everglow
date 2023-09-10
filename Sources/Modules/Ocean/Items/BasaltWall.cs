@@ -10,7 +10,7 @@ namespace Everglow.Ocean.Items.Walls
 		public override void SetStaticDefaults()
 		{
 			// base.DisplayName.SetDefault("VolcanoStone Wall");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩墙");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩墙");
 		}
 		public override void SetDefaults()
 		{

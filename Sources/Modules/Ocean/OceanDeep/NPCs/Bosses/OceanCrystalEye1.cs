@@ -18,7 +18,7 @@ namespace Everglow.Ocean.NPCs.OceanCrystal
 		{
             // base.DisplayName.SetDefault("海洋封印之眼");
 			Main.npcFrameCount[base.NPC.type] = 1;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海洋封印之眼");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海洋封印之眼");
 		}
         private int a = 0;
         private bool down = true;

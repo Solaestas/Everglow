@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Everglow.Ocean.Projectiles.projectile2
+namespace Everglow.Ocean.Projectiles
 {
 	// Token: 0x02000749 RID: 1865
     public class Olivine : ModProjectile

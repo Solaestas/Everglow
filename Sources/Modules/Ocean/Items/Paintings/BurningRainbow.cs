@@ -21,7 +21,7 @@ namespace Everglow.Ocean.Items.Drawings
 		public override void SetStaticDefaults()
 		{
 			// base.DisplayName.SetDefault("烈焰彩虹");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "烈焰彩虹");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "烈焰彩虹");
 		}
 
 		// Token: 0x060009BB RID: 2491 RVA: 0x000500EC File Offset: 0x0004E2EC

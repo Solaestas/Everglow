@@ -1,4 +1,4 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Ocean.Tiles
@@ -34,7 +34,7 @@ namespace Everglow.Ocean.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.Acropora>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.Corals.Acropora>());
         }
         public override void PlaceInWorld(int i, int j, Item item)
         {

@@ -6,7 +6,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
 	// Token: 0x02000DCE RID: 3534
 	public class 小脑珊瑚 : ModTile

@@ -21,7 +21,7 @@ namespace Everglow.Ocean.Items.Drawings
 		public override void SetStaticDefaults()
 		{
 			// base.DisplayName.SetDefault("珊瑚浅滩");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "珊瑚浅滩");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "珊瑚浅滩");
 		}
 		public override void SetDefaults()
 		{

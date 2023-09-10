@@ -1,5 +1,5 @@
-﻿using Terraria.Localization;
-namespace Everglow.Ocean.Items.Ores
+using Terraria.Localization;
+namespace Everglow.Ocean.OceanDeep.Items
 {
     public class DarkSeaBar : ModItem
     {

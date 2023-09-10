@@ -6,7 +6,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
 	// Token: 0x02000DCE RID: 3534
 	public class 白色海鳃 : ModTile
@@ -50,7 +50,7 @@ namespace Everglow.Ocean.Tiles.Ocean
 		}
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.WhiteSeaPen>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.WhiteSeaPen>());
         }
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {

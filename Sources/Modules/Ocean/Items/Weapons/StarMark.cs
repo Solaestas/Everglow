@@ -14,7 +14,7 @@ namespace Everglow.Ocean.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
-            //DisplayName.AddTranslation(GameCulture.Chinese, "星光球");
+            //// DisplayName.AddTranslation(GameCulture.Chinese, "星光球");
             ItemID.Sets.Yoyo[Type] = true;
             ItemID.Sets.GamepadExtraRange[Type] = 15;
             ItemID.Sets.GamepadSmartQuickReach[Type] = true;

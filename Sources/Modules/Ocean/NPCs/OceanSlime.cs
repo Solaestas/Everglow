@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
@@ -13,7 +13,7 @@ namespace Everglow.Ocean.NPCs
         {
             // base.DisplayName.SetDefault("Ocean Slime");
             Main.npcFrameCount[base.NPC.type] = 2;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝史莱姆");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝史莱姆");
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
@@ -53,13 +53,13 @@ namespace Everglow.Ocean.NPCs
         {
             for (int i = 0; i < 5; i++)
             {
-                Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, (float)hitDirection, -1f, 0, default(Color), 1f);
+                Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, hit.HitDirection, -1f, 0, default(Color), 1f);
             }
             if (base.NPC.life <= 0)
             {
                 for (int j = 0; j < 20; j++)
                 {
-                    Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, (float)hitDirection, -1f, 0, default(Color), 1f);
+                    Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, hit.HitDirection, -1f, 0, default(Color), 1f);
                 }
             }
         }
@@ -69,7 +69,7 @@ namespace Everglow.Ocean.NPCs
         }
         public override void OnKill()
         {
-            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.OceanBlueOre>(), Main.rand.Next(7, 13), false, 0, false, false);
+            Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.OceanBlueOre>(), Main.rand.Next(7, 13), false, 0, false, false);
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {

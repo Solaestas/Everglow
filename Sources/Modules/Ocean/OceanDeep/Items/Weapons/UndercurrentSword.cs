@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -19,14 +19,11 @@ namespace Everglow.Ocean.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
-            // DisplayName.AddTranslation(GameCulture.Chinese, "深渊暗流");
+            // // DisplayName.AddTranslation(GameCulture.Chinese, "深渊暗流");
             // Tooltip.SetDefault("击中敌人引发浑浊的深渊爆炸");
-            GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
-        public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
             Item.damage = 300;//伤害
             Item.DamageType = DamageClass.Melee/* tModPorter Suggestion: Consider MeleeNoSpeed for no attack speed scaling */;//是否是近战
             Item.width = 58;//宽
@@ -40,7 +37,7 @@ namespace Everglow.Ocean.Items.Weapons
             Item.autoReuse = true;//能否持续挥动
             Item.crit = 8;//暴击
             Item.value = 45000;//价值，1表示一铜币，这里是100铂金币
-            Item.shoot = ModContent.ProjectileType<Everglow.Ocean.Projectiles.AbyssBeam>();//??????????yoyo??
+            Item.shoot = ModContent.ProjectileType<Everglow.Ocean.OceanDeep.Projectiles.AbyssBeam>();//??????????yoyo??
             Item.scale = 1f;//大小
             Item.shootSpeed = 5f;//??Ч???????
         }
@@ -63,12 +60,12 @@ namespace Everglow.Ocean.Items.Weapons
             {
                 return;
             }
-            float num1 = (float)damage * 0.04f;
+            float num1 = (float)hit.Damage * 0.04f;
             if ((int)num1 == 0)
             {
                 return;
             }
-            Projectile.NewProjectile(target.Center.X, target.Center.Y, 2f, 2f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.AbyssBomb>(), damage, knockback, player.whoAmI, 0f, 0f);
+            Projectile.NewProjectile(null, target.Center.X, target.Center.Y, 2f, 2f,ModContent.ProjectileType<Everglow.Ocean.OceanDeep.Projectiles.AbyssBomb>(), damageDone, 1f, player.whoAmI, 0f, 0f);
         }
         // Token: 0x060002D2 RID: 722 RVA: 0x000354AC File Offset: 0x000336AC
         public override void MeleeEffects(Player player, Rectangle hitbox)

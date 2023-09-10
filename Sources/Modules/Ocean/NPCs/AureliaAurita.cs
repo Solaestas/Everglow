@@ -15,7 +15,7 @@ namespace Everglow.Ocean.NPCs
 		{
             // base.DisplayName.SetDefault("jellyfish");
 			Main.npcFrameCount[base.NPC.type] = 5;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海月水母");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海月水母");
 		}
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
@@ -221,8 +221,8 @@ namespace Everglow.Ocean.NPCs
 		// Token: 0x0600147A RID: 5242 RVA: 0x0000801E File Offset: 0x0000621E
 		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 		{
-			player.AddBuff(70, 240, true);
-            player.AddBuff(base.Mod.Find<ModBuff>("极剧毒").Type, 20, true);
+			target.AddBuff(70, 240, true);
+			target.AddBuff(base.Mod.Find<ModBuff>("极剧毒").Type, 20, true);
 		}
         // Token: 0x02000413 RID: 1043
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -246,13 +246,13 @@ namespace Everglow.Ocean.NPCs
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 33, (float)hitDirection, -1f, 0, default(Color), 1f);
+				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 33, hit.HitDirection, -1f, 0, default(Color), 1f);
 			}
 			if (base.NPC.life <= 0)
 			{
 				for (int j = 0; j < 15; j++)
 				{
-					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 33, (float)hitDirection, -1f, 0, default(Color), 1f);
+					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 33, hit.HitDirection, -1f, 0, default(Color), 1f);
 				}
 			}
 		}
@@ -261,15 +261,15 @@ namespace Everglow.Ocean.NPCs
         {
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.VoidBubble>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.VoidBubble>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.OceanDustCore>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.OceanDustCore>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(150) == 0 && Main.hardMode)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.FluoresceinYoyo>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.FluoresceinYoyo>(), 1, false, 0, false, false);
             }
         }
 	}

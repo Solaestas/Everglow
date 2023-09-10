@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -15,7 +15,7 @@ namespace Everglow.Ocean.NPCs
 		{
 			// base.DisplayName.SetDefault("Sailfish");
 			Main.npcFrameCount[base.NPC.type] = 4;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "旗鱼");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "旗鱼");
 		}
 
 		// Token: 0x0600147E RID: 5246 RVA: 0x000B4364 File Offset: 0x000B2564
@@ -235,7 +235,7 @@ namespace Everglow.Ocean.NPCs
 		// Token: 0x06001482 RID: 5250 RVA: 0x00008065 File Offset: 0x00006265
 		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 		{
-			player.AddBuff(30, 420, true);
+			target.AddBuff(30, 420, true);
 		}
 
 		// Token: 0x06001483 RID: 5251 RVA: 0x00007FE0 File Offset: 0x000061E0
@@ -245,34 +245,34 @@ namespace Everglow.Ocean.NPCs
 		{
 			for (int i = 0; i < 2; i++)
 			{
-				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 115, (float)hitDirection, -1f, 0, default(Color), 1f);
+				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 115, hit.HitDirection, -1f, 0, default(Color), 1f);
 			}
 			if (base.NPC.life <= 0)
 			{
 				for (int j = 0; j < 25; j++)
 				{
-					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 115, (float)hitDirection, -1f, 0, default(Color), 1f);
+					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 115, hit.HitDirection, -1f, 0, default(Color), 1f);
 				}
                 for (int j = 0; j < 25; j++)
                 {
-                    Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 117, (float)hitDirection, -1f, 0, default(Color), 1f);
+                    Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 117, hit.HitDirection, -1f, 0, default(Color), 1f);
                 }
                 float scaleFactor = (float)(Main.rand.Next(-200, 200) / 100);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/旗鱼碎块1"), 1f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/旗鱼碎块2"), 1f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/旗鱼碎块3"), 1f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/旗鱼碎块4"), 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/旗鱼碎块1").Type, 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/旗鱼碎块2").Type, 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/旗鱼碎块3").Type, 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/旗鱼碎块4").Type, 1f);
 			}
 		}
         public override void OnKill()
         {
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.空灵泡>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.空灵泡>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.利刃鳞>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.利刃鳞>(), 1, false, 0, false, false);
             }
         }
         public bool hasBeenHit;

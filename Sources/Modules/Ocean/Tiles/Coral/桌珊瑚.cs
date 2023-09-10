@@ -6,7 +6,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
 	// Token: 0x02000DD8 RID: 3544
 	public class 桌珊瑚 : ModTile
@@ -40,7 +40,7 @@ namespace Everglow.Ocean.Tiles.Ocean
 		}
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.MiddleTableCoral>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.MiddleTableCoral>());
         }
     }
 }

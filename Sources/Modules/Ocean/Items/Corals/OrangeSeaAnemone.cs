@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -19,7 +19,7 @@ namespace Everglow.Ocean.Items.Corals//制作是mod名字
             base.Item.height = 16;//高
             base.Item.rare = 2;//品质
             base.Item.scale = 1f;//大小
-            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.菊花海葵>();
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.Coral.菊花海葵>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;

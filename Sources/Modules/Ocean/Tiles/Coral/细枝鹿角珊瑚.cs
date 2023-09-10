@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -50,7 +50,7 @@ namespace Everglow.Ocean.Tiles.Coral
                 zero = Vector2.Zero;
             }
             int height = 16;
-            //Main.spriteBatch.Draw(mod.GetTexture("Tiles/Ocean/细枝鹿角珊瑚Glow"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), new Color(255, 255, 255, 0), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            //Main.spriteBatch.Draw(ModAsset.细枝鹿角珊瑚Glow.Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), new Color(255, 255, 255, 0), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {
@@ -63,7 +63,7 @@ namespace Everglow.Ocean.Tiles.Coral
 		}
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.WeakAcropora>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.Corals.WeakAcropora>());
         }
         public override void PlaceInWorld(int i, int j, Item item)
         {

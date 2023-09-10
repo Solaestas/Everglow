@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -15,7 +15,7 @@ namespace Everglow.Ocean.NPCs
 		{
 			// base.DisplayName.SetDefault("Sailfish");
 			Main.npcFrameCount[base.NPC.type] = 4;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "小丑鱼");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "小丑鱼");
 		}
         private bool flag = true;
         private int num = 0;
@@ -133,7 +133,7 @@ namespace Everglow.Ocean.NPCs
 		// Token: 0x06001482 RID: 5250 RVA: 0x00008065 File Offset: 0x00006265
 		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 		{
-			player.AddBuff(30, 420, true);
+			target.AddBuff(30, 420, true);
 		}
 
 		// Token: 0x06001483 RID: 5251 RVA: 0x00007FE0 File Offset: 0x000061E0
@@ -143,17 +143,17 @@ namespace Everglow.Ocean.NPCs
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, (float)hitDirection, -1f, 0, default(Color), 1f);
+				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, hit.HitDirection, -1f, 0, default(Color), 1f);
 			}
 			if (base.NPC.life <= 0)
 			{
 				for (int j = 0; j < 25; j++)
 				{
-					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, (float)hitDirection, -1f, 0, default(Color), 1f);
+					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, hit.HitDirection, -1f, 0, default(Color), 1f);
 				}
                 float scaleFactor = (float)(Main.rand.Next(-200, 200) / 100);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/小丑鱼碎块1"), 1f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/小丑鱼碎块2"), 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/小丑鱼碎块1").Type, 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/小丑鱼碎块2").Type, 1f);
 			}
 			base.NPC.spriteDirection = ((base.NPC.direction > 0) ? 1 : -1);
 		}

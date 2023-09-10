@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -11,7 +11,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		public override void SetStaticDefaults()
 		{
             // base.DisplayName.SetDefault("海蓝宝石法杖");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石法杖");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石法杖");
 		}
 		public override void SetDefaults()
 		{
@@ -30,7 +30,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
             base.Item.rare = 11;
             base.Item.UseSound = SoundID.Item43;
 			base.Item.autoReuse = true;
-            base.Item.shoot =ModContent.ProjectileType<Everglow.Ocean.Projectiles.AquamarineStaffPro>();
+            base.Item.shoot =ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.AquamarineStaffPro>();
 			base.Item.shootSpeed = 10.8f;
 		}
 		public override void AddRecipes()

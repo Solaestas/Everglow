@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -70,7 +70,7 @@ namespace Everglow.Ocean.Projectiles
                     Vector2 v2 = (Projectile.Center - Main.player[num5].Center) * num100 * 1.2f * (float)Math.Sin(Projectile.timeLeft / 10f + 0.25f * k) * ((60 - k) / 30f);
                     Vector2 drawPos = Projectile.Center + v2 - v - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                     Color color = new Color(100 * Projectile.timeLeft / 24f + 155, 100 * Projectile.timeLeft / 24f + 155, 100 * Projectile.timeLeft / 24f + 155, base.Projectile.alpha) * ((60 - k) / 60f) * (Projectile.timeLeft / (Projectile.timeLeft < 120 ? 450f * (125 - Projectile.timeLeft) * (125 - Projectile.timeLeft) / 25f : 450f));
-                    spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/海洋波纹~"), drawPos, new Rectangle(0, frameHeight * Projectile.frame, ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/海洋波纹~").Width(), frameHeight), color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/海洋波纹~"), drawPos, new Rectangle(0, frameHeight * Projectile.frame, ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/海洋波纹~").Width(), frameHeight), color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
                 }
                 for (int k = 0; k < 60; k++)
                 {
@@ -79,7 +79,7 @@ namespace Everglow.Ocean.Projectiles
                     Vector2 v2 = (Projectile.Center - Main.player[num5].Center) * num100 * 1.2f * (float)Math.Sin(Projectile.timeLeft / 10f + 0.25f * -k) * ((60 - k) / 30f);
                     Vector2 drawPos = Projectile.Center + v2 + v - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                     Color color = new Color(100 * Projectile.timeLeft / 24f + 155, 100 * Projectile.timeLeft / 24f + 155, 100 * Projectile.timeLeft / 24f + 155, base.Projectile.alpha) * ((60 - k) / 60f) * (Projectile.timeLeft / (Projectile.timeLeft < 120 ? 450f * (125 - Projectile.timeLeft) * (125 - Projectile.timeLeft) / 25f: 450f));
-                    spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/海洋波纹~"), drawPos, new Rectangle(0, frameHeight * Projectile.frame, ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/海洋波纹~").Width(), frameHeight), color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/海洋波纹~"), drawPos, new Rectangle(0, frameHeight * Projectile.frame, ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/海洋波纹~").Width(), frameHeight), color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
                 }
             }
             return true;

@@ -17,7 +17,7 @@ namespace Everglow.Ocean.Items.Pickaxes
 		{
             // base.DisplayName.SetDefault("地热");
 			// base.Tooltip.SetDefault("brush!");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "地热");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "地热");
 			// base.Tooltip.AddTranslation(GameCulture.Chinese, "用无穷的炽热熔化冰冻的心");
             GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }

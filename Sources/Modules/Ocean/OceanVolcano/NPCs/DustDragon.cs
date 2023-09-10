@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -69,16 +69,16 @@ namespace Everglow.Ocean.NPCs.VolCano
 		{
             if(Main.rand.Next(100) == 1)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.MeltingStaff>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.MeltingStaff>(), 1, false, 0, false, false);
             }
-            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.LavaStone>(), Main.rand.Next(1, 4), false, 0, false, false);
+            Item.NewItem(NPC.GetSource_FromThis(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.LavaStone>(), Main.rand.Next(1, 4), false, 0, false, false);
             return true;
 		}
 		public override void HitEffect(NPC.HitInfo hit)
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 4, (float)hitDirection, -1f, 0, default(Color), 1f);
+				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 4, hit.HitDirection, -1f, 0, default(Color), 1f);
 			}
 		}
 	}

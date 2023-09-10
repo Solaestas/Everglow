@@ -1,9 +1,10 @@
-﻿using System;
+using System;
+using Everglow.Ocean.Common;
 using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace Everglow.Ocean.Items.Armors
+namespace Everglow.Ocean.OceanDeep.Items.Armors
 {
 	[AutoloadEquip(new EquipType[]
 	{
@@ -15,7 +16,7 @@ namespace Everglow.Ocean.Items.Armors
 		{
 			// base.DisplayName.SetDefault("");
 			// base.Tooltip.SetDefault("");
-			// base.DisplayName.AddTranslation(GameCulture.Chinese, "渊海面具");
+			// base.// DisplayName.AddTranslation(GameCulture.Chinese, "渊海面具");
 			// base.Tooltip.AddTranslation(GameCulture.Chinese, "近战伤害和暴击各增加12%");
 		}
 		public override void SetDefaults()
@@ -41,7 +42,7 @@ namespace Everglow.Ocean.Items.Armors
         }
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
-            return body.type == ModContent.ItemType<Everglow.Ocean.Items.AbyssBreastplate>() && legs.type == ModContent.ItemType<Everglow.Ocean.Items.AbyssLegging>();
+            return body.type == ModContent.ItemType<Everglow.Ocean.OceanDeep.Items.Armors.AbyssBreastplate>() && legs.type == ModContent.ItemType<Everglow.Ocean.OceanDeep.Items.Armors.AbyssLegging>();
         }
         public override void ArmorSetShadows(Player player)
         {

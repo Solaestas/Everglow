@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -8,7 +8,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
     public class Lamp : ModTile
     {
@@ -184,7 +184,7 @@ namespace Everglow.Ocean.Tiles.Ocean
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.LighthouseLamp>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.LighthouseLamp>());
         }
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {
@@ -211,11 +211,11 @@ namespace Everglow.Ocean.Tiles.Ocean
             OceanContentPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<OceanContentPlayer>();
             if (false)
             {
-                //Main.spriteBatch.Draw(mod.GetTexture("Tiles/Ocean/海洋封印台Glow"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), new Color(mplayer.movieTime / 120f, mplayer.movieTime / 120f, mplayer.movieTime / 120f, 0), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                //Main.spriteBatch.Draw(ModAsset.海洋封印台Glow.Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), new Color(mplayer.movieTime / 120f, mplayer.movieTime / 120f, mplayer.movieTime / 120f, 0), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
             if (false)
             {
-                //Main.spriteBatch.Draw(mod.GetTexture("Tiles/Ocean/海洋封印台Glow"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), new Color(255, 255, 255, 0), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                //Main.spriteBatch.Draw(ModAsset.海洋封印台Glow.Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), new Color(255, 255, 255, 0), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
         }
     }

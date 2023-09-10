@@ -66,7 +66,7 @@ namespace Everglow.Ocean.OceanVolcano.Items
 			num2 = 0f;
 			vector.X = (float)Main.mouseX + Main.screenPosition.X;
 			vector.Y = (float)Main.mouseY + Main.screenPosition.Y;
-			Projectile.NewProjectile(vector.X, vector.Y, num, num2,ModContent.ProjectileType<Everglow.Ocean.Projectiles.LavaCup>(), damage, knockBack, player.whoAmI, 0f, 0f);
+			Projectile.NewProjectile(null, vector.X, vector.Y, num, num2,ModContent.ProjectileType<Everglow.Ocean.Projectiles.LavaCup>(), damage, knockback, player.whoAmI, 0f, 0f);
 			return false;
 		}
 	}

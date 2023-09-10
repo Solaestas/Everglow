@@ -11,7 +11,7 @@ namespace Everglow.Ocean.Items.Gems
         {
             // Tooltip.SetDefault("");
             // DisplayName.SetDefault("LavaGem");
-            // DisplayName.AddTranslation(GameCulture.Chinese, "熔岩结核");
+            // // DisplayName.AddTranslation(GameCulture.Chinese, "熔岩结核");
         }
         public override void SetDefaults()
         {

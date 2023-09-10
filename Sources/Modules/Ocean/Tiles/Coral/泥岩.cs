@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Localization;
@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
 	// Token: 0x02000EBF RID: 3775
 	public class 泥岩 : ModTile
@@ -28,9 +28,8 @@ namespace Everglow.Ocean.Tiles.Ocean
 			// modTranslation.AddTranslation(GameCulture.English, "");
 			AddMapEntry(new Color(148, 107, 74), modTranslation);
 			this.DustType = 37;
-			this.HitSound = 0;
-			this.soundStyle/* tModPorter Note: Removed. Integrate into HitSound */ = 0;
-			this.disableSmartCursor/* tModPorter Note: Removed. Use TileID.Sets.DisableSmartCursor instead */ = true;
+			this.HitSound = SoundID.Dig;
+			TileID.Sets.DisableSmartCursor[Type] = true;
 		}
 
 

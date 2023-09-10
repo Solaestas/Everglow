@@ -1,9 +1,10 @@
-﻿using System;
+using System;
+using Everglow.Ocean.Common;
 using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace Everglow.Ocean.Items.Gems
+namespace Everglow.Ocean.Items
 {
     public class LargeOlivine : ModItem
 	{
@@ -11,7 +12,7 @@ namespace Everglow.Ocean.Items.Gems
 		{
             // base.DisplayName.SetDefault("大橄榄石");
 			// base.Tooltip.SetDefault("For Capture the Gem. It drops when you die");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "大橄榄石");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "大橄榄石");
 			// base.Tooltip.AddTranslation(GameCulture.Chinese, "适合夺取宝石。你死后掉落");
 		}
 		public override void SetDefaults()
@@ -25,12 +26,12 @@ namespace Everglow.Ocean.Items.Gems
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe(1);
-            recipe.AddIngredient(null, "Olivine", 15); 
+            recipe.AddIngredient(ModContent.ItemType<Items.Olivine>(), 15); 
             recipe.Register();
         }
         public override void UpdateInventory(Player player)
         {
-            ((OceanContentPlayer)player.GetModPlayer(base.Mod, "OceanContentPlayer")).LargeOlivine = true;
+            player.GetModPlayer<OceanContentPlayer>().LargeOlivine = true;
         }
     }
 }

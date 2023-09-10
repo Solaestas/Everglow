@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
@@ -18,7 +18,7 @@ namespace Everglow.Ocean.NPCs
 		{
             // base.DisplayName.SetDefault("星渊水母");
 			Main.npcFrameCount[base.NPC.type] = 5;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "星渊水母");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "星渊水母");
 		}
         private bool initialization = true;
         private bool canDespawn;
@@ -44,7 +44,7 @@ namespace Everglow.Ocean.NPCs
 			base.NPC.height = 100;
 			base.NPC.defense = 50;
 			base.NPC.lifeMax = (Main.expertMode ? 36000 : 30000);
-            if(MythWorld.Myth)
+            if(Main.masterMode)
             {
                 base.NPC.lifeMax = 20650;
             }
@@ -61,7 +61,7 @@ namespace Everglow.Ocean.NPCs
 			base.NPC.DeathSound = SoundID.NPCDeath28;
             NPCID.Sets.TrailCacheLength[base.NPC.type] = 60;
             NPCID.Sets.TrailingMode[base.NPC.type] = 0;
-            this.Music = Mod.GetSoundSlot((Terraria.ModLoader.SoundType)51, "Sounds/Music/Glow");
+            //this.Music = Mod.GetSoundSlot((Terraria.ModLoader.SoundType)51, "Sounds/Music/Glow");
         }
         public override void AI()
         {
@@ -354,8 +354,8 @@ namespace Everglow.Ocean.NPCs
                         float num100 = -1000;
                         for (int j = 0; j < 8; j++)
                         {
-                            Projectile.NewProjectile(Main.player[base.NPC.target].position.X + 1000f, Main.player[base.NPC.target].position.Y + num100, -4f, 0f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
-                            Projectile.NewProjectile(Main.player[base.NPC.target].position.X - 1000f, Main.player[base.NPC.target].position.Y + num100 - 125f, 4f, 0f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.player[base.NPC.target].position.X + 1000f, Main.player[base.NPC.target].position.Y + num100, -4f, 0f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.player[base.NPC.target].position.X - 1000f, Main.player[base.NPC.target].position.Y + num100 - 125f, 4f, 0f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
                             num100 += 250;
                         }
                     }
@@ -369,12 +369,12 @@ namespace Everglow.Ocean.NPCs
                     float num102 = 0;
                     for (int j = 0; j < 8; j++)
                     {
-                        Projectile.NewProjectile(Main.player[base.NPC.target].position.X + 1000f, Main.player[base.NPC.target].position.Y + num100, -5f, 0f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
-                        Projectile.NewProjectile(Main.player[base.NPC.target].position.X - 1000f, Main.player[base.NPC.target].position.Y + num100, 5f, 0f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
-                        Projectile.NewProjectile(Main.player[base.NPC.target].position.X + 500f + num102, Main.player[base.NPC.target].position.Y + num100 * 0.7660254038f, -2.5f, 6.92820323f * 0.625f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
-                        Projectile.NewProjectile(Main.player[base.NPC.target].position.X - 500f - num102, Main.player[base.NPC.target].position.Y + num100 * 0.7660254038f, 2.5f, 6.92820323f * 0.625f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
-                        Projectile.NewProjectile(Main.player[base.NPC.target].position.X + 500f + num102, Main.player[base.NPC.target].position.Y - num100 * 0.7660254038f, -2.5f, -6.92820323f * 0.625f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
-                        Projectile.NewProjectile(Main.player[base.NPC.target].position.X - 500f - num102, Main.player[base.NPC.target].position.Y - num100 * 0.7660254038f, 2.5f, -6.92820323f * 0.625f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.player[base.NPC.target].position.X + 1000f, Main.player[base.NPC.target].position.Y + num100, -5f, 0f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.player[base.NPC.target].position.X - 1000f, Main.player[base.NPC.target].position.Y + num100, 5f, 0f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.player[base.NPC.target].position.X + 500f + num102, Main.player[base.NPC.target].position.Y + num100 * 0.7660254038f, -2.5f, 6.92820323f * 0.625f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.player[base.NPC.target].position.X - 500f - num102, Main.player[base.NPC.target].position.Y + num100 * 0.7660254038f, 2.5f, 6.92820323f * 0.625f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.player[base.NPC.target].position.X + 500f + num102, Main.player[base.NPC.target].position.Y - num100 * 0.7660254038f, -2.5f, -6.92820323f * 0.625f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.player[base.NPC.target].position.X - 500f - num102, Main.player[base.NPC.target].position.Y - num100 * 0.7660254038f, 2.5f, -6.92820323f * 0.625f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 40, 0f, Main.myPlayer, 0f, 0f);
                         num100 += 250;
                         num102 += 125;
                     }
@@ -414,7 +414,7 @@ namespace Everglow.Ocean.NPCs
                         num112 += (float)Main.rand.Next(-5, 6) * 0.05f;
                         vector2.X += num111 * 5f;
                         vector2.Y += num112 * 5f;
-                        Projectile.NewProjectile(vector2.X, vector2.Y, num111, num112, num114, 40, 0f, Main.myPlayer, 0f, 0f);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), vector2.X, vector2.Y, num111, num112, num114, 40, 0f, Main.myPlayer, 0f, 0f);
                         base.NPC.netUpdate = true;
                         return;
                     }
@@ -426,8 +426,8 @@ namespace Everglow.Ocean.NPCs
                         float num100 = -1000;
                         for (int j = 0; j < 8; j++)
                         {
-                            Projectile.NewProjectile(Main.player[base.NPC.target].position.X + 1000f, Main.player[base.NPC.target].position.Y + num100, -4f, 0f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 200, 0f, Main.myPlayer, 0f, 0f);
-                            Projectile.NewProjectile(Main.player[base.NPC.target].position.X - 1000f, Main.player[base.NPC.target].position.Y + num100 - 125f, 4f, 0f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 200, 0f, Main.myPlayer, 0f, 0f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.player[base.NPC.target].position.X + 1000f, Main.player[base.NPC.target].position.Y + num100, -4f, 0f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 200, 0f, Main.myPlayer, 0f, 0f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.player[base.NPC.target].position.X - 1000f, Main.player[base.NPC.target].position.Y + num100 - 125f, 4f, 0f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 200, 0f, Main.myPlayer, 0f, 0f);
                             num100 += 250;
                         }
                     }
@@ -469,7 +469,7 @@ namespace Everglow.Ocean.NPCs
                             num112 += (float)Main.rand.Next(-5, 6) * 0.05f;
                             vector2.X += num111 * 5f;
                             vector2.Y += num112 * 5f;
-                            Projectile.NewProjectile(vector2.X, vector2.Y, num111, num112, num114, 40, 0f, Main.myPlayer, 0f, 0f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), vector2.X, vector2.Y, num111, num112, num114, 40, 0f, Main.myPlayer, 0f, 0f);
                             base.NPC.netUpdate = true;
                         }
                         return;
@@ -584,7 +584,7 @@ namespace Everglow.Ocean.NPCs
                 if(npclocalai100 > num15 / 240f + 880 && npclocalai100 < num15 / 240f + 980 && npclocalai100 % 50 == 0)
                 {
                     Vector2 vector5 = player.position + new Vector2(0, Main.rand.Next(150, 400)).RotatedBy(Math.PI * Main.rand.Next(0, 10000) / 5000f) + new Vector2(0, 40);
-                    int num16 = Projectile.NewProjectile(vector5.X, vector5.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.星渊水母幻影>(), 48, 0f, Main.myPlayer, 0f, 0f);
+                    int num16 = Projectile.NewProjectile(NPC.GetSource_FromAI(), vector5.X, vector5.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.星渊水母幻影>(), 48, 0f, Main.myPlayer, 0f, 0f);
                     Main.projectile[num16].scale = Main.rand.Next(70, 140) / 100f;
                 }
                 if(npclocalai100 > num15 / 240f + 880 && npclocalai100 < num15 / 240f + 2480 && (npclocalai100 - num15 / 240f) % 180 < 27)
@@ -612,16 +612,16 @@ namespace Everglow.Ocean.NPCs
 	        		base.NPC.velocity *= 0.96f;
                     Lighting.AddLight(base.NPC.Center, 0.2f * (255 - base.NPC.alpha) / 255, 0, 0f);
                 }
-                if(npclocalai100 > num15 / 240f + 880 && npclocalai100 < num15 / 240f + 2280 && npclocalai100 % 80 == 0 && !MythWorld.Myth)
+                if(npclocalai100 > num15 / 240f + 880 && npclocalai100 < num15 / 240f + 2280 && npclocalai100 % 80 == 0 && !Main.masterMode)
                 {
                     Vector2 vector5 = player.position + new Vector2(0, Main.rand.Next(150, 400)).RotatedBy(Math.PI * Main.rand.Next(0, 10000) / 5000f) + new Vector2(0, 140);
-                    int num17 = Projectile.NewProjectile(vector5.X, vector5.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.星渊水母幻影>(), 48, 0f, Main.myPlayer, 0f, 0f);
+                    int num17 = Projectile.NewProjectile(NPC.GetSource_FromAI(), vector5.X, vector5.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.星渊水母幻影>(), 48, 0f, Main.myPlayer, 0f, 0f);
                     Main.projectile[num17].scale = Main.rand.Next(70, 140) / 100f;
                 }
-                if(npclocalai100 > num15 / 240f + 880 && npclocalai100 < num15 / 240f + 2280 && npclocalai100 % 60 == 0 && MythWorld.Myth)
+                if(npclocalai100 > num15 / 240f + 880 && npclocalai100 < num15 / 240f + 2280 && npclocalai100 % 60 == 0 && Main.masterMode)
                 {
                     Vector2 vector5 = player.position + new Vector2(0, Main.rand.Next(150, 400)).RotatedBy(Math.PI * Main.rand.Next(0, 10000) / 5000f) + new Vector2(0, 140);
-                    int num17 = Projectile.NewProjectile(vector5.X, vector5.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.星渊水母幻影>(), 48, 0f, Main.myPlayer, 0f, 0f);
+                    int num17 = Projectile.NewProjectile(NPC.GetSource_FromAI(), vector5.X, vector5.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.星渊水母幻影>(), 48, 0f, Main.myPlayer, 0f, 0f);
                     Main.projectile[num17].scale = Main.rand.Next(70, 140) / 100f;
                 }
                 if(npclocalai100 > num15 / 240f + 2480 && npclocalai100 < num15 / 240f + 3500)
@@ -652,11 +652,11 @@ namespace Everglow.Ocean.NPCs
                             float i = k + 0.5f;
                             if((int)k % 2 == 1)
                             {
-                                Projectile.NewProjectile(base.NPC.Center.X, base.NPC.Center.Y, (float)Math.Cos(((float)i / 10f) * Math.PI) * 7 / 3 * 1.44f, (float)(0 - (float)Math.Sin(((float)i / 10f) * Math.PI) * 7) / 3 * 1.44f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.水母磷光1>(), base.NPC.damage / 2, 0.2f, Main.myPlayer, 0f, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), base.NPC.Center.X, base.NPC.Center.Y, (float)Math.Cos(((float)i / 10f) * Math.PI) * 7 / 3 * 1.44f, (float)(0 - (float)Math.Sin(((float)i / 10f) * Math.PI) * 7) / 3 * 1.44f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.水母磷光1>(), base.NPC.damage / 2, 0.2f, Main.myPlayer, 0f, 0f);
                             }
                             else
                             {
-                                Projectile.NewProjectile(base.NPC.Center.X, base.NPC.Center.Y, (float)Math.Cos(((float)i / 10f) * Math.PI) * 7 / 3 * 1.44f, (float)(0 - (float)Math.Sin(((float)i / 10f) * Math.PI) * 7) / 3 * 1.44f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.水母磷光2>(), base.NPC.damage / 2, 0.2f, Main.myPlayer, 0f, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), base.NPC.Center.X, base.NPC.Center.Y, (float)Math.Cos(((float)i / 10f) * Math.PI) * 7 / 3 * 1.44f, (float)(0 - (float)Math.Sin(((float)i / 10f) * Math.PI) * 7) / 3 * 1.44f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.水母磷光2>(), base.NPC.damage / 2, 0.2f, Main.myPlayer, 0f, 0f);
                             }
                         }
                         return;
@@ -667,8 +667,8 @@ namespace Everglow.Ocean.NPCs
                     Vector2 vector8 = new Vector2(0, 1000).RotatedBy(npclocalai100 / 40f);
                     Vector2 vector6 = Main.player[base.NPC.target].position + vector8;
                     Vector2 vector7 = Main.player[base.NPC.target].position - vector8;
-                    Projectile.NewProjectile(vector6.X, vector6.Y, -vector8.X / 180f, -vector8.Y / 180f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 44, 0f, Main.myPlayer, 0f, 0f);
-                    Projectile.NewProjectile(vector7.X, vector7.Y, vector8.X / 180f, vector8.Y / 180f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 44, 0f, Main.myPlayer, 0f, 0f);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), vector6.X, vector6.Y, -vector8.X / 180f, -vector8.Y / 180f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 44, 0f, Main.myPlayer, 0f, 0f);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), vector7.X, vector7.Y, vector8.X / 180f, vector8.Y / 180f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.RougeRay>(), 44, 0f, Main.myPlayer, 0f, 0f);
                 }
                 if(npclocalai100 > num15 / 240f + 3500 && npclocalai100 < num15 / 240f + 4500)
                 {
@@ -697,22 +697,22 @@ namespace Everglow.Ocean.NPCs
                 }
                 if(NPC.life <= NPC.lifeMax * 0.65f && num18 && npclocalai100 > num15 / 240f + 100)
                 {
-			    	Projectile.NewProjectile(base.NPC.Center.X, base.NPC.Center.Y, 2.5f, 2.5f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.渊海磷光>(), base.NPC.damage, 0.2f, Main.myPlayer, 0f, 0f);
-                    Projectile.NewProjectile(base.NPC.Center.X, base.NPC.Center.Y, -2.5f, 2.5f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.渊海磷光>(), base.NPC.damage, 0.2f, Main.myPlayer, 0f, 0f);
-                    Projectile.NewProjectile(base.NPC.Center.X, base.NPC.Center.Y, 2.5f, -2.5f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.渊海磷光>(), base.NPC.damage, 0.2f, Main.myPlayer, 0f, 0f);
-                    Projectile.NewProjectile(base.NPC.Center.X, base.NPC.Center.Y, -2.5f, -2.5f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.渊海磷光>(), base.NPC.damage, 0.2f, Main.myPlayer, 0f, 0f);
+			    	Projectile.NewProjectile(NPC.GetSource_FromAI(), base.NPC.Center.X, base.NPC.Center.Y, 2.5f, 2.5f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.渊海磷光>(), base.NPC.damage, 0.2f, Main.myPlayer, 0f, 0f);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), base.NPC.Center.X, base.NPC.Center.Y, -2.5f, 2.5f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.渊海磷光>(), base.NPC.damage, 0.2f, Main.myPlayer, 0f, 0f);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), base.NPC.Center.X, base.NPC.Center.Y, 2.5f, -2.5f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.渊海磷光>(), base.NPC.damage, 0.2f, Main.myPlayer, 0f, 0f);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), base.NPC.Center.X, base.NPC.Center.Y, -2.5f, -2.5f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.渊海磷光>(), base.NPC.damage, 0.2f, Main.myPlayer, 0f, 0f);
                     num18 = false;
                 }
                 if(npclocalai100 > num15 / 240f + 4550 && npclocalai100 < num15 / 240f + 4650 && npclocalai100 % 100 == 0)
                 {
                     Vector2 vector5 = player.position + new Vector2(0, Main.rand.Next(150, 400)).RotatedBy(Math.PI * Main.rand.Next(0, 10000) / 5000f) + new Vector2(0, 140);
-                    int num17 = Projectile.NewProjectile(vector5.X, vector5.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.水母电击>(), 200, 0f, Main.myPlayer, 0f, 0f);
+                    int num17 = Projectile.NewProjectile(NPC.GetSource_FromAI(), vector5.X, vector5.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.水母电击>(), 200, 0f, Main.myPlayer, 0f, 0f);
                     Main.projectile[num17].scale = Main.rand.Next(90, 140) / 100f;
                 }
                 if(npclocalai100 > num15 / 240f + 4650 && npclocalai100 < num15 / 240f + 5250 && npclocalai100 % 600 == 0)
                 {
                     Vector2 vector5 = player.position + new Vector2(0, Main.rand.Next(150, 400)).RotatedBy(Math.PI * Main.rand.Next(0, 10000) / 5000f) + new Vector2(0, 140);
-                    int num17 = Projectile.NewProjectile(vector5.X, vector5.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.水母电击>(), 200, 0f, Main.myPlayer, 0f, 0f);
+                    int num17 = Projectile.NewProjectile(NPC.GetSource_FromAI(), vector5.X, vector5.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.水母电击>(), 200, 0f, Main.myPlayer, 0f, 0f);
                     Main.projectile[num17].scale = Main.rand.Next(90, 140) / 100f;
                 }
                 if(npclocalai100 > num15 / 240f + 4550 && npclocalai100 < num15 / 240f + 5255)
@@ -740,17 +740,17 @@ namespace Everglow.Ocean.NPCs
                 {
                     npclocalai100 = (int)(num15 / 240f + 20);
                 }
-                if(NPC.life <= NPC.lifeMax * 0.35f && MythWorld.Myth && npclocalai100 % 480 == 0)
+                if(NPC.life <= NPC.lifeMax * 0.35f && Main.masterMode && npclocalai100 % 480 == 0)
                 {
                     Vector2 vector = NPC.Center + new Vector2(0f, (float)NPC.height / 2f);
-                    NPC.NewNPC((int)vector.X, (int)vector.Y, ModContent.NPCType<Everglow.Ocean.NPCs.StarHydra>(), 0, 0f, 0f, 0f, 0f, 255);
+                    NPC.NewNPC(NPC.GetSource_FromAI(), (int)vector.X, (int)vector.Y, ModContent.NPCType<Everglow.Ocean.NPCs.StarHydra>(), 0, 0f, 0f, 0f, 0f, 255);
                 }
-                if(NPC.life <= NPC.lifeMax * 0.05f && MythWorld.Myth && num20)
+                if(NPC.life <= NPC.lifeMax * 0.05f && Main.masterMode && num20)
                 {
                     for (int j = 0; j < 18; j++)
                     {
                         Vector2 vector = NPC.Center + new Vector2(0f, (float)NPC.height / 2f);
-                        NPC.NewNPC((int)vector.X, (int)vector.Y, ModContent.NPCType<Everglow.Ocean.NPCs.StarHydra>(), 0, 0f, 0f, 0f, 0f, 255);
+                        NPC.NewNPC(NPC.GetSource_FromAI(), (int)vector.X, (int)vector.Y, ModContent.NPCType<Everglow.Ocean.NPCs.StarHydra>(), 0, 0f, 0f, 0f, 0f, 255);
                     }
                     num20 = false;
                 }
@@ -824,8 +824,8 @@ namespace Everglow.Ocean.NPCs
 		// Token: 0x0600147A RID: 5242 RVA: 0x0000801E File Offset: 0x0000621E
 		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 		{
-			player.AddBuff(70, 240, true);
-            player.AddBuff(base.Mod.Find<ModBuff>("ExPoi").Type, 60, true);
+			target.AddBuff(70, 240, true);
+			target.AddBuff(base.Mod.Find<ModBuff>("ExPoi").Type, 60, true);
 		}
         // Token: 0x02000413 RID: 1043
         //public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
@@ -871,13 +871,13 @@ namespace Everglow.Ocean.NPCs
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, (float)hitDirection, -1f, 0, default(Color), 1f);
+				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, hit.HitDirection, -1f, 0, default(Color), 1f);
 			}
 			if (base.NPC.life <= 0)
 			{
 				for (int j = 0; j < 15; j++)
 				{
-					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, (float)hitDirection, -1f, 0, default(Color), 1f);
+					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, hit.HitDirection, -1f, 0, default(Color), 1f);
 				}
 			}
 		}
@@ -886,30 +886,30 @@ namespace Everglow.Ocean.NPCs
         {
             if (Main.expertMode)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.StarJellyFishTreasureBag>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.StarJellyFishTreasureBag>(), 1, false, 0, false, false);
                 return;
             }
             else
             {
                 if (Main.rand.Next(9) == 0)
                 {
-                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.StarJellyFishPlatf>(), 1, false, 0, false, false);
+                    Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.StarJellyFishPlatf>(), 1, false, 0, false, false);
                 }
                 if (Main.rand.Next(3) == 0)
                 {
-                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.TentacleBow>(), 1, false, 0, false, false);
+                    Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.TentacleBow>(), 1, false, 0, false, false);
                 }
                 if (Main.rand.Next(3) == 0)
                 {
-                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.GlowingJellyStaff>(), 1, false, 0, false, false);
+                    Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.GlowingJellyStaff>(), 1, false, 0, false, false);
                 }
                 if (Main.rand.Next(3) == 0)
                 {
-                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.CarmineBlade>(), 1, false, 0, false, false);
+                    Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.CarmineBlade>(), 1, false, 0, false, false);
                 }
                 if (Main.rand.Next(3) == 0)
                 {
-                    Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.RedGlassSpear>(), 1, false, 0, false, false);
+                    Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.RedGlassSpear>(), 1, false, 0, false, false);
                 }
             }
             if (!MythWorld.downedXYSM)

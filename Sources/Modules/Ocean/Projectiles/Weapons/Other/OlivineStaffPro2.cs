@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Everglow.Ocean.Projectiles.projectile2
+namespace Everglow.Ocean.Projectiles
 {
     public class OlivineStaffPro2 : ModProjectile
 	{

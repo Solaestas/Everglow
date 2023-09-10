@@ -1,18 +1,18 @@
-﻿using System;
+using System;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 
-namespace Everglow.Ocean.Items.Walls
+namespace Everglow.Ocean.Items
 {
     public class DarkAquamarineBrickWall : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
 			// base.DisplayName.SetDefault("");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "黯淡海蓝宝石晶莹宝石墙");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "黯淡海蓝宝石晶莹宝石墙");
 		}
 		public override void SetDefaults()
 		{
@@ -25,15 +25,15 @@ namespace Everglow.Ocean.Items.Walls
 			base.Item.useTime = 7;
 			base.Item.useStyle = 1;
 			base.Item.consumable = true;
-            base.Item.createWall = ModContent.WallType<Everglow.Ocean.Walls.黯淡海蓝宝石晶莹宝石墙>();
+            base.Item.createWall = ModContent.WallType<Everglow.Ocean.Walls.黯淡海蓝宝石晶莹宝石块墙>();
 		}
 		public override void AddRecipes()
 		{
 			Recipe modRecipe = /* base */Recipe.Create(this.Type, 4);
-            modRecipe.AddIngredient(null, "AquamarineBrick", 1);
+            modRecipe.AddIngredient(ModContent.ItemType<AquamarineBrick>(), 1);
 			modRecipe.AddTile(18);
 			modRecipe.Register();
-            Recipe modRecipe2 = /* base */Recipe.Create(null, "AquamarineBrick", 1);
+            Recipe modRecipe2 = /* base */Recipe.Create(ModContent.ItemType<AquamarineBrick>(), 1);
             modRecipe2.AddIngredient(this, 4);
             modRecipe2.AddTile(18);
             modRecipe2.Register();

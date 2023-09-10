@@ -50,10 +50,10 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
         {
             num += 1;
             Vector2 pc = player.position + new Vector2(player.width, player.height) / 2;
-            Vector2 v = new Vector2(speedX, speedY);
+            Vector2 v = velocity;
             v = v.RotatedBy(Math.PI * (2 - (num % 5)) / 5f * -player.direction);
             //顶上的不要改，不然会鬼畜
-            int num3 = Projectile.NewProjectile(pc.X, pc.Y, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.鹿角珊瑚>(), damage, knockBack, player.whoAmI);//195是特效代码，这里指发射物会发射到鼠标位置，34是伤害，10是击退
+            int num3 = Projectile.NewProjectile(null, pc.X, pc.Y, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.鹿角珊瑚>(), damage, (int)knockback, player.whoAmI);//195是特效代码，这里指发射物会发射到鼠标位置，34是伤害，10是击退
             Main.projectile[num3].ai[0] = 3;
             if (num >= 4)
             {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -16,7 +16,7 @@ namespace Everglow.Ocean.NPCs
 		{
             // base.DisplayName.SetDefault("babyjellyfish");
 			Main.npcFrameCount[base.NPC.type] = 4;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "水螅");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "水螅");
 		}
 
 		// Token: 0x06001476 RID: 5238 RVA: 0x000B399C File Offset: 0x000B1B9C
@@ -141,8 +141,8 @@ namespace Everglow.Ocean.NPCs
 		// Token: 0x0600147A RID: 5242 RVA: 0x0000801E File Offset: 0x0000621E
 		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 		{
-			player.AddBuff(70, 240, true);
-            player.AddBuff(base.Mod.Find<ModBuff>("ExPoi").Type, 5, true);
+			target.AddBuff(70, 240, true);
+			target.AddBuff(base.Mod.Find<ModBuff>("ExPoi").Type, 5, true);
 		}
         // Token: 0x02000413 RID: 1043
 
@@ -151,13 +151,13 @@ namespace Everglow.Ocean.NPCs
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, (float)hitDirection, -1f, 0, default(Color), 1f);
+				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, hit.HitDirection, -1f, 0, default(Color), 1f);
 			}
 			if (base.NPC.life <= 0)
 			{
 				for (int j = 0; j < 15; j++)
 				{
-					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, (float)hitDirection, -1f, 0, default(Color), 1f);
+					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, hit.HitDirection, -1f, 0, default(Color), 1f);
 				}
 			}
 		}
@@ -166,7 +166,7 @@ namespace Everglow.Ocean.NPCs
         {
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.VoidBubble>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.VoidBubble>(), 1, false, 0, false, false);
             }
         }
 	}

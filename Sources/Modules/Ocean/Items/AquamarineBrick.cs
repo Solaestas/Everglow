@@ -1,18 +1,18 @@
-﻿using System;
+using System;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 
-namespace Everglow.Ocean.Items.Bricks
+namespace Everglow.Ocean.Items
 {
     public class AquamarineBrick : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
 			// base.DisplayName.SetDefault("");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石晶莹宝石块");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石晶莹宝石块");
 		}
 		public override void SetDefaults()
 		{

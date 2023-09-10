@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -23,7 +23,7 @@ namespace Everglow.Ocean.OceanVolcano.Items
     {
         public override void SetStaticDefaults()
         {
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "天火");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "天火");
             // Tooltip.SetDefault("");
             GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
@@ -57,16 +57,16 @@ namespace Everglow.Ocean.OceanVolcano.Items
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Vector2 v = new Vector2(speedX, speedY);
+            Vector2 v = new Vector2(velocity.X, velocity.Y);
             int num = Main.rand.Next(2, 6);
-            Projectile.NewProjectile(position.X, position.Y, speedX, speedY, type, (int)((double)damage), knockBack, player.whoAmI, 0f, 0f);
+            Projectile.NewProjectile(null, position.X, position.Y, velocity.X, velocity.Y, type, (int)((double)damage), knockback, player.whoAmI, 0f, 0f);
             float X = Main.rand.NextFloat(-250, 250);
             float Y = Main.rand.NextFloat(-250, 250);
             Vector2 v2 = (new Vector2(Main.screenPosition.X + Main.mouseX + Main.rand.NextFloat(-24, 24), Main.screenPosition.Y + Main.mouseY + Main.rand.NextFloat(-24, 24)) - new Vector2((float)position.X + X, (float)position.Y - 1000f + Y));
             v2 = v2 / v2.Length() * 13f;
             if (Main.rand.Next(2) == 0)
             {
-                int o = Projectile.NewProjectile((float)position.X + X, (float)position.Y - 1000f + Y, v2.X, v2.Y, 686, (int)damage * 10, (float)knockBack, player.whoAmI, 0f, 0f);
+                int o = Projectile.NewProjectile(null, (float)position.X + X, (float)position.Y - 1000f + Y, v2.X, v2.Y, 686, (int)damage * 10, (float)knockback, player.whoAmI, 0f, 0f);
                 Main.projectile[o].hostile = false;
                 Main.projectile[o].friendly = true;
             }

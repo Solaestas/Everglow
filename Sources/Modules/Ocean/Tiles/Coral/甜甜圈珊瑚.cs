@@ -5,7 +5,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
 	// Token: 0x02000C71 RID: 3185
 	public class 甜甜圈珊瑚 : ModTile
@@ -25,7 +25,7 @@ namespace Everglow.Ocean.Tiles.Ocean
             TileObjectData.newTile.StyleHorizontal = true;
 			TileObjectData.newTile.LavaDeath = false;
 			TileObjectData.addTile((int)base.Type);
-            this.RegisterItemDrop(ModContent.ItemType<Everglow.Ocean.Items.AnnularCoral>());
+            this.RegisterItemDrop(ModContent.ItemType<Everglow.Ocean.Items.Corals.AnnularCoral>());
             LocalizedText modTranslation = base.CreateMapEntryName();
             // modTranslation.SetDefault("");
             base.AddMapEntry(new Color(63, 187, 161), modTranslation);

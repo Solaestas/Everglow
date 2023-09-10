@@ -23,7 +23,7 @@ namespace Everglow.Ocean.NPCs.TownNPCs
 			NPCID.Sets.AttackType[base.NPC.type] = 0;
 			NPCID.Sets.AttackTime[base.NPC.type] = 60;
 			NPCID.Sets.AttackAverageChance[base.NPC.type] = 15;
-			// base.DisplayName.AddTranslation(GameCulture.Chinese, "火山探险家");
+			// base.// DisplayName.AddTranslation(GameCulture.Chinese, "火山探险家");
 		}
 		public override void SetDefaults()
 		{

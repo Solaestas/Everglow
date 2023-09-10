@@ -12,7 +12,7 @@ namespace Everglow.Ocean.Items
 		public override void SetStaticDefaults()
 		{
             //base.DisplayName.SetDefault("绿松石");
-            //base.DisplayName.AddTranslation(GameCulture.Chinese, "绿松石");
+            //base.// DisplayName.AddTranslation(GameCulture.Chinese, "绿松石");
 		}
 
 		// Token: 0x060019E9 RID: 6633 RVA: 0x000A8668 File Offset: 0x000A6868

@@ -8,7 +8,7 @@ using Terraria.ObjectData;
 using Terraria.DataStructures;
 using Terraria.Enums;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
     // Token: 0x02000DCE RID: 3534
     public class 伞房叶状珊瑚 : ModTile
@@ -52,7 +52,7 @@ namespace Everglow.Ocean.Tiles.Ocean
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.LobophylliaCorymbosa>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.LobophylliaCorymbosa>());
         }
         public override void PlaceInWorld(int i, int j, Item item)
         {

@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Everglow.Ocean.Projectiles.projectile2
+namespace Everglow.Ocean.Projectiles
 {
     public class LavaCup : ModProjectile
     {
@@ -108,7 +108,7 @@ namespace Everglow.Ocean.Projectiles.projectile2
             {
                 if ((new Vector2(num2,num3) - Projectile.Center).Length() < 15)
                 {
-                    int i = Projectile.NewProjectile(base.Projectile.Center.X, base.Projectile.Center.Y, 0 + num16.X, 2 + num16.Y,ModContent.ProjectileType<Everglow.Ocean.Projectiles.火山溅射>(), base.Projectile.damage * 4, base.Projectile.knockBack, Main.myPlayer, 0f, 0f);
+                    int i = Projectile.NewProjectile(Projectile.GetSource_FromAI(), base.Projectile.Center.X, base.Projectile.Center.Y, 0 + num16.X, 2 + num16.Y,ModContent.ProjectileType<Everglow.Ocean.Projectiles.火山溅射>(), base.Projectile.damage * 4, base.Projectile.knockBack, Main.myPlayer, 0f, 0f);
                     Main.projectile[i].timeLeft = 60;
                     Main.projectile[i].penetrate = 1;
                 }
@@ -130,7 +130,7 @@ namespace Everglow.Ocean.Projectiles.projectile2
         }
         public override void PostDraw(Color lightColor)
         {
-            spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/projectile2/LavaCupGlow"), base.Projectile.Center - Main.screenPosition, null, Color.White * 0.7f, base.Projectile.rotation, new Vector2(21f, 21f), 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/projectile2/LavaCupGlow"), base.Projectile.Center - Main.screenPosition, null, Color.White * 0.7f, base.Projectile.rotation, new Vector2(21f, 21f), 1f, SpriteEffects.None, 0f);
         }
     }
 }

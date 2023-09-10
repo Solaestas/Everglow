@@ -15,7 +15,7 @@ namespace Everglow.Ocean.NPCs.Ocean
 		{
             // base.DisplayName.SetDefault("深海蟹");
 			Main.npcFrameCount[base.NPC.type] = 8;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "深海蟹");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "深海蟹");
 		}
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{

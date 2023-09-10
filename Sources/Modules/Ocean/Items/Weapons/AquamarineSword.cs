@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -21,7 +21,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
         public override void SetStaticDefaults()
         {
             // Tooltip.SetDefault("");
-            // DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石剑");
+            // // DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石剑");
         }
         private int num = 0;
         private bool k = true;
@@ -65,9 +65,9 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
         {
             num += 1;
             Vector2 pc = player.position + new Vector2(player.width, player.height) / 2;
-            Vector2 v = new Vector2(speedX, speedY);
+            Vector2 v = new Vector2(velocity.X, velocity.Y);
             v = v.RotatedBy(Math.PI * (2 - (num % 5)) / 5f * -player.direction);
-            Projectile.NewProjectile(pc.X, pc.Y, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.OceanBlue>(), damage, knockBack, player.whoAmI);
+            Projectile.NewProjectile(source, pc.X, pc.Y, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.OceanBlue>(), damage, knockback, player.whoAmI);
             if(num >= 4)
             {
                 k = true;

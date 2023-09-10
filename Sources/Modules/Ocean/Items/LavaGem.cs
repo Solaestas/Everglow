@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -11,7 +11,7 @@ namespace Everglow.Ocean.Items
         {
             // Tooltip.SetDefault("");
             // DisplayName.SetDefault("LavaGem");
-            DisplayName.AddTranslation(GameCulture.Chinese, "熔岩结核");
+            // DisplayName.AddTranslation(GameCulture.Chinese, "熔岩结核");
         }
         public override void SetDefaults()
         {

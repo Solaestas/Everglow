@@ -6,7 +6,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
 	// Token: 0x02000DCE RID: 3534
 	public class 脑珊瑚 : ModTile
@@ -49,11 +49,11 @@ namespace Everglow.Ocean.Tiles.Ocean
                 zero = Vector2.Zero;
             }
             int height = 16;
-            //Main.spriteBatch.Draw(mod.GetTexture("Tiles/Ocean/脑珊瑚Glow"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            //Main.spriteBatch.Draw(ModAsset.脑珊瑚Glow.Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.Meandrina>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.Meandrina>());
         }
         // Token: 0x0600486A RID: 18538 RVA: 0x003488D0 File Offset: 0x00346AD0
         public override void NearbyEffects(int i, int j, bool closer)

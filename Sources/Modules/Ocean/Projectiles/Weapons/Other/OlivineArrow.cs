@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Everglow.Ocean.Projectiles.projectile2
+namespace Everglow.Ocean.Projectiles
 {
     public class OlivineArrow : ModProjectile
 	{
@@ -45,7 +45,7 @@ namespace Everglow.Ocean.Projectiles.projectile2
                 float a = (float)Main.rand.Next(0, 720) / 360f * 3.141592653589793238f;
                 float m = (float)Main.rand.Next(0, 50000);
                 float l = (float)Main.rand.Next((int)m, 50000) / 1800f;
-                int num4 = Projectile.NewProjectile(base.Projectile.Center.X, base.Projectile.Center.Y, (float)((float)l * Math.Cos((float)a)) * 0.16f, (float)((float)l * Math.Sin((float)a)) * 0.16f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.OlivineShoot>(), base.Projectile.damage, base.Projectile.knockBack, base.Projectile.owner, 0f, 0f);
+                int num4 = Projectile.NewProjectile(null, base.Projectile.Center.X, base.Projectile.Center.Y, (float)((float)l * Math.Cos((float)a)) * 0.16f, (float)((float)l * Math.Sin((float)a)) * 0.16f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.OlivineShoot>(), base.Projectile.damage, base.Projectile.knockBack, base.Projectile.owner, 0f, 0f);
                 Main.projectile[num4].scale = (float)Main.rand.Next(7000, 13000) / 10000f;
             }
             SoundEngine.PlaySound(SoundID.Item27, new Vector2(base.Projectile.position.X, base.Projectile.position.Y));

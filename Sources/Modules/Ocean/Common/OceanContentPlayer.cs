@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -299,7 +299,7 @@ namespace Everglow.Ocean.Common
 				if (num >= 0)
 				{
 					base.Player.inventory[num].stack--;
-					Item.NewItem((int)base.Player.position.X, (int)base.Player.position.Y, base.Player.width, base.Player.height, ModContent.ItemType<Everglow.Ocean.Items.LargeAquamarine>(), 1, false, 0, false, false);
+					Item.NewItem(null, (int)base.Player.position.X, (int)base.Player.position.Y, base.Player.width, base.Player.height, ModContent.ItemType<Everglow.Ocean.Items.LargeAquamarine>(), 1, false, 0, false, false);
 					if (base.Player.inventory[num].stack <= 0)
 					{
 						base.Player.inventory[num] = new Item();
@@ -312,7 +312,7 @@ namespace Everglow.Ocean.Common
 				if (num >= 0)
 				{
 					base.Player.inventory[num].stack--;
-					Item.NewItem((int)base.Player.position.X, (int)base.Player.position.Y, base.Player.width, base.Player.height, ModContent.ItemType<Everglow.Ocean.Items.LargeOlivine>(), 1, false, 0, false, false);
+					Item.NewItem(null, (int)base.Player.position.X, (int)base.Player.position.Y, base.Player.width, base.Player.height, ModContent.ItemType<Everglow.Ocean.Items.LargeOlivine>(), 1, false, 0, false, false);
 					if (base.Player.inventory[num].stack <= 0)
 					{
 						base.Player.inventory[num] = new Item();

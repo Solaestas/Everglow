@@ -23,7 +23,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		public override void SetStaticDefaults()
 		{
 			// Tooltip.SetDefault("");
-            // DisplayName.AddTranslation(GameCulture.Chinese, "橄榄石锤");
+            // // DisplayName.AddTranslation(GameCulture.Chinese, "橄榄石锤");
         }
 
 		public override void SetDefaults()

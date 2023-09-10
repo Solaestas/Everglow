@@ -132,7 +132,7 @@ namespace MythMod.UI.OceanContinent
                     }
                     if (mplayer.wMyth)
                     {
-                        MythWorld.Myth = true;
+                        Main.masterMode = true;
                         mplayer.wMyth = false;
                     }
                 }

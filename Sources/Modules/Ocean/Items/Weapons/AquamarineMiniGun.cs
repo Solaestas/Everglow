@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -21,7 +21,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		{
 			// base.DisplayName.SetDefault("");
 			// base.Tooltip.SetDefault("");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石迷你机枪");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石迷你机枪");
 			// base.Tooltip.AddTranslation(GameCulture.Chinese, "这东西太贵重了,只好做成这个尺寸了\n 66%不消耗弹药");
 		}
 		public override void SetDefaults()
@@ -45,10 +45,10 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		}
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-            Projectile.NewProjectile(position.X, position.Y + Main.rand.Next(-1, 2) * 6f, speedX, speedY, type, damage, knockBack, player.whoAmI, 0f, 0f);
+            Projectile.NewProjectile(source, position.X, position.Y + Main.rand.Next(-1, 2) * 6f, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 0f, 0f);
             if((int)(Main.time / 5f) % 5 == 0)
             {
-                int k = Projectile.NewProjectile(position.X, position.Y + Main.rand.Next(-2, 2), speedX, speedY, 257, damage * 5, knockBack, player.whoAmI, 0f, 0f);
+                int k = Projectile.NewProjectile(source, position.X, position.Y + Main.rand.Next(-2, 2), velocity.X, velocity.Y, 257, damage * 5, knockback, player.whoAmI, 0f, 0f);
                 Main.projectile[k].friendly = true;
                 Main.projectile[k].hostile = false;
             }

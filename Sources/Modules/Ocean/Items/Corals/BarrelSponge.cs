@@ -1,6 +1,6 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 
-namespace Everglow.Ocean.Items
+namespace Everglow.Ocean.Items.Corals
 {
     public class BarrelSponge : ModItem
     {

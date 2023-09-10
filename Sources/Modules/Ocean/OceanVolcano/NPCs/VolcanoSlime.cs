@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent;
@@ -15,7 +15,7 @@ namespace Everglow.Ocean.NPCs.VolCano
         {
             // base.DisplayName.SetDefault("Abyss slime");
             Main.npcFrameCount[base.NPC.type] = 2;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "火山史莱姆");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "火山史莱姆");
         }
         public override void SetDefaults()
         {
@@ -36,7 +36,7 @@ namespace Everglow.Ocean.NPCs.VolCano
             base.NPC.HitSound = SoundID.NPCHit1;
             base.NPC.DeathSound = SoundID.NPCDeath1;
             this.Banner = base.NPC.type;
-            this.BannerItem = ModContent.ItemType<Everglow.Ocean.Items.AbyssSlimeBanner>();
+            this.BannerItem = ModContent.ItemType<Everglow.Ocean.OceanDeep.Items.AbyssSlimeBanner>();
         }
         public override void AI()
         {
@@ -76,13 +76,13 @@ namespace Everglow.Ocean.NPCs.VolCano
         {
             for (int i = 0; i < 5; i++)
             {
-                Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, (float)hitDirection, -1f, 0, default(Color), 1f);
+                Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, hit.HitDirection, -1f, 0, default(Color), 1f);
             }
             if (base.NPC.life <= 0)
             {
                 for (int j = 0; j < 20; j++)
                 {
-                    Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, (float)hitDirection, -1f, 0, default(Color), 1f);
+                    Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, hit.HitDirection, -1f, 0, default(Color), 1f);
                 }
             }
         }
@@ -90,9 +90,9 @@ namespace Everglow.Ocean.NPCs.VolCano
         {
             if (Main.rand.Next(100) == 1)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.MeteorFlame>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.MeteorFlame>(), 1, false, 0, false, false);
             }
-            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.LavaStone>(), Main.rand.Next(1, 4), false, 0, false, false);
+            Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.LavaStone>(), Main.rand.Next(1, 4), false, 0, false, false);
         }
     }
 }

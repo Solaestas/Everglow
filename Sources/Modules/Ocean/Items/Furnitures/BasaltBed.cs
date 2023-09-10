@@ -10,7 +10,7 @@ namespace Everglow.Ocean.Items.Furnitures
 		public override void SetStaticDefaults()
 		{
             // DisplayName.SetDefault("BasaltBed");
-            // DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩床");
+            // // DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩床");
         }
 		public override void SetDefaults()
 		{

@@ -24,7 +24,7 @@ namespace Everglow.Ocean.Items
 			base.Item.useTime = 10;
 			base.Item.useStyle = 1;
 			base.Item.consumable = true;
-			base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.AquamarineLock>();
+			//base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.AquamarineLock>();
 			base.Item.flame = true;
 			base.Item.value = 500;
 		}

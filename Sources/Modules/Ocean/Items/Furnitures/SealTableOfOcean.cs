@@ -11,7 +11,7 @@ namespace Everglow.Ocean.Items
 		public override void SetStaticDefaults()
 		{
             // base.DisplayName.SetDefault("海洋封印台");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海洋封印台");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海洋封印台");
 		}
 
 		// Token: 0x06001CA5 RID: 7333 RVA: 0x000B5C5C File Offset: 0x000B3E5C

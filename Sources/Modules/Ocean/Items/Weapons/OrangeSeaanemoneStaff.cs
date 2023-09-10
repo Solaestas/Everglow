@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -23,7 +23,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		{
             // base.DisplayName.SetDefault("");
 			Item.staff[base.Item.type] = true;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "菊花海葵召唤杖");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "菊花海葵召唤杖");
 		}
 
 		// Token: 0x060010AA RID: 4266 RVA: 0x0007B4A8 File Offset: 0x000796A8
@@ -69,7 +69,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
             num2 = 0f;
             vector.X = (float)Main.mouseX + Main.screenPosition.X;
             vector.Y = (float)Main.mouseY + Main.screenPosition.Y;
-            Projectile.NewProjectile(vector.X, vector.Y, num, num2,ModContent.ProjectileType<Everglow.Ocean.Projectiles.菊花海葵>(), damage, knockBack, player.whoAmI, 0f, 0f);
+            Projectile.NewProjectile(null, vector.X, vector.Y, num, num2,ModContent.ProjectileType<Everglow.Ocean.Projectiles.菊花海葵>(), damage, knockback, player.whoAmI, 0f, 0f);
             return false;
         }
         public override void AddRecipes()

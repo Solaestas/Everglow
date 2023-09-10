@@ -11,7 +11,7 @@ namespace Everglow.Ocean.Items
 		public override void SetStaticDefaults()
 		{
 			// base.DisplayName.SetDefault("Waveblue Block");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海洋石砖");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海洋石砖");
 		}
 
 		// Token: 0x06001CB1 RID: 7345 RVA: 0x000B5F1C File Offset: 0x000B411C

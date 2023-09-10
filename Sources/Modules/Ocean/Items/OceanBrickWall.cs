@@ -12,7 +12,7 @@ namespace Everglow.Ocean.Items.Walls
 		public override void SetStaticDefaults()
 		{
 			// base.DisplayName.SetDefault("Bluewave Wall");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝砖墙");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝砖墙");
 		}
 
 		// Token: 0x06001C9D RID: 7325 RVA: 0x000B5A14 File Offset: 0x000B3C14

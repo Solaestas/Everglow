@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -37,7 +37,7 @@ namespace Everglow.Ocean.Projectiles
             int num17 = TextureAssets.Projectile[base.Projectile.type].Value.Height / Main.projFrames[base.Projectile.type];
             int y = num17 * base.Projectile.frame;
             Vector2 origin = new Vector2(16f, 17f);
-            spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/菊花海葵Glow"), base.Projectile.Center - Main.screenPosition, new Rectangle?(new Rectangle(0, y, texture2D.Width, num17)), new Color(255,255,255,base.Projectile.alpha), base.Projectile.rotation, origin, base.Projectile.scale, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/菊花海葵Glow"), base.Projectile.Center - Main.screenPosition, new Rectangle?(new Rectangle(0, y, texture2D.Width, num17)), new Color(255,255,255,base.Projectile.alpha), base.Projectile.rotation, origin, base.Projectile.scale, SpriteEffects.None, 0f);
         }
         // Token: 0x06001EC5 RID: 7877 RVA: 0x0018AA00 File Offset: 0x00188C00
         public override void AI()
@@ -56,7 +56,7 @@ namespace Everglow.Ocean.Projectiles
             }
             if (base.Projectile.timeLeft % 30 == 0 && !A)
             {
-                Projectile.NewProjectile(base.Projectile.Center.X, base.Projectile.Center.Y - 5f, Main.rand.Next(-100, 100) / 150f, -5f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.海葵粒子>(), base.Projectile.damage, base.Projectile.knockBack, Main.myPlayer, 0f, 0f);
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), base.Projectile.Center.X, base.Projectile.Center.Y - 5f, Main.rand.Next(-100, 100) / 150f, -5f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.海葵粒子>(), base.Projectile.damage, base.Projectile.knockBack, Main.myPlayer, 0f, 0f);
             }
             base.Projectile.rotation = (float)Math.Atan2((double)base.Projectile.velocity.Y, (double)base.Projectile.velocity.X) + (float)Math.PI * 1.5f;
 			base.Projectile.frameCounter++;

@@ -1,4 +1,4 @@
-﻿ using System;
+ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -15,7 +15,7 @@ namespace Everglow.Ocean.NPCs
 		{
 			// base.DisplayName.SetDefault("Lava Slime");
 			Main.npcFrameCount[base.NPC.type] = 2;
-			// base.DisplayName.AddTranslation(GameCulture.Chinese, "尖刺火山史莱姆");
+			// base.// DisplayName.AddTranslation(GameCulture.Chinese, "尖刺火山史莱姆");
 		}
 		public override void SetDefaults()
 		{
@@ -79,7 +79,7 @@ namespace Everglow.Ocean.NPCs
 							value.Y *= 1f + (float)Main.rand.Next(-50, 51) * 0.005f;
 							value.Normalize();
 							value *= 4f + (float)Main.rand.Next(-50, 51) * 0.01f;
-							Projectile.NewProjectile(vector.X, vector.Y, value.X, value.Y,ModContent.ProjectileType<Everglow.Ocean.Projectiles.烈火球>(), 192, 0f, Main.myPlayer, 0f, 0f);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), vector.X, vector.Y, value.X, value.Y,ModContent.ProjectileType<Everglow.Ocean.Projectiles.烈火球>(), 192, 0f, Main.myPlayer, 0f, 0f);
 							this.spikeTimer = 30f;
 						}
 						return;
@@ -100,7 +100,7 @@ namespace Everglow.Ocean.NPCs
 						num *= num3;
 						num2 *= num3;
 						this.spikeTimer = 50f;
-                        Projectile.NewProjectile(vector.X, vector.Y, num, num2,ModContent.ProjectileType<Everglow.Ocean.Projectiles.烈火球>(), 155, 0f, Main.myPlayer, 0f, 0f);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), vector.X, vector.Y, num, num2,ModContent.ProjectileType<Everglow.Ocean.Projectiles.烈火球>(), 155, 0f, Main.myPlayer, 0f, 0f);
 					}
 				}
 			}
@@ -109,13 +109,13 @@ namespace Everglow.Ocean.NPCs
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 4, (float)hitDirection, -1f, 0, default(Color), 1f);
+				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 4, hit.HitDirection, -1f, 0, default(Color), 1f);
 			}
 			if (base.NPC.life <= 0)
 			{
 				for (int j = 0; j < 20; j++)
 				{
-					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 4, (float)hitDirection, -1f, 0, default(Color), 1f);
+					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 4, hit.HitDirection, -1f, 0, default(Color), 1f);
 				}
 			}
 		}
@@ -131,15 +131,15 @@ namespace Everglow.Ocean.NPCs
 		{
             if (Main.rand.Next(100) == 1)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.LavaCupStaff>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.LavaCupStaff>(), 1, false, 0, false, false);
             }
-            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.LavaStone>(), Main.rand.Next(1,4), false, 0, false, false);
+            Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.LavaStone>(), Main.rand.Next(1,4), false, 0, false, false);
 		}
 		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 		{
 			if (Main.expertMode)
 			{
-				player.AddBuff(24, 540, true);
+				target.AddBuff(24, 540, true);
 			}
 		}
 		public float spikeTimer = 60f;

@@ -5,7 +5,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
 	// Token: 0x02000DD9 RID: 3545
 	public class 黄色海绵 : ModTile
@@ -36,7 +36,7 @@ namespace Everglow.Ocean.Tiles.Ocean
 		}
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.YellowSponge>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.YellowSponge>());
         }
         // Token: 0x0600489D RID: 18589 RVA: 0x000138D5 File Offset: 0x00011AD5
         public override void NumDust(int i, int j, bool fail, ref int num)

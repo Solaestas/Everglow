@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace Everglow.Ocean.Items.Armors
+namespace Everglow.Ocean.OceanDeep.Items.Armors
 {
 	[AutoloadEquip(new EquipType[]
 	{
@@ -15,7 +15,7 @@ namespace Everglow.Ocean.Items.Armors
 		{
             // base.DisplayName.SetDefault("");
             // base.Tooltip.SetDefault("");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "渊海护胫");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "渊海护胫");
             // base.Tooltip.AddTranslation(GameCulture.Chinese, "增加27%移速,增加8%闪避");
         }
         public override void AddRecipes()

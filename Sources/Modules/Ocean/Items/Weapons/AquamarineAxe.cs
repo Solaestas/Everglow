@@ -16,7 +16,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		{
             // base.DisplayName.SetDefault("海蓝宝石斧");
 			// base.Tooltip.SetDefault("brush!");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石斧");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石斧");
 			// base.Tooltip.AddTranslation(GameCulture.Chinese, "");
 		}
 

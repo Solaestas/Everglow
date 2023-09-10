@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Everglow.Ocean.Items.UnderSea
+namespace Everglow.Ocean.OceanDeep.Items
 {
     public class VoidBubble : ModItem
     {

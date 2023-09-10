@@ -10,7 +10,7 @@ namespace Everglow.Ocean.OceanVolcano.Items
         public override void SetStaticDefaults()
         {
             // Tooltip.SetDefault("");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "玄武岩");
         }
         public override void SetDefaults()
         {

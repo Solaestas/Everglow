@@ -12,7 +12,7 @@ namespace Everglow.Ocean.Items.Weapons
 		{
             // base.DisplayName.SetDefault("洋流射线");
 			Item.staff[base.Item.type] = true;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "洋流射线");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "洋流射线");
 		}
 		public override void SetDefaults()
 		{

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -6,7 +6,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles.Coral
 {
 	public class 大橙色海星 : ModTile
 	{
@@ -19,7 +19,7 @@ namespace Everglow.Ocean.Tiles.Ocean
 			TileObjectData.newTile.StyleWrapLimit = 36;
 			TileObjectData.addTile((int)base.Type);
 			this.DustType = 7;
-			this.disableSmartCursor/* tModPorter Note: Removed. Use TileID.Sets.DisableSmartCursor instead */ = true;
+			TileID.Sets.DisableSmartCursor[Type] = true;
 			LocalizedText modTranslation = base.CreateMapEntryName();
 			// modTranslation.SetDefault("大橙色海星");
 			base.AddMapEntry(new Color(120, 85, 60), modTranslation);
@@ -27,7 +27,7 @@ namespace Everglow.Ocean.Tiles.Ocean
 		}
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-		   Item.NewItem(i * 16, j * 16, 48, 48, ModContent.ItemType<Everglow.Ocean.Items.HugeOrangeStarfish>(), 1, false, 0, false, false);
+		   Item.NewItem(null, i * 16, j * 16, 48, 48, ModContent.ItemType<Items.Corals.HugeOrangeStarfish>(), 1, false, 0, false, false);
 		}
 	}
 }

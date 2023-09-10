@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -27,7 +27,7 @@ namespace Everglow.Ocean.Items.Weapons
 		{
             // base.DisplayName.SetDefault("深海热泉");
 			Item.staff[base.Item.type] = true;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "深海热泉");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "深海热泉");
             GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
         public static short GetGlowMask = 0;
@@ -56,7 +56,7 @@ namespace Everglow.Ocean.Items.Weapons
 		// Token: 0x060010AB RID: 4267 RVA: 0x0007B59C File Offset: 0x0007979C
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile.NewProjectile(position.X, position.Y, speedX, speedY, ModContent.ProjectileType<Everglow.Ocean.Projectiles.深海热泉>(), damage, knockBack, player.whoAmI, 1f);
+            Projectile.NewProjectile(null, position.X, position.Y, velocity.X, velocity.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.深海热泉>(), damage, knockback, player.whoAmI, 1f);
 
             return false;
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -15,7 +15,7 @@ namespace Everglow.Ocean.NPCs
 		public override void SetStaticDefaults()
 		{
 			// base.DisplayName.SetDefault("SuperWaterBomb");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "超级水雷");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "超级水雷");
 			Main.npcFrameCount[base.NPC.type] = 1;
 		}
 
@@ -45,12 +45,12 @@ namespace Everglow.Ocean.NPCs
 		{
 			if (projectile.penetrate == -1)
 			{
-				damage = (int)((double)damage * 2);
+				modifiers.SourceDamage = (modifiers.SourceDamage * 2);
 				return;
 			}
 			if (projectile.penetrate > 1)
 			{
-				damage = (int)((double)damage * 4);
+				modifiers.SourceDamage = (modifiers.SourceDamage * 4);
 				return;
 			}
 			projectile.penetrate = 1;
@@ -58,23 +58,23 @@ namespace Everglow.Ocean.NPCs
         // Token: 0x02000413 RID: 1043
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
-            SoundEngine.PlaySound(Mod.GetLegacySoundSlot(SoundType.Item, "Sounds/Item/烟花爆炸"), (int)NPC.Center.X, (int)NPC.Center.Y);
-            player.velocity = (NPC.velocity - player.velocity) / (NPC.velocity - player.velocity).Length() * 54;
-            Projectile.NewProjectile(base.NPC.position.X + (float)base.NPC.width * 0.5f, base.NPC.position.Y + (float)base.NPC.height * 0.5f, 0f, 0f, 164, 10, 4f, Main.myPlayer, 0f, 0f);
+            SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/烟花爆炸"), (int)NPC.Center.X, (int)NPC.Center.Y);
+			target.velocity = (NPC.velocity - target.velocity) / (NPC.velocity - target.velocity).Length() * 54;
+            Projectile.NewProjectile(null, base.NPC.position.X + (float)base.NPC.width * 0.5f, base.NPC.position.Y + (float)base.NPC.height * 0.5f, 0f, 0f, 164, 10, 4f, Main.myPlayer, 0f, 0f);
             for (int k = 0; k <= 10; k++)
             {
                 Vector2 v = new Vector2(0, Main.rand.Next(16,160)).RotatedByRandom(Math.PI * 2);
-                Gore.NewGore(base.NPC.Center, v, base.Mod.GetGoreSlot("Gores/超级水雷碎块"), 1f);
+                Gore.NewGore(base.NPC.Center, v, ModContent.Find<ModGore>("Everglow/超级水雷碎块").Type, 1f);
             }
             for (int k = 0; k <= 10; k++)
             {
                 Vector2 v = new Vector2(0, Main.rand.Next(16, 160)).RotatedByRandom(Math.PI * 2);
-                Gore.NewGore(base.NPC.Center, v, base.Mod.GetGoreSlot("Gores/超级水雷碎块2"), 1f);
+                Gore.NewGore(base.NPC.Center, v, ModContent.Find<ModGore>("Everglow/超级水雷碎块2").Type, 1f);
             }
             for (int k = 0; k <= 30; k++)
             {
                 Vector2 v = new Vector2(0, Main.rand.Next(0, 140)).RotatedByRandom(Math.PI * 2);
-                int num4 = Projectile.NewProjectile(NPC.Center.X + v.X, NPC.Center.Y + v.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.熔炉烈焰>(), 1000, 0, Main.myPlayer, Main.rand.Next(1000, 3000) / 700f, 0f);
+                int num4 = Projectile.NewProjectile(null, NPC.Center.X + v.X, NPC.Center.Y + v.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.熔炉烈焰>(), 1000, 0, Main.myPlayer, Main.rand.Next(1000, 3000) / 700f, 0f);
                 Main.projectile[num4].hostile = true;
             }
         }
@@ -82,22 +82,22 @@ namespace Everglow.Ocean.NPCs
         public override void HitEffect(NPC.HitInfo hit)
         {
             Player player = Main.player[Main.myPlayer];
-            SoundEngine.PlaySound(Mod.GetLegacySoundSlot(SoundType.Item, "Sounds/Item/烟花爆炸"), (int)NPC.Center.X, (int)NPC.Center.Y);
-            Projectile.NewProjectile(base.NPC.position.X + (float)base.NPC.width * 0.5f, base.NPC.position.Y + (float)base.NPC.height * 0.5f, 0f, 0f, 164, 10, 4f, Main.myPlayer, 0f, 0f);
+            SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/烟花爆炸"), (int)NPC.Center.X, (int)NPC.Center.Y);
+            Projectile.NewProjectile(null, base.NPC.position.X + (float)base.NPC.width * 0.5f, base.NPC.position.Y + (float)base.NPC.height * 0.5f, 0f, 0f, 164, 10, 4f, Main.myPlayer, 0f, 0f);
             for (int k = 0; k <= 10; k++)
             {
                 Vector2 v = new Vector2(0, Main.rand.Next(16,160)).RotatedByRandom(Math.PI * 2);
-                Gore.NewGore(base.NPC.position, v, base.Mod.GetGoreSlot("Gores/超级水雷碎块"), 1f);
+                Gore.NewGore(base.NPC.position, v, ModContent.Find<ModGore>("Everglow/超级水雷碎块").Type, 1f);
             }
             for (int k = 0; k <= 10; k++)
             {
                 Vector2 v = new Vector2(0, Main.rand.Next(16,160)).RotatedByRandom(Math.PI * 2);
-                Gore.NewGore(base.NPC.position, v, base.Mod.GetGoreSlot("Gores/超级水雷碎块2"), 1f);
+                Gore.NewGore(base.NPC.position, v, ModContent.Find<ModGore>("Everglow/超级水雷碎块2").Type, 1f);
             }
             for (int k = 0; k <= 30; k++)
             {
                 Vector2 v = new Vector2(0, Main.rand.Next(0, 140)).RotatedByRandom(Math.PI * 2);
-                int num4 = Projectile.NewProjectile(NPC.Center.X + v.X, NPC.Center.Y + v.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.熔炉烈焰>(), 1000, 0, Main.myPlayer, Main.rand.Next(1000, 3000) / 700f, 0f);
+                int num4 = Projectile.NewProjectile(null, NPC.Center.X + v.X, NPC.Center.Y + v.Y, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.熔炉烈焰>(), 1000, 0, Main.myPlayer, Main.rand.Next(1000, 3000) / 700f, 0f);
                 Main.projectile[num4].hostile = true;
             }
         }

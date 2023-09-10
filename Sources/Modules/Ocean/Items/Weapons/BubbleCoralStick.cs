@@ -60,9 +60,9 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
             if(Main.rand.Next(3) == 1)
             {
                 Vector2 pc = player.position + new Vector2(player.width, player.height) / 2;
-                Vector2 v = new Vector2(speedX, speedY);
+                Vector2 v = new Vector2(velocity.X, velocity.Y);
                 v = v.RotatedBy(Math.PI * (2 - (num % 5)) / 5f * -player.direction);
-                Projectile.NewProjectile(pc.X, pc.Y, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.BubbleCoral>(), damage, knockBack, player.whoAmI);
+                Projectile.NewProjectile(null, pc.X, pc.Y, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.BubbleCoral>(), damage, knockback, player.whoAmI);
                 if (num >= 4)
                 {
                     k = true;

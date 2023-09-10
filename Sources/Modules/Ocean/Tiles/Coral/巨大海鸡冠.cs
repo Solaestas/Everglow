@@ -7,7 +7,7 @@ using Terraria.ObjectData;
 using Terraria.DataStructures;
 using Terraria.Enums;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
 	public class 巨大海鸡冠 : ModTile
 	{
@@ -43,7 +43,7 @@ namespace Everglow.Ocean.Tiles.Ocean
 		}
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.HugeAlcyonarian>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.HugeAlcyonarian>());
         }
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {

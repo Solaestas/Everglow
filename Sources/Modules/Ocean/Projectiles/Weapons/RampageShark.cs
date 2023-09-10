@@ -50,7 +50,7 @@ public class RampageShark : ModProjectile
 					SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/SharkGun0").WithVolumeScale(0.4f), Projectile.Center);
 				}
 				Vector2 newvelocity = velocity.RotatedBy(Main.rand.NextFloat(-Power / 244f, Power / 244f));
-				Projectile p = Projectile.NewProjectileDirect(shootSource, Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockBack, player.whoAmI);
+				Projectile p = Projectile.NewProjectileDirect(shootSource, Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockback, player.whoAmI);
 				p.CritChance = (int)(item.crit + player.GetCritChance(DamageClass.Generic));
 
 				Dust d = Dust.NewDustDirect(Projectile.Center + offset + velocity * 0.7f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<BulletShell>(), velocity.X, velocity.Y, 0, default, 1f);
@@ -59,7 +59,7 @@ public class RampageShark : ModProjectile
 				d.scale = 1f;
 
 				float rot = newvelocity.ToRotation();
-				Projectile.NewProjectile(shootSource, Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.06f, rot);
+				Projectile.NewProjectile(shootSource, Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockback, player.whoAmI, 0.06f, rot);
 			}
 			else
 			{
@@ -71,14 +71,14 @@ public class RampageShark : ModProjectile
 				for (int i = 0; i < Times; i++)
 				{
 					Vector2 newvelocity = velocity.RotatedBy(Main.rand.NextFloat(-Power / 66f, Power / 66f));
-					Projectile p = Projectile.NewProjectileDirect(shootSource, Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockBack, player.whoAmI);
+					Projectile p = Projectile.NewProjectileDirect(shootSource, Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockback, player.whoAmI);
 					p.CritChance = (int)(item.crit + player.GetCritChance(DamageClass.Generic));
 					Dust d = Dust.NewDustDirect(Projectile.Center + offset + velocity * 0.7f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<BulletShell>(), velocity.X, velocity.Y, 0, default, 1f);
 					d.velocity = velocity.RotatedBy(-1.57 * player.direction - Main.rand.NextFloat(1.25f, 1.75f) * player.direction) * 0.4f * (24 + Power) / 54f;
 					d.noGravity = false;
 					d.scale = 1f;
 					float rot = newvelocity.ToRotation();
-					Projectile.NewProjectile(shootSource, Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.12f, rot);
+					Projectile.NewProjectile(shootSource, Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockback, player.whoAmI, 0.12f, rot);
 				}
 
 			}

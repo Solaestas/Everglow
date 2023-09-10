@@ -1,8 +1,8 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
-namespace Everglow.Ocean.Items.UnderSea
+namespace Everglow.Ocean.OceanDeep.Items
 {
     public class BladeScale : ModItem
     {

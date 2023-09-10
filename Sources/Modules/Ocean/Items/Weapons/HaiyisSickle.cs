@@ -19,7 +19,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
     {
         public override void SetStaticDefaults()
         {
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "粉红伊人");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "粉红伊人");
             // Tooltip.SetDefault("射出正二十面体结晶");
         }
         public override void SetDefaults()

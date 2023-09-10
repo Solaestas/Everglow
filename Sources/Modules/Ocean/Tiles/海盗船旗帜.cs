@@ -8,7 +8,7 @@ using Terraria.ObjectData;
 using Terraria.DataStructures;
 using Terraria.Enums;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
     public class 海盗船旗帜 : ModTile
     {
@@ -32,7 +32,7 @@ namespace Everglow.Ocean.Tiles.Ocean
             TileObjectData.newTile.AnchorTop = new AnchorData((Terraria.Enums.AnchorType)1, 1, 1);
             TileObjectData.addTile((int)base.Type);
             this.DustType = 7;
-            this.disableSmartCursor/* tModPorter Note: Removed. Use TileID.Sets.DisableSmartCursor instead */ = true;
+            TileID.Sets.DisableSmartCursor[Type] = true;
             LocalizedText modTranslation = base.CreateMapEntryName();
             // modTranslation.SetDefault("海盗船旗帜");
             base.AddMapEntry(new Color(0, 24, 123), modTranslation);
@@ -40,7 +40,7 @@ namespace Everglow.Ocean.Tiles.Ocean
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 48, 48, ModContent.ItemType<Everglow.Ocean.Items.PirateFlag>(), 1, false, 0, false, false);
+            Item.NewItem(null, i * 16, j * 16, 48, 48, ModContent.ItemType<Everglow.Ocean.Items.PirateFlag>(), 1, false, 0, false, false);
         }
         public override void PlaceInWorld(int i, int j, Item item)
         {

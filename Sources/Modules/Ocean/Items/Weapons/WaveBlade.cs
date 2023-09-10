@@ -1,4 +1,4 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
@@ -10,7 +10,7 @@ namespace Everglow.Ocean.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "浪花之刃");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "浪花之刃");
             // base.Tooltip.AddTranslation(GameCulture.Chinese, "浪花之刃");
         }
         public override void AddRecipes()
@@ -42,7 +42,7 @@ namespace Everglow.Ocean.Items.Weapons
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			float shootSpeed = base.Item.shootSpeed;
-			Projectile.NewProjectile((float)position.X, (float)position.Y, (float)speedX, (float)speedY, (int)type, (int)damage * 7, (float)knockBack, player.whoAmI, 0f, 0f);
+			Projectile.NewProjectile(null, (float)position.X, (float)position.Y, (float)velocity.X, (float)velocity.Y, (int)type, (int)damage * 7, (float)knockback, player.whoAmI, 0f, 0f);
 			return false;
 		}
         public override void MeleeEffects(Player player, Rectangle hitbox)

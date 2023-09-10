@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -21,7 +21,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
         public override void SetStaticDefaults()
         {
             // Tooltip.SetDefault("");
-            // DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石之刃");
+            // // DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石之刃");
         }
         private int num = 0;
         private bool k = true;
@@ -42,7 +42,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
             Item.crit = 7;
             Item.value = 12000;
             Item.scale = 1f;
-            Item.shoot = ModContent.ProjectileType<Everglow.Ocean.Projectiles.AquamarineBlade>();
+            Item.shoot = ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.AquamarineBlade>();
             Item.shootSpeed = 4f;
 
         }

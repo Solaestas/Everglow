@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -13,14 +13,14 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
-namespace Everglow.Ocean.Items.UnderSea
+namespace Everglow.Ocean.OceanDeep.Items
 {
     public class CrystalTop : ModItem
     {
         public override void SetStaticDefaults()
         {
             // Tooltip.SetDefault("");
-            // DisplayName.AddTranslation(GameCulture.Chinese, "璀璨琉璃");
+            // // DisplayName.AddTranslation(GameCulture.Chinese, "璀璨琉璃");
         }
         public override void SetDefaults()
         {

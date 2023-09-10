@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
@@ -17,7 +17,7 @@ namespace Everglow.Ocean.NPCs.OceanCrystal
 		{
             // base.DisplayName.SetDefault("海洋封印之眼");
 			Main.npcFrameCount[base.NPC.type] = 1;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海洋封印之眼");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海洋封印之眼");
 		}
         private int a = 0;
         private bool down = true;
@@ -37,7 +37,7 @@ namespace Everglow.Ocean.NPCs.OceanCrystal
 			base.NPC.height = 28;
 			base.NPC.defense = 50;
 			base.NPC.lifeMax = (Main.expertMode ? 4500 : 3750);
-            if(MythWorld.Myth)
+            if(Main.masterMode)
             {
                 base.NPC.lifeMax = 2750;
             }
@@ -118,7 +118,7 @@ namespace Everglow.Ocean.NPCs.OceanCrystal
             if(NPC.localAI[0] % 75 == 0)
             {
                 Vector2 v = (player.Center - (NPC.Center)) * (13 / num3);
-                Projectile.NewProjectile(base.NPC.Center.X, base.NPC.Center.Y, v.X, v.Y,ModContent.ProjectileType<Everglow.Ocean.Projectiles.蔚蓝射线>(), (int)(base.NPC.damage * 0.2f), 0.2f, Main.myPlayer, 0f, 0f);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), base.NPC.Center.X, base.NPC.Center.Y, v.X, v.Y,ModContent.ProjectileType<Everglow.Ocean.Projectiles.蔚蓝射线>(), (int)(base.NPC.damage * 0.2f), 0.2f, Main.myPlayer, 0f, 0f);
             }
             if (Main.rand.Next(300) == 1)
             {

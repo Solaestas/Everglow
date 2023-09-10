@@ -10,7 +10,7 @@ namespace Everglow.Ocean.Items
         public override void SetStaticDefaults()
         {
             //Tooltip.SetDefault("它长满了海藻");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "滨岸木");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "滨岸木");
         }
         public override void SetDefaults()
         {

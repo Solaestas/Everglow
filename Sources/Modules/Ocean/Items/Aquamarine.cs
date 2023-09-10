@@ -1,15 +1,15 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using Terraria;
-namespace Everglow.Ocean.Items.Gems
+namespace Everglow.Ocean.Items
 {
     public class Aquamarine : ModItem
     {
         public override void SetStaticDefaults()
         {
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石");
             // Tooltip.SetDefault("非常好看的宝石");
         }
         public override void SetDefaults()

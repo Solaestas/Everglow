@@ -1,4 +1,4 @@
-﻿using Terraria.Audio;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
@@ -29,7 +29,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		{
 			// base.DisplayName.SetDefault(".");
 			// base.Tooltip.SetDefault(".");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "爆音虾钳");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "爆音虾钳");
 			// base.Tooltip.AddTranslation(GameCulture.Chinese, "打碎敌人的耳膜,放出200分贝的音波\n静止的敌人高概率闪避,移动的敌人更容易被击中\n距离越近命中率越高");
 		}
 
@@ -50,15 +50,15 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 			base.Item.rare = 11;
 			base.Item.UseSound = SoundID.Item8;
 			base.Item.autoReuse = true;
-			base.Item.shoot =ModContent.ProjectileType<Everglow.Ocean.Projectiles.CrackSoundWave>();
+			base.Item.shoot =ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.CrackSoundWave>();
         }
         // Token: 0x0600462B RID: 17963 RVA: 0x0027BBA8 File Offset: 0x00279DA8
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-            SoundEngine.PlaySound(Mod.GetLegacySoundSlot(SoundType.Item, "Sounds/Item/烟花爆炸"), (int)position.X + player.direction * 36, (int)position.Y - 9);
+            SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/烟花爆炸"), (int)position.X + player.direction * 36, (int)position.Y - 9);
             for (int k = 0; k < 4; k++)
             {
-                Projectile.NewProjectile(position.X + player.direction * 36f, position.Y - 9f, 0, 0, type, damage, knockBack, Main.myPlayer, k, 0f);
+                Projectile.NewProjectile(null, position.X + player.direction * 36f, position.Y - 9f, 0, 0, type, damage, knockback, Main.myPlayer, k, 0f);
             }
 			return false;
         }

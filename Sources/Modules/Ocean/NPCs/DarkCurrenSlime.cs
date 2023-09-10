@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using Everglow.Ocean.Common;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -15,7 +16,7 @@ namespace Everglow.Ocean.NPCs
 		{
 			// base.DisplayName.SetDefault("Abyss slime");
 			Main.npcFrameCount[base.NPC.type] = 2;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "深渊暗流史莱姆");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "深渊暗流史莱姆");
 		}
 
 		// Token: 0x06001809 RID: 6153 RVA: 0x0010AD00 File Offset: 0x00108F00
@@ -38,7 +39,7 @@ namespace Everglow.Ocean.NPCs
 			base.NPC.HitSound = SoundID.NPCHit1;
 			base.NPC.DeathSound = SoundID.NPCDeath1;
 			this.Banner = base.NPC.type;
-			this.BannerItem = ModContent.ItemType<Everglow.Ocean.Items.AbyssSlimeBanner>();
+			this.BannerItem = ModContent.ItemType<Everglow.Ocean.OceanDeep.Items.AbyssSlimeBanner>();
 		}
         public override void AI()
         {
@@ -73,13 +74,13 @@ namespace Everglow.Ocean.NPCs
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, (float)hitDirection, -1f, 0, default(Color), 1f);
+				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, hit.HitDirection, -1f, 0, default(Color), 1f);
 			}
 			if (base.NPC.life <= 0)
 			{
 				for (int j = 0; j < 20; j++)
 				{
-					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, (float)hitDirection, -1f, 0, default(Color), 1f);
+					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, hit.HitDirection, -1f, 0, default(Color), 1f);
 				}
 			}
 		}
@@ -87,7 +88,7 @@ namespace Everglow.Ocean.NPCs
 		// Token: 0x0600180C RID: 6156 RVA: 0x0010AEF8 File Offset: 0x001090F8
 		public override void OnKill()
 		{
-            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.AbyssOre>(), Main.rand.Next(8, 15), false, 0, false, false);
+            Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.OceanDeep.Items.AbyssOre>(), Main.rand.Next(8, 15), false, 0, false, false);
 		}
 	}
 }

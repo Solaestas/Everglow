@@ -6,7 +6,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
 	public class 蜂巢珊瑚 : ModTile
 	{
@@ -54,7 +54,7 @@ namespace Everglow.Ocean.Tiles.Ocean
                 zero = Vector2.Zero;
             }
             int height = 38;
-            //Main.spriteBatch.Draw(mod.GetTexture("Tiles/Ocean/蜂巢珊瑚Glow"), new Vector2(i * 16 - 18 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 52, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            //Main.spriteBatch.Draw(ModAsset.蜂巢珊瑚Glow.Value, new Vector2(i * 16 - 18 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 52, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
         public override void NearbyEffects(int i, int j, bool closer)
 		{
@@ -62,7 +62,7 @@ namespace Everglow.Ocean.Tiles.Ocean
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 48, 48, ModContent.ItemType<Everglow.Ocean.Items.Favosites>(), 1, false, 0, false, false);
+            Item.NewItem(null, i * 16, j * 16, 48, 48, ModContent.ItemType<Everglow.Ocean.Items.Favosites>(), 1, false, 0, false, false);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -13,14 +13,11 @@ namespace Everglow.Ocean.OceanVolcano.Items
 		{
 			// base.DisplayName.SetDefault("");
 			// base.Tooltip.SetDefault("");
-			// base.DisplayName.AddTranslation(GameCulture.Chinese, "恶魔之吻");
+			// base.// DisplayName.AddTranslation(GameCulture.Chinese, "恶魔之吻");
 			// base.Tooltip.AddTranslation(GameCulture.Chinese, "击中怪物造成毁灭一般的伤害,有概率直接爆炸");
-            GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
-        public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
             base.Item.useStyle = 3;
 			base.Item.useTurn = false;
 			base.Item.useAnimation = 5;
@@ -53,18 +50,18 @@ namespace Everglow.Ocean.OceanVolcano.Items
                 Dust.NewDust(new Vector2(target.position.X, target.position.Y), target.width, target.height, ModContent.DustType<Everglow.Ocean.Dusts.Flame>(), 0f, 0f, 0, default(Color), 1f);
                 Dust.NewDust(new Vector2(target.position.X, target.position.Y), target.width, target.height, ModContent.DustType<Everglow.Ocean.Dusts.Flame>(), 0f, 0f, 0, default(Color), 1.5f);
             }
-            target.StrikeNPC((int)(damage * Main.rand.NextFloat(0.85f, 1.15f)), 0, 1, Main.rand.Next(100) > 50 ? false : true);
-            target.StrikeNPC((int)(damage * Main.rand.NextFloat(0.85f, 1.15f)), 0, 1, Main.rand.Next(100) > 50 ? false : true);
-            target.StrikeNPC((int)(damage * Main.rand.NextFloat(0.85f, 1.15f)), 0, 1, Main.rand.Next(100) > 50 ? false : true);
+            target.StrikeNPC((int)(damageDone * Main.rand.NextFloat(0.85f, 1.15f)), 0, 1, Main.rand.Next(100) > 50 ? false : true);
+            target.StrikeNPC((int)(damageDone * Main.rand.NextFloat(0.85f, 1.15f)), 0, 1, Main.rand.Next(100) > 50 ? false : true);
+            target.StrikeNPC((int)(damageDone * Main.rand.NextFloat(0.85f, 1.15f)), 0, 1, Main.rand.Next(100) > 50 ? false : true);
             if(Main.rand.Next(10) == 1)
             {
-                target.StrikeNPC((int)(damage * Main.rand.NextFloat(8.5f, 11.5f)), 0, 1, Main.rand.Next(100) > 50 ? false : true);
+                target.StrikeNPC((int)(damageDone * Main.rand.NextFloat(8.5f, 11.5f)), 0, 1, Main.rand.Next(100) > 50 ? false : true);
                 for (int k = 0; k <= 10; k++)
                 {
                     float a = (float)Main.rand.Next(0, 720) / 360 * 3.141592653589793238f;
                     float m = (float)Main.rand.Next(0, 50000);
                     float l = (float)Main.rand.Next((int)m, 50000) / 1800;
-                    int num4 = Projectile.NewProjectile(target.Center.X, target.Center.Y, (float)((float)l * Math.Cos((float)a)) * 0.36f, (float)((float)l * Math.Sin((float)a)) * 0.36f,ModContent.ProjectileType<Everglow.Ocean.Projectiles.火山溅射>(), damage, 0, Main.myPlayer, 0f, 0f);
+                    int num4 = Projectile.NewProjectile(null, target.Center.X, target.Center.Y, (float)((float)l * Math.Cos((float)a)) * 0.36f, (float)((float)l * Math.Sin((float)a)) * 0.36f,ModContent.ProjectileType<Everglow.Ocean.OceanVolcano.Projectiles.火山溅射>(), damageDone, 0, Main.myPlayer, 0f, 0f);
                     Main.projectile[num4].scale = (float)Main.rand.Next(7000, 13000) / 10000f;
                 }
             }

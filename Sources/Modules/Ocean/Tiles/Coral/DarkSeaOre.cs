@@ -14,7 +14,7 @@ namespace Everglow.Ocean.Tiles
             Main.ugBackTransition = 1000;
             DustType = DustID.BorealWood;
             MinPick = 240;
-            SoundType = SoundID.Grass;
+            HitSound = SoundID.Grass;
             // SoundStyle = 2;
             RegisterItemDrop(ModContent.ItemType<Items.Ores.DarkSeaOre>());
             Main.tileSpelunker[(int)base.Type] = true;

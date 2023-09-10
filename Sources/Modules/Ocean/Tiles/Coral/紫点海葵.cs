@@ -6,7 +6,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
 	public class 紫点海葵 : ModTile
 	{
@@ -95,7 +95,7 @@ namespace Everglow.Ocean.Tiles.Ocean
                 zero = Vector2.Zero;
             }
             int height = 16;
-            Main.spriteBatch.Draw(Mod.GetTexture("Tiles/Ocean/紫点海葵Glow"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height), new Color(55,55,55,0), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(ModAsset.紫点海葵Glow.Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height), new Color(55,55,55,0), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
     }
 }

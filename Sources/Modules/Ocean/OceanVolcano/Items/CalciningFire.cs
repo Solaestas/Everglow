@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -21,7 +21,7 @@ namespace Everglow.Ocean.OceanVolcano.Items
 		{
 			// base.DisplayName.SetDefault("");
 			// base.Tooltip.SetDefault("");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "灼烧之怒");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "灼烧之怒");
 			// base.Tooltip.AddTranslation(GameCulture.Chinese, "");
             GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
@@ -48,10 +48,10 @@ namespace Everglow.Ocean.OceanVolcano.Items
 		}
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-            Projectile.NewProjectile(position.X, position.Y + Main.rand.Next(-1, 2) * 6f, speedX, speedY, type, damage, knockBack, player.whoAmI, 0f, 0f);
+            Projectile.NewProjectile(null, position.X, position.Y + Main.rand.Next(-1, 2) * 6f, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 0f, 0f);
             if((int)(Main.time / 5f) % 5 == 0)
             {
-                int k = Projectile.NewProjectile(position.X + speedX * 3, position.Y + Main.rand.Next(-2, 2) + speedY * 3, speedX, speedY, 34, damage * 2, knockBack, player.whoAmI, 0f, 0f);
+                int k = Projectile.NewProjectile(null, position.X + velocity.X * 3, position.Y + Main.rand.Next(-2, 2) + velocity.Y * 3, velocity.X, velocity.Y, 34, damage * 2, knockback, player.whoAmI, 0f, 0f);
                 Main.projectile[k].friendly = true;
                 Main.projectile[k].hostile = false;
                 Main.projectile[k].extraUpdates = 3;

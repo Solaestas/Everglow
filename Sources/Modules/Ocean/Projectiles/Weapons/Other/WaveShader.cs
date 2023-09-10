@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.ID;
 using Everglow.Ocean.Common;
 
-namespace Everglow.Ocean.Projectiles.projectile4
+namespace Everglow.Ocean.Projectiles
 {
     public class WaveShader : ModProjectile
     {
@@ -100,7 +100,7 @@ namespace Everglow.Ocean.Projectiles.projectile4
                 double num1 = Main.rand.Next(0, 1000) / 500f;
                 double num2 = Math.Sin((double)num1 * Math.PI) * num4 / 40f;
                 double num3 = Math.Cos((double)num1 * Math.PI) * num4 / 40f;
-                int num5 = Projectile.NewProjectile(base.projectile.Center.X, base.projectile.Center.Y, (float)num2, (float)num3, base.mod.ProjectileType("BlueGemDust"), (int)((double)base.projectile.damage * 0.1f), base.projectile.knockBack, base.projectile.owner, 0f, 0f);
+                int num5 = Projectile.NewProjectile(base.projectile.Center.X, base.projectile.Center.Y, (float)num2, (float)num3, base.mod.ProjectileType("BlueGemDust"), (int)((double)base.projectile.damage * 0.1f), base.Projectile.knockBack, base.projectile.owner, 0f, 0f);
                 Main.projectile[num5].scale = Main.rand.Next(1150, 2200) / 1000f;
             }
             for (int a = 0; a < 90; a++)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -14,7 +14,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		public override void SetStaticDefaults()
 		{
             // base.DisplayName.SetDefault("黄色海绵炮");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "黄色海绵炮");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "黄色海绵炮");
 		}
 		public override void SetDefaults()
 		{
@@ -39,13 +39,13 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		{
             for(int h = 0;h < 5;h++)
             {
-                Vector2 v = new Vector2(speedX, speedY).RotatedBy(Main.rand.NextFloat(-0.25f,0.25f)) * Main.rand.NextFloat(0.65f,1.37f);
-                int num = Projectile.NewProjectile(position.X + speedX + v.X, position.Y - 12f + speedY + v.Y, v.X, v.Y, type, damage, knockBack, player.whoAmI, 0f, 0f);
+                Vector2 v = new Vector2(velocity.X, velocity.Y).RotatedBy(Main.rand.NextFloat(-0.25f,0.25f)) * Main.rand.NextFloat(0.65f,1.37f);
+                int num = Projectile.NewProjectile(null, position.X + velocity.X + v.X, position.Y - 12f + velocity.Y + v.Y, v.X, v.Y, type, damage, knockback, player.whoAmI, 0f, 0f);
             }
             for (int h = 0; h < 3; h++)
             {
-                Vector2 v = new Vector2(speedX, speedY).RotatedBy(Main.rand.NextFloat(-0.25f, 0.25f)) * Main.rand.NextFloat(0.15f, 0.4f);
-                int num = Projectile.NewProjectile(position.X + speedX + v.X, position.Y + speedY + v.Y + 5f, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.YellowSponge>(), damage * 2, knockBack, player.whoAmI, 0f, 0f);
+                Vector2 v = new Vector2(velocity.X, velocity.Y).RotatedBy(Main.rand.NextFloat(-0.25f, 0.25f)) * Main.rand.NextFloat(0.15f, 0.4f);
+                int num = Projectile.NewProjectile(null, position.X + velocity.X + v.X, position.Y + velocity.Y + v.Y + 5f, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.YellowSponge>(), damage * 2, knockback, player.whoAmI, 0f, 0f);
             }
             return false;
 		}

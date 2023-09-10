@@ -8,7 +8,7 @@ namespace Everglow.Ocean.Items.Corals
     {
         public override void SetStaticDefaults()
         {
-            // DisplayName.SetDefault("0…7¨®0†80…90‡70…00†20„50ˆ40‡5");
+            // DisplayName.SetDefault("Â0â€¦7Â¨Â®Â0â€ 8Â0â€¦9Â0â€¡7Â0â€¦0Â0â€ 2Â0â€ž5Â0Ë†4Â0â€¡5");
         }
         public override void SetDefaults()
         {
@@ -16,7 +16,7 @@ namespace Everglow.Ocean.Items.Corals
             base.Item.height = 16;
             base.Item.rare = 2;
             base.Item.scale = 1f;
-            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.0…7¨®0†80…90‡70…00†20„50ˆ40‡5>();
+            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.Coral.å¤§è“è‰²æµ·æ˜Ÿ>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;

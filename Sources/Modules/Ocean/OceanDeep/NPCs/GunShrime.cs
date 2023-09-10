@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using Everglow.Ocean.Common;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -14,7 +15,7 @@ namespace Everglow.Ocean.NPCs
 		{
 			// base.DisplayName.SetDefault("枪虾");
 			Main.npcFrameCount[base.NPC.type] = 4;
-			// base.DisplayName.AddTranslation(GameCulture.Chinese, "枪虾");
+			// base.// DisplayName.AddTranslation(GameCulture.Chinese, "枪虾");
 		}
 		public override void SetDefaults()
 		{
@@ -79,8 +80,8 @@ namespace Everglow.Ocean.NPCs
             int num5 = (int)Player.FindClosest(base.NPC.Center, 1, 1);
             if ((Main.player[num5].Center - base.NPC.Center).Length() < 200f && NPC.localAI[0] % 90 == 0)
             {
-                SoundEngine.PlaySound(Mod.GetLegacySoundSlot(SoundType.Item, "Sounds/Item/烟花爆炸"), (int)base.NPC.Center.X + base.NPC.direction * 16, (int)base.NPC.Center.Y - 4);
-                int num3 = Projectile.NewProjectile(base.NPC.Center.X + base.NPC.direction * 16f, base.NPC.Center.Y - 4f, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.CrackSoundWave>(), 150, 1.2f, Main.myPlayer, 0, 0f);
+                SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/烟花爆炸"), (int)base.NPC.Center.X + base.NPC.direction * 16, (int)base.NPC.Center.Y - 4);
+                int num3 = Projectile.NewProjectile(NPC.GetSource_FromAI(), base.NPC.Center.X + base.NPC.direction * 16f, base.NPC.Center.Y - 4f, 0, 0,ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.CrackSoundWave>(), 150, 1.2f, Main.myPlayer, 0, 0f);
                 Main.projectile[num3].hostile = true;
                 Main.projectile[num3].friendly = false;
             }
@@ -89,7 +90,7 @@ namespace Everglow.Ocean.NPCs
 		{
 			if (Main.netMode != 1)
 			{
-				Projectile.NewProjectile(player.Center.X, player.Center.Y, 0f, 0f, 612, 0, 0f, Main.myPlayer, 0f, 0f);
+				Projectile.NewProjectile(null, target.Center.X, target.Center.Y, 0f, 0f, 612, 0, 0f, Main.myPlayer, 0f, 0f);
 			}
 		}
 		public override void FindFrame(int frameHeight)
@@ -118,15 +119,15 @@ namespace Everglow.Ocean.NPCs
 		{
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.VoidBubble>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.OceanDeep.Items.VoidBubble>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.BladeScale>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.OceanDeep.Items.BladeScale>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(150) == 0 && Main.hardMode)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.PistolShrimpPlier>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.OceanDeep.Items.Weapons.PistolShrimpPlier>(), 1, false, 0, false, false);
 			}
 		}
 	}

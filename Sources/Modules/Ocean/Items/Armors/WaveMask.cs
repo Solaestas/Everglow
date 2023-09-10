@@ -15,7 +15,7 @@ namespace Everglow.Ocean.Items.Armors
         {
             // base.DisplayName.SetDefault("");
             // base.Tooltip.SetDefault("");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝面具");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝面具");
             // base.Tooltip.AddTranslation(GameCulture.Chinese, "近战伤害和暴击各增加10%");
         }
         public override void SetDefaults()

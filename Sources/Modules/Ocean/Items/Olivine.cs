@@ -1,9 +1,9 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Localization;
-namespace Everglow.Ocean.Items.Gems
+namespace Everglow.Ocean.Items
 {
     public class Olivine : ModItem//材料是物品名称
     {
@@ -12,7 +12,7 @@ namespace Everglow.Ocean.Items.Gems
         {
             // Tooltip.SetDefault("");
             // DisplayName.SetDefault("Olivine");
-            // DisplayName.AddTranslation(GameCulture.Chinese, "橄榄石");
+            // // DisplayName.AddTranslation(GameCulture.Chinese, "橄榄石");
         }
         // Token: 0x0600462B RID: 17963 RVA: 0x0027BBA8 File Offset: 0x00279DA8
         public override void SetDefaults()

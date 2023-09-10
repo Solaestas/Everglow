@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -6,7 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Everglow.Ocean.Projectiles.projectile3
+namespace Everglow.Ocean.Projectiles
 {
     public class RollingLava : ModProjectile
 	{
@@ -84,12 +84,12 @@ namespace Everglow.Ocean.Projectiles.projectile3
             for (int i = 0; i < 10; i++)
             {
                 float scaleFactor5 = (float)(Main.rand.Next(-20, 20) / 100f);
-                Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor5, base.Mod.GetGoreSlot("Gores/火山浮石碎块" + (i % 5 + 1).ToString()), 0.8f);
+                Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor5, ModContent.Find<ModGore>("Everglow/火山浮石碎块" + (i % 5 + 1).ToString()).Type, 0.8f);
             }
             for (int i = 0; i < 5; i++)
             {
                 float scaleFactor5 = (float)(Main.rand.Next(-20, 20) / 100f);
-                Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor5, base.Mod.GetGoreSlot("Gores/火山浮石碎块" + (i % 2 + 6).ToString()), 0.8f);
+                Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor5, ModContent.Find<ModGore>("Everglow/火山浮石碎块" + (i % 2 + 6).ToString()).Type, 0.8f);
             }
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -97,7 +97,7 @@ namespace Everglow.Ocean.Projectiles.projectile3
 		}
         public override void PostDraw(Color lightColor)
         {
-            spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/projectile3/熔岩滚石Glow"), base.Projectile.Center - Main.screenPosition, null, new Color(255,255,255,0), base.Projectile.rotation, new Vector2(50f, 50f), 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw((Texture2D)ModContent.Request<Texture2D>("Everglow/Ocean/Projectiles/projectile3/熔岩滚石Glow"), base.Projectile.Center - Main.screenPosition, null, new Color(255,255,255,0), base.Projectile.rotation, new Vector2(50f, 50f), 1f, SpriteEffects.None, 0f);
         }
     }
 }

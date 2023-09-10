@@ -24,7 +24,7 @@ namespace Everglow.Ocean.Items.Weapons
 		{
             // base.DisplayName.SetDefault("海龙风暴");
 			Item.staff[base.Item.type] = true;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海龙风暴");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海龙风暴");
             // base.Tooltip.AddTranslation(GameCulture.Chinese, "扶摇直上九万里\n神话");
         }
         public override void SetDefaults()

@@ -1,4 +1,4 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Ocean.Tiles.Town
@@ -109,15 +109,15 @@ namespace Everglow.Ocean.Tiles.Town
             r = 0.5f;
             base.ModifyLight(i, j, ref r, ref g, ref b);
         }
-        public override bool RightClick(int i, int j)
-        {
-            Player player = Main.LocalPlayer;
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.Typeless.TransportCircle>()] < 1)
-            {
-                Projectile.NewProjectile(null, player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Typeless.TransportCircle>(), 0, 0, player.whoAmI, 0);
-            }
-            return true;
-        }
+        //public override bool RightClick(int i, int j)
+        //{
+        //    Player player = Main.LocalPlayer;
+        //    if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.Typeless.TransportCircle>()] < 1)
+        //    {
+        //        Projectile.NewProjectile(null, player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Typeless.TransportCircle>(), 0, 0, player.whoAmI, 0);
+        //    }
+        //    return true;
+        //}
         public override void MouseOver(int i, int j)
         {
             Player player = Main.LocalPlayer;

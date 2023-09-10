@@ -19,7 +19,7 @@ namespace Everglow.Ocean.Items
     {
         public override void SetStaticDefaults()
         {
-            // DisplayName.AddTranslation(GameCulture.Chinese, "熔岩石");
+            // // DisplayName.AddTranslation(GameCulture.Chinese, "熔岩石");
             // Tooltip.SetDefault("");
             GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }

@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
-namespace Everglow.Ocean.Projectiles.projectile2
+namespace Everglow.Ocean.Projectiles
 {
     //135596
     public class OceanSealBroken3 : ModProjectile
@@ -53,14 +53,14 @@ namespace Everglow.Ocean.Projectiles.projectile2
         {
             SoundEngine.PlaySound(SoundID.Item27, new Vector2(base.Projectile.position.X, base.Projectile.position.Y));
             float scaleFactor = (float)(Main.rand.Next(-200, 200) / 100);
-            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石1"), 1f);
-            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石2"), 1f);
-            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石5"), 1f);
-            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石5"), 1f);
-            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石5"), 1f);
-            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石5"), 1f);
-            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石3"), 1f);
-            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/海洋晶石4"), 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/海洋晶石1").Type, 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/海洋晶石2").Type, 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/海洋晶石5").Type, 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/海洋晶石5").Type, 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/海洋晶石5").Type, 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/海洋晶石5").Type, 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/海洋晶石3").Type, 1f);
+            Gore.NewGore(base.Projectile.position, base.Projectile.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/海洋晶石4").Type, 1f);
             for (int a = 0; a < 90; a++)
             {
                 Vector2 vector = Projectile.position;

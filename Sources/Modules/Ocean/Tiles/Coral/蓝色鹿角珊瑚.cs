@@ -6,7 +6,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
 	public class 蓝色鹿角珊瑚 : ModTile
 	{
@@ -55,14 +55,14 @@ namespace Everglow.Ocean.Tiles.Ocean
                 zero = Vector2.Zero;
             }
             int height = 16;
-            //Main.spriteBatch.Draw(mod.GetTexture("Tiles/Ocean/蓝色鹿角珊瑚Glow"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), new Color(255, 255, 255, 0), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            //Main.spriteBatch.Draw(ModAsset.蓝色鹿角珊瑚Glow.Value, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.frameX, tile.frameY, 16, height), new Color(255, 255, 255, 0), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
         public override void NearbyEffects(int i, int j, bool closer)
 		{
 		}
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.BlueAcropora>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.BlueAcropora>());
         }
         public override void PlaceInWorld(int i, int j, Item item)
         {

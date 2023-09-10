@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -18,7 +18,7 @@ namespace Everglow.Ocean.NPCs.VolCano
 		public override void SetStaticDefaults()
 		{
             // base.DisplayName.SetDefault("熔岩巨石怪");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "熔岩巨石怪");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "熔岩巨石怪");
 		}
 		public override void SetDefaults()
 		{
@@ -61,14 +61,14 @@ namespace Everglow.Ocean.NPCs.VolCano
                     for (int i = 0; i < 30; i++)
                     {
                         float scaleFactor5 = (float)(Main.rand.Next(-20, 20) / 100f);
-                        Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor5, base.Mod.GetGoreSlot("Gores/火山浮石碎块" + (i % 5 + 1).ToString()), 1f);
+                        Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor5, ModContent.Find<ModGore>("Everglow/火山浮石碎块" + (i % 5 + 1).ToString()).Type, 1f);
                     }
                     for (int i = 0; i < 5; i++)
                     {
                         float scaleFactor5 = (float)(Main.rand.Next(-20, 20) / 100f);
-                        Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor5, base.Mod.GetGoreSlot("Gores/火山浮石碎块" + (i % 2 + 6).ToString()), 1f);
-                        NPC.NewNPC((int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Ocean.NPCs.LavaStone2>(), 0, 0, Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.Next(0, 60), 255);
-                        NPC.NewNPC((int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Ocean.NPCs.火山浮石>(), 0, 0, Main.rand.NextFloat(-0.15f,0.15f), Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.Next(0,60), 255);
+                        Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor5, ModContent.Find<ModGore>("Everglow/火山浮石碎块" + (i % 2 + 6).ToString()).Type, 1f);
+                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Ocean.NPCs.LavaStone2>(), 0, 0, Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.Next(0, 60), 255);
+                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Ocean.NPCs.火山浮石>(), 0, 0, Main.rand.NextFloat(-0.15f,0.15f), Main.rand.NextFloat(-0.15f, 0.15f), Main.rand.Next(0,60), 255);
                     }
                     st = false;
                 }
@@ -173,7 +173,7 @@ namespace Everglow.Ocean.NPCs.VolCano
                             if (Xa % 6 == 0)
                             {
                                 Vector2 v2 = new Vector2(v[l].X, v[l].Y) / v[l].Length() * 6f;
-                                int u = Projectile.NewProjectile(NPC.Center.X + v[l].X, NPC.Center.Y + v[l].Y, v2.X, v2.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.烟火>(), 100, 2f, Main.myPlayer, 0f, 1);
+                                int u = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X + v[l].X, NPC.Center.Y + v[l].Y, v2.X, v2.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.烟火>(), 100, 2f, Main.myPlayer, 0f, 1);
                                 Main.projectile[u].friendly = false;
                                 Main.projectile[u].timeLeft = 30;
                             }
@@ -207,31 +207,31 @@ namespace Everglow.Ocean.NPCs.VolCano
 			SoundEngine.PlaySound(SoundID.Item10, new Vector2(base.NPC.position.X, base.NPC.position.Y));
             for (int i = 0; i < 5; i++)
             {
-                Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 54, (float)hitDirection, -1f, 0, default(Color), 1f);
+                Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 54, hit.HitDirection, -1f, 0, default(Color), 1f);
             }
             for (int j = 0; j < 3; j++)
             {
-                Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 6, (float)hitDirection, -1f, 0, default(Color), 1f);
+                Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 6, hit.HitDirection, -1f, 0, default(Color), 1f);
             }
             if (base.NPC.life <= 0)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 6, (float)hitDirection, -1f, 0, default(Color), 1f);
+                    Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 6, hit.HitDirection, -1f, 0, default(Color), 1f);
                 }
 				for (int j = 0; j < 25; j++)
                 {
-                    Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 54, (float)hitDirection, -1f, 0, default(Color), 1f);
+                    Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 54, hit.HitDirection, -1f, 0, default(Color), 1f);
                 }
                 float scaleFactor = (float)(Main.rand.Next(-8, 8) / 100f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/火山浮石碎块1"), 1f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/火山浮石碎块2"), 1f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/火山浮石碎块3"), 1f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/火山浮石碎块4"), 1f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/火山浮石碎块5"), 1f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/火山浮石碎块5"), 1f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/火山浮石碎块5"), 1f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/火山浮石碎块5"), 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/火山浮石碎块1").Type, 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/火山浮石碎块2").Type, 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/火山浮石碎块3").Type, 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/火山浮石碎块4").Type, 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/火山浮石碎块5").Type, 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/火山浮石碎块5").Type, 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/火山浮石碎块5").Type, 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/火山浮石碎块5").Type, 1f);
                 int num3 = 0;
             }
         }

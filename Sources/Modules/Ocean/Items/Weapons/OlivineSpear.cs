@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -14,7 +14,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		{
 			// base.DisplayName.SetDefault("");
 			// base.Tooltip.SetDefault("");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "橄榄石长枪");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "橄榄石长枪");
 			// base.Tooltip.AddTranslation(GameCulture.Chinese, "");
 		}
 		public override void SetDefaults()
@@ -36,16 +36,16 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 			base.Item.maxStack = 1;
 			base.Item.value = 14000;
 			base.Item.rare = 11;
-            base.Item.shoot =ModContent.ProjectileType<Everglow.Ocean.Projectiles.橄榄石长枪>();
+            base.Item.shoot =ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.橄榄石长枪>();
 			base.Item.shootSpeed = 12f;
 		}
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile.NewProjectile(position.X, position.Y, speedX / 1.2f, speedY / 1.2f, ModContent.ProjectileType<Everglow.Ocean.Projectiles.橄榄石长枪2>(), damage, knockBack, player.whoAmI);
-            Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(0));
-            speedX = perturbedSpeed.X;
-            speedY = perturbedSpeed.Y;
-            Projectile.NewProjectile(position.X, position.Y, speedX, speedY, ModContent.ProjectileType<Everglow.Ocean.Projectiles.橄榄石长枪>(), damage, knockBack, player.whoAmI);
+            Projectile.NewProjectile(null, position.X, position.Y, velocity.X / 1.2f, velocity.Y / 1.2f, ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.橄榄石长枪2>(), damage, knockback, player.whoAmI);
+            Vector2 perturbedSpeed = new Vector2(velocity.X, velocity.Y).RotatedByRandom(MathHelper.ToRadians(0));
+            velocity.X = perturbedSpeed.X;
+            velocity.Y = perturbedSpeed.Y;
+            Projectile.NewProjectile(null, position.X, position.Y, velocity.X, velocity.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.橄榄石长枪>(), damage, knockback, player.whoAmI);
             return false;
         }
         public override void AddRecipes()

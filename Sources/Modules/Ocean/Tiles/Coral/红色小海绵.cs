@@ -5,7 +5,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
 	// Token: 0x02000C71 RID: 3185
 	public class 红色小海绵 : ModTile
@@ -32,7 +32,7 @@ namespace Everglow.Ocean.Tiles.Ocean
             TileObjectData.addAlternate(1);
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.addTile((int)base.Type);
-            this.disableSmartCursor/* tModPorter Note: Removed. Use TileID.Sets.DisableSmartCursor instead */ = true;
+            TileID.Sets.DisableSmartCursor[Type] = true;
             this.AdjTiles = new int[]
             {
                 15
@@ -50,7 +50,7 @@ namespace Everglow.Ocean.Tiles.Ocean
 		}
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.RedSponge>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Everglow.Ocean.Items.RedSponge>());
         }
         // Token: 0x0600400D RID: 16397 RVA: 0x00013946 File Offset: 0x00011B46
         // Token: 0x0600400E RID: 16398 RVA: 0x00013956 File Offset: 0x00011B56

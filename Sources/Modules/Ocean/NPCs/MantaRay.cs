@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -14,7 +14,7 @@ namespace Everglow.Ocean.NPCs
 		{
 			// base.DisplayName.SetDefault("Sailfish");
 			Main.npcFrameCount[base.NPC.type] = 7;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "斑点魟");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "斑点魟");
 		}
 		public override void SetDefaults()
 		{
@@ -219,23 +219,23 @@ namespace Everglow.Ocean.NPCs
 		}
 		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 		{
-			player.AddBuff(30, 420, true);
+			target.AddBuff(30, 420, true);
 		}
 		public override void HitEffect(NPC.HitInfo hit)
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, (float)hitDirection, -1f, 0, default(Color), 1f);
+				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, hit.HitDirection, -1f, 0, default(Color), 1f);
 			}
 			if (base.NPC.life <= 0)
 			{
 				for (int j = 0; j < 25; j++)
 				{
-					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, (float)hitDirection, -1f, 0, default(Color), 1f);
+					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, hit.HitDirection, -1f, 0, default(Color), 1f);
 				}
                 float scaleFactor = (float)(Main.rand.Next(-200, 200) / 100);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/斑点魟碎块"), 1f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/斑点魟碎块2"), 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/斑点魟碎块").Type, 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/斑点魟碎块2").Type, 1f);
 			}
 			base.NPC.spriteDirection = ((base.NPC.direction > 0) ? 1 : -1);
 		}
@@ -259,7 +259,7 @@ namespace Everglow.Ocean.NPCs
         {
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.OceanDustCore>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.OceanDustCore>(), 1, false, 0, false, false);
             }
         }
 	}

@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -21,7 +21,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		{
             // base.DisplayName.SetDefault("红珊瑚法杖");
 			Item.staff[base.Item.type] = true;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "红珊瑚法杖");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "红珊瑚法杖");
 		}
 		public override void SetDefaults()
 		{
@@ -44,7 +44,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		}
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile.NewProjectile(position.X, position.Y, speedX, speedY,ModContent.ProjectileType<Everglow.Ocean.Projectiles.红珊瑚>(), damage, knockBack, player.whoAmI, 0f, 0f);
+            Projectile.NewProjectile(null, position.X, position.Y, velocity.X, velocity.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.红珊瑚>(), damage, knockback, player.whoAmI, 0f, 0f);
             return false;
         }
         public override void AddRecipes()

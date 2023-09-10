@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -26,7 +26,7 @@ namespace Everglow.Ocean.Items.Weapons
 		{
 			// base.DisplayName.SetDefault(".");
 			// base.Tooltip.SetDefault(".");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "幽渊之光");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "幽渊之光");
 			// base.Tooltip.AddTranslation(GameCulture.Chinese, "深渊之下,点点磷光");
             GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
@@ -55,7 +55,7 @@ namespace Everglow.Ocean.Items.Weapons
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			float num = 0.7854f;
-			double num2 = Math.Atan2((double)speedX, (double)speedY) - (double)(num / 2f);
+			double num2 = Math.Atan2((double)velocity.X, (double)velocity.Y) - (double)(num / 2f);
 			double num3 = (double)(num / 8f);
             for (int i = 0; i < 4; i++)
             {
@@ -64,7 +64,7 @@ namespace Everglow.Ocean.Items.Weapons
             for (int k = 0; k < 10; k++)
             {
                 int num5 = Main.rand.Next(-2, 2);
-                Projectile.NewProjectile(position.X, position.Y, speedX * 1.3f + num5, speedY * 1.3f + num5, type, damage, knockBack, Main.myPlayer, 0f, 0f);
+                Projectile.NewProjectile(null, position.X, position.Y, velocity.X * 1.3f + num5, velocity.Y * 1.3f + num5, type, damage, knockback, Main.myPlayer, 0f, 0f);
             }
 			return false;
         }

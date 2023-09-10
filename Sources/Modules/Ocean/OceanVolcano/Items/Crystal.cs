@@ -20,7 +20,7 @@ namespace Everglow.Ocean.OceanVolcano.Items
         public override void SetStaticDefaults()
         {
             // Tooltip.SetDefault("");
-            // DisplayName.AddTranslation(GameCulture.Chinese, "石英");
+            // // DisplayName.AddTranslation(GameCulture.Chinese, "石英");
         }
         public override void SetDefaults()
         {

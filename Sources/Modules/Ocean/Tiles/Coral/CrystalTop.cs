@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Capture;
 
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
     public class CrystalTop : ModTile
 	{
@@ -23,9 +23,8 @@ namespace Everglow.Ocean.Tiles.Ocean
 			Main.tileOreFinderPriority[(int)base.Type] = 1300;
 			this.MinPick = 200;
 			this.DustType = 183;
-			this.HitSound = 21;
-			this.soundStyle/* tModPorter Note: Removed. Integrate into HitSound */ = 2;
-            this.RegisterItemDrop(ModContent.ItemType<Everglow.Ocean.Items.CrystalTop>());
+			this.HitSound = SoundID.Tink;
+            this.RegisterItemDrop(ModContent.ItemType<Everglow.Ocean.OceanDeep.Items.CrystalTop>());
 			Main.tileSpelunker[(int)base.Type] = true;
 			LocalizedText modTranslation = base.CreateMapEntryName();
 			base.AddMapEntry(new Color(0,115,231), modTranslation);

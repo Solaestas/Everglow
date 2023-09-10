@@ -13,7 +13,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Ocean.Projectiles.projectile3
+namespace Everglow.Ocean.Projectiles
 {
     public class Wave : ModProjectile
     {

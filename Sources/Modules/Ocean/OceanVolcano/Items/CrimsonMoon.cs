@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -21,7 +21,7 @@ namespace Everglow.Ocean.OceanVolcano.Items
     {
         public override void SetStaticDefaults()
         {
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "赤月");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "赤月");
             // Tooltip.SetDefault("灼热导致它真实伤害远远高于面板");
             GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
@@ -53,13 +53,13 @@ namespace Everglow.Ocean.OceanVolcano.Items
             {
                 for(int y =0;y < 12;y++)
                 {
-                    int u = Projectile.NewProjectile(position.X, position.Y, speedX, speedY, ModContent.ProjectileType<Everglow.Ocean.Projectiles.CrisomMoon2>(), damage, knockBack, player.whoAmI, 0f, 0f);
+                    int u = Projectile.NewProjectile(null, position.X, position.Y, velocity.X, velocity.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.CrisomMoon2>(), damage, knockback, player.whoAmI, 0f, 0f);
                     Main.projectile[u].rotation = Main.rand.NextFloat((MathHelper.TwoPi));
                 }
             }
             else
             {
-                Projectile.NewProjectile(position.X, position.Y, speedX, speedY, type, damage, knockBack, player.whoAmI, 0f, 0f);
+                Projectile.NewProjectile(null, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 0f, 0f);
             }
             a += 1;
             return false;

@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Everglow.Ocean.Projectiles.projectile2
+namespace Everglow.Ocean.Projectiles
 {
     public class OlivineStaffPro : ModProjectile
 	{
@@ -88,7 +88,7 @@ namespace Everglow.Ocean.Projectiles.projectile2
                     Main.dust[num1].noGravity = true;
                     Main.dust[num2].noGravity = true;
                     Vector2 v = Projectile.oldVelocity.RotatedBy(Main.rand.NextFloat(-0.8f, 0.8f)) * Main.rand.NextFloat(0.2f, 0.8f) * i;
-                    Projectile.NewProjectile(Projectile.Center.X + v.X, Projectile.Center.Y + v.Y, 0, 0, ModContent.ProjectileType<Everglow.Ocean.Projectiles.OlivineStaffPro2>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 0, i * 9);
+                    Projectile.NewProjectile(null, Projectile.Center.X + v.X, Projectile.Center.Y + v.Y, 0, 0, ModContent.ProjectileType<Everglow.Ocean.Projectiles.OlivineStaffPro2>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 0, i * 9);
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace Everglow.Ocean.Projectiles.projectile2
                     Main.dust[num1].noGravity = true;
                     Main.dust[num2].noGravity = true;
                     Vector2 v = Projectile.oldVelocity.RotatedBy(Main.rand.NextFloat(-0.8f, 0.8f)) * Main.rand.NextFloat(0.2f, 2.4f) * i;
-                    Projectile.NewProjectile(Projectile.Center.X + v.X, Projectile.Center.Y + v.Y, 0, 0, ModContent.ProjectileType<Everglow.Ocean.Projectiles.OlivineStaffPro2>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 0, i * 4.5f);
+                    Projectile.NewProjectile(null, Projectile.Center.X + v.X, Projectile.Center.Y + v.Y, 0, 0, ModContent.ProjectileType<Everglow.Ocean.Projectiles.OlivineStaffPro2>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 0, i * 4.5f);
                 }
             }
             else
@@ -119,7 +119,7 @@ namespace Everglow.Ocean.Projectiles.projectile2
                     Main.dust[num1].noGravity = true;
                     Main.dust[num2].noGravity = true;
                     Vector2 v = Projectile.oldVelocity.RotatedBy(Main.rand.NextFloat(-0.8f, 0.8f)) * Main.rand.NextFloat(0.2f, 0.8f) * i;
-                    Projectile.NewProjectile(Projectile.Center.X + v.X, Projectile.Center.Y + v.Y, 0, 0, ModContent.ProjectileType<Everglow.Ocean.Projectiles.OlivineStaffPro2>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 0, i * 9);
+                    Projectile.NewProjectile(null, Projectile.Center.X + v.X, Projectile.Center.Y + v.Y, 0, 0, ModContent.ProjectileType<Everglow.Ocean.Projectiles.OlivineStaffPro2>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 0, i * 9);
                 }
             }
 		}

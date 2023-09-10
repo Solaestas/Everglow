@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Everglow.Ocean.Projectiles.projectile3
+namespace Everglow.Ocean.Projectiles
 {
     public class SeadraStaff : ModProjectile
 	{
@@ -32,7 +32,7 @@ namespace Everglow.Ocean.Projectiles.projectile3
 		public override void Kill(int timeLeft)
 		{
             OceanContentPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<OceanContentPlayer>();
-            int num = Projectile.NewProjectile(Projectile.Center.X, Projectile.Center.Y, 0, 0, ModContent.ProjectileType<Everglow.Ocean.Projectiles.Storm>(), Projectile.damage, 10f, Main.myPlayer, 10f, 25f);
+            int num = Projectile.NewProjectile(null, Projectile.Center.X, Projectile.Center.Y, 0, 0, ModContent.ProjectileType<Everglow.Ocean.Projectiles.Storm>(), Projectile.damage, 10f, Main.myPlayer, 10f, 25f);
             Main.projectile[num].hostile = false;
             Main.projectile[num].friendly = true;
             for (int i = 0; i < 65; i++)

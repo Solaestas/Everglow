@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Everglow.Ocean.Projectiles.projectile3
+namespace Everglow.Ocean.Projectiles
 {
 	public class OceanCurrentRay : ModProjectile
 	{
@@ -63,7 +63,7 @@ namespace Everglow.Ocean.Projectiles.projectile3
                     }
                     if (num7 < 50)
                     {
-                        Main.npc[j].StrikeNPC((int)(projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), projectile.knockBack, projectile.direction, Main.rand.Next(200) > 150 ? true : false);
+                        Main.npc[j].StrikeNPC((int)(projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), Projectile.knockBack, projectile.direction, Main.rand.Next(200) > 150 ? true : false);
                         projectile.penetrate--;
                         if(projectile.penetrate < 0)
                         {

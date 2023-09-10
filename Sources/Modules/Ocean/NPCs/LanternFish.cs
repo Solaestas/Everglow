@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using Everglow.Ocean.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -16,7 +17,7 @@ namespace Everglow.Ocean.NPCs
 		{
 			// base.DisplayName.SetDefault("Sailfish");
 			Main.npcFrameCount[base.NPC.type] = 4;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "灯笼鱼");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "灯笼鱼");
 		}
 
 		// Token: 0x0600147E RID: 5246 RVA: 0x000B4364 File Offset: 0x000B2564
@@ -39,7 +40,7 @@ namespace Everglow.Ocean.NPCs
 			base.NPC.DeathSound = SoundID.NPCDeath40;
 			base.NPC.knockBackResist = 0.2f;
             this.Banner = base.NPC.type;
-            this.BannerItem = ModContent.ItemType<Everglow.Ocean.Items.LightfishBanner>();
+            this.BannerItem = ModContent.ItemType<Everglow.Ocean.OceanDeep.Items.LightfishBanner>();
         }
 
 		// Token: 0x0600147F RID: 5247 RVA: 0x000B4440 File Offset: 0x000B2640
@@ -230,7 +231,7 @@ namespace Everglow.Ocean.NPCs
 		// Token: 0x06001482 RID: 5250 RVA: 0x00008065 File Offset: 0x00006265
 		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 		{
-			player.AddBuff(30, 420, true);
+			target.AddBuff(30, 420, true);
 		}
 
 		// Token: 0x06001483 RID: 5251 RVA: 0x00007FE0 File Offset: 0x000061E0
@@ -240,17 +241,17 @@ namespace Everglow.Ocean.NPCs
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, (float)hitDirection, -1f, 0, default(Color), 1f);
+				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, hit.HitDirection, -1f, 0, default(Color), 1f);
 			}
 			if (base.NPC.life <= 0)
 			{
 				for (int j = 0; j < 25; j++)
 				{
-					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, (float)hitDirection, -1f, 0, default(Color), 1f);
+					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, hit.HitDirection, -1f, 0, default(Color), 1f);
 				}
                 float scaleFactor = (float)(Main.rand.Next(-200, 200) / 100);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/灯笼鱼碎块1"), 1f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/灯笼鱼碎块2"), 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/灯笼鱼碎块1").Type, 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/灯笼鱼碎块2").Type, 1f);
 			}
 			base.NPC.spriteDirection = ((base.NPC.direction > 0) ? 1 : -1);
 		}
@@ -275,15 +276,15 @@ namespace Everglow.Ocean.NPCs
         {
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.BladeScale>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.OceanDeep.Items.BladeScale>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.OceanDustCore>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.OceanDeep.Items.OceanDustCore>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(150) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.ScaleShot>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.OceanDeep.Items.Weapons.ScaleShot>(), 1, false, 0, false, false);
             }
         }
 	}

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -15,7 +15,7 @@ namespace Everglow.Ocean.NPCs
 		{
 			// base.DisplayName.SetDefault("lava tortoise");
 			Main.npcFrameCount[base.NPC.type] = 8;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "熔岩陆龟");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "熔岩陆龟");
 		}
 		public override void SetDefaults()
 		{
@@ -82,28 +82,28 @@ namespace Everglow.Ocean.NPCs
         {
             for (int i = 0; i < 5; i++)
             {
-                Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, (float)hitDirection, -1f, 0, default(Color), 1f);
+                Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, hit.HitDirection, -1f, 0, default(Color), 1f);
             }
             if (base.NPC.life <= 0)
             {
                 for (int j = 0; j < 20; j++)
                 {
-                    Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, (float)hitDirection, -1f, 0, default(Color), 1f);
+                    Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 59, hit.HitDirection, -1f, 0, default(Color), 1f);
                 }
             }
             if (base.NPC.life <= 0)
             {
                 float scaleFactor = (float)(Main.rand.Next(-8, 8) / 100f);
-                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/熔岩陆龟碎块"), 1f);
+                Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/熔岩陆龟碎块").Type, 1f);
             }
         }
         public override void OnKill()
         {
             if (Main.rand.Next(100) == 1)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.VolcanoBlade>(), 1, false, 0, false, false);
+                Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.VolcanoBlade>(), 1, false, 0, false, false);
             }
-            Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.LavaStone>(), Main.rand.Next(2, 5), false, 0, false, false);
+            Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.LavaStone>(), Main.rand.Next(2, 5), false, 0, false, false);
         }
     }
 }

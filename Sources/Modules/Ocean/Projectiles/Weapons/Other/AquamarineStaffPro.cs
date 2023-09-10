@@ -84,7 +84,7 @@ public class AquamarineStaffPro : ModProjectile
 				for (int l = 0; l < 10; l++)
 				{
 					Vector2 v = Projectile.oldVelocity.RotatedBy(l / 5f * Math.PI + 0.25f);
-					int h = Projectile.NewProjectile(Projectile.Center.X, Projectile.Center.Y, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.AquamarineStaffPro>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 9999, 9999);
+					int h = Projectile.NewProjectile(null, Projectile.Center.X, Projectile.Center.Y, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.AquamarineStaffPro>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 9999, 9999);
 					Main.projectile[h].timeLeft = 7;
 					Main.projectile[h].tileCollide = false;
 					Main.projectile[h].penetrate = -1;
@@ -108,7 +108,7 @@ public class AquamarineStaffPro : ModProjectile
 			for (int l = 0; l < 10; l++)
 			{
 				Vector2 v = Projectile.oldVelocity.RotatedBy(l / 5f * Math.PI + 0.25f);
-				int h = Projectile.NewProjectile(Projectile.Center.X, Projectile.Center.Y, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.AquamarineStaffPro>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 9999, 9999);
+				int h = Projectile.NewProjectile(null, Projectile.Center.X, Projectile.Center.Y, v.X, v.Y, ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.AquamarineStaffPro>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 9999, 9999);
 				if (Projectile.penetrate >= 1)
 				{
 					Main.projectile[h].timeLeft = 7;

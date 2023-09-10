@@ -1,4 +1,5 @@
 using System;
+using Everglow.Ocean.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -17,7 +18,7 @@ namespace Everglow.Ocean.NPCs
 		{
             // base.DisplayName.SetDefault("jellyfish");
 			Main.npcFrameCount[base.NPC.type] = 5;
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "警报水母");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "警报水母");
 		}
 		// Token: 0x06001B17 RID: 6935 RVA: 0x0000B428 File Offset: 0x00009628
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -241,8 +242,8 @@ namespace Everglow.Ocean.NPCs
 		// Token: 0x0600147A RID: 5242 RVA: 0x0000801E File Offset: 0x0000621E
 		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 		{
-			player.AddBuff(70, 320, true);
-            player.AddBuff(base.Mod.Find<ModBuff>("极剧毒").Type, 32, true);
+			target.AddBuff(70, 320, true);
+			target.AddBuff(base.Mod.Find<ModBuff>("极剧毒").Type, 32, true);
 		}
 
 		// Token: 0x0600147B RID: 5243 RVA: 0x000A99DC File Offset: 0x000A7BDC
@@ -250,13 +251,13 @@ namespace Everglow.Ocean.NPCs
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, (float)hitDirection, -1f, 0, default(Color), 1f);
+				Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, hit.HitDirection, -1f, 0, default(Color), 1f);
 			}
 			if (base.NPC.life <= 0)
 			{
 				for (int j = 0; j < 15; j++)
 				{
-					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, (float)hitDirection, -1f, 0, default(Color), 1f);
+					Dust.NewDust(base.NPC.position, base.NPC.width, base.NPC.height, 5, hit.HitDirection, -1f, 0, default(Color), 1f);
 				}
 			}
 		}
@@ -264,15 +265,15 @@ namespace Everglow.Ocean.NPCs
         {
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.空灵泡>(), 1, false, 0, false, false);
+                //Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.空灵泡>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(3) == 0)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.海因子>(), 1, false, 0, false, false);
+                //Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.海因子>(), 1, false, 0, false, false);
             }
             if (Main.rand.Next(175) == 0 && Main.hardMode)
             {
-                Item.NewItem((int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.幽渊之光>(), 1, false, 0, false, false);
+                //Item.NewItem(NPC.GetSource_Death(), (int)base.NPC.position.X, (int)base.NPC.position.Y, base.NPC.width, base.NPC.height, ModContent.ItemType<Everglow.Ocean.Items.幽渊之光>(), 1, false, 0, false, false);
             }
         }
 	}

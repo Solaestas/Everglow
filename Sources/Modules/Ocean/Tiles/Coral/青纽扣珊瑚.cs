@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Capture;
 
 
-namespace Everglow.Ocean.Tiles.Ocean
+namespace Everglow.Ocean.Tiles
 {
 	// Token: 0x02000E8F RID: 3727
     public class 青纽扣珊瑚 : ModTile
@@ -25,9 +25,9 @@ namespace Everglow.Ocean.Tiles.Ocean
 			Main.tileOreFinderPriority[(int)base.Type] = 1300;
 			this.MinPick = 200;
 			this.DustType = 183;
-			this.HitSound = 21;
-			this.soundStyle/* tModPorter Note: Removed. Integrate into HitSound */ = 2;
-            this.RegisterItemDrop(ModContent.ItemType<Everglow.Ocean.Items.CyanZoanthid>());
+			this.HitSound = SoundID.Tink;
+			
+            this.RegisterItemDrop(ModContent.ItemType<Everglow.Ocean.Items.Corals.CyanZoanthid>());
 			Main.tileSpelunker[(int)base.Type] = true;
 			LocalizedText modTranslation = base.CreateMapEntryName();
 			base.AddMapEntry(new Color(37, 91, 67), modTranslation);
@@ -51,7 +51,7 @@ namespace Everglow.Ocean.Tiles.Ocean
 			num4 *= 270;
 			num += num3;
 			num2 += num4;
-			Texture2D texture = ModContent.Request<Texture2D>("Everglow/Ocean/Tiles/Ocean/青纽扣珊瑚Glow");
+			Texture2D texture = ModAsset.青纽扣珊瑚Glow.Value;
 			Vector2 position = new Vector2((float)(i * 16) - Main.screenPosition.X + (float)this.GetDrawOffset(), (float)(j * 16) - Main.screenPosition.Y + (float)this.GetDrawOffset());
 			if (CaptureManager.Instance.IsCapturing)
 			{

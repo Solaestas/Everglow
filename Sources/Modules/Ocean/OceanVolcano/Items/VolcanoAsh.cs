@@ -9,7 +9,7 @@ namespace Everglow.Ocean.Items.Bricks
 		public override void SetStaticDefaults()
 		{
 			// base.DisplayName.SetDefault("Volcano ask");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "火山灰");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "火山灰");
 		}
 		public override void SetDefaults()
 		{

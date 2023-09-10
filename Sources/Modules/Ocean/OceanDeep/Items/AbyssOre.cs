@@ -1,4 +1,4 @@
-﻿using Terraria.ID;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -13,7 +13,7 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader.IO;
 using Terraria.GameContent.Achievements;
-namespace Everglow.Ocean.Items
+namespace Everglow.Ocean.OceanDeep.Items
 {
     public class AbyssOre : ModItem
     {
@@ -21,17 +21,14 @@ namespace Everglow.Ocean.Items
         {
             // Tooltip.SetDefault("深渊之下");
             // DisplayName.SetDefault("渊海矿");
-            GetGlowMask = Everglow.Ocean.SetStaticDefaultsGlowMask(this);
         }
-        public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
             base.Item.width = 40;
             base.Item.height = 40;
             base.Item.rare = 8;
             base.Item.scale = 1f;
-            base.Item.createTile = ModContent.TileType<Everglow.Ocean.Tiles.AbyssOre>();
+            //base.Item.createTile = ModContent.TileType<Everglow.Ocean.OceanDeep.Tiles.AbyssOre>();
             base.Item.useStyle = 1;
             base.Item.useTurn = true;
             base.Item.useAnimation = 15;
@@ -46,7 +43,7 @@ namespace Everglow.Ocean.Items
         // Token: 0x0600462B RID: 17963 RVA: 0x0027BBA8 File Offset: 0x00279DA8
         public override void AddRecipes()
         {
-            Recipe recipe = Recipe.Create(ModContent.ItemType<Everglow.Ocean.Items.DarkSeaBar>(), 1);//制作一个武器
+            Recipe recipe = Recipe.Create(ModContent.ItemType<Everglow.Ocean.OceanDeep.Items.DarkSeaBar>(), 1);//制作一个武器
             recipe.AddIngredient(null, "AbyssOre", 4); //需要一个材料
             recipe.requiredTile[0] = 412;
             recipe.Register();

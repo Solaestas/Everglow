@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -11,7 +11,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 		public override void SetStaticDefaults()
 		{
             // base.DisplayName.SetDefault("海蓝宝石钩");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石钩");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "海蓝宝石钩");
 		}
 		public override void SetDefaults()
 		{
@@ -22,7 +22,7 @@ namespace Everglow.Ocean.Items.Weapons.OceanWeapons
 			base.Item.noUseGraphic = true;
 			base.Item.useStyle = 5;
 			base.Item.shootSpeed = 30f;
-            base.Item.shoot =ModContent.ProjectileType<Everglow.Ocean.Projectiles.AquamarineHookPro>();
+            base.Item.shoot =ModContent.ProjectileType<Everglow.Ocean.Projectiles.Weapons.Other.AquamarineHookPro>();
 			base.Item.UseSound = SoundID.Item1;
 			base.Item.useAnimation = 20;
 			base.Item.useTime = 20;

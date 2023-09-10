@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -12,7 +12,7 @@ namespace Everglow.Ocean.NPCs
 		public override void SetStaticDefaults()
 		{
 			// base.DisplayName.SetDefault("WaterBoom");
-            // base.DisplayName.AddTranslation(GameCulture.Chinese, "水雷");
+            // base.// DisplayName.AddTranslation(GameCulture.Chinese, "水雷");
 			Main.npcFrameCount[base.NPC.type] = 3;
 		}
 		public override void SetDefaults()
@@ -46,34 +46,34 @@ namespace Everglow.Ocean.NPCs
 		{
 			if (projectile.penetrate == -1)
 			{
-				damage = (int)((double)damage * 2);
+				modifiers.SourceDamage = (modifiers.SourceDamage * 2);
 				return;
 			}
 			if (projectile.penetrate > 1)
 			{
-				damage = (int)((double)damage * 4);
+				modifiers.SourceDamage = (modifiers.SourceDamage * 4);
 				return;
 			}
 			projectile.penetrate = 1;
 		}
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
-            player.velocity = (NPC.velocity - player.velocity) / (NPC.velocity - player.velocity).Length() * 5;
-            Projectile.NewProjectile(base.NPC.position.X + (float)base.NPC.width * 0.5f, base.NPC.position.Y + (float)base.NPC.height * 0.5f, 0f, 0f, 164, 10, 4f, Main.myPlayer, 0f, 0f);
+            target.velocity = (NPC.velocity - target.velocity) / (NPC.velocity - target.velocity).Length() * 5;
+            Projectile.NewProjectile(null, base.NPC.position.X + (float)base.NPC.width * 0.5f, base.NPC.position.Y + (float)base.NPC.height * 0.5f, 0f, 0f, 164, 10, 4f, Main.myPlayer, 0f, 0f);
             float scaleFactor = (float)(Main.rand.Next(-200, 200) / 100);
-            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块1"), 1f);
-            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块2"), 1f);
-            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块3"), 1f);
-            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块4"), 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/水雷碎块1").Type, 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/水雷碎块2").Type, 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/水雷碎块3").Type, 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/水雷碎块4").Type, 1f);
         }
         public override void HitEffect(NPC.HitInfo hit)
         {
-            Projectile.NewProjectile(base.NPC.position.X + (float)base.NPC.width * 0.5f, base.NPC.position.Y + (float)base.NPC.height * 0.5f, 0f, 0f, 164, 150, 4f, Main.myPlayer, 0f, 0f);
+            Projectile.NewProjectile(null, base.NPC.position.X + (float)base.NPC.width * 0.5f, base.NPC.position.Y + (float)base.NPC.height * 0.5f, 0f, 0f, 164, 150, 4f, Main.myPlayer, 0f, 0f);
             float scaleFactor = (float)(Main.rand.Next(-200, 200) / 100);
-            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块1"), 1f);
-            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块2"), 1f);
-            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块3"), 1f);
-            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, base.Mod.GetGoreSlot("Gores/水雷碎块4"), 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/水雷碎块1").Type, 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/水雷碎块2").Type, 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/水雷碎块3").Type, 1f);
+            Gore.NewGore(base.NPC.position, base.NPC.velocity * scaleFactor, ModContent.Find<ModGore>("Everglow/水雷碎块4").Type, 1f);
         }
 		public override bool CheckActive()
 		{
