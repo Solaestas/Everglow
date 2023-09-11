@@ -79,13 +79,15 @@ public class GoldenShowerBomb : ModProjectile, IWarpProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		Texture2D Shadow = ModAsset.CursedHitLight.Value;
-		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(255, 205, 0, 0) * dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark, SpriteEffects.None, 0);
+		float dark = Math.Max((Projectile.timeLeft - 100) / 50f, 0);
+		float dark2 = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
+		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(255, 205, 0, 0) * dark2, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark2, SpriteEffects.None, 0);
 
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		Color cDark = new Color(0, 0, 0, 1f - timeValue);
 		DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 20 * (1 - timeValue) * Projectile.ai[0], cDark * dark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
 		DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 4 * (1 - timeValue) * Projectile.ai[0], new Color(255, 205, 0, 0) * dark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 48 * Projectile.ai[0], 40 * Projectile.ai[0], new Color(255, 205, 0, 0) * dark2, Projectile.Center - Main.screenPosition, Commons.ModAsset.Noise_hiveCyber.Value);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -125,8 +127,7 @@ public class GoldenShowerBomb : ModProjectile, IWarpProjectile
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft;
 
-		MythUtils.DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 36 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.6f * value
-			, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		MythUtils.DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 64 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 2f * value, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{

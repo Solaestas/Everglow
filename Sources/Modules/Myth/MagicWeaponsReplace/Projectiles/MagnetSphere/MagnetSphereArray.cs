@@ -60,6 +60,9 @@ internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 		Player player = Main.player[Projectile.owner];
 		Vector2 center = player.Center + ringPos - Main.screenPosition;
 		float timeValue = (float)(Main.timeForVisualEffects * 0.01);
+		float width = 10f;
+		width *= timer / 30f;
+		Color baseColor = new Color(0, 255, 215, 0);
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for(int t = 0;t < 3;t++)
 		{
@@ -73,19 +76,19 @@ internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 					Vector2 oldPos = vertexPos;
 					if(j == 0)
 					{
-						Vector2 normalizedVel = Vector2.Normalize(vertexVel.RotatedBy(-MathHelper.PiOver2)) * 10;
+						Vector2 normalizedVel = Vector2.Normalize(vertexVel.RotatedBy(-MathHelper.PiOver2)) * width;
 						bars.Add(new Vertex2D(center + vertexPos - normalizedVel, Color.Transparent, new Vector3(j / 25f + timeValue, 0, 0)));
 						bars.Add(new Vertex2D(center + vertexPos + normalizedVel, Color.Transparent, new Vector3(j / 25f + timeValue, 1, 0)));
 					}
 					vertexPos += vertexVel;
 					vertexVel = Vector2.Normalize(-vertexPos - vertexVel) * 2.5f + vertexVel * 0.96f;
-					Color drawColor = new Color(0, 255, 215, 0);
+					Color drawColor = baseColor;
 					if(vertexPos.Length() < 3.5f)
 					{
 						vertexPos = Vector2.zeroVector;
 						drawColor = Color.Transparent;
 					}
-					Vector2 normalized = Vector2.Normalize(vertexPos - oldPos).RotatedBy(MathHelper.PiOver2) * 10;
+					Vector2 normalized = Vector2.Normalize(vertexPos - oldPos).RotatedBy(MathHelper.PiOver2) * width;
 					bars.Add(new Vertex2D(center + vertexPos - normalized, drawColor, new Vector3(j / 25f + timeValue, 0, 0)));
 					bars.Add(new Vertex2D(center + vertexPos + normalized, drawColor, new Vector3(j / 25f + timeValue, 1, 0)));
 				}
@@ -94,10 +97,21 @@ internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.FogTraceLight.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		bars = new List<Vertex2D>();
+		for (int x = 0;x <= 30;x++)
+		{
+			float rad = 70 + MathF.Sin(timeValue) * 10;
+			Vector2 radious = new Vector2(0, -1).RotatedBy(x / 30d * MathHelper.TwoPi);
+			bars.Add(new Vertex2D(center + radious * rad, baseColor, new Vector3(x / 30f, 0 + timeValue, 0)));
+			bars.Add(new Vertex2D(center + radious * (rad - 15 * timer / 30f), Color.Transparent, new Vector3(x / 30f, 0.1f + timeValue, 0)));
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_phantom.Value;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 	}
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		Player player = Main.player[Projectile.owner];
-		DrawTexCircle(spriteBatch, timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
+		DrawTexCircle(spriteBatch, timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 17);
 	}
 }

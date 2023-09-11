@@ -83,7 +83,7 @@ public class GoldenShowerII : ModProjectile, IWarpProjectile
 		for(int x = 0; x < 8;x++)
 		{
 			Vector2 BasePos = Projectile.Center - new Vector2(4) + Projectile.velocity * Main.rand.NextFloat(1f);
-			var d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Ichor, 0, 0, 0, default, 0.6f / (Projectile.ai[0] + 1));
+			var d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Ichor, 0, 0, 0, default, 0.6f);
 			d0.noGravity = true;
 			d0.velocity *= 0;
 		}

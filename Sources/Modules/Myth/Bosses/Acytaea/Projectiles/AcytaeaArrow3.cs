@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Bosses.Acytaea.NPCs;
+using Everglow.Myth.Bosses.Acytaea.NPCs;
 using Terraria.Audio;
 
 namespace Everglow.Myth.Bosses.Acytaea.Projectiles;
@@ -48,26 +48,26 @@ internal class AcytaeaArrow3 : ModProjectile
 			ka = Projectile.timeLeft / 60f;
 		Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 1.2f / 250f * ka, 0, 0);
 		Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
-		for (int z = 0; z < 200; z++)
-		{
-			if (Main.npc[z].active && Main.npc[z].type == ModContent.NPCType<AcytaeaShadow3>())
-			{
-				if ((Main.npc[z].Center - Projectile.Center).Length() < 60)
-				{
-					Main.npc[z].active = false;
-					for (int j = 0; j < 6; j++)
-					{
-						Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 7f)).RotatedByRandom(6.28);
-						Projectile.NewProjectile(null, Projectile.Center + v * 2f, v, ModContent.ProjectileType<BrokenAcytaea2>(), 0, 1, Main.myPlayer);
-					}
-					for (int j = 0; j < 30; j++)
-					{
-						Vector2 v0 = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(Math.PI * 2);
-						Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 8f)).RotatedByRandom(Math.PI * 2), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), v0.X, v0.Y, 0, default, 1.5f);
-					}
-				}
-			}
-		}
+		//for (int z = 0; z < 200; z++)
+		//{
+		//	if (Main.npc[z].active && Main.npc[z].type == ModContent.NPCType<AcytaeaShadow3>())
+		//	{
+		//		if ((Main.npc[z].Center - Projectile.Center).Length() < 60)
+		//		{
+		//			Main.npc[z].active = false;
+		//			for (int j = 0; j < 6; j++)
+		//			{
+		//				Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 7f)).RotatedByRandom(6.28);
+		//				Projectile.NewProjectile(null, Projectile.Center + v * 2f, v, ModContent.ProjectileType<BrokenAcytaea2>(), 0, 1, Main.myPlayer);
+		//			}
+		//			for (int j = 0; j < 30; j++)
+		//			{
+		//				Vector2 v0 = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(Math.PI * 2);
+		//				Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 8f)).RotatedByRandom(Math.PI * 2), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), v0.X, v0.Y, 0, default, 1.5f);
+		//			}
+		//		}
+		//	}
+		//}
 		int num22 = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 8f)).RotatedByRandom(Math.PI * 2), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1.5f);
 		Main.dust[num22].velocity *= 0.2f;
 	}
