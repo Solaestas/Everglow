@@ -7,7 +7,7 @@ namespace Everglow.Myth.TheFirefly.NPCs;
 public class BlackStarFruit : ModNPC
 {
 	/// <summary>
-	/// The time of the light from the entity. Used with <see cref="vectorRotationPosition"/> and <see cref="flo"/>
+	/// The time of the light from the entity. Used with <see cref="vectorRotationPosition"/> and <see cref="floatLightPosition"/>
 	/// </summary>
 	private float EntityLightTime = 0;
 	private Vector2[] vectorRotationPosition = new Vector2[12];
