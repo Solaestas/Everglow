@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 namespace Everglow.Myth.LanternMoon.Projectiles.DashCore;
 
 class YellowFlame0Shine : ModProjectile
@@ -72,7 +72,6 @@ class YellowFlame0Shine : ModProjectile
 	Color Aimcolor = new Color(255, 204, 0);
 	Color[] ProjOldColor = new Color[70];
 	float kb = 1;
-	float x = 0;
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return false;

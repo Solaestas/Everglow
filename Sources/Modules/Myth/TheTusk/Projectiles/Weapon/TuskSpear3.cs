@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
 public class TuskSpear3 : ModProjectile
@@ -25,7 +25,6 @@ public class TuskSpear3 : ModProjectile
 	public override void AI()
 	{
 		float Rot1 = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
-		float Rot2 = 1.8f;
 		Projectile.rotation = Rot1;
 		Player player = Main.player[Projectile.owner];
 

@@ -1,4 +1,5 @@
 using Everglow.Myth.Common;
+using Microsoft.Xna.Framework;
 using Terraria;
 using static Everglow.Myth.Common.MythUtils;
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere;
@@ -108,6 +109,33 @@ internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_phantom.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		bars = new List<Vertex2D>();
+		for (int x = 0; x <= 30; x++)
+		{
+			float rad = 70 + MathF.Sin(timeValue) * 10;
+			Vector2 radius = new Vector2(0, -1).RotatedBy(x / 30d * MathHelper.TwoPi);
+			bars.Add(new Vertex2D(center + radius * rad, baseColor, new Vector3(x / 30f, 0 + timeValue, 0)));
+			bars.Add(new Vertex2D(center + radius * (rad - 15 * timer / 30f), Color.Transparent, new Vector3(x / 30f, 0.1f + timeValue, 0)));
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_phantom.Value;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		bars = new List<Vertex2D>();
+		for (int x = 0; x < 3;x ++)
+		{
+			Vector2 radius = new Vector2(0, -1).RotatedBy((x + 0.5) / 3d * MathHelper.TwoPi + timeValue);
+			Vector2 cut = new Vector2(0, -1).RotatedBy((x + 0.5) / 3d * MathHelper.TwoPi + MathHelper.PiOver2 + timeValue);
+			bars.Add(new Vertex2D(center + radius * 40, baseColor, new Vector3(x / 3f, 0 + timeValue * 0.2f, 0)));
+			bars.Add(new Vertex2D(center + radius * 80 + cut * width * 0.4f, baseColor, new Vector3(x / 3f + 0.4f, 0.4f + timeValue * 0.2f, 0)));
+			bars.Add(new Vertex2D(center + radius * 80 - cut * width * 0.4f, baseColor, new Vector3(x / 3f - 0.4f, 0.4f + timeValue * 0.2f, 0)));
+
+			bars.Add(new Vertex2D(center + radius * 80 + cut * width * 0.4f, baseColor, new Vector3(x / 3f + 0.4f, 0.4f + timeValue * 0.2f, 0)));
+			bars.Add(new Vertex2D(center + radius * 80 - cut * width * 0.4f, baseColor, new Vector3(x / 3f - 0.4f, 0.4f + timeValue * 0.2f, 0)));
+			bars.Add(new Vertex2D(center + radius * 100, baseColor, new Vector3(x / 3f, 0.8f + timeValue * 0.2f, 0)));
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_crack_dense.Value;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
 	}
 	public void DrawWarp(VFXBatch spriteBatch)
 	{

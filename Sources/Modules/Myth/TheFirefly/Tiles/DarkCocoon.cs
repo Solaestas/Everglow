@@ -149,25 +149,6 @@ public class DarkCocoon : ModTile
 				}
 			}
 		}
-		bool canPlace1x2 = true;
-		for (int x = 0; x < 1; x++)
-		{
-			for (int y = -2; y < 1; y++)
-			{
-				Tile checkTile = Main.tile[i + x, j + y];
-				if (checkTile.HasTile && y <= -1)
-				{
-					canPlace1x2 = false;
-				}
-				if (y == 0)
-				{
-					if (!checkTile.HasTile || checkTile.Slope != SlopeType.Solid)
-					{
-						canPlace1x2 = false;
-					}
-				}
-			}
-		}
 		bool canPlace2x1 = true;
 		for (int x = 0; x < 2; x++)
 		{

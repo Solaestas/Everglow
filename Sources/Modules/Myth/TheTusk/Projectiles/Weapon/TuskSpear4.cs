@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
 internal class TuskSpear4 : ModProjectile
@@ -17,7 +17,6 @@ internal class TuskSpear4 : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
 	}
-	private float K = 10;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		for (int y = 0; y < 12; y++)

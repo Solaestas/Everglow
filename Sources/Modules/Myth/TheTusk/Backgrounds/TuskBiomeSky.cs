@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheTusk.WorldGeneration;
 using Terraria.Graphics.Effects;
 namespace Everglow.Myth.TheTusk.Backgrounds;
@@ -245,7 +245,6 @@ public class TuskBiomeSky : CustomSky
 		Vector2 SkyVortex = SkyBase + new Vector2(1210, 161)/*图心偏移坐标*/ - new Vector2(1024, 600)/*绘制中心*/;
 		SkyVortex = TuskBiomeCenter;
 		float Blength = 1800;
-		float ABdevide = 0.32085f;
 		double OneDevideRotaSpeed = 2500d;
 
 		var CloudLine = new Texture2D[10];

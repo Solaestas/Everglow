@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria;
 using Terraria.Localization;
 
@@ -99,7 +99,6 @@ public class ToothSpear : ModProjectile
 
 		return false; // Don't execute vanilla AI.
 	}
-	private Effect ef;
 	private bool max = false;
 	private Vector2[] vpos = new Vector2[15];
 }

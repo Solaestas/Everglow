@@ -70,18 +70,16 @@ public class MythUtils
 		}
 		spriteBatch.Draw(tex, vertex2Ds, PrimitiveType.TriangleList);
 	}
-	public static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	public static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0, int precise = 1)
 	{
 		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radius / 2; h += 2)
+		for (int h = 0; h <= radius * precise; h += 1)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 0, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 2 / precise + addRot), color, new Vector3(h / radius / precise, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(h / radius * Math.PI * 2 / precise + addRot), color, new Vector3(h / radius / precise, 0, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius), color, new Vector3(1, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius + width), color, new Vector3(1, 0, 0)));
 		if (circle.Count > 0)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = tex;

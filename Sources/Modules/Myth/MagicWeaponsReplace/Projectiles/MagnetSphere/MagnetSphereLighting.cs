@@ -82,6 +82,8 @@ public class MagnetSphereLighting : ModProjectile, IWarpProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		DrawLightingBolt(Color.White * 0.3f);
 		DrawLightingBolt(new Color(0, 255, 199, 0));
 
@@ -97,7 +99,7 @@ public class MagnetSphereLighting : ModProjectile, IWarpProjectile
 			value = 0;
 		float colorV = 0.9f * (1 - value);
 
-		Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+		Texture2D t = ModAsset.Wave.Value;
 		DrawTexCircle(value * 160, 10 * value * value, new Color(0, colorV, colorV * 0.7f, 0f), Projectile.Center - Main.screenPosition, t);
 
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), (float)(Math.PI / 4d) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, dark / 2f), SpriteEffects.None, 0);
@@ -189,11 +191,11 @@ public class MagnetSphereLighting : ModProjectile, IWarpProjectile
 		{
 			if (c0 == Color.White * 0.3f)
 			{
-				Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Darkline");
+				Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Darkline.Value;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, lighting.ToArray(), 0, lighting.Count - 2);
 				return;
 			}
-			Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagneticLight");
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.MagneticLight.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, lighting.ToArray(), 0, lighting.Count - 2);
 		}
 	}
@@ -201,7 +203,7 @@ public class MagnetSphereLighting : ModProjectile, IWarpProjectile
 	{
 		float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
 		float colorV = 0.9f * (1 - value);
-		Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+		Texture2D t = ModAsset.Wave.Value;
 		DrawTexCircle(spriteBatch, value * 160, 100, new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 }

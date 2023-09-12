@@ -15,6 +15,8 @@ sampler uImage2 : register(s2);
 float4x4 uTransform;
 float3 circleCenter;
 float radiusOfCircle;
+float uTime;
+float uWarp;
 
 struct VSInput {
 	float2 Pos : POSITION0;
@@ -60,12 +62,16 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
 	// 求 theta 和 phi ，对应 x, y
 	float3 hitpos = dir * t - circleCenter;
 	float3 N = normalize(hitpos);
-	float x = atan2(hitpos.z, hitpos.x) / 3.14159 + 1.0;
-	float y = hitpos.y / radiusOfCircle + 1.0;
-
+	float x = atan2(N.z, N.x) / 3.14159 + 1.0;
+	float y = atan2(N.y, N.x) / 3.14159 + 1.0;
+	//float y = hitpos.y / radiusOfCircle + 1.0;
 	// 因为我坐标是 [-1, 1] 这个区间的，所以先要翻正再取模
-	float xx = fmod(x + 1, 1.0);
+	float xx = fmod(x + 1 + input.Texcoord.z, 1.0);//增加由input.z引起的一个旋转效果
 	float yy = fmod(y + 1, 1.0);
+	float xx2 = fmod(x + 1 + uTime, 1.0);//增加由uTime引起的模糊
+	float4 warp = tex2D(uImage1, float2(xx2, yy));
+	xx += (warp.r - 0.5) * uWarp;
+	yy += (warp.g - 0.5) * uWarp;
 	return tex2D(uImage0, float2(xx, yy)) * input.Color;
 
 }
@@ -84,7 +90,7 @@ technique Technique1
 {
 	pass ColorBar 
 	{
-		VertexShader = compile vs_2_0 VertexShaderFunction();
-		PixelShader = compile ps_2_0 PixelShaderFunction();
+		VertexShader = compile vs_3_0 VertexShaderFunction();
+		PixelShader = compile ps_3_0 PixelShaderFunction();
 	}
 }

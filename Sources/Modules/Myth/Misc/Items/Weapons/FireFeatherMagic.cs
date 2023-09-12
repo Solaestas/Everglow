@@ -48,7 +48,6 @@ public class FireFeatherMagic : ModItem
 		}
 		return false;
 	}
-	float useSpeed = -1f;
 	public override void HoldItem(Player player)
 	{
 	}

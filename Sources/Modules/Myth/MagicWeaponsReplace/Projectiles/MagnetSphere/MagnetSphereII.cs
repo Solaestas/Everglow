@@ -32,9 +32,9 @@ public class MagnetSphereII : ModProjectile
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
-		Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0, 0.46f * Projectile.scale, 0.4f * Projectile.scale);
+		Lighting.AddLight(Projectile.Center, 0, 1.8f * Projectile.scale, 1.4f * Projectile.scale);
 		Projectile.velocity *= 0.999f;
-		Projectile.scale = 0.6f + (float)Math.Sin(Main.timeForVisualEffects / 1.8f + Projectile.ai[0]) * 0.45f;
+		Projectile.scale = 0.6f + (float)Math.Sin(Main.timeForVisualEffects / 1.8f + Projectile.whoAmI) * 0.25f;
 		Projectile.timeLeft -= player.ownedProjectileCounts[Projectile.type];
 		if (Main.rand.NextBool(8))
 		{
@@ -71,56 +71,50 @@ public class MagnetSphereII : ModProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = ModAsset.MagnetSphereII.Value;
-
-		Texture2D Shade = ModAsset.NewWaterBoltShade.Value;
-
+		float timeValue = (float)(Main.timeForVisualEffects * 0.008f);
+		float mulSize = 1f + MathF.Sin(timeValue * 15f + Projectile.whoAmI) * 0.15f;
 		var baseColor = new Color(0, 199, 129, 0);
-
-
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		MythUtils.DrawTexCircle(20 * mulSize, 10, baseColor, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail.Value, 0, 3);
+		Texture2D Light = ModAsset.MagnetSphereII.Value;
+		Texture2D Shade = ModAsset.NewWaterBoltShade.Value;
 		Main.spriteBatch.Draw(Shade, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, Color.White, Projectile.rotation, Shade.Size() / 2f, 1.08f * Projectile.scale, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, baseColor, Projectile.rotation, Light.Size() / 2f, 0.8f * Projectile.scale, SpriteEffects.None, 0);
 
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect sphere = Commons.ModAsset.SpherePerspective.Value;
 		List<Vertex2D> triangleList = new List<Vertex2D>();
-		float radius = 40;
-		float timeValue = (float)(Main.timeForVisualEffects * 0.02f) % 1;
-		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), baseColor , new Vector3(-1 + timeValue, 1, 0)));
-		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, -radius), baseColor , new Vector3(-1 + timeValue, -1, 0)));
-		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, -radius), baseColor , new Vector3(1 + timeValue, -1, 0)));
+		float radius = 40 * mulSize;
 
-		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), baseColor , new Vector3(-1 + timeValue, 1, 0)));
-		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, -radius), baseColor , new Vector3(1 + timeValue, -1, 0)));
-		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, radius), baseColor , new Vector3(1 + timeValue, 1, 0)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), baseColor , new Vector3(-1, 1, timeValue)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, -radius), baseColor , new Vector3(-1, -1, timeValue)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, -radius), baseColor , new Vector3(1, -1, timeValue)));
 
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
-		RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-		// 干掉注释掉就可以只显示三角形栅格
-		//RasterizerState rasterizerState = new RasterizerState();
-		//rasterizerState.CullMode = CullMode.None;
-		//rasterizerState.FillMode = FillMode.WireFrame;
-		//Main.graphics.GraphicsDevice.RasterizerState = rasterizerState;
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), baseColor , new Vector3(-1, 1, timeValue)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, -radius), baseColor , new Vector3(1, -1, timeValue)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, radius), baseColor , new Vector3(1, 1, timeValue)));
 
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0));
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-
-		// 把变换和所需信息丢给shader
 		sphere.Parameters["uTransform"].SetValue(model * projection);
 		sphere.Parameters["circleCenter"].SetValue(new Vector3(0, 0, -2));
 		sphere.Parameters["radiusOfCircle"].SetValue(1f);
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_hiveCyber.Value;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		sphere.Parameters["uTime"].SetValue(timeValue * 0.4f);
+		sphere.Parameters["uWarp"].SetValue(0.06f);
 
 		sphere.CurrentTechnique.Passes[0].Apply();
 
-
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_hiveCyber.Value;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.Textures[1] = Commons.ModAsset.Noise_rgb.Value;
+		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.LinearWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
-
-		Main.graphics.GraphicsDevice.RasterizerState = originalState;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 		return false;
 	}
 
