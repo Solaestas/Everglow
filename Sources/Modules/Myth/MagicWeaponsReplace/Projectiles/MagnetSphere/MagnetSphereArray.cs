@@ -101,9 +101,9 @@ internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 		for (int x = 0;x <= 30;x++)
 		{
 			float rad = 70 + MathF.Sin(timeValue) * 10;
-			Vector2 radious = new Vector2(0, -1).RotatedBy(x / 30d * MathHelper.TwoPi);
-			bars.Add(new Vertex2D(center + radious * rad, baseColor, new Vector3(x / 30f, 0 + timeValue, 0)));
-			bars.Add(new Vertex2D(center + radious * (rad - 15 * timer / 30f), Color.Transparent, new Vector3(x / 30f, 0.1f + timeValue, 0)));
+			Vector2 radius = new Vector2(0, -1).RotatedBy(x / 30d * MathHelper.TwoPi);
+			bars.Add(new Vertex2D(center + radius * rad, baseColor, new Vector3(x / 30f, 0 + timeValue, 0)));
+			bars.Add(new Vertex2D(center + radius * (rad - 15 * timer / 30f), Color.Transparent, new Vector3(x / 30f, 0.1f + timeValue, 0)));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_phantom.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;

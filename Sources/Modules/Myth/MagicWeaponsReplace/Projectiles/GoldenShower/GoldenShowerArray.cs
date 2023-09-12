@@ -69,9 +69,9 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int t = 0; t <= 30; t++)
 		{
-			Vector2 radious = new Vector2(0, -90).RotatedBy(t / 30d * MathHelper.TwoPi);
-			bars.Add(new Vertex2D(player.Center + ringPos + radious, c0, new Vector3(t / 30f, 0, 0)));
-			bars.Add(new Vertex2D(player.Center + ringPos + radious * 0.5f, Color.Transparent, new Vector3(t / 30f, 1, 0)));
+			Vector2 radius = new Vector2(0, -90).RotatedBy(t / 30d * MathHelper.TwoPi);
+			bars.Add(new Vertex2D(player.Center + ringPos + radius, c0, new Vector3(t / 30f, 0, 0)));
+			bars.Add(new Vertex2D(player.Center + ringPos + radius * 0.5f, Color.Transparent, new Vector3(t / 30f, 1, 0)));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Wave_full_black.Value;
 		Main.graphics.GraphicsDevice.Textures[1] = Commons.ModAsset.Noise_flame_0.Value;
@@ -83,9 +83,9 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		bars = new List<Vertex2D>();
 		for (int t = 0; t <= 30; t++)
 		{
-			Vector2 radious = new Vector2(0, -90).RotatedBy(t / 30d * MathHelper.TwoPi);
-			bars.Add(new Vertex2D(player.Center + ringPos + radious, c0, new Vector3(t / 30f, 0, 0)));
-			bars.Add(new Vertex2D(player.Center + ringPos + radious * 0.5f, Color.Transparent, new Vector3(t / 30f, 1, 0)));
+			Vector2 radius = new Vector2(0, -90).RotatedBy(t / 30d * MathHelper.TwoPi);
+			bars.Add(new Vertex2D(player.Center + ringPos + radius, c0, new Vector3(t / 30f, 0, 0)));
+			bars.Add(new Vertex2D(player.Center + ringPos + radius * 0.5f, Color.Transparent, new Vector3(t / 30f, 1, 0)));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Wave_full.Value;
 		Main.graphics.GraphicsDevice.Textures[1] = Commons.ModAsset.Noise_flame_0.Value;
@@ -99,15 +99,15 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		float timeValue = (float)(Main.timeForVisualEffects * 0.03);
 		for (int t = 0; t <= 12; t++)
 		{
-			Vector2 radious = new Vector2(0, -81).RotatedBy((t + 0.5) / 12d * MathHelper.TwoPi);
-			Vector2 radiousT = radious.RotatedBy(MathHelper.PiOver2) / 12;
+			Vector2 radius = new Vector2(0, -81).RotatedBy((t + 0.5) / 12d * MathHelper.TwoPi);
+			Vector2 radiousT = radius.RotatedBy(MathHelper.PiOver2) / 12;
 
 			bars.Add(new Vertex2D(player.Center + ringPos + radiousT, c0, new Vector3(timeValue + t * 0.7f, 0, 0)));
 			bars.Add(new Vertex2D(player.Center + ringPos - radiousT, c0, new Vector3(timeValue + t * 0.7f, 1, 0)));
-			bars.Add(new Vertex2D(player.Center + ringPos + radious + radiousT, c0 * 0, new Vector3(timeValue + t * 0.7f + 0.7f, 0, 0)));
+			bars.Add(new Vertex2D(player.Center + ringPos + radius + radiousT, c0 * 0, new Vector3(timeValue + t * 0.7f + 0.7f, 0, 0)));
 
-			bars.Add(new Vertex2D(player.Center + ringPos + radious + radiousT, c0 * 0, new Vector3(timeValue + t * 0.7f + 0.7f, 0, 0)));
-			bars.Add(new Vertex2D(player.Center + ringPos + radious - radiousT, c0 * 0, new Vector3(timeValue + t * 0.7f + 0.7f, 1, 0)));
+			bars.Add(new Vertex2D(player.Center + ringPos + radius + radiousT, c0 * 0, new Vector3(timeValue + t * 0.7f + 0.7f, 0, 0)));
+			bars.Add(new Vertex2D(player.Center + ringPos + radius - radiousT, c0 * 0, new Vector3(timeValue + t * 0.7f + 0.7f, 1, 0)));
 			bars.Add(new Vertex2D(player.Center + ringPos - radiousT, c0, new Vector3(timeValue + t * 0.7f, 1, 0)));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_2.Value;
@@ -125,13 +125,13 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		c0 = new Color(0,0,0,150) * power;
 		for (int t = 0; t <= 8; t++)
 		{
-			Vector2 radious = new Vector2(0, -240);
+			Vector2 radius = new Vector2(0, -240);
 			Vector2 radiousT = new Vector2(0, -projPower).RotatedBy(MathHelper.PiOver2);
 			float value = (t - 4f) / 8f;
 			float zValue = MathF.Cos(value * MathHelper.TwoPi) + 1;
 			zValue /= 3f;
-			bars.Add(new Vertex2D(player.Center + ringPos + radious * value + radiousT, c0, new Vector3(t / 7f, 0, zValue)));
-			bars.Add(new Vertex2D(player.Center + ringPos + radious * value - radiousT, c0, new Vector3(t / 7f, 1, zValue)));
+			bars.Add(new Vertex2D(player.Center + ringPos + radius * value + radiousT, c0, new Vector3(t / 7f, 0, zValue)));
+			bars.Add(new Vertex2D(player.Center + ringPos + radius * value - radiousT, c0, new Vector3(t / 7f, 1, zValue)));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_0_black.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
@@ -141,14 +141,14 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		c0 = new Color(255, 210, 0, 0) * 0.75f * power;
 		for (int t = 0; t <= 8; t++)
 		{
-			Vector2 radious = new Vector2(0, -240);
+			Vector2 radius = new Vector2(0, -240);
 			Vector2 radiousT = new Vector2(0, -projPower).RotatedBy(MathHelper.PiOver2);
 			float value = (t - 4f) / 8f;
 			float zValue = MathF.Cos(value * MathHelper.TwoPi) + 1;
 			zValue /= 3f;
 			zValue *= projPower / 30f;
-			bars.Add(new Vertex2D(player.Center + ringPos + radious * value + radiousT, c0, new Vector3(t / 7f, 0, zValue)));
-			bars.Add(new Vertex2D(player.Center + ringPos + radious * value - radiousT, c0, new Vector3(t / 7f, 1, zValue)));
+			bars.Add(new Vertex2D(player.Center + ringPos + radius * value + radiousT, c0, new Vector3(t / 7f, 0, zValue)));
+			bars.Add(new Vertex2D(player.Center + ringPos + radius * value - radiousT, c0, new Vector3(t / 7f, 1, zValue)));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_0.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
@@ -158,14 +158,14 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		bars = new List<Vertex2D>();
 		for (int t = 0; t <= 8; t++)
 		{
-			Vector2 radious = new Vector2(0, -105);
+			Vector2 radius = new Vector2(0, -105);
 			Vector2 radiousT = new Vector2(0, -30).RotatedBy(MathHelper.PiOver2);
 			float value = (t - 4f) / 8f;
 			float zValue = MathF.Cos(value * MathHelper.TwoPi) + 1;
 			zValue /= 4f;
 			zValue *= projPower / 30f;
-			bars.Add(new Vertex2D(player.Center + ringPos + radious * value + radiousT, c0, new Vector3(t / 7f, 0, zValue)));
-			bars.Add(new Vertex2D(player.Center + ringPos + radious * value - radiousT, c0, new Vector3(t / 7f, 1, zValue)));
+			bars.Add(new Vertex2D(player.Center + ringPos + radius * value + radiousT, c0, new Vector3(t / 7f, 0, zValue)));
+			bars.Add(new Vertex2D(player.Center + ringPos + radius * value - radiousT, c0, new Vector3(t / 7f, 1, zValue)));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_0_black.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
@@ -193,13 +193,13 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		Color c0 = new Color(0, 0, 0, 255);
 		for (int t = 0; t <= 8; t++)
 		{
-			Vector2 radious = new Vector2(0, -projPower * 8);
+			Vector2 radius = new Vector2(0, -projPower * 8);
 			Vector2 radiousT = new Vector2(0, -projPower).RotatedBy(MathHelper.PiOver2);
 			float value = (t - 4f) / 8f;
 			float zValue = MathF.Cos(value * MathHelper.TwoPi) + 1;
 			zValue /= 3f;
-			bars.Add(new Vertex2D(player.Center + ringPos + radious * value + radiousT, c0, new Vector3(t / 7f, 0, zValue)));
-			bars.Add(new Vertex2D(player.Center + ringPos + radious * value - radiousT, c0, new Vector3(t / 7f, 1, zValue)));
+			bars.Add(new Vertex2D(player.Center + ringPos + radius * value + radiousT, c0, new Vector3(t / 7f, 0, zValue)));
+			bars.Add(new Vertex2D(player.Center + ringPos + radius * value - radiousT, c0, new Vector3(t / 7f, 1, zValue)));
 		}
 
 		spriteBatch.Draw(Commons.ModAsset.Trail_7_black.Value, bars, PrimitiveType.TriangleStrip);

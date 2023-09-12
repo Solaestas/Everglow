@@ -1,4 +1,5 @@
 using Everglow.Myth.Common;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -70,19 +71,56 @@ public class MagnetSphereII : ModProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagnetSphere/MagnetSphereII");
-		Texture2D Light2 = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagnetSphere/Projectile_254");
-		Texture2D Shade = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterBolt/NewWaterBoltShade");
+		Texture2D Light = ModAsset.MagnetSphereII.Value;
 
-		var c0 = new Color(0, 199, 129, 0);
+		Texture2D Shade = ModAsset.NewWaterBoltShade.Value;
+
+		var baseColor = new Color(0, 199, 129, 0);
 
 
 		Main.spriteBatch.Draw(Shade, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, Color.White, Projectile.rotation, Shade.Size() / 2f, 1.08f * Projectile.scale, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, baseColor, Projectile.rotation, Light.Size() / 2f, 0.8f * Projectile.scale, SpriteEffects.None, 0);
+
+		Effect sphere = Commons.ModAsset.SpherePerspective.Value;
+		List<Vertex2D> triangleList = new List<Vertex2D>();
+		float radius = 40;
+		float timeValue = (float)(Main.timeForVisualEffects * 0.02f) % 1;
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), baseColor , new Vector3(-1 + timeValue, 1, 0)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, -radius), baseColor , new Vector3(-1 + timeValue, -1, 0)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, -radius), baseColor , new Vector3(1 + timeValue, -1, 0)));
+
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), baseColor , new Vector3(-1 + timeValue, 1, 0)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, -radius), baseColor , new Vector3(1 + timeValue, -1, 0)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, radius), baseColor , new Vector3(1 + timeValue, 1, 0)));
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+		RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
+		// 干掉注释掉就可以只显示三角形栅格
+		//RasterizerState rasterizerState = new RasterizerState();
+		//rasterizerState.CullMode = CullMode.None;
+		//rasterizerState.FillMode = FillMode.WireFrame;
+		//Main.graphics.GraphicsDevice.RasterizerState = rasterizerState;
+
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0));
 
 
-		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, 0.8f * Projectile.scale, SpriteEffects.None, 0);
-		var rt = new Rectangle(0, 44 * (int)(Main.timeForVisualEffects / 6f % 5), 38, 44);
-		Main.spriteBatch.Draw(Light2, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), rt, new Color(95, 95, 95, 55), Projectile.rotation, rt.Size() / 2f, Projectile.scale * 0.2f + 1.2f, SpriteEffects.None, 0);
+		// 把变换和所需信息丢给shader
+		sphere.Parameters["uTransform"].SetValue(model * projection);
+		sphere.Parameters["circleCenter"].SetValue(new Vector3(0, 0, -2));
+		sphere.Parameters["radiusOfCircle"].SetValue(1f);
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_hiveCyber.Value;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+
+		sphere.CurrentTechnique.Passes[0].Apply();
+
+
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
+
+		Main.graphics.GraphicsDevice.RasterizerState = originalState;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin();
 		return false;
 	}
 

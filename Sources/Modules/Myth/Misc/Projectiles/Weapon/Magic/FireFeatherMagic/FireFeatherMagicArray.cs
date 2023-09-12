@@ -167,15 +167,15 @@ internal class FireFeatherMagicArray : VisualProjectile
 		for (int x = 0; x < 40; x++)
 		{
 			float pocession = 1 - timer / 30f;
-			Vector2 radious = toBottom.RotatedBy(x / 20d * Math.PI);
+			Vector2 radius = toBottom.RotatedBy(x / 20d * Math.PI);
 			float width = 75f;
 			if (x / 40f > WingPower / 210f)
 			{
 				pocession += 0.7f;
 			}
-			Vector2 normalizedRadious = radious / 40f * MathF.Sin(x / 40f * MathF.PI) * width;
-			bars.Add(new Vertex2D(Projectile.Center + radious + normalizedRadious, new Color(x / 40f, 0.0f, pocession, 0.0f), new Vector3(x / 25f, 0 + (float)Main.time * 0.009f, 0)));
-			bars.Add(new Vertex2D(Projectile.Center + radious, new Color(x / 40f, 0.8f, pocession, 0.0f), new Vector3(x / 25f, 0.5f + (float)Main.time * 0.009f, 0)));
+			Vector2 normalizedRadious = radius / 40f * MathF.Sin(x / 40f * MathF.PI) * width;
+			bars.Add(new Vertex2D(Projectile.Center + radius + normalizedRadious, new Color(x / 40f, 0.0f, pocession, 0.0f), new Vector3(x / 25f, 0 + (float)Main.time * 0.009f, 0)));
+			bars.Add(new Vertex2D(Projectile.Center + radius, new Color(x / 40f, 0.8f, pocession, 0.0f), new Vector3(x / 25f, 0.5f + (float)Main.time * 0.009f, 0)));
 		}
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}

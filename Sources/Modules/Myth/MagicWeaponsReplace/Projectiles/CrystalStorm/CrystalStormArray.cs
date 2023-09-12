@@ -129,25 +129,25 @@ internal class CrystalStormArray : ModProjectile
 
 	}
 
-	private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	private static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radious / 2; h++)
+		for (int h = 0; h < radius / 2; h++)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 0, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
 		if (circle.Count > 0)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = tex;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}
-	private static void DrawTexSquire(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	private static void DrawTexSquire(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
 		for (int h = 0; h < 5; h++)
@@ -155,22 +155,22 @@ internal class CrystalStormArray : ModProjectile
 			float Value0 = (float)(h / 4f + Main.timeForVisualEffects / 191d) % 1f;
 			float Value1 = (float)((h + 1) / 4f + Main.timeForVisualEffects / 191d) % 1f;
 
-			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(Math.PI / 2 * h + addRot), color, new Vector3(Value0, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(Math.PI / 2 * h + addRot), color, new Vector3(Value0, 0, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(Math.PI / 2 * h + addRot), color, new Vector3(Value0, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(Math.PI / 2 * h + addRot), color, new Vector3(Value0, 0, 0)));
 
 			if (Value1 < Value0)
 			{
 				float D0 = (1 - Value0) * 4;
-				Vector2 Delta = new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(Math.PI / 2 * (h + 1) + addRot) - new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(Math.PI / 2 * h + addRot);
-				Vector2 DeltaWidth = new Vector2(0, radious).RotatedBy(Math.PI / 2 * (h + 1) + addRot) - new Vector2(0, radious).RotatedBy(Math.PI / 2 * h + addRot);
+				Vector2 Delta = new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(Math.PI / 2 * (h + 1) + addRot) - new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(Math.PI / 2 * h + addRot);
+				Vector2 DeltaWidth = new Vector2(0, radius).RotatedBy(Math.PI / 2 * (h + 1) + addRot) - new Vector2(0, radius).RotatedBy(Math.PI / 2 * h + addRot);
 
 				if (h < 4)
 				{
-					circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(Math.PI / 2 * h + addRot) + Delta * D0, color, new Vector3(1, 1, 0)));
-					circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(Math.PI / 2 * h + addRot) + DeltaWidth * D0, color, new Vector3(1, 0, 0)));
+					circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(Math.PI / 2 * h + addRot) + Delta * D0, color, new Vector3(1, 1, 0)));
+					circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(Math.PI / 2 * h + addRot) + DeltaWidth * D0, color, new Vector3(1, 0, 0)));
 
-					circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(Math.PI / 2 * h + addRot) + Delta * D0, color, new Vector3(0, 1, 0)));
-					circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(Math.PI / 2 * h + addRot) + DeltaWidth * D0, color, new Vector3(0, 0, 0)));
+					circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(Math.PI / 2 * h + addRot) + Delta * D0, color, new Vector3(0, 1, 0)));
+					circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(Math.PI / 2 * h + addRot) + DeltaWidth * D0, color, new Vector3(0, 0, 0)));
 				}
 
 			}
