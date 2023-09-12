@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Items.Accessories;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -197,7 +197,7 @@ internal class ShadowWingBow : ModProjectile
 		Vector2 vec = player.DirectionTo(Main.MouseWorld);
 		Vector2 v = vec.RotatedBy(1.57f);
 
-		Vector2 basePos = player.MountedCenter + vec * 7 + new Vector2(0, 8);
+		Vector2 basePos = player.MountedCenter + vec * 7 + new Vector2(0, 2);
 		float b0 = Math.Clamp(Energy / 2f, 0, 60);
 		float b3 = b0 / 60f * (b0 / 60f);
 
@@ -218,7 +218,7 @@ internal class ShadowWingBow : ModProjectile
 			vertices.Add(new Vertex2D(pos[i] - Main.screenPosition, c, new Vector3(0, (float)i / pos.Length, 1)));
 			vertices.Add(new Vertex2D(pos[i] - Main.screenPosition + vec * 6, c, new Vector3(1, (float)i / pos.Length, 1)));
 		}
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowString");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.ShadowWingBowString.Value;
 		if (vertices.Count > 2)
 		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
@@ -232,22 +232,17 @@ internal class ShadowWingBow : ModProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		Player player = Main.player[Projectile.owner];
-		//Texture2D TexString = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowString0");
-		Texture2D TexMainU0 = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowU0");
-		Texture2D TexMainU1 = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowU1");
-		Texture2D TexMainU0G = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowU0Glow");
-		Texture2D TexMainU1G = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowU1Glow");
-		Texture2D TexMainU2 = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowU2");
-		Texture2D TexMainD0 = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowD0");
-		Texture2D TexMainD1 = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowD1");
-		Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowMain");
-		Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowMainGlow");
+		Texture2D TexMainU0 = ModAsset.ShadowWingBowU0.Value;
+		Texture2D TexMainU1 = ModAsset.ShadowWingBowU1.Value;
+		Texture2D TexMainU0G = ModAsset.ShadowWingBowU0Glow.Value;
+		Texture2D TexMainU1G = ModAsset.ShadowWingBowU1Glow.Value;
+		Texture2D TexMainU2 = ModAsset.ShadowWingBowU2.Value;
+		Texture2D TexMainD0 = ModAsset.ShadowWingBowD0.Value;
+		Texture2D TexMainD1 = ModAsset.ShadowWingBowD1.Value;
+		Texture2D TexMain = ModAsset.ShadowWingBowMain.Value;
+		Texture2D TexMainG = ModAsset.ShadowWingBowMainGlow.Value;
 		Texture2D TexArrow = TextureAssets.Projectile[(int)Projectile.ai[0]].Value;
-		Texture2D TexMothArrow = MythContent.QuickTexture("TheFirefly/Projectiles/MothArrow");
-		//float a0 = Energy % 60f;
-		//float a1 = (60 - a0) / 60f;
-		//float a2 = a1 * 1.5f;
-		//float a3 = a2 * a2;
+		Texture2D TexMothArrow = ModAsset.MothArrow.Value;
 		float b0 = Math.Clamp(Energy / 2f, 0, 60);
 		float b1 = b0 / 60f;
 		float b2 = b1;
@@ -266,9 +261,6 @@ internal class ShadowWingBow : ModProjectile
 			se = SpriteEffects.FlipVertically;
 		if (player.gravDir == -1 && player.direction == -1)
 			se = SpriteEffects.None;
-		//int StringFrame = 0;
-		//StringFrame = Math.Clamp((int)(Energy / 20f), 0, 5);
-		//TexString = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowString" + StringFrame.ToString());
 		Vector2 v0 = Main.MouseWorld - player.MountedCenter;
 		if (player.controlUseItem)
 		{
