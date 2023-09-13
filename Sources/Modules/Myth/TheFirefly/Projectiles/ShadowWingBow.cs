@@ -24,19 +24,12 @@ internal class ShadowWingBow : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
 	}
-
-	private int Ran = -1;
-
-	//private int Tokill = -1;
 	public override Color? GetAlpha(Color lightColor)
 	{
 		return new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0);
 	}
 
 	private bool Release = true;
-
-	//private int PdamF = 0;
-	private Vector2 oldPo = Vector2.Zero;
 
 	private float[] ArRot = new float[5];
 	private float[] ArVel = new float[5];
@@ -180,8 +173,6 @@ internal class ShadowWingBow : ModProjectile
 					Projectile.timeLeft = 10;
 			}
 		}
-		if (Ran == -1)
-			Ran = Main.rand.Next(9);
 	}
 
 	public override bool PreDraw(ref Color lightColor)

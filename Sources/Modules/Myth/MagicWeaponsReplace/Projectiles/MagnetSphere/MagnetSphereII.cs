@@ -84,7 +84,7 @@ public class MagnetSphereII : ModProjectile
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect sphere = Commons.ModAsset.SpherePerspective.Value;
+		Effect sphere = ModAsset.SpherePerspective.Value;
 		List<Vertex2D> triangleList = new List<Vertex2D>();
 		float radius = 40 * mulSize;
 

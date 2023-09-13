@@ -921,7 +921,7 @@ public class FlamingDashCore : ModNPC
 			}
 		}
 		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/CoreFlame").Value;
-		t = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/Metero").Value;
+		t = ModContent.Request<Texture2D>("Everglow/Myth/Acytaea/Projectiles/Metero").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 	}
