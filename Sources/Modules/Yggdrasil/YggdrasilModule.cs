@@ -15,6 +15,8 @@ internal class YggdrasilModule : EverglowModule
 
 	private Effect ScreenOcclusion;
 
+	internal event Action OnStartDay;
+	internal event Action OnStartNight;
 
 	public override void Load()
 	{
@@ -25,6 +27,26 @@ internal class YggdrasilModule : EverglowModule
 			ScreenOcclusion = ModContent.Request<Effect>("Everglow/Yggdrasil/Effects/Occlusion", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 			IL_Main.DrawToMap += IL_Main_DrawToMap;
 			IL_Main.DrawToMap_Section += IL_Main_DrawToMap_Section;
+			On_Main.UpdateTime_StartDay += On_Main_UpdateTime_StartDay;
+			On_Main.UpdateTime_StartNight += On_Main_UpdateTime_StartNight;
+		}
+	}
+
+	private void On_Main_UpdateTime_StartNight(On_Main.orig_UpdateTime_StartNight orig, ref bool stopEvents)
+	{
+		orig(ref stopEvents);
+		if(!stopEvents)
+		{
+			OnStartNight();
+		}
+	}
+
+	private void On_Main_UpdateTime_StartDay(On_Main.orig_UpdateTime_StartDay orig, ref bool stopEvents)
+	{
+		orig(ref stopEvents);
+		if(!stopEvents)
+		{
+			OnStartDay();
 		}
 	}
 	private bool WorldGen_oceanDepths(On_WorldGen.orig_oceanDepths orig, int x, int y)
