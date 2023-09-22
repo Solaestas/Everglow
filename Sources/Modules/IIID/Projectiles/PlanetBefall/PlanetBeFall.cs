@@ -48,7 +48,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 		public override void OnSpawn(IEntitySource source)
 		{
 			Player player = Main.player[Projectile.owner];
-			Array = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
+			/*Array = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
 			Main.projectile[Array].Center = Main.MouseWorld;
 			Projectile.ai[0] = Main.projectile[Array].Center.X;
 			Projectile.ai[1] = Main.projectile[Array].Center.Y;
@@ -69,7 +69,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 
 
 
-			base.OnSpawn(source);
+			base.OnSpawn(source);*/
 		}
 		public override void AI()
 		{
@@ -273,8 +273,8 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 	{
 		public override void OnModLoad()
 		{
-			PlanetBeFall.model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallModel.obj");
-			PlanetBeFall.NormalMap = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallNormal");
+			PlanetBeFall.model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
+			PlanetBeFall.NormalMap = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture");
 			base.OnModLoad();
 		}
 
@@ -295,7 +295,6 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 					target = proj.Center - Main.ScreenSize.ToVector2() / 2;
 					if (PlanetBeFallAnimation)
 					{
-
 						AnimationTimer += 1;
 						float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
 						if (AnimationTimer >= 60 && AnimationTimer < 120)

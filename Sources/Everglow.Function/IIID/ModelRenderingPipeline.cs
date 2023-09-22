@@ -156,7 +156,7 @@ namespace Everglow.Commons.IIID
             ShadingPass();
             BloomPass();
             ToneMappingPass();
-            // PixelArtPass();
+            //PixelArtPass();
             FinalBlend();
 
 
@@ -240,20 +240,21 @@ namespace Everglow.Commons.IIID
             var spriteBatch = Main.spriteBatch;
 
             //// Save content of m_fakeScreenTarget
-            //graphicsDevice.SetRenderTarget(m_blurRenderTargets[1]);
-            //graphicsDevice.Clear(Color.Transparent);
-            //spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp,
-            //    DepthStencilState.None,
-            //    RasterizerState.CullNone);
-            //pixelArtEffect.CurrentTechnique.Passes["DownSample_Naive"].Apply();
+            graphicsDevice.SetRenderTarget(m_blurRenderTargets[1]);
+            graphicsDevice.Clear(Color.Transparent);
+			var pixelArtEffect = m_pixelArt.Value;
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp,
+               DepthStencilState.None,
+                RasterizerState.CullNone);
+			pixelArtEffect.CurrentTechnique.Passes["DownSample_Naive"].Apply();
 
-            //int width = m_fakeScreenTargetSwap.Width;
-            //int height = m_fakeScreenTargetSwap.Height;
-            //spriteBatch.Draw(m_fakeScreenTargetSwap, m_blurRenderTargets[1].Bounds, Color.White);
-            //// spriteBatch.Draw(m_emissionTarget, m_emissionTarget.Bounds, Color.White);
-            //spriteBatch.End();
+            int width = m_fakeScreenTargetSwap.Width;
+            int height = m_fakeScreenTargetSwap.Height;
+            spriteBatch.Draw(m_fakeScreenTargetSwap, m_blurRenderTargets[1].Bounds, Color.White);
+            spriteBatch.Draw(m_emissionTarget, m_emissionTarget.Bounds, Color.White);
+            spriteBatch.End();
 
-            var pixelArtEffect = m_pixelArt.Value;
+            
             graphicsDevice.Textures[1] = m_depthTarget;
             graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
             pixelArtEffect.Parameters["uBias"].SetValue(0.01f);
@@ -315,9 +316,9 @@ namespace Everglow.Commons.IIID
             // 如果Model有非均匀缩放，就要用法线变换矩阵而不是Model矩阵
             gBufferShader.Parameters["uModelNormal"].SetValue(Matrix.Transpose(Matrix.Invert(model.ModelTransform)));
             gBufferShader.Parameters["uCameraPosition"].SetValue(new Vector3(0, 0, 1000));
-            gBufferShader.Parameters["uLightDirection"].SetValue(Vector3.Normalize(new Vector3(-1f, 1f, 1f)));
+            gBufferShader.Parameters["uLightDirection"].SetValue(Vector3.Normalize(new Vector3(-1f, -1f, -1f)));
             gBufferShader.Parameters["uLightIntensity"].SetValue(new Vector3(1f, 1f, 1f) * 10);
-            gBufferShader.Parameters["uNormalIntensity"].SetValue(0.1f);
+            gBufferShader.Parameters["uNormalIntensity"].SetValue(-0.1f);
 
             graphicsDevice.Textures[0] = model.Texture;
             graphicsDevice.Textures[1] = model.NormalTexture;
@@ -342,7 +343,7 @@ namespace Everglow.Commons.IIID
                 DepthStencilState.None,
                 RasterizerState.CullNone);
             graphicsDevice.Textures[1] = m_blurRenderTargets[0];
-            filterEffect.Parameters["uIntensity"].SetValue(0f);
+            filterEffect.Parameters["uIntensity"].SetValue(0.1f);
             filterEffect.CurrentTechnique.Passes["Blend"].Apply();
             spriteBatch.Draw(m_fakeScreenTargetSwap, m_fakeScreenTarget.Bounds, Color.White);
             spriteBatch.End();

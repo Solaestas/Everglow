@@ -7,5 +7,8 @@ Kd 0.80000001192093 0.80000001192093 0.80000001192093
 map_Kd PlanetBeFallTexture.png
 Ke 1 1 1
 map_Ke PlanetBeFallEmission.png
+Ks 1 1 1
+Ns 50
 illum 7
+bump -bm 1.000 PlanetBeFallTexture.png
 

@@ -420,18 +420,6 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 
 			sb.End();
 
-			gd.SetRenderTarget(GoldenCrack);
-			gd.Clear(Color.Transparent);
-			Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive);
-			foreach (Projectile proj in Main.projectile)
-			{
-				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBeFall>())
-				{
-					(proj.ModProjectile as PlanetBeFall).DrawIIIDProj(POVinGoldencrack);
-				}
-			}	
-			sb.End();
-
 			gd.SetRenderTarget(Main.screenTarget);
 			gd.Clear(Color.Transparent);
 			sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -439,11 +427,10 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			sb.End();
 
 			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			gd.Textures[0] = GoldenCrack;
 			gd.Textures[1] = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/NonIIIDProj/GoldenCrack/GoldenCrack").Value;
 			GoldenCrackVFX.CurrentTechnique.Passes["Tentacle"].Apply();
-			GoldenCrackVFX.Parameters["m"].SetValue(0.0f);
-			GoldenCrackVFX.Parameters["n"].SetValue(0.00f);
+			GoldenCrackVFX.Parameters["m"].SetValue(0.01f);
+			GoldenCrackVFX.Parameters["n"].SetValue(0.01f);
 			sb.Draw(render, Vector2.Zero, Color.White);
 			sb.End();
 
