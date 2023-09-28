@@ -531,7 +531,7 @@ public class LanternGhostKing : ModNPC
 			{
 				if (!player.dead)
 				{
-					Projectile.NewProjectile(null, player.Center, Vector2.Zero, ModContent.ProjectileType<Bosses.Acytaea.Projectiles.playerHit>(), NPC.damage / 4, 0, 0, 0, 0);
+					Projectile.NewProjectile(null, player.Center, Vector2.Zero, ModContent.ProjectileType<Acytaea.Projectiles.playerHit>(), NPC.damage / 4, 0, 0, 0, 0);
 					player.AddBuff(BuffID.OnFire, 300);
 				}
 			}
