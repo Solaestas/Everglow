@@ -8,10 +8,26 @@ sampler_state
     MinFilter = LINEAR;
     MagFilter = LINEAR;
     AddressU = WRAP;
+    AddressV = WRAP;
+};
+texture uHeatMap;
+sampler uHeatMapSampler =
+sampler_state
+{
+    Texture = <uHeatMap>;
+    MipFilter = LINEAR;
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+    AddressU = CLAMP;
     AddressV = CLAMP;
 };
+//valueC由Color.r代替
+//float valueC;
+//utime由Color.g代替
+//float utime;
 float4x4 uTransform;
-float uProcession;
+float uTexcoordY;
+
 struct VSInput
 {
     float2 Pos : POSITION0;
@@ -37,19 +53,17 @@ PSInput VertexShaderFunction(VSInput input)
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
-    float newX = input.Texcoord.x % 1;
-    float newY = input.Texcoord.y - 0.5;
-    //newY *= 1 / (sin(log(-(input.Texcoord.z - 1) * 22.141 + 1)));
-    //newY *= 1 / sin(log(input.Texcoord.z * 22.141 + 1));
-    newY *= 1 / sin(input.Texcoord.z * 3.141592653589793238);
-    newY += 0.5;
-    newY = clamp(newY, 0, 1);
-    float2 newCoord = float2(newX, newY);
-    float4 color = tex2D(uImage, newCoord);
-    color *= input.Color;
-    color *= sin(uProcession * 3.141592653589793238) * max(sin(uProcession * 3.141592653589793238), 0);
-    return color;
+    float4 colorNoise = tex2D(uNoiseSampler, input.Texcoord.xy);
+    float2 newXY = input.Color.xy - float2(0.5, 0.5);
+    newXY.y /= input.Color.w;
+    newXY += float2(0.5, 0.5);
+    newXY.y = clamp(newXY.y, 0, 1);
+    float4 colorHalo = tex2D(uImage, newXY);
+    float light = 1 - colorHalo.r * colorNoise.r * (1 - input.Color.b);
+    float4 colorHeatMap = tex2D(uHeatMapSampler, float2(light, uTexcoordY));
+    return colorHeatMap;
 }
+
 technique Technique1
 {
     pass Test

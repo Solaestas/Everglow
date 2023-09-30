@@ -1,6 +1,4 @@
 using Everglow.Myth.Common;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -84,17 +82,17 @@ public class MagnetSphereII : ModProjectile
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect sphere = ModAsset.SpherePerspective.Value;
+		Effect sphere = ModAsset.MagnetSphere_SpherePerspective.Value;
 		List<Vertex2D> triangleList = new List<Vertex2D>();
 		float radius = 40 * mulSize;
 
-		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), baseColor , new Vector3(-1, 1, timeValue)));
-		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, -radius), baseColor , new Vector3(-1, -1, timeValue)));
-		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, -radius), baseColor , new Vector3(1, -1, timeValue)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), baseColor, new Vector3(-1, 1, timeValue)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, -radius), baseColor, new Vector3(-1, -1, timeValue)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, -radius), baseColor, new Vector3(1, -1, timeValue)));
 
-		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), baseColor , new Vector3(-1, 1, timeValue)));
-		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, -radius), baseColor , new Vector3(1, -1, timeValue)));
-		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, radius), baseColor , new Vector3(1, 1, timeValue)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), baseColor, new Vector3(-1, 1, timeValue)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, -radius), baseColor, new Vector3(1, -1, timeValue)));
+		triangleList.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, radius), baseColor, new Vector3(1, 1, timeValue)));
 
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;

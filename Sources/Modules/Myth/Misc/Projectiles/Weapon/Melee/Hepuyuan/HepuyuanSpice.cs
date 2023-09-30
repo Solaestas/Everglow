@@ -12,6 +12,7 @@ public class HepuyuanSpice : ModProjectile
 		Projectile.tileCollide = false;
 		Projectile.timeLeft = 80;
 		Projectile.penetrate = -1;
+		Projectile.extraUpdates = 1;
 	}
 
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -23,7 +24,7 @@ public class HepuyuanSpice : ModProjectile
 	{
 		Player player = Main.player[Projectile.owner];
 		var Vx = new List<Vertex2D>();
-		Vector2 Vbase = Projectile.Center - Main.screenPosition + new Vector2(0, 24 * player.gravDir);
+		Vector2 Vbase = Projectile.Center + new Vector2(0, 24 * player.gravDir);
 		var v0 = new Vector2(0, -1);
 		var v0T = new Vector2(1, 0);
 		float length = Projectile.ai[0];
@@ -35,7 +36,6 @@ public class HepuyuanSpice : ModProjectile
 		Color ct = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
 		ct.A = 180;
 		var cp = new Color(200, 200, 200, 0);
-		float fadeK = Math.Clamp((Projectile.timeLeft - 10) / 24f, 0, 1f);
 		float fadeG = Math.Clamp((Projectile.timeLeft - 10) / 24f + 0.12f, 0, 1f);
 
 		Vx.Add(new Vertex2D(Vbase + v0 * 2, cp, new Vector3(1, 0, 0)));
@@ -46,22 +46,24 @@ public class HepuyuanSpice : ModProjectile
 		Vx.Add(new Vertex2D(Vbase + v0 * 2 * (1 - fadeG), cp, new Vector3(1 - fadeG, fadeG, 0)));
 		Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeG + v0 * 2 * (1 - fadeG), cp, new Vector3(1 - fadeG, 0, 0)));
 
-		if (Projectile.Center.X > player.Center.X)
-		{
-			Vx.Add(new Vertex2D(Vbase + v0 * 2, ct, new Vector3(1, 0, 0)));
-			Vx.Add(new Vertex2D(Vbase + v0 * 2 * (1 - fadeK), ct, new Vector3(1 - fadeK, fadeK, 0)));
-			Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeK + v0 * 2 * (1 - fadeK), ct, new Vector3(1 - fadeK, 0, 0)));
-		}
-		else
-		{
-			Vx.Add(new Vertex2D(Vbase + v0 * 2, ct, new Vector3(1, 0, 0)));
-			Vx.Add(new Vertex2D(Vbase + (v0 + v0T) * fadeK + v0 * 2 * (1 - fadeK), ct, new Vector3(1, fadeK, 0)));
-			Vx.Add(new Vertex2D(Vbase + v0 * 2 * (1 - fadeK), ct, new Vector3(1 - fadeK, fadeK, 0)));
-		}
-
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/Misc/Projectiles/Weapon/Melee/Hepuyuan/HepuyuanSpice").Value;
+		Texture2D t = ModAsset.HepuyuanSpice.Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Effect dissolve = Commons.ModAsset.Dissolve.Value;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		float dissolveDuration = Projectile.timeLeft / 60f - 0.2f;
+		dissolve.Parameters["uTransform"].SetValue(model * projection);
+		dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_spiderNet.Value);
+		dissolve.Parameters["duration"].SetValue(dissolveDuration);
+		dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0, 0.9f, 0.9f, 1f));
+		dissolve.Parameters["uNoiseSize"].SetValue(4f);
+		dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(Projectile.ai[1], Projectile.ai[2]));
+		dissolve.CurrentTechnique.Passes[0].Apply();
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		return false;
 	}
 	public override void AI()

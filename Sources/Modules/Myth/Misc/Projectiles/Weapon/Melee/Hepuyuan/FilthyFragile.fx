@@ -1,17 +1,17 @@
 ﻿sampler2D uImage : register(s0);
-texture uNoise;
-sampler uNoiseSampler =
+texture uHeatMap;
+sampler uHeatMapSampler =
 sampler_state
 {
-    Texture = <uNoise>;
+    Texture = <uHeatMap>;
     MipFilter = LINEAR;
     MinFilter = LINEAR;
     MagFilter = LINEAR;
-    AddressU = WRAP;
+    AddressU = CLAMP;
     AddressV = CLAMP;
 };
 float4x4 uTransform;
-float uProcession;
+
 struct VSInput
 {
     float2 Pos : POSITION0;
@@ -37,19 +37,16 @@ PSInput VertexShaderFunction(VSInput input)
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
-    float newX = input.Texcoord.x % 1;
-    float newY = input.Texcoord.y - 0.5;
-    //newY *= 1 / (sin(log(-(input.Texcoord.z - 1) * 22.141 + 1)));
-    //newY *= 1 / sin(log(input.Texcoord.z * 22.141 + 1));
-    newY *= 1 / sin(input.Texcoord.z * 3.141592653589793238);
-    newY += 0.5;
-    newY = clamp(newY, 0, 1);
-    float2 newCoord = float2(newX, newY);
-    float4 color = tex2D(uImage, newCoord);
-    color *= input.Color;
-    color *= sin(uProcession * 3.141592653589793238) * max(sin(uProcession * 3.141592653589793238), 0);
-    return color;
+    float4 colorBranch = tex2D(uImage, input.Texcoord.xy);
+    float light = colorBranch.r * input.Color.r;
+    float4 colorHeatMap = tex2D(uHeatMapSampler, float2(light, 0));
+    if (light > 0.5)
+    {
+        colorHeatMap.w *= 0;
+    }
+    return colorHeatMap;
 }
+
 technique Technique1
 {
     pass Test
