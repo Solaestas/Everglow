@@ -90,7 +90,7 @@ public class BlackCorruptRainFriendly : ModProjectile
 		return true;
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		for (int j = 0; j < timeLeft / 24; j++)
 		{

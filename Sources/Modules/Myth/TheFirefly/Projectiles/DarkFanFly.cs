@@ -107,7 +107,7 @@ internal class DarkFanFly : ModProjectile
 			Projectile.timeLeft -= 4;
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 	}
 

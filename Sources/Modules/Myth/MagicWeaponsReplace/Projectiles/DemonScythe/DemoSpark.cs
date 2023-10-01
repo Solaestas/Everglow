@@ -107,12 +107,12 @@ public class DemoSpark : ModProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 	}
 
-	public override bool PreKill(int timeLeft)
+	public override bool PreOnKill(int timeLeft)
 	{
 		return true;
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 	}
 

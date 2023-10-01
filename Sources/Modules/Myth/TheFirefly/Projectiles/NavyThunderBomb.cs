@@ -54,7 +54,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 		}
 		return false;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
 		Player player = Main.player[Projectile.owner];

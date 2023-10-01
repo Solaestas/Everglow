@@ -58,7 +58,7 @@ class GoldLanternLine : ModProjectile
 		Projectile.velocity *= 0.2f;
 		return false;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 	}
 

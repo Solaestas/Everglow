@@ -99,12 +99,12 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 		return false;
 	}
 
-	public override bool PreKill(int timeLeft)
+	public override bool PreOnKill(int timeLeft)
 	{
 		return true;
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Storm>(), (int)(Projectile.damage * 0.6f), Projectile.knockBack, Projectile.owner);
 		p.CritChance = Projectile.CritChance / 4;

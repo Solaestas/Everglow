@@ -100,7 +100,7 @@ public class GlowWoodSword : ModProjectile
 		//Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value,rt,new Color(55,0,0,0));
 		base.PostDraw(lightColor);
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 
 	}
