@@ -129,7 +129,7 @@ public class GlowStar : ModProjectile
 		//Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c2 * (1.1f - k0), Projectile.rotation, Light.Size() / 2f, new Vector2(scale * 1.5f, 4f), SpriteEffects.None, 0);
 		return false;
 	}
-	public override bool PreOnKill(int timeLeft)
+	public override bool PreKill(int timeLeft)
 	{
 		return timeLeft < 995;
 	}

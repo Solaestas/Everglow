@@ -21,7 +21,7 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 	}
 	public override void Kill(int timeLeft)
 	{
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 	public void GenerateVFX(int Frequency)
 	{

@@ -98,7 +98,7 @@ public class TsunamiShark_marking : ModProjectile, IWarpProjectile
 					tsunamiS.MarkedTarget = target;
 			}
 		}
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
