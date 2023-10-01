@@ -1,5 +1,7 @@
 using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.WorldGeneration;
 using Everglow.Myth.TheTusk.Tiles;
+using SubworldLibrary;
 using Terraria.Graphics.Effects;
 using Terraria.IO;
 using Terraria.ModLoader.IO;
@@ -31,6 +33,10 @@ public class TuskGen : ModSystem
 	/// <returns></returns>
 	public static bool TuskLandActive()
 	{
+		if(SubworldSystem.AnyActive(ModIns.Mod))
+		{
+			return false;
+		}
 		TuskGen tuskGen = ModContent.GetInstance<TuskGen>();
 		Vector2 TuskBiomeCenter = new Vector2(tuskGen.tuskCenterX, tuskGen.tuskCenterY) * 16;
 		Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - TuskBiomeCenter;

@@ -1,3 +1,6 @@
+using Everglow.Commons.Weapons.StabbingSwords;
+using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
+
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
     public class HolyBayonet_Pro : StabbingProjectile
@@ -16,10 +19,34 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			MaxLength = 1.25f;
 			DrawWidth = 0.4f;
 		}
+		public override void AI()
+		{
+			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
+			Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.08f);
+			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))
+			{
+				Dust dust = Dust.NewDustDirect(pos, Projectile.width, Projectile.height, ModContent.DustType<HolyDustMoveWithPlayer>(), 0, 0, 0, default, Main.rand.NextFloat(0.95f, 1.2f));
+				dust.velocity = vel;
+				dust.noGravity = true;
+			}
+			cooling--;
+			base.AI();
+		}
+		private int cooling = 0;
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+		{
+			if(Main.rand.NextBool(6) && cooling <= 0)
+			{
+				cooling = 12;
+				Vector2 newAddPos = new Vector2(120, 0).RotatedByRandom(Math.PI * 2);
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center + newAddPos, -newAddPos * 0.2f, ModContent.ProjectileType<HolyBayonet_Slash>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+			}
+			base.OnHitNPC(target, hit, damageDone);
+		}
 		public override void DrawEffect(Color lightColor)
 		{
-			Texture2D Shadow = ModAsset.StabbingProjectileShade.Value;
-			Texture2D light = ModAsset.StabbingProjectile.Value;
+			Texture2D Shadow = Commons.ModAsset.StabbingProjectileShade.Value;
+			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
 			if (TradeShade > 0)

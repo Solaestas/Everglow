@@ -1,6 +1,7 @@
 using Terraria.ObjectData;
 using Everglow.Yggdrasil.Common.Utils;
 using Everglow.Yggdrasil.Common;
+using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
@@ -10,6 +11,7 @@ public class DoubleArmsChineseStreetLamp : ModTile
 	{
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
+
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Height = 5;
 		TileObjectData.newTile.Width = 1;
@@ -22,8 +24,13 @@ public class DoubleArmsChineseStreetLamp : ModTile
 			18
 		};
 		TileObjectData.newTile.CoordinateWidth = 54;
+		TileObjectData.newTile.Origin = new Point16(0, 4);
 		TileObjectData.addTile(Type);
 		DustType = DustID.DynastyWood;
+	}
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
 	}
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
@@ -90,7 +97,7 @@ public class DoubleArmsChineseStreetLamp : ModTile
 	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Texture2D tPostTexture = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/DoubleArmsChineseStreetLamp_Post");
+		Texture2D tPostTexture = ModAsset.DoubleArmsChineseStreetLamp_Post.Value;
 		var rt = new Rectangle(i * 16 - 19, j * 16, 54, 16);
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
@@ -107,15 +114,18 @@ public class DoubleArmsChineseStreetLamp : ModTile
 		{
 			var tileSpin = new TileSpin();
 
-			Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/LargeLantern_Lantern");
+			Texture2D tex = ModAsset.LargeLantern_Lantern.Value;
 			float OffsetX = -8;
 			tileSpin.Update(i, j);
-			tileSpin.DrawThreeLanternsString(i, j, tex, new Rectangle(tile.TileFrameX / 54 * 18 + 2, 2, 14, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 4, 12, 10, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 6, 22, 6, 8), new Vector2(7, 5), new Vector2(5, 5), new Vector2(3, 4), OffsetX, 23);
+			tileSpin.DrawThreeLanternsString(spriteBatch, i, j, tex, new Rectangle(tile.TileFrameX / 54 * 18 + 2, 2, 14, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 4, 12, 10, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 6, 22, 6, 8), new Vector2(7, 5), new Vector2(5, 5), new Vector2(3, 4), OffsetX, 23);
 			tileSpin.Update(i, j + 1);
-			tileSpin.DrawThreeLanternsString(i, j + 1, tex, new Rectangle(tile.TileFrameX / 54 * 18 + 2, 2, 14, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 4, 12, 10, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 6, 22, 6, 8), new Vector2(7, 5), new Vector2(5, 5), new Vector2(3, 4), OffsetX + 32, 7);
+			tileSpin.DrawThreeLanternsString(spriteBatch, i, j + 1, tex, new Rectangle(tile.TileFrameX / 54 * 18 + 2, 2, 14, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 4, 12, 10, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 6, 22, 6, 8), new Vector2(7, 5), new Vector2(5, 5), new Vector2(3, 4), OffsetX + 32, 7);
 
 			if (tile.TileFrameX == 0)
 			{
+				Texture2D texGlow = ModAsset.LargeLantern_Lantern_glow.Value;
+				tileSpin.DrawThreeLanternsString(spriteBatch, i, j, texGlow, new Rectangle(tile.TileFrameX / 54 * 18 + 2, 2, 14, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 4, 12, 10, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 6, 22, 6, 8), new Vector2(7, 5), new Vector2(5, 5), new Vector2(3, 4), OffsetX, 23,1, true, new Color(255, 255, 255, 0));
+				tileSpin.DrawThreeLanternsString(spriteBatch, i, j + 1, texGlow, new Rectangle(tile.TileFrameX / 54 * 18 + 2, 2, 14, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 4, 12, 10, 10), new Rectangle(tile.TileFrameX / 54 * 18 + 6, 22, 6, 8), new Vector2(7, 5), new Vector2(5, 5), new Vector2(3, 4), OffsetX + 32, 7,1, true, new Color(255, 255, 255, 0));
 				Lighting.AddLight(i, j, 1f, 0.45f, 0.15f);
 				Lighting.AddLight(i, j + 1, 1f, 0.45f, 0.15f);
 			}

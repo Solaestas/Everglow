@@ -1,4 +1,4 @@
-﻿namespace Everglow.Yggdrasil.Common.Utils;
+namespace Everglow.Yggdrasil.Common.Utils;
 
 internal class TileSpin
 {
@@ -38,7 +38,7 @@ internal class TileSpin
 	/// <param name="offsetY"></param>
 	/// <param name="specialColor"></param>
 	/// <param name="color"></param>
-	public void DrawRotatedChandelier(int i, int j, Texture2D tex, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
+	public void DrawRotatedChandelier(SpriteBatch spriteBatch, int i, int j, Texture2D tex, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
 	{
 		float rot = 0;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -51,11 +51,11 @@ internal class TileSpin
 		if (TileRotation.ContainsKey((i, j)))
 		{
 			rot = TileRotation[(i, j)].Y;
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX - 18, 0, 54, 48), c, rot, new Vector2(27, 0), 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX - 18, 0, 54, 48), c, rot, new Vector2(27, 0), 1f, SpriteEffects.None, 0f);
 		}
 		else
 		{
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX - 18, 0, 54, 48), c, rot, new Vector2(27, 0), 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX - 18, 0, 54, 48), c, rot, new Vector2(27, 0), 1f, SpriteEffects.None, 0f);
 		}
 	}
 	/// <summary>
@@ -68,7 +68,7 @@ internal class TileSpin
 	/// <param name="offsetY"></param>
 	/// <param name="specialColor"></param>
 	/// <param name="color"></param>
-	public void DrawRotatedLamp(int i, int j, Texture2D tex, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
+	public void DrawRotatedLamp(SpriteBatch spriteBatch, int i, int j, Texture2D tex, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
 	{
 		float rot = 0;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -81,11 +81,11 @@ internal class TileSpin
 		if (TileRotation.ContainsKey((i, j)))
 		{
 			rot = TileRotation[(i, j)].Y;
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX, 0, 18, 34), c, rot, new Vector2(9, 0), 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX, 0, 18, 34), c, rot, new Vector2(9, 0), 1f, SpriteEffects.None, 0f);
 		}
 		else
 		{
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX, 0, 18, 34), c, rot, new Vector2(9, 0), 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX, 0, 18, 34), c, rot, new Vector2(9, 0), 1f, SpriteEffects.None, 0f);
 		}
 	}
 	/// <summary>
@@ -100,7 +100,7 @@ internal class TileSpin
 	/// <param name="offsetY"></param>
 	/// <param name="specialColor"></param>
 	/// <param name="color"></param>
-	public void DrawRotatedTile(int i, int j, Texture2D tex, Rectangle sourceRectangle, Vector2 origin, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
+	public void DrawRotatedTile(SpriteBatch spriteBatch, int i, int j, Texture2D tex, Rectangle sourceRectangle, Vector2 origin, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
 	{
 		float rot = 0;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -112,11 +112,11 @@ internal class TileSpin
 		if (TileRotation.ContainsKey((i, j)))
 		{
 			rot = TileRotation[(i, j)].Y;
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot, origin, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot, origin, 1f, SpriteEffects.None, 0f);
 		}
 		else
 		{
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot, origin, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot, origin, 1f, SpriteEffects.None, 0f);
 		}
 	}
 	/// <summary>
@@ -132,7 +132,7 @@ internal class TileSpin
 	/// <param name="kRot"></param>
 	/// <param name="specialColor"></param>
 	/// <param name="color"></param>
-	public void DrawRotatedTilePrecise(int i, int j, Texture2D tex, Rectangle sourceRectangle, Vector2 origin, float offsetX = 0, float offsetY = 0, float kRot = 1, bool specialColor = false, Color color = new Color())
+	public void DrawRotatedTilePrecise(SpriteBatch spriteBatch, int i, int j, Texture2D tex, Rectangle sourceRectangle, Vector2 origin, float offsetX = 0, float offsetY = 0, float kRot = 1, bool specialColor = false, Color color = new Color())
 	{
 		float rot = 0;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -150,11 +150,11 @@ internal class TileSpin
 				maxC = Math.Clamp(maxC, 0, 1);
 				c = new Color(maxC, maxC, maxC, 0);
 			}
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot * kRot, origin, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot * kRot, origin, 1f, SpriteEffects.None, 0f);
 		}
 		else
 		{
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot * kRot, origin, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot * kRot, origin, 1f, SpriteEffects.None, 0f);
 		}
 	}
 	/// <summary>
@@ -174,9 +174,9 @@ internal class TileSpin
 	/// <param name="kRot"></param>
 	/// <param name="specialColor"></param>
 	/// <param name="color"></param>
-	public void DrawThreeLanternsString(int i, int j, Texture2D tex, Rectangle source1, Rectangle source2, Rectangle source3, Vector2 origin1, Vector2 origin2, Vector2 origin3, float offsetX = 0, float offsetY = 0, float kRot = 1, bool specialColor = false, Color color = new Color())
+	public void DrawThreeLanternsString(SpriteBatch spriteBatch, int i, int j, Texture2D tex, Rectangle source1, Rectangle source2, Rectangle source3, Vector2 origin1, Vector2 origin2, Vector2 origin3, float offsetX = 0, float offsetY = 0, float kRot = 1, bool specialColor = false, Color color = new Color())
 	{
-		float rot = 0;
+		float rot;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
@@ -197,15 +197,15 @@ internal class TileSpin
 			}
 			Position2 = Position1 + new Vector2(0, 10).RotatedBy(rot * kRot * 0.6f);
 			Position3 = Position2 + new Vector2(0, 9).RotatedBy(rot * kRot * 1.0f);
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position1, source1, c, rot * kRot * 0.6f, origin1, 1f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position2, source2, c, rot * kRot * 1.0f, origin2, 1f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position3, source3, c, rot * kRot * 1.6f, origin3, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position1, source1, c, rot * kRot * 0.6f, origin1, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position2, source2, c, rot * kRot * 1.0f, origin2, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position3, source3, c, rot * kRot * 1.6f, origin3, 1f, SpriteEffects.None, 0f);
 		}
 		else
 		{
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position1, source1, c, 0, origin1, 1f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position2, source2, c, 0, origin2, 1f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position3, source3, c, 0, origin3, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position1, source1, c, 0, origin1, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position2, source2, c, 0, origin2, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position3, source3, c, 0, origin3, 1f, SpriteEffects.None, 0f);
 		}
 	}
 }

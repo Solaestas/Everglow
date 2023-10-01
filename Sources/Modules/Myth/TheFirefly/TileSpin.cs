@@ -1,11 +1,89 @@
-﻿using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Commons.Physics;
+using Everglow.Myth.TheFirefly.Dusts;
 
 namespace Everglow.Myth.TheFirefly;
 
 internal class TileSpin
 {
 	public static Dictionary<(int, int), Vector2> TileRotation = new Dictionary<(int, int), Vector2>();
+	public static Dictionary<(int, int), List<Mass>> SwayVine = new Dictionary<(int, int), List<Mass>>();
 
+	/// <summary>
+	/// 此项仅用于复杂的组合吊灯
+	/// </summary>
+	/// <param name="ij"></param>
+	/// <param name="strength"></param>
+	public static void ActivateTileSpin((int, int) ij, float strength)
+	{
+		if (!TileRotation.ContainsKey(ij))
+			TileRotation.Add(ij, new Vector2(-Math.Clamp(strength, -1, 1) * 0.2f));
+		else
+		{
+			float rot;
+			float omega;
+			omega = TileRotation[ij].X;
+			rot = TileRotation[ij].Y;
+			if (CanAddForce(rot, strength) || CanAddForce(omega, strength))
+				TileRotation[ij] = new Vector2(omega - Math.Clamp(strength, -1, 1) * 0.2f, rot + omega - Math.Clamp(strength, -1, 1) * 0.2f);
+			if (Math.Abs(omega) < 0.001f && Math.Abs(rot) < 0.001f)
+				TileRotation.Remove(ij);
+		}
+	}
+	public static bool CanAddForce(float value1, float value2)
+	{
+		return value1 * value2 < 0 || Math.Abs(value1) < Math.Abs(value2);
+	}
+	/// <summary>
+	/// 藤蔓物理
+	/// </summary>
+	/// <param name="i"></param>
+	/// <param name="j"></param>
+	/// <param name="elasticity"></param>
+	/// <param name="damping"></param>
+	public void UpdateVine(int i, int j, float elasticity = 0.5f, float damping = 0.5f)
+
+	{
+		if (SwayVine.ContainsKey((i, j)) && !Main.gamePaused)
+		{
+			int length = SwayVine[(i, j)].Count;
+			while (Main.tile[i, j + length].TileType == ModContent.TileType<Tiles.BlackVine>())
+			{
+				SwayVine[(i, j)].Add(new Mass(10, new Vector2(0, SwayVine[(i, j)].Count * 16), false));
+				length++;
+			}
+			while (Main.tile[i, j + length - 1].TileType != ModContent.TileType<Tiles.BlackVine>())
+			{
+				int restCount = SwayVine[(i, j)].Count;
+				if(restCount <= 0)
+				{
+					SwayVine.Remove((i, j));
+					return;
+				}
+				SwayVine[(i, j)].RemoveAt(restCount - 1);
+				length--;
+			}
+			length = SwayVine[(i, j)].Count;
+			for (int x = 0;x < length - 1;x++)
+			{
+				Spring spring = new Spring(elasticity, 12, damping, SwayVine[(i, j)][x], SwayVine[(i, j)][x + 1]);
+				SwayVine[(i, j)][x + 1].force.Y += SwayVine[(i, j)][x + 1].mass * 0.032f;//Gravity
+				if (Main.tile[i, j + x].wall <= 0)
+				{
+					SwayVine[(i, j)][x + 1].force.X += Main.windSpeedCurrent * 0.1f * (1 + MathF.Sin(i * 0.25f + j * 0.25f + x * 0.45f + (float)(Main.time) * 0.03f) * 1.4f);
+				}
+				Vector2 worldCoord = new Vector2(i, j) * 16 + SwayVine[(i, j)][x + 1].position + new Vector2(8);
+				foreach (Player player in Main.player)
+				{
+					if(player.Hitbox.Right().X > worldCoord.X && player.Hitbox.Left().X < worldCoord.X && player.Hitbox.Bottom().Y > worldCoord.Y && player.Hitbox.Top().Y < worldCoord.Y)
+					{
+						SwayVine[(i, j)][x + 1].force += player.velocity * 0.6f;
+					}
+				}
+				spring.ApplyForce(3f);
+				SwayVine[(i, j)][x + 1].Update(3f);
+			}
+		}
+	}
 	/// <summary>
 	/// 更新旋转
 	/// </summary>
@@ -22,7 +100,11 @@ internal class TileSpin
 			Omega = TileRotation[(i, j)].X;
 			rot = TileRotation[(i, j)].Y;
 			Omega = Omega * k1 - rot * k2;
+
+			if (Main.tile[i, j].WallType == 0)
+				Omega = Omega * 0.99f - Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(j + i + (float)Main.time / 12f) * 0.1f) * 0.2f;
 			TileRotation[(i, j)] = new Vector2(Omega, rot + Omega);
+
 			if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
 				TileRotation.Remove((i, j));
 		}
@@ -40,12 +122,12 @@ internal class TileSpin
 		if (TileRotation.ContainsKey((i, j)) && !Main.gamePaused)
 		{
 			float rot;
-			float Omega;
-			Omega = TileRotation[(i, j)].X;
+			float omega;
+			omega = TileRotation[(i, j)].X;
 			rot = TileRotation[(i, j)].Y;
-			Omega = Omega * 0.75f - rot * 0.13f;
-			TileRotation[(i, j)] = new Vector2(Omega, rot + Omega);
-			float Strength = Math.Abs(Omega) + Math.Abs(rot);
+			omega = omega * 0.75f - rot * 0.13f;
+			TileRotation[(i, j)] = new Vector2(omega, rot + omega);
+			float Strength = Math.Abs(omega) + Math.Abs(rot);
 			if (Main.rand.NextBool(Math.Clamp((int)(100 - Strength * 1200f * k1), 1, 900)))
 			{
 				var d = Dust.NewDustDirect(new Vector2(i * 16 + Addx, j * 16 + Addy) + offset.RotatedBy(rot), width, height, ModContent.DustType<BlueParticleDark>());
@@ -53,11 +135,11 @@ internal class TileSpin
 				d.alpha = (int)(255 - Strength * 2000f * k1);
 				d2.scale = Strength * 10f;
 				d.scale *= k1;
-				d.velocity = (offset.RotatedBy(rot) - offset.RotatedBy(rot - Omega)) * k1 * 1f;
+				d.velocity = (offset.RotatedBy(rot) - offset.RotatedBy(rot - omega)) * k1 * 1f;
 				d2.scale *= k1;
-				d2.velocity = (offset.RotatedBy(rot) - offset.RotatedBy(rot - Omega)) * k1 * 1f;
+				d2.velocity = (offset.RotatedBy(rot) - offset.RotatedBy(rot - omega)) * k1 * 1f;
 			}
-			if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+			if (Math.Abs(omega) < 0.001f && Math.Abs(rot) < 0.001f)
 				TileRotation.Remove((i, j));
 		}
 	}
@@ -72,7 +154,7 @@ internal class TileSpin
 	/// <param name="offsetY"></param>
 	/// <param name="specialColor"></param>
 	/// <param name="color"></param>
-	public void DrawRotatedChandelier(int i, int j, Texture2D tex, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
+	public void DrawRotatedChandelier(SpriteBatch spriteBatch, int i, int j, Texture2D tex, float offsetX = 8, float offsetY = 0, int frameX = -1, int frameY = -1, int width = 54, int height = 48, bool specialColor = false, Color color = new Color())
 	{
 		float rot = 0;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -85,16 +167,36 @@ internal class TileSpin
 		if (TileRotation.ContainsKey((i, j)))
 		{
 			rot = TileRotation[(i, j)].Y;
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX - 18, 0, 54, 48), c, rot, new Vector2(27, 0), 1f, SpriteEffects.None, 0f);
+			int frX = tile.TileFrameX - 18;
+			if(frameX != -1)
+			{
+				frX = frameX;
+			}
+			int frY = 0;
+			if(frY != -1)
+			{
+				frY = frameY;
+			}
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(frX, frY, width, height), c, rot, new Vector2(width / 2f, 0), 1f, SpriteEffects.None, 0f);
 		}
 		else
 		{
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX - 18, 0, 54, 48), c, rot, new Vector2(27, 0), 1f, SpriteEffects.None, 0f);
+			int frX = tile.TileFrameX - 18;
+			if (frameX != -1)
+			{
+				frX = frameX;
+			}
+			int frY = 0;
+			if (frY != -1)
+			{
+				frY = frameY;
+			}
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(frX, frY, width, height), c, rot, new Vector2(width / 2f, 0), 1f, SpriteEffects.None, 0f);
 		}
 	}
 
 	/// <summary>
-	/// 专门绘制吊灯的
+	/// 专门绘制灯笼的
 	/// </summary>
 	/// <param name="i"></param>
 	/// <param name="j"></param>
@@ -103,7 +205,7 @@ internal class TileSpin
 	/// <param name="offsetY"></param>
 	/// <param name="specialColor"></param>
 	/// <param name="color"></param>
-	public void DrawRotatedLamp(int i, int j, Texture2D tex, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
+	public void DrawRotatedLamp(SpriteBatch spriteBatch, int i, int j, Texture2D tex, float offsetX = 0, float offsetY = 0, int width = 18, int height = 34, bool specialColor = false, Color color = new Color())
 	{
 		float rot = 0;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -116,11 +218,11 @@ internal class TileSpin
 		if (TileRotation.ContainsKey((i, j)))
 		{
 			rot = TileRotation[(i, j)].Y;
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX, 0, 18, 34), c, rot, new Vector2(9, 0), 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX, 0, width, height), c, rot, new Vector2(width / 2f, 0), 1f, SpriteEffects.None, 0f);
 		}
 		else
 		{
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX, 0, 18, 34), c, rot, new Vector2(9, 0), 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX, 0, width, height), c, rot, new Vector2(width / 2f, 0), 1f, SpriteEffects.None, 0f);
 		}
 	}
 
@@ -136,7 +238,7 @@ internal class TileSpin
 	/// <param name="offsetY"></param>
 	/// <param name="specialColor"></param>
 	/// <param name="color"></param>
-	public void DrawRotatedTile(int i, int j, Texture2D tex, Rectangle sourceRectangle, Vector2 origin, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
+	public void DrawRotatedTile(SpriteBatch spriteBatch, int i, int j, Texture2D tex, Rectangle sourceRectangle, Vector2 origin, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
 	{
 		float rot = 0;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -148,11 +250,11 @@ internal class TileSpin
 		if (TileRotation.ContainsKey((i, j)))
 		{
 			rot = TileRotation[(i, j)].Y;
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot, origin, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot, origin, 1f, SpriteEffects.None, 0f);
 		}
 		else
 		{
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot, origin, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot, origin, 1f, SpriteEffects.None, 0f);
 		}
 	}
 
@@ -169,7 +271,7 @@ internal class TileSpin
 	/// <param name="kRot"></param>
 	/// <param name="specialColor"></param>
 	/// <param name="color"></param>
-	public void DrawRotatedTile(int i, int j, Texture2D tex, Rectangle sourceRectangle, Vector2 origin, float offsetX = 0, float offsetY = 0, float kRot = 1, bool specialColor = false, Color color = new Color())
+	public void DrawRotatedTile(SpriteBatch spriteBatch, int i, int j, Texture2D tex, Rectangle sourceRectangle, Vector2 origin, float offsetX = 0, float offsetY = 0, float kRot = 1, bool specialColor = false, Color color = new Color())
 	{
 		float rot = 0;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -187,20 +289,20 @@ internal class TileSpin
 				maxC = Math.Clamp(maxC, 0, 1);
 				c = new Color(maxC, maxC, maxC, 0);
 			}
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot * kRot, origin, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot * kRot, origin, 1f, SpriteEffects.None, 0f);
 		}
 		else
 		{
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot * kRot, origin, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot * kRot, origin, 1f, SpriteEffects.None, 0f);
 		}
 	}
 
 	/// <summary>
 	/// 芦苇类杆状绘制
 	/// </summary>
-	public void DrawReed(int i, int j, int Length, Texture2D texFlower, Texture2D texReed, Rectangle flowerRectangle, Rectangle reedRectangle, Vector2 flowerOrigin, Vector2 reedOrigin, float offsetX = 0, float offsetY = 0, float kRot = 1, bool specialColor = false, Color color = new Color())
+	public void DrawReed(SpriteBatch spriteBatch, int i, int j, int Length, Texture2D texFlower, Texture2D texReed, Rectangle flowerRectangle, Rectangle reedRectangle, Vector2 flowerOrigin, Vector2 reedOrigin, float offsetX = 0, float offsetY = 0, float kRot = 1, bool specialColor = false, Color color = new Color())
 	{
-		float rot = 0;
+		float rot;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
@@ -232,7 +334,7 @@ internal class TileSpin
 					reedRectangle = flowerRectangle;
 					reedOrigin = flowerOrigin;
 				}
-				Main.spriteBatch.Draw(texReed, new Vector2(i * 16 + offsetX + Totaldx, (j - x) * 16 + offsetY) + zero - Main.screenPosition, reedRectangle, c, LowerRotation, reedOrigin, new Vector2(1f, MathUtils.Sqrt(256 + dx * dx) / 16f + 0.1f), SpriteEffects.None, 0f);
+				spriteBatch.Draw(texReed, new Vector2(i * 16 + offsetX + Totaldx, (j - x) * 16 + offsetY) + zero - Main.screenPosition, reedRectangle, c, LowerRotation, reedOrigin, new Vector2(1f, MathUtils.Sqrt(256 + dx * dx) / 16f + 0.1f), SpriteEffects.None, 0f);
 				Totaldx += dx;
 			}
 		}
@@ -253,7 +355,7 @@ internal class TileSpin
 					reedRectangle = flowerRectangle;
 					reedOrigin = flowerOrigin;
 				}
-				Main.spriteBatch.Draw(texReed, new Vector2(i * 16 + offsetX, (j - x) * 16 + offsetY) + zero - Main.screenPosition, reedRectangle, c, rot * kRot, reedOrigin, 1f, SpriteEffects.None, 0f);
+				spriteBatch.Draw(texReed, new Vector2(i * 16 + offsetX, (j - x) * 16 + offsetY) + zero - Main.screenPosition, reedRectangle, c, rot * kRot, reedOrigin, 1f, SpriteEffects.None, 0f);
 			}
 		}
 	}

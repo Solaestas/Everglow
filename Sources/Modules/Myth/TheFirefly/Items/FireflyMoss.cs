@@ -1,26 +1,48 @@
-﻿using Everglow.Myth;
-
 namespace Everglow.Myth.TheFirefly.Items;
 
 public class FireflyMoss : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		
-	}
-
 	public override void SetDefaults()
 	{
-		
-		Item.width = 16;
-		Item.height = 16;
-		Item.maxStack = 999;
-		Item.useTurn = true;
-		Item.autoReuse = true;
+		Item.width = 20;
+		Item.height = 18;
+		Item.useStyle = ItemUseStyleID.Swing;
 		Item.useAnimation = 15;
 		Item.useTime = 10;
-		Item.useStyle = ItemUseStyleID.Swing;
+		Item.useTurn = true;
+		Item.autoReuse = true;
 		Item.consumable = true;
-		Item.createTile = ModContent.TileType<Tiles.FireflyMoss>();
+		Item.maxStack = Item.CommonMaxStack;
+	}
+	public override bool? UseItem(Player player)
+	{
+		int i = (int)(Main.MouseWorld.X / 16);
+		int j = (int)(Main.MouseWorld.Y / 16);
+		Tile tile = Main.tile[i, j];
+		if(tile.TileType == ModContent.TileType<Tiles.DarkCocoon>())
+		{
+			tile.TileType = (ushort)ModContent.TileType<Tiles.DarkCocoonMoss>();
+			WorldGen.SquareTileFrame(i, j, true);
+			NetMessage.SendTileSquare(player.whoAmI, i, j, TileChangeType.None);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public override bool CanUseItem(Player player)
+	{
+		int i = (int)(Main.MouseWorld.X / 16);
+		int j = (int)(Main.MouseWorld.Y / 16);
+		Tile tile = Main.tile[i, j];
+		if (tile.TileType == ModContent.TileType<Tiles.DarkCocoon>())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

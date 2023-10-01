@@ -6,26 +6,16 @@ public class GlowWoodTorch : ModItem
 {
 	public override void SetStaticDefaults()
 	{
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
+		Item.ResearchUnlockCount = 100;
+		ItemID.Sets.SingleUseInGamepad[Type] = true;
+		ItemID.Sets.Torches[Type] = true;
 	}
 
 	public override void SetDefaults()
 	{
-		Item.flame = true;
-		Item.width = 10;
-		Item.height = 12;
-		Item.value = 50;
-		Item.maxStack = 999;
-		Item.holdStyle = 1;
-		Item.noWet = false;
-		Item.useTurn = true;
-		Item.autoReuse = true;
-		Item.useAnimation = 15;
-		Item.useTime = 10;
-		Item.useStyle = ItemUseStyleID.Swing;
-		Item.holdStyle = ItemHoldStyleID.HoldFront;
-		Item.consumable = true;
-		Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodTorch>();
+		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodTorch>());
+		Item.width = 20;
+		Item.height = 20;
 	}
 
 	public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
@@ -47,11 +37,6 @@ public class GlowWoodTorch : ModItem
 	public override void PostUpdate()
 	{
 		Lighting.AddLight(Item.Center, 1f, 1f, 1f);
-	}
-
-	public override void AutoLightSelect(ref bool dryTorch, ref bool wetTorch, ref bool glowstick)
-	{
-		wetTorch = true;
 	}
 	public override void AddRecipes()
 	{

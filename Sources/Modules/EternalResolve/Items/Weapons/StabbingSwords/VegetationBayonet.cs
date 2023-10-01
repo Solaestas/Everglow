@@ -1,8 +1,9 @@
+using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
-    public class VegetationBayonet : StabbingSwordItem
+	public class VegetationBayonet : StabbingSwordItem
 	{
 		//TODO:翻译
 		//会造成中毒
@@ -16,7 +17,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.White;
 			Item.value = Item.sellPrice(0, 0, 90, 0);
 			Item.shoot = ModContent.ProjectileType<VegetationBayonet_Pro>();
-			PowerfulStabProj = 1;
+			StabMulDamage = 4f;
+			PowerfulStabProj = ModContent.ProjectileType<VegetationBayonet_Pro_Stab>();
 			base.SetDefaults();
 		}
 		public override void AddRecipes()
@@ -30,6 +32,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		}
 		public override void UpdateInventory(Player player)
 		{
+			base.UpdateInventory(player);
 			if (specialDelay > 360)
 			{
 				player.AddBuff(BuffID.Rabies, 2);
