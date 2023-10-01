@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Items.Accessories;
 using Terraria;
 
@@ -35,8 +35,9 @@ public class GlowingButterfly : ModProjectile
 		Projectile.alpha = 255;
 	}
 
-	private float Ome = 0;
+	private float omega = 0;
 
+	private int useStyle = 0;
 	public override void AI()
 	{
 		Player owner = Main.player[Projectile.owner];
@@ -45,13 +46,13 @@ public class GlowingButterfly : ModProjectile
 
 			if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
 			{
-				if (y == 0)
+				if (useStyle == 0)
 				{
 					Projectile.timeLeft = Main.rand.Next(135, 185);
 					Projectile.frame = Main.rand.Next(6);
-					Ome = Main.rand.NextFloat(-0.02f, 0.02f);
-					Projectile.scale = Main.rand.NextFloat(0.6f, 1.0f);
-					y = ItemUseStyleID.Swing;
+					omega = Main.rand.NextFloat(-0.02f, 0.02f);
+					Projectile.scale = Main.rand.NextFloat(0.4f, 0.7f);
+					useStyle = ItemUseStyleID.Swing;
 				}
 				if (Projectile.timeLeft > 100 && Projectile.alpha >= 8)
 					Projectile.alpha -= 4;
@@ -66,13 +67,13 @@ public class GlowingButterfly : ModProjectile
 			}
 			else
 			{
-				if (y == 0)
+				if (useStyle == 0)
 				{
 					Projectile.timeLeft = Main.rand.Next(85, 135);
 					Projectile.frame = Main.rand.Next(6);
-					Ome = Main.rand.NextFloat(-0.02f, 0.02f);
+					omega = Main.rand.NextFloat(-0.02f, 0.02f);
 					Projectile.scale = Main.rand.NextFloat(0.6f, 1.0f);
-					y = ItemUseStyleID.Swing;
+					useStyle = ItemUseStyleID.Swing;
 				}
 				if (Projectile.timeLeft > 50 && Projectile.alpha >= 8)
 					Projectile.alpha -= 8;
@@ -89,8 +90,8 @@ public class GlowingButterfly : ModProjectile
 
 		//Projectile.spriteDirection = Projectile.velocity.X > 0 ? -1 : 1;
 		Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.75);
-		Projectile.velocity = Projectile.velocity.RotatedBy(Ome);
-		Ome += Math.Sign(Ome) * 0.001f;
+		Projectile.velocity = Projectile.velocity.RotatedBy(omega);
+		omega += Math.Sign(omega) * 0.001f;
 		if (Projectile.frame != 5)
 			Projectile.velocity *= 1.04f;
 		else
@@ -99,8 +100,6 @@ public class GlowingButterfly : ModProjectile
 		}
 		if (Collision.SolidCollision(Projectile.Center - Projectile.velocity, 1, 1))
 			Projectile.tileCollide = true;
-		Stre = Math.Clamp((100 - Projectile.timeLeft) / 10f, 0, 1f);
-
 		if (Projectile.timeLeft % 5 == 0)
 		{
 			if (Projectile.frame != 5)
@@ -114,12 +113,15 @@ public class GlowingButterfly : ModProjectile
 		if (Projectile.frame > 5)
 			Projectile.frame = 0;
 		Projectile.velocity.Y *= 0.96f;
-		if (Projectile.timeLeft % 6 == 0)
+		if (Projectile.timeLeft % 12 == 0)
 		{
-			//int num89 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 113, 0,0, 0, default, 0.6f);
-			int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.4f, 1.2f));
-			//Main.dust[num89].velocity = Projectile.velocity * 0.5f;
-			Main.dust[num90].velocity = Projectile.velocity * 0.5f;
+			int type = ModContent.DustType<BlueGlowAppear>();
+			//if (Projectile.ai[0] == 0)
+			//{
+			//	type = ModContent.DustType<BlueGlowAppear_dark>();
+			//}
+			Dust dust = Dust.NewDustDirect(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, type, 0f, 0f, 100, default, Main.rand.NextFloat(0.9f, 2.2f));
+			dust.velocity = Projectile.velocity * 0.5f;
 		}
 		GeneralBehavior(owner, out Vector2 vectorToIdlePosition, out float distanceToIdlePosition);
 		SearchForTargets(owner, out bool foundTarget, out float distanceFromTarget, out Vector2 targetCenter);
@@ -293,121 +295,35 @@ public class GlowingButterfly : ModProjectile
 		Lighting.AddLight(Projectile.Center, new Vector3(0, 0.05f * (255 - Projectile.alpha) / 255f, 0.12f * (255 - Projectile.alpha) / 255f));
 	}
 
-	private int y = 0;
-	private float Stre;
-
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		if (Projectile.alpha > 180)
 			return;
-		for (int i = 0; i < 18; i++)
-		{
-			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f * Stre);
-		}
-		for (int i = 0; i < 6; i++)
-		{
-			int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, DustID.Electric, 0f, 0f, 100, Color.Blue, Main.rand.NextFloat(0.7f, 1.2f) * Stre);
-			Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(5f, 10f)).RotatedByRandom(6.283) * Stre;
-			Main.dust[num90].noGravity = true;
-		}
 	}
-
-	public override Color? GetAlpha(Color lightColor)
+	public override bool PreDraw(ref Color lightColor)
 	{
-		return new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, (255 - Projectile.alpha) / 3);
+		Texture2D tex = ModAsset.GlowingButterfly.Value;
+		//Texture2D texDark = ModAsset.GlowingButterfly_dark.Value;
+		//Texture2D texBound = ModAsset.GlowingButterfly_bound.Value;
+		Color lightC = new Color(55 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, (255 - Projectile.alpha) / 2);
+		//if(Projectile.ai[0] == 1)
+		//{
+		//	lightC = Color.Transparent;
+		//}
+		//if (Projectile.ai[0] == 2)
+		//{
+		//	lightC = new Color(55 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, (255 - Projectile.alpha) / 2);
+		//}
+		//float colorValue = (255 - Projectile.alpha) / 255f;
+		Rectangle frame = new Rectangle(0, Projectile.frame * 46, 46, 46);
+		//Main.spriteBatch.Draw(texDark, Projectile.Center - Main.screenPosition, frame, Color.White * colorValue, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+		//Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, frame, lightC, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+		//Main.spriteBatch.Draw(texBound, Projectile.Center - Main.screenPosition, frame, Color.White * ((255 - Projectile.alpha) / 400f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, frame, lightC, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+		return false;
 	}
-
-	/*private Effect ef;
-         public override void PostDraw(Color lightColor)
-         {
-             Main.spriteBatch.End();
-             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-             List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
-             ef = (Effect)ModContent.Request<Effect>("Everglow/Myth/Effects/Trail").Value;
-             for (int i = 1; i < Projectile.oldPos.Length; ++i)
-             {
-                 if (Projectile.oldPos[i] == Vector2.Zero) break;
-
-                 int width = 30;
-                 var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-
-                 var factor = i / (float)Projectile.oldPos.Length;
-                 var color = Color.Lerp(Color.White, Color.Blue, factor);
-                 var w = MathHelper.Lerp(1f, 0.05f, factor);
-
-                 bars.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + normalDir * width + new Vector2(17, 17) - Projectile.velocity * 1.5f, color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-                 bars.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + normalDir * -width + new Vector2(17, 17) - Projectile.velocity * 1.5f, color, new Vector3((float)Math.Sqrt(factor), 0, w)));
-             }
-
-             List<VertexBase.CustomVertexInfo> triangleList = new List<VertexBase.CustomVertexInfo>();
-
-             if (bars.Count > 2)
-             {
-                 triangleList.Add(bars[0]);
-                 var vertex = new VertexBase.CustomVertexInfo((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, Color.White, new Vector3(0, 0.5f, 1));
-                 triangleList.Add(bars[1]);
-                 triangleList.Add(vertex);
-                 for (int i = 0; i < bars.Count - 2; i += 2)
-                 {
-                     triangleList.Add(bars[i]);
-                     triangleList.Add(bars[i + 2]);
-                     triangleList.Add(bars[i + 1]);
-
-                     triangleList.Add(bars[i + 1]);
-                     triangleList.Add(bars[i + 2]);
-                     triangleList.Add(bars[i + 3]);
-                 }
-                 RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-                 var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-                 var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
-                 ef.Parameters["uTransform"].SetValue(model * projection);
-                 ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f + Projectile.ai[0]);
-                 Texture2D Blue = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapBlue").Value;
-                 Texture2D Shape = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/Lightline").Value;
-                 Texture2D Mask = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/IceTrace").Value;
-                 Main.graphics.GraphicsDevice.Textures[0] = Blue;
-                 Main.graphics.GraphicsDevice.Textures[1] = Shape;
-                 Main.graphics.GraphicsDevice.Textures[2] = Mask;
-                 Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-                 Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
-                 Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
-                 ef.CurrentTechnique.Passes[0].Apply();
-                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
-                 Main.graphics.GraphicsDevice.RasterizerState = originalState;
-                 Main.spriteBatch.End();
-                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-             }
-         }
-         private struct CustomVertexInfo : IVertexType
-         {
-             private static VertexDeclaration _vertexDeclaration = new VertexDeclaration(new VertexElement[3]
-             {
-                 new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.Position, 0),
-                 new VertexElement(8, VertexElementFormat.Color, VertexElementUsage.Color, 0),
-                 new VertexElement(12, VertexElementFormat.Vector3, VertexElementUsage.TextureCoordinate, 0)
-             });
-             public Vector2 Position;
-             public Color Color;
-             public Vector3 TexCoord;
-
-             public CustomVertexInfo(Vector2 position, Color color, Vector3 texCoord)
-             {
-                 this.Position = position;
-                 this.Color = color;
-                 this.TexCoord = texCoord;
-             }
-
-             public VertexDeclaration VertexDeclaration
-             {
-                 get
-                 {
-                     return _vertexDeclaration;
-                 }
-             }
-         }*/
 }

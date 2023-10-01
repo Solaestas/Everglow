@@ -11,16 +11,9 @@ public class GlowWoodPlatform : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.width = 8;
-		Item.height = 10;
-		Item.maxStack = 999;
-		Item.useTurn = true;
-		Item.autoReuse = true;
-		Item.useAnimation = 15;
-		Item.useTime = 10;
-		Item.useStyle = ItemUseStyleID.Swing;
-		Item.consumable = true;
-		Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodPlatform>();
+		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodPlatform>());
+		Item.width = 24;
+		Item.height = 18;
 	}
 
 	public override void AddRecipes()

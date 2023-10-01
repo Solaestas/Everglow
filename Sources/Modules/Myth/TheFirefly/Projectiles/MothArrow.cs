@@ -44,7 +44,7 @@ internal class MothArrow : ModProjectile
 	{
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		for (int j = 0; j < 16; j++)
 		{

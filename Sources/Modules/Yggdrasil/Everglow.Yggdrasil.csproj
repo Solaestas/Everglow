@@ -1,6 +1,2 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="..\Module.props" />
-	<ItemGroup>
-	  <ProjectReference Include="..\Myth\Everglow.Myth.csproj" />
-	</ItemGroup>
 </Project>

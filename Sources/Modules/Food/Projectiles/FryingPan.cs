@@ -1,10 +1,9 @@
-using Terraria.Audio;
-using Everglow.Food.Dusts;
 using Everglow.Commons.MEAC;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
-using Everglow.Commons.Utilities;
-using Everglow.Myth;
+using Everglow.Food.Dusts;
+using Terraria.Audio;
 
 namespace Everglow.Food.Projectiles;
 

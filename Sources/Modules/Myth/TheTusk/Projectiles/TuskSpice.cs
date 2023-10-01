@@ -22,7 +22,7 @@ public class TuskSpice : ModProjectile
 		Projectile.damage = 0;
 	}
 	Vector2 SP = Vector2.Zero;
-	float Omega = 0;
+	float omega = 0;
 	bool OnPlac = false;
 	bool Down = false;
 	bool Collid = false;
@@ -58,11 +58,11 @@ public class TuskSpice : ModProjectile
 		{
 			if (!Down)
 			{
-				Omega += (float)(Math.PI - Projectile.rotation) / 23f;
-				Omega *= 0.96f;
-				Projectile.rotation += Omega;
+				omega += (float)(Math.PI - Projectile.rotation) / 23f;
+				omega *= 0.96f;
+				Projectile.rotation += omega;
 				Projectile.velocity = new Vector2(0, 0.01f);
-				if (Math.Abs(Math.PI - Projectile.rotation) < 0.05f && Math.Abs(Omega) < 0.05f)
+				if (Math.Abs(Math.PI - Projectile.rotation) < 0.05f && Math.Abs(omega) < 0.05f)
 				{
 					Down = true;
 					Projectile.velocity.Y += 0.25f;
@@ -117,8 +117,6 @@ public class TuskSpice : ModProjectile
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, colorz, Projectile.rotation, new Vector2(12f, 25f), Projectile.scale, SpriteEffects.None, 0);
 		if (!Down)
 			return;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 		if (Projectile.alpha == 0)
 		{
 			for (int f = 0; f < Projectile.oldPos.Length; f++)

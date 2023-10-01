@@ -12,11 +12,8 @@ public class GlowWoodChest : ModTile
 {
 	public override void SetStaticDefaults()
 	{
-		// Properties
 		Main.tileSpelunker[Type] = true;
 		Main.tileContainer[Type] = true;
-		Main.tileShine2[Type] = true;
-		Main.tileShine[Type] = 1200;
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
 		Main.tileOreFinderPriority[Type] = 500;
@@ -27,7 +24,6 @@ public class GlowWoodChest : ModTile
 		DustType = ModContent.DustType<BlueGlow>();
 		AdjTiles = new int[] { TileID.Containers };
 		
-		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
 		TileObjectData.newTile.Origin = new Point16(0, 1);
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16 };
@@ -38,8 +34,14 @@ public class GlowWoodChest : ModTile
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
 		TileObjectData.addTile(Type);
-	}
 
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
+	}
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+	}
 	public override ushort GetMapOption(int i, int j)
 	{
 		return (ushort)(Main.tile[i, j].TileFrameX / 36);
@@ -70,11 +72,6 @@ public class GlowWoodChest : ModTile
 
 		return name + ": " + Main.chest[chest].name;
 	}
-
-	public override void NumDust(int i, int j, bool fail, ref int num)
-	{
-		num = 1;
-	}
 	public override bool RightClick(int i, int j)
 	{
 		return FurnitureUtils.ChestRightClick(i, j);
@@ -95,13 +92,6 @@ public class GlowWoodChest : ModTile
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		var tile = Main.tile[i, j];
-		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-		if (Main.drawToScreen)
-			zero = Vector2.Zero;
-		Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChestGlow");
-		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
-
 		base.PostDraw(i, j, spriteBatch);
 	}
 }

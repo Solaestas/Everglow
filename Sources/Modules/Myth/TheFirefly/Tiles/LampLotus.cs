@@ -27,17 +27,18 @@ public class LampLotus : ModTile
 		var tile = Main.tile[i, j];
 		var tile2 = Main.tile[i, j - 1];
 
-		if (tile2.TileType != tile.TileType)
+		if (tile2.TileType != tile.TileType && !tile2.HasTile)
 		{
 			int length = 0;
-			while (Main.tile[i, j + length].TileType == tile.TileType && Main.tile[i, j + length].LiquidAmount == 0)
+			while (Main.tile[i, j + length].TileType == tile.TileType)
 			{
 				length++;
 			}
-			if (length <= 9)
+			if (length <= 4)
 			{
 				tile2.TileType = (ushort)ModContent.TileType<LampLotus>();
 				tile2.HasTile = true;
+				tile2.TileFrameX = (short)(Main.rand.Next(8) * 16);
 			}
 		}
 	}
@@ -68,12 +69,12 @@ public class LampLotus : ModTile
 						else
 						{
 							float rot;
-							float Omega;
-							Omega = TileSpin.TileRotation[(i, j)].X;
+							float omega;
+							omega = TileSpin.TileRotation[(i, j)].X;
 							rot = TileSpin.TileRotation[(i, j)].Y;
-							if (Math.Abs(Omega) < 0.4f && Math.Abs(rot) < 0.4f)
-								TileSpin.TileRotation[(i, j)] = new Vector2(Omega + Math.Clamp(player.velocity.X * 0.02f, -1, 1) * 2f, rot + Omega + Math.Clamp(player.velocity.X * 0.02f, -1, 1) * 2f);
-							if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+							if (Math.Abs(omega) < 0.4f && Math.Abs(rot) < 0.4f)
+								TileSpin.TileRotation[(i, j)] = new Vector2(omega + Math.Clamp(player.velocity.X * 0.02f, -1, 1) * 2f, rot + omega + Math.Clamp(player.velocity.X * 0.02f, -1, 1) * 2f);
+							if (Math.Abs(omega) < 0.001f && Math.Abs(rot) < 0.001f)
 								TileSpin.TileRotation.Remove((i, j));
 						}
 					}
@@ -84,11 +85,11 @@ public class LampLotus : ModTile
 						else
 						{
 							float rot;
-							float Omega;
-							Omega = TileSpin.TileRotation[(i, j)].X;
+							float omega;
+							omega = TileSpin.TileRotation[(i, j)].X;
 							rot = TileSpin.TileRotation[(i, j)].Y;
-							if (Math.Abs(Omega) < 4f && Math.Abs(rot) < 4f)
-								TileSpin.TileRotation[(i, j)] = new Vector2(Omega * 0.999f + Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f) * 0.002f, rot * 0.999f + Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f) * 0.002f);
+							if (Math.Abs(omega) < 4f && Math.Abs(rot) < 4f)
+								TileSpin.TileRotation[(i, j)] = new Vector2(omega * 0.999f + Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f) * 0.002f, rot * 0.999f + Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f) * 0.002f);
 						}
 					}
 				}
@@ -106,12 +107,12 @@ public class LampLotus : ModTile
 			{
 				length++;
 			}
-			Texture2D texflower = MythContent.QuickTexture("TheFirefly/Tiles/LampLotus");
-			Texture2D texflowerGlow = MythContent.QuickTexture("TheFirefly/Tiles/LampLotusGlow");
+			Texture2D texflower = ModAsset.LampLotus.Value;
+			Texture2D texflowerGlow = ModAsset.LampLotusGlow.Value;
 			var tsp = new TileSpin();
 			tsp.Update(i, j);
-			tsp.DrawReed(i, j, length, texflower, texflower, new Rectangle(tile.TileFrameX, 0, 28, 34), new Rectangle(tile.TileFrameX, 36, 28, 16), new Vector2(14, 34), new Vector2(14, 16), 8, 16);
-			tsp.DrawReed(i, j, length, texflower, texflowerGlow, new Rectangle(tile.TileFrameX, 0, 28, 34), new Rectangle(tile.TileFrameX, 36, 28, 16), new Vector2(14, 34), new Vector2(14, 16), 8, 16, 1, true, new Color(0, 155, 255, 0));
+			tsp.DrawReed(spriteBatch, i, j, length, texflower, texflower, new Rectangle(tile.TileFrameX / 16 * 28, 0, 28, 34), new Rectangle(tile.TileFrameX / 16 * 28, 36, 28, 16), new Vector2(14, 34), new Vector2(14, 16), 8, 16);
+			tsp.DrawReed(spriteBatch, i, j, length, texflower, texflowerGlow, new Rectangle(tile.TileFrameX / 16 * 28, 0, 28, 34), new Rectangle(tile.TileFrameX / 16 * 28, 36, 28, 16), new Vector2(14, 34), new Vector2(14, 16), 8, 16, 1, true, new Color(0, 155, 255, 0));
 		}
 		return false;
 	}

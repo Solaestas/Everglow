@@ -1,10 +1,9 @@
 using Everglow.Myth.Common;
-using Everglow.Myth.LanternMoon.NPCs;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
-using Terraria;
+using Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;
+using Mono.Cecil;
+using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.Localization;
-using Terraria.WorldBuilding;
 
 namespace Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 
@@ -13,8 +12,7 @@ public class LanternGhostKing : ModNPC
 {
 	public override void SetStaticDefaults()
 	{
-		// DisplayName.SetDefault("Lantern Ghost King");
-				Main.npcFrameCount[NPC.type] = 3;
+		Main.npcFrameCount[NPC.type] = 3;
 	}
 	public override void SetDefaults()
 	{
@@ -170,7 +168,7 @@ public class LanternGhostKing : ModNPC
 				for (int j = 0; j < 150; j++)
 				{
 					Vector2 v2 = new Vector2(0, Main.rand.Next(Main.rand.Next(0, 1200), 1200)).RotatedByRandom(Math.PI * 2);
-					Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X + NPC.Center.X, v2.Y + NPC.Center.Y, 0, 0, ModContent.ProjectileType<DarkLanternBomb>(), 50, 0f, player.whoAmI, v2.Length() / 4f, 0);
+					Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X + NPC.Center.X, v2.Y + NPC.Center.Y, 0, 0, ModContent.ProjectileType<DarkLanternBomb2>(), 50, 0f, player.whoAmI, 0, 0);
 				}
 			}
 		}
@@ -457,6 +455,48 @@ public class LanternGhostKing : ModNPC
 					int gr19 = Gore.NewGore(null, NPC.position + new Vector2(Main.rand.NextFloat(-60, 60f), 40), goreVelocity, ModContent.Find<ModGore>("Everglow/LanternGhostKingGore12").Type, 1f);
 					Main.gore[gr19].timeLeft = 900;
 				}
+
+				var lanternExplosion = new LanternExplosion
+				{
+					velocity = Vector2.Zero,
+					Active = true,
+					Visible = true,
+					position = NPC.Center,
+					maxTime = Main.rand.Next(126, 136),
+					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(4.15f, 4.6f), Main.rand.NextFloat(8f, 12f) },
+					FireBallVelocity = new Vector2[]
+					{
+				RandomVector2(4f, 3f),
+				RandomVector2(4f, 3f),
+				RandomVector2(4f, 3f),
+				RandomVector2(4f, 3f),
+				RandomVector2(3f, 2f),
+				RandomVector2(3f, 2f),
+				RandomVector2(3f, 1.5f),
+				RandomVector2(2.5f, 0.5f),
+				RandomVector2(2.5f, 0.5f),
+				RandomVector2(2.5f, 0.01f),
+				RandomVector2(2, 0.01f),
+				RandomVector2(1, 0.01f)
+					}
+				};
+				Ins.VFXManager.Add(lanternExplosion);
+
+				for (int x = 0; x < 37; x++)
+				{
+					var flameDust = new FlameDust
+					{
+						velocity = RandomVector2(45f, 10f),
+						Active = true,
+						Visible = true,
+						position = NPC.Center,
+						maxTime = Main.rand.Next(26, 96),
+						ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 0, Main.rand.NextFloat(1f, 3.4f) }
+					};
+					Ins.VFXManager.Add(flameDust);
+				}
+				Projectile.NewProjectile(NPC.GetSource_Death(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion_II>(), 10000, 10);
+				SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithPitchOffset(-1f), Main.MouseWorld);
 			}
 		}
 	}
@@ -503,18 +543,28 @@ public class LanternGhostKing : ModNPC
 	}
 	public void DrawFlameRing(float phase, float range, Vector2 center, Texture2D tex, float TexCoord = 0)
 	{
-		var Vx = new List<Vertex2D>();
+		var bars = new List<Vertex2D>();
 		for (int h = 0; h < 200; h++)
 		{
 			var color3 = new Color((int)(255 * NPC.ai[0]), (int)(255 * NPC.ai[0]), (int)(255 * NPC.ai[0]), 0);
 			Vector2 v0 = new Vector2(0, range).RotatedBy(h / 100d * Math.PI + phase);
 			Vector2 v1 = new Vector2(0, range).RotatedBy((h + 1) / 100d * Math.PI + phase);
-			Vx.Add(new Vertex2D(center + v0, color3, new Vector3((TexCoord + h / 20f) % 1f, 0, 0)));
-			Vx.Add(new Vertex2D(center + v1, color3, new Vector3(Math.Clamp((TexCoord + h / 20f) % 1f + 1f / 20f, 0, 1f), 0, 0)));
-			Vx.Add(new Vertex2D(center, color3, new Vector3(Math.Clamp((TexCoord + h / 20f) % 1f + 0.5f / 20f, 0, 1f), 1, 0)));
+			bars.Add(new Vertex2D(center + v0, color3, new Vector3((TexCoord + h / 20f) % 1f, 0, 0)));
+			bars.Add(new Vertex2D(center + v1, color3, new Vector3(Math.Clamp((TexCoord + h / 20f) % 1f + 1f / 20f, 0, 1f), 0, 0)));
+			bars.Add(new Vertex2D(center, color3, new Vector3(Math.Clamp((TexCoord + h / 20f) % 1f + 0.5f / 20f, 0, 1f), 1, 0)));
 		}
 
 		Main.graphics.GraphicsDevice.Textures[0] = tex;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
+	}
+
+	public Vector2 RandomVector2(float maxLength, float minLength = 0)
+	{
+		if (maxLength <= minLength)
+		{
+			maxLength = minLength + 0.001f;
+		}
+		return new Vector2(Main.rand.NextFloat(minLength, maxLength), 0).RotatedByRandom(6.283);
 	}
 }
+
