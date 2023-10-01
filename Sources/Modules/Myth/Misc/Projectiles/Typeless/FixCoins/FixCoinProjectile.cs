@@ -1,4 +1,4 @@
-using Everglow.Myth.Common;
+﻿using Everglow.Myth.Common;
 using Everglow.Myth.Misc.Dusts;
 using Terraria.Audio;
 using Terraria.DataStructures;

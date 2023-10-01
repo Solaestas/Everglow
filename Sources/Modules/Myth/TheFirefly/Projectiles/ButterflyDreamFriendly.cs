@@ -1,4 +1,4 @@
-using Everglow.Myth.TheFirefly.Items.Accessories;
+﻿using Everglow.Myth.TheFirefly.Items.Accessories;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
