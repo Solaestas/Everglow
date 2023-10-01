@@ -1,4 +1,4 @@
-using Everglow.Commons.VFX.CommonVFXDusts;
+﻿using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Minortopography.GiantPinetree.Dusts;
 using SteelSeries.GameSense;
 using Terraria.Audio;
@@ -118,7 +118,7 @@ public class FrostBall : ModProjectile
 	{
 		target.AddBuff(BuffID.Frostburn, 180);
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		GenerateSmog(6);
 		for (int g = 0; g < 18; g++)
