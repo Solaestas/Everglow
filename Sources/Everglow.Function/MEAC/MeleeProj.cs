@@ -295,19 +295,27 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		return false;
 	}
 
-	public virtual void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = new Vector4(), Vector2 coord0 = new Vector2(), float DrawScale = 1, Texture2D glowTexture = null)
+	public virtual void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = new Vector4(), Vector2 drawScale = new Vector2(), Texture2D glowTexture = null)
 	{
-		Player player = Main.player[Projectile.owner];
 		if(diagonal == new Vector4())
 		{
 			diagonal = new Vector4(0, 1, 1, 0);
 		}
+		if (drawScale == new Vector2())
+		{
+			drawScale = new Vector2(0, 1);
+			if(longHandle)
+			{
+				drawScale = new Vector2(-0.6f, 1);
+			}
+		}
 		Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+		Vector2 drawCenter = ProjCenter_WithoutGravDir - Main.screenPosition;
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), ProjCenter_WithoutGravDir, ProjCenter_WithoutGravDir + mainVec);
+		DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -318,17 +326,21 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		coordVector.X *= texture.Width;
 		coordVector.Y *= texture.Height;
 		float theta = MathF.Atan2(coordVector.Y, coordVector.X);
-		Vector2 mainVectorI = mainVec.RotatedBy(theta) * MathF.Cos(theta);
-		Vector2 mainVectorJ = mainVec.RotatedBy(theta - MathHelper.PiOver2) * MathF.Sin(theta);
+		Vector2 drawVector = positionEnd - positionStart;
+
+		Vector2 mainVectorI = drawVector.RotatedBy(theta * -Projectile.spriteDirection) * MathF.Cos(theta);
+		Vector2 mainVectorJ = drawVector.RotatedBy((theta - MathHelper.PiOver2) * -Projectile.spriteDirection) * MathF.Sin(theta);
+
 		List<Vertex2D> vertex2Ds = new List<Vertex2D>
 		{
 			new Vertex2D(positionStart, drawColor, new Vector3(textureCoordStart, 0)),
-			new Vertex2D(positionStart + mainVectorI, drawColor, new Vector3(textureCoordEnd.X, positionStart.Y, 0)),
+			new Vertex2D(positionStart + mainVectorI, drawColor, new Vector3(textureCoordEnd.X, textureCoordStart.Y, 0)),
 
-			new Vertex2D(positionEnd + mainVectorJ, drawColor, new Vector3(positionStart.X, textureCoordEnd.Y, 0)),
-			new Vertex2D(positionEnd, drawColor, new Vector3(textureCoordEnd, 0))
+			new Vertex2D(positionStart + mainVectorJ, drawColor, new Vector3(textureCoordStart.X, textureCoordEnd.Y, 0)),
+			new Vertex2D(positionEnd, drawColor, new Vector3(textureCoordEnd, 0)),
 		};
 		Main.graphics.GraphicsDevice.Textures[0] = texture;
+		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
 	}
 	public virtual float TrailAlpha(float factor)
