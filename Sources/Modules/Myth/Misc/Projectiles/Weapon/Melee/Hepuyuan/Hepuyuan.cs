@@ -1,5 +1,3 @@
-using Everglow.Myth.TheFirefly.Projectiles;
-using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
@@ -134,7 +132,7 @@ public class Hepuyuan : MeleeProj
 				useTrail = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 2.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(190, targetRot,0.4f), 0.4f);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(190, targetRot, 0.4f), 0.4f);
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
@@ -184,7 +182,7 @@ public class Hepuyuan : MeleeProj
 				GenerateVFX();
 				GenerateSpark();
 			}
-			if(timer == (int)(57 + 12 * timeMul))
+			if (timer == (int)(57 + 12 * timeMul))
 			{
 				Vector2 v0 = new Vector2(Projectile.spriteDirection * 6, 0.5f);
 				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center - v0 * 30, v0, ModContent.ProjectileType<Hepuyuan_thrust2>(), Projectile.damage, 0, Projectile.owner);
@@ -222,9 +220,10 @@ public class Hepuyuan : MeleeProj
 		Player player = Main.player[Projectile.owner];
 		player.fullRotation = 0;
 	}
-	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth = 10, float HorizontalHeight = 10, float DrawScale = 0.9F, string GlowPath = "", double DrawRotation = 0.7854)
+	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{
-		base.DrawSelf(spriteBatch, lightColor, 240, 57, 0.7f, "Myth/Misc/Projectiles/Weapon/Melee/Hepuyuan/HepuyuanGlow");
+		drawScale = new Vector2(-0.6f, 1.14f);
+		base.DrawSelf(spriteBatch, lightColor, diagonal, drawScale, glowTexture);
 	}
 	public override void DrawTrail(Color color)
 	{
@@ -248,13 +247,15 @@ public class Hepuyuan : MeleeProj
 			float factor = i / (length - 1f);
 			float w = TrailAlpha(factor);
 			Color c0 = Color.White;
-			if(i == 0)
+			if (i == 0)
 			{
 				c0 = Color.Transparent;
 			}
 			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.3f * Projectile.scale, c0, new Vector3(factor, 1, 0f)));
 			bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, c0, new Vector3(factor, 0, w)));
 		}
+		bars.Add(new Vertex2D(Projectile.Center + mainVec * 0.3f * Projectile.scale, Color.White, new Vector3(0, 1, 0f)));
+		bars.Add(new Vertex2D(Projectile.Center + mainVec * Projectile.scale, Color.White, new Vector3(0, 0, 1)));
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);

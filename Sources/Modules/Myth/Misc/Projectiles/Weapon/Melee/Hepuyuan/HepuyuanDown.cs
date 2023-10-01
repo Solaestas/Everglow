@@ -1,6 +1,5 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.Misc.Gores;
-using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
@@ -13,58 +12,30 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 		Projectile.CloneDefaults(ProjectileID.Spear);
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 80;
-		Projectile.extraUpdates =12;
+		Projectile.extraUpdates = 12;
 		Projectile.width = 80;
 		Projectile.height = 80;
 		Projectile.timeLeft = 240;
 	}
-
-	internal bool Crash = false;
-	internal int timer = 0;
-	private float addK = 1.0f;
-	internal Vector2 FirstVel = Vector2.Zero;
-	internal float[] wid = new float[60];
-	internal Vector2[] OldplCen = new Vector2[60];
-	internal int TrueL = 0;
-	internal float[] statrP = new float[4];
+	public bool Crash = false;
 	public override bool PreAI()
 	{
 		Player player = Main.player[Projectile.owner];
-		OldplCen[0] = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 15f;
-		for (int i = 0; i < 1; i++)
-		{
-			Vector2 v1 = new Vector2(Main.rand.NextFloat(0.8f, 10f), 0).RotatedByRandom(6.28);
-			Vector2 v2 = new Vector2(Main.rand.NextFloat(30f), 0).RotatedByRandom(6.28);
-			Dust.NewDust(OldplCen[0] - new Vector2(4) + v2, 1, 1, Main.rand.NextBool(2) ? ModContent.DustType<Dusts.XiaoDustCyan>() : ModContent.DustType<Dusts.XiaoDust>(), (Projectile.velocity * 0.35f + v1).X, (Projectile.velocity * 0.35f + v1).Y, 0, default, Main.rand.NextFloat(0.85f, Main.rand.NextFloat(0.85f, 3.75f)));
-		}
+		if (player.direction == -Math.Sign(Projectile.velocity.X))
+			player.direction *= -1;
+		player.heldProj = Projectile.whoAmI;
+
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + MathHelper.PiOver4;
-		timer++;
-		if (timer % 10 == 1 && Projectile.timeLeft > 30)
+		if (Projectile.timeLeft % 10 == 1 && Projectile.timeLeft > 30)
 		{
 			var v = Vector2.Normalize(Projectile.velocity);
 			int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<XiaoBlackWave>(), 0, 0, player.whoAmI, Math.Clamp(Projectile.velocity.Length() / 8f, 0f, 4f), 0);
 			Main.projectile[h].rotation = (float)(Math.Atan2(v.Y, v.X) + Math.PI / 2d);
 		}
-		for (int f = OldplCen.Length - 1; f > 0; f--)
-		{
-			OldplCen[f] = OldplCen[f - 1];
-		}
-		wid[0] = Math.Clamp(Projectile.velocity.Length() / 6f, 0, 60);
-		for (int f = wid.Length - 1; f > 0; f--)
-		{
-			wid[f] = wid[f - 1];
-		}
-		if (player.direction == -Math.Sign(Projectile.velocity.X))
-			player.direction *= -1;
-		player.heldProj = Projectile.whoAmI;
 
-		if (Projectile.timeLeft <= 6)
-		{
-			if (Collision.SolidCollision(player.Top, 1, 1))
-				player.position.Y -= 64 * player.gravDir;
-		}
+
 		Projectile.velocity *= 0.995f;
-		if(Main.rand.NextBool(9))
+		if (Main.rand.NextBool(9))
 		{
 			GenerateVFX();
 		}
@@ -77,10 +48,6 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 			Projectile.velocity *= 0.5f;
 			Projectile.timeLeft -= 1;
 			Projectile.extraUpdates = 0;
-			for (int f = wid.Length - 1; f >= 0; f--)
-			{
-				wid[f] *= 0.9f;
-			}
 			if (Projectile.timeLeft % 30 == 1)
 			{
 				for (int h = 0; h < 18; h++)
@@ -92,44 +59,6 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 			}
 			if (!Crash)
 			{
-				for (int f = 0; f < 45; f++)
-				{
-					Vector2 v0 = new Vector2(Main.rand.NextFloat(0.8f, 3f), 0).RotatedByRandom(6.28);
-					float Dx = Main.rand.NextFloat(-250f, 250f);
-					Vector2 Pos = OldplCen[0] + new Vector2(Dx, (40 + Main.rand.NextFloat(-10f, 10f)) * player.gravDir);
-					for (int i = 0; i < 5; i++)
-					{
-						if (Collision.SolidCollision(Pos, 1, 1))
-							Pos.Y -= 16 * player.gravDir;
-					}
-					Vector2 Dy = v0 + new Vector2(0, Main.rand.NextFloat(Math.Abs(Dx) - 278, 0) / 12f);
-					Dy.Y *= player.gravDir;
-					if (Main.rand.NextBool(2))
-					{
-						var g = Gore.NewGoreDirect(null, Pos, Dy * 2f, ModContent.GoreType<XiaoDash0>(), Main.rand.NextFloat(1f, 4.5f));
-						g.timeLeft = Main.rand.Next(250, 600);
-					}
-					else
-					{
-						var g = Gore.NewGoreDirect(null, Pos, Dy * 2f, ModContent.GoreType<XiaoDash1>(), Main.rand.NextFloat(1f, 4.5f));
-						g.timeLeft = Main.rand.Next(250, 600);
-					}
-				}
-				for (int f = 0; f < 205; f++)
-				{
-					Vector2 v0 = new Vector2(Main.rand.NextFloat(0.8f, 3f), 0).RotatedByRandom(6.28);
-					float Dx = Main.rand.NextFloat(-350f, 350f);
-					Vector2 Pos = OldplCen[0] + new Vector2(Dx, (40 + Main.rand.NextFloat(-10f, 10f)) * player.gravDir);
-					for (int i = 0; i < 5; i++)
-					{
-						if (Collision.SolidCollision(Pos, 1, 1))
-							Pos.Y -= 16 * player.gravDir;
-					}
-					Vector2 Dy = v0 + new Vector2(0, Main.rand.NextFloat(Math.Abs(Dx) - 278, 0) / 12f);
-					Dy.Y *= player.gravDir;
-					Vector2 v2 = new Vector2(Main.rand.NextFloat(30f), 0).RotatedByRandom(6.28);
-					Dust.NewDust(Pos - new Vector2(4) + v2, 1, 1, Main.rand.NextBool(2) ? ModContent.DustType<Dusts.XiaoDustCyan>() : ModContent.DustType<Dusts.XiaoDust>(), Dy.X * 2f, Dy.Y * 2f, 0, default, Main.rand.NextFloat(0.85f, Main.rand.NextFloat(0.85f, 5.75f)));
-				}
 				for (int f = 0; f < 8; f++)
 				{
 					Vector2 Pos = Projectile.Center + new Vector2((f - 3.5f) * 80, -300 * player.gravDir);
@@ -186,6 +115,61 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 						Main.projectile[h].rotation = MathF.PI - Main.rand.NextFloat((f - 5.5f) / 15f - 0.1f + Math.Sign(f - 5.5f) * 0.75f, (f - 5.5f) / 15f + 0.1f + Math.Sign(f - 5.5f) * 0.75f);
 					}
 				}
+				int times = 24;
+				for(int f = 0; f <= times; f++)
+				{
+					Vector2 newVec = new Vector2((f - times / 2) / 1f, -10).RotatedByRandom(Main.rand.NextFloat(-0.3f, 0.3f)) * Main.rand.NextFloat(1.4f, 2.3f);
+					newVec.Y *= player.gravDir;
+					var positionVFX = Projectile.Center + new Vector2((f - times / 2) * 24, -60) + newVec * Main.rand.NextFloat(0.7f, 1f);
+					for(int i = 0; i < 75; i++)
+					{
+						if (!Collision.SolidCollision(positionVFX, 1, 1))
+						{
+							positionVFX.Y += 12 * player.gravDir;
+						}
+						else
+						{
+							break;
+						}
+					}
+					positionVFX.Y += 60;
+					var filthy = new FilthyLucreFlame_darkDust
+					{
+						velocity = newVec,
+						Active = true,
+						Visible = true,
+						position = positionVFX,
+						maxTime = Main.rand.Next(17, 26),
+						ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.08f, 0.08f), Main.rand.NextFloat(18f, 60f) }
+					};
+					Ins.VFXManager.Add(filthy);
+					var filthy2 = new FilthyLucreFlameDust
+					{
+						velocity = newVec,
+						Active = true,
+						Visible = true,
+						position = positionVFX,
+						maxTime = Main.rand.Next(17, 26),
+						ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0f, 0f), Main.rand.NextFloat(18f, 40f) }
+					};
+					Ins.VFXManager.Add(filthy2);
+					var smog = new FilthyFragileDust
+					{
+						velocity = -new Vector2(0, MathF.Sin(f / (float)times * MathF.PI)) * Main.rand.NextFloat(10f, 60f),
+						Active = true,
+						Visible = true,
+						position = positionVFX - new Vector2(0, 80),
+						coord = new Vector2(Main.rand.NextFloat(1f), Main.rand.NextFloat(1f)),
+						maxTime = Main.rand.Next(60, 165),
+						scale = Main.rand.NextFloat(Main.rand.NextFloat(8.4f, 10.4f), 14f),
+						rotation = Main.rand.NextFloat(6.283f),
+						rotation2 = Main.rand.NextFloat(6.283f),
+						omega = Main.rand.NextFloat(-30f, 30f),
+						phi = Main.rand.NextFloat(6.283f),
+						ai = new float[] { Main.rand.NextFloat(0f, 0.2f), Main.rand.NextFloat(0.2f, 0.5f) }
+					};
+					Ins.VFXManager.Add(smog);
+				}
 				ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
 				mplayer.FlyCamPosition = new Vector2(0, 84).RotatedByRandom(6.283);
 				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Xiao"), Projectile.Center);
@@ -194,10 +178,9 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 		}
 		else
 		{
+			player.Center = Projectile.Center - new Vector2(0, 80);
 			if (Projectile.velocity.Length() < 100)
-				Projectile.velocity *= addK;
-			if (addK < 1.5f)
-				addK += 0.001f;
+				Projectile.velocity *= 1.05f;
 		}
 		if (Projectile.timeLeft > 6 && !Collision.SolidCollision(Projectile.Center, 1, 1))
 			player.velocity = Projectile.velocity * 6;
@@ -335,7 +318,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 				value = (trailLength - 1 - x) / 16f;
 			}
 			float width2 = 1 - Math.Min((x / 35f), 0.5f);
-			
+
 			bars.Add(drawCenter - vel * 17 * x + width, drawColor * value, new Vector3(x / 1000f - timeEffectValue, 1, width2));
 			bars.Add(drawCenter - vel * 17 * x - width, drawColor * value, new Vector3(x / 1000f - timeEffectValue, 0, width2));
 		}

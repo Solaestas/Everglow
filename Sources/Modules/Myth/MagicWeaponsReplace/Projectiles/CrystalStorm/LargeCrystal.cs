@@ -169,8 +169,4 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 		Projectile.damage = 0;
 		timeToKill = 60;
 	}
-	public override void Kill(int timeLeft)
-	{
-		
-	}
 }
