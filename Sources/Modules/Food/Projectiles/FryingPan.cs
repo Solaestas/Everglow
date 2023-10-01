@@ -63,9 +63,9 @@ public class FryingPan : MeleeProj, IWarpProjectile
 		return BlendState.NonPremultiplied;
 	}
 
-	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, string GlowPath, double DrawRotation)
+	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 coord0 = default, float DrawScale = 1, Texture2D glowTexture = null)
 	{
-		base.DrawSelf(spriteBatch, lightColor, 70, 40, 1.04f, "", 0.666667);
+		base.DrawSelf(spriteBatch, lightColor, diagonal, coord0, DrawScale, glowTexture);
 	}
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
