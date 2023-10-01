@@ -16,7 +16,7 @@ internal class AcytaeaBow : ModProjectile
 
 
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		Projectile.NewProjectile(null, Projectile.Center, new Vector2(34, 0).RotatedBy(Projectile.ai[0]), ModContent.ProjectileType<AcytaeaArrow>(), Projectile.damage, 3, Main.LocalPlayer.whoAmI);
 	}

@@ -99,7 +99,7 @@ public class MothBall : ModProjectile
 		#endregion Origin
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		/*震屏
             MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
@@ -180,7 +180,7 @@ public class MothBall : ModProjectile
 		}
 
 		//Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 
 	public override bool OnTileCollide(Vector2 oldVelocity)

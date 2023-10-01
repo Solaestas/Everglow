@@ -15,7 +15,7 @@ internal class AcytaeaWarningArrow : ModProjectile
 		Projectile.DamageType = DamageClass.Ranged;
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		Projectile.NewProjectile(null, Projectile.Center + new Vector2(0, -800), new Vector2(0, 34), ModContent.ProjectileType<AcytaeaArrow>(), 0, 1, Main.myPlayer);
 	}

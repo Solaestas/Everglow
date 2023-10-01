@@ -1,4 +1,4 @@
-using Everglow.Myth.TheFirefly.Items.Accessories;
+﻿using Everglow.Myth.TheFirefly.Items.Accessories;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
@@ -79,7 +79,7 @@ public class ButterflyDreamFriendly : ModProjectile
 		//Main.dust[index2].alpha = (int)(Main.dust[index2].scale * 50);
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		if (timeLeft > 0)
 		{
