@@ -47,7 +47,7 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 			Projectile.Kill();
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.NPCHit4.WithVolumeScale(Math.Min(0.8f, Projectile.velocity.Length() / 40f)), Projectile.Center);
 		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Vector2.One, ModContent.ProjectileType<DemoHit>(), 0, 0, Projectile.owner, Projectile.velocity.Length() / 3f, Projectile.rotation + Main.rand.NextFloat(6.283f));

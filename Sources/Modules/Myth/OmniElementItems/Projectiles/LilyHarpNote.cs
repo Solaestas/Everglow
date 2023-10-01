@@ -99,7 +99,7 @@ public class LilyHarpNote : ModProjectile
 		behindProjectiles.Add(index);
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<LilyHarpNoteKill>(), 0, 0);
 		for (int i = 0; i < 18; i++)
@@ -120,6 +120,6 @@ public class LilyHarpNote : ModProjectile
                 Vector2 v0 = new Vector2(0, 6).RotatedBy(k0 + i / 1.5d * Math.PI);
                 Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, v0, ModContent.ProjectileType<VineProj>(), 0, 0, Projectile.owner, Main.rand.Next(100), Main.rand.NextFloat(0, 2f));
             }*/
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 }

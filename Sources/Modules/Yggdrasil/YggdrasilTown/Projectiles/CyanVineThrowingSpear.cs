@@ -58,7 +58,7 @@ public class CyanVineThrowingSpear : ModProjectile
 		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, tex.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		return false;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		for (int x = 0; x < 16; x++)
 		{

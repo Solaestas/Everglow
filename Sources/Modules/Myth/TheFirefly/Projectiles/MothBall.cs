@@ -69,7 +69,8 @@ public class MothBall : ModProjectile
 			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/PowerAccumulate"), Projectile.Center);
 		}
 	}
-	public override void Kill(int timeLeft)
+
+	public override void OnKill(int timeLeft)
 	{
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<MothBallExplosion>(), 50, 3, Projectile.owner, 60f);
 		if (Main.masterMode)
@@ -114,6 +115,7 @@ public class MothBall : ModProjectile
 			}
 		}
 
+		//Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
 		base.Kill(timeLeft);
 	}
 

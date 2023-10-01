@@ -273,7 +273,7 @@ internal class SightOfTileProjRead : ModProjectile
 		return baseColor;
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		if (timeLeft > 0)
 		{
@@ -295,6 +295,6 @@ internal class SightOfTileProjRead : ModProjectile
 			WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 			WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 		}
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 }
