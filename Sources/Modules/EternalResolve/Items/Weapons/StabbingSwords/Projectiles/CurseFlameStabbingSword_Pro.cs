@@ -26,7 +26,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			if (Main.rand.NextBool(2))
 				GenerateVFX(1);
 		}
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 
 		}

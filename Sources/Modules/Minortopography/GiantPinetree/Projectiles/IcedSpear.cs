@@ -203,7 +203,7 @@ public class IcedSpear : ModProjectile
 		Main.spriteBatch.Draw(texIce, Projectile.Center - Main.screenPosition, null, iceColor, Projectile.rotation, texIce.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		return false;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		if(timeLeft > 60)
 		{
