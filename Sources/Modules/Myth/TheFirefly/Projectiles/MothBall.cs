@@ -116,7 +116,6 @@ public class MothBall : ModProjectile
 		}
 
 		//Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
-		base.Kill(timeLeft);
 	}
 
 	public override bool PreDraw(ref Color lightColor)
