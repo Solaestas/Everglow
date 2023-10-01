@@ -80,7 +80,7 @@ public class GoldRound : ModProjectile
 			Main.dust[num].noGravity = true;
 		}
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 	}
 	public override bool PreDraw(ref Color lightColor)

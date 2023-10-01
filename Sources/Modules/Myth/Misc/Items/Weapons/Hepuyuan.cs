@@ -1,3 +1,4 @@
+using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Myth.Common;
 using Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
 using Terraria.Audio;
@@ -51,7 +52,15 @@ public class Hepuyuan : ModItem
 				return;
 			}
 		}
-		CanDown = true;
+		for (int h = 21; h < 120; h++)
+		{
+			if (Collision.SolidCollision(player.Center + new Vector2(0, h * 16 * player.gravDir), 1, 1))
+			{
+				CanDown = true;
+				return;
+			}
+		}
+		CanDown = false;
 		base.HoldItemFrame(player);
 	}
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -176,7 +185,5 @@ public class HepuyuanOwner : ModPlayer
 	}
 	public override void UpdateEquips()
 	{
-		if (Player.HeldItem.type == ModContent.ItemType<Hepuyuan>())
-			Player.jumpSpeedBoost += 12.75f;
 	}
 }

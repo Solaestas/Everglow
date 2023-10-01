@@ -1,4 +1,3 @@
-using Terraria;
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
 
 public class HepuyuanSpice : ModProjectile
@@ -6,11 +5,11 @@ public class HepuyuanSpice : ModProjectile
 	public override void SetDefaults()
 	{
 		Projectile.width = 100;
-		Projectile.height = 180;
+		Projectile.height = 100;
 		Projectile.friendly = true;
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = false;
-		Projectile.timeLeft = 80;
+		Projectile.timeLeft = 1;
 		Projectile.penetrate = -1;
 		Projectile.extraUpdates = 1;
 	}
@@ -28,7 +27,7 @@ public class HepuyuanSpice : ModProjectile
 		var v0 = new Vector2(0, -1);
 		var v0T = new Vector2(1, 0);
 		float length = Projectile.ai[0];
-		v0 = v0 * length * Math.Clamp((80 - Projectile.timeLeft) / 12f, 0, 1f);
+		v0 = v0 * length * Math.Clamp((130 - Projectile.timeLeft) / 24f, 0, 1f);
 		v0T = v0T * 77.77f;
 		v0 = v0.RotatedBy(Projectile.rotation);
 		v0T = v0T.RotatedBy(Projectile.rotation);
@@ -52,7 +51,11 @@ public class HepuyuanSpice : ModProjectile
 		Effect dissolve = Commons.ModAsset.Dissolve.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		float dissolveDuration = Projectile.timeLeft / 60f - 0.2f;
+		float dissolveDuration = Projectile.timeLeft / 80f - 0.2f;
+		if(Projectile.timeLeft > 80)
+		{
+			dissolveDuration = 1.2f;
+		}
 		dissolve.Parameters["uTransform"].SetValue(model * projection);
 		dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_spiderNet.Value);
 		dissolve.Parameters["duration"].SetValue(dissolveDuration);
@@ -69,7 +72,9 @@ public class HepuyuanSpice : ModProjectile
 	public override void AI()
 	{
 		if (Projectile.timeLeft <= 78)
+		{
 			Projectile.friendly = false;
+		}
 		Projectile.hide = true;
 	}
 	public static int CyanStrike = 0;

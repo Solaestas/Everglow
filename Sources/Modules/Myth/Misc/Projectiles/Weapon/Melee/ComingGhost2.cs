@@ -159,7 +159,7 @@ class ComingGhost2 : ModProjectile
 		}
 		return false;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 	}
 

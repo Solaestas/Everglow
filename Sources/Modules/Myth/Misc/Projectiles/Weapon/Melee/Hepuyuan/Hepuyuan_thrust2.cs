@@ -19,6 +19,8 @@ public class Hepuyuan_thrust2 : ModProjectile, IWarpProjectile
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
+		Player player = Main.player[Projectile.owner];
+		Projectile.extraUpdates = (int)(16 * player.meleeSpeed);
 		Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 3.7F;
 		SoundEngine.PlaySound(SoundID.Item71.WithVolume(0.6f).WithPitchOffset(-0.5f), Projectile.Center);
 	}
@@ -53,7 +55,7 @@ public class Hepuyuan_thrust2 : ModProjectile, IWarpProjectile
 		myplayer.InvincibleFrameTime = 15;
 		return false;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		Player player = Main.player[Projectile.owner];
 		player.fullRotation = 0;

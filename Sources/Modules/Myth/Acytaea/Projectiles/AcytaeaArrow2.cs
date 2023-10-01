@@ -19,7 +19,7 @@ internal class AcytaeaArrow2 : ModProjectile
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, Projectile.Center);
 		for (int j = 0; j < 6; j++)

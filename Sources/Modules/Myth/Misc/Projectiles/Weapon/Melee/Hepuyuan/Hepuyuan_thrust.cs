@@ -17,9 +17,14 @@ public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
 		Projectile.friendly = true;
 		Projectile.penetrate = -1;
 	}
+	public Vector2 PlayerSafePos = new Vector2();
 	public override void OnSpawn(IEntitySource source)
 	{
+		Player player = Main.player[Projectile.owner];
+		Projectile.extraUpdates = (int)(12 * player.meleeSpeed);
+		PlayerSafePos = player.position;
 		Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 8;
+
 		SoundEngine.PlaySound(SoundID.Item71);
 	}
 	public override bool PreAI()
@@ -30,7 +35,16 @@ public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
 		player.heldProj = Projectile.whoAmI;
 		player.fullRotation = MathF.Sin((240 - Projectile.timeLeft) / 240f * MathF.PI) * Math.Sign(Projectile.velocity.X) * 1.26f;
 		player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height / 2f);
-		player.Center = Projectile.Center - Vector2.Normalize(Projectile.velocity) * (240 - Projectile.timeLeft);
+		player.immune = true;
+		player.immuneTime = 5;
+		if(Projectile.timeLeft > 1)
+		{
+			player.Center = Projectile.Center - Vector2.Normalize(Projectile.velocity) * (240 - Projectile.timeLeft);
+		}
+		if (!Collision.SolidCollision(player.position, player.Hitbox.Width, player.Hitbox.Height))
+		{	
+			PlayerSafePos = player.position;
+		}
 		if (Collision.SolidCollision(Projectile.Center, 1, 1))
 		{
 			Projectile.velocity *= 0.9f;
@@ -61,31 +75,20 @@ public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
 				GenerateSpark();
 			}
 		}
-		if (Projectile.timeLeft % 40 == 0)
+		if (Projectile.timeLeft % 60 == 0)
 		{
-			Generate3DVFXRing();
+			var v = Vector2.Normalize(Projectile.velocity);
+			int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<XiaoBlackWave>(), 0, 0, player.whoAmI, Math.Clamp(Projectile.velocity.Length() / 4f, 0f, 4f), 0);
+			Main.projectile[h].rotation = (float)(Math.Atan2(v.Y, v.X) + Math.PI / 2d);
 		}
-		MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
-		myplayer.InvincibleFrameTime = 15;
+
 		return false;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		Player player = Main.player[Projectile.owner];
 		player.fullRotation = 0;
-	}
-	private void Generate3DVFXRing()
-	{
-		BlackRingVFX v = new BlackRingVFX()
-		{
-			pos = Projectile.Center,
-			vel = Projectile.velocity,
-			color = Color.Lerp(Color.White, Color.Transparent, 0.4f),
-			scale = 3,
-			maxtime = 20,
-			timeleft = 20
-		};
-		Ins.VFXManager.Add(v);
+		player.position = PlayerSafePos;
 	}
 	private void GenerateVFX()
 	{

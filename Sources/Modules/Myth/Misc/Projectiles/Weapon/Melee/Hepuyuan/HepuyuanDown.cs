@@ -1,6 +1,7 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.Misc.Gores;
 using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
 
@@ -18,6 +19,11 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 		Projectile.timeLeft = 240;
 	}
 	public bool Crash = false;
+	public override void OnSpawn(IEntitySource source)
+	{
+		Player player = Main.player[Projectile.owner];
+		Projectile.extraUpdates = (int)(12 * player.meleeSpeed);
+	}
 	public override bool PreAI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -78,7 +84,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 					if (empty)
 						continue;
 					Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<HepuyuanSpice>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(50f, 110f), Main.rand.NextFloat(0f, 1f), Main.rand.NextFloat(0f, 1f));
-					p.timeLeft = Main.rand.Next(78, 82);
+					p.timeLeft = Main.rand.Next(128, 132);
 					if (player.gravDir == 1)
 						p.rotation = Main.rand.NextFloat((f - 3.5f) / 15f - 0.3f, (f - 3.5f) / 15f + 0.3f);
 					else
@@ -178,7 +184,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 		}
 		else
 		{
-			player.Center = Projectile.Center - new Vector2(0, 80);
+			player.Center = Projectile.Center - new Vector2(0, 80 * player.gravDir);
 			if (Projectile.velocity.Length() < 100)
 				Projectile.velocity *= 1.05f;
 		}

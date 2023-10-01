@@ -55,7 +55,7 @@ public abstract class FixCoinProjectile : ModProjectile
 		}
 		LightColorI += 1 / 150f;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, Projectile.Center);
 		int type = ModContent.DustType<PureWhite>();
