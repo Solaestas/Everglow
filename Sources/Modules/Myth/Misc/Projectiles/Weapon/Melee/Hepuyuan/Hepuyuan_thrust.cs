@@ -9,7 +9,7 @@ public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
 	public override string Texture => "Everglow/Myth/Misc/Projectiles/Weapon/Melee/Hepuyuan/Hepuyuan";
 	public override void SetDefaults()
 	{
-		Projectile.extraUpdates = 2;
+		Projectile.extraUpdates = 12;
 		Projectile.timeLeft = 240;
 		Projectile.width = 80;
 		Projectile.height = 80;
