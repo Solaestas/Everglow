@@ -60,8 +60,8 @@ public class Hepuyuan : MeleeProj
 	}
 	public override void AI()
 	{
-		base.AI();
 		Player player = Main.player[Projectile.owner];
+		base.AI();
 		TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
 		Tplayer.HideLeg = true;
 		useTrail = true;
@@ -195,7 +195,7 @@ public class Hepuyuan : MeleeProj
 			if (timer < 24 * timeMul)//前摇
 			{
 				useTrail = false;
-				LockPlayerDir(player);
+				//LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 2.5f;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(190, targetRot, 0, -0.3f * Projectile.spriteDirection), 0.4f / timeMul);
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;

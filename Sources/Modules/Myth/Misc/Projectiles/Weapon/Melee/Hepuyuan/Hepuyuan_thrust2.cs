@@ -33,7 +33,6 @@ public class Hepuyuan_thrust2 : ModProjectile, IWarpProjectile
 
 		if (Projectile.timeLeft < 6)
 		{
-			player.velocity *= 0f;
 			Projectile.velocity *= 0.4f;
 		}
 		if (Main.rand.Next(240) < Projectile.timeLeft)

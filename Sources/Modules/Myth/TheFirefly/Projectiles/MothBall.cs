@@ -69,7 +69,6 @@ public class MothBall : ModProjectile
 			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/PowerAccumulate"), Projectile.Center);
 		}
 	}
-
 	public override void OnKill(int timeLeft)
 	{
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<MothBallExplosion>(), 50, 3, Projectile.owner, 60f);
@@ -117,25 +116,15 @@ public class MothBall : ModProjectile
 
 		//Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
 	}
-
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D Light = ModAsset.CorruptLight.Value;
-		float power = 1f;
-		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, null, new Color(power, power, power, 0), Projectile.rotation, Light.Size() / 2f, 1f, SpriteEffects.None, 0);
-
 		int frameX = (Projectile.frame % 6);
 		int frameY = (Projectile.frame - frameX) / 6;
 		int frameSideX = 270;
 		int frameSideY = 290;
 		Main.spriteBatch.Draw(ModContent.Request<Texture2D>(Texture).Value, Projectile.Center - Main.screenPosition, new Rectangle(frameX * frameSideX, frameY * frameSideY + 10, 270, 270), new Color(1f, 1f, 1f, 0), Projectile.rotation, new Vector2(135f), Projectile.scale * subscale / 60f, SpriteEffects.None, 0f);
-		//for (int g = 0; g < 15; g++)
-		//{
-		//	SpriteEffects eff = SpriteEffects.None;
-		//	if (vloB[g].X > 0)
-		//		eff = SpriteEffects.FlipHorizontally;
-		//	Main.spriteBatch.Draw(Common.MythContent.QuickTexture("TheFirefly/Projectiles/ButterflyDream"), Projectile.Center * subscale / 60f - Main.screenPosition, new Rectangle(0, yB[g], 36, 34), new Color(0.2f, 0.5f, 1f, 0), Projectile.rotation, new Vector2(18f, 17f), subscale / 60f, eff, 0f);
-		//}
+
 		if (Projectile.timeLeft < 60)
 			Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, Light.Size() / 2f, (60 - Projectile.timeLeft) / 30f, SpriteEffects.None, 0);
 

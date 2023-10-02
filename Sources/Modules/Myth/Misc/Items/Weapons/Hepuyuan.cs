@@ -32,8 +32,8 @@ public class Hepuyuan : ModItem
 
 	public override bool CanUseItem(Player player)
 	{
-		Item.useTime = 18;
-		Item.useAnimation = 18;
+		Item.useTime = (int)(18f / player.meleeSpeed);
+		Item.useAnimation = (int)(18f / player.meleeSpeed);
 		return player.ownedProjectileCounts[Item.shoot] < 1;
 	}
 	bool CanDown;
