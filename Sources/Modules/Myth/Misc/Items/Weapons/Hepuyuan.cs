@@ -46,7 +46,10 @@ public class Hepuyuan : ModItem
 		}
 		for (int h = 0; h < 21; h++)
 		{
-			if (Collision.SolidCollision(player.Center + new Vector2(0, h * 16 * player.gravDir), 1, 1))
+			Vector2 pos = player.Center + new Vector2(0, h * 16 * player.gravDir);
+			Vector2 coord = pos / 16f;
+			Tile tile = Main.tile[(int)coord.X, (int)coord.Y];
+			if (TileID.Sets.Platforms[tile.TileType] || Collision.SolidCollision(pos, 1, 1))
 			{
 				CanDown = false;
 				return;
@@ -54,7 +57,10 @@ public class Hepuyuan : ModItem
 		}
 		for (int h = 21; h < 120; h++)
 		{
-			if (Collision.SolidCollision(player.Center + new Vector2(0, h * 16 * player.gravDir), 1, 1))
+			Vector2 pos = player.Center + new Vector2(0, h * 16 * player.gravDir);
+			Vector2 coord = pos / 16f;
+			Tile tile = Main.tile[(int)coord.X, (int)coord.Y];
+			if (TileID.Sets.Platforms[tile.TileType] || Collision.SolidCollision(pos, 1, 1))
 			{
 				CanDown = true;
 				return;

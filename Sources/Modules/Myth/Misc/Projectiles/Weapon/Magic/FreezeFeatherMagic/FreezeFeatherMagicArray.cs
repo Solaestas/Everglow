@@ -142,12 +142,12 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int x = 0; x < 40; x++)
 		{
-			float pocession = 1 - timer / 30f;
+			float pocession = (1 - timer / 30f);
 			Vector2 radius = toBottom.RotatedBy(x / 20d * Math.PI);
 			float width = 75f;
 			if (x / 40f > WingPower / 210f)
 			{
-				pocession += 0.7f;
+				pocession += 0.9f;
 			}
 			Vector2 normalizedRadious = radius / 40f * MathF.Sin(x / 40f * MathF.PI) * width;
 			bars.Add(new Vertex2D(Projectile.Center + radius + normalizedRadious, new Color(x / 40f, 0.1f, pocession, 0.0f), new Vector3(0 + (float)Main.time * 0.014f, x / 15f, 0)));

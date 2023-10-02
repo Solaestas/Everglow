@@ -21,7 +21,7 @@ public class FreezeFeather : ModProjectile
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 2;
 	}
-	internal int TimeTokill = -1;
+	internal int timeTokill = -1;
 	ModProjectile MagicArray = null;
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -42,14 +42,14 @@ public class FreezeFeather : ModProjectile
 	}
 	public override void AI()
 	{
-		if (TimeTokill >= 0 && TimeTokill <= 2)
+		if (timeTokill >= 0 && timeTokill <= 2)
 			Projectile.Kill();
-		if (TimeTokill <= 15 && TimeTokill > 0)
+		if (timeTokill <= 15 && timeTokill > 0)
 			Projectile.velocity = Projectile.oldVelocity;
-		TimeTokill--;
-		if (TimeTokill >= 0)
+		timeTokill--;
+		if (timeTokill >= 0)
 		{
-			if (TimeTokill < 10)
+			if (timeTokill < 10)
 			{
 				Projectile.damage = 0;
 				Projectile.friendly = false;
@@ -149,7 +149,7 @@ public class FreezeFeather : ModProjectile
 				Ins.VFXManager.Add(smog);
 			}
 		}
-		if (Projectile.timeLeft <= 100 && TimeTokill < 0)
+		if (Projectile.timeLeft <= 100 && timeTokill < 0)
 		{
 			if (MagicArray != null)
 			{
@@ -173,7 +173,7 @@ public class FreezeFeather : ModProjectile
 	}
 	public override void PostDraw(Color lightColor)
 	{
-		if (TimeTokill >= 0)
+		if (timeTokill >= 0)
 		{
 			return;
 		}
@@ -253,7 +253,7 @@ public class FreezeFeather : ModProjectile
 	}
 	public  void AmmoHit()
 	{
-		TimeTokill = 20;
+		timeTokill = 20;
 		Projectile.tileCollide = false;
 		Projectile.ignoreWater = true;
 		Projectile.velocity = Projectile.oldVelocity;

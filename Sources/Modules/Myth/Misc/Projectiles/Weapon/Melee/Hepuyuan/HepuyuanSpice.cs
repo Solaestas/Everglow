@@ -23,7 +23,7 @@ public class HepuyuanSpice : ModProjectile
 	{
 		Player player = Main.player[Projectile.owner];
 		var Vx = new List<Vertex2D>();
-		Vector2 Vbase = Projectile.Center + new Vector2(0, 24 * player.gravDir);
+		Vector2 Vbase = Projectile.Center + new Vector2(0, 8 * player.gravDir);
 		var v0 = new Vector2(0, -1);
 		var v0T = new Vector2(1, 0);
 		float length = Projectile.ai[0];

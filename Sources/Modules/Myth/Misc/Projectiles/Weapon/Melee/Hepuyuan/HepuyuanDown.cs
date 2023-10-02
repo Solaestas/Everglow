@@ -1,5 +1,4 @@
 using Everglow.Myth.Common;
-using Everglow.Myth.Misc.Gores;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -19,6 +18,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 		Projectile.timeLeft = 240;
 	}
 	public bool Crash = false;
+	private Vector2 stopPoint = Vector2.Zero;
 	public override void OnSpawn(IEntitySource source)
 	{
 		Player player = Main.player[Projectile.owner];
@@ -32,7 +32,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 		player.heldProj = Projectile.whoAmI;
 
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + MathHelper.PiOver4;
-		if (Projectile.timeLeft % 10 == 1 && Projectile.timeLeft > 30)
+		if (Projectile.timeLeft % 10 == 1 && Projectile.timeLeft > 30 && !Crash)
 		{
 			var v = Vector2.Normalize(Projectile.velocity);
 			int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<XiaoBlackWave>(), 0, 0, player.whoAmI, Math.Clamp(Projectile.velocity.Length() / 8f, 0f, 4f), 0);
@@ -49,8 +49,27 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 		{
 			GenerateSpark();
 		}
-		if (Collision.SolidCollision(Projectile.Center + Projectile.velocity, 1, 1))
+		bool shouldStop = false;
+
+		for(int t = -8;t < Projectile.velocity.Length() + 8;t+=1)
 		{
+			if (TileCollisionUtils.PlatformCollision(Projectile.Center + Vector2.Normalize(Projectile.velocity) * t))
+			{
+				if(stopPoint == Vector2.zeroVector)
+				{
+					stopPoint = Projectile.Center + Vector2.Normalize(Projectile.velocity) * (t - 2);
+				}
+				shouldStop = true; 
+				break;
+			}
+		}
+		if(Crash)
+		{
+			shouldStop = true;
+		}
+		if (shouldStop)
+		{
+			Projectile.Center = stopPoint;
 			Projectile.velocity *= 0.5f;
 			Projectile.timeLeft -= 1;
 			Projectile.extraUpdates = 0;
@@ -59,19 +78,22 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 				for (int h = 0; h < 18; h++)
 				{
 					Vector2 v = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 16 * h;
-					if (Collision.SolidCollision(v, 1, 1))
+					Vector2 coordV = v / 16f;
+					Tile tile2 = Main.tile[(int)coordV.X, (int)coordV.Y];
+					if (TileID.Sets.Platforms[tile2.TileType])
 						Collision.HitTiles(v, Projectile.velocity * 20, 16, 16);
 				}
 			}
 			if (!Crash)
 			{
+				player.Center = stopPoint - new Vector2(0, 40 * player.gravDir);
 				for (int f = 0; f < 8; f++)
 				{
 					Vector2 Pos = Projectile.Center + new Vector2((f - 3.5f) * 80, -300 * player.gravDir);
 					bool empty = false;
 					for (int i = 0; i < 75; i++)
 					{
-						if (!Collision.SolidCollision(Pos, 1, 1))
+						if (!TileCollisionUtils.PlatformCollision(Pos))
 						{
 							Pos.Y += 8 * player.gravDir;
 							empty = true;
@@ -99,7 +121,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 					bool empty = false;
 					for (int i = 0; i < 75; i++)
 					{
-						if (!Collision.SolidCollision(Pos, 1, 1))
+						if (!TileCollisionUtils.PlatformCollision(Pos))
 						{
 							Pos.Y += 8 * player.gravDir;
 							empty = true;
@@ -122,14 +144,14 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 					}
 				}
 				int times = 24;
-				for(int f = 0; f <= times; f++)
+				for (int f = 0; f <= times; f++)
 				{
 					Vector2 newVec = new Vector2((f - times / 2) / 1f, -10).RotatedByRandom(Main.rand.NextFloat(-0.3f, 0.3f)) * Main.rand.NextFloat(1.4f, 2.3f);
 					newVec.Y *= player.gravDir;
-					var positionVFX = Projectile.Center + new Vector2((f - times / 2) * 24, -60) + newVec * Main.rand.NextFloat(0.7f, 1f);
-					for(int i = 0; i < 75; i++)
+					var positionVFX = Projectile.Center + new Vector2((f - times / 2) * 24, -60 * player.gravDir) + newVec * Main.rand.NextFloat(0.7f, 1f);
+					for (int i = 0; i < 75; i++)
 					{
-						if (!Collision.SolidCollision(positionVFX, 1, 1))
+						if (!TileCollisionUtils.PlatformCollision(positionVFX))
 						{
 							positionVFX.Y += 12 * player.gravDir;
 						}
@@ -138,7 +160,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 							break;
 						}
 					}
-					positionVFX.Y += 60;
+					positionVFX.Y += 60 * player.gravDir;
 					var filthy = new FilthyLucreFlame_darkDust
 					{
 						velocity = newVec,
@@ -188,10 +210,10 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 			if (Projectile.velocity.Length() < 100)
 				Projectile.velocity *= 1.05f;
 		}
-		if (Projectile.timeLeft > 6 && !Collision.SolidCollision(Projectile.Center, 1, 1))
-			player.velocity = Projectile.velocity * 6;
-		if (Projectile.timeLeft > 6 && Collision.SolidCollision(Projectile.Center, 1, 1))
+		if (Projectile.timeLeft > 6 && Crash)
+		{
 			Projectile.timeLeft -= 4;
+		}
 
 		if (Projectile.timeLeft < 6)
 		{
@@ -259,7 +281,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 	{
 		Vector2 velocityLeft = Vector2.Normalize(Projectile.velocity).RotatedBy(-MathHelper.PiOver2);
 		var positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-90f, 90f) + Vector2.Normalize(Projectile.velocity) * (Main.rand.NextFloat(Projectile.timeLeft - 120, Projectile.timeLeft + 0));
-		if (Collision.SolidCollision(Projectile.Center, 1, 1))
+		if (TileCollisionUtils.PlatformCollision(Projectile.Center))
 		{
 			positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-90f, 90f) + Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(-480f, 0f);
 		}
