@@ -87,7 +87,7 @@ public class BloodBlade2 : ModProjectile
 			Main.dust[num22].velocity *= 0.2f;
 		}
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
 		mplayer.FlyCamPosition = new Vector2(0, 12).RotatedByRandom(6.283);

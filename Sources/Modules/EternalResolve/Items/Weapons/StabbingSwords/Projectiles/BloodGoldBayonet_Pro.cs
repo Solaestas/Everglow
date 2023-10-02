@@ -40,11 +40,11 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				player.ClearBuff(ModContent.BuffType<Buffs.BloodSwordStrikeBuff>());
 			}
 		}
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			Player player = Main.player[Projectile.owner];
 			player.ClearBuff(ModContent.BuffType<Buffs.BloodSwordStrikeBuff>());
-			base.Kill(timeLeft);
+			base.OnKill(timeLeft);
 		}
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{

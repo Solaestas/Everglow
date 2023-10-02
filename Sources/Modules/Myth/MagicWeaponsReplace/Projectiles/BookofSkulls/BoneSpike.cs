@@ -254,7 +254,7 @@ internal class BoneSpike : ModProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.NPCHit2, Projectile.Center);
 		for (int f = 0; f < 20; f++)

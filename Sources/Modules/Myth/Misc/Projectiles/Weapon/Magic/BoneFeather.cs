@@ -133,7 +133,7 @@ public class BoneFeather : ModProjectile
 			Projectile.Kill();
 		}
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.DD2_SkeletonHurt, Projectile.Center);
 		for (int j = 0; j < 15; j++)

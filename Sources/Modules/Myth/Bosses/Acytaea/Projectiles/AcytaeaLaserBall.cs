@@ -83,7 +83,7 @@ public class AcytaeaLaserBall : ModProjectile
 		St *= 0.99f;
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 	}
 

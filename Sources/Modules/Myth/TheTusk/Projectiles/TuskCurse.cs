@@ -28,7 +28,7 @@ public class TuskCurse : ModProjectile
 		Projectile.velocity *= 0.98f;
 		Projectile.velocity.Y += 0.4f;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.DD2_SkeletonHurt, Projectile.Center);
 		for (int h = 0; h < 20; h++)

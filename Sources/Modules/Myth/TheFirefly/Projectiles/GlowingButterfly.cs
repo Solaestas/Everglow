@@ -299,7 +299,7 @@ public class GlowingButterfly : ModProjectile
 	{
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		if (Projectile.alpha > 180)
 			return;
