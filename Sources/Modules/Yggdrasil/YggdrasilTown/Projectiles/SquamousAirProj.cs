@@ -63,9 +63,9 @@ public class SquamousAirProj : ModProjectile
 			Projectile.velocity *= 0f;
 		}
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 	public void GenerateSmog(int Frequency)
 	{
