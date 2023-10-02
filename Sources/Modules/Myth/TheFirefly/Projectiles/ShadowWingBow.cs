@@ -29,13 +29,13 @@ internal class ShadowWingBow : ModProjectile
 		return new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0);
 	}
 
-	private bool Release = true;
+	private bool released = true;
 
-	private float[] ArRot = new float[5];
-	private float[] ArVel = new float[5];
-	private float[] SArVel = new float[5];
-	private float[] ArVelφ = new float[5];
-	private float[] Arcol = new float[5];
+	private float[] arrowRot = new float[5];
+	private float[] arrowVel = new float[5];
+	private float[] subArrowVel = new float[5];
+	private float[] arrowVelPhi = new float[5];
+	private float[] arrowcol = new float[5];
 	private int addi = 0;
 
 	public override void AI()
@@ -43,7 +43,7 @@ internal class ShadowWingBow : ModProjectile
 		addi++;
 		Player player = Main.player[Projectile.owner];
 		player.itemAnimation = 1;
-		player.heldProj = Projectile.whoAmI;
+		//player.heldProj = Projectile.whoAmI;
 		TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
 		//玩家动作
 		Vector2 vToMouse = Main.MouseWorld - player.Top;
@@ -75,43 +75,43 @@ internal class ShadowWingBow : ModProjectile
 			}
 		}
 		Tplayer.HeadRotation = AddHeadRotation;
-		if (ArRot[0] == 0)
+		if (arrowRot[0] == 0)
 		{
-			ArRot[0] = Main.rand.NextFloat(-0.7f, -0.5f);
+			arrowRot[0] = Main.rand.NextFloat(-0.7f, -0.5f);
 			for (int s = 1; s < 4; s++)
 			{
-				ArRot[s] = Main.rand.NextFloat(-0.5f, 0.5f);
+				arrowRot[s] = Main.rand.NextFloat(-0.5f, 0.5f);
 			}
-			ArRot[4] = Main.rand.NextFloat(0.5f, 0.7f);
+			arrowRot[4] = Main.rand.NextFloat(0.5f, 0.7f);
 		}
-		if (SArVel[0] == 0)
+		if (subArrowVel[0] == 0)
 		{
 			for (int s = 0; s < 5; s++)
 			{
-				SArVel[s] = Main.rand.NextFloat(24f, 28f);
+				subArrowVel[s] = Main.rand.NextFloat(24f, 28f);
 			}
 		}
-		if (ArVelφ[0] == 0)
+		if (arrowVelPhi[0] == 0)
 		{
 			for (int s = 0; s < 5; s++)
 			{
-				ArVelφ[s] = Main.rand.NextFloat(0, 6.283f);
+				arrowVelPhi[s] = Main.rand.NextFloat(0, 6.283f);
 			}
 		}
 		if (Energy is > 60 and < 120)
 		{
 			for (int s = 0; s < 5; s++)
 			{
-				ArRot[s] *= 0.96f;
+				arrowRot[s] *= 0.96f;
 			}
 		}
 		for (int s = 0; s < 5; s++)
 		{
-			ArVel[s] = SArVel[s] + (float)(Math.Sin(ArVelφ[s] + Main.timeForVisualEffects / 20d) * 3);
+			arrowVel[s] = subArrowVel[s] + (float)(Math.Sin(arrowVelPhi[s] + Main.timeForVisualEffects / 20d) * 3);
 		}
 		for (int s = 0; s < 5; s++)
 		{
-			Arcol[s] = Math.Clamp((float)(Math.Abs(s - 2.5) * 100 + (Energy - 90) * 7) / 255f, 0, 1f) * 0.6f;
+			arrowcol[s] = Math.Clamp((float)(Math.Abs(s - 2.5) * 100 + (Energy - 90) * 7) / 255f, 0, 1f) * 0.6f;
 		}
 		Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].Center;
 
@@ -119,7 +119,7 @@ internal class ShadowWingBow : ModProjectile
 		Projectile.Center = Main.player[Projectile.owner].Center + Vector2.Normalize(v0) * 22f;
 		Projectile.velocity *= 0;
 
-		if (player.controlUseItem && Release)
+		if (player.controlUseItem && released)
 		{
 			Projectile.timeLeft = 5 + Energy;
 			if (Energy <= 120)
@@ -145,21 +145,21 @@ internal class ShadowWingBow : ModProjectile
 				Energy = 120;
 			}
 		}
-		if (!Main.mouseLeft && Release)//发射
+		if (!Main.mouseLeft && released)//发射
 		{
 			SoundEngine.PlaySound(SoundID.Item5, Projectile.Center);
 			Projectile.NewProjectileDirect(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0) * (Energy + 6) / 9f, (int)Projectile.ai[0], Projectile.damage + Energy / 5, Projectile.knockBack, player.whoAmI).extraUpdates++;
 			for (int s = 0; s < 5; s++)
 			{
-				if (Arcol[s] > 0)
-					Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0).RotatedBy(ArRot[s]) * ArVel[s] * 1f, ModContent.ProjectileType<MothArrow>(), (int)((Projectile.damage + Energy / 5) * 0.47), Projectile.knockBack, player.whoAmI, 0, player.HeldItem.crit + player.GetCritChance(DamageClass.Ranged) + player.GetCritChance(DamageClass.Generic));
+				if (arrowcol[s] > 0)
+					Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0).RotatedBy(arrowRot[s]) * arrowVel[s] * 1f, ModContent.ProjectileType<MothArrow>(), (int)((Projectile.damage + Energy / 5) * 0.47), Projectile.knockBack, player.whoAmI, 0, player.HeldItem.crit + player.GetCritChance(DamageClass.Ranged) + player.GetCritChance(DamageClass.Generic));
 			}
 			Energy = 0;
-			Release = false;
+			released = false;
 		}
 		if (Projectile.ai[1] > 0)
 			Projectile.ai[1] -= 1f;
-		if (!Main.mouseLeft && !Release)
+		if (!Main.mouseLeft && !released)
 		{
 			if (Projectile.ai[1] > 0)
 			{
@@ -267,10 +267,10 @@ internal class ShadowWingBow : ModProjectile
 		Vector2 vProA = Main.player[Projectile.owner].Center + Vector2.Normalize(v0) * (28f - 12f * b3);
 		for (int s = 0; s < 5; s++)
 		{
-			Vector2 vProB = Main.player[Projectile.owner].Center + Vector2.Normalize(v0).RotatedBy(ArRot[s]) * (ArVel[s] * 1.4f - 16f * b3);
-			Main.spriteBatch.Draw(TexMothArrow, vProB - Main.screenPosition, null, new Color(Arcol[s], Arcol[s], Arcol[s], 0), Projectile.rotation + ArRot[s], new Vector2(TexMothArrow.Width / 2f, TexMothArrow.Height / 2f), 1f, SpriteEffects.None, 0);
+			Vector2 vProB = Main.player[Projectile.owner].Center + Vector2.Normalize(v0).RotatedBy(arrowRot[s]) * (arrowVel[s] * 1.4f - 16f * b3);
+			Main.spriteBatch.Draw(TexMothArrow, vProB - Main.screenPosition, null, new Color(arrowcol[s], arrowcol[s], arrowcol[s], 0), Projectile.rotation + arrowRot[s], new Vector2(TexMothArrow.Width / 2f, TexMothArrow.Height / 2f), 1f, SpriteEffects.None, 0);
 		}
-		if (Release)
+		if (released)
 			Main.spriteBatch.Draw(TexArrow, vProA - Main.screenPosition, new Rectangle(0, 0, TexArrow.Width, TexArrow.Height), drawColor, Projectile.rotation + (float)(Math.PI * 0.25), new Vector2(TexArrow.Width / 2f, TexArrow.Height / 2f), 1f, SpriteEffects.None, 0);
 
 		float rotu0 = Energy / 1200f;
