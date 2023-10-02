@@ -12,7 +12,6 @@ public class FryingPan : MeleeProj, IWarpProjectile
 	public override void SetDef()
 	{
 		Projectile.width = 60;
-
 		Projectile.height = 60;
 
 		maxAttackType = 0;//循环攻击方式的总数
@@ -24,8 +23,6 @@ public class FryingPan : MeleeProj, IWarpProjectile
 		drawScaleFactor = 1f;
 
 		disFromPlayer = 0;
-
-		Projectile.height = 20;//判定区域的宽度，默认为15
 
 		Projectile.scale = 1f;//总大小，有需要时可以使用
 
@@ -65,6 +62,10 @@ public class FryingPan : MeleeProj, IWarpProjectile
 	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{
 		drawScale.Y = 1.4f;
+		if(attackType == 0)
+		{
+			drawScale = new Vector2(-0.4f, 1.4f);
+		}
 		base.DrawSelf(spriteBatch, lightColor, diagonal, drawScale, glowTexture);
 	}
 
@@ -338,14 +339,14 @@ public class FryingPan : MeleeProj, IWarpProjectile
 			//    }
 			//}
 			Projectile.rotation += 0.1f * Projectile.spriteDirection;
-			mainVec = Projectile.rotation.ToRotationVector2() * 38;
+			mainVec = Projectile.rotation.ToRotationVector2() * 78;
 			if (Projectile.timeLeft <= 2980)
 			{
 				float mulVelocity = Math.Min((2960 - Projectile.timeLeft) / 16f, 16f);
 				Projectile.velocity = Projectile.velocity * 0.8f + Vector2.Normalize(player.Center - Projectile.velocity - Projectile.Center) * mulVelocity;
 
 				Projectile.rotation += mulVelocity / 12f * Projectile.spriteDirection;
-				mainVec = Projectile.rotation.ToRotationVector2() * 38;
+				mainVec = Projectile.rotation.ToRotationVector2() * 78;
 				if ((player.Center - Projectile.Center).Length() < 32)
 					Projectile.timeLeft = 0;
 			}

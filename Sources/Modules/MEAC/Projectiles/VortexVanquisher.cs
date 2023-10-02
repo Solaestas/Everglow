@@ -64,48 +64,37 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 		useTrail = true;
 
 		Vector2 vToMouse = Main.MouseWorld - player.Top;
-		float AddHeadRotation = (float)Math.Atan2(vToMouse.Y, vToMouse.X) + (1 - player.direction) * 1.57f;
-		if (player.gravDir == -1)
+		float addHeadRotation = ((float)Math.Atan2(vToMouse.Y, vToMouse.X) + 6.283f) % 6.283f;
+
+		if (player.direction == -1)
 		{
-			if (player.direction == -1)
-			{
-				if (AddHeadRotation >= 0.57f && AddHeadRotation < 2)
-					AddHeadRotation = 0.57f;
-			}
-			else
-			{
-				if (AddHeadRotation <= -0.57f)
-					AddHeadRotation = -0.57f;
-			}
+			if (addHeadRotation >= 2 && addHeadRotation < 5.71f)
+				addHeadRotation = 5.71f;
 		}
 		else
 		{
-			if (player.direction == -1)
-			{
-				if (AddHeadRotation >= 2 && AddHeadRotation < 5.71f)
-					AddHeadRotation = 5.71f;
-			}
-			else
-			{
-				if (AddHeadRotation >= 0.57f)
-					AddHeadRotation = 0.57f;
-			}
+			if (addHeadRotation >= 0.57f)
+				addHeadRotation = 0.57f;
 		}
 		float timeMul = 1f / player.meleeSpeed;
 
 		if (attackType == 0)
 		{
 			int t = timer;
+			if(t == 0)
+			{
+				Projectile.spriteDirection = player.direction;
+			}
 			if (t < 20 * timeMul)
 			{
 				useTrail = false;
-				mainVec = Vector2.Lerp(mainVec, Player.DirectionTo(MouseWorld_WithoutGravDir) * 150, 0.2f / timeMul);
+				mainVec = Vector2.Lerp(mainVec, Player.DirectionTo(Main.MouseWorld) * 150, 0.2f / timeMul);
 				disFromPlayer = MathHelper.Lerp(disFromPlayer, -30, 0.2f);
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (t >= 20 * timeMul && t < 40 * timeMul)
 			{
-				if (t == 20)
+				if (t == (int)(21 * timeMul))
 				{
 					SoundEngine.PlaySound(SoundID.Item1);
 					if (Main.myPlayer == Projectile.owner)
@@ -133,7 +122,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
-				Tplayer.HeadRotation = -BodyRotation + AddHeadRotation;
+				Tplayer.HeadRotation = -BodyRotation + addHeadRotation * player.gravDir;
 			}
 		}
 		if (attackType == 1)
@@ -147,7 +136,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
-			if (timer == 8)
+			if (timer == (int)(8 * timeMul))
 			{
 				AttSound(new SoundStyle(
 			"Everglow/MEAC/Sounds/TrueMeleeSwing"));
@@ -182,7 +171,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				mainVec = Vector2.Lerp(mainVec, targetRot.ToRotationVector2() * 180, 0.15f / timeMul);
 				Projectile.rotation = mainVec.ToRotation();
 			}
-			if (timer == 20)
+			if (timer == (int)(20 * timeMul))
 			{
 				for (int i = 0; i < 30; i++)
 				{
@@ -215,7 +204,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
-				Tplayer.HeadRotation = -BodyRotation + AddHeadRotation;
+				Tplayer.HeadRotation = -BodyRotation + addHeadRotation;
 			}
 		}
 		if (attackType == 3)
@@ -229,13 +218,13 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 			if (timer < 120 * timeMul)
 			{
 				Lighting.AddLight(Projectile.Center + mainVec + Projectile.velocity, 0.9f, 0.6f, 0f);
-				if (timer % 10 == 0)
+				if (timer % (int)(10 * timeMul) == 0)
 					AttSound(SoundID.Item1);
 				CanIgnoreTile = true;
 				isAttacking = true;
 				Projectile.extraUpdates = 2;
 				Projectile.Center += Projectile.velocity;
-				Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Normalize(MouseWorld_WithoutGravDir - Player.Center) * 180, 0.06f);
+				Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Normalize(Main.MouseWorld - Player.Center) * 180, 0.06f);
 				Projectile.rotation += 0.3f * Projectile.spriteDirection / timeMul;
 				mainVec = Projectile.rotation.ToRotationVector2() * 160;
 			}
@@ -253,7 +242,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 			{
 				useTrail = false;
 
-				Vector2 vec = Vector2.Normalize(MouseWorld_WithoutGravDir - Player.Center);
+				Vector2 vec = Vector2.Normalize(Main.MouseWorld - Player.Center);
 				Projectile.rotation = vec.ToRotation();
 				mainVec = vec * 160;
 				Player.velocity += Vector2.Normalize(Main.MouseWorld - Player.Center) * 20;
