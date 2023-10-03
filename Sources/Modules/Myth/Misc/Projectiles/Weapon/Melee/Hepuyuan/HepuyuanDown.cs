@@ -16,6 +16,8 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 		Projectile.width = 80;
 		Projectile.height = 80;
 		Projectile.timeLeft = 240;
+		Projectile.usesLocalNPCImmunity = true;
+		Projectile.localNPCHitCooldown = 90;
 	}
 	public bool Crash = false;
 	private Vector2 stopPoint = Vector2.Zero;
@@ -105,7 +107,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 					}
 					if (empty)
 						continue;
-					Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<HepuyuanSpice>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(50f, 110f), Main.rand.NextFloat(0f, 1f), Main.rand.NextFloat(0f, 1f));
+					Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<HepuyuanSpice>(), (int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(50f, 110f), Main.rand.NextFloat(0f, 1f), Main.rand.NextFloat(0f, 1f));
 					p.timeLeft = Main.rand.Next(128, 132);
 					if (player.gravDir == 1)
 						p.rotation = Main.rand.NextFloat((f - 3.5f) / 15f - 0.3f, (f - 3.5f) / 15f + 0.3f);

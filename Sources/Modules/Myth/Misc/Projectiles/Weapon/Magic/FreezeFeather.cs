@@ -104,7 +104,7 @@ public class FreezeFeather : ModProjectile
 					Active = true,
 					Visible = true,
 					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
-					maxTime = Main.rand.Next(137, 245),
+					maxTime = Main.rand.Next(67, 120),
 					scale = Main.rand.NextFloat(18f, 45f),
 					rotation = Main.rand.NextFloat(6.283f),
 					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.005f, 0.005f) }
@@ -120,7 +120,7 @@ public class FreezeFeather : ModProjectile
 					Active = true,
 					Visible = true,
 					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
-					maxTime = Main.rand.Next(137, 245),
+					maxTime = Main.rand.Next(67, 120),
 					scale = Main.rand.NextFloat(18f, 45f),
 					rotation = Main.rand.NextFloat(6.283f),
 					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.005f, 0.005f) }
@@ -247,7 +247,7 @@ public class FreezeFeather : ModProjectile
 		if (MagicArray != null)
 		{
 			var arrayProj = MagicArray as FreezeFeatherMagicArray;
-			arrayProj.WingPower += 2f;
+			arrayProj.WingPower += 3f;
 		}
 		AmmoHit();
 	}
@@ -291,7 +291,7 @@ public class FreezeFeather : ModProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity * 16,
-				maxTime = Main.rand.Next(237, 345),
+				maxTime = Main.rand.Next(87, 175),
 				scale = Main.rand.NextFloat(320f, 435f),
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
@@ -307,7 +307,7 @@ public class FreezeFeather : ModProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity * 16,
-				maxTime = Main.rand.Next(237, 345),
+				maxTime = Main.rand.Next(87, 175),
 				scale = Main.rand.NextFloat(220f, 235f),
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }

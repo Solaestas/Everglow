@@ -48,9 +48,6 @@ public class FireFeatherMagic : ModItem
 		}
 		return false;
 	}
-	public override void HoldItem(Player player)
-	{
-	}
 	public override void AddRecipes()
 	{
 		CreateRecipe()

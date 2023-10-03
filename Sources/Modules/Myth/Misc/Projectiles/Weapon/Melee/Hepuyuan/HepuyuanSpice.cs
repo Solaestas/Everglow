@@ -12,6 +12,7 @@ public class HepuyuanSpice : ModProjectile
 		Projectile.timeLeft = 1;
 		Projectile.penetrate = -1;
 		Projectile.extraUpdates = 1;
+		Projectile.localNPCHitCooldown = 30;
 	}
 
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -71,7 +72,7 @@ public class HepuyuanSpice : ModProjectile
 	}
 	public override void AI()
 	{
-		if (Projectile.timeLeft <= 78)
+		if (Projectile.timeLeft <= 118)
 		{
 			Projectile.friendly = false;
 		}

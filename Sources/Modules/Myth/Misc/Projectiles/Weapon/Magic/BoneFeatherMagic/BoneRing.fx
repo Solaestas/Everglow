@@ -10,6 +10,17 @@ sampler_state
     AddressU = CLAMP;
     AddressV = CLAMP;
 };
+texture uHeatMap2;
+sampler uHeatMap2Sampler =
+sampler_state
+{
+    Texture = <uHeatMap2>;
+    MipFilter = LINEAR;
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+    AddressU = CLAMP;
+    AddressV = CLAMP;
+};
 texture uNoise;
 sampler uNoiseSampler =
 sampler_state
@@ -22,7 +33,7 @@ sampler_state
     AddressV = WRAP;
 };
 //utime由Color.b代替
-float uTime;
+
 float4x4 uTransform;
 
 struct VSInput
@@ -51,12 +62,14 @@ PSInput VertexShaderFunction(VSInput input)
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
     float4 colorNoise = tex2D(uNoiseSampler, input.Texcoord.xy);
-    float2 coordXY = float2((input.Color.x + uTime) % 1, input.Color.y % 1);
-    float4 colorHalo = tex2D(uImage, coordXY);
+    float4 colorHalo = tex2D(uImage, input.Color.xy);
     float light = colorHalo.r * colorNoise.r * 2;
     float4 colorHeatMap = tex2D(uHeatMapSampler, float2(light, input.Color.b));
+    colorHeatMap.w *= 0;
+    float4 colorHeatMap2 = tex2D(uHeatMap2Sampler, float2(light, input.Color.b));
     colorHeatMap.w *= input.Color.a;
-    return colorHeatMap;
+    float4 colorHeatMap3 = colorHeatMap2 + colorHeatMap;
+    return colorHeatMap3;
 }
 
 technique Technique1
