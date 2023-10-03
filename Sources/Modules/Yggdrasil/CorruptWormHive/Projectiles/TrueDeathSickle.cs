@@ -39,7 +39,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 	{
 		return BlendState.AlphaBlend;
 	}
-	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, string GlowPath, double DrawRotation)
+	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
 		//DrawEffect(Ins.Batch);
@@ -116,6 +116,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 		Main.graphics.GraphicsDevice.Textures[0] = tex;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
 	}
+
 	private Vector2 SelfRotated(ref Vector2 vector2, float angle)
 	{
 		return vector2.RotatedBy(angle);
