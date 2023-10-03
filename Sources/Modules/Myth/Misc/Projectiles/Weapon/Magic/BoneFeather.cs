@@ -1,5 +1,6 @@
 using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Myth.Misc.Projectiles.Weapon.Magic.BoneFeatherMagic;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using static Everglow.Commons.Utilities.ProjectileUtils;
@@ -179,5 +180,24 @@ public class BoneNPCModifier : GlobalNPC
 			}
 		}
 		base.ModifyHitByProjectile(npc, projectile, ref modifiers);
+	}
+	public override void ModifyHitByItem(NPC npc, Player player, Item item, ref NPC.HitModifiers modifiers)
+	{
+		foreach (Projectile p in Main.projectile)
+		{
+			if (p.type == ModContent.ProjectileType<BoneFeather>() && p.active)
+			{
+				BoneFeather bf = p.ModProjectile as BoneFeather;
+				if (bf.StuckNPC == npc.whoAmI)
+				{
+					if (bf.timeTokill > 0)
+					{
+						modifiers.ScalingBonusDamage += 0.07f;
+						bf.AmmoHit();
+					}
+				}
+			}
+		}
+		base.ModifyHitByItem(npc, player, item, ref modifiers);
 	}
 }

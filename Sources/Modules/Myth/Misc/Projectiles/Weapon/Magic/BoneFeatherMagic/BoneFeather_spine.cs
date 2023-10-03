@@ -16,7 +16,7 @@ public class BoneFeather_spine : ModProjectile
 		Projectile.timeLeft = 240;
 		Projectile.penetrate = -1;
 		Projectile.usesLocalNPCImmunity = true;
-		Projectile.localNPCHitCooldown = 120;
+		Projectile.localNPCHitCooldown = 20;
 		Projectile.extraUpdates = 4;
 		Projectile.aiStyle = -1;
 	}
@@ -73,29 +73,29 @@ public class BoneFeather_spine : ModProjectile
 		}
 		return false;
 	}
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		if(target.velocity.X > 0)
+		if (target.velocity.X > 0)
 		{
-			hit.HitDirection = -1;
+			modifiers.HitDirectionOverride = 1;
 		}
 		if (target.velocity.X < 0)
 		{
-			hit.HitDirection = 1;
+			modifiers.HitDirectionOverride = 1;
 		}
-		if(target.velocity.X == 0)
+		if (target.velocity.X == 0)
 		{
 			Player player = Main.player[Projectile.owner];
 			if (target.Center.X < player.Center.X)
 			{
-				hit.HitDirection = -1;
+				modifiers.HitDirectionOverride = -1;
 			}
 			else
 			{
-				hit.HitDirection = 1;
+				modifiers.HitDirectionOverride = 1;
 			}
 		}
-		base.OnHitNPC(target, hit, damageDone);
+		base.ModifyHitNPC(target, ref modifiers);
 	}
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 	{

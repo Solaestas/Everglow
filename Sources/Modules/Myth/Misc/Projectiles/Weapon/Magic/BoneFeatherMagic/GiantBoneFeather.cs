@@ -76,13 +76,13 @@ public class GiantBoneFeather : ModProjectile
 		{
 			float timeValue = (80 - timeTokill) / 80f;
 			DrawTrail(Commons.ModAsset.Trail_2_black_thick.Value, Color.White, 36);
-			DrawTrail(Commons.ModAsset.Trail_6.Value, new Color(0.9f * (1 - timeValue), 0.9f * (1 - timeValue), 0.6f * (1 - timeValue), 0f), Math.Max(timeTokill - 44, 0));
+			DrawTrail(Commons.ModAsset.Noise_spine.Value, new Color(0.9f * (1 - timeValue), 0.9f * (1 - timeValue), 0.6f * (1 - timeValue), 0f), Math.Max(timeTokill - 44, 0));
 			return;
 		}
 		else
 		{
 			DrawTrail(Commons.ModAsset.Trail_2_black_thick.Value, Color.White);
-			DrawTrail(Commons.ModAsset.Trail_6.Value, new Color(0.9f, 0.9f, 0.5f, 0f));
+			DrawTrail(Commons.ModAsset.Noise_spine.Value, new Color(0.9f, 0.9f, 0.5f, 0f));
 		}
 		SpriteEffects spriteEffects = SpriteEffects.None;
 		if (Projectile.spriteDirection == -1)
@@ -193,16 +193,22 @@ public class GiantBoneFeather : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.velocity = Projectile.oldVelocity;
 		SoundEngine.PlaySound((SoundID.DD2_WitherBeastCrystalImpact.WithVolume(0.3f)).WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
+		for (int j = 0; j < 80; j++)
+		{
+			Vector2 v = new Vector2(0, Main.rand.NextFloat(7, 160)).RotatedByRandom(MathHelper.TwoPi);
+			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.BoneFeather>(), v.X, v.Y, 0, default, Main.rand.NextFloat(1.8f, 3.7f));
+		}
 		for (int j = 0; j < 40; j++)
 		{
-			Vector2 v = new Vector2(0, Main.rand.NextFloat(7, 120)).RotatedByRandom(MathHelper.TwoPi);
-			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.BoneFeather>(), v.X, v.Y, 150, default, Main.rand.NextFloat(1.8f, 3.7f));
+			Vector2 v = new Vector2(0, Main.rand.NextFloat(0.8f, 9)).RotatedByRandom(MathHelper.TwoPi);
+			Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.Bones2>(), v.X, v.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+			d.rotation = Main.rand.NextFloat(6.283f);
 		}
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<GiantBoneFeatherExplosion>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 8);
 		for (int x = 0; x < 6; x++)
 		{
 			Vector2 v0 = new Vector2(0, 15).RotatedBy(x / 6d * Math.Tau);
-			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - v0 * 2, v0, ModContent.ProjectileType<BoneFeather_spine>(), Projectile.damage / 8, 0, player.whoAmI, Main.rand.NextFloat(1f), Main.rand.NextFloat(1f));
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - v0 * 2, v0, ModContent.ProjectileType<BoneFeather_spine>(), Projectile.damage / 8, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(1f), Main.rand.NextFloat(1f));
 		}
 		Projectile.position -= Projectile.velocity;
 	}
