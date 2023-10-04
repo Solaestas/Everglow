@@ -42,6 +42,4 @@ class JungleSlingshotHit : ModProjectile
 	{
 		return false;
 	}
-	private Effect ef;
-	float radious = 0;
 }

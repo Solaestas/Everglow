@@ -2990,6 +2990,7 @@ Projectiles: {
 	MissileProjHostile.DisplayName: Missile Proj Hostile
 	MothArrow.DisplayName: Moth Arrow
 	MothBall.DisplayName: Moth Ball
+	MothBallExplosion.DisplayName: Moth Ball Explosion
 	MothGrey.DisplayName: Moth Grey
 	MothMagicArray.DisplayName: Moth Magic Array
 	MothYoyoProjectile.DisplayName: Moth Yoyo Projectile

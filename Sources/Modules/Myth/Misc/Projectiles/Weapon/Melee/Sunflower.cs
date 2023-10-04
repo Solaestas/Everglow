@@ -13,7 +13,6 @@ public class Sunflower : ModProjectile
 		Projectile.timeLeft = 3000;
 		Main.projFrames[Projectile.type] = 5;
 	}
-	int times = 0;
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
 		if (Projectile.timeLeft > 2950)

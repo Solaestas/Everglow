@@ -102,9 +102,6 @@ public class AshBone : ModProjectile
 			FillWhipControlPoints(Projectile, WhipPointsForCollision);
 			int num5 = Main.rand.Next(WhipPointsForCollision.Count - 10, WhipPointsForCollision.Count);
 			Rectangle rectangle = Utils.CenteredRectangle(WhipPointsForCollision[num5], new Vector2(30f, 30f));
-			int num6 = 57;
-			if (Main.rand.NextBool(3))
-				num6 = 43;
 			var dust = Dust.NewDustDirect(rectangle.TopLeft(), rectangle.Width, rectangle.Height, DustID.Bone, 0f, 0f, 100, Color.White, 1f);
 			dust.position = WhipPointsForCollision[num5];
 			dust.fadeIn = 0.3f;

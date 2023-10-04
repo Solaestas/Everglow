@@ -273,7 +273,7 @@ public class CrimsonTuskFireWork : ModNPC
 					Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxB.ToArray(), 0, VxB.Count / 3);
 
-					t = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/AcytaeaLaser").Value;
+					t = ModContent.Request<Texture2D>("Everglow/Myth/Acytaea/Projectiles/AcytaeaLaser").Value;
 					Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 

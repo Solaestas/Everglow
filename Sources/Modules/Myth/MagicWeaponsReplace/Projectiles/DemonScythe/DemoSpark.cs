@@ -25,18 +25,18 @@ public class DemoSpark : ModProjectile
 
 	public override void AI()
 	{
-		int MaxC = (int)Projectile.ai[0];
-		MaxC = Math.Min(26, MaxC);
+		int maxC = (int)Projectile.ai[0];
+		maxC = Math.Min(26, maxC);
 		if (Projectile.timeLeft >= 200)
 		{
-			for (int x = 0; x < MaxC; x++)
+			for (int x = 0; x < maxC; x++)
 			{
 				SparkVelocity[x] = new Vector2(0, Projectile.ai[0] * 2f).RotatedByRandom(6.283) * Main.rand.NextFloat(0.05f, 1.2f);
 				SparkOldPos[x, 0] = Projectile.Center;
 			}
 		}
 
-		for (int x = 0; x < MaxC; x++)
+		for (int x = 0; x < maxC; x++)
 		{
 			for (int y = 39; y > 0; y--)
 			{
@@ -56,18 +56,18 @@ public class DemoSpark : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		DrawSpark(Color.White, Math.Min(Projectile.timeLeft / 8f, 20f), Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkDark"));
-		DrawSpark(new Color(131, 0, 255, 0), Math.Min(Projectile.timeLeft / 8f, 20f), Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
+		DrawSpark(Color.White, Math.Min(Projectile.timeLeft / 8f, 20f), ModAsset.SparkDark.Value);
+		DrawSpark(new Color(131, 0, 255, 0), Math.Min(Projectile.timeLeft / 8f, 20f), ModAsset.SparkLight.Value);
 
 		return false;
 	}
 
 	private void DrawSpark(Color c0, float width, Texture2D tex)
 	{
-		int MaxC = (int)Projectile.ai[0];
-		MaxC = Math.Min(26, MaxC);
+		int maxC = (int)Projectile.ai[0];
+		maxC = Math.Min(26, maxC);
 		var bars = new List<Vertex2D>();
-		for (int x = 0; x < MaxC; x++)
+		for (int x = 0; x < maxC; x++)
 		{
 			int TrueL = 0;
 			for (int i = 1; i < 40; ++i)

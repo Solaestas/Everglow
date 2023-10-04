@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Bosses.Acytaea.Projectiles;
+﻿using Everglow.Myth.Acytaea.Projectiles;
 using Everglow.Myth.LanternMoon.Buffs;
 using Terraria;
 using Terraria.Audio;

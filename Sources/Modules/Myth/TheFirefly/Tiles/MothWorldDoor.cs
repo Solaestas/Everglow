@@ -220,20 +220,20 @@ public class DrawMagicArraySystem : ModSystem
 		Main.graphics.GraphicsDevice.Textures[0] = tex;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
 	}
-	public static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	public static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		float timer = (float)(Main.time * 0.003f);
-		float sinValue = 0.8f * (MathF.Sin(timer + radious / 8 * MathF.PI) * 0.5f + 0.5f);
+		float sinValue = 0.8f * (MathF.Sin(timer + radius / 8 * MathF.PI) * 0.5f + 0.5f);
 		var circle = new List<Vertex2D>();
 		for (int h = 0; h < 60; h += 1)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / 60f * Math.PI * 2 + addRot), color, new Vector3(h / 60f, 0.2f + sinValue, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / 60f * Math.PI * 2 + addRot), color, new Vector3(h / 60f, sinValue, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / 60f * Math.PI * 2 + addRot), color, new Vector3(h / 60f, 0.2f + sinValue, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(h / 60f * Math.PI * 2 + addRot), color, new Vector3(h / 60f, sinValue, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0.2f + sinValue, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(1, sinValue, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.2f + sinValue, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0, sinValue, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(1, 0.2f + sinValue, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(1, sinValue, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0.2f + sinValue, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(0, sinValue, 0)));
 		if (circle.Count > 0)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = tex;
