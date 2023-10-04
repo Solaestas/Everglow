@@ -2,26 +2,42 @@ namespace Everglow.Commons.Utilities;
 
 public static class ProjectileUtils
 {
+	public static bool IsSafeInTheWorld(Projectile projectile)
+	{
+		return IsSafeInTheWorld(projectile.TopLeft) && IsSafeInTheWorld(projectile.TopRight) && IsSafeInTheWorld(projectile.BottomLeft) && IsSafeInTheWorld(projectile.BottomRight);
+	}
+	public static bool IsSafeInTheWorld(Vector2 position)
+	{
+		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
+		{
+			return false;
+		}
+		if (position.Y <= 320 || position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			return false;
+		}
+		return true;
+	}
 	public abstract class StickNPCProjectile : ModProjectile
 	{
 		/// <summary>
-		/// 目标敌人,目标敌人死亡的时候会改成-2
+		/// 鐩爣鏁屼汉,鐩爣鏁屼汉姝讳骸鐨勬椂鍊欎細鏀规垚-2
 		/// </summary>
 		public int StuckNPC = -1;
 		/// <summary>
-		/// 相对角度
+		/// 鐩稿瑙掑害
 		/// </summary>
 		public float RelativeAngle = 0;
 		/// <summary>
-		/// 击中时的角度
+		/// 鍑讳腑鏃剁殑瑙掑害
 		/// </summary>
 		public float HitTargetAngle = 0;
 		/// <summary>
-		/// 相对位置
+		/// 鐩稿浣嶇疆
 		/// </summary>
 		public Vector2 RelativePos = Vector2.zeroVector;
 		/// <summary>
-		/// 击中时怪的大小
+		/// 鍑讳腑鏃舵�殑澶у皬
 		/// </summary>
 		public float HitTargetScale = 1f;
 		public override void AI()
