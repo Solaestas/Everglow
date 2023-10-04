@@ -1,4 +1,4 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
@@ -64,7 +64,7 @@ public class TsunamiShark_marking : ModProjectile, IWarpProjectile
 			Lighting.AddLight(Projectile.Center + radious, 0, valueLight * valueLight, valueLight);
 		}
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		if(PotentialTargets.Count > 0)
 		{
@@ -98,7 +98,7 @@ public class TsunamiShark_marking : ModProjectile, IWarpProjectile
 					tsunamiS.MarkedTarget = target;
 			}
 		}
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{

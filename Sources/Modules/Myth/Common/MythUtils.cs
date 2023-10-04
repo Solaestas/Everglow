@@ -114,7 +114,7 @@ public class MythUtils
 	/// </summary>
 	/// <param name="path"></param>
 	/// <returns></returns>
-	public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type)
+	public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type, int startFrameX = 0, int startFrameY = 0)
 	{
 		if (x > Main.maxTilesX - width || x < 0 || y > Main.maxTilesY - height || y < 0)
 			return;
@@ -124,10 +124,49 @@ public class MythUtils
 			{
 				Tile tile = Main.tile[x + i, y + j];
 				tile.TileType = (ushort)type;
-				tile.TileFrameX = (short)(i * 18);
-				tile.TileFrameY = (short)(j * 18);
+				tile.TileFrameX = (short)(startFrameX + i * 18);
+				tile.TileFrameY = (short)(startFrameY + j * 18);
 				tile.HasTile = true;
 			}
 		}
+	}
+	public static float GetHourHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if(!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 43200 * MathHelper.TwoPi);
+	}
+	public static float GetMinuteHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if (!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 3600 * MathHelper.TwoPi);
+	}
+	public static float GetSecondHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if (!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 60 * MathHelper.TwoPi);
 	}
 }

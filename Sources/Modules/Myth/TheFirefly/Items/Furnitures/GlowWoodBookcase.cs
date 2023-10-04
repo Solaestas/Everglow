@@ -11,17 +11,9 @@ public class GlowWoodBookcase : ModItem
 
 	public override void SetDefaults()
 	{
+		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodBookcase>());
 		Item.width = 28;
-		Item.height = 20;
-		Item.maxStack = 99;
-		Item.useTurn = true;
-		Item.autoReuse = true;
-		Item.useAnimation = 15;
-		Item.useTime = 10;
-		Item.useStyle = ItemUseStyleID.Swing;
-		Item.consumable = true;
-		Item.value = 2000;
-		Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodBookcase>();
+		Item.height = 34;
 	}
 
 	public override void AddRecipes()

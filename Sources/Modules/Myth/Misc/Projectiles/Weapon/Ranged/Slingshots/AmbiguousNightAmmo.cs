@@ -19,9 +19,9 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 		Main.dust[index].velocity = Projectile.velocity * Main.rand.NextFloat(0.85f, 1.15f) * 0.55f;
 		base.AI();
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 	public void GenerateVFX(int Frequency)
 	{

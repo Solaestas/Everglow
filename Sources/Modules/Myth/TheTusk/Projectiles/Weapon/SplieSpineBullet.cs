@@ -95,7 +95,7 @@ public class SplieSpineBullet : ModProjectile
 		Explosion();
 		return false;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 	}
 	public override void PostDraw(Color lightColor)

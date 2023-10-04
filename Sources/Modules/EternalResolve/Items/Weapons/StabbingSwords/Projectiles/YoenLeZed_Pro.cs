@@ -33,7 +33,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f), Projectile.Center);
 			}
 		}
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			ActiveSound sound = SoundEngine.FindActiveSound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f));
 			if (sound != null)

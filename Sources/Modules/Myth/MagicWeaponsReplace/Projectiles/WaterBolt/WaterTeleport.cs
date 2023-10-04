@@ -169,7 +169,7 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 		DrawTexCircle(spriteBatch, SizeII, (40 - SizeII) * Timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		if (Timer < 1)
 			return;
@@ -191,6 +191,6 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 			Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
 			Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
 		}
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 }

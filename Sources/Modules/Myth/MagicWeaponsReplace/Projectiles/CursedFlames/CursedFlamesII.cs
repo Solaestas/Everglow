@@ -255,7 +255,9 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 		if (bars.Count > 3)
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
 	}
-	public override void Kill(int timeLeft)
+
+
+	public override void OnKill(int timeLeft)
 	{
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);

@@ -78,7 +78,7 @@ internal class DarkFanFly : ModProjectile
 			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Projectile.velocity * 0.3f, ModContent.ProjectileType<GlowingButterfly>(), Projectile.damage / 3, Projectile.knockBack, player.whoAmI, Main.rand.Next(2), 0f);
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 	}
 

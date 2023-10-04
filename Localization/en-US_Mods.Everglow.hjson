@@ -970,6 +970,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	EnergyDrink: {
+		DisplayName: Energy Drink
+		Tooltip: ""
+	}
+
 	StarSeed: {
 		DisplayName: Star Seed
 		Tooltip: ""
@@ -2851,6 +2856,7 @@ Projectiles: {
 	GoldenStabbingSword_Pro_Stab.DisplayName: Golden Stabbing Sword_ Pro_ Stab
 	HolyBayonet_Pro.DisplayName: Holy Bayonet_ Pro
 	HolyBayonet_Pro_Stab.DisplayName: Holy Bayonet_ Pro_ Stab
+	HolyBayonet_Slash.DisplayName: Holy Bayonet_ Slash
 	IchorBayonet_Pro.DisplayName: Ichor Bayonet_ Pro
 	IchorBayonet_Pro_Stab.DisplayName: Ichor Bayonet_ Pro_ Stab
 	IronStabbingSword_Pro.DisplayName: Iron Stabbing Sword_ Pro
