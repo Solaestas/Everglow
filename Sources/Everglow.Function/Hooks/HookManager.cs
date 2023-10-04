@@ -1,6 +1,8 @@
 using System.Reflection;
 using Everglow.Commons.Enums;
 using Everglow.Commons.Interfaces;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Weapons.StabbingSwords;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
@@ -109,9 +111,16 @@ public class HookManager : ModSystem
 		On_Main.DrawBackground += Main_DrawBackground;
 		On_Main.DoDraw_WallsTilesNPCs += Main_DoDraw_WallsTilesNPCs;
 		On_FilterManager.EndCapture += On_FilterManager_EndCapture;
+		On_Projectile.UpdateEnchantmentVisuals += Projectile_UpdateEnchantmentVisuals;
 		Main.OnResolutionChanged += Main_OnResolutionChanged;
 	}
-
+	private void Projectile_UpdateEnchantmentVisuals(On_Projectile.orig_UpdateEnchantmentVisuals orig, Projectile self)
+	{
+		if (self.ModProjectile is not StabbingProjectile and not MeleeProj)
+		{
+			orig(self);
+		}
+	}
 	private void On_FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
 	{
 		Invoke(CodeLayer.PreDrawFilter);
@@ -172,6 +181,7 @@ public class HookManager : ModSystem
 		On_Main.DrawBG -= Main_DrawBG;
 		On_Main.DrawBackground -= Main_DrawBackground;
 		On_Main.DoDraw_WallsTilesNPCs -= Main_DoDraw_WallsTilesNPCs;
+		On_Projectile.UpdateEnchantmentVisuals -= Projectile_UpdateEnchantmentVisuals;
 		Main.OnResolutionChanged -= Main_OnResolutionChanged;
 	}
 

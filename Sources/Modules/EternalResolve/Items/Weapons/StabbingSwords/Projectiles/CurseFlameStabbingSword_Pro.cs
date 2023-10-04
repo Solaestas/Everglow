@@ -20,15 +20,10 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			MaxLength = 1.15f;
 			DrawWidth = 0.4f;
 		}
-		public override void AI()
+		public override void VisualParticle()
 		{
-			base.AI();
 			if (Main.rand.NextBool(2))
 				GenerateVFX(1);
-		}
-		public override void OnKill(int timeLeft)
-		{
-
 		}
 		public void GenerateVFX(int Frequency)
 		{

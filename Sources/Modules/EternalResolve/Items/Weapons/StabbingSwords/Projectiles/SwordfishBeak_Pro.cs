@@ -33,9 +33,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				modifiers.ArmorPenetration += 4;
 			}
 		}
-		public override void AI()
+		public override void VisualParticle()
 		{
-			base.AI();
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
 			Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.24f);
 			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))

@@ -22,15 +22,20 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			MaxLength = 1.15f;
 			DrawWidth = 0.4f;
 		}
+		public override void VisualParticle()
+		{
+			GenerateVFX(1);
+			SplitVFX(2);
+		}
 		public override void AI()
 		{
 			base.AI();
-			GenerateVFX(1);
-			SplitVFX(2);
-
-			if (Main.timeForVisualEffects % 10 == 0)
+			if (UpdateTimer % Projectile.extraUpdates == 0)
 			{
-				SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f), Projectile.Center);
+				if (Main.timeForVisualEffects % 10 == 0)
+				{
+					SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f), Projectile.Center);
+				}
 			}
 		}
 		public override void OnKill(int timeLeft)
