@@ -41,7 +41,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		/// <summary>
 		/// 重影深度缩变,小于1
 		/// </summary>
-		public float FadeTradeShade = 0f;
+		public float FadeShade = 0f;
 		/// <summary>
 		/// 重影彩色部分亮度缩变,小于1
 		/// </summary>
@@ -73,7 +73,8 @@ namespace Everglow.Commons.Weapons.StabbingSwords
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 4;
-        }
+			Projectile.extraUpdates = 20;
+		}
         public virtual int SoundTimer { get; private set; } = 6;
         public override void SendExtraAI(BinaryWriter writer)
         {
@@ -100,7 +101,6 @@ namespace Everglow.Commons.Weapons.StabbingSwords
             Projectile.soundDelay--;
             if (Projectile.soundDelay <= 0)
             {
-				//SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
 				SoundStyle ss = SoundID.Item1;
 				SoundEngine.PlaySound(ss, Projectile.Center);
                 Projectile.soundDelay = SoundTimer;
@@ -260,8 +260,8 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 				{
 					DarkDraw[f] = DarkDraw[f - 1];
 					DarkDraw[f].Postion = DarkDraw[f - 1].Postion + Main.player[Projectile.owner].velocity;
-					DarkDraw[f].Color.A = (byte)(DarkDraw[f - 1].Color.A * FadeTradeShade);
-					DarkDraw[f].Size.Y = DarkDraw[f - 1].Size.Y * FadeScale;
+					DarkDraw[f].Color.A = (byte)(DarkDraw[f - 1].Color.A * MathF.Pow(FadeShade, 1 / 20f));
+					DarkDraw[f].Size.Y = DarkDraw[f - 1].Size.Y * MathF.Pow(FadeScale,1 / 20f);
 				}
 			}
 			if(Projectile.timeLeft >= TradeLength - 1)
@@ -273,9 +273,9 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			}
 			else
 			{
-				DarkDraw[0].Color.A = (byte)(DarkDraw[0].Color.A * FadeTradeShade);
+				DarkDraw[0].Color.A = (byte)(DarkDraw[0].Color.A * MathF.Pow(FadeShade, 1 / 20f));
 				DarkDraw[0].Postion = drawPos + Main.player[Projectile.owner].velocity;
-				DarkDraw[0].Size.Y = drawSize.Y * FadeScale;
+				DarkDraw[0].Size.Y = drawSize.Y * MathF.Pow(FadeScale, 1 / 20f);
 				DarkDraw[0].Rotation = drawRotation;
 			}
 		}

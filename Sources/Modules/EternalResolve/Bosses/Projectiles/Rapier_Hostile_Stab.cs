@@ -2,8 +2,6 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.VFX;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -12,11 +10,11 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 {
 	public abstract class Rapier_Hostile_Stab : ModProjectile, IWarpProjectile
 	{
-        public int itemType;
-        /// <summary>
-        /// 常规颜色
-        /// </summary>
-        public Color Color = Color.White;
+		public int itemType;
+		/// <summary>
+		/// 常规颜色
+		/// </summary>
+		public Color Color = Color.White;
 		/// <summary>
 		/// 阴影强度
 		/// </summary>
@@ -40,7 +38,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		/// <summary>
 		/// 重影深度缩变,小于1
 		/// </summary>  
-		public float FadeTradeShade = 0f;
+		public float FadeShade = 0f;
 		/// <summary>
 		/// 重影彩色部分亮度缩变,小于1
 		/// </summary>
@@ -52,7 +50,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
 		public override void SetDefaults()
 		{
-            Projectile.width = 10;
+			Projectile.width = 10;
 			Projectile.height = 24;
 			Projectile.netImportant = true;
 			Projectile.friendly = false;
@@ -68,27 +66,27 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		public int ToKill = 120;
 		public override void OnSpawn(IEntitySource source)
 		{
-            SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
+			SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
 			SoundEngine.PlaySound(ss, Projectile.Center);
 			StartCenter = Projectile.Center;
 
-			if (Projectile.ai[1] == 1|| Projectile.ai[1] == 2)
+			if (Projectile.ai[1] == 1 || Projectile.ai[1] == 2)
 			{
 				Projectile.timeLeft = 40;
 				Projectile.extraUpdates++;
 			}
-           
-        }
+
+		}
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
-			
+
 			float point = 0;
 			Vector2 end = Projectile.Center + Projectile.velocity * 80 * MaxLength;
 			if (EndPos != Vector2.zeroVector)
 			{
 				end = EndPos;
 			}
-			if (Projectile.timeLeft>2)
+			if (Projectile.timeLeft > 2)
 			{
 				if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), StartCenter, end, Projectile.width, ref point))
 				{
@@ -99,7 +97,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		}
 		public override void AI()
 		{
-            if (Projectile.timeLeft%15==0 && Projectile.ai[1] != 2)
+			if (Projectile.timeLeft % 15 == 0 && Projectile.ai[1] != 2)
 			{
 				StabVFX v = new StabVFX()
 				{
@@ -110,8 +108,8 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 					maxtime = 20,
 					timeleft = 20,
 					alpha = 0.8f
-                };
-                Ins.VFXManager.Add(v);
+				};
+				Ins.VFXManager.Add(v);
 				/*
 				v = new StabVFX()
 				{
@@ -124,30 +122,30 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 					alpha = 0.8f
                 };
                 Ins.VFXManager.Add(v);*/
-            }
+			}
 			ProduceWaterRipples(new Vector2(Projectile.velocity.Length(), 30));
-            if (Projectile.ai[1] == 0)
+			if (Projectile.ai[1] == 0)
 			{
-                Main.npc[(int)Projectile.ai[0]].spriteDirection = Projectile.spriteDirection;
-                Projectile.Center = Main.npc[(int)Projectile.ai[0]].Center + Projectile.velocity * 50 * MaxLength;
+				Main.npc[(int)Projectile.ai[0]].spriteDirection = Projectile.spriteDirection;
+				Projectile.Center = Main.npc[(int)Projectile.ai[0]].Center + Projectile.velocity * 50 * MaxLength;
 			}
 			else
 			{
-				if(Projectile.timeLeft>2)
-				Projectile.Center += Projectile.velocity*8;
-            }
+				if (Projectile.timeLeft > 2)
+					Projectile.Center += Projectile.velocity * 8;
+			}
 
-            if (Projectile.timeLeft <= 2)
-            {
-                ToKill--;
-                Projectile.timeLeft = 2;
-            }
-            if (ToKill >= 120)
+			if (Projectile.timeLeft <= 2)
 			{
-				
-                Projectile.rotation = Projectile.velocity.ToRotation();
-                Projectile.spriteDirection = Projectile.direction;
-            }
+				ToKill--;
+				Projectile.timeLeft = 2;
+			}
+			if (ToKill >= 120)
+			{
+
+				Projectile.rotation = Projectile.velocity.ToRotation();
+				Projectile.spriteDirection = Projectile.direction;
+			}
 			else
 			{
 				Projectile.extraUpdates = 24;
@@ -155,7 +153,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 					Projectile.Kill();
 			}
 			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
-			if (!Collision.CanHitLine(StartCenter,1,1,end,1,1))
+			if (!Collision.CanHitLine(StartCenter, 1, 1, end, 1, 1))
 			{
 				if (EndPos == Vector2.zeroVector)
 				{
@@ -164,10 +162,10 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				}
 			}
 		}
-		public virtual void HitTile() 
+		public virtual void HitTile()
 		{
 			SoundStyle ss = SoundID.NPCHit4;
-			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);	
+			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
 			for (int g = 0; g < 20; g++)
 			{
 				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(MathHelper.TwoPi);
@@ -201,27 +199,27 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		}
 		public virtual void DrawItem(Color lightColor)
 		{
-			
-            int type = itemType;
-            Texture2D itemTexture = TextureAssets.Item[type].Value;
-            Main.spriteBatch.Draw(itemTexture, Main.npc[(int)Projectile.ai[0]].Center + Projectile.velocity * 40 - Main.screenPosition, null, lightColor, Projectile.rotation + MathF.PI * 0.25f, itemTexture.Size() / 2f, 1, SpriteEffects.None, 0f);
-        }
-        public override void PostDraw(Color lightColor)
+
+			int type = itemType;
+			Texture2D itemTexture = TextureAssets.Item[type].Value;
+			Main.spriteBatch.Draw(itemTexture, Main.npc[(int)Projectile.ai[0]].Center + Projectile.velocity * 40 - Main.screenPosition, null, lightColor, Projectile.rotation + MathF.PI * 0.25f, itemTexture.Size() / 2f, 1, SpriteEffects.None, 0f);
+		}
+		public override void PostDraw(Color lightColor)
 		{
 			DrawEffect(lightColor);
 		}
 		public virtual void DrawEffect(Color lightColor)
 		{
 
-            Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 25 * ToKill / 120f * DrawWidth;
+			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 25 * ToKill / 120f * DrawWidth;
 			Vector2 start = StartCenter;
 			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
-			if(EndPos != Vector2.Zero)
+			if (EndPos != Vector2.Zero)
 			{
 				end = EndPos;
 			}
-            float value = (Projectile.timeLeft + ToKill) / 200f;
-            Vector2 middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
+			float value = (Projectile.timeLeft + ToKill) / 200f;
+			Vector2 middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
 			float time = (float)(Main.time * 0.03);
 			float dark = MathF.Sin(value * MathF.PI) * 4;
 			List<Vertex2D> bars = new List<Vertex2D>
@@ -336,7 +334,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				new Vertex2D(end - Main.screenPosition,alphaColor,new Vector3(0f + time, 0.5f, 1)),
 				new Vertex2D(end - Main.screenPosition,alphaColor,new Vector3(0f + time, 0.5f, 1))
 			};
-			sb.Draw(Commons.ModAsset.Trail_1.Value,bars, PrimitiveType.TriangleStrip);
+			sb.Draw(Commons.ModAsset.Trail_1.Value, bars, PrimitiveType.TriangleStrip);
 		}
 	}
 }

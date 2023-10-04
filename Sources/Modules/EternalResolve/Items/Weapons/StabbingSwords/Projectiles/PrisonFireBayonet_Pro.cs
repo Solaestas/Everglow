@@ -16,7 +16,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			TradeLength = 6;
 			TradeShade = 1f;
 			Shade = 0.65f;
-			FadeTradeShade = 0.84f;
+			FadeShade = 0.84f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.4f;
@@ -167,7 +167,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 						TradeLength = 6;
 						TradeShade = 1f;
 						Shade = 0.65f;
-						FadeTradeShade = 0.84f;
+						FadeShade = 0.84f;
 						FadeScale = 1;
 						TradeLightColorValue = 1f;
 						FadeLightColorValue = 0.4f;
@@ -187,7 +187,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 						TradeLength = 6;
 						TradeShade = 0.4f;
 						Shade = 0.65f;
-						FadeTradeShade = 0.74f;
+						FadeShade = 0.74f;
 						FadeScale = 1;
 						TradeLightColorValue = 1f;
 						FadeLightColorValue = 0.4f;

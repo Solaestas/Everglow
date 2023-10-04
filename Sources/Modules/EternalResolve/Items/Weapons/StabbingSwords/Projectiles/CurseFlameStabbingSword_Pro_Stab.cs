@@ -16,7 +16,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			base.SetDefaults();
 			TradeShade = 0.9f;
 			Shade = 0.9f;
-			FadeTradeShade = 0.74f;
+			FadeShade = 0.74f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.8f;

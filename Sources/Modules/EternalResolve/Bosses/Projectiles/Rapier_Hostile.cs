@@ -42,7 +42,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		/// <summary>
 		/// 重影深度缩变,小于1
 		/// </summary>
-		public float FadeTradeShade = 0f;
+		public float FadeShade = 0f;
 		/// <summary>
 		/// 重影彩色部分亮度缩变,小于1
 		/// </summary>
@@ -213,7 +213,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				{
 					DarkDraw[f] = DarkDraw[f - 1];
 					DarkDraw[f].Postion = DarkDraw[f - 1].Postion + Main.player[Projectile.owner].velocity;
-					DarkDraw[f].Color.A = (byte)(DarkDraw[f - 1].Color.A * FadeTradeShade);
+					DarkDraw[f].Color.A = (byte)(DarkDraw[f - 1].Color.A * FadeShade);
 					DarkDraw[f].Size.Y = DarkDraw[f - 1].Size.Y * FadeScale;
 				}
 			}
@@ -226,7 +226,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			}
 			else
 			{
-				DarkDraw[0].Color.A = (byte)(DarkDraw[0].Color.A * FadeTradeShade);
+				DarkDraw[0].Color.A = (byte)(DarkDraw[0].Color.A * FadeShade);
 				DarkDraw[0].Postion = drawPos + Main.player[Projectile.owner].velocity;
 				DarkDraw[0].Size.Y = drawSize.Y * FadeScale;
 				DarkDraw[0].Rotation = drawRotation;

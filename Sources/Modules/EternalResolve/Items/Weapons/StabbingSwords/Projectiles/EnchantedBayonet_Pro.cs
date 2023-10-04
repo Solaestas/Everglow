@@ -12,7 +12,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			TradeLength = 4;
 			TradeShade = 0.8f;
 			Shade = 0.2f;
-			FadeTradeShade = 0.64f;
+			FadeShade = 0.64f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.5f;
@@ -42,16 +42,16 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				switch (Main.rand.Next(4))
 				{
 					case 0:
-						DarkDraw[0].Color = new Color(76, 126, 255, (byte)(FadeTradeShade * 255));
+						DarkDraw[0].Color = new Color(76, 126, 255, (byte)(FadeShade * 255));
 						break;
 					case 1:
-						DarkDraw[0].Color = new Color(229, 111, 216, (byte)(FadeTradeShade * 255));
+						DarkDraw[0].Color = new Color(229, 111, 216, (byte)(FadeShade * 255));
 						break;
 					case 2:
-						DarkDraw[0].Color = new Color(247, 233, 141, (byte)(FadeTradeShade * 255));
+						DarkDraw[0].Color = new Color(247, 233, 141, (byte)(FadeShade * 255));
 						break;
 					case 3:
-						DarkDraw[0].Color = new Color(114, 177, 204, (byte)(FadeTradeShade * 255));
+						DarkDraw[0].Color = new Color(114, 177, 204, (byte)(FadeShade * 255));
 						break;
 				}
 			}
