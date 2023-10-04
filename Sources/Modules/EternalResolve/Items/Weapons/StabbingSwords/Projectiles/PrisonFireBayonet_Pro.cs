@@ -157,7 +157,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			Player player = Main.player[Projectile.owner];
 			base.PostDraw(lightColor);
-			Lighting.AddLight(Projectile.Center + Projectile.velocity, 1f * Projectile.timeLeft / TradeLength, 0.4f * Projectile.timeLeft / TradeLength, 0f);
+			float valueLight = Projectile.timeLeft / TradeLength / (Projectile.extraUpdates + 1);
+			Lighting.AddLight(Projectile.Center + Projectile.velocity, 1f * valueLight, 0.4f * valueLight, 0f);
 			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			if (Main.myPlayer == Projectile.owner)
