@@ -35,7 +35,7 @@ public class HepuyuanSpice : ModProjectile
 
 		Color ct = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
 		ct.A = 180;
-		var cp = new Color(200, 200, 200, 0);
+		var cp = new Color(200, 200, 200, 200);
 		float fadeG = Math.Clamp((Projectile.timeLeft - 10) / 24f + 0.12f, 0, 1f);
 
 		Vx.Add(new Vertex2D(Vbase + v0 * 2, cp, new Vector3(1, 0, 0)));

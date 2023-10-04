@@ -63,6 +63,22 @@ public class CursedFlameHit : ModProjectile, IWarpProjectile
 
 		MythUtils.DrawTexCircle_Warp(spriteBatch, value * 27 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		if (Projectile.Center.X > target.Center.X)
+		{
+			modifiers.HitDirectionOverride = -1;
+		}
+		if (Projectile.Center.X < target.Center.X)
+		{
+			modifiers.HitDirectionOverride = 1;
+		}
+		if (Projectile.Center.X == target.Center.X)
+		{
+			modifiers.HitDirectionOverride = 0;
+		}
+		base.ModifyHitNPC(target, ref modifiers);
+	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(BuffID.CursedInferno, 300);
