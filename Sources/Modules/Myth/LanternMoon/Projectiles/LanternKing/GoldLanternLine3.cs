@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
@@ -15,7 +15,6 @@ public class GoldLanternLine3 : ModProjectile
 		Projectile.tileCollide = false;
 		Projectile.DamageType = DamageClass.Magic;
 	}
-	float Z = 0;
 	public override void AI()
 	{
 		Projectile.velocity = Projectile.velocity * 0.95f;

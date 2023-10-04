@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;
 
 internal class Storm : ModProjectile
 {
@@ -46,7 +46,7 @@ internal class Storm : ModProjectile
 			if (Intensity <= 0)
 				Projectile.Kill();
 		}
-		for (int j = 0; j < 12; j++)
+		for (int j = 0; j < 4; j++)
 		{
 			Vector2 v0 = Vector2.Zero;
 			float k0 = Main.rand.NextFloat(0f, 1f);
@@ -147,5 +147,5 @@ internal class Storm : ModProjectile
 	}
 
 	internal int Intensity = 0;
-	internal Vector2 RingPos = Vector2.Zero;
+	internal Vector2 ringPos = Vector2.Zero;
 }

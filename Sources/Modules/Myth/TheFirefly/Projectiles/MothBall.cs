@@ -1,27 +1,12 @@
-﻿using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Myth.TheFirefly.VFXs;
 using Terraria.Audio;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
 public class MothBall : ModProjectile
 {
-	private float r = 0;
-	private Vector2 v0;
-	private int Fra = 0;
-	private int FraX = 0;
-	private int FraY = 0;
-	private Vector2[] vB = new Vector2[15];
-	private Vector2[] vloB = new Vector2[15];
-	private int[] yB = new int[15];
-	private float Stre2 = 1;
-	public override bool CloneNewInstances => false;
-	public override bool IsCloneable => false;
-
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("幻蝶泡");
-	}
-
+	private float subscale = 0f;
 	public override void SetDefaults()
 	{
 		Projectile.width = 32;
@@ -33,85 +18,60 @@ public class MothBall : ModProjectile
 		Projectile.timeLeft = 300;
 		Projectile.tileCollide = false;
 	}
-
+	public void GenerateLightingBolt()
+	{
+		float size = Main.rand.NextFloat(18f, Main.rand.NextFloat(20f, 40f));
+		Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(9f, 30f)).RotatedByRandom(MathHelper.TwoPi);
+		var electric = new MothBallCurrent
+		{
+			velocity = afterVelocity + Projectile.velocity,
+			Active = true,
+			Visible = true,
+			position = Projectile.Center,
+			maxTime = Main.rand.Next(42, 90),
+			scale = size,
+			projectileOwner = Projectile.whoAmI,
+			ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), 2 }
+		};
+		Ins.VFXManager.Add(electric);
+	}
 	public override void AI()
 	{
-		int p = Player.FindClosest(Projectile.Center, 1000, 1000);
-
-		if (p is >= 0 and < 255)
+		Player player = Main.player[Player.FindClosest(Projectile.position, Projectile.width, Projectile.height)];
+		if (Projectile.timeLeft > 240)
+			subscale += 1f;
+		if (Projectile.timeLeft is <= 240 and >= 60)
+			subscale = 60 + (float)(10 * Math.Sin((Projectile.timeLeft - 60) / 60d * Math.PI));
+		if (Projectile.timeLeft < 60 && subscale > 0.5f)
+			subscale -= 1f;
+		if (Projectile.timeLeft < 50)
+		{
+			Projectile.velocity *= 0.95f;
+			Projectile.scale *= 0.97f;
+			GenerateLightingBolt();
+		}
+		else
 		{
 			float speed = MathHelper.Clamp((300 - Projectile.timeLeft) * 0.1f, 0, 30);
-			speed *= MathHelper.Clamp(Vector2.Distance(Projectile.Center, Main.player[p].Center) / 300, 1, 2f);
-			Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[p].Center) * speed, 0.015f);
+			speed *= MathHelper.Clamp(Vector2.Distance(Projectile.Center, player.Center) / 300, 1, 2f);
+			Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(player.Center) * speed, 0.015f);
 		}
-		if (Projectile.timeLeft < 50)
-			Projectile.velocity *= 0.95f;
-
-		#region Origin
-
-		if (Stre2 > 0)
-			Stre2 -= 0.005f;
-		if (Projectile.timeLeft == 300)
+		if (Projectile.frame >= 30)
 		{
-			v0 = Projectile.Center;
-			for (int g = 0; g < 15; g++)
-			{
-				vB[g] = new Vector2(0, Main.rand.Next(0, 35)).RotatedByRandom(6.283);
-				vloB[g] = new Vector2(0, Main.rand.NextFloat(0.4f, 2.8f)).RotatedByRandom(6.283);
-				yB[g] = Main.rand.Next(4) * 36;
-			}
+			Projectile.frame = 0;
 		}
-		if (Projectile.timeLeft > 240)
-			r += 1f;
-		if (Projectile.timeLeft is <= 240 and >= 60)
-			r = 60 + (float)(10 * Math.Sin((Projectile.timeLeft - 60) / 60d * Math.PI));
-		if (Projectile.timeLeft < 60 && r > 0.5f)
-			r -= 1f;
-		int Dx = (int)(r * 1.5f);
-		int Dy = (int)(r * 1.5f);
-		Fra = (600 - Projectile.timeLeft) / 3 % 30;
-		FraX = Fra % 6 * 270;
-		FraY = Fra / 6 * 290;
-		if (v0 != Vector2.Zero)
+		else
 		{
-			// Projectile.position = v0 - new Vector2(Dx, Dy) / 2f;
+			Projectile.frame++;
 		}
-
-		Projectile.width = Dx;
-		Projectile.height = Dy;
-		for (int g = 0; g < 15; g++)
+		if (Projectile.timeLeft == 185)
 		{
-			if (yB[g] > 102)
-				yB[g] = 0;
-			if (Projectile.timeLeft % 10 == 0)
-				yB[g] += 36;
-			vB[g] += vloB[g];
-			if (vB[g].Length() > 80)
-			{
-				double a1 = Math.Atan2(vloB[g].Y, vloB[g].X);
-				double a2 = Math.Atan2(vB[g].Y, vB[g].X);
-				double a3 = a2 - a1;
-				vloB[g] = -vloB[g].RotatedBy(a3 * 2);
-				vB[g] += vloB[g];
-			}
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/PowerAccumulate"), Projectile.Center);
 		}
-
-		#endregion Origin
 	}
-
 	public override void OnKill(int timeLeft)
 	{
-		/*震屏
-            MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
-            mplayer.Shake = 6;
-            float Str = 1;
-            mplayer.ShakeStrength = Str;*/
-		ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
-		mplayer.FlyCamPosition = new Vector2(0, 48).RotatedByRandom(6.283);
-		SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
-		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Projectile.owner, 2, 6f);
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 4f);
-
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<MothBallExplosion>(), 50, 3, Projectile.owner, 60f);
 		if (Main.masterMode)
 		{
 			for (int h = 0; h < 6; h++)
@@ -122,87 +82,113 @@ public class MothBall : ModProjectile
 				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, v1, ModContent.ProjectileType<MissileProjHostile>(), Projectile.damage, 3, Projectile.owner, 4f);
 			}
 		}
-		for (int h = 0; h < 200; h += 3)
-		{
-			Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.8f, 2.4f);
-			int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<PureBlue>(), 0, 0, 0, default, 35f * Main.rand.NextFloat(0.7f, 2.9f));
-			Main.dust[r].noGravity = true;
-			Main.dust[r].velocity = v3 * 6;
-		}
-		for (int y = 0; y < 180; y += 3)
-		{
-			int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(3.3f, 14.2f));
-			Main.dust[index].noGravity = true;
-			Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 37.5f), 0).RotatedByRandom(Math.PI * 2d);
-		}
-		for (int y = 0; y < 180; y += 3)
-		{
-			int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(3.3f, 14.2f));
-			Main.dust[index].noGravity = true;
-			Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(3.0f, 47.5f)).RotatedByRandom(Math.PI * 2d);
-		}
-		for (int y = 0; y < 36; y++)
-		{
-			int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(3.3f, 10.2f));
-			Main.dust[index].noGravity = true;
-			Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.8f, 13.5f)).RotatedByRandom(Math.PI * 2d);
-		}
 		if (Main.netMode != NetmodeID.MultiplayerClient)
 		{
 			for (int y = 0; y < 10; y++)
 			{
 				for (int i = 0; i < 5; i++)
 				{
-					var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), (int)(Projectile.Center.X + vB[y].X), (int)(Projectile.Center.Y + vB[y].Y), ModContent.NPCType<NPCs.Bosses.Butterfly>());
+					var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), Projectile.Center, ModContent.NPCType<NPCs.Bosses.Butterfly>());
 					npc.velocity = Main.rand.NextVector2Unit() * Main.rand.Next(4, 12);
 					npc.netUpdate2 = true;
 				}
 				for (int i = 0; i < 4; i++)
 				{
-					var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<NPCs.Bosses.Butterfly>());
+					var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), Projectile.Center, ModContent.NPCType<NPCs.Bosses.Butterfly>());
 					npc.velocity = Main.rand.NextVector2Unit() * Main.rand.Next(2, 5);
 					npc.netUpdate2 = true;
 				}
 			}
 
 			int player = Player.FindClosest(Projectile.Center, 1000, 1000);
-			float X = 0;
+			float addRot = 0;
 			if (player is >= 0 and < 255)
-				X = Projectile.DirectionTo(Main.player[player].Center).ToRotation();
+				addRot = Projectile.DirectionTo(Main.player[player].Center).ToRotation();
 			for (int h = 0; h < 36; h++)
 			{
 				if (h % 6 < 3)
 				{
-					Vector2 v = new Vector2(0, 12f).RotatedBy(h * MathHelper.TwoPi / 36f + X);
+					Vector2 v = new Vector2(0, 12f).RotatedBy(h * MathHelper.TwoPi / 36f + addRot);
 					Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center + v, v, ModContent.ProjectileType<BlueMissil>(), Projectile.damage, 0f, Main.myPlayer, 2);
 				}
 			}
 		}
 
 		//Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
-		base.OnKill(timeLeft);
 	}
-
-	public override bool OnTileCollide(Vector2 oldVelocity)
-	{
-		Projectile.Kill();
-		return false;
-	}
-
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Main.spriteBatch.Draw(ModContent.Request<Texture2D>(Texture).Value, Projectile.Center - Main.screenPosition, new Rectangle(FraX, 10 + FraY, 270, 270), new Color(1f, 1f, 1f, 0), Projectile.rotation, new Vector2(135f, 135f), r / 60f, SpriteEffects.None, 0f);
-		for (int g = 0; g < 15; g++)
-		{
-			SpriteEffects eff = SpriteEffects.None;
-			if (vloB[g].X > 0)
-				eff = SpriteEffects.FlipHorizontally;
-			Main.spriteBatch.Draw(Common.MythContent.QuickTexture("TheFirefly/Projectiles/ButterflyDream"), Projectile.Center + vB[g] * r / 60f - Main.screenPosition, new Rectangle(0, yB[g], 36, 34), new Color(0.2f, 0.5f, 1f, 0), Projectile.rotation, new Vector2(18f, 17f), r / 60f, eff, 0f);
-		}
-		Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/CorruptLight");
-		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, null, new Color((int)(255 * Stre2), (int)(255 * Stre2), (int)(255 * Stre2), 0), Projectile.rotation, Light.Size() / 2f, Projectile.scale * 2 * r / 60f, SpriteEffects.None, 0);
+		Texture2D Light = ModAsset.CorruptLight.Value;
+		int frameX = (Projectile.frame % 6);
+		int frameY = (Projectile.frame - frameX) / 6;
+		int frameSideX = 270;
+		int frameSideY = 290;
+		Main.spriteBatch.Draw(ModContent.Request<Texture2D>(Texture).Value, Projectile.Center - Main.screenPosition, new Rectangle(frameX * frameSideX, frameY * frameSideY + 10, 270, 270), new Color(1f, 1f, 1f, 0), Projectile.rotation, new Vector2(135f), Projectile.scale * subscale / 60f, SpriteEffects.None, 0f);
+
 		if (Projectile.timeLeft < 60)
 			Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, Light.Size() / 2f, (60 - Projectile.timeLeft) / 30f, SpriteEffects.None, 0);
+
+		float range = 720f;
+		if(Projectile.timeLeft < 100)
+		{
+			range += (100 - Projectile.timeLeft) * 16;
+		}
+		for(int k = 0;k < 9;k++)
+		{
+			DrawCurrents(k - (float)Main.time * 0.03f, k, range);
+		}
+
 		return false;
+	}
+	public void DrawCurrents(float addRot, float randomSeed, float startLength = 180f)
+	{
+		List<Vector2> current = new List<Vector2>();
+		Vector2 start = new Vector2(0, startLength);
+		float maxTime = 17f;
+		if (Projectile.timeLeft < 100)
+		{
+			maxTime += (100 - Projectile.timeLeft) * 0.1f;
+		}
+		for (int t = 1; t < maxTime; t++)
+		{
+			start = start * 0.82f + new Vector2(0, 20) * 0.18f;
+			Vector2 v0 = start.RotatedBy(-t * t / 60f + addRot);
+			current.Add(v0);
+		}
+		current = GraphicsUtils.CatmullRom(current);
+
+		float length = current.Count;
+		float timeValue = (float)Main.timeForVisualEffects * 0.02f;
+		List<Vertex2D> bars = new List<Vertex2D>();
+		for (int t = (int)length - 1; t >= 0; t--)
+		{
+			float value = t / length;
+			Vector2 normalize = Vector2.Normalize(current[t].RotatedBy(Math.PI * 0.5));
+			if(t != 0)
+			{
+				normalize = Vector2.Normalize(current[t] - current[t - 1]).RotatedBy(-Math.PI * 0.5);
+			}
+			float width = 50 + randomSeed * 2;
+			normalize *= width;
+			float colorValue = 0f;
+			if(Projectile.timeLeft < 100)
+			{
+				colorValue = value * value * (100 - Projectile.timeLeft) / 50f;
+			}
+			bars.Add(current[t] + Projectile.Center + normalize, new Color(0, 200, 255, 0) * colorValue, new Vector3(1 - value + timeValue + randomSeed * 0.13f, 0, value));
+			bars.Add(current[t] + Projectile.Center - normalize, new Color(0, 200, 255, 0) * colorValue, new Vector3(1 - value + timeValue + randomSeed * 0.13f, 1, value));
+		}
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+		Effect effect = Commons.ModAsset.StabSwordEffect.Value;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.Parameters["uProcession"].SetValue(0.5f);
+		effect.CurrentTechnique.Passes[0].Apply();
+		Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_thick.Value;
+		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
 }

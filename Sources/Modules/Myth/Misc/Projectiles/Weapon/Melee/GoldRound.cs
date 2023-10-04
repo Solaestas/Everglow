@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 using Terraria.Localization;
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
 
@@ -23,7 +23,6 @@ public class GoldRound : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 	}
 	private float Omega = 0.4f;
-	private bool initialization = true;
 	public override void AI()
 	{
 		Projectile.velocity *= 0.98f;
@@ -53,7 +52,6 @@ public class GoldRound : ModProjectile
 				if (l != -1)
 				{
 					Projectile.velocity += (Main.npc[l].Center - Projectile.Center) / (Main.npc[l].Center - Projectile.Center).Length() * 17f;
-					initialization = false;
 				}
 				/*else
                     {

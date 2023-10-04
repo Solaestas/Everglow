@@ -37,7 +37,6 @@ internal class WaveSprayDust : ShaderDraw
 	public List<Vector2> oldPos = new List<Vector2>();
 	public float timer;
 	public float maxTime;
-	public float alpha;
 	public WaveSprayDust() { }
 	public WaveSprayDust(int maxTime, Vector2 position, Vector2 velocity, params float[] ai) : base(position, velocity, ai)
 	{
@@ -90,14 +89,13 @@ internal class WaveSprayDust : ShaderDraw
 			normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
 			Color light = Lighting.GetColor((int)(oldPos[i].X / 16f), (int)(oldPos[i].Y / 16f));
 
-			var drawcRope = new Color(Math.Min(fx * fx * fx + 0.2f - i / (float)len, 0.8f), light.R / 255f * (1 - alpha), light.G / 255f * (1 - alpha), light.B / 255f * (1 - alpha));
+			var drawcRope = new Color(Math.Min(fx * fx * fx + 0.2f - i / (float)len, 0.8f), light.R / 255f, light.G / 255f, light.B / 255f);
 			float width = ai[2] * (float)Math.Sin(i / (double)len * Math.PI);
-			Vector2 pointUp = oldPos[i] + normal * width;
-			Vector2 pointDown = oldPos[i] - normal * width;
+
 			Vector2 widthUp = new Vector2(normal.X * width, 0);
 			Vector2 widthDown = -new Vector2(normal.X * width, 0);
 
-			float drawAlpha = MathF.Pow(1 - alpha, 3f);
+			float drawAlpha = MathF.Pow(1, 3f);
 			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width + widthUp, drawcRope, new Vector3(0 + ai[0], (i + 15 - len) / 30f + timer / 1500f * velocity.Length() * drawAlpha, drawAlpha));
 			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width + widthDown, drawcRope, new Vector3(0.4f + ai[0], (i + 15 - len) / 30f + timer / 1500f * velocity.Length() * drawAlpha, drawAlpha));
 		}

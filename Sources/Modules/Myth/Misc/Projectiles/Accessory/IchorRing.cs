@@ -50,9 +50,9 @@ public class IchorRing : ModProjectile
 		}
 		target.AddBuff(BuffID.Ichor, 600);
 	}
-	private bool insertWithRing(Vector2 point1, Vector2 point2, float radious, float toleranceWidth)
+	private bool insertWithRing(Vector2 point1, Vector2 point2, float radius, float toleranceWidth)
 	{
-		return Math.Abs((point1 - point2).Length() - radious) < toleranceWidth;
+		return Math.Abs((point1 - point2).Length() - radius) < toleranceWidth;
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
@@ -76,38 +76,38 @@ public class IchorRing : ModProjectile
 		D.noGravity = true;
 		D.velocity = new Vector2(-v0.Y * Speed, v0.X * Speed);
 	}
-	private void DrawTexLiquidCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, int textureDrawTimes = 1, double addRot = 0)
+	private void DrawTexLiquidCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, int textureDrawTimes = 1, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radious / 2; h += 2)
+		for (int h = 0; h < radius / 2; h += 2)
 		{
 
-			float coordX = (h * 2 / radious * textureDrawTimes + (float)Main.timeForVisualEffects * 0.02f) % 1f;
-			float nextCoordX = ((h + 2) * 2 / radious * textureDrawTimes + (float)Main.timeForVisualEffects * 0.02f) % 1f;
+			float coordX = (h * 2 / radius * textureDrawTimes + (float)Main.timeForVisualEffects * 0.02f) % 1f;
+			float nextCoordX = ((h + 2) * 2 / radius * textureDrawTimes + (float)Main.timeForVisualEffects * 0.02f) % 1f;
 			float OutWave = width * (1 + MathF.Sin(coordX * MathF.PI * 2) * 0.03f);
 			float InWave = width * (1 + MathF.Sin(-coordX * MathF.PI * 4) * 0.23f);
-			InWave = Math.Min(InWave, radious);
-			circle.Add(new Vertex2D(center + new Vector2(0, radious - InWave).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(coordX, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious + OutWave).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(coordX, 0, 0)));
+			InWave = Math.Min(InWave, radius);
+			circle.Add(new Vertex2D(center + new Vector2(0, radius - InWave).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(coordX, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius + OutWave).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(coordX, 0, 0)));
 			if (nextCoordX < coordX)
 			{
 				float midValue = (1 - coordX) / (nextCoordX + 1 - coordX);
 				OutWave = width;
 				InWave = width;
-				InWave = Math.Min(InWave, radious);
-				circle.Add(new Vertex2D(center + new Vector2(0, radious - InWave).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3(1, 1, 0)));
-				circle.Add(new Vertex2D(center + new Vector2(0, radious + OutWave).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3(1, 0, 0)));
-				circle.Add(new Vertex2D(center + new Vector2(0, radious - InWave).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3(0, 1, 0)));
-				circle.Add(new Vertex2D(center + new Vector2(0, radious + OutWave).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3(0, 0, 0)));
+				InWave = Math.Min(InWave, radius);
+				circle.Add(new Vertex2D(center + new Vector2(0, radius - InWave).RotatedBy((h + midValue) / radius * Math.PI * 4 + addRot), color, new Vector3(1, 1, 0)));
+				circle.Add(new Vertex2D(center + new Vector2(0, radius + OutWave).RotatedBy((h + midValue) / radius * Math.PI * 4 + addRot), color, new Vector3(1, 0, 0)));
+				circle.Add(new Vertex2D(center + new Vector2(0, radius - InWave).RotatedBy((h + midValue) / radius * Math.PI * 4 + addRot), color, new Vector3(0, 1, 0)));
+				circle.Add(new Vertex2D(center + new Vector2(0, radius + OutWave).RotatedBy((h + midValue) / radius * Math.PI * 4 + addRot), color, new Vector3(0, 0, 0)));
 			}
 		}
 		float coordx = (float)Main.timeForVisualEffects * 0.02f % 1f;
 		float outWave = width * (1 + MathF.Sin(coordx * MathF.PI * 2) * 0.23f);
 		float inWave = width * (1 + MathF.Sin(-coordx * MathF.PI * 4) * 0.13f);
-		inWave = Math.Min(inWave, radious);
+		inWave = Math.Min(inWave, radius);
 
-		circle.Add(new Vertex2D(center + new Vector2(0, radious - inWave).RotatedBy(addRot), color, new Vector3(coordx, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + outWave).RotatedBy(addRot), color, new Vector3(coordx, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius - inWave).RotatedBy(addRot), color, new Vector3(coordx, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius + outWave).RotatedBy(addRot), color, new Vector3(coordx, 0, 0)));
 
 		if (circle.Count > 0)
 		{

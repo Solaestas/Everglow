@@ -43,6 +43,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     //newY *= 1 / sin(log(input.Texcoord.z * 22.141 + 1));
     newY *= 1 / sin(input.Texcoord.z * 3.141592653589793238);
     newY += 0.5;
+    newY = clamp(newY, 0, 1);
     float2 newCoord = float2(newX, newY);
     float4 color = tex2D(uImage, newCoord);
     color *= input.Color;

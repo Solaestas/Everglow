@@ -8,13 +8,14 @@ public class IchorSplashPipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.IchorSplash;
-		effect.Value.Parameters["uNoise"].SetValue(ModAsset.Noise_cell.Value);
+		
 	}
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		effect.Parameters["uNoise"].SetValue(ModAsset.Noise_cell.Value);
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D FlameColor = ModAsset.HeatMap_ichorSplash.Value;
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);

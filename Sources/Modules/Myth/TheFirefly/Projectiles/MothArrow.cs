@@ -28,11 +28,6 @@ internal class MothArrow : ModProjectile
 		Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver4;
 		if (Projectile.timeLeft % 3 == 0)
 			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, Main.rand.NextFloat(0.6f, 1.8f));
-		/*
-            if (Collision.SolidCollision(Projectile.Center, 1, 1))
-            {
-                Projectile.Kill();
-            }*/
 	}
 
 	public override bool PreDraw(ref Color lightColor)
@@ -57,16 +52,6 @@ internal class MothArrow : ModProjectile
 			Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283);
 			int num21 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f, 0, 0, ModContent.DustType<BlueParticleDark2>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f));
 			Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
-		}
-		foreach (NPC target in Main.npc)
-		{
-			if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
-			{
-				NPC.HitModifiers npcHitM = new NPC.HitModifiers();
-				NPC.HitInfo hit = npcHitM.ToHitInfo(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f), Main.rand.NextFloat(100f) < Main.player[Projectile.owner].GetTotalCritChance(Projectile.DamageType), 2);
-				target.StrikeNPC(hit, true, true);
-				NetMessage.SendStrikeNPC(target, hit);
-			}
 		}
 	}
 }
