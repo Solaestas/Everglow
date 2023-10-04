@@ -2,6 +2,7 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Commons.Weapons.StabbingSwords.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -110,18 +111,6 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 					alpha = 0.8f
 				};
 				Ins.VFXManager.Add(v);
-				/*
-				v = new StabVFX()
-				{
-					pos = Projectile.Center + Projectile.velocity * MaxLength * 70,
-					vel = Vector2.Normalize(Projectile.velocity),
-					color = Color.Lerp(Color, Color.White, 0.4f),
-					maxtime = 30,
-					timeleft = 30,
-					scale = 10,
-					alpha = 0.8f
-                };
-                Ins.VFXManager.Add(v);*/
 			}
 			ProduceWaterRipples(new Vector2(Projectile.velocity.Length(), 30));
 			if (Projectile.ai[1] == 0)
