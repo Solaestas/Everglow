@@ -138,7 +138,7 @@ public class AcytaeaSword_projectile : MeleeProj
 	}
 	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{
-		drawScale = new Vector2(-0.2f, 1.02f);
+		drawScale = new Vector2(-0.1f, 1.02f);
 		glowTexture = ModAsset.Acytaea_sword_Item_glow.Value;
 		base.DrawSelf(spriteBatch, lightColor, diagonal, drawScale, glowTexture);
 	}
@@ -192,9 +192,9 @@ public class AcytaeaSword_projectile : MeleeProj
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		for (int x = 0; x < 15; x++)
+		for (int x = 0; x < 25; x++)
 		{
-			Vector2 newVec = new Vector2(0, Main.rand.NextFloat(18f, 30f)).RotatedByRandom(6.238f);
+			Vector2 newVec = new Vector2(0, Main.rand.NextFloat(4f, 12f)).RotatedByRandom(6.238f);
 			var positionVFX = target.Center + newVec * Main.rand.NextFloat(0.7f, 0.9f);
 
 			var acytaeaFlame = new AcytaeaFlameDust
