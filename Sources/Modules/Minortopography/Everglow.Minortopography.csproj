@@ -1,6 +1,3 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <PackageReference Update="Solaestas.tModLoader.ModBuilder" Version="1.1.2" />
-  </ItemGroup>
 </Project>
     

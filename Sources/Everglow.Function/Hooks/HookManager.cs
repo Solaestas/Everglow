@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Everglow.Commons.Enums;
 using Everglow.Commons.Interfaces;
 using MonoMod.Cil;
@@ -55,12 +56,12 @@ public class OnHookHandler : IHookHandler
 	public string Name => Hook.Target.Name;
 }
 
-public record HookHandler(CodeLayer Layer, dynamic Hook, string Name) : IHookHandler
+public record HookHandler(CodeLayer Layer, Delegate Hook, string Name) : IHookHandler
 {
 	public bool Enable { get; set; } = true;
 }
 
-public class HookManager : ModSystem 
+public class HookManager : ModSystem
 {
 	private TrueHookManager _manager;
 
@@ -83,7 +84,8 @@ public class HookManager : ModSystem
 		{
 			try
 			{
-				handler.Hook.Invoke();
+				var hook = (Action)handler.Hook;
+				hook.Invoke();
 			}
 			catch (Exception ex)
 			{
@@ -181,18 +183,6 @@ public class HookManager : ModSystem
 		Invoke(CodeLayer.PostDrawPlayers);
 	}
 
-	[Obsolete]
-	private void Main_DoDraw(ILContext il)
-	{
-		var cursor = new ILCursor(il);
-		if (!cursor.TryGotoNext(MoveType.Before, ins => ins.MatchLdcI4(36)))
-		{
-			throw new Exception("Main_DoDraw_NotFound_1");
-		}
-
-		cursor.EmitDelegate(() => Invoke(CodeLayer.PostDrawFilter));
-	}
-
 	private void Main_DoDraw_WallsTilesNPCs(On_Main.orig_DoDraw_WallsTilesNPCs orig, Main self)
 	{
 		Invoke(CodeLayer.PostDrawBG);
@@ -232,7 +222,8 @@ public class HookManager : ModSystem
 		{
 			try
 			{
-				handler.Hook.Invoke(mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
+				var hook = (Action<Vector2, Vector2, Rectangle?, float>)handler.Hook;
+				hook.Invoke(mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
 			}
 			catch (Exception ex)
 			{
@@ -264,7 +255,8 @@ public class HookManager : ModSystem
 		{
 			try
 			{
-				handler.Hook.Invoke(obj);
+				var hook = (Action<Vector2>)handler.Hook;
+				hook.Invoke(obj);
 			}
 			catch (Exception ex)
 			{
@@ -297,37 +289,36 @@ public class HookManager : ModSystem
 	{
 		public TerrariaFunction disableFlags;
 
-		public Dictionary<CodeLayer, List<HookHandler>> hooks = validLayers.ToDictionary(l => l, l => new List<HookHandler>());
+		public Dictionary<CodeLayer, List<HookHandler>> hooks = requiredHookType.Keys.ToDictionary(l => l, l => new List<HookHandler>());
 
-		private static readonly CodeLayer[] validLayers = new CodeLayer[]
+		private static readonly Dictionary<CodeLayer, Type> requiredHookType = new Dictionary<CodeLayer, Type>
 		{
-			CodeLayer.PreDrawFilter,
-			CodeLayer.PostDrawTiles,
-			CodeLayer.PostDrawProjectiles,
-			CodeLayer.PostDrawDusts,
-			CodeLayer.PostDrawNPCs,
-			CodeLayer.PostDrawPlayers,
-			CodeLayer.PostDrawMapIcons,
-			CodeLayer.PostDrawBG,
-
-			CodeLayer.PostUpdateEverything,
-			CodeLayer.PostUpdateProjectiles,
-			CodeLayer.PostUpdatePlayers,
-			CodeLayer.PostUpdateNPCs,
-			CodeLayer.PostUpdateDusts,
-			CodeLayer.PostUpdateInvasions,
-
-			CodeLayer.PostEnterWorld_Single,
-			CodeLayer.PostExitWorld_Single,
-			CodeLayer.PostEnterWorld_Server,
-			CodeLayer.ResolutionChanged,
+			[CodeLayer.PreDrawFilter] = typeof(Action),
+			[CodeLayer.PostDrawTiles] = typeof(Action),
+			[CodeLayer.PostDrawProjectiles] = typeof(Action),
+			[CodeLayer.PostDrawDusts] = typeof(Action),
+			[CodeLayer.PostDrawNPCs] = typeof(Action),
+			[CodeLayer.PostDrawPlayers] = typeof(Action),
+			[CodeLayer.PostDrawMapIcons] = typeof(Action<Vector2, Vector2, Rectangle?, float>),
+			[CodeLayer.PostDrawBG] = typeof(Action),
+			[CodeLayer.PostUpdateEverything] = typeof(Action),
+			[CodeLayer.PostUpdateProjectiles] = typeof(Action),
+			[CodeLayer.PostUpdatePlayers] = typeof(Action),
+			[CodeLayer.PostUpdateNPCs] = typeof(Action),
+			[CodeLayer.PostUpdateDusts] = typeof(Action),
+			[CodeLayer.PostUpdateInvasions] = typeof(Action),
+			[CodeLayer.PostEnterWorld_Single] = typeof(Action),
+			[CodeLayer.PostExitWorld_Single] = typeof(Action),
+			[CodeLayer.PostEnterWorld_Server] = typeof(Action),
+			[CodeLayer.ResolutionChanged] = typeof(Action<Vector2>),
 		};
 
 		private List<IDisposable> monoHooks = new();
 
-		public IHookHandler AddHook(CodeLayer layer, Delegate hook, string name = default)
+		public IHookHandler AddHook<T>(CodeLayer layer, T hook, [CallerMemberName]string name = default, [CallerFilePath]string file = default) where T : Delegate
 		{
-			var handler = new HookHandler(layer, hook, name ?? string.Empty);
+			Debug.Assert(typeof(T).IsAssignableTo(requiredHookType[layer]), $"Hook type not match, {Wrapper.Create(requiredHookType[layer])} != {Wrapper.Create(typeof(T))}");
+			var handler = new HookHandler(layer, hook, $"{Path.GetFileNameWithoutExtension(file)}.{name}.{layer}");
 			hooks[layer].Add(handler);
 			return handler;
 		}
