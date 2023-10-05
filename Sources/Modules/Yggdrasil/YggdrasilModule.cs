@@ -37,7 +37,7 @@ internal class YggdrasilModule : EverglowModule
 		orig(ref stopEvents);
 		if(!stopEvents)
 		{
-			OnStartNight();
+			OnStartNight?.Invoke();
 		}
 	}
 
@@ -46,7 +46,7 @@ internal class YggdrasilModule : EverglowModule
 		orig(ref stopEvents);
 		if(!stopEvents)
 		{
-			OnStartDay();
+			OnStartDay?.Invoke();
 		}
 	}
 	private bool WorldGen_oceanDepths(On_WorldGen.orig_oceanDepths orig, int x, int y)

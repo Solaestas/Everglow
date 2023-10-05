@@ -192,7 +192,7 @@ public class YggdrasilTownGeneration
 				{
 					if (!tile.HasTile)
 					{
-						tile.TileType = (ushort)ModContent.TileType<DarkMud>();
+						tile.TileType = (ushort)ModContent.TileType<DarkSludge>();
 						tile.HasTile = true;
 					}
 				}

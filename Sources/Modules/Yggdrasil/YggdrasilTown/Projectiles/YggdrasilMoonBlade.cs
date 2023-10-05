@@ -136,7 +136,7 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 	{
 		return base.Colliding(projHitbox, targetHitbox);
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<YggdrasilMoonBladeHit>(), 0, 0, -1, 20, startVelocity.ToRotation());
 	}

@@ -240,7 +240,7 @@ public class YggdrasilWorldGeneration : ModSystem
 
 							if (pixel.R == 31 && pixel.G == 26 && pixel.B == 45)//黑淤泥
 							{
-								tile.TileType = (ushort)ModContent.TileType<DarkMud>();
+								tile.TileType = (ushort)ModContent.TileType<DarkSludge>();
 								tile.HasTile = true;
 							}
 

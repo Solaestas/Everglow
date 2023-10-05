@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
@@ -19,8 +20,7 @@ public class StoneScaleWood : ModTile
 		Main.tileBlockLight[Type] = true;
 		Main.tileShine2[Type] = false;
 
-		Main.ugBackTransition = 1000;
-		DustType = DustID.BorealWood;
+		DustType = ModContent.DustType<StoneDragonScaleWoodDust>();
 		MinPick = 150;
 		HitSound = SoundID.Dig;
 
