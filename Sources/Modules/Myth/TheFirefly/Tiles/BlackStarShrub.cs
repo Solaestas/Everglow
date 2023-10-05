@@ -100,7 +100,7 @@ public class BlackStarShrub : ModTile, ITileFluentlyDrawn
 		ushort type = tile.TileType;
 		
 		// 回声涂料
-		if (!tileDrawing.IsVisible(tile)) return;
+		if (!TileDrawing.IsVisible(tile)) return;
 		
 		int paint = Main.tile[paintPos].TileColor;
 		int textureStyle = tile.TileFrameX + frame.Y * 50;

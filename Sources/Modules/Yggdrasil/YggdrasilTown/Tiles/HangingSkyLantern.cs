@@ -100,7 +100,7 @@ public class HangingSkyLantern : ModTile, ITileFluentlyDrawn
 	/// <param name="tileDrawing">原版TileDrawing类的实例，有很多好用的方法（各个卷筒纸共享一个值）</param>
 	private void DrawLanternPiece(int frameX, int frameHeight, float swayCoefficient, int offsetX, Point tilePos, Point paintPos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
 		// 回声涂料	
-		if (!tileDrawing.IsVisible(Main.tile[paintPos])) return;	
+		if (!TileDrawing.IsVisible(Main.tile[paintPos])) return;	
 		
 		var tile = Main.tile[tilePos];
 		ushort type = tile.TileType;
