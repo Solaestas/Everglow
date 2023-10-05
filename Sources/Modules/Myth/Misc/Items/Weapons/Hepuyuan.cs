@@ -11,7 +11,7 @@ public class Hepuyuan : ModItem
 	public override void SetDefaults()
 	{
 		Item.rare = ItemRarityID.Purple;
-		Item.value = Item.sellPrice(silver: 50);
+		Item.value = 648000;
 		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.useAnimation = 18;
 		Item.useTime = 18;
