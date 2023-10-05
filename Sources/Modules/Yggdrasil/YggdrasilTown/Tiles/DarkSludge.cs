@@ -2,7 +2,7 @@ using Terraria;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
-public class DarkMud : ModTile
+public class DarkSludge : ModTile
 {
 	public override void PostSetDefaults()
 	{

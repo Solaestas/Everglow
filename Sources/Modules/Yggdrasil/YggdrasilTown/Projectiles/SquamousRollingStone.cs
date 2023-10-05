@@ -110,7 +110,7 @@ public class SquamousRollingStone : ModProjectile
 		}
 		return false;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		for (int x = 0; x < 16; x++)
 		{

@@ -70,9 +70,10 @@ public class DragonScaleHammerProj : MeleeProj
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
-	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, string GlowPath, double DrawRotation)
+	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{
-		base.DrawSelf(spriteBatch, lightColor, 124, 80, 0.82f, "");
+		drawScale = new Vector2(-0.1f, 1.4f);
+		base.DrawSelf(spriteBatch, lightColor, diagonal, drawScale, glowTexture);
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
