@@ -120,8 +120,8 @@ public class TuskKillEffect : ModNPC
 			ef.Parameters["uTransform"].SetValue(model * projection);
 			ef.Parameters["uTime"].SetValue(0);
 			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapBloodTusk").Value;
-			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Myth/Acytaea/Projectiles/Metero").Value;
-			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Myth/Acytaea/Projectiles/Metero").Value;
+			Main.graphics.GraphicsDevice.Textures[1] = Commons.ModAsset.Metero.Value;
+			Main.graphics.GraphicsDevice.Textures[2] = Commons.ModAsset.Metero.Value;
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;

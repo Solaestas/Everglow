@@ -29,39 +29,6 @@ public class Acytaea_sword_Item : ModItem
 		Item.useAnimation = (int)(18f / player.meleeSpeed);
 		return player.ownedProjectileCounts[Item.shoot] < 1;
 	}
-	bool CanDown;
-	public override void HoldItemFrame(Player player)
-	{
-		if (player.mount.Active)
-		{
-			CanDown = false;
-			return;
-		}
-		for (int h = 0; h < 21; h++)
-		{
-			Vector2 pos = player.Center + new Vector2(0, h * 16 * player.gravDir);
-			Vector2 coord = pos / 16f;
-			Tile tile = Main.tile[(int)coord.X, (int)coord.Y];
-			if (TileID.Sets.Platforms[tile.TileType] || Collision.SolidCollision(pos, 1, 1))
-			{
-				CanDown = false;
-				return;
-			}
-		}
-		for (int h = 21; h < 120; h++)
-		{
-			Vector2 pos = player.Center + new Vector2(0, h * 16 * player.gravDir);
-			Vector2 coord = pos / 16f;
-			Tile tile = Main.tile[(int)coord.X, (int)coord.Y];
-			if (TileID.Sets.Platforms[tile.TileType] || Collision.SolidCollision(pos, 1, 1))
-			{
-				CanDown = true;
-				return;
-			}
-		}
-		CanDown = false;
-		base.HoldItemFrame(player);
-	}
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
 

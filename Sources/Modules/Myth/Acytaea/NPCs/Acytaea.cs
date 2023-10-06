@@ -1,6 +1,9 @@
 using Everglow.Commons.Coroutines;
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Skeleton2D;
 using Everglow.Myth.Acytaea.Projectiles;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.Localization;
@@ -525,82 +528,7 @@ public class Acytaea : VisualNPC
 		}
 		else
 		{
-			//TODO Hjson
-			//if (Language.ActiveCulture.Name == "zh-Hans")
-			//{
-			//    IList<string> list = new List<string>
-			//    {
-			//        //list.Add("用诡药和大理石块可以合成封印碎片,把它放进大理石神庙碎片堆");
-			//        "向日葵也可以制作武器",
-			//        "游戏前期弹弓很实用",
-			//        //list.Add("想做手机却不想钓鱼?去打封魔石瓶,里面封印的力量和一次上古航海有关");
-			//        //list.Add("传说云间生长着一株光之花");
-			//        "棍棒可以解决绝大多数近身威胁",
-			//        "闪避伤害后,仍然会获得无敌时间",
-			//        "月总后霜月和南瓜月会加强,期间掉落的魂是个好东西",
-			//        "空中的飞龙有极低概率掉落雷之花"
-			//    };
-			//    //list.Add("激光剑是晶光剑的升级版,像我一样,又厉害又好看");
 
-			//    if (WorldGen.crimson)
-			//    {
-			//        list.Add("猩红之地上高耸起不寻常的活体组织。解开那里的谜题,我有点好奇那\"大牙齿\"的力量还剩多少");
-			//        list.Add("在世界右半边地下的中间有一块奇怪地形，一只以灵魂为食的虫子栖息在那儿。去把它的茧打破看看");
-			//    }
-			//    else
-			//    {
-			//        list.Add("在腐化之地的下方有一块不会蔓延的奇怪地形,这是因为那里的灵魂几乎都被一只大肉虫吸收了。现在它应该在茧里呆着,去把茧打破看看");//fix:"在腐化之地的下方有一块不会蔓延的奇怪地形，这是因为那里的灵魂几乎都被一只大肉虫吸收了。现在它应该在茧里呆着，去把茧打破看看"
-			//        list.Add("地表某处高耸着一块由血肉构成的地形,我记得那是一颗活着的牙齿导致的。解开那里的谜题看看会发生什么");
-			//    }
-			//    list.Add("有时我也想让一些有趣的生物给我按摩,你打Boss的时候可以叫上我");
-
-			//    list.Add("我用强大的翼肌来振翅,比你们那些用飞翔之魂驱动的冒牌货好多了");
-			//    list.Add("头上的角?撞到会疼,烦死了");
-			//    list.Add("问我多高吗,算上角刚好一米八");
-			//    list.Add("头发?天生就是这种颜色的吖");
-			//    list.Add("我从没有被任何力量打败过,被我斩去的神明不下十个,你就是个普通的人类罢了");
-			//    list.Add("最疯狂的一件事?我大概...屠灭了一整个城市,只用了一分钟");
-			//    list.Add("不准问我年龄!生日的话,嗯,可以,4月19日");
-			//    list.Add("克苏鲁？它好丑,听说你们有人被它丑疯了？");
-			//    list.Add("你应当感到荣幸，我可是你们口中的\"永恒\"");
-			//    list.Add("我身上是有鳞片的,只不过我可以控制它们收起来");
-			//    Main.npcChatText = list[Main.rand.Next(list.Count)];
-			//}
-			//else
-			//{
-			//    IList<string> list = new List<string>
-			//    {
-			//        "Sunflower can be used to craft weapons",
-			//        "Slingshots are pretty useful in the early gameplay",
-			//        "Clubs can deal with most melee threats",
-			//        "You'll still have immunity frames after dodging",
-			//        "Wyverns rarely drop Flower of Lightning"
-			//    };
-
-			//    if (WorldGen.crimson)
-			//    {
-			//        list.Add("An unusual living tissue rised in The Crimson. Solve the puzzle there, I wonder how much power left for that \"Giant Tooth\"");
-			//        list.Add("There's a strange biome lies in right underground part of the world, a giant insect inhabits there. Break its cocoon and see what will happen");
-			//    }
-			//    else
-			//    {
-			//        list.Add("There's a strange non-spreading biome under The Corruption, that's because a giant larva absorbed most soul there. Now it should be staying in its cocoon, go and break the cocoon");
-			//        list.Add("A biome made of flesh rised somewhere on the surface. I remember it's due to a living tooth. Solve the puzzle there and see what will happen");
-			//    }
-			//    list.Add("Sometimes I want interesting creatures to give me massages, you can take me when fighting the Bosses");
-
-			//    list.Add("I strike my wings by powerful wing muscles, much better than your imitations driven by Soul of Flight");
-			//    list.Add("The horns? It hurts when hit, so sick");
-			//    list.Add("How tall I am? Exactly 1.8m including the horns");
-			//    list.Add("My hair? The color is natural!");
-			//    list.Add("I've never been defeated, more than ten gods I've slayed, you're nobody");
-			//    list.Add("The most insane thing I've done? Well...destroying a city, in ten minutes");
-			//    list.Add("Never ask about my age!Birthday? Can, April 19th");
-			//    list.Add("Cthulu...so ugly, I heard that some of you had gone mad because of its face");
-			//    list.Add("You should feel honored, I'm who you say \"eternal\"");
-			//    list.Add("I do have scales, but I can hide them");
-			//    Main.npcChatText = list[Main.rand.Next(list.Count)];
-			//}
 		}
 	}
 
@@ -620,15 +548,15 @@ public class Acytaea : VisualNPC
 	{
 		for (int d = 0; d < Main.projectile.Length; d++)
 		{
-			if (Main.projectile[d].type == ModContent.ProjectileType<AcytaeaMagicBook>())
+			if (Main.projectile[d].type == ModContent.ProjectileType<AcytaeaSword_projectile_TownNPC>())
 				return;
 		}
-		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaMagicBook>(), 0, 1, Main.myPlayer);
+		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaSword_projectile_TownNPC>(), 50, 6, Main.myPlayer, NPC.whoAmI);
 	}
 
 	public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
 	{
-		projType = ModContent.ProjectileType<AcytaeaMagicBook>();
+		projType = ModContent.ProjectileType<AcytaeaSword_projectile_TownNPC>();
 		attackDelay = 60;
 	}
 

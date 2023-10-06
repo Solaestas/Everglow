@@ -1945,17 +1945,6 @@ public class BloodTusk : ModNPC
 							Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskHang").Value;
 							Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 							Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk1.ToArray(), 0, Tusk1.Count / 3);
-							if (!Main.gamePaused)
-							{
-								for (int j = 0; j < Main.player.Length; j++)
-								{
-									if (!Main.player[j].dead)
-									{
-										if ((Main.player[j].Center - (Mouth1[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL1[i]))).Length() < 30)
-											Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
-									}
-								}
-							}
 							Main.spriteBatch.End();
 							Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 						}
@@ -1973,17 +1962,6 @@ public class BloodTusk : ModNPC
 							Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskHang").Value;
 							Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 							Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk1.ToArray(), 0, Tusk1.Count / 3);
-							if (!Main.gamePaused)
-							{
-								for (int j = 0; j < Main.player.Length; j++)
-								{
-									if (!Main.player[j].dead)
-									{
-										if ((Main.player[j].Center - (Mouth1[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL1[i]))).Length() < 30)
-											Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
-									}
-								}
-							}
 							Main.spriteBatch.End();
 							Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 						}
@@ -2021,17 +1999,6 @@ public class BloodTusk : ModNPC
 							Texture2D t2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskHang").Value;
 							Main.graphics.GraphicsDevice.Textures[0] = t2;//GlodenBloodScaleMirror
 							Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk2.ToArray(), 0, Tusk2.Count / 3);
-							if (!Main.gamePaused)
-							{
-								for (int j = 0; j < Main.player.Length; j++)
-								{
-									if (!Main.player[j].dead)
-									{
-										if ((Main.player[j].Center - (Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]))).Length() < 30)
-											Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
-									}
-								}
-							}
 							Main.spriteBatch.End();
 							Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 						}
@@ -2049,17 +2016,6 @@ public class BloodTusk : ModNPC
 							Texture2D t2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskHang").Value;
 							Main.graphics.GraphicsDevice.Textures[0] = t2;//GlodenBloodScaleMirror
 							Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk2.ToArray(), 0, Tusk2.Count / 3);
-							if (!Main.gamePaused)
-							{
-								for (int j = 0; j < Main.player.Length; j++)
-								{
-									if (!Main.player[j].dead)
-									{
-										if ((Main.player[j].Center - (Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]))).Length() < 30)
-											Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
-									}
-								}
-							}
 							Main.spriteBatch.End();
 							Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 						}

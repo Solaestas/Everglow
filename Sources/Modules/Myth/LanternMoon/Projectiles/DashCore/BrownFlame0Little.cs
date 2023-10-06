@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Acytaea.Projectiles;
+using Everglow.Myth.Acytaea.Projectiles;
 using Everglow.Myth.LanternMoon.Buffs;
 using Terraria;
 
@@ -40,20 +40,6 @@ class BrownFlame0Little : ModProjectile
 		Lighting.AddLight(Projectile.Center, (byte)(color0.R * ka) / 300f, (byte)(color0.G * ka) / 300f, (byte)(color0.B * ka) / 300f);
 		if (Projectile.timeLeft < 60)
 			Projectile.scale *= 0.97f;
-		for (int j = 0; j < Main.player.Length; j++)
-		{
-			if (Main.player[j].active)
-			{
-				if (!Main.player[j].HasBuff(ModContent.BuffType<BrownImmune>()))
-				{
-					if (!Main.player[j].dead)
-					{
-						if ((Main.player[j].Center - Projectile.Center).Length() < 24)
-							Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Projectile.damage, 0, j, 0, 0);
-					}
-				}
-			}
-		}
 		color0.R = (byte)(color0.R * 0.94f + Aimcolor.R * 0.06f);
 		color0.G = (byte)(color0.G * 0.94f + Aimcolor.G * 0.06f);
 		color0.B = (byte)(color0.B * 0.94f + Aimcolor.B * 0.06f);
@@ -124,7 +110,7 @@ class BrownFlame0Little : ModProjectile
 				Vx.Add(bars[i + 3]);
 			}
 		}
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/DashCore/MeteroTrail").Value;
+		Texture2D t = Commons.ModAsset.Metero.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 

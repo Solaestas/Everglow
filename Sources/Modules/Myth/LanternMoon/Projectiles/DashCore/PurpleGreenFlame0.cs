@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 namespace Everglow.Myth.LanternMoon.Projectiles.DashCore;
 
 class PurpleGreenFlame0 : ModProjectile
@@ -37,34 +37,6 @@ class PurpleGreenFlame0 : ModProjectile
 		Lighting.AddLight(Projectile.Center, (byte)(color0.R * ka) / 100f, (byte)(color0.G * ka) / 100f, (byte)(color0.B * ka) / 100f);
 		if (Projectile.timeLeft < 60)
 			Projectile.scale *= 0.97f;
-		for (int j = 0; j < Main.player.Length; j++)
-		{
-			if (Main.player[j].active)
-			{
-				if (Projectile.timeLeft < 120)
-				{
-					if (!Main.player[j].HasBuff(ModContent.BuffType<Buffs.GreenImmune>()))
-					{
-						if (!Main.player[j].dead)
-						{
-							if ((Main.player[j].Center - Projectile.Center).Length() < 24)
-								Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Acytaea.Projectiles.playerHit>(), Projectile.damage, 0, j, 0, 0);
-						}
-					}
-				}
-				if (Projectile.timeLeft > 100)
-				{
-					if (!Main.player[j].HasBuff(ModContent.BuffType<Buffs.PurpleImmune>()))
-					{
-						if (!Main.player[j].dead)
-						{
-							if ((Main.player[j].Center - Projectile.Center).Length() < 24)
-								Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Acytaea.Projectiles.playerHit>(), Projectile.damage, 0, j, 0, 0);
-						}
-					}
-				}
-			}
-		}
 		if (Projectile.timeLeft < 120)
 			Aimcolor = new Color(0, 255, 17);
 		color0.R = (byte)(color0.R * 0.94f + Aimcolor.R * 0.06f);
@@ -136,7 +108,7 @@ class PurpleGreenFlame0 : ModProjectile
 				Vx.Add(bars[i + 3]);
 			}
 		}
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/DashCore/MeteroTrail").Value;
+		Texture2D t = Commons.ModAsset.Metero.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 

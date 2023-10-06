@@ -98,24 +98,6 @@ public class HugeMouth : ModNPC
 		Main.spriteBatch.Draw(t1, NPC.Center - Main.screenPosition, null, color, NPC.rotation + Big - (float)Math.PI / 2f, new Vector2(16, t1.Height / 2f), 1f, SpriteEffects.None, 0f);
 		Texture2D t2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/HugeMouthUp").Value;
 		Main.spriteBatch.Draw(t2, NPC.Center - Main.screenPosition, null, color, NPC.rotation - Big - (float)Math.PI / 2f, new Vector2(16, t1.Height / 2f), 1f, SpriteEffects.None, 0f);
-		if (!Main.gamePaused)
-		{
-			for (int x = 0; x < 440; x += 20)
-			{
-				if (Main.LocalPlayer.active)
-				{
-					if (!Main.LocalPlayer.dead)
-					{
-						if ((Main.LocalPlayer.Center - NPC.Center + new Vector2(-x, 0).RotatedBy(NPC.rotation - Big - (float)Math.PI / 2f)).Length() < 30)
-							// 弹幕
-							Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Dam / 8, 0, 0, 0, 0);
-						if ((Main.LocalPlayer.Center - NPC.Center + new Vector2(-x, 0).RotatedBy(NPC.rotation + Big - (float)Math.PI / 2f)).Length() < 30)
-							// 弹幕
-							Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Dam / 8, 0, 0, 0, 0);
-					}
-				}
-			}
-		}
 		return false;
 	}
 }
