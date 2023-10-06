@@ -10,7 +10,7 @@ internal class YggdrasilWorld : Subworld
 	public override int Width => 1200;
 	public override int Height => 12000;
 	public override bool NormalUpdates => true;
-	public override bool ShouldSave => true;
+	public override bool ShouldSave => false;//Only in debug mode,when published,turn true.
 	public override List<GenPass> Tasks => new List<GenPass>()
 	{
 		new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass()
@@ -65,39 +65,7 @@ class YggdrasilWorldSystem : ModSystem
 	{
 		YggdrasilWorld.YggdrasilTimer++;
 		base.PostUpdateEverything();
-		//if(Main.mouseLeft && Main.mouseLeftRelease)
-		//{
-		//	Subworld sWorld = SubworldSystem.Current;
-		//	if (sWorld != null)
-		//	{
-		//		YggdrasilWorld yWorld = sWorld as YggdrasilWorld;
-		//		if (yWorld != null)
-		//		{
-		//			Main.NewText(Main.worldPathName);
-		//		}
-		//	}
-		//}
 	}
-	//public override void LoadWorldData(TagCompound tag)
-	//{
-	//	Subworld sWorld = SubworldSystem.Current;
-	//	if (sWorld is YggdrasilWorld)
-	//	{
-	//		YggdrasilWorld yWorld = sWorld as YggdrasilWorld;
-	//		tag.TryGet("scocCenterX", out yWorld.StoneCageOfChallengesCenter.X);
-	//		tag.TryGet("scocCenterY", out yWorld.StoneCageOfChallengesCenter.Y);
-	//	}
-	//}
-	//public override void SaveWorldData(TagCompound tag)
-	//{
-	//	Subworld sWorld = SubworldSystem.Current;
-	//	if (sWorld is YggdrasilWorld)
-	//	{
-	//		YggdrasilWorld yWorld = sWorld as YggdrasilWorld;
-	//		tag["scocCenterX"] = yWorld.StoneCageOfChallengesCenter.X;
-	//		tag["scocCenterY"] = yWorld.StoneCageOfChallengesCenter.Y;
-	//	}
-	//}
 }
 
 
