@@ -1,3 +1,4 @@
+using System;
 using Everglow.Commons.TileHelper;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -82,11 +83,13 @@ internal class SightOfTileUI : ModSystem
 
 	private UICircle circle0 = new(0f, Vector2.Zero, ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value, ModContent.Request<Texture2D>("Everglow/ZY/Items/InTile").Value);
 	private UICircle circle1 = new(0f, Vector2.Zero, ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value, ModContent.Request<Texture2D>("Everglow/ZY/Items/OutTile").Value);
+	private UICircle circle2 = new(0f, Vector2.Zero, ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value, ModContent.Request<Texture2D>("Everglow/ZY/Items/HorizontalFlip").Value);
 	public Vector2 DrawCenter;
 	private int animationTimer = 0;
 	public bool EnableMapIOUI = false;
 	public bool InTile = true;
 	public bool OutTile = true;
+	public bool HorizontalFlip = false;
 	public List<string> fileName = new();
 	public string OutFileName;
 
@@ -118,15 +121,21 @@ internal class SightOfTileUI : ModSystem
 		{
 			circle0.contain = ModContent.Request<Texture2D>("Everglow/ZY/Items/InTile").Value;
 			circle1.contain = ModContent.Request<Texture2D>("Everglow/ZY/Items/OutTile").Value;
+			circle2.contain = ModContent.Request<Texture2D>("Everglow/ZY/Items/HorizontalFlip").Value;
+			if (HorizontalFlip == true)
+			{
+				circle2.contain = ModContent.Request<Texture2D>("Everglow/ZY/Items/HorizontalFlip_On").Value;
+			}
 			UpdateAndDraw(circle0, 0);
 			UpdateAndDraw(circle1, 1);
+			UpdateAndDraw(circle2, 2);
 		}
 		base.PostDrawInterface(spriteBatch);
 	}
 
 	public void UpdateAndDraw(UICircle c0, int Count)
 	{
-		c0.AddCenter = new Vector2(0, animationTimer * 1.0f).RotatedBy(animationTimer / 60d * Math.PI + Count * Math.PI);
+		c0.AddCenter = new Vector2(0, animationTimer * 1.0f).RotatedBy(animationTimer / 60d * Math.PI + Count / 1.5 * Math.PI);
 		if (animationTimer < 30)
 		{
 			c0.Size = animationTimer / 30f;
@@ -174,6 +183,22 @@ internal class SightOfTileUI : ModSystem
 					{
 						Directory.CreateDirectory(rootpath);
 					}
+				}
+				if (Count == 2)
+				{
+					HorizontalFlip = !HorizontalFlip;
+					SoundEngine.PlaySound(SoundID.MenuTick);
+				}
+			}
+			if (Count == 2)
+			{
+				if(!HorizontalFlip)
+				{
+					Main.instance.MouseText("HorizontalFlip : Off");
+				}
+				else
+				{
+					Main.instance.MouseText("HorizontalFlip : On");
 				}
 			}
 		}
@@ -273,6 +298,7 @@ internal class SightOfTileUI : ModSystem
 		DrawCenter = Main.MouseScreen / Main.UIScale;
 		circle0.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
 		circle1.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
+		circle2.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
 		InTile = false;
 		OutTile = false;
 		EnableMapIOUI = true;
@@ -282,6 +308,7 @@ internal class SightOfTileUI : ModSystem
 	{
 		circle0.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
 		circle1.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
+		circle2.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
 		EnableMapIOUI = false;
 	}
 
