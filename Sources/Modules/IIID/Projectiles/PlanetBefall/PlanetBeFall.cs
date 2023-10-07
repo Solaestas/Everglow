@@ -228,7 +228,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 
 			ArtParameters artParameters = new ArtParameters
 			{
-				EnableOuterEdge = false
+				EnableOuterEdge = true
 			};
 			modelPipeline.BeginCapture(viewProjectionParams, bloom, artParameters);
 			{
