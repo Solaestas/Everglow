@@ -4,11 +4,28 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 {
 	public class GroundLayerManager : ModSystem
 	{
+		static GroundLayerManager()
+		{
+			On_Main.DoDraw_WallsTilesNPCs += On_Main_DoDraw_WallsTilesNPCs;
+			On_Main.DrawLiquid += On_Main_DrawLiquid;
+		}
+		private static void On_Main_DrawLiquid(On_Main.orig_DrawLiquid orig, Main self, bool bg, int waterStyle, float Alpha, bool drawSinglePassLiquids)
+		{
+			orig(self, bg, waterStyle, Alpha, drawSinglePassLiquids);
+			Instance.DrawForegroundLayers(Main.spriteBatch);
+		}
+		private static void On_Main_DoDraw_WallsTilesNPCs(On_Main.orig_DoDraw_WallsTilesNPCs orig, Main self)
+		{
+			Instance.SetCameraPos(new(Main.LocalPlayer.Center, 1600));
+			Instance.DrawBackgroundLayers(Main.spriteBatch);
+			orig(self);
+		}
 		public static GroundLayerManager Instance => ModContent.GetInstance<GroundLayerManager>();
 		StructCollection<Layer> layerCollection = new();
 		Vector3 CameraPos;
 		public bool WaitLoadTexture = false;
 		Dictionary<string, int> layerMap = new();
+		bool needResort;
 		public bool AddLayer(string layerName, string layerTexturePath, Vector3 layerPos)
 		{
 			if (layerMap.ContainsKey(layerName))
@@ -19,6 +36,7 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 			if (layerCollection.Add(layer))
 			{
 				layerMap[layerName] = layer.UniqueID;
+				needResort = true;
 				return true;
 			}
 			return false;
@@ -30,6 +48,11 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 				return false;
 			}
 			return layerCollection.Remove(id);
+		}
+		public void Clear()
+		{
+			layerMap.Clear();
+			layerCollection.Clear();
 		}
 		public bool GetLayer(string layerName, ref Layer layer)
 		{
@@ -50,10 +73,19 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 			}
 			CameraPos = cameraPos;
 		}
+		private void Resort()
+		{
+			if(!needResort)
+			{
+				return;
+			}
+			layerCollection.Sort((i1, i2) => i1.Position.Z.CompareTo(i2.Position.Z));
+			needResort = false;
+		}
 		public void DrawForegroundLayers(SpriteBatch sprite)
 		{
+			Resort();
 			Layer[] layers = layerCollection.GetUpdateElements();
-			Array.Sort(layers, (l1, l2) => l1.Position.Z.CompareTo(l2.Position.Z));
 			for (int i = 0; i < layers.Length; i++)
 			{
 				Layer drawLayer = layers[i];
@@ -94,13 +126,13 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 				sprite.Draw(texture,
 					new Rectangle((int)(r4.X - Main.screenPosition.X), (int)(r4.Y - Main.screenPosition.Y), r4.Width, r4.Height),
 					new Rectangle((int)(r3.X - drawLayer.Position.X), (int)(r3.Y - drawLayer.Position.Y), r3.Width, r3.Height),
-					Color.White with { A = (byte)(r4.Intersects(Main.LocalPlayer.getRect()) ? 63 : 255) });
+					Color.White);
 			}
 		}
 		public void DrawBackgroundLayers(SpriteBatch sprite)
 		{
+			Resort();
 			Layer[] layers = layerCollection.GetUpdateElements();
-			Array.Sort(layers, (l1, l2) => l1.Position.Z.CompareTo(l2.Position.Z));
 			for (int i = 0; i < layers.Length; i++)
 			{
 				Layer drawLayer = layers[i];
@@ -137,27 +169,33 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 				sprite.Draw(texture,
 					new Rectangle((int)(r4.X - Main.screenPosition.X), (int)(r4.Y - Main.screenPosition.Y), r4.Width, r4.Height),
 					new Rectangle((int)(r3.X - drawLayer.Position.X), (int)(r3.Y - drawLayer.Position.Y), r3.Width, r3.Height),
-					Color.White with { A = (byte)(r4.Intersects(Main.LocalPlayer.getRect()) ? 63 : 255) });
+					Color.White);
 			}
-		}
-		public override void PostDrawTiles()
-		{
-			SetCameraPos(new(Main.LocalPlayer.Center, 1600));
-			DrawForegroundLayers(Main.spriteBatch);
 		}
 		public override void OnWorldUnload()
 		{
-			layerMap.Clear();
-			layerCollection.Clear();
+			Clear();
 		}
 	}
-	class TestPlayer : ModPlayer
+	class TestCommand : ModCommand
 	{
-		public override void OnEnterWorld()
+		public override string Command => "Layer";
+
+		public override CommandType Type => CommandType.Chat;
+
+		public override void Action(CommandCaller caller, string input, string[] args)
 		{
-			GroundLayerManager.Instance.AddLayer("Test1", "Everglow/Commons/Textures/Noise_melting", new(Player.Center, 400));
-			GroundLayerManager.Instance.AddLayer("Test2", "Everglow/Commons/Textures/Noise_melting", new(Player.Center, 800));
-			GroundLayerManager.Instance.AddLayer("Test3", "Everglow/Commons/Textures/Noise_melting", new(Player.Center, 1200));
+			if (args.Length == 0 || args[0] == "clear")
+			{
+				GroundLayerManager.Instance.Clear();
+			}
+			else if (args[0] == "new")
+			{
+				for (int i = 0; i < 100; i++)
+				{
+					GroundLayerManager.Instance.AddLayer("Test" + i, "Everglow/Commons/Textures/Noise_melting", new(Main.LocalPlayer.Center + Main.rand.NextFloat(MathHelper.TwoPi).ToRotationVector2() * Main.rand.NextFloat(3200), Main.rand.NextFloat(-1600, 1600)));
+				}
+			}
 		}
 	}
 }
