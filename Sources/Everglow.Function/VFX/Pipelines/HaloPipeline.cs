@@ -15,18 +15,18 @@ public class HaloPipeline : PostPipeline
 	{
 		Ins.MainThread.AddTask(() =>
 		{
-			AllocateRenderTarget();
+			AllocateRenderTarget(Vector2.One);
 		});
-		Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, () =>
+		Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, (Vector2 size) =>
 		{
 			haloScreen?.Dispose();
 			haloScreenSwap?.Dispose();
-			AllocateRenderTarget();
+			AllocateRenderTarget(size);
 		}, "Realloc RenderTarget");
 		effect = ModAsset.SolarHalo;
 	}
 
-	private void AllocateRenderTarget()
+	private void AllocateRenderTarget(Vector2 size)
 	{
 		var gd = Main.instance.GraphicsDevice;
 		haloScreen = new RenderTarget2D(gd, ScreenWidth, ScreenHeight, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);

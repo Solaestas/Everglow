@@ -17,21 +17,21 @@ public class BloomPipeline : PostPipeline
 		blurScreens = new RenderTarget2D[MAX_BLUR_LEVELS];
 		Ins.MainThread.AddTask(() =>
 		{
-			AllocateRenderTarget();
+			AllocateRenderTarget(new Vector2(MaxBlurWidth, MaxBlurHeight));
 		});
-		Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, () =>
+		Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, (Vector2 size) =>
 		{
 			for (int i = 0; i < blurScreens.Length; i++)
 			{
 				blurScreens[i]?.Dispose();
 			}
 			blurScreenSwap?.Dispose();
-			AllocateRenderTarget();
+			AllocateRenderTarget(size);
 		}, "Realloc RenderTarget");
 		effect = ModAsset.Bloom;
 	}
 
-	private void AllocateRenderTarget()
+	private void AllocateRenderTarget(Vector2 size)
 	{
 		var gd = Main.instance.GraphicsDevice;
 		for (int i = 0; i < MAX_BLUR_LEVELS; i++)
