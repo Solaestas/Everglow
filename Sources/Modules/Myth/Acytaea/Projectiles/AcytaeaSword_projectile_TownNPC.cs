@@ -6,6 +6,7 @@ namespace Everglow.Myth.Acytaea.Projectiles;
 
 public class AcytaeaSword_projectile_TownNPC : MeleeProj
 {
+	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
 	public override void SetDef()
 	{
 		Projectile.aiStyle = -1;

@@ -176,7 +176,6 @@ public class Acytaea : VisualNPC
 		if (!player.active || player.dead)
 		{
 			NPC.active = false;
-			NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, NPC.type);
 		}
 		else
 		{
@@ -504,27 +503,8 @@ public class Acytaea : VisualNPC
 	{
 		if (firstButton)
 		{
-			NPC.friendly = false;
-			NPC.aiStyle = -1;
-
-			NPC.lifeMax = 165000;
-			NPC.life = 165000;
-			if (Main.expertMode)
-			{
-				NPC.lifeMax = 275000;
-				NPC.life = 275000;
-			}
-			if (Main.masterMode)
-			{
-				NPC.lifeMax = 385000;
-				NPC.life = 385000;
-			}
-			NPC.boss = true;
-			NPC.localAI[0] = 0;
-			NPC.aiStyle = -1;
-			NPC.width = 40;
-			NPC.height = 56;
-			StartToBeABoss();
+			NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea_Boss>());
+			NPC.active = false;
 		}
 		else
 		{
