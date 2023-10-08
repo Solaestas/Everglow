@@ -10,8 +10,8 @@ namespace Everglow.Commons.VFX;
 
 public class VFXManager : IVFXManager
 {
-	public static readonly CodeLayer[] drawLayers = new CodeLayer[]
-	{
+	public static readonly CodeLayer[] drawLayers =
+	[
 		CodeLayer.PreDrawFilter,
 		CodeLayer.PostDrawProjectiles,
 		CodeLayer.PostDrawTiles,
@@ -19,7 +19,7 @@ public class VFXManager : IVFXManager
 		CodeLayer.PostDrawBG,
 		CodeLayer.PostDrawPlayers,
 		CodeLayer.PostDrawNPCs,
-	};
+	];
 
 	/// <summary>
 	/// 包含uTransform，对s0进行采样的普通Shader
@@ -38,7 +38,7 @@ public class VFXManager : IVFXManager
 	{
 		foreach (var layer in drawLayers)
 		{
-			visuals[layer] = new List<IVisualCollection>();
+			visuals[layer] = [];
 			if (layer is CodeLayer.PostDrawNPCs or CodeLayer.PostDrawBG)
 			{
 				Ins.HookManager.AddHook(layer, () =>
@@ -56,6 +56,7 @@ public class VFXManager : IVFXManager
 			}
 		}
 		hookManager.AddHook(CodeLayer.PostUpdateEverything, Update, "VFX Update");
+		hookManager.AddHook(CodeLayer.PostExitWorld_Single, Clear, "VFX Clear");
 		mainThread.AddTask(() => tempRenderTarget = Ins.RenderTargetPool.GetRenderTarget2D());
 		foreach (var visual in Ins.ModuleManager.CreateInstances<IVisual>())
 		{
