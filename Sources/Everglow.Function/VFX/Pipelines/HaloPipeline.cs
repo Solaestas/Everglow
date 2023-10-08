@@ -7,15 +7,11 @@ public class HaloPipeline : PostPipeline
 	private RenderTarget2D haloScreen;
 	private RenderTarget2D haloScreenSwap;
 
-	private static int ScreenWidth => Main.screenWidth;
-
-	private static int ScreenHeight => Main.screenHeight;
-
 	public override void Load()
 	{
 		Ins.MainThread.AddTask(() =>
 		{
-			AllocateRenderTarget(Vector2.One);
+			AllocateRenderTarget(new Vector2(Main.screenWidth, Main.screenHeight));
 		});
 		Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, (Vector2 size) =>
 		{
@@ -29,8 +25,8 @@ public class HaloPipeline : PostPipeline
 	private void AllocateRenderTarget(Vector2 size)
 	{
 		var gd = Main.instance.GraphicsDevice;
-		haloScreen = new RenderTarget2D(gd, ScreenWidth, ScreenHeight, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
-		haloScreenSwap = new RenderTarget2D(gd, ScreenWidth, ScreenHeight, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
+		haloScreen = new RenderTarget2D(gd, (int)size.X, (int)size.Y, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
+		haloScreenSwap = new RenderTarget2D(gd, (int)size.X, (int)size.Y, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
 	}
 
 	public override void Render(RenderTarget2D rt2D)
