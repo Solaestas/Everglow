@@ -1,6 +1,6 @@
 using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.CustomTiles.DataStructures;
-using Everglow.Commons.CustomTiles.EntityColliding;
+using Everglow.Commons.CustomTiles.EntityCollider;
 using Everglow.Commons.CustomTiles.Tiles;
 using Everglow.Commons.Enums;
 
@@ -18,7 +18,7 @@ public class TileSystem
 
 	private Queue<int> _freeIndices = new Queue<int>();
 
-	private List<CustomTile> _tiles = new();
+	private List<RigidEntity> _tiles = new();
 
 	private int _updateCount = 0;
 
@@ -37,13 +37,13 @@ public class TileSystem
 
 	public static bool Enable { get; private set; }
 
-	public IEnumerable<CustomTile> Tiles => _tiles;
+	public IEnumerable<RigidEntity> Tiles => _tiles;
 
 	/// <summary>
 	/// 增加一个Tile，不会进行联机同步，需要手动发包
 	/// </summary>
 	/// <param name="tile"> </param>
-	public void AddTile(CustomTile tile)
+	public void AddTile(RigidEntity tile)
 	{
 		Enable = true;
 		if (_freeIndices.TryDequeue(out var index))
@@ -67,7 +67,7 @@ public class TileSystem
 		_tiles.Clear();
 	}
 
-	public bool Collision(Collider collider, out CustomTile tile)
+	public bool Collision(Collider collider, out RigidEntity tile)
 	{
 		foreach (var c in _tiles)
 		{
@@ -109,7 +109,7 @@ public class TileSystem
 		}
 	}
 
-	public CustomTile GetTile(int whoAmI) => _tiles[whoAmI];
+	public RigidEntity GetTile(int whoAmI) => _tiles[whoAmI];
 
 	public IEnumerable<T> GetTiles<T>() => _tiles.OfType<T>();
 
@@ -119,20 +119,22 @@ public class TileSystem
 	/// <param name="rect"> </param>
 	/// <param name="velocity"> </param>
 	/// <returns> </returns>
-	public List<(CustomTile tile, Direction info)> MoveCollision(EntityHandler handler, Vector2 move, bool ignorePlats = false)
+	public List<(RigidEntity tile, Direction info)> MoveCollision(IEntityCollider collider, Vector2 move, bool ignorePlats = false)
 	{
-		List<(CustomTile tile, Direction info)> list = new();
-		AABB aabb = handler.HitBox;
+		List<(RigidEntity tile, Direction info)> list = [];
+		AABB aabb = collider.Entity.Hitbox.ToAABB();
 		foreach (var tile in _tiles)
 		{
-			Direction info = tile.MoveCollision(aabb, ref handler.trueVelocity, ref move, ignorePlats);
+			var absoluteVelocity = collider.AbsoluteVelocity;
+			Direction info = tile.MoveCollision(aabb, ref absoluteVelocity, ref move, ignorePlats);
+			collider.AbsoluteVelocity = absoluteVelocity;
 			if (info != Direction.None)
 			{
 				list.Add((tile, info));
 				tile.OnCollision(aabb, info);
 			}
 		}
-		handler.position += Terraria.Collision.TileCollision(handler.position, move, handler.GetEntity().width, handler.GetEntity().height, ignorePlats);
+		collider.Position += Terraria.Collision.TileCollision(collider.Position, move, collider.Entity.width, collider.Entity.height, ignorePlats);
 		return list;
 	}
 
@@ -197,7 +199,7 @@ public class TileSystem
 			{
 				float t = MathHelper.Lerp(0, samples[i], j / 20f);
 				Vector2 p = samplingPoint + t * directionUnit;
-				if (Collision(new CAABB(new AABB(p - Vector2.One, Vector2.One * 2))))
+				if (Collision(Collider.Create(new AABB(p - Vector2.One, Vector2.One * 2))))
 				{
 					samples[i] = t;
 					break;
@@ -210,14 +212,14 @@ public class TileSystem
 	{
 		if (!Enable || !EnableCollisionHook)
 			return orig(Position, Width, Height);
-		return orig(Position, Width, Height) || Collision(new CAABB(new AABB(Position.X, Position.Y, Width, Height)));
+		return orig(Position, Width, Height) || Collision(Collider.Create(new AABB(Position.X, Position.Y, Width, Height)));
 	}
 
 	private bool Collision_SolidCollision_Vector2_int_int_bool(On_Collision.orig_SolidCollision_Vector2_int_int_bool orig, Vector2 Position, int Width, int Height, bool acceptTopSurfaces)
 	{
 		if (!Enable || !EnableCollisionHook)
 			return orig(Position, Width, Height, acceptTopSurfaces);
-		return orig(Position, Width, Height, acceptTopSurfaces) || Collision(new CAABB(new AABB(Position.X, Position.Y, Width, Height)));
+		return orig(Position, Width, Height, acceptTopSurfaces) || Collision(Collider.Create(new AABB(Position.X, Position.Y, Width, Height)));
 	}
 
 	private Vector2 Collision_TileCollision(On_Collision.orig_TileCollision orig, Vector2 Position, Vector2 Velocity, int Width, int Height, bool fallThrough, bool fall2, int gravDir)
