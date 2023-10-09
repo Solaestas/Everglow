@@ -1,24 +1,25 @@
+using Everglow.Commons.CustomTiles;
 using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.CustomTiles.DataStructures;
-using Everglow.Commons.CustomTiles.EntityColliding;
+using Everglow.Commons.CustomTiles.EntityCollider;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.CustomTiles.Tiles;
 
-public abstract class DPlatform : CustomTile, IHookable
+public abstract class DPlatform : RigidEntity, IHookable
 {
 	private static readonly Dictionary<(Direction, Direction), Direction> hitEdges = new()
 	{
-		[(Direction.Top, Direction.Right)] = Direction.TopRight,
-		[(Direction.Right, Direction.Bottom)] = Direction.BottomRight,
-		[(Direction.Bottom, Direction.Left)] = Direction.BottomLeft,
-		[(Direction.Top, Direction.Left)] = Direction.TopLeft,
-		[(Direction.Top, Direction.Bottom)] = Direction.Inside,
-		[(Direction.Right, Direction.Left)] = Direction.Inside,
-		[(Direction.Top, Direction.None)] = Direction.Top,
+		[(Direction.Up, Direction.Right)] = Direction.UpRight,
+		[(Direction.Right, Direction.Down)] = Direction.DownRight,
+		[(Direction.Down, Direction.Left)] = Direction.DownLeft,
+		[(Direction.Up, Direction.Left)] = Direction.UpLeft,
+		[(Direction.Up, Direction.Down)] = Direction.In,
+		[(Direction.Right, Direction.Left)] = Direction.In,
+		[(Direction.Up, Direction.None)] = Direction.Up,
 		[(Direction.Right, Direction.None)] = Direction.Right,
-		[(Direction.Bottom, Direction.None)] = Direction.Bottom,
+		[(Direction.Down, Direction.None)] = Direction.Down,
 		[(Direction.Left, Direction.None)] = Direction.Left,
 	};
 	public DPlatform()
@@ -107,24 +108,24 @@ public abstract class DPlatform : CustomTile, IHookable
 				{
 					case Direction.Left:
 						if (!(aabb.Left.Distance(edge.begin.X) < 1) && !(aabb.Left.Distance(edge.end.X) < 1))
-							result = rotation.Angle < 0 ? Direction.Bottom : Direction.Top;
+							result = rotation.Angle < 0 ? Direction.Down : Direction.Up;
 						break;
 					case Direction.Right:
 						if (!(aabb.Right.Distance(edge.begin.X) < 1) && !(aabb.Right.Distance(edge.end.X) < 1))
-							result = rotation.Angle < 0 ? Direction.Bottom : Direction.Top;
+							result = rotation.Angle < 0 ? Direction.Down : Direction.Up;
 						break;
 					default:
 						break;
 				}
-				if (result == Direction.Inside)
+				if (result == Direction.In)
 				{
 					if (-MathHelper.PiOver4 * 3 < rotation.Angle && rotation.Angle <= -MathHelper.PiOver4 ||
 						MathHelper.PiOver4 < rotation.Angle && rotation.Angle <= MathHelper.PiOver4 * 3)
 					{
-						result = aabb.Center.Y > position.Y ? Direction.Top : Direction.Bottom;
+						result = aabb.Center.Y > position.Y ? Direction.Up : Direction.Down;
 						float w;
 						float h;
-						if (result == Direction.Bottom)
+						if (result == Direction.Down)
 						{
 							w = (rotation.Angle < -MathHelper.PiOver2 ? aabb.Right : aabb.Left) - position.X;
 							h = (rotation.Angle < -MathHelper.PiOver2 ? aabb.Right : aabb.Left) * edge.K + edge.B;
@@ -162,7 +163,7 @@ public abstract class DPlatform : CustomTile, IHookable
 						velocity.X = this.velocity.X + cache.X;
 					}
 				}
-				else if (result == Direction.Bottom)
+				else if (result == Direction.Down)
 				{
 					float h = position.X < aabb.Center.X ? edge.end.Y : edge.begin.Y;
 					aabb.position.Y = h - aabb.Height;
@@ -170,7 +171,7 @@ public abstract class DPlatform : CustomTile, IHookable
 					cache = angularVelocity.YAxis * width * Math.Abs(angularVelocity.Angle) * Vector2.UnitY;
 					velocity.Y = this.velocity.Y + cache.Y;
 				}
-				else if (result == Direction.Top)
+				else if (result == Direction.Up)
 				{
 					float h = position.X > aabb.Center.X ? edge.end.Y : edge.begin.Y;
 					aabb.position.Y = h;
@@ -197,7 +198,7 @@ public abstract class DPlatform : CustomTile, IHookable
 					Direction h = result & (Direction.Right | Direction.Left);
 					float w = Vector2.Dot(result.ToVector2() * aabb.size / 2 + aabb.Center - position, rotation.YAxis);
 					result = result & ~Direction.Right & ~Direction.Left;
-					if (rotation.Angle < 0 && result == Direction.Top || rotation.Angle > 0 && result == Direction.Bottom)
+					if (rotation.Angle < 0 && result == Direction.Up || rotation.Angle > 0 && result == Direction.Down)
 						result = Direction.None;
 					else
 					{
@@ -213,19 +214,19 @@ public abstract class DPlatform : CustomTile, IHookable
 					Vector2 offset = Vector2.Zero;
 					switch (result)
 					{
-						case Direction.TopLeft:
+						case Direction.UpLeft:
 							w = Vector2.Dot(aabb.TopLeft - position, rotation.YAxis);
 							offset = position + w * rotation.YAxis - aabb.TopLeft;
 							break;
-						case Direction.TopRight:
+						case Direction.UpRight:
 							w = Vector2.Dot(aabb.TopRight - position, rotation.YAxis);
 							offset = position + w * rotation.YAxis - aabb.TopRight;
 							break;
-						case Direction.BottomLeft:
+						case Direction.DownLeft:
 							w = Vector2.Dot(aabb.BottomLeft - position, rotation.YAxis);
 							offset = position + w * rotation.YAxis - aabb.BottomLeft;
 							break;
-						case Direction.BottomRight:
+						case Direction.DownRight:
 							w = Vector2.Dot(aabb.BottomRight - position, rotation.YAxis);
 							offset = position + w * rotation.YAxis - aabb.BottomRight;
 							break;
@@ -251,9 +252,9 @@ public abstract class DPlatform : CustomTile, IHookable
 			new Vector2(0, width / 2f), 1,
 			SpriteEffects.None, 0);
 	}
-	public override void Move()
+	public override void UpdatePosition()
 	{
-		base.Move();
+		base.UpdatePosition();
 		rotation += angularVelocity;
 	}
 	public void SetHookPosition(Projectile hook)
@@ -261,8 +262,8 @@ public abstract class DPlatform : CustomTile, IHookable
 		float proj = Vector2.Dot(hook.Center - position, rotation.YAxis);
 		hook.Center = position + rotation.YAxis * proj;
 	}
-	public override void Stand(EntityHandler handler, bool newStand)
+	public override void Stand(IEntityCollider collider, bool newStand)
 	{
-		handler.extraVelocity = cache + velocity;
+		collider.DeltaVelocity = cache + velocity;
 	}
 }

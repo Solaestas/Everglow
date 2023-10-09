@@ -125,7 +125,7 @@ public static class CollisionUtils
 		bool result = false;
 		if (new Edge(aabb.TopLeft, aabb.TopRight).Intersect(edge))
 		{
-			it.Current = Direction.Top;
+			it.Current = Direction.Up;
 			if (!it.MoveNext())
 				return true;
 			result = true;
@@ -139,7 +139,7 @@ public static class CollisionUtils
 		}
 		if (new Edge(aabb.BottomRight, aabb.BottomLeft).Intersect(edge))
 		{
-			it.Current = Direction.Bottom;
+			it.Current = Direction.Down;
 			if (!it.MoveNext())
 				return true;
 			result = true;
@@ -189,10 +189,10 @@ public static class CollisionUtils
 				{
 					dir = (flipX, flipY) switch
 					{
-						(true, true) => Direction.TopLeft,
-						(false, true) => Direction.TopRight,
-						(true, false) => Direction.BottomLeft,
-						(false, false) => Direction.BottomRight
+						(true, true) => Direction.UpLeft,
+						(false, true) => Direction.UpRight,
+						(true, false) => Direction.DownLeft,
+						(false, false) => Direction.DownRight
 					};
 				}
 				return result;
@@ -209,7 +209,7 @@ public static class CollisionUtils
 		{
 			result = or.Y - aabb.Height / 2 <= circle.radius;
 			if (result)
-				dir = flipY ? Direction.Top : Direction.Bottom;
+				dir = flipY ? Direction.Up : Direction.Down;
 			return result;
 		}
 	}
