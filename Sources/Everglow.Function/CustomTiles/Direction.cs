@@ -1,15 +1,16 @@
-﻿namespace Everglow.Commons.CustomTiles;
+namespace Everglow.Commons.CustomTiles;
 
+[Flags]
 public enum Direction : byte
 {
 	None = 0,
-	Top = 1,
+	Up = 1,
 	Left = 2,
 	Right = 4,
-	Bottom = 8,
-	TopLeft = Top | Left,
-	TopRight = Top | Right,
-	BottomLeft = Bottom | Left,
-	BottomRight = Bottom | Right,
-	Inside = 16
+	Down = 8,
+	In = 16,
+	UpLeft = Up | Left,
+	UpRight = Up | Right,
+	DownLeft = Down | Left,
+	DownRight = Down | Right,
 }

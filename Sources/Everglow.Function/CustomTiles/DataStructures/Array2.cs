@@ -1,10 +1,8 @@
-namespace Everglow.Commons.Physics.DataStructures;
+namespace Everglow.Commons.CustomTiles.DataStructures;
 
 public class Array2<T>
 {
-	public T valueA;
-	public T valueB;
-
+	public T valueA, valueB;
 	public T this[int index]
 	{
 		get
@@ -12,29 +10,23 @@ public class Array2<T>
 			Debug.Assert(index <= 1);
 			return index == 0 ? valueA : valueB;
 		}
-
 		set
 		{
 			Debug.Assert(index <= 1);
 			if (index == 0)
-			{
 				valueA = value;
-			}
 			else
 			{
 				valueB = value;
 			}
 		}
 	}
-
 	public (T, T) Tuple => (valueA, valueB);
-
 	public Array2()
 	{
 		valueA = default;
 		valueB = default;
 	}
-
 	public Array2(T valueA, T valueB)
 	{
 		this.valueA = valueA;
@@ -50,13 +42,11 @@ public class Array2<T>
 	{
 		private Array2<T> array;
 		private int index;
-
 		public ArrayEnumerator(Array2<T> array)
 		{
 			this.array = array;
 			index = -1;
 		}
-
 		public ref T Current
 		{
 			get

@@ -1,6 +1,6 @@
 using Everglow.Commons.DataStructures;
 
-namespace Everglow.Commons.Physics.DataStructures;
+namespace Everglow.Commons.CustomTiles.DataStructures;
 
 [DebuggerDisplay("position = ({position.X}, {position.Y}) radius = {radius}")]
 public struct Circle
@@ -15,8 +15,9 @@ public struct Circle
 	}
 
 	public Vector2 GetEdge(float angle) => position + new Vector2(radius, 0).RotatedBy(angle);
-
 	public Vector2 GetEdge(Rotation rot) => position + radius * rot.XAxis;
-
-	public override string ToString() => $"({position.X}, {position.Y}) : {radius}";
+	public override string ToString()
+	{
+		return $"({position.X}, {position.Y}) : {radius}";
+	}
 }

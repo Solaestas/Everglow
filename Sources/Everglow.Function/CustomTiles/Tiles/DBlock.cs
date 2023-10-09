@@ -1,91 +1,34 @@
-using Everglow.Commons.CustomTiles.EntityColliding;
-using Everglow.Commons.Physics.Abstracts;
-using Everglow.Commons.Physics.Colliders;
-using Everglow.Commons.Physics.DataStructures;
+using Everglow.Commons.CustomTiles;
+using Everglow.Commons.CustomTiles.Collide;
+using Everglow.Commons.CustomTiles.DataStructures;
+using Everglow.Commons.CustomTiles.EntityCollider;
 using Everglow.Commons.Utilities;
 using Terraria.GameContent;
 
 namespace Everglow.Commons.CustomTiles.Tiles;
 
-public abstract class DBlock : CustomTile, IGrabbable, IHookable
+public abstract class DBlock : RigidEntity, IGrabbable, IHookable
 {
 	public Vector2 size;
-	public Vector2 Center => position + size / 2;
-	public override bool IsGrabbable => true;
+
 	public DBlock()
 	{
 		oldVelocity = Vector2.Zero;
 	}
+
 	public DBlock(Vector2 position, Vector2 size)
 	{
 		this.position = position;
 		this.size = size;
 	}
-	public override Color MapColor => new(255, 255, 255, 255);
+
 	public AABB AABB => new(position, size);
-	public override ICollider2D Collider => new AABBCollider2D(new AABB(position, size));
-	public override Direction MoveCollision(AABB aabb, ref Vector2 velocity, ref Vector2 move, bool ignorePlats = false)
-	{
-		AABB collider = AABB;
 
-		Vector2 rvel = move - this.velocity;
-		Vector2 pos0 = aabb.position;
+	public Vector2 Center => position + size / 2;
 
+	public override Collider Collider => Collider.Create(new AABB(position, size));
 
-		if (!aabb.Scan(rvel).Intersect(collider))
-			return Direction.None;
-
-		const float SmallScale = 7;
-		AABB smallBox = collider;
-		smallBox.TopLeft += new Vector2(SmallScale, SmallScale);
-		smallBox.BottomRight -= new Vector2(SmallScale, SmallScale);
-		if (smallBox.Intersect(aabb))
-			return Direction.Inside;
-
-		bool onGround = velocity.Y == 0;
-		bool? isX = null;
-		Vector2 target = aabb.position + rvel;
-		do
-		{
-			aabb.position = aabb.position.Approach(target, 1);
-			if (aabb.Intersect(collider, out var area))
-			{
-				isX = area.size.X < area.size.Y;
-				break;
-			}
-		} while (aabb.position != target);
-
-		if (isX is null)
-			return Direction.None;
-		else if (isX.Value)
-		{
-			aabb.position.X = aabb.Left < collider.Left ? collider.Left - aabb.size.X : collider.Right;
-			aabb.position.Y = target.Y;
-			move = aabb.position - pos0 + this.velocity;
-			velocity.X = this.velocity.X;
-			return aabb.Left < collider.Left ? Direction.Right : Direction.Left;
-		}
-		else
-		{
-			aabb.position.Y = aabb.Top < collider.Top ? collider.Top - aabb.size.Y : collider.Bottom;
-			aabb.position.X = target.X;
-			move = aabb.position - pos0 + this.velocity;
-			velocity.Y = this.velocity.Y == 0 ?
-				onGround ? 0 : CollisionUtils.Epsilon * 10 :
-				this.velocity.Y;
-			return aabb.Top < collider.Top ? Direction.Bottom : Direction.Top;
-		}
-	}
-	public override void Stand(EntityHandler handler, bool newStand)
-	{
-		handler.extraVelocity = velocity;//记录额外位移
-		if (newStand && handler.attachType == AttachType.Stand)//不让实体滑动，但是写了可以小跳叠速度
-			handler.trueVelocity += velocity;
-	}
-	public override void Leave(EntityHandler handler)
-	{
-
-	}
+	public override Color MapColor => new(255, 255, 255, 255);
 
 	//public override void StandingBegin(Entity entity)
 	//{
@@ -140,17 +83,12 @@ public abstract class DBlock : CustomTile, IGrabbable, IHookable
 	{
 		return AABB.Intersect(new AABB(player.position + player.slideDir * Vector2.UnitX, player.Size));
 	}
-	public virtual void OnGrab(Player player)
+
+	public override void Draw()
 	{
-		player.position.X = player.position.X > position.X + size.X / 2 ? position.X + size.X : position.X - player.width;
-		player.position += velocity;
-		player.velocity.X -= velocity.X;
+		Main.spriteBatch.Draw(Texture.Value, position - Main.screenPosition, new Rectangle(0, 0, (int)size.X, (int)size.Y), Color.White);
 	}
-	public virtual void EndGrab(Player player)
-	{
-		player.velocity.X += velocity.X * 2;
-		player.GetModPlayer<PlayerColliding>().Jump(player.jump, player.velocity.Y + velocity.Y);
-	}
+
 	public override void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale)
 	{
 		Vector2 Dc = position + new Vector2(16, 16);
@@ -163,19 +101,26 @@ public abstract class DBlock : CustomTile, IGrabbable, IHookable
 				Vector2 DrawPos = (Dc / 16f + new Vector2(i - 1, j - 1) - mapTopLeft) * mapScale + mapX2Y2AndOff;
 				Texture2D t = TextureAssets.MagicPixel.Value;
 				var drawdes = new Rectangle((int)DrawPos.X - 1, (int)DrawPos.Y - 1, 2, 2);
-				bool candraw;
-				if (mapRect != null)
-					candraw = drawdes.Intersects(mapRect.Value);
-				else
-				{
-					candraw = true;
-				}
+				bool candraw = mapRect != null ? drawdes.Intersects(mapRect.Value) : true;
 				if (candraw)
+				{
 					Main.spriteBatch.Draw(t, DrawPos, new Rectangle(0, 0, 1, 1), MapColor, 0, Vector2.Zero, mapScale, SpriteEffects.None, 0);
+				}
 			}
 		}
 	}
-	public override void Move()
+
+	public virtual void EndGrab(Player player)
+	{
+		player.velocity.X += velocity.X * 2;
+		player.GetModPlayer<PlayerCollider>().Jump(player.jump, player.velocity.Y + velocity.Y);
+	}
+
+	public override void Leave(IEntityCollider collider)
+	{
+	}
+
+	public override void UpdatePosition()
 	{
 		Vector2 target = position + oldVelocity;
 		TileSystem.EnableCollisionHook = false;
@@ -187,14 +132,84 @@ public abstract class DBlock : CustomTile, IGrabbable, IHookable
 			oldVelocity *= 0;
 		}
 	}
-	public override void Draw()
+
+	public override Direction MoveCollision(AABB aabb, ref Vector2 velocity, ref Vector2 move, bool ignorePlats = false)
 	{
-		Main.spriteBatch.Draw(Texture.Value, position - Main.screenPosition, new Rectangle(0, 0, (int)size.X, (int)size.Y), Color.White);
+		AABB collider = AABB;
+
+		Vector2 rvel = move - this.velocity;
+		Vector2 pos0 = aabb.position;
+
+		if (!aabb.Scan(rvel).Intersect(collider))
+		{
+			return Direction.None;
+		}
+
+		const float SmallScale = 7;
+		AABB smallBox = collider;
+		smallBox.TopLeft += new Vector2(SmallScale, SmallScale);
+		smallBox.BottomRight -= new Vector2(SmallScale, SmallScale);
+		if (smallBox.Intersect(aabb))
+		{
+			return Direction.In;
+		}
+
+		bool onGround = velocity.Y == 0;
+		bool? isX = null;
+		Vector2 target = aabb.position + rvel;
+		do
+		{
+			aabb.position = aabb.position.Approach(target, 1);
+			if (aabb.Intersect(collider, out var area))
+			{
+				isX = area.size.X < area.size.Y;
+				break;
+			}
+		} while (aabb.position != target);
+
+		if (isX is null)
+		{
+			return Direction.None;
+		}
+		else if (isX.Value)
+		{
+			aabb.position.X = aabb.Left < collider.Left ? collider.Left - aabb.size.X : collider.Right;
+			aabb.position.Y = target.Y;
+			move = aabb.position - pos0 + this.velocity;
+			velocity.X = this.velocity.X;
+			return aabb.Left < collider.Left ? Direction.Right : Direction.Left;
+		}
+		else
+		{
+			aabb.position.Y = aabb.Top < collider.Top ? collider.Top - aabb.size.Y : collider.Bottom;
+			aabb.position.X = target.X;
+			move = aabb.position - pos0 + this.velocity;
+			velocity.Y = this.velocity.Y == 0 ?
+				onGround ? 0 : CollisionUtils.Epsilon * 10 :
+				this.velocity.Y;
+			return aabb.Top < collider.Top ? Direction.Down : Direction.Up;
+		}
+	}
+
+	public virtual void OnGrab(Player player)
+	{
+		player.position.X = player.position.X > position.X + size.X / 2 ? position.X + size.X : position.X - player.width;
+		player.position += velocity;
+		player.velocity.X -= velocity.X;
 	}
 
 	public virtual void SetHookPosition(Projectile hook)
 	{
 		hook.position = Vector2.Clamp(hook.position, position, position + size - hook.Size);
 		hook.position += velocity;
+	}
+
+	public override void Stand(IEntityCollider collider, bool newStand)
+	{
+		collider.DeltaVelocity = velocity;//记录额外位移
+		if (newStand && collider.AttachType == AttachType.Stand)//不让实体滑动，但是写了可以小跳叠速度
+		{
+			collider.AbsoluteVelocity += velocity;
+		}
 	}
 }
