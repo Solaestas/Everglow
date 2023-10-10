@@ -12,16 +12,15 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			TradeLength = 4;
 			TradeShade = 0.8f;
 			Shade = 0.2f;
-			FadeTradeShade = 0.64f;
+			FadeShade = 0.64f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.5f;
 			MaxLength = 0.88f;
 			DrawWidth = 0.4f;
 		}
-		public override void AI()
+		public override void VisualParticle()
 		{
-			base.AI();
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
 			Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.08f);
 			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))
@@ -42,16 +41,16 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				switch (Main.rand.Next(4))
 				{
 					case 0:
-						DarkDraw[0].Color = new Color(76, 126, 255, (byte)(FadeTradeShade * 255));
+						DarkDraw[0].Color = new Color(76, 126, 255, (byte)(FadeShade * 255));
 						break;
 					case 1:
-						DarkDraw[0].Color = new Color(229, 111, 216, (byte)(FadeTradeShade * 255));
+						DarkDraw[0].Color = new Color(229, 111, 216, (byte)(FadeShade * 255));
 						break;
 					case 2:
-						DarkDraw[0].Color = new Color(247, 233, 141, (byte)(FadeTradeShade * 255));
+						DarkDraw[0].Color = new Color(247, 233, 141, (byte)(FadeShade * 255));
 						break;
 					case 3:
-						DarkDraw[0].Color = new Color(114, 177, 204, (byte)(FadeTradeShade * 255));
+						DarkDraw[0].Color = new Color(114, 177, 204, (byte)(FadeShade * 255));
 						break;
 				}
 			}
