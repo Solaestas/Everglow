@@ -87,32 +87,7 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 				{
 					continue;
 				}
-				float f = drawLayer.Position.Z / CameraPos.Z;
-
-				int leftX = (int)(Main.screenPosition.X * (1 - f) + CameraPos.X * f);
-				int rightX = (int)((Main.screenPosition.X + Main.screenWidth) * (1 - f) + CameraPos.X * f);
-				int topY = (int)(Main.screenPosition.Y * (1 - f) + CameraPos.Y * f);
-				int bottomY = (int)((Main.screenPosition.Y + Main.screenHeight) * (1 - f) + CameraPos.Y * f);
-
-				Rectangle r1 = new((int)drawLayer.Position.X, (int)drawLayer.Position.Y, texture.Width, texture.Height);
-				Rectangle r2 = new(leftX, topY, rightX - leftX, bottomY - topY);
-				Rectangle.Intersect(ref r1, ref r2, out Rectangle r3);
-
-				if (r3.Width == 0 || r3.Height == 0)
-				{
-					continue;
-				}
-
-				float f2 = CameraPos.Z / (CameraPos.Z - drawLayer.Position.Z);
-				Rectangle r4 = new((int)(CameraPos.X + (r3.X - CameraPos.X) * f2),
-					(int)(CameraPos.Y + (r3.Y - CameraPos.Y) * f2),
-					(int)(r3.Width * f2),
-					(int)(r3.Height * f2));
-
-				sprite.Draw(texture,
-					new Rectangle((int)(r4.X - Main.screenPosition.X), (int)(r4.Y - Main.screenPosition.Y), r4.Width, r4.Height),
-					new Rectangle((int)(r3.X - drawLayer.Position.X), (int)(r3.Y - drawLayer.Position.Y), r3.Width, r3.Height),
-					Color.White);
+				drawLayer.Draw(sprite, CameraPos, !WaitLoadTexture);
 			}
 		}
 		public void DrawBackgroundLayers(SpriteBatch sprite)
