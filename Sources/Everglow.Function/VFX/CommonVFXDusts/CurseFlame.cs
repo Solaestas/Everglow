@@ -9,7 +9,7 @@ public class CurseFlamePipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.CurseFlame;
-		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
+		effect.Value.Parameters["uNoise"].SetValue(ModAsset.Noise_perlin.Value);
 		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_curseFlame.Value);
 	}
 	public override void BeginRender()
@@ -19,7 +19,7 @@ public class CurseFlamePipeline : Pipeline
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.Parameters["uTexcoordY"].SetValue(0.2f);
-		Texture2D halo = Commons.ModAsset.Point.Value;
+		Texture2D halo = ModAsset.Point.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
@@ -32,7 +32,7 @@ public class CurseFlamePipeline : Pipeline
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.Parameters["uTexcoordY"].SetValue(0.8f);
-		Texture2D halo = Commons.ModAsset.Point.Value;
+		Texture2D halo = ModAsset.Point.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
