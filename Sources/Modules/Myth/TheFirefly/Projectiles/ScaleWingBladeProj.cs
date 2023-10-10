@@ -90,7 +90,7 @@ public class ScaleWingBladeProj : MeleeProj
 		TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
 		Tplayer.HideLeg = true;
 		useTrail = true;
-		float timeMul = 1f - GetMeleeSpeed(player) / 100f;
+		float timeMul = 1f / player.meleeSpeed;
 
 		Vector2 vToMouse = Main.MouseWorld - player.Top;
 		float AddHeadRotation = (float)Math.Atan2(vToMouse.Y, vToMouse.X) + (1 - player.direction) * 1.57f;
@@ -123,25 +123,25 @@ public class ScaleWingBladeProj : MeleeProj
 
 		if (attackType == 0)
 		{
-			if (timer < 30)//前摇
+			if (timer < 30 * timeMul)//前摇
 			{
 				useTrail = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, -1.2f), 0.1f);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, -1.2f), 0.1f / timeMul);
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == 20)
 				AttSound(new SoundStyle("Everglow/MEAC/Sounds/TrueMeleeSwing"));
-			if (timer > 30 && timer < 50)
+			if (timer > 30 * timeMul && timer < 50 * timeMul)
 			{
 				isAttacking = true;
-				Projectile.rotation += Projectile.spriteDirection * 0.25f;
+				Projectile.rotation += Projectile.spriteDirection * 0.25f / timeMul;
 				mainVec = Vector2Elipse(120, Projectile.rotation, 0.6f);
 			}
 
-			if (timer > 50 + 20 * timeMul)
+			if (timer > 70 * timeMul)
 			{
 				player.fullRotation = 0;
 				player.legRotation = 0;
@@ -159,24 +159,24 @@ public class ScaleWingBladeProj : MeleeProj
 		}
 		if (attackType == 1)
 		{
-			if (timer < 30)//前摇
+			if (timer < 30 * timeMul)//前摇
 			{
 				useTrail = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.1f);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.1f / timeMul);
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == 20)
 				AttSound(new SoundStyle("Everglow/MEAC/Sounds/TrueMeleeSwing"));
-			if (timer > 30 && timer < 50)
+			if (timer > 30 * timeMul && timer < 50 * timeMul)
 			{
 				isAttacking = true;
-				Projectile.rotation += Projectile.spriteDirection * 0.25f;
+				Projectile.rotation += Projectile.spriteDirection * 0.25f / timeMul;
 				mainVec = Vector2Elipse(120, Projectile.rotation, 0.6f);
 			}
-			if (timer > 50)
+			if (timer > 50 * timeMul)
 				NextAttackType();
 			float BodyRotation = (float)Math.Sin((timer - 30) / 40d * Math.PI) * 0.2f * player.direction * player.gravDir;
 			player.fullRotation = BodyRotation;
@@ -188,37 +188,37 @@ public class ScaleWingBladeProj : MeleeProj
 		if (attackType == 2)
 		{
 			float BodyRotation = 0;
-			if (timer < 10)//前摇
+			if (timer < 10 * timeMul)//前摇
 			{
 				useTrail = false;
 				LockPlayerDir(player);
 				float targetRot = +MathHelper.PiOver2 + player.direction * 0.7f;
-				mainVec = Vector2.Lerp(mainVec, targetRot.ToRotationVector2() * 100, 0.15f);
+				mainVec = Vector2.Lerp(mainVec, targetRot.ToRotationVector2() * 100, 0.15f / timeMul);
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 
 				BodyRotation = (float)Math.Sin((timer - 6) / 8d * Math.PI) * 0.2f * player.direction * player.gravDir;
 
 			}
-			if (timer > 10 && timer < 30)
+			if (timer > 10 * timeMul && timer < 30 * timeMul)
 			{
 				isAttacking = true;
-				Projectile.rotation -= Projectile.spriteDirection * 0.26f;
+				Projectile.rotation -= Projectile.spriteDirection * 0.26f / timeMul;
 				mainVec = Projectile.rotation.ToRotationVector2() * 90;
 
 				BodyRotation = -(float)Math.Sin((timer - 22) / 16d * Math.PI) * 0.2f * player.direction * player.gravDir;
 
 			}
-			if (timer > 30 && timer < 50)
+			if (timer > 30 * timeMul && timer < 50 * timeMul)
 			{
 				isAttacking = true;
-				Projectile.rotation += Projectile.spriteDirection * 0.25f;
+				Projectile.rotation += Projectile.spriteDirection * 0.25f / timeMul;
 				mainVec = Projectile.rotation.ToRotationVector2() * 130;
 
 				BodyRotation = (float)Math.Sin((timer - 42) / 16d * Math.PI) * 0.2f * player.direction * player.gravDir;
 
 			}
-			if (timer < 50)
+			if (timer < 50 * timeMul)
 			{
 				player.fullRotation = BodyRotation;
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
@@ -261,19 +261,19 @@ public class ScaleWingBladeProj : MeleeProj
 				}
 			}
 
-			if (timer > 55 + 25 * timeMul)
+			if (timer > 80 * timeMul)
 				NextAttackType();
 		}
 		if (attackType == 100)//右键攻击
 		{
 			float BodyRotation;
-			if (timer < 60)
+			if (timer < 60 * timeMul)
 			{
 				CanIgnoreTile = true;
 				useTrail = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, -1.2f), 0.1f);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, -1.2f), 0.1f / timeMul);
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 
@@ -293,13 +293,13 @@ public class ScaleWingBladeProj : MeleeProj
 				d3.velocity = -r * 4;
 				d3.noGravity = true;
 			}
-			else if (timer < 100)
+			else if (timer < 100 * timeMul)
 			{
 				useTrail = false;
 				LockPlayerDir(player);
 				Projectile.ai[0] = GetAngToMouse();
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.8f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, targetRot, -1.2f, Projectile.ai[0], 1000), 0.1f);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, targetRot, -1.2f, Projectile.ai[0], 1000), 0.1f / timeMul);
 				Projectile.rotation = mainVec.ToRotation();
 
 				Vector2 r = Main.rand.NextVector2Unit();
@@ -320,15 +320,15 @@ public class ScaleWingBladeProj : MeleeProj
 			}
 			if (timer == 105)
 				AttSound(new SoundStyle("Everglow/MEAC/Sounds/TrueMeleePowerSwing"));
-			if (timer > 100)
+			if (timer > 100 * timeMul)
 			{
 				isAttacking = true;
 				drawScaleFactor = 0.6f;
-				if (timer < 115)
+				if (timer < 115 * timeMul)
 				{
 					isAttacking = true;
 					mainVec = Vector2Elipse(220, Projectile.rotation, -1.2f, Projectile.ai[0], 1000);
-					Projectile.rotation += Projectile.spriteDirection * 0.42f;
+					Projectile.rotation += Projectile.spriteDirection * 0.42f / timeMul;
 				}
 
 				BodyRotation = (float)Math.Sin((timer - 114.514) / 18d * Math.PI) * 0.7f * player.direction * player.gravDir;
@@ -337,7 +337,6 @@ public class ScaleWingBladeProj : MeleeProj
 			else
 			{
 				Vector2 ToMouseWorld = Main.MouseWorld - player.Top;
-				float HeadRot = (float)Math.Atan2(ToMouseWorld.Y, ToMouseWorld.X) + (float)(Math.PI * 0.5 * (1 - player.direction));
 				BodyRotation = -timer * player.direction * 0.003f * player.gravDir;
 			}
 			player.fullRotation = BodyRotation;
@@ -348,7 +347,7 @@ public class ScaleWingBladeProj : MeleeProj
 
 			if (timer == 115)
 				Projectile.friendly = false;
-			if (timer > 125)
+			if (timer > 125 * timeMul)
 			{
 				CanIgnoreTile = false;
 				End();

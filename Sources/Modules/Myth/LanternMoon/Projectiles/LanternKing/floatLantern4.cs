@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
 public class floatLantern4 : ModProjectile
 {
@@ -28,22 +28,17 @@ public class floatLantern4 : ModProjectile
 		return new Color?(new Color(1f, 1f, 1f, 0.5f));
 	}
 	private bool initialization = true;
-	private bool Boom = false;
 	public override void AI()
 	{
 		if (initialization)
 		{
 			num1 = Main.rand.Next(-120, 0);
-			num2 = (int)Projectile.ai[0] * 4;
-			num3 = Main.rand.NextFloat(0.3f, 1.8f);
 			num4 = Main.rand.NextFloat(0.3f, 1800f);
-			num5 = Main.rand.NextFloat(2.85f, 3.15f);
 			Projectile.timeLeft = 1200;
 			Fy = Main.rand.Next(4);
 			initialization = false;
 		}
 		num1 += 1;
-		num2 -= 1;
 		num4 += 0.01f;
 		Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) - (float)Math.PI * 0.5f;
 		/*if (Projectile.timeLeft < 995)
@@ -64,12 +59,7 @@ public class floatLantern4 : ModProjectile
 	}
 	private float num = 0;
 	private int num1 = 0;
-	private int num2 = -1;
-	private float num3 = 0.8f;
 	private float num4 = 0;
-	private float num5 = 0;
-	private float x = 0;
-	private float y = 0;
 	private int Fy = 0;
 	private int fyc = 0;
 	public override bool PreDraw(ref Color lightColor)

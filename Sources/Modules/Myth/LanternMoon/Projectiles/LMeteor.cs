@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.LanternMoon.Projectiles;
 
@@ -17,7 +17,6 @@ class LMeteor : ModProjectile
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
 	}
 	float ka = 0;
-	Vector2 AIMpos;
 	int TrueL = 1;
 	float Stre = 0.85f;
 	float Sca = 0;

@@ -297,16 +297,16 @@ public class MothMagicArray : ModProjectile
 	//    rad = rad * rad / 90f;
 	//    drawcircle(sb,rad * 0.6f, 45 * rad / 90f + 18, new color(1f, 0.24f, 0, 0f), projectile.center - main.screenposition);
 	//}
-	private static void DrawCircle(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, bool Black = false)
+	private static void DrawCircle(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, bool Black = false)
 	{
 		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radious / 2; h += 5)
+		for (int h = 0; h < radius / 2; h += 5)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 0, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(h / radius * Math.PI * 4), color, new Vector3(0.5f, 0, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, radious), color, new Vector3(0.5f, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + width), color, new Vector3(0.5f, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius), color, new Vector3(0.5f, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius + width), color, new Vector3(0.5f, 0, 0)));
 		if (circle.Count > 0)
 		{
 			Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
@@ -316,16 +316,16 @@ public class MothMagicArray : ModProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}
-	private static void DrawCircle(float radious, float width, Color color, Vector2 center, float value0 = 0, float valu1 = 0)
+	private static void DrawCircle(float radius, float width, Color color, Vector2 center, float value0 = 0, float valu1 = 0)
 	{
 		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radious / 2; h++)
+		for (int h = 0; h < radius / 2; h++)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3((h / (float)radious * 6 + (float)Main.timeForVisualEffects / 200f) % 1, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4), color, new Vector3((h / (float)radious * 6 + (float)Main.timeForVisualEffects / 200f) % 1, 0, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4), color, new Vector3((h / (float)radius * 6 + (float)Main.timeForVisualEffects / 200f) % 1, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(h / radius * Math.PI * 4), color, new Vector3((h / (float)radius * 6 + (float)Main.timeForVisualEffects / 200f) % 1, 0, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, radious), color, new Vector3(0.5f, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + width), color, new Vector3(0.5f, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius), color, new Vector3(0.5f, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius + width), color, new Vector3(0.5f, 0, 0)));
 		if (circle.Count > 0)
 		{
 			Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/FireLight");

@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 namespace Everglow.Myth.LanternMoon.Projectiles.DashCore;
 
 class YellowFlame0Shine : ModProjectile
@@ -46,7 +46,7 @@ class YellowFlame0Shine : ModProjectile
 					if (!Main.player[j].dead)
 					{
 						if ((Main.player[j].Center - Projectile.Center).Length() < 24)
-							Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Bosses.Acytaea.Projectiles.playerHit>(), Projectile.damage, 0, j, 0, 0);
+							Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Acytaea.Projectiles.playerHit>(), Projectile.damage, 0, j, 0, 0);
 					}
 				}
 			}
@@ -72,7 +72,6 @@ class YellowFlame0Shine : ModProjectile
 	Color Aimcolor = new Color(255, 204, 0);
 	Color[] ProjOldColor = new Color[70];
 	float kb = 1;
-	float x = 0;
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return false;

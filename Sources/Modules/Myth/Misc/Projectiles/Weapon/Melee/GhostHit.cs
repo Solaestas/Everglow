@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
 
 class GhostHit : ModProjectile
@@ -17,7 +17,6 @@ class GhostHit : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 13;
 	}
-	private float K = 10;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 
