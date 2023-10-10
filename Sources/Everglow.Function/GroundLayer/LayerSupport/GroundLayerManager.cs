@@ -83,10 +83,6 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 				{
 					return;
 				}
-				if (!drawLayer.PrePareDraw(out Texture2D texture, !WaitLoadTexture))
-				{
-					continue;
-				}
 				drawLayer.Draw(sprite, CameraPos, !WaitLoadTexture);
 			}
 		}
