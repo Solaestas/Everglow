@@ -37,7 +37,7 @@ public class Everglow : Mod
 		Ins.Add<GraphicsDevice>(Main.instance.GraphicsDevice);
 		Ins.Add<IVisualQualityController, VisualQualityController>();
 		Ins.Add<ModuleManager>();
-		Ins.Add<IHookManager, HookManager.TrueHookManager>();
+		Ins.Add<IHookManager, HookManager>();
 		Ins.Add<IMainThreadContext, MainThreadContext>();
 		if (Main.netMode != NetmodeID.Server)
 		{
