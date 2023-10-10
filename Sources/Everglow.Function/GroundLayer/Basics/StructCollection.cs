@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Everglow.Commons.GroundLayer.Basics
 {
-	public class StructCollection<T>(int size = 5000, T defaultValue = default) where T : struct, IUniqueID<int>
+	public class StructCollection<TKey, TValue>(int size = 5000, TValue defaultValue = default) where TValue : struct, IUniqueID<TKey> where TKey : IComparable<TKey>
 	{
-		Dictionary<int, int> map = new();
-		T[] _container = new T[size];
+		Dictionary<TKey, int> map = new();
+		TValue[] _container = new TValue[size];
 		int _ptr = 0;
-		T _default = defaultValue;
-		public ref T this[int uniqueID]
+		TValue _default = defaultValue;
+		public ref TValue this[TKey uniqueID]
 		{
 			get
 			{
@@ -23,7 +23,7 @@ namespace Everglow.Commons.GroundLayer.Basics
 				return ref _default;
 			}
 		}
-		public bool Add(T content)
+		public bool Add(TValue content)
 		{
 			if (_ptr == _container.Length)
 			{
@@ -34,7 +34,7 @@ namespace Everglow.Commons.GroundLayer.Basics
 			_ptr++;
 			return true;
 		}
-		public bool Remove(int uniqueID)
+		public bool Remove(TKey uniqueID)
 		{
 			if (!map.TryGetValue(uniqueID, out int index))
 			{
@@ -45,12 +45,22 @@ namespace Everglow.Commons.GroundLayer.Basics
 			_ptr--;
 			return true;
 		}
+		public bool TryGet(TKey uniqueID, ref TValue content)
+		{
+			if (map.TryGetValue(uniqueID, out int index))
+			{
+				content = _container[index];
+				return true;
+			}
+			content = _default;
+			return false;
+		}
 		public void Clear()
 		{
 			_ptr = 0;
 			map.Clear();
 		}
-		public bool Contains(int uniqueID)
+		public bool Contains(TKey uniqueID)
 		{
 			return map.ContainsKey(uniqueID);
 		}
@@ -60,16 +70,16 @@ namespace Everglow.Commons.GroundLayer.Basics
 			{
 				return false;
 			}
-			var newContainer = new T[newSize];
+			var newContainer = new TValue[newSize];
 			Array.Copy(_container, newContainer, _ptr);
 			_container = newContainer;
 			return true;
 		}
-		public T[] GetUpdateElements()
+		public TValue[] GetUpdateElements()
 		{
 			return _container[0.._ptr];
 		}
-		public void Sort(Comparison<T> comparison = null)
+		public void Sort(Comparison<TValue> comparison = null)
 		{
 			comparison ??= (t1, t2) => t1.UniqueID.CompareTo(t2.UniqueID);
 			Array.Sort(_container[0.._ptr], comparison);
