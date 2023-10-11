@@ -1,10 +1,10 @@
-using Everglow.Commons.CustomTiles.Collide;
-using Everglow.Commons.CustomTiles.DataStructures;
-using Everglow.Commons.CustomTiles.Tiles;
+#if false
+using Everglow.Commons.Collider;
+using Everglow.Commons.Collider.EntityCollider;
 
 namespace Everglow.Commons.CustomTiles.EntityCollider;
 
-public class ProjCollider : GlobalProjectile, IEntityCollider
+public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 {
 	public const int HookAIStyle = 7;
 
@@ -67,7 +67,7 @@ public class ProjCollider : GlobalProjectile, IEntityCollider
 
 	private static void Projectile_AI_007_GrapplingHooks_On(On_Projectile.orig_AI_007_GrapplingHooks orig, Projectile self)
 	{
-		if (!TileSystem.Enable)
+		if (!ColliderManager.Enable)
 		{
 			orig(self);
 			return;
@@ -128,20 +128,20 @@ public class ProjCollider : GlobalProjectile, IEntityCollider
 
 	private static void Projectile_HandleMovement(On_Projectile.orig_HandleMovement orig, Projectile self, Vector2 wetVelocity, out int overrideWidth, out int overrideHeight)
 	{
-		if (!TileSystem.Enable || !self.tileCollide || self.aiStyle == HookAIStyle)
+		if (!ColliderManager.Enable || !self.tileCollide || self.aiStyle == HookAIStyle)
 		{
 			orig(self, wetVelocity, out overrideWidth, out overrideHeight);
 			return;
 		}
 
-		TileSystem.EnableCollisionHook = false;
+		ColliderManager.EnableHook = false;
 		var proj = self.GetGlobalProjectile<ProjCollider>();
 
 		// 记录位置，否则会把传送当成位移
 		proj.Position = self.position;
 		orig(self, wetVelocity, out overrideWidth, out overrideHeight);
-		IEntityCollider.Update(proj, true);
-		TileSystem.EnableCollisionHook = true;
+		IBox.Update(proj, true);
+		ColliderManager.EnableHook = true;
 	}
 
 	public void OnAttach()
@@ -183,7 +183,7 @@ public class ProjCollider : GlobalProjectile, IEntityCollider
 			return;
 		}
 
-		foreach (var tile in TileSystem.Instance.Tiles)
+		foreach (var tile in ColliderManager.Instance.Tiles)
 		{
 			if (tile is IHookable hookable && tile.Collision(new CAABB(new AABB(projectile.position, projectile.Size))))
 			{
@@ -208,3 +208,4 @@ public class ProjCollider : GlobalProjectile, IEntityCollider
 		}
 	}
 }
+#endif

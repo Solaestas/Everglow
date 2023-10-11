@@ -1,4 +1,4 @@
-using Everglow.Commons.CustomTiles;
+using Everglow.Commons.Collider;
 
 namespace Everglow.Yggdrasil.Common.Elevator.Tiles;
 
@@ -44,7 +44,7 @@ public class Winch : ModTile
 						return;
 				}
 			}
-			foreach (var Dtile in TileSystem.Instance.GetTiles<YggdrasilElevator>())
+			foreach (var Dtile in ColliderManager.Instance.OfType<YggdrasilElevator>())
 			{
 				Vector2 Dc = Dtile.Center;
 				float Dy = Math.Abs(Dc.Y / 16f - j);
@@ -66,7 +66,7 @@ public class Winch : ModTile
 			}
 			if (!HasLift)
 			{
-				TileSystem.Instance.AddTile(new YggdrasilElevator() { Position = new Vector2(i, j + 15) * 16 - new Vector2(48, 8) });
+				ColliderManager.Instance.Add(new YggdrasilElevator() { Position = new Vector2(i, j + 15) * 16 - new Vector2(48, 8) });
 				thisTile.TileFrameX = 1;
 			}
 		}
