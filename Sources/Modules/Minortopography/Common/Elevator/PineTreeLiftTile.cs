@@ -1,11 +1,11 @@
 using Everglow.Commons.CustomTiles.Tiles;
-using Everglow.Commons.CustomTiles;
 using Everglow.Commons.CustomTiles.DataStructures;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.Physics;
 using Everglow.Minortopography.Common.Elevator.Tiles;
 using Terraria.DataStructures;
 using Newtonsoft.Json.Linq;
+using Everglow.Commons.Collider;
 
 namespace Everglow.Minortopography.Common.Elevator;
 

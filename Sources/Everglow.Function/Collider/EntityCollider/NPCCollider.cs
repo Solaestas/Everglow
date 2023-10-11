@@ -1,8 +1,9 @@
-using Everglow.Commons.CustomTiles.Tiles;
+#if false
+using Everglow.Commons.Collider;
 
 namespace Everglow.Commons.CustomTiles.EntityCollider;
 
-public class NPCCollider : GlobalNPC, IEntityCollider
+public class NPCCollider : GlobalNPC, IBox
 {
 	private bool fall;
 	private NPC npc;
@@ -75,41 +76,42 @@ public class NPCCollider : GlobalNPC, IEntityCollider
 
 	private static void NPC_ApplyTileCollision(On_NPC.orig_ApplyTileCollision orig, NPC self, bool fall, Vector2 cPosition, int cWidth, int cHeight)
 	{
-		TileSystem.EnableCollisionHook = false;
+		ColliderManager.EnableHook = false;
 		self.GetGlobalNPC<NPCCollider>().fall = fall;
 		orig(self, fall, cPosition, cWidth, cHeight);
-		TileSystem.EnableCollisionHook = true;
+		ColliderManager.EnableHook = true;
 	}
 
 	private static void NPC_Collision_MoveWhileDry(On_NPC.orig_Collision_MoveWhileDry orig, NPC self)
 	{
-		if (!TileSystem.Enable || self.noTileCollide)
+		if (!ColliderManager.Enable || self.noTileCollide)
 		{
 			orig(self);
 			return;
 		}
 
-		TileSystem.EnableCollisionHook = false;
+		ColliderManager.EnableHook = false;
 		var npc = self.GetGlobalNPC<NPCCollider>();
 		npc.Position = self.position;
 		orig(self);
-		IEntityCollider.Update(npc, npc.fall);
-		TileSystem.EnableCollisionHook = true;
+		IBox.Update(npc, npc.fall);
+		ColliderManager.EnableHook = true;
 	}
 
 	private static void NPC_Collision_MoveWhileWet(On_NPC.orig_Collision_MoveWhileWet orig, NPC self, Vector2 oldDryVelocity, float Slowdown)
 	{
-		if (!TileSystem.Enable || self.noTileCollide)
+		if (!ColliderManager.Enable || self.noTileCollide)
 		{
 			orig(self, oldDryVelocity, Slowdown);
 			return;
 		}
 
-		TileSystem.EnableCollisionHook = false;
+		ColliderManager.EnableHook = false;
 		var npc = self.GetGlobalNPC<NPCCollider>();
 		npc.Position = self.position;
 		orig(self, oldDryVelocity, Slowdown);
-		IEntityCollider.Update(npc, npc.fall);
-		TileSystem.EnableCollisionHook = true;
+		IBox.Update(npc, npc.fall);
+		ColliderManager.EnableHook = true;
 	}
 }
+#endif

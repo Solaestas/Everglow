@@ -1,4 +1,4 @@
-using Everglow.Commons.CustomTiles;
+using Everglow.Commons.Collider;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
@@ -28,7 +28,7 @@ public class LiftLamp : ModTile
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
 		int FrameX = 0;
-		foreach (var Dtile in TileSystem.Instance.GetTiles<YggdrasilElevator>())
+		foreach (var Dtile in ColliderManager.Instance.OfType<YggdrasilElevator>())
 		{
 			Vector2 Dc = Dtile.Center;
 			if (Math.Abs(Dc.Y / 16f - j) < 4 && Main.tile[i, j].TileFrameY == 0 && Math.Abs(Dc.X / 16f - i) < Dtile.size.X / 32f + 5)

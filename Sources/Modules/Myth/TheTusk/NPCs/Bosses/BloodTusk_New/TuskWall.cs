@@ -1,4 +1,4 @@
-using Everglow.Commons.CustomTiles;
+using Everglow.Commons.Collider;
 using Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk_New.DTiles;
 using Terraria.Localization;
 
@@ -31,8 +31,8 @@ public class TuskWall : ModNPC
 		if (NPC.ai[2] == 0)
 		{
 			NPC.ai[2] = 1;
-			TileSystem.Instance.AddTile(new WallDBlock { npc = NPC, id = 0, dir = NPC.direction });
-			TileSystem.Instance.AddTile(new WallDBlock { npc = NPC, id = 1, dir = NPC.direction });
+			ColliderManager.Instance.Add(new WallDBlock { npc = NPC, id = 0, dir = NPC.direction });
+			ColliderManager.Instance.Add(new WallDBlock { npc = NPC, id = 1, dir = NPC.direction });
 		}
 
 		if (NPC.ai[0] < 880)
