@@ -4,6 +4,8 @@ namespace Everglow.Commons.Collider;
 
 public class BoxEntity : RigidEntity, IBox, IHookable
 {
+	private const float Padding = 7;
+
 	public AABB Box => new(Position, Size);
 
 	public int Quantity => 114514;
