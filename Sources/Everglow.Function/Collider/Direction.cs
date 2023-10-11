@@ -1,4 +1,4 @@
-namespace Everglow.Commons.CustomTiles;
+namespace Everglow.Commons.Collider;
 
 [Flags]
 public enum Direction : byte
