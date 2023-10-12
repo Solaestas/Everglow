@@ -6,11 +6,6 @@ public static class CollisionUtils
 {
 	public const float Epsilon = 1e-3f;
 
-	public static bool SignEquals(float a, float b)
-	{
-		return (a > 0 && b > 0) || (a < 0 && b < 0);
-	}
-
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 	public static float Cross(this Vector2 a, Vector2 b)
 	{
