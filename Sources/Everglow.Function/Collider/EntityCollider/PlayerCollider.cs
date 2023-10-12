@@ -6,27 +6,19 @@ namespace Everglow.Commons.Collider.EntityCollider;
 
 public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 {
+	public AABB Box => new(Player.position, new Vector2(Player.width, Player.height));
+
 	public override bool CloneNewInstances => true;
-
-	public override bool IsCloneable => true;
-
-	public Vector2 Size => new(Player.width, Player.height);
 
 	public float Gravity => Player.gravDir;
 
-	public AABB Box => new(Player.position, new Vector2(Player.width, Player.height));
-
-	public int Quantity => 1;
-
 	public RigidEntity Ground { get; set; }
 
-	private Vector2 oldPosition;
+	public override bool IsCloneable => true;
 
-	public Vector2 Velocity
-	{
-		get => Player.velocity;
-		set => Player.velocity = value;
-	}
+	public float OffsetY { get => Player.gfxOffY; set => Player.gfxOffY = value; }
+
+	public Vector2 OldPosition { get; set; }
 
 	public Vector2 Position
 	{
@@ -34,7 +26,46 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 		set => Player.position = value;
 	}
 
-	public float OffsetY { get => Player.gfxOffY; set => Player.gfxOffY = value; }
+	public Vector2 Size => new(Player.width, Player.height);
+
+	public Vector2 Velocity
+	{
+		get => Player.velocity;
+		set => Player.velocity = value;
+	}
+
+	public static void Player_JumpMovement(On_Player.orig_JumpMovement orig, Player self)
+	{
+		var collider = self.GetModPlayer<PlayerCollider>();
+		orig(self);
+		if (self.jump != 0 && collider.jumpSpeed != 0)
+		{
+			self.velocity.Y = collider.jumpSpeed;
+		}
+		else
+		{
+			collider.jumpSpeed = 0;
+		}
+	}
+
+	public override ModPlayer Clone(Player newEntity)
+	{
+		var clone = base.Clone(newEntity) as PlayerCollider;
+		clone.OldPosition = newEntity.position;
+		clone.Ground = null;
+		clone.jumpSpeed = 0;
+		return clone;
+	}
+
+	public void ForceJump()
+	{
+		jumpSpeed = Player.velocity.Y;
+	}
+
+	public bool Ignore(RigidEntity entity)
+	{
+		return false;
+	}
 
 	public override void Load()
 	{
@@ -47,77 +78,26 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 		IL_Player.WallslideMovement += Player_WallslideMovement_IL;
 	}
 
-	public override ModPlayer Clone(Player newEntity)
+	public void OnCollision(CollisionResult result)
 	{
-		var clone = base.Clone(newEntity) as PlayerCollider;
-		clone.Position = newEntity.position;
-		return clone;
+	}
+
+	public void OnLeave()
+	{
+		if (-Entity.velocity.Y > Player.jumpSpeed)
+		{
+			ForceJump();
+		}
 	}
 
 	private float jumpSpeed;
 
-	public void ForceJump()
+	private static bool Player_CanFitSpace(On_Player.orig_CanFitSpace orig, Player self, int heightBoost)
 	{
-		jumpSpeed = Player.velocity.Y;
-	}
-
-	public static void Player_JumpMovement(On_Player.orig_JumpMovement orig, Player self)
-	{
-		var collider = self.GetModPlayer<PlayerCollider>();
-		orig(self);
-		if(self.jump != 0 && collider.jumpSpeed != 0)
-		{
-			self.velocity.Y = collider.jumpSpeed;
-		}
-		else
-		{
-			collider.jumpSpeed = 0;
-		}
-	}
-
-	private void Prepare()
-	{
-		if(Ground != null && OffsetY != 0)
-		{
-			Player.position.Y += OffsetY;
-			OffsetY = 0;
-		}
-		oldPosition = Player.position;
-	}
-
-	private const float Sqrt2Div2 = 0.707106781186f;
-
-	private void Update()
-	{
-		var stride = Player.position - oldPosition;
-		if (Ground != null)
-		{
-			var acc = Ground.StandAccelerate(this);
-			if (stride.Y * Gravity < 0)
-			{
-				Player.velocity += acc;
-				if (-Player.velocity.Y > Player.jumpSpeed)
-				{
-					ForceJump();
-				}
-			}
-			stride += acc;
-			Ground = null;
-		}
-		Player.position = oldPosition;
-		foreach (var result in ColliderManager.Instance.Move(this, stride))
-		{
-			if (Vector2.Dot(result.Normal, Gravity * Vector2.UnitY) > Sqrt2Div2)
-			{
-				Ground = result.Collider;
-				Player.velocity.Y = 0;
-			}
-			else if (result.Normal == new Vector2(0, -1))
-			{
-				Player.velocity.Y = -0.001f;
-			}
-		}
-		Main.NewText($"{Player.velocity.Y},{Player.gravity}");
+		ColliderManager.EnableHook = false;
+		bool flag = orig(self, heightBoost);
+		ColliderManager.EnableHook = true;
+		return flag;
 	}
 
 	private static void Player_DryCollision(On_Player.orig_DryCollision orig, Player self, bool fallThrough, bool ignorePlats)
@@ -128,23 +108,7 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 			return;
 		}
 		ColliderManager.EnableHook = false;
-		var player = self.GetModPlayer<PlayerCollider>();
-		player.Prepare();
-		orig(self, fallThrough, ignorePlats);
-		player.Update();
-		ColliderManager.EnableHook = true;
-	}
-
-	private static void Player_WaterCollision(On_Player.orig_WaterCollision orig, Player self, bool fallThrough, bool ignorePlats)
-	{
-		if (!ColliderManager.Enable || self.ghost)
-		{
-			orig(self, fallThrough, ignorePlats);
-			return;
-		}
-
-		ColliderManager.EnableHook = false;
-		var player = self.GetModPlayer<PlayerCollider>();
+		IEntityCollider<Player> player = self.GetModPlayer<PlayerCollider>();
 		player.Prepare();
 		orig(self, fallThrough, ignorePlats);
 		player.Update();
@@ -160,19 +124,11 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 		}
 
 		ColliderManager.EnableHook = false;
-		var player = self.GetModPlayer<PlayerCollider>();
+		IEntityCollider<Player> player = self.GetModPlayer<PlayerCollider>();
 		player.Prepare();
 		orig(self, fallThrough, ignorePlats);
 		player.Update();
 		ColliderManager.EnableHook = true;
-	}
-
-	private static bool Player_CanFitSpace(On_Player.orig_CanFitSpace orig, Player self, int heightBoost)
-	{
-		ColliderManager.EnableHook = false;
-		bool flag = orig(self, heightBoost);
-		ColliderManager.EnableHook = true;
-		return flag;
 	}
 
 	private static void Player_WallslideMovement_IL(ILContext il)
@@ -212,31 +168,19 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 		ColliderManager.EnableHook = true;
 	}
 
-	public bool Ignore(RigidEntity entity)
+	private static void Player_WaterCollision(On_Player.orig_WaterCollision orig, Player self, bool fallThrough, bool ignorePlats)
 	{
-		return false;
+		if (!ColliderManager.Enable || self.ghost)
+		{
+			orig(self, fallThrough, ignorePlats);
+			return;
+		}
+
+		ColliderManager.EnableHook = false;
+		IEntityCollider<Player> player = self.GetModPlayer<PlayerCollider>();
+		player.Prepare();
+		orig(self, fallThrough, ignorePlats);
+		player.Update();
+		ColliderManager.EnableHook = true;
 	}
-
-	//public void OnCollision(RigidEntity tile, Direction dir, ref RigidEntity newAttach)
-	//{
-	//	if (dir == Direction.In)
-	//	{
-	//		Player.Hurt(PlayerDeathReason.ByCustomReason("Inside Tile"), 10, 0);
-	//	}
-
-	//	if (tile.IsGrabbable && dir.IsH())
-	//	{
-	//		var player = Entity;
-	//		player.slideDir = (int)player.GetControlDirectionH().ToVector2().X;
-	//		if (player.slideDir == 0 || player.spikedBoots <= 0 || player.mount.Active ||
-	//			(!player.controlLeft || player.slideDir != -1 || dir != Direction.Left) &&
-	//			(!player.controlRight || player.slideDir != 1 || dir != Direction.Right))
-	//		{
-	//			return;
-	//		}
-	//		newAttach = tile;
-	//		AttachDir = dir;
-	//		AttachType = AttachType.Grab;
-	//	}
-	//}
 }
