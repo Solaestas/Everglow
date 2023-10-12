@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Collider.EntityCollider;
+namespace Everglow.Commons.Collider;
 
 public interface IEntityCollider<T> : IBox where T : Entity
 {
@@ -49,7 +49,7 @@ public interface IEntityCollider<T> : IBox where T : Entity
 			}
 			else if (result.Normal == new Vector2(0, -1))
 			{
-				Entity.velocity.Y = -0.001f;
+				Entity.velocity.Y = -CollisionUtils.Epsilon;
 			}
 			OnCollision(result);
 		}

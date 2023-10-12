@@ -3,7 +3,7 @@ using Everglow.Commons.Hooks;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 
-namespace Everglow.Commons.Collider.EntityCollider;
+namespace Everglow.Commons.Collider;
 
 public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 {

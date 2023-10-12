@@ -4,8 +4,6 @@ namespace Everglow.Commons.Collider;
 
 public class ColliderManager : ILoadable
 {
-	public const float AirSpeed = 0.001f;
-
 	public static bool EnableHook { get; set; } = true;
 
 	public static bool Enable { get; private set; }
