@@ -2,7 +2,6 @@ using System.Reflection;
 using Everglow.Commons.Coroutines;
 using ReLogic.Graphics;
 using Terraria.GameContent;
-using Terraria.ModLoader;
 
 namespace Everglow.Commons.BiomesText;
 
@@ -12,10 +11,11 @@ public class BiomeLable : ModSystem
 	public int Width => 324;
 	public int Height => 100;
 	public int duration = -1;
+	public int timeLag = 50;
 	private CoroutineManager _coroutineManager = new CoroutineManager();
 	public List<ModBiome> TotalBiomes;
-	public Dictionary<ModBiome, bool> ActiveModBiomeCache = new Dictionary<ModBiome, bool>();
-	public Dictionary<string, bool> ActiveVanillaBiomeCache = new Dictionary<string, bool>();
+	public Dictionary<ModBiome, int> ActiveModBiomeCache = new Dictionary<ModBiome, int>();
+	public Dictionary<string, int> ActiveVanillaBiomeCache = new Dictionary<string, int>();
 	public static Dictionary<string, BiomeData> VanillaBiomeDatas = new Dictionary<string, BiomeData>();
 	public Queue<BiomeData> NewActiveBiomeQueue = new Queue<BiomeData>();
 	public struct BiomeData
@@ -41,59 +41,59 @@ public class BiomeLable : ModSystem
 	{
 		foreach (ModBiome modBiome in TotalBiomes)
 		{
-			ActiveModBiomeCache[modBiome] = false;
+			ActiveModBiomeCache[modBiome] = 0;
 		}
-		ActiveVanillaBiomeCache["Beach"] = false;
+		ActiveVanillaBiomeCache["Beach"] = 0;
 		VanillaBiomeDatas["Beach"] = new BiomeData("Ocean", ModAsset.Ocean.Value);
-		ActiveVanillaBiomeCache["Corrupt"] = false;
+		ActiveVanillaBiomeCache["Corrupt"] = 0;
 		VanillaBiomeDatas["Corrupt"] = new BiomeData("The Corruption", ModAsset.The_Corruption.Value);
-		ActiveVanillaBiomeCache["Crimson"] = false;
+		ActiveVanillaBiomeCache["Crimson"] = 0;
 		VanillaBiomeDatas["Crimson"] = new BiomeData("The Crimson", ModAsset.The_Crimson.Value);
-		ActiveVanillaBiomeCache["Desert"] = false;
+		ActiveVanillaBiomeCache["Desert"] = 0;
 		VanillaBiomeDatas["Desert"] = new BiomeData("Desert", ModAsset.Desert.Value);
-		ActiveVanillaBiomeCache["DirtLayerHeight"] = false;
-		ActiveVanillaBiomeCache["Dungeon"] = false;
+		ActiveVanillaBiomeCache["DirtLayerHeight"] = 0;
+		ActiveVanillaBiomeCache["Dungeon"] = 0;
 		VanillaBiomeDatas["Dungeon"] = new BiomeData("Dungeon", ModAsset.Dungeon.Value);
-		ActiveVanillaBiomeCache["Forest"] = false;
+		ActiveVanillaBiomeCache["Forest"] = 0;
 		VanillaBiomeDatas["Forest"] = new BiomeData("Forest", ModAsset.Forest.Value);
-		ActiveVanillaBiomeCache["GemCave"] = false;
-		ActiveVanillaBiomeCache["Glowshroom"] = false;
+		ActiveVanillaBiomeCache["GemCave"] = 0;
+		ActiveVanillaBiomeCache["Glowshroom"] = 0;
 		VanillaBiomeDatas["Glowshroom"] = new BiomeData("Glowshroom Land", ModAsset.Glowing_Mushroom_biome.Value);
-		ActiveVanillaBiomeCache["Granite"] = false;
-		ActiveVanillaBiomeCache["Graveyard"] = false;
-		ActiveVanillaBiomeCache["Hallow"] = false;
+		ActiveVanillaBiomeCache["Granite"] = 0;
+		ActiveVanillaBiomeCache["Graveyard"] = 0;
+		ActiveVanillaBiomeCache["Hallow"] = 0;
 		VanillaBiomeDatas["Hallow"] = new BiomeData("The Hallow", ModAsset.The_Hallow.Value);
-		ActiveVanillaBiomeCache["Jungle"] = false;
+		ActiveVanillaBiomeCache["Jungle"] = 0;
 		VanillaBiomeDatas["Jungle"] = new BiomeData("Jungle", ModAsset.Jungle.Value);
-		ActiveVanillaBiomeCache["LihzhardTemple"] = false;
+		ActiveVanillaBiomeCache["LihzhardTemple"] = 0;
 		VanillaBiomeDatas["LihzhardTemple"] = new BiomeData("Lihzhard Temple", ModAsset.LihzhardTemple.Value);
-		ActiveVanillaBiomeCache["Marble"] = false;
-		ActiveVanillaBiomeCache["Meteor"] = false;
-		ActiveVanillaBiomeCache["NormalCaverns"] = false;
+		ActiveVanillaBiomeCache["Marble"] = 0;
+		ActiveVanillaBiomeCache["Meteor"] = 0;
+		ActiveVanillaBiomeCache["NormalCaverns"] = 0;
 		VanillaBiomeDatas["NormalCaverns"] = new BiomeData("Cavern", ModAsset.Cavern.Value);
-		ActiveVanillaBiomeCache["NormalSpace"] = false;
+		ActiveVanillaBiomeCache["NormalSpace"] = 0;
 		VanillaBiomeDatas["NormalSpace"] = new BiomeData("Space", ModAsset.Space.Value);
-		ActiveVanillaBiomeCache["NormalUnderground"] = false;
-		ActiveVanillaBiomeCache["OldOneArmy"] = false;
-		ActiveVanillaBiomeCache["OverworldHeight"] = false;
-		ActiveVanillaBiomeCache["PeaceCandle"] = false;
-		ActiveVanillaBiomeCache["Purity"] = false;
-		ActiveVanillaBiomeCache["Rain"] = false;
-		ActiveVanillaBiomeCache["RockLayerHeight"] = false;
-		ActiveVanillaBiomeCache["Sandstorm"] = false;
-		ActiveVanillaBiomeCache["ShadowCandle"] = false;
-		ActiveVanillaBiomeCache["Shimmer"] = false;
-		ActiveVanillaBiomeCache["SkyHeight"] = false;
-		ActiveVanillaBiomeCache["Snow"] = false;
+		ActiveVanillaBiomeCache["NormalUnderground"] = 0;
+		ActiveVanillaBiomeCache["OldOneArmy"] = 0;
+		ActiveVanillaBiomeCache["OverworldHeight"] = 0;
+		ActiveVanillaBiomeCache["PeaceCandle"] = 0;
+		ActiveVanillaBiomeCache["Purity"] = 0;
+		ActiveVanillaBiomeCache["Rain"] = 0;
+		ActiveVanillaBiomeCache["RockLayerHeight"] = 0;
+		ActiveVanillaBiomeCache["Sandstorm"] = 0;
+		ActiveVanillaBiomeCache["ShadowCandle"] = 0;
+		ActiveVanillaBiomeCache["Shimmer"] = 0;
+		ActiveVanillaBiomeCache["SkyHeight"] = 0;
+		ActiveVanillaBiomeCache["Snow"] = 0;
 		VanillaBiomeDatas["Snow"] = new BiomeData("Snowland", ModAsset.Snowland.Value);
-		ActiveVanillaBiomeCache["TowerNebula"] = false;
-		ActiveVanillaBiomeCache["TowerSolar"] = false;
-		ActiveVanillaBiomeCache["TowerStardust"] = false;
-		ActiveVanillaBiomeCache["TowerVortex"] = false;
-		ActiveVanillaBiomeCache["UndergroundDesert"] = false;
+		ActiveVanillaBiomeCache["TowerNebula"] = 0;
+		ActiveVanillaBiomeCache["TowerSolar"] = 0;
+		ActiveVanillaBiomeCache["TowerStardust"] = 0;
+		ActiveVanillaBiomeCache["TowerVortex"] = 0;
+		ActiveVanillaBiomeCache["UndergroundDesert"] = 0;
 		VanillaBiomeDatas["UndergroundDesert"] = new BiomeData("Underground Desert", ModAsset.Underground_Desert.Value);
-		ActiveVanillaBiomeCache["UnderworldHeight"] = false;
-		ActiveVanillaBiomeCache["WaterCandle"] = false;
+		ActiveVanillaBiomeCache["UnderworldHeight"] = 0;
+		ActiveVanillaBiomeCache["WaterCandle"] = 0;
 		base.OnWorldLoad();
 	}
 	public override void PostDrawInterface(SpriteBatch spriteBatch)
@@ -103,17 +103,20 @@ public class BiomeLable : ModSystem
 		{
 			if (modBiome.IsBiomeActive(player))
 			{
-				if (!ActiveModBiomeCache[modBiome])
+				if (ActiveModBiomeCache[modBiome] < timeLag)
 				{
-					ActiveModBiomeCache[modBiome] = true;
-					NewActiveBiomeQueue.Enqueue(new BiomeData(modBiome.Name, ModContent.Request<Texture2D>(modBiome.BestiaryIcon, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value));
+					ActiveModBiomeCache[modBiome]++;
+					if(ActiveModBiomeCache[modBiome] == timeLag)
+					{
+						NewActiveBiomeQueue.Enqueue(new BiomeData(modBiome.Name, ModContent.Request<Texture2D>(modBiome.BestiaryIcon, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value));
+					}			
 				}
 			}
 			else
 			{
-				if (ActiveModBiomeCache[modBiome])
+				if (ActiveModBiomeCache[modBiome] > 0)
 				{
-					ActiveModBiomeCache[modBiome] = false;
+					ActiveModBiomeCache[modBiome] = 0;
 				}
 			}
 		}
@@ -131,7 +134,7 @@ public class BiomeLable : ModSystem
 		CheckNewActiveVanillaBiome("NormalSpace", player.ZoneNormalSpace);
 		CheckNewActiveVanillaBiome("Snow", player.ZoneSnow);
 		CheckNewActiveVanillaBiome("UndergroundDesert", player.ZoneUndergroundDesert);
-		if(NewActiveBiomeQueue.Count > 2)
+		if (NewActiveBiomeQueue.Count > 2)
 		{
 			NewActiveBiomeQueue.Dequeue();
 		}
@@ -149,17 +152,20 @@ public class BiomeLable : ModSystem
 	{
 		if (value)
 		{
-			if (!ActiveVanillaBiomeCache[name])
+			if (ActiveVanillaBiomeCache[name] < timeLag)
 			{
-				ActiveVanillaBiomeCache[name] = true;
-				NewActiveBiomeQueue.Enqueue(VanillaBiomeDatas[name]);
+				ActiveVanillaBiomeCache[name]++;
+				if(ActiveVanillaBiomeCache[name] == timeLag)
+				{
+					NewActiveBiomeQueue.Enqueue(VanillaBiomeDatas[name]);
+				}
 			}
 		}
 		else
 		{
-			if (ActiveVanillaBiomeCache[name])
+			if (ActiveVanillaBiomeCache[name] > 0)
 			{
-				ActiveVanillaBiomeCache[name] = false;
+				ActiveVanillaBiomeCache[name] = 0;
 			}
 		}
 	}
@@ -178,10 +184,10 @@ public class BiomeLable : ModSystem
 			spriteBatch.Draw(Lable, new Vector2(Main.screenWidth / 2f, 200), new Rectangle(0, Height * (i / 2), Width, Height), Color.White, 0, new Vector2(Width, Height) * 0.5f, 1f, SpriteEffects.None, 0);
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
-			Effect dissolve = ModAsset.Dissolve.Value;
+			Effect dissolve = ModAsset.Dissolve_BiomeLable.Value;
 			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 			var model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.EffectMatrix;
-			float dissolveDuration = 1.2f - i / 122f;
+			float dissolveDuration = (1f - i / 148f) * 2;
 			dissolve.Parameters["uTransform"].SetValue(model * projection);
 			dissolve.Parameters["uNoise"].SetValue(ModAsset.Noise_spiderNet.Value);
 			dissolve.Parameters["duration"].SetValue(dissolveDuration);
