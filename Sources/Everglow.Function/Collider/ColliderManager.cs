@@ -153,7 +153,7 @@ public class ColliderManager : ILoadable
 			{
 				float t = MathHelper.Lerp(0, samples[i], j / 20f);
 				Vector2 p = samplingPoint + t * directionUnit;
-				if (Intersect(new AABB(p - Vector2.One, Vector2.One * 2)))
+				if (Intersect(new AABB(p - Vector2.One * 6, Vector2.One * 12)))
 				{
 					samples[i] = t;
 					break;
