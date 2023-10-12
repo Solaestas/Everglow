@@ -4,8 +4,6 @@ namespace Everglow.Commons.Collider;
 
 public class BoxEntity : RigidEntity, IBox
 {
-	private const float Padding = 7;
-
 	public AABB Box => new(Position, Size);
 
 	public int Quantity => 114514;
@@ -26,7 +24,7 @@ public class BoxEntity : RigidEntity, IBox
 		{
 			result.Stride = stride;
 			result.Normal = Vector2.Zero;
-			return false;
+			return true;
 		}
 
 		stride -= Velocity;
@@ -118,26 +116,6 @@ public class BoxEntity : RigidEntity, IBox
 	public virtual bool Ignore(RigidEntity entity)
 	{
 		return false;
-	}
-
-	private static float Intersect(AABB a, AABB b)
-	{
-		var topLeft = Vector2.Max(a.TopLeft, b.TopLeft);
-		var bottomRight = Vector2.Min(a.BottomRight, b.BottomRight);
-		return Math.Max(0, bottomRight.X - topLeft.X) * Math.Max(0, bottomRight.Y - topLeft.Y);
-	}
-
-	private static float Approach(float begin, float end, float velocity)
-	{
-		var sign = Math.Sign(end - begin);
-		if (sign * (end - begin) < sign * velocity)
-		{
-			return end;
-		}
-		else
-		{
-			return begin + velocity * sign;
-		}
 	}
 
 	public override Vector2 StandAccelerate(IBox obj)

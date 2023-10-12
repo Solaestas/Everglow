@@ -6,23 +6,111 @@ public class ColliderManager : ILoadable
 {
 	public const float AirSpeed = 0.001f;
 
-	private const int Capacity = 100;
+	public static bool EnableHook { get; set; } = true;
 
-	private const bool AllowOverflow = true;
+	public static bool Enable { get; private set; }
 
-	public static bool EnableHook = true;
+	public static ColliderManager Instance => ModContent.GetInstance<ColliderManager>();
 
-	private List<RigidEntity> _tiles = new();
+	public void Add(RigidEntity entity)
+	{
+		Enable = true;
+		if (rigidbody.Count > Capacity)
+		{
+			int count = rigidbody.RemoveAll(tile => !tile.Active);
+			if (count == 0 && !AllowOverflow)
+			{
+				rigidbody[0] = entity;
+				return;
+			}
+		}
+		rigidbody.Add(entity);
+	}
+
+	public void Clear()
+	{
+		rigidbody.Clear();
+		Enable = false;
+	}
+
+	public void Draw()
+	{
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		foreach (var tile in rigidbody)
+		{
+			tile.Draw();
+		}
+		Main.spriteBatch.End();
+	}
+
+	public void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale)
+	{
+		foreach (var tile in rigidbody)
+		{
+			tile.DrawToMap(mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
+		}
+	}
+
+	public bool First(AABB aabb, out RigidEntity result)
+	{
+		foreach (var entity in rigidbody)
+		{
+			if (entity.Intersect(aabb))
+			{
+				result = entity;
+				return true;
+			}
+		}
+		result = null;
+		return false;
+	}
+
+	public bool Intersect(AABB aabb)
+	{
+		foreach(var entity in rigidbody)
+		{
+			if (entity.Intersect(aabb))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public void Load(Mod mod)
 	{
-		//On_Collision.LaserScan += Collision_LaserScan;
+		On_Collision.LaserScan += Collision_LaserScan;
 		On_Collision.TileCollision += Collision_TileCollision;
-		//On_Collision.SolidCollision_Vector2_int_int += Collision_SolidCollision_Vector2_int_int;
-		//On_Collision.SolidCollision_Vector2_int_int_bool += Collision_SolidCollision_Vector2_int_int_bool;
+		On_Collision.SolidCollision_Vector2_int_int += Collision_SolidCollision_Vector2_int_int;
+		On_Collision.SolidCollision_Vector2_int_int_bool += Collision_SolidCollision_Vector2_int_int_bool;
 		Ins.HookManager.AddHook(CodeLayer.PostUpdateEverything, Update);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, Draw);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawMapIcons, DrawToMap);
+		Ins.HookManager.AddHook(CodeLayer.PostExitWorld_Single, Clear);
+	}
+
+	public IEnumerable<CollisionResult> Move(IBox box, Vector2 stride)
+	{
+		var list = new List<CollisionResult>();
+		foreach (var entity in rigidbody)
+		{
+			if (box.Ignore(entity))
+			{
+				continue;
+			}
+			if (entity.Collision(box, stride, out var result))
+			{
+				stride = result.Stride;
+				list.Add(result);
+			}
+		}
+		box.Position += stride;
+		return list;
+	}
+
+	public IEnumerable<T> OfType<T>()
+	{
+		return rigidbody.OfType<T>();
 	}
 
 	public void Unload()
@@ -33,103 +121,23 @@ public class ColliderManager : ILoadable
 		On_Collision.SolidCollision_Vector2_int_int_bool -= Collision_SolidCollision_Vector2_int_int_bool;
 	}
 
-	public static ColliderManager Instance => ModContent.GetInstance<ColliderManager>();
-
-	public static bool Enable { get; private set; }
-
-	public IEnumerable<RigidEntity> Tiles => _tiles;
-
-	public void Add(RigidEntity tile)
-	{
-		Enable = true;
-		if (_tiles.Count > Capacity)
-		{
-			int count = _tiles.RemoveAll(tile => !tile.Active);
-			if (count == 0 && !AllowOverflow)
-			{
-				_tiles[0] = tile;
-				return;
-			}
-		}
-		_tiles.Add(tile);
-	}
-
-	public void Clear()
-	{
-		_tiles.Clear();
-	}
-
-	public bool First(AABB aabb, out RigidEntity tile)
-	{
-		foreach (var entity in _tiles)
-		{
-			if (entity.Intersect(aabb))
-			{
-				tile = entity;
-				return true;
-			}
-		}
-		tile = null;
-		return false;
-	}
-
-	public void Draw()
-	{
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		foreach (var tile in _tiles)
-		{
-			tile.Draw();
-		}
-		Main.spriteBatch.End();
-	}
-
-	public void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale)
-	{
-		foreach (var tile in _tiles)
-		{
-			tile.DrawToMap(mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
-		}
-	}
-
-	public IEnumerable<T> OfType<T>()
-	{
-		return _tiles.OfType<T>();
-	}
-
-	public IEnumerable<CollisionResult> Move(IBox box, Vector2 stride)
-	{
-		var list = new List<CollisionResult>();
-		if(stride == Vector2.Zero)
-		{
-			stride += box.Gravity * CollisionUtils.Epsilon * Vector2.UnitY;
-		}
-		foreach (var tile in _tiles)
-		{
-			if (box.Ignore(tile))
-			{
-				continue;
-			}
-			if (tile.Collision(box, stride, out var result))
-			{
-				stride = result.Stride;
-				list.Add(result);
-			}
-		}
-		box.Position += stride;
-		return list;
-	}
-
 	public void Update()
 	{
-		for (int i = 0; i < _tiles.Count; i++)
+		for (int i = 0; i < rigidbody.Count; i++)
 		{
-			var tile = _tiles[i];
+			var tile = rigidbody[i];
 			if (tile.Active)
 			{
 				tile.Update();
 			}
 		}
 	}
+
+	private const bool AllowOverflow = true;
+
+	private const int Capacity = 100;
+
+	private List<RigidEntity> rigidbody = new();
 
 	private void Collision_LaserScan(On_Collision.orig_LaserScan orig, Vector2 samplingPoint, Vector2 directionUnit, float samplingWidth, float maxDistance, float[] samples)
 	{
@@ -154,11 +162,6 @@ public class ColliderManager : ILoadable
 		}
 	}
 
-	public bool Intersect(AABB aabb)
-	{
-		return First(aabb, out _);
-	}
-
 	private bool Collision_SolidCollision_Vector2_int_int(On_Collision.orig_SolidCollision_Vector2_int_int orig, Vector2 Position, int Width, int Height)
 	{
 		if (!Enable || !EnableHook)
@@ -170,24 +173,33 @@ public class ColliderManager : ILoadable
 
 	private bool Collision_SolidCollision_Vector2_int_int_bool(On_Collision.orig_SolidCollision_Vector2_int_int_bool orig, Vector2 Position, int Width, int Height, bool acceptTopSurfaces)
 	{
-		return !Enable || !EnableHook
-			? orig(Position, Width, Height, acceptTopSurfaces)
-			: orig(Position, Width, Height, acceptTopSurfaces) || Intersect(new AABB(Position.X, Position.Y, Width, Height));
+		if (!Enable || !EnableHook)
+		{
+			return orig(Position, Width, Height, acceptTopSurfaces);
+		}
+		return orig(Position, Width, Height, acceptTopSurfaces) || Intersect(new AABB(Position.X, Position.Y, Width, Height));
 	}
 
 	private Vector2 Collision_TileCollision(On_Collision.orig_TileCollision orig, Vector2 Position, Vector2 Velocity, int Width, int Height, bool fallThrough, bool fall2, int gravDir)
 	{
-		Vector2 result = orig(Position, Velocity, Width, Height, fallThrough, fall2, gravDir);
+		Vector2 stride = orig(Position, Velocity, Width, Height, fallThrough, fall2, gravDir);
 		if (EnableHook && Enable)
 		{
 			var box = new BoxImpl()
 			{
 				Position = Position,
 				Size = new Vector2(Width, Height),
+				Gravity = gravDir,
 			};
-			Move(box, Velocity);
-			return box.Position - Position;
+			foreach(var entity in rigidbody)
+			{
+				if(entity.Collision(box, stride, out var result))
+				{
+					stride = result.Stride;
+				}
+			}
+			return stride;
 		}
-		return result;
+		return stride;
 	}
 }

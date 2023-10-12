@@ -1,14 +1,10 @@
-#if false
 using Everglow.Commons.Collider;
-using Everglow.Commons.Collider.EntityCollider;
 
-namespace Everglow.Commons.CustomTiles.EntityCollider;
+namespace Everglow.Commons.Collider.EntityCollider;
 
 public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 {
 	public const int HookAIStyle = 7;
-
-	private Projectile projectile;
 
 	public static readonly HashSet<Projectile> callFromHook = new();
 
@@ -18,34 +14,30 @@ public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 
 	public override bool IsCloneable => true;
 
-	public Direction AttachDir { get; set; }
+	public Vector2 Position { get => Entity.position; set => Entity.position = value; }
 
-	public RigidEntity AttachTile { get; set; }
+	public Projectile Entity { get; set; }
 
-	public AttachType AttachType { get; set; }
+	public RigidEntity Ground { get; set; }
 
-	public bool CanAttach => true;
+	public float OffsetY { get => Entity.gfxOffY; set => Entity.gfxOffY = value; }
 
-	public Entity Entity => projectile;
+	public Vector2 OldPosition { get; set; }
 
-	public Vector2 DeltaVelocity { get; set; }
+	public AABB Box => new AABB(Entity.position, Entity.width, Entity.height);
 
-	public Direction Ground => Direction.Down;
+	public float Gravity => 1;
 
-	public Vector2 Position { get; set; }
+	public Vector2 Size => new Vector2(Entity.width, Entity.height);
 
-	public Vector2 AbsoluteVelocity { get; set; }
+	public Vector2 Velocity { get => Entity.velocity; set => Entity.velocity = value; }
 
 	public override GlobalProjectile Clone(Projectile from, Projectile to)
 	{
 		var clone = base.Clone(from, to) as ProjCollider;
-		clone.projectile = to;
-		clone.AttachTile = null;
-		clone.AttachDir = Direction.None;
-		clone.AttachType = AttachType.None;
-		clone.Position = to.position;
-		clone.AbsoluteVelocity = to.velocity;
-		clone.DeltaVelocity = Vector2.Zero;
+		clone.Entity = to;
+		clone.Ground = null;
+		clone.OldPosition = to.position;
 		return clone;
 	}
 
@@ -119,8 +111,8 @@ public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 
 		if (self.ai[0] != 1)
 		{
-			var collider = self.GetGlobalProjectile<ProjCollider>();
-			collider.UpdateHook();
+			ProjCollider collider = self.GetGlobalProjectile<ProjCollider>();
+			//collider.UpdateHook();
 		}
 		orig(self);
 		callFromHook.Remove(self);
@@ -135,77 +127,67 @@ public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 		}
 
 		ColliderManager.EnableHook = false;
-		var proj = self.GetGlobalProjectile<ProjCollider>();
+		IEntityCollider<Projectile> proj = self.GetGlobalProjectile<ProjCollider>();
 
 		// 记录位置，否则会把传送当成位移
-		proj.Position = self.position;
+		proj.Prepare();
 		orig(self, wetVelocity, out overrideWidth, out overrideHeight);
-		IBox.Update(proj, true);
+		proj.Update();
 		ColliderManager.EnableHook = true;
 	}
 
-	public void OnAttach()
+	//private void UpdateHook()
+	//{
+	//	Player player = Main.player[projectile.owner];
+	//	if (AttachTile is not null)
+	//	{
+	//		if (AttachTile.Active)
+	//		{
+	//			callFromHook.Add(projectile);
+	//			(AttachTile as IHookable).SetHookPosition(projectile);
+	//		}
+	//		else
+	//		{
+	//			AttachTile = null;
+	//		}
+	//		return;
+	//	}
+
+	//	foreach (var tile in ColliderManager.Instance.Tiles)
+	//	{
+	//		if (tile is IHookable hookable && tile.Collision(new CAABB(new AABB(projectile.position, projectile.Size))))
+	//		{
+	//			hookable.SetHookPosition(projectile);
+	//			if (projectile.type == ProjectileID.QueenSlimeHook && projectile.alpha == 0 && Main.myPlayer == projectile.owner)
+	//			{
+	//				player.DoQueenSlimeHookTeleport(projectile.position);
+	//				NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, projectile.owner);
+	//			}
+	//			callFromHook.Add(projectile);
+	//			projectile.ai[0] = 2;
+	//			projectile.netUpdate = true;
+	//			projectile.velocity *= 0;
+	//			if (projectile.alpha == 0)
+	//			{
+	//				projectile.alpha = 1;
+	//				Terraria.Audio.SoundEngine.PlaySound(SoundID.Dig, projectile.Center);
+	//			}
+	//			AttachTile = tile;
+	//			break;
+	//		}
+	//	}
+	//}
+
+	public void OnCollision(CollisionResult result)
 	{
-		projectile.velocity.Y = 0;
 	}
 
-	public void OnCollision(RigidEntity tile, Direction dir, ref RigidEntity newAttach)
+	public void OnLeave()
 	{
-		if (dir == Direction.In)
-		{
-			projectile.Kill();
-		}
 	}
 
-	public void OnUpdate()
+	public bool Ignore(RigidEntity entity)
 	{
-		if (AttachTile is not null)
-		{
-			projectile.position += new Vector2(0, projectile.gfxOffY);
-			projectile.gfxOffY = 0;
-		}
-	}
-
-	private void UpdateHook()
-	{
-		Player player = Main.player[projectile.owner];
-		if (AttachTile is not null)
-		{
-			if (AttachTile.Active)
-			{
-				callFromHook.Add(projectile);
-				(AttachTile as IHookable).SetHookPosition(projectile);
-			}
-			else
-			{
-				AttachTile = null;
-			}
-			return;
-		}
-
-		foreach (var tile in ColliderManager.Instance.Tiles)
-		{
-			if (tile is IHookable hookable && tile.Collision(new CAABB(new AABB(projectile.position, projectile.Size))))
-			{
-				hookable.SetHookPosition(projectile);
-				if (projectile.type == ProjectileID.QueenSlimeHook && projectile.alpha == 0 && Main.myPlayer == projectile.owner)
-				{
-					player.DoQueenSlimeHookTeleport(projectile.position);
-					NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, projectile.owner);
-				}
-				callFromHook.Add(projectile);
-				projectile.ai[0] = 2;
-				projectile.netUpdate = true;
-				projectile.velocity *= 0;
-				if (projectile.alpha == 0)
-				{
-					projectile.alpha = 1;
-					Terraria.Audio.SoundEngine.PlaySound(SoundID.Dig, projectile.Center);
-				}
-				AttachTile = tile;
-				break;
-			}
-		}
+		return false;
 	}
 }
-#endif
