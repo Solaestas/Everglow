@@ -1,3 +1,4 @@
+using System.Reflection;
 using Everglow.Commons.Hooks;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
@@ -13,6 +14,10 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 	public float Gravity => Player.gravDir;
 
 	public RigidEntity Ground { get; set; }
+
+	public RigidEntity Grab { get; set; }
+
+	public int GrabDir { get; set; }
 
 	public override bool IsCloneable => true;
 
@@ -74,12 +79,20 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 		On_Player.WaterCollision += Player_WaterCollision;
 		On_Player.JumpMovement += Player_JumpMovement;
 		On_Player.HoneyCollision += Player_HoneyCollision;
-		On_Player.WallslideMovement += Player_WallslideMovement_On;
 		IL_Player.WallslideMovement += Player_WallslideMovement_IL;
 	}
 
 	public void OnCollision(CollisionResult result)
 	{
+		if (Player.spikedBoots <= 0)
+		{
+			return;
+		}
+		if (1 - Math.Abs(result.Normal.X) < CollisionUtils.Epsilon)
+		{
+			Grab = result.Collider;
+			GrabDir = Math.Sign(result.Normal.X);
+		}
 	}
 
 	public void OnLeave()
@@ -134,6 +147,21 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 	private static void Player_WallslideMovement_IL(ILContext il)
 	{
 		var cursor = new ILCursor(il);
+		cursor.Emit(OpCodes.Ldarg_0);
+		cursor.EmitDelegate((Player player) =>
+		{
+			ColliderManager.EnableHook = false;
+			var collider = player.GetModPlayer<PlayerCollider>();
+			var position = player.position + new Vector2(collider.GrabDir, 0);
+			if (collider.Grab != null)
+			{
+				if (collider.GrabDir != player.direction ||
+					!collider.Grab.Intersect(new AABB(position, player.Size)))
+				{
+					collider.Grab = null;
+				}
+			}
+		});
 		var skipControlCheck = cursor.DefineLabel();
 		var skipSetFlag = cursor.DefineLabel();
 		if (!cursor.TryGotoNext(MoveType.After, ins => ins.MatchStfld<Player>("sliding")))
@@ -144,7 +172,7 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 		cursor.Emit(OpCodes.Ldarg_0);
 		cursor.EmitDelegate((Player player) =>
 		{
-			return false;
+			return player.GetModPlayer<PlayerCollider>().Grab != null;
 		});
 		cursor.Emit(OpCodes.Brfalse, skipSetFlag);
 
@@ -159,13 +187,15 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 		}
 
 		cursor.MarkLabel(skipControlCheck);
-	}
 
-	private static void Player_WallslideMovement_On(On_Player.orig_WallslideMovement orig, Player self)
-	{
-		ColliderManager.EnableHook = false;
-		orig(self);
-		ColliderManager.EnableHook = true;
+		cursor.Index = 0;
+		MethodInfo setHook = typeof(ColliderManager).GetProperty(nameof(ColliderManager.EnableHook), BindingFlags.Static | BindingFlags.Public).SetMethod;
+		while (cursor.TryGotoNext(MoveType.Before, ins => ins.MatchRet()))
+		{
+			cursor.Emit(OpCodes.Ldc_I4_1);
+			cursor.Emit(OpCodes.Call, setHook);
+			cursor.Index++;
+		}
 	}
 
 	private static void Player_WaterCollision(On_Player.orig_WaterCollision orig, Player self, bool fallThrough, bool ignorePlats)
