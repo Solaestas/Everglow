@@ -1,4 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <Solaestas-EffectFile Remove="effects\iiideffects\PixelArt.fx" />
+  </ItemGroup>
 </Project>
 
 

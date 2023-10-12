@@ -54,7 +54,7 @@ namespace Everglow.Commons.IIID
         private Asset<Effect> m_gbufferPassEffect;
         private Asset<Effect> m_filtersEffect;
         private Asset<Effect> m_toneMapping;
-        private Asset<Effect> m_pixelArt;
+        private Asset<Effect> m_ConcaveEdge;
 
         public RenderTarget2D ModelTarget
         {
@@ -68,7 +68,7 @@ namespace Everglow.Commons.IIID
             m_gbufferPassEffect = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/GBufferPass"); 
             m_filtersEffect = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/Filters");
             m_toneMapping = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/ToneMapping");
-            m_pixelArt = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/PixelArt");
+            m_ConcaveEdge = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/ConcaveEdge");
             Main.OnResolutionChanged += Main_OnResolutionChanged;
 			Ins.MainThread.AddTask(() =>
             {
@@ -146,9 +146,9 @@ namespace Everglow.Commons.IIID
             {
                 m_filtersEffect.Wait();
             }
-            if (!m_pixelArt.IsLoaded)
+            if (!m_ConcaveEdge.IsLoaded)
             {
-                m_pixelArt.Wait();
+                m_ConcaveEdge.Wait();
             }
 
             Blit(Main.screenTarget, Main.screenTargetSwap, null, "");
@@ -156,8 +156,8 @@ namespace Everglow.Commons.IIID
             ShadingPass();
             BloomPass();
             ToneMappingPass();
-            //PixelArtPass();
-            FinalBlend();
+            ConcaveEdgePass();
+            //FinalBlend();
 
 
             graphicsDevice.SetRenderTarget(Main.screenTarget);
@@ -234,45 +234,40 @@ namespace Everglow.Commons.IIID
             spriteBatch.End();
         }
 
-        private void PixelArtPass()
-        {
-            var graphicsDevice = Main.graphics.GraphicsDevice;
-            var spriteBatch = Main.spriteBatch;
+		private void ConcaveEdgePass()
+		{
+			var graphicsDevice = Main.graphics.GraphicsDevice;
+			var spriteBatch = Main.spriteBatch;
+			//// Save content of m_fakeScreenTarget
+			//graphicsDevice.SetRenderTarget(m_blurRenderTargets[1]);
+			//graphicsDevice.Clear(Color.Transparent);
+			//spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp,
+			//    DepthStencilState.None,
+			//    RasterizerState.CullNone);
+			//ConcaveEdgeEffect.CurrentTechnique.Passes["DownSample_Naive"].Apply();
+			//int width = m_fakeScreenTargetSwap.Width;
+			//int height = m_fakeScreenTargetSwap.Height;
+			//spriteBatch.Draw(m_fakeScreenTargetSwap, m_blurRenderTargets[1].Bounds, Color.White);
+			//// spriteBatch.Draw(m_emissionTarget, m_emissionTarget.Bounds, Color.White);
+			//spriteBatch.End();
+			var ConcaveEdgeEffect = m_ConcaveEdge.Value;
+			graphicsDevice.Textures[1] = m_depthTarget;
+			graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
+			ConcaveEdgeEffect.Parameters["uBias"].SetValue(0.01f);
+			ConcaveEdgeEffect.Parameters["_ZBufferParams"].SetValue(m_ZbufferParams);
+			if (m_artParams.EnableOuterEdge)
+			{
+				ConcaveEdgeEffect.Parameters["_EdgeColor"].SetValue(new Vector4(1f, 0f, 0f, 1f));
+				Blit(m_fakeScreenTargetSwap, m_fakeScreenTarget, ConcaveEdgeEffect, "Edge_HighLight_Outer");
+			}
+			else
+			{
+				Blit(m_fakeScreenTargetSwap, m_fakeScreenTarget, ConcaveEdgeEffect, "Edge_HighLight_Inner");
+			}
+			Blit(m_fakeScreenTarget, m_fakeScreenTargetSwap, null, "");
+		}
 
-            //// Save content of m_fakeScreenTarget
-            graphicsDevice.SetRenderTarget(m_blurRenderTargets[1]);
-            graphicsDevice.Clear(Color.Transparent);
-			var pixelArtEffect = m_pixelArt.Value;
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp,
-               DepthStencilState.None,
-                RasterizerState.CullNone);
-			pixelArtEffect.CurrentTechnique.Passes["DownSample_Naive"].Apply();
-
-            int width = m_fakeScreenTargetSwap.Width;
-            int height = m_fakeScreenTargetSwap.Height;
-            spriteBatch.Draw(m_fakeScreenTargetSwap, m_blurRenderTargets[1].Bounds, Color.White);
-            spriteBatch.Draw(m_emissionTarget, m_emissionTarget.Bounds, Color.White);
-            spriteBatch.End();
-
-            
-            graphicsDevice.Textures[1] = m_depthTarget;
-            graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
-            pixelArtEffect.Parameters["uBias"].SetValue(0.01f);
-            pixelArtEffect.Parameters["_ZBufferParams"].SetValue(m_ZbufferParams);
-
-            if (m_artParams.EnableOuterEdge)
-            {
-                pixelArtEffect.Parameters["_EdgeColor"].SetValue(new Vector4(1f, 0f, 0f, 1f));
-                Blit(m_fakeScreenTargetSwap, m_fakeScreenTarget, pixelArtEffect, "Edge_HighLight_Outer");
-            }
-            else
-            {
-                Blit(m_fakeScreenTargetSwap, m_fakeScreenTarget, pixelArtEffect, "Edge_HighLight_Inner");
-            }
-            Blit(m_fakeScreenTarget, m_fakeScreenTargetSwap, null, "");
-        }
-
-        private void ShadingPass()
+		private void ShadingPass()
         {
             var graphicsDevice = Main.graphics.GraphicsDevice;
             var spriteBatch = Main.spriteBatch;

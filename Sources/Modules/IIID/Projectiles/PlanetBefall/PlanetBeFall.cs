@@ -86,12 +86,12 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 				{
 					Projectile.velocity *= 1.05f;
 				}
-				if (s < 9000)
-					s = MathUtils.Lerp(0.05f, s, 9000);
+				if (s < 8500)
+					s = MathUtils.Lerp(0.05f, s, 8500);
 			}
 			player.heldProj = Projectile.whoAmI;
 		}
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			foreach (Projectile proj in Main.projectile)
 			{
@@ -127,7 +127,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 					}
 				}
 			}
-			base.Kill(timeLeft);
+			base.OnKill(timeLeft);
 		}
 
 		public static ObjReader.Model model;
@@ -190,16 +190,25 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 
 			// 用这个函数创建透视投影，需要FOV和屏幕宽高比
 			var projection = Matrix.CreatePerspectiveFieldOfView(MathF.PI / 3f, 1.0f, 1f, 1200f);
-			var t = new Vector3(0, 0, 10000 - s);
+			var t = new Vector3(5, -100, 10000 - s);
 			Vector2 lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
+			Matrix GameViewTransformationMatrix = Main.GameViewMatrix.TransformationMatrix;
+
 			var modelMatrix =
-						   Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
-						   * Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
-			* Matrix.CreateTranslation(t)
+
+
+			 /* Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
+						* Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)*/
+
+			 Matrix.CreateTranslation(t)
+
 			* Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0),
 									 new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 500),
 									 new Vector3(0, -1, 0))
-		   * Matrix.CreateScale(0.5f);
+			* Main.GameViewMatrix.ZoomMatrix
+		    * Matrix.CreateTranslation(new Vector3(-Main.GameViewMatrix.TransformationMatrix.M41, -Main.GameViewMatrix.TransformationMatrix.M42, 0))
+			;
+
 
 
 
@@ -228,7 +237,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 
 			ArtParameters artParameters = new ArtParameters
 			{
-				EnableOuterEdge = true
+				EnableOuterEdge = false
 			};
 			modelPipeline.BeginCapture(viewProjectionParams, bloom, artParameters);
 			{

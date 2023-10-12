@@ -304,15 +304,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			FieldOfView = MathF.PI / 3f,
 			AspectRatio = 1.0f,
 			ZNear = 1f,
-			ZFar = 700f
-		};
-		ViewProjectionParams POVinGoldencrack = new ViewProjectionParams
-		{
-			ViewTransform = Matrix.Identity,
-			FieldOfView = MathF.PI / 3f,
-			AspectRatio = 1.0f,
-			ZNear = 700f,
-			ZFar = 10000f
+			ZFar = 8000
 		};
 		private void FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
 		{

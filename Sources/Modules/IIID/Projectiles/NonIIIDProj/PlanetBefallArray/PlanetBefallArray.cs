@@ -42,10 +42,10 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 				BloomIntensity = MathF.Sin((float)(Projectile.ai[0] / (18 * Math.PI)))+1;
 			}
 		}
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			BloomIntensity = 0;
-			base.Kill(timeLeft);
+			base.OnKill(timeLeft);
 		}
 		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 		{
