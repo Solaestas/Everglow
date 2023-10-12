@@ -4,7 +4,7 @@ namespace Everglow.Commons.Collider;
 
 public static class CollisionUtils
 {
-	public const float Epsilon = 1e-4f;
+	public const float Epsilon = 1e-3f;
 
 	public static bool SignEquals(float a, float b)
 	{
