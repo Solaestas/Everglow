@@ -55,9 +55,8 @@ namespace Everglow.Commons.IIID
         private Asset<Effect> m_filtersEffect;
         private Asset<Effect> m_toneMapping;
         private Asset<Effect> m_ConcaveEdge;
-		private Asset<Effect> m_PixelArt;
 
-		public RenderTarget2D ModelTarget
+        public RenderTarget2D ModelTarget
         {
             get
             {
@@ -70,9 +69,7 @@ namespace Everglow.Commons.IIID
             m_filtersEffect = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/Filters");
             m_toneMapping = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/ToneMapping");
             m_ConcaveEdge = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/ConcaveEdge");
-			m_PixelArt = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/PixelArt");
-
-			Main.OnResolutionChanged += Main_OnResolutionChanged;
+            Main.OnResolutionChanged += Main_OnResolutionChanged;
 			Ins.MainThread.AddTask(() =>
             {
                 m_fakeScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, RenderTargetSize, RenderTargetSize, false,
@@ -160,8 +157,7 @@ namespace Everglow.Commons.IIID
             BloomPass();
             ToneMappingPass();
             ConcaveEdgePass();
-			PixelArtPass();
-			FinalBlend();
+            //FinalBlend();
 
 
             graphicsDevice.SetRenderTarget(Main.screenTarget);
@@ -270,24 +266,7 @@ namespace Everglow.Commons.IIID
 			}
 			Blit(m_fakeScreenTarget, m_fakeScreenTargetSwap, null, "");
 		}
-		private void PixelArtPass()
-		{
-			var graphicsDevice = Main.graphics.GraphicsDevice;
-			var spriteBatch = Main.spriteBatch;
 
-			var PixelArtEffect = m_PixelArt.Value;
-			// Draw to m_fakeScreenTarget
-			graphicsDevice.SetRenderTarget(m_fakeScreenTarget);
-			graphicsDevice.Clear(Color.Transparent);
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp,
-				DepthStencilState.None,
-				RasterizerState.CullNone);
-			graphicsDevice.Textures[1] = m_blurRenderTargets[0];
-			PixelArtEffect.Parameters["uIntensity"].SetValue(0.1f);
-			PixelArtEffect.CurrentTechnique.Passes["Blend"].Apply();
-			spriteBatch.Draw(m_fakeScreenTargetSwap, m_fakeScreenTarget.Bounds, Color.White);
-			spriteBatch.End();
-		}
 		private void ShadingPass()
         {
             var graphicsDevice = Main.graphics.GraphicsDevice;
