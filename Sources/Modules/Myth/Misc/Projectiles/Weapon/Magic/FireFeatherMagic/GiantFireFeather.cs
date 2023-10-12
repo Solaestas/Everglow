@@ -16,7 +16,7 @@ public class GiantFireFeather : ModProjectile
 		Projectile.DamageType = DamageClass.Magic;
 		Projectile.tileCollide = true;
 		Projectile.timeLeft = 360;
-		Projectile.penetrate = 1;
+		Projectile.penetrate = -1;
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.extraUpdates = 3;
 		Projectile.localNPCHitCooldown = 2;
@@ -226,6 +226,7 @@ public class GiantFireFeather : ModProjectile
 		Player player = Main.player[Projectile.owner];
 		TimeTokill = 80;
 		Projectile.tileCollide = false;
+		Projectile.friendly = false;
 		Projectile.ignoreWater = true;
 		Projectile.velocity = Projectile.oldVelocity;
 		for (int j = 0; j < 40; j++)

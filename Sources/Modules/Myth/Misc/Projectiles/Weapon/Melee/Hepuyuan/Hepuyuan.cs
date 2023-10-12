@@ -1,321 +1,346 @@
-using Everglow.Myth.Common;
-using Everglow.Myth.Misc.Dusts;
-using Everglow.Myth.Misc.Gores;
-using Terraria;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
 
-public class Hepuyuan : ModProjectile, IWarpProjectile
+public class Hepuyuan : MeleeProj
 {
-	public virtual float HoldoutRangeMin => 24f;
-	public virtual float HoldoutRangeMax => 150f;
-
-	public override void SetDefaults()
+	public override void SetDef()
 	{
-		Projectile.CloneDefaults(ProjectileID.Spear); // Clone the default values for a vanilla spear. Spear specific values set for width, height, aiStyle, friendly, penetrate, tileCollide, scale, hide, ownerHitCheck, and melee.  
-		Projectile.extraUpdates = 6;
+		Projectile.aiStyle = -1;
+		Projectile.timeLeft = 30;
+		Projectile.extraUpdates = 1;
+		Projectile.scale = 1f;
+		Projectile.hostile = false;
+		Projectile.friendly = true;
+		Projectile.tileCollide = false;
+		Projectile.ignoreWater = true;
+		Projectile.penetrate = -1;
+		Projectile.usesLocalNPCImmunity = true;
+		Projectile.localNPCHitCooldown = 15;
+		Projectile.DamageType = DamageClass.Melee;
+
 		Projectile.width = 80;
 		Projectile.height = 80;
+		Projectile.tileCollide = false;
+		Projectile.friendly = true;
+		longHandle = true;
+		maxAttackType = 4;
+		trailLength = 20;
+		shadertype = "Trail";
+		AutoEnd = false;
 	}
-	internal int timer = 0;
-	internal bool max = false;
-	internal Vector2 FirstVel = Vector2.Zero;
-	internal float[] wid = new float[60];
-	internal Vector2[] OldplCen = new Vector2[60];
-	internal float[] statrP = new float[4];
-	public override bool PreAI()
+	public override string TrailShapeTex()
+	{
+		return "Everglow/Commons/Textures/Melee";
+	}
+	public override string TrailColorTex()
+	{
+		return "Everglow/Myth/Misc/Projectiles/Weapon/Melee/Hepuyuan/Hepuyuan_meleeColor";
+	}
+	public override float TrailAlpha(float factor)
+	{
+		return base.TrailAlpha(factor) * 1.15f;
+	}
+	public override BlendState TrailBlendState()
+	{
+		return BlendState.NonPremultiplied;
+	}
+	public override void End()
 	{
 		Player player = Main.player[Projectile.owner];
-		OldplCen[0] = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 15f;//记录位置
-		for (int f = OldplCen.Length - 1; f > 0; f--)
-		{
-			OldplCen[f] = OldplCen[f - 1];
-		}
-
-		for (int i = 0; i < 1; i++)
-		{
-			Vector2 v1 = new Vector2(Main.rand.NextFloat(0.8f, 10f), 0).RotatedByRandom(6.28);
-			Vector2 v2 = new Vector2(Main.rand.NextFloat(30f), 0).RotatedByRandom(6.28);
-			Dust.NewDust(OldplCen[0] - new Vector2(4) + v2, 1, 1, Main.rand.NextBool(2) ? ModContent.DustType<XiaoDustCyan>() : ModContent.DustType<XiaoDust>(), (Projectile.velocity * 0.35f + v1).X, (Projectile.velocity * 0.35f + v1).Y, 0, default, Main.rand.NextFloat(0.85f, Main.rand.NextFloat(0.85f, 3.75f)));
-		}
-
-		if (Main.rand.NextBool(1) && Projectile.timeLeft > 15)
-		{
-			Vector2 v0 = new Vector2(Main.rand.NextFloat(0.8f, 10f), 0).RotatedByRandom(6.28);
-			if (Main.rand.NextBool(2))
-			{
-				Vector2 v2 = new Vector2(Main.rand.NextFloat(70f), 0).RotatedByRandom(6.28);
-				var g = Gore.NewGoreDirect(null, OldplCen[0] + v2, Projectile.velocity * 0.35f + v0, ModContent.GoreType<XiaoDash0>(), Main.rand.NextFloat(0.65f, Main.rand.NextFloat(2.5f, 4.75f)));
-				g.timeLeft = Main.rand.Next(250, 500);
-			}
-			else
-			{
-				Vector2 v2 = new Vector2(Main.rand.NextFloat(70f), 0).RotatedByRandom(6.28);
-				var g = Gore.NewGoreDirect(null, OldplCen[0] + v2, Projectile.velocity * 0.35f + v0, ModContent.GoreType<XiaoDash1>(), Main.rand.NextFloat(0.65f, Main.rand.NextFloat(2.5f, 4.75f)));
-				g.timeLeft = Main.rand.Next(250, 500);
-			}
-		}
-
-		timer++;
-		if (timer % 24 == 1 && Projectile.timeLeft > 30)
-		{
-			var v = Vector2.Normalize(Projectile.velocity);
-			int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<XiaoBlackWave>(), 0, 0, player.whoAmI, Math.Clamp(Projectile.velocity.Length() / 8f, 0f, 4f), 0);
-			Main.projectile[h].rotation = (float)(Math.Atan2(v.Y, v.X) + Math.PI / 2d);
-		}
-
-		wid[0] = Math.Clamp(Projectile.velocity.Length() / 6f, 0, 60);//宽度
-		for (int f = wid.Length - 1; f > 0; f--)
-		{
-			wid[f] = wid[f - 1];
-		}
-		if (player.direction == -Math.Sign(Projectile.velocity.X))
-			player.direction *= -1;
-		float duration = player.itemAnimationMax * 7.2f;
-		player.heldProj = Projectile.whoAmI;
-		if (Projectile.timeLeft > duration)
-			Projectile.timeLeft = (int)duration;
-		float halfDuration = duration * 0.5f;
-
-
-		if (Projectile.timeLeft < halfDuration + 2 && !max)
-			max = true;
-
-		Projectile.velocity *= 0.995f;
-		if (Projectile.spriteDirection == -1)
-			Projectile.rotation += MathHelper.ToRadians(45f);
-		else
-		{
-			Projectile.rotation += MathHelper.ToRadians(135f);
-		}
-
-		if (Collision.SolidCollision(Projectile.Center, 1, 1))
-		{
-			Projectile.velocity *= 0.9f;
-			Projectile.timeLeft -= 4;
-			player.velocity *= 0.9f;
-			if (Projectile.timeLeft % 30 == 1)
-			{
-				for (int h = 0; h < 18; h++)
-				{
-					Vector2 v = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 16 * h;
-					if (Collision.SolidCollision(v, 1, 1))
-						Collision.HitTiles(v, Projectile.velocity * 20, 16, 16);
-				}
-			}
-		}
-		if (Projectile.timeLeft > 6 && !Collision.SolidCollision(Projectile.Center, 1, 1))
-			player.velocity = Projectile.velocity * 6;
-		if (Projectile.timeLeft < 6)
-		{
-			player.velocity *= 0.4f;
-			Projectile.velocity *= 0.4f;
-		}
-		MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
-		myplayer.InvincibleFrameTime = 15;
-		return false;
+		player.legFrame = new Rectangle(0, 0, player.legFrame.Width, player.legFrame.Height);
+		player.fullRotation = 0;
+		player.legRotation = 0;
+		player.legPosition = Vector2.Zero;
+		Projectile.Kill();
+		player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
 	}
-
-	public void DrawWarp(VFXBatch spriteBatch)
+	public override void OnSpawn(IEntitySource source)
 	{
-		if (FirstVel == Vector2.Zero)
-			FirstVel = Vector2.Normalize(Projectile.velocity);
-		Vector2 FlipVel = FirstVel.RotatedBy(Math.PI / 2d);
-
-		var VxII = new List<Vertex2D>();
-		var barsII = new List<Vertex2D>();
-
-		int TrueL = 0;
-		for (int i = 1; i < 60; ++i)
-		{
-			if (OldplCen[i] == Vector2.Zero)
-			{
-				TrueL = i - 1;
-				break;
-			}
-		}
-		for (int i = 1; i < 60; ++i)
-		{
-			if (OldplCen[i] == Vector2.Zero)
-				break;
-			float widk = MathF.Sqrt(i * 75);
-			Vector2 DeltaV0 = -OldplCen[i] + OldplCen[i - 1];
-			float d = DeltaV0.ToRotation() + 3.14f + 1.57f;
-			if (d > 6.28f)
-				d -= 6.28f;
-			float dir = d / MathHelper.TwoPi;
-			var factor = i / 60f;
-			float factor2 = i / (float)TrueL;
-
-			var c0 = new Color(dir, MathF.Sin(factor2 * 3.14159f), 0f, 0f);
-			if (i < 10)
-				c0 = new Color(dir, MathF.Sin(factor2 * 3.14159f) * i / 10f, 0f, 0f);
-			barsII.Add(new Vertex2D(OldplCen[i] + FlipVel * wid[i] * widk - Main.screenPosition, c0, new Vector3((float)Math.Sqrt(factor), 1, 1 - factor2)));
-			barsII.Add(new Vertex2D(OldplCen[i] - FlipVel * wid[i] * widk - Main.screenPosition, c0, new Vector3((float)Math.Sqrt(factor), 0, 1 - factor2)));
-		}
-		if (barsII.Count > 2)
-		{
-			VxII.Add(barsII[0]);
-			var vertex = new Vertex2D((barsII[0].position + barsII[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 90, new Color(0, 0, 0, 0), new Vector3(0, 0.5f, 1));
-			VxII.Add(barsII[1]);
-			VxII.Add(vertex);
-			for (int i = 0; i < barsII.Count - 2; i += 2)
-			{
-				VxII.Add(barsII[i]);
-				VxII.Add(barsII[i + 2]);
-				VxII.Add(barsII[i + 1]);
-
-				VxII.Add(barsII[i + 1]);
-				VxII.Add(barsII[i + 2]);
-				VxII.Add(barsII[i + 3]);
-			}
-		}
-
-
-		spriteBatch.Draw(MythContent.QuickTexture("UIImages/VisualTextures/BladeShadow"), VxII, PrimitiveType.TriangleList);
 	}
-	public override void PostDraw(Color lightColor)
+	public override void AI()
 	{
-		int TrueL = 0;
-		for (int i = 1; i < 60; ++i)
+		Player player = Main.player[Projectile.owner];
+		base.AI();
+		TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
+		Tplayer.HideLeg = true;
+		useTrail = true;
+		float timeMul = 1 / player.meleeSpeed;
+		if (attackType == 0)
 		{
-			if (OldplCen[i] == Vector2.Zero)
+			if (timer < 3 * timeMul)//前摇
 			{
-				TrueL = i - 1;
-				break;
+				useTrail = false;
+				LockPlayerDir(player);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(170, targetRot, 2f), 0.7f);
+				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
+			}
+			if (timer == (int)(20 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer == (int)(30 * timeMul))
+			{
+				Vector2 v0 = new Vector2(Projectile.spriteDirection * 6, -0.5f);
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center - v0 * 30, v0, ModContent.ProjectileType<Hepuyuan_thrust2>(), Projectile.damage, 0, Projectile.owner);
+			}
+			if (timer > 3 * timeMul && timer < 30 * timeMul)
+			{
+				isAttacking = true;
+				Projectile.rotation -= Projectile.spriteDirection * 0.25f / timeMul;
+				mainVec = Vector2Elipse(190, Projectile.rotation, 0.6f);
+				GenerateVFX();
+				GenerateSpark();
+			}
+
+			if (timer > 40 * timeMul)
+			{
+				player.fullRotation = 0;
+				player.legRotation = 0;
+				NextAttackType();
 			}
 		}
-
-		if (FirstVel == Vector2.Zero)
-			FirstVel = Vector2.Normalize(Projectile.velocity);
-		Vector2 FlipVel = FirstVel.RotatedBy(Math.PI / 2d);
-
-		for (int d = 0; d < 4; d++)
+		if (attackType == 1)
 		{
-			var VxII = new List<Vertex2D>();
-			var barsII = new List<Vertex2D>();
-			Vector2 deltaPos = new Vector2(0, 24).RotatedBy(d / 2d * Math.PI + Main.time / 32d);
-			float widk = Vector2.Dot(Vector2.Normalize(deltaPos), Vector2.Normalize(Projectile.velocity)) + 2f;
-			float widV = 2;
-			if (d == 0)
+			if (timer < 24 * timeMul)//前摇
 			{
-				deltaPos *= 0;
-				statrP[d] = 1;
+				useTrail = false;
+				LockPlayerDir(player);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(210, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
 			}
-			else
+			if (timer == (int)(20 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer > 16 * timeMul && timer < 50 * timeMul)
 			{
-				if (statrP[d] == 0)
-					statrP[d] = Main.rand.NextFloat(1f, 2f);
+				isAttacking = true;
+				Projectile.rotation -= Projectile.spriteDirection * 0.25f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(240, Projectile.rotation, -1.2f, 0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				GenerateVFX();
+				GenerateSpark();
 			}
-			for (int i = 1; i < 60; ++i)
+			if (timer > 50 * timeMul)
+				NextAttackType();
+
+		}
+		if (attackType == 2)
+		{
+			if (timer < 24 * timeMul)//前摇
 			{
-				if (OldplCen[i] == Vector2.Zero)
-					break;
-				var factor = i / (float)TrueL;
-				var w = statrP[d] - factor;
-				if (w > 1)
-					w = 2 - w;
-				barsII.Add(new Vertex2D(deltaPos * (float)Math.Clamp(Math.Sqrt(factor * 3), 0, 1) * widV + OldplCen[i] + FlipVel * wid[i] * widk * widk * 0.6f - Main.screenPosition, new Color(0, 1f * (1 - factor), 0.8f * (1 - factor), 0), new Vector3((float)Math.Sqrt(factor), 1, w)));
-				barsII.Add(new Vertex2D(deltaPos * (float)Math.Clamp(Math.Sqrt(factor * 3), 0, 1) * widV + OldplCen[i] - FlipVel * wid[i] * widk * widk * 0.6f - Main.screenPosition, new Color(0, 1f * (1 - factor), 0.8f * (1 - factor), 0), new Vector3((float)Math.Sqrt(factor), 0, w)));
+				useTrail = false;
+				LockPlayerDir(player);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 2.5f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(190, targetRot, 0.4f), 0.4f / timeMul);
+				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
 			}
-			if (barsII.Count > 2)
+			if (timer == (int)(20 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer > 16 * timeMul && timer < 30 * timeMul)
 			{
-				VxII.Add(barsII[0]);
-				if (statrP[d] > 1)
-					statrP[d] = 2 - statrP[d];
-				Vector2 Vadd = (barsII[0].position + barsII[1].position) * 0.5f - (barsII[2].position + barsII[3].position) * 0.5f;
-				var vertex = new Vertex2D((barsII[0].position + barsII[1].position) * 0.5f + Vadd * 2.7f, new Color(0, 1f, 0.8f, 0), new Vector3(0, 0.5f, statrP[d]));
-				VxII.Add(barsII[1]);
-				VxII.Add(vertex);
-				for (int i = 0; i < barsII.Count - 2; i += 2)
-				{
-					VxII.Add(barsII[i]);
-					VxII.Add(barsII[i + 2]);
-					VxII.Add(barsII[i + 1]);
-
-					VxII.Add(barsII[i + 1]);
-					VxII.Add(barsII[i + 2]);
-					VxII.Add(barsII[i + 3]);
-				}
+				isAttacking = true;
+				Projectile.rotation += Projectile.spriteDirection * 0.15f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(210, Projectile.rotation, 0.4f, 0f), 0.2f / timeMul);
+				GenerateVFX();
+				GenerateSpark();
 			}
-
-			RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-			Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIImages/VisualTextures/EShoot");
-
-
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
-
-			Main.graphics.GraphicsDevice.RasterizerState = originalState;
+			if (timer > 30 * timeMul && timer < 45 * timeMul)
+			{
+				isAttacking = true;
+				Projectile.rotation += Projectile.spriteDirection * 0.35f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(210, Projectile.rotation, 0.4f, 0f), 0.4f / timeMul);
+				GenerateVFX();
+				GenerateSpark();
+			}
+			if (timer > 55 * timeMul)
+				NextAttackType();
+		}
+		if (attackType == 3)
+		{
+			if (timer < 24 * timeMul)//前摇
+			{
+				useTrail = false;
+				LockPlayerDir(player);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 2.5f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(190, targetRot, 1.27f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
+			}
+			if (timer == (int)(20 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer == (int)(37 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer == (int)(54 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer > 16 * timeMul && timer < 57 * timeMul)
+			{
+				isAttacking = true;
+				Projectile.rotation += Projectile.spriteDirection * 0.29f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(270, Projectile.rotation, 1.27f, -0.2f * Projectile.spriteDirection), 0.3f / timeMul);
+				GenerateVFX();
+				GenerateSpark();
+			}
+			if (timer == (int)(69 * timeMul))
+			{
+				Vector2 v0 = new Vector2(Projectile.spriteDirection * 6, 0.5f);
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center - v0 * 30, v0, ModContent.ProjectileType<Hepuyuan_thrust2>(), Projectile.damage, 0, Projectile.owner);
+			}
+			if (timer > 83 * timeMul)
+				NextAttackType();
+		}
+		if (attackType == 4)
+		{
+			if (timer < 24 * timeMul)//前摇
+			{
+				useTrail = false;
+				//LockPlayerDir(player);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 2.5f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(190, targetRot, 0, -0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
+			}
+			if (timer == (int)(20 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer > 16 * timeMul && timer < 50 * timeMul)
+			{
+				isAttacking = true;
+				Projectile.rotation += Projectile.spriteDirection * ((timer - 16 * timeMul) / 110f) / timeMul / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(200, Projectile.rotation, 0, -0.2f * Projectile.spriteDirection), 0.3f / timeMul);
+				GenerateVFX();
+				GenerateSpark();
+			}
+			if (timer > 76 * timeMul)
+				NextAttackType();
 		}
 	}
-	public override bool PreDraw(ref Color lightColor)
+	public override void OnKill(int timeLeft)
 	{
-		int TrueL = 0;
-		for (int i = 1; i < 60; ++i)
+		Player player = Main.player[Projectile.owner];
+		player.fullRotation = 0;
+	}
+	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
+	{
+		drawScale = new Vector2(-0.6f, 1.14f);
+		base.DrawSelf(spriteBatch, lightColor, diagonal, drawScale, glowTexture);
+	}
+	public override void DrawTrail(Color color)
+	{
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		var SmoothTrail = new List<Vector2>();
+		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
 		{
-			if (OldplCen[i] == Vector2.Zero)
-			{
-				TrueL = i - 1;
-				break;
-			}
+			SmoothTrail.Add(SmoothTrailX[x]);
 		}
-		if (FirstVel == Vector2.Zero)
-			FirstVel = Vector2.Normalize(Projectile.velocity);
-		Vector2 FlipVel = FirstVel.RotatedBy(Math.PI / 2d);
-		for (int d = 0; d < 7; d++)
-		{
-			var VxII = new List<Vertex2D>();
-			var barsII = new List<Vertex2D>();
-			Vector2 deltaPos = new Vector2(0, 24).RotatedBy(d / 3d * Math.PI + Main.time / 7d);
+		if (trailVecs.Count != 0)
+			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
 
-			float widV = 2;
+		int length = SmoothTrail.Count;
+		if (length <= 3)
+			return;
+		Vector2[] trail = SmoothTrail.ToArray();
+		var bars = new List<Vertex2D>();
+
+		for (int i = 0; i < length; i++)
+		{
+			float factor = i / (length - 1f);
+			float w = TrailAlpha(factor);
 			Color c0 = Color.White;
-			if (d == 0)
+			if (i == 0)
 			{
-				deltaPos *= 0;
-				c0 = new Color(255, 255, 255, 0);
+				c0 = Color.Transparent;
 			}
-
-			for (int i = 1; i < 60; ++i)
-			{
-				float widk = Vector2.Dot(Vector2.Normalize(deltaPos), Vector2.Normalize(Projectile.velocity)) + 1.2f;
-
-				widk += MathF.Sqrt(60 - i) * 0.11f;
-				if (Projectile.timeLeft < 60f)
-					widk *= Projectile.timeLeft / 60f;
-				if (OldplCen[i] == Vector2.Zero)
-					break;
-				var factor = i / (float)TrueL;
-				var factor2 = i / (float)TrueL;
-				barsII.Add(new Vertex2D(deltaPos * (float)Math.Clamp(Math.Sqrt(factor * 3), 0, 1) * widV + OldplCen[i] + FlipVel * wid[i] * widk - Main.screenPosition, c0, new Vector3((float)Math.Sqrt(factor), 1, 1 - factor2)));
-				barsII.Add(new Vertex2D(deltaPos * (float)Math.Clamp(Math.Sqrt(factor * 3), 0, 1) * widV + OldplCen[i] - FlipVel * wid[i] * widk - Main.screenPosition, c0, new Vector3((float)Math.Sqrt(factor), 0, 1 - factor2)));
-			}
-			if (barsII.Count > 2)
-			{
-				VxII.Add(barsII[0]);
-				Vector2 Vadd = (barsII[0].position + barsII[1].position) * 0.5f - (barsII[2].position + barsII[3].position) * 0.5f;
-				var vertex = new Vertex2D((barsII[0].position + barsII[1].position) * 0.5f + Vadd * 2.7f, new Color(255, 255, 255, 255), new Vector3(0, 0.5f, 1));
-				VxII.Add(barsII[1]);
-				VxII.Add(vertex);
-				for (int i = 0; i < barsII.Count - 2; i += 2)
-				{
-					VxII.Add(barsII[i]);
-					VxII.Add(barsII[i + 2]);
-					VxII.Add(barsII[i + 1]);
-
-					VxII.Add(barsII[i + 1]);
-					VxII.Add(barsII[i + 2]);
-					VxII.Add(barsII[i + 3]);
-				}
-			}
-
-			Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapShadeXiao").Value;
-			if (d == 0)
-				t0 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapShadeXiaoGreen").Value;
-			Main.graphics.GraphicsDevice.Textures[0] = t0;
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
+			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.3f * Projectile.scale, c0, new Vector3(factor, 1, 0f)));
+			bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, c0, new Vector3(factor, 0, w)));
 		}
-		return true;
+		bars.Add(new Vertex2D(Projectile.Center + mainVec * 0.3f * Projectile.scale, Color.White, new Vector3(0, 1, 0f)));
+		bars.Add(new Vertex2D(Projectile.Center + mainVec * Projectile.scale, Color.White, new Vector3(0, 0, 1)));
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+
+		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
+		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		//Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+
+		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
+		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
+
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+	}
+	private void GenerateVFX()
+	{
+		Player player = Main.player[Projectile.owner];
+		int times = (int)Math.Floor(player.meleeSpeed);
+		if(Main.rand.NextFloat(0, 1f) < player.meleeSpeed % 1f)
+		{
+			times += 1;
+		}
+		for(int x = 0;x < times;x++)
+		{
+			Vector2 newVec = mainVec;
+			newVec *= player.gravDir;
+			Vector2 mainVecLeft = Vector2.Normalize(newVec).RotatedBy(-MathHelper.PiOver2 * player.gravDir);
+			var positionVFX = Projectile.Center + mainVecLeft * Main.rand.NextFloat(-30f, 30f) + newVec * Main.rand.NextFloat(0.7f, 1f);
+
+			var filthy = new FilthyLucreFlame_darkDust
+			{
+				velocity = mainVecLeft * 6 * Projectile.spriteDirection,
+				Active = true,
+				Visible = true,
+				position = positionVFX,
+				maxTime = Main.rand.Next(17, 56),
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.03f, 0.03f), Main.rand.NextFloat(18f, 30f) }
+			};
+			Ins.VFXManager.Add(filthy);
+			var filthy2 = new FilthyLucreFlameDust
+			{
+				velocity = mainVecLeft * 16 * Projectile.spriteDirection,
+				Active = true,
+				Visible = true,
+				position = positionVFX,
+				maxTime = Main.rand.Next(17, 56),
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(18f, 30f) }
+			};
+			Ins.VFXManager.Add(filthy2);
+		}
+	}
+	public void GenerateSpark()
+	{
+		Player player = Main.player[Projectile.owner];
+		int times = (int)Math.Floor(player.meleeSpeed);
+		if (Main.rand.NextFloat(0, 1f) < player.meleeSpeed % 1f)
+		{
+			times += 1;
+		}
+		for (int x = 0; x < times; x++)
+		{
+			Vector2 newVec = mainVec;
+			newVec *= player.gravDir;
+			Vector2 mainVecLeft = Vector2.Normalize(newVec).RotatedBy(-MathHelper.PiOver2 * player.gravDir);
+			var positionVFX = Projectile.Center + mainVecLeft * Main.rand.NextFloat(-30f, 30f) + newVec * Main.rand.NextFloat(0.7f, 1f);
+			var smog = new FilthyFragileDust
+			{
+				velocity = mainVecLeft * 16 * Projectile.spriteDirection,
+				Active = true,
+				Visible = true,
+				position = positionVFX,
+				coord = new Vector2(Main.rand.NextFloat(1f), Main.rand.NextFloat(1f)),
+				maxTime = Main.rand.Next(60, 165),
+				scale = Main.rand.NextFloat(Main.rand.NextFloat(3.4f, 6.4f), 14f),
+				rotation = Main.rand.NextFloat(6.283f),
+				rotation2 = Main.rand.NextFloat(6.283f),
+				omega = Main.rand.NextFloat(-30f, 30f),
+				phi = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0f, 0.2f), Main.rand.NextFloat(0.2f, 0.5f) }
+			};
+			Ins.VFXManager.Add(smog);
+		}
 	}
 
 	public static int CyanStrike = 0;

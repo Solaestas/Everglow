@@ -33,13 +33,13 @@ internal class FireFeatherMagicBook : MagicBookProjectile
 		if (player.itemTime > 0 && player.HeldItem.type == ItemType && player.active && !player.dead)//检测手持物品
 		{
 			Projectile.timeLeft = player.itemTime + 60;
-			if (Timer < 30)
-				Timer++;
+			if (timer < 30)
+				timer++;
 		}
 		else
 		{
-			Timer--;
-			if (Timer < 0)
+			timer--;
+			if (timer < 0)
 				Projectile.Kill();
 		}
 		Player.CompositeArmStretchAmount playerCASA = Player.CompositeArmStretchAmount.Full;//玩家动作
@@ -78,7 +78,7 @@ internal class FireFeatherMagicBook : MagicBookProjectile
 		var bars = new List<Vertex2D>();
 		for (int i = 0; i < 10; ++i)
 		{
-			double rot = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
+			double rot = -timer / 270d - i * timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
 			rot += Projectile.rotation;
 			Vector2 basePos = Projectile.Center + x0 - x0.RotatedBy(rot) * i / 4.5f - y0 * 0.05f - x0 * 0.02f;
 
@@ -144,7 +144,7 @@ internal class FireFeatherMagicBook : MagicBookProjectile
 		}
 
 		basePos2 = Projectile.Center + y0 * 0.25f + x0 * 1.3f;
-		double roprTot = -Timer / 270d - 9 * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
+		double roprTot = -timer / 270d - 9 * timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
 		roprTot += Projectile.rotation;
 		Vector2 ropeLeft = Projectile.Center + x0 - x0.RotatedBy(roprTot) * 2 + y0 * 0.15f - x0 * 0.02f;
 

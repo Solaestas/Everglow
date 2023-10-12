@@ -24,13 +24,13 @@ internal class BookofSkullsArray : ModProjectile, IWarpProjectile
 		if (player.itemTime > 0 && player.HeldItem.type == ItemID.BookofSkulls && player.active && !player.dead)
 		{
 			Projectile.timeLeft = player.itemTime + 60;
-			if (Timer < 30)
-				Timer++;
+			if (timer < 30)
+				timer++;
 		}
 		else
 		{
-			Timer--;
-			if (Timer < 0)
+			timer--;
+			if (timer < 0)
 				Projectile.Kill();
 		}
 		Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
@@ -40,7 +40,7 @@ internal class BookofSkullsArray : ModProjectile, IWarpProjectile
 		player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
 		Projectile.rotation = player.fullRotation;
 
-		RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
+		ringPos = ringPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
 
 
 	}
@@ -58,28 +58,28 @@ internal class BookofSkullsArray : ModProjectile, IWarpProjectile
 		return false;
 	}
 
-	internal int Timer = 0;
-	internal Vector2 RingPos = Vector2.Zero;
+	internal int timer = 0;
+	internal Vector2 ringPos = Vector2.Zero;
 
 	public void DrawMagicArray(Texture2D tex, Color c0)
 	{
 		Player player = Main.player[Projectile.owner];
 		Texture2D Water = tex;
 		var c1 = new Color(c0.R * 0.39f / 255f, c0.G * 0.39f / 255f, c0.B * 0.39f / 255f, c0.A * 0.39f / 255f);
-		float Pdark = (Math.Abs(player.itemTime - player.itemTimeMax / 2f) + 0.2f) / player.itemTimeMax * Timer / 30f;
+		float Pdark = (Math.Abs(player.itemTime - player.itemTimeMax / 2f) + 0.2f) / player.itemTimeMax * timer / 30f;
 		var c2 = new Color(1f * Pdark, 0.45f * Pdark * Pdark, 0f, 0f);
 
-		DrawTexCircle(Timer * 1.6f, 22, c0, player.Center + RingPos - Main.screenPosition, Water, Main.timeForVisualEffects / 17);
-		DrawTexCircle(Timer * 1.3f, 32, c1, player.Center + RingPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 17);
+		DrawTexCircle(timer * 1.6f, 22, c0, player.Center + ringPos - Main.screenPosition, Water, Main.timeForVisualEffects / 17);
+		DrawTexCircle(timer * 1.3f, 32, c1, player.Center + ringPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 17);
 
 		float timeRot = (float)(Main.timeForVisualEffects / 57d);
-		Vector2 Point1 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 0 + timeRot);
-		Vector2 Point2 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 2 / 3d + timeRot);
-		Vector2 Point3 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 4 / 3d + timeRot);
+		Vector2 Point1 = player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 1.8f).RotatedBy(Math.PI * 0 + timeRot);
+		Vector2 Point2 = player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 1.8f).RotatedBy(Math.PI * 2 / 3d + timeRot);
+		Vector2 Point3 = player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 1.8f).RotatedBy(Math.PI * 4 / 3d + timeRot);
 
-		Vector2 Point4 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 1 / 3d + timeRot + 0.3f);
-		Vector2 Point5 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 3 / 3d + timeRot + 0.3f);
-		Vector2 Point6 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 5 / 3d + timeRot + 0.3f);
+		Vector2 Point4 = player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 1.8f).RotatedBy(Math.PI * 1 / 3d + timeRot + 0.3f);
+		Vector2 Point5 = player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 1.8f).RotatedBy(Math.PI * 3 / 3d + timeRot + 0.3f);
+		Vector2 Point6 = player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 1.8f).RotatedBy(Math.PI * 5 / 3d + timeRot + 0.3f);
 		DrawTexLine(Point1, Point2, c2, c2, Water);
 		DrawTexLine(Point2, Point3, c2, c2, Water);
 		DrawTexLine(Point3, Point1, c2, c2, Water);
@@ -140,6 +140,6 @@ internal class BookofSkullsArray : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		Player player = Main.player[Projectile.owner];
-		DrawTexCircle(spriteBatch, Timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
+		DrawTexCircle(spriteBatch, timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
 	}
 }

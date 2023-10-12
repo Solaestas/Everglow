@@ -30,13 +30,13 @@ internal class FreezeFeatherMagicBook : MagicBookProjectile
 		if (player.itemTime > 0 && player.HeldItem.type == ItemType && player.active && !player.dead)//检测手持物品
 		{
 			Projectile.timeLeft = player.itemTime + 60;
-			if (Timer < 30)
-				Timer++;
+			if (timer < 30)
+				timer++;
 		}
 		else
 		{
-			Timer--;
-			if (Timer < 0)
+			timer--;
+			if (timer < 0)
 				Projectile.Kill();
 		}
 		Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;//玩家动作

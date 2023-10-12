@@ -39,7 +39,7 @@ class GoldLanternRay : ModProjectile
 	{
 		return false;
 	}
-	public static float Timer = 0;
+	public static float timer = 0;
 	public static int WHOAMI = -1;
 	public static int Typ = -1;
 	int TrueL = 1;
@@ -96,7 +96,7 @@ class GoldLanternRay : ModProjectile
 						if (!Main.player[j].dead)
 						{
 							if ((Main.player[j].Center - Vlaser[i]).Length() < 40)
-								Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Bosses.Acytaea.Projectiles.playerHit>(), Projectile.damage, 0, j, 0, 0);
+								Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Acytaea.Projectiles.playerHit>(), Projectile.damage, 0, j, 0, 0);
 						}
 					}
 				}

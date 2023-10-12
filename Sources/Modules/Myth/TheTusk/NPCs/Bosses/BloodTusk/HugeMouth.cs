@@ -1,4 +1,4 @@
-using Everglow.Myth.Bosses.Acytaea.Projectiles;
+using Everglow.Myth.Acytaea.Projectiles;
 using Terraria;
 using Terraria.Localization;
 

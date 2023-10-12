@@ -86,7 +86,7 @@ public class SunFlowerpetal : ModProjectile
                 return new Color?(new Color(1f * Projectile.timeLeft / 60f, 1f * Projectile.timeLeft / 60f, 1f * Projectile.timeLeft / 60f, 1f * Projectile.timeLeft / 60f));
             }
         }*/
-	/*public override void Kill(int timeLeft)
+	/*public override void OnKill(int timeLeft)
 	{
             Main.PlaySound(2, (int)Projectile.position.X, (int)Projectile.position.Y, 37, 0.5f, 0f);
         }*/

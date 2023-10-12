@@ -1,5 +1,5 @@
-using Everglow.Myth.Common;
 using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Myth.Common;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
@@ -28,24 +28,27 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 	public override void AI()
 	{
 		Projectile.velocity.Y += 0.010f;
-		if (Main.rand.NextBool(4))
+		if (Ins.VisualQuality.High)
 		{
-			GenerateVFX(1);
-		}
-		if (Main.rand.NextBool(4))
-		{
-			var spark = new CurseFlameSparkDust
+			if (Main.rand.NextBool(4))
 			{
-				velocity = Projectile.velocity + new Vector2(0, Main.rand.NextFloat(0.07f, 1f)).RotatedByRandom(6.283),
-				Active = true,
-				Visible = true,
-				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - Projectile.velocity,
-				maxTime = Main.rand.Next(7, 95),
-				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 47.0f)),
-				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) }
-			};
-			Ins.VFXManager.Add(spark);
+				GenerateVFX(1);
+			}
+			if (Main.rand.NextBool(4))
+			{
+				var spark = new CurseFlameSparkDust
+				{
+					velocity = Projectile.velocity + new Vector2(0, Main.rand.NextFloat(0.07f, 1f)).RotatedByRandom(6.283),
+					Active = true,
+					Visible = true,
+					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - Projectile.velocity,
+					maxTime = Main.rand.Next(7, 95),
+					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 47.0f)),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) }
+				};
+				Ins.VFXManager.Add(spark);
+			}
 		}
 	}
 	public void GenerateVFX(int Frequency)
@@ -65,10 +68,29 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 			};
 			Ins.VFXManager.Add(cf);
 		}
+
+
+		if (Main.rand.NextBool(3))
+		{
+			var cf = new CursedFlameDust
+			{
+				velocity = Projectile.velocity * 2.7f,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center,
+				maxTime = Main.rand.Next(27, 122),
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 0, Main.rand.NextFloat(3.6f, 10f) }
+			};
+			Ins.VFXManager.Add(cf);
+		}
 	}
 
 	public void GenerateVFXExpolode(int Frequency, float mulVelocity = 1f)
 	{
+		if (Ins.VisualQuality.Low)
+		{
+			Frequency /= 3;
+		}
 		for (int g = 0; g < Frequency * 3; g++)
 		{
 			var cf = new CurseFlameDust
@@ -234,7 +256,7 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 			var factor = i / (float)TrueL;
 			float x0 = factor * 1.3f - (float)(Main.time / 15d) + 100000;
 			x0 %= 1f;
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c0 , new Vector3(x0, 1, 0)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c0, new Vector3(x0, 1, 0)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c0, new Vector3(x0, 0, 0)));
 			var factorII = factor;
 			factor = (i + 1) / (float)TrueL;
@@ -255,7 +277,9 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 		if (bars.Count > 3)
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
 	}
-	public override void Kill(int timeLeft)
+
+
+	public override void OnKill(int timeLeft)
 	{
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);

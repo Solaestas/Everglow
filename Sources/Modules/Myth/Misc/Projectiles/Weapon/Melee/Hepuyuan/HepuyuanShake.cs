@@ -11,7 +11,7 @@ public class HepuyuanShake : ModProjectile
 		Projectile.timeLeft = 80;
 		Projectile.alpha = 0;
 		Projectile.penetrate = -1;
-		Projectile.extraUpdates = 2;
+		Projectile.extraUpdates = 1;
 	}
 	public override void AI()
 	{
@@ -23,6 +23,8 @@ public class HepuyuanShake : ModProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Player player = Main.player[Projectile.owner];
 		var Vx = new List<Vertex2D>();
 		Vector2 Vbase = Projectile.Center - Main.screenPosition + new Vector2(0, 24 * player.gravDir);

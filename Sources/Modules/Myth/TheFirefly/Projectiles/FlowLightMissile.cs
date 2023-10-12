@@ -43,6 +43,7 @@ internal class FlowLightMissile : ModProjectile
 			oldPo = Projectile.Center;
 			Projectile.Center = oldPo;
 			Projectile.velocity *= 0;
+			player.itemAnimation = 1;
 		}
 		if (!player.controlUseItem && release)
 		{

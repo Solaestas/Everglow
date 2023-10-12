@@ -1,7 +1,6 @@
 using Everglow.Myth.TheFirefly.WorldGeneration;
 using SubworldLibrary;
 using Terraria.ObjectData;
-//using Windows.Win32.Foundation;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
@@ -28,7 +27,7 @@ public class MothWorldDoor : ModTile
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.addTile(Type);
 		var modTranslation = CreateMapEntryName();
-				AddMapEntry(new Color(148, 0, 255), modTranslation);
+		AddMapEntry(new Color(148, 0, 255), modTranslation);
 	}
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{
@@ -46,7 +45,7 @@ public class MothWorldDoor : ModTile
 		Texture2D tex = ModAsset.MothWorldDoorGlow.Value;
 
 		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
-		if(tile.TileFrameX == 72 && tile.TileFrameY == 108)
+		if (tile.TileFrameX == 72 && tile.TileFrameY == 108)
 		{
 			DrawMagicArraySystem.ArrayPosition = new Vector2(i, j);
 		}
@@ -64,7 +63,7 @@ public class MothWorldDoor : ModTile
 	}
 	public override void RandomUpdate(int i, int j)
 	{
-		if(DrawMagicArraySystem.ArrayPosition != Vector2.zeroVector)
+		if (DrawMagicArraySystem.ArrayPosition != Vector2.zeroVector)
 		{
 			float playerDistance = 2000;
 			foreach (Player player in Main.player)
@@ -78,7 +77,7 @@ public class MothWorldDoor : ModTile
 					}
 				}
 			}
-			if(playerDistance > 1800)
+			if (playerDistance > 1800)
 			{
 				DrawMagicArraySystem.ArrayPosition = Vector2.zeroVector;
 			}
@@ -90,7 +89,7 @@ public class MothWorldDoor : ModTile
 		Player player = Main.LocalPlayer;
 		if ((player.Center - new Vector2(i * 16, j * 16)).Length() < 12)
 		{
-			
+
 		}
 		base.NearbyEffects(i, j, closer);
 	}
@@ -135,7 +134,7 @@ public class DrawMagicArraySystem : ModSystem
 		float playerDistance = 150;
 		foreach (Player player in Main.player)
 		{
-			if(player.active && !player.dead)
+			if (player.active && !player.dead)
 			{
 				float distance = (player.Center - (ArrayPosition * 16 + new Vector2(-24, -27))).Length();
 				if (distance < playerDistance)
@@ -158,13 +157,13 @@ public class DrawMagicArraySystem : ModSystem
 		Color c1 = c0 * 0.8f;
 		float timeRot = timer;
 		float size = 24f;
-		Vector2 Point1 = pos + new Vector2(0,size).RotatedBy(Math.PI * 0 + timeRot);
-		Vector2 Point2 = pos + new Vector2(0,size).RotatedBy(Math.PI * 2 / 3d + timeRot);
-		Vector2 Point3 = pos + new Vector2(0,size).RotatedBy(Math.PI * 4 / 3d + timeRot);
+		Vector2 Point1 = pos + new Vector2(0, size).RotatedBy(Math.PI * 0 + timeRot);
+		Vector2 Point2 = pos + new Vector2(0, size).RotatedBy(Math.PI * 2 / 3d + timeRot);
+		Vector2 Point3 = pos + new Vector2(0, size).RotatedBy(Math.PI * 4 / 3d + timeRot);
 
-		Vector2 Point4 = pos + new Vector2(0,size).RotatedBy(Math.PI * 1 / 3d + timeRot);
-		Vector2 Point5 = pos + new Vector2(0,size).RotatedBy(Math.PI * 3 / 3d + timeRot);
-		Vector2 Point6 = pos + new Vector2(0,size).RotatedBy(Math.PI * 5 / 3d + timeRot);
+		Vector2 Point4 = pos + new Vector2(0, size).RotatedBy(Math.PI * 1 / 3d + timeRot);
+		Vector2 Point5 = pos + new Vector2(0, size).RotatedBy(Math.PI * 3 / 3d + timeRot);
+		Vector2 Point6 = pos + new Vector2(0, size).RotatedBy(Math.PI * 5 / 3d + timeRot);
 		magicSeal = ModAsset.CorruptDustLine.Value;
 
 		DrawTexLine(Point1, Point2, c1, c1, magicSeal);
@@ -175,7 +174,7 @@ public class DrawMagicArraySystem : ModSystem
 		DrawTexLine(Point5, Point6, c1, c1, magicSeal);
 		DrawTexLine(Point6, Point4, c1, c1, magicSeal);
 
-	
+
 	}
 	public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
 	{
@@ -221,20 +220,20 @@ public class DrawMagicArraySystem : ModSystem
 		Main.graphics.GraphicsDevice.Textures[0] = tex;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
 	}
-	public static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	public static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		float timer = (float)(Main.time * 0.003f);
-		float sinValue = 0.8f * (MathF.Sin(timer + radious / 8 * MathF.PI) * 0.5f + 0.5f);
+		float sinValue = 0.8f * (MathF.Sin(timer + radius / 8 * MathF.PI) * 0.5f + 0.5f);
 		var circle = new List<Vertex2D>();
 		for (int h = 0; h < 60; h += 1)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / 60f * Math.PI * 2 + addRot), color, new Vector3(h / 60f, 0.2f + sinValue, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / 60f * Math.PI * 2 + addRot), color, new Vector3(h / 60f, sinValue, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / 60f * Math.PI * 2 + addRot), color, new Vector3(h / 60f, 0.2f + sinValue, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(h / 60f * Math.PI * 2 + addRot), color, new Vector3(h / 60f, sinValue, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0.2f + sinValue, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(1, sinValue, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.2f + sinValue, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0, sinValue, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(1, 0.2f + sinValue, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(1, sinValue, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0.2f + sinValue, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(0, sinValue, 0)));
 		if (circle.Count > 0)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = tex;

@@ -2,6 +2,7 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -50,7 +51,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 			if (targetNPC >= 0 && targetNPC < 200)
 			{
-				if (Main.npc[targetNPC].active && !Main.npc[targetNPC].dontTakeDamage)
+				if (Main.npc[targetNPC].active && !Main.npc[targetNPC].dontTakeDamage && (Main.npc[targetNPC].Center - Projectile.Center).Length() < 900f)
 				{
 					return;
 				}
@@ -61,7 +62,16 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			{
 				if (npc.active && !npc.dontTakeDamage)
 				{
-					if ((npc.Center - Projectile.Center).Length() < minDis)
+					float length = (npc.Center - Projectile.Center).Length();
+					if (!npc.CanBeChasedBy())
+					{
+						length = 580 + Main.rand.NextFloat(10f);
+					}
+					if (npc.type == NPCID.TargetDummy)
+					{
+						length = 590 + Main.rand.NextFloat(10f);
+					}
+					if (length < minDis)
 					{
 						minDis = npc.Center.Length();
 						whoAmI = npc.whoAmI;

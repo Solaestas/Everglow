@@ -4,7 +4,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;
 
-public class CrystalStormII : ModProjectile, IWarpProjectile//½«½Ó¿Ú¸ÄÎªÊ¹ÓÃIWarpProjectile
+public class CrystalStormII : ModProjectile, IWarpProjectile//å°†æ¥å£æ”¹ä¸ºä½¿ç”¨IWarpProjectile
 {
 	public override void SetDefaults()
 	{
@@ -32,20 +32,20 @@ public class CrystalStormII : ModProjectile, IWarpProjectile//½«½Ó¿Ú¸ÄÎªÊ¹ÓÃIWar
 	}
 	public override void AI()
 	{
-		float MulScale = 1f;
+		float mulScale = 1f;
 		if (Projectile.timeLeft < 30)
-			MulScale = Projectile.timeLeft / 30f;
-		if (Main.rand.NextBool(5))
+			mulScale = Projectile.timeLeft / 30f;
+		if (Main.rand.NextBool(15))
 		{
 			Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity + new Vector2(0, Main.rand.NextFloat(6f)).RotatedByRandom(6.283);
-			var d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.CrystalPulse2, 0, 0, 0, default, 0.8f * MulScale);
+			var d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.CrystalPulse2, 0, 0, 0, default, 0.8f * mulScale);
 			d0.noGravity = true;
 			d0.velocity = Projectile.velocity * 0.2f + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(6.283);
 		}
-		if (Main.rand.NextBool(3))
+		if (Main.rand.NextBool(9))
 		{
-			Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * MulScale * 0.2f;
-			int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<CrystalAppearStoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.1f, 1f) * Projectile.scale * MulScale);
+			Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * mulScale * 0.2f;
+			int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<CrystalAppearStoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.1f, 1f) * Projectile.scale * mulScale);
 			Main.dust[dust0].noGravity = true;
 			Main.dust[dust0].alpha = 175;
 		}
@@ -63,7 +63,7 @@ public class CrystalStormII : ModProjectile, IWarpProjectile//½«½Ó¿Ú¸ÄÎªÊ¹ÓÃIWar
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CrystalStorm/CrystalStormII");
+		Texture2D Light = ModAsset.CrystalStormII.Value;
 
 		var c0 = new Color(0.5f * Projectile.ai[0] + 0.1f, 0.3f, 0.7f * (1 - Projectile.ai[0]) + 0.3f, 0);
 		var c1 = new Color(1f, 1f, 1f, 0.2f);
@@ -142,9 +142,9 @@ public class CrystalStormII : ModProjectile, IWarpProjectile//½«½Ó¿Ú¸ÄÎªÊ¹ÓÃIWar
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/ElecLine");
+		Texture2D t = ModAsset.Projectiles_ElecLine.Value;
 		if (Shade)
-			t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Darkline");
+			t = ModAsset.Darkline.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 
 		if (bars.Count > 3)
@@ -153,7 +153,7 @@ public class CrystalStormII : ModProjectile, IWarpProjectile//½«½Ó¿Ú¸ÄÎªÊ¹ÓÃIWar
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 
-		/*²»ÔÙÓÃ¿ªÆôshader
+		/*ä¸å†ç”¨å¼€å¯shader
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Effect KEx = Everglow.Commons.ModAsset.DrawWarp.Value;
@@ -218,18 +218,18 @@ public class CrystalStormII : ModProjectile, IWarpProjectile//½«½Ó¿Ú¸ÄÎªÊ¹ÓÃIWar
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
+		Texture2D t = ModAsset.FogTraceLight.Value;
 
-		//ÌùÍ¼²»ÓÃÔÚÕâÀï´«
+		//è´´å›¾ä¸ç”¨åœ¨è¿™é‡Œä¼ 
 		//Main.graphics.GraphicsDevice.Textures[0] = t;
 
 		if (bars.Count > 3)
 			//Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
-			//ÀïÃæµÄËùÓĞ»æÖÆ£¨°üÀ¨¶¥µã»æÖÆ£©¸ÄÎªÓÃVFXBatch spriteBatchµÄDraw£¬ÈçÏÂ
+			//é‡Œé¢çš„æ‰€æœ‰ç»˜åˆ¶ï¼ˆåŒ…æ‹¬é¡¶ç‚¹ç»˜åˆ¶ï¼‰æ”¹ä¸ºç”¨VFXBatch spriteBatchçš„Drawï¼Œå¦‚ä¸‹
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
 
-		//½áÎ²µÄbegin-endÒ²É¾µô
+		//ç»“å°¾çš„begin-endä¹Ÿåˆ æ‰
 		//Main.spriteBatch.End();
 		//Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
