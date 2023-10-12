@@ -93,6 +93,7 @@ public class BiomeLable : ModSystem
 		ActiveVanillaBiomeCache["UndergroundDesert"] = 0;
 		VanillaBiomeDatas["UndergroundDesert"] = new BiomeData("Underground Desert", ModAsset.Underground_Desert.Value);
 		ActiveVanillaBiomeCache["UnderworldHeight"] = 0;
+		VanillaBiomeDatas["UnderworldHeight"] = new BiomeData("Underground World", ModAsset.The_Underworld.Value);
 		ActiveVanillaBiomeCache["WaterCandle"] = 0;
 		base.OnWorldLoad();
 	}
@@ -134,6 +135,7 @@ public class BiomeLable : ModSystem
 		CheckNewActiveVanillaBiome("NormalSpace", player.ZoneNormalSpace);
 		CheckNewActiveVanillaBiome("Snow", player.ZoneSnow);
 		CheckNewActiveVanillaBiome("UndergroundDesert", player.ZoneUndergroundDesert);
+		CheckNewActiveVanillaBiome("UnderworldHeight", player.ZoneUnderworldHeight);
 		if (NewActiveBiomeQueue.Count > 2)
 		{
 			NewActiveBiomeQueue.Dequeue();
