@@ -1,48 +1,46 @@
-#if false
 using Everglow.Commons.Collider;
+using Everglow.Commons.Collider.EntityCollider;
 
 namespace Everglow.Commons.CustomTiles.EntityCollider;
 
-public class NPCCollider : GlobalNPC, IBox
+public class NPCCollider : GlobalNPC, IEntityCollider<NPC>
 {
-	private bool fall;
-	private NPC npc;
-
-	public Vector2 AbsoluteVelocity { get; set; }
-
-	public Direction AttachDir { get; set; }
-
-	public RigidEntity AttachTile { get; set; }
-
-	public AttachType AttachType { get; set; }
-
-	public bool CanAttach => true;
+	public AABB Box => new AABB(Entity.position, Entity.width, Entity.height);
 
 	public override bool CloneNewInstances => true;
 
-	public Vector2 DeltaVelocity { get; set; }
+	public NPC Entity { get; set; }
 
-	public Entity Entity => npc;
+	public float Gravity => 1;
 
-	public Direction Ground => Direction.Down;
+	public RigidEntity Ground { get; set; }
 
 	public override bool InstancePerEntity => true;
 
 	public override bool IsCloneable => true;
 
-	public Vector2 Position { get; set; }
+	public float OffsetY { get => Entity.gfxOffY; set => Entity.gfxOffY = value; }
+
+	public Vector2 OldPosition { get; set; }
+
+	public Vector2 Position { get => Entity.position; set => Entity.position = value; }
+
+	public Vector2 Size => new Vector2(Entity.width, Entity.height);
+
+	public Vector2 Velocity { get => Entity.velocity; set => Entity.velocity = value; }
 
 	public override GlobalNPC Clone(NPC from, NPC to)
 	{
 		var clone = base.Clone(from, to) as NPCCollider;
-		clone.npc = to;
-		clone.AttachTile = null;
-		clone.AttachDir = Direction.None;
-		clone.AttachType = AttachType.None;
-		clone.Position = to.position;
-		clone.AbsoluteVelocity = to.velocity;
-		clone.DeltaVelocity = Vector2.Zero;
+		clone.Entity = to;
+		clone.OldPosition = to.position;
+		clone.Ground = null;
 		return clone;
+	}
+
+	public bool Ignore(RigidEntity entity)
+	{
+		return false;
 	}
 
 	public override void Load()
@@ -52,27 +50,15 @@ public class NPCCollider : GlobalNPC, IBox
 		On_NPC.ApplyTileCollision += NPC_ApplyTileCollision;
 	}
 
-	public void OnAttach()
+	public void OnCollision(CollisionResult result)
 	{
-		npc.velocity.Y = 0;
 	}
 
-	public void OnCollision(RigidEntity tile, Direction dir, ref RigidEntity newAttach)
+	public void OnLeave()
 	{
-		if (dir == Direction.In && !npc.boss)
-		{
-			npc.StrikeNPC(10, 0, 0);
-		}
 	}
 
-	public void OnUpdate()
-	{
-		if (AttachTile is not null)
-		{
-			npc.position += new Vector2(0, npc.gfxOffY);
-			npc.gfxOffY = 0;
-		}
-	}
+	private bool fall;
 
 	private static void NPC_ApplyTileCollision(On_NPC.orig_ApplyTileCollision orig, NPC self, bool fall, Vector2 cPosition, int cWidth, int cHeight)
 	{
@@ -91,10 +77,10 @@ public class NPCCollider : GlobalNPC, IBox
 		}
 
 		ColliderManager.EnableHook = false;
-		var npc = self.GetGlobalNPC<NPCCollider>();
-		npc.Position = self.position;
+		IEntityCollider<NPC> npc = self.GetGlobalNPC<NPCCollider>();
+		npc.Prepare();
 		orig(self);
-		IBox.Update(npc, npc.fall);
+		npc.Update();
 		ColliderManager.EnableHook = true;
 	}
 
@@ -107,11 +93,10 @@ public class NPCCollider : GlobalNPC, IBox
 		}
 
 		ColliderManager.EnableHook = false;
-		var npc = self.GetGlobalNPC<NPCCollider>();
-		npc.Position = self.position;
+		IEntityCollider<NPC> npc = self.GetGlobalNPC<NPCCollider>();
+		npc.Prepare();
 		orig(self, oldDryVelocity, Slowdown);
-		IBox.Update(npc, npc.fall);
+		npc.Update();
 		ColliderManager.EnableHook = true;
 	}
 }
-#endif
