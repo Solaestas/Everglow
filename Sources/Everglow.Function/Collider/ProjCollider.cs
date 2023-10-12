@@ -1,6 +1,4 @@
-using Everglow.Commons.Collider;
-
-namespace Everglow.Commons.Collider.EntityCollider;
+namespace Everglow.Commons.Collider;
 
 public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 {
@@ -109,7 +107,7 @@ public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 
 		foreach (var hookable in ColliderManager.Instance.OfType<IHookable>())
 		{
-			var rigitbody = (RigidEntity)hookable;	
+			var rigitbody = (RigidEntity)hookable;
 			if (rigitbody.Intersect(new AABB(Entity.position, Entity.Size)))
 			{
 				hookable.SetHookPosition(Entity);

@@ -1,7 +1,4 @@
-using Everglow.Commons.Collider;
-using Everglow.Commons.Collider.EntityCollider;
-
-namespace Everglow.Commons.CustomTiles.EntityCollider;
+namespace Everglow.Commons.Collider;
 
 public class NPCCollider : GlobalNPC, IEntityCollider<NPC>
 {
