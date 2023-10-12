@@ -2,7 +2,7 @@ using Terraria.GameContent;
 
 namespace Everglow.Commons.Collider;
 
-public class BoxEntity : RigidEntity, IBox
+public class BoxEntity : RigidEntity, IBox, IHookable
 {
 	public AABB Box => new(Position, Size);
 
@@ -121,5 +121,12 @@ public class BoxEntity : RigidEntity, IBox
 	public override Vector2 StandAccelerate(IBox obj)
 	{
 		return Velocity;
+	}
+
+	public void SetHookPosition(Projectile hook)
+	{
+		var box = Box;
+		hook.position.X = MathHelper.Clamp(hook.position.X, box.Left, box.Right);
+		hook.position.Y = MathHelper.Clamp(hook.position.Y, box.Top, box.Bottom);
 	}
 }

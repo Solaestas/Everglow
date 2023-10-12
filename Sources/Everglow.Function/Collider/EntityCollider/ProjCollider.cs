@@ -6,7 +6,7 @@ public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 {
 	public const int HookAIStyle = 7;
 
-	public static readonly HashSet<Projectile> callFromHook = new();
+	public static readonly HashSet<Projectile> canHook = new();
 
 	public override bool CloneNewInstances => true;
 
@@ -50,7 +50,7 @@ public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 
 	private bool On_Projectile_AI_007_GrapplingHooks_CanTileBeLatchedOnTo(On_Projectile.orig_AI_007_GrapplingHooks_CanTileBeLatchedOnTo orig, Projectile self, int x, int y)
 	{
-		if (callFromHook.Contains(self))
+		if (canHook.Contains(self))
 		{
 			return true;
 		}
@@ -64,58 +64,13 @@ public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 			orig(self);
 			return;
 		}
-
-		Player player = Main.player[self.owner];
-		int numHooks = 3;
-		if (self.type == 165)
-		{
-			numHooks = 8;
-		}
-		else if (self.type == 256)
-		{
-			numHooks = 2;
-		}
-		else if (self.type == 372)
-		{
-			numHooks = 2;
-		}
-		else if (self.type == 652)
-		{
-			numHooks = 1;
-		}
-		else if (self.type is >= 646 and <= 649)
-		{
-			numHooks = 4;
-		}
-
-		int grapCount = 0;
-		int leastTime = int.MaxValue;
-		int leastIndex = self.whoAmI;
-		foreach (var proj in Main.projectile)
-		{
-			if (proj.active && proj.aiStyle == 7 && proj.owner == self.owner)
-			{
-				grapCount++;
-				if (proj.timeLeft < leastTime)
-				{
-					leastTime = proj.timeLeft;
-					leastIndex = proj.whoAmI;
-				}
-			}
-		}
-		ProjectileLoader.NumGrappleHooks(self, player, ref numHooks);
-		if (grapCount > numHooks)
-		{
-			Main.projectile[leastIndex].Kill();
-		}
-
 		if (self.ai[0] != 1)
 		{
 			ProjCollider collider = self.GetGlobalProjectile<ProjCollider>();
-			//collider.UpdateHook();
+			collider.UpdateHook();
 		}
 		orig(self);
-		callFromHook.Remove(self);
+		canHook.Remove(self);
 	}
 
 	private static void Projectile_HandleMovement(On_Projectile.orig_HandleMovement orig, Projectile self, Vector2 wetVelocity, out int overrideWidth, out int overrideHeight)
@@ -136,47 +91,34 @@ public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 		ColliderManager.EnableHook = true;
 	}
 
-	//private void UpdateHook()
-	//{
-	//	Player player = Main.player[projectile.owner];
-	//	if (AttachTile is not null)
-	//	{
-	//		if (AttachTile.Active)
-	//		{
-	//			callFromHook.Add(projectile);
-	//			(AttachTile as IHookable).SetHookPosition(projectile);
-	//		}
-	//		else
-	//		{
-	//			AttachTile = null;
-	//		}
-	//		return;
-	//	}
+	private void UpdateHook()
+	{
+		if (Ground is not null)
+		{
+			if (Ground.Active)
+			{
+				canHook.Add(Entity);
+				((IHookable)Ground).SetHookPosition(Entity);
+			}
+			else
+			{
+				Ground = null;
+			}
+			return;
+		}
 
-	//	foreach (var tile in ColliderManager.Instance.Tiles)
-	//	{
-	//		if (tile is IHookable hookable && tile.Collision(new CAABB(new AABB(projectile.position, projectile.Size))))
-	//		{
-	//			hookable.SetHookPosition(projectile);
-	//			if (projectile.type == ProjectileID.QueenSlimeHook && projectile.alpha == 0 && Main.myPlayer == projectile.owner)
-	//			{
-	//				player.DoQueenSlimeHookTeleport(projectile.position);
-	//				NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, projectile.owner);
-	//			}
-	//			callFromHook.Add(projectile);
-	//			projectile.ai[0] = 2;
-	//			projectile.netUpdate = true;
-	//			projectile.velocity *= 0;
-	//			if (projectile.alpha == 0)
-	//			{
-	//				projectile.alpha = 1;
-	//				Terraria.Audio.SoundEngine.PlaySound(SoundID.Dig, projectile.Center);
-	//			}
-	//			AttachTile = tile;
-	//			break;
-	//		}
-	//	}
-	//}
+		foreach (var hookable in ColliderManager.Instance.OfType<IHookable>())
+		{
+			var rigitbody = (RigidEntity)hookable;	
+			if (rigitbody.Intersect(new AABB(Entity.position, Entity.Size)))
+			{
+				hookable.SetHookPosition(Entity);
+				canHook.Add(Entity);
+				Ground = rigitbody;
+				break;
+			}
+		}
+	}
 
 	public void OnCollision(CollisionResult result)
 	{
