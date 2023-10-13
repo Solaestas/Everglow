@@ -2,6 +2,8 @@ using System.Reflection;
 using Everglow.Commons.Coroutines;
 using ReLogic.Graphics;
 using Terraria.GameContent;
+using Terraria.UI.Chat;
+using static ReLogic.Graphics.DynamicSpriteFont;
 
 namespace Everglow.Commons.BiomesText;
 
@@ -136,15 +138,19 @@ public class BiomeLable : ModSystem
 		CheckNewActiveVanillaBiome("Snow", player.ZoneSnow);
 		CheckNewActiveVanillaBiome("UndergroundDesert", player.ZoneUndergroundDesert);
 		CheckNewActiveVanillaBiome("UnderworldHeight", player.ZoneUnderworldHeight);
-		if (NewActiveBiomeQueue.Count > 2)
+		if (NewActiveBiomeQueue.Count > 4)
 		{
 			NewActiveBiomeQueue.Dequeue();
 		}
 		if (duration == -1)
 		{
-			if (NewActiveBiomeQueue.Count > 0)
+			if (NewActiveBiomeQueue.Count > 1)
 			{
-				_coroutineManager.StartCoroutine(new Coroutine(DrawNewBiome(spriteBatch, NewActiveBiomeQueue.Dequeue())));
+				_coroutineManager.StartCoroutine(new Coroutine(DrawNewBiome(spriteBatch, NewActiveBiomeQueue.Dequeue(), 60)));
+			}
+			else if (NewActiveBiomeQueue.Count > 0)
+			{
+				_coroutineManager.StartCoroutine(new Coroutine(DrawNewBiome(spriteBatch, NewActiveBiomeQueue.Dequeue(), 240)));
 			}
 		}
 		_coroutineManager.Update();
@@ -175,33 +181,46 @@ public class BiomeLable : ModSystem
 	/// 落地
 	/// </summary>
 	/// <returns></returns>
-	private IEnumerator<ICoroutineInstruction> DrawNewBiome(SpriteBatch spriteBatch, BiomeData biomedata)
+	private IEnumerator<ICoroutineInstruction> DrawNewBiome(SpriteBatch spriteBatch, BiomeData biomedata, int time = 120)
 	{
 		Texture2D biomeIcon = biomedata.Icon;
-		for (int i = 0; i < 148; i++)
+		Vector2 stringSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, biomedata.Name, Vector2.One);
+		float mulWidth = 1f;
+		if(stringSize.X > 58)
+		{
+			mulWidth = stringSize.X / 58f;
+		}
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.EffectMatrix;
+		float screenCoordY = 100;
+		for (int i = 0; i < time; i++)
 		{
 			duration = i;
 			spriteBatch.End();
-			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
-			spriteBatch.Draw(Lable, new Vector2(Main.screenWidth / 2f, 200), new Rectangle(0, Height * (i / 2), Width, Height), Color.White, 0, new Vector2(Width, Height) * 0.5f, 1f, SpriteEffects.None, 0);
+			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, spriteBatch.transformMatrix);
+			int drawY = Height * (int)(i / (time / 120f));
+			spriteBatch.Draw(Lable, new Vector2(Main.screenWidth / 2f - 29 * mulWidth, screenCoordY), new Rectangle(0, drawY, 144, Height), Color.White, 0, new Vector2(144, 50), 1f, SpriteEffects.None, 0);
+			spriteBatch.Draw(Lable, new Vector2(Main.screenWidth / 2f, screenCoordY), new Rectangle(144, drawY, 58, Height), Color.White, 0, new Vector2(29, 50), new Vector2(mulWidth, 1f), SpriteEffects.None, 0);
+			spriteBatch.Draw(Lable, new Vector2(Main.screenWidth / 2f + 29 * mulWidth, screenCoordY), new Rectangle(202, drawY, 122, Height), Color.White, 0, new Vector2(0, 50), 1f, SpriteEffects.None, 0);
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
 			Effect dissolve = ModAsset.Dissolve_BiomeLable.Value;
-			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-			var model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.EffectMatrix;
-			float dissolveDuration = (1f - i / 148f) * 2;
+
+			float dissolveDuration = (1f - i / (float)time) * 2;
+			float alpha = (i - time / 9f) / (time / 18f);
+			alpha = Math.Clamp(alpha, 0, 1);
 			dissolve.Parameters["uTransform"].SetValue(model * projection);
 			dissolve.Parameters["uNoise"].SetValue(ModAsset.Noise_spiderNet.Value);
 			dissolve.Parameters["duration"].SetValue(dissolveDuration);
-			dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(1, 1f, 1f, 1f));
-			dissolve.Parameters["uNoiseSize"].SetValue(4f);
-			dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(0.4f, 0.4f));
+			dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(1f, 1f, 1f, 1f));
+			dissolve.Parameters["uNoiseSize"].SetValue(16f);
+			dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(0.44f, 0.36f));
 			dissolve.CurrentTechnique.Passes[0].Apply();
-			spriteBatch.DrawString(FontAssets.MouseText.Value, biomedata.Name, new Vector2(Main.screenWidth / 2f - 10, 180), Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-			spriteBatch.Draw(biomeIcon, new Vector2(Main.screenWidth / 2f - 55, 196), null, Color.White, 0, biomeIcon.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+			spriteBatch.DrawString(FontAssets.MouseText.Value, biomedata.Name, new Vector2(Main.screenWidth / 2f, screenCoordY - 20), Color.White * alpha, 0, new Vector2(stringSize.X * 0.5f, 0), 1f, SpriteEffects.None, 0);
+			spriteBatch.Draw(biomeIcon, new Vector2(Main.screenWidth / 2f - 29 * mulWidth - 37, screenCoordY - 4), null, Color.White * alpha, 0, biomeIcon.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
-			if (i == 147)
+			if (i == time - 1)
 			{
 				duration = -1;
 			}
