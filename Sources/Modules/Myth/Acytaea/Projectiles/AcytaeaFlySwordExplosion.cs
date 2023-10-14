@@ -9,8 +9,8 @@ public class AcytaeaFlySwordExplosion : ModProjectile, IWarpProjectile
 	{
 		Projectile.width = 120;
 		Projectile.height = 120;
-		Projectile.friendly = true;
-		Projectile.hostile = false;
+		Projectile.friendly = false;
+		Projectile.hostile = true;
 		Projectile.aiStyle = -1;
 		Projectile.penetrate = -1;
 		Projectile.timeLeft = 200;

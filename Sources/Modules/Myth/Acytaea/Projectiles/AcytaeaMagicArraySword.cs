@@ -3,7 +3,7 @@ using Everglow.Myth.Acytaea.VFXs;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
-public class AcytaeaLaserSword : ModProjectile
+public class AcytaeaMagicArraySword : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
 	public override void SetDefaults()
@@ -44,7 +44,7 @@ public class AcytaeaLaserSword : ModProjectile
 		}
 		if (Owner.type == ModContent.NPCType<Acytaea_Boss>())
 		{
-			Projectile.velocity = new Vector2(70, 0).RotatedBy(Projectile.rotation);
+			Projectile.velocity = new Vector2(0, -56).RotatedBy(Projectile.rotation);
 			Projectile.Center = Owner.Center + Projectile.velocity;
 		}
 		else
@@ -53,6 +53,17 @@ public class AcytaeaLaserSword : ModProjectile
 		}
 		CheckFrame();
 		GenerateVFX();
+	}
+	public override void OnKill(int timeLeft)
+	{
+		foreach (var npc in Main.npc)
+		{
+			if (npc.type == ModContent.NPCType<Acytaea_Boss>())
+			{
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_following>(), 0, 0f, -1, npc.whoAmI);
+				break;
+			}
+		}
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -69,26 +80,9 @@ public class AcytaeaLaserSword : ModProjectile
 		Vector2 step = Vector2.Normalize(Projectile.velocity) * 4;
 		Vector2 velocityLeft = step.RotatedBy(MathHelper.PiOver2) / 4f * width;
 		Vector2 detect = Projectile.Center + step * 12;
-		for (int i = 1; i < 600; ++i)
+		for (int i = 1; i < 100; ++i)
 		{
 			detect += step;
-			if (Collision.SolidCollision(detect, 0, 0))
-			{
-				break;
-			}
-			bool shouldBreak = false;
-			foreach(Player player in Main.player)
-			{
-				if((detect - player.Center).Length() < 50f)
-				{
-					shouldBreak = true;
-					break;
-				}
-			}
-			if(shouldBreak)
-			{
-				break;
-			}
 			float x = -i / 40f + (float)Main.time * 0.06f;
 			bars.Add(new Vertex2D(detect + velocityLeft, c0, new Vector3(x, 1, MathF.Min(i / width / 4f, 0.5f))));
 			bars.Add(new Vertex2D(detect - velocityLeft, c0, new Vector3(x, 0, MathF.Min(i / width / 4f, 0.5f))));
@@ -109,7 +103,7 @@ public class AcytaeaLaserSword : ModProjectile
 	}
 	public void GenerateVFX()
 	{
-		for (int x = 0; x < 4; x++)
+		for(int x = 0;x<4;x++)
 		{
 			Vector2 newVec = new Vector2(0, Main.rand.NextFloat(4f, 12f)).RotatedByRandom(6.283);
 			var positionVFX = EndPos + newVec * Main.rand.NextFloat(0.7f, 0.9f);
@@ -181,11 +175,14 @@ public class AcytaeaLaserSword : ModProjectile
 		dissolve.CurrentTechnique.Passes[0].Apply();
 		Texture2D tex = ModAsset.AcytaeaFlySword.Value;
 		Rectangle projFrame = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
-		Main.spriteBatch.Draw(tex, Projectile.Center, projFrame, lightColor, Projectile.rotation + MathHelper.PiOver4, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(tex, Projectile.Center, projFrame, lightColor, Projectile.rotation - MathHelper.PiOver4, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D star = Commons.ModAsset.Star.Value;
+
 		Vector2 endDrawPos = EndPos - Main.screenPosition;
+		Texture2D star = Commons.ModAsset.Star.Value;
+		Texture2D dark = Commons.ModAsset.Point_black.Value;
+		Main.spriteBatch.Draw(dark, endDrawPos, null, new Color(255, 255, 255, 255), 0, dark.Size() / 2f, width / 16f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), MathHelper.PiOver2, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), 0, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
@@ -204,16 +201,5 @@ public class AcytaeaLaserSword : ModProjectile
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_thick.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, rings.ToArray(), 0, rings.Count - 2);
-	}
-	public override void OnKill(int timeLeft)
-	{
-		foreach (var npc in Main.npc)
-		{
-			if (npc.type == ModContent.NPCType<Acytaea_Boss>())
-			{
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_following>(), 0, 0f, -1, npc.whoAmI);
-				break;
-			}
-		}
 	}
 }

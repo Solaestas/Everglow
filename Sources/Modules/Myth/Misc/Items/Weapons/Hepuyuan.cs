@@ -137,14 +137,13 @@ public class Hepuyuan : ModItem
 			HepuyuanOwner.MouseCooling = 30;
 			return false;
 		}
-
+		if (CanDown && player.ownedProjectileCounts[ModContent.ProjectileType<HepuyuanDown>()] < 1)
+		{
+			Projectile.NewProjectile(source, position, new Vector2(0, player.gravDir), ModContent.ProjectileType<HepuyuanDown>(), damage * 5, knockback, player.whoAmI, 0f, 0f);
+			return false;
+		}
 		if (player.ownedProjectileCounts[Item.shoot] < 1)
 		{
-			if (CanDown && player.ownedProjectileCounts[ModContent.ProjectileType<HepuyuanDown>()] < 1)
-			{
-				Projectile.NewProjectile(source, position, new Vector2(0, player.gravDir), ModContent.ProjectileType<HepuyuanDown>(), damage * 5, knockback, player.whoAmI, 0f, 0f);
-				return false;
-			}
 			Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<Misc.Projectiles.Weapon.Melee.Hepuyuan.Hepuyuan>(), damage, knockback, player.whoAmI, 0f, 0f);
 		}
 		return false;

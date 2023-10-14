@@ -42,7 +42,42 @@ public class AcytaeaScratch : ModProjectile
 		{
 			Projectile.Center = Owner.Center;
 			Projectile.spriteDirection = Owner.spriteDirection;
+			for (int x = 0; x < Math.Min(Owner.velocity.Length() * 0.2f - 2, Projectile.timeLeft * 0.5f); x++)
+			{
+				Vector2 newVec = Owner.velocity * 0.1f + new Vector2(0, Main.rand.NextFloat(0.1f, 0.7f)).RotatedByRandom(6.283);
+				if (newVec.Length() > 10)
+				{
+					newVec = newVec / newVec.Length() * 10f;
+				}
+				var positionVFX = Projectile.Center + Owner.velocity * Main.rand.NextFloat(0f, 1f) + new Vector2(0, Main.rand.NextFloat(0.1f, 15f)).RotatedByRandom(6.283) + new Vector2(0, -10);
+
+				var acytaeaFlame = new AcytaeaSparkDust
+				{
+					velocity = newVec,
+					Active = true,
+					Visible = true,
+					position = positionVFX,
+					maxTime = Main.rand.Next(24, 56),
+					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(0.8f, 1.2f) * newVec.Length() }
+				};
+				Ins.VFXManager.Add(acytaeaFlame);
+			}
 		}
+	}
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+	{
+		for(int k = 0;k < Projectile.oldPos.Length;k++)
+		{
+			Vector2 deltaVector = Projectile.oldPos[k] - Projectile.position;
+			Rectangle newProjectileHitBox = projHitbox;
+			newProjectileHitBox.X -= (int)deltaVector.X;
+			newProjectileHitBox.Y -= (int)deltaVector.Y;
+			if(newProjectileHitBox.Intersects(targetHitbox))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -65,6 +100,22 @@ public class AcytaeaScratch : ModProjectile
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(18f, 30f) }
 			};
 			Ins.VFXManager.Add(acytaeaFlame);
+		}
+		for (int x = 0; x < 60; x++)
+		{
+			Vector2 newVec = new Vector2(0, Main.rand.NextFloat(4f, 12f)).RotatedByRandom(6.238f);
+			var positionVFX = target.Center + newVec * Main.rand.NextFloat(0.7f, 0.9f);
+
+			var acytaeaSpark = new AcytaeaSparkDust
+			{
+				velocity = newVec,
+				Active = true,
+				Visible = true,
+				position = positionVFX,
+				maxTime = Main.rand.Next(14, 30),
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(8f, 10f) }
+			};
+			Ins.VFXManager.Add(acytaeaSpark);
 		}
 		target.AddBuff(ModContent.BuffType<AcytaeaInferno>(), 450);
 		base.OnHitPlayer(target, info);
