@@ -22,6 +22,5 @@
 		<Solaestas-ResourceFile Include="**\*.obj" />
 		<Solaestas-ResourceFile Include="**\*.bmp" />
 		<Solaestas-ResourceFile Include="**\*.mapio" />
-		<AdditionalFiles Update="**\*.FileListAbsolute.txt" Visible="false" Link="\" />
 	</ItemGroup>
 </Project>

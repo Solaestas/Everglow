@@ -7,9 +7,9 @@ using static ReLogic.Graphics.DynamicSpriteFont;
 
 namespace Everglow.Commons.BiomesText;
 
-public class BiomeLable : ModSystem
+public class BiomeLabel : ModSystem
 {
-	public Texture2D Lable => ModAsset.Textboard.Value;
+	public Texture2D Label => ModAsset.Textboard.Value;
 	public int Width => 324;
 	public int Height => 100;
 	public int duration = -1;
@@ -199,12 +199,12 @@ public class BiomeLable : ModSystem
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, spriteBatch.transformMatrix);
 			int drawY = Height * (int)(i / (time / 120f));
-			spriteBatch.Draw(Lable, new Vector2(Main.screenWidth / 2f - 29 * mulWidth, screenCoordY), new Rectangle(0, drawY, 144, Height), Color.White, 0, new Vector2(144, 50), 1f, SpriteEffects.None, 0);
-			spriteBatch.Draw(Lable, new Vector2(Main.screenWidth / 2f, screenCoordY), new Rectangle(144, drawY, 58, Height), Color.White, 0, new Vector2(29, 50), new Vector2(mulWidth, 1f), SpriteEffects.None, 0);
-			spriteBatch.Draw(Lable, new Vector2(Main.screenWidth / 2f + 29 * mulWidth, screenCoordY), new Rectangle(202, drawY, 122, Height), Color.White, 0, new Vector2(0, 50), 1f, SpriteEffects.None, 0);
+			spriteBatch.Draw(Label, new Vector2(Main.screenWidth / 2f - 29 * mulWidth, screenCoordY), new Rectangle(0, drawY, 144, Height), Color.White, 0, new Vector2(144, 50), 1f, SpriteEffects.None, 0);
+			spriteBatch.Draw(Label, new Vector2(Main.screenWidth / 2f, screenCoordY), new Rectangle(144, drawY, 58, Height), Color.White, 0, new Vector2(29, 50), new Vector2(mulWidth, 1f), SpriteEffects.None, 0);
+			spriteBatch.Draw(Label, new Vector2(Main.screenWidth / 2f + 29 * mulWidth, screenCoordY), new Rectangle(202, drawY, 122, Height), Color.White, 0, new Vector2(0, 50), 1f, SpriteEffects.None, 0);
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
-			Effect dissolve = ModAsset.Dissolve_BiomeLable.Value;
+			Effect dissolve = ModAsset.Dissolve_BiomeLabel.Value;
 
 			float dissolveDuration = (1f - i / (float)time) * 2;
 			float alpha = (i - time / 9f) / (time / 18f);
