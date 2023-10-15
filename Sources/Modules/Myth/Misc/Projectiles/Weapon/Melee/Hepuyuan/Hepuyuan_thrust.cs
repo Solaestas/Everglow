@@ -37,7 +37,8 @@ public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
 		player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height / 2f);
 		player.immune = true;
 		player.immuneTime = 5;
-		if(Projectile.timeLeft > 1)
+		player.noFallDmg = true;
+		if (Projectile.timeLeft > 1)
 		{
 			player.Center = Projectile.Center - Vector2.Normalize(Projectile.velocity) * (240 - Projectile.timeLeft);
 		}
