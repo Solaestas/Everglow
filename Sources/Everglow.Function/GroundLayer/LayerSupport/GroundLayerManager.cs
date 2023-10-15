@@ -24,19 +24,14 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 		Vector3 CameraPos;
 		public bool WaitLoadTexture = false;
 		bool needResort;
-		public bool AddLayer(string layerName, string layerTexturePath, Vector3 layerPos, int maxFrame = 1, int frameInterval = int.MaxValue)
+		public bool AddLayer(string layerName, string texturePath, Vector3 position, Point size, Point frameSize, bool horizontal = true, int frameMaxCount = 1, int frameInterval = int.MaxValue)
 		{
 			if (Main.netMode == NetmodeID.Server)
 			{
 				return false;
 			}
-			var layer = new Layer(layerName,layerTexturePath) 
-			{ 
-				Position = layerPos,
-				MaxFrameCount = maxFrame,
-				FrameInterval = frameInterval
-			};
-			return (needResort = layerCollection.Add(layer)) ? true : false;
+			Layer layer = new Layer(layerName, texturePath, position, size, frameSize, horizontal, frameMaxCount, frameInterval);
+			return (needResort = layerCollection.Add(ref layer)) ? true : false;
 		}
 		public bool RemoveLayer(string layerName)
 		{
@@ -125,7 +120,14 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 			{
 				for (int i = 0; i < 100; i++)
 				{
-					GroundLayerManager.Instance.AddLayer("Test" + i, "Everglow/Commons/Textures/Noise_melting", new(Main.LocalPlayer.Center + Main.rand.NextFloat(MathHelper.TwoPi).ToRotationVector2() * Main.rand.NextFloat(3200), Main.rand.NextFloat(-1600, 1600)));
+					GroundLayerManager.Instance.AddLayer("Test" + i,
+						"Everglow/Commons/Textures/Noise_melting",
+						new Vector3(Main.LocalPlayer.Center + Main.rand.NextFloat(MathHelper.TwoPi).ToRotationVector2() * Main.rand.NextFloat(3200), Main.rand.NextFloat(-1600, 800)),
+						new Point(Main.rand.Next(128,256),Main.rand.Next(128,256)),
+						new Point(256,256),
+						true,
+						1,
+						int.MaxValue);
 				}
 			}
 		}

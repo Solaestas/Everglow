@@ -12,6 +12,7 @@ namespace Everglow.Commons.GroundLayer.Basics
 		TValue[] _container = new TValue[size];
 		int _ptr = 0;
 		TValue _default = defaultValue;
+		public int Count => _ptr;
 		public ref TValue this[TKey uniqueID]
 		{
 			get
@@ -23,7 +24,7 @@ namespace Everglow.Commons.GroundLayer.Basics
 				return ref _default;
 			}
 		}
-		public bool Add(TValue content)
+		public bool Add(ref TValue content)
 		{
 			if (_ptr == _container.Length)
 			{

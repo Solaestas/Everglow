@@ -11,59 +11,46 @@ using Terraria.ModLoader;
 
 namespace Everglow.Commons.GroundLayer.LayerSupport
 {
-	public struct Layer : IUniqueID<string>
+	public struct Layer(string layerName, string texturePath, Vector3 position, Point size, Point frameSize, bool horizontal = true, int frameMaxCount = 1, int frameInterval = int.MaxValue) : IUniqueID<string>
 	{
-		public Layer(string layerName, string texturePath)
+		public readonly string UniqueID { get; } = layerName;
+		public Vector3 Position = position;
+		Asset<Texture2D> textureAsset = ModContent.Request<Texture2D>(texturePath);
+		int frameIndex;
+		int frameTimer;
+		int disposeTimer;
+		bool PrepareDraw(out Texture2D texture,bool immediate)
 		{
-			UniqueID = layerName;
-			Texture = ModContent.Request<Texture2D>(TexturePath = texturePath);
-		}
-		public readonly string UniqueID { get; }
-		public string TexturePath;
-		public Asset<Texture2D> Texture;
-		public Vector3 Position;
-		public int MaxFrameCount;
-		public int FrameInterval;
-		public bool HorizontalFrame;
-		int currentFrame;
-		int frameCounter;
-		public bool PrePareDraw(out Texture2D texture, bool immediate = true)
-		{
-			switch (Texture.State)
+			switch (textureAsset.State)
 			{
-				case AssetState.Loaded:
-					texture = Texture.Value;
-					return true;
-				case AssetState.Loading:
-					texture = null;
-					return false;
-				case AssetState.NotLoaded:
-					Texture = ModContent.Request<Texture2D>(TexturePath, immediate ? AssetRequestMode.ImmediateLoad : AssetRequestMode.AsyncLoad);
-					texture = Texture.Value;
-					return immediate;
 				default:
-					texture = null;
-					return false;
+				case AssetState.NotLoaded:
+					{
+						textureAsset = ModContent.Request<Texture2D>(texturePath, immediate ? AssetRequestMode.ImmediateLoad : AssetRequestMode.AsyncLoad);
+						texture = null;
+						return false;
+					}
+				case AssetState.Loaded:
+					{
+						texture = textureAsset.Value;
+						return true;
+					}
+				case AssetState.Loading:
+					{
+						if(immediate)
+						{
+							while (!textureAsset.IsLoaded)
+								;
+							texture=textureAsset.Value;
+							return true;
+						}
+						texture = null; 
+						return false;
+					}
 			}
 		}
 		public void Draw(SpriteBatch sprite, Vector3 CameraPos, bool waitLoad)
 		{
-			if (!PrePareDraw(out Texture2D texture, !waitLoad))
-			{
-				return;
-			}
-
-			int frameWidth = texture.Width;
-			int frameHeight = texture.Height;
-			if (HorizontalFrame)
-			{
-				frameWidth /= MaxFrameCount;
-			}
-			else
-			{
-				frameHeight /= MaxFrameCount;
-			}
-
 			float f = Position.Z / CameraPos.Z;
 
 			int leftX = (int)(Main.screenPosition.X * (1 - f) + CameraPos.X * f);
@@ -71,7 +58,7 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 			int topY = (int)(Main.screenPosition.Y * (1 - f) + CameraPos.Y * f);
 			int bottomY = (int)((Main.screenPosition.Y + Main.screenHeight) * (1 - f) + CameraPos.Y * f);
 
-			Rectangle r1 = new((int)Position.X, (int)Position.Y, frameWidth, frameHeight);
+			Rectangle r1 = new((int)Position.X, (int)Position.Y, size.X, size.Y);
 			Rectangle r2 = new(leftX, topY, rightX - leftX, bottomY - topY);
 			Rectangle.Intersect(ref r1, ref r2, out Rectangle r3);
 
@@ -80,24 +67,42 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 				return;
 			}
 
-			float f2 = CameraPos.Z / (CameraPos.Z - Position.Z);
-			Rectangle r4 = new((int)(CameraPos.X + (r3.X - CameraPos.X) * f2),
-				(int)(CameraPos.Y + (r3.Y - CameraPos.Y) * f2),
-				(int)(r3.Width * f2),
-				(int)(r3.Height * f2));
-
-			if (++frameCounter >= FrameInterval)
+			if(!PrepareDraw(out var texture,!waitLoad))
 			{
-				frameCounter = 0;
-				if (++currentFrame >= MaxFrameCount)
+				if (textureAsset.IsLoaded)
 				{
-					currentFrame = 0;
+					if (++disposeTimer > 1200)
+					{
+						disposeTimer = 0;
+						textureAsset.Dispose();
+					}
+				}
+				return;
+			}
+
+			if (++frameTimer >= frameInterval)
+			{
+				frameTimer = 0;
+				if (++frameIndex >= frameMaxCount)
+				{
+					frameIndex = 0;
 				}
 			}
 
+			float f2 = CameraPos.Z / (CameraPos.Z - Position.Z);
+			Rectangle r4 = new((int)(CameraPos.X + (r3.X - CameraPos.X) * f2 - Main.screenPosition.X),
+				(int)(CameraPos.Y + (r3.Y - CameraPos.Y) * f2 - Main.screenPosition.Y),
+				(int)(r3.Width * f2),
+				(int)(r3.Height * f2));
+
+			Rectangle r5 = new Rectangle((int)(r3.X - Position.X) + frameIndex * (horizontal ? 1 : 0) * frameSize.X,
+				(int)(r3.Y - Position.Y) + frameIndex * (horizontal ? 0 : 1) * frameSize.Y,
+				(int)(r3.Width * (frameSize.X / (float)size.X)),
+				(int)(r3.Height * (frameSize.Y / (float)size.Y)));
+
 			sprite.Draw(texture,
-				new Rectangle((int)(r4.X - Main.screenPosition.X), (int)(r4.Y - Main.screenPosition.Y), r4.Width, r4.Height),
-				new Rectangle((int)(r3.X - Position.X) + (HorizontalFrame ? currentFrame : 0) * frameWidth, (int)(r3.Y - Position.Y) + (HorizontalFrame ? 0 : currentFrame) * frameHeight, r3.Width, r3.Height),
+				r4,
+				r5,
 				Color.White);
 		}
 	}
