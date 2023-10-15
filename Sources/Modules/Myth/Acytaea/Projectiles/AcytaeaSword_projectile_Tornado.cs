@@ -7,13 +7,13 @@ using Terraria.Enums;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
 
-public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBloomProjectile
+public class AcytaeaSword_projectile_Tornado : ModProjectile, IWarpProjectile, IBloomProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
 	public override void SetDefaults()
 	{
 		Projectile.aiStyle = -1;
-		Projectile.timeLeft = 60;
+		Projectile.timeLeft = 720;
 		Projectile.extraUpdates = 1;
 		Projectile.scale = 1f;
 		Projectile.hostile = true;
@@ -41,6 +41,7 @@ public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBlo
 	public bool useTrail = true;
 	public bool longHandle = false;
 	public string shadertype = "Trail0";
+	public float Omega = 0f;
 	public override void OnSpawn(IEntitySource source)
 	{
 		int index = (int)Projectile.ai[0];
@@ -52,6 +53,7 @@ public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBlo
 		{
 			Projectile.Kill();
 		}
+		Omega = 0f;
 	}
 	public override void AI()
 	{
@@ -79,43 +81,36 @@ public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBlo
 			trailVecs.Clear();
 		}
 		//ProduceWaterRipples(new Vector2(mainVec.Length(), 30));
-
-		float timeMul = 1f;
 		if (attackType == 0)
 		{
-			if (timer < 3 * timeMul)//前摇
+			if (timer < 3)//前摇
 			{
-				float targetRot = -MathHelper.PiOver2 + Owner.spriteDirection * 0.5f;
+				float targetRot = -MathHelper.PiOver2;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(170, targetRot, 2f), 0.7f);
 				mainVec += Projectile.DirectionFrom(Owner.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
-			if (timer == (int)(20 * timeMul))
-				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
-			if (timer > 3 * timeMul && timer < 30 * timeMul)
+			if (timer % (int)(6.283 / Omega) == 0)
+				SoundEngine.PlaySound(SoundID.Item1.WithPitchOffset(Omega), Projectile.Center);
+			if (timer > 3 && timer < 700)
 			{
-				Projectile.rotation += Projectile.spriteDirection * 0.25f / timeMul;
-				mainVec = Vector2Elipse(190, Projectile.rotation, 0.6f);
-				if (timer < 24 * timeMul)
+				Projectile.rotation += Projectile.spriteDirection * Omega;
+				mainVec = Vector2Elipse(190, Projectile.rotation, 1.2f);
+				if (timer < 1294)
 				{
 					GenerateVFX();
 				}
-				else
-				{
-					if (Main.rand.Next((int)(60 * timeMul)) < (30 * timeMul - timer) * 10)
-					{
-						GenerateVFX();
-					}
-				}
 			}
-
-			if (timer > 60 * timeMul)
+			if(timer > 3 && timer < 260)
 			{
-				End();
+				Omega += 0.002f;
+			}
+			if (Projectile.timeLeft < 90)
+			{
+				Omega *= 0.95f;
 			}
 		}
 		Projectile.Center = Owner.Center + mainVec * 0.02f;
-		Projectile.spriteDirection = Owner.spriteDirection;
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -286,13 +281,9 @@ public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBlo
 
 		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
 	}
-	public void End()
-	{
-		Projectile.Kill();
-	}
 	public override void OnKill(int timeLeft)
 	{
-		foreach(var proj in Main.projectile)
+		foreach (var proj in Main.projectile)
 		{
 			if (proj != null && proj.active)
 			{
@@ -313,45 +304,46 @@ public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBlo
 	}
 	private void GenerateVFX()
 	{
-		int times = 3;
+		float lengthValue = 150 / mainVec.Length();
+		float times = lengthValue * Omega;
 		for (int x = 0; x < times; x++)
 		{
 			Vector2 newVec = mainVec;
-			Vector2 mainVecLeft = Vector2.Normalize(newVec).RotatedBy(-MathHelper.PiOver2);
+			Vector2 mainVecLeft = Vector2.Normalize(newVec).RotatedBy(-MathHelper.PiOver2) * lengthValue * 1.7f * Omega;
 			var positionVFX = Projectile.Center + mainVecLeft * Main.rand.NextFloat(-30f, 30f) + newVec * Main.rand.NextFloat(0.7f, 0.9f);
 
 			var acytaeaFlame = new AcytaeaFlameDust
 			{
-				velocity = -mainVecLeft * Main.rand.NextFloat(6f, 12f) * Projectile.spriteDirection,
+				velocity = -mainVecLeft * Main.rand.NextFloat(2f, 4f) * Projectile.spriteDirection,
 				Active = true,
 				Visible = true,
 				position = positionVFX,
 				maxTime = Main.rand.Next(14, 16),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(18f, 30f) }
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), mainVec.Y * mainVec.X / 100000f, Main.rand.NextFloat(18f, 30f) * Omega }
 			};
 			Ins.VFXManager.Add(acytaeaFlame);
 		}
-		for (int x = 0; x < times; x++)
+		for (int x = 0; x < times * 2; x++)
 		{
 			Vector2 newVec = mainVec;
-			Vector2 mainVecLeft = Vector2.Normalize(newVec).RotatedBy(-MathHelper.PiOver2);
+			Vector2 mainVecLeft = Vector2.Normalize(newVec).RotatedBy(-MathHelper.PiOver2) * lengthValue * 3.7f * Omega;
 			var positionVFX = Projectile.Center + mainVecLeft * Main.rand.NextFloat(-30f, 30f) + newVec * Main.rand.NextFloat(0.7f, 0.9f);
 
 			var acytaeaFlame = new AcytaeaSparkDust
 			{
-				velocity = -mainVecLeft * Main.rand.NextFloat(6f, 28f) * Projectile.spriteDirection,
+				velocity = -mainVecLeft * Main.rand.NextFloat(2f, 4f) * Projectile.spriteDirection,
 				Active = true,
 				Visible = true,
 				position = positionVFX,
-				maxTime = Main.rand.Next(14, 36),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(8f, 10f) }
+				maxTime = Main.rand.Next(14, 26),
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), mainVec.Y * mainVec.X / 100000f, Main.rand.NextFloat(8f, 10f) * Omega }
 			};
 			Ins.VFXManager.Add(acytaeaFlame);
 		}
 	}
 	public void DrawTrail(Color color)
 	{
-		if(trailVecs.Count <= 1)
+		if (trailVecs.Count <= 1)
 		{
 			return;
 		}

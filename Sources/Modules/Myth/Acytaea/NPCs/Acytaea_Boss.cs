@@ -483,6 +483,66 @@ public class Acytaea_Boss : ModNPC
 		}
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer(20)));
 	}
+	//龙卷
+	private IEnumerator<ICoroutineInstruction> SwordArray_Tornado()
+	{
+		Player player = Main.player[NPC.target];
+		NPC.rotation = 0;
+		NPC.direction = 1;
+		if (Main.rand.NextBool(2))
+		{
+			NPC.direction = -1;
+		}
+		NPC.spriteDirection = NPC.direction;
+		for (int t = 0; t < 20; t++)
+		{
+			float value = t / 20f;
+			Vector2 targetPos = player.Center + new Vector2(-130 * NPC.direction, -60);
+			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			yield return new SkipThisFrame();
+		}
+		ClearFollowingSword();
+		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_projectile_Tornado>(), 60, 4f, player.whoAmI, NPC.whoAmI);
+		for (int t = 0; t < 330; t++)
+		{
+			NPC.velocity.Y *= 0.5f;
+			float value = 0;
+			foreach(var proj in Main.projectile)
+			{
+				if(proj != null && proj.active)
+				{
+					if(proj.type == ModContent.ProjectileType<AcytaeaSword_projectile_Tornado>())
+					{
+						AcytaeaSword_projectile_Tornado aSPT = proj.ModProjectile as AcytaeaSword_projectile_Tornado;
+						if(aSPT.mainVec.X > 0)
+						{
+							NPC.spriteDirection = 1;
+						}
+						else
+						{
+							NPC.spriteDirection = -1;
+						}
+						value = aSPT.Omega;
+						break;
+					}
+				}
+			}
+			if(t == 319)
+			{
+				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - new Vector2(Math.Sign((player.Center - NPC.Center).X) * 240, 0), new Vector2(Math.Sign((player.Center - NPC.Center).X) * 60, 0), ModContent.ProjectileType<AcytaeaTornado>(), 60, 4f, player.whoAmI, NPC.whoAmI);
+			}
+			Vector2 targetPos = player.Center;
+			Vector2 toTarget = targetPos - NPC.Center - NPC.velocity;
+			if(toTarget.Length() > 200)
+			{
+				toTarget = Utils.SafeNormalize(toTarget, Vector2.zeroVector) * 200;
+			}
+			toTarget *= 0.4f * value;
+			NPC.velocity = toTarget * 0.05f + NPC.velocity * 0.95f;
+			yield return new SkipThisFrame();
+		}
+		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
+	}
 	private IEnumerator<ICoroutineInstruction> FaceToPlayer(int time = 60)
 	{
 		Player player = Main.player[NPC.target];
@@ -500,30 +560,43 @@ public class Acytaea_Boss : ModNPC
 			NPC.position = targetPos * 0.05f + NPC.position * 0.95f;
 			yield return new SkipThisFrame();
 		}
-		switch (Main.rand.Next(5))
+
+		
+		if (NPC.life > NPC.lifeMax * 0.5f)
 		{
-			case 0:
-				_acytaeaCoroutine.StartCoroutine(new Coroutine(SwordArray_Round()));
-				break;
-			case 1:
-				_acytaeaCoroutine.StartCoroutine(new Coroutine(ContinueScratchPlayer(Main.rand.Next(4, 13))));
-				break;
-			case 2:
-				_acytaeaCoroutine.StartCoroutine(new Coroutine(Scratch3Player()));
-				break;
-			case 3:
-				_acytaeaCoroutine.StartCoroutine(new Coroutine(SlashPlayer()));
-				break;
-			case 4:
-				_acytaeaCoroutine.StartCoroutine(new Coroutine(SwordArray()));
-				break;
+			switch (Main.rand.Next(3))
+			{
+				case 0:
+					_acytaeaCoroutine.StartCoroutine(new Coroutine(ScratchPlayer()));
+					break;
+				case 1:
+					_acytaeaCoroutine.StartCoroutine(new Coroutine(SlashPlayer()));
+					break;
+				case 2:
+					_acytaeaCoroutine.StartCoroutine(new Coroutine(Scratch3Player()));
+					break;
+			}
 		}
-		if (false)
+		else
 		{
-			_acytaeaCoroutine.StartCoroutine(new Coroutine(ContinueScratchPlayer(Main.rand.Next(4, 13))));
-			_acytaeaCoroutine.StartCoroutine(new Coroutine(Scratch3Player()));
-			_acytaeaCoroutine.StartCoroutine(new Coroutine(SlashPlayer()));
-			_acytaeaCoroutine.StartCoroutine(new Coroutine(SwordArray()));
+			switch (Main.rand.Next(5))
+			{
+				case 0:
+					_acytaeaCoroutine.StartCoroutine(new Coroutine(SwordArray_Round()));
+					break;
+				case 1:
+					_acytaeaCoroutine.StartCoroutine(new Coroutine(ContinueScratchPlayer(Main.rand.Next(4, 13))));
+					break;
+				case 2:
+					_acytaeaCoroutine.StartCoroutine(new Coroutine(SwordArray_Tornado()));
+					break;
+				case 3:
+					_acytaeaCoroutine.StartCoroutine(new Coroutine(SlashPlayer()));
+					break;
+				case 4:
+					_acytaeaCoroutine.StartCoroutine(new Coroutine(SwordArray()));
+					break;
+			}
 		}
 	}
 	private void ClearFollowingSword()

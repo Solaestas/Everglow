@@ -1,3 +1,5 @@
+using Everglow.Myth.Acytaea.Projectiles;
+
 namespace Everglow.Myth.Acytaea.VFXs;
 
 internal abstract class ShaderDraw : Visual
@@ -80,6 +82,18 @@ internal class AcytaeaFlameDust : ShaderDraw
 			if (timer > maxTime)
 				Active = false;
 			velocity = velocity.RotatedBy(ai[1]);
+		}
+		foreach (Projectile p in Main.projectile)
+		{
+			if (p != null && p.active)
+			{
+				if (p.type == ModContent.ProjectileType<AcytaeaTornado>())
+				{
+					float length = Math.Abs(position.X - p.Center.X) + 1;
+					velocity.X -= (position.X - p.Center.X) / length;
+					break;
+				}
+			}
 		}
 		float delC = ai[2] * 0.05f * (float)Math.Sin((maxTime - timer) / 40d * Math.PI);
 		Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.85f * delC, 0, 0);

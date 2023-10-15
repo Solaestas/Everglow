@@ -134,14 +134,7 @@ public class AcytaeaSword_projectile : MeleeProj
 	}
 	public override void OnKill(int timeLeft)
 	{
-		foreach(var npc in Main.npc)
-		{
-			if(npc.type == ModContent.NPCType<Acytaea_Boss>())
-			{
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_following>(), 0, 0f, -1, npc.whoAmI);
-				break;
-			}
-		}
+
 	}
 	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{

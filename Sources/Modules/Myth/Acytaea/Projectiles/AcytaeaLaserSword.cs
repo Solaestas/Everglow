@@ -207,6 +207,16 @@ public class AcytaeaLaserSword : ModProjectile
 	}
 	public override void OnKill(int timeLeft)
 	{
+		foreach (var proj in Main.projectile)
+		{
+			if (proj != null && proj.active)
+			{
+				if (proj.type == ModContent.ProjectileType<AcytaeaSword_following>())
+				{
+					return;
+				}
+			}
+		}
 		foreach (var npc in Main.npc)
 		{
 			if (npc.type == ModContent.NPCType<Acytaea_Boss>())

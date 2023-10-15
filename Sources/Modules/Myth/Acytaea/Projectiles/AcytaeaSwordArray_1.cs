@@ -89,6 +89,7 @@ public class AcytaeaSwordArray_1 : ModProjectile
 			Vector2 toPlayer = player.Center - Projectile.Center - Projectile.velocity;
 			Vector2 normalizeToPlayer = Utils.SafeNormalize(toPlayer, Vector2.zeroVector) * (1620f / Range + Projectile.whoAmI % 5);
 			Projectile.velocity = Projectile.velocity * 0.95f + normalizeToPlayer * 0.05f;
+			GenerateVFX();
 		}
 		AddRot += Omega;
 		if(Timer > 100)
@@ -113,6 +114,54 @@ public class AcytaeaSwordArray_1 : ModProjectile
 			}
 		}
 		Projectile.Kill();
+	}
+	private void GenerateVFX()
+	{
+		for (int k = 0; k < subProjActive.Count; k++)
+		{
+			if (subProjActive[k])
+			{
+				if (Main.rand.NextBool(7))
+				{
+					Vector2 deltaVector = new Vector2(0, Range).RotatedBy(k / (float)subProjActive.Count * MathHelper.TwoPi + AddRot);
+					int times = 1;
+					for (int x = 0; x < times; x++)
+					{
+						Vector2 newVec = deltaVector;
+						Vector2 mainVecLeft = Vector2.Normalize(newVec).RotatedBy(-MathHelper.PiOver2);
+						var positionVFX = Projectile.Center + deltaVector + mainVecLeft * Main.rand.NextFloat(-30f, 30f);
+
+						var acytaeaFlame = new AcytaeaFlameDust
+						{
+							velocity = -mainVecLeft * Main.rand.NextFloat(6f, 12f) * Projectile.spriteDirection,
+							Active = true,
+							Visible = true,
+							position = positionVFX,
+							maxTime = Main.rand.Next(14, 16),
+							ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(18f, 30f) }
+						};
+						Ins.VFXManager.Add(acytaeaFlame);
+					}
+					for (int x = 0; x < times * 2; x++)
+					{
+						Vector2 newVec = deltaVector;
+						Vector2 mainVecLeft = Vector2.Normalize(newVec).RotatedBy(-MathHelper.PiOver2);
+						var positionVFX = Projectile.Center + deltaVector + mainVecLeft * Main.rand.NextFloat(-30f, 30f);
+
+						var acytaeaFlame = new AcytaeaSparkDust
+						{
+							velocity = -mainVecLeft * Main.rand.NextFloat(6f, 12f) * Projectile.spriteDirection,
+							Active = true,
+							Visible = true,
+							position = positionVFX,
+							maxTime = Main.rand.Next(14, 36),
+							ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(8f, 10f) }
+						};
+						Ins.VFXManager.Add(acytaeaFlame);
+					}
+				}
+			}
+		}
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
