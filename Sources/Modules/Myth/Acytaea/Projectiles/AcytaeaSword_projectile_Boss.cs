@@ -13,8 +13,8 @@ public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBlo
 	public override void SetDefaults()
 	{
 		Projectile.aiStyle = -1;
-		Projectile.timeLeft = 60;
-		Projectile.extraUpdates = 1;
+		Projectile.timeLeft = 120;
+		Projectile.extraUpdates = 0;
 		Projectile.scale = 1f;
 		Projectile.hostile = true;
 		Projectile.friendly = false;
@@ -83,33 +83,34 @@ public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBlo
 		float timeMul = 1f;
 		if (attackType == 0)
 		{
-			if (timer < 3 * timeMul)//前摇
+			if (timer < 30 * timeMul)//前摇
 			{
-				float targetRot = -MathHelper.PiOver2 + Owner.spriteDirection * 0.5f;
+				float targetRot = -MathHelper.PiOver2 - Owner.spriteDirection * 0.5f;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(170, targetRot, 2f), 0.7f);
 				mainVec += Projectile.DirectionFrom(Owner.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == (int)(20 * timeMul))
 				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
-			if (timer > 3 * timeMul && timer < 30 * timeMul)
+			if (timer > 33 * timeMul && timer < 60 * timeMul)
 			{
+				Projectile.extraUpdates = 1;
 				Projectile.rotation += Projectile.spriteDirection * 0.25f / timeMul;
 				mainVec = Vector2Elipse(190, Projectile.rotation, 0.6f);
-				if (timer < 24 * timeMul)
+				if (timer < 54 * timeMul)
 				{
 					GenerateVFX();
 				}
 				else
 				{
-					if (Main.rand.Next((int)(60 * timeMul)) < (30 * timeMul - timer) * 10)
+					if (Main.rand.Next((int)(90 * timeMul)) < (60 * timeMul - timer) * 10)
 					{
 						GenerateVFX();
 					}
 				}
 			}
 
-			if (timer > 60 * timeMul)
+			if (timer > 90 * timeMul)
 			{
 				End();
 			}
@@ -149,12 +150,30 @@ public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBlo
 			}
 		}
 		Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+		Texture2D tex2 = ModAsset.AcytaeaSword_projectile_highLight.Value;
+		Texture2D tex3 = ModAsset.AcytaeaSword_projectile_glow.Value;
 		Vector2 drawCenter = Projectile.Center - Main.screenPosition;
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
+		if(timer < 30)
+		{
+			DrawVertexByTwoLine(tex2, new Color(255, 255, 255, 0) * (timer / 30f), diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
+		}
+		else
+		{
+			DrawVertexByTwoLine(tex2, new Color(255, 255, 255, 0) * ((120 - timer) / 90f), diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
+		}
 		DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
+		if (timer < 30)
+		{
+			DrawVertexByTwoLine(tex3, new Color(255, 255, 255, 0) * (timer / 30f), diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
+		}
+		else
+		{
+			DrawVertexByTwoLine(tex3, new Color(255, 255, 255, 0) * ((120 - timer) / 90f), diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
+		}
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);

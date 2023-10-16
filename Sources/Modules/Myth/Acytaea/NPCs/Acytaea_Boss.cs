@@ -135,11 +135,16 @@ public class Acytaea_Boss : ModNPC
 		}
 		ClearFollowingSword();
 		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_projectile_Boss>(), 60, 4f, player.whoAmI, NPC.whoAmI);
-		for (int t = 0; t < 60; t++)
+		for (int t = 0; t < 10; t++)
 		{
 			float value = 0.05f;
 			Vector2 targetPos = player.Center + new Vector2(-130 * NPC.direction, -60);
 			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			yield return new SkipThisFrame();
+		}
+		for (int t = 0; t < 90; t++)
+		{
+			NPC.velocity *= 0.6f;
 			yield return new SkipThisFrame();
 		}
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
@@ -419,7 +424,7 @@ public class Acytaea_Boss : ModNPC
 			}
 			yield return new SkipThisFrame();
 		}
-		yield return new SkipThisFrame();
+		yield return new WaitForFrames(60);
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer(20)));
 	}
 	//轮状剑阵
@@ -561,7 +566,7 @@ public class Acytaea_Boss : ModNPC
 			yield return new SkipThisFrame();
 		}
 
-		
+
 		if (NPC.life > NPC.lifeMax * 0.5f)
 		{
 			switch (Main.rand.Next(3))
