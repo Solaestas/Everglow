@@ -11,9 +11,9 @@ using Terraria.ModLoader;
 
 namespace Everglow.Commons.GroundLayer.LayerSupport
 {
-	public struct Layer(string layerName, string texturePath, Vector3 position, Point size, Point frameSize, bool horizontal = true, int frameMaxCount = 1, int frameInterval = int.MaxValue) : IUniqueID<string>
+	public class Layer(string layerName, string texturePath, Vector3 position, Point size, Point frameSize, bool horizontal = true, int frameMaxCount = 1, int frameInterval = int.MaxValue) : IUniqueID<string>
 	{
-		public readonly string UniqueID { get; } = layerName;
+		public string UniqueID { get; } = layerName;
 		public Vector3 Position = position;
 		Asset<Texture2D> textureAsset = ModContent.Request<Texture2D>(texturePath);
 		int frameIndex;
@@ -49,7 +49,7 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 					}
 			}
 		}
-		public void Draw(SpriteBatch sprite, Vector3 CameraPos, bool waitLoad)
+		public void DoDraw(SpriteBatch sprite, Vector3 CameraPos, bool waitLoad,Color color)
 		{
 			float f = Position.Z / CameraPos.Z;
 
@@ -100,10 +100,25 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 				(int)(r3.Width * (frameSize.X / (float)size.X)),
 				(int)(r3.Height * (frameSize.Y / (float)size.Y)));
 
+
+
+			Draw(sprite, texture, r4, r5, color);
+		}
+		public virtual void Draw(SpriteBatch sprite,Texture2D texture,Rectangle screenTargetArea, Rectangle drawClippingArea, Color color)
+		{
 			sprite.Draw(texture,
-				r4,
-				r5,
+				screenTargetArea,
+				drawClippingArea,
 				Color.White);
+			sprite.Draw(texture,
+				new Vector2(screenTargetArea.X, screenTargetArea.Y),
+				drawClippingArea,
+				color,
+				0,
+				Vector2.Zero,
+				new Vector2(drawClippingArea.Width / (float)screenTargetArea.Width, drawClippingArea.Height / (float)screenTargetArea.Height),
+				SpriteEffects.None,
+				0);
 		}
 	}
 }

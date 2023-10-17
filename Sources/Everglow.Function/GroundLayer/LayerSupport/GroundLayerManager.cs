@@ -1,4 +1,5 @@
 using Everglow.Commons.GroundLayer.Basics;
+using Terraria.Graphics.Effects;
 
 namespace Everglow.Commons.GroundLayer.LayerSupport
 {
@@ -20,7 +21,7 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 			orig(self);
 		}
 		public static GroundLayerManager Instance => ModContent.GetInstance<GroundLayerManager>();
-		StructCollection<string, Layer> layerCollection = new();
+		SuccessiveCollection<string, Layer> layerCollection = new();
 		Vector3 CameraPos;
 		public bool WaitLoadTexture = false;
 		bool needResort;
@@ -31,6 +32,14 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 				return false;
 			}
 			Layer layer = new Layer(layerName, texturePath, position, size, frameSize, horizontal, frameMaxCount, frameInterval);
+			return (needResort = layerCollection.Add(ref layer)) ? true : false;
+		}
+		public bool AddLayer(Layer layer)
+		{
+			if (Main.netMode == NetmodeID.Server)
+			{
+				return false;
+			}
 			return (needResort = layerCollection.Add(ref layer)) ? true : false;
 		}
 		public bool RemoveLayer(string layerName)
@@ -78,7 +87,7 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 				{
 					return;
 				}
-				drawLayer.Draw(sprite, CameraPos, !WaitLoadTexture);
+				drawLayer.DoDraw(sprite, CameraPos, !WaitLoadTexture, Main.ColorOfTheSkies);
 			}
 		}
 		public void DrawBackgroundLayers(SpriteBatch sprite)
@@ -92,7 +101,7 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 				{
 					return;
 				}
-				drawLayer.Draw(sprite, CameraPos, !WaitLoadTexture);
+				drawLayer.DoDraw(sprite, CameraPos, !WaitLoadTexture,Main.tileColor);
 			}
 		}
 		public override void OnWorldUnload()

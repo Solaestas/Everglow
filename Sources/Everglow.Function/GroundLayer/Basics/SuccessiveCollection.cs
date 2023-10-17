@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Everglow.Commons.GroundLayer.Basics
 {
-	public class StructCollection<TKey, TValue>(int size = 5000, TValue defaultValue = default) where TValue : struct, IUniqueID<TKey> where TKey : IComparable<TKey>
+	public class SuccessiveCollection<TKey, TValue>(int size = 5000, TValue defaultValue = default) where TValue : IUniqueID<TKey> where TKey : IComparable<TKey>
 	{
 		Dictionary<TKey, int> map = new();
 		TValue[] _container = new TValue[size];
