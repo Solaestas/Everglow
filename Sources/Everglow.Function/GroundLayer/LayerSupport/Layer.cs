@@ -1,13 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Everglow.Commons.GroundLayer.Basics;
-using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using Terraria.Initializers;
-using Terraria.ModLoader;
 
 namespace Everglow.Commons.GroundLayer.LayerSupport
 {
@@ -19,7 +11,7 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 		int frameIndex;
 		int frameTimer;
 		int disposeTimer;
-		bool PrepareDraw(out Texture2D texture,bool immediate)
+		bool PrepareDraw(out Texture2D texture, bool immediate)
 		{
 			switch (textureAsset.State)
 			{
@@ -37,19 +29,19 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 					}
 				case AssetState.Loading:
 					{
-						if(immediate)
+						if (immediate)
 						{
 							while (!textureAsset.IsLoaded)
 								;
-							texture=textureAsset.Value;
+							texture = textureAsset.Value;
 							return true;
 						}
-						texture = null; 
+						texture = null;
 						return false;
 					}
 			}
 		}
-		public void DoDraw(SpriteBatch sprite, Vector3 CameraPos, bool waitLoad,Color color)
+		public void DoDraw(SpriteBatch sprite, Vector3 CameraPos, bool waitLoad, Color color)
 		{
 			float f = Position.Z / CameraPos.Z;
 
@@ -67,7 +59,7 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 				return;
 			}
 
-			if(!PrepareDraw(out var texture,!waitLoad))
+			if (!PrepareDraw(out var texture, !waitLoad))
 			{
 				if (textureAsset.IsLoaded)
 				{
@@ -104,12 +96,8 @@ namespace Everglow.Commons.GroundLayer.LayerSupport
 
 			Draw(sprite, texture, r4, r5, color);
 		}
-		public virtual void Draw(SpriteBatch sprite,Texture2D texture,Rectangle screenTargetArea, Rectangle drawClippingArea, Color color)
+		public virtual void Draw(SpriteBatch sprite, Texture2D texture, Rectangle screenTargetArea, Rectangle drawClippingArea, Color color)
 		{
-			sprite.Draw(texture,
-				screenTargetArea,
-				drawClippingArea,
-				Color.White);
 			sprite.Draw(texture,
 				new Vector2(screenTargetArea.X, screenTargetArea.Y),
 				drawClippingArea,
