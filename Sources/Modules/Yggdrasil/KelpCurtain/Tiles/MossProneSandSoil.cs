@@ -1,6 +1,6 @@
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles;
 
-public class YggdrasilDirt : ModTile
+public class MossProneSandSoil : ModTile
 {
 	public override void PostSetDefaults()
 	{

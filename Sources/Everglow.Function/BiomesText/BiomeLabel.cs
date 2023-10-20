@@ -46,7 +46,7 @@ public class BiomeLabel : ModSystem
 			ActiveModBiomeCache[modBiome] = 0;
 		}
 		ActiveVanillaBiomeCache["Beach"] = 0;
-		VanillaBiomeDatas["Beach"] = new BiomeData("Ocean", ModAsset.Ocean.Value);
+		VanillaBiomeDatas["Beach"] = new BiomeData("Ocean", ModAsset.Ocean_beach.Value);
 		ActiveVanillaBiomeCache["Corrupt"] = 0;
 		VanillaBiomeDatas["Corrupt"] = new BiomeData("The Corruption", ModAsset.The_Corruption.Value);
 		ActiveVanillaBiomeCache["Crimson"] = 0;

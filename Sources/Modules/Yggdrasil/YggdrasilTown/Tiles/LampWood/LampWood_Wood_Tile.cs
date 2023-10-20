@@ -1,6 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
 public class LampWood_Wood_Tile : ModTile
 {

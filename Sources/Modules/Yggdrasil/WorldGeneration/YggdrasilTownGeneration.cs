@@ -206,53 +206,56 @@ public class YggdrasilTownGeneration
 		int leftBound = GenRand.Next(380, 400) + deltaX;
 		int rightBound = GenRand.Next(800, 820) + deltaX;
 		int startY = 11632;
-		PlaceRectangleAreaOfBlock(leftBound, startY + 1, rightBound, startY + 3, TileID.GrayBrick);
 		KillRectangleAreaOfTile(leftBound, startY - 10, rightBound, startY);
 		PlaceFrameImportantTiles(595, startY - 11, 16, 12, ModContent.TileType<OriginPylon>());
 		for (int x = leftBound + 5; x < rightBound - 5; x++)
 		{
-			Tile tile = SafeGetTile(x, startY);
-			Tile tileLeft = SafeGetTile(x - 1, startY);
-			Tile tileRight = SafeGetTile(x + 1, startY);
-			tile.wall = WallID.IronFence;
-			if (x % 12 == 0)
+			if(x % 20 == 0)
 			{
-				if (!tile.HasTile && !tileLeft.HasTile && !tileRight.HasTile)
-				{
-					for (int y = 1; y < 7; y++)
-					{
-						Tile tile2 = SafeGetTile(x, startY - y);
-						tile2.wall = WallID.IronFence;
-						if (y == 6)
-						{
-							Tile tile2Left = SafeGetTile(x + 1, startY - y);
-							Tile tile2Right = SafeGetTile(x - 1, startY - y);
-							tile2.TileType = TileID.Platforms;
-							tile2.TileFrameY = 162;
-							tile2.HasTile = true;
-							tile2Left.TileType = TileID.Platforms;
-							tile2Left.TileFrameY = 162;
-							tile2Left.HasTile = true;
-							tile2Right.TileType = TileID.Platforms;
-							tile2Right.TileFrameY = 162;
-							tile2Right.HasTile = true;
+				PlaceFrameImportantTiles(x, startY, 20, 1, ModContent.TileType<StoneBridgeTile>(), 0, 0);
+			}
+			//Tile tile = SafeGetTile(x, startY);
+			//Tile tileLeft = SafeGetTile(x - 1, startY);
+			//Tile tileRight = SafeGetTile(x + 1, startY);
+			//tile.wall = WallID.IronFence;
+			//if (x % 12 == 0)
+			//{
+			//	if (!tile.HasTile && !tileLeft.HasTile && !tileRight.HasTile)
+			//	{
+			//		for (int y = 1; y < 7; y++)
+			//		{
+			//			Tile tile2 = SafeGetTile(x, startY - y);
+			//			tile2.wall = WallID.IronFence;
+			//			if (y == 6)
+			//			{
+			//				Tile tile2Left = SafeGetTile(x + 1, startY - y);
+			//				Tile tile2Right = SafeGetTile(x - 1, startY - y);
+			//				tile2.TileType = TileID.Platforms;
+			//				tile2.TileFrameY = 162;
+			//				tile2.HasTile = true;
+			//				tile2Left.TileType = TileID.Platforms;
+			//				tile2Left.TileFrameY = 162;
+			//				tile2Left.HasTile = true;
+			//				tile2Right.TileType = TileID.Platforms;
+			//				tile2Right.TileFrameY = 162;
+			//				tile2Right.HasTile = true;
 
-							PlaceFrameImportantTiles(x - 1, startY - y + 1, 1, 2, TileID.HangingLanterns, 0, 72);
-							PlaceFrameImportantTiles(x + 1, startY - y + 1, 1, 2, TileID.HangingLanterns, 0, 72);
-						}
-					}
-				}
-			}
-			if (x % 40 == 0 && x > leftBound + 20 && x < rightBound - 20)
-			{
-				PlaceFrameImportantTiles(x - 6, 11636, 13, 8, ModContent.TileType<PierWithSlabsTop>());
-				int y = 11644;
-				while (!SafeGetTile(x, y).HasTile)
-				{
-					PlaceFrameImportantTiles(x - 1, y, 3, 3, ModContent.TileType<PierWithSlabs>());
-					y += 3;
-				}
-			}
+			//				/*PlaceFrameImportantTiles(x - 1, startY - y + 1, 1, 2, TileID.HangingLanterns, 0, 72);*/
+			//				PlaceFrameImportantTiles(x + 1, startY - y + 1, 1, 2, TileID.HangingLanterns, 0, 72);
+			//			}
+			//		}
+			//	}
+			//}
+			//if (x % 40 == 0 && x > leftBound + 20 && x < rightBound - 20)
+			//{
+			//	PlaceFrameImportantTiles(x - 6, 11636, 13, 8, ModContent.TileType<PierWithSlabsTop>());
+			//	int y = 11644;
+			//	while (!SafeGetTile(x, y).HasTile)
+			//	{
+			//		PlaceFrameImportantTiles(x - 1, y, 3, 3, ModContent.TileType<PierWithSlabs>());
+			//		y += 3;
+			//	}
+			//}
 		}
 	}
 	/// <summary>
