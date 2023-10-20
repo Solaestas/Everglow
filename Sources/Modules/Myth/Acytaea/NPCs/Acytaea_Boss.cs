@@ -18,7 +18,7 @@ public class Acytaea_Boss : ModNPC
 		NPC.width = 34;
 		NPC.height = 48;
 		NPC.aiStyle = 7;
-		NPC.damage = 100;
+		NPC.damage = 0;
 		NPC.defense = 100;
 		NPC.lifeMax = 250000;
 		NPC.HitSound = SoundID.NPCHit1;
@@ -59,6 +59,7 @@ public class Acytaea_Boss : ModNPC
 	}
 	public override void OnKill()
 	{
+		NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea>());
 		NPC.SetEventFlagCleared(ref DownedBossSystem.downedAcytaea, -1);
 		if (Main.netMode == NetmodeID.Server)
 			NetMessage.SendData(MessageID.WorldData);
@@ -73,6 +74,7 @@ public class Acytaea_Boss : ModNPC
 			NPC.active = false;
 			NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea>());
 		}
+		NPC.damage = 0;
 	}
 	#region Boss
 	private int wingFrame = 0;
@@ -373,15 +375,6 @@ public class Acytaea_Boss : ModNPC
 		{
 			Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordArray_0>(), 60, 4f, player.whoAmI, NPC.whoAmI, x / 6f, -200);
 		}
-		var acytaeaLaserSwordHDREffect = new AcytaeaLaserSwordHDREffect
-		{
-			Active = true,
-			Visible = true,
-			maxTime = 300,
-			timer = 0,
-			owner = NPC
-		};
-		Ins.VFXManager.Add(acytaeaLaserSwordHDREffect);
 		for (int t = 0; t < 30; t++)
 		{
 			NPC.velocity *= 0.1f;

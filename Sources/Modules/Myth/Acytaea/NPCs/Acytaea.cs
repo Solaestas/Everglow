@@ -65,232 +65,17 @@ public class Acytaea : VisualNPC
 	}
 	public override void AI()
 	{
-		if (!NPC.boss)
-		{
-			NPCHappiness NH = NPC.Happiness;
-			NH.SetBiomeAffection<ForestBiome>((AffectionLevel)50);
-			NH.SetBiomeAffection<SnowBiome>((AffectionLevel)70);
-			NH.SetBiomeAffection<CrimsonBiome>((AffectionLevel)90);
-			NH.SetBiomeAffection<CorruptionBiome>((AffectionLevel)90);
-			NH.SetBiomeAffection<UndergroundBiome>((AffectionLevel)(-20));
-			NH.SetBiomeAffection<DesertBiome>((AffectionLevel)20);
-			NH.SetBiomeAffection<DungeonBiome>((AffectionLevel)(-50));
-			NH.SetBiomeAffection<OceanBiome>((AffectionLevel)50);
-			NH.SetBiomeAffection<JungleBiome>((AffectionLevel)30);
-		}
-		else
-		{
-			BeABoss();
-		}
+		NPCHappiness NH = NPC.Happiness;
+		NH.SetBiomeAffection<ForestBiome>((AffectionLevel)50);
+		NH.SetBiomeAffection<SnowBiome>((AffectionLevel)70);
+		NH.SetBiomeAffection<CrimsonBiome>((AffectionLevel)90);
+		NH.SetBiomeAffection<CorruptionBiome>((AffectionLevel)90);
+		NH.SetBiomeAffection<UndergroundBiome>((AffectionLevel)(-20));
+		NH.SetBiomeAffection<DesertBiome>((AffectionLevel)20);
+		NH.SetBiomeAffection<DungeonBiome>((AffectionLevel)(-50));
+		NH.SetBiomeAffection<OceanBiome>((AffectionLevel)50);
+		NH.SetBiomeAffection<JungleBiome>((AffectionLevel)30);
 	}
-	#region Boss
-	private int wingFrame = 0;
-	private int wingFrameCounter = 0;
-	private CoroutineManager _acytaeaCoroutine = new CoroutineManager();
-	public Skeleton2D acytaeaSkeleton;
-	public void StartToBeABoss()
-	{
-		NPC.TargetClosest(true);
-		_acytaeaCoroutine.StartCoroutine(new Coroutine(StartFighting()));
-		StartSkeletons();
-	}
-	public void StartSkeletons()
-	{
-		Texture2D backWing = ModAsset.AcytaeaBackWing.Value;
-		Texture2D frontWing = ModAsset.AcytaeaFrontWing.Value;
-		Texture2D backArm = ModAsset.AcytaeaBackArm.Value;
-		Texture2D body = ModAsset.AcytaeaBody.Value;
-		Texture2D legs = ModAsset.AcytaeaLeg.Value;
-		Texture2D frontArm = ModAsset.AcytaeaFrontArm.Value;
-		Texture2D head = ModAsset.AcytaeaHead.Value;
-
-		Bone2D bodyBone = new Bone2D();
-		bodyBone.Length = 0;
-		bodyBone.Rotation = NPC.rotation;
-		bodyBone.WorldSpacePosition = NPC.Center;
-		bodyBone.Name = "bodyBone";
-		bodyBone.Scale = Vector2.One;
-		Bone2D backWingBone = CreateLimbBone(0, 0, "backWingBone", Vector2.zeroVector);
-		bodyBone.AddChild(backWingBone);
-		Bone2D frontWingBone = CreateLimbBone(0, 0, "frontWingBone", Vector2.zeroVector);
-		bodyBone.AddChild(frontWingBone);
-		Bone2D backArmBone = CreateLimbBone(1, 0, "backArmBone", Vector2.zeroVector);
-		bodyBone.AddChild(backArmBone);
-		Bone2D legsBone = CreateLimbBone(10, 0, "legsBone", Vector2.zeroVector);
-		legsBone.AddChild(bodyBone);
-		Bone2D frontArmsBone = CreateLimbBone(1, 0, "frontArmsBone", Vector2.zeroVector);
-		bodyBone.AddChild(frontArmsBone);
-		Bone2D headBone = CreateLimbBone(1, 0, "headBone", Vector2.zeroVector);
-		bodyBone.AddChild(headBone);
-		List<Bone2D> bones = new List<Bone2D>
-		{
-			bodyBone,
-			backWingBone,
-			frontWingBone,
-			backArmBone,
-			legsBone,
-			frontArmsBone,
-			headBone,
-		};
-		acytaeaSkeleton = new Skeleton2D(bones);
-
-		acytaeaSkeleton.Slots.Add(CreateSlot("bodySlot", bodyBone, body));
-		acytaeaSkeleton.Slots.Add(CreateSlot("backWingSlot", backWingBone, backWing));
-		acytaeaSkeleton.Slots.Add(CreateSlot("frontWingSlot", frontWingBone, frontWing));
-		acytaeaSkeleton.Slots.Add(CreateSlot("backArmSlot", backArmBone, backArm));
-		acytaeaSkeleton.Slots.Add(CreateSlot("legsSlot", legsBone, legs));
-		acytaeaSkeleton.Slots.Add(CreateSlot("frontArmSlot", frontArmsBone, frontArm));
-		acytaeaSkeleton.Slots.Add(CreateSlot("headSlot", headBone, head));
-	}
-	public Slot CreateSlot(string name, Bone2D bone, Texture2D attachmentTexture, float attachmentRot = 0)
-	{
-		Slot slot = new Slot();
-		slot.Name = name;
-		slot.Bone = bone;
-		RegionAttachment attachment = new RegionAttachment();
-		attachment.Texture = attachmentTexture;
-		attachment.Rotation = attachmentRot;
-		attachment.Size = Vector2.One;
-		slot.Attachment = attachment;
-		return slot;
-	}
-	/// <summary>
-	/// 创建一个肢体骨骼
-	/// </summary>
-	public Bone2D CreateLimbBone(float length, float rotation, string name, Vector2 position)
-	{
-		Bone2D bone = new Bone2D();
-		bone.Length = length;
-		bone.Rotation = rotation;
-		bone.WorldSpacePosition = NPC.Center;
-		bone.Name = name;
-		bone.Position = position;
-		bone.Scale = Vector2.One;
-		return bone;
-	}
-	public void BeABoss()
-	{
-		Player player = Main.player[NPC.target];
-		UpdateWings();
-		_acytaeaCoroutine.Update();
-		if (!player.active || player.dead)
-		{
-			NPC.active = false;
-		}
-		else
-		{
-			if ((player.Center - NPC.Center).Length() > 15000)
-				NPC.active = false;
-		}
-		if (Main.mouseLeft && Main.mouseLeftRelease)
-		{
-			NPC.direction *= -1;
-			NPC.spriteDirection = NPC.direction;
-		}
-	}
-	public void UpdateWings()
-	{
-		wingFrameCounter++;
-		if (wingFrameCounter > 6)
-		{
-			wingFrameCounter = 0;
-			wingFrame++;
-			if (wingFrame > 3)
-			{
-				wingFrame = 0;
-			}
-		}
-	}
-	private IEnumerator<ICoroutineInstruction> StartFighting()
-	{
-		Player player = Main.player[NPC.target];
-		NPC.direction = 1;
-		NPC.noGravity = true;
-		if (player.Center.X < NPC.Center.X)
-		{
-			NPC.direction = -1;
-		}
-		NPC.spriteDirection = NPC.direction;
-		for (int t = 0; t < 60; t++)
-		{
-			Vector2 targetPos = player.Center + new Vector2(-200 * NPC.direction, 0);
-			NPC.position = targetPos * 0.05f + NPC.position * 0.95f;
-			yield return new SkipThisFrame();
-		}
-		_acytaeaCoroutine.StartCoroutine(new Coroutine(SlashPlayer()));
-	}
-	private IEnumerator<ICoroutineInstruction> SlashPlayer()
-	{
-		Player player = Main.player[NPC.target];
-		NPC.direction = 1;
-		if (player.Center.X < NPC.Center.X)
-		{
-			NPC.direction = -1;
-		}
-		NPC.spriteDirection = NPC.direction;
-		for (int t = 0; t < 600; t++)
-		{
-			Vector2 targetPos = player.Center + new Vector2(200 * NPC.direction, 0);
-			NPC.Center = targetPos * 0.05f + NPC.Center * 0.95f;
-			yield return new SkipThisFrame();
-		}
-	}
-	public void DrawSelfBoss(SpriteBatch spriteBatch, Color drawColor)
-	{
-		Vector2 drawPos = NPC.Center - Main.screenPosition;
-		Vector2 commonOrigin = NPC.Hitbox.Size() / 2f;
-		SpriteEffects drawEffect = SpriteEffects.None;
-		Vector2 wingorigin = commonOrigin + new Vector2(10, 0);
-		if (NPC.spriteDirection == -1)
-		{
-			drawEffect = SpriteEffects.FlipHorizontally;
-			wingorigin = commonOrigin + new Vector2(26, 0);
-		}
-		Texture2D backWing = ModAsset.AcytaeaBackWing.Value;
-		Texture2D frontWing = ModAsset.AcytaeaFrontWing.Value;
-		Texture2D backArm = ModAsset.AcytaeaBackArm.Value;
-		Texture2D body = ModAsset.AcytaeaBody.Value;
-		Texture2D legs = ModAsset.AcytaeaLeg.Value;
-		Texture2D frontArm = ModAsset.AcytaeaFrontArm.Value;
-		Texture2D head = ModAsset.AcytaeaHead.Value;
-		Texture2D[] backWingFrames = new Texture2D[] { ModAsset.AcytaeaBackWing_0.Value, ModAsset.AcytaeaBackWing_1.Value, ModAsset.AcytaeaBackWing_2.Value, ModAsset.AcytaeaBackWing_3.Value };
-		Texture2D[] frontWingFrames = new Texture2D[] { ModAsset.AcytaeaFrontWing_0.Value, ModAsset.AcytaeaFrontWing_1.Value, ModAsset.AcytaeaFrontWing_2.Value, ModAsset.AcytaeaFrontWing_3.Value };
-		if (acytaeaSkeleton != null)
-		{
-			foreach (Slot slot in acytaeaSkeleton.Slots)
-			{
-				if (slot.Name == "bodySlot")
-				{
-					slot.Bone.Rotation = MathF.Sin((float)(Main.timeForVisualEffects * 0.03f));
-				}
-				slot.Bone.WorldSpacePosition = NPC.Center;
-				if (slot.Name == "backWingSlot")
-				{
-					slot.Attachment.Texture = backWingFrames[Math.Clamp(wingFrame, 0, 3)];
-				}
-				if (slot.Name == "frontWingSlot")
-				{
-					slot.Attachment.Texture = frontWingFrames[Math.Clamp(wingFrame, 0, 3)];
-				}
-				if (slot.Name == "frontArmSlot")
-				{
-					slot.Bone.Rotation += 0.02f;
-				}
-			}
-			acytaeaSkeleton.DrawDebugView(spriteBatch);
-		}
-		else
-		{
-			spriteBatch.Draw(backWing, drawPos, new Rectangle(0, 56 * wingFrame, 86, 56), drawColor, NPC.rotation, wingorigin, 1f, drawEffect, 0);
-			spriteBatch.Draw(frontWing, drawPos, new Rectangle(0, 56 * wingFrame, 86, 56), drawColor, NPC.rotation, wingorigin, 1f, drawEffect, 0);
-			spriteBatch.Draw(backArm, drawPos, null, drawColor, NPC.rotation, commonOrigin, 1f, drawEffect, 0);
-			spriteBatch.Draw(body, drawPos, null, drawColor, NPC.rotation, commonOrigin, 1f, drawEffect, 0);
-			spriteBatch.Draw(legs, drawPos, null, drawColor, NPC.rotation, commonOrigin, 1f, drawEffect, 0);
-			spriteBatch.Draw(frontArm, drawPos, null, drawColor, NPC.rotation, commonOrigin, 1f, drawEffect, 0);
-			spriteBatch.Draw(head, drawPos, null, drawColor, NPC.rotation, commonOrigin, 1f, drawEffect, 0);
-		}
-	}
-	#endregion
 	public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
 	{
 		//TODO hjson
@@ -328,9 +113,6 @@ public class Acytaea : VisualNPC
 	{
 		return base.PreKill();
 	}
-
-	#region TownNPC
-
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
 		return 0;
@@ -545,14 +327,11 @@ public class Acytaea : VisualNPC
 		multiplier = 2f;
 	}
 
-	#endregion TownNPC
-
 	public override void Draw()
 	{
 	}
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		DrawSelfBoss(spriteBatch, drawColor);
-		return false;
+		return true;
 	}
 }

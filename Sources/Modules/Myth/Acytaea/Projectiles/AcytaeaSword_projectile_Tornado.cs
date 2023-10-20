@@ -4,6 +4,7 @@ using Everglow.Myth.Acytaea.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
 
@@ -128,7 +129,7 @@ public class AcytaeaSword_projectile_Tornado : ModProjectile, IWarpProjectile, I
 		}
 
 		return false;
-	}
+	}s
 	public void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = new Vector4(), Vector2 drawScale = new Vector2(), Texture2D glowTexture = null)
 	{
 		if (diagonal == new Vector4())
@@ -144,6 +145,8 @@ public class AcytaeaSword_projectile_Tornado : ModProjectile, IWarpProjectile, I
 			}
 		}
 		Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+		Texture2D tex2 = ModAsset.AcytaeaSword_projectile_highLight.Value;
+		Texture2D tex3 = ModAsset.AcytaeaSword_projectile_glow.Value;
 		Vector2 drawCenter = Projectile.Center - Main.screenPosition;
 
 		Main.spriteBatch.End();

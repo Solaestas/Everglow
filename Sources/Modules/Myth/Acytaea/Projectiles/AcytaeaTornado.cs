@@ -34,7 +34,8 @@ public class AcytaeaTornado : ModProjectile
 			GenerateVFX();
 		}
 		Projectile.velocity.X *= 0.95f;
-		if(player != null)
+		Projectile.velocity.Y = 3f;
+		if (player != null)
 		{
 			float k = (player.Center - Projectile.Center - Projectile.velocity).X;
 			if (Math.Abs(k) > 50)
@@ -43,31 +44,31 @@ public class AcytaeaTornado : ModProjectile
 			}
 			Projectile.velocity.X += k / 100f;
 		}
-		float value2 = 1f;
-		if (Projectile.timeLeft < 60)
-		{
-			value2 = Projectile.timeLeft / 60f;
-		}
-		if (Timer < 24)
-		{
-			value2 = Timer / 24f;
-		}
-		for (int x = 0; x < 3 * value2; x++)
-		{
-			Vector2 newVec = new Vector2(0, Main.rand.NextFloat(4f, 12f)).RotatedByRandom(6.283) + new Vector2(0, -7) * value2;
-			var positionVFX = new Vector2(Main.rand.NextFloat(-40, 40), Main.rand.NextFloat(-600f, Math.Min(600f, TornadoBottom.Y - Projectile.Center.Y))) + Projectile.Center + newVec * Main.rand.NextFloat(0.7f, 0.9f) + new Vector2(Main.rand.NextFloat(-100, 100), -7);
+		//float value2 = 1f;
+		//if (Projectile.timeLeft < 60)
+		//{
+		//	value2 = Projectile.timeLeft / 60f;
+		//}
+		//if (Timer < 24)
+		//{
+		//	value2 = Timer / 24f;
+		//}
+		//for (int x = 0; x < 3 * value2; x++)
+		//{
+		//	Vector2 newVec = new Vector2(0, Main.rand.NextFloat(4f, 12f)).RotatedByRandom(6.283) + new Vector2(0, -7) * value2;
+		//	var positionVFX = new Vector2(Main.rand.NextFloat(-40, 40), Main.rand.NextFloat(-600f, Math.Min(600f, TornadoBottom.Y - Projectile.Center.Y))) + Projectile.Center + newVec * Main.rand.NextFloat(0.7f, 0.9f) + new Vector2(Main.rand.NextFloat(-100, 100), -7);
 
-			var acytaeaFlame = new AcytaeaFlameDust
-			{
-				velocity = newVec,
-				Active = true,
-				Visible = true,
-				position = positionVFX,
-				maxTime = Main.rand.Next(14, 36),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(8f, 25f) * value2 }
-			};
-			Ins.VFXManager.Add(acytaeaFlame);
-		}
+		//	var acytaeaFlame = new AcytaeaFlameDust
+		//	{
+		//		velocity = newVec,
+		//		Active = true,
+		//		Visible = true,
+		//		position = positionVFX,
+		//		maxTime = Main.rand.Next(14, 36),
+		//		ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(8f, 25f) * value2 }
+		//	};
+		//	Ins.VFXManager.Add(acytaeaFlame);
+		//}
 	}
 	public void GenerateVFX()
 	{
@@ -158,10 +159,11 @@ public class AcytaeaTornado : ModProjectile
 				value = 1;
 			}
 			value *= tolerance / 3f;
-			float mulWidth = 2 - MathF.Cos(k / 80f * MathF.PI);
-			mulWidth *= 0.7f;
-			bars.Add(Projectile.Center + new Vector2(-width * mulWidth, k * 20), color * value, new Vector3(0.2f + uTime + k / valueX, k / valueY + deltaY, 0));
-			bars.Add(Projectile.Center + new Vector2(width * mulWidth, k * 20), color * value, new Vector3(0.2f + uTime + k / valueX, k / valueY + deltaY, 1));
+			float mulWidth = 1.5f - MathF.Cos(k / 80f * MathF.PI);
+			mulWidth *= 1.2f;
+			float worm = MathF.Sin(k * 0.44f + (float)Main.timeForVisualEffects * 0.03f) * 10 * mulWidth;
+			bars.Add(Projectile.Center + new Vector2(-width * mulWidth + worm, k * 20), color * value, new Vector3(0.2f + uTime + k / valueX, k / valueY + deltaY - worm * 0.01f, 0));
+			bars.Add(Projectile.Center + new Vector2(width * mulWidth + worm, k * 20), color * value, new Vector3(0.2f + uTime + k / valueX , k / valueY + deltaY - worm * 0.01f, 1));
 			if(k > 0 && tolerance == 3)
 			{
 				if (Collision.SolidCollision(Projectile.Center + new Vector2(0, k * 20 + 20), 0, 0))

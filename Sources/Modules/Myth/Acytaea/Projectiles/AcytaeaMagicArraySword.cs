@@ -186,6 +186,8 @@ public class AcytaeaMagicArraySword : ModProjectile
 		Texture2D tex = ModAsset.AcytaeaFlySword.Value;
 		Rectangle projFrame = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
 		Main.spriteBatch.Draw(tex, Projectile.Center, projFrame, lightColor, Projectile.rotation - MathHelper.PiOver4, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
+		Texture2D texglow = ModAsset.AcytaeaFlySword_glow.Value;
+		Main.spriteBatch.Draw(texglow, Projectile.Center, projFrame, new Color(255, 255, 255, 0), Projectile.rotation - MathHelper.PiOver4, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
