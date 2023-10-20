@@ -53,6 +53,22 @@ public class YggdrasilWorldGeneration : ModSystem
 			}
 		}
 	}
+	public static void PlaceFrameImportantTilesAbove(int x, int y, int width, int height, int type, int startX = 0, int startY = 0)
+	{
+		if (x > Main.maxTilesX - width || x < 0 || y > Main.maxTilesY - height || y < 0)
+			return;
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				Tile tile = Main.tile[x + i, y + j - height];
+				tile.TileType = (ushort)type;
+				tile.TileFrameX = (short)(i * 18 + startX);
+				tile.TileFrameY = (short)(j * 18 + startY);
+				tile.HasTile = true;
+			}
+		}
+	}
 	public static Tile SafeGetTile(int i, int j)
 	{
 		return Main.tile[Math.Clamp(i, 20, Main.maxTilesX - 20), Math.Clamp(j, 20, Main.maxTilesY - 20)];
@@ -257,7 +273,7 @@ public class YggdrasilWorldGeneration : ModSystem
 							}
 							if (pixel.R == 53 && pixel.G == 29 && pixel.B == 26)//天穹泥
 							{
-								tile.TileType = (ushort)ModContent.TileType<YggdrasilDirt>();
+								tile.TileType = (ushort)ModContent.TileType<MossProneSandSoil>();
 								tile.HasTile = true;
 							}
 

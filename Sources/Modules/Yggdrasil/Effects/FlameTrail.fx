@@ -47,7 +47,6 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     float4 c = tex2D(uShapeTex, float2(coord.x + uTime, coord.y)); //Ö÷ÎÆÀí
     c *= tex2D(uColorTex, float2(c.r * coord.z, 0.5)); //³ËÑÕÉ«Í¼
     return c * coord.z;
-
 }
 
 float4 PixelShaderFunction2(PSInput input) : COLOR0
