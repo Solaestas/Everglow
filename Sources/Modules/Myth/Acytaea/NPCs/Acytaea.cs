@@ -1,9 +1,4 @@
-using Everglow.Commons.Coroutines;
-using Everglow.Commons.DataStructures;
-using Everglow.Commons.Skeleton2D;
 using Everglow.Myth.Acytaea.Projectiles;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.Localization;
@@ -56,6 +51,14 @@ public class Acytaea : VisualNPC
 	public override bool CheckActive()
 	{
 		return canDespawn;
+	}
+	public override void FindFrame(int frameHeight)
+	{
+		if(Math.Abs(NPC.velocity.X) > 0.2f)
+		{
+			NPC.frameCounter -= 2;
+		}
+		base.FindFrame(frameHeight);
 	}
 	public override void OnKill()
 	{
@@ -117,12 +120,10 @@ public class Acytaea : VisualNPC
 	{
 		return 0;
 	}
-
 	public override bool CanChat()
 	{
 		return !NPC.boss;
 	}
-
 	public override string GetChat()
 	{
 		//TODO Hjson 重写
@@ -265,7 +266,6 @@ public class Acytaea : VisualNPC
 		}
 		return list[Main.rand.Next(list.Count)];
 	}
-
 	public override void SetChatButtons(ref string button, ref string button2)
 	{
 		//TODO Hjson
@@ -280,7 +280,6 @@ public class Acytaea : VisualNPC
 			button2 = Language.GetTextValue("Help");
 		}
 	}
-
 	public override void OnChatButtonClicked(bool firstButton, ref string shopName)
 	{
 		if (firstButton)
@@ -293,19 +292,16 @@ public class Acytaea : VisualNPC
 
 		}
 	}
-
 	public override void TownNPCAttackStrength(ref int damage, ref float knockback)
 	{
 		damage = 30;
 		knockback = 2f;
 	}
-
 	public override void TownNPCAttackCooldown(ref int cooldown, ref int randExtraCooldown)
 	{
 		cooldown = 60;
 		randExtraCooldown = 60;
 	}
-
 	public override void TownNPCAttackMagic(ref float auraLightMultiplier)
 	{
 		for (int d = 0; d < Main.projectile.Length; d++)
@@ -315,18 +311,15 @@ public class Acytaea : VisualNPC
 		}
 		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaSword_projectile_TownNPC>(), 50, 6, Main.myPlayer, NPC.whoAmI);
 	}
-
 	public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
 	{
 		projType = ModContent.ProjectileType<AcytaeaSword_projectile_TownNPC>();
 		attackDelay = 60;
 	}
-
 	public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
 	{
 		multiplier = 2f;
 	}
-
 	public override void Draw()
 	{
 	}

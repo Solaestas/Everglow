@@ -221,7 +221,7 @@ public class AcytaeaSwordArray_1 : ModProjectile
 	}
 	public override void PostDraw(Color lightColor)
 	{
-		Texture2D tex = ModAsset.AcytaeaFlySword.Value;
+		Texture2D tex = ModAsset.AcytaeaFlySword_red.Value;
 		Rectangle projFrame = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int k = 0; k < subProjActive.Count; k++)
@@ -232,7 +232,7 @@ public class AcytaeaSwordArray_1 : ModProjectile
 				float rot = MathF.Atan2(deltaVector.Y, deltaVector.X) + MathHelper.PiOver4 + Projectile.rotation;
 				Vector2 drawCenter = Projectile.Center - Main.screenPosition + deltaVector;
 				Vector2 normal20 = new Vector2(40, -40).RotatedBy(rot);
-				Main.spriteBatch.Draw(tex, drawCenter, projFrame, lightColor, rot, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
+				Main.spriteBatch.Draw(tex, drawCenter, projFrame, new Color(255, 0, 215, 155), rot, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
 				Color red = Color.Red * (0.03f * Math.Abs(Omega * Range));
 				red.A = 0;
 				bars.Add(drawCenter + normal20, Color.Transparent, new Vector3(1, 0, 0));

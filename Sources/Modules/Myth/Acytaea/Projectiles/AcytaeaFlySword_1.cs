@@ -1,10 +1,9 @@
 using Everglow.Myth.Acytaea.Buffs;
 using Everglow.Myth.Acytaea.VFXs;
-using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FreezeFeatherMagic;
 using Terraria.Audio;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
-public class AcytaeaFlySword : ModProjectile
+public class AcytaeaFlySword_1 : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
 	public override void SetDefaults()
@@ -20,10 +19,10 @@ public class AcytaeaFlySword : ModProjectile
 		Projectile.penetrate = -1;
 		Projectile.DamageType = DamageClass.Melee;
 
-		Projectile.width = 80;
-		Projectile.height = 80;
+		Projectile.width = 40;
+		Projectile.height = 40;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
+		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
 	}
 	public int TimeTokill = -1;
 	public Vector2 Aim = Vector2.Zero;
@@ -41,26 +40,39 @@ public class AcytaeaFlySword : ModProjectile
 		else
 		{
 			CheckFrame();
-			Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-			if (Projectile.timeLeft > 540)
+
+			if (TimeTokill > -30)
 			{
-				Vector2 toAim = Aim - Projectile.Center - Projectile.velocity;
-				toAim *= 0.1f;
-				if (toAim.Length() > 30f)
-				{
-					toAim = Vector2.Normalize(toAim) * 30f;
-				}
-				Projectile.velocity = toAim * 0.05f + Projectile.velocity * 0.95f;
+				Projectile.velocity *= 0.7f;
+				Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 			}
 			else
 			{
-				Projectile.velocity.Y += 0.5f;
-			}
-			foreach(Player p in Main.player)
-			{
-				if(p != null && p.active && !p.dead)
+				if(Projectile.timeLeft <= 570 && Projectile.velocity.Length() > 60f)
 				{
-					if(Rectangle.Intersect(Projectile.Hitbox, p.Hitbox) != Rectangle.emptyRectangle)
+					for (int x = 0; x < 2; x++)
+					{
+						Vector2 newVec = new Vector2(0, Main.rand.NextFloat(0.4f, 2f)).RotatedByRandom(6.238f) + Projectile.velocity * 0.08f;
+						var positionVFX = Projectile.Center - newVec * Main.rand.NextFloat(0.7f, 0.9f);
+
+						var acytaeaFlame = new AcytaeaFlameDust
+						{
+							velocity = newVec,
+							Active = true,
+							Visible = true,
+							position = positionVFX,
+							maxTime = Main.rand.Next(14, 16),
+							ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(9f, 18f) }
+						};
+						Ins.VFXManager.Add(acytaeaFlame);
+					}
+				}
+			}
+			foreach (Player p in Main.player)
+			{
+				if (p != null && p.active && !p.dead)
+				{
+					if (Rectangle.Intersect(Projectile.Hitbox, p.Hitbox) != Rectangle.emptyRectangle)
 					{
 						AmmoHit();
 					}
@@ -88,7 +100,7 @@ public class AcytaeaFlySword : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.velocity = Projectile.oldVelocity;
 		SoundEngine.PlaySound((SoundID.DD2_WitherBeastCrystalImpact.WithVolume(0.3f)).WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
-		for (int x = 0; x < 25; x++)
+		for (int x = 0; x < 15; x++)
 		{
 			Vector2 newVec = new Vector2(0, Main.rand.NextFloat(4f, 12f)).RotatedByRandom(6.238f);
 			var positionVFX = Projectile.Center + newVec * Main.rand.NextFloat(0.7f, 0.9f);
@@ -104,7 +116,23 @@ public class AcytaeaFlySword : ModProjectile
 			};
 			Ins.VFXManager.Add(acytaeaFlame);
 		}
-		//Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaFlySwordExplosion>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 14);
+		for (int x = 0; x < 25; x++)
+		{
+			Vector2 newVec = new Vector2(0, Main.rand.NextFloat(4f, 24f)).RotatedByRandom(6.238f);
+			var positionVFX = Projectile.Center + newVec * Main.rand.NextFloat(0.7f, 0.9f);
+
+			var acytaeaFlame = new AcytaeaSparkDust
+			{
+				velocity = newVec,
+				Active = true,
+				Visible = true,
+				position = positionVFX,
+				maxTime = Main.rand.Next(37, 152),
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(4f, 8f) }
+			};
+			Ins.VFXManager.Add(acytaeaFlame);
+		}
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaFlySwordExplosion>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 14);
 		Projectile.position -= Projectile.velocity;
 	}
 	public override bool PreDraw(ref Color lightColor)
@@ -173,26 +201,16 @@ public class AcytaeaFlySword : ModProjectile
 	}
 	private void CheckFrame()
 	{
-		Projectile.frameCounter++;
-		if (Projectile.frameCounter > 6)
-		{
-			if (Projectile.frame < 3)
-			{
-				Projectile.frame++;
-			}
-			else
-			{
-				Projectile.frame = 0;
-			}
-			Projectile.frameCounter = 0;
-		}
 	}
 	public override void PostDraw(Color lightColor)
 	{
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		DrawTrail(Commons.ModAsset.Trail_2_black_thick.Value, Color.White * 0.7f);
-		DrawTrail(Commons.ModAsset.Trail_6.Value, new Color(1f, 0f, 0.4f, 0f));
+		if(TimeTokill > -50 && TimeTokill < 0)
+		{
+			DrawTrail(Commons.ModAsset.Trail_2_black_thick.Value, Color.White * 0.7f);
+			DrawTrail(Commons.ModAsset.Trail_6.Value, new Color(1f, 0f, 0.4f, 0f));
+		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect dissolve = Commons.ModAsset.Dissolve.Value;
@@ -211,9 +229,16 @@ public class AcytaeaFlySword : ModProjectile
 		dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(Projectile.ai[1], Projectile.ai[2]));
 		dissolve.CurrentTechnique.Passes[0].Apply();
 		Texture2D tex = ModAsset.AcytaeaFlySword_red.Value;
-		Rectangle projFrame = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
-		Main.spriteBatch.Draw(tex, Projectile.Center, projFrame, new Color(255, 0, 215, 155), Projectile.rotation + MathHelper.PiOver4, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
+		Rectangle projFrame = new Rectangle(0, 0, 80, 80);
+		Main.spriteBatch.Draw(tex, Projectile.Center, projFrame, new Color(255, 0, 215, 255), Projectile.rotation + MathHelper.PiOver4, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
+
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		if (Projectile.timeLeft < 570 && TimeTokill < 0)
+		{
+			Texture2D tex2 = ModAsset.AcytaeaSword_projectile_highLight.Value;
+			Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, projFrame, new Color(255, 0, 215, 255) * ((570 - Projectile.timeLeft) / 5f), Projectile.rotation + MathHelper.PiOver4, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(tex2, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0) * ((570 - Projectile.timeLeft) / 10f), Projectile.rotation + MathHelper.PiOver4, tex2.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+		}
 	}
 }

@@ -321,14 +321,16 @@ public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBlo
 				}
 			}
 		}
-		foreach (var npc in Main.npc)
+		if (OwnerNPC == -1)
 		{
-			if (npc.type == ModContent.NPCType<Acytaea_Boss>())
-			{
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_following>(), 0, 0f, -1, npc.whoAmI);
-				break;
-			}
+			return;
 		}
+		NPC Owner = Main.npc[OwnerNPC];
+		if (Owner == null || !Owner.active)
+		{
+			return;
+		}
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_following>(), 0, 0f, -1, OwnerNPC);
 	}
 	private void GenerateVFX()
 	{

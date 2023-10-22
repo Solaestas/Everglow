@@ -2,6 +2,8 @@ using Everglow.Commons.Coroutines;
 using Everglow.Commons.CustomTiles;
 using Everglow.Myth.Acytaea.Projectiles;
 using Everglow.Myth.Acytaea.VFXs;
+using SteelSeries.GameSense.DeviceZone;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Acytaea.NPCs;
@@ -34,17 +36,17 @@ public class Acytaea_Boss : ModNPC
 		NPC.friendly = false;
 		NPC.aiStyle = -1;
 
-		NPC.lifeMax = 165000;
-		NPC.life = 165000;
+		NPC.lifeMax = 25000;
+		NPC.life = 25000;
 		if (Main.expertMode)
 		{
-			NPC.lifeMax = 275000;
-			NPC.life = 275000;
+			NPC.lifeMax = 37500;
+			NPC.life = 37500;
 		}
 		if (Main.masterMode)
 		{
-			NPC.lifeMax = 385000;
-			NPC.life = 385000;
+			NPC.lifeMax = 45000;
+			NPC.life = 45000;
 		}
 		NPC.boss = true;
 		NPC.localAI[0] = 0;
@@ -75,6 +77,10 @@ public class Acytaea_Boss : ModNPC
 			NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea>());
 		}
 		NPC.damage = 0;
+		if(!NPC.collideY)
+		{
+			LegFrameCounter++;
+		}
 	}
 	#region Boss
 	private int wingFrame = 0;
@@ -88,14 +94,18 @@ public class Acytaea_Boss : ModNPC
 	}
 	public void UpdateWings()
 	{
-		wingFrameCounter++;
-		if (wingFrameCounter > 6)
+		if (!NPC.collideY)
 		{
-			wingFrameCounter = 0;
-			wingFrame++;
-			if (wingFrame > 3)
+			wingFrameCounter++;
+			if (wingFrameCounter > 6)
 			{
-				wingFrame = 0;
+				wingFrameCounter = 0;
+				wingFrame++;
+				if (wingFrame > 3)
+				{
+					wingFrame = 0;
+					SoundEngine.PlaySound(SoundID.Item32, NPC.Center);
+				}
 			}
 		}
 	}
@@ -137,15 +147,25 @@ public class Acytaea_Boss : ModNPC
 		}
 		ClearFollowingSword();
 		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_projectile_Boss>(), 60, 4f, player.whoAmI, NPC.whoAmI);
+		
 		for (int t = 0; t < 10; t++)
 		{
 			float value = 0.05f;
 			Vector2 targetPos = player.Center + new Vector2(-130 * NPC.direction, -60);
 			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			HeadRot -= 0.04f * NPC.direction;
 			yield return new SkipThisFrame();
 		}
 		for (int t = 0; t < 90; t++)
 		{
+			if(t > 20 && t <= 35)
+			{
+				HeadRot += 0.07f * NPC.direction;
+			}
+			else if(t > 35)
+			{
+				HeadRot *= 0.9f;
+			}
 			NPC.velocity *= 0.6f;
 			yield return new SkipThisFrame();
 		}
@@ -327,6 +347,32 @@ public class Acytaea_Boss : ModNPC
 				}
 				yield return new SkipThisFrame();
 			}
+			if (Main.expertMode && !Main.masterMode)
+			{
+				for (int t = 0; t < 10; t++)
+				{
+					NPC.velocity *= 0.7f;
+					NPC.rotation = NPC.velocity.X * 0.14f;
+					if (Math.Abs(NPC.velocity.X) > 1.5)
+					{
+						NPC.rotation = 1.5f * Math.Sign(NPC.velocity.X);
+					}
+					yield return new SkipThisFrame();
+				}
+			}
+			else if(!Main.masterMode)
+			{
+				for (int t = 0; t < 25; t++)
+				{
+					NPC.velocity *= 0.7f;
+					NPC.rotation = NPC.velocity.X * 0.14f;
+					if (Math.Abs(NPC.velocity.X) > 1.5)
+					{
+						NPC.rotation = 1.5f * Math.Sign(NPC.velocity.X);
+					}
+					yield return new SkipThisFrame();
+				}
+			}
 		}
 		for (int t = 0; t < 12; t++)
 		{
@@ -360,24 +406,40 @@ public class Acytaea_Boss : ModNPC
 			float value = t / 20f;
 			Vector2 targetPos = player.Center + new Vector2(0 * NPC.direction, -300);
 			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			HeadFrameCounter++;
 			yield return new SkipThisFrame();
 		}
-		for (int x = -7; x <= 7; x++)
+		if(Main.expertMode)
 		{
-			Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordArray_0>(), 60, 4f, player.whoAmI, NPC.whoAmI, x / 3f, 120);
+			for (int x = -7; x <= 7; x++)
+			{
+				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordArray_0>(), 60, 4f, player.whoAmI, NPC.whoAmI, x / 3f, 120);
+			}
+		}
+		else
+		{
+			for (int x = -4; x <= 4; x++)
+			{
+				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordArray_0>(), 60, 4f, player.whoAmI, NPC.whoAmI, x / 1.7f, 120);
+			}
 		}
 		for (int t = 0; t < 40; t++)
 		{
 			NPC.velocity *= 0.1f;
+			HeadFrameCounter++;
 			yield return new SkipThisFrame();
 		}
-		for (int x = -15; x <= 15; x++)
+		if (Main.masterMode)
 		{
-			Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordArray_0>(), 60, 4f, player.whoAmI, NPC.whoAmI, x / 6f, -200);
+			for (int x = -15; x <= 15; x++)
+			{
+				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordArray_0>(), 60, 4f, player.whoAmI, NPC.whoAmI, x / 6f, -200);
+			}
 		}
 		for (int t = 0; t < 30; t++)
 		{
 			NPC.velocity *= 0.1f;
+			HeadFrameCounter++;
 			yield return new SkipThisFrame();
 		}
 		ClearFollowingSword();
@@ -385,6 +447,7 @@ public class Acytaea_Boss : ModNPC
 		p0.rotation = NPC.spriteDirection + MathHelper.PiOver2;
 		for (int t = 0; t < 240; t++)
 		{
+			HeadRot = (280 - t) / 280f * NPC.direction;
 			NPC.velocity *= 0.1f;
 			NPC.direction = 1;
 			if (player.Center.X < NPC.Center.X)
@@ -415,6 +478,7 @@ public class Acytaea_Boss : ModNPC
 					}
 				}
 			}
+			HeadFrameCounter++;
 			yield return new SkipThisFrame();
 		}
 		yield return new WaitForFrames(60);
@@ -446,6 +510,7 @@ public class Acytaea_Boss : ModNPC
 				}
 			}
 			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			HeadFrameCounter++;
 			yield return new SkipThisFrame();
 		}
 		ClearFollowingSword();	
@@ -453,11 +518,25 @@ public class Acytaea_Boss : ModNPC
 		yield return new WaitForFrames(1);
 		Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -455), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordArray_1>(), 60, 4f, player.whoAmI, NPC.whoAmI, 8, 1.6f);
 		p0.spriteDirection = -1;
-		yield return new WaitForFrames(15);
-		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -455), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordArray_1>(), 60, 4f, player.whoAmI, NPC.whoAmI, 12, 2.7f);
-		yield return new WaitForFrames(15);
-		Projectile p2 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -455), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordArray_1>(), 60, 4f, player.whoAmI, NPC.whoAmI, 20, 4.5f);
-		p2.spriteDirection = -1;
+		for (int t = 0; t < 15; t++)
+		{
+			HeadFrameCounter++;
+			yield return new SkipThisFrame();
+		}
+		if(Main.expertMode)
+		{
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -455), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordArray_1>(), 60, 4f, player.whoAmI, NPC.whoAmI, 12, 2.7f);
+		}
+		for (int t = 0; t < 15; t++)
+		{
+			HeadFrameCounter++;
+			yield return new SkipThisFrame();
+		}
+		if (Main.masterMode)
+		{
+			Projectile p2 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -455), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordArray_1>(), 60, 4f, player.whoAmI, NPC.whoAmI, 20, 4.5f);
+			p2.spriteDirection = -1;
+		}
 		for (int t = 0; t < 40; t++)
 		{
 			NPC.velocity *= 0.1f;
@@ -472,11 +551,13 @@ public class Acytaea_Boss : ModNPC
 				}
 			}
 			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			HeadFrameCounter++;
 			yield return new SkipThisFrame();
 		}
 		for (int t = 0; t < 220; t++)
 		{
 			NPC.velocity *= 0.8f;
+			HeadFrameCounter++;
 			yield return new SkipThisFrame();
 		}
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer(20)));
@@ -501,6 +582,7 @@ public class Acytaea_Boss : ModNPC
 		}
 		ClearFollowingSword();
 		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_projectile_Tornado>(), 60, 4f, player.whoAmI, NPC.whoAmI);
+
 		for (int t = 0; t < 330; t++)
 		{
 			NPC.velocity.Y *= 0.5f;
@@ -536,13 +618,226 @@ public class Acytaea_Boss : ModNPC
 				toTarget = Utils.SafeNormalize(toTarget, Vector2.zeroVector) * 200;
 			}
 			toTarget *= 0.4f * value;
-			NPC.velocity = toTarget * 0.05f + NPC.velocity * 0.95f;
+			float valueVelocity = 0.0015f;
+			if(Main.expertMode)
+			{
+				valueVelocity = 0.006f;
+			}
+			if (Main.masterMode)
+			{
+				valueVelocity = 0.05f;
+			}
+			NPC.velocity = toTarget * valueVelocity + NPC.velocity * (1 - valueVelocity);
+			HeadFrameCounter++;
 			yield return new SkipThisFrame();
 		}
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
 	}
+	//飞剑斩
+	private IEnumerator<ICoroutineInstruction> SlashPlayerAndReleaseSword()
+	{
+		Player player = Main.player[NPC.target];
+		NPC.rotation = 0;
+		NPC.direction = 1;
+		if (Main.rand.NextBool(2))
+		{
+			NPC.direction = -1;
+		}
+		NPC.spriteDirection = NPC.direction;
+		Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<AcytaeaMagicArray>(), 60, 4f, player.whoAmI, NPC.whoAmI);
+		proj.rotation = -NPC.direction * 1.9f + MathF.PI * 0.5f;
+		Vector2 targetPos = player.Center + new Vector2(-230 * NPC.direction, -40);
+		for (int t = 0; t < 20; t++)
+		{
+			float value = t / 20f;
+			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			if (proj.type == ModContent.ProjectileType<AcytaeaMagicArray>())
+			{
+				proj.Center = NPC.Center;
+			}
+			yield return new SkipThisFrame();
+		}
+		ClearFollowingSword();
+		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_projectile_Boss_shoot>(), 60, 4f, player.whoAmI, NPC.whoAmI);
+		for (int t = 0; t < 50; t++)
+		{
+			if(t < 10)
+			{
+				HeadRot -= 0.04f * NPC.direction;
+			}
+			else if (t > 30 && t <= 45)
+			{
+				HeadRot += 0.07f * NPC.direction;
+			}
+			NPC.velocity *= 0.6f;
+			if (proj.type == ModContent.ProjectileType<AcytaeaMagicArray>())
+			{
+				proj.Center = NPC.Center;
+			}
+			yield return new SkipThisFrame();
+		}
+		Vector2 aimPos = player.Center;
+		Projectile.NewProjectile(NPC.GetSource_FromAI(), aimPos, Vector2.zeroVector, ModContent.ProjectileType<Acytaea_Lock>(), 0, 0f, player.whoAmI, NPC.whoAmI);
+		for (int t = 0; t < 60; t++)
+		{
+			HeadRot *= 0.9f;
+			NPC.velocity *= 0.6f;
+			foreach(Projectile projectile in Main.projectile)
+			{
+				if (projectile != null && projectile.active)
+				{
+					if (projectile.type == ModContent.ProjectileType<AcytaeaFlySword_1>() && projectile.timeLeft < 570)
+					{
+						Vector2 toAim = aimPos - projectile.Center - projectile.velocity;
+						float aimRot = MathF.Atan2(toAim.Y, toAim.X);
+						projectile.rotation = projectile.rotation * 0.85f + aimRot * 0.15f;
+					}
+				}
+			}
+			yield return new SkipThisFrame();
+		}
+		for (int t = 0; t < 40; t++)
+		{
+			NPC.velocity *= 0.6f;
+			foreach (Projectile projectile in Main.projectile)
+			{
+				if(projectile != null && projectile.active)
+				{
+					if (projectile.type == ModContent.ProjectileType<AcytaeaFlySword_1>())
+					{
+						Vector2 toAim = aimPos - projectile.Center - projectile.velocity;
+						AcytaeaFlySword_1 acytaeaFlySword_1 = projectile.ModProjectile as AcytaeaFlySword_1;
+						if(acytaeaFlySword_1 != null)
+						{
+							if (toAim.Length() < 72f)
+							{
+								projectile.Center = aimPos;
+								acytaeaFlySword_1.AmmoHit();
+							}
+							else if (acytaeaFlySword_1.TimeTokill < 0)
+							{
+								float aimRot = MathF.Atan2(toAim.Y, toAim.X);
+								projectile.velocity = Utils.SafeNormalize(toAim, Vector2.zeroVector) * 70f;
+							}
+						}
+					}
+				}				
+			}
+			yield return new SkipThisFrame();
+		}
+		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
+		yield return new SkipThisFrame();
+	}
+	//3连飞剑斩
+	private IEnumerator<ICoroutineInstruction> Slash3xPlayerAndReleaseSword()
+	{
+		Player player = Main.player[NPC.target];
+		NPC.rotation = 0;
+		NPC.direction = 1;
+		if (Main.rand.NextBool(2))
+		{
+			NPC.direction = -1;
+		}
+		NPC.spriteDirection = NPC.direction;
+		for (int a = 0; a < 3; a++)
+		{
+			NPC.direction *= -1;
+			NPC.spriteDirection = NPC.direction;
+			Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<AcytaeaMagicArray>(), 60, 4f, player.whoAmI, NPC.whoAmI);
+			proj.rotation = -NPC.direction * 1.9f + MathF.PI * 0.5f;
+			Vector2 targetPos = player.Center + new Vector2(Main.rand.NextFloat(-730, -300) * NPC.direction, Main.rand.NextFloat(-230, 100));
+			for (int t = 0; t < 20; t++)
+			{
+				float value = t / 20f;
+				NPC.position = targetPos * (value) + NPC.position * (1 - value);
+				if (proj.type == ModContent.ProjectileType<AcytaeaMagicArray>())
+				{
+					proj.Center = NPC.Center;
+				}
+				yield return new SkipThisFrame();
+			}
+			ClearFollowingSword();
+			Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_projectile_Boss_shoot>(), 60, 4f, player.whoAmI, NPC.whoAmI, 2 - a);
+			for (int t = 0; t < 50; t++)
+			{
+				if (t < 10)
+				{
+					HeadRot -= 0.04f * NPC.direction;
+				}
+				else if (t > 30 && t <= 45)
+				{
+					HeadRot += 0.07f * NPC.direction;
+				}
+				if (proj.type == ModContent.ProjectileType<AcytaeaMagicArray>())
+				{
+					proj.Center = NPC.Center;
+				}
+				yield return new SkipThisFrame();
+			}
+		}
+		Vector2 aimPos = player.Center;
+		Projectile.NewProjectile(NPC.GetSource_FromAI(), aimPos, Vector2.zeroVector, ModContent.ProjectileType<Acytaea_Lock>(), 0, 0f, player.whoAmI, NPC.whoAmI);
+		for (int t = 0; t < 40; t++)
+		{
+			HeadRot *= 0.9f;
+			NPC.velocity *= 0.6f;
+			foreach (Projectile projectile in Main.projectile)
+			{
+				if (projectile != null && projectile.active)
+				{
+					if (projectile.type == ModContent.ProjectileType<AcytaeaFlySword_1>())
+					{
+						Vector2 toAim = aimPos - projectile.Center - projectile.velocity;
+						float aimRot = MathF.Atan2(toAim.Y, toAim.X);
+						projectile.rotation = projectile.rotation * 0.85f + aimRot * 0.15f;
+					}
+				}
+			}
+			yield return new SkipThisFrame();
+		}
+		for (int t = 0; t < 90; t++)
+		{
+			NPC.velocity *= 0.6f;
+			foreach (Projectile projectile in Main.projectile)
+			{
+				if (projectile != null && projectile.active)
+				{
+					if (projectile.type == ModContent.ProjectileType<AcytaeaFlySword_1>() && projectile.timeLeft < 570)
+					{
+						Vector2 toAim = aimPos - projectile.Center - projectile.velocity;
+						AcytaeaFlySword_1 acytaeaFlySword_1 = projectile.ModProjectile as AcytaeaFlySword_1;
+						if (acytaeaFlySword_1 != null)
+						{
+							if (toAim.Length() < 72f)
+							{
+								projectile.Center = aimPos;
+								acytaeaFlySword_1.AmmoHit();
+							}
+							else if (acytaeaFlySword_1.TimeTokill < 0)
+							{
+								float aimRot = MathF.Atan2(toAim.Y, toAim.X);
+								projectile.velocity = Utils.SafeNormalize(toAim, Vector2.zeroVector) * 70f;
+							}
+						}
+					}
+				}
+			}
+			yield return new SkipThisFrame();
+		}
+		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
+		yield return new SkipThisFrame();
+	}
+	//技能更迭
 	private IEnumerator<ICoroutineInstruction> FaceToPlayer(int time = 60)
 	{
+		if(Main.expertMode)
+		{
+			time = 45;
+		}
+		if (Main.masterMode)
+		{
+			time = 15;
+		}
 		Player player = Main.player[NPC.target];
 		NPC.direction = 1;
 		NPC.noGravity = true;
@@ -553,31 +848,36 @@ public class Acytaea_Boss : ModNPC
 		NPC.spriteDirection = NPC.direction;
 		for (int t = 0; t < time; t++)
 		{
+			HeadRot *= 0.7f;
+			NPC.velocity *= 0.7f;
 			NPC.rotation *= 0.95f;
 			Vector2 targetPos = player.Center + new Vector2(-200 * NPC.direction, 0);
 			NPC.position = targetPos * 0.05f + NPC.position * 0.95f;
 			yield return new SkipThisFrame();
 		}
-
-
+		//_acytaeaCoroutine.StartCoroutine(new Coroutine(Slash3xPlayerAndReleaseSword()));
 		if (NPC.life > NPC.lifeMax * 0.5f)
 		{
-			switch (Main.rand.Next(3))
+			switch (Main.rand.Next(2))
 			{
 				case 0:
-					_acytaeaCoroutine.StartCoroutine(new Coroutine(ScratchPlayer()));
-					break;
-				case 1:
 					_acytaeaCoroutine.StartCoroutine(new Coroutine(SlashPlayer()));
 					break;
-				case 2:
-					_acytaeaCoroutine.StartCoroutine(new Coroutine(Scratch3Player()));
+				case 1:
+					if (Main.rand.NextBool(2))
+					{
+						_acytaeaCoroutine.StartCoroutine(new Coroutine(Scratch3Player()));
+					}
+					else
+					{
+						_acytaeaCoroutine.StartCoroutine(new Coroutine(ScratchPlayer()));
+					}
 					break;
 			}
 		}
 		else
 		{
-			switch (Main.rand.Next(5))
+			switch (Main.rand.Next(6))
 			{
 				case 0:
 					_acytaeaCoroutine.StartCoroutine(new Coroutine(SwordArray_Round()));
@@ -593,6 +893,16 @@ public class Acytaea_Boss : ModNPC
 					break;
 				case 4:
 					_acytaeaCoroutine.StartCoroutine(new Coroutine(SwordArray()));
+					break;
+				case 5:
+					if(Main.rand.NextBool(2))
+					{
+						_acytaeaCoroutine.StartCoroutine(new Coroutine(SlashPlayerAndReleaseSword()));
+					}
+					else
+					{
+						_acytaeaCoroutine.StartCoroutine(new Coroutine(Slash3xPlayerAndReleaseSword()));
+					}
 					break;
 			}
 		}
@@ -612,6 +922,24 @@ public class Acytaea_Boss : ModNPC
 	}
 	public void DrawSelfBoss(SpriteBatch spriteBatch, Color drawColor)
 	{
+		if(HeadFrameCounter > 6)
+		{
+			HeadFrame++;
+			HeadFrameCounter = 0;
+		}
+		if(HeadFrame > 11)
+		{
+			HeadFrame = 0;
+		}
+		if (LegFrameCounter > 6)
+		{
+			LegFrame++;
+			LegFrameCounter = 0;
+		}
+		if (LegFrame > 9)
+		{
+			LegFrame = 0;
+		}
 		Vector2 drawPos = NPC.Center - Main.screenPosition;
 		Vector2 commonOrigin = NPC.Hitbox.Size() / 2f;
 		if (NPC.spriteDirection == -1)
@@ -631,17 +959,23 @@ public class Acytaea_Boss : ModNPC
 		Texture2D body = ModAsset.AcytaeaBody.Value;
 		Texture2D legs = ModAsset.AcytaeaLeg.Value;
 		Texture2D frontArm = ModAsset.AcytaeaFrontArm.Value;
-		Texture2D head = ModAsset.AcytaeaHead.Value;
-		Texture2D[] backWingFrames = new Texture2D[] { ModAsset.AcytaeaBackWing_0.Value, ModAsset.AcytaeaBackWing_1.Value, ModAsset.AcytaeaBackWing_2.Value, ModAsset.AcytaeaBackWing_3.Value };
-		Texture2D[] frontWingFrames = new Texture2D[] { ModAsset.AcytaeaFrontWing_0.Value, ModAsset.AcytaeaFrontWing_1.Value, ModAsset.AcytaeaFrontWing_2.Value, ModAsset.AcytaeaFrontWing_3.Value };
-		spriteBatch.Draw(backWing, drawPos, new Rectangle(0, 56 * wingFrame, 86, 56), drawColor, NPC.rotation, wingorigin, 1f, drawEffect, 0);
-		spriteBatch.Draw(frontWing, drawPos, new Rectangle(0, 56 * wingFrame, 86, 56), drawColor, NPC.rotation, wingorigin, 1f, drawEffect, 0);
+		Texture2D head = ModAsset.AcytaeaHead_frame.Value;
+		if(!NPC.collideY)
+		{
+			spriteBatch.Draw(backWing, drawPos, new Rectangle(0, 56 * wingFrame, 86, 56), drawColor, NPC.rotation, wingorigin, 1f, drawEffect, 0);
+			spriteBatch.Draw(frontWing, drawPos, new Rectangle(0, 56 * wingFrame, 86, 56), drawColor, NPC.rotation, wingorigin, 1f, drawEffect, 0);
+		}
 		spriteBatch.Draw(backArm, drawPos, null, drawColor, NPC.rotation, commonOrigin, 1f, drawEffect, 0);
 		spriteBatch.Draw(body, drawPos, null, drawColor, NPC.rotation, commonOrigin, 1f, drawEffect, 0);
-		spriteBatch.Draw(legs, drawPos, null, drawColor, NPC.rotation, commonOrigin, 1f, drawEffect, 0);
+		spriteBatch.Draw(legs, drawPos, new Rectangle(0, 64 * LegFrame, 50, 64), drawColor, NPC.rotation, commonOrigin, 1f, drawEffect, 0);
 		spriteBatch.Draw(frontArm, drawPos, null, drawColor, NPC.rotation, commonOrigin, 1f, drawEffect, 0);
-		spriteBatch.Draw(head, drawPos, null, drawColor, NPC.rotation, commonOrigin, 1f, drawEffect, 0);
+		spriteBatch.Draw(head, drawPos + new Vector2(6, 1), new Rectangle(0, 64 * HeadFrame, 50, 64), drawColor, NPC.rotation + HeadRot, new Vector2(26, 29), 1f, drawEffect, 0);
 	}
+	public float HeadRot = 0;
+	public int HeadFrame = 0;
+	public int HeadFrameCounter = 0;
+	public int LegFrame = 0;
+	public int LegFrameCounter = 0;
 	#endregion
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{

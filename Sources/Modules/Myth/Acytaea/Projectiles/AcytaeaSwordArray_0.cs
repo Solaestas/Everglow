@@ -73,8 +73,8 @@ public class AcytaeaSwordArray_0 : ModProjectile
 	}
 	public override void PostDraw(Color lightColor)
 	{
-		Texture2D tex = ModAsset.AcytaeaFlySword.Value;
+		Texture2D tex = ModAsset.AcytaeaFlySword_red.Value;
 		Rectangle projFrame = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
-		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, projFrame, lightColor, Projectile.rotation + MathHelper.PiOver4, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, projFrame, new Color(255, 0, 215, 155), Projectile.rotation + MathHelper.PiOver4, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
 	}
 }

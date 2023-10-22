@@ -194,9 +194,15 @@ public class AcytaeaMagicArraySword : ModProjectile
 		Vector2 endDrawPos = EndPos - Main.screenPosition;
 		Texture2D star = Commons.ModAsset.Star.Value;
 		Texture2D dark = Commons.ModAsset.Point_black.Value;
-		Main.spriteBatch.Draw(dark, endDrawPos, null, new Color(255, 255, 255, 255), 0, dark.Size() / 2f, width / 16f, SpriteEffects.None, 0);
+		Texture2D dark2 = Commons.ModAsset.Star_black.Value;
+		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, 0, dark.Size() / 2f, width / 16f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark2, endDrawPos, null, Color.White, MathHelper.PiOver2, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark2, endDrawPos, null, Color.White, 0, star.Size() / 2f, new Vector2(3f, width / 16f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark2, endDrawPos, null, Color.White, MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark2, endDrawPos, null, Color.White, (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
+
 		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), MathHelper.PiOver2, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), 0, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), 0, star.Size() / 2f, new Vector2(3f, width / 16f), SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
 		Main.spriteBatch.End();

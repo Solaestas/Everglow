@@ -1,5 +1,9 @@
+using Everglow.Myth.Acytaea.Buffs;
+using Everglow.Myth.Acytaea.VFXs;
+using Terraria.Audio;
+
 namespace Everglow.Myth.Acytaea.Projectiles;
-public class Acytaea_Lock : ModProjectile
+public class AcytaeaMagicArray : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
 	public override void SetDefaults()
@@ -53,13 +57,26 @@ public class Acytaea_Lock : ModProjectile
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int t = 0; t <= 30; t++)
 		{
-			Vector2 radius = new Vector2(0, -90 * range).RotatedBy(t / 30d * MathHelper.TwoPi);
-			bars.Add(new Vertex2D(Projectile.Center + radius, new Color(255, 0, 0, 0), new Vector3(t / 10f, 0, 0)));
-			bars.Add(new Vertex2D(Projectile.Center + radius * 0.5f, new Color(125, 0, 0, 0), new Vector3(t / 10f, 0.3f, 0)));
+			float mulWid = MathF.Sin(t / 30f * MathHelper.Pi);
+			Vector2 radius = new Vector2(90 * range, 0).RotatedBy((t - 15f) / 50d * MathHelper.TwoPi + Projectile.rotation);
+			bars.Add(new Vertex2D(Projectile.Center + radius, new Color(255, 0, 215, 155), new Vector3(t / 10f, 0, 0)));
+			bars.Add(new Vertex2D(Projectile.Center + radius * (1 + mulWid * 0.5f), new Color(125, 0, 0, 0), new Vector3(t / 10f, 0.3f, 0)));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.AcytaeaCircle14.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Texture2D lightSword = ModAsset.AcytaeaCircle11.Value;
+		float mulTime = 1f;
+		if (Projectile.timeLeft < 30f)
+		{
+			mulTime = Projectile.timeLeft / 30f;
+		}
+		for (int t = 0; t < 5; t++)
+		{
+			Vector2 radius = new Vector2(190 * range, 0).RotatedBy((t - 2f) / 10d * MathHelper.TwoPi + Projectile.rotation);
+			Main.spriteBatch.Draw(lightSword, Projectile.Center + radius, null, new Color(255, 0, 215, 155), Projectile.rotation + (t - 2f) / 1.57f, lightSword.Size() / 2f, new Vector2(1.4f, 0.5f * mulTime), SpriteEffects.None, 0);
+		}
+
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}

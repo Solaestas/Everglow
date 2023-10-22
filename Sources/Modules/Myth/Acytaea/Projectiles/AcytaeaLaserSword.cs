@@ -53,6 +53,7 @@ public class AcytaeaLaserSword : ModProjectile
 		}
 		CheckFrame();
 		GenerateVFX();
+		Projectile.hide = true;
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -61,6 +62,11 @@ public class AcytaeaLaserSword : ModProjectile
 	public override bool ShouldUpdatePosition()
 	{
 		return false;
+	}
+	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+	{
+		overPlayers.Add(index);
+		base.DrawBehind(index, behindNPCsAndTiles, behindNPCs, behindProjectiles, overPlayers, overWiresUI);
 	}
 	public void DrawLaser(Texture2D tex, Color color, float width = 36)
 	{
@@ -187,11 +193,18 @@ public class AcytaeaLaserSword : ModProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Texture2D star = Commons.ModAsset.Star.Value;
+		Texture2D dark = Commons.ModAsset.Star_black.Value;
 		Vector2 endDrawPos = EndPos - Main.screenPosition;
-		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), MathHelper.PiOver2, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), 0, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, MathHelper.PiOver2, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, 0, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, 0, star.Size() / 2f, new Vector2(3f, width / 8f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 20, 60, 0), MathHelper.PiOver2, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 20, 60, 0), 0, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 20, 60, 0), MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), 0, star.Size() / 2f, new Vector2(3f, width / 8f), SpriteEffects.None, 0);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float range = 80 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f) * 20;

@@ -42,33 +42,23 @@ public class AcytaeaTornado : ModProjectile
 			{
 				k = 50 * Math.Sign(k);
 			}
-			Projectile.velocity.X += k / 100f;
+			if (Main.expertMode)
+			{
+				Projectile.velocity.X += k / 200f;
+			}
+			else if (Main.masterMode)
+			{
+				Projectile.velocity.X += k / 100f;
+			}
+			else
+			{
+				Projectile.velocity.X += k / 300f;
+			}
 		}
-		//float value2 = 1f;
-		//if (Projectile.timeLeft < 60)
-		//{
-		//	value2 = Projectile.timeLeft / 60f;
-		//}
-		//if (Timer < 24)
-		//{
-		//	value2 = Timer / 24f;
-		//}
-		//for (int x = 0; x < 3 * value2; x++)
-		//{
-		//	Vector2 newVec = new Vector2(0, Main.rand.NextFloat(4f, 12f)).RotatedByRandom(6.283) + new Vector2(0, -7) * value2;
-		//	var positionVFX = new Vector2(Main.rand.NextFloat(-40, 40), Main.rand.NextFloat(-600f, Math.Min(600f, TornadoBottom.Y - Projectile.Center.Y))) + Projectile.Center + newVec * Main.rand.NextFloat(0.7f, 0.9f) + new Vector2(Main.rand.NextFloat(-100, 100), -7);
-
-		//	var acytaeaFlame = new AcytaeaFlameDust
-		//	{
-		//		velocity = newVec,
-		//		Active = true,
-		//		Visible = true,
-		//		position = positionVFX,
-		//		maxTime = Main.rand.Next(14, 36),
-		//		ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(8f, 25f) * value2 }
-		//	};
-		//	Ins.VFXManager.Add(acytaeaFlame);
-		//}
+		if (Projectile.timeLeft % 200 == 0)
+		{
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/MagicWeaponsReplace/Sounds/TyphoonBlackHoleStrong").WithVolumeScale(100f / ((player.Center - Projectile.Center).Length() + 100)), Projectile.Center);
+		}
 	}
 	public void GenerateVFX()
 	{
@@ -125,14 +115,23 @@ public class AcytaeaTornado : ModProjectile
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		if(Projectile.timeLeft < 60 || Timer < 40)
+		float heightValue = 0.75f;
+		if (Main.expertMode)
+		{
+			heightValue = 1f;
+		}
+		if (Main.masterMode)
+		{
+			heightValue = 1.5f;
+		}
+		if (Projectile.timeLeft < 60 || Timer < 40)
 		{
 			return false;
 		}
-		Rectangle r = new Rectangle(projHitbox.X, projHitbox.Y - 600, 80, 1200);
-		if(TornadoBottom.Y < projHitbox.Y + 600)
+		Rectangle r = new Rectangle(projHitbox.X, projHitbox.Y - (int)(600 * heightValue), 80, (int)(1200 * heightValue));
+		if(TornadoBottom.Y < projHitbox.Y + (int)(600 * heightValue))
 		{
-			r.Height = (int)(TornadoBottom.Y - (projHitbox.Y - 600));
+			r.Height = (int)(TornadoBottom.Y - (projHitbox.Y - (int)(600 * heightValue)));
 		}
 		return r.Intersects(targetHitbox);
 	}
@@ -150,6 +149,15 @@ public class AcytaeaTornado : ModProjectile
 		{
 			length = 40;
 		}
+		float heightValue = 15;
+		if(Main.expertMode)
+		{
+			heightValue = 20;
+		}
+		if(Main.masterMode)
+		{
+			heightValue = 30;
+		}
 		var bars = new List<Vertex2D>();
 		for(int k = -length; k < length; k++)
 		{
@@ -160,16 +168,16 @@ public class AcytaeaTornado : ModProjectile
 			}
 			value *= tolerance / 3f;
 			float mulWidth = 1.5f - MathF.Cos(k / 80f * MathF.PI);
-			mulWidth *= 1.2f;
+			mulWidth *= 1.2f * heightValue / 20f;
 			float worm = MathF.Sin(k * 0.44f + (float)Main.timeForVisualEffects * 0.03f) * 10 * mulWidth;
-			bars.Add(Projectile.Center + new Vector2(-width * mulWidth + worm, k * 20), color * value, new Vector3(0.2f + uTime + k / valueX, k / valueY + deltaY - worm * 0.01f, 0));
-			bars.Add(Projectile.Center + new Vector2(width * mulWidth + worm, k * 20), color * value, new Vector3(0.2f + uTime + k / valueX , k / valueY + deltaY - worm * 0.01f, 1));
+			bars.Add(Projectile.Center + new Vector2(-width * mulWidth + worm, k * heightValue), color * value, new Vector3(0.2f + uTime + k / valueX, k / valueY + deltaY - worm * 0.01f, 0));
+			bars.Add(Projectile.Center + new Vector2(width * mulWidth + worm, k * heightValue), color * value, new Vector3(0.2f + uTime + k / valueX , k / valueY + deltaY - worm * 0.01f, 1));
 			if(k > 0 && tolerance == 3)
 			{
-				if (Collision.SolidCollision(Projectile.Center + new Vector2(0, k * 20 + 20), 0, 0))
+				if (Collision.SolidCollision(Projectile.Center + new Vector2(0, k * heightValue + heightValue), 0, 0))
 				{
 					tolerance--;
-					Collision.HitTiles(Projectile.Center + new Vector2(-40, k * 20 - 20), new Vector2(0, -50), 80, 40);
+					Collision.HitTiles(Projectile.Center + new Vector2(-40, k * heightValue - heightValue), new Vector2(0, -50), 80, 40);
 				}
 			}
 			if (tolerance < 3)
@@ -178,10 +186,10 @@ public class AcytaeaTornado : ModProjectile
 			}
 			if(tolerance <= 0)
 			{
-				TornadoBottom = Projectile.Center + new Vector2(0, k * 20 + 20);
+				TornadoBottom = Projectile.Center + new Vector2(0, k * heightValue + heightValue);
 				break;
 			}
-			Lighting.AddLight(Projectile.Center + new Vector2(0, k * 20), 1 * value, 0, 0.4f * value);
+			Lighting.AddLight(Projectile.Center + new Vector2(0, k * heightValue), 1 * value, 0, 0.4f * value);
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
