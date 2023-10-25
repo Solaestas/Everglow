@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using SubworldLibrary;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
@@ -22,8 +21,6 @@ public class YggdrasilTownNPC : GlobalNPC
 				fix *= fix;
 				spawnRate = (int)((1 / fix) * spawnRate);
 				maxSpawns = (int)(fix * maxSpawns);
-				Main.chatMonitor.Clear();
-				Main.NewText($"{fix:00.0000},{spawnRate},{1f / spawnRate},{maxSpawns}");
 			}
 		}
 	}

@@ -35,26 +35,26 @@ public class StoneScaleWood : ModTile
 	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Tile tile = Main.tile[i, j];
-		if(!tile.HasTile)
-		{
-			return false;
-		}
-		spriteBatch.End();
-		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
+		//Tile tile = Main.tile[i, j];
+		//if(!tile.HasTile)
+		//{
+		//	return false;
+		//}
+		//spriteBatch.End();
+		//spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 
-		Vector2 worldPos = new Vector2(i, j);
-		Texture2D noiseTex = ModAsset.DragonSacleNoise.Value;
-		Effect noise = ModAsset.DragonSacle.Value;
-		noise.Parameters["tex0"].SetValue(noiseTex);
-		noise.Parameters["worldPos"].SetValue(worldPos);
-		noise.Parameters["textureWidth"].SetValue(512);
-		noise.CurrentTechnique.Passes["newTexutre"].Apply();
+		//Vector2 worldPos = new Vector2(i, j);
+		//Texture2D noiseTex = ModAsset.DragonSacleNoise.Value;
+		//Effect noise = ModAsset.DragonSacle.Value;
+		//noise.Parameters["tex0"].SetValue(noiseTex);
+		//noise.Parameters["worldPos"].SetValue(worldPos);
+		//noise.Parameters["textureWidth"].SetValue(512);
+		//noise.CurrentTechnique.Passes["newTexutre"].Apply();
 		return true;
 	}
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		spriteBatch.End();
-		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
+		//spriteBatch.End();
+		//spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
 	}
 }
