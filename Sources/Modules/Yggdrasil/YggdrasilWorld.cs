@@ -1,7 +1,9 @@
 using System.Reflection;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using SubworldLibrary;
 using Terraria.WorldBuilding;
-
+using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 namespace Everglow.Yggdrasil;
 internal class YggdrasilWorld : Subworld
 {
@@ -17,9 +19,9 @@ internal class YggdrasilWorld : Subworld
 	};
 	public override void OnEnter()
 	{
-
 		SubworldSystem.hideUnderworld = true;
 		YggdrasilTimer = 0;
+		
 	}
 	public override void OnLoad()
 	{

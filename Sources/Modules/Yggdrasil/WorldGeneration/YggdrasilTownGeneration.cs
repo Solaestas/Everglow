@@ -1,5 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 using Terraria.Utilities;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
@@ -207,12 +208,14 @@ public class YggdrasilTownGeneration
 		int rightBound = GenRand.Next(800, 820) + deltaX;
 		int startY = 11632;
 		KillRectangleAreaOfTile(leftBound, startY - 10, rightBound, startY);
-		PlaceFrameImportantTiles(595, startY - 11, 16, 12, ModContent.TileType<OriginPylon>());
+		PlaceFrameImportantTiles(595, startY - 37, 8, 12, ModContent.TileType<OriginPylon>());
 		for (int x = leftBound + 5; x < rightBound - 5; x++)
 		{
 			if(x % 20 == 0)
 			{
 				PlaceFrameImportantTiles(x, startY, 20, 1, ModContent.TileType<StoneBridgeTile>(), 0, 0);
+				StoneBridge_fence sBF = new StoneBridge_fence { position = new Vector2(x, startY - 24) * 16, Active = true, Visible = true };
+				Ins.VFXManager.Add(sBF);
 			}
 			//Tile tile = SafeGetTile(x, startY);
 			//Tile tileLeft = SafeGetTile(x - 1, startY);
