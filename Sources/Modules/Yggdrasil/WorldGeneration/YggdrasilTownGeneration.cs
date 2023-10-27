@@ -1,6 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
-using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 using Terraria.Utilities;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
@@ -211,11 +210,11 @@ public class YggdrasilTownGeneration
 		PlaceFrameImportantTiles(595, startY - 37, 8, 12, ModContent.TileType<OriginPylon>());
 		for (int x = leftBound + 5; x < rightBound - 5; x++)
 		{
-			if(x % 20 == 0)
+			if (x % 20 == 0)
 			{
 				PlaceFrameImportantTiles(x, startY, 20, 1, ModContent.TileType<StoneBridgeTile>(), 0, 0);
-				StoneBridge_fence sBF = new StoneBridge_fence { position = new Vector2(x, startY - 24) * 16, Active = true, Visible = true };
-				Ins.VFXManager.Add(sBF);
+
+				PlaceFrameImportantTiles(x, startY + 7, 20, 1, ModContent.TileType<StoneBridgeTile>(), 36, 36);
 			}
 			//Tile tile = SafeGetTile(x, startY);
 			//Tile tileLeft = SafeGetTile(x - 1, startY);
@@ -734,7 +733,7 @@ public class YggdrasilTownGeneration
 		QuickBuild(randX, 11270, "YggdrasilTown/MapIOs/434x159YggdrasilTown.mapio");
 		int randY = GenRand.Next(512);
 		//平滑嵌入左上段
-		for(int x = randX - 70;x < randX + 150;x++)
+		for (int x = randX - 70; x < randX + 150; x++)
 		{
 			float yMin = (randX + 150 - x) / 220f;
 			yMin *= yMin;
@@ -766,22 +765,22 @@ public class YggdrasilTownGeneration
 			yMin *= 55f;
 			yMin = 11200 + yMin;
 			yMin -= PerlinPixelB[x % 512, randY] * 0.06f;
-			for (int y = (int)yMin; y <  11400; y++)
+			for (int y = (int)yMin; y < 11400; y++)
 			{
 				Tile tile = SafeGetTile(x, y);
 				if (!tile.HasTile && tile.LiquidAmount == 0)
-				{ 
+				{
 					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 					tile.HasTile = true;
 				}
 			}
 		}
 		Point digStart = new Point(randX, 11415);
-		for (int t = 0;t < 75;t++)
+		for (int t = 0; t < 75; t++)
 		{
 			digStart += new Point(-1, t / 24);
 			int range = (75 - t) / 5 + 5;
-			for(int x0 = -range; x0 <= range; x0++)
+			for (int x0 = -range; x0 <= range; x0++)
 			{
 				for (int y0 = -range; y0 <= range; y0++)
 				{
@@ -913,7 +912,7 @@ public class YggdrasilTownGeneration
 		while (!SafeGetTile(AzureGrottoCenterX, startY).HasTile)
 		{
 			startY--;
-			if(startY < 10500)
+			if (startY < 10500)
 			{
 				break;
 			}
@@ -927,7 +926,7 @@ public class YggdrasilTownGeneration
 			step = 1;
 		}
 		int x = AzureGrottoCenterX - step * 240;
-		while(x >= 50 && x <= 1150)
+		while (x >= 50 && x <= 1150)
 		{
 			x += step;
 			float noiseX = PerlinPixelG[(randX + x) % 512, randY] / 256f;
@@ -939,7 +938,7 @@ public class YggdrasilTownGeneration
 				Tile target = SafeGetTile(x, y);
 				target.HasTile = true;
 				target.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
-				if(y <= startY + valueY - 6)
+				if (y <= startY + valueY - 6)
 				{
 					target.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 				}
@@ -947,7 +946,7 @@ public class YggdrasilTownGeneration
 		}
 		int tunnelLength = GenRand.Next(447, 528);
 		x = AzureGrottoCenterX;
-		if(step > 0)
+		if (step > 0)
 		{
 			while (x + tunnelLength > Main.maxTilesX - 50)
 			{
@@ -970,11 +969,11 @@ public class YggdrasilTownGeneration
 		{
 			count++;
 			x += step;
-			for(int y = startY2;y <= startY2 + 8;y++)
+			for (int y = startY2; y <= startY2 + 8; y++)
 			{
 				Tile target = SafeGetTile(x, y);
-				
-				if(y != startY2 + 8)
+
+				if (y != startY2 + 8)
 				{
 					target.HasTile = false;
 				}
@@ -984,7 +983,7 @@ public class YggdrasilTownGeneration
 					target.HasTile = true;
 				}
 			}
-			if(count > tunnelLength - 200)
+			if (count > tunnelLength - 200)
 			{
 				float valueX = tunnelLength - count;
 				valueX -= 100;
@@ -1006,10 +1005,10 @@ public class YggdrasilTownGeneration
 		}
 		int sealY = startY2 - 20;
 		int sealCountY = 0;
-		while(!SafeGetTile(cageMiddleX, sealY + sealCountY).HasTile)
+		while (!SafeGetTile(cageMiddleX, sealY + sealCountY).HasTile)
 		{
 			sealCountY++;
-			if(sealCountY > 100)
+			if (sealCountY > 100)
 			{
 				break;
 			}
@@ -1021,12 +1020,12 @@ public class YggdrasilTownGeneration
 		randY = GenRand.Next(512);
 		int startX = Math.Max(cageMiddleX - 300, 0);
 		int endX = Math.Min(cageMiddleX + 300, Main.maxTilesX);
-		for (int x0 = startX;x0 <= endX; x0++)
+		for (int x0 = startX; x0 <= endX; x0++)
 		{
 			for (int y = centerOfCage.Y - 200; y <= centerOfCage.Y + 30; y++)
 			{
 				Tile target = SafeGetTile(x0, y);
-				if(target.TileType == ModContent.TileType<StoneScaleWood>() && target.HasTile)
+				if (target.TileType == ModContent.TileType<StoneScaleWood>() && target.HasTile)
 				{
 					Vector2 dis = (new Vector2(x0, y) - new Vector2(centerOfCage.X, centerOfCage.Y + 40));
 					dis.X *= 1f;
@@ -1048,7 +1047,7 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
-		if(SubworldLibrary.SubworldSystem.Current != null)
+		if (SubworldLibrary.SubworldSystem.Current != null)
 		{
 			YggdrasilWorld yWorld = SubworldLibrary.SubworldSystem.Current as YggdrasilWorld;
 			if (yWorld != null)
