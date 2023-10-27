@@ -3,12 +3,8 @@ using SubworldLibrary;
 
 namespace Everglow.Yggdrasil.Common;
 [Pipeline(typeof(WCSPipeline))]
-public class StoneBridge_fence : BackgroundVFX
+public class BoneAndPlatform_background : BackgroundVFX
 {
-	public override void OnSpawn()
-	{
-		texture = ModAsset.StoneBridge_fence.Value;
-	}
 	public override void Update()
 	{
 		if (!SubworldSystem.IsActive<YggdrasilWorld>())
@@ -17,8 +13,8 @@ public class StoneBridge_fence : BackgroundVFX
 		}
 		base.Update();
 	}
-	public override void Draw()
+	public override void OnSpawn()
 	{
-		base.Draw();
+		texture = ModAsset.BoneAndPlatform_background.Value;
 	}
 }

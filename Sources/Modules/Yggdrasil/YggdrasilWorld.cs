@@ -21,7 +21,13 @@ internal class YggdrasilWorld : Subworld
 	{
 		SubworldSystem.hideUnderworld = true;
 		YggdrasilTimer = 0;
-		
+		for(int x = 20;x < Main.maxTilesX - 20;x++)
+		{
+			for (int y = 20; y < Main.maxTilesY - 20; y++)
+			{
+				
+			}
+		}
 	}
 	public override void OnLoad()
 	{

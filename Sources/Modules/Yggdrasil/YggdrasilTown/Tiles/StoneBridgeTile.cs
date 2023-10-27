@@ -1,8 +1,10 @@
-using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using Everglow.Commons.VFX.Scene;
+using Everglow.Yggdrasil.Common;
+using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
-public class StoneBridgeTile : ModTile
+public class StoneBridgeTile : SceneTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -12,7 +14,8 @@ public class StoneBridgeTile : ModTile
 		Main.tileWaterDeath[Type] = false;
 		Main.tileBlendAll[Type] = false;
 		Main.tileBlockLight[Type] = true;
-		this.MinPick = int.MaxValue;
+		DustType = DustID.Stone;
+		MinPick = int.MaxValue;
 		AddMapEntry(new Color(64, 64, 61));
 	}
 	public override bool CanExplode(int i, int j)
@@ -25,23 +28,26 @@ public class StoneBridgeTile : ModTile
 	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Tile tile = Main.tile[i, j];
-		Color c = Lighting.GetColor(i, j);
-		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-		if (Main.drawToScreen)
-			zero = Vector2.Zero;
-		//spriteBatch.Draw(ModAsset.StoneBridge_fence.Value, new Vector2(i, j - 4.5f) * 16 + zero - Main.screenPosition, new Rectangle((int)(tile.TileFrameX / 18f * 16), 0, 16, 320), c, 0, new Vector2(0), 1f, SpriteEffects.None, 0);
-		spriteBatch.Draw(ModAsset.StoneBridge.Value, new Vector2(i, j - 4) * 16 + zero - Main.screenPosition, new Rectangle((int)(tile.TileFrameX / 18f * 16), 0, 16, 320), c, 0, new Vector2(0), 1f, SpriteEffects.None, 0);
-		if (tile.TileFrameX == 0)
-		{
-			for (int k = 0; k < 6; k++)
-			{
-			}
-		}
+
 		return false;
+	}
+	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+	{
+		base.PostDraw(i, j, spriteBatch);
 	}
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
 
+	}
+	public override void AddScene(int i, int j)
+	{
+		Tile tile = SafeGetTile(i, j);
+		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
+		{
+			StoneBridge_fence sBF = new StoneBridge_fence { position = new Vector2(i, j - 3) * 16 - new Vector2(0, 14), Active = true, Visible = true, originTile = new Point(i, j), originType = ModContent.TileType<StoneBridgeTile>() };
+			Ins.VFXManager.Add(sBF);
+			StoneBridge_foreground sBF2 = new StoneBridge_foreground { position = new Vector2(i, j - 3) * 16 - new Vector2(0, 4), Active = true, Visible = true, originTile = new Point(i, j), originType = ModContent.TileType<StoneBridgeTile>() };
+			Ins.VFXManager.Add(sBF2);
+		}
 	}
 }
