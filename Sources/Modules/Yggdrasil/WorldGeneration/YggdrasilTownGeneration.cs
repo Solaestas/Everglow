@@ -1,7 +1,9 @@
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 using Terraria.Utilities;
+using Terraria.WorldBuilding;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 namespace Everglow.Yggdrasil.WorldGeneration;
 public class YggdrasilTownGeneration
@@ -30,6 +32,8 @@ public class YggdrasilTownGeneration
 		BuildFossilizedMineRoad();
 		Main.statusText = "Constructing The Yggdrasil Town Below...";
 		BuildTownBelow();
+		Main.statusText = "Growing LampWoods...";
+		BuildLampWoodLand();
 		Main.statusText = "Constructing The Yggdrasil Town Upper...";
 		BuildTownUpper();
 		Main.statusText = "The Barrier To 2rd Floor Of Yggdrasil...";
@@ -631,93 +635,93 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildFossilizedMineRoad()
 	{
-		int deltaX = 120;
-		if (AzureGrottoCenterX > 600)
-		{
-			deltaX = -120;
-		}
-		int step = Math.Sign(deltaX);
-		int startX = 600 + deltaX;
-		int startY = 11632;
-		while (SafeGetTile(startX, startY + 1).TileType == TileID.GrayBrick)
-		{
-			startX += step;
-		}
-		int lengthX = GenRand.Next(140, 152);
-		for (int x0 = 0; x0 < lengthX; x0++)
-		{
-			KillRectangleAreaOfTile(x0 * step + startX, startY - 17, x0 * step + startX, startY);
-			PlaceRectangleAreaOfBlock(x0 * step + startX, startY + 1, x0 * step + startX, startY + 3, TileID.GrayBrick, false);
-		}
-		int continueEmpty = 0;
-		float radius = 5f;
-		Vector2 velocity = new Vector2(step, 0);
-		Vector2 position = new Vector2(startX + lengthX * step, startY - radius);
-		int times = 0;
-		int coordY = GenRand.Next(512);
-		int rotatedTimes = 0;
-		int noRotatedTimes = 0;
-		while (continueEmpty < 15)
-		{
-			times++;
-			velocity = Vector2.Normalize(velocity);
-			position += velocity;
-			int x = (int)position.X;
-			int y = (int)position.Y;
-			for (int x0 = -10; x0 <= 10; x0++)
-			{
-				for (int y0 = -10; y0 <= 10; y0++)
-				{
-					if (new Vector2(x0, y0).Length() < radius)
-					{
-						Tile tile = SafeGetTile(x0 + x, y0 + y);
-						tile.HasTile = false;
-					}
-				}
-			}
-			if (rotatedTimes > 0)
-			{
-				rotatedTimes--;
-				velocity = velocity.RotatedBy(step * Math.PI / 40d);
-				noRotatedTimes = 0;
-			}
-			else
-			{
-				rotatedTimes = 0;
-				Vector2 probePos = position + velocity * 50;
-				if ((!SafeGetTile((int)probePos.X, (int)(probePos.Y)).HasTile && position.Y > 11451) || probePos.X > 1200 || probePos.X < 0)
-				{
-					rotatedTimes = 40;
-					step *= -1;
-					continue;
-				}
-				velocity = velocity.RotatedBy((PerlinPixelG[times % 512, coordY] - 127.5) * 0.0002);
-				velocity.Y -= 0.015f;
-				noRotatedTimes++;
-				if (noRotatedTimes > Math.Max(80 + 11540 - position.Y, 80))
-				{
-					if (GenRand.NextBool(60))
-					{
-						rotatedTimes = 40;
-						step *= -1;
-					}
-				}
-				velocity.X *= 1.12f;
-			}
-			Vector2 probePosII = position + velocity * 5;
-			if (SafeGetTile((int)probePosII.X, (int)(probePosII.Y)).TileType != ModContent.TileType<StoneScaleWood>() && y < 11451)
-			{
-				continueEmpty++;
-			}
-			else
-			{
-				continueEmpty = 0;
-			}
-			if (times > 8000)
-			{
-				break;
-			}
-		}
+		//int deltaX = 120;
+		//if (AzureGrottoCenterX > 600)
+		//{
+		//	deltaX = -120;
+		//}
+		//int step = Math.Sign(deltaX);
+		//int startX = 600 + deltaX;
+		//int startY = 11632;
+		//while (SafeGetTile(startX, startY + 1).TileType == TileID.GrayBrick)
+		//{
+		//	startX += step;
+		//}
+		//int lengthX = GenRand.Next(140, 152);
+		//for (int x0 = 0; x0 < lengthX; x0++)
+		//{
+		//	KillRectangleAreaOfTile(x0 * step + startX, startY - 17, x0 * step + startX, startY);
+		//	PlaceRectangleAreaOfBlock(x0 * step + startX, startY + 1, x0 * step + startX, startY + 3, TileID.GrayBrick, false);
+		//}
+		//int continueEmpty = 0;
+		//float radius = 5f;
+		//Vector2 velocity = new Vector2(step, 0);
+		//Vector2 position = new Vector2(startX + lengthX * step, startY - radius);
+		//int times = 0;
+		//int coordY = GenRand.Next(512);
+		//int rotatedTimes = 0;
+		//int noRotatedTimes = 0;
+		//while (continueEmpty < 15)
+		//{
+		//	times++;
+		//	velocity = Vector2.Normalize(velocity);
+		//	position += velocity;
+		//	int x = (int)position.X;
+		//	int y = (int)position.Y;
+		//	for (int x0 = -10; x0 <= 10; x0++)
+		//	{
+		//		for (int y0 = -10; y0 <= 10; y0++)
+		//		{
+		//			if (new Vector2(x0, y0).Length() < radius)
+		//			{
+		//				Tile tile = SafeGetTile(x0 + x, y0 + y);
+		//				tile.HasTile = false;
+		//			}
+		//		}
+		//	}
+		//	if (rotatedTimes > 0)
+		//	{
+		//		rotatedTimes--;
+		//		velocity = velocity.RotatedBy(step * Math.PI / 40d);
+		//		noRotatedTimes = 0;
+		//	}
+		//	else
+		//	{
+		//		rotatedTimes = 0;
+		//		Vector2 probePos = position + velocity * 50;
+		//		if ((!SafeGetTile((int)probePos.X, (int)(probePos.Y)).HasTile && position.Y > 11451) || probePos.X > 1200 || probePos.X < 0)
+		//		{
+		//			rotatedTimes = 40;
+		//			step *= -1;
+		//			continue;
+		//		}
+		//		velocity = velocity.RotatedBy((PerlinPixelG[times % 512, coordY] - 127.5) * 0.0002);
+		//		velocity.Y -= 0.015f;
+		//		noRotatedTimes++;
+		//		if (noRotatedTimes > Math.Max(80 + 11540 - position.Y, 80))
+		//		{
+		//			if (GenRand.NextBool(60))
+		//			{
+		//				rotatedTimes = 40;
+		//				step *= -1;
+		//			}
+		//		}
+		//		velocity.X *= 1.12f;
+		//	}
+		//	Vector2 probePosII = position + velocity * 5;
+		//	if (SafeGetTile((int)probePosII.X, (int)(probePosII.Y)).TileType != ModContent.TileType<StoneScaleWood>() && y < 11451)
+		//	{
+		//		continueEmpty++;
+		//	}
+		//	else
+		//	{
+		//		continueEmpty = 0;
+		//	}
+		//	if (times > 8000)
+		//	{
+		//		break;
+		//	}
+		//}
 
 	}
 	/// <summary>
@@ -725,12 +729,12 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildTownBelow()
 	{
-		int randX = AzureGrottoCenterX + 50;
+		int randX = AzureGrottoCenterX + 200;
 		if (AzureGrottoCenterX > 600)
 		{
-			randX = AzureGrottoCenterX - 50 - 434;
+			randX = AzureGrottoCenterX - 200 - 434;
 		}
-		QuickBuild(randX, 11270, "YggdrasilTown/MapIOs/434x159YggdrasilTown.mapio");
+		QuickBuild(randX, 11400, "YggdrasilTown/MapIOs/434x159YggdrasilTown.mapio");
 		int randY = GenRand.Next(512);
 		//平滑嵌入左上段
 		for (int x = randX - 70; x < randX + 150; x++)
@@ -792,6 +796,71 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
+	}
+	/// <summary>
+	/// 灯木森林
+	/// </summary>
+	public static void BuildLampWoodLand()
+	{
+		int direction = 1;
+		int randX = AzureGrottoCenterX;
+		if (AzureGrottoCenterX > 600)
+		{
+			direction = -1;
+			randX = AzureGrottoCenterX;
+		}
+		int startY = 11400;
+		int countX = 0;
+		int coordX = GenRand.Next(512);
+		int coordY = GenRand.Next(512);
+		while (countX < 500)
+		{
+			countX++;
+			int x = randX + countX * direction;
+			float yMin = 11040 - countX * countX / 2000f;
+			for(int y = startY; y > yMin;y--)
+			{
+				float valueR = PerlinPixelR[(int)(x * 0.24f + coordX) % 512, (int)(y * 1.3 + coordY) % 512] / 255f;
+				if(y < yMin + 100)
+				{
+					valueR -= (yMin - y) / 100f + 1;
+				}
+
+				Tile tile = SafeGetTile(x, y);
+				if(!tile.HasTile && tile.LiquidAmount<=0)
+				{
+					if(valueR > 0.65f)
+					{
+						tile.TileType = (ushort)ModContent.TileType<DarkForestGrass>();
+						tile.HasTile = true;
+					}
+					if (valueR > 0.7f)
+					{
+						tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
+						tile.HasTile = true;
+					}
+				}
+			}
+		}
+		int smoothX = randX;
+		if (AzureGrottoCenterX > 600)
+		{
+			smoothX = randX - 500;
+		}
+		SmoothTile(smoothX, 11000, smoothX + 500, 11250);
+		Point treeRotPos = new Point(200, 11000);
+		if(AzureGrottoCenterX < 600)
+		{
+			treeRotPos = new Point(1000, 11000);
+		}
+		ShapeData shapeData = new ShapeData();
+		WorldUtils.Gen(treeRotPos, new Shapes.Circle(55, 55), new Actions.Blank().Output(shapeData));
+		WorldUtils.Gen(treeRotPos, new Shapes.Circle(33, 33), Actions.Chain(new GenAction[]
+		{
+	        new Modifiers.Offset(29, 0),
+	        new Actions.Blank().Output(shapeData)
+		}));
+		WorldUtils.Gen(treeRotPos, new ModShapes.InnerOutline(shapeData, true), new Actions.SetTile((ushort)ModContent.TileType<FemaleLampWood>(), true));
 	}
 	/// <summary>
 	/// 上天穹镇
