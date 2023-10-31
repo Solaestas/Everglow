@@ -1,7 +1,9 @@
+using Everglow.CagedDomain.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
+
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
@@ -1128,7 +1130,7 @@ public class YggdrasilTownGeneration
 	/// <summary>
 	/// 建造一个灯柱
 	/// </summary>
-	public static void PlaceChineseStyleLampPost(int x, int y, int style, int ai0 = 0, int ai1 = 0, int ai2 = 0, int ai3 = 0)
+	public static void PlaceChineseStyleLampPost(int x, int y, int style, int ai0 = 0, int ai1 = 0)
 	{
 		switch (style)
 		{
@@ -1313,7 +1315,7 @@ public class YggdrasilTownGeneration
 		//50%的概率侧面有灯笼
 		if (GenRand.NextBool(2))
 		{
-			int type = ModContent.TileType<SideHangingLantern>();
+			int type = ModContent.TileType<SideHangingLantern_Red>();
 			if (GenRand.NextBool(3))
 			{
 				type = ModContent.TileType<SideHangingLantern_White>();

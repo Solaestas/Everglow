@@ -606,7 +606,7 @@ public static class FurnitureUtils
 	}
 
 	/// <summary>
-	///
+	///触发电线信号(正常的StyleHorizontal物块)
 	/// </summary>
 	/// <param name="i"></param>
 	/// <param name="j"></param>
@@ -648,7 +648,76 @@ public static class FurnitureUtils
 		{
 			for (int l = 0; l < tileY; l++)
 			{
-				Wiring.SkipWire(x + k, y + l);
+				//安全化处理
+				if (x + k > 0 && x + k < Main.maxTilesX)
+				{
+					if (y + l > 0 && y + l < Main.maxTilesY)
+					{
+						//异形MultiTile检测
+						if (Main.tile[x + k, y + l].TileType == type)
+						{
+							Wiring.SkipWire(x + k, y + l);
+						}
+					}
+				}
+			}
+		}
+	}
+	/// <summary>
+	///触发电线信号(特例StyleVertical物块)
+	/// </summary>
+	/// <param name="i"></param>
+	/// <param name="j"></param>
+	/// <param name="type"></param>
+	/// <param name="tileX"></param>物块组合体横向占多少块
+	/// <param name="tileY"></param>物块组合体纵向占多少块
+	/// <param name="coordinateX"></param>物块组合体横向每一帧宽度(单位像素)
+	/// <param name="coordinateY"></param>物块组合体纵向每一帧高度(单位像素)
+	public static void LightHitwireStyleVertical(int i, int j, int type, int tileX, int tileY, int coordinateX = 18, int coordinateY = 18)
+	{
+		Tile tile = Main.tile[i, j];
+		int x = i - tile.TileFrameX / coordinateX % tileX;
+		int y = j - tile.TileFrameY / coordinateY % tileY;
+		for (int m = x; m < x + tileX; m++)
+		{
+			for (int n = y; n < y + tileY; n++)
+			{
+				if (!tile.HasTile)
+					continue;
+				if (tile.TileType == type)
+				{
+					tile = Main.tile[m, n];
+					if (tile.TileFrameY < coordinateY * tileY)
+					{
+						tile = Main.tile[m, n];
+						tile.TileFrameY += (short)(coordinateY * tileY);
+					}
+					else
+					{
+						tile = Main.tile[m, n];
+						tile.TileFrameY -= (short)(coordinateY * tileY);
+					}
+				}
+			}
+		}
+		if (!Wiring.running)
+			return;
+		for (int k = 0; k < tileX; k++)
+		{
+			for (int l = 0; l < tileY; l++)
+			{
+				//安全化处理
+				if(x + k > 0 && x + k < Main.maxTilesX)
+				{
+					if (y + l > 0 && y + l < Main.maxTilesY)
+					{
+						//异形MultiTile检测
+						if (Main.tile[x + k, y + l].TileType == type)
+						{
+							Wiring.SkipWire(x + k, y + l);
+						}
+					}
+				}
 			}
 		}
 	}
