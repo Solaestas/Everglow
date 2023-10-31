@@ -16,7 +16,7 @@ public class CylinderChandelierGroup : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 3, 3, ModContent.TileType<HangingSkyLantern>());
+		//PlaceFrameImportantTiles(x, y, 3, 3, ModContent.TileType<HangingSkyLantern>());
 		base.Build(ref x, y);
 	}
 }
@@ -35,7 +35,7 @@ public class HexagonalCeilingChandelier : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 3, 3, ModContent.TileType<HexagonalCeilingLamp>());
+		//PlaceFrameImportantTiles(x, y, 3, 3, ModContent.TileType<HexagonalCeilingLamp>());
 		base.Build(ref x, y);
 	}
 }
