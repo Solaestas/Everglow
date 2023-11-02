@@ -85,7 +85,7 @@ public class DarkTaro : ModTile, ITileFluentlyDrawn
 		ushort type = tile.TileType;
 
 		// 回声涂料
-		if (!tileDrawing.IsVisible(tile))
+		if (!TileDrawing.IsVisible(tile))
 			return;
 
 		int paint = Main.tile[paintPos].TileColor;

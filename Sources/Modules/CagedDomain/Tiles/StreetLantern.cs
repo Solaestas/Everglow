@@ -122,7 +122,7 @@ public class StreetLantern : ModTile, ITileFluentlyDrawn
 	private void DrawLanternPiece(Rectangle frame, float swayCoefficient, int offsetX, int offsetY, Point tilePos, Point paintPos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing, Color color = new Color())
 	{
 		// 回声涂料	
-		if (!tileDrawing.IsVisible(Main.tile[paintPos]))
+		if (!TileDrawing.IsVisible(Main.tile[paintPos]))
 			return;
 
 		var tile = Main.tile[tilePos];

@@ -47,7 +47,7 @@ public static class FurnitureUtils
 		var tile = Main.tile[pos];
         var tileData = TileObjectData.GetTileData(tile.type, 0);
 
-		if (!tileDrawing.IsVisible(tile) || tileData is null) return;
+		if (!TileDrawing.IsVisible(tile) || tileData is null) return;
 
 		// 油漆
 		Texture2D tex = tileDrawing.GetTileDrawTexture(tile, pos.X, pos.Y);
@@ -150,7 +150,7 @@ public static class FurnitureUtils
 		for (int i = topLeft.X; i < topLeft.X + sizeX; i++) {
 			for (int j = topLeft.Y; j < topLeft.Y + sizeY; j++) {
 				Tile tile = Main.tile[i, j];
-				if (tile.type != type || !tileDrawing.IsVisible(tile))
+				if (tile.type != type || !TileDrawing.IsVisible(tile))
 					continue;
 
 				short tileFrameX = tile.frameX;
