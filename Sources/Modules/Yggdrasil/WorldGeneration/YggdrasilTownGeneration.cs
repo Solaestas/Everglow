@@ -856,12 +856,39 @@ public class YggdrasilTownGeneration
 			treeRotPos = new Point(1000, 11000);
 		}
 		ShapeData shapeData = new ShapeData();
-		WorldUtils.Gen(treeRotPos, new Shapes.Circle(55, 55), new Actions.Blank().Output(shapeData));
-		WorldUtils.Gen(treeRotPos, new Shapes.Circle(33, 33), Actions.Chain(new GenAction[]
+		WorldUtils.Gen(treeRotPos, new Shapes.Circle(15, 15), new Actions.Blank().Output(shapeData));
+		Vector2 offset = new Vector2(0);
+		Vector2 offsetVel = new Vector2(0, -3);
+		float width = 13f;
+		for (int i = 0;i < 75;i++)
 		{
-	        new Modifiers.Offset(29, 0),
-	        new Actions.Blank().Output(shapeData)
-		}));
+			offset += offsetVel;
+			offsetVel = offsetVel.RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f));
+			offsetVel = offsetVel * 0.85f + new Vector2(0, -3) * 0.15f;
+			width *= 0.98f;
+			WorldUtils.Gen(treeRotPos, new Shapes.Circle((int)width, (int)width), Actions.Chain(new GenAction[]{new Modifiers.Offset((int)offset.X, (int)offset.Y), new Actions.Blank().Output(shapeData)}));
+			if(i > 24)
+			{
+				if(Main.rand.NextBool(15))
+				{
+					Vector2 offset2 = offset;
+					float dir2 = (Main.rand.Next(2) - 0.5f) * 2;
+					Vector2 offsetVel2 = offsetVel.RotatedBy(Main.rand.NextFloat(-1.3f, -0.5f) * dir2);
+					Vector2 offsetVel2final = offsetVel.RotatedBy(Main.rand.NextFloat(-1.7f, -1.0f) * dir2);
+					float width2 =  width * 0.98f;
+					int length = 75 - i + Main.rand.Next(-11, 45);
+
+					for (int j = 0; j < length; j++)
+					{
+						offset2 += offsetVel2;
+						offsetVel2 = offsetVel2.RotatedBy(Main.rand.NextFloat(-0.04f, 0.04f));
+						offsetVel2 = offsetVel2 * 0.85f + offsetVel2final * 0.15f;
+						width2 *= 0.98f;
+						WorldUtils.Gen(treeRotPos, new Shapes.Circle((int)width2, (int)width2), Actions.Chain(new GenAction[] { new Modifiers.Offset((int)offset2.X, (int)offset2.Y), new Actions.Blank().Output(shapeData) }));
+					}
+				}
+			}
+		}
 		WorldUtils.Gen(treeRotPos, new ModShapes.InnerOutline(shapeData, true), new Actions.SetTile((ushort)ModContent.TileType<FemaleLampWood>(), true));
 	}
 	/// <summary>
@@ -1127,6 +1154,7 @@ public class YggdrasilTownGeneration
 			}
 		}
 	}
+
 	/// <summary>
 	/// 建造一个灯柱
 	/// </summary>
