@@ -38,6 +38,7 @@ public class OriginPylon : SceneTile
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.addTile(Type);
 		AddMapEntry(new Color(64, 64, 61));
+		MinPick = int.MaxValue;
 	}
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{

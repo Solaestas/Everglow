@@ -26,11 +26,6 @@ public class RockExplosion_friendly : ModProjectile, IWarpProjectile
 		else
 		{
 			GenerateSmog(20);
-			for (int x = 0; x < 4 * Projectile.ai[0]; x++)
-			{
-				Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<SquamousShellStone>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
-				dust.velocity = new Vector2(0, Main.rand.NextFloat(0f, 1f * Projectile.ai[0])).RotatedByRandom(MathHelper.TwoPi);
-			}
 		}
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
