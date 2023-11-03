@@ -83,7 +83,7 @@ public class RockArrow : ModProjectile
 	{
 		TimeTokill = 240;
 		Projectile.velocity = Projectile.oldVelocity;
-		for (int x = 0; x <9; x++)
+		for (int x = 0; x < 9; x++)
 		{
 			Dust.NewDust(Projectile.Center - Projectile.velocity * 2 - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone>(), 0f, 0f, 0, default, 0.7f);
 		}
