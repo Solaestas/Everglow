@@ -132,8 +132,6 @@ public class MissileProj : ModProjectile, IWarpProjectile
 	private void HitToAnything()
 	{
 		Player player = Main.player[Projectile.owner];
-		ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
-
 		Projectile.velocity = Projectile.oldVelocity;
 		Projectile.friendly = false;
 		if (timeTokill < 0)

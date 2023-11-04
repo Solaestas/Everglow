@@ -34,6 +34,7 @@ public class Spark_MoonBladeDust : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
+	public bool noGravity;
 	public Spark_MoonBladeDust() { }
 	public override void Update()
 	{
@@ -48,7 +49,11 @@ public class Spark_MoonBladeDust : Visual
 			timer = maxTime;
 		}
 		velocity *= 0.98f;
-		velocity += new Vector2(Main.windSpeedCurrent * 0.4f, 0.6f);
+		if(!noGravity)
+		{
+			velocity += new Vector2(Main.windSpeedCurrent * 0.4f, 0.6f);
+		}
+
 		scale *= 0.995f;
 		timer++;
 		if (timer > maxTime)
