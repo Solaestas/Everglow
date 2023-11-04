@@ -13,7 +13,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			TradeLength = 4;
 			TradeShade = 0.7f;
 			Shade = 0.8f;
-			FadeTradeShade = 0.34f;
+			FadeShade = 0.34f;
 			FadeScale = 1;
 			TradeLightColorValue = 0.6f;
 			FadeLightColorValue = 0.4f;
@@ -39,9 +39,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Texture2D itemTexture = ModAsset.VertebralSpur_withouFlag.Value;
 			Main.spriteBatch.Draw(itemTexture, ItemDraw.Postion - Main.screenPosition, null, lightColor, ItemDraw.Rotation, itemTexture.Size() / 2f, ItemDraw.Size, ItemDraw.SpriteEffect, 0f);
 		}
-		public override void AI()
+		public override void VisualParticle()
 		{
-			base.AI();
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
 			Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.08f);
 			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))
