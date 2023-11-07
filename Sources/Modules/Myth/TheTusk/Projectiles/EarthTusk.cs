@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
@@ -196,7 +196,7 @@ public class EarthTusk : ModProjectile
 			new Vertex2D(ProjCenterII - TenNormalize - Main.screenPosition, EndColor, new Vector3(1, 0, 0))
 		};
 
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheTusk/Projectiles/Textures/Tuskplus" + TextureType.ToString());
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Tuskplus0.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
 

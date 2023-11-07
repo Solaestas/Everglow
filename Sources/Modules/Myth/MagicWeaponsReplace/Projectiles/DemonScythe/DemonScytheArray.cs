@@ -52,9 +52,9 @@ internal class DemonScytheArray : ModProjectile, IWarpProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Projectile.hide = false;
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color(0.4f, 0.0f, 0.8f, 0));
+		DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(1f, 1f, 1f, 1f));
+		DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(1f, 1f, 1f, 1f));
+		DrawMagicArray(ModAsset.WaterLine.Value, new Color(0.4f, 0.0f, 0.8f, 0));
 		return false;
 	}
 
@@ -72,11 +72,11 @@ internal class DemonScytheArray : ModProjectile, IWarpProjectile
 		DrawTexCircle(timer * 1.6f * Size0, 25, c0, player.Center + ringPos - Main.screenPosition, Water, Main.timeForVisualEffects / 17);
 		DrawTexCircle(timer * 1.5f * Size0, 15, c1, player.Center + ringPos - Main.screenPosition, Water, Main.timeForVisualEffects / 57);
 		DrawTexCircle(timer * 1.4f * Size0, 15, c2, player.Center + ringPos - Main.screenPosition, Water, Main.timeForVisualEffects / 227);
-		DrawTexMoon(timer * 1.6f * Size0, 25, c0, player.Center + ringPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.timeForVisualEffects / 3);
+		DrawTexMoon(timer * 1.6f * Size0, 25, c0, player.Center + ringPos - Main.screenPosition, ModAsset.BloomLight.Value, Main.timeForVisualEffects / 3);
 		DrawTexCircle(timer * 0.8f, 25, c0 * Size1, player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), Water, -Main.timeForVisualEffects / 7);
 		DrawTexCircle(timer * 0.7f, 12, c1 * Size1, player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), Water, -Main.timeForVisualEffects / 27);
 		DrawTexCircle(timer * 0.63f, 12, c2 * Size1, player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), Water, -Main.timeForVisualEffects / 127);
-		DrawTexMoon(timer * 0.8f, 25, c0 * Size1, player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
+		DrawTexMoon(timer * 0.8f, 25, c0 * Size1, player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), ModAsset.BloomLight.Value, -Main.timeForVisualEffects / 1.8);
 	}
 
 	private static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
@@ -154,8 +154,8 @@ internal class DemonScytheArray : ModProjectile, IWarpProjectile
 	{
 
 		Player player = Main.player[Projectile.owner];
-		//DrawTexCircle(timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
-		DrawTexMoon(spriteBatch, timer * 1.4f, 35, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.timeForVisualEffects / 3);
-		DrawTexMoon(spriteBatch, timer * 0.65f, 35, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
+		//DrawTexCircle(timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, ModAsset.WaterLine.Value, Main.timeForVisualEffects / 17);
+		DrawTexMoon(spriteBatch, timer * 1.4f, 35, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, ModAsset.BloomLight.Value, Main.timeForVisualEffects / 3);
+		DrawTexMoon(spriteBatch, timer * 0.65f, 35, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36),ModAsset.BloomLight.Value, -Main.timeForVisualEffects / 1.8);
 	}
 }

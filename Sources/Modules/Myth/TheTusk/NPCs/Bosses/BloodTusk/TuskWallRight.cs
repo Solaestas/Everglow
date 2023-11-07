@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
@@ -169,7 +169,7 @@ public class TuskWallRight : ModNPC
 		BloodTusk.FogSpace[12] = NPC.Center + new Vector2(100, -563);
 		Color color = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Bottom.Y / 16d));
 		color = NPC.GetAlpha(color) * ((255 - NPC.alpha) / 255f);
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/TuskWallRight").Value;
+		Texture2D t = ModAsset.TuskWallRight.Value;
 		Main.spriteBatch.Draw(t, NPC.Center - Main.screenPosition + V[0] + new Vector2(0, 60), new Rectangle(0, 0, t.Width, t.Height - (int)V[0].Y), color, NPC.rotation, new Vector2(t.Width / 2f, t.Height / 2f), 1f, SpriteEffects.None, 0f);
 		return false;
 	}

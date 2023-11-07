@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Items.Weapons;
 using Terraria.Localization;
 
@@ -53,7 +53,7 @@ public class MothEye : ModItem
 	{
 		if (fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
 		{
-			Texture2D mEyeTex = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_GlowOn");
+			Texture2D mEyeTex = ModAsset.MothEye_GlowOn.Value;
 			for (int x = 0; x < 8; x++)
 			{
 				Vector2 v0 = new Vector2(0, 6 + 2f * (float)Math.Sin(Main.timeForVisualEffects * 0.1)).RotatedBy(x / 4d * Math.PI);
@@ -63,7 +63,7 @@ public class MothEye : ModItem
 		}
 		else
 		{
-			Texture2D mEyeTex = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_GlowOff");
+			Texture2D mEyeTex = ModAsset.MothEye_GlowOff.Value;
 			for (int x = 0; x < 8; x++)
 			{
 				Vector2 v0 = new Vector2(0, 8 + 3f * (float)Main.timeForVisualEffects).RotatedBy(x / 4d * Math.PI);
@@ -72,33 +72,6 @@ public class MothEye : ModItem
 			spriteBatch.Draw(mEyeTex, position, null, drawColor, 0f, origin, scale, 0, 0f);
 		}
 	}
-
-	//public override void UpdateInventory(Player player) //KEEP FOR REFERENCE
-	//{
-	//    bool hasMothEye = false;
-	//    foreach (var item in player.armor)
-	//    {
-	//        if (item.type == ModContent.ItemType<Items.Accessories.MothEye>())
-	//        {
-	//            hasMothEye = true;
-	//            break;
-	//        }
-	//    }
-	//    base.UpdateInventory(player);
-	//}
-
-	//public override void EquipFrameEffects(Player player, EquipType type)
-	//{
-	//    if (fireflyBiome.IsBiomeActive(player))
-	//    {
-	//        Texture2D mEyeTex1 = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_Neck");
-	//    }
-	//    else
-	//    {
-	//        Texture2D mEyeTex2 = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_NeckOff");
-	//        EquipTexture.Equals(mEyeTex2, type);
-	//    }
-	//}
 	//TODO:DIDNOT FINISH Equipped Effect:Change texture in Firefly biome, fail.
 }
 class MothEyePlayer : ModPlayer
@@ -139,13 +112,5 @@ class MothEyePlayer : ModPlayer
 			}
 		}
 	}
-	//public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit) //Example use of MothEyeEquipped
-	//{
-	//    if (MothEyeEquipped == true)
-	//    {
-	//        target.AddBuff(BuffID.Bleeding, 300);
-	//    }
-	//    base.OnHitNPC(item, target, damage, knockback, crit);
-	//}
 }
  //   TODO: Finish Item Equip Effects (Displays a different equip texture when in the Firefly Biome, See MothEye_Neck.png and MothEye_NeckOff.png

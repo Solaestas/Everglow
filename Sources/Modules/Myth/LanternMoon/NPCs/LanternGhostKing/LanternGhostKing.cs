@@ -536,7 +536,7 @@ public class LanternGhostKing : ModNPC
 			}
 		}
 
-		Texture2D tex0 = MythContent.QuickTexture("LanternMoon/NPCs/LanternFlame0");
+		Texture2D tex0 = ModAsset.LanternFlame0.Value;
 		DrawFlameRing((float)Main.timeForVisualEffects * 0.04f, 1300, RingCenter - Main.screenPosition, tex0);
 
 	}

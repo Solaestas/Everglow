@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria.GameContent;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
@@ -127,7 +127,7 @@ public class MothMagicArray : ModProjectile
 
 		//鼠标圈
 
-		t = MythContent.QuickTexture("TheFirefly/Projectiles/GlowFanTex/BlueFlyD");
+		t = ModAsset.BlueFlyD.Value;
 		Main.spriteBatch.Draw(t, Main.MouseScreen, null, new Color(0.5f, 0.5f, 0.5f, 0), 0, t.Size() / 2f, 0.75f, SpriteEffects.None, 0);
 
 		//攻击位置,此处顺带标记距离小于120的
@@ -161,11 +161,11 @@ public class MothMagicArray : ModProjectile
 				Vx.Add(new Vertex2D(v2 + v1, color3, new Vector3((1 + h) / 30f % 1f, 0, 0)));
 				Vx.Add(new Vertex2D(v2, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 			}
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/Circle0");
+			t = ModAsset.Circle0.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/GlowFanTex/BlueFlyD");
+			t = ModAsset.BlueFlyD.Value;
 			Main.spriteBatch.Draw(t, v2, null, new Color(0.5f * k, 0.5f * k, 0.5f * k, 0f * k), 0, t.Size() / 2f, 0.75f, SpriteEffects.None, 0);
 		}
 
@@ -178,7 +178,7 @@ public class MothMagicArray : ModProjectile
 			Vx.Add(new Vertex2D(vf + v1, color2, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
 			Vx.Add(new Vertex2D(vf, color2, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 		}
-		t = MythContent.QuickTexture("TheFirefly/Projectiles/Circle0");
+		t = ModAsset.Circle0.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
@@ -192,7 +192,7 @@ public class MothMagicArray : ModProjectile
 			Vx2.Add(new Vertex2D(vf + v1, color4, new Vector3((1 + h) / 30f % 1f, 0, 0)));
 			Vx2.Add(new Vertex2D(vf, color4, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 		}
-		t = MythContent.QuickTexture("TheFirefly/Projectiles/Circle1");
+		t = ModAsset.Circle1.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 
@@ -215,7 +215,7 @@ public class MothMagicArray : ModProjectile
 				Vx3.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 			}
 		}
-		t = MythContent.QuickTexture("TheFirefly/Projectiles/Circle2");
+		t = ModAsset.Circle2.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx3.ToArray(), 0, Vx3.Count / 3);
 
@@ -275,7 +275,6 @@ public class MothMagicArray : ModProjectile
 				}
 			}
 		}
-		//DrawCircle(Rad * 0.8f, 25 * Rad / 90f + 12, new Color(0f, 0f, 1f, 0f), Projectile.Center - Main.screenPosition);
 	}
 
 	public override bool PreDraw(ref Color lightColor)
@@ -283,20 +282,6 @@ public class MothMagicArray : ModProjectile
 		return true;
 	}
 
-	//public void drawwarp(vfxbatch sb)
-	//{
-	//    float rad;
-	//    if (projectile.timeleft >= 20)
-	//    {
-	//        rad = math.min(projectile.localai[0] * 3, 90);
-	//    }
-	//    else
-	//    {
-	//        rad = math.min(projectile.localai[0] * 3, 90) * projectile.timeleft / 20f;
-	//    }
-	//    rad = rad * rad / 90f;
-	//    drawcircle(sb,rad * 0.6f, 45 * rad / 90f + 18, new color(1f, 0.24f, 0, 0f), projectile.center - main.screenposition);
-	//}
 	private static void DrawCircle(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, bool Black = false)
 	{
 		var circle = new List<Vertex2D>();
@@ -309,9 +294,9 @@ public class MothMagicArray : ModProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, radius + width), color, new Vector3(0.5f, 0, 0)));
 		if (circle.Count > 0)
 		{
-			Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+			Texture2D t = ModAsset.Wave.Value;
 			if (Black)
-				t = MythContent.QuickTexture("OmniElementItems/Projectiles/WaveBlack");
+				t = ModAsset.WaveBlack.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
@@ -328,7 +313,7 @@ public class MothMagicArray : ModProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, radius + width), color, new Vector3(0.5f, 0, 0)));
 		if (circle.Count > 0)
 		{
-			Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/FireLight");
+			Texture2D t = ModAsset.FireLight.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}

@@ -115,7 +115,7 @@ public class BloodLampProj : ModProjectile
 				if (!NoPedal[x] && x == 1)
 				{
 					var Cen2 = new Vector2(19f, 19f);
-					Texture2D Glow = MythContent.QuickTexture("LanternMoon/Projectiles/BloodLampFrame/BloodLamp_Glow");
+					Texture2D Glow = ModAsset.BloodLamp_Glow.Value;
 					Main.spriteBatch.Draw(Glow, Projectile.Center - Main.screenPosition + Cen2 - Glow.Size() / 2f/*坐标校正*/, null, new Color(Col, Col, Col, 0), Projectile.rotation, Cen2, 1, SpriteEffects.None, 0);
 				}
 			}

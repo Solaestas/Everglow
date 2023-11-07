@@ -147,7 +147,7 @@ public class Hepuyuan : ModItem
 		var slotSize = new Vector2(42f, 42f);
 		position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
 		Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f;
-		Texture2D RArr = MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/Hepuyuan/RightGreenSpice");
+		Texture2D RArr = ModAsset.RightGreenSpice.Value;
 		if (!Main.gamePaused)
 		{
 			if (!CanDown)

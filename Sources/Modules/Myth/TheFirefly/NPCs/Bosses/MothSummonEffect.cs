@@ -152,7 +152,7 @@ public class MothSummonEffect : ModNPC
 				triangleList.Add(bars[i + 2]);
 				triangleList.Add(bars[i + 3]);
 			}
-			Texture2D t = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/MeteroD");
+			Texture2D t = ModAsset.MeteroD.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			if (triangleList.Count > 3)
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);

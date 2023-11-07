@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
 
@@ -25,7 +25,7 @@ public class GoldRoundYoyo : ModProjectile
 	}
 	public override void PostDraw(Color lightColor)
 	{
-		Texture2D texture = MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/GoldRoundYoyoGlow");
+		Texture2D texture = ModAsset.GoldRoundYoyoGlow.Value;
 		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(255, 255, 255, 0), Projectile.rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), Projectile.scale, SpriteEffects.None, 0);
 	}
 }
