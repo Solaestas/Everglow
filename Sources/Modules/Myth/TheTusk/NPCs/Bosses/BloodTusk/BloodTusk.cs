@@ -1,5 +1,3 @@
-using Everglow.Myth.Acytaea.Projectiles;
-using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -83,9 +81,9 @@ public class BloodTusk : ModNPC
 	private bool Transparent = false;
 	private int fir = 9999999;
 	private int Dam = 0;
-	public static int[] N = new int[4];
-	public static Vector2 Cen;
-	public static int secondStageHeadSlot = -1;
+	public NPC[] FlyingTentacleTusks = new NPC[4];
+	public Vector2 LookingCenter;
+	public int secondStageHeadSlot = -1;
 	private float Hm = 0;
 	public override void OnKill()
 	{
@@ -1242,17 +1240,25 @@ public class BloodTusk : ModNPC
 				iMax = 3;
 			if (Main.masterMode)
 				iMax = 4;
-			Cen = NPC.Center + new Vector2(-3, 90);
+			LookingCenter = NPC.Center + new Vector2(-3, 90);
 			NPC.localAI[1] += 1;
-			if (summon)
+			if (NoTentacle)
 			{
 				if (NPC.localAI[0] > 600)
 				{
 					for (int i = 0; i < iMax; i++)
 					{
-						N[i] = NPC.NewNPC(null, (int)(NPC.Center.X + 12), (int)(NPC.Center.Y + 90), ModContent.NPCType<CrimsonTuskControlable>(), 0, -1, i, (i - 1.5f) * 0.7f);
+						FlyingTentacleTusks[i] = NPC.NewNPCDirect(null, (int)(NPC.Center.X + 12), (int)(NPC.Center.Y + 90), ModContent.NPCType<CrimsonTuskControlable>(), 0, -1, i, (i - 1.5f) * 0.7f);
+						if(FlyingTentacleTusks[i] != null)
+						{
+							CrimsonTuskControlable ctct = FlyingTentacleTusks[i].ModNPC as CrimsonTuskControlable;
+							if(ctct != null)
+							{
+								ctct.Owner = NPC;
+							}
+						}
 					}
-					summon = false;
+					NoTentacle = false;
 				}
 			}
 			if (NPC.life >= NPC.lifeMax * 0.5)
@@ -1263,22 +1269,25 @@ public class BloodTusk : ModNPC
 					{
 						if (NPC.localAI[1] % 200 > i * 50 && NPC.localAI[1] % 200 < (i + 1) * 50)
 						{
-							Vector2 v = player.Center - Main.npc[N[i]].Center;
+							Vector2 v = player.Center - FlyingTentacleTusks[i].Center;
 							if (i % 2 == 0)
 								v = new Vector2(-v.X, v.Y);
 							v = v / v.Length() * 7f;
-							Main.npc[N[i]].velocity = Main.npc[N[i]].velocity * 0.95f + v * 0.05f;
+							FlyingTentacleTusks[i].velocity = FlyingTentacleTusks[i].velocity * 0.95f + v * 0.05f;
 							int k = i + 1;
 							if (k >= 4)
 								k = 0;
-							v = player.Center - Main.npc[N[k]].Center;
-							if (i % 2 == 0)
-								v = new Vector2(-v.X, v.Y);
-							v = v / v.Length() * 7f;
-							Main.npc[N[k]].velocity = Main.npc[N[k]].velocity * 0.975f + v * 0.025f;
+							if (FlyingTentacleTusks[k] != null && FlyingTentacleTusks[k].active && FlyingTentacleTusks[k].type == ModContent.NPCType<CrimsonTuskControlable>())
+							{
+								v = player.Center - FlyingTentacleTusks[k].Center;
+								if (i % 2 == 0)
+									v = new Vector2(-v.X, v.Y);
+								v = v / v.Length() * 7f;
+								FlyingTentacleTusks[k].velocity = FlyingTentacleTusks[k].velocity * 0.975f + v * 0.025f;
+							}
 						}
-						if (Main.npc[N[i]].Center.Y > NPC.Center.Y - 240)
-							Main.npc[N[i]].velocity.Y -= 0.25f;
+						if (FlyingTentacleTusks[i].Center.Y > NPC.Center.Y - 240)
+							FlyingTentacleTusks[i].velocity.Y -= 0.25f;
 						Back[i] = false;
 					}
 					if (NPC.localAI[1] > 600)
@@ -1286,20 +1295,26 @@ public class BloodTusk : ModNPC
 				}
 				else
 				{
-					for (int i = 0; i < iMax; i++)
+					if (!NoTentacle)
 					{
-						Vector2 v = Cen - Main.npc[N[i]].Center;
-						if (v.Length() > 10 && !Back[i])
+						for (int i = 0; i < iMax; i++)
 						{
-							v = v / v.Length() * 10f;
-							Main.npc[N[i]].velocity = Main.npc[N[i]].velocity * 0.95f + v * 0.05f;
-						}
-						else
-						{
-							if (!Back[i])
-								Back[i] = true;
-							Main.npc[N[i]].position = Cen - new Vector2(15, 20);
-							Main.npc[N[i]].velocity = Main.npc[N[i]].velocity / Main.npc[N[i]].velocity.Length() * 0.5f;
+							if (FlyingTentacleTusks[i] != null && FlyingTentacleTusks[i].active && FlyingTentacleTusks[i].type == ModContent.NPCType<CrimsonTuskControlable>())
+							{
+								Vector2 v = LookingCenter - FlyingTentacleTusks[i].Center;
+								if (v.Length() > 10 && !Back[i])
+								{
+									v = v / v.Length() * 10f;
+									FlyingTentacleTusks[i].velocity = FlyingTentacleTusks[i].velocity * 0.95f + v * 0.05f;
+								}
+								else
+								{
+									if (!Back[i])
+										Back[i] = true;
+									FlyingTentacleTusks[i].position = LookingCenter - new Vector2(15, 20);
+									FlyingTentacleTusks[i].velocity = FlyingTentacleTusks[i].velocity / FlyingTentacleTusks[i].velocity.Length() * 0.5f;
+								}
+							}					
 						}
 					}
 				}
@@ -1310,25 +1325,31 @@ public class BloodTusk : ModNPC
 				{
 					for (int i = 0; i < iMax; i++)
 					{
-						if (NPC.localAI[1] % 200 > i * 50 && NPC.localAI[1] % 200 < (i + 1) * 50)
+						if (FlyingTentacleTusks[i] != null && FlyingTentacleTusks[i].active && FlyingTentacleTusks[i].type == ModContent.NPCType<CrimsonTuskControlable>())
 						{
-							Vector2 v = player.Center - Main.npc[N[i]].Center;
-							if (i % 2 == 0)
-								v = new Vector2(-v.X, v.Y);
-							v = v / v.Length() * 7f;
-							Main.npc[N[i]].velocity = Main.npc[N[i]].velocity * 0.95f + v * 0.05f;
-							int k = i + 1;
-							if (k >= 4)
-								k = 0;
-							v = player.Center - Main.npc[N[k]].Center;
-							if (i % 2 == 0)
-								v = new Vector2(-v.X, v.Y);
-							v = v / v.Length() * 7f;
-							Main.npc[N[k]].velocity = Main.npc[N[k]].velocity * 0.975f + v * 0.025f;
+							if (NPC.localAI[1] % 200 > i * 50 && NPC.localAI[1] % 200 < (i + 1) * 50)
+							{
+								Vector2 v = player.Center - FlyingTentacleTusks[i].Center;
+								if (i % 2 == 0)
+									v = new Vector2(-v.X, v.Y);
+								v = v / v.Length() * 7f;
+								FlyingTentacleTusks[i].velocity = FlyingTentacleTusks[i].velocity * 0.95f + v * 0.05f;
+								int k = i + 1;
+								if (k >= 4)
+									k = 0;
+								if (FlyingTentacleTusks[k] != null && FlyingTentacleTusks[k].active && FlyingTentacleTusks[k].type == ModContent.NPCType<CrimsonTuskControlable>())
+								{
+									v = player.Center - FlyingTentacleTusks[k].Center;
+									if (i % 2 == 0)
+										v = new Vector2(-v.X, v.Y);
+									v = v / v.Length() * 7f;
+									FlyingTentacleTusks[k].velocity = FlyingTentacleTusks[k].velocity * 0.975f + v * 0.025f;
+								}
+							}
+							if (FlyingTentacleTusks[i].Center.Y > NPC.Center.Y - 240)
+								FlyingTentacleTusks[i].velocity.Y -= 0.25f;
+							Back[i] = false;
 						}
-						if (Main.npc[N[i]].Center.Y > NPC.Center.Y - 240)
-							Main.npc[N[i]].velocity.Y -= 0.25f;
-						Back[i] = false;
 					}
 					if (NPC.localAI[1] > 600)
 						NPC.localAI[1] = 0;
@@ -1337,18 +1358,21 @@ public class BloodTusk : ModNPC
 				{
 					for (int i = 0; i < iMax; i++)
 					{
-						Vector2 v = Cen - Main.npc[N[i]].Center;
-						if (v.Length() > 10 && !Back[i])
+						if (FlyingTentacleTusks[i] != null && FlyingTentacleTusks[i].active && FlyingTentacleTusks[i].type == ModContent.NPCType<CrimsonTuskControlable>())
 						{
-							v = v / v.Length() * 10f;
-							Main.npc[N[i]].velocity = Main.npc[N[i]].velocity * 0.95f + v * 0.05f;
-						}
-						else
-						{
-							if (!Back[i])
-								Back[i] = true;
-							Main.npc[N[i]].position = Cen - new Vector2(15, 20);
-							Main.npc[N[i]].velocity = Main.npc[N[i]].velocity / Main.npc[N[i]].velocity.Length() * 0.5f;
+							Vector2 v = LookingCenter - FlyingTentacleTusks[i].Center;
+							if (v.Length() > 10 && !Back[i])
+							{
+								v = v / v.Length() * 10f;
+								FlyingTentacleTusks[i].velocity = FlyingTentacleTusks[i].velocity * 0.95f + v * 0.05f;
+							}
+							else
+							{
+								if (!Back[i])
+									Back[i] = true;
+								FlyingTentacleTusks[i].position = LookingCenter - new Vector2(15, 20);
+								FlyingTentacleTusks[i].velocity = FlyingTentacleTusks[i].velocity / FlyingTentacleTusks[i].velocity.Length() * 0.5f;
+							}
 						}
 					}
 				}
@@ -1358,7 +1382,7 @@ public class BloodTusk : ModNPC
 		{
 			for (int i = 0; i < iMax; i++)
 			{
-				Main.npc[N[i]].ai[3] = 30;
+				FlyingTentacleTusks[i].ai[3] = 30;
 			}
 			NPC.alpha += 5;
 			if (NPC.alpha > 250)
@@ -1712,7 +1736,7 @@ public class BloodTusk : ModNPC
 		return true;
 	}
 	private bool[] Back = new bool[4];
-	private bool summon = true;
+	public bool NoTentacle = true;
 	private int iMax = 0;
 	private bool HasbeenKilled = false;
 	public static int Killing = 0;
@@ -1752,7 +1776,7 @@ public class BloodTusk : ModNPC
 				Killing = 180;
 				for (int i = 0; i < iMax; i++)
 				{
-					Main.npc[N[i]].ai[3] = 30;
+					FlyingTentacleTusks[i].ai[3] = 30;
 				}
 			}
 		}

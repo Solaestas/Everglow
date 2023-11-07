@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+using Terraria.DataStructures;
+using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
 
@@ -35,10 +36,43 @@ public class CrimsonTuskControlable : ModNPC
 	}
 	private bool start = true;
 	private Vector2[] vpos = new Vector2[400];
+	public NPC Owner;
+	public override void OnSpawn(IEntitySource source)
+	{
+		if (Owner == null)
+		{
+			foreach (NPC npc in Main.npc)
+			{
+				if (npc != null && npc.active)
+				{
+					if (npc.type == ModContent.NPCType<BloodTusk>())
+					{
+						if ((npc.Center - NPC.Center).Length() < 20000)
+						{
+							Owner = npc;
+							break;
+						}
+					}
+				}
+			}
+			if (Owner == null)
+			{
+				NPC.active = false;
+				return;
+			}
+		}
+	}
 	public override void AI()
 	{
+		if (Owner == null)
+		{
+			NPC.active = false;
+			return;
+		}
+		BloodTusk bloodTusk = Owner.ModNPC as BloodTusk;
+		bloodTusk.FlyingTentacleTusks[(int)NPC.ai[1]] = NPC;
 		NPC.TargetClosest(true);
-		BloodTusk.N[(int)NPC.ai[1]] = NPC.whoAmI;
+
 		if (start)
 		{
 			NPC.velocity = new Vector2(0, -7f).RotatedBy(NPC.ai[0] * NPC.ai[2] / 4d);
@@ -46,11 +80,11 @@ public class CrimsonTuskControlable : ModNPC
 		}
 		NPC.rotation = (float)(Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + Math.PI / 2d);
 
-		length = (NPC.Center - BloodTusk.Cen).Length();
+		length = (NPC.Center - bloodTusk.LookingCenter).Length();
 		if (length > 700)
 		{
 			NPC.velocity *= 0.9f;
-			NPC.velocity -= (NPC.Center - BloodTusk.Cen) / length;
+			NPC.velocity -= (NPC.Center - bloodTusk.LookingCenter) / length;
 		}
 
 	}
@@ -158,6 +192,12 @@ public class CrimsonTuskControlable : ModNPC
 	private Vector2[] Dvkil = new Vector2[400];
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
+		if (Owner == null)
+		{
+			NPC.active = false;
+			return;
+		}
+		BloodTusk bloodTusk = Owner.ModNPC as BloodTusk;
 		if (length < 15)
 			return;
 		Main.spriteBatch.End();
@@ -184,7 +224,7 @@ public class CrimsonTuskControlable : ModNPC
 			}
 			else
 			{
-				vpos[i] = vpos[i - 1] + (vpos[i - 1] - vpos[i - 2]) * 0.95f + (BloodTusk.Cen - vpos[i - 1]) / (BloodTusk.Cen - vpos[i - 1]).Length() * 0.2f;
+				vpos[i] = vpos[i - 1] + (vpos[i - 1] - vpos[i - 2]) * 0.95f + (bloodTusk.LookingCenter - vpos[i - 1]) / (bloodTusk.LookingCenter - vpos[i - 1]).Length() * 0.2f;
 			}
 			if (killing == 179)
 				Prevkilpos[i] = vpos[i];
@@ -217,12 +257,12 @@ public class CrimsonTuskControlable : ModNPC
 			}
 			if (killing is < 178 and > 0)
 			{
-				if ((vkilpos[i] - BloodTusk.Cen).Length() < 6)
+				if ((vkilpos[i] - bloodTusk.LookingCenter).Length() < 6)
 					break;
 			}
 			else
 			{
-				if ((vpos[i] - BloodTusk.Cen).Length() < 6)
+				if ((vpos[i] - bloodTusk.LookingCenter).Length() < 6)
 					break;
 			}
 		}

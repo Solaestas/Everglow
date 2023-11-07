@@ -1,4 +1,3 @@
-using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
@@ -48,7 +47,10 @@ public class EarthTuskHostile : ModProjectile
 			times++;
 			CheckCenter = Projectile.Center + new Vector2(times * Projectile.ai[1], 0).RotatedBy(times / 6f * Projectile.ai[1]);
 			if (times > 256)
+			{
 				Projectile.Kill();
+				break;
+			}
 
 		}
 		Projectile.velocity *= 0;
