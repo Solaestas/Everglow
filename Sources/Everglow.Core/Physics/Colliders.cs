@@ -3,26 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Physics
 {
-    internal class Polygon
+    public class Polygon
     {
         public List<Vector2> Points;
     }
-    internal interface ICollider2D
+    public interface ICollider2D
     {
         Vector3 GetSDFWithGradient(Vector2 position);
         bool Intersect(ICollider2D other);
         bool Contains(Vector2 position);
     }
 
-    internal interface IPolygonalCollider2D : ICollider2D
+    public interface IPolygonalCollider2D : ICollider2D
     {
         Polygon GetPolygon();
     }
 
-    internal class AABBCollider2D : IPolygonalCollider2D
+    public class AABBCollider2D : IPolygonalCollider2D
     {
         public Vector2 Center
         {
@@ -77,7 +78,7 @@ namespace Everglow.Commons.Physics
         }
     }
 
-    internal class TileTriangleCollider2D : IPolygonalCollider2D
+    public class TileTriangleCollider2D : IPolygonalCollider2D
     {
         public Vector2 Center
         {
@@ -123,7 +124,14 @@ namespace Everglow.Commons.Physics
             Vector2 proj = Vector2.Dot(d, p) * d;
             Vector2 N = p - proj;
             float x = Math.Sign(-cross(d, p)) * N.Length();
-            N = N.SafeNormalize(new Vector2(-d.Y, d.X));
+			if(N != Vector2.zeroVector)
+			{
+				N = N.NormalizeSafe();
+			}
+			else
+			{
+				N = new Vector2(-d.Y, d.X);
+			}
             return new Vector3(x, N.X, N.Y);
         }
 
