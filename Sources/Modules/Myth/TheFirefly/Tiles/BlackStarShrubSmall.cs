@@ -84,7 +84,7 @@ public class BlackStarShrubSmall : ModTile, ITileFluentlyDrawn
 		var tileDrawing = drawInfo.TileDrawing;
 	
 		// 回声涂料	
-		if (!tileDrawing.IsVisible(Main.tile[tilePos])) return;	
+		if (!TileDrawing.IsVisible(Main.tile[tilePos])) return;	
 		
 		var tile = Main.tile[tilePos];
 		ushort type = tile.TileType;
