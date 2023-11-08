@@ -2,6 +2,7 @@ using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 using Everglow.Myth.TheFirefly.Buffs;
 using Everglow.Myth.TheFirefly.VFXs;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -68,6 +69,21 @@ public class MothBallExplosion : ModProjectile, IWarpProjectile
 				ai = new float[] { 0, 0, 0 }
 			};
 			Ins.VFXManager.Add(electric);
+		}
+
+		// 生成分叉闪电
+		int totalLightnings = (int)(Frequency * 0.2);
+		float angleDivision = (float)(Math.PI * 2 / totalLightnings);
+		for (int g = 0; g < totalLightnings; g++)
+		{
+			float randScale = Main.rand.NextFloat(0.75f, 1.0f);
+			var lightning = new BranchedLightning(
+				250f * randScale, 
+				15f * randScale, 
+				Projectile.position, 
+				g * angleDivision * + Main.rand.NextFloat(angleDivision), 
+				50f * randScale);
+			Ins.VFXManager.Add(lightning);
 		}
 	}
 	public void GenerateSmog(int Frequency)

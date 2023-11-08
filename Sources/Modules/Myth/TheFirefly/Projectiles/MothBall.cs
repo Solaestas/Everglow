@@ -18,6 +18,13 @@ public class MothBall : ModProjectile
 		Projectile.timeLeft = 300;
 		Projectile.tileCollide = false;
 	}
+
+	public void GenerateBranchedLighting()
+	{
+		var lightning = new BranchedLightning(100f, 9f ,Projectile.position, Main.rand.NextVector2Unit().ToRotation(), 25f);
+		Ins.VFXManager.Add(lightning);
+	}
+
 	public void GenerateLightingBolt()
 	{
 		float size = Main.rand.NextFloat(18f, Main.rand.NextFloat(20f, 40f));
@@ -48,7 +55,14 @@ public class MothBall : ModProjectile
 		{
 			Projectile.velocity *= 0.95f;
 			Projectile.scale *= 0.97f;
-			GenerateLightingBolt();
+
+			if (Projectile.timeLeft > 10 && Main.rand.NextFloat() < (0.2 + 0.3 * (50 - Projectile.timeLeft) / 40))
+			{
+				GenerateBranchedLighting();
+			} else
+			{
+				GenerateLightingBolt();
+			}
 		}
 		else
 		{
@@ -113,10 +127,10 @@ public class MothBall : ModProjectile
 				}
 			}
 		}
-
-		//Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
-	}
-	public override bool PreDraw(ref Color lightColor)
+        // base.OnKill(timeLeft);
+        //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
+    }
+    public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D Light = ModAsset.CorruptLight.Value;
 		int frameX = (Projectile.frame % 6);
