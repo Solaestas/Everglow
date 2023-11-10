@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Terraria.GameContent;
@@ -198,12 +199,9 @@ public class Skeleton2D
 
 	public void DrawDebugView(SpriteBatch sb)
 	{
-		var state = GraphicsUtils.SaveSpriteBatchState(sb);
-		sb.End();
+		using((SpriteBatchState.Immediate with { BlendState = BlendState.NonPremultiplied }).BeginScope(sb))
 		{
-			sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 			Render(sb);
-			sb.End();
 			Main.graphics.GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };
 			// 这里使用SpriteBatch默认Shader绘制三角形
 
@@ -211,6 +209,5 @@ public class Skeleton2D
 
 			RenderBones_Debug();
 		}
-		GraphicsUtils.RestoreSpriteBatchState(sb, state);
 	}
 }

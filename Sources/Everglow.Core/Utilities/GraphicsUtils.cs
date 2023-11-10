@@ -1,13 +1,20 @@
+using Everglow.Commons.DataStructures;
+
 namespace Everglow.Commons.Utilities;
 
 public static class GraphicsUtils
 {
-	public record struct SpriteBatchState(
-		SpriteSortMode SortMode,
-		BlendState BlendState,
-		SamplerState SamplerState,
-		DepthStencilState DepthStencilState,
-		RasterizerState RasterizerState);
+	public static void Begin(this SpriteBatch spriteBatch, SpriteBatchState state)
+	{
+		spriteBatch.Begin(
+			state.SortMode,
+			state.BlendState,
+			state.SamplerState,
+			state.DepthStencilState,
+			state.RasterizerState,
+			state.Effect,
+			state.TransformMatrix);
+	}
 
 	/// <summary>
 	/// 根据输入点的List获得一个使用CatmullRom样条平滑过后的路径
@@ -37,8 +44,8 @@ public static class GraphicsUtils
 
 		for (int i = 1; i < count; i++)
 		{
-			float rotCurrent = (path[i] - path[i - 1]).ToRotation();
-			float rotNext = (path[i + 2] - path[i + 1]).ToRotation();
+			float rotCurrent = new Rotation(path[i] - path[i - 1]).Radian;
+			float rotNext = new Rotation(path[i + 2] - path[i + 1]).Radian;
 			int dom;
 			if (precision is null)
 			{
@@ -66,43 +73,20 @@ public static class GraphicsUtils
 		result.Add(path[^2]);
 		return result;
 	}
-	public static SpriteBatchState SaveSpriteBatchState(SpriteBatch sb)
-	{
-		return new SpriteBatchState(sb.sortMode, sb.blendState, sb.samplerState, sb.depthStencilState, sb.rasterizerState);
-	}
 
-	public static void RestoreSpriteBatchState(SpriteBatch sb, SpriteBatchState state)
+	public static SpriteBatchState? GetState(this SpriteBatch spriteBatch)
 	{
-		Debug.Assert(!sb.beginCalled);
-		sb.Begin(state.SortMode, state.BlendState, state.SamplerState, state.DepthStencilState, state.RasterizerState);
-	}
-
-	private static Stack<SpriteBatchState> states = new Stack<SpriteBatchState>();
-	/// <summary>
-	/// 储存SpriteBatch当前的状态，如果BeginCalled，则调用End
-	/// </summary>
-	/// <param name="sb"></param>
-	public static void PushSpriteBatchState(SpriteBatch sb)
-	{
-		states.Push(new SpriteBatchState(sb.sortMode, sb.blendState, sb.samplerState, sb.depthStencilState, sb.rasterizerState));
-		if (sb.beginCalled)
+		if (!spriteBatch.beginCalled)
 		{
-			sb.End();
+			return null;
 		}
+		return new SpriteBatchState(
+			spriteBatch.sortMode,
+			spriteBatch.blendState,
+			spriteBatch.samplerState,
+			spriteBatch.depthStencilState,
+			spriteBatch.rasterizerState,
+			spriteBatch.transformMatrix,
+			spriteBatch.customEffect);
 	}
-
-	/// <summary>
-	/// 弹出SpiteBatch的状态然后Begin，如果尚未End则调用End
-	/// </summary>
-	/// <param name="sb"></param>
-	public static void PopSpriteBatchState(SpriteBatch sb)
-	{
-		if (sb.beginCalled)
-		{
-			sb.End();
-		}
-		var state = states.Pop();
-		sb.Begin(state.SortMode, state.BlendState, state.SamplerState, state.DepthStencilState, state.RasterizerState);
-	}
-
 }
