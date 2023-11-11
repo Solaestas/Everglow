@@ -731,10 +731,10 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildTownBelow()
 	{
-		int randX = AzureGrottoCenterX + 200;
+		int randX = AzureGrottoCenterX + 100;
 		if (AzureGrottoCenterX > 600)
 		{
-			randX = AzureGrottoCenterX - 200 - 434;
+			randX = AzureGrottoCenterX - 100 - 434;
 		}
 		QuickBuild(randX, 11400, "YggdrasilTown/MapIOs/434x159YggdrasilTown.mapio");
 		int randY = GenRand.Next(512);
@@ -894,8 +894,7 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
-		WorldUtils.Gen(treeRotPos, new ModShapes.InnerOutline(shapeData, true), new Actions.SetTile((ushort)ModContent.TileType<FemaleLampWood>(), true));
-		WorldUtils.Gen(treeRotPos, new ModShapes.InnerOutline(shapeData, true), new Actions.PlaceWall((ushort)ModContent.WallType<FemaleLampWoodWall>()));
+
 		for(int i = -250;i < 251;i++)
 		{
 			for (int j = -100; j < 101; j++)
