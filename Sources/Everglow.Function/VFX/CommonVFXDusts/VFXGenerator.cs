@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework.Input;
 using SteelSeries.GameSense;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
@@ -309,12 +310,7 @@ class VFXGenerator : ModItem
 				break;
 			case 13:
 				{
-					var lightning = new BranchedLightning
-					{
-						position = Main.MouseWorld,
-						rotation = Main.rand.NextVector2Unit().ToRotation(),
-						maxTime = 300
-					};
+					var lightning = new BranchedLightning(100f, 9f, Main.MouseWorld, Main.rand.NextVector2Unit().ToRotation(), 300f, (float)(Math.PI/30));
 					Ins.VFXManager.Add(lightning);
 				}
 				break;

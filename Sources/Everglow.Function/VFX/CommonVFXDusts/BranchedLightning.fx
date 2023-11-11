@@ -33,6 +33,7 @@ float uBlurProportion;
 float4x4 uTransform;
 
 float uDisplacementShift;
+float uDisplacementPeriod;
 
 struct VSInput
 {
@@ -58,6 +59,11 @@ PSInput VertexShaderFunction(VSInput input)
     return output;
 }
 
+float PingPong(float val)
+{
+    val %= 2;
+    return val < 1 ? val : (2 - val);
+}
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
@@ -71,8 +77,14 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
         return dotColor * baseColor;
     }
 
-    float rawDisplace = tex2D(uDisplacementSampler, (input.Texcoord.yz % uNoiseSize) / uNoiseSize).r;
-   
+    float2 displaceCoord = (input.Texcoord.yz % uNoiseSize) / uNoiseSize;
+    float rawDisplace = tex2D(uDisplacementSampler, displaceCoord).r;
+    /*
+    float rawDisplace = lerp(
+        tex2D(uDisplacementSampler, displaceCoord).r, 
+        tex2D(uDisplacementSampler, float2(1,1) - displaceCoord).r, 
+        PingPong((uDisplacementShift % uDisplacementPeriod) / uDisplacementPeriod * 2));
+    */
     float refinedDisplace = (rawDisplace - 0.5) * uDisplaceIntensity;
     float currentHalfWidthProportion = input.Texcoord.x * 0.5;
     float distFromCenter = abs(input.Color.r + refinedDisplace - 0.5);
