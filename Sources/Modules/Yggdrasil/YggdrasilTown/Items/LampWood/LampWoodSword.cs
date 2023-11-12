@@ -18,7 +18,6 @@ public class LampWoodSword : ModItem
 		Item.autoReuse = true;
 		Item.DamageType = DamageClass.Melee;
 		Item.noUseGraphic = true;
-		Item.DamageType = DamageClass.Melee;
 		Item.noMelee = true;
 		Item.shootSpeed = 5f;
 		Item.shoot = ModContent.ProjectileType<Projectiles.LampWoodSword_Projectile>();

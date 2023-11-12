@@ -1,34 +1,21 @@
-using Terraria.DataStructures;
+using Everglow.Commons.Weapons.CrossBow;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
-public class CyanVineCrossBow : ModItem
+public class CyanVineCrossBow : CrossBowItem
 {
-	public override void SetDefaults()
+	public override void SetDef()
 	{
 		Item.width = 74;
 		Item.height = 34;
 		Item.rare = ItemRarityID.White;
 		Item.value = 3800;
-
 		Item.useTime = 20;
 		Item.useAnimation = 20;
-		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.autoReuse = true;
-		Item.UseSound = SoundID.Item5;
-
-		Item.DamageType = DamageClass.Ranged;
 		Item.damage = 15;
 		Item.knockBack = 4f;
-		Item.noMelee = true;
-
-		Item.shoot = ProjectileID.WoodenArrowFriendly;
-		Item.shootSpeed = 14f;
-		Item.useAmmo = AmmoID.Arrow;
-	}
-	public override Vector2? HoldoutOffset()
-	{
-		return new Vector2(-12f, 0f);
+		CrossBowProjType = ModContent.ProjectileType<CyanVineCrossBow_Proj>();
 	}
 	public override void AddRecipes()
 	{
@@ -37,9 +24,5 @@ public class CyanVineCrossBow : ModItem
 			.AddIngredient(ModContent.ItemType<StoneDragonScaleWood>(), 12)
 			.AddTile(TileID.WorkBenches)
 			.Register();
-	}
-	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-	{
-		return true;
 	}
 }
