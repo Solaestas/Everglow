@@ -104,6 +104,11 @@ public class RockExplosion_friendly : ModProjectile, IWarpProjectile
 		if (circle.Count > 2)
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
 	}
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		modifiers.HitDirectionOverride = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
+		base.ModifyHitNPC(target, ref modifiers);
+	}
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
