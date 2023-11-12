@@ -20,8 +20,8 @@ sampler_state
     MipFilter = LINEAR;
     MinFilter = LINEAR;
     MagFilter = LINEAR;
-    AddressU = CLAMP;
-    AddressV = CLAMP;
+    AddressU = Wrap;
+    AddressV = Wrap;
 };
 float uDisplaceIntensity;
 float uNoiseSize;
@@ -33,7 +33,8 @@ float uBlurProportion;
 float4x4 uTransform;
 
 float uDisplacementShift;
-float uDisplacementPeriod;
+float uTransitPeriod;
+float uDeformPeriod;
 
 struct VSInput
 {
@@ -77,19 +78,18 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
         return dotColor * baseColor;
     }
 
-    float2 displaceCoord = (input.Texcoord.yz % uNoiseSize) / uNoiseSize;
+    //float2 displaceCoord = (input.Texcoord.yz % uNoiseSize) / uNoiseSize;
+    float2 displaceCoord = float2(
+        input.Texcoord.y + lerp(0, input.Texcoord.z / uNoiseSize, input.Color.r/*+ input.Texcoord.z / uNoiseSize + uDisplacementShift / uTransitPeriod*/),
+        uDisplacementShift / uDeformPeriod);
     float rawDisplace = tex2D(uDisplacementSampler, displaceCoord).r;
-    /*
-    float rawDisplace = lerp(
-        tex2D(uDisplacementSampler, displaceCoord).r, 
-        tex2D(uDisplacementSampler, float2(1,1) - displaceCoord).r, 
-        PingPong((uDisplacementShift % uDisplacementPeriod) / uDisplacementPeriod * 2));
-    */
-    float refinedDisplace = (rawDisplace - 0.5) * uDisplaceIntensity;
+
+    float refinedDisplace = (rawDisplace - 0.5) * uDisplaceIntensity * (-pow(2 * input.Color.r - 1, 6)+1);
     float currentHalfWidthProportion = input.Texcoord.x * 0.5;
-    float distFromCenter = abs(input.Color.r + refinedDisplace - 0.5);
+    float distFromCenter = abs(input.Color.g + refinedDisplace - 0.5);
     float blurProportion = uBlurProportion * (input.Color.a == 0 ? 1: 10);
 
+    // 绘制边缘模糊
     if (distFromCenter > (currentHalfWidthProportion + uBlurProportion))
         return float4(0, 0, 0, 0);
     
@@ -97,8 +97,6 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
         return baseColor * (1.0 - ((distFromCenter - currentHalfWidthProportion) / uBlurProportion));
     
     return baseColor;
-
-    return float4(1, 1, 1, 1);
 }
 
 technique Technique1

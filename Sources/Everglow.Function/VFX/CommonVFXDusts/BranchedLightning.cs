@@ -20,7 +20,8 @@ public class BranchedLightningPipeline : Pipeline
 		effect.Value.Parameters["uLineProportion"].SetValue(BranchedLightning.LINE_PROPORTION);
 		effect.Value.Parameters["uEdgeColor"].SetValue((new Color(0, 200, 255)).ToVector4());
 		effect.Value.Parameters["uBlurProportion"].SetValue(BranchedLightning.BLUR_PROPORTION);
-		effect.Value.Parameters["uDisplacementPeriod"].SetValue(BranchedLightning.DISPLACE_PERIOD);
+		effect.Value.Parameters["uTransitPeriod"].SetValue(BranchedLightning.TRANSIT_PERIOD);
+		effect.Value.Parameters["uDeformPeriod"].SetValue(BranchedLightning.DEFORM_PERIOD);
 	}
 	public override void BeginRender()
 	{
@@ -28,7 +29,7 @@ public class BranchedLightningPipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
-		//effect.Parameters["uDisplacementShift"].SetValue((float)Main.time);
+		effect.Parameters["uDisplacementShift"].SetValue((float)Main.time);
 
 		Texture2D lightningTrail = ModAsset.Trail.Value;
 		Ins.Batch.BindTexture<Vertex2D>(lightningTrail);
@@ -45,7 +46,7 @@ public class BranchedLightningPipeline : Pipeline
 [Pipeline(typeof(BranchedLightningPipeline), typeof(BloomPipeline))]
 public class BranchedLightning : Visual
 {
-	public const int MAX_SEGMENTS = 9;
+	public const int MAX_SEGMENTS = 12;
 	public const float DEFAULT_RENDER_STRIP_WIDTH = 125f;
 
 
@@ -57,14 +58,15 @@ public class BranchedLightning : Visual
 
 	//子分支
 	public const float DEVIATION_ANGLE = (float)Math.PI / 4;
-	public const int MAX_BRANCH_COUNT = 3;
+	public const int MAX_BRANCH_COUNT = 2;
 	public const float WIDTH_DECAY = 0.85f;
 	public const float LENGTH_DECAY = 0.9f;
 	public const float CHILD_ANGLE_AMPLIFICATION = 1.5f;
 
 	//变形
-	public const float DISPLACE_INTENSITY = 0.25f;
-	public const float DISPLACE_PERIOD = 10f;
+	public const float DISPLACE_INTENSITY = 0.5f;
+	public const float TRANSIT_PERIOD = 10f;
+	public const float DEFORM_PERIOD = 60f;
 	public const float NOISE_SIZE = 512;
 	public const float ANGULAR_ACCELERATION_PROPORTION = 0.2f;
 	public const float DEFAULT_ANGULAR_SPEED_LIMIT = (float)(Math.PI/90);
@@ -143,7 +145,6 @@ public class BranchedLightning : Visual
 		// 波动
 		private float angularVel;
 		private float wiggleAngularSpeedLimit;
-		private float displacePhase;
 
 		// 宽度
 		private float widthProportion;
@@ -156,13 +157,15 @@ public class BranchedLightning : Visual
 		private LightningNode parent;
 		private List<LightningNode> children;
 
+		// 噪波
+		private float distortionX;
+
 		public LightningNode(
 			float nodeWidth, 
 			Vector2 rawOffset, 
 			float segmentLength = DEFAULT_SEGMENT_LENGTH, 
 			float renderStripWidth = DEFAULT_RENDER_STRIP_WIDTH ,
 			float wiggleAngularSpeedLimit = DEFAULT_ANGULAR_SPEED_LIMIT,
-			float displacePhase = 0, 
 			LightningNode parentNode = null, 
 			int nodeDepth = 0) 
 		{
@@ -174,7 +177,7 @@ public class BranchedLightning : Visual
 			this.segmentLength = segmentLength;
 			this.renderStripWidth = renderStripWidth;
 			this.wiggleAngularSpeedLimit = wiggleAngularSpeedLimit;
-			this.displacePhase = displacePhase;
+			this.distortionX = Main.rand.NextFloat();
 
 			if (this.depth < MAX_SEGMENTS)
 			{
@@ -334,7 +337,6 @@ public class BranchedLightning : Visual
 					segmentLength,
 					renderStripWidth,
 					wiggleAngularSpeedLimit,
-					0,
 					this,
 					childDepth));
 			}
@@ -394,10 +396,18 @@ public class BranchedLightning : Visual
 				float currentWidth = widthProportion * widthProgress * multiplyFactor;
 				float parentCurrentWidth = parent.widthProportion * parent.widthProgress * multiplyFactor;
 
-				Vertex2D upperLeft = new Vertex2D(parentWorldPos - parentNormalDisplacement, new Color(0f,0,1, useEdgeColor), new Vector3(parentCurrentWidth, parentWorldPos.X, parentWorldPos.Y));
-				Vertex2D upperRight = new Vertex2D(worldPos - normalDisplacement, new Color(0f, 0, 1, useEdgeColor), new Vector3(currentWidth, worldPos.X, worldPos.Y));
-				Vertex2D lowerLeft = new Vertex2D(parentWorldPos + parentNormalDisplacement, new Color(1f, 0, 1, useEdgeColor), new Vector3(parentCurrentWidth, parentWorldPos.X, parentWorldPos.Y));
-				Vertex2D lowerRight = new Vertex2D(worldPos + normalDisplacement, new Color(1f, 0, 1, useEdgeColor), new Vector3(currentWidth, worldPos.X, worldPos.Y));
+				/*
+				Vertex2D upperLeft = new Vertex2D(parentWorldPos - parentNormalDisplacement, new Color(0f,0f,1, useEdgeColor), new Vector3(parentCurrentWidth, parentWorldPos.X, parentWorldPos.Y));
+				Vertex2D upperRight = new Vertex2D(worldPos - normalDisplacement, new Color(1f, 0f, 1, useEdgeColor), new Vector3(currentWidth, worldPos.X, worldPos.Y));
+				Vertex2D lowerLeft = new Vertex2D(parentWorldPos + parentNormalDisplacement, new Color(0f, 1f, 1, useEdgeColor), new Vector3(parentCurrentWidth, parentWorldPos.X, parentWorldPos.Y));
+				Vertex2D lowerRight = new Vertex2D(worldPos + normalDisplacement, new Color(1f, 1f, 1, useEdgeColor), new Vector3(currentWidth, worldPos.X, worldPos.Y));
+				*/
+
+				float offSetLength = rawOffset.Length();
+				Vertex2D upperLeft = new Vertex2D(parentWorldPos - parentNormalDisplacement, new Color(0f, 0f, 1, useEdgeColor), new Vector3(parentCurrentWidth, distortionX, offSetLength));
+				Vertex2D upperRight = new Vertex2D(worldPos - normalDisplacement, new Color(1f, 0f, 1, useEdgeColor), new Vector3(currentWidth, distortionX, offSetLength));
+				Vertex2D lowerLeft = new Vertex2D(parentWorldPos + parentNormalDisplacement, new Color(0f, 1f, 1, useEdgeColor), new Vector3(parentCurrentWidth, distortionX, offSetLength));
+				Vertex2D lowerRight = new Vertex2D(worldPos + normalDisplacement, new Color(1f, 1f, 1, useEdgeColor), new Vector3(currentWidth, distortionX, offSetLength));
 				AddVertexesForOne(barsList, upperLeft, upperRight, lowerLeft, lowerRight);
 			}
 		}
