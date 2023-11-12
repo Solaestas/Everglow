@@ -45,7 +45,6 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     float4 c = tex2D(uShapeTex, float2(coord.x, coord.y)); //主纹理
     c *= tex2D(uColorTex, float2(c.r * coord.z, 0.5)); //乘颜色图
     return c * coord.z;
-
 }
 
 float4 PixelShaderFunction2(PSInput input) : COLOR0
@@ -56,6 +55,14 @@ float4 PixelShaderFunction2(PSInput input) : COLOR0
     float a = 1 - (c.r - 1) * 0.7f;
     c *= a; //乘上透明度
     return c;
+}
+float4 PixelShaderFunction3(PSInput input) : COLOR0
+{
+    float3 coord = input.Texcoord;
+    float4 c = tex2D(uShapeTex, float2(coord.x, coord.y)); //主纹理
+    c *= tex2D(uColorTex, float2(c.r * coord.z, 0.5)); //乘颜色图
+    c *= input.Color;
+    return c * coord.z;
 }
 
 technique Technique1
@@ -69,5 +76,10 @@ technique Technique1
     {
         VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_2_0 PixelShaderFunction2();
+    }
+    pass TrailWithLight
+    {
+        VertexShader = compile vs_2_0 VertexShaderFunction();
+        PixelShader = compile ps_2_0 PixelShaderFunction3();
     }
 }

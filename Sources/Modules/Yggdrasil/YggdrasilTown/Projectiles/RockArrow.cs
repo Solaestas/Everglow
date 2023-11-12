@@ -1,5 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -57,14 +58,14 @@ public class RockArrow : ModProjectile
 	{
 		for (int g = 0; g < Frequency / 2 + 1; g++)
 		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 12f)).RotatedByRandom(MathHelper.TwoPi);
 			var somg = new RockSmogDust
 			{
 				velocity = newVelocity,
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
-				maxTime = Main.rand.Next(37, 45),
+				maxTime = Main.rand.Next(17, 25),
 				scale = Main.rand.NextFloat(40f, 55f),
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
@@ -87,7 +88,14 @@ public class RockArrow : ModProjectile
 		{
 			Dust.NewDust(Projectile.Center - Projectile.velocity * 2 - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone>(), 0f, 0f, 0, default, 0.7f);
 		}
+		for (int x = 0; x < 9; x++)
+		{
+			Dust dust = Dust.NewDustDirect(Projectile.Center - Projectile.velocity * 2 - new Vector2(4), 0, 0, ModContent.DustType<TrailStoneSmokeDust>(), 0f, 0f, 0, default, 0.7f);
+			dust.velocity = new Vector2(0, Main.rand.NextFloat(5f, 13f)).RotatedByRandom(6.283);
+			dust.scale = Main.rand.NextFloat(0.45f, 0.6f);
+		}
 		GenerateSmog(6);
+		SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
 		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<RockExplosion_friendly>(), Projectile.damage, 0, Projectile.owner, 6);
 	}
 	public override bool PreDraw(ref Color lightColor)
