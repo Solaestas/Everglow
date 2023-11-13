@@ -77,16 +77,28 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
         dotColor.a = dotColor.r;
         return dotColor * baseColor;
     }
+    
+    float noiseX = input.Texcoord.y;
+    float noiseRange = input.Texcoord.z;
+    float texU = input.Color.r;
+    float texV = input.Color.g;
 
     //float2 displaceCoord = (input.Texcoord.yz % uNoiseSize) / uNoiseSize;
-    float2 displaceCoord = float2(
-        input.Texcoord.y + lerp(0, input.Texcoord.z / uNoiseSize, input.Color.r/*+ input.Texcoord.z / uNoiseSize + uDisplacementShift / uTransitPeriod*/),
+    float dispLerp = texU - (uDisplacementShift / uTransitPeriod) % 2.0;
+    if (dispLerp < 0 && dispLerp >= -1) {
+        dispLerp *= -1;
+    } else if (dispLerp < -1) {
+        dispLerp += 2;
+    }
+    
+        float2 displaceCoord = float2(
+        noiseX + lerp(0, noiseRange / uNoiseSize, dispLerp /* + uDisplacementShift / uTransitPeriod*/),
         uDisplacementShift / uDeformPeriod);
     float rawDisplace = tex2D(uDisplacementSampler, displaceCoord).r;
 
-    float refinedDisplace = (rawDisplace - 0.5) * uDisplaceIntensity * (-pow(2 * input.Color.r - 1, 6)+1);
+    float refinedDisplace = (rawDisplace - 0.5) * uDisplaceIntensity * (-pow(2 * texU - 1, 6) + 1);
     float currentHalfWidthProportion = input.Texcoord.x * 0.5;
-    float distFromCenter = abs(input.Color.g + refinedDisplace - 0.5);
+    float distFromCenter = abs(texV + refinedDisplace - 0.5);
     float blurProportion = uBlurProportion * (input.Color.a == 0 ? 1: 10);
 
     // 绘制边缘模糊

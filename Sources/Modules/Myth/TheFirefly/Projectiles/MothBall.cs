@@ -56,7 +56,7 @@ public class MothBall : ModProjectile
 			Projectile.velocity *= 0.95f;
 			Projectile.scale *= 0.97f;
 
-			if (Projectile.timeLeft > 10 && Main.rand.NextFloat() < (0.15 + 0.3 * (50 - Projectile.timeLeft) / 40))
+			if (Projectile.timeLeft > 10 && Main.rand.NextFloat() < (0.15 + 0.2 * (50 - Projectile.timeLeft) / 40))
 			{
 				GenerateBranchedLighting();
 			} else

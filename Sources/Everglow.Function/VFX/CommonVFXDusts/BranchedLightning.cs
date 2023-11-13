@@ -60,16 +60,16 @@ public class BranchedLightning : Visual
 	public const float DEVIATION_ANGLE = (float)Math.PI / 4;
 	public const int MAX_BRANCH_COUNT = 2;
 	public const float WIDTH_DECAY = 0.85f;
-	public const float LENGTH_DECAY = 0.9f;
+	public const float LENGTH_DECAY = 0.95f;
 	public const float CHILD_ANGLE_AMPLIFICATION = 1.5f;
 
 	//变形
-	public const float DISPLACE_INTENSITY = 0.5f;
-	public const float TRANSIT_PERIOD = 10f;
-	public const float DEFORM_PERIOD = 60f;
+	public const float DISPLACE_INTENSITY = 0.35f;
+	public const float TRANSIT_PERIOD = 20f;
+	public const float DEFORM_PERIOD = 120f;
 	public const float NOISE_SIZE = 512;
 	public const float ANGULAR_ACCELERATION_PROPORTION = 0.2f;
-	public const float DEFAULT_ANGULAR_SPEED_LIMIT = (float)(Math.PI/90);
+	public const float DEFAULT_ANGULAR_SPEED_LIMIT = (float)(Math.PI/5);
 
 	public const float LINE_PROPORTION = 0.1f;
 	public const float EDGE_LINE_RATIO = 0.15f;
@@ -326,7 +326,7 @@ public class BranchedLightning : Visual
 				{
 					// 非主分支
 					childWidth *= 0.45f;
-					childLengthDecay *= 0.9f;
+					//childLengthDecay *= 0.9f;
 					childAngle *= CHILD_ANGLE_AMPLIFICATION;
 					childDepth += 2;
 				}
