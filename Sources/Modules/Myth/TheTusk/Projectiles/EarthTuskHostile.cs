@@ -1,4 +1,3 @@
-﻿using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
@@ -48,7 +47,10 @@ public class EarthTuskHostile : ModProjectile
 			times++;
 			CheckCenter = Projectile.Center + new Vector2(times * Projectile.ai[1], 0).RotatedBy(times / 6f * Projectile.ai[1]);
 			if (times > 256)
+			{
 				Projectile.Kill();
+				break;
+			}
 
 		}
 		Projectile.velocity *= 0;
@@ -196,7 +198,7 @@ public class EarthTuskHostile : ModProjectile
 			new Vertex2D(ProjCenterII - TenNormalize - Main.screenPosition, EndColor, new Vector3(1, 0, 0))
 		};
 
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheTusk/Projectiles/Textures/Tuskplus" + TextureType.ToString());
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Tuskplus0.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
 
@@ -235,8 +237,6 @@ public class EarthTuskHostile : ModProjectile
 			if (squzze < 0.1f)
 				break;
 		}
-		Vector2 largeFragilesTop = new Vector2(0, -rotateValue * 12 - 4).RotatedBy(Projectile.rotation);
-
 		var Fragiles = new List<Vertex2D>
 		{
 			new Vertex2D(SummonCenterII + fragilesLeft - Main.screenPosition, EndColor, new Vector3(leftX, topY, 0)),

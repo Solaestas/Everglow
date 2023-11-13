@@ -13,22 +13,17 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			TradeLength = 6;
 			TradeShade = 0.3f;
 			Shade = 0.6f;
-			FadeTradeShade = 0.74f;
+			FadeShade = 0.74f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.8f;
 			MaxLength = 1.15f;
 			DrawWidth = 0.4f;
 		}
-		public override void AI()
+		public override void VisualParticle()
 		{
-			base.AI();
 			if (Main.rand.NextBool(2))
 				GenerateVFX(1);
-		}
-		public override void Kill(int timeLeft)
-		{
-
 		}
 		public void GenerateVFX(int Frequency)
 		{
@@ -68,7 +63,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void PostDraw(Color lightColor)
 		{
-			Lighting.AddLight(Projectile.Center + Projectile.velocity, 0.2f * Projectile.timeLeft / TradeLength, 0.24f * Projectile.timeLeft / TradeLength, 0.3f * Projectile.timeLeft / TradeLength);
+			float value = Projectile.timeLeft / TradeLength / (Projectile.extraUpdates + 1);
+			Lighting.AddLight(Projectile.Center + Projectile.velocity, 0.2f * value, 0.24f * value, 0.3f * value);
 			Player player = Main.player[Projectile.owner];
 			Texture2D itemTexture = TextureAssets.Item[Main.player[Projectile.owner].HeldItem.type].Value;
 			Texture2D Shadow = Commons.ModAsset.StabbingProjectileShade.Value;

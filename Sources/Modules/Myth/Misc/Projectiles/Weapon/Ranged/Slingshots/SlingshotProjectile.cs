@@ -165,8 +165,8 @@ public abstract class SlingshotProjectile : ModProjectile
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		DrawTexLine(Head1, SlingshotStringTail, 1, drawColor, MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/String"));
-		DrawTexLine(Head2, SlingshotStringTail, 1, drawColor, MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/String"));
+		DrawTexLine(Head1, SlingshotStringTail, 1, drawColor, ModAsset.String.Value);
+		DrawTexLine(Head2, SlingshotStringTail, 1, drawColor, ModAsset.String.Value);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}

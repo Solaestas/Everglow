@@ -356,7 +356,7 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 				bars.Add(new Vertex2D(DrawCenter + normalDir * width * (1 - factorIII) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTrace");
+		Texture2D t = ModAsset.FogTrace.Value;
 		if (Shade)
 			t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceShade5xDark");
 		Main.graphics.GraphicsDevice.Textures[0] = t;
@@ -428,7 +428,7 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(9f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
+		Texture2D t = ModAsset.FogTraceLight.Value;
 
 		if (bars.Count > 3)
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);

@@ -35,7 +35,6 @@ internal class FireFeatherMagicArray : VisualProjectile
 	public bool OldControlUp = false;
 	public int timer = 0;
 	public Vector2 ringPos = Vector2.Zero;
-	//private CoroutineManager _coroutineManager = new CoroutineManager();
 	public override string Texture => "Everglow/" + ModAsset.FireFeatherMagicPath;
 	public override void SetDefaults()
 	{
@@ -48,27 +47,9 @@ internal class FireFeatherMagicArray : VisualProjectile
 		Projectile.tileCollide = false;
 		base.SetDefaults();
 	}
-	//private IEnumerator<ICoroutineInstruction> RightClick(int times)
-	//{
-	//	for (int x = 0; x < times; x++)
-	//	{
-	//		WingPower -= 21;
-	//		if (WingPower < 0)
-	//		{
-	//			WingPower = 0;
-	//			yield break;
-	//		}
-	//		Player player = Main.player[Projectile.owner];
-	//		Vector2 pos = Projectile.Center + new Vector2(Main.rand.NextFloat(-600, 600), -1600);
-	//		Vector2 vel = Vector2.Normalize(Main.MouseWorld - pos) * 60;
-	//		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), pos, vel, ModContent.ProjectileType<GiantFireFeather>(), player.HeldItem.damage * 5, 10, Projectile.owner);
-	//		timer = 30;
-	//		yield return new WaitForFrames((uint)Main.rand.Next(5, 9));
-	//	}
-	//}
+
 	public override void AI()
 	{
-		//_coroutineManager.Update();
 		Player player = Main.player[Projectile.owner];
 		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(-player.direction * 22, -12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
 		Projectile.spriteDirection = player.direction;

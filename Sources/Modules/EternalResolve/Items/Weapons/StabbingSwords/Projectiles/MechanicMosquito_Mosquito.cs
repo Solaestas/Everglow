@@ -144,7 +144,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Projectile.Kill();
 			}
 		}
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			for(int a = 0;a < 10;a++)
 			{

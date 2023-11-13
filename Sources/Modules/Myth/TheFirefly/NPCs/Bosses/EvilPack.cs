@@ -164,7 +164,7 @@ public class EvilPack : ModNPC
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/EvilHive");
+		Texture2D tg = ModAsset.EvilHive.Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
@@ -200,7 +200,7 @@ public class EvilPack : ModNPC
 		SpriteEffects effects = SpriteEffects.None;
 		if (NPC.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;
-		Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/EvilHiveGlow");
+		Texture2D tg = ModAsset.EvilHiveGlow.Value;
 		float C = (float)Math.Sqrt(Math.Max((90 - NPC.ai[1]) / 90f, 0)) * 0.6f + Math.Abs(omega * 15);
 		C = 0.8f + C * 0.2f;
 		var color = new Color(C, C, C, 0);
@@ -234,7 +234,7 @@ public class EvilPack : ModNPC
 
 	public void DrawCrack(Vector2 DrawCenter, float Radius, int type, int Power = 1)
 	{
-		Texture2D t0 = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/Crack" + type.ToString());
+		Texture2D t0 = ModAsset.Crack.Value;
 
 		var vertex2Ds = new List<Vertex2D>();
 		for (int a = 1; a < Power + 1; a++)
@@ -248,9 +248,9 @@ public class EvilPack : ModNPC
 				Vector2 DrawPoint2 = new Vector2(0, -Radius).RotatedBy((x + 1) / 5d * Math.PI);
 				Vector2 dp1 = DrawPoint1.RotatedBy(NPC.rotation) * scale + Move;
 				Vector2 dp2 = DrawPoint2.RotatedBy(NPC.rotation) * scale + Move;
-				vertex2Ds.Add(new Vertex2D(DrawCenter + dp1, color, new Vector3(0.5f + DrawPoint1.X / t0.Width, 0.5f + DrawPoint1.Y / t0.Height, 0)));
-				vertex2Ds.Add(new Vertex2D(DrawCenter + dp2, color, new Vector3(0.5f + DrawPoint2.X / t0.Width, 0.5f + DrawPoint2.Y / t0.Height, 0)));
-				vertex2Ds.Add(new Vertex2D(DrawCenter, color, new Vector3(0.5f, 0.5f, 0)));
+				vertex2Ds.Add(new Vertex2D(DrawCenter + dp1, color, new Vector3((0.5f + DrawPoint1.X / t0.Width) / 7f + type / 7f, 0.5f + DrawPoint1.Y / t0.Height, 0)));
+				vertex2Ds.Add(new Vertex2D(DrawCenter + dp2, color, new Vector3((0.5f + DrawPoint2.X / t0.Width) / 7f + type / 7f, 0.5f + DrawPoint2.Y / t0.Height, 0)));
+				vertex2Ds.Add(new Vertex2D(DrawCenter, color, new Vector3(0.5f / 7f + type / 7f, 0.5f, 0)));
 			}
 		}
 

@@ -78,8 +78,8 @@ public class MythUtils
 			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 2 / precise + addRot), color, new Vector3(h / radius / precise, 1, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(h / radius * Math.PI * 2 / precise + addRot), color, new Vector3(h / radius / precise, 0, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, radius), color, new Vector3(1, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radius + width), color, new Vector3(1, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
 		if (circle.Count > 0)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = tex;

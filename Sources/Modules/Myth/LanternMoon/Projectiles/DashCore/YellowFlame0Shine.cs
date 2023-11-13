@@ -37,20 +37,6 @@ class YellowFlame0Shine : ModProjectile
 		Lighting.AddLight(Projectile.Center, (byte)(color0.R * ka) / 100f, (byte)(color0.G * ka) / 100f, (byte)(color0.B * ka) / 100f);
 		if (Projectile.timeLeft < 60)
 			Projectile.scale *= 0.97f;
-		for (int j = 0; j < Main.player.Length; j++)
-		{
-			if (Main.player[j].active)
-			{
-				if (!Main.player[j].HasBuff(ModContent.BuffType<Buffs.YellowImmune>()))
-				{
-					if (!Main.player[j].dead)
-					{
-						if ((Main.player[j].Center - Projectile.Center).Length() < 24)
-							Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Acytaea.Projectiles.playerHit>(), Projectile.damage, 0, j, 0, 0);
-					}
-				}
-			}
-		}
 		color0.R = (byte)(color0.R * 0.84f + Aimcolor.R * 0.16f);
 		color0.G = (byte)(color0.G * 0.84f + Aimcolor.G * 0.16f);
 		color0.B = (byte)(color0.B * 0.84f + Aimcolor.B * 0.16f);
@@ -87,12 +73,12 @@ class YellowFlame0Shine : ModProjectile
 		/* x += 0.01f;
              float K = (float)(Math.Sin(x + Math.Sin(x) * 6) * (0.95 + Math.Sin(x + 0.24 + Math.Sin(x))) + 3) / 30f;
              float M = (float)(Math.Sin(x + Math.Tan(x) * 6) * (0.95 + Math.Cos(x + 0.24 + Math.Sin(x))) + 3) / 30f;
-             Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.8f, 0f, 0) * 0.4f, 0, new Vector2(128f, 128f), K * 2.4f, SpriteEffects.None, 0f);
-             Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.8f, 0f, 0) * 0.4f, (float)(Math.PI * 0.5), new Vector2(128f, 128f), K * 2.4f, SpriteEffects.None, 0f);
-             Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.6f, 0f, 0) * 0.4f, (float)(Math.PI * 0.75), new Vector2(128f, 128f), M * 2.4f, SpriteEffects.None, 0f);
-             Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.6f, 0f, 0) * 0.4f, (float)(Math.PI * 0.25), new Vector2(128f, 128f), M * 2.4f, SpriteEffects.None, 0f);
-             Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, Projectile.Center - Main.screenPosition, null, new Color(0.8f, 0.4f, 0f, 0) * 0.4f, x * 6f, new Vector2(128f, 128f), (M + K) * 2.4f, SpriteEffects.None, 0f);
-             Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, Projectile.Center - Main.screenPosition, null, new Color(0.8f, 0.4f, 0f, 0) * 0.4f, -x * 6f, new Vector2(128f, 128f), (float)Math.Sqrt(M * M + K * K) * 2.4f, SpriteEffects.None, 0f);
+             Main.spriteBatch.Draw(ModAsset.LightEffect.Value, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.8f, 0f, 0) * 0.4f, 0, new Vector2(128f, 128f), K * 2.4f, SpriteEffects.None, 0f);
+             Main.spriteBatch.Draw(ModAsset.LightEffect.Value, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.8f, 0f, 0) * 0.4f, (float)(Math.PI * 0.5), new Vector2(128f, 128f), K * 2.4f, SpriteEffects.None, 0f);
+             Main.spriteBatch.Draw(ModAsset.LightEffect.Value, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.6f, 0f, 0) * 0.4f, (float)(Math.PI * 0.75), new Vector2(128f, 128f), M * 2.4f, SpriteEffects.None, 0f);
+             Main.spriteBatch.Draw(ModAsset.LightEffect.Value, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.6f, 0f, 0) * 0.4f, (float)(Math.PI * 0.25), new Vector2(128f, 128f), M * 2.4f, SpriteEffects.None, 0f);
+             Main.spriteBatch.Draw(ModAsset.LightEffect.Value, Projectile.Center - Main.screenPosition, null, new Color(0.8f, 0.4f, 0f, 0) * 0.4f, x * 6f, new Vector2(128f, 128f), (M + K) * 2.4f, SpriteEffects.None, 0f);
+             Main.spriteBatch.Draw(ModAsset.LightEffect.Value, Projectile.Center - Main.screenPosition, null, new Color(0.8f, 0.4f, 0f, 0) * 0.4f, -x * 6f, new Vector2(128f, 128f), (float)Math.Sqrt(M * M + K * K) * 2.4f, SpriteEffects.None, 0f);
             */
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -138,7 +124,7 @@ class YellowFlame0Shine : ModProjectile
 				Vx.Add(bars[i + 3]);
 			}
 		}
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/DashCore/MeteroTrail").Value;
+		Texture2D t = Commons.ModAsset.Metero.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 

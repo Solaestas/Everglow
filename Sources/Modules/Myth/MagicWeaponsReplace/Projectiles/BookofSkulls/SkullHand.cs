@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria;
 using Terraria.Audio;
 
@@ -224,9 +224,8 @@ internal class SkullHand : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Projectile.hide = true;
-		Texture2D bone = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BookofSkulls/SkullHand");
-		Texture2D Power = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine");
-		Texture2D PowerShade = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade");
+		Texture2D bone = ModAsset.SkullHand.Value;
+		Texture2D Power = ModAsset.WaterLine.Value;
 		Vector2 v0 = Projectile.Center + Direction * 60;
 		Color c0 = Lighting.GetColor((int)(v0.X / 16f), (int)(v0.Y / 16f));
 

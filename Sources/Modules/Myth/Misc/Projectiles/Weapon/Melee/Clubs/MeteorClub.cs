@@ -75,7 +75,7 @@ public class MeteorClub : ClubProj
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/Clubs/MeteorClub_trail");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.MeteorClub_trail.Value;
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
@@ -86,7 +86,7 @@ public class MeteorClub : ClubProj
 		SpriteEffects effects = SpriteEffects.None;
 		if (Projectile.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;
-		Texture2D texture = MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/Clubs/MeteorClub_glow");
+		Texture2D texture = ModAsset.MeteorClub_glow.Value;
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
 		for (int i = 0; i < 5; i++)
 		{

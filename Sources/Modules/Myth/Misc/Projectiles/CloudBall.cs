@@ -81,7 +81,7 @@ public class CloudBall : ModProjectile
 		return false;
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		// 这是原来的粒子效果
 		/*for (int i = 0; i < 30; i++)

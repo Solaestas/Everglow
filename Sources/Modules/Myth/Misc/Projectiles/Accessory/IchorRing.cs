@@ -117,12 +117,12 @@ public class IchorRing : ModProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D tex = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceShade5xDark");
+		Texture2D tex = ModAsset.FogTraceShade5xDark.Value;
 		float width = 40f;
 		if (Projectile.timeLeft < 120f)
 			width = Projectile.timeLeft / 3f;
 		DrawTexLiquidCircle(Projectile.ai[0] * 0.9f, width, new Color(255, 100, 100, 100), Projectile.Center - Main.screenPosition, tex, 5, Main.time * 0.05);
-		tex = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
+		tex = ModAsset.FogTraceLight.Value;
 		DrawTexLiquidCircle(Projectile.ai[0] * 0.9f, width, new Color(255, 190, 0, 0), Projectile.Center - Main.screenPosition, tex, 5, Main.time * 0.03);
 		if (!Main.gamePaused)
 		{
@@ -261,7 +261,7 @@ public class IchorRing : ModProjectile
 			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * delta * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 1, 0f)));
 			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 0, 0f)));
 		}
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineShade");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.WaterLineShade.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 	}
 	private void UpdateMoon(ref List<Vector2> listVec)

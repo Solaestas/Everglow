@@ -1,5 +1,3 @@
-using Everglow.Myth.Acytaea.Projectiles;
-using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -83,9 +81,9 @@ public class BloodTusk : ModNPC
 	private bool Transparent = false;
 	private int fir = 9999999;
 	private int Dam = 0;
-	public static int[] N = new int[4];
-	public static Vector2 Cen;
-	public static int secondStageHeadSlot = -1;
+	public NPC[] FlyingTentacleTusks = new NPC[4];
+	public Vector2 LookingCenter;
+	public int secondStageHeadSlot = -1;
 	private float Hm = 0;
 	public override void OnKill()
 	{
@@ -139,6 +137,8 @@ public class BloodTusk : ModNPC
 	private int pulltime = 0;//拉动围墙向中夹的倒计时
 	public override void AI()//这是一个自行刷新的函数
 	{
+		if (HasTranSkin == 239)
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/TuskCrack")/*, NPC.Bottom*/); //Camera moves to boss when going in phase 2. ~Setnour6
 		if (DarkCenter == Vector2.Zero)
 		{
 			int Cx = (int)(NPC.Center.X / 16f);
@@ -267,13 +267,6 @@ public class BloodTusk : ModNPC
 					return;
 				}
 			}
-			/*if (!lockBlood)
-                {
-                    if (Misc.Projectiles.Weapon.Fragrans.Fragrans.DefTusk)
-                    {
-                        lockBlood = true;
-                    }
-                }*/
 			startFight = true;
 			NPC.dontTakeDamage = false;
 		}
@@ -885,7 +878,7 @@ public class BloodTusk : ModNPC
 						Freq = 10;
 					if (NPC.localAI[0] % Freq == 1)
 					{
-						int r = /*NPC.NewNPC(null, (int)(NPC.Center.X - 3), (int)(NPC.Center.Y + 80), ModContent.NPCType<CrimsonTusk>())*/Projectile.NewProjectile(null, new Vector2(-3, 80) + NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CrimsonTuskProjGra>(), NPC.damage / 9, 1);
+						int r = Projectile.NewProjectile(null, new Vector2(-3, 80) + NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CrimsonTuskProjGra>(), NPC.damage / 9, 1);
 						Main.projectile[r].velocity = new Vector2(0, Main.rand.NextFloat(-26f, -12f)).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f));
 					}
 				}
@@ -1247,17 +1240,25 @@ public class BloodTusk : ModNPC
 				iMax = 3;
 			if (Main.masterMode)
 				iMax = 4;
-			Cen = NPC.Center + new Vector2(-3, 90);
+			LookingCenter = NPC.Center + new Vector2(-3, 90);
 			NPC.localAI[1] += 1;
-			if (summon)
+			if (NoTentacle)
 			{
 				if (NPC.localAI[0] > 600)
 				{
 					for (int i = 0; i < iMax; i++)
 					{
-						N[i] = NPC.NewNPC(null, (int)(NPC.Center.X + 12), (int)(NPC.Center.Y + 90), ModContent.NPCType<CrimsonTuskControlable>(), 0, -1, i, (i - 1.5f) * 0.7f);
+						FlyingTentacleTusks[i] = NPC.NewNPCDirect(null, (int)(NPC.Center.X + 12), (int)(NPC.Center.Y + 90), ModContent.NPCType<CrimsonTuskControlable>(), 0, -1, i, (i - 1.5f) * 0.7f);
+						if(FlyingTentacleTusks[i] != null)
+						{
+							CrimsonTuskControlable ctct = FlyingTentacleTusks[i].ModNPC as CrimsonTuskControlable;
+							if(ctct != null)
+							{
+								ctct.Owner = NPC;
+							}
+						}
 					}
-					summon = false;
+					NoTentacle = false;
 				}
 			}
 			if (NPC.life >= NPC.lifeMax * 0.5)
@@ -1268,22 +1269,25 @@ public class BloodTusk : ModNPC
 					{
 						if (NPC.localAI[1] % 200 > i * 50 && NPC.localAI[1] % 200 < (i + 1) * 50)
 						{
-							Vector2 v = player.Center - Main.npc[N[i]].Center;
+							Vector2 v = player.Center - FlyingTentacleTusks[i].Center;
 							if (i % 2 == 0)
 								v = new Vector2(-v.X, v.Y);
 							v = v / v.Length() * 7f;
-							Main.npc[N[i]].velocity = Main.npc[N[i]].velocity * 0.95f + v * 0.05f;
+							FlyingTentacleTusks[i].velocity = FlyingTentacleTusks[i].velocity * 0.95f + v * 0.05f;
 							int k = i + 1;
 							if (k >= 4)
 								k = 0;
-							v = player.Center - Main.npc[N[k]].Center;
-							if (i % 2 == 0)
-								v = new Vector2(-v.X, v.Y);
-							v = v / v.Length() * 7f;
-							Main.npc[N[k]].velocity = Main.npc[N[k]].velocity * 0.975f + v * 0.025f;
+							if (FlyingTentacleTusks[k] != null && FlyingTentacleTusks[k].active && FlyingTentacleTusks[k].type == ModContent.NPCType<CrimsonTuskControlable>())
+							{
+								v = player.Center - FlyingTentacleTusks[k].Center;
+								if (i % 2 == 0)
+									v = new Vector2(-v.X, v.Y);
+								v = v / v.Length() * 7f;
+								FlyingTentacleTusks[k].velocity = FlyingTentacleTusks[k].velocity * 0.975f + v * 0.025f;
+							}
 						}
-						if (Main.npc[N[i]].Center.Y > NPC.Center.Y - 240)
-							Main.npc[N[i]].velocity.Y -= 0.25f;
+						if (FlyingTentacleTusks[i].Center.Y > NPC.Center.Y - 240)
+							FlyingTentacleTusks[i].velocity.Y -= 0.25f;
 						Back[i] = false;
 					}
 					if (NPC.localAI[1] > 600)
@@ -1291,20 +1295,26 @@ public class BloodTusk : ModNPC
 				}
 				else
 				{
-					for (int i = 0; i < iMax; i++)
+					if (!NoTentacle)
 					{
-						Vector2 v = Cen - Main.npc[N[i]].Center;
-						if (v.Length() > 10 && !Back[i])
+						for (int i = 0; i < iMax; i++)
 						{
-							v = v / v.Length() * 10f;
-							Main.npc[N[i]].velocity = Main.npc[N[i]].velocity * 0.95f + v * 0.05f;
-						}
-						else
-						{
-							if (!Back[i])
-								Back[i] = true;
-							Main.npc[N[i]].position = Cen - new Vector2(15, 20);
-							Main.npc[N[i]].velocity = Main.npc[N[i]].velocity / Main.npc[N[i]].velocity.Length() * 0.5f;
+							if (FlyingTentacleTusks[i] != null && FlyingTentacleTusks[i].active && FlyingTentacleTusks[i].type == ModContent.NPCType<CrimsonTuskControlable>())
+							{
+								Vector2 v = LookingCenter - FlyingTentacleTusks[i].Center;
+								if (v.Length() > 10 && !Back[i])
+								{
+									v = v / v.Length() * 10f;
+									FlyingTentacleTusks[i].velocity = FlyingTentacleTusks[i].velocity * 0.95f + v * 0.05f;
+								}
+								else
+								{
+									if (!Back[i])
+										Back[i] = true;
+									FlyingTentacleTusks[i].position = LookingCenter - new Vector2(15, 20);
+									FlyingTentacleTusks[i].velocity = FlyingTentacleTusks[i].velocity / FlyingTentacleTusks[i].velocity.Length() * 0.5f;
+								}
+							}					
 						}
 					}
 				}
@@ -1315,25 +1325,31 @@ public class BloodTusk : ModNPC
 				{
 					for (int i = 0; i < iMax; i++)
 					{
-						if (NPC.localAI[1] % 200 > i * 50 && NPC.localAI[1] % 200 < (i + 1) * 50)
+						if (FlyingTentacleTusks[i] != null && FlyingTentacleTusks[i].active && FlyingTentacleTusks[i].type == ModContent.NPCType<CrimsonTuskControlable>())
 						{
-							Vector2 v = player.Center - Main.npc[N[i]].Center;
-							if (i % 2 == 0)
-								v = new Vector2(-v.X, v.Y);
-							v = v / v.Length() * 7f;
-							Main.npc[N[i]].velocity = Main.npc[N[i]].velocity * 0.95f + v * 0.05f;
-							int k = i + 1;
-							if (k >= 4)
-								k = 0;
-							v = player.Center - Main.npc[N[k]].Center;
-							if (i % 2 == 0)
-								v = new Vector2(-v.X, v.Y);
-							v = v / v.Length() * 7f;
-							Main.npc[N[k]].velocity = Main.npc[N[k]].velocity * 0.975f + v * 0.025f;
+							if (NPC.localAI[1] % 200 > i * 50 && NPC.localAI[1] % 200 < (i + 1) * 50)
+							{
+								Vector2 v = player.Center - FlyingTentacleTusks[i].Center;
+								if (i % 2 == 0)
+									v = new Vector2(-v.X, v.Y);
+								v = v / v.Length() * 7f;
+								FlyingTentacleTusks[i].velocity = FlyingTentacleTusks[i].velocity * 0.95f + v * 0.05f;
+								int k = i + 1;
+								if (k >= 4)
+									k = 0;
+								if (FlyingTentacleTusks[k] != null && FlyingTentacleTusks[k].active && FlyingTentacleTusks[k].type == ModContent.NPCType<CrimsonTuskControlable>())
+								{
+									v = player.Center - FlyingTentacleTusks[k].Center;
+									if (i % 2 == 0)
+										v = new Vector2(-v.X, v.Y);
+									v = v / v.Length() * 7f;
+									FlyingTentacleTusks[k].velocity = FlyingTentacleTusks[k].velocity * 0.975f + v * 0.025f;
+								}
+							}
+							if (FlyingTentacleTusks[i].Center.Y > NPC.Center.Y - 240)
+								FlyingTentacleTusks[i].velocity.Y -= 0.25f;
+							Back[i] = false;
 						}
-						if (Main.npc[N[i]].Center.Y > NPC.Center.Y - 240)
-							Main.npc[N[i]].velocity.Y -= 0.25f;
-						Back[i] = false;
 					}
 					if (NPC.localAI[1] > 600)
 						NPC.localAI[1] = 0;
@@ -1342,18 +1358,21 @@ public class BloodTusk : ModNPC
 				{
 					for (int i = 0; i < iMax; i++)
 					{
-						Vector2 v = Cen - Main.npc[N[i]].Center;
-						if (v.Length() > 10 && !Back[i])
+						if (FlyingTentacleTusks[i] != null && FlyingTentacleTusks[i].active && FlyingTentacleTusks[i].type == ModContent.NPCType<CrimsonTuskControlable>())
 						{
-							v = v / v.Length() * 10f;
-							Main.npc[N[i]].velocity = Main.npc[N[i]].velocity * 0.95f + v * 0.05f;
-						}
-						else
-						{
-							if (!Back[i])
-								Back[i] = true;
-							Main.npc[N[i]].position = Cen - new Vector2(15, 20);
-							Main.npc[N[i]].velocity = Main.npc[N[i]].velocity / Main.npc[N[i]].velocity.Length() * 0.5f;
+							Vector2 v = LookingCenter - FlyingTentacleTusks[i].Center;
+							if (v.Length() > 10 && !Back[i])
+							{
+								v = v / v.Length() * 10f;
+								FlyingTentacleTusks[i].velocity = FlyingTentacleTusks[i].velocity * 0.95f + v * 0.05f;
+							}
+							else
+							{
+								if (!Back[i])
+									Back[i] = true;
+								FlyingTentacleTusks[i].position = LookingCenter - new Vector2(15, 20);
+								FlyingTentacleTusks[i].velocity = FlyingTentacleTusks[i].velocity / FlyingTentacleTusks[i].velocity.Length() * 0.5f;
+							}
 						}
 					}
 				}
@@ -1363,7 +1382,7 @@ public class BloodTusk : ModNPC
 		{
 			for (int i = 0; i < iMax; i++)
 			{
-				Main.npc[N[i]].ai[3] = 30;
+				FlyingTentacleTusks[i].ai[3] = 30;
 			}
 			NPC.alpha += 5;
 			if (NPC.alpha > 250)
@@ -1509,11 +1528,6 @@ public class BloodTusk : ModNPC
 				}
 			}
 		}
-		/*if (locktime > 0)
-            {
-                NPC.dontTakeDamage = true;
-                locktime--;
-            }*/
 	}
 
 	private int Dx1 = 0;
@@ -1722,7 +1736,7 @@ public class BloodTusk : ModNPC
 		return true;
 	}
 	private bool[] Back = new bool[4];
-	private bool summon = true;
+	public bool NoTentacle = true;
 	private int iMax = 0;
 	private bool HasbeenKilled = false;
 	public static int Killing = 0;
@@ -1762,7 +1776,7 @@ public class BloodTusk : ModNPC
 				Killing = 180;
 				for (int i = 0; i < iMax; i++)
 				{
-					Main.npc[N[i]].ai[3] = 30;
+					FlyingTentacleTusks[i].ai[3] = 30;
 				}
 			}
 		}
@@ -1791,33 +1805,32 @@ public class BloodTusk : ModNPC
 		color.G = (byte)Math.Clamp(color.G - tuskHitMove.Length() * tuskHitMove.Length() * 5f, 0f, 255f);
 		color.B = (byte)Math.Clamp(color.B - tuskHitMove.Length() * tuskHitMove.Length() * 5f, 0f, 255f);
 		color.A = (byte)Math.Clamp(color.A - tuskHitMove.Length() * tuskHitMove.Length() * 3f, 0f, 255f);
-		Texture2D TuskBaseP1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskTeethPhase1").Value;
-		Texture2D TuskS1P1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS1P1").Value;
-		Texture2D TuskS2P1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS2P1").Value;
-		Texture2D TuskS3P1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS3bP1").Value;
-		Texture2D TuskS4P1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS4bP1").Value;
-		Texture2D TuskS5P1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS5P1").Value;
-		Texture2D TuskS6P1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS6P1").Value;
-		Texture2D TuskS7P1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS7P1").Value;
-		Texture2D TuskS8P1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS8P1").Value;
+		Texture2D TuskBaseP1 = ModAsset.BloodTuskTeethPhase1.Value;
+		Texture2D TuskS2P1 = ModAsset.BloodTuskS2P1.Value;
+		Texture2D TuskS3P1 = ModAsset.BloodTuskS3bP1.Value;
+		Texture2D TuskS4P1 = ModAsset.BloodTuskS4bP1.Value;
+		Texture2D TuskS5P1 = ModAsset.BloodTuskS5P1.Value;
+		Texture2D TuskS6P1 = ModAsset.BloodTuskS6P1.Value;
+		Texture2D TuskS7P1 = ModAsset.BloodTuskS7P1.Value;
+		Texture2D TuskS8P1 = ModAsset.BloodTuskS8P1.Value;
 
-		Texture2D TuskBase = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskTeeth").Value;
-		Texture2D TuskBaseBlack = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskTeethBlack").Value;
-		Texture2D TuskBaseE1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye1").Value;
-		Texture2D TuskBaseE2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye2").Value;
-		Texture2D TuskBaseE3 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye3").Value;
-		Texture2D TuskBaseE4 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye4").Value;
-		Texture2D TuskBaseE5 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye5").Value;
-		Texture2D TuskBaseE6 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye6").Value;
-		Texture2D TuskBaseE7 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye7").Value;
-		Texture2D TuskS1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS1").Value;
-		Texture2D TuskS2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS2").Value;
-		Texture2D TuskS3 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS3b").Value;
-		Texture2D TuskS4 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS4b").Value;
-		Texture2D TuskS5 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS5").Value;
-		Texture2D TuskS6 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS6").Value;
-		Texture2D TuskS7 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS7").Value;
-		Texture2D TuskS8 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS8").Value;
+		Texture2D TuskBase = ModAsset.BloodTuskTeeth.Value;
+		Texture2D TuskBaseBlack = ModAsset.BloodTuskTeethBlack.Value;
+		Texture2D TuskBaseE1 = ModAsset.BloodTuskEye1.Value;
+		Texture2D TuskBaseE2 = ModAsset.BloodTuskEye2.Value;
+		Texture2D TuskBaseE3 = ModAsset.BloodTuskEye3.Value;
+		Texture2D TuskBaseE4 = ModAsset.BloodTuskEye4.Value;
+		Texture2D TuskBaseE5 = ModAsset.BloodTuskEye5.Value;
+		Texture2D TuskBaseE6 = ModAsset.BloodTuskEye6.Value;
+		Texture2D TuskBaseE7 = ModAsset.BloodTuskEye7.Value;
+		Texture2D TuskS1 = ModAsset.BloodTuskS1.Value;
+		Texture2D TuskS2 = ModAsset.BloodTuskS2.Value;
+		Texture2D TuskS3 = ModAsset.BloodTuskS3b.Value;
+		Texture2D TuskS4 = ModAsset.BloodTuskS4b.Value;
+		Texture2D TuskS5 = ModAsset.BloodTuskS5.Value;
+		Texture2D TuskS6 = ModAsset.BloodTuskS6.Value;
+		Texture2D TuskS7 = ModAsset.BloodTuskS7.Value;
+		Texture2D TuskS8 = ModAsset.BloodTuskS8.Value;
 
 		if (!Main.gamePaused)
 			tuskHitMove *= SprK;
@@ -1849,47 +1862,47 @@ public class BloodTusk : ModNPC
 					if (i == 0)
 					{
 						if (Eyevalue > 6 && Eyevalue <= 12)
-							TuskBaseE1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye1C").Value;
+							TuskBaseE1 = ModAsset.BloodTuskEye1C.Value;
 						if (Eyevalue > 12 && Eyevalue <= 18)
-							TuskBaseE1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye1L").Value;
+							TuskBaseE1 = ModAsset.BloodTuskEye1L.Value;
 						if (Eyevalue > 18 && Eyevalue <= 24)
-							TuskBaseE1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye1O").Value;
+							TuskBaseE1 = ModAsset.BloodTuskEye1O.Value;
 						if (Eyevalue > 24)
-							TuskBaseE1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk_Head_Boss_Void").Value;
+							TuskBaseE1 = ModAsset.BloodTusk_Head_Boss_Void.Value;
 					}
 					if (i == 1)
 					{
 						if (Eyevalue > 16 && Eyevalue <= 24)
-							TuskBaseE2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye2C").Value;
+							TuskBaseE2 = ModAsset.BloodTuskEye2C.Value;
 						if (Eyevalue > 24)
-							TuskBaseE2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk_Head_Boss_Void").Value;
+							TuskBaseE2 = ModAsset.BloodTusk_Head_Boss_Void.Value;
 					}
 					if (i == 2)
 					{
 						if (Eyevalue > 16 && Eyevalue <= 24)
-							TuskBaseE3 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye3C").Value;
+							TuskBaseE3 = ModAsset.BloodTuskEye3C.Value;
 						if (Eyevalue > 24)
-							TuskBaseE3 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk_Head_Boss_Void").Value;
+							TuskBaseE3 = ModAsset.BloodTusk_Head_Boss_Void.Value;
 					}
 					if (i == 3)
 					{
 						if (Eyevalue > 18)
-							TuskBaseE4 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk_Head_Boss_Void").Value;
+							TuskBaseE4 = ModAsset.BloodTusk_Head_Boss_Void.Value;
 					}
 					if (i == 4)
 					{
 						if (Eyevalue > 18)
-							TuskBaseE5 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk_Head_Boss_Void").Value;
+							TuskBaseE5 = ModAsset.BloodTusk_Head_Boss_Void.Value;
 					}
 					if (i == 5)
 					{
 						if (Eyevalue > 18)
-							TuskBaseE6 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk_Head_Boss_Void").Value;
+							TuskBaseE6 = ModAsset.BloodTusk_Head_Boss_Void.Value;
 					}
 					if (i == 6)
 					{
 						if (Eyevalue > 18)
-							TuskBaseE7 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk_Head_Boss_Void").Value;
+							TuskBaseE7 = ModAsset.BloodTusk_Head_Boss_Void.Value;
 					}
 				}
 			}
@@ -1933,8 +1946,7 @@ public class BloodTusk : ModNPC
 
 						if (i % 24 == 3 && i < 350)
 						{
-							Main.spriteBatch.End();
-							Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 							float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
 							var Tusk1 = new List<VertexBase.CustomVertexInfo>
 							{
@@ -1942,27 +1954,14 @@ public class BloodTusk : ModNPC
 								new VertexBase.CustomVertexInfo(Mouth1[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
 								new VertexBase.CustomVertexInfo(Mouth1[i] + new Vector2(0, -10) - normalDir * Math.Clamp(Len, 0, HangMaxL1[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
 							};
-							Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskHang").Value;
+							Texture2D t1 = ModAsset.CrimsonTuskHang.Value;
 							Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 							Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk1.ToArray(), 0, Tusk1.Count / 3);
-							if (!Main.gamePaused)
-							{
-								for (int j = 0; j < Main.player.Length; j++)
-								{
-									if (!Main.player[j].dead)
-									{
-										if ((Main.player[j].Center - (Mouth1[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL1[i]))).Length() < 30)
-											Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
-									}
-								}
-							}
-							Main.spriteBatch.End();
-							Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 						}
 						if (i % 8 == 3 && i >= 350)
 						{
-							Main.spriteBatch.End();
-							Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 							float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
 							var Tusk1 = new List<VertexBase.CustomVertexInfo>
 							{
@@ -1970,22 +1969,10 @@ public class BloodTusk : ModNPC
 								new VertexBase.CustomVertexInfo(Mouth1[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
 								new VertexBase.CustomVertexInfo(Mouth1[i] + new Vector2(0, -10) - normalDir * Math.Clamp(Len, 0, HangMaxL1[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
 							};
-							Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskHang").Value;
+							Texture2D t1 = ModAsset.CrimsonTuskHang.Value;
 							Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 							Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk1.ToArray(), 0, Tusk1.Count / 3);
-							if (!Main.gamePaused)
-							{
-								for (int j = 0; j < Main.player.Length; j++)
-								{
-									if (!Main.player[j].dead)
-									{
-										if ((Main.player[j].Center - (Mouth1[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL1[i]))).Length() < 30)
-											Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
-									}
-								}
-							}
-							Main.spriteBatch.End();
-							Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 						}
 					}
 				}
@@ -2009,8 +1996,7 @@ public class BloodTusk : ModNPC
 						bars2.Add(new VertexBase.CustomVertexInfo(Mouth2[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
 						if (i % 24 == 3 && i < 350)
 						{
-							Main.spriteBatch.End();
-							Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 							float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
 							var Tusk2 = new List<VertexBase.CustomVertexInfo>
 							{
@@ -2018,27 +2004,14 @@ public class BloodTusk : ModNPC
 								new VertexBase.CustomVertexInfo(Mouth2[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
 								new VertexBase.CustomVertexInfo(Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
 							};
-							Texture2D t2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskHang").Value;
+							Texture2D t2 = ModAsset.CrimsonTuskHang.Value;
 							Main.graphics.GraphicsDevice.Textures[0] = t2;//GlodenBloodScaleMirror
 							Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk2.ToArray(), 0, Tusk2.Count / 3);
-							if (!Main.gamePaused)
-							{
-								for (int j = 0; j < Main.player.Length; j++)
-								{
-									if (!Main.player[j].dead)
-									{
-										if ((Main.player[j].Center - (Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]))).Length() < 30)
-											Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
-									}
-								}
-							}
-							Main.spriteBatch.End();
-							Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 						}
 						if (i % 8 == 3 && i >= 350)
 						{
-							Main.spriteBatch.End();
-							Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 							float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
 							var Tusk2 = new List<VertexBase.CustomVertexInfo>
 							{
@@ -2046,22 +2019,10 @@ public class BloodTusk : ModNPC
 								new VertexBase.CustomVertexInfo(Mouth2[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
 								new VertexBase.CustomVertexInfo(Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
 							};
-							Texture2D t2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskHang").Value;
+							Texture2D t2 = ModAsset.CrimsonTuskHang.Value;
 							Main.graphics.GraphicsDevice.Textures[0] = t2;//GlodenBloodScaleMirror
 							Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk2.ToArray(), 0, Tusk2.Count / 3);
-							if (!Main.gamePaused)
-							{
-								for (int j = 0; j < Main.player.Length; j++)
-								{
-									if (!Main.player[j].dead)
-									{
-										if ((Main.player[j].Center - (Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]))).Length() < 30)
-											Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
-									}
-								}
-							}
-							Main.spriteBatch.End();
-							Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 						}
 					}
 				}
@@ -2069,8 +2030,7 @@ public class BloodTusk : ModNPC
 				var triangleList2 = new List<VertexBase.CustomVertexInfo>();
 				if (bars1.Count > 2)
 				{
-					Main.spriteBatch.End();
-					Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 					triangleList1.Add(bars1[^2]);
 					var vertex = new VertexBase.CustomVertexInfo((bars1[^2].Position + bars1[^1].Position) * 0.5f + Mouth1Vel * 15f, Color.White, new Vector3(0, 0.5f, 0));
 					triangleList1.Add(bars1[^1]);
@@ -2085,18 +2045,13 @@ public class BloodTusk : ModNPC
 						triangleList1.Add(bars1[i + 2]);
 						triangleList1.Add(bars1[i + 3]);
 					}
-					Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/BloodRope").Value;
+					Texture2D t1 = ModAsset.BloodRope.Value;
 					Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList1.ToArray(), 0, triangleList1.Count / 3);
-
-					Main.spriteBatch.End();
-					Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 				}
 
 				if (bars2.Count > 2)
 				{
-					Main.spriteBatch.End();
-					Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 					triangleList2.Add(bars2[0]);
 					var vertex = new VertexBase.CustomVertexInfo((bars2[0].Position + bars2[1].Position) * 0.5f + Mouth2Vel * 15f, Color.White, new Vector3(0, 0.5f, 0));
 					triangleList2.Add(bars2[1]);
@@ -2111,18 +2066,15 @@ public class BloodTusk : ModNPC
 						triangleList2.Add(bars2[i + 2]);
 						triangleList2.Add(bars2[i + 3]);
 					}
-					Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/BloodRope").Value;
+					Texture2D t1 = ModAsset.BloodRope.Value;
 					Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList2.ToArray(), 0, triangleList2.Count / 3);
-
-					Main.spriteBatch.End();
-					Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 				}
 			}
 
 			Main.spriteBatch.Draw(TuskS3, NPC.position - Main.screenPosition + new Vector2(15, 94) + V[2], new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 			Main.spriteBatch.Draw(TuskS4, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[3], new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskFleshBack").Value, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[9], new Rectangle(0, 0, 220, (int)(312 - V[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(ModAsset.BloodTuskFleshBack.Value, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[9], new Rectangle(0, 0, 220, (int)(312 - V[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 
 			Color Blc = NPC.GetAlpha(Color.Black) * ((255 - NPC.alpha) / 255f);
 			Main.spriteBatch.Draw(TuskBaseBlack, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[8] + tuskHitMove, new Rectangle(0, 0, 220, (int)(312 - V[8].Y * 1.5f)), Blc, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
@@ -2150,16 +2102,16 @@ public class BloodTusk : ModNPC
 			//绘制一阶段獠牙
 			Main.spriteBatch.Draw(TuskS3P1, NPC.position - Main.screenPosition + new Vector2(15, 94) + V[2], new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 			Main.spriteBatch.Draw(TuskS4P1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[3], new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskFleshBack").Value, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[9], new Rectangle(0, 0, 220, (int)(312 - V[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(ModAsset.BloodTuskFleshBack.Value, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[9], new Rectangle(0, 0, 220, (int)(312 - V[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 			Main.spriteBatch.Draw(TuskBaseP1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[8] + tuskHitMove, new Rectangle(0, 0, 220, (int)(312 - V[8].Y * 1.5f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(TuskS1P1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[0], new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(ModAsset.BloodTuskS1P1.Value, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[0], new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 			Main.spriteBatch.Draw(TuskS2P1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[1], new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 			Main.spriteBatch.Draw(TuskS5P1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[4], new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 			Main.spriteBatch.Draw(TuskS6P1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[5], new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 			Main.spriteBatch.Draw(TuskS7P1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[6], new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 			Main.spriteBatch.Draw(TuskS8P1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[7], new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 		}
-		Effect ef = ModContent.Request<Effect>("Everglow/Myth/Effects/TuskFade").Value;
+		Effect ef = ModAsset.TuskFade.Value;
 		if (NPC.life < NPC.lifeMax / 2f && HasTranSkin > 0)
 		{
 			NPC.localAI[0] = 0;
@@ -2177,24 +2129,23 @@ public class BloodTusk : ModNPC
 			//阶段切换shader
 			if (!Main.gamePaused)
 				HasTranSkin--;
-			if (HasTranSkin == 239)
-				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/TuskCrack")/*, NPC.Bottom*/); //Camera moves to boss when going in phase 2. ~Setnour6
+
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 			ef.Parameters["minr"].SetValue(1 - HasTranSkin / 180f);
-			ef.Parameters["uImage1"].SetValue(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/Perlin").Value);
+			ef.Parameters["uImage1"].SetValue(ModAsset.Perlin.Value);
 
 			ef.CurrentTechnique.Passes["Test"].Apply();
-			Color cg = color;
+			Color cg;
 			ef.Parameters["BackCol"].SetValue(new Vector4(color.R, color.G, color.B, 255 - NPC.alpha) / 255f);
 			float alp = (255 - NPC.alpha) / 255f;
 			cg = new Color(color.R / 255f * alp, color.G / 255f * alp, color.B / 255f * alp, alp);
 			Main.spriteBatch.Draw(TuskS3P1, NPC.position - Main.screenPosition + new Vector2(15, 94) + V[2], new Rectangle?(NPC.frame), cg, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 			Main.spriteBatch.Draw(TuskS4P1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[3], new Rectangle?(NPC.frame), cg, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskFleshBack").Value, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[9], new Rectangle(0, 0, 220, (int)(312 - V[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(ModAsset.BloodTuskFleshBack.Value, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[9], new Rectangle(0, 0, 220, (int)(312 - V[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 			Main.spriteBatch.Draw(TuskBaseP1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[8] + tuskHitMove, new Rectangle(0, 0, 220, (int)(312 - V[8].Y * 1.5f)), cg, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(TuskS1P1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[0], new Rectangle?(NPC.frame), cg, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(ModAsset.BloodTuskS1P1.Value, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[0], new Rectangle?(NPC.frame), cg, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 			Main.spriteBatch.Draw(TuskS2P1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[1], new Rectangle?(NPC.frame), cg, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 			Main.spriteBatch.Draw(TuskS5P1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[4], new Rectangle?(NPC.frame), cg, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 			Main.spriteBatch.Draw(TuskS6P1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[5], new Rectangle?(NPC.frame), cg, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
@@ -2204,17 +2155,14 @@ public class BloodTusk : ModNPC
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
 
-		//Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskFlesh2").Value, NPC.position - Main.screenPosition + new Vector2(15, 88) + V[9] + new Vector2(0, -1), new Rectangle(0, 0, 220, (int)(312 - V[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
+		//Main.spriteBatch.Draw(ModAsset.BloodTuskFlesh2").Value, NPC.position - Main.screenPosition + new Vector2(15, 88) + V[9] + new Vector2(0, -1), new Rectangle(0, 0, 220, (int)(312 - V[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 		if (BasePos != Vector2.Zero)
 		{
 			//拉丝底座
-			Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskFlesh1").Value, BasePos - Main.screenPosition + new Vector2(15, 90) + V[9], new Rectangle(0, 0, 220, (int)(312 - V[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(ModAsset.BloodTuskFlesh1.Value, BasePos - Main.screenPosition + new Vector2(15, 90) + V[9], new Rectangle(0, 0, 220, (int)(312 - V[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 
 			if (BasePos != NPC.position)
 			{
-				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
 				for (int z = 0; z < 4; z++)
 				{
 					hangItem[z] = new Vector2(0, 25 * (float)Math.Sin(Main.time / 70d + z) * (BasePos.Y - NPC.position.Y) / 50f);
@@ -2228,7 +2176,7 @@ public class BloodTusk : ModNPC
 						new VertexBase.CustomVertexInfo(BasePos + new Vector2(125, 172) + hangItem[z] - Main.screenPosition, color, new Vector3(1, 1, 0)),
 						new VertexBase.CustomVertexInfo(BasePos + new Vector2(-95, 172) + hangItem[z] - Main.screenPosition, color, new Vector3(0, 1, 0))
 					};
-					Texture2D thang = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskDragLine" + (3 + z).ToString()).Value;
+					Texture2D thang = ModContent.Request<Texture2D>("Everglow/" + ModAsset.BloodTuskDragLinePath + (3 + z).ToString()).Value;
 					Main.graphics.GraphicsDevice.Textures[0] = thang;
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 				}
@@ -2245,54 +2193,23 @@ public class BloodTusk : ModNPC
 				};
 
 
-				Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskDragLine1").Value;
+				Texture2D t = ModAsset.BloodTuskDragLine.Value;
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
-				t = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskDragLine2").Value;
+				t = ModAsset.BloodTuskDragLine2.Value;
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
-				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			}
 		}
 		else
 		{
-			Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskFlesh1").Value, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[9], new Rectangle(0, 0, 220, (int)(312 - V[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(ModAsset.BloodTuskFlesh1.Value, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[9], new Rectangle(0, 0, 220, (int)(312 - V[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 		}
-		Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskFlesh").Value, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[9], new Rectangle(0, 0, 220, (int)(312 - V[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
+		Main.spriteBatch.Draw(ModAsset.BloodTuskFlesh.Value, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[9], new Rectangle(0, 0, 220, (int)(312 - V[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 
 		return false;
 	}
-	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-	{
-		/*List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
-            Color color = Color.White;
-            for (int x = 0; x < 20; x++)
-            {
-                if (x < 19)
-                {
-                    Vx.Add(new VertexBase.CustomVertexInfo(DarkCenter - Main.screenPosition, color, new Vector3(1f, 0.5f, 0)));
-                    Vx.Add(new VertexBase.CustomVertexInfo(FogSpace[x] - Main.screenPosition, color, new Vector3(0, 0, 0)));
-                    Vx.Add(new VertexBase.CustomVertexInfo(FogSpace[x + 1] - Main.screenPosition, color, new Vector3(0, 1, 0)));
-                }
-                else
-                {
-                    Vx.Add(new VertexBase.CustomVertexInfo(DarkCenter - Main.screenPosition, color, new Vector3(1f, 0.5f, 0)));
-                    Vx.Add(new VertexBase.CustomVertexInfo(FogSpace[x] - Main.screenPosition, color, new Vector3(0, 0, 0)));
-                    Vx.Add(new VertexBase.CustomVertexInfo(FogSpace[0] - Main.screenPosition, color, new Vector3(0, 1, 0)));
-                }
-            }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/Black").Value;
-            Main.graphics.GraphicsDevice.Textures[0] = t;
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            base.PostDraw(spriteBatch, screenPos, drawColor);*/
-	}
-
 	private Vector2[] hangItem = new Vector2[8];
 	private Vector2[] Mouth1 = new Vector2[400];
 	private Vector2[] Mouth2 = new Vector2[400];
@@ -2348,11 +2265,11 @@ public class BloodTusk : ModNPC
 	{
 		var color2 = new Color(255, 255, 255, 0);
 		Color color = Color.White;
-		Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/White").Value, Vector2.Zero, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White, 0, new Vector2(Main.screenWidth / 2f, Main.screenHeight / 2f), 5f, SpriteEffects.None, 0f);
+		Main.spriteBatch.Draw(ModAsset.White.Value, Vector2.Zero, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White, 0, new Vector2(Main.screenWidth / 2f, Main.screenHeight / 2f), 5f, SpriteEffects.None, 0f);
 
 		//if (MythMod.TuskFogIndex < 1)
 		{
-			Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/DarkFog").Value, DarkCenter - Main.screenPosition, null, color, 0, new Vector2(500, 500), 4f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(ModAsset.DarkFog.Value, DarkCenter - Main.screenPosition, null, color, 0, new Vector2(500, 500), 4f, SpriteEffects.None, 0f);
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			var Vx = new List<VertexBase.CustomVertexInfo>();
@@ -2423,35 +2340,22 @@ public class BloodTusk : ModNPC
 				}
 			}
 
-			Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/WhiteBlack2").Value;
+			Texture2D t = ModAsset.WhiteBlack2.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
-			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/PerlinFog").Value;
-			Effect PurpleFog = ModContent.Request<Effect>("Everglow/Myth/Effects/PurpleFog").Value;
+			Main.graphics.GraphicsDevice.Textures[1] = ModAsset.PerlinFog.Value;
+			Effect PurpleFog = ModAsset.Effects_PurpleFog.Value;
 			PurpleFog.Parameters["m"].SetValue((float)Main.time * -0.001f);
 			PurpleFog.CurrentTechnique.Passes[0].Apply();
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			t = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/WhiteBlack").Value;
+			t = ModAsset.WhiteBlack.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
-		Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/Sight").Value, Main.LocalPlayer.Center - Main.screenPosition, null, color2, 0, new Vector2(500, 500), 0.75f, SpriteEffects.None, 0f);
-
-		/*Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect PurpleFog2 = ModContent.Request<Effect>("Everglow/Myth/Effects/DarkFog").Value;
-            if(Killing > 0)
-            {
-                Minr = 1 - Killing / 180f;
-            }
-            PurpleFog2.Parameters["minr"].SetValue(Minr);
-            PurpleFog2.CurrentTechnique.Passes[0].Apply();
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/PurpleFog").Value, Vector2.Zero, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), color2, 0, new Vector2(1024, 1024), 3f, SpriteEffects.None, 0f);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);*/
+		Main.spriteBatch.Draw(ModAsset.Sight.Value, Main.LocalPlayer.Center - Main.screenPosition, null, color2, 0, new Vector2(500, 500), 0.75f, SpriteEffects.None, 0f);
 	}
 	public static float Minr = 0;
 }

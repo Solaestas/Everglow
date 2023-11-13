@@ -1,5 +1,3 @@
-﻿using Everglow.Myth.Common;
-
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 
 internal class CursedPipeline : PostPipeline
@@ -9,7 +7,7 @@ internal class CursedPipeline : PostPipeline
 	{
 		var sb = Main.spriteBatch;
 		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-		effect.Value.Parameters["tex1"].SetValue(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/Cursed_Color"));
+		effect.Value.Parameters["tex1"].SetValue(ModAsset.Cursed_Color.Value);
 		effect.Value.Parameters["uTransform"].SetValue(
 			Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1)
 			);
@@ -20,6 +18,6 @@ internal class CursedPipeline : PostPipeline
 
 	public override void Load()
 	{
-		effect = ModContent.Request<Effect>("Everglow/Myth/MagicWeaponsReplace/Projectiles/CursedFlames/FlameColor");
+		effect = ModAsset.FlameColor;
 	}
 }

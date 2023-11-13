@@ -45,8 +45,8 @@ public class NewWaterBolt : ModProjectile, IWarpProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = MythContent.QuickTexture("TheFirefly/Projectiles/GlowStar");
-		Texture2D Shade = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterBolt/NewWaterBoltShade");
+		Texture2D Light = ModAsset.GlowStar.Value;
+		Texture2D Shade = ModAsset.NewWaterBoltShade.Value;
 		float k1 = (100f + Projectile.ai[0] * 25) * 0.3f;
 		float k0 = (1000 - Projectile.timeLeft) / k1;
 		float k2 = 1f;
@@ -81,7 +81,7 @@ public class NewWaterBolt : ModProjectile, IWarpProjectile
 			bars0.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, Color.White, new Vector3(x0, 1, w)));
 			bars0.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, Color.White, new Vector3(x0, 0, w)));
 		}
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlack");
+		Texture2D t = ModAsset.WaterLineBlack.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (bars0.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars0.ToArray(), 0, bars0.Count - 2);
@@ -103,7 +103,7 @@ public class NewWaterBolt : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
 		}
-		t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine");
+		t = ModAsset.WaterLine.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -142,12 +142,12 @@ public class NewWaterBolt : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
 		}
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine");
+		Texture2D t = ModAsset.WaterLine.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (bars.Count > 3)
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		if (timeLeft > 0)
 			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 1f, 3f);

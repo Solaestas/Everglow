@@ -193,7 +193,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 		{
 			for (int x = 0; x < glowStrength + glowStrength2; x++)
 			{
-				Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition + new Vector2(0, -12) * Main.player[Projectile.owner].gravDir + new Vector2(x / 20f).RotatedBy(x), null, new Color(2, 2, 2, 0), Projectile.rotation, new Vector2(tex.Width / 2f, tex.Height / 2f), 1, SpriteEffects.None, 0);
+				Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition + new Vector2(0, -12) + new Vector2(x / 20f).RotatedBy(x), null, new Color(2, 2, 2, 0), Projectile.rotation, new Vector2(tex.Width / 2f, tex.Height / 2f), 1, SpriteEffects.None, 0);
 			}
 		}
 		if (Projectile.timeLeft <= 9 && Projectile.timeLeft >= 0 && Projectile.timeLeft % 3 == 0)
@@ -203,12 +203,12 @@ public class GoldShield : ModProjectile, IWarpProjectile
 				float X = (float)Math.Sqrt(Main.rand.NextFloat(0, 0.5f));
 				float Y = (float)Math.Sqrt(Main.rand.NextFloat(0, 0.5f));
 				var v0 = new Vector2(X * Math.Sign(Main.rand.NextFloat(-1, 1)) * 38, Y * Math.Sign(Main.rand.NextFloat(-1, 1)) * 38);
-				int k = Dust.NewDust(Projectile.Center + v0 - new Vector2(4) + new Vector2(0, -12) * Main.player[Projectile.owner].gravDir, 0, 0, DustID.GoldFlame, 0, 0, 0, default, Main.rand.NextFloat(0.8f, 2f));
+				int k = Dust.NewDust(Projectile.Center + v0 - new Vector2(4) + new Vector2(0, -12), 0, 0, DustID.GoldFlame, 0, 0, 0, default, Main.rand.NextFloat(0.8f, 2f));
 				Main.dust[k].noGravity = true;
 
 			}
 		}
-		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition + new Vector2(0, -12) * Main.player[Projectile.owner].gravDir, null, new Color(255, 255, 255, 0), Projectile.rotation, new Vector2(tex.Width / 2f, tex.Height / 2f), 1, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition + new Vector2(0, -12), null, new Color(255, 255, 255, 0), Projectile.rotation, new Vector2(tex.Width / 2f, tex.Height / 2f), 1, SpriteEffects.None, 0);
 
 
 

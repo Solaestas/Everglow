@@ -1,4 +1,3 @@
-using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.DataStructures;
 
@@ -83,7 +82,7 @@ public class MissileProj : ModProjectile, IWarpProjectile
 	}
 	private void AddLight()
 	{
-		if(timeTokill < 0)
+		if (timeTokill < 0)
 		{
 			Lighting.AddLight(Projectile.Center, 0, Projectile.ai[0] * Projectile.ai[0] * 0.0003f, Projectile.ai[0] * 0.03f);
 		}

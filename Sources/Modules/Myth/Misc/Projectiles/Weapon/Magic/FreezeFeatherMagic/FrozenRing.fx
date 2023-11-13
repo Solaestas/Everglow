@@ -22,7 +22,7 @@ sampler_state
     AddressV = WRAP;
 };
 //utime由Color.b代替
-
+float uTime;
 float4x4 uTransform;
 
 struct VSInput
@@ -51,7 +51,8 @@ PSInput VertexShaderFunction(VSInput input)
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
     float4 colorNoise = tex2D(uNoiseSampler, input.Texcoord.xy);
-    float4 colorHalo = tex2D(uImage, input.Color.xy);
+    float2 coordXY = float2((input.Color.x + uTime) % 1, input.Color.y % 1);
+    float4 colorHalo = tex2D(uImage, coordXY);
     float light = colorHalo.r * colorNoise.r * 2;
     float4 colorHeatMap = tex2D(uHeatMapSampler, float2(light, input.Color.b));
     colorHeatMap.w *= input.Color.a;

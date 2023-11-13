@@ -1,10 +1,11 @@
+using Microsoft.Xna.Framework.Graphics;
+
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FreezeFeatherMagic;
 internal class FrozenRingPipeline : Pipeline
 {
 	public override void Load()
 	{
 		effect = ModAsset.FrozenRing;
-		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_spiderNet.Value);
 		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_frozenRing.Value);
 	}
 	public override void BeginRender()
@@ -13,7 +14,9 @@ internal class FrozenRingPipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
-		Texture2D halo = Commons.ModAsset.Trail.Value;
+		effect.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.001f));
+		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_turtleCrack.Value);
+		Texture2D halo = Commons.ModAsset.Trail_1.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicWrap;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
@@ -142,16 +145,16 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int x = 0; x < 40; x++)
 		{
-			float pocession = 1 - timer / 30f;
+			float pocession = (1 - timer / 30f);
 			Vector2 radius = toBottom.RotatedBy(x / 20d * Math.PI);
 			float width = 75f;
 			if (x / 40f > WingPower / 210f)
 			{
-				pocession += 0.7f;
+				pocession += 0.9f;
 			}
 			Vector2 normalizedRadious = radius / 40f * MathF.Sin(x / 40f * MathF.PI) * width;
-			bars.Add(new Vertex2D(Projectile.Center + radius + normalizedRadious, new Color(x / 40f, 0.1f, pocession, 0.0f), new Vector3(0 + (float)Main.time * 0.014f, x / 15f, 0)));
-			bars.Add(new Vertex2D(Projectile.Center + radius, new Color(x / 40f, 0.9f, pocession, 0.0f), new Vector3(0.8f + (float)Main.time * 0.014f, x / 15f, 0)));
+			bars.Add(new Vertex2D(Projectile.Center + radius + normalizedRadious, new Color(x / 400f, 0.1f, pocession, 0.0f), new Vector3(0 + (float)Main.time * 0.001f, x / 15f, 0)));
+			bars.Add(new Vertex2D(Projectile.Center + radius, new Color(x / 400f, 0.9f, pocession, 0.0f), new Vector3(0.8f + (float)Main.time * 0.001f, x / 15f, 0)));
 		}
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}

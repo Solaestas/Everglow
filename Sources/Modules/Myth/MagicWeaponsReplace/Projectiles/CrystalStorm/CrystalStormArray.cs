@@ -52,9 +52,9 @@ internal class CrystalStormArray : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Projectile.hide = false;
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CrystalDarkline"), new Color(0.6f, 0.6f, 0.6f, 0.6f));
+		DrawMagicArray(ModAsset.CrystalDarkline.Value, new Color(0.6f, 0.6f, 0.6f, 0.6f));
 
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color(0, 120, 225, 0));
+		DrawMagicArray(ModAsset.WaterLine.Value, new Color(0, 120, 225, 0));
 
 
 		return false;
@@ -67,9 +67,9 @@ internal class CrystalStormArray : ModProjectile
 	{
 		Player player = Main.player[Projectile.owner];
 		Texture2D Water = tex;
-		Texture2D Crystalline = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Crystalline");
-		Texture2D CrystalLight = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CrystalLight");
-		if (tex == MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CrystalDarkline"))
+		Texture2D Crystalline = ModAsset.Crystalline.Value;
+		Texture2D CrystalLight = ModAsset.CrystalLight.Value;
+		if (tex == ModAsset.CrystalDarkline.Value)
 		{
 			Crystalline = tex;
 			CrystalLight = tex;

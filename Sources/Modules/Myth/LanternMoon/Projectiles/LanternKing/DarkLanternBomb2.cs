@@ -63,7 +63,7 @@ public class DarkLanternBomb2 : ModProjectile, IWarpProjectile
 
 		float timer = (float)(Main.timeForVisualEffects * 0.01f + Projectile.ai[0]);
         float sizeValue = (float)(Math.Sin(timer + Math.Sin(timer) * 6) * (0.95 + Math.Sin(timer + 0.24 + Math.Sin(timer))) + 3) / 30f;
-		Texture2D textureLight = ModAsset.LanternKing_LightEffect.Value;
+		Texture2D textureLight = ModAsset.LightEffect.Value;
 		Texture2D flameRing = ModAsset.CoreFlame.Value;
 		Main.spriteBatch.Draw(textureLight, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.05f, 0f, 0) * 0.4f, 0, textureLight.Size() / 2f, sizeValue * 12f * lightInit, SpriteEffects.None, 0f);
         Main.spriteBatch.Draw(textureLight, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.05f, 0f, 0) * 0.4f, (float)(Math.PI * 0.5), textureLight.Size() / 2f, sizeValue * 6f * lightInit, SpriteEffects.None, 0f);
@@ -105,7 +105,7 @@ public class DarkLanternBomb2 : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch sb)
 	{
 	}
-    public override void Kill(int timeLeft)
+    public override void OnKill(int timeLeft)
     {
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);

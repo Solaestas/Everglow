@@ -1,4 +1,4 @@
-﻿namespace Everglow.MEAC.Projectiles;
+namespace Everglow.MEAC.Projectiles;
 
 public class DashingLightEff : ModProjectile
 {
@@ -100,7 +100,7 @@ public class DashingLightEff : ModProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * (base.Projectile.ai[0] == 0 ? Main.GameViewMatrix.ZoomMatrix : Main.Transform);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/MEAC/Images/tex4", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;

@@ -29,7 +29,7 @@ public class BeadShakeWave : ModProjectile, IWarpProjectile
 		value = MathF.Sqrt(value);
 		float colorV = 0.9f * (1 - value);
 		colorV *= 10;
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Lightline");
+		Texture2D t = ModAsset.Lightline.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;
@@ -93,7 +93,7 @@ public class BeadShakeWave : ModProjectile, IWarpProjectile
 		value = MathF.Sqrt(value);
 		float colorV = 0.9f * (1 - value);
 		colorV *= 10;
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Lightline");
+		Texture2D t = ModAsset.Lightline.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;

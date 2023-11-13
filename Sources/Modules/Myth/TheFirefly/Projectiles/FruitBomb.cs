@@ -97,7 +97,7 @@ public class FruitBomb : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D shadow = ModAsset.CursedHit.Value;
-		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
+		float dark = Math.Max((Projectile.timeLeft - 50) / 50f, 0);
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] * 0.2f, SpriteEffects.None, 0);
 		return false;
 	}

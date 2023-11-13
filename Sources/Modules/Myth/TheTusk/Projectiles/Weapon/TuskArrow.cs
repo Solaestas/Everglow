@@ -189,7 +189,7 @@ class TuskArrow : ModProjectile, IWarpProjectile
 				bars.Add(new Vertex2D(DrawCenter + normalDir * width * factorIII - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTrace");
+		Texture2D t = ModAsset.FogTrace.Value;
 		if (Shade)
 			t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceShade5xDark");
 		Main.graphics.GraphicsDevice.Textures[0] = t;
@@ -264,7 +264,7 @@ class TuskArrow : ModProjectile, IWarpProjectile
 				bars.Add(new Vertex2D(DrawCenter + normalDir * width * factorIII - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
+		Texture2D t = ModAsset.FogTraceLight.Value;
 		if (bars.Count > 3)
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
 	}

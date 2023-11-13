@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria.Graphics.Effects;
 
 namespace Everglow.Myth.LanternMoon.Skies;
@@ -33,15 +33,14 @@ public class LanternSky : CustomSky
 	{
 		if (maxDepth >= 3E+38f && minDepth < 3E+38f)
 		{
-			Texture2D LightE = MythContent.QuickTexture("VisualTextures/LightEffect");
+			Texture2D LightE = ModAsset.LightEffect.Value;
 			Main.spriteBatch.Draw(LightE, StarPos, null, new Color(0.3f, 0.21f, 0, 0), -(float)Math.Sin(Main.time / 26d) + 0.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * 0.05f, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(LightE, StarPos, null, new Color(1f, 0.7f, 0, 0), (float)Math.Sin(Main.time / 12d + 2) + 1.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * 0.05f, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(LightE, StarPos, null, new Color(0.3f, 0.21f, 0, 0), (float)Math.PI / 2f + (float)(Main.time / 9d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 1.57))) * 0.05f, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(LightE, StarPos, null, new Color(1f, 0.7f, 0, 0), (float)(Main.time / 26d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 3.14))) * 0.05f, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(LightE, StarPos, null, new Color(1f, 0.7f, 0, 0), -(float)(Main.time / 26d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 4.71))) * 0.05f, SpriteEffects.None, 0);
-			//spriteBatch.Draw(Common.MythContent.QuickTexture("LanternMoon/Skies/LanternSky"), new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), new Color(255, 255, 255, 255));
 		}
-		Texture2D LMoon = MythContent.QuickTexture("LanternMoon/Skies/LanternMoon");
+		Texture2D LMoon = ModAsset.LanternMoon.Value;
 		float HalfMaxTime = Main.dayTime ? 27000 : 16200;
 		float rotation = (float)(Main.time / HalfMaxTime) - 7.3f;
 		if ((StarPos - MythContent.GetSunPos()).Length() < 30)
@@ -108,7 +107,7 @@ public class LanternSky : CustomSky
 		}
 		if (Vx.Count > 2)
 		{
-			Texture2D t = MythContent.QuickTexture("LanternMoon/Projectiles/LBloodEffect");
+			Texture2D t = ModAsset.LBloodEffect.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 		}

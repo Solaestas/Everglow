@@ -139,8 +139,8 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = MythContent.QuickTexture("TheFirefly/Projectiles/GlowStar");
-		Texture2D Shade = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterBolt/NewWaterBoltShade");
+		Texture2D Light = ModAsset.GlowStar.Value;
+		Texture2D Shade = ModAsset.NewWaterBoltShade.Value;
 		var c0 = new Color(0.4f, 0.3f + 0.6f, 0, 0);
 
 		var bars0 = new List<Vertex2D>();
@@ -277,7 +277,9 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 		if (bars.Count > 3)
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
 	}
-	public override void Kill(int timeLeft)
+
+
+	public override void OnKill(int timeLeft)
 	{
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);

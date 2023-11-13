@@ -54,7 +54,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 		}
 		return false;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
 		Player player = Main.player[Projectile.owner];
@@ -130,7 +130,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		float lightValue = (Projectile.timeLeft - 100f) / 200f;
-		Texture2D Water = ModAsset.Projectiles_ElecLine.Value;
+		Texture2D Water = ModAsset.ElecLine.Value;
 		Texture2D WaterS = ModAsset.WaterLineBlackShade.Value;
 		float value0 = (float)(Math.Sin(800d / (Projectile.timeLeft + 35)) * 0.75f + 0.25f) * (300 - Projectile.timeLeft) / 300f;
 		value0 = Math.Max(0, value0);

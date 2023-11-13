@@ -1,4 +1,4 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
@@ -40,7 +40,7 @@ public class BlackCorruptRain3Friendly : ModProjectile
 
 	public override void PostDraw(Color lightColor)
 	{
-		Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
+		Texture2D t = ModAsset.FogTraceLight.Value;
 		float width = 20;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft / 6f;
@@ -51,7 +51,7 @@ public class BlackCorruptRain3Friendly : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");
+		Texture2D Light = ModAsset.FixCoinLight3.Value;
 		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, Light.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		return true;
 	}
