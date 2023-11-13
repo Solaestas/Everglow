@@ -310,7 +310,7 @@ class VFXGenerator : ModItem
 				break;
 			case 13:
 				{
-					var lightning = new BranchedLightning(100f, 9f, Main.MouseWorld, Main.rand.NextVector2Unit().ToRotation(), 300f, (float)(Math.PI/5));
+					var lightning = new BranchedLightning(100f, 9f, Main.MouseWorld, Main.rand.NextVector2Unit().ToRotation(), 300f, 0/*(float)(Math.PI/5)*/);
 					Ins.VFXManager.Add(lightning);
 				}
 				break;

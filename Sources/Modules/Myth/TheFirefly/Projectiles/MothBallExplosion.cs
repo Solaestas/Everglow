@@ -56,7 +56,7 @@ public class MothBallExplosion : ModProjectile, IWarpProjectile
 			Ins.VFXManager.Add(electric);
 		}
 		//for (int g = 0; g < Frequency * 3; g++)
-		for (int g = 0; g < Frequency * 2; g++)
+		for (int g = 0; g < Frequency * 1.5f; g++)
 		{
 			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(20f, 30f)).RotatedByRandom(MathHelper.TwoPi);
 			var electric = new MothBallCurrent
@@ -73,14 +73,14 @@ public class MothBallExplosion : ModProjectile, IWarpProjectile
 		}
 
 		// 生成分叉闪电
-		int totalLightnings = (int)(Frequency * 0.25);
+		int totalLightnings = (int)(Frequency * 0.35);
 		float angleDivision = (float)(Math.PI * 2 / totalLightnings);
 		for (int g = 0; g < totalLightnings; g++)
 		{
 			float randScale = Main.rand.NextFloat(0.75f, 1.0f);
 			var lightning = new BranchedLightning(
-				200f * randScale, 
-				10f * randScale, 
+				150f * randScale, 
+				8f * randScale, 
 				Projectile.position, 
 				g * angleDivision + Main.rand.NextFloat(angleDivision),
 				45f * randScale);
