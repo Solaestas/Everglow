@@ -14,15 +14,46 @@ Tiles: {
 	StrangeTuskStone4.MapEntry: Strange Tusk Stone
 	TuskRelic.MapEntry: The Tusk Relic
 	BlackFren.MapEntry: Black Fern
-	BlackFrenLarge.MapEntry: Black Fern Large
+	BlackFrenLarge.MapEntry: Large Black Fern
 	BlackStarShrub.MapEntry: Black Star Shrub
 	BlackStarShrubSmall.MapEntry: Black Star Shrub Small
 	BlackVine.MapEntry: Black Vine
 	BlueBlossom.MapEntry: Blue Blossom
-	CocoonRock.MapEntry: Cocoon Rock
+	DarkCocoonGrass.MapEntry: Dark Cocoon Grass
+	FireflyPiranhaBanner.MapEntry: Firefly Piranha Banner
 	GlowingReed.MapEntry: Glowing Reed
 	LampLotus.MapEntry: Lamp Lotus
+	LargeFireBulb.MapEntry: Large Fire Bulb
 	MothWorldDoor.MapEntry: Moth World Door
+	GlowingDrop.MapEntry: Glowing Drop
+	GlowWoodBathtub.MapEntry: Glow Wood Bathtub
+	GlowWoodBed.MapEntry: Glow Wood Bed
+	GlowWoodCampfire.MapEntry: Glow Wood Campfire
+	GlowWoodCandelabra.MapEntry: Glow Wood Candelabra
+	GlowWoodCandle.MapEntry: Glow Wood Candle
+	GlowWoodChair.MapEntry: Glow Wood Chair
+	GlowWoodChandelier.MapEntry: Glow Wood Chandelier
+	GlowWoodChandelierType2.MapEntry: Glow Wood Chandelier 2
+	GlowWoodChandelierType3.MapEntry: Glow Wood Chandelier 3
+	GlowWoodChandelierType4.MapEntry: Glow Wood Chandelier 4
+	GlowWoodChest.MapEntry: Glow Wood Chest
+	GlowWoodDoorClosed.MapEntry: Glow Wood Door Closed
+	GlowWoodDoorClosedType2.MapEntry: Glow Wood Door Closed 2
+	GlowWoodDoorOpened.MapEntry: Glow Wood Door Opened
+	GlowWoodDoorOpenedType2.MapEntry: Glow Wood Door Opened 2
+	GlowWoodDresser.MapEntry: Glow Wood Dresser
+	GlowWoodDresserType2.MapEntry: Glow Wood Dresser 2
+	GlowWoodLantern.MapEntry: Glow Wood Lantern
+	GlowWoodLanternType2.MapEntry: Glow Wood Lantern 2
+	GlowWoodMusicBox.MapEntry: Glow Wood Music Box
+	GlowWoodPiano.MapEntry: Glow Wood Piano
+	GlowWoodPlatform.MapEntry: Glow Wood Platform
+	GlowWoodSink.MapEntry: Glow Wood Sink
+	GlowWoodSinkType2.MapEntry: Glow Wood Sink 2
+	GlowWoodSofa.MapEntry: Glow Wood Sofa
+	GlowWoodTable.MapEntry: Glow Wood Table
+	GlowWoodTorch.MapEntry: Glow Wood Torch
+	GlowWoodWorkBench.MapEntry: Glow Wood Work Bench
 	CyanVineBar.MapEntry: Cyan Vine Bar
 	CyanVineOreTile.MapEntry: Cyan Vine Ore Tile
 	CyanVineStone.MapEntry: Cyan Vine Stone
@@ -54,6 +85,11 @@ Biomes: {
 		DisplayName: The Kelp Curtains
 		TownNPCDialogueName: the Kelp Curtain Biome
 	}
+
+	HurricaneMazeBiome: {
+		DisplayName: The Hurricane Maze
+		TownNPCDialogueName: the Hurricane Maze Biome
+	}
 }
 
 MapEntry.FluorescentTree: Fluorescent Tree
@@ -77,6 +113,11 @@ Buffs: {
 	OnElectric: {
 		DisplayName: On Electric
 		Description: Mods.Everglow.Buffs.OnElectric.Description
+	}
+
+	StaminaEnergyBuff: {
+		DisplayName: Stamina Energy
+		Description: Mods.Everglow.Buffs.StaminaEnergyBuff.Description
 	}
 
 	StarCrack: {
@@ -777,7 +818,7 @@ Buffs: {
 	}
 
 	WaterMelonJuiceBuff: {
-		DisplayName: Water Melon Juice
+		DisplayName: Watermelon Juice
 		Description: '''
 					Greatly increases crit chance and knockback
 					'Focused striking force'
@@ -789,6 +830,11 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.TuskStaff.Description
 	}
 
+	FireflyInferno: {
+		DisplayName: Firefly Inferno
+		Description: Mods.Everglow.Buffs.FireflyInferno.Description
+	}
+
 	GlowMothBuff: {
 		DisplayName: Glow Moth Buff
 		Description: Mods.Everglow.Buffs.GlowMothBuff.Description
@@ -797,6 +843,11 @@ Buffs: {
 	OnMoth: {
 		DisplayName: "Mark of the Phantom Butterfly"
 		Description: "Receive more damage from the phantom butterflies"
+	}
+
+	ShadowPotionBuff: {
+		DisplayName: Shadow Potion Buff
+		Description: Mods.Everglow.Buffs.ShadowPotionBuff.Description
 	}
 
 	Freeze: {
@@ -870,7 +921,7 @@ Buffs: {
 	}
 
 	YellowImmune: {
-		DisplayName: "Yellow Flame Immuniy"
+		DisplayName: "Yellow Flame Immunity"
 		Description: "Spiritual Fiery Core's yellow flame cannot hurt you"
 	}
 
@@ -1036,8 +1087,18 @@ Items: {
 		Tooltip: ""
 	}
 
+	EnergyDrink: {
+		DisplayName: Energy Drink
+		Tooltip: ""
+	}
+
 	StarSeed: {
 		DisplayName: Star Seed
+		Tooltip: ""
+	}
+
+	EnergyBand: {
+		DisplayName: Energy Band
 		Tooltip: ""
 	}
 
@@ -1419,6 +1480,116 @@ Items: {
 		Tooltip: "{$Mods.Everglow.Common.ExcluWeapon}\n[c/B4B16E:'This is Order']\nLeft click in succession to perform different attacks\nThe last attack slightly propels you to the cursor\nLeft click and hold to dash and summon falling spears\nRight click to summon a pillar and grant you a damage-reducing shield"
 	}
 
+	BurningFrozenHeart: {
+		DisplayName: Burning Frozen Heart
+		Tooltip: ""
+	}
+
+	CreatPineTree: {
+		DisplayName: Create Pine Tree
+		Tooltip: ""
+	}
+
+	DessertBag_Snow: {
+		DisplayName: Snowy Dessert Bag
+		Tooltip: ""
+	}
+
+	FrostBomb: {
+		DisplayName: Frost Bomb
+		Tooltip: ""
+	}
+
+	HarvestingClaw: {
+		DisplayName: Harvesting Claw
+		Tooltip: ""
+	}
+
+	IcedSpear: {
+		DisplayName: Ice Spear
+		Tooltip: ""
+	}
+
+	PearlOfCyan: {
+		DisplayName: Pearl Of Cyan
+		Tooltip: ""
+	}
+
+	PineNut: {
+		DisplayName: Pine Nut
+		Tooltip: ""
+	}
+
+	PineStab: {
+		DisplayName: Pine Rapier
+		Tooltip: ""
+	}
+
+	SnowPineChest: {
+		DisplayName: Snow Pine Chest
+		Tooltip: ""
+	}
+
+	SnowPineChest_fresh: {
+		DisplayName: Fresh Snow Pine Chest
+		Tooltip: ""
+	}
+
+	SnowPineChest_gold: {
+		DisplayName: Gold Snow Pine Chest
+		Tooltip: ""
+	}
+
+	SnowPineDoor: {
+		DisplayName: Snow Pine Door
+		Tooltip: ""
+	}
+
+	SnowPineLeaveStaff: {
+		DisplayName: Snow Pine Leaf Staff
+		Tooltip: ""
+	}
+
+	SnowPineLeavesWall: {
+		DisplayName: Snow Pine Leaf Wall
+		Tooltip: ""
+	}
+
+	SnowPineLockBox: {
+		DisplayName: Snow Pine Lock Box
+		Tooltip: ""
+	}
+
+	SnowPineWoodStaff: {
+		DisplayName: Snow Pine Wood Staff
+		Tooltip: ""
+	}
+
+	SnowPineWoodWall: {
+		DisplayName: Snow Pine Wood Wall
+		Tooltip: ""
+	}
+
+	SungloChandelier: {
+		DisplayName: Sunglow Chandelier
+		Tooltip: ""
+	}
+
+	Thatched: {
+		DisplayName: Thatched Block
+		Tooltip: ""
+	}
+
+	ThatchedWall: {
+		DisplayName: Thatched Wall
+		Tooltip: ""
+	}
+
+	PineLiftWinch: {
+		DisplayName: Pine Lift Winch
+		Tooltip: ""
+	}
+
 	Tester: {
 		DisplayName: Tester
 		Tooltip: ""
@@ -1519,6 +1690,11 @@ Items: {
 		Tooltip: "Increases armor penetration by 5\nIncreases damage and crit chance by 5%\n'A tusk was knocked down from mouth of a beast, again you knocked down a small part of it'"
 	}
 
+	LargeFireBulbTestItem: {
+		DisplayName: Large Fire Bulb Test Item
+		Tooltip: ""
+	}
+
 	FireflyPylonItem: {
 		DisplayName: Firefly Pylon
 		Tooltip: ""
@@ -1531,6 +1707,21 @@ Items: {
 
 	BlackStarShrub: {
 		DisplayName: Black Star Shrub
+		Tooltip: ""
+	}
+
+	BlackVine: {
+		DisplayName: Black Vine
+		Tooltip: ""
+	}
+
+	CorruptOrbStonePost: {
+		DisplayName: Corrupt Orb Stone Post
+		Tooltip: ""
+	}
+
+	CrimsonOrbStonePost: {
+		DisplayName: Crimson Orb Stone Post
 		Tooltip: ""
 	}
 
@@ -1549,12 +1740,9 @@ Items: {
 		Tooltip: ""
 	}
 
-	FireflyCapital: {
-		DisplayName: "'An Illusion of The Firefly'"
-		Tooltip: '''
-				Brings you to The Firefly
-				{$Mods.Everglow.Common.DebugItem}
-				'''
+	FireflyImpression: {
+		DisplayName: "'An Impression of The Firefly'"
+		Tooltip: Brings you to The Firefly\n{$Mods.Everglow.Common.DebugItem}
 	}
 
 	FireflyMoss: {
@@ -1564,6 +1752,11 @@ Items: {
 
 	FireflyPigment: {
 		DisplayName: Firefly Pigment
+		Tooltip: ""
+	}
+
+	FireflyPiranhaBanner: {
+		DisplayName: Firefly Piranha Banner
 		Tooltip: ""
 	}
 
@@ -1582,18 +1775,18 @@ Items: {
 		Tooltip: ""
 	}
 
-	GlowMetal: {
-		DisplayName: Glowing Metal Block
-		Tooltip: ""
-	}
-
-	GlowStone: {
-		DisplayName: Glowing Stone
+	GlowingReedSeed: {
+		DisplayName: Glowing Reed Seed
 		Tooltip: ""
 	}
 
 	GlowWood: {
 		DisplayName: Glow Wood
+		Tooltip: ""
+	}
+
+	GlowWoodWall: {
+		DisplayName: Glow Wood Wall
 		Tooltip: ""
 	}
 
@@ -1681,6 +1874,11 @@ Items: {
 				'''
 	}
 
+	ShadowPotion: {
+		DisplayName: Shadow Potion
+		Tooltip: ""
+	}
+
 	FluorescentLeafStaff: {
 		DisplayName: Fluorescent Leaf Staff
 		Tooltip: ""
@@ -1696,6 +1894,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	GlowWoodBathtub: {
+		DisplayName: Glow Wood Bathtub
+		Tooltip: ""
+	}
+
 	GlowWoodBed: {
 		DisplayName: Glow Wood Bed
 		Tooltip: ""
@@ -1703,11 +1906,6 @@ Items: {
 
 	GlowWoodBookcase: {
 		DisplayName: Glow Wood Bookcase
-		Tooltip: ""
-	}
-
-	GlowWoodBookcaseType2: {
-		DisplayName: Glow Wood Bookcase 2
 		Tooltip: ""
 	}
 
@@ -1826,13 +2024,13 @@ Items: {
 		Tooltip: ""
 	}
 
-	GlowWoodSofaType2: {
-		DisplayName: Glow Wood Sofa 2
+	GlowWoodTable: {
+		DisplayName: Glow Wood Table
 		Tooltip: ""
 	}
 
-	GlowWoodTable: {
-		DisplayName: Glow Wood Table
+	GlowWoodToilet: {
+		DisplayName: Glow Wood Toilet
 		Tooltip: ""
 	}
 
@@ -1853,6 +2051,21 @@ Items: {
 
 	MothRelic: {
 		DisplayName: Corrupted Moth Relic
+		Tooltip: ""
+	}
+
+	FireflywoodBreastplate: {
+		DisplayName: Fireflywood Breastplate
+		Tooltip: ""
+	}
+
+	FireflywoodHelmet: {
+		DisplayName: Fireflywood Helmet
+		Tooltip: ""
+	}
+
+	FireflywoodLeggings: {
+		DisplayName: Fireflywood Leggings
 		Tooltip: ""
 	}
 
@@ -2679,6 +2892,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	DarkMud: {
+		DisplayName: Dark Mud
+		Tooltip: ""
+	}
+
 	DoubleArmsChineseStreetLamp: {
 		DisplayName: "Chinese Double Arms Street Lamp"
 		Tooltip: ""
@@ -2694,8 +2912,18 @@ Items: {
 		Tooltip: ""
 	}
 
-	ShoreMud: {
-		DisplayName: Shore Mud
+	IronTrackScaffolding: {
+		DisplayName: Iron Track Scaffolding
+		Tooltip: ""
+	}
+
+	PierWithSlabs: {
+		DisplayName: Pier With Slabs
+		Tooltip: ""
+	}
+
+	PierWithSlabsTop: {
+		DisplayName: Pier With Slabs Top
 		Tooltip: ""
 	}
 
@@ -2774,6 +3002,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	YggdrasilCyatheaWood: {
+		DisplayName: Yggdrasil Cyathea Wood
+		Tooltip: ""
+	}
+
 	YggdrasilDirt: {
 		DisplayName: Yggdrasil Dirt
 		Tooltip: ""
@@ -2811,6 +3044,11 @@ Items: {
 
 	HardmodeItem: {
 		DisplayName: Hardmode Item
+		Tooltip: ""
+	}
+
+	ScreenPositionPrintItem: {
+		DisplayName: Screen Position Print Item
 		Tooltip: ""
 	}
 
@@ -2911,7 +3149,7 @@ Projectiles: {
 	BlueRibbonBayonet_Pro.DisplayName: Blue Ribbon Rapier
 	BlueRibbonBayonet_Pro_Stab.DisplayName: Blue Ribbon Rapier
 	CopperStabbingSword_Pro.DisplayName: Copper Rapier
-	CopperStabbingSword_Pro_Stab.DisplayName: Copper Rapier
+	CopperStabbingSword_Pro_Stab.DisplayName: Copper Repier
 	CrutchBayonet_Pro.DisplayName: Crutch Rapier
 	CrutchBayonet_Pro_Stab.DisplayName: Crutch Rapier
 	CurseFlameStabbingSword_Pro.DisplayName: Cursed Flame Rapier
@@ -2923,13 +3161,14 @@ Projectiles: {
 	EnchantedBayonet_beam.DisplayName: Enchanted Rapier Beam
 	EnchantedBayonet_Pro.DisplayName: Enchanted Rapier
 	EnchantedBayonet_Pro_Stab.DisplayName: Enchanted Rapier
-	EternalNight_Pro.DisplayName: Eternal Night Rapier
-	EternalNight_Pro_Stab.DisplayName: Eternal Night Rapier
-	EternalNight_shadow.DisplayName: Eternal Night Rapier Shadow
+	EternalNight_Pro.DisplayName: Eternal Night
+	EternalNight_Pro_Stab.DisplayName: Eternal Night
+	EternalNight_shadow.DisplayName: Eternal Night Shadow
 	GoldenStabbingSword_Pro.DisplayName: Gold Rapier
 	GoldenStabbingSword_Pro_Stab.DisplayName: Gold Rapier
 	HolyBayonet_Pro.DisplayName: Holy Rapier
 	HolyBayonet_Pro_Stab.DisplayName: Holy Rapier
+	HolyBayonet_Slash.DisplayName: Holy Rapier Slash
 	IchorBayonet_Pro.DisplayName: Ichor Rapier
 	IchorBayonet_Pro_Stab.DisplayName: Ichor Rapier
 	IronStabbingSword_Pro.DisplayName: Iron Rapier
@@ -2965,8 +3204,6 @@ Projectiles: {
 	YoenLeZed_Pro_Stab.DisplayName: Yoen Le Zed
 	YoenLeZed_Pro_Stab_HitTile.DisplayName: Yoen Le Zed
 	FryingPan.DisplayName: Frying Pan
-	ButterflyDreamFriendly.DisplayName: Butterfly Dream
-	ButterflyDream.DisplayName: Butterfly Dream
 	DashingLightEff.DisplayName: Dashing Light
 	VortexVanquisher.DisplayName: Vortex Vanquisher
 	VortexVanquisher2.DisplayName: Vortex Vanquisher
@@ -2974,8 +3211,15 @@ Projectiles: {
 	VortexVanquisherThump.DisplayName: Vortex Vanquisher Thump
 	GoldShield.DisplayName: Gold Shield
 	StonePost.DisplayName: Stone Post
-	CrimsonTuskProj.DisplayName: Crimson Tusk
-	CrimsonTuskProjGra.DisplayName: Crimson Tusk
+	FrostBall.DisplayName: Frost Ball
+	FrostBomb.DisplayName: Frost Bomb
+	FrostSpice.DisplayName: Frost Spice
+	IcedSpear.DisplayName: Iced Spear
+	PineSprite.DisplayName: Pine Sprite
+	PineStab_Pro.DisplayName: Pine Stab_ Pro
+	PineStab_Pro_Stab.DisplayName: Pine Stab_ Pro_ Stab
+	CrimsonTuskProj.DisplayName: Crimson Tusk Proj
+	CrimsonTuskProjGra.DisplayName: Crimson Tusk Proj Gra
 	EarthTusk.DisplayName: Earth Tusk
 	EarthTuskHostile.DisplayName: Earth Tusk
 	TuskCrack.DisplayName: Tusk Crack
@@ -3008,6 +3252,8 @@ Projectiles: {
 	BlueMissil.DisplayName: Blue Missile
 	BlueMissilFriendly.DisplayName: Blue Missile
 	BombShakeWave.DisplayName: Bomb Shake Wave
+	ButterflyDream.DisplayName: Butterfly Dream
+	ButterflyDreamFriendly.DisplayName: Butterfly Dream
 	CorMoth4DProj.DisplayName: 4D Butterfly Effect
 	CorruptDust.DisplayName: Corrupt Dust
 	DarkEffect.DisplayName: Dark Effect
@@ -3026,10 +3272,12 @@ Projectiles: {
 	GlowStar.DisplayName: Glow Star
 	GlowStarExplosion.DisplayName: Glow Star Explosion
 	GlowWoodSword.DisplayName: Glow Wood Sword
-	MissileProj.DisplayName: Missile
-	MissileProjHostile.DisplayName: Missile
+	MissileExplosion.DisplayName: Missile Explosion
+	MissileProj.DisplayName: Missile Proj
+	MissileProjHostile.DisplayName: Missile Proj Hostile
 	MothArrow.DisplayName: Moth Arrow
 	MothBall.DisplayName: Moth Ball
+	MothBallExplosion.DisplayName: Moth Ball Explosion
 	MothGrey.DisplayName: Moth Grey
 	MothMagicArray.DisplayName: Moth Magic Array
 	MothYoyoProjectile.DisplayName: Glow-yo
@@ -3089,6 +3337,7 @@ Projectiles: {
 	WoodSlingshot.DisplayName: Wood Slingshot
 	ComingGhost.DisplayName: Warped Blade
 	ComingGhost2.DisplayName: Warped Blade
+	CyanFrostProj.DisplayName: Cyfrost Blade
 	GhostHit.DisplayName: Ghost Hit
 	GoldRound.DisplayName: Golden Round
 	GoldRoundYoyo.DisplayName: Golden Round
@@ -3097,7 +3346,7 @@ Projectiles: {
 	Sunflower.DisplayName: Sunflower Disc
 	SunFlowerpetal.DisplayName: Sunflower Petal
 	World.DisplayName: The World
-	WorldHit.DisplayName: World Hit
+	WorldHit.DisplayName: The World Hit
 	Hepuyuan.DisplayName: Prinomial Jade Winged Spear
 	HepuyuanDown.DisplayName: Prinomial Jade Winged Spear
 	HepuyuanShake.DisplayName: Prinomial Jade Winged Spear
@@ -3329,6 +3578,15 @@ Projectiles: {
 	CactusBallProj.DisplayName: Cactus Ball
 	CactusBallSpike.DisplayName: Cactus Ball Spike
 	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
+	SquamousAirProj.DisplayName: Squamous Air Projectile
+	SquamousRockExplosion.DisplayName: Squamous Rock Explosion
+	SquamousRockProj.DisplayName: Squamous Rock
+	SquamousRockProj_small.DisplayName: Squamous Rock
+	SquamousRockSpike.DisplayName: Squamous Rock Spike
+	SquamousRollingStone.DisplayName: Squamous Rolling Stone
+	Squamous_HitTile.DisplayName: Squamous Hit
+	YggdrasilMoonBlade.DisplayName: Yggdrasil Moon Blade
+	YggdrasilMoonBladeHit.DisplayName: Yggdrasil Moon Blade Hit
 	AcroporaSpear.DisplayName: Acropora Spear
 	AcroporaThumpEff.DisplayName: Acropora Thump
 	TrueDeathSickle.DisplayName: True Death Sickle

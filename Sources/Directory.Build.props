@@ -5,7 +5,7 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PlatformTarget>AnyCPU</PlatformTarget>
-		<LangVersion>preview</LangVersion>
+		<LangVersion>11</LangVersion>
 		<NoWarn>$(NoWarn);CS0436</NoWarn>
 		<GeneratePath>true</GeneratePath>
 		<EverglowDirectory>$(MSBuildThisFileDirectory)Everglow\</EverglowDirectory>
@@ -15,12 +15,12 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
-		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.1.2" />
+		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.4.1" />
 		<Publicize Include="ReLogic" />
 		<Publicize Include="MonoMod.RuntimeDetour" />
 		<Publicize Include="MonoMod.Utils" />
-		<Publicize Include="FNA" />
 		<Solaestas-ResourceFile Include="**\*.bmp" />
 		<Solaestas-ResourceFile Include="**\*.mapio" />
+		<AdditionalFiles Update="**\*.FileListAbsolute.txt" Visible="false" Link="\" />
 	</ItemGroup>
 </Project>

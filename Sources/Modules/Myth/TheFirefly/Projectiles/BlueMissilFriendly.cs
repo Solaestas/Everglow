@@ -23,7 +23,7 @@ public class BlueMissilFriendly : ModProjectile
 		dust.velocity = Projectile.velocity * 0.8f;
 		Projectile.scale *= 0.98f;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		for (int i = 0; i < 18; i++)
 		{

@@ -102,7 +102,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			base.OnHitNPC(target, hit, damageDone);
 		}
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			if(Projectile.alpha < 180)
 			{

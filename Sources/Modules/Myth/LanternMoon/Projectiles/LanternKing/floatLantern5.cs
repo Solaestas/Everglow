@@ -1,11 +1,7 @@
-﻿namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
 public class floatLantern5 : ModProjectile
 {
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("漂浮灯笼");
-	}
 	public override void SetDefaults()
 	{
 		Projectile.width = 20;
@@ -22,22 +18,17 @@ public class floatLantern5 : ModProjectile
 		Projectile.scale = 1f;
 
 	}
-	//55555
 	public override Color? GetAlpha(Color lightColor)
 	{
 		return new Color?(new Color(1f, 1f, 1f, 0.5f));
 	}
 	private bool initialization = true;
-	private bool Boom = false;
 	public override void AI()
 	{
 		if (initialization)
 		{
 			num1 = Main.rand.Next(-120, 0);
-			num2 = (int)Projectile.ai[0] * 4;
-			num3 = Main.rand.NextFloat(0.3f, 1.8f);
 			num4 = Main.rand.NextFloat(0.3f, 1800f);
-			num5 = Main.rand.NextFloat(2.85f, 3.15f);
 			if (Projectile.timeLeft > 6000)
 				Projectile.timeLeft = 3000;
 			for (int i = 0; i < 4; i++)
@@ -49,32 +40,17 @@ public class floatLantern5 : ModProjectile
 			initialization = false;
 		}
 		num1 += 1;
-		num2 -= 1;
 		num4 += 0.01f;
 		Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) - (float)Math.PI * 0.5f;
-		/*if (Projectile.timeLeft < 995)
-            {
-                Vector2 vector = Projectile.Center - new Vector2(4, 4);
-                int num = Dust.NewDust(vector, 2, 2, 102, 0f, 0f, 0, default(Color), (float)Projectile.scale * 0.8f);
-                Main.dust[num].velocity *= 0.0f;
-                Main.dust[num].noGravity = true;
-                Main.dust[num].scale *=  1.2f;
-                Main.dust[num].alpha = 200;
-            }*/
+
 		if (num1 > 0 && num1 <= 120)
 			num = num1 / 120f;
 		if (Projectile.timeLeft < 120)
 			num = Projectile.timeLeft / 120f;
-		//Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 0.8f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0.2f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0f / 255f * Projectile.scale * num1);
 	}
 	private float num = 0;
 	private int num1 = 0;
-	private int num2 = -1;
-	private float num3 = 0.8f;
 	private float num4 = 0;
-	private float num5 = 0;
-	private float x = 0;
-	private float y = 0;
 	private int Fy = 0;
 	private int fyc = 0;
 	private Vector2[] V4 = new Vector2[4];

@@ -133,10 +133,10 @@ internal class RopeManager
 			{
 				if (Main.rand.NextBool(12) || (i, j) == (rectangle.Width / 2, rectangle.Height / 2))
 				{
-					int MaxCount = 4;
+					int maxCount = 4;
 					if (rectangle.Width > 10)
-						MaxCount = 6;
-					var rope = new Rope(new Vector2(i * 5, j * 5) + basePosition, (Main.rand.Next(0, 60) + 140) / 300f, Main.rand.Next(2, MaxCount + 1), offset);
+						maxCount = 6;
+					var rope = new Rope(new Vector2(i * 5, j * 5) + basePosition, (Main.rand.Next(0, 60) + 140) / 300f, Main.rand.Next(2, maxCount + 1), offset);
 					ropes.Add(rope);
 					result.Add(rope);
 				}

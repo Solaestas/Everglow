@@ -2,6 +2,7 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -34,6 +35,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		public Vector2 startCenter = Vector2.zeroVector;
 		public Vector2 endCenter = Vector2.zeroVector;
 		public Vector2 flashVelocity = Vector2.zeroVector;
+		public float hitTargetAngle = 0;
 		public override void OnSpawn(IEntitySource source)
 		{
 			targetNPC = (int)Projectile.ai[0];
@@ -49,7 +51,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 			if (targetNPC >= 0 && targetNPC < 200)
 			{
-				if (Main.npc[targetNPC].active && !Main.npc[targetNPC].dontTakeDamage)
+				if (Main.npc[targetNPC].active && !Main.npc[targetNPC].dontTakeDamage && (Main.npc[targetNPC].Center - Projectile.Center).Length() < 900f)
 				{
 					return;
 				}
@@ -60,7 +62,16 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			{
 				if (npc.active && !npc.dontTakeDamage)
 				{
-					if ((npc.Center - Projectile.Center).Length() < minDis)
+					float length = (npc.Center - Projectile.Center).Length();
+					if (!npc.CanBeChasedBy())
+					{
+						length = 580 + Main.rand.NextFloat(10f);
+					}
+					if (npc.type == NPCID.TargetDummy)
+					{
+						length = 590 + Main.rand.NextFloat(10f);
+					}
+					if (length < minDis)
 					{
 						minDis = npc.Center.Length();
 						whoAmI = npc.whoAmI;
@@ -159,7 +170,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 						if (stick != null && stick.active)
 						{
 							Projectile.rotation = stick.rotation + relativeAngle;
-							Projectile.Center = stick.Center + relativePos.RotatedBy(stick.rotation - relativeAngle);
+							Projectile.Center = stick.Center + relativePos.RotatedBy(stick.rotation + relativeAngle - hitTargetAngle);
 						}
 						else
 						{
@@ -185,6 +196,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					if ((new Rectangle((int)Projectile.Center.X, (int)Projectile.Center.Y, 1, 1)).Intersects(npc.Hitbox))
 					{
 						relativeAngle = Projectile.rotation - npc.rotation;
+						hitTargetAngle = Projectile.rotation;
 						relativePos = Projectile.Center - npc.Center;
 						stickNPC = npc.whoAmI;
 						return true;

@@ -130,7 +130,7 @@ public class ExplodeLantern : ModProjectile, IWarpProjectile
 			Ins.VFXManager.Add(cf);
 		}
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);

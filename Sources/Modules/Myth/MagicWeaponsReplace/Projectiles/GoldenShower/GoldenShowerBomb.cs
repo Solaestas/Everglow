@@ -1,12 +1,11 @@
-﻿using Everglow.Myth.Common;
-using static Everglow.Myth.Common.MythUtils;
+using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Myth.Common;
+using Terraria.DataStructures;
+
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
 
-public class GoldenShowerBomb : ModProjectile, IWarpProjectile, IBloomProjectile
-{
-	public override bool CloneNewInstances => false;
-	public override bool IsCloneable => false;
-
+public class GoldenShowerBomb : ModProjectile, IWarpProjectile
+{ 
 	public override void SetDefaults()
 	{
 		Projectile.width = 120;
@@ -19,132 +18,119 @@ public class GoldenShowerBomb : ModProjectile, IWarpProjectile, IBloomProjectile
 		Projectile.tileCollide = false;
 		Projectile.extraUpdates = 1;
 		Projectile.usesLocalNPCImmunity = true;
-		Projectile.localNPCHitCooldown = 20;
+		Projectile.localNPCHitCooldown = 200;
 		Projectile.DamageType = DamageClass.Magic;
 	}
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+	{
+		float timeValue = (200 - Projectile.timeLeft) / 200f;
+		float maxDis = MathF.Sqrt(timeValue) * 24 * Projectile.ai[0];
+		bool bool0 = (targetHitbox.TopLeft() - projHitbox.Center()).Length() < maxDis;
+		bool bool1 = (targetHitbox.TopRight() - projHitbox.Center()).Length() < maxDis;
+		bool bool2 = (targetHitbox.BottomLeft() - projHitbox.Center()).Length() < maxDis;
+		bool bool3 = (targetHitbox.BottomRight() - projHitbox.Center()).Length() < maxDis;
+		return bool0 || bool1 || bool2 || bool3;
+	}
+	public override void OnSpawn(IEntitySource source)
+	{
+		float times = Projectile.ai[0] / 2.5f;
+		if (Ins.VisualQuality.Low)
+		{
+			times *= 0.5f;
+		}
 
+		for (int g = 0; g < 12 * times; g++)
+		{
+			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(1.1f)).RotatedByRandom(MathHelper.TwoPi);
+			float mulScale = Main.rand.NextFloat(6f, 14f);
+			var blood = new IchorDrop
+			{
+				velocity = afterVelocity * MathF.Sqrt(Projectile.ai[0]),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center,
+				maxTime = Main.rand.Next(82, 164),
+				scale = mulScale,
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
+			};
+			Ins.VFXManager.Add(blood);
+		}
+		for (int g = 0; g < 6 * times; g++)
+		{
+			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(0.8f)).RotatedByRandom(MathHelper.TwoPi);
+			var blood = new IchorSplash
+			{
+				velocity = afterVelocity * MathF.Sqrt(Projectile.ai[0]),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center,
+				maxTime = Main.rand.Next(42, 164),
+				scale = Main.rand.NextFloat(6f, 12f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 }
+			};
+			Ins.VFXManager.Add(blood);
+		}
+	}
 	public override void AI()
 	{
-		Projectile.velocity *= 0.95f;
-
-		if (Projectile.timeLeft <= 198)
-			Projectile.friendly = false;
-
-
-		int MaxC = (int)(Projectile.ai[0] / 6 + 5);
-		MaxC = Math.Min(26, MaxC);
-		if (Projectile.timeLeft >= 200)
-		{
-			for (int x = 0; x < MaxC; x++)
-			{
-				SparkVelocity[x] = new Vector2(0, Projectile.ai[0]).RotatedByRandom(6.283) * Main.rand.NextFloat(0.05f, 1.2f);
-				SparkOldPos[x, 0] = Projectile.Center;
-			}
-		}
-
-		for (int x = 0; x < MaxC; x++)
-		{
-			for (int y = 39; y > 0; y--)
-			{
-				SparkOldPos[x, y] = SparkOldPos[x, y - 1];
-			}
-			if (Collision.SolidCollision(SparkOldPos[x, 0] + new Vector2(SparkVelocity[x].X, 0), 0, 0))
-				SparkVelocity[x].X *= -0.95f;
-			if (Collision.SolidCollision(SparkOldPos[x, 0] + new Vector2(0, SparkVelocity[x].Y), 0, 0))
-				SparkVelocity[x].Y *= -0.95f;
-			SparkOldPos[x, 0] += SparkVelocity[x];
-
-			if (SparkVelocity[x].Length() > 0.3f)
-				SparkVelocity[x] *= 0.95f;
-			SparkVelocity[x].Y += 0.04f;
-		}
 		Projectile.velocity *= 0;
 	}
-
 	public override void PostDraw(Color lightColor)
 	{
-		Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitLight");
-		float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(255, 225, 0, 0) * Dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * Dark, SpriteEffects.None, 0);
+		Texture2D Shadow = ModAsset.CursedHitLight.Value;
+		float dark = Math.Max((Projectile.timeLeft - 100) / 50f, 0);
+		float dark2 = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
+		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(255, 205, 0, 0) * dark2, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark2, SpriteEffects.None, 0);
+
+		float timeValue = (200 - Projectile.timeLeft) / 200f;
+		Color cDark = new Color(0, 0, 0, 1f - timeValue);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 20 * (1 - timeValue) * Projectile.ai[0], cDark * dark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 4 * (1 - timeValue) * Projectile.ai[0], new Color(255, 205, 0, 0) * dark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 48 * Projectile.ai[0], 40 * Projectile.ai[0], new Color(255, 205, 0, 0) * dark2, Projectile.Center - Main.screenPosition, Commons.ModAsset.Noise_hiveCyber.Value);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHit");
-		float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * Dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f, SpriteEffects.None, 0);
-		Texture2D light = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitStar");
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(255, 225, 0, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) * Projectile.ai[0] / 40f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(255, 225, 0, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, Dark) * Projectile.ai[0] / 40f, SpriteEffects.None, 0);
-		float size = Math.Clamp(Projectile.timeLeft / 8f - 10, 0f, 20f);
-		if (size > 0)
-		{
-			DrawSpark(Color.White * 0.5f, size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkDark"));
-			DrawSpark(new Color(255, 225, 0, 0), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
-		}
+		Texture2D Shadow = ModAsset.CursedHit.Value;
+		float dark = Math.Max((Projectile.timeLeft - 120) / 80f, 0);
+		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f, SpriteEffects.None, 0);
+		Texture2D light = ModAsset.LineLight_2.Value;
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(255, 205, 0, 0), 1.57f, light.Size() / 2f, new Vector2(0.5f, dark) * Projectile.ai[0] * 0.2f, SpriteEffects.None, 0);
 		return false;
 	}
-
-	private Vector2[,] SparkOldPos = new Vector2[27, 40];
-	private Vector2[] SparkVelocity = new Vector2[27];
-	internal void DrawSpark(Color c0, float width, Texture2D tex)
+	private void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
-		int MaxC = (int)(Projectile.ai[0] / 6 + 5);
-		MaxC = Math.Min(26, MaxC);
-		var bars = new List<Vertex2D>();
-		for (int x = 0; x < MaxC; x++)
+		var circle = new List<Vertex2D>();
+		for (int h = 0; h < radius / 2; h++)
 		{
-			int TrueL = 0;
-			for (int i = 1; i < 40; ++i)
-			{
-				if (SparkOldPos[x, i] == Vector2.Zero)
-					break;
-
-				TrueL++;
-			}
-			for (int i = 1; i < 40; ++i)
-			{
-				if (SparkOldPos[x, i] == Vector2.Zero)
-					break;
-
-				var normalDir = SparkOldPos[x, i - 1] - SparkOldPos[x, i];
-				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-				var factor = i / (float)TrueL;
-				var w = MathHelper.Lerp(1f, 0.05f, factor);
-				float x0 = 1 - factor;
-				if (i == 1)
-				{
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
-				}
-				bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
-				bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
-				if (i == 39)
-				{
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
-				}
-			}
-			Texture2D t = tex;
-			Main.graphics.GraphicsDevice.Textures[0] = t;
+			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 24 / radius % 1, 0.8f, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 24 / radius % 1, 0.5f, 0)));
 		}
-		if (bars.Count > 3)
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(1, 0.8f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(1, 0.5f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0.5f, 0)));
+		if (circle.Count > 0)
+		{
+			Main.graphics.GraphicsDevice.Textures[0] = tex;
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
+		}
 	}
-
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-
-		float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
+		float value = (200 - Projectile.timeLeft) / 200f;
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
 			colorV *= Projectile.ai[0] / 10f;
-		Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
-		DrawTexCircle(spriteBatch, value * 16 * Projectile.ai[0], 100, new Color(colorV, colorV * 0.4f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+		Texture2D t = Commons.ModAsset.Trail.Value;
+		float width = 60;
+		if (Projectile.timeLeft < 60)
+			width = Projectile.timeLeft;
+
+		MythUtils.DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 64 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 2f * value, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
-	public void DrawBloom()
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		float size = Math.Clamp(Projectile.timeLeft / 8f - 60, 0f, 20f);
-		if (size > 0)
-			DrawSpark(new Color(255, 2255, 225, 0), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
+		target.AddBuff(BuffID.Ichor, 900);
 	}
 }

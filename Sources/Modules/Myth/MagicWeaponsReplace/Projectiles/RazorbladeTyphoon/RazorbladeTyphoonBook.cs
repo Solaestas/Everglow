@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon;
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon;
 
 internal class RazorbladeTyphoonBook : MagicBookProjectile
 {
@@ -26,7 +26,7 @@ internal class RazorbladeTyphoonBook : MagicBookProjectile
 	{
 		ConstantUsingTime += 1;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		int HitType = ModContent.ProjectileType<HurricaneMask>();
 		float WindHole = Math.Min(ConstantUsingTime / 720f - 0.2f, 1f);
@@ -39,6 +39,6 @@ internal class RazorbladeTyphoonBook : MagicBookProjectile
 			p.CritChance = (int)Main.player[Projectile.owner].GetTotalCritChance(DamageClass.Magic);
 		}
 		ConstantUsingTime = 0;
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 }

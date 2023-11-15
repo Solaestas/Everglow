@@ -1,6 +1,7 @@
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.GameContent.Shaders;
@@ -294,105 +295,53 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		return false;
 	}
 
-	public virtual void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth = 10, float HorizontalHeight = 10, float DrawScale = 0.9f, string GlowPath = "", double DrawRotation = 0.7854)
+	public virtual void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = new Vector4(), Vector2 drawScale = new Vector2(), Texture2D glowTexture = null)
 	{
-		Player player = Main.player[Projectile.owner];
-		//Main.spriteBatch.End();
-		//Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		//Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-		//float exScale = longHandle ? 2 : 1;
-		//Vector2 origin = new Vector2(longHandle ? tex.Width / 2 : 5, tex.Height / 2);
-		//Main.spriteBatch.Draw(tex, ProjCenter_WithoutGravDir - Main.screenPosition, null, Projectile.GetAlpha(lightColor), MainVec_WithoutGravDir.ToRotation(), origin, new Vector2(exScale * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0);
-
-		//Main.spriteBatch.End();
-		//Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-
-		float texWidth = HorizontalWidth;//转换成水平贴图时候的宽度
-		float texHeight = HorizontalHeight;//转换成水平贴图时候的高度
-		float Size = DrawScale;//放大的几何倍数
-		double baseRotation = DrawRotation;//这个是刀刃倾斜度与水平的夹角,尽量不要是别的数值
-
-		float exScale = 1;
-		if (longHandle)
-			exScale += 1f;
-		var origin = new Vector2(longHandle ? texWidth / 2 : 5, texHeight / 2);
-
-		Vector2 Zoom = new Vector2(exScale * drawScaleFactor * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale;
-
-		double ProjRotation = MainVec_WithoutGravDir.ToRotation() + Math.PI / 4;
-
-		float QuarterSqrtTwo = 0.35355f;
-
-		Vector2 drawCenter = ProjCenter_WithoutGravDir - Main.screenPosition;
-		Vector2 CenterMoveByPlayerRotation = new Vector2(6 * player.direction, -player.height * player.gravDir) - new Vector2(0, -player.height * player.gravDir).RotatedBy(player.fullRotation);
-		Vector2 drawCenter2 = drawCenter - CenterMoveByPlayerRotation;
-
-		Vector2 INormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation - Math.PI / 4)) * Zoom.Y * Size;
-		Vector2 JNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation + Math.PI / 4)) * Zoom.X * Size;
-
-		Vector2 ITexNormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(-(baseRotation - Math.PI / 4));
-		ITexNormal.X /= tex.Width;
-		ITexNormal.Y /= tex.Height;
-		Vector2 JTexNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(-(baseRotation + Math.PI / 4));
-		JTexNormal.X /= tex.Width;
-		JTexNormal.Y /= tex.Height;
-
-		Vector2 TopLeft/*原水平贴图的左上角,以此类推*/ = Vector2.Normalize(INormal) * origin.Y - Vector2.Normalize(JNormal) * origin.X;
-		Vector2 TopRight = Vector2.Normalize(JNormal) * (JNormal.Length() * 2 - origin.X) + Vector2.Normalize(INormal) * origin.Y;
-		Vector2 BottomLeft = -Vector2.Normalize(INormal) * (INormal.Length() * 2 - origin.Y) - Vector2.Normalize(JNormal) * origin.X;
-		Vector2 BottomRight = Vector2.Normalize(JNormal) * (JNormal.Length() * 2 - origin.X) - Vector2.Normalize(INormal) * (INormal.Length() * 2 - origin.Y);
-
-
-		Vector2 sourceTopLeft = new Vector2(0.5f) + ITexNormal - JTexNormal;
-		Vector2 sourceTopRight = new Vector2(0.5f) + ITexNormal + JTexNormal;
-		Vector2 sourceBottomLeft = new Vector2(0.5f) - ITexNormal - JTexNormal;
-		Vector2 sourceBottomRight = new Vector2(0.5f) - ITexNormal + JTexNormal;
-
-		if (Player.direction * Player.gravDir == -1)
+		if(diagonal == new Vector4())
 		{
-			sourceTopLeft = sourceBottomLeft;
-			sourceTopRight = sourceBottomRight;
-			sourceBottomLeft = new Vector2(0.5f) + ITexNormal - JTexNormal;
-			sourceBottomRight = new Vector2(0.5f) + ITexNormal + JTexNormal;
+			diagonal = new Vector4(0, 1, 1, 0);
 		}
-
-		var vertex2Ds = new List<Vertex2D>
+		if (drawScale == new Vector2())
 		{
-				new Vertex2D(drawCenter2 + TopLeft, lightColor, new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
-				new Vertex2D(drawCenter2 + BottomLeft, lightColor, new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
-				new Vertex2D(drawCenter + TopRight, lightColor, new Vector3(sourceTopRight.X, sourceTopRight.Y, 0)),
-
-				new Vertex2D(drawCenter2 + BottomLeft, lightColor, new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
-				new Vertex2D(drawCenter + BottomRight, lightColor, new Vector3(sourceBottomRight.X, sourceBottomRight.Y, 0)),
-				new Vertex2D(drawCenter + TopRight, lightColor, new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
-		};
+			drawScale = new Vector2(0, 1);
+			if(longHandle)
+			{
+				drawScale = new Vector2(-0.6f, 1);
+			}
+		}
+		Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+		Vector2 drawCenter = Projectile.Center - Main.screenPosition;
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		Main.graphics.GraphicsDevice.Textures[0] = tex;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
-
-		if (GlowPath != "")
-		{
-			vertex2Ds = new List<Vertex2D>
-			{
-				new Vertex2D(drawCenter2 + TopLeft, new Color(255,255,255,0), new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
-				new Vertex2D(drawCenter2 + BottomLeft, new Color(255,255,255,0), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
-				new Vertex2D(drawCenter + TopRight, new Color(255,255,255,0), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0)),
-
-				new Vertex2D(drawCenter2 + BottomLeft, new Color(255,255,255,0), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
-				new Vertex2D(drawCenter + BottomRight, new Color(255,255,255,0), new Vector3(sourceBottomRight.X, sourceBottomRight.Y, 0)),
-				new Vertex2D(drawCenter + TopRight, new Color(255,255,255,0), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
-			};
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/" + GlowPath).Value;
-			;
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
-		}
+		DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+	}
+	public void DrawVertexByTwoLine(Texture2D texture, Color drawColor, Vector2 textureCoordStart, Vector2 textureCoordEnd, Vector2 positionStart, Vector2 positionEnd)
+	{
+		Vector2 coordVector = textureCoordEnd - textureCoordStart;
+		coordVector.X *= texture.Width;
+		coordVector.Y *= texture.Height;
+		float theta = MathF.Atan2(coordVector.Y, coordVector.X);
+		Vector2 drawVector = positionEnd - positionStart;
+
+		Vector2 mainVectorI = drawVector.RotatedBy(theta * -Projectile.spriteDirection) * MathF.Cos(theta);
+		Vector2 mainVectorJ = drawVector.RotatedBy((theta - MathHelper.PiOver2) * -Projectile.spriteDirection) * MathF.Sin(theta);
+
+		List<Vertex2D> vertex2Ds = new List<Vertex2D>
+		{
+			new Vertex2D(positionStart, drawColor, new Vector3(textureCoordStart, 0)),
+			new Vertex2D(positionStart + mainVectorI, drawColor, new Vector3(textureCoordEnd.X, textureCoordStart.Y, 0)),
+
+			new Vertex2D(positionStart + mainVectorJ, drawColor, new Vector3(textureCoordStart.X, textureCoordEnd.Y, 0)),
+			new Vertex2D(positionEnd, drawColor, new Vector3(textureCoordEnd, 0)),
+		};
+		Main.graphics.GraphicsDevice.Textures[0] = texture;
+		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
 	}
 	public virtual float TrailAlpha(float factor)
 	{
@@ -447,7 +396,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
 		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
@@ -461,8 +410,6 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
-
-	private Vector2 r = Vector2.One;
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		if (selfWarp)

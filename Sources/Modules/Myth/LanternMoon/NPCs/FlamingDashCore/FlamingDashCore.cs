@@ -664,7 +664,7 @@ public class FlamingDashCore : ModNPC
 			var w = MathHelper.Lerp(1f, 0.05f, factor);
 
 			//HSV[i - 1] = RGBtoHSV(NPCOldColor[i]);
-			float min, max, tmp, H, S, V;
+			float min, max, tmp, H;
 			float R = NPCOldColor[i].R * 1.0f / 255f, G = NPCOldColor[i].G * 1.0f / 255f, B = NPCOldColor[i].B * 1.0f / 255f;
 			tmp = Math.Min(R, G);
 			min = Math.Min(tmp, B);
@@ -766,7 +766,7 @@ public class FlamingDashCore : ModNPC
 
 	private Color RGBtoHSV(Color color)
 	{
-		float min, max, tmp, H, S, V;
+		float min, max, tmp, H;
 		float R = color.R * 1.0f / 255f, G = color.G * 1.0f / 255f, B = color.B * 1.0f / 255f;
 		tmp = Math.Min(R, G);
 		min = Math.Min(tmp, B);
@@ -921,7 +921,7 @@ public class FlamingDashCore : ModNPC
 			}
 		}
 		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/CoreFlame").Value;
-		t = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/Metero").Value;
+		t = ModContent.Request<Texture2D>("Everglow/Myth/Acytaea/Projectiles/Metero").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 	}

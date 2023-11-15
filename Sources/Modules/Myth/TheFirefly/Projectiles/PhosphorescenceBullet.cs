@@ -39,7 +39,7 @@ public class PhosphorescenceBullet : ModProjectile
 		}
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		for (int j = 0; j < timeLeft / 8; j++)
 		{

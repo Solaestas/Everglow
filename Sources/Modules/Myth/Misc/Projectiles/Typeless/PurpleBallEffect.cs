@@ -1,4 +1,4 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 
 namespace Everglow.Myth.Misc.Projectiles.Typeless;
 
@@ -24,11 +24,6 @@ public class PurpleBallEffect : ModProjectile
 	{
 		Projectile.velocity *= 0;
 		v0 = Projectile.Center;
-		float DusS = 0.25f;
-		if (Projectile.timeLeft >= 200 && Projectile.timeLeft <= 210)
-			DusS = 1.2f;
-		if (Projectile.timeLeft <= 180)
-			DusS = 0.25f;
 		if (Projectile.timeLeft >= 180)
 			Pro = (240 - Projectile.timeLeft) * (240 - Projectile.timeLeft) / 12;
 		else
@@ -62,7 +57,7 @@ public class PurpleBallEffect : ModProjectile
 			float f = 1.2f - (180 - Projectile.timeLeft) / 190f;
 			Col = f * f * f;
 		}
-		Texture2D tex2 = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Dusts/CosmicCrack3").Value;
+		Texture2D tex2 = ModContent.Request<Texture2D>("Everglow/Myth/Acytaea/Dusts/CosmicCrack3").Value;
 		for (float r = 0; r < Col + 0.1; r += 0.1f)
 		{
 			Main.spriteBatch.Draw(tex2, v0 - Main.screenPosition, new Rectangle(0, 0, Pro, 50), new Color(0.1f, 0.1f, 0.1f, 0), AI0, tex2.Size() / 2f, Scale, SpriteEffects.None, 0);

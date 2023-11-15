@@ -8,7 +8,7 @@ public class IchorDropPipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.IchorDrop;
-		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_ichorDrop.Value);
+
 	}
 	public override void BeginRender()
 	{
@@ -16,6 +16,7 @@ public class IchorDropPipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_ichorDrop.Value);
 		effect.Parameters["uIlluminationThreshold"].SetValue(0.99f);
 		Texture2D lightness = ModAsset.Point_lowContrast.Value;
 		Ins.Batch.BindTexture<Vertex2D>(lightness);
@@ -60,7 +61,17 @@ public class IchorDrop : Visual
 		if (Collision.SolidCollision(position, 0, 0))
 		{
 			velocity *= -0.02f;
-			timer += 4;
+			if(Ins.VisualQuality.Low)
+			{
+				timer += 4;
+			}
+			else
+			{
+				if (!Main.rand.NextBool(4))
+				{
+					timer -= 1;
+				}
+			}
 		}
 		var tile = Main.tile[(int)(position.X / 16), (int)(position.Y / 16)];
 		if (position.Y % 1 < tile.LiquidAmount / 256f)

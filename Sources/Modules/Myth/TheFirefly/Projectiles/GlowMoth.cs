@@ -309,7 +309,7 @@ public class GlowMoth : ModProjectile
 		}
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		Player player = Main.player[Projectile.owner];
 		MothOwner mothOwner = player.GetModPlayer<MothOwner>();
