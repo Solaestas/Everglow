@@ -1,7 +1,6 @@
-using Terraria;
 namespace Everglow.Myth.TheFirefly.NPCs.Bosses;
 
-public class Butterfly : ModNPC
+public class SummonedButterfly : ModNPC
 {
 	public Vector2 targetPos;
 

@@ -164,14 +164,17 @@ public class EvilPack : ModNPC
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		Texture2D tg = ModAsset.EvilHive.Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Texture2D mainTex = ModAsset.EvilHive.Value;
 
+		float frameX = (float)NPC.frame.X / mainTex.Width;
+
+		if (NPC.ai[1] > 90)
+		{
+			mainTex = ModAsset.EvilPack_Cracked.Value;
+			frameX = 0;
+		}
+		float frameX1 = (float)NPC.frame.Width / mainTex.Width;
 		List<Vertex2D> vertices = new();
-
-		float frameX = (float)NPC.frame.X / tg.Width;
-		float frameX1 = (float)NPC.frame.Width / tg.Width;
 
 		Vector2 center = NPC.position + new Vector2(67, -90);
 		Vector2 offset = new Vector2(-NPC.frame.Width / 2, 0).RotatedBy(NPC.rotation);
@@ -186,39 +189,29 @@ public class EvilPack : ModNPC
 		offset = new Vector2(+NPC.frame.Width / 2, +NPC.frame.Height).RotatedBy(NPC.rotation);
 		vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX + frameX1, 1, 0)));
 
-		Main.graphics.GraphicsDevice.Textures[0] = tg;
+		Main.graphics.GraphicsDevice.Textures[0] = mainTex;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, 2);
-
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 		return false;
 	}
 
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		SpriteEffects effects = SpriteEffects.None;
-		if (NPC.spriteDirection == 1)
-			effects = SpriteEffects.FlipHorizontally;
-		Texture2D tg = ModAsset.EvilHiveGlow.Value;
-		float C = (float)Math.Sqrt(Math.Max((90 - NPC.ai[1]) / 90f, 0)) * 0.6f + Math.Abs(omega * 15);
-		C = 0.8f + C * 0.2f;
-		var color = new Color(C, C, C, 0);
-		var drawOrigin = new Vector2(tg.Width / 2f / Main.npcFrameCount[NPC.type], 0);
 		var drawOffset = new Vector2(67, -90);
+		if (NPC.ai[1] <= 90)
+		{
+			SpriteEffects effects = SpriteEffects.None;
+			if (NPC.spriteDirection == 1)
+				effects = SpriteEffects.FlipHorizontally;
+			Texture2D glowTex = ModAsset.EvilHiveGlow.Value;
+			float C = (float)Math.Sqrt(Math.Max((90 - NPC.ai[1]) / 90f, 0)) * 0.6f + Math.Abs(omega * 15);
+			C = 0.8f + C * 0.2f;
+			var color = new Color(C, C, C, 0);
+			var drawOrigin = new Vector2(glowTex.Width / 2f / Main.npcFrameCount[NPC.type], 0);
 
-		Main.spriteBatch.Draw(tg, NPC.position + drawOffset - Main.screenPosition, new Rectangle?(NPC.frame), color, NPC.rotation, drawOrigin, 1f, effects, 0f);
 
-
-		//此段代码备用于日后调参，删掉注释之后显示HitBox
-		//Texture2D tBox = TextureAssets.MagicPixel.Value;
-		//Rectangle rt = NPC.Hitbox;
-		//rt.X -= (int)Main.screenPosition.X;
-		//rt.Y -= (int)Main.screenPosition.Y;
-		//Main.spriteBatch.Draw(tBox, rt, new Color(55, 0, 0, 0));
-
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Main.spriteBatch.Draw(glowTex, NPC.position + drawOffset - Main.screenPosition, new Rectangle?(NPC.frame), color, NPC.rotation, drawOrigin, 1f, effects, 0f);
+		}
 		Vector2 CrackCenter = new Vector2(-24, 196).RotatedBy(NPC.rotation) + drawOffset;
 		if (NPC.ai[1] <= 90)
 		{
@@ -248,8 +241,8 @@ public class EvilPack : ModNPC
 				Vector2 DrawPoint2 = new Vector2(0, -Radius).RotatedBy((x + 1) / 5d * Math.PI);
 				Vector2 dp1 = DrawPoint1.RotatedBy(NPC.rotation) * scale + Move;
 				Vector2 dp2 = DrawPoint2.RotatedBy(NPC.rotation) * scale + Move;
-				vertex2Ds.Add(new Vertex2D(DrawCenter + dp1, color, new Vector3((0.5f + DrawPoint1.X / t0.Width) / 7f + type / 7f, 0.5f + DrawPoint1.Y / t0.Height, 0)));
-				vertex2Ds.Add(new Vertex2D(DrawCenter + dp2, color, new Vector3((0.5f + DrawPoint2.X / t0.Width) / 7f + type / 7f, 0.5f + DrawPoint2.Y / t0.Height, 0)));
+				vertex2Ds.Add(new Vertex2D(DrawCenter + dp1, color, new Vector3((0.5f + DrawPoint1.X / t0.Width * 7) / 7f + type / 7f, 0.5f + DrawPoint1.Y / t0.Height, 0)));
+				vertex2Ds.Add(new Vertex2D(DrawCenter + dp2, color, new Vector3((0.5f + DrawPoint2.X / t0.Width * 7) / 7f + type / 7f, 0.5f + DrawPoint2.Y / t0.Height, 0)));
 				vertex2Ds.Add(new Vertex2D(DrawCenter, color, new Vector3(0.5f / 7f + type / 7f, 0.5f, 0)));
 			}
 		}
