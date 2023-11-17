@@ -1255,7 +1255,7 @@ public class CorruptMoth : ModNPC
 		int num = (int)NPC.frameCounter % Main.npcFrameCount[NPC.type];
 		NPC.frame.Y = num * frameHeight;
 	}
-	private Vector3 RodriguesRotate(Vector3 origVec, Vector3 axis, float theta)
+	private static Vector3 RodriguesRotate(Vector3 origVec, Vector3 axis, float theta)
 	{
 		if(axis != new Vector3(0, 0, 0))
 		{
@@ -1373,7 +1373,7 @@ public class CorruptMoth : ModNPC
 				pos = RodriguesRotate(pos, axis, (float)Main.time * 0.03f) * 140;
 				pos.X += NPC.Center.X - Main.screenPosition.X;
 				pos.Y += NPC.Center.Y - Main.screenPosition.Y;
-				Vector2 v2Pos = Projection2(pos, new Vector2(Main.screenWidth, Main.screenHeight) / 2, out float scale, 1000);
+				Vector2 v2Pos = Projection2(pos, new Vector2(Main.screenWidth, Main.screenHeight) / 2, 1000);
 
 
 				vertices.Add(v2Pos, color * alpha, coord);
@@ -1385,10 +1385,9 @@ public class CorruptMoth : ModNPC
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
 
-	private static Vector2 Projection2(Vector3 v3, Vector2 center, out float scale, float viewZ)
+	private static Vector2 Projection2(Vector3 v3, Vector2 center, float viewZ)
 	{
 		float k2 = -viewZ / (v3.Z - viewZ);
-		scale = k2;
 		var v = new Vector2(v3.X, v3.Y);
 		return v + (k2 - 1) * (v - center);
 	}
