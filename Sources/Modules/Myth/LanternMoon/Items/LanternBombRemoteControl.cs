@@ -1,11 +1,5 @@
-using Everglow.Commons;
-using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
-using Everglow.Myth.TheFirefly.Projectiles;
-using Mono.Cecil;
-using Terraria.Audio;
-using Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;
-using Terraria.DataStructures;
 using Everglow.Myth.LanternMoon.Projectiles;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.Items;
 
@@ -92,7 +86,7 @@ public class LanternBombRemoteControl : ModItem
 			//		}
 			//	}
 			//}
-			 Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<Firework12Inches>(), 50, 0f, player.whoAmI, 0, 0);
+			Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<Firework12Inches>(), 50, 0f, player.whoAmI, 0, 0);
 			return false;
 		}
 		for (int j = -10; j < 10; j++)
