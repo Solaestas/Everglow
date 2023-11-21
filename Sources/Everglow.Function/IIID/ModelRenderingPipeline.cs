@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Terraria.GameContent.TextureAssets;
 
 namespace Everglow.Commons.IIID
 {
@@ -55,8 +56,10 @@ namespace Everglow.Commons.IIID
         private Asset<Effect> m_filtersEffect;
         private Asset<Effect> m_toneMapping;
         private Asset<Effect> m_ConcaveEdge;
+		private Asset<Effect> m_PixelArt;
+		private Asset<Effect> m_Edge;
 
-        public RenderTarget2D ModelTarget
+		public RenderTarget2D ModelTarget
         {
             get
             {
@@ -69,7 +72,10 @@ namespace Everglow.Commons.IIID
             m_filtersEffect = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/Filters");
             m_toneMapping = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/ToneMapping");
             m_ConcaveEdge = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/ConcaveEdge");
-            Main.OnResolutionChanged += Main_OnResolutionChanged;
+			m_PixelArt = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/PixelArt");
+			m_Edge = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/Edge");
+
+			Main.OnResolutionChanged += Main_OnResolutionChanged;
 			Ins.MainThread.AddTask(() =>
             {
                 m_fakeScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, RenderTargetSize, RenderTargetSize, false,
@@ -150,21 +156,85 @@ namespace Everglow.Commons.IIID
             {
                 m_ConcaveEdge.Wait();
             }
+			if (!m_PixelArt.IsLoaded)
+			{
+				m_PixelArt.Wait();
+			}
+			if (!m_Edge.IsLoaded)
+			{
+				m_Edge.Wait();
+			}
 
-            Blit(Main.screenTarget, Main.screenTargetSwap, null, "");
+			Blit(Main.screenTarget, Main.screenTargetSwap, null, "");
 
             ShadingPass();
-            BloomPass();
-            ToneMappingPass();
-            ConcaveEdgePass();
+			//BloomPass();
+            //ToneMappingPass();
+            //ConcaveEdgePass();
             //FinalBlend();
+			PixelArt();
+		    Edge();
 
-
-            graphicsDevice.SetRenderTarget(Main.screenTarget);
+			graphicsDevice.SetRenderTarget(Main.screenTarget);
             spriteBatch.Begin();
             spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
         }
+		private void ShadingPass()
+        {
+            var graphicsDevice = Main.graphics.GraphicsDevice;
+            var spriteBatch = Main.spriteBatch;
 
+            // 绘制在具有深度缓冲的一个RT上，而不是原屏幕
+            DepthStencilState dState = DepthStencilState.Default;
+            RasterizerState rState = new RasterizerState();
+            rState.CullMode = CullMode.CullClockwiseFace;
+            rState.FillMode = FillMode.Solid;
+            Main.graphics.GraphicsDevice.DepthStencilState = dState;
+            Main.graphics.GraphicsDevice.RasterizerState = rState;
+
+            // 切换到GBuffer Targets上
+            var renderTargets = new RenderTargetBinding[3]
+            {
+                m_fakeScreenTarget,
+                m_emissionTarget,
+                m_depthTarget
+            };
+            graphicsDevice.SetRenderTargets(renderTargets);
+            graphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer | ClearOptions.Stencil,
+                Color.Transparent, 1.0f, 0);
+
+            for (int i = 0; i < m_models.Count; i++)
+            {
+                DrawOneModel(i);
+            }
+        }
+        private void DrawOneModel(int index)
+        {
+            var graphicsDevice = Main.graphics.GraphicsDevice;
+            var spriteBatch = Main.spriteBatch;
+
+            var model = m_models[index];
+            var vertices = model.Vertices;
+            var gBufferShader = m_gbufferPassEffect.Value;
+
+            gBufferShader.Parameters["uModel"].SetValue(model.ModelTransform);
+            gBufferShader.Parameters["uViewProjection"].SetValue(m_viewProjectionMatrix);
+            // 如果Model有非均匀缩放，就要用法线变换矩阵而不是Model矩阵
+            gBufferShader.Parameters["uModelNormal"].SetValue(Matrix.Transpose(Matrix.Invert(model.ModelTransform)));
+            gBufferShader.Parameters["uCameraPosition"].SetValue(new Vector3(0, 0, 1000));
+            gBufferShader.Parameters["uLightDirection"].SetValue(Vector3.Normalize(new Vector3(0f, 1f, 1f)));
+            gBufferShader.Parameters["uLightIntensity"].SetValue(new Vector3(1f, 1f, 1f) * 150);
+            gBufferShader.Parameters["uNormalIntensity"].SetValue(-1f);
+
+            graphicsDevice.Textures[0] = model.Texture;
+            graphicsDevice.Textures[1] = model.NormalTexture;
+            graphicsDevice.Textures[2] = model.MaterialTexture;
+            graphicsDevice.Textures[3] = model.EmissionTexture;
+
+            gBufferShader.CurrentTechnique.Passes["Forward_Lit"].Apply();
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices.ToArray(),
+                0, vertices.Count / 3);
+        }
         private void BloomPass()
         {
             var graphicsDevice = Main.graphics.GraphicsDevice;
@@ -267,63 +337,9 @@ namespace Everglow.Commons.IIID
 			Blit(m_fakeScreenTarget, m_fakeScreenTargetSwap, null, "");
 		}
 
-		private void ShadingPass()
-        {
-            var graphicsDevice = Main.graphics.GraphicsDevice;
-            var spriteBatch = Main.spriteBatch;
 
-            // 绘制在具有深度缓冲的一个RT上，而不是原屏幕
-            DepthStencilState dState = DepthStencilState.Default;
-            RasterizerState rState = new RasterizerState();
-            rState.CullMode = CullMode.CullClockwiseFace;
-            rState.FillMode = FillMode.Solid;
-            Main.graphics.GraphicsDevice.DepthStencilState = dState;
-            Main.graphics.GraphicsDevice.RasterizerState = rState;
 
-            // 切换到GBuffer Targets上
-            var renderTargets = new RenderTargetBinding[3]
-            {
-                m_fakeScreenTarget,
-                m_emissionTarget,
-                m_depthTarget
-            };
-            graphicsDevice.SetRenderTargets(renderTargets);
-            graphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer | ClearOptions.Stencil,
-                Color.Transparent, 1.0f, 0);
 
-            for (int i = 0; i < m_models.Count; i++)
-            {
-                DrawOneModel(i);
-            }
-        }
-
-        private void DrawOneModel(int index)
-        {
-            var graphicsDevice = Main.graphics.GraphicsDevice;
-            var spriteBatch = Main.spriteBatch;
-
-            var model = m_models[index];
-            var vertices = model.Vertices;
-            var gBufferShader = m_gbufferPassEffect.Value;
-
-            gBufferShader.Parameters["uModel"].SetValue(model.ModelTransform);
-            gBufferShader.Parameters["uViewProjection"].SetValue(m_viewProjectionMatrix);
-            // 如果Model有非均匀缩放，就要用法线变换矩阵而不是Model矩阵
-            gBufferShader.Parameters["uModelNormal"].SetValue(Matrix.Transpose(Matrix.Invert(model.ModelTransform)));
-            gBufferShader.Parameters["uCameraPosition"].SetValue(new Vector3(0, 0, 1000));
-            gBufferShader.Parameters["uLightDirection"].SetValue(Vector3.Normalize(new Vector3(-1f, -1f, -1f)));
-            gBufferShader.Parameters["uLightIntensity"].SetValue(new Vector3(1f, 1f, 1f) * 10);
-            gBufferShader.Parameters["uNormalIntensity"].SetValue(-0.1f);
-
-            graphicsDevice.Textures[0] = model.Texture;
-            graphicsDevice.Textures[1] = model.NormalTexture;
-            graphicsDevice.Textures[2] = model.MaterialTexture;
-            graphicsDevice.Textures[3] = model.EmissionTexture;
-
-            gBufferShader.CurrentTechnique.Passes["Forward_Lit"].Apply();
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices.ToArray(),
-                0, vertices.Count / 3);
-        }
 
         private void FinalBlend()
         {
@@ -343,9 +359,46 @@ namespace Everglow.Commons.IIID
             spriteBatch.Draw(m_fakeScreenTargetSwap, m_fakeScreenTarget.Bounds, Color.White);
             spriteBatch.End();
         }
+		private void PixelArt()
+		{
+			Blit(m_fakeScreenTarget, m_fakeScreenTargetSwap, null, "");
 
+			var graphicsDevice = Main.graphics.GraphicsDevice;
+			var spriteBatch = Main.spriteBatch;
 
-        private void Blit(RenderTarget2D rt1, RenderTarget2D rt2, Effect effect, string pass)
+			var PixelEffect = m_PixelArt.Value;
+			// Draw to m_fakeScreenTarget
+			graphicsDevice.SetRenderTarget(m_fakeScreenTarget);
+			graphicsDevice.Clear(Color.Transparent);
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp,
+				DepthStencilState.None,
+				RasterizerState.CullNone);
+			PixelEffect.Parameters["_PixelSize"].SetValue(1);
+			PixelEffect.Parameters["_PixelRatio"].SetValue(1);
+			PixelEffect.CurrentTechnique.Passes["Blend"].Apply();
+			spriteBatch.Draw(m_fakeScreenTargetSwap, m_fakeScreenTarget.Bounds, Color.White);
+			spriteBatch.End();
+		}
+		private void Edge()
+		{
+			Blit(m_fakeScreenTarget, m_fakeScreenTargetSwap, null, "");
+
+			var graphicsDevice = Main.graphics.GraphicsDevice;
+			var spriteBatch = Main.spriteBatch;
+
+			var EdgeEffect = m_Edge.Value;
+			// Draw to m_fakeScreenTarget
+			graphicsDevice.SetRenderTarget(m_fakeScreenTarget);
+			graphicsDevice.Clear(Color.Transparent);
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp,
+				DepthStencilState.None,
+				RasterizerState.CullNone);
+			EdgeEffect.CurrentTechnique.Passes["Edge"].Apply();
+			spriteBatch.Draw(m_fakeScreenTargetSwap, m_fakeScreenTarget.Bounds, Color.White);
+			spriteBatch.End();
+		}
+
+		private void Blit(RenderTarget2D rt1, RenderTarget2D rt2, Effect effect, string pass)
         {
             Blit(rt1, rt2, effect, pass, 
                 BlendState.Opaque);

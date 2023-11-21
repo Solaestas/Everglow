@@ -6,8 +6,12 @@
 		<Solaestas-AssetPrefix>$(AssetsPrefix)</Solaestas-AssetPrefix>
 	</PropertyGroup>
 	<ItemGroup>
+	  <AdditionalFiles Remove="iiid\effects\iiideffects\edge.fx" />
+	</ItemGroup>
+	<ItemGroup>
 	  <Solaestas-EffectFile Remove="IIID\Effects\Bloom.fx" />
 	  <Solaestas-EffectFile Remove="IIID\Effects\GoldenCrack.fx" />
+	  <Solaestas-EffectFile Remove="iiid\effects\iiideffects\edge.fx" />
 	  <Solaestas-EffectFile Remove="IIID\Effects\IIIDEffects\Filters.fx" />
 	  <Solaestas-EffectFile Remove="IIID\Effects\IIIDEffects\GBufferPass.fx" />
 	  <Solaestas-EffectFile Remove="IIID\Effects\IIIDEffects\MeshTest.fx" />
