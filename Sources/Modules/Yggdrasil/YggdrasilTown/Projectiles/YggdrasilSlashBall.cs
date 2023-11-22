@@ -24,25 +24,6 @@ public class YggdrasilSlashBall : ModProjectile
 		Projectile.scale = 0;
 		base.OnSpawn(source);
 	}
-	public void GenerateSmog(int Frequency)
-	{
-		for (int g = 0; g < Frequency; g++)
-		{
-			Vector2 vel = new Vector2(0, Main.rand.NextFloat(6.6f, 18f)).RotateRandom(MathHelper.TwoPi);
-			float mulWidth = Main.rand.NextFloat(6.6f, 18f);
-			var darknessNight = new Smog_MoonBladeDust
-			{
-				velocity = vel,
-				Active = true,
-				Visible = true,
-				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
-				maxTime = Main.rand.Next(27, 72),
-				scale = mulWidth,
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
-			};
-			Ins.VFXManager.Add(darknessNight);
-		}
-	}
 	public void GenerateSpark()
 	{
 		Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1.0f, 4f)).RotatedByRandom(MathHelper.TwoPi);

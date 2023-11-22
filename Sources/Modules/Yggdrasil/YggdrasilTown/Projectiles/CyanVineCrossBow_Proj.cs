@@ -18,8 +18,8 @@ public class CyanVineCrossBow_Proj : CrossBowProjectile
 		Player player = Main.player[Projectile.owner];
 		float sliderPosValue = (player.itemAnimationMax - player.itemAnimation) / (float)player.itemAnimationMax;
 		sliderPosValue = MathF.Pow(sliderPosValue, 0.6f);
-		Vector2 upChordHead = new Vector2(5, -13);
-		Vector2 downChordHead = new Vector2(7, 9);
+		Vector2 upChordHead = new Vector2(9, -13);
+		Vector2 downChordHead = new Vector2(11, 9);
 		Vector2 upChordTail = new Vector2(24 - sliderPosValue * 32, -6);
 		Vector2 downChordTail = new Vector2(24 - sliderPosValue * 32, -3);
 		Vector2 sliderHead = new Vector2(28 - sliderPosValue * 32, -6);
@@ -48,14 +48,14 @@ public class CyanVineCrossBow_Proj : CrossBowProjectile
 		float totalDir = player.direction * player.gravDir;
 		var vertices = new List<Vertex2D>();
 
-		vertices.Add(basePoint + upChordHead + upChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.2f * totalDir, lightColor, new Vector3(0 / (float)ChordTexture.Width, 0 / (float)ChordTexture.Height, 0));
-		vertices.Add(basePoint + upChordHead - upChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.2f * totalDir, lightColor, new Vector3(0 / (float)ChordTexture.Width, 3 / (float)ChordTexture.Height, 0));
+		vertices.Add(basePoint + upChordHead + upChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.8f * totalDir, lightColor, new Vector3(0 / (float)ChordTexture.Width, 0 / (float)ChordTexture.Height, 0));
+		vertices.Add(basePoint + upChordHead - upChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.8f * totalDir, lightColor, new Vector3(0 / (float)ChordTexture.Width, 3 / (float)ChordTexture.Height, 0));
 
-		vertices.Add(basePoint + upChordTail + upChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.2f * totalDir, lightColor, new Vector3(8 / (float)ChordTexture.Width, 0 / (float)ChordTexture.Height, 0));
-		vertices.Add(basePoint + upChordTail - upChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.2f * totalDir, lightColor, new Vector3(8 / (float)ChordTexture.Width, 3 / (float)ChordTexture.Height, 0));
+		vertices.Add(basePoint + upChordTail + upChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.8f * totalDir, lightColor, new Vector3(8 / (float)ChordTexture.Width, 0 / (float)ChordTexture.Height, 0));
+		vertices.Add(basePoint + upChordTail - upChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.8f * totalDir, lightColor, new Vector3(8 / (float)ChordTexture.Width, 3 / (float)ChordTexture.Height, 0));
 
-		vertices.Add(basePoint + upChordTail + upChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.2f * totalDir, Color.Transparent, new Vector3(8 / (float)ChordTexture.Width, 0 / (float)ChordTexture.Height, 0));
-		vertices.Add(basePoint + upChordTail - upChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.2f * totalDir, Color.Transparent, new Vector3(8 / (float)ChordTexture.Width, 3 / (float)ChordTexture.Height, 0));
+		vertices.Add(basePoint + upChordTail + upChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.8f * totalDir, Color.Transparent, new Vector3(8 / (float)ChordTexture.Width, 0 / (float)ChordTexture.Height, 0));
+		vertices.Add(basePoint + upChordTail - upChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.8f * totalDir, Color.Transparent, new Vector3(8 / (float)ChordTexture.Width, 3 / (float)ChordTexture.Height, 0));
 
 		vertices.Add(basePoint + sliderHead + slider.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 3 * totalDir, Color.Transparent, new Vector3(18 / (float)ChordTexture.Width, 6 / (float)ChordTexture.Height, 0));
 		vertices.Add(basePoint + sliderHead - slider.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 3 * totalDir, Color.Transparent, new Vector3(18 / (float)ChordTexture.Width, 3 / (float)ChordTexture.Height, 0));
@@ -69,14 +69,14 @@ public class CyanVineCrossBow_Proj : CrossBowProjectile
 		vertices.Add(basePoint + sliderTail + slider.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 3 * totalDir, Color.Transparent, new Vector3(10 / (float)ChordTexture.Width, 6 / (float)ChordTexture.Height, 0));
 		vertices.Add(basePoint + sliderTail - slider.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 3 * totalDir, Color.Transparent, new Vector3(10 / (float)ChordTexture.Width, 3 / (float)ChordTexture.Height, 0));
 
-		vertices.Add(basePoint + downChordHead + downChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.2f * totalDir, Color.Transparent, new Vector3(0 / (float)ChordTexture.Width, 5 / (float)ChordTexture.Height, 0));
-		vertices.Add(basePoint + downChordHead - downChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.2f * totalDir, Color.Transparent, new Vector3(0 / (float)ChordTexture.Width, 9 / (float)ChordTexture.Height, 0));
+		vertices.Add(basePoint + downChordHead + downChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.8f * totalDir, Color.Transparent, new Vector3(0 / (float)ChordTexture.Width, 5 / (float)ChordTexture.Height, 0));
+		vertices.Add(basePoint + downChordHead - downChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.8f * totalDir, Color.Transparent, new Vector3(0 / (float)ChordTexture.Width, 9 / (float)ChordTexture.Height, 0));
 
-		vertices.Add(basePoint + downChordHead + downChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.2f * totalDir, lightColor, new Vector3(0 / (float)ChordTexture.Width, 5 / (float)ChordTexture.Height, 0));
-		vertices.Add(basePoint + downChordHead - downChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.2f * totalDir, lightColor, new Vector3(0 / (float)ChordTexture.Width, 9 / (float)ChordTexture.Height, 0));
+		vertices.Add(basePoint + downChordHead + downChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.8f * totalDir, lightColor, new Vector3(0 / (float)ChordTexture.Width, 5 / (float)ChordTexture.Height, 0));
+		vertices.Add(basePoint + downChordHead - downChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.8f * totalDir, lightColor, new Vector3(0 / (float)ChordTexture.Width, 9 / (float)ChordTexture.Height, 0));
 
-		vertices.Add(basePoint + downChordTail + downChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.2f * totalDir, lightColor, new Vector3(8 / (float)ChordTexture.Width, 5 / (float)ChordTexture.Height, 0));
-		vertices.Add(basePoint + downChordTail - downChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.2f * totalDir, lightColor, new Vector3(8 / (float)ChordTexture.Width, 9 / (float)ChordTexture.Height, 0));
+		vertices.Add(basePoint + downChordTail + downChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.8f * totalDir, lightColor, new Vector3(8 / (float)ChordTexture.Width, 5 / (float)ChordTexture.Height, 0));
+		vertices.Add(basePoint + downChordTail - downChord.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 1.8f * totalDir, lightColor, new Vector3(8 / (float)ChordTexture.Width, 9 / (float)ChordTexture.Height, 0));
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);

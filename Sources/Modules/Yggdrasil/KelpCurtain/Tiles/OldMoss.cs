@@ -20,6 +20,12 @@ public class OldMoss : ModTile
 	}
 	public override void RandomUpdate(int i, int j)
 	{
+		if (Main.tile[i, j].Slope == SlopeType.Solid && !Main.tile[i, j + 1].HasTile)//雨帘苔
+		{
+			Tile tile = Main.tile[i, j + 1];
+			tile.TileType = (ushort)ModContent.TileType<KelpMoss>();
+			tile.HasTile = true;
+		}
 		if (Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid &&
 				Main.tile[i, j + 1].Slope == SlopeType.Solid && Main.tile[i + 1, j + 1].Slope == SlopeType.Solid && Main.tile[i - 1, j + 1].Slope == SlopeType.Solid && Main.tile[i + 2, j + 1].Slope == SlopeType.Solid && Main.tile[i - 2, j + 1].Slope == SlopeType.Solid)//树木
 		{
@@ -39,6 +45,7 @@ public class OldMoss : ModTile
 			if (MaxHeight > 3)
 				BuildCyatheaTree(i, j - 1, MaxHeight);
 		}
+
 	}
 	public static void BuildCyatheaTree(int i, int j, int height = 0)
 	{
