@@ -57,7 +57,7 @@ public class GiantBell_Tile : ModTile, ITileFluentlyDrawn
 	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		var drawCenterPos = pos.ToWorldCoordinates(autoAddY: 0) - screenPosition;
-		DrawLanternPiece(0.01f, 0, pos + new Point(-1, 0), pos + new Point(-1, 1), drawCenterPos, spriteBatch, tileDrawing);
+		DrawGiantBellPiece(0.01f, 0, pos + new Point(-1, 0), pos + new Point(-1, 1), drawCenterPos, spriteBatch, tileDrawing);
 	}
 
 	/// <summary>
@@ -70,7 +70,7 @@ public class GiantBell_Tile : ModTile, ITileFluentlyDrawn
 	/// <param name="drawCenterPos">绘制中心的坐标</param>
 	/// <param name="spriteBatch">合批绘制</param>
 	/// <param name="tileDrawing">原版TileDrawing类的实例，有很多好用的方法</param>
-	private void DrawLanternPiece(float swayCoefficient, int offsetX, Point tilePos, Point paintPos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	private void DrawGiantBellPiece(float swayCoefficient, int offsetX, Point tilePos, Point paintPos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		// 回声涂料	
 		if (!TileDrawing.IsVisible(Main.tile[paintPos]))

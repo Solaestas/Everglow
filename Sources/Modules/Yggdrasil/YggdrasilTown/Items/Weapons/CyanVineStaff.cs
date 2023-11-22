@@ -1,19 +1,21 @@
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
-public class CyanVineThrowingSpear : ModItem
+public class CyanVineStaff : ModItem
 {
 	public override void SetDefaults()
 	{
 		Item.useStyle = ItemUseStyleID.Swing;
-		Item.width = 54;
-		Item.height = 108;
-		Item.useAnimation = 16;
-		Item.useTime = 16;
+		Item.width = 60;
+		Item.height = 68;
+		Item.useAnimation = 26;
+		Item.useTime = 26;
 		Item.knockBack = 4f;
 		Item.damage = 13;
 		Item.rare = ItemRarityID.White;
 		Item.UseSound = SoundID.Item1;
-		Item.value = 3600;
+		Item.value = 4000;
 		Item.autoReuse = false;
 		Item.DamageType = DamageClass.Melee;
 		Item.channel = true;
@@ -22,13 +24,14 @@ public class CyanVineThrowingSpear : ModItem
 		Item.noUseGraphic = true;
 
 
-		Item.shoot = ModContent.ProjectileType<Projectiles.CyanVineThrowingSpear>();
+		Item.shoot = ModContent.ProjectileType<CyanVineStaff_proj>();
+		Item.shootSpeed = 12;
 	}
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ModContent.ItemType<CyanVineBar>(), 14)
-			.AddIngredient(ModContent.ItemType<StoneDragonScaleWood>(), 26)
+			.AddIngredient(ModContent.ItemType<CyanVineBar>(), 16)
+			.AddIngredient(ModContent.ItemType<StoneDragonScaleWood>(), 13)
 			.AddTile(TileID.WorkBenches)
 			.Register();
 	}
