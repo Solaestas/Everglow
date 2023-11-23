@@ -1,8 +1,6 @@
-using Terraria;
 using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.GameContent;
-using Terraria.Localization;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Summon;
 
@@ -13,7 +11,7 @@ public class AshBone : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Ash Bone");
-				DefaultToWhip();
+		DefaultToWhip();
 	}
 	private void DefaultToWhip()
 	{
