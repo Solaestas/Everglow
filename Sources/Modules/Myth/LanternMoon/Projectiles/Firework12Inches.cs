@@ -338,7 +338,7 @@ public class Firework12Inches : FireworkProjectile
 				drawPos3D.X += (Projectile.Center - Main.screenPosition).X;
 				drawPos3D.Y += (Projectile.Center - Main.screenPosition).Y;
 				float scale;
-				Vector2 v2Pos = Projection2D(drawPos3D, new Vector2(Main.screenWidth, Main.screenHeight) / 2, 4000, out scale);
+				Vector2 v2Pos = Projection2D(drawPos3D, new Vector2(Main.screenWidth, Main.screenHeight) / 2, 1000, out scale);
 
 
 				Vector3[] trailPos = flameTrail.OldPos.Reverse<Vector3>().ToArray();
@@ -357,13 +357,13 @@ public class Firework12Inches : FireworkProjectile
 						Vector3 oldPos3D0 = trailPos[i];
 						oldPos3D0.X += (Projectile.Center - Main.screenPosition).X;
 						oldPos3D0.Y += (Projectile.Center - Main.screenPosition).Y;
-						Vector2 old0 = Projection2D(oldPos3D0, new Vector2(Main.screenWidth, Main.screenHeight) / 2, 4000, out scale0);
+						Vector2 old0 = Projection2D(oldPos3D0, new Vector2(Main.screenWidth, Main.screenHeight) / 2, 1000, out scale0);
 
 						float scale1;
 						Vector3 oldPos3D1 = trailPos[i - 1];
 						oldPos3D1.X += (Projectile.Center - Main.screenPosition).X;
 						oldPos3D1.Y += (Projectile.Center - Main.screenPosition).Y;
-						Vector2 old1 = Projection2D(oldPos3D1, new Vector2(Main.screenWidth, Main.screenHeight) / 2, 4000, out scale1);
+						Vector2 old1 = Projection2D(oldPos3D1, new Vector2(Main.screenWidth, Main.screenHeight) / 2, 1000, out scale1);
 
 						Vector2 normal = old0 - old1;
 						normal = Vector2.Normalize(normal).RotatedBy(MathHelper.PiOver2);

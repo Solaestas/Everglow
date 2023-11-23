@@ -1,4 +1,5 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
+using Terraria.Audio;
 
 namespace Everglow.Myth.LanternMoon.Projectiles;
 
@@ -48,6 +49,7 @@ public class RisingFirework : ModProjectile
 			Projectile.velocity *= 0.8f;
 			if (timeToKill == 80)
 			{
+				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/FireworkExplosion"), Projectile.Center);
 				Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<Firework6Inches>(), 50, 0f, Projectile.owner, 0, 0);
 				if (p != null)
 				{
