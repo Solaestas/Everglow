@@ -11,98 +11,117 @@ public abstract class YoyoProjectile : ModProjectile
 		Projectile.scale = 1f;
 		ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 200f;
 		Projectile.DamageType = DamageClass.Melee;
+		MaxStaySeconds = 3;
+		MaxRopeLength = 200;
+		Acceleration = 14f;
+		RotatedSpeed = 0.45f;
 		SetDef();
 	}
 	public virtual void SetDef()
 	{
 
 	}
+	/// <summary>
+	/// Yoyo exists after [this] seconds will be reuse.less than 0 to make yoyo exists enternal.default to 3.
+	/// </summary>
+	public float MaxStaySeconds;
+	/// <summary>
+	/// default to 200.
+	/// </summary>
+	public float MaxRopeLength;
+	/// <summary>
+	/// default to 14.
+	/// </summary>
+	public float Acceleration;
+	/// <summary>
+	/// default to 0.45f.
+	/// </summary>
+	public float RotatedSpeed;
 	public override void AI()
 	{
-		YoyoAI(Projectile.whoAmI, 60f, 200f, 14f);
+		YoyoAI();
 	}
 	/// <summary>
 	/// Yoyo
 	/// </summary>
 	/// <param name="index"></param>
 	/// <param name="seconds"></param>
-	/// <param name="length"></param>
+	/// <param name="MaxRopeLength"></param>
 	/// <param name="acceleration"></param>
 	/// <param name="rotationSpeed"></param>
-	public static void YoyoAI(int index, float seconds, float length, float acceleration = 14f, float rotationSpeed = 0.45f)
+	public virtual void YoyoAI()
 	{
-		Projectile projectile = Main.projectile[index];
-		Player player = Main.player[projectile.owner];
+		Player player = Main.player[Projectile.owner];
 
 		bool checkSelf = false;
-		for (int i = 0; i < projectile.whoAmI; i++)
+		for (int i = 0; i < Projectile.whoAmI; i++)
 		{
-			if (Main.projectile[i].active && Main.projectile[i].owner == projectile.owner && Main.projectile[i].type == projectile.type)
+			if (Main.projectile[i].active && Main.projectile[i].owner == Projectile.owner && Main.projectile[i].type == Projectile.type)
 				checkSelf = true;
 		}
-		if (projectile.owner == Main.myPlayer)
+		if (Projectile.owner == Main.myPlayer)
 		{
-			projectile.localAI[0] += 1f;
+			Projectile.localAI[0] += 1f;
 			if (checkSelf)
-				projectile.localAI[0] += Main.rand.NextFloat(1.0f, 3.1f);
-			float num = projectile.localAI[0] / 60f;
-			num /= (1f + player.GetAttackSpeed(DamageClass.Generic)) / 2f;
-			if (num > seconds)
-				projectile.ai[0] = -1f;
+				Projectile.localAI[0] += Main.rand.NextFloat(1.0f, 3.1f);
+			float timerOfSecond = Projectile.localAI[0] / 60f;
+			timerOfSecond /= (1f + player.GetAttackSpeed(DamageClass.Generic)) / 2f;
+			if (timerOfSecond > MaxStaySeconds && MaxStaySeconds > 0)
+				Projectile.ai[0] = -1f;
 		}
 		if (player.dead)
 		{
-			projectile.Kill();
+			Projectile.Kill();
 			return;
 		}
 		if (!checkSelf)
 		{
-			player.heldProj = projectile.whoAmI;
+			player.heldProj = Projectile.whoAmI;
 			player.itemAnimation = 2;
 			player.itemTime = 2;
-			if (projectile.Center.X > player.Center.X)
+			if (Projectile.Center.X > player.Center.X)
 			{
 				player.ChangeDir(1);
-				projectile.direction = 1;
+				Projectile.direction = 1;
 			}
 			else
 			{
 				player.ChangeDir(-1);
-				projectile.direction = -1;
+				Projectile.direction = -1;
 			}
 		}
-		if (projectile.velocity.HasNaNs())
-			projectile.Kill();
-		projectile.timeLeft = 6;
+		if (Projectile.velocity.HasNaNs())
+			Projectile.Kill();
+		Projectile.timeLeft = 6;
 
 		if (player.yoyoString)
-			length = length * 1.25f + 30f;
-		length /= (1f + player.GetAttackSpeed(DamageClass.Generic) * 3f) / 4f;
-		float num3 = acceleration / ((1f + player.GetAttackSpeed(DamageClass.Generic) * 3f) / 4f);
+			MaxRopeLength = MaxRopeLength * 1.25f + 30f;
+		MaxRopeLength /= (1f + player.GetAttackSpeed(DamageClass.Generic) * 3f) / 4f;
+		float num3 = Acceleration / ((1f + player.GetAttackSpeed(DamageClass.Generic) * 3f) / 4f);
 		float num4 = 14f - num3 / 2f;
 		float num5 = 5f + num3 / 2f;
 		if (checkSelf)
 			num5 += 20f;
-		if (projectile.ai[0] >= 0f)
+		if (Projectile.ai[0] >= 0f)
 		{
-			if (projectile.velocity.Length() > num3)
-				projectile.velocity *= 0.98f;
+			if (Projectile.velocity.Length() > num3)
+				Projectile.velocity *= 0.98f;
 			bool flag3 = false;
 			bool flag4 = false;
-			Vector2 vector = player.Center - projectile.Center;
-			if (vector.Length() > length)
+			Vector2 vector = player.Center - Projectile.Center;
+			if (vector.Length() > MaxRopeLength)
 			{
 				flag3 = true;
-				if ((double)vector.Length() > (double)length * 1.3)
+				if ((double)vector.Length() > (double)MaxRopeLength * 1.3)
 					flag4 = true;
 			}
-			if (projectile.owner == Main.myPlayer)
+			if (Projectile.owner == Main.myPlayer)
 			{
 				if (!player.channel || player.stoned || player.frozen)
 				{
-					projectile.ai[0] = -1f;
-					projectile.ai[1] = 0f;
-					projectile.netUpdate = true;
+					Projectile.ai[0] = -1f;
+					Projectile.ai[1] = 0f;
+					Projectile.netUpdate = true;
 				}
 				else
 				{
@@ -110,79 +129,79 @@ public abstract class YoyoProjectile : ModProjectile
 					float x = vector2.X;
 					float y = vector2.Y;
 					Vector2 vector3 = new Vector2(x, y) - player.Center;
-					if (vector3.Length() > length)
+					if (vector3.Length() > MaxRopeLength)
 					{
 						vector3.Normalize();
-						vector3 *= length;
+						vector3 *= MaxRopeLength;
 						vector3 = player.Center + vector3;
 						x = vector3.X;
 						y = vector3.Y;
 					}
-					if (projectile.ai[0] != x || projectile.ai[1] != y)
+					if (Projectile.ai[0] != x || Projectile.ai[1] != y)
 					{
 						var value = new Vector2(x, y);
 						Vector2 vector4 = value - player.Center;
-						if (vector4.Length() > length - 1f)
+						if (vector4.Length() > MaxRopeLength - 1f)
 						{
 							vector4.Normalize();
-							vector4 *= length - 1f;
+							vector4 *= MaxRopeLength - 1f;
 							value = player.Center + vector4;
 							x = value.X;
 							y = value.Y;
 						}
-						projectile.ai[0] = x;
-						projectile.ai[1] = y;
-						projectile.netUpdate = true;
+						Projectile.ai[0] = x;
+						Projectile.ai[1] = y;
+						Projectile.netUpdate = true;
 					}
 				}
 			}
-			if (flag4 && projectile.owner == Main.myPlayer)
+			if (flag4 && Projectile.owner == Main.myPlayer)
 			{
-				projectile.ai[0] = -1f;
-				projectile.netUpdate = true;
+				Projectile.ai[0] = -1f;
+				Projectile.netUpdate = true;
 			}
-			if (projectile.ai[0] >= 0f)
+			if (Projectile.ai[0] >= 0f)
 			{
 				if (flag3)
 				{
 					num4 /= 2f;
 					num3 *= 2f;
-					if (projectile.Center.X > player.Center.X && projectile.velocity.X > 0f)
-						projectile.velocity.X = projectile.velocity.X * 0.5f;
-					if (projectile.Center.Y > player.Center.Y && projectile.velocity.Y > 0f)
-						projectile.velocity.Y = projectile.velocity.Y * 0.5f;
-					if (projectile.Center.X < player.Center.X && projectile.velocity.X > 0f)
-						projectile.velocity.X = projectile.velocity.X * 0.5f;
-					if (projectile.Center.Y < player.Center.Y && projectile.velocity.Y > 0f)
-						projectile.velocity.Y = projectile.velocity.Y * 0.5f;
+					if (Projectile.Center.X > player.Center.X && Projectile.velocity.X > 0f)
+						Projectile.velocity.X = Projectile.velocity.X * 0.5f;
+					if (Projectile.Center.Y > player.Center.Y && Projectile.velocity.Y > 0f)
+						Projectile.velocity.Y = Projectile.velocity.Y * 0.5f;
+					if (Projectile.Center.X < player.Center.X && Projectile.velocity.X > 0f)
+						Projectile.velocity.X = Projectile.velocity.X * 0.5f;
+					if (Projectile.Center.Y < player.Center.Y && Projectile.velocity.Y > 0f)
+						Projectile.velocity.Y = Projectile.velocity.Y * 0.5f;
 				}
-				var value2 = new Vector2(projectile.ai[0], projectile.ai[1]);
-				Vector2 vector5 = value2 - projectile.Center;
-				projectile.velocity.Length();
+				var value2 = new Vector2(Projectile.ai[0], Projectile.ai[1]);
+				Vector2 vector5 = value2 - Projectile.Center;
+				Projectile.velocity.Length();
 				if (vector5.Length() > num5)
 				{
 					vector5.Normalize();
 					vector5 *= num3;
-					projectile.velocity = (projectile.velocity * (num4 - 1f) + vector5) / num4;
+					Projectile.velocity = (Projectile.velocity * (num4 - 1f) + vector5) / num4;
 				}
 				else if (checkSelf)
 				{
-					if ((double)projectile.velocity.Length() < (double)num3 * 0.6)
+					if ((double)Projectile.velocity.Length() < (double)num3 * 0.6)
 					{
-						vector5 = projectile.velocity;
+						vector5 = Projectile.velocity;
 						vector5.Normalize();
 						vector5 *= num3 * 0.6f;
-						projectile.velocity = (projectile.velocity * (num4 - 1f) + vector5) / num4;
+						Projectile.velocity = (Projectile.velocity * (num4 - 1f) + vector5) / num4;
 					}
 				}
 				else
 				{
-					projectile.velocity *= 0.8f;
+					Projectile.velocity *= 0.8f;
 				}
-				if (checkSelf && !flag3 && (double)projectile.velocity.Length() < (double)num3 * 0.6)
+				if (checkSelf && !flag3 && (double)Projectile.velocity.Length() < (double)num3 * 0.6)
 				{
-					projectile.velocity.Normalize();
-					projectile.velocity *= num3 * 0.6f;
+					Projectile.velocity.Normalize();
+					Projectile.velocity *= num3 * 0.6f;
 				}
 			}
 		}
@@ -190,42 +209,41 @@ public abstract class YoyoProjectile : ModProjectile
 		{
 			num4 *= 0.8f;
 			num3 *= 1.5f;
-			projectile.tileCollide = false;
-			Vector2 vector6 = player.position - projectile.Center;
+			Projectile.tileCollide = false;
+			Vector2 vector6 = player.position - Projectile.Center;
 			float num6 = vector6.Length();
 			if (num6 < num3 + 10f || num6 == 0f)
-				projectile.Kill();
+				Projectile.Kill();
 			else
 			{
 				vector6.Normalize();
 				vector6 *= num3;
-				projectile.velocity = (projectile.velocity * (num4 - 1f) + vector6) / num4;
+				Projectile.velocity = (Projectile.velocity * (num4 - 1f) + vector6) / num4;
 			}
 		}
-		projectile.rotation += rotationSpeed;
+		Projectile.rotation += RotatedSpeed;
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		DrawString(Projectile.whoAmI);
+		DrawString();
 		return base.PreDraw(ref lightColor);
 	}
-	public static void DrawString(int index, Vector2 to = default)
+	public virtual void DrawString(Vector2 to = default)
 	{
-		Projectile projectile = Main.projectile[index];
-		Player player = Main.player[projectile.owner];
+		Player player = Main.player[Projectile.owner];
 		Vector2 mountedCenter = player.MountedCenter;
 		Vector2 vector = mountedCenter;
 		vector.Y += player.gfxOffY;
 		if (to != default)
 			vector = to;
-		float num = projectile.Center.X - vector.X;
-		float num2 = projectile.Center.Y - vector.Y;
+		float num = Projectile.Center.X - vector.X;
+		float num2 = Projectile.Center.Y - vector.Y;
 		Math.Sqrt((double)(num * num + num2 * num2));
 		float rotation;
-		if (!projectile.counterweight)
+		if (!Projectile.counterweight)
 		{
 			int num3 = -1;
-			if (projectile.position.X + projectile.width / 2 < player.position.X + player.width / 2)
+			if (Projectile.position.X + Projectile.width / 2 < player.position.X + player.width / 2)
 				num3 = 1;
 			num3 *= -1;
 			player.itemRotation = (float)Math.Atan2((double)(num2 * num3), (double)(num * num3));
@@ -241,8 +259,8 @@ public abstract class YoyoProjectile : ModProjectile
 			num2 *= num4;
 			vector.X -= num * 0.1f;
 			vector.Y -= num2 * 0.1f;
-			num = projectile.position.X + projectile.width * 0.5f - vector.X;
-			num2 = projectile.position.Y + projectile.height * 0.5f - vector.Y;
+			num = Projectile.position.X + Projectile.width * 0.5f - vector.X;
+			num2 = Projectile.position.Y + Projectile.height * 0.5f - vector.Y;
 		}
 		while (checkSelf)
 		{
@@ -263,12 +281,12 @@ public abstract class YoyoProjectile : ModProjectile
 				num2 *= num6;
 				vector.X += num;
 				vector.Y += num2;
-				num = projectile.position.X + projectile.width * 0.5f - vector.X;
-				num2 = projectile.position.Y + projectile.height * 0.1f - vector.Y;
+				num = Projectile.position.X + Projectile.width * 0.5f - vector.X;
+				num2 = Projectile.position.Y + Projectile.height * 0.1f - vector.Y;
 				if (num7 > 12f)
 				{
 					float num8 = 0.3f;
-					float num9 = Math.Abs(projectile.velocity.X) + Math.Abs(projectile.velocity.Y);
+					float num9 = Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y);
 					if (num9 > 16f)
 						num9 = 16f;
 					num9 = 1f - num9 / 16f;
@@ -288,7 +306,7 @@ public abstract class YoyoProjectile : ModProjectile
 					}
 					else
 					{
-						num9 = Math.Abs(projectile.velocity.X) / 3f;
+						num9 = Math.Abs(Projectile.velocity.X) / 3f;
 						if (num9 > 1f)
 							num9 = 1f;
 						num9 -= 0.5f;
