@@ -1,3 +1,5 @@
+using static Terraria.GameContent.Prefixes.PrefixLegacy;
+
 namespace Everglow.Commons.Weapons.Whips;
 
 public abstract class WhipItem : ModItem
@@ -7,7 +9,7 @@ public abstract class WhipItem : ModItem
 	{
 		Item.knockBack = 2f;
 		SetDef();
-		DefaultToWhip(Item.damage, Item.knockBack, Item.shootSpeed, Item.useAnimation);
+		DefaultToWhip(Item.damage, Item.knockBack, Item.shootSpeed);
 	}
 	/// <summary>
 	/// These tags should be filled: shoot, shootSpeed, useAnimation, damage, rare, value, width, height
@@ -26,7 +28,7 @@ public abstract class WhipItem : ModItem
 		Item.autoReuse = false;
 		return true;
 	}
-	public void DefaultToWhip(int dmg, float kb, float shootspeed, int animationTotalTime = 30)
+	public void DefaultToWhip(int dmg, float kb, float shootspeed)
 	{
 		Player player = Main.LocalPlayer;
 		Item.autoReuse = false;
@@ -34,8 +36,6 @@ public abstract class WhipItem : ModItem
 			Item.autoReuse = true;
 		Item.autoReuse = false;
 		Item.useStyle = ItemUseStyleID.Swing;
-		Item.useAnimation = animationTotalTime;
-		Item.useTime = animationTotalTime;
 		Item.UseSound = SoundID.Item152;
 		Item.noMelee = true;
 		Item.DamageType = DamageClass.Summon;
@@ -43,5 +43,6 @@ public abstract class WhipItem : ModItem
 		Item.damage = dmg;
 		Item.knockBack = kb;
 		Item.shootSpeed = shootspeed;
+		ItemSets.SwordsHammersAxesPicks[Item.type] = true;
 	}
 }

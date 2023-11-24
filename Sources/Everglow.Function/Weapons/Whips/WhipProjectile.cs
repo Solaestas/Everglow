@@ -1,4 +1,5 @@
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
 
@@ -10,6 +11,10 @@ public abstract class WhipProjectile : ModProjectile
 
 	public override void SetDefaults()
 	{
+		SegmentCount = 20;
+		DustType = 0;
+		WhipLength = 300;
+		VerticalFrameCount = 5;
 		DefaultToWhip();
 		SetDef();
 	}
@@ -17,6 +22,26 @@ public abstract class WhipProjectile : ModProjectile
 	{
 
 	}
+	/// <summary>
+	/// The dust that will generate by whip.
+	/// </summary>
+	public int DustType;
+	/// <summary>
+	/// How many SegmentCount of this whip, default to 20.
+	/// </summary>
+	public int SegmentCount;
+	/// <summary>
+	/// The max range this whip can reach, default to 300.
+	/// </summary>
+	public float WhipLength;
+	/// <summary>
+	/// The animation(max) time of this whip.
+	/// </summary>
+	public float TimeToFlyOut;
+	/// <summary>
+	/// The vertical frames of whip texture.
+	/// </summary>
+	public int VerticalFrameCount;
 	public void DefaultToWhip()
 	{
 		Projectile.width = 18;
@@ -31,6 +56,15 @@ public abstract class WhipProjectile : ModProjectile
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = -1;
 		Projectile.DamageType = DamageClass.Summon;
+	}
+	public override void OnSpawn(IEntitySource source)
+	{
+		Player player = Main.player[Projectile.owner];
+		player.itemAnimationMax = (int)(player.itemAnimationMax / player.meleeSpeed);
+		player.itemAnimation = player.itemAnimationMax;
+		player.itemTimeMax = player.itemAnimationMax;
+		player.itemTime = player.itemAnimationMax;
+		TimeToFlyOut = player.itemAnimationMax * Projectile.MaxUpdates;
 	}
 	public override void CutTiles()
 	{
@@ -48,13 +82,23 @@ public abstract class WhipProjectile : ModProjectile
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		for (int n = 0; n < WhipPointsForCollision.Count; n++)
+		float lineSpeedMax = WhipLength / TimeToFlyOut / 3f;
+		if (lineSpeedMax >= 1)
 		{
-			var point = WhipPointsForCollision[n].ToPoint();
-			projHitbox.Location = new Point(point.X - projHitbox.Width / 2, point.Y - projHitbox.Height / 2);
-			if (projHitbox.Intersects(targetHitbox))
+			for (int t = 0; t < lineSpeedMax; t++)
 			{
-				return true;
+				var list0 = new List<Vector2>();
+				float fade = 1 - t / MathF.Floor(lineSpeedMax + 1);
+				FillWhipControlPoints(list0, (1 - fade) * 3);
+				for (int i = 0; i < list0.Count; i++)
+				{
+					var point = list0[i].ToPoint();
+					projHitbox.Location = new Point(point.X - projHitbox.Width / 2, point.Y - projHitbox.Height / 2);
+					if (projHitbox.Intersects(targetHitbox))
+					{
+						return true;
+					}
+				}
 			}
 		}
 		return false;
@@ -63,69 +107,75 @@ public abstract class WhipProjectile : ModProjectile
 	{
 		AI_165_Whip();
 		WhipPointsForCollision.Clear();
-		FillWhipControlPoints(Projectile, WhipPointsForCollision);
+		FillWhipControlPoints(WhipPointsForCollision);
 		return;
 	}
-	private void AI_165_Whip()
+	/// <summary>
+	/// Whip AI after adjusted.
+	/// Projectile.ai[0] work as a timer, you should not change it. 
+	/// 
+	/// </summary>
+	public virtual void AI_165_Whip()
 	{
 		Player player = Main.player[Projectile.owner];
 		Projectile.rotation = Projectile.velocity.ToRotation() + 1.5707964f;
 		Projectile.ai[0] += 1f;
-		float num;
-		int num2;
-		float num3;
-		GetWhipSettings(Projectile, out num, out num2, out num3);
+		float rangeMultiplier = WhipLength / 300f;
 		Projectile.tileCollide = false;
 		Projectile.Center = Main.GetPlayerArmPosition(Projectile) + Projectile.velocity * (Projectile.ai[0] - 1f);
 		Projectile.spriteDirection = Vector2.Dot(Projectile.velocity, Vector2.UnitX) < 0f ? -1 : 1;
-		if (Projectile.ai[0] >= num || player.itemAnimation == 0)
+		if (Projectile.ai[0] >= TimeToFlyOut || player.itemAnimation == 0)
 		{
 			Projectile.Kill();
 			return;
 		}
 		player.heldProj = Projectile.whoAmI;
-		player.itemAnimation = player.itemAnimationMax - (int)(Projectile.ai[0] / Projectile.MaxUpdates);
-		player.itemTime = player.itemAnimation;
-		if (Projectile.ai[0] == (int)(num / 2f))
+		if (Projectile.ai[0] == (int)(TimeToFlyOut / 2f))
 		{
-			WhipPointsForCollision.Clear();
-			FillWhipControlPoints(Projectile, WhipPointsForCollision);
 			Vector2 position = WhipPointsForCollision[WhipPointsForCollision.Count - 1];
 			SoundEngine.PlaySound(SoundID.Item153, position);
 		}
-		float t = Projectile.ai[0] / num;
-		if (Utils.GetLerpValue(0.1f, 0.7f, t, true) * Utils.GetLerpValue(0.9f, 0.7f, t, true) > 0.5f && Main.rand.Next(3) != 0)
+		GenerateDusts();
+	}
+	public virtual void GenerateDusts()
+	{
+		Player player = Main.player[Projectile.owner];
+		float t = Projectile.ai[0] / TimeToFlyOut;
+		if (Utils.GetLerpValue(0.1f, 0.7f, t, true) * Utils.GetLerpValue(0.9f, 0.7f, t, true) > 0.5f)
 		{
-			WhipPointsForCollision.Clear();
-			FillWhipControlPoints(Projectile, WhipPointsForCollision);
-			int num5 = Main.rand.Next(WhipPointsForCollision.Count - 10, WhipPointsForCollision.Count);
-			Rectangle rectangle = Utils.CenteredRectangle(WhipPointsForCollision[num5], new Vector2(30f, 30f));
-			var dust = Dust.NewDustDirect(rectangle.TopLeft(), rectangle.Width, rectangle.Height, DustID.Bone, 0f, 0f, 100, Color.White, 1f);
-			dust.position = WhipPointsForCollision[num5];
-			dust.fadeIn = 0.3f;
-			Vector2 spinningpoint = WhipPointsForCollision[num5] - WhipPointsForCollision[num5 - 1];
-			dust.noGravity = true;
-			dust.velocity *= 0.5f;
-			dust.velocity += spinningpoint.RotatedBy((double)(player.direction * 1.5707964f), default);
-			dust.velocity *= 0.5f;
+			float times = (Main.rand.NextFloat(3) - 1) * player.meleeSpeed;
+			if(times < 0)
+			{
+				times = 0;
+			}
+			if (WhipPointsForCollision.Count > 10)
+			{
+				for (int x = 0; x < times; x++)
+				{
+					int randSegment = Main.rand.Next(WhipPointsForCollision.Count - 10, WhipPointsForCollision.Count);
+					Rectangle rectangle = Utils.CenteredRectangle(WhipPointsForCollision[randSegment], new Vector2(30f, 30f));
+					var dust = Dust.NewDustDirect(rectangle.TopLeft(), rectangle.Width, rectangle.Height, DustType, 0f, 0f, 100, Color.White, 1f);
+					dust.position = WhipPointsForCollision[randSegment];
+					dust.fadeIn = 0.3f;
+					Vector2 spinningpoint = WhipPointsForCollision[randSegment] - WhipPointsForCollision[randSegment - 1];
+					dust.noGravity = true;
+					dust.velocity *= 0.5f;
+					dust.velocity += spinningpoint.RotatedBy((double)(player.direction * 1.5707964f), default);
+					dust.velocity *= 0.5f;
+				}
+			}
 		}
 	}
-	public static void GetWhipSettings(Projectile proj, out float timeToFlyOut, out int segments, out float rangeMultiplier)
+	public virtual void FillWhipControlPoints(List<Vector2> controlPoints, float deltaStep = 0)
 	{
-		timeToFlyOut = Main.player[proj.owner].itemAnimationMax * proj.MaxUpdates;
-		rangeMultiplier = 1f;
-		segments = 20;
-		rangeMultiplier *= 1.2f;//鞭长
-	}
-	public static void FillWhipControlPoints(Projectile proj, List<Vector2> controlPoints)
-	{
-		float timeToFlyOut;
-		int segments;
-		float rangeMultiplier;
-		GetWhipSettings(proj, out timeToFlyOut, out segments, out rangeMultiplier);
-		float duration = proj.ai[0] / timeToFlyOut;
+		float rangeMultiplier = WhipLength / 300f;
+		float duration = (Projectile.ai[0] - deltaStep) / TimeToFlyOut;
+		if(duration < 0)
+		{
+			duration = 0;
+		}
 		float duration15 = 1.5f;
-		float maxRotation = MathHelper.Pi * 10f * (1f - duration * duration15) * -proj.spriteDirection / segments;
+		float maxRotation = MathHelper.Pi * 10f * (1f - duration * duration15) * -Projectile.spriteDirection / SegmentCount;
 		float durationSquare15 = duration * duration15;
 		float factor = 0f;
 		if (durationSquare15 > 1f)
@@ -133,67 +183,85 @@ public abstract class WhipProjectile : ModProjectile
 			factor = (durationSquare15 - 1f) / 0.5f;
 			durationSquare15 = MathHelper.Lerp(1f, 0f, factor);
 		}
-		Player player = Main.player[proj.owner];
+		Player player = Main.player[Projectile.owner];
 		Item heldItem = player.HeldItem;
 		float durationValue = heldItem.useAnimation * 2 * duration * player.whipRangeMultiplier;
-		durationValue = proj.velocity.Length() * durationValue * durationSquare15 * rangeMultiplier / segments;
-		Vector2 startArmPosition = Main.GetPlayerArmPosition(proj);
-		Vector2 vector = startArmPosition;
-		float num14 = -MathHelper.PiOver2;
-		Vector2 value = vector;
-		float num15 = MathHelper.PiOver2 + MathHelper.PiOver2 * proj.spriteDirection;
-		Vector2 value2 = vector;
-		float num16 = MathHelper.PiOver2;
+		durationValue = Projectile.velocity.Length() * durationValue * durationSquare15 * rangeMultiplier / SegmentCount;
+		Vector2 startArmPosition = Main.GetPlayerArmPosition(Projectile);
+		Vector2 value0 = startArmPosition;
+		float alpha = -MathHelper.PiOver2;
+		Vector2 value1 = value0;
+		float beta = MathHelper.PiOver2 + MathHelper.PiOver2 * Projectile.spriteDirection;
+		Vector2 value2 = value0;
+		float gama = MathHelper.PiOver2;
 		controlPoints.Add(startArmPosition);
-		for (int i = 0; i < segments; i++)
+		for (int i = 0; i < SegmentCount; i++)
 		{
-			float num17 = i / (float)segments;
-			float num18 = maxRotation * num17;
-			Vector2 vector2 = vector + num14.ToRotationVector2() * durationValue;
-			Vector2 vector3 = value2 + num16.ToRotationVector2() * (durationValue * 2f);
-			Vector2 vector4 = value + num15.ToRotationVector2() * (durationValue * 2f);
-			float num19 = 1f - durationSquare15;
-			float num20 = 1f - num19 * num19;
-			var value3 = Vector2.Lerp(vector3, vector2, num20 * 0.9f + 0.1f);
-			var value4 = Vector2.Lerp(vector4, value3, num20 * 0.7f + 0.3f);
+			float segmentPrecent = i / (float)SegmentCount;
+			float rotProcess = maxRotation * segmentPrecent;
+			Vector2 vector0 = value0 + alpha.ToRotationVector2() * durationValue;
+			Vector2 vector1 = value1 + beta.ToRotationVector2() * (durationValue * 2f);
+			Vector2 vector2 = value2 + gama.ToRotationVector2() * (durationValue * 2f);
+			float duration0 = 1f - durationSquare15;
+			float duration1 = 1f - duration0 * duration0;
+			var value3 = Vector2.Lerp(vector2, vector0, duration1 * 0.9f + 0.1f);
+			var value4 = Vector2.Lerp(vector1, value3, duration1 * 0.7f + 0.3f);
 			Vector2 spinningpoint = startArmPosition + (value4 - startArmPosition) * new Vector2(1f, duration15);
-			float num21 = factor;
-			num21 *= num21;
-			Vector2 item = spinningpoint.RotatedBy((double)(proj.rotation + 4.712389f * num21 * proj.spriteDirection), startArmPosition);
-			controlPoints.Add(item);
-			num14 += num18;
-			num16 += num18;
-			num15 += num18;
-			vector = vector2;
-			value2 = vector3;
-			value = vector4;
+			Vector2 thisPos = spinningpoint.RotatedBy((double)(Projectile.rotation + (3 * MathHelper.PiOver2) * factor * factor * Projectile.spriteDirection), startArmPosition);
+			controlPoints.Add(thisPos);
+			alpha += rotProcess;
+			gama += rotProcess;
+			beta += rotProcess;
+			value0 = vector0;
+			value1 = vector1;
+			value2 = vector2;
 		}
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		DrawWhip(Projectile);
+		float lineSpeedMax = WhipLength / TimeToFlyOut / 3f;
+		//draw ghost image when line speed very fast.
+		if (lineSpeedMax >= 1)
+		{
+			for (int t = 1; t < lineSpeedMax; t++)
+			{
+				float fade = 1 - t / MathF.Floor(lineSpeedMax + 1);
+				DrawWhip((1 - fade) * 3);
+			}
+		}
+		DrawWhip();
 		return false;
 	}
-	public virtual void DrawWhip(Projectile proj)
+	public virtual void DrawWhip(float foreStep = 0)
 	{
-		var list = new List<Vector2>();
-		FillWhipControlPoints(proj, list);
-		Texture2D mainTexture = TextureAssets.Projectile[proj.type].Value;
-		for (int i = 0; i < list.Count - 1; i++)
+		Texture2D mainTexture = TextureAssets.Projectile[Projectile.type].Value;
+		int frameHeight = mainTexture.Height / VerticalFrameCount;
+
+		var list0 = new List<Vector2>();
+		FillWhipControlPoints(list0, foreStep);
+		for (int i = 0; i < list0.Count - 1; i++)
 		{
-			int frame = (int)(i / (float)(list.Count - 1) * 4);
+			int frame = (int)(i / (float)(list0.Count - 1) * 4);
 			if (frame == 0 && i > 0)
 			{
 				frame = 1;
 			}
-			Rectangle rectangle = new Rectangle(0, 28 * frame, 18, 28);
+			if (frame != 0 && i == 0)
+			{
+				frame = 0;
+			}
+			Rectangle rectangle = new Rectangle(0, frameHeight * frame, mainTexture.Width, frameHeight);
 			var origin = new Vector2(rectangle.Width / 2, 2f);
-			Vector2 positionNow = list[i];
-			Vector2 positionAdd = list[i + 1] - positionNow;
+			Vector2 positionNow = list0[i];
+			Vector2 positionAdd = list0[i + 1] - positionNow;
 			float rotation = positionAdd.ToRotation() - MathHelper.PiOver2;
 			Color color = Lighting.GetColor(positionNow.ToTileCoordinates());
+			if(foreStep != 0)
+			{
+				color *= (1 - foreStep / 3f) * 0.2f;
+			}
 			var scale = new Vector2(1f, (positionAdd.Length() + 2f) / rectangle.Height * 2f);
-			Main.spriteBatch.Draw(mainTexture, list[i] - Main.screenPosition, new Rectangle?(rectangle), color, rotation, origin, scale, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(mainTexture, list0[i] - Main.screenPosition, new Rectangle?(rectangle), color, rotation, origin, scale, SpriteEffects.None, 0f);
 		}
 	}
 }

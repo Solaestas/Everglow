@@ -15,5 +15,6 @@ public class GrilledSquidTentacle : WhipItem
 		Item.rare = ItemRarityID.White;
 		Item.damage = 25;
 		Item.useAnimation = 30;
+		Item.useTime = 30;
 	}
 }
