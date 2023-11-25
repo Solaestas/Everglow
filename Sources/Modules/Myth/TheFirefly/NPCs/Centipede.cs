@@ -583,6 +583,7 @@ internal class CentipedeBody : FireWormBody
 
 internal class CentipedeTail : FireWormTail
 {
+	[Obsolete]
 	public override void SetStaticDefaults()
 	{
 		var value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)

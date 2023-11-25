@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.MagicWeaponsReplace.Projectiles.BookofSkulls;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.BookofSkulls;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.DreamWeaver;
@@ -7,6 +7,9 @@ using Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.WaterBolt;
+using Everglow.Myth.Misc.Projectiles.Weapon.Magic.BoneFeatherMagic;
+using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
+using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FreezeFeatherMagic;
 using Terraria.DataStructures;
 using Terraria.Localization;
 
@@ -87,6 +90,12 @@ public class MagicBooksReplace : GlobalItem
 				item.noUseGraphic = false;
 			if (item.type == ModContent.ItemType<TheFirefly.Items.Weapons.DreamWeaver>())
 				item.noUseGraphic = false;
+			if (item.type == ModContent.ItemType<Misc.Items.Weapons.FireFeatherMagic>())
+				item.noUseGraphic = false;
+			if (item.type == ModContent.ItemType<Misc.Items.Weapons.FreezeFeatherMagic>())
+				item.noUseGraphic = false;
+			if (item.type == ModContent.ItemType<Misc.Items.Weapons.BoneFeatherMagic>())
+				item.noUseGraphic = false;
 			return base.UseItem(item, player);
 		}
 		if (item.type == ItemID.WaterBolt)
@@ -114,6 +123,12 @@ public class MagicBooksReplace : GlobalItem
 		if (item.type == ItemID.LunarFlareBook)
 			item.noUseGraphic = true;
 		if (item.type == ModContent.ItemType<TheFirefly.Items.Weapons.DreamWeaver>())
+			item.noUseGraphic = true;
+		if (item.type == ModContent.ItemType<Misc.Items.Weapons.FireFeatherMagic>())
+			item.noUseGraphic = true;
+		if (item.type == ModContent.ItemType<Misc.Items.Weapons.FreezeFeatherMagic>())
+			item.noUseGraphic = true;
+		if (item.type == ModContent.ItemType<Misc.Items.Weapons.BoneFeatherMagic>())
 			item.noUseGraphic = true;
 		// Aim Types
 		if (item.type == ItemID.WaterBolt)
@@ -200,6 +215,35 @@ public class MagicBooksReplace : GlobalItem
 		if (item.type == ModContent.ItemType<TheFirefly.Items.Weapons.DreamWeaver>())
 		{
 			int aimType = ModContent.ProjectileType<DreamWeaverBook>();
+			if (player.ownedProjectileCounts[aimType] < 1)
+				Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
+		}
+		if (item.type == ModContent.ItemType<Misc.Items.Weapons.FireFeatherMagic>())
+		{
+			int aimType = ModContent.ProjectileType<FireFeatherMagicBook>();
+			if (player.ownedProjectileCounts[aimType] < 1)
+				Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
+			aimType = ModContent.ProjectileType<FireFeatherMagicArray>();
+			if (player.ownedProjectileCounts[aimType] < 1)
+			{
+				Projectile p = Projectile.NewProjectileDirect(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
+			}
+		}
+		if (item.type == ModContent.ItemType<Misc.Items.Weapons.FreezeFeatherMagic>())
+		{
+			int aimType = ModContent.ProjectileType<FreezeFeatherMagicBook>();
+			if (player.ownedProjectileCounts[aimType] < 1)
+				Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
+			aimType = ModContent.ProjectileType<FreezeFeatherMagicArray>();
+			if (player.ownedProjectileCounts[aimType] < 1)
+				Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
+		}
+		if (item.type == ModContent.ItemType<Misc.Items.Weapons.BoneFeatherMagic>())
+		{
+			int aimType = ModContent.ProjectileType<BoneFeatherMagicBook>();
+			if (player.ownedProjectileCounts[aimType] < 1)
+				Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
+			aimType = ModContent.ProjectileType<BoneFeatherMagicArray>();
 			if (player.ownedProjectileCounts[aimType] < 1)
 				Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
 		}

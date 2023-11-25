@@ -43,7 +43,7 @@ class BrownFlame0 : ModProjectile
 					if (!Main.player[j].dead)
 					{
 						if ((Main.player[j].Center - Projectile.Center).Length() < 24)
-							Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Bosses.Acytaea.Projectiles.playerHit>(), Projectile.damage, 0, j, 0, 0);
+							Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Acytaea.Projectiles.playerHit>(), Projectile.damage, 0, j, 0, 0);
 					}
 				}
 			}

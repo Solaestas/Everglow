@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.LanternMoon.Buffs;
+using Everglow.Myth.LanternMoon.Buffs;
 using Terraria;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.DashCore;
@@ -71,7 +71,6 @@ class ImmuneCircle : ModProjectile
 	{
 		return false;
 	}
-	int TrueL = 1;
 	float CirR0 = 0;
 	float CirPro0 = 0;
 	public override void PostDraw(Color lightColor)

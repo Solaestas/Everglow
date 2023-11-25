@@ -22,12 +22,12 @@ internal class LunarFlareArray : ModProjectile
 		Player player = Main.player[Projectile.owner];
 		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
 		Projectile.spriteDirection = player.direction;
-		if (player.itemTime > 0 && player.HeldItem.type == ItemID.LunarFlareBook)
+		if (player.itemTime > 0 && player.HeldItem.type == ItemID.LunarFlareBook && player.active && !player.dead)
 		{
 			Projectile.timeLeft = player.itemTime + 99;
-			if (Timer < 99)
-				Timer++;
-			if (Timer % 5 == 0)
+			if (timer < 99)
+				timer++;
+			if (timer % 5 == 0)
 			{
 				SubStars.Add(new SubStar(Projectile, SubStars.Count)
 				{
@@ -39,11 +39,11 @@ internal class LunarFlareArray : ModProjectile
 		}
 		else
 		{
-			Timer--;
-			if (Timer < 0)
+			timer--;
+			if (timer < 0)
 				Projectile.Kill();
 		}
-		Projectile.scale = Timer / 99f;
+		Projectile.scale = timer / 99f;
 		Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
 		player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.timeForVisualEffects / 18d) * 0.6 + 1.2) * -player.direction);
@@ -53,14 +53,14 @@ internal class LunarFlareArray : ModProjectile
 
 		if (Lighting.Mode is not Terraria.Graphics.Light.LightMode.Color and not Terraria.Graphics.Light.LightMode.White)
 			return;
-		RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
-		Projectile.velocity = RingPos;
-		for (int x = (int)(-Timer * 3.5f); x <= Timer * 3.5f; x += 8)
+		ringPos = ringPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
+		Projectile.velocity = ringPos;
+		for (int x = (int)(-timer * 3.5f); x <= timer * 3.5f; x += 8)
 		{
-			for (int y = (int)(-Timer * 3.5f); y <= Timer * 3.5f; y += 8)
+			for (int y = (int)(-timer * 3.5f); y <= timer * 3.5f; y += 8)
 			{
 				var AddRange = new Vector2(x, y);
-				if (AddRange.Length() < Timer * 3.5f)
+				if (AddRange.Length() < timer * 3.5f)
 				{
 					Vector2 tPos = Projectile.Center + AddRange;
 					Tile tile = Main.tile[(int)(tPos.X / 16f), (int)(tPos.Y / 16f)];
@@ -72,11 +72,11 @@ internal class LunarFlareArray : ModProjectile
 		Lighting.AddLight(Projectile.Center, 0.5f, 0.5f, 0.9f);
 		for (int x = 0; x <= 4; x++)
 		{
-			Lighting.AddLight(Projectile.Center + new Vector2(0, Timer).RotatedBy(x / 2d * Math.PI - Main.timeForVisualEffects * 0.03f), 0.5f, 0.5f, 0.9f);
+			Lighting.AddLight(Projectile.Center + new Vector2(0, timer).RotatedBy(x / 2d * Math.PI - Main.timeForVisualEffects * 0.03f), 0.5f, 0.5f, 0.9f);
 		}
 		for (int x = 0; x <= 12; x++)
 		{
-			Lighting.AddLight(Projectile.Center + new Vector2(0, Timer * (1.4f + 0.9f * (x % 2))).RotatedBy(x / 6d * Math.PI + Main.timeForVisualEffects * 0.03f), 0.5f, 0.5f, 0.9f);
+			Lighting.AddLight(Projectile.Center + new Vector2(0, timer * (1.4f + 0.9f * (x % 2))).RotatedBy(x / 6d * Math.PI + Main.timeForVisualEffects * 0.03f), 0.5f, 0.5f, 0.9f);
 		}
 		SubStars.ForEach(sub => sub.Update());
 	}
@@ -95,8 +95,8 @@ internal class LunarFlareArray : ModProjectile
 		SubStars.ForEach(sub => sub.ReceiveExtraAI(reader));
 	}
 
-	internal int Timer = 0;
-	internal Vector2 RingPos = Vector2.Zero;
+	internal int timer = 0;
+	internal Vector2 ringPos = Vector2.Zero;
 	internal List<SubStar> SubStars = new();
 	internal class SubStar
 	{

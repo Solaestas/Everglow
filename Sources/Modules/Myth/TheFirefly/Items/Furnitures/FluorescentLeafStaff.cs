@@ -1,5 +1,3 @@
-using Everglow.Myth.TheFirefly.Items;
-using Everglow.Myth.TheFirefly.Tiles;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Myth.TheFirefly.Items.Furnitures;
@@ -20,9 +18,8 @@ public class FluorescentLeafStaff : ModItem
 		Item.useAnimation = 15;
 		Item.useTime = 10;
 		Item.useStyle = ItemUseStyleID.Swing;
-
-		Item.useAmmo = ModContent.ItemType<GlowWood>();
+		Item.tileWand = ModContent.ItemType<GlowWood>();
 		Item.value = 2000;
-		Item.createTile = ModContent.TileType<LifeFluorescentTreeLeaf>();
+		Item.createTile = ModContent.TileType<Tiles.LifeFluorescentTreeLeaf>();
 	}
 }

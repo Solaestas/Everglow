@@ -1,4 +1,4 @@
-﻿namespace Everglow.PlantAndFarm.Items.Materials;
+namespace Everglow.PlantAndFarm.Items.Materials;
 
 public class FlowerBrochure : ModItem
 {
@@ -17,5 +17,9 @@ public class FlowerBrochure : ModItem
 		Item.value = 10000;
 		Item.rare = ItemRarityID.Blue;
 		Item.material = true;
+	}
+	public override void UpdateAccessory(Player player, bool hideVisual)
+	{
+		player.GetModPlayer<PAFPlayer>().FlowerBrochure = !hideVisual;
 	}
 }

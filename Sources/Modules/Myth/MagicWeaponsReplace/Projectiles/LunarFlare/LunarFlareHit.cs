@@ -32,18 +32,18 @@ public class LunarFlareHit : ModProjectile, IWarpProjectile, IBloomProjectile
 			Projectile.friendly = false;
 
 
-		int MaxC = (int)(Projectile.ai[0] / 6 + 5);
-		MaxC = Math.Min(26, MaxC);
+		int maxC = (int)(Projectile.ai[0] / 6 + 5);
+		maxC = Math.Min(26, maxC);
 		if (Projectile.timeLeft >= 200)
 		{
-			for (int x = 0; x < MaxC; x++)
+			for (int x = 0; x < maxC; x++)
 			{
 				SparkVelocity[x] = new Vector2(0, Projectile.ai[0]).RotatedByRandom(6.283) * Main.rand.NextFloat(0.05f, 1.2f);
 				SparkOldPos[x, 0] = Projectile.Center;
 			}
 		}
 
-		for (int x = 0; x < MaxC; x++)
+		for (int x = 0; x < maxC; x++)
 		{
 			for (int y = 39; y > 0; y--)
 			{
@@ -58,26 +58,25 @@ public class LunarFlareHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		Projectile.velocity *= 0;
 		Lighting.AddLight(Projectile.Center, 0, Projectile.timeLeft / 100f, Projectile.timeLeft / 100f);
 	}
-
 	public override void PostDraw(Color lightColor)
 	{
-		Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitLight");
-		float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(0, 255, 255, 0) * Dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * Dark, SpriteEffects.None, 0);
+		Texture2D Shadow = ModAsset.CursedHitLight.Value;
+		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
+		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(0, 255, 255, 0) * dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark, SpriteEffects.None, 0);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHit");
-		float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * Dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f, SpriteEffects.None, 0);
-		Texture2D light = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitStar");
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 255, 255, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 255, 255, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, Dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
+		Texture2D Shadow = ModAsset.CursedHit.Value;
+		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
+		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f, SpriteEffects.None, 0);
+		Texture2D light = ModAsset.CursedHitStar.Value;
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 255, 255, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 255, 255, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
 		float size = Math.Clamp(Projectile.timeLeft / 8f - 10, 0f, 20f);
 		if (size > 0)
 		{
-			DrawSpark(Color.White * 0.5f, size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkDark"));
-			DrawSpark(new Color(0, 255, 255, 0), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
+			DrawSpark(Color.White * 0.5f, size, ModAsset.SparkDark.Value);
+			DrawSpark(new Color(0, 255, 255, 0), size, ModAsset.SparkLight.Value);
 		}
 		return false;
 	}
@@ -86,10 +85,10 @@ public class LunarFlareHit : ModProjectile, IWarpProjectile, IBloomProjectile
 	private Vector2[] SparkVelocity = new Vector2[27];
 	internal void DrawSpark(Color c0, float width, Texture2D tex)
 	{
-		int MaxC = (int)(Projectile.ai[0] / 6 + 5);
-		MaxC = Math.Min(26, MaxC);
+		int maxC = (int)(Projectile.ai[0] / 6 + 5);
+		maxC = Math.Min(26, maxC);
 		var bars = new List<Vertex2D>();
-		for (int x = 0; x < MaxC; x++)
+		for (int x = 0; x < maxC; x++)
 		{
 			int TrueL = 0;
 			for (int i = 1; i < 40; ++i)
@@ -111,38 +110,21 @@ public class LunarFlareHit : ModProjectile, IWarpProjectile, IBloomProjectile
 				float x0 = 1 - factor;
 				if (i == 1)
 				{
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
+					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
+					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
 				}
-				bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
-				bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
+				bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width - Main.screenPosition, c0, new Vector3(x0, 1, w)));
+				bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width - Main.screenPosition, c0, new Vector3(x0, 0, w)));
 				if (i == 39)
 				{
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
-					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
+					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
+					bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
 				}
 			}
-			Texture2D t = tex;
-			Main.graphics.GraphicsDevice.Textures[0] = t;
+			Main.graphics.GraphicsDevice.Textures[0] = tex;
 		}
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-	}
-	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
-	{
-		var circle = new List<Vertex2D>();
-
-		for (int h = 0; h < radious / 2; h += 1)
-		{
-			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
-		}
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
-		if (circle.Count > 2)
-			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
 	}
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
@@ -150,17 +132,17 @@ public class LunarFlareHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
 			colorV *= Projectile.ai[0] / 10f;
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Vague");
+		Texture2D t = ModAsset.Vague.Value;
 		float width = 60;
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft;
 
-		DrawTexCircle_VFXBatch(spriteBatch, value * 27 * Projectile.ai[0], width, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+		MythUtils.DrawTexCircle_Warp(spriteBatch, value * 27 * Projectile.ai[0], width, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 	public void DrawBloom()
 	{
 		float size = Math.Clamp(Projectile.timeLeft / 8f - 60, 0f, 20f);
 		if (size > 0)
-			DrawSpark(new Color(255, 255, 255, 0), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
+			DrawSpark(new Color(255, 255, 255, 0), size, ModAsset.SparkLight.Value);
 	}
 }

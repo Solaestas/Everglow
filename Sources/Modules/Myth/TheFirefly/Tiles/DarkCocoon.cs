@@ -13,15 +13,18 @@ public class DarkCocoon : ModTile
 		DustType = 191;
 		AddMapEntry(new Color(17, 16, 17));
 	}
-	public override void NearbyEffects(int i, int j, bool closer)
-	{
-	}
-
 	public override void RandomUpdate(int i, int j)
 	{
+		var thisTile = Main.tile[i, j];
+		bool slope = thisTile.Slope != SlopeType.Solid;
+		if(slope)
+		{
+			return;
+		}
+		//种树
 		if (Main.rand.NextBool(6))
 		{
-			if (Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid &&
+			if (Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid &&
 				Main.tile[i, j + 1].Slope == SlopeType.Solid && Main.tile[i + 1, j + 1].Slope == SlopeType.Solid && Main.tile[i - 1, j + 1].Slope == SlopeType.Solid && Main.tile[i + 2, j + 1].Slope == SlopeType.Solid && Main.tile[i - 2, j + 1].Slope == SlopeType.Solid)//树木
 			{
 				int MaxHeight = 0;
@@ -41,169 +44,291 @@ public class DarkCocoon : ModTile
 					BuildFluorescentTree(i, j - 1, MaxHeight);
 			}
 		}
-
-		if (!Main.tile[i, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i, j - 1].LiquidAmount > 0)
+		//种植灯莲
+		if (!Main.tile[i, j - 1].HasTile && Main.tile[i, j - 1].LiquidAmount > 0)
 		{
 			Tile tile = Main.tile[i, j - 1];
 			tile.TileType = (ushort)ModContent.TileType<LampLotus>();
 			tile.HasTile = true;
 			tile.TileFrameX = (short)(28 * Main.rand.Next(8));
 		}
-		if (Main.rand.NextBool(6))//黑萤藤蔓
-		{
-			Tile t0 = Main.tile[i, j];
 
+		//黑萤藤蔓
+		if (Main.rand.NextBool(6))
+		{
 			Tile t2 = Main.tile[i, j + 1];
-			if (t0.Slope == SlopeType.Solid && !t2.HasTile)
+			if (!t2.HasTile)
 			{
 				t2.TileType = (ushort)ModContent.TileType<BlackVine>();
 				t2.HasTile = true;
-				t2.TileFrameY = (short)(Main.rand.Next(6, 9) * 18);
 			}
 		}
-		if (Main.rand.NextBool(3))//流萤滴
+		bool canPlaceShrub = true;
+		for (int x = -1; x < 2; x++)
 		{
-			int count = 0;
-			for (int x = -1; x <= 1; x++)
+			for (int y = -3; y < 0; y++)
 			{
-				for (int y = 1; y <= 3; y++)
-				{
-					Tile t0 = Main.tile[i + x, j + y];
-					if (t0.HasTile)
-						count++;
-					Tile t1 = Main.tile[i + x, j + y - 1];
-					if (y == 1 && (!t1.HasTile || t1.Slope != SlopeType.Solid))
-						count++;
-				}
+				if (Main.tile[i + x, j + y].HasTile)
+					canPlaceShrub = false;
 			}
-			if (count == 0)
-				Common.MythUtils.PlaceFrameImportantTiles(i - 1, j + 1, 3, 3, ModContent.TileType<Furnitures.GlowingDrop>());
-
 		}
-		Tile tx = Main.tile[i, j + 1];
-		if (!tx.HasTile)
-			NPC.NewNPC(null, i * 16 + Main.rand.Next(-8, 9), j * 16 + 32, ModContent.NPCType<NPCs.LittleFireBulb>());
-		if (Main.rand.NextBool(3))//流萤滴
+		bool nearWater = false;
+		for (int x = -8; x < 9; x++)
 		{
-			int count = 0;
-			for (int x = -1; x <= 1; x++)
+			for (int y = -3; y < 4; y++)
 			{
-				for (int y = 1; y <= 10; y++)
+				if (Main.tile[i + x, j + y].LiquidAmount > 3)
+					nearWater = true;
+			}
+		}
+		bool canPlace1x1 = true;
+		for (int x = 0; x < 1; x++)
+		{
+			for (int y = -1; y < 1; y++)
+			{
+				Tile checkTile = Main.tile[i + x, j + y];
+				if (checkTile.HasTile && y <= -1)
 				{
-					Tile t0 = Main.tile[i + x, j + y];
-					if (t0.HasTile)
-						count++;
-					Tile t1 = Main.tile[i + x, j + y - 1];
-					if (y == 1 && (!t1.HasTile || t1.Slope != SlopeType.Solid))
-						count++;
+					canPlace1x1 = false;
 				}
-				foreach (var npc in Main.npc)
+				if (y == 0)
 				{
-					if (npc.active)
+					if (!checkTile.HasTile || checkTile.Slope != SlopeType.Solid)
 					{
-						if (Math.Abs(npc.Center.X - i * 16) < 20)
+						canPlace1x1 = false;
+					}
+				}
+			}
+		}
+		if (Main.rand.NextBool(16))//巨型萤火吊
+		{
+			int count = 0;
+			float length = 0;
+			for (int x = 0; x <= 1; x++)
+			{
+				for (int y = 0; y <= 4; y++)
+				{
+					Tile t0 = Main.tile[i + x, j + y];
+					if (y == 0)
+					{
+						if (!t0.HasTile || t0.TileType != (ushort)ModContent.TileType<DarkCocoon>() || t0.IsHalfBlock)
+						{
 							count++;
+						}
+					}
+					else
+					{
+						if (t0.HasTile)
+						{
+							count++;
+						}
 					}
 				}
 			}
 			if (count == 0)
-				NPC.NewNPC(null, i * 16 + Main.rand.Next(-8, 9), j * 16 + 180, ModContent.NPCType<NPCs.LargeFireBulb>());
+			{
+				for (int y = 4; y <= 80; y++)
+				{
+					for (int x = 0; x <= 1; x++)
+					{
+						Tile t0 = Main.tile[i + x, j + y];
+						if (!t0.HasTile)
+						{
+							length += 1 / 8f;
+						}
+						else
+						{
+							y = 81;
+							break;
+						}
+					}
+				}
+				if (Main.netMode != NetmodeID.Server)
+				{
+					LargeFireBulb.PlaceMe(i, j, (ushort)Main.rand.Next((int)Math.Floor(length)));
+				}
+			}
 		}
-		if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid)//黑萤苣
+		bool canPlace2x1 = true;
+		for (int x = 0; x < 2; x++)
+		{
+			for (int y = -1; y < 1; y++)
+			{
+				Tile checkTile = Main.tile[i + x, j + y];
+				if (checkTile.HasTile && y <= -1)
+				{
+					canPlace2x1 = false;
+				}
+				if(y == 0)
+				{
+					if (!checkTile.HasTile || checkTile.Slope != SlopeType.Solid)
+					{
+						canPlace2x1 = false;
+					}
+				}
+			}
+		}
+		bool canPlace2x2 = true;
+		for (int x = 0; x < 2; x++)
+		{
+			for (int y = -2; y < 1; y++)
+			{
+				Tile checkTile = Main.tile[i + x, j + y];
+				if (checkTile.HasTile && y <= -1)
+				{
+					canPlace2x2 = false;
+				}
+				if (y == 0)
+				{
+					if (!checkTile.HasTile || checkTile.Slope != SlopeType.Solid)
+					{
+						canPlace2x2 = false;
+					}
+				}
+			}
+		}
+		bool canPlace3x2 = true;
+		for (int x = 0; x < 3; x++)
+		{
+			for (int y = -2; y < 1; y++)
+			{
+				Tile checkTile = Main.tile[i + x, j + y];
+				if (checkTile.HasTile && y <= -1)
+				{
+					canPlace3x2 = false;
+				}
+				if (y == 0)
+				{
+					if (!checkTile.HasTile || checkTile.Slope != SlopeType.Solid)
+					{
+						canPlace3x2 = false;
+					}
+				}
+			}
+		}
+		//黑萤苣
+		if (canPlaceShrub && !nearWater && Main.rand.NextBool(3))
 		{
 			Tile t1 = Main.tile[i, j - 1];
 			Tile t2 = Main.tile[i, j - 2];
 			Tile t3 = Main.tile[i, j - 3];
-			for (int x = -1; x < 2; x++)
+			switch (Main.rand.Next(4))
 			{
-				for (int y = -3; y < 4; y++)
-				{
-					if (Main.tile[i + x, j + y].LiquidAmount > 3)
-						return;
-				}
+				case 0:
+					t1.TileType = (ushort)ModContent.TileType<BlueBlossom>();
+					t2.TileType = (ushort)ModContent.TileType<BlueBlossom>();
+					t3.TileType = (ushort)ModContent.TileType<BlueBlossom>();
+					t1.HasTile = true;
+					t2.HasTile = true;
+					t3.HasTile = true;
+					short num2 = (short)(Main.rand.Next(0, 12) * 120);
+					t3.TileFrameX = num2;
+					t2.TileFrameX = num2;
+					t1.TileFrameX = num2;
+					t1.TileFrameY = 32;
+					t2.TileFrameY = 16;
+					t3.TileFrameY = 0;
+					break;
+				case 1:
+					t1.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
+					t2.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
+					t1.HasTile = true;
+					t2.HasTile = true;
+					short numa = (short)(Main.rand.Next(0, 6) * 48);
+					t1.TileFrameX = numa;
+					t2.TileFrameX = numa;
+					t1.TileFrameY = 16;
+					t2.TileFrameY = 0;
+					break;
+
+				case 2:
+					t1.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
+					t2.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
+					t1.HasTile = true;
+					t2.HasTile = true;
+					short num = (short)(Main.rand.Next(0, 6) * 48);
+					t2.TileFrameX = num;
+					t1.TileFrameX = num;
+					t1.TileFrameY = 16;
+					t2.TileFrameY = 0;
+					break;
+
+				case 3:
+					t1.TileType = (ushort)ModContent.TileType<BlackStarShrub>();
+					t2.TileType = (ushort)ModContent.TileType<BlackStarShrub>();
+					t3.TileType = (ushort)ModContent.TileType<BlackStarShrub>();
+					t1.HasTile = true;
+					t2.HasTile = true;
+					t3.HasTile = true;
+					short num1 = (short)(Main.rand.Next(0, 6) * 72);
+					t3.TileFrameX = num1;
+					t2.TileFrameX = num1;
+					t1.TileFrameX = num1;
+					t1.TileFrameY = 32;
+					t2.TileFrameY = 16;
+					t3.TileFrameY = 0;
+					break;
 			}
+			return;
+		}
+		//蕨和岩石
+		if (Main.rand.NextBool(2) && !nearWater)
+		{
 			if (Main.rand.NextBool(2))
 			{
-				switch (Main.rand.Next(1, 10))
+				switch (Main.rand.Next(6))
 				{
+
+					case 0:
+						if (canPlace3x2)
+							Common.MythUtils.PlaceFrameImportantTiles(i, j - 2, 3, 2, ModContent.TileType<BlackFrenLarge>(), 54 * Main.rand.Next(3));
+						break;
+
 					case 1:
-						t1.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
-						t2.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
-						t1.HasTile = true;
-						t2.HasTile = true;
-						short numa = (short)(Main.rand.Next(0, 6) * 48);
-						t1.TileFrameX = numa;
-						t2.TileFrameX = numa;
-						t1.TileFrameY = 16;
-						t2.TileFrameY = 0;
+						if (canPlace2x2)
+							Common.MythUtils.PlaceFrameImportantTiles(i, j - 2, 2, 2, ModContent.TileType<BlackFren>(), 36 * Main.rand.Next(3));
 						break;
 
 					case 2:
-						t1.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
-						t2.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
-						t1.HasTile = true;
-						t2.HasTile = true;
-						short num = (short)(Main.rand.Next(0, 6) * 48);
-						t2.TileFrameX = num;
-						t1.TileFrameX = num;
-						t1.TileFrameY = 16;
-						t2.TileFrameY = 0;
+						if (canPlace3x2)
+							Common.MythUtils.PlaceFrameImportantTiles(i, j - 2, 3, 2, ModContent.TileType<BlackFrenLarge>(), 54 * Main.rand.Next(3));
 						break;
 
 					case 3:
-						t1.TileType = (ushort)ModContent.TileType<BlackStarShrub>();
-						t2.TileType = (ushort)ModContent.TileType<BlackStarShrub>();
-						t3.TileType = (ushort)ModContent.TileType<BlackStarShrub>();
-						t1.HasTile = true;
-						t2.HasTile = true;
-						t3.HasTile = true;
-						short num1 = (short)(Main.rand.Next(0, 6) * 72);
-						t3.TileFrameX = num1;
-						t2.TileFrameX = num1;
-						t1.TileFrameX = num1;
-						t1.TileFrameY = 32;
-						t2.TileFrameY = 16;
-						t3.TileFrameY = 0;
+						if (canPlace2x2)
+							Common.MythUtils.PlaceFrameImportantTiles(i, j - 2, 2, 2, ModContent.TileType<BlackFren>(), 36 * Main.rand.Next(3));
 						break;
 
 					case 4:
-						t1.TileType = (ushort)ModContent.TileType<BlueBlossom>();
-						t2.TileType = (ushort)ModContent.TileType<BlueBlossom>();
-						t3.TileType = (ushort)ModContent.TileType<BlueBlossom>();
-						t1.HasTile = true;
-						t2.HasTile = true;
-						t3.HasTile = true;
-						short num2 = (short)(Main.rand.Next(0, 12) * 120);
-						t3.TileFrameX = num2;
-						t2.TileFrameX = num2;
-						t1.TileFrameX = num2;
-						t1.TileFrameY = 32;
-						t2.TileFrameY = 16;
-						t3.TileFrameY = 0;
+						if (canPlace2x1)
+							Common.MythUtils.PlaceFrameImportantTiles(i, j - 1, 2, 1, ModContent.TileType<CocoonRock>(), 36 * Main.rand.Next(3));
 						break;
 
 					case 5:
-						WorldGen.Place3x2(i - 1, j - 1, (ushort)ModContent.TileType<BlackFrenLarge>(), Main.rand.Next(3));
+						if (canPlace2x1)
+							Common.MythUtils.PlaceFrameImportantTiles(i, j - 1, 2, 1, ModContent.TileType<CocoonRock>(), 36 * Main.rand.Next(3));
+						break;
+				}
+			}
+			return;
+		}
+		if(canPlace1x1)
+		{
+			if(nearWater)
+			{
+				Common.MythUtils.PlaceFrameImportantTiles(i, j - 1, 1, 1, ModContent.TileType<GlowingReed>(), 18 * Main.rand.Next(5));
+			}
+			else
+			{
+				switch (Main.rand.Next(2))
+				{
+
+					case 0:
+						Common.MythUtils.PlaceFrameImportantTiles(i, j - 1, 1, 1, ModContent.TileType<DarkCocoonGrass>(), 18 * Main.rand.Next(6));
 						break;
 
-					case 6:
-						WorldGen.Place2x2(i - 1, j - 1, (ushort)ModContent.TileType<BlackFren>(), Main.rand.Next(3));
-						break;
-
-					case 7:
-						WorldGen.Place3x2(i - 1, j - 1, (ushort)ModContent.TileType<BlackFrenLarge>(), Main.rand.Next(3));
-						break;
-
-					case 8:
-						WorldGen.Place2x2(i - 1, j - 1, (ushort)ModContent.TileType<BlackFren>(), Main.rand.Next(3));
-						break;
-
-					case 9:
-						WorldGen.Place2x1(i - 1, j - 1, (ushort)ModContent.TileType<CocoonRock>(), Main.rand.Next(3));
-						break;
-
-					case 10:
-						WorldGen.Place2x1(i - 1, j - 1, (ushort)ModContent.TileType<CocoonRock>(), Main.rand.Next(3));
+					case 1:
+						WorldGen.PlaceTile(i,j - 1, ModContent.TileType<Tiles.PurpleThorns>());
 						break;
 				}
 			}
@@ -265,7 +390,7 @@ public class DarkCocoon : ModTile
 			{
 				tile.TileType = (ushort)ModContent.TileType<FluorescentTree>();
 				tile.TileFrameY = 2;
-				tile.TileFrameX = 0;
+				tile.TileFrameX = (short)Main.rand.Next(2);
 				tile.HasTile = true;
 				continue;
 			}

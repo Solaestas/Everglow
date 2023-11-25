@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
 public class GoldLanternLine6 : ModProjectile
 {
@@ -22,8 +22,6 @@ public class GoldLanternLine6 : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
 	}
-	private float Z = 0;
-	private Vector2 Vk;
 	public override void AI()
 	{
 		Projectile.velocity.Y += 0.1f;

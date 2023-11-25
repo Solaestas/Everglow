@@ -24,8 +24,8 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 	public override void AI()
 	{
 		Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0.22f, 0f, 0.9f);
-		if (Timer < 30)
-			Timer += 2;
+		if (timer < 30)
+			timer += 2;
 		if (Projectile.velocity.Length() < 48f)
 			Projectile.velocity *= 1.05f;
 		float vL = Projectile.velocity.Length() * 0.1f;
@@ -47,7 +47,7 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 			Projectile.Kill();
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.NPCHit4.WithVolumeScale(Math.Min(0.8f, Projectile.velocity.Length() / 40f)), Projectile.Center);
 		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Vector2.One, ModContent.ProjectileType<DemoHit>(), 0, 0, Projectile.owner, Projectile.velocity.Length() / 3f, Projectile.rotation + Main.rand.NextFloat(6.283f));
@@ -83,7 +83,7 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 		return false;
 	}
 
-	internal int Timer = 0;
+	internal int timer = 0;
 
 	public void DrawMagicArray(Texture2D tex, Color c0)
 	{
@@ -91,23 +91,23 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 		var c1 = new Color(c0.R * 0.19f / 255f, c0.G * 0.19f / 255f, c0.B * 0.19f / 255f, c0.A * 0.19f / 255f);
 		var c2 = new Color(c0.R * 0.09f / 255f, c0.G * 0.09f / 255f, c0.B * 0.09f / 255f, c0.A * 0.09f / 255f);
 		float Size1 = (float)(Math.Sin((Main.timeForVisualEffects + 40) / 24) / 7d + 1);
-		float Size2 = Timer / 30f;
+		float Size2 = timer / 30f;
 		DrawTexCircle(24, 25 * Size2, c0 * Size1, Projectile.Center - Main.screenPosition, Water, -Main.timeForVisualEffects / 7);
 		DrawTexCircle(22, 12 * Size2, c1 * Size1, Projectile.Center - Main.screenPosition, Water, -Main.timeForVisualEffects / 27);
 		DrawTexCircle(20, 12 * Size2, c2 * Size1, Projectile.Center - Main.screenPosition, Water, -Main.timeForVisualEffects / 127);
 		DrawTexMoon(24, 25 * Size2, c0 * Size1, Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
 	}
 
-	private void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	private void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radious / 2; h++)
+		for (int h = 0; h < radius / 2; h++)
 		{
-			circle.Add(new Vertex2D(center + RotAndEclipse(new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot)), color, new Vector3(h * 2 / radious, 1, 0)));
-			circle.Add(new Vertex2D(center + RotAndEclipse(new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4 + addRot)), color, new Vector3(h * 2 / radious, 0, 0)));
+			circle.Add(new Vertex2D(center + RotAndEclipse(new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot)), color, new Vector3(h * 2 / radius, 1, 0)));
+			circle.Add(new Vertex2D(center + RotAndEclipse(new Vector2(0, radius + width).RotatedBy(h / radius * Math.PI * 4 + addRot)), color, new Vector3(h * 2 / radius, 0, 0)));
 		}
-		circle.Add(new Vertex2D(center + RotAndEclipse(new Vector2(0, radious).RotatedBy(addRot)), color, new Vector3(0.5f, 1, 0)));
-		circle.Add(new Vertex2D(center + RotAndEclipse(new Vector2(0, radious + width).RotatedBy(addRot)), color, new Vector3(0.5f, 0, 0)));
+		circle.Add(new Vertex2D(center + RotAndEclipse(new Vector2(0, radius).RotatedBy(addRot)), color, new Vector3(0.5f, 1, 0)));
+		circle.Add(new Vertex2D(center + RotAndEclipse(new Vector2(0, radius + width).RotatedBy(addRot)), color, new Vector3(0.5f, 0, 0)));
 		if (circle.Count > 0)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = tex;
@@ -115,40 +115,40 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 		}
 	}
 
-	private void DrawTexMoon(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	private void DrawTexMoon(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radious * 5; h++)
+		for (int h = 0; h < radius * 5; h++)
 		{
-			Vector2 up = new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 0.27 + addRot);
-			Vector2 down = new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 0.27 + addRot);
+			Vector2 up = new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 0.27 + addRot);
+			Vector2 down = new Vector2(0, radius + width).RotatedBy(h / radius * Math.PI * 0.27 + addRot);
 			up = RotAndEclipse(up);
 			down = RotAndEclipse(down);
-			circle.Add(new Vertex2D(center + up, color, new Vector3(h * 0.2f / radious, 1, 0)));
-			circle.Add(new Vertex2D(center + down, color, new Vector3(h * 0.2f / radious, 0, 0)));
+			circle.Add(new Vertex2D(center + up, color, new Vector3(h * 0.2f / radius, 1, 0)));
+			circle.Add(new Vertex2D(center + down, color, new Vector3(h * 0.2f / radius, 0, 0)));
 		}
-		//circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
-		//circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
+		//circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
+		//circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
 		if (circle.Count > 0)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = tex;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}
-	private void DrawTexMoon(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	private void DrawTexMoon(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radious * 5; h++)
+		for (int h = 0; h < radius * 5; h++)
 		{
-			Vector2 up = new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 0.27 + addRot);
-			Vector2 down = new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 0.27 + addRot);
+			Vector2 up = new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 0.27 + addRot);
+			Vector2 down = new Vector2(0, radius + width).RotatedBy(h / radius * Math.PI * 0.27 + addRot);
 			up = RotAndEclipse(up);
 			down = RotAndEclipse(down);
-			circle.Add(new Vertex2D(center + up, color, new Vector3(h * 0.2f / radious, 1, 0)));
-			circle.Add(new Vertex2D(center + down, color, new Vector3(h * 0.2f / radious, 0, 0)));
+			circle.Add(new Vertex2D(center + up, color, new Vector3(h * 0.2f / radius, 1, 0)));
+			circle.Add(new Vertex2D(center + down, color, new Vector3(h * 0.2f / radius, 0, 0)));
 		}
-		//circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
-		//circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
+		//circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
+		//circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
 		if (circle.Count > 0)
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
 	}
