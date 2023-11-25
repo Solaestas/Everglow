@@ -23,7 +23,7 @@ internal class DreamWeaverBook : MagicBookProjectile
 		Player player = Main.player[Projectile.owner];
 		if (player.itemTime <= 0 || player.HeldItem.type != ModContent.ItemType<TheFirefly.Items.Weapons.DreamWeaver>())
 		{
-			if (Timer < 0)
+			if (timer < 0)
 				Projectile.Kill();
 		}
 		if (player.itemTime == 2 && player.HeldItem.type == ItemType)

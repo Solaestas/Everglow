@@ -28,7 +28,7 @@ public class TuskCurse : ModProjectile
 		Projectile.velocity *= 0.98f;
 		Projectile.velocity.Y += 0.4f;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.DD2_SkeletonHurt, Projectile.Center);
 		for (int h = 0; h < 20; h++)
@@ -94,7 +94,7 @@ public class TuskCurse : ModProjectile
 			ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.06f);
 			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapBloodTusk").Value;
 			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/FogTrace").Value;
-			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/Metero").Value;
+			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Myth/Acytaea/Projectiles/Metero").Value;
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;

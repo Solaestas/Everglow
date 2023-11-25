@@ -1,4 +1,3 @@
-﻿using Everglow.Myth.Common;
 using ReLogic.Content;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
@@ -31,7 +30,7 @@ internal class CursedFlamePipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
-		Texture2D FlameColor = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/Cursed_Color");
+		Texture2D FlameColor = ModAsset.Cursed_Color.Value;
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
 		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
@@ -43,7 +42,7 @@ internal class CursedFlamePipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
-[Pipeline(typeof(CursedFlamePipeline), typeof(BloomPipeline))]
+[Pipeline(typeof(Commons.VFX.CommonVFXDusts.CurseFlamePipeline), typeof(BloomPipeline))]
 internal class CursedFlameDust : ShaderDraw
 {
 	private Vector2 vsadd = Vector2.Zero;
@@ -81,8 +80,9 @@ internal class CursedFlameDust : ShaderDraw
 
 	public override void Draw()
 	{
+		float pocession = timer / maxTime;
+		float timeValue = (float)(Main.time * 0.002);
 		Vector2[] pos = oldPos.Reverse<Vector2>().ToArray();
-		float fx = timer / maxTime;
 		int len = pos.Length;
 		if (len <= 2)
 			return;
@@ -91,10 +91,12 @@ internal class CursedFlameDust : ShaderDraw
 		{
 			Vector2 normal = oldPos[i] - oldPos[i - 1];
 			normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
-			var drawcRope = new Color(fx * fx * fx * 2, 0.5f, 1, 150 / 255f);
-			float width = ai[2] * (float)Math.Sin(i / (double)len * Math.PI);
-			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width, drawcRope, new Vector3(0 + ai[0], i / 80f, 0));
-			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.05f + ai[0], i / 80f, 0));
+			float coordValue = i / (float)len;
+			var drawcRopeUp = new Color(0.25f + coordValue * 0.5f, 0, pocession, 0);
+			var drawcRopeDown = new Color(0.25f + coordValue * 0.5f, 1, pocession, 0);
+			float width = ai[2] * (float)Math.Sin(coordValue * Math.PI);
+			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width, drawcRopeUp, new Vector3(ai[0] + coordValue * 0.4f, timeValue, 0.8f));
+			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width, drawcRopeDown, new Vector3(ai[0] + coordValue * 0.4f, timeValue + 0.4f, 0.8f));
 		}
 		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);

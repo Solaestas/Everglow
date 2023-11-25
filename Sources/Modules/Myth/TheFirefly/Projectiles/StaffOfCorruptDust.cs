@@ -76,9 +76,9 @@ internal class StaffOfCorruptDust : ModProjectile
 		Main.spriteBatch.Draw(t, Projectile.Center - Main.screenPosition, null, color, Projectile.rotation + MathF.PI * 0.27f, t.Size() / 2f, Projectile.scale, S, 0f);
 		return false;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/CorruptDust_end"), Projectile.Center);
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 }

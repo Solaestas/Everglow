@@ -70,18 +70,16 @@ public class MythUtils
 		}
 		spriteBatch.Draw(tex, vertex2Ds, PrimitiveType.TriangleList);
 	}
-	public static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	public static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0, int precise = 1)
 	{
 		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radious / 2; h += 2)
+		for (int h = 0; h <= radius * precise; h += 1)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 2 / precise + addRot), color, new Vector3(h / radius / precise, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(h / radius * Math.PI * 2 / precise + addRot), color, new Vector3(h / radius / precise, 0, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
 		if (circle.Count > 0)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = tex;
@@ -89,32 +87,51 @@ public class MythUtils
 		}
 	}
 
-	public static void DrawTexCircle(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	public static void DrawTexCircle(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
 
-		for (int h = 0; h < radious / 2; h += 1)
+		for (int h = 0; h < radius / 2; h += 1)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 0, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
 
 		if (circle.Count > 0)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = tex;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
+	}
+	public static void DrawTexCircle_Warp(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	{
+		var circle = new List<Vertex2D>();
+
+		Color c0 = color;
+		c0.R = 0;
+		for (int h = 0; h < radius / 2; h += 1)
+		{
+			c0.R = (byte)(h / radius * 2 * 255);
+			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / radius * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radius, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radius, 0, 0)));
+		}
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), c0, new Vector3(1, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), c0, new Vector3(1, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), c0, new Vector3(0, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), c0, new Vector3(0, 0, 0)));
+		if (circle.Count > 2 && radius > 1)
+			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
 	}
 	/// <summary>
 	/// 以[x,y]为左上顶点放置大件连续物块,此类物块必须是18x18(不算分隔线就16x16)一帧的
 	/// </summary>
 	/// <param name="path"></param>
 	/// <returns></returns>
-	public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type)
+	public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type, int startFrameX = 0, int startFrameY = 0)
 	{
 		if (x > Main.maxTilesX - width || x < 0 || y > Main.maxTilesY - height || y < 0)
 			return;
@@ -124,10 +141,49 @@ public class MythUtils
 			{
 				Tile tile = Main.tile[x + i, y + j];
 				tile.TileType = (ushort)type;
-				tile.TileFrameX = (short)(i * 18);
-				tile.TileFrameY = (short)(j * 18);
+				tile.TileFrameX = (short)(startFrameX + i * 18);
+				tile.TileFrameY = (short)(startFrameY + j * 18);
 				tile.HasTile = true;
 			}
 		}
+	}
+	public static float GetHourHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if(!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 43200 * MathHelper.TwoPi);
+	}
+	public static float GetMinuteHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if (!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 3600 * MathHelper.TwoPi);
+	}
+	public static float GetSecondHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if (!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 60 * MathHelper.TwoPi);
 	}
 }

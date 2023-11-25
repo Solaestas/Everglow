@@ -9,6 +9,7 @@ internal class YggdrasilWorld : Subworld
 	public override int Width => 1200;
 	public override int Height => 12000;
 	public override bool NormalUpdates => true;
+	public override bool ShouldSave => true;
 	public override List<GenPass> Tasks => new List<GenPass>()
 	{
 		new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass()
