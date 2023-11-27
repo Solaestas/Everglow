@@ -130,8 +130,8 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			base.OnKill(timeLeft);
 		}
 
-		public static ObjReader.Model model;
-		public static Asset<Texture2D> NormalMap;
+		public ObjReader.Model model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
+		public Asset<Texture2D> NormalMap = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture");
 
 		public Vector3 SpinWithAxis(Vector3 orig, Vector3 axis, float Rotation)
 		{
@@ -192,22 +192,16 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			var projection = Matrix.CreatePerspectiveFieldOfView(MathF.PI / 3f, 1.0f, 1f, 1200f);
 			var t = new Vector3(5, -100, 10000 - s);
 			Vector2 lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
-			Matrix GameViewTransformationMatrix = Main.GameViewMatrix.TransformationMatrix;
 
 			var modelMatrix =
-
-
-			 /* Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
-						* Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)*/
-
-			 Matrix.CreateTranslation(t)
-
+			  Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
+			* Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
+			*Matrix.CreateTranslation(t)
 			* Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0),
 									 new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 500),
 									 new Vector3(0, -1, 0))
 			* Main.GameViewMatrix.ZoomMatrix
-		    * Matrix.CreateTranslation(new Vector3(-Main.GameViewMatrix.TransformationMatrix.M41, -Main.GameViewMatrix.TransformationMatrix.M42, 0))
-			;
+		    * Matrix.CreateTranslation(new Vector3(-Main.GameViewMatrix.TransformationMatrix.M41, -Main.GameViewMatrix.TransformationMatrix.M42, 0));
 
 
 
@@ -282,8 +276,8 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 	{
 		public override void OnModLoad()
 		{
-			PlanetBeFall.model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
-			PlanetBeFall.NormalMap = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture");
+			//PlanetBeFall.model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
+			//PlanetBeFall.NormalMap = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture");
 			base.OnModLoad();
 		}
 
