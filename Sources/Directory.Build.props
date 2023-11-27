@@ -21,5 +21,6 @@
 		<Publicize Include="MonoMod.Utils" />
 		<Solaestas-ResourceFile Include="**\*.bmp" />
 		<Solaestas-ResourceFile Include="**\*.mapio" />
+		<AdditionalFiles Update="**\*.FileListAbsolute.txt" Visible="false" Link="\" />
 	</ItemGroup>
 </Project>
