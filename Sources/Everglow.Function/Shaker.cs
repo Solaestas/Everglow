@@ -33,7 +33,7 @@ public class ShakerInfo
 			return;
 		}
 		int time = tickTimer - tracetime;
-		if (maxTick != 1 && time > maxTick)
+		if (maxTick != -1 && time > maxTick)
 		{
 			return;
 		}
@@ -117,7 +117,7 @@ public class UndirectedShakerInfo : ShakerInfo
 			return;
 		}
 		int time = tickTimer - tracetime;
-		if (maxTick != 1 && time > maxTick)
+		if (maxTick != -1 && time > maxTick)
 		{
 			return;
 		}
