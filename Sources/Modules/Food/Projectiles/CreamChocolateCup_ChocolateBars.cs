@@ -23,6 +23,7 @@ internal class CreamChocolateCup_ChocolateBars : ModProjectile
 	}
 	public override void AI()
 	{
+		Projectile.velocity.Y += 0.15f;
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.X, Projectile.velocity.Y) + MathHelper.PiOver4;
 		base.AI();
 	}

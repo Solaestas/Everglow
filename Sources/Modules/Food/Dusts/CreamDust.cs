@@ -5,6 +5,8 @@ public class CreamDust : ModDust
 {
 	public override void OnSpawn(Dust dust)
 	{
+		dust.rotation = dust.scale;
+		dust.dustIndex = 0;
 	}
 
 	public override bool Update(Dust dust)
@@ -18,9 +20,10 @@ public class CreamDust : ModDust
 			dust.velocity *= 0;
 			dust.scale *= 0.95f;
 		}
-		dust.scale *= 0.98f;
+		dust.dustIndex++;
+		dust.scale = MathF.Sin(dust.dustIndex / 10f) * dust.rotation * 0.4f;
 		dust.velocity *= 0.98f;
-		if (dust.scale < 0.1f)
+		if (dust.dustIndex > 31)
 		{
 			dust.active = false;
 		}
