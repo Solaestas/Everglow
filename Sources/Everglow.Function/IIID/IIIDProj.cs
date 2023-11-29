@@ -17,17 +17,18 @@ namespace Everglow.Commons.IIID
 	{
 		public override void SetDefaults()
 		{
-			Projectile.width = 14;
-			Projectile.height = 14;
+			Projectile.width = 114;
+			Projectile.height = 114;
 			Projectile.friendly = true;
 			Projectile.DamageType = DamageClass.Melee;
 			Projectile.aiStyle = -1;
 			Projectile.penetrate = 1;
-			Projectile.timeLeft = 600;
+			Projectile.timeLeft = 1200;
 			Projectile.hostile = false;
 			Projectile.alpha = 255;
-			Projectile.tileCollide = true;
+			Projectile.tileCollide = false;
 			Projectile.ignoreWater = true;
+			Projectile.hide = true;
 			SetDef();
 		}
 
@@ -47,12 +48,27 @@ namespace Everglow.Commons.IIID
 		{
 			return Vector3.Dot(v1, v2) / v1.Length() / v2.Length();
 		}
+		public Vector2 lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
+		public Matrix DefaultPerspectiveMatrix()
+		{
 
+
+			return
+			  Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
+			* Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
+			* Matrix.CreateTranslation(new Vector3(5, -100, 1500))
+			* Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0),
+									 new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 500),
+									 new Vector3(0, -1, 0))
+			* Main.GameViewMatrix.ZoomMatrix
+			* Matrix.CreateTranslation(new Vector3(-Main.GameViewMatrix.TransformationMatrix.M41, -Main.GameViewMatrix.TransformationMatrix.M42, 0));
+
+		}
 		/// <summary>
 		/// 模型 ( 用ObjReader.LoadFile("")导入 )
 		/// The Model ( Imported by ObjReader.LoadFile("") )
 		/// </summary>
-		public ObjReader.Model model = ObjReader.LoadFile("Everglow/Function/IIID/Cube.obj"); 
+		public ObjReader.Model model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
 		/// <summary>
 		/// 模型主要贴图
 		/// The Main Texture of Model
@@ -113,7 +129,7 @@ namespace Everglow.Commons.IIID
 		};
 
 
-		public override bool PreDraw(ref Color lightColor)
+		public void DrawIIIDProj(ViewProjectionParams viewProjectionParams)
 		{
 			List<VertexRP> vertices = new List<VertexRP>();
 			Main.instance.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
@@ -170,10 +186,11 @@ namespace Everglow.Commons.IIID
 			modelPipeline.EndCapture();
 
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-			Main.spriteBatch.Draw(modelPipeline.ModelTarget, Projectile.Center - Main.screenPosition - new Vector2(500, 500) - (Projectile.Center - Main.LocalPlayer.Center),
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+			Main.spriteBatch.Draw(modelPipeline.ModelTarget, Vector2.Lerp(Projectile.Center, lookat, 1f) - Main.screenPosition - new Vector2(1000, 1000),
 				null, Color.White, 0, Vector2.One * 0.5f, 2f, SpriteEffects.None, 0);
-			return true;
+
+			return ;
 		}
 	}
 }

@@ -170,11 +170,17 @@ namespace Everglow.Commons.IIID
 
             ShadingPass();
 			//BloomPass();
-            //ToneMappingPass();
-            //ConcaveEdgePass();
-            //FinalBlend();
-			PixelArt();
-		    Edge();
+			//ToneMappingPass();
+			//ConcaveEdgePass();
+			//FinalBlend();
+			if (m_artParams.EnablePixelArt)
+			{
+				PixelArt();
+			}
+			if (m_artParams.EnableOuterEdge)
+			{
+				Edge();
+			}
 
 			graphicsDevice.SetRenderTarget(Main.screenTarget);
             spriteBatch.Begin();

@@ -24,26 +24,42 @@ using Everglow.Commons.Skeleton2D;
 namespace Everglow.IIID.Projectiles.PlanetBefall
 {
 
-	public class PlanetBeFall : ModProjectile
+	public class PlanetBeFall : IIIDProj
 	{
 		public Vector2 target;
 		public Vector2 spawnposition;
 		public int Array;
-		public override void SetDefaults()
-		{
 
-			Projectile.width = 114;
-			Projectile.height = 114;
-			Projectile.friendly = true;
-			Projectile.DamageType = DamageClass.Melee;
-			Projectile.aiStyle = -1;
-			Projectile.penetrate = 1;
-			Projectile.timeLeft = 1200;
-			Projectile.hostile = false;
-			Projectile.alpha = 255;
-			Projectile.tileCollide = false;
-			Projectile.ignoreWater = true;
-			Projectile.hide = true;
+		public override void SetDef()
+		{
+			model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
+			IIIDTexture = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture").Value;
+			NormalTexture = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture").Value;
+			MaterialTexture = TextureAssets.MagicPixel.Value;
+			EmissionTexture = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallEmission").Value;
+			bloom = new BloomParams
+			{
+				BlurIntensity = 1.0f,
+				BlurRadius = 1.0f
+			};
+			artParameters = new ArtParameters
+			{
+				EnablePixelArt = true,
+				EnableOuterEdge = true,
+			};
+			viewProjectionParams = new ViewProjectionParams
+			{
+				ViewTransform = Matrix.Identity,
+				FieldOfView = MathF.PI / 3f,
+				AspectRatio = 1.0f,
+				ZNear = 1f,
+				ZFar = 1200f
+			};
+		}
+
+		public override Matrix ModelMovementMatrix()
+		{
+			return DefaultPerspectiveMatrix();
 		}
 		public override void OnSpawn(IEntitySource source)
 		{
@@ -130,193 +146,60 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			base.OnKill(timeLeft);
 		}
 
-		public ObjReader.Model model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
-		public Asset<Texture2D> NormalMap = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture");
+		//public ObjReader.Model model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
 
-		public Vector3 SpinWithAxis(Vector3 orig, Vector3 axis, float Rotation)
-		{
-			axis = Vector3.Normalize(axis);
-			float k = (float)Math.Cos(Rotation);
-			return orig * k + Vector3.Cross(axis, orig * (float)Math.Sin(Rotation)) + Vector3.Dot(axis, orig) * axis * (1 - k);
-		}
-		public float GetCos(Vector3 v1, Vector3 v2)
-		{
-			return Vector3.Dot(v1, v2) / v1.Length() / v2.Length();
-		}
 		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 		{
 			//overPlayers.Add(index);
 		}
 		float s = 5000f;
-		public void DrawIIIDProj(ViewProjectionParams viewProjectionParams)
+
+		public class TestProjModelSystem : ModSystem
 		{
-			Viewport viewport = Main.graphics.GraphicsDevice.Viewport;
-			List<VertexRP> vertices = new List<VertexRP>();
-			Main.instance.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-			for (int f = 0; f < model.faces.Count; f++)
+			public override void OnModLoad()
 			{
-				bool hasTexCoord = model.faces[f].TextureCoords.Count == 3;
-				bool hasNormal = model.faces[f].Normals.Count == 3;
-				bool hasPosition = model.faces[f].Positions.Count == 3;
-				Debug.Assert(hasTexCoord && hasNormal && hasPosition);
-
-				Vector3 A = model.positions[model.faces[f].Positions[0]] * 103;
-				Vector3 B = model.positions[model.faces[f].Positions[1]] * 103;
-				Vector3 C = model.positions[model.faces[f].Positions[2]] * 103;
-				Vector3 tangentVector = ModelEntity.CalculateTangentVector(
-					A,
-					B,
-					C,
-					model.texCoords[model.faces[f].TextureCoords[0]],
-					model.texCoords[model.faces[f].TextureCoords[1]],
-					model.texCoords[model.faces[f].TextureCoords[2]]);//每个面的切向量
-
-				Vector3 surfaceNormal = Vector3.Normalize(Vector3.Cross(B - A, C - A));//每个面的法向量
-				float check = Vector3.Dot(tangentVector, surfaceNormal);
-				// Debug.Assert(check == 0);
-				for (int i = 0; i < 3; i++)
-				{
-					Vector3 axis = new Vector3(1, -3, 2);
-					Vector2 texCoord = hasTexCoord ? model.texCoords[model.faces[f].TextureCoords[i]] : Vector2.Zero;
-					Vector3 normal = hasNormal ? model.normals[model.faces[f].Normals[i]] : Vector3.Zero;
-					Vector3 v3 = hasPosition ? model.positions[model.faces[f].Positions[i]] * 103 : Vector3.Zero;
-					//v3 = SpinWithAxis(v3, axis, (float)(Main.timeForVisualEffects * 0.04f));
-					//normal = SpinWithAxis(normal, axis, (float)(Main.timeForVisualEffects * 0.04f));
-					vertices.Add(new VertexRP(v3, new Vector3(texCoord, 0), normal, tangentVector));
-
-				}
+				//PlanetBeFall.model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
+				//PlanetBeFall.NormalMap = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture");
+				base.OnModLoad();
 			}
-			var modelPipeline = ModContent.GetInstance<ModelRenderingPipeline>();
 
-			// 用这个函数创建透视投影，需要FOV和屏幕宽高比
-			var projection = Matrix.CreatePerspectiveFieldOfView(MathF.PI / 3f, 1.0f, 1f, 1200f);
-			var t = new Vector3(5, -100, 10000 - s);
-			Vector2 lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
-
-			var modelMatrix =
-			  Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
-			* Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
-			*Matrix.CreateTranslation(t)
-			* Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0),
-									 new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 500),
-									 new Vector3(0, -1, 0))
-			* Main.GameViewMatrix.ZoomMatrix
-		    * Matrix.CreateTranslation(new Vector3(-Main.GameViewMatrix.TransformationMatrix.M41, -Main.GameViewMatrix.TransformationMatrix.M42, 0));
-
-
-
-
-
-			ModelEntity entity = new ModelEntity
-			{
-				Vertices = vertices,
-				Texture = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture").Value,
-				NormalTexture = NormalMap.Value,
-				MaterialTexture = TextureAssets.MagicPixel.Value,//ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/PlanetBefall/PlanetBeFallTexture").Value,
-				EmissionTexture = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallEmission").Value,
-				ModelTransform = modelMatrix,
-			};
-
-
-			//ef.Parameters["uModel"].SetValue(modelMatrix);
-			//ef.Parameters["uViewProjection"].SetValue(projection);
-			//// 如果Model有非均匀缩放，就要用法线变换矩阵而不是Model矩阵
-			//ef.Parameters["uModelNormal"].SetValue(Matrix.Transpose(Matrix.Invert(modelMatrix)));
-
-			BloomParams bloom = new BloomParams
-			{
-				BlurIntensity = 1.0f,
-				BlurRadius = 1.0f
-			};
-
-			ArtParameters artParameters = new ArtParameters
-			{
-				EnableOuterEdge = false
-			};
-			modelPipeline.BeginCapture(viewProjectionParams, bloom, artParameters);
-			{
-				modelPipeline.PushModelEntity(entity);
-			}
-			modelPipeline.EndCapture();
-
-			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-			Main.spriteBatch.Draw(modelPipeline.ModelTarget, Vector2.Lerp(Projectile.Center, lookat, 1f) - Main.screenPosition - new Vector2(1000, 1000),
-				null, Color.White, 0, Vector2.One * 0.5f, 2f, SpriteEffects.None, 0);
-
-			//Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
-			//    new Vertex3D[]
-			//    {
-			//        new Vertex3D(new Vector3(0,0.5f,0),Vector3.Zero, Vector3.Zero),
-			//        new Vertex3D(new Vector3(-0.5f,-0.5f,0),Vector3.Zero, Vector3.Zero),
-			//        new Vertex3D(new Vector3(0.5f,-0.5f,0),Vector3.Zero, Vector3.Zero)
-			//    }, 0, 1);
-			/*List<Vertex2D> verticesII = new List<Vertex2D>();
-            for (int f = 0; f < model.faces.Count; f++)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    Vector3 Aixs = new Vector3(1, 3, 2);
-                    Vector3 lightS = new Vector3(-1, -2, 3);
-                    Vector3 Spin = SpinWithAxis(model.positions[model.faces[f].V[i]], Aixs, Projectile.timeLeft / 40f);
-                    Vector3 SpinNormal = SpinWithAxis(model.normals[model.faces[f].N[i]], Aixs, Projectile.timeLeft / 40f);
-                    float s = Math.Max(GetCos(lightS, SpinNormal), 0);
-
-                    Vector3 Prepos = Spin / (Spin.Z + 100) * 600;
-                    Vector2 pos = new Vector2(Prepos.X, Prepos.Y) + Projectile.Center - Main.screenPosition;
-                    verticesII.Add(new Vertex2D(pos, new Color(s,s,s), model.normals[model.faces[f].N[i]]));
-                }
-            }
-            Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, verticesII.ToArray(), 0, verticesII.Count - 2);*/
-			return;
 		}
-	}
-	public class TestProjModelSystem : ModSystem
-	{
-		public override void OnModLoad()
+		public class PlanetBeFallScreenMovePlayer : ModPlayer
 		{
-			//PlanetBeFall.model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
-			//PlanetBeFall.NormalMap = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture");
-			base.OnModLoad();
-		}
-
-	}
-	public class PlanetBeFallScreenMovePlayer : ModPlayer
-	{
-		public int AnimationTimer = 0;
-		public bool PlanetBeFallAnimation = false;
-		public Projectile proj;
-		const float MaxTime = 180;
-		public override void ModifyScreenPosition()
-		{
-			Vector2 target;
-			if (proj != null)
+			public int AnimationTimer = 0;
+			public bool PlanetBeFallAnimation = false;
+			public Projectile proj;
+			const float MaxTime = 180;
+			public override void ModifyScreenPosition()
 			{
-				if (proj.owner == Player.whoAmI)
+				Vector2 target;
+				if (proj != null)
 				{
-					target = proj.Center - Main.ScreenSize.ToVector2() / 2;
-					if (PlanetBeFallAnimation)
+					if (proj.owner == Player.whoAmI)
 					{
-						AnimationTimer += 1;
-						float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
-						if (AnimationTimer >= 60 && AnimationTimer < 120)
+						target = proj.Center - Main.ScreenSize.ToVector2() / 2;
+						if (PlanetBeFallAnimation)
 						{
-							Value = 1;
-						}
-						if (AnimationTimer >= 120)
-						{
-							Value = (1 + MathF.Cos((AnimationTimer - 120) / 60f * MathF.PI)) / 2f;
-						}
+							AnimationTimer += 1;
+							float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
+							if (AnimationTimer >= 60 && AnimationTimer < 120)
+							{
+								Value = 1;
+							}
+							if (AnimationTimer >= 120)
+							{
+								Value = (1 + MathF.Cos((AnimationTimer - 120) / 60f * MathF.PI)) / 2f;
+							}
 
-						if (AnimationTimer >= MaxTime)
-						{
-							AnimationTimer = (int)MaxTime;
-							PlanetBeFallAnimation = false;
+							if (AnimationTimer >= MaxTime)
+							{
+								AnimationTimer = (int)MaxTime;
+								PlanetBeFallAnimation = false;
+							}
+							Player.immune = true;
+							Player.immuneTime = 1;
+							Main.screenPosition = (Value).Lerp(Main.screenPosition, target);
 						}
-						Player.immune = true;
-						Player.immuneTime = 1;
-						Main.screenPosition = (Value).Lerp(Main.screenPosition, target);
 					}
 				}
 			}
