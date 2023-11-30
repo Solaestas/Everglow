@@ -20,7 +20,7 @@ public class CreamChocolateCupStaff_proj : ModProjectile
 		Player player = Main.player[Projectile.owner];
 		Vector2 mouseToPlayer = Main.MouseWorld - player.MountedCenter;
 		mouseToPlayer = Vector2.Normalize(mouseToPlayer);
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, mouseToPlayer * 16f, ModContent.ProjectileType<CreamChocolateCup_ChocolateBars>(), Projectile.damage * 3, 0.4f, player.whoAmI);
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, mouseToPlayer * 16f, ModContent.ProjectileType<CreamChocolateCup_ChocolateBars>(), Projectile.damage * 2, 0.4f, player.whoAmI);
 	}
 	public override void AI()
 	{
