@@ -2,7 +2,7 @@ using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-internal class CyanVineStaff_proj : ModProjectile
+public class CyanVineStaff_proj : ModProjectile
 {
 	public override string Texture => "Everglow/Yggdrasil/YggdrasilTown/Projectiles/CyanVineStaff_proj";
 
@@ -36,7 +36,7 @@ internal class CyanVineStaff_proj : ModProjectile
 			Projectile.ai[1] -= 1f;
 			float useDuration = (player.itemTime - 5) / (float)player.itemTimeMax;
 			useDuration *= useDuration;
-			Projectile.rotation = (float)(Math.Atan2(MouseToPlayer.Y, MouseToPlayer.X) + Math.PI * 0.25) - useDuration * player.direction * 6;
+			Projectile.rotation = (float)(Math.Atan2(MouseToPlayer.Y, MouseToPlayer.X) + Math.PI * 0.25) - useDuration * player.direction * 0.6f;
 			Projectile.Center = player.MountedCenter + Vector2.Normalize(MouseToPlayer).RotatedBy(Projectile.ai[0] / 0.8d) * (8f - Projectile.ai[0] * 8) + new Vector2(0, 0);
 			Projectile.velocity *= 0;
 			if (player.itemTime == player.itemTimeMax - 1)
@@ -45,7 +45,15 @@ internal class CyanVineStaff_proj : ModProjectile
 			}
 			if (player.itemTime == 0)
 			{
-				player.itemTime = player.itemTimeMax;
+				if (player.ItemCheck_PayMana(player.HeldItem, true))
+				{
+					player.ItemCheck_ApplyManaRegenDelay(player.HeldItem);
+					player.itemTime = player.itemTimeMax;
+				}
+				else
+				{
+					Projectile.Kill();
+				}
 			}
 		}
 		if (!player.controlUseItem && release)
@@ -89,13 +97,6 @@ internal class CyanVineStaff_proj : ModProjectile
 			return;
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
-		Vector2 v0 = Projectile.Center - player.MountedCenter;
-
-
-
-		if (player.controlUseTile)
-			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
-
 		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
 		Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 		SpriteEffects se = SpriteEffects.None;
