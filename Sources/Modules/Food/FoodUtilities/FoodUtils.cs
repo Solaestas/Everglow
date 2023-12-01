@@ -1,4 +1,4 @@
-﻿namespace Everglow.Food.Utils;
+﻿namespace Everglow.Food.FoodUtilities;
 
 internal static class FoodUtils
 {
