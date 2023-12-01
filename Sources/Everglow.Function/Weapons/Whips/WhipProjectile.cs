@@ -241,7 +241,7 @@ public abstract class WhipProjectile : ModProjectile
 		FillWhipControlPoints(list0, foreStep);
 		for (int i = 0; i < list0.Count - 1; i++)
 		{
-			int frame = (int)(i / (float)(list0.Count - 1) * 4);
+			int frame = (int)(i / (float)(list0.Count - 1) * VerticalFrameCount);
 			if (frame == 0 && i > 0)
 			{
 				frame = 1;

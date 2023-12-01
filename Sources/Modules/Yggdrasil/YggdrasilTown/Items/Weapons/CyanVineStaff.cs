@@ -1,4 +1,3 @@
-using Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;

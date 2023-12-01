@@ -1,4 +1,6 @@
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Terraria.DataStructures;
+using static Terraria.GameContent.Bestiary.IL_BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 
@@ -7,12 +9,13 @@ public class HandheldCircularSaw_proj : ModProjectile
 	public override string Texture => "Everglow/Yggdrasil/KelpCurtain/Projectiles/Legacies/HandheldCircularSaw_handle";
 	public override void SetDefaults()
 	{
-		Projectile.width = 50;
-		Projectile.height = 50;
+		Projectile.width = 30;
+		Projectile.height = 30;
 		Projectile.DamageType = DamageClass.Magic;
 		Projectile.aiStyle = -1;
 		Projectile.penetrate = -1;
 		Projectile.tileCollide = false;
+		Projectile.friendly = true;
 		Projectile.ignoreWater = true;
 	}
 	public override void OnSpawn(IEntitySource source)
@@ -24,12 +27,13 @@ public class HandheldCircularSaw_proj : ModProjectile
 		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathF.PI * 0.75f);
 
 		player.heldProj = Projectile.whoAmI;
-		Vector2 MouseToPlayer = Main.MouseWorld - player.MountedCenter;
-		MouseToPlayer = Vector2.Normalize(MouseToPlayer);
+		Vector2 mouseToPlayer = Main.MouseWorld - player.MountedCenter;
+		mouseToPlayer = Vector2.Normalize(mouseToPlayer);
 		if (player.controlUseItem)
 		{
-			Projectile.rotation = (float)(Math.Atan2(MouseToPlayer.Y, MouseToPlayer.X) + Math.PI * 0.25);
-			Projectile.Center = player.MountedCenter + Vector2.Normalize(MouseToPlayer) * 32f;
+			float aimRot = -MathF.Asin(Vector3.Cross(new Vector3(mouseToPlayer, 0), new Vector3(new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75), 0)).Z);
+			Projectile.rotation += aimRot * 0.05f;
+			Projectile.Center = player.MountedCenter + new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75) * 50f;
 			Projectile.velocity *= 0;
 			if (player.itemTime == 0)
 			{
@@ -46,12 +50,14 @@ public class HandheldCircularSaw_proj : ModProjectile
 		{
 			player.direction = 1;
 		}
+		GenerateOrangeSpark((int)FlameValue);
+		FlameValue *= 0.92f;
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return false;
 	}
-
+	public float FlameValue = 0;
 	public override void PostDraw(Color lightColor)
 	{
 		Player player = Main.player[Projectile.owner];
@@ -62,16 +68,43 @@ public class HandheldCircularSaw_proj : ModProjectile
 		SpriteEffects se = SpriteEffects.None;
 		if (player.direction == -1)
 			se = SpriteEffects.FlipVertically;
-		float rot0 = Projectile.rotation - (float)(Math.PI * 0.25) + MathF.PI * 0.3f * player.direction;
-		Vector2 MouseToPlayer = Main.MouseWorld - player.MountedCenter;
-		MouseToPlayer = Vector2.Normalize(MouseToPlayer);
+		float rot0 = Projectile.rotation - (float)(Math.PI * 0.25) + MathF.PI * 0.25f * player.direction;
+		Vector2 projToPlayer = new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75);
 
-		Main.spriteBatch.Draw(texSaw, Projectile.Center - Main.screenPosition - new Vector2(0, 6) + MouseToPlayer * 12, new Rectangle(0, 0, 34, 34), drawColor, (float)Main.time * 0.75f, new Vector2(17), 1f, se, 0);
-		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - new Vector2(0, 6), null, drawColor, rot0, texMain.Size() / 2f, 1f, se, 0);
-
+		Main.spriteBatch.Draw(texSaw, Projectile.Center - Main.screenPosition - new Vector2(0, 6) + projToPlayer * 0, new Rectangle(0, 0, 34, 34), drawColor, (float)Main.time * 0.75f, new Vector2(17), 1f, se, 0);
+		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - new Vector2(0, 6) - projToPlayer * 13, null, drawColor, rot0, texMain.Size() / 2f, 1f, se, 0);
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		return base.Colliding(projHitbox, targetHitbox);
+	}
+
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		FlameValue += 1f;
+		base.OnHitNPC(target, hit, damageDone);
+	}
+	public void GenerateOrangeSpark(int times)
+	{
+		Player player = Main.player[Projectile.owner];
+		Vector2 projToPlayer = new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75);
+		Vector2 projToPlayerDown = new Vector2(-1, 0).RotatedBy(Projectile.rotation - Math.PI * 0.75);
+		float addAngle = Main.rand.NextFloat(-0.8f, 0.8f);
+		for (int a = 0;a < times;a++)
+		{
+			Vector2 newVelocity = projToPlayer.RotatedBy(addAngle) * -1f * FlameValue;
+			var spark = new FireSparkDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center - new Vector2(0, 6) + projToPlayer * 3 + projToPlayerDown.RotatedBy(addAngle) * 15 * player.direction,
+				maxTime = Main.rand.Next(7, 45),
+				scale = Main.rand.NextFloat(1f, Main.rand.NextFloat(4f, 7.0f)),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.08f) * player.direction }
+			};
+			Ins.VFXManager.Add(spark);
+		}
 	}
 }

@@ -1,6 +1,4 @@
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
-using Terraria.ID;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Legacies;
 
@@ -10,12 +8,12 @@ public class HandheldCircularSaw : ModItem
 	{
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.width = 46;
-		Item.height =54;
+		Item.height = 54;
 		Item.useAnimation = 5;
 		Item.useTime = 5;
 		Item.shootSpeed = 5f;
 		Item.knockBack = 1.5f;
-		Item.damage = 24; 
+		Item.damage = 24;
 		Item.rare = ItemRarityID.Green;
 
 		Item.DamageType = DamageClass.Melee;
@@ -30,8 +28,10 @@ public class HandheldCircularSaw : ModItem
 		{
 			if (Main.myPlayer == player.whoAmI)
 			{
-				if (player.altFunctionUse != 2)
-					Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<HandheldCircularSaw_proj>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
+				Projectile p0 = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<HandheldCircularSaw_proj>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
+				Vector2 mouseToPlayer = Main.MouseWorld - player.MountedCenter;
+				mouseToPlayer = Vector2.Normalize(mouseToPlayer);
+				p0.rotation = mouseToPlayer.ToRotation() + MathHelper.PiOver4;
 			}
 			return false;
 		}
