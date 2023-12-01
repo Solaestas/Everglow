@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
@@ -34,5 +35,9 @@ public class CyanVineStaff : ModItem
 			.AddIngredient(ModContent.ItemType<StoneDragonScaleWood>(), 13)
 			.AddTile(TileID.WorkBenches)
 			.Register();
+	}
+	public override bool CanUseItem(Player player)
+	{
+		return player.ownedProjectileCounts[ModContent.ProjectileType<CyanVineStaff_proj>()] == 0;
 	}
 }

@@ -107,7 +107,7 @@ public class CyanVineStaff_proj_shoot : ModProjectile, IWarpProjectile
 
 		float velocityValue = Projectile.ai[0] / 100f;
 		colorValue0 *= velocityValue;
-		var c0 = new Color(0, colorValue0, colorValue0 * colorValue0 * 0.3f, 0);
+		var c0 = new Color(0, colorValue0 * colorValue0 * 0.3f, colorValue0, 0);
 
 		var bars = new List<Vertex2D>();
 		for (int i = 1; i < trueLength; ++i)

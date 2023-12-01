@@ -114,7 +114,7 @@ public class AcroporaThumpEff : ModProjectile
 			}
 
 		}
-		Texture2D t0 = ModAsset.Weapons_AcroporaSpear.Value;
+		Texture2D t0 = ModAsset.AcroporaSpear.Value;
 		Color c0 = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16));
 		Main.spriteBatch.Draw(t0, Projectile.Center - Main.screenPosition, null, c0 * (Projectile.timeLeft / 40f), Projectile.rotation + (float)(Math.PI / 4f), t0.Size() / 2f, 1, SpriteEffects.None, 0);
 

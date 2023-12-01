@@ -3,11 +3,11 @@ using Everglow.Yggdrasil.Common;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles;
 
-public class AcroporaSpear : MeleeProj
+public class AcroporaSpear_proj : MeleeProj
 {
 	public override void SetDef()
 	{
-		maxAttackType = 2;
+		maxAttackType = 3;
 		trailLength = 20;
 		longHandle = true;
 		shadertype = "Trail";
@@ -241,6 +241,43 @@ public class AcroporaSpear : MeleeProj
 				mainVec = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);
 			}
 			if (timer > 80)
+				NextAttackType();
+			else if (timer > 1)
+			{
+				float BodyRotation = (float)Math.Sin((timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
+				player.fullRotation = BodyRotation;
+				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
+				player.legRotation = -BodyRotation;
+				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
+				Tplayer.HeadRotation = -BodyRotation;
+			}
+		}
+		if (attackType == 3)
+		{
+			if (timer < 20)
+			{
+				useTrail = false;
+				LockPlayerDir(Player);
+				float targetRot = -MathHelper.PiOver2 + Player.direction * 1.2f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(180, targetRot, -1.2f), 0.15f);
+				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
+			}
+			if (timer == 8)
+			{
+				AttSound(new SoundStyle(
+			"Everglow/MEAC/Sounds/TrueMeleeSwing"));
+			}
+			if (timer % 10 == 8 && timer > 30)
+				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
+			if (timer > 20 && timer < 75)
+			{
+				Lighting.AddLight(Projectile.Center + mainVec, 0.24f, 0.06f, 0f);
+				isAttacking = true;
+				Projectile.rotation -= Projectile.spriteDirection * 0.4f;
+				mainVec = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);
+			}
+			if (timer > 70)
 				NextAttackType();
 			else if (timer > 1)
 			{
