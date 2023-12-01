@@ -25,11 +25,8 @@ public class CyanVineStaff_proj_shoot : ModProjectile, IWarpProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 90;
 	}
-	internal float startSpeed = 200;
-	internal int targetNPC = -1;
 	public override void OnSpawn(IEntitySource source)
 	{
-		startSpeed = Projectile.velocity.Length();
 	}
 	private void AddLight()
 	{
