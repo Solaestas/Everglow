@@ -83,11 +83,6 @@ Biomes: {
 		DisplayName: Kelp Curtain Biome
 		TownNPCDialogueName: the Kelp Curtain Biome
 	}
-
-	HurricaneMazeBiome: {
-		DisplayName: Hurricane Maze Biome
-		TownNPCDialogueName: the Hurricane Maze Biome
-	}
 }
 
 MapEntry.FluorescentTree: Mods.Everglow.MapEntry.FluorescentTree
@@ -985,8 +980,23 @@ Items: {
 		Tooltip: ""
 	}
 
+	CheeseYoyo: {
+		DisplayName: Cheese Yoyo
+		Tooltip: ""
+	}
+
+	CreamChocolateCupStaff: {
+		DisplayName: Cream Chocolate Cup Staff
+		Tooltip: ""
+	}
+
 	FryingPanItem: {
 		DisplayName: Frying Pan Item
+		Tooltip: ""
+	}
+
+	GrilledSquidTentacle: {
+		DisplayName: Grilled Squid Tentacle
 		Tooltip: ""
 	}
 
@@ -1820,11 +1830,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	AshBone: {
-		DisplayName: Ash Bone
-		Tooltip: ""
-	}
-
 	BoneFeatherMagic: {
 		DisplayName: Bone Feather Magic
 		Tooltip: ""
@@ -2580,11 +2585,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	DarkMud: {
-		DisplayName: Dark Mud
-		Tooltip: ""
-	}
-
 	DoubleArmsChineseStreetLamp: {
 		DisplayName: Double Arms Chinese Street Lamp
 		Tooltip: ""
@@ -2600,18 +2600,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	IronTrackScaffolding: {
-		DisplayName: Iron Track Scaffolding
-		Tooltip: ""
-	}
-
-	PierWithSlabs: {
-		DisplayName: Pier With Slabs
-		Tooltip: ""
-	}
-
-	PierWithSlabsTop: {
-		DisplayName: Pier With Slabs Top
+	ShoreMud: {
+		DisplayName: Shore Mud
 		Tooltip: ""
 	}
 
@@ -2690,11 +2680,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	YggdrasilCyatheaWood: {
-		DisplayName: Yggdrasil Cyathea Wood
-		Tooltip: ""
-	}
-
 	YggdrasilDirt: {
 		DisplayName: Yggdrasil Dirt
 		Tooltip: ""
@@ -2735,11 +2720,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	ScreenPositionPrintItem: {
-		DisplayName: Screen Position Print Item
-		Tooltip: ""
-	}
-
 	SightOfTile: {
 		DisplayName: Sight Of Tile
 		Tooltip: ""
@@ -2752,6 +2732,7 @@ Items: {
 }
 
 NPCs: {
+	RapierMaster_Boss.DisplayName: Rapier Master_ Boss
 	TuskKillEffect.DisplayName: Tusk Kill Effect
 	TuskWall.DisplayName: Tusk Wall
 	BloodTusk.DisplayName: Blood Tusk
@@ -2814,10 +2795,6 @@ NPCs: {
 		}
 	}
 
-	AcytaeaShadow.DisplayName: Acytaea Shadow
-	AcytaeaShadow2.DisplayName: Acytaea Shadow2
-	AcytaeaShadow3.DisplayName: Acytaea Shadow3
-	FakeAcytaea.DisplayName: Fake Acytaea
 	CyanOreBeetle.DisplayName: Cyan Ore Beetle
 	SquamousShell.DisplayName: Squamous Shell
 	TestNPC.DisplayName: Test N P C
@@ -2891,7 +2868,17 @@ Projectiles: {
 	YoenLeZed_Pro.DisplayName: Yoen Le Zed_ Pro
 	YoenLeZed_Pro_Stab.DisplayName: Yoen Le Zed_ Pro_ Stab
 	YoenLeZed_Pro_Stab_HitTile.DisplayName: Yoen Le Zed_ Pro_ Stab_ Hit Tile
+	CrutchRapier_Hostile.DisplayName: Crutch Rapier_ Hostile
+	CrutchRapier_Stab_Hostile.DisplayName: Crutch Rapier_ Stab_ Hostile
+	Rapier_Slash.DisplayName: Rapier_ Slash
+	CheeseYoyo_proj.DisplayName: Cheese Yoyo_proj
+	CreamChocolateCupStaff_proj.DisplayName: Cream Chocolate Cup Staff_proj
+	CreamChocolateCupStaff_proj_rightClick.DisplayName: Cream Chocolate Cup Staff_proj_right Click
+	CreamChocolateCupStaff_proj_held.DisplayName: Cream Chocolate Cup Staff_proj_held
+	CreamChocolateCup_ChocolateBars.DisplayName: Cream Chocolate Cup_ Chocolate Bars
+	CreamChocolateCup_CreamFlow.DisplayName: Cream Chocolate Cup_ Cream Flow
 	FryingPan.DisplayName: Frying Pan
+	GrilledSquidTentacle_proj.DisplayName: Grilled Squid Tentacle_proj
 	DashingLightEff.DisplayName: Dashing Light Eff
 	VortexVanquisher.DisplayName: Vortex Vanquisher
 	VortexVanquisher2.DisplayName: Vortex Vanquisher2
@@ -2926,11 +2913,9 @@ Projectiles: {
 	ToothMagicHit.DisplayName: Tooth Magic Hit
 	ToothMagicSplit.DisplayName: Tooth Magic Split
 	ToothMagicSplit2.DisplayName: Tooth Magic Split2
-	ToothSpear.DisplayName: Tooth Spear
+	ToothSpear_proj.DisplayName: Tooth Spear_proj
 	Tusk0.DisplayName: Tusk0
 	TuskArrow.DisplayName: Tusk Arrow
-	TuskSpear3.DisplayName: Tusk Spear3
-	TuskSpear4.DisplayName: Tusk Spear4
 	TuskSummon.DisplayName: Tusk Summon
 	BeadShakeWave.DisplayName: Bead Shake Wave
 	BlackCorruptRain.DisplayName: Black Corrupt Rain
@@ -2986,7 +2971,6 @@ Projectiles: {
 	VineProj2.DisplayName: Vine Proj2
 	CloudBall.DisplayName: Cloud Ball
 	MagicHit.DisplayName: Magic Hit
-	AshBone.DisplayName: Ash Bone
 	XmasWhip.DisplayName: Xmas Whip
 	AmbiguousLine.DisplayName: Ambiguous Line
 	AmbiguousNight.DisplayName: Ambiguous Night
@@ -3039,6 +3023,8 @@ Projectiles: {
 	HepuyuanDown.DisplayName: Hepuyuan Down
 	HepuyuanShake.DisplayName: Hepuyuan Shake
 	HepuyuanSpice.DisplayName: Hepuyuan Spice
+	Hepuyuan_thrust.DisplayName: Hepuyuan_thrust
+	Hepuyuan_thrust2.DisplayName: Hepuyuan_thrust2
 	XiaoBlackWave.DisplayName: Xiao Black Wave
 	XiaoHit.DisplayName: Xiao Hit
 	AdamantiteClub.DisplayName: Adamantite Club
@@ -3094,6 +3080,12 @@ Projectiles: {
 	FlameShoot.DisplayName: Flame Shoot
 	GiantFireFeather.DisplayName: Giant Fire Feather
 	GiantFireFeatherExplosion.DisplayName: Giant Fire Feather Explosion
+	BoneFeatherMagicArray.DisplayName: Bone Feather Magic Array
+	BoneFeatherMagicBook.DisplayName: Bone Feather Magic Book
+	BoneFeather_spine.DisplayName: Bone Feather_spine
+	BoneShoot.DisplayName: Bone Shoot
+	GiantBoneFeather.DisplayName: Giant Bone Feather
+	GiantBoneFeatherExplosion.DisplayName: Giant Bone Feather Explosion
 	FlowerPetalPurple.DisplayName: Flower Petal Purple
 	PurpleBallEffect.DisplayName: Purple Ball Effect
 	FixCoinCrit1.DisplayName: Fix Coin Crit1
@@ -3152,6 +3144,7 @@ Projectiles: {
 	CursedFlamesArray.DisplayName: Cursed Flames Array
 	CursedFlamesBook.DisplayName: Cursed Flames Book
 	CursedFlamesII.DisplayName: Cursed Flames I I
+	CrystalExplosion.DisplayName: Crystal Explosion
 	CrystalStormArray.DisplayName: Crystal Storm Array
 	CrystalStormBook.DisplayName: Crystal Storm Book
 	CrystalStormII.DisplayName: Crystal Storm I I
@@ -3243,9 +3236,6 @@ Projectiles: {
 	AcytaeaTornado5.DisplayName: Acytaea Tornado5
 	AcytaeaTornadoHit.DisplayName: Acytaea Tornado Hit
 	AcytaeaWarningArrow.DisplayName: Acytaea Warning Arrow
-	BloodBlade.DisplayName: Blood Blade
-	BloodBlade2.DisplayName: Blood Blade2
-	BloodBladeShadow.DisplayName: Blood Blade Shadow
 	BrokenAcytaea.DisplayName: Broken Acytaea
 	BrokenAcytaea2.DisplayName: Broken Acytaea2
 	Metero.DisplayName: Metero
@@ -3266,15 +3256,6 @@ Projectiles: {
 	CactusBallProj.DisplayName: Cactus Ball Proj
 	CactusBallSpike.DisplayName: Cactus Ball Spike
 	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
-	SquamousAirProj.DisplayName: Squamous Air Proj
-	SquamousRockExplosion.DisplayName: Squamous Rock Explosion
-	SquamousRockProj.DisplayName: Squamous Rock Proj
-	SquamousRockProj_small.DisplayName: Squamous Rock Proj_small
-	SquamousRockSpike.DisplayName: Squamous Rock Spike
-	SquamousRollingStone.DisplayName: Squamous Rolling Stone
-	Squamous_HitTile.DisplayName: Squamous_ Hit Tile
-	YggdrasilMoonBlade.DisplayName: Yggdrasil Moon Blade
-	YggdrasilMoonBladeHit.DisplayName: Yggdrasil Moon Blade Hit
 	AcroporaSpear.DisplayName: Acropora Spear
 	AcroporaThumpEff.DisplayName: Acropora Thump Eff
 	TrueDeathSickle.DisplayName: True Death Sickle
@@ -3288,8 +3269,8 @@ Configs: {
 		DisplayName: Everglow Config
 
 		debugMode: {
-			Label: Enable Debug Mode
-			Tooltip: "[For developers] Enable debug mode to allow debug functions to run"
+			Label: debug Mode
+			Tooltip: ""
 		}
 	}
 
@@ -3341,73 +3322,73 @@ Configs: {
 		DisplayName: Fog Configs
 
 		EnableScattering: {
-			Label: 开启雾效
-			Tooltip: 是否开启参与介质散射
+			Label: Enable Scattering
+			Tooltip: ""
 		}
 
 		EnableLightUpload: {
-			Label: 【性能测试】开启光源数据
-			Tooltip: 是否启用发光体数据上传（CPU到GPU）
+			Label: Enable Light Upload
+			Tooltip: ""
 		}
 
 		MaxBloomRadius: {
-			Label: 模糊半径
-			Tooltip: 光效的最大溢出半径，最终半径是以2为底的指数，越大越影响性能
+			Label: Max Bloom Radius
+			Tooltip: ""
 		}
 
 		BloomIntensity: {
-			Label: 光效强度
-			Tooltip: 光效的强度，用于放大亮度
+			Label: Bloom Intensity
+			Tooltip: ""
 		}
 
 		OffscreenTiles: {
-			Label: 离屏物块渲染数量
-			Tooltip: 光效需要计算超出屏幕的物块数量
+			Label: Offscreen Tiles
+			Tooltip: ""
 		}
 
 		LightLuminanceThreashold: {
-			Label: 光源阈值
-			Tooltip: 可以调整原版点亮物块的光源阈值
+			Label: Light Luminance Threashold
+			Tooltip: ""
 		}
 
 		GaussianKernel: {
-			Label: 是否开启高斯卷积核
-			Tooltip: 更柔和的效果，但是性能较差
+			Label: Gaussian Kernel
+			Tooltip: ""
 		}
 
 		FogAbsorptionR: {
-			Label: 雾吸收率（R）
-			Tooltip: 雾吸收红色通道直接光的比率，越大则越暗淡
+			Label: Fog Absorption R
+			Tooltip: ""
 		}
 
 		FogAbsorptionG: {
-			Label: 雾吸收率（G）
-			Tooltip: 雾吸收绿色通道直接光的比率，越大则越暗淡
+			Label: Fog Absorption G
+			Tooltip: ""
 		}
 
 		FogAbsorptionB: {
-			Label: 雾吸收率（B）
-			Tooltip: 雾吸收蓝色通道直接光的比率，越大则越暗淡
+			Label: Fog Absorption B
+			Tooltip: ""
 		}
 
 		FogScatterWithDistance: {
-			Label: 扩散率随距离增大
-			Tooltip: 是否让散射效果随着距离增大而增大
+			Label: Fog Scatter With Distance
+			Tooltip: ""
 		}
 
 		FogBloomRate: {
-			Label: 雾散射扩散率
-			Tooltip: 散射光的扩散比率
+			Label: Fog Bloom Rate
+			Tooltip: ""
 		}
 
 		FogBloomAbsorptionFactor: {
-			Label: 雾散射能见度影响系数
-			Tooltip: 散射光受到能见度影响的比率，0为不受能见度影响，1完全受能见度影响
+			Label: Fog Bloom Absorption Factor
+			Tooltip: ""
 		}
 
 		EnableTemporalInterp: {
-			Label: 开启Temporal插值
-			Tooltip: 是否允许光照结果进行帧间插值来平滑
+			Label: Enable Temporal Interp
+			Tooltip: ""
 		}
 	}
 }

@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System.Text;
 using Terraria.Localization;
 
-namespace Everglow.Food.Utils;
+namespace Everglow.Food.FoodUtilities;
 
 public class FoodDuration
 {
