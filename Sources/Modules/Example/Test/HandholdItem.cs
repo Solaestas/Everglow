@@ -1,7 +1,9 @@
 using Terraria.DataStructures;
 
 namespace Everglow.Example.Test;
-
+/// <summary>
+/// Devs only.
+/// </summary>
 public class HandholdItem : ModItem
 {
 	public override void SetDefaults()
