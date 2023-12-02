@@ -6,7 +6,7 @@ public class TrailProjectile : TrailingProjectile
 {
 	public override void SetDef()
 	{
-		//TrailTexture = Commons.ModAsset.Trail_6.Value;
+		TrailTexture = Commons.ModAsset.Trail_2.Value;
 		base.SetDef();
 	}
 }

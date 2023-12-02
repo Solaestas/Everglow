@@ -108,45 +108,22 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile
 		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
 		var bars = new List<Vertex2D>();
 		var bars2 = new List<Vertex2D>();
+		var bars3 = new List<Vertex2D>();
 		for (int i = 1; i < SmoothTrail.Count; ++i)
 		{
-			var normalDir = SmoothTrail[i - 1] - SmoothTrail[i];
-			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 			float factor = i / (float)SmoothTrail.Count;
 			float width = TrailWidthFunction(factor);
-			float timeValue = (float)Main.time * 0.05f;
+			float timeValue = (float)Main.time * 0.0005f;
 			factor += timeValue;
-			float widthMax = TrailWidth;
-			float widthMax2 = TrailWidth;
+
 			Color drawC = TrailColor;
-			//Only correct when the track swril conterclockwise. 
-			if (i < SmoothTrail.Count - 1)
-			{
-				float cR = GetCurvatureRadius(SmoothTrail[i - 1], SmoothTrail[i], SmoothTrail[i + 1]);
-				if (i < SmoothTrail.Count - 2 && i > 2)
-				{
-					float cRUp = GetCurvatureRadius(SmoothTrail[i - 1], SmoothTrail[i], SmoothTrail[i + 2]);
-					float cRDown = GetCurvatureRadius(SmoothTrail[i - 2], SmoothTrail[i], SmoothTrail[i + 1]);
-					if (cR < 0)
-					{
-						cR = MathF.Max(MathF.Max(cRUp, cRDown), cR);
-					}
-				}
-				if (cR > -widthMax && cR < 0)
-				{
-					widthMax = -cR;
-				}
-				if (cR < widthMax2 && cR > 0)
-				{
-					widthMax2 = cR;
-				}
-			}
-			bars.Add(new Vertex2D(SmoothTrail[i] + normalDir * widthMax + halfSize, drawC, new Vector3(factor * 7 + timeValue, 1, width)));
+
+			bars.Add(new Vertex2D(SmoothTrail[i] + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor * 7 + timeValue, 1, width)));
 			bars.Add(new Vertex2D(SmoothTrail[i] + halfSize, drawC, new Vector3(factor * 7 + timeValue, 0.5f, width)));
-
-
+			bars2.Add(new Vertex2D(SmoothTrail[i] + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor * 7 + timeValue, 1, width)));
 			bars2.Add(new Vertex2D(SmoothTrail[i] + halfSize, drawC, new Vector3(factor * 7 + timeValue, 0.5f, width)));
-			bars2.Add(new Vertex2D(SmoothTrail[i] - normalDir * widthMax2 + halfSize, drawC, new Vector3(factor * 7 + timeValue, 0, width)));
+			bars3.Add(new Vertex2D(SmoothTrail[i] + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor * 7 + timeValue, 1, width)));
+			bars3.Add(new Vertex2D(SmoothTrail[i] + halfSize, drawC, new Vector3(factor * 7 + timeValue, 0.5f, width)));
 		}
 
 		Main.spriteBatch.End();
@@ -163,6 +140,8 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		if (bars2.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
+		if (bars3.Count > 3)
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
