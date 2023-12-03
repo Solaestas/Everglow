@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 
-public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
+public class Pycnidium_explosion : ModProjectile, IWarpProjectile
 {
 	public override string Texture => "Everglow/Yggdrasil/KelpCurtain/Projectiles/Legacies/BacterialAgent_proj";
 	public override void SetDefaults()
@@ -25,20 +25,20 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
-		SoundEngine.PlaySound(SoundID.Shatter, Projectile.Center);
+		SoundEngine.PlaySound(SoundID.DD2_GoblinBomb.WithVolume(0.5f), Projectile.Center);
 	}
 	public void GenerateLiquid(int frequency)
 	{
 		for (int x = 0; x < frequency; x++)
 		{
-			Vector2 velocity = new Vector2(Main.rand.NextFloat(8f, 20f), 0).RotatedBy(Projectile.rotation);
+			Vector2 velocity = new Vector2(Main.rand.NextFloat(2f, 6f), 0).RotatedByRandom(MathHelper.TwoPi);
 			var splash = new LichenSlimeSplash
 			{
 				velocity = velocity,
 				Active = true,
 				Visible = true,
 				position = Projectile.Center,
-				maxTime = Main.rand.Next(12, 68),
+				maxTime = Main.rand.Next(12, 40),
 				scale = Main.rand.NextFloat(6f, 18f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(20.0f, 40.0f) }
 			};
@@ -46,15 +46,15 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 		}
 		for (int x = 0; x < frequency * 2; x++)
 		{
-			Vector2 velocity = new Vector2(Main.rand.NextFloat(8f, 20f), 0).RotatedBy(Projectile.rotation);
-			float mulScale = Main.rand.NextFloat(6f, 15f);
+			Vector2 velocity = new Vector2(Main.rand.NextFloat(3f, 6f), 0).RotatedByRandom(MathHelper.TwoPi);
+			float mulScale = Main.rand.NextFloat(6f, 9f);
 			var blood = new LichenSlimeDrop
 			{
 				velocity = velocity,
 				Active = true,
 				Visible = true,
 				position = Projectile.Center,
-				maxTime = Main.rand.Next(32, 164),
+				maxTime = Main.rand.Next(32, 64),
 				scale = mulScale,
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
@@ -66,7 +66,7 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 	{
 		for (int g = 0; g < frequency; g++)
 		{
-			Vector2 velocity = new Vector2(Main.rand.NextFloat(8f, 20f), 0).RotatedBy(Projectile.rotation + Main.rand.NextFloat(-0.3f, 0.3f));
+			Vector2 velocity = new Vector2(Main.rand.NextFloat(3f, 6f), 0).RotatedByRandom(MathHelper.TwoPi);
 			var smog = new LichenSlimeStar
 			{
 				velocity = velocity,
@@ -74,7 +74,7 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
 				maxTime = Main.rand.Next(20, 85),
-				scale = Main.rand.NextFloat(0.4f, 1.8f),
+				scale = Main.rand.NextFloat(0.4f, 0.8f),
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(-0.005f, 0.005f) }
 			};
@@ -86,20 +86,18 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 		Projectile.velocity *= 0;
 		if (Projectile.timeLeft == 199)
 		{
-			GenerateLiquid(30);
-			GenerateSpark(20);
+			GenerateLiquid(3);
+			GenerateSpark(6);
 			Projectile.friendly = false;
 		}
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		bool bool0 = (targetHitbox.TopLeft() - projHitbox.Center()).Length() < 40;
-		bool bool1 = (targetHitbox.TopRight() - projHitbox.Center()).Length() < 40;
-		bool bool2 = (targetHitbox.BottomLeft() - projHitbox.Center()).Length() < 40;
-		bool bool3 = (targetHitbox.BottomRight() - projHitbox.Center()).Length() < 40;
-		bool bool4 = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), new Vector2(targetHitbox.Width, targetHitbox.Height), projHitbox.Center(), projHitbox.Center() + new Vector2(400, 0).RotatedBy(Projectile.rotation));
-
-		return bool0 || bool1 || bool2 || bool3 || bool4;
+		bool bool0 = (targetHitbox.TopLeft() - projHitbox.Center()).Length() < 24;
+		bool bool1 = (targetHitbox.TopRight() - projHitbox.Center()).Length() < 24;
+		bool bool2 = (targetHitbox.BottomLeft() - projHitbox.Center()).Length() < 24;
+		bool bool3 = (targetHitbox.BottomRight() - projHitbox.Center()).Length() < 24;
+		return bool0 || bool1 || bool2 || bool3;
 	}
 	private static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
@@ -125,10 +123,10 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Color c = new Color(0.7f * MathF.Sqrt(1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 0.3f * (1 - timeValue), 0f);
-		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, c * dark, 0, shadow.Size() / 2f, 2.2f / 15f * dark, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, c * dark, 0, shadow.Size() / 2f, 0.4f * dark, SpriteEffects.None, 0);
 		Color cDark = new Color(0, 0, 0, 1f - timeValue);
-		DrawTexCircle(MathF.Sqrt(timeValue) * 120, 200 * (1 - timeValue), cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
-		DrawTexCircle(MathF.Sqrt(timeValue) * 120, 40 * (1 - timeValue), c * 0.4f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 40, 70 * (1 - timeValue), cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 40, 20 * (1 - timeValue), c * 0.4f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -137,8 +135,8 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 		Color c = new Color(0.7f * MathF.Sqrt(1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 0.3f * (1 - timeValue), 0f);
 
 		Texture2D light = Commons.ModAsset.Star.Value;
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * 0.8f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * 0.8f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * 0.4f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * 0.4f, SpriteEffects.None, 0);
 		return false;
 	}
 	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
@@ -165,7 +163,11 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
 		float colorV = 0.9f * (1 - value);
+		if (Projectile.ai[0] >= 10)
+			colorV *= Projectile.ai[0] / 10f;
 		Texture2D t = Commons.ModAsset.Trail.Value;
+
+
 		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 40f, 22 * (1 - value), new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
