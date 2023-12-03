@@ -1,3 +1,6 @@
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Terraria.DataStructures;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
 public class CyanVineThrowingSpear : ModItem
@@ -17,11 +20,8 @@ public class CyanVineThrowingSpear : ModItem
 		Item.autoReuse = false;
 		Item.DamageType = DamageClass.Melee;
 		Item.channel = true;
-
 		Item.noMelee = true;
 		Item.noUseGraphic = true;
-
-
 		Item.shoot = ModContent.ProjectileType<Projectiles.CyanVineThrowingSpear>();
 	}
 	public override void AddRecipes()
@@ -31,5 +31,29 @@ public class CyanVineThrowingSpear : ModItem
 			.AddIngredient(ModContent.ItemType<StoneDragonScaleWood>(), 26)
 			.AddTile(TileID.WorkBenches)
 			.Register();
+	}
+	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+	{
+		foreach(Projectile proj in Main.projectile)
+		{
+			if(proj.active)
+			{
+				if(proj.owner == player.whoAmI)
+				{
+					if(proj.type == type)
+					{
+						Projectiles.CyanVineThrowingSpear cvts = proj.ModProjectile as Projectiles.CyanVineThrowingSpear;
+						if (cvts != null)
+						{
+							if(!cvts.Shot)
+							{
+								return false;
+							}
+						}
+					}
+				}
+			}
+		}
+		return base.Shoot(player, source, position, velocity, type, damage, knockback);
 	}
 }
