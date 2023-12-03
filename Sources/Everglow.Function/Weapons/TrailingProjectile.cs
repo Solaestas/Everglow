@@ -34,12 +34,34 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 	{
 
 	}
+	/// <summary>
+	/// Negative before projectile nominal killed(when projectile hit tile, hit enemies...), positive after.Substrate 1 by every frame. 
+	/// </summary>
 	public int TimeTokill = -1;
+	/// <summary>
+	/// Update every frame(1/60s), add by 1.
+	/// </summary>
 	public int Timer = 0;
+	/// <summary>
+	/// The color of trailing track.
+	/// </summary>
 	public Color TrailColor;
+	/// <summary>
+	/// If true, the trailing track will not influenced by environment light.
+	/// </summary>
 	public bool SelfLuminous;
+	/// <summary>
+	/// The width of trailing track.
+	/// </summary>
 	public float TrailWidth;
+	/// <summary>
+	/// The first texture of a trailing track.
+	/// </summary>
 	public Texture2D TrailTexture;
+	/// <summary>
+	/// The second texture of a trailing track. Reserved for custom trail.
+	/// </summary>
+	public Texture2D TrailTextureBlack;
 	/// <summary>
 	/// The shader use to trail, parameter "uTransform" should be contained.
 	/// </summary>
@@ -93,6 +115,72 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 	public virtual void Explosion()
 	{
 
+	}
+	/// <summary>
+	/// Reserved for possible use.
+	/// </summary>
+	public virtual void DrawTrailDark()
+	{
+		List<Vector2> unSmoothPos = new List<Vector2>();
+		for (int i = 0; i < Projectile.oldPos.Length; ++i)
+		{
+			if (Projectile.oldPos[i] == Vector2.Zero)
+				break;
+			unSmoothPos.Add(Projectile.oldPos[i]);
+		}
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos);//平滑
+		var SmoothTrail = new List<Vector2>();
+		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
+		{
+			SmoothTrail.Add(SmoothTrailX[x]);
+		}
+		if (unSmoothPos.Count != 0)
+			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
+
+		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
+		var bars = new List<Vertex2D>();
+		var bars2 = new List<Vertex2D>();
+		var bars3 = new List<Vertex2D>();
+		for (int i = SmoothTrail.Count - 1; i > 0; --i)
+		{
+			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
+			if (mulFac > 1f)
+			{
+				mulFac = 1f;
+			}
+			float factor = i / (float)SmoothTrail.Count * mulFac;
+			float width = TrailWidthFunction(factor);
+			float timeValue = (float)Main.time * 0.06f;
+
+			Vector2 drawPos = SmoothTrail[i] + halfSize;
+			Color drawC = Color.White;
+			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
+			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
+			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 0, width)));
+			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
+			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
+			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
+		}
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Effect effect = TrailShader;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.CurrentTechnique.Passes[0].Apply();
+		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_black.Value;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		if (bars.Count > 3)
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		if (bars2.Count > 3)
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
+		if (bars3.Count > 3)
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
 	public virtual void DrawTrail()
 	{
