@@ -1,6 +1,5 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Terraria.DataStructures;
-using static Terraria.GameContent.Bestiary.IL_BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 
@@ -26,6 +25,7 @@ public class HandheldCircularSaw_proj : ModProjectile
 		Player player = Main.player[Projectile.owner];
 		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathF.PI * 0.75f);
 
+		Vector2 armRootPos = player.MountedCenter + new Vector2(-4 * player.direction, -2);
 		player.heldProj = Projectile.whoAmI;
 		Vector2 mouseToPlayer = Main.MouseWorld - player.MountedCenter;
 		mouseToPlayer = Vector2.Normalize(mouseToPlayer);
@@ -33,7 +33,7 @@ public class HandheldCircularSaw_proj : ModProjectile
 		{
 			float aimRot = -MathF.Asin(Vector3.Cross(new Vector3(mouseToPlayer, 0), new Vector3(new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75), 0)).Z);
 			Projectile.rotation += aimRot * 0.05f;
-			Projectile.Center = player.MountedCenter + new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75) * 50f;
+			Projectile.Center = armRootPos + new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75) * 50f;
 			Projectile.velocity *= 0;
 			if (player.itemTime == 0)
 			{
@@ -71,8 +71,8 @@ public class HandheldCircularSaw_proj : ModProjectile
 		float rot0 = Projectile.rotation - (float)(Math.PI * 0.25) + MathF.PI * 0.25f * player.direction;
 		Vector2 projToPlayer = new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75);
 
-		Main.spriteBatch.Draw(texSaw, Projectile.Center - Main.screenPosition - new Vector2(0, 6) + projToPlayer * 0, new Rectangle(0, 0, 34, 34), drawColor, (float)Main.time * 0.75f, new Vector2(17), 1f, se, 0);
-		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - new Vector2(0, 6) - projToPlayer * 13, null, drawColor, rot0, texMain.Size() / 2f, 1f, se, 0);
+		Main.spriteBatch.Draw(texSaw, Projectile.Center - Main.screenPosition + projToPlayer * 0, new Rectangle(0, 0, 34, 34), drawColor, (float)Main.time * 0.75f, new Vector2(17), 1f, se, 0);
+		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - projToPlayer * 13, null, drawColor, rot0, texMain.Size() / 2f, 1f, se, 0);
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
@@ -90,7 +90,7 @@ public class HandheldCircularSaw_proj : ModProjectile
 		Vector2 projToPlayer = new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75);
 		Vector2 projToPlayerDown = new Vector2(-1, 0).RotatedBy(Projectile.rotation - Math.PI * 0.75);
 		float addAngle = Main.rand.NextFloat(-0.8f, 0.8f);
-		for (int a = 0;a < times;a++)
+		for (int a = 0; a < times; a++)
 		{
 			Vector2 newVelocity = projToPlayer.RotatedBy(addAngle) * -1f * FlameValue;
 			var spark = new FireSparkDust
@@ -98,7 +98,7 @@ public class HandheldCircularSaw_proj : ModProjectile
 				velocity = newVelocity,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center - new Vector2(0, 6) + projToPlayer * 3 + projToPlayerDown.RotatedBy(addAngle) * 15 * player.direction,
+				position = Projectile.Center + projToPlayer * 3 + projToPlayerDown.RotatedBy(addAngle) * 15 * player.direction,
 				maxTime = Main.rand.Next(7, 45),
 				scale = Main.rand.NextFloat(1f, Main.rand.NextFloat(4f, 7.0f)),
 				rotation = Main.rand.NextFloat(6.283f),

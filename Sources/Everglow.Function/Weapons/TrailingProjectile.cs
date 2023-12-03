@@ -83,7 +83,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 	public virtual void KillMainStructure()
 	{
 		Projectile.velocity = Projectile.oldVelocity;
-		Projectile.damage = 0;
+		Projectile.friendly = false;
 		if (TimeTokill < 0)
 		{
 			Explosion();

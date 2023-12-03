@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Items.SquamousShell;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 
@@ -45,7 +46,7 @@ public class YggdrasilSlashBall : ModProjectile
 	{
 		Lighting.AddLight(Projectile.Center, 0.14f, 0.47f, 0.97f);
 		Player player = Main.player[Projectile.owner];
-		if (player.controlUseItem && player.CheckMana(player.HeldItem, player.HeldItem.mana, false))
+		if (player.controlUseItem && player.CheckMana(player.HeldItem, player.HeldItem.mana, false) &&player.HeldItem.type == ModContent.ItemType<FlurryingBlades>())
 		{
 			if (Projectile.scale < 1f)
 			{
