@@ -31,7 +31,7 @@ public class LichenInfectedNPC : GlobalNPC
 	{
 		if (npc.HasBuff(ModContent.BuffType<LichenInfected>()))
 		{
-			Projectile p0 = Projectile.NewProjectileDirect(player.GetSource_FromAI(), npc.Center, Vector2.zeroVector, ModContent.ProjectileType<LichensPycnidium>(), 150, 0, player.whoAmI);
+			Projectile p0 = Projectile.NewProjectileDirect(player.GetSource_FromAI(), npc.Center, Vector2.zeroVector, ModContent.ProjectileType<LichensPycnidium>(), 150, 0, player.whoAmI, Main.rand.NextFloat(MathHelper.TwoPi));
 			LichensPycnidium lp = p0.ModProjectile as LichensPycnidium;
 			if(lp != null)
 			{
@@ -44,7 +44,7 @@ public class LichenInfectedNPC : GlobalNPC
 	{
 		if (npc.HasBuff(ModContent.BuffType<LichenInfected>()))
 		{
-			Projectile p0 = Projectile.NewProjectileDirect(projectile.GetSource_FromAI(), npc.Center, Vector2.zeroVector, ModContent.ProjectileType<LichensPycnidium>(), 150, 0, projectile.owner);
+			Projectile p0 = Projectile.NewProjectileDirect(projectile.GetSource_FromAI(), npc.Center, Vector2.zeroVector, ModContent.ProjectileType<LichensPycnidium>(), 150, 0, projectile.owner, Main.rand.NextFloat(MathHelper.TwoPi));
 			LichensPycnidium lp = p0.ModProjectile as LichensPycnidium;
 			if (lp != null)
 			{
