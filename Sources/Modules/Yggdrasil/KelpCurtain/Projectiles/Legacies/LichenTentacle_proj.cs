@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Commons.Weapons.Whips;
+using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
@@ -72,5 +73,9 @@ public class LichenTentacle_proj : WhipProjectile
 				}
 			}
 		}
+	}
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		target.AddBuff(ModContent.BuffType<LichenInfected>(), 45);
 	}
 }

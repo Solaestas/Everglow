@@ -130,7 +130,7 @@ public class BacterialAgent_proj : TrailingProjectile
 		}
 		return true;
 	}
-	public void DrawTrailDark()
+	public override void DrawTrailDark()
 	{
 		List<Vector2> unSmoothPos = new List<Vector2>();
 		for (int i = 0; i < Projectile.oldPos.Length; ++i)

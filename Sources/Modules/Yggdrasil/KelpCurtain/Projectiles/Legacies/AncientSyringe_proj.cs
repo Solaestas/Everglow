@@ -1,4 +1,5 @@
 using Everglow.Commons.Weapons;
+using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.Items.Legacies;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Terraria.DataStructures;
@@ -55,6 +56,7 @@ public class AncientSyringe_proj : HandholdProjectile
 			};
 			Ins.VFXManager.Add(blood);
 		}
+		target.AddBuff(ModContent.BuffType<LichenInfected>(), 480);
 		base.OnHitNPC(target, hit, damageDone);
 	}
 	public override void AI()

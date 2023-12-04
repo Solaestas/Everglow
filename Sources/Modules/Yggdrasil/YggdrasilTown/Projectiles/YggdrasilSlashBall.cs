@@ -150,6 +150,8 @@ public class YggdrasilSlashBall : ModProjectile
 			bars.Add(pos + v2 * 0.5f * size, new Color(0, 0, 0, 0), new Vector3(1, 0.4f, 0));
 			bars.Add(pos + v2 * size, new Color(0, 0, 0, 0), new Vector3(1, 0.5f, 0));
 		}
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Star_black.Value;
