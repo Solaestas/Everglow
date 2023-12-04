@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.UI;
 using Everglow.Food.Buffs;
-using Everglow.Food.Utils;
+using Everglow.Food.FoodUtilities;
 
 namespace Everglow.Food;
 
