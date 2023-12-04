@@ -21,9 +21,8 @@ public class LichenInfectedNPC : GlobalNPC
 {
 	public override void OnHitPlayer(NPC npc, Player target, Player.HurtInfo hurtInfo)
 	{
-		if(npc.HasBuff(ModContent.BuffType<LichenInfected>()))
+		if (npc.HasBuff(ModContent.BuffType<LichenInfected>()))
 		{
-
 		}
 		base.OnHitPlayer(npc, target, hurtInfo);
 	}
@@ -31,12 +30,7 @@ public class LichenInfectedNPC : GlobalNPC
 	{
 		if (npc.HasBuff(ModContent.BuffType<LichenInfected>()))
 		{
-			Projectile p0 = Projectile.NewProjectileDirect(player.GetSource_FromAI(), npc.Center, Vector2.zeroVector, ModContent.ProjectileType<LichensPycnidium>(), 150, 0, player.whoAmI, Main.rand.NextFloat(MathHelper.TwoPi));
-			LichensPycnidium lp = p0.ModProjectile as LichensPycnidium;
-			if(lp != null)
-			{
-				lp.AttachTarget = npc;
-			}
+			AddProjectile(npc, player);
 		}
 		base.OnHitByItem(npc, player, item, hit, damageDone);
 	}
@@ -44,13 +38,40 @@ public class LichenInfectedNPC : GlobalNPC
 	{
 		if (npc.HasBuff(ModContent.BuffType<LichenInfected>()))
 		{
-			Projectile p0 = Projectile.NewProjectileDirect(projectile.GetSource_FromAI(), npc.Center, Vector2.zeroVector, ModContent.ProjectileType<LichensPycnidium>(), 150, 0, projectile.owner, Main.rand.NextFloat(MathHelper.TwoPi));
-			LichensPycnidium lp = p0.ModProjectile as LichensPycnidium;
-			if (lp != null)
-			{
-				lp.AttachTarget = npc;
-			}
+			AddProjectile(npc, Main.player[projectile.owner]);
 		}
 		base.OnHitByProjectile(npc, projectile, hit, damageDone);
+	}
+	public void AddProjectile(NPC npc, Player player)
+	{
+		bool hasProj = false;
+		if (npc.HasBuff(ModContent.BuffType<LichenInfected>()))
+		{
+			foreach (Projectile p in Main.projectile)
+			{
+				if (p.active && p.type == ModContent.ProjectileType<LichensPycnidium>())
+				{
+					if (p.owner == player.whoAmI)
+					{
+						LichensPycnidium lP = p.ModProjectile as LichensPycnidium;
+						if (lP != null)
+						{
+							lP.AddLichens(Main.rand.NextFloat(MathHelper.TwoPi), npc, Main.rand.NextFloat(-200f, 200f));
+							hasProj = true;
+							break;
+						}
+					}
+				}
+			}
+			if (!hasProj)
+			{
+				Projectile p0 = Projectile.NewProjectileDirect(player.GetSource_FromAI(), npc.Center, Vector2.zeroVector, ModContent.ProjectileType<LichensPycnidium>(), 150, 0, player.whoAmI, Main.rand.NextFloat(MathHelper.TwoPi));
+				LichensPycnidium lp = p0.ModProjectile as LichensPycnidium;
+				if (lp != null)
+				{
+					lp.AddLichens(Main.rand.NextFloat(MathHelper.TwoPi), npc, Main.rand.NextFloat(-20f, 20f));
+				}
+			}
+		}
 	}
 }

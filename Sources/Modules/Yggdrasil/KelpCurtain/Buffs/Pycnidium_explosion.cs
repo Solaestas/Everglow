@@ -18,7 +18,7 @@ public class Pycnidium_explosion : ModProjectile, IWarpProjectile
 		Projectile.penetrate = -1;
 		Projectile.timeLeft = 200;
 		Projectile.tileCollide = false;
-		Projectile.extraUpdates = 6;
+		Projectile.extraUpdates = 12;
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 20;
 		Projectile.DamageType = DamageClass.Magic;
@@ -172,6 +172,12 @@ public class Pycnidium_explosion : ModProjectile, IWarpProjectile
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		target.AddBuff(ModContent.BuffType<LichenInfected>(), 300);
+		hit.Damage = 15;
+		//target.AddBuff(ModContent.BuffType<LichenInfected>(), 300);
+	}
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		modifiers.FinalDamage /= 10f;
+		base.ModifyHitNPC(target, ref modifiers);
 	}
 }

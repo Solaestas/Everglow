@@ -11,18 +11,9 @@ sampler uImage2 : register(s2);
 * 如有需要可以自己加参数
 */
 
-
-float4x4 uTransform;
 float3 circleCenter;
 float radiusOfCircle;
 float uTime;
-
-struct VSInput
-{
-    float2 Pos : POSITION0;
-    float4 Color : COLOR0;
-    float3 Texcoord : TEXCOORD0;
-};
 
 struct PSInput
 {
@@ -30,14 +21,6 @@ struct PSInput
     float4 Color : COLOR0;
     float3 Texcoord : TEXCOORD0;
 };
-
-float3 hsv2rgb(float3 c)
-{
-    float4 K = float4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-    float3 p = abs((c.xxx + K.xyz - floor(c.xxx + K.xyz)) * 6.0 - K.www);
-    return c.z * lerp(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-}
-
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
@@ -84,16 +67,6 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     return Cz * input.Color;
 
 }
-
-PSInput VertexShaderFunction(VSInput input)
-{
-    PSInput output;
-    output.Color = input.Color;
-    output.Texcoord = input.Texcoord;
-    output.Pos = mul(float4(input.Pos, 0, 1), uTransform);
-    return output;
-}
-
 
 technique Technique1
 {
