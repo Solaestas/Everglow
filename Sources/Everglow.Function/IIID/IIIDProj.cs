@@ -131,6 +131,7 @@ namespace Everglow.Commons.IIID
 
 		public void DrawIIIDProj(ViewProjectionParams viewProjectionParams)
 		{
+			lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
 			List<VertexRP> vertices = new List<VertexRP>();
 			Main.instance.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 			for (int f = 0; f < model.faces.Count; f++)

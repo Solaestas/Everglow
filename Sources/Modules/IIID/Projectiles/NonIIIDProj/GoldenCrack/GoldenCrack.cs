@@ -304,7 +304,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			FieldOfView = MathF.PI / 3f,
 			AspectRatio = 1.0f,
 			ZNear = 1f,
-			ZFar = 8000
+			ZFar = 2000
 		};
 		private void FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
 		{
@@ -440,7 +440,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			{
 				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBeFall>())
 				{
-					(proj.ModProjectile as PlanetBeFall).DrawIIIDProj(viewProjectionParams);
+					(proj.ModProjectile as IIIDProj).DrawIIIDProj(viewProjectionParams);
 				}
 			}
 			Main.spriteBatch.End();
