@@ -1,4 +1,4 @@
-﻿using Everglow.Food.InfoDisplays;
+using Everglow.Food.InfoDisplays;
 
 namespace Everglow.Food.Items.Monitors;
 
@@ -6,7 +6,7 @@ public class Cellphone : GlobalItem
 {
 	public override void UpdateInventory(Item item, Player player)
 	{
-		if (item.type == ItemID.CellPhone)
+		if (item.type == ItemID.CellPhone || item.type is 5358 or 5359 or 5360 or 5361) // CellPhone or any ShellPhone
 		{
 			FoodSatietyInfoDisplayplayer SatietyInfo = player.GetModPlayer<FoodSatietyInfoDisplayplayer>();
 			SatietyInfo.AccBloodGlucoseMonitor = true;//显示当前饱食度

@@ -985,8 +985,23 @@ Items: {
 		Tooltip: ""
 	}
 
+	CheeseYoyo: {
+		DisplayName: Cheese Yoyo
+		Tooltip: ""
+	}
+
+	CreamChocolateCupStaff: {
+		DisplayName: Cream Chocolate Cup Staff
+		Tooltip: ""
+	}
+
 	FryingPanItem: {
 		DisplayName: Frying Pan Item
+		Tooltip: ""
+	}
+
+	GrilledSquidTentacle: {
+		DisplayName: Grilled Squid Tentacle
 		Tooltip: ""
 	}
 
@@ -1822,11 +1837,6 @@ Items: {
 
 	BlueflowerDress: {
 		DisplayName: Blueflower Dress
-		Tooltip: ""
-	}
-
-	AshBone: {
-		DisplayName: Ash Bone
 		Tooltip: ""
 	}
 
@@ -2881,7 +2891,14 @@ Projectiles: {
 	CrutchRapier_Hostile.DisplayName: Crutch Rapier_ Hostile
 	CrutchRapier_Stab_Hostile.DisplayName: Crutch Rapier_ Stab_ Hostile
 	Rapier_Slash.DisplayName: Rapier_ Slash
+	CheeseYoyo_proj.DisplayName: Cheese Yoyo_proj
+	CreamChocolateCupStaff_proj.DisplayName: Cream Chocolate Cup Staff_proj
+	CreamChocolateCupStaff_proj_rightClick.DisplayName: Cream Chocolate Cup Staff_proj_right Click
+	CreamChocolateCupStaff_proj_held.DisplayName: Cream Chocolate Cup Staff_proj_held
+	CreamChocolateCup_ChocolateBars.DisplayName: Cream Chocolate Cup_ Chocolate Bars
+	CreamChocolateCup_CreamFlow.DisplayName: Cream Chocolate Cup_ Cream Flow
 	FryingPan.DisplayName: Frying Pan
+	GrilledSquidTentacle_proj.DisplayName: Grilled Squid Tentacle_proj
 	DashingLightEff.DisplayName: Dashing Light Eff
 	VortexVanquisher.DisplayName: Vortex Vanquisher
 	VortexVanquisher2.DisplayName: Vortex Vanquisher2
@@ -2975,7 +2992,6 @@ Projectiles: {
 	VineProj2.DisplayName: Vine Proj2
 	CloudBall.DisplayName: Cloud Ball
 	MagicHit.DisplayName: Magic Hit
-	AshBone.DisplayName: Ash Bone
 	XmasWhip.DisplayName: Xmas Whip
 	AmbiguousLine.DisplayName: Ambiguous Line
 	AmbiguousNight.DisplayName: Ambiguous Night
