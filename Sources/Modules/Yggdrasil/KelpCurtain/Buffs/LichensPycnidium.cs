@@ -48,7 +48,7 @@ public class LichensPycnidium : ModProjectile
 	}
 	public SubLichen UpdateLichen(SubLichen lichen)
 	{
-		float rotValue = 0.4f * MathF.Sin(lichen.ai0 * 0.25f + lichen.attachTarget.whoAmI + (float)Main.time * 0.03f);
+		float rotValue = 0.4f * MathF.Sin(lichen.ai0 * 95f + lichen.attachTarget.whoAmI + (float)Main.time * 0.03f);
 		float lengthValue = 24 * MathF.Sin(lichen.ai0 + lichen.attachTarget.whoAmI * 0.25f + (float)Main.time * 0.042f);
 		Vector2 aimPos = new Vector2(30 + lengthValue + lichen.maturity / 5f, 0).RotatedBy(lichen.ai0 + rotValue);
 		if (!lichen.attachTarget.noGravity)
@@ -96,14 +96,14 @@ public class LichensPycnidium : ModProjectile
 		{
 			Projectile.timeLeft = 60;
 		}
-
+		Projectile.Center = Main.player[Projectile.owner].Center;
 		base.AI();
 	}
 	public void Explode(SubLichen lichen)
 	{
 		if(lichen.active)
 		{
-			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), lichen.attachPos + lichen.attachTarget.Center, Vector2.zeroVector, ModContent.ProjectileType<Pycnidium_explosion>(), Projectile.damage, Projectile.knockBack * 4f, Projectile.owner, 30);
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), lichen.attachPos + lichen.attachTarget.Center, Vector2.zeroVector, ModContent.ProjectileType<Pycnidium_explosion>(), 12, Projectile.knockBack * 4f, Projectile.owner, 30);
 		}
 	}
 	public SubLichen SetRotation(SubLichen lichen, float value)

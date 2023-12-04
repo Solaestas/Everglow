@@ -177,7 +177,6 @@ public class Pycnidium_explosion : ModProjectile, IWarpProjectile
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		modifiers.FinalDamage /= 10f;
 		base.ModifyHitNPC(target, ref modifiers);
 	}
 }
