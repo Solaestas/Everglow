@@ -50,7 +50,7 @@ public class CorruptMoth : ModNPC
 		get => NPC.localAI[2];
 		set => NPC.localAI[2] = value;
 	}
-	private int Timer
+	public int Timer
 	{
 		set => NPC.ai[1] = value;
 		get => (int)NPC.ai[1];
@@ -252,13 +252,7 @@ public class CorruptMoth : ModNPC
 			NPC.ai[0] = 0;
 			NPC.noTileCollide = true;
 			start = true;
-			if (Main.netMode != NetmodeID.MultiplayerClient)
-			{
-				for (int h = 0; h < 15; h++)
-				{
-					NPC.NewNPC(null, (int)NPC.Center.X + 25, (int)NPC.Center.Y + 150, ModContent.NPCType<MothSummonEffect>());
-				}
-			}
+
 			NPC.localAI[0] = 0;
 			return;
 		}
@@ -287,7 +281,7 @@ public class CorruptMoth : ModNPC
 			NPC.noGravity = true;
 			PhamtomDis = (200 - Timer) * 120f / 200;
 			NPC.velocity *= 0f;
-			if (++Timer > 200)
+			if (Timer > 200)
 			{
 				NPC.dontTakeDamage = false;
 				NPC.noTileCollide = true;
@@ -1240,7 +1234,9 @@ public class CorruptMoth : ModNPC
 
 	public override void FindFrame(int frameHeight)
 	{
-		NPC.frameCounter += NPC.velocity.Length() / 50f + 0.1f;
+		float frameSpeed = NPC.velocity.Length() / 20f + 0.6f;
+		frameSpeed = Math.Min(frameSpeed, 1f);
+		NPC.frameCounter += frameSpeed;
 		int num = (int)NPC.frameCounter % Main.npcFrameCount[NPC.type];
 		NPC.frame.Y = num * frameHeight;
 	}
