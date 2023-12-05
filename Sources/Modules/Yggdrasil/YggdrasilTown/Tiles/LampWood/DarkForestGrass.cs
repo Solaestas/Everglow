@@ -11,6 +11,7 @@ public class DarkForestGrass : ModTile
 	{
 		Main.tileSolid[Type] = true;
 		Main.tileMerge[Type][ModContent.TileType<DarkForestSoil>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<StoneScaleWood>()] = true;
 		Main.tileBlockLight[Type] = true;
 		DustType = ModContent.DustType<DarkForestSoil_Dust>();
 		HitSound = SoundID.Dig;

@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
@@ -16,6 +17,8 @@ public class StoneScaleWood : ModTile
 		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreLargeUp>()] = true;
 		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreLarge>()] = true;
 		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreMiddle>()] = true;
+		Main.tileMerge[Type][(ushort)ModContent.TileType<DarkForestSoil>()] = true;
+		Main.tileMerge[Type][(ushort)ModContent.TileType<DarkForestGrass>()] = true;
 		Main.tileBlendAll[Type] = false;
 		Main.tileBlockLight[Type] = true;
 		Main.tileShine2[Type] = false;
