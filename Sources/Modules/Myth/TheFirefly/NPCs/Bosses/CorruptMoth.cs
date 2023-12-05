@@ -1,11 +1,13 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Items;
 using Everglow.Myth.TheFirefly.Items.BossDrop;
 using Everglow.Myth.TheFirefly.Items.Weapons;
 using Everglow.Myth.TheFirefly.Projectiles;
 using Everglow.Myth.TheFirefly.VFXs;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
@@ -58,14 +60,6 @@ public class CorruptMoth : ModNPC
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 11;
-		var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
-		{
-			CustomTexturePath = "Everglow/Myth/TheFirefly/NPCs/Bosses/CorruptMothBoss",
-			Position = new Vector2(20f, 24f),
-			PortraitPositionXOverride = 0f,
-			PortraitPositionYOverride = 12f
-		};
-		NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
 		NPCID.Sets.TrailCacheLength[NPC.type] = 4;
 	}
 	public override void SetDefaults()
@@ -133,12 +127,12 @@ public class CorruptMoth : ModNPC
 		//NPC.SetEventFlagCleared(ref DownedBossSystem.downedMoth, -1);
 		if (Main.netMode == NetmodeID.Server)
 			NetMessage.SendData(MessageID.WorldData);
-		Gore.NewGore(NPC.Center, NPC.velocity + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 3).RotatedByRandom(6.283), ModContent.GoreType<CorruptMothGore_0>());
-		Gore.NewGore(NPC.Center, NPC.velocity + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 3).RotatedByRandom(6.283), ModContent.GoreType<CorruptMothGore_0>());
-		Gore.NewGore(NPC.Center, NPC.velocity + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 3).RotatedByRandom(6.283), ModContent.GoreType<CorruptMothGore_0>());
-		Gore.NewGore(NPC.Center, NPC.velocity + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 3).RotatedByRandom(6.283), ModContent.GoreType<CorruptMothGore_0>());
-		Gore.NewGore(NPC.Center, NPC.velocity + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 3).RotatedByRandom(6.283), ModContent.GoreType<CorruptMothGore_1>());
-		Gore.NewGore(NPC.Center, NPC.velocity + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 3).RotatedByRandom(6.283), ModContent.GoreType<CorruptMothGore_2>());
+		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.3f + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 13).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/CorruptMothGore_3").Type);
+		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.3f + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 13).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/CorruptMothGore_3").Type);
+		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.3f + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 13).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/CorruptMothGore_0").Type);
+		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.3f + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 13).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/CorruptMothGore_0").Type);
+		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.3f + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 13).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/CorruptMothGore_1").Type);
+		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.3f + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 13).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/CorruptMothGore_2").Type);
 	}
 	public override bool CheckActive()
 	{
@@ -290,22 +284,17 @@ public class CorruptMoth : ModNPC
 		{
 			NPC.dontTakeDamage = true;
 			NPC.noTileCollide = false;
-			NPC.noGravity = false;
+			NPC.noGravity = true;
 			PhamtomDis = (200 - Timer) * 120f / 200;
-			if (Timer > 50)
-			{
-				NPC.noGravity = true;
-				NPC.velocity *= 0.9f;
-			}
+			NPC.velocity *= 0f;
 			if (++Timer > 200)
 			{
 				NPC.dontTakeDamage = false;
 				NPC.noTileCollide = true;
-				NPC.noGravity = true;
 				NPC.ai[0]++;
 				Timer = 0;
 			}
-		}//生成
+		}//苏醒
 		if (NPC.ai[0] == 1)
 		{
 			if (++Timer < 200)
@@ -1384,27 +1373,56 @@ public class CorruptMoth : ModNPC
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
-
 	private static Vector2 Projection2(Vector3 v3, Vector2 center, float viewZ)
 	{
 		float k2 = -viewZ / (v3.Z - viewZ);
 		var v = new Vector2(v3.X, v3.Y);
 		return v + (k2 - 1) * (v - center);
 	}
-
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		SpriteEffects effects = SpriteEffects.None;
-		if (NPC.spriteDirection == 1)
-			effects = SpriteEffects.FlipHorizontally;
-		if (NPC.ai[0] >= 6 || SummonButterfliesCount > 0)
-			DrawCube();
-
 		Texture2D tx = ModContent.Request<Texture2D>(Texture).Value;
 		Texture2D GlowTexture = ModAsset.CorruptMoth_Glow.Value;
 		Texture2D WingDustTexture = ModAsset.CorruptMoth_WingEffect.Value;
 		Vector2 origin = new Vector2(tx.Width, tx.Height / 11) / 2;
 		Color origColor = NPC.GetAlpha(drawColor);
+		SpriteEffects effects = SpriteEffects.None;
+		NPC cocoon = null;
+		bool hasCocoon = false;
+		foreach(var npc in Main.npc)
+		{
+			if(npc.active && npc.type == ModContent.NPCType<EvilPack>())
+			{
+				if ((npc.Center - NPC.Center).Length() < 2500)
+				{
+					hasCocoon = true;
+					cocoon = npc;
+				}
+			}
+		}
+		if (NPC.ai[0] == 0 && hasCocoon && cocoon != null && cocoon.active)
+		{
+			tx = ModAsset.CorruptMoth_Awake_front.Value;
+			Texture2D bloom = ModAsset.CorruptMoth_Awake_bloom.Value;
+			Texture2D glow = ModAsset.CorruptMoth_Awake_front_glow.Value;
+			NPC.rotation = -1.7f;
+			NPC.Center = cocoon.Top + new Vector2(-25, -95) + new Vector2(0, 200).RotatedBy(cocoon.rotation);
+
+			float value = (1 - Timer / 200f);
+			value *= value;
+			spriteBatch.Draw(bloom, NPC.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0) * value, NPC.rotation + cocoon.rotation, bloom.Size() / 2, NPC.scale, SpriteEffects.FlipHorizontally, 0f);
+
+			spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, null, origColor, NPC.rotation + cocoon.rotation, tx.Size() / 2, NPC.scale, SpriteEffects.FlipHorizontally, 0f);
+
+			spriteBatch.Draw(glow, NPC.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0) * (1 - value), NPC.rotation + cocoon.rotation, glow.Size() / 2, NPC.scale, SpriteEffects.FlipHorizontally, 0f);
+			return false;
+		}
+		if (NPC.spriteDirection == 1)
+			effects = SpriteEffects.FlipHorizontally;
+		if (NPC.ai[0] >= 6 || SummonButterfliesCount > 0)
+			DrawCube();
+
+
 		for (int k = 0; k < NPC.oldPos.Length; k++)
 		{
 			float fadeValue = ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
@@ -1429,12 +1447,6 @@ public class CorruptMoth : ModNPC
 		if (NPC.ai[0] >= 6 || SummonButterfliesCount > 0)
 			DrawCube(true);
 
-		//删掉注释显示碰撞箱
-		//Texture2D tBox = TextureAssets.MagicPixel.Value;
-		//Rectangle rt = NPC.Hitbox;
-		//rt.X -= (int)Main.screenPosition.X;
-		//rt.Y -= (int)Main.screenPosition.Y;
-		//Main.spriteBatch.Draw(tBox, rt, new Color(55, 0, 0, 0));
 		return false;
 	}
 	public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)

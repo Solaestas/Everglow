@@ -164,6 +164,11 @@ public class EvilPack : ModNPC
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
+		return false;
+	}
+
+	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+	{
 		Texture2D mainTex = ModAsset.EvilHive.Value;
 
 		float frameX = (float)NPC.frame.X / mainTex.Width;
@@ -192,11 +197,6 @@ public class EvilPack : ModNPC
 		Main.graphics.GraphicsDevice.Textures[0] = mainTex;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, 2);
 
-		return false;
-	}
-
-	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-	{
 		var drawOffset = new Vector2(67, -90);
 		if (NPC.ai[1] <= 90)
 		{

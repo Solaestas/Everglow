@@ -985,6 +985,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	HandholdItem: {
+		DisplayName: Handhold Item
+		Tooltip: ""
+	}
+
 	CheeseYoyo: {
 		DisplayName: Cheese Yoyo
 		Tooltip: ""
@@ -2335,6 +2340,16 @@ Items: {
 		Tooltip: ""
 	}
 
+	FireCracker: {
+		DisplayName: Fire Cracker
+		Tooltip: ""
+	}
+
+	FireCrackerLauncher: {
+		DisplayName: Fire Cracker Launcher
+		Tooltip: ""
+	}
+
 	LanternBombRemoteControl: {
 		DisplayName: Lantern Bomb Remote Control
 		Tooltip: ""
@@ -2891,6 +2906,9 @@ Projectiles: {
 	CrutchRapier_Hostile.DisplayName: Crutch Rapier_ Hostile
 	CrutchRapier_Stab_Hostile.DisplayName: Crutch Rapier_ Stab_ Hostile
 	Rapier_Slash.DisplayName: Rapier_ Slash
+	HandholdProj.DisplayName: Handhold Proj
+	HandholdProj2.DisplayName: Handhold Proj2
+	TrailProjectile.DisplayName: Trail Projectile
 	CheeseYoyo_proj.DisplayName: Cheese Yoyo_proj
 	CreamChocolateCupStaff_proj.DisplayName: Cream Chocolate Cup Staff_proj
 	CreamChocolateCupStaff_proj_rightClick.DisplayName: Cream Chocolate Cup Staff_proj_right Click
@@ -3179,10 +3197,14 @@ Projectiles: {
 	SkullII.DisplayName: Skull I I
 	BlackHole.DisplayName: Black Hole
 	BloodLampProj.DisplayName: Blood Lamp Proj
+	Firework12Inches.DisplayName: Firework12 Inches
+	Firework6Inches.DisplayName: Firework6 Inches
+	FireworkSubExplosion.DisplayName: Firework Sub Explosion
 	LBloodEffect.DisplayName: L Blood Effect
 	LBloodEffectGra.DisplayName: L Blood Effect Gra
 	LMeteor.DisplayName: L Meteor
 	RainbowWave.DisplayName: Rainbow Wave
+	RisingFirework.DisplayName: Rising Firework
 	DarkLantern.DisplayName: Dark Lantern
 	DarkLantern3.DisplayName: Dark Lantern3
 	DarkLanternBomb2.DisplayName: Dark Lantern Bomb2
