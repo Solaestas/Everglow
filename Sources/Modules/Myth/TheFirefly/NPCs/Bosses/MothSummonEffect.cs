@@ -1,6 +1,4 @@
-using System;
 using Everglow.Commons.Weapons;
-using Terraria;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheFirefly.NPCs.Bosses;
@@ -22,7 +20,7 @@ public class MothSummonEffect : TrailingProjectile
 		{
 			if (npc.active && npc.type == ModContent.NPCType<CorruptMoth>())
 			{
-				if((npc.Center - Projectile.Center).Length() < 2500)
+				if ((npc.Center - Projectile.Center).Length() < 2500)
 				{
 					hasMoth = true;
 					Moth = npc;
@@ -57,19 +55,19 @@ public class MothSummonEffect : TrailingProjectile
 				{
 					KillMainStructure();
 					CorruptMoth cMoth = Moth.ModNPC as CorruptMoth;
-					if(cMoth != null)
+					if (cMoth != null)
 					{
 						cMoth.Timer += 10;
 					}
 				}
 				Vector2 targetVel = Vector2.Normalize(toTarget) * 15f;
 				Projectile.velocity = Vector2.Lerp(Projectile.velocity, targetVel, 0.05f);
-				
+
 			}
 			else
 			{
 				Projectile.velocity = Projectile.velocity.RotatedBy(Projectile.ai[0]);
-				if(Projectile.velocity.Length() > 3f)
+				if (Projectile.velocity.Length() > 3f)
 				{
 					Projectile.velocity *= 0.9f;
 				}

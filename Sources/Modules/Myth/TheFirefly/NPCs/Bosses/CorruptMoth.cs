@@ -216,7 +216,7 @@ public class CorruptMoth : ModNPC
 			});
 		}
 		bool phase2 = NPC.life < NPC.lifeMax * 0.6f;
-		Lighting.AddLight(NPC.Center, 0f, 0f, 0.1f * (1 - NPC.alpha / 255f));
+		Lighting.AddLight(NPC.Center, 0.2f, 0.2f, 0.2f + 0.4f * (1 - NPC.alpha / 255f));
 		NPC.friendly = NPC.dontTakeDamage;
 		if (lightVisual > 0)//光效
 			lightVisual -= 0.04f;
@@ -551,6 +551,16 @@ public class CorruptMoth : ModNPC
 			if (Timer > endTime)
 			{
 				Timer = 0;
+				if(Main.masterMode)
+				{
+					for (int i = 0; i < 2; i++)
+					{
+						Vector2 v = Vector2.Normalize(player.Center - NPC.Center) * 8f;
+						v = v.RotatedBy(i - 0.5f);
+						Projectile p = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center - v, v, ModContent.ProjectileType<MothMiddleBullet>(), NPC.damage / 2, 0f, Main.myPlayer);
+						p.timeLeft = 1200;
+					}
+				}
 				if (++NPC.ai[2] >= counts)
 				{
 					NPC.ai[0]++;
@@ -599,7 +609,10 @@ public class CorruptMoth : ModNPC
 						}
 					}
 				}
-				MoveTo(player.Center + new Vector2(0, -300), 8, 40);
+				if((NPC.Center - (player.Center + new Vector2(0, -300))).Length() < 50)
+				{
+					MoveTo(player.Center + new Vector2(0, -300), 8, 40);
+				}
 				GetDir_ByPlayer();
 			}
 			if (Timer >= 400)

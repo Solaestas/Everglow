@@ -1,6 +1,7 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.TheFirefly.NPCs.Bosses;
 using Everglow.Myth.TheFirefly.VFXs;
+using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
@@ -154,6 +155,21 @@ public class BlueStarFlower : ModProjectile
 				Vector2 v = new Vector2(0.18f + (float)Math.Sin(i * MathHelper.TwoPi / 10) * 0.17f, 0).RotatedBy(i * MathHelper.TwoPi / c + r);
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, v, ModContent.ProjectileType<BlackCorruptRain3>(), Projectile.damage / 6, 0f, Main.myPlayer, Main.rand.NextFloat(MathF.PI * 2));
 			}
+		}
+		if(Main.masterMode)
+		{
+			//for (int i = 0; i < 4; i++)
+			//{
+			//	Vector2 v = new Vector2(4, -2).RotatedBy(i * 0.3f) * (9 - i) / 6f;
+			//	Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - v, v, ModContent.ProjectileType<MothMiddleBullet>(), Projectile.damage / 3, 0f, Main.myPlayer);
+			//	p.timeLeft = Main.rand.Next(1580, 1620);
+			//}
+			//for (int i = 0; i < 4; i++)
+			//{
+			//	Vector2 v = new Vector2(-4, -2).RotatedBy(-i * 0.3f) * (9 - i) / 6f;
+			//	Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - v, v, ModContent.ProjectileType<MothMiddleBullet>(), Projectile.damage / 3, 0f, Main.myPlayer);
+			//	p.timeLeft = Main.rand.Next(1580, 1620);
+			//}
 		}
 	}
 	public override void PostDraw(Color lightColor)
