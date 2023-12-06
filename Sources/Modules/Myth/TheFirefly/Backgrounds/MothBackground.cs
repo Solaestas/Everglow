@@ -93,7 +93,7 @@ public class MothBackground : ModSystem
 			}
 			Ins.HookManager.Enable(TerrariaFunction.DrawBackground);
 		}
-		if (CorruptMoth.CorruptMothNPC != null && CorruptMoth.CorruptMothNPC.active)//发光物体在boss战时变暗
+		if (NPC.CountNPCS(ModContent.NPCType<CorruptMoth>()) > 0)//发光物体在boss战时变暗
 			luminance = MathHelper.Lerp(luminance, 0.1f, 0.02f);
 		else
 		{
@@ -101,7 +101,6 @@ public class MothBackground : ModSystem
 			if (luminance == 1)
 				CorruptMoth.CorruptMothNPC = null;
 		}
-
 	}
 	/// <summary>
 	/// 判定是否开启地形

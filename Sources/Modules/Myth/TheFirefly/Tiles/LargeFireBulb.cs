@@ -1,3 +1,5 @@
+using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Projectiles;
 using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ObjectData;
@@ -57,8 +59,8 @@ internal class LargeFireBulb : ModTile
 		TileObjectData.newTile.DrawYOffset = -6;
 		TileObjectData.addTile(Type);
 
-		LocalizedText name = CreateMapEntryName();
-		AddMapEntry(new Color(28, 132, 255), name);
+		DustType = ModContent.DustType<FluorescentTreeDust>();
+		AddMapEntry(new Color(28, 132, 255));
 	}
 
 	/// <summary>
@@ -102,7 +104,6 @@ internal class LargeFireBulb : ModTile
 		succeed &= modTile.TryGrow(x, y + height, broadcast);
 		return succeed;
 	}
-
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
 	{
 		var tile = Main.tile[i, j];
@@ -134,7 +135,6 @@ internal class LargeFireBulb : ModTile
 
 		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
 	}
-
 	public override void RandomUpdate(int i, int j)
 	{
 		var tile = Main.tile[i, j];
@@ -160,7 +160,6 @@ internal class LargeFireBulb : ModTile
 		}
 		base.RandomUpdate(i, j);
 	}
-
 	private bool TryGrow(int x, int y, bool broadcast = true)
 	{
 		for (int i = 0; i < 2; i++)
@@ -192,7 +191,6 @@ internal class LargeFireBulb : ModTile
 
 		return true;
 	}
-
 	private bool HasSameTileAt(int i, int j)
 	{
 		if (!WorldGen.InWorld(i, j, 10))
@@ -200,11 +198,10 @@ internal class LargeFireBulb : ModTile
 		var tile = Main.tile[i, j];
 		return tile != null && tile.HasTile && tile.type == Type;
 	}
-
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
-		if (tile.TileFrameX != 0 || tile.TileFrameY != 0)
+		if (tile.TileFrameX % 80 != 0 || tile.TileFrameY != 0)
 			return false;
 
 		Vector2 offscreenVector = new Vector2(Main.offScreenRange);
@@ -229,21 +226,44 @@ internal class LargeFireBulb : ModTile
 
 		var tex = ModAsset.LargeFireBulb_Root.Value;
 		Texture2D glow = null;
-		if (HasSameTileAt(i, j - 4)) // 上面有同样物块，不是根
+		if(tile.TileFrameX == 0)
 		{
-			if (!HasSameTileAt(i, j + 4)) // 下面没有同样物块，是果实2
+			if (HasSameTileAt(i, j - 4)) // 上面有同样物块，不是根
 			{
-				tex = ModAsset.LargeFireBulb_Fruit2.Value;
-				glow = ModAsset.LargeFireBulb_Fruit2_Glow.Value;
+				if (!HasSameTileAt(i, j + 4)) // 下面没有同样物块，是果实2
+				{
+					tex = ModAsset.LargeFireBulb_Fruit2.Value;
+					glow = ModAsset.LargeFireBulb_Fruit2_Glow.Value;
+				}
+				else if (!HasSameTileAt(i, j + 8)) // 下面有同样物块，但下面第二格有，是果实1
+				{
+					tex = ModAsset.LargeFireBulb_Fruit1.Value;
+					glow = ModAsset.LargeFireBulb_Fruit1_Glow.Value;
+				}
+				else // 下面有同样物块，下面第二格也有，是茎
+				{
+					tex = ModAsset.LargeFireBulb_Stem.Value;
+				}
 			}
-			else if (!HasSameTileAt(i, j + 8)) // 下面有同样物块，但下面第二格有，是果实1
+		}
+		if (tile.TileFrameX == 80)
+		{
+			if (HasSameTileAt(i, j - 4)) // 上面有同样物块，不是根
 			{
-				tex = ModAsset.LargeFireBulb_Fruit1.Value;
-				glow = ModAsset.LargeFireBulb_Fruit1_Glow.Value;
-			}
-			else // 下面有同样物块，下面第二格也有，是茎
-			{
-				tex = ModAsset.LargeFireBulb_Stem.Value;
+				if (!HasSameTileAt(i, j + 4)) // 下面没有同样物块，是果实2
+				{
+					tex = Commons.ModAsset.Empty.Value;
+					glow = Commons.ModAsset.Empty.Value;
+				}
+				else if (!HasSameTileAt(i, j + 8)) // 下面有同样物块，但下面第二格有，是果实1
+				{
+					tex = ModAsset.LargeFireBulb_Fruit1_cut.Value;
+					glow = Commons.ModAsset.Empty.Value;
+				}
+				else // 下面有同样物块，下面第二格也有，是茎
+				{
+					tex = ModAsset.LargeFireBulb_Stem.Value;
+				}
 			}
 		}
 
@@ -278,5 +298,26 @@ internal class LargeFireBulb : ModTile
 				b = 0;
 			}
 		}
+	}
+	public override void KillMultiTile(int i, int j, int frameX, int frameY)
+	{
+
+		if (HasSameTileAt(i, j - 4) && Main.tile[i, j - 4].TileFrameX == 0) // 上面有同样物块，不是根
+		{
+			if (!HasSameTileAt(i, j + 4)) // 下面没有同样物块，是果实2
+			{
+				Projectile.NewProjectile(WorldGen.GetItemSource_FromTileBreak(i, j), new Vector2(i + 1, j + 4) * 16, Vector2.zeroVector, ModContent.ProjectileType<FallenDropFruit>(), 100, 10);
+			}
+
+		}
+		Main.tile[i, j - 8].TileFrameX = 80;
+		Main.tile[i, j - 4].TileFrameX = 80;
+		base.KillMultiTile(i, j, frameX, frameY);
+		Main.NewText(j);
+	}
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+
+		base.NumDust(i, j, fail, ref num);
 	}
 }
