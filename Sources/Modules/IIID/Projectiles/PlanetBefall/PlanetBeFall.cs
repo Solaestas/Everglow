@@ -68,15 +68,22 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 									 new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 500),
 									 new Vector3(0, -1, 0))
 				* Main.GameViewMatrix.ZoomMatrix
-				* Matrix.CreateTranslation(new Vector3(-Main.GameViewMatrix.TransformationMatrix.M41, -Main.GameViewMatrix.TransformationMatrix.M42, 0));
+				* Matrix.CreateTranslation(new Vector3(-Main.GameViewMatrix.TransformationMatrix.M41, -Main.GameViewMatrix.TransformationMatrix.M42, 0))
+				;
 
-			return DefaultPerspectiveMatrix();
 		}
 		public override void OnSpawn(IEntitySource source)
 		{
 			Player player = Main.player[Projectile.owner];
 			Array = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
 			Main.projectile[Array].Center = Main.MouseWorld;
+			foreach (Projectile proj in Main.projectile)
+			{
+				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBefallArray>() && proj == Main.projectile[Array])
+				{
+					(proj.ModProjectile as PlanetBefallArray).PlanetBeFallProj =Projectile.whoAmI ;
+				}
+			}
 			Projectile.ai[0] = Main.projectile[Array].Center.X;
 			Projectile.ai[1] = Main.projectile[Array].Center.Y;
 			Projectile.velocity = Vector2.Normalize(Main.projectile[Array].Center - Projectile.Center) / 10;
@@ -100,7 +107,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			Player player = Main.player[Projectile.owner];
 			target = new Vector2(Projectile.ai[0], Projectile.ai[1]);
 
-			if ((Projectile.Center - target).Length() < 100)
+			if ((Projectile.Center - target).Length() < 10)
 			{
 				Projectile.Kill();
 			}
@@ -115,15 +122,9 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			}
 			player.heldProj = Projectile.whoAmI;
 		}
+
 		public override void OnKill(int timeLeft)
 		{
-			foreach (Projectile proj in Main.projectile)
-			{
-				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBefallArray>() && proj == Main.projectile[Array])
-				{
-					(proj.ModProjectile as PlanetBefallArray).BloomIntensityChange = true;
-				}
-			}
 
 			Player player = Main.player[Projectile.owner];
 			PlanetBeFallScreenMovePlayer PlanetBeFallScreenMovePlayer = player.GetModPlayer<PlanetBeFallScreenMovePlayer>();
@@ -143,7 +144,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			{
 				float Dis = (target.Center - Projectile.Center).Length();
 
-				if (Dis < 2500)
+				if (Dis < 500)
 				{
 					if (!target.dontTakeDamage && !target.friendly && target.active)
 					{

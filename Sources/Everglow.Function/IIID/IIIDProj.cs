@@ -22,7 +22,7 @@ namespace Everglow.Commons.IIID
 			Projectile.friendly = true;
 			Projectile.DamageType = DamageClass.Melee;
 			Projectile.aiStyle = -1;
-			Projectile.penetrate = 1;
+			Projectile.penetrate = -1;
 			Projectile.timeLeft = 1200;
 			Projectile.hostile = false;
 			Projectile.alpha = 255;

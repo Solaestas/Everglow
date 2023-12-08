@@ -21,7 +21,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 		internal float Timer = 0;
 		internal float alpha = 1;
 		public float BloomIntensity = 1;
-		public bool BloomIntensityChange = false;
+		public int PlanetBeFallProj;
 		public override void AI()
 		{
 			Player player = Main.player[Projectile.owner];
@@ -36,10 +36,10 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 				alpha *= 0.95f;
 			}
 			
-			if (BloomIntensityChange)
+			if (!Main.projectile[PlanetBeFallProj].active)
 			{
 				Projectile.ai[0]++;
-				BloomIntensity = MathF.Sin((float)(Projectile.ai[0] / (18 * Math.PI)))+1;
+				BloomIntensity = MathF.Sin((float)(Projectile.ai[0] / (5 * Math.PI)))/3+1;
 			}
 		}
 		public override void OnKill(int timeLeft)
@@ -72,17 +72,17 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			Texture2D PlantBeFallOut = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/NonIIIDProj/PlanetBefallArray/PlantBeFallOut").Value;
 			Texture2D GeoElement = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/NonIIIDProj/PlanetBefallArray/GeoElement").Value;
 			Vector2 p = Projectile.Center - Main.screenPosition - new Vector2(GeoElement.Width, GeoElement.Height) / 8;
-			Main.spriteBatch.Draw(GeoElement, new Rectangle((int)p.X, (int)p.Y, GeoElement.Width / 4, GeoElement.Height / 4), Color.White * alpha);
+			Main.spriteBatch.Draw(GeoElement, new Rectangle((int)p.X, (int)p.Y-100, GeoElement.Width / 4, GeoElement.Height / 4), Color.White * alpha);
 
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			DrawTexCircle(Timer * 30f, 100, Color.Gold * alpha, Projectile.Center - Main.screenPosition, PlantBeFallOut, Main.timeForVisualEffects / 1500 + MathHelper.PiOver4);
+			DrawTexCircle(Timer * 30f, 100, Color.Gold * alpha, Projectile.Center - Main.screenPosition-new Vector2 (0,100), PlantBeFallOut, Main.timeForVisualEffects / 1500 + MathHelper.PiOver4);
 			List<Vertex2D> In = new List<Vertex2D>();
 
-			Vector2 Point1 = Projectile.Center - Main.screenPosition + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 0 - Main.timeForVisualEffects / 500);
-			Vector2 Point2 = Projectile.Center - Main.screenPosition + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 1 / 2d - Main.timeForVisualEffects / 500);
-			Vector2 Point3 = Projectile.Center - Main.screenPosition + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 2 / 2d - Main.timeForVisualEffects / 500);
-			Vector2 Point4 = Projectile.Center - Main.screenPosition + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 3 / 2d - Main.timeForVisualEffects / 500);
+			Vector2 Point1 = Projectile.Center - Main.screenPosition - new Vector2(0, 100) + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 0 - Main.timeForVisualEffects / 500);
+			Vector2 Point2 = Projectile.Center - Main.screenPosition - new Vector2(0, 100) + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 1 / 2d - Main.timeForVisualEffects / 500);
+			Vector2 Point3 = Projectile.Center - Main.screenPosition - new Vector2(0, 100) + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 2 / 2d - Main.timeForVisualEffects / 500);
+			Vector2 Point4 = Projectile.Center - Main.screenPosition - new Vector2(0, 100) + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 3 / 2d - Main.timeForVisualEffects / 500);
 			In.Add(new Vertex2D(Point1, Color.Gold * alpha, new Vector3(0, 0, 0)));
 			In.Add(new Vertex2D(Point2, Color.Gold * alpha, new Vector3(1, 0, 0)));
 			In.Add(new Vertex2D(Point4, Color.Gold * alpha, new Vector3(0, 1, 0)));
