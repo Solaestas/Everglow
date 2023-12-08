@@ -1,163 +1,266 @@
-using Terraria;
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
+using Everglow.Myth.Acytaea.VFXs;
+using Terraria.DataStructures;
 
-class GhostHit : ModProjectile
+namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
+public class GhostHit : ModProjectile
 {
+	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
 	public override void SetDefaults()
 	{
-		Projectile.width = 26;
-		Projectile.height = 26;
-		Projectile.friendly = true;
+		Projectile.aiStyle = -1;
+		Projectile.timeLeft = 40;
+		Projectile.extraUpdates = 2;
+		Projectile.scale = 1f;
 		Projectile.hostile = false;
-		Projectile.penetrate = -1;
-		Projectile.timeLeft = 700;
-		//Projectile.extraUpdates = 10;
+		Projectile.friendly = true;
 		Projectile.tileCollide = false;
+		Projectile.ignoreWater = true;
+		Projectile.penetrate = -1;
 		Projectile.DamageType = DamageClass.Melee;
-		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 13;
-	}
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
 
+		Projectile.width = 40;
+		Projectile.height = 40;
+		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
 	}
 	public override void AI()
 	{
-		Player player = Main.player[Projectile.owner];
-		int duration = player.itemAnimationMax;
-		if (Projectile.timeLeft > duration)
-			Projectile.timeLeft = duration;
-		Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
-		for (int i = 0; i < 12; i++)
+		if (Projectile.timeLeft > 15)
 		{
-			if (Projectile.velocity.Length() > i * 10f)
-				Projectile.velocity *= 0.9f;
+			Projectile.velocity *= 0.9f;
+			Projectile.velocity = Projectile.velocity.RotatedBy(Projectile.ai[0]);
 		}
-		Projectile.velocity += new Vector2(Projectile.ai[0], Projectile.ai[1]);
 	}
-	private Effect ef;
-	private Vector2[] vpos = new Vector2[15];
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+	{
+		for (int k = 0; k < Projectile.oldPos.Length; k++)
+		{
+			Vector2 deltaVector = Projectile.oldPos[k] - Projectile.position;
+			Rectangle newProjectileHitBox = projHitbox;
+			newProjectileHitBox.X -= (int)deltaVector.X;
+			newProjectileHitBox.Y -= (int)deltaVector.Y;
+			if (newProjectileHitBox.Intersects(targetHitbox))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	public override void OnSpawn(IEntitySource source)
+	{
+	}
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		for (int x = 0; x < 5; x++)
+		{
+			Vector2 newVec = new Vector2(0, Main.rand.NextFloat(2f, 5f)).RotatedByRandom(6.238f);
+			var positionVFX = target.Center + newVec * Main.rand.NextFloat(0.7f, 0.9f);
+
+			var acytaeaFlame = new AcytaeaFlameDust
+			{
+				velocity = newVec,
+				Active = true,
+				Visible = true,
+				position = positionVFX,
+				maxTime = Main.rand.Next(14, 16),
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(9f, 15f) }
+			};
+			Ins.VFXManager.Add(acytaeaFlame);
+		}
+		for (int x = 0; x < 12; x++)
+		{
+			Vector2 newVec = new Vector2(0, Main.rand.NextFloat(2f, 5f)).RotatedByRandom(6.238f);
+			var positionVFX = target.Center + newVec * Main.rand.NextFloat(0.7f, 0.9f);
+
+			var acytaeaSpark = new AcytaeaSparkDust
+			{
+				velocity = newVec,
+				Active = true,
+				Visible = true,
+				position = positionVFX,
+				maxTime = Main.rand.Next(14, 30),
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(4f, 5f) }
+			};
+			Ins.VFXManager.Add(acytaeaSpark);
+		}
+	}
+	public override bool PreDraw(ref Color lightColor)
+	{
+		return false;
+	}
 	public override void PostDraw(Color lightColor)
 	{
+		DrawTrail();
+	}
+	public virtual void DrawTrail()
+	{
+
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-		var bars = new List<Vertex2D>();
-		ef = ModContent.Request<Effect>("Everglow/Myth/Effects/Trail").Value;
-		// 把所有的点都生成出来，按照顺序
-		int width = 60;
-		if (Projectile.timeLeft < 30)
-			width = Projectile.timeLeft * 2;
-		Player player = Main.player[Projectile.owner];
-		int duration = player.itemAnimationMax;
-		/*if (Projectile.timeLeft == duration - 10)
-            {
-                for (int i = 1; i < Projectile.oldPos.Length; ++i)
-                {
-                    vpos[i] = Projectile.oldPos[i];
-                }
-            }*/
-		int Imax = 0;
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		DrawDark();
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		DrawLight();
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+	}
+	private void DrawLight()
+	{
+		for (int z = 0; z < 3; z++)
 		{
-			Imax = i;
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
-		}
-
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
-		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
-			if (vpos[i] != Vector2.Zero)
+			List<Vector2> oldPosNoneZero = new List<Vector2>();
+			for (int x = 0; x < Projectile.oldPos.Length; x++)
 			{
-				var normalDir = Projectile.velocity;
-				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-				var factor = i / (float)Projectile.oldPos.Length;
-				var color = Color.Lerp(Color.White, Color.Red, factor);
-				var w = MathHelper.Lerp(1f, 0.05f, factor);
-				Vector2 deltaPos = Projectile.position - vpos[1];
-				if (Imax - i < 5)
-					width = (int)(width * (Imax - i) / 5f);
-				bars.Add(new Vertex2D(vpos[i] + normalDir * width + new Vector2(13) + deltaPos, color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-				bars.Add(new Vertex2D(vpos[i] + normalDir * -width + new Vector2(13) + deltaPos, color, new Vector3((float)Math.Sqrt(factor), 0, w)));
+				if (x >= 1)
+				{
+					if (Projectile.oldPos[x] == Projectile.oldPos[x - 1])
+					{
+						continue;
+					}
+				}
+				if (Projectile.oldPos[x] == Vector2.zeroVector)
+				{
+					break;
+				}
+				oldPosNoneZero.Add(Projectile.oldPos[x]);
 			}
-			else
+			if (oldPosNoneZero.Count <= 1)
 			{
-				var normalDir = Projectile.velocity;
-				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-				var factor = i / (float)Projectile.oldPos.Length;
-				var color = Color.Lerp(Color.White, Color.Red, factor);
-				var w = MathHelper.Lerp(1f, 0.05f, factor);
-				if (Imax - i < 5)
-					width = (int)(width * (Imax - i) / 5f);
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(13), color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(13), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
+				return;
 			}
-		}
-
-		var triangleList = new List<Vertex2D>();
-
-		if (bars.Count > 2)
-		{
-
-			// 按照顺序连接三角形
-			triangleList.Add(bars[0]);
-			Vector2 vo = (bars[0].position - bars[1].position) / (bars[0].position - bars[1].position).Length();
-			var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + vo.RotatedBy(-Math.PI / 2d) * 30, Color.White, new Vector3(0, 0.5f, 1));
-			triangleList.Add(bars[1]);
-			triangleList.Add(vertex);
-			for (int i = 0; i < bars.Count - 2; i += 2)
+			List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(oldPosNoneZero.ToArray());//平滑
+			var SmoothTrail = new List<Vector2>();
+			for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
 			{
-				triangleList.Add(bars[i]);
-				triangleList.Add(bars[i + 2]);
-				triangleList.Add(bars[i + 1]);
-
-				triangleList.Add(bars[i + 1]);
-				triangleList.Add(bars[i + 2]);
-				triangleList.Add(bars[i + 3]);
+				SmoothTrail.Add(SmoothTrailX[x]);
 			}
-			RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-			// 干掉注释掉就可以只显示三角形栅格
-			//RasterizerState rasterizerState = new RasterizerState();
-			//rasterizerState.CullMode = CullMode.None;
-			//rasterizerState.FillMode = FillMode.WireFrame;
-			//Main.graphics.GraphicsDevice.RasterizerState = rasterizerState;
+			SmoothTrail.Add(oldPosNoneZero.Last());
 
-			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+			int length = SmoothTrail.Count;
+			if (length <= 3)
+				return;
+			Vector2[] trail = SmoothTrail.ToArray();
 
-			// 把变换和所需信息丢给shader
-			ef.Parameters["uTransform"].SetValue(model * projection);
-			ef.Parameters["uTime"].SetValue(0);
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapGhost").Value;
-			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/Lightline").Value;
-			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/GoldLine2").Value;
-			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-			Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
-			Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
-			//Main.graphics.GraphicsDevice.Textures[0] = Main.magicPixel;
-			//Main.graphics.GraphicsDevice.Textures[1] = Main.magicPixel;
-			//Main.graphics.GraphicsDevice.Textures[2] = Main.magicPixel;
-
-			ef.CurrentTechnique.Passes[0].Apply();
-
-
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
-
-			Main.graphics.GraphicsDevice.RasterizerState = originalState;
-			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			List<Vertex2D> bars = new List<Vertex2D>();
+			Vector2 offset = Vector2.zeroVector;
+			if (z == 2)
+			{
+				offset = new Vector2(9 * Projectile.spriteDirection, -6);
+			}
+			for (int i = 1; i < length; ++i)
+			{
+				float width = 8;
+				if (Projectile.timeLeft < 20)
+				{
+					width = Projectile.timeLeft * 0.4f;
+				}
+				var normalDir = trail[i - 1] - trail[i];
+				normalDir = new Vector2(-normalDir.Y, normalDir.X).SafeNormalize(Vector2.Zero);
+				var factor = (i - 1) / (float)(length - 3);
+				var color = new Color(255, 0, 65, 0) * MathF.Sin(factor * MathF.PI) * MathF.Sin(factor * MathF.PI);
+				if (z == 1)
+				{
+					offset = -normalDir * 12f * Projectile.spriteDirection;
+				}
+				bars.Add(new Vertex2D(trail[i] - normalDir * width + offset + new Vector2(Projectile.width / 2f), color, new Vector3(factor * 2, 0.5f - Projectile.spriteDirection * 0.5f, factor)));
+				bars.Add(new Vertex2D(trail[i] + normalDir * width + offset + new Vector2(Projectile.width / 2f), color, new Vector3(factor * 2, 0.5f + Projectile.spriteDirection * 0.5f, factor)));
+			}
+			if (bars.Count > 2)
+			{
+				Texture2D t = ModAsset.Trail_Scratch.Value;
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+				Effect effect = ModAsset.AcytaeaScratchEffect.Value;
+				var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+				var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
+				effect.Parameters["uTransform"].SetValue(model * projection);
+				effect.Parameters["uProcession"].SetValue(0.5f);
+				effect.CurrentTechnique.Passes["Test2"].Apply();
+				Main.graphics.GraphicsDevice.Textures[0] = t;
+				Main.graphics.GraphicsDevice.Textures[1] = ModAsset.Acytaea_meleeColor.Value;
+				Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			}
 		}
 	}
-	public override bool OnTileCollide(Vector2 oldVelocity)
+	private void DrawDark()
 	{
-		for (int y = 0; y < 12; y++)
+		for (int z = 0; z < 3; z++)
 		{
-			int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, 183, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
-			Main.dust[num90].noGravity = true;
-			Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(2.0f, 2.5f), Main.rand.NextFloat(1.8f, 11.5f)).RotatedByRandom(Math.PI * 2d);
+			List<Vector2> oldPosNoneZero = new List<Vector2>();
+			for (int x = 0; x < Projectile.oldPos.Length; x++)
+			{
+				if (x >= 1)
+				{
+					if (Projectile.oldPos[x] == Projectile.oldPos[x - 1])
+					{
+						continue;
+					}
+				}
+				if (Projectile.oldPos[x] == Vector2.zeroVector)
+				{
+					break;
+				}
+				oldPosNoneZero.Add(Projectile.oldPos[x]);
+			}
+			if (oldPosNoneZero.Count <= 1)
+			{
+				return;
+			}
+			List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(oldPosNoneZero.ToArray());//平滑
+			var SmoothTrail = new List<Vector2>();
+			for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
+			{
+				SmoothTrail.Add(SmoothTrailX[x]);
+			}
+			SmoothTrail.Add(oldPosNoneZero.Last());
+
+			int length = SmoothTrail.Count;
+			if (length <= 3)
+				return;
+			Vector2[] trail = SmoothTrail.ToArray();
+
+			List<Vertex2D> bars = new List<Vertex2D>();
+			Vector2 offset = Vector2.zeroVector;
+			if (z == 2)
+			{
+				offset = new Vector2(9 * Projectile.spriteDirection, -6);
+			}
+			var color = Color.White;
+			for (int i = 1; i < length; ++i)
+			{
+				float width = 8;
+				if (Projectile.timeLeft < 20)
+				{
+					width = Projectile.timeLeft * 0.4f;
+				}
+				var normalDir = trail[i - 1] - trail[i];
+				normalDir = new Vector2(-normalDir.Y, normalDir.X).SafeNormalize(Vector2.Zero);
+
+				var factor = (i - 1) / (float)(length - 3);
+				if (z == 1)
+				{
+					offset = -normalDir * 12f * Projectile.spriteDirection;
+				}
+				bars.Add(new Vertex2D(trail[i] - normalDir * width + offset + new Vector2(Projectile.width / 2f), color, new Vector3(factor, 0.5f - Projectile.spriteDirection * 0.5f, factor)));
+				bars.Add(new Vertex2D(trail[i] + normalDir * width + offset + new Vector2(Projectile.width / 2f), color, new Vector3(factor, 0.5f + Projectile.spriteDirection * 0.5f, factor)));
+
+			}
+
+			if (bars.Count > 2)
+			{
+				Texture2D t = Commons.ModAsset.Trail_black.Value;
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+				Effect effect = ModAsset.AcytaeaScratchEffect.Value;
+				var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+				var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
+				effect.Parameters["uTransform"].SetValue(model * projection);
+				effect.Parameters["uProcession"].SetValue(0.5f);
+				effect.CurrentTechnique.Passes["Test"].Apply();
+				Main.graphics.GraphicsDevice.Textures[0] = t;
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			}
 		}
-		Projectile.Kill();
-		return true;
 	}
 }
