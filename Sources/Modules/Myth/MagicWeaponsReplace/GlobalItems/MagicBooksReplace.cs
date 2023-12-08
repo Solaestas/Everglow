@@ -217,6 +217,9 @@ public class MagicBooksReplace : GlobalItem
 			int aimType = ModContent.ProjectileType<DreamWeaverBook>();
 			if (player.ownedProjectileCounts[aimType] < 1)
 				Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
+			aimType = ModContent.ProjectileType<DreamWeaverArray>();
+			if (player.ownedProjectileCounts[aimType] < 1)
+				Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
 		}
 		if (item.type == ModContent.ItemType<Misc.Items.Weapons.FireFeatherMagic>())
 		{

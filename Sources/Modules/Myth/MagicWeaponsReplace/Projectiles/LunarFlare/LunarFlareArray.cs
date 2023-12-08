@@ -16,7 +16,10 @@ internal class LunarFlareArray : ModProjectile
 		Projectile.DamageType = DamageClass.Summon;
 		Projectile.tileCollide = false;
 	}
-
+	public override bool? CanCutTiles()
+	{
+		return false;
+	}
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -222,7 +225,7 @@ internal class StarrySkySystem : ModSystem
 		RenderTarget2D blackTarget = renderTargets.Resource[2];
 		RenderTarget2D StarrySkyTarget = renderTargets.Resource[3];
 
-		Effect Starry = MythContent.QuickEffect("Effects/StarrySkyZone");
+		Effect Starry = ModAsset.StarrySkyZone.Value;
 		//保存原图
 		GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
 		graphicsDevice.SetRenderTarget(screen);

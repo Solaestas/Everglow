@@ -14,7 +14,10 @@ internal class BookofSkullsArray : ModProjectile, IWarpProjectile
 		Projectile.timeLeft = 10000;
 		Projectile.tileCollide = false;
 	}
-
+	public override bool? CanCutTiles()
+	{
+		return false;
+	}
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];

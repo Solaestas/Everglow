@@ -1,13 +1,10 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
-using Everglow.Myth.TheFirefly.Items;
 using Everglow.Myth.TheFirefly.Items.BossDrop;
 using Everglow.Myth.TheFirefly.Items.Weapons;
 using Everglow.Myth.TheFirefly.Projectiles;
 using Everglow.Myth.TheFirefly.VFXs;
-using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
@@ -190,19 +187,21 @@ public class CorruptMoth : ModNPC
 	{
 		if (ShieldHealthValue > 0)
 		{
-			ShieldHealthValue -= modifiers.GetDamage(projectile.damage, Main.rand.Next(100) < projectile.CritChance);
+			float damage = modifiers.GetDamage(projectile.damage, Main.rand.Next(100) < projectile.CritChance);
+			ShieldHealthValue -= damage;
 			modifiers.FinalDamage *= 0.01f;
 			SoundEngine.PlaySound(SoundID.NPCHit4, NPC.Center);
 			if (lightVisual < 0.6f)
 				lightVisual += 1.2f;
 
-			if (Main.rand.NextBool() && Main.netMode != NetmodeID.MultiplayerClient)
-				Projectile.NewProjectile(NPC.GetSource_OnHurt(projectile), projectile.Center, (projectile.Center - NPC.Center).SafeNormalize(Vector2.One) * 12, ModContent.ProjectileType<BlueMissil>(), NPC.damage / 6, 0, Main.myPlayer); // Higher number on NPC.damage / int = less damage
+			if ((ShieldHealthValue % 200 - damage < 0) && Main.netMode != NetmodeID.MultiplayerClient)
+				Projectile.NewProjectile(NPC.GetSource_OnHurt(projectile), projectile.Center, (projectile.Center - NPC.Center).SafeNormalize(Vector2.One) * 12, ModContent.ProjectileType<MothMiddleBullet>(), NPC.damage / 6, 0, Main.myPlayer); // Higher number on NPC.damage / int = less damage
 		}
 	}
 
 	public override void AI()
 	{
+		GenerateDust();
 		SummonButterfliesCount = NPC.CountNPCS(ModContent.NPCType<SummonedButterfly>());
 		if (!startLoading)
 		{
@@ -551,7 +550,7 @@ public class CorruptMoth : ModNPC
 			if (Timer > endTime)
 			{
 				Timer = 0;
-				if(Main.masterMode)
+				if (Main.masterMode)
 				{
 					for (int i = 0; i < 2; i++)
 					{
@@ -599,7 +598,7 @@ public class CorruptMoth : ModNPC
 						lightVisual = 1.5f;
 						PhamtomDis = 80;
 						Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, -1), ModContent.ProjectileType<BlueStarFlower>(), NPC.damage, 1);
-						if(p0 != null)
+						if (p0 != null)
 						{
 							BlueStarFlower bsf = p0.ModProjectile as BlueStarFlower;
 							if (bsf != null)
@@ -609,7 +608,7 @@ public class CorruptMoth : ModNPC
 						}
 					}
 				}
-				if((NPC.Center - (player.Center + new Vector2(0, -300))).Length() < 50)
+				if ((NPC.Center - (player.Center + new Vector2(0, -300))).Length() > 50)
 				{
 					MoveTo(player.Center + new Vector2(0, -300), 8, 40);
 				}
@@ -1135,7 +1134,34 @@ public class CorruptMoth : ModNPC
 		}
 		NPC.oldPos[0] = NPC.Center;
 	}
-
+	public void GenerateDust()
+	{
+		if (NPC.alpha == 0 && NPC.velocity.Length() > 0.5f)
+		{
+			for (int d = 0; d < 6; d++)
+			{
+				float value = NPC.frame.Y / 4560f + Main.rand.NextFloat(-0.1f, 0.1f);
+				float lowBound = -105f;
+				float highBound = 24f;
+				float x = Main.rand.NextFloat(lowBound, highBound);
+				float y = MathF.Sqrt(highBound - x) * 15f;
+				if (NPC.direction == -1)
+				{
+					y = MathF.Sqrt(x - lowBound) * 15f;
+				}
+				float scale = Main.rand.NextFloat(0.8f, 0.9f);
+				Dust dust = Dust.NewDustDirect(NPC.Center, 0, 0, ModContent.DustType<BlueGlow>(), 0, 0, 0, default, scale);
+				dust.position += new Vector2(x - MathF.Cos(value * MathHelper.TwoPi) * 30, -y * NPC.direction * MathF.Cos(value * MathHelper.TwoPi)).RotatedBy(NPC.rotation);
+				if (NPC.direction == -1)
+				{
+					dust.position.X += 60;
+				}
+				dust.velocity = NPC.velocity * 0.8f + new Vector2(0, -y * NPC.direction * MathF.Sin(value * MathHelper.TwoPi) * 0.04f).RotatedBy(NPC.rotation);
+			}
+		}
+		
+		
+	}
 	private void MoveTo(Vector2 targetPos, float Speed, float n)
 	{
 		Vector2 targetVec = (targetPos - NPC.Center).SafeNormalize(Vector2.Zero) * Speed;
@@ -1255,7 +1281,7 @@ public class CorruptMoth : ModNPC
 	}
 	private static Vector3 RodriguesRotate(Vector3 origVec, Vector3 axis, float theta)
 	{
-		if(axis != new Vector3(0, 0, 0))
+		if (axis != new Vector3(0, 0, 0))
 		{
 			axis = Vector3.Normalize(axis);
 		}
@@ -1268,7 +1294,7 @@ public class CorruptMoth : ModNPC
 	}
 	[CloneByReference]
 	private readonly Vector3[] cubeVec = new Vector3[]
-    {
+	{
 		new Vector3(1,1,1),//*
 		new Vector3(1,1,-1),//-
 		new Vector3(1,-1,-1),//|
@@ -1301,7 +1327,7 @@ public class CorruptMoth : ModNPC
 		for (int j = 0; j < 8; j++)
 		{
 			posCheck = RodriguesRotate(cubeVec[j], axis, (float)Main.time * 0.03f);
-			if(posCheck.Z > totalMaxZ)
+			if (posCheck.Z > totalMaxZ)
 			{
 				totalMaxZ = posCheck.Z;
 			}
@@ -1310,7 +1336,7 @@ public class CorruptMoth : ModNPC
 		{
 			bool has110 = false;
 			bool type7 = true;
-			
+
 			float alpha = 1f;
 			float faceMaxZ = 0;
 			for (int j = 0; j < 4; j++)
@@ -1344,13 +1370,13 @@ public class CorruptMoth : ModNPC
 				if (array[i][j] - 1 == 0)
 				{
 					type7 = false;
-				    coord = new Vector3(1, 0, 0);
+					coord = new Vector3(1, 0, 0);
 				}
-				else if(array[i][j] - 1 == 6)
+				else if (array[i][j] - 1 == 6)
 				{
 					coord = new Vector3(1, 0, 0);
 				}
-				else if(!type7 && (pos - new Vector3(1, 1, 1)).Length() >= MathF.Sqrt(2) * 2 - 0.1 && (pos - new Vector3(1, 1, 1)).Length() <= MathF.Sqrt(2) * 2 + 0.1)
+				else if (!type7 && (pos - new Vector3(1, 1, 1)).Length() >= MathF.Sqrt(2) * 2 - 0.1 && (pos - new Vector3(1, 1, 1)).Length() <= MathF.Sqrt(2) * 2 + 0.1)
 				{
 					coord = new Vector3(0, 1, 0);
 				}
@@ -1358,7 +1384,7 @@ public class CorruptMoth : ModNPC
 				{
 					coord = new Vector3(0, 1, 0);
 				}
-				else if(!has110)
+				else if (!has110)
 				{
 					coord = new Vector3(1, 1, 0);
 					has110 = true;
@@ -1367,7 +1393,7 @@ public class CorruptMoth : ModNPC
 				{
 					coord = new Vector3(0, 0, 0);
 				}
-				
+
 				pos = RodriguesRotate(pos, axis, (float)Main.time * 0.03f) * 140;
 				pos.X += NPC.Center.X - Main.screenPosition.X;
 				pos.Y += NPC.Center.Y - Main.screenPosition.Y;
@@ -1398,9 +1424,9 @@ public class CorruptMoth : ModNPC
 		SpriteEffects effects = SpriteEffects.None;
 		NPC cocoon = null;
 		bool hasCocoon = false;
-		foreach(var npc in Main.npc)
+		foreach (var npc in Main.npc)
 		{
-			if(npc.active && npc.type == ModContent.NPCType<EvilPack>())
+			if (npc.active && npc.type == ModContent.NPCType<EvilPack>())
 			{
 				if ((npc.Center - NPC.Center).Length() < 2500)
 				{

@@ -1,6 +1,3 @@
-using Everglow.Myth.Common;
-using Microsoft.Xna.Framework;
-using Terraria;
 using static Everglow.Myth.Common.MythUtils;
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere;
 
@@ -17,7 +14,11 @@ internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 		Projectile.DamageType = DamageClass.Magic;
 		Projectile.tileCollide = false;
 	}
-    public override void AI()
+	public override bool? CanCutTiles()
+	{
+		return false;
+	}
+	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
 		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
@@ -65,17 +66,17 @@ internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 		width *= timer / 30f;
 		Color baseColor = new Color(0, 255, 215, 0);
 		List<Vertex2D> bars = new List<Vertex2D>();
-		for(int t = 0;t < 3;t++)
+		for (int t = 0; t < 3; t++)
 		{
-			
-			for(int i = 0;i < 2;i++)
+
+			for (int i = 0; i < 2; i++)
 			{
 				Vector2 vertexPos = new Vector2(0, -70).RotatedBy(timeValue + t * MathHelper.TwoPi / 3d);
 				Vector2 vertexVel = (vertexPos * 0.1f).RotatedBy((i - 0.5f) * 2);
-				for(int j = 0;j < 50;j++)
+				for (int j = 0; j < 50; j++)
 				{
 					Vector2 oldPos = vertexPos;
-					if(j == 0)
+					if (j == 0)
 					{
 						Vector2 normalizedVel = Vector2.Normalize(vertexVel.RotatedBy(-MathHelper.PiOver2)) * width;
 						bars.Add(new Vertex2D(center + vertexPos - normalizedVel, Color.Transparent, new Vector3(j / 25f + timeValue, 0, 0)));
@@ -84,7 +85,7 @@ internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 					vertexPos += vertexVel;
 					vertexVel = Vector2.Normalize(-vertexPos - vertexVel) * 2.5f + vertexVel * 0.96f;
 					Color drawColor = baseColor;
-					if(vertexPos.Length() < 3.5f)
+					if (vertexPos.Length() < 3.5f)
 					{
 						vertexPos = Vector2.zeroVector;
 						drawColor = Color.Transparent;
@@ -99,7 +100,7 @@ internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		bars = new List<Vertex2D>();
-		for (int x = 0;x <= 30;x++)
+		for (int x = 0; x <= 30; x++)
 		{
 			float rad = 70 + MathF.Sin(timeValue) * 10;
 			Vector2 radius = new Vector2(0, -1).RotatedBy(x / 30d * MathHelper.TwoPi);
@@ -121,7 +122,7 @@ internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		bars = new List<Vertex2D>();
-		for (int x = 0; x < 3;x ++)
+		for (int x = 0; x < 3; x++)
 		{
 			Vector2 radius = new Vector2(0, -1).RotatedBy((x + 0.5) / 3d * MathHelper.TwoPi + timeValue);
 			Vector2 cut = new Vector2(0, -1).RotatedBy((x + 0.5) / 3d * MathHelper.TwoPi + MathHelper.PiOver2 + timeValue);
