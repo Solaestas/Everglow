@@ -105,7 +105,7 @@ public class TuskBiomeSky : CustomSky
 		{
 			Vector2 offset = Main.rand.NextVector2Unit() * Main.rand.Next(700, 3000);
 			Vector3 pos = cloudCenter + new Vector3(offset.X, 0, offset.Y);
-			var l = new RedLightning() { pos = pos, rotation = 1.57f, maxTimeleft = 60 };
+			var l = new RedLightning() { pos = pos, rotation = 1.57f, maxTimeleft = 40 };
 			l.Create();
 			lightnings.Add(l);
 
@@ -119,7 +119,7 @@ public class TuskBiomeSky : CustomSky
 				if (!lightning.sub && lightning.pos.Z < 8000)
 				{
 					float a = MathHelper.Clamp(1 - lightning.pos.Z / 8000f, 0f, 1f);
-					Main.ColorOfTheSkies = Color.Lerp(Main.ColorOfTheSkies, new Color(0.8f, 0.6f, 0.6f), 0.5f * a * lightning.timeleft / 60f);//闪电背景颜色
+					Main.ColorOfTheSkies = Color.Lerp(Main.ColorOfTheSkies, new Color(0.8f, 0.6f, 0.6f), 0.3f * a * lightning.timeleft / 60f);//闪电背景颜色
 				}
 				if (lightning.timeleft <= 0)
 					lightnings.Remove(lightning);
@@ -131,8 +131,8 @@ public class TuskBiomeSky : CustomSky
 			float alpha = 0;
 			if (lightning.pos.Z > 7000)
 				alpha = (lightning.pos.Z - 7000) / 10000f;
-			Vertex3D_2[] vertices = lightning.GetVertices(90, new Color(1, 1f - alpha, 1f - alpha, 0f));
-			Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheTusk/Backgrounds/Lightning");
+			Vertex3D_2[] vertices = lightning.GetVertices(30, new Color(1, 1f - alpha, 1f - alpha, 0f));
+			Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheTusk/Backgrounds/RedPoint");
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices, 0, vertices.Length - 2);
 
 		}
@@ -235,7 +235,7 @@ public class TuskBiomeSky : CustomSky
 		var camPos = new Vector3(Main.screenWidth / 2 + Main.screenPosition.X, Main.screenHeight / 2 + Main.screenPosition.Y, -300);
 		int lookup = 50;//往上看
 		var matrix = Matrix.CreateLookAt(camPos, new Vector3(camPos.X, camPos.Y - lookup, 1), Vector3.Down);
-		matrix *= Matrix.CreatePerspectiveFieldOfView(MathHelper.Pi / 5, Main.graphics.GraphicsDevice.Viewport.AspectRatio, 1, 15000);
+		matrix *= Matrix.CreatePerspectiveFieldOfView(MathHelper.Pi / 5, Main.graphics.GraphicsDevice.Viewport.AspectRatio, 1, 12500);
 
 		Effect eff = MythContent.QuickEffect("Effects/DrawPrim3D");
 		eff.Parameters["uTransform"].SetValue(matrix);
@@ -249,7 +249,7 @@ public class TuskBiomeSky : CustomSky
 
 		var CloudLine = new Texture2D[10];
 		CloudLine[1] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkBlueGreenCloud").Value;
-		CloudLine[2] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkGreenCloud").Value;
+		CloudLine[2] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkBlueGreenCloud").Value;
 		CloudLine[3] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkGreyCloud").Value;
 		CloudLine[4] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkGreyCloud").Value;
 		CloudLine[5] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkGreyCloud2").Value;
@@ -299,12 +299,12 @@ public class TuskBiomeSky : CustomSky
 			}
 			if (i == 8)
 			{
-				Blength = 210;
+				Blength = 200;
 				OneDevideRotaSpeed = 400d;
 			}
 			if (i == 9)
 			{
-				Blength = 160;
+				Blength = 135;
 				OneDevideRotaSpeed = 220d;
 			}
 			#endregion
@@ -335,12 +335,16 @@ public class TuskBiomeSky : CustomSky
 				if (i == 6)
 					c *= 0.6f;
 
-				float n = 0.9f - i * 0.075f;//内层顶点的距离
-				if (i == 6)
-					n -= 0.1f;
-				Vx.Add(new Vertex3D_2(center + offset * 1f, new Vector3(u / counts, 0, 0), c));
-				Vx.Add(new Vertex3D_2(center + offset * n, new Vector3(u / counts, 0.6f, 0), c));
-			}
+				float n = 0.5f;
+				int storey = 9 - i;
+				n += storey * 0.02f;
+				if (storey == 3)
+				{
+					n -= 0.4f;
+				}
+                Vx.Add(new Vertex3D_2(center + offset * 1, new Vector3(u / counts, 0, 0), c));
+				Vx.Add(new Vertex3D_2(center + offset * n, new Vector3(u / counts, 1f, 0), c));
+            }
 			Main.graphics.GraphicsDevice.Textures[0] = CloudLine[i];//GlodenBloodScaleMirror
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, Vx.ToArray(), 0, Vx.Count - 2);
 		}

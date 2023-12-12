@@ -32,9 +32,11 @@ internal class WallDBlock : DBlock
 				if (dir == -1)
 					Position = new Vector2(npc.Center.X + 90 - size.X, npc.Center.Y - npc.ai[0] * 0.3f);
 			}
-			if (!Main.npc[npc.whoAmI].active)
+			if (!Main.npc[npc.whoAmI].active || Main.npc[npc.whoAmI].type != ModContent.NPCType<TuskWall>())
+			{
 				Kill();
-			Position += new Vector2(0, 30);
+			}
+				Position += new Vector2(0, 30);
 		}
 	}
 }
