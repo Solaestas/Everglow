@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallWave
+namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallExplosion
 {
     public class PlanetBefallWave : ModProjectile//, IWarpProjectile
     {

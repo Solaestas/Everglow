@@ -15,11 +15,12 @@ using Terraria.Localization;
 using Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack;
 using Terraria.Audio;
 using Mono.Cecil;
-using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallWave;
+using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallExplosion;
 using Everglow.Commons.Utilities;
 using System.Diagnostics;
 using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray;
 using Everglow.Commons.Skeleton2D;
+using Everglow.Myth.TheFirefly.Projectiles;
 
 namespace Everglow.IIID.Projectiles.PlanetBefall
 {
@@ -132,7 +133,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			PlanetBeFallScreenMovePlayer.proj = null;
 			PlanetBeFallScreenMovePlayer.AnimationTimer = 0;
 
-
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<PlanetBefallExplosion>(), (int)(Projectile.damage * (1000) / 100f), Projectile.knockBack * 0.4f, Projectile.owner, 1000 / 15f + 5f);
 			SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, player.Center);
 			ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 150).RotatedByRandom(6.283);
@@ -140,18 +141,6 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			float k1 = Math.Clamp(Projectile.velocity.Length(), 1, 3);
 			float k2 = Math.Clamp(Projectile.velocity.Length(), 6, 10);
 			float k0 = 1f / 4 * k2;
-			foreach (NPC target in Main.npc)
-			{
-				float Dis = (target.Center - Projectile.Center).Length();
-
-				if (Dis < 500)
-				{
-					if (!target.dontTakeDamage && !target.friendly && target.active)
-					{
-						player.ApplyDamageToNPC(target, Projectile.damage, Projectile.knockBack, 0, Main.rand.NextBool(22, 33));
-					}
-				}
-			}
 			base.OnKill(timeLeft);
 		}
 
