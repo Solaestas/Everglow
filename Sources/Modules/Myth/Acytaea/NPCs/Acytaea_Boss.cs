@@ -172,6 +172,38 @@ public class Acytaea_Boss : ModNPC
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
 		yield return new SkipThisFrame();
 	}
+	//瞬间砍一刀
+	private IEnumerator<ICoroutineInstruction> SuddenSlash()
+	{
+		Player player = Main.player[NPC.target];
+		NPC.rotation = 0;
+		ClearFollowingSword();
+		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_projectile_Boss>(), 60, 4f, player.whoAmI, NPC.whoAmI);
+
+		for (int t = 0; t < 2; t++)
+		{
+			float value = 0.05f;
+			Vector2 targetPos = player.Center + new Vector2(-130 * NPC.direction, -60);
+			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			HeadRot -= 0.2f * NPC.direction;
+			yield return new SkipThisFrame();
+		}
+		for (int t = 0; t < 30; t++)
+		{
+			if (t > 20 && t <= 35)
+			{
+				HeadRot += 0.07f * NPC.direction;
+			}
+			else if (t > 35)
+			{
+				HeadRot *= 0.9f;
+			}
+			NPC.velocity *= 0.6f;
+			yield return new SkipThisFrame();
+		}
+		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
+		yield return new SkipThisFrame();
+	}
 	//龙爪划过
 	private IEnumerator<ICoroutineInstruction> ScratchPlayer()
 	{
@@ -827,6 +859,49 @@ public class Acytaea_Boss : ModNPC
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
 		yield return new SkipThisFrame();
 	}
+	//剑雨
+	private IEnumerator<ICoroutineInstruction> SwordRainLine()
+	{
+		NPC.TargetClosest();
+		Player player = Main.player[NPC.target];
+		NPC.rotation = 0;
+		NPC.direction = 1;
+		if (player.Center.X < NPC.Center.X)
+		{
+			NPC.direction = -1;
+		}
+		NPC.spriteDirection = NPC.direction;
+		for (int t = 0; t < 20; t++)
+		{
+			NPC.velocity *= 0.1f;
+			float value = t / 20f;
+			Vector2 targetPos = player.Center + new Vector2(-450 * NPC.direction, 60);
+			while (Collision.SolidCollision(targetPos, NPC.width, NPC.height))
+			{
+				targetPos.Y -= 10;
+				if (targetPos.Y < player.Center.Y - 200)
+				{
+					break;
+				}
+			}
+			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			HeadFrameCounter++;
+			yield return new SkipThisFrame();
+		}
+		ClearFollowingSword();
+		Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaLaserSword2>(), 60, 4f, player.whoAmI, NPC.whoAmI);
+		p0.rotation = (player.Center + new Vector2(0, -400) - NPC.Center).ToRotation();
+		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -400), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordRain>(), 60, 4f, player.whoAmI, NPC.whoAmI);
+		for (int t = 0; t < 260; t++)
+		{
+
+			NPC.velocity *= 0.8f;
+			
+			HeadFrameCounter++;
+			yield return new SkipThisFrame();
+		}
+		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer(20)));
+	}
 	//技能更迭
 	private IEnumerator<ICoroutineInstruction> FaceToPlayer(int time = 60)
 	{
@@ -877,7 +952,7 @@ public class Acytaea_Boss : ModNPC
 		}
 		else
 		{
-			switch (Main.rand.Next(6))
+			switch (Main.rand.Next(7))
 			{
 				case 0:
 					_acytaeaCoroutine.StartCoroutine(new Coroutine(SwordArray_Round()));
@@ -895,7 +970,7 @@ public class Acytaea_Boss : ModNPC
 					_acytaeaCoroutine.StartCoroutine(new Coroutine(SwordArray()));
 					break;
 				case 5:
-					if(Main.rand.NextBool(2))
+					if (Main.rand.NextBool(2))
 					{
 						_acytaeaCoroutine.StartCoroutine(new Coroutine(SlashPlayerAndReleaseSword()));
 					}
@@ -903,6 +978,9 @@ public class Acytaea_Boss : ModNPC
 					{
 						_acytaeaCoroutine.StartCoroutine(new Coroutine(Slash3xPlayerAndReleaseSword()));
 					}
+					break;
+				case 6:
+					_acytaeaCoroutine.StartCoroutine(new Coroutine(SwordRainLine()));
 					break;
 			}
 		}
