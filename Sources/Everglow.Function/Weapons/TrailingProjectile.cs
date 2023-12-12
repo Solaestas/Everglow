@@ -27,6 +27,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		TrailWidth = 30f;
 		SelfLuminous = false;
 		TrailTexture = ModAsset.Trail.Value;
+		TrailTextureBlack = ModAsset.Trail_black.Value;
 		TrailShader = ModAsset.Trailing.Value;
 		SetDef();
 	}
@@ -85,8 +86,6 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			Projectile.velocity *= 0f;
 			return;
 		}
-		Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center - Projectile.velocity).RotatedBy(0) * 12.5f;
-		Projectile.velocity *= 0.95f;
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
