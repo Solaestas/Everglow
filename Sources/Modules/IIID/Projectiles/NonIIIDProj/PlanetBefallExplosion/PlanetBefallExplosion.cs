@@ -36,10 +36,9 @@ public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 		{
 			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Crystal_Burst_Strong"), Projectile.Center);
 		}
-		GenerateSmog((int)(1.3 * Projectile.ai[0]));
-		GenerateFire((int)(2.3 * Projectile.ai[0]));
-		GenerateSmog((int)(1.3 * Projectile.ai[0]));
-		GenerateSpark((int)(7 * Projectile.ai[0]));
+		GenerateSmog((int)(0.7f * Projectile.ai[0]));
+		GenerateFire((int)(0.75f * Projectile.ai[0]));
+		GenerateSmog((int)(0.3f * Projectile.ai[0]));
 	}
 	public void GenerateSmog(int Frequency)
 	{
@@ -63,47 +62,25 @@ public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 	}
 	public void GenerateFire(int Frequency)
 	{
-		float mulVelocity = Projectile.ai[0] / 5f;
+		float mulVelocity = Projectile.ai[0] / 4f;
 		for (int g = 0; g < Frequency; g++)
 		{
 			Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
-			/*var fire = new MothBlueFireDust
+			var fire = new VFXs.PlanetBeFallFireDust
 			{
 				velocity = newVelocity,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity * 4,
-				maxTime = Main.rand.Next(9, 55),
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-15, 15), Main.rand.NextFloat(-15, 15)).RotatedByRandom(6.283) + newVelocity * 3,
+				maxTime = Main.rand.Next(15, 45),
 				scale = Main.rand.NextFloat(2f, 7f) * Projectile.ai[0],
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
 			};
-			Ins.VFXManager.Add(fire);*/
+			Ins.VFXManager.Add(fire);
 		}
 	}
-	public void GenerateSpark(int Frequency)
-	{
-		for (int g = 0; g < Frequency; g++)
-		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 7.6f)).RotatedByRandom(MathHelper.TwoPi) * Projectile.ai[0] / 10f;
-			/*var smog = new MothShimmerScaleDust
-			{
-				velocity = newVelocity,
-				Active = true,
-				Visible = true,
-				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
-				coord = new Vector2(Main.rand.NextFloat(1f), Main.rand.NextFloat(1f)),
-				maxTime = Main.rand.Next(20, 85),
-				scale = Main.rand.NextFloat(0.4f, 8.4f),
-				rotation = Main.rand.NextFloat(6.283f),
-				rotation2 = Main.rand.NextFloat(6.283f),
-				omega = Main.rand.NextFloat(-30f, 30f),
-				phi = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(-0.005f, 0.005f) }
-			};
-			Ins.VFXManager.Add(smog);*/
-		}
-	}
+
 	public override void AI()
 	{
 		Projectile.velocity *= 0;
@@ -136,12 +113,12 @@ public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}
-	/*public override void PostDraw(Color lightColor)
+	public override void PostDraw(Color lightColor)
 	{
-		Texture2D shadow = ModAsset.CursedHitLight.Value;
+		Texture2D shadow = Myth.ModAsset.CursedHitLight.Value;
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Color c = new Color(0.2f * MathF.Sqrt(1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 3f * (1 - timeValue), 0f);
+		Color c = new Color(1.2f * MathF.Sqrt(1 - timeValue), 2f * (1 - timeValue) * (1 - timeValue), 0.5f * (1 - timeValue), 0f);
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null,c * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark, SpriteEffects.None, 0);
 		Color cDark = new Color(0, 0, 0, 1f - timeValue);
 		DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 20 * (1 - timeValue) * Projectile.ai[0], cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
@@ -149,16 +126,16 @@ public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D shadow = ModAsset.CursedHit.Value;
+		Texture2D shadow = Myth.ModAsset.CursedHit.Value;
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Color c = new Color(0.2f * MathF.Sqrt(1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 3f * (1 - timeValue), 0f);
+		Color c = new Color(1f * MathF.Sqrt(1 - timeValue), 1f * (1 - timeValue) * (1 - timeValue), 0.1f * (1 - timeValue), 0f);
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] * 0.2f, SpriteEffects.None, 0);
-		Texture2D light = ModAsset.CursedHitStar.Value;
+		Texture2D light = Myth.ModAsset.CursedHitStar.Value;
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
 		return false;
-	}*/
+	}
 	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
