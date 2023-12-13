@@ -1,3 +1,4 @@
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -867,9 +868,37 @@ public class BloodTusk : ModNPC
 					Hm -= 1 / 100f;
 				if (NPC.localAI[0] > 1850 && NPC.localAI[0] < 2350)
 				{
-					for (int i = 0; i < 10; i++)
+					for (int i = 0; i < 2; i++)
 					{
-						Dust.NewDust(NPC.Center + new Vector2(-13, 60), 20, 20, DustID.Blood, 0, Main.rand.NextFloat(-15f, -9f) * Hm, 0, default, Main.rand.NextFloat(0.3f, 4f));
+						Vector2 velocity = new Vector2(0, Main.rand.NextFloat(5f)).RotatedByRandom(MathHelper.TwoPi) + new Vector2(0, -8);
+						var blood = new BloodSplash
+						{
+							velocity = velocity,
+							Active = true,
+							Visible = true,
+							position = NPC.Bottom + new Vector2(Main.rand.NextFloat(-6f, 0), 0).RotatedByRandom(6.283) + new Vector2(0, -10),
+							maxTime = Main.rand.Next(42, 78),
+							scale = Main.rand.NextFloat(6f, 18f),
+							ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(20.0f, 40.0f) }
+						};
+						Ins.VFXManager.Add(blood);
+						for (int g = 0; g < 2; g++)
+						{
+							Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(5f)).RotatedByRandom(MathHelper.TwoPi) + new Vector2(0, -17);
+							float mulScale = Main.rand.NextFloat(6f, 25f);
+							var bloodDrop = new BloodDrop
+							{
+								velocity = afterVelocity,
+								Active = true,
+								Visible = true,
+								position = NPC.Bottom + new Vector2(Main.rand.NextFloat(-6f, 0), 0).RotatedByRandom(6.283) + new Vector2(0, -10),
+								maxTime = Main.rand.Next(82, 164),
+								scale = mulScale,
+								rotation = Main.rand.NextFloat(6.283f),
+								ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
+							};
+							Ins.VFXManager.Add(bloodDrop);
+						}
 					}
 					int Freq = 18;
 					if (Main.expertMode && !Main.masterMode)
@@ -1249,10 +1278,10 @@ public class BloodTusk : ModNPC
 					for (int i = 0; i < iMax; i++)
 					{
 						FlyingTentacleTusks[i] = NPC.NewNPCDirect(null, (int)(NPC.Center.X + 12), (int)(NPC.Center.Y + 90), ModContent.NPCType<CrimsonTuskControlable>(), 0, -1, i, (i - 1.5f) * 0.7f);
-						if(FlyingTentacleTusks[i] != null)
+						if (FlyingTentacleTusks[i] != null)
 						{
 							CrimsonTuskControlable ctct = FlyingTentacleTusks[i].ModNPC as CrimsonTuskControlable;
-							if(ctct != null)
+							if (ctct != null)
 							{
 								ctct.Owner = NPC;
 							}
@@ -1314,7 +1343,7 @@ public class BloodTusk : ModNPC
 									FlyingTentacleTusks[i].position = LookingCenter - new Vector2(15, 20);
 									FlyingTentacleTusks[i].velocity = FlyingTentacleTusks[i].velocity / FlyingTentacleTusks[i].velocity.Length() * 0.5f;
 								}
-							}					
+							}
 						}
 					}
 				}

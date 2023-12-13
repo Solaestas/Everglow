@@ -22,7 +22,7 @@ public class ToothMagicBall : ModProjectile
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
-		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.PI / 2d));
+		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.PI / 2d) * -player.direction);
 		if (Projectile.timeLeft >= 1000)
 			Projectile.timeLeft = 10;
 		if (Main.mouseLeft && player.statMana > player.HeldItem.mana)

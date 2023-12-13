@@ -1,7 +1,5 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheTusk.VFXs;
-using SteelSeries.GameSense;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -56,7 +54,7 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - Projectile.velocity * Main.rand.NextFloat(3f, 14f),
-				maxTime = Main.rand.Next(48, 56),
+				maxTime = Main.rand.Next(18, 26),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(18f, 28f) * mulWidth }
 			};
 			Ins.VFXManager.Add(blood);
@@ -167,7 +165,7 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
-		
+
 
 		if (Projectile.timeLeft > 500)
 			Projectile.scale = 0.8f;

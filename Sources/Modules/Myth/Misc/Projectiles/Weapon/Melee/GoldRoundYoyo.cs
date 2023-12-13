@@ -32,6 +32,7 @@ public class GoldRoundYoyo : YoyoProjectile
 		{
 			TrailWidth *= 0.8f;
 		}
+		Lighting.AddLight(Projectile.Center,0.5f,0.2f,0);
 		base.AI();
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
