@@ -9,7 +9,7 @@ using Everglow.Commons.Vertex;
 
 namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallExplosion;
 
-public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
+public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 {
 	public float BlurOffset = 0;
 	public override void SetDefaults()
@@ -48,7 +48,7 @@ public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity * 4,
-				maxTime = Main.rand.Next(37, 85),
+				maxTime = Main.rand.Next(60, 90),
 				scale = Main.rand.NextFloat(2f, 7f) * Projectile.ai[0],
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
@@ -68,7 +68,7 @@ public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-15, 15), Main.rand.NextFloat(-15, 15)).RotatedByRandom(6.283) + newVelocity * 3,
-				maxTime = Main.rand.Next(15, 45),
+				maxTime = Main.rand.Next(45, 75),
 				scale = Main.rand.NextFloat(2f, 7f) * Projectile.ai[0],
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
@@ -79,10 +79,11 @@ public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 
 	public override void AI()
 	{
+		float timeValue = (200 - Projectile.timeLeft);
 		Projectile.velocity *= 0;
 		if (Projectile.timeLeft <= 199)
 			Projectile.friendly = false;
-		BlurOffset = MathF.Sin(Projectile.timeLeft * MathF.PI / 200);
+		BlurOffset = MathF.Max( MathF.Sin(timeValue * MathF.PI / 150),0);
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
@@ -118,8 +119,8 @@ public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 		Color c = new Color(1f * MathF.Sqrt(1 - timeValue), 1f * (1 - timeValue) * (1 - timeValue), 0.1f * (1 - timeValue), 0f);
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null,c * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark, SpriteEffects.None, 0);
 		Color cDark = new Color(0, 0, 0, 1f - timeValue);
-		DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 20 * (1 - timeValue) * Projectile.ai[0], cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
-		DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 4 * (1 - timeValue) * Projectile.ai[0], c * 0.4f , Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
+		//DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 20 * (1 - timeValue) * Projectile.ai[0], cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
+		//DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 4 * (1 - timeValue) * Projectile.ai[0], c * 0.4f , Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -155,7 +156,7 @@ public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
-		float colorV = 0.9f * (1 - value);
+		float colorV = 0.5f * (1 - value);
 		if (Projectile.ai[0] >= 10)
 			colorV *= Projectile.ai[0] / 10f;
 		Texture2D t = Commons.ModAsset.Trail.Value;
