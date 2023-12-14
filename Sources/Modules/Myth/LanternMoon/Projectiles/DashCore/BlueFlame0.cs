@@ -63,7 +63,7 @@ class BlueFlame0 : ModProjectile
 		Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/DashCore/DashCoreLight").Value, Projectile.Center - Main.screenPosition, null, new Color(color0.R / 155f * kb, color0.G / 155f * kb, color0.B / 155f * kb, 0), Projectile.rotation, new Vector2(56, 56), Projectile.scale * 2f, SpriteEffects.None, 0);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		var bars = new List<VertexBase.CustomVertexInfo>();
+		var bars = new List<Vertex2D>();
 		float width = 20;
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft / 3f;
@@ -84,14 +84,14 @@ class BlueFlame0 : ModProjectile
 			var factor = i / (float)TrueL;
 			var w = MathHelper.Lerp(1f, 0.05f, factor);
 			// Using Vertex2D didn't work here
-			bars.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + normalDir * width + new Vector2(17, 17) - Main.screenPosition, new Color(84, 53, 46, 0), new Vector3(factor, 1, w)));
-			bars.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + normalDir * -width + new Vector2(17, 17) - Main.screenPosition, new Color(84, 53, 46, 0), new Vector3(factor, 0, w)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(17, 17) - Main.screenPosition, new Color(84, 53, 46, 0), new Vector3(factor, 1, w)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(17, 17) - Main.screenPosition, new Color(84, 53, 46, 0), new Vector3(factor, 0, w)));
 		}
-		var Vx = new List<VertexBase.CustomVertexInfo>();
+		var Vx = new List<Vertex2D>();
 		if (bars.Count > 2)
 		{
 			Vx.Add(bars[0]);
-			var vertex = new VertexBase.CustomVertexInfo((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, new Color(84, 53, 46, 0), new Vector3(0, 0.5f, 1));
+			var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, new Color(84, 53, 46, 0), new Vector3(0, 0.5f, 1));
 			Vx.Add(bars[1]);
 			Vx.Add(vertex);
 			for (int i = 0; i < bars.Count - 2; i += 2)
@@ -109,7 +109,7 @@ class BlueFlame0 : ModProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
-		/*List<VertexBase.CustomVertexInfo> bars2 = new List<VertexBase.CustomVertexInfo>();
+		/*List<Vertex2D> bars2 = new List<Vertex2D>();
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
             {
                 if (Projectile.oldPos[i] == Vector2.Zero) break;
@@ -119,14 +119,14 @@ class BlueFlame0 : ModProjectile
                 var factor = i / (float)TrueL;
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
 
-                bars2.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + normalDir * width + new Vector2(10, 10) - Main.screenPosition, new Color(ProjOldColor[i].R, ProjOldColor[i].G, ProjOldColor[i].B, 0), new Vector3(factor, 1, w)));
-                bars2.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + normalDir * -width + new Vector2(10, 10) - Main.screenPosition, new Color(ProjOldColor[i].R, ProjOldColor[i].G, ProjOldColor[i].B, 0), new Vector3(factor, 0, w)));
+                bars2.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10, 10) - Main.screenPosition, new Color(ProjOldColor[i].R, ProjOldColor[i].G, ProjOldColor[i].B, 0), new Vector3(factor, 1, w)));
+                bars2.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10, 10) - Main.screenPosition, new Color(ProjOldColor[i].R, ProjOldColor[i].G, ProjOldColor[i].B, 0), new Vector3(factor, 0, w)));
             }
-            List<VertexBase.CustomVertexInfo> Vx2 = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> Vx2 = new List<Vertex2D>();
             if (bars.Count > 2)
             {
                 Vx2.Add(bars[0]);
-                var vertex = new VertexBase.CustomVertexInfo((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, new Color(color0.R, color0.G, color0.B, 0), new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, new Color(color0.R, color0.G, color0.B, 0), new Vector3(0, 0.5f, 1));
                 Vx2.Add(bars[1]);
                 Vx2.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)

@@ -76,7 +76,7 @@ public class TuskKillEffect : ModNPC
 	{
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-		var bars = new List<VertexBase.CustomVertexInfo>();
+		var bars = new List<Vertex2D>();
 		ef = ModAsset.Trail.Value;
 		Vector2 v = Cent - NPC.Center;
 		int width = (int)(4 * kx);
@@ -92,16 +92,16 @@ public class TuskKillEffect : ModNPC
 
 			var w = MathHelper.Lerp(1f, 0.05f, factor);
 
-			bars.Add(new VertexBase.CustomVertexInfo(NPC.oldPos[i] + normalDir * width + new Vector2(4, 35), color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-			bars.Add(new VertexBase.CustomVertexInfo(NPC.oldPos[i] + normalDir * -width + new Vector2(4, 35), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
+			bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * width + new Vector2(4, 35), color, new Vector3((float)Math.Sqrt(factor), 1, w)));
+			bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * -width + new Vector2(4, 35), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
 		}
 
-		var triangleList = new List<VertexBase.CustomVertexInfo>();
+		var triangleList = new List<Vertex2D>();
 
 		if (bars.Count > 2)
 		{
 			triangleList.Add(bars[0]);
-			var vertex = new VertexBase.CustomVertexInfo((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(NPC.velocity) * 5, Color.White, new Vector3(0, 0.5f, 1));
+			var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(NPC.velocity) * 5, Color.White, new Vector3(0, 0.5f, 1));
 			triangleList.Add(bars[1]);
 			triangleList.Add(vertex);
 			for (int i = 0; i < bars.Count - 2; i += 2)

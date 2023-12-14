@@ -145,36 +145,36 @@ public class LargeTusk2 : ModNPC
 	{
 		if (!startFight || NPC.velocity.Length() >= 0.5f)
 			return false;
-		var BackBase = new List<VertexBase.CustomVertexInfo>();
+		var BackBase = new List<Vertex2D>();
 		Color color = Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16));
 		float index = (84 - V.Y) / 84f;
-		BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(0, 1, 0)));
-		BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(0, 5) + VBase - Main.screenPosition, color, new Vector3(0.5f, 0, 0)));
-		BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(1, 1, 0)));
+		BackBase.Add(new Vertex2D(NPC.Bottom + new Vector2(-600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(0, 1, 0)));
+		BackBase.Add(new Vertex2D(NPC.Bottom + new Vector2(0, 5) + VBase - Main.screenPosition, color, new Vector3(0.5f, 0, 0)));
+		BackBase.Add(new Vertex2D(NPC.Bottom + new Vector2(600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(1, 1, 0)));
 		Texture2D thang = ModAsset.LargeTuskBase.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = thang;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, BackBase.ToArray(), 0, BackBase.Count / 3);
 
 
-		var Vx2 = new List<VertexBase.CustomVertexInfo>
+		var Vx2 = new List<Vertex2D>
 		{
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-12, 5) - Main.screenPosition, color, new Vector3(0, index, 0)),
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(12, V.Y - 79) - Main.screenPosition, color, new Vector3(1, 0, 0)),
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(12, 5) - Main.screenPosition, color, new Vector3(1, index, 0)),
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-12, V.Y - 79) - Main.screenPosition, color, new Vector3(0, 0, 0)),
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(12, V.Y - 79) - Main.screenPosition, color, new Vector3(1, 0, 0)),
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-12, 5) - Main.screenPosition, color, new Vector3(0, index, 0))
+			new Vertex2D(NPC.Bottom + new Vector2(-12, 5) - Main.screenPosition, color, new Vector3(0, index, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(12, V.Y - 79) - Main.screenPosition, color, new Vector3(1, 0, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(12, 5) - Main.screenPosition, color, new Vector3(1, index, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(-12, V.Y - 79) - Main.screenPosition, color, new Vector3(0, 0, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(12, V.Y - 79) - Main.screenPosition, color, new Vector3(1, 0, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(-12, 5) - Main.screenPosition, color, new Vector3(0, index, 0))
 		};
 		thang = ModAsset.Tuskplus0.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = thang;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 
 
-		var ForeBase = new List<VertexBase.CustomVertexInfo>
+		var ForeBase = new List<Vertex2D>
 		{
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(0, 1, 0)),
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(0, 5) + VBase - Main.screenPosition, color, new Vector3(0.5f, 0, 0)),
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(1, 1, 0))
+			new Vertex2D(NPC.Bottom + new Vector2(-600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(0, 1, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(0, 5) + VBase - Main.screenPosition, color, new Vector3(0.5f, 0, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(1, 1, 0))
 		};
 
 		thang = ModAsset.LargeTuskDrag.Value;

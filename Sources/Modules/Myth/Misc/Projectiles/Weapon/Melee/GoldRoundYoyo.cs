@@ -11,6 +11,7 @@ public class GoldRoundYoyo : YoyoProjectile
 		MaxRopeLength = 380;
 		MaxStaySeconds = 120;
 		RotatedSpeed = 0.3f;
+		Acceleration = 20;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
 	}
@@ -28,11 +29,15 @@ public class GoldRoundYoyo : YoyoProjectile
 	public override void AI()
 	{
 		Timer++;
-		if(Projectile.ai[0] < 0)
+		if (Projectile.ai[0] < 0)
 		{
 			TrailWidth *= 0.8f;
 		}
-		Lighting.AddLight(Projectile.Center,0.5f,0.2f,0);
+		Lighting.AddLight(Projectile.Center, 0.5f, 0.2f, 0);
+		Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, DustID.GemTopaz, 0f, 0f, 100, default, 0.7f);
+		d.velocity = new Vector2(0, 2).RotatedBy(Main.rand.NextFloat(MathHelper.TwoPi));
+		d.position += d.velocity * 2;
+		d.noGravity = true;
 		base.AI();
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -42,7 +47,7 @@ public class GoldRoundYoyo : YoyoProjectile
 		if (HitCounter >= 6)
 		{
 			HitCounter = 0;
-			for (int x = 0;x < 15;x++)
+			for (int x = 0; x < 15; x++)
 			{
 				Vector2 v0 = new Vector2(Main.rand.NextFloat(3f, 12f), 0).RotatedByRandom(MathHelper.TwoPi);
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, v0, ModContent.ProjectileType<GoldRound>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
@@ -51,9 +56,9 @@ public class GoldRoundYoyo : YoyoProjectile
 		for (int i = 0; i < 15; i++)
 		{
 			Vector2 v = new Vector2(0, Main.rand.NextFloat(1.5f, 4f)).RotatedByRandom(MathHelper.TwoPi);
-			int num = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 87, 0f, 0f, 100, default, 1.2f);
-			Main.dust[num].velocity *= v;
-			Main.dust[num].noGravity = true;
+			Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, DustID.GemTopaz, 0f, 0f, 100, default, 1.2f);
+			d.velocity *= v;
+			d.noGravity = true;
 		}
 		base.OnHitNPC(target, hit, damageDone);
 	}
@@ -248,21 +253,14 @@ public class GoldRoundYoyo : YoyoProjectile
 			Vector2 drawPos = Projectile.Center - Main.screenPosition;
 			float factor = i / 120f;
 			bars.Add(new Vertex2D(drawPos + new Vector2(0, 8).RotatedBy(MathHelper.TwoPi * factor), drawC, new Vector3(factor, timeValue, 0)));
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 70).RotatedBy(MathHelper.TwoPi * factor), Color.Transparent, new Vector3(factor, timeValue, 0)));
+			bars.Add(new Vertex2D(drawPos + new Vector2(0, 35).RotatedBy(MathHelper.TwoPi * factor), Color.Transparent, new Vector3(factor, timeValue, 0)));
 		}
 		for (int i = 0; i <= 120; ++i)
 		{
 			Vector2 drawPos = Projectile.Center - Main.screenPosition;
 			float factor = i / 120f;
 			bars.Add(new Vertex2D(drawPos + new Vector2(0, 8).RotatedBy(MathHelper.TwoPi * factor), drawC, new Vector3(factor, timeValue, 0)));
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 50).RotatedBy(MathHelper.TwoPi * factor), Color.Transparent, new Vector3(factor, timeValue, 0)));
-		}
-		for (int i = 0; i <= 120; ++i)
-		{
-			Vector2 drawPos = Projectile.Center - Main.screenPosition;
-			float factor = i / 120f;
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 8).RotatedBy(MathHelper.TwoPi * factor), drawC, new Vector3(factor, timeValue, 0)));
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 30).RotatedBy(MathHelper.TwoPi * factor), Color.Transparent, new Vector3(factor, timeValue, 0)));
+			bars.Add(new Vertex2D(drawPos + new Vector2(0, 25).RotatedBy(MathHelper.TwoPi * factor), Color.Transparent, new Vector3(factor, timeValue, 0)));
 		}
 		for (int i = 0; i <= 120; ++i)
 		{
@@ -270,6 +268,13 @@ public class GoldRoundYoyo : YoyoProjectile
 			float factor = i / 120f;
 			bars.Add(new Vertex2D(drawPos + new Vector2(0, 8).RotatedBy(MathHelper.TwoPi * factor), drawC, new Vector3(factor, timeValue, 0)));
 			bars.Add(new Vertex2D(drawPos + new Vector2(0, 15).RotatedBy(MathHelper.TwoPi * factor), Color.Transparent, new Vector3(factor, timeValue, 0)));
+		}
+		for (int i = 0; i <= 120; ++i)
+		{
+			Vector2 drawPos = Projectile.Center - Main.screenPosition;
+			float factor = i / 120f;
+			bars.Add(new Vertex2D(drawPos + new Vector2(0, 8).RotatedBy(MathHelper.TwoPi * factor), drawC, new Vector3(factor, timeValue, 0)));
+			bars.Add(new Vertex2D(drawPos + new Vector2(0, 10).RotatedBy(MathHelper.TwoPi * factor), Color.Transparent, new Vector3(factor, timeValue, 0)));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_spiderNet.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;

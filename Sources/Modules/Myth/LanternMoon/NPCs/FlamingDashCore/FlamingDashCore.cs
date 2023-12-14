@@ -897,8 +897,8 @@ public class FlamingDashCore : ModNPC
 			var NewFac = (float)Math.Sqrt(i + 1) / TrueL * 24 - NPC.localAI[0] / 30f;
 			var NewFac2 = (float)Math.Sqrt(i) / TrueL * 24 - NPC.localAI[0] / 30f;
 			Lighting.AddLight(NPC.oldPos[i], (255 - NPC.alpha) * 1.2f / 50f * ka * (1 - factor), (255 - NPC.alpha) * 0.7f / 50f * ka * (1 - factor), 0);
-			//bars.Add(new VertexBase.CustomVertexInfo(NPC.oldPos[i] + normalDir * width + new Vector2(20, 20) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(NewFac % 1f + 0.5f, 1, w)));
-			//bars.Add(new VertexBase.CustomVertexInfo(NPC.oldPos[i] + normalDir * -width + new Vector2(20, 20) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(NewFac % 1f + 0.5f, 0, w)));
+			//bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * width + new Vector2(20, 20) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(NewFac % 1f + 0.5f, 1, w)));
+			//bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * -width + new Vector2(20, 20) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(NewFac % 1f + 0.5f, 0, w)));
 			bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * width + new Vector2(20, 20) - Main.screenPosition, new Color(NPCOldColor[i].R, NPCOldColor[i].G, NPCOldColor[i].B, 0), new Vector3(factor, 1, w)));
 			bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * -width + new Vector2(20, 20) - Main.screenPosition, new Color(NPCOldColor[i].R, NPCOldColor[i].G, NPCOldColor[i].B, 0), new Vector3(factor, 0, w)));
 		}

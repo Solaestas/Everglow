@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheTusk;
+using Everglow.Myth.TheTusk;
 using Everglow.Myth.TheTusk.Projectiles;
 using Everglow.Myth.TheTusk.Projectiles.Weapon;
 using Terraria.Localization;
@@ -83,7 +83,7 @@ public class CrimsonTuskFireWork : ModNPC
 	{
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-		var bars2 = new List<VertexBase.CustomVertexInfo>();
+		var bars2 = new List<Vertex2D>();
 
 		for (int i = 1; i < 400; ++i)
 		{
@@ -156,12 +156,12 @@ public class CrimsonTuskFireWork : ModNPC
 			{
 				for (int g = 0; g < 12; g++)
 				{
-					var Tusk = new List<VertexBase.CustomVertexInfo>();
+					var Tusk = new List<Vertex2D>();
 					float size = Math.Clamp((240 - Bomb - delayTusk[g]) / 66f, 0, 1f);
-					Tusk.Add(new VertexBase.CustomVertexInfo(NPC.Center + new Vector2(lengTusk[g] * size * 2.5f, 0).RotatedBy(rotTusk[g]) - Main.screenPosition, colori, new Vector3(0.5f, 0, 0)));
-					Tusk.Add(new VertexBase.CustomVertexInfo(NPC.Center + new Vector2(0, -9 * size).RotatedBy(rotTusk[g]) - Main.screenPosition, colori, new Vector3(0, 1, 0)));
-					Tusk.Add(new VertexBase.CustomVertexInfo(NPC.Center + new Vector2(0, 9 * size).RotatedBy(rotTusk[g]) - Main.screenPosition, colori, new Vector3(1, 1, 0)));
-					Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskflip").Value;
+					Tusk.Add(new Vertex2D(NPC.Center + new Vector2(lengTusk[g] * size * 2.5f, 0).RotatedBy(rotTusk[g]) - Main.screenPosition, colori, new Vector3(0.5f, 0, 0)));
+					Tusk.Add(new Vertex2D(NPC.Center + new Vector2(0, -9 * size).RotatedBy(rotTusk[g]) - Main.screenPosition, colori, new Vector3(0, 1, 0)));
+					Tusk.Add(new Vertex2D(NPC.Center + new Vector2(0, 9 * size).RotatedBy(rotTusk[g]) - Main.screenPosition, colori, new Vector3(1, 1, 0)));
+					Texture2D t1 = ModAsset.CrimsonTuskflip.Value;
 					Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk.ToArray(), 0, Tusk.Count / 3);
 				}
@@ -180,8 +180,8 @@ public class CrimsonTuskFireWork : ModNPC
 				{
 					Main.spriteBatch.End();
 					Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-					var bars = new List<VertexBase.CustomVertexInfo>();
-					var barsB = new List<VertexBase.CustomVertexInfo>();
+					var bars = new List<Vertex2D>();
+					var barsB = new List<Vertex2D>();
 
 					float step = 4;
 					int Count = 0;
@@ -214,10 +214,10 @@ public class CrimsonTuskFireWork : ModNPC
 							var c1 = new Color(sc / 3, sc / 3, sc / 3, sc / 3);
 							if ((iz + Bomb * 2) % 15 < 9)
 								c0 *= 0;
-							bars.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 1, w)));
-							bars.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 0, w)));
-							barsB.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 1, w)));
-							barsB.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 0, w)));
+							bars.Add(new Vertex2D(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 1, w)));
+							bars.Add(new Vertex2D(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 0, w)));
+							barsB.Add(new Vertex2D(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 1, w)));
+							barsB.Add(new Vertex2D(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 0, w)));
 						}
 						else
 						{
@@ -226,17 +226,17 @@ public class CrimsonTuskFireWork : ModNPC
 							var c1 = new Color(sc / 3, sc / 3, sc / 3, sc / 3);
 							if ((iz + Bomb * 2) % 15 < 9)
 								c0 *= 0;
-							bars.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 1, w)));
-							bars.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 0, w)));
-							barsB.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 1, w)));
-							barsB.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 0, w)));
+							bars.Add(new Vertex2D(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 1, w)));
+							bars.Add(new Vertex2D(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 0, w)));
+							barsB.Add(new Vertex2D(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 1, w)));
+							barsB.Add(new Vertex2D(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 0, w)));
 						}
 					}
-					var Vx = new List<VertexBase.CustomVertexInfo>();
+					var Vx = new List<Vertex2D>();
 					if (bars.Count > 2)
 					{
 						Vx.Add(bars[0]);
-						var vertex = new VertexBase.CustomVertexInfo((bars[0].Position + bars[1].Position) * 0.5f + new Vector2(-5, 0).RotatedBy(rotTusk[g]), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
+						var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + new Vector2(-5, 0).RotatedBy(rotTusk[g]), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
 						Vx.Add(bars[1]);
 						Vx.Add(vertex);
 						for (int iz = 0; iz < bars.Count - 2; iz += 2)
@@ -251,11 +251,11 @@ public class CrimsonTuskFireWork : ModNPC
 						}
 					}
 
-					var VxB = new List<VertexBase.CustomVertexInfo>();
+					var VxB = new List<Vertex2D>();
 					if (barsB.Count > 2)
 					{
 						VxB.Add(barsB[0]);
-						var vertex = new VertexBase.CustomVertexInfo((barsB[0].Position + barsB[1].Position) * 0.5f + new Vector2(-5, 0).RotatedBy(rotTusk[g]), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
+						var vertex = new Vertex2D((barsB[0].position + barsB[1].position) * 0.5f + new Vector2(-5, 0).RotatedBy(rotTusk[g]), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
 						VxB.Add(barsB[1]);
 						VxB.Add(vertex);
 						for (int iz = 0; iz < barsB.Count - 2; iz += 2)
@@ -269,29 +269,29 @@ public class CrimsonTuskFireWork : ModNPC
 							VxB.Add(barsB[iz + 3]);
 						}
 					}
-					Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/TuskShade").Value;
+					Texture2D t = ModAsset.BloodTusk_TuskShade.Value;
 					Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxB.ToArray(), 0, VxB.Count / 3);
 
-					t = ModContent.Request<Texture2D>("Everglow/Myth/Acytaea/Projectiles/AcytaeaLaser").Value;
+					t = Commons.ModAsset.Trail.Value;
 					Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
 
 				}
 			}
-			bars2.Add(new VertexBase.CustomVertexInfo(VPos + new Vector2(width2, 0) - Main.screenPosition, colori, new Vector3(factor, 1, 0)));
-			bars2.Add(new VertexBase.CustomVertexInfo(VPos + new Vector2(-width2, 0) - Main.screenPosition, colori, new Vector3(factor, 0, 0)));
+			bars2.Add(new Vertex2D(VPos + new Vector2(width2, 0) - Main.screenPosition, colori, new Vector3(factor, 1, 0)));
+			bars2.Add(new Vertex2D(VPos + new Vector2(-width2, 0) - Main.screenPosition, colori, new Vector3(factor, 0, 0)));
 			if (Collision.SolidCollision(VPos, 1, 1))
 				break;
 		}
-		var triangleList2 = new List<VertexBase.CustomVertexInfo>();
+		var triangleList2 = new List<Vertex2D>();
 		if (bars2.Count > 2)
 		{
 			Vector2 VPos = NPC.Center;
 			Color colori = Lighting.GetColor((int)(VPos.X / 16d), (int)(VPos.Y / 16d));
 			triangleList2.Add(bars2[0]);
-			var vertex = new VertexBase.CustomVertexInfo((bars2[0].Position + bars2[1].Position) * 0.5f + new Vector2(0, -5), colori, new Vector3(0, 0.5f, 0));
+			var vertex = new Vertex2D((bars2[0].position + bars2[1].position) * 0.5f + new Vector2(0, -5), colori, new Vector3(0, 0.5f, 0));
 			triangleList2.Add(bars2[1]);
 			triangleList2.Add(vertex);
 			for (int i = 0; i < bars2.Count - 2; i += 2)
@@ -304,7 +304,7 @@ public class CrimsonTuskFireWork : ModNPC
 				triangleList2.Add(bars2[i + 2]);
 				triangleList2.Add(bars2[i + 3]);
 			}
-			Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/BloodRope").Value;
+			Texture2D t1 = ModAsset.BloodRope.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList2.ToArray(), 0, triangleList2.Count / 3);
 

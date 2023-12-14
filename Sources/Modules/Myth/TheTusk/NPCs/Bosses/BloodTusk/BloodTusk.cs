@@ -1952,8 +1952,8 @@ public class BloodTusk : ModNPC
 			if (NPC.localAI[0] < 750 && NPC.localAI[0] > 90)
 			{
 				//向下开口
-				var bars1 = new List<VertexBase.CustomVertexInfo>();
-				var bars2 = new List<VertexBase.CustomVertexInfo>();
+				var bars1 = new List<Vertex2D>();
+				var bars2 = new List<Vertex2D>();
 
 				for (int i = 1; i < 400; ++i)//右侧
 				{
@@ -1970,18 +1970,18 @@ public class BloodTusk : ModNPC
 						var factor = Math.Abs(i / 30f % 2 - 1);
 
 						var w2 = MathHelper.Lerp(1f, 0.0f, 0);
-						bars1.Add(new VertexBase.CustomVertexInfo(Mouth1[i] + normalDir * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
-						bars1.Add(new VertexBase.CustomVertexInfo(Mouth1[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
+						bars1.Add(new Vertex2D(Mouth1[i] + normalDir * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
+						bars1.Add(new Vertex2D(Mouth1[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
 
 						if (i % 24 == 3 && i < 350)
 						{
 
 							float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
-							var Tusk1 = new List<VertexBase.CustomVertexInfo>
+							var Tusk1 = new List<Vertex2D>
 							{
-								new VertexBase.CustomVertexInfo(Mouth1[i] + normalDir.RotatedBy(1.57) * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(0, 0, 0)),
-								new VertexBase.CustomVertexInfo(Mouth1[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
-								new VertexBase.CustomVertexInfo(Mouth1[i] + new Vector2(0, -10) - normalDir * Math.Clamp(Len, 0, HangMaxL1[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
+								new Vertex2D(Mouth1[i] + normalDir.RotatedBy(1.57) * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(0, 0, 0)),
+								new Vertex2D(Mouth1[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
+								new Vertex2D(Mouth1[i] + new Vector2(0, -10) - normalDir * Math.Clamp(Len, 0, HangMaxL1[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
 							};
 							Texture2D t1 = ModAsset.CrimsonTuskHang.Value;
 							Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
@@ -1992,11 +1992,11 @@ public class BloodTusk : ModNPC
 						{
 
 							float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
-							var Tusk1 = new List<VertexBase.CustomVertexInfo>
+							var Tusk1 = new List<Vertex2D>
 							{
-								new VertexBase.CustomVertexInfo(Mouth1[i] + normalDir.RotatedBy(1.57) * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(0, 0, 0)),
-								new VertexBase.CustomVertexInfo(Mouth1[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
-								new VertexBase.CustomVertexInfo(Mouth1[i] + new Vector2(0, -10) - normalDir * Math.Clamp(Len, 0, HangMaxL1[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
+								new Vertex2D(Mouth1[i] + normalDir.RotatedBy(1.57) * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(0, 0, 0)),
+								new Vertex2D(Mouth1[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
+								new Vertex2D(Mouth1[i] + new Vector2(0, -10) - normalDir * Math.Clamp(Len, 0, HangMaxL1[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
 							};
 							Texture2D t1 = ModAsset.CrimsonTuskHang.Value;
 							Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
@@ -2021,17 +2021,17 @@ public class BloodTusk : ModNPC
 						var factor = Math.Abs(i / 30f % 2 - 1);
 
 						var w2 = MathHelper.Lerp(1f, 0.0f, 0);
-						bars2.Add(new VertexBase.CustomVertexInfo(Mouth2[i] + normalDir * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
-						bars2.Add(new VertexBase.CustomVertexInfo(Mouth2[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
+						bars2.Add(new Vertex2D(Mouth2[i] + normalDir * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
+						bars2.Add(new Vertex2D(Mouth2[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
 						if (i % 24 == 3 && i < 350)
 						{
 
 							float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
-							var Tusk2 = new List<VertexBase.CustomVertexInfo>
+							var Tusk2 = new List<Vertex2D>
 							{
-								new VertexBase.CustomVertexInfo(Mouth2[i] + normalDir.RotatedBy(1.57) * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(0, 0, 0)),
-								new VertexBase.CustomVertexInfo(Mouth2[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
-								new VertexBase.CustomVertexInfo(Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
+								new Vertex2D(Mouth2[i] + normalDir.RotatedBy(1.57) * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(0, 0, 0)),
+								new Vertex2D(Mouth2[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
+								new Vertex2D(Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
 							};
 							Texture2D t2 = ModAsset.CrimsonTuskHang.Value;
 							Main.graphics.GraphicsDevice.Textures[0] = t2;//GlodenBloodScaleMirror
@@ -2042,11 +2042,11 @@ public class BloodTusk : ModNPC
 						{
 
 							float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
-							var Tusk2 = new List<VertexBase.CustomVertexInfo>
+							var Tusk2 = new List<Vertex2D>
 							{
-								new VertexBase.CustomVertexInfo(Mouth2[i] + normalDir.RotatedBy(1.57) * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(0, 0, 0)),
-								new VertexBase.CustomVertexInfo(Mouth2[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
-								new VertexBase.CustomVertexInfo(Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
+								new Vertex2D(Mouth2[i] + normalDir.RotatedBy(1.57) * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(0, 0, 0)),
+								new Vertex2D(Mouth2[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
+								new Vertex2D(Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
 							};
 							Texture2D t2 = ModAsset.CrimsonTuskHang.Value;
 							Main.graphics.GraphicsDevice.Textures[0] = t2;//GlodenBloodScaleMirror
@@ -2055,13 +2055,13 @@ public class BloodTusk : ModNPC
 						}
 					}
 				}
-				var triangleList1 = new List<VertexBase.CustomVertexInfo>();
-				var triangleList2 = new List<VertexBase.CustomVertexInfo>();
+				var triangleList1 = new List<Vertex2D>();
+				var triangleList2 = new List<Vertex2D>();
 				if (bars1.Count > 2)
 				{
 
 					triangleList1.Add(bars1[^2]);
-					var vertex = new VertexBase.CustomVertexInfo((bars1[^2].Position + bars1[^1].Position) * 0.5f + Mouth1Vel * 15f, Color.White, new Vector3(0, 0.5f, 0));
+					var vertex = new Vertex2D((bars1[^2].position + bars1[^1].position) * 0.5f + Mouth1Vel * 15f, Color.White, new Vector3(0, 0.5f, 0));
 					triangleList1.Add(bars1[^1]);
 					triangleList1.Add(vertex);
 					for (int i = bars1.Count - 4; i > -2; i -= 2)
@@ -2082,7 +2082,7 @@ public class BloodTusk : ModNPC
 				if (bars2.Count > 2)
 				{
 					triangleList2.Add(bars2[0]);
-					var vertex = new VertexBase.CustomVertexInfo((bars2[0].Position + bars2[1].Position) * 0.5f + Mouth2Vel * 15f, Color.White, new Vector3(0, 0.5f, 0));
+					var vertex = new Vertex2D((bars2[0].position + bars2[1].position) * 0.5f + Mouth2Vel * 15f, Color.White, new Vector3(0, 0.5f, 0));
 					triangleList2.Add(bars2[1]);
 					triangleList2.Add(vertex);
 					for (int i = 0; i < bars2.Count - 2; i += 2)
@@ -2195,34 +2195,34 @@ public class BloodTusk : ModNPC
 				for (int z = 0; z < 4; z++)
 				{
 					hangItem[z] = new Vector2(0, 25 * (float)Math.Sin(Main.time / 70d + z) * (BasePos.Y - NPC.position.Y) / 50f);
-					var Vx2 = new List<VertexBase.CustomVertexInfo>
+					var Vx2 = new List<Vertex2D>
 					{
-						new VertexBase.CustomVertexInfo(NPC.position + new Vector2(-95, 162) - Main.screenPosition, color, new Vector3(0, 0, 0)),
-						new VertexBase.CustomVertexInfo(NPC.position + new Vector2(125, 162) - Main.screenPosition, color, new Vector3(1, 0, 0)),
-						new VertexBase.CustomVertexInfo(BasePos + new Vector2(125, 172) + hangItem[z] - Main.screenPosition, color, new Vector3(1, 1, 0)),
+						new Vertex2D(NPC.position + new Vector2(-95, 162) - Main.screenPosition, color, new Vector3(0, 0, 0)),
+						new Vertex2D(NPC.position + new Vector2(125, 162) - Main.screenPosition, color, new Vector3(1, 0, 0)),
+						new Vertex2D(BasePos + new Vector2(125, 172) + hangItem[z] - Main.screenPosition, color, new Vector3(1, 1, 0)),
 
-						new VertexBase.CustomVertexInfo(NPC.position + new Vector2(-95, 162) - Main.screenPosition, color, new Vector3(0, 0, 0)),
-						new VertexBase.CustomVertexInfo(BasePos + new Vector2(125, 172) + hangItem[z] - Main.screenPosition, color, new Vector3(1, 1, 0)),
-						new VertexBase.CustomVertexInfo(BasePos + new Vector2(-95, 172) + hangItem[z] - Main.screenPosition, color, new Vector3(0, 1, 0))
+						new Vertex2D(NPC.position + new Vector2(-95, 162) - Main.screenPosition, color, new Vector3(0, 0, 0)),
+						new Vertex2D(BasePos + new Vector2(125, 172) + hangItem[z] - Main.screenPosition, color, new Vector3(1, 1, 0)),
+						new Vertex2D(BasePos + new Vector2(-95, 172) + hangItem[z] - Main.screenPosition, color, new Vector3(0, 1, 0))
 					};
 					Texture2D thang = ModContent.Request<Texture2D>("Everglow/" + ModAsset.BloodTuskDragLinePath + (3 + z).ToString()).Value;
 					Main.graphics.GraphicsDevice.Textures[0] = thang;
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 				}
 
-				var Vx = new List<VertexBase.CustomVertexInfo>
+				var Vx = new List<Vertex2D>
 				{
-					new VertexBase.CustomVertexInfo(NPC.position + new Vector2(-95, 162) - Main.screenPosition, color, new Vector3(0, 0, 0)),
-					new VertexBase.CustomVertexInfo(NPC.position + new Vector2(125, 162) - Main.screenPosition, color, new Vector3(1, 0, 0)),
-					new VertexBase.CustomVertexInfo(BasePos + new Vector2(125, 172) - Main.screenPosition, color, new Vector3(1, 1, 0)),
+					new Vertex2D(NPC.position + new Vector2(-95, 162) - Main.screenPosition, color, new Vector3(0, 0, 0)),
+					new Vertex2D(NPC.position + new Vector2(125, 162) - Main.screenPosition, color, new Vector3(1, 0, 0)),
+					new Vertex2D(BasePos + new Vector2(125, 172) - Main.screenPosition, color, new Vector3(1, 1, 0)),
 
-					new VertexBase.CustomVertexInfo(NPC.position + new Vector2(-95, 162) - Main.screenPosition, color, new Vector3(0, 0, 0)),
-					new VertexBase.CustomVertexInfo(BasePos + new Vector2(125, 172) - Main.screenPosition, color, new Vector3(1, 1, 0)),
-					new VertexBase.CustomVertexInfo(BasePos + new Vector2(-95, 172) - Main.screenPosition, color, new Vector3(0, 1, 0))
+					new Vertex2D(NPC.position + new Vector2(-95, 162) - Main.screenPosition, color, new Vector3(0, 0, 0)),
+					new Vertex2D(BasePos + new Vector2(125, 172) - Main.screenPosition, color, new Vector3(1, 1, 0)),
+					new Vertex2D(BasePos + new Vector2(-95, 172) - Main.screenPosition, color, new Vector3(0, 1, 0))
 				};
 
 
-				Texture2D t = ModAsset.BloodTuskDragLine.Value;
+				Texture2D t = ModAsset.BloodTuskDragLine1.Value;
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
@@ -2301,8 +2301,8 @@ public class BloodTusk : ModNPC
 			Main.spriteBatch.Draw(ModAsset.DarkFog.Value, DarkCenter - Main.screenPosition, null, color, 0, new Vector2(500, 500), 4f, SpriteEffects.None, 0f);
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			var Vx = new List<VertexBase.CustomVertexInfo>();
-			var Vx2 = new List<VertexBase.CustomVertexInfo>();
+			var Vx = new List<Vertex2D>();
+			var Vx2 = new List<Vertex2D>();
 			if (!CheckUpdate)
 			{
 				for (int f = 0; f < 200; f++)
@@ -2345,27 +2345,27 @@ public class BloodTusk : ModNPC
 			{
 				if (x < 19)
 				{
-					Vx.Add(new VertexBase.CustomVertexInfo(DarkCenter - Main.screenPosition, color, new Vector3(1f, 0.5f, 0)));
-					Vx.Add(new VertexBase.CustomVertexInfo(FogSpace[x] - Main.screenPosition, color, new Vector3(0, 0, 0)));
-					Vx.Add(new VertexBase.CustomVertexInfo(FogSpace[x + 1] - Main.screenPosition, color, new Vector3(0, 1, 0)));
+					Vx.Add(new Vertex2D(DarkCenter - Main.screenPosition, color, new Vector3(1f, 0.5f, 0)));
+					Vx.Add(new Vertex2D(FogSpace[x] - Main.screenPosition, color, new Vector3(0, 0, 0)));
+					Vx.Add(new Vertex2D(FogSpace[x + 1] - Main.screenPosition, color, new Vector3(0, 1, 0)));
 				}
 				else
 				{
-					Vx.Add(new VertexBase.CustomVertexInfo(DarkCenter - Main.screenPosition, color, new Vector3(1f, 0.5f, 0)));
-					Vx.Add(new VertexBase.CustomVertexInfo(FogSpace[x] - Main.screenPosition, color, new Vector3(0, 0, 0)));
-					Vx.Add(new VertexBase.CustomVertexInfo(FogSpace[0] - Main.screenPosition, color, new Vector3(0, 1, 0)));
+					Vx.Add(new Vertex2D(DarkCenter - Main.screenPosition, color, new Vector3(1f, 0.5f, 0)));
+					Vx.Add(new Vertex2D(FogSpace[x] - Main.screenPosition, color, new Vector3(0, 0, 0)));
+					Vx.Add(new Vertex2D(FogSpace[0] - Main.screenPosition, color, new Vector3(0, 1, 0)));
 				}
 				if (x < 19)
 				{
-					Vx2.Add(new VertexBase.CustomVertexInfo(DarkCenter - Main.screenPosition, color2, new Vector3(1f, 0.5f, 0)));
-					Vx2.Add(new VertexBase.CustomVertexInfo(FogSpace[x] - Main.screenPosition, color2, new Vector3(0, 0, 0)));
-					Vx2.Add(new VertexBase.CustomVertexInfo(FogSpace[x + 1] - Main.screenPosition, color2, new Vector3(0, 1, 0)));
+					Vx2.Add(new Vertex2D(DarkCenter - Main.screenPosition, color2, new Vector3(1f, 0.5f, 0)));
+					Vx2.Add(new Vertex2D(FogSpace[x] - Main.screenPosition, color2, new Vector3(0, 0, 0)));
+					Vx2.Add(new Vertex2D(FogSpace[x + 1] - Main.screenPosition, color2, new Vector3(0, 1, 0)));
 				}
 				else
 				{
-					Vx2.Add(new VertexBase.CustomVertexInfo(DarkCenter - Main.screenPosition, color2, new Vector3(1f, 0.5f, 0)));
-					Vx2.Add(new VertexBase.CustomVertexInfo(FogSpace[x] - Main.screenPosition, color2, new Vector3(0, 0, 0)));
-					Vx2.Add(new VertexBase.CustomVertexInfo(FogSpace[0] - Main.screenPosition, color2, new Vector3(0, 1, 0)));
+					Vx2.Add(new Vertex2D(DarkCenter - Main.screenPosition, color2, new Vector3(1f, 0.5f, 0)));
+					Vx2.Add(new Vertex2D(FogSpace[x] - Main.screenPosition, color2, new Vector3(0, 0, 0)));
+					Vx2.Add(new Vertex2D(FogSpace[0] - Main.screenPosition, color2, new Vector3(0, 1, 0)));
 				}
 			}
 

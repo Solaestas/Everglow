@@ -1,5 +1,6 @@
 using Everglow.Commons.Weapons.Yoyos;
 using Humanizer;
+using Terraria;
 using Terraria.DataStructures;
 using static Everglow.Myth.TheTusk.Projectiles.Weapon.BloodyBoneYoyo;
 
@@ -12,10 +13,13 @@ public class BloodyBoneYoyo : YoyoProjectile
 
 		base.SetDefaults();
 		MaxStaySeconds = 60;
+		Acceleration = 7;
+		MaxRopeLength = 320;
 	}
 	public struct Tentacle
 	{
 		public List<Vector2> oldPos;
+		public List<Vector2> jointVel;
 		public Vector2 velocity;
 		public Vector2 position;
 		public float time;
@@ -27,20 +31,121 @@ public class BloodyBoneYoyo : YoyoProjectile
 	public List<Tentacle> tentacles;
 	public Tentacle UpdateTentacle(Tentacle tentacle)
 	{
-		if (tentacle.time < 90)
+		if (tentacle.time < 75 && Projectile.ai[0] > 0)
 		{
 			tentacle.oldPos.Add(tentacle.position);
+			float mulRot = (75 - tentacle.time) / 75f;
+			mulRot = MathF.Max(mulRot, 0);
+			tentacle.jointVel.Add(tentacle.velocity.RotatedBy(MathHelper.PiOver2 ) * 0.1f * mulRot * MathF.Sin(tentacle.time * 0.4f));
 		}
-		if (tentacle.oldPos.Count > 150 - tentacle.time)
+		if (tentacle.time > 75)
+		{
+			if(tentacle.oldPos.Count > 0)
+			{
+				tentacle.oldPos.RemoveAt(0);
+				tentacle.jointVel.RemoveAt(0);
+				float coilValue = 20;
+				if (tentacle.time > 100)
+				{
+					coilValue = (tentacle.time - 95) * 4;
+				}
+				for (int x = tentacle.oldPos.Count - 1; x >= 0; x--)
+				{
+					float value = Math.Max(0, ((coilValue - 0.01f) - x) / coilValue);
+					tentacle.oldPos[x] -= tentacle.oldPos[0] * value;
+				}
+			}		
+		}
+		else if(tentacle.oldPos.Count > Main.rand.Next(150 - (int)tentacle.time) * 2f)
 		{
 			tentacle.oldPos.RemoveAt(0);
-			for(int x = tentacle.oldPos.Count - 1; x >= 0 ;x--)
+			tentacle.jointVel.RemoveAt(0);
+			float coilValue = 20;
+			if (tentacle.time > 100)
 			{
-				float value = Math.Max(0, (20 - x) / 20f);
+				coilValue = (tentacle.time - 95) * 4;
+			}
+			for (int x = tentacle.oldPos.Count - 1; x >= 0; x--)
+			{
+				float value = Math.Max(0, ((coilValue - 0.01f) - x) / coilValue);
 				tentacle.oldPos[x] -= tentacle.oldPos[0] * value;
 			}
 		}
-		
+		//收球的时候剧烈收回
+		if (Projectile.ai[0] <= 0)
+		{
+			for (int a = 0;a < 2;a++)
+			{
+				if(tentacle.oldPos.Count > 0)
+				{
+					tentacle.oldPos.RemoveAt(0);
+					tentacle.jointVel.RemoveAt(0);
+					for (int x = tentacle.oldPos.Count - 1; x >= 0; x--)
+					{
+						float value = Math.Max(0, (19.99f - x) / 20f);
+						tentacle.oldPos[x] -= tentacle.oldPos[0] * value;
+					}
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+		for (int x = tentacle.oldPos.Count - 1; x >= 0; x--)
+		{
+			if (tentacle.jointVel.Count > x)
+			{
+				tentacle.oldPos[x] += tentacle.jointVel[x];
+				tentacle.jointVel[x] *= 0.98f;
+			}
+		}
+		////碰撞
+		//for (int x = tentacle.oldPos.Count - 1; x >= 0; x--)
+		//{
+		//	if(tentacle.jointVel.Count > x)
+		//	{
+		//		if(Collision.SolidCollision(tentacle.oldPos[x] + tentacle.jointVel[x] + Projectile.Center, 1, 1))
+		//		{
+		//			tentacle.jointVel[x] -= Vector2.Normalize(tentacle.oldPos[x]);
+		//			tentacle.oldPos[x] += tentacle.jointVel[x];
+
+		//		}
+		//		else if(Collision.SolidCollision(tentacle.oldPos[x] + Projectile.velocity + Projectile.Center, 1, 1))
+		//		{
+		//			tentacle.jointVel[x] -= Vector2.Normalize(Projectile.velocity) * 0.2f;
+		//			tentacle.oldPos[x] -= Projectile.velocity;
+		//		}
+		//		else
+		//		{
+		//			tentacle.oldPos[x] += tentacle.jointVel[x];
+		//			tentacle.jointVel[x] *= 0.95f;
+		//		}
+		//	}
+		//}
+		////牵拉
+		//for (int x = tentacle.oldPos.Count - 1; x >= 1; x--)
+		//{
+		//	if (tentacle.jointVel.Count > x)
+		//	{
+		//		Vector2 v0 = tentacle.oldPos[x - 1] + tentacle.jointVel[x - 1] - tentacle.oldPos[x] - tentacle.jointVel[x];
+		//		if (v0.Length() > 15)
+		//		{
+		//			Vector2 dragForce = Vector2.Normalize(v0) * (v0.Length() - 15) * 0.01f;
+		//			for (int y = x; y < tentacle.oldPos.Count - 1; y++)
+		//			{
+		//				tentacle.oldPos[x] += dragForce * Math.Max(0, (19.99f - x) / 20f);
+		//			}
+		//		}
+		//	}
+		//}
+		if (Collision.SolidCollision(tentacle.position + tentacle.velocity + Projectile.Center, 1, 1))
+		{
+			if(tentacle.time < 75)
+			{
+				tentacle.time = 150 - tentacle.time;
+			}
+		}
 		tentacle.position += tentacle.velocity;
 		float maxRotVel = tentacle.time / 30f;
 		if(maxRotVel > 1)
@@ -48,10 +153,16 @@ public class BloodyBoneYoyo : YoyoProjectile
 			maxRotVel = 1;
 		}
 		tentacle.velocity = tentacle.velocity.RotatedBy(tentacle.ai0 * maxRotVel);
+
 		tentacle.ai0 *= 0.98f;
+		tentacle.ai0 += tentacle.ai1;
+		tentacle.ai1 *= 0.98f;
 		if (tentacle.time > 30)
 		{
-			tentacle.velocity *= 0.94f;
+			if(tentacle.velocity.Length() > 0.1f)
+			{
+				tentacle.velocity *= 0.94f;
+			}
 		}
 		if (tentacle.time > 60)
 		{
@@ -83,10 +194,12 @@ public class BloodyBoneYoyo : YoyoProjectile
 		{
 			Tentacle tentacle = new Tentacle();
 			tentacle.oldPos = new List<Vector2>();
+			tentacle.jointVel = new List<Vector2>();
 			tentacle.time = 0;
 			tentacle.position = Vector2.zeroVector;
 			tentacle.velocity = new Vector2(Main.rand.NextFloat(3, 6f), 0).RotatedByRandom(MathHelper.TwoPi);
 			tentacle.ai0 = Main.rand.NextFloat(-0.3f, 0.3f);
+			tentacle.ai1 = Main.rand.NextFloat(-0.001f, 0.027f) * -MathF.Sign(tentacle.ai0);
 			tentacles.Add(tentacle);
 		}
 		if (tentacles.Count > 0)
@@ -241,6 +354,17 @@ public class BloodyBoneYoyo : YoyoProjectile
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
+		foreach (Tentacle tentacle in tentacles)
+		{
+			foreach(Vector2 v0 in tentacle.oldPos)
+			{
+				Rectangle rectangle = new Rectangle((int)(Projectile.Center + v0).X - 4, (int)(Projectile.Center + v0).Y - 4, 8, 8);
+				if (targetHitbox.Intersects(rectangle))
+				{
+					return true;
+				}
+			}
+		}
 		return base.Colliding(projHitbox, targetHitbox);
 	}
 	public override bool PreDraw(ref Color lightColor)
@@ -257,15 +381,22 @@ public class BloodyBoneYoyo : YoyoProjectile
 				{
 					posLeft = Vector2.Normalize(tentacle.oldPos[x] - tentacle.oldPos[x - 1]).RotatedBy(MathHelper.PiOver2) * 5f;
 				}
-				float width = 1f;
 				float factor = (x + 120 - tentacle.oldPos.Count) / 120f;
+				float width = 1f;
+				if(factor > 0.8f)
+				{
+					width = MathF.Sin((1 - factor) * 2.5f * MathF.PI);
+				}
 				if (x == 0)
 				{
-					bars.Add(drawPos + posLeft, Color.Transparent, new Vector3(factor, 0, width));
-					bars.Add(drawPos - posLeft, Color.Transparent, new Vector3(factor, 1, width));
+					bars.Add(Projectile.Center + posLeft, Color.Transparent, new Vector3(factor, 0, width));
+					bars.Add(Projectile.Center - posLeft, Color.Transparent, new Vector3(factor, 1, width));
+					bars.Add(Projectile.Center + posLeft, lightColor, new Vector3(factor, 0, width));
+					bars.Add(Projectile.Center - posLeft, lightColor, new Vector3(factor, 1, width));
 				}
-				bars.Add(drawPos + posLeft, lightColor, new Vector3(factor, 0, width));
-				bars.Add(drawPos - posLeft, lightColor, new Vector3(factor, 1, width));
+				Color newLightColor = Lighting.GetColor(drawPos.ToTileCoordinates());
+				bars.Add(drawPos + posLeft, newLightColor, new Vector3(factor, 0, width));
+				bars.Add(drawPos - posLeft, newLightColor, new Vector3(factor, 1, width));
 				if(x == tentacle.oldPos.Count - 1)
 				{
 					bars.Add(drawPos + posLeft, Color.Transparent, new Vector3(factor, 0, width));
