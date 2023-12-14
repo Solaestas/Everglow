@@ -27,7 +27,7 @@ public class StoneScaleWood : ModTile
 		MinPick = 150;
 		HitSound = SoundID.Dig;
 
-		AddMapEntry(new Color(44, 40, 37));
+		AddMapEntry(new Color(77, 66, 63));
 	}
 	public override bool CanExplode(int i, int j)
 	{
