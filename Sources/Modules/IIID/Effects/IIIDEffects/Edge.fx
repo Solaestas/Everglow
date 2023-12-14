@@ -14,8 +14,8 @@ float4 edge(float2 coords : TEXCOORD0) : COLOR0
     if (color.a != 0)
         return color;
     // 获取每个像素的正确大小
-    float dx = 1;
-    float dy = 1;
+    float dx = 2;
+    float dy = 2;
     bool flag = false;
     // 对周围8格进行判定
     for (int i = -1; i <= 1; i++)

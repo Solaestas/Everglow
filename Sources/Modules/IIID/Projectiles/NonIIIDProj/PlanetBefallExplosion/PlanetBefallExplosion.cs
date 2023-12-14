@@ -11,6 +11,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallExplosion;
 
 public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 {
+	public float BlurOffset = 0;
 	public override void SetDefaults()
 	{
 		Projectile.width = 120;
@@ -28,14 +29,9 @@ public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
-		if (Projectile.ai[0] <=20)
-		{
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Crystal_Burst_Normal").WithVolumeScale(Projectile.ai[0] / 20f + 0.2f), Projectile.Center);
-		}
-		else
-		{
+
 			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Crystal_Burst_Strong"), Projectile.Center);
-		}
+
 		GenerateSmog((int)(0.7f * Projectile.ai[0]));
 		GenerateFire((int)(0.75f * Projectile.ai[0]));
 		GenerateSmog((int)(0.3f * Projectile.ai[0]));
@@ -86,6 +82,7 @@ public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 		Projectile.velocity *= 0;
 		if (Projectile.timeLeft <= 199)
 			Projectile.friendly = false;
+		BlurOffset = MathF.Sin(Projectile.timeLeft * MathF.PI / 200);
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
@@ -117,8 +114,8 @@ public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 	{
 		Texture2D shadow = Myth.ModAsset.CursedHitLight.Value;
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
-		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Color c = new Color(1.2f * MathF.Sqrt(1 - timeValue), 2f * (1 - timeValue) * (1 - timeValue), 0.5f * (1 - timeValue), 0f);
+		float dark = Math.Max((Projectile.timeLeft - 150) / 50, 0);
+		Color c = new Color(1f * MathF.Sqrt(1 - timeValue), 1f * (1 - timeValue) * (1 - timeValue), 0.1f * (1 - timeValue), 0f);
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null,c * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark, SpriteEffects.None, 0);
 		Color cDark = new Color(0, 0, 0, 1f - timeValue);
 		DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 20 * (1 - timeValue) * Projectile.ai[0], cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
@@ -128,12 +125,12 @@ public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 	{
 		Texture2D shadow = Myth.ModAsset.CursedHit.Value;
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
-		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
+		float dark = Math.Max((Projectile.timeLeft - 150) / 25, 0);
 		Color c = new Color(1f * MathF.Sqrt(1 - timeValue), 1f * (1 - timeValue) * (1 - timeValue), 0.1f * (1 - timeValue), 0f);
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] * 0.2f, SpriteEffects.None, 0);
 		Texture2D light = Myth.ModAsset.CursedHitStar.Value;
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark * dark) * Projectile.ai[0] * 0.1f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * Projectile.ai[0] * 0.1f, SpriteEffects.None, 0);
 		return false;
 	}
 	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
@@ -141,7 +138,6 @@ public class PlanetBefallExplosion : ModProjectile, IWarpProjectile
 		var circle = new List<Vertex2D>();
 
 		Color c0 = color;
-		c0.R = 0;
 		for (int h = 0; h < radius / 2; h += 1)
 		{
 

@@ -133,14 +133,10 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			PlanetBeFallScreenMovePlayer.proj = null;
 			PlanetBeFallScreenMovePlayer.AnimationTimer = 0;
 
-			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - new Vector2(0, 100), Vector2.zeroVector, ModContent.ProjectileType<PlanetBefallExplosion>(), (int)(Projectile.damage * (100) / 100f), Projectile.knockBack * 0.4f, Projectile.owner, 45);
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - new Vector2(0, 100), Vector2.zeroVector, ModContent.ProjectileType<PlanetBefallExplosion>(), (int)(Projectile.damage * (100) / 100f), Projectile.knockBack * 0.4f, Projectile.owner, 60);
 			SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, player.Center);
 			ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 150).RotatedByRandom(6.283);
-	//Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<PlanetBefallExplosion>(), 0, 0, Projectile.owner, 4f);
-			float k1 = Math.Clamp(Projectile.velocity.Length(), 1, 3);
-			float k2 = Math.Clamp(Projectile.velocity.Length(), 6, 10);
-			float k0 = 1f / 4 * k2;
 			base.OnKill(timeLeft);
 		}
 

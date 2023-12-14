@@ -2863,7 +2863,7 @@ Projectiles: {
 	Rapier_Slash.DisplayName: Rapier_ Slash
 	FryingPan.DisplayName: Frying Pan
 	PlanetBeFall.DisplayName: Planet Be Fall
-	PlanetBefallWave.DisplayName: Planet Befall Wave
+	PlanetBefallExplosion.DisplayName: Planet Befall Explosion
 	PlanetBefallArray.DisplayName: Planet Befall Array
 	GoldenCrack.DisplayName: Golden Crack
 	DashingLightEff.DisplayName: Dashing Light Eff

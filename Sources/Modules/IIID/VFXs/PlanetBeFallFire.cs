@@ -69,7 +69,7 @@ public class PlanetBeFallFireDust : Visual
 		}
 		float pocession = 1 - timer / maxTime;
 		float c = pocession * scale * 0.02f;
-		Lighting.AddLight(position, 0, 0, c);
+		Lighting.AddLight(position, c*10,c*10 , 0);
 	}
 
 	public override void Draw()

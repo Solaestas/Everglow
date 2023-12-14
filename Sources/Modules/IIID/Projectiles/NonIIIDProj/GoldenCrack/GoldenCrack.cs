@@ -24,6 +24,7 @@ using Everglow.IIID.Projectiles;
 using Everglow.IIID.Projectiles.PlanetBefall;
 using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray;
 using Everglow.Commons.IIID;
+using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 {
@@ -274,13 +275,15 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 		RenderTarget2D bloom1;
 		RenderTarget2D bloom2;
 		RenderTarget2D GoldenCrack;
-		Effect Bloom1, GoldenCrackVFX;
+
+		Effect Bloom1, GoldenCrackVFX, Radial;
 
 		public override string Name => "IIID";
 		public override void Load()
 		{
-			Bloom1 = ModContent.Request<Effect>("Everglow/IIID/Effects/Bloom1").Value;
-			GoldenCrackVFX = ModContent.Request<Effect>("Everglow/IIID/Effects/GoldenCrack").Value;
+			Bloom1 = ModAsset.Bloom1.Value;
+			GoldenCrackVFX = ModAsset.Effects_GoldenCrack.Value;
+			Radial = ModAsset.Radial.Value;
 			On_FilterManager.EndCapture += FilterManager_EndCapture;//原版绘制场景的最后部分——滤镜。在这里运用render保证不会与原版冲突
 			Main.OnResolutionChanged += Main_OnResolutionChanged;
 		}
@@ -438,12 +441,36 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
 			foreach (Projectile proj in Main.projectile)
 			{
-				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBeFall>())
+				if (proj.active && proj.ModProjectile is IIIDProj)
 				{
 					(proj.ModProjectile as IIIDProj).DrawIIIDProj(viewProjectionParams);
 				}
 			}
 			Main.spriteBatch.End();
+
+			foreach (Projectile proj in Main.projectile)
+			{
+				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBefallExplosion.PlanetBefallExplosion>())
+				{
+
+					float BlurOffset = (proj.ModProjectile as PlanetBefallExplosion.PlanetBefallExplosion).BlurOffset;
+					gd.SetRenderTarget(Main.screenTargetSwap);
+					gd.Clear(Color.Transparent);
+					sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+					sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+					sb.End();
+
+					gd.SetRenderTarget(Main.screenTarget);
+					Radial = ModAsset.Radial.Value;
+					sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+					Radial.CurrentTechnique.Passes["Blend"].Apply();
+					Radial.Parameters["_BlurOffset"].SetValue(BlurOffset/Math.Max(5,(proj.Center-Main.LocalPlayer.Center).Length()/5));
+					Radial.Parameters["_Center"].SetValue((proj.Center - Main.screenPosition)/new Vector2(Main.screenWidth, Main.screenHeight));
+					sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+					sb.End();
+				}
+			}
+
 
 			orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
 		}

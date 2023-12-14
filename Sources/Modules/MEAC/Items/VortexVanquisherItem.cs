@@ -97,7 +97,7 @@ public class VortexVanquisherItem : ModItem
 						return;
 					}
 					CoolTimeForQ = 100;
-					Projectile PlanetBeFall = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), /*Main.MouseWorld*/new Vector2(player.Center.X, Main.MouseWorld.Y - 1500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), Item.damage * 10, Item.knockBack * 10, player.whoAmI);
+					Projectile PlanetBeFall = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), /*Main.MouseWorld*/new Vector2(player.Center.X, Main.MouseWorld.Y - 1500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), Item.damage * 9, Item.knockBack * 10, player.whoAmI);
 					
 				}
 				if (player.altFunctionUse != 2)
@@ -121,14 +121,14 @@ public class VortexVanquisherItem : ModItem
 						if (proj.owner == player.whoAmI && proj.type == ModContent.ProjectileType<GoldShield>() && proj.active)
 						{
 							proj.timeLeft = 1200;
-							proj.ai[1] = 150;//盾量
+							proj.ai[1] = player.statLife*0.23f;//盾量
 							HasProj = true;
 						}
 					}
 					if (!HasProj)
 					{
 						Projectile proj2 = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<GoldShield>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
-						proj2.ai[1] = 150;//盾量
+						proj2.ai[1] = player.statLife*0.23f;//盾量
 					}
 					Vector2 CheckPoint = Main.MouseWorld;
 					for (int y = 0; y < 60; y++)
@@ -193,7 +193,7 @@ public class VortexVanquisherItem : ModItem
 				{
 					int playerdir = Main.MouseWorld.X > player.Center.X ? 1 : -1;
 					player.direction = playerdir;
-					Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, new Vector2(Math.Sign(Main.MouseWorld.X - player.Center.X), 0), ModContent.ProjectileType<VortexVanquisherThump>(), Item.damage * 2, 0, player.whoAmI); //Original: Item.damage * 6
+					Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, new Vector2(Math.Sign(Main.MouseWorld.X - player.Center.X), 0), ModContent.ProjectileType<VortexVanquisherThump>(), Item.damage, 0, player.whoAmI); //Original: Item.damage * 6
 					ClickTime = 0;
 				}
 			}
