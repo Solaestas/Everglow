@@ -8,8 +8,6 @@ using Terraria.ObjectData;
 namespace Everglow.CagedDomain.Tiles;
 
 public class GiantBell_Tile : ModTile, ITileFluentlyDrawn
-
-
 {
 	public override void SetStaticDefaults()
 	{
@@ -35,9 +33,10 @@ public class GiantBell_Tile : ModTile, ITileFluentlyDrawn
 
 		AddMapEntry(new Color(225, 195, 78));
 	}
-	public override void NumDust(int i, int j, bool fail, ref int num)
+	public override bool RightClick(int i, int j)
 	{
-		num = 0;
+		SoundEngine.PlaySound(HitSound, new Vector2(i, j) * 16);
+		return base.RightClick(i, j);
 	}
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
