@@ -53,7 +53,7 @@ public class FrozenNPC : GlobalNPC
 	public override bool PreAI(NPC npc)
 	{
 
-		if (npc.HasBuff(ModContent.BuffType<Petrification>()))
+		if (npc.HasBuff(ModContent.BuffType<Freeze>()))
 		{
 			npc.velocity *= 0;
 			return false;
@@ -67,7 +67,7 @@ public class FrozenNPC : GlobalNPC
 	public override void AI(NPC npc)
 	{
 
-		if (npc.HasBuff(ModContent.BuffType<Petrification>()))
+		if (npc.HasBuff(ModContent.BuffType<Freeze>()))
 		{
 			npc.velocity *= 0;
 			return;
