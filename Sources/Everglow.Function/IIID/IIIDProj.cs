@@ -17,10 +17,9 @@ namespace Everglow.Commons.IIID
 	{
 		public override void SetDefaults()
 		{
-			Projectile.width = 114;
-			Projectile.height = 114;
+			Projectile.width = 120;
+			Projectile.height = 120;
 			Projectile.friendly = true;
-			Projectile.DamageType = DamageClass.Melee;
 			Projectile.aiStyle = -1;
 			Projectile.penetrate = -1;
 			Projectile.timeLeft = 1200;

@@ -6,6 +6,7 @@ using Terraria.DataStructures;
 using Everglow.Commons.VFX;
 using  Everglow.Myth;
 using Everglow.Commons.Vertex;
+using Everglow.IIID.Buffs;
 
 namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallExplosion;
 
@@ -83,7 +84,7 @@ public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 		Projectile.velocity *= 0;
 		if (Projectile.timeLeft <= 199)
 			Projectile.friendly = false;
-		BlurOffset = MathF.Max( MathF.Sin(timeValue * MathF.PI / 150),0);
+		BlurOffset = 0.5f*MathF.Max( MathF.Sin(timeValue * MathF.PI / 200),0);
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
@@ -166,6 +167,6 @@ public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		//target.AddBuff(ModContent.BuffType<FireflyInferno>(), (int)(Projectile.ai[0] * 10f));
+		target.AddBuff(ModContent.BuffType<Petrification>(), (int)(240));
 	}
 }

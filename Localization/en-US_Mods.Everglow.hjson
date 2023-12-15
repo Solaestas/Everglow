@@ -703,6 +703,11 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.WaterMelonJuiceBuff.Description
 	}
 
+	Petrification: {
+		DisplayName: Petrification
+		Description: Mods.Everglow.Buffs.Petrification.Description
+	}
+
 	TuskStaff: {
 		DisplayName: Tusk Staff
 		Description: Mods.Everglow.Buffs.TuskStaff.Description
