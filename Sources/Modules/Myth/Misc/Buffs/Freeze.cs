@@ -25,6 +25,7 @@ public class FrozenNPC : GlobalNPC
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			Effect frozenEff = ModAsset.FrozenNPC.Value;
+			frozenEff.Parameters["uImageSize"].SetValue(Main.npcFrameCount[npc.type]);
 			frozenEff.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_Frozen.Value);
 			frozenEff.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_spiderNet.Value);
 			frozenEff.Parameters["drawColor"].SetValue(drawColor.ToVector4());
@@ -51,10 +52,29 @@ public class FrozenNPC : GlobalNPC
 	}
 	public override bool PreAI(NPC npc)
 	{
-		if (npc.HasBuff(ModContent.BuffType<Freeze>()))
+
+		if (npc.HasBuff(ModContent.BuffType<Petrification>()))
 		{
 			npc.velocity *= 0;
+			return false;
 		}
-		return base.PreAI(npc);
+		else
+		{
+			return base.PreAI(npc);
+		}
+	}
+
+	public override void AI(NPC npc)
+	{
+
+		if (npc.HasBuff(ModContent.BuffType<Petrification>()))
+		{
+			npc.velocity *= 0;
+			return;
+		}
+		else
+		{
+			base.AI(npc);
+		}
 	}
 }
