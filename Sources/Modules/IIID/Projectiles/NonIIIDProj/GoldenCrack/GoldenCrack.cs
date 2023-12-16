@@ -84,8 +84,6 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 		}
 		public void Generate()
 		{
-
-			// 根节点生成，朝向0，粗细1，长度随机50中选
 			root = new Node(0, 0, Rand(), 300 * Rand(), false, true, false, false, Vector2.Zero);
 			root = Buildmaster(root, 5);
 			Nodes = new Node[cnt + 1];
@@ -110,7 +108,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 
 			}
 			// 参数修改了
-			Node master = new Node(cnt, Rand(MathHelper.Pi / 6f), node.size * Rand(), node.length * Rand(), false, true, false, false, Position(node.position, vel, node));
+			Node master = new Node(cnt, Rand(MathHelper.Pi / 6f), node.size * Rand(), node.length * Rand() * 0.9f, false, true, false, false, Position(node.position, vel, node));
 			node.children.Add(Buildmaster(master, dep + 1));
 			return node;
 		}
@@ -124,7 +122,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 				node.isterminal = true;
 				return node;
 			}
-			Node child = new Node(cnt, Rand(MathHelper.Pi / 6f), node.size * Rand(), node.length * Rand(), false, false, true, false, Position(node.position, vel, node));
+			Node child = new Node(cnt, Rand(MathHelper.Pi / 6f), node.size * Rand(), node.length * Rand() * 0.9f, false, false, true, false, Position(node.position, vel, node));
 			node.children.Add(Buildbrunch(child, dep + 1));
 			return node;
 		}
