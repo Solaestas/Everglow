@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
@@ -75,6 +76,7 @@ public class DarkGlimmeringRods : ModNPC
 	}
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
 		spriteBatch.End();
 		spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Texture2D mainTex = (Texture2D)ModContent.Request<Texture2D>(Texture);
@@ -102,6 +104,8 @@ public class DarkGlimmeringRods : ModNPC
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
+		spriteBatch.End();
+		spriteBatch.Begin(sBS);
 		return false;
 	}
 }
