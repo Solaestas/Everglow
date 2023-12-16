@@ -60,7 +60,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 
 		public override Matrix ModelMovementMatrix()
 		{
-			var t = new Vector3(5, -100, 5000 - s);
+			var t = new Vector3(5, -50, 5000 - s);
 			return
 			    Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
 				* Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
@@ -114,7 +114,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			}
 			if (Projectile.timeLeft < 1170)
 			{
-				if (Projectile.velocity.Length() < 10)
+				if (Projectile.velocity.Length() < 12.5f)
 				{
 					Projectile.velocity *= 1.1f;
 				}
@@ -163,7 +163,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			public int AnimationTimer = 0;
 			public bool PlanetBeFallAnimation = false;
 			public Projectile proj;
-			const float MaxTime = 180;
+			const float MaxTime = 135;
 			public override void ModifyScreenPosition()
 			{
 				Vector2 target;
@@ -175,14 +175,14 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 						if (PlanetBeFallAnimation)
 						{
 							AnimationTimer += 1;
-							float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
-							if (AnimationTimer >= 60 && AnimationTimer < 120)
+							float Value = (1-MathF.Cos((AnimationTimer) * MathF.PI / 45)) / 2f;
+							if (AnimationTimer >= 45 && AnimationTimer < 90)
 							{
 								Value = 1;
 							}
-							if (AnimationTimer >= 120)
+							if (AnimationTimer >= 90)
 							{
-								Value = (1 + MathF.Cos((AnimationTimer - 120) / 60f * MathF.PI)) / 2f;
+								Value = (1 + MathF.Cos((AnimationTimer - 90) * MathF.PI/ 45 )) / 2f;
 							}
 
 							if (AnimationTimer >= MaxTime)
