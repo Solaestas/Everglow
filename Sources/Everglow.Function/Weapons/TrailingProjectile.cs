@@ -27,6 +27,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		TrailWidth = 30f;
 		SelfLuminous = false;
 		TrailTexture = ModAsset.Trail.Value;
+		TrailTextureBlack = ModAsset.Trail_black.Value;
 		TrailShader = ModAsset.Trailing.Value;
 		SetDef();
 	}
@@ -85,8 +86,6 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			Projectile.velocity *= 0f;
 			return;
 		}
-		Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center - Projectile.velocity).RotatedBy(0) * 12.5f;
-		Projectile.velocity *= 0.95f;
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
@@ -225,12 +224,12 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 				drawC.G = (byte)(lightC.G * drawC.G / 255f);
 				drawC.B = (byte)(lightC.B * drawC.B / 255f);
 			}
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor * 7 + timeValue, 1, width)));
-			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor * 7 + timeValue, 0.5f, width)));
-			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor * 7 + timeValue, 1, width)));
-			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(factor * 7 + timeValue, 0.5f, width)));
-			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor * 7 + timeValue, 1, width)));
-			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor * 7 + timeValue, 0.5f, width)));
+			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
+			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
+			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
+			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
 		}
 
 		Main.spriteBatch.End();

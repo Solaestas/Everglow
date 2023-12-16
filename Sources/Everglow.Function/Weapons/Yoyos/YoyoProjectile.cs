@@ -5,7 +5,10 @@ public abstract class YoyoProjectile : ModProjectile
 {
 	public override void SetDefaults()
 	{
-		Projectile.CloneDefaults(549);
+		//Projectile.CloneDefaults(549);
+		Projectile.friendly = true;
+		Projectile.hostile = false;
+		Projectile.penetrate = -1;
 		Projectile.width = 16;
 		Projectile.height = 16;
 		Projectile.scale = 1f;
@@ -15,12 +18,17 @@ public abstract class YoyoProjectile : ModProjectile
 		MaxRopeLength = 200;
 		Acceleration = 14f;
 		RotatedSpeed = 0.45f;
+		Weight = 4f;
 		SetDef();
 	}
 	public virtual void SetDef()
 	{
 
 	}
+	/// <summary>
+	/// When hit npc, the speed of rebound inversely proportional to the value.default to 10.
+	/// </summary>
+	public float Weight;
 	/// <summary>
 	/// Yoyo exists after [this] seconds will be reuse.less than 0 to make yoyo exists enternal.default to 3.
 	/// </summary>
@@ -40,6 +48,20 @@ public abstract class YoyoProjectile : ModProjectile
 	public override void AI()
 	{
 		YoyoAI();
+	}
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		Player player = Main.player[Projectile.owner];
+		Projectile.velocity += Vector2.Normalize(Projectile.Center - target.Center) / (Weight + 0.01f) * 100f;
+		if(player.yoyoGlove && Projectile.ai[2] != 1 && player.ownedProjectileCounts[Projectile.type] <= 1)
+		{
+			Projectile.NewProjectile(Projectile.GetSource_FromAI(),player.Center, Vector2.Normalize(Projectile.Center - player.MountedCenter) * player.HeldItem.shootSpeed, Projectile.type, Projectile.damage, Projectile.knockBack, player.whoAmI, 0, 0, 1);
+		}
+		base.OnHitNPC(target, hit, damageDone);
+	}
+	public override bool OnTileCollide(Vector2 oldVelocity)
+	{
+		return false;
 	}
 	/// <summary>
 	/// Yoyo
