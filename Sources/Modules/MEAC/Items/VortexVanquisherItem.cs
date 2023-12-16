@@ -49,24 +49,24 @@ public class VortexVanquisherItem : ModItem
 			if (CoolTimeForE > 0)
 			{
 				CoolTimeForE--;
-				spriteBatch.Draw(RArr1, drawPos + new Vector2(26.73f) * scale + new Vector2(4, 4), null, new Color(0, 0, 0, 255), 0f, RArr1.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+				spriteBatch.Draw(RArr1, position + slotSize * Main.inventoryScale / 2f, null, new Color(0, 0, 0, 255), 0f, RArr1.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
 				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (CoolTimeForE / 60f).ToString("#.#"), drawPos + new Vector2(22.91f) * scale, Color.White, 0f, Vector2.Zero, scale * 1.91f, SpriteEffects.None, 0);
 			}
 			else
 			{
 				CoolTimeForE = 0;
-				spriteBatch.Draw(RArr1, drawPos + new Vector2(26.73f) * scale + new Vector2(4, 4), null, new Color(155, 155, 155, 50), 0f, RArr1.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+				spriteBatch.Draw(RArr1, position + slotSize * Main.inventoryScale / 2f, null, new Color(155, 155, 155, 50), 0f, RArr1.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
 			}
 			if (CoolTimeForQ > 0)
 			{
 				CoolTimeForQ--;
-				spriteBatch.Draw(RArr2, drawPos + new Vector2(26.73f) * scale + new Vector2(-20, 4), null, new Color(0, 0, 0, 255), 0f, RArr2.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+				spriteBatch.Draw(RArr2, position+new Vector2 (0,slotSize.Y* Main.inventoryScale/ 2f), null, new Color(0, 0, 0, 255), 0f, RArr2.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
 				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (CoolTimeForQ / 60f).ToString("#.#"), drawPos + new Vector2(22.91f) * scale + new Vector2(-30, 0), Color.White, 0f, Vector2.Zero, scale * 1.91f, SpriteEffects.None, 0);
 			}
 			else
 			{
 				CoolTimeForQ = 0;
-				spriteBatch.Draw(RArr2, drawPos + new Vector2(26.73f) * scale + new Vector2(-20, 4), null, new Color(155, 155, 155, 50), 0f, RArr2.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+				spriteBatch.Draw(RArr2, position + new Vector2(0, slotSize.Y * Main.inventoryScale / 2f), null, new Color(155, 155, 155, 50), 0f, RArr2.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
 			}
 		}
 	}
@@ -96,7 +96,7 @@ public class VortexVanquisherItem : ModItem
 					{
 						return;
 					}
-					CoolTimeForQ = 100;
+					CoolTimeForQ = 1440;
 					Projectile PlanetBeFall = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), /*Main.MouseWorld*/new Vector2(player.Center.X, Main.MouseWorld.Y - 1500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), Item.damage * 9, Item.knockBack * 10, player.whoAmI);
 					
 				}
@@ -114,7 +114,7 @@ public class VortexVanquisherItem : ModItem
 					{
 						return;
 					}
-					CoolTimeForE = 60;
+					CoolTimeForE = 720;
 					bool HasProj = false;
 					foreach (Projectile proj in Main.projectile)
 					{
