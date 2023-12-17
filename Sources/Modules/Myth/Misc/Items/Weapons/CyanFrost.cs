@@ -20,6 +20,7 @@ public class CyanFrost : ModItem
 		Item.UseSound = SoundID.Item1;
 		Item.shoot = ModContent.ProjectileType<CyanFrostProj>();
 		Item.noMelee = true; // This is set the sword itself doesn't deal damage (only the projectile does).
+		Item.noUseGraphic = true;
 		Item.shootsEveryUse = true; // This makes sure Player.ItemAnimationJustStarted is set when swinging.
 		Item.autoReuse = true;
 		Item.crit = 16;
