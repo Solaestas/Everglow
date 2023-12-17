@@ -191,7 +191,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 								PlanetBeFallAnimation = false;
 							}
 							Player.immune = true;
-							Player.immuneTime = 1;
+							Player.immuneTime = 4;
 							Main.screenPosition = (Value).Lerp(Main.screenPosition, target);
 						}
 					}
