@@ -174,6 +174,8 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 						target = proj.Center - Main.ScreenSize.ToVector2() / 2;
 						if (PlanetBeFallAnimation)
 						{
+							Player.immune = true;
+							Player.immuneTime = 60;
 							AnimationTimer += 1;
 							float Value = (1-MathF.Cos((AnimationTimer) * MathF.PI / 45)) / 2f;
 							if (AnimationTimer >= 45 && AnimationTimer < 90)
@@ -190,8 +192,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 								AnimationTimer = (int)MaxTime;
 								PlanetBeFallAnimation = false;
 							}
-							Player.immune = true;
-							Player.immuneTime = 4;
+							
 							Main.screenPosition = (Value).Lerp(Main.screenPosition, target);
 						}
 					}
