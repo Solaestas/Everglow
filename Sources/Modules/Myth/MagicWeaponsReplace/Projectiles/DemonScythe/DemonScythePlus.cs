@@ -207,7 +207,7 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 
-		DrawTexMoon(spriteBatch, 34, 35, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition,ModAsset.BloomLight.Value, Main.timeForVisualEffects / 3);
-		DrawTexMoon(spriteBatch, 22, 35, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition,ModAsset.BloomLight.Value, -Main.timeForVisualEffects / 1.8);
+		DrawTexMoon(spriteBatch, 18, 35, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition,ModAsset.BloomLight.Value, Main.timeForVisualEffects / 3);
+		//DrawTexMoon(spriteBatch, 22, 35, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition,ModAsset.BloomLight.Value, -Main.timeForVisualEffects / 1.8);
 	}
 }

@@ -354,6 +354,5 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			spriteBatch.Draw(TrailTexture, bars2, PrimitiveType.TriangleStrip);
 		if (bars3.Count > 3)
 			spriteBatch.Draw(TrailTexture, bars3, PrimitiveType.TriangleStrip);
-
 	}
 }

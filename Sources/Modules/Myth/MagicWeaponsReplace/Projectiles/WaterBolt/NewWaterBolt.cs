@@ -1,15 +1,18 @@
-using Everglow.Commons.MEAC;
-using Everglow.Myth.Common;
+using Everglow.Commons.Weapons;
 using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Projectiles;
-using Terraria;
+using Everglow.Myth.TheFirefly.VFXs;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.WaterBolt;
 
-public class NewWaterBolt : ModProjectile, IWarpProjectile
+public class NewWaterBolt : TrailingProjectile
 {
 	public override void SetDefaults()
+	{
+		base.SetDefaults();
+	}
+	public override void SetDef()
 	{
 		Projectile.width = 10;
 		Projectile.height = 10;
@@ -26,133 +29,265 @@ public class NewWaterBolt : ModProjectile, IWarpProjectile
 		Projectile.DamageType = DamageClass.Magic;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
-	}
 
+		TrailColor = new Color(0, 0.4f, 1, 0f);
+		TrailWidth = 30f;
+		SelfLuminous = true;
+		TrailTexture = Commons.ModAsset.Trail_5.Value;
+		TrailTextureBlack = Commons.ModAsset.Trail_5_black.Value;
+	}
 	public override void AI()
 	{
 		Projectile.velocity *= 0.9993f;
 		Projectile.velocity.Y += 0.02f;
-		float k0 = 1f / (Projectile.ai[0] + 2) * 2;
-		Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * Projectile.scale * 0.3f;
-		Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f * k0);
-		if (Projectile.ai[1] > 0)
+
+		if(Main.rand.NextBool(4))
 		{
-			Projectile.ai[1] -= 1;
-			if (Projectile.ai[1] == 1)
-				Projectile.Kill();
+			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(-15f, -7.5f)).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
+			float mulScale = Main.rand.NextFloat(2f, 8f);
+			var blood = new FireflyBlueLiquidDrop
+			{
+				velocity = afterVelocity / mulScale,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
+				maxTime = Main.rand.Next(32, 64),
+				scale = mulScale,
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
+			};
+			Ins.VFXManager.Add(blood);
 		}
+
+		base.AI();
 	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = ModAsset.GlowStar.Value;
-		Texture2D Shade = ModAsset.NewWaterBoltShade.Value;
-		float k1 = (100f + Projectile.ai[0] * 25) * 0.3f;
-		float k0 = (1000 - Projectile.timeLeft) / k1;
-		float k2 = 1f;
-		if (Projectile.timeLeft <= 1000 - k1)
-			k0 = 1;
-		if (Projectile.timeLeft < 200)
-			k2 = Projectile.timeLeft / 200f;
-		var c0 = new Color(0, k0 * k0 * 0.3f, k0 * 0.8f + 0.8f, 0);
-
-		var bars0 = new List<Vertex2D>();
-		float width = 24;
-
-		int TrueL = 0;
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
+		DrawTrailDark();
+		DrawTrail();
+		if (TimeTokill <= 0)
 		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
+			DrawSelf();
+			var bars = new List<Vertex2D>();
+			for (int i = 0; i < 4; ++i)
+			{
+				float factor = i / 3f;
+				float timeValue = -(float)Main.time * 0.06f;
 
-			TrueL++;
+				Vector2 normalizedVel = Vector2.Normalize(Projectile.velocity);
+				Vector2 drawPos = Projectile.Center + normalizedVel * 20f * (i - 2.4f);
+				Color drawC = new Color(0f, 0.5f, 1f, 0);
+				bars.Add(new Vertex2D(drawPos + normalizedVel.RotatedBy(MathHelper.PiOver2) * 40, drawC * (i / 3f), new Vector3(timeValue, 1, 1 - factor)));
+				bars.Add(new Vertex2D(drawPos - normalizedVel.RotatedBy(MathHelper.PiOver2) * 40, drawC * (i / 3f), new Vector3(timeValue, 0, 1 - factor)));
+			}
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Effect effect = TrailShader;
+			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+			effect.Parameters["uTransform"].SetValue(model * projection);
+			effect.CurrentTechnique.Passes[0].Apply();
+			Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+			Main.graphics.GraphicsDevice.Textures[0] = TrailTexture;
+			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+			if (bars.Count > 3)
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
-		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
-
-			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-			var factor = i / (float)TrueL;
-			var w = MathHelper.Lerp(1f, 0.05f, factor);
-			float x0 = factor * 0.6f - (float)(Main.timeForVisualEffects / 35d) + 10000;
-			x0 %= 1f;
-			bars0.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, Color.White, new Vector3(x0, 1, w)));
-			bars0.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, Color.White, new Vector3(x0, 0, w)));
-		}
-		Texture2D t = ModAsset.WaterLineBlack.Value;
-		Main.graphics.GraphicsDevice.Textures[0] = t;
-		if (bars0.Count > 3)
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars0.ToArray(), 0, bars0.Count - 2);
-
-		Main.spriteBatch.Draw(Shade, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, Color.White, Projectile.rotation, Light.Size() / 2f, (k0 / 1.8f + 0.2f) / (Projectile.ai[0] + 3) * 3.5f * k2, SpriteEffects.None, 0);
-
-		var bars = new List<Vertex2D>();
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
-		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
-
-			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-			var factor = i / (float)TrueL;
-			var w = MathHelper.Lerp(1f, 0.05f, factor);
-			float x0 = factor * 0.6f - (float)(Main.timeForVisualEffects / 35d) + 10000;
-			x0 %= 1f;
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
-		}
-		t = ModAsset.WaterLine.Value;
-		Main.graphics.GraphicsDevice.Textures[0] = t;
-		if (bars.Count > 3)
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, (k0 / 1.8f + 0.2f) / (Projectile.ai[0] + 3) * 3.5f * k2, SpriteEffects.None, 0);
-		if (bars.Count > 3)
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, (k0 / 1.8f + 0.2f) / (Projectile.ai[0] + 3) * 3.5f * k2, SpriteEffects.None, 0);
 		return false;
 	}
+	public override void DrawTrail()
+	{
+		List<Vector2> unSmoothPos = new List<Vector2>();
+		for (int i = 0; i < Projectile.oldPos.Length; ++i)
+		{
+			if (Projectile.oldPos[i] == Vector2.Zero)
+				break;
+			unSmoothPos.Add(Projectile.oldPos[i]);
+		}
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos);//平滑
+		var SmoothTrail = new List<Vector2>();
+		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
+		{
+			SmoothTrail.Add(SmoothTrailX[x]);
+		}
+		if (unSmoothPos.Count != 0)
+			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
 
+		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
+		var bars = new List<Vertex2D>();
+		var bars2 = new List<Vertex2D>();
+		var bars3 = new List<Vertex2D>();
+		for (int i = 1; i < SmoothTrail.Count; ++i)
+		{
+			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
+			if (mulFac > 1f)
+			{
+				mulFac = 1f;
+			}
+			float factor = i / (float)SmoothTrail.Count * mulFac;
+			float width = TrailWidthFunction(factor);
+			float timeValue = -(float)Main.time * 0.06f;
+
+			Vector2 drawPos = SmoothTrail[i] + halfSize;
+			Color drawC = TrailColor;
+			if (!SelfLuminous)
+			{
+				Color lightC = Lighting.GetColor((drawPos / 16f).ToPoint());
+				drawC.R = (byte)(lightC.R * drawC.R / 255f);
+				drawC.G = (byte)(lightC.G * drawC.G / 255f);
+				drawC.B = (byte)(lightC.B * drawC.B / 255f);
+			}
+			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
+			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 0, width)));
+			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
+			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+		}
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Effect effect = TrailShader;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.CurrentTechnique.Passes[0].Apply();
+		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+		Main.graphics.GraphicsDevice.Textures[0] = TrailTexture;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		if (bars.Count > 3)
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		if (bars2.Count > 3)
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
+		if (bars3.Count > 3)
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+	}
+	public override void DrawTrailDark()
+	{
+		List<Vector2> unSmoothPos = new List<Vector2>();
+		for (int i = 0; i < Projectile.oldPos.Length; ++i)
+		{
+			if (Projectile.oldPos[i] == Vector2.Zero)
+				break;
+			unSmoothPos.Add(Projectile.oldPos[i]);
+		}
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos);//平滑
+		var SmoothTrail = new List<Vector2>();
+		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
+		{
+			SmoothTrail.Add(SmoothTrailX[x]);
+		}
+		if (unSmoothPos.Count != 0)
+			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
+
+		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
+		var bars = new List<Vertex2D>();
+		var bars2 = new List<Vertex2D>();
+		var bars3 = new List<Vertex2D>();
+		for (int i = SmoothTrail.Count - 1; i > 0; --i)
+		{
+			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
+			if (mulFac > 1f)
+			{
+				mulFac = 1f;
+			}
+			float factor = i / (float)SmoothTrail.Count * mulFac;
+			float width = TrailWidthFunction(factor);
+			float timeValue = -(float)Main.time * 0.06f;
+
+			Vector2 drawPos = SmoothTrail[i] + halfSize;
+			Color drawC = Color.White;
+			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
+			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 0, width)));
+			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
+			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+		}
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Effect effect = TrailShader;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.CurrentTechnique.Passes[0].Apply();
+		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+		Main.graphics.GraphicsDevice.Textures[0] = TrailTextureBlack;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		if (bars.Count > 3)
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		if (bars2.Count > 3)
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
+		if (bars3.Count > 3)
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+	}
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-		var c0 = new Color(0.6f, 0.3f, 0f);
+		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
+		float width = TrailWidth;
+		List<Vector2> unSmoothPos = new List<Vector2>();
+		for (int i = 0; i < Projectile.oldPos.Length; ++i)
+		{
+			if (Projectile.oldPos[i] == Vector2.Zero)
+				break;
+			unSmoothPos.Add(Projectile.oldPos[i]);
+		}
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos);//平滑
+		var SmoothTrail = new List<Vector2>();
+		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
+		{
+			SmoothTrail.Add(SmoothTrailX[x]);
+		}
+		if (unSmoothPos.Count != 0)
+			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
+
 		var bars = new List<Vertex2D>();
-		float width = 48;
-
-		int TrueL = 0;
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
+		var bars2 = new List<Vertex2D>();
+		var bars3 = new List<Vertex2D>();
+		for (int i = 1; i < SmoothTrail.Count; ++i)
 		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
+			if (SmoothTrail[i] == Vector2.Zero)
 				break;
+			var normalDir = SmoothTrail[i - 1] - SmoothTrail[i];
+			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
+			if (mulFac > 1f)
+			{
+				mulFac = 1f;
+			}
+			float factor = i / (float)SmoothTrail.Count * mulFac;
+			float widthZ = TrailWidthFunction(factor);
+			var c0 = new Color(1f - (normalDir.X + 5f) / 10f, 1f - (normalDir.Y + 5f) / 10f, 0.1f, 1);
 
-			TrueL++;
-		}
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
-		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
 
-			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-			var factor = i / (float)TrueL;
-			var w = MathHelper.Lerp(1f, 0.05f, factor);
-			float x0 = factor * 0.6f - (float)(Main.timeForVisualEffects / 15d) + 10000;
-			x0 %= 1f;
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
+			float x0 = factor * 1.3f + (float)(Main.time * 0.03f);
+			Vector2 drawPos = SmoothTrail[i] - Main.screenPosition + halfSize;
+
+			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * width, c0, new Vector3(x0, 1, widthZ)));
+			bars.Add(new Vertex2D(drawPos, c0, new Vector3(x0, 0.5f, widthZ)));
+			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * width, c0, new Vector3(x0, 1, widthZ)));
+			bars2.Add(new Vertex2D(drawPos, c0, new Vector3(x0, 0.5f, widthZ)));
+			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * width, c0, new Vector3(x0, 1, widthZ)));
+			bars3.Add(new Vertex2D(drawPos, c0, new Vector3(x0, 0.5f, widthZ)));
 		}
-		Texture2D t = ModAsset.WaterLine.Value;
-		Main.graphics.GraphicsDevice.Textures[0] = t;
+		Texture2D warpTex = Commons.ModAsset.Trail_1.Value;
 		if (bars.Count > 3)
-			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
+			spriteBatch.Draw(warpTex, bars, PrimitiveType.TriangleStrip);
+		if (bars2.Count > 3)
+			spriteBatch.Draw(warpTex, bars2, PrimitiveType.TriangleStrip);
+		if (bars3.Count > 3)
+			spriteBatch.Draw(warpTex, bars3, PrimitiveType.TriangleStrip);
 	}
-	public override void OnKill(int timeLeft)
+	public override void KillMainStructure()
 	{
-		if (timeLeft > 0)
-			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 1f, 3f);
-		if (timeLeft <= 0)
-			return;
+		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 10f, 3f);
 		switch (Main.rand.Next(2))
 		{
 			case 0:
@@ -164,13 +299,13 @@ public class NewWaterBolt : ModProjectile, IWarpProjectile
 				break;
 		}
 
-		for (int j = 0; j < 8 * 5; j++)
+		for (int j = 0; j < 10; j++)
 		{
 			Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale;
 			int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f * 5);
 			Main.dust[dust0].noGravity = true;
 		}
-		for (int j = 0; j < 16 * 5; j++)
+		for (int j = 0; j < 20; j++)
 		{
 			Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale;
 			int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * 5);
@@ -192,5 +327,6 @@ public class NewWaterBolt : ModProjectile, IWarpProjectile
 				}
 			}
 		}
+		base.KillMainStructure();
 	}
 }
