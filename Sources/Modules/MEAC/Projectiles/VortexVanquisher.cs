@@ -54,8 +54,8 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 	public override void Attack()
 	{
 		Player player = Main.player[Projectile.owner];
-		//TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
-		//Tplayer.HideLeg = true;
+		TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
+		Tplayer.HideLeg = true;
 		if (Main.myPlayer == Projectile.owner && Main.mouseRight && Main.mouseRightRelease)
 		{
 
