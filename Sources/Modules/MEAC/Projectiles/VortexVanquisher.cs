@@ -54,8 +54,8 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 	public override void Attack()
 	{
 		Player player = Main.player[Projectile.owner];
-		TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
-		Tplayer.HideLeg = true;
+		//TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
+		//Tplayer.HideLeg = true;
 		if (Main.myPlayer == Projectile.owner && Main.mouseRight && Main.mouseRightRelease)
 		{
 
@@ -66,7 +66,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 		Vector2 vToMouse = Main.MouseWorld - player.Top;
 		float addHeadRotation = ((float)Math.Atan2(vToMouse.Y, vToMouse.X) + 6.283f) % 6.283f;
 
-		if (player.direction == -1)
+		/*if (player.direction == -1)
 		{
 			if (addHeadRotation >= 2 && addHeadRotation < 5.71f)
 				addHeadRotation = 5.71f;
@@ -75,7 +75,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 		{
 			if (addHeadRotation >= 0.57f)
 				addHeadRotation = 0.57f;
-		}
+		}*/
 		float timeMul = 1f / player.meleeSpeed;
 
 		if (attackType == 0)
@@ -122,7 +122,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
-				Tplayer.HeadRotation = -BodyRotation + addHeadRotation * player.gravDir;
+				//Tplayer.HeadRotation = -BodyRotation + addHeadRotation * player.gravDir;
 			}
 		}
 		if (attackType == 1)
@@ -157,7 +157,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
-				Tplayer.HeadRotation = -BodyRotation;
+				//Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
 		if (attackType == 2)
@@ -204,7 +204,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
-				Tplayer.HeadRotation = -BodyRotation + addHeadRotation;
+				//Tplayer.HeadRotation = -BodyRotation + addHeadRotation;
 			}
 		}
 		if (attackType == 3)
@@ -227,6 +227,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Normalize(Main.MouseWorld - Player.Center) * 180, 0.06f);
 				Projectile.rotation += 0.3f * Projectile.spriteDirection / timeMul;
 				mainVec = Projectile.rotation.ToRotationVector2() * 160;
+				Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Vector2.Normalize(Main.MouseWorld - Player.Center).ToRotation() - 1.57f);
 			}
 
 			if (timer > 120 * timeMul)
@@ -276,7 +277,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
-				Tplayer.HeadRotation = -BodyRotation;
+				//Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
 	}
