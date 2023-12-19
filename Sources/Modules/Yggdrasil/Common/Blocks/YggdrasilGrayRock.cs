@@ -17,6 +17,8 @@ public class YggdrasilGrayRock : ModTile
 		Main.tileMergeDirt[Type] = true;
 		Main.tileBlockLight[Type] = true;
 
+
+
 		DustType = DustID.BorealWood;
 		MinPick = 180;
 		HitSound = SoundID.Dig;
@@ -25,5 +27,11 @@ public class YggdrasilGrayRock : ModTile
 	public override void PostSetupTileMerge()
 	{
 		base.PostSetupTileMerge();
+	}
+	public override void NearbyEffects(int i, int j, bool closer)
+	{
+		Tile tile = Main.tile[i, j];
+
+		base.NearbyEffects(i, j, closer);
 	}
 }
