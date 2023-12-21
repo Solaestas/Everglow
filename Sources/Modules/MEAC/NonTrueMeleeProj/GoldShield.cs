@@ -1,7 +1,24 @@
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
+using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria;
+using Terraria.Audio;
+using Terraria.Chat;
+using Terraria.GameContent.Events;
+using Terraria.GameContent.Items;
+using Terraria.GameInput;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
+using Terraria.Utilities;
+using Terraria.WorldBuilding;
+using static Terraria.IL_Player.HurtModifiers;
+using System.Runtime.CompilerServices;
+
 namespace Everglow.MEAC.NonTrueMeleeProj;
 
 public class GoldShield : ModProjectile, IWarpProjectile
@@ -283,57 +300,63 @@ public class GoldShield : ModProjectile, IWarpProjectile
 }
 public class GlodShieldPlayer : ModPlayer
 {
-	public int immuneTime = 0;
-	// TODO 叫人来修
+
+	public int GlodShieldDurability;
+	public bool Dodge;
+
+	/*public override bool FreeDodge(Player.HurtInfo info)
+	{
+		
+	}*/
+	public override bool FreeDodge(Player.HurtInfo info)
+	{
+		if (Dodge)
+		{
+			Dodge = false;
+			return true;
+		}
+		return base.FreeDodge(info);
+	}
+
+	public void PreHurt(ref Player.HurtInfo info)
+	{
+		GlodShieldDurability = 0;
+		foreach (Projectile proj in Main.projectile)
+		{
+			if (proj.active & proj.owner == Player.whoAmI & proj.type == ModContent.ProjectileType<GoldShield>())
+			{
+				GlodShieldDurability = (int)proj.ai[1];
+				if (GlodShieldDurability >= info.Damage)
+				{
+					Dodge = true;
+					this.GlodShieldDurability -= (int)info.Damage;
+					info.Damage *= 0;
+				}
+				else
+				{
+					info.Damage -= GlodShieldDurability;
+					this.GlodShieldDurability *= 0;
+				}
+				Main.player[proj.owner].immune = true;
+				Main.player[proj.owner].immuneTime = 30;
+				Main.player[proj.owner].noKnockback = true;
+				proj.ai[1] = GlodShieldDurability;
+				if (proj.ai[1] <= 0)
+				{
+					proj.ai[1] = 0;
+					proj.ai[0] = 10;
+					proj.timeLeft = 15;
+				}
+			}
+		}
+	}
 	public override void ModifyHurt(ref Player.HurtModifiers modifiers)
 	{
-		//if (immuneTime > 0)
-		//{
-		//	return false;
-		//}
-		//immuneTime = 30;
-		//if (Player.longInvince)
-		//	immuneTime = 45;
-		//for (int x = 0; x < Main.projectile.Length; x++)
-		//{
-		//	if (Main.projectile[x].owner == Player.whoAmI)
-		//	{
-		//		if (Main.projectile[x].type == ModContent.ProjectileType<GoldShield>() && Main.projectile[x].active)
-		//		{
-
-		//			if (Main.projectile[x].ai[1] >= damage)
-		//			{
-		//				Main.projectile[x].ai[1] -= damage;
-		//				Main.projectile[x].ai[0] = 10;
-		//				return false;
-		//			}
-		//			else
-		//			{
-		//				damage -= (int)Main.projectile[x].ai[1];
-		//				Main.projectile[x].ai[1] = 0;
-		//				Main.projectile[x].timeLeft = 14;
-		//			}
-		//		}
-		//	}
-
-		//}
-	}
-	public static int DownUpdate(int value)
-	{
-		if (value > 0)
+		modifiers.ModifyHurtInfo += new Player.HurtModifiers.HurtInfoModifier(this.PreHurt);
+		if (GlodShieldDurability > 0)
 		{
-			value--;
+			modifiers.DisableDust();
+			modifiers.DisableSound();
 		}
-		else
-		{
-			value = 0;
-		}
-		return value;
-	}
-	public override void PostUpdate()
-	{
-		immuneTime = DownUpdate(immuneTime);
-		if (immuneTime > 0)
-			Player.immune = true;
 	}
 }
