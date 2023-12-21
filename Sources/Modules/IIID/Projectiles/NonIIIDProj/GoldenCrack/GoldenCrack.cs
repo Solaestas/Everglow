@@ -287,7 +287,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 		}
 		public override void Unload()
 		{
-			On_FilterManager.EndCapture += FilterManager_EndCapture;
+			On_FilterManager.EndCapture -= FilterManager_EndCapture;
 			Main.OnResolutionChanged -= Main_OnResolutionChanged;
 		}
 
