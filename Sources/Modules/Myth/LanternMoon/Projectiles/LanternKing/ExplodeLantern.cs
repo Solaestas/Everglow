@@ -168,7 +168,7 @@ public class ExplodeLantern : ModProjectile, IWarpProjectile
 					Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center, Vector2.Zero, HitType, Projectile.damage, Projectile.knockBack, Projectile.owner);
 			}
 		}
-		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.4f), Projectile.Center);
+		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.8f), Projectile.Center);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{

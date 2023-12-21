@@ -74,7 +74,7 @@ public class PlayerStamina : ModPlayer
 			stamina = 0;
 			staminaRecovery = true;
 		}
-		if (staminaRecovery)
+		if (staminaRecovery && recCD <= 0)
 		{
 			stamina += staminaRecoveryValue;
 			if (stamina > maxStamina)

@@ -49,7 +49,7 @@ public abstract class SlingshotProjectile : ModProjectile
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
 		if (Power == 24 && player.controlUseItem)
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Misc/Sounds/NewSlingshot" + Main.rand.Next(8).ToString()).WithVolumeScale(0.4f), Projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Misc/Sounds/NewSlingshot" + Main.rand.Next(8).ToString()).WithVolumeScale(0.8f), Projectile.Center);
 		Vector2 MouseToPlayer = Main.MouseWorld - player.MountedCenter;
 		if (player.controlUseItem && Release)
 		{

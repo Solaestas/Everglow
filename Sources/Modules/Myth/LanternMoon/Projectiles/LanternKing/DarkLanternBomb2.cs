@@ -126,6 +126,6 @@ public class DarkLanternBomb2 : ModProjectile, IWarpProjectile
 		GorePos = new Vector2(Main.rand.NextFloat(-0.4f, 1.4f), 0).RotatedByRandom(6.283) * 6f;
 		int gra3 = Gore.NewGore(null, Projectile.Center, GorePos, ModContent.Find<ModGore>("Everglow/FloatLanternGore6").Type, 1f);
 		Main.gore[gra3].timeLeft = Main.rand.Next(300, 600);
-		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.4f), Projectile.Center);
+		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.8f), Projectile.Center);
 	}
 }
