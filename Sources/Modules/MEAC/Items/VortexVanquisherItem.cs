@@ -121,14 +121,14 @@ public class VortexVanquisherItem : ModItem
 						if (proj.owner == player.whoAmI && proj.type == ModContent.ProjectileType<GoldShield>() && proj.active)
 						{
 							proj.timeLeft = 1200;
-							proj.ai[1] = player.statLife*0.23f;//盾量
+							proj.ai[1] = player.statLifeMax*0.23f;//盾量
 							HasProj = true;
 						}
 					}
 					if (!HasProj)
 					{
 						Projectile proj2 = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<GoldShield>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
-						proj2.ai[1] = player.statLife*0.23f;//盾量
+						proj2.ai[1] = player.statLifeMax * 0.23f;//盾量
 					}
 					Vector2 CheckPoint = Main.MouseWorld;
 					for (int y = 0; y < 60; y++)
