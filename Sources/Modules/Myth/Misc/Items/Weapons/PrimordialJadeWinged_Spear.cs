@@ -1,11 +1,11 @@
 using Everglow.Myth.Common;
-using Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
+using Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Items.Weapons;
 
-public class Hepuyuan : ModItem
+public class PrimordialJadeWinged_Spear : ModItem
 {
 	public override void SetDefaults()
 	{
@@ -22,7 +22,7 @@ public class Hepuyuan : ModItem
 		Item.DamageType = DamageClass.Melee;
 		Item.noMelee = true;
 		Item.shootSpeed = 5f;
-		Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Melee.Hepuyuan.Hepuyuan>();
+		Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear.PrimordialJadeWinged_Spear>();
 	}
 	public override bool AltFunctionUse(Player player)
 	{
@@ -104,7 +104,7 @@ public class Hepuyuan : ModItem
 					float CosineTheta = Math.Clamp(Vector2.Dot(playerToNPC, playerToMouseWorld), 0, 1);//用于计算鼠标方向权重
 					if (Main.npc[d].type == NPCID.TargetDummy)
 						Threaten[d] = 1;
-					float k0 = HepuyuanOwner.MouseCooling / 20f;
+					float k0 = PrimordialJadeWinged_SpearOwner.MouseCooling / 20f;
 					Threaten[d] = Threaten[d] * CosineTheta * (1 - k0) + Threaten[d] * k0;
 				}
 			}
@@ -122,23 +122,23 @@ public class Hepuyuan : ModItem
 			}
 
 			Vector2 NewVelocity = velocity;
-			if (MaxT > 0 && HepuyuanOwner.MouseCooling > 3)
+			if (MaxT > 0 && PrimordialJadeWinged_SpearOwner.MouseCooling > 3)
 
 				NewVelocity = Vector2.Normalize(Main.npc[MaxD].Center + Main.npc[MaxD].velocity * 2 - player.Center) * velocity.Length();
-			Projectile.NewProjectile(source, position, NewVelocity, ModContent.ProjectileType<Projectiles.Weapon.Melee.Hepuyuan.Hepuyuan_thrust>(), damage * 2, knockback, player.whoAmI, 0f, 0f);
+			Projectile.NewProjectile(source, position, NewVelocity, ModContent.ProjectileType<Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear.PrimordialJadeWinged_Spear_thrust>(), damage * 2, knockback, player.whoAmI, 0f, 0f);
 
 			player.velocity += NewVelocity * 4;
-			HepuyuanOwner.MouseCooling = 30;
+			PrimordialJadeWinged_SpearOwner.MouseCooling = 30;
 			return false;
 		}
-		if (CanDown && player.ownedProjectileCounts[ModContent.ProjectileType<HepuyuanDown>()] < 1)
+		if (CanDown && player.ownedProjectileCounts[ModContent.ProjectileType<PrimordialJadeWinged_SpearDown>()] < 1)
 		{
-			Projectile.NewProjectile(source, position, new Vector2(0, player.gravDir), ModContent.ProjectileType<HepuyuanDown>(), damage * 5, knockback, player.whoAmI, 0f, 0f);
+			Projectile.NewProjectile(source, position, new Vector2(0, player.gravDir), ModContent.ProjectileType<PrimordialJadeWinged_SpearDown>(), damage * 5, knockback, player.whoAmI, 0f, 0f);
 			return false;
 		}
 		if (player.ownedProjectileCounts[Item.shoot] < 1)
 		{
-			Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<Misc.Projectiles.Weapon.Melee.Hepuyuan.Hepuyuan>(), damage, knockback, player.whoAmI, 0f, 0f);
+			Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear.PrimordialJadeWinged_Spear>(), damage, knockback, player.whoAmI, 0f, 0f);
 		}
 		return false;
 	}
@@ -169,7 +169,7 @@ public class Hepuyuan : ModItem
 		return null;
 	}
 }
-public class HepuyuanOwner : ModPlayer
+public class PrimordialJadeWinged_SpearOwner : ModPlayer
 {
 	public static int MouseCooling = 0;
 	public override void PostUpdate()

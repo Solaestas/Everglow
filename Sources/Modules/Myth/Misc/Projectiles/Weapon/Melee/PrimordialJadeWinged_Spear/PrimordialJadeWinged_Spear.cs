@@ -1,8 +1,8 @@
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
+namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
 
-public class Hepuyuan : MeleeProj
+public class PrimordialJadeWinged_Spear : MeleeProj
 {
 	public override void SetDef()
 	{
@@ -35,7 +35,7 @@ public class Hepuyuan : MeleeProj
 	}
 	public override string TrailColorTex()
 	{
-		return "Everglow/Myth/Misc/Projectiles/Weapon/Melee/Hepuyuan/Hepuyuan_meleeColor";
+		return "Everglow/Myth/Misc/Projectiles/Weapon/Melee/PrimordialJadeWinged_Spear/PrimordialJadeWinged_Spear_meleeColor";
 	}
 	public override float TrailAlpha(float factor)
 	{
@@ -82,7 +82,7 @@ public class Hepuyuan : MeleeProj
 			if (timer == (int)(30 * timeMul))
 			{
 				Vector2 v0 = new Vector2(Projectile.spriteDirection * 6, -0.5f);
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center - v0 * 30, v0, ModContent.ProjectileType<Hepuyuan_thrust2>(), Projectile.damage, 0, Projectile.owner);
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center - v0 * 30, v0, ModContent.ProjectileType<PrimordialJadeWinged_Spear_thrust2>(), Projectile.damage, 0, Projectile.owner);
 			}
 			if (timer > 3 * timeMul && timer < 30 * timeMul)
 			{
@@ -185,7 +185,7 @@ public class Hepuyuan : MeleeProj
 			if (timer == (int)(69 * timeMul))
 			{
 				Vector2 v0 = new Vector2(Projectile.spriteDirection * 6, 0.5f);
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center - v0 * 30, v0, ModContent.ProjectileType<Hepuyuan_thrust2>(), Projectile.damage, 0, Projectile.owner);
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center - v0 * 30, v0, ModContent.ProjectileType<PrimordialJadeWinged_Spear_thrust2>(), Projectile.damage, 0, Projectile.owner);
 			}
 			if (timer > 83 * timeMul)
 				NextAttackType();

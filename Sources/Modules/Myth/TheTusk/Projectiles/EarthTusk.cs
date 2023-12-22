@@ -1,4 +1,3 @@
-using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
@@ -7,7 +6,7 @@ namespace Everglow.Myth.TheTusk.Projectiles;
 
 public class EarthTusk : ModProjectile
 {
-	public override string Texture => "Everglow/Myth/TheTusk/Projectiles/Textures/Tuskplus0";
+	public override string Texture => "Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/LargeTusk";
 	public override void SetDefaults()
 	{
 		Projectile.tileCollide = false;
@@ -193,13 +192,13 @@ public class EarthTusk : ModProjectile
 		var bars = new List<Vertex2D>
 		{
 			new Vertex2D(SummonCenterII + TenNormalize - Main.screenPosition, StartColor, new Vector3(0, value, 0)),
-			new Vertex2D(SummonCenterII - TenNormalize - Main.screenPosition, StartColor, new Vector3(1, value, 0)),
+			new Vertex2D(SummonCenterII - TenNormalize - Main.screenPosition, StartColor, new Vector3(1 / 6f, value, 0)),
 
 			new Vertex2D(ProjCenterII + TenNormalize - Main.screenPosition, EndColor, new Vector3(0, 0, 0)),
-			new Vertex2D(ProjCenterII - TenNormalize - Main.screenPosition, EndColor, new Vector3(1, 0, 0))
+			new Vertex2D(ProjCenterII - TenNormalize - Main.screenPosition, EndColor, new Vector3(1 / 6f, 0, 0))
 		};
 
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Tuskplus0.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.LargeTusk.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
 

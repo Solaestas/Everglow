@@ -2,7 +2,7 @@ using Everglow.Myth.Common;
 using Everglow.Myth.TheTusk;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
+namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
 
 class XiaoHit : ModProjectile
 {

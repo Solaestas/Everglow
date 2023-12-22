@@ -1,4 +1,4 @@
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
+namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
 public class BlackRingVFXPipeline : Pipeline
 {
 

@@ -1,6 +1,6 @@
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
+namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
 
-public class HepuyuanSpice : ModProjectile
+public class PrimordialJadeWinged_SpearSpice : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -46,7 +46,7 @@ public class HepuyuanSpice : ModProjectile
 		Vx.Add(new Vertex2D(Vbase + v0 * 2 * (1 - fadeG), cp, new Vector3(1 - fadeG, fadeG, 0)));
 		Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeG + v0 * 2 * (1 - fadeG), cp, new Vector3(1 - fadeG, 0, 0)));
 
-		Texture2D t = ModAsset.HepuyuanSpice.Value;
+		Texture2D t = ModAsset.PrimordialJadeWinged_SpearSpice.Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect dissolve = Commons.ModAsset.Dissolve.Value;

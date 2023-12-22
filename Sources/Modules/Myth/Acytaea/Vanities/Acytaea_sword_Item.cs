@@ -1,4 +1,4 @@
-using Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
+using Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
 using Terraria.Audio;
 using Terraria.DataStructures;
 

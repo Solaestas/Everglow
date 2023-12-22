@@ -1,4 +1,5 @@
 using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
 
@@ -38,6 +39,12 @@ public class LargeTusk : ModNPC
 	private bool squ = false;
 	private bool Down = true;
 	private bool Spr = false;
+	public int Style = 0;
+	public override void OnSpawn(IEntitySource source)
+	{
+		Style = Main.rand.Next(6);
+		base.OnSpawn(source);
+	}
 	public override void AI()
 	{
 		if (VBaseType1 == Vector2.Zero)
@@ -104,17 +111,6 @@ public class LargeTusk : ModNPC
 			if (Main.masterMode)
 				NPC.damage = 100;
 			V *= 0.6f;
-			/*if ((player.Center - NPC.Center).Length() < 400)
-                {
-                    MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
-                    mplayer.MinaShake = 4;
-                    float Str = 1;
-                    if ((player.Center - NPC.Center).Length() > 100)
-                    {
-                        Str = 100 / (player.Center - NPC.Center).Length();
-                    }
-                    mplayer.ShakeStrength = Str;
-                }*/
 			if (V.Y <= 0.5f)
 				squ = true;
 		}
@@ -152,18 +148,18 @@ public class LargeTusk : ModNPC
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, BackBase.ToArray(), 0, BackBase.Count / 3);
 
 
-		var Vx2 = new List<Vertex2D>
+		var bars = new List<Vertex2D>
 		{
-			new Vertex2D(NPC.Bottom + new Vector2(-12, 5) - Main.screenPosition, color, new Vector3(0, index, 0)),
-			new Vertex2D(NPC.Bottom + new Vector2(12, V.Y - 79) - Main.screenPosition, color, new Vector3(1, 0, 0)),
-			new Vertex2D(NPC.Bottom + new Vector2(12, 5) - Main.screenPosition, color, new Vector3(1, index, 0)),
-			new Vertex2D(NPC.Bottom + new Vector2(-12, V.Y - 79) - Main.screenPosition, color, new Vector3(0, 0, 0)),
-			new Vertex2D(NPC.Bottom + new Vector2(12, V.Y - 79) - Main.screenPosition, color, new Vector3(1, 0, 0)),
-			new Vertex2D(NPC.Bottom + new Vector2(-12, 5) - Main.screenPosition, color, new Vector3(0, index, 0))
+			new Vertex2D(NPC.Bottom + new Vector2(-12, 5) - Main.screenPosition, color, new Vector3(Style / 6f, index, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(12, V.Y - 79) - Main.screenPosition, color, new Vector3(Style / 6f + 1 / 6f, 0, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(12, 5) - Main.screenPosition, color, new Vector3(Style / 6f + 1 / 6f, index, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(-12, V.Y - 79) - Main.screenPosition, color, new Vector3(Style / 6f, 0, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(12, V.Y - 79) - Main.screenPosition, color, new Vector3(Style / 6f+ 1 / 6f, 0, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(-12, 5) - Main.screenPosition, color, new Vector3(Style / 6f, index, 0))
 		};
-		thang = ModAsset.Tuskplus0.Value;
+		thang = ModAsset.LargeTusk.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = thang;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
 
 
 		var ForeBase = new List<Vertex2D>

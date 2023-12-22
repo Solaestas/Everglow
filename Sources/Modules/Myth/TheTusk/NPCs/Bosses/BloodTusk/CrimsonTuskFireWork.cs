@@ -1,16 +1,10 @@
-using Everglow.Myth.TheTusk;
 using Everglow.Myth.TheTusk.Projectiles;
 using Everglow.Myth.TheTusk.Projectiles.Weapon;
-using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
 
 public class CrimsonTuskFireWork : ModNPC
 {
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("Tusk Spike Fireworks");
-			}
 	public override void SetDefaults()
 	{
 		NPC.behindTiles = true;
@@ -26,7 +20,7 @@ public class CrimsonTuskFireWork : ModNPC
 		NPC.width = 30;
 		NPC.height = 30;
 		NPC.defense = 0;
-		NPC.lifeMax = 5;
+		NPC.lifeMax = 15;
 		NPC.knockBackResist = 0f;
 		NPC.value = Item.buyPrice(0, 0, 0, 0);
 		NPC.aiStyle = -1;
@@ -34,7 +28,7 @@ public class CrimsonTuskFireWork : ModNPC
 		NPC.lavaImmune = true;
 		NPC.noGravity = true;
 		NPC.noTileCollide = true;
-		NPC.dontTakeDamage = true;
+		NPC.dontTakeDamage = false;
 	}
 
 	private bool Shoot = false;
@@ -81,6 +75,7 @@ public class CrimsonTuskFireWork : ModNPC
 	}
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
+		//GraphicsUtils.PushSpriteBatchState(spriteBatch);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 		var bars2 = new List<Vertex2D>();
@@ -309,13 +304,8 @@ public class CrimsonTuskFireWork : ModNPC
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList2.ToArray(), 0, triangleList2.Count / 3);
 
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
-		CirR0 += 0.001f;
-		CirPro0 += 0.3f;
 	}
-
-	private float CirR0 = 0;
-	private float CirPro0 = 0;
 	private Vector2[,] Vlaser = new Vector2[12, 501];
 }

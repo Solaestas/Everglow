@@ -1,4 +1,5 @@
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
@@ -31,11 +32,51 @@ public class TuskWallRight : ModNPC
 	private bool squ = false;
 	private bool Down = true;
 	private bool canDespawn;
-	private int AimNPC = -1;
+	public NPC BloodTuskTarget;
+	public override void OnSpawn(IEntitySource source)
+	{
+		foreach (NPC npc in Main.npc)
+		{
+			if (npc.active)
+			{
+				if (npc.type == ModContent.NPCType<BloodTusk>())
+				{
+					if ((npc.Center - NPC.Center).Length() < 3000)
+					{
+						BloodTuskTarget = npc;
+						break;
+					}
+				}
+			}
+		}
+		base.OnSpawn(source);
+	}
 	public override void AI()
 	{
+		if (BloodTuskTarget == null)
+		{
+			foreach (NPC npc in Main.npc)
+			{
+				if (npc.active)
+				{
+					if (npc.type == ModContent.NPCType<BloodTusk>())
+					{
+						if ((npc.Center - NPC.Center).Length() < 3000)
+						{
+							BloodTuskTarget = npc;
+							break;
+						}
+					}
+				}
+			}
+		}
+		if (BloodTuskTarget == null)
+		{
+			NPC.active = false;
+		}
+		BloodTusk bTusk = BloodTuskTarget.ModNPC as BloodTusk;
 		/*联机情况下错误排查*/
-		if (NPC.Bottom.Y > BloodTusk.DarkCenter.Y && Collision.SolidCollision(NPC.Bottom + new Vector2(0, -10), 1, 1))
+		if (NPC.Bottom.Y > bTusk.DarkCenter.Y && Collision.SolidCollision(NPC.Bottom + new Vector2(0, -10), 1, 1))
 			NPC.position.Y -= 5f;
 		NPC.TargetClosest(false);
 		VMax[0] = new Vector2(0, 840);
@@ -43,23 +84,13 @@ public class TuskWallRight : ModNPC
 		if (NPC.collideX && Down)
 			NPC.active = false;
 		NPC.velocity.X *= 0;
-		if (AimNPC == -1)
+
+		if (BloodTuskTarget.active && BloodTuskTarget.life < BloodTuskTarget.lifeMax * 0.5)
 		{
-			for (int a = 0; a < 200; a++)
-			{
-				if (Main.npc[a].type == ModContent.NPCType<BloodTusk>() && Main.npc[a].active)
-					AimNPC = a;
-			}
-		}
-		if (AimNPC != -1)
-		{
-			if (Main.npc[AimNPC].active && Main.npc[AimNPC].life < Main.npc[AimNPC].lifeMax * 0.5)
-			{
-				if (NPC.Center.X - Main.npc[AimNPC].Center.X > 150)
-					NPC.position.X -= 0.05f;
-				if (NPC.Center.X - Main.npc[AimNPC].Center.X < -150)
-					NPC.position.X += 0.05f;
-			}
+			if (NPC.Center.X - BloodTuskTarget.Center.X > 150)
+				NPC.position.X -= 0.05f;
+			if (NPC.Center.X - BloodTuskTarget.Center.X < -150)
+				NPC.position.X += 0.05f;
 		}
 		if (NPC.collideY && NPC.alpha > 0 && !squ)
 		{
@@ -88,26 +119,10 @@ public class TuskWallRight : ModNPC
 				}
 			}
 		}
-		if (!player.active || player.dead)
-			canDespawn = true;
-		else
-		{
-			if (NPC.CountNPCS(ModContent.NPCType<BloodTusk>()) <= 0)
-				canDespawn = true;
-			else
-			{
-				if (BloodTusk.Killing > 0)
-					canDespawn = true;
-				else
-				{
-					canDespawn = false;
-				}
-			}
-		}
 
 		if (NPC.CountNPCS(ModContent.NPCType<BloodTusk>()) <= 0)
 			squ = true;
-		if (BloodTusk.Killing > 0)
+		if (bTusk.Killing > 0)
 			squ = true;
 		if (squ)
 		{
@@ -148,6 +163,23 @@ public class TuskWallRight : ModNPC
 				}
 			}
 		}
+
+		if (!player.active || player.dead)
+			canDespawn = true;
+		else
+		{
+			if (NPC.CountNPCS(ModContent.NPCType<BloodTusk>()) <= 0)
+				canDespawn = true;
+			else
+			{
+				if (bTusk.Killing > 0)
+					canDespawn = true;
+				else
+				{
+					canDespawn = false;
+				}
+			}
+		}
 	}
 	public override bool CheckActive()
 	{
@@ -161,12 +193,6 @@ public class TuskWallRight : ModNPC
 	{
 		if (!startFight)
 			return false;
-		BloodTusk.FogSpace[17] = NPC.Center + new Vector2(66, 412);
-		BloodTusk.FogSpace[16] = NPC.Center + new Vector2(127, 260);
-		BloodTusk.FogSpace[15] = NPC.Center + new Vector2(169, 67);
-		BloodTusk.FogSpace[14] = NPC.Center + new Vector2(198, -131);
-		BloodTusk.FogSpace[13] = NPC.Center + new Vector2(203, -313);
-		BloodTusk.FogSpace[12] = NPC.Center + new Vector2(100, -563);
 		Color color = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Bottom.Y / 16d));
 		color = NPC.GetAlpha(color) * ((255 - NPC.alpha) / 255f);
 		Texture2D t = ModAsset.TuskWallRight.Value;

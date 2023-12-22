@@ -2,14 +2,14 @@ using Everglow.Myth.Common;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
+namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
 
-public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
+public class PrimordialJadeWinged_Spear_thrust2 : ModProjectile, IWarpProjectile
 {
-	public override string Texture => "Everglow/Myth/Misc/Projectiles/Weapon/Melee/Hepuyuan/Hepuyuan";
+	public override string Texture => "Everglow/Myth/Misc/Projectiles/Weapon/Melee/PrimordialJadeWinged_Spear/PrimordialJadeWinged_Spear";
 	public override void SetDefaults()
 	{
-		Projectile.extraUpdates = 12;
+		Projectile.extraUpdates = 16;
 		Projectile.timeLeft = 240;
 		Projectile.width = 80;
 		Projectile.height = 80;
@@ -17,15 +17,12 @@ public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
 		Projectile.friendly = true;
 		Projectile.penetrate = -1;
 	}
-	public Vector2 PlayerSafePos = new Vector2();
 	public override void OnSpawn(IEntitySource source)
 	{
 		Player player = Main.player[Projectile.owner];
-		Projectile.extraUpdates = (int)(12 * player.meleeSpeed);
-		PlayerSafePos = player.position;
-		Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 8;
-
-		SoundEngine.PlaySound(SoundID.Item71);
+		Projectile.extraUpdates = (int)(16 * player.meleeSpeed);
+		Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 3.7F;
+		SoundEngine.PlaySound(SoundID.Item71.WithVolume(0.6f).WithPitchOffset(-0.5f), Projectile.Center);
 	}
 	public override bool PreAI()
 	{
@@ -33,68 +30,52 @@ public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + MathF.PI / 4f;
 		Projectile.velocity *= 0.995f;
 		player.heldProj = Projectile.whoAmI;
-		player.fullRotation = MathF.Sin((240 - Projectile.timeLeft) / 240f * MathF.PI) * Math.Sign(Projectile.velocity.X) * 1.26f;
-		player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height / 2f);
-		player.immune = true;
-		player.immuneTime = 5;
-		player.noFallDmg = true;
-		if (Projectile.timeLeft > 1)
-		{
-			player.Center = Projectile.Center - Vector2.Normalize(Projectile.velocity) * (240 - Projectile.timeLeft);
-		}
-		if (!Collision.SolidCollision(player.position, player.Hitbox.Width, player.Hitbox.Height))
-		{	
-			PlayerSafePos = player.position;
-		}
-		if (Collision.SolidCollision(Projectile.Center, 1, 1))
-		{
-			Projectile.velocity *= 0.9f;
-			if (Projectile.timeLeft % 30 == 1)
-			{
-				for (int h = 0; h < 18; h++)
-				{
-					Vector2 v = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 16 * h;
-					if (Collision.SolidCollision(v, 1, 1))
-						Collision.HitTiles(v, Projectile.velocity * 20, 16, 16);
-				}
-			}
-			collisionTimer++;
-		}
+
 		if (Projectile.timeLeft < 6)
 		{
-			player.velocity *= 0f;
 			Projectile.velocity *= 0.4f;
 		}
 		if (Main.rand.Next(240) < Projectile.timeLeft)
 		{
-			if (Main.rand.NextBool(9))
+			if (Main.rand.NextBool(7))
 			{
 				GenerateVFX();
 			}
-			if(Main.rand.NextBool(3))
+			if(Main.rand.NextBool(6))
 			{
 				GenerateSpark();
 			}
 		}
-		if (Projectile.timeLeft % 60 == 0)
+		if (Projectile.timeLeft % 40 == 0)
 		{
-			var v = Vector2.Normalize(Projectile.velocity);
-			int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<XiaoBlackWave>(), 0, 0, player.whoAmI, Math.Clamp(Projectile.velocity.Length() / 4f, 0f, 4f), 0);
-			Main.projectile[h].rotation = (float)(Math.Atan2(v.Y, v.X) + Math.PI / 2d);
+			Generate3DVFXRing();
 		}
-
+		MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
+		myplayer.InvincibleFrameTime = 15;
 		return false;
 	}
 	public override void OnKill(int timeLeft)
 	{
 		Player player = Main.player[Projectile.owner];
 		player.fullRotation = 0;
-		player.position = PlayerSafePos;
+	}
+	private void Generate3DVFXRing()
+	{
+		BlackRingVFX v = new BlackRingVFX()
+		{
+			pos = Projectile.Center,
+			vel = Projectile.velocity,
+			color = Color.Lerp(Color.White, Color.Transparent, 0.4f),
+			scale = 3,
+			maxtime = 20,
+			timeleft = 20
+		};
+		Ins.VFXManager.Add(v);
 	}
 	private void GenerateVFX()
 	{
 		Vector2 velocityLeft = Vector2.Normalize(Projectile.velocity).RotatedBy(-MathHelper.PiOver2);
-		var positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-30f, 30f) + Vector2.Normalize(Projectile.velocity) * (Main.rand.NextFloat(Projectile.timeLeft - 120, Projectile.timeLeft + 60));
+		var positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-30f, 30f) + Vector2.Normalize(Projectile.velocity) * (Main.rand.NextFloat(Projectile.timeLeft - 320, Projectile.timeLeft + 60));
 		if (Collision.SolidCollision(Projectile.Center, 1, 1))
 		{
 			positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-40f, 40f) + Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(-480f, 0f);
@@ -102,14 +83,25 @@ public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
 
 		var filthy = new FilthyLucreFlame_darkDust
 		{
-			velocity = Projectile.velocity * 1.5f + velocityLeft * Main.rand.NextFloat(-10f, 10f),
+			velocity = Projectile.velocity * 3f + velocityLeft * Main.rand.NextFloat(-10f, 10f),
 			Active = true,
 			Visible = true,
 			position = positionVFX,
 			maxTime = Main.rand.Next(17, 26),
-			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.004f, 0.004f), Main.rand.NextFloat(18f, 30f) }
+			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(18f, 30f) }
 		};
 		Ins.VFXManager.Add(filthy);
+
+		var filthy2 = new FilthyLucreFlameDust
+		{
+			velocity = Projectile.velocity * 3f + velocityLeft * Main.rand.NextFloat(-10f, 10f),
+			Active = true,
+			Visible = true,
+			position = positionVFX,
+			maxTime = Main.rand.Next(17, 26),
+			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(18f, 30f) }
+		};
+		Ins.VFXManager.Add(filthy2);
 	}
 	public void GenerateSpark()
 	{
@@ -143,9 +135,9 @@ public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
 		{
 			timeValue = Projectile.timeLeft / 60f;
 		}
-		Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 60f * timeValue;
-		Vector2 start = Projectile.Center + Vector2.Normalize(Projectile.velocity) * 150;
-		Vector2 end = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 750;
+		Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 40f * timeValue;
+		Vector2 start = Projectile.Center + Vector2.Normalize(Projectile.velocity) * 90;
+		Vector2 end = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 240;
 		float value = (Projectile.timeLeft) / 135f;
 		Vector2 middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
 		float time = (float)(Main.time * 0.03);
@@ -171,9 +163,15 @@ public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
 	public int collisionTimer = 0;
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D mainTex = ModAsset.Hepuyuan_Hepuyuan.Value;
+		Texture2D mainTex = ModAsset.PrimordialJadeWinged_Spear_PrimordialJadeWinged_Spear.Value;
 		Vector2 drawCenter = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 150f;
-		Main.spriteBatch.Draw(mainTex, drawCenter - Main.screenPosition, null, lightColor, Projectile.rotation, mainTex.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+		float fadeLightColor = 1f;
+		if(Projectile.timeLeft > 200)
+		{
+			fadeLightColor = 240 - Projectile.timeLeft;
+			fadeLightColor /= 40f;
+		}
+		Main.spriteBatch.Draw(mainTex, drawCenter - Main.screenPosition, null, lightColor * fadeLightColor, Projectile.rotation, mainTex.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		drawCenter = Projectile.Center + Vector2.Normalize(Projectile.velocity) * 60f;
 		float timeValue = 1f;
 		if (Projectile.timeLeft < 60)
@@ -181,16 +179,16 @@ public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
 			timeValue = Projectile.timeLeft / 60f;
 		}
 		Vector2 vel = Vector2.Normalize(Projectile.velocity);
-		Vector2 width = vel.RotatedBy(MathF.PI * 0.5) * 150 * timeValue;
+		Vector2 width = vel.RotatedBy(MathF.PI * 0.5) * 90 * timeValue;
 		Color drawColor = new Color(10, 255, 255, 0);
-		int trailLength = 48;
-		if ((240 - Projectile.timeLeft) / 3 < 48)
+		int trailLength = 24;
+		if ((240 - Projectile.timeLeft) / 3 < 24)
 		{
 			trailLength = (240 - Projectile.timeLeft) / 3;
 		}
-		if (48 - collisionTimer * 0.5f < trailLength)
+		if (24 - collisionTimer * 0.5f < trailLength)
 		{
-			trailLength = 48 - collisionTimer / 2;
+			trailLength = 24 - collisionTimer / 2;
 			if (trailLength < 10)
 			{
 				trailLength = 10;
@@ -206,8 +204,8 @@ public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
 			{
 				value = (trailLength - 1 - x) / 16f;
 			}
-			bars.Add(drawCenter - vel * 17 * x + width, drawColor * value, new Vector3(x / 1000f - timeEffectValue, 1, MathF.Sin(x / 64f)));
-			bars.Add(drawCenter - vel * 17 * x - width, drawColor * value, new Vector3(x / 1000f - timeEffectValue, 0, MathF.Sin(x / 64f)));
+			bars.Add(drawCenter - vel * 17 * x + width, drawColor * value, new Vector3(x / 1000f - timeEffectValue, 1, MathF.Sin(x / 48f)));
+			bars.Add(drawCenter - vel * 17 * x - width, drawColor * value, new Vector3(x / 1000f - timeEffectValue, 0, MathF.Sin(x / 48f)));
 		}
 
 		List<Vertex2D> barsDark = new List<Vertex2D>();
@@ -218,20 +216,20 @@ public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
 			{
 				value = (trailLength - 1 - x) / 16f;
 			}
-			barsDark.Add(drawCenter - vel * 17 * x + width, Color.White * value, new Vector3(x / 1000f - timeEffectValue, 1, MathF.Sin(x / 64f)));
-			barsDark.Add(drawCenter - vel * 17 * x - width, Color.White * value, new Vector3(x / 1000f - timeEffectValue, 0, MathF.Sin(x / 64f)));
+			barsDark.Add(drawCenter - vel * 17 * x + width, Color.White * value, new Vector3(x / 1000f - timeEffectValue, 1, MathF.Sin(x / 48f)));
+			barsDark.Add(drawCenter - vel * 17 * x - width, Color.White * value, new Vector3(x / 1000f - timeEffectValue, 0, MathF.Sin(x / 48f)));
 		}
 
 		List<Vertex2D> bars2 = new List<Vertex2D>();
 		for (int x = 0; x < trailLength; x++)
 		{
 			float value = 1;
-			if (x > trailLength - 10)
+			if (x > trailLength - 20)
 			{
-				value = (trailLength - 1 - x) / 9f;
+				value = (trailLength - 1 - x) / 19f;
 			}
-			bars2.Add(drawCenter - vel * 20 * x + width * 0.16f, drawColor * value, new Vector3(x / 48f - timeEffectValue * 1.2f, 1, MathF.Sin(x / 48f)));
-			bars2.Add(drawCenter - vel * 20 * x - width * 0.16f, drawColor * value, new Vector3(x / 48f - timeEffectValue * 1.2f, 0, MathF.Sin(x / 48f)));
+			bars2.Add(drawCenter - vel * 5 * x + width * 0.6f, drawColor * value, new Vector3(x / 48f - timeEffectValue * 1.2f, 1, MathF.Sin(x / 72f)));
+			bars2.Add(drawCenter - vel * 5 * x - width * 0.6f, drawColor * value, new Vector3(x / 48f - timeEffectValue * 1.2f, 0, MathF.Sin(x / 72f)));
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
@@ -245,7 +243,7 @@ public class Hepuyuan_thrust : ModProjectile, IWarpProjectile
 		Main.graphics.graphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, barsDark.ToArray(), 0, barsDark.Count - 2);
 
-		Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_0.Value;
+		Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_1.Value;
 		Main.graphics.graphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
 

@@ -2,11 +2,11 @@ using Everglow.Myth.Common;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
+namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
 
-public class HepuyuanDown : ModProjectile, IWarpProjectile
+public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 {
-	public override string Texture => "Everglow/Myth/Misc/Projectiles/Weapon/Melee/Hepuyuan/Hepuyuan";
+	public override string Texture => "Everglow/Myth/Misc/Projectiles/Weapon/Melee/PrimordialJadeWinged_Spear/PrimordialJadeWinged_Spear";
 	public override void SetDefaults()
 	{
 		Projectile.CloneDefaults(ProjectileID.Spear);
@@ -107,7 +107,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 					}
 					if (empty)
 						continue;
-					Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<HepuyuanSpice>(), (int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(50f, 110f), Main.rand.NextFloat(0f, 1f), Main.rand.NextFloat(0f, 1f));
+					Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<PrimordialJadeWinged_SpearSpice>(), (int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(50f, 110f), Main.rand.NextFloat(0f, 1f), Main.rand.NextFloat(0f, 1f));
 					p.timeLeft = Main.rand.Next(128, 132);
 					if (player.gravDir == 1)
 						p.rotation = Main.rand.NextFloat((f - 3.5f) / 15f - 0.3f, (f - 3.5f) / 15f + 0.3f);
@@ -135,7 +135,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 					}
 					if (empty)
 						continue;
-					int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<HepuyuanShake>(), 0, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(17f, 32f) * (Math.Abs(f - 5.5f) + 0.5f), 0);
+					int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<PrimordialJadeWinged_SpearShake>(), 0, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(17f, 32f) * (Math.Abs(f - 5.5f) + 0.5f), 0);
 
 
 					if (player.gravDir == 1)
@@ -222,6 +222,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 			player.velocity *= 0.4f;
 			Projectile.velocity *= 0.4f;
 		}
+		player.noFallDmg = true;
 		MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
 		myplayer.InvincibleFrameTime = 15;
 		return false;
@@ -306,7 +307,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D mainTex = ModAsset.Hepuyuan_Hepuyuan.Value;
+		Texture2D mainTex = ModAsset.PrimordialJadeWinged_Spear_PrimordialJadeWinged_Spear.Value;
 		Vector2 drawCenter = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 150f;
 		float fadeLightColor = 1f;
 		if (Projectile.timeLeft > 200)

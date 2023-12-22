@@ -1,6 +1,6 @@
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
+namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
 
-public class HepuyuanShake : ModProjectile
+public class PrimordialJadeWinged_SpearShake : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -47,7 +47,7 @@ public class HepuyuanShake : ModProjectile
 		Vx.Add(new Vertex2D(Vbase + v0 * 2 * (1 - fadeK), cr, new Vector3(1 - fadeK, fadeK, 0)));
 		Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeK + v0 * 2 * (1 - fadeK), cr, new Vector3(1 - fadeK, 0, 0)));
 
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/Misc/Projectiles/Weapon/Melee/Hepuyuan/HepuyuanShake").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/Misc/Projectiles/Weapon/Melee/PrimordialJadeWinged_Spear/PrimordialJadeWinged_SpearShake").Value;
 
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
