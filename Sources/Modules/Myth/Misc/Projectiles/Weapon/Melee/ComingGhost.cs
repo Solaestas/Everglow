@@ -1,3 +1,4 @@
+using Everglow.Myth.Misc.Dusts;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
@@ -24,7 +25,7 @@ class ComingGhost : MeleeProj
 		Projectile.tileCollide = false;
 		Projectile.friendly = true;
 		longHandle = false;
-		maxAttackType = 0;
+		maxAttackType = 3;
 		trailLength = 20;
 		shadertype = "Trail";
 		AutoEnd = false;
@@ -36,7 +37,7 @@ class ComingGhost : MeleeProj
 		if (HasHit > 2)
 			return;
 		Player player = Main.player[Projectile.owner];
-		Vector2 v = new Vector2(0, 10).RotatedByRandom(Math.PI * 2) * 5f;
+		Vector2 v = new Vector2(0, 6).RotatedByRandom(Math.PI * 2) * 5f;
 		Projectile.NewProjectile(null, target.Center - v * 3, v, ModContent.ProjectileType<GhostHit>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(-0.05f, 0.05f));
 	}
 	public override string TrailShapeTex()
@@ -67,7 +68,7 @@ class ComingGhost : MeleeProj
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
-
+		HasHit = 0;
 	}
 	public override void AI()
 	{
@@ -79,7 +80,113 @@ class ComingGhost : MeleeProj
 		float timeMul = 1 / player.meleeSpeed;
 		if (attackType == 0)
 		{
-			if (timer < 24 * timeMul)//前摇
+			if (timer < 14 * timeMul)//前摇
+			{
+				useTrail = false;
+				LockPlayerDir(player);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
+			}
+			if (timer == (int)(14 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer > 14 * timeMul && timer < 35 * timeMul)
+			{
+				isAttacking = true;
+				Projectile.rotation += Projectile.spriteDirection * 0.32f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, -1.2f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				player.fullRotationOrigin = new Vector2(10, 42);
+				player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
+				player.legRotation = -player.fullRotation;
+
+				Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)),0, 0, ModContent.DustType<Crow>());
+				d.scale = Main.rand.NextFloat(2f, 4.5f);
+			}
+			if (timer > 44 * timeMul)
+			{
+				HasHit = 0;
+				NextAttackType();
+			}
+
+		}
+
+		if (attackType == 1)
+		{
+			if (timer < 9 * timeMul)//前摇
+			{
+				useTrail = false;
+				LockPlayerDir(player);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
+			}
+			if (timer == (int)(10 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer > 9 * timeMul && timer < 42 * timeMul)
+			{
+				isAttacking = true;
+				Projectile.rotation += Projectile.spriteDirection * 0.17f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, 0, 0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				player.fullRotationOrigin = new Vector2(10, 42);
+				player.fullRotation = MathF.Sin((timer - 9 * timeMul) / (30f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
+				player.legRotation = -player.fullRotation;
+
+				Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)), 0, 0, ModContent.DustType<Crow>());
+				d.scale = Main.rand.NextFloat(2f, 4.5f);
+			}
+			if (timer > 55 * timeMul)
+			{
+				HasHit = 0;
+				NextAttackType();
+			}
+		}
+
+		if (attackType == 2)
+		{
+			if (timer < 10 * timeMul)//前摇
+			{
+				useTrail = false;
+				LockPlayerDir(player);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
+			}
+			if (timer == (int)(10 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer > 9 * timeMul && timer < 25 * timeMul)
+			{
+				isAttacking = true;
+				Projectile.rotation -= Projectile.spriteDirection * 0.45f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, -0.2f, 0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				player.fullRotationOrigin = new Vector2(10, 42);
+				player.fullRotation = MathF.Sin((timer - 9 * timeMul) / (10f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
+				player.legRotation = -player.fullRotation;
+				for(int i = 0;i < 3;i++)
+				{
+					Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)), 0, 0, ModContent.DustType<Crow>());
+					d.scale = Main.rand.NextFloat(2f, 4.5f);
+				}
+
+			}
+			if (timer > 32 * timeMul)
+			{
+				HasHit = 0;
+				NextAttackType();
+			}
+		}
+
+		if (attackType == 3)
+		{
+			if(timer == 1)
+			{
+				Projectile.ai[0] = 0;
+				Projectile.ai[1] = player.direction;
+				Style3StartPoint = player.Center;
+			}
+			if (timer < 12 * timeMul)//前摇
 			{
 				useTrail = false;
 				LockPlayerDir(player);
@@ -90,20 +197,38 @@ class ComingGhost : MeleeProj
 			}
 			if (timer == (int)(20 * timeMul))
 				AttSound(SoundID.Item1);
-			if (timer > 16 * timeMul && timer < 55 * timeMul)
+			if (timer > 12 * timeMul && timer < 35 * timeMul)
 			{
+				LockPlayerDir(player);
 				isAttacking = true;
-				Projectile.rotation += Projectile.spriteDirection * 0.17f / timeMul;
+				player.immuneAlpha = 255;
+				Projectile.rotation += 0;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, -1.2f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul);
 				player.fullRotationOrigin = new Vector2(10, 42);
-				player.fullRotation = MathF.Sin((timer - 16 * timeMul) / (38f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
+				player.fullRotation = MathF.Sin((timer - 16 * timeMul) / (28f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
 				player.legRotation = -player.fullRotation;
+				float duration = (timer - 12 * timeMul) / (float)(23 * timeMul) * 100f;
+				if (duration > 10 * Projectile.ai[0])
+				{
+					Projectile.ai[0]++;
+					if(!Collision.SolidCollision(player.position + new Vector2(25 * player.direction, 0), player.width, player.height - 20))
+					{
+						player.position.X += 25 * Projectile.ai[1];
+					}
+
+					Vector2 v0 = new Vector2(0, 12 * Main.rand.NextFloat(0.65f, 1.8f)).RotatedByRandom(MathHelper.TwoPi);
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Style3StartPoint + new Vector2((60 + duration * 2.5f) * Projectile.ai[1], 0) - v0 * 8, v0, ModContent.ProjectileType<ComingGhost_Slash>(), Projectile.damage, Projectile.knockBack);
+				}
 			}
-			if (timer > 94 * timeMul)
+			if (timer > 44 * timeMul)
+			{
+				HasHit = 0;
 				NextAttackType();
+			}
 
 		}
 	}
+	public Vector2 Style3StartPoint = Vector2.zeroVector;
 	public override void OnKill(int timeLeft)
 	{
 		Player player = Main.player[Projectile.owner];
@@ -111,7 +236,11 @@ class ComingGhost : MeleeProj
 	}
 	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{
-		//drawScale = new Vector2(-0.6f, 1.14f);
+		if (attackType == 3)
+		{
+			return;
+		}
+			//drawScale = new Vector2(-0.6f, 1.14f);
 		base.DrawSelf(spriteBatch, lightColor, diagonal, drawScale, glowTexture);
 	}
 	public override void DrawTrail(Color color)

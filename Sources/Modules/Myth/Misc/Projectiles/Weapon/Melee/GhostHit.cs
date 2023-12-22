@@ -21,7 +21,7 @@ public class GhostHit : ModProjectile
 		Projectile.width = 40;
 		Projectile.height = 40;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
+		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
 	}
 	public override void AI()
 	{
@@ -51,38 +51,38 @@ public class GhostHit : ModProjectile
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		for (int x = 0; x < 5; x++)
-		{
-			Vector2 newVec = new Vector2(0, Main.rand.NextFloat(2f, 5f)).RotatedByRandom(6.238f);
-			var positionVFX = target.Center + newVec * Main.rand.NextFloat(0.7f, 0.9f);
+		//for (int x = 0; x < 5; x++)
+		//{
+		//	Vector2 newVec = new Vector2(0, Main.rand.NextFloat(2f, 5f)).RotatedByRandom(6.238f);
+		//	var positionVFX = target.Center + newVec * Main.rand.NextFloat(0.7f, 0.9f);
 
-			var acytaeaFlame = new AcytaeaFlameDust
-			{
-				velocity = newVec,
-				Active = true,
-				Visible = true,
-				position = positionVFX,
-				maxTime = Main.rand.Next(14, 16),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(9f, 15f) }
-			};
-			Ins.VFXManager.Add(acytaeaFlame);
-		}
-		for (int x = 0; x < 12; x++)
-		{
-			Vector2 newVec = new Vector2(0, Main.rand.NextFloat(2f, 5f)).RotatedByRandom(6.238f);
-			var positionVFX = target.Center + newVec * Main.rand.NextFloat(0.7f, 0.9f);
+		//	var acytaeaFlame = new AcytaeaFlameDust
+		//	{
+		//		velocity = newVec,
+		//		Active = true,
+		//		Visible = true,
+		//		position = positionVFX,
+		//		maxTime = Main.rand.Next(14, 16),
+		//		ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(9f, 15f) }
+		//	};
+		//	Ins.VFXManager.Add(acytaeaFlame);
+		//}
+		//for (int x = 0; x < 12; x++)
+		//{
+		//	Vector2 newVec = new Vector2(0, Main.rand.NextFloat(2f, 5f)).RotatedByRandom(6.238f);
+		//	var positionVFX = target.Center + newVec * Main.rand.NextFloat(0.7f, 0.9f);
 
-			var acytaeaSpark = new AcytaeaSparkDust
-			{
-				velocity = newVec,
-				Active = true,
-				Visible = true,
-				position = positionVFX,
-				maxTime = Main.rand.Next(14, 30),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(4f, 5f) }
-			};
-			Ins.VFXManager.Add(acytaeaSpark);
-		}
+		//	var acytaeaSpark = new AcytaeaSparkDust
+		//	{
+		//		velocity = newVec,
+		//		Active = true,
+		//		Visible = true,
+		//		position = positionVFX,
+		//		maxTime = Main.rand.Next(14, 30),
+		//		ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(4f, 5f) }
+		//	};
+		//	Ins.VFXManager.Add(acytaeaSpark);
+		//}
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{

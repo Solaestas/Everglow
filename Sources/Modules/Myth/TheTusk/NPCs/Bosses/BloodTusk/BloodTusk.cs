@@ -1,5 +1,7 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.Localization;
@@ -1547,101 +1549,101 @@ public class BloodTusk : ModNPC
 	}
 	public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
 	{
-		bool flag = NPC.life <= 0;
-		if (!flag)
-		{
-			float num = NPC.life / (float)NPC.lifeMax;
-			bool flag2 = num > 1f;
-			if (flag2)
-				num = 1f;
-			int num2 = (int)(36f * num);
-			float num3 = position.X - 18f * scale;
-			float num4 = position.Y;
-			bool flag3 = Main.player[Main.myPlayer].gravDir == -1f;
-			if (flag3)
-			{
-				num4 -= Main.screenPosition.Y;
-				num4 = Main.screenPosition.Y + Main.screenHeight - num4;
-			}
-			float num5 = 0f;
-			float num6 = 255f;
-			num -= 0.1f;
-			bool flag4 = (double)num > 0.5;
-			float num7;
-			float num8;
-			if (flag4)
-			{
-				num7 = 255f;
-				num8 = 255f * (1f - num) * 2f;
-			}
-			else
-			{
-				num7 = 255f * num * 2f;
-				num8 = 255f;
-			}
-			float num9 = 0.95f;
-			num8 *= num9;
-			num7 *= num9;
-			num6 *= num9;
-			bool flag5 = num8 < 0f;
-			if (flag5)
-				num8 = 0f;
-			bool flag6 = num8 > 255f;
-			if (flag6)
-				num8 = 255f;
-			bool flag7 = num7 < 0f;
-			if (flag7)
-				num7 = 0f;
-			bool flag8 = num7 > 255f;
-			if (flag8)
-				num7 = 255f;
-			bool flag9 = num6 < 0f;
-			if (flag9)
-				num6 = 0f;
-			bool flag10 = num6 > 255f;
-			if (flag10)
-				num6 = 255f;
-			var color = new Color((byte)num8, (byte)num7, (byte)num5, (byte)num6);
-			bool flag11 = num2 < 3;
-			if (flag11)
-				num2 = 3;
-			bool flag12 = num2 < 38;
-			if (flag12)
-			{
-				bool flag13 = num2 < 40;
-				if (flag13)
-					Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + num2 * scale, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(2, 0, 2, TextureAssets.Hb2.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-				bool flag14 = num2 < 38;
-				if (flag14)
-					Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + (num2 + 2) * scale, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(num2 + 2, 0, 36 - num2 - 2, TextureAssets.Hb2.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-				bool flag15 = num2 > 2;
-				if (flag15)
-					Main.spriteBatch.Draw(TextureAssets.Hb1.Value, new Vector2(num3 - Main.screenPosition.X, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, num2 - 2, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-				bool flag16 = num2 > 18;//分血条
-				if (flag16)
-					Main.spriteBatch.Draw(TextureAssets.Hb1.Value, new Vector2(num3 - Main.screenPosition.X + 17, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, 4, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-				else
-				{
-					Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + 17, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, 4, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-				}
-				Main.spriteBatch.Draw(TextureAssets.Hb1.Value, new Vector2(num3 - Main.screenPosition.X + (num2 - 2) * scale, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(32, 0, 2, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-			}
-			else
-			{
-				bool flag16 = num2 < 40;
-				if (flag16)
-					Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + num2 * scale, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(num2, 0, 36 - num2, TextureAssets.Hb2.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-				bool flag17 = num2 > 18;//分血条
-				if (flag17)
-					Main.spriteBatch.Draw(TextureAssets.Hb1.Value, new Vector2(num3 - Main.screenPosition.X + 17, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, 4, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-				else
-				{
-					Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + 17, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, 4, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-				}
-				Main.spriteBatch.Draw(TextureAssets.Hb1.Value, new Vector2(num3 - Main.screenPosition.X, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, num2, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-			}
-		}
-		return false;
+		//bool flag = NPC.life <= 0;
+		//if (!flag)
+		//{
+		//	float num = NPC.life / (float)NPC.lifeMax;
+		//	bool flag2 = num > 1f;
+		//	if (flag2)
+		//		num = 1f;
+		//	int num2 = (int)(36f * num);
+		//	float num3 = position.X - 18f * scale;
+		//	float num4 = position.Y;
+		//	bool flag3 = Main.player[Main.myPlayer].gravDir == -1f;
+		//	if (flag3)
+		//	{
+		//		num4 -= Main.screenPosition.Y;
+		//		num4 = Main.screenPosition.Y + Main.screenHeight - num4;
+		//	}
+		//	float num5 = 0f;
+		//	float num6 = 255f;
+		//	num -= 0.1f;
+		//	bool flag4 = (double)num > 0.5;
+		//	float num7;
+		//	float num8;
+		//	if (flag4)
+		//	{
+		//		num7 = 255f;
+		//		num8 = 255f * (1f - num) * 2f;
+		//	}
+		//	else
+		//	{
+		//		num7 = 255f * num * 2f;
+		//		num8 = 255f;
+		//	}
+		//	float num9 = 0.95f;
+		//	num8 *= num9;
+		//	num7 *= num9;
+		//	num6 *= num9;
+		//	bool flag5 = num8 < 0f;
+		//	if (flag5)
+		//		num8 = 0f;
+		//	bool flag6 = num8 > 255f;
+		//	if (flag6)
+		//		num8 = 255f;
+		//	bool flag7 = num7 < 0f;
+		//	if (flag7)
+		//		num7 = 0f;
+		//	bool flag8 = num7 > 255f;
+		//	if (flag8)
+		//		num7 = 255f;
+		//	bool flag9 = num6 < 0f;
+		//	if (flag9)
+		//		num6 = 0f;
+		//	bool flag10 = num6 > 255f;
+		//	if (flag10)
+		//		num6 = 255f;
+		//	var color = new Color((byte)num8, (byte)num7, (byte)num5, (byte)num6);
+		//	bool flag11 = num2 < 3;
+		//	if (flag11)
+		//		num2 = 3;
+		//	bool flag12 = num2 < 38;
+		//	if (flag12)
+		//	{
+		//		bool flag13 = num2 < 40;
+		//		if (flag13)
+		//			Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + num2 * scale, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(2, 0, 2, TextureAssets.Hb2.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
+		//		bool flag14 = num2 < 38;
+		//		if (flag14)
+		//			Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + (num2 + 2) * scale, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(num2 + 2, 0, 36 - num2 - 2, TextureAssets.Hb2.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
+		//		bool flag15 = num2 > 2;
+		//		if (flag15)
+		//			Main.spriteBatch.Draw(TextureAssets.Hb1.Value, new Vector2(num3 - Main.screenPosition.X, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, num2 - 2, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
+		//		bool flag16 = num2 > 18;//分血条
+		//		if (flag16)
+		//			Main.spriteBatch.Draw(TextureAssets.Hb1.Value, new Vector2(num3 - Main.screenPosition.X + 17, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, 4, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
+		//		else
+		//		{
+		//			Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + 17, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, 4, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
+		//		}
+		//		Main.spriteBatch.Draw(TextureAssets.Hb1.Value, new Vector2(num3 - Main.screenPosition.X + (num2 - 2) * scale, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(32, 0, 2, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
+		//	}
+		//	else
+		//	{
+		//		bool flag16 = num2 < 40;
+		//		if (flag16)
+		//			Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + num2 * scale, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(num2, 0, 36 - num2, TextureAssets.Hb2.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
+		//		bool flag17 = num2 > 18;//分血条
+		//		if (flag17)
+		//			Main.spriteBatch.Draw(TextureAssets.Hb1.Value, new Vector2(num3 - Main.screenPosition.X + 17, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, 4, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
+		//		else
+		//		{
+		//			Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + 17, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, 4, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
+		//		}
+		//		Main.spriteBatch.Draw(TextureAssets.Hb1.Value, new Vector2(num3 - Main.screenPosition.X, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, num2, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
+		//	}
+		//}
+		return base.DrawHealthBar(hbPosition, ref scale, ref position);
 	}
 	public override bool PreAI()
 	{
@@ -1649,6 +1651,7 @@ public class BloodTusk : ModNPC
 
 		if (HasbeenKilled)
 		{
+			NPC.velocity *= 0;
 			Killing--;
 			if (Killing == 150)
 			{
@@ -1776,10 +1779,14 @@ public class BloodTusk : ModNPC
 				NPC.dontTakeDamage = true;
 				HasbeenKilled = true;
 				NPC.active = true;
+				NPC.velocity *= 0;
 				Killing = 180;
-				for (int i = 0; i < MaxFlyingTentaclesCount; i++)
+				for (int i = 0; i < FlyingTentacleTusks.Length; i++)
 				{
-					FlyingTentacleTusks[i].ai[3] = 30;
+					if(FlyingTentacleTusks[i] != null && FlyingTentacleTusks[i].ai.Length > 3)
+					{
+						FlyingTentacleTusks[i].ai[3] = 30;
+					}
 				}
 			}
 		}
@@ -1939,7 +1946,6 @@ public class BloodTusk : ModNPC
 
 						if (i % 24 == 3 && i < 350)
 						{
-
 							float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
 							var Tusk1 = new List<Vertex2D>
 							{
@@ -1948,13 +1954,12 @@ public class BloodTusk : ModNPC
 								new Vertex2D(Mouth1[i] + new Vector2(0, -10) - normalDir * Math.Clamp(Len, 0, HangMaxL1[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
 							};
 							Texture2D t1 = ModAsset.CrimsonTuskHang.Value;
+							Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 							Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 							Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk1.ToArray(), 0, Tusk1.Count / 3);
-
 						}
 						if (i % 8 == 3 && i >= 350)
 						{
-
 							float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
 							var Tusk1 = new List<Vertex2D>
 							{
@@ -1963,9 +1968,28 @@ public class BloodTusk : ModNPC
 								new Vertex2D(Mouth1[i] + new Vector2(0, -10) - normalDir * Math.Clamp(Len, 0, HangMaxL1[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
 							};
 							Texture2D t1 = ModAsset.CrimsonTuskHang.Value;
+							Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 							Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 							Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk1.ToArray(), 0, Tusk1.Count / 3);
-
+						}
+					}
+					if(i % 20 == 0)
+					{
+						foreach(Player player in Main.player)
+						{
+							if (player != null && player.active && !player.immune)
+							{
+								if((player.Center - (Mouth1[i] + new Vector2(0, -10))).Length() < 100 && player.Top.Y > Mouth1[i].Y - 10)
+								{
+									player.Hurt(PlayerDeathReason.ByNPC(NPC.whoAmI), NPC.damage, -1, false, false, false, 30);
+									player.immune = true;
+									player.immuneTime = 30;
+									if (player.longInvince)
+									{
+										player.immuneTime = 45;
+									}
+								}
+							}
 						}
 					}
 				}
@@ -1989,7 +2013,6 @@ public class BloodTusk : ModNPC
 						bars2.Add(new Vertex2D(Mouth2[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
 						if (i % 24 == 3 && i < 350)
 						{
-
 							float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
 							var Tusk2 = new List<Vertex2D>
 							{
@@ -1998,13 +2021,12 @@ public class BloodTusk : ModNPC
 								new Vertex2D(Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
 							};
 							Texture2D t2 = ModAsset.CrimsonTuskHang.Value;
+							Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 							Main.graphics.GraphicsDevice.Textures[0] = t2;//GlodenBloodScaleMirror
 							Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk2.ToArray(), 0, Tusk2.Count / 3);
-
 						}
 						if (i % 8 == 3 && i >= 350)
 						{
-
 							float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
 							var Tusk2 = new List<Vertex2D>
 							{
@@ -2013,9 +2035,28 @@ public class BloodTusk : ModNPC
 								new Vertex2D(Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]) - Main.screenPosition, colori, new Vector3(0.5f, 1, 0))
 							};
 							Texture2D t2 = ModAsset.CrimsonTuskHang.Value;
+							Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 							Main.graphics.GraphicsDevice.Textures[0] = t2;//GlodenBloodScaleMirror
 							Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk2.ToArray(), 0, Tusk2.Count / 3);
-
+						}
+					}
+					if (i % 20 == 0)
+					{
+						foreach (Player player in Main.player)
+						{
+							if (player != null && player.active && !player.immune)
+							{
+								if ((player.Center - (Mouth2[i] + new Vector2(0, -10))).Length() < 100 && player.Top.Y > Mouth1[i].Y - 10)
+								{
+									player.Hurt(PlayerDeathReason.ByNPC(NPC.whoAmI), NPC.damage, 1, false, false, false, 30);
+									player.immune = true;
+									player.immuneTime = 30;
+									if (player.longInvince)
+									{
+										player.immuneTime = 45;
+									}
+								}
+							}
 						}
 					}
 				}
@@ -2039,6 +2080,7 @@ public class BloodTusk : ModNPC
 						triangleList1.Add(bars1[i + 3]);
 					}
 					Texture2D t1 = ModAsset.BloodRope.Value;
+					Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 					Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList1.ToArray(), 0, triangleList1.Count / 3);
 				}
@@ -2060,6 +2102,7 @@ public class BloodTusk : ModNPC
 						triangleList2.Add(bars2[i + 3]);
 					}
 					Texture2D t1 = ModAsset.BloodRope.Value;
+					Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 					Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList2.ToArray(), 0, triangleList2.Count / 3);
 				}
@@ -2147,8 +2190,8 @@ public class BloodTusk : ModNPC
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
-
-		//Main.spriteBatch.Draw(ModAsset.BloodTuskFlesh2").Value, NPC.position - Main.screenPosition + new Vector2(15, 88) + SubTuskPosition[9] + new Vector2(0, -1), new Rectangle(0, 0, 220, (int)(312 - SubTuskPosition[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		if (BasePos != Vector2.Zero)
 		{
 			//拉丝底座
@@ -2200,7 +2243,8 @@ public class BloodTusk : ModNPC
 			Main.spriteBatch.Draw(ModAsset.BloodTuskFlesh1.Value, NPC.position - Main.screenPosition + new Vector2(15, 90) + SubTuskPosition[9], new Rectangle(0, 0, 220, (int)(312 - SubTuskPosition[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
 		}
 		Main.spriteBatch.Draw(ModAsset.BloodTuskFlesh.Value, NPC.position - Main.screenPosition + new Vector2(15, 90) + SubTuskPosition[9], new Rectangle(0, 0, 220, (int)(312 - SubTuskPosition[9].Y * 2f)), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
-
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		return false;
 	}
 	public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)

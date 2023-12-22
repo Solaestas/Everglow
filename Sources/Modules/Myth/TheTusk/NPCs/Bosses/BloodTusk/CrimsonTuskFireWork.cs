@@ -123,15 +123,6 @@ public class CrimsonTuskFireWork : ModNPC
 				if (i == 4)
 					width2 *= 0.5f;
 			}
-			if (width <= 3)
-			{
-				if (Main.rand.NextBool(5))
-				{
-					Vector2 vd = new Vector2(0, Main.rand.NextFloat(-1.3f, -0.5f)).RotatedByRandom(6.283);
-					int a = Dust.NewDust(VPos - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(-8f, 8f)), 0, 0, DustID.Blood, vd.X, vd.Y, 0, default, Main.rand.NextFloat(0.5f, 1.5f));
-					Main.dust[a].noGravity = true;
-				}
-			}
 			if (Bomb == 5 && i == 1 && !Main.gamePaused)
 			{
 				// 弹幕
@@ -159,120 +150,6 @@ public class CrimsonTuskFireWork : ModNPC
 					Texture2D t1 = ModAsset.CrimsonTuskflip.Value;
 					Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk.ToArray(), 0, Tusk.Count / 3);
-				}
-			}
-			if (Bomb < 60 && Bomb > 5 && i == 1)
-			{
-				float yd = 1;
-				if (Bomb > 45)
-					yd = (60 - Bomb) / 15f;
-				if (Bomb < 20)
-				{
-					yd = (Bomb - 5) / 15f;
-					yd *= yd;
-				}
-				for (int g = 0; g < 12; g++)
-				{
-					Main.spriteBatch.End();
-					Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-					var bars = new List<Vertex2D>();
-					var barsB = new List<Vertex2D>();
-
-					float step = 4;
-					int Count = 0;
-					for (int m = 0; m < 500; ++m)
-					{
-						if (Collision.SolidCollision(NPC.Center + new Vector2(step, 0).RotatedBy(rotTusk[g]) * m, 1, 1))
-							break;
-						Vlaser[g, m] = NPC.Center + new Vector2(step, 0).RotatedBy(rotTusk[g]) * m;
-						++Count;
-					}
-					for (int iz = 1; iz < Count; ++iz)
-					{
-						if (Vlaser[g, iz] == Vector2.Zero)
-							break;
-
-						var normalDir = Vlaser[g, iz - 1] - Vlaser[g, iz];
-						normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-
-						var lerpvalue = (float)Math.Sqrt(iz + 1) / 9f + Bomb / 60f;
-						var w = MathHelper.Lerp(1f, 0.05f, lerpvalue);
-						float width3 = 12;
-						if (iz <= 25)
-							width3 = 12 * (float)Math.Sqrt(iz) / 5f;
-
-						width3 *= yd;
-						if (Count - iz < 5)
-						{
-							int sc = Math.Clamp((int)(255 * (Count - iz - 1) / 5f * (200 - iz) / 200f), 0, 255);
-							var c0 = new Color(sc, 0, 0, 0);
-							var c1 = new Color(sc / 3, sc / 3, sc / 3, sc / 3);
-							if ((iz + Bomb * 2) % 15 < 9)
-								c0 *= 0;
-							bars.Add(new Vertex2D(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 1, w)));
-							bars.Add(new Vertex2D(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 0, w)));
-							barsB.Add(new Vertex2D(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 1, w)));
-							barsB.Add(new Vertex2D(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 0, w)));
-						}
-						else
-						{
-							int sc = Math.Clamp((int)(255 * (200 - iz) / 200f), 0, 255);
-							var c0 = new Color(sc, 0, 0, 0);
-							var c1 = new Color(sc / 3, sc / 3, sc / 3, sc / 3);
-							if ((iz + Bomb * 2) % 15 < 9)
-								c0 *= 0;
-							bars.Add(new Vertex2D(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 1, w)));
-							bars.Add(new Vertex2D(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 0, w)));
-							barsB.Add(new Vertex2D(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 1, w)));
-							barsB.Add(new Vertex2D(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 0, w)));
-						}
-					}
-					var Vx = new List<Vertex2D>();
-					if (bars.Count > 2)
-					{
-						Vx.Add(bars[0]);
-						var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + new Vector2(-5, 0).RotatedBy(rotTusk[g]), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
-						Vx.Add(bars[1]);
-						Vx.Add(vertex);
-						for (int iz = 0; iz < bars.Count - 2; iz += 2)
-						{
-							Vx.Add(bars[iz]);
-							Vx.Add(bars[iz + 2]);
-							Vx.Add(bars[iz + 1]);
-
-							Vx.Add(bars[iz + 1]);
-							Vx.Add(bars[iz + 2]);
-							Vx.Add(bars[iz + 3]);
-						}
-					}
-
-					var VxB = new List<Vertex2D>();
-					if (barsB.Count > 2)
-					{
-						VxB.Add(barsB[0]);
-						var vertex = new Vertex2D((barsB[0].position + barsB[1].position) * 0.5f + new Vector2(-5, 0).RotatedBy(rotTusk[g]), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
-						VxB.Add(barsB[1]);
-						VxB.Add(vertex);
-						for (int iz = 0; iz < barsB.Count - 2; iz += 2)
-						{
-							VxB.Add(barsB[iz]);
-							VxB.Add(barsB[iz + 2]);
-							VxB.Add(barsB[iz + 1]);
-
-							VxB.Add(barsB[iz + 1]);
-							VxB.Add(barsB[iz + 2]);
-							VxB.Add(barsB[iz + 3]);
-						}
-					}
-					Texture2D t = ModAsset.BloodTusk_TuskShade.Value;
-					Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
-					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxB.ToArray(), 0, VxB.Count / 3);
-
-					t = Commons.ModAsset.Trail.Value;
-					Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
-					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
-
-
 				}
 			}
 			bars2.Add(new Vertex2D(VPos + new Vector2(width2, 0) - Main.screenPosition, colori, new Vector3(factor, 1, 0)));
@@ -307,5 +184,18 @@ public class CrimsonTuskFireWork : ModNPC
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
 	}
-	private Vector2[,] Vlaser = new Vector2[12, 501];
+	public override void OnKill()
+	{
+		for (int i = 1; i < 400; ++i)
+		{
+			if(Main.rand.NextBool(3))
+			{
+				Vector2 VPos = NPC.Center + new Vector2(0, i * 5f);
+				Vector2 vd = new Vector2(0, Main.rand.NextFloat(-1.3f, -0.5f)).RotatedByRandom(6.283);
+				int a = Dust.NewDust(VPos - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(-8f, 8f)), 0, 0, DustID.Blood, vd.X, vd.Y, 0, default, Main.rand.NextFloat(0.5f, 1.5f));
+				Main.dust[a].noGravity = true;
+			}
+		}
+		base.OnKill();
+	}
 }
