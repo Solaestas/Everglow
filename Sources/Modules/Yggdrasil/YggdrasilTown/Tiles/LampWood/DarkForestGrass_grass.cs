@@ -1,4 +1,8 @@
 using Everglow.Commons.VFX.Scene;
+using Microsoft.Xna.Framework.Graphics;
+using static Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.DarkTaro;
+using Terraria.GameContent.Drawing;
+using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 [Pipeline(typeof(WCSPipeline))]
@@ -230,13 +234,14 @@ public class DarkForestGrass_grass_fore : ForegroundVFX
 		{
 			rot = MathHelper.Pi - rot;
 		}
+		Vector2 windPush = new Vector2(Main.windSpeedCurrent * (1 + MathF.Sin(position.X * position.Y * 0.0003f + (float)Main.time * 0.03f * Main.windSpeedCurrent)) * 3f, 0);
 		float dLength = 16 / 52f;
-		bars.Add(drawCenter + new Vector2(-8 * length, -8).RotatedBy(rot) + direction * 6, lightColor, new Vector3(18 * style / 52f, 0, 0));
-		bars.Add(drawCenter + new Vector2(8 * length, -8).RotatedBy(rot) + direction * 6, lightColor, new Vector3(dLength + 18 * style / 52f, 0, 0));
+		bars.Add(drawCenter + new Vector2(-8 * length, -8).RotatedBy(rot) + direction * 6 + windPush, lightColor, new Vector3(18 * style / 52f, 0, 0));
+		bars.Add(drawCenter + new Vector2(8 * length, -8).RotatedBy(rot) + direction * 6 + windPush, lightColor, new Vector3(dLength + 18 * style / 52f, 0, 0));
 		bars.Add(drawCenter + new Vector2(8 * length, 2).RotatedBy(rot) + direction * 6, lightColor, new Vector3(dLength + 18 * style / 52f, 1, 0));
 
 		bars.Add(drawCenter + new Vector2(-8 * length, 2).RotatedBy(rot) + direction * 6, lightColor, new Vector3(18 * style / 52f, 1, 0));
 		bars.Add(drawCenter + new Vector2(8 * length, 2).RotatedBy(rot) + direction * 6, lightColor, new Vector3(dLength + 18 * style / 52f, 1, 0));
-		bars.Add(drawCenter + new Vector2(-8 * length, -8).RotatedBy(rot) + direction * 6, lightColor, new Vector3(18 * style / 52f, 0, 0));
+		bars.Add(drawCenter + new Vector2(-8 * length, -8).RotatedBy(rot) + direction * 6 + windPush, lightColor, new Vector3(18 * style / 52f, 0, 0));
 	}
 }
