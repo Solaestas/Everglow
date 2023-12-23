@@ -116,7 +116,7 @@ public class DarkForestGrass_grass_fore : ForegroundVFX
 		{
 			if (tile.Slope == SlopeType.SlopeUpLeft)
 			{
-				AddDrawingFace(bars, new Vector2(1, 1) * 0.02f, position, lightColor, 1.6f);
+				AddDrawingFace(bars, new Vector2(1, 1) * 0.85f, position, lightColor, 1.4143f, new Vector2(-5, -5));
 				Tile upTile = Main.tile[originTile + new Point(0, -1)];
 				if (!upTile.HasTile)
 				{
@@ -135,7 +135,7 @@ public class DarkForestGrass_grass_fore : ForegroundVFX
 			}
 			if (tile.Slope == SlopeType.SlopeDownLeft)
 			{
-				AddDrawingFace(bars, new Vector2(1, -1) * 0.02f, position, lightColor, 1.6f);
+				AddDrawingFace(bars, new Vector2(1, -1) * 0.85f, position, lightColor, 1.4143f, new Vector2(-5, 5));
 				Tile downTile = Main.tile[originTile + new Point(0, 1)];
 				if (!downTile.HasTile)
 				{
@@ -154,7 +154,7 @@ public class DarkForestGrass_grass_fore : ForegroundVFX
 			}
 			if (tile.Slope == SlopeType.SlopeUpRight)
 			{
-				AddDrawingFace(bars, new Vector2(-1, 1) * 0.02f, position, lightColor, 1.6f);
+				AddDrawingFace(bars, new Vector2(-1, 1) * 0.85f, position, lightColor, 1.4143f, new Vector2(5, -5));
 				Tile upTile = Main.tile[originTile + new Point(0, -1)];
 				if (!upTile.HasTile)
 				{
@@ -173,7 +173,7 @@ public class DarkForestGrass_grass_fore : ForegroundVFX
 			}
 			if (tile.Slope == SlopeType.SlopeDownRight)
 			{
-				AddDrawingFace(bars, new Vector2(-1, -1) * 0.02f, position, lightColor, 1.6f);
+				AddDrawingFace(bars, new Vector2(-1, -1) * 0.85f, position, lightColor, 1.4143f, new Vector2(5, 5));
 				Tile downTile = Main.tile[originTile + new Point(0, 1)];
 				if (!downTile.HasTile)
 				{
@@ -234,14 +234,14 @@ public class DarkForestGrass_grass_fore : ForegroundVFX
 		{
 			rot = MathHelper.Pi - rot;
 		}
-		Vector2 windPush = new Vector2(Main.windSpeedCurrent * (1 + MathF.Sin(position.X * position.Y * 0.0003f + (float)Main.time * 0.03f * Main.windSpeedCurrent)) * 3f, 0);
+		Vector2 windPush = new Vector2(Main.windSpeedCurrent * (1 + MathF.Sin(position.X * position.Y * 0.0003f + (float)Main.time * 0.09f)) * 3f, 0);
 		float dLength = 16 / 52f;
-		bars.Add(drawCenter + new Vector2(-8 * length, -8).RotatedBy(rot) + direction * 6 + windPush, lightColor, new Vector3(18 * style / 52f, 0, 0));//这三个点需要碰撞
-		bars.Add(drawCenter + new Vector2(8 * length, -8).RotatedBy(rot) + direction * 6 + windPush, lightColor, new Vector3(dLength + 18 * style / 52f, 0, 0));//这三个点需要碰撞
-		bars.Add(drawCenter + new Vector2(8 * length, 2).RotatedBy(rot) + direction * 6, lightColor, new Vector3(dLength + 18 * style / 52f, 1, 0));
+		bars.Add(drawCenter + new Vector2(-8 * length, -8).RotatedBy(rot) + direction * 12 + windPush, lightColor, new Vector3(18 * style / 52f, 0, 0));//这三个点需要碰撞
+		bars.Add(drawCenter + new Vector2(8 * length, -8).RotatedBy(rot) + direction * 12 + windPush, lightColor, new Vector3(dLength + 18 * style / 52f, 0, 0));//这三个点需要碰撞
+		bars.Add(drawCenter + new Vector2(8 * length, 8).RotatedBy(rot) + direction * 12, lightColor, new Vector3(dLength + 18 * style / 52f, 1, 0));
 
-		bars.Add(drawCenter + new Vector2(-8 * length, 2).RotatedBy(rot) + direction * 6, lightColor, new Vector3(18 * style / 52f, 1, 0));
-		bars.Add(drawCenter + new Vector2(8 * length, 2).RotatedBy(rot) + direction * 6, lightColor, new Vector3(dLength + 18 * style / 52f, 1, 0));
-		bars.Add(drawCenter + new Vector2(-8 * length, -8).RotatedBy(rot) + direction * 6 + windPush, lightColor, new Vector3(18 * style / 52f, 0, 0));//这三个点需要碰撞
+		bars.Add(drawCenter + new Vector2(-8 * length, 8).RotatedBy(rot) + direction * 12, lightColor, new Vector3(18 * style / 52f, 1, 0));
+		bars.Add(drawCenter + new Vector2(8 * length, 8).RotatedBy(rot) + direction * 12, lightColor, new Vector3(dLength + 18 * style / 52f, 1, 0));
+		bars.Add(drawCenter + new Vector2(-8 * length, -8).RotatedBy(rot) + direction * 12 + windPush, lightColor, new Vector3(18 * style / 52f, 0, 0));//这三个点需要碰撞
 	}
 }
