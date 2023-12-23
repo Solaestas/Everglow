@@ -29,6 +29,7 @@ class ComingGhost : MeleeProj
 		trailLength = 20;
 		shadertype = "Trail";
 		AutoEnd = false;
+		selfWarp = true;
 	}
 	private int HasHit = 0;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -149,7 +150,7 @@ class ComingGhost : MeleeProj
 			{
 				useTrail = false;
 				LockPlayerDir(player);
-				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				float targetRot = -MathHelper.PiOver2 - player.direction * 1.6f;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
@@ -171,7 +172,7 @@ class ComingGhost : MeleeProj
 				}
 
 			}
-			if (timer > 32 * timeMul)
+			if (timer > 30 * timeMul)
 			{
 				HasHit = 0;
 				NextAttackType();
@@ -180,14 +181,11 @@ class ComingGhost : MeleeProj
 
 		if (attackType == 3)
 		{
-			if(timer == 1)
+			if (timer < 2 * timeMul)//前摇
 			{
 				Projectile.ai[0] = 0;
 				Projectile.ai[1] = player.direction;
 				Style3StartPoint = player.Center;
-			}
-			if (timer < 12 * timeMul)//前摇
-			{
 				useTrail = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
@@ -195,28 +193,28 @@ class ComingGhost : MeleeProj
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
-			if (timer == (int)(20 * timeMul))
+			if (timer == (int)(10 * timeMul))
 				AttSound(SoundID.Item1);
-			if (timer > 12 * timeMul && timer < 35 * timeMul)
+			if (timer > 2 * timeMul && timer < 25 * timeMul)
 			{
 				LockPlayerDir(player);
 				isAttacking = true;
 				player.immuneAlpha = 255;
-				Projectile.rotation += 0;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, -1.2f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				Projectile.rotation += Projectile.spriteDirection * 0.4f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, -1.25f, -0.1f * Projectile.spriteDirection), 0.4f / timeMul);
 				player.fullRotationOrigin = new Vector2(10, 42);
-				player.fullRotation = MathF.Sin((timer - 16 * timeMul) / (28f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
+				player.fullRotation = MathF.Sin((timer - 16 * timeMul) / (28f * timeMul) * MathHelper.Pi) * 0.6f * Projectile.ai[1];
 				player.legRotation = -player.fullRotation;
-				float duration = (timer - 12 * timeMul) / (float)(23 * timeMul) * 100f;
+				float duration = (timer - 2 * timeMul) / (float)(23 * timeMul) * 100f;
 				if (duration > 10 * Projectile.ai[0])
 				{
 					Projectile.ai[0]++;
-					if(!Collision.SolidCollision(player.position + new Vector2(25 * player.direction, 0), player.width, player.height - 20))
+					if(!Collision.SolidCollision(player.position + new Vector2(35 * Projectile.ai[1], 0), player.width, player.height - 20))
 					{
-						player.position.X += 25 * Projectile.ai[1];
+						player.position.X += 35 * Projectile.ai[1];
 					}
 
-					Vector2 v0 = new Vector2(0, 12 * Main.rand.NextFloat(0.65f, 1.8f)).RotatedByRandom(MathHelper.TwoPi);
+					Vector2 v0 = new Vector2(0, 14 * Main.rand.NextFloat(0.65f, 1.8f)).RotatedByRandom(MathHelper.TwoPi);
 					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Style3StartPoint + new Vector2((60 + duration * 2.5f) * Projectile.ai[1], 0) - v0 * 8, v0, ModContent.ProjectileType<ComingGhost_Slash>(), Projectile.damage, Projectile.knockBack);
 				}
 			}
@@ -290,5 +288,65 @@ class ComingGhost : MeleeProj
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+	}
+	public override void DrawWarp(VFXBatch spriteBatch)
+	{
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		var SmoothTrail = new List<Vector2>();
+		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
+		{
+			SmoothTrail.Add(SmoothTrailX[x]);
+		}
+		if (trailVecs.Count != 0)
+			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+		int length = SmoothTrail.Count;
+		if (length <= 3)
+			return;
+		Vector2[] trail = SmoothTrail.ToArray();
+		var bars = new List<Vertex2D>();
+		for (int i = 0; i < length; i++)
+		{
+			float factor = i / (length - 1f);
+			float w = 0.2f;
+			float d = trail[i].ToRotation() + 3.14f + 1.57f;
+			if (d > 6.28f)
+				d -= 6.28f;
+			float dir = d / MathHelper.TwoPi;
+
+			float dir1 = dir;
+			if (i > 0)
+			{
+				float d1 = trail[i - 1].ToRotation() + 3.14f + 1.57f;
+				if (d1 > 6.28f)
+					d1 -= 6.28f;
+				dir1 = d1 / MathHelper.TwoPi;
+			}
+
+			if (dir - dir1 > 0.5)
+			{
+				var midValue = (1 - dir) / (1 - dir + dir1);
+				var midPoint = midValue * trail[i] + (1 - midValue) * trail[i - 1];
+				var oldFactor = (i - 1) / (length - 1f);
+				var midFactor = midValue * factor + (1 - midValue) * oldFactor;
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(midFactor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(midFactor, 0, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(midFactor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(midFactor, 0, 1)));
+			}
+			if (dir1 - dir > 0.5)
+			{
+				var midValue = (1 - dir1) / (1 - dir1 + dir);
+				var midPoint = midValue * trail[i - 1] + (1 - midValue) * trail[i];
+				var oldFactor = (i - 1) / (length - 1f);
+				var midFactor = midValue * oldFactor + (1 - midValue) * factor;
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(midFactor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(midFactor, 0, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(midFactor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(midFactor, 0, 1)));
+			}
+			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, w, 0, 1), new Vector3(factor, 1, w)));
+			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
+		}
+		spriteBatch.Draw(Commons.ModAsset.Melee.Value, bars, PrimitiveType.TriangleStrip);
 	}
 }
