@@ -2,7 +2,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Everglow.Food.Buffs.VanillaFoodBuffs;
 using Everglow.Food.Items;
-using Everglow.Food.Utils;
+using Everglow.Food.FoodUtilities;
 
 namespace Everglow.Food;
 

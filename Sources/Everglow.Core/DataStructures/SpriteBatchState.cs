@@ -31,18 +31,14 @@ public record struct SpriteBatchState(
 		Matrix.Identity,
 		null);
 
-	public readonly DrawState DrawState => new(BlendState, SamplerState, DepthStencilState, RasterizerState);
-
 	public readonly IDisposable BeginScope(SpriteBatch spriteBatch)
 	{
 		SpriteBatchState? oldState = null;
-
 		if (spriteBatch.beginCalled)
 		{
-			spriteBatch.End();
 			oldState = spriteBatch.GetState();
+			spriteBatch.End();
 		}
-
 		spriteBatch.Begin(this);
 
 		return new Scope(spriteBatch, oldState);
@@ -72,6 +68,7 @@ public record struct SpriteBatchState(
 	private class Scope : IDisposable
 	{
 		private readonly SpriteBatchState? _state;
+
 		private readonly SpriteBatch _spriteBatch;
 
 		public Scope(SpriteBatch spriteBatch, SpriteBatchState? state)
