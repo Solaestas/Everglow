@@ -55,7 +55,7 @@ public class DarkTaro : ModTile, ITileFluentlyDrawn
 	{
 		var tile = Main.tile[pos];
 		var drawCenterPos = pos.ToWorldCoordinates(autoAddY: 16) - screenPosition;
-		Rectangle Frame(int y) => new Rectangle(tile.TileFrameX, y, 96, 92);
+		Rectangle Frame(int y) => new Rectangle(tile.TileFrameX, y, 92, 92);
 		Point SwayHitboxPos(int addX) => new Point(pos.X + addX, pos.Y);
 		Point PaintPos(int addY) => new Point(pos.X, pos.Y - addY);
 

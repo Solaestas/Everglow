@@ -1,3 +1,4 @@
+using Everglow.Commons.VFX.Scene;
 using Everglow.Yggdrasil.Common.Elevator.Tiles;
 using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
@@ -5,7 +6,7 @@ using Terraria;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
-public class DarkForestGrass : ModTile
+public class DarkForestGrass : SceneTile
 {
 	public override void PostSetDefaults()
 	{
@@ -183,5 +184,12 @@ public class DarkForestGrass : ModTile
 			tile.TileFrameX = (short)Main.rand.Next(3);
 			tile.HasTile = true;
 		}
+	}
+	public override void AddScene(int i, int j)
+	{
+		DarkForestGrass_grass_fore leaf = new DarkForestGrass_grass_fore { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
+		leaf.scale = Main.rand.NextFloat(0.85f, 1.15f);
+		leaf.style = Main.rand.Next(3);
+		Ins.VFXManager.Add(leaf);
 	}
 }
