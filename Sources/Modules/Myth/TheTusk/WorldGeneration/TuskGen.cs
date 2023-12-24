@@ -106,6 +106,8 @@ public class TuskGen : ModSystem
 		{
 			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildWorldTuskTable");
 			BuildTuskLand();
+			Main.spawnTileX = 150;
+			Main.spawnTileY = 220;
 		}
 	}
 	public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)

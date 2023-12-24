@@ -1,9 +1,16 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
+using Everglow.Myth.TheFirefly.Items.BossDrop;
+using Everglow.Myth.TheFirefly.Items.Weapons;
+using Everglow.Myth.TheTusk.Items;
+using Everglow.Myth.TheTusk.Items.Accessories;
+using Everglow.Myth.TheTusk.Items.BossDrop;
+using Everglow.Myth.TheTusk.Items.Weapons;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
@@ -1691,7 +1698,6 @@ public class BloodTusk : ModNPC
 				NPC.position.Y = NPC.position.Y + NPC.height / 2;
 				NPC.position.X = NPC.position.X - NPC.width / 2;
 				NPC.position.Y = NPC.position.Y - NPC.height / 2;
-				float vFX = Main.rand.Next(-2000, 2000) / 5000f;
 
 				//var vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 6f);
 				//Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/BloodTuskBroken1").Type, 1f);
@@ -1710,38 +1716,7 @@ public class BloodTusk : ModNPC
 				//vFX = Main.rand.Next(-2000, 2000) / 5000f;
 				//vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 12f);
 				//Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/BloodTuskBroken6").Type, 1f);
-				if (!Main.expertMode && !Main.masterMode)
-				{
-					int itemType = ModContent.ItemType<Items.Weapons.ToothKnife>();
-					switch (Main.rand.Next(5))
-					{
-						case 0:
-							itemType = ModContent.ItemType<Items.Weapons.ToothStaff>();
-							break;
-						case 1:
-							itemType = ModContent.ItemType<Items.Accessories.TuskLace>();
-							break;
-						case 2:
-							itemType = ModContent.ItemType<Items.Weapons.ToothMagicBall>();
-							break;
-						case 3:
-							itemType = ModContent.ItemType<Items.Weapons.BloodyBoneYoyo>();
-							break;
-						case 4:
-							itemType = ModContent.ItemType<Items.Weapons.SpineGun>();
-							break;
-					}
-					Item.NewItem(null, NPC.Hitbox, itemType);
-				}
-				else
-				{
-					Item.NewItem(null, NPC.Hitbox, ModContent.ItemType<Items.BossDrop.TuskTreasureBag>());
-					if (Main.masterMode)
-						Item.NewItem(null, NPC.Hitbox, ModContent.ItemType<Items.BossDrop.TuskRelic>());
-				}
-				if (Main.rand.NextBool(10))
-					Item.NewItem(null, NPC.Hitbox, ModContent.ItemType<Items.BossDrop.BloodyTuskTrophy>());
-
+				
 				SubTuskOnSquzze = false;
 				SubTuskOnStretch = false;
 				Transparent = false;
@@ -1758,6 +1733,20 @@ public class BloodTusk : ModNPC
 			return false;
 		}
 		return true;
+	}
+	public override void ModifyNPCLoot(NPCLoot npcLoot)
+	{
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TuskMirror>()));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyTuskTrophy>(), 10, 1));
+
+		npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TuskTreasureBag>()));
+		npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<TuskRelic>()));
+
+		var rule = new LeadingConditionRule(new Conditions.NotExpert());
+		rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<ToothStaff>(), ModContent.ItemType<ToothBow>(), ModContent.ItemType<ToothSpear>(), ModContent.ItemType<TuskLace>(), ModContent.ItemType<ToothMagicBall>(), ModContent.ItemType<BloodyBoneYoyo>(), ModContent.ItemType<SpineGun>(), ModContent.ItemType<ToothKnife>()));
+
+		npcLoot.Add(rule);
+		base.ModifyNPCLoot(npcLoot);
 	}
 	public override void HitEffect(NPC.HitInfo hit)
 	{
@@ -2262,27 +2251,5 @@ public class BloodTusk : ModNPC
 		SprK = 0.09f + SprK * 0.9f;
 		if (projectile.velocity != Vector2.Zero)
 			tuskHitMove += Vector2.Normalize(projectile.velocity) * Math.Clamp(projectile.knockBack, 0, 20f);
-	}
-	public override void ModifyNPCLoot(NPCLoot npcLoot)
-	{
-		/*大师*/
-		//npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.Legendary.ToothSpear>(), 40/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-		//npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.Legendary.ToothBow>(), 8/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-		/*Uncomment when needed*///npcLoot.Add(ItemDropRule.ByCondition(new FiveRandomM(), ModContent.ItemType<Items.BossDrop.TuskRelic>(), 1/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-								 //npcLoot.Add(ItemDropRule.ByCondition(new FiveRandomM(), ModContent.ItemType<Items.BossDrop.TuskTreasureBag>(), 1/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-
-		/*专家*/
-		//npcLoot.Add(ItemDropRule.ByCondition(new OnlyExper(), ModContent.ItemType<Items.Weapons.Legendary.ToothSpear>(), 125/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-		//npcLoot.Add(ItemDropRule.ByCondition(new OnlyExper(), ModContent.ItemType<Items.Weapons.Legendary.ToothBow>(), 25/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-		/*Uncomment when needed*///npcLoot.Add(ItemDropRule.ByCondition(DropBasedOnExpertMode, ModContent.ItemType<Items.BossDrop.TuskTreasureBag>(), 1/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-		/*普通*/
-		//npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType< Items.Weapons.Legendary.ToothSpear> (), 500/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-		//npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Weapons.Legendary.ToothBow>(), 100/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-		/*Uncomment when needed*///npcLoot.Add(ItemDropRule.ByCondition(new FiveRandomN(), ModContent.ItemType<Items.Weapons.SpineGun>(), 6/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-		/*Uncomment when needed*///npcLoot.Add(ItemDropRule.ByCondition(new FiveRandomN(), ModContent.ItemType<Items.Weapons.BloodyBoneYoyo>(), 6/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-		/*Uncomment when needed*/// npcLoot.Add(ItemDropRule.ByCondition(new FiveRandomN(), ModContent.ItemType<Items.Weapons.ToothMagicBall>(), 6/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-		/*Uncomment when needed*/// npcLoot.Add(ItemDropRule.ByCondition(new FiveRandomN(), ModContent.ItemType<Items.Accessories.TuskLace>(), 6/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-		/*Uncomment when needed*///npcLoot.Add(ItemDropRule.ByCondition(new FiveRandomN(), ModContent.ItemType<Items.Weapons.ToothStaff>(), 6/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-		/*Uncomment when needed*///npcLoot.Add(ItemDropRule.ByCondition(new FiveRandomN(), ModContent.ItemType<Items.Weapons.ToothKnife>(), 6/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
 	}
 }

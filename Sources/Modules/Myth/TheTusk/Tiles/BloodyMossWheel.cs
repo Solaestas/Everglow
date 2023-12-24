@@ -109,7 +109,7 @@ public class BloodyMossWheel : ModTile
 		//1→
 		//2↓
 		//3←
-		if (Dir[0] == 0 && Dir[1] == 0 && Dir[2] == 0 && Dir[3] == 0)
+		if (Dir[0] == 6 && Dir[1] == 1 && Dir[2] == 2 && Dir[3] == 0)
 		{
 			if (Step == 0)
 			{
@@ -117,7 +117,7 @@ public class BloodyMossWheel : ModTile
 				StepChange = 30;
 			}
 		}
-		if (Dir[0] == 0 && Dir[1] == 0 && Dir[2] == 0 && Dir[3] == 0)
+		if (Dir[0] == 7 && Dir[1] == 0 && Dir[2] == 4 && Dir[3] == 0)
 		{
 			if (Step == 1)
 			{
@@ -125,7 +125,7 @@ public class BloodyMossWheel : ModTile
 				StepChange = 30;
 			}
 		}
-		if (Dir[0] == 0 && Dir[1] == 0 && Dir[2] == 0 && Dir[3] == 0)
+		if (Dir[0] == 3 && Dir[1] == 2 && Dir[2] == 3 && Dir[3] == 5)
 		{
 			if (Step == 2)
 			{
@@ -286,40 +286,45 @@ public class BloodyMossWheel : ModTile
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
 
-		Texture2D Tdoor = ModAsset.Tusk_CosmicFlame.Value;
-		Texture2D Tdoor2 = ModAsset.CosmicVort.Value;
-		Texture2D Tdoor3 = ModAsset.CosmicPerlin.Value;
-		Texture2D scene = ModAsset.TuskMiddle_Square.Value;
+		Texture2D Tdoor = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/CosmicFlame").Value;
+		Texture2D Tdoor2 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/CosmicVort").Value;
+		Texture2D Tdoor3 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/CosmicPerlin").Value;
 		if (CanK)
 		{
-			Killing--;
-			sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
-			sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(100, 100, 100, 0), -(float)Main.time / 20f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
-			sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 15f, new Vector2(56), (60 - Killing) / 50f, SpriteEffects.None, 0f);
-			sb.Draw(Tdoor2, new Vector2(TileI * 16, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
-			sb.Draw(Tdoor3, new Vector2(TileI * 16, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), -(float)Main.time / 20f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
-			sb.Draw(Tdoor3, new Vector2(TileI * 16, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 15f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
+			if(!Main.gamePaused)
+			{
+				Killing--;
+			}
+			sb.Draw(Tdoor, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 300f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
+			sb.Draw(Tdoor, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(100, 100, 100, 0), -(float)Main.time / 200f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
+			sb.Draw(Tdoor, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 150f, new Vector2(56), (60 - Killing) / 50f, SpriteEffects.None, 0f);
+			sb.Draw(Tdoor2, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 300f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
+			sb.Draw(Tdoor3, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), -(float)Main.time / 200f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
+			sb.Draw(Tdoor3, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 150f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
+
+			Texture2D scene = ModAsset.TuskMiddle_Square.Value;
+			Matrix matrix = sb.transformMatrix;
 
 			sb.End();
-			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, matrix);
+
 			Effect dissolve = ModAsset.Dissolve_WithCenter.Value;
-			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
+			var projection = Matrix.CreateOrthographicOffCenter(-Main.offScreenRange, Main.screenWidth + Main.offScreenRange, Main.screenHeight + Main.offScreenRange, -Main.offScreenRange, 0, 1);
 			float dissolveDuration = (60 - Killing) / 60f - 0.2f;
 
-			dissolve.Parameters["uTransform"].SetValue(model * projection);
+			dissolve.Parameters["uTransform"].SetValue(matrix * projection);
 			dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_spiderNet.Value);
 			dissolve.Parameters["duration"].SetValue(dissolveDuration);
-			dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.3f, 0, 0.5f, 1f));
-			dissolve.Parameters["uNoiseSize"].SetValue(4f);
-			dissolve.Parameters["uNoiseXY"].SetValue(new Vector2((float)Main.timeForVisualEffects * 0.03f));
+			dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.8f, 0, 0.1f, 1f));
+			dissolve.Parameters["uNoiseSize"].SetValue(3f);
+			dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(0, (float)Main.timeForVisualEffects * 0.0003f));
 			dissolve.CurrentTechnique.Passes[0].Apply();
 
-			sb.Draw(scene, new Vector2(TileI * 16, TileJ * 16 - 68)  + zero, null,Color.White, 0, new Vector2(256), (60 - Killing) / 45f, SpriteEffects.None, 0f);
+			sb.Draw(scene, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition, null, Color.White * 0.8f, 0, scene.Size() * 0.5f, 0.25f, SpriteEffects.None, 0f);
+
 
 			sb.End();
-			sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
+			sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, matrix);
 		}
 	}
 }

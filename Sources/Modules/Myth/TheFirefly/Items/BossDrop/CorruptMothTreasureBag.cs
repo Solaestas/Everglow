@@ -1,6 +1,8 @@
 using Everglow.Myth.TheFirefly.Items.Accessories;
 using Everglow.Myth.TheFirefly.Items.Weapons;
 using Everglow.Myth.TheFirefly.NPCs.Bosses;
+using Everglow.Myth.TheTusk.Items.Accessories;
+using Everglow.Myth.TheTusk.Items.Weapons;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 
@@ -34,63 +36,29 @@ public class CorruptMothTreasureBag : ModItem
 	{
 		return true;
 	}
-
-	// TODO 不知道改成啥了
-#if false
-	// Sets the associated NPC this treasure bag is dropped from
-	[Obsolete]
-	public override int BossBagNPC => ModContent.NPCType<CorruptMoth>();
-
-	[Obsolete]
-	public override void OpenBossBag(Player player)
+	public override void RightClick(Player player)
 	{
-		var entitySource = player.GetSource_OpenItem(Type);
-
-		switch (Main.rand.Next(9))
+		switch (Main.rand.Next(5))
 		{
 			case 0:
-				player.QuickSpawnItem(entitySource, ModContent.ItemType<ShadowWingBow>());
+				player.QuickSpawnItem(null, ModContent.ItemType<ShadowWingBow>(), 1);
 				break;
-
 			case 1:
-				player.QuickSpawnItem(entitySource, ModContent.ItemType<PhosphorescenceGun>());
+				player.QuickSpawnItem(null, ModContent.ItemType<ScaleWingBlade>(), 1);
 				break;
-
 			case 2:
-				player.QuickSpawnItem(entitySource, ModContent.ItemType<EvilChrysalis>());
+				player.QuickSpawnItem(null, ModContent.ItemType<PhosphorescenceGun>(), 1);
 				break;
-
 			case 3:
-				player.QuickSpawnItem(entitySource, ModContent.ItemType<DustOfCorrupt>());
+				player.QuickSpawnItem(null, ModContent.ItemType<EvilChrysalis>(), 1);
 				break;
-
 			case 4:
-				player.QuickSpawnItem(entitySource, ModContent.ItemType<MothYoyo>());
-				break;
-
-			case 5:
-				player.QuickSpawnItem(entitySource, ModContent.ItemType<ScaleWingBlade>());
-				break;
-			case 6:
-				player.QuickSpawnItem(entitySource, ModContent.ItemType<DreamWeaver>());
-				break;
-
-			case 7:
-				player.QuickSpawnItem(entitySource, ModContent.ItemType<FlowLightMissile>());
-				break;
-
-			case 8:
-				player.QuickSpawnItem(entitySource, ModContent.ItemType<NavyThunder>());
+				player.QuickSpawnItem(null, ModContent.ItemType<DustOfCorrupt>(), 1);
 				break;
 		}
-		if (Main.rand.NextBool(2))
-			player.QuickSpawnItem(entitySource, ModContent.ItemType<MothEye>());
-		else if (Main.masterMode)
-		{
-			player.QuickSpawnItem(entitySource, ModContent.ItemType<MothEye>());
-		}
+		player.QuickSpawnItem(null, ItemID.GoldCoin, 7);
+		base.RightClick(player);
 	}
-#endif
 
 	// Below is code for the visuals
 
