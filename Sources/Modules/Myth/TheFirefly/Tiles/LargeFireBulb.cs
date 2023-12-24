@@ -7,7 +7,7 @@ namespace Everglow.Myth.TheFirefly.Tiles;
 
 internal class LargeFireBulbTestItem : ModItem
 {
-	public override string Texture => "Everglow/" + ModAsset.LargeFireBulbPath;
+	public override string Texture => "Everglow/" + ModAsset.LargeFireBulb_itemPath;
 
 	public override void SetDefaults()
 	{
