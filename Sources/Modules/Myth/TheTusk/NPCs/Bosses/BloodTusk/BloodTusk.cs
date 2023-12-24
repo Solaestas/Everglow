@@ -1693,23 +1693,23 @@ public class BloodTusk : ModNPC
 				NPC.position.Y = NPC.position.Y - NPC.height / 2;
 				float vFX = Main.rand.Next(-2000, 2000) / 5000f;
 
-				var vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 6f);
-				Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/BloodTuskBroken1").Type, 1f);
-				vFX = Main.rand.Next(-2000, 2000) / 5000f;
-				vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 6f);
-				Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/BloodTuskBroken2").Type, 1f);
-				vFX = Main.rand.Next(-2000, 2000) / 5000f;
-				vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 6f);
-				Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/BloodTuskBroken3").Type, 1f);
-				vFX = Main.rand.Next(-2000, 2000) / 5000f;
-				vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 12f);
-				Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/BloodTuskBroken4").Type, 1f);
-				vFX = Main.rand.Next(-2000, 2000) / 5000f;
-				vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 12f);
-				Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/BloodTuskBroken5").Type, 1f);
-				vFX = Main.rand.Next(-2000, 2000) / 5000f;
-				vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 12f);
-				Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/BloodTuskBroken6").Type, 1f);
+				//var vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 6f);
+				//Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/BloodTuskBroken1").Type, 1f);
+				//vFX = Main.rand.Next(-2000, 2000) / 5000f;
+				//vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 6f);
+				//Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/BloodTuskBroken2").Type, 1f);
+				//vFX = Main.rand.Next(-2000, 2000) / 5000f;
+				//vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 6f);
+				//Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/BloodTuskBroken3").Type, 1f);
+				//vFX = Main.rand.Next(-2000, 2000) / 5000f;
+				//vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 12f);
+				//Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/BloodTuskBroken4").Type, 1f);
+				//vFX = Main.rand.Next(-2000, 2000) / 5000f;
+				//vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 12f);
+				//Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/BloodTuskBroken5").Type, 1f);
+				//vFX = Main.rand.Next(-2000, 2000) / 5000f;
+				//vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 12f);
+				//Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/BloodTuskBroken6").Type, 1f);
 				if (!Main.expertMode && !Main.masterMode)
 				{
 					int itemType = ModContent.ItemType<Items.Weapons.ToothKnife>();

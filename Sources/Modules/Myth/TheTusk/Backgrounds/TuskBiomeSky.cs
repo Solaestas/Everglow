@@ -382,33 +382,6 @@ public class TuskBiomeSky : CustomSky
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, CloseII.ToArray(), 0, 2);
 		}
-		rvcII = GetDrawRect(texCloseII.Size(), 0.27f, 2);
-		rvcII.Y -= 0;
-		rvcII.X += 320;
-		UpY = rvcII.Y / (float)texCloseII.Height;
-		DownY = (rvcII.Y + rvcII.Height) / (float)texCloseII.Height;
-		CloseII = new List<Vertex2D>
-		{
-			new Vertex2D(new Vector2(0, 0), DrawC, new Vector3(rvcII.X / (float)texCloseII.Width, UpY, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth * 2, 0), DrawC, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
-			new Vertex2D(new Vector2(0, Main.screenHeight* 2), DrawC, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
-
-			new Vertex2D(new Vector2(0, Main.screenHeight* 2), DrawC, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth* 2, 0), DrawC, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth* 2, Main.screenHeight* 2), DrawC, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, DownY, 0))
-		};
-		if (CloseII.Count > 2)
-		{
-			Main.graphics.GraphicsDevice.Textures[0] = texCloseII;
-			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, CloseII.ToArray(), 0, 2);
-		}
-		if (DownY > 1)
-		{
-			float DrawY = (1 - UpY) / (DownY - UpY) * Main.screenHeight - 5;
-			spriteBatch.Draw(texCloseII, new Rectangle(0, (int)DrawY, Main.screenWidth, Main.screenHeight - (int)DrawY), new Rectangle(1000, 1100, 1, 1), DrawC);
-		}
-
 
 		spriteBatch.End();
 		spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);

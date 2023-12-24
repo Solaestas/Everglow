@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheTusk.Tiles;
@@ -82,25 +83,63 @@ public class BloodyMossWheelFinished : ModTile
 		TileI = i;
 		TileJ = j;
 		PlayerTpTime[player.whoAmI] = TpTime;
-	}
+		DrawAll(sb);
 
+
+		
+	}
+	public override void NearbyEffects(int i, int j, bool closer)
+	{
+		base.NearbyEffects(i, j, closer);
+	}
+	public override bool RightClick(int i, int j)
+	{
+		return base.RightClick(i, j);
+	}
 	private int TpH = -200;
-	public static void DrawAll(SpriteBatch sb)
+	public void DrawAll(SpriteBatch sb)
 	{
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
 
-		Texture2D Tdoor = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/CosmicFlame").Value;
-		Texture2D Tdoor2 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/CosmicVort").Value;
-		Texture2D Tdoor3 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/CosmicPerlin").Value;
-		var Correction = new Vector2(-186f, -260f);
-		sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
-		sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(100, 100, 100, 0), -(float)Main.time / 20f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
-		sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 15f, new Vector2(56), 65f / 50f, SpriteEffects.None, 0f);
-		sb.Draw(Tdoor2, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), 65 / 45f, SpriteEffects.None, 0f);
-		sb.Draw(Tdoor3, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), -(float)Main.time / 20f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
-		sb.Draw(Tdoor3, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 15f, new Vector2(56), 65 / 45f, SpriteEffects.None, 0f);
+		Texture2D Tdoor = ModAsset.Tusk_CosmicFlame.Value;
+		Texture2D Tdoor2 = ModAsset.CosmicVort.Value;
+		Texture2D Tdoor3 = ModAsset.CosmicPerlin.Value;
+
+
+		sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
+		sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(100, 100, 100, 0), -(float)Main.time / 20f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
+		sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 15f, new Vector2(56), 65f / 50f, SpriteEffects.None, 0f);
+		sb.Draw(Tdoor2, new Vector2(TileI * 16, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), 65 / 45f, SpriteEffects.None, 0f);
+		sb.Draw(Tdoor3, new Vector2(TileI * 16, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), -(float)Main.time / 20f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
+		sb.Draw(Tdoor3, new Vector2(TileI * 16, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 15f, new Vector2(56), 65 / 45f, SpriteEffects.None, 0f);
+
+		Texture2D scene = ModAsset.TuskMiddle_Square.Value;
+		Matrix matrix = sb.transformMatrix;
+
+		sb.End();
+		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, matrix);
+
+		Effect dissolve = ModAsset.Dissolve_WithCenter.Value;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * matrix;
+		float dissolveDuration = 1 - 0.2f;
+
+		dissolve.Parameters["uTransform"].SetValue(model * projection);
+		dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_spiderNet.Value);
+		dissolve.Parameters["duration"].SetValue(dissolveDuration);
+		dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.8f, 0, 0.1f, 1f));
+		dissolve.Parameters["uNoiseSize"].SetValue(3f);
+		dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(0, (float)Main.timeForVisualEffects * 0.0003f));
+		dissolve.CurrentTechnique.Passes[0].Apply();
+
+		Vector2 correction = (Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f - new Vector2(TileI * 16, TileJ * 16 - 68)) * new Vector2(1f, Main.screenWidth / (float)Main.screenHeight / 1.3333f) * 0.1333f;
+		sb.Draw(scene, new Vector2(TileI * 16, TileJ * 16 - 68), null, Color.White * 0.8f, 0, scene.Size() * 0.5f, 0.15f, SpriteEffects.None, 0f);
+
+
+		sb.End();
+		sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, matrix);
 	}
 	public static float TileI = 0;
 	public static float TileJ = 0;

@@ -37,10 +37,10 @@ public class TuskGen : ModSystem
 		{
 			return false;
 		}
-		TuskGen tuskGen = ModContent.GetInstance<TuskGen>();
-		Vector2 TuskBiomeCenter = new Vector2(tuskGen.tuskCenterX, tuskGen.tuskCenterY - 80) * 16;
-		Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - TuskBiomeCenter;
-		return v0.Length() < 1700;
+		else
+		{
+			return true;
+		}
 	}
 	internal float TuskS = 0;
 	public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor)
