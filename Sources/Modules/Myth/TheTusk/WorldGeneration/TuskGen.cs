@@ -280,22 +280,23 @@ public class TuskGen : ModSystem
 					}
 				}
 			}
-			if (score > 6000)
-			{
-				for (int j =0;j < score / 1000;j++)
-				{
-					Tile tile = Main.tile[x, y - j - 20];
-					tile.TileType = TileID.Stone;
-					tile.HasTile = true;
-				}
-				for (int j = 0; j < times; j++)
-				{
-					Tile tile = Main.tile[x + 1, y - j - 20];
-					tile.TileType = TileID.Copper;
-					tile.HasTile = true;
-				}
-				return new Point(x, y);
-			}
+			//Debug Code.
+			//if (score > 6000)
+			//{
+			//	for (int j =0;j < score / 1000;j++)
+			//	{
+			//		Tile tile = Main.tile[x, y - j - 20];
+			//		tile.TileType = TileID.Stone;
+			//		tile.HasTile = true;
+			//	}
+			//	for (int j = 0; j < times; j++)
+			//	{
+			//		Tile tile = Main.tile[x + 1, y - j - 20];
+			//		tile.TileType = TileID.Copper;
+			//		tile.HasTile = true;
+			//	}
+			//	return new Point(x, y);
+			//}
 		}
 		return new Point(Main.maxTilesX / 3, 600);
 	}
