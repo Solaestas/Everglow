@@ -189,6 +189,10 @@ public class CorruptMoth : ModNPC
 		{
 			float damage = modifiers.GetDamage(projectile.damage, Main.rand.Next(100) < projectile.CritChance);
 			ShieldHealthValue -= damage;
+			if(ShieldHealthValue <= 0)
+			{
+				BreakShield();
+			}
 			modifiers.FinalDamage *= 0.01f;
 			SoundEngine.PlaySound(SoundID.NPCHit4, NPC.Center);
 			if (lightVisual < 0.6f)
@@ -1123,7 +1127,11 @@ public class CorruptMoth : ModNPC
 			}
 			else
 			{
-				ShieldHealthValue = 0;
+				if (ShieldHealthValue > 0)
+				{
+					BreakShield();
+					ShieldHealthValue = 0;
+				}
 				NPC.ai[0] = 1;
 				Timer = 150;
 			}
@@ -1133,6 +1141,15 @@ public class CorruptMoth : ModNPC
 			NPC.oldPos[i] = NPC.oldPos[i - 1];
 		}
 		NPC.oldPos[0] = NPC.Center;
+	}
+	public void BreakShield()
+	{
+		for (int d = 0; d < 150; d++)
+		{
+			float scale = Main.rand.NextFloat(0.8f, 3.5f);
+			Dust dust = Dust.NewDustDirect(NPC.Center, 0, 0, ModContent.DustType<BlueGlow>(), 0, 0, 0, default, scale);
+			dust.velocity = NPC.velocity * 0.8f + new Vector2(0, Main.rand.NextFloat(16f, 25f)).RotateRandom(MathHelper.TwoPi);
+		}
 	}
 	public void GenerateDust()
 	{
@@ -1393,13 +1410,82 @@ public class CorruptMoth : ModNPC
 				{
 					coord = new Vector3(0, 0, 0);
 				}
-
 				pos = RodriguesRotate(pos, axis, (float)Main.time * 0.03f) * 140;
 				pos.X += NPC.Center.X - Main.screenPosition.X;
 				pos.Y += NPC.Center.Y - Main.screenPosition.Y;
 				Vector2 v2Pos = Projection2(pos, new Vector2(Main.screenWidth, Main.screenHeight) / 2, 1000);
+				vertices.Add(v2Pos, color * alpha, coord);
+			}
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, 2);
+			vertices.Clear();
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.CubeTexture2.Value;
+		color = new Color(0.05f, 0.3f, 1f) * ((lightVisual + 3) / 4f);
+		for (int i = 0; i < 6; i++)
+		{
+			bool has110 = false;
+			bool type7 = true;
 
-
+			float alpha = 1f;
+			float faceMaxZ = 0;
+			for (int j = 0; j < 4; j++)
+			{
+				Vector3 pos = cubeVec[array[i][j] - 1];
+				posCheck = RodriguesRotate(pos, axis, (float)Main.time * 0.03f);
+				if (posCheck.Z > faceMaxZ)
+				{
+					faceMaxZ = posCheck.Z;
+				}
+			}
+			if (front)
+			{
+				if (faceMaxZ != totalMaxZ)
+				{
+					continue;
+				}
+			}
+			else
+			{
+				alpha *= 0.8f;
+				if (faceMaxZ == totalMaxZ)
+				{
+					continue;
+				}
+			}
+			for (int j = 0; j < 4; j++)
+			{
+				Vector3 pos = cubeVec[array[i][j] - 1];
+				Vector3 coord;
+				if (array[i][j] - 1 == 0)
+				{
+					type7 = false;
+					coord = new Vector3(1, 0, 0);
+				}
+				else if (array[i][j] - 1 == 6)
+				{
+					coord = new Vector3(1, 0, 0);
+				}
+				else if (!type7 && (pos - new Vector3(1, 1, 1)).Length() >= MathF.Sqrt(2) * 2 - 0.1 && (pos - new Vector3(1, 1, 1)).Length() <= MathF.Sqrt(2) * 2 + 0.1)
+				{
+					coord = new Vector3(0, 1, 0);
+				}
+				else if (type7 && (pos - new Vector3(-1, -1, -1)).Length() >= MathF.Sqrt(2) * 2 - 0.1 && (pos - new Vector3(-1, -1, -1)).Length() <= MathF.Sqrt(2) * 2 + 0.1)
+				{
+					coord = new Vector3(0, 1, 0);
+				}
+				else if (!has110)
+				{
+					coord = new Vector3(1, 1, 0);
+					has110 = true;
+				}
+				else
+				{
+					coord = new Vector3(0, 0, 0);
+				}
+				pos = RodriguesRotate(pos, axis, (float)Main.time * 0.03f) * 140;
+				pos.X += NPC.Center.X - Main.screenPosition.X;
+				pos.Y += NPC.Center.Y - Main.screenPosition.Y;
+				Vector2 v2Pos = Projection2(pos, new Vector2(Main.screenWidth, Main.screenHeight) / 2, 1000);
 				vertices.Add(v2Pos, color * alpha, coord);
 			}
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, 2);
