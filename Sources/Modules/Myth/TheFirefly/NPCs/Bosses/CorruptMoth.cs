@@ -1084,6 +1084,7 @@ public class CorruptMoth : ModNPC
 		}//拳
 		if (NPC.ai[0] == 13)//
 		{
+			ShieldHealthValue = 0;
 			if (Timer == 0)
 			{
 				foreach (NPC butterfly in Main.npc)
@@ -1123,7 +1124,6 @@ public class CorruptMoth : ModNPC
 			}
 			else
 			{
-				ShieldHealthValue = 0;
 				NPC.ai[0] = 1;
 				Timer = 150;
 			}
