@@ -38,7 +38,7 @@ public class CorruptMothTreasureBag : ModItem
 	}
 	public override void RightClick(Player player)
 	{
-		switch (Main.rand.Next(5))
+		switch (Main.rand.Next(9))
 		{
 			case 0:
 				player.QuickSpawnItem(null, ModContent.ItemType<ShadowWingBow>(), 1);
@@ -54,6 +54,18 @@ public class CorruptMothTreasureBag : ModItem
 				break;
 			case 4:
 				player.QuickSpawnItem(null, ModContent.ItemType<DustOfCorrupt>(), 1);
+				break;
+			case 5:
+				player.QuickSpawnItem(null, ModContent.ItemType<MothYoyo>(), 1);
+				break;
+			case 6:
+				player.QuickSpawnItem(null, ModContent.ItemType<GlowBeadGun>(), 1);
+				break;
+			case 7:
+				player.QuickSpawnItem(null, ModContent.ItemType<DreamWeaver>(), 1);
+				break;
+			case 8:
+				player.QuickSpawnItem(null, ModContent.ItemType<FlowLightMissile>(), 1);
 				break;
 		}
 		player.QuickSpawnItem(null, ItemID.GoldCoin, 7);
