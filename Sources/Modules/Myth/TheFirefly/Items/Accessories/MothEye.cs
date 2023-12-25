@@ -25,7 +25,7 @@ public class MothEye : ModItem
 		player.maxMinions += 1;
 		player.maxTurrets += 1;
 		player.GetDamage(DamageClass.Summon) *= 1.06f;
-		if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+		if (fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
 		{
 			player.manaSickReduction += 4;
 			player.manaCost -= 0.05f;
@@ -33,7 +33,7 @@ public class MothEye : ModItem
 	}
 	public override void ModifyTooltips(List<TooltipLine> tooltips)
 	{
-		if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+		if (fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
 		{
 			tooltips.AddRange(new TooltipLine[]
 			{
@@ -85,7 +85,7 @@ class MothEyePlayer : ModPlayer
 	}
 	public override void ModifyWeaponDamage(Item item, ref StatModifier damage)
 	{
-		if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+		if (fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
 		{
 			for (int f = 0; f < Player.armor.Length; f++)
 			{
