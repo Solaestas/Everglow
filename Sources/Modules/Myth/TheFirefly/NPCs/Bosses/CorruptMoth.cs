@@ -1454,7 +1454,7 @@ public class CorruptMoth : ModNPC
 		}
 		if (NPC.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;
-		if (NPC.ai[0] >= 6 || SummonButterfliesCount > 0)
+		if (NPC.ai[0] >= 6 && ShieldHealthValue > 0)
 			DrawCube();
 
 
@@ -1479,7 +1479,7 @@ public class CorruptMoth : ModNPC
 		spriteBatch.Draw(WingDustTexture, NPC.Center - Main.screenPosition, new Rectangle?(NPC.frame), new Color(1f, 1f, 1f, 0) * (MathF.Pow(NPC.velocity.Length() / 20f, 1.0f) * ((255 - NPC.alpha) / 255f)), NPC.rotation, origin, NPC.scale, effects, 0f);
 
 
-		if (NPC.ai[0] >= 6 || SummonButterfliesCount > 0)
+		if (NPC.ai[0] >= 6 && ShieldHealthValue > 0)
 			DrawCube(true);
 
 		return false;
