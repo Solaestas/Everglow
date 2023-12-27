@@ -637,93 +637,93 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildFossilizedMineRoad()
 	{
-		//int deltaX = 120;
-		//if (AzureGrottoCenterX > 600)
-		//{
-		//	deltaX = -120;
-		//}
-		//int step = Math.Sign(deltaX);
-		//int startX = 600 + deltaX;
-		//int startY = 11632;
-		//while (SafeGetTile(startX, startY + 1).TileType == TileID.GrayBrick)
-		//{
-		//	startX += step;
-		//}
-		//int lengthX = GenRand.Next(140, 152);
-		//for (int x0 = 0; x0 < lengthX; x0++)
-		//{
-		//	KillRectangleAreaOfTile(x0 * step + startX, startY - 17, x0 * step + startX, startY);
-		//	PlaceRectangleAreaOfBlock(x0 * step + startX, startY + 1, x0 * step + startX, startY + 3, TileID.GrayBrick, false);
-		//}
-		//int continueEmpty = 0;
-		//float radius = 5f;
-		//Vector2 velocity = new Vector2(step, 0);
-		//Vector2 position = new Vector2(startX + lengthX * step, startY - radius);
-		//int times = 0;
-		//int coordY = GenRand.Next(512);
-		//int rotatedTimes = 0;
-		//int noRotatedTimes = 0;
-		//while (continueEmpty < 15)
-		//{
-		//	times++;
-		//	velocity = Vector2.Normalize(velocity);
-		//	position += velocity;
-		//	int x = (int)position.X;
-		//	int y = (int)position.Y;
-		//	for (int x0 = -10; x0 <= 10; x0++)
-		//	{
-		//		for (int y0 = -10; y0 <= 10; y0++)
-		//		{
-		//			if (new Vector2(x0, y0).Length() < radius)
-		//			{
-		//				Tile tile = SafeGetTile(x0 + x, y0 + y);
-		//				tile.HasTile = false;
-		//			}
-		//		}
-		//	}
-		//	if (rotatedTimes > 0)
-		//	{
-		//		rotatedTimes--;
-		//		velocity = velocity.RotatedBy(step * Math.PI / 40d);
-		//		noRotatedTimes = 0;
-		//	}
-		//	else
-		//	{
-		//		rotatedTimes = 0;
-		//		Vector2 probePos = position + velocity * 50;
-		//		if ((!SafeGetTile((int)probePos.X, (int)(probePos.Y)).HasTile && position.Y > 11451) || probePos.X > 1200 || probePos.X < 0)
-		//		{
-		//			rotatedTimes = 40;
-		//			step *= -1;
-		//			continue;
-		//		}
-		//		velocity = velocity.RotatedBy((PerlinPixelG[times % 512, coordY] - 127.5) * 0.0002);
-		//		velocity.Y -= 0.015f;
-		//		noRotatedTimes++;
-		//		if (noRotatedTimes > Math.Max(80 + 11540 - position.Y, 80))
-		//		{
-		//			if (GenRand.NextBool(60))
-		//			{
-		//				rotatedTimes = 40;
-		//				step *= -1;
-		//			}
-		//		}
-		//		velocity.X *= 1.12f;
-		//	}
-		//	Vector2 probePosII = position + velocity * 5;
-		//	if (SafeGetTile((int)probePosII.X, (int)(probePosII.Y)).TileType != ModContent.TileType<StoneScaleWood>() && y < 11451)
-		//	{
-		//		continueEmpty++;
-		//	}
-		//	else
-		//	{
-		//		continueEmpty = 0;
-		//	}
-		//	if (times > 8000)
-		//	{
-		//		break;
-		//	}
-		//}
+		int deltaX = 120;
+		if (AzureGrottoCenterX > 600)
+		{
+			deltaX = -120;
+		}
+		int step = Math.Sign(deltaX);
+		int startX = 600 + deltaX;
+		int startY = 11632;
+		while (SafeGetTile(startX, startY + 1).TileType == TileID.GrayBrick)
+		{
+			startX += step;
+		}
+		int lengthX = GenRand.Next(140, 152);
+		for (int x0 = 0; x0 < lengthX; x0++)
+		{
+			KillRectangleAreaOfTile(x0 * step + startX, startY - 17, x0 * step + startX, startY);
+			PlaceRectangleAreaOfBlock(x0 * step + startX, startY + 1, x0 * step + startX, startY + 3, TileID.GrayBrick, false);
+		}
+		int continueEmpty = 0;
+		float radius = 5f;
+		Vector2 velocity = new Vector2(step, 0);
+		Vector2 position = new Vector2(startX + lengthX * step, startY - radius);
+		int times = 0;
+		int coordY = GenRand.Next(512);
+		int rotatedTimes = 0;
+		int noRotatedTimes = 0;
+		while (continueEmpty < 15)
+		{
+			times++;
+			velocity = Vector2.Normalize(velocity);
+			position += velocity;
+			int x = (int)position.X;
+			int y = (int)position.Y;
+			for (int x0 = -10; x0 <= 10; x0++)
+			{
+				for (int y0 = -10; y0 <= 10; y0++)
+				{
+					if (new Vector2(x0, y0).Length() < radius)
+					{
+						Tile tile = SafeGetTile(x0 + x, y0 + y);
+						tile.HasTile = false;
+					}
+				}
+			}
+			if (rotatedTimes > 0)
+			{
+				rotatedTimes--;
+				velocity = velocity.RotatedBy(step * Math.PI / 40d);
+				noRotatedTimes = 0;
+			}
+			else
+			{
+				rotatedTimes = 0;
+				Vector2 probePos = position + velocity * 50;
+				if ((!SafeGetTile((int)probePos.X, (int)(probePos.Y)).HasTile && position.Y > 11451) || probePos.X > 1200 || probePos.X < 0)
+				{
+					rotatedTimes = 40;
+					step *= -1;
+					continue;
+				}
+				velocity = velocity.RotatedBy((PerlinPixelG[times % 512, coordY] - 127.5) * 0.0002);
+				velocity.Y -= 0.015f;
+				noRotatedTimes++;
+				if (noRotatedTimes > Math.Max(80 + 11540 - position.Y, 80))
+				{
+					if (GenRand.NextBool(60))
+					{
+						rotatedTimes = 40;
+						step *= -1;
+					}
+				}
+				velocity.X *= 1.12f;
+			}
+			Vector2 probePosII = position + velocity * 5;
+			if (SafeGetTile((int)probePosII.X, (int)(probePosII.Y)).TileType != ModContent.TileType<StoneScaleWood>() && y < 11451)
+			{
+				continueEmpty++;
+			}
+			else
+			{
+				continueEmpty = 0;
+			}
+			if (times > 8000)
+			{
+				break;
+			}
+		}
 
 	}
 	/// <summary>
@@ -731,73 +731,73 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildTownBelow()
 	{
-		int randX = AzureGrottoCenterX + 100;
-		if (AzureGrottoCenterX > 600)
-		{
-			randX = AzureGrottoCenterX - 100 - 434;
-		}
-		QuickBuild(randX, 11400, "YggdrasilTown/MapIOs/434x159YggdrasilTown.mapio");
-		int randY = GenRand.Next(512);
-		//平滑嵌入左上段
-		for (int x = randX - 70; x < randX + 150; x++)
-		{
-			float yMin = (randX + 150 - x) / 220f;
-			yMin *= yMin;
-			yMin *= 45f;
-			yMin = 11270 - yMin;
-			yMin -= PerlinPixelB[x % 512, randY] * 0.02f;
-			for (int y = 11270; y > yMin; y--)
-			{
-				Tile tile = SafeGetTile(x, y);
-				if (y == 11270)
-				{
-					if (!tile.HasTile)
-					{
-						break;
-					}
-				}
-				else
-				{
-					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
-					tile.HasTile = true;
-				}
-			}
-		}
-		//平滑嵌入右侧
-		for (int x = randX + 390; x < randX + 600; x++)
-		{
-			float yMin = (randX + 600 - x) / 210f;
-			yMin *= yMin;
-			yMin *= 55f;
-			yMin = 11200 + yMin;
-			yMin -= PerlinPixelB[x % 512, randY] * 0.06f;
-			for (int y = (int)yMin; y < 11400; y++)
-			{
-				Tile tile = SafeGetTile(x, y);
-				if (!tile.HasTile && tile.LiquidAmount == 0)
-				{
-					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
-					tile.HasTile = true;
-				}
-			}
-		}
-		Point digStart = new Point(randX, 11415);
-		for (int t = 0; t < 75; t++)
-		{
-			digStart += new Point(-1, t / 24);
-			int range = (75 - t) / 5 + 5;
-			for (int x0 = -range; x0 <= range; x0++)
-			{
-				for (int y0 = -range; y0 <= range; y0++)
-				{
-					Tile tile = Main.tile[x0 + digStart.X, y0 + digStart.Y];
-					if (new Vector2(x0, y0).Length() < range)
-					{
-						tile.HasTile = false;
-					}
-				}
-			}
-		}
+		//int randX = AzureGrottoCenterX + 100;
+		//if (AzureGrottoCenterX > 600)
+		//{
+		//	randX = AzureGrottoCenterX - 100 - 434;
+		//}
+		//QuickBuild(randX, 11400, "YggdrasilTown/MapIOs/434x159YggdrasilTown.mapio");
+		//int randY = GenRand.Next(512);
+		////平滑嵌入左上段
+		//for (int x = randX - 70; x < randX + 150; x++)
+		//{
+		//	float yMin = (randX + 150 - x) / 220f;
+		//	yMin *= yMin;
+		//	yMin *= 45f;
+		//	yMin = 11270 - yMin;
+		//	yMin -= PerlinPixelB[x % 512, randY] * 0.02f;
+		//	for (int y = 11270; y > yMin; y--)
+		//	{
+		//		Tile tile = SafeGetTile(x, y);
+		//		if (y == 11270)
+		//		{
+		//			if (!tile.HasTile)
+		//			{
+		//				break;
+		//			}
+		//		}
+		//		else
+		//		{
+		//			tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+		//			tile.HasTile = true;
+		//		}
+		//	}
+		//}
+		////平滑嵌入右侧
+		//for (int x = randX + 390; x < randX + 600; x++)
+		//{
+		//	float yMin = (randX + 600 - x) / 210f;
+		//	yMin *= yMin;
+		//	yMin *= 55f;
+		//	yMin = 11200 + yMin;
+		//	yMin -= PerlinPixelB[x % 512, randY] * 0.06f;
+		//	for (int y = (int)yMin; y < 11400; y++)
+		//	{
+		//		Tile tile = SafeGetTile(x, y);
+		//		if (!tile.HasTile && tile.LiquidAmount == 0)
+		//		{
+		//			tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+		//			tile.HasTile = true;
+		//		}
+		//	}
+		//}
+		//Point digStart = new Point(randX, 11415);
+		//for (int t = 0; t < 75; t++)
+		//{
+		//	digStart += new Point(-1, t / 24);
+		//	int range = (75 - t) / 5 + 5;
+		//	for (int x0 = -range; x0 <= range; x0++)
+		//	{
+		//		for (int y0 = -range; y0 <= range; y0++)
+		//		{
+		//			Tile tile = Main.tile[x0 + digStart.X, y0 + digStart.Y];
+		//			if (new Vector2(x0, y0).Length() < range)
+		//			{
+		//				tile.HasTile = false;
+		//			}
+		//		}
+		//	}
+		//}
 	}
 	/// <summary>
 	/// 灯木森林
@@ -815,6 +815,7 @@ public class YggdrasilTownGeneration
 		int countX = 0;
 		int coordX = GenRand.Next(512);
 		int coordY = GenRand.Next(512);
+		//放置草块
 		while (countX < 500)
 		{
 			countX++;
@@ -831,15 +832,54 @@ public class YggdrasilTownGeneration
 				Tile tile = SafeGetTile(x, y);
 				if(!tile.HasTile && tile.LiquidAmount<=0)
 				{
-					if(valueR > 0.65f)
+					//边缘区域为草方块
+					if(valueR > 0.62f)
 					{
 						tile.TileType = (ushort)ModContent.TileType<DarkForestGrass>();
 						tile.HasTile = true;
 					}
-					if (valueR > 0.7f)
+					//其他区域是泥
+					if (valueR > 0.85f)
 					{
 						tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
 						tile.HasTile = true;
+					}
+				}
+			}
+		}
+		countX = 0;
+		coordX = GenRand.Next(512);
+		coordY = GenRand.Next(512);
+		while (countX < 500)
+		{
+			countX++;
+			int x = randX + countX * direction;
+			float yMin = 11040 - countX * countX / 2000f;
+			for (int y = startY; y > yMin; y--)
+			{
+				float valueG = PerlinPixelG[(int)(x * 0.24f + coordX) % 512, (int)(y * 0.24 + coordY) % 512] / 255f;
+				Tile tile0 = SafeGetTile(x, y);
+				Tile tile1 = SafeGetTile(x + 1, y);
+				Tile tile2 = SafeGetTile(x, y + 1);
+				Tile tile3 = SafeGetTile(x + 1, y + 1);
+				Tile tile4 = SafeGetTile(x, y - 1);
+				Tile tile5 = SafeGetTile(x + 1, y - 1);
+				//罐子
+				if(valueG > 0.8f)
+				{
+					if (!tile0.HasTile && !tile1.HasTile && !tile4.HasTile && !tile5.HasTile && tile2.HasTile && tile3.HasTile && tile2.Slope == SlopeType.Solid && (tile2.TileType == ModContent.TileType<DarkForestGrass>() || tile2.TileType == ModContent.TileType<DarkForestSoil>()) && tile3.Slope == SlopeType.Solid && (tile3.TileType == ModContent.TileType<DarkForestGrass>() || tile3.TileType == ModContent.TileType<DarkForestSoil>()))
+					{
+						if (Main.rand.NextBool(3))
+						{
+							if (Main.rand.NextBool(2))
+							{
+								PlaceFrameImportantTiles(x, y - 1, 2, 2, ModContent.TileType<LampWoodPot>(), Main.rand.Next(3) * 36);
+							}
+							else
+							{
+								PlaceFrameImportantTiles(x, y - 1, 2, 2, TileID.Pots, Main.rand.Next(3) * 36, 36);
+							}
+						}
 					}
 				}
 			}
@@ -1048,6 +1088,7 @@ public class YggdrasilTownGeneration
 			step = 1;
 		}
 		int x = AzureGrottoCenterX - step * 240;
+		//盖上石木
 		while (x >= 50 && x <= 1150)
 		{
 			x += step;
@@ -1087,8 +1128,14 @@ public class YggdrasilTownGeneration
 		int cageMiddleX = AzureGrottoCenterX + (tunnelLength - 100) * step;
 		randX = GenRand.Next(512);
 		randY = GenRand.Next(512);
+
 		while (count <= tunnelLength)
 		{
+			//前往大厅的道路和隧道
+			if(count == 0)
+			{
+				QuickBuild(x - 39, startY2 - 3, "YggdrasilTown/MapIOs/LiftRoomOfChallengerHall40x22.mapio");
+			}
 			count++;
 			x += step;
 			for (int y = startY2; y <= startY2 + 8; y++)
@@ -1105,6 +1152,7 @@ public class YggdrasilTownGeneration
 					target.HasTile = true;
 				}
 			}
+			//挖出大厅
 			if (count > tunnelLength - 200)
 			{
 				float valueX = tunnelLength - count;
@@ -1142,6 +1190,7 @@ public class YggdrasilTownGeneration
 		randY = GenRand.Next(512);
 		int startX = Math.Max(cageMiddleX - 300, 0);
 		int endX = Math.Min(cageMiddleX + 300, Main.maxTilesX);
+		//大厅顶部的琥珀
 		for (int x0 = startX; x0 <= endX; x0++)
 		{
 			for (int y = centerOfCage.Y - 200; y <= centerOfCage.Y + 30; y++)

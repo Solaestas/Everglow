@@ -1,6 +1,7 @@
 using Everglow.Commons.Skeleton2D;
 using Everglow.Yggdrasil.KelpCurtain.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Walls;
+using Terraria;
 using Terraria.Utilities;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 namespace Everglow.Yggdrasil.WorldGeneration;
@@ -16,6 +17,7 @@ public class KelpCurtainGeneration
 		PlaceRectangleAreaOfWall(20, 9600, 155, 10650, ModContent.WallType<DragonScaleWoodWall>());
 		PlaceRectangleAreaOfWall(1045, 9600, 1180, 10650, ModContent.WallType<DragonScaleWoodWall>());
 		BuildDeathJadeLake();
+		BuildRainValley();
 	}
 	public static int[,] PerlinPixelR = new int[512, 512];
 	public static int[,] PerlinPixelG = new int[512, 512];
@@ -208,6 +210,8 @@ public class KelpCurtainGeneration
 	public static void BuildRainValley()
 	{
 		int startY = 10000;
+		int randY = GenRand.Next(512);
+		int randX = GenRand.Next(512);
 		while (startY < 12000)
 		{
 			startY++;
@@ -217,7 +221,20 @@ public class KelpCurtainGeneration
 				break;
 			}
 		}
-
+		startY -= 200;
+		for (int y = startY; y > 9900;y--)
+		{
+			for (int x = 100; x <= 1100;x++)
+			{
+				int dense = PerlinPixelB[(x / 4 + randX) % 512, (y + randY) % 512];
+				if(dense > 160)
+				{
+					Tile tile = SafeGetTile(x, y);
+					tile.TileType = (ushort)ModContent.TileType<OldMoss>();
+					tile.HasTile = true;
+				}
+			}
+		}
 	}
 	public static void UnforcablePlaceAreaOfTile(int x0, int y0, int x1, int y1, int type)
 	{
