@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.Common.BackgroundManager;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using SubworldLibrary;
@@ -176,9 +177,16 @@ public class YggdrasilTownBackground : ModSystem
 	/// </summary>
 	private void DrawBackground()
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS2 = sBS;
+		sBS2.BlendState = BlendState.NonPremultiplied;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS2);
 		if (alpha <= 0)
 			return;
 		Color baseColor = Color.White * alpha;
 		DrawYggdrasilTownBackground(baseColor);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 	}
 }

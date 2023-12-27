@@ -101,7 +101,7 @@ public class DarkForestGrass : SceneTile
 			case 10:
 				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 3))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 3, ModContent.TileType<DarkTaro>(), 0);
+					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 3, ModContent.TileType<DarkTaro>(), 72 * Main.rand.Next(3));
 				}
 				break;
 			case 11:

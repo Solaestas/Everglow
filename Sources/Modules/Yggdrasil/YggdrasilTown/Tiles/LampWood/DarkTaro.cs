@@ -35,7 +35,7 @@ public class DarkTaro : ModTile, ITileFluentlyDrawn
 	}
 	public override void PlaceInWorld(int i, int j, Item item)
 	{
-		short num = (short)Main.rand.Next(0, 1);
+		short num = (short)Main.rand.Next(0, 3);
 		Main.tile[i, j].TileFrameX = (short)(num * 72);
 		Main.tile[i, j + 1].TileFrameX = (short)(num * 72);
 		Main.tile[i, j + 2].TileFrameX = (short)(num * 72);
@@ -55,7 +55,7 @@ public class DarkTaro : ModTile, ITileFluentlyDrawn
 	{
 		var tile = Main.tile[pos];
 		var drawCenterPos = pos.ToWorldCoordinates(autoAddY: 16) - screenPosition;
-		Rectangle Frame(int y) => new Rectangle(tile.TileFrameX, y, 92, 92);
+		Rectangle Frame(int y) => new Rectangle(tile.TileFrameX / 72 * 100, y, 100, 92);
 		Point SwayHitboxPos(int addX) => new Point(pos.X + addX, pos.Y);
 		Point PaintPos(int addY) => new Point(pos.X, pos.Y - addY);
 
@@ -70,7 +70,8 @@ public class DarkTaro : ModTile, ITileFluentlyDrawn
 		DrawShrubPiece(Frame(96), 0.12f, SwayHitboxPos(0), PaintPos(1), drawInfo);
 		DrawShrubPiece(Frame(192), 0.104f, SwayHitboxPos(-1), PaintPos(2), drawInfo);
 		DrawShrubPiece(Frame(288), 0.075f, SwayHitboxPos(-1), PaintPos(2), drawInfo);
-		DrawShrubPiece(Frame(384), 0, SwayHitboxPos(-1), PaintPos(2), drawInfo);
+		DrawShrubPiece(Frame(384), 0.053f, SwayHitboxPos(1), PaintPos(3), drawInfo);
+		DrawShrubPiece(Frame(480), 0, SwayHitboxPos(-1), PaintPos(2), drawInfo);
 	}
 	/// <summary>
 	/// 绘制灌木的一个小Piece

@@ -4,6 +4,6 @@ public class DarkForestSoil : ModItem
 {
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.LampWood.DarkForestGrass>());
+		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.LampWood.DarkForestSoil>());
 	}
 }
