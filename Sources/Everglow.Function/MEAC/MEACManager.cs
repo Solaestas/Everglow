@@ -1,4 +1,5 @@
 using Terraria.Graphics.Effects;
+using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
 namespace Everglow.Commons.MEAC;
 
@@ -31,7 +32,7 @@ internal class MEACManager : ILoadable
 	{
 		bloomTarget1 = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)v.X / 3, (int)v.Y / 3);
 		bloomTarget2 = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)v.X / 3, (int)v.Y / 3);
-	}
+    }
 
 	private void Main_OnResolutionChanged(Vector2 obj)
 	{
@@ -56,18 +57,21 @@ internal class MEACManager : ILoadable
 	{
 		if (HasBloom())
 		{
-			Effect Bloom = ModAsset.Bloom1.Value;
+            if (bloomTarget1 == null)
+                CreateRender(new Vector2(Main.screenWidth, Main.screenHeight));
+
+            Effect Bloom = ModAsset.Bloom1.Value;
 
 			//保存原图
 			graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
-			graphicsDevice.Clear(Color.Transparent);
+			graphicsDevice.Clear(Color.Black);
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 			Main.spriteBatch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
 			Main.spriteBatch.End();
 
 			//在screen上绘制发光部分
 			graphicsDevice.SetRenderTarget(screen);
-			graphicsDevice.Clear(Color.Transparent);
+			graphicsDevice.Clear(Color.Black);
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			DrawBloom(Main.spriteBatch);
 			Main.spriteBatch.End();
@@ -75,7 +79,7 @@ internal class MEACManager : ILoadable
 			//取样
 
 			graphicsDevice.SetRenderTarget(bloomTarget2);
-			graphicsDevice.Clear(Color.Transparent);
+			graphicsDevice.Clear(Color.Black);
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 			Bloom.CurrentTechnique.Passes[0].Apply();//取亮度超过m值的部分
 			Bloom.Parameters["m"].SetValue(0.5f);
@@ -83,7 +87,6 @@ internal class MEACManager : ILoadable
 			Main.spriteBatch.End();
 
 			//处理
-
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 			Bloom.Parameters["uScreenResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight) / 3f);
 			Bloom.Parameters["uRange"].SetValue(1.5f);//范围
@@ -92,18 +95,18 @@ internal class MEACManager : ILoadable
 			{
 				Bloom.CurrentTechnique.Passes["GlurV"].Apply();//横向
 				graphicsDevice.SetRenderTarget(bloomTarget1);
-				graphicsDevice.Clear(Color.Transparent);
+				graphicsDevice.Clear(Color.Black);
 				Main.spriteBatch.Draw(bloomTarget2, Vector2.Zero, Color.White);
 
 				Bloom.CurrentTechnique.Passes["GlurH"].Apply();//纵向
 				graphicsDevice.SetRenderTarget(bloomTarget2);
-				graphicsDevice.Clear(Color.Transparent);
+				graphicsDevice.Clear(Color.Black);
 				Main.spriteBatch.Draw(bloomTarget1, Vector2.Zero, Color.White);
 			}
 			Main.spriteBatch.End();
 
 			graphicsDevice.SetRenderTarget(Main.screenTarget);
-			graphicsDevice.Clear(Color.Transparent);
+			graphicsDevice.Clear(Color.Black);
 
 			//叠加
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
@@ -112,7 +115,7 @@ internal class MEACManager : ILoadable
 			Main.spriteBatch.End();
 		}
 	}
-
+	
 	private void FilterManager_EndCapture()
 	{
 		// 直接从RT池子里取
@@ -148,8 +151,12 @@ internal class MEACManager : ILoadable
 		bool flag2 = DrawWarp_Style2();
 		if (flag2)
 		{
+			GetOrig(graphicsDevice);
+			graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
+			graphicsDevice.Clear(Color.Black);
+			DrawWarp_Style2();
 			graphicsDevice.SetRenderTarget(Main.screenTarget);
-			graphicsDevice.Clear(new Color(0.5f, 0.5f, 0, 0));
+			graphicsDevice.Clear(new Color(0.5f, 0.5f, 0, 1));
 			graphicsDevice.Textures[1] = Main.screenTargetSwap;
 			graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
@@ -159,9 +166,9 @@ internal class MEACManager : ILoadable
 			Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
 			Main.spriteBatch.End();
 		}
-		UseBloom(graphicsDevice);
+        UseBloom(graphicsDevice);
 		screen = null;
-		renderTargets.Release();
+        renderTargets.Release();
 	}
 
 	private void DrawBloom(SpriteBatch sb)//发光层
@@ -175,10 +182,48 @@ internal class MEACManager : ILoadable
 			}
 		}
 	}
+    private enum WarpStyle
+    {
+		None,
+        Style1,
+        Style2,
+        Both
+    }
 
-	private bool DrawWarp()//扭曲层
+    private WarpStyle GetWarpStyle()
 	{
-		bool flag = false;
+		WarpStyle result = WarpStyle.None;
+        foreach (Projectile proj in Main.projectile)
+        {
+            if (proj.active)
+            {
+                if (proj.ModProjectile is IWarpProjectile)
+				{
+					if (result == WarpStyle.None)
+						result = WarpStyle.Style1;
+					else
+					{
+						result = WarpStyle.Both;
+						break;
+					}
+                }
+                if (proj.ModProjectile is IWarpProjectile_warpStyle2)
+                {
+					if (result == WarpStyle.None)
+						result = WarpStyle.Style2;
+                    else
+                    {
+                        result = WarpStyle.Both;
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+	private void DrawWarp()//扭曲层
+	{
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
 		Effect KEx = ModAsset.DrawWarp.Value;
 		KEx.Parameters["uTransform"].SetValue(Main.Transform * Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
@@ -189,17 +234,14 @@ internal class MEACManager : ILoadable
 			{
 				if (proj.ModProjectile is IWarpProjectile ModProj2)
 				{
-					flag = true;
 					ModProj2.DrawWarp(Ins.Batch);
 				}
 			}
 		}
 		Ins.Batch.End();
-		return flag;
 	}
-	private bool DrawWarp_Style2()//扭曲层
+	private void DrawWarp_Style2()//扭曲层
 	{
-		bool flag = false;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
 		Effect ef = ModAsset.DrawWarp.Value;
 		ef.Parameters["uTransform"].SetValue(Main.Transform * Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
@@ -210,13 +252,11 @@ internal class MEACManager : ILoadable
 			{
 				if (proj.ModProjectile is IWarpProjectile_warpStyle2 modProj2)
 				{
-					flag = true;
 					modProj2.DrawWarp(Ins.Batch);
 				}
 			}
 		}
 		Ins.Batch.End();
-		return flag;
 	}
 
 	/// <summary>
@@ -226,7 +266,7 @@ internal class MEACManager : ILoadable
 	private void GetOrig(GraphicsDevice graphicsDevice)
 	{
 		graphicsDevice.SetRenderTarget(screen);
-		graphicsDevice.Clear(Color.Transparent);
+		graphicsDevice.Clear(Color.Black);
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 		Main.spriteBatch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
 		Main.spriteBatch.End();
