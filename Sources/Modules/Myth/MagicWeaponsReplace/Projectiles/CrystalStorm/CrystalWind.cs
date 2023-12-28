@@ -77,7 +77,7 @@ public class CrystalWind : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, 0)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, 0)));
 		}
-		Texture2D t = ModAsset.Projectiles_GoldLine.Value;
+		Texture2D t = ModAsset.GoldLine.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (bars.Count > 3)
@@ -113,7 +113,7 @@ public class CrystalWind : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
 		}
-		Texture2D t = ModAsset.Projectiles_GoldLine.Value;
+		Texture2D t = ModAsset.GoldLine.Value;
 		if (bars.Count > 3)
 
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);

@@ -101,7 +101,7 @@ public class SkullII : ModProjectile, IWarpProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BookofSkulls/SkullII");
+		Texture2D Light = ModAsset.SkullII.Value;
 
 		var c0 = new Color(1f, 0.4f, 0f, 0);
 		var c1 = new Color(1f, 1f, 1f, 0.7f);
@@ -181,9 +181,9 @@ public class SkullII : ModProjectile, IWarpProjectile
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/ElecLine");
+		Texture2D t = ModAsset.ElecLine.Value;
 		if (Shade)
-			t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Darkline");
+			t = ModAsset.Darkline.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 
 		if (bars.Count > 3)
@@ -251,7 +251,7 @@ public class SkullII : ModProjectile, IWarpProjectile
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
+		Texture2D t = ModAsset.FogTraceLight.Value;
 		if (bars.Count > 3)
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
 	}

@@ -1,5 +1,4 @@
 using Everglow.Myth.Common;
-using static Everglow.Myth.Common.MythUtils;
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
 
 internal class GoldenShowerArray : ModProjectile, IWarpProjectile
@@ -15,7 +14,10 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		Projectile.DamageType = DamageClass.Summon;
 		Projectile.tileCollide = false;
 	}
-
+	public override bool? CanCutTiles()
+	{
+		return false;
+	}
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -122,7 +124,7 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		eye.CurrentTechnique.Passes[0].Apply();
 
 		bars = new List<Vertex2D>();
-		c0 = new Color(0,0,0,150) * power;
+		c0 = new Color(0, 0, 0, 150) * power;
 		for (int t = 0; t <= 8; t++)
 		{
 			Vector2 radius = new Vector2(0, -240);

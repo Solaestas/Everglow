@@ -15,7 +15,10 @@ internal class CrystalStormArray : ModProjectile
 		Projectile.DamageType = DamageClass.Magic;
 		Projectile.tileCollide = false;
 	}
-
+	public override bool? CanCutTiles()
+	{
+		return false;
+	}
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -43,33 +46,29 @@ internal class CrystalStormArray : ModProjectile
 
 		ringPos = ringPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
 	}
-
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 	{
 		behindNPCs.Add(index);
 	}
-
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Projectile.hide = false;
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CrystalDarkline"), new Color(0.6f, 0.6f, 0.6f, 0.6f));
+		DrawMagicArray(ModAsset.CrystalDarkline.Value, new Color(0.6f, 0.6f, 0.6f, 0.6f));
 
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color(0, 120, 225, 0));
+		DrawMagicArray(ModAsset.WaterLine.Value, new Color(0, 120, 225, 0));
 
 
 		return false;
 	}
-
 	internal int timer = 0;
 	internal Vector2 ringPos = Vector2.Zero;
-
 	public void DrawMagicArray(Texture2D tex, Color c0)
 	{
 		Player player = Main.player[Projectile.owner];
 		Texture2D Water = tex;
-		Texture2D Crystalline = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Crystalline");
-		Texture2D CrystalLight = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CrystalLight");
-		if (tex == MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CrystalDarkline"))
+		Texture2D Crystalline = ModAsset.Crystalline.Value;
+		Texture2D CrystalLight = ModAsset.CrystalLight.Value;
+		if (tex == ModAsset.CrystalDarkline.Value)
 		{
 			Crystalline = tex;
 			CrystalLight = tex;
@@ -128,7 +127,6 @@ internal class CrystalStormArray : ModProjectile
 		DrawTexLine(Point3_, Point6, c0, c0, CrystalLight, 0.7f);
 
 	}
-
 	private static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -182,7 +180,6 @@ internal class CrystalStormArray : ModProjectile
 		}
 
 	}
-
 	public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex, float AddValue = 0)
 	{
 		float Wid = 24f;

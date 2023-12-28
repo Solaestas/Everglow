@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
@@ -86,20 +86,6 @@ class GoldLanternRay : ModProjectile
 			{
 				bars.Add(new Vertex2D(Vlaser[i] + normalDir * width - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(factor % 1f, 1, w)));
 				bars.Add(new Vertex2D(Vlaser[i] + normalDir * -width - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(factor % 1f, 0, w)));
-			}
-			if (!Main.gamePaused)
-			{
-				if (i % 15 == 0)
-				{
-					for (int j = 0; j < Main.player.Length; j++)
-					{
-						if (!Main.player[j].dead)
-						{
-							if ((Main.player[j].Center - Vlaser[i]).Length() < 40)
-								Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Acytaea.Projectiles.playerHit>(), Projectile.damage, 0, j, 0, 0);
-						}
-					}
-				}
 			}
 		}
 		var Vx = new List<Vertex2D>();

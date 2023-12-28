@@ -85,7 +85,7 @@ public class MothGrey : ModProjectile
 				Vx.Add(bars[i + 3]);
 			}
 		}
-		Texture2D t = Common.MythContent.QuickTexture("TheFirefly/Projectiles/MothGreyLine");
+		Texture2D t = ModAsset.MothGreyLine.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (Vx.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);

@@ -15,7 +15,10 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 		Projectile.DamageType = DamageClass.Summon;
 		Projectile.tileCollide = false;
 	}
-
+	public override bool? CanCutTiles()
+	{
+		return false;
+	}
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -70,10 +73,9 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Projectile.hide = false;
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceShade"), new Color(1f, 1f, 1f, 1f));
+		DrawMagicArray(ModAsset.FogTraceShade.Value, new Color(1f, 1f, 1f, 1f));
 
-		//DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/ElecLine"), new Color(67, 255, 0, 0));
+		DrawMagicArray(ModAsset.ElecLine.Value, new Color(67, 255, 0, 0));
 		return false;
 	}
 
@@ -194,6 +196,6 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch sb)
 	{
 		Player player = Main.player[Projectile.owner];
-		DrawTexCircle(sb, timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTrace"), Main.timeForVisualEffects / 17);
+		DrawTexCircle(sb, timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, ModAsset.FogTrace.Value, Main.timeForVisualEffects / 17);
 	}
 }

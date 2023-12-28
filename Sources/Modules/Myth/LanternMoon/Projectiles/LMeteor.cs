@@ -93,11 +93,11 @@ class LMeteor : ModProjectile
 		}
 		if (Vx.Count > 2)
 		{
-			Texture2D t = MythContent.QuickTexture("LanternMoon/Projectiles/LMeteor");
+			Texture2D t = ModAsset.LMeteor.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 		}
-		Texture2D LightE = MythContent.QuickTexture("VisualTextures/LightEffect");
+		Texture2D LightE = ModAsset.LightEffect.Value;
 		Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(0.3f * Stre * Stre, 0.21f * Stre * Stre, 0, 0), -(float)Math.Sin(Main.time / 26d) + 0.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * Sca, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(1f * Stre * Stre, 0.7f * Stre * Stre, 0, 0), (float)Math.Sin(Main.time / 12d + 2) + 1.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * Sca, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(0.3f * Stre * Stre, 0.21f * Stre * Stre, 0, 0), (float)Math.PI / 2f + (float)(Main.time / 9d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 1.57))) * Sca, SpriteEffects.None, 0);

@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.Misc.Dusts;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -204,7 +204,7 @@ public abstract class FixCoinProjectile : ModProjectile
 			if (bars.Count > 2)
 			{
 				RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-				Texture2D Color = MythContent.QuickTexture("UIImages/VisualTextures/ElecLine");
+				Texture2D Color = ModAsset.ElecLine.Value;
 
 				Main.graphics.GraphicsDevice.Textures[0] = Color;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -213,7 +213,7 @@ public abstract class FixCoinProjectile : ModProjectile
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D LightE = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value;
+		Texture2D LightE = ModAsset.LightEffect.Value;
 
 		Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(ColorVec.X * LightColorI * LightColorI, ColorVec.Y * LightColorI * LightColorI, ColorVec.Z * LightColorI * LightColorI, 0), -(float)Math.Sin(Main.time / 26d) + 0.6f, new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(ColorVec.X * LightColorI * LightColorI, ColorVec.Y * LightColorI * LightColorI, ColorVec.Z * LightColorI * LightColorI, 0), (float)Math.Sin(Main.time / 12d + 2) + 1.6f, new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
@@ -221,8 +221,8 @@ public abstract class FixCoinProjectile : ModProjectile
 		Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(ColorVec.X * LightColorI * LightColorI, ColorVec.Y * LightColorI * LightColorI, ColorVec.Z * LightColorI * LightColorI, 0), (float)(Main.time / 26d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 3.14)), SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(ColorVec.X * LightColorI * LightColorI, ColorVec.Y * LightColorI * LightColorI, ColorVec.Z * LightColorI * LightColorI, 0), -(float)(Main.time / 26d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 4.71)), SpriteEffects.None, 0);
 		var Ball = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		Texture2D Circle = MythContent.QuickTexture("Misc/Projectiles/Typeless/FixCoins/FixCoinFramework");
-		Texture2D Light = MythContent.QuickTexture("Misc/Projectiles/Typeless/FixCoins/FixCoinLight");
+		Texture2D Circle = ModAsset.FixCoinFramework.Value;
+		Texture2D Light = ModAsset.FixCoinLight.Value;
 		Color color = Lighting.GetColor((int)(Projectile.Center.X / 16d), (int)(Projectile.Center.Y / 16d));
 		color = Projectile.GetAlpha(color) * ((255 - Projectile.alpha) / 255f);
 		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255 * LightColorII * ColorVec.X), (int)(255 * LightColorII * ColorVec.Y), (int)(255 * LightColorII * ColorVec.Z), 0), Projectile.rotation, new Vector2(56f, 56f), Projectile.scale, SpriteEffects.None, 0);

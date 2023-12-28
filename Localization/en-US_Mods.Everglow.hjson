@@ -21,7 +21,6 @@ Tiles: {
 	FireflyPiranhaBanner.MapEntry: Firefly Piranha Banner
 	GlowingReed.MapEntry: Glowing Reed
 	LampLotus.MapEntry: Lamp Lotus
-	LargeFireBulb.MapEntry: Large Fire Bulb
 	MothWorldDoor.MapEntry: Moth World Door
 	GlowingDrop.MapEntry: Glowing Drop
 	GlowWoodBathtub.MapEntry: Glow Wood Bathtub
@@ -803,6 +802,11 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.YellowImmune.Description
 	}
 
+	AcytaeaInferno: {
+		DisplayName: Acytaea Inferno
+		Description: Mods.Everglow.Buffs.AcytaeaInferno.Description
+	}
+
 	CactusBallBuff: {
 		DisplayName: Cactus Ball Buff
 		Description: Mods.Everglow.Buffs.CactusBallBuff.Description
@@ -1360,6 +1364,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	TuskMirror: {
+		DisplayName: Tusk Mirror
+		Tooltip: ""
+	}
+
 	TuskStatusI: {
 		DisplayName: Tusk Status I
 		Tooltip: ""
@@ -1780,6 +1789,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	Glow: {
+		DisplayName: Glow
+		Tooltip: ""
+	}
+
 	CorruptMothTreasureBag: {
 		DisplayName: Corrupt Moth Treasure Bag
 		Tooltip: ""
@@ -1880,8 +1894,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	Hepuyuan: {
-		DisplayName: Hepuyuan
+	PrimordialJadeWinged_Spear: {
+		DisplayName: Primordial Jade Winged_ Spear
 		Tooltip: ""
 	}
 
@@ -2330,8 +2344,28 @@ Items: {
 		Tooltip: ""
 	}
 
+	FireCracker: {
+		DisplayName: Fire Cracker
+		Tooltip: ""
+	}
+
+	FireCrackerLauncher: {
+		DisplayName: Fire Cracker Launcher
+		Tooltip: ""
+	}
+
 	LanternBombRemoteControl: {
 		DisplayName: Lantern Bomb Remote Control
+		Tooltip: ""
+	}
+
+	Acytaea_horn: {
+		DisplayName: Acytaea_horn
+		Tooltip: ""
+	}
+
+	Acytaea_sword_Item: {
+		DisplayName: Acytaea_sword_ Item
 		Tooltip: ""
 	}
 
@@ -2739,7 +2773,6 @@ Items: {
 NPCs: {
 	RapierMaster_Boss.DisplayName: Rapier Master_ Boss
 	TuskKillEffect.DisplayName: Tusk Kill Effect
-	TuskWall.DisplayName: Tusk Wall
 	BloodTusk.DisplayName: Blood Tusk
 	BloodyMouth1.DisplayName: Bloody Mouth1
 	BloodyMouth2.DisplayName: Bloody Mouth2
@@ -2770,12 +2803,10 @@ NPCs: {
 	FireflyPiranhaInfected_small.DisplayName: Firefly Piranha Infected_small
 	FireflyPiranha_small.DisplayName: Firefly Piranha_small
 	GlowingFirefly.DisplayName: Glowing Firefly
-	LargeFireBulb.DisplayName: Large Fire Bulb
 	LittleFireBulb.DisplayName: Little Fire Bulb
-	Butterfly.DisplayName: Butterfly
 	CorruptMoth.DisplayName: Corrupt Moth
 	EvilPack.DisplayName: Evil Pack
-	MothSummonEffect.DisplayName: Moth Summon Effect
+	SummonedButterfly.DisplayName: Summoned Butterfly
 	FloatLantern.DisplayName: Float Lantern
 	RedPackBomber.DisplayName: Red Pack Bomber
 	LanternGhostKing.DisplayName: Lantern Ghost King
@@ -2800,6 +2831,7 @@ NPCs: {
 		}
 	}
 
+	Acytaea_Boss.DisplayName: Acytaea_ Boss
 	CyanOreBeetle.DisplayName: Cyan Ore Beetle
 	SquamousShell.DisplayName: Squamous Shell
 	TestNPC.DisplayName: Test N P C
@@ -2916,6 +2948,8 @@ Projectiles: {
 	LittleTusk0.DisplayName: Little Tusk0
 	SpineGun.DisplayName: Spine Gun
 	SplieSpineBullet.DisplayName: Splie Spine Bullet
+	ToothBow.DisplayName: Tooth Bow
+	ToothBow_BloodArrow.DisplayName: Tooth Bow_ Blood Arrow
 	ToothMagic.DisplayName: Tooth Magic
 	ToothMagicBall.DisplayName: Tooth Magic Ball
 	ToothMagicHit.DisplayName: Tooth Magic Hit
@@ -2923,7 +2957,6 @@ Projectiles: {
 	ToothMagicSplit2.DisplayName: Tooth Magic Split2
 	ToothSpear_proj.DisplayName: Tooth Spear_proj
 	Tusk0.DisplayName: Tusk0
-	TuskArrow.DisplayName: Tusk Arrow
 	TuskSummon.DisplayName: Tusk Summon
 	BeadShakeWave.DisplayName: Bead Shake Wave
 	BlackCorruptRain.DisplayName: Black Corrupt Rain
@@ -2932,6 +2965,7 @@ Projectiles: {
 	BlackCorruptRainFriendly.DisplayName: Black Corrupt Rain Friendly
 	BlueMissil.DisplayName: Blue Missil
 	BlueMissilFriendly.DisplayName: Blue Missil Friendly
+	BlueStarFlower.DisplayName: Blue Star Flower
 	BombShakeWave.DisplayName: Bomb Shake Wave
 	ButterflyDream.DisplayName: Butterfly Dream
 	ButterflyDreamFriendly.DisplayName: Butterfly Dream Friendly
@@ -2943,6 +2977,7 @@ Projectiles: {
 	DreamWeaver.DisplayName: Dream Weaver
 	EvilChrysalis.DisplayName: Evil Chrysalis
 	EvilChrysalisRightClick.DisplayName: Evil Chrysalis Right Click
+	FallenDropFruit.DisplayName: Fallen Drop Fruit
 	FanHit.DisplayName: Fan Hit
 	FlowLightMissile.DisplayName: Flow Light Missile
 	FruitBomb.DisplayName: Fruit Bomb
@@ -2959,8 +2994,10 @@ Projectiles: {
 	MothArrow.DisplayName: Moth Arrow
 	MothBall.DisplayName: Moth Ball
 	MothBallExplosion.DisplayName: Moth Ball Explosion
+	MothBulletExplosion.DisplayName: Moth Bullet Explosion
 	MothGrey.DisplayName: Moth Grey
 	MothMagicArray.DisplayName: Moth Magic Array
+	MothMiddleBullet.DisplayName: Moth Middle Bullet
 	MothYoyoProjectile.DisplayName: Moth Yoyo Projectile
 	MothYoyoSub.DisplayName: Moth Yoyo Sub
 	NavyThunder.DisplayName: Navy Thunder
@@ -2971,6 +3008,7 @@ Projectiles: {
 	ScaleWingBladeProj.DisplayName: Scale Wing Blade Proj
 	ShadowWingBow.DisplayName: Shadow Wing Bow
 	StaffOfCorruptDust.DisplayName: Staff Of Corrupt Dust
+	MothSummonEffect.DisplayName: Moth Summon Effect
 	LilyHarpNote.DisplayName: Lily Harp Note
 	LilyHarpNoteKill.DisplayName: Lily Harp Note Kill
 	LilyHarpProj.DisplayName: Lily Harp Proj
@@ -3016,7 +3054,6 @@ Projectiles: {
 	TopazSlingshot.DisplayName: Topaz Slingshot
 	WoodSlingshot.DisplayName: Wood Slingshot
 	ComingGhost.DisplayName: Coming Ghost
-	ComingGhost2.DisplayName: Coming Ghost2
 	CyanFrostProj.DisplayName: Cyan Frost Proj
 	GhostHit.DisplayName: Ghost Hit
 	GoldRound.DisplayName: Gold Round
@@ -3027,12 +3064,12 @@ Projectiles: {
 	SunFlowerpetal.DisplayName: Sun Flowerpetal
 	World.DisplayName: World
 	WorldHit.DisplayName: World Hit
-	Hepuyuan.DisplayName: Hepuyuan
-	HepuyuanDown.DisplayName: Hepuyuan Down
-	HepuyuanShake.DisplayName: Hepuyuan Shake
-	HepuyuanSpice.DisplayName: Hepuyuan Spice
-	Hepuyuan_thrust.DisplayName: Hepuyuan_thrust
-	Hepuyuan_thrust2.DisplayName: Hepuyuan_thrust2
+	PrimordialJadeWinged_Spear.DisplayName: Primordial Jade Winged_ Spear
+	PrimordialJadeWinged_SpearDown.DisplayName: Primordial Jade Winged_ Spear Down
+	PrimordialJadeWinged_SpearShake.DisplayName: Primordial Jade Winged_ Spear Shake
+	PrimordialJadeWinged_SpearSpice.DisplayName: Primordial Jade Winged_ Spear Spice
+	PrimordialJadeWinged_Spear_thrust.DisplayName: Primordial Jade Winged_ Spear_thrust
+	PrimordialJadeWinged_Spear_thrust2.DisplayName: Primordial Jade Winged_ Spear_thrust2
 	XiaoBlackWave.DisplayName: Xiao Black Wave
 	XiaoHit.DisplayName: Xiao Hit
 	AdamantiteClub.DisplayName: Adamantite Club
@@ -3140,6 +3177,7 @@ Projectiles: {
 	GoldenShowerBomb.DisplayName: Golden Shower Bomb
 	GoldenShowerBook.DisplayName: Golden Shower Book
 	GoldenShowerII.DisplayName: Golden Shower I I
+	DreamWeaverArray.DisplayName: Dream Weaver Array
 	DreamWeaverBook.DisplayName: Dream Weaver Book
 	DreamWeaverII.DisplayName: Dream Weaver I I
 	DemoHit.DisplayName: Demo Hit
@@ -3166,10 +3204,14 @@ Projectiles: {
 	SkullII.DisplayName: Skull I I
 	BlackHole.DisplayName: Black Hole
 	BloodLampProj.DisplayName: Blood Lamp Proj
+	Firework12Inches.DisplayName: Firework12 Inches
+	Firework6Inches.DisplayName: Firework6 Inches
+	FireworkSubExplosion.DisplayName: Firework Sub Explosion
 	LBloodEffect.DisplayName: L Blood Effect
 	LBloodEffectGra.DisplayName: L Blood Effect Gra
 	LMeteor.DisplayName: L Meteor
 	RainbowWave.DisplayName: Rainbow Wave
+	RisingFirework.DisplayName: Rising Firework
 	DarkLantern.DisplayName: Dark Lantern
 	DarkLantern3.DisplayName: Dark Lantern3
 	DarkLanternBomb2.DisplayName: Dark Lantern Bomb2
@@ -3223,35 +3265,27 @@ Projectiles: {
 	YellowFlame0LittleShine.DisplayName: Yellow Flame0 Little Shine
 	YellowFlame0Shine.DisplayName: Yellow Flame0 Shine
 	YellowToRedFlame0Little.DisplayName: Yellow To Red Flame0 Little
-	AcytaeaArrow.DisplayName: Acytaea Arrow
-	AcytaeaArrow2.DisplayName: Acytaea Arrow2
-	AcytaeaArrow3.DisplayName: Acytaea Arrow3
-	AcytaeaArrowGra.DisplayName: Acytaea Arrow Gra
-	AcytaeaBow.DisplayName: Acytaea Bow
-	AcytaeaBow2.DisplayName: Acytaea Bow2
-	AcytaeaCenterBow.DisplayName: Acytaea Center Bow
-	AcytaeaEffect.DisplayName: Acytaea Effect
-	AcytaeaEffectUp.DisplayName: Acytaea Effect Up
-	AcytaeaLaser.DisplayName: Acytaea Laser
-	AcytaeaLaserBall.DisplayName: Acytaea Laser Ball
-	AcytaeaLaserLight.DisplayName: Acytaea Laser Light
-	AcytaeaLight.DisplayName: Acytaea Light
-	AcytaeaMagicBook.DisplayName: Acytaea Magic Book
+	AcytaeaFlySword.DisplayName: Acytaea Fly Sword
+	AcytaeaFlySwordExplosion.DisplayName: Acytaea Fly Sword Explosion
+	AcytaeaFlySword_1.DisplayName: Acytaea Fly Sword_1
+	AcytaeaFlySword_2.DisplayName: Acytaea Fly Sword_2
+	AcytaeaLaserSword.DisplayName: Acytaea Laser Sword
+	AcytaeaLaserSword2.DisplayName: Acytaea Laser Sword2
+	AcytaeaMagicArray.DisplayName: Acytaea Magic Array
+	AcytaeaMagicArraySword.DisplayName: Acytaea Magic Array Sword
+	AcytaeaScratch.DisplayName: Acytaea Scratch
+	AcytaeaSwordArray_0.DisplayName: Acytaea Sword Array_0
+	AcytaeaSwordArray_1.DisplayName: Acytaea Sword Array_1
+	AcytaeaSwordRain.DisplayName: Acytaea Sword Rain
+	AcytaeaSword_following.DisplayName: Acytaea Sword_following
+	AcytaeaSword_projectile.DisplayName: Acytaea Sword_projectile
+	AcytaeaSword_projectile_Boss.DisplayName: Acytaea Sword_projectile_ Boss
+	AcytaeaSword_projectile_Boss_shoot.DisplayName: Acytaea Sword_projectile_ Boss_shoot
+	AcytaeaSword_projectile_Tornado.DisplayName: Acytaea Sword_projectile_ Tornado
+	AcytaeaSword_projectile_TownNPC.DisplayName: Acytaea Sword_projectile_ Town N P C
 	AcytaeaTornado.DisplayName: Acytaea Tornado
-	AcytaeaTornado2.DisplayName: Acytaea Tornado2
-	AcytaeaTornado3.DisplayName: Acytaea Tornado3
-	AcytaeaTornado4.DisplayName: Acytaea Tornado4
-	AcytaeaTornado5.DisplayName: Acytaea Tornado5
-	AcytaeaTornadoHit.DisplayName: Acytaea Tornado Hit
-	AcytaeaWarningArrow.DisplayName: Acytaea Warning Arrow
-	BrokenAcytaea.DisplayName: Broken Acytaea
-	BrokenAcytaea2.DisplayName: Broken Acytaea2
-	Metero.DisplayName: Metero
-	Metero2.DisplayName: Metero2
-	Metero3.DisplayName: Metero3
-	Metero4.DisplayName: Metero4
-	MeteroFri.DisplayName: Metero Fri
-	playerHit.DisplayName: player Hit
+	Acytaea_Lock.DisplayName: Acytaea_ Lock
+	Acytaea_ShineStar.DisplayName: Acytaea_ Shine Star
 	RampageShark.DisplayName: Rampage Shark
 	RampageSharkHit.DisplayName: Rampage Shark Hit
 	TsunamiShark.DisplayName: Tsunami Shark

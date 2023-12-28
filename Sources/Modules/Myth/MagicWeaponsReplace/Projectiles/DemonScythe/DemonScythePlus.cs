@@ -77,9 +77,9 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color(0.4f, 0.0f, 0.8f, 0));
+		DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(1f, 1f, 1f, 1f));
+		DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(1f, 1f, 1f, 1f));
+		DrawMagicArray(ModAsset.WaterLine.Value, new Color(0.4f, 0.0f, 0.8f, 0));
 		return false;
 	}
 
@@ -95,7 +95,7 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 		DrawTexCircle(24, 25 * Size2, c0 * Size1, Projectile.Center - Main.screenPosition, Water, -Main.timeForVisualEffects / 7);
 		DrawTexCircle(22, 12 * Size2, c1 * Size1, Projectile.Center - Main.screenPosition, Water, -Main.timeForVisualEffects / 27);
 		DrawTexCircle(20, 12 * Size2, c2 * Size1, Projectile.Center - Main.screenPosition, Water, -Main.timeForVisualEffects / 127);
-		DrawTexMoon(24, 25 * Size2, c0 * Size1, Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
+		DrawTexMoon(24, 25 * Size2, c0 * Size1, Projectile.Center - Main.screenPosition,ModAsset.BloomLight.Value, -Main.timeForVisualEffects / 1.8);
 	}
 
 	private void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
@@ -207,7 +207,7 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 
-		DrawTexMoon(spriteBatch, 34, 35, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.timeForVisualEffects / 3);
-		DrawTexMoon(spriteBatch, 22, 35, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
+		DrawTexMoon(spriteBatch, 18, 35, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition,ModAsset.BloomLight.Value, Main.timeForVisualEffects / 3);
+		//DrawTexMoon(spriteBatch, 22, 35, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition,ModAsset.BloomLight.Value, -Main.timeForVisualEffects / 1.8);
 	}
 }
