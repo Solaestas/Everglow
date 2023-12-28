@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
@@ -65,8 +65,8 @@ internal class PhosphorescenceGun : ModProjectile
 		if (Main.mouseLeft)
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
 
-		Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun");
-		Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGunGlow");
+		Texture2D TexMain = ModAsset.PhosphorescenceGunTex_PhosphorescenceGun.Value;
+		Texture2D TexMainG = ModAsset.PhosphorescenceGunGlow.Value;
 
 		Projectile.frame = (int)(addi % 45 / 5f);
 		var DrawRect = new Rectangle(0, Projectile.frame * 44, 70, 40);

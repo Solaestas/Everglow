@@ -53,7 +53,14 @@ public class MothShimmerScaleDust : Visual
 			timer = maxTime;
 		}
 		velocity *= 0.98f;
-		velocity += new Vector2(Main.windSpeedCurrent * 0.1f, 0.012f * scale);
+		if (ai.Length >= 3)
+		{
+			velocity += new Vector2(Main.windSpeedCurrent * 0.1f, -0.1f) * ai[2];
+		}
+		else
+		{
+			velocity += new Vector2(Main.windSpeedCurrent * 0.1f, -0.1f);
+		}
 		scale *= 0.98f;
 		timer++;
 		if (timer > maxTime)

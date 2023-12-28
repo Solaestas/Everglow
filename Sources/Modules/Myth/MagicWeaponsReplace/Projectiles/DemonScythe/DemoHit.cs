@@ -135,7 +135,7 @@ public class DemoHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
 			colorV *= Projectile.ai[0] / 10f;
-		Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+		Texture2D t = ModAsset.Wave.Value;
 		DrawTexCircle(value * 16 * Projectile.ai[0], 100, new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 	public void DrawBloom()

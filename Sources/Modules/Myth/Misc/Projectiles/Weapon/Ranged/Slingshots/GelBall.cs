@@ -92,7 +92,7 @@ public class GelBall : SlingshotAmmo
 
 		if (bars.Count > 2)
 		{
-			Texture2D t = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/Textures/SlingshotTrailKS");
+			Texture2D t = ModAsset.SlingshotTrailKS.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
@@ -172,7 +172,7 @@ public class GelBall : SlingshotAmmo
 		}
 		if (bars.Count > 2)
 		{
-			Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Darkline");
+			Texture2D t = ModAsset.Darkline.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}

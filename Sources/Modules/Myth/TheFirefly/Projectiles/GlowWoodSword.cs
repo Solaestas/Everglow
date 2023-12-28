@@ -80,7 +80,7 @@ public class GlowWoodSword : ModProjectile
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(8f) - Main.screenPosition, c0, new Vector3(factor, 1, w)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(8f) - Main.screenPosition, c0, new Vector3(factor, 0, w)));
 		}
-		Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/MothGreyLine");
+		Texture2D t = ModAsset.MothGreyLine.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -89,11 +89,11 @@ public class GlowWoodSword : ModProjectile
 	}
 	public override void PostDraw(Color lightColor)
 	{
-		Texture2D Light = MythContent.QuickTexture("TheFirefly/Projectiles/GlowWoodSword");
+		Texture2D Light = ModAsset.Projectiles_GlowWoodSword.Value;
 		float k0 = Projectile.timeLeft / 60f;
 		var c0 = new Color(k0 * k0 * 0.3f, k0 * k0 * 0.8f, k0 * 0.8f + 0.2f, 1 - k0);
 		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, null, c0, Projectile.rotation, Light.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
-		//»æÖÆµ¯Ä»Åö×²Ïä
+		//ç»˜åˆ¶å¼¹å¹•ç¢°æ’žç®±
 		//Rectangle rt = Projectile.Hitbox;
 		//rt.X -= (int)Main.screenPosition.X;
 		//rt.Y -= (int)Main.screenPosition.Y;

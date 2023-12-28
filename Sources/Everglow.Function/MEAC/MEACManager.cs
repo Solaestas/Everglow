@@ -118,7 +118,6 @@ internal class MEACManager : ILoadable
 		// 直接从RT池子里取
 		var renderTargets = Ins.RenderTargetPool.GetRenderTarget2DArray(1);
 		screen = renderTargets.Resource[0];
-
 		if (bloomTarget1 == null)
 			CreateRender(new Vector2(Main.screenWidth, Main.screenHeight));
 		GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
@@ -127,8 +126,6 @@ internal class MEACManager : ILoadable
 		graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
 		graphicsDevice.Clear(Color.Transparent);
 		bool flag = DrawWarp();
-		bool flag2 = DrawWarp_Style2();
-
 		if (flag)
 		{
 			graphicsDevice.SetRenderTarget(Main.screenTarget);
@@ -136,11 +133,19 @@ internal class MEACManager : ILoadable
 			graphicsDevice.Textures[1] = Main.screenTargetSwap;
 			graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			ScreenWarp.CurrentTechnique.Passes[0].Apply();
 			ScreenWarp.Parameters["strength"].SetValue(0.025f);//扭曲程度
+			ScreenWarp.CurrentTechnique.Passes["KScreen0"].Apply();
+
 			Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
 			Main.spriteBatch.End();
+			GetOrig(graphicsDevice);
+			graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
+			graphicsDevice.Clear(Color.Transparent);
+			screen = renderTargets.Resource[0];
 		}
+
+
+		bool flag2 = DrawWarp_Style2();
 		if (flag2)
 		{
 			graphicsDevice.SetRenderTarget(Main.screenTarget);
@@ -148,8 +153,9 @@ internal class MEACManager : ILoadable
 			graphicsDevice.Textures[1] = Main.screenTargetSwap;
 			graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			ScreenWarp.CurrentTechnique.Passes[1].Apply();
 			ScreenWarp.Parameters["strength"].SetValue(0.25f);//扭曲程度
+			ScreenWarp.CurrentTechnique.Passes["KScreen1"].Apply();
+
 			Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
 			Main.spriteBatch.End();
 		}

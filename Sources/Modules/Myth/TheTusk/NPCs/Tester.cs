@@ -1,6 +1,3 @@
-﻿using Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk_New;
-using Terraria.Localization;
-
 namespace Everglow.Myth.TheTusk.NPCs;
 
 public class Tester : ModItem
@@ -8,7 +5,7 @@ public class Tester : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Tester");
-			}
+	}
 	public override void SetDefaults()
 	{
 		Item.width = 32;
@@ -21,10 +18,6 @@ public class Tester : ModItem
 	}
 	public override bool CanUseItem(Player player)
 	{
-		var npc = NPC.NewNPCDirect(null, (int)Main.MouseWorld.X - 800, (int)Main.MouseWorld.Y, ModContent.NPCType<TuskWall>());
-		npc.direction = 1;
-		npc = NPC.NewNPCDirect(null, (int)Main.MouseWorld.X + 800, (int)Main.MouseWorld.Y, ModContent.NPCType<TuskWall>());
-		npc.direction = -1;
 		return base.CanUseItem(player);
 	}
 }

@@ -30,25 +30,18 @@ public class ComingGhost : ModItem
 		Item.shootSpeed = 8;
 		Item.crit = 8;
 	}
-	private int useCount = 0;
+	public override bool CanUseItem(Player player)
+	{
+		Item.useTime = (int)(18f / player.meleeSpeed);
+		Item.useAnimation = (int)(18f / player.meleeSpeed);
+		return player.ownedProjectileCounts[Item.shoot] < 1;
+	}
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		if (useCount % 4 == 0)
-			type = ModContent.ProjectileType<Projectiles.Weapon.Melee.ComingGhost>();
-		else if (useCount % 4 == 1)
+		if (player.ownedProjectileCounts[Item.shoot] < 1)
 		{
-			type = ModContent.ProjectileType<Projectiles.Weapon.Melee.ComingGhost2>();
+			Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity, type, damage, knockback, player.whoAmI, 0f, 0f);
 		}
-		else if (useCount % 4 == 2)
-		{
-			type = ModContent.ProjectileType<Projectiles.Weapon.Melee.ComingGhost>();
-		}
-		else
-		{
-			type = ModContent.ProjectileType<Projectiles.Weapon.Melee.ComingGhost2>();
-		}
-		Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity, type, damage, knockback, player.whoAmI, 0f, 0f);
-		useCount++;
 		return false;
 	}
 }

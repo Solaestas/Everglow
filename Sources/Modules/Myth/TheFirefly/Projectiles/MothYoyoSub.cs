@@ -87,7 +87,7 @@ public class MothYoyoSub : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");
+		Texture2D Light = ModAsset.FixCoinLight3.Value;;
 		Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
 		var origin = new Vector2(tex.Width / 2, tex.Height / 6);
 		Rectangle sourceRec = tex.Frame(1, 4, 0, Projectile.frame % 4);

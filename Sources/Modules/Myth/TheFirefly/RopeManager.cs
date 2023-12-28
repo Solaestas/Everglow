@@ -226,14 +226,13 @@ internal class RopeManager
 		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
 			Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
 
-		//gd.Textures[0] = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
 		gd.Textures[0] = TextureAssets.MagicPixel.Value;
 		gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertices.ToArray(), 0, vertices.Count, indices.ToArray(), 0, indices.Count / 3);
 
 		sb.End();
 		sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
 				Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
-		Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
+		Texture2D dropTexture = ModAsset.Branch.Value;
 		for (int i = 0; i < ropes.Count; i++)
 		{
 			Vector2 offset = ropes[i].GetOffset();

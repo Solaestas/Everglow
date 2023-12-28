@@ -16,7 +16,10 @@ internal class LunarFlareArray : ModProjectile
 		Projectile.DamageType = DamageClass.Summon;
 		Projectile.tileCollide = false;
 	}
-
+	public override bool? CanCutTiles()
+	{
+		return false;
+	}
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -222,7 +225,7 @@ internal class StarrySkySystem : ModSystem
 		RenderTarget2D blackTarget = renderTargets.Resource[2];
 		RenderTarget2D StarrySkyTarget = renderTargets.Resource[3];
 
-		Effect Starry = MythContent.QuickEffect("Effects/StarrySkyZone");
+		Effect Starry = ModAsset.StarrySkyZone.Value;
 		//保存原图
 		GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
 		graphicsDevice.SetRenderTarget(screen);
@@ -236,7 +239,7 @@ internal class StarrySkySystem : ModSystem
 		graphicsDevice.SetRenderTarget(blackTarget);
 		graphicsDevice.Clear(Color.Transparent);
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D tex = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LunarFlare/BlackSky");
+		Texture2D tex = ModAsset.BlackSky.Value;
 
 		//抓捕缓存substar
 		List<LunarFlareArray.SubStar> stars = new();
@@ -257,7 +260,7 @@ internal class StarrySkySystem : ModSystem
 		graphicsDevice.SetRenderTarget(StarrySkyTarget);
 		graphicsDevice.Clear(Color.Transparent);
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		tex = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LunarFlare/StarrySky");
+		tex = ModAsset.StarrySky.Value;
 		Main.spriteBatch.Draw(tex, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
 		//TODO:@SliverMoon把星星绘制在这里
 		//绘制substar
@@ -270,7 +273,7 @@ internal class StarrySkySystem : ModSystem
 
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		Starry.Parameters["uTransform"].SetValue(projection);
-		Starry.Parameters["tex2"].SetValue(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Perlin"));
+		Starry.Parameters["tex2"].SetValue(ModAsset.Perlin.Value);
 		Starry.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.005f));
 		Starry.Parameters["tex1"].SetValue(StarrySkyTarget);
 		Starry.CurrentTechnique.Passes[0].Apply();
