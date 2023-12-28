@@ -11,4 +11,9 @@ public abstract class SceneTile : ModTile
 		AddScene(i, j);
 		base.PlaceInWorld(i, j, item);
 	}
+	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
+	{
+		//AddScene(i, j);
+		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+	}
 }

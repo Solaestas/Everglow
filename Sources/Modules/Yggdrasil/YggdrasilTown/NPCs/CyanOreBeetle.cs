@@ -99,8 +99,8 @@ public class CyanOreBeetle : ModNPC
 					NPC.frame.Y = 0;
 				}
 			}
-			if (Math.Abs(NPC.velocity.X) < 10 * NPC.scale)
-				NPC.velocity.X += NPC.spriteDirection * NPC.scale;
+			if (Math.Abs(NPC.velocity.X) < 4 * NPC.scale)
+				NPC.velocity.X += NPC.spriteDirection * NPC.scale * 0.2f;
 			NPC.rotation = (float)(Math.Atan2(Total.Y, Total.X) + Math.PI / 2d * 3);
 			if (NPC.velocity == NPC.oldVelocity)
 				NPC.velocity += new Vector2(0, -3).RotatedBy(NPC.rotation);

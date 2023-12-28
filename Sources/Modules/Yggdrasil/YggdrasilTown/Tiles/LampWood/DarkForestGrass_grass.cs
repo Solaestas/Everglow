@@ -1,8 +1,4 @@
 using Everglow.Commons.VFX.Scene;
-using Microsoft.Xna.Framework.Graphics;
-using static Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.DarkTaro;
-using Terraria.GameContent.Drawing;
-using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 [Pipeline(typeof(WCSPipeline))]
