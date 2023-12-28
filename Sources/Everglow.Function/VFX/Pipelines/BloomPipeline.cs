@@ -72,13 +72,13 @@ public class BloomPipeline : PostPipeline
 		effect.Parameters["uIntensity"].SetValue(1);
 
 		gd.SetRenderTarget(blurScreenSwap);
-		gd.Clear(Color.Transparent);
+		gd.Clear(Color.Black);
 		effect.Parameters["uSize"].SetValue(blurScreenSwap.Size());
 		effect.CurrentTechnique.Passes["BloomH"].Apply();
 		sb.Draw(blurScreens[^1], rectangle, Color.White);
 
 		gd.SetRenderTarget(blurScreens[^1]);
-		gd.Clear(Color.Transparent);
+		gd.Clear(Color.Black);
 		effect.Parameters["uSize"].SetValue(blurScreens[^1].Size());
 		effect.CurrentTechnique.Passes["BloomV"].Apply();
 		sb.Draw(blurScreenSwap, rectangle, Color.White);
