@@ -125,7 +125,8 @@ internal class MEACManager : ILoadable
 		GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
 
 		WarpStyle warpStyle = GetWarpStyle();
-		Main.NewText(warpStyle);
+		//Debug code
+		//Main.NewText(warpStyle);
         if (warpStyle == WarpStyle.Style1 || warpStyle == WarpStyle.Both) 
 		{
             GetOrig(graphicsDevice);
@@ -154,7 +155,7 @@ internal class MEACManager : ILoadable
 			graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 			ScreenWarp.CurrentTechnique.Passes[1].Apply();
-			ScreenWarp.Parameters["strength"].SetValue(0.25f);//扭曲程度
+			ScreenWarp.Parameters["strength"].SetValue(0.025f);//扭曲程度
 			Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
 			Main.spriteBatch.End();
 		}

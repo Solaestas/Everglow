@@ -17,7 +17,8 @@ public class CyanVineStaff : ModItem
 		Item.UseSound = SoundID.Item1;
 		Item.value = 4000;
 		Item.autoReuse = false;
-		Item.DamageType = DamageClass.Melee;
+		Item.DamageType = DamageClass.Magic;
+		Item.mana = 7;
 		Item.channel = true;
 
 		Item.noMelee = true;
