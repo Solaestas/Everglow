@@ -15,7 +15,10 @@ internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 		Projectile.timeLeft = 10000;
 		Projectile.tileCollide = false;
 	}
-
+	public override bool? CanCutTiles()
+	{
+		return false;
+	}
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -52,10 +55,10 @@ internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Projectile.hide = false;
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(0.6f, 0.6f, 0.6f, 0.6f));
-		//DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
+		DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(0.6f, 0.6f, 0.6f, 0.6f));
+		//DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(1f, 1f, 1f, 1f));
 
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color(36, 180, 255, 0));
+		DrawMagicArray(ModAsset.WaterLine.Value, new Color(36, 180, 255, 0));
 		return false;
 	}
 
@@ -139,6 +142,6 @@ internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 	{
 
 		Player player = Main.player[Projectile.owner];
-		DrawTexCircle(spriteBatch, timer * 1.2f, 82, new Color((int)(255 * (Math.Sin(Main.timeForVisualEffects * 0.12f) + 1) / 2d), 150, 255, 0), player.Center + ringPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 6);
+		DrawTexCircle(spriteBatch, timer * 1.2f, 82, new Color((int)(255 * (Math.Sin(Main.timeForVisualEffects * 0.12f) + 1) / 2d), 150, 255, 0), player.Center + ringPos - Main.screenPosition, ModAsset.WaterLine.Value, Main.timeForVisualEffects / 6);
 	}
 }

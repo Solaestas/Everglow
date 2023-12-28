@@ -149,7 +149,7 @@ public abstract class SlingshotAmmo : ModProjectile
 
 		if (bars.Count > 2)
 		{
-			Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/EShoot");
+			Texture2D t = ModAsset.EShoot.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}

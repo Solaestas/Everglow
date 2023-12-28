@@ -410,7 +410,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
-	public void DrawWarp(VFXBatch spriteBatch)
+	public virtual void DrawWarp(VFXBatch spriteBatch)
 	{
 		if (selfWarp)
 			return;

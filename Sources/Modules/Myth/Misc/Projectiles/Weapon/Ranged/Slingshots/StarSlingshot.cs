@@ -44,8 +44,8 @@ internal class StarSlingshot : SlingshotProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		var dColor = Color.Lerp(drawColor, new Color(20, 20, 240, 40), Power / 120f);
-		DrawTexLine(Head1, SlingshotStringTail, 1, dColor, Light, MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/String"));
-		DrawTexLine(Head2, SlingshotStringTail, 1, dColor, Light, MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/String"));
+		DrawTexLine(Head1, SlingshotStringTail, 1, dColor, Light, ModAsset.String.Value);
+		DrawTexLine(Head2, SlingshotStringTail, 1, dColor, Light, ModAsset.String.Value);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 

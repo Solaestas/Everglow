@@ -169,7 +169,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.CurrentTechnique.Passes[0].Apply();
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_black.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = TrailTextureBlack;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -354,6 +354,5 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			spriteBatch.Draw(TrailTexture, bars2, PrimitiveType.TriangleStrip);
 		if (bars3.Count > 3)
 			spriteBatch.Draw(TrailTexture, bars3, PrimitiveType.TriangleStrip);
-
 	}
 }

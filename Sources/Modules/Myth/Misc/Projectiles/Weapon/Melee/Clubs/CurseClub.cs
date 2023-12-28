@@ -151,7 +151,7 @@ public class CurseClub : ClubProj
 		SpriteEffects effects = SpriteEffects.None;
 		if (Projectile.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;
-		Texture2D texture = MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/Clubs/CurseClub_glow");
+		Texture2D texture = ModAsset.CurseClub_glow.Value;
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
 		for (int i = 0; i < 5; i++)
 		{
@@ -208,7 +208,7 @@ public class CurseClub : ClubProj
 
 		//Effect MeleeTrail = MythContent.QuickEffect("Misc/Projectiles/Weapon/Melee/Clubs/MetalClubTrail");
 		//MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/Clubs/CurseClub_trail");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.CurseClub_trail.Value;
 
 		//MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
 		//if (ReflectTexturePath != "")

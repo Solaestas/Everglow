@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
@@ -38,7 +38,7 @@ internal class EvilChrysalisRightClick : ModProjectile
 		Vdr = Vdr / Vdr.Length() * 7;
 
 		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(Vdr.Y, Vdr.X) - Math.PI / 2d));
-		Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisRightClick");
+		Texture2D t = ModAsset.EvilChrysalisRightClick.Value;
 		Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 		SpriteEffects S = SpriteEffects.None;
 		if (Math.Sign(Vdr.X) == -1)
@@ -50,7 +50,7 @@ internal class EvilChrysalisRightClick : ModProjectile
 
 		Main.spriteBatch.Draw(t, player.MountedCenter - Main.screenPosition + Vdr * 5f, null, color, (float)(Math.Atan2(Vdr.Y, Vdr.X) + Math.PI / 4d), new Vector2(25f, 25f), Projectile.scale, S, 0f);
 
-		Texture2D tg = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalisG");
+		Texture2D tg = ModAsset.EvilChrysalisG.Value;
 		Main.spriteBatch.Draw(tg, player.MountedCenter - Main.screenPosition + Vdr * 5f, null, new Color(255, 255, 255, 0), (float)(Math.Atan2(Vdr.Y, Vdr.X) + Math.PI / 4d), new Vector2(25f, 25f), Projectile.scale, S, 0f);
 		return false;
 	}

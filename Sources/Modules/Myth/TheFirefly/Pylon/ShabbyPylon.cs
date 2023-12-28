@@ -98,7 +98,7 @@ internal class ShabbyPylonUpdate : GlobalNPC
 {
 	public override void OnKill(NPC npc)
 	{
-		if (npc.type is NPCID.BrainofCthulhu or NPCID.EaterofWorldsHead)
+		if (npc.type == NPCID.BrainofCthulhu || ((npc.type == NPCID.EaterofWorldsHead || npc.type == NPCID.EaterofWorldsBody || npc.type == NPCID.EaterofWorldsTail) && NPC.CountNPCS(NPCID.EaterofWorldsBody) + NPC.CountNPCS(NPCID.EaterofWorldsHead) + NPC.CountNPCS(NPCID.EaterofWorldsTail) == 1))
 		{
 			do
 			{
