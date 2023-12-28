@@ -288,13 +288,13 @@ public class TemporarySys : ModSystem//暂时用一个ModSystem上滤镜
 			var gd = Main.instance.GraphicsDevice;
 
 			gd.SetRenderTarget(Main.screenTargetSwap);
-			gd.Clear(Color.Transparent);
+			gd.Clear(Color.Black);
 			sb.Begin();
 			sb.Draw(Main.screenTarget, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
 			sb.End();
 
 			gd.SetRenderTarget(Main.screenTarget);
-			gd.Clear(Color.Transparent);
+			gd.Clear(Color.Black);
 			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 			Effect eff = ModContent.Request<Effect>("Everglow/Myth/Effects/BlackHole", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 			var scRes = new Vector2(Main.screenWidth, Main.screenHeight);
