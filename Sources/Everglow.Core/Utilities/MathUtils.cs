@@ -248,8 +248,14 @@ public static class MathUtils
 		return (1 - value) * from + to * value;
 	}
 
-	public static Vector2 Lerp(this float value, Vector2 from, Vector2 to)
+    public static void LerpValue(this ref float from, float to, float value)
+    {
+		from = (1 - value) * from + to * value;
+    }
+
+    public static Vector2 Lerp(this float value, Vector2 from, Vector2 to)
 	{
 		return (1 - value) * from + to * value;
 	}
+
 }
