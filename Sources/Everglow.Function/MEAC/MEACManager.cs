@@ -125,31 +125,25 @@ internal class MEACManager : ILoadable
 			CreateRender(new Vector2(Main.screenWidth, Main.screenHeight));
 		GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
 
-		GetOrig(graphicsDevice);
-		graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
-		graphicsDevice.Clear(Color.Transparent);
-		bool flag = DrawWarp();
-		if (flag)
+		WarpStyle warpStyle = GetWarpStyle();
+		Main.NewText(warpStyle);
+        if (warpStyle == WarpStyle.Style1 || warpStyle == WarpStyle.Both) 
 		{
-			graphicsDevice.SetRenderTarget(Main.screenTarget);
-			graphicsDevice.Clear(Color.Transparent);
-			graphicsDevice.Textures[1] = Main.screenTargetSwap;
-			graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			ScreenWarp.Parameters["strength"].SetValue(0.025f);//扭曲程度
-			ScreenWarp.CurrentTechnique.Passes["KScreen0"].Apply();
-
-			Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
-			Main.spriteBatch.End();
-			GetOrig(graphicsDevice);
-			graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
-			graphicsDevice.Clear(Color.Transparent);
-			screen = renderTargets.Resource[0];
-		}
-
-
-		bool flag2 = DrawWarp_Style2();
-		if (flag2)
+            GetOrig(graphicsDevice);
+            graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
+            graphicsDevice.Clear(Color.Black);
+            DrawWarp();
+            graphicsDevice.SetRenderTarget(Main.screenTarget);
+            graphicsDevice.Clear(Color.Black);
+            graphicsDevice.Textures[1] = Main.screenTargetSwap;
+            graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            ScreenWarp.CurrentTechnique.Passes[0].Apply();
+            ScreenWarp.Parameters["strength"].SetValue(0.025f);//扭曲程度
+            Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
+            Main.spriteBatch.End();
+        }
+		if (warpStyle == WarpStyle.Style2 || warpStyle == WarpStyle.Both)
 		{
 			GetOrig(graphicsDevice);
 			graphicsDevice.SetRenderTarget(Main.screenTargetSwap);

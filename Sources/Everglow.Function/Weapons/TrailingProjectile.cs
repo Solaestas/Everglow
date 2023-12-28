@@ -1,4 +1,5 @@
-using Everglow.Commons.DataStructures;
+using System.Linq;
+using Everglow.Commons;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
@@ -235,7 +236,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		}
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect effect = TrailShader;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
@@ -252,7 +253,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
 
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(sBS);
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 
 	}
