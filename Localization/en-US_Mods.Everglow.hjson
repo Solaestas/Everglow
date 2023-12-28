@@ -52,6 +52,10 @@ Tiles: {
 	GlowWoodTable.MapEntry: Glow Wood Table
 	GlowWoodTorch.MapEntry: Glow Wood Torch
 	GlowWoodWorkBench.MapEntry: Glow Wood Work Bench
+	BoneAndPlatform_tile.MapEntry: Bone And Platform_tile
+	LampWoodCandelabra.MapEntry: Lamp Wood Candelabra
+	LampWoodCandle.MapEntry: Lamp Wood Candle
+	LampWoodChandelier.MapEntry: Lamp Wood Chandelier
 	CyanVineBar.MapEntry: Cyan Vine Bar
 	CyanVineOreTile.MapEntry: Cyan Vine Ore Tile
 	CyanVineStone.MapEntry: Cyan Vine Stone
@@ -82,6 +86,11 @@ Biomes: {
 	KelpCurtainBiome: {
 		DisplayName: Kelp Curtain Biome
 		TownNPCDialogueName: the Kelp Curtain Biome
+	}
+
+	HurricaneMazeBiome: {
+		DisplayName: Hurricane Maze Biome
+		TownNPCDialogueName: the Hurricane Maze Biome
 	}
 }
 
@@ -808,6 +817,11 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.CactusBallBuff.Description
 	}
 
+	LichenInfected: {
+		DisplayName: Lichen Infected
+		Description: Mods.Everglow.Buffs.LichenInfected.Description
+	}
+
 	DeathFlame: {
 		DisplayName: Death Flame
 		Description: Mods.Everglow.Buffs.DeathFlame.Description
@@ -820,13 +834,78 @@ Items: {
 		Tooltip: ""
 	}
 
+	ChinesePartitionLamp: {
+		DisplayName: Chinese Partition Lamp
+		Tooltip: ""
+	}
+
+	ChineseStyleFloorLamp: {
+		DisplayName: Chinese Style Floor Lamp
+		Tooltip: ""
+	}
+
+	DoubleArmsChineseStreetLamp: {
+		DisplayName: Double Arms Chinese Street Lamp
+		Tooltip: ""
+	}
+
+	GiantBell: {
+		DisplayName: Giant Bell
+		Tooltip: ""
+	}
+
+	GiantCampFire: {
+		DisplayName: Giant Camp Fire
+		Tooltip: ""
+	}
+
+	HangingSkyLantern: {
+		DisplayName: Hanging Sky Lantern
+		Tooltip: ""
+	}
+
+	HexagonalCeilingLamp: {
+		DisplayName: Hexagonal Ceiling Lamp
+		Tooltip: ""
+	}
+
+	PierWithSlabs: {
+		DisplayName: Pier With Slabs
+		Tooltip: ""
+	}
+
+	PierWithSlabsTop: {
+		DisplayName: Pier With Slabs Top
+		Tooltip: ""
+	}
+
 	PlumBlossomInABowl: {
 		DisplayName: Plum Blossom In A Bowl
 		Tooltip: ""
 	}
 
+	SideHangingLantern_Red: {
+		DisplayName: Side Hanging Lantern_ Red
+		Tooltip: ""
+	}
+
+	SideHangingLantern_White: {
+		DisplayName: Side Hanging Lantern_ White
+		Tooltip: ""
+	}
+
+	StreetLantern: {
+		DisplayName: Street Lantern
+		Tooltip: ""
+	}
+
 	WhiteLotusBonsai: {
 		DisplayName: White Lotus Bonsai
+		Tooltip: ""
+	}
+
+	YellowDynastyShingles: {
+		DisplayName: Yellow Dynasty Shingles
 		Tooltip: ""
 	}
 
@@ -977,6 +1056,11 @@ Items: {
 
 	EnergyBand: {
 		DisplayName: Energy Band
+		Tooltip: ""
+	}
+
+	HandholdItem: {
+		DisplayName: Handhold Item
 		Tooltip: ""
 	}
 
@@ -1850,6 +1934,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	DarkFlower: {
+		DisplayName: Dark Flower
+		Tooltip: ""
+	}
+
 	FeatherMagic: {
 		DisplayName: Feather Magic
 		Tooltip: ""
@@ -2565,13 +2654,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	ChinesePartitionLamp: {
-		DisplayName: Chinese Partition Lamp
-		Tooltip: ""
-	}
-
-	ChineseStyleFloorLamp: {
-		DisplayName: Chinese Style Floor Lamp
+	BoneAndPlatformCreate: {
+		DisplayName: Bone And Platform Create
 		Tooltip: ""
 	}
 
@@ -2585,33 +2669,33 @@ Items: {
 		Tooltip: ""
 	}
 
-	DoubleArmsChineseStreetLamp: {
-		DisplayName: Double Arms Chinese Street Lamp
+	DarkForestSoil: {
+		DisplayName: Dark Forest Soil
 		Tooltip: ""
 	}
 
-	HangingSkyLantern: {
-		DisplayName: Hanging Sky Lantern
+	DarkSludge: {
+		DisplayName: Dark Sludge
 		Tooltip: ""
 	}
 
-	HexagonalCeilingLamp: {
-		DisplayName: Hexagonal Ceiling Lamp
+	DilapidatedDangerSigns: {
+		DisplayName: Dilapidated Danger Signs
 		Tooltip: ""
 	}
 
-	ShoreMud: {
-		DisplayName: Shore Mud
+	FemaleLampLeaves_Item: {
+		DisplayName: Female Lamp Leaves_ Item
 		Tooltip: ""
 	}
 
-	SideHangingLantern: {
-		DisplayName: Side Hanging Lantern
+	GreyTownBrick_Item: {
+		DisplayName: Grey Town Brick_ Item
 		Tooltip: ""
 	}
 
-	SideHangingLantern_White: {
-		DisplayName: Side Hanging Lantern_ White
+	IronTrackScaffolding: {
+		DisplayName: Iron Track Scaffolding
 		Tooltip: ""
 	}
 
@@ -2625,16 +2709,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	StreetLantern: {
-		DisplayName: Street Lantern
-		Tooltip: ""
-	}
-
-	YellowDynastyShingles: {
-		DisplayName: Yellow Dynasty Shingles
-		Tooltip: ""
-	}
-
 	YggdrasilAmber: {
 		DisplayName: Yggdrasil Amber
 		Tooltip: ""
@@ -2642,6 +2716,11 @@ Items: {
 
 	CyanVineAxe: {
 		DisplayName: Cyan Vine Axe
+		Tooltip: ""
+	}
+
+	CyanVineCrossBow: {
+		DisplayName: Cyan Vine Cross Bow
 		Tooltip: ""
 	}
 
@@ -2655,6 +2734,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	CyanVineStaff: {
+		DisplayName: Cyan Vine Staff
+		Tooltip: ""
+	}
+
 	CyanVineSword: {
 		DisplayName: Cyan Vine Sword
 		Tooltip: ""
@@ -2662,6 +2746,76 @@ Items: {
 
 	CyanVineThrowingSpear: {
 		DisplayName: Cyan Vine Throwing Spear
+		Tooltip: ""
+	}
+
+	DragonScaleHammer: {
+		DisplayName: Dragon Scale Hammer
+		Tooltip: ""
+	}
+
+	FlurryingBlades: {
+		DisplayName: Flurrying Blades
+		Tooltip: ""
+	}
+
+	RockArrow: {
+		DisplayName: Rock Arrow
+		Tooltip: ""
+	}
+
+	RockSpikeBallista: {
+		DisplayName: Rock Spike Ballista
+		Tooltip: ""
+	}
+
+	LampWoodBreastplate: {
+		DisplayName: Lamp Wood Breastplate
+		Tooltip: ""
+	}
+
+	LampWoodCandelabra_Item: {
+		DisplayName: Lamp Wood Candelabra_ Item
+		Tooltip: ""
+	}
+
+	LampWoodCandle_Item: {
+		DisplayName: Lamp Wood Candle_ Item
+		Tooltip: ""
+	}
+
+	LampWoodChandelier_Item: {
+		DisplayName: Lamp Wood Chandelier_ Item
+		Tooltip: ""
+	}
+
+	LampWoodHammer: {
+		DisplayName: Lamp Wood Hammer
+		Tooltip: ""
+	}
+
+	LampWoodHelmet: {
+		DisplayName: Lamp Wood Helmet
+		Tooltip: ""
+	}
+
+	LampWoodLamp_Item: {
+		DisplayName: Lamp Wood Lamp_ Item
+		Tooltip: ""
+	}
+
+	LampWoodLeggings: {
+		DisplayName: Lamp Wood Leggings
+		Tooltip: ""
+	}
+
+	LampWoodSword: {
+		DisplayName: Lamp Wood Sword
+		Tooltip: ""
+	}
+
+	LampWood_Wood: {
+		DisplayName: Lamp Wood_ Wood
 		Tooltip: ""
 	}
 
@@ -2675,13 +2829,43 @@ Items: {
 		Tooltip: ""
 	}
 
+	KelpMoss_largeCreate: {
+		DisplayName: Kelp Moss_large Create
+		Tooltip: ""
+	}
+
+	MossProneSandSoil: {
+		DisplayName: Moss Prone Sand Soil
+		Tooltip: ""
+	}
+
 	OldMoss: {
 		DisplayName: Old Moss
 		Tooltip: ""
 	}
 
-	YggdrasilDirt: {
-		DisplayName: Yggdrasil Dirt
+	YggdrasilCyatheaWood: {
+		DisplayName: Yggdrasil Cyathea Wood
+		Tooltip: ""
+	}
+
+	AncientSyringe: {
+		DisplayName: Ancient Syringe
+		Tooltip: ""
+	}
+
+	BacterialAgent: {
+		DisplayName: Bacterial Agent
+		Tooltip: ""
+	}
+
+	HandheldCircularSaw: {
+		DisplayName: Handheld Circular Saw
+		Tooltip: ""
+	}
+
+	LichenTentacle: {
+		DisplayName: Lichen Tentacle
 		Tooltip: ""
 	}
 
@@ -2692,6 +2876,11 @@ Items: {
 
 	CyanWindGranite: {
 		DisplayName: Cyan Wind Granite
+		Tooltip: ""
+	}
+
+	CharonDoubleSickle_Item: {
+		DisplayName: Charon Double Sickle_ Item
 		Tooltip: ""
 	}
 
@@ -2715,8 +2904,18 @@ Items: {
 		Tooltip: ""
 	}
 
+	YggdrasilGrayRock_Item: {
+		DisplayName: Yggdrasil Gray Rock_ Item
+		Tooltip: ""
+	}
+
 	HardmodeItem: {
 		DisplayName: Hardmode Item
+		Tooltip: ""
+	}
+
+	ScreenPositionPrintItem: {
+		DisplayName: Screen Position Print Item
 		Tooltip: ""
 	}
 
@@ -2784,18 +2983,19 @@ NPCs: {
 		DisplayName: Acytaea
 
 		TownNPCMood: {
-			Content: I am content.
-			NoHome: I hate not having a home.
-			FarFromHome: I am too far from home.
-			LoveSpace: I love having so much space.
-			DislikeCrowded: I dislike how crowded I am.
-			HateCrowded: I hate how crowded I am.
+			Content: 我很满足。
+			NoHome: 我讨厌没有家。
+			FarFromHome: 我离家太远了。
+			LoveSpace: 我非常喜欢有这么大的空间。
+			DislikeCrowded: 我不喜欢这么拥挤。
+			HateCrowded: 我讨厌这么拥挤。
 			LikeNPC_Princess: I like {NPCName}.
 			Princess_LovesNPC: I like {NPCName}.
 		}
 	}
 
 	CyanOreBeetle.DisplayName: Cyan Ore Beetle
+	DarkGlimmeringRods.DisplayName: Dark Glimmering Rods
 	SquamousShell.DisplayName: Squamous Shell
 	TestNPC.DisplayName: Test N P C
 }
@@ -2871,6 +3071,9 @@ Projectiles: {
 	CrutchRapier_Hostile.DisplayName: Crutch Rapier_ Hostile
 	CrutchRapier_Stab_Hostile.DisplayName: Crutch Rapier_ Stab_ Hostile
 	Rapier_Slash.DisplayName: Rapier_ Slash
+	HandholdProj.DisplayName: Handhold Proj
+	HandholdProj2.DisplayName: Handhold Proj2
+	TrailProjectile.DisplayName: Trail Projectile
 	CheeseYoyo_proj.DisplayName: Cheese Yoyo_proj
 	CreamChocolateCupStaff_proj.DisplayName: Cream Chocolate Cup Staff_proj
 	CreamChocolateCupStaff_proj_rightClick.DisplayName: Cream Chocolate Cup Staff_proj_right Click
@@ -3110,6 +3313,7 @@ Projectiles: {
 	FixCoinSpeed2.DisplayName: Fix Coin Speed2
 	FixCoinSpeed3.DisplayName: Fix Coin Speed3
 	IchorRing.DisplayName: Ichor Ring
+	DarkFlower_Proj.DisplayName: Dark Flower_ Proj
 	NewWaterBolt.DisplayName: New Water Bolt
 	WaterBoltArray.DisplayName: Water Bolt Array
 	WaterBoltBook.DisplayName: Water Bolt Book
@@ -3255,9 +3459,39 @@ Projectiles: {
 	TsunamiShark_missile_hit.DisplayName: Tsunami Shark_missile_hit
 	CactusBallProj.DisplayName: Cactus Ball Proj
 	CactusBallSpike.DisplayName: Cactus Ball Spike
+	CyanVineCrossBow_Proj.DisplayName: Cyan Vine Cross Bow_ Proj
+	CyanVineStaff_proj.DisplayName: Cyan Vine Staff_proj
+	CyanVineStaff_proj_Explosion.DisplayName: Cyan Vine Staff_proj_ Explosion
+	CyanVineStaff_proj_shoot.DisplayName: Cyan Vine Staff_proj_shoot
+	CyanVineSword_Projectile.DisplayName: Cyan Vine Sword_ Projectile
 	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
-	AcroporaSpear.DisplayName: Acropora Spear
+	DragonScaleHammerProj.DisplayName: Dragon Scale Hammer Proj
+	LampWoodSword_Projectile.DisplayName: Lamp Wood Sword_ Projectile
+	RockArrow.DisplayName: Rock Arrow
+	RockExplosion_friendly.DisplayName: Rock Explosion_friendly
+	RockSpikeBallista_Proj.DisplayName: Rock Spike Ballista_ Proj
+	SquamousAirProj.DisplayName: Squamous Air Proj
+	SquamousRockExplosion.DisplayName: Squamous Rock Explosion
+	SquamousRockProj.DisplayName: Squamous Rock Proj
+	SquamousRockProj_small.DisplayName: Squamous Rock Proj_small
+	SquamousRockSpike.DisplayName: Squamous Rock Spike
+	SquamousRollingStone.DisplayName: Squamous Rolling Stone
+	Squamous_HitTile.DisplayName: Squamous_ Hit Tile
+	WindBladeBallHit.DisplayName: Wind Blade Ball Hit
+	YggdrasilMoonBlade.DisplayName: Yggdrasil Moon Blade
+	YggdrasilMoonBladeHit.DisplayName: Yggdrasil Moon Blade Hit
+	YggdrasilMoonBlade_friendly.DisplayName: Yggdrasil Moon Blade_friendly
+	YggdrasilSlashBall.DisplayName: Yggdrasil Slash Ball
+	AcroporaSpear_proj.DisplayName: Acropora Spear_proj
 	AcroporaThumpEff.DisplayName: Acropora Thump Eff
+	Pycnidium_explosion.DisplayName: Pycnidium_explosion
+	AncientSyringe_proj.DisplayName: Ancient Syringe_proj
+	BacterialAgent_explosion.DisplayName: Bacterial Agent_explosion
+	BacterialAgent_proj.DisplayName: Bacterial Agent_proj
+	HandheldCircularSaw_proj.DisplayName: Handheld Circular Saw_proj
+	LichenTentacle_proj.DisplayName: Lichen Tentacle_proj
+	LichensPycnidium.DisplayName: Lichens Pycnidium
+	CharonDoubleSickle.DisplayName: Charon Double Sickle
 	TrueDeathSickle.DisplayName: True Death Sickle
 	TrueDeathSickleHit.DisplayName: True Death Sickle Hit
 	SightOfTileProj.DisplayName: Sight Of Tile Proj

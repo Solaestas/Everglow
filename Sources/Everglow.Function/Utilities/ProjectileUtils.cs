@@ -2,7 +2,16 @@ namespace Everglow.Commons.Utilities;
 
 public static class ProjectileUtils
 {
-	public static bool IsSafeInTheWorld(Projectile projectile)
+    public static void TrackOldValue<T>(T[] array, T curValue)
+    {
+        for (int i = array.Length - 1; i > 0; i--)
+        {
+            array[i] = array[i - 1];
+        }
+        array[0] = curValue;
+    }
+
+    public static bool IsSafeInTheWorld(Projectile projectile)
 	{
 		return IsSafeInTheWorld(projectile.TopLeft) && IsSafeInTheWorld(projectile.TopRight) && IsSafeInTheWorld(projectile.BottomLeft) && IsSafeInTheWorld(projectile.BottomRight);
 	}

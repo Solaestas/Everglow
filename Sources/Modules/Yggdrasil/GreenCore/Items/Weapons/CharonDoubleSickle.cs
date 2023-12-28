@@ -1,3 +1,4 @@
+using Everglow.Common.VFX.CommonVFXDusts;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -51,22 +52,39 @@ namespace Everglow.Yggdrasil.GreenCore.Items.Weapons
 			if (projectile.hide)
 				overPlayers.Add(index);
 		}
-		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        bool canSpawnHitEff = false;
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            //命中特效
+
+            if (canSpawnHitEff)
+            {
+                FogVFX fog = MEACVFX.Create<FogVFX>(projectile.Center, Main.rand.NextVector2Circular(2, 2) + projectile.velocity * 0.1f, 0);
+                // fog.substract = true;
+                fog.drawColor = new Color(0.15f, 0.3f, 0.2f, 0f);
+                fog.SetTimeleft(90);
+                fog.scale = 1.5f * projectile.scale;
+
+                fog = MEACVFX.Create<FogVFX>(projectile.Center, Main.rand.NextVector2Circular(2, 2) + projectile.velocity * 0.1f, 0);
+                fog.substract = true;
+                fog.drawColor = new Color(0.6f, 0.2f, 0.1f, 1f);
+                fog.SetTimeleft(70);
+                fog.scale = 1.2f * projectile.scale;
+                canSpawnHitEff = false;
+            }
+            SoundStyle sound = SoundID.NPCDeath44;
+            sound.Volume = 0.2f;
+            sound.Pitch = -0.2f;
+            SoundEngine.PlaySound(sound, projectile.Center);//命中音效
+
+        }
+        public override void AI()
 		{
-			//命中特效
+            canSpawnHitEff = true;
 
-			SoundStyle sound = SoundID.NPCDeath44;
-			sound.Volume = 0.2f;
-			sound.Pitch = -0.2f;
-			SoundEngine.PlaySound(sound, projectile.Center);//命中音效
+            int speed = 45;//初速度
 
-		}
-		public override void AI()
-		{
-
-			int speed = 40;//初速度
-
-			float rangeFactor = 0.25f;//偏移角度
+			float rangeFactor = 0.20f;//偏移角度
 
 			float acc = 0.01f;//回拉加速度
 
