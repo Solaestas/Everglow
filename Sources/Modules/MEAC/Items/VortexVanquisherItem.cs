@@ -25,7 +25,7 @@ public class VortexVanquisherItem : ModItem
 		Item.useTime = 5;
 		Item.shootSpeed = 5f;
 		Item.knockBack = 6.5f;
-		Item.damage = 90;
+		Item.damage = 608;
 		Item.rare = ItemRarityID.Green;
 
 		Item.DamageType = DamageClass.Melee;
@@ -84,10 +84,8 @@ public class VortexVanquisherItem : ModItem
 	internal bool LeftClick = false;
 	public override void HoldItem(Player player)
 	{
-		Main.screenPosition += new Vector2(0, 100);
 		if (player.ownedProjectileCounts[ModContent.ProjectileType<VortexVanquisher>()] + player.ownedProjectileCounts[ModContent.ProjectileType<VortexVanquisherThump>()] < 1)
 		{
-
 			if (Main.myPlayer == player.whoAmI)
 			{
 				if (Main.mouseMiddle && Main.mouseMiddleRelease)
@@ -97,7 +95,11 @@ public class VortexVanquisherItem : ModItem
 						return;
 					}
 					CoolTimeForQ = 1440;
-					Projectile PlanetBeFall = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), /*Main.MouseWorld*/new Vector2(player.Center.X, Main.MouseWorld.Y - 1500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), Item.damage * 9, Item.knockBack * 10, player.whoAmI);
+					if(player.name == "Omni")
+					{
+						CoolTimeForQ = 10;
+					}
+					Projectile PlanetBeFall = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), /*Main.MouseWorld*/new Vector2(player.Center.X, Main.MouseWorld.Y - 1500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), Item.damage * 27, Item.knockBack * 10, player.whoAmI);
 					
 				}
 				if (player.altFunctionUse != 2)
@@ -115,13 +117,17 @@ public class VortexVanquisherItem : ModItem
 						return;
 					}
 					CoolTimeForE = 720;
+					if (player.name == "Omni")
+					{
+						CoolTimeForE = 10;
+					}
 					bool HasProj = false;
 					foreach (Projectile proj in Main.projectile)
 					{
 						if (proj.owner == player.whoAmI && proj.type == ModContent.ProjectileType<GoldShield>() && proj.active)
 						{
 							proj.timeLeft = 1200;
-							proj.ai[1] = player.statLifeMax*0.23f;//盾量
+							proj.ai[1] = player.statLifeMax * 0.23f;//盾量
 							HasProj = true;
 						}
 					}
@@ -131,7 +137,7 @@ public class VortexVanquisherItem : ModItem
 						proj2.ai[1] = player.statLifeMax * 0.23f;//盾量
 					}
 					Vector2 CheckPoint = Main.MouseWorld;
-					for (int y = 0; y < 60; y++)
+					for (int y = 0; y < 120; y++)
 					{
 						if (Collision.SolidCollision(CheckPoint, 1, 1))
 						{
@@ -139,7 +145,7 @@ public class VortexVanquisherItem : ModItem
 						}
 						else
 						{
-							CheckPoint += new Vector2(0, 10) * player.gravDir;
+							CheckPoint += new Vector2(0, 8) * player.gravDir;
 						}
 					}
 					if (!Collision.SolidCollision(CheckPoint, 1, 1))
@@ -152,7 +158,7 @@ public class VortexVanquisherItem : ModItem
 					int TCount = 0;
 					for (int a = 0; a < 12; a++)
 					{
-						Vector2 v0 = new Vector2(10, 0).RotatedBy(a / 6d * Math.PI);
+						Vector2 v0 = new Vector2(20, 0).RotatedBy(a / 6d * Math.PI);
 						if (Collision.SolidCollision(CheckPoint + v0, 1, 1))
 						{
 							TotalVector -= v0;
@@ -165,7 +171,7 @@ public class VortexVanquisherItem : ModItem
 					}
 					for (int a = 0; a < 24; a++)
 					{
-						Vector2 v0 = new Vector2(20, 0).RotatedBy(a / 12d * Math.PI);
+						Vector2 v0 = new Vector2(40, 0).RotatedBy(a / 12d * Math.PI);
 						if (Collision.SolidCollision(CheckPoint + v0, 1, 1))
 						{
 							TotalVector -= v0 * 0.5f;
@@ -181,9 +187,9 @@ public class VortexVanquisherItem : ModItem
 						return;
 					}
 
-					int f = Projectile.NewProjectile(player.GetSource_ItemUse(Item), CheckPoint, Vector2.Zero, ModContent.ProjectileType<StonePost>(), Item.damage, 0, player.whoAmI, 1);
+					Projectile p0 = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), CheckPoint, Vector2.Zero, ModContent.ProjectileType<StonePost>(), Item.damage, 0, player.whoAmI, 1);
 					float Angle = (float)Math.Atan2(TotalVector.Y, TotalVector.X);
-					Main.projectile[f].rotation = (float)(Angle - Math.PI * 1.5);
+					p0.rotation = (float)(Angle - Math.PI * 1.5);
 				}
 			}
 			if (LeftClick)
