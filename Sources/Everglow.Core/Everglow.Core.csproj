@@ -11,6 +11,7 @@
 		<Reference Remove="$(tMLLibraryPath)\**\ReLogic.dll" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="MathNet.Numerics" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
 	</ItemGroup>
 </Project>
