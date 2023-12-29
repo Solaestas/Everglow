@@ -10,7 +10,7 @@ public static class CustomBlendStates
 
     public static readonly BlendState Subtract = NewSubtract();
 
-    public static readonly BlendState Reverse = NewBlendState("BlendState.Reverse", Blend.SourceAlpha, Blend.InverseDestinationColor, Blend.InverseSourceColor, Blend.SourceAlpha);
+    public static readonly BlendState Reverse = NewBlendState("BlendState.Reverse", Blend.InverseDestinationColor,Blend.SourceAlpha , Blend.InverseSourceColor, Blend.SourceAlpha);
 
 
     public static BlendState NewSubtract()
