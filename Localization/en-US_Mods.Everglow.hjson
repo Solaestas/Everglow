@@ -7,7 +7,6 @@ Tiles: {
 	BloodyMossWheelFinished.MapEntry: Bloody Moss Wheel Finished
 	StoneTusk.MapEntry: Stone Tusk
 	StoneTuskSmall.MapEntry: Stone Tusk Small
-	StrangeTuskStone.MapEntry: Strange Tusk Stone
 	StrangeTuskStone1.MapEntry: Strange Tusk Stone1
 	StrangeTuskStone2.MapEntry: Strange Tusk Stone2
 	StrangeTuskStone3.MapEntry: Strange Tusk Stone3
@@ -2748,6 +2747,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	AmberMagicOrb: {
+		DisplayName: Amber Magic Orb
+		Tooltip: ""
+	}
+
 	CyanVineAxe: {
 		DisplayName: Cyan Vine Axe
 		Tooltip: ""
@@ -2780,6 +2784,11 @@ Items: {
 
 	CyanVineThrowingSpear: {
 		DisplayName: Cyan Vine Throwing Spear
+		Tooltip: ""
+	}
+
+	YggdrasilAmberLaser: {
+		DisplayName: Yggdrasil Amber Laser
 		Tooltip: ""
 	}
 
@@ -2915,6 +2924,11 @@ Items: {
 
 	CharonDoubleSickle_Item: {
 		DisplayName: Charon Double Sickle_ Item
+		Tooltip: ""
+	}
+
+	ShadowEulogist: {
+		DisplayName: Shadow Eulogist
 		Tooltip: ""
 	}
 
@@ -3200,6 +3214,10 @@ Projectiles: {
 	PhantomMoth.DisplayName: Phantom Moth
 	PhosphorescenceBullet.DisplayName: Phosphorescence Bullet
 	PhosphorescenceGun.DisplayName: Phosphorescence Gun
+	PylonStonePostProj_crimson_explosion.DisplayName: Pylon Stone Post Proj_crimson_explosion
+	PylonStonePostProj_crimson.DisplayName: Pylon Stone Post Proj_crimson
+	PylonStonePostProj_corrupt.DisplayName: Pylon Stone Post Proj_corrupt
+	PylonStonePostProj_corrupt_explosion.DisplayName: Pylon Stone Post Proj_corrupt_explosion
 	ScaleWingBladeProj.DisplayName: Scale Wing Blade Proj
 	ShadowWingBow.DisplayName: Shadow Wing Bow
 	StaffOfCorruptDust.DisplayName: Staff Of Corrupt Dust
@@ -3229,6 +3247,7 @@ Projectiles: {
 	GelBall.DisplayName: Gel Ball
 	GelSlingshot.DisplayName: Gel Slingshot
 	GlowSporeBead.DisplayName: Glow Spore Bead
+	Glow.DisplayName: Glow
 	JungleSlingshot.DisplayName: Jungle Slingshot
 	JungleSlingshotHit.DisplayName: Jungle Slingshot Hit
 	KSSlingshotHit.DisplayName: K S Slingshot Hit
@@ -3249,8 +3268,10 @@ Projectiles: {
 	TopazSlingshot.DisplayName: Topaz Slingshot
 	WoodSlingshot.DisplayName: Wood Slingshot
 	ComingGhost.DisplayName: Coming Ghost
+	ComingGhost_Slash.DisplayName: Coming Ghost_ Slash
 	CyanFrostProj.DisplayName: Cyan Frost Proj
 	GhostHit.DisplayName: Ghost Hit
+	GlowMoonBlade.DisplayName: Glow Moon Blade
 	GoldRound.DisplayName: Gold Round
 	GoldRoundYoyo.DisplayName: Gold Round Yoyo
 	MeleeHit.DisplayName: Melee Hit
@@ -3493,6 +3514,7 @@ Projectiles: {
 	TsunamiShark_missile_hit.DisplayName: Tsunami Shark_missile_hit
 	CactusBallProj.DisplayName: Cactus Ball Proj
 	CactusBallSpike.DisplayName: Cactus Ball Spike
+	AmberBall.DisplayName: Amber Ball
 	CyanVineCrossBow_Proj.DisplayName: Cyan Vine Cross Bow_ Proj
 	CyanVineStaff_proj.DisplayName: Cyan Vine Staff_proj
 	CyanVineStaff_proj_Explosion.DisplayName: Cyan Vine Staff_proj_ Explosion
@@ -3512,6 +3534,7 @@ Projectiles: {
 	SquamousRollingStone.DisplayName: Squamous Rolling Stone
 	Squamous_HitTile.DisplayName: Squamous_ Hit Tile
 	WindBladeBallHit.DisplayName: Wind Blade Ball Hit
+	YggdrasilAmberLaser_proj.DisplayName: Yggdrasil Amber Laser_proj
 	YggdrasilMoonBlade.DisplayName: Yggdrasil Moon Blade
 	YggdrasilMoonBladeHit.DisplayName: Yggdrasil Moon Blade Hit
 	YggdrasilMoonBlade_friendly.DisplayName: Yggdrasil Moon Blade_friendly
@@ -3526,6 +3549,7 @@ Projectiles: {
 	LichenTentacle_proj.DisplayName: Lichen Tentacle_proj
 	LichensPycnidium.DisplayName: Lichens Pycnidium
 	CharonDoubleSickle.DisplayName: Charon Double Sickle
+	ShadowEulogistProj.DisplayName: Shadow Eulogist Proj
 	TrueDeathSickle.DisplayName: True Death Sickle
 	TrueDeathSickleHit.DisplayName: True Death Sickle Hit
 	SightOfTileProj.DisplayName: Sight Of Tile Proj
