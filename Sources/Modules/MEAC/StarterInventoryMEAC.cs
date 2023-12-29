@@ -1,7 +1,7 @@
 using Everglow.MEAC.Items;
 using static Steamworks.SteamUser;
 
-namespace Everglow.Myth;
+namespace Everglow.MEAC;
 
 public class StarterInventoryMEAC : ModPlayer
 {
@@ -14,11 +14,11 @@ public class StarterInventoryMEAC : ModPlayer
 		//        new Item(ItemID.HealingPotion)
 		//    };
 		//}
-		if (Main.LocalPlayer.name is "FelixYang777" or "Felix Yang")
+		if (Main.LocalPlayer.name.Equals("Felixyang777", StringComparison.OrdinalIgnoreCase) || Main.LocalPlayer.name.Equals("Felix Yang", StringComparison.OrdinalIgnoreCase))
 		{
 			return new[]
 			{
-			new Item(ModContent.ItemType<VortexVanquisherItem>()),
+			new Item(ModContent.ItemType<VortexVanquisherItem>())
 			};
 		}
 		return new[]
