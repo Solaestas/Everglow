@@ -25,7 +25,7 @@ public class SkeletonPlayerLayer : PlayerDrawLayer
 	public override void Draw(ref PlayerDrawSet drawInfo)
 	{
 		var player = drawInfo.drawPlayer;
-		if (player.HeldItem == null || player.HeldItem.type == ItemID.None)
+		if (player.HeldItem.type == ModContent.ItemType<TestSkeletonOwl>())
 		{
 			skeleton2D.Position = player.Center;
 			skeleton2D.Rotation = 0f;
