@@ -28,7 +28,7 @@ public class GlowStarExplosion : ModProjectile, IWarpProjectile
 		value = MathF.Sqrt(value);
 		float colorV = 0.9f * (1 - value);
 		colorV *= 10;
-		Texture2D t = ModAsset.Projectiles_EShoot.Value;
+		Texture2D t = ModAsset.EShoot.Value;
 		Texture2D shade = ModAsset.FogTraceShade5xDark.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)

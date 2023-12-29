@@ -52,6 +52,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.Scripts", "Sources
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.IIID", "Sources\Modules\IIID\Everglow.IIID.csproj", "{C50DC1B0-E865-4B7A-8A9A-F15D4619E1BF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{59C00874-E7FB-435B-933E-660A284C86A5}"
+	ProjectSection(SolutionItems) = preProject
+		Sources\Modules\Directory.Build.props = Sources\Modules\Directory.Build.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -140,6 +145,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{59C00874-E7FB-435B-933E-660A284C86A5} = {49C8E04B-858D-4FAB-9345-03C9C3D1ED4E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5A74DCF1-B2AD-4E60-813F-653D561E7E6A}

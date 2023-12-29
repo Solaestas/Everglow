@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.OmniElementItems.Projectiles;
 
@@ -56,7 +56,7 @@ public class LilyHarpNoteKill : ModProjectile//, IWarpProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, radius + width), color, new Vector3(0.5f, 0, 0)));
 		if (circle.Count > 0)
 		{
-			Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+			Texture2D t = ModAsset.Wave.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
@@ -73,7 +73,7 @@ public class LilyHarpNoteKill : ModProjectile//, IWarpProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, radius + width), color, new Vector3(0.5f, 0, 0)));
 		if (circle.Count > 0)
 		{
-			Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+			Texture2D t = ModAsset.Wave.Value;
 			spriteBatch.Draw(t, circle, PrimitiveType.TriangleStrip);
 		}
 	}

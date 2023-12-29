@@ -128,9 +128,9 @@ public class LunarFlareII : ModProjectile, IWarpProjectile//将接口改为使用IWarpP
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/ElecLine");
+		Texture2D t = ModAsset.ElecLine.Value;
 		if (Shade)
-			t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Darkline");
+			t = ModAsset.Darkline.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 
 		if (bars.Count > 3)
@@ -204,7 +204,7 @@ public class LunarFlareII : ModProjectile, IWarpProjectile//将接口改为使用IWarpP
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
+		Texture2D t = ModAsset.FogTraceLight.Value;
 
 		//贴图不用在这里传
 		//Main.graphics.GraphicsDevice.Textures[0] = t;

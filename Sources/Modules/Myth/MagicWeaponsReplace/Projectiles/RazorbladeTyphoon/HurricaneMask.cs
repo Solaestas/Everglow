@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon;
@@ -49,7 +49,7 @@ public class HurricaneMask : ModProjectile, IWarpProjectile
 		Texture2D Shadow = ModAsset.CursedHit.Value;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] * 6f * dark, SpriteEffects.None, 0);
-		Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitLight");
+		Shadow = ModAsset.CursedHitLight.Value;
 		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(0, 225, 255, 0) * dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] * 8f * dark, SpriteEffects.None, 0);
 	}
 	public override bool PreDraw(ref Color lightColor)
@@ -100,7 +100,7 @@ public class HurricaneMask : ModProjectile, IWarpProjectile
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
 			colorV *= Projectile.ai[0] / 10f;
-		Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+		Texture2D t = ModAsset.Wave.Value;
 		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 1200 * Projectile.ai[0], 100, new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 }

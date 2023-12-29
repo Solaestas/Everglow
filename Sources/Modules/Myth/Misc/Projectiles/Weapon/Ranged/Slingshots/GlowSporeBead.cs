@@ -114,7 +114,7 @@ public class GlowSporeBead : SlingshotAmmo
 
 		if (bars.Count > 2)
 		{
-			Texture2D t = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/Textures/SporeTrace");
+			Texture2D t = ModAsset.SporeTrace.Value;
 
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -179,7 +179,7 @@ public class GlowSporeBead : SlingshotAmmo
 		}
 		if (bars.Count > 2)
 		{
-			Texture2D t = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/Textures/SporeTraceShade");
+			Texture2D t = ModAsset.SporeTraceShade.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}

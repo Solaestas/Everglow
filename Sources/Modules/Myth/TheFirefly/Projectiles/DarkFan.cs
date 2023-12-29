@@ -108,7 +108,7 @@ internal class DarkFan : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Player player = Main.player[Projectile.owner];
-		Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/DarkFan");
+		Texture2D t = ModAsset.DarkFan.Value;
 		var drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
 		if (ExtraKnife)
 		{

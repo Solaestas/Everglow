@@ -56,7 +56,7 @@ public class IchorClub : ClubProj
 		SpriteEffects effects = SpriteEffects.None;
 		if (Projectile.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;
-		Texture2D texture = MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/Clubs/IchorClub_glow");
+		Texture2D texture = ModAsset.IchorClub_glow.Value;
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
 		for (int i = 0; i < 5; i++)
 		{
@@ -251,7 +251,7 @@ public class IchorClub : ClubProj
 			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * delta * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 1, 0f)));
 			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 0, 0f)));
 		}
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineShade");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.WaterLineShade.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 	}
 	private void UpdateMoon(ref List<Vector2> listVec)

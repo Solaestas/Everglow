@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Localization;
 
@@ -84,7 +84,7 @@ public class BlackCorruptRainFriendly : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");
+		Texture2D Light = ModAsset.FixCoinLight3.Value;
 		int C = (int)(255 * Stre2);
 		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(C, C, C, 0), Projectile.rotation, new Vector2(56f, 56f), Projectile.scale, SpriteEffects.None, 0);
 		return true;

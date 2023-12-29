@@ -65,7 +65,7 @@ public class FluorescentTree : ModTile
 
 	public void InsertOneTreeRope(int xTS, int yTS, int style)
 	{
-		Texture2D treeTexture = MythContent.QuickTexture("TheFirefly/Tiles/FluorescentTree");
+		Texture2D treeTexture = ModAsset.FluorescentTree.Value;
 
 		var point = new Point(xTS, yTS);
 		Vector2 tileCenterWS = point.ToWorldCoordinates(0, 0);
@@ -322,7 +322,7 @@ public class FluorescentTree : ModTile
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Texture2D treeTexture = MythContent.QuickTexture("TheFirefly/Tiles/FluorescentTree");
+		Texture2D treeTexture = ModAsset.FluorescentTree.Value;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
