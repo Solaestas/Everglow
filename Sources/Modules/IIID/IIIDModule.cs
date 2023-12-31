@@ -1,17 +1,6 @@
-using Everglow.Commons.Modules;
-using Everglow.Commons.ObjectPool;
-using Everglow.IIID.Projectiles.NonIIIDProj;
-using Everglow.IIID.Projectiles.PlanetBefall;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.Graphics.Effects;
-
 namespace Everglow.Sources.Modules.IIIDModule
 {
-    /*internal class IIIDModule : EverglowModule
+	/*internal class IIIDModule : EverglowModule
 	{
         RenderTarget2D render;
         RenderTarget2D screen;
@@ -87,95 +76,95 @@ namespace Everglow.Sources.Modules.IIIDModule
                    node.num,
                    true, false);*/
 
-           /* gd.SetRenderTarget(bloom1);
-            gd.Clear(Color.Transparent);
-            Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
-            Bloom.CurrentTechnique.Passes["GlurH"].Apply();
+	/* gd.SetRenderTarget(bloom1);
+	 gd.Clear(Color.Transparent);
+	 Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
+	 Bloom.CurrentTechnique.Passes["GlurH"].Apply();
 
-            gd.SetRenderTarget(bloom2);
-            gd.Clear(Color.Transparent);
-            Main.spriteBatch.Draw(bloom1, Vector2.Zero, Color.White);
-            Main.spriteBatch.End();
+	 gd.SetRenderTarget(bloom2);
+	 gd.Clear(Color.Transparent);
+	 Main.spriteBatch.Draw(bloom1, Vector2.Zero, Color.White);
+	 Main.spriteBatch.End();
 
-            gd.SetRenderTarget(Main.screenTarget);
-            gd.Clear(Color.Transparent);
-            Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive);
-            Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
-            Main.spriteBatch.Draw(bloom2, new Rectangle(0, 0, Main.screenWidth * 3, Main.screenHeight * 3), Color.White);
-            Main.spriteBatch.End();
+	 gd.SetRenderTarget(Main.screenTarget);
+	 gd.Clear(Color.Transparent);
+	 Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive);
+	 Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+	 Main.spriteBatch.Draw(bloom2, new Rectangle(0, 0, Main.screenWidth * 3, Main.screenHeight * 3), Color.White);
+	 Main.spriteBatch.End();
 
-            // UseCosmic(gd);
-            GoldenCrackVFX = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/GoldenCrack").Value;
-            gd.SetRenderTarget(Main.screenTargetSwap);
-            gd.Clear(Color.Transparent);
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
-            sb.End();
+	 // UseCosmic(gd);
+	 GoldenCrackVFX = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/GoldenCrack").Value;
+	 gd.SetRenderTarget(Main.screenTargetSwap);
+	 gd.Clear(Color.Transparent);
+	 sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+	 sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+	 sb.End();
 
-            gd.SetRenderTarget(render);
-            gd.Clear(Color.Transparent);
-            sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            foreach (Projectile proj in Main.projectile)
-            {
-                if (proj.active && proj.type == ModContent.ProjectileType<GoldenCrack>())
-                {
-                    Color c3 = Color.Gold;
-                    (proj.ModProjectile as GoldenCrack).PreDraw(ref c3);
-                }
-            }
-            sb.End();
+	 gd.SetRenderTarget(render);
+	 gd.Clear(Color.Transparent);
+	 sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+	 foreach (Projectile proj in Main.projectile)
+	 {
+		 if (proj.active && proj.type == ModContent.ProjectileType<GoldenCrack>())
+		 {
+			 Color c3 = Color.Gold;
+			 (proj.ModProjectile as GoldenCrack).PreDraw(ref c3);
+		 }
+	 }
+	 sb.End();
 
-            gd.SetRenderTarget(Main.screenTarget);
-            gd.Clear(Color.Transparent);
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
-            sb.End();
-            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            gd.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/GoldenCrack/GoldenCrack").Value;
+	 gd.SetRenderTarget(Main.screenTarget);
+	 gd.Clear(Color.Transparent);
+	 sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+	 sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+	 sb.End();
+	 sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+	 gd.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/GoldenCrack/GoldenCrack").Value;
 
 
-            GoldenCrackVFX.CurrentTechnique.Passes["Tentacle"].Apply();
-            GoldenCrackVFX.Parameters["m"].SetValue(0.0f);
-            GoldenCrackVFX.Parameters["n"].SetValue(0.00f);
-            sb.Draw(render, Vector2.Zero, Color.White);
-            sb.End();
+	 GoldenCrackVFX.CurrentTechnique.Passes["Tentacle"].Apply();
+	 GoldenCrackVFX.Parameters["m"].SetValue(0.0f);
+	 GoldenCrackVFX.Parameters["n"].SetValue(0.00f);
+	 sb.Draw(render, Vector2.Zero, Color.White);
+	 sb.End();
 
-            gd.SetRenderTarget(Main.screenTargetSwap);
-            gd.Clear(Color.Transparent);
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
-            sb.End();
+	 gd.SetRenderTarget(Main.screenTargetSwap);
+	 gd.Clear(Color.Transparent);
+	 sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+	 sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+	 sb.End();
 
-            gd.SetRenderTarget(Main.screenTarget);
-            gd.Clear(Color.Transparent);
-            Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive);
-            Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
-            foreach (Projectile proj in Main.projectile)
-            {
-                if (proj.active && proj.type == ModContent.ProjectileType<PlanetBeFall>())
-                {
-                    (proj.ModProjectile as PlanetBeFall).DrawIIIDProj();
-                }
-            }
-            Main.spriteBatch.End();
+	 gd.SetRenderTarget(Main.screenTarget);
+	 gd.Clear(Color.Transparent);
+	 Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive);
+	 Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+	 foreach (Projectile proj in Main.projectile)
+	 {
+		 if (proj.active && proj.type == ModContent.ProjectileType<PlanetBeFall>())
+		 {
+			 (proj.ModProjectile as PlanetBeFall).DrawIIIDProj();
+		 }
+	 }
+	 Main.spriteBatch.End();
 
-            orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
-        }
-        private void Main_OnLoadWorlds(On.Terraria.Main.orig_LoadWorlds orig)
-        {
-            if (render != null)
-            {
-                CreateRender();
-            }
-            orig();
-        }
-        public void CreateRender()
-        {
-            render = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
-            screen = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
-            bloom1 = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 3, Main.screenHeight / 3);
-            bloom2 = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 3, Main.screenHeight / 3);
-        }
+	 orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
+ }
+ private void Main_OnLoadWorlds(On.Terraria.Main.orig_LoadWorlds orig)
+ {
+	 if (render != null)
+	 {
+		 CreateRender();
+	 }
+	 orig();
+ }
+ public void CreateRender()
+ {
+	 render = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
+	 screen = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
+	 bloom1 = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 3, Main.screenHeight / 3);
+	 bloom2 = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 3, Main.screenHeight / 3);
+ }
 
-    }*/
+}*/
 }

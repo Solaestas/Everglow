@@ -1,23 +1,11 @@
+using Everglow.Commons.DataStructures;
+using Everglow.Commons.Enums;
 using Everglow.Commons.MEAC;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
-using Terraria.DataStructures;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
-using Terraria;
-using Terraria.Audio;
-using Terraria.Chat;
-using Terraria.GameContent.Events;
-using Terraria.GameContent.Items;
-using Terraria.GameInput;
-using Terraria.Graphics.Shaders;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using Terraria.Utilities;
-using Terraria.WorldBuilding;
-using static Terraria.IL_Player.HurtModifiers;
-using System.Runtime.CompilerServices;
 
 namespace Everglow.MEAC.NonTrueMeleeProj;
 
@@ -226,10 +214,11 @@ public class GoldShield : ModProjectile, IWarpProjectile
 			}
 		}
 		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition + new Vector2(0, -12), null, new Color(255, 255, 255, 0), Projectile.rotation, new Vector2(tex.Width / 2f, tex.Height / 2f), 1, SpriteEffects.None, 0);
-
-
-
-
+		Texture2D rt = GoldShieldTargetLoad.ShieldTexture;
+		if(rt != null)
+		{
+			Main.spriteBatch.Draw(rt, Projectile.Center - Main.screenPosition + new Vector2(0, -12), null, new Color(255, 255, 255, 0), Projectile.rotation, rt.Size() / 2f, 1, SpriteEffects.None, 0);
+		}
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -237,17 +226,16 @@ public class GoldShield : ModProjectile, IWarpProjectile
 		Post.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.003));
 		Post.CurrentTechnique.Passes[0].Apply();
 
-		Texture2D StoneSquire = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/GoldShieldGlowMap").Value;
+		Texture2D StoneSquire = ModAsset.GoldShieldGlowMap.Value;
 		DrawPost(new Color(255, 255, 255, 0), 200, 50, 1, StoneSquire);
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Post.CurrentTechnique.Passes[0].Apply();
-		Texture2D StoneSquireD = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/GoldShieldDarkMap").Value;
+		Texture2D StoneSquireD = ModAsset.GoldShieldDarkMap.Value;
 		DrawPost(new Color(255, 255, 255, 155), 200, 50, 1, StoneSquireD);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
 
 
 		float WaveRange = 0.7f;
@@ -297,7 +285,79 @@ public class GoldShield : ModProjectile, IWarpProjectile
 		}
 		return false;
 	}
+	
 }
+public class GoldShieldTargetLoad : ModSystem
+{
+	public static RenderTarget2D shieldScreen;
+	public override void Load()
+	{
+		Ins.MainThread.AddTask(() =>
+		{
+			AllocateRenderTarget(new Vector2(Main.screenWidth, Main.screenHeight));
+		});
+		Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, (Vector2 size) =>
+		{
+			shieldScreen?.Dispose();
+			AllocateRenderTarget(size);
+		}, "Realloc RenderTarget");
+
+		Ins.HookManager.AddHook(CodeLayer.PostDrawProjectiles, TheBackgroundTextureOfShield);
+	}
+
+	public void AllocateRenderTarget(Vector2 size)
+	{
+		var gd = Main.instance.GraphicsDevice;
+		shieldScreen = new RenderTarget2D(gd, (int)size.X, (int)size.Y, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
+	}
+
+	private static void TheBackgroundTextureOfShield()
+	{
+		//if(Main.instance.GraphicsDevice == null)
+		//{
+		//	return;
+		//}
+		//var gDevice = Main.instance.GraphicsDevice;
+		//SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		//Main.spriteBatch.End();
+		//Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+		//var cur = Main.screenTarget;
+
+
+		//gDevice.SetRenderTarget(shieldScreen);
+		//gDevice.Clear(Color.Transparent);
+		////尝试绘制花纹
+		//float timeValue = (float)Main.timeForVisualEffects * 0.02f;
+		//Texture2D texPiece = ModAsset.GoldShieldScale_dark.Value;
+		//Texture2D texPieceBack = ModAsset.GoldShieldScale_light.Value;
+		//Vector2 drawPos = new Vector2(0);
+		//for (int i = 0; i < 6; i++)
+		//{
+		//	float time2 = timeValue % 1f;
+		//	float phi = (time2 + i) / 6f;
+		//	phi = MathF.Sin(phi * MathF.PI);
+		//	float distance = time2 * 10 + i * 10;
+		//	Main.EntitySpriteDraw(texPieceBack, drawPos + new Vector2(distance - 60, distance + 20), null, Color.White, 0, texPiece.Size() / 2f, phi, SpriteEffects.None);
+		//	Main.EntitySpriteDraw(texPieceBack, drawPos + new Vector2(distance - 60, -distance - 20), null, Color.White, 0, texPiece.Size() / 2f, phi, SpriteEffects.None);
+		//	Main.EntitySpriteDraw(texPieceBack, drawPos + new Vector2(distance + 60, distance - 80), null, Color.White, 0, texPiece.Size() / 2f, phi, SpriteEffects.None);
+		//	Main.EntitySpriteDraw(texPieceBack, drawPos + new Vector2(distance + 60, -distance + 80), null, Color.White, 0, texPiece.Size() / 2f, phi, SpriteEffects.None);
+
+		//	Main.EntitySpriteDraw(texPiece, drawPos + new Vector2(distance + 60, distance + 20), null, Color.White, 0, texPiece.Size() / 2f, phi, SpriteEffects.None);
+		//	Main.EntitySpriteDraw(texPiece, drawPos + new Vector2(distance + 60, -distance - 20), null, Color.White, 0, texPiece.Size() / 2f, phi, SpriteEffects.None);
+		//	Main.EntitySpriteDraw(texPiece, drawPos + new Vector2(distance - 60, distance - 80), null, Color.White, 0, texPiece.Size() / 2f, phi, SpriteEffects.None);
+		//	Main.EntitySpriteDraw(texPiece, drawPos + new Vector2(distance - 60, -distance + 80), null, Color.White, 0, texPiece.Size() / 2f, phi, SpriteEffects.None);
+		//}
+		//Main.spriteBatch.End();
+		//gDevice.SetRenderTarget(Main.screenTarget);
+		//ShieldTexture = shieldScreen;
+		//Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+		//Main.spriteBatch.Draw(cur, Vector2.Zero, Color.White);
+		//Main.spriteBatch.End();
+		//Main.spriteBatch.Begin(sBS);
+	}
+	public static Texture2D ShieldTexture;
+}
+
 public class GlodShieldPlayer : ModPlayer
 {
 

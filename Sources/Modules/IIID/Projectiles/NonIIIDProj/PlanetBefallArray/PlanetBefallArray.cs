@@ -40,7 +40,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			if (!Main.projectile[PlanetBeFallProj].active)
 			{
 				Projectile.ai[0]++;
-				BloomIntensity = MathF.Sin((float)(Projectile.ai[0] / (5 * Math.PI)))/3+1;
+				BloomIntensity = MathF.Sin(Projectile.ai[0] / (5 * MathF.PI)) / 3f + 1;
 			}
 		}
 		public override void OnKill(int timeLeft)

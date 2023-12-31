@@ -72,7 +72,22 @@ public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 			};
 			Ins.VFXManager.Add(somg);
 		}
-		
+		for (int g = 0; g < Frequency * 2; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, mulVelocity * MathF.Sqrt(Main.rand.NextFloat(0f, 1f)) * 2).RotatedByRandom(MathHelper.TwoPi);
+			var somg = new FireSmogDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(MathF.Sqrt(Main.rand.NextFloat(0f, 1f)), 0).RotatedByRandom(6.283) + newVelocity * 3,
+				maxTime = Main.rand.Next(60, 90),
+				scale = Main.rand.NextFloat(2f, 7f) * Projectile.ai[0],
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+			};
+			Ins.VFXManager.Add(somg);
+		}
 	}
 	public void GenerateFire(int Frequency)
 	{
@@ -85,7 +100,7 @@ public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 				velocity = newVelocity,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-15, 15), Main.rand.NextFloat(-15, 15)).RotatedByRandom(6.283) + newVelocity * 3,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(0, 15), Main.rand.NextFloat(-15, 15)).RotatedByRandom(6.283) + newVelocity * 3,
 				maxTime = Main.rand.Next(45, 75),
 				scale = Main.rand.NextFloat(2f, 7f) * Projectile.ai[0],
 				rotation = Main.rand.NextFloat(6.283f),
@@ -93,15 +108,15 @@ public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 			};
 			Ins.VFXManager.Add(fire);
 		}
-		for (int g = 0; g < Frequency; g++)
+		for (int g = 0; g < Frequency * 2; g++)
 		{
-			Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 1f)).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 newVelocity = new Vector2(0, mulVelocity * MathF.Sqrt(Main.rand.NextFloat(0f, 1f)) * 2).RotatedByRandom(MathHelper.TwoPi);
 			var fire = new VFXs.PlanetBeFallFireDust
 			{
 				velocity = newVelocity,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-15, 15), Main.rand.NextFloat(-15, 15)).RotatedByRandom(6.283) + newVelocity * 3,
+				position = Projectile.Center + new Vector2(MathF.Sqrt(Main.rand.NextFloat(0f, 1f)), 0).RotatedByRandom(6.283) + newVelocity * 3,
 				maxTime = Main.rand.Next(45, 75),
 				scale = Main.rand.NextFloat(0.5f, 2f) * Projectile.ai[0],
 				rotation = Main.rand.NextFloat(6.283f),
@@ -143,11 +158,11 @@ public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 
 	public override void AI()
 	{
-		float timeValue = (200 - Projectile.timeLeft);
+		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		Projectile.velocity *= 0;
 		if (Projectile.timeLeft <= 199)
 			Projectile.friendly = false;
-		BlurOffset = 0.5f*MathF.Max( MathF.Sin(timeValue * MathF.PI / 200),0);
+		BlurOffset = 0.5f * MathF.Max(MathF.Sin(timeValue * MathF.PI * 1.5f), 0);
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{

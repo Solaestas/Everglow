@@ -450,7 +450,6 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			{
 				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBefallExplosion.PlanetBefallExplosion>())
 				{
-
 					float BlurOffset = (proj.ModProjectile as PlanetBefallExplosion.PlanetBefallExplosion).BlurOffset;
 					gd.SetRenderTarget(Main.screenTargetSwap);
 					gd.Clear(Color.Transparent);
@@ -462,7 +461,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 					Radial = ModAsset.Radial.Value;
 					sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 					Radial.CurrentTechnique.Passes["Blend"].Apply();
-					Radial.Parameters["_BlurOffset"].SetValue(BlurOffset/Math.Max(10,MathF.Pow( (proj.Center-Main.LocalPlayer.Center).Length()/100,2)));
+					Radial.Parameters["_BlurOffset"].SetValue(BlurOffset / Math.Max(10, MathF.Pow((proj.Center - Main.LocalPlayer.Center).Length() / 100, 2)));
 					Radial.Parameters["_Center"].SetValue((proj.Center - Main.screenPosition)/new Vector2(Main.screenWidth, Main.screenHeight));
 					sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
 					sb.End();
