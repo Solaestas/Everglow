@@ -130,11 +130,21 @@ public class VortexVanquisherItem : ModItem
 							proj.ai[1] = player.statLifeMax * 0.23f;//盾量
 							HasProj = true;
 						}
+						if (proj.owner == player.whoAmI && proj.type == ModContent.ProjectileType<GoldShield_backTextureSubProj>() && proj.active)
+						{
+							proj.timeLeft = 1200;
+						}
 					}
 					if (!HasProj)
 					{
 						Projectile proj2 = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<GoldShield>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
 						proj2.ai[1] = player.statLifeMax * 0.23f;//盾量
+						Projectile subProj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.zeroVector, ModContent.ProjectileType<GoldShield_backTextureSubProj>(), 0, 0, player.whoAmI);
+						if (subProj != null)
+						{
+							GoldShield_backTextureSubProj gSBTSP = subProj.ModProjectile as GoldShield_backTextureSubProj;
+							gSBTSP.MainProj = proj2;
+						}
 					}
 					Vector2 CheckPoint = Main.MouseWorld;
 					for (int y = 0; y < 120; y++)
