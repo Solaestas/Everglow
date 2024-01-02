@@ -48,14 +48,17 @@ public class GoldShield : ModProjectile, IWarpProjectile
 	}
 	private void AllocateRenderTarget(Vector2 size)
 	{
-		var gd = Main.instance.GraphicsDevice;
-		BlackAreaSwap = new RenderTarget2D(gd, (int)size.X, (int)size.Y);
-		BlackAreaOrig = new RenderTarget2D(gd, Main.screenWidth, Main.screenHeight);
+		if(Ins.VisualQuality.High)
+		{
+			var gd = Main.instance.GraphicsDevice;
+			BlackAreaSwap = new RenderTarget2D(gd, (int)size.X, (int)size.Y);
+			BlackAreaOrig = new RenderTarget2D(gd, Main.screenWidth, Main.screenHeight);
+		}
 	}
 	
 	public void RenderCanvasOfShield()
 	{
-		if(ProjectileCount <= 0)
+		if(ProjectileCount <= 0 || !Ins.VisualQuality.High)
 		{
 			return;
 		}

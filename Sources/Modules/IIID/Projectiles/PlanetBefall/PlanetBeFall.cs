@@ -1,26 +1,12 @@
 using Everglow.Commons.IIID;
-using Everglow.Commons.Vertex;
-using ReLogic.Content;
+using Everglow.Commons.Utilities;
+using Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack;
+using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray;
+using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallExplosion;
+using Everglow.IIID.VFXs;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Humanizer;
-using Terraria.GameContent.Drawing;
-using Terraria.UI;
-using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.GameContent.UI.Elements;
-using Terraria.Localization;
-using Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack;
-using Terraria.Audio;
-using Mono.Cecil;
-using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallExplosion;
-using Everglow.Commons.Utilities;
-using System.Diagnostics;
-using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray;
-using Everglow.Commons.Skeleton2D;
-using Everglow.Myth.TheFirefly.Projectiles;
 
 namespace Everglow.IIID.Projectiles.PlanetBefall
 {
@@ -62,7 +48,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 		{
 			var t = new Vector3(5, -50, 5000 - s);
 			return
-			    Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
+				Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
 				* Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
 				* Matrix.CreateTranslation(t)
 				* Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0),
@@ -82,7 +68,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			{
 				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBefallArray>() && proj == Main.projectile[Array])
 				{
-					(proj.ModProjectile as PlanetBefallArray).PlanetBeFallProj =Projectile.whoAmI ;
+					(proj.ModProjectile as PlanetBefallArray).PlanetBeFallProj = Projectile.whoAmI;
 				}
 			}
 			Projectile.ai[0] = Main.projectile[Array].Center.X;
@@ -114,6 +100,18 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			}
 			if (Projectile.timeLeft < 1170)
 			{
+				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 3f)).RotatedByRandom(MathHelper.TwoPi);
+				var somg = new Spark_RockCrackDust
+				{
+					velocity = newVelocity + Projectile.velocity,
+					Active = true,
+					Visible = true,
+					position = Projectile.Center + newVelocity * 22 + new Vector2(0, Main.rand.NextFloat(0f, 200f)).RotatedByRandom(MathHelper.TwoPi) - Projectile.velocity * 5 + new Vector2(0, -100),
+					maxTime = Main.rand.Next(160, 250),
+					scale = Main.rand.NextFloat(30f, 146f),
+					ai = new float[] { 0, 0 }
+				};
+				Ins.VFXManager.Add(somg);
 				if (Projectile.velocity.Length() < 12.5f)
 				{
 					Projectile.velocity *= 1.1f;
@@ -177,14 +175,14 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 							Player.immune = true;
 							Player.immuneTime = 60;
 							AnimationTimer += 1;
-							float Value = (1-MathF.Cos((AnimationTimer) * MathF.PI / 45)) / 2f;
+							float Value = (1 - MathF.Cos((AnimationTimer) * MathF.PI / 45)) / 2f;
 							if (AnimationTimer >= 45 && AnimationTimer < 90)
 							{
 								Value = 1;
 							}
 							if (AnimationTimer >= 90)
 							{
-								Value = (1 + MathF.Cos((AnimationTimer - 90) * MathF.PI/ 45 )) / 2f;
+								Value = (1 + MathF.Cos((AnimationTimer - 90) * MathF.PI / 45)) / 2f;
 							}
 
 							if (AnimationTimer >= MaxTime)
@@ -192,7 +190,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 								AnimationTimer = (int)MaxTime;
 								PlanetBeFallAnimation = false;
 							}
-							
+
 							Main.screenPosition = (Value).Lerp(Main.screenPosition, target);
 						}
 					}

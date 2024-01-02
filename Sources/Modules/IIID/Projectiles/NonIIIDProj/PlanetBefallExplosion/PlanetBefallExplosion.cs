@@ -1,13 +1,10 @@
-using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.MEAC;
-using Everglow.Myth.TheFirefly;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Everglow.Commons.VFX;
-using  Everglow.Myth;
 using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.IIID.Buffs;
 using Everglow.IIID.VFXs;
+using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallExplosion;
 
@@ -31,9 +28,7 @@ public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
-
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Crystal_Burst_Strong"), Projectile.Center);
-
+		SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Crystal_Burst_Strong"), Projectile.Center);
 		GenerateSmog((int)(0.7f * Projectile.ai[0]));
 		GenerateFire((int)(0.75f * Projectile.ai[0]));
 		GenerateSmog((int)(0.3f * Projectile.ai[0]));
@@ -44,17 +39,34 @@ public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 		for (int g = 0; g < Frequency * 0.6; g++)
 		{
 			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(45f, 125f)).RotatedByRandom(MathHelper.TwoPi);
-			var somg = new RockSmogLine
+			if(!Main.rand.NextBool(8))
 			{
-				velocity = newVelocity,
-				Active = true,
-				Visible = true,
-				position = Projectile.Center + newVelocity * Main.rand.NextFloat(-0.5f, 4f),
-				maxTime = Main.rand.Next(45, 68),
-				scale = Main.rand.NextFloat(60f, 220f),
-				ai = new float[] { 0, 0 }
-			};
-			Ins.VFXManager.Add(somg);
+				var somg = new RockSmogLine
+				{
+					velocity = newVelocity,
+					Active = true,
+					Visible = true,
+					position = Projectile.Center + newVelocity * Main.rand.NextFloat(-0.5f, 4f),
+					maxTime = Main.rand.Next(45, 68),
+					scale = Main.rand.NextFloat(60f, 220f),
+					ai = new float[] { 0, 0 }
+				};
+				Ins.VFXManager.Add(somg);
+			}
+			else
+			{
+				var somg = new RockSmogLine_front
+				{
+					velocity = newVelocity,
+					Active = true,
+					Visible = true,
+					position = Projectile.Center + newVelocity * Main.rand.NextFloat(-0.5f, 4f),
+					maxTime = Main.rand.Next(45, 68),
+					scale = Main.rand.NextFloat(60f, 220f),
+					ai = new float[] { 0, 0 }
+				};
+				Ins.VFXManager.Add(somg);
+			}
 		}
 		for (int g = 0; g < Frequency; g++)
 		{
@@ -196,7 +208,7 @@ public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50, 0);
 		Color c = new Color(1f * MathF.Sqrt(1 - timeValue), 1f * (1 - timeValue) * (1 - timeValue), 0.1f * (1 - timeValue), 0f);
-		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null,c * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, c * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark, SpriteEffects.None, 0);
 		Color cDark = new Color(0, 0, 0, 1f - timeValue);
 		//DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 20 * (1 - timeValue) * Projectile.ai[0], cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
 		//DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 4 * (1 - timeValue) * Projectile.ai[0], c * 0.4f , Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
@@ -246,5 +258,17 @@ public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(ModContent.BuffType<Petrification>(), (int)(240));
+	}
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		if (target.Center.X < Projectile.Center.X)
+		{
+			modifiers.HitDirectionOverride = -1;
+		}
+		else
+		{
+			modifiers.HitDirectionOverride = 1;
+		}
+		base.ModifyHitNPC(target, ref modifiers);
 	}
 }
