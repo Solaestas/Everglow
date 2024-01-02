@@ -1,6 +1,7 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Weapons;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -20,6 +21,7 @@ public class YggdrasilAmberLaser_proj : HandholdProjectile, IWarpProjectile
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
+		SoundEngine.PlaySound(SoundID.Shimmer1.WithPitchOffset(1), Projectile.Center);
 		Player player = Main.player[Projectile.owner];
 		Vector2 mouseToPlayer = Main.MouseWorld - player.Center;
 		mouseToPlayer = Vector2.Normalize(mouseToPlayer);
@@ -224,7 +226,7 @@ public class YggdrasilAmberLaser_proj : HandholdProjectile, IWarpProjectile
 			}
 			Vector2 checkPoint = Projectile.Center + mouseToPlayer * step * 8;
 			Vector2 toMouseLeft = mouseToPlayer.RotatedBy(MathHelper.PiOver2);
-			float width = duration * 25;
+			float width = duration * duration * 25;
 			Color drawColor = new Color(duration * 0.7f, duration * duration * 0.52f, 0, 0);
 			float mulWidth = 1f;
 			if (step + 4 <= 10)

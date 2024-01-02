@@ -1,4 +1,7 @@
+using System.Net;
 using Everglow.Commons.Weapons;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -10,11 +13,17 @@ public class AmberBall : TrailingProjectile
 		TrailTexture = Commons.ModAsset.Trail_3.Value;
 		TrailWidth = 50;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
+		Projectile.usesLocalNPCImmunity = true;
+		Projectile.localNPCHitCooldown = 5;
+		Projectile.ArmorPenetration = 0;
 		base.SetDef();
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		base.OnHitNPC(target, hit, damageDone);
+		if(TimeTokill < 0)
+		{
+			KillMainStructure();
+		}
 	}
 	public override void AI()
 	{
@@ -34,8 +43,25 @@ public class AmberBall : TrailingProjectile
 		Projectile.velocity.Y += 0.1f;
 		Projectile.velocity *= 0.99f;
 	}
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+	{
+		if(TimeTokill < 0)
+		{
+			return base.Colliding(projHitbox, targetHitbox);
+		}
+		else
+		{
+			if(TimeTokill <  4)
+			{
+				return Rectangle.Intersect(new Rectangle(projHitbox.Left - 48, projHitbox.Top - 48, 128, 128), targetHitbox) != Rectangle.emptyRectangle;
+			}
+		}
+		return false;
+	}
 	public override void KillMainStructure()
 	{
+		Projectile.damage = (int)(Projectile.damage * 5f / 3f);
+		Projectile.ArmorPenetration += 4;
 		base.KillMainStructure();
 	}
 	public override bool PreDraw(ref Color lightColor)
@@ -47,10 +73,55 @@ public class AmberBall : TrailingProjectile
 	}
 	public override void DrawSelf()
 	{
+		Projectile.friendly = true;
 		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
 		var texMain2 = ModAsset.AmberBall_black.Value;
+		if(TimeTokill > 0)
+		{
+			float scale = 1 - TimeTokill / 30f;
+			var texMain3 = ModAsset.AmberBall_white.Value;
+			Main.spriteBatch.Draw(texMain2, Projectile.Center - Main.screenPosition - Projectile.velocity, null, Color.White, 0, texMain2.Size() / 2f, 1f + scale * scale * 1f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, new Color(1f, 1f, 1f, 0), 0, texMain.Size() / 2f, 1f + scale * scale * 1f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(texMain3, Projectile.Center - Main.screenPosition - Projectile.velocity, null, new Color(scale, scale, scale, scale), 0, texMain3.Size() / 2f, 1f + scale * scale * 1f, SpriteEffects.None, 0);
+			return;
+		}
 		Main.spriteBatch.Draw(texMain2, Projectile.Center - Main.screenPosition - Projectile.velocity, null, Color.White, 0, texMain2.Size() / 2f, 1f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, new Color(1f, 1f, 1f, 0), 0, texMain.Size() / 2f, 1f, SpriteEffects.None, 0);
+	}
+	public override void OnKill(int timeLeft)
+	{
+		for(int x = 0;x < 12;x++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 6f)).RotatedByRandom(MathHelper.TwoPi);
+			var somg = new AmberFlameDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center,
+				maxTime = Main.rand.Next(27, 35),
+				scale = Main.rand.NextFloat(5.20f, 16.35f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+			};
+			Ins.VFXManager.Add(somg);
+		}
+		for (int x = 0; x < 8; x++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 8f)).RotatedByRandom(MathHelper.TwoPi);
+			Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, ModContent.DustType<YggdrasilAmberFlame>());
+			dust.velocity = newVelocity;
+			dust.noGravity = true;
+		}
+		for (int x = 0; x < 12; x++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 8f)).RotatedByRandom(MathHelper.TwoPi);
+			Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, ModContent.DustType<YggdrasilAmberMoon>());
+			dust.velocity = newVelocity;
+			dust.scale = Main.rand.NextFloat(1.2f, 2f);
+		}
+		SoundEngine.PlaySound(SoundID.NPCDeath1.WithPitchOffset(1), Projectile.Center);
+		base.OnKill(timeLeft);
 	}
 	public override void DrawTrailDark()
 	{
