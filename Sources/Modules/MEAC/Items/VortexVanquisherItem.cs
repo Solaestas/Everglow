@@ -1,16 +1,10 @@
-using Everglow.MEAC.Projectiles;
 //using Everglow.Sources.Commons.Core.Utils;
-using Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack;
-using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray;
 using Everglow.IIID.Projectiles.PlanetBefall;
-using ReLogic.Graphics;
-using System.Security.AccessControl;
-using Terraria;
-using Terraria.GameContent;
-using Terraria.ID;
-using static Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack.Tree;
-using Everglow.IIID;
 using Everglow.MEAC.NonTrueMeleeProj;
+using Everglow.MEAC.Projectiles;
+using Everglow.Myth.TheFirefly.Items;
+using ReLogic.Graphics;
+using Terraria.GameContent;
 
 namespace Everglow.MEAC.Items;
 
@@ -19,20 +13,20 @@ public class VortexVanquisherItem : ModItem
 	public override void SetDefaults()
 	{
 		Item.useStyle = ItemUseStyleID.Swing;
-		Item.width = 1;
-		Item.height = 1;
+		Item.width = 86;
+		Item.height = 86;
 		Item.useAnimation = 5;
 		Item.useTime = 5;
 		Item.shootSpeed = 5f;
 		Item.knockBack = 6.5f;
 		Item.damage = 608;
-		Item.rare = ItemRarityID.Green;
+		Item.rare = ItemRarityID.Purple;
 
 		Item.DamageType = DamageClass.Melee;
 		Item.noMelee = true;
 		Item.noUseGraphic = true;
 
-		Item.value = Item.sellPrice(gold: 1);
+		Item.value = 648000;
 	}
 
 	private int CoolTimeForE = 0;
@@ -60,7 +54,7 @@ public class VortexVanquisherItem : ModItem
 			if (CoolTimeForQ > 0)
 			{
 				CoolTimeForQ--;
-				spriteBatch.Draw(RArr2, position+new Vector2 (0,slotSize.Y* Main.inventoryScale/ 2f), null, new Color(0, 0, 0, 255), 0f, RArr2.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+				spriteBatch.Draw(RArr2, position + new Vector2(0, slotSize.Y * Main.inventoryScale / 2f), null, new Color(0, 0, 0, 255), 0f, RArr2.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
 				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (CoolTimeForQ / 60f).ToString("#.#"), drawPos + new Vector2(22.91f) * scale + new Vector2(-30, 0), Color.White, 0f, Vector2.Zero, scale * 1.91f, SpriteEffects.None, 0);
 			}
 			else
@@ -95,12 +89,12 @@ public class VortexVanquisherItem : ModItem
 						return;
 					}
 					CoolTimeForQ = 1440;
-					if(player.name == "Omni")
+					if (player.name == "Omni")
 					{
 						CoolTimeForQ = 10;
 					}
 					Projectile PlanetBeFall = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), /*Main.MouseWorld*/new Vector2(player.Center.X, Main.MouseWorld.Y - 1500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), Item.damage * 27, Item.knockBack * 10, player.whoAmI);
-					
+
 				}
 				if (player.altFunctionUse != 2)
 				{
@@ -197,7 +191,7 @@ public class VortexVanquisherItem : ModItem
 						return;
 					}
 
-					Projectile p0 = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), CheckPoint, Vector2.Zero, ModContent.ProjectileType<StonePost>(), Item.damage, 0, player.whoAmI, 1);
+					Projectile p0 = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), CheckPoint, Vector2.Zero, ModContent.ProjectileType<StonePost>(), Item.damage / 3, 0, player.whoAmI, 1);
 					float Angle = (float)Math.Atan2(TotalVector.Y, TotalVector.X);
 					p0.rotation = (float)(Angle - Math.PI * 1.5);
 				}
@@ -226,10 +220,6 @@ public class VortexVanquisherItem : ModItem
 	{
 
 		return true;
-	}
-	public override void AddRecipes()
-	{
-
 	}
 }
 

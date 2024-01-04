@@ -12,6 +12,8 @@ public class PrimordialJadeWinged_Spear : ModItem
 		Item.rare = ItemRarityID.Purple;
 		Item.value = 648000;
 		Item.useStyle = ItemUseStyleID.Shoot;
+		Item.width = 84;
+		Item.height = 84;
 		Item.useAnimation = 18;
 		Item.useTime = 18;
 		Item.autoReuse = true;

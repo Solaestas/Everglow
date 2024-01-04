@@ -71,7 +71,7 @@ public class DashingLightEff : ModProjectile, IWarpProjectile
 		{
 			timeValue = Projectile.timeLeft / 60f;
 		}
-		Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 60f * timeValue;
+		Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 30f * timeValue;
 		Vector2 start = Projectile.Center + Vector2.Normalize(Projectile.velocity) * (100 - Projectile.timeLeft) * 3;
 		Vector2 end = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 100;
 
