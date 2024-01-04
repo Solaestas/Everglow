@@ -4,7 +4,7 @@ using Everglow.Commons.VFX;
 
 namespace Everglow.IIID.VFXs;
 
-public class RockSmogLinePipeline : Pipeline//这个绘制层在火焰之之后，被火焰覆盖
+public class RockSmogLinePipeline : Pipeline
 {
 	public override void Load()
 	{
@@ -18,7 +18,7 @@ public class RockSmogLinePipeline : Pipeline//这个绘制层在火焰之之后�
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.Spark_RockCrack_Heatmap.Value);
+		Ins.Batch.BindTexture<Vertex2D>(ModAsset.RockSmogLine_Heatmap.Value);
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearClamp, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
@@ -32,7 +32,7 @@ public class RockSmogLinePipeline : Pipeline//这个绘制层在火焰之之后�
 [Pipeline(typeof(RockSmogLinePipeline))]
 public class RockSmogLine : Visual
 {
-	public override CodeLayer DrawLayer => CodeLayer.PostDrawProjectiles;
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;//这个绘制层在火焰之之后，被火焰覆盖
 	public List<Vector2> oldPos = new List<Vector2>();
 	public Vector2 position;
 	public Vector2 velocity;

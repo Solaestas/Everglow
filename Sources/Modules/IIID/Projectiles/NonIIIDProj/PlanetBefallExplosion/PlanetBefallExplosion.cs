@@ -39,34 +39,17 @@ public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 		for (int g = 0; g < Frequency * 0.6; g++)
 		{
 			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(45f, 125f)).RotatedByRandom(MathHelper.TwoPi);
-			if(!Main.rand.NextBool(8))
+			var somg = new RockSmogLine_front
 			{
-				var somg = new RockSmogLine
-				{
-					velocity = newVelocity,
-					Active = true,
-					Visible = true,
-					position = Projectile.Center + newVelocity * Main.rand.NextFloat(-0.5f, 4f),
-					maxTime = Main.rand.Next(45, 68),
-					scale = Main.rand.NextFloat(60f, 220f),
-					ai = new float[] { 0, 0 }
-				};
-				Ins.VFXManager.Add(somg);
-			}
-			else
-			{
-				var somg = new RockSmogLine_front
-				{
-					velocity = newVelocity,
-					Active = true,
-					Visible = true,
-					position = Projectile.Center + newVelocity * Main.rand.NextFloat(-0.5f, 4f),
-					maxTime = Main.rand.Next(45, 68),
-					scale = Main.rand.NextFloat(60f, 220f),
-					ai = new float[] { 0, 0 }
-				};
-				Ins.VFXManager.Add(somg);
-			}
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + newVelocity * Main.rand.NextFloat(-0.5f, 4f),
+				maxTime = Main.rand.Next(45, 68),
+				scale = Main.rand.NextFloat(60f, 220f),
+				ai = new float[] { 0, 0 }
+			};
+			Ins.VFXManager.Add(somg);
 		}
 		for (int g = 0; g < Frequency; g++)
 		{
