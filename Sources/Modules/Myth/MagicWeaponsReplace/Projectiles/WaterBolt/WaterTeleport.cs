@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Buffs;
 using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Projectiles;

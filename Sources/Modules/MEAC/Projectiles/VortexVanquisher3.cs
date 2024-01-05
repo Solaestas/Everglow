@@ -1,3 +1,4 @@
+using Everglow.IIID.VFXs;
 using Terraria.Audio;
 using Terraria.GameContent.Shaders;
 
@@ -44,6 +45,21 @@ public class VortexVanquisher3 : ModProjectile
 
 				Gsplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
 				SoundEngine.PlaySound(SoundID.NPCHit4);
+				for (int g = 0; g < 12; g++)
+				{
+					Vector2 newVelocity = new Vector2(-Main.rand.NextFloat(35f, 44f), 0).RotatedBy(Projectile.rotation - MathHelper.PiOver4 + Main.rand.NextFloat(-1.4f, 1.4f));
+					var somg = new VortexVanquisherGlowingSmogLine_front
+					{
+						velocity = newVelocity,
+						Active = true,
+						Visible = true,
+						position = Projectile.Center + new Vector2(10, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver4) - newVelocity * 0.2f,
+						maxTime = Main.rand.Next(15, 38),
+						scale = Main.rand.NextFloat(40f, 60f),
+						ai = new float[] { 0, 0 }
+					};
+					Ins.VFXManager.Add(somg);
+				}
 			}
 		}
 		else

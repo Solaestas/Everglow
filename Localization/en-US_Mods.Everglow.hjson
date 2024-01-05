@@ -710,6 +710,11 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.WaterMelonJuiceBuff.Description
 	}
 
+	Petrification: {
+		DisplayName: Petrification
+		Description: Mods.Everglow.Buffs.Petrification.Description
+	}
+
 	TuskStaff: {
 		DisplayName: Tusk Staff
 		Description: Mods.Everglow.Buffs.TuskStaff.Description
@@ -1064,6 +1069,11 @@ Items: {
 
 	HandholdItem: {
 		DisplayName: Handhold Item
+		Tooltip: ""
+	}
+
+	TestSkeletonOwl: {
+		DisplayName: Test Skeleton Owl
 		Tooltip: ""
 	}
 
@@ -3128,6 +3138,10 @@ Projectiles: {
 	CreamChocolateCup_CreamFlow.DisplayName: Cream Chocolate Cup_ Cream Flow
 	FryingPan.DisplayName: Frying Pan
 	GrilledSquidTentacle_proj.DisplayName: Grilled Squid Tentacle_proj
+	PlanetBeFall.DisplayName: Planet Be Fall
+	PlanetBefallExplosion.DisplayName: Planet Befall Explosion
+	PlanetBefallArray.DisplayName: Planet Befall Array
+	GoldenCrack.DisplayName: Golden Crack
 	DashingLightEff.DisplayName: Dashing Light Eff
 	VortexVanquisher.DisplayName: Vortex Vanquisher
 	VortexVanquisher2.DisplayName: Vortex Vanquisher2

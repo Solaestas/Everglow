@@ -1,5 +1,6 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
+using Everglow.Myth.TheFirefly.Items;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -12,6 +13,8 @@ public class PrimordialJadeWinged_Spear : ModItem
 		Item.rare = ItemRarityID.Purple;
 		Item.value = 648000;
 		Item.useStyle = ItemUseStyleID.Shoot;
+		Item.width = 84;
+		Item.height = 84;
 		Item.useAnimation = 18;
 		Item.useTime = 18;
 		Item.autoReuse = true;
@@ -167,6 +170,17 @@ public class PrimordialJadeWinged_Spear : ModItem
 			SoundEngine.PlaySound(Item.UseSound, player.Center);
 
 		return null;
+	}
+	public override void AddRecipes()
+	{
+		Recipe recipe = CreateRecipe();
+		recipe.AddIngredient(ItemID.Trident);
+		recipe.AddIngredient(ItemID.Spear);
+		recipe.AddIngredient(ItemID.Emerald, 45);
+		recipe.AddIngredient(ItemID.LunarBar, 24);
+		recipe.AddIngredient(ItemID.ChlorophyteBar, 10);
+		recipe.AddTile(TileID.LunarCraftingStation);
+		recipe.Register();
 	}
 }
 public class PrimordialJadeWinged_SpearOwner : ModPlayer
