@@ -1,3 +1,5 @@
+using Terraria.DataStructures;
+
 namespace Everglow.MEAC.Projectiles;
 
 public class VortexVanquisherThump : ModProjectile
@@ -20,6 +22,7 @@ public class VortexVanquisherThump : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.extraUpdates = 10;
 	}
+	public float startX = 0;
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -30,11 +33,16 @@ public class VortexVanquisherThump : ModProjectile
 		player.immuneTime = 8;
 		Projectile.velocity = Vector2.Normalize(Projectile.velocity);
 		Projectile.position += new Vector2(18f / Projectile.extraUpdates * Math.Sign(Projectile.velocity.X), 0);
-		if (Projectile.timeLeft > 20)
-			player.velocity = Projectile.velocity * 24f;
+		if(Projectile.timeLeft > 290)
+		{
+			startX = MathF.Sign(Projectile.velocity.X);
+		}
+		if (Projectile.timeLeft > 20 && Projectile.active)
+			player.velocity = new Vector2(startX * 24, 0);
 		else
 		{
-			player.velocity *= 0.9f;
+			startX *= 0;
+			player.velocity *= 0.96f;
 		}
 	}
 	public void StrikeDown()
