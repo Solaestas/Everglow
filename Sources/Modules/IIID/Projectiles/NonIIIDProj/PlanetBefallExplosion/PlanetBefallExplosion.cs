@@ -240,7 +240,11 @@ public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		target.AddBuff(ModContent.BuffType<Petrification>(), (int)(240));
+		//For code safty, you can't prtrificate a boss.
+		if(!target.boss ||(target.type == NPCID.EyeofCthulhu || target.type == NPCID.BrainofCthulhu || target.type == NPCID.Skeleton || target.type == NPCID.SkeletronPrime || target.type == NPCID.Deerclops || target.type == NPCID.KingSlime || target.type == NPCID.QueenBee || target.type == NPCID.QueenBee || target.type == NPCID.DukeFishron || target.type == NPCID.Spazmatism || target.type == NPCID.Retinazer || target.type == NPCID.Plantera || target.type == NPCID.CultistBoss))
+		{
+			target.AddBuff(ModContent.BuffType<Petrification>(), 240);
+		}
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{

@@ -1,4 +1,3 @@
-//using Everglow.Sources.Commons.Core.Utils;
 using Everglow.IIID.Projectiles.PlanetBefall;
 using Everglow.MEAC.NonTrueMeleeProj;
 using Everglow.MEAC.Projectiles;
@@ -67,7 +66,6 @@ public class VortexVanquisherItem : ModItem
 
 	public override bool CanUseItem(Player player)
 	{
-
 		if (base.CanUseItem(player))
 		{
 
@@ -218,8 +216,18 @@ public class VortexVanquisherItem : ModItem
 	int ClickTime = 0;
 	public override bool AltFunctionUse(Player player)
 	{
-
 		return true;
+	}
+	public override void AddRecipes()
+	{
+		Recipe recipe = CreateRecipe();
+		recipe.AddIngredient(ItemID.Trident);
+		recipe.AddIngredient(ItemID.Spear);
+		recipe.AddIngredient(ItemID.Amber, 45);
+		recipe.AddIngredient(ItemID.LunarBar, 24);
+		recipe.AddIngredient(ItemID.SunplateBlock, 30);
+		recipe.AddTile(TileID.LunarCraftingStation);
+		recipe.Register();
 	}
 }
 
