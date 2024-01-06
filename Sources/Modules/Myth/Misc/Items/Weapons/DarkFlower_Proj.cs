@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using Everglow.Common.VFX.CommonVFXDusts;
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -184,6 +185,7 @@ public class DarkFlower_Proj : ModProjectile
             bars.Add(new Vertex2D(oldPos[i] - Main.screenPosition + normalDir * width, c * w, new Vector3((float)Math.Sqrt(factor) + t, 1, w)));
             bars.Add(new Vertex2D(oldPos[i] - Main.screenPosition + normalDir * -width, c * w, new Vector3((float)Math.Sqrt(factor) + t, 0, w)));
         }
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Immediate, CustomBlendStates.Subtract, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
 
@@ -199,7 +201,7 @@ public class DarkFlower_Proj : ModProjectile
         DrawOnCenter(tex, projectile.Center - Main.screenPosition, new Color(0.5f, 1f, 0.8f) * alpha, projectile.rotation, projectile.scale);
 
         Main.spriteBatch.End();
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+        Main.spriteBatch.Begin(sBS);
 
         return false;
     }
