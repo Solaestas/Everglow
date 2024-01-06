@@ -116,7 +116,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 
 		gd.SetRenderTarget(Main.screenTarget);
 		gd.Clear(Color.Transparent);
-		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 		sb.Draw(BlackAreaOrig, Vector2.Zero, Color.White);
 		sb.End();
