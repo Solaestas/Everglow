@@ -7,6 +7,7 @@ using MonoMod.Cil;
 
 namespace Everglow.Commons.CustomTiles.EntityColliding;
 
+[Autoload(false)]
 public class ProjColliding : GlobalProjectile
 {
 	public const int HookAiStyle = 7;

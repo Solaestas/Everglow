@@ -12,7 +12,7 @@ namespace Everglow.Minortopography.GiantPinetree.Projectiles
 			Color = new Color(11, 84, 46);
 			TradeShade = 0.5f;
 			Shade = 2f;
-			FadeTradeShade = 0.52f;
+			FadeShade = 0.52f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.4f;

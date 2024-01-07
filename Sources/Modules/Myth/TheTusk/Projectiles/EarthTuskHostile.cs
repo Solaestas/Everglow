@@ -1,4 +1,3 @@
-﻿using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
@@ -7,7 +6,7 @@ namespace Everglow.Myth.TheTusk.Projectiles;
 
 public class EarthTuskHostile : ModProjectile
 {
-	public override string Texture => "Everglow/Myth/TheTusk/Projectiles/Textures/Tuskplus0";
+	public override string Texture => "Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/LargeTusk";
 	public override void SetDefaults()
 	{
 		Projectile.tileCollide = false;
@@ -48,7 +47,10 @@ public class EarthTuskHostile : ModProjectile
 			times++;
 			CheckCenter = Projectile.Center + new Vector2(times * Projectile.ai[1], 0).RotatedBy(times / 6f * Projectile.ai[1]);
 			if (times > 256)
+			{
 				Projectile.Kill();
+				break;
+			}
 
 		}
 		Projectile.velocity *= 0;
@@ -190,13 +192,13 @@ public class EarthTuskHostile : ModProjectile
 		var bars = new List<Vertex2D>
 		{
 			new Vertex2D(SummonCenterII + TenNormalize - Main.screenPosition, StartColor, new Vector3(0, value, 0)),
-			new Vertex2D(SummonCenterII - TenNormalize - Main.screenPosition, StartColor, new Vector3(1, value, 0)),
+			new Vertex2D(SummonCenterII - TenNormalize - Main.screenPosition, StartColor, new Vector3(1 / 6f, value, 0)),
 
 			new Vertex2D(ProjCenterII + TenNormalize - Main.screenPosition, EndColor, new Vector3(0, 0, 0)),
-			new Vertex2D(ProjCenterII - TenNormalize - Main.screenPosition, EndColor, new Vector3(1, 0, 0))
+			new Vertex2D(ProjCenterII - TenNormalize - Main.screenPosition, EndColor, new Vector3(1 / 6f, 0, 0))
 		};
 
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheTusk/Projectiles/Textures/Tuskplus" + TextureType.ToString());
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.LargeTusk.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
 
@@ -235,8 +237,6 @@ public class EarthTuskHostile : ModProjectile
 			if (squzze < 0.1f)
 				break;
 		}
-		Vector2 largeFragilesTop = new Vector2(0, -rotateValue * 12 - 4).RotatedBy(Projectile.rotation);
-
 		var Fragiles = new List<Vertex2D>
 		{
 			new Vertex2D(SummonCenterII + fragilesLeft - Main.screenPosition, EndColor, new Vector3(leftX, topY, 0)),

@@ -18,15 +18,6 @@ internal class MothWorld : Subworld
 	public override void DrawMenu(GameTime gameTime)
 	{
 		Texture2D MenuUG2SBG = ModAsset.FireflyUnderground1Screen4K.Value;
-
-		//Texture2D MenuSkyBG = (Texture2D)ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Backgrounds/FireflySky", (AssetRequestMode)2);
-		//Texture2D MenuFarBG = (Texture2D)ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Backgrounds/FireflyFar", (AssetRequestMode)2);
-		//Texture2D MenuMidCloseBG = (Texture2D)ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Backgrounds/FireflyMidClose", (AssetRequestMode)2);
-		//Texture2D MenuMiddleBG = (Texture2D)ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Backgrounds/FireflyMiddle", (AssetRequestMode)2);
-		//Texture2D MenuMiddleGlowBG = (Texture2D)ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Backgrounds/FireflyMiddleGlow", (AssetRequestMode)2);
-		//Texture2D MenuCloseBG = (Texture2D)ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Backgrounds/FireflyClose", (AssetRequestMode)2);
-		//Texture2D MenuClose2BG = (Texture2D)ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Backgrounds/FireflyClose2", (AssetRequestMode)2);
-
 		Vector2 zero = Vector2.Zero;
 		#region MenuUGS2BG
 		float uG1Width = (float)Main.screenWidth / (float)MenuUG2SBG.Width;
@@ -126,14 +117,7 @@ internal class MothWorld : Subworld
 		#endregion
 
 		Main.spriteBatch.Draw(MenuUG2SBG, zero, null, Color.White, 0f, Vector2.Zero, uG1Width, (SpriteEffects)0, 0f);
-		//Main.spriteBatch.Draw(MenuSkyBG, zero, (Rectangle?)null, Color.White, 0f, Vector2.Zero, skyWidth, (SpriteEffects)0, 0f);
-		//Main.spriteBatch.Draw(MenuFarBG, zero, (Rectangle?)null, Color.White, 0f, Vector2.Zero, farWidth, (SpriteEffects)0, 0f);
-		//Main.spriteBatch.Draw(MenuMidCloseBG, zero, (Rectangle?)null, Color.White, 0f, Vector2.Zero, midCloseWidth, (SpriteEffects)0, 0f);
-		//Main.spriteBatch.Draw(MenuMiddleBG, zero, (Rectangle?)null, Color.White, 0f, Vector2.Zero, middleWidth, (SpriteEffects)0, 0f);
-		//Main.spriteBatch.Draw(MenuMiddleGlowBG, zero, (Rectangle?)null, Color.White, 0f, Vector2.Zero, middleGlowWidth, (SpriteEffects)0, 0f);
-
 		base.DrawMenu(gameTime);
-		//return;
 	}
 	//public override bool ChangeAudio()
 	// TODO: MothBiomeOld should play when entering and exiting the firefly subworld but MothBiome should play while inside the subworld.

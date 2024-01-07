@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria;
 using Terraria.Audio;
 
@@ -66,7 +66,7 @@ internal class BoneSpike : ModProjectile, IWarpProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Spice = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BookofSkulls/BoneSpike");
+		Texture2D Spice = ModAsset.BoneSpike.Value;
 		if (Projectile.timeLeft <= 1780)
 		{
 			Vector2 v0 = Projectile.Center;
@@ -78,7 +78,7 @@ internal class BoneSpike : ModProjectile, IWarpProjectile
 
 	public override void PostDraw(Color lightColor)
 	{
-		Texture2D Power = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine");
+		Texture2D Power = ModAsset.WaterLine.Value;
 		float Pdark = 0f;
 		float Pwidth = 1f;
 		if (Projectile.timeLeft > 1780)
@@ -275,7 +275,7 @@ internal class BoneSpike : ModProjectile, IWarpProjectile
 
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-		Texture2D Power = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine");
+		Texture2D Power = ModAsset.WaterLine.Value;
 		float Pdark = 0f;
 		float Pwidth = 1f;
 		if (Projectile.timeLeft > 1780)

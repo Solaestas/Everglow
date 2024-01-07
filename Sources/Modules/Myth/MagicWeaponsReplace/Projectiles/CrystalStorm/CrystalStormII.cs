@@ -142,7 +142,7 @@ public class CrystalStormII : ModProjectile, IWarpProjectile//将接口改为使
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = ModAsset.Projectiles_ElecLine.Value;
+		Texture2D t = ModAsset.ElecLine.Value;
 		if (Shade)
 			t = ModAsset.Darkline.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;

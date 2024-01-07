@@ -47,7 +47,10 @@ internal class FireFeatherMagicArray : VisualProjectile
 		Projectile.tileCollide = false;
 		base.SetDefaults();
 	}
-
+	public override bool? CanCutTiles()
+	{
+		return false;
+	}
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];

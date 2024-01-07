@@ -1,10 +1,7 @@
-using Everglow.Commons.FeatureFlags;
+using Everglow.Myth.Misc.Dusts;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
-using Terraria.GameContent.NetModules;
 using Terraria.Graphics.Renderers;
-using Terraria.ID;
-using Terraria.Net;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
 // This is a copy of the Excalibur's projectile
@@ -100,8 +97,30 @@ public class CyanFrostProj : ModProjectile
 		{
 			// This dust spawns on the swinging arc, or just on the perimeter of the projectile arc.
 			// Original Excalibur color: Color.White
-			Dust.NewDustPerfect(dustPosition, DustID.Frost, dustVelocity, 100, Color.SkyBlue * Projectile.Opacity, 1.2f * Projectile.Opacity);
+			Dust coloredDust = Dust.NewDustPerfect(dustPosition, DustID.Frost, dustVelocity, 100, Color.SkyBlue * Projectile.Opacity, 1.2f * Projectile.Opacity);
+			coloredDust.noGravity = true;
 		}
+
+		Dust diamond = Dust.NewDustPerfect(Projectile.Center + new Vector2(70, 0).RotatedBy(Projectile.rotation), ModContent.DustType<IceScale>(), Vector2.zeroVector, 100, Color.SkyBlue * Projectile.Opacity, 1.2f * Projectile.Opacity);
+		diamond.noGravity = true;
+		diamond.rotation = Projectile.rotation + MathHelper.PiOver2;
+
+		Dust diamond2 = Dust.NewDustPerfect(Projectile.Center + new Vector2(100, 0).RotatedBy(Projectile.rotation), ModContent.DustType<IceScale>(), Vector2.zeroVector, 100, Color.SkyBlue * Projectile.Opacity, 1.8f * Projectile.Opacity);
+		diamond2.noGravity = true;
+		diamond2.rotation = Projectile.rotation + MathHelper.PiOver2;
+		if(Projectile.timeLeft % 2 == 1)
+		{
+			Dust diamond3 = Dust.NewDustPerfect(Projectile.Center + new Vector2(170, 0).RotatedBy(Projectile.rotation), ModContent.DustType<IceScale>(), Vector2.zeroVector, 100, Color.SkyBlue * Projectile.Opacity, 3.8f * Projectile.Opacity);
+			diamond3.noGravity = true;
+			diamond3.rotation = Projectile.rotation + MathHelper.PiOver2;
+		}
+		Dust diamond4 = Dust.NewDustPerfect(Projectile.Center + new Vector2(190, 0).RotatedBy(Projectile.rotation), ModContent.DustType<IceScale2>(), Vector2.zeroVector, 100, Color.SkyBlue * Projectile.Opacity, 1.8f * Projectile.Opacity);
+		diamond4.noGravity = true;
+		diamond4.rotation = Projectile.rotation + MathHelper.PiOver2;
+
+		Dust diamond5 = Dust.NewDustPerfect(Projectile.Center + new Vector2(130 + 30 * MathF.Sin(Projectile.timeLeft), 0).RotatedBy(Projectile.rotation), ModContent.DustType<IceScale3>(), Vector2.zeroVector, 100, Color.SkyBlue * Projectile.Opacity, 2.6f * Projectile.Opacity);
+		diamond5.noGravity = true;
+		diamond5.rotation = Projectile.rotation + MathHelper.PiOver2;
 
 		Projectile.scale *= Projectile.ai[2]; // Set the scale of the projectile to the scale of the item.
 
@@ -166,9 +185,9 @@ public class CyanFrostProj : ModProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-	//	ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
-	//			new ParticleOrchestraSettings { PositionInWorld = Main.rand.NextVector2FromRectangle(target.Hitbox) },
-	//			Projectile.owner);
+		//	ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
+		//			new ParticleOrchestraSettings { PositionInWorld = Main.rand.NextVector2FromRectangle(target.Hitbox) },
+		//			Projectile.owner);
 		Spawn_CustomColorExcalibur(new ParticleOrchestraSettings { PositionInWorld = Main.rand.NextVector2FromRectangle(target.Hitbox) }, new Color(0f, 0.5f, 0.6f, 0.5f), new Color(0f, 0.82f, 0.82f, 1f));
 
 		// Set the target's hit direction to away from the player so the knockback is in the correct direction.
@@ -192,6 +211,7 @@ public class CyanFrostProj : ModProjectile
 	// Look at the source code for the other sword types.
 	public override bool PreDraw(ref Color lightColor)
 	{
+		Player player = Main.player[Projectile.owner];
 		Vector2 position = Projectile.Center - Main.screenPosition;
 		Texture2D texture = TextureAssets.Projectile[Type].Value;
 		Rectangle sourceRectangle = texture.Frame(1, 4); // The sourceRectangle says which frame to use.
@@ -213,6 +233,8 @@ public class CyanFrostProj : ModProjectile
 		faintLightingColor.G = (byte)(faintLightingColor.G * lightingColor);
 		faintLightingColor.B = (byte)(faintLightingColor.R * (0.25f + lightingColor * 0.75f));
 
+		Texture2D sword = ModAsset.CyanFrost.Value;
+		Main.EntitySpriteDraw(sword, position + new Vector2(70, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver4 * player.direction), new Rectangle(0, 0, 104, 104), lightColor, Projectile.rotation + MathHelper.PiOver2 * player.direction, sword.Size() * 0.5f, 1f, spriteEffects, 0f);
 		// Back part
 		Main.EntitySpriteDraw(texture, position, sourceRectangle, backDarkColor * lightingColor * lerpTime, Projectile.rotation + Projectile.ai[0] * MathHelper.PiOver4 * -1f * (1f - percentageOfLife), origin, scale, spriteEffects, 0f);
 		// Very faint part affected by the light color
@@ -335,10 +357,10 @@ public class CyanFrostProj : ModProjectile
 			{
 				Dust dust = Dust.NewDustPerfect(settings.PositionInWorld, 92, vector2.RotatedBy(Main.rand.NextFloatDirection() * ((float)Math.PI * 2f) * 0.025f) * Main.rand.NextFloat());
 				dust.noGravity = true;
-				dust.scale = 1.4f;
+				dust.scale = 0.8f;
 				Dust dust2 = Dust.NewDustPerfect(settings.PositionInWorld, 92, -vector2.RotatedBy(Main.rand.NextFloatDirection() * ((float)Math.PI * 2f) * 0.025f) * Main.rand.NextFloat());
 				dust2.noGravity = true;
-				dust2.scale = 1.4f;
+				dust2.scale = 0.8f;
 			}
 		}
 	}

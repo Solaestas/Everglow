@@ -136,7 +136,7 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 
 		if (bars.Count > 2)
 		{
-			Texture2D t = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/Textures/ShadowTrail");
+			Texture2D t = ModAsset.ShadowTrail.Value;
 
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -204,9 +204,9 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 		}
 		if (bars.Count > 2)
 		{
-			Texture2D t = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/Textures/SlingshotTrailBlack");
+			Texture2D t = ModAsset.SlingshotTrailBlack.Value;
 			if (times == 1)
-				t = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/Textures/ShadowTrailFlame");
+				t = ModAsset.ShadowTrailFlame.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}

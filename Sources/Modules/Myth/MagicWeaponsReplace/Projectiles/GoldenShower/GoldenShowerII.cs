@@ -2,7 +2,7 @@ using Everglow.Commons.VFX.CommonVFXDusts;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
-public class GoldenShowerII : ModProjectile, IWarpProjectile
+public class GoldenShowerII : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -117,84 +117,4 @@ public class GoldenShowerII : ModProjectile, IWarpProjectile
 	{
 		return false;
 	}
-	public void DrawWarp(VFXBatch spriteBatch)
-	{
-		float width = 16;
-
-		int trueL = 0;
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
-		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
-			trueL++;
-		}
-		var bars = new List<Vertex2D>();
-		for (int i = 1; i < trueL; ++i)
-		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
-
-			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-
-			float k0 = (float)Math.Atan2(normalDir.Y, normalDir.X);
-			k0 += 3.14f + 1.57f;
-			if (k0 > 6.28f)
-				k0 -= 6.28f;
-			var c0 = new Color(k0 / 6.28f, 0.4f, 0, 0);
-
-			var factor = i / (float)trueL;
-			float x0 = factor * 1.3f - (float)(Main.timeForVisualEffects / 15d) + 100000;
-			x0 %= 1f;
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c0, new Vector3(x0, 1, 0)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c0, new Vector3(x0, 0, 0)));
-		}
-		if (bars.Count > 2)
-		{
-			spriteBatch.Draw(bars, PrimitiveType.TriangleStrip);
-		}
-	}
-	//public override CodeLayer DrawLayer => CodeLayer.PostDrawTiles;
-	//public override void Draw()
-	//{
-	//	float k1 = 60f;
-	//	float k0 = (240 - Projectile.timeLeft) / k1;
-
-	//	if (Projectile.timeLeft <= 240 - k1)
-	//		k0 = 1;
-
-	//	var c0 = new Color(k0 * 0.8f + 0.2f, k0 * k0 * 0.4f + 0.2f, 0f, 0);
-	//	int trueL = 0;
-	//	for (int i = 1; i < Projectile.oldPos.Length; ++i)
-	//	{
-	//		if (Projectile.oldPos[i] == Vector2.Zero)
-	//			break;
-
-	//		trueL++;
-	//	}
-
-	//	var bars = new List<Vertex2D>();
-	//	float width = 36;
-	//	if (Projectile.timeLeft <= 40)
-	//		width = Projectile.timeLeft * 0.9f;
-	//	if (Projectile.ai[0] == 3)
-	//		width *= 0.5f;
-	//	for (int i = 1; i < trueL; ++i)
-	//	{
-
-	//		if (Projectile.oldPos[i] == Vector2.Zero)
-	//			break;
-
-	//		var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-	//		normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-	//		var factor = i / (float)trueL;
-	//		float x0 = factor * 0.6f + (float)(Main.time * 0.03) + Projectile.whoAmI * 0.03f;
-	//		bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(5f), c0, new Vector3(x0, 1, factor * 0.7f + 0.3f)));
-	//		bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(5f), c0, new Vector3(x0, 0, factor * 0.7f + 0.3f)));
-	//	}
-	//	if (bars.Count > 2)
-	//	{
-	//		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
-	//	}
-	//}
 }

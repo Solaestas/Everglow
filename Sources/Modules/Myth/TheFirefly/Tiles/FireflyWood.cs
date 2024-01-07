@@ -25,7 +25,7 @@ public class FireflyWood : ModTile
 
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
-		Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/FireflyWoodGlow");
+		Texture2D tex = ModAsset.FireflyWoodGlow.Value;
 		Player player = Main.player[Player.FindClosest(new Vector2(i * 16, j * 16), 16, 16)];
 		float dis = Math.Clamp((player.Center - new Vector2(i * 16, j * 16)).Length() / 480f, 0f, 10f);
 		dis = Math.Clamp(dis + (float)Math.Sin(dis * 14d - Main.timeForVisualEffects / 25f) / 2f, 0f, 1f);
