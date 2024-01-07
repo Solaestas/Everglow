@@ -1,7 +1,7 @@
 using Everglow.Commons.VFX.Scene;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
-[Pipeline(typeof(WCSPipeline))]
+[Pipeline(typeof(Grass_FurPipeline))]
 public class DarkForestGrass_grass_fore : ForegroundVFX
 {
 	public override void OnSpawn()
@@ -10,20 +10,20 @@ public class DarkForestGrass_grass_fore : ForegroundVFX
 	}
 	public override void Update()
 	{
-		foreach (Player player in Main.player)
+		if(originTile.X >= Main.maxTilesX - 1 || originTile.X <= 1)
 		{
-			if (player != null && player.active && !player.dead)
-			{
-
-			}
+			Active = false;
 		}
-		base.Update();
+		if (originTile.Y >= Main.maxTilesY - 1 || originTile.Y <= 1)
+		{
+			Active = false;
+		}
 	}
 	public float scale;
 	public int style;
 	public override void Draw()
 	{
-		Color lightColor = Lighting.GetColor((int)position.X / 16, (int)position.Y / 16);
+		Color lightColor = Color.White;
 
 		Ins.Batch.BindTexture<Vertex2D>(texture);
 		List<Vertex2D> bars = new List<Vertex2D>();
