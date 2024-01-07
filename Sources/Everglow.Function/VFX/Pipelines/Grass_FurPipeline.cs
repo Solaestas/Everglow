@@ -135,10 +135,10 @@ public class Grass_FurPipeline : Pipeline
 		{
 			for (int x = 0; x < 30; x++)
 			{
-				float posX = -TotalMovedPosition.X + x / 30f * grass_FurScreen.Width;
-				float posY = -TotalMovedPosition.Y + y / 30f * grass_FurScreen.Height;
-				Color lightColor0 = Lighting.GetColor((int)(posX + LastRenderPosition.X + TotalMovedPosition.X) / 16, (int)(posY + LastRenderPosition.Y + TotalMovedPosition.Y) / 16);
-				Color lightColor2 = Lighting.GetColor((int)(posX + LastRenderPosition.X + TotalMovedPosition.X) / 16, (int)(posY + LastRenderPosition.Y + grass_FurScreen.Height / 30f + TotalMovedPosition.Y) / 16);
+				float posX = x / 30f * grass_FurScreen.Width;
+				float posY = y / 30f * grass_FurScreen.Height;
+				Color lightColor0 = Lighting.GetColor((int)(posX + TotalMovedPosition.X) / 16, (int)(posY + TotalMovedPosition.Y) / 16);
+				Color lightColor2 = Lighting.GetColor((int)(posX + TotalMovedPosition.X) / 16, (int)(posY + grass_FurScreen.Height / 30f + TotalMovedPosition.Y) / 16);
 				if (x == 0)
 				{
 					bars.Add(new Vector2(posX, posY), Color.Transparent, new Vector3(x / 30f, y / 30f, 0));
