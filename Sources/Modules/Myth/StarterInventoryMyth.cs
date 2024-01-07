@@ -14,11 +14,11 @@ public class StarterInventoryMyth : ModPlayer
 		//        new Item(ItemID.HealingPotion)
 		//    };
 		//}
-		if (Main.LocalPlayer.name is "Omnielement" or "万象元素")
+		if (Main.LocalPlayer.name.Equals("Omnielement", StringComparison.OrdinalIgnoreCase) || Main.LocalPlayer.name.Equals("万象元素", StringComparison.OrdinalIgnoreCase))
 		{
 			return new[]
 			{
-			new Item(ModContent.ItemType<LilyHarp>()),
+			new Item(ModContent.ItemType<LilyHarp>())
 			};
 		}
 		return new[]

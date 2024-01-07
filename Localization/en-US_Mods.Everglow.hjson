@@ -7,7 +7,6 @@ Tiles: {
 	BloodyMossWheelFinished.MapEntry: Bloody Moss Wheel Finished
 	StoneTusk.MapEntry: Stone Tusk
 	StoneTuskSmall.MapEntry: Stone Tusk Small
-	StrangeTuskStone.MapEntry: Strange Tusk Stone
 	StrangeTuskStone1.MapEntry: Strange Tusk Stone1
 	StrangeTuskStone2.MapEntry: Strange Tusk Stone2
 	StrangeTuskStone3.MapEntry: Strange Tusk Stone3
@@ -702,6 +701,11 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.WaterMelonJuiceBuff.Description
 	}
 
+	Petrification: {
+		DisplayName: Petrification
+		Description: Mods.Everglow.Buffs.Petrification.Description
+	}
+
 	TuskStaff: {
 		DisplayName: Tusk Staff
 		Description: Mods.Everglow.Buffs.TuskStaff.Description
@@ -986,6 +990,11 @@ Items: {
 
 	HandholdItem: {
 		DisplayName: Handhold Item
+		Tooltip: ""
+	}
+
+	TestSkeletonOwl: {
+		DisplayName: Test Skeleton Owl
 		Tooltip: ""
 	}
 
@@ -2919,6 +2928,10 @@ Projectiles: {
 	CreamChocolateCup_CreamFlow.DisplayName: Cream Chocolate Cup_ Cream Flow
 	FryingPan.DisplayName: Frying Pan
 	GrilledSquidTentacle_proj.DisplayName: Grilled Squid Tentacle_proj
+	PlanetBeFall.DisplayName: Planet Be Fall
+	PlanetBefallExplosion.DisplayName: Planet Befall Explosion
+	PlanetBefallArray.DisplayName: Planet Befall Array
+	GoldenCrack.DisplayName: Golden Crack
 	DashingLightEff.DisplayName: Dashing Light Eff
 	VortexVanquisher.DisplayName: Vortex Vanquisher
 	VortexVanquisher2.DisplayName: Vortex Vanquisher2
@@ -3005,6 +3018,10 @@ Projectiles: {
 	PhantomMoth.DisplayName: Phantom Moth
 	PhosphorescenceBullet.DisplayName: Phosphorescence Bullet
 	PhosphorescenceGun.DisplayName: Phosphorescence Gun
+	PylonStonePostProj_crimson_explosion.DisplayName: Pylon Stone Post Proj_crimson_explosion
+	PylonStonePostProj_crimson.DisplayName: Pylon Stone Post Proj_crimson
+	PylonStonePostProj_corrupt.DisplayName: Pylon Stone Post Proj_corrupt
+	PylonStonePostProj_corrupt_explosion.DisplayName: Pylon Stone Post Proj_corrupt_explosion
 	ScaleWingBladeProj.DisplayName: Scale Wing Blade Proj
 	ShadowWingBow.DisplayName: Shadow Wing Bow
 	StaffOfCorruptDust.DisplayName: Staff Of Corrupt Dust
@@ -3034,6 +3051,7 @@ Projectiles: {
 	GelBall.DisplayName: Gel Ball
 	GelSlingshot.DisplayName: Gel Slingshot
 	GlowSporeBead.DisplayName: Glow Spore Bead
+	Glow.DisplayName: Glow
 	JungleSlingshot.DisplayName: Jungle Slingshot
 	JungleSlingshotHit.DisplayName: Jungle Slingshot Hit
 	KSSlingshotHit.DisplayName: K S Slingshot Hit
@@ -3054,8 +3072,10 @@ Projectiles: {
 	TopazSlingshot.DisplayName: Topaz Slingshot
 	WoodSlingshot.DisplayName: Wood Slingshot
 	ComingGhost.DisplayName: Coming Ghost
+	ComingGhost_Slash.DisplayName: Coming Ghost_ Slash
 	CyanFrostProj.DisplayName: Cyan Frost Proj
 	GhostHit.DisplayName: Ghost Hit
+	GlowMoonBlade.DisplayName: Glow Moon Blade
 	GoldRound.DisplayName: Gold Round
 	GoldRoundYoyo.DisplayName: Gold Round Yoyo
 	MeleeHit.DisplayName: Melee Hit
