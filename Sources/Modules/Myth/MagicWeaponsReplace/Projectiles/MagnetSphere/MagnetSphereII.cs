@@ -106,9 +106,9 @@ public class MagnetSphereII : ModProjectile
 		sphere.CurrentTechnique.Passes[0].Apply();
 
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_hiveCyber.Value;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.Textures[1] = Commons.ModAsset.Noise_rgb.Value;
-		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);

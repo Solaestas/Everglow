@@ -49,7 +49,7 @@ public class ItemTooltipGlobal : GlobalItem
 			float scaleY = Math.Min((float)Main.screenHeight / (drawableLines[^1].Y + 11 - drawableLines[0].Y), 1);
 			var vec = new Vector3(drawableLines[^1].X, Main.screenHeight, 0);
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp,
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
 				DepthStencilState.Default, RasterizerState.CullNone,
 				null,
 				Matrix.CreateTranslation(-vec) *

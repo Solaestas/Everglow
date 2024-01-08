@@ -136,7 +136,7 @@ internal class MEACManager : ILoadable
             graphicsDevice.SetRenderTarget(Main.screenTarget);
             graphicsDevice.Clear(Color.Black);
             graphicsDevice.Textures[1] = Main.screenTargetSwap;
-            graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
+            graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             ScreenWarp.CurrentTechnique.Passes[0].Apply();
             ScreenWarp.Parameters["strength"].SetValue(0.025f);//扭曲程度
@@ -152,7 +152,7 @@ internal class MEACManager : ILoadable
 			graphicsDevice.SetRenderTarget(Main.screenTarget);
 			graphicsDevice.Clear(new Color(0.5f, 0.5f, 0, 1));
 			graphicsDevice.Textures[1] = Main.screenTargetSwap;
-			graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
+			graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 			ScreenWarp.CurrentTechnique.Passes[1].Apply();
 			ScreenWarp.Parameters["strength"].SetValue(0.025f);//扭曲程度
@@ -217,7 +217,7 @@ internal class MEACManager : ILoadable
 
 	private void DrawWarp()//扭曲层
 	{
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		Effect KEx = ModAsset.DrawWarp.Value;
 		KEx.Parameters["uTransform"].SetValue(Main.Transform * Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
 		KEx.CurrentTechnique.Passes[0].Apply();
@@ -235,7 +235,7 @@ internal class MEACManager : ILoadable
 	}
 	private void DrawWarp_Style2()//扭曲层
 	{
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		Effect ef = ModAsset.DrawWarp.Value;
 		ef.Parameters["uTransform"].SetValue(Main.Transform * Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
 		ef.CurrentTechnique.Passes["Trail1"].Apply();

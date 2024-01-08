@@ -46,7 +46,7 @@ public class VFXManager : IVFXManager
 					Main.spriteBatch.End();
 					Draw(layer);
 					Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
-						SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
+						SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone,
 						null, Main.GameViewMatrix.TransformationMatrix);
 				}, $"VFX {layer}");
 			}

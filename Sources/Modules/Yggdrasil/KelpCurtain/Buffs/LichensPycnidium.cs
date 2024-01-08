@@ -227,7 +227,7 @@ internal class LichensPycnidiumManager : ILoadable
 	private void DrawLichensPycnidium()
 	{
 		float timeValue = (float)(Main.timeForVisualEffects * 0.008f);
-		Ins.Batch.Begin(BlendState.NonPremultiplied, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Ins.Batch.Begin(BlendState.NonPremultiplied, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		Effect sphere = ModAsset.Pycnidium_SpherePerspective.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;

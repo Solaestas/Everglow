@@ -82,7 +82,7 @@ public class BackgroundManager
 		if (CloseII.Count > 2)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = tex;
-			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, CloseII.ToArray(), 0, 2);
 		}
 		Main.spriteBatch.End();
@@ -249,7 +249,7 @@ public class BackgroundManager
 		if (WaterFallVertex.Count > 2)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.WaterFall.Value;
-			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, WaterFallVertex.ToArray(), 0, WaterFallVertex.Count - 2);
 		}
 
@@ -268,7 +268,7 @@ public class BackgroundManager
 		if (WaterFallVertexII.Count > 2)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.WaterFall.Value;
-			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, WaterFallVertexII.ToArray(), 0, WaterFallVertexII.Count - 2);
 		}
 		Main.spriteBatch.End();

@@ -73,7 +73,7 @@ public abstract class DissolveGore : ModGore
 		Texture2D texG = ModContent.Request<Texture2D>(DissolveAnimationTexture).Value;
 
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Color cg = Lighting.GetColor((int)(gore.position.X / 16f), (int)(gore.position.Y / 16f));
 		Effect ef = MythContent.QuickEffect(EffectPath());
 		ef.Parameters["alphaValue"].SetValue((600 - gore.timeLeft) / 600f);
@@ -85,7 +85,7 @@ public abstract class DissolveGore : ModGore
 
 		Main.spriteBatch.Draw(tex, gore.position + new Vector2(gore.Width / 2f, gore.Height / 2f) - Main.screenPosition, null, cg, gore.rotation, tex.Size() / 2, gore.scale, SpriteEffects.None, 0);
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		if (HasBone)
 		{
 			Texture2D texB = ModContent.Request<Texture2D>(BurnedTexture).Value;

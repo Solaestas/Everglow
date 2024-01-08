@@ -20,8 +20,8 @@ public class IchorDropPipeline : Pipeline
 		effect.Parameters["uIlluminationThreshold"].SetValue(0.99f);
 		Texture2D lightness = ModAsset.Point_lowContrast.Value;
 		Ins.Batch.BindTexture<Vertex2D>(lightness);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearClamp, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointClamp, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 

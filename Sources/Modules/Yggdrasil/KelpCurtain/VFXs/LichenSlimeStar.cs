@@ -15,8 +15,8 @@ public class LichenSlimeStarPipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D lightness = Commons.ModAsset.Star.Value;
 		Ins.Batch.BindTexture<Vertex2D>(lightness);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearClamp, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointClamp, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 

@@ -141,7 +141,7 @@ internal class YggdrasilModule : EverglowModule
 			graphicsDevice.SetRenderTarget(TotalEffeftsRender);
 			graphicsDevice.Clear(Color.Transparent);
 			graphicsDevice.Textures[1] = OcclusionRender;
-			graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
+			graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 			ScreenOcclusion.CurrentTechnique.Passes[0].Apply();
 
@@ -166,7 +166,7 @@ internal class YggdrasilModule : EverglowModule
 
 	private bool DrawOcclusion(VFXBatch spriteBatch)//遮盖层
 	{
-		spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 
 		Effect effect = ModAsset.Null.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
@@ -191,7 +191,7 @@ internal class YggdrasilModule : EverglowModule
 
 	private bool DrawEffect(VFXBatch spriteBatch)//特效层
 	{
-		spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 
 		Effect MeleeTrail = ModAsset.FlameTrail.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
@@ -221,7 +221,7 @@ internal class YggdrasilModule : EverglowModule
 	{
 		graphicsDevice.SetRenderTarget(screen);
 		graphicsDevice.Clear(Color.Transparent);
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		Ins.Batch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
 		Ins.Batch.End();
 	}
