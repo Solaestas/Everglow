@@ -16,8 +16,8 @@ internal class BoneRingPipeline : Pipeline
 		effect.Parameters["uHeatMap2"].SetValue(ModAsset.HeatMap_boneRing_dark.Value);
 		Texture2D halo = Commons.ModAsset.Trail.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicWrap;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 

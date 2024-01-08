@@ -54,6 +54,7 @@ Tiles: {
 	LampWoodCandelabra.MapEntry: Lamp Wood Candelabra
 	LampWoodCandle.MapEntry: Lamp Wood Candle
 	LampWoodChandelier.MapEntry: Lamp Wood Chandelier
+	LampWood_Chest.MapEntry: Lamp Wood_ Chest
 	CyanVineBar.MapEntry: Cyan Vine Bar
 	CyanVineOreTile.MapEntry: Cyan Vine Ore Tile
 	CyanVineStone.MapEntry: Cyan Vine Stone
@@ -2946,12 +2947,12 @@ NPCs: {
 		DisplayName: Acytaea
 
 		TownNPCMood: {
-			Content: 我很满足。
-			NoHome: 我讨厌没有家。
-			FarFromHome: 我离家太远了。
-			LoveSpace: 我非常喜欢有这么大的空间。
-			DislikeCrowded: 我不喜欢这么拥挤。
-			HateCrowded: 我讨厌这么拥挤。
+			Content: I am content.
+			NoHome: I hate not having a home.
+			FarFromHome: I am too far from home.
+			LoveSpace: I love having so much space.
+			DislikeCrowded: I dislike how crowded I am.
+			HateCrowded: I hate how crowded I am.
 			LikeNPC_Princess: I like {NPCName}.
 			Princess_LovesNPC: I like {NPCName}.
 		}
@@ -3487,7 +3488,25 @@ Projectiles: {
 	CactusBallProj.DisplayName: Cactus Ball Proj
 	CactusBallSpike.DisplayName: Cactus Ball Spike
 	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
-	AcroporaSpear.DisplayName: Acropora Spear
+	DragonScaleHammerProj.DisplayName: Dragon Scale Hammer Proj
+	LampWoodSword_Projectile.DisplayName: Lamp Wood Sword_ Projectile
+	RockArrow.DisplayName: Rock Arrow
+	RockExplosion_friendly.DisplayName: Rock Explosion_friendly
+	RockSpikeBallista_Proj.DisplayName: Rock Spike Ballista_ Proj
+	SquamousAirProj.DisplayName: Squamous Air Proj
+	SquamousRockExplosion.DisplayName: Squamous Rock Explosion
+	SquamousRockProj.DisplayName: Squamous Rock Proj
+	SquamousRockProj_small.DisplayName: Squamous Rock Proj_small
+	SquamousRockSpike.DisplayName: Squamous Rock Spike
+	SquamousRollingStone.DisplayName: Squamous Rolling Stone
+	Squamous_HitTile.DisplayName: Squamous_ Hit Tile
+	WindBladeBallHit.DisplayName: Wind Blade Ball Hit
+	YggdrasilAmberLaser_proj.DisplayName: Yggdrasil Amber Laser_proj
+	YggdrasilMoonBlade.DisplayName: Yggdrasil Moon Blade
+	YggdrasilMoonBladeHit.DisplayName: Yggdrasil Moon Blade Hit
+	YggdrasilMoonBlade_friendly.DisplayName: Yggdrasil Moon Blade_friendly
+	YggdrasilSlashBall.DisplayName: Yggdrasil Slash Ball
+	AcroporaSpear_proj.DisplayName: Acropora Spear_proj
 	AcroporaThumpEff.DisplayName: Acropora Thump Eff
 	Pycnidium_explosion.DisplayName: Pycnidium_explosion
 	AncientSyringe_proj.DisplayName: Ancient Syringe_proj

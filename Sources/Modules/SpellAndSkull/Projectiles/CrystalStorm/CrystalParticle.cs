@@ -92,7 +92,7 @@ internal class CrystalParticle : Visual
 		//var cur = VFXManager.Instance.CurrentRenderTarget;
 
 		//gd.SetRenderTarget(Main.screenTargetSwap);
-		//sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+		//sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 		//sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
 
 		//gd.BlendState = BlendState.AlphaBlend;

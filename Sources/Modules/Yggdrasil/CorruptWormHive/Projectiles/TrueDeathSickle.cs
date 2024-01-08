@@ -41,7 +41,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 	}
 	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		//DrawEffect(Ins.Batch);
 		Ins.Batch.End();
 		Player player = Main.player[Projectile.owner];
@@ -447,7 +447,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 	}
 	public void DrawBloom()
 	{
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		Effect MeleeTrail = ModAsset.FlameTrail.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
@@ -459,7 +459,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 		Ins.Batch.End();
 
 
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		Effect effect = ModAsset.Null.Value;
 		model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);

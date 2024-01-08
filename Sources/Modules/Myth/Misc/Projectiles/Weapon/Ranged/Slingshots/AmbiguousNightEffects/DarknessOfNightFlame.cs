@@ -33,8 +33,8 @@ internal class DarknessOfNightPipeline : Pipeline
 		effect.Parameters["uPowder"].SetValue(ModAsset.NoiseSand.Value);
 		Texture2D FlameColor = ModAsset.DarknessOfNight_Color.Value;
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
-		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 

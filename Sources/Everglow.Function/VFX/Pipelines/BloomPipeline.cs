@@ -47,7 +47,7 @@ public class BloomPipeline : PostPipeline
 		var effect = this.effect.Value;
 		Rectangle rectangle = new(0, 0, 1, 1);
 
-		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 
 		effect.Parameters["uTransform"].SetValue(
 			Matrix.CreateOrthographicOffCenter(0, 1, 1, 0, 0, 1));
@@ -97,7 +97,7 @@ public class BloomPipeline : PostPipeline
 		var cur = Ins.VFXManager.CurrentRenderTarget;
 		Ins.VFXManager.SwapRenderTarget();
 		gd.SetRenderTarget(Ins.VFXManager.CurrentRenderTarget);
-		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 		sb.Draw(cur, Vector2.Zero, Color.White);
 
 		gd.BlendState = BlendState.AlphaBlend;

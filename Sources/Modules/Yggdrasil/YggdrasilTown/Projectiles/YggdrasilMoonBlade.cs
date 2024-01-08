@@ -90,7 +90,7 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 			bars.Add(pos - startVelocity * 80f * (2 - Math.Abs(x) / 20f) * colorValue, Color.Transparent, new Vector3(0 + timeValue, x / 12f + Projectile.whoAmI * 0.5f, 0));
 		}
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_longitudinalFold.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		bars = new List<Vertex2D>();
@@ -101,7 +101,7 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 			bars.Add(pos, new Color(33, 232, 255, 0) * colorValue, new Vector3(0, 0.5f, 0));
 			bars.Add(pos - startVelocity * 80f * (1 - Math.Abs(x) / 20f), new Color(100, 30, 255, 0) * 0.5f * colorValue, new Vector3(0, 0, 0));
 		}
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail.Value;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		return false;

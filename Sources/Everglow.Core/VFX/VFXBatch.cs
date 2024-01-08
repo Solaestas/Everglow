@@ -278,12 +278,12 @@ public class VFXBatch : IDisposable
 
 	public void Begin()
 	{
-		Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicClamp, RasterizerState.CullNone);
+		Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointClamp, RasterizerState.CullNone);
 	}
 
 	public void Begin(BlendState blendState)
 	{
-		Begin(blendState, DepthStencilState.None, SamplerState.AnisotropicClamp, RasterizerState.CullNone);
+		Begin(blendState, DepthStencilState.None, SamplerState.PointClamp, RasterizerState.CullNone);
 	}
 
 	public void Begin(BlendState blendState, DepthStencilState depthStencilState, SamplerState samplerState, RasterizerState rasterizerState)

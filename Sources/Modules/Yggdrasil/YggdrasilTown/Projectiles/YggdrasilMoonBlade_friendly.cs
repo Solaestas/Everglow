@@ -112,7 +112,7 @@ public class YggdrasilMoonBlade_friendly : ModProjectile, IWarpProjectile
 		}
 		Main.graphics.GraphicsDevice.BlendState = BlendState.NonPremultiplied;
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_black.Value;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
@@ -128,7 +128,7 @@ public class YggdrasilMoonBlade_friendly : ModProjectile, IWarpProjectile
 		}
 		Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_longitudinalFold.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		
@@ -144,7 +144,7 @@ public class YggdrasilMoonBlade_friendly : ModProjectile, IWarpProjectile
 		}
 		Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail.Value;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		return false;

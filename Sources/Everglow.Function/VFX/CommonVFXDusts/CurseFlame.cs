@@ -20,8 +20,8 @@ public class CurseFlamePipeline : Pipeline
 		effect.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_curseFlame.Value);
 		Texture2D halo = ModAsset.Point.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 	public override void EndRender()

@@ -142,7 +142,7 @@ internal class SightOfTileProj : ModProjectile
 	private void DrawNinePiecesForTiles(int LeftX, int RightX, int UpY, int DownY)
 	{
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 		Texture2D t = ModAsset.Rectangle.Value;
 		var baseColor = new Color(0, 30, 120, 180);

@@ -193,7 +193,7 @@ internal class BlackHole : ModProjectile
 
 		float time = (float)Main.timeForVisualEffects * 0.02f;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.Transform);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.Transform);
 
 		List<Vertex2D> vertices = new();
 		(int, int) r = front ? (50, 100) : (0, 50);

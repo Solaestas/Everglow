@@ -97,8 +97,8 @@ public class GiantCampFire_flame_fore_Pipeline : Pipeline
 		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_flame_1.Value);
 		Texture2D halo = Commons.ModAsset.Noise_flame_1.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 	public override void EndRender()
