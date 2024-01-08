@@ -847,10 +847,10 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
-		countX = 0;
+		countX = -100;
 		coordX = GenRand.Next(512);
 		coordY = GenRand.Next(512);
-		while (countX < 500)
+		while (countX < 800)
 		{
 			countX++;
 			int x = randX + countX * direction;
@@ -873,7 +873,7 @@ public class YggdrasilTownGeneration
 						{
 							if (Main.rand.NextBool(2))
 							{
-								PlaceFrameImportantTiles(x, y - 1, 2, 2, ModContent.TileType<LampWoodPot>(), Main.rand.Next(3) * 36);
+								PlaceFrameImportantTiles(x, y - 1, 2, 2, ModContent.TileType<LampWoodPot>(), Main.rand.Next(6) * 36);
 							}
 							else
 							{

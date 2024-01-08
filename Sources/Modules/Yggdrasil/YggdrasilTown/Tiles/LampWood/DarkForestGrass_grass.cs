@@ -23,9 +23,21 @@ public class DarkForestGrass_grass_fore : ForegroundVFX
 	public int style;
 	public override void Draw()
 	{
-		Color lightColor = Color.White;
+		Vector2 deltaPos = Grass_FurPipeline.TotalMovedPosition;
+		int rectangleX = (int)(Main.screenPosition - deltaPos).X;
+		int rectangleY = (int)(Main.screenPosition - deltaPos).Y;
+		Rectangle checkRectangle = new Rectangle(rectangleX, rectangleY, Main.screenWidth - 8, Main.screenHeight - 8);
+		if (checkRectangle.Contains((int)position.X, (int)position.Y))
+		{
+			return;
+		}
+		Color lightColor = Color.White;//new Color(MathF.Sin((float)Main.time * 0.03f + 0), MathF.Sin((float)Main.time * 0.03f + MathF.PI / 3f), MathF.Sin((float)Main.time * 0.03f + MathF.PI / 3f * 2), 1);
 
 		Ins.Batch.BindTexture<Vertex2D>(texture);
+		if(Grass_FurPipeline.RenderStyle == 1)
+		{
+			Ins.Batch.BindTexture<Vertex2D>(ModAsset.DarkForestGrass_hardness.Value);
+		}
 		List<Vertex2D> bars = new List<Vertex2D>();
 		Tile tile = Main.tile[originTile];
 		if (tile.Slope == SlopeType.Solid && !tile.halfBrick())
