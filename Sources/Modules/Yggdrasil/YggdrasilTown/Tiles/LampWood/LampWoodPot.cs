@@ -6,7 +6,7 @@ using static Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.DarkTaro;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
-public class LampWoodPot : ModTile
+public class LampWoodPot : ModTile, ITileFluentlyDrawn
 {
 	public override void SetStaticDefaults()
 	{
@@ -36,7 +36,7 @@ public class LampWoodPot : ModTile
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
-		if (tile.TileFrameY == 0 && tile.TileFrameX == 0)
+		if (tile.TileFrameY == 0 && tile.TileFrameX % 36 == 0 && tile.TileFrameX < 108)
 		{
 			TileFluentDrawManager.AddFluentPoint(this, i, j);
 		}
@@ -57,12 +57,14 @@ public class LampWoodPot : ModTile
 			TileDrawing = tileDrawing
 		};
 
-		DrawShrubPiece(Frame(0), 0.1f, SwayHitboxPos(0), PaintPos(1), drawInfo);
+		DrawShrubPiece(Frame(0), 0.05f, SwayHitboxPos(0), PaintPos(0), drawInfo);
+		DrawShrubPiece(Frame(22), 0.03f, new Point(pos.X, pos.Y - 1), new Point(pos.X, pos.Y - 1), drawInfo);
+		DrawShrubPiece(Frame(44), 0.04f, new Point(pos.X + 1, pos.Y - 1), new Point(pos.X + 1, pos.Y - 1), drawInfo);
 	}
 	/// <summary>
 	/// 绘制灌木的一个小Piece
 	/// </summary>
-	private void DrawShrubPiece(Rectangle frame, float swayStrength, Point tilePos, Point paintPos, BasicDrawInfo drawInfo, Color? specialColor = null)
+	private void DrawShrubPiece(Rectangle frame, float swayStrength, Point tilePos, Point paintPos, BasicDrawInfo drawInfo)
 	{
 		var drawCenterPos = drawInfo.DrawCenterPos;
 		var spriteBatch = drawInfo.SpriteBatch;
@@ -76,7 +78,7 @@ public class LampWoodPot : ModTile
 			return;
 
 		int paint = Main.tile[paintPos].TileColor;
-		int textureStyle = tile.TileFrameX + frame.Y * 50;
+		int textureStyle = 255;
 		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.LampWoodPot_beadPath, type, textureStyle, paint, tileDrawing);
 		tex ??= ModAsset.LampWoodPot_bead.Value;
 
@@ -95,9 +97,10 @@ public class LampWoodPot : ModTile
 		tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(paintPos.X, paintPos.Y, tile, type, 0, 0, ref tileLight, tileDrawing._rand.NextBool(4));
 		tileLight = tileDrawing.DrawTiles_GetLightOverride(paintPos.Y, paintPos.X, tile, type, 0, 0, tileLight);
 
-		var origin = new Vector2(47, 95);
+		var origin = new Vector2(6, 36);
 		var tileSpriteEffect = SpriteEffects.None;
 		spriteBatch.Draw(tex, drawCenterPos + new Vector2(0, 6), frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
+		spriteBatch.Draw(tex, drawCenterPos + new Vector2(0, 6), frame, new Color(0.25f, 0.25f, 0.1f, 0), rotation, origin, 1f, tileSpriteEffect, 0f);
 	}
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)
 	{
