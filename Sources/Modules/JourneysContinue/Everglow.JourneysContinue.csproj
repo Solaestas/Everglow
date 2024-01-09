@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <None Remove="items\weapons\veryfirst.docx" />
+  </ItemGroup>
+</Project>
