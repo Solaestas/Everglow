@@ -150,7 +150,7 @@ public class YggdrasilAmberLaser_proj : HandholdProjectile, IWarpProjectile
 		if (player.direction == -1)
 			se = SpriteEffects.FlipVertically;
 		float rot = Projectile.rotation - (float)(Math.PI * 0.25) + TextureRotation * player.direction;
-		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition + DrawOffset - new Vector2(54, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver4), null, lightColor, rot, texMain.Size() / 2f, 1f, se, 0);
+		var texMain_glow = ModAsset.YggdrasilAmberLaser_glow_proj.Value;
 		int timeMax = (int)(player.itemTimeMax / player.meleeSpeed);
 		float duration = player.itemTime / (float)timeMax;
 		duration *= 1.5f;
@@ -160,6 +160,12 @@ public class YggdrasilAmberLaser_proj : HandholdProjectile, IWarpProjectile
 			duration = 0;
 		}
 		duration = MathF.Sin(duration * MathHelper.Pi);
+
+
+		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition + DrawOffset - new Vector2(54, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver4), null, lightColor, rot, texMain.Size() / 2f, 1f, se, 0);
+		Color powerColor = new Color(duration, duration * duration, duration * duration, 0);
+		Main.spriteBatch.Draw(texMain_glow, Projectile.Center - Main.screenPosition + DrawOffset - new Vector2(54, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver4), null, powerColor, rot, texMain_glow.Size() / 2f, 1f, se, 0);
+
 
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();

@@ -34,8 +34,7 @@ public class LampWood_Chest : ModTile
 		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
 		TileObjectData.addTile(Type);
 
-		LocalizedText name = CreateMapEntryName();
-		AddMapEntry(new Color(69, 36, 78), name);
+		AddMapEntry(new Color(85, 72, 126));
 	}
 	public override ushort GetMapOption(int i, int j)
 	{

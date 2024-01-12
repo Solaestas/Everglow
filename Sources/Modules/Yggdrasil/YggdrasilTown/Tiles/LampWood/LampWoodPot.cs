@@ -14,6 +14,8 @@ public class LampWoodPot : ModTile, ITileFluentlyDrawn
 		Main.tileNoAttach[Type] = true;
 		Main.tileLavaDeath[Type] = true;
 		Main.tileCut[Type] = true;
+		Main.tileOreFinderPriority[Type] = 100;
+		Main.tileSpelunker[Type] = true;
 		DustType = ModContent.DustType<LampWood_Dust>();
 
 		// Placement
