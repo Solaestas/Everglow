@@ -1,7 +1,9 @@
-using Everglow.Myth.Common;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 using Terraria.Audio;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon;
+namespace Everglow.SpellAndSkull.Projectiles.RazorbladeTyphoon;
 
 public class HurricaneMask : ModProjectile, IWarpProjectile
 {
@@ -30,10 +32,10 @@ public class HurricaneMask : ModProjectile, IWarpProjectile
 			p.CritChance = Projectile.CritChance;
 			p.timeLeft = 100 + (int)(Projectile.ai[0] * 240);
 			if (Projectile.ai[0] < 0.5f)
-				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/MagicWeaponsReplace/Sounds/TyphoonBlackHoleWeak").WithVolumeScale(Projectile.ai[0] * 2), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/SpellAndSkull/SpellAndSkull/Sounds/TyphoonBlackHoleWeak").WithVolumeScale(Projectile.ai[0] * 2), Projectile.Center);
 			else
 			{
-				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/MagicWeaponsReplace/Sounds/TyphoonBlackHoleStrong").WithVolumeScale(Projectile.ai[0]), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/SpellAndSkull/SpellAndSkull/Sounds/TyphoonBlackHoleStrong").WithVolumeScale(Projectile.ai[0]), Projectile.Center);
 			}
 			Projectile.Kill();
 		}
@@ -42,7 +44,7 @@ public class HurricaneMask : ModProjectile, IWarpProjectile
 		if (Projectile.timeLeft < 100)
 			Projectile.extraUpdates = 9;
 		if (Projectile.timeLeft == 100)
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/MagicWeaponsReplace/Sounds/TyphoonBlackHoleSummon").WithVolumeScale(Projectile.ai[0]).WithPitchOffset(0f), Projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle("Everglow/SpellAndSkull/SpellAndSkull/Sounds/TyphoonBlackHoleSummon").WithVolumeScale(Projectile.ai[0]).WithPitchOffset(0f), Projectile.Center);
 	}
 	public override void PostDraw(Color lightColor)
 	{
@@ -100,7 +102,7 @@ public class HurricaneMask : ModProjectile, IWarpProjectile
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
 			colorV *= Projectile.ai[0] / 10f;
-		Texture2D t = ModAsset.Wave.Value;
+		Texture2D t = Commons.ModAsset.Wave.Value;
 		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 1200 * Projectile.ai[0], 100, new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 }

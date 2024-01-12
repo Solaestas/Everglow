@@ -1,6 +1,6 @@
-﻿using Everglow.Myth.MagicWeaponsReplace.Projectiles;
+﻿using Everglow.SpellAndSkull.Projectiles;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
+namespace Everglow.SpellAndSkull.Projectiles.CursedFlames;
 
 internal class CursedFlamesBook : MagicBookProjectile
 {

@@ -1,8 +1,9 @@
-using Everglow.Myth.Common;
+using Everglow.Commons.Vertex;
+using Everglow.SpellAndSkull.Common;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere;
+namespace Everglow.SpellAndSkull.Projectiles.MagnetSphere;
 
 public class MagnetSphereII : ModProjectile
 {
@@ -74,7 +75,7 @@ public class MagnetSphereII : ModProjectile
 		var baseColor = new Color(0, 199, 129, 0);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		MythUtils.DrawTexCircle(20 * mulSize, 10, baseColor, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail.Value, 0, 3);
+		SpellAndSkullUtils.DrawTexCircle(20 * mulSize, 10, baseColor, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail.Value, 0, 3);
 		Texture2D Light = ModAsset.MagnetSphereII.Value;
 		Texture2D Shade = ModAsset.NewWaterBoltShade.Value;
 		Main.spriteBatch.Draw(Shade, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, Color.White, Projectile.rotation, Shade.Size() / 2f, 1.08f * Projectile.scale, SpriteEffects.None, 0);
@@ -82,7 +83,7 @@ public class MagnetSphereII : ModProjectile
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect sphere = ModAsset.MagnetSphere_SpherePerspective.Value;
+		Effect sphere = ModAsset.SpherePerspective.Value;
 		List<Vertex2D> triangleList = new List<Vertex2D>();
 		float radius = 40 * mulSize;
 

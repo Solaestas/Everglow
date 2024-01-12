@@ -1,6 +1,7 @@
-using Everglow.Myth.Common;
-
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+namespace Everglow.SpellAndSkull.Projectiles.DemonScythe;
 
 internal class DemonScytheArray : ModProjectile, IWarpProjectile
 {
@@ -55,9 +56,9 @@ internal class DemonScytheArray : ModProjectile, IWarpProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Projectile.hide = false;
-		DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(1f, 1f, 1f, 1f));
-		DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(1f, 1f, 1f, 1f));
-		DrawMagicArray(ModAsset.WaterLine.Value, new Color(0.4f, 0.0f, 0.8f, 0));
+		DrawMagicArray(Commons.ModAsset.Trail_5_black.Value, new Color(1f, 1f, 1f, 1f));
+		DrawMagicArray(Commons.ModAsset.Trail_5_black.Value, new Color(1f, 1f, 1f, 1f));
+		DrawMagicArray(Commons.ModAsset.Trail_5.Value, new Color(0.4f, 0.0f, 0.8f, 0));
 		return false;
 	}
 
@@ -157,8 +158,8 @@ internal class DemonScytheArray : ModProjectile, IWarpProjectile
 	{
 
 		Player player = Main.player[Projectile.owner];
-		//DrawTexCircle(timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, ModAsset.WaterLine.Value, Main.timeForVisualEffects / 17);
+		//DrawTexCircle(timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 17);
 		DrawTexMoon(spriteBatch, timer * 1.4f, 35, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, ModAsset.BloomLight.Value, Main.timeForVisualEffects / 3);
-		DrawTexMoon(spriteBatch, timer * 0.65f, 35, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36),ModAsset.BloomLight.Value, -Main.timeForVisualEffects / 1.8);
+		DrawTexMoon(spriteBatch, timer * 0.65f, 35, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), ModAsset.BloomLight.Value, -Main.timeForVisualEffects / 1.8);
 	}
 }

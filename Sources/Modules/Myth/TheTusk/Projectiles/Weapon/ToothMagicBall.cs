@@ -175,7 +175,7 @@ public class ToothMagicBall : ModProjectile
 		{
 			if(energyValue < 0.3f)
 			{
-				Texture2D light = ModAsset.CursedHitStar.Value;
+				Texture2D light = Commons.ModAsset.StarSlash.Value;
 				Main.spriteBatch.Draw(light, bulbPos - Main.screenPosition, null, c0, 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, energyValue * energyValue * 8), SpriteEffects.None, 0);
 				Main.spriteBatch.Draw(light, bulbPos - Main.screenPosition, null, c0, 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, energyValue * energyValue * 8), SpriteEffects.None, 0);
 			}

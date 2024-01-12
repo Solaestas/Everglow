@@ -1,7 +1,9 @@
-using Everglow.Myth.Common;
-using Terraria;
+using Everglow.SpellAndSkull.Common;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare;
+namespace Everglow.SpellAndSkull.Projectiles.LunarFlare;
 
 public class LunarFlareHit : ModProjectile, IWarpProjectile, IBloomProjectile
 {
@@ -137,7 +139,7 @@ public class LunarFlareHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft;
 
-		MythUtils.DrawTexCircle_Warp(spriteBatch, value * 27 * Projectile.ai[0], width, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+		SpellAndSkullUtils.DrawTexCircle_Warp(spriteBatch, value * 27 * Projectile.ai[0], width, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 	public void DrawBloom()
 	{

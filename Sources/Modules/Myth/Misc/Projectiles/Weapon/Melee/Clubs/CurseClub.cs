@@ -1,6 +1,5 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
+using Everglow.Myth.Misc.VFXs;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 

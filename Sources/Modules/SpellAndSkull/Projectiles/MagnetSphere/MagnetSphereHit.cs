@@ -1,10 +1,11 @@
 using Everglow.Commons.MEAC;
-using Everglow.Myth.Common;
-using Terraria;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 using Terraria.DataStructures;
-using static Everglow.Myth.Common.MythUtils;
+using static Everglow.SpellAndSkull.Common.SpellAndSkullUtils;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere;
+namespace Everglow.SpellAndSkull.Projectiles.MagnetSphere;
 
 public class MagnetSphereHit : ModProjectile, IWarpProjectile
 {
@@ -94,7 +95,7 @@ public class MagnetSphereHit : ModProjectile, IWarpProjectile
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
 			colorV *= Projectile.ai[0] / 10f;
-		Texture2D t = ModAsset.Wave.Value;
+		Texture2D t = Commons.ModAsset.Wave.Value;
 		DrawTexCircle(value * 7 * Projectile.ai[0], 10 * value * value, new Color(0, colorV, colorV * 0.7f, 0f), Projectile.Center - Main.screenPosition, t);
 
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), (float)(Math.PI / 4d) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, dark * Projectile.ai[0] / 20f), SpriteEffects.None, 0);

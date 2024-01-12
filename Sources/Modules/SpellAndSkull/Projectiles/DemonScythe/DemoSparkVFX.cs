@@ -1,6 +1,8 @@
 using Everglow.Commons.Enums;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe;
+namespace Everglow.SpellAndSkull.Projectiles.DemonScythe;
 
 public class DemoSparkVFX : Visual
 {

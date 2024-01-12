@@ -1,10 +1,11 @@
-using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.GlobalItems;
-using Terraria;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using Everglow.SpellAndSkull.GlobalItems;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.BookofSkulls;
+namespace Everglow.SpellAndSkull.Projectiles.BookofSkulls;
 
 public class SkullII : ModProjectile, IWarpProjectile
 {
@@ -181,7 +182,7 @@ public class SkullII : ModProjectile, IWarpProjectile
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = ModAsset.ElecLine.Value;
+		Texture2D t = Commons.ModAsset.Trail_6.Value;
 		if (Shade)
 			t = ModAsset.Darkline.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;

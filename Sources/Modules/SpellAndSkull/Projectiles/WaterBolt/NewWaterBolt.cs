@@ -1,10 +1,11 @@
+using Everglow.Commons.Utilities;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 using Everglow.Commons.Weapons;
-using Everglow.Myth.TheFirefly.Dusts;
-using Everglow.Myth.TheFirefly.Projectiles;
-using Everglow.Myth.TheFirefly.VFXs;
+using Everglow.SpellAndSkull.Dusts;
 using Terraria.Audio;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.WaterBolt;
+namespace Everglow.SpellAndSkull.Projectiles.WaterBolt;
 
 public class NewWaterBolt : TrailingProjectile
 {
@@ -41,11 +42,11 @@ public class NewWaterBolt : TrailingProjectile
 		Projectile.velocity *= 0.9993f;
 		Projectile.velocity.Y += 0.02f;
 
-		if(Main.rand.NextBool(4))
+		if (Main.rand.NextBool(4))
 		{
 			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(-15f, -7.5f)).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
 			float mulScale = Main.rand.NextFloat(2f, 8f);
-			var blood = new FireflyBlueLiquidDrop
+			var blood = new WaterBoltDrop
 			{
 				velocity = afterVelocity / mulScale,
 				Active = true,
@@ -287,28 +288,28 @@ public class NewWaterBolt : TrailingProjectile
 	}
 	public override void KillMainStructure()
 	{
-		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 10f, 3f);
+		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<RipplingWave>(), 0, 0, Projectile.owner, 10f, 3f);
 		switch (Main.rand.Next(2))
 		{
 			case 0:
-				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/MagicWeaponsReplace/Sounds/WaterBolt1"), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/SpellAndSkull/SpellAndSkull/Sounds/WaterBolt1"), Projectile.Center);
 				break;
 
 			case 1:
-				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/MagicWeaponsReplace/Sounds/WaterBolt2"), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/SpellAndSkull/SpellAndSkull/Sounds/WaterBolt2"), Projectile.Center);
 				break;
 		}
 
 		for (int j = 0; j < 10; j++)
 		{
 			Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale;
-			int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f * 5);
+			int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<ShatterDrop_1>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f * 5);
 			Main.dust[dust0].noGravity = true;
 		}
 		for (int j = 0; j < 20; j++)
 		{
 			Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale;
-			int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * 5);
+			int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<ShatterDrop_0>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * 5);
 			Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / 5);
 			Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
 		}

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;
+﻿namespace Everglow.SpellAndSkull.Projectiles.CrystalStorm;
 
 internal class CrystalStormBook : MagicBookProjectile
 {
@@ -36,7 +36,7 @@ internal class CrystalStormBook : MagicBookProjectile
 				times = 0;
 		}
 
-		//string pathBase = "MagicWeaponsReplace/Textures/";
+		//string pathBase = "SpellAndSkull/Textures/";
 		//FrontTexPath = pathBase + "CrystalStorm_A";
 		//PaperTexPath = pathBase + "CrystalStorm_C";
 		//BackTexPath = pathBase + "CrystalStorm_B";

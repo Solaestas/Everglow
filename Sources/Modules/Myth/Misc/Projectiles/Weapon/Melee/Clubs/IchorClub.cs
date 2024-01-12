@@ -1,6 +1,5 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
+using Everglow.Myth.Misc.Projectiles.Accessory;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
@@ -19,7 +18,7 @@ public class IchorClub : ClubProj
 		for (int x = 0; x < 2; x++)
 		{
 			Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
-			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center + velocity * -2, velocity, ModContent.ProjectileType<GoldenShowerII>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center + velocity * -2, velocity, ModContent.ProjectileType<IchorCurrent>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
 			p.friendly = false;
 			p.CritChance = Projectile.CritChance;
 		}
@@ -251,7 +250,7 @@ public class IchorClub : ClubProj
 			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * delta * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 1, 0f)));
 			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 0, 0f)));
 		}
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.WaterLineShade.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_5_black.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 	}
 	private void UpdateMoon(ref List<Vector2> listVec)

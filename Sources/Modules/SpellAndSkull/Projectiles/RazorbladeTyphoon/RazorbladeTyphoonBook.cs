@@ -1,4 +1,4 @@
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon;
+namespace Everglow.SpellAndSkull.Projectiles.RazorbladeTyphoon;
 
 internal class RazorbladeTyphoonBook : MagicBookProjectile
 {
@@ -11,7 +11,7 @@ internal class RazorbladeTyphoonBook : MagicBookProjectile
 		effectColor = new Color(0, 125, 225, 20);
 
 		//TODO：等到凝胶的贴图优化完再改
-		//string pathBase = "MagicWeaponsReplace/Textures/";
+		//string pathBase = "SpellAndSkull/Textures/";
 		//FrontTexPath = pathBase + "RazorbladeTyphoon_A";
 		//PaperTexPath = pathBase + "RazorbladeTyphoon_C";
 		//BackTexPath = pathBase + "RazorbladeTyphoon_B";

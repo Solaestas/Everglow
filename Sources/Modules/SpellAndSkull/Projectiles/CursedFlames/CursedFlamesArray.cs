@@ -1,6 +1,8 @@
-using Everglow.Myth.Common;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
+namespace Everglow.SpellAndSkull.Projectiles.CursedFlames;
 
 internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 {
@@ -75,7 +77,7 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 		Projectile.hide = false;
 		DrawMagicArray(ModAsset.FogTraceShade.Value, new Color(1f, 1f, 1f, 1f));
 
-		DrawMagicArray(ModAsset.ElecLine.Value, new Color(67, 255, 0, 0));
+		DrawMagicArray(Commons.ModAsset.Trail_6.Value, new Color(67, 255, 0, 0));
 		return false;
 	}
 
@@ -196,6 +198,6 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch sb)
 	{
 		Player player = Main.player[Projectile.owner];
-		DrawTexCircle(sb, timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, ModAsset.FogTrace.Value, Main.timeForVisualEffects / 17);
+		DrawTexCircle(sb, timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_2_thick.Value, Main.timeForVisualEffects / 17);
 	}
 }

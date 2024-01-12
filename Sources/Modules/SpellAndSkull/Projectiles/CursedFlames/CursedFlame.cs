@@ -1,6 +1,10 @@
+using Everglow.Commons.Enums;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using Everglow.Commons.VFX.Pipelines;
 using ReLogic.Content;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
+namespace Everglow.SpellAndSkull.Projectiles.CursedFlames;
 
 internal abstract class ShaderDraw : Visual
 {
@@ -21,7 +25,7 @@ internal class CursedFlamePipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModContent.Request<Effect>("Everglow/Myth/MagicWeaponsReplace/Projectiles/CursedFlames/CursedFlame", AssetRequestMode.ImmediateLoad);
+		effect = ModContent.Request<Effect>("Everglow/SpellAndSkull/SpellAndSkull/Projectiles/CursedFlames/CursedFlame", AssetRequestMode.ImmediateLoad);
 		effect.Value.Parameters["uNoise"].SetValue(ModContent.Request<Texture2D>("Everglow/Example/VFX/Perlin", AssetRequestMode.ImmediateLoad).Value);
 	}
 	public override void BeginRender()

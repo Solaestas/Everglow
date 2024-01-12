@@ -1,8 +1,10 @@
-using Everglow.Myth.Common;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
+namespace Everglow.SpellAndSkull.Projectiles.GoldenShower;
 
 internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 {
@@ -10,11 +12,6 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 	{
 		DustType = DustID.Ichor;
 		ItemType = ItemID.GoldenShower;
-		string pathBase = "MagicWeaponsReplace/Textures/";
-		FrontTexPath = pathBase + "GoldenShower_A";
-		PaperTexPath = pathBase + "GoldenShower_C";
-		BackTexPath = pathBase + "GoldenShower_B";
-		GlowPath = pathBase + "GoldenShower_E";
 
 		TexCoordTop = new Vector2(6, 0);
 		TexCoordLeft = new Vector2(0, 24);
@@ -22,6 +19,20 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 		TexCoordRight = new Vector2(28, 0);
 
 		effectColor = new Color(255, 175, 0, 0);
+	}
+	public override void OnSpawn(IEntitySource source)
+	{
+		FrontTexture = ModAsset.GoldenShower_A.Value;
+		PaperTexture = ModAsset.GoldenShower_C.Value;
+		BackTexture = ModAsset.GoldenShower_B.Value;
+		GlowTexture = ModAsset.GoldenShower_E.Value;
+		Player player = Main.player[Projectile.owner];
+		for (int d = 0; d < 16; d++)
+		{
+			Vector2 velocity = new Vector2(0, Main.rand.NextFloat(-16f, -12f)).RotatedBy(Main.rand.NextFloat(-0.6f, 0.6f));
+			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -20), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+		}
+		base.OnSpawn(source);
 	}
 	public override void SpecialAI()
 	{
@@ -61,15 +72,6 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 			}
 		}
 
-	}
-	public override void OnSpawn(IEntitySource source)
-	{
-		Player player = Main.player[Projectile.owner];
-		for (int d = 0; d < 16; d++)
-		{
-			Vector2 velocity = new Vector2(0, Main.rand.NextFloat(-16f, -12f)).RotatedBy(Main.rand.NextFloat(-0.6f, 0.6f));
-			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -20), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
-		}
 	}
 	internal int constantUsingTime = 0;
 

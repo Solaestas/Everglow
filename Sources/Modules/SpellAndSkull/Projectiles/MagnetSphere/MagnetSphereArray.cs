@@ -1,5 +1,8 @@
-using static Everglow.Myth.Common.MythUtils;
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere;
+using static Everglow.SpellAndSkull.Common.SpellAndSkullUtils;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+namespace Everglow.SpellAndSkull.Projectiles.MagnetSphere;
 
 internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 {

@@ -1,6 +1,6 @@
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Items;
+namespace Everglow.SpellAndSkull.Items;
 
 public class CrystalSkull : ModItem
 {

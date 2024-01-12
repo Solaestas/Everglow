@@ -1,9 +1,8 @@
 using Everglow.Myth.TheFirefly.Dusts;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DreamWeaver;
+namespace Everglow.Myth.TheFirefly.Projectiles.DreamWeaver;
 
 public class DreamWeaverII : ModProjectile, IWarpProjectile
 {
@@ -224,7 +223,7 @@ public class DreamWeaverII : ModProjectile, IWarpProjectile
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D t = ModAsset.GoldLine.Value;
+		Texture2D t = Commons.ModAsset.Trail_3.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -294,7 +293,7 @@ public class DreamWeaverII : ModProjectile, IWarpProjectile
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = ModAsset.FogTraceLight.Value;
+		Texture2D t = Commons.ModAsset.Trail_2_thick.Value;
 
 		if (bars.Count > 3)
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);

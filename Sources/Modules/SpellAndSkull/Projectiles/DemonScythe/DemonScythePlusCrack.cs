@@ -1,7 +1,8 @@
-using Everglow.Myth.Common;
+using Everglow.Commons.Vertex;
+using Everglow.SpellAndSkull.Common;
 using Terraria;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe;
+namespace Everglow.SpellAndSkull.Projectiles.DemonScythe;
 
 internal class DemonScythePlusCrack : ModProjectile
 {
@@ -92,7 +93,7 @@ internal class DemonScythePlusCrack : ModProjectile
 		circle.Add(new Vertex2D(BasePos + new Vector2(-10, -10).RotatedBy(Projectile.rotation) * Scl, Color.Violet, new Vector3(0.5f, 1, 0)));
 		if (circle.Count > 0)
 		{
-			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.WaterLine.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_5.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, circle.ToArray(), 0, circle.Count / 3);
 		}
 		return false;
@@ -142,7 +143,7 @@ internal class DemonScythePlusCrack : ModProjectile
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = ModAsset.ElecLine.Value;
+		Texture2D t = Commons.ModAsset.Trail_6.Value;
 		if (Shade)
 			t = ModAsset.Darkline.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;

@@ -1,7 +1,7 @@
-using Everglow.Myth.MagicWeaponsReplace.GlobalItems;
+using Everglow.SpellAndSkull.GlobalItems;
 using Terraria;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.WaterBolt;
+namespace Everglow.SpellAndSkull.Projectiles.WaterBolt;
 
 public class OldWaterBolt : GlobalProjectile
 {

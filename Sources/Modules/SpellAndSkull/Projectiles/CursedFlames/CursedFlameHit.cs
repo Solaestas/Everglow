@@ -1,6 +1,8 @@
-using Everglow.Myth.Common;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.VFX;
+using Everglow.SpellAndSkull.Common;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
+namespace Everglow.SpellAndSkull.Projectiles.CursedFlames;
 
 public class CursedFlameHit : ModProjectile, IWarpProjectile
 {
@@ -61,7 +63,7 @@ public class CursedFlameHit : ModProjectile, IWarpProjectile
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft;
 
-		MythUtils.DrawTexCircle_Warp(spriteBatch, value * 27 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		SpellAndSkullUtils.DrawTexCircle_Warp(spriteBatch, value * 27 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{

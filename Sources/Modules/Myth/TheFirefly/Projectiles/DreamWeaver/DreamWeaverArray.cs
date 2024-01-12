@@ -1,6 +1,5 @@
 using Everglow.Commons.Weapons;
-
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DreamWeaver;
+namespace Everglow.Myth.TheFirefly.Projectiles.DreamWeaver;
 
 internal class DreamWeaverArray : NoTextureProjectile, IWarpProjectile
 {
@@ -62,13 +61,13 @@ internal class DreamWeaverArray : NoTextureProjectile, IWarpProjectile
 		List<Vertex2D> bars = new List<Vertex2D>();
 		Color drawColor = new Color(0, 0.4f, 1f, 0);
 		Vector2 drawPos = player.MountedCenter + ringPos;
-		for(int t =0;t < 7;t++)
+		for (int t = 0; t < 7; t++)
 		{
 			Vector2 drawPoint = new Vector2(0, projPower * 1.1f).RotatedBy(t / 7f * MathHelper.TwoPi);
 			Vector2 pointVel = new Vector2(0, projPower * 0.1f).RotatedBy((t + 2.4f) / 7f * MathHelper.TwoPi) * 2.4f;
 			float omega = 0.5f * projPower / 30f;
 			float omegaStep = (0.03f + 0.01f * MathF.Sin(timeValue * 0.4f)) * projPower / 30f;
-			for (int s = 0;s < 35;s++)
+			for (int s = 0; s < 35; s++)
 			{
 				Vector2 velLeft = Vector2.Normalize(pointVel).RotatedBy(MathHelper.PiOver2) * projPower * 0.5f;
 				float factor = s / 34f;

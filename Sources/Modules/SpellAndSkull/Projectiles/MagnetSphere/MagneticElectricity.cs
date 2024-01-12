@@ -1,9 +1,9 @@
 using Everglow.Commons.Enums;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
-using Everglow.Myth.Common;
-using ReLogic.Content;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere;
+namespace Everglow.SpellAndSkull.Projectiles.MagnetSphere;
 
 internal abstract class ShaderDraw : Visual
 {

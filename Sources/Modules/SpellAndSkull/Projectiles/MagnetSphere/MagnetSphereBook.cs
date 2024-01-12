@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere;
+﻿namespace Everglow.SpellAndSkull.Projectiles.MagnetSphere;
 
 internal class MagnetSphereBook : MagicBookProjectile
 {

@@ -1,4 +1,6 @@
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
+using Everglow.Commons.VFX;
+
+namespace Everglow.SpellAndSkull.Projectiles.CursedFlames;
 
 internal class CursedPipeline : PostPipeline
 {

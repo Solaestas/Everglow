@@ -1,7 +1,8 @@
+using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Terraria.Audio;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
+namespace Everglow.SpellAndSkull.Projectiles.GoldenShower;
 public class GoldenShowerII : ModProjectile
 {
 	public override void SetDefaults()

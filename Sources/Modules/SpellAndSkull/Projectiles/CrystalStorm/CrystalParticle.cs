@@ -1,8 +1,10 @@
 using Everglow.Commons.Enums;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
 using Terraria.GameContent;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;
+namespace Everglow.SpellAndSkull.Projectiles.CrystalStorm;
 
 [Pipeline(typeof(WCSPipeline))]
 internal class CrystalParticle : Visual

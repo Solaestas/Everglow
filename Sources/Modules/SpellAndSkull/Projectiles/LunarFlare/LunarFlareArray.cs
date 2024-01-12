@@ -1,7 +1,8 @@
-using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare.Walls;
+using Everglow.Commons.Enums;
+using Everglow.SpellAndSkull.Common;
+using Everglow.SpellAndSkull.Projectiles.LunarFlare.Walls;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare;
+namespace Everglow.SpellAndSkull.Projectiles.LunarFlare;
 
 internal class LunarFlareArray : ModProjectile
 {
@@ -120,7 +121,7 @@ internal class LunarFlareArray : ModProjectile
 			this.index = index;
 			//在非服务器上请求图片
 			if (Main.netMode != NetmodeID.Server)
-				Texture ??= ModContent.Request<Texture2D>("Everglow/Myth/MagicWeaponsReplace/Projectiles/LunarFlare/Star", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+				Texture ??= ModContent.Request<Texture2D>("Everglow/SpellAndSkull/SpellAndSkull/Projectiles/LunarFlare/Star", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		}
 		internal void SendExtraAI(BinaryWriter writer)
 		{

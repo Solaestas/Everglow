@@ -1,8 +1,9 @@
-using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Dusts;
+using Everglow.Commons.Vertex;
+using Everglow.SpellAndSkull.Common;
+using Everglow.SpellAndSkull.Dusts;
 using Terraria.Audio;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;
+namespace Everglow.SpellAndSkull.Projectiles.CrystalStorm;
 
 public class LargeCrystal : ModProjectile//This proj summon storm at breaking 
 {
@@ -101,7 +102,7 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
 		}
-		Texture2D t = ModAsset.Projectiles_BladeShadow.Value;
+		Texture2D t = ModAsset.BladeShadow.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (bars.Count > 3)
@@ -158,7 +159,7 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 			Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
 
 			v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedBy(Main.rand.NextFloat(0, 3.14159f) + x0) * Projectile.scale;
-			dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<TheFirefly.Dusts.BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * 5);
+			dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<ShatterDrop_0>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * 5);
 			Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 10);
 			Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
 		}

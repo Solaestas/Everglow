@@ -1,7 +1,9 @@
-using Everglow.Myth.Common;
+using System.IO;
+using Everglow.Commons.Vertex;
+using Everglow.SpellAndSkull.Common;
 using Terraria.GameContent;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles;
+namespace Everglow.SpellAndSkull.Projectiles;
 
 /// <summary>
 /// 魔法书类
@@ -27,75 +29,75 @@ public abstract class MagicBookProjectile : ModProjectile
 	/// <summary>
 	/// 最好不要动计时器，计算书本的翻开程度，甚至决定了书本是否kill
 	/// </summary>
-	internal int timer = 0;
+	public int timer = 0;
 	/// <summary>
 	/// 产生粒子的类型（主要应用于Kill的时候）
 	/// </summary>
-	internal int DustType = -1;
+	public int DustType = -1;
 	/// <summary>
 	/// 如果有混合粒子效果，产生粒子的第二种类型
 	/// </summary>
-	internal int DustTypeII = -1;
+	public int DustTypeII = -1;
 	/// <summary>
 	/// 发射的弹幕
 	/// </summary>
-	internal int ProjType = -1;
+	public int ProjType = -1;
 	/// <summary>
 	/// 物品种类
 	/// </summary>
-	internal int ItemType = -1;
+	public int ItemType = -1;
 	/// <summary>
 	/// 绘制出来的特效书尺寸,和物品贴图大小无关,默认12
 	/// </summary>
-	internal float BookScale = 12f;
+	public float BookScale = 12f;
 	/// <summary>
 	/// 伤害倍率
 	/// </summary>
-	internal float MulDamage = 1f;
+	public float MulDamage = 1f;
 	/// <summary>
 	/// 射速倍率
 	/// </summary>
-	internal float MulVelocity = 1f;
+	public float MulVelocity = 1f;
 	/// <summary>
 	/// 弹幕初始生成位置随速度偏移倍率
 	/// </summary>
-	internal float MulStartPosByVelocity = 1f;
+	public float MulStartPosByVelocity = 1f;
 	/// <summary>
 	/// 是否使用荧光效果,默认为是
 	/// </summary>
-	internal bool UseGlow = true;
+	public bool UseGlow = true;
 	/// <summary>
 	/// 封面荧光的颜色
 	/// </summary>
-	internal Color GlowColor = new Color(255, 255, 255, 0);
+	public Color GlowColor = new Color(255, 255, 255, 0);
 	/// <summary>
 	/// 环绕魔法光效的颜色
 	/// </summary>
-	internal Color effectColor = new Color(255, 255, 255, 0);
-	internal Vector2 TexCoordTop = new Vector2(16, 0);
-	internal Vector2 TexCoordLeft = new Vector2(1, 15);
-	internal Vector2 TexCoordDown = new Vector2(12, 28);
-	internal Vector2 TexCoordRight = new Vector2(27, 11);
+	public Color effectColor = new Color(255, 255, 255, 0);
+	public Vector2 TexCoordTop = new Vector2(16, 0);
+	public Vector2 TexCoordLeft = new Vector2(1, 15);
+	public Vector2 TexCoordDown = new Vector2(12, 28);
+	public Vector2 TexCoordRight = new Vector2(27, 11);
 	/// <summary>
-	/// 荧光效果路径,从MythModule后(不含)开始算起
+	/// 荧光效果路径,从SpellAndSkullModule后(不含)开始算起
 	/// </summary>
-	internal string GlowPath = "";
+	public Texture2D GlowTexture = null;
 	/// <summary>
-	/// 后部荧光效果路径,从MythModule后(不含)开始算起
+	/// 后部荧光效果路径,从SpellAndSkullModule后(不含)开始算起
 	/// </summary>
-	internal string BackGlowPath = "";
+	public Texture2D BackGlowTexture = null;
 	/// <summary>
-	/// 封面图路径,从MythModule后(不含)开始算起
+	/// 封面图路径,从SpellAndSkullModule后(不含)开始算起
 	/// </summary>
-	internal string FrontTexPath = "";
+	public Texture2D FrontTexture = null;
 	/// <summary>
-	/// 书页图路径,从MythModule后(不含)开始算起
+	/// 书页图路径,从SpellAndSkullModule后(不含)开始算起
 	/// </summary>
-	internal string PaperTexPath = "";
+	public Texture2D PaperTexture = null;
 	/// <summary>
-	/// 封底图路径,从MythModule后(不含)开始算起
+	/// 封底图路径,从SpellAndSkullModule后(不含)开始算起
 	/// </summary>
-	internal string BackTexPath = "";
+	public Texture2D BackTexture = null;
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -142,34 +144,31 @@ public abstract class MagicBookProjectile : ModProjectile
 		if (ItemType == -1)
 			return;
 		Texture2D Book = TextureAssets.Item[ItemType].Value;
-		if (BackTexPath == "" && FrontTexPath == "")
+		if (BackTexture == null && FrontTexture == null)
 		{
 
 		}
 		else
 		{
-			if (BackTexPath == "")
-				Book = MythContent.QuickTexture(FrontTexPath);
+			if (BackTexture == null)
+				Book = FrontTexture;
 			else
 			{
-				Book = MythContent.QuickTexture(BackTexPath);
+				Book = BackTexture;
 			}
 		}
 		Texture2D BookGlow;
-		if (BackGlowPath == "" && GlowPath == "")
-			BookGlow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Item_" + ItemType + "_Glow");
+		if (BackGlowTexture == null && GlowTexture == null)
+			BookGlow = ModContent.Request<Texture2D>("Everglow/SpellAndSkull/Projectiles/Item_" + ItemType + "_Glow", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		else
 		{
-			if (BackGlowPath == "")
-				BookGlow = MythContent.QuickTexture(GlowPath);
+			if (BackGlowTexture == null)
+				BookGlow = GlowTexture;
 			else
 			{
-				BookGlow = MythContent.QuickTexture(BackGlowPath);
+				BookGlow = BackGlowTexture;
 			}
 		}
-		Texture2D Paper = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagicBookPaper");
-		if (PaperTexPath != "")
-			Paper = MythContent.QuickTexture(PaperTexPath);
 		Projectile.hide = true;
 
 		DrawBack(TextureAssets.MagicPixel.Value, 2, 1.2f);
@@ -179,26 +178,29 @@ public abstract class MagicBookProjectile : ModProjectile
 		DrawBack(Book);
 		if (UseGlow)
 			DrawBack(BookGlow, 1);
-		DrawPaper(Paper);
-		if (BackTexPath == "" && FrontTexPath == "")
+		if(PaperTexture != null)
+		{
+			DrawPaper(PaperTexture);
+		}
+		if (BackTexture == null && FrontTexture == null)
 		{
 
 		}
 		else
 		{
-			if (FrontTexPath == "")
-				Book = MythContent.QuickTexture(BackTexPath);
+			if (FrontTexture == null)
+				Book = BackTexture;
 			else
 			{
-				Book = MythContent.QuickTexture(FrontTexPath);
+				Book = FrontTexture;
 			}
 		}
 		DrawFront(Book);
-		if (GlowPath == "")
-			BookGlow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Item_" + ItemType + "_Glow");
+		if (GlowTexture == null)
+			BookGlow = ModContent.Request<Texture2D>("Everglow/SpellAndSkull/Projectiles/Item_" + ItemType + "_Glow", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		else
 		{
-			BookGlow = MythContent.QuickTexture(GlowPath);
+			BookGlow = GlowTexture;
 		}
 		if (UseGlow)
 			DrawFront(BookGlow, 1);

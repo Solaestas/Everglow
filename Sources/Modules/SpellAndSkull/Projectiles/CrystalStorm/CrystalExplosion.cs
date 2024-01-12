@@ -1,11 +1,13 @@
-using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Myth.Common;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using Everglow.SpellAndSkull.Common;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;
+namespace Everglow.SpellAndSkull.Projectiles.CrystalStorm;
 
 public class CrystalExplosion : ModProjectile, IWarpProjectile
-{ 
+{
 	public override void SetDefaults()
 	{
 		Projectile.width = 120;
@@ -33,7 +35,7 @@ public class CrystalExplosion : ModProjectile, IWarpProjectile
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
-		
+
 	}
 	public override void AI()
 	{
@@ -81,7 +83,7 @@ public class CrystalExplosion : ModProjectile, IWarpProjectile
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft;
 
-		MythUtils.DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 36 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.6f * value
+		SpellAndSkullUtils.DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 36 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.6f * value
 			, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

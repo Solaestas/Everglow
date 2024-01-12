@@ -1,9 +1,10 @@
-using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Buffs;
-using Everglow.Myth.TheFirefly.Dusts;
-using Everglow.Myth.TheFirefly.Projectiles;
-using static Everglow.Myth.Common.MythUtils;
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.WaterBolt;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using Everglow.SpellAndSkull.Buffs;
+using Everglow.SpellAndSkull.Dusts;
+using static Everglow.SpellAndSkull.Common.SpellAndSkullUtils;
+namespace Everglow.SpellAndSkull.Projectiles.WaterBolt;
 
 internal class WaterTeleport : ModProjectile, IWarpProjectile
 {
@@ -54,7 +55,7 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 						if (p.ai[0] == AimAi0)
 						{
 							player.Center = Main.MouseWorld;
-							Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 1);
+							Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center, Vector2.Zero, ModContent.ProjectileType<RipplingWave>(), 0, 0, Projectile.owner, 1);
 
 							float k1 = 0.3f;
 							float k2 = 8;
@@ -62,13 +63,13 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 							for (int j = 0; j < 80; j++)
 							{
 								Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-								int dust0 = Dust.NewDust(player.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * 0.4f * k0);
+								int dust0 = Dust.NewDust(player.Center - new Vector2(4), 0, 0, ModContent.DustType<ShatterDrop_1>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * 0.4f * k0);
 								Main.dust[dust0].noGravity = true;
 							}
 							for (int j = 0; j < 160; j++)
 							{
 								Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-								int dust1 = Dust.NewDust(player.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * k0);
+								int dust1 = Dust.NewDust(player.Center - new Vector2(4), 0, 0, ModContent.DustType<ShatterDrop_0>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * k0);
 								Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
 								Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
 							}
@@ -97,7 +98,7 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 							if (p0.owner == player.whoAmI && p0.type == Projectile.type && p0.active)
 							{
 								p0.Kill();
-								Projectile.NewProjectile(p0.GetSource_FromAI(), p0.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, 255, 1);
+								Projectile.NewProjectile(p0.GetSource_FromAI(), p0.Center, Vector2.Zero, ModContent.ProjectileType<RipplingWave>(), 0, 0, 255, 1);
 								p0.active = false;
 							}
 						}
@@ -115,10 +116,10 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Projectile.hide = false;
-		DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(1f, 1f, 1f, 1f));
-		//DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(1f, 1f, 1f, 1f));
-		DrawMagicArray(ModAsset.WaterLine.Value, new Color(0, 0.45f, 1f, 0));
-		Main.spriteBatch.Draw(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterBolt/WaterTeleport"), Projectile.Center - Main.screenPosition, null, new Color(0, 30, 255, 0), 0, new Vector2(34), timer / 30f, SpriteEffects.None, 0);
+		DrawMagicArray(Commons.ModAsset.Trail_5_black.Value, new Color(1f, 1f, 1f, 1f));
+		//DrawMagicArray(Commons.ModAsset.Trail_5_black.Value, new Color(1f, 1f, 1f, 1f));
+		DrawMagicArray(Commons.ModAsset.Trail_5.Value, new Color(0, 0.45f, 1f, 0));
+		Main.spriteBatch.Draw(ModAsset.WaterTeleport.Value, Projectile.Center - Main.screenPosition, null, new Color(0, 30, 255, 0), 0, new Vector2(34), timer / 30f, SpriteEffects.None, 0);
 		if ((Main.MouseWorld - Projectile.Center).Length() < 30)
 			Utils.DrawBorderString(Main.spriteBatch, Projectile.ai[0].ToString(), Projectile.Center - Main.screenPosition, Color.AliceBlue);
 		return false;
@@ -165,8 +166,8 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 
 		float Size = (float)((Main.timeForVisualEffects / 2d + Projectile.ai[0] * 4) % 40d);
 		float SizeII = (float)((Main.timeForVisualEffects / 2d + 20 + Projectile.ai[0] * 4) % 40d);
-		DrawTexCircle(spriteBatch, Size, (40 - Size) * timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, ModAsset.WaterLine.Value, Main.timeForVisualEffects / 17);
-		DrawTexCircle(spriteBatch, SizeII, (40 - SizeII) * timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, ModAsset.WaterLine.Value, Main.timeForVisualEffects / 17);
+		DrawTexCircle(spriteBatch, Size, (40 - Size) * timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 17);
+		DrawTexCircle(spriteBatch, SizeII, (40 - SizeII) * timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 17);
 	}
 
 	public override void OnKill(int timeLeft)
@@ -181,13 +182,13 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 		for (int j = 0; j < 80; j++)
 		{
 			Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-			int dust0 = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * 0.4f * k0);
+			int dust0 = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<ShatterDrop_1>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * 0.4f * k0);
 			Main.dust[dust0].noGravity = true;
 		}
 		for (int j = 0; j < 160; j++)
 		{
 			Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-			int dust1 = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * k0);
+			int dust1 = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<ShatterDrop_0>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * k0);
 			Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
 			Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
 		}

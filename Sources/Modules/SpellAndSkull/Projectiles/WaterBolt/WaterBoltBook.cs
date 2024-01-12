@@ -1,7 +1,8 @@
-﻿using Everglow.Myth.MagicWeaponsReplace.Buffs;
-using Everglow.Myth.MagicWeaponsReplace.Projectiles;
+using Everglow.SpellAndSkull.Buffs;
+using Everglow.SpellAndSkull.Projectiles;
+using Terraria.DataStructures;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.WaterBolt;
+namespace Everglow.SpellAndSkull.Projectiles.WaterBolt;
 
 internal class WaterBoltBook : MagicBookProjectile
 {
@@ -10,16 +11,19 @@ internal class WaterBoltBook : MagicBookProjectile
 		DustType = DustID.WaterCandle;
 		ItemType = ItemID.WaterBolt;
 		effectColor = new Color(30, 60, 225, 100);
-		string pathBase = "MagicWeaponsReplace/Textures/";
-		FrontTexPath = pathBase + "WaterBolt_A";
-		PaperTexPath = pathBase + "WaterBolt_C";
-		BackTexPath = pathBase + "WaterBolt_B";
-		GlowPath = pathBase + "WaterBolt_E";
-
+		
 		TexCoordTop = new Vector2(6, 0);
 		TexCoordLeft = new Vector2(0, 24);
 		TexCoordDown = new Vector2(22, 24);
 		TexCoordRight = new Vector2(28, 0);
+	}
+	public override void OnSpawn(IEntitySource source)
+	{
+		FrontTexture = ModAsset.WaterBolt_A.Value;
+		PaperTexture = ModAsset.WaterBolt_C.Value;
+		BackTexture = ModAsset.WaterBolt_B.Value;
+		GlowTexture = ModAsset.WaterBolt_E.Value;
+		base.OnSpawn(source);
 	}
 	public override void SpecialAI()
 	{

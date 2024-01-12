@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.BookofSkulls;
+﻿namespace Everglow.SpellAndSkull.Projectiles.BookofSkulls;
 
 internal class BookofSkullsBook : MagicBookProjectile
 {

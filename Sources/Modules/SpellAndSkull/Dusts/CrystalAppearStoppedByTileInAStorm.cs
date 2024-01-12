@@ -1,6 +1,6 @@
-﻿using Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;
+﻿using Everglow.SpellAndSkull.Projectiles.CrystalStorm;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Dusts;
+namespace Everglow.SpellAndSkull.Dusts;
 
 public class CrystalAppearStoppedByTileInAStorm : ModDust
 {

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare;
+﻿namespace Everglow.SpellAndSkull.Projectiles.LunarFlare;
 
 internal class LunarFlareBook : MagicBookProjectile
 {

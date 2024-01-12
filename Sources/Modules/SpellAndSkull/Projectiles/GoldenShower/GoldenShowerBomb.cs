@@ -1,8 +1,11 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Myth.Common;
+using Everglow.SpellAndSkull.Common;
 using Terraria.DataStructures;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
+namespace Everglow.SpellAndSkull.Projectiles.GoldenShower;
 
 public class GoldenShowerBomb : ModProjectile, IWarpProjectile
 { 
@@ -127,7 +130,7 @@ public class GoldenShowerBomb : ModProjectile, IWarpProjectile
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft;
 
-		MythUtils.DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 64 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 2f * value, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		SpellAndSkullUtils.DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 64 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 2f * value, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{

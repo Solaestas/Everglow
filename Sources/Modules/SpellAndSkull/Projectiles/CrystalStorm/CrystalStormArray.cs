@@ -1,6 +1,7 @@
-using Everglow.Myth.Common;
+using Everglow.Commons.Vertex;
+using Everglow.SpellAndSkull.Common;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;
+namespace Everglow.SpellAndSkull.Projectiles.CrystalStorm;
 
 internal class CrystalStormArray : ModProjectile
 {
@@ -55,7 +56,7 @@ internal class CrystalStormArray : ModProjectile
 		Projectile.hide = false;
 		DrawMagicArray(ModAsset.CrystalDarkline.Value, new Color(0.6f, 0.6f, 0.6f, 0.6f));
 
-		DrawMagicArray(ModAsset.WaterLine.Value, new Color(0, 120, 225, 0));
+		DrawMagicArray(Commons.ModAsset.Trail_5.Value, new Color(0, 120, 225, 0));
 
 
 		return false;

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.MagicWeaponsReplace.Dusts;
+﻿namespace Everglow.SpellAndSkull.Dusts;
 
 public class CrystalAppearStoppedByTile : ModDust
 {

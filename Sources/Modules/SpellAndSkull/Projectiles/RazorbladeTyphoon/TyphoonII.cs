@@ -1,8 +1,10 @@
 using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 using Terraria;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon;
+namespace Everglow.SpellAndSkull.Projectiles.RazorbladeTyphoon;
 
 public class TyphoonII : ModProjectile, IWarpProjectile
 {
@@ -156,8 +158,8 @@ public class TyphoonII : ModProjectile, IWarpProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/RazorbladeTyphoon/TyphoonII");
-		Texture2D Shade = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/RazorbladeTyphoon/TyphoonIIShade");
+		Texture2D Light = ModAsset.TyphoonII.Value;
+		Texture2D Shade = ModAsset.TyphoonIIShade.Value;
 		float k0 = 1f;
 		var c0 = new Color(0, k0 * k0 * 0.3f + 0.6f, k0 * k0 * 0.1f + 0.9f, 0);
 
@@ -241,7 +243,7 @@ public class TyphoonII : ModProjectile, IWarpProjectile
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(34f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = ModAsset.FogTrace.Value;
+		Texture2D t = Commons.ModAsset.Trail_2_thick.Value;
 		if (Shade)
 			t = ModAsset.FogTraceShade.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;

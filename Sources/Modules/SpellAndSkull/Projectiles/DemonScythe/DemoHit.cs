@@ -1,7 +1,8 @@
-using Everglow.Myth.Common;
-using static Everglow.Myth.Common.MythUtils;
-using Terraria;
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using static Everglow.SpellAndSkull.Common.SpellAndSkullUtils;
+namespace Everglow.SpellAndSkull.Projectiles.DemonScythe;
 
 public class DemoHit : ModProjectile, IWarpProjectile, IBloomProjectile
 {
@@ -135,7 +136,7 @@ public class DemoHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
 			colorV *= Projectile.ai[0] / 10f;
-		Texture2D t = ModAsset.Wave.Value;
+		Texture2D t = Commons.ModAsset.Wave.Value;
 		DrawTexCircle(value * 16 * Projectile.ai[0], 100, new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 	public void DrawBloom()

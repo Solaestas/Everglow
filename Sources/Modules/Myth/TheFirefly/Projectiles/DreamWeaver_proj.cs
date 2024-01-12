@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
-public class DreamWeaver : ModProjectile, IWarpProjectile
+public class DreamWeaver_proj : ModProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
 	{
@@ -48,7 +48,7 @@ public class DreamWeaver : ModProjectile, IWarpProjectile
 				for (int x = 0; x < 6; x++)
 				{
 					Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 12f)).RotatedByRandom(6.283);
-					var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 4, velocity + Projectile.velocity, ModContent.ProjectileType<DreamWeaver>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+					var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 4, velocity + Projectile.velocity, ModContent.ProjectileType<DreamWeaver_proj>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
 					SoundEngine.PlaySound(SoundID.Item54);
 					p.friendly = false;
 					p.damage = Projectile.damage / 4;
@@ -100,7 +100,7 @@ public class DreamWeaver : ModProjectile, IWarpProjectile
 						for (int x = 0; x < 3; x++)
 						{
 							Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
-							var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 2, velocity, ModContent.ProjectileType<DreamWeaver>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+							var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 2, velocity, ModContent.ProjectileType<DreamWeaver_proj>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
 							SoundEngine.PlaySound(SoundID.Item54);
 							p.friendly = false;
 						}
@@ -132,7 +132,7 @@ public class DreamWeaver : ModProjectile, IWarpProjectile
 			for (int x = 0; x < 3; x++)
 			{
 				Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
-				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2, velocity, ModContent.ProjectileType<DreamWeaver>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2, velocity, ModContent.ProjectileType<DreamWeaver_proj>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
 				SoundEngine.PlaySound(SoundID.Item54);
 				p.friendly = false;
 			}

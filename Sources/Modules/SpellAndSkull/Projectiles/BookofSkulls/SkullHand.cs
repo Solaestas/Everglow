@@ -1,8 +1,9 @@
-using Everglow.Myth.Common;
+using Everglow.Commons.Vertex;
+using Everglow.SpellAndSkull.Common;
 using Terraria;
 using Terraria.Audio;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.BookofSkulls;
+namespace Everglow.SpellAndSkull.Projectiles.BookofSkulls;
 
 internal class SkullHand : ModProjectile
 {
@@ -103,7 +104,7 @@ internal class SkullHand : ModProjectile
 			if (Main.rand.NextBool(2))
 				dir = -1;
 
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/MothHitCocoon"), Projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle("Everglow/SpellAndSkull/Sounds/MothHitCocoon"), Projectile.Center);
 		}
 		if (Projectile.timeLeft > 300)
 		{
@@ -225,7 +226,7 @@ internal class SkullHand : ModProjectile
 	{
 		Projectile.hide = true;
 		Texture2D bone = ModAsset.SkullHand.Value;
-		Texture2D Power = ModAsset.WaterLine.Value;
+		Texture2D Power = Commons.ModAsset.Trail_5.Value;
 		Vector2 v0 = Projectile.Center + Direction * 60;
 		Color c0 = Lighting.GetColor((int)(v0.X / 16f), (int)(v0.Y / 16f));
 

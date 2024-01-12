@@ -1,4 +1,4 @@
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;
+namespace Everglow.SpellAndSkull.Projectiles.CrystalStorm;
 
 internal class Storm : ModProjectile
 {

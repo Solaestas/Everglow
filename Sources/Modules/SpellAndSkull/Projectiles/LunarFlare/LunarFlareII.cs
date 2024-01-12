@@ -1,10 +1,12 @@
-using Terraria;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare;
+namespace Everglow.SpellAndSkull.Projectiles.LunarFlare;
 
-public class LunarFlareII : ModProjectile, IWarpProjectile//½«½Ó¿Ú¸ÄÎªÊ¹ÓÃIWarpProjectile
+public class LunarFlareII : ModProjectile, IWarpProjectile//å°†æ¥å£æ”¹ä¸ºä½¿ç”¨IWarpProjectile
 {
 	public override void SetDefaults()
 	{
@@ -128,7 +130,7 @@ public class LunarFlareII : ModProjectile, IWarpProjectile//½«½Ó¿Ú¸ÄÎªÊ¹ÓÃIWarpP
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = ModAsset.ElecLine.Value;
+		Texture2D t = Commons.ModAsset.Trail_6.Value;
 		if (Shade)
 			t = ModAsset.Darkline.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
@@ -139,7 +141,7 @@ public class LunarFlareII : ModProjectile, IWarpProjectile//½«½Ó¿Ú¸ÄÎªÊ¹ÓÃIWarpP
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 
-		/*²»ÔÙÓÃ¿ªÆôshader
+		/*ä¸å†ç”¨å¼€å¯shader
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Effect KEx = Everglow.Commons.ModAsset.DrawWarp.Value;
@@ -206,16 +208,16 @@ public class LunarFlareII : ModProjectile, IWarpProjectile//½«½Ó¿Ú¸ÄÎªÊ¹ÓÃIWarpP
 		}
 		Texture2D t = ModAsset.FogTraceLight.Value;
 
-		//ÌùÍ¼²»ÓÃÔÚÕâÀï´«
+		//è´´å›¾ä¸ç”¨åœ¨è¿™é‡Œä¼ 
 		//Main.graphics.GraphicsDevice.Textures[0] = t;
 
 		if (bars.Count > 3)
 			//Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
-			//ÀïÃæµÄËùÓĞ»æÖÆ£¨°üÀ¨¶¥µã»æÖÆ£©¸ÄÎªÓÃVFXBatch spriteBatchµÄDraw£¬ÈçÏÂ
+			//é‡Œé¢çš„æ‰€æœ‰ç»˜åˆ¶ï¼ˆåŒ…æ‹¬é¡¶ç‚¹ç»˜åˆ¶ï¼‰æ”¹ä¸ºç”¨VFXBatch spriteBatchçš„Drawï¼Œå¦‚ä¸‹
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
 
-		//½áÎ²µÄbegin-endÒ²É¾µô
+		//ç»“å°¾çš„begin-endä¹Ÿåˆ æ‰
 		//Main.spriteBatch.End();
 		//Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}

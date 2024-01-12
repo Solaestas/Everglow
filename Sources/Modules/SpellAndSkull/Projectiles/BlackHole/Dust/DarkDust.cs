@@ -1,4 +1,8 @@
-﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.BlackHole.Dust;
+using Everglow.Commons.VFX;
+using Everglow.Commons.VFX.Pipelines;
+using Everglow.Commons.VFX.Visuals;
+
+namespace Everglow.SpellAndSkull.Projectiles.BlackHole.Dust;
 
 [Pipeline(typeof(WCSPipeline))]
 internal class DarkDust : Particle
@@ -22,7 +26,7 @@ internal class DarkDust : Particle
 	}
 	public override void Draw()
 	{
-		Texture2D tex = ModContent.Request<Texture2D>("Everglow/Myth/MagicWeaponsReplace/Projectiles/BlackHole/Dust/BlackDust").Value;
+		Texture2D tex = ModAsset.BlackDust.Value;
 		for (int i = 0; i < 5; i++)
 		{
 			float a = (5 - i) / 5f;

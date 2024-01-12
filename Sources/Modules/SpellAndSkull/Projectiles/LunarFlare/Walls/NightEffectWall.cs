@@ -1,4 +1,4 @@
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare.Walls;
+namespace Everglow.SpellAndSkull.Projectiles.LunarFlare.Walls;
 
 public class NightEffectWall : ModWall
 {

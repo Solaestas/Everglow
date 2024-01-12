@@ -1,9 +1,10 @@
-using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Projectiles.BlackHole.Dust;
+using Everglow.Commons.Vertex;
+using Everglow.SpellAndSkull.Common;
+using Everglow.SpellAndSkull.Projectiles.BlackHole.Dust;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.BlackHole;
+namespace Everglow.SpellAndSkull.Projectiles.BlackHole;
 
 //[Pipeline(typeof(BlackHolePipeline))]
 internal class BlackHole : ModProjectile
@@ -208,7 +209,7 @@ internal class BlackHole : ModProjectile
 			vertices.Add(new Vertex2D(v2, c, new Vector3(time + i / 50f, 1, 0)));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.tex3.Value;
-		//Effect ef = MythContent.QuickEffect("MagicWeaponsReplace/Projectiles/BlackHole/Colorize");
+		//Effect ef = SpellAndSkullContent.QuickEffect("SpellAndSkull/Projectiles/BlackHole/Colorize");
 		//ef.CurrentTechnique.Passes[0].Apply();
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
 
@@ -229,7 +230,7 @@ internal class BlackHole : ModProjectile
 				v2 = Projection(new Vector3(Projectile.Center.X + v3.X - Main.screenPosition.X, Projectile.Center.Y + v3.Y - Main.screenPosition.Y, v3.Z), new Vector2(Main.screenWidth, Main.screenHeight) / 2);
 				vertices.Add(new Vertex2D(v2, c, new Vector3(time + i / 50f, 1, 0)));
 			}
-			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.EShoot.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_1.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
 
 			time = (float)Main.timeForVisualEffects * 0.02f;
@@ -246,7 +247,7 @@ internal class BlackHole : ModProjectile
 				v2 = Projection(new Vector3(Projectile.Center.X + v3.X - Main.screenPosition.X, Projectile.Center.Y + v3.Y - Main.screenPosition.Y, v3.Z), new Vector2(Main.screenWidth, Main.screenHeight) / 2);
 				vertices.Add(new Vertex2D(v2, c, new Vector3(time, 1, 0)));
 			}
-			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.FogTrace.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_thick.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
 		}
 
@@ -296,7 +297,7 @@ public class TemporarySys : ModSystem//暂时用一个ModSystem上滤镜
 			gd.SetRenderTarget(Main.screenTarget);
 			gd.Clear(Color.Transparent);
 			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			Effect eff = ModContent.Request<Effect>("Everglow/Myth/Effects/BlackHole", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			Effect eff = ModContent.Request<Effect>("Everglow/SpellAndSkull/Effects/BlackHole", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 			var scRes = new Vector2(Main.screenWidth, Main.screenHeight);
 			var pos = Vector2.Transform(proj.Center - Main.screenPosition, Main.Transform);
 			eff.Parameters["uPosition"].SetValue(pos / scRes);
@@ -309,7 +310,7 @@ public class TemporarySys : ModSystem//暂时用一个ModSystem上滤镜
 			sb.End();
 			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.Default, RasterizerState.CullNone, null, Main.Transform);
 			//绘制黑洞以及前半环
-			Texture2D tex = ModContent.Request<Texture2D>("Everglow/Myth/MagicWeaponsReplace/Projectiles/BlackHole/BlackHole").Value;
+			Texture2D tex = ModContent.Request<Texture2D>("Everglow/SpellAndSkull/SpellAndSkull/Projectiles/BlackHole/BlackHole").Value;
 			sb.Draw(tex, proj.Center - Main.screenPosition, null, Color.White, 0, tex.Size() / 2, proj.scale / 255f, 0, 0);
 			BlackHole.DrawRing(proj, true);
 			sb.End();

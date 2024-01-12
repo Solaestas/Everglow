@@ -1,6 +1,7 @@
-using Everglow.Myth.Common;
-using static Everglow.Myth.Common.MythUtils;
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.WaterBolt;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.VFX;
+using static Everglow.SpellAndSkull.Common.SpellAndSkullUtils;
+namespace Everglow.SpellAndSkull.Projectiles.WaterBolt;
 
 internal class WaterBoltArray : ModProjectile, IWarpProjectile
 {
@@ -55,8 +56,8 @@ internal class WaterBoltArray : ModProjectile, IWarpProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Projectile.hide = false;
-		DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(1f, 1f, 1f, 1f));
-		DrawMagicArray(ModAsset.WaterLine.Value, new Color(0, 0.45f, 1f, 0));
+		DrawMagicArray(Commons.ModAsset.Trail_5_black.Value, new Color(1f, 1f, 1f, 1f));
+		DrawMagicArray(Commons.ModAsset.Trail_5.Value, new Color(0, 0.45f, 1f, 0));
 		return false;
 	}
 
@@ -94,6 +95,6 @@ internal class WaterBoltArray : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		Player player = Main.player[Projectile.owner];
-		DrawTexCircle(spriteBatch, timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, ModAsset.WaterLine.Value, Main.timeForVisualEffects / 17);
+		DrawTexCircle(spriteBatch, timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 17);
 	}
 }

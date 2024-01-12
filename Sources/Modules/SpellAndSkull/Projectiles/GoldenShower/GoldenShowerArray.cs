@@ -1,5 +1,8 @@
-using Everglow.Myth.Common;
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
+using Everglow.SpellAndSkull.Common;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+namespace Everglow.SpellAndSkull.Projectiles.GoldenShower;
 
 internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 {
@@ -75,7 +78,7 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(player.Center + ringPos + radius, c0, new Vector3(t / 30f, 0, 0)));
 			bars.Add(new Vertex2D(player.Center + ringPos + radius * 0.5f, Color.Transparent, new Vector3(t / 30f, 1, 0)));
 		}
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Wave_full_black.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Wave_full_black.Value;
 		Main.graphics.GraphicsDevice.Textures[1] = Commons.ModAsset.Noise_flame_0.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
@@ -89,7 +92,7 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(player.Center + ringPos + radius, c0, new Vector3(t / 30f, 0, 0)));
 			bars.Add(new Vertex2D(player.Center + ringPos + radius * 0.5f, Color.Transparent, new Vector3(t / 30f, 1, 0)));
 		}
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Wave_full.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Wave_full.Value;
 		Main.graphics.GraphicsDevice.Textures[1] = Commons.ModAsset.Noise_flame_0.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
@@ -179,7 +182,7 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 	{
 		float power = projPower / 30f;
 		Player player = Main.player[Projectile.owner];
-		MythUtils.DrawTexCircle_Warp(spriteBatch, projPower * 3, projPower * 2.4f, new Color(1, 0.6f * power, 0f, 0f), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_0.Value, (float)(Main.timeForVisualEffects * 0.02f));
+		SpellAndSkullUtils.DrawTexCircle_Warp(spriteBatch, projPower * 3, projPower * 2.4f, new Color(1, 0.6f * power, 0f, 0f), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_0.Value, (float)(Main.timeForVisualEffects * 0.02f));
 
 
 		spriteBatch.End();

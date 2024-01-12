@@ -1,4 +1,6 @@
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe;
+using Everglow.Commons.Vertex;
+
+namespace Everglow.SpellAndSkull.Projectiles.DemonScythe;
 
 public class DemoSpark : ModProjectile
 {

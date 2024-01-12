@@ -1,7 +1,8 @@
 using Everglow.Commons.MEAC;
-using Everglow.Myth.Common;
-using static Everglow.Myth.Common.MythUtils;
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using static Everglow.SpellAndSkull.Common.SpellAndSkullUtils;
+namespace Everglow.SpellAndSkull.Projectiles.RazorbladeTyphoon;
 
 internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 {
@@ -55,10 +56,10 @@ internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Projectile.hide = false;
-		DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(0.6f, 0.6f, 0.6f, 0.6f));
-		//DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(1f, 1f, 1f, 1f));
+		DrawMagicArray(Commons.ModAsset.Trail_5_black.Value, new Color(0.6f, 0.6f, 0.6f, 0.6f));
+		//DrawMagicArray(Commons.ModAsset.Trail_5_black.Value, new Color(1f, 1f, 1f, 1f));
 
-		DrawMagicArray(ModAsset.WaterLine.Value, new Color(36, 180, 255, 0));
+		DrawMagicArray(Commons.ModAsset.Trail_5.Value, new Color(36, 180, 255, 0));
 		return false;
 	}
 
@@ -142,6 +143,6 @@ internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 	{
 
 		Player player = Main.player[Projectile.owner];
-		DrawTexCircle(spriteBatch, timer * 1.2f, 82, new Color((int)(255 * (Math.Sin(Main.timeForVisualEffects * 0.12f) + 1) / 2d), 150, 255, 0), player.Center + ringPos - Main.screenPosition, ModAsset.WaterLine.Value, Main.timeForVisualEffects / 6);
+		DrawTexCircle(spriteBatch, timer * 1.2f, 82, new Color((int)(255 * (Math.Sin(Main.timeForVisualEffects * 0.12f) + 1) / 2d), 150, 255, 0), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 6);
 	}
 }
