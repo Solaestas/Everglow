@@ -284,3 +284,4 @@ public class BlacksmithForge: YggdrasilTownStreetElement
 		base.Build(ref x, y);
 	}
 }
+

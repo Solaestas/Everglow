@@ -1,4 +1,5 @@
 using Everglow.CagedDomain.Tiles;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
@@ -815,7 +816,7 @@ public class YggdrasilTownGeneration
 		int countX = 0;
 		int coordX = GenRand.Next(512);
 		int coordY = GenRand.Next(512);
-		//放置草块
+		//放置泥块,草块
 		while (countX < 500)
 		{
 			countX++;
@@ -847,6 +848,97 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
+		//放置含有宝箱的房间
+		countX = -100;
+		coordX = GenRand.Next(512);
+		coordY = GenRand.Next(512);
+		List<Vector2> roomPositions = new List<Vector2>();
+		while (countX < 800)
+		{
+			countX++;
+			int x = randX + countX * direction;
+			float yMin = 10840;
+			for (int y = startY + 150; y > yMin; y--)
+			{
+				float valueB = PerlinPixelB[(int)(x * 0.24f + coordX) % 512, (int)(y * 0.24 + coordY) % 512] / 255f;
+				//坐标锁定
+				if (valueB > 0.4f)
+				{
+					int halfWidth = GenRand.Next(10, 13);
+					int roomHeight = GenRand.Next(8, 10);
+					int chestPosXI = Main.rand.Next(-halfWidth + 2, halfWidth - 1);
+					bool canBuild = true;
+					int xj = 0;
+					int yj = 0;
+					for(int j = 0;j < 50;j++)
+					{
+						Tile topLeft = SafeGetTile(x + xj - halfWidth, y + yj - roomHeight);
+						Tile topRight = SafeGetTile(x + xj + halfWidth, y + yj - roomHeight);
+						Tile bottomLeft = SafeGetTile(x + xj - halfWidth, y + yj);
+						Tile bottomRight = SafeGetTile(x + xj + halfWidth, y + yj);
+						if (!topLeft.HasTile && !topRight.HasTile && 
+							bottomLeft.HasTile && (bottomLeft.TileType == ModContent.TileType<DarkForestGrass>() || bottomLeft.TileType == ModContent.TileType<DarkForestSoil>()) &&
+							bottomRight.HasTile && (bottomRight.TileType == ModContent.TileType<DarkForestGrass>() || bottomRight.TileType == ModContent.TileType<DarkForestSoil>()))
+						{
+							break;
+						}
+						else
+						{
+							yj += 1;
+						}
+						if(j == 49)
+						{
+							canBuild = false;
+							break;
+						}
+					}
+					foreach(Vector2 point in roomPositions)
+					{
+						if((point - new Vector2(x, y + yj)).Length() < 100)
+						{
+							canBuild = false;
+							break;
+						}
+					}
+					if (canBuild)
+					{
+						roomPositions.Add(new Vector2(x, y + yj));
+					}
+					else
+					{
+						continue;
+					}
+					for(int xi = x - halfWidth;xi <= x + halfWidth;xi++)
+					{
+						for (int yi = y + yj - roomHeight; yi <= y + yj; yi++)
+						{
+							Tile tile = SafeGetTile(xi, yi);
+							if (xi == x - halfWidth || xi == x + halfWidth || yi == y + yj || yi == y + yj - roomHeight)
+							{
+								tile.TileType = (ushort)ModContent.TileType<LampWood_Wood_Tile>();
+								tile.HasTile = true;
+							}
+							else
+							{
+								tile.wall = (ushort)ModContent.WallType<LampWood_Wood_Wall>();
+								tile.HasTile = false;
+							}
+						}
+					}
+					for (int xi = x - halfWidth; xi <= x + halfWidth; xi++)
+					{
+						for (int yi = y + yj - roomHeight; yi <= y + yj; yi++)
+						{
+							if (xi == x + chestPosXI && yi == y + yj - 1)
+							{
+								PlaceLampWoodBiomeChest(xi, yi);
+							}
+						}
+					}
+				}
+			}
+		}
+		//放置罐子
 		countX = -100;
 		coordX = GenRand.Next(512);
 		coordY = GenRand.Next(512);
@@ -855,7 +947,7 @@ public class YggdrasilTownGeneration
 			countX++;
 			int x = randX + countX * direction;
 			float yMin = 11040 - countX * countX / 2000f;
-			for (int y = startY; y > yMin; y--)
+			for (int y = startY + 150; y > yMin; y--)
 			{
 				float valueG = PerlinPixelG[(int)(x * 0.24f + coordX) % 512, (int)(y * 0.24 + coordY) % 512] / 255f;
 				Tile tile0 = SafeGetTile(x, y);
@@ -865,7 +957,7 @@ public class YggdrasilTownGeneration
 				Tile tile4 = SafeGetTile(x, y - 1);
 				Tile tile5 = SafeGetTile(x + 1, y - 1);
 				//罐子
-				if(valueG > 0.8f)
+				if(valueG > 0.4f)
 				{
 					if (!tile0.HasTile && !tile1.HasTile && !tile4.HasTile && !tile5.HasTile && tile2.HasTile && tile3.HasTile && tile2.Slope == SlopeType.Solid && (tile2.TileType == ModContent.TileType<DarkForestGrass>() || tile2.TileType == ModContent.TileType<DarkForestSoil>()) && tile3.Slope == SlopeType.Solid && (tile3.TileType == ModContent.TileType<DarkForestGrass>() || tile3.TileType == ModContent.TileType<DarkForestSoil>()))
 					{
@@ -889,12 +981,14 @@ public class YggdrasilTownGeneration
 		{
 			smoothX = randX - 500;
 		}
+		//平滑区间
 		SmoothTile(smoothX, 11000, smoothX + 500, 11250);
 		Point treeRotPos = new Point(200, 11000);
 		if(AzureGrottoCenterX < 600)
 		{
 			treeRotPos = new Point(1000, 11000);
 		}
+		//大灯塔树母树
 		ShapeData shapeData = new ShapeData();
 		WorldUtils.Gen(treeRotPos, new Shapes.Circle(15, 15), new Actions.Blank().Output(shapeData));
 		Vector2 offset = new Vector2(0);
@@ -2359,6 +2453,85 @@ public class YggdrasilTownGeneration
 				tile.HasTile = true;
 			}
 		}
+	}
+	/// <summary>
+	/// 生成一个灯塔木森林环境专属的宝箱
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	public static void PlaceLampWoodBiomeChest(int x, int y)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				Tile tile = SafeGetTile(i + x, y - j);
+				if (tile.HasTile)
+				{
+					tile.ClearEverything();
+				}
+			}
+		}
+		List<Item> chestContents = new List<Item>();
+		int mainItem = WorldGen.genRand.Next(2);
+		//尽可能出现不同奖励
+		switch (mainItem)
+		{
+			case 0:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<AmberMagicOrb>(), 1));
+				break;
+			case 1:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<YggdrasilAmberLaser>(), 1));
+				break;
+		}
+		//金币
+		if (WorldGen.genRand.NextBool(5))
+		{
+			chestContents.Add(new Item(setDefaultsToType: ItemID.GoldCoin, WorldGen.genRand.Next(1, 3)));
+		}
+		//绳子
+		chestContents.Add(new Item(setDefaultsToType: ItemID.Rope, WorldGen.genRand.Next(70, 151)));
+		//药水
+		int potionType = 1;
+		switch (WorldGen.genRand.Next(5))
+		{
+			case 0:
+				potionType = ItemID.WarmthPotion;
+				break;
+			case 1:
+				potionType = ItemID.GillsPotion;
+				break;
+			case 2:
+				potionType = ItemID.WaterWalkingPotion;
+				break;
+			case 3:
+				potionType = ItemID.SpelunkerPotion;
+				break;
+			case 4:
+				potionType = ItemID.MiningPotion;
+				break;
+		}
+		chestContents.Add(new Item(setDefaultsToType: potionType, WorldGen.genRand.Next(1, 4)));
+		//冰雪火把
+		//if (WorldGen.genRand.NextBool(2))
+		//{
+		//	chestContents.Add(new Item(setDefaultsToType: ItemID.IceTorch, WorldGen.genRand.Next(40, 91)));
+		//}
+		//荧光棒
+		if (WorldGen.genRand.NextBool(2))
+		{
+			if (WorldGen.genRand.NextBool(5))
+			{
+				chestContents.Add(new Item(setDefaultsToType: ItemID.StickyGlowstick, WorldGen.genRand.Next(20, 61)));
+			}
+			else
+			{
+				chestContents.Add(new Item(setDefaultsToType: ItemID.Glowstick, WorldGen.genRand.Next(20, 61)));
+			}
+		}
+		int type = ModContent.TileType<LampWood_Chest>();
+
+		WorldGenMisc.PlaceChest(x, y, (ushort)type, chestContents);
 	}
 }
 

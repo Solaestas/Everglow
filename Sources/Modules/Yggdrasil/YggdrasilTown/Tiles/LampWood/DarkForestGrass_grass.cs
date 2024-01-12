@@ -18,6 +18,11 @@ public class DarkForestGrass_grass_fore : ForegroundVFX
 		{
 			Active = false;
 		}
+		Tile tile = Main.tile[originTile];
+		if (tile.TileType != originType || !tile.HasTile)
+		{
+			Active = false;
+		}
 	}
 	public float scale;
 	public int style;

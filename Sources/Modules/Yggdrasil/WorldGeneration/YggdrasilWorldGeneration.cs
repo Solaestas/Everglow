@@ -10,6 +10,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Walls;
 using Everglow.Commons.TileHelper;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilTownGeneration;
 using static Everglow.Yggdrasil.WorldGeneration.KelpCurtainGeneration;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
 namespace Everglow.Yggdrasil.WorldGeneration;
 
@@ -90,6 +91,16 @@ public class YggdrasilWorldGeneration : ModSystem
 		{
 			for (int y = y0; y <= y1; y += 1)
 			{
+				Tile tile = Main.tile[x, y];
+				Tile tileUp = Main.tile[x, y - 1];
+				if (tile.TileType == TileID.Containers || tile.TileType == ModContent.TileType<LampWood_Chest>())
+				{
+					continue;
+				}
+				if (tileUp.TileType == TileID.Containers || tileUp.TileType == ModContent.TileType<LampWood_Chest>())
+				{
+					continue;
+				}
 				Tile.SmoothSlope(x, y, false);
 				WorldGen.TileFrame(x, y, true, false);
 				WorldGen.SquareWallFrame(x, y, true);

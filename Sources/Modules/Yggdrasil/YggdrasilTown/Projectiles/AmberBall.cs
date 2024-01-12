@@ -66,8 +66,8 @@ public class AmberBall : TrailingProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		DrawTrailDark();
-		DrawTrail();
+		//DrawTrailDark();
+		//DrawTrail();
 		DrawSelf();
 		return false;
 	}

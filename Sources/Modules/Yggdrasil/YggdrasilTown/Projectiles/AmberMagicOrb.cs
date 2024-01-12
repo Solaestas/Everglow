@@ -47,7 +47,7 @@ public class AmberMagicOrb : HandholdProjectile, IWarpProjectile
 		Projectile.rotation = mouseToPlayer.ToRotation() + MathHelper.PiOver4;
 
 		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (Projectile.rotation - MathF.PI * 0.25f) * player.gravDir - MathF.PI * 0.5f);
-		DepartLength = Power;
+		DepartLength = Power * player.itemAnimation / player.itemAnimationMax;
 
 		Projectile.Center = ArmRootPos + new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75) * DepartLength;
 		if (player.controlUseItem)
