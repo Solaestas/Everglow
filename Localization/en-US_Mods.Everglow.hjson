@@ -54,7 +54,7 @@ Tiles: {
 	LampWoodCandelabra.MapEntry: Lamp Wood Candelabra
 	LampWoodCandle.MapEntry: Lamp Wood Candle
 	LampWoodChandelier.MapEntry: Lamp Wood Chandelier
-	LampWood_Chest.MapEntry: Lamp Wood_ Chest
+	LampWoodPlatform.MapEntry: Lamp Wood Platform
 	CyanVineBar.MapEntry: Cyan Vine Bar
 	CyanVineOreTile.MapEntry: Cyan Vine Ore Tile
 	CyanVineStone.MapEntry: Cyan Vine Stone
@@ -2868,13 +2868,28 @@ Items: {
 		Tooltip: ""
 	}
 
+	LampWoodWall_item: {
+		DisplayName: Lamp Wood Wall_item
+		Tooltip: ""
+	}
+
 	LampWood_Chest_Item: {
 		DisplayName: Lamp Wood_ Chest_ Item
 		Tooltip: ""
 	}
 
+	LampWood_Platform: {
+		DisplayName: Lamp Wood_ Platform
+		Tooltip: ""
+	}
+
 	LampWood_Wood: {
 		DisplayName: Lamp Wood_ Wood
+		Tooltip: ""
+	}
+
+	LampWood_workBench: {
+		DisplayName: Lamp Wood_work Bench
 		Tooltip: ""
 	}
 
