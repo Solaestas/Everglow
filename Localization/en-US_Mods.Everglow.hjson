@@ -54,7 +54,7 @@ Tiles: {
 	LampWoodCandelabra.MapEntry: Lamp Wood Candelabra
 	LampWoodCandle.MapEntry: Lamp Wood Candle
 	LampWoodChandelier.MapEntry: Lamp Wood Chandelier
-	LampWood_Chest.MapEntry: Lamp Wood_ Chest
+	LampWoodPlatform.MapEntry: Lamp Wood Platform
 	CyanVineBar.MapEntry: Cyan Vine Bar
 	CyanVineOreTile.MapEntry: Cyan Vine Ore Tile
 	CyanVineStone.MapEntry: Cyan Vine Stone
