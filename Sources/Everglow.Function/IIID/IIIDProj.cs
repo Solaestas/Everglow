@@ -49,20 +49,20 @@ namespace Everglow.Commons.IIID
 		}
 		public Vector2 lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
 		public int RenderTargetSize = Math.Max(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width) / 2;
+		public float rate = (float)2000 / Math.Max(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width);
 		public Matrix DefaultPerspectiveMatrix()
 		{
 
-
 			return
-			  Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
-			* Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
-			* Matrix.CreateTranslation(new Vector3(5, -100, 2000))
-			* Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0),
-									 new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 500),
-									 new Vector3(0, -1, 0))
-			* Main.GameViewMatrix.ZoomMatrix
-			* Matrix.CreateTranslation(new Vector3(-Main.GameViewMatrix.TransformationMatrix.M41, -Main.GameViewMatrix.TransformationMatrix.M42, 0));
-		}
+							 Matrix.CreateScale((float)1000 / RenderTargetSize)
+				* Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
+				* Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
+				* Matrix.CreateTranslation(new Vector3(5, -100, 1500))
+				* Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0) * rate,
+									 new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 500) * rate,
+									 new Vector3(0, -1, 0) * rate)
+				* Main.GameViewMatrix.ZoomMatrix
+				* Matrix.CreateTranslation(new Vector3(-Main.GameViewMatrix.TransformationMatrix.M41, -Main.GameViewMatrix.TransformationMatrix.M42, 0));
 		/// <summary>
 		/// 模型 ( 用ObjReader.LoadFile("")导入 )
 		/// The Model ( Imported by ObjReader.LoadFile("") )
@@ -184,7 +184,7 @@ namespace Everglow.Commons.IIID
 			modelPipeline.PushModelEntity(entity);
 
 			modelPipeline.EndCapture();
-			
+
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 			Main.spriteBatch.Draw(modelPipeline.ModelTarget, Vector2.Lerp(Projectile.Center, lookat, 1f) - Main.screenPosition - new Vector2(RenderTargetSize, RenderTargetSize),

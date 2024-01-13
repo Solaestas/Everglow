@@ -48,13 +48,13 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 		{
 			var t = new Vector3(5, -50, 5000 - s);
 			return
-			
-			    Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
+			     Matrix.CreateScale((float)1000/RenderTargetSize)
+				*Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
 				* Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
 				* Matrix.CreateTranslation(t)
-				* Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0),
-									 new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 500),
-									 new Vector3(0, -1, 0))
+				* Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0)*rate,
+									 new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 500) * rate,
+									 new Vector3(0, -1, 0) * rate)
 				* Main.GameViewMatrix.ZoomMatrix
 				* Matrix.CreateTranslation(new Vector3(-Main.GameViewMatrix.TransformationMatrix.M41, -Main.GameViewMatrix.TransformationMatrix.M42, 0));
 			;
@@ -117,8 +117,8 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 				{
 					Projectile.velocity *= 1.1f;
 				}
-				if (s < 3200)
-					s = MathUtils.Lerp(0.05f, s, 3200);
+				if (s < 3500)
+					s = MathUtils.Lerp(0.05f, s, 3500);
 			}
 			player.heldProj = Projectile.whoAmI;
 		}
@@ -145,7 +145,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 		{
 			//overPlayers.Add(index);
 		}
-		float s = 1000;
+		float s = 0;
 
 		public class TestProjModelSystem : ModSystem
 		{
