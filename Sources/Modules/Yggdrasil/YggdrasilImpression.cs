@@ -18,7 +18,7 @@ public class YggdrasilImpression : ModItem
 		// TODO world
 		if (player.itemAnimation == player.itemAnimationMax)
 		{
-			//Ins.VFXManager.Clear();
+			Ins.VFXManager.Clear();
 			if (SubworldSystem.IsActive<YggdrasilWorld>())
 				SubworldSystem.Exit();
 			else

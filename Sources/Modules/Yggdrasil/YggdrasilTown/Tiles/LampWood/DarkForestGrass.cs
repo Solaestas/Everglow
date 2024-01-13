@@ -126,21 +126,21 @@ public class DarkForestGrass : SceneTile
 				}
 				break;
 			case 16:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 17, 20))
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 18, 21))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 17, 20, ModContent.TileType<LampWood_newStyleTree>(), 0);
+					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 18, 21, ModContent.TileType<LampWood_newStyleTree_1>(), 0);
 				}
 				break;
 			case 17:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 17, 20))
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 18, 21))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 17, 20, ModContent.TileType<LampWood_newStyleTree>(), 0);
+					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 18, 21, ModContent.TileType<LampWood_newStyleTree_1>(), 0);
 				}
 				break;
 			case 18:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 17, 20))
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 18, 21))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 17, 20, ModContent.TileType<LampWood_newStyleTree>(), 0);
+					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 18, 21, ModContent.TileType<LampWood_newStyleTree_1>(), 0);
 				}
 				break;
 		}
