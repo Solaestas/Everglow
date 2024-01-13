@@ -47,7 +47,7 @@ class ToothKnife : MeleeProj
 	}
 	public override string TrailColorTex()
 	{
-		return "Everglow/Myth/Misc/Projectiles/Weapon/Melee/ComingGhost_meleeColor";
+		return "Everglow/Myth/TheTusk/Projectiles/Weapon/TuskKnife_meleeColor";
 	}
 	public override float TrailAlpha(float factor)
 	{
@@ -213,7 +213,7 @@ class ToothKnife : MeleeProj
 					}
 
 					Vector2 v0 = new Vector2(0, 14 * Main.rand.NextFloat(0.65f, 1.8f)).RotatedByRandom(MathHelper.TwoPi);
-					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Style3StartPoint + new Vector2((60 + duration * 2.5f) * Projectile.ai[1], 0) - v0 * 8, v0, ModContent.ProjectileType<ComingGhost_Slash>(), Projectile.damage, Projectile.knockBack);
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Style3StartPoint + new Vector2((60 + duration * 2.5f) * Projectile.ai[1], 0) - v0 * 8, v0, ModContent.ProjectileType<TuskSlash>(), Projectile.damage, Projectile.knockBack);
 				}
 			}
 			if (timer > 44 * timeMul)
