@@ -28,6 +28,23 @@ public class DarkForestGrass_grass_fore : ForegroundVFX
 	public int style;
 	public override void Draw()
 	{
+		if (originTile.X >= Main.maxTilesX - 1 || originTile.X <= 1)
+		{
+			Active = false;
+			return;
+		}
+		if (originTile.Y >= Main.maxTilesY - 1 || originTile.Y <= 1)
+		{
+			Active = false;
+			return;
+		}
+		Tile tile = Main.tile[originTile];
+		if (tile.TileType != originType || !tile.HasTile)
+		{
+			Active = false;
+			return;
+		}
+
 		Vector2 deltaPos = Grass_FurPipeline.TotalMovedPosition;
 		int rectangleX = (int)(Main.screenPosition - deltaPos).X;
 		int rectangleY = (int)(Main.screenPosition - deltaPos).Y;
@@ -44,7 +61,6 @@ public class DarkForestGrass_grass_fore : ForegroundVFX
 			Ins.Batch.BindTexture<Vertex2D>(ModAsset.DarkForestGrass_hardness.Value);
 		}
 		List<Vertex2D> bars = new List<Vertex2D>();
-		Tile tile = Main.tile[originTile];
 		if (tile.Slope == SlopeType.Solid && !tile.halfBrick())
 		{
 			if (tile.TileFrameX >= 18 && tile.TileFrameX <= 54 && tile.TileFrameY == 0)
