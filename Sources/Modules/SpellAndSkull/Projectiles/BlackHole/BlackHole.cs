@@ -297,7 +297,7 @@ public class TemporarySys : ModSystem//暂时用一个ModSystem上滤镜
 			gd.SetRenderTarget(Main.screenTarget);
 			gd.Clear(Color.Transparent);
 			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			Effect eff = ModContent.Request<Effect>("Everglow/SpellAndSkull/Effects/BlackHole", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			Effect eff = ModAsset.BlackHole_shader.Value;
 			var scRes = new Vector2(Main.screenWidth, Main.screenHeight);
 			var pos = Vector2.Transform(proj.Center - Main.screenPosition, Main.Transform);
 			eff.Parameters["uPosition"].SetValue(pos / scRes);
@@ -310,7 +310,7 @@ public class TemporarySys : ModSystem//暂时用一个ModSystem上滤镜
 			sb.End();
 			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.Default, RasterizerState.CullNone, null, Main.Transform);
 			//绘制黑洞以及前半环
-			Texture2D tex = ModContent.Request<Texture2D>("Everglow/SpellAndSkull/SpellAndSkull/Projectiles/BlackHole/BlackHole").Value;
+			Texture2D tex = ModAsset.BlackHole.Value;
 			sb.Draw(tex, proj.Center - Main.screenPosition, null, Color.White, 0, tex.Size() / 2, proj.scale / 255f, 0, 0);
 			BlackHole.DrawRing(proj, true);
 			sb.End();

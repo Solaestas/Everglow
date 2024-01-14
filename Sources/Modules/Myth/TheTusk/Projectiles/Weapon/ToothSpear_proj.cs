@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.VFX.CommonVFXDusts;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
@@ -179,6 +180,22 @@ public class ToothSpear_proj : ModProjectile
 			barsDark.Add(LockCenter - vel * 12 * x + width, Color.White * value, new Vector3(x / 15f - timeEffectValue, 1, MathF.Sin(x / 16f)));
 			barsDark.Add(LockCenter - vel * 12 * x - width, Color.White * value, new Vector3(x / 15f - timeEffectValue, 0, MathF.Sin(x / 16f)));
 		}
+		drawColor = lightColor;
+		List<Vertex2D> barsHighLight = new List<Vertex2D>();
+		for (int x = 0; x < trailLength; x++)
+		{
+			float value = 1;
+			if (x > trailLength - 12)
+			{
+				value = (trailLength - 1 - x) / 11f;
+			}
+			drawColor.A = (byte)(value * 255);
+			barsHighLight.Add(LockCenter - vel * 6 * x + width * 0.4f, drawColor, new Vector3(x / 30f - timeEffectValue, 1, MathF.Sin(x / 8f)));
+			barsHighLight.Add(LockCenter - vel * 6 * x - width * 0.4f, drawColor, new Vector3(x / 30f - timeEffectValue, 0, MathF.Sin(x / 8f)));
+		}
+
+
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 		Effect effect = Commons.ModAsset.StabSwordEffect.Value;
@@ -196,9 +213,20 @@ public class ToothSpear_proj : ModProjectile
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
 
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+		effect = Commons.ModAsset.Trailing.Value;
+		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.CurrentTechnique.Passes["HeatMap"].Apply();
+		
+		Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_1.Value;
+		Main.graphics.graphicsDevice.Textures[1] = ModAsset.TuskKnife_meleeColor.Value;
+		Main.graphics.graphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+		Main.graphics.graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
+		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, barsHighLight.ToArray(), 0, barsHighLight.Count - 2);
 
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 		return false;
 	}
 }

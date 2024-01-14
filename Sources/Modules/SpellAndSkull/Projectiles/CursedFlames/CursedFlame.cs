@@ -25,8 +25,8 @@ internal class CursedFlamePipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModContent.Request<Effect>("Everglow/SpellAndSkull/SpellAndSkull/Projectiles/CursedFlames/CursedFlame", AssetRequestMode.ImmediateLoad);
-		effect.Value.Parameters["uNoise"].SetValue(ModContent.Request<Texture2D>("Everglow/Example/VFX/Perlin", AssetRequestMode.ImmediateLoad).Value);
+		effect = ModAsset.CursedFlame;
+		effect.Value.Parameters["uNoise"].SetValue(ModAsset.Perlin.Value);
 	}
 	public override void BeginRender()
 	{

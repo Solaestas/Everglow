@@ -4,13 +4,6 @@ namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
 public class DreamWeaver : SpellTomeItem//TODO:织梦丝雨
 {
-	public override void SetStaticDefaults()
-	{
-		Item.staff[Item.type] = true;
-		DecorativeProjectileTypes.Add(ModContent.ProjectileType<TheFirefly.Projectiles.DreamWeaver.DreamWeaverBook>());
-		DecorativeProjectileTypes.Add(ModContent.ProjectileType<TheFirefly.Projectiles.DreamWeaver.DreamWeaverArray>());
-	}
-
 	public override void SetDefaults()
 	{
 
@@ -30,5 +23,7 @@ public class DreamWeaver : SpellTomeItem//TODO:织梦丝雨
 		Item.autoReuse = true;
 		Item.shoot = ModContent.ProjectileType<Projectiles.DreamWeaver_proj>();
 		Item.shootSpeed = 12f;
+		DecorativeProjectileTypes.Add(ModContent.ProjectileType<TheFirefly.Projectiles.DreamWeaver.DreamWeaverBook>());
+		DecorativeProjectileTypes.Add(ModContent.ProjectileType<TheFirefly.Projectiles.DreamWeaver.DreamWeaverArray>());
 	}
 }

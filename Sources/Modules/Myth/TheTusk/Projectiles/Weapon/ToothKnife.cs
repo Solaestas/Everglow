@@ -3,7 +3,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
-class ToothKnife : MeleeProj
+class ToothKnife : MeleeProj, IWarpProjectile
 {
 	public override void SetDef()
 	{
@@ -25,7 +25,7 @@ class ToothKnife : MeleeProj
 		Projectile.tileCollide = false;
 		Projectile.friendly = true;
 		longHandle = false;
-		maxAttackType = 3;
+		maxAttackType = 5;
 		trailLength = 20;
 		shadertype = "Trail";
 		AutoEnd = false;
@@ -39,7 +39,7 @@ class ToothKnife : MeleeProj
 			return;
 		Player player = Main.player[Projectile.owner];
 		Vector2 v = new Vector2(0, 6).RotatedByRandom(Math.PI * 2) * 5f;
-		//Projectile.NewProjectile(null, target.Center - v * 3, v, ModContent.ProjectileType<GhostHit>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(-0.05f, 0.05f));
+		Projectile.NewProjectile(null, target.Center - v * 3, v, ModContent.ProjectileType<TuskSlash>(), Projectile.damage / 3, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(-0.05f, 0.05f));
 	}
 	public override string TrailShapeTex()
 	{
@@ -86,7 +86,7 @@ class ToothKnife : MeleeProj
 				useTrail = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(82, targetRot, +1.2f), 0.4f / timeMul);
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
@@ -96,13 +96,13 @@ class ToothKnife : MeleeProj
 			{
 				isAttacking = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.32f / timeMul;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, -1.2f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(90, Projectile.rotation, -1.2f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul);
 				player.fullRotationOrigin = new Vector2(10, 42);
 				player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
 				player.legRotation = -player.fullRotation;
 
-				Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)), 0, 0, ModContent.DustType<Crow>());
-				d.scale = Main.rand.NextFloat(2f, 4.5f);
+				//Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)), 0, 0, ModContent.DustType<Crow>());
+				//d.scale = Main.rand.NextFloat(2f, 4.5f);
 			}
 			if (timer > 44 * timeMul)
 			{
@@ -112,30 +112,30 @@ class ToothKnife : MeleeProj
 		}
 		if (attackType == 1)
 		{
-			if (timer < 9 * timeMul)//前摇
+			if (timer < 4 * timeMul)//前摇
 			{
 				useTrail = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(82, targetRot, +1.2f), 0.4f / timeMul);
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
-			if (timer == (int)(10 * timeMul))
+			if (timer == (int)(4 * timeMul))
 				AttSound(SoundID.Item1);
-			if (timer > 9 * timeMul && timer < 42 * timeMul)
+			if (timer > 4 * timeMul && timer < 25 * timeMul)
 			{
 				isAttacking = true;
-				Projectile.rotation += Projectile.spriteDirection * 0.17f / timeMul;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, 0, 0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				Projectile.rotation += Projectile.spriteDirection * 0.32f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(90, Projectile.rotation, -1.0f, 0.3f * Projectile.spriteDirection), 0.4f / timeMul);
 				player.fullRotationOrigin = new Vector2(10, 42);
-				player.fullRotation = MathF.Sin((timer - 9 * timeMul) / (30f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
+				player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.2f * player.direction;
 				player.legRotation = -player.fullRotation;
 
-				Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)), 0, 0, ModContent.DustType<Crow>());
-				d.scale = Main.rand.NextFloat(2f, 4.5f);
+				//Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)), 0, 0, ModContent.DustType<Crow>());
+				//d.scale = Main.rand.NextFloat(2f, 4.5f);
 			}
-			if (timer > 55 * timeMul)
+			if (timer > 34 * timeMul)
 			{
 				HasHit = 0;
 				NextAttackType();
@@ -144,33 +144,30 @@ class ToothKnife : MeleeProj
 
 		if (attackType == 2)
 		{
-			if (timer < 10 * timeMul)//前摇
+			if (timer < 4 * timeMul)//前摇
 			{
 				useTrail = false;
 				LockPlayerDir(player);
-				float targetRot = -MathHelper.PiOver2 - player.direction * 1.6f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(82, targetRot, +1.2f), 0.4f / timeMul);
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
-			if (timer == (int)(10 * timeMul))
+			if (timer == (int)(4 * timeMul))
 				AttSound(SoundID.Item1);
-			if (timer > 9 * timeMul && timer < 25 * timeMul)
+			if (timer > 4 * timeMul && timer < 25 * timeMul)
 			{
 				isAttacking = true;
-				Projectile.rotation -= Projectile.spriteDirection * 0.45f / timeMul;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, -0.2f, 0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				Projectile.rotation -= Projectile.spriteDirection * 0.32f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(90, Projectile.rotation, -1.1f, -0.6f * Projectile.spriteDirection), 0.4f / timeMul);
 				player.fullRotationOrigin = new Vector2(10, 42);
-				player.fullRotation = MathF.Sin((timer - 9 * timeMul) / (10f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
+				player.fullRotation = -MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
 				player.legRotation = -player.fullRotation;
-				for (int i = 0; i < 3; i++)
-				{
-					Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)), 0, 0, ModContent.DustType<Crow>());
-					d.scale = Main.rand.NextFloat(2f, 4.5f);
-				}
 
+				//Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)), 0, 0, ModContent.DustType<Crow>());
+				//d.scale = Main.rand.NextFloat(2f, 4.5f);
 			}
-			if (timer > 30 * timeMul)
+			if (timer > 34 * timeMul)
 			{
 				HasHit = 0;
 				NextAttackType();
@@ -179,52 +176,113 @@ class ToothKnife : MeleeProj
 
 		if (attackType == 3)
 		{
-			if (timer < 2 * timeMul)//前摇
+			if (timer < 4 * timeMul)//前摇
 			{
-				Projectile.ai[0] = 0;
-				Projectile.ai[1] = player.direction;
-				Style3StartPoint = player.Center;
 				useTrail = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(82, targetRot, +1.2f), 0.4f / timeMul);
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
-			if (timer == (int)(10 * timeMul))
+			if (timer == (int)(4 * timeMul))
 				AttSound(SoundID.Item1);
-			if (timer > 2 * timeMul && timer < 25 * timeMul)
+			if (timer > 4 * timeMul && timer < 25 * timeMul)
 			{
-				LockPlayerDir(player);
 				isAttacking = true;
-				player.immuneAlpha = 255;
-				Projectile.rotation += Projectile.spriteDirection * 0.4f / timeMul;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, -1.25f, -0.1f * Projectile.spriteDirection), 0.4f / timeMul);
+				Projectile.rotation += Projectile.spriteDirection * 0.32f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(90, Projectile.rotation, -1.0f, 0.3f * Projectile.spriteDirection), 0.4f / timeMul);
 				player.fullRotationOrigin = new Vector2(10, 42);
-				player.fullRotation = MathF.Sin((timer - 16 * timeMul) / (28f * timeMul) * MathHelper.Pi) * 0.6f * Projectile.ai[1];
+				player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.3f * player.direction;
 				player.legRotation = -player.fullRotation;
-				float duration = (timer - 2 * timeMul) / (float)(23 * timeMul) * 100f;
-				if (duration > 10 * Projectile.ai[0])
-				{
-					Projectile.ai[0]++;
-					if (!Collision.SolidCollision(player.position + new Vector2(35 * Projectile.ai[1], 0), player.width, player.height - 20))
-					{
-						player.position.X += 35 * Projectile.ai[1];
-					}
 
-					Vector2 v0 = new Vector2(0, 14 * Main.rand.NextFloat(0.65f, 1.8f)).RotatedByRandom(MathHelper.TwoPi);
-					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Style3StartPoint + new Vector2((60 + duration * 2.5f) * Projectile.ai[1], 0) - v0 * 8, v0, ModContent.ProjectileType<TuskSlash>(), Projectile.damage, Projectile.knockBack);
-				}
+				//Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)), 0, 0, ModContent.DustType<Crow>());
+				//d.scale = Main.rand.NextFloat(2f, 4.5f);
 			}
-			if (timer > 44 * timeMul)
+			if (timer > 34 * timeMul)
 			{
 				HasHit = 0;
 				NextAttackType();
 			}
+		}
+		if (attackType == 4)
+		{
+			if (timer < 4 * timeMul)//前摇
+			{
+				useTrail = false;
+				LockPlayerDir(player);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(82, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
+			}
+			if (timer == (int)(4 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer > 4 * timeMul && timer < 25 * timeMul)
+			{
+				isAttacking = true;
+				Projectile.rotation -= Projectile.spriteDirection * 0.32f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(90, Projectile.rotation, -0.6f, -0.6f * Projectile.spriteDirection), 0.4f / timeMul);
+				player.fullRotationOrigin = new Vector2(10, 42);
+				player.fullRotation = -MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
+				player.legRotation = -player.fullRotation;
 
+				//Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)), 0, 0, ModContent.DustType<Crow>());
+				//d.scale = Main.rand.NextFloat(2f, 4.5f);
+			}
+			if (timer > 34 * timeMul)
+			{
+				HasHit = 0;
+				NextAttackType();
+			}
+		}
+		if (attackType == 5)
+		{
+			if (timer < 14 * timeMul)//前摇
+			{
+				useTrail = false;
+				LockPlayerDir(player);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 2.4f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(82, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
+
+				player.fullRotationOrigin = new Vector2(10, 42);
+				player.fullRotation = -MathF.Sin((timer * timeMul) / (28f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
+				player.legRotation = -player.fullRotation;
+
+				if (timer == (int)(1 * timeMul))
+				{
+					for (int i = 0; i < 5; i++)
+					{
+						Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Top - new Vector2(0, 30 + i * 20), new Vector2(player.direction, 1) / 10000f, ModContent.ProjectileType<TuskPin>(), Projectile.damage, Projectile.knockBack, player.whoAmI);
+						p0.timeLeft = 80 + i * 5 + Main.rand.Next(5);
+					}
+				}
+			}
+			
+			if (timer == (int)(4 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer > 14 * timeMul && timer < 35 * timeMul)
+			{
+				isAttacking = true;
+				float coefficientTimer = (timer * timeMul - 14 * timeMul) / (28f * timeMul);
+				Projectile.rotation += Projectile.spriteDirection * 1.3f / MathF.Pow(timeMul, 5.5f) * coefficientTimer * coefficientTimer;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(90, Projectile.rotation, 0.1f, 0.3f * Projectile.spriteDirection), 0.9f / timeMul);
+				player.fullRotationOrigin = new Vector2(10, 42);
+				player.fullRotation = -MathF.Sin((timer - 14 * timeMul) / (18f * timeMul) * MathHelper.Pi) * 0.7f * player.direction;
+				player.legRotation = -player.fullRotation;
+
+				//Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)), 0, 0, ModContent.DustType<Crow>());
+				//d.scale = Main.rand.NextFloat(2f, 4.5f);
+			}
+			if (timer > 54 * timeMul)
+			{
+				HasHit = 0;
+				NextAttackType();
+			}
 		}
 	}
-	public Vector2 Style3StartPoint = Vector2.zeroVector;
 	public override void OnKill(int timeLeft)
 	{
 		Player player = Main.player[Projectile.owner];
@@ -260,26 +318,29 @@ class ToothKnife : MeleeProj
 		{
 			float factor = i / (length - 1f);
 			float w = TrailAlpha(factor);
-			Color c0 = Color.White;
+			Point point = (Projectile.Center + trail[i] * Projectile.scale).ToPoint();
+			Color c0 = Lighting.GetColor(point.X / 16, point.Y / 16);
 			if (i == 0)
 			{
 				c0 = Color.Transparent;
 			}
-			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.3f * Projectile.scale, c0, new Vector3(factor, 1, 0f)));
+			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.1f * Projectile.scale, c0, new Vector3(factor, 1, 0f)));
 			bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, c0, new Vector3(factor, 0, w)));
 		}
-		bars.Add(new Vertex2D(Projectile.Center + mainVec * 0.3f * Projectile.scale, Color.White, new Vector3(0, 1, 0f)));
-		bars.Add(new Vertex2D(Projectile.Center + mainVec * Projectile.scale, Color.White, new Vector3(0, 0, 1)));
+		Point point1 = (Projectile.Center + mainVec * Projectile.scale).ToPoint();
+		Color c1 = Lighting.GetColor(point1.X / 16, point1.Y / 16);
+		bars.Add(new Vertex2D(Projectile.Center + mainVec * 0.1f * Projectile.scale, c1, new Vector3(0, 1, 0f)));
+		bars.Add(new Vertex2D(Projectile.Center + mainVec * Projectile.scale, c1, new Vector3(0, 0, 1)));
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 
-		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect MeleeTrail = Commons.ModAsset.MeleeTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Wave_slash.Value;
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
-		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
+		MeleeTrail.CurrentTechnique.Passes["ArcBladeAffectByEnvironmentLight"].Apply();
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
@@ -287,6 +348,6 @@ class ToothKnife : MeleeProj
 	}
 	public override void DrawWarp(VFXBatch spriteBatch)
 	{
-
+		base.DrawWarp(spriteBatch);
 	}
 }

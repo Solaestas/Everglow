@@ -192,6 +192,10 @@ class ComingGhost : MeleeProj
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
+				if(timer == 1)
+				{
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center, Vector2.zeroVector, ModContent.ProjectileType<ComingGhost_Shimmer>(), 0, Projectile.knockBack, player.whoAmI, player.direction);
+				}
 			}
 			if (timer == (int)(10 * timeMul))
 				AttSound(SoundID.Item1);
@@ -217,13 +221,17 @@ class ComingGhost : MeleeProj
 					Vector2 v0 = new Vector2(0, 14 * Main.rand.NextFloat(0.65f, 1.8f)).RotatedByRandom(MathHelper.TwoPi);
 					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Style3StartPoint + new Vector2((60 + duration * 2.5f) * Projectile.ai[1], 0) - v0 * 8, v0, ModContent.ProjectileType<ComingGhost_Slash>(), Projectile.damage, Projectile.knockBack);
 				}
+				
 			}
 			if (timer > 44 * timeMul)
 			{
 				HasHit = 0;
 				NextAttackType();
 			}
-
+			if (timer == (int)(40 * timeMul))
+			{
+				Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center, Vector2.zeroVector, ModContent.ProjectileType<ComingGhost_Shimmer>(), 0, Projectile.knockBack, player.whoAmI, -player.direction);
+			}
 		}
 	}
 	public Vector2 Style3StartPoint = Vector2.zeroVector;

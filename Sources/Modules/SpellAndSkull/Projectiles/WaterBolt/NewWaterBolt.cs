@@ -292,11 +292,11 @@ public class NewWaterBolt : TrailingProjectile
 		switch (Main.rand.Next(2))
 		{
 			case 0:
-				SoundEngine.PlaySound(new SoundStyle("Everglow/SpellAndSkull/SpellAndSkull/Sounds/WaterBolt1"), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/SpellAndSkull/Sounds/WaterBolt1"), Projectile.Center);
 				break;
 
 			case 1:
-				SoundEngine.PlaySound(new SoundStyle("Everglow/SpellAndSkull/SpellAndSkull/Sounds/WaterBolt2"), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/SpellAndSkull/Sounds/WaterBolt2"), Projectile.Center);
 				break;
 		}
 

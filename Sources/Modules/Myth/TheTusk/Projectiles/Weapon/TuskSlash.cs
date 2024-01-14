@@ -28,20 +28,20 @@ public class TuskSlash : ModProjectile, IWarpProjectile
 	}
 	public override void AI()
 	{
-		Projectile.velocity *= 0.93f;
-		if (Main.rand.NextBool(4) && Projectile.timeLeft > 30)
-		{
-			Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.01f, 0.01f)) * Main.rand.NextFloat(3f, 6f);
-			Dust dust = Dust.NewDustDirect(Projectile.position - Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(0f, (120 - Projectile.timeLeft) * 3f), Projectile.width, Projectile.height, ModContent.DustType<Crow>(), 0, 0, 0, default, Main.rand.NextFloat(0.95f, 1.7f));
-			dust.velocity = vel;
-		}
-		if (Main.rand.NextBool(12) && Projectile.timeLeft > 30)
-		{
-			Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.01f, 0.01f)) * Main.rand.NextFloat(3f, 6f);
-			Dust dust = Dust.NewDustDirect(Projectile.position - Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(0f, (120 - Projectile.timeLeft) * 3f), Projectile.width, Projectile.height, DustID.LifeDrain, 0, 0, 0, default, Main.rand.NextFloat(0.45f, 0.7f));
-			dust.velocity = vel;
-			dust.noGravity = true;
-		}
+		Projectile.velocity *= 0.85f;
+		//if (Main.rand.NextBool(4) && Projectile.timeLeft > 30)
+		//{
+		//	Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.01f, 0.01f)) * Main.rand.NextFloat(3f, 6f);
+		//	Dust dust = Dust.NewDustDirect(Projectile.position - Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(0f, (120 - Projectile.timeLeft) * 3f), Projectile.width, Projectile.height, ModContent.DustType<Crow>(), 0, 0, 0, default, Main.rand.NextFloat(0.95f, 1.7f));
+		//	dust.velocity = vel;
+		//}
+		//if (Main.rand.NextBool(12) && Projectile.timeLeft > 30)
+		//{
+		//	Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.01f, 0.01f)) * Main.rand.NextFloat(3f, 6f);
+		//	Dust dust = Dust.NewDustDirect(Projectile.position - Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(0f, (120 - Projectile.timeLeft) * 3f), Projectile.width, Projectile.height, DustID.LifeDrain, 0, 0, 0, default, Main.rand.NextFloat(0.45f, 0.7f));
+		//	dust.velocity = vel;
+		//	dust.noGravity = true;
+		//}
 		if (Projectile.timeLeft == 114)
 		{
 			SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/Slash").WithVolumeScale(0.33f), Projectile.Center);
@@ -51,14 +51,12 @@ public class TuskSlash : ModProjectile, IWarpProjectile
 	{
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Vector2 hitCenter = StartCenter + Vector2.Normalize(Projectile.velocity) * 120f;
-		lightColor = Lighting.GetColor((int)(hitCenter.X / 16f), (int)(hitCenter.Y / 16f));
 		float value0 = (120 - Projectile.timeLeft) / 120f;
 		float value1 = MathF.Pow(value0, 0.5f);
 		float width = (1 - MathF.Cos(value1 * 2f * MathF.PI)) * 10f;
 		Vector2 normalizedVelocity = Utils.SafeNormalize(Projectile.velocity, Vector2.zeroVector);
 		Vector2 normalize = normalizedVelocity.RotatedBy(Math.PI / 2d) * width;
-		Color shadow = Color.White * 0.7f;
+		Color shadow = Color.White * 0.4f;
 		List<Vertex2D> bars = new List<Vertex2D>
 			{
 				new Vertex2D(StartCenter + normalize - Main.screenPosition, shadow, new Vector3(0,0,0)),
@@ -69,7 +67,7 @@ public class TuskSlash : ModProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StabbingProjectileShade.Value;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		Color light = new Color(1f, 0.85f, 0.63f, 0) * width * 0.4f;
+		Color light = new Color(0.08f * lightColor.R / 255f, 0.02f * width / 10f * lightColor.G / 255f, 0.02f * width / 10f * lightColor.B / 255f, 0) * width * 0.25f;
 		light *= width / 10f;
 		normalize *= width * width / 450f;
 		bars = new List<Vertex2D>
@@ -81,8 +79,12 @@ public class TuskSlash : ModProjectile, IWarpProjectile
 			};
 		Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StabbingProjectile.Value;
+		//Draw Twice to make the color more vivid.
 		if (bars.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		return false;

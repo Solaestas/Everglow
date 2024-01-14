@@ -2956,21 +2956,20 @@ Projectiles: {
 	TuskSpice.DisplayName: Tusk Spice
 	TuskSpiceBlack.DisplayName: Tusk Spice Black
 	TuskSpicePro.DisplayName: Tusk Spice Pro
-	Tusk.DisplayName: Tusk
 	BloodyBoneYoyo.DisplayName: Bloody Bone Yoyo
-	LittleTusk.DisplayName: Little Tusk
-	LittleTusk0.DisplayName: Little Tusk0
 	SpineGun.DisplayName: Spine Gun
 	SplieSpineBullet.DisplayName: Splie Spine Bullet
 	ToothBow.DisplayName: Tooth Bow
 	ToothBow_BloodArrow.DisplayName: Tooth Bow_ Blood Arrow
+	ToothKnife.DisplayName: Tooth Knife
 	ToothMagic.DisplayName: Tooth Magic
 	ToothMagicBall.DisplayName: Tooth Magic Ball
 	ToothMagicHit.DisplayName: Tooth Magic Hit
 	ToothMagicSplit.DisplayName: Tooth Magic Split
 	ToothMagicSplit2.DisplayName: Tooth Magic Split2
 	ToothSpear_proj.DisplayName: Tooth Spear_proj
-	Tusk0.DisplayName: Tusk0
+	TuskPin.DisplayName: Tusk Pin
+	TuskSlash.DisplayName: Tusk Slash
 	TuskSummon.DisplayName: Tusk Summon
 	BeadShakeWave.DisplayName: Bead Shake Wave
 	BlackCorruptRain.DisplayName: Black Corrupt Rain
@@ -3076,10 +3075,14 @@ Projectiles: {
 	TopazSlingshot.DisplayName: Topaz Slingshot
 	WoodSlingshot.DisplayName: Wood Slingshot
 	ComingGhost.DisplayName: Coming Ghost
+	ComingGhost_Shimmer.DisplayName: Coming Ghost_ Shimmer
 	ComingGhost_Slash.DisplayName: Coming Ghost_ Slash
 	CyanFrostProj.DisplayName: Cyan Frost Proj
+	FocusRay.DisplayName: Focus Ray
 	GhostHit.DisplayName: Ghost Hit
 	GlowMoonBlade.DisplayName: Glow Moon Blade
+	GlowMoonBlade_ash.DisplayName: Glow Moon Blade_ash
+	Glow_Fall.DisplayName: Glow_ Fall
 	GoldRound.DisplayName: Gold Round
 	GoldRoundYoyo.DisplayName: Gold Round Yoyo
 	MeleeHit.DisplayName: Melee Hit

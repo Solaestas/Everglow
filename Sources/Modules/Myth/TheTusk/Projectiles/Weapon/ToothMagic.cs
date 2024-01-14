@@ -356,7 +356,7 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 		}
 		Texture2D t = ModAsset.FogTrace.Value;
 		if (Shade)
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/FogTraceShade5xDark");
+			t = Commons.ModAsset.Trail_2_black_thick.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 
 		if (bars.Count > 3)
