@@ -48,41 +48,37 @@ public class CrystalWind : ModProjectile, IWarpProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		float k1 = 30f;
-		float k0 = (120 - Projectile.timeLeft) / k1;
+		float timeValue = (120 - Projectile.timeLeft) / 120f;
 
-		if (Projectile.timeLeft <= 120 - k1)
-			k0 = 1;
-
-		var c0 = new Color(0, k0 * k0 * 0.2f, k0 * 0.8f + 0.2f, 0);
 		var bars = new List<Vertex2D>();
-		float width = 24;
+		float width = 48;
 		if (Projectile.timeLeft <= 40)
-			width = Projectile.timeLeft * 0.6f;
+			width *= Projectile.timeLeft / 40f;
 
-		int TrueL = 0;
+		int trueL = 0;
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
 				break;
 
-			TrueL++;
+			trueL++;
 		}
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
+		for (int i = 1; i < trueL; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
 				break;
 
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-			var factor = i / (float)TrueL;
-			var w = MathHelper.Lerp(1f, 0.05f, factor);
+			var factor = i / (float)trueL;
+			var c0 = Color.Lerp(new Color(75, 0, 105, 0), new Color(0, 120, 255, 0), factor);
+			c0 *= timeValue;
 			float x0 = factor * 0.6f - (float)(Main.timeForVisualEffects / 35d) + 10000;
-			x0 %= 1f;
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, 0)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, 0)));
 		}
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/GoldLine");
+		Texture2D t = ModAsset.GoldLine.Value;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -91,38 +87,36 @@ public class CrystalWind : ModProjectile, IWarpProjectile
 
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-		var c0 = new Color(0.6f, 0.6f, 0f);
+		
 		var bars = new List<Vertex2D>();
-		float width = 24;
+		float width = 48;
 
-		int TrueL = 0;
+		int trueL = 0;
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
 				break;
 
-			TrueL++;
+			trueL++;
 		}
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
+		for (int i = 1; i < trueL; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
 				break;
 
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-			var factor = i / (float)TrueL;
+			var factor = i / (float)trueL;
 			var w = MathHelper.Lerp(1f, 0.05f, factor);
 			float x0 = factor * 0.6f - (float)(Main.timeForVisualEffects / 35d) + 10000;
-			x0 %= 1f;
+			var c0 = new Color(normalDir.ToRotation() / 6.283f, 0.6f, 0f);
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
 		}
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/GoldLine");
-		//Main.graphics.GraphicsDevice.Textures[0] = t;
+		Texture2D t = ModAsset.GoldLine.Value;
 		if (bars.Count > 3)
-			//Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
-		//Main.spriteBatch.End();
-		//Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 	}
 }

@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
 public class GoldLanternLine7 : ModProjectile
@@ -57,7 +57,7 @@ public class GoldLanternLine7 : ModProjectile
 	{
 		Projectile.Kill();
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		Player player = Main.player[Player.FindClosest(Projectile.position, Projectile.width, Projectile.height)];
 		for (int j = 0; j < 10; j++)
@@ -65,7 +65,7 @@ public class GoldLanternLine7 : ModProjectile
 			Vector2 v2 = Projectile.velocity.RotatedBy(j / 5f * Math.PI);
 			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, v2, ModContent.ProjectileType<GoldLanternLine3>(), 0, 0, player.whoAmI, 0, 0);
 		}
-		Kill(timeLeft);
+		OnKill(timeLeft);
 	}
 	private float Wid = 0;
 	private float sca = 0;

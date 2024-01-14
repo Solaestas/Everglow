@@ -15,8 +15,9 @@ public class EverglowConfig : ModConfig
 	/// 是否是Debug模式，如果是那么我们可以打印很多debug信息，或者运行一些debug下才有的逻辑
 	/// </summary>
 	[DefaultValue(false)]
-	[Label("Enable Debug Mode")]
-	[Tooltip("[For developers] Enable debug mode to allow debug functions to run")]
+	// TODO 转移到hjson中
+	//[Label("Enable Debug Mode")]
+	//[Tooltip("[For developers] Enable debug mode to allow debug functions to run")]
 	public bool debugMode;
 
 	public static bool DebugMode

@@ -49,7 +49,14 @@ public class MothBlueFireDust : Visual
 			timer = maxTime;
 		}
 		velocity *= 0.9f;
-		velocity += new Vector2(Main.windSpeedCurrent * 0.1f, -0.1f);
+		if(ai.Length >= 3)
+		{
+			velocity += new Vector2(Main.windSpeedCurrent * 0.1f, -0.1f) * ai[2];
+		}
+		else
+		{
+			velocity += new Vector2(Main.windSpeedCurrent * 0.1f, -0.1f);
+		}
 		if (scale < 160)
 		{
 			scale += 2f;

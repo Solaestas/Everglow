@@ -39,7 +39,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		/// <summary>
 		/// 重影深度缩变,小于1
 		/// </summary>  
-		public float FadeTradeShade = 0f;
+		public float FadeShade = 0f;
 		/// <summary>
 		/// 重影彩色部分亮度缩变,小于1
 		/// </summary>

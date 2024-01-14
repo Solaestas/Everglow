@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Buffs;
 using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Projectiles;
@@ -31,13 +31,13 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 		if (player.HeldItem.type == ItemID.WaterBolt)
 		{
 			Projectile.timeLeft = player.itemTime + 60;
-			if (Timer < 30)
-				Timer++;
+			if (timer < 30)
+				timer++;
 		}
 		else
 		{
-			Timer--;
-			if (Timer < 0)
+			timer--;
+			if (timer < 0)
 				Projectile.Kill();
 		}
 
@@ -115,23 +115,23 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Projectile.hide = false;
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
-		//DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
-		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color(0, 0.45f, 1f, 0));
-		Main.spriteBatch.Draw(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterBolt/WaterTeleport"), Projectile.Center - Main.screenPosition, null, new Color(0, 30, 255, 0), 0, new Vector2(34), Timer / 30f, SpriteEffects.None, 0);
+		DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(1f, 1f, 1f, 1f));
+		//DrawMagicArray(ModAsset.WaterLineBlackShade.Value, new Color(1f, 1f, 1f, 1f));
+		DrawMagicArray(ModAsset.WaterLine.Value, new Color(0, 0.45f, 1f, 0));
+		Main.spriteBatch.Draw(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterBolt/WaterTeleport"), Projectile.Center - Main.screenPosition, null, new Color(0, 30, 255, 0), 0, new Vector2(34), timer / 30f, SpriteEffects.None, 0);
 		if ((Main.MouseWorld - Projectile.Center).Length() < 30)
 			Utils.DrawBorderString(Main.spriteBatch, Projectile.ai[0].ToString(), Projectile.Center - Main.screenPosition, Color.AliceBlue);
 		return false;
 	}
 
-	internal int Timer = 0;
+	internal int timer = 0;
 
 	public void DrawMagicArray(Texture2D tex, Color c0)
 	{
 		float Size = (float)((Main.timeForVisualEffects / 2d + Projectile.ai[0] * 4) % 40d);
 		float SizeII = (float)((Main.timeForVisualEffects / 2d + 20 + Projectile.ai[0] * 4) % 40d);
-		DrawTexCircle(Size, (40 - Size) * Timer / 30f, c0, Projectile.Center - Main.screenPosition, tex, Main.timeForVisualEffects / 17);
-		DrawTexCircle(SizeII, (40 - SizeII) * Timer / 30f, c0, Projectile.Center - Main.screenPosition, tex, Main.timeForVisualEffects / 17);
+		DrawTexCircle(Size, (40 - Size) * timer / 30f, c0, Projectile.Center - Main.screenPosition, tex, Main.timeForVisualEffects / 17);
+		DrawTexCircle(SizeII, (40 - SizeII) * timer / 30f, c0, Projectile.Center - Main.screenPosition, tex, Main.timeForVisualEffects / 17);
 	}
 
 
@@ -165,13 +165,13 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 
 		float Size = (float)((Main.timeForVisualEffects / 2d + Projectile.ai[0] * 4) % 40d);
 		float SizeII = (float)((Main.timeForVisualEffects / 2d + 20 + Projectile.ai[0] * 4) % 40d);
-		DrawTexCircle(spriteBatch, Size, (40 - Size) * Timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
-		DrawTexCircle(spriteBatch, SizeII, (40 - SizeII) * Timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
+		DrawTexCircle(spriteBatch, Size, (40 - Size) * timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, ModAsset.WaterLine.Value, Main.timeForVisualEffects / 17);
+		DrawTexCircle(spriteBatch, SizeII, (40 - SizeII) * timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, ModAsset.WaterLine.Value, Main.timeForVisualEffects / 17);
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
-		if (Timer < 1)
+		if (timer < 1)
 			return;
 
 
@@ -191,6 +191,6 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 			Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
 			Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
 		}
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 }

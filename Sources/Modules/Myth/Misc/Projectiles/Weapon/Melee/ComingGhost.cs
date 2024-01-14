@@ -1,31 +1,36 @@
-﻿using Everglow.Myth.Common;
 using Everglow.Myth.Misc.Dusts;
-using Terraria;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
 
-class ComingGhost : ModProjectile
+class ComingGhost : MeleeProj
 {
-	public override void SetDefaults()
+	public override void SetDef()
 	{
-		Projectile.width = 110;
-		Projectile.height = 110;
-		Projectile.friendly = true;
-		Projectile.hostile = false;
-		Projectile.penetrate = -1;
-		Projectile.timeLeft = 200;
+		Projectile.aiStyle = -1;
+		Projectile.timeLeft = 30;
 		Projectile.extraUpdates = 1;
+		Projectile.scale = 1f;
+		Projectile.hostile = false;
+		Projectile.friendly = true;
 		Projectile.tileCollide = false;
+		Projectile.ignoreWater = true;
+		Projectile.penetrate = -1;
+		Projectile.usesLocalNPCImmunity = true;
+		Projectile.localNPCHitCooldown = 15;
 		Projectile.DamageType = DamageClass.Melee;
-		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 70;
+
+		Projectile.width = 80;
+		Projectile.height = 80;
+		Projectile.tileCollide = false;
+		Projectile.friendly = true;
+		longHandle = false;
+		maxAttackType = 3;
+		trailLength = 20;
+		shadertype = "Trail";
+		AutoEnd = false;
+		selfWarp = true;
 	}
-	private Vector2 v_1 = new Vector2(-50, -30);
-	private Vector2 v2 = Vector2.Zero;
-	private bool Dir = false;
-	private int Pdir = 1;
-	private float Prot = 0;
-	private bool ExtraKnife = false;
 	private int HasHit = 0;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
@@ -33,365 +38,259 @@ class ComingGhost : ModProjectile
 		if (HasHit > 2)
 			return;
 		Player player = Main.player[Projectile.owner];
-		Vector2 v = new Vector2(0, 80).RotatedByRandom(Math.PI * 2) * 5f;
-		Vector2 v2 = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2);
-		Projectile.NewProjectile(null, target.Center + v, -v * 2.5f, ModContent.ProjectileType<GhostHit>(), Projectile.damage, Projectile.knockBack, player.whoAmI, v2.X, v2.Y);
-		Projectile.NewProjectile(null, target.Center + v + v.RotatedBy(Math.PI / 2d) * 0.05f, -v * 2.42f, ModContent.ProjectileType<GhostHit>(), Projectile.damage, Projectile.knockBack, player.whoAmI, v2.X, v2.Y);
-		Projectile.NewProjectile(null, target.Center + v - v.RotatedBy(Math.PI / 2d) * 0.05f, -v * 2.34f, ModContent.ProjectileType<GhostHit>(), Projectile.damage, Projectile.knockBack, player.whoAmI, v2.X, v2.Y);
+		Vector2 v = new Vector2(0, 6).RotatedByRandom(Math.PI * 2) * 5f;
+		Projectile.NewProjectile(null, target.Center - v * 3, v, ModContent.ProjectileType<GhostHit>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(-0.05f, 0.05f));
 	}
-	float ka = 0;
+	public override string TrailShapeTex()
+	{
+		return "Everglow/Commons/Textures/Melee";
+	}
+	public override string TrailColorTex()
+	{
+		return "Everglow/Myth/Misc/Projectiles/Weapon/Melee/ComingGhost_meleeColor";
+	}
+	public override float TrailAlpha(float factor)
+	{
+		return base.TrailAlpha(factor) * 1.15f;
+	}
+	public override BlendState TrailBlendState()
+	{
+		return BlendState.NonPremultiplied;
+	}
+	public override void End()
+	{
+		Player player = Main.player[Projectile.owner];
+		player.legFrame = new Rectangle(0, 0, player.legFrame.Width, player.legFrame.Height);
+		player.fullRotation = 0;
+		player.legRotation = 0;
+		player.legPosition = Vector2.Zero;
+		Projectile.Kill();
+		player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
+	}
+	public override void OnSpawn(IEntitySource source)
+	{
+		HasHit = 0;
+	}
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
-
-		if (!Dir)
+		base.AI();
+		TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
+		Tplayer.HideLeg = true;
+		useTrail = true;
+		float timeMul = 1 / player.meleeSpeed;
+		if (attackType == 0)
 		{
-			Pdir = Math.Sign(Main.mouseX - player.Center.X + Main.screenPosition.X);
-			Vector2 vc = -(new Vector2(Main.mouseX, Main.mouseY) - player.Center + Main.screenPosition);
-			Prot = (float)Math.Atan2(vc.Y, vc.X);
-			if (Pdir == 1)
-				Prot += (float)Math.PI;
-			ka = Main.rand.NextFloat(Main.rand.NextFloat(0.15f, 1f), 1f);
-			Dir = true;
-			int times = 0;
-			for (int j = 0; j < 200; j++)
+			if (timer < 14 * timeMul)//前摇
 			{
-				if ((Main.npc[j].Center - Projectile.Center).Length() < 510 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly && Main.npc[j].active && Main.npc[j].CanBeChasedBy())
+				useTrail = false;
+				LockPlayerDir(player);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
+			}
+			if (timer == (int)(14 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer > 14 * timeMul && timer < 35 * timeMul)
+			{
+				isAttacking = true;
+				Projectile.rotation += Projectile.spriteDirection * 0.32f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, -1.2f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				player.fullRotationOrigin = new Vector2(10, 42);
+				player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
+				player.legRotation = -player.fullRotation;
+
+				Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)),0, 0, ModContent.DustType<Crow>());
+				d.scale = Main.rand.NextFloat(2f, 4.5f);
+			}
+			if (timer > 44 * timeMul)
+			{
+				HasHit = 0;
+				NextAttackType();
+			}
+
+		}
+
+		if (attackType == 1)
+		{
+			if (timer < 9 * timeMul)//前摇
+			{
+				useTrail = false;
+				LockPlayerDir(player);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
+			}
+			if (timer == (int)(10 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer > 9 * timeMul && timer < 42 * timeMul)
+			{
+				isAttacking = true;
+				Projectile.rotation += Projectile.spriteDirection * 0.17f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, 0, 0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				player.fullRotationOrigin = new Vector2(10, 42);
+				player.fullRotation = MathF.Sin((timer - 9 * timeMul) / (30f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
+				player.legRotation = -player.fullRotation;
+
+				Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)), 0, 0, ModContent.DustType<Crow>());
+				d.scale = Main.rand.NextFloat(2f, 4.5f);
+			}
+			if (timer > 55 * timeMul)
+			{
+				HasHit = 0;
+				NextAttackType();
+			}
+		}
+
+		if (attackType == 2)
+		{
+			if (timer < 10 * timeMul)//前摇
+			{
+				useTrail = false;
+				LockPlayerDir(player);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 1.6f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
+			}
+			if (timer == (int)(10 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer > 9 * timeMul && timer < 25 * timeMul)
+			{
+				isAttacking = true;
+				Projectile.rotation -= Projectile.spriteDirection * 0.45f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, -0.2f, 0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				player.fullRotationOrigin = new Vector2(10, 42);
+				player.fullRotation = MathF.Sin((timer - 9 * timeMul) / (10f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
+				player.legRotation = -player.fullRotation;
+				for(int i = 0;i < 3;i++)
 				{
-					if (Main.rand.NextBool(7))
+					Dust d = Dust.NewDustDirect(player.Center + mainVec * MathF.Sqrt(Main.rand.NextFloat(1f)), 0, 0, ModContent.DustType<Crow>());
+					d.scale = Main.rand.NextFloat(2f, 4.5f);
+				}
+
+			}
+			if (timer > 30 * timeMul)
+			{
+				HasHit = 0;
+				NextAttackType();
+			}
+		}
+
+		if (attackType == 3)
+		{
+			if (timer < 2 * timeMul)//前摇
+			{
+				Projectile.ai[0] = 0;
+				Projectile.ai[1] = player.direction;
+				Style3StartPoint = player.Center;
+				useTrail = false;
+				LockPlayerDir(player);
+				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainVec.ToRotation();
+			}
+			if (timer == (int)(10 * timeMul))
+				AttSound(SoundID.Item1);
+			if (timer > 2 * timeMul && timer < 25 * timeMul)
+			{
+				LockPlayerDir(player);
+				isAttacking = true;
+				player.immuneAlpha = 255;
+				Projectile.rotation += Projectile.spriteDirection * 0.4f / timeMul;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, -1.25f, -0.1f * Projectile.spriteDirection), 0.4f / timeMul);
+				player.fullRotationOrigin = new Vector2(10, 42);
+				player.fullRotation = MathF.Sin((timer - 16 * timeMul) / (28f * timeMul) * MathHelper.Pi) * 0.6f * Projectile.ai[1];
+				player.legRotation = -player.fullRotation;
+				float duration = (timer - 2 * timeMul) / (float)(23 * timeMul) * 100f;
+				if (duration > 10 * Projectile.ai[0])
+				{
+					Projectile.ai[0]++;
+					if(!Collision.SolidCollision(player.position + new Vector2(35 * Projectile.ai[1], 0), player.width, player.height - 20))
 					{
-						Vector2 v = new Vector2(0, 80).RotatedByRandom(Math.PI * 2) * 5f;
-						Vector2 v2 = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2);
-						Projectile.NewProjectile(null, Main.npc[j].Center + v, -v * 2.5f, ModContent.ProjectileType<GhostHit>(), Projectile.damage, Projectile.knockBack, player.whoAmI, v2.X, v2.Y);
-						Projectile.NewProjectile(null, Main.npc[j].Center + v + v.RotatedBy(Math.PI / 2d) * 0.05f, -v * 2.42f, ModContent.ProjectileType<GhostHit>(), Projectile.damage, Projectile.knockBack, player.whoAmI, v2.X, v2.Y);
-						Projectile.NewProjectile(null, Main.npc[j].Center + v - v.RotatedBy(Math.PI / 2d) * 0.05f, -v * 2.34f, ModContent.ProjectileType<GhostHit>(), Projectile.damage, Projectile.knockBack, player.whoAmI, v2.X, v2.Y);
-						times++;
-						if (times >= 3)
-							break;
+						player.position.X += 35 * Projectile.ai[1];
 					}
+
+					Vector2 v0 = new Vector2(0, 14 * Main.rand.NextFloat(0.65f, 1.8f)).RotatedByRandom(MathHelper.TwoPi);
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Style3StartPoint + new Vector2((60 + duration * 2.5f) * Projectile.ai[1], 0) - v0 * 8, v0, ModContent.ProjectileType<ComingGhost_Slash>(), Projectile.damage, Projectile.knockBack);
 				}
 			}
-		}
-		Vector2 v0 = v_1.RotatedBy(1.6 / 170d * Math.PI * (200 - Projectile.timeLeft));
-		if (ExtraKnife)
-		{
-			v0 = v_1.RotatedBy(1.6 / 170d * Math.PI * 170);
-			if (Projectile.timeLeft % 2 == 0)
+			if (timer > 44 * timeMul)
 			{
-				if (Projectile.extraUpdates > 1)
-					Projectile.extraUpdates--;
+				HasHit = 0;
+				NextAttackType();
 			}
-		}
-		else
-		{
-			if (Projectile.timeLeft % 4 == 0)
-			{
-				if (Projectile.extraUpdates < 20)
-					Projectile.extraUpdates++;
-			}
-		}
-		if (Projectile.timeLeft < 30)
-			Projectile.Kill();
-		Projectile.spriteDirection = Pdir;
-		v0.X *= Pdir;
-		Vector2 v1 = new Vector2(v0.X, v0.Y * ka).RotatedBy(Prot) * 2f - new Vector2(47, 47);
-		Projectile.position = player.Center + v1;
-		v2 = Projectile.Center - player.Center;
-		v2.X *= Pdir;
-		float Rot = (float)(Math.Atan2(v2.Y, v2.X) + Math.PI / 4d * Pdir);
-		Projectile.rotation = Rot;
-		Projectile.velocity = v2.RotatedBy(Math.PI / 2d) / v2.Length();
-		if (Pdir == 1)
-		{
-			if (Projectile.timeLeft < 60)
-				Nar = (Projectile.timeLeft - 30f) / 30f;
-			if (ExtraKnife)
-				Nar = 0;
-		}
-		else
-		{
-			if (Projectile.timeLeft < 60)
-				dNar = (Projectile.timeLeft - 30f) / 30f;
-			if (ExtraKnife)
-				dNar = 0;
-		}
-		if (Projectile.timeLeft == 32 && !ExtraKnife)
-		{
-			ExtraKnife = true;
-			Projectile.timeLeft = 70;
+
 		}
 	}
-	float Nar = 1;
-	float dNar = 1;
-	public override bool PreDraw(ref Color lightColor)
+	public Vector2 Style3StartPoint = Vector2.zeroVector;
+	public override void OnKill(int timeLeft)
 	{
 		Player player = Main.player[Projectile.owner];
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/Misc/Projectiles/Weapon/Melee/ComingGhost").Value;
-		int frameHeight = t.Height;
-		var drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
-		if (ExtraKnife)
-		{
-			for (int k = 0; k < (Projectile.timeLeft - 25) * 2; k++)
-			{
-				if (k % 10 == 2)
-				{
-					Vector2 v3 = v_1.RotatedBy(1.6 / 170d * Math.PI * (170 - k)) * 1.5f;
-					v3.X *= Pdir;
-					Vector2 v4 = new Vector2(v3.X, v3.Y * ka).RotatedBy(Prot);
-					Vector2 v5 = new Vector2(v3.X, v3.Y).RotatedBy(Prot);
-					Vector2 drawPos = player.Center + v4 - Main.screenPosition + drawOrigin + new Vector2(1f, Projectile.gfxOffY) - new Vector2(47);
-					Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
-					float Kc = ((Projectile.timeLeft - 25) * 2 - k) / (float)((Projectile.timeLeft - 25) * 2);
-					var color2 = new Color((int)(color.R * Kc), (int)(color.G * Kc), (int)(color.B * Kc), (int)(color.A * Kc));
-					float Rot = (float)(Math.Atan2(v5.Y, v5.X) + Math.PI / 4d * Pdir + Math.PI * (1 - Pdir) / 2d);
-					SpriteEffects S = SpriteEffects.None;
-					if (Pdir == -1)
-						S = SpriteEffects.FlipHorizontally;
-					Main.spriteBatch.Draw(t, drawPos, null, color2, Rot, drawOrigin, Projectile.scale, S, 0f);
-				}
-			}
-			return false;
-		}
-		for (int k = 0; k < Projectile.oldPos.Length; k++)
-		{
-			if (Projectile.oldPos[k] == Vector2.Zero)
-				break;
-			if (k % 10 == 2)
-			{
-				Vector2 v3 = v_1.RotatedBy(1.6 / 170d * Math.PI * (200 - Projectile.timeLeft - k)) * 1.5f;
-				if (Projectile.timeLeft < 30)
-					v3 = v_1.RotatedBy(1.6 * Math.PI) * 1.5f;
-				v3.X *= Pdir;
-				Vector2 v4 = new Vector2(v3.X, v3.Y * ka).RotatedBy(Prot);
-				Vector2 v5 = new Vector2(v3.X, v3.Y).RotatedBy(Prot);
-				Vector2 drawPos = player.Center + v4 - Main.screenPosition + drawOrigin + new Vector2(1f, Projectile.gfxOffY) - new Vector2(47);
-				Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
-				var color2 = new Color((int)(color.R * (Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length), (int)(color.G * (Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length), (int)(color.B * (Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length), (int)(color.A * (Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length));
-				float Rot = (float)(Math.Atan2(v5.Y, v5.X) + Math.PI / 4d * Pdir + Math.PI * (1 - Pdir) / 2d);
-				SpriteEffects S = SpriteEffects.None;
-				if (Pdir == -1)
-					S = SpriteEffects.FlipHorizontally;
-				Main.spriteBatch.Draw(t, drawPos, null, color2, Rot, drawOrigin, Projectile.scale, S, 0f);
-			}
-		}
-		return false;
+		player.fullRotation = 0;
 	}
-	public override void Kill(int timeLeft)
+	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{
+		if (attackType == 3)
+		{
+			return;
+		}
+			//drawScale = new Vector2(-0.6f, 1.14f);
+		base.DrawSelf(spriteBatch, lightColor, diagonal, drawScale, glowTexture);
 	}
-
-	public override void PostDraw(Color lightColor)
+	public override void DrawTrail(Color color)
 	{
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-		var bart = new List<Vertex2D>();
-		Effect ef2 = MythContent.QuickEffect("Effects/Trail");
-		int widti = 70;
-		if (ExtraKnife)
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		var SmoothTrail = new List<Vector2>();
+		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
 		{
-			for (int i = 1; i < (Projectile.timeLeft - 25) * 2; ++i)
-			{
-				Vector2 v3 = v_1.RotatedBy(1.6 / 170d * Math.PI * (170 - i)) * 1.5f;
-
-				v3.X *= Pdir;
-				Vector2 v4 = new Vector2(v3.X, v3.Y * ka).RotatedBy(Prot);
-				var normalDir = v_1.RotatedBy(1.6 / 170d * Math.PI * (170 - i + 1)) * 1.5f - v_1.RotatedBy(1.6 / 170d * Math.PI * (170 - i)) * 1.5f;
-
-				normalDir.X *= Pdir;
-				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X)).RotatedBy(Prot);
-
-				var factor = i / (float)((Projectile.timeLeft - 25) * 2);
-				var color = Color.Lerp(Color.White, Color.Red, factor);
-				var w = MathHelper.Lerp(1f, 0.05f, factor);
-
-				Player player = Main.player[Projectile.owner];
-
-				bart.Add(new Vertex2D(player.Center + v4 + normalDir * widti * Nar, color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-				bart.Add(new Vertex2D(player.Center + v4 + normalDir * -widti * dNar, color, new Vector3((float)Math.Sqrt(factor), 0, w)));
-				if (!Main.gamePaused && Main.rand.NextBool(15))
-				{
-					int num90 = Dust.NewDust(player.Center + v4 + normalDir * -widti * Main.rand.NextFloat(Main.rand.NextFloat(-0.5f, 0.8f), 0.8f) * player.direction, 0, 0, ModContent.DustType<Crow>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.4f, 2.5f));
-					Main.dust[num90].noGravity = true;
-					Main.dust[num90].velocity = v4.RotatedBy(Math.PI / 2d * player.direction) / v4.Length();
-				}
-			}
+			SmoothTrail.Add(SmoothTrailX[x]);
 		}
-		else
-		{
-			for (int i = 1; i < Projectile.oldPos.Length; ++i)
-			{
-				if (Projectile.oldPos[i] == Vector2.Zero)
-					break;
-				Vector2 v3 = v_1.RotatedBy(1.6 / 170d * Math.PI * (200 - Projectile.timeLeft - i)) * 1.5f;
-				if (Projectile.timeLeft < 30)
-					v3 = v_1.RotatedBy(1.6 * Math.PI) * 1.5f;
-				v3.X *= Pdir;
-				Vector2 v4 = new Vector2(v3.X, v3.Y * ka).RotatedBy(Prot);
-				var normalDir = v_1.RotatedBy(1.6 / 170d * Math.PI * (200 - Projectile.timeLeft - i + 1)) * 1.5f - v_1.RotatedBy(1.6 / 170d * Math.PI * (200 - Projectile.timeLeft - i)) * 1.5f;
-				if (Projectile.timeLeft < 30)
-				{
-					if (i < 30 - Projectile.timeLeft)
-						normalDir = v_1.RotatedBy(1.6 / 170d * Math.PI * 170) * 1.5f - v_1.RotatedBy(1.6 / 170d * Math.PI * 169.99) * 1.5f;
-				}
-				normalDir.X *= Pdir;
-				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X)).RotatedBy(Prot);
+		if (trailVecs.Count != 0)
+			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
 
-				var factor = i / (float)Projectile.oldPos.Length;
-				var color = Color.Lerp(Color.White, Color.Red, factor);
-				float h = 0;
-				if (Projectile.timeLeft > 130)
-					h = (Projectile.timeLeft - 200) / 70f + 1;
-				var w = MathHelper.Lerp(1f, 0.05f, factor + h);
-
-				Player player = Main.player[Projectile.owner];
-
-				bart.Add(new Vertex2D(player.Center + v4 + normalDir * widti * Nar, color, new Vector3((float)Math.Sqrt(factor + h), 1, w)));
-				bart.Add(new Vertex2D(player.Center + v4 + normalDir * -widti * dNar, color, new Vector3((float)Math.Sqrt(factor + h), 0, w)));
-				if (!Main.gamePaused && Main.rand.NextBool(15))
-				{
-					int num90 = Dust.NewDust(player.Center + v4 + normalDir * -widti * Main.rand.NextFloat(Main.rand.NextFloat(-0.5f, 0.8f), 0.8f) * player.direction, 0, 0, ModContent.DustType<Crow>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.4f, 2.5f));
-					Main.dust[num90].noGravity = true;
-					Main.dust[num90].velocity = v4.RotatedBy(Math.PI / 2d * player.direction) / v4.Length();
-				}
-			}
-		}
-
-
-		var triangleLisu = new List<Vertex2D>();
-
-		if (bart.Count > 2)
-		{
-			triangleLisu.Add(bart[0]);
-			var vertex = new Vertex2D((bart[0].position + bart[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 3, Color.White, new Vector3(0, 0.5f, 1));
-			triangleLisu.Add(bart[1]);
-			triangleLisu.Add(vertex);
-			for (int i = 0; i < bart.Count - 2; i += 2)
-			{
-				triangleLisu.Add(bart[i]);
-				triangleLisu.Add(bart[i + 2]);
-				triangleLisu.Add(bart[i + 1]);
-
-				triangleLisu.Add(bart[i + 1]);
-				triangleLisu.Add(bart[i + 2]);
-				triangleLisu.Add(bart[i + 3]);
-			}
-			RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
-			ef2.Parameters["uTransform"].SetValue(model * projection);
-			ef2.Parameters["uTime"].SetValue(-(float)Main.time * 0.21f);
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapRedBeta").Value;
-			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/ComingGhostD" + (1 + Pdir).ToString()).Value;
-			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/ForgeWaveLight").Value;
-			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-			Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
-			Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
-			ef2.CurrentTechnique.Passes[0].Apply();
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleLisu.ToArray(), 0, triangleLisu.Count / 3);
-			Main.graphics.GraphicsDevice.RasterizerState = originalState;
-		}
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+		int length = SmoothTrail.Count;
+		if (length <= 3)
+			return;
+		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
-		Effect ef = MythContent.QuickEffect("Effects/Trail");
-		int width = 70;
-		if (ExtraKnife)
+
+		for (int i = 0; i < length; i++)
 		{
-			for (int i = 1; i < (Projectile.timeLeft - 25) * 2; ++i)
+			float factor = i / (length - 1f);
+			float w = TrailAlpha(factor);
+			Color c0 = Color.White;
+			if (i == 0)
 			{
-				Vector2 v3 = v_1.RotatedBy(1.6 / 170d * Math.PI * (170 - i)) * 1.5f;
-				if (Projectile.timeLeft < 30)
-					v3 = v_1.RotatedBy(1.6 * Math.PI) * 1.5f;
-				v3.X *= Pdir;
-				Vector2 v4 = new Vector2(v3.X, v3.Y * ka).RotatedBy(Prot);
-				var normalDir = v_1.RotatedBy(1.6 / 170d * Math.PI * (170 - i + 1)) * 1.5f - v_1.RotatedBy(1.6 / 170d * Math.PI * (170 - i)) * 1.5f;
-				if (Projectile.timeLeft < 30)
-				{
-					if (i < 30 - Projectile.timeLeft)
-						normalDir = v_1.RotatedBy(1.6 / 170d * Math.PI * 170) * 1.5f - v_1.RotatedBy(1.6 / 170d * Math.PI * 169.99) * 1.5f;
-				}
-				normalDir.X *= Pdir;
-				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X)).RotatedBy(Prot);
-
-				var factor = i / (float)((Projectile.timeLeft - 25) * 2);
-				var color = Color.Lerp(Color.White, Color.Red, factor);
-				var w = MathHelper.Lerp(1f, 0.05f, factor);
-
-				Player player = Main.player[Projectile.owner];
-
-				bars.Add(new Vertex2D(player.Center + v4 + normalDir * width * Nar, color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-				bars.Add(new Vertex2D(player.Center + v4 + normalDir * -width * dNar, color, new Vector3((float)Math.Sqrt(factor), 0, w)));
+				c0 = Color.Transparent;
 			}
+			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.3f * Projectile.scale, c0, new Vector3(factor, 1, 0f)));
+			bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, c0, new Vector3(factor, 0, w)));
 		}
-		else
-		{
-			for (int i = 1; i < Projectile.oldPos.Length; ++i)
-			{
-				if (Projectile.oldPos[i] == Vector2.Zero)
-					break;
-				Vector2 v3 = v_1.RotatedBy(1.6 / 170d * Math.PI * (200 - Projectile.timeLeft - i)) * 1.5f;
-				if (Projectile.timeLeft < 30)
-					v3 = v_1.RotatedBy(1.6 * Math.PI) * 1.5f;
-				v3.X *= Pdir;
-				Vector2 v4 = new Vector2(v3.X, v3.Y * ka).RotatedBy(Prot);
-				var normalDir = v_1.RotatedBy(1.6 / 170d * Math.PI * (200 - Projectile.timeLeft - i + 1)) * 1.5f - v_1.RotatedBy(1.6 / 170d * Math.PI * (200 - Projectile.timeLeft - i)) * 1.5f;
-				if (Projectile.timeLeft < 30)
-				{
-					if (i < 30 - Projectile.timeLeft)
-						normalDir = v_1.RotatedBy(1.6 / 170d * Math.PI * 170) * 1.5f - v_1.RotatedBy(1.6 / 170d * Math.PI * 169.99) * 1.5f;
-				}
-				normalDir.X *= Pdir;
-				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X)).RotatedBy(Prot);
-
-				var factor = i / (float)Projectile.oldPos.Length;
-				var color = Color.Lerp(Color.White, Color.Red, factor);
-				float h = 0;
-				if (Projectile.timeLeft > 130)
-					h = (Projectile.timeLeft - 200) / 70f + 1;
-				var w = MathHelper.Lerp(1f, 0.05f, factor + h);
-
-				Player player = Main.player[Projectile.owner];
-
-				bars.Add(new Vertex2D(player.Center + v4 + normalDir * width * Nar, color, new Vector3((float)Math.Sqrt(factor + h), 1, w)));
-				bars.Add(new Vertex2D(player.Center + v4 + normalDir * -width * dNar, color, new Vector3((float)Math.Sqrt(factor + h), 0, w)));
-			}
-		}
-
-
-		var triangleList = new List<Vertex2D>();
-
-		if (bars.Count > 2)
-		{
-			triangleList.Add(bars[0]);
-			var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 3, Color.White, new Vector3(0, 0.5f, 1));
-			triangleList.Add(bars[1]);
-			triangleList.Add(vertex);
-			for (int i = 0; i < bars.Count - 2; i += 2)
-			{
-				triangleList.Add(bars[i]);
-				triangleList.Add(bars[i + 2]);
-				triangleList.Add(bars[i + 1]);
-
-				triangleList.Add(bars[i + 1]);
-				triangleList.Add(bars[i + 2]);
-				triangleList.Add(bars[i + 3]);
-			}
-			RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
-			ef.Parameters["uTransform"].SetValue(model * projection);
-			ef.Parameters["uTime"].SetValue(0);
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapRedBeta").Value;
-			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/ComingGhost" + (1 + Pdir).ToString()).Value;
-			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/ComingGhost" + (1 + Pdir).ToString()).Value;
-			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-			Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
-			Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
-			ef.CurrentTechnique.Passes[0].Apply();
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
-			Main.graphics.GraphicsDevice.RasterizerState = originalState;
-		}
+		bars.Add(new Vertex2D(Projectile.Center + mainVec * 0.3f * Projectile.scale, Color.White, new Vector3(0, 1, 0f)));
+		bars.Add(new Vertex2D(Projectile.Center + mainVec * Projectile.scale, Color.White, new Vector3(0, 0, 1)));
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+
+		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
+		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		//Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+
+		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
+		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
+
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+	}
+	public override void DrawWarp(VFXBatch spriteBatch)
+	{
+		
 	}
 }

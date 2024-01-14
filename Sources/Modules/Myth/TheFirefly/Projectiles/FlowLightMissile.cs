@@ -43,6 +43,7 @@ internal class FlowLightMissile : ModProjectile
 			oldPo = Projectile.Center;
 			Projectile.Center = oldPo;
 			Projectile.velocity *= 0;
+			player.itemAnimation = 1;
 		}
 		if (!player.controlUseItem && release)
 		{
@@ -91,7 +92,6 @@ internal class FlowLightMissile : ModProjectile
 	private void HitToAnything()
 	{
 		Player player = Main.player[Projectile.owner];
-		ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
 
 		Projectile.velocity = Projectile.oldVelocity;
 		Projectile.friendly = false;

@@ -1,4 +1,4 @@
-﻿using Terraria.GameContent;
+using Terraria.GameContent;
 namespace Everglow.Myth.Common;
 
 public static class ProjectileExtras

@@ -46,7 +46,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     if (!any(mainTex))
         return float4(0, 0, 0, 0);
     if (colorNoise.r < duration)
-        return mainTex;
+        return mainTex * input.Color;
     if (colorNoise.r < duration + 0.2)
         return uDissolveColor;
     return float4(0, 0, 0, 0);

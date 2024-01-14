@@ -58,7 +58,7 @@ class WorldHit : ModProjectile, IWarpProjectile
 		return false;
 	}
 	private Effect ef;
-	internal float radious = 0;
+	internal float radius = 0;
 	internal float FirstRo = 0;
 	internal float SecondRo = 0;
 	internal Vector2[,] DrawLine = new Vector2[23, 18];
@@ -76,18 +76,18 @@ class WorldHit : ModProjectile, IWarpProjectile
 		ef = MythContent.QuickEffect("Effects/FadeCurseGreen");
 		float widx = Projectile.timeLeft / 120f;
 		float widxM = 1f - widx;
-		radious = (float)(Math.Sqrt(5 * widxM) * 60) * Projectile.ai[0];
+		radius = (float)(Math.Sqrt(5 * widxM) * 60) * Projectile.ai[0];
 		float width = widx * widx * 80f + 10;
 		for (int i = 0; i < 51; ++i)
 		{
-			Vector2 vDp = new Vector2(0, radious).RotatedBy(i / 25d * Math.PI + FirstRo);
+			Vector2 vDp = new Vector2(0, radius).RotatedBy(i / 25d * Math.PI + FirstRo);
 			var normalDir = Vector2.Normalize(vDp);
 
 			var factor = i / 50f;
 			var color = Color.Lime;
 			var w = MathHelper.Lerp(1f, 0.05f, 0.5f);
 
-			if (width < radious)
+			if (width < radius)
 				bars.Add(new Vertex2D(Projectile.Center, color, new Vector3(factor, 0, w)));
 			else
 			{

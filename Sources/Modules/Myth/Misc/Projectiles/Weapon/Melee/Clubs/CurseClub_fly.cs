@@ -1,7 +1,5 @@
-using Everglow.Commons.Utilities;
 using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
-using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Shaders;
 
@@ -69,26 +67,24 @@ public class CurseClub_fly : ModProjectile, IWarpProjectile
 
 	private void GenerateVFX()
 	{
-		Vector2 v2 = Projectile.velocity;
-		float mulVelocity = 0.3f + Omega + v2.Length() / 10f;
-		mulVelocity *= 0.8f;
+		float mulVelocity = 0.3f + Omega;
 		var v0 = new Vector2(1, 1);
 		v0 *= Main.rand.NextFloat(Main.rand.NextFloat(HitLength * 0.75f, HitLength), HitLength);
 		v0.X *= Projectile.spriteDirection;
 		if (Main.rand.NextBool(2))
 			v0 *= -1;
 		v0 = v0.RotatedBy(Projectile.rotation + Main.rand.NextFloat(Omega));
-		float Speed = Math.Min(Omega * 0.15f, 0.061f);
+		float Speed = Math.Min(Omega * 0.15f, 0.061f) * 1.2f;
 		var v1 = new Vector2(-v0.Y * Speed, v0.X * Speed);
 
 		var cf = new CursedFlameDust
 		{
-			velocity = v1 + v2 * 0.5f,
+			velocity = v1 + Projectile.velocity * 0.3f,
 			Active = true,
 			Visible = true,
 			position = Projectile.Center + v0,
-			maxTime = Main.rand.Next(17, 32),
-			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(3.6f, 10f) * mulVelocity }
+			maxTime = Main.rand.Next(27, 72),
+			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Omega * 0.1f, Main.rand.NextFloat(3.6f, 30f) * mulVelocity }
 		};
 		Ins.VFXManager.Add(cf);
 	}
@@ -316,7 +312,7 @@ public class CurseClub_fly : ModProjectile, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/Clubs/CurseClub_trail");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.CurseClub_trail.Value;
 
 		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
 		lightColor.W = 0.7f * Omega;

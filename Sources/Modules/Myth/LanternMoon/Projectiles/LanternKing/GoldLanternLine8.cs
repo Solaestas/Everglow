@@ -68,7 +68,7 @@ public class GoldLanternLine8 : ModProjectile
 	{
 		Projectile.Kill();
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		/*Player player = Main.player[Player.FindClosest(Projectile.position, Projectile.width, Projectile.height)];
             for (int j = 0;j < 10; j++)

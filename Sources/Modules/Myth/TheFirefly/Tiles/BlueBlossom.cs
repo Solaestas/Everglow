@@ -78,7 +78,7 @@ public class BlueBlossom : ModTile, ITileFluentlyDrawn
 		var frame = new Rectangle(tile.TileFrameX, 0, 120, 108);
 
 		// 回声涂料
-		if (!tileDrawing.IsVisible(tile))
+		if (!TileDrawing.IsVisible(tile))
 			return;
 
 		int paint = Main.tile[tilePos].TileColor;

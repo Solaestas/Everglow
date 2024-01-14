@@ -8,8 +8,4 @@ public class PineWoodWall : ModWall
 		DustType = DustID.WoodFurniture;
 		AddMapEntry(new Color(24, 10, 10));
 	}
-	public override bool CanExplode(int i, int j)
-	{
-		return false;
-	}
 }

@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.OmniElementItems;
 using Terraria.DataStructures;
 
@@ -237,7 +237,7 @@ internal class LilyHarpProj : ModProjectile//, IWarpProjectile
 			}
 			if (Vx.Count > 2)
 			{
-				Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/VineLine");
+				Texture2D t = ModAsset.VineLine.Value;
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 			}
@@ -249,7 +249,7 @@ internal class LilyHarpProj : ModProjectile//, IWarpProjectile
 			if (value is < 1 and > 0)
 				DrawCircle(value * 133, 8 * (1 - value) + 3, new Color(0, 0.10f * (1 - value), 0.06f * (1 - value), 0f), player.Center + new Vector2(player.direction * 15, 0) - Main.screenPosition);
 		}
-		Texture2D tx = MythContent.QuickTexture("OmniElementItems/Projectiles/LilyHarpProj");
+		Texture2D tx = ModAsset.LilyHarpProj.Value;
 		float AddRot = player.fullRotation;
 		SpriteEffects se = SpriteEffects.None;
 		if (player.direction == -1)
@@ -266,36 +266,36 @@ internal class LilyHarpProj : ModProjectile//, IWarpProjectile
 		return false;
 	}
 
-	private static void DrawCircle(float radious, float width, Color color, Vector2 center)
+	private static void DrawCircle(float radius, float width, Color color, Vector2 center)
 	{
 		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radious / 2; h++)
+		for (int h = 0; h < radius / 2; h++)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 0, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(h / radius * Math.PI * 4), color, new Vector3(0.5f, 0, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, radious), color, new Vector3(0.5f, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + width), color, new Vector3(0.5f, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius), color, new Vector3(0.5f, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius + width), color, new Vector3(0.5f, 0, 0)));
 		if (circle.Count > 0)
 		{
-			Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+			Texture2D t = ModAsset.Wave.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}
-	private static void DrawCircle(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center)
+	private static void DrawCircle(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center)
 	{
 		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radious / 2; h++)
+		for (int h = 0; h < radius / 2; h++)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 0, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(h / radius * Math.PI * 4), color, new Vector3(0.5f, 0, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, radious), color, new Vector3(0.5f, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious + width), color, new Vector3(0.5f, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius), color, new Vector3(0.5f, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius + width), color, new Vector3(0.5f, 0, 0)));
 		if (circle.Count > 0)
 		{
-			Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+			Texture2D t = ModAsset.Wave.Value;
 			spriteBatch.Draw(t, circle, PrimitiveType.TriangleStrip);
 		}
 	}

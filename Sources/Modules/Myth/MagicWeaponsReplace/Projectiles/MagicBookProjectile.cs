@@ -27,7 +27,7 @@ public abstract class MagicBookProjectile : ModProjectile
 	/// <summary>
 	/// 最好不要动计时器，计算书本的翻开程度，甚至决定了书本是否kill
 	/// </summary>
-	internal int Timer = 0;
+	internal int timer = 0;
 	/// <summary>
 	/// 产生粒子的类型（主要应用于Kill的时候）
 	/// </summary>
@@ -105,13 +105,13 @@ public abstract class MagicBookProjectile : ModProjectile
 		if (player.itemTime > 0 && player.HeldItem.type == ItemType && player.active && !player.dead)//检测手持物品
 		{
 			Projectile.timeLeft = player.itemTime + 60;
-			if (Timer < 30)
-				Timer++;
+			if (timer < 30)
+				timer++;
 		}
 		else
 		{
-			Timer--;
-			if (Timer < 0)
+			timer--;
+			if (timer < 0)
 				Projectile.Kill();
 		}
 		Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;//玩家动作
@@ -227,8 +227,8 @@ public abstract class MagicBookProjectile : ModProjectile
 			var bars = new List<Vertex2D>();
 			for (int i = 0; i < 10/*一页相当于10个【矩形长条】组成的曲面*/; ++i)
 			{
-				double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4)/*一个和时间，i都有关的函数，制造了页的曲面效果，timer到30就停了，Main.timeForVisualEffects一直变化*/;
-				rot -= x / 540d * Timer;//每一页之间的角度差
+				double rot = timer / 270d + i * timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4)/*一个和时间，i都有关的函数，制造了页的曲面效果，timer到30就停了，Main.timeForVisualEffects一直变化*/;
+				rot -= x / 540d * timer;//每一页之间的角度差
 				rot += Projectile.rotation;//当然也收到弹幕本身的旋转角度影响
 				Vector2 basePos = Projectile.Center + x0 - x0.RotatedBy(rot) * i / 4.5f;//【矩形长条】长轴的中点，借x0遍历经过弯曲的宽轴【-x0,x0】，如果你意识到了x0是半宽轴，这里就不会有什么疑问
 
@@ -278,11 +278,11 @@ public abstract class MagicBookProjectile : ModProjectile
 		var barsII = new List<Vertex2D>();
 		for (int i = 0; i < 10; ++i)
 		{
-			double rotII = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);//翻页起点角度
-			rotII += 8 / 18d / 30d * Timer;
+			double rotII = -timer / 270d - i * timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);//翻页起点角度
+			rotII += 8 / 18d / 30d * timer;
 
-			double rotIII = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4);//翻页终点角度
-			rotIII -= 8 / 18d / 30d * Timer;
+			double rotIII = timer / 270d + i * timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4);//翻页终点角度
+			rotIII -= 8 / 18d / 30d * timer;
 
 			double rotIV = MathHelper.Lerp((float)rotII, (float)rotIII, (float)(Main.timeForVisualEffects / 15d + Math.Sin(Main.timeForVisualEffects / 62d) * 9) % 1f);//翻页过程角度插值
 			rotIV += Projectile.rotation;
@@ -332,8 +332,8 @@ public abstract class MagicBookProjectile : ModProjectile
 			var bars = new List<Vertex2D>();
 			for (int i = 0; i < 10; ++i)
 			{
-				double rot = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
-				rot += x / 18d / 30d * Timer;
+				double rot = -timer / 270d - i * timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
+				rot += x / 18d / 30d * timer;
 				rot += Projectile.rotation;
 				Vector2 basePos = Projectile.Center + x0 - x0.RotatedBy(rot) * i / 4.5f - y0 * 0.05f - x0 * 0.02f;//【- y0 * 0.05f - x0 * 0.02f】再现，为了不让翻起的那一页到前面时凸出来
 
@@ -397,7 +397,7 @@ public abstract class MagicBookProjectile : ModProjectile
 		var bars = new List<Vertex2D>();
 		for (int i = 0; i < 10; ++i)
 		{
-			double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4);
+			double rot = timer / 270d + i * timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4);
 			Vector2 basePos = Projectile.Center + x0 - x0.RotatedBy(rot) * i / 4.5f;
 
 			float upX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
@@ -458,7 +458,7 @@ public abstract class MagicBookProjectile : ModProjectile
 		var bars = new List<Vertex2D>();
 		for (int i = 0; i < 10; ++i)
 		{
-			double rot = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
+			double rot = -timer / 270d - i * timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
 			rot += Projectile.rotation;
 			Vector2 basePos = Projectile.Center + x0 - x0.RotatedBy(rot) * i / 4.5f - y0 * 0.05f - x0 * 0.02f;
 
@@ -502,7 +502,7 @@ public abstract class MagicBookProjectile : ModProjectile
 		}
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		if (DustType == -1)
 			return;

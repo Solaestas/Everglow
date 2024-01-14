@@ -54,7 +54,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 		}
 		return false;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
 		Player player = Main.player[Projectile.owner];
@@ -130,7 +130,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		float lightValue = (Projectile.timeLeft - 100f) / 200f;
-		Texture2D Water = ModAsset.Projectiles_ElecLine.Value;
+		Texture2D Water = ModAsset.ElecLine.Value;
 		Texture2D WaterS = ModAsset.WaterLineBlackShade.Value;
 		float value0 = (float)(Math.Sin(800d / (Projectile.timeLeft + 35)) * 0.75f + 0.25f) * (300 - Projectile.timeLeft) / 300f;
 		value0 = Math.Max(0, value0);
@@ -138,8 +138,8 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 		DrawTexCircle(132, 32, new Color(0, 0.45f * value0, 1f * value0, 0), Projectile.Center - Main.screenPosition, Water, Main.time / 17);
 		DrawTexCircle(122, 42, new Color(0, 0.15f * value0, 0.33f * value0, 0), Projectile.Center - Main.screenPosition, Water, -Main.time / 17);
 
-		Texture2D Dark = ModAsset.BlueFlameDark.Value;
-		Main.spriteBatch.Draw(Dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, Dark.Size() / 2f, SparkleStrength / 60f, SpriteEffects.None, 0f);
+		Texture2D dark = ModAsset.BlueFlameDark.Value;
+		Main.spriteBatch.Draw(dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, dark.Size() / 2f, SparkleStrength / 60f, SpriteEffects.None, 0f);
 		Texture2D Light = ModAsset.CorruptLight.Value;
 		if (lightValue > 0)
 		{
@@ -156,7 +156,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 			}
 			else
 			{
-				Main.spriteBatch.Draw(Dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, Dark.Size() / 2f, k3, SpriteEffects.None, 0);
+				Main.spriteBatch.Draw(dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, dark.Size() / 2f, k3, SpriteEffects.None, 0);
 
 			}
 			Texture2D Star = ModAsset.LineLight.Value;
@@ -166,7 +166,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 		}
 		else if(Projectile.timeLeft <= 5)
 		{
-			Main.spriteBatch.Draw(Dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, Dark.Size() / 2f, Projectile.timeLeft / 5f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, dark.Size() / 2f, Projectile.timeLeft / 5f, SpriteEffects.None, 0f);
 			Texture2D Star = ModAsset.LineLight.Value;
 			Main.spriteBatch.Draw(Star, Projectile.Center - Main.screenPosition, null, new Color(0f, 1f, 1f, 0), 0, Star.Size() / 2f, new Vector2(0.75f, 0.4f * Projectile.timeLeft / 10f), SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(Star, Projectile.Center - Main.screenPosition, null, new Color(0f, 1f, 1f, 0), MathF.PI / 2, Star.Size() / 2, new Vector2(0.52f, 0.4f * Projectile.timeLeft / 10f), SpriteEffects.None, 0);
@@ -179,19 +179,19 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 		return false;
 	}
 
-	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
 
-		for (int h = 0; h < radious / 2; h += 1)
+		for (int h = 0; h < radius / 2; h += 1)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 0, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
 		if (circle.Count > 2)
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
 	}
@@ -202,7 +202,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
 			colorV *= 10;
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Vague");
+		Texture2D t = ModAsset.SparkLight.Value;
 		float width = 60;
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft;

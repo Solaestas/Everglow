@@ -1,8 +1,11 @@
 using Everglow.Commons.Modules;
 using Everglow.Myth.Common.FogEffect.Sky;
 using Everglow.Myth.TheFirefly.Backgrounds;
+using Everglow.Myth.TheFirefly.WorldGeneration;
+using Everglow.Myth.TheTusk.WorldGeneration;
 using MonoMod.Cil;
 using ReLogic.Content;
+using SubworldLibrary;
 using Terraria.GameContent.Shaders;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
@@ -34,10 +37,18 @@ public class MythModule : EverglowModule
 			On_FilterManager.EndCapture += FilterManager_EndCapture;
 			SkyManager.Instance["TuskSky"] = new TheTusk.Backgrounds.TuskBiomeSky();
 
+			On_WorldGen.oceanDepths += WorldGen_oceanDepths;
 			m_fogPass = new FogPass();
 		}
 	}
-
+	private bool WorldGen_oceanDepths(On_WorldGen.orig_oceanDepths orig, int x, int y)
+	{
+		if (SubworldSystem.IsActive<MothWorld>() || SubworldSystem.IsActive<TuskWorld>())
+		{
+			return false;
+		}
+		return orig(x, y);
+	}
 	public override void Unload()
 	{
 		ReplaceEffectPass = null;

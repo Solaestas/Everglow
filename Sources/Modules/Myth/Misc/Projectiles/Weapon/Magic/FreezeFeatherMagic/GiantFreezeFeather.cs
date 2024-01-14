@@ -15,14 +15,14 @@ public class GiantFreezeFeather : ModProjectile
 		Projectile.DamageType = DamageClass.Magic;
 		Projectile.tileCollide = true;
 		Projectile.timeLeft = 360;
-		Projectile.penetrate = 1;
+		Projectile.penetrate = -1;
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.extraUpdates = 3;
 		Projectile.localNPCHitCooldown = 2;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 80;
 	}
-	internal int TimeTokill = -1;
+	public int TimeTokill = -1;
 	public override void AI()
 	{
 		if (TimeTokill >= 0 && TimeTokill <= 2)
@@ -140,14 +140,14 @@ public class GiantFreezeFeather : ModProjectile
 		if (TimeTokill >= 0)
 		{
 			float timeValue = (80 - TimeTokill) / 80f;
-			DrawTrail(Commons.ModAsset.Trail_2_black_thick.Value, Color.White, 36);
-			DrawTrail(Commons.ModAsset.Trail_6.Value, new Color(1f * (1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 1f, 0f), Math.Max(TimeTokill - 44, 0));
+			DrawTrail(Commons.ModAsset.Trail_2_black_thick.Value, Color.White * 0.3f, 36);
+			DrawTrail(Commons.ModAsset.Trail_6.Value, new Color(0.55f * (1 - timeValue) * (1 - timeValue), 0.9f * (1 - timeValue), 1f, 0f), Math.Max(TimeTokill - 44, 0));
 			return;
 		}
 		else
 		{
-			DrawTrail(Commons.ModAsset.Trail_2_black_thick.Value, Color.White);
-			DrawTrail(Commons.ModAsset.Trail_6.Value, new Color(0.7f, 0.9f, 1f, 0f));
+			DrawTrail(Commons.ModAsset.Trail_2_black_thick.Value, Color.White * 0.3f);
+			DrawTrail(Commons.ModAsset.Trail_6.Value, new Color(0.55f, 0.9f, 1f, 0f));
 		}
 		SpriteEffects spriteEffects = SpriteEffects.None;
 		if (Projectile.spriteDirection == -1)
@@ -260,6 +260,7 @@ public class GiantFreezeFeather : ModProjectile
 		Player player = Main.player[Projectile.owner];
 		TimeTokill = 80;
 		Projectile.tileCollide = false;
+		Projectile.friendly = false;
 		Projectile.ignoreWater = true;
 		Projectile.velocity = Projectile.oldVelocity;
 		SoundEngine.PlaySound((SoundID.DD2_WitherBeastCrystalImpact.WithVolume(0.3f)).WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);

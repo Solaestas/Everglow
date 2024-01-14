@@ -6,9 +6,10 @@ public sealed class MythManualMusicRegistration : ILoadable
 	{
 		// Title Music
 		MusicLoader.AddMusic(mod, "Myth/Musics/BaseMusic");
-		MusicLoader.AddMusic(mod, "Myth/Musics/MenuMusic");
+		//MusicLoader.AddMusic(mod, "Myth/Musics/MenuMusic");
 		// Moth Musics
 		MusicLoader.AddMusic(mod, "Myth/Musics/MothBiome");
+		MusicLoader.AddMusic(mod, "Myth/Musics/MothBiomeOld");
 		MusicLoader.AddMusic(mod, "Myth/Musics/MothFighting");
 		// Other Moth Music
 		MusicLoader.AddMusic(mod, "Myth/Musics/MothFightingAlt");

@@ -1,5 +1,4 @@
 using Everglow.Commons.TileHelper;
-using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
@@ -11,19 +10,19 @@ namespace Everglow.Commons.Utilities;
 public static class FurnitureUtils
 {
 	#region Swingable Object Drawing
-	
+
 	public static void BannerFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		int top = pos.Y - Main.tile[pos].TileFrameY / 18;
 		HangingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(pos.X, top), -4);
 	}
-	
+
 	public static void LanternFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		int top = pos.Y - Main.tile[pos].TileFrameY / 18;
 		HangingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(pos.X, top), 0);
 	}
-	
+
 	public static void Chandelier3x3FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		int left = Main.tile[pos].TileFrameX / 18;
@@ -45,13 +44,14 @@ public static class FurnitureUtils
 	public static void HangingObjectFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing, Point topLeft, float swayOffset = -4f, float swayStrength = 0.15f)
 	{
 		var tile = Main.tile[pos];
-        var tileData = TileObjectData.GetTileData(tile.type, 0);
+		var tileData = TileObjectData.GetTileData(tile.type, 0);
 
-		if (!tileDrawing.IsVisible(tile) || tileData is null) return;
+		if (!TileDrawing.IsVisible(tile) || tileData is null)
+			return;
 
 		// 油漆
 		Texture2D tex = tileDrawing.GetTileDrawTexture(tile, pos.X, pos.Y);
-		
+
 		short tileFrameX = tile.frameX;
 		short tileFrameY = tile.frameY;
 
@@ -63,7 +63,8 @@ public static class FurnitureUtils
 
 		int offsetY = tileData.DrawYOffset;
 		// 锤子是这样的
-		if (WorldGen.IsBelowANonHammeredPlatform(topTileX, topTileY)) {
+		if (WorldGen.IsBelowANonHammeredPlatform(topTileX, topTileY))
+		{
 			offsetY -= 8;
 		}
 
@@ -108,13 +109,15 @@ public static class FurnitureUtils
 
 		// 绘制
 		spriteBatch.Draw(tex, finalDrawPos, rectangle, tileLight, rotation, finalOrigin, 1f, SpriteEffects.None, 0f);
-	
+
 		// 有火的话绘制火
-		if (TileLoader.GetTile(tile.type) is not ITileFlameData tileFlame) return;
+		if (TileLoader.GetTile(tile.type) is not ITileFlameData tileFlame)
+			return;
 
 		TileDrawing.TileFlameData tileFlameData = tileFlame.GetTileFlameData(pos.X, pos.Y, tile.type, tileFrameY);
 		ulong seed = tileFlameData.flameSeed is 0 ? Main.TileFrameSeed ^ (ulong)(((long)pos.X << 32) | (uint)pos.Y) : tileFlameData.flameSeed;
-		for (int k = 0; k < tileFlameData.flameCount; k++) {
+		for (int k = 0; k < tileFlameData.flameCount; k++)
+		{
 			float x = Utils.RandomInt(ref seed, tileFlameData.flameRangeXMin, tileFlameData.flameRangeXMax) * tileFlameData.flameRangeMultX;
 			float y = Utils.RandomInt(ref seed, tileFlameData.flameRangeYMin, tileFlameData.flameRangeYMax) * tileFlameData.flameRangeMultY;
 			Main.spriteBatch.Draw(tileFlameData.flameTexture, finalDrawPos + new Vector2(x, y), rectangle, tileFlameData.flameColor, rotation, finalOrigin, 1f, SpriteEffects.None, 0f);
@@ -124,9 +127,10 @@ public static class FurnitureUtils
 	public static void MultiTileGrassFluentDraw(Vector2 screenPosition, TileDrawing tileDrawing, SpriteBatch spriteBatch, Point topLeft, Texture2D glowmask = null)
 	{
 		var tileTopLeft = Main.tile[topLeft];
-        var tileData = TileObjectData.GetTileData(tileTopLeft.type, 0);
+		var tileData = TileObjectData.GetTileData(tileTopLeft.type, 0);
 
-		if (tileData is null) return;
+		if (tileData is null)
+			return;
 
 		int bottomTileX = topLeft.X + tileData.Origin.X;
 		int bottomTileY = topLeft.Y + tileData.Origin.Y;
@@ -147,10 +151,12 @@ public static class FurnitureUtils
 		float num = 0.15f;
 		ushort type = Main.tile[topLeft].type;
 
-		for (int i = topLeft.X; i < topLeft.X + sizeX; i++) {
-			for (int j = topLeft.Y; j < topLeft.Y + sizeY; j++) {
+		for (int i = topLeft.X; i < topLeft.X + sizeX; i++)
+		{
+			for (int j = topLeft.Y; j < topLeft.Y + sizeY; j++)
+			{
 				Tile tile = Main.tile[i, j];
-				if (tile.type != type || !tileDrawing.IsVisible(tile))
+				if (tile.type != type || !TileDrawing.IsVisible(tile))
 					continue;
 
 				short tileFrameX = tile.frameX;
@@ -170,7 +176,8 @@ public static class FurnitureUtils
 				float swayCorrection = Math.Abs(windCycle) * 2f * heightStrength;
 				Vector2 origin = center - vector2;
 				Texture2D tileDrawTexture = tileDrawing.GetTileDrawTexture(tile, i, j);
-				if (tileDrawTexture != null) {
+				if (tileDrawTexture != null)
+				{
 					spriteBatch.Draw(tileDrawTexture, center + new Vector2(0f, swayCorrection), new Rectangle(tileFrameX, tileFrameY, tileWidth, tileHeight - halfBrickHeight), tileLight, windCycle * num * heightStrength, origin, 1f, tileSpriteEffect, 0f);
 					if (glowmask != null)
 						spriteBatch.Draw(glowmask, center + new Vector2(0f, swayCorrection), new Rectangle(tileFrameX, tileFrameY, tileWidth, tileHeight - halfBrickHeight), Color.White, windCycle * num * heightStrength, origin, 1f, tileSpriteEffect, 0f);

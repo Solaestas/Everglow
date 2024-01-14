@@ -50,7 +50,10 @@ internal class StaffOfCorruptDust : ModProjectile
 		{
 			Projectile.timeLeft = 5;
 		}
-
+		else if(Projectile.timeLeft >= 5)
+		{
+			Projectile.timeLeft = 1;
+		}
 		Projectile.localAI[0] += 1;
 		if (Projectile.localAI[0] % 12 == 2)
 		{
@@ -76,9 +79,9 @@ internal class StaffOfCorruptDust : ModProjectile
 		Main.spriteBatch.Draw(t, Projectile.Center - Main.screenPosition, null, color, Projectile.rotation + MathF.PI * 0.27f, t.Size() / 2f, Projectile.scale, S, 0f);
 		return false;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/CorruptDust_end"), Projectile.Center);
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 }

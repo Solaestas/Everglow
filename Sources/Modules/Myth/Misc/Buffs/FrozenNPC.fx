@@ -1,5 +1,6 @@
 ﻿sampler2D uImage : register(s0);
 texture uHeatMap;
+int uImageSize;
 sampler uHeatMapSampler =
 sampler_state
 {
@@ -27,7 +28,7 @@ float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0
     float4 colorTarget = tex2D(uImage, coords);
     if (!any(colorTarget))
         return colorTarget;
-    float4 colorNoise = tex2D(uNoiseSampler, coords * 0.3);
+    float4 colorNoise = tex2D(uNoiseSampler, float2(coords.x, fmod(coords.y * uImageSize, 1)));
     float light = colorNoise.r;
     float4 colorHeatMap = tex2D(uHeatMapSampler, float2(light, 0));
     float3 final = colorHeatMap.rgb * 0.8 + colorTarget * 0.2;

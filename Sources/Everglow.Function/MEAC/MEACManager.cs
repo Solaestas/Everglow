@@ -118,7 +118,6 @@ internal class MEACManager : ILoadable
 		// 直接从RT池子里取
 		var renderTargets = Ins.RenderTargetPool.GetRenderTarget2DArray(1);
 		screen = renderTargets.Resource[0];
-
 		if (bloomTarget1 == null)
 			CreateRender(new Vector2(Main.screenWidth, Main.screenHeight));
 		GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
@@ -126,8 +125,7 @@ internal class MEACManager : ILoadable
 		GetOrig(graphicsDevice);
 		graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
 		graphicsDevice.Clear(Color.Transparent);
-		bool flag = DrawWarp(Main.spriteBatch);
-
+		bool flag = DrawWarp();
 		if (flag)
 		{
 			graphicsDevice.SetRenderTarget(Main.screenTarget);
@@ -135,8 +133,29 @@ internal class MEACManager : ILoadable
 			graphicsDevice.Textures[1] = Main.screenTargetSwap;
 			graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			ScreenWarp.CurrentTechnique.Passes[0].Apply();
-			ScreenWarp.Parameters["i"].SetValue(0.025f);//扭曲程度
+			ScreenWarp.Parameters["strength"].SetValue(0.025f);//扭曲程度
+			ScreenWarp.CurrentTechnique.Passes["KScreen0"].Apply();
+
+			Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
+			Main.spriteBatch.End();
+			GetOrig(graphicsDevice);
+			graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
+			graphicsDevice.Clear(Color.Transparent);
+			screen = renderTargets.Resource[0];
+		}
+
+
+		bool flag2 = DrawWarp_Style2();
+		if (flag2)
+		{
+			graphicsDevice.SetRenderTarget(Main.screenTarget);
+			graphicsDevice.Clear(new Color(0.5f, 0.5f, 0, 0));
+			graphicsDevice.Textures[1] = Main.screenTargetSwap;
+			graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
+			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+			ScreenWarp.Parameters["strength"].SetValue(0.25f);//扭曲程度
+			ScreenWarp.CurrentTechnique.Passes["KScreen1"].Apply();
+
 			Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
 			Main.spriteBatch.End();
 		}
@@ -157,11 +176,11 @@ internal class MEACManager : ILoadable
 		}
 	}
 
-	private bool DrawWarp(SpriteBatch sb)//扭曲层
+	private bool DrawWarp()//扭曲层
 	{
 		bool flag = false;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
-		Effect KEx = Everglow.Commons.ModAsset.DrawWarp.Value;
+		Effect KEx = ModAsset.DrawWarp.Value;
 		KEx.Parameters["uTransform"].SetValue(Main.Transform * Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
 		KEx.CurrentTechnique.Passes[0].Apply();
 		foreach (Projectile proj in Main.projectile)
@@ -172,6 +191,27 @@ internal class MEACManager : ILoadable
 				{
 					flag = true;
 					ModProj2.DrawWarp(Ins.Batch);
+				}
+			}
+		}
+		Ins.Batch.End();
+		return flag;
+	}
+	private bool DrawWarp_Style2()//扭曲层
+	{
+		bool flag = false;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Effect ef = ModAsset.DrawWarp.Value;
+		ef.Parameters["uTransform"].SetValue(Main.Transform * Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
+		ef.CurrentTechnique.Passes["Trail1"].Apply();
+		foreach (Projectile proj in Main.projectile)
+		{
+			if (proj.active)
+			{
+				if (proj.ModProjectile is IWarpProjectile_warpStyle2 modProj2)
+				{
+					flag = true;
+					modProj2.DrawWarp(Ins.Batch);
 				}
 			}
 		}

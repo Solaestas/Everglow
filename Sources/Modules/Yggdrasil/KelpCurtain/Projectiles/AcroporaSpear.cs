@@ -32,9 +32,9 @@ public class AcroporaSpear : MeleeProj
 	{
 		return BlendState.NonPremultiplied;
 	}
-	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, string GlowPath, double DrawRotation)
+	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{
-		base.DrawSelf(spriteBatch, lightColor, 173, 69, 0.9f);
+		base.DrawSelf(spriteBatch, lightColor, diagonal, drawScale, glowTexture);
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{

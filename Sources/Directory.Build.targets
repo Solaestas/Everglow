@@ -17,6 +17,10 @@
 	</Target>
 
 	<Target Name="AssetList" BeforeTargets="Build" Condition="'$(AssetsPrefix)' != ''">
+		<PropertyGroup>
+			<!--单独构建Everglow.csproj时其依赖项的Configuration会延迟赋值-->
+			<EverglowOutputDirectory>$(EverglowDirectory)bin\$(Configuration)\$(TargetFramework)\</EverglowOutputDirectory>
+		</PropertyGroup>
 		<WriteLinesToFile File="$(EverglowDirectory)obj\$(AssetsPrefix).asset.list"
 			Lines="@(Solaestas-EffectFile);@(Solaestas-ImageFile)"
 			Overwrite="true" />
