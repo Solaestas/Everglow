@@ -63,6 +63,7 @@ namespace Everglow.Commons.IIID
 									 new Vector3(0, -1, 0) * rate)
 				* Main.GameViewMatrix.ZoomMatrix
 				* Matrix.CreateTranslation(new Vector3(-Main.GameViewMatrix.TransformationMatrix.M41, -Main.GameViewMatrix.TransformationMatrix.M42, 0));
+		}
 		/// <summary>
 		/// 模型 ( 用ObjReader.LoadFile("")导入 )
 		/// The Model ( Imported by ObjReader.LoadFile("") )
