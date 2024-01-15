@@ -7,6 +7,9 @@ namespace Everglow.Commons.AssetReplace.UIReplace.Replacements;
 internal class EverglowAssets
 {
 	public Asset<Texture2D>[] InventoryBacks = new Asset<Texture2D>[20];
+	public ClassicBar ClassicBar = new();
+	public FancyBar FancyBar = new();
+	public HorizontalBar HorizontalBar = new();
 
 	public void LoadTextures()
 	{
@@ -16,14 +19,14 @@ internal class EverglowAssets
 				continue;
 			InventoryBacks[i] = UIReplaceModule.GetTexture($"UISkinEverglow/Inventory/Inventory_Back{i}");
 		}
+		ClassicBar.LoadTextures("UISkinEverglow");
+		FancyBar.LoadTextures("UISkinEverglow");
+		HorizontalBar.LoadTextures("UISkinEverglow");
 	}
 
 	public void Apply()
 	{
 		// 永恒意志还没有自己的HP, MP槽样式，所以这里用原版的把它覆盖了
-		UIReplaceModule.TerrariaAssets.ClassicBar.ReplaceTextures();
-		UIReplaceModule.TerrariaAssets.FancyBar.ReplaceTextures();
-		UIReplaceModule.TerrariaAssets.HorizontalBar.ReplaceTextures();
 		TextureAssets.InventoryBack = InventoryBacks[0];
 		TextureAssets.InventoryBack2 = InventoryBacks[2];
 		TextureAssets.InventoryBack3 = InventoryBacks[3];
@@ -43,5 +46,8 @@ internal class EverglowAssets
 		TextureAssets.InventoryBack17 = InventoryBacks[17];
 		TextureAssets.InventoryBack18 = InventoryBacks[18];
 		TextureAssets.InventoryBack19 = InventoryBacks[19];
+		ClassicBar.ReplaceTextures();
+		FancyBar.ReplaceTextures();
+		HorizontalBar.ReplaceTextures();
 	}
 }
