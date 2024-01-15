@@ -3134,7 +3134,9 @@ Projectiles: {
 	TinClub.DisplayName: Tin Club
 	TitaniumClub.DisplayName: Titanium Club
 	TungstenClub.DisplayName: Tungsten Club
+	TungstenClub_smash.DisplayName: Tungsten Club_smash
 	WoodenClub.DisplayName: Wooden Club
+	WoodenClub_smash.DisplayName: Wooden Club_smash
 	BoneFeather.DisplayName: Bone Feather
 	EndlessCurseFlame.DisplayName: Endless Curse Flame
 	FireFeather.DisplayName: Fire Feather

@@ -1,3 +1,4 @@
+using Everglow.Commons.Utilities;
 using Terraria.DataStructures;
 namespace Everglow.Commons.Weapons.Clubs;
 
@@ -41,10 +42,69 @@ public abstract class ClubItem : ModItem
 
 	}
 	public int ProjType;
+	public int ProjTypeSmash;
+	public bool CanDown;
+	public override void UpdateInventory(Player player)
+	{
+		for (int h = 0; h < 7; h++)
+		{
+			Vector2 pos = player.Center + new Vector2(0, h * 16 * player.gravDir);
+			if (TileCollisionUtils.PlatformCollision(pos))
+			{
+				CanDown = false;
+				return;
+			}
+		}
+		for (int h = 7; h < 120; h++)
+		{
+			Vector2 pos = player.Center + new Vector2(0, h * 16 * player.gravDir);
+			if (TileCollisionUtils.PlatformCollision(pos))
+			{
+				CanDown = true;
+				return;
+			}
+		}
+		CanDown = false;
+	}
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		if (player.ownedProjectileCounts[type] < 1)
-			Projectile.NewProjectile(source, position + velocity * 2f, Vector2.Zero, type, damage, knockback, player.whoAmI, 0f, 0f);
+		int typeDown = ProjTypeSmash;
+		if (typeDown > 0)
+		{
+			if (CanDown)
+			{
+				if (player.ownedProjectileCounts[typeDown] < 1 && Main.mouseLeftRelease)
+				{
+					player.mount.Dismount(player);
+					Projectile.NewProjectile(source, position + velocity * 2f, Vector2.Zero, typeDown, (int)(damage * 1.62f), knockback, player.whoAmI, 0f, 0f);
+					if (player.ownedProjectileCounts[type] >= 1)
+					{
+						foreach(Projectile proj in Main.projectile)
+						{
+							if(proj != null && proj.active)
+							{
+								if(proj.owner == player.whoAmI && proj.type == type)
+								{
+									proj.Kill();
+								}
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				if (player.ownedProjectileCounts[type] + player.ownedProjectileCounts[typeDown] < 1)
+				{
+					Projectile.NewProjectile(source, position + velocity * 2f, Vector2.Zero, type, damage, knockback, player.whoAmI, 0f, 0f);
+				}			
+			}
+		}
+		else
+		{
+			if (player.ownedProjectileCounts[type] < 1)
+				Projectile.NewProjectile(source, position + velocity * 2f, Vector2.Zero, type, damage, knockback, player.whoAmI, 0f, 0f);
+		}
 		return false;
 	}
 }

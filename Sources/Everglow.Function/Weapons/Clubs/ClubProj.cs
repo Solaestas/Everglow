@@ -2,8 +2,11 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
+using Everglow.Commons.Weapons.StabbingSwords;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent.Shaders;
+using Terraria.ModLoader;
 
 namespace Everglow.Commons.Weapons.Clubs;
 
@@ -85,27 +88,28 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 	{
 		return "Everglow/MEAC/Images/Melee";
 	}
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	public override void OnSpawn(IEntitySource source)
 	{
-		hit.HitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
+		Omega = MaxOmega * 0.5f;
+		base.OnSpawn(source);
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f, 3), MinStrikeOmegaDecrease);
-
+		modifiers.HitDirectionOverride = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		float ShakeStrength = Omega;
 		Omega *= power;
 		modifiers.FinalDamage /= power;
 		Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
 		modifiers.Knockback *= Omega * 3;
+		base.ModifyHitNPC(target, ref modifiers);
 	}
 	public virtual void UpdateSound()
 	{
 		AudioTimer -= Omega;
 		if (AudioTimer <= 0)
 		{
-			//SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Misc/Projectiles/Weapon/Melee/Clubs/Club_wood").WithPitchOffset(-1 + Omega * 3f), Projectile.Center);
 			SoundEngine.PlaySound(SoundID.DD2_MonkStaffSwing.WithPitchOffset(-1 + Omega * 3f).WithVolumeScale(1 - Omega), Projectile.Center);
 			AudioTimer = MathF.PI;
 		}
@@ -135,15 +139,27 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		//这个计时器还没归零，下一击已然命中。则这一击失效。
 		//如果设计极短，又会重复判断
 		//而且还考虑到怪物会动
-
 		Projectile.rotation += Omega;
 		if (HasContinueUsing())
 		{
 			float MeleeSpeed = player.GetAttackSpeed(Projectile.DamageType);
-			if (Omega < MeleeSpeed * MaxOmega)
-				Omega += Beta * MeleeSpeed;
-			if (Projectile.timeLeft < 22)
-				Projectile.timeLeft = 22;
+			if (player.controlUseTile && !player.GetModPlayer<PlayerStamina>().staminaRecovery && player.GetModPlayer<PlayerStamina>().CheckStamina(1))
+			{
+				if (Omega < MeleeSpeed * MaxOmega * 2)
+					Omega += Beta * MeleeSpeed * 3;
+				if (Projectile.timeLeft < 22)
+					Projectile.timeLeft = 22;
+			}
+			else
+			{
+				if (Omega < MeleeSpeed * MaxOmega)
+					Omega += Beta * MeleeSpeed;
+				else
+					Omega *= 0.9f;
+				if (Projectile.timeLeft < 22)
+					Projectile.timeLeft = 22;
+			}
+
 		}
 		else
 		{
@@ -233,10 +249,9 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
 		Effect MeleeTrail = ModAsset.ClubTrail.Value;
-		;
-		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
+		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
+		MeleeTrail.Parameters["tex0"].SetValue(ModAsset.Noise_flame_0.Value);
 		MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
 		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
 		lightColor.W = 0.7f * Omega;

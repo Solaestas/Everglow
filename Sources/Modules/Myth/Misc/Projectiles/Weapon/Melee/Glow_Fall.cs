@@ -14,7 +14,7 @@ public class Glow_Fall : TrailingProjectile
 		TrailColor = new Color(0, 0.7f, 1f, 0);
 		SelfLuminous = true;
 		TrailWidth = 20f;
-		Projectile.extraUpdates = 5;
+		Projectile.extraUpdates = 2;
 		Projectile.friendly = true;
 		Projectile.penetrate = -1;
 		Projectile.usesLocalNPCImmunity = true;
