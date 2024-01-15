@@ -1,17 +1,18 @@
-using Everglow.Myth.Common;
+using Everglow.Commons.Utilities;
+using Everglow.Commons.Vertex;
 
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
+namespace Everglow.Commons.Weapons.Clubs;
 
 public abstract class ClubProj_metal : ClubProj
 {
 	/// <summary>
 	/// 反光强度，默认4
 	/// </summary>
-	internal float ReflectStrength = 4f;
+	public float ReflectStrength = 4f;
 	/// <summary>
 	/// 反光的底色(默认武器本身)
 	/// </summary>
-	internal string ReflectTexturePath = "";
+	public string ReflectTexturePath = "";
 
 	public override void SetDef()
 	{
@@ -61,7 +62,7 @@ public abstract class ClubProj_metal : ClubProj
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		Effect MeleeTrail = MythContent.QuickEffect("Misc/Projectiles/Weapon/Melee/Clubs/MetalClubTrail");
+		Effect MeleeTrail = ModAsset.MetalClubTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 

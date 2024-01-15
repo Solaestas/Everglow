@@ -1,5 +1,5 @@
 using Terraria.DataStructures;
-namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
+namespace Everglow.Commons.Weapons.Clubs;
 
 /// <summary>
 /// Default damage = 5 width*height = 48*48 useT = useA = 4 useStyle = ItemUseStyleID.Shoot rare = ItemRarityID.White value = 50 
@@ -40,7 +40,7 @@ public abstract class ClubItem : ModItem
 	{
 
 	}
-	internal int ProjType;
+	public int ProjType;
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
 		if (player.ownedProjectileCounts[type] < 1)
