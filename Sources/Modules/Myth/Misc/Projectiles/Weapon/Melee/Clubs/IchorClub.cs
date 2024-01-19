@@ -235,22 +235,29 @@ public class IchorClub : ClubProj
 			return;
 
 		var bars = new List<Vertex2D>();
-		var light = new Color(1f, 1f, 1f, 1f);
+		var light = new Color(1f, 1f, 1f, 0f);
 		light *= 2;
 		light.A /= 4;
 		light.G = (byte)(light.G * 0.8f);
 		light.B = 0;
+		float timeValue = (float)Main.time * 0.07f;
 		for (int i = 0; i < length; i++)
 		{
-			float factor = i / (length - 1f);
+			float factor = i / 30f - timeValue;
 			float delta = (1 - timeLeft / 64f * 0.45f) * Omega / MaxOmega + 1 - Omega / MaxOmega;
-			float maxValue = 20f;
-			if (length < maxValue)
-				delta = delta * length / maxValue + (maxValue - length) / maxValue;
-			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * delta * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 0, 0f)));
+			if(i < 10)
+			{
+				delta *= i / 10f;
+			}
+			if(length - i - 1 < 10)
+			{
+				delta *= (length - i - 1) / 10f;
+			}
+			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i].RotatedBy(timeValue * 1.5f) * delta * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 1, 0f)));
+			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i].RotatedBy(timeValue * 1.5f) * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 0, 0f)));
 		}
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_5_black.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_5.Value;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 	}
 	private void UpdateMoon(ref List<Vector2> listVec)

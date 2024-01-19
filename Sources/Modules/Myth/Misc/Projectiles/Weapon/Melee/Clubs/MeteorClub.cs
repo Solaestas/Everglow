@@ -1,6 +1,3 @@
-using Everglow.Myth.Common;
-using Terraria;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class MeteorClub : ClubProj

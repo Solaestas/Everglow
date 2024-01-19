@@ -49,7 +49,7 @@ internal class StarSlingshot : SlingshotProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		Texture2D star = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/Textures/SlingshotHitStar");
+		Texture2D star = ModAsset.SlingshotHitStar.Value;
 		Main.spriteBatch.Draw(star, SlingshotStringTail, null, Light, 0, star.Size() / 2f, new Vector2(0.06f, 0.23f + MathF.Sin((float)(Main.timeForVisualEffects * 0.1)) * 0.2f) * Power / 120f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(star, SlingshotStringTail, null, Light, MathF.PI / 2, star.Size() / 2f, new Vector2(0.06f, 0.23f + MathF.Sin((float)(Main.timeForVisualEffects * 0.1)) * 0.2f) * Power / 120f, SpriteEffects.None, 0);
 
@@ -74,7 +74,7 @@ internal class StarSlingshot : SlingshotProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		Player player = Main.player[Projectile.owner];
-		Texture2D TexMain = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/StarSlingsh_glow");
+		Texture2D TexMain = ModAsset.StarSlingsh_glow.Value;
 		var drawColor = new Color(255, 255, 255, 0);
 		SpriteEffects spriteEffect = SpriteEffects.None;
 		float DrawRot = Projectile.rotation - MathF.PI / 4f;

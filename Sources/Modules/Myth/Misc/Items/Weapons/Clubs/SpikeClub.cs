@@ -7,6 +7,7 @@ public class SpikeClub : ClubItem
 		Item.damage = 21;
 		Item.value = 450;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.SpikeClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.SpikeClub_smash>();
 	}
 	public override void AddRecipes()
 	{
