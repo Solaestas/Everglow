@@ -99,7 +99,7 @@ public class CurseClub_smash : ClubProj_Smash
 			bars.Add(new Vertex2D(trail[i] - Main.screenPosition, c0, new Vector3(1, 0, 0)));
 		}
 
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.CurseClub_glow.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Melee_CurseClub_glow.Value;
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 	}

@@ -1,4 +1,4 @@
-using Everglow.Myth.Misc.Projectiles.Accessory;
+using Everglow.Myth.Misc.Dusts;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
@@ -12,20 +12,31 @@ public class CrystalClub_smash : ClubProj_Smash_metal
 	public override string Texture => "Everglow/" + ModAsset.Melee_CrystalClubPath;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		for (int x = 0; x < 2; x++)
+		int type = 0;
+		switch (Main.rand.Next(3))
 		{
-			Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
-			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center + velocity * -2, velocity, ModContent.ProjectileType<IchorCurrent>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
-			p.friendly = false;
-			p.CritChance = Projectile.CritChance;
+			case 0:
+				type = DustID.BlueCrystalShard;
+				break;
+			case 1:
+				type = DustID.PinkCrystalShard;
+				break;
+			case 2:
+				type = DustID.PurpleCrystalShard;
+				break;
 		}
-		target.AddBuff(BuffID.Ichor, (int)(818 * Omega));
+		for (float d = 0.1f; d < Omega; d += 0.04f)
+		{
+			var D = Dust.NewDustDirect(target.Center - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, 0, 0, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
+			D.noGravity = true;
+			D.velocity = new Vector2(0, Main.rand.NextFloat(Omega * 25f)).RotatedByRandom(6.283);
+		}
 	}
 	public override void AI()
 	{
 		base.AI();
 		Player player = Main.player[Projectile.owner];
-		for (float x = 0; x < Omega + 0.6 + player.velocity.Length() / 180f; x += 0.05f)
+		for (float x = 0; x < Omega + 0.6 + player.velocity.Length() / 180f; x += 0.15f)
 		{
 			Vector2 pos = (trailVecs2.ToArray()[trailVecs2.Count - 1] + trailVecs2.ToArray()[trailVecs2.Count - 1]) / 2f;
 			float factor = Main.rand.NextFloat(0, 1f);
@@ -44,7 +55,10 @@ public class CrystalClub_smash : ClubProj_Smash_metal
 				vel = (trailVecs2.ToArray()[trailVecs2.Count - 1] - trailVecs2.ToArray()[trailVecs2.Count - 2]) * factor + (trailVecs2.ToArray()[trailVecs2.Count - 2] - trailVecs2.ToArray()[trailVecs2.Count - 3]) * (1 - factor);
 			}
 			vel += player.velocity;
-			vel *= Main.rand.NextFloat(0.1f, 0.3f);
+			vel *= 0.0001f;
+			Dust d0 = Dust.NewDustDirect(pos,0,0,ModContent.DustType<CrystalScale>());
+			d0.alpha = 150;
+			d0.velocity = vel;
 		}
 	}
 }

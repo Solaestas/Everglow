@@ -28,21 +28,24 @@ public abstract class ClubProj_Smash_metal : ClubProj_Smash
 		for (int i = 0; i < length; i++)
 		{
 			float factor = i / (length - 1f);
-			float w = TrailAlpha(factor);
+			Vector2 trailSelfPos = trail[i] - Projectile.Center;
+			float w = 1 - Math.Abs((trailSelfPos.X * 0.5f + trailSelfPos.Y * 0.5f) / trailSelfPos.Length());
+			float w2 = MathF.Sqrt(TrailAlpha(factor));
+			w *= w2 * w;
 			Color c0 = Color.White;
 			if (i == 0)
 			{
 				c0 = Color.Transparent;
 			}
 			bars.Add(new Vertex2D(Projectile.Center, c0, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(trail[i], c0, new Vector3(factor, 0, w)));
+			bars.Add(new Vertex2D(trail[i], c0, new Vector3(factor, 0, w * ReflectStrength)));
 		}
 
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
 		Effect MeleeTrail = ModAsset.ClubTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);

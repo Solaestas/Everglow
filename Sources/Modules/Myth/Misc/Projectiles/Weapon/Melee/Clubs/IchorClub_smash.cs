@@ -55,7 +55,7 @@ public class IchorClub_smash : ClubProj_Smash
 				position = pos,
 				maxTime = Main.rand.Next(6, 32),
 				scale = Main.rand.NextFloat(6f, 12f),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), rot * 0.1f, Main.rand.NextFloat(3.6f, 30f) }
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), rot * 0.01f, Main.rand.NextFloat(3.6f, 30f) }
 			};
 			Ins.VFXManager.Add(fire);
 			for (int g = 0; g < 1; g++)
@@ -106,7 +106,7 @@ public class IchorClub_smash : ClubProj_Smash
 			bars.Add(new Vertex2D(trail[i] - Main.screenPosition, c0, new Vector3(1, 0, 0)));
 		}
 
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.IchorClub_glow.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Melee_IchorClub_glow.Value;
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 	}

@@ -4,4 +4,9 @@ public class TitaniumClub_smash : ClubProj_Smash_metal
 {
 	public override string Texture => "Everglow/" + ModAsset.Melee_TitaniumClubPath;
 	public override string TrailColorTex() => "Everglow/" + ModAsset.TitaniumClub_lightPath;
+	public override void SetDef()
+	{
+		ReflectStrength = 5f;
+		base.SetDef();
+	}
 }

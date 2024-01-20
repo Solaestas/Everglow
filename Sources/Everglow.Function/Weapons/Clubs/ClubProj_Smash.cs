@@ -103,20 +103,37 @@ public abstract class ClubProj_Smash : MeleeProj
 				player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
 				player.legRotation = -player.fullRotation;
 			}
-			if (Collision.SolidCollision(player.BottomLeft, player.width, 64))
+			if(player.gravDir == 1)
 			{
-				if (timer <= 70)
+				if (Collision.SolidCollision(player.BottomLeft, player.width, 64))
 				{
-					Smash(0);
+					if (timer <= 70)
+					{
+						Smash(0);
+					}
+					if (timer > 70)
+					{
+						Smash(1);
+					}
 				}
-				if (timer > 70)
+			}
+			if (player.gravDir == -1)
+			{
+				if (Collision.SolidCollision(player.TopLeft - new Vector2(0, 64), player.width, 80))
 				{
-					Smash(1);				
+					if (timer <= 70)
+					{
+						Smash(0);
+					}
+					if (timer > 70)
+					{
+						Smash(1);
+					}
 				}
 			}
 			if (timer > 25 * timeMul)
 			{
-				player.velocity.Y += 1f;
+				player.velocity.Y += player.gravDir;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
@@ -199,13 +216,18 @@ public abstract class ClubProj_Smash : MeleeProj
 			Omega = 0.8f;
 			for (int g = 0; g < 24; g++)
 			{
-				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(35f, 74f)).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
+				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(35f, 74f) * player.gravDir).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
+				Vector2 pos = player.Bottom + new Vector2(0, 48) - newVelocity * 0.2f;
+				if (player.gravDir == -1)
+				{
+					pos = player.Top - new Vector2(0, 48) - newVelocity * 0.2f;
+				}
 				var somg = new Smog_club_front
 				{
 					velocity = newVelocity,
 					Active = true,
 					Visible = true,
-					position = player.Bottom + new Vector2(0, 48) - newVelocity * 0.2f,
+					position = pos,
 					maxTime = Main.rand.Next(15, 48),
 					scale = Main.rand.NextFloat(40f, 60f),
 					ai = new float[] { 0, 0 }
@@ -220,13 +242,18 @@ public abstract class ClubProj_Smash : MeleeProj
 			Omega = 0.4f;
 			for (int g = 0; g < 12; g++)
 			{
-				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(35f, 44f)).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
+				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(35f, 44f) * player.gravDir).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
+				Vector2 pos = player.Bottom + new Vector2(0, 48) - newVelocity * 0.2f;
+				if(player.gravDir == -1)
+				{
+					pos = player.Top - new Vector2(0, 48) - newVelocity * 0.2f;
+				}
 				var somg = new Smog_club_front
 				{
 					velocity = newVelocity,
 					Active = true,
 					Visible = true,
-					position = player.Bottom + new Vector2(0, 48) - newVelocity * 0.2f,
+					position = pos,
 					maxTime = Main.rand.Next(15, 38),
 					scale = Main.rand.NextFloat(40f, 60f),
 					ai = new float[] { 0, 0 }
@@ -285,7 +312,7 @@ public abstract class ClubProj_Smash : MeleeProj
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
 		Effect MeleeTrail = ModAsset.ClubTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);

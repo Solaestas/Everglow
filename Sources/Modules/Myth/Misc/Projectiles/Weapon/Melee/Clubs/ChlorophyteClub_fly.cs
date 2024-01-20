@@ -109,7 +109,7 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 				Projectile.velocity = vT0.SafeNormalize(Vector2.Zero) * 55;
 				Projectile.friendly = true;
 			}
-			if (Projectile.timeLeft == 558)
+			if (Projectile.timeLeft == 558 && Projectile.ai[0] == 0)
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ChlorophyteClub_VFX>(), Projectile.damage, Projectile.knockBack * 0.4f, Projectile.owner, Omega);
 			float value = (580 - Projectile.timeLeft) / 70f;
 			Lighting.AddLight(Projectile.Center, value * 2f, value * 6f, value);
@@ -220,7 +220,7 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
 		Effect MeleeTrail = Commons.ModAsset.ClubTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);

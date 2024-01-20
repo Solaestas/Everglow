@@ -2,7 +2,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class MeteorClub_smash : ClubProj_Smash_metal
 {
-	public override string TrailColorTex() => "Everglow/" + ModAsset.MeteorClub_glowPath;
+	public override string TrailColorTex() => "Everglow/" + ModAsset.Melee_MeteorClub_glowPath;
 	public override string Texture => "Everglow/" + ModAsset.Melee_MeteorClubPath;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
@@ -44,7 +44,7 @@ public class MeteorClub_smash : ClubProj_Smash_metal
 			bars.Add(new Vertex2D(trail[i] - Main.screenPosition, c0, new Vector3(1, 0, 0)));
 		}
 
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.MeteorClub_glow.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Melee_MeteorClub_glow.Value;
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
