@@ -36,6 +36,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.Example", "Sources
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.Food", "Sources\Modules\Food\Everglow.Food.csproj", "{5F627CB0-E1F3-4830-B8B3-C7DC27615659}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.JourneysContinue", "Sources\Modules\JourneysContinue\Everglow.JourneysContinue.csproj", "{84B7005D-5B5D-4AE3-822B-1C00DDCA07D8}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.Minortopography", "Sources\Modules\Minortopography\Everglow.Minortopography.csproj", "{612927F6-ACE5-478C-84D4-7D1CC36DF178}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.Ocean", "Sources\Modules\Ocean\Everglow.Ocean.csproj", "{B2E4591C-B4D3-4F3A-98DC-DA4E37F4127A}"
@@ -110,6 +112,10 @@ Global
 		{5F627CB0-E1F3-4830-B8B3-C7DC27615659}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F627CB0-E1F3-4830-B8B3-C7DC27615659}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F627CB0-E1F3-4830-B8B3-C7DC27615659}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84B7005D-5B5D-4AE3-822B-1C00DDCA07D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84B7005D-5B5D-4AE3-822B-1C00DDCA07D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84B7005D-5B5D-4AE3-822B-1C00DDCA07D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84B7005D-5B5D-4AE3-822B-1C00DDCA07D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{612927F6-ACE5-478C-84D4-7D1CC36DF178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{612927F6-ACE5-478C-84D4-7D1CC36DF178}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{612927F6-ACE5-478C-84D4-7D1CC36DF178}.Release|Any CPU.ActiveCfg = Release|Any CPU
