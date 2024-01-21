@@ -3111,15 +3111,19 @@ Projectiles: {
 	CrimsonClub.DisplayName: Crimson Club
 	CrystalClub.DisplayName: Crystal Club
 	CrystalClub_fly.DisplayName: Crystal Club_fly
+	CrystalClub_fly_Explosion.DisplayName: Crystal Club_fly_ Explosion
 	CurseClub.DisplayName: Curse Club
 	CurseClub_fly.DisplayName: Curse Club_fly
+	CurseClub_smash.DisplayName: Curse Club_smash
 	EbonwoodClub.DisplayName: Ebonwood Club
 	GoldClub.DisplayName: Gold Club
 	IchorClub.DisplayName: Ichor Club
 	IchorClub_fly.DisplayName: Ichor Club_fly
+	IchorClub_smash.DisplayName: Ichor Club_smash
 	IronClub.DisplayName: Iron Club
 	LeadClub.DisplayName: Lead Club
 	MeteorClub.DisplayName: Meteor Club
+	MeteorClub_smash.DisplayName: Meteor Club_smash
 	MithrilClub.DisplayName: Mithril Club
 	OrichalcumClub.DisplayName: Orichalcum Club
 	PalladiumClub.DisplayName: Palladium Club
@@ -3130,9 +3134,14 @@ Projectiles: {
 	ShadewoodClub.DisplayName: Shadewood Club
 	SilverClub.DisplayName: Silver Club
 	SpikeClub.DisplayName: Spike Club
+	SpikeClubSlash.DisplayName: Spike Club Slash
+	SpikeClub_smash.DisplayName: Spike Club_smash
 	StarDancer.DisplayName: Star Dancer
+	StarDancer_smash.DisplayName: Star Dancer_smash
+	TinClub_smash.DisplayName: Tin Club_smash
 	TinClub.DisplayName: Tin Club
 	TitaniumClub.DisplayName: Titanium Club
+	TitaniumClub_smash.DisplayName: Titanium Club_smash
 	TungstenClub.DisplayName: Tungsten Club
 	TungstenClub_smash.DisplayName: Tungsten Club_smash
 	WoodenClub.DisplayName: Wooden Club

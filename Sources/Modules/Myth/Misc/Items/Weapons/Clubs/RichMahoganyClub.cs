@@ -7,6 +7,7 @@ public class RichMahoganyClub : ClubItem
 		Item.damage = 6;
 		Item.value = 64;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.RichMahoganyClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.RichMahoganyClub_smash>();
 	}
 	public override void AddRecipes()
 	{

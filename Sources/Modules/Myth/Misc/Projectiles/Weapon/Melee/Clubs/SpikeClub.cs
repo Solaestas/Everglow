@@ -1,5 +1,3 @@
-using Everglow.Myth.Common;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class SpikeClub : ClubProj_metal
@@ -11,19 +9,13 @@ public class SpikeClub : ClubProj_metal
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		int k = (int)(Omega * 10);
-		k = Main.rand.Next(k * 2);
-		for (int x = 0; x < k; x++)
-		{
-			NPC.HitInfo hit = modifiers.ToHitInfo(Projectile.damage * 0.5f * Omega, Main.rand.NextFloat(100f) < Main.player[Projectile.owner].GetTotalCritChance(Projectile.DamageType), 0);
-			target.StrikeNPC(hit, true, true);
-			NetMessage.SendStrikeNPC(target, hit);
-		}
 		modifiers.Knockback *= 0.4f;
-
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
+		Player player = Main.player[Projectile.owner];
+		Vector2 v = new Vector2(0, 6).RotatedByRandom(Math.PI * 2) * 5f;
+		Projectile.NewProjectile(null, target.Center - v * 3, v, ModContent.ProjectileType<SpikeClubSlash>(), Projectile.damage / 2, 0, player.whoAmI, Main.rand.NextFloat(-0.05f, 0.05f));
 		target.AddBuff(BuffID.Bleeding, 600);
 	}
 	internal List<Vector2> MoonBladeI = new List<Vector2>();

@@ -7,5 +7,6 @@ public class CrystalClub : ClubItem
 		Item.damage = 51;
 		Item.value = 5000;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CrystalClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CrystalClub_smash>();
 	}
 }

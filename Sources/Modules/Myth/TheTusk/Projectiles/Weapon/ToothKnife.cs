@@ -255,8 +255,16 @@ class ToothKnife : MeleeProj, IWarpProjectile
 				{
 					for (int i = 0; i < 5; i++)
 					{
-						Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Top - new Vector2(0, 30 + i * 20), new Vector2(player.direction, 1) / 10000f, ModContent.ProjectileType<TuskPin>(), Projectile.damage, Projectile.knockBack, player.whoAmI);
-						p0.timeLeft = 80 + i * 5 + Main.rand.Next(5);
+						if(player.gravDir == 1)
+						{
+							Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Top - new Vector2(0, 30 + i * 20), new Vector2(player.direction, 1) / 10000f, ModContent.ProjectileType<TuskPin>(), Projectile.damage, Projectile.knockBack, player.whoAmI);
+							p0.timeLeft = 80 + i * 5 + Main.rand.Next(5);
+						}
+						else
+						{
+							Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Bottom + new Vector2(0, 30 + i * 20), new Vector2(player.direction, -1) / 10000f, ModContent.ProjectileType<TuskPin>(), Projectile.damage, Projectile.knockBack, player.whoAmI);
+							p0.timeLeft = 80 + i * 5 + Main.rand.Next(5);
+						}
 					}
 				}
 			}
@@ -334,7 +342,7 @@ class ToothKnife : MeleeProj, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
 		Effect MeleeTrail = Commons.ModAsset.MeleeTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
