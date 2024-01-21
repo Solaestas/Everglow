@@ -57,7 +57,7 @@ public class AcytaeaTornado : ModProjectile
 		}
 		if (Projectile.timeLeft % 200 == 0)
 		{
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/TheFirefly/Sounds/TyphoonBlackHoleStrong").WithVolumeScale(100f / ((player.Center - Projectile.Center).Length() + 100)), Projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/TyphoonBlackHoleStrong").WithVolumeScale(100f / ((player.Center - Projectile.Center).Length() + 100)), Projectile.Center);
 		}
 	}
 	public void GenerateVFX()

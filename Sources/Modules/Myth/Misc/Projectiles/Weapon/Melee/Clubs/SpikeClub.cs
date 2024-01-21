@@ -144,29 +144,6 @@ public class SpikeClub : ClubProj_metal
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
-
-		Effect MeleeTrail = MythContent.QuickEffect("Misc/Projectiles/Weapon/Melee/Clubs/MetalClubTrail");
-		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-
-
-		MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
-		if (ReflectTexturePath != "")
-		{
-			try
-			{
-				MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(ReflectTexturePath).Value);
-			}
-			catch
-			{
-				MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
-			}
-		}
-		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
-		lightColor.W = 0.7f * Omega;
-		MeleeTrail.Parameters["Light"].SetValue(lightColor);
-		MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
 
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
