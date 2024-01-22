@@ -15,6 +15,7 @@ public class ToothBow : ModItem
         Item.useStyle = ItemUseStyleID.Shoot;
 		Item.autoReuse = false;
 		Item.UseSound = SoundID.Item1;
+		Item.channel = true;
 
 		Item.DamageType = DamageClass.Ranged;
 		Item.damage = 46;

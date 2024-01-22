@@ -1,4 +1,5 @@
 using Everglow.Commons.Weapons;
+using Terraria.Audio;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
@@ -75,8 +76,9 @@ public class ToothBow : HandholdProjectile
 
 			Projectile.timeLeft = player.itemTimeMax;
 		}
-		if (!player.controlUseItem)
+		else
 		{
+			SoundEngine.PlaySound(SoundID.Item5, Projectile.Center);
 			Projectile.NewProjectileDirect(Terraria.Entity.InheritSource(Projectile), Projectile.Center, new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75) * 30f, ModContent.ProjectileType<ToothBow_BloodArrow>(), Projectile.damage, Projectile.knockBack, player.whoAmI);
 			Projectile.Kill();
 		}
