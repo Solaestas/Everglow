@@ -1,3 +1,5 @@
+using Everglow.Commons.DataStructures;
+
 namespace Everglow.Myth.Acytaea.Projectiles;
 public class Acytaea_ShineStar : ModProjectile
 {
@@ -31,12 +33,13 @@ public class Acytaea_ShineStar : ModProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		float value = Projectile.timeLeft / 60f;
-		Vector2 newScale = new Vector2(1f, value) * MathF.Sin(value * MathF.PI);
-		Texture2D star = Commons.ModAsset.Star.Value;
+		Vector2 newScale = new Vector2(1f, value * 2) * MathF.Sin(value * MathF.PI) * 2f;
+		Texture2D star = Commons.ModAsset.StarSlash.Value;
 		Texture2D dark = Commons.ModAsset.Point_black.Value;
 		Main.spriteBatch.Draw(dark, Projectile.Center - Main.screenPosition, null, Color.White * value, 0, dark.Size() / 2f, 1f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, new Color(255,0,0,0), Projectile.timeLeft * 0.02f, star.Size() / 2f, newScale, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, new Color(255, 0, 0, 0), Projectile.timeLeft * 0.02f, star.Size() / 2f, newScale, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, new Color(255, 0, 0, 0), Projectile.timeLeft * 0.02f + MathHelper.PiOver2, star.Size() / 2f, newScale, SpriteEffects.None, 0);
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float range = (60 - Projectile.timeLeft) / 60f;
@@ -53,6 +56,6 @@ public class Acytaea_ShineStar : ModProjectile
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 	}
 }

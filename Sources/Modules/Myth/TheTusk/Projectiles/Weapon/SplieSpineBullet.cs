@@ -99,8 +99,6 @@ public class SplieSpineBullet : ModProjectile
 	public override void PostDraw(Color lightColor)
 	{
 	}
-
-	private int TrueL = 1;
 	public override bool PreDraw(ref Color lightColor)
 	{
 		if (Tokill > 0)
