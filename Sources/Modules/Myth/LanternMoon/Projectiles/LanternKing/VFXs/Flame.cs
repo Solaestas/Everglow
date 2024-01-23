@@ -25,7 +25,7 @@ internal class FlamePipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.VFXs_Flame;
-		effect.Value.Parameters["uNoise"].SetValue(ModAsset.Perlin.Value);
+		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
 	}
 	public override void BeginRender()
 	{

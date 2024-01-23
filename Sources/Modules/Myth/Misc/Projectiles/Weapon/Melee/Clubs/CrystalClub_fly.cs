@@ -82,7 +82,7 @@ public class CrystalClub_fly : ModProjectile, IWarpProjectile
 		SoundEngine.PlaySound(SoundID.Shatter.WithPitchOffset(Main.rand.NextFloat(0.2f, 0.9f)), Projectile.Center);
 		int type = 0;
 
-		for (int d = 0; d < 50; d += 1)
+		for (int d = 0; d < 25; d += 1)
 		{
 			switch (Main.rand.Next(3))
 			{
@@ -101,7 +101,7 @@ public class CrystalClub_fly : ModProjectile, IWarpProjectile
 			D.noGravity = true;
 			D.velocity = new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(6.283) * scale;
 		}
-		for (int d = 0; d < 120; d += 1)
+		for (int d = 0; d < 40; d += 1)
 		{
 			switch (Main.rand.Next(4))
 			{
@@ -124,6 +124,7 @@ public class CrystalClub_fly : ModProjectile, IWarpProjectile
 			D.velocity = new Vector2(0, Main.rand.NextFloat(20f)).RotatedByRandom(6.283) * scale;
 		}
 		hit.HitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<CrystalClub_fly_Explosion>(), Projectile.damage / 2, Projectile.knockBack * 0.1f, Projectile.owner, 8);
 		Projectile.Kill();
 	}
 	public BlendState TrailBlendState()

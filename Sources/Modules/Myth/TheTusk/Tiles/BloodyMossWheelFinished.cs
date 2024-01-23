@@ -81,7 +81,6 @@ public class BloodyMossWheelFinished : ModTile
 	{
 		return base.RightClick(i, j);
 	}
-	private int TpH = -200;
 	public void DrawAll(SpriteBatch sb)
 	{
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);

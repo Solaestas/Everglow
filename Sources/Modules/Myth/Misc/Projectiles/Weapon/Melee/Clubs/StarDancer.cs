@@ -74,7 +74,7 @@ public class StarDancer : ClubProj
 		SpriteEffects effects = SpriteEffects.None;
 		if (Projectile.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;
-		Texture2D texture = MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/Clubs/StarDancer_glow");
+		Texture2D texture = ModAsset.StarDancer_glow.Value;
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
 		for (int i = 0; i < 5; i++)
 		{
@@ -126,11 +126,11 @@ public class StarDancer : ClubProj
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		Effect MeleeTrail = MythContent.QuickEffect("Misc/Projectiles/Weapon/Melee/Clubs/CrystalClubTrail");
+		Effect MeleeTrail = ModAsset.CrystalClubTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
-		MeleeTrail.Parameters["tex1"].SetValue(MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/Clubs/CrystalClub_trail"));
+		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.CrystalClub_trail.Value);
 		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
 		lightColor.W = 0.7f * Omega;
 		MeleeTrail.Parameters["Light"].SetValue(lightColor);

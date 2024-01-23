@@ -12,5 +12,6 @@ public class WoodenClub : ClubItem
 	public override void SetDef()
 	{
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.WoodenClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.WoodenClub_smash>();
 	}
 }

@@ -1,3 +1,4 @@
+using Everglow.Commons.FeatureFlags;
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Items.BossDrop;
@@ -100,7 +101,18 @@ public class CorruptMoth : ModNPC
 		NPCID.Sets.TrailCacheLength[NPC.type] = 4;
 		if (!Main.dedServ)
 		{
-			Music = MythContent.QuickMusic("MothFighting");
+			if (EverglowClientConfig.ReplaceMothAudio == 0) //ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace == MothAudioReplaceMode.MothFighting
+			{
+				Music = MythContent.QuickMusic("MothFighting");
+			}
+			else if (EverglowClientConfig.ReplaceMothAudio == 1)
+			{
+				Music = MythContent.QuickMusic("MothFightingAlt");
+			}
+			else if (EverglowClientConfig.ReplaceMothAudio == 2)
+			{
+				Music = MythContent.QuickMusic("MothFightingOld2");
+			}
 		}
 	}
 	public int SummonButterfliesCount = 0;

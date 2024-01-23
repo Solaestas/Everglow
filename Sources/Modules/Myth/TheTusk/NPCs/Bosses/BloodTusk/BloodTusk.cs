@@ -2159,7 +2159,7 @@ public class BloodTusk : ModNPC
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 			ef.Parameters["minr"].SetValue(1 - HasTranSkin / 180f);
-			ef.Parameters["uImage1"].SetValue(ModAsset.Perlin.Value);
+			ef.Parameters["uImage1"].SetValue(Commons.ModAsset.Noise_perlin.Value);
 
 			ef.CurrentTechnique.Passes["Test"].Apply();
 			Color cg;

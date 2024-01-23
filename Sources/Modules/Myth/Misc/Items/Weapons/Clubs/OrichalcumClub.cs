@@ -7,6 +7,7 @@ public class OrichalcumClub : ClubItem
 		Item.damage = 60;
 		Item.value = 2717;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.OrichalcumClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.OrichalcumClub_smash>();
 	}
 	public override void AddRecipes()
 	{

@@ -1,6 +1,8 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Myth.Acytaea.NPCs;
 using Everglow.Myth.Acytaea.VFXs;
 using Terraria.DataStructures;
+using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
 public class AcytaeaLaserSword2 : ModProjectile
@@ -68,51 +70,6 @@ public class AcytaeaLaserSword2 : ModProjectile
 		overPlayers.Add(index);
 		base.DrawBehind(index, behindNPCsAndTiles, behindNPCs, behindProjectiles, overPlayers, overWiresUI);
 	}
-	public void DrawLaser(Texture2D tex, Color color, float width = 36)
-	{
-		//var c0 = color;
-		//var bars = new List<Vertex2D>();
-		//Vector2 step = Vector2.Normalize(Projectile.velocity) * 4;
-		//Vector2 velocityLeft = step.RotatedBy(MathHelper.PiOver2) / 4f * width;
-		//Vector2 detect = Projectile.Center + step * 12;
-		//for (int i = 1; i < 600; ++i)
-		//{
-		//	detect += step;
-		//	if (Collision.SolidCollision(detect, 0, 0))
-		//	{
-		//		break;
-		//	}
-		//	bool shouldBreak = false;
-		//	foreach(Player player in Main.player)
-		//	{
-		//		if((detect - player.Center).Length() < 50f)
-		//		{
-		//			shouldBreak = true;
-		//			break;
-		//		}
-		//	}
-		//	if(shouldBreak)
-		//	{
-		//		break;
-		//	}
-		//	float x = -i / 40f + (float)Main.time * 0.06f;
-		//	bars.Add(new Vertex2D(detect + velocityLeft, c0, new Vector3(x, 1, MathF.Min(i / width / 4f, 0.5f))));
-		//	bars.Add(new Vertex2D(detect - velocityLeft, c0, new Vector3(x, 0, MathF.Min(i / width / 4f, 0.5f))));
-		//}
-		//EndPos = detect;
-		//Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-		//Main.graphics.GraphicsDevice.Textures[0] = tex;
-		//if (bars.Count > 3)
-		//{
-		//	Effect effect = Commons.ModAsset.StabSwordEffect.Value;
-		//	var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		//	var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		//	effect.Parameters["uTransform"].SetValue(model * projection);
-		//	effect.Parameters["uProcession"].SetValue(0.5f);
-		//	effect.CurrentTechnique.Passes["Test"].Apply();
-		//	Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		//}
-	}
 	public void GenerateVFX()
 	{
 		for (int x = 0; x < 4; x++)
@@ -150,6 +107,7 @@ public class AcytaeaLaserSword2 : ModProjectile
 	}
 	public override void PostDraw(Color lightColor)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float width = 36;
@@ -164,10 +122,8 @@ public class AcytaeaLaserSword2 : ModProjectile
 		width *= 0.4f;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		DrawLaser(Commons.ModAsset.Trail_2_black_thick.Value, Color.White * 0.7f, width);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		DrawLaser(Commons.ModAsset.Trail_1.Value, new Color(1f, 0f, 0.4f, 0f), width);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect dissolve = Commons.ModAsset.Dissolve.Value;
@@ -192,21 +148,21 @@ public class AcytaeaLaserSword2 : ModProjectile
 		Main.spriteBatch.Draw(texglow, Projectile.Center, projFrame, new Color(255, 255, 255, 0), Projectile.rotation + MathHelper.PiOver4, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D star = Commons.ModAsset.Star.Value;
-		Texture2D dark = Commons.ModAsset.Star_black.Value;
+		Texture2D star = Commons.ModAsset.StarSlash.Value;
+		Texture2D dark = Commons.ModAsset.StarSlash_black.Value;
 		Vector2 endDrawPos = EndPos - Main.screenPosition;
-		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, MathHelper.PiOver2, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, 0, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, 0, star.Size() / 2f, new Vector2(3f, width / 8f), SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 20, 60, 0), MathHelper.PiOver2, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 20, 60, 0), 0, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 20, 60, 0), MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), 0, star.Size() / 2f, new Vector2(3f, width / 8f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, MathHelper.PiOver2, star.Size() / 2f, width / 4.5f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, 0, star.Size() / 2f, width / 4.5f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 3f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 3f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, 0, star.Size() / 2f, new Vector2(3f, width / 2.25f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 20, 60, 0), MathHelper.PiOver2, star.Size() / 2f, width / 4.5f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 20, 60, 0), 0, star.Size() / 2f, width / 4.5f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 20, 60, 0), MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 3f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 3f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), 0, star.Size() / 2f, new Vector2(3f, width / 2.25f), SpriteEffects.None, 0);
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 		float range = 80 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f) * 20;
 		List<Vertex2D> rings = new List<Vertex2D>();
 		for(int x = 0;x < 45;x++)

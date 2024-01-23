@@ -109,7 +109,7 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 				Projectile.velocity = vT0.SafeNormalize(Vector2.Zero) * 55;
 				Projectile.friendly = true;
 			}
-			if (Projectile.timeLeft == 558)
+			if (Projectile.timeLeft == 558 && Projectile.ai[0] == 0)
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ChlorophyteClub_VFX>(), Projectile.damage, Projectile.knockBack * 0.4f, Projectile.owner, Omega);
 			float value = (580 - Projectile.timeLeft) / 70f;
 			Lighting.AddLight(Projectile.Center, value * 2f, value * 6f, value);
@@ -220,13 +220,13 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		Effect MeleeTrail = MythContent.QuickEffect("Misc/Projectiles/Weapon/Melee/Clubs/ClubTrail");
+		Effect MeleeTrail = Commons.ModAsset.ClubTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
-		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>("Everglow/Myth/Misc/Projectiles/Weapon/Melee/Clubs/ChlorophyteClub_light").Value);
+		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.ChlorophyteClub_light.Value);
 		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
 		lightColor.W = 0.7f * Omega;
 		if (Projectile.timeLeft > 550)

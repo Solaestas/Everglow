@@ -7,6 +7,7 @@ public class PalladiumClub : ClubItem
 		Item.damage = 44;
 		Item.value = 2074;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.PalladiumClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.PalladiumClub_smash>();
 	}
 	public override void AddRecipes()
 	{

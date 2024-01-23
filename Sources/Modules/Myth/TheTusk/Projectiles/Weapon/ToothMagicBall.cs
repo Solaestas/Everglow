@@ -1,5 +1,3 @@
-using Everglow.Myth.Common;
-using Terraria.Localization;
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
 public class ToothMagicBall : ModProjectile
@@ -58,25 +56,25 @@ public class ToothMagicBall : ModProjectile
 		{
 			return;
 		}
-		Texture2D TC = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodCore");
-		Texture2D TB0 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDrop0");
-		Texture2D TB1 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDrop1");
-		Texture2D TB2 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDrop2");
-		Texture2D TB3 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDrop3");
-		Texture2D TT0 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk0");
-		Texture2D TT1 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk1");
-		Texture2D TT2 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk2");
-		Texture2D TT3 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk3");
-		Texture2D TT4 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk4");
-		Texture2D TT5 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk5");
-		Texture2D TT6 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk6");
-		Texture2D TT7 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk7");
-		Texture2D TT8 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk8");
-		Texture2D TT9 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk9");
+		Texture2D TC = ModAsset.ToothMagicBallBloodCore.Value;
+		Texture2D TB0 = ModAsset.ToothMagicBallBloodDrop0.Value;
+		Texture2D TB1 = ModAsset.ToothMagicBallBloodDrop1.Value;
+		Texture2D TB2 = ModAsset.ToothMagicBallBloodDrop2.Value;
+		Texture2D TB3 = ModAsset.ToothMagicBallBloodDrop3.Value;
+		Texture2D TT0 = ModAsset.ToothMagicBallBloodDropTusk0.Value;
+		Texture2D TT1 = ModAsset.ToothMagicBallBloodDropTusk1.Value;
+		Texture2D TT2 = ModAsset.ToothMagicBallBloodDropTusk2.Value;
+		Texture2D TT3 = ModAsset.ToothMagicBallBloodDropTusk3.Value;
+		Texture2D TT4 = ModAsset.ToothMagicBallBloodDropTusk4.Value;
+		Texture2D TT5 = ModAsset.ToothMagicBallBloodDropTusk5.Value;
+		Texture2D TT6 = ModAsset.ToothMagicBallBloodDropTusk6.Value;
+		Texture2D TT7 = ModAsset.ToothMagicBallBloodDropTusk7.Value;
+		Texture2D TT8 = ModAsset.ToothMagicBallBloodDropTusk8.Value;
+		Texture2D TT9 = ModAsset.ToothMagicBallBloodDropTusk9.Value;
 		var drawOrigin = new Vector2(TC.Width * 0.5f, TC.Height * 0.5f);
 		Color c0 = Lighting.GetColor((int)(player.Center.X / 16f), (int)(player.Center.Y / 16f));
 		SpriteEffects sp = SpriteEffects.None;
-		
+
 		if (player.direction == -1)
 			sp = SpriteEffects.FlipHorizontally;
 		if (VTMax[0] == Vector2.Zero)
@@ -117,7 +115,7 @@ public class ToothMagicBall : ModProjectile
 		List<Vertex2D> bars = new List<Vertex2D>();
 		float accuracy = 16;
 		List<Vertex2D> bars2 = new List<Vertex2D>();
-		for(int x = 0;x < 9;x++)
+		for (int x = 0; x < 9; x++)
 		{
 			Vector2 addPos = Vector2.zeroVector;
 			Vector2 addVel = new Vector2(0, 4 * energyValue).RotatedBy(x / 9f * MathHelper.TwoPi - timeValue * 0.4f);
@@ -171,13 +169,17 @@ public class ToothMagicBall : ModProjectile
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 
-		if(!player.controlUseItem)
+		if (!player.controlUseItem)
 		{
-			if(energyValue < 0.3f)
+			if (energyValue < 0.3f)
 			{
-				Texture2D light = ModAsset.CursedHitStar.Value;
-				Main.spriteBatch.Draw(light, bulbPos - Main.screenPosition, null, c0, 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, energyValue * energyValue * 8), SpriteEffects.None, 0);
-				Main.spriteBatch.Draw(light, bulbPos - Main.screenPosition, null, c0, 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, energyValue * energyValue * 8), SpriteEffects.None, 0);
+				Texture2D dark = Commons.ModAsset.StarSlash_black.Value;
+				Main.spriteBatch.Draw(dark, bulbPos - Main.screenPosition, null, Color.White * 0.3f, 0 + Projectile.ai[1], dark.Size() / 2f, new Vector2(1f, energyValue * energyValue * 12), SpriteEffects.None, 0);
+				Main.spriteBatch.Draw(dark, bulbPos - Main.screenPosition, null, Color.White * 0.3f, MathHelper.PiOver2 + Projectile.ai[1], dark.Size() / 2f, new Vector2(0.5f, energyValue * energyValue * 48), SpriteEffects.None, 0);
+
+				Texture2D light = Commons.ModAsset.StarSlash.Value;
+				Main.spriteBatch.Draw(light, bulbPos - Main.screenPosition, null, c0, 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, energyValue * energyValue * 12), SpriteEffects.None, 0);
+				Main.spriteBatch.Draw(light, bulbPos - Main.screenPosition, null, c0, MathHelper.PiOver2 + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, energyValue * energyValue * 48), SpriteEffects.None, 0);
 			}
 		}
 	}
