@@ -59,14 +59,17 @@ public class MeshAttachment : Attachment
 		{
 			float weight = 0f;
 			Vector2 targetPos = Vector2.Zero;
-			foreach (var binding in v.BoneBindings)
+			if(v.BoneBindings != null)
 			{
-				targetPos += binding.Bone.GetWorldPosition(binding.BindPosition) * binding.Weight;
-				weight += binding.Weight;
-			}
-			targetPos *= 1f / weight;
-			var vx = new Vertex2D(targetPos - Main.screenPosition, Color.White, new Vector3(v.UV, 0f));
-			vertices.Add(vx);
+				foreach (var binding in v.BoneBindings)
+				{
+					targetPos += binding.Bone.GetWorldPosition(binding.BindPosition) * binding.Weight;
+					weight += binding.Weight;
+				}
+				targetPos *= 1f / weight;
+				var vx = new Vertex2D(targetPos - Main.screenPosition, Color.White, new Vector3(v.UV, 0f));
+				vertices.Add(vx);
+			}	
 		}
 
 		Main.graphics.GraphicsDevice.Textures[0] = Texture;
