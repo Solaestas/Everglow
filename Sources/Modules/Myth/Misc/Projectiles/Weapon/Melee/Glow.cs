@@ -1,3 +1,4 @@
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.Misc.Dusts;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
@@ -48,47 +49,19 @@ public class Glow : ModProjectile
 
 		Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) - Projectile.velocity;
 		Projectile.scale = scaleAdder + percentageOfLife * scaleMulti;
-
-		float dustRotation = Projectile.rotation + Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7f;
-		Vector2 dustPosition = Projectile.Center + dustRotation.ToRotationVector2() * 84f * Projectile.scale;
-		Vector2 dustVelocity = (dustRotation + Projectile.ai[0] * MathHelper.PiOver2).ToRotationVector2();
-		//if (Main.rand.NextFloat() * 2f < Projectile.Opacity)
-		//{
-		//	// Original Excalibur color: Color.Gold, Color.White
-		//	Color dustColor = Color.Lerp(Color.SkyBlue, Color.White, Main.rand.NextFloat() * 0.3f);
-		//	Dust coloredDust = Dust.NewDustPerfect(Projectile.Center + dustRotation.ToRotationVector2() * (Main.rand.NextFloat() * 80f * Projectile.scale + 20f * Projectile.scale), DustID.FireworksRGB, dustVelocity * 1f, 100, dustColor, 0.4f);
-		//	coloredDust.fadeIn = 0.4f + Main.rand.NextFloat() * 0.15f;
-		//	coloredDust.noGravity = true;
-		//}
-
-		//if (Main.rand.NextFloat() * 1.5f < Projectile.Opacity)
-		//{
-		//	// This dust spawns on the swinging arc, or just on the perimeter of the projectile arc.
-		//	// Original Excalibur color: Color.White
-		//	Dust coloredDust = Dust.NewDustPerfect(dustPosition, DustID.Frost, dustVelocity, 100, Color.SkyBlue * Projectile.Opacity, 1.2f * Projectile.Opacity);
-		//	coloredDust.noGravity = true;
-		//}
-
-		//Dust diamond = Dust.NewDustPerfect(Projectile.Center + new Vector2(70, 0).RotatedBy(Projectile.rotation), ModContent.DustType<IceScale>(), Vector2.zeroVector, 100, Color.SkyBlue * Projectile.Opacity, 1.2f * Projectile.Opacity);
-		//diamond.noGravity = true;
-		//diamond.rotation = Projectile.rotation + MathHelper.PiOver2;
-
-		//Dust diamond2 = Dust.NewDustPerfect(Projectile.Center + new Vector2(100, 0).RotatedBy(Projectile.rotation), ModContent.DustType<IceScale>(), Vector2.zeroVector, 100, Color.SkyBlue * Projectile.Opacity, 1.8f * Projectile.Opacity);
-		//diamond2.noGravity = true;
-		//diamond2.rotation = Projectile.rotation + MathHelper.PiOver2;
-		//if(Projectile.timeLeft % 2 == 1)
-		//{
-		//	Dust diamond3 = Dust.NewDustPerfect(Projectile.Center + new Vector2(170, 0).RotatedBy(Projectile.rotation), ModContent.DustType<IceScale>(), Vector2.zeroVector, 100, Color.SkyBlue * Projectile.Opacity, 3.8f * Projectile.Opacity);
-		//	diamond3.noGravity = true;
-		//	diamond3.rotation = Projectile.rotation + MathHelper.PiOver2;
-		//}
-		//Dust diamond4 = Dust.NewDustPerfect(Projectile.Center + new Vector2(190, 0).RotatedBy(Projectile.rotation), ModContent.DustType<IceScale2>(), Vector2.zeroVector, 100, Color.SkyBlue * Projectile.Opacity, 1.8f * Projectile.Opacity);
-		//diamond4.noGravity = true;
-		//diamond4.rotation = Projectile.rotation + MathHelper.PiOver2;
-
-		//Dust diamond5 = Dust.NewDustPerfect(Projectile.Center + new Vector2(130 + 30 * MathF.Sin(Projectile.timeLeft), 0).RotatedBy(Projectile.rotation), ModContent.DustType<IceScale3>(), Vector2.zeroVector, 100, Color.SkyBlue * Projectile.Opacity, 2.6f * Projectile.Opacity);
-		//diamond5.noGravity = true;
-		//diamond5.rotation = Projectile.rotation + MathHelper.PiOver2;
+		float distance = Main.rand.NextFloat(10f, 80.0f);
+		var spark = new RayDustDust
+		{
+			velocity = Vector2.Normalize(new Vector2(player.direction, 1).RotatedBy(Projectile.rotation * player.direction + MathHelper.PiOver2)) * distance / 12f * player.direction,
+			Active = true,
+			Visible = true,
+			position = Projectile.Center + Vector2.Normalize(new Vector2(player.direction, 1).RotatedBy(Projectile.rotation * player.direction)) * distance,
+			maxTime = Main.rand.Next(137, 245),
+			scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(0.4f, 2.0f)) * MathF.Sqrt(distance),
+			rotation = Main.rand.NextFloat(6.283f),
+			ai = new float[] { 0, 0 }
+		};
+		Ins.VFXManager.Add(spark);
 
 		Projectile.scale *= Projectile.ai[2]; // Set the scale of the projectile to the scale of the item.
 
@@ -145,7 +118,6 @@ public class Glow : ModProjectile
 
 		hit.HitDirection = (Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1);
 	}
-
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,

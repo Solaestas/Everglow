@@ -24,71 +24,12 @@ public class AbTuskFlesh : ModTile
 	{
 		return false;
 	}
-
-	private int HasCheckPan = 0;
-	private int RandomCheck = 0;
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
 		if (NPC.CountNPCS(ModContent.NPCType<BloodTusk>()) + NPC.CountNPCS(ModContent.NPCType<TuskCooling>()) < 1)
 		{
 			NPC.NewNPC(null, i * 16, j * 16, ModContent.NPCType<BloodTusk>());
 		}
-		//if (HasCheckPan < 3)
-		//{
-		//	for (int x = -30; x < 31; x++)
-		//	{
-		//		for (int y = 5; y < 300; y++)
-		//		{
-		//			if (Main.tile[i + x, j + y].TileType == (ushort)ModContent.TileType<BloodyMossWheel>())
-		//			{
-		//				HasCheckPan += 1;
-		//				return;
-		//			}
-		//			if (Main.tile[i + x, j + y].TileType == (ushort)ModContent.TileType<BloodyMossWheelFinished>())
-		//			{
-		//				HasCheckPan += 1;
-		//				return;
-		//			}
-		//		}
-		//	}
-		//	int CountCriW = 0;
-		//	for (int y = 17; y < 300; y++)
-		//	{
-		//		if (Main.tile[i, j + y].WallType == (ushort)ModContent.WallType<BloodyStoneWall>())
-		//		{
-		//			CountCriW++;
-		//			if (CountCriW > 2)
-		//			{
-		//				Main.tile[i, j + y + 12].TileType = (ushort)ModContent.TileType<BloodyMossWheel>();
-		//				((Tile)Main.tile[i, j + y + 12]).HasTile = true;
-		//				HasCheckPan += 1;
-		//				return;
-		//			}
-		//		}
-		//	}
-		//	HasCheckPan += 1;
-		//}
-		//if (RandomCheck <= 0)
-		//{
-		//	if (NPC.CountNPCS(ModContent.NPCType<BloodTusk>()) + NPC.CountNPCS(ModContent.NPCType<TuskCooling>()) < 1)
-		//	{
-		//		for (int x = -30; x < 31; x++)
-		//		{
-		//			for (int y = 5; y < 300; y++)
-		//			{
-		//				if (Main.tile[i + x, j + y].TileType == (ushort)ModContent.TileType<BloodyMossWheelFinished>())
-		//				{
-		//					NPC.NewNPC(null, i * 16, j * 16, ModContent.NPCType<BloodTusk>());
-		//					RandomCheck = 3600;
-		//					return;
-		//				}
-		//			}
-		//		}
-		//	}
-		//	RandomCheck = 180;
-		//}
-		//if (RandomCheck > 0)
-		//	RandomCheck--;
 	}
 	public override void RandomUpdate(int i, int j)
 	{

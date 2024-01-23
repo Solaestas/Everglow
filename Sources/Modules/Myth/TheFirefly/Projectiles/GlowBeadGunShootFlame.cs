@@ -78,7 +78,7 @@ public class GlowBeadGunShootFlame : ModProjectile, IWarpProjectile, IBloomProje
 		float value = (200 - Projectile.timeLeft) / 200f;
 		value = MathF.Sqrt(value);
 		float colorV = 0.9f * (1 - value);
-		Texture2D t = ModAsset.FogTraceLight.Value;
+		Texture2D t = Commons.ModAsset.Trail_2.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;
@@ -92,7 +92,7 @@ public class GlowBeadGunShootFlame : ModProjectile, IWarpProjectile, IBloomProje
 		float value = (200 - Projectile.timeLeft) / 200f;
 		value = MathF.Sqrt(value);
 		float colorV = 0.9f * (1 - value);
-		Texture2D t = ModAsset.FogTraceLight.Value;
+		Texture2D t = Commons.ModAsset.Trail_2.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;
@@ -104,7 +104,7 @@ public class GlowBeadGunShootFlame : ModProjectile, IWarpProjectile, IBloomProje
 		float value = (200 - Projectile.timeLeft) / 200f;
 		value = MathF.Sqrt(value);
 		float colorV = 0.9f * (1 - value);
-		Texture2D t = ModAsset.FogTraceLight.Value;
+		Texture2D t = Commons.ModAsset.Trail_2.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;

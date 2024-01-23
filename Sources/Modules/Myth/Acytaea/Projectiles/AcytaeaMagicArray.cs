@@ -1,6 +1,8 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Myth.Acytaea.Buffs;
 using Everglow.Myth.Acytaea.VFXs;
 using Terraria.Audio;
+using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
 public class AcytaeaMagicArray : ModProjectile
@@ -32,6 +34,7 @@ public class AcytaeaMagicArray : ModProjectile
 	}
 	public override void PostDraw(Color lightColor)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect dissolve = Commons.ModAsset.Dissolve.Value;
@@ -78,6 +81,6 @@ public class AcytaeaMagicArray : ModProjectile
 		}
 
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 	}
 }

@@ -7,6 +7,7 @@ public class StarDancer : ClubItem
 		Item.damage = 12;
 		Item.value = 1114;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.StarDancer>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.StarDancer_smash>();
 	}
 	public override void AddRecipes()
 	{

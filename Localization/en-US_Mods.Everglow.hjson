@@ -761,11 +761,6 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.MoonAndFragransIII.Description
 	}
 
-	WaterBoltII: {
-		DisplayName: Water Bolt I I
-		Description: Mods.Everglow.Buffs.WaterBoltII.Description
-	}
-
 	BlueImmune: {
 		DisplayName: Blue Immune
 		Description: Mods.Everglow.Buffs.BlueImmune.Description
@@ -814,6 +809,11 @@ Buffs: {
 	CactusBallBuff: {
 		DisplayName: Cactus Ball Buff
 		Description: Mods.Everglow.Buffs.CactusBallBuff.Description
+	}
+
+	WaterBoltII: {
+		DisplayName: Water Bolt I I
+		Description: Mods.Everglow.Buffs.WaterBoltII.Description
 	}
 
 	DeathFlame: {
@@ -2343,11 +2343,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	CrystalSkull: {
-		DisplayName: Crystal Skull
-		Tooltip: ""
-	}
-
 	BloodLamp: {
 		DisplayName: Blood Lamp
 		Tooltip: ""
@@ -2595,6 +2590,11 @@ Items: {
 
 	YellowBellFlower: {
 		DisplayName: Yellow Bell Flower
+		Tooltip: ""
+	}
+
+	CrystalSkull: {
+		DisplayName: Crystal Skull
 		Tooltip: ""
 	}
 
@@ -2938,6 +2938,7 @@ Projectiles: {
 	VortexVanquisher3.DisplayName: Vortex Vanquisher3
 	VortexVanquisherThump.DisplayName: Vortex Vanquisher Thump
 	GoldShield.DisplayName: Gold Shield
+	GoldShield_backTextureSubProj.DisplayName: Gold Shield_back Texture Sub Proj
 	StonePost.DisplayName: Stone Post
 	FrostBall.DisplayName: Frost Ball
 	FrostBomb.DisplayName: Frost Bomb
@@ -2955,21 +2956,20 @@ Projectiles: {
 	TuskSpice.DisplayName: Tusk Spice
 	TuskSpiceBlack.DisplayName: Tusk Spice Black
 	TuskSpicePro.DisplayName: Tusk Spice Pro
-	Tusk.DisplayName: Tusk
 	BloodyBoneYoyo.DisplayName: Bloody Bone Yoyo
-	LittleTusk.DisplayName: Little Tusk
-	LittleTusk0.DisplayName: Little Tusk0
 	SpineGun.DisplayName: Spine Gun
 	SplieSpineBullet.DisplayName: Splie Spine Bullet
 	ToothBow.DisplayName: Tooth Bow
 	ToothBow_BloodArrow.DisplayName: Tooth Bow_ Blood Arrow
+	ToothKnife.DisplayName: Tooth Knife
 	ToothMagic.DisplayName: Tooth Magic
 	ToothMagicBall.DisplayName: Tooth Magic Ball
 	ToothMagicHit.DisplayName: Tooth Magic Hit
 	ToothMagicSplit.DisplayName: Tooth Magic Split
 	ToothMagicSplit2.DisplayName: Tooth Magic Split2
 	ToothSpear_proj.DisplayName: Tooth Spear_proj
-	Tusk0.DisplayName: Tusk0
+	TuskPin.DisplayName: Tusk Pin
+	TuskSlash.DisplayName: Tusk Slash
 	TuskSummon.DisplayName: Tusk Summon
 	BeadShakeWave.DisplayName: Bead Shake Wave
 	BlackCorruptRain.DisplayName: Black Corrupt Rain
@@ -2987,7 +2987,7 @@ Projectiles: {
 	DarkEffect.DisplayName: Dark Effect
 	DarkFan.DisplayName: Dark Fan
 	DarkFanFly.DisplayName: Dark Fan Fly
-	DreamWeaver.DisplayName: Dream Weaver
+	DreamWeaver_proj.DisplayName: Dream Weaver_proj
 	EvilChrysalis.DisplayName: Evil Chrysalis
 	EvilChrysalisRightClick.DisplayName: Evil Chrysalis Right Click
 	FallenDropFruit.DisplayName: Fallen Drop Fruit
@@ -3025,6 +3025,9 @@ Projectiles: {
 	ScaleWingBladeProj.DisplayName: Scale Wing Blade Proj
 	ShadowWingBow.DisplayName: Shadow Wing Bow
 	StaffOfCorruptDust.DisplayName: Staff Of Corrupt Dust
+	DreamWeaverArray.DisplayName: Dream Weaver Array
+	DreamWeaverBook.DisplayName: Dream Weaver Book
+	DreamWeaverII.DisplayName: Dream Weaver I I
 	MothSummonEffect.DisplayName: Moth Summon Effect
 	LilyHarpNote.DisplayName: Lily Harp Note
 	LilyHarpNoteKill.DisplayName: Lily Harp Note Kill
@@ -3072,10 +3075,14 @@ Projectiles: {
 	TopazSlingshot.DisplayName: Topaz Slingshot
 	WoodSlingshot.DisplayName: Wood Slingshot
 	ComingGhost.DisplayName: Coming Ghost
+	ComingGhost_Shimmer.DisplayName: Coming Ghost_ Shimmer
 	ComingGhost_Slash.DisplayName: Coming Ghost_ Slash
 	CyanFrostProj.DisplayName: Cyan Frost Proj
+	FocusRay.DisplayName: Focus Ray
 	GhostHit.DisplayName: Ghost Hit
 	GlowMoonBlade.DisplayName: Glow Moon Blade
+	GlowMoonBlade_ash.DisplayName: Glow Moon Blade_ash
+	Glow_Fall.DisplayName: Glow_ Fall
 	GoldRound.DisplayName: Gold Round
 	GoldRoundYoyo.DisplayName: Gold Round Yoyo
 	MeleeHit.DisplayName: Melee Hit
@@ -3104,15 +3111,19 @@ Projectiles: {
 	CrimsonClub.DisplayName: Crimson Club
 	CrystalClub.DisplayName: Crystal Club
 	CrystalClub_fly.DisplayName: Crystal Club_fly
+	CrystalClub_fly_Explosion.DisplayName: Crystal Club_fly_ Explosion
 	CurseClub.DisplayName: Curse Club
 	CurseClub_fly.DisplayName: Curse Club_fly
+	CurseClub_smash.DisplayName: Curse Club_smash
 	EbonwoodClub.DisplayName: Ebonwood Club
 	GoldClub.DisplayName: Gold Club
 	IchorClub.DisplayName: Ichor Club
 	IchorClub_fly.DisplayName: Ichor Club_fly
+	IchorClub_smash.DisplayName: Ichor Club_smash
 	IronClub.DisplayName: Iron Club
 	LeadClub.DisplayName: Lead Club
 	MeteorClub.DisplayName: Meteor Club
+	MeteorClub_smash.DisplayName: Meteor Club_smash
 	MithrilClub.DisplayName: Mithril Club
 	OrichalcumClub.DisplayName: Orichalcum Club
 	PalladiumClub.DisplayName: Palladium Club
@@ -3123,11 +3134,18 @@ Projectiles: {
 	ShadewoodClub.DisplayName: Shadewood Club
 	SilverClub.DisplayName: Silver Club
 	SpikeClub.DisplayName: Spike Club
+	SpikeClubSlash.DisplayName: Spike Club Slash
+	SpikeClub_smash.DisplayName: Spike Club_smash
 	StarDancer.DisplayName: Star Dancer
+	StarDancer_smash.DisplayName: Star Dancer_smash
+	TinClub_smash.DisplayName: Tin Club_smash
 	TinClub.DisplayName: Tin Club
 	TitaniumClub.DisplayName: Titanium Club
+	TitaniumClub_smash.DisplayName: Titanium Club_smash
 	TungstenClub.DisplayName: Tungsten Club
+	TungstenClub_smash.DisplayName: Tungsten Club_smash
 	WoodenClub.DisplayName: Wooden Club
+	WoodenClub_smash.DisplayName: Wooden Club_smash
 	BoneFeather.DisplayName: Bone Feather
 	EndlessCurseFlame.DisplayName: Endless Curse Flame
 	FireFeather.DisplayName: Fire Feather
@@ -3174,55 +3192,10 @@ Projectiles: {
 	FixCoinSpeed1.DisplayName: Fix Coin Speed1
 	FixCoinSpeed2.DisplayName: Fix Coin Speed2
 	FixCoinSpeed3.DisplayName: Fix Coin Speed3
+	CursedFlameBall.DisplayName: Cursed Flame Ball
+	CursedFlameBrust.DisplayName: Cursed Flame Brust
+	IchorCurrent.DisplayName: Ichor Current
 	IchorRing.DisplayName: Ichor Ring
-	NewWaterBolt.DisplayName: New Water Bolt
-	WaterBoltArray.DisplayName: Water Bolt Array
-	WaterBoltBook.DisplayName: Water Bolt Book
-	WaterTeleport.DisplayName: Water Teleport
-	HurricaneMask.DisplayName: Hurricane Mask
-	RazorbladeTyphoonArray.DisplayName: Razorblade Typhoon Array
-	RazorbladeTyphoonBook.DisplayName: Razorblade Typhoon Book
-	TyphoonII.DisplayName: Typhoon I I
-	MagnetSphereArray.DisplayName: Magnet Sphere Array
-	MagnetSphereBook.DisplayName: Magnet Sphere Book
-	MagnetSphereHit.DisplayName: Magnet Sphere Hit
-	MagnetSphereII.DisplayName: Magnet Sphere I I
-	MagnetSphereLighting.DisplayName: Magnet Sphere Lighting
-	LunarFlareArray.DisplayName: Lunar Flare Array
-	LunarFlareBook.DisplayName: Lunar Flare Book
-	LunarFlareHit.DisplayName: Lunar Flare Hit
-	LunarFlareII.DisplayName: Lunar Flare I I
-	StarProj.DisplayName: Star Proj
-	GoldenShowerArray.DisplayName: Golden Shower Array
-	GoldenShowerBomb.DisplayName: Golden Shower Bomb
-	GoldenShowerBook.DisplayName: Golden Shower Book
-	GoldenShowerII.DisplayName: Golden Shower I I
-	DreamWeaverArray.DisplayName: Dream Weaver Array
-	DreamWeaverBook.DisplayName: Dream Weaver Book
-	DreamWeaverII.DisplayName: Dream Weaver I I
-	DemoHit.DisplayName: Demo Hit
-	DemonScytheArray.DisplayName: Demon Scythe Array
-	DemonScytheBook.DisplayName: Demon Scythe Book
-	DemonScythePlus.DisplayName: Demon Scythe Plus
-	DemonScythePlusCrack.DisplayName: Demon Scythe Plus Crack
-	DemoSpark.DisplayName: Demo Spark
-	CursedFlameHit.DisplayName: Cursed Flame Hit
-	CursedFlamesArray.DisplayName: Cursed Flames Array
-	CursedFlamesBook.DisplayName: Cursed Flames Book
-	CursedFlamesII.DisplayName: Cursed Flames I I
-	CrystalExplosion.DisplayName: Crystal Explosion
-	CrystalStormArray.DisplayName: Crystal Storm Array
-	CrystalStormBook.DisplayName: Crystal Storm Book
-	CrystalStormII.DisplayName: Crystal Storm I I
-	CrystalWind.DisplayName: Crystal Wind
-	LargeCrystal.DisplayName: Large Crystal
-	Storm.DisplayName: Storm
-	BoneSpike.DisplayName: Bone Spike
-	BookofSkullsArray.DisplayName: Bookof Skulls Array
-	BookofSkullsBook.DisplayName: Bookof Skulls Book
-	SkullHand.DisplayName: Skull Hand
-	SkullII.DisplayName: Skull I I
-	BlackHole.DisplayName: Black Hole
 	BloodLampProj.DisplayName: Blood Lamp Proj
 	Firework12Inches.DisplayName: Firework12 Inches
 	Firework6Inches.DisplayName: Firework6 Inches
@@ -3317,6 +3290,52 @@ Projectiles: {
 	TsunamiShark_missile_hit.DisplayName: Tsunami Shark_missile_hit
 	CactusBallProj.DisplayName: Cactus Ball Proj
 	CactusBallSpike.DisplayName: Cactus Ball Spike
+	NewWaterBolt.DisplayName: New Water Bolt
+	RipplingWave.DisplayName: Rippling Wave
+	WaterBoltArray.DisplayName: Water Bolt Array
+	WaterBoltBook.DisplayName: Water Bolt Book
+	WaterTeleport.DisplayName: Water Teleport
+	HurricaneMask.DisplayName: Hurricane Mask
+	RazorbladeTyphoonArray.DisplayName: Razorblade Typhoon Array
+	RazorbladeTyphoonBook.DisplayName: Razorblade Typhoon Book
+	TyphoonII.DisplayName: Typhoon I I
+	MagnetSphereArray.DisplayName: Magnet Sphere Array
+	MagnetSphereBook.DisplayName: Magnet Sphere Book
+	MagnetSphereHit.DisplayName: Magnet Sphere Hit
+	MagnetSphereII.DisplayName: Magnet Sphere I I
+	MagnetSphereLighting.DisplayName: Magnet Sphere Lighting
+	LunarFlareArray.DisplayName: Lunar Flare Array
+	LunarFlareBook.DisplayName: Lunar Flare Book
+	LunarFlareHit.DisplayName: Lunar Flare Hit
+	LunarFlareII.DisplayName: Lunar Flare I I
+	StarProj.DisplayName: Star Proj
+	GoldenShowerArray.DisplayName: Golden Shower Array
+	GoldenShowerBomb.DisplayName: Golden Shower Bomb
+	GoldenShowerBook.DisplayName: Golden Shower Book
+	GoldenShowerII.DisplayName: Golden Shower I I
+	DemoHit.DisplayName: Demo Hit
+	DemonScytheArray.DisplayName: Demon Scythe Array
+	DemonScytheBook.DisplayName: Demon Scythe Book
+	DemonScythePlus.DisplayName: Demon Scythe Plus
+	DemonScythePlusCrack.DisplayName: Demon Scythe Plus Crack
+	DemoSpark.DisplayName: Demo Spark
+	CursedFlameHit.DisplayName: Cursed Flame Hit
+	CursedFlamesArray.DisplayName: Cursed Flames Array
+	CursedFlamesBook.DisplayName: Cursed Flames Book
+	CursedFlamesII.DisplayName: Cursed Flames I I
+	CrystalExplosion.DisplayName: Crystal Explosion
+	CrystalStormArray.DisplayName: Crystal Storm Array
+	CrystalStormBook.DisplayName: Crystal Storm Book
+	CrystalStormII.DisplayName: Crystal Storm I I
+	CrystalWind.DisplayName: Crystal Wind
+	LargeCrystal.DisplayName: Large Crystal
+	Storm.DisplayName: Storm
+	BoneSpike.DisplayName: Bone Spike
+	BookofSkullsArray.DisplayName: Bookof Skulls Array
+	BookofSkullsBook.DisplayName: Bookof Skulls Book
+	SkullHand.DisplayName: Skull Hand
+	SkullII.DisplayName: Skull I I
+	BlackHole.DisplayName: Black Hole
 	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
 	AcroporaSpear.DisplayName: Acropora Spear
 	AcroporaThumpEff.DisplayName: Acropora Thump Eff
