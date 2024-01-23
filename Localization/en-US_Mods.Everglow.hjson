@@ -826,6 +826,11 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.WaterBoltII.Description
 	}
 
+	LichenInfected: {
+		DisplayName: Lichen Infected
+		Description: Mods.Everglow.Buffs.LichenInfected.Description
+	}
+
 	DeathFlame: {
 		DisplayName: Death Flame
 		Description: Mods.Everglow.Buffs.DeathFlame.Description
