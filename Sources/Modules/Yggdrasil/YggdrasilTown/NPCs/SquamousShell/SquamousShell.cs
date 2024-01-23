@@ -1,6 +1,8 @@
 using System.Runtime.Intrinsics.X86;
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.CustomTiles;
+using Everglow.Commons.Skeleton2D;
+using Everglow.Commons.Skeleton2D.Reader;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
@@ -11,10 +13,6 @@ namespace Everglow.Yggdrasil.YggdrasilTown.NPCs.SquamousShell;
 [AutoloadBossHead]
 public class SquamousShell : ModNPC
 {
-	public override void SetStaticDefaults()
-	{
-		Main.npcFrameCount[NPC.type] = 1;
-	}
 	public override void SetDefaults()
 	{
 		NPC.aiStyle = -1;
@@ -34,6 +32,15 @@ public class SquamousShell : ModNPC
 	}
 	public bool Flying = false;
 	public float PhantomValue = 0f;
+	public Skeleton2D SquamousShellSkeleton;
+	public override void Load()
+	{
+
+	}
+	public override void SetStaticDefaults()
+	{
+		Main.npcFrameCount[NPC.type] = 1;
+	}
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
 		return 0f;
@@ -43,6 +50,8 @@ public class SquamousShell : ModNPC
 		NPC.velocity.Y = 2f;
 		_coroutineManager.StartCoroutine(new Coroutine(Landing()));
 		_coroutineManager.StartCoroutine(new Coroutine(FlyingFrame()));
+		var data = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monster.json");
+		SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(data, $"Everglow/Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/");
 	}
 	public override void AI()
 	{
@@ -680,35 +689,49 @@ public class SquamousShell : ModNPC
 	}
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		Texture2D mainTex = ModAsset.SquamousShell.Value;
-		SpriteEffects spe = SpriteEffects.None;
-		float drawRot = NPC.rotation * NPC.spriteDirection;
-		if (NPC.spriteDirection == -1)
+		//Texture2D mainTex = ModAsset.SquamousShell.Value;
+		//SpriteEffects spe = SpriteEffects.None;
+		//float drawRot = NPC.rotation * NPC.spriteDirection;
+		//if (NPC.spriteDirection == -1)
+		//{
+		//	spe = SpriteEffects.FlipHorizontally;
+		//	drawRot += MathF.PI;
+		//}
+		//if(Flying)
+		//{
+		//	mainTex = ModAsset.SquamousShell_fly.Value;
+		//	spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, NPC.frame, drawColor, drawRot, NPC.frame.Size() * 0.5f, NPC.scale, spe, 0);
+		//}
+		//else
+		//{
+		//	spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, null, drawColor, drawRot, mainTex.Size() * 0.5f, NPC.scale, spe, 0);
+		//	if (PhantomValue > 0)
+		//	{
+		//		spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, null, drawColor * (1 - PhantomValue), drawRot, mainTex.Size() * 0.5f, NPC.scale + PhantomValue, spe, 0);
+		//	}
+		//}
+
+		//if (WakingTimer < 180)
+		//{
+		//	Texture2D deadShell = ModAsset.DeadSquamousShell.Value;
+		//	float fade = 1 - WakingTimer / 180f;
+		//	spriteBatch.Draw(deadShell, NPC.Center - Main.screenPosition, null, drawColor * fade, drawRot, deadShell.Size() * 0.5f, NPC.scale, spe, 0);
+		//}
+		if(SquamousShellSkeleton == null)
 		{
-			spe = SpriteEffects.FlipHorizontally;
-			drawRot += MathF.PI;
-		}
-		if(Flying)
-		{
-			mainTex = ModAsset.SquamousShell_fly.Value;
-			spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, NPC.frame, drawColor, drawRot, NPC.frame.Size() * 0.5f, NPC.scale, spe, 0);
+			var data = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monster.json");
+			SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(data, $"Everglow/Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/");
 		}
 		else
 		{
-			spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, null, drawColor, drawRot, mainTex.Size() * 0.5f, NPC.scale, spe, 0);
-			if (PhantomValue > 0)
-			{
-				spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, null, drawColor * (1 - PhantomValue), drawRot, mainTex.Size() * 0.5f, NPC.scale + PhantomValue, spe, 0);
-			}
+			SquamousShellSkeleton.Position = NPC.Center;
+			SquamousShellSkeleton.Rotation = NPC.rotation;
+			// skeleton2D.InverseKinematics(Main.MouseWorld);
+			float framesOfAnimation = 35;
+			SquamousShellSkeleton.PlayAnimation("walk", ((float)Main.timeForVisualEffects % framesOfAnimation / framesOfAnimation) * framesOfAnimation / 60f);
+			SquamousShellSkeleton.DrawDebugView(spriteBatch);
 		}
 
-		if (WakingTimer < 180)
-		{
-			Texture2D deadShell = ModAsset.DeadSquamousShell.Value;
-			float fade = 1 - WakingTimer / 180f;
-			spriteBatch.Draw(deadShell, NPC.Center - Main.screenPosition, null, drawColor * fade, drawRot, deadShell.Size() * 0.5f, NPC.scale, spe, 0);
-		}
-		
 		return false;
 	}
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
