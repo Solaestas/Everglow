@@ -1,12 +1,10 @@
 using Everglow.Commons.VFX.Scene;
-using Everglow.Yggdrasil.Common.Elevator.Tiles;
 using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Terraria;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
-public class DarkForestGrass : SceneTile
+public class DarkForestGrass : ModTile, ISceneTile
 {
 	public override void PostSetDefaults()
 	{
@@ -18,6 +16,14 @@ public class DarkForestGrass : SceneTile
 		HitSound = SoundID.Dig;
 
 		AddMapEntry(new Color(71, 71, 145));
+	}
+	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
+	{
+		if(VFXManager.InScreen(new Vector2(i,j) * 16, 200))
+		{
+			Grass_FurPipeline.ShouldUpdateRenderTarget = true;
+		}
+		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
 	}
 	public override void RandomUpdate(int i, int j)
 	{
@@ -75,7 +81,7 @@ public class DarkForestGrass : SceneTile
 				}
 				break;
 			case 6:
-				if(TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 2))
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 2))
 				{
 					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<LampWood_Grass>(), 18 * Main.rand.Next(6));
 				}
@@ -105,42 +111,59 @@ public class DarkForestGrass : SceneTile
 				}
 				break;
 			case 11:
-				PlaceTree(i, j);
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 5, 13))
+				{
+					LampWood_newStyleTree_0 lampWood_NewStyleTree_0 = TileLoader.GetTile(ModContent.TileType<LampWood_newStyleTree_0>()) as LampWood_newStyleTree_0;
+					lampWood_NewStyleTree_0.PlaceOriginAtBottomLeft(i - 5, j - 1);
+				}
 				break;
 			case 12:
-				PlaceTree(i, j);
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 5, 13))
+				{
+					LampWood_newStyleTree_0 lampWood_NewStyleTree_0 = TileLoader.GetTile(ModContent.TileType<LampWood_newStyleTree_0>()) as LampWood_newStyleTree_0;
+					lampWood_NewStyleTree_0.PlaceOriginAtBottomLeft(i - 5, j - 1);
+				}
 				break;
 			case 13:
-				PlaceTree(i, j);
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 5, 13))
+				{
+					LampWood_newStyleTree_0 lampWood_NewStyleTree_0 = TileLoader.GetTile(ModContent.TileType<LampWood_newStyleTree_0>()) as LampWood_newStyleTree_0;
+					lampWood_NewStyleTree_0.PlaceOriginAtBottomLeft(i - 5, j - 1);
+				}
 				break;
 			case 14:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 17, 20))
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 9, 16))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 17, 20, ModContent.TileType<LampWood_newStyleTree>(), 0);
+					LampWood_newStyleTree_1 lampWood_NewStyleTree_1 = TileLoader.GetTile(ModContent.TileType<LampWood_newStyleTree_1>()) as LampWood_newStyleTree_1;
+					lampWood_NewStyleTree_1.PlaceOriginAtBottomLeft(i - 4, j - 1);
 				}
 				break;
 			case 15:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 17, 20))
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 9, 16))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 17, 20, ModContent.TileType<LampWood_newStyleTree>(), 0);
+					LampWood_newStyleTree_1 lampWood_NewStyleTree_1 = TileLoader.GetTile(ModContent.TileType<LampWood_newStyleTree_1>()) as LampWood_newStyleTree_1;
+					lampWood_NewStyleTree_1.PlaceOriginAtBottomLeft(i - 4, j - 1);
 				}
 				break;
 			case 16:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 18, 21))
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 9, 16))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 18, 21, ModContent.TileType<LampWood_newStyleTree_1>(), 0);
+					LampWood_newStyleTree_1 lampWood_NewStyleTree_1 = TileLoader.GetTile(ModContent.TileType<LampWood_newStyleTree_1>()) as LampWood_newStyleTree_1;
+					lampWood_NewStyleTree_1.PlaceOriginAtBottomLeft(i - 4, j - 1);
 				}
 				break;
 			case 17:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 18, 21))
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 9, 16))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 18, 21, ModContent.TileType<LampWood_newStyleTree_1>(), 0);
+					LampWood_newStyleTree_1 lampWood_NewStyleTree_1 = TileLoader.GetTile(ModContent.TileType<LampWood_newStyleTree_1>()) as LampWood_newStyleTree_1;
+					lampWood_NewStyleTree_1.PlaceOriginAtBottomLeft(i - 4, j - 1);
 				}
 				break;
 			case 18:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 18, 21))
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 9, 16))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 18, 21, ModContent.TileType<LampWood_newStyleTree_1>(), 0);
+					LampWood_newStyleTree_1 lampWood_NewStyleTree_1 = TileLoader.GetTile(ModContent.TileType<LampWood_newStyleTree_1>()) as LampWood_newStyleTree_1;
+					lampWood_NewStyleTree_1.PlaceOriginAtBottomLeft(i - 4, j - 1);
 				}
 				break;
 		}
@@ -215,11 +238,11 @@ public class DarkForestGrass : SceneTile
 			tile.HasTile = true;
 		}
 	}
-	public override void AddScene(int i, int j)
+	public void AddScene(int i, int j)
 	{
 		DarkForestGrass_grass_fore leaf = new DarkForestGrass_grass_fore { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
-		leaf.scale = Main.rand.NextFloat(0.85f, 1.15f);
-		leaf.style = Main.rand.Next(3);
+		leaf.scale = 1f;
+		leaf.style = i % 3;
 		Ins.VFXManager.Add(leaf);
 	}
 }

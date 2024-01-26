@@ -2698,11 +2698,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	YggdrasilImpression: {
-		DisplayName: Yggdrasil Impression
-		Tooltip: ""
-	}
-
 	BoneAndPlatformCreate: {
 		DisplayName: Bone And Platform Create
 		Tooltip: ""

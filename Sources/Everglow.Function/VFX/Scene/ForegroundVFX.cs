@@ -21,38 +21,44 @@ public abstract class ForegroundVFX : Visual
 				Tile tile = Main.tile[originTile.X, originTile.Y];
 				if(tile != null)
 				{
-					if(TileLoader.GetTile(tile.TileType) is SceneTile)
+					if(TileLoader.GetTile(tile.TileType) is ISceneTile)
 					{
 						if(tile.TileType == originType)
 						{
 							if (!tile.HasTile)
 							{
 								Active = false;
+								SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
 							}
 						}
 						else
 						{
 							Active = false;
+							SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
 						}
 					}
 					else
 					{
 						Active = false;
+						SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
 					}
 				}
 				else
 				{
 					Active = false;
+					SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
 				}
 			}
 			else
 			{
 				Active = false;
+				SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
 			}
 		}
 		else
 		{
 			Active = false;
+			SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
 		}
 		Vector2 checkPos = position + texture.Size() / 2;
 		if (VFXManager.InScreen(checkPos, Math.Max(texture.Width, texture.Height + 200)))
@@ -61,7 +67,8 @@ public abstract class ForegroundVFX : Visual
 		}
 		else
 		{
-			Visible = false;
+			Active = false;
+			SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
 		}
 	}
 	public override void Draw()

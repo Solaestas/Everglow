@@ -1,35 +1,38 @@
 namespace Everglow.Commons.VFX.Scene;
 public class SceneVFXSystem : ModSystem
 {
-	private int timeClock = 0;
-	public override void OnWorldLoad()
-	{
-		timeClock = 0;
-		base.OnWorldLoad();
-	}
-	public override void PostUpdateEverything()
-	{
-		if(timeClock < 10)
-		{
-			timeClock++;
-		}
-		base.PostUpdateEverything();
-	}
+	public static Dictionary<(int, int), bool> TilePointHasScene = new Dictionary<(int, int), bool>();
+	internal Vector2 LastCheckScreenPosition = new Vector2();
+	internal float MaxUpdateDistance = 500;
 	public override void PostUpdateWorld()
 	{
-		if (timeClock == 1)
+		Vector2 deltaScreenPos = LastCheckScreenPosition - Main.screenPosition;
+		if (deltaScreenPos.Length() > MaxUpdateDistance - 150)
 		{
-			for (int x = 20; x < Main.maxTilesX - 20; x++)
+			LastCheckScreenPosition = Main.screenPosition;
+			int startX = (int)((Main.screenPosition.X - MaxUpdateDistance) / 16f);
+			startX = Math.Max(startX, 20);
+			int endX = (int)((Main.screenPosition.X + Main.screenWidth + MaxUpdateDistance) / 16f);
+			endX = Math.Min(endX, Main.maxTilesX - 20);
+			int startY = (int)((Main.screenPosition.Y - MaxUpdateDistance) / 16f);
+			startY = Math.Max(startY, 20);
+			int endY = (int)((Main.screenPosition.Y + Main.screenHeight + MaxUpdateDistance) / 16f);
+			endY = Math.Min(endY, Main.maxTilesY - 20);
+			for (int x = startX; x < endX; x++)
 			{
-				for (int y = 20; y < Main.maxTilesY - 20; y++)
+				for (int y = startY; y < endY; y++)
 				{
 					Tile tile = Main.tile[x, y];
-					if (tile != null)
+					if (tile != null && tile.HasTile)
 					{
-						if (TileLoader.GetTile(tile.TileType) is SceneTile)
+						if (TileLoader.GetTile(tile.TileType) is ISceneTile)
 						{
-							SceneTile sceneTile = TileLoader.GetTile(tile.TileType) as SceneTile;
-							sceneTile.AddScene(x, y);
+							if (!TilePointHasScene.ContainsKey((x, y)) || !TilePointHasScene[(x, y)])
+							{
+								ISceneTile sceneTile = TileLoader.GetTile(tile.TileType) as ISceneTile;
+								sceneTile.AddScene(x, y);
+								TilePointHasScene[(x, y)] = true;
+							}
 						}
 					}
 				}

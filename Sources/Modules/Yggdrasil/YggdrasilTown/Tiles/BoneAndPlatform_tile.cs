@@ -5,7 +5,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
-public class BoneAndPlatform_tile : SceneTile
+public class BoneAndPlatform_tile : ModTile, ISceneTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -40,7 +40,7 @@ public class BoneAndPlatform_tile : SceneTile
 		LocalizedText name = CreateMapEntryName();
 		AddMapEntry(new Color(69, 36, 78), name);
 	}
-	public override void AddScene(int i, int j)
+	public void AddScene(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
 		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
@@ -50,7 +50,6 @@ public class BoneAndPlatform_tile : SceneTile
 			BoneAndPlatform_foreground scene2 = new BoneAndPlatform_foreground { position = new Vector2(i, j - 14) * 16, Active = true, originTile = new Point(i, j), originType = ModContent.TileType<BoneAndPlatform_tile>()};
 			Ins.VFXManager.Add(scene2);
 		}
-		base.AddScene(i, j);
 	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{

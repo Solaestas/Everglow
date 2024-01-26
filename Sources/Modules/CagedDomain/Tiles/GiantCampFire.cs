@@ -8,7 +8,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.CagedDomain.Tiles;
 
-public class GiantCampFire : SceneTile
+public class GiantCampFire : ModTile, ISceneTile
 {
 	public override void PostSetDefaults()
 	{
@@ -32,7 +32,7 @@ public class GiantCampFire : SceneTile
 		DustType = DustID.WoodFurniture;
 		AddMapEntry(new Color(91, 62, 39));
 	}
-	public override void AddScene(int i, int j)
+	public void AddScene(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
 

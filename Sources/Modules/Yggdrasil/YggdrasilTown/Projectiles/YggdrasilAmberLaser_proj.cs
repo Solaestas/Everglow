@@ -233,7 +233,8 @@ public class YggdrasilAmberLaser_proj : HandholdProjectile, IWarpProjectile
 			Vector2 checkPoint = Projectile.Center + mouseToPlayer * step * 8;
 			Vector2 toMouseLeft = mouseToPlayer.RotatedBy(MathHelper.PiOver2);
 			float width = duration * duration * 25;
-			Color drawColor = new Color(duration * 0.7f, duration * duration * 0.52f, 0, 0);
+			float duration2 = Math.Max(duration, 0);
+			Color drawColor = new Color(duration * 0.7f, duration2 * duration2 * 0.52f, 0, 0);
 			float mulWidth = 1f;
 			if (step + 4 <= 10)
 			{
