@@ -3,6 +3,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
+using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 
 using Terraria.Utilities;
@@ -43,12 +44,14 @@ public class YggdrasilTownGeneration
 		BuildDuskfallBarrier();
 		Main.statusText = "The Stone Cage Of Challenges...";
 		BuildStoneCageOfChallenges();
+		Main.statusText = "Twilight Forest...";
+		BuildTwilightLand();
 	}
-	public static int[,] PerlinPixelR = new int[512, 512];
-	public static int[,] PerlinPixelG = new int[512, 512];
-	public static int[,] PerlinPixelB = new int[512, 512];
-	public static int[,] PerlinPixel2 = new int[512, 512];
-	public static int[,] CellPixel = new int[512, 512];
+	public static int[,] PerlinPixelR = new int[1024, 1024];
+	public static int[,] PerlinPixelG = new int[1024, 1024];
+	public static int[,] PerlinPixelB = new int[1024, 1024];
+	public static int[,] PerlinPixel2 = new int[1024, 1024];
+	public static int[,] CellPixel = new int[1024, 1024];
 	public static int AzureGrottoCenterX;
 	public static UnifiedRandom GenRand = new UnifiedRandom();
 	public static List<YggdrasilTownStreetElement> StreetConstructorsSheet;
@@ -114,7 +117,7 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void FillPerlinPixel()
 	{
-		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_rgb.bmp");
+		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_II_rgb.bmp");
 		Vector2 perlinCoordCenter = new Vector2(GenRand.NextFloat(0f, 1f), GenRand.NextFloat(0f, 1f));
 		imageData.ProcessPixelRows(accessor =>
 		{
@@ -180,7 +183,7 @@ public class YggdrasilTownGeneration
 			for (int y = center.Y - 60; y < center.Y + radious; y++)
 			{
 				Tile tile = SafeGetTile(x, y);
-				float color = PerlinPixel2[Math.Clamp((int)(x - center.X + radious * 1.5f) / 3, 0, 512), Math.Clamp((y - center.Y + radious) / 2, 0, 512)] / 255f;
+				float color = PerlinPixel2[Math.Clamp((int)(x - center.X + radious * 1.5f) / 3, 0, 1024), Math.Clamp((y - center.Y + radious) / 2, 0, 1024)] / 255f;
 				float distance = new Vector2((x - center.X) * 0.6667f, y - center.Y).Length() / 200f;
 				if (color + distance > 1.5f)
 				{
@@ -302,8 +305,8 @@ public class YggdrasilTownGeneration
 		}
 		int xLength0 = x0 - 155;
 		int yLength = y0 - 11111;
-		int y0CoordPerlin = GenRand.Next(512);
-		int y1CoordPerlin = GenRand.Next(512);
+		int y0CoordPerlin = GenRand.Next(1024);
+		int y1CoordPerlin = GenRand.Next(1024);
 		//左侧坡面
 		for (int y = y0; y > 11111; y--)
 		{
@@ -313,7 +316,7 @@ public class YggdrasilTownGeneration
 				if (!tile.HasTile)
 				{
 					float colorPerlinValue = (x - 155f) * (x0 - x) / (x0 - 155 + 0.01f) / (x0 - 155 + 0.01f);
-					float xValue = (x - 155) / (float)xLength0 + PerlinPixelB[x % 512, y0CoordPerlin] * colorPerlinValue / 255f * 0.3f * 300f / (x0 - 155 + 0.1f);
+					float xValue = (x - 155) / (float)xLength0 + PerlinPixelB[x % 1024, y0CoordPerlin] * colorPerlinValue / 255f * 0.3f * 300f / (x0 - 155 + 0.1f);
 					if (xValue < (y - 11111) / (float)yLength)
 					{
 						tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
@@ -336,7 +339,7 @@ public class YggdrasilTownGeneration
 				if (!tile.HasTile)
 				{
 					float colorPerlinValue = (x - x1) * (1045 - x) / (x - x1 + 0.01f) / (1045 - x + 0.01f);
-					float xValue = (1045 - x) / (float)xLength1 + PerlinPixelB[x % 512, y1CoordPerlin] * colorPerlinValue / 255f * 0.3f * 300f / (1045 - x0 + 0.1f);
+					float xValue = (1045 - x) / (float)xLength1 + PerlinPixelB[x % 1024, y1CoordPerlin] * colorPerlinValue / 255f * 0.3f * 300f / (1045 - x0 + 0.1f);
 					if (xValue < (y - 11111) / (float)yLength)
 					{
 						tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
@@ -349,12 +352,12 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
-		int coordRandomY = GenRand.Next(512);
+		int coordRandomY = GenRand.Next(1024);
 		for (int x = 155; x < 1045; x++)
 		{
 			float y1 = y0 + (x - 600) * (x - 600) / 500f - 200;
-			int y2 = PerlinPixelB[x % 512, coordRandomY] / 20;
-			int y3 = PerlinPixelG[x % 512, coordRandomY] / 9;
+			int y2 = PerlinPixelB[x % 1024, coordRandomY] / 20;
+			int y3 = PerlinPixelG[x % 1024, coordRandomY] / 9;
 			for (int y = (int)y1 - y2; y < y1 + 80 + y3; y++)
 			{
 				Tile tile = SafeGetTile(x, y);
@@ -387,8 +390,8 @@ public class YggdrasilTownGeneration
 		}
 		int height = GenRand.Next(270, 321);
 		int maxWidth = GenRand.Next(960, 981);
-		int y0CoordPerlin = GenRand.Next(512);
-		int y1CoordPerlin = GenRand.Next(512);
+		int y0CoordPerlin = GenRand.Next(1024);
+		int y1CoordPerlin = GenRand.Next(1024);
 
 		for (int y = -30; y < height; y++)
 		{
@@ -396,8 +399,8 @@ public class YggdrasilTownGeneration
 			int width = (int)(Math.Pow(2, 8 * (heightValue - 0.9)) / 4d * maxWidth) + 25;
 			for (int x = -width; x <= width; x++)
 			{
-				float thickValue = PerlinPixelG[(int)(x * 0.9f + maxWidth * 1f) % 512, y0CoordPerlin] * 0.2f;
-				float thickValueUp = PerlinPixelG[(int)(x * 0.9f + maxWidth * 1f) % 512, y1CoordPerlin] * 0.08f;
+				float thickValue = PerlinPixelG[(int)(x * 0.9f + maxWidth * 1f) % 1024, y0CoordPerlin] * 0.2f;
+				float thickValueUp = PerlinPixelG[(int)(x * 0.9f + maxWidth * 1f) % 1024, y1CoordPerlin] * 0.08f;
 				float mulThickValue = 1;
 				if (maxWidth * 0.4377f - Math.Abs(x) < 30)
 				{
@@ -661,7 +664,7 @@ public class YggdrasilTownGeneration
 		Vector2 velocity = new Vector2(step, 0);
 		Vector2 position = new Vector2(startX + lengthX * step, startY - radius);
 		int times = 0;
-		int coordY = GenRand.Next(512);
+		int coordY = GenRand.Next(1024);
 		int rotatedTimes = 0;
 		int noRotatedTimes = 0;
 		while (continueEmpty < 15)
@@ -698,7 +701,7 @@ public class YggdrasilTownGeneration
 					step *= -1;
 					continue;
 				}
-				velocity = velocity.RotatedBy((PerlinPixelG[times % 512, coordY] - 127.5) * 0.0002);
+				velocity = velocity.RotatedBy((PerlinPixelG[times % 1024, coordY] - 127.5) * 0.0002);
 				velocity.Y -= 0.015f;
 				noRotatedTimes++;
 				if (noRotatedTimes > Math.Max(80 + 11540 - position.Y, 80))
@@ -738,7 +741,7 @@ public class YggdrasilTownGeneration
 		//	randX = AzureGrottoCenterX - 100 - 434;
 		//}
 		//QuickBuild(randX, 11400, "YggdrasilTown/MapIOs/434x159YggdrasilTown.mapio");
-		//int randY = GenRand.Next(512);
+		//int randY = GenRand.Next(1024);
 		////平滑嵌入左上段
 		//for (int x = randX - 70; x < randX + 150; x++)
 		//{
@@ -746,7 +749,7 @@ public class YggdrasilTownGeneration
 		//	yMin *= yMin;
 		//	yMin *= 45f;
 		//	yMin = 11270 - yMin;
-		//	yMin -= PerlinPixelB[x % 512, randY] * 0.02f;
+		//	yMin -= PerlinPixelB[x % 1024, randY] * 0.02f;
 		//	for (int y = 11270; y > yMin; y--)
 		//	{
 		//		Tile tile = SafeGetTile(x, y);
@@ -771,7 +774,7 @@ public class YggdrasilTownGeneration
 		//	yMin *= yMin;
 		//	yMin *= 55f;
 		//	yMin = 11200 + yMin;
-		//	yMin -= PerlinPixelB[x % 512, randY] * 0.06f;
+		//	yMin -= PerlinPixelB[x % 1024, randY] * 0.06f;
 		//	for (int y = (int)yMin; y < 11400; y++)
 		//	{
 		//		Tile tile = SafeGetTile(x, y);
@@ -814,33 +817,32 @@ public class YggdrasilTownGeneration
 		}
 		int startY = 11400;
 		int countX = 0;
-		int coordX = GenRand.Next(512);
-		int coordY = GenRand.Next(512);
+		int coordX = GenRand.Next(100, 200) + 1024;
+		int coordY = GenRand.Next(100, 200) + 1024;
 		//放置泥块,草块
-		while (countX < 500)
+		while (countX < 600)
 		{
 			countX++;
 			int x = randX + countX * direction;
 			float yMin = 11040 - countX * countX / 2000f;
-			for(int y = startY; y > yMin;y--)
+			for(int y = startY + PerlinPixelG[(x + coordX) % 1024, 200] / 20; y > yMin;y--)
 			{
-				float valueR = PerlinPixelR[(int)(x * 0.24f + coordX) % 512, (int)(y * 1.3 + coordY) % 512] / 255f;
+				float valueR = PerlinPixelR[(int)(x + coordX) % 1024, (int)(y * 3.3 + coordY) % 1024] / 255f;
 				if(y < yMin + 100)
 				{
 					valueR -= (yMin - y) / 100f + 1;
 				}
-
 				Tile tile = SafeGetTile(x, y);
 				if(!tile.HasTile && tile.LiquidAmount<=0)
 				{
 					//边缘区域为草方块
-					if(valueR > 0.62f)
+					if(valueR > 0.32f)
 					{
 						tile.TileType = (ushort)ModContent.TileType<DarkForestGrass>();
 						tile.HasTile = true;
 					}
 					//其他区域是泥
-					if (valueR > 0.85f)
+					if (valueR > 0.45f)
 					{
 						tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
 						tile.HasTile = true;
@@ -850,8 +852,8 @@ public class YggdrasilTownGeneration
 		}
 		//放置含有宝箱的房间
 		countX = -100;
-		coordX = GenRand.Next(512);
-		coordY = GenRand.Next(512);
+		coordX = GenRand.Next(1024) + 1024;
+		coordY = GenRand.Next(1024) + 1024;
 		List<Vector2> roomPositions = new List<Vector2>();
 		while (countX < 800)
 		{
@@ -860,7 +862,7 @@ public class YggdrasilTownGeneration
 			float yMin = 10840;
 			for (int y = startY + 150; y > yMin; y--)
 			{
-				float valueB = PerlinPixelB[(int)(x * 0.24f + coordX) % 512, (int)(y * 0.24 + coordY) % 512] / 255f;
+				float valueB = PerlinPixelB[(int)(x * 0.75f + coordX) % 1024, (int)(y * 0.75 + coordY) % 1024] / 255f;
 				//坐标锁定
 				if (valueB > 0.4f)
 				{
@@ -940,8 +942,8 @@ public class YggdrasilTownGeneration
 		}
 		//放置罐子
 		countX = -100;
-		coordX = GenRand.Next(512);
-		coordY = GenRand.Next(512);
+		coordX = GenRand.Next(1024) + 1024;
+		coordY = GenRand.Next(1024) + 1024;
 		while (countX < 800)
 		{
 			countX++;
@@ -949,7 +951,7 @@ public class YggdrasilTownGeneration
 			float yMin = 11040 - countX * countX / 2000f;
 			for (int y = startY + 150; y > yMin; y--)
 			{
-				float valueG = PerlinPixelG[(int)(x * 0.24f + coordX) % 512, (int)(y * 0.24 + coordY) % 512] / 255f;
+				float valueG = PerlinPixelG[(int)(x * 0.24f + coordX) % 1024, (int)(y * 0.24 + coordY) % 1024] / 255f;
 				Tile tile0 = SafeGetTile(x, y);
 				Tile tile1 = SafeGetTile(x + 1, y);
 				Tile tile2 = SafeGetTile(x, y + 1);
@@ -1034,7 +1036,7 @@ public class YggdrasilTownGeneration
 			for (int j = -100; j < 101; j++)
 			{
 				float length = new Vector2(i, j * 2.5f).Length() / 250f;
-				float valueG = PerlinPixelR[(int)(i * 0.24f + coordX + 140) % 512, (int)(j * 1.3 + coordY + 140) % 512] / 255f;
+				float valueG = PerlinPixelR[(int)(i * 0.24f + coordX + 140) % 1024, (int)(j * 1.3 + coordY + 140) % 1024] / 255f;
 				if(Main.rand.NextBool(15) && length + valueG < 1)
 				{
 					int x = treeHat.X + i;
@@ -1137,14 +1139,14 @@ public class YggdrasilTownGeneration
 	public static void BuildDuskfallBarrier()
 	{
 		int centerY = 10700;
-		int coordX = GenRand.Next(512);
+		int coordX = GenRand.Next(1024);
 		int coordY = GenRand.Next(150, 612);
 		for (int x = 0; x < 1200; x++)
 		{
 			for (int y = -150; y < 150; y++)
 			{
 				float thick = (x - 600) * (x - 600) / 2400f + 30f;
-				thick += PerlinPixelR[(x + coordX) % 512, (y + coordY) % 512] / 25f;
+				thick += PerlinPixelR[(x + coordX) % 1024, (y + coordY) % 1024] / 25f;
 				if (Math.Abs(y) < thick)
 				{
 					Tile tile = SafeGetTile(x, y + centerY);
@@ -1174,8 +1176,8 @@ public class YggdrasilTownGeneration
 			}
 		}
 		startY -= 30;
-		int randX = GenRand.Next(512);
-		int randY = GenRand.Next(512);
+		int randX = GenRand.Next(1024);
+		int randY = GenRand.Next(1024);
 		int step = -1;
 		if (AzureGrottoCenterX > 600)
 		{
@@ -1186,7 +1188,7 @@ public class YggdrasilTownGeneration
 		while (x >= 50 && x <= 1150)
 		{
 			x += step;
-			float noiseX = PerlinPixelG[(randX + x) % 512, randY] / 256f;
+			float noiseX = PerlinPixelG[(randX + x) % 1024, randY] / 256f;
 			float valueX = Math.Abs(x - (AzureGrottoCenterX - step * 170) + noiseX * 27f) / 550f;
 			float valueY = 1 - MathF.Cos(valueX * MathF.PI);
 			valueY *= 200;
@@ -1220,8 +1222,8 @@ public class YggdrasilTownGeneration
 		int count = 0;
 		int startY2 = startY + 170;
 		int cageMiddleX = AzureGrottoCenterX + (tunnelLength - 100) * step;
-		randX = GenRand.Next(512);
-		randY = GenRand.Next(512);
+		randX = GenRand.Next(1024);
+		randY = GenRand.Next(1024);
 
 		while (count <= tunnelLength)
 		{
@@ -1252,13 +1254,13 @@ public class YggdrasilTownGeneration
 				float valueX = tunnelLength - count;
 				valueX -= 100;
 				float deltaY = 80 - valueX * valueX / 450f;
-				deltaY += PerlinPixelB[(randX + count) % 512, randY] / 90f;
+				deltaY += PerlinPixelB[(randX + count) % 1024, randY] / 90f;
 				for (int y = startY2 - (int)deltaY; y <= startY2 + 8; y++)
 				{
 					Tile target = SafeGetTile(x, y);
 					target.HasTile = false;
 					Vector2 centerPoint = new Vector2(cageMiddleX, startY2 - deltaY * 0.5f);
-					float colorValue = 1 - CellPixel[(x * 4 + randX) % 512, (y * 4 + randY) % 512] / 255f;
+					float colorValue = 1 - CellPixel[(x * 4 + randX) % 1024, (y * 4 + randY) % 1024] / 255f;
 					colorValue *= colorValue * 2;
 					if (colorValue > (centerPoint - new Vector2(x, y)).Length() / 100f - 0.7f)
 					{
@@ -1280,8 +1282,8 @@ public class YggdrasilTownGeneration
 		sealY = sealY + sealCountY - 10;
 		PlaceFrameImportantTiles(cageMiddleX, sealY, 20, 10, ModContent.TileType<SquamousShellSeal>());
 		Point centerOfCage = new Point(cageMiddleX, startY2 - 40);
-		randX = GenRand.Next(512);
-		randY = GenRand.Next(512);
+		randX = GenRand.Next(1024);
+		randY = GenRand.Next(1024);
 		int startX = Math.Max(cageMiddleX - 300, 0);
 		int endX = Math.Min(cageMiddleX + 300, Main.maxTilesX);
 		//大厅顶部的琥珀
@@ -1295,7 +1297,7 @@ public class YggdrasilTownGeneration
 					Vector2 dis = (new Vector2(x0, y) - new Vector2(centerOfCage.X, centerOfCage.Y + 40));
 					dis.X *= 1f;
 					float myLength = dis.Length();
-					float cellC = 1 - CellPixel[(int)(x0 * 3.5f + randX) % 512, (int)(myLength * 3 + randY) % 512] / 255f;
+					float cellC = 1 - CellPixel[(int)(x0 * 3.5f + randX) % 1024, (int)(myLength * 3 + randY) % 1024] / 255f;
 					//float xValue = Math.Abs(x0 - cageMiddleX) / 300f;
 					//xValue = 1 - xValue;
 					//xValue *= 3;
@@ -1318,6 +1320,89 @@ public class YggdrasilTownGeneration
 			if (yWorld != null)
 			{
 				yWorld.StoneCageOfChallengesCenter = new Vector2(cageMiddleX, startY2 - 40) * 16;
+			}
+		}
+	}
+	/// <summary>
+	/// 暮光之地
+	/// </summary>
+	public static void BuildTwilightLand()
+	{
+		int direction = -1;
+		int randX = AzureGrottoCenterX;
+		if (AzureGrottoCenterX > 600)
+		{
+			direction = 1;
+		}
+		int startY = 11000;
+		for (int yi = 0; yi < 1000; yi++)
+		{
+			Tile checkWater = SafeGetTile(randX, yi + startY);
+			if (checkWater.LiquidAmount > 0)
+			{
+				startY += yi - 20;
+				break;
+			}
+		}
+		int countX = 0;
+		int coordX = GenRand.Next(100, 200) + 1024;
+		int coordY = GenRand.Next(100, 200) + 1024;
+		//放置泥块,草块
+		while (countX < 450)
+		{
+			countX++;
+			int x = randX + countX * direction;
+			float yMax = Math.Max(30 + PerlinPixelG[(x + coordX) % 1024, 200] / 20, 0);
+			if (countX < 50)
+			{
+				yMax = Math.Max(countX - 20 + PerlinPixelG[(x + coordX) % 1024, 200] / 20, 0);
+			}
+			if (countX > 400)
+			{
+				yMax = Math.Max(430 - countX + PerlinPixelG[(x + coordX) % 1024, 200] / 20, 0);
+			}
+			yMax *= 1f;
+			for (int y = startY - (int)yMax / 2; y < startY + yMax / 2; y++)
+			{
+				float valueR = PerlinPixelR[(int)(x + coordX) % 1024, (int)(y * 3.3 + coordY) % 1024] / 255f;
+				float valueY = 0;
+				if(Math.Abs(y - startY) < 4 + PerlinPixelB[(int)(x + coordX) % 1024, (int)(y * 3.3 + coordY) % 1024] / 55f)
+				{
+					valueY = 0.3f;
+				}
+				valueR += valueY;
+				if (y > startY + yMax / 2 - 3 && valueR > 0.45f)
+				{
+					valueR = 0.4f;
+				}
+				if (y < startY - yMax / 2 + 3 && valueR > 0.45f)
+				{
+					valueR = 0.4f;
+				}
+				Tile tile = SafeGetTile(x, y);
+				//边缘区域为草方块
+				if (valueR > 0.32f)
+				{
+					tile.TileType = (ushort)ModContent.TileType<TwilightGrassBlock>();
+					tile.HasTile = true;
+				}
+				//其他区域是泥
+				if (valueR > 0.45f)
+				{
+					tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
+					tile.HasTile = true;
+				}
+			}
+			float xValue = (450 - countX) / 450f;
+			xValue = MathF.Sqrt(xValue);
+			float yMin = Math.Max((xValue * 170 - 15) + PerlinPixelG[(x + coordX) % 1024, 200] / 10, 0);
+			for (int y = startY - 1; y > startY - yMin; y--)
+			{
+				Tile tile = SafeGetTile(x, y);
+				if (tile.HasTile && tile.TileType == ModContent.TileType<StoneScaleWood>())
+				{
+					tile.HasTile = false;
+				}
 			}
 		}
 	}

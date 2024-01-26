@@ -3,7 +3,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
-public class FemaleLampLeaves : SceneTile
+public class FemaleLampLeaves : ModTile, ISceneTile
 {
 	public override void PostSetDefaults()
 	{
@@ -18,7 +18,7 @@ public class FemaleLampLeaves : SceneTile
 	{
 		return false;
 	}
-	public override void AddScene(int i, int j)
+	public void AddScene(int i, int j)
 	{
 		for (int x = 0; x < 3; x++)
 		{

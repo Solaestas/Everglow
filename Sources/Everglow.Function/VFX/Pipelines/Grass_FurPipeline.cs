@@ -21,6 +21,7 @@ public class Grass_FurPipeline : Pipeline
 	public static Vector2 LastRenderPosition;//上次刷新的屏幕坐标
 	public static float RefreshDistance = 200f;//刷新距离阈值
 	public static int RenderStyle = 0;//0的时候画草,1的时候画可扭性图
+	public static bool ShouldUpdateRenderTarget;//如果物块的帧发生了更新就重置画板
 
 	public override void Load()
 	{
@@ -159,6 +160,28 @@ public class Grass_FurPipeline : Pipeline
 			Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
 		effect.Value.CurrentTechnique.Passes[0].Apply();
 	}
+	public void ClearRender()
+	{
+		var sb = Main.spriteBatch;
+		var gd = Main.instance.GraphicsDevice;
+		//保存原画
+		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Invert(Main.GameViewMatrix.TransformationMatrix));
+		var cur = Main.screenTarget;
+		gd.SetRenderTarget(saveScreenTarget);
+		gd.Clear(Color.Transparent);
+		sb.Draw(cur, Vector2.Zero, Color.White);
+		sb.End();
+
+		gd.SetRenderTarget(grass_FurScreen);
+		gd.Clear(Color.Transparent);
+
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointClamp, RasterizerState.CullNone);
+		effect.Value.Parameters["uTransform"].SetValue(
+			Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) *
+			Main.GameViewMatrix.EffectMatrix *
+			Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
+		effect.Value.CurrentTechnique.Passes[0].Apply();
+	}
 	public override void Render(IEnumerable<IVisual> visuals)
 	{
 		if (grass_FurScreen == null)
@@ -169,7 +192,34 @@ public class Grass_FurPipeline : Pipeline
 		TotalMovedPosition = Main.screenPosition - LastRenderPosition;
 		//UpdateForceField();
 		EndRender();//未超出刷新阈值,直接画已经处理好的RenderTarget即可结束渲染
-		if (TotalMovedPosition.Length() > RefreshDistance)
+					//满足以下条件刷新RenderTarget
+		bool condition1 = TotalMovedPosition.Length() > RefreshDistance;
+		bool condition2 = ShouldUpdateRenderTarget;
+		
+		if(condition2)//由于物块变化引起的刷新
+		{
+			var sb = Main.spriteBatch;
+			var gd = Main.instance.GraphicsDevice;
+
+			ClearRender();
+
+			LastRenderPosition = Main.screenPosition;
+			RenderStyle = 0;
+			foreach (var visual in visuals)
+			{
+				visual.Draw();
+			}
+			Ins.Batch.End();
+			
+			gd.SetRenderTarget(Main.screenTarget);
+			gd.Clear(Color.Transparent);
+			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			sb.Draw(saveScreenTarget, Vector2.Zero, Color.White);
+			sb.End();
+
+			ShouldUpdateRenderTarget = false;
+		}
+		else if (condition1)
 		{
 			var sb = Main.spriteBatch;
 			var gd = Main.instance.GraphicsDevice;

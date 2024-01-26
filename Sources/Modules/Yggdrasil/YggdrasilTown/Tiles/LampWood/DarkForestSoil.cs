@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
@@ -8,6 +9,7 @@ public class DarkForestSoil : ModTile
 	{
 		Main.tileSolid[Type] = true;
 		Main.tileMerge[Type][ModContent.TileType<DarkForestGrass>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<TwilightGrassBlock>()] = true;
 		Main.tileMerge[Type][ModContent.TileType<StoneScaleWood>()] = true;
 		Main.tileBlockLight[Type] = true;
 		DustType = ModContent.DustType<DarkForestSoil_Dust>();

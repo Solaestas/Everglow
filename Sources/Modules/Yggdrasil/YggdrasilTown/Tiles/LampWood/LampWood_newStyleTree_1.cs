@@ -1,47 +1,21 @@
-using Terraria.ObjectData;
+using Everglow.Commons.TileHelper;
+using Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
-public class LampWood_newStyleTree_1 : ModTile
+public class LampWood_newStyleTree_1 : ShapeDataTile
 {
 	public override void SetStaticDefaults()
 	{
-		Main.tileFrameImportant[Type] = true;
-		Main.tileLighted[Type] = true;
-		Main.tileLavaDeath[Type] = false;
-
-		Main.tileWaterDeath[Type] = false;
-		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-		TileObjectData.newTile.Height = 21;
-		TileObjectData.newTile.Width = 18;
-		TileObjectData.newTile.CoordinateHeights = new int[]
-		{
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			16,
-			22
-		};
-		TileObjectData.newTile.StyleHorizontal = true;
-		TileObjectData.newTile.LavaDeath = false;
-		TileObjectData.addTile(Type);
-		AddMapEntry(new Color(125, 125, 125));
+		base.SetStaticDefaults();
+		Main.tileAxe[Type] = true;
+		AddMapEntry(new Color(49, 41, 96));
+	}
+	public override void PostSetDefaults()
+	{
+		base.PostSetDefaults();
+		MultiItem = true;
+		CustomItemType = ModContent.ItemType<LampWood_Wood>();
 	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
@@ -54,6 +28,6 @@ public class LampWood_newStyleTree_1 : ModTile
 
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
-		spriteBatch.Draw(ModAsset.LampWood_newStyleTree_1_glow.Value, new Vector2(i, j) * 16 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
+		spriteBatch.Draw(ModAsset.LampWood_newStyleTree_glow.Value, new Vector2(i, j) * 16 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
 	}
 }

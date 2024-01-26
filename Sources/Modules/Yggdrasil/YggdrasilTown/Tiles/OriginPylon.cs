@@ -7,7 +7,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
-public class OriginPylon : SceneTile
+public class OriginPylon : ModTile, ISceneTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -108,7 +108,7 @@ public class OriginPylon : SceneTile
 			}
 		}
 	}
-	public override void AddScene(int i, int j)
+	public void AddScene(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
 		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)

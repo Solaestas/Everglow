@@ -45,13 +45,16 @@ public class DarkForestGrass_grass_fore : ForegroundVFX
 			return;
 		}
 
-		Vector2 deltaPos = Grass_FurPipeline.TotalMovedPosition;
-		int rectangleX = (int)(Main.screenPosition - deltaPos).X;
-		int rectangleY = (int)(Main.screenPosition - deltaPos).Y;
-		Rectangle checkRectangle = new Rectangle(rectangleX, rectangleY, Main.screenWidth - 8, Main.screenHeight - 8);
-		if (checkRectangle.Contains((int)position.X, (int)position.Y))
+		if(!Grass_FurPipeline.ShouldUpdateRenderTarget)
 		{
-			return;
+			Vector2 deltaPos = Grass_FurPipeline.TotalMovedPosition;
+			int rectangleX = (int)(Main.screenPosition - deltaPos).X;
+			int rectangleY = (int)(Main.screenPosition - deltaPos).Y;
+			Rectangle checkRectangle = new Rectangle(rectangleX, rectangleY, Main.screenWidth - 8, Main.screenHeight - 8);
+			if (checkRectangle.Contains((int)position.X, (int)position.Y))
+			{
+				return;
+			}
 		}
 		Color lightColor = Color.White;//new Color(MathF.Sin((float)Main.time * 0.03f + 0), MathF.Sin((float)Main.time * 0.03f + MathF.PI / 3f), MathF.Sin((float)Main.time * 0.03f + MathF.PI / 3f * 2), 1);
 

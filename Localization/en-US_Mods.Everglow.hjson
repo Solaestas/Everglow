@@ -2683,6 +2683,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	YggdrasilImpression: {
+		DisplayName: Yggdrasil Impression
+		Tooltip: ""
+	}
+
 	TreePlacer: {
 		DisplayName: Tree Placer
 		Tooltip: ""
@@ -2690,11 +2695,6 @@ Items: {
 
 	TwilightWood: {
 		DisplayName: Twilight Wood
-		Tooltip: ""
-	}
-
-	YggdrasilImpression: {
-		DisplayName: Yggdrasil Impression
 		Tooltip: ""
 	}
 
@@ -3592,6 +3592,7 @@ Projectiles: {
 	SkullHand.DisplayName: Skull Hand
 	SkullII.DisplayName: Skull I I
 	BlackHole.DisplayName: Black Hole
+	CrystalReflect.DisplayName: Crystal Reflect
 	AmberBall.DisplayName: Amber Ball
 	AmberMagicOrb.DisplayName: Amber Magic Orb
 	CyanVineCrossBow_Proj.DisplayName: Cyan Vine Cross Bow_ Proj

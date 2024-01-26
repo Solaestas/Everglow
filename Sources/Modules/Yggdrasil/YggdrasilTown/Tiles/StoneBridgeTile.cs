@@ -4,7 +4,7 @@ using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
-public class StoneBridgeTile : SceneTile
+public class StoneBridgeTile : ModTile, ISceneTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -39,7 +39,7 @@ public class StoneBridgeTile : SceneTile
 	{
 
 	}
-	public override void AddScene(int i, int j)
+	public void AddScene(int i, int j)
 	{
 		Tile tile = SafeGetTile(i, j);
 		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)

@@ -4,7 +4,7 @@ using Terraria;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles;
 
-public class KelpMoss_large_tile : SceneTile
+public class KelpMoss_large_tile : ModTile, ISceneTile
 {
 	public override void PostSetDefaults()
 	{
@@ -19,7 +19,7 @@ public class KelpMoss_large_tile : SceneTile
 	{
 		return false;
 	}
-	public override void AddScene(int i, int j)
+	public void AddScene(int i, int j)
 	{
 		KelpMoss_large_fore kelp = new KelpMoss_large_fore { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = ModContent.TileType<KelpMoss_large_tile>() };
 		kelp.startRotation = GetNeighborTileRotation(new Vector2(i * 16, j * 16));
