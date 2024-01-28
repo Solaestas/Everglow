@@ -1,9 +1,10 @@
-namespace Everglow.Yggdrasil.YggdrasilTown.Dusts;
+namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Dusts;
 
-public class CyanVine : ModDust
+public class TwilightCrystalDust : ModDust
 {
 	public override void OnSpawn(Dust dust)
 	{
+
 	}
 
 	public override bool Update(Dust dust)
@@ -49,6 +50,7 @@ public class CyanVine : ModDust
 				dust.active = false;
 			}
 		}
+		Lighting.AddLight(dust.position, new Vector3(0.03f,0.3f, 0.65f) * (1 - dust.alpha / 255f));
 		return false;
 	}
 }

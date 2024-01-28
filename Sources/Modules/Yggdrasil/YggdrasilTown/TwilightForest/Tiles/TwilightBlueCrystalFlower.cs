@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Dusts;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles;
@@ -24,6 +25,7 @@ public class TwilightBlueCrystalFlower : ModTile
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.addTile(Type);
 		AddMapEntry(new Color(40, 80, 148));
+		DustType = ModContent.DustType<TwilightCrystalDust>();
 	}
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{

@@ -49,7 +49,7 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 			return;
 		}
 		int height = Main.rand.Next(14, 60);
-		switch (Main.rand.Next(6))
+		switch (Main.rand.Next(8))
 		{
 			case 0:
 				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i - 4, j, 8, height))
@@ -124,6 +124,18 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 					{
 						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 4, 3, ModContent.TileType<TwilightBlueCrystalFlower>(), 72 * Main.rand.Next(2), 0);
 					}
+				}
+				break;
+			case 6:
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 2))
+				{
+					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<Twilight_Grass>(), 18 * Main.rand.Next(6));
+				}
+				break;
+			case 7:
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 2))
+				{
+					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<Twilight_Grass>(), 18 * Main.rand.Next(6));
 				}
 				break;
 		}

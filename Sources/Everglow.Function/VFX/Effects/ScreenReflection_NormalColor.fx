@@ -53,7 +53,8 @@ PSInput VertexShaderFunction(VSInput input)
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
     float4 normalColor = tex2D(uImage0, input.Texcoord.xy);
-
+    if (!any(normalColor))
+        return normalColor;
     float3 N = normalize(normalColor.xyz - float3(0.5, 0.5, 0.5));
     float3 R = normalize(reflect(float3(0, 0, -1), N));
     float NdotV = max(0, N.z);
@@ -66,7 +67,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     float3 fresnel = uFresnelF0 + (1.0 - uFresnelF0) * pow(1.0 - NdotV, 5);
     float3 sceneHDR = pow(tex2D(uScreenBuffer, move_world_pos).rgb, 2.2);
     float3 hdr = sceneHDR * uKs * fresnel;
-    return float4(pow(hdr, 1 / 2.2), 1.0);
+    return float4(pow(hdr, 1 / 2.2), 1.0) * input.Color;
 }
 
 technique Technique1

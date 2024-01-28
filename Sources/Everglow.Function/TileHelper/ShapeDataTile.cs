@@ -65,8 +65,8 @@ public abstract class ShapeDataTile : ModTile
 		if (fail)
 			return;
 		var thisTile = Main.tile[i, j];
-		int x0 = i - thisTile.TileFrameX / 18 + 1;
-		int y0 = j - thisTile.TileFrameY / 18 + 1;
+		int x0 = i - thisTile.TileFrameX / 18;
+		int y0 = j - thisTile.TileFrameY / 18;
 		int times = 1;
 		for (int x = 0; x < TotalWidth; x++)
 		{

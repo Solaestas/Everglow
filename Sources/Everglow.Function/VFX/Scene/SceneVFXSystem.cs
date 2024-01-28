@@ -40,4 +40,9 @@ public class SceneVFXSystem : ModSystem
 		}
 		base.PostUpdateWorld();
 	}
+	public override void OnWorldLoad()
+	{
+		TilePointHasScene = new Dictionary<(int, int), bool>();
+		base.OnWorldLoad();
+	}
 }

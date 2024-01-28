@@ -410,4 +410,15 @@ public class TwilightTree : ModTile
 			hasRope.Add((xTS, yTS), (style, rs));
 		}
 	}
+	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+	{
+		Tile tile = Main.tile[i, j];
+		if (tile.TileFrameY == 3)
+		{
+			r = 0.03f;
+			g = 0.124f;
+			b = 0.124f;
+		}
+		base.ModifyLight(i, j, ref r, ref g, ref b);
+	}
 }
