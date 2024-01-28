@@ -1,9 +1,6 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Enums;
 using Everglow.Commons.Interfaces;
-using Everglow.Commons.Vertex;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
-using Terraria.GameContent;
 
 namespace Everglow.Commons.VFX.Pipelines;
 
@@ -12,9 +9,8 @@ namespace Everglow.Commons.VFX.Pipelines;
 /// </summary>
 public class ScreenReflectionPipeline : Pipeline
 {
-	private RenderTarget2D saveScreenTarget;//保存的原始屏幕
-	private RenderTarget2D screenReflectionScreen;//反射法线RenderTarget
-
+	private RenderTarget2D screenReflectionScreen;//反射区域
+	private SpriteBatchState saveSpriteBatchState = new SpriteBatchState();
 	public override void Load()
 	{
 		Ins.MainThread.AddTask(() =>
@@ -23,7 +19,6 @@ public class ScreenReflectionPipeline : Pipeline
 		});
 		Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, (Vector2 size) =>
 		{
-			saveScreenTarget?.Dispose();
 			screenReflectionScreen?.Dispose();
 			AllocateRenderTarget(size);
 		}, "Realloc RenderTarget");
@@ -33,49 +28,60 @@ public class ScreenReflectionPipeline : Pipeline
 	private void AllocateRenderTarget(Vector2 size)
 	{
 		var gd = Main.instance.GraphicsDevice;
-		saveScreenTarget = new RenderTarget2D(gd, (int)size.X, (int)size.Y, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
 		screenReflectionScreen = new RenderTarget2D(gd, (int)size.X, (int)size.Y, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
 	}
 	public override void BeginRender()
 	{
-		var sb = Main.spriteBatch;
-		var gd = Main.instance.GraphicsDevice;
-		//保存原画
+		var graphicsDevice = Main.graphics.GraphicsDevice;
+		var spriteBatch = Main.spriteBatch;
 
-		var cur = Main.screenTarget;
-		gd.SetRenderTarget(saveScreenTarget);
-		gd.Clear(Color.Transparent);
-		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Invert(Main.GameViewMatrix.TransformationMatrix));
-		sb.Draw(cur, Vector2.Zero, Color.White);
-		sb.End();
-		//切换到镜面层
+		graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
+		//保存原屏幕
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.Default,
+			RasterizerState.CullNone);
+		spriteBatch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+		spriteBatch.End();
+		List<Player> players = new List<Player>() { Main.LocalPlayer };
+		//外加玩家
+		Main.PlayerRenderer.DrawPlayers(Main.Camera, players);
 
-		//切换回原屏幕
-		gd.SetRenderTarget(Main.screenTarget);
-		gd.Clear(Color.Transparent);
-		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Invert(Main.GameViewMatrix.TransformationMatrix));
-		sb.Draw(saveScreenTarget, Vector2.Zero, Color.White);
+		graphicsDevice.SetRenderTarget(screenReflectionScreen);
+		//以另一种方法绘制保存下来的屏幕
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.Default,
+			RasterizerState.CullNone, null, Matrix.Invert(Main.GameViewMatrix.TransformationMatrix));
+		spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+		spriteBatch.End();
 
-		sb.End();
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointClamp, RasterizerState.CullNone);
-		Effect ef = ModAsset.ScreenReflection_NormalColor.Value;
+		graphicsDevice.SetRenderTarget(Main.screenTarget);
+		//绘制原屏幕
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.Default,
+			RasterizerState.CullNone);
+		spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+		spriteBatch.End();
+
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.None,
+			RasterizerState.CullNone);
+
+		Effect ef = Commons.ModAsset.ScreenReflection_NormalColor.Value;
 		var viewport = Main.graphics.GraphicsDevice.Viewport;
-		var projection = Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, 500);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0));
 
+		var projection = Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, 500);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0));
+
+		//ef.Parameters["uBaseColor"].SetValue(new Vector3(0.82f, 0.82f, 0.82f));
 		ef.Parameters["uFresnelF0"].SetValue(new Vector3(0.17f));
 		ef.Parameters["uKs"].SetValue(new Vector3(1.0f));
 		ef.Parameters["uScreenDistanceMultipler"].SetValue(Vector2.One);
-		ef.Parameters["uViewportSize"].SetValue(new Vector2(saveScreenTarget.Width,
-			saveScreenTarget.Height));
+		ef.Parameters["uViewportSize"].SetValue(new Vector2(screenReflectionScreen.Width,
+			screenReflectionScreen.Height));
 		ef.Parameters["uModel"].SetValue(model);
 		ef.Parameters["uMNormal"].SetValue(Matrix.Identity);
 		ef.Parameters["uViewProj"].SetValue(Main.GameViewMatrix.TransformationMatrix * projection);
 
 		ef.CurrentTechnique.Passes["Test"].Apply();
-
-		Main.graphics.GraphicsDevice.Textures[1] = saveScreenTarget;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
+		Main.graphics.GraphicsDevice.Textures[0] = screenReflectionScreen;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 	}
 	public override void Render(IEnumerable<IVisual> visuals)
 	{
@@ -84,12 +90,12 @@ public class ScreenReflectionPipeline : Pipeline
 		{
 			visual.Draw();
 		}
-		Ins.Batch.End();
 		EndRender();
 	}
 	public override void EndRender()
 	{
-
+		var spriteBatch = Main.spriteBatch;
+		spriteBatch.End();
 	}
 
 	/// <summary>
@@ -99,7 +105,7 @@ public class ScreenReflectionPipeline : Pipeline
 	/// <param name="B"></param>
 	/// <param name="C"></param>
 	/// <returns></returns>
-	private List<CrystalVertex> CreateFace(Vector3 A, Vector3 B, Vector3 C, out Vector3 N)
+	public static List<CrystalVertex> CreateFace(Vector3 A, Vector3 B, Vector3 C, out Vector3 N)
 	{
 		List<CrystalVertex> data = new List<CrystalVertex>();
 		Vector3 Normal = Vector3.Normalize(Vector3.Cross(B - A, C - A));
@@ -138,9 +144,9 @@ public class ScreenReflectionPipeline : Pipeline
 	{
 		private static VertexDeclaration _vertexDeclaration = new VertexDeclaration(new VertexElement[3]
 		{
-            new VertexElement(0, VertexElementFormat.Vector3, VertexElementUsage.Position, 0),
-		    new VertexElement(12, VertexElementFormat.Color, VertexElementUsage.Color, 0),
-		    new VertexElement(16, VertexElementFormat.Vector3, VertexElementUsage.TextureCoordinate, 0)
+			new VertexElement(0, VertexElementFormat.Vector3, VertexElementUsage.Position, 0),
+			new VertexElement(12, VertexElementFormat.Color, VertexElementUsage.Color, 0),
+			new VertexElement(16, VertexElementFormat.Vector3, VertexElementUsage.TextureCoordinate, 0)
 		});
 
 		public Vector3 Position;

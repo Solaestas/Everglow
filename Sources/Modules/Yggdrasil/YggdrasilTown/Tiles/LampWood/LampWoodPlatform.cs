@@ -48,11 +48,8 @@ public class LampWoodPlatform : ModTile
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
 		Texture2D tex = ModAsset.LampWoodPlatform_Glow.Value;
-		Player player = Main.player[Player.FindClosest(new Vector2(i * 16, j * 16), 16, 16)];
-		float dis = Math.Clamp((player.Center - new Vector2(i * 16, j * 16)).Length() / 480f, 0f, 10f);
-		dis = Math.Clamp(dis + (float)Math.Sin(dis * 14d - Main.timeForVisualEffects / 25f) / 2f, 0f, 1f);
-		dis = Math.Clamp(1 - dis, 0f, 1f);
-		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(dis, dis, dis, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
+
+		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 
 		base.PostDraw(i, j, spriteBatch);
 	}

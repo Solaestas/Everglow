@@ -61,8 +61,8 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     move_world_pos = move_world_pos / uViewportSize;
     float3 fresnel = uFresnelF0 + (1.0 - uFresnelF0) * pow(1.0 - NdotV, 5);
     float3 sceneHDR = pow(tex2D(uScreenBuffer, move_world_pos).rgb, 2.2);
-    float3 hdr = uBaseColor + sceneHDR * uKs * fresnel;
-    return float4(pow(hdr, 1 / 2.2), 1.0);
+    float3 hdr = sceneHDR * uKs * fresnel;
+    return float4(pow(hdr, 1 / 2.2), 1.0) * float4(uBaseColor, 1);
 }
 
 technique Technique1

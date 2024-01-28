@@ -1,8 +1,10 @@
+using Everglow.Commons.VFX.Scene;
+using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Dusts;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles;
 
-public class TwilightBlueCrystal_2 : ModTile
+public class TwilightBlueCrystal_2 : ModTile, ISceneTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -24,6 +26,7 @@ public class TwilightBlueCrystal_2 : ModTile
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.addTile(Type);
 		AddMapEntry(new Color(40, 80, 148));
+		DustType = ModContent.DustType<TwilightCrystalDust>();
 	}
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{
@@ -34,12 +37,19 @@ public class TwilightBlueCrystal_2 : ModTile
 	}
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Color lightColor = Lighting.GetColor(i, j);
+	}
+	public void AddScene(int i, int j)
+	{
 		Tile tile = Main.tile[i, j];
-		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-
-		if (Main.drawToScreen)
-			zero = Vector2.Zero;
-		spriteBatch.Draw(ModContent.Request<Texture2D>(Texture).Value, new Vector2(i, j) * 16 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), lightColor * 3.1f, 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
+		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
+		{
+			TwilightBlueCrystal_2_Mirror mirror = new TwilightBlueCrystal_2_Mirror { position = new Vector2(i, j) * 16 + new Vector2(4, 8), Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.TwilightBlueCrystal_2_Mirror.Value };
+			Ins.VFXManager.Add(mirror);
+		}
+		if (tile.TileFrameX == 54 && tile.TileFrameY == 0)
+		{
+			TwilightBlueCrystal_2_Mirror mirror = new TwilightBlueCrystal_2_Mirror { position = new Vector2(i, j) * 16 + new Vector2(8, 8), Active = true, Visible = true, originTile = new Point(i, j), originType = Type, FlipH = true, texture = ModAsset.TwilightBlueCrystal_2_Mirror_flipH.Value };
+			Ins.VFXManager.Add(mirror);
+		}
 	}
 }
