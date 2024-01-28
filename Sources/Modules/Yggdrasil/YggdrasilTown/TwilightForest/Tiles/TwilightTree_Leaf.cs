@@ -1,10 +1,10 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles;
 
 public class TwilightTree_Leaf : ModGore
 {
-	public override string Texture => "Everglow/TwilightForest/Tiles/TwilightTree_Leaf";
+	public override string Texture => "Everglow/YggdrasilTown/TwilightForest/Tiles/TwilightTree_Leaf";
 
 	public override bool Update(Gore gore)
 	{
