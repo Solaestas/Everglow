@@ -5,6 +5,7 @@ namespace Everglow.Myth.TheFirefly.Items.Furnitures;
 
 public class GlowWoodLanternType2 : ModItem
 {
+	//TODO:Translate:流萤灯笼\n款式2
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

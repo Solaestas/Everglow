@@ -4,6 +4,7 @@ namespace Everglow.Myth.TheFirefly.Items.Furnitures;
 
 public class GlowWoodDresser : ModItem
 {
+	//TODO:Translate:流萤梳妆台\n款式1
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

@@ -2,8 +2,9 @@ using Everglow.SpellAndSkull.Items;
 
 namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
-public class DreamWeaver : SpellTomeItem//TODO:织梦丝雨
+public class DreamWeaver : SpellTomeItem
 {
+	//TODO:Translate:织梦丝雨\n洒出蓝色的荧光雨滴攻击敌人
 	public override void SetDefaults()
 	{
 

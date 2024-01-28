@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Items.Accessories;
 using Everglow.Myth.TheFirefly.Projectiles;
 using Terraria.DataStructures;
@@ -6,14 +6,10 @@ using Terraria.Localization;
 
 namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
+//TODO:Translate:荧光素散弹枪
 public class PhosphorescenceGun : ModItem
 {
 	FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
-	public override void SetStaticDefaults()
-	{
-		
-	}
-
 	public override void SetDefaults()
 	{
 		

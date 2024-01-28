@@ -1,21 +1,17 @@
-using Everglow.Myth;
-using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Items.Accessories;
 using Everglow.Myth.TheFirefly.Projectiles;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Graphics;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
+//TODO:Translate:幻蝶萤火扇\n左键近战挥舞扇子\n右键丢出扇子\n命中敌人释放幻蝶并施加印记,印记会降低敌人对本武器攻击的抗性,最多叠加五层\标记最后命中的敌人作为召唤物的攻击目标
 public class DarknessFan : ModItem
 {
 	FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
 	public override void SetDefaults()
 	{
-		
+
 		Item.damage = 9;
 		Item.DamageType = DamageClass.Summon;
 		Item.mana = 12;

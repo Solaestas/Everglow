@@ -1,11 +1,10 @@
-using Everglow.Myth.TheFirefly.Items;
-using Everglow.Myth.TheFirefly.Tiles.Furnitures;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Myth.TheFirefly.Items.Furnitures;
 
 public class GlowWoodCampfire : ModItem
 {
+	//TODO:Translate:流萤篝火
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

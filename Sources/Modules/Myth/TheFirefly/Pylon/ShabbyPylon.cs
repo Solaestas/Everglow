@@ -6,7 +6,7 @@ using Terraria.ModLoader.Default;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Pylon;
-
+//TODO:Translate:破损晶塔
 internal class ShabbyPylonTileEntity : TEModdedPylon
 {
 }

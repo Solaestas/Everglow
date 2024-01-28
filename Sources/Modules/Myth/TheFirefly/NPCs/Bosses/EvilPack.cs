@@ -1,12 +1,10 @@
-using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
-using Terraria;
 using Terraria.Audio;
 using Terraria.Localization;
 using static Steamworks.SteamUser;
 
 namespace Everglow.Myth.TheFirefly.NPCs.Bosses;
-
+//TODO:Translate:邪魔之茧
 public class EvilPack : ModNPC
 {
 	public ulong SteamID64 = GetSteamID().m_SteamID;
@@ -102,7 +100,7 @@ public class EvilPack : ModNPC
 						}
 					}
 
-					
+
 					NPC.ai[2] += 1;
 				}
 			}

@@ -5,6 +5,7 @@ namespace Everglow.Myth.TheFirefly.Items.Furnitures;
 
 public class GlowWoodDoorType2 : ModItem
 {
+	//TODO:Translate:流萤木门\n款式2
 	public override void SetStaticDefaults()
 	{
 	}

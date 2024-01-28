@@ -5,6 +5,7 @@ namespace Everglow.Myth.TheFirefly.Items.Furnitures;
 
 public class GlowWoodWorkBench : ModItem
 {
+	//TODO:Translate:流萤工作台
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

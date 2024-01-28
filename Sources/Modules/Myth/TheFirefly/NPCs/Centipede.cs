@@ -1,5 +1,3 @@
-using Everglow.Myth.Common;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
@@ -7,8 +5,7 @@ using Terraria.Localization;
 
 namespace Everglow.Myth.TheFirefly.NPCs;
 
-// 蜈蚣设定：起始时蜈蚣贴在物块上爬行。受到攻击后转换为钻地（蠕虫形态）
-
+//TODO:Translate:流萤蜈蚣
 internal class CentipedeHead : FireWormHead
 {
 	public override int BodyType => ModContent.NPCType<CentipedeBody>();

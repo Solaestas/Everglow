@@ -4,7 +4,7 @@ namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
 public class GlowBeadGun : ModItem
 {
-
+	//TODO:Translate:萤火连珠炮\n根据蓄力时间打出一连串魔法弹
 	public override void SetDefaults()
 	{
 		

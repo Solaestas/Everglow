@@ -2,7 +2,7 @@ using Everglow.Myth.Common;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Myth.TheFirefly.Items.Furnitures;
-
+//TODO:Translate:流萤音乐盒
 public class GlowWoodMusicBox : ModItem
 {
 	public override void SetStaticDefaults()

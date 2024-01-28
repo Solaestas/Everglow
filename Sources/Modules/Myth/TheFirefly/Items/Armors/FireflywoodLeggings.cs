@@ -1,5 +1,5 @@
 using Terraria.GameContent.Creative;
-
+//TODO:Translate:流萤木护胫
 namespace Everglow.Myth.TheFirefly.Items.Armors
 {
 	// The AutoloadEquip attribute automatically attaches an equip texture to this item.

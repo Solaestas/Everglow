@@ -1,9 +1,8 @@
-using Everglow.Myth.TheFirefly.Items;
 using Everglow.Myth.TheFirefly.NPCs.Bosses;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheFirefly.Items.Accessories;
-
+//TODO:Translate:黑萤苣章
 public class FireflyBorageBadge : ModItem
 {
 	public override void SetDefaults()

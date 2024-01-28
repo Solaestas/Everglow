@@ -1,12 +1,8 @@
-﻿namespace Everglow.Myth.TheFirefly.Items;
+namespace Everglow.Myth.TheFirefly.Items;
 
 public class GlowingFirefly : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		
-	}
-
+	//TODO:Translate:流萤萤火虫
 	public override void SetDefaults()
 	{
 		

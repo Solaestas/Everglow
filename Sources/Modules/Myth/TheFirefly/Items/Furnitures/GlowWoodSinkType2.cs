@@ -4,6 +4,7 @@ namespace Everglow.Myth.TheFirefly.Items.Furnitures;
 
 public class GlowWoodSinkType2 : ModItem
 {
+	//TODO:Translate:流萤水盆\n款式2
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

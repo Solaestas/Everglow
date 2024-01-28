@@ -13,6 +13,7 @@ using Terraria.Localization;
 namespace Everglow.Myth.TheFirefly.NPCs.Bosses;
 
 [AutoloadBossHead]
+//TODO:Translate:流萤巨蛾
 public class CorruptMoth : ModNPC
 {
 	public static NPC CorruptMothNPC;

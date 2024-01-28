@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheFirefly.Items.Accessories;
+using Everglow.Myth.TheFirefly.Items.Accessories;
 using Everglow.Myth.TheFirefly.Projectiles;
 using Terraria.Localization;
 
@@ -6,14 +6,13 @@ namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
 public class MothYoyo : ModItem
 {
+	//TODO:Translate:卷蛾球
 	FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
 	public override void SetStaticDefaults()
 	{
-		// These are all related to gamepad controls and don't seem to affect anything else
 		ItemID.Sets.Yoyo[Item.type] = true;
 		ItemID.Sets.GamepadExtraRange[Item.type] = 15;
-		ItemID.Sets.GamepadSmartQuickReach[Item.type] = true;
-		
+		ItemID.Sets.GamepadSmartQuickReach[Item.type] = true;	
 	}
 
 	public override void SetDefaults()

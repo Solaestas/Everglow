@@ -6,10 +6,7 @@ namespace Everglow.Myth.TheFirefly.Items.Weapons;
 public class GlowWoodSword : ModItem
 {
 	FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
-	public override void SetStaticDefaults()
-	{
-		
-	}
+	//TODO:Translate:流萤木剑
 	public override void SetDefaults()
 	{
 		Item.damage = 13;

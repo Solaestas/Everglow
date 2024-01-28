@@ -1,4 +1,3 @@
-using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using ReLogic.Content;
 using Terraria.DataStructures;
@@ -8,7 +7,7 @@ using Terraria.ModLoader.Default;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Pylon;
-
+//TODO:Translate:流萤晶塔
 internal class FireflyPylonTileEntity : TEModdedPylon
 {
 }

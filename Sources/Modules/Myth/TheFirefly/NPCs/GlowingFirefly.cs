@@ -1,10 +1,9 @@
-using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Items;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Myth.TheFirefly.NPCs;
-
+//TODO:Translate:流萤萤火虫
 public class GlowingFirefly : ModNPC
 {
 	public override void SetStaticDefaults()

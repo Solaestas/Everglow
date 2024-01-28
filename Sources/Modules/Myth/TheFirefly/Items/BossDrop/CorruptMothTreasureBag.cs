@@ -1,14 +1,10 @@
-using Everglow.Myth.TheFirefly.Items.Accessories;
 using Everglow.Myth.TheFirefly.Items.Weapons;
-using Everglow.Myth.TheFirefly.NPCs.Bosses;
-using Everglow.Myth.TheTusk.Items.Accessories;
-using Everglow.Myth.TheTusk.Items.Weapons;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Myth.TheFirefly.Items.BossDrop;
 
-// Basic code for a boss treasure bag
+//TODO:Translate:宝藏袋 流萤巨蛾
 public class CorruptMothTreasureBag : ModItem
 {
 

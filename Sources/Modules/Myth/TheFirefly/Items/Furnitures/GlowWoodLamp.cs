@@ -1,10 +1,10 @@
-using Everglow.Myth.TheFirefly.Items;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Myth.TheFirefly.Items.Furnitures;
 
 public class GlowWoodLamp : ModItem
 {
+	//TODO:Translate:流萤灯
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

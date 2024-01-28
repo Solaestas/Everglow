@@ -2,6 +2,7 @@ namespace Everglow.Myth.TheFirefly.Items;
 
 public class FireflyMoss : ModItem
 {
+	//TODO:Translate:流花苔藓
 	public override void SetDefaults()
 	{
 		Item.width = 20;

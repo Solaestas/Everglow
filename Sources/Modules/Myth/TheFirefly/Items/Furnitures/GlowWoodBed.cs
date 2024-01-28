@@ -1,10 +1,10 @@
-using Everglow.Myth.TheFirefly.Items;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Myth.TheFirefly.Items.Furnitures;
 
 public class GlowWoodBed : ModItem
 {
+	//TODO:Translate:流萤床
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
@@ -12,7 +12,7 @@ public class GlowWoodBed : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodBed> ());
+		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodBed>());
 		Item.width = 32;
 		Item.height = 22;
 	}

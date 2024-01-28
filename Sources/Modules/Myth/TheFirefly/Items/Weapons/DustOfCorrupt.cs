@@ -1,11 +1,10 @@
-using System;
-using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
 public class DustOfCorrupt : ModItem
 {
+	//TODO:Translate:鳞翅粉尘法杖\n吹出一道道蓝紫色的夜光粉尘
 	public override void SetDefaults()
 	{
 		Item.damage = 13;
@@ -33,7 +32,7 @@ public class DustOfCorrupt : ModItem
 	Projectile staff = null;
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		
+
 		if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.StaffOfCorruptDust>()] < 1)
 		{
 			staff = Projectile.NewProjectileDirect(source, position + Vector2.Normalize(velocity) * 48, velocity, ModContent.ProjectileType<Projectiles.StaffOfCorruptDust>(), 0, knockback, player.whoAmI);

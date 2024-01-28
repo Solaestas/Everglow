@@ -1,10 +1,9 @@
 using Everglow.Myth.TheFirefly.Buffs;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheFirefly.Items.Potions
 {
-	//TODO:翻译 幽夜药剂 NightElixir
+	//TODO:Translate:幽夜药剂\n日光直射下损失生命,暗处提升伤害和防御
 	public class ShadowPotion : ModItem
 	{
 		public static LocalizedText RestoreLifeText { get; private set; }

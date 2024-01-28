@@ -4,6 +4,7 @@ namespace Everglow.Myth.TheFirefly.Items.Furnitures;
 
 public class GlowWoodTorch : ModItem
 {
+	//TODO:Translate:流萤火把
 	public override void SetStaticDefaults()
 	{
 		Item.ResearchUnlockCount = 100;

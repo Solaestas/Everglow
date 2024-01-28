@@ -5,6 +5,7 @@ namespace Everglow.Myth.TheFirefly.Items;
 
 public class FireflyImpression : ModItem
 {
+	//TODO:Translate:流萤之镜\n盯着镜子回想起一段奇遇
 	public override void SetDefaults()
 	{
 		Item.width = 20;

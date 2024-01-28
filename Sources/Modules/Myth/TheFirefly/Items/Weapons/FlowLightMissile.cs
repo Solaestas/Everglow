@@ -4,6 +4,7 @@ namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
 public class FlowLightMissile : ModItem
 {
+	//TODO:Translate:流光导弹\n蓄力后发射高能结晶,长时间蓄力使能量增大的同时,结晶变得易爆
 	public override void SetStaticDefaults()
 	{
 		Item.staff[Item.type] = true;

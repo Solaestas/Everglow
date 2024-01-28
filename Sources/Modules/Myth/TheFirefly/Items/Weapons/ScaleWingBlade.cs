@@ -3,7 +3,7 @@ using Terraria.Localization;
 using Everglow.Myth.TheFirefly.Projectiles;
 
 namespace Everglow.Myth.TheFirefly.Items.Weapons;
-
+//TODO:Translate:巨蛾翅之刃
 public class ScaleWingBlade : ModItem
 {
 	FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();

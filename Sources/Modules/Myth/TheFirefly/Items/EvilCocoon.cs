@@ -1,18 +1,13 @@
-using Everglow.Myth;
 using Everglow.Myth.TheFirefly.NPCs.Bosses;
 
 namespace Everglow.Myth.TheFirefly.Items;
 
 public class EvilCocoon : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		
-	}
-
+	//TODO:Translate:邪魔茧\n生成一个包含了飞蛾的巨茧\n开发者测试用品
 	public override void SetDefaults()
 	{
-		
+
 		Item.width = 20;
 		Item.height = 32;
 		Item.useAnimation = 45;
@@ -21,15 +16,6 @@ public class EvilCocoon : ModItem
 		Item.maxStack = 999;
 		Item.consumable = true;
 	}
-
-	public override void ModifyTooltips(List<TooltipLine> list)
-	{
-	}
-
-	public override void Update(ref float gravity, ref float maxFallSpeed)
-	{
-	}
-
 	public override bool CanUseItem(Player player)
 	{
 		if (NPC.CountNPCS(ModContent.NPCType<CorruptMoth>()) < 1)

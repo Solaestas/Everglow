@@ -1,9 +1,8 @@
-using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Items.Weapons;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheFirefly.Items.Accessories;
-
+//TODO:Translate:蛾之眼吊坠
 [AutoloadEquip(EquipType.Neck)]
 public class MothEye : ModItem
 {
@@ -113,4 +112,4 @@ class MothEyePlayer : ModPlayer
 		}
 	}
 }
- //   TODO: Finish Item Equip Effects (Displays a different equip texture when in the Firefly Biome, See MothEye_Neck.png and MothEye_NeckOff.png
+//   TODO: Finish Item Equip Effects (Displays a different equip texture when in the Firefly Biome, See MothEye_Neck.png and MothEye_NeckOff.png

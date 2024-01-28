@@ -1,12 +1,8 @@
-﻿namespace Everglow.Myth.TheFirefly.Items;
+namespace Everglow.Myth.TheFirefly.Items;
 
 public class FireflyPigment : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		
-	}
-
+	//TODO:Translate:夜火色素
 	public override void SetDefaults()
 	{
 		

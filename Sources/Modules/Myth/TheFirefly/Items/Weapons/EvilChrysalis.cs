@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheFirefly.Items.Accessories;
+using Everglow.Myth.TheFirefly.Items.Accessories;
 using Everglow.Myth.TheFirefly.Projectiles;
 using Terraria.DataStructures;
 using Terraria.Localization;
@@ -7,15 +7,10 @@ namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
 public class EvilChrysalis : ModItem
 {
+	//TODO:Translate:邪茧法杖\n召唤流萤飞蛾宝宝\n右键消耗法力召唤一个法阵辅助攻击
 	FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
-	public override void SetStaticDefaults()
-	{
-		
-	}
-
 	public override void SetDefaults()
 	{
-		
 		Item.damage = 24;
 		Item.mana = 6;
 		Item.width = 50;

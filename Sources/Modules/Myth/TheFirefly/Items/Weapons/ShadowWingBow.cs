@@ -1,21 +1,16 @@
-﻿using Everglow.Myth;
 using Everglow.Myth.TheFirefly.Items.Accessories;
 using Terraria.DataStructures;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
+//TODO:Translate:影翼巨弓\n蓄力使能量凝聚成更多的箭
 public class ShadowWingBow : ModItem
 {
 	FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
-	public override void SetStaticDefaults()
-	{
-		
-	}
-
 	public override void SetDefaults()
 	{
-		
+
 		Item.width = 46;
 		Item.height = 82;
 		Item.rare = ItemRarityID.Green;

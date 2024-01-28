@@ -4,6 +4,7 @@ namespace Everglow.Myth.TheFirefly.Items;
 
 public class MothScaleDust : ModItem
 {
+	//TODO:Translate:流萤蛾鳞尘
 	public override void SetDefaults()
 	{	
 		Item.width = 20;

@@ -4,11 +4,11 @@ namespace Everglow.Myth.TheFirefly.Items.Furnitures;
 
 public class FluorescentWoodStaff : ModItem
 {
+	//TODO:Translate:流萤生命木魔杖,消耗流萤木,摆放流萤生命木
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
-
 	public override void SetDefaults()
 	{
 		Item.width = 48;

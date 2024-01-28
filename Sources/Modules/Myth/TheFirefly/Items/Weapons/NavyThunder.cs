@@ -4,11 +4,11 @@ namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
 public class NavyThunder : ModItem
 {
+	//TODO:Translate:蓝火骷髅雷
 	public override void SetStaticDefaults()
 	{
 		Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(6, 5));
 	}
-
 	public override void SetDefaults()
 	{
 		Item.damage = 78;

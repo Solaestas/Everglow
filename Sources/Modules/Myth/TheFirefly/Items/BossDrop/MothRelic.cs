@@ -1,11 +1,7 @@
-﻿namespace Everglow.Myth.TheFirefly.Items.BossDrop;
-
+namespace Everglow.Myth.TheFirefly.Items.BossDrop;
+//TODO:Translate:流萤巨蛾圣物
 public class MothRelic : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-	}
-
 	public override void SetDefaults()
 	{
 		Item.width = 38;

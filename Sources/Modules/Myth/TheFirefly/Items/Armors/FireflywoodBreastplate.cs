@@ -1,5 +1,6 @@
 using Terraria.GameContent.Creative;
 
+//TODO:Translate:流萤木板甲
 namespace Everglow.Myth.TheFirefly.Items.Armors
 {
 	[AutoloadEquip(EquipType.Body)]

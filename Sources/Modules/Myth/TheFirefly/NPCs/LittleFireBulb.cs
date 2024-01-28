@@ -1,9 +1,7 @@
-using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
-using Terraria;
 
 namespace Everglow.Myth.TheFirefly.NPCs;
-
+//TODO:Translate:大流萤吊滴\n已弃用
 public class LittleFireBulb : ModNPC
 {
 	public override void SetDefaults()
