@@ -89,6 +89,7 @@ public class SquamousRockSpike : ModProjectile
 		Projectile.tileCollide = false;
 		Projectile.ignoreWater = true;
 		AmmoHit();
+		Projectile.timeLeft = 10;
 		return false;
 	}
 	public void AmmoHit()
