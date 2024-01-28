@@ -4,7 +4,7 @@ using Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.Items.BossDrop;
-
+//TODO:Translate:宝藏袋 鲜血獠牙
 public class TuskTreasureBag : ModItem
 {
 	public override void SetDefaults()

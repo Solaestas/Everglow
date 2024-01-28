@@ -1,13 +1,11 @@
-﻿using Terraria.Localization;
-
 namespace Everglow.Myth.TheTusk.Items;
-
+//TODO:Translate:血红苔石
 public class BloodMossStone : ModItem
 {
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Blood Moss Stone");
-			}
+	}
 
 	public override void SetDefaults()
 	{

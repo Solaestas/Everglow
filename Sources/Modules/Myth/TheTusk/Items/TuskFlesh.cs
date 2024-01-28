@@ -1,13 +1,11 @@
-﻿using Terraria.Localization;
-
 namespace Everglow.Myth.TheTusk.Items;
-
+//TODO:Translate:颌部结缔组织活体
 public class TuskFlesh : ModItem
 {
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Living Tissue");
-			}
+	}
 
 	public override void SetDefaults()
 	{

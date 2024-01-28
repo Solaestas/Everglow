@@ -1,9 +1,7 @@
 using Terraria.DataStructures;
-using Terraria.GameContent.Creative;
-using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.Items.Weapons;
-
+//TODO:Translate:脊骨火铳\n可以把子弹改成近爆霰弹
 public class SpineGun : ModItem
 {
 	public override void SetDefaults()

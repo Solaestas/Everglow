@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Slingshots;
 
 public class DiamondSlingshot : SlingshotItem
 {
+	//TODO:Translate:钻石弹弓
 	public override void SetDef()
 	{
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Ranged.Slingshots.DiamondSlingshot>();

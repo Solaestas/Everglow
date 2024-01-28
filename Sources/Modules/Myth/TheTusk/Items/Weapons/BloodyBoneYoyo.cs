@@ -1,8 +1,7 @@
 using Terraria.GameContent.Creative;
-using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.Items.Weapons;
-
+//TODO:Translate:血骨球\n……等等,这里面好像有触手
 public class BloodyBoneYoyo : ModItem
 {
 	public override void SetStaticDefaults()

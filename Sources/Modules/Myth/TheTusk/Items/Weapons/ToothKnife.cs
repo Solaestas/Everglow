@@ -1,9 +1,6 @@
-using Everglow.Myth.TheTusk.Projectiles;
-using Everglow.Myth.TheTusk.Projectiles.Weapon;
-using Terraria;
 using Terraria.DataStructures;
 namespace Everglow.Myth.TheTusk.Items.Weapons;
-
+//TODO:Translate:板牙刃
 public class ToothKnife : ModItem
 {
 	//TODO:暴击后在地上召唤獠牙刺

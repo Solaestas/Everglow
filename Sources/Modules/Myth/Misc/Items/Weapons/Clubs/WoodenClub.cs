@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class WoodenClub : ClubItem
 {
+	//TODO:Translate:木棍棒
 	public override void AddRecipes()
 	{
 		CreateRecipe()

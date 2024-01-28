@@ -2,6 +2,7 @@ namespace Everglow.Myth.TheTusk.Items.BossDrop;
 
 public class BloodyTuskTrophy : ModItem
 {
+	//TODO:Translate:鲜血獠牙纪念章
 	public override void SetDefaults()
 	{
 		Item.width = 32;

@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Slingshots;
 
 public class AmbiguousNight : SlingshotItem
 {
+	//TODO:Translate:虚夜弹弓
 	public override void SetDef()
 	{
 		Item.damage = 54;

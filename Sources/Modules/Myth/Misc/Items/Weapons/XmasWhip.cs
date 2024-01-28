@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons;
 
 public class XmasWhip : ModItem
 {
+	//TODO:Translate:圣诞树鞭
 	public override void SetDefaults()
 	{
 

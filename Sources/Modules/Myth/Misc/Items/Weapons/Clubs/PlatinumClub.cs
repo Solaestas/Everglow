@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class PlatinumClub : ClubItem
 {
+	//TODO:Translate:铂棍棒
 	public override void SetDef()
 	{
 		Item.damage = 11;

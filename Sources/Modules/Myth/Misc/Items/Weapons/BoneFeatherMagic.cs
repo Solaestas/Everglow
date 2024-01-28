@@ -10,10 +10,13 @@ namespace Everglow.Myth.Misc.Items.Weapons;
 
 public class BoneFeatherMagic : SpellTomeItem
 {
+	//TODO:Translate:骨羽法书\n释放骨羽攻击，有一定的破甲能力
 	//骨羽会插在怪物身上10s
 	//每一根骨羽会增加下次攻击7%的伤害上不封顶
 	//增伤会消耗骨羽
 	//骨羽自身的攻击只会消耗附着1s以上的骨羽
+	//II:快速打出骨羽，命中敌人使身后的白骨之环充能，右键消耗充能落下巨型骨羽，也可以消耗充能转化为鬼之翼飞行。
+
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

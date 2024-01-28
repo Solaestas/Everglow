@@ -1,11 +1,11 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
-using Everglow.Myth.TheFirefly.Items;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Items.Weapons;
-
+//TODO:Translate:和璞鸢
+//左键攻击,右键突刺
 public class PrimordialJadeWinged_Spear : ModItem
 {
 	public override void SetDefaults()

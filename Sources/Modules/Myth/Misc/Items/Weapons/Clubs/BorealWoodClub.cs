@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class BorealWoodClub : ClubItem
 {
+	//TODO:Translate:针叶木棍棒
 	public override void SetDef()
 	{
 		Item.damage = 6;

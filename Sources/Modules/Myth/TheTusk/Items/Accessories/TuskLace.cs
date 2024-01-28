@@ -1,6 +1,7 @@
-﻿namespace Everglow.Myth.TheTusk.Items.Accessories;
+namespace Everglow.Myth.TheTusk.Items.Accessories;
 
 [AutoloadEquip(EquipType.Neck)]
+//TODO:Translate:獠牙吊坠\n提升5%伤害和暴击率,5点盔甲穿透力
 public class TuskLace : ModItem
 {
 	public override void SetStaticDefaults()

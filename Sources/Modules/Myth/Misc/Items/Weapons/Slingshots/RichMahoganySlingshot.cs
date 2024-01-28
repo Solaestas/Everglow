@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Slingshots;
 
 public class RichMahoganySlingshot : SlingshotItem
 {
+	//TODO:Translate:红木弹弓
 	public override void SetDef()
 	{
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Ranged.Slingshots.RichMahoganySlingshot>();

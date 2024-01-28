@@ -6,6 +6,7 @@ namespace Everglow.Myth.Misc.Items.Weapons;
 
 public class CloudGun : ModItem
 {
+	//TODO:Translate:云导炮
 	public override void SetDefaults()
 	{
 		Item.damage = 20;

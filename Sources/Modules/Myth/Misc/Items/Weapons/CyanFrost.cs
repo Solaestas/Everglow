@@ -5,6 +5,7 @@ namespace Everglow.Myth.Misc.Items.Weapons;
 
 public class CyanFrost : ModItem
 {
+	//TODO:Translate:青霜
 	public override void SetDefaults()
 	{
 		Item.damage = 30;

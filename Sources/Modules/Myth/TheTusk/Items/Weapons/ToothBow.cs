@@ -1,7 +1,7 @@
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheTusk.Items.Weapons;
-
+//TODO:Translate:血颌弓
 public class ToothBow : ModItem
 {
 	public override void SetDefaults()
@@ -12,7 +12,7 @@ public class ToothBow : ModItem
 
 		Item.useTime = 20;
 		Item.useAnimation = 20;
-        Item.useStyle = ItemUseStyleID.Shoot;
+		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.autoReuse = false;
 		Item.UseSound = SoundID.Item1;
 		Item.channel = true;

@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class CactusClub : ClubItem
 {
+	//TODO:Translate:仙人掌棍棒
 	public override void SetDef()
 	{
 		Item.damage = 7;

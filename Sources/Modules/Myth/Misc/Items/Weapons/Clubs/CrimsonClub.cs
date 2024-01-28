@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class CrimsonClub : ClubItem
 {
+	//TODO:Translate:血金棍棒
 	public override void SetDef()
 	{
 		Item.damage = 13;

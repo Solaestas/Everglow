@@ -1,13 +1,12 @@
-﻿using Terraria.Localization;
-
 namespace Everglow.Myth.TheTusk.Items;
 
 public class TuskStatusIV : ModItem
 {
+	//TODO:Translate:被猩红色苔藓侵染的石碑 其四
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Crimson Statue IV");
-			}
+	}
 
 	public override void SetDefaults()
 	{

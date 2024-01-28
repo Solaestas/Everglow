@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class StarDancer : ClubItem
 {
+	//TODO:Translate:星之舞者
 	public override void SetDef()
 	{
 		Item.damage = 12;

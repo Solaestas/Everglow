@@ -2,9 +2,9 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class MeteorClub : ClubItem
 {
+	//TODO:Translate:陨石棍棒
 	public override void SetDef()
 	{
-
 		Item.damage = 16;
 		Item.value = 576;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.MeteorClub>();

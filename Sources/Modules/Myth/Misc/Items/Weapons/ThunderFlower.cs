@@ -5,6 +5,7 @@ namespace Everglow.Myth.Misc.Items.Weapons;
 
 public class ThunderFlower : ModItem
 {
+	//TODO:Translate:雷之花
 	public override void SetDefaults()
 	{
 		Item.damage = 75;

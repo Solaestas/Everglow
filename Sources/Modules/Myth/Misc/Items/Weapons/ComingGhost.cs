@@ -5,6 +5,7 @@ namespace Everglow.Myth.Misc.Items.Weapons;
 
 public class ComingGhost : ModItem
 {
+	//TODO:Translate:诡弑
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

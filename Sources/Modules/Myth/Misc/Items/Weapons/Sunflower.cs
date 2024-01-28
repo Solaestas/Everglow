@@ -4,6 +4,7 @@ namespace Everglow.Myth.Misc.Items.Weapons;
 
 public class Sunflower : ModItem
 {
+	//TODO:Translate:向日葵飞盘
 	public override void SetDefaults()
 	{
 

@@ -2,6 +2,7 @@ using Terraria.DataStructures;
 namespace Everglow.Myth.Misc.Items.Weapons;
 public class SilveralGun : ModItem
 {
+	//TODO:Translate:银红手枪
 	public override void SetDefaults()
 	{
 		Item.damage = 9;

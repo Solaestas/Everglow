@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class AdamantiteClub : ClubItem
 {
+	//TODO:Translate:精金棍棒
 	public override void SetDef()
 	{
 		Item.damage = 74;

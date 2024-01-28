@@ -1,7 +1,7 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.Items.BossDrop;
-
+//TODO:Translate:鲜血獠牙圣物
 public class TuskRelic : ModItem
 {
 	public override void SetStaticDefaults()

@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Slingshots;
 
 public class StarSlingshot : SlingshotItem
 {
+	//TODO:Translate:星辉弹弓
 	public override void SetDef()
 	{
 		Item.damage = 18;

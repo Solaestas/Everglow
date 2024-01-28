@@ -9,6 +9,8 @@ namespace Everglow.Myth.Misc.Items.Weapons;
 
 public class FireFeatherMagic : SpellTomeItem
 {
+	//TODO:Translate:火羽法书：释放火羽攻击，命中点燃敌人。
+	//II：快速打出火羽，命中敌人使身后的炽焰之环充能，右键消耗充能落下巨型火羽，也可以消耗充能转化为火之翼飞行。
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

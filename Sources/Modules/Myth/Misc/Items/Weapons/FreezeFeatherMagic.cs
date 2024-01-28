@@ -10,6 +10,8 @@ namespace Everglow.Myth.Misc.Items.Weapons;
 
 public class FreezeFeatherMagic : SpellTomeItem
 {
+	//TODO:Translate:冰羽法书：释放冰羽毛攻击敌人，有概率点燃霜火。
+	//II：快速打出冰羽，命中敌人使身后的凝冰之环充能，右键消耗充能落下巨型冰羽，也可以消耗充能转化为冰之翼飞行。
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

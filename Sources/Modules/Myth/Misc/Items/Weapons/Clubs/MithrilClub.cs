@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class MithrilClub : ClubItem
 {
+	//TODO:Translate:秘银棍棒
 	public override void SetDef()
 	{
 		Item.damage = 56;

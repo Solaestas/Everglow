@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class TungstenClub : ClubItem
 {
+	//TODO:Translate:钨棍棒
 	public override void SetDef()
 	{
 		Item.damage = 9;

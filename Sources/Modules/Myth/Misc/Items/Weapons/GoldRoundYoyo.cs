@@ -2,6 +2,8 @@ namespace Everglow.Myth.Misc.Items.Weapons;
 
 public class GoldRoundYoyo : ModItem
 {
+	//TODO:Translate:日冕
+	//攻击过程逐渐充能,直到形成一个环状日冕,内部的敌人会不时受到灼热的射线攻击
 	public override void SetStaticDefaults()
 	{
 		ItemID.Sets.Yoyo[Item.type] = true;

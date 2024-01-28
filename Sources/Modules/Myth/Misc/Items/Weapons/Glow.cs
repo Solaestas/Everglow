@@ -3,6 +3,8 @@ using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Items.Weapons
 {
+	//TODO:Translate:流光
+	//斩出日光剑气的同时召唤坠地的法术流星
 	public class Glow : ModItem
 	{
 		public override void SetDefaults()

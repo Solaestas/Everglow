@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class ChlorophyteClub : ClubItem
 {
+	//TODO:Translate:叶绿棍棒
 	public override void SetDef()
 	{
 		Item.damage = 80;

@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Slingshots;
 
 public class PearlwoodSlingshot : SlingshotItem
 {
+	//TODO:Translate:珍珠木弹弓
 	public override void SetDef()
 	{
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Ranged.Slingshots.PearlwoodSlingshot>();

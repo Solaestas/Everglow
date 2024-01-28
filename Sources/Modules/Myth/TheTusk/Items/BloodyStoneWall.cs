@@ -1,13 +1,11 @@
-﻿using Terraria.Localization;
-
 namespace Everglow.Myth.TheTusk.Items;
-
+//TODO:Translate:血石墙壁
 public class BloodyStoneWall : ModItem
 {
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Bloody Stone Wall");
-			}
+	}
 
 	public override void SetDefaults()
 	{

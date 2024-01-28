@@ -1,15 +1,14 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
-using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.Items.Weapons;
-
+//TODO:Translate:血色法球
 public class ToothMagicBall : ModItem
 {
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Sanguine Orb");
-						CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
 
 	public override void SetDefaults()

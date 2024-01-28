@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class IchorClub : ClubItem
 {
+	//TODO:Translate:灵液棍棒
 	public override void SetDef()
 	{
 		Item.damage = 47;

@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class CorruptClub : ClubItem
 {
+	//TODO:Translate:魔金棍棒
 	public override void SetDef()
 	{
 		Item.damage = 12;

@@ -4,6 +4,7 @@ namespace Everglow.Myth.Misc.Items.Weapons;
 
 public class SilveralRifle : ModItem
 {
+	//TODO:Translate:银红步枪
 	public override void SetDefaults()
 	{
 		Item.damage = 32;

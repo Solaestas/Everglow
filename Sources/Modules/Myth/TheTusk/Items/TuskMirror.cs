@@ -2,7 +2,7 @@ using Everglow.Myth.TheTusk.WorldGeneration;
 using SubworldLibrary;
 
 namespace Everglow.Myth.TheTusk.Items;
-
+//TODO:Translate:血色明镜\n凝视着它沉入血之渊
 public class TuskMirror : ModItem
 {
 	public override void SetDefaults()

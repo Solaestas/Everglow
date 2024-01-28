@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class CrystalClub : ClubItem
 {
+	//TODO:Translate:水晶棍棒
 	public override void SetDef()
 	{
 		Item.damage = 51;

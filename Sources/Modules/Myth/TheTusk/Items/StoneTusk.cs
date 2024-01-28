@@ -1,13 +1,11 @@
-﻿using Terraria.Localization;
-
 namespace Everglow.Myth.TheTusk.Items;
-
+//TODO:Translate:风化獠牙
 public class StoneTusk : ModItem
 {
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Fossilized Tusk");
-			}
+	}
 	public override void SetDefaults()
 	{
 		Item.width = 32;

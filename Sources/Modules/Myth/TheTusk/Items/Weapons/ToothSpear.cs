@@ -1,7 +1,7 @@
 using Terraria.Audio;
 using Terraria.DataStructures;
 namespace Everglow.Myth.TheTusk.Items.Weapons;
-
+//TODO:Translate:獠牙长矛
 public class ToothSpear : ModItem
 {
 	public override void SetDefaults()

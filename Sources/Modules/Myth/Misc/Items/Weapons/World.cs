@@ -3,6 +3,7 @@ namespace Everglow.Myth.Misc.Items.Weapons;
 
 public class World : ModItem
 {
+	//TODO:Translate:世界
 	public override void SetDefaults()
 	{
 		Item.damage = 572;

@@ -2,7 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Slingshots;
 
 public class JungleSlingshot : SlingshotItem
 {
-	//TODO:丛林孢子弹弓:划过的轨迹以及爆炸散开的范围都会随机施加中毒
+	//TODO:Translate:丛林孢子弹弓:划过的轨迹以及爆炸散开的范围都会随机施加中毒
 	public override void SetDef()
 	{
 		Item.damage = 22;

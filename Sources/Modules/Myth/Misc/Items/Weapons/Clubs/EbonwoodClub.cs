@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class EbonwoodClub : ClubItem
 {
+	//TODO:Translate:乌木棍棒
 	public override void SetDef()
 	{
 		Item.damage = 7;

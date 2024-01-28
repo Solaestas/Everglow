@@ -2,6 +2,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class SpikeClub : ClubItem
 {
+	//TODO:Translate:尖刺棍棒
 	public override void SetDef()
 	{
 		Item.damage = 21;
