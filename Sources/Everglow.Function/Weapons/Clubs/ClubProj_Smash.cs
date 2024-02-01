@@ -105,7 +105,7 @@ public abstract class ClubProj_Smash : MeleeProj
 			}
 			if(player.gravDir == 1)
 			{
-				if (Collision.SolidCollision(player.BottomLeft, player.width, 64))
+				if (Collision.SolidCollision(player.BottomLeft, player.width, 64) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 16)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 0)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, -16)))
 				{
 					if (timer <= 70)
 					{

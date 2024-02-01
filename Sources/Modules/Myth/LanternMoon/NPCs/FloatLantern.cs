@@ -1,9 +1,8 @@
-﻿using Everglow.Myth.LanternMoon.LanternCommon;
-using Terraria;
-using Terraria.Localization;
+using Everglow.Myth.LanternMoon.Gores;
+using Everglow.Myth.LanternMoon.LanternCommon;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
-
 
 public class FloatLantern : ModNPC
 {
@@ -11,9 +10,8 @@ public class FloatLantern : ModNPC
 	public LanternMoonProgress LanternMoonProgress = ModContent.GetInstance<LanternMoonProgress>();
 	public override void SetStaticDefaults()
 	{
-		// DisplayName.SetDefault("Lantern Ghost");
 		Main.npcFrameCount[NPC.type] = 3;
-			}
+	}
 	public override void SetDefaults()
 	{
 		NPC.damage = 100;
@@ -29,35 +27,27 @@ public class FloatLantern : ModNPC
 		NPC.noGravity = true;
 		NPC.noTileCollide = true;
 		NPC.HitSound = SoundID.NPCHit3;
-		/*NPC.BannerID = NPC.type;
-            this.bannerItem = base.mod.ItemType("LanternghostBanner");*/
 	}
-	private int A2 = 0;
-	private int num1 = 0;
-	private bool initialization = true;
+	public override void OnSpawn(IEntitySource source)
+	{
+		NPC.ai[1] = Main.rand.Next(-120, 0);
+		NPC.ai[2] = Main.rand.NextFloat(0.3f, 1800f);
+	}
 	public override void AI()
 	{
-		num1 += 1;
-		if (initialization)
-		{
-			num1 = Main.rand.Next(-120, 0);
-			num4 = Main.rand.NextFloat(0.3f, 1800f);
-			initialization = false;
-		}
-		num4 += 0.01f;
-		if (num1 > 0 && num1 <= 120)
-			num = num1 / 120f;
+		NPC.ai[1] += 1;
+		NPC.ai[2] += 0.01f;
 		NPC.TargetClosest(false);
 		Player player = Main.player[NPC.target];
 		NPC.rotation = NPC.velocity.X / 30f;
-		A2 += 1;
-		if (A2 % 45 < 15)
+		NPC.ai[0] += 1;
+		if (NPC.ai[0] % 45 < 15)
 			NPC.frame.Y = 0;
-		if (A2 % 45 >= 15 && A2 % 45 < 30)
+		if (NPC.ai[0] % 45 >= 15 && NPC.ai[0] % 45 < 30)
 			NPC.frame.Y = 74;
-		if (A2 % 45 >= 30 && A2 % 45 < 45)
+		if (NPC.ai[0] % 45 >= 30 && NPC.ai[0] % 45 < 45)
 			NPC.frame.Y = 148;
-		Vector2 v = player.Center + new Vector2((float)Math.Sin(A2 / 40f) * 500f, (float)Math.Sin((A2 + 200) / 40f) * 50f - 150) - NPC.Center;
+		Vector2 v = player.Center + new Vector2((float)Math.Sin(NPC.ai[0] / 40f) * 500f, (float)Math.Sin((NPC.ai[0] + 200) / 40f) * 50f - 150) - NPC.Center;
 		if (NPC.velocity.Length() < 9f)
 			NPC.velocity += v / v.Length() * 0.35f;
 		NPC.velocity *= 0.96f;
@@ -72,28 +62,66 @@ public class FloatLantern : ModNPC
 	{
 		if (NPC.life <= 0)
 		{
-			Vector2 vF = new Vector2(Main.rand.NextFloat(-0.4f, 0.4f), 0).RotatedByRandom(6.283) * 6f;
-			Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/FloatLanternGore1").Type, 1f);
-			vF = new Vector2(Main.rand.NextFloat(-0.4f, 0.4f), 0).RotatedByRandom(6.283) * 6f;
-			Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/FloatLanternGore2").Type, 1f);
-			for (int f = 0; f < 3; f++)
+			var gore0 = new FloatLanternGore1
 			{
-				vF = new Vector2(Main.rand.NextFloat(-0.4f, 1.4f), 0).RotatedByRandom(6.283) * 6f;
-				int gra0 = Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/FloatLanternGore3").Type, 1f);
-				Main.gore[gra0].timeLeft = Main.rand.Next(300, 600);
-				vF = new Vector2(Main.rand.NextFloat(-0.4f, 1.4f), 0).RotatedByRandom(6.283) * 6f;
-				int gra1 = Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/FloatLanternGore4").Type, 1f);
-				Main.gore[gra1].timeLeft = Main.rand.Next(300, 600);
-				vF = new Vector2(Main.rand.NextFloat(-0.4f, 1.4f), 0).RotatedByRandom(6.283) * 6f;
-				int gra2 = Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/FloatLanternGore5").Type, 1f);
-				Main.gore[gra2].timeLeft = Main.rand.Next(300, 600);
-				vF = new Vector2(Main.rand.NextFloat(-0.4f, 1.4f), 0).RotatedByRandom(6.283) * 6f;
-				int gra3 = Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/FloatLanternGore6").Type, 1f);
-				Main.gore[gra3].timeLeft = Main.rand.Next(300, 600);
+				Active = true,
+				Visible = true,
+				velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
+				noGravity = false,
+				position = NPC.Center
+			};
+			Ins.VFXManager.Add(gore0);
+			var gore1 = new FloatLanternGore2
+			{
+				Active = true,
+				Visible = true,
+				velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
+				noGravity = false,
+				position = NPC.Center
+			};
+			Ins.VFXManager.Add(gore1);
+			for (int f = 0; f < 2; f++)
+			{
+				var gore2 = new FloatLanternGore3
+				{
+					Active = true,
+					Visible = true,
+					velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
+					noGravity = false,
+					position = NPC.Center
+				};
+				Ins.VFXManager.Add(gore2);
+				var gore3 = new FloatLanternGore4
+				{
+					Active = true,
+					Visible = true,
+					velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
+					noGravity = false,
+					position = NPC.Center
+				};
+				Ins.VFXManager.Add(gore3);
+				var gore4 = new FloatLanternGore5
+				{
+					Active = true,
+					Visible = true,
+					velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
+					noGravity = false,
+					position = NPC.Center
+				};
+				Ins.VFXManager.Add(gore4);
+				var gore5 = new FloatLanternGore6
+				{
+					Active = true,
+					Visible = true,
+					velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
+					noGravity = false,
+					position = NPC.Center
+				};
+				Ins.VFXManager.Add(gore5);
 			}
-			LanternMoonProgress.Point += 15;
-			LanternMoonProgress.WavePoint += 15;
-			for (int f = 0; f < 55; f++)
+			LanternMoonProgress.AddPoint(15);
+
+			for (int f = 0; f < 22; f++)
 			{
 				Vector2 v3 = new Vector2(0, Main.rand.NextFloat(0, 12f)).RotatedByRandom(MathHelper.TwoPi);
 				int r = Dust.NewDust(NPC.Center - new Vector2(4, 4) - new Vector2(4, 4), 8, 8, ModContent.DustType<Dusts.Flame4>(), v3.X, v3.Y, 0, default, Main.rand.NextFloat(0.6f, 1.8f));
@@ -101,15 +129,12 @@ public class FloatLantern : ModNPC
 				Main.dust[r].velocity = v3;
 			}
 		}
-
 	}
-	private float num = 0;
-	private float num4 = 0;
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		Texture2D tg = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/NPCs/FloatLanternGlow").Value;
-		Texture2D tg2 = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/NPCs/FloatLanternGlow2").Value;
+		Texture2D tg = ModAsset.FloatLanternGlow.Value;
+		Texture2D tg2 = ModAsset.FloatLanternGlow2.Value;
 		SpriteEffects effects = SpriteEffects.None;
 		if (NPC.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;
@@ -118,10 +143,8 @@ public class FloatLantern : ModNPC
 		Vector2 vector2 = value - Main.screenPosition;
 		vector2 -= new Vector2(tg.Width, tg.Height / Main.npcFrameCount[NPC.type]) * 1f / 2f;
 		vector2 += vector * 1f + new Vector2(0f, 4f + NPC.gfxOffY);
-		Main.spriteBatch.Draw(tg, vector2, new Rectangle(0, NPC.frame.Y, 62, 74), new Color(200, 200, 200, 0), NPC.rotation, vector, 1f, effects, 0f);
-		x += 0.01f;
-		var colorT = new Color(1f * num * (float)(Math.Sin(num4) + 2) / 3f, 1f * num * (float)(Math.Sin(num4) + 2) / 3f, 1f * num * (float)(Math.Sin(num4) + 2) / 3f, 0.15f * num * (float)(Math.Sin(num4) + 2) / 3f);
-		Main.spriteBatch.Draw(tg2, vector2, new Rectangle(0, NPC.frame.Y, 62, 74), colorT, NPC.rotation, vector, 1f, effects, 0f);
+		spriteBatch.Draw(tg, vector2, new Rectangle(0, NPC.frame.Y, 62, 74), new Color(200, 200, 200, 0), NPC.rotation, vector, 1f, effects, 0f);
+
+		spriteBatch.Draw(tg2, vector2, new Rectangle(0, NPC.frame.Y, 62, 74), new Color(200, 200, 200, 0), NPC.rotation, vector, 1f, effects, 0f);
 	}
-	private float x = 0;
 }

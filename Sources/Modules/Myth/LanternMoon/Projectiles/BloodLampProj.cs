@@ -9,15 +9,6 @@ namespace Everglow.Myth.LanternMoon.Projectiles;
 public class BloodLampProj : ModProjectile
 {
 	private CoroutineManager _coroutineManager = new CoroutineManager();
-
-	public override void SetStaticDefaults()
-	{
-		for (int x = -1; x < 15; x++)
-		{
-			BLantern[x + 1] = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/BloodLampFrame/BloodLamp_" + x.ToString());
-		}
-		// DisplayName.SetDefault("Blood Lamp");
-	}
 	public override void SetDefaults()
 	{
 		Projectile.width = 38;
@@ -29,9 +20,13 @@ public class BloodLampProj : ModProjectile
 		Projectile.tileCollide = false;
 		Projectile.timeLeft = 600;
 		Projectile.scale = 1;
+		for (int x = -1; x < 15; x++)
+		{
+			BLantern[x + 1] = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/BloodLampFrame/BloodLamp_" + x.ToString());
+		}
 	}
 	//这种贴图每个Proj都是一样的也不会变化，干脆直接readonly然后在SSD里Request，然后所有Proj共用一个数组
-	private Asset<Texture2D>[] BLantern = new Asset<Texture2D>[16];
+	private static Asset<Texture2D>[] BLantern = new Asset<Texture2D>[16];
 	//这个bool数组每个Proj不同，所以要到Clone里new，但是直接构造是不必要的，因为不是clone获得的那个实例不会调用AI与Draw
 	private bool[] NoPedal;
 	//值类型就不必在clone里重新初始化了
@@ -58,14 +53,6 @@ public class BloodLampProj : ModProjectile
 			new Vector2(23, 16),
 			new Vector2(15, 16)
 	};
-
-	public override ModProjectile Clone(Projectile projectile)
-	{
-		var clone = base.Clone(projectile) as BloodLampProj;
-		NoPedal = new bool[16];
-		_coroutineManager = new CoroutineManager();
-		return clone;
-	}
 	public override void AI()
 	{
 		timer++;
@@ -136,7 +123,7 @@ public class BloodLampProj : ModProjectile
 		_coroutineManager.StartCoroutine(new Coroutine(DropPedal()));
 		yield return new WaitForFrames(75);
 		Col = 255;
-		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, new Vector2(0, -1), ModContent.ProjectileType<LMeteor>(), 0, 0, Projectile.owner);//金色的核心
+		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, new Vector2(0, -1), ModContent.ProjectileType<RedLanternMeteor>(), 0, 0, Projectile.owner);//金色的核心
 		Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Vector2.Zero, ModContent.GoreType<Gores.BloodLanternBody>());
 		for (int h = 0; h < 11; h++)
 		{
@@ -146,7 +133,7 @@ public class BloodLampProj : ModProjectile
 		}
 		NoPedal[1] = true;
 		yield return new WaitForFrames(5);
-		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, new Vector2(0, -1), ModContent.ProjectileType<RainbowWave>(), 0, 0, Projectile.owner);//彩虹光环
+
 		yield return new WaitForFrames(10);
 
 		yield return new WaitForFrames(65);

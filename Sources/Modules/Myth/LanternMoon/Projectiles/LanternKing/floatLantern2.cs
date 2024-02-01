@@ -1,11 +1,7 @@
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
-public class floatLantern2 : ModProjectile
+public class FloatLantern2 : ModProjectile
 {
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("漂浮灯笼");
-	}
 	public override void SetDefaults()
 	{
 		Projectile.width = 20;

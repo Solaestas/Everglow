@@ -1,20 +1,13 @@
-using Everglow.Myth.Common;
+using Everglow.Myth.LanternMoon.NPCs;
 using Terraria.GameContent;
 using Terraria.Localization;
-
 namespace Everglow.Myth.LanternMoon.LanternCommon;
 
 public class LanternMoonProgress : ModSystem//灯笼月
 {
 	public override void PostUpdateInvasions()
 	{
-		//if (EverglowConfig.DebugMode)
-		//{
-		//	WavePoint++;
-		//	Point++;
-		//}
-		WavePoint++;
-		Point++;
+		//AddPoint(8);
 		if (PreWavePoint[0] == 0)//共计40波，每一波需要的分数
 		{
 			PreWavePoint[0] = 100;
@@ -63,6 +56,7 @@ public class LanternMoonProgress : ModSystem//灯笼月
 		}
 		if (OnLanternMoon)
 		{
+			AddEnemies();
 			if (Wave == 0)
 				WavePoint = Point;
 			if (WavePoint > PreWavePoint[Wave])
@@ -94,6 +88,11 @@ public class LanternMoonProgress : ModSystem//灯笼月
 	public int Point = 0;
 	public int WavePoint = 0;
 	public bool OnLanternMoon = false;
+	public void AddPoint(int value)
+	{
+		WavePoint += value;
+		Point += value;
+	}
 	public override void PostDrawInterface(SpriteBatch spriteBatch)
 	{
 		if (!OnLanternMoon)
@@ -225,5 +224,22 @@ public class LanternMoonProgress : ModSystem//灯笼月
 			1f,
 			0.4f,
 			-1);
+	}
+
+	public void AddEnemies()
+	{
+		if (Wave <= 14)
+		{
+			if(NPC.CountNPCS(ModContent.NPCType<FloatLantern>()) < 15)
+			{ 
+				if(Main.rand.NextBool(20))
+				{
+					int x0 = (int)(Main.screenPosition.X - Main.offScreenRange - 150);
+					int x1 = (int)(Main.screenPosition.X + Main.screenWidth + Main.offScreenRange + 150);
+					int y0 = (int)(Main.screenPosition.Y + Main.screenHeight * 0.5f);
+					NPC.NewNPC(NPC.GetSource_NaturalSpawn(), Main.rand.NextBool(2) ? x0 : x1, y0, ModContent.NPCType<FloatLantern>());
+				}
+			}
+		}
 	}
 }
