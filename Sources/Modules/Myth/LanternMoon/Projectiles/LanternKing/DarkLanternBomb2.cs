@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons;
+using Everglow.Myth.LanternMoon.Gores;
 using Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -16,7 +16,6 @@ public class DarkLanternBomb2 : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = false;
 		Projectile.extraUpdates = 3;
-		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -86,11 +85,11 @@ public class DarkLanternBomb2 : ModProjectile
 		colorValue = Math.Max(0.05f, colorValue) - (Projectile.timeLeft / 400);
 		colorValue += 1 - timeValueX2;
 		float maxDistance = 70;
-		if (Main.expertMode)
+		if(Main.expertMode)
 		{
 			maxDistance = 82;
 		}
-		if (Main.masterMode)
+		if(Main.masterMode)
 		{
 			maxDistance = 150;
 		}
@@ -101,10 +100,10 @@ public class DarkLanternBomb2 : ModProjectile
 	{
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);
-		var p = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 5);
+		var p = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion>(), Projectile.damage, Projectile.knockBack);
 		p.friendly = Projectile.friendly;
 		p.hostile = Projectile.hostile;
-
-		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.4f), Projectile.Center);
+		
+    	SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.4f), Projectile.Center);
 	}
 }

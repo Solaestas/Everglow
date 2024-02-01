@@ -23,6 +23,12 @@ public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 		Lighting.AddLight(Projectile.Center, new Vector3(value * 3.5f, value * value * 1.5f, value * value * value));
 		base.AI();
 	}
+	public override void AI()
+	{
+		float value = Projectile.timeLeft / 20f;
+		Lighting.AddLight(Projectile.Center, new Vector3(value * 3.5f, value * value * 1.5f, value * value * value));
+		base.AI();
+	}
 	public override void OnSpawn(IEntitySource source)
 	{
 		float mulSize = 1f;

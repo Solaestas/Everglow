@@ -1,5 +1,4 @@
-using System.Linq;
-using Everglow.Commons;
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
@@ -253,7 +252,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
 
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 
 
 	}

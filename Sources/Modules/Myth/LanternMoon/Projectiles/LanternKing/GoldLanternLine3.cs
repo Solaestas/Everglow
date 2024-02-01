@@ -8,7 +8,6 @@ public class GoldLanternLine3 : TrailingProjectile
 	public override void SetDef()
 	{
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
-		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 		TrailColor = new Color(1, 0.65f, 0, 0f);
 		TrailWidth = 2f;
 		SelfLuminous = true;

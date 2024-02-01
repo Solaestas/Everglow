@@ -120,9 +120,17 @@ public class BloodLampProj : ModProjectile
 		_coroutineManager.StartCoroutine(new Coroutine(ControlVolume()));
 		_coroutineManager.StartCoroutine(new Coroutine(JitterFlash()));
 		yield return new WaitForFrames(170);
+		_coroutineManager.StartCoroutine(new Coroutine(DropPedal()));
 		yield return new WaitForFrames(75);
 		Col = 255;
-
+		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, new Vector2(0, -1), ModContent.ProjectileType<RedLanternMeteor>(), 0, 0, Projectile.owner);//金色的核心
+		Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Vector2.Zero, ModContent.GoreType<Gores.BloodLanternBody>());
+		for (int h = 0; h < 11; h++)
+		{
+			int f = Projectile.NewProjectile(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(9, 24f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffectGra>(), 0, 0, Projectile.owner, Projectile.whoAmI);
+			Main.projectile[f].scale = Main.rand.NextFloat(0.75f, 1.25f);
+			Main.projectile[f].timeLeft = Main.rand.Next(80, 130);
+		}
 		NoPedal[1] = true;
 		yield return new WaitForFrames(5);
 
@@ -157,5 +165,26 @@ public class BloodLampProj : ModProjectile
 			yield return new SkipThisFrame();
 		}
 		Main.musicVolume = originalVolume;
+	}
+
+
+	private IEnumerator<ICoroutineInstruction> DropPedal()
+	{
+		while (true)
+		{
+			for (int x = 2; x < 16; x++)
+			{
+				if (!NoPedal[x] && Main.rand.Next(Projectile.timeLeft) < 3)
+				{
+					NoPedal[x] = true;
+					Vector2 Cen = PedalPos[x] - new Vector2(6f, 7f);
+					Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<BloodPedal>());
+					Projectile.NewProjectile(null, Projectile.Center + Cen - BLantern[x].Size() / 2f,
+						new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283),
+						ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
+				}
+			}
+			yield return new SkipThisFrame();
+		}
 	}
 }

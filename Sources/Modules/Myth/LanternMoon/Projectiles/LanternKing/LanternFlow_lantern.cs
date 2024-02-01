@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework.Graphics;
+
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 [Pipeline(typeof(WCSPipeline))]
 public class LanternFlow_lantern : Visual
@@ -31,7 +33,7 @@ public class LanternFlow_lantern : Visual
 		}
 		velocity *= 0.98f;
 		position += velocity;
-		if (timer >= maxTime)
+		if(timer >= maxTime)
 		{
 			Active = false;
 		}
@@ -53,7 +55,7 @@ public class LanternFlow_lantern : Visual
 		Vector2 v3 = position + new Vector2(width, height).RotatedBy(rotation) * 0.5f * scale;
 
 		alpha = (maxTime - timer) / 40f;
-		if (timer < 40)
+		if(timer < 40)
 		{
 			alpha = timer / 40f;
 		}
