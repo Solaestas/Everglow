@@ -1,11 +1,9 @@
-﻿namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+using Everglow.Commons.Weapons;
+
+namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
 public class GoldLanternLine2 : ModProjectile
 {
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("灯笼须2");
-	}
 	public override void SetDefaults()
 	{
 		Projectile.width = 1;
@@ -20,6 +18,7 @@ public class GoldLanternLine2 : ModProjectile
 		Projectile.DamageType = DamageClass.Magic;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 	}
 	private float Z = 0;
 	public override void AI()

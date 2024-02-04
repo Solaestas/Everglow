@@ -1,8 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Weapons;
-using Everglow.Myth.LanternMoon.Gores;
 using Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
-using Terraria;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
@@ -24,6 +22,8 @@ public class LanternFlow : TrailingProjectile
 		Projectile.scale = 1f;
 
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 400;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
+		ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 14400;
 		TrailColor = new Color(1f, 0.2f, 0f, 0f) * 0.3f;
 		TrailWidth = 240f;
 		SelfLuminous = true;
@@ -38,13 +38,13 @@ public class LanternFlow : TrailingProjectile
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
-		if(OwnerNPC == null)
+		if (OwnerNPC == null)
 		{
-			foreach(NPC npc in Main.npc)
+			foreach (NPC npc in Main.npc)
 			{
-				if(npc != null && npc.active)
+				if (npc != null && npc.active)
 				{
-					if(npc.type == ModContent.NPCType<LanternGhostKing>())
+					if (npc.type == ModContent.NPCType<LanternGhostKing>())
 					{
 						OwnerNPC = npc;
 					}
@@ -75,11 +75,11 @@ public class LanternFlow : TrailingProjectile
 
 		base.AI();
 		Vector2 toOwner = OwnerNPC.Center - Projectile.Center;
-		if(Projectile.timeLeft > 507)
+		if (Projectile.timeLeft > 507)
 		{
 			Projectile.velocity = Projectile.velocity.RotatedBy(MathF.Sin(Projectile.timeLeft * 0.08f) * 0.02f);
 		}
-		else if(Projectile.timeLeft > 447)
+		else if (Projectile.timeLeft > 447)
 		{
 			Projectile.velocity = Projectile.velocity.RotatedBy(Projectile.ai[0]);
 		}
@@ -96,13 +96,13 @@ public class LanternFlow : TrailingProjectile
 				WarpStrength *= 0.98f;
 			}
 		}
-		if(Projectile.timeLeft < 580)
+		if (Projectile.timeLeft < 580)
 		{
 			for (int i = 0; i < Projectile.oldPos.Length / 60; i++)
 			{
 				int checkOldPosIndex = Main.rand.Next(5, (int)MathF.Min(598 - Projectile.timeLeft, Projectile.oldPos.Length - 2));
 				float mulScale = Main.rand.NextFloat(0.5f, 1.2f);
-				if(Projectile.timeLeft < 120f)
+				if (Projectile.timeLeft < 120f)
 				{
 					mulScale *= Projectile.timeLeft / 120f;
 				}
@@ -199,9 +199,9 @@ public class LanternFlow : TrailingProjectile
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		for(int i = 50;i < Projectile.oldPos.Count();i++)
+		for (int i = 50; i < Projectile.oldPos.Count(); i++)
 		{
-			if((targetHitbox.Center() - (Projectile.oldPos[i] + new Vector2(Projectile.width, Projectile.height) * 0.5f)).Length() < TrailWidth * 0.3f)
+			if ((targetHitbox.Center() - (Projectile.oldPos[i] + new Vector2(Projectile.width, Projectile.height) * 0.5f)).Length() < TrailWidth * 0.3f)
 			{
 				return true;
 			}

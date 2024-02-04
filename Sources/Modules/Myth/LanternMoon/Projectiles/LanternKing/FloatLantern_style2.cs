@@ -1,6 +1,6 @@
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
-public class FloatLantern3 : ModProjectile
+public class FloatLantern_style2 : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -12,11 +12,11 @@ public class FloatLantern3 : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = false;
 		Projectile.extraUpdates = 3;
-		Projectile.timeLeft = 3600;
+		Projectile.timeLeft = 7200;
 		Projectile.alpha = 0;
 		Projectile.penetrate = -1;
 		Projectile.scale = 1f;
-
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 	}
 	public override Color? GetAlpha(Color lightColor)
 	{
@@ -36,20 +36,11 @@ public class FloatLantern3 : ModProjectile
 		num1 += 1;
 		num4 += 0.01f;
 		Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) - (float)Math.PI * 0.5f;
-		/*if (Projectile.timeLeft < 995)
-            {
-                Vector2 vector = Projectile.Center - new Vector2(4, 4);
-                int num = Dust.NewDust(vector, 2, 2, 102, 0f, 0f, 0, default(Color), (float)Projectile.scale * 0.8f);
-                Main.dust[num].velocity *= 0.0f;
-                Main.dust[num].noGravity = true;
-                Main.dust[num].scale *=  1.2f;
-                Main.dust[num].alpha = 200;
-            }*/
+
 		if (num1 > 0 && num1 <= 120)
 			num = num1 / 120f;
 		if (Projectile.timeLeft < 120)
 			num = Projectile.timeLeft / 120f;
-		Projectile.velocity = Projectile.velocity.RotatedBy(0.004);
 		//Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 0.8f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0.2f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0f / 255f * Projectile.scale * num1);
 	}
 	private float num = 0;

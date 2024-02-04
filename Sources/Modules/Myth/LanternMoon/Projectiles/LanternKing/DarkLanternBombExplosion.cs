@@ -1,3 +1,4 @@
+using Everglow.Commons.Weapons;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;
 using Terraria.DataStructures;
 
@@ -14,6 +15,7 @@ public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 		Projectile.tileCollide = false;
 		Projectile.timeLeft = 30;
 		Projectile.penetrate = -1;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 	}
 	public override void AI()
 	{

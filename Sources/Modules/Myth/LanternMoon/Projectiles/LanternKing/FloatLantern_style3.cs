@@ -1,6 +1,8 @@
+using Everglow.Commons.Weapons;
+
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
-public class FloatLantern2 : ModProjectile
+public class FloatLantern_style3 : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -12,13 +14,12 @@ public class FloatLantern2 : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = false;
 		Projectile.extraUpdates = 3;
-		Projectile.timeLeft = 7200;
+		Projectile.timeLeft = 3600;
 		Projectile.alpha = 0;
 		Projectile.penetrate = -1;
 		Projectile.scale = 1f;
-
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 	}
-	//55555
 	public override Color? GetAlpha(Color lightColor)
 	{
 		return new Color?(new Color(1f, 1f, 1f, 0.5f));
@@ -50,6 +51,7 @@ public class FloatLantern2 : ModProjectile
 			num = num1 / 120f;
 		if (Projectile.timeLeft < 120)
 			num = Projectile.timeLeft / 120f;
+		Projectile.velocity = Projectile.velocity.RotatedBy(0.004);
 		//Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 0.8f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0.2f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0f / 255f * Projectile.scale * num1);
 	}
 	private float num = 0;

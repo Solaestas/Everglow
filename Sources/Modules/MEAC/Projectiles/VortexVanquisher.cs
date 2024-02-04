@@ -107,22 +107,22 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 			{
 				Projectile.spriteDirection = player.direction;
 			}
-			if (t < 20 * timeMul)
+			if (t < 7 * timeMul)
 			{
 				useTrail = false;
 				mainVec = Vector2.Lerp(mainVec, Player.DirectionTo(Main.MouseWorld) * 150, 0.2f / timeMul);
 				disFromPlayer = MathHelper.Lerp(disFromPlayer, -30, 0.2f);
 				Projectile.rotation = mainVec.ToRotation();
 			}
-			if (t >= 20 * timeMul && t < 40 * timeMul)
+			if (t >= 7 * timeMul && t < 27 * timeMul)
 			{
-				if (t == (int)(21 * timeMul))
+				if (t == (int)(8 * timeMul))
 				{
 					SoundEngine.PlaySound(SoundID.Item1);
 					if (Main.myPlayer == Projectile.owner)
 						Projectile.NewProjectile(Player.GetSource_FromAI(), Projectile.Center, Vector2.Normalize(mainVec) * 20, ModContent.ProjectileType<DashingLightEff>(), 1, 0, Projectile.owner);
 				}
-				if (t < 30 * timeMul)
+				if (t < 17 * timeMul)
 				{
 					disFromPlayer += 20;
 					isAttacking = true;
@@ -132,7 +132,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 					disFromPlayer -= 20;
 				}
 			}
-			if (t > 40 * timeMul)
+			if (t > 27 * timeMul)
 			{
 				disFromPlayer = 6;
 				NextAttackType();

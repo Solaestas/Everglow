@@ -3234,21 +3234,15 @@ Projectiles: {
 	DarkLanternBomb2.DisplayName: Dark Lantern Bomb2
 	DarkLanternBombExplosion.DisplayName: Dark Lantern Bomb Explosion
 	DarkLanternBombExplosion_II.DisplayName: Dark Lantern Bomb Explosion_ I I
-	ExplodeLantern.DisplayName: Explode Lantern
 	ExplosiveLantern.DisplayName: Explosive Lantern
-	FloatLantern2.DisplayName: Float Lantern2
-	FloatLantern3.DisplayName: Float Lantern3
-	FloatLantern4.DisplayName: Float Lantern4
-	GoldLantern.DisplayName: Gold Lantern
+	FloatLantern_style2.DisplayName: Float Lantern_style2
+	FloatLantern_style3.DisplayName: Float Lantern_style3
+	FloatLantern_style4.DisplayName: Float Lantern_style4
 	GoldLanternLine.DisplayName: Gold Lantern Line
 	GoldLanternLine2.DisplayName: Gold Lantern Line2
 	GoldLanternLine3.DisplayName: Gold Lantern Line3
-	GoldLanternLine8.DisplayName: Gold Lantern Line8
-	GoldLanternRay.DisplayName: Gold Lantern Ray
-	GoldLanternStar.DisplayName: Gold Lantern Star
 	LanternFlow.DisplayName: Lantern Flow
-	Redlight.DisplayName: Redlight
-	StrikePlayer.DisplayName: Strike Player
+	LanternFlowLine.DisplayName: Lantern Flow Line
 	BlueFlame0.DisplayName: Blue Flame0
 	BlueFlame0Little.DisplayName: Blue Flame0 Little
 	BlueFlame0LittleSoon.DisplayName: Blue Flame0 Little Soon

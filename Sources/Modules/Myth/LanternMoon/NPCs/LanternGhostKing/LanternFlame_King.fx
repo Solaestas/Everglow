@@ -14,7 +14,6 @@ sampler_state
 };
 
 float4x4 uTransform;
-float uTime;
 
 struct VSInput
 {

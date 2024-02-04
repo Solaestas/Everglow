@@ -1,6 +1,6 @@
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 [Pipeline(typeof(WCSPipeline))]
-public class LanternFlow_lantern : Visual
+public class LanternFlow_lantern2 : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawNPCs;
 
@@ -13,11 +13,10 @@ public class LanternFlow_lantern : Visual
 	public int width;
 	public int height;
 	public Texture2D texture = ModAsset.LanternFlow.Value;
-	public int maxTime = 60;
-	public NPC npcOwner;
+	public int maxTime = 500;
 	public override void OnSpawn()
 	{
-		maxTime = 120;
+		maxTime = 500;
 		timer = 0;
 		width = texture.Width;
 		height = texture.Height;
@@ -25,23 +24,14 @@ public class LanternFlow_lantern : Visual
 	public override void Update()
 	{
 		timer++;
-		if (npcOwner != null && npcOwner.active)
-		{
-			velocity = velocity.RotatedBy(MathF.Sin((float)Main.time * 0.03f) * 0.02f);
-		}
 		velocity *= 0.98f;
+		velocity.Y += 0.5f;
 		position += velocity;
 		if (timer >= maxTime)
 		{
 			Active = false;
 		}
 		rotation = velocity.X / scale * 0.1f;
-		float maxDis = 400;
-		if ((npcOwner.Center - position).Length() < maxDis)
-		{
-			velocity += Vector2.Normalize(npcOwner.Center - position - velocity) * ((400 - (npcOwner.Center - position).Length()) / 400f);
-			timer += (int)((maxDis - (npcOwner.Center - position).Length()) / 40f);
-		}
 		Lighting.AddLight(position, new Vector3(1f, 0.3f, 0) * scale * alpha);
 		base.Update();
 	}

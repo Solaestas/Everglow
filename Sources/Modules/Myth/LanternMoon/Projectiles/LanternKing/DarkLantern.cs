@@ -23,6 +23,7 @@ public class DarkLantern : TrailingProjectile
 		Projectile.scale = 1f;
 
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 		TrailColor = new Color(1f, 0.7f, 0f, 0f);
 		TrailWidth = 40f;
 		SelfLuminous = true;
