@@ -1,6 +1,8 @@
+using Everglow.Commons.Weapons;
+
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
-public class FloatLantern3 : ModProjectile
+public class FloatLantern_style3 : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -16,7 +18,7 @@ public class FloatLantern3 : ModProjectile
 		Projectile.alpha = 0;
 		Projectile.penetrate = -1;
 		Projectile.scale = 1f;
-
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 	}
 	public override Color? GetAlpha(Color lightColor)
 	{

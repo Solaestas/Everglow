@@ -2,7 +2,7 @@ using Everglow.Commons.Weapons;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
-public class FloatLantern_style4 : ModProjectile
+public class DarkLantern3 : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -10,14 +10,14 @@ public class FloatLantern_style4 : ModProjectile
 		Projectile.height = 20;
 		Projectile.aiStyle = -1;
 		Projectile.friendly = false;
-		Projectile.hostile = true;
+		Projectile.hostile = false;
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = false;
 		Projectile.extraUpdates = 3;
-		Projectile.timeLeft = 3600;
+		Projectile.timeLeft = 5280;
 		Projectile.alpha = 0;
 		Projectile.penetrate = -1;
-		Projectile.scale = 1f;
+		Projectile.scale = 1.5f;
 		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 	}
 	public override Color? GetAlpha(Color lightColor)
@@ -31,28 +31,18 @@ public class FloatLantern_style4 : ModProjectile
 		{
 			num1 = Main.rand.Next(-120, 0);
 			num4 = Main.rand.NextFloat(0.3f, 1800f);
-			Projectile.timeLeft = 1200;
+			Projectile.timeLeft = 5280;
 			Fy = Main.rand.Next(4);
 			initialization = false;
 		}
 		num1 += 1;
 		num4 += 0.01f;
-		Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) - (float)Math.PI * 0.5f;
-		/*if (Projectile.timeLeft < 995)
-            {
-                Vector2 vector = Projectile.Center - new Vector2(4, 4);
-                int num = Dust.NewDust(vector, 2, 2, 102, 0f, 0f, 0, default(Color), (float)Projectile.scale * 0.8f);
-                Main.dust[num].velocity *= 0.0f;
-                Main.dust[num].noGravity = true;
-                Main.dust[num].scale *=  1.2f;
-                Main.dust[num].alpha = 200;
-            }*/
 		if (num1 > 0 && num1 <= 120)
 			num = num1 / 120f;
-		if (Projectile.timeLeft < 120)
-			num = Projectile.timeLeft / 120f;
-		Projectile.velocity = Projectile.velocity.RotatedBy(-0.004);
-		//Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 0.8f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0.2f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0f / 255f * Projectile.scale * num1);
+		if (num1 >= 1)
+			Projectile.hostile = true;
+		if (Projectile.timeLeft < 240)
+			Projectile.scale *= 0.99f;
 	}
 	private float num = 0;
 	private int num1 = 0;

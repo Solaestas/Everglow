@@ -14,7 +14,7 @@ sampler_state
 };
 
 float4x4 uTransform;
-float uTime;
+float uDuration;
 
 struct VSInput
 {
@@ -45,7 +45,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     warp *= (input.Texcoord.y - 0.5) * 1.5;
     float4 color = tex2D(uImage, input.Texcoord.xy + warp);
     float4 color2 = tex2D(uImage2, input.Texcoord.xz);
-    float4 colorFlame = tex2D(uImage1, float2(sqrt(color.r * color2.r), 0.5));
+    float4 colorFlame = tex2D(uImage1, float2(sqrt(color.r * color2.r), uDuration));
     return colorFlame * input.Color;
 }
 
