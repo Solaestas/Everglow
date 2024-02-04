@@ -90,7 +90,7 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 				switch (Main.rand.Next(2))
 				{
 					case 0:
-						if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 7, 7))
+						if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 8, 7))
 						{
 							TwilightBlueCrystal_1 tBC = TileLoader.GetTile(ModContent.TileType<TwilightBlueCrystal_1>()) as TwilightBlueCrystal_1;
 							tBC.PlaceOriginAtBottomLeft(i, j - 1);
@@ -99,7 +99,7 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 					case 1:
 						if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 8, 7))
 						{
-							TwilightBlueCrystal_0 tBC = TileLoader.GetTile(ModContent.TileType<TwilightBlueCrystal_0>()) as TwilightBlueCrystal_0;
+							TwilightBlueCrystal_1 tBC = TileLoader.GetTile(ModContent.TileType<TwilightBlueCrystal_1>()) as TwilightBlueCrystal_1;
 							tBC.PlaceOriginAtBottomLeft(i, j - 1);
 						}
 						break;

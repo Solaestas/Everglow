@@ -80,8 +80,8 @@ public class ScreenReflectionPipeline : Pipeline
 
 		ef.CurrentTechnique.Passes["Test"].Apply();
 		Main.graphics.GraphicsDevice.Textures[0] = screenReflectionScreen;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
 	}
 	public override void Render(IEnumerable<IVisual> visuals)
 	{
