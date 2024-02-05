@@ -23,7 +23,7 @@ public class BombLantern : ModNPC
 		NPC.width = 60;
 		NPC.height = 60;
 		NPC.defense = 10;
-		NPC.value = 100;
+		NPC.value = 0;
 		NPC.aiStyle = -1;
 		NPC.knockBackResist = 0.2f;
 		NPC.dontTakeDamage = false;

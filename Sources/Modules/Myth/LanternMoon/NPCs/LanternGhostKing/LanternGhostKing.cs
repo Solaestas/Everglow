@@ -91,6 +91,14 @@ public class LanternGhostKing : ModNPC
 			maxTime = 240
 		};
 		Ins.VFXManager.Add(spark);
+		var warp = new LanternFlameRing_warpDust
+		{
+			OwnerLanternKing = NPC,
+			Active = true,
+			Visible = true,
+			maxTime = 240
+		};
+		Ins.VFXManager.Add(warp);
 		RingCenter = NPC.Center;
 	}
 	public void UpdateDrawParameter()

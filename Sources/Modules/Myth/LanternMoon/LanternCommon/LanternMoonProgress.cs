@@ -24,8 +24,8 @@ public class LanternMoonProgress : ModSystem//灯笼月
 			PreWavePoint[10] = 600;
 			PreWavePoint[11] = 800;//5000
 			PreWavePoint[12] = 1000;
-			PreWavePoint[13] = 1500;//7000
-			PreWavePoint[14] = 2500;//10000
+			PreWavePoint[13] = 1000;//7000
+			PreWavePoint[14] = 3000;//10000
 
 			PreWavePoint[15] = 1200;
 			PreWavePoint[16] = 1350;
@@ -62,11 +62,20 @@ public class LanternMoonProgress : ModSystem//灯笼月
 				WavePoint = Point;
 			if (WavePoint > PreWavePoint[Wave])
 			{
-				NewWave();
-			}
-			if (Wave == 14)
-			{
-				UpdateWave15();
+				if (Wave == 0)
+					Main.NewText("Wave 2:", new Color(175, 75, 255));
+				if (Wave == 1)
+					Main.NewText("Wave 3:", new Color(175, 75, 255));
+				if (Wave == 2)
+					Main.NewText("Wave 4:", new Color(175, 75, 255));
+				if (Wave == 3)
+					Main.NewText("Wave 5:", new Color(175, 75, 255));
+				if (Wave == 4)
+					Main.NewText("Wave 6:", new Color(175, 75, 255));
+				if (Wave == 5)
+					Main.NewText("Wave 7:", new Color(175, 75, 255));
+				WavePoint -= PreWavePoint[Wave];
+				Wave++;
 			}
 		}
 		if (Main.dayTime)
@@ -75,54 +84,15 @@ public class LanternMoonProgress : ModSystem//灯笼月
 			Main.invasionProgressMode = 0;
 		}
 	}
-	public void NewWave()
-	{
-		Main.NewText("Wave " + (Wave + 2) + ":", new Color(175, 75, 255));
-		WavePoint -= PreWavePoint[Wave];
-		Wave++;
-	}
 	public int Wave = 0;
 	public int[] PreWavePoint = new int[40];
 	public int Point = 0;
 	public int WavePoint = 0;
 	public bool OnLanternMoon = false;
-	public NPC Wave15Boss;
-	public void UpdateWave15()
-	{
-		if(Wave15Boss == null || !Wave15Boss.active)
-		{
-			int x0 = (int)(Main.screenPosition.X - Main.offScreenRange - 150);
-			int x1 = (int)(Main.screenPosition.X + Main.screenWidth + Main.offScreenRange + 150);
-			int y0 = (int)(Main.screenPosition.Y + Main.screenHeight * 0.5f);
-			
-			Wave15Boss = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), Main.rand.NextBool(2) ? x0 : x1, y0, ModContent.NPCType<LanternGhostKing>());
-		}
-		else
-		{
-			if(Wave15Boss.active)
-			{
-				Point = 2500 - (int)(Wave15Boss.life / (float)Wave15Boss.lifeMax * 2500) + 7500;
-				WavePoint = 2500 - (int)(Wave15Boss.life / (float)Wave15Boss.lifeMax * 2500);
-			}
-		}
-	}
 	public void AddPoint(int value)
 	{
-		if(Wave == 14 || Wave == 24)
-		{
-			return;
-		}
-		int mulValue = 1;
-		if(Main.expertMode)
-		{
-			mulValue = 2;
-		}
-		if(Main.masterMode)
-		{
-			mulValue = 3;
-		}
-		WavePoint += value * mulValue;
-		Point += value * mulValue;
+		WavePoint += value;
+		Point += value;
 	}
 	public override void PostDrawInterface(SpriteBatch spriteBatch)
 	{
@@ -259,7 +229,7 @@ public class LanternMoonProgress : ModSystem//灯笼月
 
 	public void AddEnemies()
 	{
-		if (Wave < 14)
+		if (Wave <= 14)
 		{
 			if(NPC.CountNPCS(ModContent.NPCType<FloatLantern>()) < 15)
 			{ 
@@ -274,29 +244,33 @@ public class LanternMoonProgress : ModSystem//灯笼月
 			}
 			if (Wave >= 5)
 			{
-				if (NPC.CountNPCS(ModContent.NPCType<BombLantern>()) < 15)
+				if (Main.rand.NextBool(20))
 				{
-					if (Main.rand.NextBool(20))
-					{
-						int x0 = (int)(Main.screenPosition.X - Main.offScreenRange - 150);
-						int x1 = (int)(Main.screenPosition.X + Main.screenWidth + Main.offScreenRange + 150);
-						int y0 = (int)(Main.screenPosition.Y + Main.screenHeight * 0.5f);
-						NPC.NewNPC(NPC.GetSource_NaturalSpawn(), Main.rand.NextBool(2) ? x0 : x1, y0, ModContent.NPCType<BombLantern>());
-					}
+					int x0 = (int)(Main.screenPosition.X - Main.offScreenRange - 150);
+					int x1 = (int)(Main.screenPosition.X + Main.screenWidth + Main.offScreenRange + 150);
+					int y0 = (int)(Main.screenPosition.Y + Main.screenHeight * 0.5f);
+					NPC.NewNPC(NPC.GetSource_NaturalSpawn(), Main.rand.NextBool(2) ? x0 : x1, y0, ModContent.NPCType<BombLantern>());
 				}
 			}
 			if (Wave >= 8)
 			{
-				if (NPC.CountNPCS(ModContent.NPCType<CylindricalLantern>()) < 15)
+				if (Main.rand.NextBool(20))
 				{
-					if (Main.rand.NextBool(20))
-					{
-						int x0 = (int)(Main.screenPosition.X - Main.offScreenRange - 150);
-						int x1 = (int)(Main.screenPosition.X + Main.screenWidth + Main.offScreenRange + 150);
-						int y0 = (int)(Main.screenPosition.Y + Main.screenHeight * 0.5f);
-						NPC.NewNPC(NPC.GetSource_NaturalSpawn(), Main.rand.NextBool(2) ? x0 : x1, y0, ModContent.NPCType<CylindricalLantern>());
-					}
+					int x0 = (int)(Main.screenPosition.X - Main.offScreenRange - 150);
+					int x1 = (int)(Main.screenPosition.X + Main.screenWidth + Main.offScreenRange + 150);
+					int y0 = (int)(Main.screenPosition.Y + Main.screenHeight * 0.5f);
+					NPC.NewNPC(NPC.GetSource_NaturalSpawn(), Main.rand.NextBool(2) ? x0 : x1, y0, ModContent.NPCType<CylindricalLantern>());
 				}
+			}
+		}
+		if(Wave == 15)
+		{
+			if (NPC.CountNPCS(ModContent.NPCType<LanternGhostKing>()) < 1)
+			{
+				int x0 = (int)(Main.screenPosition.X - Main.offScreenRange - 150);
+				int x1 = (int)(Main.screenPosition.X + Main.screenWidth + Main.offScreenRange + 150);
+				int y0 = (int)(Main.screenPosition.Y + Main.screenHeight * 0.5f);
+				NPC.NewNPC(NPC.GetSource_NaturalSpawn(), Main.rand.NextBool(2) ? x0 : x1, y0, ModContent.NPCType<LanternGhostKing>());
 			}
 		}
 	}
