@@ -1,5 +1,4 @@
-using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
+using Everglow.Myth.Misc.VFXs;
 using Terraria.Audio;
 using Terraria.GameContent.Shaders;
 

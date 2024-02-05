@@ -83,7 +83,15 @@ public class GoldRound : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D t = ModAsset.GoldRound.Value;
-		Main.spriteBatch.Draw(t, Projectile.Center-Main.screenPosition, null, new Color(1f, 0.7f, 0.1f, 0), Projectile.rotation, t.Size() * 0.5f, Projectile.scale * 0.5f, SpriteEffects.None, 0f);
+		Color c0 = new Color(0.5f, 0.3f, 0.04f, 0);
+		Main.spriteBatch.Draw(t, Projectile.Center-Main.screenPosition, null, c0, Projectile.rotation, t.Size() * 0.5f, Projectile.scale * 0.5f, SpriteEffects.None, 0f);
+		if (Projectile.timeLeft > 1470)
+		{
+			for(int x = 0;x < Projectile.timeLeft - 1470;x+=3)
+			{
+				Main.spriteBatch.Draw(t, Projectile.Center - Main.screenPosition, null, c0, Projectile.rotation, t.Size() * 0.5f, Projectile.scale * 0.5f, SpriteEffects.None, 0f);
+			}
+		}
 		return false;
 	}
 }

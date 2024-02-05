@@ -83,7 +83,7 @@ public class StarAmmo : SlingshotAmmo
 	{
 		float Power = Projectile.ai[0] * 0.5f + 0.5f;
 		var Light = new Color(Power, Power / 2.1f, 0, 0);
-		Texture2D star = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/Textures/SlingshotHitStar");
+		Texture2D star = ModAsset.SlingshotHitStar.Value;
 		float kSize = 1f;
 		if (TimeTokill > 0)
 			kSize = TimeTokill / 30f;

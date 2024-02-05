@@ -121,7 +121,7 @@ public class TuskBiomeSky : CustomSky
 			if (lightning.pos.Z > 7000)
 				alpha = (lightning.pos.Z - 7000) / 10000f;
 			Vertex3D_2[] vertices = lightning.GetVertices(30, new Color(1, 1f - alpha, 1f - alpha, 0f));
-			Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheTusk/Backgrounds/RedPoint");
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.RedPoint.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices, 0, vertices.Length - 2);
 
 		}

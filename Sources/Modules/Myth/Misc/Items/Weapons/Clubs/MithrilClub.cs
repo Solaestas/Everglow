@@ -7,6 +7,7 @@ public class MithrilClub : ClubItem
 		Item.damage = 56;
 		Item.value = 2682;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.MithrilClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.MithrilClub_smash>();
 	}
 	public override void AddRecipes()
 	{

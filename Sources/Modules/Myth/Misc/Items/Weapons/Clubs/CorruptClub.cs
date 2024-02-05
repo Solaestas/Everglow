@@ -7,6 +7,7 @@ public class CorruptClub : ClubItem
 		Item.damage = 12;
 		Item.value = 169;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CorruptClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CorruptClub_smash>();
 	}
 	public override void AddRecipes()
 	{

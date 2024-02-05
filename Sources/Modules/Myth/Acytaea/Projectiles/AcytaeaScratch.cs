@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Myth.Acytaea.Buffs;
 using Everglow.Myth.Acytaea.VFXs;
 using Terraria.DataStructures;
@@ -130,7 +131,7 @@ public class AcytaeaScratch : ModProjectile
 	}
 	public virtual void DrawTrail()
 	{
-
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		DrawDark();
@@ -138,7 +139,7 @@ public class AcytaeaScratch : ModProjectile
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		DrawLight();
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 	}
 	private void DrawLight()
 	{

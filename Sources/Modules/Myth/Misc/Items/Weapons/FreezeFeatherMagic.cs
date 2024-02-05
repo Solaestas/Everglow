@@ -1,12 +1,14 @@
-using Everglow.Myth.MagicWeaponsReplace.GlobalItems;
 using Everglow.Myth.Misc.Projectiles.Weapon.Magic;
+using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FreezeFeatherMagic;
+using Everglow.SpellAndSkull.GlobalItems;
+using Everglow.SpellAndSkull.Items;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Myth.Misc.Items.Weapons;
 
-public class FreezeFeatherMagic : ModItem
+public class FreezeFeatherMagic : SpellTomeItem
 {
 	public override void SetStaticDefaults()
 	{
@@ -30,6 +32,9 @@ public class FreezeFeatherMagic : ModItem
 		Item.shootSpeed = 4;
 		Item.crit = 8;
 		Item.mana = 15;
+
+		DecorativeProjectileTypes.Add(ModContent.ProjectileType<FreezeFeatherMagicBook>());
+		DecorativeProjectileTypes.Add(ModContent.ProjectileType<FreezeFeatherMagicArray>());
 	}
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{

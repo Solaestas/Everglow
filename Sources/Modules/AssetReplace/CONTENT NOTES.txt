@@ -1,0 +1,1 @@
+UIReplace has been moved to Everglow.Function so EverglowConfig can load the configured assets

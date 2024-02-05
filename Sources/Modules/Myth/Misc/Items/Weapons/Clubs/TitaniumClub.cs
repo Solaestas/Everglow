@@ -7,6 +7,7 @@ public class TitaniumClub : ClubItem
 		Item.damage = 80;
 		Item.value = 3751;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.TitaniumClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.TitaniumClub_smash>();
 	}
 	public override void AddRecipes()
 	{

@@ -1,6 +1,8 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Myth.Acytaea.NPCs;
 using Everglow.Myth.Acytaea.VFXs;
 using Terraria.DataStructures;
+using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
 public class AcytaeaMagicArraySword : ModProjectile
@@ -148,6 +150,7 @@ public class AcytaeaMagicArraySword : ModProjectile
 	}
 	public override void PostDraw(Color lightColor)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float width = 36;
@@ -192,21 +195,21 @@ public class AcytaeaMagicArraySword : ModProjectile
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 		Vector2 endDrawPos = EndPos - Main.screenPosition;
-		Texture2D star = Commons.ModAsset.Star.Value;
+		Texture2D star = Commons.ModAsset.StarSlash.Value;
 		Texture2D dark = Commons.ModAsset.Point_black.Value;
-		Texture2D dark2 = Commons.ModAsset.Star_black.Value;
+		Texture2D dark2 = Commons.ModAsset.StarSlash_black.Value;
 		Main.spriteBatch.Draw(dark, endDrawPos, null, Color.White, 0, dark.Size() / 2f, width / 16f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(dark2, endDrawPos, null, Color.White, MathHelper.PiOver2, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(dark2, endDrawPos, null, Color.White, 0, star.Size() / 2f, new Vector2(3f, width / 16f), SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(dark2, endDrawPos, null, Color.White, MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(dark2, endDrawPos, null, Color.White, (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark2, endDrawPos, null, Color.White, MathHelper.PiOver2, star.Size() / 2f, width / 4.5f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark2, endDrawPos, null, Color.White, 0, star.Size() / 2f, new Vector2(3f, width / 4.5f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark2, endDrawPos, null, Color.White, MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(dark2, endDrawPos, null, Color.White, (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
 
-		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), MathHelper.PiOver2, star.Size() / 2f, width / 16f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), 0, star.Size() / 2f, new Vector2(3f, width / 16f), SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 36f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), MathHelper.PiOver2, star.Size() / 2f, width / 4.5f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), 0, star.Size() / 2f, new Vector2(3f, width / 4.5f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, endDrawPos, null, new Color(255, 0, 60, 0), (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 		float range = 80 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f) * 20;
 		List<Vertex2D> rings = new List<Vertex2D>();
 		for(int x = 0;x < 45;x++)

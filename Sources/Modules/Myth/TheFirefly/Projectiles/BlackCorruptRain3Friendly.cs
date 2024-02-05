@@ -40,7 +40,7 @@ public class BlackCorruptRain3Friendly : ModProjectile
 
 	public override void PostDraw(Color lightColor)
 	{
-		Texture2D t = ModAsset.FogTraceLight.Value;
+		Texture2D t = Commons.ModAsset.Trail_2.Value;
 		float width = 20;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft / 6f;
