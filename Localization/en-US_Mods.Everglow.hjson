@@ -2817,6 +2817,8 @@ NPCs: {
 	EvilPack.DisplayName: Evil Pack
 	SummonedButterfly.DisplayName: Summoned Butterfly
 	ExplosiveLantern_growing.DisplayName: Explosive Lantern_growing
+	BombLantern.DisplayName: Bomb Lantern
+	CylindricalLantern.DisplayName: Cylindrical Lantern
 	FloatLantern.DisplayName: Float Lantern
 	RedPackBomber.DisplayName: Red Pack Bomber
 	LanternGhostKing.DisplayName: Lantern Ghost King
@@ -3225,6 +3227,7 @@ Projectiles: {
 	Firework12Inches.DisplayName: Firework12 Inches
 	Firework6Inches.DisplayName: Firework6 Inches
 	FireworkSubExplosion.DisplayName: Firework Sub Explosion
+	FlameCylinder.DisplayName: Flame Cylinder
 	LBloodEffect.DisplayName: L Blood Effect
 	LBloodEffectGra.DisplayName: L Blood Effect Gra
 	RedLanternMeteor.DisplayName: Red Lantern Meteor

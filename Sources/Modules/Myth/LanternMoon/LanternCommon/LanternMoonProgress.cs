@@ -1,4 +1,5 @@
 using Everglow.Myth.LanternMoon.NPCs;
+using Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 using Terraria.GameContent;
 using Terraria.Localization;
 namespace Everglow.Myth.LanternMoon.LanternCommon;
@@ -239,6 +240,37 @@ public class LanternMoonProgress : ModSystem//灯笼月
 					int y0 = (int)(Main.screenPosition.Y + Main.screenHeight * 0.5f);
 					NPC.NewNPC(NPC.GetSource_NaturalSpawn(), Main.rand.NextBool(2) ? x0 : x1, y0, ModContent.NPCType<FloatLantern>());
 				}
+				
+			}
+			if (Wave >= 5)
+			{
+				if (Main.rand.NextBool(20))
+				{
+					int x0 = (int)(Main.screenPosition.X - Main.offScreenRange - 150);
+					int x1 = (int)(Main.screenPosition.X + Main.screenWidth + Main.offScreenRange + 150);
+					int y0 = (int)(Main.screenPosition.Y + Main.screenHeight * 0.5f);
+					NPC.NewNPC(NPC.GetSource_NaturalSpawn(), Main.rand.NextBool(2) ? x0 : x1, y0, ModContent.NPCType<BombLantern>());
+				}
+			}
+			if (Wave >= 8)
+			{
+				if (Main.rand.NextBool(20))
+				{
+					int x0 = (int)(Main.screenPosition.X - Main.offScreenRange - 150);
+					int x1 = (int)(Main.screenPosition.X + Main.screenWidth + Main.offScreenRange + 150);
+					int y0 = (int)(Main.screenPosition.Y + Main.screenHeight * 0.5f);
+					NPC.NewNPC(NPC.GetSource_NaturalSpawn(), Main.rand.NextBool(2) ? x0 : x1, y0, ModContent.NPCType<CylindricalLantern>());
+				}
+			}
+		}
+		if(Wave == 15)
+		{
+			if (NPC.CountNPCS(ModContent.NPCType<LanternGhostKing>()) < 1)
+			{
+				int x0 = (int)(Main.screenPosition.X - Main.offScreenRange - 150);
+				int x1 = (int)(Main.screenPosition.X + Main.screenWidth + Main.offScreenRange + 150);
+				int y0 = (int)(Main.screenPosition.Y + Main.screenHeight * 0.5f);
+				NPC.NewNPC(NPC.GetSource_NaturalSpawn(), Main.rand.NextBool(2) ? x0 : x1, y0, ModContent.NPCType<LanternGhostKing>());
 			}
 		}
 	}

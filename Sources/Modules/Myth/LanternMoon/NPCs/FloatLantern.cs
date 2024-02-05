@@ -14,12 +14,12 @@ public class FloatLantern : ModNPC
 	}
 	public override void SetDefaults()
 	{
-		NPC.damage = 100;
-		NPC.lifeMax = 500;
-		NPC.npcSlots = 14f;
-		NPC.width = 62;
-		NPC.height = 74;
-		NPC.defense = 0;
+		NPC.damage = 36;
+		NPC.lifeMax = 104;
+		NPC.npcSlots = 0.1f;
+		NPC.width = 50;
+		NPC.height = 36;
+		NPC.defense = 6;
 		NPC.value = 0;
 		NPC.aiStyle = -1;
 		NPC.knockBackResist = 0.6f;
@@ -130,6 +130,10 @@ public class FloatLantern : ModNPC
 			}
 		}
 	}
+	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+	{
+		return false;
+	}
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
@@ -138,11 +142,11 @@ public class FloatLantern : ModNPC
 		SpriteEffects effects = SpriteEffects.None;
 		if (NPC.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;
-		var value = new Vector2(NPC.Center.X, NPC.Center.Y);
-		var vector = new Vector2(texture.Width / 2, texture.Height / Main.npcFrameCount[NPC.type] / 2);
-		Vector2 vector2 = value - Main.screenPosition;
-		vector2 -= new Vector2(tg.Width, tg.Height / Main.npcFrameCount[NPC.type]) * 1f / 2f;
-		vector2 += vector * 1f + new Vector2(0f, 4f + NPC.gfxOffY);
+
+		var vector = new Vector2(texture.Width / 2f, texture.Height / 2f / Main.npcFrameCount[NPC.type]);
+		Vector2 vector2 = NPC.Center - Main.screenPosition + new Vector2(0, 12);
+		spriteBatch.Draw(texture, vector2, new Rectangle(0, NPC.frame.Y, 62, 74), drawColor, NPC.rotation, vector, 1f, effects, 0f);
+
 		spriteBatch.Draw(tg, vector2, new Rectangle(0, NPC.frame.Y, 62, 74), new Color(200, 200, 200, 0), NPC.rotation, vector, 1f, effects, 0f);
 
 		spriteBatch.Draw(tg2, vector2, new Rectangle(0, NPC.frame.Y, 62, 74), new Color(200, 200, 200, 0), NPC.rotation, vector, 1f, effects, 0f);

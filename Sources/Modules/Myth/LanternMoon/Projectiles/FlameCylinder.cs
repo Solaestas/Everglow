@@ -1,51 +1,29 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Commons.Weapons;
 
-namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+namespace Everglow.Myth.LanternMoon.Projectiles;
 
-public class GoldLanternLine : TrailingProjectile
+public class FlameCylinder : TrailingProjectile
 {
 	public override void SetDef()
 	{
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
+		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 400;
 		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 		TrailColor = new Color(1, 0.65f, 0, 0f);
-		TrailWidth = 2f;
+		TrailWidth = 120f;
 		SelfLuminous = true;
-		TrailTexture = Commons.ModAsset.Trail.Value;
-		TrailTextureBlack = Commons.ModAsset.Trail_black.Value;
+		TrailTexture = Commons.ModAsset.Trail_0.Value;
+		TrailTextureBlack = Commons.ModAsset.Trail_2_black.Value;
 		TrailShader = Commons.ModAsset.Trailing.Value;
 		Projectile.timeLeft = 300;
 		Projectile.hostile = true;
 		Projectile.friendly = false;
+		Projectile.extraUpdates = 3;
 	}
 	public override void AI()
 	{
 		Player player = Main.player[Player.FindClosest(Projectile.Center, 0, 0)];
-		if(Projectile.timeLeft > 200)
-		{
-			Projectile.velocity *= 0.97f;
-		}
-		if (Projectile.timeLeft == 200)
-		{
-			TrailWidth = 10f;
-			Projectile.velocity = Vector2.Normalize(player.Center - Projectile.Center) * 15;
-			for (int x = 0; x < 15; x++)
-			{
-				var spark = new RayDustDust
-				{
-					velocity = new Vector2(0, Main.rand.NextFloat(2, 3f)).RotateRandom(MathHelper.TwoPi),
-					Active = true,
-					Visible = true,
-					position = Projectile.Center,
-					maxTime = Main.rand.Next(67, 75),
-					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(9f, 12.0f)),
-					rotation = Main.rand.NextFloat(6.283f),
-					ai = new float[] { 0 }
-				};
-				Ins.VFXManager.Add(spark);
-			}
-		}
+		Projectile.velocity *= 0.984f;
 		Lighting.AddLight(Projectile.Center, new Vector3(1f, 1f, 0) * TrailWidth / 7f);
 		base.AI();
 	}
@@ -55,23 +33,6 @@ public class GoldLanternLine : TrailingProjectile
 	}
 	public override void DrawSelf()
 	{
-		Texture2D star = Commons.ModAsset.StarSlash.Value;
-		float width = 0.5f;
-		if (Projectile.timeLeft < 200)
-		{
-			width = 2f;
-		}
-		if (Projectile.timeLeft < 150)
-		{
-			width *= Projectile.timeLeft / 150f;
-		}
-		width *= 1 + (MathF.Sin((float)Main.time * 0.23f + Projectile.whoAmI) + 0.5f) * 0.7f;
-		float timeValue = MathF.Sin((float)Main.time * 0.07f + Projectile.whoAmI) * 0.5f + 0.5f;
-		Color c0 = new Color(1f, 0.75f * timeValue, 0, 0) * timeValue;
-		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, c0, MathHelper.PiOver2, star.Size() / 2f, width / 4.5f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, c0, 0, star.Size() / 2f, new Vector2(3f, width / 4.5f), SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, c0, MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, c0, (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
 	}
 	public override void DrawTrail()
 	{
@@ -104,18 +65,19 @@ public class GoldLanternLine : TrailingProjectile
 			}
 			float factor = i / (float)SmoothTrail.Count * mulFac;
 			float width = TrailWidthFunction(factor);
-			float timeValue = (float)Main.time * 0.0005f;
+			float timeValue = -(float)Main.timeForVisualEffects * 0.005f;
 			factor += timeValue;
 
 			Vector2 drawPos = SmoothTrail[i] + halfSize;
-			Color drawC = TrailColor;
-			drawC *= (1 - i / (float)SmoothTrail.Count);
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			float value0 = (1 - i / (float)SmoothTrail.Count);
+			Color drawC = new Color(value0, value0 * value0 * 0.7f, value0 * value0 * value0 * 0.2f, 0);
+			
+			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + 0.4f + timeValue, 1, width)));
+			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + 0.4f + timeValue, 0.5f, width)));
 			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
 			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
-			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + 0.2f + timeValue, 1, width)));
+			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + 0.2f + timeValue, 0.5f, width)));
 		}
 
 		Main.spriteBatch.End();
