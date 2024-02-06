@@ -24,7 +24,6 @@ public class StarDancer_starProj : ModProjectile
 		Projectile.velocity *= 0;
 		if (Projectile.timeLeft == 10)
 		{
-			Projectile.friendly = true;
 			for (int i = 0; i < 3f; i++)
 			{
 				Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustID.YellowStarDust, 0, 0, 0, default, 1f);
