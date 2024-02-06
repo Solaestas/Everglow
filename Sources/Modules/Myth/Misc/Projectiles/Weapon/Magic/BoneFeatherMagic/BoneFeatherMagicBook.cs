@@ -12,14 +12,15 @@ internal class BoneFeatherMagicBook : MagicBookProjectile
 		MulStartPosByVelocity = 2f;
 		UseGlow = true;
 
-		FrontTexture = ModAsset.BoneFeatherMagic_book.Value;
+		FrontTexture = ModAsset.BoneFeatherMagic.Value;
 		PaperTexture = ModAsset.FireFeatherMagic_paper.Value;
 		GlowTexture = ModAsset.BoneFeatherMagic.Value;
+		GlowColor = Color.Transparent;
 		effectColor = new Color(50, 50, 31, 40);
-		//TexCoordTop = new Vector2(25, 0);
-		//TexCoordLeft = new Vector2(1, 24);
-		//TexCoordDown = new Vector2(32, 32);
-		//TexCoordRight = new Vector2(57, 10);
+		TexCoordTop = new Vector2(10, 0);
+		TexCoordLeft = new Vector2(-1, 29);
+		TexCoordDown = new Vector2(28, 39);
+		TexCoordRight = new Vector2(43, 9);
 	}
 	public override void AI()
 	{

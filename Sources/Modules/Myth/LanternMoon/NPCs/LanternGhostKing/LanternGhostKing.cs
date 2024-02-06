@@ -1,19 +1,18 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Myth.Common;
 using Everglow.Myth.LanternMoon.Gores;
+using Everglow.Myth.LanternMoon.LanternCommon;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.Map;
 
 namespace Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 
 [AutoloadBossHead]
 public class LanternGhostKing : ModNPC
 {
+	public LanternMoonProgress LanternMoonProgress = ModContent.GetInstance<LanternMoonProgress>();
 	internal bool NearDie = false;
 	internal Vector2 RingCenterTrend;
 	internal Vector2 RingCenter;
@@ -68,6 +67,7 @@ public class LanternGhostKing : ModNPC
 		NPC.knockBackResist = 0f;
 		NPC.noGravity = true;
 		NPC.noTileCollide = true;
+		NPC.dontTakeDamage = true;
 		NPC.HitSound = SoundID.NPCHit3;
 		Music = MythContent.QuickMusic("DashCore");
 	}
@@ -133,7 +133,6 @@ public class LanternGhostKing : ModNPC
 	}
 	public override void AI()
 	{
-		CheckPlayerTouchRing();
 		NPC.localAI[0] += 1;
 		UpdateDrawParameter();
 		NPC.TargetClosest(false);
@@ -158,7 +157,7 @@ public class LanternGhostKing : ModNPC
 			}
 		}
 
-		if (NPC.localAI[0] <= 0)
+		if (NPC.localAI[0] <= 1)
 		{
 			NPC.rotation = NPC.velocity.X / 120f;
 			Vector2 v = player.Center + new Vector2((float)Math.Sin(NPC.localAI[0] / 40f) * 500f, (float)Math.Sin((NPC.localAI[0] + 200) / 40f) * 50f - 350) - NPC.Center;
@@ -167,6 +166,19 @@ public class LanternGhostKing : ModNPC
 			NPC.velocity *= 0.96f;
 			RingCenterTrend = NPC.Center;
 			RingRadiusTrend = 1800;
+			if (Phase == 1 && NPC.life == NPC.lifeMax)
+			{
+				if (NPC.CountNPCS(ModContent.NPCType<FloatLantern>()) + NPC.CountNPCS(ModContent.NPCType<BombLantern>()) + NPC.CountNPCS(ModContent.NPCType<CylindricalLantern>()) >= 1)
+				{
+					NPC.localAI[0] = 0;
+					NPC.dontTakeDamage = true;
+				}
+			}
+		}
+		else
+		{
+			NPC.dontTakeDamage = false;
+			CheckPlayerTouchRing();
 		}
 		if (Phase == 1)
 		{
@@ -200,7 +212,7 @@ public class LanternGhostKing : ModNPC
 						Vector2 v0 = new Vector2(0, 24 * MathF.Abs(NPC.ai[1]) + 12).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f));
 						Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0 * 6, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, player.whoAmI, 0, 0);
 						float myDamage = 40;
-						if(Main.expertMode)
+						if (Main.expertMode)
 						{
 							myDamage = 55;
 						}
@@ -312,7 +324,7 @@ public class LanternGhostKing : ModNPC
 					if (NPC.velocity.Length() > 20f)
 						NPC.velocity *= 0.96f;
 				}
-				if(NPC.localAI[0] >= 999)
+				if (NPC.localAI[0] >= 999)
 				{
 					NPC.localAI[0] = 1500;
 				}
@@ -669,7 +681,7 @@ public class LanternGhostKing : ModNPC
 					innerVector0 = NPC.Center + new Vector2(-NPC.ai[3] * 600, -200);
 					innerVector1 = new Vector2(NPC.ai[3] * 600, 200);
 				}
-				if(NPC.localAI[0] > 1680 && NPC.localAI[0] <= 1710)
+				if (NPC.localAI[0] > 1680 && NPC.localAI[0] <= 1710)
 				{
 					float rotValue = (1710 - NPC.localAI[0]) / 30f;
 					rotValue = MathF.Pow(rotValue, 3);
@@ -761,7 +773,7 @@ public class LanternGhostKing : ModNPC
 			//灯火炸环2
 			if (NPC.localAI[0] >= 2400 && NPC.localAI[0] < 3100)
 			{
-				if(NPC.localAI[0] < 3000)
+				if (NPC.localAI[0] < 3000)
 				{
 					if (NPC.localAI[0] % 250 == 0)
 						Lantern3RingCenter = new Vector2(0, -300).RotatedBy(Main.rand.NextFloat(-1.3f, 1.3f));
@@ -870,9 +882,9 @@ public class LanternGhostKing : ModNPC
 			//落灯柱,临时向量0借为位移目标
 			if (NPC.localAI[0] >= 3100 && NPC.localAI[0] < 3600)
 			{
-				if(NPC.localAI[0] == 3103)
+				if (NPC.localAI[0] == 3103)
 				{
-					for(int i = 0;i < 8;i++)
+					for (int i = 0; i < 8; i++)
 					{
 						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(Main.rand.NextFloat(-1500, 1500), -600), Vector2.Zero, ModContent.ProjectileType<LanternFlowLine>(), 40, 0f, player.whoAmI, 0, 0);
 					}
@@ -915,11 +927,11 @@ public class LanternGhostKing : ModNPC
 					NPC.velocity *= 0;
 					NPC.alpha = 0;
 					int count = 9;
-					if(Main.expertMode)
+					if (Main.expertMode)
 					{
 						count = 15;
 					}
-					for(int i = 0;i < count; i++)
+					for (int i = 0; i < count; i++)
 					{
 						Vector2 v0 = new Vector2(0, count).RotatedBy(i / (float)count * MathHelper.TwoPi);
 						Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, player.whoAmI, 0, 0);
@@ -934,7 +946,7 @@ public class LanternGhostKing : ModNPC
 						}
 						p0.damage = (int)myDamage / 2;
 					}
-					if(Main.masterMode)
+					if (Main.masterMode)
 					{
 						for (int i = 0; i < 15; i++)
 						{
@@ -965,8 +977,8 @@ public class LanternGhostKing : ModNPC
 		}
 		if (Main.dayTime)
 		{
-			NPC.velocity.Y += 1;	
-			if((NPC.Center - player.Center).Length() > 2500)
+			NPC.velocity.Y += 1;
+			if ((NPC.Center - player.Center).Length() > 2500)
 			{
 				NPC.active = false;
 			}
@@ -980,11 +992,13 @@ public class LanternGhostKing : ModNPC
 	/// </summary>
 	private Vector2 innerVector0 = Vector2.zeroVector;
 	private Vector2 innerVector1 = Vector2.zeroVector;
-	private Vector2 innerVector2 = Vector2.zeroVector;
 	public override void HitEffect(NPC.HitInfo hit)
 	{
 		if (NPC.life <= 0)
 		{
+			LanternMoonProgress.NewWave();
+			LanternMoonProgress.Point = 10000;
+			LanternMoonProgress.WavePoint = 0;
 			for (int f = 0; f < 13; f++)
 			{
 				var gore2 = new FloatLanternGore3
@@ -1267,7 +1281,7 @@ public class LanternGhostKing : ModNPC
 			new Vertex2D(v2 - Main.screenPosition, c2, new Vector3(0, 1, 0)),
 			new Vertex2D(v3 - Main.screenPosition, c3, new Vector3(1, 1, 0))
 		};
-		if(flipH)
+		if (flipH)
 		{
 			bars = new List<Vertex2D>()
 		{

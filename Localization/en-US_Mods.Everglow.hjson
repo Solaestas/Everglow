@@ -3146,6 +3146,8 @@ Projectiles: {
 	MithrilClub_smash.DisplayName: Mithril Club_smash
 	OrichalcumClub.DisplayName: Orichalcum Club
 	OrichalcumClub_smash.DisplayName: Orichalcum Club_smash
+	OrichalcumPedal.DisplayName: Orichalcum Pedal
+	OrichalcumPedal_slash.DisplayName: Orichalcum Pedal_slash
 	PalladiumClub.DisplayName: Palladium Club
 	PalladiumClub_smash.DisplayName: Palladium Club_smash
 	PalmWoodClub.DisplayName: Palm Wood Club
@@ -3165,6 +3167,8 @@ Projectiles: {
 	SpikeClub_smash.DisplayName: Spike Club_smash
 	StarDancer.DisplayName: Star Dancer
 	StarDancer_smash.DisplayName: Star Dancer_smash
+	StarDancer_starProj.DisplayName: Star Dancer_star Proj
+	StarDancer_starProj2.DisplayName: Star Dancer_star Proj2
 	TinClub_smash.DisplayName: Tin Club_smash
 	TinClub.DisplayName: Tin Club
 	TitaniumClub.DisplayName: Titanium Club
