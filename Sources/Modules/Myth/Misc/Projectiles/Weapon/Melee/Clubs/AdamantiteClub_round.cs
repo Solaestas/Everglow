@@ -1,0 +1,477 @@
+using Everglow.Commons.DataStructures;
+using Everglow.Commons.VFX.CommonVFXDusts;
+using SteelSeries.GameSense;
+using Terraria.GameContent.Shaders;
+
+namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
+
+public class AdamantiteClub_round : ModProjectile, IWarpProjectile
+{
+	public override string Texture => "Everglow/" + ModAsset.Melee_AdamantiteClubPath;
+	/// <summary>
+	/// 角速度
+	/// </summary>
+	internal float Omega = 0;
+	/// <summary>
+	/// 角加速度
+	/// </summary>
+	internal float Beta = 0.005f;
+	/// <summary>
+	/// 最大角速度(受近战攻速影响)
+	/// </summary>
+	internal float MaxOmega = 0.5f;
+	/// <summary>
+	/// 伤害半径
+	/// </summary>
+	internal float HitLength = 32f;
+	/// <summary>
+	/// 命中敌人后对于角速度的削减率(会根据敌人的击退抗性而再次降低)
+	/// </summary>
+	internal float StrikeOmegaDecrease = 0.9f;
+	/// <summary>
+	/// 命中敌人后最低剩余角速度(默认40%,即0.4)
+	/// </summary>
+	internal float MinStrikeOmegaDecrease = 0.4f;
+	/// <summary>
+	/// 内部参数，用来计算伤害
+	/// </summary>
+	internal int DamageStartValue = 0;
+	/// <summary>
+	/// 拖尾长度
+	/// </summary>
+	internal int trailLength = 10;
+	/// <summary>
+	/// 是否正在攻击
+	/// </summary>
+	internal bool isAttacking = false;
+	/// <summary>
+	/// 拖尾
+	/// </summary>
+	internal Queue<Vector2> trailVecs;
+	public override void SetDefaults()
+	{
+		Projectile.width = 100;
+		Projectile.height = 100;
+		Projectile.penetrate = -1;
+
+		Projectile.timeLeft = 580;
+
+		Projectile.friendly = false;
+		Projectile.hostile = false;
+		Projectile.localNPCHitCooldown = 60;
+		Projectile.usesLocalNPCImmunity = true;
+		Projectile.tileCollide = false;
+		Projectile.extraUpdates = 1;
+
+		Projectile.DamageType = DamageClass.Melee;
+		trailVecs = new Queue<Vector2>(trailLength + 1);
+	}
+
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		hit.HitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
+	}
+	public BlendState TrailBlendState()
+	{
+		return BlendState.AlphaBlend;
+	}
+	public string TrailShapeTex()
+	{
+		return "Everglow/MEAC/Images/Melee";
+	}
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f, 3), MinStrikeOmegaDecrease);
+		Omega *= power;
+		modifiers.FinalDamage /= power;
+		modifiers.Knockback *= Omega * 3;
+	}
+	public override void AI()
+	{
+		if (DamageStartValue == 0)
+		{
+			DamageStartValue = Projectile.damage;
+			Projectile.damage = 0;
+			int count = 0;
+			while(GetHitTimes(Projectile.Center) == 0)
+			{
+				count++;
+				Projectile.Center += new Vector2(0, 10);
+				if(count > 30)
+				{
+					break;
+				}
+			}
+		}
+		//造成伤害等于原伤害*转速*3.334
+		Projectile.damage = Math.Max((int)(DamageStartValue * Omega * 3.334), 1);
+
+		Player player = Main.player[Projectile.owner];
+
+		Projectile.rotation += Omega;
+		float MeleeSpeed = player.GetAttackSpeed(Projectile.DamageType);
+		if (Projectile.timeLeft > 570)
+		{
+			Projectile.velocity *= 0.2f;
+			if (Omega < MeleeSpeed * MaxOmega)
+				Omega += Beta * MeleeSpeed * 12f;
+		}
+		else
+		{
+			if (Projectile.timeLeft == 570)
+			{
+				Projectile.friendly = true;
+				Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 20f;
+			}
+			UpdateMovement();
+			if (Projectile.timeLeft < 500)
+				Omega *= 0.98f;
+			else
+			{
+				if (Omega < MeleeSpeed * MaxOmega + 0.2f)
+					Omega += Beta * MeleeSpeed * 0.04f;
+			}
+		}
+		if (Projectile.timeLeft < 450)
+			Projectile.friendly = false;
+		Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * Projectile.scale;
+		trailVecs.Enqueue(HitRange);
+		if (trailVecs.Count > trailLength)
+			trailVecs.Dequeue();
+
+		if (player.dead)
+			Projectile.Kill();
+
+		ProduceWaterRipples(new Vector2(HitLength * Projectile.scale));
+
+		if(Projectile.timeLeft is > 450 and < 570)
+		{
+			Vector2 v2 = new Vector2(0, Main.rand.NextFloat(46f, 92f)).RotatedByRandom(Math.PI * 2) * 0.25f;
+			Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, v2, ModContent.ProjectileType<AdamantiteClub_round_slash>(), Projectile.damage / 2, 0, player.whoAmI, Main.rand.NextFloat(-0.05f, 0.05f));
+			p0.timeLeft = Main.rand.Next(118, 126);
+			AdamantiteClub_round_slash aCRS = p0.ModProjectile as AdamantiteClub_round_slash;
+			if (aCRS != null)
+			{
+				aCRS.StickProjectile = Projectile;
+			}
+			GenerateSpark((int)Projectile.velocity.Length() * 2);
+		}
+	}
+	public int MoveTimer = 0;
+	public Vector2 NormalToTiles;
+	public void UpdateMovement()
+	{
+
+		Player player = Main.player[Projectile.owner];
+		int totalHit = 0;
+		if (MoveTimer == 0)
+		{
+
+		}
+		NormalToTiles = Vector2.zeroVector;
+		for (int i = 0; i < 32; i++)
+		{
+			Vector2 checkPoint = new Vector2(50, 0).RotatedBy(i / 32f * MathHelper.TwoPi);
+			if (TileCollisionUtils.PlatformCollision(checkPoint + Projectile.Center))
+			{
+				totalHit++;
+				NormalToTiles -= checkPoint;
+			}
+			else
+			{
+				NormalToTiles += checkPoint;
+			}
+		}
+		for (int i = 0; i < 24; i++)
+		{
+			Vector2 checkPoint = new Vector2(36, 0).RotatedBy(i / 24f * MathHelper.TwoPi);
+			if (TileCollisionUtils.PlatformCollision(checkPoint + Projectile.Center))
+			{
+				totalHit += 3;
+				NormalToTiles -= checkPoint * 2;
+			}
+			else
+			{
+				NormalToTiles += checkPoint * 2;
+			}
+		}
+		float velocityLength = 20;
+		if (Projectile.timeLeft < 550)
+		{
+			velocityLength = Math.Max(0, (Projectile.timeLeft - 450) / 5f);
+		}
+		if (NormalToTiles.Length() > 0.1f)
+		{
+			NormalToTiles = Vector2.Normalize(NormalToTiles);
+			float angle0 = Vector2.Dot(NormalToTiles.RotatedBy(MathHelper.PiOver2), Projectile.velocity) / Projectile.velocity.Length();
+			float angle1 = Vector2.Dot(NormalToTiles.RotatedBy(-MathHelper.PiOver2), Projectile.velocity) / Projectile.velocity.Length();
+			if (angle0 > angle1)
+			{
+				Projectile.velocity = NormalToTiles.RotatedBy(MathHelper.PiOver2) * velocityLength;
+			}
+			else
+			{
+				Projectile.velocity = NormalToTiles.RotatedBy(-MathHelper.PiOver2) * velocityLength;
+			}
+		}
+		else
+		{
+			Projectile.velocity += new Vector2(0, 1);
+		}
+		int maxTo20Hit = 20;
+		float adjustValue = 0;
+		for(int i = -8;i <=8;i++)
+		{
+			float value = i / 10f;
+			Vector2 checkVel = Projectile.velocity.RotatedBy(value);
+			int newHitTimes = Math.Abs(GetHitTimes(Projectile.Center + checkVel) - 20);
+			if (newHitTimes < maxTo20Hit)
+			{
+				maxTo20Hit = newHitTimes;
+				adjustValue = value;
+			}
+		}
+		Projectile.velocity = Projectile.velocity.RotatedBy(adjustValue);
+	}
+	public int GetHitTimes(Vector2 checkPoint)
+	{
+		int totalHit = 0;
+		for (int i = 0; i < 32; i++)
+		{
+			if (TileCollisionUtils.PlatformCollision(checkPoint + new Vector2(50, 0).RotatedBy(i / 32f * MathHelper.TwoPi)))
+			{
+				totalHit++;
+			}
+		}
+		for (int i = 0; i < 24; i++)
+		{
+			if (TileCollisionUtils.PlatformCollision(checkPoint + new Vector2(36, 0).RotatedBy(i / 24f * MathHelper.TwoPi)))
+			{
+				totalHit += 3;
+			}
+		}
+		return totalHit;
+	}
+	public void GenerateSpark(int Frequency)
+	{
+		float mulVelocity = Omega * 10;
+		for (int g = 0; g < Frequency; g++)
+		{
+			Vector2 newVelocity = NormalToTiles.RotatedBy(MathHelper.PiOver2 * (Main.rand.NextBool(2) ? 1 : -1)) * 2.6f * mulVelocity * Main.rand.NextFloat(0.1f, 2.0f);
+			var spark = new FireSpark_MetalStabDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center - NormalToTiles * 26f,
+				maxTime = Main.rand.Next(27, 35),
+				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4.1f, 27.0f)),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) }
+			};
+			Ins.VFXManager.Add(spark);
+		}
+	}
+	public override bool PreDraw(ref Color lightColor)
+	{
+		SpriteEffects effects = SpriteEffects.None;
+		if (Projectile.spriteDirection == 1)
+			effects = SpriteEffects.FlipHorizontally;
+		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+		float colorValue = Omega / 0.4f;
+		var color = new Color(colorValue, colorValue, colorValue, colorValue);
+		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
+		for (int i = 0; i < 5; i++)
+		{
+			float alp = Omega / 0.1f;
+			var color2 = new Color((float)((5 - i) / 5f * alp), (float)((5 - i) / 5f * alp), (float)((5 - i) / 5f * alp), 0);
+			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.75f * Omega, texture.Size() / 2f, Projectile.scale, effects, 0f);
+		}
+		DrawTrail();
+		PostPreDraw();
+		return false;
+	}
+	public void PostPreDraw()
+	{
+
+	}
+	public void DrawTrail()
+	{
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		var SmoothTrail = new List<Vector2>();
+		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
+		{
+			SmoothTrail.Add(SmoothTrailX[x]);
+		}
+		if (trailVecs.Count != 0)
+			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+
+		int length = SmoothTrail.Count;
+		if (length <= 3)
+			return;
+		Vector2[] trail = SmoothTrail.ToArray();
+		var bars = new List<Vertex2D>();
+
+		for (int i = 0; i < length; i++)
+		{
+			float factor = i / (length - 1f);
+			float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
+			float w2 = MathF.Sqrt(TrailAlpha(factor));
+			w *= w2 * w;
+			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.1f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
+			bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w * 1f)));
+		}
+		bars.Add(new Vertex2D(Projectile.Center, Color.Transparent, new Vector3(0, 0, 0)));
+		bars.Add(new Vertex2D(Projectile.Center, Color.Transparent, new Vector3(0, 0, 0)));
+		for (int i = 0; i < length; i++)
+		{
+			float factor = i / (length - 1f);
+			float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
+			float w2 = MathF.Sqrt(TrailAlpha(factor));
+			w *= w2 * w;
+			bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.1f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
+			bars.Add(new Vertex2D(Projectile.Center - trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w * 1f)));
+		}
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+
+		Effect MeleeTrail = Commons.ModAsset.MetalClubTrail.Value;
+		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
+		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+
+		MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
+
+		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
+		lightColor.W = 4f * Omega;
+		MeleeTrail.Parameters["Light"].SetValue(lightColor);
+		MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
+
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
+	}
+	public void DrawWarp(VFXBatch spriteBatch)
+	{
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		var SmoothTrail = new List<Vector2>();
+		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
+		{
+			SmoothTrail.Add(SmoothTrailX[x]);
+		}
+		if (trailVecs.Count != 0)
+			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+		int length = SmoothTrail.Count;
+		if (length <= 3)
+			return;
+		Vector2[] trail = SmoothTrail.ToArray();
+		var bars = new List<Vertex2D>();
+		for (int i = 0; i < length; i++)
+		{
+			float factor = i / (length - 1f);
+
+			float d = trail[i].ToRotation() + 3.14f + 1.57f;
+			if (d > 6.28f)
+				d -= 6.28f;
+			float dir = d / MathHelper.TwoPi;
+
+
+			float dir1 = dir;
+			if (i > 0)
+			{
+				float d1 = trail[i - 1].ToRotation() + 3.14f + 1.57f;
+				if (d1 > 6.28f)
+					d1 -= 6.28f;
+				dir1 = d1 / MathHelper.TwoPi;
+			}
+			if (dir - dir1 > 0.5)
+			{
+				var MidValue = (1 - dir) / (1 - dir + dir1);
+				var MidPoint = MidValue * trail[i] + (1 - MidValue) * trail[i - 1];
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(0, Omega, 0, 1), new Vector3(factor, 0, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(1, Omega, 0, 1), new Vector3(factor, 0, 1)));
+			}
+			if (dir1 - dir > 0.5)
+			{
+				var MidValue = (1 - dir1) / (1 - dir1 + dir);
+				var MidPoint = MidValue * trail[i - 1] + (1 - MidValue) * trail[i];
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(1, Omega, 0, 1), new Vector3(factor, 0, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(0, Omega, 0, 1), new Vector3(factor, 0, 1)));
+			}
+
+			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, Omega, 0, 1), new Vector3(factor, 1, 1)));
+			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, Omega, 0, 1), new Vector3(factor, 0, 1)));
+		}
+		bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, Color.Transparent, new Vector3(0, 0, 0)));
+		bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, Color.Transparent, new Vector3(0, 0, 0)));
+		for (int i = 0; i < length; i++)
+		{
+			float factor = i / (length - 1f);
+
+			float d = trail[i].ToRotation() + 3.14f + 1.57f;
+			if (d > 6.28f)
+				d -= 6.28f;
+			float dir = d / MathHelper.TwoPi;
+
+			float dir1 = dir;
+			if (i > 0)
+			{
+				float d1 = trail[i - 1].ToRotation() + 3.14f + 1.57f;
+				if (d1 > 6.28f)
+					d1 -= 6.28f;
+				dir1 = d1 / MathHelper.TwoPi;
+			}
+
+			if (dir - dir1 > 0.5)
+			{
+				var MidValue = (1 - dir) / (1 - dir + dir1);
+				var MidPoint = MidValue * trail[i] + (1 - MidValue) * trail[i - 1];
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(0, Omega, 0, 1), new Vector3(factor, 0, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(1, Omega, 0, 1), new Vector3(factor, 0, 1)));
+			}
+			if (dir1 - dir > 0.5)
+			{
+				var MidValue = (1 - dir1) / (1 - dir1 + dir);
+				var MidPoint = MidValue * trail[i - 1] + (1 - MidValue) * trail[i];
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(1, Omega, 0, 1), new Vector3(factor, 0, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(0, Omega, 0, 1), new Vector3(factor, 0, 1)));
+			}
+
+			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, Omega, 0, 1), new Vector3(factor, 1, 1)));
+			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - trail[i] * Projectile.scale * 1.1f, new Color(dir, Omega, 0, 1), new Vector3(factor, 0, 1)));
+		}
+
+		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
+	}
+	public float TrailAlpha(float factor)
+	{
+		float w;
+		w = MathHelper.Lerp(0f, 1, factor);
+		return w;
+	}
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+	{
+		return base.Colliding(projHitbox, targetHitbox);
+	}
+	private void ProduceWaterRipples(Vector2 beamDims)
+	{
+		var shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
+		float waveSine = 1f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
+		Vector2 HitRange = new Vector2(HitLength, -HitLength).RotatedBy(Projectile.rotation) * Projectile.scale;
+		Vector2 ripplePos = Projectile.Center + HitRange;
+		Vector2 ripplePosII = Projectile.Center - HitRange;
+		Color waveData = new Color(0.5f, 0.1f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
+		shaderData.QueueRipple(ripplePos, waveData, beamDims, RippleShape.Square, Projectile.rotation + MathHelper.Pi / 2f);
+		shaderData.QueueRipple(ripplePosII, waveData, beamDims, RippleShape.Square, Projectile.rotation + MathHelper.Pi / 2f);
+	}
+}

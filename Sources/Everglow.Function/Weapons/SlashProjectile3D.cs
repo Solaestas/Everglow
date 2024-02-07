@@ -1,11 +1,14 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Utilities;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
+namespace Everglow.Commons.Weapons;
 
-public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
+public class SlashProjectile3D : ModProjectile, IWarpProjectile_warpStyle2
 {
 	public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
 	public override void SetDefaults()
@@ -19,9 +22,6 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		Projectile.penetrate = -1;
 		Projectile.timeLeft = 120;
 		Projectile.extraUpdates = 3;
-
-		Projectile.localNPCHitCooldown = 60;
-		Projectile.usesLocalNPCImmunity = true;
 	}
 	public List<Vector3> OldPosSpace = new List<Vector3>();
 	public Vector3 SpacePos;
@@ -60,13 +60,7 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		{
 			SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/Slash").WithVolumeScale(0.33f), Projectile.Center);
 		}
-		if (Main.rand.NextBool(2) && Omega > 0.4f)
-		{
-			Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(SpacePos.X, SpacePos.Y), new Vector2(delta0.X, delta0.Y) * 1.5f, ModContent.ProjectileType<OrichalcumPedal>(), Projectile.damage / 8, 0, Projectile.owner, Main.rand.NextFloat(-0.4f, 0.4f), Main.rand.Next(3));
-			p0.scale = Main.rand.NextFloat(0.8f, 1.2f) * Projectile.ai[0];
-		}
 	}
-	public int HitTimes = 0;
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		for (int i = 0; i < SmoothTrail.Count - 4; i += 4)
@@ -75,11 +69,6 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 			if (Rectangle.Intersect(rectangle, targetHitbox) != Rectangle.emptyRectangle)
 			{
 				Projectile.damage /= 2;
-				HitTimes++;
-				if(HitTimes > 3)
-				{
-					Projectile.friendly = false;
-				}
 				return true;
 			}
 		}
@@ -156,7 +145,7 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 
 		if (value1 > 0.5f)
 		{
-			drawColor = new Color(1.6f * lightColor.R / 255f, 0.8f * lightColor.G / 255f, 3f * lightColor.B / 255f, 0) * (value1 - 0.5f) * 8;
+			drawColor = new Color(4.6f * lightColor.R / 255f, 0.8f * lightColor.G / 255f, 4f * lightColor.B / 255f, 0) * (value1 - 0.5f) * 2;
 			bars = new List<Vertex2D>();
 			for (int i = 0; i < SmoothTrail.Count; i++)
 			{

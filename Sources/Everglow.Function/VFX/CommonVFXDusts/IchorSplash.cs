@@ -102,7 +102,7 @@ public class IchorSplash : Visual
 		int len = pos.Length;
 		if (len <= 2)
 			return;
-		var bars = new Vertex2D[len * 2 - 1];
+		var bars = new List<Vertex2D>();
 		for (int i = 1; i < len; i++)
 		{
 			Vector2 normal = oldPos[i] - oldPos[i - 1];
@@ -128,11 +128,10 @@ public class IchorSplash : Visual
 			{
 				widthDown *= 0f;
 			}
-			
-			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width + widthUp, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0 + ai[0], (i + 15 - len) / 17f, pocession));
-			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width + widthDown, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0.6f + ai[0], (i + 15 - len) / 17f, pocession));
+
+			bars.Add(oldPos[i] + normal * width + widthUp, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0 + ai[0], (i + 15 - len) / 17f, pocession));
+			bars.Add(oldPos[i] - normal * width + widthDown, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0.6f + ai[0], (i + 15 - len) / 17f, pocession));
 		}
-		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
 }

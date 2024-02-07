@@ -2931,6 +2931,7 @@ Projectiles: {
 	CreamChocolateCup_CreamFlow.DisplayName: Cream Chocolate Cup_ Cream Flow
 	FryingPan.DisplayName: Frying Pan
 	GrilledSquidTentacle_proj.DisplayName: Grilled Squid Tentacle_proj
+	SlashProjectile3D.DisplayName: Slash Projectile3 D
 	PlanetBeFall.DisplayName: Planet Be Fall
 	PlanetBefallExplosion.DisplayName: Planet Befall Explosion
 	PlanetBefallArray.DisplayName: Planet Befall Array
@@ -3103,6 +3104,8 @@ Projectiles: {
 	XiaoBlackWave.DisplayName: Xiao Black Wave
 	XiaoHit.DisplayName: Xiao Hit
 	AdamantiteClub.DisplayName: Adamantite Club
+	AdamantiteClub_round.DisplayName: Adamantite Club_round
+	AdamantiteClub_round_slash.DisplayName: Adamantite Club_round_slash
 	AdamantiteClub_smash.DisplayName: Adamantite Club_smash
 	BorealWoodClub.DisplayName: Boreal Wood Club
 	BorealWoodClub_smash.DisplayName: Boreal Wood Club_smash
@@ -3115,6 +3118,7 @@ Projectiles: {
 	ChlorophyteClub_VFX.DisplayName: Chlorophyte Club_ V F X
 	ChlorophyteClub_VFX_2.DisplayName: Chlorophyte Club_ V F X_2
 	CobaltClub.DisplayName: Cobalt Club
+	CobaltClub_falling.DisplayName: Cobalt Club_falling
 	CobaltClub_smash.DisplayName: Cobalt Club_smash
 	CopperClub.DisplayName: Copper Club
 	CopperClub_smash.DisplayName: Copper Club_smash
@@ -3149,6 +3153,7 @@ Projectiles: {
 	OrichalcumPedal.DisplayName: Orichalcum Pedal
 	OrichalcumPedal_slash.DisplayName: Orichalcum Pedal_slash
 	PalladiumClub.DisplayName: Palladium Club
+	PalladiumClub_small.DisplayName: Palladium Club_small
 	PalladiumClub_smash.DisplayName: Palladium Club_smash
 	PalmWoodClub.DisplayName: Palm Wood Club
 	PalmWoodClub_smash.DisplayName: Palm Wood Club_smash
@@ -3173,6 +3178,7 @@ Projectiles: {
 	TinClub.DisplayName: Tin Club
 	TitaniumClub.DisplayName: Titanium Club
 	TitaniumClub_smash.DisplayName: Titanium Club_smash
+	Titanium_Fragment.DisplayName: Titanium_ Fragment
 	TungstenClub.DisplayName: Tungsten Club
 	TungstenClub_smash.DisplayName: Tungsten Club_smash
 	WoodenClub.DisplayName: Wooden Club
@@ -3194,6 +3200,7 @@ Projectiles: {
 	FlameShoot.DisplayName: Flame Shoot
 	GiantFireFeather.DisplayName: Giant Fire Feather
 	GiantFireFeatherExplosion.DisplayName: Giant Fire Feather Explosion
+	CobaltClub_falling_Shoot.DisplayName: Cobalt Club_falling_ Shoot
 	BoneFeatherMagicArray.DisplayName: Bone Feather Magic Array
 	BoneFeatherMagicBook.DisplayName: Bone Feather Magic Book
 	BoneFeather_spine.DisplayName: Bone Feather_spine

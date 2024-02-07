@@ -1311,8 +1311,12 @@ public class BloodTusk : ModNPC
 								FlyingTentacleTusks[k].velocity = FlyingTentacleTusks[k].velocity * 0.975f + v * 0.025f;
 							}
 						}
-						if (FlyingTentacleTusks[i].Center.Y > NPC.Center.Y - 240)
-							FlyingTentacleTusks[i].velocity.Y -= 0.25f;
+						if(FlyingTentacleTusks.Length > i || FlyingTentacleTusks[i] != null || !FlyingTentacleTusks[i].active)
+						{
+							if (FlyingTentacleTusks[i].Center.Y > NPC.Center.Y - 240)
+								FlyingTentacleTusks[i].velocity.Y -= 0.25f;
+						}
+
 						Back[i] = false;
 					}
 					if (NPC.localAI[1] > 600)
@@ -1371,8 +1375,11 @@ public class BloodTusk : ModNPC
 									FlyingTentacleTusks[k].velocity = FlyingTentacleTusks[k].velocity * 0.975f + v * 0.025f;
 								}
 							}
-							if (FlyingTentacleTusks[i].Center.Y > NPC.Center.Y - 240)
-								FlyingTentacleTusks[i].velocity.Y -= 0.25f;
+							if (FlyingTentacleTusks.Length > i || FlyingTentacleTusks[i] != null || !FlyingTentacleTusks[i].active)
+							{
+								if (FlyingTentacleTusks[i].Center.Y > NPC.Center.Y - 240)
+									FlyingTentacleTusks[i].velocity.Y -= 0.25f;
+							}
 							Back[i] = false;
 						}
 					}
