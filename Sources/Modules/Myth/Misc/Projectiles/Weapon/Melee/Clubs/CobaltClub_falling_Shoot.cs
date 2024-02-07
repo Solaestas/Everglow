@@ -1,7 +1,5 @@
-using Everglow.Commons.DataStructures;
 using Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 using Terraria.Audio;
-using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 
@@ -39,11 +37,7 @@ public class CobaltClub_falling_Shoot : ModProjectile, IWarpProjectile
 
 	public override void PostDraw(Color lightColor)
 	{
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
-		if (Projectile.timeLeft > 200)
+		if(Projectile.timeLeft > 200)
 		{
 			return;
 		}
@@ -52,9 +46,6 @@ public class CobaltClub_falling_Shoot : ModProjectile, IWarpProjectile
 		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(0f, 0.5f, 1f, 0) * dark * (lightColor.B / 255f), 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 10f * dark, SpriteEffects.None, 0);
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		DrawTexCircle(timeValue * 24 * Projectile.ai[0], 8 * (1 - timeValue) * Projectile.ai[0], new Color(0.1f * (1 - timeValue) * (1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), (1 - timeValue), 0f), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_thick.Value);
-
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(sBS);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{

@@ -24,6 +24,7 @@ public class StarDancer_starProj2 : ModProjectile
 		Projectile.velocity *= 0;
 		if (Projectile.timeLeft == 10)
 		{
+			Projectile.friendly = true;
 			Vector2 v0 = new Vector2(Main.rand.NextFloat(1f, 1.2f), 0).RotatedByRandom(6.283);
 			for (int i = 0; i < 5; i++)
 			{

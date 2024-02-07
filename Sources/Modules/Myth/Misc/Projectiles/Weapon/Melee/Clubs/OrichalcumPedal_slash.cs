@@ -19,6 +19,9 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		Projectile.penetrate = -1;
 		Projectile.timeLeft = 120;
 		Projectile.extraUpdates = 3;
+
+		Projectile.localNPCHitCooldown = 60;
+		Projectile.usesLocalNPCImmunity = true;
 	}
 	public List<Vector3> OldPosSpace = new List<Vector3>();
 	public Vector3 SpacePos;
@@ -49,17 +52,21 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 	{
 		Projectile.friendly = true;
 		OldPosSpace.Add(SpacePos);
+		Vector3 delta0 = SpacePos;
 		SpacePos = RodriguesRotate(SpacePos, RotatedAxis, Omega);
+		delta0 = SpacePos - delta0;
 		Omega *= 0.9f;
 		if (Projectile.timeLeft == 114)
 		{
 			SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/Slash").WithVolumeScale(0.33f), Projectile.Center);
 		}
-		if (Main.rand.NextBool(17))
+		if (Main.rand.NextBool(2) && Omega > 0.4f)
 		{
-			Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(SpacePos.X, SpacePos.Y), new Vector2(SpacePos.X, SpacePos.Y), ModContent.ProjectileType<GoldLanternLine>(), Projectile.damage / 2, 0, Projectile.owner);
+			Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(SpacePos.X, SpacePos.Y), new Vector2(delta0.X, delta0.Y) * 1.5f, ModContent.ProjectileType<OrichalcumPedal>(), Projectile.damage / 8, 0, Projectile.owner, Main.rand.NextFloat(-0.4f, 0.4f), Main.rand.Next(3));
+			p0.scale = Main.rand.NextFloat(0.8f, 1.2f) * Projectile.ai[0];
 		}
 	}
+	public int HitTimes = 0;
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		for (int i = 0; i < SmoothTrail.Count - 4; i += 4)
@@ -68,6 +75,11 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 			if (Rectangle.Intersect(rectangle, targetHitbox) != Rectangle.emptyRectangle)
 			{
 				Projectile.damage /= 2;
+				HitTimes++;
+				if(HitTimes > 3)
+				{
+					Projectile.friendly = false;
+				}
 				return true;
 			}
 		}
@@ -144,7 +156,7 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 
 		if (value1 > 0.5f)
 		{
-			drawColor = new Color(4.6f * lightColor.R / 255f, 0.8f * lightColor.G / 255f, 4f * lightColor.B / 255f, 0) * (value1 - 0.5f) * 2;
+			drawColor = new Color(1.6f * lightColor.R / 255f, 0.8f * lightColor.G / 255f, 3f * lightColor.B / 255f, 0) * (value1 - 0.5f) * 8;
 			bars = new List<Vertex2D>();
 			for (int i = 0; i < SmoothTrail.Count; i++)
 			{
@@ -158,7 +170,7 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		}
 
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 		return false;
 	}
 	public void DrawWarp(VFXBatch spriteBatch)
@@ -170,17 +182,19 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		float value0 = (120 - Projectile.timeLeft) / 120f;
 		float value1 = MathF.Pow(value0, 0.3f);
 		value1 = MathF.Sin(value1 * MathF.PI);
-		float width = value1 * 70f;
+		float width = value1 * 20f;
 		Vector2 drawPos = Projectile.Center - Main.screenPosition;
+		float rotValue = 4.71f;
+
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int i = 0; i < SmoothTrail.Count; i++)
 		{
-			Vector2 normal = Vector2.Normalize(SmoothTrail[i]).RotatedBy(MathHelper.PiOver2);
-			Color drawColor0 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 1, 1);
-			Color drawColor1 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 0, 1);
+			Vector2 normal = Vector2.Normalize(SmoothTrail[i]).RotatedBy(rotValue);
+			Color drawColor0 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 0.2f, 0);
+			Color drawColor1 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 0, 0);
 
-			bars.Add(SmoothTrail[i] + drawPos, drawColor0, new Vector3(0.5f, i / (float)(SmoothTrail.Count - 1), 0));
-			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor1, new Vector3(0.44f, i / (float)(SmoothTrail.Count - 1), 0));
+			bars.Add(SmoothTrail[i] + drawPos, drawColor0, new Vector3(0.5f, i / (float)(SmoothTrail.Count - 1), 1));
+			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor1, new Vector3(0.44f, i / (float)(SmoothTrail.Count - 1), 1));
 		}
 
 		if (bars.Count > 3)
