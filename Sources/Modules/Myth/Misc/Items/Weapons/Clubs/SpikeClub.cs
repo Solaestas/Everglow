@@ -6,6 +6,7 @@ public class SpikeClub : ClubItem
 	{
 		Item.damage = 21;
 		Item.value = 450;
+		Item.rare = ItemRarityID.Green;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.SpikeClub>();
 		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.SpikeClub_smash>();
 	}

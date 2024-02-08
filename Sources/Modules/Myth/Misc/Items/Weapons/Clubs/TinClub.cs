@@ -12,7 +12,7 @@ public class TinClub : ClubItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.TinBar, 18)
+			.AddIngredient(ItemID.TinBar, 8)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

@@ -6,6 +6,7 @@ public class CurseClub : ClubItem
 	{
 		Item.damage = 57;
 		Item.value = 5000;
+		Item.rare = ItemRarityID.LightRed;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CurseClub>();
 		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CurseClub_smash>();
 	}

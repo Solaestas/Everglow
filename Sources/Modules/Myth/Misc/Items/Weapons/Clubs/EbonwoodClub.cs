@@ -12,7 +12,7 @@ public class EbonwoodClub : ClubItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.Ebonwood, 18)
+			.AddIngredient(ItemID.Ebonwood, 8)
 			.AddTile(TileID.WorkBenches)
 			.Register();
 	}
