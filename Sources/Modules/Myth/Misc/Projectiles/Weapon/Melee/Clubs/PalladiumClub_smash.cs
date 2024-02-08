@@ -5,7 +5,6 @@ public class PalladiumClub_smash : ClubProj_Smash_metal
 	public override string Texture => "Everglow/" + ModAsset.Melee_PalladiumClubPath;
 	public override void Smash(int level)
 	{
-		Player player = Main.player[Projectile.owner];
 		if (level == 0)
 		{
 			Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<PalladiumClub_small>(), (int)(Projectile.damage * 0.4f), Projectile.knockBack * 0.4f, Projectile.owner, 0.24f);

@@ -13,7 +13,7 @@ public class Titanium_Fragment : ModProjectile
 		Projectile.aiStyle = -1;
 		Projectile.tileCollide = false;
 		Projectile.ignoreWater = true;
-		Projectile.penetrate = 12;
+		Projectile.penetrate = 6;
 		Projectile.usesIDStaticNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 60;
 	}

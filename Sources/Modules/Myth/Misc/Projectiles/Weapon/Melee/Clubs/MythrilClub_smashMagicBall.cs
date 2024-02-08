@@ -1,5 +1,4 @@
 using Everglow.Myth.Misc.Dusts;
-using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
@@ -27,10 +26,6 @@ public class MythrilClub_smashMagicBall : ModProjectile
 		if(Projectile.timeLeft > 120)
 		{
 			return false;
-		}
-		if(Projectile.timeLeft == 120)
-		{
-			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<MythrilClub_Shoot>(), (int)(Projectile.damage * 0.4f), Projectile.knockBack * 0.4f, Projectile.owner, 1f);
 		}
 		return base.PreAI();
 	}
@@ -76,7 +71,7 @@ public class MythrilClub_smashMagicBall : ModProjectile
 
 			d0.scale *= Projectile.scale;
 
-			Lighting.AddLight(Projectile.Center, new Vector3(0.1f, 0.4f, 0.6f) * Projectile.scale);
+			Lighting.AddLight(Projectile.Center, new Vector3(0.1f, 0.7f, 0.6f) * Projectile.scale);
 		}
 		base.AI();
 	}

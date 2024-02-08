@@ -1,10 +1,10 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
+using Everglow.Commons.Physics;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
-using Terraria.Audio;
+using log4net.Core;
 using Terraria.DataStructures;
-using Terraria.ID;
 namespace Everglow.Commons.Weapons.Clubs;
 
 public abstract class ClubProj_Smash : MeleeProj
@@ -33,7 +33,7 @@ public abstract class ClubProj_Smash : MeleeProj
 		trailLength = 20;
 		shadertype = "Trail";
 		AutoEnd = false;
-		selfWarp = false;
+		selfWarp = true;
 	}
 	public bool Crash = false;
 	public int FixedDirection = 1;
@@ -104,7 +104,7 @@ public abstract class ClubProj_Smash : MeleeProj
 				player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
 				player.legRotation = -player.fullRotation;
 			}
-			if (player.gravDir == 1)
+			if(player.gravDir == 1)
 			{
 				if (Collision.SolidCollision(player.BottomLeft, player.width, 64) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 16)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 0)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, -16)))
 				{
@@ -217,7 +217,6 @@ public abstract class ClubProj_Smash : MeleeProj
 		Player player = Main.player[Projectile.owner];
 		if (level == 1)//强
 		{
-			SoundEngine.PlaySound(SoundID.Research);
 			attackType = 1;
 			Omega = 0.8f;
 			for (int g = 0; g < 24; g++)
@@ -244,14 +243,13 @@ public abstract class ClubProj_Smash : MeleeProj
 		}
 		if (level == 0)//弱
 		{
-			SoundEngine.PlaySound(SoundID.DrumFloorTom);
 			attackType = 2;
 			Omega = 0.4f;
 			for (int g = 0; g < 12; g++)
 			{
 				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(35f, 44f) * player.gravDir).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
 				Vector2 pos = player.Bottom + new Vector2(0, 48) - newVelocity * 0.2f;
-				if (player.gravDir == -1)
+				if(player.gravDir == -1)
 				{
 					pos = player.Top - new Vector2(0, 48) - newVelocity * 0.2f;
 				}

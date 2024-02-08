@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.VFX.CommonVFXDusts;
+using Microsoft.Xna.Framework.Graphics;
 using SteelSeries.GameSense;
 using Terraria.GameContent.Shaders;
 
@@ -65,6 +66,7 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 
 		Projectile.DamageType = DamageClass.Melee;
 		trailVecs = new Queue<Vector2>(trailLength + 1);
+		StrikeOmegaDecrease = 0.99f;
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -81,7 +83,7 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f, 3), MinStrikeOmegaDecrease);
+		float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f, 6), MinStrikeOmegaDecrease);
 		Omega *= power;
 		modifiers.FinalDamage /= power;
 		modifiers.Knockback *= Omega * 3;
@@ -161,8 +163,6 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 	public Vector2 NormalToTiles;
 	public void UpdateMovement()
 	{
-
-		Player player = Main.player[Projectile.owner];
 		int totalHit = 0;
 		if (MoveTimer == 0)
 		{
@@ -200,6 +200,7 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 		{
 			velocityLength = Math.Max(0, (Projectile.timeLeft - 450) / 5f);
 		}
+		velocityLength *= Projectile.ai[0];
 		if (NormalToTiles.Length() > 0.1f)
 		{
 			NormalToTiles = Vector2.Normalize(NormalToTiles);
@@ -218,16 +219,16 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 		{
 			Projectile.velocity += new Vector2(0, 1);
 		}
-		int maxTo20Hit = 20;
+		int maxTo12Hit = 12;
 		float adjustValue = 0;
 		for(int i = -8;i <=8;i++)
 		{
 			float value = i / 10f;
 			Vector2 checkVel = Projectile.velocity.RotatedBy(value);
-			int newHitTimes = Math.Abs(GetHitTimes(Projectile.Center + checkVel) - 20);
-			if (newHitTimes < maxTo20Hit)
+			int newHitTimes = Math.Abs(GetHitTimes(Projectile.Center + checkVel) - 12);
+			if (newHitTimes < maxTo12Hit)
 			{
-				maxTo20Hit = newHitTimes;
+				maxTo12Hit = newHitTimes;
 				adjustValue = value;
 			}
 		}
@@ -280,12 +281,12 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
 		float colorValue = Omega / 0.4f;
 		var color = new Color(colorValue, colorValue, colorValue, colorValue);
-		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
+		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, color, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
 		for (int i = 0; i < 5; i++)
 		{
 			float alp = Omega / 0.1f;
-			var color2 = new Color((float)((5 - i) / 5f * alp), (float)((5 - i) / 5f * alp), (float)((5 - i) / 5f * alp), 0);
-			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.75f * Omega, texture.Size() / 2f, Projectile.scale, effects, 0f);
+			var color2 = new Color((float)((5 - i) / 5f * alp), (float)((5 - i) / 5f * alp * Omega), (float)((5 - i) / 5f * alp * Omega), 0);
+			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.75f * Omega, texture.Size() / 2f, Projectile.scale, effects, 0f);
 		}
 		DrawTrail();
 		PostPreDraw();
@@ -293,7 +294,14 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 	}
 	public void PostPreDraw()
 	{
+		float colorValue = Omega / 0.1f * (MathF.Sin((float)Main.time * 0.15f + Projectile.whoAmI * 4.32f) * 0.4f + 0.3f);
+		var starDark = Commons.ModAsset.StarSlash_black.Value;
+		var star = Commons.ModAsset.StarSlash.Value;
+		Vector2 size = new Vector2(colorValue * 0.14f, 1f) * Projectile.scale * 1.4f;
+		Color redSlash = new Color(colorValue, 0.002f * colorValue * colorValue, 0.002f * colorValue * colorValue, 0);
 
+		Main.EntitySpriteDraw(starDark, Projectile.Center - Main.screenPosition - NormalToTiles * 40, null, Color.White * colorValue, NormalToTiles.ToRotation(), starDark.Size() / 2f, size, SpriteEffects.None, 0f);
+		Main.EntitySpriteDraw(star, Projectile.Center - Main.screenPosition - NormalToTiles * 40, null, redSlash * colorValue, NormalToTiles.ToRotation(), star.Size() / 2f, size, SpriteEffects.None, 0f);
 	}
 	public void DrawTrail()
 	{
