@@ -1,13 +1,13 @@
 namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
-public class MithrilClub : ClubItem
+public class MythrilClub : ClubItem
 {
 	public override void SetDef()
 	{
 		Item.damage = 56;
 		Item.value = 2682;
-		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.MithrilClub>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.MithrilClub_smash>();
+		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.MythrilClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.MythrilClub_smash>();
 	}
 	public override void AddRecipes()
 	{

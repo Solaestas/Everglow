@@ -3,6 +3,7 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Physics;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
+using log4net.Core;
 using Terraria.DataStructures;
 namespace Everglow.Commons.Weapons.Clubs;
 
@@ -143,6 +144,8 @@ public abstract class ClubProj_Smash : MeleeProj
 		}
 		if (attackType == 1)
 		{
+			ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
+			Gsplayer.FlyCamPosition = new Vector2(0, 14).RotatedByRandom(6.283);
 			player.direction = FixedDirection;
 			if (timer < 8 * timeMul)//前摇
 			{
@@ -174,6 +177,8 @@ public abstract class ClubProj_Smash : MeleeProj
 		}//强
 		if (attackType == 2)
 		{
+			ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
+			Gsplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
 			player.direction = FixedDirection;
 			if (timer < 8 * timeMul)//前摇
 			{

@@ -2108,8 +2108,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	MithrilClub: {
-		DisplayName: Mithril Club
+	MythrilClub: {
+		DisplayName: Mythril Club
 		Tooltip: ""
 	}
 
@@ -3106,6 +3106,7 @@ Projectiles: {
 	AdamantiteClub.DisplayName: Adamantite Club
 	AdamantiteClub_round.DisplayName: Adamantite Club_round
 	AdamantiteClub_round_slash.DisplayName: Adamantite Club_round_slash
+	AdamantiteClub_slash.DisplayName: Adamantite Club_slash
 	AdamantiteClub_smash.DisplayName: Adamantite Club_smash
 	BorealWoodClub.DisplayName: Boreal Wood Club
 	BorealWoodClub_smash.DisplayName: Boreal Wood Club_smash
@@ -3146,8 +3147,9 @@ Projectiles: {
 	LeadClub_smash.DisplayName: Lead Club_smash
 	MeteorClub.DisplayName: Meteor Club
 	MeteorClub_smash.DisplayName: Meteor Club_smash
-	MithrilClub.DisplayName: Mithril Club
-	MithrilClub_smash.DisplayName: Mithril Club_smash
+	MythrilClub_smashMagicBall.DisplayName: Mythril Club_smash Magic Ball
+	MythrilClub_smash.DisplayName: Mythril Club_smash
+	MythrilClub.DisplayName: Mythril Club
 	OrichalcumClub.DisplayName: Orichalcum Club
 	OrichalcumClub_smash.DisplayName: Orichalcum Club_smash
 	OrichalcumPedal.DisplayName: Orichalcum Pedal
@@ -3201,6 +3203,7 @@ Projectiles: {
 	GiantFireFeather.DisplayName: Giant Fire Feather
 	GiantFireFeatherExplosion.DisplayName: Giant Fire Feather Explosion
 	CobaltClub_falling_Shoot.DisplayName: Cobalt Club_falling_ Shoot
+	TitaniumClub_smash_explosion.DisplayName: Titanium Club_smash_explosion
 	BoneFeatherMagicArray.DisplayName: Bone Feather Magic Array
 	BoneFeatherMagicBook.DisplayName: Bone Feather Magic Book
 	BoneFeather_spine.DisplayName: Bone Feather_spine
