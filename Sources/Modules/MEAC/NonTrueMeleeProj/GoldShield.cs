@@ -3,8 +3,12 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
+using Everglow.Commons.Weapons.StabbingSwords;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.UI.ResourceSets;
 
 namespace Everglow.MEAC.NonTrueMeleeProj;
 
@@ -392,16 +396,28 @@ public class GoldShield : ModProjectile, IWarpProjectile
 		return false;
 	}
 }
+
+public class GoldShieldUIDrawer : ModSystem
+{
+	public override void PostDrawInterface(SpriteBatch spriteBatch)
+	{
+		Vector2 pos = Vector2.Zero;
+		Player p = Main.LocalPlayer;
+		if (p.GetModPlayer<GoldShieldPlayer>().HasShield)
+		{
+			pos = Vector2.Lerp(pos, p.Center - new Vector2(50, 0) * p.direction - Main.screenPosition, 0.2f);
+			p.GetModPlayer<GoldShieldPlayer>().Draw();
+		}
+	}
+}
+
 public class GoldShieldPlayer : ModPlayer
 {
 
-	public int GoldShieldDurability;
+	public float GoldShieldDurability;
 	public bool Dodge;
+	public bool HasShield;
 
-	/*public override bool FreeDodge(Player.HurtInfo info)
-	{
-		
-	}*/
 	public override bool FreeDodge(Player.HurtInfo info)
 	{
 		if (Dodge)
@@ -412,12 +428,45 @@ public class GoldShieldPlayer : ModPlayer
 		return base.FreeDodge(info);
 	}
 
-	public void PreHurt(ref Player.HurtInfo info)
+
+
+
+
+
+
+	public override void PreUpdate()
 	{
-		GoldShieldDurability = 0;
 		foreach (Projectile proj in Main.projectile)
 		{
 			if (proj.active & proj.owner == Player.whoAmI & proj.type == ModContent.ProjectileType<GoldShield>())
+			{
+				HasShield = true;
+				GoldShieldDurability = proj.ai[1];
+				GoldShieldDurability -= 0.01f;
+				if(GoldShieldDurability <= 0)
+				{
+					GoldShieldDurability = 0;
+				}
+				proj.ai[1] = GoldShieldDurability;
+				break;
+			}
+			else
+			{
+				HasShield = false;
+				GoldShieldDurability = 0;
+			}
+		}
+	}
+
+
+
+
+
+	public void PreHurt(ref Player.HurtInfo info)
+	{
+		foreach (Projectile proj in Main.projectile)
+		{
+			if (HasShield)
 			{
 				GoldShieldDurability = (int)proj.ai[1];
 				if (GoldShieldDurability >= info.Damage)
@@ -428,7 +477,7 @@ public class GoldShieldPlayer : ModPlayer
 				}
 				else
 				{
-					info.Damage -= GoldShieldDurability;
+					info.Damage -=(int) GoldShieldDurability;
 					this.GoldShieldDurability *= 0;
 				}
 				Main.player[proj.owner].immune = true;
@@ -452,5 +501,106 @@ public class GoldShieldPlayer : ModPlayer
 			modifiers.DisableDust();
 			modifiers.DisableSound();
 		}
+	}
+
+
+
+
+
+	public void Draw()
+	{
+		SpriteBatch spriteBatch = Main.spriteBatch;
+		Color color = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
+		PlayerStatsSnapshot snapshot = new PlayerStatsSnapshot(Player);
+		ClassicPlayerResourcesDisplaySet ing = new ClassicPlayerResourcesDisplaySet("name", "config");
+
+
+		if (Player.ghost || Player.statLifeMax2 <= 0 || snapshot.AmountOfLifeHearts <= 0)
+			return;
+
+
+
+
+
+		int MaxGoldShieldDurability;
+		MaxGoldShieldDurability = (int)(Player.statLifeMax * 0.6f);
+		float UIDisplay_ShieldOnHeart;
+
+		int HeartsNum = snapshot.AmountOfLifeHearts;
+		UIDisplay_ShieldOnHeart = MaxGoldShieldDurability / (float)HeartsNum;
+		int num2 = snapshot.LifeFruitCount;
+
+
+		int num4 = (int)((float)Player.statLifeMax2 / UIDisplay_ShieldOnHeart);
+		if (num4 >= 10)
+			num4 = 10;
+
+		string text = Lang.inter[0].Value + " " + (int)GoldShieldDurability + "/" + MaxGoldShieldDurability;
+		Vector2 vector = FontAssets.MouseText.Value.MeasureString(text);
+		if (!Player.ghost)
+		{
+			spriteBatch.DrawString(FontAssets.MouseText.Value, "盾量", new Vector2((float)(500 + 13 * num4) - vector.X * 0.5f + (float)ing.UI_ScreenAnchorX, 6f), color, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+			spriteBatch.DrawString(FontAssets.MouseText.Value, ((int)GoldShieldDurability+1) + "/" + MaxGoldShieldDurability, new Vector2((float)(500 + 13 * num4) + vector.X * 0.5f + (float)ing.UI_ScreenAnchorX, 6f), color, 0f, new Vector2(FontAssets.MouseText.Value.MeasureString(Player.statLife + "/" + Player.statLifeMax2).X, 0f), 1f, SpriteEffects.None, 0f);
+		}
+
+
+
+		for (int i = 1; i < (int)((float)MaxGoldShieldDurability / UIDisplay_ShieldOnHeart) + 1; i++)
+		{
+			int num5 = 255;
+			float num6 = 1f;
+			bool flag = false;
+			if ((float)GoldShieldDurability >= (float)i * UIDisplay_ShieldOnHeart)
+			{
+				num5 = 255;
+				if ((float)GoldShieldDurability == (float)i * UIDisplay_ShieldOnHeart)
+					flag = true;
+			}
+			else
+			{
+				float num7 = ((float)GoldShieldDurability - (float)(i - 1) * UIDisplay_ShieldOnHeart) / UIDisplay_ShieldOnHeart;
+				num5 = (int)(30f + 225f * num7);
+				if (num5 < 30)
+					num5 = 30;
+
+				num6 = num7 / 4f + 0.75f;
+				if ((double)num6 < 0.75)
+					num6 = 0.75f;
+
+				if (num7 > 0f)
+					flag = true;
+			}
+
+			if (flag)
+				num6 += Main.cursorScale - 1f;
+
+			int num8 = 0;
+			int num9 = 0;
+			if (i > 10)
+			{
+				num8 -= 260;
+				num9 += 26;
+			}
+
+			int a = (int)((double)num5 * 0.9);
+			if (!Player.ghost)
+			{
+				var heartTexture = ModAsset.ShieldHeart;
+				if (num2 > 0)
+					num2--;
+
+				Vector2 position = new Vector2(500 + 26 * (i - 1) + num8 + UIDisplay_ShieldOnHeart + heartTexture.Width() / 2, 32f + heartTexture.Height() * (1 - num6) / 2f + num9 + heartTexture.Height() / 2);
+
+				ResourceOverlayDrawContext drawContext = new ResourceOverlayDrawContext(snapshot, ing, i - 1, heartTexture)
+				{
+					position = position,
+					color = new Color(num5, num5, num5, a),
+					origin = heartTexture.Size() / 2f,
+					scale = new Vector2(num6)
+				};
+				ResourceOverlayLoader.DrawResource(drawContext);
+			}
+		}
+
 	}
 }
