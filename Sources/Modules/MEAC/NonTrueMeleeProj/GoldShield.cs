@@ -5,10 +5,13 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.Weapons.StabbingSwords;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
+using ReLogic.Content;
 using ReLogic.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.ResourceSets;
+using Terraria.Localization;
 
 namespace Everglow.MEAC.NonTrueMeleeProj;
 
@@ -403,10 +406,12 @@ public class GoldShieldUIDrawer : ModSystem
 	{
 		Vector2 pos = Vector2.Zero;
 		Player p = Main.LocalPlayer;
-		if (p.GetModPlayer<GoldShieldPlayer>().HasShield)
+		if (p.GetModPlayer<GoldShieldPlayer>().HasShield  && Main.ResourceSetsManager.ActiveSet.DisplayedName== Language.GetTextValue("UI.HealthManaStyle_Default"))
 		{
+
 			pos = Vector2.Lerp(pos, p.Center - new Vector2(50, 0) * p.direction - Main.screenPosition, 0.2f);
 			p.GetModPlayer<GoldShieldPlayer>().ClassicDraw();
+			p.GetModPlayer<GoldShieldPlayer>().Draw();
 		}
 	}
 }
@@ -504,7 +509,11 @@ public class GoldShieldPlayer : ModPlayer
 	}
 
 
-
+	public void Draw()
+	{
+		var column = ModAsset.column.Value;
+		Main.spriteBatch.Draw(column, new Vector2(Main.screenWidth-290,Main.screenHeight-250),Color.White);
+	}
 
 
 	public void ClassicDraw()
@@ -595,4 +604,126 @@ public class GoldShieldPlayer : ModPlayer
 		}
 
 	}
+	
+
+/*	private void DrawLifeBar(SpriteBatch spriteBatch)
+	{
+		PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(Player);
+		float UIDisplay_ShieldOnHeart;
+		UIDisplay_ShieldOnHeart = playerStatsSnapshot.LifePerSegment;
+		int _heartCountRow1, _heartCountRow2, _lastHeartFillingIndex,_lastHeartPanelIndex;
+
+		_heartCountRow1 = Utils.Clamp(playerStatsSnapshot.AmountOfLifeHearts, 0, 10);
+		_heartCountRow2 = Utils.Clamp(playerStatsSnapshot.AmountOfLifeHearts - 10, 0, 10);
+		int lastHeartFillingIndex = (int)((float)playerStatsSnapshot.Life / UIDisplay_ShieldOnHeart);
+		_lastHeartFillingIndex = lastHeartFillingIndex;
+		_lastHeartPanelIndex = _heartCountRow1 + _heartCountRow2 - 1;
+
+
+		 ResourceDrawSettings defaultResourceDrawSettings;
+
+		// Create a cached override for usages of 'default' to avoid copypasting.
+		defaultResourceDrawSettings = default;
+		defaultResourceDrawSettings.StatsSnapshot = playerStatsSnapshot;
+	//	defaultResourceDrawSettings.DisplaySet = this;
+
+
+
+
+
+		Color color = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
+
+		Vector2 vector = new Vector2(Main.screenWidth - 300 + 4, 15f);
+
+		bool isHovered = false;
+		FancyClassicPlayerResourcesDisplaySet ing = new FancyClassicPlayerResourcesDisplaySet("name", "config","resource", AssetRequestMode.ImmediateLoad);
+	
+
+	   ResourceDrawSettings resourceDrawSettings = defaultResourceDrawSettings;
+		resourceDrawSettings.ElementCount = _heartCountRow1;
+		resourceDrawSettings.ElementIndexOffset = 0;
+		resourceDrawSettings.TopLeftAnchor = vector;
+		resourceDrawSettings.GetTextureMethod = HeartPanelDrawer;
+		resourceDrawSettings.OffsetPerDraw = Vector2.Zero;
+		resourceDrawSettings.OffsetPerDrawByTexturePercentile = Vector2.UnitX;
+		resourceDrawSettings.OffsetSpriteAnchor = Vector2.Zero;
+		resourceDrawSettings.OffsetSpriteAnchorByTexturePercentile = Vector2.Zero;
+		resourceDrawSettings.Draw(spriteBatch, ref isHovered);
+		resourceDrawSettings = defaultResourceDrawSettings;
+		resourceDrawSettings.ElementCount = _heartCountRow2;
+		resourceDrawSettings.ElementIndexOffset = 10;
+		resourceDrawSettings.TopLeftAnchor = vector + new Vector2(0f, 28f);
+		resourceDrawSettings.GetTextureMethod = HeartPanelDrawer;
+		resourceDrawSettings.OffsetPerDraw = Vector2.Zero;
+		resourceDrawSettings.OffsetPerDrawByTexturePercentile = Vector2.UnitX;
+		resourceDrawSettings.OffsetSpriteAnchor = Vector2.Zero;
+		resourceDrawSettings.OffsetSpriteAnchorByTexturePercentile = Vector2.Zero;
+		resourceDrawSettings.Draw(spriteBatch, ref isHovered);
+		resourceDrawSettings = defaultResourceDrawSettings;
+		resourceDrawSettings.ElementCount = _heartCountRow1;
+		resourceDrawSettings.ElementIndexOffset = 0;
+		resourceDrawSettings.TopLeftAnchor = vector + new Vector2(15f, 15f);
+		resourceDrawSettings.GetTextureMethod = HeartFillingDrawer;
+		resourceDrawSettings.OffsetPerDraw = Vector2.UnitX * 2f;
+		resourceDrawSettings.OffsetPerDrawByTexturePercentile = Vector2.UnitX;
+		resourceDrawSettings.OffsetSpriteAnchor = Vector2.Zero;
+		resourceDrawSettings.OffsetSpriteAnchorByTexturePercentile = new Vector2(0.5f, 0.5f);
+		resourceDrawSettings.Draw(spriteBatch, ref isHovered);
+		resourceDrawSettings = defaultResourceDrawSettings;
+		resourceDrawSettings.ElementCount = _heartCountRow2;
+		resourceDrawSettings.ElementIndexOffset = 10;
+		resourceDrawSettings.TopLeftAnchor = vector + new Vector2(15f, 15f) + new Vector2(0f, 28f);
+		resourceDrawSettings.GetTextureMethod = HeartFillingDrawer;
+		resourceDrawSettings.OffsetPerDraw = Vector2.UnitX * 2f;
+		resourceDrawSettings.OffsetPerDrawByTexturePercentile = Vector2.UnitX;
+		resourceDrawSettings.OffsetSpriteAnchor = Vector2.Zero;
+		resourceDrawSettings.OffsetSpriteAnchorByTexturePercentile = new Vector2(0.5f, 0.5f);
+		resourceDrawSettings.Draw(spriteBatch, ref isHovered);
+		_hoverLife = isHovered && ResourceOverlayLoader.DisplayHoverText(preparedSnapshot, this, true);
+
+
+	}
+
+	private void HeartPanelDrawer(int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
+	{
+		sourceRect = null;
+		offset = Vector2.Zero;
+		sprite = _heartLeft;
+		drawScale = 1f;
+		if (elementIndex == lastElementIndex && elementIndex == firstElementIndex)
+		{
+			sprite = _heartSingleFancy;
+			offset = new Vector2(-4f, -4f);
+		}
+		else if (elementIndex == lastElementIndex && lastElementIndex == _lastHeartPanelIndex)
+		{
+			sprite = _heartRightFancy;
+			offset = new Vector2(-8f, -4f);
+		}
+		else if (elementIndex == lastElementIndex)
+		{
+			sprite = _heartRight;
+		}
+		else if (elementIndex != firstElementIndex)
+		{
+			sprite = _heartMiddle;
+		}
+	}
+
+	private void HeartFillingDrawer(int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
+	{
+		sourceRect = null;
+		offset = Vector2.Zero;
+		sprite = _heartLeft;
+		if (elementIndex < _playerLifeFruitCount)
+			sprite = _heartFillHoney;
+		else
+			sprite = _heartFill;
+
+		float num = (drawScale = Utils.GetLerpValue(_lifePerHeart * (float)elementIndex, _lifePerHeart * (float)(elementIndex + 1), _currentPlayerLife, clamped: true));
+		if (elementIndex == _lastHeartFillingIndex && num > 0f)
+			drawScale += Main.cursorScale - 1f;
+	}*/
+	
+
 }
