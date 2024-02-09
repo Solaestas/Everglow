@@ -141,13 +141,13 @@ public class AncientSyringe_proj : HandholdProjectile
 			duration = 0;
 		}
 		duration = MathF.Sin(duration * MathHelper.Pi);
-		Texture2D star = Commons.ModAsset.Star_black.Value;
+		Texture2D star = Commons.ModAsset.StarSlash_black.Value;
 		Color drawC = new Color(0.7f * lightColor.R / 255f, 2f * lightColor.G / 255f, 0.2f * lightColor.B / 255f, 0);
-		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition + DrawOffset + new Vector2(24, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver4), null, Color.White, MathHelper.PiOver2, star.Size() / 2f, 0.2f * duration, se, 0);
-		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition + DrawOffset + new Vector2(24, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver4), null, Color.White, 0, star.Size() / 2f, 0.2f * duration, se, 0);
-		star = Commons.ModAsset.Star.Value;
-		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition + DrawOffset + new Vector2(24, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver4), null, drawC, MathHelper.PiOver2, star.Size() / 2f, 0.2f * duration, se, 0);
-		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition + DrawOffset + new Vector2(24, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver4), null, drawC, 0, star.Size() / 2f, 0.2f * duration, se, 0);
+		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition + DrawOffset + new Vector2(24, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver4), null, Color.White, MathHelper.PiOver2, star.Size() / 2f, 0.5f * duration, se, 0);
+		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition + DrawOffset + new Vector2(24, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver4), null, Color.White, 0, star.Size() / 2f, 0.5f * duration, se, 0);
+		star = Commons.ModAsset.StarSlash.Value;
+		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition + DrawOffset + new Vector2(24, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver4), null, drawC, MathHelper.PiOver2, star.Size() / 2f, 0.5f * duration, se, 0);
+		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition + DrawOffset + new Vector2(24, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver4), null, drawC, 0, star.Size() / 2f, 0.5f * duration, se, 0);
 		return false;
 	}
 }

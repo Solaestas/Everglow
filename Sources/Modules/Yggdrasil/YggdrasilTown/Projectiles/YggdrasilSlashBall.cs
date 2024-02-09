@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Items.SquamousShell;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
@@ -132,8 +133,8 @@ public class YggdrasilSlashBall : ModProjectile
 			Vector2 v2 = new Vector2(0, 60f).RotatedBy(rot) * Projectile.scale;
 			v2.X *= MathF.Cos(theta);
 			v2 = v2.RotatedBy(phi);
-			bars.Add(pos + v2 * 0.5f * size, new Color(0, 0, 0, 0), new Vector3(1, 0.4f, 0));
-			bars.Add(pos + v2 * size, new Color(0, 0, 0, 0), new Vector3(1, 0.5f, 0));
+			bars.Add(pos + v2 * 0.5f * size, new Color(0, 0, 0, 0), new Vector3(0.42f, 0, 0));
+			bars.Add(pos + v2 * size, new Color(0, 0, 0, 0), new Vector3(0.5f, 0, 0));
 			for (int x = 0; x <= 20; x++)
 			{
 				Vector2 v0 = new Vector2(0, 50f + i * 2).RotatedBy(x / 8f + rot) * Projectile.scale;
@@ -141,20 +142,21 @@ public class YggdrasilSlashBall : ModProjectile
 				v0 = v0.RotatedBy(phi);
 				float amount = (x - 10f) / 10f;
 				amount *= amount;
-				bars.Add(pos + v0 * (0.5f + amount / 2f) * size, new Color(255, 255, 255, 255), new Vector3(x / 20f, 0.42f, 0));
-				bars.Add(pos + v0 * size, new Color(255, 255, 255, 255), new Vector3(x / 20f, 0.5f, 0));
+				bars.Add(pos + v0 * (0.5f + amount / 2f) * size, new Color(255, 255, 255, 255), new Vector3(0.42f, x / 20f, 0));
+				bars.Add(pos + v0 * size, new Color(255, 255, 255, 255), new Vector3(0.5f, x / 20f, 0));
 			}
 			v2 = new Vector2(0, 60f).RotatedBy(2.5 + rot) * Projectile.scale;
 			v2.X *= MathF.Cos(theta);
 			v2 = v2.RotatedBy(phi);
-			bars.Add(pos + v2 * 0.5f * size, new Color(0, 0, 0, 0), new Vector3(1, 0.4f, 0));
-			bars.Add(pos + v2 * size, new Color(0, 0, 0, 0), new Vector3(1, 0.5f, 0));
+			bars.Add(pos + v2 * 0.5f * size, new Color(0, 0, 0, 0), new Vector3(0.42f, 1f, 0));
+			bars.Add(pos + v2 * size, new Color(0, 0, 0, 0), new Vector3(0.5f, 1f, 0));
 		}
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Star_black.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StarSlash_black.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		float range = 60;
 		bars = new List<Vertex2D>();
@@ -177,8 +179,8 @@ public class YggdrasilSlashBall : ModProjectile
 			Vector2 v2 = new Vector2(0, 60f).RotatedBy(rot) * Projectile.scale;
 			v2.X *= MathF.Cos(theta);
 			v2 = v2.RotatedBy(phi);
-			bars.Add(pos + v2 * 0.5f * size, new Color(0, 0, 0, 0), new Vector3(1, 0.4f, 0));
-			bars.Add(pos + v2 * size, new Color(0, 0, 0, 0), new Vector3(1, 0.5f, 0));
+			bars.Add(pos + v2 * 0.5f * size, new Color(0, 0, 0, 0), new Vector3(0.42f, 0, 0));
+			bars.Add(pos + v2 * size, new Color(0, 0, 0, 0), new Vector3(0.42f, 0, 0));
 			for (int x = 0; x <= 20; x++)
 			{
 				Vector2 v0 = new Vector2(0, 50f + i * 2).RotatedBy(x / 8f + rot) * Projectile.scale;
@@ -186,21 +188,22 @@ public class YggdrasilSlashBall : ModProjectile
 				v0 = v0.RotatedBy(phi);
 				float amount = (x - 10f) / 10f;
 				amount *= amount;
-				bars.Add(pos + v0 * (0.5f + amount / 2f) * size, new Color(0, 12, 150, 0), new Vector3(x / 20f, 0.42f, 0));
-				bars.Add(pos + v0 * size, Color.Lerp(new Color(81, 243, 255, 0), new Color(0, 120, 250, 0), amount), new Vector3(x / 20f, 0.5f, 0));
+				bars.Add(pos + v0 * (0.5f + amount / 2f) * size, new Color(0, 12, 150, 0), new Vector3(0.42f, x / 20f, 0));
+				bars.Add(pos + v0 * size, Color.Lerp(new Color(81, 243, 255, 0), new Color(0, 120, 250, 0), amount), new Vector3(0.5f, x / 20f, 0));
 			}
 			v2 = new Vector2(0, 60f).RotatedBy(2.5 + rot) * Projectile.scale;
 			v2.X *= MathF.Cos(theta);
 			v2 = v2.RotatedBy(phi);
-			bars.Add(pos + v2 * 0.5f * size, new Color(0, 0, 0, 0), new Vector3(1, 0.4f, 0));
-			bars.Add(pos + v2 * size, new Color(0, 0, 0, 0), new Vector3(1, 0.5f, 0));
+			bars.Add(pos + v2 * 0.5f * size, new Color(0, 0, 0, 0), new Vector3(0.42f, 1, 0));
+			bars.Add(pos + v2 * size, new Color(0, 0, 0, 0), new Vector3(0.5f, 1, 0));
 		}
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Star.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StarSlash.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
-		
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 		return false;
 	}
 	public void DrawWarp(VFXBatch spriteBatch)

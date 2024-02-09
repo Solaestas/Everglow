@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Terraria.Audio;
@@ -121,6 +122,9 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 	}
 	public override void PostDraw(Color lightColor)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Texture2D shadow = Commons.ModAsset.Star.Value;
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
@@ -129,6 +133,9 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 		Color cDark = new Color(0, 0, 0, 1f - timeValue);
 		DrawTexCircle(MathF.Sqrt(timeValue) * 120, 200 * (1 - timeValue), cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
 		DrawTexCircle(MathF.Sqrt(timeValue) * 120, 40 * (1 - timeValue), c * 0.4f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
