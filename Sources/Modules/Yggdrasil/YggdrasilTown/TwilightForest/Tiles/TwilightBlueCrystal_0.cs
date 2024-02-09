@@ -26,9 +26,9 @@ public class TwilightBlueCrystal_0 : ShapeDataTile, ISceneTile
 	public void AddScene(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
-		if (tile.TileFrameX == 72 && tile.TileFrameY == 0)
+		if (tile.TileFrameX == 0 && tile.TileFrameY == 90)
 		{
-			TwilightBlueCrystal_0_Mirror mirror = new TwilightBlueCrystal_0_Mirror { position = new Vector2(i, j) * 16 + new Vector2(-64, 6), Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
+			TwilightBlueCrystal_0_Mirror mirror = new TwilightBlueCrystal_0_Mirror { position = new Vector2(i, j) * 16 + new Vector2(0, -80), Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
 			Ins.VFXManager.Add(mirror);
 		}
 	}

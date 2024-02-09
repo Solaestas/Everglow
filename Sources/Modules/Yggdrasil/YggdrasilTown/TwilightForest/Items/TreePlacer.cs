@@ -85,12 +85,12 @@ internal class TreePlacer : ModItem
 			}
 			tile.TileType = (ushort)ModContent.TileType<TwilightTree>();
 			tile.TileFrameY = 1;
-			tile.TileFrameX = (short)Main.rand.Next(4);
+			tile.TileFrameX = (short)Main.rand.Next(8);
 			tile.HasTile = true;
 
 			tileRight.TileType = (ushort)ModContent.TileType<TwilightTree>();
 			tileRight.TileFrameY = 2;
-			tileRight.TileFrameX = (short)Main.rand.Next(4);
+			tileRight.TileFrameX = (short)Main.rand.Next(8);
 			tileRight.HasTile = true;
 		}
 	}

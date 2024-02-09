@@ -276,7 +276,7 @@ public class TwilightTree : ModTile
 				break;
 			case 2:  //右树干
 				Width = 16;
-				TexCoordY = 264;
+				TexCoordY = 280;
 				OffsetX += -8;
 				break;
 			case 3:  //树冠
