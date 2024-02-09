@@ -406,7 +406,7 @@ public class GoldShieldUIDrawer : ModSystem
 		if (p.GetModPlayer<GoldShieldPlayer>().HasShield)
 		{
 			pos = Vector2.Lerp(pos, p.Center - new Vector2(50, 0) * p.direction - Main.screenPosition, 0.2f);
-			p.GetModPlayer<GoldShieldPlayer>().Draw();
+			p.GetModPlayer<GoldShieldPlayer>().ClassicDraw();
 		}
 	}
 }
@@ -442,7 +442,7 @@ public class GoldShieldPlayer : ModPlayer
 			{
 				HasShield = true;
 				GoldShieldDurability = proj.ai[1];
-				GoldShieldDurability -= 0.01f;
+				GoldShieldDurability -= 0.1f;
 				if(GoldShieldDurability <= 0)
 				{
 					GoldShieldDurability = 0;
@@ -507,20 +507,16 @@ public class GoldShieldPlayer : ModPlayer
 
 
 
-	public void Draw()
+	public void ClassicDraw()
 	{
 		SpriteBatch spriteBatch = Main.spriteBatch;
 		Color color = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
 		PlayerStatsSnapshot snapshot = new PlayerStatsSnapshot(Player);
 		ClassicPlayerResourcesDisplaySet ing = new ClassicPlayerResourcesDisplaySet("name", "config");
 
-
+		ing.UI_ScreenAnchorX = Main.screenWidth - 800;
 		if (Player.ghost || Player.statLifeMax2 <= 0 || snapshot.AmountOfLifeHearts <= 0)
 			return;
-
-
-
-
 
 		int MaxGoldShieldDurability;
 		MaxGoldShieldDurability = (int)(Player.statLifeMax * 0.6f);
@@ -528,10 +524,8 @@ public class GoldShieldPlayer : ModPlayer
 
 		int HeartsNum = snapshot.AmountOfLifeHearts;
 		UIDisplay_ShieldOnHeart = MaxGoldShieldDurability / (float)HeartsNum;
-		int num2 = snapshot.LifeFruitCount;
 
-
-		int num4 = (int)((float)Player.statLifeMax2 / UIDisplay_ShieldOnHeart);
+	/*	int num4 = (int)((float)Player.statLifeMax2 / UIDisplay_ShieldOnHeart);
 		if (num4 >= 10)
 			num4 = 10;
 
@@ -539,9 +533,9 @@ public class GoldShieldPlayer : ModPlayer
 		Vector2 vector = FontAssets.MouseText.Value.MeasureString(text);
 		if (!Player.ghost)
 		{
-			spriteBatch.DrawString(FontAssets.MouseText.Value, "盾量", new Vector2((float)(500 + 13 * num4) - vector.X * 0.5f + (float)ing.UI_ScreenAnchorX, 6f), color, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-			spriteBatch.DrawString(FontAssets.MouseText.Value, ((int)GoldShieldDurability+1) + "/" + MaxGoldShieldDurability, new Vector2((float)(500 + 13 * num4) + vector.X * 0.5f + (float)ing.UI_ScreenAnchorX, 6f), color, 0f, new Vector2(FontAssets.MouseText.Value.MeasureString(Player.statLife + "/" + Player.statLifeMax2).X, 0f), 1f, SpriteEffects.None, 0f);
-		}
+			spriteBatch.DrawString(FontAssets.MouseText.Value, "盾量", new Vector2((float)(500 + 13 * num4) - vector.X * 0.5f + Main.screenWidth - 800, 6f), color, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+			spriteBatch.DrawString(FontAssets.MouseText.Value, ((int)GoldShieldDurability+1) + "/" + MaxGoldShieldDurability, new Vector2((float)(500 + 13 * num4) + vector.X * 0.5f + Main.screenWidth - 800, 6f), color, 0f, new Vector2(FontAssets.MouseText.Value.MeasureString(Player.statLife + "/" + Player.statLifeMax2).X, 0f), 1f, SpriteEffects.None, 0f);
+		}*/
 
 
 
@@ -586,10 +580,8 @@ public class GoldShieldPlayer : ModPlayer
 			if (!Player.ghost)
 			{
 				var heartTexture = ModAsset.ShieldHeart;
-				if (num2 > 0)
-					num2--;
 
-				Vector2 position = new Vector2(500 + 26 * (i - 1) + num8 + UIDisplay_ShieldOnHeart + heartTexture.Width() / 2, 32f + heartTexture.Height() * (1 - num6) / 2f + num9 + heartTexture.Height() / 2);
+				Vector2 position = new Vector2(Main.screenWidth - 312 + 26 * (i - 1) + num8 + UIDisplay_ShieldOnHeart + heartTexture.Width() / 2, 32f + heartTexture.Height() * (1 - num6) / 2f + num9 + heartTexture.Height() / 2);
 
 				ResourceOverlayDrawContext drawContext = new ResourceOverlayDrawContext(snapshot, ing, i - 1, heartTexture)
 				{
