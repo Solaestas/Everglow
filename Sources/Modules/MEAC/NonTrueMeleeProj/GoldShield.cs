@@ -12,6 +12,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.ResourceSets;
 using Terraria.Localization;
+using static Terraria.Localization.NetworkText;
 
 namespace Everglow.MEAC.NonTrueMeleeProj;
 
@@ -406,12 +407,37 @@ public class GoldShieldUIDrawer : ModSystem
 	{
 		Vector2 pos = Vector2.Zero;
 		Player p = Main.LocalPlayer;
-		if (p.GetModPlayer<GoldShieldPlayer>().HasShield  && Main.ResourceSetsManager.ActiveSet.DisplayedName== Language.GetTextValue("UI.HealthManaStyle_Default"))
+		if (p.GetModPlayer<GoldShieldPlayer>().HasShield)
+			
 		{
 
 			pos = Vector2.Lerp(pos, p.Center - new Vector2(50, 0) * p.direction - Main.screenPosition, 0.2f);
-			p.GetModPlayer<GoldShieldPlayer>().ClassicDraw();
-			p.GetModPlayer<GoldShieldPlayer>().Draw();
+			if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_Default"))
+			{
+				p.GetModPlayer<GoldShieldPlayer>().ClassicDraw();
+			}
+			else if(Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_New"))
+			{
+				p.GetModPlayer<GoldShieldPlayer>().DrawLifeBar(new FancyClassicPlayerResourcesDisplaySet("New", "New", "FancyClassic", AssetRequestMode.ImmediateLoad));
+			}
+			else if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_HorizontalBars"))
+			{
+			//	p.GetModPlayer<GoldShieldPlayer>().DrawLifeBar(Main.spriteBatch);
+			}
+			else if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_NewWithText"))
+			{
+				p.GetModPlayer<GoldShieldPlayer>().DrawLifeBar(new FancyClassicPlayerResourcesDisplaySet("New", "New", "FancyClassic", AssetRequestMode.ImmediateLoad));
+			}
+			else if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_HorizontalBarsWithText"))
+			{
+			//	p.GetModPlayer<GoldShieldPlayer>().DrawLifeBar(Main.spriteBatch);
+			}
+			else if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_HorizontalBarsWithFullText"))
+			{
+				//p.GetModPlayer<GoldShieldPlayer>().DrawLifeBar(Main.spriteBatch);
+			}
+
+
 		}
 	}
 }
@@ -521,7 +547,7 @@ public class GoldShieldPlayer : ModPlayer
 		SpriteBatch spriteBatch = Main.spriteBatch;
 		Color color = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
 		PlayerStatsSnapshot snapshot = new PlayerStatsSnapshot(Player);
-		ClassicPlayerResourcesDisplaySet ing = new ClassicPlayerResourcesDisplaySet("name", "config");
+		ClassicPlayerResourcesDisplaySet ing = new ClassicPlayerResourcesDisplaySet("Default", "Default");
 
 		ing.UI_ScreenAnchorX = Main.screenWidth - 800;
 		if (Player.ghost || Player.statLifeMax2 <= 0 || snapshot.AmountOfLifeHearts <= 0)
@@ -604,42 +630,77 @@ public class GoldShieldPlayer : ModPlayer
 		}
 
 	}
-	
 
-/*	private void DrawLifeBar(SpriteBatch spriteBatch)
+
+
+
+
+
+
+
+
+
+
+
+
+	int _lastHeartPanelIndex;
+	 float _currentPlayerLife;
+	 float _lifePerHeart;
+	 int _playerLifeFruitCount;
+	 int _lastHeartFillingIndex;
+	 int _heartCountRow1;
+	 int _heartCountRow2;
+	bool _drawText;
+
+	public void DrawLifeBar(FancyClassicPlayerResourcesDisplaySet Displayset)
 	{
+		SpriteBatch spriteBatch = Main.spriteBatch;
 		PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(Player);
-		float UIDisplay_ShieldOnHeart;
-		UIDisplay_ShieldOnHeart = playerStatsSnapshot.LifePerSegment;
-		int _heartCountRow1, _heartCountRow2, _lastHeartFillingIndex,_lastHeartPanelIndex;
+		int _playerLifeFruitCount = playerStatsSnapshot.LifeFruitCount;
+		float _lifePerHeart = playerStatsSnapshot.LifePerSegment;
+		int _currentPlayerLife = playerStatsSnapshot.Life;
 
-		_heartCountRow1 = Utils.Clamp(playerStatsSnapshot.AmountOfLifeHearts, 0, 10);
-		_heartCountRow2 = Utils.Clamp(playerStatsSnapshot.AmountOfLifeHearts - 10, 0, 10);
-		int lastHeartFillingIndex = (int)((float)playerStatsSnapshot.Life / UIDisplay_ShieldOnHeart);
-		_lastHeartFillingIndex = lastHeartFillingIndex;
-		_lastHeartPanelIndex = _heartCountRow1 + _heartCountRow2 - 1;
+		/*
+		_heartCountRow1 = Utils.Clamp((int)((float)playerStatsSnapshot.LifeMax / _lifePerHeart), 0, 10);
+		_heartCountRow2 = Utils.Clamp((int)((float)(playerStatsSnapshot.LifeMax - 200) / _lifePerHeart), 0, 10);
+		*/
+		 _heartCountRow1 = Utils.Clamp(playerStatsSnapshot.AmountOfLifeHearts, 0, 10);
+		 _heartCountRow2 = Utils.Clamp(playerStatsSnapshot.AmountOfLifeHearts - 10, 0, 10);
+		 int lastHeartFillingIndex = (int)((float)playerStatsSnapshot.Life / _lifePerHeart);
+		 _lastHeartFillingIndex = lastHeartFillingIndex;
+		 _lastHeartPanelIndex = _heartCountRow1 + _heartCountRow2 - 1;
 
+		/*
+		_starCount = (int)((float)playerStatsSnapshot.ManaMax / _manaPerStar);
+		*/
 
-		 ResourceDrawSettings defaultResourceDrawSettings;
+		PlayerStatsSnapshot preparedSnapshot = playerStatsSnapshot;
 
 		// Create a cached override for usages of 'default' to avoid copypasting.
-		defaultResourceDrawSettings = default;
-		defaultResourceDrawSettings.StatsSnapshot = playerStatsSnapshot;
-	//	defaultResourceDrawSettings.DisplaySet = this;
-
-
-
+		ResourceDrawSettings defaultResourceDrawSettings = default;
+		defaultResourceDrawSettings.StatsSnapshot = preparedSnapshot;
+		defaultResourceDrawSettings.DisplaySet = Displayset;
+		;
 
 
 		Color color = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
+		if (!ResourceOverlayLoader.PreDrawResourceDisplay(preparedSnapshot, Displayset, true, ref color, out bool drawText))
+			goto SkipDrawing;
+
+		if (Displayset.ConfigKey == "NewWithText")
+			_drawText = true;
+		else
+			_drawText = false;
 
 		Vector2 vector = new Vector2(Main.screenWidth - 300 + 4, 15f);
+		if (_drawText)
+		{
+			vector.Y += 6f;
+		}
 
 		bool isHovered = false;
-		FancyClassicPlayerResourcesDisplaySet ing = new FancyClassicPlayerResourcesDisplaySet("name", "config","resource", AssetRequestMode.ImmediateLoad);
-	
 
-	   ResourceDrawSettings resourceDrawSettings = defaultResourceDrawSettings;
+		ResourceDrawSettings resourceDrawSettings = defaultResourceDrawSettings;
 		resourceDrawSettings.ElementCount = _heartCountRow1;
 		resourceDrawSettings.ElementIndexOffset = 0;
 		resourceDrawSettings.TopLeftAnchor = vector;
@@ -679,13 +740,34 @@ public class GoldShieldPlayer : ModPlayer
 		resourceDrawSettings.OffsetSpriteAnchor = Vector2.Zero;
 		resourceDrawSettings.OffsetSpriteAnchorByTexturePercentile = new Vector2(0.5f, 0.5f);
 		resourceDrawSettings.Draw(spriteBatch, ref isHovered);
-		_hoverLife = isHovered && ResourceOverlayLoader.DisplayHoverText(preparedSnapshot, this, true);
+	//	_hoverLife = isHovered && ResourceOverlayLoader.DisplayHoverText(preparedSnapshot, new FancyClassicPlayerResourcesDisplaySet("New", "New", "FancyClassic", AssetRequestMode.ImmediateLoad), true);
 
-
+	SkipDrawing:
+		ResourceOverlayLoader.PostDrawResourceDisplay(preparedSnapshot, Displayset, true, color, drawText);
 	}
+
+
+
+
+
+
 
 	private void HeartPanelDrawer(int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
 	{
+		string text = "Images\\UI\\PlayerResourceSets\\" + "FancyClassic";
+		Asset<Texture2D> _heartLeft = Main.Assets.Request<Texture2D>(text + "\\Heart_Left", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _heartMiddle = Main.Assets.Request<Texture2D>(text + "\\Heart_Middle", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _heartRight = Main.Assets.Request<Texture2D>(text + "\\Heart_Right", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _heartRightFancy = Main.Assets.Request<Texture2D>(text + "\\Heart_Right_Fancy", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _heartFill = Main.Assets.Request<Texture2D>(text + "\\Heart_Fill", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _heartFillHoney = Main.Assets.Request<Texture2D>(text + "\\Heart_Fill_B", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _heartSingleFancy = Main.Assets.Request<Texture2D>(text + "\\Heart_Single_Fancy", AssetRequestMode.ImmediateLoad	);
+		Asset<Texture2D> _starTop = Main.Assets.Request<Texture2D>(text + "\\Star_A",			AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _starMiddle = Main.Assets.Request<Texture2D>(text + "\\Star_B", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _starBottom = Main.Assets.Request<Texture2D>(text + "\\Star_C", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _starSingle = Main.Assets.Request<Texture2D>(text + "\\Star_Single", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _starFill = Main.Assets.Request<Texture2D>(text + "\\Star_Fill", AssetRequestMode.ImmediateLoad);
+
 		sourceRect = null;
 		offset = Vector2.Zero;
 		sprite = _heartLeft;
@@ -712,6 +794,19 @@ public class GoldShieldPlayer : ModPlayer
 
 	private void HeartFillingDrawer(int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
 	{
+		string text = "Images\\UI\\PlayerResourceSets\\" + "FancyClassic";
+		Asset<Texture2D> _heartLeft = Main.Assets.Request<Texture2D>(text + "\\Heart_Left", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _heartMiddle = Main.Assets.Request<Texture2D>(text + "\\Heart_Middle", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _heartRight = Main.Assets.Request<Texture2D>(text + "\\Heart_Right", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _heartRightFancy = Main.Assets.Request<Texture2D>(text + "\\Heart_Right_Fancy", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _heartFill = Main.Assets.Request<Texture2D>(text + "\\Heart_Fill", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _heartFillHoney = Main.Assets.Request<Texture2D>(text + "\\Heart_Fill_B", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _heartSingleFancy = Main.Assets.Request<Texture2D>(text + "\\Heart_Single_Fancy", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _starTop = Main.Assets.Request<Texture2D>(text + "\\Star_A", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _starMiddle = Main.Assets.Request<Texture2D>(text + "\\Star_B", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _starBottom = Main.Assets.Request<Texture2D>(text + "\\Star_C", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _starSingle = Main.Assets.Request<Texture2D>(text + "\\Star_Single", AssetRequestMode.ImmediateLoad);
+		Asset<Texture2D> _starFill = Main.Assets.Request<Texture2D>(text + "\\Star_Fill", AssetRequestMode.ImmediateLoad);
 		sourceRect = null;
 		offset = Vector2.Zero;
 		sprite = _heartLeft;
@@ -723,7 +818,17 @@ public class GoldShieldPlayer : ModPlayer
 		float num = (drawScale = Utils.GetLerpValue(_lifePerHeart * (float)elementIndex, _lifePerHeart * (float)(elementIndex + 1), _currentPlayerLife, clamped: true));
 		if (elementIndex == _lastHeartFillingIndex && num > 0f)
 			drawScale += Main.cursorScale - 1f;
-	}*/
-	
+	}
+
+
+
+
+
+
+
+
+
+
+
 
 }
