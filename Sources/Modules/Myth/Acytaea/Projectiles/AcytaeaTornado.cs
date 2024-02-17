@@ -19,9 +19,9 @@ public class AcytaeaTornado : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.penetrate = -1;
 		Projectile.DamageType = DamageClass.Melee;
-
 		Projectile.width = 80;
 		Projectile.height = 80;
+		ProjectileID.Sets.DrawScreenCheckFluff[Type] = 8192;
 	}
 	public float Timer = 0;
 	public Vector2 TornadoBottom = Vector2.zeroVector;
