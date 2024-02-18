@@ -5,7 +5,7 @@ using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 
-public class CobaltClub_falling_Shoot : ModProjectile, IWarpProjectile
+public class MythrilClub_Shoot : ModProjectile, IWarpProjectile
 {
 	public override string Texture => "Everglow/" + ModAsset.Melee_CobaltClubPath;
 	public override void SetDefaults()
@@ -26,15 +26,6 @@ public class CobaltClub_falling_Shoot : ModProjectile, IWarpProjectile
 	}
 	public override void AI()
 	{
-		if (Projectile.timeLeft == 199)
-		{
-			SoundEngine.PlaySound(SoundID.Item71.WithVolume(Projectile.ai[0] / 5f), Projectile.position);
-
-			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<CobaltClub_falling>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, Main.rand.Next(12));
-			p.CritChance = Projectile.CritChance;
-			p.extraUpdates = 2;
-			Projectile.velocity *= 0;
-		}
 	}
 
 	public override void PostDraw(Color lightColor)
@@ -51,7 +42,7 @@ public class CobaltClub_falling_Shoot : ModProjectile, IWarpProjectile
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(0f, 0.5f, 1f, 0) * dark * (lightColor.B / 255f), 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 10f * dark, SpriteEffects.None, 0);
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
-		DrawTexCircle(timeValue * 24 * Projectile.ai[0], 8 * (1 - timeValue) * Projectile.ai[0], new Color(0.1f * (1 - timeValue) * (1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), (1 - timeValue), 0f), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_thick.Value);
+		DrawTexCircle(timeValue * 24 * Projectile.ai[0], 8 * (1 - timeValue) * Projectile.ai[0], new Color(0.1f * (1 - timeValue) * (1 - timeValue), 0.9f * (1 - timeValue) * (1 - timeValue), 0.2f * (1 - timeValue), 0f) * (lightColor.G / 75f), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_thick.Value);
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
@@ -67,8 +58,8 @@ public class CobaltClub_falling_Shoot : ModProjectile, IWarpProjectile
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 10f, SpriteEffects.None, 0);
 		Texture2D light = Commons.ModAsset.StarSlash.Value;
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0.1f * (1 - timeValue) * (1 - timeValue), 0.2f * (1 - timeValue) * (1 - timeValue), (1 - timeValue), 0f) * (lightColor.B / 75f), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * Projectile.ai[0] * 0.35f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0.1f * (1 - timeValue) * (1 - timeValue), 0.2f * (1 - timeValue) * (1 - timeValue), (1 - timeValue), 0f) * (lightColor.B / 75f), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * Projectile.ai[0] * 0.35f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0.1f * (1 - timeValue) * (1 - timeValue), 0.9f * (1 - timeValue) * (1 - timeValue), 0.2f * (1 - timeValue), 0f) * (lightColor.G / 75f), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * Projectile.ai[0] * 0.35f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0.1f * (1 - timeValue) * (1 - timeValue), 0.9f * (1 - timeValue) * (1 - timeValue), 0.2f * (1 - timeValue), 0f) * (lightColor.G / 75f), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * Projectile.ai[0] * 0.35f, SpriteEffects.None, 0);
 
 		return false;
 	}
