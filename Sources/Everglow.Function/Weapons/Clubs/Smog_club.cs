@@ -9,8 +9,6 @@ public class Smog_clubPipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.Smog_club;
-		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_flame_0.Value);
-		effect.Value.Parameters["uLine"].SetValue(ModAsset.TrailV.Value);
 	}
 	public override void BeginRender()
 	{
@@ -18,8 +16,9 @@ public class Smog_clubPipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_flame_0.Value);
+		effect.Parameters["uLine"].SetValue(ModAsset.TrailV.Value);
 		Ins.Batch.BindTexture<Vertex2D>(ModAsset.Smog_club_Heatmap.Value);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearClamp, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
@@ -72,9 +71,6 @@ public class Smog_club_front : Visual
 			bars.Add(oldPos[i] + normal * scale, lightColorWithPos, new Vector3(0, (i + 15 - len) / 75f + timer / 15000f, fx - width * 0.4f));
 			bars.Add(oldPos[i] - normal * scale, lightColorWithPos, new Vector3(1, (i + 15 - len) / 75f + timer / 15000f, fx - width * 0.4f));
 		}
-		if (bars.Count > 0)
-		{
-			Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
-		}
+		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
 }

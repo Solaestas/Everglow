@@ -6,8 +6,6 @@ internal class FlameRingPipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.FlameRing;
-		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_melting.Value);
-		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_flameRing.Value);
 	}
 	public override void BeginRender()
 	{
@@ -15,6 +13,8 @@ internal class FlameRingPipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_melting.Value);
+		effect.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_flameRing.Value);
 		Texture2D halo = Commons.ModAsset.Trail.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;

@@ -1,5 +1,6 @@
 using Everglow.Commons.Enums;
 using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
 
@@ -8,18 +9,16 @@ public class IchorSplashPipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.IchorSplash;
-		effect.Value.Parameters["uNoise"].SetValue(ModAsset.Noise_cell.Value);
 	}
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		//effect.Parameters["uNoise"].SetValue(ModAsset.Noise_cell.Value);
 		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.Parameters["uNoise"].SetValue(ModAsset.Noise_cell.Value);
 		Texture2D FlameColor = ModAsset.HeatMap_ichorSplash.Value;
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearClamp, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
@@ -29,7 +28,7 @@ public class IchorSplashPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
-[Pipeline(typeof(IchorSplashPipeline))]
+[Pipeline(typeof(IchorSplashPipeline), typeof(BloomPipeline))]
 public class IchorSplash : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
@@ -112,21 +111,27 @@ public class IchorSplash : Visual
 			Vector2 pointDown = oldPos[i] - normal * width;
 			Vector2 widthUp = new Vector2(normal.X * width, 0);
 			Vector2 widthDown = -new Vector2(normal.X * width, 0);
-			if (Main.tile[(int)(pointUp.X / 16f), (int)(pointUp.Y / 16f) - 1].LiquidAmount > 0)
+
+			if (pointUp.X <= 320 || pointUp.X >= Main.maxTilesX * 16 - 320)
 			{
-				widthUp *= MathF.Sqrt(alpha) * 4f;
+				Active = false;
+				return;
 			}
-			else
+			if (pointUp.Y <= 320 || pointUp.Y >= Main.maxTilesY * 16 - 320)
 			{
-				widthUp *= 0f;
+				Active = false;
+				return;
 			}
-			if (Main.tile[(int)(pointDown.X / 16f), (int)(pointDown.Y / 16f) - 1].LiquidAmount > 0)
+
+			if (pointDown.X <= 320 || pointDown.X >= Main.maxTilesX * 16 - 320)
 			{
-				widthDown *= MathF.Sqrt(alpha) * 4f;
+				Active = false;
+				return;
 			}
-			else
+			if (pointDown.Y <= 320 || pointDown.Y >= Main.maxTilesY * 16 - 320)
 			{
-				widthDown *= 0f;
+				Active = false;
+				return;
 			}
 
 			bars.Add(oldPos[i] + normal * width + widthUp, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0 + ai[0], (i + 15 - len) / 17f, pocession));

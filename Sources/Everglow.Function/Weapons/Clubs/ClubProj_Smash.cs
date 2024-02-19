@@ -33,7 +33,7 @@ public abstract class ClubProj_Smash : MeleeProj
 		trailLength = 20;
 		shadertype = "Trail";
 		AutoEnd = false;
-		selfWarp = true;
+		selfWarp = false;
 	}
 	public bool Crash = false;
 	public int FixedDirection = 1;

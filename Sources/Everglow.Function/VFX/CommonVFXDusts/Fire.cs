@@ -8,8 +8,6 @@ public class FirePipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.Fire;
-		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
-		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_fire.Value);
 	}
 	public override void BeginRender()
 	{
@@ -17,6 +15,8 @@ public class FirePipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
+		effect.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_fire.Value);
 		Texture2D halo = Commons.ModAsset.Point.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
