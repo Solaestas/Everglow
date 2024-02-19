@@ -418,23 +418,23 @@ public class GoldShieldUIDrawer : ModSystem
 			}
 			else if(Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_New"))
 			{
-				p.GetModPlayer<GoldShieldPlayer>().DrawLifeBar(new FancyClassicPlayerResourcesDisplaySet("New", "New", "FancyClassic", AssetRequestMode.ImmediateLoad));
+				p.GetModPlayer<GoldShieldPlayer>().FancyDraw(new FancyClassicPlayerResourcesDisplaySet("New", "New", "FancyClassic", AssetRequestMode.ImmediateLoad));
 			}
 			else if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_HorizontalBars"))
 			{
-			//	p.GetModPlayer<GoldShieldPlayer>().DrawLifeBar(Main.spriteBatch);
+				p.GetModPlayer<GoldShieldPlayer>().HorizontalDraw(new HorizontalBarsPlayerResourcesDisplaySet("HorizontalBars", "HorizontalBars", "HorizontalBars", AssetRequestMode.ImmediateLoad));
 			}
 			else if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_NewWithText"))
 			{
-				p.GetModPlayer<GoldShieldPlayer>().DrawLifeBar(new FancyClassicPlayerResourcesDisplaySet("NewWithText", "NewWithText", "FancyClassic", AssetRequestMode.ImmediateLoad));
+				p.GetModPlayer<GoldShieldPlayer>().FancyDraw(new FancyClassicPlayerResourcesDisplaySet("NewWithText", "NewWithText", "FancyClassic", AssetRequestMode.ImmediateLoad));
 			}
 			else if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_HorizontalBarsWithText"))
 			{
-			//	p.GetModPlayer<GoldShieldPlayer>().DrawLifeBar(Main.spriteBatch);
+				p.GetModPlayer<GoldShieldPlayer>().HorizontalDraw(new HorizontalBarsPlayerResourcesDisplaySet("HorizontalBarsWithText", "HorizontalBarsWithText", "HorizontalBars", AssetRequestMode.ImmediateLoad));
 			}
 			else if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_HorizontalBarsWithFullText"))
 			{
-				//p.GetModPlayer<GoldShieldPlayer>().DrawLifeBar(Main.spriteBatch);
+				p.GetModPlayer<GoldShieldPlayer>().HorizontalDraw(new HorizontalBarsPlayerResourcesDisplaySet("HorizontalBarsWithFullText", "HorizontalBarsWithFullText", "HorizontalBars", AssetRequestMode.ImmediateLoad));
 			}
 
 
@@ -460,11 +460,6 @@ public class GoldShieldPlayer : ModPlayer
 	}
 
 
-
-
-
-
-
 	public override void PreUpdate()
 	{
 		foreach (Projectile proj in Main.projectile)
@@ -473,7 +468,7 @@ public class GoldShieldPlayer : ModPlayer
 			{
 				HasShield = true;
 				GoldShieldDurability = proj.ai[1];
-				GoldShieldDurability -= 0.1f;
+	//			GoldShieldDurability -= 0.1f;
 				if(GoldShieldDurability <= 0)
 				{
 					GoldShieldDurability = 0;
@@ -534,13 +529,7 @@ public class GoldShieldPlayer : ModPlayer
 		}
 	}
 
-
-	public void Draw()
-	{
-		var column = ModAsset.column.Value;
-		Main.spriteBatch.Draw(column, new Vector2(Main.screenWidth-290,Main.screenHeight-250),Color.White);
-	}
-
+	#region ClassicDraw
 
 	public void ClassicDraw()
 	{
@@ -634,13 +623,9 @@ public class GoldShieldPlayer : ModPlayer
 
 
 
+	#endregion
 
-
-
-
-
-
-
+	#region FancyDraw
 
 
 	int _lastHeartPanelIndex;
@@ -652,7 +637,7 @@ public class GoldShieldPlayer : ModPlayer
 	 int _heartCountRow2;
 	bool _drawText;
 
-	public void DrawLifeBar(FancyClassicPlayerResourcesDisplaySet Displayset)
+	public void FancyDraw(FancyClassicPlayerResourcesDisplaySet Displayset)
 	{
 		SpriteBatch spriteBatch = Main.spriteBatch;
 		PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(Player);
@@ -688,8 +673,6 @@ public class GoldShieldPlayer : ModPlayer
 
 
 		Color color = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
-		if (!ResourceOverlayLoader.PreDrawResourceDisplay(preparedSnapshot, Displayset, true, ref color, out bool drawText))
-			goto SkipDrawing;
 
 		if (Displayset.ConfigKey == "NewWithText")
 			_drawText = true;
@@ -724,50 +707,6 @@ public class GoldShieldPlayer : ModPlayer
 		resourceDrawSettings.OffsetSpriteAnchor = Vector2.Zero;
 		resourceDrawSettings.OffsetSpriteAnchorByTexturePercentile = new Vector2(0.5f, 0.5f);
 		resourceDrawSettings.Draw(spriteBatch, ref isHovered);
-	//	 VertexBuffer  = isHovered && ResourceOverlayLoader.DisplayHoverText(preparedSnapshot, new FancyClassicPlayerResourcesDisplaySet("New", "New", "FancyClassic", AssetRequestMode.ImmediateLoad), true);
-
-	SkipDrawing:
-		ResourceOverlayLoader.PostDrawResourceDisplay(preparedSnapshot, Displayset, true, color, drawText);
-	}
-
-
-
-
-
-
-
-	private void HeartPanelDrawer(int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
-	{
-		string text = "Images\\UI\\PlayerResourceSets\\" + "FancyClassic";
-		Asset<Texture2D> _heartLeft = Main.Assets.Request<Texture2D>(text + "\\Heart_Left", AssetRequestMode.ImmediateLoad);
-		Asset<Texture2D> _heartMiddle = Main.Assets.Request<Texture2D>(text + "\\Heart_Middle", AssetRequestMode.ImmediateLoad);
-		Asset<Texture2D> _heartRight = Main.Assets.Request<Texture2D>(text + "\\Heart_Right", AssetRequestMode.ImmediateLoad);
-		Asset<Texture2D> _heartRightFancy = Main.Assets.Request<Texture2D>(text + "\\Heart_Right_Fancy", AssetRequestMode.ImmediateLoad);
-		Asset<Texture2D> _heartSingleFancy = Main.Assets.Request<Texture2D>(text + "\\Heart_Single_Fancy", AssetRequestMode.ImmediateLoad	);
-
-
-		sourceRect = null;
-		offset = Vector2.Zero;
-		sprite = _heartLeft;
-		drawScale = 1f;
-		if (elementIndex == lastElementIndex && elementIndex == firstElementIndex)
-		{
-			sprite = _heartSingleFancy;
-			offset = new Vector2(-4f, -4f);
-		}
-		else if (elementIndex == lastElementIndex && lastElementIndex == _lastHeartPanelIndex)
-		{
-			sprite = _heartRightFancy;
-			offset = new Vector2(-8f, -4f);
-		}
-		else if (elementIndex == lastElementIndex)
-		{
-			sprite = _heartRight;
-		}
-		else if (elementIndex != firstElementIndex)
-		{
-			sprite = _heartMiddle;
-		}
 	}
 
 	private void HeartFillingDrawer(int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
@@ -791,15 +730,133 @@ public class GoldShieldPlayer : ModPlayer
 			drawScale += Main.cursorScale - 1f;
 	}
 
+	#endregion FancyDraw
 
+	#region HorizontalDraw
+	public void HorizontalDraw(HorizontalBarsPlayerResourcesDisplaySet Displayset)
+	{
 
+		Asset<Texture2D> _panelMiddleHP = Main.Assets.Request<Texture2D>("Images\\UI\\PlayerResourceSets\\HorizontalBars\\HP_Panel_Middle", AssetRequestMode.ImmediateLoad);
+	
 
+		PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(Player);
 
+		// Make drawing use the automatically-clamped AmountOf properties (#HealthManaAPI)
+		/*
+		_hpSegmentsCount = (int)((float)playerStatsSnapshot.LifeMax / playerStatsSnapshot.LifePerSegment);
+		_mpSegmentsCount = (int)((float)playerStatsSnapshot.ManaMax / playerStatsSnapshot.ManaPerSegment);
+		*/
+		int _drawTextStyle;
+		int MaxGoldShieldDurability;
+		MaxGoldShieldDurability = (int)(Player.statLifeMax * 0.6f);
 
+		if (Displayset.ConfigKey == "HorizontalBarsWithFullText")
+			_drawTextStyle = 2;
+		else if (Displayset.ConfigKey == "HorizontalBarsWithText")
+			_drawTextStyle = 1;
+		else
+			_drawTextStyle = 0;
 
+		int HeartsNum = playerStatsSnapshot.AmountOfLifeHearts;
 
+		int _maxSegmentCount = 20;
+		_playerLifeFruitCount = playerStatsSnapshot.LifeFruitCount;
+		float _hpPercent = (float)GoldShieldDurability / MaxGoldShieldDurability;
 
+		PlayerStatsSnapshot preparedSnapshot = playerStatsSnapshot;
+		SpriteBatch spriteBatch = Main.spriteBatch;
+		int num = 16;
+		int num2 = 18;
+		int num3 = Main.screenWidth - 300 - 22 + num;
+		if (_drawTextStyle == 2)
+		{
+			num2 += 2;
 
+		}
+		else if (_drawTextStyle == 1)
+		{
+			num2 += 4;
+		}
+
+		Color color = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
+		if (!ResourceOverlayLoader.PreDrawResourceDisplay(preparedSnapshot, Displayset, true, ref color, out bool drawText))
+			goto SkipLifeDrawing;
+
+		Vector2 vector = new Vector2(num3, num2);
+		vector.X += (_maxSegmentCount - HeartsNum ) * _panelMiddleHP.Width();
+		bool isHovered = false;
+		ResourceDrawSettings resourceDrawSettings = default(ResourceDrawSettings);
+
+		
+		resourceDrawSettings = default(ResourceDrawSettings);
+		resourceDrawSettings.ElementCount = HeartsNum;
+		resourceDrawSettings.ElementIndexOffset = 0;
+		// Make the filling draw from right to left (#HealthManaAPI)
+		resourceDrawSettings.TopLeftAnchor = vector + new Vector2(6f, 6f);
+		resourceDrawSettings.GetTextureMethod = LifeFillingDrawer;
+		resourceDrawSettings.OffsetPerDraw = new Vector2(ModAsset.Shield_Fill.Width(), 0f);
+		resourceDrawSettings.OffsetPerDrawByTexturePercentile = Vector2.Zero;
+		resourceDrawSettings.OffsetSpriteAnchor = Vector2.Zero;
+		resourceDrawSettings.OffsetSpriteAnchorByTexturePercentile = Vector2.Zero;
+		resourceDrawSettings.StatsSnapshot = preparedSnapshot;
+		resourceDrawSettings.DisplaySet = Displayset;
+		resourceDrawSettings.Draw(spriteBatch, ref isHovered);
+
+	SkipLifeDrawing:
+
+		ResourceOverlayLoader.PostDrawResourceDisplay(preparedSnapshot, Displayset, true, color, drawText);
+		
+	}
+
+	
+	private void LifeFillingDrawer(int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
+	{
+		sprite = ModAsset.Shield_Fill;
+		PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(Player);
+		int HeartsNum = playerStatsSnapshot.AmountOfLifeHearts;
+		_playerLifeFruitCount = playerStatsSnapshot.LifeFruitCount;
+		int MaxGoldShieldDurability;
+		MaxGoldShieldDurability = (int)(Player.statLifeMax * 0.6f);
+		float _hpPercent = (float)GoldShieldDurability / MaxGoldShieldDurability;
+
+		if (elementIndex < _playerLifeFruitCount)
+			sprite = ModAsset.Shield_Fill;
+
+		FillBarByValues(elementIndex, sprite, HeartsNum, _hpPercent, out offset, out drawScale, out sourceRect);
+
+		// Make the bar fillings draw from right to left (#HealthManaAPI)
+		int opposite = lastElementIndex - (elementIndex - firstElementIndex);
+		int drawIndexOffset = opposite - elementIndex;
+		offset.X += drawIndexOffset * sprite.Width();
+	}
+
+	public static void FillBarByValues(int elementIndex, Asset<Texture2D> sprite, int segmentsCount, float fillPercent, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
+	{
+		sourceRect = null;
+		offset = Vector2.Zero;
+		float num = 1f;
+		float num2 = 1f / (float)segmentsCount;
+
+		/*
+		float t = 1f - fillPercent;
+		*/
+		float t = fillPercent;
+		float lerpValue = Utils.GetLerpValue(num2 * (float)elementIndex, num2 * (float)(elementIndex + 1), t, clamped: true);
+
+		/*
+		num = 1f - lerpValue;
+		*/
+		num = lerpValue;
+		drawScale = 1f;
+		Rectangle value = sprite.Frame();
+		int num3 = (int)((float)value.Width * (1f - num));
+		offset.X += num3;
+		value.X += num3;
+		value.Width -= num3;
+		sourceRect = value;
+	}
+
+	#endregion HorizontalDraw
 
 
 }
