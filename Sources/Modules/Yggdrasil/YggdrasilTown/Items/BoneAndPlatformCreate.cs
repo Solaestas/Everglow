@@ -25,10 +25,6 @@ public class BoneAndPlatformCreate : ModItem
 			x0 -= 60;
 		}
 		PlaceFrameImportantTiles(x0, y0, 60, 1, ModContent.TileType<BoneAndPlatform_tile>(),0, 0);
-		BoneAndPlatform_background scene = new BoneAndPlatform_background { position = new Vector2(x0, y0 - 14) * 16, Active = true, originTile = new Point(x0, y0), originType = ModContent.TileType<BoneAndPlatform_tile>(), direction = player.direction };
-		Ins.VFXManager.Add(scene);
-		BoneAndPlatform_foreground scene2 = new BoneAndPlatform_foreground { position = new Vector2(x0, y0 - 14) * 16, Active = true, originTile = new Point(x0, y0), originType = ModContent.TileType<BoneAndPlatform_tile>(), direction = player.direction };
-		Ins.VFXManager.Add(scene2);
 		return false;
 	}
 	public override bool? UseItem(Player player)
