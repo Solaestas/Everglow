@@ -497,14 +497,25 @@ public class GoldShieldPlayer : ModPlayer
 				GoldShieldDurability = (int)proj.ai[1];
 				if (GoldShieldDurability >= info.Damage)
 				{
+					if (info.Damage!=0)
+					{
+						CombatText.NewText(new Rectangle((int)Player.Center.X - 10, (int)Player.Center.Y - 10, 20, 20), Color.Gold, info.Damage);
+					}
 					Dodge = true;
+
 					this.GoldShieldDurability -= (int)info.Damage;
 					info.Damage *= 0;
+					
 				}
 				else
 				{
 					info.Damage -=(int) GoldShieldDurability;
+					if (GoldShieldDurability != 0)
+					{
+						CombatText.NewText(new Rectangle((int)Player.Center.X - 10, (int)Player.Center.Y - 10, 20, 20), Color.Gold, (int)GoldShieldDurability);
+					}
 					this.GoldShieldDurability *= 0;
+
 				}
 				Main.player[proj.owner].immune = true;
 				Main.player[proj.owner].immuneTime = 30;
