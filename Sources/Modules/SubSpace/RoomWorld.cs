@@ -1,12 +1,25 @@
 using SubworldLibrary;
 using Terraria.WorldBuilding;
-
 namespace Everglow.SubSpace;
 
 public class RoomWorld : Subworld
 {
-	public Subworld OriginalWorld;
-	public Point AnchorWorldCoordinate;
+	/// <summary>
+	/// 原世界,为主世界时Null
+	/// </summary>
+	public static Subworld OriginalWorld;
+	/// <summary>
+	/// 房间深度
+	/// </summary>
+	public static int LayerDepth;
+	/// <summary>
+	/// 返回的层级
+	/// </summary>
+	public static int ExitToTarget;
+	/// <summary>
+	/// 入口在原世界中的位置(返回锚点)
+	/// </summary>
+	public static Point AnchorWorldCoordinate;
 	public override int Width => 200;
 	public override int Height => 200;
 	public override void OnLoad()
@@ -19,14 +32,13 @@ public class RoomWorld : Subworld
 	{
 		new WoodenBoxRoomGenPass()
 	};
-	public override bool ShouldSave => true;
+	public override bool ShouldSave => false;
 	public override void OnEnter()
 	{
 		base.OnEnter();
 	}
 	public override void OnExit()
 	{
-		base.OnExit();
 	}
 }
 
