@@ -2688,6 +2688,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	CreateRoom: {
+		DisplayName: Create Room
+		Tooltip: ""
+	}
+
 	TreePlacer: {
 		DisplayName: Tree Placer
 		Tooltip: ""
