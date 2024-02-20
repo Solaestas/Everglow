@@ -5,8 +5,10 @@ using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.Weapons.StabbingSwords;
+using Microsoft.CodeAnalysis.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
+using Mono.Cecil;
 using ReLogic.Content;
 using ReLogic.Graphics;
 using Terraria.DataStructures;
@@ -612,16 +614,34 @@ public class GoldShieldPlayer : ModPlayer
 				num9 += 26;
 			}
 
+
+
 			int a = (int)((double)num5 * 0.9);
 			if (!Player.ghost)
 			{
 				var heartTexture = ModAsset.ShieldHeart;
+
+
+				float num2 = 1f / (float)HeartsNum;
+				float _hpPercent = (float)GoldShieldDurability / MaxGoldShieldDurability;
+				/*
+				float t = 1f - fillPercent;
+				*/
+				float t = _hpPercent;
+				float lerpValue = Utils.GetLerpValue(num2 * (float)i, num2 * (float)(i + 1), t, clamped: true);
+
+				Rectangle value = heartTexture.Frame();
+				int num3 = (int)((float)value.Width * (1f - lerpValue));
+
+				value.Width -= num3;
+
 
 				Vector2 position = new Vector2(Main.screenWidth - 312 + 26 * (i - 1) + num8 + UIDisplay_ShieldOnHeart + heartTexture.Width() / 2, 32f + heartTexture.Height() * (1 - num6) / 2f + num9 + heartTexture.Height() / 2);
 
 				ResourceOverlayDrawContext drawContext = new ResourceOverlayDrawContext(snapshot, ing, i - 1, heartTexture)
 				{
 					position = position,
+					source = value,
 					color = new Color(num5, num5, num5, a),
 					origin = heartTexture.Size() / 2f,
 					scale = new Vector2(num6)
