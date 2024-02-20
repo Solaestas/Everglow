@@ -1,3 +1,4 @@
+using System;
 using Everglow.Commons.Enums;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Utilities;
@@ -468,7 +469,7 @@ public class GoldShieldPlayer : ModPlayer
 			{
 				HasShield = true;
 				GoldShieldDurability = proj.ai[1];
-	//			GoldShieldDurability -= 0.1f;
+			GoldShieldDurability -= 0.1f;
 				if(GoldShieldDurability <= 0)
 				{
 					GoldShieldDurability = 0;
@@ -499,7 +500,7 @@ public class GoldShieldPlayer : ModPlayer
 				{
 					if (info.Damage!=0)
 					{
-						CombatText.NewText(new Rectangle((int)Player.Center.X - 10, (int)Player.Center.Y - 10, 20, 20), Color.Gold, info.Damage);
+						CombatText .NewText(new Rectangle((int)Player.Center.X - 10, (int)Player.Center.Y - 10, 20, 20), Color.Gold, info.Damage);
 					}
 					Dodge = true;
 
@@ -705,8 +706,8 @@ public class GoldShieldPlayer : ModPlayer
 		resourceDrawSettings.GetTextureMethod = HeartFillingDrawer;
 		resourceDrawSettings.OffsetPerDraw = Vector2.UnitX * 2f;
 		resourceDrawSettings.OffsetPerDrawByTexturePercentile = Vector2.UnitX;
-		resourceDrawSettings.OffsetSpriteAnchor = Vector2.Zero;
-		resourceDrawSettings.OffsetSpriteAnchorByTexturePercentile = new Vector2(0.5f, 0.5f);
+		resourceDrawSettings.OffsetSpriteAnchor = new Vector2(11f, 11f);
+		resourceDrawSettings.OffsetSpriteAnchorByTexturePercentile = Vector2.Zero;
 		resourceDrawSettings.Draw(spriteBatch, ref isHovered);
 		resourceDrawSettings = defaultResourceDrawSettings;
 		resourceDrawSettings.ElementCount = _heartCountRow2;
@@ -715,30 +716,45 @@ public class GoldShieldPlayer : ModPlayer
 		resourceDrawSettings.GetTextureMethod = HeartFillingDrawer;
 		resourceDrawSettings.OffsetPerDraw = Vector2.UnitX * 2f;
 		resourceDrawSettings.OffsetPerDrawByTexturePercentile = Vector2.UnitX;
-		resourceDrawSettings.OffsetSpriteAnchor = Vector2.Zero;
-		resourceDrawSettings.OffsetSpriteAnchorByTexturePercentile = new Vector2(0.5f, 0.5f);
+		resourceDrawSettings.OffsetSpriteAnchor = new Vector2(11f,11f);
+		resourceDrawSettings.OffsetSpriteAnchorByTexturePercentile = Vector2.Zero;
 		resourceDrawSettings.Draw(spriteBatch, ref isHovered);
 	}
 
 	private void HeartFillingDrawer(int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
 	{
-		string text = "Images\\UI\\PlayerResourceSets\\" + "FancyClassic";
-		Asset<Texture2D> _heartLeft = ModAsset.ShieldHeart;
 
-		Asset<Texture2D> _heartFill = ModAsset.ShieldHeart;
-		Asset<Texture2D> _heartFillHoney = ModAsset.ShieldHeart;
 
 		sourceRect = null;
 		offset = Vector2.Zero;
-		sprite = _heartLeft;
-		if (elementIndex < _playerLifeFruitCount)
-			sprite = _heartFillHoney;
-		else
-			sprite = _heartFill;
+		sprite = ModAsset.ShieldHeart;
+		PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(Player);
+		int HeartsNum = playerStatsSnapshot.AmountOfLifeHearts;
+		_playerLifeFruitCount = playerStatsSnapshot.LifeFruitCount;
+		int MaxGoldShieldDurability;
+		MaxGoldShieldDurability = (int)(Player.statLifeMax * 0.6f);
 
-		float num = (drawScale = Utils.GetLerpValue(_lifePerHeart * (float)elementIndex, _lifePerHeart * (float)(elementIndex + 1), GoldShieldDurability, clamped: true));
-		if (elementIndex == _lastHeartFillingIndex && num > 0f)
-			drawScale += Main.cursorScale - 1f;
+		float _hpPercent = (float)GoldShieldDurability / MaxGoldShieldDurability;
+		offset = Vector2.Zero;
+		float num = 1f;
+		float num2 = 1f / (float)HeartsNum;
+
+		/*
+		float t = 1f - fillPercent;
+		*/
+		float t = _hpPercent;
+		float lerpValue = Utils.GetLerpValue(num2 * (float)elementIndex, num2 * (float)(elementIndex + 1), t, clamped: true);
+
+		/*
+		num = 1f - lerpValue;
+		*/
+		num = lerpValue;
+		drawScale = 1f;
+		Rectangle value = sprite.Frame();
+		int num3 = (int)((float)value.Width * (1f - num));
+
+		value.Width -= num3;
+		sourceRect = value;
 	}
 
 	#endregion FancyDraw
@@ -790,8 +806,7 @@ public class GoldShieldPlayer : ModPlayer
 		}
 
 		Color color = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
-		if (!ResourceOverlayLoader.PreDrawResourceDisplay(preparedSnapshot, Displayset, true, ref color, out bool drawText))
-			goto SkipLifeDrawing;
+
 
 		Vector2 vector = new Vector2(num3, num2);
 		vector.X += (_maxSegmentCount - HeartsNum ) * _panelMiddleHP.Width();
@@ -813,9 +828,6 @@ public class GoldShieldPlayer : ModPlayer
 		resourceDrawSettings.DisplaySet = Displayset;
 		resourceDrawSettings.Draw(spriteBatch, ref isHovered);
 
-	SkipLifeDrawing:
-
-		ResourceOverlayLoader.PostDrawResourceDisplay(preparedSnapshot, Displayset, true, color, drawText);
 		
 	}
 
@@ -830,8 +842,6 @@ public class GoldShieldPlayer : ModPlayer
 		MaxGoldShieldDurability = (int)(Player.statLifeMax * 0.6f);
 		float _hpPercent = (float)GoldShieldDurability / MaxGoldShieldDurability;
 
-		if (elementIndex < _playerLifeFruitCount)
-			sprite = ModAsset.Shield_Fill;
 
 		FillBarByValues(elementIndex, sprite, HeartsNum, _hpPercent, out offset, out drawScale, out sourceRect);
 
