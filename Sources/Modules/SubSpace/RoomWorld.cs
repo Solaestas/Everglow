@@ -22,6 +22,7 @@ public class RoomWorld : Subworld
 	public static Point AnchorWorldCoordinate;
 	public override int Width => 200;
 	public override int Height => 200;
+	public override bool NormalUpdates => true;
 	public override void OnLoad()
 	{
 		Main.worldSurface = 190;
