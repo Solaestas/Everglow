@@ -20,8 +20,8 @@ public class RoomWorld : Subworld
 	/// 入口在原世界中的位置(返回锚点)
 	/// </summary>
 	public static Point AnchorWorldCoordinate;
-	public override int Width => 200;
-	public override int Height => 200;
+	public override int Width => 300;
+	public override int Height => 300;
 	public override bool NormalUpdates => true;
 	public override void OnLoad()
 	{

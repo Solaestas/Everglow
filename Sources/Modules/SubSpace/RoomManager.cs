@@ -1,5 +1,6 @@
 using Everglow.Commons.TileHelper;
 using SubworldLibrary;
+using Terraria;
 
 namespace Everglow.SubSpace;
 
@@ -8,7 +9,7 @@ public class RoomManager
 	/// <summary>
 	/// 向内深入一层房间
 	/// </summary>
-	public static void EnterNextLevelRoom(Point point)
+	public static void EnterNextLevelRoom(Point point, string mapPath = "")
 	{
 		//如果已经在房间里了,向下一层
 		if (SubworldSystem.IsActive<RoomWorld>())
@@ -19,8 +20,10 @@ public class RoomManager
 			//没有记录就新建
 			if (!WoodenBoxRoomGenPass.ReadWorldSave())
 			{
+				//没有给定的地图数据直接搓一个木制空洞
+				WoodenBoxRoomGenPass.MapIOPathOfNewRoom = mapPath;
 				WoodenBoxRoomGenPass.BuildWoodenRoom();
-			}		
+			}
 		}
 		//如果不在房间里就进入1层房间
 		else
@@ -34,7 +37,7 @@ public class RoomManager
 			{
 				RoomWorld.OriginalWorld = null;
 			}
-
+			WoodenBoxRoomGenPass.MapIOPathOfNewRoom = mapPath;
 			RoomWorld.AnchorWorldCoordinate = point;
 			RoomWorld.LayerDepth = 1;
 			SubworldSystem.Enter<RoomWorld>();
@@ -147,5 +150,20 @@ public class RoomPlayer : ModPlayer
 		base.OnEnterWorld();
 	}
 }
+public class RoomWorldTile : GlobalTile
+{
+	public override bool CanKillTile(int i, int j, int type, ref bool blockDamaged)
+	{
+		if(SubworldSystem.IsActive<RoomWorld>())
+		{
+			if (Math.Abs(i - Main.maxTilesX / 2) > 80 || Math.Abs(j - Main.maxTilesY / 2) > 80)
+			{
+				return false;
+			}
+		}
+		return base.CanKillTile(i, j, type, ref blockDamaged);
+	}
+}
+
 
 
