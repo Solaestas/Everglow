@@ -471,7 +471,7 @@ public class GoldShieldPlayer : ModPlayer
 			{
 				HasShield = true;
 				GoldShieldDurability = proj.ai[1];
-			GoldShieldDurability -= 0.1f;
+	//		GoldShieldDurability -= 0.1f;
 				if(GoldShieldDurability <= 0)
 				{
 					GoldShieldDurability = 0;
