@@ -22,15 +22,17 @@ public class CreateRoom : ModItem
 	{
 		if (player.itemAnimation == player.itemAnimationMax)
 		{
-			
+
 
 
 		}
 		return base.UseItem(player);
 	}
 	public bool Holding = false;
+	public Point MousePoint = new Point(0, 0);
 	public override void HoldItem(Player player)
 	{
+		MousePoint = new Point((int)(Main.MouseWorld.X / 16f), (int)(Main.MouseWorld.Y / 16f));
 		if (RoomWorld.OriginalWorld != null)
 		{
 			//Main.NewText(Main.worldName);
@@ -39,12 +41,11 @@ public class CreateRoom : ModItem
 		{
 			//RoomWorld.LayerDepth = 0;
 		}
-		if(Main.mouseLeft && Main.mouseLeftRelease)
+		if (Main.mouseLeft && Main.mouseLeftRelease)
 		{
-			Point point = new Point((int)(Main.MouseWorld.X / 16f), (int)(Main.MouseWorld.Y / 16f));
-			RoomManager.EnterNextLevelRoom(point);
+			RoomManager.EnterNextLevelRoom(MousePoint);
 		}
-		if(Main.mouseRight && Main.mouseRightRelease)
+		if (Main.mouseRight && Main.mouseRightRelease)
 		{
 			RoomManager.ExitALevelOfRoom();
 		}
@@ -57,21 +58,24 @@ public class CreateRoom : ModItem
 	}
 	public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
 	{
-		if(Holding)
+		if (Holding)
 		{
+			SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
+			spriteBatch.End();
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 			Color drawColor1 = new Color(0.4f, 0, 0, 1);
-			Point point = new Point((int)(Main.MouseWorld.X / 16f), (int)(Main.MouseWorld.Y / 16f));
-			string mouseText = point.ToString() + "\nLeft click to create a room at this point";
+			string mouseText = MousePoint.ToString() + "\nLeft click to create a room at this point";
 			int mouseTextValue = 0;
 			string path = Path.Combine(Main.SavePath, "Mods", "ModDatas", "Everglow_RoomWorlds", Main.worldID.ToString());
 			if (SubworldSystem.AnyActive())
 			{
 				path = Path.Combine(Main.SavePath, "Mods", "ModDatas", "Everglow_RoomWorlds", Main.worldID.ToString(), SubworldSystem.Current.Name.ToString());
 			}
-			string readPath = path + "\\RoomMapIO" + point.X.ToString() + "_" + point.Y.ToString() + "_" + (RoomWorld.LayerDepth + 1) + ".mapio";
+			string readPath = path + "\\RoomMapIO" + MousePoint.X.ToString() + "_" + MousePoint.Y.ToString() + "_" + (RoomWorld.LayerDepth + 1) + ".mapio";
 			if (File.Exists(readPath))
 			{
-				mouseText = point.ToString() + "\nHad Room!";
+				mouseText = MousePoint.ToString() + "\nHad Room!";
 				mouseTextValue = 3;
 				drawColor1 = new Color(1f, 0.6f, 0, 1);
 			}
@@ -84,13 +88,8 @@ public class CreateRoom : ModItem
 
 			Main.instance.MouseText(mouseText, mouseTextValue);
 
-
-			SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
-			spriteBatch.End();
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
 			Texture2D block = Commons.ModAsset.TileBlock.Value;
-			spriteBatch.Draw(block, point.ToVector2() * 16 - Main.screenPosition, null, drawColor1, 0, new Vector2(0), 1f, SpriteEffects.None, 0);
+			spriteBatch.Draw(block, MousePoint.ToVector2() * 16 - Main.screenPosition, null, drawColor1, 0, new Vector2(0), 1f, SpriteEffects.None, 0);
 
 			spriteBatch.End();
 			spriteBatch.Begin(sBS);
