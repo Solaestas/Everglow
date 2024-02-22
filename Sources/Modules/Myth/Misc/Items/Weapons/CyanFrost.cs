@@ -16,7 +16,7 @@ public class CyanFrost : ModItem
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.knockBack = 2;
 		Item.value = 10000;
-		Item.rare = ItemRarityID.Blue;
+		Item.rare = ItemRarityID.LightRed;
 		Item.UseSound = SoundID.Item1;
 		Item.shoot = ModContent.ProjectileType<CyanFrostProj>();
 		Item.noMelee = true;

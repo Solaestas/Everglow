@@ -12,7 +12,7 @@ public class IronClub : ClubItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.IronBar, 18)
+			.AddIngredient(ItemID.IronBar, 12)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

@@ -18,7 +18,7 @@ public class HandholdItem : ModItem
 		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.noMelee = true;
 		Item.noUseGraphic = true;
-		Item.UseSound = SoundID.Item132.WithVolumeScale(0.4f) with { MaxInstances = 3 };
+		Item.UseSound = SoundID.Item132.WithVolumeScale(0.8f) with { MaxInstances = 3 };
 		Item.knockBack = 2.5f;
 		Item.value = Item.sellPrice(0, 0, 20, 0);
 		Item.rare = ItemRarityID.Green;

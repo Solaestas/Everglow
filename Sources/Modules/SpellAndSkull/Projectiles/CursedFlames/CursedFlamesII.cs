@@ -297,7 +297,7 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 		int hitType = ModContent.ProjectileType<CursedFlameHit>();
 		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, hitType, Projectile.damage, Projectile.knockBack * 6, Projectile.owner, 18, Projectile.rotation + Main.rand.NextFloat(6.283f));
 
-		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.4f), Projectile.Center);
+		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.8f), Projectile.Center);
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
@@ -316,7 +316,7 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 		target.AddBuff(BuffID.CursedInferno, 900);
 		Projectile.damage = (int)(Projectile.damage * 1.2);
 
-		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(0.4f), Projectile.Center);
+		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(0.8f), Projectile.Center);
 	}
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
@@ -334,13 +334,13 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 		target.AddBuff(BuffID.CursedInferno, 900);
 		Projectile.damage = (int)(Projectile.damage * 1.2);
 
-		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(0.4f), Projectile.Center);
+		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(0.8f), Projectile.Center);
 	}
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 11).RotatedByRandom(6.283);
-		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(0.4f), Projectile.Center);
+		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(0.8f), Projectile.Center);
 		GenerateVFXExpolode(5, 0.6f);
 		for (int d = 0; d < 28; d++)
 		{

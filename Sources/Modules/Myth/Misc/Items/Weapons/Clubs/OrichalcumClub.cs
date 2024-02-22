@@ -6,13 +6,14 @@ public class OrichalcumClub : ClubItem
 	{
 		Item.damage = 60;
 		Item.value = 2717;
+		Item.rare = ItemRarityID.LightRed;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.OrichalcumClub>();
 		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.OrichalcumClub_smash>();
 	}
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.OrichalcumBar, 18)
+			.AddIngredient(ItemID.OrichalcumBar, 14)
 			.AddTile(TileID.MythrilAnvil)
 			.Register();
 	}

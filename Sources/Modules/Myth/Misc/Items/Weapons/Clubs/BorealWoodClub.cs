@@ -12,7 +12,7 @@ public class BorealWoodClub : ClubItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.BorealWood, 18)
+			.AddIngredient(ItemID.BorealWood, 8)
 			.AddTile(TileID.WorkBenches)
 			.Register();
 	}

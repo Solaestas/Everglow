@@ -183,7 +183,7 @@ public class TsunamiShark_missile : ModProjectile
 		GenerateVFXKill(24);
 		SoundEngine.PlaySound(SoundID.Splash, Projectile.Center);
 		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<TsunamiShark_missile_hit>(), Projectile.damage / 7, Projectile.knockBack);
-		SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/WaterMissile" + Main.rand.Next(2)).WithVolumeScale(0.4f), Projectile.Center);
+		SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/WaterMissile" + Main.rand.Next(2)).WithVolumeScale(0.8f), Projectile.Center);
 	}
 	public void GenerateVFXKill(int Frequency)
 	{

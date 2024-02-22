@@ -12,7 +12,7 @@ public class PlatinumClub : ClubItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.PlatinumBar, 18)
+			.AddIngredient(ItemID.PlatinumBar, 12)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}
