@@ -12,7 +12,7 @@ public class TungstenClub : ClubItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.TungstenBar, 18)
+			.AddIngredient(ItemID.TungstenBar, 12)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

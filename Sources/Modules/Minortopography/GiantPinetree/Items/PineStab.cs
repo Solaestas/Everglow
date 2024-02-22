@@ -13,7 +13,7 @@ namespace Everglow.Minortopography.GiantPinetree.Items
 			staminaCost = 0.72f;
 			Item.damage = 12;
 			Item.knockBack = 1f;
-			Item.rare = ItemRarityID.White;
+			Item.rare = ItemRarityID.Blue;
 			Item.value = Item.sellPrice(0, 2, 45, 0);
 			Item.shoot = ModContent.ProjectileType<PineStab_Pro>();
 			StabMulDamage = 1.81f;

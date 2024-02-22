@@ -12,7 +12,7 @@ public class LeadClub : ClubItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.LeadBar, 18)
+			.AddIngredient(ItemID.LeadBar, 12)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

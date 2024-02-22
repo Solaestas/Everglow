@@ -1,4 +1,5 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee
@@ -26,6 +27,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee
 		public bool HasHitTile = false;
 		public override void OnSpawn(IEntitySource source)
 		{
+			SoundEngine.PlaySound(SoundID.Item60);
 			Energy = 400;
 			base.OnSpawn(source);
 		}
