@@ -2193,8 +2193,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	MithrilClub: {
-		DisplayName: Mithril Club
+	MythrilClub: {
+		DisplayName: Mythril Club
 		Tooltip: ""
 	}
 
@@ -2683,11 +2683,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	YggdrasilImpression: {
-		DisplayName: Yggdrasil Impression
-		Tooltip: ""
-	}
-
 	CreateRoom: {
 		DisplayName: Create Room
 		Tooltip: ""
@@ -2700,6 +2695,11 @@ Items: {
 
 	WoodenRoomDoor_Item: {
 		DisplayName: Wooden Room Door_ Item
+		Tooltip: ""
+	}
+
+	YggdrasilImpression: {
+		DisplayName: Yggdrasil Impression
 		Tooltip: ""
 	}
 
@@ -3385,8 +3385,8 @@ Projectiles: {
 	LeadClub_smash.DisplayName: Lead Club_smash
 	MeteorClub.DisplayName: Meteor Club
 	MeteorClub_smash.DisplayName: Meteor Club_smash
-	MithrilClub.DisplayName: Mithril Club
-	MithrilClub_smash.DisplayName: Mithril Club_smash
+	MythrilClub.DisplayName: Mythril Club
+	MythrilClub_smash.DisplayName: Mythril Club_smash
 	OrichalcumClub.DisplayName: Orichalcum Club
 	OrichalcumClub_smash.DisplayName: Orichalcum Club_smash
 	PalladiumClub.DisplayName: Palladium Club

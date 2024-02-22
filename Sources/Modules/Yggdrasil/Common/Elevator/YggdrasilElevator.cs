@@ -268,13 +268,3 @@ public class YggdrasilElevator : DBlock
 		base.DrawToMap(mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
 	}
 }
-public class ElevatorSummonSystem : ModSystem
-{
-	public override void PostUpdateEverything()
-	{
-		if (Main.mouseRight && Main.mouseRightRelease)
-		{
-
-		}
-	}
-}
