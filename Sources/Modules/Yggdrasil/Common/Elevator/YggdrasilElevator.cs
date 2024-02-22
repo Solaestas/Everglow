@@ -7,36 +7,36 @@ using Everglow.Commons.Vertex;
 
 namespace Everglow.Yggdrasil.Common.Elevator;
 
-internal class YggdrasilElevator : DBlock
+public class YggdrasilElevator : DBlock
 {
 	/// <summary>
 	/// 接下来运行的方向
 	/// </summary>
-	internal int RunningDirection = 1;
+	public int RunningDirection = 1;
 	/// <summary>
 	/// 停靠时间
 	/// </summary>
-	internal int PauseTime = 0;
+	public int PauseTime = 0;
 	/// <summary>
 	/// 持续加速时间
 	/// </summary>
-	internal int AccelerateTimeLeft = 0;
+	public int AccelerateTimeLeft = 0;
 	/// <summary>
 	/// 因故障卡顿的滞留时间
 	/// </summary>
-	internal int DetentionTime = 0;
+	public int DetentionTime = 0;
 	/// <summary>
 	/// 起始Y坐标
 	/// </summary>
-	internal float StartCoordY = 0;
+	public float StartCoordY = 0;
 	/// <summary>
 	/// 电梯上的灯有没有开
 	/// </summary>
-	internal bool LampOn = false;
+	public bool LampOn = false;
 	/// <summary>
 	/// 初始化的检验
 	/// </summary>
-	internal bool CheckDefault = false;
+	public bool CheckDefault = false;
 
 	public override void OnCollision(AABB aabb, Direction dir)
 	{

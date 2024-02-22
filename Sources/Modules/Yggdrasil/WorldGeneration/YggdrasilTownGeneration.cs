@@ -16,36 +16,36 @@ public class YggdrasilTownGeneration
 	{
 		Initialize();
 		Main.statusText = "Yggdrasil Town Bark Cliff...";
-		PlaceRectangleAreaOfBlock(20, 10650, 155, 12000, ModContent.TileType<StoneScaleWood>());
-		PlaceRectangleAreaOfBlock(1045, 10650, 1180, 12000, ModContent.TileType<StoneScaleWood>());
-		PlaceRectangleAreaOfBlock(0, 11700, 1200, 12000, ModContent.TileType<StoneScaleWood>());
+		PlaceRectangleAreaOfBlock(20, (Main.maxTilesY - 350), 155, Main.maxTilesY, ModContent.TileType<StoneScaleWood>());
+		PlaceRectangleAreaOfBlock(Main.maxTilesX - 155, (Main.maxTilesY - 350), Main.maxTilesX - 20, Main.maxTilesY, ModContent.TileType<StoneScaleWood>());
+		PlaceRectangleAreaOfBlock(0, (Main.maxTilesY - 350), Main.maxTilesX, Main.maxTilesY, ModContent.TileType<StoneScaleWood>());
 
-		PlaceRectangleAreaOfWall(20, 10650, 155, 12000, ModContent.WallType<StoneDragonScaleWoodWall>());
-		PlaceRectangleAreaOfWall(1045, 10650, 1180, 12000, ModContent.WallType<StoneDragonScaleWoodWall>());
-		PlaceRectangleAreaOfWall(0, 11700, 1200, 12000, ModContent.WallType<StoneDragonScaleWoodWall>());
+		PlaceRectangleAreaOfWall(20, (Main.maxTilesY - 350), 155, Main.maxTilesY, ModContent.WallType<StoneDragonScaleWoodWall>());
+		PlaceRectangleAreaOfWall(Main.maxTilesX - 155, (Main.maxTilesY - 350), Main.maxTilesX - 20, Main.maxTilesY, ModContent.WallType<StoneDragonScaleWoodWall>());
+		PlaceRectangleAreaOfWall(0, (Main.maxTilesY - 300), Main.maxTilesX, Main.maxTilesY, ModContent.WallType<StoneDragonScaleWoodWall>());
 		Main.statusText = "Filling Midnight Bayou With Mud...";
 		BuildMidnightBayou();
 
 		Main.statusText = "Carving The Heavenly Portal...";
 		BuildHeavenlyPortal();
-		Main.statusText = "Flooding The Azure Grotto...";
-		BuildAzureGrotto();
-		Main.statusText = "Digging The Tangled Submine...";
-		BuildTangledSubmine();
-		Main.statusText = "Another Side, The Fossilized Mine Road...";
-		BuildFossilizedMineRoad();
-		Main.statusText = "Constructing The Yggdrasil Town Below...";
-		BuildTownBelow();
-		Main.statusText = "Growing LampWoods...";
-		BuildLampWoodLand();
-		Main.statusText = "Constructing The Yggdrasil Town Upper...";
-		BuildTownUpper();
-		Main.statusText = "The Barrier To 2rd Floor Of Yggdrasil...";
-		BuildDuskfallBarrier();
-		Main.statusText = "The Stone Cage Of Challenges...";
-		BuildStoneCageOfChallenges();
-		Main.statusText = "Twilight Forest...";
-		BuildTwilightLand();
+		//Main.statusText = "Flooding The Azure Grotto...";
+		//BuildAzureGrotto();
+		//Main.statusText = "Digging The Tangled Submine...";
+		//BuildTangledSubmine();
+		//Main.statusText = "Another Side, The Fossilized Mine Road...";
+		//BuildFossilizedMineRoad();
+		//Main.statusText = "Constructing The Yggdrasil Town Below...";
+		//BuildTownBelow();
+		//Main.statusText = "Growing LampWoods...";
+		//BuildLampWoodLand();
+		//Main.statusText = "Constructing The Yggdrasil Town Upper...";
+		//BuildTownUpper();
+		//Main.statusText = "The Barrier To 2rd Floor Of Yggdrasil...";
+		//BuildDuskfallBarrier();
+		//Main.statusText = "The Stone Cage Of Challenges...";
+		//BuildStoneCageOfChallenges();
+		//Main.statusText = "Twilight Forest...";
+		//BuildTwilightLand();
 	}
 	public static int[,] PerlinPixelR = new int[1024, 1024];
 	public static int[,] PerlinPixelG = new int[1024, 1024];
@@ -175,7 +175,7 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildMidnightBayou()
 	{
-		Point center = new Point(600, 11640);
+		Point center = new Point(1400, Main.maxTilesY - 360);
 		int radious = 300;
 
 		for (int x = (int)(center.X - radious * 1.5); x < (int)(center.X + radious * 1.5); x++)
@@ -213,11 +213,11 @@ public class YggdrasilTownGeneration
 		{
 			deltaX = -40;
 		}
-		int leftBound = GenRand.Next(380, 400) + deltaX;
-		int rightBound = GenRand.Next(800, 820) + deltaX;
-		int startY = 11632;
+		int leftBound = GenRand.Next(1080, 1100) + deltaX;
+		int rightBound = GenRand.Next(1700, 1720) + deltaX;
+		int startY = Main.maxTilesY - 368;
 		KillRectangleAreaOfTile(leftBound, startY - 10, rightBound, startY);
-		PlaceFrameImportantTiles(595, startY - 37, 8, 12, ModContent.TileType<OriginPylon>());
+		PlaceFrameImportantTiles(1395, startY - 37, 8, 12, ModContent.TileType<OriginPylon>());
 		for (int x = leftBound + 5; x < rightBound - 5; x++)
 		{
 			if (x % 20 == 0)
@@ -226,48 +226,6 @@ public class YggdrasilTownGeneration
 
 				PlaceFrameImportantTiles(x, startY + 7, 20, 1, ModContent.TileType<StoneBridgeTile>(), 36, 36);
 			}
-			//Tile tile = SafeGetTile(x, startY);
-			//Tile tileLeft = SafeGetTile(x - 1, startY);
-			//Tile tileRight = SafeGetTile(x + 1, startY);
-			//tile.wall = WallID.IronFence;
-			//if (x % 12 == 0)
-			//{
-			//	if (!tile.HasTile && !tileLeft.HasTile && !tileRight.HasTile)
-			//	{
-			//		for (int y = 1; y < 7; y++)
-			//		{
-			//			Tile tile2 = SafeGetTile(x, startY - y);
-			//			tile2.wall = WallID.IronFence;
-			//			if (y == 6)
-			//			{
-			//				Tile tile2Left = SafeGetTile(x + 1, startY - y);
-			//				Tile tile2Right = SafeGetTile(x - 1, startY - y);
-			//				tile2.TileType = TileID.Platforms;
-			//				tile2.TileFrameY = 162;
-			//				tile2.HasTile = true;
-			//				tile2Left.TileType = TileID.Platforms;
-			//				tile2Left.TileFrameY = 162;
-			//				tile2Left.HasTile = true;
-			//				tile2Right.TileType = TileID.Platforms;
-			//				tile2Right.TileFrameY = 162;
-			//				tile2Right.HasTile = true;
-
-			//				/*PlaceFrameImportantTiles(x - 1, startY - y + 1, 1, 2, TileID.HangingLanterns, 0, 72);*/
-			//				PlaceFrameImportantTiles(x + 1, startY - y + 1, 1, 2, TileID.HangingLanterns, 0, 72);
-			//			}
-			//		}
-			//	}
-			//}
-			//if (x % 40 == 0 && x > leftBound + 20 && x < rightBound - 20)
-			//{
-			//	PlaceFrameImportantTiles(x - 6, 11636, 13, 8, ModContent.TileType<PierWithSlabsTop>());
-			//	int y = 11644;
-			//	while (!SafeGetTile(x, y).HasTile)
-			//	{
-			//		PlaceFrameImportantTiles(x - 1, y, 3, 3, ModContent.TileType<PierWithSlabs>());
-			//		y += 3;
-			//	}
-			//}
 		}
 	}
 	/// <summary>
@@ -276,15 +234,15 @@ public class YggdrasilTownGeneration
 	public static void BuildHeavenlyPortal()
 	{
 		int x0 = 155;
-		int x1 = 1045;
-		int y0 = 11200;
-		for (int y = 11200; y < 11650; y++)
+		int x1 = Main.maxTilesX - 155;
+		int y0 = Main.maxTilesY - 800;
+		for (int y = Main.maxTilesY - 800; y < Main.maxTilesY - 350; y++)
 		{
-			if (y > 11650)
+			if (y > Main.maxTilesY - 350)
 			{
 				break;
 			}
-			for (int x = 156; x <= 1044; x++)
+			for (int x = 156; x <= Main.maxTilesX - 156; x++)
 			{
 				Tile tile = SafeGetTile(x, y);
 				if (tile.HasTile)
@@ -297,18 +255,18 @@ public class YggdrasilTownGeneration
 					{
 						x1 = x;
 						y0 = y;
-						y = 11651;
+						y = Main.maxTilesY - 349;
 						break;
 					}
 				}
 			}
 		}
 		int xLength0 = x0 - 155;
-		int yLength = y0 - 11111;
+		int yLength = y0 - Main.maxTilesX - 889;
 		int y0CoordPerlin = GenRand.Next(1024);
 		int y1CoordPerlin = GenRand.Next(1024);
 		//左侧坡面
-		for (int y = y0; y > 11111; y--)
+		for (int y = y0; y > Main.maxTilesX - 889; y--)
 		{
 			for (int x = 155; x < x0; x++)
 			{
@@ -317,11 +275,11 @@ public class YggdrasilTownGeneration
 				{
 					float colorPerlinValue = (x - 155f) * (x0 - x) / (x0 - 155 + 0.01f) / (x0 - 155 + 0.01f);
 					float xValue = (x - 155) / (float)xLength0 + PerlinPixelB[x % 1024, y0CoordPerlin] * colorPerlinValue / 255f * 0.3f * 300f / (x0 - 155 + 0.1f);
-					if (xValue < (y - 11111) / (float)yLength)
+					if (xValue < (y - (Main.maxTilesX - 889)) / (float)yLength)
 					{
 						tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 						tile.HasTile = true;
-						if (xValue < (y - 11111) / (float)yLength + 4)
+						if (xValue < (y - (Main.maxTilesX - 889)) / (float)yLength + 4)
 						{
 							tile.wall = (ushort)(ModContent.WallType<StoneDragonScaleWoodWall>());
 						}
@@ -330,21 +288,21 @@ public class YggdrasilTownGeneration
 			}
 		}
 		//右侧坡面
-		int xLength1 = 1045 - x1;
-		for (int y = y0; y > 11111; y--)
+		int xLength1 = (x0 - 155) - x1;
+		for (int y = y0; y > (Main.maxTilesX - 889); y--)
 		{
-			for (int x = x1; x < 1045; x++)
+			for (int x = x1; x < (x0 - 155); x++)
 			{
 				Tile tile = SafeGetTile(x, y);
 				if (!tile.HasTile)
 				{
-					float colorPerlinValue = (x - x1) * (1045 - x) / (x - x1 + 0.01f) / (1045 - x + 0.01f);
-					float xValue = (1045 - x) / (float)xLength1 + PerlinPixelB[x % 1024, y1CoordPerlin] * colorPerlinValue / 255f * 0.3f * 300f / (1045 - x0 + 0.1f);
-					if (xValue < (y - 11111) / (float)yLength)
+					float colorPerlinValue = (x - x1) * ((x0 - 155) - x) / (x - x1 + 0.01f) / ((x0 - 155) - x + 0.01f);
+					float xValue = ((x0 - 155) - x) / (float)xLength1 + PerlinPixelB[x % 1024, y1CoordPerlin] * colorPerlinValue / 255f * 0.3f * 300f / ((x0 - 155) - x0 + 0.1f);
+					if (xValue < (y - (Main.maxTilesX - 889)) / (float)yLength)
 					{
 						tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 						tile.HasTile = true;
-						if (xValue < (y - 11111) / (float)yLength + 4)
+						if (xValue < (y - (Main.maxTilesX - 889)) / (float)yLength + 4)
 						{
 							tile.wall = (ushort)(ModContent.WallType<StoneDragonScaleWoodWall>());
 						}
@@ -353,7 +311,7 @@ public class YggdrasilTownGeneration
 			}
 		}
 		int coordRandomY = GenRand.Next(1024);
-		for (int x = 155; x < 1045; x++)
+		for (int x = 155; x < (x0 - 155); x++)
 		{
 			float y1 = y0 + (x - 600) * (x - 600) / 500f - 200;
 			int y2 = PerlinPixelB[x % 1024, coordRandomY] / 20;
@@ -616,7 +574,7 @@ public class YggdrasilTownGeneration
 
 		for (int x = 60; x < 1140; x++)
 		{
-			for (int y = 11000; y < 12000; y++)
+			for (int y = 11000; y < Main.maxTilesY; y++)
 			{
 				if (GenRand.NextBool(1500))
 				{
