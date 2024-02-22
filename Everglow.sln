@@ -59,6 +59,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{59C0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.SpellAndSkull", "Sources\Modules\SpellAndSkull\Everglow.SpellAndSkull.csproj", "{F24B50C1-414B-4026-858D-09CBA84794FA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.SubSpace", "Sources\Modules\SubSpace\Everglow.SubSpace.csproj", "{BF477059-FD57-4862-834B-64C74F9D5BAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -148,6 +150,10 @@ Global
 		{F24B50C1-414B-4026-858D-09CBA84794FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F24B50C1-414B-4026-858D-09CBA84794FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F24B50C1-414B-4026-858D-09CBA84794FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF477059-FD57-4862-834B-64C74F9D5BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF477059-FD57-4862-834B-64C74F9D5BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF477059-FD57-4862-834B-64C74F9D5BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF477059-FD57-4862-834B-64C74F9D5BAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
