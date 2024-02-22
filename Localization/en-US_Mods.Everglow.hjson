@@ -2688,6 +2688,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	YggdrasilImpression: {
+		DisplayName: Yggdrasil Impression
+		Tooltip: ""
+	}
+
 	TreePlacer: {
 		DisplayName: Tree Placer
 		Tooltip: ""
