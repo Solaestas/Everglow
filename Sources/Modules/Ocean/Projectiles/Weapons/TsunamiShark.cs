@@ -48,7 +48,7 @@ public class TsunamiShark : ModProjectile
 			Vector2 random = new Vector2(0, Main.rand.NextFloat(1f)).RotatedByRandom(6.283);
 			ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 2).RotatedByRandom(6.283);
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/WaterGun").WithVolumeScale(0.4f), Projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/WaterGun").WithVolumeScale(0.8f), Projectile.Center);
 
 
 			Projectile p = Projectile.NewProjectileDirect(shootSource,

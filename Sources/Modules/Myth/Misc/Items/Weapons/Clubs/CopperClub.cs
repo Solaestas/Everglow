@@ -12,7 +12,7 @@ public class CopperClub : ClubItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.CopperBar, 18)
+			.AddIngredient(ItemID.CopperBar, 8)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

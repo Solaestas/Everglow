@@ -2603,6 +2603,21 @@ Items: {
 		Tooltip: ""
 	}
 
+	CreateRoom: {
+		DisplayName: Create Room
+		Tooltip: ""
+	}
+
+	WoodenRoomDoor_exit_Item: {
+		DisplayName: Wooden Room Door_exit_ Item
+		Tooltip: ""
+	}
+
+	WoodenRoomDoor_Item: {
+		DisplayName: Wooden Room Door_ Item
+		Tooltip: ""
+	}
+
 	TreePlacer: {
 		DisplayName: Tree Placer
 		Tooltip: ""

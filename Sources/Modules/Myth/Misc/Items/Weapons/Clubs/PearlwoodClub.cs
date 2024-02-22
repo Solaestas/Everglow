@@ -12,7 +12,7 @@ public class PearlwoodClub : ClubItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.Pearlwood, 18)
+			.AddIngredient(ItemID.Pearlwood, 8)
 			.AddTile(TileID.WorkBenches)
 			.Register();
 	}

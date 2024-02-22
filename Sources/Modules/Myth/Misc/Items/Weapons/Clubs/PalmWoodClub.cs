@@ -12,7 +12,7 @@ public class PalmWoodClub : ClubItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.PalmWood, 18)
+			.AddIngredient(ItemID.PalmWood, 8)
 			.AddTile(TileID.WorkBenches)
 			.Register();
 	}

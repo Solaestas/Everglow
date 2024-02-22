@@ -11,7 +11,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		{
 			Item.damage = 40;
 			Item.knockBack = 1.79f;
-			Item.rare = ItemRarityID.LightPurple;
+			Item.rare = ItemRarityID.LightRed;
 			Item.value = Item.sellPrice(0, 14, 56, 75);
 			Item.shoot = ModContent.ProjectileType<CurseFlameStabbingSword_Pro>();
 			StabMulDamage = 4f;

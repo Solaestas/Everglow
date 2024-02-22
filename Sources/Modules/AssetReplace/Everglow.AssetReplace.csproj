@@ -1,3 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+		<!--Disable Auto Generate ModAsset-->
+		<Solaestas-UseAssetPath>false</Solaestas-UseAssetPath>
+	</PropertyGroup>
 </Project>
-    

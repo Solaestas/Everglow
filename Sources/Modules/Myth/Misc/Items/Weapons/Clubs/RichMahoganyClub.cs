@@ -12,7 +12,7 @@ public class RichMahoganyClub : ClubItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.RichMahogany, 18)
+			.AddIngredient(ItemID.RichMahogany, 8)
 			.AddTile(TileID.WorkBenches)
 			.Register();
 	}

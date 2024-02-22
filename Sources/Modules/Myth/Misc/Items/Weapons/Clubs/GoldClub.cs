@@ -12,7 +12,7 @@ public class GoldClub : ClubItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.GoldBar, 18)
+			.AddIngredient(ItemID.GoldBar, 12)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

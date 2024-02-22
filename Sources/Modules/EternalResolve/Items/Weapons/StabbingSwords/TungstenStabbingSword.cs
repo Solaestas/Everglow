@@ -19,7 +19,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		public override void AddRecipes()
 		{
 			CreateRecipe().
-				AddIngredient(ItemID.TungstenBar, 17).
+				AddIngredient(ItemID.TungstenBar, 10).
 				AddTile(TileID.Anvils).
 				Register();
 			base.AddRecipes();
