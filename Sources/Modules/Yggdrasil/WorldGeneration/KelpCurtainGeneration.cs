@@ -1,7 +1,5 @@
-using Everglow.Commons.Skeleton2D;
 using Everglow.Yggdrasil.KelpCurtain.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Walls;
-using Terraria;
 using Terraria.Utilities;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 namespace Everglow.Yggdrasil.WorldGeneration;
@@ -12,11 +10,11 @@ public class KelpCurtainGeneration
 		Initialize();
 		Main.statusText = "Kelp Curtain Bark Cliff...";
 		UnforcablePlaceAreaOfTile(20, 9600, 155, 10650, ModContent.TileType<DragonScaleWood>());
-		UnforcablePlaceAreaOfTile(1045, 9600, 1180, 10650, ModContent.TileType<DragonScaleWood>());
+		UnforcablePlaceAreaOfTile(Main.maxTilesX - 155, 9600, Main.maxTilesX - 20, 10650, ModContent.TileType<DragonScaleWood>());
 
 		PlaceRectangleAreaOfWall(20, 9600, 155, 10650, ModContent.WallType<DragonScaleWoodWall>());
-		PlaceRectangleAreaOfWall(1045, 9600, 1180, 10650, ModContent.WallType<DragonScaleWoodWall>());
-		BuildDeathJadeLake();
+		PlaceRectangleAreaOfWall(Main.maxTilesX - 155, 9600, Main.maxTilesX - 20, 10650, ModContent.WallType<DragonScaleWoodWall>());
+		//BuildDeathJadeLake();
 		BuildRainValley();
 	}
 	public static int[,] PerlinPixelR = new int[512, 512];
@@ -104,7 +102,7 @@ public class KelpCurtainGeneration
 		int randX = GenRand.Next(512);
 		int bankWidth = GenRand.Next(220, 240);
 		int peakHeight = 0;//记录一个连续的高度
-		//湖堤
+						   //湖堤
 		for (int step = 0; step < bankWidth; step++)
 		{
 			int height = (int)(step * step / 400f + PerlinPixelB[(step + randX) % 512, randY] / 30f) - 24;
@@ -160,7 +158,7 @@ public class KelpCurtainGeneration
 		for (int step = 0; step < 30; step++)
 		{
 			int thick = (int)((30 - step) * (30 - step) / 26d + PerlinPixelB[(step + randX) % 512, randY] / 30f);
-	    	for (int deltaY = 0; deltaY < thick; deltaY++)
+			for (int deltaY = 0; deltaY < thick; deltaY++)
 			{
 				int x = lakePeakX + step * direction;
 				int y = startY - peakHeight + deltaY;
@@ -178,7 +176,7 @@ public class KelpCurtainGeneration
 				int thick = (int)((30 - step) * (30 - step) / 26d + PerlinPixelB[(step + randX) % 512, randY] / 30f);
 				for (int deltaY = 0; deltaY < thick; deltaY++)
 				{
-					int x = 1045 - step * direction;
+					int x = Main.maxTilesX - 155 - step * direction;
 					int y = startY - peakHeight + deltaY;
 					Tile tile = SafeGetTile(x, y);
 					tile.TileType = (ushort)ModContent.TileType<OldMoss>();
@@ -222,12 +220,12 @@ public class KelpCurtainGeneration
 			}
 		}
 		startY -= 200;
-		for (int y = startY; y > 9900;y--)
+		for (int y = startY; y > 9900; y--)
 		{
-			for (int x = 100; x <= 1100;x++)
+			for (int x = 100; x <= 1100; x++)
 			{
 				int dense = PerlinPixelB[(x / 4 + randX) % 512, (y + randY) % 512];
-				if(dense > 160)
+				if (dense > 160)
 				{
 					Tile tile = SafeGetTile(x, y);
 					tile.TileType = (ushort)ModContent.TileType<OldMoss>();
@@ -243,7 +241,7 @@ public class KelpCurtainGeneration
 			for (int y = y0; y <= y1; y += 1)
 			{
 				Tile tile = SafeGetTile(x, y);
-				if(!tile.HasTile)
+				if (!tile.HasTile)
 				{
 					tile.TileType = (ushort)type;
 					tile.HasTile = true;

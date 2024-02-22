@@ -6,8 +6,8 @@ internal class YggdrasilWorld : Subworld
 {
 	public static float YggdrasilTimer = 0;
 	public Vector2 StoneCageOfChallengesCenter = Vector2.zeroVector;
-	public override int Width => 1200;
-	public override int Height => 12000;
+	public override int Width => 2000;
+	public override int Height => 21000;
 	public override bool NormalUpdates => true;
 	public override bool ShouldSave => false;//Only in debug mode,when published,turn true.
 	public override List<GenPass> Tasks => new List<GenPass>()
