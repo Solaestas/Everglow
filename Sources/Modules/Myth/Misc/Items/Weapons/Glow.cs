@@ -7,7 +7,7 @@ namespace Everglow.Myth.Misc.Items.Weapons
 	{
 		public override void SetDefaults()
 		{
-			Item.damage = 30;
+			Item.damage = 174;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 52;
 			Item.height = 52;
@@ -15,8 +15,8 @@ namespace Everglow.Myth.Misc.Items.Weapons
 			Item.useAnimation = 17;
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.knockBack = 2;
-			Item.value = 10000;
-			Item.rare = ItemRarityID.Blue;
+			Item.value = 90000;
+			Item.rare = ItemRarityID.Red;
 			Item.UseSound = SoundID.Item1;
 			Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Melee.Glow>();
 			Item.noMelee = true;
