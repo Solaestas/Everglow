@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.LanternMoon.Skies;
 using Terraria.Graphics.Effects;
 namespace Everglow.Myth.LanternMoon.Projectiles;
@@ -48,8 +48,8 @@ class RainbowWave : ModProjectile
 
 	public override void PostDraw(Color lightColor)
 	{
-		Rainbow = MythContent.QuickEffect("Effects/RainbowVague");
-		Texture2D RainbowTex = MythContent.QuickTexture("UIImages/VisualTextures/Rainbow");
+		Rainbow = ModAsset.Effects_RainbowVague.Value;
+		Texture2D RainbowTex = ModAsset.Rainbow.Value;
 		if (Projectile.timeLeft > 6)
 		{
 			LanternSky lanternSky = ModContent.GetInstance<LanternSky>();

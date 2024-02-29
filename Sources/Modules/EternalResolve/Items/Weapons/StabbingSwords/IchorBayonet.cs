@@ -11,7 +11,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		{
 			Item.damage = 44;
 			Item.knockBack = 1.87f;
-			Item.rare = ItemRarityID.LightPurple;
+			Item.rare = ItemRarityID.LightRed;
 			Item.value = Item.sellPrice(0, 15, 27, 86);
 			Item.shoot = ModContent.ProjectileType<IchorBayonet_Pro>();
 			StabMulDamage = 4f;

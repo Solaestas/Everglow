@@ -56,13 +56,13 @@ public class AmbiguousNightHit : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D shadow = ModAsset.CursedHit.Value;
-		Texture2D blackHole = ModAsset.BlackHole_BlackHole.Value;
+		Texture2D blackHole = ModAsset.BlackHole_texture.Value;
 		Texture2D blue = ModAsset.CorruptLight.Value;
 		float dark = Math.Max((Projectile.timeLeft) / 300f, 0);
 
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, Color.White, 0, shadow.Size() / 2f, 8f * Projectile.ai[0] * dark * dark, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(blackHole, Projectile.Center - Main.screenPosition, null, Color.White, 0, blackHole.Size() / 2f, 1.4f * Projectile.ai[0] * dark, SpriteEffects.None, 0);
-		Texture2D light = ModAsset.CursedHitStar.Value;
+		Texture2D light = Commons.ModAsset.StarSlash.Value;
 		dark = Math.Max((Projectile.timeLeft - 240) / 70f, 0);
 		Main.spriteBatch.Draw(blue, Projectile.Center - Main.screenPosition, null, new Color(1f,1f,1f,0), 0, blue.Size() / 2f, 6f * Projectile.ai[0] * dark, SpriteEffects.None, 0);
 		if (Projectile.timeLeft % 4 >= 2)

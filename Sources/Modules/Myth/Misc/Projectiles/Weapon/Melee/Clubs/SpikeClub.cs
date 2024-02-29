@@ -1,5 +1,3 @@
-using Everglow.Myth.Common;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class SpikeClub : ClubProj_metal
@@ -11,19 +9,13 @@ public class SpikeClub : ClubProj_metal
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		int k = (int)(Omega * 10);
-		k = Main.rand.Next(k * 2);
-		for (int x = 0; x < k; x++)
-		{
-			NPC.HitInfo hit = modifiers.ToHitInfo(Projectile.damage * 0.5f * Omega, Main.rand.NextFloat(100f) < Main.player[Projectile.owner].GetTotalCritChance(Projectile.DamageType), 0);
-			target.StrikeNPC(hit, true, true);
-			NetMessage.SendStrikeNPC(target, hit);
-		}
 		modifiers.Knockback *= 0.4f;
-
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
+		Player player = Main.player[Projectile.owner];
+		Vector2 v = new Vector2(0, 6).RotatedByRandom(Math.PI * 2) * 5f;
+		Projectile.NewProjectile(null, target.Center - v * 3, v, ModContent.ProjectileType<SpikeClubSlash>(), Projectile.damage / 2, 0, player.whoAmI, Main.rand.NextFloat(-0.05f, 0.05f));
 		target.AddBuff(BuffID.Bleeding, 600);
 	}
 	internal List<Vector2> MoonBladeI = new List<Vector2>();
@@ -66,7 +58,7 @@ public class SpikeClub : ClubProj_metal
 			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * delta * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 1, 0f)));
 			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 0, 0f)));
 		}
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.BloomLight.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -144,29 +136,6 @@ public class SpikeClub : ClubProj_metal
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
-
-		Effect MeleeTrail = MythContent.QuickEffect("Misc/Projectiles/Weapon/Melee/Clubs/MetalClubTrail");
-		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-
-
-		MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
-		if (ReflectTexturePath != "")
-		{
-			try
-			{
-				MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(ReflectTexturePath).Value);
-			}
-			catch
-			{
-				MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
-			}
-		}
-		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
-		lightColor.W = 0.7f * Omega;
-		MeleeTrail.Parameters["Light"].SetValue(lightColor);
-		MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
 
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);

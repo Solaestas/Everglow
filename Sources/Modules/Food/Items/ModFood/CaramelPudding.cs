@@ -1,7 +1,7 @@
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Everglow.Food.Buffs.ModFoodBuffs;
-using Everglow.Food.Utils;
+using Everglow.Food.FoodUtilities;
 
 namespace Everglow.Food.Items.ModFood;
 

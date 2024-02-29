@@ -1,11 +1,24 @@
-﻿using Microsoft.Xna.Framework.Audio;
+using System.Reflection;
+using Everglow.Commons.AssetReplace;
+using Everglow.Commons.FeatureFlags;
+using Everglow.Commons.Interfaces;
+using Everglow.Commons.Modules;
+using Microsoft.Xna.Framework.Audio;
 using Terraria.Audio;
 
 namespace Everglow.AssetReplace.SoundReplace;
 
 internal class PickItemSoundReplaceModule : IModule
 {
+	public PickItemSoundReplaceModule()
+	{
+		Code = GetType().Assembly;
+	}
 	public string Name => "Pick Item Sound Modify";
+
+	public Assembly Code { get; }
+
+	public bool Condition => true;
 
 	public void Load()
 	{

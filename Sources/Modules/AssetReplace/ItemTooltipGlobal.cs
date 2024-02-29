@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
+using Everglow.Commons.FeatureFlags;
 using Terraria.GameContent;
 using Terraria.UI.Chat;
 

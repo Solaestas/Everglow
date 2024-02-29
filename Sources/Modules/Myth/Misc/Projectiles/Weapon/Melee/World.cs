@@ -354,11 +354,12 @@ class World : ModProjectile, IWarpProjectile
 						VxII.Add(barsII[i + 3]);
 					}
 				}
-				Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapShade").Value;
+				Texture2D t0 = Commons.ModAsset.Trail_black.Value;
 				Main.graphics.GraphicsDevice.Textures[0] = t0;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
 			}
-			Texture2D t = MythContent.QuickTexture("UIImages/VisualTextures/World");
+			Texture2D t = ModAsset.VisualTextures_World.Value;
+			;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 		}
@@ -442,6 +443,6 @@ class World : ModProjectile, IWarpProjectile
 				Vx.Add(bars[i + 3]);
 			}
 		}
-		spriteBatch.Draw(MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/Clubs/CrystalClub_trail"), Vx, PrimitiveType.TriangleList);
+		spriteBatch.Draw(ModAsset.CrystalClub_trail.Value, Vx, PrimitiveType.TriangleList);
 	}
 }

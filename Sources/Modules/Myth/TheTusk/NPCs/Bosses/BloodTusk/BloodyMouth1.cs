@@ -155,22 +155,6 @@ public class BloodyMouth1 : ModNPC
 		Color color = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
 		color = NPC.GetAlpha(color) * ((255 - NPC.alpha) / 255f);
 		Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodyMouth1").Value;
-		if (!Main.gamePaused)
-		{
-			for (int x = 0; x < t0.Width - (int)V[1].Y - 40; x += 20)
-			{
-				if (Main.LocalPlayer.active)
-				{
-					if (!Main.LocalPlayer.dead)
-					{
-						if ((Main.LocalPlayer.Center - NPC.Center + new Vector2(-x, 0).RotatedBy(NPC.rotation)).Length() < 30)
-							Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Dam / 8, 1, 0, 0, 0);
-						if ((Main.LocalPlayer.Center - NPC.Center + new Vector2(-x, 0).RotatedBy(NPC.rotation)).Length() < 30)
-							Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Dam / 8, 1, 0, 0, 0);
-					}
-				}
-			}
-		}
 		if (Coo < 405)
 		{
 			if (Coo >= 120)

@@ -1,5 +1,4 @@
-using Everglow.Commons.Coroutines;
-using Everglow.Myth.MagicWeaponsReplace.GlobalItems;
+using Everglow.SpellAndSkull.GlobalItems;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 internal class FlameRingPipeline : Pipeline
@@ -47,7 +46,10 @@ internal class FireFeatherMagicArray : VisualProjectile
 		Projectile.tileCollide = false;
 		base.SetDefaults();
 	}
-
+	public override bool? CanCutTiles()
+	{
+		return false;
+	}
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];

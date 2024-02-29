@@ -1,6 +1,7 @@
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
+using SteelSeries.GameSense;
 using Terraria.GameContent;
 namespace Everglow.MEAC.NonTrueMeleeProj;
 
@@ -11,9 +12,11 @@ public class StonePost : ModProjectile, IWarpProjectile
 		Projectile.width = 10;
 		Projectile.height = 10;
 		Projectile.aiStyle = -1;
-		Projectile.friendly = false;
+		Projectile.friendly = true;
 		Projectile.hostile = false;
 		Projectile.tileCollide = false;
+		Projectile.usesLocalNPCImmunity = true;
+		Projectile.localNPCHitCooldown = 120;
 		Projectile.timeLeft = 1800;
 		Projectile.penetrate = -1;
 	}
@@ -35,7 +38,25 @@ public class StonePost : ModProjectile, IWarpProjectile
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 	{
 		behindNPCsAndTiles.Add(index);
-
+	}
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+	{
+		float k0 = MathF.Sqrt(1 - Projectile.timeLeft * 0.004f % 1) * 2;
+		if (k0 > 1)
+		{
+			return false;
+		}
+		float WaveRange = 1.7f;
+		Vector2 v0 = RotByPro(new Vector2(0, -k0 * 40)) * WaveRange + Projectile.Center;
+		Vector2 v1 = RotByPro(new Vector2(k0 * 150, 0)) * WaveRange + Projectile.Center;
+		Vector2 v2 = RotByPro(new Vector2(0, k0 * 40)) * WaveRange + Projectile.Center;
+		Vector2 v3 = RotByPro(new Vector2(-k0 * 150, 0)) * WaveRange + Projectile.Center;
+		Vector2 hitSize = new Vector2(targetHitbox.Width, targetHitbox.Height);
+		bool b0 = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), hitSize, v0, v1);
+		bool b1 = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), hitSize, v1, v2);
+		bool b2 = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), hitSize, v2, v3);
+		bool b3 = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), hitSize, v3, v0);
+		return b0 || b1 || b2 || b3;
 	}
 	public static void DrawDoubleLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2)
 	{
@@ -85,11 +106,11 @@ public class StonePost : ModProjectile, IWarpProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D BackG = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/StonePostBackGround").Value;
-		Texture2D Front = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/StonePost").Value;
-		Texture2D FaceBackG = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/StonePostFaceBackGround").Value;
-		Texture2D FaceBackGGlow = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/StonePostFaceBackGroundGlow").Value;
-		Texture2D Root = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/StonePostRoot").Value;
+		Texture2D BackG = ModAsset.StonePostBackGround.Value;
+		Texture2D Front = ModAsset.StonePost.Value;
+		Texture2D FaceBackG = ModAsset.StonePostFaceBackGround.Value;
+		Texture2D FaceBackGGlow = ModAsset.StonePostFaceBackGroundGlow.Value;
+		Texture2D Root = ModAsset.StonePostRoot.Value;
 
 		lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16));
 		Main.spriteBatch.End();
@@ -97,10 +118,10 @@ public class StonePost : ModProjectile, IWarpProjectile
 
 		float WaveRange = 1.7f;
 
-		float k0 = (float)Math.Sqrt(1 - Projectile.timeLeft * 0.004 % 1) * 2;//画方波
+		float k0 = MathF.Sqrt(1 - Projectile.timeLeft * 0.004f % 1) * 2;//画方波
 		float k1 = 1 - k0;
 		float k2 = k1 * k1;
-		float k3 = (float)Math.Sqrt(k1);
+		float k3 = MathF.Sqrt(k1);
 		Vector2 DrawCen = Projectile.Center - Main.screenPosition;
 		if (k0 < 1)
 		{
@@ -240,7 +261,7 @@ public class StonePost : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float WaveRange = 1.7f;
-		Texture2D BackG = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/Black").Value;
+		Texture2D BackG = ModAsset.Black.Value;
 
 		float k0 = (float)Math.Sqrt(1 - Projectile.timeLeft * 0.004 % 1) * 2;//画方波
 		k0 = Math.Max(k0 - 0.025f, 0);

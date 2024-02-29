@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
@@ -393,6 +394,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 				bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w)));
 			}
 		}
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
@@ -401,16 +403,14 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-		//Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 	}
-	public void DrawWarp(VFXBatch spriteBatch)
+	public virtual void DrawWarp(VFXBatch spriteBatch)
 	{
 		if (selfWarp)
 			return;
@@ -449,6 +449,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 			{
 				var midValue = (1 - dir) / (1 - dir + dir1);
 				var midPoint = midValue * trail[i] + (1 - midValue) * trail[i - 1];
+				midPoint.X = 0;
 				var oldFactor = (i - 1) / (length - 1f);
 				var midFactor = midValue * factor + (1 - midValue) * oldFactor;
 				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(midFactor, 1, 1)));
@@ -460,6 +461,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 			{
 				var midValue = (1 - dir1) / (1 - dir1 + dir);
 				var midPoint = midValue * trail[i - 1] + (1 - midValue) * trail[i];
+				midPoint.X = 0;
 				var oldFactor = (i - 1) / (length - 1f);
 				var midFactor = midValue * oldFactor + (1 - midValue) * factor;
 				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(midFactor, 1, 1)));

@@ -6,7 +6,9 @@ public class ChlorophyteClub : ClubItem
 	{
 		Item.damage = 80;
 		Item.value = 9605;
+		Item.rare = ItemRarityID.Lime;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.ChlorophyteClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.ChlorophyteClub_smash>();
 	}
 	public override void AddRecipes()
 	{

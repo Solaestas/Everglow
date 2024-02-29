@@ -844,12 +844,12 @@ public class FlamingDashCore : ModNPC
 		x += 0.01f;
 		float K = (float)(Math.Sin(x + Math.Sin(x) * 6) * (0.95 + Math.Sin(x + 0.24 + Math.Sin(x))) + 3) / 30f;
 		float M = (float)(Math.Sin(x + Math.Tan(x) * 6) * (0.95 + Math.Cos(x + 0.24 + Math.Sin(x))) + 3) / 30f;
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, 0, new Vector2(128f, 128f), K * 2.4f * Sca, SpriteEffects.None, 0f);
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, (float)(Math.PI * 0.5), new Vector2(128f, 128f), K * 2.4f * Sca, SpriteEffects.None, 0f);
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, (float)(Math.PI * 0.75), new Vector2(128f, 128f), M * 2.4f * Sca, SpriteEffects.None, 0f);
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, (float)(Math.PI * 0.25), new Vector2(128f, 128f), M * 2.4f * Sca, SpriteEffects.None, 0f);
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, x * 6f, new Vector2(128f, 128f), (M + K) * 2.4f * Sca, SpriteEffects.None, 0f);
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, -x * 6f, new Vector2(128f, 128f), (float)Math.Sqrt(M * M + K * K) * 2.4f * Sca, SpriteEffects.None, 0f);
+		spriteBatch.Draw(ModAsset.LightEffect.Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, 0, new Vector2(128f, 128f), K * 2.4f * Sca, SpriteEffects.None, 0f);
+		spriteBatch.Draw(ModAsset.LightEffect.Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, (float)(Math.PI * 0.5), new Vector2(128f, 128f), K * 2.4f * Sca, SpriteEffects.None, 0f);
+		spriteBatch.Draw(ModAsset.LightEffect.Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, (float)(Math.PI * 0.75), new Vector2(128f, 128f), M * 2.4f * Sca, SpriteEffects.None, 0f);
+		spriteBatch.Draw(ModAsset.LightEffect.Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, (float)(Math.PI * 0.25), new Vector2(128f, 128f), M * 2.4f * Sca, SpriteEffects.None, 0f);
+		spriteBatch.Draw(ModAsset.LightEffect.Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, x * 6f, new Vector2(128f, 128f), (M + K) * 2.4f * Sca, SpriteEffects.None, 0f);
+		spriteBatch.Draw(ModAsset.LightEffect.Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, -x * 6f, new Vector2(128f, 128f), (float)Math.Sqrt(M * M + K * K) * 2.4f * Sca, SpriteEffects.None, 0f);
 		spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		var bars = new List<Vertex2D>();
@@ -899,8 +899,8 @@ public class FlamingDashCore : ModNPC
 			var NewFac = (float)Math.Sqrt(i + 1) / TrueL * 24 - NPC.localAI[0] / 30f;
 			var NewFac2 = (float)Math.Sqrt(i) / TrueL * 24 - NPC.localAI[0] / 30f;
 			Lighting.AddLight(NPC.oldPos[i], (255 - NPC.alpha) * 1.2f / 50f * ka * (1 - factor), (255 - NPC.alpha) * 0.7f / 50f * ka * (1 - factor), 0);
-			//bars.Add(new VertexBase.CustomVertexInfo(NPC.oldPos[i] + normalDir * width + new Vector2(20, 20) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(NewFac % 1f + 0.5f, 1, w)));
-			//bars.Add(new VertexBase.CustomVertexInfo(NPC.oldPos[i] + normalDir * -width + new Vector2(20, 20) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(NewFac % 1f + 0.5f, 0, w)));
+			//bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * width + new Vector2(20, 20) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(NewFac % 1f + 0.5f, 1, w)));
+			//bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * -width + new Vector2(20, 20) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(NewFac % 1f + 0.5f, 0, w)));
 			bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * width + new Vector2(20, 20) - Main.screenPosition, new Color(NPCOldColor[i].R, NPCOldColor[i].G, NPCOldColor[i].B, 0), new Vector3(factor, 1, w)));
 			bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * -width + new Vector2(20, 20) - Main.screenPosition, new Color(NPCOldColor[i].R, NPCOldColor[i].G, NPCOldColor[i].B, 0), new Vector3(factor, 0, w)));
 		}
@@ -922,8 +922,8 @@ public class FlamingDashCore : ModNPC
 				Vx.Add(bars[i + 3]);
 			}
 		}
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/CoreFlame").Value;
-		t = ModContent.Request<Texture2D>("Everglow/Myth/Acytaea/Projectiles/Metero").Value;
+		Texture2D t = Commons.ModAsset.Metero.Value;
+		t = Commons.ModAsset.Metero.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 	}

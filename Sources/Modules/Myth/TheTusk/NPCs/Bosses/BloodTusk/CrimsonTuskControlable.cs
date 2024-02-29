@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+using Terraria.DataStructures;
+using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
 
@@ -35,10 +36,43 @@ public class CrimsonTuskControlable : ModNPC
 	}
 	private bool start = true;
 	private Vector2[] vpos = new Vector2[400];
+	public NPC Owner;
+	public override void OnSpawn(IEntitySource source)
+	{
+		if (Owner == null)
+		{
+			foreach (NPC npc in Main.npc)
+			{
+				if (npc != null && npc.active)
+				{
+					if (npc.type == ModContent.NPCType<BloodTusk>())
+					{
+						if ((npc.Center - NPC.Center).Length() < 20000)
+						{
+							Owner = npc;
+							break;
+						}
+					}
+				}
+			}
+			if (Owner == null)
+			{
+				NPC.active = false;
+				return;
+			}
+		}
+	}
 	public override void AI()
 	{
+		if (Owner == null)
+		{
+			NPC.active = false;
+			return;
+		}
+		BloodTusk bloodTusk = Owner.ModNPC as BloodTusk;
+		bloodTusk.FlyingTentacleTusks[(int)NPC.ai[1]] = NPC;
 		NPC.TargetClosest(true);
-		BloodTusk.N[(int)NPC.ai[1]] = NPC.whoAmI;
+
 		if (start)
 		{
 			NPC.velocity = new Vector2(0, -7f).RotatedBy(NPC.ai[0] * NPC.ai[2] / 4d);
@@ -46,11 +80,11 @@ public class CrimsonTuskControlable : ModNPC
 		}
 		NPC.rotation = (float)(Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + Math.PI / 2d);
 
-		length = (NPC.Center - BloodTusk.Cen).Length();
+		length = (NPC.Center - bloodTusk.LookingCenter).Length();
 		if (length > 700)
 		{
 			NPC.velocity *= 0.9f;
-			NPC.velocity -= (NPC.Center - BloodTusk.Cen) / length;
+			NPC.velocity -= (NPC.Center - bloodTusk.LookingCenter) / length;
 		}
 
 	}
@@ -158,11 +192,17 @@ public class CrimsonTuskControlable : ModNPC
 	private Vector2[] Dvkil = new Vector2[400];
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
+		if (Owner == null)
+		{
+			NPC.active = false;
+			return;
+		}
+		BloodTusk bloodTusk = Owner.ModNPC as BloodTusk;
 		if (length < 15)
 			return;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-		var bars2 = new List<VertexBase.CustomVertexInfo>();
+		var bars2 = new List<Vertex2D>();
 
 		for (int i = 1; i < 400; ++i)
 		{
@@ -184,7 +224,7 @@ public class CrimsonTuskControlable : ModNPC
 			}
 			else
 			{
-				vpos[i] = vpos[i - 1] + (vpos[i - 1] - vpos[i - 2]) * 0.95f + (BloodTusk.Cen - vpos[i - 1]) / (BloodTusk.Cen - vpos[i - 1]).Length() * 0.2f;
+				vpos[i] = vpos[i - 1] + (vpos[i - 1] - vpos[i - 2]) * 0.95f + (bloodTusk.LookingCenter - vpos[i - 1]) / (bloodTusk.LookingCenter - vpos[i - 1]).Length() * 0.2f;
 			}
 			if (killing == 179)
 				Prevkilpos[i] = vpos[i];
@@ -207,22 +247,22 @@ public class CrimsonTuskControlable : ModNPC
 
 			if (killing is < 178 and > 0)
 			{
-				bars2.Add(new VertexBase.CustomVertexInfo(vkilpos[i] + normalDir * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
-				bars2.Add(new VertexBase.CustomVertexInfo(vkilpos[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
+				bars2.Add(new Vertex2D(vkilpos[i] + normalDir * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
+				bars2.Add(new Vertex2D(vkilpos[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
 			}
 			else
 			{
-				bars2.Add(new VertexBase.CustomVertexInfo(vpos[i] + normalDir * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
-				bars2.Add(new VertexBase.CustomVertexInfo(vpos[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
+				bars2.Add(new Vertex2D(vpos[i] + normalDir * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
+				bars2.Add(new Vertex2D(vpos[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
 			}
 			if (killing is < 178 and > 0)
 			{
-				if ((vkilpos[i] - BloodTusk.Cen).Length() < 6)
+				if ((vkilpos[i] - bloodTusk.LookingCenter).Length() < 6)
 					break;
 			}
 			else
 			{
-				if ((vpos[i] - BloodTusk.Cen).Length() < 6)
+				if ((vpos[i] - bloodTusk.LookingCenter).Length() < 6)
 					break;
 			}
 		}
@@ -232,11 +272,11 @@ public class CrimsonTuskControlable : ModNPC
 			killing = 180;
 			NPC.ai[3] = 60;
 		}
-		var triangleList2 = new List<VertexBase.CustomVertexInfo>();
+		var triangleList2 = new List<Vertex2D>();
 		if (bars2.Count > 2)
 		{
 			triangleList2.Add(bars2[0]);
-			var vertex = new VertexBase.CustomVertexInfo((bars2[0].Position + bars2[1].Position) * 0.5f + Vector2.Normalize(NPC.velocity), Color.White, new Vector3(0, 0.5f, 0));
+			var vertex = new Vertex2D((bars2[0].position + bars2[1].position) * 0.5f + Vector2.Normalize(NPC.velocity), Color.White, new Vector3(0, 0.5f, 0));
 			triangleList2.Add(bars2[1]);
 			triangleList2.Add(vertex);
 			for (int i = 0; i < bars2.Count - 2; i += 2)

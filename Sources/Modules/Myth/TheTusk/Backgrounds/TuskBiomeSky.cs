@@ -1,3 +1,4 @@
+using Everglow.Commons.Physics;
 using Everglow.Myth.Common;
 using Everglow.Myth.TheTusk.WorldGeneration;
 using Terraria.Graphics.Effects;
@@ -7,8 +8,6 @@ namespace Everglow.Myth.TheTusk.Backgrounds;
 public class TuskBiomeSky : CustomSky
 {
 	public static bool Open = false;
-	//public static bool HasSky = false;
-	//private bool skyActive;
 	public override void OnLoad()
 	{
 
@@ -16,15 +15,11 @@ public class TuskBiomeSky : CustomSky
 
 	public override void Deactivate(params object[] args)
 	{
-		//HasSky = false;
-		//this.skyActive = false;
 	}
 
 	public override void Reset()
 	{
 		rocks = new List<Rock>();
-		//HasSky = false;
-		//this.skyActive = false;
 	}
 
 	public override bool IsActive()
@@ -34,13 +29,7 @@ public class TuskBiomeSky : CustomSky
 
 	public override void Activate(Vector2 position, params object[] args)
 	{
-		//HasSky = true;
-		//this.skyActive = true;
 	}
-
-
-
-	//物体相关系统
 	private class Rock
 	{
 		public Vector3 pos;
@@ -105,7 +94,7 @@ public class TuskBiomeSky : CustomSky
 		{
 			Vector2 offset = Main.rand.NextVector2Unit() * Main.rand.Next(700, 3000);
 			Vector3 pos = cloudCenter + new Vector3(offset.X, 0, offset.Y);
-			var l = new RedLightning() { pos = pos, rotation = 1.57f, maxTimeleft = 60 };
+			var l = new RedLightning() { pos = pos, rotation = 1.57f, maxTimeleft = 40 };
 			l.Create();
 			lightnings.Add(l);
 
@@ -119,7 +108,7 @@ public class TuskBiomeSky : CustomSky
 				if (!lightning.sub && lightning.pos.Z < 8000)
 				{
 					float a = MathHelper.Clamp(1 - lightning.pos.Z / 8000f, 0f, 1f);
-					Main.ColorOfTheSkies = Color.Lerp(Main.ColorOfTheSkies, new Color(0.8f, 0.6f, 0.6f), 0.5f * a * lightning.timeleft / 60f);//闪电背景颜色
+					Main.ColorOfTheSkies = Color.Lerp(Main.ColorOfTheSkies, new Color(0.8f, 0.6f, 0.6f), 0.3f * a * lightning.timeleft / 60f);//闪电背景颜色
 				}
 				if (lightning.timeleft <= 0)
 					lightnings.Remove(lightning);
@@ -131,8 +120,8 @@ public class TuskBiomeSky : CustomSky
 			float alpha = 0;
 			if (lightning.pos.Z > 7000)
 				alpha = (lightning.pos.Z - 7000) / 10000f;
-			Vertex3D_2[] vertices = lightning.GetVertices(90, new Color(1, 1f - alpha, 1f - alpha, 0f));
-			Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheTusk/Backgrounds/Lightning");
+			Vertex3D_2[] vertices = lightning.GetVertices(30, new Color(1, 1f - alpha, 1f - alpha, 0f));
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.RedPoint.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices, 0, vertices.Length - 2);
 
 		}
@@ -144,7 +133,7 @@ public class TuskBiomeSky : CustomSky
 		if (Main.rand.NextBool(45) && !Main.gamePaused)
 		{
 			Vector3 pos = cloudCenter + new Vector3(Main.rand.Next(-500, 500), +3000, Main.rand.Next(-500, 500));
-			rocks.Add(new Rock() { pos = pos, velocity = new Vector3(Main.rand.NextFloat(-2, 2), -Main.rand.NextFloat(1, 3), Main.rand.NextFloat(-2, 2)), style = 1 + Main.rand.Next(5) });
+			rocks.Add(new Rock() { pos = pos, velocity = new Vector3(Main.rand.NextFloat(-2, 2), -Main.rand.NextFloat(0.5f, 0.9f), Main.rand.NextFloat(-2, 2)), style = 1 + Main.rand.Next(5) });
 		}
 		if (!Main.gamePaused)
 		{
@@ -216,6 +205,8 @@ public class TuskBiomeSky : CustomSky
 
 	public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
 	{
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
 		TuskGen tuskGen = ModContent.GetInstance<TuskGen>();
 		Vector2 TuskBiomeCenter = new Vector2(tuskGen.tuskCenterX, tuskGen.tuskCenterY) * 16;
 		Vector2 TuskBiomeCenterToScreenPosition = Main.screenPosition - TuskBiomeCenter;
@@ -223,33 +214,50 @@ public class TuskBiomeSky : CustomSky
 
 		#region #1：背景光
 		int yoffset = (int)Main.screenPosition.Y / 50;
-		Texture2D tex = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/TuskBiomeSky").Value;
-		Main.spriteBatch.Draw(tex, new Rectangle(0, -yoffset, Main.screenWidth, Main.screenHeight + yoffset), DrawC * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f));
+		Texture2D tex = ModAsset.TuskBiomeSky.Value;
+		spriteBatch.Draw(tex, new Rectangle(-1300, -yoffset - 600, Main.screenWidth + 2600, Main.screenHeight + yoffset * 2 + 1200), DrawC * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f));
 		#endregion
 		#region #2：风暴
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
+
+
+		Vector2 FarS = new Vector2(Main.screenWidth / 2f, Main.screenHeight + 80) - TuskBiomeCenterToScreenPosition * 0.04f;
+		var VskyF = new List<Vertex2D>();
+		VskyF.Add(new Vertex2D(FarS + new Vector2(Main.screenWidth / 2f, -600) * 2, DrawC, new Vector3(1, 0, 0)));
+		VskyF.Add(new Vertex2D(FarS + new Vector2(Main.screenWidth / 2f, -600 + Main.screenHeight) * 2, DrawC, new Vector3(1, 1, 0)));
+		VskyF.Add(new Vertex2D(FarS + new Vector2(-Main.screenWidth / 2f, -600 + Main.screenHeight) * 2, DrawC, new Vector3(0, 1, 0)));
+
+		VskyF.Add(new Vertex2D(FarS + new Vector2(Main.screenWidth / 2f, -600) * 2, DrawC, new Vector3(1, 0, 0)));
+		VskyF.Add(new Vertex2D(FarS + new Vector2(-Main.screenWidth / 2f, -600) * 2, DrawC, new Vector3(0, 0, 0)));
+		VskyF.Add(new Vertex2D(FarS + new Vector2(-Main.screenWidth / 2f, -600 + Main.screenHeight) * 2, DrawC, new Vector3(0, 1, 0)));
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.TuskFar.Value;
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VskyF.ToArray(), 0, VskyF.Count / 3);
+
+
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
 
 		//计算矩阵
 		var camPos = new Vector3(Main.screenWidth / 2 + Main.screenPosition.X, Main.screenHeight / 2 + Main.screenPosition.Y, -300);
 		int lookup = 50;//往上看
 		var matrix = Matrix.CreateLookAt(camPos, new Vector3(camPos.X, camPos.Y - lookup, 1), Vector3.Down);
-		matrix *= Matrix.CreatePerspectiveFieldOfView(MathHelper.Pi / 5, Main.graphics.GraphicsDevice.Viewport.AspectRatio, 1, 15000);
+		matrix *= Matrix.CreatePerspectiveFieldOfView(MathHelper.Pi / 5, Main.graphics.GraphicsDevice.Viewport.AspectRatio, 1, 12500);
 
 		Effect eff = MythContent.QuickEffect("Effects/DrawPrim3D");
 		eff.Parameters["uTransform"].SetValue(matrix);
 		eff.CurrentTechnique.Passes[0].Apply();
 
 		Vector2 SkyBase = new Vector2(Main.screenWidth / 2f, Main.screenHeight * 1.0f - 160f) - TuskBiomeCenterToScreenPosition * 0.01f;
-		Vector2 SkyVortex = SkyBase + new Vector2(1210, 161)/*图心偏移坐标*/ - new Vector2(1024, 600)/*绘制中心*/;
+		Vector2 SkyVortex = SkyBase + new Vector2(1210, 161)/*图心偏移坐标*/ - new Vector2(Main.screenWidth / 2f, 600)/*绘制中心*/;
 		SkyVortex = TuskBiomeCenter;
 		float Blength = 1800;
 		double OneDevideRotaSpeed = 2500d;
 
 		var CloudLine = new Texture2D[10];
 		CloudLine[1] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkBlueGreenCloud").Value;
-		CloudLine[2] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkGreenCloud").Value;
+		CloudLine[2] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkBlueGreenCloud").Value;
 		CloudLine[3] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkGreyCloud").Value;
 		CloudLine[4] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkGreyCloud").Value;
 		CloudLine[5] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkGreyCloud2").Value;
@@ -299,12 +307,12 @@ public class TuskBiomeSky : CustomSky
 			}
 			if (i == 8)
 			{
-				Blength = 210;
+				Blength = 200;
 				OneDevideRotaSpeed = 400d;
 			}
 			if (i == 9)
 			{
-				Blength = 160;
+				Blength = 135;
 				OneDevideRotaSpeed = 220d;
 			}
 			#endregion
@@ -335,79 +343,50 @@ public class TuskBiomeSky : CustomSky
 				if (i == 6)
 					c *= 0.6f;
 
-				float n = 0.9f - i * 0.075f;//内层顶点的距离
-				if (i == 6)
-					n -= 0.1f;
-				Vx.Add(new Vertex3D_2(center + offset * 1f, new Vector3(u / counts, 0, 0), c));
-				Vx.Add(new Vertex3D_2(center + offset * n, new Vector3(u / counts, 0.6f, 0), c));
-			}
+				float n = 0.5f;
+				int storey = 9 - i;
+				n += storey * 0.02f;
+				if (storey == 3)
+				{
+					n -= 0.4f;
+				}
+                Vx.Add(new Vertex3D_2(center + offset * 1, new Vector3(u / counts, 0, 0), c));
+				Vx.Add(new Vertex3D_2(center + offset * n, new Vector3(u / counts, 1f, 0), c));
+            }
 			Main.graphics.GraphicsDevice.Textures[0] = CloudLine[i];//GlodenBloodScaleMirror
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, Vx.ToArray(), 0, Vx.Count - 2);
 		}
 		#endregion
 		#region #3：前景
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
-
-		Vector2 FarS = new Vector2(Main.screenWidth / 2f, Main.screenHeight + 80) - TuskBiomeCenterToScreenPosition * 0.04f;
-		var VskyF = new List<Vertex2D>();
-		VskyF.Add(new Vertex2D(FarS + new Vector2(1024, -750), DrawC, new Vector3(1, 0, 0)));
-		VskyF.Add(new Vertex2D(FarS + new Vector2(1024, 150), DrawC, new Vector3(1, 1, 0)));
-		VskyF.Add(new Vertex2D(FarS + new Vector2(-1024, 150), DrawC, new Vector3(0, 1, 0)));
-
-		VskyF.Add(new Vertex2D(FarS + new Vector2(1024, -750), DrawC, new Vector3(1, 0, 0)));
-		VskyF.Add(new Vertex2D(FarS + new Vector2(-1024, -750), DrawC, new Vector3(0, 0, 0)));
-		VskyF.Add(new Vertex2D(FarS + new Vector2(-1024, 150), DrawC, new Vector3(0, 1, 0)));
-		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/TuskFar").Value;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VskyF.ToArray(), 0, VskyF.Count / 3);
-
-
-		Main.spriteBatch.End();
-
-		var texCloseII = MythContent.QuickTexture("TheTusk/Backgrounds/TuskMiddle");
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Rectangle rvcII = GetDrawRect(texCloseII.Size(), 0.27f, 2);
-		rvcII.Y -= 0;
-		rvcII.X += -360;
-
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
+		var texCloseII = ModAsset.TuskMiddle.Value;
+		Rectangle rvcII = GetDrawRect(texCloseII.Size(), 0.14f, 1.3f);
+		rvcII.X += 460;
+		rvcII.Y += 80;
 		float UpY = rvcII.Y / (float)texCloseII.Height;
 		float DownY = (rvcII.Y + rvcII.Height) / (float)texCloseII.Height;
 		var CloseII = new List<Vertex2D>
 		{
 			new Vertex2D(new Vector2(0, 0), DrawC, new Vector3(rvcII.X / (float)texCloseII.Width, UpY, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth, 0), DrawC, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
-			new Vertex2D(new Vector2(0, Main.screenHeight), DrawC, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
+			new Vertex2D(new Vector2(Main.screenWidth * 2, 0), DrawC, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
+			new Vertex2D(new Vector2(0, Main.screenHeight* 2), DrawC, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
 
-			new Vertex2D(new Vector2(0, Main.screenHeight), DrawC, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth, 0), DrawC, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth, Main.screenHeight), DrawC, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, DownY, 0))
+			new Vertex2D(new Vector2(0, Main.screenHeight* 2), DrawC, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
+			new Vertex2D(new Vector2(Main.screenWidth* 2, 0), DrawC, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
+			new Vertex2D(new Vector2(Main.screenWidth* 2, Main.screenHeight* 2), DrawC, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, DownY, 0))
 		};
-		Effect bgW = MythContent.QuickEffect("Effects/BackgroundWrapWithColor");
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		bgW.Parameters["uTransform"].SetValue(projection);
-		bgW.Parameters["uTime"].SetValue(0.34f);
-		bgW.Parameters["uColor"].SetValue(DrawC.ToVector4());
-		bgW.CurrentTechnique.Passes[0].Apply();
-
 		if (CloseII.Count > 2)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = texCloseII;
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, CloseII.ToArray(), 0, 2);
 		}
-		if (DownY > 1)
-		{
-			float DrawY = (1 - UpY) / (DownY - UpY) * Main.screenHeight - 5;
-			Main.spriteBatch.Draw(texCloseII, new Rectangle(0, (int)DrawY, Main.screenWidth, Main.screenHeight - (int)DrawY), new Rectangle(1000, 1100, 1, 1), DrawC);
-		}
 
-
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
 		#endregion
 	}
-
 	public override void Update(GameTime gameTime)
 	{
 		bool skyActive = TuskGen.TuskLandActive();

@@ -6,7 +6,9 @@ public class CobaltClub : ClubItem
 	{
 		Item.damage = 41;
 		Item.value = 2005;
+		Item.rare = ItemRarityID.LightRed;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CobaltClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CobaltClub_smash>();
 	}
 	public override void AddRecipes()
 	{

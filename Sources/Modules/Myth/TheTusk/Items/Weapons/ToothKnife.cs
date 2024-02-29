@@ -13,32 +13,36 @@ public class ToothKnife : ModItem
 		Item.height = 48;
 
 		Item.useStyle = ItemUseStyleID.Swing;
+		Item.noMelee = true;
+		Item.noUseGraphic = true;
 		Item.useTime = 20;
 		Item.useAnimation = 20;
 		Item.autoReuse = true;
 
 		Item.DamageType = DamageClass.Melee;
 		Item.damage = 25;
-		Item.knockBack = 6;
-		Item.crit = 6;
+		Item.knockBack = 3.4f;
+		Item.crit = 2;
 
-		Item.value = 4000;
+		Item.value = 4050;
 		Item.rare = ItemRarityID.Green;
 		Item.UseSound = SoundID.Item1;
 
-		Item.shoot = ModContent.ProjectileType<Tusk0>();
+		Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.ToothKnife>();
 		Item.shootSpeed = 8f;
+	}
+	public override bool CanUseItem(Player player)
+	{
+		Item.useTime = (int)(18f / player.meleeSpeed);
+		Item.useAnimation = (int)(18f / player.meleeSpeed);
+		return player.ownedProjectileCounts[Item.shoot] < 1;
 	}
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		return false;
-	}
-	public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
-	{
-		if(hit.Crit)
+		if (player.ownedProjectileCounts[Item.shoot] < 1)
 		{
-			Projectile.NewProjectile(Item.GetSource_OnHit(target), target.Center + new Vector2(80, 0), new Vector2(Main.rand.NextFloat(-1f, 1f), 0), ModContent.ProjectileType<EarthTusk>(), Item.damage, Item.knockBack * 0.8f, player.whoAmI, 2, 1);
-			Projectile.NewProjectile(Item.GetSource_OnHit(target), target.Center + new Vector2(-80, 0), new Vector2(Main.rand.NextFloat(-1f, 1f), 0), ModContent.ProjectileType<EarthTusk>(), Item.damage, Item.knockBack * 0.8f, player.whoAmI, 2, -1);
+			Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity, type, damage, knockback, player.whoAmI, 0f, 0f);
 		}
+		return false;
 	}
 }

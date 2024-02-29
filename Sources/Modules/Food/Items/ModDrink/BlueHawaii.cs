@@ -1,5 +1,5 @@
 using Everglow.Food.Buffs.ModDrinkBuffs;
-using Everglow.Food.Utils;
+using Everglow.Food.FoodUtilities;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 

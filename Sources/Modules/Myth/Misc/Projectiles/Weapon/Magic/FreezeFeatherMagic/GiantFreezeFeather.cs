@@ -22,7 +22,7 @@ public class GiantFreezeFeather : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 80;
 	}
-	internal int TimeTokill = -1;
+	public int TimeTokill = -1;
 	public override void AI()
 	{
 		if (TimeTokill >= 0 && TimeTokill <= 2)

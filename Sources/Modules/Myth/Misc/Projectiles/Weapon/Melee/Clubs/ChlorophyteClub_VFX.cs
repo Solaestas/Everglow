@@ -212,7 +212,7 @@ public class ChlorophyteClub_VFX : ModProjectile
 			}
 			if (Vx.Count > 2)
 			{
-				Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/VineLine");
+				Texture2D t = ModAsset.VineLine.Value;
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 			}
@@ -240,7 +240,7 @@ public class ChlorophyteClub_VFX : ModProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
 		if (circle.Count > 0)
 		{
-			Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
+			Texture2D t = Commons.ModAsset.Trail_2.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
