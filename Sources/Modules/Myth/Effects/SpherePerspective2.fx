@@ -40,16 +40,13 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     float t1 = (-B + sqdet) / (2 * A);
     float t2 = (-B - sqdet) / (2 * A);
     float t = t1 < t2 ? t1 : t2;
-    float3 ligS = float3(0, 0, 1);
+    float3 ligS = float3(-1, 1, 1) / sqrt(3);
 	// 求 theta 和 phi ，对应 x, y
     float3 hitpos = dir * t - circleCenter;
     
     float3 N = normalize(hitpos);
-    //删注解扭曲
-    //float4 Cwarp = tex2D(uImage0, coord.xy * 0.6f + float2(uTime * 1.8, sin(uTime)));
-    //删注解随时间变化
-    float x = atan2(hitpos.z, hitpos.x) / 3.14159 + 1.0/* + uTime + Cwarp.r * 0.05*/;
-    float y = hitpos.y / radiusOfCircle + 1.0 /*+ uTime + Cwarp.g * 0.05*/;
+    float x = atan2(hitpos.z, hitpos.x) / 3.14159 + 1.0 + uTime;
+    float y = hitpos.y / radiusOfCircle + 1.0;
     float x0 = atan2(hitpos.z, hitpos.x) / 3.14159 + 1.0;
     float y0 = hitpos.y / radiusOfCircle + 1.0;
     
@@ -61,10 +58,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     float yy0 = fmod(y0 + 1, 1.0);
     float costheta = dot(ligS, N);
     float4 Cz = tex2D(uImage0, float2(xx, yy));
-
-    float4 ga = (costheta, costheta, costheta, costheta);
-    Cz *= ga;
-    return Cz * input.Color;
+    return Cz;
 
 }
 
@@ -72,7 +66,6 @@ technique Technique1
 {
     pass ColorBar
     {
-        VertexShader = compile vs_3_0 VertexShaderFunction();
-        PixelShader = compile ps_3_0 PixelShaderFunction();
+        PixelShader = compile ps_2_0 PixelShaderFunction();
     }
 }
