@@ -2,7 +2,7 @@
 sampler uImage1 : register(s1);
 sampler uImage2 : register(s2);
 
-
+//这个是负球面映射
 /*
 * 使用方法：	uTransform		国际惯例是顶点坐标变换矩阵，只会影响两个三角形的变换，也就是教程中的屏幕
 *			circleCenter	球心的三维坐标，注意这个坐标的z分量需要是负数才能显示出来，因为我用的是另一个坐标系
@@ -31,22 +31,17 @@ struct PSInput
     float3 Texcoord : TEXCOORD0;
 };
 
-float3 hsv2rgb(float3 c)
-{
-    float4 K = float4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-    float3 p = abs((c.xxx + K.xyz - floor(c.xxx + K.xyz)) * 6.0 - K.www);
-    return c.z * lerp(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-}
-
-
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
     float3 coord = input.Texcoord;
 	
     float3 dir = float3(coord.x, coord.y, -1);
     float3 P = -circleCenter;
+    //视线 模的平方
     float A = dot(dir, dir);
+    //？ 忘了
     float B = 2 * dot(dir, P);
+    //能看到的最远一圈 模的平方
     float C = dot(P, P) - radiusOfCircle * radiusOfCircle;
 	
 	// 解方程
@@ -56,7 +51,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     float sqdet = sqrt(det);
     float t1 = (-B + sqdet) / (2 * A);
     float t2 = (-B - sqdet) / (2 * A);
-    float t = t1 < t2 ? t1 : t2;
+    float t = t1 > t2 ? t1 : t2;
     float3 ligS = float3(0, 0, 1);
 	// 求 theta 和 phi ，对应 x, y
     float3 hitpos = dir * t - circleCenter;

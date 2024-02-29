@@ -8,22 +8,23 @@ using Terraria.GameContent;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
 
-public class BombLantern : ModNPC
+public class BloodLanternGhost : ModNPC
 {
+	public override string Texture => "Everglow/Myth/LanternMoon/NPCs/BloodLanternGhost_drained";
 	public LanternMoonProgress LanternMoonProgress = ModContent.GetInstance<LanternMoonProgress>();
 	public override void SetStaticDefaults()
 	{
-		Main.npcFrameCount[NPC.type] = 4;
+		Main.npcFrameCount[NPC.type] = 8;
 	}
 	public override void SetDefaults()
 	{
-		NPC.damage = 44;
-		NPC.lifeMax = 515;
+		NPC.damage = 75;
+		NPC.lifeMax = 906;
 		NPC.npcSlots = 0.5f;
 		NPC.width = 60;
 		NPC.height = 60;
-		NPC.defense = 10;
-		NPC.value = 100;
+		NPC.defense = 24;
+		NPC.value = 200;
 		NPC.aiStyle = -1;
 		NPC.knockBackResist = 0.2f;
 		NPC.dontTakeDamage = false;
@@ -37,10 +38,6 @@ public class BombLantern : ModNPC
 		NPC.ai[0] = 0;
 		NPC.ai[1] = 0;
 		NPC.ai[2] = 0;
-		Tail0 = NPC.Center + new Vector2(0, 35).RotatedBy(NPC.rotation);
-		Tail1 = NPC.Center + new Vector2(0, 45).RotatedBy(NPC.rotation);
-		Tail2 = NPC.Center + new Vector2(0, 55).RotatedBy(NPC.rotation);
-		Tail3 = NPC.Center + new Vector2(0, 55).RotatedBy(NPC.rotation);
 	}
 	public override void FindFrame(int frameHeight)
 	{
@@ -108,120 +105,50 @@ public class BombLantern : ModNPC
 		}
 		else//冲撞
 		{
-			//没有眩晕
-			if (DizzyTime <= 0)
+
+			NPC.ai[0]++;
+			if (NPC.ai[0] < 30)
 			{
-				NPC.ai[0]++;
-				if (NPC.ai[0] < 30)
+				NPC.velocity *= 0.8f;
+				NPC.rotation *= 0.8f;
+			}
+			if (NPC.ai[0] == 30)
+			{
+				NPC.velocity += Vector2.Normalize(toPlayer) * 20f;
+				NPC.rotation = NPC.velocity.X * 0.02f;
+				NPC.direction = -1;
+				if (NPC.velocity.X < 0)
 				{
-					NPC.velocity *= 0.8f;
-					NPC.rotation *= 0.8f;
-				}
-				if (NPC.ai[0] == 30)
-				{
-					NPC.velocity += Vector2.Normalize(toPlayer) * 20f;
-					NPC.rotation = NPC.velocity.X * 0.02f;
-					NPC.direction = -1;
-					if (NPC.velocity.X < 0)
-					{
-						NPC.direction = 1;
-					}
-				}
-				if (NPC.ai[0] > 50)
-				{
-					NPC.velocity *= 0.8f;
-				}
-				if (NPC.ai[0] > 90)
-				{
-					NPC.velocity.Y -= 2.5f;
-				}
-				if ((toPlayer.Y > 200 && NPC.ai[0] >= 50) || NPC.ai[0] > 200)//结束冲撞
-				{
-					NPC.ai[1] = 0;
-				}
-				if (NPC.ai[0] > 30)
-				{
-					if (Collision.SolidCollision(NPC.position + new Vector2(NPC.velocity.X, 0), NPC.width, NPC.height))
-					{
-						NPC.velocity.X *= -0.7f;
-						NPC.ai[2] = Main.rand.NextFloat(-1.4f, 1.4f);
-						DizzyTime = 240;
-					}
-					if (Collision.SolidCollision(NPC.position + new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height))
-					{
-						NPC.velocity.Y *= -0.7f;
-						NPC.ai[2] = Main.rand.NextFloat(-1.4f, 1.4f);
-						DizzyTime = 240;
-					}
+					NPC.direction = 1;
 				}
 			}
-			else
+			if (NPC.ai[0] > 50)
 			{
-				UpdateDizzyAI();
+				NPC.velocity *= 0.8f;
 			}
-		}
-		Tail0 = NPC.Center + new Vector2(0, 30).RotatedBy(NPC.rotation);
-
-		Vector2 addVecGrav = new Vector2(0, 10);
-		if (TileCollisionUtils.PlatformCollision(Tail1))
-		{
-			addVecGrav = Vector2.zeroVector;
-		}
-		Tail1 = Tail0 + (Tail1 - Tail0) * 0.5f + addVecGrav;
-		while ((Tail1 - Tail0).Length() > 10)
-		{
-			Tail1 += (Tail0 - Tail1) * 0.1f;
-		}
-
-		addVecGrav = new Vector2(0, 10);
-		if (TileCollisionUtils.PlatformCollision(Tail2))
-		{
-			addVecGrav = Vector2.zeroVector;
-		}
-		Tail2 = Tail1 + (Tail2 - Tail1) * 0.5f + addVecGrav;
-		while ((Tail2 - Tail1).Length() > 20)
-		{
-			Tail2 += (Tail1 - Tail2) * 0.1f;
-		}
-
-		addVecGrav = new Vector2(0, 10);
-		if (TileCollisionUtils.PlatformCollision(Tail2))
-		{
-			addVecGrav = Vector2.zeroVector;
-		}
-		Tail3 = Tail2 + (Tail3 - Tail2) * 0.5f + addVecGrav;
-		while ((Tail3 - Tail2).Length() > 10)
-		{
-			Tail3 += (Tail2 - Tail3) * 0.1f;
-		}
-	}
-	public void UpdateDizzyAI()
-	{
-		DizzyTime--;
-		bool collided = false;
-		if (Collision.SolidCollision(NPC.position + new Vector2(NPC.velocity.X, 0), NPC.width, NPC.height))
-		{
-			NPC.velocity.X *= -0.7f;
-			NPC.ai[2] = Main.rand.NextFloat(-0.04f, 0.04f) * NPC.velocity.Length() + NPC.ai[2] * 0.5f;
-			collided = true;
-		}
-		if (Collision.SolidCollision(NPC.position + new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height))
-		{
-			NPC.velocity.Y *= -0.7f;
-			NPC.ai[2] = Main.rand.NextFloat(-0.04f, 0.04f) * NPC.velocity.Length() + NPC.ai[2] * 0.5f;
-			collided = true;
-		}
-		if (!collided)
-		{
-			NPC.velocity.Y += 0.5f;
-		}
-		NPC.rotation += NPC.ai[2];
-		NPC.ai[2] *= 0.98f;
-		NPC.velocity *= 0.98f;
-
-		if (DizzyTime <= 0)
-		{
-			NPC.ai[1] = 0;//结束冲撞
+			if (NPC.ai[0] > 90)
+			{
+				NPC.velocity.Y -= 2.5f;
+			}
+			if ((toPlayer.Y > 200 && NPC.ai[0] >= 50) || NPC.ai[0] > 200)//结束冲撞
+			{
+				NPC.ai[1] = 0;
+			}
+			if (NPC.ai[0] > 30)
+			{
+				if (Collision.SolidCollision(NPC.position + new Vector2(NPC.velocity.X, 0), NPC.width, NPC.height))
+				{
+					NPC.velocity.X *= -0.7f;
+					NPC.ai[2] = Main.rand.NextFloat(-1.4f, 1.4f);
+					DizzyTime = 240;
+				}
+				if (Collision.SolidCollision(NPC.position + new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height))
+				{
+					NPC.velocity.Y *= -0.7f;
+					NPC.ai[2] = Main.rand.NextFloat(-1.4f, 1.4f);
+					DizzyTime = 240;
+				}
+			}
 		}
 	}
 	public void UpdateExplosion()
@@ -316,10 +243,6 @@ public class BombLantern : ModNPC
 	{
 		return false;
 	}
-	public Vector2 Tail0 = Vector2.zeroVector;
-	public Vector2 Tail1 = Vector2.zeroVector;
-	public Vector2 Tail2 = Vector2.zeroVector;
-	public Vector2 Tail3 = Vector2.zeroVector;
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
@@ -330,11 +253,6 @@ public class BombLantern : ModNPC
 		if (NPC.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;
 		spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, new Vector2(72), NPC.scale, effects, 0);
-		Texture2D tail = ModAsset.BombLantern_tail.Value;
-		spriteBatch.Draw(tail, Tail1 - Main.screenPosition, new Rectangle(0, 0, 16, 24), drawColor, (Tail1 - Tail0).ToRotation() - MathHelper.PiOver2, new Vector2(8, 12), NPC.scale, effects, 0);
-		spriteBatch.Draw(tail, Tail2 - Main.screenPosition, new Rectangle(0, 26, 16, 22), drawColor, (Tail2 - Tail1).ToRotation() - MathHelper.PiOver2, new Vector2(8, 11), NPC.scale, effects, 0);
-		spriteBatch.Draw(tail, Tail3 - Main.screenPosition, new Rectangle(0, 46, 18, 20), drawColor, (Tail3 - Tail2).ToRotation() - MathHelper.PiOver2, new Vector2(9, 10), NPC.scale, effects, 0);
-
 		Texture2D glow0 = ModAsset.BombLantern_glow.Value;
 
 		spriteBatch.Draw(glow0, NPC.Center - Main.screenPosition, NPC.frame, new Color(1f, 0.6f, 0.2f, 0), NPC.rotation, new Vector2(72), NPC.scale, effects, 0);
