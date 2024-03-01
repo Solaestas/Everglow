@@ -79,7 +79,7 @@ public class ShakerInfo
 }
 public class UndirectedShakerInfo : ShakerInfo
 {
-	public static UndirectedShakerInfo Create(Vector2 center, float strength = 1, float period = 1, float speed = 1, float acv = 0.9f, float acp = 0.9f, int maxtick = -1)
+	public static UndirectedShakerInfo Create(Vector2 center, float strength = 20, float period = 60, float speed = 30, float acv = 0.9f, float acp = 0.9f, int maxtick = 10)
 	{
 		if (period < 0)
 		{
