@@ -2598,6 +2598,21 @@ Items: {
 		Tooltip: ""
 	}
 
+	CreateRoom: {
+		DisplayName: Create Room
+		Tooltip: ""
+	}
+
+	WoodenRoomDoor_exit_Item: {
+		DisplayName: Wooden Room Door_exit_ Item
+		Tooltip: ""
+	}
+
+	WoodenRoomDoor_Item: {
+		DisplayName: Wooden Room Door_ Item
+		Tooltip: ""
+	}
+
 	TreePlacer: {
 		DisplayName: Tree Placer
 		Tooltip: ""
@@ -3100,39 +3115,63 @@ Projectiles: {
 	XiaoBlackWave.DisplayName: Xiao Black Wave
 	XiaoHit.DisplayName: Xiao Hit
 	AdamantiteClub.DisplayName: Adamantite Club
+	AdamantiteClub_smash.DisplayName: Adamantite Club_smash
 	BorealWoodClub.DisplayName: Boreal Wood Club
+	BorealWoodClub_smash.DisplayName: Boreal Wood Club_smash
 	CactusClub.DisplayName: Cactus Club
+	CactusClub_smash.DisplayName: Cactus Club_smash
 	ChlorophyteClub.DisplayName: Chlorophyte Club
 	ChlorophyteClub_fly.DisplayName: Chlorophyte Club_fly
+	ChlorophyteClub_fly_2.DisplayName: Chlorophyte Club_fly_2
+	ChlorophyteClub_smash.DisplayName: Chlorophyte Club_smash
 	ChlorophyteClub_VFX.DisplayName: Chlorophyte Club_ V F X
+	ChlorophyteClub_VFX_2.DisplayName: Chlorophyte Club_ V F X_2
 	CobaltClub.DisplayName: Cobalt Club
+	CobaltClub_smash.DisplayName: Cobalt Club_smash
 	CopperClub.DisplayName: Copper Club
+	CopperClub_smash.DisplayName: Copper Club_smash
 	CorruptClub.DisplayName: Corrupt Club
+	CorruptClub_smash.DisplayName: Corrupt Club_smash
 	CrimsonClub.DisplayName: Crimson Club
+	CrimsonClub_smash.DisplayName: Crimson Club_smash
 	CrystalClub.DisplayName: Crystal Club
 	CrystalClub_fly.DisplayName: Crystal Club_fly
 	CrystalClub_fly_Explosion.DisplayName: Crystal Club_fly_ Explosion
+	CrystalClub_smash.DisplayName: Crystal Club_smash
 	CurseClub.DisplayName: Curse Club
 	CurseClub_fly.DisplayName: Curse Club_fly
 	CurseClub_smash.DisplayName: Curse Club_smash
 	EbonwoodClub.DisplayName: Ebonwood Club
+	EbonwoodClub_smash.DisplayName: Ebonwood Club_smash
 	GoldClub.DisplayName: Gold Club
+	GoldClub_smash.DisplayName: Gold Club_smash
 	IchorClub.DisplayName: Ichor Club
 	IchorClub_fly.DisplayName: Ichor Club_fly
 	IchorClub_smash.DisplayName: Ichor Club_smash
 	IronClub.DisplayName: Iron Club
+	IronClub_smash.DisplayName: Iron Club_smash
 	LeadClub.DisplayName: Lead Club
+	LeadClub_smash.DisplayName: Lead Club_smash
 	MeteorClub.DisplayName: Meteor Club
 	MeteorClub_smash.DisplayName: Meteor Club_smash
 	MithrilClub.DisplayName: Mithril Club
+	MithrilClub_smash.DisplayName: Mithril Club_smash
 	OrichalcumClub.DisplayName: Orichalcum Club
+	OrichalcumClub_smash.DisplayName: Orichalcum Club_smash
 	PalladiumClub.DisplayName: Palladium Club
+	PalladiumClub_smash.DisplayName: Palladium Club_smash
 	PalmWoodClub.DisplayName: Palm Wood Club
+	PalmWoodClub_smash.DisplayName: Palm Wood Club_smash
 	PearlwoodClub.DisplayName: Pearlwood Club
+	PearlwoodClub_smash.DisplayName: Pearlwood Club_smash
 	PlatinumClub.DisplayName: Platinum Club
+	PlatinumClub_smash.DisplayName: Platinum Club_smash
 	RichMahoganyClub.DisplayName: Rich Mahogany Club
+	RichMahoganyClub_smash.DisplayName: Rich Mahogany Club_smash
 	ShadewoodClub.DisplayName: Shadewood Club
+	ShadewoodClub_smash.DisplayName: Shadewood Club_smash
 	SilverClub.DisplayName: Silver Club
+	SilverClub_smash.DisplayName: Silver Club_smash
 	SpikeClub.DisplayName: Spike Club
 	SpikeClubSlash.DisplayName: Spike Club Slash
 	SpikeClub_smash.DisplayName: Spike Club_smash
@@ -3358,45 +3397,52 @@ Configs: {
 	EverglowClientConfig: {
 		DisplayName: Everglow Client Config
 
+		Headers: {
+			TextureReplace: Texture Replace Header
+			AudioReplace: Audio Replace Header
+		}
+
 		TextureReplace: {
-			Label: "{$Mods.Everglow.Config.TextureReplace.Label}"
-			Tooltip: "{$Mods.Everglow.Config.TextureReplace.Tooltip}"
+			Label: Texture Replace
+			Tooltip: ""
 		}
 
 		ItemPickSoundReplace: {
-			Label: "{$Mods.Everglow.Config.ItemPickSoundReplace.Label}"
+			Label: Item Pick Sound Replace
 			Tooltip: ""
 		}
 
 		MothAudioReplace: {
-			Label: "{$Mods.Everglow.Config.MothAudioReplace.Label}"
-			Tooltip: "{$Mods.Everglow.Config.MothAudioReplace.Tooltip}"
+			Label: Moth Audio Replace
+			Tooltip: ""
 		}
 
 		TuskAudioReplace: {
-			Label: "{$Mods.Everglow.Config.TuskAudioReplace.Label}"
-			Tooltip: "{$Mods.Everglow.Config.TuskAudioReplace.Tooltip}"
+			Label: Tusk Audio Replace
+			Tooltip: ""
 		}
 	}
 
 	TextureReplaceMode: {
 		Tooltip: ""
 		Terraria.Label: Terraria
+		Default.Label: Default
 		EternalResolve.Label: Eternal Resolve
+		Everglow.Label: Everglow
 		Myth.Label: Myth
 	}
 
 	MothAudioReplaceMode: {
 		Tooltip: ""
-		MothFighting.Label: Original
-		AltMothFighting.Label: Alternate
-		OldMothFighting.Label: Old
+		MothFighting.Label: Moth Fighting
+		AltMothFighting.Label: Alt Moth Fighting
+		OldMothFighting.Label: Old Moth Fighting
 	}
 
 	TuskAudioReplaceMode: {
 		Tooltip: ""
-		TuskFighting.Label: Original
-		OldTuskFighting.Label: Old
+		TuskFighting.Label: Tusk Fighting
+		OldTuskFighting.Label: Old Tusk Fighting
 	}
 
 	FogConfigs: {
@@ -3471,12 +3517,5 @@ Configs: {
 			Label: Enable Temporal Interp
 			Tooltip: ""
 		}
-	}
-}
-
-Config: {
-	Header: {
-		TextureReplace: Texture Replace Header
-		AudioReplace: Item Pick Sound Replace Header
 	}
 }
