@@ -79,7 +79,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 			modifiers.FinalDamage *= 1.85f;
 			modifiers.Knockback *= 2;
 			//Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12, 150)).RotatedByRandom(6.283);
-			ShakerManager.AddShaker(UndirectedShakerInfo.Create(target.Center, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12, 150)));
+			ShakerManager.AddShaker(UndirectedShakerInfo.Create(target.Center, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 24, 50)));
 		}
 	}
 
