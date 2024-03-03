@@ -1,4 +1,6 @@
 using Everglow.CagedDomain.Tiles;
+using Everglow.Yggdrasil.KelpCurtain.Tiles;
+using Everglow.Yggdrasil.KelpCurtain.Walls;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
@@ -16,6 +18,7 @@ public class YggdrasilTownGeneration
 	{
 		Initialize();
 		Main.statusText = "Yggdrasil Town Bark Cliff...";
+		
 		PlaceRectangleAreaOfBlock(20, (Main.maxTilesY - 350), 155, Main.maxTilesY, ModContent.TileType<StoneScaleWood>());
 		PlaceRectangleAreaOfBlock(Main.maxTilesX - 155, (Main.maxTilesY - 350), Main.maxTilesX - 20, Main.maxTilesY, ModContent.TileType<StoneScaleWood>());
 		PlaceRectangleAreaOfBlock(0, (Main.maxTilesY - 350), Main.maxTilesX, Main.maxTilesY, ModContent.TileType<StoneScaleWood>());
@@ -23,11 +26,14 @@ public class YggdrasilTownGeneration
 		PlaceRectangleAreaOfWall(20, (Main.maxTilesY - 350), 155, Main.maxTilesY, ModContent.WallType<StoneDragonScaleWoodWall>());
 		PlaceRectangleAreaOfWall(Main.maxTilesX - 155, (Main.maxTilesY - 350), Main.maxTilesX - 20, Main.maxTilesY, ModContent.WallType<StoneDragonScaleWoodWall>());
 		PlaceRectangleAreaOfWall(0, (Main.maxTilesY - 300), Main.maxTilesX, Main.maxTilesY, ModContent.WallType<StoneDragonScaleWoodWall>());
+		
 		Main.statusText = "Filling Midnight Bayou With Mud...";
 		BuildMidnightBayou();
 
 		Main.statusText = "Carving The Heavenly Portal...";
 		BuildHeavenlyPortal();
+		BuildGiantYggdrasilPosts();
+		BuildLampWoodLand();
 		//Main.statusText = "Flooding The Azure Grotto...";
 		//BuildAzureGrotto();
 		//Main.statusText = "Digging The Tangled Submine...";
@@ -225,6 +231,93 @@ public class YggdrasilTownGeneration
 				PlaceFrameImportantTiles(x, startY, 20, 1, ModContent.TileType<StoneBridgeTile>(), 0, 0);
 
 				PlaceFrameImportantTiles(x, startY + 7, 20, 1, ModContent.TileType<StoneBridgeTile>(), 36, 36);
+			}
+		}
+	}
+	/// <summary>
+	/// 巨型天穹石柱
+	/// </summary>
+	public static void BuildGiantYggdrasilPosts()
+	{
+		int x0CoordPerlin = GenRand.Next(1024);
+		int y0CoordPerlin = GenRand.Next(1024);
+		int upBound = Main.maxTilesY - 1900;
+		for (int i = 2;i < 9;i++)
+		{
+			Vector2 point = new Vector2(GenRand.Next(-40, 40) + i * 200, Main.maxTilesY - 460);
+			int radious = GenRand.Next(50, 60);
+			if(i == 3 || i == 6)
+			{
+				radious = (int)(radious * 2.5);
+			}
+			Vector2 velocity = new Vector2(0, -6).RotatedBy(GenRand.NextFloat(-0.2f, 0.2f));
+			//特殊处理
+			if (i == 2)
+			{
+				velocity = new Vector2(0, -6).RotatedBy(-0.3);
+			}
+			if (i == 8)
+			{
+				velocity = new Vector2(0, -6).RotatedBy(0.3);
+			}
+			if(i == 4)
+			{
+				point.X += 100;
+			}
+			if (i == 5)
+			{
+				continue;
+			}
+			if (i == 6)
+			{
+				point.X += 100;
+			}
+			for (int step = 0; step < 400; step++)
+			{
+				point += velocity;
+				if(SafeGetTile((int)(point + velocity * 30).X, (int)(point + velocity).Y).HasTile)
+				{
+					point -= velocity;
+					velocity.X *= -1;
+					point += velocity;
+				}
+				if (point.X < 50 || point.X > 1950)
+				{
+					break;
+				}
+				if(point.Y < upBound)
+				{
+					break;
+				}
+				if (step > 50)
+				{
+					Vector2 point2 = point - velocity * 24 + velocity.RotatedBy(GenRand.NextFloat(MathHelper.TwoPi)) * 3;
+					WorldGen.digTunnel(point2.X, point2.Y, GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, 42), GenRand.Next(3, 6));
+				}
+				//if (GenRand.NextBool(12))
+				//{
+				//	Vector2 point2 = point - velocity * 6;
+				//	WorldGen.digTunnel(point2.X, point2.Y, GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(127, 372), GenRand.Next(6, 15));
+				//}
+				//都地形生成了还考虑开销?
+				for (int dx = -radious; dx <= radious; dx++)
+				{
+					for (int dy = -radious / 8; dy <= radious / 8; dy++)
+					{
+						Vector2 v0 = new Vector2(dx, dy);
+						int x = (int)point.X + dx;
+						int y = (int)point.Y + dy;
+
+
+						if (v0.Length() < radious - PerlinPixelB[(x + x0CoordPerlin) % 1024, (y + y0CoordPerlin) % 1024] / 8f)
+						{
+							Tile tile = SafeGetTile(x, y);
+							tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+							tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+							tile.HasTile = true;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -766,248 +859,293 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildLampWoodLand()
 	{
-		int direction = 1;
-		int randX = AzureGrottoCenterX;
-		if (AzureGrottoCenterX > 600)
+		int upBound = Main.maxTilesY - 1900;
+		int bottomBound = Main.maxTilesY - 460;
+		int countLamp = 0;
+		for(int i = 0;i < 1000;i++)
 		{
-			direction = -1;
-			randX = AzureGrottoCenterX;
-		}
-		int startY = 11400;
-		int countX = 0;
-		int coordX = GenRand.Next(100, 200) + 1024;
-		int coordY = GenRand.Next(100, 200) + 1024;
-		//放置泥块,草块
-		while (countX < 600)
-		{
-			countX++;
-			int x = randX + countX * direction;
-			float yMin = 11040 - countX * countX / 2000f;
-			for(int y = startY + PerlinPixelG[(x + coordX) % 1024, 200] / 20; y > yMin;y--)
+			int x0CoordPerlin = GenRand.Next(1024);
+			int y0CoordPerlin = GenRand.Next(1024);
+			int checkX = GenRand.Next(50, Main.maxTilesX - 49);
+			int checkY = GenRand.Next(upBound, bottomBound);
+			if(CheckSpaceWidth(checkX, checkY) > 100)
 			{
-				float valueR = PerlinPixelR[(int)(x + coordX) % 1024, (int)(y * 3.3 + coordY) % 1024] / 255f;
-				if(y < yMin + 100)
+				countLamp++;
+				int startX = checkX - CheckSpaceLeft(checkX, checkY) - 60;
+				int endX = checkX + CheckSpaceRight(checkX, checkY) + 60;
+				for(int x = startX;x <= endX;x++)
 				{
-					valueR -= (yMin - y) / 100f + 1;
-				}
-				Tile tile = SafeGetTile(x, y);
-				if(!tile.HasTile && tile.LiquidAmount<=0)
-				{
-					//边缘区域为草方块
-					if(valueR > 0.32f)
+					for (int y = checkY - 30;y <= checkY + 30;y++)
 					{
-						tile.TileType = (ushort)ModContent.TileType<DarkForestGrass>();
+						Tile tile = SafeGetTile(x, y);
+						float addXValue = 0;
+						float addYValue = PerlinPixelG[(x + x0CoordPerlin) % 1024, (y + y0CoordPerlin) % 1024] / 255f * 0.5f;
+						if (tile.WallType == ModContent.WallType<StoneDragonScaleWoodWall>())
+						{
+							addXValue = EmbeddingDepthOfTileType(x, y, ModContent.TileType<StoneScaleWood>(), 10) / 20f;
+						}
+						float value = addYValue + Math.Abs(checkY - y) / 30f + addXValue;
+						int type = ModContent.TileType<DarkForestSoil>();
+						if (value > 0.6)
+						{
+							type = ModContent.TileType<DarkForestGrass>();
+						}
+						if(value > 1)
+						{
+							continue;
+						}
+						tile.TileType = (ushort)type;
 						tile.HasTile = true;
 					}
-					//其他区域是泥
-					if (valueR > 0.45f)
-					{
-						tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
-						tile.HasTile = true;
-					}
+				}
+				if(countLamp > 12)
+				{
+					break;
 				}
 			}
 		}
-		//放置含有宝箱的房间
-		countX = -100;
-		coordX = GenRand.Next(1024) + 1024;
-		coordY = GenRand.Next(1024) + 1024;
-		List<Vector2> roomPositions = new List<Vector2>();
-		while (countX < 800)
-		{
-			countX++;
-			int x = randX + countX * direction;
-			float yMin = 10840;
-			for (int y = startY + 150; y > yMin; y--)
-			{
-				float valueB = PerlinPixelB[(int)(x * 0.75f + coordX) % 1024, (int)(y * 0.75 + coordY) % 1024] / 255f;
-				//坐标锁定
-				if (valueB > 0.4f)
-				{
-					int halfWidth = GenRand.Next(10, 13);
-					int roomHeight = GenRand.Next(8, 10);
-					int chestPosXI = Main.rand.Next(-halfWidth + 2, halfWidth - 1);
-					bool canBuild = true;
-					int xj = 0;
-					int yj = 0;
-					for(int j = 0;j < 50;j++)
-					{
-						Tile topLeft = SafeGetTile(x + xj - halfWidth, y + yj - roomHeight);
-						Tile topRight = SafeGetTile(x + xj + halfWidth, y + yj - roomHeight);
-						Tile bottomLeft = SafeGetTile(x + xj - halfWidth, y + yj);
-						Tile bottomRight = SafeGetTile(x + xj + halfWidth, y + yj);
-						if (!topLeft.HasTile && !topRight.HasTile && 
-							bottomLeft.HasTile && (bottomLeft.TileType == ModContent.TileType<DarkForestGrass>() || bottomLeft.TileType == ModContent.TileType<DarkForestSoil>()) &&
-							bottomRight.HasTile && (bottomRight.TileType == ModContent.TileType<DarkForestGrass>() || bottomRight.TileType == ModContent.TileType<DarkForestSoil>()))
-						{
-							break;
-						}
-						else
-						{
-							yj += 1;
-						}
-						if(j == 49)
-						{
-							canBuild = false;
-							break;
-						}
-					}
-					foreach(Vector2 point in roomPositions)
-					{
-						if((point - new Vector2(x, y + yj)).Length() < 100)
-						{
-							canBuild = false;
-							break;
-						}
-					}
-					if (canBuild)
-					{
-						roomPositions.Add(new Vector2(x, y + yj));
-					}
-					else
-					{
-						continue;
-					}
-					for(int xi = x - halfWidth;xi <= x + halfWidth;xi++)
-					{
-						for (int yi = y + yj - roomHeight; yi <= y + yj; yi++)
-						{
-							Tile tile = SafeGetTile(xi, yi);
-							if (xi == x - halfWidth || xi == x + halfWidth || yi == y + yj || yi == y + yj - roomHeight)
-							{
-								tile.TileType = (ushort)ModContent.TileType<LampWood_Wood_Tile>();
-								tile.HasTile = true;
-							}
-							else
-							{
-								tile.wall = (ushort)ModContent.WallType<LampWood_Wood_Wall>();
-								tile.HasTile = false;
-							}
-						}
-					}
-					for (int xi = x - halfWidth; xi <= x + halfWidth; xi++)
-					{
-						for (int yi = y + yj - roomHeight; yi <= y + yj; yi++)
-						{
-							if (xi == x + chestPosXI && yi == y + yj - 1)
-							{
-								PlaceLampWoodBiomeChest(xi, yi);
-							}
-						}
-					}
-				}
-			}
-		}
-		//放置罐子
-		countX = -100;
-		coordX = GenRand.Next(1024) + 1024;
-		coordY = GenRand.Next(1024) + 1024;
-		while (countX < 800)
-		{
-			countX++;
-			int x = randX + countX * direction;
-			float yMin = 11040 - countX * countX / 2000f;
-			for (int y = startY + 150; y > yMin; y--)
-			{
-				float valueG = PerlinPixelG[(int)(x * 0.24f + coordX) % 1024, (int)(y * 0.24 + coordY) % 1024] / 255f;
-				Tile tile0 = SafeGetTile(x, y);
-				Tile tile1 = SafeGetTile(x + 1, y);
-				Tile tile2 = SafeGetTile(x, y + 1);
-				Tile tile3 = SafeGetTile(x + 1, y + 1);
-				Tile tile4 = SafeGetTile(x, y - 1);
-				Tile tile5 = SafeGetTile(x + 1, y - 1);
-				//罐子
-				if(valueG > 0.4f)
-				{
-					if (!tile0.HasTile && !tile1.HasTile && !tile4.HasTile && !tile5.HasTile && tile2.HasTile && tile3.HasTile && tile2.Slope == SlopeType.Solid && (tile2.TileType == ModContent.TileType<DarkForestGrass>() || tile2.TileType == ModContent.TileType<DarkForestSoil>()) && tile3.Slope == SlopeType.Solid && (tile3.TileType == ModContent.TileType<DarkForestGrass>() || tile3.TileType == ModContent.TileType<DarkForestSoil>()))
-					{
-						if (Main.rand.NextBool(3))
-						{
-							if (Main.rand.NextBool(2))
-							{
-								PlaceFrameImportantTiles(x, y - 1, 2, 2, ModContent.TileType<LampWoodPot>(), Main.rand.Next(6) * 36);
-							}
-							else
-							{
-								PlaceFrameImportantTiles(x, y - 1, 2, 2, TileID.Pots, Main.rand.Next(3) * 36, 36);
-							}
-						}
-					}
-				}
-			}
-		}
-		int smoothX = randX;
-		if (AzureGrottoCenterX > 600)
-		{
-			smoothX = randX - 500;
-		}
-		//平滑区间
-		SmoothTile(smoothX, 11000, smoothX + 500, 11250);
-		Point treeRotPos = new Point(200, 11000);
-		if(AzureGrottoCenterX < 600)
-		{
-			treeRotPos = new Point(1000, 11000);
-		}
-		//大灯塔树母树
-		ShapeData shapeData = new ShapeData();
-		WorldUtils.Gen(treeRotPos, new Shapes.Circle(15, 15), new Actions.Blank().Output(shapeData));
-		Vector2 offset = new Vector2(0);
-		Vector2 offsetVel = new Vector2(0, -3);
-		Point treeHat = treeRotPos;
-		float width = 13f;
-		for (int i = 0;i < 75;i++)
-		{
-			offset += offsetVel;
-			offsetVel = offsetVel.RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f));
-			offsetVel = offsetVel * 0.85f + new Vector2(i * i / 3000f * -direction, -3) * 0.15f;
-			width *= 0.98f;
-			WorldUtils.Gen(treeRotPos, new Shapes.Circle((int)width, (int)width), Actions.Chain(new GenAction[]{new Modifiers.Offset((int)offset.X, (int)offset.Y), new Actions.Blank().Output(shapeData)}));
-			if(i > 24)
-			{
-				if(Main.rand.NextBool(15))
-				{
-					Vector2 offset2 = offset;
-					float dir2 = (Main.rand.Next(2) - 0.5f) * 2;
-					Vector2 offsetVel2 = offsetVel.RotatedBy(Main.rand.NextFloat(-1.3f, -0.5f) * dir2);
-					Vector2 offsetVel2final = offsetVel.RotatedBy(Main.rand.NextFloat(-1.7f, -1.0f) * dir2);
-					float width2 =  width * 0.97f;
-					int length = 75 - i + Main.rand.Next(-11, 45);
+		//int direction = 1;
+		//int randX = AzureGrottoCenterX;
+		//if (AzureGrottoCenterX > 600)
+		//{
+		//	direction = -1;
+		//	randX = AzureGrottoCenterX;
+		//}
+		//int startY = 11400;
+		//int countX = 0;
+		//int coordX = GenRand.Next(100, 200) + 1024;
+		//int coordY = GenRand.Next(100, 200) + 1024;
+		////放置泥块,草块
+		//while (countX < 600)
+		//{
+		//	countX++;
+		//	int x = randX + countX * direction;
+		//	float yMin = 11040 - countX * countX / 2000f;
+		//	for(int y = startY + PerlinPixelG[(x + coordX) % 1024, 200] / 20; y > yMin;y--)
+		//	{
+		//		float valueR = PerlinPixelR[(int)(x + coordX) % 1024, (int)(y * 3.3 + coordY) % 1024] / 255f;
+		//		if(y < yMin + 100)
+		//		{
+		//			valueR -= (yMin - y) / 100f + 1;
+		//		}
+		//		Tile tile = SafeGetTile(x, y);
+		//		if(!tile.HasTile && tile.LiquidAmount<=0)
+		//		{
+		//			//边缘区域为草方块
+		//			if(valueR > 0.32f)
+		//			{
+		//				tile.TileType = (ushort)ModContent.TileType<DarkForestGrass>();
+		//				tile.HasTile = true;
+		//			}
+		//			//其他区域是泥
+		//			if (valueR > 0.45f)
+		//			{
+		//				tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
+		//				tile.HasTile = true;
+		//			}
+		//		}
+		//	}
+		//}
+		////放置含有宝箱的房间
+		//countX = -100;
+		//coordX = GenRand.Next(1024) + 1024;
+		//coordY = GenRand.Next(1024) + 1024;
+		//List<Vector2> roomPositions = new List<Vector2>();
+		//while (countX < 800)
+		//{
+		//	countX++;
+		//	int x = randX + countX * direction;
+		//	float yMin = 10840;
+		//	for (int y = startY + 150; y > yMin; y--)
+		//	{
+		//		float valueB = PerlinPixelB[(int)(x * 0.75f + coordX) % 1024, (int)(y * 0.75 + coordY) % 1024] / 255f;
+		//		//坐标锁定
+		//		if (valueB > 0.4f)
+		//		{
+		//			int halfWidth = GenRand.Next(10, 13);
+		//			int roomHeight = GenRand.Next(8, 10);
+		//			int chestPosXI = Main.rand.Next(-halfWidth + 2, halfWidth - 1);
+		//			bool canBuild = true;
+		//			int xj = 0;
+		//			int yj = 0;
+		//			for(int j = 0;j < 50;j++)
+		//			{
+		//				Tile topLeft = SafeGetTile(x + xj - halfWidth, y + yj - roomHeight);
+		//				Tile topRight = SafeGetTile(x + xj + halfWidth, y + yj - roomHeight);
+		//				Tile bottomLeft = SafeGetTile(x + xj - halfWidth, y + yj);
+		//				Tile bottomRight = SafeGetTile(x + xj + halfWidth, y + yj);
+		//				if (!topLeft.HasTile && !topRight.HasTile && 
+		//					bottomLeft.HasTile && (bottomLeft.TileType == ModContent.TileType<DarkForestGrass>() || bottomLeft.TileType == ModContent.TileType<DarkForestSoil>()) &&
+		//					bottomRight.HasTile && (bottomRight.TileType == ModContent.TileType<DarkForestGrass>() || bottomRight.TileType == ModContent.TileType<DarkForestSoil>()))
+		//				{
+		//					break;
+		//				}
+		//				else
+		//				{
+		//					yj += 1;
+		//				}
+		//				if(j == 49)
+		//				{
+		//					canBuild = false;
+		//					break;
+		//				}
+		//			}
+		//			foreach(Vector2 point in roomPositions)
+		//			{
+		//				if((point - new Vector2(x, y + yj)).Length() < 100)
+		//				{
+		//					canBuild = false;
+		//					break;
+		//				}
+		//			}
+		//			if (canBuild)
+		//			{
+		//				roomPositions.Add(new Vector2(x, y + yj));
+		//			}
+		//			else
+		//			{
+		//				continue;
+		//			}
+		//			for(int xi = x - halfWidth;xi <= x + halfWidth;xi++)
+		//			{
+		//				for (int yi = y + yj - roomHeight; yi <= y + yj; yi++)
+		//				{
+		//					Tile tile = SafeGetTile(xi, yi);
+		//					if (xi == x - halfWidth || xi == x + halfWidth || yi == y + yj || yi == y + yj - roomHeight)
+		//					{
+		//						tile.TileType = (ushort)ModContent.TileType<LampWood_Wood_Tile>();
+		//						tile.HasTile = true;
+		//					}
+		//					else
+		//					{
+		//						tile.wall = (ushort)ModContent.WallType<LampWood_Wood_Wall>();
+		//						tile.HasTile = false;
+		//					}
+		//				}
+		//			}
+		//			for (int xi = x - halfWidth; xi <= x + halfWidth; xi++)
+		//			{
+		//				for (int yi = y + yj - roomHeight; yi <= y + yj; yi++)
+		//				{
+		//					if (xi == x + chestPosXI && yi == y + yj - 1)
+		//					{
+		//						PlaceLampWoodBiomeChest(xi, yi);
+		//					}
+		//				}
+		//			}
+		//		}
+		//	}
+		//}
+		////放置罐子
+		//countX = -100;
+		//coordX = GenRand.Next(1024) + 1024;
+		//coordY = GenRand.Next(1024) + 1024;
+		//while (countX < 800)
+		//{
+		//	countX++;
+		//	int x = randX + countX * direction;
+		//	float yMin = 11040 - countX * countX / 2000f;
+		//	for (int y = startY + 150; y > yMin; y--)
+		//	{
+		//		float valueG = PerlinPixelG[(int)(x * 0.24f + coordX) % 1024, (int)(y * 0.24 + coordY) % 1024] / 255f;
+		//		Tile tile0 = SafeGetTile(x, y);
+		//		Tile tile1 = SafeGetTile(x + 1, y);
+		//		Tile tile2 = SafeGetTile(x, y + 1);
+		//		Tile tile3 = SafeGetTile(x + 1, y + 1);
+		//		Tile tile4 = SafeGetTile(x, y - 1);
+		//		Tile tile5 = SafeGetTile(x + 1, y - 1);
+		//		//罐子
+		//		if(valueG > 0.4f)
+		//		{
+		//			if (!tile0.HasTile && !tile1.HasTile && !tile4.HasTile && !tile5.HasTile && tile2.HasTile && tile3.HasTile && tile2.Slope == SlopeType.Solid && (tile2.TileType == ModContent.TileType<DarkForestGrass>() || tile2.TileType == ModContent.TileType<DarkForestSoil>()) && tile3.Slope == SlopeType.Solid && (tile3.TileType == ModContent.TileType<DarkForestGrass>() || tile3.TileType == ModContent.TileType<DarkForestSoil>()))
+		//			{
+		//				if (Main.rand.NextBool(3))
+		//				{
+		//					if (Main.rand.NextBool(2))
+		//					{
+		//						PlaceFrameImportantTiles(x, y - 1, 2, 2, ModContent.TileType<LampWoodPot>(), Main.rand.Next(6) * 36);
+		//					}
+		//					else
+		//					{
+		//						PlaceFrameImportantTiles(x, y - 1, 2, 2, TileID.Pots, Main.rand.Next(3) * 36, 36);
+		//					}
+		//				}
+		//			}
+		//		}
+		//	}
+		//}
+		//int smoothX = randX;
+		//if (AzureGrottoCenterX > 600)
+		//{
+		//	smoothX = randX - 500;
+		//}
+		////平滑区间
+		//SmoothTile(smoothX, 11000, smoothX + 500, 11250);
+		//Point treeRotPos = new Point(200, 11000);
+		//if(AzureGrottoCenterX < 600)
+		//{
+		//	treeRotPos = new Point(1000, 11000);
+		//}
+		////大灯塔树母树
+		//ShapeData shapeData = new ShapeData();
+		//WorldUtils.Gen(treeRotPos, new Shapes.Circle(15, 15), new Actions.Blank().Output(shapeData));
+		//Vector2 offset = new Vector2(0);
+		//Vector2 offsetVel = new Vector2(0, -3);
+		//Point treeHat = treeRotPos;
+		//float width = 13f;
+		//for (int i = 0;i < 75;i++)
+		//{
+		//	offset += offsetVel;
+		//	offsetVel = offsetVel.RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f));
+		//	offsetVel = offsetVel * 0.85f + new Vector2(i * i / 3000f * -direction, -3) * 0.15f;
+		//	width *= 0.98f;
+		//	WorldUtils.Gen(treeRotPos, new Shapes.Circle((int)width, (int)width), Actions.Chain(new GenAction[]{new Modifiers.Offset((int)offset.X, (int)offset.Y), new Actions.Blank().Output(shapeData)}));
+		//	if(i > 24)
+		//	{
+		//		if(Main.rand.NextBool(15))
+		//		{
+		//			Vector2 offset2 = offset;
+		//			float dir2 = (Main.rand.Next(2) - 0.5f) * 2;
+		//			Vector2 offsetVel2 = offsetVel.RotatedBy(Main.rand.NextFloat(-1.3f, -0.5f) * dir2);
+		//			Vector2 offsetVel2final = offsetVel.RotatedBy(Main.rand.NextFloat(-1.7f, -1.0f) * dir2);
+		//			float width2 =  width * 0.97f;
+		//			int length = 75 - i + Main.rand.Next(-11, 45);
 
-					for (int j = 0; j < length; j++)
-					{
-						offset2 += offsetVel2;
-						offsetVel2 = offsetVel2.RotatedBy(Main.rand.NextFloat(-0.04f, 0.04f));
-						offsetVel2 = offsetVel2 * 0.85f + offsetVel2final * 0.15f;
-						width2 *= 0.98f;
-						WorldUtils.Gen(treeRotPos, new Shapes.Circle((int)width2, (int)width2), Actions.Chain(new GenAction[] { new Modifiers.Offset((int)offset2.X, (int)offset2.Y), new Actions.Blank().Output(shapeData) }));
-					}
-				}
-				if(i == 53)
-				{
-					treeHat += new Point((int)offset.X, (int)offset.Y);
-				}
-			}
-		}
+		//			for (int j = 0; j < length; j++)
+		//			{
+		//				offset2 += offsetVel2;
+		//				offsetVel2 = offsetVel2.RotatedBy(Main.rand.NextFloat(-0.04f, 0.04f));
+		//				offsetVel2 = offsetVel2 * 0.85f + offsetVel2final * 0.15f;
+		//				width2 *= 0.98f;
+		//				WorldUtils.Gen(treeRotPos, new Shapes.Circle((int)width2, (int)width2), Actions.Chain(new GenAction[] { new Modifiers.Offset((int)offset2.X, (int)offset2.Y), new Actions.Blank().Output(shapeData) }));
+		//			}
+		//		}
+		//		if(i == 53)
+		//		{
+		//			treeHat += new Point((int)offset.X, (int)offset.Y);
+		//		}
+		//	}
+		//}
 
-		for(int i = -250;i < 251;i++)
-		{
-			for (int j = -100; j < 101; j++)
-			{
-				float length = new Vector2(i, j * 2.5f).Length() / 250f;
-				float valueG = PerlinPixelR[(int)(i * 0.24f + coordX + 140) % 1024, (int)(j * 1.3 + coordY + 140) % 1024] / 255f;
-				if(Main.rand.NextBool(15) && length + valueG < 1)
-				{
-					int x = treeHat.X + i;
-					int y = treeHat.Y + j;
-					Tile tile = SafeGetTile(x, y);
-					if(tile != null && !tile.HasTile)
-					{
-						tile.TileType = (ushort)ModContent.TileType<FemaleLampLeaves>();
-						tile.HasTile = true;
-					}
-				}
-			}
-		}
+		//for(int i = -250;i < 251;i++)
+		//{
+		//	for (int j = -100; j < 101; j++)
+		//	{
+		//		float length = new Vector2(i, j * 2.5f).Length() / 250f;
+		//		float valueG = PerlinPixelR[(int)(i * 0.24f + coordX + 140) % 1024, (int)(j * 1.3 + coordY + 140) % 1024] / 255f;
+		//		if(Main.rand.NextBool(15) && length + valueG < 1)
+		//		{
+		//			int x = treeHat.X + i;
+		//			int y = treeHat.Y + j;
+		//			Tile tile = SafeGetTile(x, y);
+		//			if(tile != null && !tile.HasTile)
+		//			{
+		//				tile.TileType = (ushort)ModContent.TileType<FemaleLampLeaves>();
+		//				tile.HasTile = true;
+		//			}
+		//		}
+		//	}
+		//}
 	}
 	/// <summary>
 	/// 上天穹镇

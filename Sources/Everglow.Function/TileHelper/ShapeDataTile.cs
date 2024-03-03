@@ -9,6 +9,7 @@ public abstract class ShapeDataTile : ModTile
 	public override void SetStaticDefaults()
 	{
 		Main.tileFrameImportant[Type] = true;
+		Main.tileCut[Type] = false;
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Height = TotalHeight;
 		TileObjectData.newTile.Width = TotalWidth;

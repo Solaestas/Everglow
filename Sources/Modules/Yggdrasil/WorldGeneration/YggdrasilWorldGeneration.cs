@@ -11,6 +11,7 @@ using Everglow.Commons.TileHelper;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilTownGeneration;
 using static Everglow.Yggdrasil.WorldGeneration.KelpCurtainGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
+using Terraria;
 
 namespace Everglow.Yggdrasil.WorldGeneration;
 
@@ -211,6 +212,12 @@ public class YggdrasilWorldGeneration : ModSystem
 		}
 		SmoothTile(x0, y0, x1, y1);
 	}
+	/// <summary>
+	/// 快速建好一个MapIO
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="Path"></param>
 	public static void QuickBuild(int x, int y, string Path)
 	{
 		var mapIO = new MapIO(x, y);
@@ -223,6 +230,311 @@ public class YggdrasilWorldGeneration : ModSystem
 			WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 			WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 		}
+	}
+	/// <summary>
+	/// 返回一点上下两侧的空旷高度
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static int CheckSpaceHeight(int x, int y)
+	{
+		int count = 0;
+		int x0 = x;
+		int y0 = y;
+		if (x0 > Main.maxTilesX || x0 < 0)
+		{
+			return count;
+		}
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (y0 > Main.maxTilesY)
+			{
+				break;
+			}
+			y0++;
+			count++;
+		}
+		x0 = x;
+		y0 = y - 1;
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (y0 < 0)
+			{
+				break;
+			}
+			y0--;
+			count++;
+		}
+		return count;
+	}
+	/// <summary>
+	/// 返回一点左右两侧的空旷长度
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static int CheckSpaceWidth(int x, int y)
+	{
+		int count = 0;
+		int x0 = x;
+		int y0 = y;
+		if (y0 > Main.maxTilesY || y0 < 0)
+		{
+			return count;
+		}
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (x0 > Main.maxTilesX)
+			{
+				break;
+			}
+			x0++;
+			count++;
+		}
+		x0 = x - 1;
+		y0 = y;
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (x0 < 0)
+			{
+				break;
+			}
+			x0--;
+			count++;
+		}
+		return count;
+	}
+	/// <summary>
+	/// 返回一点到左侧的空旷长度
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static int CheckSpaceLeft(int x, int y)
+	{
+		int count = 0;
+		int x0 = x;
+		int y0 = y;
+		if (y0 > Main.maxTilesY || y0 < 0)
+		{
+			return count;
+		}
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (x0 < 0)
+			{
+				break;
+			}
+			x0--;
+			count++;
+		}
+		return count;
+	}
+	/// <summary>
+	/// 返回一点到右侧的空旷长度
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static int CheckSpaceRight(int x, int y)
+	{
+		int count = 0;
+		int x0 = x;
+		int y0 = y;
+		if (y0 > Main.maxTilesY || y0 < 0)
+		{
+			return count;
+		}
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (x0 > Main.maxTilesX)
+			{
+				break;
+			}
+			x0++;
+			count++;
+		}
+		return count;
+	}
+	/// <summary>
+	/// 返回一点到上缘的空旷高度
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static int CheckSpaceUp(int x, int y)
+	{
+		int count = 0;
+		int x0 = x;
+		int y0 = y;
+		if (x0 > Main.maxTilesX || x0 < 0)
+		{
+			return count;
+		}
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (y0 < 0)
+			{
+				break;
+			}
+			y0--;
+			count++;
+		}
+		return count;
+	}
+	/// <summary>
+	/// 返回一点到下缘的空旷高度
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static int CheckSpaceDown(int x, int y)
+	{
+		int count = 0;
+		int x0 = x;
+		int y0 = y;
+		if (y0 > Main.maxTilesY || y0 < 0)
+		{
+			return count;
+		}
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (y0 > Main.maxTilesY)
+			{
+				break;
+			}
+			y0++;
+			count++;
+		}
+		return count;
+	}
+	/// <summary>
+	/// 返回一点嵌入固体块的深度
+	/// </summary>
+	/// <returns></returns>
+	public static int EmbeddingDepth(int x, int y, int maxRange = 4)
+	{
+		int depth = 0;
+		for(int i = -maxRange; i <= maxRange; i++)
+		{
+			for (int j = -maxRange; j <= maxRange; j++)
+			{
+				if(new Vector2(i, j).Length() <= maxRange)
+				{
+					if(SafeGetTile(i + x,j + y).HasTile)
+					{
+						depth++;
+					}
+				}
+			}
+		}
+		return depth;
+	}
+	/// <summary>
+	/// 返回一点嵌入某种物块的深度
+	/// </summary>
+	/// <returns></returns>
+	public static int EmbeddingDepthOfTileType(int x, int y, int type, int maxRange = 4)
+	{
+		int depth = 0;
+		for (int i = -maxRange; i <= maxRange; i++)
+		{
+			for (int j = -maxRange; j <= maxRange; j++)
+			{
+				if (new Vector2(i, j).Length() <= maxRange)
+				{
+					Tile tile = SafeGetTile(i + x, j + y);
+					if (tile.HasTile && tile.TileType == type)
+					{
+						depth++;
+					}
+				}
+			}
+		}
+		return depth;
+	}
+	/// <summary>
+	/// 返回一点附近的地势法线
+	/// </summary>
+	/// <returns></returns>
+	public static Vector2 TerrianSurfaceNormal(int x, int y)
+	{
+		Vector2 v0 = Vector2.zeroVector;
+		for (int i = -4; i <= 4; i++)
+		{
+			for (int j = -4; j <= 4; j++)
+			{
+				Vector2 v1 = new Vector2(i, j);
+				if (v1.Length() <= 4)
+				{
+					Tile tile = SafeGetTile(i + x, j + y);
+					if (tile.HasTile)
+					{
+						v0 += Vector2.Normalize(v1) / v1.Length();
+					}
+					else
+					{
+						v0 -= Vector2.Normalize(v1) / v1.Length();
+					}
+				}
+			}
+		}
+		if(v0.Length() < 0.1f)
+		{
+			return Vector2.zeroVector;
+		}
+		return Vector2.Normalize(v0);
+	}
+	/// <summary>
+	/// 返回一点到100格以内最近物块的距离
+	/// </summary>
+	/// <returns></returns>
+	public static float To100NearestBlockDistance(int x, int y)
+	{
+		float minDis = 100;
+		for (int i = -100; i <= 100; i++)
+		{
+			for (int j = -100; j <= 100; j++)
+			{
+
+				Tile tile = SafeGetTile(i + x, j + y);
+				if (tile.HasTile)
+				{
+					Vector2 v1 = new Vector2(i, j);
+					if (v1.Length() < minDis)
+					{
+						minDis = v1.Length();
+					}
+				}
+			}
+		}
+		return minDis;
+	}
+	/// <summary>
+	/// 返回一点到100格以内最近空旷的距离
+	/// </summary>
+	/// <returns></returns>
+	public static float To100NearestEmptyDistance(int x, int y)
+	{
+		float minDis = 100;
+		for (int i = -100; i <= 100; i++)
+		{
+			for (int j = -100; j <= 100; j++)
+			{
+
+				Tile tile = SafeGetTile(i + x, j + y);
+				if (!tile.HasTile)
+				{
+					Vector2 v1 = new Vector2(i, j);
+					if (v1.Length() < minDis)
+					{
+						minDis = v1.Length();
+					}
+				}
+			}
+		}
+		return minDis;
 	}
 	/// <summary>
 	/// type = 0:Kill,type = 1:place Tiles,type = 2:place Walls
