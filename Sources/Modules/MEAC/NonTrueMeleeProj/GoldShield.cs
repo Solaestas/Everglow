@@ -511,7 +511,10 @@ public class GoldShieldUIDrawer : ModSystem
 		{
 			ShieldDuration();
 		}
-
+		public override void PostUpdate()
+		{
+			ShieldDuration();
+		}
 		public void PreHurt(ref Player.HurtInfo info)
 		{
 			bool shieldsTookHit = false;
@@ -576,7 +579,7 @@ public class GoldShieldUIDrawer : ModSystem
 
 		public void ClassicDraw()
 		{
-			ShieldDuration();
+
 
 			SpriteBatch spriteBatch = Main.spriteBatch;
 			Color color = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
@@ -694,7 +697,7 @@ public class GoldShieldUIDrawer : ModSystem
 
 		public void FancyDraw(FancyClassicPlayerResourcesDisplaySet Displayset)
 		{
-			ShieldDuration();
+	
 			SpriteBatch spriteBatch = Main.spriteBatch;
 			PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(Player);
 			int MaxGoldShieldDurability;
@@ -807,7 +810,7 @@ public class GoldShieldUIDrawer : ModSystem
 		public void HorizontalDraw(HorizontalBarsPlayerResourcesDisplaySet Displayset)
 		{
 
-			ShieldDuration();
+
 			Asset<Texture2D> _panelMiddleHP = Main.Assets.Request<Texture2D>("Images\\UI\\PlayerResourceSets\\HorizontalBars\\HP_Panel_Middle", AssetRequestMode.ImmediateLoad);
 
 
