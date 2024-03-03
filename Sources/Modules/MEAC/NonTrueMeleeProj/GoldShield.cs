@@ -407,32 +407,39 @@ public class GoldShield : ModProjectile, IWarpProjectile
 
 public class GoldShieldUIDrawer : ModSystem
 {
-	public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+	/*public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
 	{
 		int ShieldBarIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Resource Bars"));
 		if (ShieldBarIndex != -1)
 		{
+			
 			layers.Insert(ShieldBarIndex, new LegacyGameInterfaceLayer(
 				"EverglowMod: Shield Bar",
 				delegate
 				{
+					
 					ShieldBarDraw(Main.spriteBatch);
 					return true;
 				},
 				InterfaceScaleType.UI)
 			);
 		}
-		base.ModifyInterfaceLayers(layers);
 
+	}*/
+
+	public override void PostDrawInterface(SpriteBatch spriteBatch)
+	{
+		ShieldBarDraw(Main.spriteBatch);
 	}
 	public void ShieldBarDraw(SpriteBatch spriteBatch)
 	{
-		Vector2 pos = Vector2.Zero;
+		
 		Player p = Main.LocalPlayer;
+
 		if (p.GetModPlayer<GoldShieldPlayer>().HasShield)
 		{
-
-			pos = Vector2.Lerp(pos, p.Center - new Vector2(50, 0) * p.direction - Main.screenPosition, 0.2f);
+			
+			
 			if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_Default"))
 			{
 				p.GetModPlayer<GoldShieldPlayer>().ClassicDraw();
@@ -477,8 +484,7 @@ public class GoldShieldUIDrawer : ModSystem
 			return base.FreeDodge(info);
 		}
 
-
-		public override void PreUpdate()
+		public void ShieldDuration()
 		{
 			foreach (Projectile proj in Main.projectile)
 			{
@@ -500,6 +506,10 @@ public class GoldShieldUIDrawer : ModSystem
 					GoldShieldDurability = 0;
 				}
 			}
+		}
+		public override void PreUpdate()
+		{
+			ShieldDuration();
 		}
 
 		public void PreHurt(ref Player.HurtInfo info)
@@ -552,10 +562,22 @@ public class GoldShieldUIDrawer : ModSystem
 			}
 		}
 
+
+		int _lastHeartPanelIndex;
+		float _currentPlayerLife;
+		float _lifePerHeart;
+		int _playerLifeFruitCount;
+		int _lastHeartFillingIndex;
+		int _heartCountRow1;
+		int _heartCountRow2;
+		bool _drawText;
+
 		#region ClassicDraw
 
 		public void ClassicDraw()
 		{
+			ShieldDuration();
+
 			SpriteBatch spriteBatch = Main.spriteBatch;
 			Color color = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
 			PlayerStatsSnapshot snapshot = new PlayerStatsSnapshot(Player);
@@ -669,17 +691,10 @@ public class GoldShieldUIDrawer : ModSystem
 		#region FancyDraw
 
 
-		int _lastHeartPanelIndex;
-		float _currentPlayerLife;
-		float _lifePerHeart;
-		int _playerLifeFruitCount;
-		int _lastHeartFillingIndex;
-		int _heartCountRow1;
-		int _heartCountRow2;
-		bool _drawText;
 
 		public void FancyDraw(FancyClassicPlayerResourcesDisplaySet Displayset)
 		{
+			ShieldDuration();
 			SpriteBatch spriteBatch = Main.spriteBatch;
 			PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(Player);
 			int MaxGoldShieldDurability;
@@ -792,6 +807,7 @@ public class GoldShieldUIDrawer : ModSystem
 		public void HorizontalDraw(HorizontalBarsPlayerResourcesDisplaySet Displayset)
 		{
 
+			ShieldDuration();
 			Asset<Texture2D> _panelMiddleHP = Main.Assets.Request<Texture2D>("Images\\UI\\PlayerResourceSets\\HorizontalBars\\HP_Panel_Middle", AssetRequestMode.ImmediateLoad);
 
 
