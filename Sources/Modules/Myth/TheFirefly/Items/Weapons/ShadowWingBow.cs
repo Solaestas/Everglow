@@ -1,4 +1,4 @@
-﻿using Everglow.Myth;
+using Everglow.Myth;
 using Everglow.Myth.TheFirefly.Items.Accessories;
 using Terraria.DataStructures;
 using Terraria.Localization;
@@ -25,6 +25,7 @@ public class ShadowWingBow : ModItem
 		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.autoReuse = false;
 		Item.UseSound = SoundID.Item1;
+		Item.channel = true;
 
 		Item.DamageType = DamageClass.Ranged;
 		Item.damage = 22;

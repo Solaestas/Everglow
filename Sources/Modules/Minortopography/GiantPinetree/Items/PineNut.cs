@@ -18,11 +18,14 @@ namespace Everglow.Minortopography.GiantPinetree.Items
 
 		public override void SetDefaults()
 		{
-			Item.CloneDefaults(ItemID.LifeCrystal);
+			//Item.CloneDefaults(ItemID.LifeCrystal);
 			Item.width = 14;
-			Item.height = 20;
+			Item.height = 30;
+			Item.useTime = 30;
+			Item.useAnimation = 20;
 			Item.rare = ItemRarityID.Green;
 			Item.value = 8000;
+			Item.UseSound = SoundID.Item2;
 			Item.useStyle = ItemUseStyleID.EatFood;
 		}
 

@@ -12,7 +12,7 @@ public class GrilledSquidTentacle : WhipItem
 		Item.shoot = ModContent.ProjectileType<GrilledSquidTentacle_proj>();
 		Item.shootSpeed = 5.04f;
 		Item.value = 32000;
-		Item.rare = ItemRarityID.White;
+		Item.rare = ItemRarityID.Green;
 		Item.damage = 25;
 		Item.useAnimation = 30;
 		Item.useTime = 30;

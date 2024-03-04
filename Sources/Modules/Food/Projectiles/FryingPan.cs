@@ -147,7 +147,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 				if (timer >= chargeTime3)
 					state3 = true;
 				timer = 10000;
-				SoundEngine.PlaySound(SoundID.Item1);
+				SoundEngine.PlaySound(SoundID.Item1 with { Volume = 0.8f });
 			}
 
 			if (timer >= 10000)//开始挥动攻击
