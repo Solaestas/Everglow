@@ -1,49 +1,3 @@
-Common: {
-	Hour: hour
-	Minute: minute
-	Second: second
-	Duration: duration
-	NotActivated: Unactivated
-	WarWhipGT:
-		'''
-		No summon tag damage
-		Your summons will focus struck enemies
-		'''
-	WhipGT:
-		'''
-		 summon tag damage
-		Your summons will focus struck enemies
-		'''
-	ClubGT: Spin to strike enemies
-	RapierGT: Right click to thrust the rapier, dealing higher damage at the cost of stamina
-	NoAmmoConsum: Does not consume ammo
-	Acytaea: Acytaea
-	ExcluWeapon: Exclusive Weapon
-	MythWeapon: Mythical Weapon
-	LegendWeapon: Legendary Weapon
-	DebugItem:
-		'''
-		! Debug item !
-		Use on your own risk
-		'''
-
-	WorldSystem: {
-		WorldCreate_Def: Generating World
-		WorldEnter_Def: Entering World
-		BuildMothCave: Generating The Cocoon
-	}
-
-	FoodSystem: {
-		Satiety: Satiety
-		CannotEat: You are full
-		CannotDrink: You don't feel like drinking
-		Khan: Khan, take me on one more charge
-	}
-
-	PylonSystem.ShabbyPylonRepairedTip: Pylon reconnected
-	Message.HasAwoken: has awoken!
-}
-
 Tiles: {
 	BottleOfNutShellFlowers.MapEntry: Bottle Of Nut Shell Flowers
 	PlumBlossomInABowl.MapEntry: Plum Blossom In A Bowl
@@ -53,14 +7,11 @@ Tiles: {
 	BloodyMossWheelFinished.MapEntry: Bloody Moss Wheel Finished
 	StoneTusk.MapEntry: Stone Tusk
 	StoneTuskSmall.MapEntry: Stone Tusk Small
-	StrangeTuskStone.MapEntry: Strange Tusk Stone
-	StrangeTuskStone1.MapEntry: Strange Tusk Stone
-	StrangeTuskStone2.MapEntry: Strange Tusk Stone
-	StrangeTuskStone3.MapEntry: Strange Tusk Stone
-	StrangeTuskStone4.MapEntry: Strange Tusk Stone
-	TuskRelic.MapEntry: The Tusk Relic
-	BlackFren.MapEntry: Black Fern
-	BlackFrenLarge.MapEntry: Large Black Fern
+	StrangeTuskStone1.MapEntry: Strange Tusk Stone1
+	StrangeTuskStone2.MapEntry: Strange Tusk Stone2
+	StrangeTuskStone3.MapEntry: Strange Tusk Stone3
+	StrangeTuskStone4.MapEntry: Strange Tusk Stone4
+	TuskRelic.MapEntry: Tusk Relic
 	BlackStarShrub.MapEntry: Black Star Shrub
 	BlackStarShrubSmall.MapEntry: Black Star Shrub Small
 	BlackVine.MapEntry: Black Vine
@@ -69,7 +20,6 @@ Tiles: {
 	FireflyPiranhaBanner.MapEntry: Firefly Piranha Banner
 	GlowingReed.MapEntry: Glowing Reed
 	LampLotus.MapEntry: Lamp Lotus
-	LargeFireBulb.MapEntry: Large Fire Bulb
 	MothWorldDoor.MapEntry: Moth World Door
 	GlowingDrop.MapEntry: Glowing Drop
 	GlowWoodBathtub.MapEntry: Glow Wood Bathtub
@@ -79,23 +29,23 @@ Tiles: {
 	GlowWoodCandle.MapEntry: Glow Wood Candle
 	GlowWoodChair.MapEntry: Glow Wood Chair
 	GlowWoodChandelier.MapEntry: Glow Wood Chandelier
-	GlowWoodChandelierType2.MapEntry: Glow Wood Chandelier 2
-	GlowWoodChandelierType3.MapEntry: Glow Wood Chandelier 3
-	GlowWoodChandelierType4.MapEntry: Glow Wood Chandelier 4
+	GlowWoodChandelierType2.MapEntry: Glow Wood Chandelier Type2
+	GlowWoodChandelierType3.MapEntry: Glow Wood Chandelier Type3
+	GlowWoodChandelierType4.MapEntry: Glow Wood Chandelier Type4
 	GlowWoodChest.MapEntry: Glow Wood Chest
 	GlowWoodDoorClosed.MapEntry: Glow Wood Door Closed
-	GlowWoodDoorClosedType2.MapEntry: Glow Wood Door Closed 2
+	GlowWoodDoorClosedType2.MapEntry: Glow Wood Door Closed Type2
 	GlowWoodDoorOpened.MapEntry: Glow Wood Door Opened
-	GlowWoodDoorOpenedType2.MapEntry: Glow Wood Door Opened 2
+	GlowWoodDoorOpenedType2.MapEntry: Glow Wood Door Opened Type2
 	GlowWoodDresser.MapEntry: Glow Wood Dresser
-	GlowWoodDresserType2.MapEntry: Glow Wood Dresser 2
+	GlowWoodDresserType2.MapEntry: Glow Wood Dresser Type2
 	GlowWoodLantern.MapEntry: Glow Wood Lantern
-	GlowWoodLanternType2.MapEntry: Glow Wood Lantern 2
+	GlowWoodLanternType2.MapEntry: Glow Wood Lantern Type2
 	GlowWoodMusicBox.MapEntry: Glow Wood Music Box
 	GlowWoodPiano.MapEntry: Glow Wood Piano
 	GlowWoodPlatform.MapEntry: Glow Wood Platform
 	GlowWoodSink.MapEntry: Glow Wood Sink
-	GlowWoodSinkType2.MapEntry: Glow Wood Sink 2
+	GlowWoodSinkType2.MapEntry: Glow Wood Sink Type2
 	GlowWoodSofa.MapEntry: Glow Wood Sofa
 	GlowWoodTable.MapEntry: Glow Wood Table
 	GlowWoodTorch.MapEntry: Glow Wood Torch
@@ -103,47 +53,42 @@ Tiles: {
 	CyanVineBar.MapEntry: Cyan Vine Bar
 	CyanVineOreTile.MapEntry: Cyan Vine Ore Tile
 	CyanVineStone.MapEntry: Cyan Vine Stone
-	LiftLamp.MapEntry: Lift Indicator
+	LiftLamp.MapEntry: Lift Lamp
 }
 
 Biomes: {
 	TuskBiome: {
-		DisplayName: The Tusk
+		DisplayName: Tusk Biome
 		TownNPCDialogueName: the Tusk Biome
 	}
 
 	TuskSurfaceBiome: {
-		DisplayName: The Tusk Surface
+		DisplayName: Tusk Surface Biome
 		TownNPCDialogueName: the Tusk Surface Biome
 	}
 
 	FireflyBiome: {
-		DisplayName: The Firefly
+		DisplayName: Firefly Biome
 		TownNPCDialogueName: the Firefly Biome
 	}
 
 	YggdrasilTownBiome: {
-		DisplayName: The Yggdrasil Town
-		TownNPCDialogueName: the Yggdrasil Town
+		DisplayName: Yggdrasil Town Biome
+		TownNPCDialogueName: the Yggdrasil Town Biome
 	}
 
 	KelpCurtainBiome: {
-		DisplayName: The Kelp Curtains
+		DisplayName: Kelp Curtain Biome
 		TownNPCDialogueName: the Kelp Curtain Biome
-	}
-
-	HurricaneMazeBiome: {
-		DisplayName: The Hurricane Maze
-		TownNPCDialogueName: the Hurricane Maze Biome
 	}
 }
 
-MapEntry.FluorescentTree: Fluorescent Tree
+MapEntry.FluorescentTree: Mods.Everglow.MapEntry.FluorescentTree
 
 Buffs: {
 	BloodSwordStrikeBuff: {
-		DisplayName: Blood Strike Buff
-		Description: Sap them of their blood
+		DisplayName: Blood Sword Strike Buff
+		Description: Mods.Everglow.Buffs.BloodSwordStrikeBuff.Description
 	}
 
 	LifeRotten: {
@@ -162,7 +107,7 @@ Buffs: {
 	}
 
 	StaminaEnergyBuff: {
-		DisplayName: Stamina Energy
+		DisplayName: Stamina Energy Buff
 		Description: Mods.Everglow.Buffs.StaminaEnergyBuff.Description
 	}
 
@@ -172,1054 +117,593 @@ Buffs: {
 	}
 
 	AppleBuff: {
-		DisplayName: Apple
-		Description:
-			'''
-			5% increased damage reduction
-			'An apple a day, doctors away'
-			'''
+		DisplayName: Apple Buff
+		Description: Mods.Everglow.Buffs.AppleBuff.Description
 	}
 
 	ApplePieBuff: {
-		DisplayName: Apple Pie
-		Description:
-			'''
-			5% increased damage reduction and 1 increased life regen
-			'An apple a day, doctors away'
-			'''
+		DisplayName: Apple Pie Buff
+		Description: Mods.Everglow.Buffs.ApplePieBuff.Description
 	}
 
 	ApricotBuff: {
-		DisplayName: Apricot
-		Description:
-			'''
-			4 increased mana regen
-			'Quenching'
-			'''
+		DisplayName: Apricot Buff
+		Description: Mods.Everglow.Buffs.ApricotBuff.Description
 	}
 
 	BaconBuff: {
-		DisplayName: Bacon
-		Description:
-			'''
-			2 increased life regen, take less damage from cold sources
-			'Warmth'
-			'''
+		DisplayName: Bacon Buff
+		Description: Mods.Everglow.Buffs.BaconBuff.Description
 	}
 
 	BananaBuff: {
-		DisplayName: Banana
-		Description:
-			'''
-			20% chance to not consume ammo, 5% increased ranged damage
-			'Low blood preasure'
-			'''
+		DisplayName: Banana Buff
+		Description: Mods.Everglow.Buffs.BananaBuff.Description
 	}
 
 	BananaSplitBuff: {
-		DisplayName: Banana Split
-		Description:
-			'''
-			33% to not consume ammo, 8% increased ranged crit chance
-			'Low blood preasure'
-			'''
+		DisplayName: Banana Split Buff
+		Description: Mods.Everglow.Buffs.BananaSplitBuff.Description
 	}
 
 	BBQRibsBuff: {
-		DisplayName: BBQ Ribs
-		Description:
-			'''
-			50 increased max life
-			'Hematinic'
-			'''
+		DisplayName: B B Q Ribs Buff
+		Description: Mods.Everglow.Buffs.BBQRibsBuff.Description
 	}
 
 	BlackCurrantBuff: {
-		DisplayName: Black Currant
-		Description:
-			'''
-			You get increased night vision and can see nearby harzards
-			'Improves vision'
-			'''
+		DisplayName: Black Currant Buff
+		Description: Mods.Everglow.Buffs.BlackCurrantBuff.Description
 	}
 
 	BloodOrangeBuff: {
-		DisplayName: Blood Orange
-		Description:
-			'''
-			25 increased max life
-			'Not Calamity'
-			'''
+		DisplayName: Blood Orange Buff
+		Description: Mods.Everglow.Buffs.BloodOrangeBuff.Description
 	}
 
 	BowlofSoupBuff: {
-		DisplayName: Bowl of Soup
-		Description:
-			'''
-			20 increased max mana and 5% increased magic damage
-			'Brain food'
-			'''
+		DisplayName: Bowlof Soup Buff
+		Description: Mods.Everglow.Buffs.BowlofSoupBuff.Description
 	}
 
 	BunnyStewBuff: {
-		DisplayName: Bunny Stew
-		Description:
-			'''
-			Enabled auto jump and increased jumping ability
-			'No rabbit was hurt during the production process'
-			'''
+		DisplayName: Bunny Stew Buff
+		Description: Mods.Everglow.Buffs.BunnyStewBuff.Description
 	}
 
 	BurgerBuff: {
-		DisplayName: Burger
-		Description:
-			'''
-			Reduced movement speed but increased defense
-			'Calorie bomb'
-			'''
+		DisplayName: Burger Buff
+		Description: Mods.Everglow.Buffs.BurgerBuff.Description
 	}
 
 	CherryBuff: {
-		DisplayName: Cherry
-		Description:
-			'''
-			Lauches an explosion on death and apply this buff to all targets
-			'Your love, is your life'
-			'''
+		DisplayName: Cherry Buff
+		Description: Mods.Everglow.Buffs.CherryBuff.Description
 	}
 
 	ChickenNuggetBuff: {
-		DisplayName: Chicken Nugget
-		Description:
-			'''
-			1 increased life regen and 4% increased attack speed
-			'Finger-licking good!'
-			'''
+		DisplayName: Chicken Nugget Buff
+		Description: Mods.Everglow.Buffs.ChickenNuggetBuff.Description
 	}
 
 	ChocolateChipCookieBuff: {
-		DisplayName: Chocolate Chip Cookie
-		Description:
-			'''
-			2 increased life and mana regen
-			'Restoring energy'
-			'''
+		DisplayName: Chocolate Chip Cookie Buff
+		Description: Mods.Everglow.Buffs.ChocolateChipCookieBuff.Description
 	}
 
 	ChristmasPuddingBuff: {
-		DisplayName: Christmas Pudding
-		Description:
-			'''
-			800 decreased aggro
-			'Beauty'
-			'''
+		DisplayName: Christmas Pudding Buff
+		Description: Mods.Everglow.Buffs.ChristmasPuddingBuff.Description
 	}
 
 	CoconutBuff: {
-		DisplayName: Coconut
-		Description:
-			'''
-			4 increased defense and 3% increased damage reduction
-			'From bra to BRA(Not true)'
-			'''
+		DisplayName: Coconut Buff
+		Description: Mods.Everglow.Buffs.CoconutBuff.Description
 	}
 
 	CookedFishBuff: {
-		DisplayName: Cooked Fish
-		Description:
-			'''
-			40 increased max mana and 4% increased magic crit chance
-			'Benefits spleen'
-			'''
+		DisplayName: Cooked Fish Buff
+		Description: Mods.Everglow.Buffs.CookedFishBuff.Description
 	}
 
 	CookedMarshmallowBuff: {
-		DisplayName: Cooked Marshmallow
-		Description:
-			'''
-			75% decreased max falling speed
-			'Pily'
-			'''
+		DisplayName: Cooked Marshmallow Buff
+		Description: Mods.Everglow.Buffs.CookedMarshmallowBuff.Description
 	}
 
 	CookedShrimpBuff: {
-		DisplayName: Cooked Shrimp
-		Description:
-			'''
-			10 increased defense and 4 increased armor penetration
-			'Calcium supplement'
-			'''
+		DisplayName: Cooked Shrimp Buff
+		Description: Mods.Everglow.Buffs.CookedShrimpBuff.Description
 	}
 
 	DragonfruitBuff: {
-		DisplayName: Dragonfruit
-		Description:
-			'''
-			Attacks inflict On Fire! and Oiled
-			'Redot-rehot'
-			'''
+		DisplayName: Dragonfruit Buff
+		Description: Mods.Everglow.Buffs.DragonfruitBuff.Description
 	}
 
 	ElderberryBuff: {
-		DisplayName: Elderberry
-		Description:
-			'''
-			You may dash slightly
-			'Antioxidation'
-			'''
+		DisplayName: Elderberry Buff
+		Description: Mods.Everglow.Buffs.ElderberryBuff.Description
 	}
 
 	EscargotBuff: {
-		DisplayName: Escargot
-		Description:
-			'''
-			You can hardly move but 25% increased damage reduction
-			'Potion of the Turtle Master?'
-			'''
+		DisplayName: Escargot Buff
+		Description: Mods.Everglow.Buffs.EscargotBuff.Description
 	}
 
 	FriedEggBuff: {
-		DisplayName: Fried Egg
-		Description:
-			'''
-			Increased attack range of throwing weapons
-			'Protein'
-			'''
+		DisplayName: Fried Egg Buff
+		Description: Mods.Everglow.Buffs.FriedEggBuff.Description
 	}
 
 	FriesBuff: {
-		DisplayName: Fries
-		Description:
-			'''
-			4 increased defense and 8% increased crit chance
-			'High oil and salt'
-			'''
+		DisplayName: Fries Buff
+		Description: Mods.Everglow.Buffs.FriesBuff.Description
 	}
 
 	FroggleBunwichBuff: {
-		DisplayName: Froggle Bunwich
-		Description:
-			'''
-			Enabled auto jump, increased damage and jumping ability
-			'You can really taste the narsh'
-			'''
+		DisplayName: Froggle Bunwich Buff
+		Description: Mods.Everglow.Buffs.FroggleBunwichBuff.Description
 	}
 
 	FruitSaladBuff: {
-		DisplayName: Fruit Salad
-		Description:
-			'''
-			Increased most stats
-			'Long-lasting vitamin!'
-			'''
+		DisplayName: Fruit Salad Buff
+		Description: Mods.Everglow.Buffs.FruitSaladBuff.Description
 	}
 
 	GingerbreadCookieBuff: {
-		DisplayName: Gingerbread Cookie
-		Description:
-			'''
-			2 increased life regen and reduced damage from cold sources
-			'Warmth'
-			'''
+		DisplayName: Gingerbread Cookie Buff
+		Description: Mods.Everglow.Buffs.GingerbreadCookieBuff.Description
 	}
 
 	GoldenDelightBuff: {
-		DisplayName: Golden Delight
-		Description:
-			'''
-			Your attacks inflict Midas, increased most stats
-			'Golden!'
-			'''
+		DisplayName: Golden Delight Buff
+		Description: Mods.Everglow.Buffs.GoldenDelightBuff.Description
 	}
 
 	GrapefruitBuff: {
-		DisplayName: Grapefruit
-		Description:
-			'''
-			50% increased minion knockback
-			'Avoid renal failure'
-			'''
+		DisplayName: Grapefruit Buff
+		Description: Mods.Everglow.Buffs.GrapefruitBuff.Description
 	}
 
 	GrapesBuff: {
-		DisplayName: Grapes
+		DisplayName: Grapes Buff
 		Description: Mods.Everglow.Buffs.GrapesBuff.Description
 	}
 
 	GrilledSquirrelBuff: {
-		DisplayName: Grilled Squirrel
-		Description:
-			'''
-			Increased jumping ability
-			'Delight'
-			'''
+		DisplayName: Grilled Squirrel Buff
+		Description: Mods.Everglow.Buffs.GrilledSquirrelBuff.Description
 	}
 
 	GrubSoupBuff: {
-		DisplayName: Grub Soup
-		Description:
-			'''
-			25 increased fishing power but you lose 2 life per second
-			'You get what you eat, but a bit disgusting'
-			'''
+		DisplayName: Grub Soup Buff
+		Description: Mods.Everglow.Buffs.GrubSoupBuff.Description
 	}
 
 	HotdogBuff: {
-		DisplayName: Hotdog
-		Description:
-			'''
-			Reduced movement speed but increased melee damage
-			'Yee~~'
-			'''
+		DisplayName: Hotdog Buff
+		Description: Mods.Everglow.Buffs.HotdogBuff.Description
 	}
 
 	IceCreamBuff: {
-		DisplayName: Ice Cream
-		Description:
-			'''
-			Immune to On Fire! and fire blocks
-			'Eat snow (Nope)'
-			'''
+		DisplayName: Ice Cream Buff
+		Description: Mods.Everglow.Buffs.IceCreamBuff.Description
 	}
 
 	LemonBuff: {
-		DisplayName: Lemon
-		Description:
-			'''
-			4% increased ranged crit chance and 300 reduced aggro
-			'Beauty'
-			'''
+		DisplayName: Lemon Buff
+		Description: Mods.Everglow.Buffs.LemonBuff.Description
 	}
 
 	LobsterTailBuff: {
-		DisplayName: Lobster Tail
-		Description:
-			'''
-			6 increased defense and 25% increased mining speed
-			'Life force'
-			'''
+		DisplayName: Lobster Tail Buff
+		Description: Mods.Everglow.Buffs.LobsterTailBuff.Description
 	}
 
 	MangoBuff: {
-		DisplayName: Mango
-		Description:
-			'''
-			Reduced continuous life loss caused by food buff
-			“Detoxifying”
-			'''
+		DisplayName: Mango Buff
+		Description: Mods.Everglow.Buffs.MangoBuff.Description
 	}
 
 	MarshmallowBuff: {
-		DisplayName: Marshmallow
-		Description:
-			'''
-			Allows you to double jump
-			'Like the cloud'
-			'''
+		DisplayName: Marshmallow Buff
+		Description: Mods.Everglow.Buffs.MarshmallowBuff.Description
 	}
 
 	MonsterLasagnaBuff: {
-		DisplayName: Monster Lasagna
-		Description:
-			'''
-			25% increased crit chance but you lose 3 life per second
-			'Cooked devil is still a devil, it won't change even in lasagna'
-			'''
+		DisplayName: Monster Lasagna Buff
+		Description: Mods.Everglow.Buffs.MonsterLasagnaBuff.Description
 	}
 
 	NachosBuff: {
-		DisplayName: Nachos
-		Description:
-			'''
-			Amplifies launchers
-			'Popcorn'
-			'''
+		DisplayName: Nachos Buff
+		Description: Mods.Everglow.Buffs.NachosBuff.Description
 	}
 
 	PadThaiBuff: {
-		DisplayName: Pad Thai
-		Description:
-			'''
-			50% increased minion knockback
-			'Exotic flavour'
-			'''
+		DisplayName: Pad Thai Buff
+		Description: Mods.Everglow.Buffs.PadThaiBuff.Description
 	}
 
 	PeachBuff: {
-		DisplayName: Peach
-		Description:
-			'''
-			Increased heart pickup range and 1 increased life regen
-			'I'm thinking of peach'
-			'''
+		DisplayName: Peach Buff
+		Description: Mods.Everglow.Buffs.PeachBuff.Description
 	}
 
 	PhoBuff: {
-		DisplayName: Pho
-		Description:
-			'''
-			8% increased summon damage
-			'Exotic flavour'
-			'''
+		DisplayName: Pho Buff
+		Description: Mods.Everglow.Buffs.PhoBuff.Description
 	}
 
 	PineappleBuff: {
-		DisplayName: Pineapple
-		Description:
-			'''
-			6 increased defense, attackers take 50% damage
-			'Promelain'
-			'''
+		DisplayName: Pineapple Buff
+		Description: Mods.Everglow.Buffs.PineappleBuff.Description
 	}
 
 	PizzaBuff: {
-		DisplayName: Pizza
-		Description:
-			'''
-			10 increased armor penetration
-			'Pineapple pizza which ignores Italians' defense'
-			'''
+		DisplayName: Pizza Buff
+		Description: Mods.Everglow.Buffs.PizzaBuff.Description
 	}
 
 	PlumBuff: {
-		DisplayName: Plum
-		Description:
-			'''
-			600 increased aggro and 8% increased attack speed
-			'As to my suggestion, is to wait!'
-			'''
+		DisplayName: Plum Buff
+		Description: Mods.Everglow.Buffs.PlumBuff.Description
 	}
 
 	PotatoChipsBuff: {
-		DisplayName: Potato Chips
-		Description:
-			'''
-			4 increased defense amd 8% increased damage
-			'High oil and salt'
-			'''
+		DisplayName: Potato Chips Buff
+		Description: Mods.Everglow.Buffs.PotatoChipsBuff.Description
 	}
 
 	PumpkinPieBuff: {
-		DisplayName: Pumpkin Pie
-		Description:
-			'''
-			50 increased max life
-			'The happiness of harvest'
-			'''
+		DisplayName: Pumpkin Pie Buff
+		Description: Mods.Everglow.Buffs.PumpkinPieBuff.Description
 	}
 
 	RambutanBuff: {
-		DisplayName: Rambutan
-		Description:
-			'''
-			Immune to Poisoned, Acid Venom and debuffs which the Ankh Shield is immune to
-			'Improves immunity'
-			'''
+		DisplayName: Rambutan Buff
+		Description: Mods.Everglow.Buffs.RambutanBuff.Description
 	}
 
 	RoastedBirdBuff: {
-		DisplayName: Roasted Bird
-		Description:
-			'''
-			Increased flying ability
-			'I am a little-little-little-little bird'
-			'''
+		DisplayName: Roasted Bird Buff
+		Description: Mods.Everglow.Buffs.RoastedBirdBuff.Description
 	}
 
 	RoastedDuckBuff: {
-		DisplayName: Roasted Duck
-		Description:
-			'''
-			Increased flying ability, you can walk on water, press DOWN to enter water
-			'This is roasted duck'
-			'''
+		DisplayName: Roasted Duck Buff
+		Description: Mods.Everglow.Buffs.RoastedDuckBuff.Description
 	}
 
 	SashimiBuff: {
-		DisplayName: Sashimi
-		Description:
-			'''
-			Move like normal in water, you can breathe in water
-			10% increased damage and 20% increased movement speed but you lose 3 life per second
-			'Parasites!'
-			'''
+		DisplayName: Sashimi Buff
+		Description: Mods.Everglow.Buffs.SashimiBuff.Description
 	}
 
 	SauteedFrogLegsBuff: {
-		DisplayName: Sauteed Frog Legs
-		Description:
-			'''
-			Enabled auto jump and increased jumping ability
-			'Haven't fish the Frog Leg? Then eat it!'
-			'''
+		DisplayName: Sauteed Frog Legs Buff
+		Description: Mods.Everglow.Buffs.SauteedFrogLegsBuff.Description
 	}
 
 	SeafoodDinnerBuff: {
-		DisplayName: Seafood Dinner
-		Description:
-			'''
-			12% increased damage, crit chance and attack speed
-			'Raw enough!'
-			'''
+		DisplayName: Seafood Dinner Buff
+		Description: Mods.Everglow.Buffs.SeafoodDinnerBuff.Description
 	}
 
 	ShrimpPoBoyBuff: {
-		DisplayName: Shrimp Po Boy
-		Description:
-			'''
-			6 increased defense and 25% increased mining speed
-			'Life force'
-			'''
+		DisplayName: Shrimp Po Boy Buff
+		Description: Mods.Everglow.Buffs.ShrimpPoBoyBuff.Description
 	}
 
 	ShuckedOysterBuff: {
-		DisplayName: Shucked Oyster
-		Description:
-			'''
-			10 increased armor penetration but 5 decreased defense, you lose 3 life per second
-			'Parasites!'
-			'''
+		DisplayName: Shucked Oyster Buff
+		Description: Mods.Everglow.Buffs.ShuckedOysterBuff.Description
 	}
 
 	SpaghettiBuff: {
-		DisplayName: Spaghetti
-		Description:
-			'''
-			1 increased max minion
-			'Exotic flavour'
-			'''
+		DisplayName: Spaghetti Buff
+		Description: Mods.Everglow.Buffs.SpaghettiBuff.Description
 	}
 
 	StarfruitBuff: {
-		DisplayName: Starfruit
-		Description:
-			'''
-			Shotguns shot one more bullet
-			'Despotic power of The Emperor 1437'
-			'''
+		DisplayName: Starfruit Buff
+		Description: Mods.Everglow.Buffs.StarfruitBuff.Description
 	}
 
 	SteakBuff: {
-		DisplayName: Steak
-		Description:
-			'''
-			33% reduced mana consumption
-			'Upper class'
-			'''
+		DisplayName: Steak Buff
+		Description: Mods.Everglow.Buffs.SteakBuff.Description
 	}
 
 	SugarCookieBuff: {
-		DisplayName: Sugar Cookie
-		Description:
-			'''
-			5% increased ranged damage
-			'Nourishing'
-			'''
+		DisplayName: Sugar Cookie Buff
+		Description: Mods.Everglow.Buffs.SugarCookieBuff.Description
 	}
 
 	AleBuff: {
-		DisplayName: Tipsy
-		Description:
-			'''
-			150% increased whip range and speed
-			'Drunk'
-			'''
+		DisplayName: Ale Buff
+		Description: Mods.Everglow.Buffs.AleBuff.Description
 	}
 
 	AppleJuiceBuff: {
-		DisplayName: Apple Juice
-		Description:
-			'''
-			60% increased damage reduction
-			'An apple a day, doctors away'
-			'''
+		DisplayName: Apple Juice Buff
+		Description: Mods.Everglow.Buffs.AppleJuiceBuff.Description
 	}
 
 	BananaDaiquiriBuff: {
-		DisplayName: Banana Daiquiri
-		Description:
-			'''
-			No ammo consumption, greatly increased ranged damage and crit change
-			'Low body temperature and blood pressure'
-			'''
+		DisplayName: Banana Daiquiri Buff
+		Description: Mods.Everglow.Buffs.BananaDaiquiriBuff.Description
 	}
 
 	BloodyMoscatoBuff: {
-		DisplayName: Bloody Moscato
-		Description:
-			'''
-			Each of your attacks heals you by 2
-			'Sanguine'
-			'''
+		DisplayName: Bloody Moscato Buff
+		Description: Mods.Everglow.Buffs.BloodyMoscatoBuff.Description
 	}
 
 	CoffeeCupBuff: {
-		DisplayName: Coffee Cup
-		Description:
-			'''
-			Greatly increased wall-placing speed, highlights enemies, traps, chests and you emit light
-			'Treasure of corporate slaves'
-			'''
+		DisplayName: Coffee Cup Buff
+		Description: Mods.Everglow.Buffs.CoffeeCupBuff.Description
 	}
 
 	CreamSodaBuff: {
-		DisplayName: Cream Soda
-		Description:
-			'''
-			Greatly increased melee ability and aggro
-			'Diarrhea!'
-			'''
+		DisplayName: Cream Soda Buff
+		Description: Mods.Everglow.Buffs.CreamSodaBuff.Description
 	}
 
 	FruitJuiceBuff: {
-		DisplayName: Fruit Juice
-		Description:
-			'''
-			Greatly increased certain stats
-			'Vitamin!'
-			'''
+		DisplayName: Fruit Juice Buff
+		Description: Mods.Everglow.Buffs.FruitJuiceBuff.Description
 	}
 
 	GrapeJuiceBuff: {
-		DisplayName: Grape Juice
-		Description:
-			'''
-			You are feeling extremely lucky
-			'Concentrated happiness'
-			'''
+		DisplayName: Grape Juice Buff
+		Description: Mods.Everglow.Buffs.GrapeJuiceBuff.Description
 	}
 
 	LemonadeBuff: {
-		DisplayName: Lemonade
-		Description:
-			'''
-			Doubled ranged knockback and 2400 reduced aggro
-			'Beauty'
-			'''
+		DisplayName: Lemonade Buff
+		Description: Mods.Everglow.Buffs.LemonadeBuff.Description
 	}
 
 	MilkCartonBuff: {
-		DisplayName: Milk Carton
-		Description:
-			'''
-			Immune to most debuffs
-			'Milk removes every debuff'
-			'''
+		DisplayName: Milk Carton Buff
+		Description: Mods.Everglow.Buffs.MilkCartonBuff.Description
 	}
 
 	MilkshakeBuff: {
-		DisplayName: Milkshake
-		Description:
-			'''
-			Greatly increased movement speed
-			'Diet'
-			'''
+		DisplayName: Milkshake Buff
+		Description: Mods.Everglow.Buffs.MilkshakeBuff.Description
 	}
 
 	PeachSangriaBuff: {
-		DisplayName: Peach Sangria
-		Description:
-			'''
-			Greatly increased life regen and increased heart pickup range
-			'I' a Peachisfied user too'
-			'''
+		DisplayName: Peach Sangria Buff
+		Description: Mods.Everglow.Buffs.PeachSangriaBuff.Description
 	}
 
 	PinaColadaBuff: {
-		DisplayName: Pina Colada
-		Description:
-			'''
-			Melee attackers take 1000% damage back (maximum 1000)
-			'Never add flavour to pretend fresh pina juice'
-			'''
+		DisplayName: Pina Colada Buff
+		Description: Mods.Everglow.Buffs.PinaColadaBuff.Description
 	}
 
 	PrismaticPunchBuff: {
-		DisplayName: Prismatic Punch
-		Description:
-			'''
-			5 increased max minion and max sentry, 50% increased summon damage and minion knockback
-			'Elegant interest'
-			'''
+		DisplayName: Prismatic Punch Buff
+		Description: Mods.Everglow.Buffs.PrismaticPunchBuff.Description
 	}
 
 	SakeBuff: {
-		DisplayName: Sake
-		Description:
-			'''
-			18 decreased defense but greatly increased melee ability
-			'The Purity, so high'
-			'''
+		DisplayName: Sake Buff
+		Description: Mods.Everglow.Buffs.SakeBuff.Description
 	}
 
 	SmoothieofDarknessBuff: {
-		DisplayName: Smoothieof Darkness
-		Description:
-			'''
-			50% increased dodge chance
-			'Dark (literally)'
-			'''
+		DisplayName: Smoothieof Darkness Buff
+		Description: Mods.Everglow.Buffs.SmoothieofDarknessBuff.Description
 	}
 
 	TeacupBuff: {
-		DisplayName: Teacup
-		Description:
-			'''
-			Greatly increased mana regen, magic damage and magic crit chance
-			'Fragrant'
-			'''
+		DisplayName: Teacup Buff
+		Description: Mods.Everglow.Buffs.TeacupBuff.Description
 	}
 
 	TropicalSmoothieBuff: {
-		DisplayName: Tropical Smoothie
-		Description:
-			'''
-			Greatly increased magic damage and magic crit chance, your mana cost is reduced to 1
-			'Tropical storm'
-			'''
+		DisplayName: Tropical Smoothie Buff
+		Description: Mods.Everglow.Buffs.TropicalSmoothieBuff.Description
 	}
 
 	ArcticshellfishWarshipBuff: {
-		DisplayName: Arcticshellfish Warship
-		Description:
-			'''
-			Increases defense
-			'Delicious arctic shellfish warship'
-			'''
+		DisplayName: Arcticshellfish Warship Buff
+		Description: Mods.Everglow.Buffs.ArcticshellfishWarshipBuff.Description
 	}
 
 	BakedMusselBuff: {
-		DisplayName: Baked Mussel
-		Description:
-			'''
-			6% increased crit damage and 4 increased defense
-			'Seems to be less raw'
-			'''
+		DisplayName: Baked Mussel Buff
+		Description: Mods.Everglow.Buffs.BakedMusselBuff.Description
 	}
 
 	BakedOysterBuff: {
-		DisplayName: Baked Oyster
-		Description:
-			'''
-			4 increased armor penetration and defense
-			'Parasites slain'
-			'''
+		DisplayName: Baked Oyster Buff
+		Description: Mods.Everglow.Buffs.BakedOysterBuff.Description
 	}
 
 	CantaloupeJellyBuff: {
-		DisplayName: Cantaloupe Jelly
-		Description:
-			'''
-			Your projectiles can penetrate one more time
-			'Duang, duang, duang'
-			'''
+		DisplayName: Cantaloupe Jelly Buff
+		Description: Mods.Everglow.Buffs.CantaloupeJellyBuff.Description
 	}
 
 	CaramelPuddingBuff: {
-		DisplayName: Caramel Pudding
-		Description:
-			'''
-			Your projectiles can bounce one more time
-			'Duang, duang, duang'
-			'''
+		DisplayName: Caramel Pudding Buff
+		Description: Mods.Everglow.Buffs.CaramelPuddingBuff.Description
 	}
 
 	CrabseedWarshipBuff: {
-		DisplayName: Crabseed Warship
-		Description:
-			'''
-			Increases crit chance
-			'Delicious crab roe warship'
-			'''
+		DisplayName: Crabseed Warship Buff
+		Description: Mods.Everglow.Buffs.CrabseedWarshipBuff.Description
 	}
 
 	DurianBuff: {
-		DisplayName: Durian
-		Description:
-			'''
-			Speeds up digestion
-			'Helps digestion'
-			'''
+		DisplayName: Durian Buff
+		Description: Mods.Everglow.Buffs.DurianBuff.Description
 	}
 
 	EggTartBuff: {
-		DisplayName: Egg Tart
-		Description:
-			'''
-			5% increased crit damage 
-			'Crispy crust'
-			'''
+		DisplayName: Egg Tart Buff
+		Description: Mods.Everglow.Buffs.EggTartBuff.Description
 	}
 
 	KiwiFruitBuff: {
-		DisplayName: Kiwi Fruit
-		Description:
-			'''
-			20% increased weapon size
-			'Also called Chinese gooseberry'
-			'''
+		DisplayName: Kiwi Fruit Buff
+		Description: Mods.Everglow.Buffs.KiwiFruitBuff.Description
 	}
 
 	KiwiIceCreamBuff: {
-		DisplayName: Kiwi Ice Cream
-		Description:
-			'''
-			10% increased weapon size and increases attack speed
-			'Kiwi power'
-			'''
+		DisplayName: Kiwi Ice Cream Buff
+		Description: Mods.Everglow.Buffs.KiwiIceCreamBuff.Description
 	}
 
 	MangosteenBuff: {
-		DisplayName: Mangosteen
-		Description:
-			'''
-			Increases attack range of boomerangs, yoyos and flails
-			'Nourishing'
-			'''
+		DisplayName: Mangosteen Buff
+		Description: Mods.Everglow.Buffs.MangosteenBuff.Description
 	}
 
 	OrangeIcecreamBuff: {
-		DisplayName: Orange Icecream
-		Description:
-			'''
-			Extends invincibility frames
-			'The reality is in your mind'
-			'''
+		DisplayName: Orange Icecream Buff
+		Description: Mods.Everglow.Buffs.OrangeIcecreamBuff.Description
 	}
 
 	SalmonInPepperBuff: {
-		DisplayName: Salmon In Pepper
-		Description:
-			'''
-			Increases movement speed, especially in water
-			'Queen of the Arctic ocean'
-			'''
+		DisplayName: Salmon In Pepper Buff
+		Description: Mods.Everglow.Buffs.SalmonInPepperBuff.Description
 	}
 
 	SalmonWarshipBuff: {
-		DisplayName: Salmon Warship
-		Description:
-			'''
-			Increases movement speed
-			'Delicious salmon warship'
-			'''
+		DisplayName: Salmon Warship Buff
+		Description: Mods.Everglow.Buffs.SalmonWarshipBuff.Description
 	}
 
 	SeafoodPizzaBuff: {
-		DisplayName: Seafood Pizza
-		Description:
-			'''
-			Increases most stats
-			'It's not easy to finish this by one'
-			'''
+		DisplayName: Seafood Pizza Buff
+		Description: Mods.Everglow.Buffs.SeafoodPizzaBuff.Description
 	}
 
 	StinkyTofuBuff: {
-		DisplayName: Stinky Tofu
-		Description:
-			'''
-			Confuses nearby enemies
-			'Appetizing but stinky'
-			'''
+		DisplayName: Stinky Tofu Buff
+		Description: Mods.Everglow.Buffs.StinkyTofuBuff.Description
 	}
 
 	StrawberryBuff: {
-		DisplayName: Strawberry
-		Description:
-			'''
-			Nearer enemies take more damage
-			'Popular fruit'
-			'''
+		DisplayName: Strawberry Buff
+		Description: Mods.Everglow.Buffs.StrawberryBuff.Description
 	}
 
 	StrawberryIcecreamBuff: {
-		DisplayName: Strawberry Icecream
-		Description:
-			'''
-			Nearer enemies take more damage
-			'Cold as you, but still I can't part with it'
-			'''
+		DisplayName: Strawberry Icecream Buff
+		Description: Mods.Everglow.Buffs.StrawberryIcecreamBuff.Description
 	}
 
 	SweetshrimpSushiBuff: {
-		DisplayName: Sweetshrimp Sushi
-		Description:
-			'''
-			Increases damage
-			'Delicious sweetshrip sushi'
-			'''
+		DisplayName: Sweetshrimp Sushi Buff
+		Description: Mods.Everglow.Buffs.SweetshrimpSushiBuff.Description
 	}
 
 	TamakoSushiBuff: {
-		DisplayName: Tamako Sushi
-		Description:
-			'''
-			Increases life regeneration
-			'Delicious tamago sushi'
-			'''
+		DisplayName: Tamako Sushi Buff
+		Description: Mods.Everglow.Buffs.TamakoSushiBuff.Description
 	}
 
 	WakameWarshipBuff: {
-		DisplayName: Wakame Warship
-		Description:
-			'''
-			Increases mana regeneration
-			'Delicious wakame sushi'
-			'''
+		DisplayName: Wakame Warship Buff
+		Description: Mods.Everglow.Buffs.WakameWarshipBuff.Description
 	}
 
 	WatermelonBuff: {
-		DisplayName: Watermelon
-		Description:
-			'''
-			8% increases knockback
-			'I'm more curious about how you can eat it whole than the watermelon itself'
-			'''
+		DisplayName: Watermelon Buff
+		Description: Mods.Everglow.Buffs.WatermelonBuff.Description
 	}
 
 	WatermelonPlateBuff: {
-		DisplayName: Watermelon Plate
-		Description:
-			'''
-			6% increased crit chance and crit damage
-			'Unpretentious arrangement'
-			'''
+		DisplayName: Watermelon Plate Buff
+		Description: Mods.Everglow.Buffs.WatermelonPlateBuff.Description
 	}
 
 	BlueHawaiiBuff: {
-		DisplayName: Blue Hawaii
-		Description:
-			'''
-			Increases speed of your projectiles
-			'Sea wind breezes'
-			'''
+		DisplayName: Blue Hawaii Buff
+		Description: Mods.Everglow.Buffs.BlueHawaiiBuff.Description
 	}
 
 	B_52Buff: {
-		DisplayName: B_52
-		Description:
-			'''
-			Greatly increases launchers' speed, damage and crit chance
-			'Bomber'
-			'''
+		DisplayName: B_52 Buff
+		Description: Mods.Everglow.Buffs.B_52Buff.Description
 	}
 
 	DreamYearningBuff: {
-		DisplayName: Dream Yearning
-		Description:
-			'''
-			Your projectiles will home into nearby enemies
-			'Thinking of thou and missing thou, yearning in intoxicated dream
-			browpowder fades, frangrance dissipates, sobriety suffers more'
-			'''
+		DisplayName: Dream Yearning Buff
+		Description: Mods.Everglow.Buffs.DreamYearningBuff.Description
 	}
 
 	DryMartiniBuff: {
-		DisplayName: Dry Martini
-		Description:
-			'''
-			Greatly increases damage
-			'Classic'
-			'''
+		DisplayName: Dry Martini Buff
+		Description: Mods.Everglow.Buffs.DryMartiniBuff.Description
 	}
 
 	GreenStormBuff: {
-		DisplayName: Green Storm
-		Description:
-			'''
-			Shoots chlorophyte crystals and spore clouds in succession
-			'Don't think grasses are cheap, they're more expensive than apples and walnuts until mass production'
-			'''
+		DisplayName: Green Storm Buff
+		Description: Mods.Everglow.Buffs.GreenStormBuff.Description
 	}
 
 	KiwiJuiceBuff: {
-		DisplayName: Kiwi Juice
-		Description:
-			'''
-			Greatly increases weapon size
-			'Concentrated Kiwi power'
-			'''
+		DisplayName: Kiwi Juice Buff
+		Description: Mods.Everglow.Buffs.KiwiJuiceBuff.Description
 	}
 
 	LonelyJellyfishBuff: {
-		DisplayName: Lonely Jellyfish
-		Description:
-			'''
-			Makes you invisible and summon jellyfish electrspheres
-			'Toss it off after appreciating'
-			'''
+		DisplayName: Lonely Jellyfish Buff
+		Description: Mods.Everglow.Buffs.LonelyJellyfishBuff.Description
 	}
 
 	OrangeJuiceBuff: {
-		DisplayName: Orange Juice
-		Description:
-			'''
-			Grants you invincibility
-			'Emm, kind of like LCL'
-			'''
+		DisplayName: Orange Juice Buff
+		Description: Mods.Everglow.Buffs.OrangeJuiceBuff.Description
 	}
 
 	PiercoldWindBuff: {
-		DisplayName: Piercold Wind
-		Description:
-			'''
-			Effectively against the Lantern Moon enemies
-			'长啸出原野, 凛然寒风生'
-			'''
+		DisplayName: Piercold Wind Buff
+		Description: Mods.Everglow.Buffs.PiercoldWindBuff.Description
 	}
 
 	PurpleHooterBuff: {
-		DisplayName: Purple Hooter
-		Description:
-			'''
-			Effectively against the Blood Moon enemies
-			'Nobleness and profoundness'
-			'''
+		DisplayName: Purple Hooter Buff
+		Description: Mods.Everglow.Buffs.PurpleHooterBuff.Description
 	}
 
 	QuinceMarryBuff: {
-		DisplayName: Quince Marry
-		Description:
-			'''
-			Effectively against the Pumpkin Moon enemies
-			'Hotness and gentleness'
-			'''
+		DisplayName: Quince Marry Buff
+		Description: Mods.Everglow.Buffs.QuinceMarryBuff.Description
 	}
 
 	RedWineBuff: {
-		DisplayName: Red Wine
-		Description:
-			'''
-			Effectively against the Frost Moon enemies
-			'The upper class and elegance'
-			'''
+		DisplayName: Red Wine Buff
+		Description: Mods.Everglow.Buffs.RedWineBuff.Description
 	}
 
 	SunriseBuff: {
-		DisplayName: Sunrise
-		Description:
-			'''
-			Effectively against the Solar Eclipse enemies
-			'Sunshine and brightness'
-			'''
+		DisplayName: Sunrise Buff
+		Description: Mods.Everglow.Buffs.SunriseBuff.Description
 	}
 
 	TricolourBuff: {
-		DisplayName: Tricolour
-		Description:
-			'''
-			Effectively against bosses' minions
-			'Complexity and specificity'
-			'''
+		DisplayName: Tricolour Buff
+		Description: Mods.Everglow.Buffs.TricolourBuff.Description
 	}
 
 	WaterMelonJuiceBuff: {
-		DisplayName: Watermelon Juice
-		Description:
-			'''
-			Greatly increases crit chance and knockback
-			'Focused striking force'
-			'''
+		DisplayName: Water Melon Juice Buff
+		Description: Mods.Everglow.Buffs.WaterMelonJuiceBuff.Description
+	}
+
+	Petrification: {
+		DisplayName: Petrification
+		Description: Mods.Everglow.Buffs.Petrification.Description
 	}
 
 	TuskStaff: {
@@ -1238,8 +722,8 @@ Buffs: {
 	}
 
 	OnMoth: {
-		DisplayName: Mark of the Phantom Butterfly
-		Description: Receive more damage from the phantom butterflies
+		DisplayName: On Moth
+		Description: Mods.Everglow.Buffs.OnMoth.Description
 	}
 
 	ShadowPotionBuff: {
@@ -1248,13 +732,13 @@ Buffs: {
 	}
 
 	Freeze: {
-		DisplayName: Icebound
-		Description: 1 Freeze!
+		DisplayName: Freeze
+		Description: Mods.Everglow.Buffs.Freeze.Description
 	}
 
 	LaserWormBuff: {
-		DisplayName: Laser Worm
-		Description: Laser worms fight for you
+		DisplayName: Laser Worm Buff
+		Description: Mods.Everglow.Buffs.LaserWormBuff.Description
 	}
 
 	ShadowSupervisor: {
@@ -1263,75 +747,63 @@ Buffs: {
 	}
 
 	MoonAndFragrans: {
-		DisplayName: Osmanthus Blossom Over the Moon
-		Description:
-			'''
-			Blooms and moon, await for you
-			25% increased damage, 15% increased crit chance and overall damage multiplier takes effect twice
-			'''
+		DisplayName: Moon And Fragrans
+		Description: Mods.Everglow.Buffs.MoonAndFragrans.Description
 	}
 
 	MoonAndFragransII: {
-		DisplayName: Osmanthus Blossom Over the Moon Ⅱ
-		Description:
-			'''
-			Blooms and moon, await for you
-			50% increased damage, 30% increased crit chance and overall damage multiplier takes effect three times
-			'''
+		DisplayName: Moon And Fragrans I I
+		Description: Mods.Everglow.Buffs.MoonAndFragransII.Description
 	}
 
 	MoonAndFragransIII: {
-		DisplayName: Osmanthus Blossom Over the Moon Ⅲ
-		Description:
-			'''
-			Blooms and moon, await for you
-			75% increased damage, 45% increased crit chance and overall damage multiplier takes effect four times
-			'''
-	}
-
-	WaterBoltII: {
-		DisplayName: Empowered Water Bolts
-		Description: Your Water Bolts are more powerful
+		DisplayName: Moon And Fragrans I I I
+		Description: Mods.Everglow.Buffs.MoonAndFragransIII.Description
 	}
 
 	BlueImmune: {
-		DisplayName: Blue Flame Immunity
-		Description: Spiritual Fiery Core's blue flame cannot hurt you
+		DisplayName: Blue Immune
+		Description: Mods.Everglow.Buffs.BlueImmune.Description
 	}
 
 	BrownImmune: {
-		DisplayName: Brown Flame Immunity
-		Description: Spiritual Fiery Core's Brown flame cannot hurt you
+		DisplayName: Brown Immune
+		Description: Mods.Everglow.Buffs.BrownImmune.Description
 	}
 
 	GreenImmune: {
-		DisplayName: Green Flame Immunity
-		Description: Spiritual Fiery Core's green flame cannot hurt you
+		DisplayName: Green Immune
+		Description: Mods.Everglow.Buffs.GreenImmune.Description
 	}
 
 	PinkImmune: {
-		DisplayName: Pink Flame Immunity
-		Description: Spiritual Fiery Core's pink flame cannot hurt you
+		DisplayName: Pink Immune
+		Description: Mods.Everglow.Buffs.PinkImmune.Description
 	}
 
 	PurpleImmune: {
-		DisplayName: Violet Flame Immunity
-		Description: Spiritual Fiery Core's violet flame cannot hurt you
+		DisplayName: Purple Immune
+		Description: Mods.Everglow.Buffs.PurpleImmune.Description
 	}
 
 	RedImmune: {
-		DisplayName: Red Flame Immunity
-		Description: Spiritual Fiery Core's red flame cannot hurt you
+		DisplayName: Red Immune
+		Description: Mods.Everglow.Buffs.RedImmune.Description
 	}
 
 	WhiteImmune: {
-		DisplayName: White Flame Immunity
-		Description: Spiritual Fiery Core's white flame cannot hurt you
+		DisplayName: White Immune
+		Description: Mods.Everglow.Buffs.WhiteImmune.Description
 	}
 
 	YellowImmune: {
-		DisplayName: Yellow Flame Immunity
-		Description: Spiritual Fiery Core's yellow flame cannot hurt you
+		DisplayName: Yellow Immune
+		Description: Mods.Everglow.Buffs.YellowImmune.Description
+	}
+
+	AcytaeaInferno: {
+		DisplayName: Acytaea Inferno
+		Description: Mods.Everglow.Buffs.AcytaeaInferno.Description
 	}
 
 	CactusBallBuff: {
@@ -1339,19 +811,14 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.CactusBallBuff.Description
 	}
 
+	WaterBoltII: {
+		DisplayName: Water Bolt I I
+		Description: Mods.Everglow.Buffs.WaterBoltII.Description
+	}
+
 	DeathFlame: {
 		DisplayName: Death Flame
 		Description: Mods.Everglow.Buffs.DeathFlame.Description
-	}
-
-	Petrification: {
-		DisplayName: Petrification
-		Description: Mods.Everglow.Buffs.Petrification.Description
-	}
-
-	AcytaeaInferno: {
-		DisplayName: Acytaea Inferno
-		Description: Mods.Everglow.Buffs.AcytaeaInferno.Description
 	}
 }
 
@@ -1372,147 +839,143 @@ Items: {
 	}
 
 	BloodGoldBayonet: {
-		DisplayName: Crimson Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Blood Gold Bayonet
+		Tooltip: ""
 	}
 
 	BlossomThorn: {
 		DisplayName: Blossom Thorn
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		Tooltip: ""
 	}
 
 	BlueRibbonBayonet: {
-		DisplayName: Blue Ribbon Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Blue Ribbon Bayonet
+		Tooltip: ""
 	}
 
 	CopperBayonet: {
-		DisplayName: Copper Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Copper Bayonet
+		Tooltip: ""
 	}
 
 	CrutchBayonet: {
-		DisplayName: Crutch Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Crutch Bayonet
+		Tooltip: ""
 	}
 
 	CurseFlameStabbingSword: {
-		DisplayName: Cursed Flame Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Curse Flame Stabbing Sword
+		Tooltip: ""
 	}
 
 	DreamStar: {
 		DisplayName: Dream Star
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		Tooltip: ""
 	}
 
 	EnchantedBayonet: {
-		DisplayName: Enchanted Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Enchanted Bayonet
+		Tooltip: ""
 	}
 
 	EternalNight: {
-		DisplayName: Eternal Night Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Eternal Night
+		Tooltip: ""
 	}
 
 	GoldenStabbingSword: {
-		DisplayName: Gold Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Golden Stabbing Sword
+		Tooltip: ""
 	}
 
 	HolyBayonet: {
-		DisplayName: Holy Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Holy Bayonet
+		Tooltip: ""
 	}
 
 	IchorBayonet: {
-		DisplayName: Ichor Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Ichor Bayonet
+		Tooltip: ""
 	}
 
 	IronStabbingSword: {
-		DisplayName: Iron Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Iron Stabbing Sword
+		Tooltip: ""
 	}
 
 	LeadStabbingSword: {
-		DisplayName: Lead Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Lead Stabbing Sword
+		Tooltip: ""
 	}
 
 	MechanicMosquito: {
 		DisplayName: Mechanic Mosquito
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		Tooltip: ""
 	}
 
 	PlatinumStabbingSword: {
-		DisplayName: Platinum Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Platinum Stabbing Sword
+		Tooltip: ""
 	}
 
 	PrisonFireBayonet: {
-		DisplayName: Molten Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Prison Fire Bayonet
+		Tooltip: ""
 	}
 
 	RedRibbonBayonet: {
-		DisplayName: Red Ribbon Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Red Ribbon Bayonet
+		Tooltip: ""
 	}
 
 	RottenGoldBayonet: {
-		DisplayName: Corruption Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Rotten Gold Bayonet
+		Tooltip: ""
 	}
 
 	SilverStabbingSword: {
-		DisplayName: Silver Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Silver Stabbing Sword
+		Tooltip: ""
 	}
 
 	SwordfishBeak: {
 		DisplayName: Swordfish Beak
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		Tooltip: ""
 	}
 
 	TinStabbingSword: {
-		DisplayName: Tin Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Tin Stabbing Sword
+		Tooltip: ""
 	}
 
 	TungstenStabbingSword: {
-		DisplayName: Tungsten Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Tungsten Stabbing Sword
+		Tooltip: ""
 	}
 
 	VegetationBayonet: {
-		DisplayName: Rapier of Grass
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Vegetation Bayonet
+		Tooltip: ""
 	}
 
 	VertebralSpur: {
 		DisplayName: Vertebral Spur
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		Tooltip: ""
 	}
 
 	YoenLeZed: {
 		DisplayName: Yoen Le Zed
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		Tooltip: ""
 	}
 
 	StaminaItem: {
 		DisplayName: Stamina Item
-		Tooltip:
-			'''
-			! Debug item !
-			Use on your own risk
-			'''
+		Tooltip: ""
 	}
 
 	EnergyDrink: {
 		DisplayName: Energy Drink
-		Tooltip: Boosts Stamina Recovery by 20%
+		Tooltip: ""
 	}
 
 	StarSeed: {
@@ -1522,407 +985,241 @@ Items: {
 
 	EnergyBand: {
 		DisplayName: Energy Band
-		Tooltip: Decreases Stamina Speed by 25%
+		Tooltip: ""
+	}
+
+	HandholdItem: {
+		DisplayName: Handhold Item
+		Tooltip: ""
+	}
+
+	TestSkeletonOwl: {
+		DisplayName: Test Skeleton Owl
+		Tooltip: ""
+	}
+
+	CheeseYoyo: {
+		DisplayName: Cheese Yoyo
+		Tooltip: ""
+	}
+
+	CreamChocolateCupStaff: {
+		DisplayName: Cream Chocolate Cup Staff
+		Tooltip: ""
 	}
 
 	FryingPanItem: {
-		DisplayName: Frying Pan
-		Tooltip: Left click to throw it as a boomerang, right click and hold to swing it as a sword
+		DisplayName: Frying Pan Item
+		Tooltip: ""
+	}
+
+	GrilledSquidTentacle: {
+		DisplayName: Grilled Squid Tentacle
+		Tooltip: ""
 	}
 
 	BloodGlucoseMonitor: {
 		DisplayName: Blood Glucose Monitor
-		Tooltip: Displays hunger information
+		Tooltip: ""
 	}
 
 	OsmoticPressureMonitor: {
 		DisplayName: Osmotic Pressure Monitor
-		Tooltip: Display thirst information
+		Tooltip: ""
 	}
 
 	ArcticshellfishWarship: {
 		DisplayName: Arcticshellfish Warship
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Increases defense
-			'Delicious arctic shellfish warship'
-			'''
+		Tooltip: ""
 	}
 
 	BakedMussel: {
 		DisplayName: Baked Mussel
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			6% increased crit damage and 4 increased defense
-			'Seems to be less raw'
-			'''
+		Tooltip: ""
 	}
 
 	BakedOyster: {
 		DisplayName: Baked Oyster
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			4 increased armor penetration and defense
-			'Parasites slain'
-			'''
+		Tooltip: ""
 	}
 
 	CantaloupeJelly: {
 		DisplayName: Cantaloupe Jelly
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Your projectiles can penetrate one more time
-			'Duang, duang, duang'
-			'''
+		Tooltip: ""
 	}
 
 	CaramelPudding: {
 		DisplayName: Caramel Pudding
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Your projectiles can penetrate one more time
-			'Duang, duang, duang'
-			'''
+		Tooltip: ""
 	}
 
 	CrabseedWarship: {
 		DisplayName: Crabseed Warship
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Increases crit chance
-			'Delicious crab roe warship'
-			'''
+		Tooltip: ""
 	}
 
 	Durian: {
 		DisplayName: Durian
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Speeds up digestion
-			'Helps digestion'
-			'''
+		Tooltip: ""
 	}
 
 	EggTart: {
 		DisplayName: Egg Tart
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			5% increased crit damage 
-			'Crispy crust'
-			'''
+		Tooltip: ""
 	}
 
 	KiwiFruit: {
 		DisplayName: Kiwi Fruit
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			20% increased weapon size
-			'Also called Chinese gooseberry'
-			'''
+		Tooltip: ""
 	}
 
 	KiwiIceCream: {
 		DisplayName: Kiwi Ice Cream
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			10% increased weapon size and increases attack speed
-			'Kiwi power'
-			'''
+		Tooltip: ""
 	}
 
 	Mangosteen: {
 		DisplayName: Mangosteen
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Increases attack range of boomerangs, yoyos and flails
-			'Nourishing'
-			'''
+		Tooltip: ""
 	}
 
 	OrangeIcecream: {
 		DisplayName: Orange Icecream
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Extends invincibility frames
-			'The reality is in your mind'
-			'''
+		Tooltip: ""
 	}
 
 	SalmonInPepper: {
 		DisplayName: Salmon In Pepper
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Increases movement speed, especially in water
-			'Queen of the Arctic ocean'
-			'''
+		Tooltip: ""
 	}
 
 	SalmonWarship: {
 		DisplayName: Salmon Warship
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Increases movement speed
-			'Delicious salmon warship'
-			'''
+		Tooltip: ""
 	}
 
 	SeafoodPizza: {
 		DisplayName: Seafood Pizza
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Increases most stats
-			'It's not easy to finish this by one'
-			'''
+		Tooltip: ""
 	}
 
 	StinkyTofu: {
 		DisplayName: Stinky Tofu
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Confuses nearby enemies
-			'Appetizing but stinky'
-			'''
+		Tooltip: ""
 	}
 
 	Strawberry: {
 		DisplayName: Strawberry
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Nearer enemies take more damage
-			'Popular fruit'
-			'''
+		Tooltip: ""
 	}
 
 	StrawberryIcecream: {
 		DisplayName: Strawberry Icecream
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Nearer enemies take more damage
-			'Cold as you, but still I can't part with it'
-			'''
+		Tooltip: ""
 	}
 
 	SweetshrimpSushi: {
 		DisplayName: Sweetshrimp Sushi
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Increases damage
-			'Delicious sweetshrip sushi'
-			'''
+		Tooltip: ""
 	}
 
 	TamakoSushi: {
 		DisplayName: Tamako Sushi
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Increases life regeneration
-			'Delicious tamago sushi'
-			'''
+		Tooltip: ""
 	}
 
 	WakameWarship: {
 		DisplayName: Wakame Warship
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Increases mana regeneration
-			'Delicious wakame sushi'
-			'''
+		Tooltip: ""
 	}
 
 	Watermelon: {
 		DisplayName: Watermelon
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			8% increases knockback
-			'I'm more curious about how you can eat it whole than the watermelon itself'
-			'''
+		Tooltip: ""
 	}
 
 	WatermelonPlate: {
 		DisplayName: Watermelon Plate
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			6% increased crit chance and crit damage
-			'Unpretentious arrangement'
-			'''
+		Tooltip: ""
 	}
 
 	BlueHawaii: {
 		DisplayName: Blue Hawaii
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Increases speed of your projectiles
-			'Sea wind breezes'
-			'''
+		Tooltip: ""
 	}
 
 	B_52: {
 		DisplayName: B_52
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Greatly increases launchers' speed, damage and crit chance
-			'Bomber'
-			'''
+		Tooltip: ""
 	}
 
 	DreamYearning: {
 		DisplayName: Dream Yearning
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Increases speed of your projectiles
-			'Thinking of thou and missing thou, yearning in intoxicated dream
-			browpowder fades, frangrance dissipates, sobriety suffers more'
-			'''
+		Tooltip: ""
 	}
 
 	DryMartini: {
 		DisplayName: Dry Martini
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Greatly increases damage
-			'Classic'
-			'''
+		Tooltip: ""
 	}
 
 	GreenStorm: {
 		DisplayName: Green Storm
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Shoots chlorophyte crystals and spore clouds in succession
-			'Don't think grasses are cheap, they're more expensive than apples and walnuts until mass production'
-			'''
+		Tooltip: ""
 	}
 
 	KiwiJuice: {
 		DisplayName: Kiwi Juice
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Greatly increases weapon size
-			'Concentrated Kiwi power'
-			'''
+		Tooltip: ""
 	}
 
 	LonelyJellyfish: {
 		DisplayName: Lonely Jellyfish
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Makes you invisible and summon jellyfish electrspheres
-			'Toss it off after appreciating'
-			'''
+		Tooltip: ""
 	}
 
 	OrangeJuice: {
 		DisplayName: Orange Juice
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Grants you invincibility
-			'Emm, kind of like LCL'
-			'''
+		Tooltip: ""
 	}
 
 	PiercoldWind: {
 		DisplayName: Piercold Wind
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Effectively against the Lantern Moon enemies
-			'长啸出原野, 凛然寒风生'
-			'''
+		Tooltip: ""
 	}
 
 	PurpleHooter: {
 		DisplayName: Purple Hooter
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Effectively against the Blood Moon enemies
-			'Nobleness and profoundness'
-			'''
+		Tooltip: ""
 	}
 
 	QuinceMarry: {
 		DisplayName: Quince Marry
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Effectively against the Pumpkin Moon enemies
-			'Hotness and gentleness'
-			'''
+		Tooltip: ""
 	}
 
 	RedWine: {
 		DisplayName: Red Wine
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Effectively against the Frost Moon enemies
-			'The upper class and elegance'
-			'''
+		Tooltip: ""
 	}
 
 	Sunrise: {
 		DisplayName: Sunrise
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Effectively against the Solar Eclipse enemies
-			'Sunshine and brightness'
-			'''
+		Tooltip: ""
 	}
 
 	Tricolour: {
 		DisplayName: Tricolour
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Effectively against bosses' minions
-			'Complexity and specificity'
-			'''
+		Tooltip: ""
 	}
 
 	WaterMelonJuice: {
-		DisplayName: Watermelon Juice
-		Tooltip:
-			'''
-			Medium improvements to all stats
-			Greatly increases crit chance and knockback
-			'Focused striking force'
-			'''
+		DisplayName: Water Melon Juice
+		Tooltip: ""
 	}
 
 	VFXGenerator: {
-		DisplayName: VFX Generator
+		DisplayName: V F X Generator
 		Tooltip: ""
 	}
 
@@ -1937,35 +1234,22 @@ Items: {
 	}
 
 	VortexVanquisherItem: {
-		DisplayName: Vortex Vanquisher
-		Tooltip:
-			'''
-			Exclusive Weapon
-			[c/B4B16E:'This is Order']
-			Left click in succession to perform different attacks
-			The last attack slightly propels you to the cursor
-			Left click and hold to dash and summon falling spears
-			Right click to summon a pillar and grant you a damage-reducing shield
-			[c/856Eb5:Developer Item: FelixYang777]
-			'''
+		DisplayName: Vortex Vanquisher Item
+		Tooltip: ""
 	}
 
 	BurningFrozenHeart: {
 		DisplayName: Burning Frozen Heart
-		Tooltip: Grants immunity to Chilled, Frostburn, Frostbite, and Frozen
+		Tooltip: ""
 	}
 
 	CreatPineTree: {
-		DisplayName: Create Pine Tree
-		Tooltip:
-			'''
-			! Debug item !
-			Use on your own risk
-			'''
+		DisplayName: Creat Pine Tree
+		Tooltip: ""
 	}
 
 	DessertBag_Snow: {
-		DisplayName: Snowy Dessert Bag
+		DisplayName: Dessert Bag_ Snow
 		Tooltip: ""
 	}
 
@@ -1980,7 +1264,7 @@ Items: {
 	}
 
 	IcedSpear: {
-		DisplayName: Ice Spear
+		DisplayName: Iced Spear
 		Tooltip: ""
 	}
 
@@ -1991,12 +1275,12 @@ Items: {
 
 	PineNut: {
 		DisplayName: Pine Nut
-		Tooltip: Permanently increases max life by 3, up to 15
+		Tooltip: ""
 	}
 
 	PineStab: {
-		DisplayName: Pine Rapier
-		Tooltip: Right click to thrust the rapier, dealing higher damage at the cost of stamina
+		DisplayName: Pine Stab
+		Tooltip: ""
 	}
 
 	SnowPineChest: {
@@ -2005,12 +1289,12 @@ Items: {
 	}
 
 	SnowPineChest_fresh: {
-		DisplayName: Fresh Snow Pine Chest
+		DisplayName: Snow Pine Chest_fresh
 		Tooltip: ""
 	}
 
 	SnowPineChest_gold: {
-		DisplayName: Gold Snow Pine Chest
+		DisplayName: Snow Pine Chest_gold
 		Tooltip: ""
 	}
 
@@ -2020,12 +1304,12 @@ Items: {
 	}
 
 	SnowPineLeaveStaff: {
-		DisplayName: Snow Pine Leaf Staff
+		DisplayName: Snow Pine Leave Staff
 		Tooltip: ""
 	}
 
 	SnowPineLeavesWall: {
-		DisplayName: Snow Pine Leaf Wall
+		DisplayName: Snow Pine Leaves Wall
 		Tooltip: ""
 	}
 
@@ -2045,12 +1329,12 @@ Items: {
 	}
 
 	SungloChandelier: {
-		DisplayName: Sunglow Chandelier
+		DisplayName: Sunglo Chandelier
 		Tooltip: ""
 	}
 
 	Thatched: {
-		DisplayName: Thatched Block
+		DisplayName: Thatched
 		Tooltip: ""
 	}
 
@@ -2089,44 +1373,44 @@ Items: {
 		Tooltip: ""
 	}
 
+	TuskMirror: {
+		DisplayName: Tusk Mirror
+		Tooltip: ""
+	}
+
 	TuskStatusI: {
-		DisplayName: Tusk Stone I
+		DisplayName: Tusk Status I
 		Tooltip: ""
 	}
 
 	TuskStatusII: {
-		DisplayName: Tusk Stone II
+		DisplayName: Tusk Status I I
 		Tooltip: ""
 	}
 
 	TuskStatusIII: {
-		DisplayName: Tusk Stone III
+		DisplayName: Tusk Status I I I
 		Tooltip: ""
 	}
 
 	TuskStatusIV: {
-		DisplayName: Tusk Stone IV
+		DisplayName: Tusk Status I V
 		Tooltip: ""
 	}
 
 	BloodyBoneYoyo: {
 		DisplayName: Bloody Bone Yoyo
-		Tooltip: Releases tusk nails on every 5 hits
+		Tooltip: ""
 	}
 
 	SpineGun: {
-		DisplayName: Spine Musket
-		Tooltip: Fires bullets which split upon detecting enemies
+		DisplayName: Spine Gun
+		Tooltip: ""
 	}
 
 	ToothBow: {
-		DisplayName: Tusk Bow
-		Tooltip:
-			'''
-			Legendary Weapon
-			Generates tusk arrows when firing
-			'It can manipulate other tusks'
-			'''
+		DisplayName: Tooth Bow
+		Tooltip: ""
 	}
 
 	ToothKnife: {
@@ -2135,50 +1419,38 @@ Items: {
 	}
 
 	ToothMagicBall: {
-		DisplayName: Sanguine Orb
+		DisplayName: Tooth Magic Ball
 		Tooltip: ""
 	}
 
 	ToothSpear: {
-		DisplayName: Bloody Dragon Spine
-		Tooltip:
-			'''
-			Mythical Weapon
-			Right click to dash
-			Has a 8s CD
-			Sync reduces the CD
-			'Go, follow the ancient heros to slay dragons'
-			'''
+		DisplayName: Tooth Spear
+		Tooltip: ""
 	}
 
 	ToothStaff: {
-		DisplayName: Tusk Staff
-		Tooltip: Raises tusks from the ground
+		DisplayName: Tooth Staff
+		Tooltip: ""
 	}
 
 	BloodyTuskTrophy: {
-		DisplayName: The Tusk Trophy
+		DisplayName: Bloody Tusk Trophy
 		Tooltip: ""
 	}
 
 	TuskRelic: {
-		DisplayName: The Tusk Relic
+		DisplayName: Tusk Relic
 		Tooltip: ""
 	}
 
 	TuskTreasureBag: {
-		DisplayName: Treasure Bag (The Tusk)
+		DisplayName: Tusk Treasure Bag
 		Tooltip: ""
 	}
 
 	TuskLace: {
-		DisplayName: Tusk Necklace
-		Tooltip:
-			'''
-			Increases armor penetration by 5
-			Increases damage and crit chance by 5%
-			'A tusk was knocked down from mouth of a beast, again you knocked down a small part of it'
-			'''
+		DisplayName: Tusk Lace
+		Tooltip: ""
 	}
 
 	LargeFireBulbTestItem: {
@@ -2187,12 +1459,12 @@ Items: {
 	}
 
 	FireflyPylonItem: {
-		DisplayName: Firefly Pylon
+		DisplayName: Firefly Pylon Item
 		Tooltip: ""
 	}
 
 	ShabbyPylonItem: {
-		DisplayName: Shabby Pylon
+		DisplayName: Shabby Pylon Item
 		Tooltip: ""
 	}
 
@@ -2217,28 +1489,23 @@ Items: {
 	}
 
 	DarkCocoon: {
-		DisplayName: Black Cocoon
+		DisplayName: Dark Cocoon
 		Tooltip: ""
 	}
 
 	DarkCocoonWall: {
-		DisplayName: Black Cocoon Wall
+		DisplayName: Dark Cocoon Wall
 		Tooltip: ""
 	}
 
 	EvilCocoon: {
-		DisplayName: Magical Cocoon
+		DisplayName: Evil Cocoon
 		Tooltip: ""
 	}
 
 	FireflyImpression: {
-		DisplayName: "'An Impression of The Firefly'"
-		Tooltip:
-			'''
-			Brings you to The Firefly
-			! Debug item !
-			Use on your own risk
-			'''
+		DisplayName: Firefly Impression
+		Tooltip: ""
 	}
 
 	FireflyMoss: {
@@ -2257,7 +1524,7 @@ Items: {
 	}
 
 	GlowCrystal: {
-		DisplayName: Glowing Crystal
+		DisplayName: Glow Crystal
 		Tooltip: ""
 	}
 
@@ -2287,60 +1554,47 @@ Items: {
 	}
 
 	LiveFluorescentLeafWall: {
-		DisplayName: Living Fluorescent Leaf Wall
+		DisplayName: Live Fluorescent Leaf Wall
 		Tooltip: ""
 	}
 
 	LiveFluorescentWoodWall: {
-		DisplayName: Living Fluorescent Wood Wall
+		DisplayName: Live Fluorescent Wood Wall
 		Tooltip: ""
 	}
 
 	MothScaleDust: {
-		DisplayName: Moth Dust
+		DisplayName: Moth Scale Dust
 		Tooltip: ""
 	}
 
 	DarknessFan: {
-		DisplayName: Phantasm Fan of Fireflies
-		Tooltip:
-			'''
-			Legendary Weapon
-			No summon tag damage
-			Your summons will focus struck enemies
-			Strike enemies with the fan and Phantom Butterflies (PBs)
-			Right click to throw out the fan
-			The fan itself inflicts Mark of PB (stackable), each level increases damage dealt by PBs by 10%
-			Max stack increases with Sync level
-			'''
+		DisplayName: Darkness Fan
+		Tooltip: ""
 	}
 
 	DreamWeaver: {
-		DisplayName: Dreamweaver
+		DisplayName: Dream Weaver
 		Tooltip: ""
 	}
 
 	DustOfCorrupt: {
-		DisplayName: Corrupted Scales
-		Tooltip: Scatter moth scales
+		DisplayName: Dust Of Corrupt
+		Tooltip: ""
 	}
 
 	EvilChrysalis: {
-		DisplayName: Cocoon Staff
-		Tooltip:
-			'''
-			Summoms little black moths to fight for you
-			Deal 400% damage to nearby enemies while summoning
-			'''
+		DisplayName: Evil Chrysalis
+		Tooltip: ""
 	}
 
 	FlowLightMissile: {
-		DisplayName: Flowlight Missile
+		DisplayName: Flow Light Missile
 		Tooltip: ""
 	}
 
 	GlowBeadGun: {
-		DisplayName: Glowing Railgun
+		DisplayName: Glow Bead Gun
 		Tooltip: ""
 	}
 
@@ -2350,36 +1604,28 @@ Items: {
 	}
 
 	MothYoyo: {
-		DisplayName: Glow-yo
-		Tooltip: Moths will appear around this Yo-yo, allowing you to deal more damage
+		DisplayName: Moth Yoyo
+		Tooltip: ""
 	}
 
 	NavyThunder: {
 		DisplayName: Navy Thunder
-		Tooltip: Deploys a glowing timebomb
+		Tooltip: ""
 	}
 
 	PhosphorescenceGun: {
-		DisplayName: Scale Shotgun
-		Tooltip: Shoots out shots and blue scale bullets which deal 36% damage
+		DisplayName: Phosphorescence Gun
+		Tooltip: ""
 	}
 
 	ScaleWingBlade: {
-		DisplayName: Lepidoptera Blade
-		Tooltip:
-			'''
-			Striking enemies with this blade or swinging this blade while near enemies will spawn moths that home in on said enemies
-			Right click to charge a more powerful swing and to spawn more moths on impact
-			'''
+		DisplayName: Scale Wing Blade
+		Tooltip: ""
 	}
 
 	ShadowWingBow: {
-		DisplayName: Occulting Wings
-		Tooltip:
-			'''
-			Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
-			Needs 1.5s to be fully charged
-			'''
+		DisplayName: Shadow Wing Bow
+		Tooltip: ""
 	}
 
 	ShadowPotion: {
@@ -2398,7 +1644,7 @@ Items: {
 	}
 
 	GlowingDrop: {
-		DisplayName: Glow Drop
+		DisplayName: Glowing Drop
 		Tooltip: ""
 	}
 
@@ -2443,17 +1689,17 @@ Items: {
 	}
 
 	GlowWoodChandelierType2: {
-		DisplayName: Glow Wood Chandelier 2
+		DisplayName: Glow Wood Chandelier Type2
 		Tooltip: ""
 	}
 
 	GlowWoodChandelierType3: {
-		DisplayName: Glow Wood Chandelier 3
+		DisplayName: Glow Wood Chandelier Type3
 		Tooltip: ""
 	}
 
 	GlowWoodChandelierType4: {
-		DisplayName: Glow Wood Chandelier 4
+		DisplayName: Glow Wood Chandelier Type4
 		Tooltip: ""
 	}
 
@@ -2473,7 +1719,7 @@ Items: {
 	}
 
 	GlowWoodDoorType2: {
-		DisplayName: Glow Wood Door 2
+		DisplayName: Glow Wood Door Type2
 		Tooltip: ""
 	}
 
@@ -2483,7 +1729,7 @@ Items: {
 	}
 
 	GlowWoodDresserType2: {
-		DisplayName: Glow Wood Dresser 2
+		DisplayName: Glow Wood Dresser Type2
 		Tooltip: ""
 	}
 
@@ -2498,13 +1744,13 @@ Items: {
 	}
 
 	GlowWoodLanternType2: {
-		DisplayName: Glow Wood Lantern 2
+		DisplayName: Glow Wood Lantern Type2
 		Tooltip: ""
 	}
 
 	GlowWoodMusicBox: {
-		DisplayName: Glow Wood Music Box (The Firefly)
-		Tooltip: Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'
+		DisplayName: Glow Wood Music Box
+		Tooltip: ""
 	}
 
 	GlowWoodPiano: {
@@ -2523,7 +1769,7 @@ Items: {
 	}
 
 	GlowWoodSinkType2: {
-		DisplayName: Glow Wood Sink 2
+		DisplayName: Glow Wood Sink Type2
 		Tooltip: ""
 	}
 
@@ -2558,12 +1804,12 @@ Items: {
 	}
 
 	CorruptMothTreasureBag: {
-		DisplayName: Treasure Bag (Corrupted Moth)
+		DisplayName: Corrupt Moth Treasure Bag
 		Tooltip: ""
 	}
 
 	MothRelic: {
-		DisplayName: Corrupted Moth Relic
+		DisplayName: Moth Relic
 		Tooltip: ""
 	}
 
@@ -2583,33 +1829,18 @@ Items: {
 	}
 
 	FireflyBorageBadge: {
-		DisplayName: Badge of Firefly Borage
-		Tooltip:
-			'''
-			Increases magic damage by 6%
-			Increases movement speed by 15%
-			'A badge made to remind you of how beautiful that place is'
-			'''
+		DisplayName: Firefly Borage Badge
+		Tooltip: ""
 	}
 
 	MothEye: {
-		DisplayName: Ommateum of the Moth
-		Tooltip:
-			'''
-			Increases minion slots by 1
-			Increases summon damage by 6%
-			'Sophisticated structures of the ommateum have amazed you'
-			'''
+		DisplayName: Moth Eye
+		Tooltip: ""
 	}
 
 	LilyHarp: {
-		DisplayName: Harp of the Valley
-		Tooltip:
-			'''
-			Music notes fly in a beautiful succession
-			The notes follow your cursor while holding left click
-			[c/856Eb5:Developer Item: Omnielement]
-			'''
+		DisplayName: Lily Harp
+		Tooltip: ""
 	}
 
 	BlueflowerBra: {
@@ -2627,125 +1858,89 @@ Items: {
 		Tooltip: ""
 	}
 
-	AshBone: {
-		DisplayName: Stashed Bones
-		Tooltip:
-			'''
-			No summon tag damage
-			Your summons will focus struck enemies
-			Brusts out several damaging bones and olden enemies struck, weaken their attack and defense
-			'''
-	}
-
 	BoneFeatherMagic: {
-		DisplayName: Book of Bone Feathers
-		Tooltip: Shoots piercing bone feathers, aging enemy on struck and weakening their attack damage/defense
+		DisplayName: Bone Feather Magic
+		Tooltip: ""
 	}
 
 	CloudGun: {
-		DisplayName: Cloud Cannon
-		Tooltip: Launches cloud clusters
+		DisplayName: Cloud Gun
+		Tooltip: ""
 	}
 
 	ComingGhost: {
-		DisplayName: Warped Blade
-		Tooltip: Randomly surprises a lucky enemy nearby
+		DisplayName: Coming Ghost
+		Tooltip: ""
 	}
 
 	CyanFrost: {
-		DisplayName: Cyfrost Blade
+		DisplayName: Cyan Frost
 		Tooltip: ""
 	}
 
 	FeatherMagic: {
-		DisplayName: Book of Feather
+		DisplayName: Feather Magic
 		Tooltip: ""
 	}
 
 	FireFeatherMagic: {
-		DisplayName: Book of Flaming Feather
-		Tooltip: Shoots explosive feathers
+		DisplayName: Fire Feather Magic
+		Tooltip: ""
 	}
 
 	FreezeFeatherMagic: {
-		DisplayName: Book of Ice Feather
-		Tooltip: Shoots ice-bound feathers
+		DisplayName: Freeze Feather Magic
+		Tooltip: ""
 	}
 
 	GoldRoundYoyo: {
-		DisplayName: Golden Round
-		Tooltip: Leaves a track of homing golden rings
+		DisplayName: Gold Round Yoyo
+		Tooltip: ""
 	}
 
 	GoldRound: {
-		DisplayName: Marigoldisc
-		Tooltip:
-			'''
-			7 defence
-			Increases damage by 7%
-			'Traditional Terrarians usually wear this to keep them healthy'
-			'''
+		DisplayName: Gold Round
+		Tooltip: ""
 	}
 
-	Hepuyuan: {
-		DisplayName: Prinomial Jade Winged Spear
-		Tooltip:
-			'''
-			Exclusive Weapon
-			Left click to dash, right click to smash
-			'You should't be getting it'
-			Homaging to Genshin Impact
-			'''
+	PrimordialJadeWinged_Spear: {
+		DisplayName: Primordial Jade Winged_ Spear
+		Tooltip: ""
 	}
 
 	SilveralGun: {
-		DisplayName: Fox Hunter Fx01
-		Tooltip: 5% increased movement speed and damage after hitting enemies
+		DisplayName: Silveral Gun
+		Tooltip: ""
 	}
 
 	SilveralRifle: {
-		DisplayName: Silver Shadow Ct01
-		Tooltip: 5% increased movement speed and damage after hitting enemies
+		DisplayName: Silveral Rifle
+		Tooltip: ""
 	}
 
 	Sunflower: {
-		DisplayName: Sunflower Disc
-		Tooltip: "'A weapon made of sunflowers, has a color of hope'"
+		DisplayName: Sunflower
+		Tooltip: ""
 	}
 
 	ThunderFlower: {
-		DisplayName: Flower of Lighting
-		Tooltip:
-			'''
-			Fires thunderstrom orbs
-			'Too many projectiles!'
-			'''
+		DisplayName: Thunder Flower
+		Tooltip: ""
 	}
 
 	World: {
-		DisplayName: The World
-		Tooltip:
-			'''
-			Summons 'World' at the curser, right click to switch between following mode and slashing mode when it is summoned
-			'Power of the entire land is accumulated here...'
-			'''
+		DisplayName: World
+		Tooltip: ""
 	}
 
 	XmasWhip: {
-		DisplayName: Christmas Whip
+		DisplayName: Xmas Whip
 		Tooltip: ""
 	}
 
 	AmbiguousNight: {
 		DisplayName: Ambiguous Night
-		Tooltip:
-			'''
-			Shoots phantasm pebbles
-			Inflict Mark of Night on targets: 
-			Weaves Nightmare Silks when close to another enemy with the same mark
-			Deals damage to both enemies and decreases duration of the Mark of Night by 2s
-			Does not consume ammo
-			'''
+		Tooltip: ""
 	}
 
 	AmethystSlingshot: {
@@ -2759,12 +1954,8 @@ Items: {
 	}
 
 	CactusSlingShot: {
-		DisplayName: Cactus Slingshot
-		Tooltip:
-			'''
-			Shoots little pebbles
-			Does not consume ammo
-			'''
+		DisplayName: Cactus Sling Shot
+		Tooltip: ""
 	}
 
 	DiamondSlingshot: {
@@ -2789,29 +1980,17 @@ Items: {
 
 	JungleSlingshot: {
 		DisplayName: Jungle Slingshot
-		Tooltip:
-			'''
-			Shoots flouroscent poisonous balls
-			Does not consume ammo
-			'''
+		Tooltip: ""
 	}
 
 	PalmWoodSlingshot: {
 		DisplayName: Palm Wood Slingshot
-		Tooltip:
-			'''
-			Shoots little pebbles
-			Does not consume ammo
-			'''
+		Tooltip: ""
 	}
 
 	PearlwoodSlingshot: {
 		DisplayName: Pearlwood Slingshot
-		Tooltip:
-			'''
-			Shoots little pebbles
-			Does not consume ammo
-			'''
+		Tooltip: ""
 	}
 
 	RichMahoganySlingshot: {
@@ -2830,19 +2009,13 @@ Items: {
 	}
 
 	ShadewoodSlingShot: {
-		DisplayName: Shadewood Slingshot
+		DisplayName: Shadewood Sling Shot
 		Tooltip: ""
 	}
 
 	StarSlingshot: {
 		DisplayName: Star Slingshot
-		Tooltip:
-			'''
-			Shoots a gloaming star, dealing AOE damage
-			Damage increases by 25% in nighttime, else decreases by 25%
-			Crit chance increases by 15% above the ground, else decreases by 15%
-			Does not consume ammo
-			'''
+		Tooltip: ""
 	}
 
 	TopazSlingshot: {
@@ -2852,11 +2025,7 @@ Items: {
 
 	WoodSlingshot: {
 		DisplayName: Wood Slingshot
-		Tooltip:
-			'''
-			Shoots little pebbles
-			Does not consume ammo
-			'''
+		Tooltip: ""
 	}
 
 	AdamantiteClub: {
@@ -3015,219 +2184,163 @@ Items: {
 	}
 
 	CloudBall: {
-		DisplayName: Cloud Cluster
+		DisplayName: Cloud Ball
 		Tooltip: ""
 	}
 
 	BlueGel: {
-		DisplayName: Coagulated Blue Gel
-		Tooltip: Increases max mana by 30 and mana regen by 4
+		DisplayName: Blue Gel
+		Tooltip: ""
 	}
 
 	CorruptEye: {
-		DisplayName: Scaled Cursed Eye
-		Tooltip:
-			'''
-			5 defence
-			increases crit chance by 4%
-			Grants immunity to Cursed Inferno
-			Release cursed flame when struck
-			Tough its owner has gone, it's still filled with curse to enemies'
-			'''
+		DisplayName: Corrupt Eye
+		Tooltip: ""
 	}
 
 	DukeTooth: {
-		DisplayName: Tusks of the Duke
-		Tooltip:
-			'''
-			Increases armor penetration by 12
-			'Fortunately, Duke Fishron is not an endangered species...as long as there're truffle worms'
-			'''
+		DisplayName: Duke Tooth
+		Tooltip: ""
 	}
 
 	GoldLiquidPupil: {
-		DisplayName: Arrogating Eye
-		Tooltip:
-			'''
-			Your attacks ignore 35% of enemies' defense
-			Generates a Ring of Ichor after struck, lasts 12s and unstackable
-			Deals high damage while it's generating
-			Damages enemies on the ring continuously
-			Inflicts Ichor to enemies inside the ring
-			'''
+		DisplayName: Gold Liquid Pupil
+		Tooltip: ""
 	}
 
 	GreenGel: {
-		DisplayName: Coagulated Green Gel
-		Tooltip:
-			'''
-			Increases max Hp by 30 and Hp regen by 4
-			'Studies have shown that green slimes generally have more vitality than blue slimes'
-			'''
+		DisplayName: Green Gel
+		Tooltip: ""
 	}
 
 	JungleVitamin: {
 		DisplayName: Jungle Vitamin
-		Tooltip:
-			'''
-			Increases max HP by 50
-			'It helps a lot in humid, dangerous jungle'
-			'''
+		Tooltip: ""
 	}
 
 	Odd8Ring: {
-		DisplayName: Strange Ring of 8
-		Tooltip:
-			'''
-			Increases damage dealt by flat 8
-			'Mystrious relic, mechanism unknown, seems to be related to certain Mathematical cult'
-			'''
+		DisplayName: Odd8 Ring
+		Tooltip: ""
 	}
 
 	RedGel: {
-		DisplayName: Coagulated Red Gel
-		Tooltip:
-			'''
-			Increases crit chance by 6%
-			Inceases crit damage by 9%
-			'Some slimes were also affected by the power of the Blood of Gods, though they didn't have any blood'
-			'''
+		DisplayName: Red Gel
+		Tooltip: ""
 	}
 
 	SilverWing: {
-		DisplayName: Badge of Silver Wings
-		Tooltip:
-			'''
-			Increases crit damage by 8%
-			If you have not been using a weapon for 3s, increases damage by 40%
-			'Concentrate the power of your soul'
-			'''
+		DisplayName: Silver Wing
+		Tooltip: ""
 	}
 
 	WalnutClip: {
-		DisplayName: Nutcracker
-		Tooltip:
-			'''
-			Increases crit damage by 16%
-			When your Hp is below 50% of the max Hp, increases damage by (50% of max Hp - current Hp)%
-			'Besides cracking nuts and crabs, it can crack enemies, too'
-			'''
+		DisplayName: Walnut Clip
+		Tooltip: ""
 	}
 
 	FixCoinCrit1: {
-		DisplayName: Enchanted Coin Crit ChanceⅠ
-		Tooltip: Gives a random accessory in inventory a prefix which increases crit chance by 1%
+		DisplayName: Fix Coin Crit1
+		Tooltip: ""
 	}
 
 	FixCoinCrit2: {
-		DisplayName: Enchanted Coin Crit ChanceⅡ
-		Tooltip: Gives a random accessory in inventory a prefix which increases crit chance by 2%~3%
+		DisplayName: Fix Coin Crit2
+		Tooltip: ""
 	}
 
 	FixCoinCrit3: {
-		DisplayName: Enchanted Coin Crit ChanceⅢ
-		Tooltip: Gives a random accessory in inventory a prefix which increases crit chance by 4%
+		DisplayName: Fix Coin Crit3
+		Tooltip: ""
 	}
 
 	FixCoinCrit4: {
-		DisplayName: Enchanted Coin Crit ChanceⅣ
-		Tooltip: Gives a random accessory in inventory a prefix which increases crit chance by 5%~6%
+		DisplayName: Fix Coin Crit4
+		Tooltip: ""
 	}
 
 	FixCoinCrit5: {
-		DisplayName: Enchanted Coin Crit ChanceⅤ
-		Tooltip: Gives a random accessory in inventory a prefix which increases crit chance by 7%~9%
+		DisplayName: Fix Coin Crit5
+		Tooltip: ""
 	}
 
 	FixCoinDamage1: {
-		DisplayName: Enchanted Coin DamageⅠ
-		Tooltip: Gives a random accessory in inventory a prefix which increases damage by 1%
+		DisplayName: Fix Coin Damage1
+		Tooltip: ""
 	}
 
 	FixCoinDamage2: {
-		DisplayName: Enchanted Coin DamageⅡ
-		Tooltip: Gives a random accessory in inventory a prefix which increases damage by 2%~3%
+		DisplayName: Fix Coin Damage2
+		Tooltip: ""
 	}
 
 	FixCoinDamage3: {
-		DisplayName: Enchanted Coin DamageⅢ
-		Tooltip: Gives a random accessory in inventory a prefix which increases damage by 4%
+		DisplayName: Fix Coin Damage3
+		Tooltip: ""
 	}
 
 	FixCoinDamage4: {
-		DisplayName: Enchanted Coin DamageⅣ
-		Tooltip: Gives a random accessory in inventory a prefix which increases damage by 5%~6%
+		DisplayName: Fix Coin Damage4
+		Tooltip: ""
 	}
 
 	FixCoinDamage5: {
-		DisplayName: Enchanted Coin DamageⅤ
-		Tooltip: Gives a random accessory in inventory a prefix which increases damage by 7%~9%
+		DisplayName: Fix Coin Damage5
+		Tooltip: ""
 	}
 
 	FixCoinDefense1: {
-		DisplayName: Enchanted Coin DefenseⅠ
-		Tooltip: Gives a random accessory in inventory a prefix which increases defense by 1
+		DisplayName: Fix Coin Defense1
+		Tooltip: ""
 	}
 
 	FixCoinDefense2: {
-		DisplayName: Enchanted Coin DefenseⅡ
-		Tooltip: Gives a random accessory in inventory a prefix which increases defense by 2~3
+		DisplayName: Fix Coin Defense2
+		Tooltip: ""
 	}
 
 	FixCoinDefense3: {
-		DisplayName: Enchanted Coin DefenseⅢ
-		Tooltip: Gives a random accessory in inventory a prefix which increases defense by 4
+		DisplayName: Fix Coin Defense3
+		Tooltip: ""
 	}
 
 	FixCoinDefense4: {
-		DisplayName: Enchanted Coin DefenseⅣ
-		Tooltip: Gives a random accessory in inventory a prefix which increases defense by 5~6
+		DisplayName: Fix Coin Defense4
+		Tooltip: ""
 	}
 
 	FixCoinDefense5: {
-		DisplayName: Enchanted Coin DefenseⅤ
-		Tooltip: Gives a random accessory in inventory a prefix which increases defense by 7~9
+		DisplayName: Fix Coin Defense5
+		Tooltip: ""
 	}
 
 	FixCoinMelee1: {
-		DisplayName: Enchanted Coin Melee SpeedⅠ
-		Tooltip: Gives a random accessory in inventory a prefix which increases melee speed by 1%
+		DisplayName: Fix Coin Melee1
+		Tooltip: ""
 	}
 
 	FixCoinMelee2: {
-		DisplayName: Enchanted Coin Melee SpeedⅡ
-		Tooltip: Gives a random accessory in inventory a prefix which increases melee speed by 2~3%
+		DisplayName: Fix Coin Melee2
+		Tooltip: ""
 	}
 
 	FixCoinMelee3: {
-		DisplayName: Enchanted Coin Melee SpeedⅢ
-		Tooltip: Gives a random accessory in inventory a prefix which increases melee speed by 4%
+		DisplayName: Fix Coin Melee3
+		Tooltip: ""
 	}
 
 	FixCoinSpeed1: {
-		DisplayName: Enchanted Coin Movement SpeedⅠ
-		Tooltip: Gives a random accessory in inventory a prefix which increases movement speed by 1%
+		DisplayName: Fix Coin Speed1
+		Tooltip: ""
 	}
 
 	FixCoinSpeed2: {
-		DisplayName: Enchanted Coin Movement SpeedⅡ
-		Tooltip: Gives a random accessory in inventory a prefix which increases movement speed by 2%~3%
+		DisplayName: Fix Coin Speed2
+		Tooltip: ""
 	}
 
 	FixCoinSpeed3: {
-		DisplayName: Enchanted Coin Movement SpeedⅢ
-		Tooltip: Gives a random accessory in inventory a prefix which increases movement speed by 4%
-	}
-
-	CrystalSkull: {
-		DisplayName: Crystal Skull
-		Tooltip:
-			'''
-			Unleashes the true power of the Vanilla and Everglow spellbooks
-			As the fruit of wisdom of the Wizards, most of the runes that were written on magic tomes are complex and unreadable.
-			However, when you use this crystal skull which was designed by the Witch-king and imbued with the power of true sight,
-			even the most ignorant apprentice can easily understand the wisdom of ancient wizards.
-			'''
+		DisplayName: Fix Coin Speed3
+		Tooltip: ""
 	}
 
 	BloodLamp: {
@@ -3235,8 +2348,28 @@ Items: {
 		Tooltip: ""
 	}
 
+	FireCracker: {
+		DisplayName: Fire Cracker
+		Tooltip: ""
+	}
+
+	FireCrackerLauncher: {
+		DisplayName: Fire Cracker Launcher
+		Tooltip: ""
+	}
+
 	LanternBombRemoteControl: {
 		DisplayName: Lantern Bomb Remote Control
+		Tooltip: ""
+	}
+
+	Acytaea_horn: {
+		DisplayName: Acytaea_horn
+		Tooltip: ""
+	}
+
+	Acytaea_sword_Item: {
+		DisplayName: Acytaea_sword_ Item
 		Tooltip: ""
 	}
 
@@ -3251,12 +2384,8 @@ Items: {
 	}
 
 	CactusBall: {
-		DisplayName: Cactus Rod
-		Tooltip:
-			'''
-			Spin and throw a cactus ball!
-			Shred victims' armour and bleed them
-			'''
+		DisplayName: Cactus Ball
+		Tooltip: ""
 	}
 
 	BlueFreeze: {
@@ -3365,189 +2494,123 @@ Items: {
 	}
 
 	WindMoveSeed: {
-		DisplayName: Aeolus' Seed
+		DisplayName: Wind Move Seed
 		Tooltip: ""
 	}
 
 	BlueTorchFlower: {
-		DisplayName: Jade Blue Icy Poker
-		Tooltip:
-			'''
-			Increases max mana by 20
-			strike an enemy recovers 2 mana, this effect has a 0.2s CD
-			'A varietas of red hot poker'
-			'''
+		DisplayName: Blue Torch Flower
+		Tooltip: ""
 	}
 
 	CyanBranch: {
-		DisplayName: Porcelianized Flower
-		Tooltip:
-			'''
-			Increases evade by 8 for 10s after struck
-			'It's pretty hard, but also brittle'
-			'''
+		DisplayName: Cyan Branch
+		Tooltip: ""
 	}
 
 	CyanPedal: {
-		DisplayName: Four-pointed Borage Flower
-		Tooltip:
-			'''
-			Increases evade by 4
-			'The missing petal was converted to your braveness'
-			'''
+		DisplayName: Cyan Pedal
+		Tooltip: ""
 	}
 
 	DarkHat: {
-		DisplayName: Ornamental Poppy
-		Tooltip:
-			'''
-			Increases crit chance by 4% and crit damage by 12%
-			'Not recommanded to use except for combat or decoration purpose'
-			'''
+		DisplayName: Dark Hat
+		Tooltip: ""
 	}
 
 	HotPinkCrown: {
-		DisplayName: Vitalized Tulip
-		Tooltip:
-			'''
-			Increases crit damage by (Max Hp * 5%)%
-			'Catalyzed by Essence of Wind, now it will react to vitality'
-			'''
+		DisplayName: Hot Pink Crown
+		Tooltip: ""
 	}
 
 	LightPurplePen: {
-		DisplayName: Rabit Hair Calligraphy Brush
-		Tooltip:
-			'''
-			Increases melee damege, melee crit chance and melee speed by 6%
-			'No rabit was hurt during the production process'
-			'''
+		DisplayName: Light Purple Pen
+		Tooltip: ""
 	}
 
 	ManyWhiteFlower: {
-		DisplayName: Bouquet of Silk Star
-		Tooltip:
-			'''
-			Increases melee speed by 18%
-			'You don't want these lovely magical flowers to be damaged'
-			'''
+		DisplayName: Many White Flower
+		Tooltip: ""
 	}
 
 	OrangeCrown: {
-		DisplayName: Tenacious Tulip
-		Tooltip:
-			'''
-			Increases defense by (max Hp * 3%)%
-			'A tulip blessed by Aeolus, its structural strength is suprisingly high'
-			'''
+		DisplayName: Orange Crown
+		Tooltip: ""
 	}
 
 	OrangeStick: {
-		DisplayName: Pennisetum Arantius
-		Tooltip:
-			'''
-			After struck, grants 5 defence and immunity to knockback for 3s
-			'Different from most grasses, it stands fast when wind blows fiercely'
-			'''
+		DisplayName: Orange Stick
+		Tooltip: ""
 	}
 
 	PinkFourPedal: {
-		DisplayName: Pink Samsara
-		Tooltip:
-			'''
-			Increases max Hp by 40
-			'It's said that injured animals will eat it to recover...it's true, but it seems not to be effective to human'
-			'''
+		DisplayName: Pink Four Pedal
+		Tooltip: ""
 	}
 
 	PurpleBall: {
-		DisplayName: Purple Hydrangea Pandents
-		Tooltip:
-			'''
-			Hitting enemies around you launches an explosion of petals
-			Damage of the petals increases with damage of the attack
-			Has a 0.5s CD
-			'Angry Hydrangea Purpura'
-			'''
+		DisplayName: Purple Ball
+		Tooltip: ""
 	}
 
 	PurpleReedHalo: {
-		DisplayName: Purple Reed Headband
-		Tooltip:
-			'''
-			Increases max Hp by 30
-			Increases max mana by 40
-			'smells good and looks good'
-			'''
+		DisplayName: Purple Reed Halo
+		Tooltip: ""
 	}
 
 	RedTriangle: {
-		DisplayName: Three-pointed Red Blossom
-		Tooltip:
-			'''
-			Increases crit damage by 18%
-			'It is an aggressive shape in Terrarian culture'
-			'''
+		DisplayName: Red Triangle
+		Tooltip: ""
 	}
 
 	SilverCupFlower: {
-		DisplayName: Royal Goblet
-		Tooltip:
-			'''
-			8 defense
-			Increases max Hp by 20
-			'There was a vicious king who has really tried to use it as a goblet, he failed to drink anything'
-			'''
+		DisplayName: Silver Cup Flower
+		Tooltip: ""
 	}
 
 	ThreeColorCrown: {
-		DisplayName: Three-colored Wreath
-		Tooltip:
-			'''
-			Hitting enemies randomly grants you one of the three effects below for 7s
-			Red:Inceasing damage by 22%, increasing crit chance by 11%
-			Violet:Immunity to most debuffs
-			Blue:Increasing max mana by 300
-			It has a 30s CD
-			'Pray for not being so lucky'
-			'''
+		DisplayName: Three Color Crown
+		Tooltip: ""
 	}
 
 	WhiteCrown: {
-		DisplayName: Flower of Hope
-		Tooltip:
-			'''
-			Increases running speed by (max Hp * 0.2%)
-			'A plain white flower, seems to mourn for someone'
-			'''
+		DisplayName: White Crown
+		Tooltip: ""
 	}
 
 	WhitePedal: {
-		DisplayName: Veil of Light
-		Tooltip:
-			'''
-			Increases evade by 2
-			Increases crit chance by 4%
-			'It's such a gauzy petal'
-			'''
+		DisplayName: White Pedal
+		Tooltip: ""
 	}
 
 	WhiteWoodFlower: {
-		DisplayName: Snow Ear Flower
-		Tooltip:
-			'''
-			Increases minion slots by 2
-			'Fantastic symbiosis'
-			'''
+		DisplayName: White Wood Flower
+		Tooltip: ""
 	}
 
 	YellowBellFlower: {
-		DisplayName: Bananea of the Valley
-		Tooltip:
-			'''
-			Increases damage by (defense * 20%)%
-			'Rare and beautiful'
-			'''
+		DisplayName: Yellow Bell Flower
+		Tooltip: ""
+	}
+
+	CrystalSkull: {
+		DisplayName: Crystal Skull
+		Tooltip: ""
+	}
+
+	CreateRoom: {
+		DisplayName: Create Room
+		Tooltip: ""
+	}
+
+	WoodenRoomDoor_exit_Item: {
+		DisplayName: Wooden Room Door_exit_ Item
+		Tooltip: ""
+	}
+
+	WoodenRoomDoor_Item: {
+		DisplayName: Wooden Room Door_ Item
+		Tooltip: ""
 	}
 
 	TreePlacer: {
@@ -3585,13 +2648,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	DarkMud: {
-		DisplayName: Dark Mud
-		Tooltip: ""
-	}
-
 	DoubleArmsChineseStreetLamp: {
-		DisplayName: Chinese Double Arms Street Lamp
+		DisplayName: Double Arms Chinese Street Lamp
 		Tooltip: ""
 	}
 
@@ -3605,18 +2663,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	IronTrackScaffolding: {
-		DisplayName: Iron Track Scaffolding
-		Tooltip: ""
-	}
-
-	PierWithSlabs: {
-		DisplayName: Pier With Slabs
-		Tooltip: ""
-	}
-
-	PierWithSlabsTop: {
-		DisplayName: Pier With Slabs Top
+	ShoreMud: {
+		DisplayName: Shore Mud
 		Tooltip: ""
 	}
 
@@ -3631,7 +2679,7 @@ Items: {
 	}
 
 	StoneDragonScaleWood: {
-		DisplayName: Fossilized Dragon Scale Wood
+		DisplayName: Stone Dragon Scale Wood
 		Tooltip: ""
 	}
 
@@ -3691,12 +2739,7 @@ Items: {
 	}
 
 	OldMoss: {
-		DisplayName: Moss
-		Tooltip: ""
-	}
-
-	YggdrasilCyatheaWood: {
-		DisplayName: Yggdrasil Cyathea Wood
+		DisplayName: Old Moss
 		Tooltip: ""
 	}
 
@@ -3726,7 +2769,7 @@ Items: {
 	}
 
 	LiftLamp: {
-		DisplayName: Lift Indicator
+		DisplayName: Lift Lamp
 		Tooltip: ""
 	}
 
@@ -3740,11 +2783,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	ScreenPositionPrintItem: {
-		DisplayName: Screen Position Print Item
-		Tooltip: ""
-	}
-
 	SightOfTile: {
 		DisplayName: Sight Of Tile
 		Tooltip: ""
@@ -3754,101 +2792,21 @@ Items: {
 		DisplayName: Test Item
 		Tooltip: ""
 	}
-
-	HandholdItem: {
-		DisplayName: Handhold Item
-		Tooltip: ""
-	}
-
-	TestSkeletonOwl: {
-		DisplayName: Test Skeleton Owl
-		Tooltip: ""
-	}
-
-	CheeseYoyo: {
-		DisplayName: Cheese Yoyo
-		Tooltip: ""
-	}
-
-	CreamChocolateCupStaff: {
-		DisplayName: Cream Chocolate Cup Staff
-		Tooltip: ""
-	}
-
-	GrilledSquidTentacle: {
-		DisplayName: Grilled Squid Tentacle
-		Tooltip: ""
-	}
-
-	TuskMirror: {
-		DisplayName: Tusk Mirror
-		Tooltip: ""
-	}
-
-	PrimordialJadeWinged_Spear: {
-		DisplayName: Primordial Jade Winged_ Spear
-		Tooltip: ""
-	}
-
-	MythrilClub: {
-		DisplayName: Mythril Club
-		Tooltip: ""
-	}
-
-	FireCracker: {
-		DisplayName: Fire Cracker
-		Tooltip: ""
-	}
-
-	FireCrackerLauncher: {
-		DisplayName: Fire Cracker Launcher
-		Tooltip: ""
-	}
-
-	Acytaea_horn: {
-		DisplayName: Acytaea_horn
-		Tooltip: ""
-	}
-
-	Acytaea_sword_Item: {
-		DisplayName: Acytaea_sword_ Item
-		Tooltip: ""
-	}
-
-	CreateRoom: {
-		DisplayName: Create Room
-		Tooltip: ""
-	}
-
-	WoodenRoomDoor_exit_Item: {
-		DisplayName: Wooden Room Door_exit_ Item
-		Tooltip: ""
-	}
-
-	WoodenRoomDoor_Item: {
-		DisplayName: Wooden Room Door_ Item
-		Tooltip: ""
-	}
-
-	ShoreMud: {
-		DisplayName: Shore Mud
-		Tooltip: ""
-	}
 }
 
 NPCs: {
+	RapierMaster_Boss.DisplayName: Rapier Master_ Boss
 	TuskKillEffect.DisplayName: Tusk Kill Effect
-	TuskWall.DisplayName: Tusk Wall
-	BloodTusk.DisplayName: Bloody Tusk
-	BloodyMouth1.DisplayName: Bloody Mouth
-	BloodyMouth2.DisplayName: Bloody Mouth
+	BloodTusk.DisplayName: Blood Tusk
+	BloodyMouth1.DisplayName: Bloody Mouth1
+	BloodyMouth2.DisplayName: Bloody Mouth2
 	CrimsonTusk.DisplayName: Crimson Tusk
-	CrimsonTusk1.DisplayName: Crimson Tusk
-	CrimsonTuskControlable.DisplayName: Controlled Crimson Tusk
-	CrimsonTuskFireWork.DisplayName: Crimson Tusk Firework
+	CrimsonTusk1.DisplayName: Crimson Tusk1
+	CrimsonTuskControlable.DisplayName: Crimson Tusk Controlable
+	CrimsonTuskFireWork.DisplayName: Crimson Tusk Fire Work
 	HugeMouth.DisplayName: Huge Mouth
 	LargeTusk.DisplayName: Large Tusk
-	LargeTusk2.DisplayName: Large Tusk
+	LargeTusk2.DisplayName: Large Tusk2
 	LittleMouth.DisplayName: Little Mouth
 	LittleTusk.DisplayName: Little Tusk
 	TuskCooling.DisplayName: Tusk Cooling
@@ -3860,26 +2818,24 @@ NPCs: {
 	TuskWaveHuge.DisplayName: Tusk Wave Huge
 	GlowingHeal.DisplayName: Glowing Heal
 	BlackStarFruit.DisplayName: Black Star Fruit
-	CentipedeHead.DisplayName: Glowing Centipede
-	CentipedeBody.DisplayName: Glowing Centipede
-	CentipedeTail.DisplayName: Glowing Centipede
-	Dendroid_normal.DisplayName: Dendroid
+	CentipedeHead.DisplayName: Centipede Head
+	CentipedeBody.DisplayName: Centipede Body
+	CentipedeTail.DisplayName: Centipede Tail
+	Dendroid_normal.DisplayName: Dendroid_normal
 	FireflyPiranha.DisplayName: Firefly Piranha
 	FireflyPiranhaInfected.DisplayName: Firefly Piranha Infected
-	FireflyPiranhaInfected_small.DisplayName: Firefly Piranha Infected
-	FireflyPiranha_small.DisplayName: Firefly Piranha
+	FireflyPiranhaInfected_small.DisplayName: Firefly Piranha Infected_small
+	FireflyPiranha_small.DisplayName: Firefly Piranha_small
 	GlowingFirefly.DisplayName: Glowing Firefly
-	LargeFireBulb.DisplayName: Large Fire Bulb
-	LittleFireBulb.DisplayName: Fire Bulb
-	Butterfly.DisplayName: Phantasm Moth
-	CorruptMoth.DisplayName: Corrupted Moth
-	EvilPack.DisplayName: Magical Cocoon
-	MothSummonEffect.DisplayName: Moth Summon Effect
+	LittleFireBulb.DisplayName: Little Fire Bulb
+	CorruptMoth.DisplayName: Corrupt Moth
+	EvilPack.DisplayName: Evil Pack
+	SummonedButterfly.DisplayName: Summoned Butterfly
 	FloatLantern.DisplayName: Float Lantern
 	RedPackBomber.DisplayName: Red Pack Bomber
 	LanternGhostKing.DisplayName: Lantern Ghost King
 	BlueCore.DisplayName: Blue Core
-	FlamingDashCore.DisplayName: Spiritual Fiery Core
+	FlamingDashCore.DisplayName: Flaming Dash Core
 	GreenCore.DisplayName: Green Core
 	RedCore.DisplayName: Red Core
 	YellowCore.DisplayName: Yellow Core
@@ -3899,16 +2855,10 @@ NPCs: {
 		}
 	}
 
-	AcytaeaShadow.DisplayName: Acytaea Shadow
-	AcytaeaShadow2.DisplayName: Acytaea Shadow
-	AcytaeaShadow3.DisplayName: Acytaea Shadow
-	FakeAcytaea.DisplayName: Acytaea
+	Acytaea_Boss.DisplayName: Acytaea_ Boss
 	CyanOreBeetle.DisplayName: Cyan Ore Beetle
 	SquamousShell.DisplayName: Squamous Shell
-	TestNPC.DisplayName: Test NPC
-	RapierMaster_Boss.DisplayName: Rapier Master_ Boss
-	SummonedButterfly.DisplayName: Summoned Butterfly
-	Acytaea_Boss.DisplayName: Acytaea_ Boss
+	TestNPC.DisplayName: Test N P C
 }
 
 Prefixes: {
@@ -3917,459 +2867,68 @@ Prefixes: {
 }
 
 Projectiles: {
-	BloodGoldBayonet_Pro.DisplayName: Crimson Rapier
-	BloodGoldBayonet_Pro_Stab.DisplayName: Crimson Rapier
-	BlossomThorn_Pro.DisplayName: Blossom Thorn
-	BlossomThorn_Pro_Stab.DisplayName: Blossom Thorn
-	BlossomThorn_Spike.DisplayName: Blossom Thorn Spike
-	BlueRibbonBayonet_Pro.DisplayName: Blue Ribbon Rapier
-	BlueRibbonBayonet_Pro_Stab.DisplayName: Blue Ribbon Rapier
-	CopperStabbingSword_Pro.DisplayName: Copper Rapier
-	CopperStabbingSword_Pro_Stab.DisplayName: Copper Repier
-	CrutchBayonet_Pro.DisplayName: Crutch Rapier
-	CrutchBayonet_Pro_Stab.DisplayName: Crutch Rapier
-	CurseFlameStabbingSword_Pro.DisplayName: Cursed Flame Rapier
-	CurseFlameStabbingSword_Pro_Stab.DisplayName: Cursed Flame Rapier
-	DreamStar_Explosion.DisplayName: Dream Star Explosion
-	DreamStar_FallenStar.DisplayName: Fallen Dream Star
-	DreamStar_Pro.DisplayName: Dream Star
-	DreamStar_Pro_Stab.DisplayName: Dream Star
-	EnchantedBayonet_beam.DisplayName: Enchanted Rapier Beam
-	EnchantedBayonet_Pro.DisplayName: Enchanted Rapier
-	EnchantedBayonet_Pro_Stab.DisplayName: Enchanted Rapier
-	EternalNight_Pro.DisplayName: Eternal Night
-	EternalNight_Pro_Stab.DisplayName: Eternal Night
-	EternalNight_shadow.DisplayName: Eternal Night Shadow
-	GoldenStabbingSword_Pro.DisplayName: Gold Rapier
-	GoldenStabbingSword_Pro_Stab.DisplayName: Gold Rapier
-	HolyBayonet_Pro.DisplayName: Holy Rapier
-	HolyBayonet_Pro_Stab.DisplayName: Holy Rapier
-	HolyBayonet_Slash.DisplayName: Holy Rapier Slash
-	IchorBayonet_Pro.DisplayName: Ichor Rapier
-	IchorBayonet_Pro_Stab.DisplayName: Ichor Rapier
-	IronStabbingSword_Pro.DisplayName: Iron Rapier
-	IronStabbingSword_Pro_Stab.DisplayName: Iron Rapier
-	LeadStabbingSword_Pro.DisplayName: Lead Rapier
-	LeadStabbingSword_Pro_Stab.DisplayName: Lead Rapier
-	MechanicMosquito_Mosquito.DisplayName: Mechanic Mosquito's Mosquito
-	MechanicMosquito_Pro.DisplayName: Mechanic Mosquito
-	MechanicMosquito_Pro_Stab.DisplayName: Mechanic Mosquito
-	PlatinumStabbingSword_Pro.DisplayName: Platinum Rapier
-	PlatinumStabbingSword_Pro_Stab.DisplayName: Platinum Rapier
-	PrisonFireBayonet_Pro.DisplayName: Molten Rapier
-	PrisonFireBayonet_Pro_Stab.DisplayName: Molten Rapier
-	RedRibbonBayonet_Pro.DisplayName: Red Ribbon Rapier
-	RedRibbonBayonet_Pro_Stab.DisplayName: Red Ribbon Rapier
-	RottenGoldBayonet_Mark.DisplayName: Corrupted Rapier Mark
-	RottenGoldBayonet_Pro.DisplayName: Corrupted Rapier
-	RottenGoldBayonet_Pro_Stab.DisplayName: Corrupted Rapier
-	RottenGoldBayonet_Slash.DisplayName: Corrupted Rapier Slash
-	SilverStabbingSword_Pro.DisplayName: Silver Rapier
-	SilverStabbingSword_Pro_Stab.DisplayName: Silver Rapier
-	SwordfishBeak_Pro.DisplayName: Swordfish Beak
-	SwordfishBeak_Pro_Stab.DisplayName: Swordfish Beak
-	TinStabbingSword_Pro.DisplayName: Tin Rapier
-	TinStabbingSword_Pro_Stab.DisplayName: Tin Rapier
-	TungstenStabbingSword_Pro.DisplayName: Tungsten Rapier
-	TungstenStabbingSword_Pro_Stab.DisplayName: Tungsten Rapier
-	VegetationBayonet_Pro.DisplayName: Rapier of Grass
-	VegetationBayonet_Pro_Stab.DisplayName: Rapier of Grass
-	VertebralSpur_Pro.DisplayName: Vertebral Spur
-	VertebralSpur_Pro_Stab.DisplayName: Vertebral Spur
-	YoenLeZed_Pro.DisplayName: Yoen Le Zed
-	YoenLeZed_Pro_Stab.DisplayName: Yoen Le Zed
-	YoenLeZed_Pro_Stab_HitTile.DisplayName: Yoen Le Zed
-	FryingPan.DisplayName: Frying Pan
-	DashingLightEff.DisplayName: Dashing Light
-	VortexVanquisher.DisplayName: Vortex Vanquisher
-	VortexVanquisher2.DisplayName: Vortex Vanquisher
-	VortexVanquisher3.DisplayName: Vortex Vanquisher
-	VortexVanquisherThump.DisplayName: Vortex Vanquisher Thump
-	GoldShield.DisplayName: Gold Shield
-	StonePost.DisplayName: Stone Post
-	FrostBall.DisplayName: Frost Ball
-	FrostBomb.DisplayName: Frost Bomb
-	FrostSpice.DisplayName: Frost Spice
-	IcedSpear.DisplayName: Iced Spear
-	PineSprite.DisplayName: Pine Sprite
-	PineStab_Pro.DisplayName: Pine Stab_ Pro
-	PineStab_Pro_Stab.DisplayName: Pine Stab_ Pro_ Stab
-	CrimsonTuskProj.DisplayName: Crimson Tusk Proj
-	CrimsonTuskProjGra.DisplayName: Crimson Tusk Proj Gra
-	EarthTusk.DisplayName: Earth Tusk
-	EarthTuskHostile.DisplayName: Earth Tusk
-	TuskCrack.DisplayName: Tusk Crack
-	TuskCurse.DisplayName: Tusk Curse
-	TuskSpice.DisplayName: Tusk Spike
-	TuskSpiceBlack.DisplayName: Tusk Spike
-	TuskSpicePro.DisplayName: Tusk Spike
-	Tusk.DisplayName: Tusk
-	BloodyBoneYoyo.DisplayName: Bloody Bone Yoyo
-	LittleTusk.DisplayName: Little Tusk
-	LittleTusk0.DisplayName: Little Tusk
-	SpineGun.DisplayName: Spine Musket
-	SplieSpineBullet.DisplayName: Splie Spine Bullet
-	ToothMagic.DisplayName: Sanguine Orb
-	ToothMagicBall.DisplayName: Sanguine Orb
-	ToothMagicHit.DisplayName: Sanguine Orb Hit
-	ToothMagicSplit.DisplayName: Sanguine Orb Split
-	ToothMagicSplit2.DisplayName: Sanguine Orb Split
-	ToothSpear.DisplayName: Bloody Dragon Spine
-	Tusk0.DisplayName: Tusk
-	TuskArrow.DisplayName: Tusk Arrow
-	TuskSpear3.DisplayName: Tusk Spear
-	TuskSpear4.DisplayName: Tusk Spear
-	TuskSummon.DisplayName: Tusk Summon
-	BeadShakeWave.DisplayName: Railgun Shake Wave
-	BlackCorruptRain.DisplayName: Corrupted Rain
-	BlackCorruptRain3.DisplayName: Corrupted Rain
-	BlackCorruptRain3Friendly.DisplayName: Corrupted Rain
-	BlackCorruptRainFriendly.DisplayName: Corrupted Rain
-	BlueMissil.DisplayName: Blue Missile
-	BlueMissilFriendly.DisplayName: Blue Missile
-	BombShakeWave.DisplayName: Bomb Shake Wave
-	ButterflyDream.DisplayName: Butterfly Dream
-	ButterflyDreamFriendly.DisplayName: Butterfly Dream
-	CorMoth4DProj.DisplayName: 4D Butterfly Effect
-	CorruptDust.DisplayName: Corrupt Dust
-	DarkEffect.DisplayName: Dark Effect
-	DarkFan.DisplayName: Phantasm Fan of Fireflies
-	DarkFanFly.DisplayName: Phantasm Fan of Fireflies
-	DreamWeaver.DisplayName: Dreamweaver
-	EvilChrysalis.DisplayName: Cocoon Staff
-	EvilChrysalisRightClick.DisplayName: Cocoon Staff
-	FanHit.DisplayName: Phantasm Fan of Fireflies Hit
-	FlowLightMissile.DisplayName: Flowlight Missile
-	FruitBomb.DisplayName: Fruit Bomb
-	GlowBeadGun.DisplayName: Glowing Railgun
-	GlowBeadGunShootFlame.DisplayName: Glowing Railgun Flame
-	GlowingButterfly.DisplayName: Glowing Butterfly
-	GlowMoth.DisplayName: Glow Moth
-	GlowStar.DisplayName: Glow Star
-	GlowStarExplosion.DisplayName: Glow Star Explosion
-	GlowWoodSword.DisplayName: Glow Wood Sword
-	MissileExplosion.DisplayName: Missile Explosion
-	MissileProj.DisplayName: Missile Proj
-	MissileProjHostile.DisplayName: Missile Proj Hostile
-	MothArrow.DisplayName: Moth Arrow
-	MothBall.DisplayName: Moth Ball
-	MothBallExplosion.DisplayName: Moth Ball Explosion
-	MothGrey.DisplayName: Moth Grey
-	MothMagicArray.DisplayName: Moth Magic Array
-	MothYoyoProjectile.DisplayName: Glow-yo
-	MothYoyoSub.DisplayName: Glow-yo Sub
-	NavyThunder.DisplayName: Navy Thunder
-	NavyThunderBomb.DisplayName: Navy Thunder Bomb
-	PhantomMoth.DisplayName: Phantom Moth
-	PhosphorescenceBullet.DisplayName: Phosphorescence Bullet
-	PhosphorescenceGun.DisplayName: Scale Shotgun Gun
-	ScaleWingBladeProj.DisplayName: Lepidoptera Blade
-	ShadowWingBow.DisplayName: Occulting Wings
-	StaffOfCorruptDust.DisplayName: Corrupted Dust
-	LilyHarpNote.DisplayName: Harp of the Valley Note
-	LilyHarpNoteKill.DisplayName: Harp of the Valley Note
-	LilyHarpProj.DisplayName: Harp of the Valley
-	LilyHarpWave.DisplayName: Harp of the Valley Wave
-	VineProj.DisplayName: Vine Proj
-	VineProj2.DisplayName: Vine Proj
-	CloudBall.DisplayName: Cloud Cluster
-	MagicHit.DisplayName: Magic Hit
-	AshBone.DisplayName: Stashed Bones
-	XmasWhip.DisplayName: Xmas Whip
-	AmbiguousLine.DisplayName: Ambiguous Line
-	AmbiguousNight.DisplayName: Ambiguous Night
-	AmbiguousNightAmmo.DisplayName: Ambiguous Night Ammo
-	AmbiguousNightHit.DisplayName: Ambiguous Night Hit
-	AmethystBead.DisplayName: Amethyst Bead
-	AmethystSlingshot.DisplayName: Amethyst Slingshot
-	BorealWoodSlingshot.DisplayName: Boreal Wood Slingshot
-	CactusSlingShot.DisplayName: Cactus Slingshot
-	DiamondBead.DisplayName: Diamond Bead
-	DiamondSlingshot.DisplayName: Diamond Slingshot
-	EbonwoodSlingshot.DisplayName: Ebonwood Slingshot
-	EmeraldBead.DisplayName: Emerald Bead
-	EmeraldSlingshot.DisplayName: Emerald Slingshot
-	GelBall.DisplayName: Gel Ball
-	GelSlingshot.DisplayName: Gel Slingshot
-	GlowSporeBead.DisplayName: Glow Spore Bead
-	Glow.DisplayName: Glow
-	JungleSlingshot.DisplayName: Jungle Slingshot
-	JungleSlingshotHit.DisplayName: Jungle Slingshot Hit
-	KSSlingshotHit.DisplayName: KS Slingshot Hit
-	KSSlingshotHitPink.DisplayName: KS Slingshot Hit
-	NormalAmmo.DisplayName: Normal Ammo
-	NormalHit.DisplayName: Normal Hit
-	PalmWoodSlingshot.DisplayName: Palm Wood Slingshot
-	PearlwoodSlingshot.DisplayName: Pearlwood Slingshot
-	RichMahoganySlingshot.DisplayName: Rich Mahogany Slingshot
-	RubyBead.DisplayName: Ruby Bead
-	RubySlingshot.DisplayName: Ruby Slingshot
-	SapphireBead.DisplayName: Sapphire Bead
-	SapphireSlingshot.DisplayName: Sapphire Slingshot
-	ShadewoodSlingShot.DisplayName: Shadewood Slingshot
-	StarAmmo.DisplayName: Star Ammo
-	StarSlingshot.DisplayName: Star Slingshot
-	TopazBead.DisplayName: Topaz Bead
-	TopazSlingshot.DisplayName: Topaz Slingshot
-	WoodSlingshot.DisplayName: Wood Slingshot
-	ComingGhost.DisplayName: Warped Blade
-	ComingGhost2.DisplayName: Warped Blade
-	CyanFrostProj.DisplayName: Cyfrost Blade
-	GhostHit.DisplayName: Ghost Hit
-	GoldRound.DisplayName: Golden Round
-	GoldRoundYoyo.DisplayName: Golden Round
-	MeleeHit.DisplayName: Melee Hit
-	MeleeHit2.DisplayName: Melee Hit
-	Sunflower.DisplayName: Sunflower Disc
-	SunFlowerpetal.DisplayName: Sunflower Petal
-	World.DisplayName: The World
-	WorldHit.DisplayName: The World Hit
-	Hepuyuan.DisplayName: Prinomial Jade Winged Spear
-	HepuyuanDown.DisplayName: Prinomial Jade Winged Spear
-	HepuyuanShake.DisplayName: Prinomial Jade Winged Spear
-	HepuyuanSpice.DisplayName: Prinomial Jade Winged Spear Spike
-	XiaoBlackWave.DisplayName: Prinomial Jade Winged Wave
-	XiaoHit.DisplayName: Prinomial Jade Winged Hit
-	AdamantiteClub.DisplayName: Adamantite Club
-	BorealWoodClub.DisplayName: Boreal Wood Club
-	CactusClub.DisplayName: Cactus Club
-	ChlorophyteClub.DisplayName: Chlorophyte Club
-	ChlorophyteClub_fly.DisplayName: Chlorophyte Club
-	ChlorophyteClub_VFX.DisplayName: Chlorophyte Club
-	CobaltClub.DisplayName: Cobalt Club
-	CopperClub.DisplayName: Copper Club
-	CorruptClub.DisplayName: Corrupt Club
-	CrimsonClub.DisplayName: Crimson Club
-	CrystalClub.DisplayName: Crystal Club
-	CrystalClub_fly.DisplayName: Crystal Club
-	CurseClub.DisplayName: Cursed Flame Club
-	CurseClub_fly.DisplayName: Cursed Flame Club
-	EbonwoodClub.DisplayName: Ebonwood Club
-	GoldClub.DisplayName: Gold Club
-	IchorClub.DisplayName: Ichor Club
-	IchorClub_fly.DisplayName: Ichor Club
-	IronClub.DisplayName: Iron Club
-	LeadClub.DisplayName: Lead Club
-	MeteorClub.DisplayName: Meteor Club
-	MithrilClub.DisplayName: Mithril Club
-	OrichalcumClub.DisplayName: Orichalcum Club
-	PalladiumClub.DisplayName: Palladium Club
-	PalmWoodClub.DisplayName: Palm Wood Club
-	PearlwoodClub.DisplayName: Pearlwood Club
-	PlatinumClub.DisplayName: Platinum Club
-	RichMahoganyClub.DisplayName: Rich Mahogany Club
-	ShadewoodClub.DisplayName: Shadewood Club
-	SilverClub.DisplayName: Silver Club
-	SpikeClub.DisplayName: Spike Club
-	StarDancer.DisplayName: Star Dancer
-	TinClub.DisplayName: Tin Club
-	TitaniumClub.DisplayName: Titanium Club
-	TungstenClub.DisplayName: Tungsten Club
-	WoodenClub.DisplayName: Wooden Club
-	BoneFeather.DisplayName: Bone Feather
-	EndlessCurseFlame.DisplayName: Endless Curse Flame
-	FireFeather.DisplayName: Fire Feather
-	FreezeFeather.DisplayName: Freeze Feather
-	ThunderBall.DisplayName: Thunder Ball
-	ThunderBall2.DisplayName: Thunder Ball
-	ThunderBallToNPC.DisplayName: Thunder Ball
-	FreezeFeatherMagicArray.DisplayName: Freeze Feather Magic
-	FreezeFeatherMagicBook.DisplayName: Freeze Feather Magic Book
-	FreezeShoot.DisplayName: Freeze Shoot
-	GiantFreezeFeather.DisplayName: Giant Freeze Feather
-	GiantFreezeFeatherExplosion.DisplayName: Giant Freeze Feather Explosion
-	FireFeatherMagicArray.DisplayName: Fire Feather Magic
-	FireFeatherMagicBook.DisplayName: Fire Feather Magic Book
-	FlameShoot.DisplayName: Flame Shoot
-	GiantFireFeather.DisplayName: Giant Fire Feather
-	GiantFireFeatherExplosion.DisplayName: Giant Fire Feather Explosion
-	FlowerPetalPurple.DisplayName: Flower Petal Purple
-	PurpleBallEffect.DisplayName: Purple Ball Effect
-	FixCoinCrit1.DisplayName: Enchanted Coin Crit Chance
-	FixCoinCrit2.DisplayName: Enchanted Coin Crit Chance
-	FixCoinCrit3.DisplayName: Enchanted Coin Crit Chance
-	FixCoinCrit4.DisplayName: Enchanted Coin Crit Chance
-	FixCoinCrit5.DisplayName: Enchanted Coin Crit Chance
-	FixCoinDamage1.DisplayName: Enchanted Coin Damage
-	FixCoinDamage2.DisplayName: Enchanted Coin Damage
-	FixCoinDamage3.DisplayName: Enchanted Coin Damage
-	FixCoinDamage4.DisplayName: Enchanted Coin Damage
-	FixCoinDamage5.DisplayName: Enchanted Coin Damage
-	FixCoinDefense1.DisplayName: Enchanted Coin Defense
-	FixCoinDefense2.DisplayName: Enchanted Coin Defense
-	FixCoinDefense3.DisplayName: Enchanted Coin Defense
-	FixCoinDefense4.DisplayName: Enchanted Coin Defense
-	FixCoinDefense5.DisplayName: Enchanted Coin Defense
-	FixCoinMelee1.DisplayName: Enchanted Coin Melee Speed
-	FixCoinMelee2.DisplayName: Enchanted Coin Melee Speed
-	FixCoinMelee3.DisplayName: Enchanted Coin Melee Speed
-	FixCoinSpeed1.DisplayName: Enchanted Coin Movement Speed
-	FixCoinSpeed2.DisplayName: Enchanted Coin Movement Speed
-	FixCoinSpeed3.DisplayName: Enchanted Coin Movement Speed
-	IchorRing.DisplayName: Ichor Ring
-	NewWaterBolt.DisplayName: Water Bolt
-	WaterBoltArray.DisplayName: Water Bolt
-	WaterBoltBook.DisplayName: Water Bolt Book
-	WaterTeleport.DisplayName: Water Teleport
-	HurricaneMask.DisplayName: Hurricane Mask
-	RazorbladeTyphoonArray.DisplayName: Razorblade Typhoon
-	RazorbladeTyphoonBook.DisplayName: Razorblade Typhoon Book
-	TyphoonII.DisplayName: Typhoon
-	MagnetSphereArray.DisplayName: Magnet Sphere
-	MagnetSphereBook.DisplayName: Magnet Sphere Book
-	MagnetSphereHit.DisplayName: Magnet Sphere Hit
-	MagnetSphereII.DisplayName: Magnet Sphere
-	MagnetSphereLighting.DisplayName: Magnet Sphere Lighting
-	LunarFlareArray.DisplayName: Lunar Flare
-	LunarFlareBook.DisplayName: Lunar Flare Book
-	LunarFlareHit.DisplayName: Lunar Flare Hit
-	LunarFlareII.DisplayName: Lunar Flare
-	StarProj.DisplayName: Star
-	GoldenShowerArray.DisplayName: Golden Shower
-	GoldenShowerBomb.DisplayName: Golden Shower Bomb
-	GoldenShowerBook.DisplayName: Golden Shower Book
-	GoldenShowerII.DisplayName: Golden Shower
-	DreamWeaverBook.DisplayName: Dream Weaver Book
-	DreamWeaverII.DisplayName: Dream Weaver
-	DemoHit.DisplayName: Demo Hit
-	DemonScytheArray.DisplayName: Demon Scythe
-	DemonScytheBook.DisplayName: Demon Scythe Book
-	DemonScythePlus.DisplayName: Demon Scythe
-	DemonScythePlusCrack.DisplayName: Demon Scythe Crack
-	DemoSpark.DisplayName: Demo Spark
-	CursedFlameHit.DisplayName: Cursed Flames Hit
-	CursedFlamesArray.DisplayName: Cursed Flames
-	CursedFlamesBook.DisplayName: Cursed Flames Book
-	CursedFlamesII.DisplayName: Cursed Flames
-	CrystalStormArray.DisplayName: Crystal Storm
-	CrystalStormBook.DisplayName: Crystal Storm Book
-	CrystalStormII.DisplayName: Crystal Storm
-	CrystalWind.DisplayName: Crystal Wind
-	LargeCrystal.DisplayName: Large Crystal
-	Storm.DisplayName: Storm
-	BoneSpike.DisplayName: Bone Spike
-	BookofSkullsArray.DisplayName: Book of Skulls
-	BookofSkullsBook.DisplayName: Bookof Skulls Book
-	SkullHand.DisplayName: Skull Hand
-	SkullII.DisplayName: Skull
-	BlackHole.DisplayName: Black Hole
-	BloodLampProj.DisplayName: Blood Lamp
-	LBloodEffect.DisplayName: Blood Effect
-	LBloodEffectGra.DisplayName: Blood Effect
-	LMeteor.DisplayName: Meteor
-	RainbowWave.DisplayName: Rainbow Wave
-	DarkLantern.DisplayName: Dark Lantern
-	DarkLantern3.DisplayName: Dark Lantern
-	DarkLanternBomb2.DisplayName: Dark Lantern Bomb
-	DarkLanternBombExplosion.DisplayName: Dark Lantern Bomb Explosion
-	DarkLanternBombExplosion_II.DisplayName: Dark Lantern Bomb Explosion
-	ExplodeLantern.DisplayName: Explode Lantern
-	floatLantern.DisplayName: Float Lantern
-	floatLantern2.DisplayName: Float Lantern
-	floatLantern3.DisplayName: Float Lantern
-	floatLantern4.DisplayName: Float Lantern
-	floatLantern5.DisplayName: Float Lantern
-	GoldLantern.DisplayName: Gold Lantern
-	GoldLanternLine.DisplayName: Gold Lantern Line
-	GoldLanternLine2.DisplayName: Gold Lantern Line
-	GoldLanternLine3.DisplayName: Gold Lantern Line
-	GoldLanternLine4.DisplayName: Gold Lantern Line
-	GoldLanternLine5.DisplayName: Gold Lantern Line
-	GoldLanternLine6.DisplayName: Gold Lantern Line
-	GoldLanternLine7.DisplayName: Gold Lantern Line
-	GoldLanternLine8.DisplayName: Gold Lantern Line
-	GoldLanternRay.DisplayName: Gold Lantern Ray
-	GoldLanternStar.DisplayName: Gold Lantern Star
-	Redlight.DisplayName: Red Light
-	StrikePlayer.DisplayName: Strike Player
-	BlueFlame0.DisplayName: Blue Flame
-	BlueFlame0Little.DisplayName: Blue Flame Little
-	BlueFlame0LittleSoon.DisplayName: Blue Flame Little
-	BlueFlame1Boom.DisplayName: Blue Flame Boom
-	BlueStarTrail.DisplayName: Blue Star Trail
-	BrownFlame0.DisplayName: Brown Flame
-	BrownFlame0Little.DisplayName: Brown Flame Little
-	GoldDashLine.DisplayName: Gold Dash Line
-	GreenFlame0.DisplayName: Green Flame
-	GreenFlame0Little.DisplayName: Green Flame Little
-	GreenFlame0Split.DisplayName: Green Flame Split
-	GreenFlame1Split.DisplayName: Green Flame Split
-	ImmuneCircle.DisplayName: Immune Circle
-	PinkFlame0.DisplayName: Pink Flame
-	PinkFlame0Little.DisplayName: Pink Flame Little
-	PurpleFlame0.DisplayName: Purple Flame
-	PurpleFlame0Little.DisplayName: Purple Flame Little
-	PurpleGreenFlame0.DisplayName: Purple Green Flame
-	PurpleGreenFlame0Little.DisplayName: Purple Green Flame Little
-	RedFlame0.DisplayName: Red Flame
-	RedFlame0Little.DisplayName: Red Flame Little
-	RedFlame0Split.DisplayName: Red Flame Split
-	RedFlame1Split.DisplayName: Red Flame Split
-	RedFlame2Split.DisplayName: Red Flame Split
-	YellowFlame0.DisplayName: Yellow Flame
-	YellowFlame0Little.DisplayName: Yellow Flame Little
-	YellowFlame0LittleShine.DisplayName: Yellow Flame Little Shine
-	YellowFlame0Shine.DisplayName: Yellow Flame Shine
-	YellowToRedFlame0Little.DisplayName: Yellow To Red Flame Little
-	AcytaeaArrow.DisplayName: Acytaea Arrow
-	AcytaeaArrow2.DisplayName: Acytaea Arrow
-	AcytaeaArrow3.DisplayName: Acytaea Arrow
-	AcytaeaArrowGra.DisplayName: Acytaea Arrow
-	AcytaeaBow.DisplayName: Acytaea Bow
-	AcytaeaBow2.DisplayName: Acytaea Bow
-	AcytaeaCenterBow.DisplayName: Acytaea Center Bow
-	AcytaeaEffect.DisplayName: Acytaea Effect
-	AcytaeaEffectUp.DisplayName: Acytaea Effect
-	AcytaeaLaser.DisplayName: Acytaea Laser
-	AcytaeaLaserBall.DisplayName: Acytaea Laser Ball
-	AcytaeaLaserLight.DisplayName: Acytaea Laser Light
-	AcytaeaLight.DisplayName: Acytaea Light
-	AcytaeaMagicBook.DisplayName: Acytaea Magic Book
-	AcytaeaTornado.DisplayName: Acytaea Tornado
-	AcytaeaTornado2.DisplayName: Acytaea Tornado
-	AcytaeaTornado3.DisplayName: Acytaea Tornado
-	AcytaeaTornado4.DisplayName: Acytaea Tornado
-	AcytaeaTornado5.DisplayName: Acytaea Tornado
-	AcytaeaTornadoHit.DisplayName: Acytaea Tornado Hit
-	AcytaeaWarningArrow.DisplayName: Acytaea Warning Arrow
-	BloodBlade.DisplayName: Blood Blade
-	BloodBlade2.DisplayName: Blood Blade
-	BloodBladeShadow.DisplayName: Blood Blade Shadow
-	BrokenAcytaea.DisplayName: Broken Acytaea
-	BrokenAcytaea2.DisplayName: Broken Acytaea
-	Metero.DisplayName: Metero
-	Metero2.DisplayName: Metero
-	Metero3.DisplayName: Metero
-	Metero4.DisplayName: Metero
-	MeteroFri.DisplayName: Metero Fri
-	playerHit.DisplayName: Player Hit
-	RampageShark.DisplayName: Rampage Shark
-	RampageSharkHit.DisplayName: Rampage Shark
-	TsunamiShark.DisplayName: Tsunami Shark
-	TsunamiShark_bullet.DisplayName: Tsunami Shark Bullet
-	TsunamiShark_bullet_hit.DisplayName: Tsunami Shark Bullet
-	TsunamiShark_flame.DisplayName: Tsunami Shark Flame
-	TsunamiShark_marking.DisplayName: Tsunami Shark Marking
-	TsunamiShark_missile.DisplayName: Tsunami Shark Missile
-	TsunamiShark_missile_hit.DisplayName: Tsunami Shark Missile
-	CactusBallProj.DisplayName: Cactus Ball
-	CactusBallSpike.DisplayName: Cactus Ball Spike
-	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
-	SquamousAirProj.DisplayName: Squamous Air Projectile
-	SquamousRockExplosion.DisplayName: Squamous Rock Explosion
-	SquamousRockProj.DisplayName: Squamous Rock
-	SquamousRockProj_small.DisplayName: Squamous Rock
-	SquamousRockSpike.DisplayName: Squamous Rock Spike
-	SquamousRollingStone.DisplayName: Squamous Rolling Stone
-	Squamous_HitTile.DisplayName: Squamous Hit
-	YggdrasilMoonBlade.DisplayName: Yggdrasil Moon Blade
-	YggdrasilMoonBladeHit.DisplayName: Yggdrasil Moon Blade Hit
-	AcroporaSpear.DisplayName: Acropora Spear
-	AcroporaThumpEff.DisplayName: Acropora Thump
-	TrueDeathSickle.DisplayName: True Death Sickle
-	TrueDeathSickleHit.DisplayName: True Death Sickle
-	SightOfTileProj.DisplayName: Sight Of Tile
-	SightOfTileProjRead.DisplayName: Sight Of Tile Read
+	BloodGoldBayonet_Pro.DisplayName: Blood Gold Bayonet_ Pro
+	BloodGoldBayonet_Pro_Stab.DisplayName: Blood Gold Bayonet_ Pro_ Stab
+	BlossomThorn_Pro.DisplayName: Blossom Thorn_ Pro
+	BlossomThorn_Pro_Stab.DisplayName: Blossom Thorn_ Pro_ Stab
+	BlossomThorn_Spike.DisplayName: Blossom Thorn_ Spike
+	BlueRibbonBayonet_Pro.DisplayName: Blue Ribbon Bayonet_ Pro
+	BlueRibbonBayonet_Pro_Stab.DisplayName: Blue Ribbon Bayonet_ Pro_ Stab
+	CopperStabbingSword_Pro.DisplayName: Copper Stabbing Sword_ Pro
+	CopperStabbingSword_Pro_Stab.DisplayName: Copper Stabbing Sword_ Pro_ Stab
+	CrutchBayonet_Pro.DisplayName: Crutch Bayonet_ Pro
+	CrutchBayonet_Pro_Stab.DisplayName: Crutch Bayonet_ Pro_ Stab
+	CurseFlameStabbingSword_Pro.DisplayName: Curse Flame Stabbing Sword_ Pro
+	CurseFlameStabbingSword_Pro_Stab.DisplayName: Curse Flame Stabbing Sword_ Pro_ Stab
+	DreamStar_Explosion.DisplayName: Dream Star_ Explosion
+	DreamStar_FallenStar.DisplayName: Dream Star_ Fallen Star
+	DreamStar_Pro.DisplayName: Dream Star_ Pro
+	DreamStar_Pro_Stab.DisplayName: Dream Star_ Pro_ Stab
+	EnchantedBayonet_beam.DisplayName: Enchanted Bayonet_beam
+	EnchantedBayonet_Pro.DisplayName: Enchanted Bayonet_ Pro
+	EnchantedBayonet_Pro_Stab.DisplayName: Enchanted Bayonet_ Pro_ Stab
+	EternalNight_Pro.DisplayName: Eternal Night_ Pro
+	EternalNight_Pro_Stab.DisplayName: Eternal Night_ Pro_ Stab
+	EternalNight_shadow.DisplayName: Eternal Night_shadow
+	GoldenStabbingSword_Pro.DisplayName: Golden Stabbing Sword_ Pro
+	GoldenStabbingSword_Pro_Stab.DisplayName: Golden Stabbing Sword_ Pro_ Stab
+	HolyBayonet_Pro.DisplayName: Holy Bayonet_ Pro
+	HolyBayonet_Pro_Stab.DisplayName: Holy Bayonet_ Pro_ Stab
+	HolyBayonet_Slash.DisplayName: Holy Bayonet_ Slash
+	IchorBayonet_Pro.DisplayName: Ichor Bayonet_ Pro
+	IchorBayonet_Pro_Stab.DisplayName: Ichor Bayonet_ Pro_ Stab
+	IronStabbingSword_Pro.DisplayName: Iron Stabbing Sword_ Pro
+	IronStabbingSword_Pro_Stab.DisplayName: Iron Stabbing Sword_ Pro_ Stab
+	LeadStabbingSword_Pro.DisplayName: Lead Stabbing Sword_ Pro
+	LeadStabbingSword_Pro_Stab.DisplayName: Lead Stabbing Sword_ Pro_ Stab
+	MechanicMosquito_Mosquito.DisplayName: Mechanic Mosquito_ Mosquito
+	MechanicMosquito_Pro.DisplayName: Mechanic Mosquito_ Pro
+	MechanicMosquito_Pro_Stab.DisplayName: Mechanic Mosquito_ Pro_ Stab
+	PlatinumStabbingSword_Pro.DisplayName: Platinum Stabbing Sword_ Pro
+	PlatinumStabbingSword_Pro_Stab.DisplayName: Platinum Stabbing Sword_ Pro_ Stab
+	PrisonFireBayonet_Pro.DisplayName: Prison Fire Bayonet_ Pro
+	PrisonFireBayonet_Pro_Stab.DisplayName: Prison Fire Bayonet_ Pro_ Stab
+	RedRibbonBayonet_Pro.DisplayName: Red Ribbon Bayonet_ Pro
+	RedRibbonBayonet_Pro_Stab.DisplayName: Red Ribbon Bayonet_ Pro_ Stab
+	RottenGoldBayonet_Mark.DisplayName: Rotten Gold Bayonet_ Mark
+	RottenGoldBayonet_Pro.DisplayName: Rotten Gold Bayonet_ Pro
+	RottenGoldBayonet_Pro_Stab.DisplayName: Rotten Gold Bayonet_ Pro_ Stab
+	RottenGoldBayonet_Slash.DisplayName: Rotten Gold Bayonet_ Slash
+	SilverStabbingSword_Pro.DisplayName: Silver Stabbing Sword_ Pro
+	SilverStabbingSword_Pro_Stab.DisplayName: Silver Stabbing Sword_ Pro_ Stab
+	SwordfishBeak_Pro.DisplayName: Swordfish Beak_ Pro
+	SwordfishBeak_Pro_Stab.DisplayName: Swordfish Beak_ Pro_ Stab
+	TinStabbingSword_Pro.DisplayName: Tin Stabbing Sword_ Pro
+	TinStabbingSword_Pro_Stab.DisplayName: Tin Stabbing Sword_ Pro_ Stab
+	TungstenStabbingSword_Pro.DisplayName: Tungsten Stabbing Sword_ Pro
+	TungstenStabbingSword_Pro_Stab.DisplayName: Tungsten Stabbing Sword_ Pro_ Stab
+	VegetationBayonet_Pro.DisplayName: Vegetation Bayonet_ Pro
+	VegetationBayonet_Pro_Stab.DisplayName: Vegetation Bayonet_ Pro_ Stab
+	VertebralSpur_Pro.DisplayName: Vertebral Spur_ Pro
+	VertebralSpur_Pro_Stab.DisplayName: Vertebral Spur_ Pro_ Stab
+	YoenLeZed_Pro.DisplayName: Yoen Le Zed_ Pro
+	YoenLeZed_Pro_Stab.DisplayName: Yoen Le Zed_ Pro_ Stab
+	YoenLeZed_Pro_Stab_HitTile.DisplayName: Yoen Le Zed_ Pro_ Stab_ Hit Tile
 	CrutchRapier_Hostile.DisplayName: Crutch Rapier_ Hostile
 	CrutchRapier_Stab_Hostile.DisplayName: Crutch Rapier_ Stab_ Hostile
 	Rapier_Slash.DisplayName: Rapier_ Slash
@@ -4382,90 +2941,362 @@ Projectiles: {
 	CreamChocolateCupStaff_proj_held.DisplayName: Cream Chocolate Cup Staff_proj_held
 	CreamChocolateCup_ChocolateBars.DisplayName: Cream Chocolate Cup_ Chocolate Bars
 	CreamChocolateCup_CreamFlow.DisplayName: Cream Chocolate Cup_ Cream Flow
+	FryingPan.DisplayName: Frying Pan
 	GrilledSquidTentacle_proj.DisplayName: Grilled Squid Tentacle_proj
 	PlanetBeFall.DisplayName: Planet Be Fall
 	PlanetBefallExplosion.DisplayName: Planet Befall Explosion
 	PlanetBefallArray.DisplayName: Planet Befall Array
 	GoldenCrack.DisplayName: Golden Crack
+	DashingLightEff.DisplayName: Dashing Light Eff
+	VortexVanquisher.DisplayName: Vortex Vanquisher
+	VortexVanquisher2.DisplayName: Vortex Vanquisher2
+	VortexVanquisher3.DisplayName: Vortex Vanquisher3
+	VortexVanquisherThump.DisplayName: Vortex Vanquisher Thump
+	GoldShield.DisplayName: Gold Shield
 	GoldShield_backTextureSubProj.DisplayName: Gold Shield_back Texture Sub Proj
+	StonePost.DisplayName: Stone Post
+	FrostBall.DisplayName: Frost Ball
+	FrostBomb.DisplayName: Frost Bomb
+	FrostSpice.DisplayName: Frost Spice
+	IcedSpear.DisplayName: Iced Spear
+	PineSprite.DisplayName: Pine Sprite
+	PineStab_Pro.DisplayName: Pine Stab_ Pro
+	PineStab_Pro_Stab.DisplayName: Pine Stab_ Pro_ Stab
+	CrimsonTuskProj.DisplayName: Crimson Tusk Proj
+	CrimsonTuskProjGra.DisplayName: Crimson Tusk Proj Gra
+	EarthTusk.DisplayName: Earth Tusk
+	EarthTuskHostile.DisplayName: Earth Tusk Hostile
+	TuskCrack.DisplayName: Tusk Crack
+	TuskCurse.DisplayName: Tusk Curse
+	TuskSpice.DisplayName: Tusk Spice
+	TuskSpiceBlack.DisplayName: Tusk Spice Black
+	TuskSpicePro.DisplayName: Tusk Spice Pro
+	BloodyBoneYoyo.DisplayName: Bloody Bone Yoyo
+	SpineGun.DisplayName: Spine Gun
+	SplieSpineBullet.DisplayName: Splie Spine Bullet
 	ToothBow.DisplayName: Tooth Bow
 	ToothBow_BloodArrow.DisplayName: Tooth Bow_ Blood Arrow
 	ToothKnife.DisplayName: Tooth Knife
+	ToothMagic.DisplayName: Tooth Magic
+	ToothMagicBall.DisplayName: Tooth Magic Ball
+	ToothMagicHit.DisplayName: Tooth Magic Hit
+	ToothMagicSplit.DisplayName: Tooth Magic Split
+	ToothMagicSplit2.DisplayName: Tooth Magic Split2
 	ToothSpear_proj.DisplayName: Tooth Spear_proj
 	TuskPin.DisplayName: Tusk Pin
 	TuskSlash.DisplayName: Tusk Slash
+	TuskSummon.DisplayName: Tusk Summon
+	BeadShakeWave.DisplayName: Bead Shake Wave
+	BlackCorruptRain.DisplayName: Black Corrupt Rain
+	BlackCorruptRain3.DisplayName: Black Corrupt Rain3
+	BlackCorruptRain3Friendly.DisplayName: Black Corrupt Rain3 Friendly
+	BlackCorruptRainFriendly.DisplayName: Black Corrupt Rain Friendly
+	BlueMissil.DisplayName: Blue Missil
+	BlueMissilFriendly.DisplayName: Blue Missil Friendly
 	BlueStarFlower.DisplayName: Blue Star Flower
+	BombShakeWave.DisplayName: Bomb Shake Wave
+	ButterflyDream.DisplayName: Butterfly Dream
+	ButterflyDreamFriendly.DisplayName: Butterfly Dream Friendly
+	CorMoth4DProj.DisplayName: Cor Moth4 D Proj
+	CorruptDust.DisplayName: Corrupt Dust
+	DarkEffect.DisplayName: Dark Effect
+	DarkFan.DisplayName: Dark Fan
+	DarkFanFly.DisplayName: Dark Fan Fly
 	DreamWeaver_proj.DisplayName: Dream Weaver_proj
+	EvilChrysalis.DisplayName: Evil Chrysalis
+	EvilChrysalisRightClick.DisplayName: Evil Chrysalis Right Click
 	FallenDropFruit.DisplayName: Fallen Drop Fruit
+	FanHit.DisplayName: Fan Hit
+	FlowLightMissile.DisplayName: Flow Light Missile
+	FruitBomb.DisplayName: Fruit Bomb
+	GlowBeadGun.DisplayName: Glow Bead Gun
+	GlowBeadGunShootFlame.DisplayName: Glow Bead Gun Shoot Flame
+	GlowingButterfly.DisplayName: Glowing Butterfly
+	GlowMoth.DisplayName: Glow Moth
+	GlowStar.DisplayName: Glow Star
+	GlowStarExplosion.DisplayName: Glow Star Explosion
+	GlowWoodSword.DisplayName: Glow Wood Sword
+	MissileExplosion.DisplayName: Missile Explosion
+	MissileProj.DisplayName: Missile Proj
+	MissileProjHostile.DisplayName: Missile Proj Hostile
+	MothArrow.DisplayName: Moth Arrow
+	MothBall.DisplayName: Moth Ball
+	MothBallExplosion.DisplayName: Moth Ball Explosion
 	MothBulletExplosion.DisplayName: Moth Bullet Explosion
+	MothGrey.DisplayName: Moth Grey
+	MothMagicArray.DisplayName: Moth Magic Array
 	MothMiddleBullet.DisplayName: Moth Middle Bullet
+	MothYoyoProjectile.DisplayName: Moth Yoyo Projectile
+	MothYoyoSub.DisplayName: Moth Yoyo Sub
+	NavyThunder.DisplayName: Navy Thunder
+	NavyThunderBomb.DisplayName: Navy Thunder Bomb
+	PhantomMoth.DisplayName: Phantom Moth
+	PhosphorescenceBullet.DisplayName: Phosphorescence Bullet
+	PhosphorescenceGun.DisplayName: Phosphorescence Gun
 	PylonStonePostProj_crimson_explosion.DisplayName: Pylon Stone Post Proj_crimson_explosion
 	PylonStonePostProj_crimson.DisplayName: Pylon Stone Post Proj_crimson
 	PylonStonePostProj_corrupt.DisplayName: Pylon Stone Post Proj_corrupt
 	PylonStonePostProj_corrupt_explosion.DisplayName: Pylon Stone Post Proj_corrupt_explosion
+	ScaleWingBladeProj.DisplayName: Scale Wing Blade Proj
+	ShadowWingBow.DisplayName: Shadow Wing Bow
+	StaffOfCorruptDust.DisplayName: Staff Of Corrupt Dust
 	DreamWeaverArray.DisplayName: Dream Weaver Array
+	DreamWeaverBook.DisplayName: Dream Weaver Book
+	DreamWeaverII.DisplayName: Dream Weaver I I
 	MothSummonEffect.DisplayName: Moth Summon Effect
+	LilyHarpNote.DisplayName: Lily Harp Note
+	LilyHarpNoteKill.DisplayName: Lily Harp Note Kill
+	LilyHarpProj.DisplayName: Lily Harp Proj
+	LilyHarpWave.DisplayName: Lily Harp Wave
+	VineProj.DisplayName: Vine Proj
+	VineProj2.DisplayName: Vine Proj2
+	CloudBall.DisplayName: Cloud Ball
+	MagicHit.DisplayName: Magic Hit
+	XmasWhip.DisplayName: Xmas Whip
+	AmbiguousLine.DisplayName: Ambiguous Line
+	AmbiguousNight.DisplayName: Ambiguous Night
+	AmbiguousNightAmmo.DisplayName: Ambiguous Night Ammo
+	AmbiguousNightHit.DisplayName: Ambiguous Night Hit
+	AmethystBead.DisplayName: Amethyst Bead
+	AmethystSlingshot.DisplayName: Amethyst Slingshot
+	BorealWoodSlingshot.DisplayName: Boreal Wood Slingshot
+	CactusSlingShot.DisplayName: Cactus Sling Shot
+	DiamondBead.DisplayName: Diamond Bead
+	DiamondSlingshot.DisplayName: Diamond Slingshot
+	EbonwoodSlingshot.DisplayName: Ebonwood Slingshot
+	EmeraldBead.DisplayName: Emerald Bead
+	EmeraldSlingshot.DisplayName: Emerald Slingshot
+	GelBall.DisplayName: Gel Ball
+	GelSlingshot.DisplayName: Gel Slingshot
+	GlowSporeBead.DisplayName: Glow Spore Bead
+	Glow.DisplayName: Glow
+	JungleSlingshot.DisplayName: Jungle Slingshot
+	JungleSlingshotHit.DisplayName: Jungle Slingshot Hit
+	KSSlingshotHit.DisplayName: K S Slingshot Hit
+	KSSlingshotHitPink.DisplayName: K S Slingshot Hit Pink
+	NormalAmmo.DisplayName: Normal Ammo
+	NormalHit.DisplayName: Normal Hit
+	PalmWoodSlingshot.DisplayName: Palm Wood Slingshot
+	PearlwoodSlingshot.DisplayName: Pearlwood Slingshot
+	RichMahoganySlingshot.DisplayName: Rich Mahogany Slingshot
+	RubyBead.DisplayName: Ruby Bead
+	RubySlingshot.DisplayName: Ruby Slingshot
+	SapphireBead.DisplayName: Sapphire Bead
+	SapphireSlingshot.DisplayName: Sapphire Slingshot
+	ShadewoodSlingShot.DisplayName: Shadewood Sling Shot
+	StarAmmo.DisplayName: Star Ammo
+	StarSlingshot.DisplayName: Star Slingshot
+	TopazBead.DisplayName: Topaz Bead
+	TopazSlingshot.DisplayName: Topaz Slingshot
+	WoodSlingshot.DisplayName: Wood Slingshot
+	ComingGhost.DisplayName: Coming Ghost
 	ComingGhost_Shimmer.DisplayName: Coming Ghost_ Shimmer
 	ComingGhost_Slash.DisplayName: Coming Ghost_ Slash
+	CyanFrostProj.DisplayName: Cyan Frost Proj
 	FocusRay.DisplayName: Focus Ray
+	GhostHit.DisplayName: Ghost Hit
 	GlowMoonBlade.DisplayName: Glow Moon Blade
 	GlowMoonBlade_ash.DisplayName: Glow Moon Blade_ash
 	Glow_Fall.DisplayName: Glow_ Fall
+	GoldRound.DisplayName: Gold Round
+	GoldRoundYoyo.DisplayName: Gold Round Yoyo
+	MeleeHit.DisplayName: Melee Hit
+	MeleeHit2.DisplayName: Melee Hit2
+	Sunflower.DisplayName: Sunflower
+	SunFlowerpetal.DisplayName: Sun Flowerpetal
+	World.DisplayName: World
+	WorldHit.DisplayName: World Hit
 	PrimordialJadeWinged_Spear.DisplayName: Primordial Jade Winged_ Spear
 	PrimordialJadeWinged_SpearDown.DisplayName: Primordial Jade Winged_ Spear Down
 	PrimordialJadeWinged_SpearShake.DisplayName: Primordial Jade Winged_ Spear Shake
 	PrimordialJadeWinged_SpearSpice.DisplayName: Primordial Jade Winged_ Spear Spice
 	PrimordialJadeWinged_Spear_thrust.DisplayName: Primordial Jade Winged_ Spear_thrust
 	PrimordialJadeWinged_Spear_thrust2.DisplayName: Primordial Jade Winged_ Spear_thrust2
+	XiaoBlackWave.DisplayName: Xiao Black Wave
+	XiaoHit.DisplayName: Xiao Hit
+	AdamantiteClub.DisplayName: Adamantite Club
 	AdamantiteClub_smash.DisplayName: Adamantite Club_smash
+	BorealWoodClub.DisplayName: Boreal Wood Club
 	BorealWoodClub_smash.DisplayName: Boreal Wood Club_smash
+	CactusClub.DisplayName: Cactus Club
 	CactusClub_smash.DisplayName: Cactus Club_smash
+	ChlorophyteClub.DisplayName: Chlorophyte Club
+	ChlorophyteClub_fly.DisplayName: Chlorophyte Club_fly
 	ChlorophyteClub_fly_2.DisplayName: Chlorophyte Club_fly_2
 	ChlorophyteClub_smash.DisplayName: Chlorophyte Club_smash
+	ChlorophyteClub_VFX.DisplayName: Chlorophyte Club_ V F X
 	ChlorophyteClub_VFX_2.DisplayName: Chlorophyte Club_ V F X_2
+	CobaltClub.DisplayName: Cobalt Club
 	CobaltClub_smash.DisplayName: Cobalt Club_smash
+	CopperClub.DisplayName: Copper Club
 	CopperClub_smash.DisplayName: Copper Club_smash
+	CorruptClub.DisplayName: Corrupt Club
 	CorruptClub_smash.DisplayName: Corrupt Club_smash
+	CrimsonClub.DisplayName: Crimson Club
 	CrimsonClub_smash.DisplayName: Crimson Club_smash
+	CrystalClub.DisplayName: Crystal Club
+	CrystalClub_fly.DisplayName: Crystal Club_fly
 	CrystalClub_fly_Explosion.DisplayName: Crystal Club_fly_ Explosion
 	CrystalClub_smash.DisplayName: Crystal Club_smash
+	CurseClub.DisplayName: Curse Club
+	CurseClub_fly.DisplayName: Curse Club_fly
 	CurseClub_smash.DisplayName: Curse Club_smash
+	EbonwoodClub.DisplayName: Ebonwood Club
 	EbonwoodClub_smash.DisplayName: Ebonwood Club_smash
+	GoldClub.DisplayName: Gold Club
 	GoldClub_smash.DisplayName: Gold Club_smash
+	IchorClub.DisplayName: Ichor Club
+	IchorClub_fly.DisplayName: Ichor Club_fly
 	IchorClub_smash.DisplayName: Ichor Club_smash
+	IronClub.DisplayName: Iron Club
 	IronClub_smash.DisplayName: Iron Club_smash
+	LeadClub.DisplayName: Lead Club
 	LeadClub_smash.DisplayName: Lead Club_smash
+	MeteorClub.DisplayName: Meteor Club
 	MeteorClub_smash.DisplayName: Meteor Club_smash
-	MythrilClub.DisplayName: Mythril Club
-	MythrilClub_smash.DisplayName: Mythril Club_smash
+	MithrilClub.DisplayName: Mithril Club
+	MithrilClub_smash.DisplayName: Mithril Club_smash
+	OrichalcumClub.DisplayName: Orichalcum Club
 	OrichalcumClub_smash.DisplayName: Orichalcum Club_smash
+	PalladiumClub.DisplayName: Palladium Club
 	PalladiumClub_smash.DisplayName: Palladium Club_smash
+	PalmWoodClub.DisplayName: Palm Wood Club
 	PalmWoodClub_smash.DisplayName: Palm Wood Club_smash
+	PearlwoodClub.DisplayName: Pearlwood Club
 	PearlwoodClub_smash.DisplayName: Pearlwood Club_smash
+	PlatinumClub.DisplayName: Platinum Club
 	PlatinumClub_smash.DisplayName: Platinum Club_smash
+	RichMahoganyClub.DisplayName: Rich Mahogany Club
 	RichMahoganyClub_smash.DisplayName: Rich Mahogany Club_smash
+	ShadewoodClub.DisplayName: Shadewood Club
 	ShadewoodClub_smash.DisplayName: Shadewood Club_smash
+	SilverClub.DisplayName: Silver Club
 	SilverClub_smash.DisplayName: Silver Club_smash
+	SpikeClub.DisplayName: Spike Club
 	SpikeClubSlash.DisplayName: Spike Club Slash
 	SpikeClub_smash.DisplayName: Spike Club_smash
+	StarDancer.DisplayName: Star Dancer
 	StarDancer_smash.DisplayName: Star Dancer_smash
 	TinClub_smash.DisplayName: Tin Club_smash
+	TinClub.DisplayName: Tin Club
+	TitaniumClub.DisplayName: Titanium Club
 	TitaniumClub_smash.DisplayName: Titanium Club_smash
+	TungstenClub.DisplayName: Tungsten Club
 	TungstenClub_smash.DisplayName: Tungsten Club_smash
+	WoodenClub.DisplayName: Wooden Club
 	WoodenClub_smash.DisplayName: Wooden Club_smash
+	BoneFeather.DisplayName: Bone Feather
+	EndlessCurseFlame.DisplayName: Endless Curse Flame
+	FireFeather.DisplayName: Fire Feather
+	FreezeFeather.DisplayName: Freeze Feather
+	ThunderBall.DisplayName: Thunder Ball
+	ThunderBall2.DisplayName: Thunder Ball2
+	ThunderBallToNPC.DisplayName: Thunder Ball To N P C
+	FreezeFeatherMagicArray.DisplayName: Freeze Feather Magic Array
+	FreezeFeatherMagicBook.DisplayName: Freeze Feather Magic Book
+	FreezeShoot.DisplayName: Freeze Shoot
+	GiantFreezeFeather.DisplayName: Giant Freeze Feather
+	GiantFreezeFeatherExplosion.DisplayName: Giant Freeze Feather Explosion
+	FireFeatherMagicArray.DisplayName: Fire Feather Magic Array
+	FireFeatherMagicBook.DisplayName: Fire Feather Magic Book
+	FlameShoot.DisplayName: Flame Shoot
+	GiantFireFeather.DisplayName: Giant Fire Feather
+	GiantFireFeatherExplosion.DisplayName: Giant Fire Feather Explosion
 	BoneFeatherMagicArray.DisplayName: Bone Feather Magic Array
 	BoneFeatherMagicBook.DisplayName: Bone Feather Magic Book
 	BoneFeather_spine.DisplayName: Bone Feather_spine
 	BoneShoot.DisplayName: Bone Shoot
 	GiantBoneFeather.DisplayName: Giant Bone Feather
 	GiantBoneFeatherExplosion.DisplayName: Giant Bone Feather Explosion
+	FlowerPetalPurple.DisplayName: Flower Petal Purple
+	PurpleBallEffect.DisplayName: Purple Ball Effect
+	FixCoinCrit1.DisplayName: Fix Coin Crit1
+	FixCoinCrit2.DisplayName: Fix Coin Crit2
+	FixCoinCrit3.DisplayName: Fix Coin Crit3
+	FixCoinCrit4.DisplayName: Fix Coin Crit4
+	FixCoinCrit5.DisplayName: Fix Coin Crit5
+	FixCoinDamage1.DisplayName: Fix Coin Damage1
+	FixCoinDamage2.DisplayName: Fix Coin Damage2
+	FixCoinDamage3.DisplayName: Fix Coin Damage3
+	FixCoinDamage4.DisplayName: Fix Coin Damage4
+	FixCoinDamage5.DisplayName: Fix Coin Damage5
+	FixCoinDefense1.DisplayName: Fix Coin Defense1
+	FixCoinDefense2.DisplayName: Fix Coin Defense2
+	FixCoinDefense3.DisplayName: Fix Coin Defense3
+	FixCoinDefense4.DisplayName: Fix Coin Defense4
+	FixCoinDefense5.DisplayName: Fix Coin Defense5
+	FixCoinMelee1.DisplayName: Fix Coin Melee1
+	FixCoinMelee2.DisplayName: Fix Coin Melee2
+	FixCoinMelee3.DisplayName: Fix Coin Melee3
+	FixCoinSpeed1.DisplayName: Fix Coin Speed1
+	FixCoinSpeed2.DisplayName: Fix Coin Speed2
+	FixCoinSpeed3.DisplayName: Fix Coin Speed3
 	CursedFlameBall.DisplayName: Cursed Flame Ball
 	CursedFlameBrust.DisplayName: Cursed Flame Brust
 	IchorCurrent.DisplayName: Ichor Current
+	IchorRing.DisplayName: Ichor Ring
+	BloodLampProj.DisplayName: Blood Lamp Proj
 	Firework12Inches.DisplayName: Firework12 Inches
 	Firework6Inches.DisplayName: Firework6 Inches
 	FireworkSubExplosion.DisplayName: Firework Sub Explosion
+	LBloodEffect.DisplayName: L Blood Effect
+	LBloodEffectGra.DisplayName: L Blood Effect Gra
+	LMeteor.DisplayName: L Meteor
+	RainbowWave.DisplayName: Rainbow Wave
 	RisingFirework.DisplayName: Rising Firework
+	DarkLantern.DisplayName: Dark Lantern
+	DarkLantern3.DisplayName: Dark Lantern3
+	DarkLanternBomb2.DisplayName: Dark Lantern Bomb2
+	DarkLanternBombExplosion.DisplayName: Dark Lantern Bomb Explosion
+	DarkLanternBombExplosion_II.DisplayName: Dark Lantern Bomb Explosion_ I I
+	ExplodeLantern.DisplayName: Explode Lantern
+	floatLantern.DisplayName: float Lantern
+	floatLantern2.DisplayName: float Lantern2
+	floatLantern3.DisplayName: float Lantern3
+	floatLantern4.DisplayName: float Lantern4
+	floatLantern5.DisplayName: float Lantern5
+	GoldLantern.DisplayName: Gold Lantern
+	GoldLanternLine.DisplayName: Gold Lantern Line
+	GoldLanternLine2.DisplayName: Gold Lantern Line2
+	GoldLanternLine3.DisplayName: Gold Lantern Line3
+	GoldLanternLine4.DisplayName: Gold Lantern Line4
+	GoldLanternLine5.DisplayName: Gold Lantern Line5
+	GoldLanternLine6.DisplayName: Gold Lantern Line6
+	GoldLanternLine7.DisplayName: Gold Lantern Line7
+	GoldLanternLine8.DisplayName: Gold Lantern Line8
+	GoldLanternRay.DisplayName: Gold Lantern Ray
+	GoldLanternStar.DisplayName: Gold Lantern Star
+	Redlight.DisplayName: Redlight
+	StrikePlayer.DisplayName: Strike Player
+	BlueFlame0.DisplayName: Blue Flame0
+	BlueFlame0Little.DisplayName: Blue Flame0 Little
+	BlueFlame0LittleSoon.DisplayName: Blue Flame0 Little Soon
+	BlueFlame1Boom.DisplayName: Blue Flame1 Boom
+	BlueStarTrail.DisplayName: Blue Star Trail
+	BrownFlame0.DisplayName: Brown Flame0
+	BrownFlame0Little.DisplayName: Brown Flame0 Little
+	GoldDashLine.DisplayName: Gold Dash Line
+	GreenFlame0.DisplayName: Green Flame0
+	GreenFlame0Little.DisplayName: Green Flame0 Little
+	GreenFlame0Split.DisplayName: Green Flame0 Split
+	GreenFlame1Split.DisplayName: Green Flame1 Split
+	ImmuneCircle.DisplayName: Immune Circle
+	PinkFlame0.DisplayName: Pink Flame0
+	PinkFlame0Little.DisplayName: Pink Flame0 Little
+	PurpleFlame0.DisplayName: Purple Flame0
+	PurpleFlame0Little.DisplayName: Purple Flame0 Little
+	PurpleGreenFlame0.DisplayName: Purple Green Flame0
+	PurpleGreenFlame0Little.DisplayName: Purple Green Flame0 Little
+	RedFlame0.DisplayName: Red Flame0
+	RedFlame0Little.DisplayName: Red Flame0 Little
+	RedFlame0Split.DisplayName: Red Flame0 Split
+	RedFlame1Split.DisplayName: Red Flame1 Split
+	RedFlame2Split.DisplayName: Red Flame2 Split
+	YellowFlame0.DisplayName: Yellow Flame0
+	YellowFlame0Little.DisplayName: Yellow Flame0 Little
+	YellowFlame0LittleShine.DisplayName: Yellow Flame0 Little Shine
+	YellowFlame0Shine.DisplayName: Yellow Flame0 Shine
+	YellowToRedFlame0Little.DisplayName: Yellow To Red Flame0 Little
 	AcytaeaFlySword.DisplayName: Acytaea Fly Sword
 	AcytaeaFlySwordExplosion.DisplayName: Acytaea Fly Sword Explosion
 	AcytaeaFlySword_1.DisplayName: Acytaea Fly Sword_1
@@ -4484,10 +3315,73 @@ Projectiles: {
 	AcytaeaSword_projectile_Boss_shoot.DisplayName: Acytaea Sword_projectile_ Boss_shoot
 	AcytaeaSword_projectile_Tornado.DisplayName: Acytaea Sword_projectile_ Tornado
 	AcytaeaSword_projectile_TownNPC.DisplayName: Acytaea Sword_projectile_ Town N P C
+	AcytaeaTornado.DisplayName: Acytaea Tornado
 	Acytaea_Lock.DisplayName: Acytaea_ Lock
 	Acytaea_ShineStar.DisplayName: Acytaea_ Shine Star
+	RampageShark.DisplayName: Rampage Shark
+	RampageSharkHit.DisplayName: Rampage Shark Hit
+	TsunamiShark.DisplayName: Tsunami Shark
+	TsunamiShark_bullet.DisplayName: Tsunami Shark_bullet
+	TsunamiShark_bullet_hit.DisplayName: Tsunami Shark_bullet_hit
+	TsunamiShark_flame.DisplayName: Tsunami Shark_flame
+	TsunamiShark_marking.DisplayName: Tsunami Shark_marking
+	TsunamiShark_missile.DisplayName: Tsunami Shark_missile
+	TsunamiShark_missile_hit.DisplayName: Tsunami Shark_missile_hit
+	CactusBallProj.DisplayName: Cactus Ball Proj
+	CactusBallSpike.DisplayName: Cactus Ball Spike
+	NewWaterBolt.DisplayName: New Water Bolt
 	RipplingWave.DisplayName: Rippling Wave
+	WaterBoltArray.DisplayName: Water Bolt Array
+	WaterBoltBook.DisplayName: Water Bolt Book
+	WaterTeleport.DisplayName: Water Teleport
+	HurricaneMask.DisplayName: Hurricane Mask
+	RazorbladeTyphoonArray.DisplayName: Razorblade Typhoon Array
+	RazorbladeTyphoonBook.DisplayName: Razorblade Typhoon Book
+	TyphoonII.DisplayName: Typhoon I I
+	MagnetSphereArray.DisplayName: Magnet Sphere Array
+	MagnetSphereBook.DisplayName: Magnet Sphere Book
+	MagnetSphereHit.DisplayName: Magnet Sphere Hit
+	MagnetSphereII.DisplayName: Magnet Sphere I I
+	MagnetSphereLighting.DisplayName: Magnet Sphere Lighting
+	LunarFlareArray.DisplayName: Lunar Flare Array
+	LunarFlareBook.DisplayName: Lunar Flare Book
+	LunarFlareHit.DisplayName: Lunar Flare Hit
+	LunarFlareII.DisplayName: Lunar Flare I I
+	StarProj.DisplayName: Star Proj
+	GoldenShowerArray.DisplayName: Golden Shower Array
+	GoldenShowerBomb.DisplayName: Golden Shower Bomb
+	GoldenShowerBook.DisplayName: Golden Shower Book
+	GoldenShowerII.DisplayName: Golden Shower I I
+	DemoHit.DisplayName: Demo Hit
+	DemonScytheArray.DisplayName: Demon Scythe Array
+	DemonScytheBook.DisplayName: Demon Scythe Book
+	DemonScythePlus.DisplayName: Demon Scythe Plus
+	DemonScythePlusCrack.DisplayName: Demon Scythe Plus Crack
+	DemoSpark.DisplayName: Demo Spark
+	CursedFlameHit.DisplayName: Cursed Flame Hit
+	CursedFlamesArray.DisplayName: Cursed Flames Array
+	CursedFlamesBook.DisplayName: Cursed Flames Book
+	CursedFlamesII.DisplayName: Cursed Flames I I
 	CrystalExplosion.DisplayName: Crystal Explosion
+	CrystalStormArray.DisplayName: Crystal Storm Array
+	CrystalStormBook.DisplayName: Crystal Storm Book
+	CrystalStormII.DisplayName: Crystal Storm I I
+	CrystalWind.DisplayName: Crystal Wind
+	LargeCrystal.DisplayName: Large Crystal
+	Storm.DisplayName: Storm
+	BoneSpike.DisplayName: Bone Spike
+	BookofSkullsArray.DisplayName: Bookof Skulls Array
+	BookofSkullsBook.DisplayName: Bookof Skulls Book
+	SkullHand.DisplayName: Skull Hand
+	SkullII.DisplayName: Skull I I
+	BlackHole.DisplayName: Black Hole
+	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
+	AcroporaSpear.DisplayName: Acropora Spear
+	AcroporaThumpEff.DisplayName: Acropora Thump Eff
+	TrueDeathSickle.DisplayName: True Death Sickle
+	TrueDeathSickleHit.DisplayName: True Death Sickle Hit
+	SightOfTileProj.DisplayName: Sight Of Tile Proj
+	SightOfTileProjRead.DisplayName: Sight Of Tile Proj Read
 }
 
 Configs: {
@@ -4495,243 +3389,133 @@ Configs: {
 		DisplayName: Everglow Config
 
 		debugMode: {
-			Label: Enable Debug Mode
-			Tooltip: "[For developers] Enable debug mode to allow debug functions to run"
+			Label: debug Mode
+			Tooltip: ""
 		}
 	}
 
 	EverglowClientConfig: {
 		DisplayName: Everglow Client Config
 
+		Headers: {
+			TextureReplace: Texture Replace Header
+			AudioReplace: Audio Replace Header
+		}
+
 		TextureReplace: {
-			Label: Texture-replacing mode
-			Tooltip:
-				'''
-				Choose your preferred texture group to replace
-				Options: Terraria, Eternal Resolve, Myth
-				'''
+			Label: Texture Replace
+			Tooltip: ""
 		}
 
 		ItemPickSoundReplace: {
-			Label: New pickup and inventory sounds
+			Label: Item Pick Sound Replace
 			Tooltip: ""
 		}
 
 		MothAudioReplace: {
-			Label: Corrupted Moth's Theme Song
-			Tooltip:
-				'''
-				Choose your preferred Corrupted Moth theme music to replace
-				Options: Original Theme, Alternate Theme, Old Theme
-				Original: Plays 'Setnour6, Shiryuu, windclimb - Moth Dance'
-				Alternate: Plays 'Setnour6, Shiryuu, windclimb - Moth Dance (Alt Version)'
-				Old: Plays 'Void - Sudden Romance'
-				This setting won't take effect if the Corrupted Moth is currently alive
-				'''
+			Label: Moth Audio Replace
+			Tooltip: ""
 		}
 
 		TuskAudioReplace: {
-			Label: (NOT IMPLEMENTED) The Tusk's Theme Song
-			Tooltip:
-				'''
-				Choose your preferred Bloody Tusk theme music to replace
-				Options: Original Theme, Old Theme
-				This setting won't take effect if The Tusk is currently alive
-				NOTE: This config is not fully set up yet and therefore does not work at the moment
-				'''
-		}
-
-		Headers: {
-			TextureReplace: Texture Replace Header
-			AudioReplace: Audio Replace Header
+			Label: Tusk Audio Replace
+			Tooltip: ""
 		}
 	}
 
 	TextureReplaceMode: {
 		Tooltip: ""
 		Terraria.Label: Terraria
-		EternalResolve.Label: Eternal Resolve
-		Myth.Label: Myth
 		Default.Label: Default
+		EternalResolve.Label: Eternal Resolve
 		Everglow.Label: Everglow
+		Myth.Label: Myth
 	}
 
 	MothAudioReplaceMode: {
 		Tooltip: ""
-		MothFighting.Label: Original
-		AltMothFighting.Label: Alternate
-		OldMothFighting.Label: Old
+		MothFighting.Label: Moth Fighting
+		AltMothFighting.Label: Alt Moth Fighting
+		OldMothFighting.Label: Old Moth Fighting
 	}
 
 	TuskAudioReplaceMode: {
 		Tooltip: ""
-		TuskFighting.Label: Original
-		OldTuskFighting.Label: Old
+		TuskFighting.Label: Tusk Fighting
+		OldTuskFighting.Label: Old Tusk Fighting
 	}
 
 	FogConfigs: {
 		DisplayName: Fog Configs
 
 		EnableScattering: {
-			Label: 开启雾效
-			Tooltip: 是否开启参与介质散射
+			Label: Enable Scattering
+			Tooltip: ""
 		}
 
 		EnableLightUpload: {
-			Label: 【性能测试】开启光源数据
-			Tooltip: 是否启用发光体数据上传（CPU到GPU）
+			Label: Enable Light Upload
+			Tooltip: ""
 		}
 
 		MaxBloomRadius: {
-			Label: 模糊半径
-			Tooltip: 光效的最大溢出半径，最终半径是以2为底的指数，越大越影响性能
+			Label: Max Bloom Radius
+			Tooltip: ""
 		}
 
 		BloomIntensity: {
-			Label: 光效强度
-			Tooltip: 光效的强度，用于放大亮度
+			Label: Bloom Intensity
+			Tooltip: ""
 		}
 
 		OffscreenTiles: {
-			Label: 离屏物块渲染数量
-			Tooltip: 光效需要计算超出屏幕的物块数量
+			Label: Offscreen Tiles
+			Tooltip: ""
 		}
 
 		LightLuminanceThreashold: {
-			Label: 光源阈值
-			Tooltip: 可以调整原版点亮物块的光源阈值
+			Label: Light Luminance Threashold
+			Tooltip: ""
 		}
 
 		GaussianKernel: {
-			Label: 是否开启高斯卷积核
-			Tooltip: 更柔和的效果，但是性能较差
+			Label: Gaussian Kernel
+			Tooltip: ""
 		}
 
 		FogAbsorptionR: {
-			Label: 雾吸收率（R）
-			Tooltip: 雾吸收红色通道直接光的比率，越大则越暗淡
+			Label: Fog Absorption R
+			Tooltip: ""
 		}
 
 		FogAbsorptionG: {
-			Label: 雾吸收率（G）
-			Tooltip: 雾吸收绿色通道直接光的比率，越大则越暗淡
+			Label: Fog Absorption G
+			Tooltip: ""
 		}
 
 		FogAbsorptionB: {
-			Label: 雾吸收率（B）
-			Tooltip: 雾吸收蓝色通道直接光的比率，越大则越暗淡
+			Label: Fog Absorption B
+			Tooltip: ""
 		}
 
 		FogScatterWithDistance: {
-			Label: 扩散率随距离增大
-			Tooltip: 是否让散射效果随着距离增大而增大
+			Label: Fog Scatter With Distance
+			Tooltip: ""
 		}
 
 		FogBloomRate: {
-			Label: 雾散射扩散率
-			Tooltip: 散射光的扩散比率
+			Label: Fog Bloom Rate
+			Tooltip: ""
 		}
 
 		FogBloomAbsorptionFactor: {
-			Label: 雾散射能见度影响系数
-			Tooltip: 散射光受到能见度影响的比率，0为不受能见度影响，1完全受能见度影响
+			Label: Fog Bloom Absorption Factor
+			Tooltip: ""
 		}
 
 		EnableTemporalInterp: {
-			Label: 开启Temporal插值
-			Tooltip: 是否允许光照结果进行帧间插值来平滑
+			Label: Enable Temporal Interp
+			Tooltip: ""
 		}
 	}
 }
-
-Config: {
-	Header: {
-		TextureReplace: Texture Configurations
-		AudioReplace: Audio Configurations
-	}
-}
-
-ExtraTooltip: {
-	Misc.UnfinishedItem: "[c/BA0022:This item is unfinished]"
-
-	FireflyItems: {
-		MothEyeCriteriaText: "[c/6B6BB2:In order to harness a fragment of the ommateum, a powerful underworld creature must be slain]"
-		MothEyeText0: "[c/7FC1FF:While in the Firefly biome:]"
-		MothEyeText1: "[c/7FC1FF:- Mana cost is reduced by 5%]"
-		MothEyeText2: "[c/7FC1FF:- The effectiveness of mana sickness is reduced by 4]"
-		MothEyeText3: "[c/7FC1FF:- All Firefly weapons deal 5% more damage]"
-		MothEyeText4: "[c/7FC1FF:- Some Firefly-related items gain bonuses]"
-		MothEyeBonusText: "[c/7FC1FF:Bonus gained from Ommateum of the Moth:]"
-		MEyeBonusTextMothBlade: "[c/7FC1FF:- Moths appearing from this blade move faster]"
-		MEyeBonusTextMothBow: "[c/7FC1FF:- Reduces the charging time of the bow]"
-		MEyeBonusTextMothGun0: "[c/7FC1FF:- The phosphorescent bullets deal more damage]"
-		MEyeBonusTextMothGun1: "[c/7FC1FF:- Prevents recoil from occuring]"
-		MEyeBonusTextMothYoyo: "[c/7FC1FF:- More moths appear from this yoyo]"
-		MEyeBonusTextMothChry0: "[c/7FC1FF:- Projectiles summoned from the moths can go through tiles]"
-		MEyeBonusTextMothChry1: "[c/7FC1FF:- The moths have a chance to shoot a stronger projectile]"
-		MEyeBonusTextMothFan: "[c/7FC1FF:- Moths appearing from this fan last longer]"
-		MEyeBonusTextGlowSword0: "[c/7FC1FF:- The initial scale of the glow wood sword projectiles are larger]"
-		MEyeBonusTextGlowSword1: "[c/7FC1FF:- Glow sword projectiles deal more damage]"
-		FFBBadge0: "[c/7FC1FF:'Affected by rage of that giant moth, your attacks become wilder']"
-		FFBBadge1: "[c/7FC1FF:Defense is lowered based on how much defense you currently have, up to -12]"
-		FFBBadge2: "[c/7FC1FF:Increases damage by 18%]"
-		FFBBadge3: "[c/7FC1FF:Increases melee speed by 10%]"
-		FFBBadge4: "[c/7FC1FF:Base critical strike chance for melee weapons and whips is reduced to 0]"
-	}
-
-	Spellbook: {
-		WaterBolt:
-			'''
-			Generates a waterball for every 5 hits which can stack up to 6
-			Right click consumes 1 and teleport you to cursor
-			Middle click at maximum stack consumes all and amplify attacks for 5 seconds
-			Clears all waterballs when switch weapons
-			'''
-		DemonScythe:
-			'''
-			The demon scythes are replaced with lunatic blades
-			Damage and knockback rises as speed increases
-			'''
-		BookofSkulls:
-			'''
-			Hitting enemies releases several bone nails which can stack up to 12
-			The bone nails will be fired with the next attack
-			Right click summons flaming bone claws on the ground
-			'''
-		CrystalStorm:
-			'''
-			Periodically fires a large stormcrystal
-			The stormcrystal forms an attracting tornado after broken
-			Coins, hearts and stars inside the tornado will be attracted to the player
-			'''
-		CursedFlames:
-			'''
-			The cursed flame balls can bounce or penetrate for 3 times
-			Damage increases by 20% for each bounce or penetration
-			'''
-		GoldenShower:
-			'''
-			Sprays ichor shower on opened and closed
-			Scale of the ichor shower on book closed increases with cast time
-			Right click increases both the spray rate and mana cost
-			'''
-		MagnetSphere:
-			'''
-			Multiple magnet spheres can exist simultaneously
-			They randomly electrocute nearby enemies and burst into powerful lightnings on hit
-			'''
-		RazorbladeTyphoon:
-			'''
-			Fires typhoons that attract and home into enemies
-			Coins, hearts and stars inside the typhoon will be attracted to the player
-			If casted for a long time, accumulation of substance will result in unexpected consequences
-			'''
-		LunarFlareBook:
-			'''
-			Reveals the star sky
-			               Gradually increases crit chance and crit damage
-			'''
-	}
-}
-
-PylonSystem.FireflyPylonLimit: A Firefly Pylon can only teleport you to another Firefly Pylon
