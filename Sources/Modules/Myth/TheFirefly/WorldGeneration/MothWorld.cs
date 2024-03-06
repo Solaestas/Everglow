@@ -299,21 +299,17 @@ internal class MothWorld : Subworld
 		}
 		base.DrawMenu(gameTime);
 	}
-	public override bool ChangeAudio()
-	 //TODO: MothBiomeOld should play when entering and exiting the firefly subworld but MothBiome should play while inside the subworld.
-	{
-		Main.newMusic = MythContent.QuickMusic("MothBiomeOld");
-		if (SubworldSystem.Enter<MothWorld>())
-		{
-			Main.newMusic = MythContent.QuickMusic("MothBiome");
-			return true;
-		}
-		else
-		{
-
-		}
-		return false;
-	}
+	//public override bool ChangeAudio()
+	// TODO: MothBiomeOld should play when entering and exiting the firefly subworld but MothBiome should play while inside the subworld.
+	//{
+	//	Main.newMusic = MythContent.QuickMusic("MothBiomeOld");
+	//	if (SubworldSystem.IsActive<MothWorld>())
+	//	{
+	//		Main.newMusic = MythContent.QuickMusic("MothBiome");
+	//		return true;
+	//	}
+	//	return false;
+	//}
 	public override void OnEnter()
 	{
 		SubworldSystem.hideUnderworld = true;
