@@ -1,10 +1,22 @@
+using System;
 using Everglow.Commons.Enums;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
+using Everglow.Commons.Weapons.StabbingSwords;
+using Microsoft.CodeAnalysis.Text;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
+using Mono.Cecil;
+using ReLogic.Content;
+using ReLogic.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.UI.ResourceSets;
+using Terraria.Localization;
+using Terraria.UI;
+using static Terraria.Localization.NetworkText;
 
 namespace Everglow.MEAC.NonTrueMeleeProj;
 
@@ -48,17 +60,17 @@ public class GoldShield : ModProjectile, IWarpProjectile
 	}
 	private void AllocateRenderTarget(Vector2 size)
 	{
-		if(Ins.VisualQuality.High)
+		if (Ins.VisualQuality.High)
 		{
 			var gd = Main.instance.GraphicsDevice;
 			BlackAreaSwap = new RenderTarget2D(gd, (int)size.X, (int)size.Y);
 			BlackAreaOrig = new RenderTarget2D(gd, Main.screenWidth, Main.screenHeight);
 		}
 	}
-	
+
 	public void RenderCanvasOfShield()
 	{
-		if(ProjectileCount <= 0 || !Ins.VisualQuality.High)
+		if (ProjectileCount <= 0 || !Ins.VisualQuality.High)
 		{
 			return;
 		}
@@ -203,7 +215,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 		}
 
 		Main.graphics.GraphicsDevice.Textures[0] = texture;
-		if(texture1 != null)
+		if (texture1 != null)
 		{
 			Main.graphics.GraphicsDevice.Textures[1] = texture1;
 		}
@@ -318,7 +330,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 			{
 				DrawPost(new Color(255, 255, 255, 0), 200, 40, 1, shieldTexture);
 			}
-			
+
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
@@ -365,7 +377,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 
 			DrawDoubleLine(DrawCen + new Vector2(0, -k0 * 150) * WaveRange + new Vector2(timeValueOfWidth), DrawCen + new Vector2(k0 * 75, -k0 * 75) * WaveRange, publicC1, publicC2);
 			DrawDoubleLine(DrawCen + new Vector2(k0 * 75, -k0 * 75) * WaveRange, DrawCen + new Vector2(k0 * 150, 0) * WaveRange + new Vector2(timeValueOfWidth), publicC2, publicC1);
-			DrawDoubleLine(DrawCen + new Vector2(0, -k0 * 150) * WaveRange + new Vector2(timeValueOfWidth , - timeValueOfWidth), DrawCen + new Vector2(-k0 * 75, -k0 * 75) * WaveRange, publicC1, publicC2);
+			DrawDoubleLine(DrawCen + new Vector2(0, -k0 * 150) * WaveRange + new Vector2(timeValueOfWidth, -timeValueOfWidth), DrawCen + new Vector2(-k0 * 75, -k0 * 75) * WaveRange, publicC1, publicC2);
 			DrawDoubleLine(DrawCen + new Vector2(-k0 * 75, -k0 * 75) * WaveRange, DrawCen + new Vector2(-k0 * 150, 0) * WaveRange - new Vector2(timeValueOfWidth, -timeValueOfWidth), publicC2, publicC1);
 
 			DrawDoubleLine(DrawCen + new Vector2(0, k0 * 150) * WaveRange + new Vector2(timeValueOfWidth, -timeValueOfWidth), DrawCen + new Vector2(k0 * 75, k0 * 75) * WaveRange, publicC1, publicC2);
@@ -392,65 +404,529 @@ public class GoldShield : ModProjectile, IWarpProjectile
 		return false;
 	}
 }
-public class GoldShieldPlayer : ModPlayer
+
+public class GoldShieldUIDrawer : ModSystem
 {
+	/*public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+	{
+		int ShieldBarIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Resource Bars"));
+		if (ShieldBarIndex != -1)
+		{
+			
+			layers.Insert(ShieldBarIndex, new LegacyGameInterfaceLayer(
+				"EverglowMod: Shield Bar",
+				delegate
+				{
+					
+					ShieldBarDraw(Main.spriteBatch);
+					return true;
+				},
+				InterfaceScaleType.UI)
+			);
+		}
 
-	public int GoldShieldDurability;
-	public bool Dodge;
+	}*/
 
-	/*public override bool FreeDodge(Player.HurtInfo info)
+	public override void PostDrawInterface(SpriteBatch spriteBatch)
+	{
+		ShieldBarDraw(Main.spriteBatch);
+	}
+	public void ShieldBarDraw(SpriteBatch spriteBatch)
 	{
 		
-	}*/
-	public override bool FreeDodge(Player.HurtInfo info)
-	{
-		if (Dodge)
-		{
-			Dodge = false;
-			return true;
-		}
-		return base.FreeDodge(info);
-	}
+		Player p = Main.LocalPlayer;
 
-	public void PreHurt(ref Player.HurtInfo info)
-	{
-		GoldShieldDurability = 0;
-		foreach (Projectile proj in Main.projectile)
+		if (p.GetModPlayer<GoldShieldPlayer>().HasShield)
 		{
-			if (proj.active & proj.owner == Player.whoAmI & proj.type == ModContent.ProjectileType<GoldShield>())
+			
+			
+			if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_Default"))
 			{
-				GoldShieldDurability = (int)proj.ai[1];
-				if (GoldShieldDurability >= info.Damage)
-				{
-					Dodge = true;
-					this.GoldShieldDurability -= (int)info.Damage;
-					info.Damage *= 0;
-				}
-				else
-				{
-					info.Damage -= GoldShieldDurability;
-					this.GoldShieldDurability *= 0;
-				}
-				Main.player[proj.owner].immune = true;
-				Main.player[proj.owner].immuneTime = 30;
-				Main.player[proj.owner].noKnockback = true;
-				proj.ai[1] = GoldShieldDurability;
-				if (proj.ai[1] <= 0)
-				{
-					proj.ai[1] = 0;
-					proj.ai[0] = 10;
-					proj.timeLeft = 15;
-				}
+				p.GetModPlayer<GoldShieldPlayer>().ClassicDraw();
+			}
+			else if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_New"))
+			{
+				p.GetModPlayer<GoldShieldPlayer>().FancyDraw(new FancyClassicPlayerResourcesDisplaySet("New", "New", "FancyClassic", AssetRequestMode.ImmediateLoad));
+			}
+			else if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_HorizontalBars"))
+			{
+				p.GetModPlayer<GoldShieldPlayer>().HorizontalDraw(new HorizontalBarsPlayerResourcesDisplaySet("HorizontalBars", "HorizontalBars", "HorizontalBars", AssetRequestMode.ImmediateLoad));
+			}
+			else if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_NewWithText"))
+			{
+				p.GetModPlayer<GoldShieldPlayer>().FancyDraw(new FancyClassicPlayerResourcesDisplaySet("NewWithText", "NewWithText", "FancyClassic", AssetRequestMode.ImmediateLoad));
+			}
+			else if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_HorizontalBarsWithText"))
+			{
+				p.GetModPlayer<GoldShieldPlayer>().HorizontalDraw(new HorizontalBarsPlayerResourcesDisplaySet("HorizontalBarsWithText", "HorizontalBarsWithText", "HorizontalBars", AssetRequestMode.ImmediateLoad));
+			}
+			else if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_HorizontalBarsWithFullText"))
+			{
+				p.GetModPlayer<GoldShieldPlayer>().HorizontalDraw(new HorizontalBarsPlayerResourcesDisplaySet("HorizontalBarsWithFullText", "HorizontalBarsWithFullText", "HorizontalBars", AssetRequestMode.ImmediateLoad));
 			}
 		}
 	}
-	public override void ModifyHurt(ref Player.HurtModifiers modifiers)
+
+	public class GoldShieldPlayer : ModPlayer
 	{
-		modifiers.ModifyHurtInfo += new Player.HurtModifiers.HurtInfoModifier(this.PreHurt);
-		if (GoldShieldDurability > 0)
+
+		public float GoldShieldDurability;
+		public bool Dodge;
+		public bool HasShield;
+
+		public override bool FreeDodge(Player.HurtInfo info)
 		{
-			modifiers.DisableDust();
-			modifiers.DisableSound();
+			if (Dodge)
+			{
+				Dodge = false;
+				return true;
+			}
+			return base.FreeDodge(info);
 		}
+
+		public void ShieldDuration()
+		{
+			foreach (Projectile proj in Main.projectile)
+			{
+				if (proj.active & proj.owner == Player.whoAmI & proj.type == ModContent.ProjectileType<GoldShield>())
+				{
+					HasShield = true;
+					GoldShieldDurability = proj.ai[1];
+					//		GoldShieldDurability -= 0.1f;
+					if (GoldShieldDurability <= 0)
+					{
+						GoldShieldDurability = 0;
+					}
+					proj.ai[1] = GoldShieldDurability;
+					break;
+				}
+				else
+				{
+					HasShield = false;
+					GoldShieldDurability = 0;
+				}
+			}
+		}
+		public override void PreUpdate()
+		{
+			ShieldDuration();
+		}
+		public override void PostUpdate()
+		{
+			ShieldDuration();
+		}
+		public void PreHurt(ref Player.HurtInfo info)
+		{
+			bool shieldsTookHit = false;
+			foreach (Projectile proj in Main.projectile)
+			{
+				if (HasShield)
+				{
+
+					GoldShieldDurability = (int)proj.ai[1];
+					if (GoldShieldDurability >= info.Damage)
+					{
+						Dodge = true;
+					}
+					int DamageBlocked = Math.Min(info.Damage, (int)GoldShieldDurability);
+					GoldShieldDurability -= DamageBlocked;
+					shieldsTookHit = true;
+					info.Damage-= DamageBlocked;
+					if (GoldShieldDurability<=0)
+					{
+						GoldShieldDurability=0;
+					}
+					if (shieldsTookHit && DamageBlocked!=0)
+					{
+						CombatText.NewText(new Rectangle((int)Player.Center.X - 10, (int)Player.Center.Y - 10, 20, 20), Color.Gold, DamageBlocked);
+						proj.ai[0] = 10;
+					}
+
+					Main.player[proj.owner].immune = true;
+					Main.player[proj.owner].immuneTime = 30;
+					Main.player[proj.owner].noKnockback = true;
+					proj.ai[1] = GoldShieldDurability;
+					if (proj.ai[1] <= 0)
+					{
+						proj.ai[1] = 0;
+	
+						proj.timeLeft = 15;
+					}
+				}
+			}
+		}
+		public override void ModifyHurt(ref Player.HurtModifiers modifiers)
+		{
+			modifiers.ModifyHurtInfo += new Player.HurtModifiers.HurtInfoModifier(this.PreHurt);
+			if (GoldShieldDurability > 0)
+			{
+				modifiers.DisableDust();
+				modifiers.DisableSound();
+			}
+		}
+
+
+		int _lastHeartPanelIndex;
+		float _currentPlayerLife;
+		float _lifePerHeart;
+		int _playerLifeFruitCount;
+		int _lastHeartFillingIndex;
+		int _heartCountRow1;
+		int _heartCountRow2;
+		bool _drawText;
+
+		#region ClassicDraw
+
+		public void ClassicDraw()
+		{
+
+
+			SpriteBatch spriteBatch = Main.spriteBatch;
+			Color color = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
+			PlayerStatsSnapshot snapshot = new PlayerStatsSnapshot(Player);
+			ClassicPlayerResourcesDisplaySet ing = new ClassicPlayerResourcesDisplaySet("Default", "Default");
+
+			ing.UI_ScreenAnchorX = Main.screenWidth - 800;
+			if (Player.ghost || Player.statLifeMax2 <= 0 || snapshot.AmountOfLifeHearts <= 0)
+				return;
+
+			int MaxGoldShieldDurability;
+			MaxGoldShieldDurability = (int)(Player.statLifeMax * 0.6f);
+			float UIDisplay_ShieldOnHeart;
+
+			int HeartsNum = snapshot.AmountOfLifeHearts;
+			UIDisplay_ShieldOnHeart = MaxGoldShieldDurability / (float)HeartsNum;
+
+			/*	int num4 = (int)((float)Player.statLifeMax2 / UIDisplay_ShieldOnHeart);
+				if (num4 >= 10)
+					num4 = 10;
+
+				string text = Lang.inter[0].Value + " " + (int)GoldShieldDurability + "/" + MaxGoldShieldDurability;
+				Vector2 vector = FontAssets.MouseText.Value.MeasureString(text);
+				if (!Player.ghost)
+				{
+					spriteBatch.DrawString(FontAssets.MouseText.Value, "盾量", new Vector2((float)(500 + 13 * num4) - vector.X * 0.5f + Main.screenWidth - 800, 6f), color, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+					spriteBatch.DrawString(FontAssets.MouseText.Value, ((int)GoldShieldDurability+1) + "/" + MaxGoldShieldDurability, new Vector2((float)(500 + 13 * num4) + vector.X * 0.5f + Main.screenWidth - 800, 6f), color, 0f, new Vector2(FontAssets.MouseText.Value.MeasureString(Player.statLife + "/" + Player.statLifeMax2).X, 0f), 1f, SpriteEffects.None, 0f);
+				}*/
+
+
+
+			for (int i = 1; i < (int)((float)MaxGoldShieldDurability / UIDisplay_ShieldOnHeart) + 1; i++)
+			{
+				int num5 = 255;
+				float num6 = 1f;
+				bool flag = false;
+				if ((float)GoldShieldDurability >= (float)i * UIDisplay_ShieldOnHeart)
+				{
+					num5 = 255;
+					if ((float)GoldShieldDurability == (float)i * UIDisplay_ShieldOnHeart)
+						flag = true;
+				}
+				else
+				{
+					float num7 = ((float)GoldShieldDurability - (float)(i - 1) * UIDisplay_ShieldOnHeart) / UIDisplay_ShieldOnHeart;
+					num5 = (int)(30f + 225f * num7);
+					if (num5 < 30)
+						num5 = 30;
+
+					num6 = num7 / 4f + 0.75f;
+					if ((double)num6 < 0.75)
+						num6 = 0.75f;
+
+					if (num7 > 0f)
+						flag = true;
+				}
+
+				if (flag)
+					num6 += Main.cursorScale - 1f;
+
+				int num8 = 0;
+				int num9 = 0;
+				if (i > 10)
+				{
+					num8 -= 260;
+					num9 += 26;
+				}
+
+
+
+				int a = (int)((double)num5 * 0.9);
+				if (!Player.ghost)
+				{
+					var heartTexture = ModAsset.ShieldHeart;
+
+
+					float num2 = 1f / (float)HeartsNum;
+					float _hpPercent = (float)GoldShieldDurability / MaxGoldShieldDurability;
+					/*
+					float t = 1f - fillPercent;
+					*/
+					float t = _hpPercent;
+					float lerpValue = Utils.GetLerpValue(num2 * (float)i, num2 * (float)(i + 1), t, clamped: true);
+
+					Rectangle value = heartTexture.Frame();
+					int num3 = (int)((float)value.Width * (1f - lerpValue));
+
+					value.Width -= num3;
+
+
+					Vector2 position = new Vector2(Main.screenWidth - 312 + 26 * (i - 1) + num8 + UIDisplay_ShieldOnHeart + heartTexture.Width() / 2, 32f + heartTexture.Height() * (1 - num6) / 2f + num9 + heartTexture.Height() / 2);
+
+					ResourceOverlayDrawContext drawContext = new ResourceOverlayDrawContext(snapshot, ing, i - 1, heartTexture)
+					{
+						position = position,
+						source = value,
+						color = new Color(num5, num5, num5, a),
+						origin = heartTexture.Size() / 2f,
+						scale = new Vector2(num6)
+					};
+					ResourceOverlayLoader.DrawResource(drawContext);
+				}
+			}
+
+		}
+
+
+
+
+		#endregion
+
+		#region FancyDraw
+
+
+
+		public void FancyDraw(FancyClassicPlayerResourcesDisplaySet Displayset)
+		{
+	
+			SpriteBatch spriteBatch = Main.spriteBatch;
+			PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(Player);
+			int MaxGoldShieldDurability;
+			MaxGoldShieldDurability = (int)(Player.statLifeMax * 0.6f);
+
+			int HeartsNum = playerStatsSnapshot.AmountOfLifeHearts;
+			_playerLifeFruitCount = playerStatsSnapshot.LifeFruitCount;
+			_lifePerHeart = MaxGoldShieldDurability / (float)HeartsNum;
+			_currentPlayerLife = playerStatsSnapshot.Life;
+
+			/*
+			_heartCountRow1 = Utils.Clamp((int)((float)playerStatsSnapshot.LifeMax / _lifePerHeart), 0, 10);
+			_heartCountRow2 = Utils.Clamp((int)((float)(playerStatsSnapshot.LifeMax - 200) / _lifePerHeart), 0, 10);
+			*/
+			_heartCountRow1 = Utils.Clamp(playerStatsSnapshot.AmountOfLifeHearts, 0, 10);
+			_heartCountRow2 = Utils.Clamp(playerStatsSnapshot.AmountOfLifeHearts - 10, 0, 10);
+			int lastHeartFillingIndex = (int)((float)playerStatsSnapshot.Life / _lifePerHeart);
+			_lastHeartFillingIndex = lastHeartFillingIndex;
+			_lastHeartPanelIndex = _heartCountRow1 + _heartCountRow2 - 1;
+
+			/*
+			_starCount = (int)((float)playerStatsSnapshot.ManaMax / _manaPerStar);
+			*/
+
+			PlayerStatsSnapshot preparedSnapshot = playerStatsSnapshot;
+
+			// Create a cached override for usages of 'default' to avoid copypasting.
+			ResourceDrawSettings defaultResourceDrawSettings = default;
+			defaultResourceDrawSettings.StatsSnapshot = preparedSnapshot;
+			defaultResourceDrawSettings.DisplaySet = Displayset;
+			;
+
+
+			Color color = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
+
+			if (Displayset.ConfigKey == "NewWithText")
+				_drawText = true;
+			else
+				_drawText = false;
+
+			Vector2 vector = new Vector2(Main.screenWidth - 300 + 4, 15f);
+			if (_drawText)
+			{
+				vector.Y += 6f;
+			}
+
+			bool isHovered = false;
+
+			ResourceDrawSettings resourceDrawSettings = defaultResourceDrawSettings;
+			resourceDrawSettings.ElementCount = _heartCountRow1;
+			resourceDrawSettings.ElementIndexOffset = 0;
+			resourceDrawSettings.TopLeftAnchor = vector + new Vector2(15f, 15f);
+			resourceDrawSettings.GetTextureMethod = HeartFillingDrawer;
+			resourceDrawSettings.OffsetPerDraw = Vector2.UnitX * 2f;
+			resourceDrawSettings.OffsetPerDrawByTexturePercentile = Vector2.UnitX;
+			resourceDrawSettings.OffsetSpriteAnchor = new Vector2(11f, 11f);
+			resourceDrawSettings.OffsetSpriteAnchorByTexturePercentile = Vector2.Zero;
+			resourceDrawSettings.Draw(spriteBatch, ref isHovered);
+			resourceDrawSettings = defaultResourceDrawSettings;
+			resourceDrawSettings.ElementCount = _heartCountRow2;
+			resourceDrawSettings.ElementIndexOffset = 10;
+			resourceDrawSettings.TopLeftAnchor = vector + new Vector2(15f, 15f) + new Vector2(0f, 28f);
+			resourceDrawSettings.GetTextureMethod = HeartFillingDrawer;
+			resourceDrawSettings.OffsetPerDraw = Vector2.UnitX * 2f;
+			resourceDrawSettings.OffsetPerDrawByTexturePercentile = Vector2.UnitX;
+			resourceDrawSettings.OffsetSpriteAnchor = new Vector2(11f, 11f);
+			resourceDrawSettings.OffsetSpriteAnchorByTexturePercentile = Vector2.Zero;
+			resourceDrawSettings.Draw(spriteBatch, ref isHovered);
+		}
+
+		private void HeartFillingDrawer(int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
+		{
+
+
+			sourceRect = null;
+			offset = Vector2.Zero;
+			sprite = ModAsset.ShieldHeart;
+			PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(Player);
+			int HeartsNum = playerStatsSnapshot.AmountOfLifeHearts;
+			_playerLifeFruitCount = playerStatsSnapshot.LifeFruitCount;
+			int MaxGoldShieldDurability;
+			MaxGoldShieldDurability = (int)(Player.statLifeMax * 0.6f);
+
+			float _hpPercent = (float)GoldShieldDurability / MaxGoldShieldDurability;
+			offset = Vector2.Zero;
+			float num = 1f;
+			float num2 = 1f / (float)HeartsNum;
+
+			/*
+			float t = 1f - fillPercent;
+			*/
+			float t = _hpPercent;
+			float lerpValue = Utils.GetLerpValue(num2 * (float)elementIndex, num2 * (float)(elementIndex + 1), t, clamped: true);
+
+			/*
+			num = 1f - lerpValue;
+			*/
+			num = lerpValue;
+			drawScale = 1f;
+			Rectangle value = sprite.Frame();
+			int num3 = (int)((float)value.Width * (1f - num));
+
+			value.Width -= num3;
+			sourceRect = value;
+		}
+
+		#endregion FancyDraw
+
+		#region HorizontalDraw
+		public void HorizontalDraw(HorizontalBarsPlayerResourcesDisplaySet Displayset)
+		{
+
+
+			Asset<Texture2D> _panelMiddleHP = Main.Assets.Request<Texture2D>("Images\\UI\\PlayerResourceSets\\HorizontalBars\\HP_Panel_Middle", AssetRequestMode.ImmediateLoad);
+
+
+			PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(Player);
+
+			// Make drawing use the automatically-clamped AmountOf properties (#HealthManaAPI)
+			/*
+			_hpSegmentsCount = (int)((float)playerStatsSnapshot.LifeMax / playerStatsSnapshot.LifePerSegment);
+			_mpSegmentsCount = (int)((float)playerStatsSnapshot.ManaMax / playerStatsSnapshot.ManaPerSegment);
+			*/
+			int _drawTextStyle;
+			int MaxGoldShieldDurability;
+			MaxGoldShieldDurability = (int)(Player.statLifeMax * 0.6f);
+
+			if (Displayset.ConfigKey == "HorizontalBarsWithFullText")
+				_drawTextStyle = 2;
+			else if (Displayset.ConfigKey == "HorizontalBarsWithText")
+				_drawTextStyle = 1;
+			else
+				_drawTextStyle = 0;
+
+			int HeartsNum = playerStatsSnapshot.AmountOfLifeHearts;
+
+			int _maxSegmentCount = 20;
+			_playerLifeFruitCount = playerStatsSnapshot.LifeFruitCount;
+			float _hpPercent = (float)GoldShieldDurability / MaxGoldShieldDurability;
+
+			PlayerStatsSnapshot preparedSnapshot = playerStatsSnapshot;
+			SpriteBatch spriteBatch = Main.spriteBatch;
+			int num = 16;
+			int num2 = 18;
+			int num3 = Main.screenWidth - 300 - 22 + num;
+			if (_drawTextStyle == 2)
+			{
+				num2 += 2;
+
+			}
+			else if (_drawTextStyle == 1)
+			{
+				num2 += 4;
+			}
+
+			Color color = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
+
+
+			Vector2 vector = new Vector2(num3, num2);
+			vector.X += (_maxSegmentCount - HeartsNum) * _panelMiddleHP.Width();
+			bool isHovered = false;
+			ResourceDrawSettings resourceDrawSettings = default(ResourceDrawSettings);
+
+
+			resourceDrawSettings = default(ResourceDrawSettings);
+			resourceDrawSettings.ElementCount = HeartsNum;
+			resourceDrawSettings.ElementIndexOffset = 0;
+			// Make the filling draw from right to left (#HealthManaAPI)
+			resourceDrawSettings.TopLeftAnchor = vector + new Vector2(6f, 6f);
+			resourceDrawSettings.GetTextureMethod = LifeFillingDrawer;
+			resourceDrawSettings.OffsetPerDraw = new Vector2(ModAsset.Shield_Fill.Width(), 0f);
+			resourceDrawSettings.OffsetPerDrawByTexturePercentile = Vector2.Zero;
+			resourceDrawSettings.OffsetSpriteAnchor = Vector2.Zero;
+			resourceDrawSettings.OffsetSpriteAnchorByTexturePercentile = Vector2.Zero;
+			resourceDrawSettings.StatsSnapshot = preparedSnapshot;
+			resourceDrawSettings.DisplaySet = Displayset;
+			resourceDrawSettings.Draw(spriteBatch, ref isHovered);
+
+
+		}
+
+
+		private void LifeFillingDrawer(int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
+		{
+			sprite = ModAsset.Shield_Fill;
+			PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(Player);
+			int HeartsNum = playerStatsSnapshot.AmountOfLifeHearts;
+			_playerLifeFruitCount = playerStatsSnapshot.LifeFruitCount;
+			int MaxGoldShieldDurability;
+			MaxGoldShieldDurability = (int)(Player.statLifeMax * 0.6f);
+			float _hpPercent = (float)GoldShieldDurability / MaxGoldShieldDurability;
+
+
+			FillBarByValues(elementIndex, sprite, HeartsNum, _hpPercent, out offset, out drawScale, out sourceRect);
+
+			// Make the bar fillings draw from right to left (#HealthManaAPI)
+			int opposite = lastElementIndex - (elementIndex - firstElementIndex);
+			int drawIndexOffset = opposite - elementIndex;
+			offset.X += drawIndexOffset * sprite.Width();
+		}
+
+		public static void FillBarByValues(int elementIndex, Asset<Texture2D> sprite, int segmentsCount, float fillPercent, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
+		{
+			sourceRect = null;
+			offset = Vector2.Zero;
+			float num = 1f;
+			float num2 = 1f / (float)segmentsCount;
+
+			/*
+			float t = 1f - fillPercent;
+			*/
+			float t = fillPercent;
+			float lerpValue = Utils.GetLerpValue(num2 * (float)elementIndex, num2 * (float)(elementIndex + 1), t, clamped: true);
+
+			/*
+			num = 1f - lerpValue;
+			*/
+			num = lerpValue;
+			drawScale = 1f;
+			Rectangle value = sprite.Frame();
+			int num3 = (int)((float)value.Width * (1f - num));
+			offset.X += num3;
+			value.X += num3;
+			value.Width -= num3;
+			sourceRect = value;
+		}
+
+		#endregion HorizontalDraw
+
+
 	}
 }
