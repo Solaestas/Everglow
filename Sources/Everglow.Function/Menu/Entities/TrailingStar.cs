@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Sources.Menu.Entities
+namespace Everglow.Commons.Menu.Entities
 {
-    internal class TraillingStar : Star
+    public class TrailingStar : Star
     {
         public Vector2[] oldPos = new Vector2[15];
         public Vector2 velocity;
