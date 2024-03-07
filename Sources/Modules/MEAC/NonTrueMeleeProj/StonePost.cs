@@ -1,6 +1,7 @@
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
+using Microsoft.Xna.Framework.Graphics;
 using SteelSeries.GameSense;
 using Terraria.GameContent;
 namespace Everglow.MEAC.NonTrueMeleeProj;
@@ -58,47 +59,86 @@ public class StonePost : ModProjectile, IWarpProjectile
 		bool b3 = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), hitSize, v3, v0);
 		return b0 || b1 || b2 || b3;
 	}
-	public static void DrawDoubleLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2)
+	//public static void DrawDoubleLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2)
+	//{
+	//	float Wid = 1.5f;
+	//	Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
+
+	//	var vertex2Ds = new List<Vertex2D>();
+
+	//	for (int x = 0; x < 3; x++)
+	//	{
+	//		vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+	//		vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+	//		vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+
+	//		vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+	//		vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+	//		vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+	//	}
+
+
+	//	Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
+	//	Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
+	//}
+	//public static void DrawDoubleLine(VFXBatch spriteBatch, Vector2 StartPos, Vector2 EndPos, Color color1, Color color2)
+	//{
+	//	float Wid = 1.5f;
+	//	Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
+
+	//	var vertex2Ds = new List<Vertex2D>();
+
+	//	for (int x = 0; x < 3; x++)
+	//	{
+	//		vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+	//		vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+	//		vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+
+	//		vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+	//		vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+	//		vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+	//	}
+
+	//	spriteBatch.Draw(TextureAssets.MagicPixel.Value, vertex2Ds, PrimitiveType.TriangleList);
+	//}
+	public static void DrawFoldLine(VFXBatch spriteBatch, Vector2 center, Vector2 vec1, Vector2 vec2, Vector2 vec3, bool back, Color c1, Color c2)
 	{
-		float Wid = 1.5f;
-		Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
-
-		var vertex2Ds = new List<Vertex2D>();
-
-		for (int x = 0; x < 3; x++)
+		float widthScale = (float)((back ? Math.Sqrt(150 * 150 + 40 * 40) : Math.Sqrt(150 * 150 + 50 * 50)) / 150f);
+		Vector2 v1 = vec1 + Vector2.Normalize(vec1 - center) * 1.5f * widthScale;
+		Vector2 v2 = vec1 - Vector2.Normalize(vec1 - center) * 1.5f * widthScale;
+		Vector2 v3 = vec2 + Vector2.Normalize(vec2 - center) * 1.5f * widthScale;
+		Vector2 v4 = vec2 - Vector2.Normalize(vec2 - center) * 1.5f * widthScale;
+		Vector2 v5 = vec3 + Vector2.Normalize(vec3 - center) * 1.5f * widthScale;
+		Vector2 v6 = vec3 - Vector2.Normalize(vec3 - center) * 1.5f * widthScale;
+		var v2ds = new List<Vertex2D>();
+		for (int i = 0; i < 3; i++)
 		{
-			vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+			Vector2 fix = new Vector2(i / 3).RotatedBy(i);
+			v2ds.Add(new(v1 + fix, c1, Vector3.Zero));
+			v2ds.Add(new(v2 + fix, c1, Vector3.Zero));
+			v2ds.Add(new(v3 + fix, c2, Vector3.Zero));
 
-			vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+			v2ds.Add(new(v2 + fix, c2, Vector3.Zero));
+			v2ds.Add(new(v4 + fix, c2, Vector3.Zero));
+			v2ds.Add(new(v3 + fix, c1, Vector3.Zero));
+
+			v2ds.Add(new(v3 + fix, c1, Vector3.Zero));
+			v2ds.Add(new(v4 + fix, c2, Vector3.Zero));
+			v2ds.Add(new(v6 + fix, c2, Vector3.Zero));
+
+			v2ds.Add(new(v3 + fix, c1, Vector3.Zero));
+			v2ds.Add(new(v6 + fix, c2, Vector3.Zero));
+			v2ds.Add(new(v5 + fix, c1, Vector3.Zero));
 		}
-
-
-		Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
-	}
-	public static void DrawDoubleLine(VFXBatch spriteBatch, Vector2 StartPos, Vector2 EndPos, Color color1, Color color2)
-	{
-		float Wid = 1.5f;
-		Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
-
-		var vertex2Ds = new List<Vertex2D>();
-
-		for (int x = 0; x < 3; x++)
+		if (spriteBatch is null)
 		{
-			vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
-
-			vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+			Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, v2ds.ToArray(), 0, v2ds.Count / 3);
 		}
-
-		spriteBatch.Draw(TextureAssets.MagicPixel.Value, vertex2Ds, PrimitiveType.TriangleList);
+		else
+		{
+			spriteBatch.Draw(TextureAssets.MagicPixel.Value, v2ds, PrimitiveType.TriangleList);
+		}
 	}
 	public Vector2 RotByPro(Vector2 orig)
 	{
@@ -125,10 +165,18 @@ public class StonePost : ModProjectile, IWarpProjectile
 		Vector2 DrawCen = Projectile.Center - Main.screenPosition;
 		if (k0 < 1)
 		{
-			DrawDoubleLine(DrawCen + RotByPro(new Vector2(0, -k0 * 40)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 75, -k0 * 20)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-			DrawDoubleLine(DrawCen + RotByPro(new Vector2(k0 * 75, -k0 * 20)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
-			DrawDoubleLine(DrawCen + RotByPro(new Vector2(0, -k0 * 40)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 75, -k0 * 20)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-			DrawDoubleLine(DrawCen + RotByPro(new Vector2(-k0 * 75, -k0 * 20)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+			//DrawDoubleLine(DrawCen + RotByPro(new Vector2(0, -k0 * 40)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 75, -k0 * 20)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+			//DrawDoubleLine(DrawCen + RotByPro(new Vector2(k0 * 75, -k0 * 20)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+			//DrawDoubleLine(DrawCen + RotByPro(new Vector2(0, -k0 * 40)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 75, -k0 * 20)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+			//DrawDoubleLine(DrawCen + RotByPro(new Vector2(-k0 * 75, -k0 * 20)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+			DrawFoldLine(null,
+				DrawCen,
+				DrawCen + RotByPro(new Vector2(k0 * 150, 0)) * WaveRange,
+				DrawCen + RotByPro(new Vector2(0, -k0 * 40)) * WaveRange,
+				DrawCen + RotByPro(new Vector2(k0 * -150, 0)) * WaveRange,
+				true,
+				new Color(1f * k2, 0.7f * k2, 0f, 0f),
+				new Color(1f * k3, 0.6f * k3, 0f, 0f));
 		}
 
 
@@ -197,10 +245,18 @@ public class StonePost : ModProjectile, IWarpProjectile
 
 			if (k0 < 1)//画方波
 			{
-				DrawDoubleLine(DrawCen + RotByPro(new Vector2(0, k0 * 50)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 75, k0 * 25)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-				DrawDoubleLine(DrawCen + RotByPro(new Vector2(k0 * 75, k0 * 25)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
-				DrawDoubleLine(DrawCen + RotByPro(new Vector2(0, k0 * 50)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 75, k0 * 25)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-				DrawDoubleLine(DrawCen + RotByPro(new Vector2(-k0 * 75, k0 * 25)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+				//DrawDoubleLine(DrawCen + RotByPro(new Vector2(0, k0 * 50)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 75, k0 * 25)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+				//DrawDoubleLine(DrawCen + RotByPro(new Vector2(k0 * 75, k0 * 25)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+				//DrawDoubleLine(DrawCen + RotByPro(new Vector2(0, k0 * 50)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 75, k0 * 25)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+				//DrawDoubleLine(DrawCen + RotByPro(new Vector2(-k0 * 75, k0 * 25)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+				DrawFoldLine(null,
+					DrawCen,
+					DrawCen + RotByPro(new Vector2(k0 * 150, 0)) * WaveRange,
+					DrawCen + RotByPro(new Vector2(0, k0 * 50)) * WaveRange,
+					DrawCen + RotByPro(new Vector2(k0 * -150, 0)) * WaveRange,
+					false,
+					new Color(1f * k2, 0.7f * k2, 0f, 0f),
+					new Color(1f * k3, 0.6f * k3, 0f, 0f));
 			}
 
 		}
@@ -275,19 +331,35 @@ public class StonePost : ModProjectile, IWarpProjectile
 
 		if (k0 < 1)
 		{
-			DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(0, -k0 * 40)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 75, -k0 * 20)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-			DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(k0 * 75, -k0 * 20)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
-			DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(0, -k0 * 40)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 75, -k0 * 20)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-			DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(-k0 * 75, -k0 * 20)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+			//DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(0, -k0 * 40)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 75, -k0 * 20)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+			//DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(k0 * 75, -k0 * 20)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+			//DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(0, -k0 * 40)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 75, -k0 * 20)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+			//DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(-k0 * 75, -k0 * 20)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+			DrawFoldLine(spriteBatch,
+				DrawCen,
+				DrawCen + RotByPro(new Vector2(k0 * 150, 0)) * WaveRange,
+				DrawCen + RotByPro(new Vector2(0, -k0 * 40)) * WaveRange,
+				DrawCen + RotByPro(new Vector2(k0 * -150, 0)) * WaveRange,
+				true,
+				new Color(1f * k2, 0.7f * k2, 0f, 0f),
+				new Color(1f * k3, 0.6f * k3, 0f, 0f));
 		}
 		spriteBatch.Draw(BackG, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 255), Projectile.rotation, new Vector2(BackG.Width / 2f, BackG.Height), 1, SpriteEffects.None);
 
 		if (k0 < 1)
 		{
-			DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(0, k0 * 50)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 75, k0 * 25)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-			DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(k0 * 75, k0 * 25)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
-			DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(0, k0 * 50)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 75, k0 * 25)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-			DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(-k0 * 75, k0 * 25)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+			//DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(0, k0 * 50)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 75, k0 * 25)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+			//DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(k0 * 75, k0 * 25)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+			//DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(0, k0 * 50)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 75, k0 * 25)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+			//DrawDoubleLine(spriteBatch, DrawCen + RotByPro(new Vector2(-k0 * 75, k0 * 25)) * WaveRange, DrawCen + RotByPro(new Vector2(-k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+			DrawFoldLine(spriteBatch,
+				DrawCen,
+				DrawCen + RotByPro(new Vector2(k0 * 150, 0)) * WaveRange,
+				DrawCen + RotByPro(new Vector2(0, k0 * 50)) * WaveRange,
+				DrawCen + RotByPro(new Vector2(k0 * -150, 0)) * WaveRange,
+				false,
+				new Color(1f * k2, 0.7f * k2, 0f, 0f),
+				new Color(1f * k3, 0.6f * k3, 0f, 0f));
 		}
 	}
 }

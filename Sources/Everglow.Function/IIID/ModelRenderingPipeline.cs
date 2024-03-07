@@ -34,7 +34,7 @@ namespace Everglow.Commons.IIID
 		private RenderTarget2D[] m_blurRenderTargets;
 
 		private const int MAX_BLUR_LEVELS = 5;
-		private const int RenderTargetSize = 1000;
+		private  int RenderTargetSize = Math.Max( GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height,GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width)/2;
 
 		//private RenderTarget2D m_albedoTarget;
 		//private RenderTarget2D m_normalTarget;
@@ -374,6 +374,7 @@ namespace Everglow.Commons.IIID
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp,
 				DepthStencilState.None,
 				RasterizerState.CullNone);
+			PixelEffect.Parameters["RenderTargetSize"].SetValue(RenderTargetSize);
 			PixelEffect.Parameters["_PixelSize"].SetValue(1);
 			PixelEffect.Parameters["_PixelRatio"].SetValue(1);
 			PixelEffect.CurrentTechnique.Passes["Blend"].Apply();
@@ -394,6 +395,7 @@ namespace Everglow.Commons.IIID
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp,
 				DepthStencilState.None,
 				RasterizerState.CullNone);
+			EdgeEffect.Parameters["RenderTargetSize"].SetValue(RenderTargetSize);
 			EdgeEffect.CurrentTechnique.Passes["Edge"].Apply();
 			spriteBatch.Draw(m_fakeScreenTargetSwap, m_fakeScreenTarget.Bounds, Color.White);
 			spriteBatch.End();
