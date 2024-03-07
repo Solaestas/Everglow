@@ -37,7 +37,7 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 			for (int y = -1; y < 2; y++)
 			{
 				Tile checkTile = Main.tile[i + x, j + y];
-				if (checkTile.HasTile && (checkTile.TileType == ModContent.TileType<DarkForestSoil>() || checkTile.TileType == Type))
+				if (checkTile.HasTile && !Main.tileFrameImportant[checkTile.TileType])
 				{
 					blockCount++;
 				}
@@ -46,7 +46,39 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 		if (blockCount >= 9)
 		{
 			tile.TileType = (ushort)(ModContent.TileType<DarkForestSoil>());
-			return;
+		}
+		for(int z = 0; z < 20; z++)
+		{
+			blockCount = 0;
+			int spreadX = Main.rand.Next(-5, 6);
+			int spreadY = Main.rand.Next(-5, 6);
+			for (int x = -1; x < 2; x++)
+			{
+				for (int y = -1; y < 2; y++)
+				{
+					Tile checkTile = YggdrasilWorldGeneration.SafeGetTile(i + x + spreadX, j + y + spreadY);
+					if (checkTile.HasTile && (checkTile.TileType == ModContent.TileType<DarkForestSoil>() || checkTile.TileType == Type))
+					{
+						blockCount++;
+					}
+					if (checkTile.HasTile && Main.tileFrameImportant[checkTile.TileType])
+					{
+						blockCount += 2;
+					}
+					if (!checkTile.HasTile)
+					{
+						blockCount += 3;
+					}
+				}
+			}
+			if (Main.rand.Next(9, 18) < blockCount)
+			{
+				Tile checkTile = YggdrasilWorldGeneration.SafeGetTile(i + spreadX, j + spreadY);
+				if (checkTile.TileType == ModContent.TileType<DarkForestSoil>())
+				{
+					checkTile.TileType = Type;
+				}
+			}
 		}
 		int height = Main.rand.Next(14, 60);
 		switch (Main.rand.Next(8))

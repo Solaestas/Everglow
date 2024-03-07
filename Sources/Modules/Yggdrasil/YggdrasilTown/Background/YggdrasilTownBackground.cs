@@ -11,7 +11,7 @@ public class YggdrasilTownBackground : ModSystem
 	/// <summary>
 	/// 地形中心
 	/// </summary>
-	public static Vector2 BiomeCenter => new Vector2(Main.maxTilesX / 2f * 16, (Main.maxTilesY - 400) * 16);
+	public static Vector2 BiomeCenter => new Vector2(Main.maxTilesX / 2f * 16, (Main.maxTilesY - 1000) * 16);
 	/// <summary>
 	/// 初始化
 	/// </summary>
@@ -66,7 +66,7 @@ public class YggdrasilTownBackground : ModSystem
 	/// <returns></returns>
 	public static bool BiomeActive()
 	{
-		if (Main.screenPosition.Y > (BiomeCenter.Y - 9300))
+		if (Main.screenPosition.Y > (BiomeCenter.Y - 16000))
 		{
 			if (SubworldSystem.IsActive<YggdrasilWorld>())
 				return true;
@@ -141,10 +141,10 @@ public class YggdrasilTownBackground : ModSystem
 		}
 		
 
-		BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000));
-		BackgroundManager.QuickDrawBG(texC3, GetDrawRect(texClose.Size(), 0.05f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, false);
-		BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texClose.Size(), 0.10f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, false);
-		BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texClose.Size(), 0.15f, new Vector2(0, 7200)), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
+		BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000));
+		BackgroundManager.QuickDrawBG(texC3, GetDrawRect(texClose.Size(), 0.05f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, false);
+		BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texClose.Size(), 0.10f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, false);
+		BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texClose.Size(), 0.15f, new Vector2(0, 7200)), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, true);
 
 		Vector2 deltaPos = screenCenter - BiomeCenter;
 		float MoveStep = 0.15f;
