@@ -24,6 +24,8 @@ public sealed class MythManualMusicRegistration : ILoadable
 		MusicLoader.AddMusic(mod, "Myth/Musics/TuskFighting");
 		// Lantern Moon Musics
 		MusicLoader.AddMusic(mod, "Myth/Musics/DashCore");
+
+		MusicLoader.AddMusic(mod, "Myth/Musics/BottleFighting");
 	}
 	public void Unload()
 	{
