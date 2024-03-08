@@ -1,17 +1,15 @@
-using Terraria.IO;
-using Terraria.WorldBuilding;
+using Everglow.Commons.TileHelper;
+using Everglow.Yggdrasil.CorruptWormHive.Tiles;
+using Everglow.Yggdrasil.HurricaneMaze.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Walls;
-using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
-using Everglow.Yggdrasil.HurricaneMaze.Tiles;
-using Everglow.Yggdrasil.CorruptWormHive.Tiles;
-using Everglow.Yggdrasil.YggdrasilTown.Walls;
-using Everglow.Commons.TileHelper;
-using static Everglow.Yggdrasil.WorldGeneration.YggdrasilTownGeneration;
-using static Everglow.Yggdrasil.WorldGeneration.KelpCurtainGeneration;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
-using Terraria;
+using Everglow.Yggdrasil.YggdrasilTown.Walls;
+using Terraria.IO;
+using Terraria.WorldBuilding;
+using static Everglow.Yggdrasil.WorldGeneration.YggdrasilTownGeneration;
 
 namespace Everglow.Yggdrasil.WorldGeneration;
 
@@ -35,11 +33,74 @@ public class YggdrasilWorldGeneration : ModSystem
 			Main.statusText = "";
 		}
 	}
+	public static int[,] GlobalPerlinPixelR = new int[1024, 1024];
+	public static int[,] GlobalPerlinPixelG = new int[1024, 1024];
+	public static int[,] GlobalPerlinPixelB = new int[1024, 1024];
+	public static int[,] GlobalPerlinPixel2 = new int[1024, 1024];
+	public static int[,] GlobalCellPixel = new int[1024, 1024];
+	/// <summary>
+	/// 噪声信息获取
+	/// </summary>
+	public static void FillPerlinPixel()
+	{
+		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_II_rgb.bmp");
+		Vector2 perlinCoordCenter = new Vector2(GenRand.NextFloat(0f, 1f), GenRand.NextFloat(0f, 1f));
+		imageData.ProcessPixelRows(accessor =>
+		{
+			for (int y = 0; y < accessor.Height; y++)
+			{
+				int newY = (int)(accessor.Height * perlinCoordCenter.Y + y) % accessor.Height;
+				var pixelRow = accessor.GetRowSpan(newY);
+				for (int x = 0; x < pixelRow.Length; x++)
+				{
+					int newX = (int)(accessor.Width * perlinCoordCenter.X + x) % accessor.Width;
+					ref var pixel = ref pixelRow[newX];
+					PerlinPixelR[x, y] = pixel.R;
+					PerlinPixelG[x, y] = pixel.G;
+					PerlinPixelB[x, y] = pixel.B;
+				}
+			}
+		});
+
+		imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_perlin.bmp");
+		perlinCoordCenter = new Vector2(GenRand.NextFloat(0f, 1f), GenRand.NextFloat(0f, 1f));
+		imageData.ProcessPixelRows(accessor =>
+		{
+			for (int y = 0; y < accessor.Height; y++)
+			{
+				int newY = (int)(accessor.Height * perlinCoordCenter.Y + y) % accessor.Height;
+				var pixelRow = accessor.GetRowSpan(newY);
+				for (int x = 0; x < pixelRow.Length; x++)
+				{
+					int newX = (int)(accessor.Width * perlinCoordCenter.X + x) % accessor.Width;
+					ref var pixel = ref pixelRow[newX];
+					PerlinPixel2[x, y] = pixel.R;
+				}
+			}
+		});
+
+		imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_cell.bmp");
+		perlinCoordCenter = new Vector2(GenRand.NextFloat(0f, 1f), GenRand.NextFloat(0f, 1f));
+		imageData.ProcessPixelRows(accessor =>
+		{
+			for (int y = 0; y < accessor.Height; y++)
+			{
+				int newY = (int)(accessor.Height * perlinCoordCenter.Y + y) % accessor.Height;
+				var pixelRow = accessor.GetRowSpan(newY);
+				for (int x = 0; x < pixelRow.Length; x++)
+				{
+					int newX = (int)(accessor.Width * perlinCoordCenter.X + x) % accessor.Width;
+					ref var pixel = ref pixelRow[newX];
+					CellPixel[x, y] = pixel.R;
+				}
+			}
+		});
+	}
 	public static void EndGenPass()
 	{
 		Main.statusText = "Finished";
 	}
-    public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type, int startX = 0, int startY = 0)
+	public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type, int startX = 0, int startY = 0)
 	{
 		if (x > Main.maxTilesX - width || x < 0 || y > Main.maxTilesY - height || y < 0)
 			return;
@@ -74,6 +135,14 @@ public class YggdrasilWorldGeneration : ModSystem
 	public static Tile SafeGetTile(int i, int j)
 	{
 		return Main.tile[Math.Clamp(i, 20, Main.maxTilesX - 20), Math.Clamp(j, 20, Main.maxTilesY - 20)];
+	}
+	public static Tile SafeGetTile(Point point)
+	{
+		return Main.tile[Math.Clamp(point.X, 20, Main.maxTilesX - 20), Math.Clamp(point.Y, 20, Main.maxTilesY - 20)];
+	}
+	public static Tile SafeGetTile(Vector2 vector)
+	{
+		return Main.tile[Math.Clamp((int)vector.X, 20, Main.maxTilesX - 20), Math.Clamp((int)vector.Y, 20, Main.maxTilesY - 20)];
 	}
 	/// <summary>
 	/// 平坦化,x0左y0上x1右y1下
@@ -127,7 +196,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				tile.HasTile = true;
 			}
 		}
-		if(smooth)
+		if (smooth)
 		{
 			SmoothTile(x0, y0, x1, y1);
 		}
@@ -416,15 +485,37 @@ public class YggdrasilWorldGeneration : ModSystem
 	public static int EmbeddingDepth(int x, int y, int maxRange = 4)
 	{
 		int depth = 0;
-		for(int i = -maxRange; i <= maxRange; i++)
+		for (int i = -maxRange; i <= maxRange; i++)
 		{
 			for (int j = -maxRange; j <= maxRange; j++)
 			{
-				if(new Vector2(i, j).Length() <= maxRange)
+				if (new Vector2(i, j).Length() <= maxRange)
 				{
-					if(SafeGetTile(i + x,j + y).HasTile)
+					if (SafeGetTile(i + x, j + y).HasTile)
 					{
 						depth++;
+					}
+				}
+			}
+		}
+		return depth;
+	}
+	/// <summary>
+	/// 返回墙壁上的一点到外面的最短距离
+	/// </summary>
+	/// <returns></returns>
+	public static float EmbeddingWallDepth(int x, int y, int maxRange = 50)
+	{
+		float depth = maxRange;
+		for (int i = -maxRange; i <= maxRange; i++)
+		{
+			for (int j = -maxRange; j <= maxRange; j++)
+			{
+				if (new Vector2(i, j).Length() <= depth)
+				{
+					if (SafeGetTile(i + x, j + y).wall <= 0)
+					{
+						depth = new Vector2(i, j).Length();
 					}
 				}
 			}
@@ -458,18 +549,18 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// 返回一点附近的地势法线
 	/// </summary>
 	/// <returns></returns>
-	public static Vector2 TerrianSurfaceNormal(int x, int y)
+	public static Vector2 TerrianSurfaceNormal(int x, int y, int maxRange = 4, int excludeTileType = -1)
 	{
 		Vector2 v0 = Vector2.zeroVector;
-		for (int i = -4; i <= 4; i++)
+		for (int i = -maxRange; i <= maxRange; i++)
 		{
-			for (int j = -4; j <= 4; j++)
+			for (int j = -maxRange; j <= maxRange; j++)
 			{
 				Vector2 v1 = new Vector2(i, j);
-				if (v1.Length() <= 4)
+				if (v1.Length() <= maxRange && v1.Length() > 0)
 				{
 					Tile tile = SafeGetTile(i + x, j + y);
-					if (tile.HasTile)
+					if (tile.HasTile && tile.TileType != excludeTileType)
 					{
 						v0 += Vector2.Normalize(v1) / v1.Length();
 					}
@@ -480,11 +571,81 @@ public class YggdrasilWorldGeneration : ModSystem
 				}
 			}
 		}
-		if(v0.Length() < 0.1f)
+		if (v0.Length() < 0.1f)
 		{
 			return Vector2.zeroVector;
 		}
 		return Vector2.Normalize(v0);
+	}
+	/// <summary>
+	/// 返回一点附近的地势倾角
+	/// </summary>
+	/// <returns></returns>
+	public static float TerrianSurfaceAngle(int x, int y, int maxRange = 4, int excludeTileType = -1)
+	{
+		Vector2 v0 = Vector2.zeroVector;
+		for (int i = -maxRange; i <= maxRange; i++)
+		{
+			for (int j = -maxRange; j <= maxRange; j++)
+			{
+				Vector2 v1 = new Vector2(i, j);
+				if (v1.Length() <= maxRange && v1.Length() > 0)
+				{
+					Tile tile = SafeGetTile(i + x, j + y);
+					if (tile.HasTile && tile.TileType != excludeTileType)
+					{
+						v0 += Vector2.Normalize(v1) / v1.Length();
+					}
+					else
+					{
+						v0 -= Vector2.Normalize(v1) / v1.Length();
+					}
+				}
+			}
+		}
+		if (v0.Length() < 0.1f)
+		{
+			return -1;
+		}
+		return v0.ToRotation();
+	}
+	/// <summary>
+	/// 返回一点附近的地势法线的离散度
+	/// </summary>
+	/// <returns></returns>
+	public static float TerrianSurfaceDiscontinuity(int x, int y, int maxRange = 4, int excludeTileType = -1)
+	{
+		List<Vector2> normalsVector = new List<Vector2>();
+		for (int i = -maxRange; i <= maxRange; i++)
+		{
+			for (int j = -maxRange; j <= maxRange; j++)
+			{
+				Vector2 v1 = new Vector2(i, j);
+				if (v1.Length() <= maxRange)
+				{
+					Vector2 v0 = TerrianSurfaceNormal(i + x, j + y, maxRange, excludeTileType);
+					if (v0 != Vector2.zeroVector)
+					{
+						normalsVector.Add(v0);
+					}
+				}
+			}
+		}
+		if (normalsVector.Count <= 1)
+		{
+			return 0;
+		}
+		// 计算平均向量
+		float meanX = normalsVector.Select(v => v.X).Average();
+		float meanY = normalsVector.Select(v => v.Y).Average();
+
+		Tuple<float, float> meanVector = Tuple.Create(meanX, meanY);
+
+		// 计算离散度
+		double dispersion = normalsVector.Sum(v =>
+			Math.Pow(v.X - meanX, 2) + Math.Pow(v.Y - meanY, 2)) / (normalsVector.Count - 1);
+
+		return (float)dispersion;
 	}
 	/// <summary>
 	/// 返回一点到100格以内最近物块的距离
@@ -497,7 +658,6 @@ public class YggdrasilWorldGeneration : ModSystem
 		{
 			for (int j = -100; j <= 100; j++)
 			{
-
 				Tile tile = SafeGetTile(i + x, j + y);
 				if (tile.HasTile)
 				{
@@ -510,6 +670,32 @@ public class YggdrasilWorldGeneration : ModSystem
 			}
 		}
 		return minDis;
+	}
+	/// <summary>
+	/// 距离最近的物块坐标,可以排除一种
+	/// </summary>
+	/// <returns></returns>
+	public static Point NearestBlockCoordinateIn100Tile(int x, int y, int excludeTileType = -1)
+	{
+		float minDis = 100;
+		Point attachPoint = new Point(x, y);
+		for (int i = -100; i <= 100; i++)
+		{
+			for (int j = -100; j <= 100; j++)
+			{
+				Tile tile = SafeGetTile(i + x, j + y);
+				if (tile.HasTile && tile.TileType != excludeTileType)
+				{
+					Vector2 v1 = new Vector2(i, j);
+					if (v1.Length() < minDis)
+					{
+						attachPoint = new Point(i + x, j + y);
+						minDis = v1.Length();
+					}
+				}
+			}
+		}
+		return attachPoint;
 	}
 	/// <summary>
 	/// 返回一点到100格以内最近空旷的距离
@@ -535,6 +721,146 @@ public class YggdrasilWorldGeneration : ModSystem
 			}
 		}
 		return minDis;
+	}
+	/// <summary>
+	/// 沿着地势表面匍匐行进铺设物块
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="step"></param>
+	/// <param name="thick"></param>
+	/// <param name="clockwise"></param>
+	public static void CrawlCarpetOfTile(int x, int y, int step, int thick, int type, bool clockwise = false)
+	{
+		Point checkPoint = NearestBlockCoordinateIn100Tile(x, y, type);
+		if (!SafeGetTile(checkPoint).HasTile)
+		{
+			return;
+		}
+		Vector2 velocity = TerrianSurfaceNormal(checkPoint.X, checkPoint.Y).RotatedBy(clockwise ? MathHelper.PiOver2 : -MathHelper.PiOver2);
+		Vector2 position = checkPoint.ToVector2();
+		for(int i = 0; i < step; i++)
+		{
+			float thickValue = thick * Math.Min((step / 2f - MathF.Abs(step / 2f - i)) * 0.2f, 1f);
+			Vector2 normal = TerrianSurfaceNormal((int)position.X, (int)position.Y);
+			CircleTile(position + normal * thickValue, position, type);
+			position += velocity;
+			int count = 0;
+			while(!SafeGetTile(position).HasTile)
+			{
+				count++;
+				position += TerrianSurfaceNormal((int)position.X, (int)position.Y);
+				if(count > 100)
+				{
+					break;
+				}
+			}
+			velocity = TerrianSurfaceNormal((int)position.X, (int)position.Y).RotatedBy(clockwise ? MathHelper.PiOver2 : -MathHelper.PiOver2);
+		}
+	}
+	/// <summary>
+	/// 圆心和直径布设圆形物块,=-1清理物块,-2清理全部
+	/// </summary>
+	/// <param name="center"></param>
+	/// <param name="radius"></param>
+	/// <param name="type"></param>
+	/// <param name="force"></param>
+	public static void CircleTile(Vector2 center, float radius, int type, bool force = false)
+	{
+		int radiusI = (int)radius;
+		for (int x = -radiusI; x <= radiusI;x++)
+		{
+			for (int y = -radiusI; y <= radiusI; y++)
+			{
+				Tile tile = SafeGetTile(center + new Vector2(x, y));
+				if(new Vector2(x, y).Length() <= radius)
+				{
+					if (force)
+					{
+						if(type == -1)
+						{
+							tile.ClearEverything();
+						}
+						else
+						{
+							tile.TileType = (ushort)type;
+							tile.HasTile = true;
+						}
+					}
+					else
+					{
+						if (!tile.HasTile)
+						{
+							tile.TileType = (ushort)type;
+							tile.HasTile = true;
+						}
+					}
+				}	
+			}
+		}
+	}
+	/// <summary>
+	/// 两点为直径布设圆形物块
+	/// </summary>
+	/// <param name="center"></param>
+	/// <param name="radius"></param>
+	/// <param name="type"></param>
+	/// <param name="force"></param>
+	public static void CircleTile(Vector2 pointA, Vector2 pointB, int type, bool force = false)
+	{
+		float radius = (pointA - pointB).Length() * 0.5f;
+		Vector2 center = (pointA + pointB) * 0.5f;
+		CircleTile(center, radius, type, force);
+	}
+	/// <summary>
+	/// 圆心半径,布设不规则圆形物块(小于半径),=-1清理物块,-2清理全部
+	/// </summary>
+	/// <param name="center"></param>
+	/// <param name="radius"></param>
+	/// <param name="type"></param>
+	/// <param name="force"></param>
+	public static void CircleTileWithRandomNoise(Vector2 center, float radius, int type, float noiseSize = 10f, bool force = false)
+	{
+		int x0CoordPerlin = GenRand.Next(1024);
+		int y0CoordPerlin = GenRand.Next(1024);
+		int radiusI = (int)radius;
+		for (int x = -radiusI; x <= radiusI; x++)
+		{
+			for (int y = -radiusI; y <= radiusI; y++)
+			{
+				Tile tile = SafeGetTile(center + new Vector2(x, y));
+				float aValue = PerlinPixelR[Math.Abs((x + x0CoordPerlin) % 1024), Math.Abs((y + y0CoordPerlin) % 1024)] / 255f;
+				if (new Vector2(x, y).Length() <= radius - aValue * noiseSize)
+				{
+					if (force)
+					{
+						if (type == -1)
+						{
+							tile.ClearEverything();
+						}
+						else
+						{
+							tile.TileType = (ushort)type;
+							tile.HasTile = true;
+						}
+					}
+					else
+					{
+						if (!tile.HasTile)
+						{
+							tile.TileType = (ushort)type;
+							tile.HasTile = true;
+						}
+					}
+				}
+			}
+		}
+	}
+	public static void CircleTileWithRandomNoise(Vector2 pointA, Vector2 pointB, int type, float noiseSize = 10f, bool force = false)
+	{
+		float radius = (pointA - pointB).Length() * 0.5f;
+		Vector2 center = (pointA + pointB) * 0.5f;
+		CircleTileWithRandomNoise(center, radius, type, noiseSize, force);
 	}
 	/// <summary>
 	/// type = 0:Kill,type = 1:place Tiles,type = 2:place Walls

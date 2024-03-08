@@ -200,9 +200,9 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 					};
 					Ins.VFXManager.Add(smog);
 				}
-				ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
-				mplayer.FlyCamPosition = new Vector2(0, 84).RotatedByRandom(6.283);
+				ShakerManager.AddShaker(Projectile.Center + new Vector2(0, 50), Projectile.velocity, 120, 120f, 65, 0.9f, 0.8f, 5);
 				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Xiao"), Projectile.Center);
+
 				Crash = true;
 			}
 		}

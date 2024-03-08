@@ -1,13 +1,15 @@
 sampler uImage0 : register(s0);
 
+int RenderTargetSize;
+
 int _PixelSize;
 float _PixelRatio;
 float2 _PixelScale;
 
-float4 Quad(float2 uv, float pixelSize, float pixelRatio)
+float4 Quad(float2 uv, float RenderTargetSize, float pixelRatio)
 {
-    float uvX = ceil(uv.x *500)/500;
-    float uvY = ceil(uv.y *500)/500;
+    float uvX = ceil(uv.x * RenderTargetSize) / RenderTargetSize;
+    float uvY = ceil(uv.y * RenderTargetSize) / RenderTargetSize;
     half2 coord = half2(uvX, uvY);
     return tex2D(uImage0, coord);
 }
@@ -40,7 +42,7 @@ float4 PS_BlendBloom(float2 coords : TEXCOORD0) : COLOR0
     }
 */
     //float4 color = Quad(i.uv,_PixelSize,_PixelRatio);
-    float4 color = Quad(coords, _PixelSize, _PixelRatio);
+    float4 color = Quad(coords, RenderTargetSize/2, _PixelRatio);
     return color;
 }
 
