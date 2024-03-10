@@ -3,47 +3,44 @@ using Terraria.ModLoader;
 using Everglow.Food.Buffs.VanillaDrinkBuffs;
 using Everglow.Food.Items;
 using Everglow.Food.FoodUtilities;
+using Everglow.Food;
 
 namespace Everglow.Food;
 
-public class DrinkGlobalItem : GlobalItem
+public class DrinkDictionaryUpdate : ModSystem
 {
-
-	// 对于原版的饮料进行类型Id到 DrinkInfo 的映射，直接获取DrinkInfo实例
-	public static Dictionary<int, DrinkInfo> m_vanillaDrinkInfos;
-	public override void Unload()
+	public override void OnModLoad()
 	{
-		m_vanillaDrinkInfos = null;
-	}
-	public DrinkGlobalItem()
-	{
-		m_vanillaDrinkInfos = new Dictionary<int, DrinkInfo>
+		DrinkGlobalItem.m_vanillaDrinkInfos = new Dictionary<int, DrinkInfo>
 		{
                 //麦芽酒
                 {
 				ItemID.Ale,
-				new DrinkInfo() {
-					Thirsty = false ,
-					BuffType = ModContent.BuffType<AleBuff> (),
+				new DrinkInfo()
+	            {
+	 				Thirsty = false ,
+					BuffType = ModContent.BuffType<AleBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
-					Name =  "SakeBuff"
+					Name = "SakeBuff"
 				}
-			},
+            },
                 //苹果汁
                 {
 				ItemID.AppleJuice,
-				new DrinkInfo() {
-				   Thirsty = false ,
+				new DrinkInfo()
+				{
+            		Thirsty = false ,
 				   BuffType = ModContent.BuffType<AppleJuiceBuff>(),
 				   BuffTime = new FoodDuration(0, 10, 0),
-				   Name =  "AppleJuiceBuff"
+				   Name = "AppleJuiceBuff"
 				}
 			},
                  //冰冻香蕉代基里
                 {
 				ItemID.BananaDaiquiri,
-				new DrinkInfo() {
-					Thirsty = false ,
+				new DrinkInfo()
+				{
+					Thirsty = false,
 					BuffType = ModContent.BuffType<BananaDaiquiriBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
 					Name = "BananaDaiquiriBuff"
@@ -52,8 +49,9 @@ public class DrinkGlobalItem : GlobalItem
                  //血腥麝香葡萄
                 {
 				ItemID.BloodyMoscato,
-				new DrinkInfo() {
-					Thirsty = false ,
+				new DrinkInfo()
+				{
+					Thirsty = false,
 					BuffType = ModContent.BuffType<BloodyMoscatoBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
 					Name = "BloodyMoscatoBuff"
@@ -62,8 +60,9 @@ public class DrinkGlobalItem : GlobalItem
                 //奶油苏打水
                 {
 				ItemID.CreamSoda,
-				new DrinkInfo() {
-					Thirsty = false ,
+				new DrinkInfo()
+				{
+					Thirsty = false,
 					BuffType = ModContent.BuffType<CreamSodaBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
 					Name = "CreamSodaBuff"
@@ -72,8 +71,9 @@ public class DrinkGlobalItem : GlobalItem
                 //咖啡
                 {
 				ItemID.CoffeeCup,
-				new DrinkInfo() {
-					Thirsty = false ,
+				new DrinkInfo()
+				{
+					Thirsty = false,
 					BuffType = ModContent.BuffType<CoffeeCupBuff>(),
 					BuffTime = new FoodDuration(0, 30, 0),
 					Name = "CoffeeCupBuff"
@@ -82,18 +82,20 @@ public class DrinkGlobalItem : GlobalItem
                 //果汁
                 {
 				ItemID.FruitJuice,
-				new DrinkInfo() {
-				   Thirsty = false ,
-				   BuffType = ModContent.BuffType<FruitJuiceBuff>(),
-				   BuffTime = new FoodDuration(0, 10, 0),
+				new DrinkInfo()
+				{
+					Thirsty = false,
+					BuffType = ModContent.BuffType<FruitJuiceBuff>(),
+					BuffTime = new FoodDuration(0, 10, 0),
 					Name = "FruitJuiceBuff"
 				}
 			},
                 //葡萄汁
                 {
 				ItemID.GrapeJuice,
-				new DrinkInfo() {
-					Thirsty = false ,
+				new DrinkInfo()
+				{
+					Thirsty = false,
 					BuffType = ModContent.BuffType<GrapeJuiceBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
 					Name = "GrapeJuiceBuff"
@@ -102,8 +104,9 @@ public class DrinkGlobalItem : GlobalItem
                 //柠檬水
                 {
 				ItemID.Lemonade,
-				new DrinkInfo() {
-					Thirsty = false ,
+				new DrinkInfo()
+				{
+					Thirsty = false,
 					BuffType = ModContent.BuffType<LemonadeBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
 					Name = "LemonadeBuff"
@@ -112,8 +115,9 @@ public class DrinkGlobalItem : GlobalItem
                 //盒装牛奶
                 {
 				ItemID.MilkCarton,
-				new DrinkInfo() {
-					Thirsty = false ,
+				new DrinkInfo()
+				{
+					Thirsty = false,
 					BuffType = ModContent.BuffType<MilkCartonBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
 					Name = "MilkCartonBuff"
@@ -122,8 +126,9 @@ public class DrinkGlobalItem : GlobalItem
                 //奶昔
                 {
 				ItemID.Milkshake,
-				new DrinkInfo() {
-					Thirsty = false ,
+				new DrinkInfo()
+				{
+					Thirsty = false,
 					BuffType = ModContent.BuffType<MilkshakeBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
 					Name = "MilkshakeBuff"
@@ -132,7 +137,8 @@ public class DrinkGlobalItem : GlobalItem
                 //桃子果酒
                 {
 				ItemID.PeachSangria,
-				new DrinkInfo() {
+				new DrinkInfo()
+				{
 					Thirsty = false,
 					BuffType = ModContent.BuffType<PeachSangriaBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
@@ -142,7 +148,8 @@ public class DrinkGlobalItem : GlobalItem
                 //椰林飘香
                 {
 				ItemID.PinaColada,
-				new DrinkInfo() {
+				new DrinkInfo()
+				{
 					Thirsty = false,
 					BuffType = ModContent.BuffType<PinaColadaBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
@@ -152,7 +159,8 @@ public class DrinkGlobalItem : GlobalItem
                 //七彩潘趣酒
                 {
 				ItemID.PrismaticPunch,
-				new DrinkInfo() {
+				new DrinkInfo()
+				{
 					Thirsty = false,
 					BuffType = ModContent.BuffType<PrismaticPunchBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
@@ -162,7 +170,8 @@ public class DrinkGlobalItem : GlobalItem
                 //清酒
                 {
 				ItemID.Sake,
-				new DrinkInfo() {
+				new DrinkInfo()
+				{
 					Thirsty = false,
 					BuffType = ModContent.BuffType<SakeBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
@@ -172,10 +181,10 @@ public class DrinkGlobalItem : GlobalItem
                 //暗黑奶昔
                 {
 				ItemID.SmoothieofDarkness,
-				new DrinkInfo() {
+				new DrinkInfo()
+				{
 					Thirsty = false,
-					BuffType = ModContent.
-					BuffType<SmoothieofDarknessBuff>(),
+					BuffType = ModContent.BuffType<SmoothieofDarknessBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
 					Name = "SmoothieofDarknessBuff"
 				}
@@ -183,7 +192,8 @@ public class DrinkGlobalItem : GlobalItem
                 //一杯茶
                 {
 				ItemID.Teacup,
-				new DrinkInfo() {
+				new DrinkInfo()
+				{
 					Thirsty = false,
 					BuffType = ModContent.BuffType<TeacupBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
@@ -192,8 +202,9 @@ public class DrinkGlobalItem : GlobalItem
 			},
                 //热带奶昔
                 {
-				ItemID.TropicalSmoothie,
-				new DrinkInfo() {
+			    ItemID.TropicalSmoothie,
+				new DrinkInfo()
+				{
 					Thirsty = false,
 					BuffType = ModContent.BuffType<TropicalSmoothieBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
@@ -202,9 +213,21 @@ public class DrinkGlobalItem : GlobalItem
 			}
 		};
 	}
+}
+public class DrinkGlobalItem : GlobalItem
+{
+
+	// 对于原版的饮料进行类型Id到 DrinkInfo 的映射，直接获取DrinkInfo实例
+	public static Dictionary<int, DrinkInfo> m_vanillaDrinkInfos;
+	public override void Unload()
+	{
+		m_vanillaDrinkInfos = null;
+	}
+
 
 	public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
 	{
+
 		if (m_vanillaDrinkInfos.ContainsKey(item.type) /*|| (item.ModItem is DrinkBase)*/)
 		{
 			int firstIndex = -1;
@@ -277,23 +300,23 @@ public class DrinkGlobalItem : GlobalItem
 		// 如果是原版的饮料，那么就手动处理，因为已经使用了物品，说明玩家满足饱食度要求
 		if (m_vanillaDrinkInfos.ContainsKey(item.type))
 		{
-			var drinkInfo = m_vanillaDrinkInfos[item.type];
+			var DrinkInfo = m_vanillaDrinkInfos[item.type];
 			var FoodPlayer = player.GetModPlayer<FoodModPlayer>();
 
 			// 变得不渴
-			FoodPlayer.Thirstystate = drinkInfo.Thirsty;
+			FoodPlayer.Thirstystate = DrinkInfo.Thirsty;
 			//加上Buff
-			player.AddBuff(drinkInfo.BuffType, drinkInfo.BuffTime.TotalFrames);
+			player.AddBuff(DrinkInfo.BuffType, DrinkInfo.BuffTime.TotalFrames);
 		}
 		else if (item.ModItem is DrinkBase)
 		{
 			var drinkItem = item.ModItem as DrinkBase;
-			var drinkInfo = drinkItem.DrinkInfo;
+			var DrinkInfo = drinkItem.DrinkInfo;
 			var FoodPlayer = player.GetModPlayer<FoodModPlayer>();
 			// 变得不渴
-			FoodPlayer.Thirstystate = drinkInfo.Thirsty;
+			FoodPlayer.Thirstystate = DrinkInfo.Thirsty;
 			//加上Buff
-			player.AddBuff(drinkInfo.BuffType, drinkInfo.BuffTime.TotalFrames);
+			player.AddBuff(DrinkInfo.BuffType, DrinkInfo.BuffTime.TotalFrames);
 		}
 	}
 

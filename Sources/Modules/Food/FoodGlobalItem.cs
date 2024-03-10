@@ -6,17 +6,11 @@ using Everglow.Food.FoodUtilities;
 
 namespace Everglow.Food;
 
-public class FoodGlobalItem : GlobalItem
+public class FoodDictionaryUpdate : ModSystem
 {
-	// 对于原版的食物进行类型Id到 FoodInfo 的映射，直接获取FoodInfo实例
-	public static Dictionary<int, FoodInfo> m_vanillaFoodInfos;
-	public override void Unload()
+	public override void OnModLoad()
 	{
-		m_vanillaFoodInfos = null;
-	}
-	public FoodGlobalItem()
-	{
-		m_vanillaFoodInfos = new Dictionary<int, FoodInfo>
+		FoodGlobalItem.m_vanillaFoodInfos = new Dictionary<int, FoodInfo>
 		{
                 //苹果 
                 {
@@ -629,8 +623,18 @@ public class FoodGlobalItem : GlobalItem
 				}
 			},
 		};
-
 	}
+}
+
+public class FoodGlobalItem : GlobalItem
+{
+	// 对于原版的食物进行类型Id到 FoodInfo 的映射，直接获取FoodInfo实例
+	public static Dictionary<int, FoodInfo> m_vanillaFoodInfos;
+	public override void Unload()
+	{
+		m_vanillaFoodInfos = null;
+	}
+
 	public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
 	{
 		if (m_vanillaFoodInfos.ContainsKey(item.type) /*|| (item.ModItem is FoodBase)*/)
@@ -646,13 +650,13 @@ public class FoodGlobalItem : GlobalItem
 			if (firstIndex >= 0)
 			{
 				tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
-				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
+				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.Buffs." + FoodInfo.Name)));
 				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
 			}
 			else
 			{
 				// 否则加到最后面
-				tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
+				tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.Buffs." + FoodInfo.Name)));
 				tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
 			}
 
@@ -673,13 +677,13 @@ public class FoodGlobalItem : GlobalItem
 			if (firstIndex >= 0)
 			{
 				tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
-				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
+				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.Buffs." + FoodInfo.Name)));
 				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
 			}
 			else
 			{
 				// 否则加到最后面
-				tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
+				tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.Buffs." + FoodInfo.Name)));
 				tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
 			}
 
@@ -688,32 +692,19 @@ public class FoodGlobalItem : GlobalItem
 				tooltips[buffTimeIndex].Text = FoodInfo.BuffTime.ToBuffTimeString();
 		}
 	}
-	public override void SetStaticDefaults()
-	{
-
-
-	}
-
-	public override void SetDefaults(Item item)
-	{
-		// 如果是原版的食物，那么就手动处理
-		if (m_vanillaFoodInfos.ContainsKey(item.type))
-		{
-			var FoodInfo = m_vanillaFoodInfos[item.type];
-		}
-		base.SetDefaults(item);
-	}
 
 	public override void OnConsumeItem(Item item, Player player)
 	{
+
 		// 如果是原版的食物，那么就手动处理，因为已经使用了物品，说明玩家满足饱食度要求
 		if (m_vanillaFoodInfos.ContainsKey(item.type))
 		{
-			var FoodInfo = m_vanillaFoodInfos[item.type];
+			FoodInfo FoodInfo = m_vanillaFoodInfos[item.type];
 			var FoodPlayer = player.GetModPlayer<FoodModPlayer>();
 
 			// 增加饱食度
 			FoodPlayer.CurrentSatiety += FoodInfo.Satiety;
+
 			//加上Buff
 			player.AddBuff(FoodInfo.BuffType, FoodInfo.BuffTime.TotalFrames);
 		}

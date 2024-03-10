@@ -1,4 +1,4 @@
-﻿using Terraria.ModLoader.IO;
+using Terraria.ModLoader.IO;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.UI;
