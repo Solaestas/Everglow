@@ -321,7 +321,10 @@ public class YggdrasilTownGeneration
 						{
 							Tile tile = SafeGetTile(x, y);
 							tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
-							tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+							if (v0.Length() < radious - aValue - 2)
+							{
+								tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+							}
 							tile.HasTile = true;
 						}
 					}
@@ -899,7 +902,7 @@ public class YggdrasilTownGeneration
 						}
 						float value = addYValue + Math.Abs(checkY - y) / 30f + addXValue;
 						int type = ModContent.TileType<DarkForestSoil>();
-						if (value > 0.6)
+						if (value > 0.9)
 						{
 							type = ModContent.TileType<DarkForestGrass>();
 						}
@@ -909,6 +912,10 @@ public class YggdrasilTownGeneration
 						}
 						tile.TileType = (ushort)type;
 						tile.HasTile = true;
+						if(value < 0.94)
+						{
+							tile.wall = WallID.Dirt;
+						}
 					}
 				}
 				//精细铺设边角
@@ -1557,10 +1564,11 @@ public class YggdrasilTownGeneration
 								tile.TileType = (ushort)ModContent.TileType<TwilightGrassBlock>();
 								tile.HasTile = true;
 							}
-							if (y0 > radiusI * 0.6f + aValue * 5)
+							if (y0 > radiusI * 0.51f + aValue * 5)
 							{
 								tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
 								tile.HasTile = true;
+								tile.wall = WallID.Dirt;
 							}
 						}
 					}

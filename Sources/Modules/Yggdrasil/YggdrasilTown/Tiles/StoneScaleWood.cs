@@ -1,6 +1,7 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
+using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
@@ -10,15 +11,16 @@ public class StoneScaleWood : ModTile
 	{
 		Main.tileSolid[Type] = true;
 		Main.tileMergeDirt[Type] = false;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreTile>()] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineStone>()] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreSmallUp>()] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreSmall>()] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreLargeUp>()] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreLarge>()] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreMiddle>()] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<DarkForestSoil>()] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<DarkForestGrass>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<CyanVineOreTile>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<CyanVineStone>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<CyanVineOreSmallUp>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<CyanVineOreSmall>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<CyanVineOreLargeUp>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<CyanVineOreLarge>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<CyanVineOreMiddle>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<DarkForestSoil>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<DarkForestGrass>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<TwilightGrassBlock>()] = true;
 		Main.tileBlendAll[Type] = false;
 		Main.tileBlockLight[Type] = true;
 		Main.tileShine2[Type] = false;

@@ -29,8 +29,8 @@ internal class YggdrasilWorld : Subworld
 	}
 	public override void OnLoad()
 	{
-		Main.worldSurface = Main.maxTilesY - 1000;
-		Main.rockLayer = Main.maxTilesY - 500;
+		Main.worldSurface = Main.maxTilesY - 100;
+		Main.rockLayer = Main.maxTilesY - 50;
 	}
 	public override void Load()
 	{

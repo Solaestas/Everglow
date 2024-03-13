@@ -1,3 +1,5 @@
+using Everglow.Commons.DataStructures;
+
 namespace Everglow.Yggdrasil.Common.BackgroundManager;
 
 public class BackgroundManager
@@ -35,7 +37,7 @@ public class BackgroundManager
 
 	public static void QuickDrawBG(Texture2D tex, Rectangle drawArea, Color baseColor, int Ymin, int Ymax, bool Xclamp = false, bool Yclamp = true)
 	{
-
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
@@ -86,7 +88,7 @@ public class BackgroundManager
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, CloseII.ToArray(), 0, 2);
 		}
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 	}
 
 	public static void DrawWaterfallInBackground(Vector2 biomeCenter, float moveStep, Vector2 positionToTextureCenter, float Width, float Height, Color baseColor, int Ymin, int Ymax, Vector2 textureSize = new Vector2(), bool Xclamp = false, bool Yclamp = true)

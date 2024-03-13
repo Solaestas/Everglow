@@ -24,7 +24,7 @@ public class TwilightStone_1 : ModTile
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.addTile(Type);
-		AddMapEntry(new Color(76, 69, 65));
+		AddMapEntry(new Color(39, 50, 52));
 		DustType = ModContent.DustType<TwilightStone_Dust>();
 	}
 }
