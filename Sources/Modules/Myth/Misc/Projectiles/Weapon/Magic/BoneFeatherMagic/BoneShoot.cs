@@ -21,7 +21,7 @@ public class BoneShoot : ModProjectile, IWarpProjectile
 	{
 		if(Projectile.timeLeft == 199)
 		{
-			SoundEngine.PlaySound(SoundID.Item71.WithVolume(Projectile.ai[0] / 5f), Projectile.position);
+			SoundEngine.PlaySound(SoundID.Item71.WithVolume(Projectile.ai[0] / 5f) with { MaxInstances = 8 }, Projectile.position);
 			Vector2 vTOMouse = Main.MouseWorld - Projectile.Center;
 			Vector2 velocity = vTOMouse.SafeNormalize(Vector2.Zero) * Projectile.ai[2];
 			velocity = velocity.RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f));
