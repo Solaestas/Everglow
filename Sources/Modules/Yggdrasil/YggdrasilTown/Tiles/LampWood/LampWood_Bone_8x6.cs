@@ -26,7 +26,7 @@ public class LampWood_Bone_8x6 : ModTile
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.addTile(Type);
-		AddMapEntry(new Color(125, 125, 125));
+		AddMapEntry(new Color(228, 226, 222));
 	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{

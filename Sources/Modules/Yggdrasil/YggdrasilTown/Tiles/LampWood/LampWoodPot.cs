@@ -2,7 +2,6 @@ using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;
-using static Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.DarkTaro;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 

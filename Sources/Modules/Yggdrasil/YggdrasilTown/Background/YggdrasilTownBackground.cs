@@ -22,40 +22,32 @@ public class YggdrasilTownBackground : ModSystem
 			Ins.HookManager.AddHook(CodeLayer.PostDrawBG, DrawBackground);
 		}
 	}
-	/// <summary>
-	/// 环境光的钩子
-	/// </summary>
-	/// <param name="orig"></param>
-	/// <param name="self"></param>
-	/// <param name="x"></param>
-	/// <param name="y"></param>
-	/// <param name="outputColor"></param>
-	public float alpha = 0f;
+	public float BackgroundSwitchAlpha = 0f;
 	public override void PostUpdateEverything()//开启地下背景
 	{
 		const float increase = 0.02f;
 		if (BiomeActive() && Main.BackgroundEnabled)
 		{
-			if (alpha < 1)
+			if (BackgroundSwitchAlpha < 1)
 			{
-				alpha += increase;
+				BackgroundSwitchAlpha += increase;
 			}
 			else
 			{
-				alpha = 1;
+				BackgroundSwitchAlpha = 1;
 				Ins.HookManager.Disable(TerrariaFunction.DrawBackground);
 			}
 
 		}
 		else
 		{
-			if (alpha > 0)
+			if (BackgroundSwitchAlpha > 0)
 			{
-				alpha -= increase;
+				BackgroundSwitchAlpha -= increase;
 			}
 			else
 			{
-				alpha = 0;
+				BackgroundSwitchAlpha = 0;
 			}
 			Ins.HookManager.Enable(TerrariaFunction.DrawBackground);
 		}
@@ -69,7 +61,10 @@ public class YggdrasilTownBackground : ModSystem
 		if (Main.screenPosition.Y > (BiomeCenter.Y - 16000))
 		{
 			if (SubworldSystem.IsActive<YggdrasilWorld>())
+			{
+				YggdrasilEnvironmentLightManager.LightingScene = YggdrasilSceneID.YggdrasilTown;
 				return true;
+			}
 		}
 		return false;
 	}
@@ -80,7 +75,7 @@ public class YggdrasilTownBackground : ModSystem
 	private void DrawYggdrasilTownBackground(Color baseColor)
 	{
 		var texSky = ModAsset.YggdrasilTownBackgroundSky.Value;
-		var texClose = ModAsset.YggdrasilTownBackgroundClose.Value;
+		var texClose = ModAsset.Great_Outpost.Value;
 		var texC1 = ModAsset.YggdrasilTownBackgroundC1.Value;
 		var texC2 = ModAsset.YggdrasilTownBackgroundC2.Value;
 		var texC3 = ModAsset.YggdrasilTownBackgroundC3.Value;
@@ -141,10 +136,10 @@ public class YggdrasilTownBackground : ModSystem
 		}
 		
 
-		BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000));
-		BackgroundManager.QuickDrawBG(texC3, GetDrawRect(texClose.Size(), 0.05f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, false);
-		BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texClose.Size(), 0.10f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, false);
-		BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texClose.Size(), 0.15f, new Vector2(0, 7200)), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, true);
+		//BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000));
+		//BackgroundManager.QuickDrawBG(texC3, GetDrawRect(texClose.Size(), 0.05f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, false);
+		//BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texClose.Size(), 0.10f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, false);
+		//BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texClose.Size(), 0.15f, new Vector2(0, 7200)), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, true);
 
 		Vector2 deltaPos = screenCenter - BiomeCenter;
 		float MoveStep = 0.15f;
@@ -158,9 +153,14 @@ public class YggdrasilTownBackground : ModSystem
 			if (DrawCenter.X >= -60 && DrawCenter.X <= Main.screenWidth + 60)
 				BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.15f, DrawCenter, 20f, 750f, baseColor * 0.06f, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), texC1.Size(), false, false);
 		}
-		BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000));
+		Rectangle drawArea = GetDrawRect(texClose.Size(), 0.08f, Vector2.Zero);
+		drawArea.Width = (int)(drawArea.Width * 0.6f);
+		drawArea.Height = (int)(drawArea.Height * 0.6f);
+		drawArea.Y += 200;
+		drawArea.X += 500;
+		BackgroundManager.QuickDrawBG(texClose, drawArea, baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
 
-		BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.35f, new Vector2(-650, -400), 60f, 550f, baseColor * 0.12f, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), texClose.Size());
+		//BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.35f, new Vector2(-650, -400), 60f, 550f, baseColor * 0.12f, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), texClose.Size());
 		BackgroundManager.QuickDrawBG(texBound, GetDrawRect(texBound.Size(), 1f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20720), (int)(BiomeCenter.Y - 20420), false, false);
 	}
 	/// <summary>
@@ -193,9 +193,9 @@ public class YggdrasilTownBackground : ModSystem
 		sBS2.BlendState = BlendState.NonPremultiplied;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS2);
-		if (alpha <= 0)
+		if (BackgroundSwitchAlpha <= 0)
 			return;
-		Color baseColor = Color.White * alpha;
+		Color baseColor = Color.White * BackgroundSwitchAlpha;
 		DrawYggdrasilTownBackground(baseColor);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);

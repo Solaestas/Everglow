@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
@@ -24,7 +25,8 @@ public class LampWood_Stone_5x4 : ModTile
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.addTile(Type);
-		AddMapEntry(new Color(125, 125, 125));
+		DustType = ModContent.DustType<TwilightStone_Dust>();
+		AddMapEntry(new Color(39, 50, 52));
 	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
