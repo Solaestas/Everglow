@@ -7,7 +7,7 @@ namespace Everglow.Commons.AssetReplace
 {
 	public interface IModifyItemPickSound
 	{
-		public static readonly GlobalHookList<GlobalItem> Hook = ItemLoader.AddModHook(new GlobalHookList<GlobalItem>(typeof(Hook).GetMethod(nameof(ModifyItemPickSound))));
+		public static readonly GlobalHookList<GlobalItem> Hook = ItemLoader.AddModHook(GlobalHookList<GlobalItem>.Create(e => (e as Hook).ModifyItemPickSound));
 		/// <summary>
 		/// 用于替换掉从物品槽拿起/放下物品的音效（不会在服务器运行）
 		/// </summary>
