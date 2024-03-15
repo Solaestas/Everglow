@@ -267,6 +267,8 @@ internal class StarrySkySystem : ModSystem
 		//绘制substar
 		stars.ForEach(star => star.Draw());
 		Main.spriteBatch.End();
+		graphicsDevice.SetRenderTarget(StarryTarget);
+		graphicsDevice.Clear(Color.Transparent);
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
 
@@ -278,9 +280,7 @@ internal class StarrySkySystem : ModSystem
 		Starry.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.005f));
 		Starry.Parameters["tex1"].SetValue(StarrySkyTarget);
 		Starry.CurrentTechnique.Passes[0].Apply();
-
-		graphicsDevice.SetRenderTarget(StarryTarget);
-		graphicsDevice.Clear(Color.Transparent);
+		
 		Main.spriteBatch.Draw(blackTarget, Vector2.Zero, Color.White);
 
 		Main.spriteBatch.End();
