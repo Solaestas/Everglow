@@ -77,7 +77,7 @@ public class DarkForestGrass : ModTile, ISceneTile
 				}
 			}
 		}
-		switch (Main.rand.Next(24))
+		switch (Main.rand.Next(27))
 		{
 			case 0:
 				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 6, 1))
@@ -230,6 +230,24 @@ public class DarkForestGrass : ModTile, ISceneTile
 				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 2))
 				{
 					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 3, 2, ModContent.TileType<BrokenBox>(), 54 * Main.rand.Next(2));
+				}
+				break;
+			case 24:
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 4, 6))
+				{
+					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 4, 6, ModContent.TileType<WaveLeafFlower4x6>(), 72 * Main.rand.Next(3));
+				}
+				break;
+			case 25:
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 4, 7))
+				{
+					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 4, 7, ModContent.TileType<WaveLeafFlower4x7>());
+				}
+				break;
+			case 26:
+				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 6, 8))
+				{
+					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 6, 8, ModContent.TileType<WaveLeafFlower6x8>());
 				}
 				break;
 		}
