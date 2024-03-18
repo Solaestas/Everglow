@@ -1,5 +1,7 @@
 sampler uImage0 : register(s0);
 
+int RenderTargetSize;
+
 int EdgeNumber;
 //float4 Range1[];
 //float4 Range2[];
@@ -22,7 +24,7 @@ float4 edge(float2 coords : TEXCOORD0) : COLOR0
     {
         for (int j = -1; j <= 1; j++)
         {
-            float4 c = tex2D(uImage0, (coords * 1000 + float2(dx * i, dy * j)) / 1000);
+            float4 c = tex2D(uImage0, (coords * 1280 + float2(dx * i, dy * j)) / 1280);
             // 如果任何一个像素有颜色
             if (any(c))
             {
