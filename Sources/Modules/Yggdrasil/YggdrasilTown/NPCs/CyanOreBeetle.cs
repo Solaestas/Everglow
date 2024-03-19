@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
@@ -10,17 +11,20 @@ public class CyanOreBeetle : ModNPC
 	{
 		Main.npcFrameCount[NPC.type] = 5;
 		YggdrasilTownNPC.RegisterYggdrasilTownNPC(Type);
+		NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
 	}
+
 	public override void SetDefaults()
 	{
 		NPC.width = 54;
 		NPC.height = 42;
-		NPC.lifeMax = 120;
+		NPC.lifeMax = 50;
 		NPC.damage = 16;
-		NPC.defense = 12;
+		NPC.defense = 6;
 		NPC.friendly = false;
 		NPC.aiStyle = 3;
-		NPC.knockBackResist = 1f;
+		NPC.knockBackResist = 0.75f;
+		NPC.value = 30;
 		NPC.HitSound = SoundID.NPCHit4;
 		NPC.DeathSound = SoundID.NPCDeath4;
 	}
@@ -38,7 +42,19 @@ public class CyanOreBeetle : ModNPC
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
-		NPC.scale = Main.rand.NextFloat(0.85f, 1.15f);
+		int scale = Main.rand.Next(1, 100);
+		if (scale <= 50)
+		{
+			NPC.scale = 1;
+		}
+		else if (scale > 50 && scale <= 85)
+		{
+			NPC.scale = 1.25f;
+		}
+		else
+		{
+			NPC.scale = 1.5f;
+		}
 		NPC.lifeMax = (int)(NPC.lifeMax * NPC.scale);
 		NPC.life = NPC.lifeMax;
 	}
@@ -144,6 +160,7 @@ public class CyanOreBeetle : ModNPC
 	}
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.CyanVineOre>(), 1, 1, 1));
+
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.CyanVineOre>(), 1, 1, 2));
 	}
 }
