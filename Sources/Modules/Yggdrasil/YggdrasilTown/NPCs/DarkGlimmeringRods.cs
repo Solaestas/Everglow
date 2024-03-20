@@ -8,7 +8,7 @@ public class DarkGlimmeringRods : ModNPC
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 8;
-		YggdrasilTownNPC.RegisterYggdrasilTownNPC(Type);
+		NPCSpawnManager.RegisterNPC(Type);
 	}
 	public override void SetDefaults()
 	{

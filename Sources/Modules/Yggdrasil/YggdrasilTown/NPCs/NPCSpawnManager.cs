@@ -2,10 +2,31 @@ using SubworldLibrary;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 
-public class YggdrasilTownNPC : GlobalNPC
+public class NPCSpawnManager : GlobalNPC
 {
-	private static HashSet<int> yggdrasilTownNPCTypes = new HashSet<int>();
-	public static void RegisterYggdrasilTownNPC(int type) => yggdrasilTownNPCTypes.Add(type);
+	private static HashSet<int> yggdrasilNPC = new HashSet<int>();
+	public static void RegisterNPC(int type) => yggdrasilNPC.Add(type);
+	public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
+	{
+		if (!SubworldSystem.IsActive<YggdrasilWorld>())
+		{
+			return;
+		}
+
+		var dict = new Dictionary<int, float>(yggdrasilNPC.Count);
+		foreach(var pair in pool)
+		{
+			if(yggdrasilNPC.Contains(pair.Key))
+			{
+				dict.Add(pair.Key, pair.Value);
+			}
+		}
+		pool.Clear();
+		foreach(var pair in dict)
+		{
+			pool.Add(pair.Key, pair.Value);
+		}
+	}
 	public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
 	{
 		if (SubworldSystem.IsActive<YggdrasilWorld>())
@@ -19,7 +40,7 @@ public class YggdrasilTownNPC : GlobalNPC
 			if (fix < 1)
 			{
 				fix *= fix;
-				spawnRate = (int)((1 / fix) * spawnRate);
+				spawnRate = (int)(1 / fix * spawnRate);
 				maxSpawns = (int)(fix * maxSpawns);
 			}
 		}
