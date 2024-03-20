@@ -19,7 +19,7 @@ public class YggdrasilTownNPC : GlobalNPC
 			if (fix < 1)
 			{
 				fix *= fix;
-				spawnRate = (int)((1 / fix) * spawnRate);
+				spawnRate = (int)(1 / fix * spawnRate);
 				maxSpawns = (int)(fix * maxSpawns);
 			}
 		}
