@@ -13,6 +13,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 		private bool mouseDown = false;
 		public Vector2 Center = Vector2.Zero;
 		public string Tooltip = string.Empty;
+		public int IndexInList = -1;
 
 		public event HandleTigger OnTigger;
 
@@ -33,9 +34,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 		{
 			mouseDown = false;
 			if (!IsMoveing)
-			{
 				OnTigger?.Invoke(this);
-			}
 		}
 
 		private void Events_OnLeftDown(BaseElement baseElement)
@@ -55,21 +54,14 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 			{
 				var c = Main.MouseScreen;
 				if (c.X + Info.TotalSize.X / 2f > ParentElement.Info.Location.X + ParentElement.Info.Size.X)
-				{
 					c.X = ParentElement.Info.Location.X + ParentElement.Info.Size.X - Info.TotalSize.X / 2f;
-				}
 				if (c.X - Info.TotalSize.X / 2f < ParentElement.Info.Location.X)
-				{
 					c.X = ParentElement.Info.Location.X + Info.TotalSize.X / 2f;
-				}
+
 				if (c.Y + Info.TotalSize.Y / 2f > ParentElement.Info.Location.Y + ParentElement.Info.Size.Y)
-				{
 					c.Y = ParentElement.Info.Location.Y + ParentElement.Info.Size.Y - Info.TotalSize.Y / 2f;
-				}
 				if (c.Y - Info.TotalSize.Y / 2f < ParentElement.Info.Location.Y)
-				{
 					c.Y = ParentElement.Info.Location.Y + Info.TotalSize.Y / 2f;
-				}
 				MoveTo(c);
 			}
 			else

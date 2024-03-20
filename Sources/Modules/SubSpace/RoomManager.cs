@@ -43,6 +43,7 @@ public class RoomManager
 			SubworldSystem.Enter<RoomWorld>();
 		}
 	}
+
 	/// <summary>
 	/// 向外离开一层房间
 	/// </summary>
@@ -51,7 +52,7 @@ public class RoomManager
 		//在房间里就向外一层
 		if (SubworldSystem.IsActive<RoomWorld>())
 		{
-			if(RoomWorld.LayerDepth > 1)
+			if (RoomWorld.LayerDepth > 1)
 			{
 				//保存世界的地图数据
 				SaveRoomDatas();
@@ -73,13 +74,14 @@ public class RoomManager
 			return;
 		}
 	}
+
 	/// <summary>
 	/// 去到指定层级的房间
 	/// </summary>
 	public static void GoToTargetLevelRoom()
 	{
-
 	}
+
 	/// <summary>
 	/// 退回原世界
 	/// </summary>
@@ -97,7 +99,7 @@ public class RoomManager
 		//层级深度归零
 		RoomWorld.LayerDepth = 0;
 		//原世界为主世界直接退出
-		if(RoomWorld.OriginalWorld == null)
+		if (RoomWorld.OriginalWorld == null)
 		{
 			SubworldSystem.Exit();
 		}
@@ -112,13 +114,14 @@ public class RoomManager
 		roomPlayer.RoomPosition = RoomWorld.AnchorWorldCoordinate;
 		RoomWorld.OriginalWorld = null;
 	}
+
 	public static void SaveRoomDatas()
 	{
 		var mapIO = new MapIO(5, 5, Main.maxTilesX - 5, Main.maxTilesY - 5);
-		string path = Path.Combine(Main.SavePath, "Mods", "ModDatas", "Everglow_RoomWorlds", Main.worldID.ToString());
+		string path = Path.Combine(ModIns.ModCachePath, "Everglow_RoomWorlds", Main.worldID.ToString());
 		if (RoomWorld.OriginalWorld != null)
 		{
-			path = Path.Combine(Main.SavePath, "Mods", "ModDatas", "Everglow_RoomWorlds", Main.worldID.ToString(), RoomWorld.OriginalWorld.Name.ToString());
+			path = Path.Combine(ModIns.ModCachePath, "Everglow_RoomWorlds", Main.worldID.ToString(), RoomWorld.OriginalWorld.Name.ToString());
 		}
 		if (!Directory.Exists(path))
 		{
@@ -129,15 +132,17 @@ public class RoomManager
 		mapIO.Write(writePath);
 	}
 }
+
 public class RoomPlayer : ModPlayer
 {
 	/// <summary>
 	/// 需要把玩家还原回去的位点,一般取房间门的锚位
 	/// </summary>
 	public Point RoomPosition;
+
 	public override void OnEnterWorld()
 	{
-		if(RoomPosition != Point.zeroPoint)
+		if (RoomPosition != Point.zeroPoint)
 		{
 			Player.Teleport(new Vector2(RoomPosition.X * 16 - 8, RoomPosition.Y * 16 - 48));
 			RoomPosition = Point.zeroPoint;
@@ -150,11 +155,12 @@ public class RoomPlayer : ModPlayer
 		base.OnEnterWorld();
 	}
 }
+
 public class RoomWorldTile : GlobalTile
 {
 	public override bool CanKillTile(int i, int j, int type, ref bool blockDamaged)
 	{
-		if(SubworldSystem.IsActive<RoomWorld>())
+		if (SubworldSystem.IsActive<RoomWorld>())
 		{
 			if (Math.Abs(i - Main.maxTilesX / 2) > 80 || Math.Abs(j - Main.maxTilesY / 2) > 80)
 			{
@@ -164,6 +170,3 @@ public class RoomWorldTile : GlobalTile
 		return base.CanKillTile(i, j, type, ref blockDamaged);
 	}
 }
-
-
-

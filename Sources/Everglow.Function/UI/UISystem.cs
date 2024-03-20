@@ -1,3 +1,5 @@
+using System.Reflection;
+using MonoMod.Cil;
 using Terraria.UI;
 
 namespace Everglow.Commons.UI
@@ -27,15 +29,17 @@ namespace Everglow.Commons.UI
 		public override void Load()
 		{
 			base.Load();
-			if (Main.netMode != NetmodeID.Server)
+			if (Main.netMode == NetmodeID.SinglePlayer)
+			{
 				system.Load();
+			}
 		}
 
 		public override void UpdateUI(GameTime gameTime)
 		{
 			base.UpdateUI(gameTime);
 
-			if (Main.netMode != NetmodeID.Server)
+			if (Main.netMode == NetmodeID.SinglePlayer)
 			{
 				if (ScreenSize != Main.ScreenSize)
 				{
@@ -56,7 +60,7 @@ namespace Everglow.Commons.UI
 					"Everglow: Everglow UI System",
 					delegate
 					{
-						if (Main.netMode != NetmodeID.Server)
+						if (Main.netMode == NetmodeID.SinglePlayer)
 							system.Draw(Main.spriteBatch);
 						return true;
 					},

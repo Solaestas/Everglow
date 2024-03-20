@@ -7,6 +7,10 @@
 	</PropertyGroup>
 	<ItemGroup>
 	  <AdditionalFiles Remove="iiid\effects\iiideffects\edge.fx" />
+	  <AdditionalFiles Remove="TmlHooks\SwitchWorldItems\Images\UIWorldListItemPatch\NextWorld.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="TmlHooks\SwitchWorldItems\Images\UIWorldListItemPatch\NextWorld.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Solaestas-EffectFile Remove="IIID\Effects\Bloom.fx" />
@@ -21,6 +25,9 @@
 	<ItemGroup>
 		<PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
 		<ProjectReference Include="..\Everglow.Core\Everglow.Core.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="obj\" />
 	</ItemGroup>
 
 </Project>

@@ -2,7 +2,22 @@ namespace Everglow.Commons;
 
 public static class ModIns
 {
-	public static Mod Mod { get; set; }
+	public static string ModCachePath;
+
+	public static Mod Mod
+	{
+		get => _mod;
+		set
+		{
+			_mod = value;
+			if (value != null)
+				ModCachePath = Path.Combine(Main.SavePath, "Mods", "ModDatas", _mod.Name);
+			else
+				ModCachePath = string.Empty;
+		}
+	}
+
+	private static Mod _mod;
 
 	public static event Action OnPostSetupContent;
 

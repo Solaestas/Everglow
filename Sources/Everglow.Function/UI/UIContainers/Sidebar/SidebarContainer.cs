@@ -46,33 +46,23 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 			UIImage image = new UIImage(ModAsset.Array.Value, Color.White);
 			image.Info.Left.SetValue(2f, 1f);
 			image.Info.Top.SetValue(-image.Info.Height.Pixel / 2f, 0.5f);
-			image.Events.OnUpdate += (element, gt) =>
-			{
-				if (mainPanel.Info.TotalLocation.X - mainPanel.Info.TotalSize.X < 4f)
-					((UIImage)element).SpriteEffects = SpriteEffects.FlipHorizontally;
-				if (mainPanel.Info.TotalLocation.X < 2f && mainPanel.Info.TotalLocation.X > -2f)
-					((UIImage)element).SpriteEffects = SpriteEffects.None;
-			};
 			image.Events.OnLeftClick += element =>
 			{
 				open = !open;
 			};
 			mainPanel.Register(image);
-
 		}
 
 		private void LoadSidebarElement(SidebarList quickBar)
 		{
-			var containers = from c in GetType().Assembly.GetTypes()
-							 where !c.IsAbstract && c.IsSubclassOf(typeof(SidebarElementBase))
-							 select c;
+			var elements = Ins.ModuleManager.CreateInstances<SidebarElementBase>();
 			TriggeredTypeSidebarUIElement quickElement;
-			SidebarElementBase sidebarElement;
-			foreach (var c in containers)
+			int i = 0;
+			foreach (var sidebarElement in elements)
 			{
-				sidebarElement = (SidebarElementBase)Activator.CreateInstance(c);
 				quickElement = new TriggeredTypeSidebarUIElement(sidebarElement.Icon, Color.White);
 				quickElement.Tooltip = sidebarElement.Tooltip;
+				quickElement.IndexInList = i;
 				quickElement.OnTigger += element =>
 				{
 					sidebarElement.Invoke();
@@ -82,6 +72,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 					mouseText = ((TriggeredTypeSidebarUIElement)element).Tooltip;
 				};
 				quickBar.Register(quickElement);
+				i++;
 			}
 		}
 
