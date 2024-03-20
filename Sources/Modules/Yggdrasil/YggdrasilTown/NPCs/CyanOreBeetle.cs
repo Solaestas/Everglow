@@ -10,7 +10,7 @@ public class CyanOreBeetle : ModNPC
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 5;
-		YggdrasilTownNPC.RegisterYggdrasilTownNPC(Type);
+		NPCSpawnManager.RegisterNPC(Type);
 		NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
 	}
 
