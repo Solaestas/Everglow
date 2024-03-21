@@ -26,6 +26,20 @@ internal class YggdrasilWorld : Subworld
 	public override void Load()
 	{
 		On_WorldGen.setWorldSize += WorldGen_setWorldSize;
+		if (ModLoader.TryGetMod("SubworldLibrary", out Mod sbl))
+		{
+			Type t = sbl.GetType().Assembly.GetType("SubworldLibrary.SubworldSystem");
+			MonoModHooks.Add(t.GetMethod("get_CurrentPath", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance),
+				Redirection_SubWorldSystem_CurrentPath);
+		}
+	}
+	private static string Redirection_SubWorldSystem_CurrentPath(Func<string> orig)
+	{
+		if (SubworldSystem.Current?.GetType() == typeof(YggdrasilWorld))
+		{
+			return Path.Combine(Main.WorldPath, "Everglow", "YggdrasilWorld.wld");
+		}
+		return orig();
 	}
 	private static void WorldGen_setWorldSize(On_WorldGen.orig_setWorldSize orig)
 	{
