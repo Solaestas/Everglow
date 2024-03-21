@@ -336,6 +336,10 @@ public class BrownCaterpillar : ModNPC
 				{
 					return true;
 				}
+				if(!projectile.Colliding(projectile.Hitbox, rectangle))
+				{
+					Main.NewText(projectile.type);
+				}
 			}
 		}
 		return false;

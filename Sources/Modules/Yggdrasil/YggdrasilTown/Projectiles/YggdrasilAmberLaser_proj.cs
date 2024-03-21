@@ -8,7 +8,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class YggdrasilAmberLaser_proj : HandholdProjectile, IWarpProjectile
 {
-	public override void SetDef()
+	public override void SetDef() 
 	{
 		DepartLength = 60;
 		TextureRotation = 5 / 18f * MathHelper.Pi;

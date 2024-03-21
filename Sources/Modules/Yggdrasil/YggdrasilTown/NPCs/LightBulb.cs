@@ -11,7 +11,7 @@ public class LightBulb : ModNPC
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 3;
-		YggdrasilTownNPC.RegisterYggdrasilTownNPC(Type);
+		NPCSpawnManager.RegisterNPC(Type);
 	}
 	public override void SetDefaults()
 	{
