@@ -234,11 +234,11 @@ public class YggdrasilSlashBall : ModProjectile
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		float right = Math.Abs(targetHitbox.Right - projHitbox.Center.X);
-		float left = Math.Abs(targetHitbox.Left - projHitbox.Center.X);
-		float top = Math.Abs(targetHitbox.Top - projHitbox.Center.Y);
-		float bottom = Math.Abs(targetHitbox.Bottom - projHitbox.Center.Y);
-		return Math.Min(right, left) < 60 * Projectile.scale && Math.Min(top, bottom) < 60 * Projectile.scale;
+		bool b0 = projHitbox.Center.X < targetHitbox.Right + 60 * Projectile.scale;
+		bool b1 = projHitbox.Center.X > targetHitbox.Left - 60 * Projectile.scale;
+		bool b2 = projHitbox.Center.Y < targetHitbox.Top + 60 * Projectile.scale;
+		bool b3 = projHitbox.Center.Y > targetHitbox.Bottom - 60 * Projectile.scale;
+		return b0 && b1 && b2 && b3;
 	}
 	public override void OnKill(int timeLeft)
 	{
