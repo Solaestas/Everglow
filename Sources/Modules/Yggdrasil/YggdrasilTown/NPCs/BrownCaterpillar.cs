@@ -1,6 +1,7 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.GreenCore.Items.Weapons;
 using MathNet.Numerics;
 using MathNet.Numerics.Distributions;
 using Terraria;
@@ -74,6 +75,7 @@ public class BrownCaterpillar : ModNPC
 		_caterpillarCoroutine.Update();
 		_caterpillarCoroutine.Update();
 		NPC.velocity *= 0;
+		AdjustPosition();
 	}
 	private IEnumerator<ICoroutineInstruction> Falling()
 	{
@@ -329,20 +331,9 @@ public class BrownCaterpillar : ModNPC
 				int x = (int)(NPC.Center.X + segment.SelfPosition.X - 20);
 				int y = (int)(NPC.Center.Y + segment.SelfPosition.Y - 20);
 				Rectangle rectangle = new Rectangle(x, y, 40, 40);
-				//ModProjectile modProjectile = projectile.ModProjectile;
-				//if (modProjectile != null)
-				//{
 
-				//	if (modProjectile.Colliding(projectile.Hitbox, rectangle).Value)
-				//	{
-
-				//		return true;
-				//	}
-				//}
-				//else
-				if (projectile.Colliding(projectile.Hitbox, rectangle) && NPC.immune[projectile.owner] == 0)
+				if (projectile.Colliding(projectile.Hitbox, rectangle) && NPC.immune[projectile.owner] == 0 && projectile.friendly)
 				{
-
 					return true;
 				}
 			}
@@ -352,6 +343,24 @@ public class BrownCaterpillar : ModNPC
 	public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
 	{
 		base.ModifyHitByProjectile(projectile, ref modifiers);
+	}
+	public override bool? CanBeHitByItem(Player player, Item item)
+	{
+		for (int i = 0; i < Segments.Count; i++)
+		{
+			Segment segment = Segments[i];
+			int x = (int)(NPC.Center.X + segment.SelfPosition.X - 20);
+			int y = (int)(NPC.Center.Y + segment.SelfPosition.Y - 20);
+			Rectangle rectangle = new Rectangle(x, y, 40, 40);
+			Rectangle itemBox = item.Hitbox;
+			itemBox.X = (int)(player.MountedCenter.X);
+			itemBox.Y = (int)(player.MountedCenter.Y);
+			if (Rectangle.Intersect(itemBox, rectangle) != Rectangle.emptyRectangle)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	public override bool ModifyCollisionData(Rectangle victimHitbox, ref int immunityCooldownSlot, ref MultipliableFloat damageMultiplier, ref Rectangle npcHitbox)
 	{
@@ -373,6 +382,14 @@ public class BrownCaterpillar : ModNPC
 		NPC.Center = v0;
 		base.OnHitByProjectile(projectile, hit, damageDone);
 	}
+	public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
+	{
+		Vector2 v0 = NPC.Center;
+		NPC.width = 500;
+		NPC.height = 500;
+		NPC.Center = v0;
+		base.OnHitByItem(player, item, hit, damageDone);
+	}
 	public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
 	{
 		if(Segments.Count > 5)
@@ -381,6 +398,8 @@ public class BrownCaterpillar : ModNPC
 		}
 		return true;
 	}
+
+
 	public Vector2 GetNormalOfTiles(Vector2 postion)
 	{
 		Vector2 normal = Vector2.Zero;

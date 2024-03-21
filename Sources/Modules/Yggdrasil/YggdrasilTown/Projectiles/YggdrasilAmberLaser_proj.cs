@@ -11,8 +11,6 @@ public class YggdrasilAmberLaser_proj : HandholdProjectile, IWarpProjectile
 	public override void SetDef()
 	{
 		DepartLength = 60;
-		Projectile.usesLocalNPCImmunity = true;
-		Projectile.localNPCHitCooldown = 20;
 		TextureRotation = 5 / 18f * MathHelper.Pi;
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 5;
