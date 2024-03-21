@@ -32,6 +32,11 @@ internal class YggdrasilWorld : Subworld
 			MonoModHooks.Add(t.GetMethod("get_CurrentPath", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance),
 				Redirection_SubWorldSystem_CurrentPath);
 		}
+		Player.Hooks.OnEnterWorld += Hooks_OnEnterWorld;
+	}
+	private void Hooks_OnEnterWorld(Player player)
+	{
+		player.TouchedTiles.Clear();
 	}
 	private static string Redirection_SubWorldSystem_CurrentPath(Func<string> orig)
 	{
