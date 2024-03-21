@@ -336,10 +336,7 @@ public class BrownCaterpillar : ModNPC
 				{
 					return true;
 				}
-				if(!projectile.Colliding(projectile.Hitbox, rectangle))
-				{
-					Main.NewText(projectile.type);
-				}
+
 			}
 		}
 		return false;
@@ -381,16 +378,16 @@ public class BrownCaterpillar : ModNPC
 	public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
 	{
 		Vector2 v0 = NPC.Center;
-		NPC.width = 500;
-		NPC.height = 500;
+		NPC.width = 400;
+		NPC.height = 400;
 		NPC.Center = v0;
 		base.OnHitByProjectile(projectile, hit, damageDone);
 	}
 	public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
 	{
 		Vector2 v0 = NPC.Center;
-		NPC.width = 500;
-		NPC.height = 500;
+		NPC.width = 400;
+		NPC.height = 400;
 		NPC.Center = v0;
 		base.OnHitByItem(player, item, hit, damageDone);
 	}

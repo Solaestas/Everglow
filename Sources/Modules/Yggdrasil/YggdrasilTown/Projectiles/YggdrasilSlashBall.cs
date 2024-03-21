@@ -1,6 +1,7 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Items.SquamousShell;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using Terraria;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -236,8 +237,8 @@ public class YggdrasilSlashBall : ModProjectile
 	{
 		bool b0 = projHitbox.Center.X < targetHitbox.Right + 60 * Projectile.scale;
 		bool b1 = projHitbox.Center.X > targetHitbox.Left - 60 * Projectile.scale;
-		bool b2 = projHitbox.Center.Y < targetHitbox.Top + 60 * Projectile.scale;
-		bool b3 = projHitbox.Center.Y > targetHitbox.Bottom - 60 * Projectile.scale;
+		bool b2 = projHitbox.Center.Y > targetHitbox.Top - 60 * Projectile.scale;
+		bool b3 = projHitbox.Center.Y < targetHitbox.Bottom + 60 * Projectile.scale;
 		return b0 && b1 && b2 && b3;
 	}
 	public override void OnKill(int timeLeft)
