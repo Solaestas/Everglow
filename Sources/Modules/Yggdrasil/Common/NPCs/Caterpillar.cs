@@ -1,5 +1,7 @@
 using Everglow.Commons.Coroutines;
+using Everglow.Yggdrasil.Common.Elevator.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 
@@ -448,7 +450,7 @@ public abstract class Caterpillar : ModNPC
 			}
 			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
 			Segment tail = Segments[Segments.Count - 1];//尾巴
-			tail.SelfPosition = Vector2.Lerp(tail.SelfPosition, Segments[0].SelfPosition + toHead * 100, 0.03f);
+			tail.SelfPosition = Vector2.Lerp(tail.SelfPosition, Segments[0].SelfPosition + toHead * (SegmentCount * SegmentBehavioralSize / 3f), 0.03f);
 			float height = CheckOverHeight(tail.SelfPosition + NPC.Center, Vector2.Normalize(toHead).RotatedBy(MathHelper.PiOver2));
 			if (height > 2 && height < 100)
 			{
@@ -506,7 +508,7 @@ public abstract class Caterpillar : ModNPC
 			}
 			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
 			Segment head = Segments[0];//头
-			head.SelfPosition += toTail * 2f * SegmentCount / 10f;
+			head.SelfPosition += toTail * 2f * (SegmentCount * SegmentBehavioralSize / 300f);
 			toTail = toTail.RotatedBy(-0.029f / (SegmentCount / 10f) * MathF.Sin(t / 60f * MathF.PI * head.SelfDirection));
 			head.Normal = toTail.RotatedBy(MathHelper.PiOver2);
 			tValue = (float)Utils.Lerp(tValue, SegmentBehavioralSize * SegmentCount / 5f, 0.03f);
@@ -633,7 +635,7 @@ public abstract class Caterpillar : ModNPC
 			}
 			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
 			Segment tail = Segments[Segments.Count - 1];//尾巴
-			tail.SelfPosition = Vector2.Lerp(tail.SelfPosition, Segments[0].SelfPosition + toHead * 100, 0.03f);
+			tail.SelfPosition = Vector2.Lerp(tail.SelfPosition, Segments[0].SelfPosition + toHead * (SegmentCount * SegmentBehavioralSize / 3f), 0.03f);
 			float height = CheckOverHeight(tail.SelfPosition + NPC.Center, Vector2.Normalize(toHead).RotatedBy(MathHelper.PiOver2));
 			if (height > 2 && height < 100)
 			{
@@ -710,6 +712,17 @@ public abstract class Caterpillar : ModNPC
 		}
 	}
 	/// <summary>
+	/// 获取绘制帧
+	/// </summary>
+	/// <param name="Style"></param>
+	/// <returns></returns>
+	public virtual Rectangle GetDrawFrame(int Style)
+	{
+		Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+		int width = texture.Width / 3;
+		return new Rectangle(Style * width, 0, width, texture.Height);
+	}
+	/// <summary>
 	/// 绘制
 	/// </summary>
 	/// <param name="spriteBatch"></param>
@@ -719,21 +732,22 @@ public abstract class Caterpillar : ModNPC
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-		for (int i = 0; i < Segments.Count; i++)
+		for (int i = 1; i < Segments.Count; i++)
 		{
 			Vector2 drawPos = Segments[i].SelfPosition + NPC.Center - Main.screenPosition;
-			int width = texture.Width / 3;
-			Rectangle drawRectangle = new Rectangle(Segments[i].Style * width, 0, width, texture.Height);
+
+			Rectangle drawRectangle = GetDrawFrame(Segments[i].Style);
 			SpriteEffects spriteEffect = SpriteEffects.None;
 			if (Segments[i].SelfDirection == -1)
 			{
 				spriteEffect = SpriteEffects.FlipVertically;
 			}
-			spriteBatch.Draw(texture, drawPos, drawRectangle, drawColor, Segments[i].Normal.ToRotation() + MathHelper.PiOver2, new Vector2(width / 2f, texture.Height / 2f), 1f, spriteEffect, 0);
+			Vector2 origin = drawRectangle.Size() / 2f;
+			spriteBatch.Draw(texture, drawPos, drawRectangle, drawColor, Segments[i].Normal.ToRotation() + MathHelper.PiOver2, origin, 1f, spriteEffect, 0);
 			if (HitTimer > 0)
 			{
 				Color hitColor = new Color(drawColor.R / 255f, 0, 0, HitTimer / 30f);
-				spriteBatch.Draw(texture, drawPos, drawRectangle, hitColor, Segments[i].Normal.ToRotation() + MathHelper.PiOver2, new Vector2(width / 2f, texture.Height / 2f), 1f, spriteEffect, 0);
+				spriteBatch.Draw(texture, drawPos, drawRectangle, hitColor, Segments[i].Normal.ToRotation() + MathHelper.PiOver2, origin, 1f, spriteEffect, 0);
 			}
 		}
 		for (int i = 0; i < 1; i++)
@@ -741,18 +755,19 @@ public abstract class Caterpillar : ModNPC
 			if (Segments.Count > 0)
 			{
 				Vector2 drawPos = Segments[i].SelfPosition + NPC.Center - Main.screenPosition;
-				int width = texture.Width / 3;
-				Rectangle drawRectangle = new Rectangle(Segments[i].Style * width, 0, width, texture.Height);
+				Rectangle drawRectangle = GetDrawFrame(Segments[i].Style);
 				SpriteEffects spriteEffect = SpriteEffects.None;
 				if (Segments[i].SelfDirection == -1)
 				{
 					spriteEffect = SpriteEffects.FlipVertically;
 				}
-				spriteBatch.Draw(texture, drawPos, drawRectangle, drawColor, Segments[i].Normal.ToRotation() + MathHelper.PiOver2, new Vector2(width / 2f, texture.Height / 2f), 1f, spriteEffect, 0);
+				Vector2 origin = new Vector2(drawRectangle.Width, drawRectangle.Height / 2f);
+				Vector2 offset = Segments[i].Normal.RotatedBy(MathHelper.PiOver2) * drawRectangle.Width / 3f;
+				spriteBatch.Draw(texture, drawPos + offset, drawRectangle, drawColor, Segments[i].Normal.ToRotation() + MathHelper.PiOver2, origin, 1f, spriteEffect, 0);
 				if (HitTimer > 0)
 				{
 					Color hitColor = new Color(drawColor.R / 255f, 0, 0, HitTimer / 30f);
-					spriteBatch.Draw(texture, drawPos, drawRectangle, hitColor, Segments[i].Normal.ToRotation() + MathHelper.PiOver2, new Vector2(width / 2f, texture.Height / 2f), 1f, spriteEffect, 0);
+					spriteBatch.Draw(texture, drawPos + offset, drawRectangle, hitColor, Segments[i].Normal.ToRotation() + MathHelper.PiOver2, origin, 1f, spriteEffect, 0);
 				}
 			}
 		}
@@ -939,7 +954,7 @@ public abstract class Caterpillar : ModNPC
 		for (int j = 0; j < Segments.Count; j++)
 		{
 			Vector2 pos = NPC.Center + Segments[j].SelfPosition;
-			Dust.NewDustDirect(pos - new Vector2(20), 20, 20, ModContent.DustType<VerdantBlood>());
+			Dust.NewDustDirect(pos - new Vector2(SegmentHitBoxSize / 2), SegmentHitBoxSize / 2, SegmentHitBoxSize / 2, ModContent.DustType<VerdantBlood>());
 		}
 		base.HitEffect(hit);
 	}
@@ -1332,7 +1347,7 @@ public abstract class Caterpillar : ModNPC
 		Vector2 normal = Vector2.Zero;
 		for (int i = 0; i < 16; i++)
 		{
-			Vector2 check = new Vector2(0, 16).RotatedBy(i / 16f * MathHelper.TwoPi);
+			Vector2 check = new Vector2(0, SegmentHitBoxSize * 0.4f).RotatedBy(i / 16f * MathHelper.TwoPi);
 			Vector2 checkWorld = postion + check;
 			if (TileCollisionUtils.PlatformCollision(checkWorld))
 			{
