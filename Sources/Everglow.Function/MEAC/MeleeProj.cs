@@ -282,7 +282,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		float point = 0;
-		if (isAttacking && Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), ProjCenter_WithoutGravDir + MainVec_WithoutGravDir * Projectile.scale * (longHandle ? 0.2f : 0.1f), ProjCenter_WithoutGravDir + MainVec_WithoutGravDir * Projectile.scale, Projectile.height, ref point))
+		if (isAttacking && Collision.CheckAABBvLineCollision2(targetHitbox.TopLeft(), targetHitbox.Size(), ProjCenter_WithoutGravDir + MainVec_WithoutGravDir * Projectile.scale * (longHandle ? 0.2f : 0.1f), ProjCenter_WithoutGravDir + MainVec_WithoutGravDir * Projectile.scale))
 		{
 			return true;
 		}

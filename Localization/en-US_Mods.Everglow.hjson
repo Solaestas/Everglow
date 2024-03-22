@@ -77,11 +77,6 @@ Biomes: {
 		TownNPCDialogueName: the Firefly Biome
 	}
 
-	YggdrasilTownBiome: {
-		DisplayName: Yggdrasil Town Biome
-		TownNPCDialogueName: the Yggdrasil Town Biome
-	}
-
 	KelpCurtainBiome: {
 		DisplayName: Kelp Curtain Biome
 		TownNPCDialogueName: the Kelp Curtain Biome
@@ -90,6 +85,11 @@ Biomes: {
 	HurricaneMazeBiome: {
 		DisplayName: Hurricane Maze Biome
 		TownNPCDialogueName: the Hurricane Maze Biome
+	}
+
+	YggdrasilTownBiome: {
+		DisplayName: Yggdrasil Town Biome
+		TownNPCDialogueName: the Yggdrasil Town Biome
 	}
 }
 
@@ -2693,6 +2693,86 @@ Items: {
 		Tooltip: ""
 	}
 
+	DragonScaleWood: {
+		DisplayName: Dragon Scale Wood
+		Tooltip: ""
+	}
+
+	DragonScaleWoodWall: {
+		DisplayName: Dragon Scale Wood Wall
+		Tooltip: ""
+	}
+
+	KelpMoss_largeCreate: {
+		DisplayName: Kelp Moss_large Create
+		Tooltip: ""
+	}
+
+	MossProneSandSoil: {
+		DisplayName: Moss Prone Sand Soil
+		Tooltip: ""
+	}
+
+	OldMoss: {
+		DisplayName: Old Moss
+		Tooltip: ""
+	}
+
+	YggdrasilCyatheaWood: {
+		DisplayName: Yggdrasil Cyathea Wood
+		Tooltip: ""
+	}
+
+	AncientSyringe: {
+		DisplayName: Ancient Syringe
+		Tooltip: ""
+	}
+
+	BacterialAgent: {
+		DisplayName: Bacterial Agent
+		Tooltip: ""
+	}
+
+	HandheldCircularSaw: {
+		DisplayName: Handheld Circular Saw
+		Tooltip: ""
+	}
+
+	LichenTentacle: {
+		DisplayName: Lichen Tentacle
+		Tooltip: ""
+	}
+
+	AcroporaSpear: {
+		DisplayName: Acropora Spear
+		Tooltip: ""
+	}
+
+	CyanWindGranite: {
+		DisplayName: Cyan Wind Granite
+		Tooltip: ""
+	}
+
+	CharonDoubleSickle_Item: {
+		DisplayName: Charon Double Sickle_ Item
+		Tooltip: ""
+	}
+
+	ShadowEulogist: {
+		DisplayName: Shadow Eulogist
+		Tooltip: ""
+	}
+
+	BloodLightCrystal: {
+		DisplayName: Blood Light Crystal
+		Tooltip: ""
+	}
+
+	TrueDeathSickle: {
+		DisplayName: True Death Sickle
+		Tooltip: ""
+	}
+
 	TreePlacer: {
 		DisplayName: Tree Placer
 		Tooltip: ""
@@ -2952,20 +3032,26 @@ NPCs: {
 		DisplayName: Acytaea
 
 		TownNPCMood: {
-			Content: I am content.
-			NoHome: I hate not having a home.
-			FarFromHome: I am too far from home.
-			LoveSpace: I love having so much space.
-			DislikeCrowded: I dislike how crowded I am.
-			HateCrowded: I hate how crowded I am.
+			Content: 我很满足。
+			NoHome: 我讨厌没有家。
+			FarFromHome: 我离家太远了。
+			LoveSpace: 我非常喜欢有这么大的空间。
+			DislikeCrowded: 我不喜欢这么拥挤。
+			HateCrowded: 我讨厌这么拥挤。
 			LikeNPC_Princess: I like {NPCName}.
 			Princess_LovesNPC: I like {NPCName}.
 		}
 	}
 
 	Acytaea_Boss.DisplayName: Acytaea_ Boss
+	BrownCaterpillar.DisplayName: Brown Caterpillar
+	CrimsonProtestant.DisplayName: Crimson Protestant
+	CrimsonSpell.DisplayName: Crimson Spell
 	CyanOreBeetle.DisplayName: Cyan Ore Beetle
 	DarkGlimmeringRods.DisplayName: Dark Glimmering Rods
+	LeafcutterAnt.DisplayName: Leafcutter Ant
+	LightBulb.DisplayName: Light Bulb
+	WhisperingGhost.DisplayName: Whispering Ghost
 	SquamousShell.DisplayName: Squamous Shell
 	TestNPC.DisplayName: Test N P C
 }
@@ -3495,6 +3581,7 @@ Projectiles: {
 	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
 	DragonScaleHammerProj.DisplayName: Dragon Scale Hammer Proj
 	LampWoodSword_Projectile.DisplayName: Lamp Wood Sword_ Projectile
+	LightSeed.DisplayName: Light Seed
 	RockArrow.DisplayName: Rock Arrow
 	RockExplosion_friendly.DisplayName: Rock Explosion_friendly
 	RockSpikeBallista_Proj.DisplayName: Rock Spike Ballista_ Proj
