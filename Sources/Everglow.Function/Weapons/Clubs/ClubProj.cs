@@ -374,7 +374,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 	{
 		float point = 0;
 		Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * Projectile.scale;
-		if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center - HitRange, Projectile.Center + HitRange, 2 * HitLength / 32f * Omega / 0.3f, ref point))
+		if (Collision.CheckAABBvLineCollision2(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center - HitRange, Projectile.Center + HitRange))
 			return true;
 		return false;
 	}
