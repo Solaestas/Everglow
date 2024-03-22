@@ -34,7 +34,7 @@ public abstract class Caterpillar : ModNPC
 		NPC.width = 400;
 		NPC.height = 400;
 
-		NPC.lifeMax = 16;
+		NPC.lifeMax = 16000;
 		NPC.aiStyle = -1;
 		NPC.damage = 22;
 		NPC.defense = 8;
@@ -479,7 +479,10 @@ public abstract class Caterpillar : ModNPC
 					segment.SelfPosition = Segments[i - 1].SelfPosition - Vector2.Normalize(v) * 28;
 				}
 				Vector2 direction = segment.SelfPosition - Segments[i - 1].SelfPosition;
-
+				if(i != Segments.Count - 1)
+				{
+					direction = Segments[i + 1].SelfPosition - Segments[i - 1].SelfPosition;
+				}
 				direction = direction.RotatedBy(-MathHelper.PiOver2);
 				segment.Normal = Vector2.Normalize(direction);
 				Segments[i] = segment;
@@ -643,6 +646,9 @@ public abstract class Caterpillar : ModNPC
 			}
 		}
 	}
+	/// <summary>
+	/// 移动碰撞箱的位置
+	/// </summary>
 	public void AdjustPosition()
 	{
 		Vector2 v4P = Segments[4].SelfPosition;
@@ -654,13 +660,13 @@ public abstract class Caterpillar : ModNPC
 			Segments[i] = segment;
 		}
 	}
-	public override void OnKill()
-	{
-	}
-	public override void ModifyNPCLoot(NPCLoot npcLoot)
-	{
-
-	}
+	/// <summary>
+	/// 绘制
+	/// </summary>
+	/// <param name="spriteBatch"></param>
+	/// <param name="screenPos"></param>
+	/// <param name="drawColor"></param>
+	/// <returns></returns>
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
@@ -703,6 +709,12 @@ public abstract class Caterpillar : ModNPC
 		}
 		return false;
 	}
+	/// <summary>
+	/// 能否打中玩家
+	/// </summary>
+	/// <param name="target"></param>
+	/// <param name="cooldownSlot"></param>
+	/// <returns></returns>
 	public override bool CanHitPlayer(Player target, ref int cooldownSlot)
 	{
 		for (int i = 0; i < Segments.Count; i++)
@@ -719,6 +731,11 @@ public abstract class Caterpillar : ModNPC
 		}
 		return false;
 	}
+	/// <summary>
+	/// 判定能否被弹幕打中,疑似存在问题
+	/// </summary>
+	/// <param name="projectile"></param>
+	/// <returns></returns>
 	public override bool? CanBeHitByProjectile(Projectile projectile)
 	{
 		if (projectile != null && projectile.active)
@@ -730,8 +747,6 @@ public abstract class Caterpillar : ModNPC
 				int y = (int)(NPC.Center.Y + segment.SelfPosition.Y - 20);
 				Rectangle rectangle = new Rectangle(x, y, 40, 40);
 
-				if (ProjectileLoader.Colliding(projectile, projectile.Hitbox, rectangle) is bool modColliding)
-					return modColliding;
 				if (projectile.Colliding(projectile.Hitbox, rectangle) && NPC.immune[projectile.owner] == 0 && projectile.friendly)
 				{
 					Vector2 strikeForce = projectile.velocity;
@@ -740,13 +755,21 @@ public abstract class Caterpillar : ModNPC
 						strikeForce = Vector2.Normalize(strikeForce) * 80f;
 					}
 					segment.SelfPosition += strikeForce;
+					Main.NewText("hit");
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	public override bool? CanBeHitByItem(Player player, Item item)
+	/// <summary>
+	/// 判定能否被玩家近战打中
+	/// </summary>
+	/// <param name="player"></param>
+	/// <param name="item"></param>
+	/// <param name="meleeAttackHitbox"></param>
+	/// <returns></returns>
+	public override bool? CanCollideWithPlayerMeleeAttack(Player player, Item item, Rectangle meleeAttackHitbox)
 	{
 		for (int i = 0; i < Segments.Count; i++)
 		{
@@ -754,16 +777,18 @@ public abstract class Caterpillar : ModNPC
 			int x = (int)(NPC.Center.X + segment.SelfPosition.X - 20);
 			int y = (int)(NPC.Center.Y + segment.SelfPosition.Y - 20);
 			Rectangle rectangle = new Rectangle(x, y, 40, 40);
-			Rectangle itemBox = item.Hitbox;
-			itemBox.X = (int)(player.MountedCenter.X);
-			itemBox.Y = (int)(player.MountedCenter.Y);
-			if (Rectangle.Intersect(itemBox, rectangle) != Rectangle.emptyRectangle)
+
+			if (Rectangle.Intersect(meleeAttackHitbox, rectangle) != Rectangle.emptyRectangle)
 			{
 				return true;
 			}
 		}
 		return false;
 	}
+	/// <summary>
+	/// 被任何东西打中,出伤显示数字,压缩碰撞箱为10x10
+	/// </summary>
+	/// <param name="modifiers"></param>
 	public override void ModifyIncomingHit(ref NPC.HitModifiers modifiers)
 	{
 		Vector2 v0 = NPC.Center;
@@ -773,6 +798,12 @@ public abstract class Caterpillar : ModNPC
 
 		base.ModifyIncomingHit(ref modifiers);
 	}
+	/// <summary>
+	/// 被弹幕打中,在此还原碰撞箱
+	/// </summary>
+	/// <param name="projectile"></param>
+	/// <param name="hit"></param>
+	/// <param name="damageDone"></param>
 	public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
 	{
 		Vector2 v0 = NPC.Center;
@@ -794,6 +825,13 @@ public abstract class Caterpillar : ModNPC
 		}
 		base.OnHitByProjectile(projectile, hit, damageDone);
 	}
+	/// <summary>
+	/// 被武器打中,在此还原碰撞箱
+	/// </summary>
+	/// <param name="player"></param>
+	/// <param name="item"></param>
+	/// <param name="hit"></param>
+	/// <param name="damageDone"></param>
 	public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
 	{
 		Vector2 v0 = NPC.Center;
@@ -815,6 +853,13 @@ public abstract class Caterpillar : ModNPC
 		}
 		base.OnHitByItem(player, item, hit, damageDone);
 	}
+	/// <summary>
+	/// 更改血条位置
+	/// </summary>
+	/// <param name="hbPosition"></param>
+	/// <param name="scale"></param>
+	/// <param name="position"></param>
+	/// <returns></returns>
 	public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
 	{
 		if (Segments.Count > 5)
@@ -823,6 +868,10 @@ public abstract class Caterpillar : ModNPC
 		}
 		return true;
 	}
+	/// <summary>
+	/// 虫体曲线的外接正交矩形为鼠标碰撞箱
+	/// </summary>
+	/// <param name="boundingBox"></param>
 	public override void ModifyHoverBoundingBox(ref Rectangle boundingBox)
 	{
 		int minX = Main.maxTilesX * 16;
@@ -841,11 +890,11 @@ public abstract class Caterpillar : ModNPC
 			{
 				minY = pos.Y - 20;
 			}
-			if (pos.X + 20 < maxX)
+			if (pos.X + 20 > maxX)
 			{
 				maxX = pos.X + 20;
 			}
-			if (pos.Y + 20 < maxY)
+			if (pos.Y + 20 > maxY)
 			{
 				maxY = pos.Y + 20;
 			}
@@ -853,10 +902,14 @@ public abstract class Caterpillar : ModNPC
 		if (maxY > minY && maxX > minX)
 		{
 			boundingBox = new Rectangle(minX, minY, maxX - minX, maxY - minY);
+			
 		}
 		base.ModifyHoverBoundingBox(ref boundingBox);
 	}
-	
+	/// <summary>
+	/// 被打到的效果,包含流血和碎尸
+	/// </summary>
+	/// <param name="hit"></param>
 	public override void HitEffect(NPC.HitInfo hit)
 	{
 		for (int j = 0; j < Segments.Count; j++)
@@ -866,6 +919,11 @@ public abstract class Caterpillar : ModNPC
 		}
 		base.HitEffect(hit);
 	}
+	/// <summary>
+	/// 获得附近物块的倾斜朝向
+	/// </summary>
+	/// <param name="postion"></param>
+	/// <returns></returns>
 	public Vector2 GetNormalOfTiles(Vector2 postion)
 	{
 		Vector2 normal = Vector2.Zero;
@@ -888,8 +946,15 @@ public abstract class Caterpillar : ModNPC
 		}
 		return Vector2.Normalize(normal);
 	}
+	/// <summary>
+	/// 获得在一个方向上投影的高度
+	/// </summary>
+	/// <param name="postion"></param>
+	/// <param name="normalDirection"></param>
+	/// <returns></returns>
 	public float CheckOverHeight(Vector2 postion, Vector2 normalDirection)
 	{
+		normalDirection = Vector2.Normalize(normalDirection);
 		for (int i = 0; i < 1000; i++)
 		{
 			Vector2 check = normalDirection * i;
