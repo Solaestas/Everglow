@@ -1,7 +1,13 @@
+using System;
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.Common.Elevator.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
+using Terraria.ID;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 
@@ -38,8 +44,9 @@ public abstract class Caterpillar : ModNPC
 		NPC.aiStyle = -1;
 		NPC.damage = 22;
 		NPC.defense = 8;
+		NPC.canDisplayBuffs = false;
 
-		
+
 		NPC.knockBackResist = 0.2f;
 		NPC.HitSound = SoundID.NPCHit1;
 		NPC.DeathSound = SoundID.NPCDeath1;
@@ -88,6 +95,22 @@ public abstract class Caterpillar : ModNPC
 	/// 是否正在舒展
 	/// </summary>
 	public bool Crawl_2 = false;
+	/// <summary>
+	/// 体节碰撞大小
+	/// </summary>
+	public int SegmentHitBoxSize = 40;
+	/// <summary>
+	/// 体节行为大小
+	/// </summary>
+	public float SegmentBehavioralSize = 30;
+	/// <summary>
+	/// 体节数量
+	/// </summary>
+	public int SegmentCount = 10;
+	/// <summary>
+	/// 防御性手段,确保至少一个协程活着
+	/// </summary>
+	public int AnyAliveCoroutineTimer;
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
 		return 0f;
@@ -100,7 +123,7 @@ public abstract class Caterpillar : ModNPC
 		{
 			startDir = -1;
 		}
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < SegmentCount; i++)
 		{
 			Segment segment = new Segment();
 			segment.Style = 1;
@@ -108,11 +131,11 @@ public abstract class Caterpillar : ModNPC
 			{
 				segment.Style = 0;
 			}
-			if (i == 9)
+			if (i == SegmentCount - 1)
 			{
 				segment.Style = 2;
 			}
-			segment.SelfPosition = new Vector2((i - 4) * 30 * startDir, 0);
+			segment.SelfPosition = new Vector2((i - (SegmentCount / 2f - 1)) * SegmentBehavioralSize * startDir, 0);
 			segment.Normal = new Vector2(0, -1 * startDir);
 			segment.SelfDirection = startDir;
 			Segments.Add(segment);
@@ -121,8 +144,31 @@ public abstract class Caterpillar : ModNPC
 		Toughness = MaxToughness;
 		_caterpillarCoroutine.StartCoroutine(new Coroutine(Falling()));
 	}
+	/// <summary>
+	/// 重置碰撞箱大小保障Buff的数字不要乱跳
+	/// </summary>
+	public override void ResetEffects()
+	{
+		Vector2 v0 = NPC.Center;
+		NPC.width = 10;
+		NPC.height = 10;
+		NPC.Center = v0;
+		AnyAliveCoroutineTimer++;
+		//正常情况下所有协程不会都死掉,真死完了等一秒防御性重启
+		if(AnyAliveCoroutineTimer > 60)
+		{
+			_caterpillarCoroutine.StartCoroutine(new Coroutine(Crawling()));
+		}
+		base.ResetEffects();
+	}
 	public override void AI()
 	{
+
+		UpdateBuffVFX();
+		Vector2 v0 = NPC.Center;
+		NPC.width = 400;
+		NPC.height = 400;
+		NPC.Center = v0;
 		for (int moveStep = 0; moveStep < AnimationSpeed; moveStep++)
 		{
 			_caterpillarCoroutine.Update();
@@ -150,6 +196,7 @@ public abstract class Caterpillar : ModNPC
 		int addTime = 30;
 		while (addTime > 0)
 		{
+			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
 			if (Flying)
 			{
 				addTime = 30;
@@ -168,18 +215,17 @@ public abstract class Caterpillar : ModNPC
 				}
 				else//悬空则继续下落
 				{
-					segment.Normal = Vector2.Lerp(new Vector2(0, -1) * segment.SelfDirection, checkNormal, 0.2f);
 					segment.SelfPosition += new Vector2(0, 5);
 
-					float distance0 = 40;
-					float distance1 = 40;
+					float distance0 = SegmentBehavioralSize + 10;
+					float distance1 = SegmentBehavioralSize + 10;
 					float force = 0;
-					while (distance0 > 30 || distance1 > 30)
+					while (distance0 > SegmentBehavioralSize || distance1 > SegmentBehavioralSize)
 					{
 						force++;
 						if (force > 5)
 						{
-							if (Main.rand.NextBool(4) && !hasAddTime)
+							if (Main.rand.NextBool(4 * SegmentCount / 10) && !hasAddTime)
 							{
 								hasAddTime = true;
 								addTime++;
@@ -190,18 +236,18 @@ public abstract class Caterpillar : ModNPC
 						{
 							Vector2 v = Segments[i - 1].SelfPosition - segment.SelfPosition;
 							distance0 = v.Length();
-							if (distance0 > 30)
+							if (distance0 > SegmentBehavioralSize)
 							{
-								segment.SelfPosition = Segments[i - 1].SelfPosition - Vector2.Normalize(v) * (28 + force);
+								segment.SelfPosition = Segments[i - 1].SelfPosition - Vector2.Normalize(v) * (SegmentBehavioralSize - 2 + force);
 							}
 						}
 						if (i < Segments.Count - 1)//除尾外,与后一节距离过远也拉住
 						{
 							Vector2 v = Segments[i + 1].SelfPosition - segment.SelfPosition;
 							distance1 = v.Length();
-							if (distance1 > 30)
+							if (distance1 > SegmentBehavioralSize)
 							{
-								segment.SelfPosition = Segments[i + 1].SelfPosition - Vector2.Normalize(v) * (28 + force);
+								segment.SelfPosition = Segments[i + 1].SelfPosition - Vector2.Normalize(v) * (SegmentBehavioralSize - 2 + force);
 							}
 						}
 					}
@@ -254,6 +300,7 @@ public abstract class Caterpillar : ModNPC
 		Toughness = MaxToughness;
 		while (addTime > 0)
 		{
+			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
 			if (Flying)
 			{
 				addTime = 300;
@@ -295,13 +342,12 @@ public abstract class Caterpillar : ModNPC
 				}
 				else//悬空则继续下落
 				{
-					segment.Normal = Vector2.Lerp(new Vector2(0, -1), checkNormal * segment.SelfDirection, 0.2f);
 					segment.SelfPosition += new Vector2(0, 5);
 
-					float distance0 = 40;
-					float distance1 = 40;
+					float distance0 = SegmentBehavioralSize + 10;
+					float distance1 = SegmentBehavioralSize + 10;
 					float force = 0;
-					while (distance0 > 30 || distance1 > 30)
+					while (distance0 > SegmentBehavioralSize || distance1 > SegmentBehavioralSize)
 					{
 						force++;
 						if (force > 5)
@@ -312,18 +358,18 @@ public abstract class Caterpillar : ModNPC
 						{
 							Vector2 v = Segments[i - 1].SelfPosition - segment.SelfPosition;
 							distance0 = v.Length();
-							if (distance0 > 30)
+							if (distance0 > SegmentBehavioralSize)
 							{
-								segment.SelfPosition = Segments[i - 1].SelfPosition - Vector2.Normalize(v) * (28 + force);
+								segment.SelfPosition = Segments[i - 1].SelfPosition - Vector2.Normalize(v) * (SegmentBehavioralSize - 2 + force);
 							}
 						}
 						if (i < Segments.Count - 1)//除尾外,与后一节距离过远也拉住
 						{
 							Vector2 v = Segments[i + 1].SelfPosition - segment.SelfPosition;
 							distance1 = v.Length();
-							if (distance1 > 30)
+							if (distance1 > SegmentBehavioralSize)
 							{
-								segment.SelfPosition = Segments[i + 1].SelfPosition - Vector2.Normalize(v) * (28 + force);
+								segment.SelfPosition = Segments[i + 1].SelfPosition - Vector2.Normalize(v) * (SegmentBehavioralSize - 2 + force);
 							}
 						}
 					}
@@ -352,7 +398,8 @@ public abstract class Caterpillar : ModNPC
 				for (int i = 0; i < Segments.Count; i++)
 				{
 					Segment segment = Segments[i];
-					segment.SelfPosition += (segment.SelfPosition - Segments[4].SelfPosition) - (segment.SelfPosition - Segments[4].SelfPosition).RotatedBy(Omega);
+					int middleIndex = SegmentCount / 2;
+					segment.SelfPosition += (segment.SelfPosition - Segments[middleIndex].SelfPosition) - (segment.SelfPosition - Segments[middleIndex].SelfPosition).RotatedBy(Omega);
 
 					//调整角度
 					if (i > 0 && i < Segments.Count - 1)
@@ -395,6 +442,8 @@ public abstract class Caterpillar : ModNPC
 		Crawl_1 = true;
 		float tValue = 0;
 		Vector2 toHead = Vector2.Normalize(Segments[Segments.Count - 1].SelfPosition - Segments[0].SelfPosition);
+		//随机决定拱起程度
+		float curveValue = Main.rand.NextFloat(1.7f, 3.3f);
 		for (int t = 0; t < 60; t++)
 		{
 			//被打破防了,掉下去,终止此协程
@@ -403,6 +452,7 @@ public abstract class Caterpillar : ModNPC
 				Crawl_1 = false;
 				yield break;
 			}
+			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
 			Segment tail = Segments[Segments.Count - 1];//尾巴
 			tail.SelfPosition = Vector2.Lerp(tail.SelfPosition, Segments[0].SelfPosition + toHead * 100, 0.03f);
 			float height = CheckOverHeight(tail.SelfPosition + NPC.Center, Vector2.Normalize(toHead).RotatedBy(MathHelper.PiOver2));
@@ -410,17 +460,18 @@ public abstract class Caterpillar : ModNPC
 			{
 				tail.SelfPosition += 2 * toHead.RotatedBy(MathHelper.PiOver2);
 			}
-			tValue = (float)Utils.Lerp(tValue, 60, 0.03f);
+			tValue = (float)Utils.Lerp(tValue, SegmentBehavioralSize * SegmentCount / 5f, 0.03f);
 			Segments[Segments.Count - 1] = tail;
 			for (int i = 1; i < Segments.Count - 1; i++)
 			{
 				float lerp = 1 - i / (float)Segments.Count;
 				Segment segment = Segments[i];
 				segment.SelfPosition = Vector2.Lerp(tail.SelfPosition, Segments[0].SelfPosition, MathF.Pow(lerp, 1.05f));
-				float x0 = MathF.Max(0.5f - Math.Abs(lerp - 0.5f), 0);
+				float x0 = MathF.Max(0.5f - Math.Abs(lerp - 0.5f), 0) * 2;
+				x0 = MathF.Pow(x0, curveValue);
 				//向上拱起向量
 				Vector2 round = new Vector2(0, tValue * 0.7f * segment.SelfDirection).RotatedBy(-lerp * MathHelper.TwoPi * segment.SelfDirection) + new Vector2(0, -tValue * segment.SelfDirection);
-				segment.SelfPosition += round.RotatedBy(toHead.ToRotation()) * x0 * 1.5f;
+				segment.SelfPosition += round.RotatedBy(toHead.ToRotation()) * MathF.Sin(x0 * MathHelper.Pi * 0.5f) * 0.75f;
 
 				Vector2 direction = Segments[i + 1].SelfPosition - Segments[i - 1].SelfPosition;
 
@@ -459,11 +510,12 @@ public abstract class Caterpillar : ModNPC
 				Crawl_2 = false;
 				yield break;
 			}
+			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
 			Segment head = Segments[0];//头
-			head.SelfPosition += toTail * 2f;
-			toTail = toTail.RotatedBy(-0.029f * MathF.Sin(t / 60f * MathF.PI * head.SelfDirection));
+			head.SelfPosition += toTail * 2f * SegmentCount / 10f;
+			toTail = toTail.RotatedBy(-0.029f / (SegmentCount / 10f) * MathF.Sin(t / 60f * MathF.PI * head.SelfDirection));
 			head.Normal = toTail.RotatedBy(MathHelper.PiOver2);
-			tValue = (float)Utils.Lerp(tValue, 60, 0.03f);
+			tValue = (float)Utils.Lerp(tValue, SegmentBehavioralSize * SegmentCount / 5f, 0.03f);
 			Segments[0] = head;
 
 			for (int i = 1; i < Segments.Count; i++)
@@ -474,9 +526,9 @@ public abstract class Caterpillar : ModNPC
 					segment.SelfPosition += toTail.RotatedBy(-MathHelper.PiOver2 * segment.SelfDirection) * tValue / 30f;
 				}
 				Vector2 v = Segments[i - 1].SelfPosition - segment.SelfPosition;
-				if (v.Length() > 30)
+				if (v.Length() > SegmentBehavioralSize)
 				{
-					segment.SelfPosition = Segments[i - 1].SelfPosition - Vector2.Normalize(v) * 28;
+					segment.SelfPosition = Segments[i - 1].SelfPosition - Vector2.Normalize(v) * (SegmentBehavioralSize - 2);
 				}
 				Vector2 direction = segment.SelfPosition - Segments[i - 1].SelfPosition;
 				if(i != Segments.Count - 1)
@@ -502,10 +554,11 @@ public abstract class Caterpillar : ModNPC
 				Crawl_2 = false;
 				yield break;
 			}
+			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
 			Segment head = Segments[0];//头
 			toTail += toTail.RotatedBy(-MathHelper.PiOver2 * head.SelfDirection) * 0.02f;
 			toTail = Vector2.Normalize(toTail);
-			head.SelfPosition += toTail * 2;
+			head.SelfPosition += toTail * 2 * (SegmentCount / 10f);
 
 			head.Normal = Vector2.Lerp(head.Normal, Segments[1].Normal, 0.2f);
 			tValue = (float)Utils.Lerp(tValue, 120, 0.03f);
@@ -524,9 +577,9 @@ public abstract class Caterpillar : ModNPC
 					shouldFall = false;
 				}
 				Vector2 v = Segments[i - 1].SelfPosition - segment.SelfPosition;
-				if (v.Length() > 30)
+				if (v.Length() > SegmentBehavioralSize)
 				{
-					segment.SelfPosition = Segments[i - 1].SelfPosition - Vector2.Normalize(v) * 28;
+					segment.SelfPosition = Segments[i - 1].SelfPosition - Vector2.Normalize(v) * (SegmentBehavioralSize - 2);
 				}
 				Vector2 direction = segment.SelfPosition - Segments[i - 1].SelfPosition;
 
@@ -551,10 +604,10 @@ public abstract class Caterpillar : ModNPC
 		{
 			LineValue += (Segments[i].Normal - Segments[i - 1].Normal).Length();
 		}
-		//蠕虫只会在比较平坦的时候休息
+		//蠕虫只会在比较平坦的时候休息,1/10的几率休息5~50秒
 		if (Main.rand.NextBool(10) && LineValue < 1)
 		{
-			_caterpillarCoroutine.StartCoroutine(new Coroutine(Waiting(Main.rand.Next(600, 3000))));
+			_caterpillarCoroutine.StartCoroutine(new Coroutine(Waiting(Main.rand.Next(300, 3000))));
 			yield break;
 		}
 		if (!Crawl_1)
@@ -584,6 +637,7 @@ public abstract class Caterpillar : ModNPC
 				Crawl_1 = false;
 				yield break;
 			}
+			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
 			Segment tail = Segments[Segments.Count - 1];//尾巴
 			tail.SelfPosition = Vector2.Lerp(tail.SelfPosition, Segments[0].SelfPosition + toHead * 100, 0.03f);
 			float height = CheckOverHeight(tail.SelfPosition + NPC.Center, Vector2.Normalize(toHead).RotatedBy(MathHelper.PiOver2));
@@ -591,7 +645,7 @@ public abstract class Caterpillar : ModNPC
 			{
 				tail.SelfPosition += 2 * toHead.RotatedBy(MathHelper.PiOver2);
 			}
-			tValue = (float)Utils.Lerp(tValue, 60, 0.03f);
+			tValue = (float)Utils.Lerp(tValue, SegmentBehavioralSize * SegmentCount / 5f, 0.03f);
 			Segments[Segments.Count - 1] = tail;
 			for (int i = 1; i < Segments.Count - 1; i++)
 			{
@@ -632,6 +686,7 @@ public abstract class Caterpillar : ModNPC
 				_caterpillarCoroutine.StartCoroutine(new Coroutine(Crawling()));
 				yield break;
 			}
+			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
 			yield return new SkipThisFrame();
 		}
 		if (!Crawl_1)
@@ -743,9 +798,9 @@ public abstract class Caterpillar : ModNPC
 			for (int i = 0; i < Segments.Count; i++)
 			{
 				Segment segment = Segments[i];
-				int x = (int)(NPC.Center.X + segment.SelfPosition.X - 20);
-				int y = (int)(NPC.Center.Y + segment.SelfPosition.Y - 20);
-				Rectangle rectangle = new Rectangle(x, y, 40, 40);
+				int x = (int)(NPC.Center.X + segment.SelfPosition.X - SegmentHitBoxSize / 2);
+				int y = (int)(NPC.Center.Y + segment.SelfPosition.Y - SegmentHitBoxSize / 2);
+				Rectangle rectangle = new Rectangle(x, y, SegmentHitBoxSize, SegmentHitBoxSize);
 
 				if (projectile.Colliding(projectile.Hitbox, rectangle) && NPC.immune[projectile.owner] == 0 && projectile.friendly)
 				{
@@ -755,7 +810,6 @@ public abstract class Caterpillar : ModNPC
 						strikeForce = Vector2.Normalize(strikeForce) * 80f;
 					}
 					segment.SelfPosition += strikeForce;
-					Main.NewText("hit");
 					return true;
 				}
 			}
@@ -774,9 +828,9 @@ public abstract class Caterpillar : ModNPC
 		for (int i = 0; i < Segments.Count; i++)
 		{
 			Segment segment = Segments[i];
-			int x = (int)(NPC.Center.X + segment.SelfPosition.X - 20);
-			int y = (int)(NPC.Center.Y + segment.SelfPosition.Y - 20);
-			Rectangle rectangle = new Rectangle(x, y, 40, 40);
+			int x = (int)(NPC.Center.X + segment.SelfPosition.X - SegmentHitBoxSize / 2);
+			int y = (int)(NPC.Center.Y + segment.SelfPosition.Y - SegmentHitBoxSize / 2);
+			Rectangle rectangle = new Rectangle(x, y, SegmentHitBoxSize, SegmentHitBoxSize);
 
 			if (Rectangle.Intersect(meleeAttackHitbox, rectangle) != Rectangle.emptyRectangle)
 			{
@@ -811,6 +865,7 @@ public abstract class Caterpillar : ModNPC
 		NPC.height = 400;
 		NPC.Center = v0;
 		HitTimer += (int)Math.Min(hit.Knockback * 5f + 10, 30);
+		HitTimer = Math.Min(HitTimer, 30);
 		if (!FallHit)
 		{
 			Toughness -= hit.Knockback;
@@ -839,6 +894,7 @@ public abstract class Caterpillar : ModNPC
 		NPC.height = 400;
 		NPC.Center = v0;
 		HitTimer += (int)Math.Min(hit.Knockback * 5f + 10, 30);
+		HitTimer = Math.Min(HitTimer, 30);
 		if (!FallHit)
 		{
 			Toughness -= hit.Knockback;
@@ -874,6 +930,373 @@ public abstract class Caterpillar : ModNPC
 	/// <param name="boundingBox"></param>
 	public override void ModifyHoverBoundingBox(ref Rectangle boundingBox)
 	{
+		if (GetBoundingBox() != Rectangle.emptyRectangle)
+		{
+			boundingBox = GetBoundingBox();
+		}
+		base.ModifyHoverBoundingBox(ref boundingBox);
+	}
+	/// <summary>
+	/// 被打到的效果,包含流血和碎尸
+	/// </summary>
+	/// <param name="hit"></param>
+	public override void HitEffect(NPC.HitInfo hit)
+	{
+		for (int j = 0; j < Segments.Count; j++)
+		{
+			Vector2 pos = NPC.Center + Segments[j].SelfPosition;
+			Dust.NewDustDirect(pos - new Vector2(20), 20, 20, ModContent.DustType<VerdantBlood>());
+		}
+		base.HitEffect(hit);
+	}
+	/// <summary>
+	/// Buff效果
+	/// </summary>
+	public virtual void UpdateBuffVFX()
+	{
+		if (NPC.markedByScytheWhip && Main.rand.NextBool(3))
+		{
+			ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.BlackLightningSmall, new ParticleOrchestraSettings
+			{
+				MovementVector = Main.rand.NextVector2Circular(1f, 1f),
+				PositionInWorld = Main.rand.NextVector2FromRectangle(NPC.Hitbox)
+			});
+		}
+		if (NPC.poisoned && Main.rand.NextBool(30))
+		{
+			Dust dust = Dust.NewDustDirect(NPC.Center, 0, 0, DustID.Poisoned, 0f, 0f, 120, default, 0.2f);
+			dust.noGravity = true;
+			dust.fadeIn = 1.9f;
+			dust.position = RedistributionInMyShape() - new Vector2(4);
+
+		}
+		if (NPC.venom && Main.rand.NextBool(10))
+		{
+			Dust dust2 = Dust.NewDustDirect(NPC.Center, 0, 0, 171, 0f, 0f, 100, default, 0.5f);
+			dust2.noGravity = true;
+			dust2.fadeIn = 1.5f;
+			dust2.position = RedistributionInMyShape() - new Vector2(4);
+		}
+		if (NPC.shadowFlame && Main.rand.Next(5) < 4)
+		{
+			Dust dust3 = Dust.NewDustDirect(NPC.Center, 0, 0, 27, 0, 0, 180, default, 1.95f);
+			dust3.noGravity = true;
+			dust3.velocity *= 0.75f;
+			dust3.velocity.X *= 0.75f;
+			dust3.velocity.Y -= 1f;
+			if (Main.rand.NextBool(4))
+			{
+				dust3.noGravity = false;
+				dust3.scale *= 0.5f;
+			}
+			dust3.position = RedistributionInMyShape() - new Vector2(4);
+		}
+		if (NPC.onFire)
+		{
+			if (Main.rand.Next(4) < 3)
+			{
+				Dust dust4 = Dust.NewDustDirect(NPC.Center, 0, 0, 6, 0, 0, 100, default, 3.5f);
+				dust4.noGravity = true;
+				dust4.velocity *= 1.8f;
+				dust4.velocity.Y -= 0.5f;
+				if (Main.rand.NextBool(4))
+				{
+					dust4.noGravity = false;
+					dust4.scale *= 0.5f;
+				}
+				dust4.position = RedistributionInMyShape() - new Vector2(4);
+			}
+			Lighting.AddLight(NPC.Center, 1f, 0.3f, 0.1f);
+		}
+		if (NPC.onFire3)
+		{
+			if (Main.rand.Next(4) < 3)
+			{
+				Dust dust5 = Dust.NewDustDirect(NPC.Center, 0, 0, 6, 0, 0, 100, default, 3.5f);
+				dust5.noGravity = true;
+				dust5.velocity *= 1.8f;
+				dust5.velocity.Y -= 0.5f;
+				if (Main.rand.NextBool(4))
+				{
+					dust5.noGravity = false;
+					dust5.scale *= 0.5f;
+				}
+				dust5.customData = 0;
+				dust5.position = RedistributionInMyShape() - new Vector2(4);
+			}
+			Lighting.AddLight(NPC.Center, 1f, 0.3f, 0.1f);
+		}
+		if (NPC.daybreak)
+		{
+			if (Main.rand.Next(4) < 3)
+			{
+				Dust dust6 = Dust.NewDustDirect(NPC.Center, 0, 0, 158, 0, 0, 100, default, 3.5f);
+				dust6.noGravity = true;
+				dust6.velocity *= 2.8f;
+				dust6.velocity.Y -= 0.5f;
+				if (Main.rand.NextBool(4))
+				{
+					dust6.noGravity = false;
+					dust6.scale *= 0.5f;
+				}
+				dust6.position = RedistributionInMyShape() - new Vector2(4);
+			}
+
+			Lighting.AddLight(NPC.Center, 1f, 0.3f, 0.1f);
+		}
+
+		if (NPC.betsysCurse)
+		{
+			if (Main.rand.Next(4) < 3)
+			{
+				Dust dust7 = Dust.NewDustDirect(NPC.Center, 0, 0, 55, 0, 0, 100, default, 3.5f);
+				dust7.noGravity = true;
+				dust7.velocity *= 2.8f;
+				dust7.velocity.Y -= 1.5f;
+				dust7.noGravity = false;
+				dust7.scale = 0.9f;
+				dust7.color = new Color(0, 0, 180, 255);
+				dust7.velocity *= 0.2f;
+				dust7.position = RedistributionInMyShape() - new Vector2(4);
+			}
+
+			Lighting.AddLight(NPC.Center, 0.6f, 0.1f, 0.9f);
+		}
+
+		if (NPC.oiled && !Main.rand.NextBool(3))
+		{
+			int num = 175;
+			Color newColor = new Color(0, 0, 0, 250);
+			if (Main.rand.NextBool(2))
+			{
+				Dust dust8 = Dust.NewDustDirect(NPC.Center, 0, 0, 4, 0f, 0f, num, newColor, 1.4f);
+				if (Main.rand.NextBool(2))
+					dust8.alpha += 25;
+
+				if (Main.rand.NextBool(2))
+					dust8.alpha += 25;
+
+				dust8.noLight = true;
+				dust8.velocity *= 0.2f;
+				dust8.velocity.Y += 0.2f;
+
+				dust8.position = RedistributionInMyShape() - new Vector2(4);
+			}
+		}
+
+		if (NPC.dryadWard && NPC.velocity.X != 0f && Main.rand.NextBool(4))
+		{
+			Dust dust9 = Dust.NewDustDirect(NPC.Center, 0, 0, 163,  0, 0, 100, default, 1.5f);
+			dust9.noGravity = true;
+			dust9.noLight = true;
+			dust9.velocity *= 0f;
+			dust9.position = RedistributionInMyShape() - new Vector2(4);
+		}
+
+		if (NPC.dryadBane && Main.rand.NextBool(4))
+		{
+			Dust dust10 = Dust.NewDustDirect(NPC.Center, 0, 0, DustID.PoisonStaff, 0, 0, 100, default, 1.5f);
+			dust10.noGravity = true;
+			dust10.velocity *= new Vector2(Main.rand.NextFloat() * 4f - 2f, 0f);
+			dust10.noLight = true;
+			dust10.position = RedistributionInMyShape() - new Vector2(4);
+		}
+
+		if (NPC.loveStruck && Main.rand.NextBool(5))
+		{
+			Vector2 vector2 = new Vector2(Main.rand.Next(-10, 11), Main.rand.Next(-10, 11));
+			vector2.Normalize();
+			vector2.X *= 0.66f;
+			int num2 = Gore.NewGore(NPC.Center, vector2 * Main.rand.Next(3, 6) * 0.33f, 331, (float)Main.rand.Next(40, 121) * 0.01f);
+			Main.gore[num2].sticky = false;
+			Main.gore[num2].velocity *= 0.4f;
+			Main.gore[num2].velocity.Y -= 0.6f;
+			Main.gore[num2].position = RedistributionInMyShape() - new Vector2(Main.gore[num2].Width, Main.gore[num2].Height) * Main.gore[num2].scale / 2f;
+		}
+
+		if (NPC.stinky && Main.rand.NextBool(5))
+		{
+			Vector2 vector3 = new Vector2(Main.rand.Next(-10, 11), Main.rand.Next(-10, 11));
+			vector3.Normalize();
+			vector3.X *= 0.66f;
+			vector3.Y = Math.Abs(vector3.Y);
+			Vector2 vector4 = vector3 * Main.rand.Next(3, 5) * 0.25f;
+			Dust dust11 = Dust.NewDustDirect(NPC.Center, 0, 0, DustID.FartInAJar, vector4.X, vector4.Y * 0.5f, 100, default, 1.5f);
+			dust11.velocity *= 0.1f;
+			dust11.velocity.Y -= 0.5f;
+			dust11.position = RedistributionInMyShape() - new Vector2(4);
+		}
+
+		if (NPC.dripping && !Main.rand.NextBool(4))
+		{
+			if (Main.rand.NextBool(2))
+			{
+				Dust dust12 = Dust.NewDustDirect(NPC.Center, 0, 0, 211, 0f, 0f, 50, default, 0.8f);
+				if (Main.rand.NextBool(2))
+					dust12.alpha += 25;
+
+				if (Main.rand.NextBool(2))
+					dust12.alpha += 25;
+
+				dust12.noLight = true;
+				dust12.velocity *= 0.2f;
+				dust12.velocity.Y += 0.2f;
+				dust12.position = RedistributionInMyShape() - new Vector2(4);
+			}
+			else
+			{
+				Dust dust13 = Dust.NewDustDirect(NPC.Center, 0, 0, 211, 0f, 0f, 50, default, 1.1f);
+				if (Main.rand.NextBool(2))
+					dust13.alpha += 25;
+
+				if (Main.rand.NextBool(2))
+					dust13.alpha += 25;
+
+				dust13.noLight = true;
+				dust13.noGravity = true;
+				dust13.velocity *= 0.2f;
+				dust13.velocity.Y += 1f;
+				dust13.position = RedistributionInMyShape() - new Vector2(4);
+			}
+		}
+
+		if (NPC.drippingSlime && !Main.rand.NextBool(4))
+		{
+			int num3 = 175;
+			Color newColor2 = new Color(0, 80, 255, 100);
+			if (Main.rand.NextBool(2))
+			{
+				Dust dust14 = Dust.NewDustDirect(NPC.Center, 0, 0, 4, 0f, 0f, num3, newColor2, 1.4f);
+				if (Main.rand.NextBool(2))
+					dust14.alpha += 25;
+
+				if (Main.rand.NextBool(2))
+					dust14.alpha += 25;
+
+				dust14.noLight = true;
+				dust14.velocity *= 0.2f;
+				dust14.velocity.Y += 0.2f;
+				dust14.position = RedistributionInMyShape() - new Vector2(4);
+			}
+		}
+
+		if (NPC.drippingSparkleSlime && !Main.rand.NextBool(4))
+		{
+			int num4 = 150;
+			if (Main.rand.NextBool(2))
+			{
+				Dust dust15 = Dust.NewDustDirect(NPC.Center, 0, 0, 243, 0f, 0f, num4);
+				if (Main.rand.NextBool(2))
+					dust15.alpha += 25;
+
+				if (Main.rand.NextBool(2))
+					dust15.alpha += 25;
+
+				dust15.noLight = true;
+				dust15.velocity *= 0.2f;
+				dust15.velocity.Y += 0.2f;
+				dust15.position = RedistributionInMyShape() - new Vector2(4);
+			}
+		}
+
+		if (NPC.onFrostBurn)
+		{
+			if (Main.rand.Next(4) < 3)
+			{
+				Dust dust16 = Dust.NewDustDirect(NPC.Center, 0, 0, 135, 0, 0, 100, default, 3.5f);
+				dust16.noGravity = true;
+				dust16.velocity *= 1.8f;
+				dust16.velocity.Y -= 0.5f;
+				if (Main.rand.NextBool(4))
+				{
+					dust16.noGravity = false;
+					dust16.scale *= 0.5f;
+				}
+				dust16.position = RedistributionInMyShape() - new Vector2(4);
+			}
+
+			Lighting.AddLight(NPC.Center, 0.1f, 0.6f, 1f);
+		}
+
+		if (NPC.onFrostBurn2)
+		{
+			if (Main.rand.Next(4) < 3)
+			{
+				Dust dust17 = Dust.NewDustDirect(NPC.Center, 0, 0, 135, 0, 0, 100, default, 3.5f);
+				dust17.noGravity = true;
+				dust17.velocity *= 1.8f;
+				dust17.velocity.Y -= 0.5f;
+				if (Main.rand.NextBool(4))
+				{
+					dust17.noGravity = false;
+					dust17.scale *= 0.5f;
+				}
+				dust17.position = RedistributionInMyShape() - new Vector2(4);
+			}
+
+			Lighting.AddLight(NPC.Center, 0.1f, 0.6f, 1f);
+		}
+
+		if (NPC.onFire2)
+		{
+			if (Main.rand.Next(4) < 3)
+			{
+				Dust dust18 = Dust.NewDustDirect(NPC.Center, 0, 0, 75, 0, 0, 100, default, 3.5f);
+				dust18.noGravity = true;
+				dust18.velocity *= 1.8f;
+				dust18.velocity.Y -= 0.5f;
+				if (Main.rand.NextBool(4))
+				{
+					dust18.noGravity = false;
+					dust18.scale *= 0.5f;
+				}
+				dust18.position = RedistributionInMyShape() - new Vector2(4);
+			}
+
+			Lighting.AddLight(NPC.Center, 1f, 0.3f, 0.1f);
+		}
+
+		//netShimmer = false;
+		//if (shimmering)
+		//{
+		//	shimmerTransparency += 0.01f;
+		//	if (Main.netMode != 1 && (double)shimmerTransparency > 0.9)
+		//		GetShimmered();
+
+		//	if (shimmerTransparency > 1f)
+		//		shimmerTransparency = 1f;
+		//}
+		//else if (shimmerTransparency > 0f)
+		//{
+		//	if (justHit)
+		//		shimmerTransparency -= 0.1f;
+
+		//	if (buffImmune[353])
+		//		shimmerTransparency -= 0.015f;
+		//	else
+		//		shimmerTransparency -= 0.001f;
+
+		//	if (shimmerTransparency < 0f)
+		//		shimmerTransparency = 0f;
+		//}
+	}
+	/// <summary>
+	/// 在虫体上随机生成一个点
+	/// </summary>
+	/// <returns></returns>
+	public Vector2 RedistributionInMyShape()
+	{
+		int choiceIndex = Main.rand.Next(Segments.Count);
+		Vector2 pos = NPC.Center + Segments[choiceIndex].SelfPosition;
+		return pos;
+	}
+	/// <summary>
+	/// 获取虫体外接正交矩形
+	/// </summary>
+	/// <returns></returns>
+	public Rectangle GetBoundingBox()
+	{
+		Rectangle boundingBox = Rectangle.Empty;
 		int minX = Main.maxTilesX * 16;
 		int minY = Main.maxTilesY * 16;
 		int maxX = 0;
@@ -902,22 +1325,8 @@ public abstract class Caterpillar : ModNPC
 		if (maxY > minY && maxX > minX)
 		{
 			boundingBox = new Rectangle(minX, minY, maxX - minX, maxY - minY);
-			
 		}
-		base.ModifyHoverBoundingBox(ref boundingBox);
-	}
-	/// <summary>
-	/// 被打到的效果,包含流血和碎尸
-	/// </summary>
-	/// <param name="hit"></param>
-	public override void HitEffect(NPC.HitInfo hit)
-	{
-		for (int j = 0; j < Segments.Count; j++)
-		{
-			Vector2 pos = NPC.Center + Segments[j].SelfPosition;
-			Dust.NewDustDirect(pos - new Vector2(20), 20, 20, ModContent.DustType<VerdantBlood>());
-		}
-		base.HitEffect(hit);
+		return boundingBox;
 	}
 	/// <summary>
 	/// 获得附近物块的倾斜朝向
