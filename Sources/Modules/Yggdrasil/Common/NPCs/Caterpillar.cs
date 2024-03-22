@@ -1,13 +1,7 @@
-using System;
 using Everglow.Commons.Coroutines;
-using Everglow.Commons.DataStructures;
-using Everglow.Yggdrasil.Common.Elevator.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Microsoft.Xna.Framework;
-using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
-using Terraria.ID;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 
@@ -155,7 +149,7 @@ public abstract class Caterpillar : ModNPC
 		NPC.Center = v0;
 		AnyAliveCoroutineTimer++;
 		//正常情况下所有协程不会都死掉,真死完了等一秒防御性重启
-		if(AnyAliveCoroutineTimer > 60)
+		if (AnyAliveCoroutineTimer > 60)
 		{
 			_caterpillarCoroutine.StartCoroutine(new Coroutine(Crawling()));
 		}
@@ -531,7 +525,7 @@ public abstract class Caterpillar : ModNPC
 					segment.SelfPosition = Segments[i - 1].SelfPosition - Vector2.Normalize(v) * (SegmentBehavioralSize - 2);
 				}
 				Vector2 direction = segment.SelfPosition - Segments[i - 1].SelfPosition;
-				if(i != Segments.Count - 1)
+				if (i != Segments.Count - 1)
 				{
 					direction = Segments[i + 1].SelfPosition - Segments[i - 1].SelfPosition;
 				}
@@ -1086,7 +1080,7 @@ public abstract class Caterpillar : ModNPC
 
 		if (NPC.dryadWard && NPC.velocity.X != 0f && Main.rand.NextBool(4))
 		{
-			Dust dust9 = Dust.NewDustDirect(NPC.Center, 0, 0, 163,  0, 0, 100, default, 1.5f);
+			Dust dust9 = Dust.NewDustDirect(NPC.Center, 0, 0, 163, 0, 0, 100, default, 1.5f);
 			dust9.noGravity = true;
 			dust9.noLight = true;
 			dust9.velocity *= 0f;
