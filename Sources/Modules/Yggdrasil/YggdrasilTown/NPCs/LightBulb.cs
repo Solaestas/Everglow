@@ -10,15 +10,15 @@ public class LightBulb : ModNPC
 {
 	public override void SetStaticDefaults()
 	{
-		Main.npcFrameCount[NPC.type] = 3;
+		Main.npcFrameCount[NPC.type] = 4;
 		NPCSpawnManager.RegisterNPC(Type);
 	}
 	public override void SetDefaults()
 	{
 
-		NPC.width = 20;
-		NPC.height = 40;
-		NPC.lifeMax = 114;
+		NPC.width = 35;
+		NPC.height = 30;
+		NPC.lifeMax = 30;
 		NPC.damage = 8;
 		NPC.defense = 2;
 		NPC.friendly = false;
@@ -35,6 +35,11 @@ public class LightBulb : ModNPC
 	{
 		target.AddBuff(BuffID.Poisoned, 600);
 	}
+	public override void FindFrame(int frameHeight)
+	{
+		NPC.frame.Y = (int)(NPC.ai[0]/30%4) * frameHeight;
+	}
+
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
 		YggdrasilTownBiome YggdrasilTownBiome = ModContent.GetInstance<YggdrasilTownBiome>();
@@ -58,7 +63,6 @@ public class LightBulb : ModNPC
 
 	public override void AI()
 	{
-		CombatText.NewText(new Rectangle((int)NPC.Center.X - 10, (int)NPC.Center.Y - 10, 20, 20), Color.Cyan, (int)NPC.ai[0]);
 		switch (State)
 		{
 			case (int)NPCState.Sleep:
