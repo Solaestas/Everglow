@@ -7,6 +7,7 @@ using Terraria.GameContent.Drawing;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 
+[NoGameModeScale]
 public abstract class Caterpillar : ModNPC
 {
 	/// <summary>
@@ -29,10 +30,13 @@ public abstract class Caterpillar : ModNPC
 	/// 体节
 	/// </summary>
 	public List<Segment> Segments = new List<Segment>();
+	public override void SetStaticDefaults()
+	{
+		
+	}
 	public override void SetDefaults()
 	{
-		NPCID.Sets.DontDoHardmodeScaling[Type] = true;//必须要设置一个这个否则专家大师模式属性翻倍三倍
-
+		NPCID.Sets.DontDoHardmodeScaling[Type] = true;
 		NPC.width = 400;
 		NPC.height = 400;
 

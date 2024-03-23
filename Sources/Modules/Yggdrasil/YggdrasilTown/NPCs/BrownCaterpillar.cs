@@ -13,12 +13,11 @@ public class BrownCaterpillar : Caterpillar
 	}
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
-		YggdrasilTownBiome YggdrasilTownBiome = ModContent.GetInstance<YggdrasilTownBiome>();
-		if (!YggdrasilTownBiome.IsBiomeActive(Main.LocalPlayer))
-			return 0f;
-		return 3f;
+		return 0f;
 	}
 	public override bool PreKill()
+
+
 	{
 		for (int j = 0; j < Segments.Count; j++)
 		{
