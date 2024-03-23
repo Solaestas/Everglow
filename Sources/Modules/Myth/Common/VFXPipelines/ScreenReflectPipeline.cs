@@ -17,7 +17,7 @@ internal class ScreenReflectPipeline : Pipeline
 		effect.Parameters["tex1"].SetValue(Main.screenTarget);
 		effect.Parameters["uScreenWidth"].SetValue(Main.screenWidth);
 		effect.Parameters["uScreenHeight"].SetValue(Main.screenHeight);
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 

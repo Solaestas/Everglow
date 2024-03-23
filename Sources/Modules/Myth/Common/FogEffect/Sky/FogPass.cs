@@ -494,7 +494,7 @@ public class FogPass
 			Main.graphics.GraphicsDevice.Clear(Color.Transparent);
 			spriteBatch.Begin(SpriteSortMode.Immediate,
 				BlendState.Opaque,
-				SamplerState.AnisotropicClamp,
+				SamplerState.PointClamp,
 				DepthStencilState.None,
 				RasterizerState.CullNone, null);
 			filterBox.Parameters["uImageSize0"].SetValue(m_blurRenderTargets[i].Size());
@@ -516,7 +516,7 @@ public class FogPass
 			graphicsDevice.Clear(Color.Transparent);
 			spriteBatch.Begin(SpriteSortMode.Immediate,
 				BlendState.Opaque,
-				SamplerState.AnisotropicClamp,
+				SamplerState.PointClamp,
 				DepthStencilState.Default,
 				RasterizerState.CullNone, null);
 			filterBox.Parameters["uImageSize0"].SetValue(m_blurRenderTargets[i + 1].Size());
@@ -546,7 +546,7 @@ public class FogPass
 		graphicsDevice.Clear(Color.Transparent);
 		spriteBatch.Begin(SpriteSortMode.Immediate,
 			BlendState.Opaque,
-			SamplerState.LinearClamp,
+			SamplerState.PointClamp,
 			DepthStencilState.Default,
 			RasterizerState.CullNone, null);
 		gaussianFilter.Parameters["uHorizontal"].SetValue(true);
@@ -560,7 +560,7 @@ public class FogPass
 		graphicsDevice.Clear(Color.Transparent);
 		spriteBatch.Begin(SpriteSortMode.Immediate,
 			BlendState.Opaque,
-			SamplerState.LinearClamp,
+			SamplerState.PointClamp,
 			DepthStencilState.Default,
 			RasterizerState.CullNone, null);
 		gaussianFilter.Parameters["uHorizontal"].SetValue(false);

@@ -517,7 +517,7 @@ public class Firework12Inches : FireworkProjectile
 			}
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = flame;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (trailBars0.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, trailBars0.ToArray(), 0, trailBars0.Count - 2);
 

@@ -7,6 +7,5 @@ public class StoneDragonScaleWood : ModItem
 		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.StoneScaleWood>());
 		Item.width = 38;
 		Item.height = 30;
-		Item.value = 1000;
 	}
 }

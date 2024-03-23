@@ -23,6 +23,6 @@ internal class DrawState
 		graphicsDevice.RasterizerState = rasterizerState;
 	}
 
-	public readonly DrawState Default = new(BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
-	public readonly DrawState Additive = new(BlendState.Additive, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+	public readonly DrawState Default = new(BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+	public readonly DrawState Additive = new(BlendState.Additive, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 }

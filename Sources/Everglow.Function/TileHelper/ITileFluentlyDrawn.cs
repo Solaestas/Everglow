@@ -18,3 +18,9 @@ public interface ITileFluentlyDrawn
 	/// <param name="tileDrawing">工具类，风速和摇晃有关的都得靠它</param>
 	void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing);
 }
+public struct BasicDrawInfo
+{
+	public Vector2 DrawCenterPos;
+	public SpriteBatch SpriteBatch;
+	public TileDrawing TileDrawing;
+}

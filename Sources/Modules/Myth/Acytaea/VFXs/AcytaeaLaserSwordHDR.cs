@@ -16,8 +16,8 @@ public class AcytaeaLaserSwordHDRPipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D dark = Commons.ModAsset.Noise_perlin.Value;
 		Ins.Batch.BindTexture<Vertex2D>(dark);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 
@@ -63,7 +63,7 @@ public class AcytaeaLaserSwordHDRPipeline2 : PostPipeline
 		var gd = Main.instance.GraphicsDevice;
 		var effect = this.effect.Value;
 
-		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 
 		gd.SetRenderTarget(acytaeaLaserSwordHDRScreen);
 		effect.Parameters["uTransform"].SetValue(Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
@@ -75,7 +75,7 @@ public class AcytaeaLaserSwordHDRPipeline2 : PostPipeline
 		var cur = Ins.VFXManager.CurrentRenderTarget;
 		Ins.VFXManager.SwapRenderTarget();
 		gd.SetRenderTarget(Ins.VFXManager.CurrentRenderTarget);
-		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 		effect.Parameters["uShade"].SetValue(rt2D);
 		effect.CurrentTechnique.Passes["Vivid"].Apply();
 		UnstableValue = (float)Utils.Lerp(UnstableValue, Main.rand.NextFloat(0.125f, 0.25f), 0.05f);

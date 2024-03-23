@@ -34,8 +34,8 @@ public class CursedFlame_flowPipeline : Pipeline
 		effect.Parameters["uNoise"].SetValue(ModAsset.Noise_melting.Value);
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Ins.Batch.BindTexture<Vertex2D>(ModAsset.Trail_6.Value);
-		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 

@@ -194,7 +194,7 @@ public class AcytaeaFlySword_1 : ModProjectile
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width2 * (1 - factor) + new Vector2(Projectile.width / 2f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
 		}
 		Texture2D t = tex;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);

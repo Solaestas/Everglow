@@ -114,7 +114,7 @@ public class AcroporaThumpEff : ModProjectile
 			}
 
 		}
-		Texture2D t0 = YggdrasilContent.QuickTexture("KelpCurtain/Items/Weapons/AcroporaSpear");
+		Texture2D t0 = ModAsset.AcroporaSpear.Value;
 		Color c0 = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16));
 		Main.spriteBatch.Draw(t0, Projectile.Center - Main.screenPosition, null, c0 * (Projectile.timeLeft / 40f), Projectile.rotation + (float)(Math.PI / 4f), t0.Size() / 2f, 1, SpriteEffects.None, 0);
 
@@ -124,8 +124,8 @@ public class AcroporaThumpEff : ModProjectile
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * (base.Projectile.ai[0] == 0 ? Main.GameViewMatrix.ZoomMatrix : Main.Transform);
 		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-		Main.graphics.GraphicsDevice.Textures[0] = YggdrasilContent.QuickTexture("KelpCurtain/Projectiles/texShade");
-		MeleeTrail.Parameters["tex1"].SetValue(YggdrasilContent.QuickTexture("KelpCurtain/Projectiles/Acropora_Color"));
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.texShade.Value;
+		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.Acropora_Color.Value);
 		MeleeTrail.CurrentTechnique.Passes[0].Apply();
 		if (bars.Count >= 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -136,8 +136,8 @@ public class AcroporaThumpEff : ModProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone);
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-		Main.graphics.GraphicsDevice.Textures[0] = YggdrasilContent.QuickTexture("KelpCurtain/Projectiles/AcroporaLight");
-		MeleeTrail.Parameters["tex1"].SetValue(YggdrasilContent.QuickTexture("KelpCurtain/Projectiles/Acropora_Color"));
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.AcroporaLight.Value;
+		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.Acropora_Color.Value);
 		MeleeTrail.CurrentTechnique.Passes[0].Apply();
 		if (bars.Count >= 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -150,8 +150,8 @@ public class AcroporaThumpEff : ModProjectile
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		float k0 = (40 - Projectile.timeLeft) / 40f;
 		MeleeTrail.Parameters["FadeValue"].SetValue(MathUtils.Sqrt(k0 * 1.2f));
-		Main.graphics.GraphicsDevice.Textures[0] = YggdrasilContent.QuickTexture("KelpCurtain/Projectiles/texBlood");
-		MeleeTrail.Parameters["tex1"].SetValue(YggdrasilContent.QuickTexture("KelpCurtain/Projectiles/Acropora_RedColor"));
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.texBlood.Value;
+		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.Acropora_Color.Value);
 		MeleeTrail.CurrentTechnique.Passes[0].Apply();
 		if (bars.Count >= 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, barsII.ToArray(), 0, bars.Count - 2);

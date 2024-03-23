@@ -172,7 +172,7 @@ public class AcytaeaLaserSword2 : ModProjectile
 			rings.Add(endDrawPos + arrow, new Color(0, 0, 0, 0), new Vector3(x / 45f, 1, 0));
 			rings.Add(endDrawPos + arrowFar, new Color(255, 0, 60, 0), new Vector3(x / 45f, 0, 0));
 		}
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_thick.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, rings.ToArray(), 0, rings.Count - 2);
 	}

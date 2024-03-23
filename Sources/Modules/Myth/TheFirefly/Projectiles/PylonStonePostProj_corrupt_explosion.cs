@@ -124,7 +124,7 @@ public class PylonStonePostProj_corrupt_explosion : NoTextureProjectile, IWarpPr
 		if (circle.Count > 0)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = tex;
-			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicWrap;
+			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}

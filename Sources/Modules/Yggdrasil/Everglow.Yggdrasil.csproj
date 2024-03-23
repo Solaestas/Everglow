@@ -1,2 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+                <ProjectReference Include="..\CagedDomain\Everglow.CagedDomain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+		<Solaestas-ResourceFile Include="YggdrasilTown\**\*.json" />
+  </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@ public class YggdrasilImpression : ModItem
 		Item.height = 50;
 		Item.useTurn = true;
 		Item.useAnimation = 15;
-		Item.useTime = 7;
+		Item.useTime = 15;
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.consumable = false;
 	}
@@ -18,6 +18,7 @@ public class YggdrasilImpression : ModItem
 		// TODO world
 		if (player.itemAnimation == player.itemAnimationMax)
 		{
+			Ins.VFXManager.Clear();
 			if (SubworldSystem.IsActive<YggdrasilWorld>())
 				SubworldSystem.Exit();
 			else
@@ -26,7 +27,7 @@ public class YggdrasilImpression : ModItem
 					Main.NewText("Fail!");
 			}
 		}
-		return base.UseItem(player);
+		return false;
 	}
 	public override void AddRecipes()
 	{

@@ -16,7 +16,7 @@ float4 PSFunction(float2 coords : TEXCOORD0) : COLOR0//用一张图片（uImage1
     }
     
 }
-float4 PSFunction2(float2 coords : TEXCOORD0) : COLOR0 //用一张图片（uImage1）去扭曲uImage0，r - 0.5代表x，g - 0.5代表y,b代表倍率。
+float4 PSFunction2(float2 coords : TEXCOORD0) : COLOR0 
 {
     float4 color = tex2D(uImage0, coords);
     float4 color2 = tex2D(uImage1, coords);

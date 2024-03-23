@@ -121,7 +121,7 @@ public class ToothBow : HandholdProjectile
 		bars.Add(drawCenter + (new Vector2(-23, 32) + new Vector2(-5, 0)).RotatedBy(rot), lightColor, new Vector3(0, 1, 0));
 		bars.Add(drawCenter + (new Vector2(-23, 32) + new Vector2(5, 0)).RotatedBy(rot), lightColor, new Vector3(1, 1, 0));
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.ToothBow_string.Value;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars.Count > 3)
 		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);

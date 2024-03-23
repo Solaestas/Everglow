@@ -319,140 +319,140 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 			{
 				return;
 			}
-
-			Bloom1 = ModContent.Request<Effect>("Everglow/IIID/Effects/Bloom1").Value;
-			gd.SetRenderTarget(Main.screenTargetSwap);
-			gd.Clear(Color.Transparent);
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-			Main.spriteBatch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
-			Main.spriteBatch.End();
-
-			//在screen上绘制发光部分
-			gd.SetRenderTarget(screen);
-			gd.Clear(Color.Transparent);
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			bool flag = false;
 			foreach (Projectile proj in Main.projectile)
 			{
-				if (proj.active && proj.type == ModContent.ProjectileType<GoldenCrack>())
+				if (proj.active && (proj.type == ModContent.ProjectileType<GoldenCrack>()|| proj.type == ModContent.ProjectileType<PlanetBefallArray.PlanetBefallArray>()|| proj.type == ModContent.ProjectileType<IIIDProj>()))
 				{
-					Color c3 = Color.Gold;
-					(proj.ModProjectile as GoldenCrack).PreDraw(ref c3);
-				}
-				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBefallArray.PlanetBefallArray>())
-				{
-					(proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).DrawBloom();
-					if (BloomIntensity <= (proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).BloomIntensity)
-					{
-						BloomIntensity = (proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).BloomIntensity;
-					}
-					else
-					{
-						BloomIntensity = 1;
-					}
+					flag = true;
+					break;
 				}
 			}
-			Main.spriteBatch.End();
-
-			//取样
-
-			gd.SetRenderTarget(bloom2);
-			gd.Clear(Color.Transparent);
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			Bloom1.CurrentTechnique.Passes[0].Apply();//取亮度超过m值的部分
-			Bloom1.Parameters["m"].SetValue(0.5f);
-			Main.spriteBatch.Draw(screen, new Rectangle(0, 0, Main.screenWidth / 3, Main.screenHeight / 3), Color.White);
-			Main.spriteBatch.End();
-
-			//处理
-
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			Bloom1.Parameters["uScreenResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight) / 3f);
-			Bloom1.Parameters["uRange"].SetValue(1.5f);//范围
-			Bloom1.Parameters["uIntensity"].SetValue(BloomIntensity);//发光强度
-			for (int i = 0; i < 2; i++)//交替使用两个RenderTarget2D，进行多次模糊
+			if (flag)
 			{
-				Bloom1.CurrentTechnique.Passes["GlurV"].Apply();//横向
-				gd.SetRenderTarget(bloom1);
-				gd.Clear(Color.Transparent);
-				Main.spriteBatch.Draw(bloom2, Vector2.Zero, Color.White);
+				Bloom1 = ModContent.Request<Effect>("Everglow/IIID/Effects/Bloom1").Value;
+				gd.SetRenderTarget(Main.screenTargetSwap);
+				gd.Clear(Color.Black);
+				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+				Main.spriteBatch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+				Main.spriteBatch.End();
 
-				Bloom1.CurrentTechnique.Passes["GlurH"].Apply();//纵向
+				//在screen上绘制发光部分
+				gd.SetRenderTarget(screen);
+				gd.Clear(Color.Black);
+				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+				foreach (Projectile proj in Main.projectile)
+				{
+					if (proj.active && proj.type == ModContent.ProjectileType<GoldenCrack>())
+					{
+						Color c3 = Color.Gold;
+						(proj.ModProjectile as GoldenCrack).PreDraw(ref c3);
+					}
+					if (proj.active && proj.type == ModContent.ProjectileType<PlanetBefallArray.PlanetBefallArray>())
+					{
+						(proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).DrawBloom();
+						if (BloomIntensity <= (proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).BloomIntensity)
+						{
+							BloomIntensity = (proj.ModProjectile as PlanetBefallArray.PlanetBefallArray).BloomIntensity;
+						}
+						else
+						{
+							BloomIntensity = 1;
+						}
+					}
+				}
+				Main.spriteBatch.End();
+
+				//取样
+
 				gd.SetRenderTarget(bloom2);
-				gd.Clear(Color.Transparent);
-				Main.spriteBatch.Draw(bloom1, Vector2.Zero, Color.White);
-			}
-			Main.spriteBatch.End();
+				gd.Clear(Color.Black);
+				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+				Bloom1.CurrentTechnique.Passes[0].Apply();//取亮度超过m值的部分
+				Bloom1.Parameters["m"].SetValue(0.5f);
+				Main.spriteBatch.Draw(screen, new Rectangle(0, 0, Main.screenWidth / 3, Main.screenHeight / 3), Color.White);
+				Main.spriteBatch.End();
 
-			gd.SetRenderTarget(Main.screenTarget);
-			gd.Clear(Color.Transparent);
+				//处理
 
-			//叠加
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
-			Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
-			Main.spriteBatch.Draw(bloom2, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
-			Main.spriteBatch.End();
-
-			GoldenCrackVFX = ModContent.Request<Effect>("Everglow/IIID/Effects/GoldenCrack").Value;
-			gd.SetRenderTarget(Main.screenTargetSwap);
-			gd.Clear(Color.Transparent);
-			sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-			sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
-			sb.End();
-
-			gd.SetRenderTarget(render);
-			gd.Clear(Color.Transparent);
-			sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			foreach (Projectile proj in Main.projectile)
-			{
-				if (proj.active && proj.type == ModContent.ProjectileType<GoldenCrack>())
+				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+				Bloom1.Parameters["uScreenResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight) / 3f);
+				Bloom1.Parameters["uRange"].SetValue(1.5f);//范围
+				Bloom1.Parameters["uIntensity"].SetValue(BloomIntensity);//发光强度
+				for (int i = 0; i < 2; i++)//交替使用两个RenderTarget2D，进行多次模糊
 				{
-					Color c3 = Color.Gold;
-					(proj.ModProjectile as GoldenCrack).PreDraw(ref c3);
+					Bloom1.CurrentTechnique.Passes["GlurV"].Apply();//横向
+					gd.SetRenderTarget(bloom1);
+					gd.Clear(Color.Black);
+					Main.spriteBatch.Draw(bloom2, Vector2.Zero, Color.White);
+
+					Bloom1.CurrentTechnique.Passes["GlurH"].Apply();//纵向
+					gd.SetRenderTarget(bloom2);
+					gd.Clear(Color.Black);
+					Main.spriteBatch.Draw(bloom1, Vector2.Zero, Color.White);
 				}
-			}
+				Main.spriteBatch.End();
 
-			sb.End();
+				gd.SetRenderTarget(Main.screenTarget);
+				gd.Clear(Color.Black);
 
-			gd.SetRenderTarget(Main.screenTarget);
-			gd.Clear(Color.Transparent);
-			sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-			sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
-			sb.End();
+				//叠加
+				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+				Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+				Main.spriteBatch.Draw(bloom2, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
+				Main.spriteBatch.End();
 
-			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			gd.Textures[1] = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/NonIIIDProj/GoldenCrack/GoldenCrack").Value;
-			GoldenCrackVFX.CurrentTechnique.Passes["Tentacle"].Apply();
-			GoldenCrackVFX.Parameters["m"].SetValue(0.01f);
-			GoldenCrackVFX.Parameters["n"].SetValue(0.01f);
-			sb.Draw(render, Vector2.Zero, Color.White);
-			sb.End();
+				GoldenCrackVFX = ModContent.Request<Effect>("Everglow/IIID/Effects/GoldenCrack").Value;
+				gd.SetRenderTarget(Main.screenTargetSwap);
+				gd.Clear(Color.Black);
+				sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+				sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+				sb.End();
 
-			gd.SetRenderTarget(Main.screenTargetSwap);
-			gd.Clear(Color.Transparent);
-			sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-			sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
-			sb.End();
-
-			gd.SetRenderTarget(Main.screenTarget);
-			gd.Clear(Color.Transparent);
-			Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive);
-			Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
-			foreach (Projectile proj in Main.projectile)
-			{
-				if (proj.active && proj.ModProjectile is IIIDProj)
+				gd.SetRenderTarget(render);
+				gd.Clear(Color.Black);
+				sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+				foreach (Projectile proj in Main.projectile)
 				{
-					(proj.ModProjectile as IIIDProj).DrawIIIDProj(viewProjectionParams);
+					if (proj.active && proj.type == ModContent.ProjectileType<GoldenCrack>())
+					{
+						Color c3 = Color.Gold;
+						(proj.ModProjectile as GoldenCrack).PreDraw(ref c3);
+					}
 				}
-			}
-			Main.spriteBatch.End();
 
+				sb.End();
+
+				gd.SetRenderTarget(Main.screenTarget);
+				gd.Clear(Color.Black);
+				sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+				sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+				sb.End();
+
+				sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+				gd.Textures[1] = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/NonIIIDProj/GoldenCrack/GoldenCrack").Value;
+				GoldenCrackVFX.CurrentTechnique.Passes["Tentacle"].Apply();
+				GoldenCrackVFX.Parameters["m"].SetValue(0.01f);
+				GoldenCrackVFX.Parameters["n"].SetValue(0.01f);
+				sb.Draw(render, Vector2.Zero, Color.White);
+				sb.End();
+				Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive);
+				foreach (Projectile proj in Main.projectile)
+				{
+					if (proj.active && proj.ModProjectile is IIIDProj)
+					{
+						(proj.ModProjectile as IIIDProj).DrawIIIDProj(viewProjectionParams);
+					}
+				}
+				Main.spriteBatch.End();
+			}
 			foreach (Projectile proj in Main.projectile)
 			{
 				if (proj.active && proj.type == ModContent.ProjectileType<PlanetBefallExplosion.PlanetBefallExplosion>())
 				{
 					float BlurOffset = (proj.ModProjectile as PlanetBefallExplosion.PlanetBefallExplosion).BlurOffset;
 					gd.SetRenderTarget(Main.screenTargetSwap);
-					gd.Clear(Color.Transparent);
+					gd.Clear(Color.Black);
 					sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 					sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
 					sb.End();

@@ -39,7 +39,7 @@ public class HeatMapRenderPipeline_cursedFlame : PostPipeline
 		var gd = Main.instance.GraphicsDevice;
 		var effect = this.effect.Value;
 
-		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 
 
 		gd.SetRenderTarget(heatMapScreen);
@@ -53,7 +53,7 @@ public class HeatMapRenderPipeline_cursedFlame : PostPipeline
 		var cur = Ins.VFXManager.CurrentRenderTarget;
 		Ins.VFXManager.SwapRenderTarget();
 		gd.SetRenderTarget(Ins.VFXManager.CurrentRenderTarget);
-		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 		sb.Draw(cur, Vector2.Zero, Color.White);
 
 		gd.BlendState = BlendState.AlphaBlend;

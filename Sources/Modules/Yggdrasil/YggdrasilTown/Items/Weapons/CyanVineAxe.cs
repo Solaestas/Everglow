@@ -1,4 +1,4 @@
-﻿namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
 public class CyanVineAxe : ModItem
 {
@@ -24,6 +24,7 @@ public class CyanVineAxe : ModItem
 	{
 		CreateRecipe()
 			.AddIngredient(ModContent.ItemType<CyanVineBar>(), 10)
+			.AddIngredient(ModContent.ItemType<StoneDragonScaleWood>(), 8)
 			.AddTile(TileID.WorkBenches)
 			.Register();
 	}

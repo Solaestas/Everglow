@@ -1,5 +1,6 @@
 using Everglow.Commons.Interfaces;
 using Everglow.Commons.Vertex;
+using Terraria;
 
 namespace Everglow.Commons.VFX;
 
@@ -277,12 +278,12 @@ public class VFXBatch : IDisposable
 
 	public void Begin()
 	{
-		Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicClamp, RasterizerState.CullNone);
+		Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointClamp, RasterizerState.CullNone);
 	}
 
 	public void Begin(BlendState blendState)
 	{
-		Begin(blendState, DepthStencilState.None, SamplerState.AnisotropicClamp, RasterizerState.CullNone);
+		Begin(blendState, DepthStencilState.None, SamplerState.PointClamp, RasterizerState.CullNone);
 	}
 
 	public void Begin(BlendState blendState, DepthStencilState depthStencilState, SamplerState samplerState, RasterizerState rasterizerState)
@@ -383,24 +384,32 @@ public class VFXBatch : IDisposable
 
 	private struct VFX2D : IVertexType
 	{
-		public Color color;
 
-		public Vector2 position;
 
-		public Vector2 texCoord;
+        private static VertexDeclaration _vertexDeclaration = new(new VertexElement[3]
+     {
+        new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.Position, 0),
+        new VertexElement(8, VertexElementFormat.Color, VertexElementUsage.Color, 0),
+        new VertexElement(12, VertexElementFormat.Vector3, VertexElementUsage.TextureCoordinate, 0)
+     });
+        public Vector2 position;
+        public Color color;
+        public Vector3 texCoord;
 
-		public VFX2D(Vector2 position, Color color, Vector2 texCoord)
-		{
-			this.position = position;
-			this.color = color;
-			this.texCoord = texCoord;
-		}
+        public VFX2D(Vector2 position, Color color, Vector2 texCoord)
+        {
+            this.position = position;
+            this.color = color;
+            this.texCoord = new(texCoord,0);
+        }
 
-		public VertexDeclaration VertexDeclaration => new(
-											new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.Position, 0),
-			new VertexElement(8, VertexElementFormat.Color, VertexElementUsage.Color, 0),
-			new VertexElement(12, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0));
-	}
+        public override string ToString()
+        {
+            return $"[{position}, {color}, {texCoord}]";
+        }
+
+        public VertexDeclaration VertexDeclaration => _vertexDeclaration;
+    }
 
 	#endregion Vertex
 

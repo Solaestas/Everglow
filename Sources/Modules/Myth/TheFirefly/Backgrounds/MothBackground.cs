@@ -360,7 +360,7 @@ public class MothBackground : ModSystem
 		Main.spriteBatch.End();
 
 		var texCloseII = ModAsset.FireflyClose2.Value;
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Rectangle rvcII = GetDrawRect(texCloseII.Size(), 0.57f, false);
 		rvcII.Y -= 300;
 		rvcII.X += 300;
@@ -386,7 +386,7 @@ public class MothBackground : ModSystem
 		if (CloseII.Count > 2)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = texCloseII;
-			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, CloseII.ToArray(), 0, 2);
 		}
 		if (DownY > 1)

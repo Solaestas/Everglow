@@ -9,11 +9,11 @@ public class Rope
 {
 	public struct _Mass
 	{
-		internal bool IsStatic;
-		internal float Mass;
-		internal Vector2 Position;
-		internal Vector2 Velocity;
-		internal Vector2 Force;
+		public bool IsStatic;
+		public float Mass;
+		public Vector2 Position;
+		public Vector2 Velocity;
+		public Vector2 Force;
 
 		public _Mass()
 		{
@@ -156,12 +156,10 @@ public class Rope
 		for (int i = 0; i < m_masses.Length; i++)
 		{
 			ref _Mass m = ref m_masses[i];
-			m.Force += new Vector2(0.04f + 0.06f *
-				(float)(Math.Sin(Terraria.Main.timeForVisualEffects / 72f + m.Position.X / 13d + m.Position.Y / 4d)), 0)
-				* (Terraria.Main.windSpeedCurrent + 1f) * 0f
+			m.Force += new Vector2(2 * (MathF.Sin((float)Main.timeForVisualEffects / 72f + m.Position.X / 13f + m.Position.Y / 4f) + 0.9f), 0)
+				* Main.windSpeedCurrent
 				+ new Vector2(0, gravity * m.Mass);
 		}
-
 	}
 
 	public void ClearForce()

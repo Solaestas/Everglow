@@ -101,7 +101,7 @@ internal class SightOfTileProj : ModProjectile
 		Vdr = Vdr / Vdr.Length() * 7;
 
 		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(Vdr.Y, Vdr.X) - (Math.PI / 2d)));
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/ZY/Items/SightOfTileProj").Value;
+		Texture2D t = ModAsset.SightOfTileProj.Value;
 		Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 		SpriteEffects S = SpriteEffects.None;
 		if (Math.Sign(Vdr.X) == -1)
@@ -142,9 +142,9 @@ internal class SightOfTileProj : ModProjectile
 	private void DrawNinePiecesForTiles(int LeftX, int RightX, int UpY, int DownY)
 	{
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/ZY/Items/Rectangle").Value;
+		Texture2D t = ModAsset.Rectangle.Value;
 		var baseColor = new Color(0, 30, 120, 180);
 		if (LeftX == RightX)
 		{
@@ -239,28 +239,149 @@ internal class SightOfTileProj : ModProjectile
 				{
 					source.Y = 32;
 				}
-
-				Main.spriteBatch.Draw(t, new Rectangle((x * 16) - ScPosX, (y * 16) - ScPosY, 16, 16), source, GetTileColor(x, y, baseColor));
+				Tile tile = Main.tile[x, y];
+				if(!IsHalfBrick(x, y))
+				{
+					Main.spriteBatch.Draw(t, new Rectangle((x * 16) - ScPosX, (y * 16) - ScPosY, 16, 16), source, GetTileColor(x, y, baseColor));
+				}
+				else
+				{
+					Main.spriteBatch.Draw(ModAsset.HalfTiles.Value, new Rectangle((x * 16) - ScPosX, (y * 16) - ScPosY, 16, 16), GetTileFrame(x, y), GetTileColorCheckHalfBrick(x, y, baseColor));
+					Main.spriteBatch.Draw(ModAsset.HalfTiles.Value, new Rectangle((x * 16) - ScPosX, (y * 16) - ScPosY, 16, 16), GetTileFrame(x, y, true), GetTileColorCheckHalfBrick(x, y, baseColor, true));
+				}
 			}
-		}
+		}		
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 	}
 
+	private bool IsHalfBrick(int x, int y)
+	{
+		Tile tile = Main.tile[x, y];
+		if (tile != null && tile.HasTile)
+		{
+			if (Main.tileSolid[tile.type])
+			{
+				if (tile.IsHalfBlock)
+				{
+					return true;
+				}
+				if (tile.Slope == SlopeType.SlopeDownLeft)
+				{
+					return true;
+				}
+				if (tile.Slope == SlopeType.SlopeDownRight)
+				{
+					return true;
+				}
+				if (tile.Slope == SlopeType.SlopeUpLeft)
+				{
+					return true;
+				}
+				if (tile.Slope == SlopeType.SlopeUpRight)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private Rectangle GetTileFrame(int i, int j, bool emptyPart = false)
+	{
+		Rectangle frame = new Rectangle(0, 0, 16, 16);
+		Tile tile = Main.tile[i, j];
+		if (tile != null && tile.HasTile)
+		{
+			if (tile.IsHalfBlock)
+			{
+				frame.X = 18;
+			}
+			if (tile.Slope == SlopeType.SlopeDownLeft)
+			{
+				frame.X = 36;
+			}
+			if (tile.Slope == SlopeType.SlopeDownRight)
+			{
+				frame.X = 54;
+			}
+			if (tile.Slope == SlopeType.SlopeUpLeft)
+			{
+				frame.X = 72;
+			}
+			if (tile.Slope == SlopeType.SlopeUpRight)
+			{
+				frame.X = 90;
+			}
+			if(emptyPart)
+			{
+				frame.Y = 18;
+				if (tile.IsHalfBlock)
+				{
+					frame.X = 108;
+				}
+				if (tile.Slope == SlopeType.SlopeDownLeft)
+				{
+					frame.X = 90;
+				}
+				if (tile.Slope == SlopeType.SlopeDownRight)
+				{
+					frame.X = 72;
+				}
+				if (tile.Slope == SlopeType.SlopeUpLeft)
+				{
+					frame.X = 54;
+				}
+				if (tile.Slope == SlopeType.SlopeUpRight)
+				{
+					frame.X = 36;
+				}
+			}
+			return frame;
+		}
+		return new Rectangle(126, 0, 0, 0);
+	}
+
+	private Color GetTileColorCheckHalfBrick(int i, int j, Color baseColor, bool emptyPart = false)
+	{
+		Tile tile = Main.tile[i, j];
+		if (tile.HasTile && !emptyPart)
+		{
+			if (tile.WallType > 0)
+			{
+				return new Color(255, 120, 0, 200);
+			}
+			if (!Main.tileSolid[tile.type])
+			{
+				return new Color(0, 20, 120, 10);
+			}
+			return new Color(200, 200, 0, 10);
+		}
+		if (tile.WallType > 0)
+		{
+			return new Color(95, 0, 0, 200);
+		}
+
+		return baseColor;
+	}
 	private Color GetTileColor(int i, int j, Color baseColor)
 	{
-		if (Main.tile[i, j].HasTile)
+		Tile tile = Main.tile[i, j];
+		if (tile.HasTile)
 		{
-			if (Main.tile[i, j].WallType > 0)
+			if (tile.WallType > 0)
 			{
-				return new Color(255, 255, 0, 200);
+				return new Color(255, 120, 0, 200);
 			}
-
-			return new Color(100, 100, 0, 10);
+			if (!Main.tileSolid[tile.type])
+			{
+				return new Color(0, 20, 120, 10);
+			}
+			return new Color(200, 200, 0, 10);
 		}
-		if (Main.tile[i, j].WallType > 0)
+		if (tile.WallType > 0)
 		{
-			return new Color(255, 55, 0, 10);
+			return new Color(95, 0, 0, 200);
 		}
 
 		return baseColor;
