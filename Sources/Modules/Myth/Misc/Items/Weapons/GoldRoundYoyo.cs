@@ -26,7 +26,8 @@ public class GoldRoundYoyo : ModItem
 		Item.damage = 136;
 		Item.noMelee = true;
 		Item.value = Item.sellPrice(0, 5, 0, 0);
-		Item.rare = ItemRarityID.Yellow;
+		Item.rare = ItemRarityID.Master;
+		Item.master = true;
 		ItemID.Sets.Yoyo[Item.type] = true;
 	}
 }

@@ -1,6 +1,10 @@
+using Everglow.Commons.NPCs.NPCList;
+using Everglow.Myth.Misc.Items.Accessories;
 using Everglow.Myth.Misc.Items.Weapons;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
+using Terraria.ID;
+using Terraria;
 
 namespace Everglow.Myth.Common;
 
@@ -14,15 +18,15 @@ public class MythContentNPCLoot : GlobalNPC
 	public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot) //TODO: Use switch-case instead of if statements. Maybe in the future
 	{
 		Player player = Main.LocalPlayer;
-		//    if (npc.type == NPCID.Nutcracker || npc.type == 349)
-		//    {
-		//        /*´óÊ¦*/
-		//        npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Accessories.WalnutClip>(), 180/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
-		//        /*×¨¼Ò*/
-		//        npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsExpert(), ModContent.ItemType<Items.Accessories.WalnutClip>(), 270/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
-		//        /*ÆÕÍ¨*/
-		//        npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Accessories.WalnutClip>(), 360/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
-		//    }
+		if (npc.type == NPCID.Nutcracker || npc.type == NPCID.NutcrackerSpinning)
+		{
+			/*´óÊ¦*/
+			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<WalnutClip>(), 180/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
+			/*×¨¼Ò*/
+			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsExpert(), ModContent.ItemType<WalnutClip>(), 270/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
+			/*ÆÕÍ¨*/
+			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<WalnutClip>(), 360/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
+		}
 		if (npc.type == NPCID.Harpy)
 		{
 			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FeatherMagic>(), 70));
@@ -186,15 +190,15 @@ public class MythContentNPCLoot : GlobalNPC
 		//        /*ÆÕÍ¨*/
 		//        npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<AmbiguousNight>(), 200/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
 		//    }
-		//    if (npc.type == NPCID.WyvernHead)
-		//    {
-		//        /*´óÊ¦*/
-		//        npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<ThunderFlower>(), 50/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
-		//        /*×¨¼Ò*/
-		//        npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsExpert(), ModContent.ItemType<ThunderFlower>(), 100/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
-		//        /*ÆÕÍ¨*/
-		//        npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<ThunderFlower>(), 140/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
-		//    }
+		if (npc.type == NPCID.WyvernHead)
+		{
+			/*´óÊ¦*/
+			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<ThunderFlower>(), 50/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
+			/*×¨¼Ò*/
+			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsExpert(), ModContent.ItemType<ThunderFlower>(), 100/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
+			/*ÆÕÍ¨*/
+			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<ThunderFlower>(), 140/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
+		}
 		if (npc.type == NPCID.Wraith)
 		{
 			/*´óÊ¦*/
@@ -204,35 +208,35 @@ public class MythContentNPCLoot : GlobalNPC
 			/*ÆÕÍ¨*/
 			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<ComingGhost>(), 200/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
 		}
-		//    if (npc.type == 370)
-		//    {
-		//        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DukeTooth>(), 3));
-		//    }
+		if (npc.type == NPCID.DukeFishron)
+		{
+			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DukeTooth>(), 3));
+		}
 		//    if (npc.type == 628)
 		//    {
 		//        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<WindMoveSeed>(), 1, 3, 5));
 		//    }
-		//    if (npc.type == 1)
-		//    {
-		//        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BlueGel>(), 800));
-		//    }
-		//    if (npc.type == -3)
-		//    {
-		//        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<RedGel>(), 800));
-		//    }
-		//    if (npc.type == -1)
-		//    {
-		//        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<GreenGel>(), 800));
-		//    }
-		//    if (!npc.friendly && npc.lifeMax > 100)
-		//    {
-		//        /*´óÊ¦*/
-		//        npcLoot.Add(ItemDropRule.ByCondition(new EclipseMasterPostPlant(), ModContent.ItemType<GoldRoundYoyo>(), 40/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
-		//        /*×¨¼Ò*/
-		//        npcLoot.Add(ItemDropRule.ByCondition(new EclipseExpertPostPlant(), ModContent.ItemType<GoldRoundYoyo>(), 60/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
-		//        /*ÆÕÍ¨*/
-		//        npcLoot.Add(ItemDropRule.ByCondition(new EclipseNormalPostPlant(), ModContent.ItemType<GoldRoundYoyo>(), 80/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
-		//    }
+		if (npc.type == NPCID.BlueSlime)
+		{
+			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BlueGel>(), 800));
+		}
+		if (npc.type == NPCID.RedSlime)
+		{
+			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<RedGel>(), 800));
+		}
+		if (npc.type == NPCID.GreenSlime)
+		{
+			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<GreenGel>(), 800));
+		}
+		if (!npc.friendly && npc.lifeMax > 100)
+		{
+			/*´óÊ¦*/
+			npcLoot.Add(ItemDropRule.ByCondition(new EclipseMasterPostPlant(), ModContent.ItemType<GoldRoundYoyo>(), 40/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
+			/*×¨¼Ò*/
+			npcLoot.Add(ItemDropRule.ByCondition(new EclipseExpertPostPlant(), ModContent.ItemType<GoldRoundYoyo>(), 60/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
+			/*ÆÕÍ¨*/
+			npcLoot.Add(ItemDropRule.ByCondition(new EclipseNormalPostPlant(), ModContent.ItemType<GoldRoundYoyo>(), 80/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
+		}
 		//    if (!npc.friendly && npc.lifeMax > 100)
 		//    {
 		//        /*´óÊ¦*/
@@ -278,11 +282,11 @@ public class MythContentNPCLoot : GlobalNPC
 		//        /*ÆÕÍ¨*/
 		//        npcLoot.Add(ItemDropRule.ByCondition(new HallowNormalHardmode(), ModContent.ItemType<CrystalClub>(), 200/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
 		//    }
-		//    if (npc.type == 344)
-		//    {
-		//        npcLoot.Add(ItemDropRule.ByCondition(new InFrostMoonFinal(), ModContent.ItemType<FrozenStormPine>(), 50/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
-		//        npcLoot.Add(ItemDropRule.ByCondition(new InFrostMoonFinal(), ModContent.ItemType<XmasWhip>(), 50/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
-		//    }
+		if (npc.type == 344)
+		{
+			//npcLoot.Add(ItemDropRule.ByCondition(new InFrostMoonFinal(), ModContent.ItemType<FrozenStormPine>(), 50/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
+			npcLoot.Add(ItemDropRule.ByCondition(new InFrostMoonFinal(), ModContent.ItemType<XmasWhip>(), 50/*¸ÅÂÊ·ÖÄ¸*/, 1/*×îÐ¡*/, 1/*×î´ó*/, 1/*¸ÅÂÊ·Ö×Ó*/));
+		}
 	}
 }
 class CrimsonExpertHardmode : IItemDropRuleCondition
@@ -459,7 +463,8 @@ class HallowNormalHardmode : IItemDropRuleCondition
 }
 class EclipseExpertPostPlant : IItemDropRuleCondition
 {
-	bool CanD => Main.expertMode && !Main.masterMode && Main.eclipse && NPC.downedPlantBoss;
+	NPC npc = new();
+	bool CanD => Main.expertMode && !Main.masterMode && Main.eclipse && NPC.downedPlantBoss && EclipseNPCs.vanillaEclipseNPCs.Contains(npc.type);
 	public bool CanDrop(DropAttemptInfo info)
 	{
 		return CanD;
@@ -478,7 +483,8 @@ class EclipseExpertPostPlant : IItemDropRuleCondition
 }
 class EclipseMasterPostPlant : IItemDropRuleCondition
 {
-	bool CanD => Main.masterMode && Main.eclipse && NPC.downedPlantBoss;
+	NPC npc = new();
+	bool CanD => Main.masterMode && Main.eclipse && NPC.downedPlantBoss && EclipseNPCs.vanillaEclipseNPCs.Contains(npc.type);
 	public bool CanDrop(DropAttemptInfo info)
 	{
 		return CanD;
@@ -497,7 +503,8 @@ class EclipseMasterPostPlant : IItemDropRuleCondition
 }
 class EclipseNormalPostPlant : IItemDropRuleCondition
 {
-	bool CanD => !Main.expertMode && Main.eclipse && NPC.downedPlantBoss;
+	NPC npc = new();
+	bool CanD => !Main.expertMode && Main.eclipse && NPC.downedPlantBoss && EclipseNPCs.vanillaEclipseNPCs.Contains(npc.type);
 	public bool CanDrop(DropAttemptInfo info)
 	{
 		return CanD;

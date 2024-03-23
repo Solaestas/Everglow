@@ -28,4 +28,14 @@ public class World : ModItem
 			Projectile.NewProjectile(source, player.Center, velocity, type, damage, knockback, player.whoAmI, 2, 0f);
 		return false;
 	}
+	public override void AddRecipes()
+	{
+		Recipe recipe = CreateRecipe();
+		recipe.AddIngredient(ItemID.TerraBlade);
+		recipe.AddIngredient(ItemID.Emerald, 50);
+		recipe.AddIngredient(ItemID.LunarBar, 20);
+		recipe.AddIngredient(ItemID.ChlorophyteBar, 12);
+		recipe.AddTile(TileID.LunarCraftingStation);
+		recipe.Register();
+	}
 }
