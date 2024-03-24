@@ -9,14 +9,14 @@ public class LeafcutterAnt : ModNPC
 {
 	public override void SetStaticDefaults()
 	{
-		Main.npcFrameCount[NPC.type] = 6;
+		Main.npcFrameCount[NPC.type] = 5;
 		NPCSpawnManager.RegisterNPC(Type);
 	}
 	public override void SetDefaults()
 	{
 
-		NPC.width = 54;
-		NPC.height = 42;
+		NPC.width = 50;
+		NPC.height = 30;
 		NPC.lifeMax = 80;
 		NPC.damage = 25;
 		NPC.defense = 10;
