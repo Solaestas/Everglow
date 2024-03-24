@@ -29,7 +29,23 @@ internal class YggdrasilModule : EverglowModule
 			IL_Main.DrawToMap_Section += IL_Main_DrawToMap_Section;
 			On_Main.UpdateTime_StartDay += On_Main_UpdateTime_StartDay;
 			On_Main.UpdateTime_StartNight += On_Main_UpdateTime_StartNight;
+			On_Main.CanStartInvasion += On_Main_CanStartInvasion;
+			On_Main.StartInvasion += On_Main_StartInvasion;
 		}
+	}
+
+	private void On_Main_StartInvasion(On_Main.orig_StartInvasion orig, int type)
+	{
+        if (YggdrasilWorld.InYggdrasil)
+            return;
+        orig(type);
+	}
+
+	private bool On_Main_CanStartInvasion(On_Main.orig_CanStartInvasion orig, int type, bool ignoreDelay)
+	{
+		if (YggdrasilWorld.InYggdrasil)
+			return false;
+		return orig(type, ignoreDelay);
 	}
 
 	private void On_Main_UpdateTime_StartNight(On_Main.orig_UpdateTime_StartNight orig, ref bool stopEvents)
@@ -111,8 +127,21 @@ internal class YggdrasilModule : EverglowModule
 	}
 	private void FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
 	{
-		// 直接从RT池子里取
-		var renderTargets = Ins.RenderTargetPool.GetRenderTarget2DArray(4);
+		
+		bool enable = false;
+		foreach (Projectile proj in Main.projectile)
+		{
+			if (proj.ModProjectile is IOcclusionProjectile && proj.active) 
+				enable = true;
+		}
+		if (!enable)
+		{
+			orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
+			return;
+		}
+        // 直接从RT池子里取
+		
+        var renderTargets = Ins.RenderTargetPool.GetRenderTarget2DArray(4);
 		screen = renderTargets.Resource[0];
 		OcclusionRender = renderTargets.Resource[1];
 		EffectTarget = renderTargets.Resource[2];
@@ -122,25 +151,25 @@ internal class YggdrasilModule : EverglowModule
 		GetOrig(graphicsDevice);
 
 		graphicsDevice.SetRenderTarget(OcclusionRender);
-		graphicsDevice.Clear(Color.Transparent);
-		bool flag = DrawOcclusion(Ins.Batch);
+        graphicsDevice.Clear(Color.Transparent);
+        bool flag = DrawOcclusion(Ins.Batch);
 
 		graphicsDevice.SetRenderTarget(EffectTarget);
-		graphicsDevice.Clear(Color.Transparent);
-		DrawEffect(Ins.Batch);
+        graphicsDevice.Clear(Color.Transparent);
+        DrawEffect(Ins.Batch);
 
 		if (flag)
 		{
 			//保存原图
 			graphicsDevice.SetRenderTarget(screen);
-			graphicsDevice.Clear(Color.Transparent);
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            graphicsDevice.Clear(Color.Black);
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 			Main.spriteBatch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
 			Main.spriteBatch.End();
 
 			graphicsDevice.SetRenderTarget(TotalEffeftsRender);
-			graphicsDevice.Clear(Color.Transparent);
-			graphicsDevice.Textures[1] = OcclusionRender;
+            graphicsDevice.Clear(Color.Transparent);
+            graphicsDevice.Textures[1] = OcclusionRender;
 			graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 			ScreenOcclusion.CurrentTechnique.Passes[0].Apply();
@@ -151,7 +180,7 @@ internal class YggdrasilModule : EverglowModule
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
 			graphicsDevice.SetRenderTarget(Main.screenTarget);
-			graphicsDevice.Clear(Color.Transparent);
+			graphicsDevice.Clear(Color.Black);
 
 			Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
 			Main.spriteBatch.End();

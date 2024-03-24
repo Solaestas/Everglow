@@ -4,6 +4,7 @@ using Terraria.WorldBuilding;
 namespace Everglow.Yggdrasil;
 internal class YggdrasilWorld : Subworld
 {
+	public static bool InYggdrasil => SubworldSystem.IsActive<YggdrasilWorld>();
 	public static float YggdrasilTimer = 0;
 	public Vector2 StoneCageOfChallengesCenter = Vector2.zeroVector;
 	public override int Width => 2000;
@@ -69,7 +70,10 @@ class YggdrasilWorldSystem : ModSystem
 {
 	public override void PostUpdateEverything()
 	{
-		YggdrasilWorld.YggdrasilTimer++;
+		if (YggdrasilWorld.InYggdrasil)
+		{
+			YggdrasilWorld.YggdrasilTimer++;
+		}
 		base.PostUpdateEverything();
 	}
 }
