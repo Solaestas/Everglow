@@ -1,5 +1,7 @@
 using System.Reflection;
 using SubworldLibrary;
+using Terraria.GameContent;
+using Terraria.GameContent.Liquid;
 using Terraria.WorldBuilding;
 
 namespace Everglow.Yggdrasil;
@@ -32,11 +34,6 @@ internal class YggdrasilWorld : Subworld
 			MonoModHooks.Add(t.GetMethod("get_CurrentPath", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance),
 				Redirection_SubWorldSystem_CurrentPath);
 		}
-		Player.Hooks.OnEnterWorld += Hooks_OnEnterWorld;
-	}
-	private void Hooks_OnEnterWorld(Player player)
-	{
-		player.TouchedTiles.Clear();
 	}
 	private static string Redirection_SubWorldSystem_CurrentPath(Func<string> orig)
 	{
@@ -68,6 +65,26 @@ internal class YggdrasilWorld : Subworld
 			Main.instance.TilePaintSystem = new();
 			Main.instance.TilesRenderer = new(Main.instance.TilePaintSystem);
 			Main.instance.WallsRenderer = new(Main.instance.TilePaintSystem);
+
+			foreach (Player player in Main.player)
+			{
+				player.TouchedTiles.Clear();
+			}
+			for(int i = 0;i<LiquidRenderer.Instance._cache.Length;i++)
+			{
+				ref LiquidRenderer.LiquidCache cache = ref LiquidRenderer.Instance._cache[i];
+				cache.HasVisibleLiquid = false;
+			}
+			for (int i = 0; i < LiquidRenderer.Instance._drawCache.Length; i++)
+			{
+				ref LiquidRenderer.LiquidDrawCache cache = ref LiquidRenderer.Instance._drawCache[i];
+				cache.IsVisible = false;
+			}
+			for (int i = 0; i < LiquidRenderer.Instance._drawCacheForShimmer.Length; i++)
+			{
+				ref LiquidRenderer.SpecialLiquidDrawCache cache = ref LiquidRenderer.Instance._drawCacheForShimmer[i];
+				cache.IsVisible = false;
+			}
 		}
 		Main.bottomWorld = Main.maxTilesY * 16;
 		Main.rightWorld = Main.maxTilesX * 16;
