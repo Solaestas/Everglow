@@ -10,14 +10,15 @@ public class LightBulb : ModNPC
 {
 	public override void SetStaticDefaults()
 	{
-		Main.npcFrameCount[NPC.type] = 4;
+		Main.npcFrameCount[NPC.type] = 12;
 		NPCSpawnManager.RegisterNPC(Type);
 	}
+
 	public override void SetDefaults()
 	{
 
-		NPC.width = 35;
-		NPC.height = 30;
+		NPC.width = 90;
+		NPC.height = 90;
 		NPC.lifeMax = 30;
 		NPC.damage = 8;
 		NPC.defense = 2;
@@ -37,7 +38,31 @@ public class LightBulb : ModNPC
 	}
 	public override void FindFrame(int frameHeight)
 	{
-		NPC.frame.Y = (int)(NPC.ai[0]/30%4) * frameHeight;
+		switch (State)
+		{
+			case (int)NPCState.Sleep:
+				{
+
+					NPC.frame.Y = (int)(NPC.frameCounter / 12 % 4 + 8) * frameHeight;
+					break;
+				}
+			case (int)NPCState.charge:
+				{
+					NPC.frame.Y = (int)(NPC.frameCounter / 6 % 12) * frameHeight;
+					break;
+				}
+			case (int)NPCState.Attack:
+				{
+					NPC.frame.Y = (int)(NPC.frameCounter / 6 % 12) * frameHeight;
+					break;
+				}
+			case (int)NPCState.Cooldown:
+				{
+					NPC.frame.Y = (int)(NPC.frameCounter / 12 % 4 + 8) * frameHeight;
+					break;
+				}
+
+		}
 	}
 
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -57,6 +82,7 @@ public class LightBulb : ModNPC
 	private enum NPCState
 	{
 		Sleep,
+		charge,
 		Attack,
 		Cooldown
 	}
@@ -67,9 +93,23 @@ public class LightBulb : ModNPC
 		{
 			case (int)NPCState.Sleep:
 				{
+					NPC.frameCounter++;
 					NPC.TargetClosest();
-
+					NPC.ai[0] = 0;
 					if (NPC.HasValidTarget && Main.player[NPC.target].Distance(NPC.Center) <= 750)
+					{
+						State = (int)NPCState.charge;
+						NPC.ai[0] = 0;
+						NPC.frameCounter = 0;
+
+					}
+					break;
+				}
+			case (int)NPCState.charge:
+				{
+					NPC.frameCounter++;
+					NPC.ai[0]++;
+					if ((NPC.ai[0] % 18) == 0)
 					{
 						State = (int)NPCState.Attack;
 						NPC.ai[0] = 0;
@@ -78,35 +118,39 @@ public class LightBulb : ModNPC
 				}
 			case (int)NPCState.Attack:
 				{
-					NPC.ai[0]++;
-					if ( ((NPC.ai[0] + 160) % 180)==0)
+					if (NPC.ai[0] == 0)
 					{
 						for (int i = 0; i < 6; i++)
 						{
 							Vector2 v = new Vector2(5f, 0);
-							v = v.RotatedBy(-Math.PI * i / 5).RotatedByRandom(Math.PI/ 10);
+							v = v.RotatedBy(-Math.PI * i / 5).RotatedByRandom(Math.PI / 10);
 							if (v.Y > 0)
 							{
 								v.Y = -v.Y;
 							}
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center- new Vector2(0, 40), v, ModContent.ProjectileType<LightSeed>(), 6, 0);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - new Vector2(0, 40), v, ModContent.ProjectileType<LightSeed>(), 6, 0);
 						}
 					}
+					NPC.ai[0]++;
+					NPC.frameCounter++;
 					NPC.TargetClosest();
 
-					if (NPC.HasValidTarget && Main.player[NPC.target].Distance(NPC.Center) > 750)
+					if ((NPC.ai[0] % 30) == 0)
 					{
 						State = (int)NPCState.Cooldown;
-						NPC.ai[0] = -160;
 					}
 					break;
 				}
 			case (int)NPCState.Cooldown:
 				{
+					NPC.frameCounter++;
 					NPC.ai[0]++;
-					if(NPC.ai[0] == 0)
+
+					NPC.TargetClosest();
+					if (NPC.HasValidTarget && Main.player[NPC.target].Distance(NPC.Center) > 750 || (NPC.ai[0] % 160) == 0)
 					{
 						State = (int)NPCState.Sleep;
+						NPC.ai[0] = 0;
 					}
 					break;
 				}
