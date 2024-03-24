@@ -62,7 +62,7 @@ public class YggdrasilTownBackground : ModSystem
 		{
 			if (SubworldSystem.IsActive<YggdrasilWorld>())
 			{
-				YggdrasilEnvironmentLightManager.LightingScene = YggdrasilSceneID.YggdrasilTown;
+				YggdrasilEnvironmentLightManager.LightingScene = YggdrasilScene.YggdrasilTown;
 				return true;
 			}
 		}
