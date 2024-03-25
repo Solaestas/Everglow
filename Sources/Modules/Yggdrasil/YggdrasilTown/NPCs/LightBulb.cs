@@ -1,8 +1,5 @@
-using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 
@@ -16,7 +13,6 @@ public class LightBulb : ModNPC
 
 	public override void SetDefaults()
 	{
-
 		NPC.width = 90;
 		NPC.height = 90;
 		NPC.lifeMax = 30;
@@ -89,6 +85,7 @@ public class LightBulb : ModNPC
 
 	public override void AI()
 	{
+		Lighting.AddLight(NPC.Center, 0.6f, 0.6f, 0);
 		switch (State)
 		{
 			case (int)NPCState.Sleep:
@@ -164,5 +161,11 @@ public class LightBulb : ModNPC
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
 		//TODO 掉落物
+	}
+	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+	{
+		Texture2D glow = ModAsset.LightBulb_glow.Value;
+		spriteBatch.Draw(glow, NPC.Center - Main.screenPosition + new Vector2(0, 4), new Rectangle(0, NPC.frame.Y, 160, 90), new Color(1f, 1f, 1f, 0), NPC.rotation, new Vector2(80, 45), NPC.scale, SpriteEffects.None, 0);
+		base.PostDraw(spriteBatch, screenPos, drawColor);
 	}
 }
