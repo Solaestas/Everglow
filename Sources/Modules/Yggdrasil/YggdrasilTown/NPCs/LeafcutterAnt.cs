@@ -27,9 +27,7 @@ public class LeafcutterAnt : ModNPC
 		NPC.HitSound = SoundID.NPCHit4;
 		NPC.DeathSound = SoundID.NPCDeath4;
 		AIType = NPCID.WalkingAntlion;
-
 	}
-
 	public override void FindFrame(int frameHeight)
 	{
 		if (NPC.ai[0] == 0f)
@@ -94,6 +92,7 @@ public class LeafcutterAnt : ModNPC
 
 	public override void OnSpawn(IEntitySource source)
 	{
+		NPC.scale = Main.rand.NextFloat(0.75f, 0.9f);
 	}
 
 	public override void OnKill()
