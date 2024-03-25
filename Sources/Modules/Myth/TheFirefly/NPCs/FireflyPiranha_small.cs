@@ -9,7 +9,7 @@ public class FireflyPiranha_small : ModNPC
 {
 	public override void SetStaticDefaults()
 	{
-		Main.npcFrameCount[NPC.type] = 12;
+		Main.npcFrameCount[NPC.type] = 5;
 	}
 	public override void SetDefaults()
 	{
