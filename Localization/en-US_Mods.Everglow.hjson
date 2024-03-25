@@ -3086,7 +3086,9 @@ NPCs: {
 	}
 
 	Acytaea_Boss.DisplayName: Acytaea_ Boss
+	BarkSpicyCaterpillar.DisplayName: Bark Spicy Caterpillar
 	BrownCaterpillar.DisplayName: Brown Caterpillar
+	Bulbling.DisplayName: Bulbling
 	CrimsonProtestant.DisplayName: Crimson Protestant
 	CrimsonSpell.DisplayName: Crimson Spell
 	CyanOreBeetle.DisplayName: Cyan Ore Beetle
