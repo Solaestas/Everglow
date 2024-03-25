@@ -43,7 +43,7 @@ public class LightBulb : ModNPC
 			case (int)NPCState.Sleep:
 				{
 
-					NPC.frame.Y = (int)(NPC.frameCounter / 12 % 4 + 8) * frameHeight;
+					NPC.frame.Y = (int)(NPC.frameCounter / 8 % 4 + 8) * frameHeight;
 					break;
 				}
 			case (int)NPCState.charge:
@@ -58,7 +58,7 @@ public class LightBulb : ModNPC
 				}
 			case (int)NPCState.Cooldown:
 				{
-					NPC.frame.Y = (int)(NPC.frameCounter / 12 % 4 + 8) * frameHeight;
+					NPC.frame.Y = (int)(NPC.frameCounter / 8 % 4 + 8) * frameHeight;
 					break;
 				}
 
