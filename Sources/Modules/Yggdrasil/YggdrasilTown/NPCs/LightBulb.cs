@@ -2,7 +2,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
-
+[NoGameModeScale]
 public class LightBulb : ModNPC
 {
 	public override void SetStaticDefaults()
@@ -86,7 +86,7 @@ public class LightBulb : ModNPC
 	public override void AI()
 	{
 		Lighting.AddLight(NPC.Center, 0.6f, 0.6f, 0);
-		if(NPC.frame.Y == 270)
+		if (NPC.frame.Y == 270)
 		{
 			Lighting.AddLight(NPC.Center, 2.6f, 2.6f, 0.6f);
 		}
@@ -160,6 +160,18 @@ public class LightBulb : ModNPC
 	}
 	public override void OnKill()
 	{
+		for (int i = 0; i < 5; i++)
+		{
+			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
+			int type = ModContent.Find<ModGore>("Everglow/GlowingBlossom_gore" + Main.rand.Next(3)).Type;
+			Gore.NewGore(NPC.GetSource_Death(), NPC.Center, v0, type, NPC.scale);
+		}
+		for (int i = 0; i < 8; i++)
+		{
+			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
+			int type = ModContent.Find<ModGore>("Everglow/GlowingBlossom_gore" + Main.rand.Next(3, 6)).Type;
+			Gore.NewGore(NPC.GetSource_Death(), NPC.Center, v0, type, NPC.scale);
+		}
 
 	}
 	public override void ModifyNPCLoot(NPCLoot npcLoot)

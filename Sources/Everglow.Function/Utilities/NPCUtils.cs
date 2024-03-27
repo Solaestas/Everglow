@@ -20,6 +20,7 @@ public class NoGameModeScale : GlobalNPC
 		Type type = npc.ModNPC?.GetType();
 		if (type != null && type.GetCustomAttribute<NoGameModeScaleAttribute>() != null)
 		{
+			NPCID.Sets.DontDoHardmodeScaling[npc.type] = true;
 			npc.lifeMax = (int)(npc.lifeMax / Main.GameModeInfo.EnemyMaxLifeMultiplier);
 			npc.damage = (int)(npc.damage / Main.GameModeInfo.EnemyDamageMultiplier);
 			npc.defense = (int)(npc.defense / Main.GameModeInfo.EnemyDefenseMultiplier);

@@ -66,7 +66,7 @@ public class BarkSpicyCaterpillar : Caterpillar
 		YggdrasilTownBiome YggdrasilTownBiome = ModContent.GetInstance<YggdrasilTownBiome>();
 		if (!YggdrasilTownBiome.IsBiomeActive(Main.LocalPlayer))
 			return 0f;
-		return 3f;
+		return 8f;
 	}
 	public override bool PreKill()
 	{
