@@ -1,3 +1,4 @@
+using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
@@ -171,14 +172,12 @@ namespace Everglow.Commons.Weapons.StabbingSwords
         {
 			if(UpdateTimer % (NormalExtraUpdates * Projectile.localNPCHitCooldown) == NormalExtraUpdates / 2)
 			{
-				float point = 0;
-
 				if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, new Vector2(targetHitbox.Left + targetHitbox.Width / 2f, targetHitbox.Top + targetHitbox.Height / 2f), 0, 0))
 				{
 					foreach(DrawParameters draw in DarkDraw)
 					{
 						Vector2 HitRange = new Vector2(1, 0).RotatedBy(draw.Rotation) * MaxLength * 72;
-						if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), draw.Postion, draw.Postion + HitRange, draw.Size.Y * 10, ref point))
+						if (CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, draw.Postion, draw.Postion + HitRange, draw.Size.Y * 10))
 						{
 							return true;
 						}

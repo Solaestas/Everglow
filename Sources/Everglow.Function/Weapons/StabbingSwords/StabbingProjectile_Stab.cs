@@ -1,4 +1,5 @@
 using Everglow.Commons.Coroutines;
+using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
@@ -104,7 +105,6 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		}
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
-			float point = 0;
 			Vector2 end = Projectile.Center + Projectile.velocity * 80 * MaxLength;
 			if (EndPos != Vector2.zeroVector)
 			{
@@ -112,7 +112,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			}
 			if (Collision.CanHit(StartCenter, 0, 0, targetHitbox.Center(), 0, 0))
 			{
-				if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), StartCenter, end, Projectile.width, ref point))
+				if (CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, StartCenter, end, Projectile.width))
 				{
 					return true;
 				}
