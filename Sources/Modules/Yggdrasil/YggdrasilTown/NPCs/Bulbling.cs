@@ -1,9 +1,9 @@
 using Everglow.Commons.CustomTiles;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
-
 public class Bulbling : ModNPC
 {
 	public override void SetStaticDefaults()
@@ -25,7 +25,20 @@ public class Bulbling : ModNPC
 		NPC.noTileCollide = false;
 		NPC.knockBackResist = 1f;
 		NPC.value = 90;
-
+		if (Main.expertMode)
+		{
+			NPC.knockBackResist = -0.08f;
+			NPC.lifeMax = 30;
+			NPC.damage = 8;
+			NPC.value = 7;
+		}
+		if (Main.masterMode)
+		{
+			NPC.knockBackResist = -0.04f;
+			NPC.lifeMax = 42;
+			NPC.damage = 11;
+			NPC.value = 10;
+		}
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -190,6 +203,38 @@ public class Bulbling : ModNPC
 			{
 				Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<BulblingSpark>());
 				d.velocity = new Vector2(Main.rand.NextFloat(2, 6f), 0).RotatedByRandom(MathHelper.TwoPi);
+			}
+			for (int g = 0; g < 40; g++)
+			{
+				Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(2, 32)).RotatedByRandom(MathHelper.TwoPi);
+				float mulScale = Main.rand.NextFloat(6f, 14f);
+				var blood = new BulblingGelDrop
+				{
+					velocity = afterVelocity / mulScale,
+					Active = true,
+					Visible = true,
+					position = NPC.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
+					maxTime = Main.rand.Next(42, 84),
+					scale = mulScale,
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
+				};
+				Ins.VFXManager.Add(blood);
+			}
+			for (int g = 0; g < 14; g++)
+			{
+				Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(2, 5)).RotatedByRandom(MathHelper.TwoPi);
+				var blood = new BulblingGelSplash
+				{
+					velocity = afterVelocity,
+					Active = true,
+					Visible = true,
+					position = NPC.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - afterVelocity,
+					maxTime = Main.rand.Next(32, 94),
+					scale = Main.rand.NextFloat(6f, 24f),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 }
+				};
+				Ins.VFXManager.Add(blood);
 			}
 		}
 		else
