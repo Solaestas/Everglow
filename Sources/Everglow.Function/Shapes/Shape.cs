@@ -7,7 +7,7 @@ using static Everglow.Commons.Shapes.Shape;
 
 namespace Everglow.Commons.Shapes
 {
-	internal class Shape
+	public class Shape
 	{
 		public interface ISAT<T>
 		{
@@ -29,9 +29,9 @@ namespace Everglow.Commons.Shapes
 	}
 	public class NormalConvex2D : IConvex<Vector2>, IEPA<Vector2>
 	{
-		public NormalConvex2D(IEnumerable<Vector2> vs)
+		public NormalConvex2D(Span<Vector2> vs)
 		{
-			vertex = ShapeCollision.QuickHull(vs).ToArray();
+			vertex = ShapeCollision.QuickHull(vs.ToArray()).ToArray();
 		}
 		protected readonly Vector2[] vertex;
 		public ReadOnlySpan<Vector2> ConvexVertex()
@@ -41,12 +41,15 @@ namespace Everglow.Commons.Shapes
 		public Vector2 FurthestPoint(Vector2 dir)
 		{
 			Vector2 center = Vector2.Zero;
-			vertex.ForEach(v => center += v);
-			center /= vertex.Count;
+			foreach (Vector2 v in vertex)
+			{
+				center += v;
+			}
+			center /= vertex.Length;
 			Vector2 result = vertex[0];
 			Vector2 Vr = result - center;
 			float d = Vector2.Dot(Vr, dir);
-			for (int i = 1; i < vertex.Count; i++)
+			for (int i = 1; i < vertex.Length; i++)
 			{
 				Vector2 Vi = vertex[i] - center;
 				float di = Vector2.Dot(Vi, dir);
@@ -59,8 +62,13 @@ namespace Everglow.Commons.Shapes
 			return result;
 		}
 	}
-	internal class Circle : IConvex<Vector2>, ISAT<Vector2>, IEPA<Vector2>
+	public class Circle : IConvex<Vector2>, ISAT<Vector2>, IEPA<Vector2>
 	{
+		public Circle(Vector2 center,float radius)
+		{
+			Center = center;
+			Radius = radius;
+		}
 		private uint samplingNumber = 8;
 		private float radius;
 		public Vector2 Center;
@@ -118,12 +126,31 @@ namespace Everglow.Commons.Shapes
 		}
 		public static explicit operator NormalConvex2D(Circle circle)
 		{
-			return new NormalConvex2D(circle.ConvexVertex());
+			Vector2[] result = new Vector2[circle.samplingNumber];
+			for (int i = 0; i < circle.samplingNumber; i++)
+			{
+				float f = MathHelper.TwoPi / circle.samplingNumber * i;
+				result[i] = circle.Center + new Vector2((float)Math.Cos(f), (float)Math.Sin(f)) * circle.radius;
+			}
+			return new NormalConvex2D(result);
 		}
 	}
-	internal class Triangle : IConvex<Vector2>, ISAT<Vector2>, IEPA<Vector2>
+	public class Triangle : IConvex<Vector2>, ISAT<Vector2>, IEPA<Vector2>
 	{
 		private readonly Vector2[] vertex = new Vector2[3];
+		public Triangle(Vector2 v1, Vector2 v2, Vector2 v3, bool checkClockWise = false)
+		{
+			if (checkClockWise)
+			{
+				vertex = ShapeCollision.QuickHull(new Vector2[] { v1, v2, v3 }).ToArray();
+			}
+			else
+			{
+				vertex[0] = v1;
+				vertex[1] = v2;
+				vertex[2] = v3;
+			}
+		}
 		public ReadOnlySpan<Vector2> ConvexVertex()
 		{
 			return new ReadOnlySpan<Vector2>(vertex);
@@ -169,7 +196,7 @@ namespace Everglow.Commons.Shapes
 		}
 		public static explicit operator NormalConvex2D(Triangle triangle)
 		{
-			return new NormalConvex2D(triangle.ConvexVertex());
+			return new NormalConvex2D(triangle.vertex);
 		}
 	}
 	public class Rectangle : IConvex<Vector2>, ISAT<Vector2>, IEPA<Vector2>
