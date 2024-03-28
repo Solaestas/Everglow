@@ -202,7 +202,7 @@ internal static class ShapeCollision
 				break;
 			}
 		}
-		convex = new NormalConvex2D(polytope);
+		convex = new NormalConvex2D(polytope.ToArray());
 		return true;
 	}
 	private static bool UpdateSimplex(List<Vector2> polytope, ref Vector2 dir)
