@@ -1,6 +1,9 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
+/// <summary>
+///这种棕色毛虫仅作为模板供参考不会自然生成
+/// </summary>
 [NoGameModeScale]
 public class BrownCaterpillar : Caterpillar
 {
@@ -13,8 +16,6 @@ public class BrownCaterpillar : Caterpillar
 		return 0f;
 	}
 	public override bool PreKill()
-
-
 	{
 		for (int j = 0; j < Segments.Count; j++)
 		{

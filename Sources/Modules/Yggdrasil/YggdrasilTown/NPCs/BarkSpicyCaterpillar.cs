@@ -1,3 +1,4 @@
+using Everglow.Commons.Coroutines;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.DataStructures;
 
@@ -67,6 +68,182 @@ public class BarkSpicyCaterpillar : Caterpillar
 		if (!YggdrasilTownBiome.IsBiomeActive(Main.LocalPlayer))
 			return 0f;
 		return 8f;
+	}
+	/// <summary>
+	/// 需要添加夜晚离开
+	/// </summary>
+	/// <returns></returns>
+	public override IEnumerator<ICoroutineInstruction> CrawlingII()
+	{
+		Crawl_2 = true;
+		float tValue = 0;
+		Vector2 toTail = GetNormalOfTiles(Segments[0].SelfPosition + NPC.Center).RotatedBy(-MathHelper.PiOver4 * Segments[0].SelfDirection);
+		if (toTail == Vector2.zeroVector)
+		{
+			toTail = Vector2.Normalize(Segments[0].SelfPosition - Segments[Segments.Count - 1].SelfPosition);
+		}
+		//从头部开始拉开虫体
+		for (int t = 0; t < 60; t++)
+		{
+			//被打破防了,掉下去,终止此协程
+			if (Toughness <= 0)
+			{
+				Crawl_2 = false;
+				yield break;
+			}
+			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
+			Segment head = Segments[0];//头
+			head.SelfPosition += toTail * 2f * (SegmentCount * SegmentBehavioralSize / 300f);
+			toTail = toTail.RotatedBy(-0.029f / (SegmentCount / 10f) * MathF.Sin(t / 60f * MathF.PI * head.SelfDirection));
+			head.Normal = toTail.RotatedBy(MathHelper.PiOver2);
+			tValue = (float)Utils.Lerp(tValue, SegmentBehavioralSize * SegmentCount / 5f, 0.03f);
+			Segments[0] = head;
+
+			for (int i = 1; i < Segments.Count; i++)
+			{
+				Segment segment = Segments[i];
+				if (GetNormalOfTiles(segment.SelfPosition + NPC.Center) == Vector2.zeroVector)
+				{
+					segment.SelfPosition += toTail.RotatedBy(-MathHelper.PiOver2 * segment.SelfDirection) * tValue / 30f;
+				}
+				Vector2 v = Segments[i - 1].SelfPosition - segment.SelfPosition;
+				if (v.Length() > SegmentBehavioralSize)
+				{
+					segment.SelfPosition = Segments[i - 1].SelfPosition - Vector2.Normalize(v) * (SegmentBehavioralSize - 2);
+				}
+				Vector2 direction = segment.SelfPosition - Segments[i - 1].SelfPosition;
+				if (i != Segments.Count - 1)
+				{
+					direction = Segments[i + 1].SelfPosition - Segments[i - 1].SelfPosition;
+				}
+				direction = direction.RotatedBy(-MathHelper.PiOver2);
+				segment.Normal = Vector2.Normalize(direction);
+				Segments[i] = segment;
+			}
+			if (t > 10 && GetNormalOfTiles(Segments[0].SelfPosition + NPC.Center) != Vector2.zeroVector)
+			{
+				break;
+			}
+			yield return new SkipThisFrame();
+		}
+		//头部寻找落点
+		while (GetNormalOfTiles(Segments[0].SelfPosition + NPC.Center) == Vector2.zeroVector)
+		{
+			//被打破防了,掉下去,终止此协程
+			if (Toughness <= 0)
+			{
+				Crawl_2 = false;
+				yield break;
+			}
+			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
+			Segment head = Segments[0];//头
+			toTail += toTail.RotatedBy(-MathHelper.PiOver2 * head.SelfDirection) * 0.02f;
+			toTail = Vector2.Normalize(toTail);
+			head.SelfPosition += toTail * 2 * (SegmentCount / 10f);
+
+			head.Normal = Vector2.Lerp(head.Normal, Segments[1].Normal, 0.2f);
+			tValue = (float)Utils.Lerp(tValue, 120, 0.03f);
+			Segments[0] = head;
+			bool shouldFall = true;
+			for (int i = 1; i < Segments.Count; i++)
+			{
+				Segment segment = Segments[i];
+				Vector2 getNormal = GetNormalOfTiles(segment.SelfPosition + NPC.Center);
+				if (getNormal == Vector2.zeroVector)
+				{
+					segment.SelfPosition += toTail.RotatedBy(-MathHelper.PiOver2 * segment.SelfDirection) * 2;
+				}
+				else
+				{
+					shouldFall = false;
+				}
+				Vector2 v = Segments[i - 1].SelfPosition - segment.SelfPosition;
+				if (v.Length() > SegmentBehavioralSize)
+				{
+					segment.SelfPosition = Segments[i - 1].SelfPosition - Vector2.Normalize(v) * (SegmentBehavioralSize - 2);
+				}
+				Vector2 direction = segment.SelfPosition - Segments[i - 1].SelfPosition;
+
+				direction = direction.RotatedBy(-MathHelper.PiOver2);
+				segment.Normal = Vector2.Normalize(direction);
+				Segments[i] = segment;
+			}
+			//如果整条虫都被头带上天了,在重力作用下滑落
+			if (shouldFall)
+			{
+				Crawl_2 = false;
+				_caterpillarCoroutine.StartCoroutine(new Coroutine(Falling_HitByDamege()));
+				yield break;
+			}
+			yield return new SkipThisFrame();
+		}
+		AdjustPosition();
+		Crawl_2 = false;
+		//平坦程度
+		float LineValue = 0;
+		for (int i = 1; i < Segments.Count; i++)
+		{
+			LineValue += (Segments[i].Normal - Segments[i - 1].Normal).Length();
+		}
+		//蠕虫只会在比较平坦的时候休息,1/10的几率休息5~50秒
+		if(!Main.dayTime)
+		{
+			Vector2 direction = GetNormalOfTiles(Segments[Segments.Count / 2].SelfPosition + NPC.Center).RotatedBy(MathHelper.PiOver2 * Segments[Segments.Count / 2].SelfDirection);
+			if (direction.X < -0.1f && NPC.Center.X < Main.screenPosition.X + Main.screenWidth / 2f - 400)
+			{
+				_caterpillarCoroutine.StartCoroutine(new Coroutine(CrawlingIII_Turn()));
+				yield break;
+			}
+			if (direction.X > 0.1f && NPC.Center.X > Main.screenPosition.X + Main.screenWidth / 2f + 400)
+			{
+				_caterpillarCoroutine.StartCoroutine(new Coroutine(CrawlingIII_Turn()));
+				yield break;
+			}
+		}
+		if (Main.rand.NextBool(10) && LineValue < 1)
+		{
+			_caterpillarCoroutine.StartCoroutine(new Coroutine(Waiting(Main.rand.Next(300, 3000))));
+			yield break;
+		}
+		if (!Crawl_1)
+		{
+			_caterpillarCoroutine.StartCoroutine(new Coroutine(Crawling()));
+		}
+	}
+	/// <summary>
+	/// 休息,夜晚离开
+	/// </summary>
+	/// <param name="time"></param>
+	/// <returns></returns>
+	public override IEnumerator<ICoroutineInstruction> Waiting(int time)
+	{
+		for (int t = 0; t < time; t++)
+		{
+			if (HitTimer > 0)
+			{
+				_caterpillarCoroutine.StartCoroutine(new Coroutine(Crawling()));
+				yield break;
+			}
+			//夜晚离开
+			if (!Main.dayTime)
+			{
+				_caterpillarCoroutine.StartCoroutine(new Coroutine(Crawling()));
+				yield break;
+			}
+			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
+			yield return new SkipThisFrame();
+		}
+		if (!Crawl_1)
+		{
+			if (Main.rand.NextBool(8))
+			{
+				_caterpillarCoroutine.StartCoroutine(new Coroutine(CrawlingIII_Turn()));
+			}
+			else
+			{
+				_caterpillarCoroutine.StartCoroutine(new Coroutine(Crawling()));
+			}
+		}
 	}
 	public override bool PreKill()
 	{
