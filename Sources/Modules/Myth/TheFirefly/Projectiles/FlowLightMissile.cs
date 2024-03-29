@@ -29,6 +29,8 @@ internal class FlowLightMissile : ModProjectile
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
+		if (Projectile.timeLeft % 5 == 0 && energy < 450)
+			player.statMana--;
 		player.heldProj = Projectile.whoAmI;
 		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathF.PI * 0.75f);
 		energy += 2;
@@ -43,7 +45,6 @@ internal class FlowLightMissile : ModProjectile
 			oldPo = Projectile.Center;
 			Projectile.Center = oldPo;
 			Projectile.velocity *= 0;
-			player.itemAnimation = 1;
 		}
 		if (!player.controlUseItem && release)
 		{
@@ -60,7 +61,7 @@ internal class FlowLightMissile : ModProjectile
 		}
 		if (energy > 450)
 			energy = 450;
-		if (player.statMana <= 0)
+		if (player.statMana <= 0 || Projectile.timeLeft < 2)
 			Shoot();
 		if (energy >= 180)
 		{

@@ -1266,6 +1266,11 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.ShadowSupervisor.Description
 	}
 
+	SilveralSpeed: {
+		DisplayName: Silveral Speed
+		Description: 5% increased movement speed and damage
+	}
+
 	MoonAndFragrans: {
 		DisplayName: Osmanthus Blossom Over the Moon
 		Description:
@@ -2289,7 +2294,11 @@ Items: {
 
 	EvilCocoon: {
 		DisplayName: Magical Cocoon
-		Tooltip: Summons the giant cocoon
+		Tooltip:
+			'''
+			Summons the giant cocoon
+			Breaking the cocoon summons Corrupted Moth
+			'''
 	}
 
 	FireflyImpression: {
@@ -2718,7 +2727,11 @@ Items: {
 
 	BoneFeatherMagic: {
 		DisplayName: Book of Bone Feathers
-		Tooltip: Shoots piercing bone feathers, aging enemy on struck and weakening their attack damage/defense
+		Tooltip:
+			'''
+			Shoots bone feathers
+			Enemies struck by bone feathers are weakened
+			'''
 	}
 
 	CloudGun: {
@@ -2728,7 +2741,7 @@ Items: {
 
 	ComingGhost: {
 		DisplayName: Warped Blade
-		Tooltip: Randomly surprises a lucky enemy nearby
+		Tooltip: ""
 	}
 
 	CyanFrost: {
@@ -4772,7 +4785,25 @@ ExtraTooltip: {
 		LunarFlareBook:
 			'''
 			Reveals the star sky
-			               Gradually increases crit chance and crit damage
+			Gradually increases crit chance and crit damage
+			'''
+		BoneFeatherMagic:
+			'''
+			The power meter fills with every enemy hit by the bone feathers
+			Press UP while holding the jump button to fly with bone wings, depleting the power meter
+			Right click to summon a bone feather strike from the sky and create spinal twists, depleting the power meter
+			'''
+		FireFeatherMagic:
+			'''
+			The power meter fills with every enemy hit by the fire feathers
+			Press UP while holding the jump button to fly with fire wings, depleting the power meter
+			Right click to summon a bone feather strike from the sky and create spinal twists, depleting the power meter
+			'''
+		FreezeFeatherMagic:
+			'''
+			The power meter fills with every enemy hit by the frost feathers
+			Press UP while holding the jump button to fly with frost wings, depleting the power meter
+			Right click to summon a bone feather strike from the sky and create spinal twists, depleting the power meter
 			'''
 	}
 }
