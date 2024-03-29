@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Everglow.Commons.Shapes.Shape;
 
 namespace Everglow.Commons.Shapes
@@ -90,6 +85,46 @@ namespace Everglow.Commons.Shapes
 				}
 			}
 		}
+		public virtual void Move(Vector2 movement)
+		{
+			Matrix transform = Matrix.CreateTranslation(new Vector3(movement, 0));
+			Transform(transform);
+		}
+		public virtual void Scale(Vector2? baseCenter, float scale)
+		{
+			if (baseCenter == null)
+			{
+				baseCenter = Vector2.Zero;
+				for (int i = 0; i < vertex.Length; i++)
+				{
+					baseCenter += vertex[i];
+				}
+				baseCenter /= vertex.Length;
+			}
+			Matrix transform = Matrix.CreateTranslation(new Vector3(baseCenter.Value, 0)) * Matrix.CreateScale(scale, scale, 1) * Matrix.CreateTranslation(new Vector3(-baseCenter.Value, 0));
+			Transform(transform);
+		}
+		public virtual void Rotate(Vector2? baseCenter, float radian)
+		{
+			if (baseCenter == null)
+			{
+				baseCenter = Vector2.Zero;
+				for (int i = 0; i < vertex.Length; i++)
+				{
+					baseCenter += vertex[i];
+				}
+				baseCenter /= vertex.Length;
+			}
+			Matrix transform = Matrix.CreateTranslation(new Vector3(baseCenter.Value, 0)) * Matrix.CreateRotationZ(radian) * Matrix.CreateTranslation(new Vector3(-baseCenter.Value, 0));
+			Transform(transform);
+		}
+		public virtual void Transform(Matrix transform)
+		{
+			for (int i = 0; i < vertex.Length; i++)
+			{
+				vertex[i] = Vector2.Transform(vertex[i], transform);
+			}
+		}
 	}
 	public class Circle : NormalConvex2D
 	{
@@ -145,6 +180,11 @@ namespace Everglow.Commons.Shapes
 					max = projection;
 				}
 			}
+		}
+		public override void Transform(Matrix transform)
+		{
+			base.Transform(transform);
+			Center = Vector2.Transform(Center, transform);
 		}
 	}
 	public class Triangle : NormalConvex2D
