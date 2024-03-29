@@ -9,7 +9,20 @@ namespace Everglow.Commons.Shapes;
 internal static class ShapeCollision
 {
 	#region Normal
+	/// <summary>
+	/// 三点向量积
+	/// </summary>
+	/// <param name="A">夹角顶点坐标</param>
+	/// <param name="B">起始边终点坐标</param>
+	/// <param name="C">终止边终点坐标</param>
+	/// <returns></returns>
 	private static float CrossProduct(Vector2 A, Vector2 B, Vector2 C) => (B.X - A.X) * (C.Y - A.Y) - (B.Y - A.Y) * (C.X - A.X);
+	/// <summary>
+	/// 计算给定点集的凸包络，并按顺时针顺序排列
+	/// </summary>
+	/// <param name="vs">点集</param>
+	/// <returns></returns>
+	/// <exception cref="ArgumentException">点集元素数量少于3时无法构建</exception>
 	public static List<Vector2> QuickHull(IEnumerable<Vector2> vs)
 	{
 		if (vs.Count() < 3)
@@ -41,7 +54,14 @@ internal static class ShapeCollision
 		lowerHull.AddRange(upperHull);
 		return lowerHull;
 	}
-	public static bool Contains(this IConvex<Vector2> convex, Vector2 point)
+	/// <summary>
+	/// 返回一个<see cref="IConvex{Vector2}"/>是否包含特定点
+	/// </summary>
+	/// <param name="convex">凸形实例</param>
+	/// <param name="point">要检查的点</param>
+	/// <param name="strict">是否严格检查(即是否考虑边重合)</param>
+	/// <returns></returns>
+	public static bool Contains(this IConvex<Vector2> convex, Vector2 point,bool strict)
 	{
 		var vs = convex.ConvexVertex();
 		var len = vs.Length;
@@ -49,14 +69,32 @@ internal static class ShapeCollision
 		{
 			Vector2 v1 = vs[i];
 			Vector2 v2 = vs[(i + 1) % len];
-			if (CrossProduct(v1, v2, point) < 0)
+			if (strict)
 			{
-				return false;
+				if (CrossProduct(v1, v2, point) <= 0)
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if (CrossProduct(v1, v2, point) < 0)
+				{
+					return false;
+				}
 			}
 		}
 		return true;
 	}
-	public static bool Intersect(Vector2 line1Start, Vector2 line1End, Vector2 line2Start, Vector2 line2End, float precision = 0.000001f)
+	/// <summary>
+	/// 检测两线是否相交
+	/// </summary>
+	/// <param name="line1Start">线1起始坐标</param>
+	/// <param name="line1End">线1终止坐标</param>
+	/// <param name="line2Start">线2起始坐标</param>
+	/// <param name="line2End">线2终止坐标</param>
+	/// <returns></returns>
+	public static bool Intersect(Vector2 line1Start, Vector2 line1End, Vector2 line2Start, Vector2 line2End)
 	{
 		float
 			x1 = line1Start.X, y1 = line1Start.Y,
@@ -78,6 +116,12 @@ internal static class ShapeCollision
 	#endregion
 
 	#region SAT
+	/// <summary>
+	/// 基于SAT法的碰撞计算，图形边数少时应优先被选择
+	/// </summary>
+	/// <param name="sat1"></param>
+	/// <param name="sat2"></param>
+	/// <returns></returns>
 	public static bool Intersect_SAT(ISAT<Vector2> sat1, ISAT<Vector2> sat2)
 	{
 		List<Vector2> axes = new();
@@ -101,6 +145,12 @@ internal static class ShapeCollision
 	#endregion
 
 	#region GJK
+	/// <summary>
+	/// 基于GJK法的碰撞计算，图形边数多时应被优先选择
+	/// </summary>
+	/// <param name="gjk1"></param>
+	/// <param name="gjk2"></param>
+	/// <returns></returns>
 	public static bool Intersect_GJK(IGJK<Vector2> gjk1, IGJK<Vector2> gjk2)
 	{
 		Vector2 dir = Vector2.UnitX;
@@ -169,6 +219,13 @@ internal static class ShapeCollision
 	#endregion
 
 	#region EPA
+	/// <summary>
+	/// 基于EPA的碰撞加强计算，主要用于获取碰撞重合区域。不关心重合区时应使用<see cref="Intersect_GJK(IGJK{Vector2}, IGJK{Vector2})"/>
+	/// </summary>
+	/// <param name="epa1"></param>
+	/// <param name="epa2"></param>
+	/// <param name="convex"></param>
+	/// <returns></returns>
 	public static bool Intersect_EPA(IEPA<Vector2> epa1, IEPA<Vector2> epa2, out IConvex<Vector2> convex)
 	{
 		convex = null;

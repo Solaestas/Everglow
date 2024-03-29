@@ -27,18 +27,21 @@ namespace Everglow.Commons.Shapes
 			public ReadOnlySpan<T> ConvexVertex();
 		}
 	}
-	public class NormalConvex2D : IConvex<Vector2>, IEPA<Vector2>
+	public class NormalConvex2D : IConvex<Vector2>, ISAT<Vector2>, IEPA<Vector2>
 	{
-		public NormalConvex2D(Span<Vector2> vs)
+		public static NormalConvex2D Create(Span<Vector2> vs)
 		{
-			vertex = ShapeCollision.QuickHull(vs.ToArray()).ToArray();
+			return new NormalConvex2D()
+			{
+				vertex = ShapeCollision.QuickHull(vs.ToArray()).ToArray()
+			};
 		}
-		protected readonly Vector2[] vertex;
-		public ReadOnlySpan<Vector2> ConvexVertex()
+		protected Vector2[] vertex;
+		public virtual ReadOnlySpan<Vector2> ConvexVertex()
 		{
 			return new ReadOnlySpan<Vector2>(vertex);
 		}
-		public Vector2 FurthestPoint(Vector2 dir)
+		public virtual Vector2 FurthestPoint(Vector2 dir)
 		{
 			Vector2 center = Vector2.Zero;
 			foreach (Vector2 v in vertex)
@@ -61,123 +64,16 @@ namespace Everglow.Commons.Shapes
 			}
 			return result;
 		}
-	}
-	public class Circle : IConvex<Vector2>, ISAT<Vector2>, IEPA<Vector2>
-	{
-		public Circle(Vector2 center,float radius)
+		public virtual List<Vector2> GetAxes()
 		{
-			Center = center;
-			Radius = radius;
-		}
-		private uint samplingNumber = 8;
-		private float radius;
-		public Vector2 Center;
-		public uint SamplingNumber
-		{
-			get => samplingNumber;
-			set => samplingNumber = Math.Max(value, 3);
-		}
-		public float Radius
-		{
-			get => radius;
-			set => radius = Math.Max(value, float.Epsilon);
-		}
-		public ReadOnlySpan<Vector2> ConvexVertex()
-		{
-			Vector2[] result = new Vector2[samplingNumber];
-			for (int i = 0; i < samplingNumber; i++)
-			{
-				float f = MathHelper.TwoPi / samplingNumber * i;
-				result[i] = Center + new Vector2((float)Math.Cos(f), (float)Math.Sin(f)) * radius;
-			}
-			return new ReadOnlySpan<Vector2>(result);
-		}
-		public Vector2 FurthestPoint(Vector2 dir)
-		{
-			return Center + Vector2.Normalize(dir) * radius;
-		}
-		public List<Vector2> GetAxes()
-		{
-			var samplings = ConvexVertex();
 			List<Vector2> axes = new();
-			for (int i = 1; i < samplingNumber; i++)
+			for(int i = 0; i < vertex.Length; i++)
 			{
-				axes.Add(samplings[i] - samplings[i - 1]);
+				axes.Add(vertex[i] - vertex[(i + 1) % vertex.Length]);
 			}
-			axes.Add(samplings[0] - samplings[^1]);
 			return axes;
 		}
-		public void Project(Vector2 axis, out float min, out float max)
-		{
-			min = float.MaxValue;
-			max = float.MinValue;
-			foreach (Vector2 point in ConvexVertex())
-			{
-				float projection = Vector2.Dot(point, axis);
-				if (projection < min)
-				{
-					min = projection;
-				}
-				if (projection > max)
-				{
-					max = projection;
-				}
-			}
-		}
-		public static explicit operator NormalConvex2D(Circle circle)
-		{
-			Vector2[] result = new Vector2[circle.samplingNumber];
-			for (int i = 0; i < circle.samplingNumber; i++)
-			{
-				float f = MathHelper.TwoPi / circle.samplingNumber * i;
-				result[i] = circle.Center + new Vector2((float)Math.Cos(f), (float)Math.Sin(f)) * circle.radius;
-			}
-			return new NormalConvex2D(result);
-		}
-	}
-	public class Triangle : IConvex<Vector2>, ISAT<Vector2>, IEPA<Vector2>
-	{
-		private readonly Vector2[] vertex = new Vector2[3];
-		public Triangle(Vector2 v1, Vector2 v2, Vector2 v3, bool checkClockWise = false)
-		{
-			if (checkClockWise)
-			{
-				vertex = ShapeCollision.QuickHull(new Vector2[] { v1, v2, v3 }).ToArray();
-			}
-			else
-			{
-				vertex[0] = v1;
-				vertex[1] = v2;
-				vertex[2] = v3;
-			}
-		}
-		public ReadOnlySpan<Vector2> ConvexVertex()
-		{
-			return new ReadOnlySpan<Vector2>(vertex);
-		}
-		public Vector2 FurthestPoint(Vector2 dir)
-		{
-			Vector2 center = (vertex[0] + vertex[1] + vertex[2]) / 3;
-			Vector2 result = vertex[0];
-			Vector2 Vr = result - center;
-			float d = Vector2.Dot(Vr, dir);
-			for (int i = 1; i < 3; i++)
-			{
-				Vector2 Vi = vertex[i] - center;
-				float di = Vector2.Dot(Vi, dir);
-				if (di > d)
-				{
-					d = di;
-					result = vertex[i];
-				}
-			}
-			return result;
-		}
-		public List<Vector2> GetAxes()
-		{
-			return new List<Vector2>() { vertex[1] - vertex[0], vertex[2] - vertex[1], vertex[0] - vertex[2] };
-		}
-		public void Project(Vector2 axis, out float min, out float max)
+		public virtual void Project(Vector2 axis, out float min, out float max)
 		{
 			min = float.MaxValue;
 			max = float.MinValue;
@@ -194,54 +90,46 @@ namespace Everglow.Commons.Shapes
 				}
 			}
 		}
-		public static explicit operator NormalConvex2D(Triangle triangle)
-		{
-			return new NormalConvex2D(triangle.vertex);
-		}
 	}
-	public class Rectangle : IConvex<Vector2>, ISAT<Vector2>, IEPA<Vector2>
+	public class Circle : NormalConvex2D
 	{
-		private Vector2 leftTop;
-		private float width, height;
-		public Vector2 LeftTop => leftTop;
-		public Vector2 RightTop => leftTop + new Vector2(width, 0);
-		public Vector2 LeftBottom => leftTop + new Vector2(0, height);
-		public Vector2 RightBottom => leftTop + new Vector2(width, height);
-		public Rectangle(Vector2 pos, float width, float height)
+		public Circle(Vector2 center,float radius,int samplingNumber=8)
 		{
-			leftTop = pos;
-			this.width = width;
-			this.height = height;
-		}
-		public Vector2 FurthestPoint(Vector2 dir)
-		{
-			Vector2 center = leftTop + new Vector2(width, height) / 2;
-			Vector2 result = leftTop;
-			Vector2 Vr = result - center;
-			float d = Vector2.Dot(Vr, dir);
-			foreach (Vector2 v in ConvexVertex())
+			Center = center;
+			Radius = radius;
+			vertex = new Vector2[samplingNumber];
+			for (int i = 0; i < samplingNumber; i++)
 			{
-				Vector2 Vi = v - center;
-				float di = Vector2.Dot(Vi, dir);
-				if (di > d)
+				float f = MathHelper.TwoPi / samplingNumber * i;
+				vertex[i] = Center + new Vector2((float)Math.Cos(f), (float)Math.Sin(f)) * radius;
+			}
+		}
+		private float radius;
+		public Vector2 Center;
+		public int SamplingNumber
+		{
+			get => vertex.Length;
+			set
+			{
+				int samplingNumber = Math.Max(value, 3);
+				vertex = new Vector2[samplingNumber];
+				for (int i = 0; i < samplingNumber; i++)
 				{
-					d = di;
-					result = v;
+					float f = MathHelper.TwoPi / samplingNumber * i;
+					vertex[i] = Center + new Vector2((float)Math.Cos(f), (float)Math.Sin(f)) * radius;
 				}
 			}
-			return result;
 		}
-		public List<Vector2> GetAxes()
+		public float Radius
 		{
-			return new List<Vector2>()
-			{
-				RightTop-LeftTop,
-				RightBottom-RightTop,
-				LeftBottom-RightBottom,
-				LeftTop-LeftBottom
-			};
+			get => radius;
+			set => radius = Math.Max(value, float.Epsilon);
 		}
-		public void Project(Vector2 axis, out float min, out float max)
+		public override Vector2 FurthestPoint(Vector2 dir)
+		{
+			return Center + Vector2.Normalize(dir) * radius;
+		}
+		public override void Project(Vector2 axis, out float min, out float max)
 		{
 			min = float.MaxValue;
 			max = float.MinValue;
@@ -258,18 +146,80 @@ namespace Everglow.Commons.Shapes
 				}
 			}
 		}
-		public ReadOnlySpan<Vector2> ConvexVertex()
+	}
+	public class Triangle : NormalConvex2D
+	{
+		public Triangle(Vector2 v1, Vector2 v2, Vector2 v3, bool checkClockWise = false)
 		{
-			Vector2[] array = new Vector2[] { LeftTop, RightTop, RightBottom, LeftBottom };
-			return new ReadOnlySpan<Vector2>(array);
+			if (checkClockWise)
+			{
+				vertex = ShapeCollision.QuickHull(new Vector2[] { v1, v2, v3 }).ToArray();
+			}
+			else
+			{
+				vertex[0] = v1;
+				vertex[1] = v2;
+				vertex[2] = v3;
+			}
+		}
+	}
+	public class Rectangle : NormalConvex2D
+	{
+		private float width, height;
+		public Vector2 LeftTop => vertex[0];
+		public Vector2 RightTop => vertex[1];
+		public Vector2 RightBottom => vertex[2];
+		public Vector2 LeftBottom => vertex[3];
+		public float Width
+		{
+			get => width;
+			set
+			{
+				if (value == 0)
+				{
+					throw new ArgumentException("Can't be 0!");
+				}
+				width = value;
+				vertex[1].X = vertex[0].X + value;
+				vertex[2].X = vertex[0].X + value;
+				if (width < 0)
+				{
+					(vertex[0], vertex[1]) = (vertex[1], vertex[0]);
+					(vertex[2], vertex[3]) = (vertex[3], vertex[2]);
+				}
+			}
+		}
+		public float Height
+		{
+			get => height;
+			set
+			{
+				if (value == 0)
+				{
+					throw new ArgumentException("Can't be 0!");
+				}
+				height = value;
+				vertex[2].Y = vertex[0].Y + value;
+				vertex[3].Y = vertex[0].Y + value;
+				if (height < 0)
+				{
+					(vertex[0], vertex[3]) = (vertex[3], vertex[0]);
+					(vertex[1], vertex[2]) = (vertex[2], vertex[1]);
+				}
+			}
+		}
+		public Rectangle(Vector2 pos, float width, float height)
+		{
+			this.width = width;
+			this.height = height;
+			vertex[0] = pos;
+			vertex[1] = vertex[0] + new Vector2(width, 0);
+			vertex[2] = vertex[0]+ new Vector2(width, height);
+			vertex[3] = vertex[0] + new Vector2(0, height);
 		}
 		public static explicit operator Microsoft.Xna.Framework.Rectangle(Rectangle rect)
 		{
-			return new Microsoft.Xna.Framework.Rectangle((int)rect.leftTop.X, (int)rect.leftTop.Y, (int)rect.width, (int)rect.height);
-		}
-		public static explicit operator NormalConvex2D(Rectangle rect)
-		{
-			return new NormalConvex2D(new Vector2[] { rect.LeftTop, rect.RightTop, rect.RightBottom, rect.LeftBottom });
+			return new Microsoft.Xna.Framework.Rectangle((int)rect.vertex[0].X, (int)rect.vertex[0].Y, (int)rect.width, (int)rect.height);
 		}
 	}
 }
