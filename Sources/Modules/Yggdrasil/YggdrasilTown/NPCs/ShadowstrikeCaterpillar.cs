@@ -268,7 +268,7 @@ public class ShadowstrikeCaterpillar : Caterpillar
 			int type = ModContent.Find<ModGore>("Everglow/ShadowstrikeCaterpillar_gore1").Type;
 			if (j == 0)
 			{
-				type = ModContent.Find<ModGore>("Everglow/ShadowstrikeCaterpillar_gore1").Type;
+				type = ModContent.Find<ModGore>("Everglow/ShadowstrikeCaterpillar_gore0").Type;
 			}
 			if (j == Segments.Count - 1)
 			{
