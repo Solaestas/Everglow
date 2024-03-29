@@ -7,7 +7,6 @@ using Terraria.GameContent.Drawing;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 
-[NoGameModeScale]
 public abstract class Caterpillar : ModNPC
 {
 	/// <summary>

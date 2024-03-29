@@ -1,10 +1,7 @@
-using Everglow.Commons.Coroutines;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Terraria.DataStructures;
-using Terraria.GameContent.Animations;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
-
+[NoGameModeScale]
 public class BrownCaterpillar : Caterpillar
 {
 	public override void SetStaticDefaults()
