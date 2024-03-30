@@ -1,4 +1,6 @@
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
@@ -24,8 +26,8 @@ public class LightBulb : ModNPC
 		NPC.noGravity = false;
 		NPC.noTileCollide = false;
 		NPC.value = 100;
-		NPC.HitSound = SoundID.NPCHit4;
-		NPC.DeathSound = SoundID.NPCDeath4;
+		NPC.HitSound = SoundID.NPCHit1;
+		NPC.DeathSound = SoundID.NPCDeath1;
 
 	}
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
@@ -131,6 +133,15 @@ public class LightBulb : ModNPC
 							}
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - new Vector2(0, 40), v, ModContent.ProjectileType<LightSeed>(), 6, 0);
 						}
+						for (int x = 0; x < 12; x++)
+						{
+							Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi) + new Vector2(0, -3f);
+							Dust dust = Dust.NewDustDirect(NPC.Center - new Vector2(0, 20), 0, 0, ModContent.DustType<LampWood_Dust_fluorescent_appear>());
+							dust.velocity = newVelocity;
+							dust.scale = Main.rand.NextFloat(1.2f, 2f);
+							dust.rotation = Main.rand.NextFloat(0.4f, 0.8f);
+						}
+						SoundEngine.PlaySound(SoundID.NPCDeath3.WithPitchOffset(1), NPC.Center - new Vector2(0, 40));
 					}
 					NPC.ai[0]++;
 					NPC.frameCounter++;
