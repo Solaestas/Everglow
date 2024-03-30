@@ -174,13 +174,13 @@ public class LightBulb : ModNPC
 		for (int i = 0; i < 5; i++)
 		{
 			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
-			int type = ModContent.Find<ModGore>("Everglow/GlowingBlossom_gore" + Main.rand.Next(3)).Type;
+			int type = ModContent.Find<ModGore>("Everglow/GlowingBlossom_gore" + Main.rand.Next(4)).Type;
 			Gore.NewGore(NPC.GetSource_Death(), NPC.Center, v0, type, NPC.scale);
 		}
 		for (int i = 0; i < 8; i++)
 		{
 			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
-			int type = ModContent.Find<ModGore>("Everglow/GlowingBlossom_gore" + Main.rand.Next(3, 6)).Type;
+			int type = ModContent.Find<ModGore>("Everglow/GlowingBlossom_gore" + Main.rand.Next(4, 7)).Type;
 			Gore.NewGore(NPC.GetSource_Death(), NPC.Center, v0, type, NPC.scale);
 		}
 
