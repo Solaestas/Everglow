@@ -117,13 +117,34 @@ public class Bulbling : ModNPC
 						NPC.ai[0] = 0;
 						NPC.frameCounter = 0;
 					}
+					//逆集群化
+					foreach(NPC npc in Main.npc)
+					{
+						if(npc != null && npc.active && npc != NPC)
+						{
+							if(npc.type == Type)
+							{
+								Vector2 v0 = NPC.Center - npc.Center;
+								if(v0.Length() < 120)
+								{
+									NPC.velocity += Vector2.Normalize(v0) * 0.25f;
+								}
+							}
+						}
+					}
 					break;
 				}
 			case (int)NPCState.Dash:
 				{
+					NPC.localAI[0] += 0.08f;
 					NPC.TargetClosest();
 					Player target = Main.player[NPC.target];
 					Vector2 toAim = target.Center - NPC.Center;
+					//差异化
+					if(MathF.Sin((float)Main.time * 0.004f + NPC.whoAmI) > -0.8)
+					{
+						toAim = target.Center + new Vector2(0, MathF.Sin((float)Main.time * 0.0005f + NPC.whoAmI * 7 + 2.1f)).RotatedBy(NPC.localAI[0] + NPC.whoAmI * 4.4f) * 142 * NPC.scale - NPC.Center;
+					}
 					NPC.velocity = Vector2.Normalize(toAim) * 3 * NPC.scale;
 					NPC.rotation = NPC.velocity.ToRotation() + 1.57f;
 
@@ -133,7 +154,6 @@ public class Bulbling : ModNPC
 						State = (int)NPCState.Rest;
 						NPC.frameCounter = 0;
 					}
-
 					break;
 				} 
 			case (int)NPCState.Rest:
@@ -148,6 +168,13 @@ public class Bulbling : ModNPC
 						NPC.TargetClosest();
 						if (NPC.HasValidTarget && Collision.CanHit(NPC.Center, 1, 1, Main.player[NPC.target].Center, 1, 1)
 										   && Main.player[NPC.target].Distance(NPC.Center) > 1000)
+						{
+							Anger = false;
+							State = (int)NPCState.Sleep;
+							NPC.frameCounter = 0;
+						}
+						//第二层差异化处理,400距离以上,1/15的概率解除仇恨
+						if(Main.rand.NextBool(15) && Main.player[NPC.target].Distance(NPC.Center) > 400)
 						{
 							Anger = false;
 							State = (int)NPCState.Sleep;

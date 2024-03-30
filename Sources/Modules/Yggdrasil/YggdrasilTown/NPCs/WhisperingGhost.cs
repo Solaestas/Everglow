@@ -1,6 +1,4 @@
-using Everglow.Yggdrasil.Common.Elevator.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.WorldBuilding;
@@ -11,14 +9,14 @@ public class WhisperingGhost : ModNPC
 {
 	public override void SetStaticDefaults()
 	{
-		Main.npcFrameCount[NPC.type] = 5;
+		Main.npcFrameCount[NPC.type] = 9;
 		NPCSpawnManager.RegisterNPC(Type);
 	}
 	public override void SetDefaults()
 	{
 
-		NPC.width = 81;
-		NPC.height = 63;
+		NPC.width = 40;
+		NPC.height = 40;
 		NPC.lifeMax = 40;
 		NPC.damage = 12;
 		NPC.defense = 4;
@@ -26,16 +24,10 @@ public class WhisperingGhost : ModNPC
 		NPC.aiStyle = -1;
 		NPC.knockBackResist = 0.15f;
 		NPC.value = 60;
-		NPC.HitSound = SoundID.NPCHit4;
-		NPC.DeathSound = SoundID.NPCDeath4;
+		NPC.HitSound = SoundID.NPCHit5;
+		NPC.DeathSound = SoundID.NPCDeath5;
 		NPC.noGravity = true;
 		NPC.noTileCollide = false;
-
-
-	}
-	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
-	{
-		target.AddBuff(BuffID.Silenced, 180);
 	}
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
@@ -82,20 +74,99 @@ public class WhisperingGhost : ModNPC
 			NPC.velocity += new Vector2(0, 0.125f);
 			NPC.velocity = Vector2.Normalize(NPC.velocity) * length;
 		}
-
-
-
-
+		NPC.spriteDirection = NPC.velocity.X > 0 ? 1 : -1;
+		NPC.localAI[0] += 1;
+		if(NPC.localAI[0] > 8)
+		{
+			NPC.localAI[0] = 0;
+			Dust dust = Dust.NewDustDirect(NPC.Center - new Vector2(4) + new Vector2(Main.rand.NextFloat(-15, 15), 15), 0, 0, ModContent.DustType<WhisperingGhostGasSmalling>());
+			dust.velocity = new Vector2(NPC.velocity.X, 3);
+			dust.scale = Main.rand.NextFloat(2.2f, 3f);
+			dust.rotation = Main.rand.NextFloat(0.4f, 0.8f);
+			dust.alpha = Main.rand.Next(0, 55);
+		}
 	}
 	private static Terraria.WorldBuilding.Conditions.NotNull _cachedConditions_notNull = new Terraria.WorldBuilding.Conditions.NotNull();
 	private static Terraria.WorldBuilding.Conditions.IsSolid _cachedConditions_solid = new Terraria.WorldBuilding.Conditions.IsSolid();
+	public override void FindFrame(int frameHeight)
+	{
+		frameHeight = 120;
+		NPC.frameCounter++;
+		if (NPC.frameCounter > 4)
+		{
+			NPC.frame.Y += frameHeight;
+			NPC.frameCounter = 0;
+		}
+		if (NPC.frame.Y >= 1080)
+		{
+			NPC.frame.Y = 0;
+		}
+	}
+	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+	{
+		Texture2D texture = ModAsset.WhisperingGhost.Value;
+		Texture2D glow = ModAsset.WhisperingGhost_glow.Value;
+		SpriteEffects spriteEffect = SpriteEffects.None;
+		if (NPC.spriteDirection == -1)
+		{
+			spriteEffect = SpriteEffects.FlipHorizontally;
+		}
+		spriteBatch.Draw(texture, NPC.Center - Main.screenPosition + new Vector2(0, 30), NPC.frame, drawColor, 0, NPC.frame.Size() * 0.5f, NPC.scale, spriteEffect, 0);
+		spriteBatch.Draw(glow, NPC.Center - Main.screenPosition + new Vector2(0, 30), NPC.frame, new Color(1f, 1f, 1f, 0) * 0.6f, 0, NPC.frame.Size() * 0.5f, NPC.scale, spriteEffect, 0);
+		return false;
+	}
+	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
+	{
+		target.AddBuff(BuffID.Silenced, 180);
+	}
 	public override void OnSpawn(IEntitySource source)
 	{
 	}
-
+	public override void HitEffect(NPC.HitInfo hit)
+	{
+		for (int x = 0; x < 3; x++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
+			newVelocity.Y *= 2;
+			Dust dust = Dust.NewDustDirect(NPC.Center - new Vector2(0, 20), 0, 0, ModContent.DustType<WhisperingGhostGas>());
+			dust.velocity = newVelocity;
+			dust.scale = Main.rand.NextFloat(1.2f, 3f);
+			dust.rotation = Main.rand.NextFloat(0.4f, 0.8f);
+			dust.alpha = Main.rand.Next(0, 55);
+		}
+		for (int x = 0; x < 2; x++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
+			newVelocity.Y *= 2;
+			Dust dust = Dust.NewDustDirect(NPC.Center - new Vector2(0, 20), 0, 0, ModContent.DustType<WhisperingGhostGas_hot>());
+			dust.velocity = newVelocity;
+			dust.scale = Main.rand.NextFloat(0.8f, 1.6f);
+			dust.rotation = Main.rand.NextFloat(0.4f, 0.8f);
+			dust.alpha = Main.rand.Next(0, 55);
+		}
+	}
 	public override void OnKill()
 	{
-
+		for (int x = 0; x < 40; x++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 8f)).RotatedByRandom(MathHelper.TwoPi);
+			newVelocity.Y *= 1.4f;
+			Dust dust = Dust.NewDustDirect(NPC.Center - new Vector2(0, 20), 0, 0, ModContent.DustType<WhisperingGhostGas>());
+			dust.velocity = newVelocity;
+			dust.scale = Main.rand.NextFloat(1.2f, 3f);
+			dust.rotation = Main.rand.NextFloat(0.4f, 0.8f);
+			dust.alpha = Main.rand.Next(0, 55);
+		}
+		for (int x = 0; x < 20; x++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 8f)).RotatedByRandom(MathHelper.TwoPi);
+			newVelocity.Y *= 1.4f;
+			Dust dust = Dust.NewDustDirect(NPC.Center - new Vector2(0, 20), 0, 0, ModContent.DustType<WhisperingGhostGas_hot>());
+			dust.velocity = newVelocity;
+			dust.scale = Main.rand.NextFloat(0.8f, 1.6f);
+			dust.rotation = Main.rand.NextFloat(0.4f, 0.8f);
+			dust.alpha = Main.rand.Next(0, 55);
+		}
 	}
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
