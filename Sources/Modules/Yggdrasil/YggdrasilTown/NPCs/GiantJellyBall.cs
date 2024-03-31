@@ -4,41 +4,28 @@ using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
-public class Bulbling : ModNPC
+public class GiantJellyBall : ModNPC
 {
 	public override void SetStaticDefaults()
 	{
-		Main.npcFrameCount[NPC.type] = 5;
+		Main.npcFrameCount[NPC.type] = 11;
 		NPCSpawnManager.RegisterNPC(Type);
 	}
 	public override void SetDefaults()
 	{
-		NPC.width = 40;
-		NPC.height = 40;
+		NPC.width = 80;
+		NPC.height = 80;
 		NPC.aiStyle = -1;
-		NPC.damage = 13;
-		NPC.defense = 2;
-		NPC.lifeMax = 24;
+		NPC.damage = 45;
+		NPC.defense = 16;
+		NPC.lifeMax = 120;
 		NPC.HitSound = SoundID.NPCHit3;
 		NPC.DeathSound = SoundID.NPCDeath3;
 		NPC.noGravity = true;
 		NPC.noTileCollide = false;
-		NPC.knockBackResist = 1f;
-		NPC.value = 90;
-		if (Main.expertMode)
-		{
-			NPC.knockBackResist = -0.08f;
-			NPC.lifeMax = 30;
-			NPC.damage = 8;
-			NPC.value = 7;
-		}
-		if (Main.masterMode)
-		{
-			NPC.knockBackResist = -0.04f;
-			NPC.lifeMax = 42;
-			NPC.damage = 11;
-			NPC.value = 10;
-		}
+		NPC.knockBackResist = 0.9f;
+		NPC.value = 200;
+		NPC.buffImmune[BuffID.Confused] = true;
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -70,31 +57,31 @@ public class Bulbling : ModNPC
 
 	public override void FindFrame(int frameHeight)
 	{
-		NPC.frame.Width = 48;
-		NPC.frame.Height = 58;
+		NPC.frame.Width = 100;
+		NPC.frame.Height = 100;
 		if (Anger)
 		{
 			NPC.frame.X = 0;
 		}
 		else
 		{
-			NPC.frame.X = 48;
+			NPC.frame.X = 0;
 		}
 		switch (State)
 		{
 			case (int)NPCState.Dash:
 				{
-					NPC.frame.Y = (int)(NPC.frameCounter / 5 % 5) * 58;
+					NPC.frame.Y = (int)(NPC.frameCounter / 5 % 11) * 100;
 					break;
 				}
 			case (int)NPCState.Sleep:
 				{
-					NPC.frame.Y = (int)(NPC.frameCounter / 5 % 5) * 58;
+					NPC.frame.Y = (int)(NPC.frameCounter / 5 % 11) * 100;
 					break;
 				}
 			case (int)NPCState.Rest:
 				{
-					NPC.frame.Y = (int)(NPC.frameCounter / 5 % 5) * 58;
+					NPC.frame.Y = (int)(NPC.frameCounter / 5 % 11) * 100;
 					break;
 				}
 		}
@@ -107,12 +94,13 @@ public class Bulbling : ModNPC
 				{
 					NPC.frameCounter++;
 					NPC.TargetClosest();
-					Vector2 targetVel = new Vector2(MathF.Sin((float)Main.time * 0.03f + NPC.whoAmI), MathF.Sin((float)Main.time * 0.06f + MathF.PI + NPC.whoAmI)) * NPC.scale;
+					Vector2 targetVel = new Vector2(MathF.Sin((float)Main.time * 0.02f + NPC.whoAmI), MathF.Sin((float)Main.time * 0.04f + MathF.PI + NPC.whoAmI)) * NPC.scale;
 					NPC.velocity = Vector2.Lerp(NPC.velocity, targetVel, 0.4f);
-					NPC.rotation = Math.Clamp(NPC.velocity.X * 0.3f, -1f, 1f);
+					NPC.rotation = Math.Clamp(NPC.velocity.X * 0.15f, -1f, 1f);
 					if (NPC.HasValidTarget && Collision.CanHit(NPC.Center, 1, 1, Main.player[NPC.target].Center, 1, 1)
 							 && Anger)
 					{
+						NPC.localAI[0] = 0;
 						State = (int)NPCState.Dash;
 						NPC.ai[0] = 0;
 						NPC.frameCounter = 0;
@@ -136,20 +124,37 @@ public class Bulbling : ModNPC
 				}
 			case (int)NPCState.Dash:
 				{
-					NPC.localAI[0] += 0.08f;
+					
 					NPC.TargetClosest();
 					Player target = Main.player[NPC.target];
 					Vector2 toAim = target.Center - NPC.Center;
 					//差异化
-					if(MathF.Sin((float)Main.time * 0.004f + NPC.whoAmI) > -0.8)
+					if(NPC.localAI[0] == 0)
 					{
-						toAim = target.Center + new Vector2(0, MathF.Sin((float)Main.time * 0.0005f + NPC.whoAmI * 7 + 2.1f)).RotatedBy(NPC.localAI[0] + NPC.whoAmI * 4.4f) * 142 * NPC.scale - NPC.Center;
+						if (MathF.Sin((float)Main.time * 0.004f + NPC.whoAmI) > -0.8)
+						{
+							toAim = target.Center + new Vector2(0, MathF.Sin((float)Main.time * 0.0005f + NPC.whoAmI * 7 + 2.1f)).RotatedBy(NPC.localAI[0] + NPC.whoAmI * 4.4f) * 142 * NPC.scale - NPC.Center;
+						}
+						NPC.velocity = Vector2.Normalize(toAim) * 21 * NPC.scale;
+						for (int i = 0; i < 20; i++)
+						{
+							Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<JellyBallGel>());
+							d.scale *= Main.rand.NextFloat(1f, 2.4f);
+							d.velocity = new Vector2(0, 4).RotatedBy(i / 20d * MathHelper.TwoPi);
+							d.noGravity = true;
+						}
+						for (int i = 0; i < 10; i++)
+						{
+							Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<JellyBallSpark>());
+							d.velocity = new Vector2(0, 2).RotatedBy(i / 10d * MathHelper.TwoPi);
+							d.noGravity = true;
+						}
 					}
-					NPC.velocity = Vector2.Normalize(toAim) * 3 * NPC.scale;
+					NPC.velocity *= 0.96f;
 					NPC.rotation = NPC.velocity.ToRotation() + 1.57f;
-
+					NPC.localAI[0] += 0.08f;
 					NPC.frameCounter++;
-					if (NPC.frameCounter >= 5)
+					if (NPC.frameCounter >= 55)
 					{
 						State = (int)NPCState.Rest;
 						NPC.frameCounter = 0;
@@ -163,6 +168,7 @@ public class Bulbling : ModNPC
 					if (NPC.velocity.Length() <= 0.5f)
 					{
 						NPC.velocity *= 0;
+						NPC.localAI[0] = 0;
 						State = (int)NPCState.Dash;
 						NPC.frameCounter = 0;
 						NPC.TargetClosest();
@@ -190,26 +196,7 @@ public class Bulbling : ModNPC
 		{
 			glowStrength = 0.1f;
 		}
-		if(Anger)
-		{
-			if (NPC.frame.Y == 58)
-			{
-				BloomLightColor = Vector3.Lerp(BloomLightColor, new Vector3(0.5f, 2f, 4f) * glowStrength, 0.3f);
-
-			}
-			else if (NPC.frame.Y == 116)
-			{
-				BloomLightColor = Vector3.Lerp(BloomLightColor, new Vector3(0f, 1f, 2f) * glowStrength, 0.3f);
-			}
-			else
-			{
-				BloomLightColor = Vector3.Lerp(BloomLightColor, new Vector3(0f, 0.3f, 0.6f) * glowStrength, 0.3f);
-			}
-		}
-		else
-		{
-			BloomLightColor = Vector3.Lerp(BloomLightColor, new Vector3(0f, 0.5f, 1f) * glowStrength, 0.3f);
-		}
+		
 		Lighting.AddLight(NPC.Center, BloomLightColor);
 	}
 	public override void HitEffect(NPC.HitInfo hit)
@@ -220,45 +207,45 @@ public class Bulbling : ModNPC
 		}
 		if(NPC.life <= 0)
 		{
-			for (int i = 0; i < 20; i++)
+			for (int i = 0; i < 30; i++)
 			{
-				Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<BulblingGel>());
+				Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<JellyBallGel>());
 				d.scale *= Main.rand.NextFloat(1f, 2.4f);
 				d.velocity = new Vector2(Main.rand.NextFloat(2, 8f), 0).RotatedByRandom(MathHelper.TwoPi);
 			}
 			for (int i = 0; i < 4; i++)
 			{
-				Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<BulblingSpark>());
+				Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<JellyBallSpark>());
 				d.velocity = new Vector2(Main.rand.NextFloat(2, 6f), 0).RotatedByRandom(MathHelper.TwoPi);
 			}
-			for (int g = 0; g < 40; g++)
+			for (int g = 0; g < 70; g++)
 			{
-				Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(2, 32)).RotatedByRandom(MathHelper.TwoPi);
-				float mulScale = Main.rand.NextFloat(6f, 14f);
-				var blood = new BulblingGelDrop
+				Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(2, 52)).RotatedByRandom(MathHelper.TwoPi);
+				float mulScale = Main.rand.NextFloat(6f, 19f);
+				var blood = new JellyBallGelDrop
 				{
 					velocity = afterVelocity / mulScale,
 					Active = true,
 					Visible = true,
 					position = NPC.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
-					maxTime = Main.rand.Next(42, 84),
+					maxTime = Main.rand.Next(62, 144),
 					scale = mulScale,
 					rotation = Main.rand.NextFloat(6.283f),
 					ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
 				};
 				Ins.VFXManager.Add(blood);
 			}
-			for (int g = 0; g < 14; g++)
+			for (int g = 0; g < 26; g++)
 			{
-				Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(2, 5)).RotatedByRandom(MathHelper.TwoPi);
-				var blood = new BulblingGelSplash
+				Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(2, 8)).RotatedByRandom(MathHelper.TwoPi);
+				var blood = new JellyBallGelSplash
 				{
 					velocity = afterVelocity,
 					Active = true,
 					Visible = true,
 					position = NPC.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - afterVelocity,
 					maxTime = Main.rand.Next(32, 94),
-					scale = Main.rand.NextFloat(6f, 24f),
+					scale = Main.rand.NextFloat(6f, 34f),
 					ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 }
 				};
 				Ins.VFXManager.Add(blood);
@@ -268,13 +255,13 @@ public class Bulbling : ModNPC
 		{
 			for (int i = 0; i < 4; i++)
 			{
-				Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<BulblingGel>());
+				Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<JellyBallGel>());
 				d.scale *= Main.rand.NextFloat(1f, 1.7f);
 				d.velocity = new Vector2(Main.rand.NextFloat(2, 4f), 0).RotatedByRandom(MathHelper.TwoPi);
 			}
 			for (int i = 0; i < 1; i++)
 			{
-				Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<BulblingSpark>());
+				Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<JellyBallSpark>());
 				d.velocity = new Vector2(Main.rand.NextFloat(2, 4f), 0).RotatedByRandom(MathHelper.TwoPi);
 			}
 		}
@@ -287,13 +274,13 @@ public class Bulbling : ModNPC
 		{
 			glowStrength = 0.4f;
 		}
-		Texture2D texture = ModAsset.Bulbling.Value;
-		Texture2D textureG = ModAsset.Bulbling_glow.Value;
-		Texture2D textureB = ModAsset.Bulbling_bloom.Value;
-		spriteBatch.Draw(textureB, NPC.Center - Main.screenPosition, new Rectangle(NPC.frame.X / 48 * 160, NPC.frame.Y / 58 * 160, 160, 160), new Color(1f, 1f, 1f, 0f) * glowStrength, NPC.rotation, new Vector2(80), NPC.scale, SpriteEffects.None, 0);
+		Texture2D texture = ModAsset.GiantJellyBall.Value;
+		//Texture2D textureG = ModAsset.JellyBall_glow.Value;
+		Texture2D textureB = ModAsset.GiantJellyBall_bloom.Value;
+		spriteBatch.Draw(textureB, NPC.Center - Main.screenPosition, NPC.frame, new Color(1f, 1f, 1f, 0f) * glowStrength, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
 		spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, Color.Lerp(drawColor * 0.7f, new Color(0.6f, 1f, 1f, 1f), 0.4f), NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
 
-		spriteBatch.Draw(textureG, NPC.Center - Main.screenPosition, NPC.frame, new Color(1f, 1f, 1f, 0f) * glowStrength, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
+		//spriteBatch.Draw(textureG, NPC.Center - Main.screenPosition, NPC.frame, new Color(1f, 1f, 1f, 0f) * glowStrength, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
 
 
 		return false;
