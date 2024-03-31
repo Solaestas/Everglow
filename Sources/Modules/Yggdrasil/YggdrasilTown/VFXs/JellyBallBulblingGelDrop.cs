@@ -1,10 +1,10 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
-public class BulblingGelDropPipeline : Pipeline
+public class JellyBallGelDropPipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModAsset.BulblingGelDrop;
+		effect = ModAsset.JellyBallGelDrop;
 
 	}
 	public override void BeginRender()
@@ -13,7 +13,7 @@ public class BulblingGelDropPipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
-		effect.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_BulblingGelDrop.Value);
+		effect.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_JellyBallGelDrop.Value);
 		effect.Parameters["uIlluminationThreshold"].SetValue(0.99f);
 		Texture2D lightness = Commons.ModAsset.Point_lowContrast.Value;
 		Ins.Batch.BindTexture<Vertex2D>(lightness);
@@ -27,8 +27,8 @@ public class BulblingGelDropPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
-[Pipeline(typeof(BulblingGelDropPipeline))]
-public class BulblingGelDrop : Visual
+[Pipeline(typeof(JellyBallGelDropPipeline))]
+public class JellyBallGelDrop : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public Vector2 position;
@@ -38,7 +38,7 @@ public class BulblingGelDrop : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-	public BulblingGelDrop() { }
+	public JellyBallGelDrop() { }
 	public override void Update()
 	{
 		position += velocity;

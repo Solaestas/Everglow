@@ -1,10 +1,10 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
-public class BulblingGelSplashPipeline : Pipeline
+public class JellyBallGelSplashPipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModAsset.BulblingGelSplash;
+		effect = ModAsset.JellyBallGelSplash;
 
 	}
 	public override void BeginRender()
@@ -14,7 +14,7 @@ public class BulblingGelSplashPipeline : Pipeline
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_cell.Value);
 		effect.Parameters["uTransform"].SetValue(model * projection);
-		Texture2D FlameColor = ModAsset.HeatMap_BulblingGelSplash.Value;
+		Texture2D FlameColor = ModAsset.HeatMap_JellyBallGelSplash.Value;
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointClamp, RasterizerState.CullNone);
@@ -26,8 +26,8 @@ public class BulblingGelSplashPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
-[Pipeline(typeof(BulblingGelSplashPipeline))]
-public class BulblingGelSplash : Visual
+[Pipeline(typeof(JellyBallGelSplashPipeline))]
+public class JellyBallGelSplash : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public List<Vector2> oldPos = new List<Vector2>();
@@ -38,7 +38,7 @@ public class BulblingGelSplash : Visual
 	public float maxTime;
 	public float scale;
 	public float alpha;
-	public BulblingGelSplash() { }
+	public JellyBallGelSplash() { }
 
 	public override void Update()
 	{

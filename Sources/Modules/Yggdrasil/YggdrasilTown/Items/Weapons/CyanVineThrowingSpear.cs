@@ -18,7 +18,7 @@ public class CyanVineThrowingSpear : ModItem
 		Item.UseSound = SoundID.Item1;
 		Item.value = 3600;
 		Item.autoReuse = false;
-		Item.DamageType = DamageClass.Melee;
+		Item.DamageType = DamageClass.Ranged;
 		Item.channel = true;
 		Item.noMelee = true;
 		Item.noUseGraphic = true;

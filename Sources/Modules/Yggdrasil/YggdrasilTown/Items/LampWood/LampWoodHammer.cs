@@ -11,13 +11,13 @@ public class LampWoodHammer : ModItem
 		Item.height = 62;
 		Item.useAnimation = 30;
 		Item.useTime = 30;
-		Item.knockBack = 4.5f;
-		Item.damage = 9;
+		Item.knockBack = 5.5f;
+		Item.damage = 13;
 		Item.rare = ItemRarityID.White;
 		Item.UseSound = SoundID.Item1;
 		Item.autoReuse = true;
 		Item.DamageType = DamageClass.Melee;
-		Item.value = 360;
+		Item.value = 100;
 		Item.hammer = 45;
 	}
 	public override void MeleeEffects(Player player, Rectangle hitbox)

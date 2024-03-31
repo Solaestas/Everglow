@@ -1,6 +1,6 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.Dusts;
 
-public class BulblingSpark : ModDust
+public class JellyBallSpark : ModDust
 {
 	public override bool Update(Dust dust)
 	{
