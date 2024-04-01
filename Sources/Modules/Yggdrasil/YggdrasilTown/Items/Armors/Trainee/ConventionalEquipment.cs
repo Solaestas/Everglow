@@ -4,7 +4,7 @@ using Terraria.Localization;
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Trainee
 {
 	[AutoloadEquip(EquipType.Body)]
-	public class TraineeBreastplate : ModItem
+	public class ConventionalEquipment : ModItem
 	{
 		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(20, 20);
 		public override void SetStaticDefaults()
