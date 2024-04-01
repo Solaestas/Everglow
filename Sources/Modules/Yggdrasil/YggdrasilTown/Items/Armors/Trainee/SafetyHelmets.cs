@@ -2,7 +2,7 @@ using Terraria.GameContent.Creative;
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Trainee
 {
 	[AutoloadEquip(EquipType.Head)]
-	public class TraineeHelmet : ModItem
+	public class SafetyHelmets : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
@@ -26,7 +26,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Trainee
 		}
 		public override bool IsArmorSet(Item head, Item body, Item legs)
 		{
-			return body.type == ModContent.ItemType<TraineeBreastplate>() && legs.type == ModContent.ItemType<TraineeLeggings>();
+			return body.type == ModContent.ItemType<ConventionalEquipment>() && legs.type == ModContent.ItemType<StandardLeggings>();
 		}
 		public override void UpdateArmorSet(Player player)
 		{
@@ -36,13 +36,12 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Trainee
 		}
 		public override void UpdateEquip(Player player)
 		{
-			player.GetDamage(DamageClass.Melee) *= 1.02f;
-			//player.setBonus
+			player.GetDamage(DamageClass.Generic) *= 1.02f;
 		}
 		public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-	
+
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.Register();
 		}

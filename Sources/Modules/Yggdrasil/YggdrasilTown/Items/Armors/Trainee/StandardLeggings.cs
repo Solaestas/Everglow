@@ -6,7 +6,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Trainee
 	// The AutoloadEquip attribute automatically attaches an equip texture to this item.
 	// Providing the EquipType.Legs value here will result in TML expecting a X_Legs.png file to be placed next to the item's main texture.
 	[AutoloadEquip(EquipType.Legs)]
-	public class TraineeLeggings : ModItem
+	public class StandardLeggings : ModItem
 	{
 
 
@@ -27,7 +27,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Trainee
 
 		public override void UpdateEquip(Player player)
 		{
-			player.moveSpeed += 0.03f;
+			player.jumpSpeedBoost += 5;
+			player.moveSpeed += 5;
 		}
 		public override void AddRecipes()
 		{
