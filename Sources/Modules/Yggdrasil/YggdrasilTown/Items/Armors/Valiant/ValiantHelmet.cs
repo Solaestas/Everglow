@@ -53,7 +53,6 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Valiant
 }
 public class ValiantHelmetPlayer : ModPlayer
 {
-	public bool isUsingMeleeProj = false;
 	public bool hasValiantHelmet;
 	public override void ResetEffects()
 	{
