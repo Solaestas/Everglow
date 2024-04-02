@@ -3,7 +3,7 @@ using Terraria.GameContent.Creative;
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Cyan
 {
 	[AutoloadEquip(EquipType.Head)]
-	public class ValiantHelmet : ModItem
+	public class CyanHeavylet : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
