@@ -34,7 +34,7 @@ namespace Everglow.Commons.IIID
 		private RenderTarget2D[] m_blurRenderTargets;
 
 		private const int MAX_BLUR_LEVELS = 5;
-		private  int RenderTargetSize = Math.Max( GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height,GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width)/2;
+		private  int RenderTargetSize =Main.dedServ?-1:  Math.Max( GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height,GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width)/2;
 
 		//private RenderTarget2D m_albedoTarget;
 		//private RenderTarget2D m_normalTarget;
@@ -63,6 +63,11 @@ namespace Everglow.Commons.IIID
 		}
 		public override void OnModLoad()
 		{
+			if(Main.dedServ)
+			{
+				return;
+			}
+
 			m_gbufferPassEffect = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/GBufferPass");
 			m_filtersEffect = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/Filters");
 			m_toneMapping = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/ToneMapping");
@@ -121,6 +126,10 @@ namespace Everglow.Commons.IIID
 
 		public void BeginCapture(ViewProjectionParams viewProjectionParams, BloomParams bloomParams, ArtParameters artParams)
 		{
+			if(Main.dedServ)
+			{
+				throw new InvalidOperationException("Can't do that at server side!");
+			}
 			var projectionTransform = Matrix.CreatePerspectiveFieldOfView(viewProjectionParams.FieldOfView,
 				viewProjectionParams.AspectRatio, viewProjectionParams.ZNear, viewProjectionParams.ZFar);
 			this.m_viewProjectionMatrix = viewProjectionParams.ViewTransform * projectionTransform;
