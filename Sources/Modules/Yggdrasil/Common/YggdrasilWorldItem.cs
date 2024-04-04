@@ -13,6 +13,6 @@ internal class YggdrasilWorldItem : SwitchWorldItemBase
 
 	public override void Enter(WorldFileData data)
 	{
-		//SubworldSystem.Enter<YggdrasilWorld>();
+		SubworldSystem.Enter<YggdrasilWorld>();
 	}
 }

@@ -53,13 +53,11 @@ internal class IngameOptionsPatch : ILoadable
 		var cache = sblSystemType.GetField("cache", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
 		if (current != null && current == cache)
 		{
-			SteamedWraps.StopPlaytimeTracking();
-			SystemLoader.PreSaveAndQuit();
+			//SteamedWraps.StopPlaytimeTracking();
+			//SystemLoader.PreSaveAndQuit();
 			IngameOptions.Close();
-			Main.menuMode = 10;
-			Main.gameMenu = true;
 			sblSystemType.GetMethod("BeginEntering", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { int.MinValue });
-			WorldGen.SaveAndQuit();
+			//WorldGen.SaveAndQuit();
 		}
 	}
 

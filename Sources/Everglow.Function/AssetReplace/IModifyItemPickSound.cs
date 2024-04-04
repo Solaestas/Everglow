@@ -1,13 +1,14 @@
 using System.Text;
 using Terraria.Audio;
 using Terraria.ModLoader.Core;
-using Hook = Everglow.Commons.AssetReplace.IModifyItemPickSound;
 
 namespace Everglow.Commons.AssetReplace
 {
 	public interface IModifyItemPickSound
 	{
-		public static readonly GlobalHookList<GlobalItem> Hook = ItemLoader.AddModHook(new GlobalHookList<GlobalItem>(typeof(Hook).GetMethod(nameof(ModifyItemPickSound))));
+		public static readonly GlobalHookList<GlobalItem> Hook =
+			ItemLoader.AddModHook(GlobalHookList<GlobalItem>.Create((gitem) => ((IModifyItemPickSound)gitem).ModifyItemPickSound));
+
 		/// <summary>
 		/// 用于替换掉从物品槽拿起/放下物品的音效（不会在服务器运行）
 		/// </summary>
@@ -29,10 +30,10 @@ namespace Everglow.Commons.AssetReplace
 
 		public static void Invoke(Item item, int context, bool putIn, ref SoundStyle? customSound, ref bool playOriginalSound)
 		{
-			if (item.ModItem is Hook)
+			if (item.ModItem is IModifyItemPickSound)
 			{
-				(item.ModItem as Hook).ModifyItemPickSound(item, context, putIn, ref customSound, ref playOriginalSound);
-				var pickSound = (item.ModItem as Hook).ModItemCustomPickSound();
+				(item.ModItem as IModifyItemPickSound).ModifyItemPickSound(item, context, putIn, ref customSound, ref playOriginalSound);
+				var pickSound = (item.ModItem as IModifyItemPickSound).ModItemCustomPickSound();
 				if (pickSound.HasValue)
 				{
 					playOriginalSound = false;
@@ -40,7 +41,7 @@ namespace Everglow.Commons.AssetReplace
 				}
 			}
 
-			foreach (Hook g in Hook.Enumerate(item))
+			foreach (IModifyItemPickSound g in Hook.Enumerate(item))
 			{
 				g.ModifyItemPickSound(item, context, putIn, ref customSound, ref playOriginalSound);
 			}
@@ -49,7 +50,7 @@ namespace Everglow.Commons.AssetReplace
 
 	public static class PickSoundHelper
 	{
-		public static void ReadFromTxtFile(this Hook modifier, string fileName, out int[] itemIDs)
+		public static void ReadFromTxtFile(this IModifyItemPickSound modifier, string fileName, out int[] itemIDs)
 		{
 			int everglowLength = nameof(Everglow).Length;
 			string path = $"{modifier.GetType().Namespace.Replace('.', '/').Remove(0, everglowLength + 1)}/{fileName}.txt";

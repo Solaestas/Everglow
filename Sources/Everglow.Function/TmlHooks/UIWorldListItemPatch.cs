@@ -1,7 +1,9 @@
 using Everglow.Commons.TmlHooks.SwitchWorldItems;
 using ReLogic.Content;
+using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
+using Terraria.Social;
 using Terraria.UI;
 
 namespace Everglow.Commons.TmlHooks;
@@ -25,8 +27,33 @@ internal class UIWorldListItemPatch : ILoadable
 	private void On_UIWorldListItem_PlayGame(On_UIWorldListItem.orig_PlayGame orig, UIWorldListItem self, UIMouseEvent evt, UIElement listeningElement)
 	{
 		orig(self, evt, listeningElement);
-		if (worldSwitchStatus.TryGetValue(self.Data.Path, out SwitchWorldItemBase switchWorldItem))
-			switchWorldItem.Enter(self.Data);
+		if (listeningElement == evt.Target && !self.TryMovingToRejectionMenuIfNeeded(self.Data.GameMode))
+		{
+			if (!worldSwitchStatus.TryGetValue(self.Data.Path, out SwitchWorldItemBase sw) || sw is OriginalWorldItem)
+				self.Data.SetAsActive();
+			SoundEngine.PlaySound(SoundID.MenuOpen);
+			Main.clrInput();
+			Main.GetInputText("");
+			if (Main.menuMultiplayer && SocialAPI.Network != null)
+			{
+				Main.menuMode = 889;
+			}
+			else if (Main.menuMultiplayer)
+			{
+				Main.menuMode = 30;
+			}
+			else
+			{
+				Main.menuMode = 10;
+			}
+			if (!Main.menuMultiplayer)
+			{
+				if (worldSwitchStatus.TryGetValue(self.Data.Path, out SwitchWorldItemBase switchWorldItem))
+					switchWorldItem.Enter(self.Data);
+				else
+					WorldGen.playWorld();
+			}
+		}
 	}
 
 	private void On_AWorldListItem_UpdateGlitchAnimation(On_AWorldListItem.orig_UpdateGlitchAnimation orig, AWorldListItem self, UIElement affectedElement)
@@ -41,8 +68,6 @@ internal class UIWorldListItemPatch : ILoadable
 		orig(self, data, orderInList, canBePlayed);
 		Asset<Texture2D> originAsset = null;
 		Rectangle originFrame = default;
-		worldSwitchStatus.TryAdd(self.Data.Path, new OriginalWorldItem());
-		int switchIndex = 0;
 		if (self._worldIcon is UIImageFramed uIImageFramed)
 		{
 			originAsset = uIImageFramed._texture;
@@ -51,6 +76,23 @@ internal class UIWorldListItemPatch : ILoadable
 		else if (self._worldIcon is UIImage image)
 		{
 			originAsset = image._texture;
+		}
+		int switchIndex = 0;
+		if (!worldSwitchStatus.TryAdd(self.Data.Path, new OriginalWorldItem()))
+		{
+			if (worldSwitchStatus.TryGetValue(self.Data.Path, out var item) && item is not OriginalWorldItem)
+			{
+				switchIndex = SwitchWorldItems.FindIndex(x => x == item);
+				if (self._worldIcon is UIImageFramed imageFrame)
+				{
+					imageFrame._texture = item.Icon;
+					imageFrame.SetFrame(new Rectangle(0, 0, item.Icon.Width(), item.Icon.Height()));
+				}
+				else if (self._worldIcon is UIImage image)
+				{
+					image._texture = item.Icon;
+				}
+			}
 		}
 		foreach (var item in self.Elements)
 		{

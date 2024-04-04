@@ -19,5 +19,6 @@ internal class OriginalWorldItem : SwitchWorldItemBase
 
 	public override void Enter(WorldFileData data)
 	{
+		WorldGen.playWorld();
 	}
 }

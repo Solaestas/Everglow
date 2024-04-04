@@ -12,37 +12,43 @@ internal class YggdrasilWorld : Subworld
 	public override int Height => 12000;
 	public override bool NormalUpdates => true;
 	public override bool ShouldSave => true;
+
 	public override List<GenPass> Tasks => new List<GenPass>()
 	{
 		new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass()
 	};
+
 	public override void OnEnter()
 	{
 		SubworldSystem.hideUnderworld = true;
 	}
+
 	public override void OnLoad()
 	{
 		Main.worldSurface = Main.maxTilesY - 1000;
 		Main.rockLayer = Main.maxTilesY - 500;
 	}
+
 	public override void Load()
 	{
 		On_WorldGen.setWorldSize += WorldGen_setWorldSize;
-		if (ModLoader.TryGetMod("SubworldLibrary", out Mod sbl))
-		{
-			Type t = sbl.GetType().Assembly.GetType("SubworldLibrary.SubworldSystem");
-			MonoModHooks.Add(t.GetMethod("get_CurrentPath", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance),
-				Redirection_SubWorldSystem_CurrentPath);
-		}
+		//if (ModLoader.TryGetMod("SubworldLibrary", out Mod sbl))
+		//{
+		//	Type t = sbl.GetType().Assembly.GetType("SubworldLibrary.SubworldSystem");
+		//	MonoModHooks.Add(t.GetMethod("get_CurrentPath", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance),
+		//		Redirection_SubWorldSystem_CurrentPath);
+		//}
 	}
-	private static string Redirection_SubWorldSystem_CurrentPath(Func<string> orig)
-	{
-		if (SubworldSystem.Current?.GetType() == typeof(YggdrasilWorld))
-		{
-			return Path.Combine(Main.WorldPath, "Everglow", "YggdrasilWorld.wld");
-		}
-		return orig();
-	}
+
+	//private static string Redirection_SubWorldSystem_CurrentPath(Func<string> orig)
+	//{
+	//	if (SubworldSystem.Current?.GetType() == typeof(YggdrasilWorld))
+	//	{
+	//		return Path.Combine(Main.WorldPath, "Everglow", "YggdrasilWorld.wld");
+	//	}
+	//	return orig();
+	//}
+
 	private static void WorldGen_setWorldSize(On_WorldGen.orig_setWorldSize orig)
 	{
 		int fixedwidth = ((Main.maxTilesX - 1) / 200 + 1) * 200;
@@ -70,7 +76,7 @@ internal class YggdrasilWorld : Subworld
 			{
 				player.TouchedTiles.Clear();
 			}
-			for(int i = 0;i<LiquidRenderer.Instance._cache.Length;i++)
+			for (int i = 0; i < LiquidRenderer.Instance._cache.Length; i++)
 			{
 				ref LiquidRenderer.LiquidCache cache = ref LiquidRenderer.Instance._cache[i];
 				cache.HasVisibleLiquid = false;
@@ -92,4 +98,3 @@ internal class YggdrasilWorld : Subworld
 		Main.maxSectionsY = (Main.maxTilesY - 1) / 150 + 1;
 	}
 }
-
