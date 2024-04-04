@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.Common.BackgroundManager;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using SubworldLibrary;
@@ -69,6 +70,14 @@ public class YggdrasilTownBackground : ModSystem
 		return false;
 	}
 	/// <summary>
+	/// 灯木背景的绘制中心
+	/// </summary>
+	public float LampWoodCenterY = 0;
+	/// <summary>
+	/// 切换背景造成的颜色变化
+	/// </summary>
+	public float BackgroundSwitchingAlpha = 0f;
+	/// <summary>
 	/// 绘制天穹城镇背景
 	/// </summary>
 	/// <param name="baseColor"></param>
@@ -132,15 +141,51 @@ public class YggdrasilTownBackground : ModSystem
 						return;
 					}
 				}
+				if (ModContent.GetInstance<LampWoodForest>().IsBiomeActive(Main.LocalPlayer))
+				{
+					var lampClose = ModAsset.LampWoodClose.Value;
+					var lampMiddle = ModAsset.LampWoodMiddle.Value;
+					var lampFar = ModAsset.LampWoodFar.Value;
+					var lampSky = ModAsset.LampWoodSky.Value;
+					Vector2 correction = new Vector2(0, LampWoodCenterY - 4000) - BiomeCenter;
+					float setSize = 1f;
+					if(BackgroundSwitchingAlpha < 1f)
+					{
+						BackgroundSwitchingAlpha += 0.02f;
+					}
+					else
+					{
+						BackgroundSwitchingAlpha = 1f;
+					}
+					BackgroundManager.QuickDrawBG(lampSky, GetDrawRect(lampSky.Size(), 0f, correction, setSize), baseColor * BackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
+					BackgroundManager.QuickDrawBG(lampFar, GetDrawRect(lampFar.Size(), 0.05f, correction, setSize), baseColor * BackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
+					BackgroundManager.QuickDrawBG(lampMiddle, GetDrawRect(lampMiddle.Size(), 0.10f, correction + new Vector2(0, 5000), setSize), baseColor * BackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
+					BackgroundManager.QuickDrawBG(lampClose, GetDrawRect(lampFar.Size(), 0.15f, correction + new Vector2(0, 6000), setSize), baseColor * BackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
+				}
+				else
+				{
+					if (Math.Abs(LampWoodCenterY - Main.screenPosition.Y) > 200)
+					{
+						LampWoodCenterY = Main.screenPosition.Y;
+					}
+					if (BackgroundSwitchingAlpha > 0f)
+					{
+						BackgroundSwitchingAlpha -= 0.02f;
+					}
+					else
+					{
+						BackgroundSwitchingAlpha = 0f;
+					}
+				}
 			}
 		}
-		
 
+		//旧背景
 		//BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000));
 		//BackgroundManager.QuickDrawBG(texC3, GetDrawRect(texClose.Size(), 0.05f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, false);
 		//BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texClose.Size(), 0.10f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, false);
 		//BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texClose.Size(), 0.15f, new Vector2(0, 7200)), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, true);
-
+		float AntiBackgroundSwitchingAlpha = 1 - BackgroundSwitchingAlpha;
 		Vector2 deltaPos = screenCenter - BiomeCenter;
 		float MoveStep = 0.15f;
 		deltaPos *= MoveStep;
@@ -148,20 +193,20 @@ public class YggdrasilTownBackground : ModSystem
 		{
 			Vector2 DrawCenter = new Vector2(Main.screenWidth, Main.screenHeight) / 2f - deltaPos + new Vector2(-650 + texC1.Width * x, -400);
 			if (DrawCenter.X >= -60 && DrawCenter.X <= Main.screenWidth + 60)
-				BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.15f, DrawCenter, 20f, 750f, baseColor * 0.06f, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), texC1.Size(), false, false);
+				BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.15f, DrawCenter, 20f, 750f, baseColor * 0.06f * AntiBackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), texC1.Size(), false, false);
 			DrawCenter = new Vector2(Main.screenWidth, Main.screenHeight) / 2f - deltaPos + new Vector2(-1350 + texC1.Width * x, -100);
 			if (DrawCenter.X >= -60 && DrawCenter.X <= Main.screenWidth + 60)
-				BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.15f, DrawCenter, 20f, 750f, baseColor * 0.06f, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), texC1.Size(), false, false);
+				BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.15f, DrawCenter, 20f, 750f, baseColor * 0.06f * AntiBackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), texC1.Size(), false, false);
 		}
 		Rectangle drawArea = GetDrawRect(texClose.Size(), 0.08f, Vector2.Zero);
 		drawArea.Width = (int)(drawArea.Width * 0.6f);
 		drawArea.Height = (int)(drawArea.Height * 0.6f);
 		drawArea.Y += 200;
 		drawArea.X += 500;
-		BackgroundManager.QuickDrawBG(texClose, drawArea, baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
+		BackgroundManager.QuickDrawBG(texClose, drawArea, baseColor * AntiBackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
 
 		//BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.35f, new Vector2(-650, -400), 60f, 550f, baseColor * 0.12f, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), texClose.Size());
-		BackgroundManager.QuickDrawBG(texBound, GetDrawRect(texBound.Size(), 1f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20720), (int)(BiomeCenter.Y - 20420), false, false);
+		BackgroundManager.QuickDrawBG(texBound, GetDrawRect(texBound.Size(), 1f, Vector2.Zero), baseColor * AntiBackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20720), (int)(BiomeCenter.Y - 20420), false, false);
 	}
 	/// <summary>
 	/// 获取绘制矩形
