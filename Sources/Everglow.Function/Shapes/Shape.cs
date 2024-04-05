@@ -21,7 +21,6 @@ namespace Everglow.Commons.Shapes
 		{
 			public ReadOnlySpan<T> ConvexVertex();
 		}
-	}
 	public class NormalConvex2D : IConvex<Vector2>, ISAT<Vector2>, IEPA<Vector2>
 	{
 		public static NormalConvex2D Create(Span<Vector2> vs)
@@ -261,5 +260,6 @@ namespace Everglow.Commons.Shapes
 		{
 			return new Microsoft.Xna.Framework.Rectangle((int)rect.vertex[0].X, (int)rect.vertex[0].Y, (int)rect.width, (int)rect.height);
 		}
+	}
 	}
 }
