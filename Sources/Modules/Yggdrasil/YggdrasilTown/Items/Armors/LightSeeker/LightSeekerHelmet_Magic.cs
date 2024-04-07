@@ -1,9 +1,11 @@
+using System.Diagnostics;
+using Everglow.Commons.Hooks;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Valiant;
 using Terraria.GameContent.Creative;
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Cyan
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.LightSeeker
 {
 	[AutoloadEquip(EquipType.Head)]
-	public class CyanHeavylet : ModItem
+	public class LightSeekerHelmet_Magic : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
@@ -21,31 +23,36 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Cyan
 		{
 			Item.width = 28;
 			Item.height = 26;
-			Item.value = 3750;
+			Item.value = 2500;
 			Item.rare = ItemRarityID.Green;
-			Item.defense = 4;
+			Item.defense = 1;
 		}
 		public override bool IsArmorSet(Item head, Item body, Item legs)
 		{
-			return body.type == ModContent.ItemType<CyanBreastplate>() && legs.type == ModContent.ItemType<CyanLeggings>();
+			return body.type == ModContent.ItemType<LightSeekerBreastplate>() && legs.type == ModContent.ItemType<LightSeekerLeggings>();
 		}
 		public override void UpdateArmorSet(Player player)
 		{
-			player.statDefense += 3;
-			player.lifeRegen += 2;
-			player.runAcceleration += 10;
-		}
+			Color lightColor = Lighting.GetColor(player.Center.ToTileCoordinates());
+
+			float lightIntensity = MathHelper.Max(MathHelper.Max(lightColor.R, lightColor.G), lightColor.B);
+			if (lightIntensity > 220) 
+			{
+                player.GetDamage(DamageClass.Magic) += 0.1f;
+            }
+
+            player.manaCost *= 0.9f;
+            player.GetDamage(DamageClass.Magic) += 0.05f;
+        }
 		public override void UpdateEquip(Player player)
 		{
-			player.endurance += 0.04f;
+			Lighting.AddLight(player.Center, Vector3.one * 0.5f);
+			
+			player.GetCritChance(DamageClass.Magic) += 4f;
 		}
 		public override void AddRecipes()
 		{
-			Recipe recipe = CreateRecipe();
-
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.Register();
+			
 		}
 	}
 }
-
