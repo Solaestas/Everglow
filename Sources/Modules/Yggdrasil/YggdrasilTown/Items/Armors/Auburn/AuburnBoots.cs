@@ -1,6 +1,6 @@
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Auburn
 {
 	[AutoloadEquip(EquipType.Legs)]
 	public class AuburnBoots : ModItem

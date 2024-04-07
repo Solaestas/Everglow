@@ -1,5 +1,5 @@
 using Terraria.GameContent.Creative;
-namespace Everglow.Yggdrasil.YggdrasilTown.Items
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Auburn
 {
 	[AutoloadEquip(EquipType.Body)]
 	public class AuburnBreastplate : ModItem
@@ -14,7 +14,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items
 			Item.width = 30;
 			Item.height = 18;
 			Item.value = 2500;
-			Item.rare = ItemRarityID.White; 
+			Item.rare = ItemRarityID.White;
 			Item.defense = 1;
 		}
 		public override void UpdateEquip(Player player)
