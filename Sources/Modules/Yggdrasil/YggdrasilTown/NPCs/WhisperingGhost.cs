@@ -46,7 +46,7 @@ public class WhisperingGhost : ModNPC
 		Vector2 aimTarget = target.Center;
 		if (Collision.CanHit(NPC.Center, 1, 1, target.Center, 1, 1))
 		{
-			toAim = aimTarget - NPC.Center + new Vector2(0, MathF.Sin(timeValue) * 150);
+			toAim = aimTarget - NPC.Center + new Vector2(0, MathF.Sin(timeValue + NPC.whoAmI) * 200);
 			NPC.velocity = Vector2.Normalize(toAim) * NPC.velocity.Length() * 1.2f;
 			if (NPC.velocity.Length() >= 2.5f)
 			{
@@ -55,7 +55,7 @@ public class WhisperingGhost : ModNPC
 		}
 		else
 		{
-			toAim = new Vector2(MathF.Cos(0.5f * timeValue), MathF.Sin(0.75f * timeValue));
+			toAim = new Vector2(MathF.Cos(0.5f * (timeValue + NPC.whoAmI)), MathF.Sin(0.75f * (timeValue + NPC.whoAmI)));
 			NPC.velocity = Vector2.Normalize(toAim) * NPC.velocity.Length() * 0.9f;
 			if (NPC.velocity.Length() <= 0.75f)
 			{
@@ -65,7 +65,7 @@ public class WhisperingGhost : ModNPC
 		if (WorldUtils.Find(NPC.Center.ToTileCoordinates(), Searches.Chain(new Searches.Down(5), _cachedConditions_notNull, _cachedConditions_solid), out var _))
 		{
 			float length = NPC.velocity.Length();
-			NPC.velocity += new Vector2(0, -0.25f);
+			NPC.velocity += new Vector2(0, -0.5f);
 			NPC.velocity = Vector2.Normalize(NPC.velocity) * length;
 		}
 		else
@@ -73,6 +73,20 @@ public class WhisperingGhost : ModNPC
 			float length = NPC.velocity.Length();
 			NPC.velocity += new Vector2(0, 0.125f);
 			NPC.velocity = Vector2.Normalize(NPC.velocity) * length;
+		}
+		foreach (NPC npc in Main.npc)
+		{
+			if (npc != null && npc.active && npc != NPC)
+			{
+				if (npc.type == Type)
+				{
+					Vector2 v0 = NPC.Center - npc.Center;
+					if (v0.Length() < 120)
+					{
+						NPC.velocity += Vector2.Normalize(v0) * 0.2f;
+					}
+				}
+			}
 		}
 		NPC.spriteDirection = NPC.velocity.X > 0 ? 1 : -1;
 		NPC.localAI[0] += 1;
@@ -85,6 +99,7 @@ public class WhisperingGhost : ModNPC
 			dust.rotation = Main.rand.NextFloat(0.4f, 0.8f);
 			dust.alpha = Main.rand.Next(0, 55);
 		}
+
 	}
 	private static Terraria.WorldBuilding.Conditions.NotNull _cachedConditions_notNull = new Terraria.WorldBuilding.Conditions.NotNull();
 	private static Terraria.WorldBuilding.Conditions.IsSolid _cachedConditions_solid = new Terraria.WorldBuilding.Conditions.IsSolid();
