@@ -1,10 +1,10 @@
 using Terraria.GameContent.Creative;
 using Terraria.Localization;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Cyan
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.LightSeeker
 {
 	[AutoloadEquip(EquipType.Body)]
-	public class CyanBreastplate : ModItem
+	public class LightSeekerBreastplate : ModItem
 	{
 		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(20, 20);
 		public override void SetStaticDefaults()
@@ -16,15 +16,14 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Cyan
 		{
 			Item.width = 28;
 			Item.height = 26;
-			Item.value = 3750;
+			Item.value = 2500;
 			Item.rare = ItemRarityID.Green;
-			Item.defense = 5;
+			Item.defense = 2;
 		}
 
 		public override void UpdateEquip(Player player)
 		{
-			player.jumpSpeedBoost += 0.05f;
-			player.moveSpeed += 0.05f;
+			player.GetCritChance(DamageClass.Generic) += 5f;
 		}
 		public override void AddRecipes()
 		{
