@@ -25,7 +25,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Cyan
 
 		public override void UpdateEquip(Player player)
 		{
-			player.GetAttackSpeed(DamageClass.Melee) *= 1.05f;
+			player.GetAttackSpeed(DamageClass.Melee) += 0.05f;
 		}
 		public override void AddRecipes()
 		{

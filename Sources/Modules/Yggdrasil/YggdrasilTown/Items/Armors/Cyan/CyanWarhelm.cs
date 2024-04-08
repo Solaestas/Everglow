@@ -36,7 +36,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Cyan
 		}
 		public override void UpdateEquip(Player player)
 		{
-            player.GetDamage(DamageClass.Melee) *= 1.04f;
+            player.GetDamage(DamageClass.Melee) += 0.04f;
 			player.GetCritChance(DamageClass.Melee) += 4;
 		}
 		public override void AddRecipes()
