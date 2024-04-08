@@ -27,8 +27,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Trainee
 
 		public override void UpdateEquip(Player player)
 		{
-			player.jumpSpeedBoost += 5;
-			player.moveSpeed += 5;
+			player.jumpSpeedBoost += 0.05f;
+			player.moveSpeed += 0.05f;
 		}
 		public override void AddRecipes()
 		{

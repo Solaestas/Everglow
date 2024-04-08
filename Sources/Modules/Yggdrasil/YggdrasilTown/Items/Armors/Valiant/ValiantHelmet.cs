@@ -33,7 +33,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Valiant
 		{
 			player.aggro -= 400;
 			player.statDefense += 2;
-			player.endurance += 0.04f;
+			player.endurance += 4f;
 
 		}
 		public override void UpdateEquip(Player player)

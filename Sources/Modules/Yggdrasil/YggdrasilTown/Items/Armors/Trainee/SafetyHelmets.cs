@@ -36,7 +36,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Trainee
 		}
 		public override void UpdateEquip(Player player)
 		{
-			player.GetDamage(DamageClass.Generic) *= 1.02f;
+			player.GetDamage(DamageClass.Generic) += 0.02f;
 		}
 		public override void AddRecipes()
 		{
