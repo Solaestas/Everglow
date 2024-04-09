@@ -27,7 +27,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Cyan
 		}
 		public override bool IsArmorSet(Item head, Item body, Item legs)
 		{
-			return body.type == ModContent.ItemType<ValiantBreastplate>() && legs.type == ModContent.ItemType<ValiantLeggings>();
+			return body.type == ModContent.ItemType<CyanBreastplate>() && legs.type == ModContent.ItemType<CyanLeggings>();
 		}
 		public override void UpdateArmorSet(Player player)
 		{

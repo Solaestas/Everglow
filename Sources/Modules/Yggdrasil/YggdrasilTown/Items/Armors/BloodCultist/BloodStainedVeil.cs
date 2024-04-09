@@ -36,7 +36,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.BloodCultist
 		}
 		public override void UpdateEquip(Player player)
 		{
-			player.GetDamage(DamageClass.Magic) *= 1.06f;
+			player.GetDamage(DamageClass.Magic) += 0.06f;
 		}
 		public override void AddRecipes()
 		{

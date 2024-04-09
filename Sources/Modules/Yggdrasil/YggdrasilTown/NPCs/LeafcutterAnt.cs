@@ -21,7 +21,7 @@ public class LeafcutterAnt : ModNPC
 		NPC.damage = 25;
 		NPC.defense = 10;
 		NPC.friendly = false;
-		NPC.aiStyle = 3;
+		NPC.aiStyle = -1;
 		NPC.knockBackResist = 0.5f;
 		NPC.value = 100;
 		NPC.HitSound = SoundID.NPCHit4;
@@ -77,6 +77,27 @@ public class LeafcutterAnt : ModNPC
 			NPC.frameCounter = 0;
 			NPC.frame.Y = frameHeight * 7;
 		}
+	}
+	public override void AI()
+	{
+		NPC.type = NPCID.WalkingAntlion;
+		NPC.AI_003_Fighters();
+		//逆集群化
+		foreach (NPC npc in Main.npc)
+		{
+			if (npc != null && npc.active && npc != NPC)
+			{
+				if (npc.type == Type)
+				{
+					Vector2 v0 = NPC.Center - npc.Center;
+					if (v0.Length() < 120)
+					{
+						NPC.velocity += Vector2.Normalize(v0) * 0.25f;
+					}
+				}
+			}
+		}
+		NPC.type = ModContent.NPCType<LeafcutterAnt>();
 	}
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
