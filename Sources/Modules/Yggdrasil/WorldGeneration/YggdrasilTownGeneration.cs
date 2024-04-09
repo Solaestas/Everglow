@@ -47,8 +47,8 @@ public class YggdrasilTownGeneration
 		//BuildTangledSubmine();
 		//Main.statusText = "Another Side, The Fossilized Mine Road...";
 		//BuildFossilizedMineRoad();
-		//Main.statusText = "Constructing The Yggdrasil Town Below...";
-		//BuildTownBelow();
+		Main.statusText = "Constructing The Yggdrasil Town Below...";
+		BuildTownBelow();
 		//Main.statusText = "Growing LampWoods...";
 		//BuildLampWoodLand();
 		//Main.statusText = "Constructing The Yggdrasil Town Upper...";
@@ -797,6 +797,8 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildTownBelow()
 	{
+		QuickBuild(40, Main.maxTilesY - 450, "YggdrasilTown/MapIOs/YggdrasilTown159x63.mapio");
+		QuickBuild(300, Main.maxTilesY - 430, "YggdrasilTown/MapIOs/YggdrasilTown201x72.mapio");
 		//int randX = AzureGrottoCenterX + 100;
 		//if (AzureGrottoCenterX > 600)
 		//{

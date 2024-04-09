@@ -250,15 +250,14 @@ public class YggdrasilAmberLaser_proj : HandholdProjectile, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 
-		Texture2D star = Commons.ModAsset.Star_black.Value;
+		Texture2D star = Commons.ModAsset.StarSlash.Value;
 		Color drawC = new Color(duration * 0.7f, duration * duration * 0.52f, 0, 0);
 
 		Vector2 starCenter = Projectile.Center + MaxStep * mouseToPlayer * 8 - Main.screenPosition;
-		Main.spriteBatch.Draw(star, starCenter, null, Color.White, MathHelper.PiOver2, star.Size() / 2f, 0.9f * duration, se, 0);
-		Main.spriteBatch.Draw(star, starCenter, null, Color.White, 0, star.Size() / 2f, 0.9f * duration, se, 0);
-		star = Commons.ModAsset.Star.Value;
-		Main.spriteBatch.Draw(star, starCenter, null, drawC, MathHelper.PiOver2, star.Size() / 2f, 0.9f * duration, se, 0);
-		Main.spriteBatch.Draw(star, starCenter, null, drawC, 0, star.Size() / 2f, 0.9f * duration, se, 0);
+
+		
+		Main.spriteBatch.Draw(star, starCenter, null, drawC, MathHelper.PiOver2 + timeValue, star.Size() / 2f, 1.9f * duration, se, 0);
+		Main.spriteBatch.Draw(star, starCenter, null, drawC, 0 + timeValue, star.Size() / 2f, 1.9f * duration, se, 0);
 		return false;
 	}
 	public void DrawWarp(VFXBatch spriteBatch)
