@@ -30,7 +30,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			float f = 0.025f;
 			if (Timer < 40)
 			{
-				Timer = f.Lerp(Timer, 20);
+				Timer = MathHelper.Lerp(Timer, 20,f);
 			}
 			if (Projectile.timeLeft < 150)
 			{

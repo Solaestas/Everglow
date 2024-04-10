@@ -118,7 +118,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 					Projectile.velocity *= 1.1f;
 				}
 				if (s < 3500)
-					s = MathUtils.Lerp(0.05f, s, 3500);
+					s = MathHelper.Lerp(0.05f, s, 3500);
 			}
 			player.heldProj = Projectile.whoAmI;
 		}
