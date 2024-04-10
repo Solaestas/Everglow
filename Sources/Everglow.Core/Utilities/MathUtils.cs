@@ -253,17 +253,7 @@ public static class MathUtils
 		return (float)Math.Sin(num);
 	}
 
-	public static float Lerp(this float value, float from, float to)
-	{
-		return (1 - value) * from + to * value;
-	}
-
-    public static void LerpValue(this ref float from, float to, float value)
-    {
-		from = (1 - value) * from + to * value;
-    }
-
-    public static Vector2 Lerp(this float value, Vector2 from, Vector2 to)
+	public static Vector2 Lerp(this float value, Vector2 from, Vector2 to)
 	{
 		return (1 - value) * from + to * value;
 	}
