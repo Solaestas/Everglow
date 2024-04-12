@@ -48,11 +48,11 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 		{
 			var t = new Vector3(5, -50, 5000 - s);
 			return
-			     Matrix.CreateScale((float)1000/RenderTargetSize)
-				*Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
+				 Matrix.CreateScale((float)1000 / RenderTargetSize)
+				* Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
 				* Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
 				* Matrix.CreateTranslation(t)
-				* Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0)*rate,
+				* Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0) * rate,
 									 new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 500) * rate,
 									 new Vector3(0, -1, 0) * rate)
 				* Main.GameViewMatrix.ZoomMatrix
@@ -118,7 +118,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 					Projectile.velocity *= 1.1f;
 				}
 				if (s < 3500)
-					s = MathHelper.Lerp(0.05f, s, 3500);
+					s = MathHelper.Lerp(s, 3500, 0.05f);
 			}
 			player.heldProj = Projectile.whoAmI;
 		}
