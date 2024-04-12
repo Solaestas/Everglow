@@ -279,7 +279,7 @@ namespace Everglow.Commons.IIID
 					1.0f / m_blurRenderTargets[i].Height));
 				filterEffect.Parameters["uDelta"].SetValue(0.5f);
 				Blit(m_blurRenderTargets[i], m_blurRenderTargets[i - 1], filterEffect, "Box", BlendState.Opaque,
-					SamplerState.PointClamp);
+					SamplerState.AnisotropicClamp);
 			}
 
 
