@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,9 +33,9 @@ public class FogVFX : MEACVFX
 			}
             rotation += ai1;
             if (timeleft > 15)
-                alpha.LerpValue(1f, 0.06f);
+                MathHelper.Lerp(alpha,1f, 0.06f);
             else
-                alpha.LerpValue(0f, 0.06f);
+				MathHelper.Lerp(alpha, 0f, 0.06f);
         }
         if (ai0 == 1)
         {
@@ -47,10 +47,10 @@ public class FogVFX : MEACVFX
             rotation += ai1;
             if (timeleft > maxTimeleft - 20)
             {
-				alpha.LerpValue(1f, 0.1f);
+				MathHelper.Lerp(alpha,1f, 0.1f);
             }
             else
-                alpha.LerpValue(0f, 0.015f);
+				MathHelper.Lerp(alpha, 0f, 0.015f);
         }
         
     }

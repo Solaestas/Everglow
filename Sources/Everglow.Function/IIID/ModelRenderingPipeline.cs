@@ -244,7 +244,7 @@ namespace Everglow.Commons.IIID
 			// Blit into m_blurRenderTargets[0]
 			graphicsDevice.SetRenderTarget(m_blurRenderTargets[0]);
 			graphicsDevice.Clear(Color.Transparent);
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.None,
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None,
 				RasterizerState.CullNone);
 			spriteBatch.Draw(m_emissionTarget, m_emissionTarget.Bounds, Color.White);
 			spriteBatch.End();
@@ -256,7 +256,7 @@ namespace Everglow.Commons.IIID
 					1.0f / m_blurRenderTargets[i].Height));
 				filterEffect.Parameters["uDelta"].SetValue(1.0f);
 				Blit(m_blurRenderTargets[i], m_blurRenderTargets[i + 1], filterEffect, "Box", BlendState.Opaque,
-					SamplerState.PointClamp);
+					SamplerState.AnisotropicClamp);
 			}
 
 			for (int i = 0; i < 1; i++)
@@ -264,12 +264,12 @@ namespace Everglow.Commons.IIID
 				filterEffect.Parameters["uDelta"].SetValue(1.0f);
 				filterEffect.Parameters["uHorizontal"].SetValue(true);
 				Blit(m_blurRenderTargets[MAX_BLUR_LEVELS - 1], m_bloomTargetSwap, filterEffect, "GBlur", BlendState.Opaque,
-					SamplerState.PointClamp);
+					SamplerState.AnisotropicClamp);
 
 				filterEffect.Parameters["uDelta"].SetValue(1.0f);
 				filterEffect.Parameters["uHorizontal"].SetValue(false);
 				Blit(m_bloomTargetSwap, m_blurRenderTargets[MAX_BLUR_LEVELS - 1], filterEffect, "GBlur", BlendState.Opaque,
-					SamplerState.PointClamp);
+					SamplerState.AnisotropicClamp);
 			}
 
 
@@ -279,7 +279,7 @@ namespace Everglow.Commons.IIID
 					1.0f / m_blurRenderTargets[i].Height));
 				filterEffect.Parameters["uDelta"].SetValue(0.5f);
 				Blit(m_blurRenderTargets[i], m_blurRenderTargets[i - 1], filterEffect, "Box", BlendState.Opaque,
-					SamplerState.PointClamp);
+					SamplerState.AnisotropicClamp);
 			}
 
 
