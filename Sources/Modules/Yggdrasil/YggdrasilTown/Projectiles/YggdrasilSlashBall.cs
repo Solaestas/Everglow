@@ -2,6 +2,7 @@ using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Items.SquamousShell;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -112,6 +113,7 @@ public class YggdrasilSlashBall : ModProjectile
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<WindBladeBallHit>(), 0, 0, -1, 6 * Projectile.scale, (target.Center - Projectile.Center).ToRotation() + Main.rand.NextFloat(-1, 1));
+		SoundEngine.PlaySound(new SoundStyle("Everglow/Yggdrasil/YggdrasilTown/Sounds/Knife").WithPitchOffset(Main.rand.NextFloat(0.4f, 0.8f)).WithVolume(0.3f) with { MaxInstances = 5 }, Projectile.Center);
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
