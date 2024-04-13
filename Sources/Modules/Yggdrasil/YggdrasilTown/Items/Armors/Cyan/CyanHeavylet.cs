@@ -33,7 +33,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Cyan
 		{
 			player.statDefense += 3;
 			player.lifeRegen += 2;
-			player.runAcceleration += 10;
+			player.runAcceleration += 0.008f;//通过命中断点获得玩家的基础跑步加速度为0.08，提升10%也就是0.008
 		}
 		public override void UpdateEquip(Player player)
 		{
