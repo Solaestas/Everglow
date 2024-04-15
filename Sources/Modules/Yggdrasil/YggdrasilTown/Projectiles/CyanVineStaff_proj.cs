@@ -78,7 +78,7 @@ public class CyanVineStaff_proj : ModProjectile
 	}
 	private void Shoot()
 	{
-		SoundEngine.PlaySound(SoundID.Item72.WithVolumeScale(0.2f), Projectile.Center);
+		SoundEngine.PlaySound(SoundID.Item72.WithVolumeScale(0.8f), Projectile.Center);
 		Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
 		v0 = Vector2.Normalize(v0);
 		Player player = Main.player[Projectile.owner];

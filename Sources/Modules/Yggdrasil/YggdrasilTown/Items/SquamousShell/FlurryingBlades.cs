@@ -35,7 +35,7 @@ public class FlurryingBlades : ModItem
 		{
 			float ai1 = Main.rand.NextFloat(0.7f, 1.4f);
 			Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0.9f, ai1);
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Yggdrasil/YggdrasilTown/Sounds/Knife").WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)).WithVolume(0.4f), player.Center);
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Yggdrasil/YggdrasilTown/Sounds/Knife").WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)).WithVolume(0.8f), player.Center);
 		}
 		return false;
 	}
