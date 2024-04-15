@@ -1,3 +1,4 @@
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
@@ -46,11 +47,13 @@ public class Titanium_Fragment : ModProjectile
 			Projectile.velocity *= 0.96f;
 			if (TileCollisionUtils.PlatformCollision(Projectile.Center + new Vector2(Projectile.velocity.X, 0)))
 			{
+				SoundEngine.PlaySound(SoundID.NPCHit4.WithVolume(Main.rand.NextFloat(0.001f, 0.03f) * Projectile.velocity.Length()).WithPitchOffset(Main.rand.NextFloat(-0.5f, 0.5f)), Projectile.Center);
 				Projectile.velocity.X *= Main.rand.NextFloat(-0.9f, -0.6f);
 				canFall = false;
 			}
 			if (TileCollisionUtils.PlatformCollision(Projectile.Center + new Vector2(0, Projectile.velocity.Y)))
 			{
+				SoundEngine.PlaySound(SoundID.NPCHit4.WithVolume(Main.rand.NextFloat(0.001f, 0.03f) * Projectile.velocity.Length()).WithPitchOffset(Main.rand.NextFloat(-0.5f, 0.5f)), Projectile.Center);
 				Projectile.velocity.Y *= Main.rand.NextFloat(-0.9f, -0.6f);
 				canFall = false;
 			}
@@ -111,6 +114,10 @@ public class Titanium_Fragment : ModProjectile
 			Projectile.velocity *= 0.95f;
 			Vector2 acc = toAim * 0.07f;
 			Projectile.velocity += acc;
+		}
+		if(AITimer == 100 + (int)(Math.Sin(Projectile.whoAmI) * 25))
+		{
+			SoundEngine.PlaySound(SoundID.NPCHit4.WithVolume(Main.rand.NextFloat(0.02f, 0.08f)).WithPitchOffset(Main.rand.NextFloat(-0.5f, 0.5f)),Projectile.Center);
 		}
 	}
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
