@@ -79,7 +79,7 @@ public class CyanVineOreLarge : ModTile
 				for (int y = -5; y < 1; y++)
 				{
 					Color cTile = Lighting.GetColor(i + x, j + y);
-					Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/CyanVine/CyanVineOreLarge");
+					Texture2D tex = ModAsset.CyanVineOreLarge.Value;
 					spriteBatch.Draw(tex, new Vector2((i + x) * 16, (j + y) * 16) - Main.screenPosition + zero, new Rectangle(x * 18 + tile.TileFrameX, y * 18 + tile.TileFrameY, 16, 18), cTile, 0, new Vector2(0), 1, SpriteEffects.None, 0);
 				}
 			}

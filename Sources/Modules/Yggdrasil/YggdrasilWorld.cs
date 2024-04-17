@@ -1,15 +1,16 @@
 using System.Reflection;
 using SubworldLibrary;
 using Terraria.WorldBuilding;
-
 namespace Everglow.Yggdrasil;
-
 internal class YggdrasilWorld : Subworld
 {
-	public override int Width => 1200;
-	public override int Height => 12000;
+	public static bool InYggdrasil => SubworldSystem.IsActive<YggdrasilWorld>();
+	public static float YggdrasilTimer = 0;
+	public Vector2 StoneCageOfChallengesCenter = Vector2.zeroVector;
+	public override int Width => 2000;
+	public override int Height => 21000;
 	public override bool NormalUpdates => true;
-	public override bool ShouldSave => true;
+	public override bool ShouldSave => false;//Only in debug mode,when published,turn true.
 	public override List<GenPass> Tasks => new List<GenPass>()
 	{
 		new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass()
@@ -17,11 +18,20 @@ internal class YggdrasilWorld : Subworld
 	public override void OnEnter()
 	{
 		SubworldSystem.hideUnderworld = true;
+		SubworldSystem.noReturn = true;
+		YggdrasilTimer = 0;
+		for (int x = 20; x < Main.maxTilesX - 20; x++)
+		{
+			for (int y = 20; y < Main.maxTilesY - 20; y++)
+			{
+
+			}
+		}
 	}
 	public override void OnLoad()
 	{
-		Main.worldSurface = Main.maxTilesY - 1000;
-		Main.rockLayer = Main.maxTilesY - 500;
+		Main.worldSurface = Main.maxTilesY - 100;
+		Main.rockLayer = Main.maxTilesY - 50;
 	}
 	public override void Load()
 	{
@@ -56,4 +66,16 @@ internal class YggdrasilWorld : Subworld
 		Main.maxSectionsY = (Main.maxTilesY - 1) / 150 + 1;
 	}
 }
+class YggdrasilWorldSystem : ModSystem
+{
+	public override void PostUpdateEverything()
+	{
+		if (YggdrasilWorld.InYggdrasil)
+		{
+			YggdrasilWorld.YggdrasilTimer++;
+		}
+		base.PostUpdateEverything();
+	}
+}
+
 

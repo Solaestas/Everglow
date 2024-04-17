@@ -20,8 +20,8 @@ public class BayonetFlamePipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D halo = Commons.ModAsset.Point.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 

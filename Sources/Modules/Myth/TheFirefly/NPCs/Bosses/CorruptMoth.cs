@@ -1346,7 +1346,7 @@ public class CorruptMoth : ModNPC
 		};
 		List<Vertex2D> vertices = new();
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.CubeTexture.Value;
 		Color color = new Color(lightVisual * lightVisual, lightVisual, 1f) * lightVisual;
@@ -1504,7 +1504,7 @@ public class CorruptMoth : ModNPC
 			vertices.Clear();
 		}
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
 	private static Vector2 Projection2(Vector3 v3, Vector2 center, float viewZ)
 	{

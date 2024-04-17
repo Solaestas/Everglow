@@ -31,8 +31,8 @@ internal class WaveOfEffectPylonHit_CorruptPipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D FlameColor = ModAsset.WaveOfEffectPylonHit_Corrupt_Color.Value;
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
-		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.NonPremultiplied, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.NonPremultiplied, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 
@@ -115,8 +115,8 @@ internal class WaveOfEffectPylonHit_CrimsonPipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D FlameColor = ModAsset.WaveOfEffectPylonHit_Crimson_Color.Value;
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
-		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.NonPremultiplied, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.NonPremultiplied, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 
