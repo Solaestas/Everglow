@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>Everglow.Commons</RootNamespace>
-		<Solaestas-UseAssetPath>false</Solaestas-UseAssetPath>
+		<EnablePathGenerator>false</EnablePathGenerator>
 	</PropertyGroup>
 	<ItemGroup>
 		<Reference Remove="$(tMLPath)" />

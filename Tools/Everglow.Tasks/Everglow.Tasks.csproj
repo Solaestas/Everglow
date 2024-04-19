@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>preview</LangVersion>
+		<Nullable>enable</Nullable>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Build.Utilities.Core"
+						  Version="17.9.5" 
+						  ExcludeAssets="runtime"/>
+		<PackageReference Include="Newtonsoft.Json"
+						  Version="13.0.3" />
+		<PackageReference Include="PolySharp"
+						  Version="1.14.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<Target Name="CopyOutput"
+			AfterTargets="Build">
+		<ItemGroup>
+			<OutputFiles Include="$(OutputPath)*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(OutputFiles)"
+			  DestinationFolder="..\" />
+	</Target>
+
+</Project>
