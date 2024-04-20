@@ -78,7 +78,7 @@ public class GiantBell_Tile : ModTile, ITileFluentlyDrawn
 		var tile = Main.tile[tilePos];
 		ushort type = tile.TileType;
 		int paint = Main.tile[paintPos].TileColor;
-		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.Tiles_GiantBellPath, type, 0, paint, tileDrawing);
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.Tiles_GiantBell_Path, type, 0, paint, tileDrawing);
 		tex ??= ModAsset.Tiles_GiantBell.Value;
 		var frame = new Rectangle(0, 0, 80, 106);
 

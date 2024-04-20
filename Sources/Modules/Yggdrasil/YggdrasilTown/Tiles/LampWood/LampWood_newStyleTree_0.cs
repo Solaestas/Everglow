@@ -153,7 +153,7 @@ public class LampWood_newStyleTree_0 : ShapeDataTile, ITileFluentlyDrawn
 			return;
 		int paint = Main.tile[paintPos].TileColor;
 		int textureStyle = 1;
-		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.LampWood_newStyleTree_0_leavePath, type, textureStyle, paint, tileDrawing);
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.LampWood_newStyleTree_0_leave_Path, type, textureStyle, paint, tileDrawing);
 		tex ??= ModAsset.LampWood_newStyleTree_0_leave.Value;
 
 		float windCycle = 0;
