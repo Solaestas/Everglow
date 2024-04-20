@@ -3,7 +3,7 @@ using Everglow.SpellAndSkull.Projectiles;
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FreezeFeatherMagic;
 internal class FreezeFeatherMagicBook : MagicBookProjectile
 {
-	public override string Texture => "Everglow/" + ModAsset.FreezeFeatherMagicPath;
+	public override string Texture => "Everglow/" + ModAsset.FreezeFeatherMagic_Path;
 	public override void SetDef()
 	{
 		ProjType = ModContent.ProjectileType<FreezeFeather>();

@@ -1,33 +1,27 @@
 <Project>
-	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<PlatformTarget>AnyCPU</PlatformTarget>
-		<LangVersion>preview</LangVersion>
-		<NoWarn>$(NoWarn);CS0436</NoWarn>
-		<Modules>Example</Modules>
-		<DefineConstants>$(DefineConstants);$(Modules)</DefineConstants>
-		<EnableModBuilder>false</EnableModBuilder>
-		<EnablePathGenerator>true</EnablePathGenerator>
-		<ProcessResource>true</ProcessResource>
-	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="tModLoader.CodeAssist"
-											Version="0.1.*" />
-		<PackageReference Include="Solaestas.tModLoader.ModBuilder"
-											Version="1.5" />
-		<PackageReference Include="StyleCop.Analyzers.Unstable"
-											Version="1.2.0.556">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<Publicize Include="ReLogic" />
-		<Publicize Include="MonoMod.RuntimeDetour" />
-		<Publicize Include="MonoMod.Utils" />
-		<AdditionalFiles Include="**\*.obj;**\*.bmp;**\*.mapio"
-										 Pack="true"
-										 ModPath="%(Identity)"
-										 Exclude="bin\**\*;obj\**\*" />
-	</ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>preview</LangVersion>
+    <NoWarn>$(NoWarn);CS0436</NoWarn>
+    <Modules>AssetReplace;CagedDomain;EternalResolve;Example;Food;IIID;MEAC;Minortopography;Myth;Ocean;Plant;PlantAndFarm;SpellAndSkull;SubSpace;TwilightForest;Yggdrasil;ZY</Modules>
+    <DefineConstants>$(DefineConstants);$(Modules)</DefineConstants>
+    <EnableModBuilder>false</EnableModBuilder>
+    <EnablePathGenerator>true</EnablePathGenerator>
+    <ProcessResource>true</ProcessResource>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
+    <PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.5" />
+    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <Publicize Include="ReLogic" />
+    <Publicize Include="MonoMod.RuntimeDetour" />
+    <Publicize Include="MonoMod.Utils" />
+    <AdditionalFiles Include="**\*.obj;**\*.bmp;**\*.mapio" Pack="true" ModPath="%(Identity)" Exclude="bin\**\*;obj\**\*" />
+  </ItemGroup>
 </Project>

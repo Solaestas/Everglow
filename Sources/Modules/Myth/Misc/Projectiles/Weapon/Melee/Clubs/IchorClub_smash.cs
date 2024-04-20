@@ -6,7 +6,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class IchorClub_smash : ClubProj_Smash
 {
-	public override string Texture => "Everglow/" + ModAsset.Melee_IchorClubPath;
+	public override string Texture => "Everglow/" + ModAsset.Melee_IchorClub_Path;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		for (int x = 0; x < 2; x++)

@@ -2,8 +2,8 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class MeteorClub_smash : ClubProj_Smash_metal
 {
-	public override string TrailColorTex() => "Everglow/" + ModAsset.Melee_MeteorClub_glowPath;
-	public override string Texture => "Everglow/" + ModAsset.Melee_MeteorClubPath;
+	public override string TrailColorTex() => "Everglow/" + ModAsset.Melee_MeteorClub_glow_Path;
+	public override string Texture => "Everglow/" + ModAsset.Melee_MeteorClub_Path;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		int type = DustID.Flare;
