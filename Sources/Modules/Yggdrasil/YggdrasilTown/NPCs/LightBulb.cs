@@ -2,6 +2,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 [NoGameModeScale]
@@ -187,7 +188,8 @@ public class LightBulb : ModNPC
 	}
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		//TODO 掉落物
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.UnstablePollen>(), 1, 1, 2));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.LightBulbOvule>(), 24, 1));
 	}
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
