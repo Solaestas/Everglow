@@ -1,9 +1,9 @@
 using Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Valiant;
 using Terraria.GameContent.Creative;
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Cyan
+namespace Everglow.Yggdrasil.YggdrasilTown.CyanVine
 {
 	[AutoloadEquip(EquipType.Head)]
-	public class CyanHeavylet : ModItem
+	public class CyanWarhelm : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
@@ -23,21 +23,21 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Cyan
 			Item.height = 26;
 			Item.value = 3750;
 			Item.rare = ItemRarityID.Green;
-			Item.defense = 4;
+			Item.defense = 3;
 		}
 		public override bool IsArmorSet(Item head, Item body, Item legs)
 		{
-			return body.type == ModContent.ItemType<CyanBreastplate>() && legs.type == ModContent.ItemType<CyanLeggings>();
-		}
-		public override void UpdateArmorSet(Player player)
+            return body.type == ModContent.ItemType<CyanBreastplate>() && legs.type == ModContent.ItemType<CyanLeggings>();
+        }
+        public override void UpdateArmorSet(Player player)
 		{
-			player.statDefense += 3;
-			player.lifeRegen += 2;
-			player.runAcceleration += 0.008f;//通过命中断点获得玩家的基础跑步加速度为0.08，提升10%也就是0.008
+			player.GetDamage(DamageClass.Melee) += 0.01f;
+			player.GetArmorPenetration(DamageClass.Melee) += 5;
 		}
 		public override void UpdateEquip(Player player)
 		{
-			player.endurance += 0.04f;
+            player.GetDamage(DamageClass.Melee) += 0.04f;
+			player.GetCritChance(DamageClass.Melee) += 4;
 		}
 		public override void AddRecipes()
 		{
@@ -48,4 +48,3 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Cyan
 		}
 	}
 }
-

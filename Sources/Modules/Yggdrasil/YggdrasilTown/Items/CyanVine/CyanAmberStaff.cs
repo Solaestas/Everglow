@@ -1,24 +1,26 @@
+using Everglow.Yggdrasil.Common.Blocks;
+using Everglow.Yggdrasil.YggdrasilTown.Items;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+namespace Everglow.Yggdrasil.YggdrasilTown.CyanVine;
 
-public class CyanVineStaff : ModItem
+public class CyanAmberStaff : ModItem
 {
 	public override void SetDefaults()
 	{
-		Item.useStyle = ItemUseStyleID.Swing;
-		Item.width = 60;
-		Item.height = 68;
-		Item.useAnimation = 26;
-		Item.useTime = 26;
-		Item.knockBack = 4f;
-		Item.damage = 13;
+		Item.useStyle = ItemUseStyleID.Shoot;
+		Item.width = 56;
+		Item.height = 56;
+		Item.useAnimation = 23;
+		Item.useTime = 23;
+		Item.knockBack = 2f;
+		Item.damage = 25;
 		Item.rare = ItemRarityID.White;
 		Item.UseSound = SoundID.Item1;
 		Item.value = 4000;
 		Item.autoReuse = false;
 		Item.DamageType = DamageClass.Magic;
-		Item.mana = 7;
+		Item.mana = 12;
 		Item.channel = true;
 
 		Item.noMelee = true;
@@ -31,9 +33,10 @@ public class CyanVineStaff : ModItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ModContent.ItemType<CyanVineBar>(), 16)
-			.AddIngredient(ModContent.ItemType<StoneDragonScaleWood>(), 13)
-			.AddTile(TileID.WorkBenches)
+			.AddIngredient(ModContent.ItemType<CyanVineStaff>())
+			.AddIngredient(ModContent.ItemType<YggdrasilAmber>(), 3)
+			.AddIngredient(ModContent.ItemType<YggdrasilGrayRock_Item>(), 20)
+			.AddTile(TileID.Anvils)
 			.Register();
 	}
 	public override bool CanUseItem(Player player)

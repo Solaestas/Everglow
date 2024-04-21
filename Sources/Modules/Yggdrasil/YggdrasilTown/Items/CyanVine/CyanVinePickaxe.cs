@@ -1,8 +1,9 @@
 using System.Reflection;
+using Everglow.Yggdrasil.YggdrasilTown.Items;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+namespace Everglow.Yggdrasil.YggdrasilTown.CyanVine;
 
 public class CyanVinePickaxe : ModItem
 {
