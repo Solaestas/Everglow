@@ -160,7 +160,6 @@ public class CyanOreBeetle : ModNPC
 	}
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-
 		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.CyanVineOre>(), 1, 1, 2));
 	}
 }
