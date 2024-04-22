@@ -1,6 +1,7 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 public class CarapaceCaterpillar : Caterpillar
@@ -123,5 +124,9 @@ public class CarapaceCaterpillar : Caterpillar
 			}
 		}
 		return base.PreKill();
+	}
+	public override void ModifyNPCLoot(NPCLoot npcLoot)
+	{
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.CaterpillarJuice>(), 1, 2, 4));
 	}
 }
