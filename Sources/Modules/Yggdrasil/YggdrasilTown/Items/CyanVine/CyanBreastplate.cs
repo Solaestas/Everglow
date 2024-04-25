@@ -1,7 +1,7 @@
 using Terraria.GameContent.Creative;
 using Terraria.Localization;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.CyanVine
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.CyanVine
 {
 	[AutoloadEquip(EquipType.Body)]
 	public class CyanBreastplate : ModItem

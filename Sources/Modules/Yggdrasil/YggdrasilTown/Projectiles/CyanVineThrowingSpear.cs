@@ -63,7 +63,7 @@ public class CyanVineThrowingSpear : ModProjectile
 	{
 		for (int x = 0; x < 16; x++)
 		{
-			Dust d = Dust.NewDustDirect(Projectile.position, 40, 40, ModContent.DustType<CyanVine>());
+			Dust d = Dust.NewDustDirect(Projectile.position, 40, 40, ModContent.DustType<Dusts.CyanVine>());
 			d.velocity *= Projectile.velocity.Length() / 10f;
 		}
 		SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);

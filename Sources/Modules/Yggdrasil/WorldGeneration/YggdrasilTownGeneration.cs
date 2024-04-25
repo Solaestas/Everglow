@@ -1,10 +1,5 @@
-using System;
-using System.Diagnostics.Metrics;
 using Everglow.CagedDomain.Tiles;
-using Everglow.Commons.CustomTiles;
 using Everglow.Yggdrasil.Common.Blocks;
-using Everglow.Yggdrasil.KelpCurtain.Tiles;
-using Everglow.Yggdrasil.KelpCurtain.Walls;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
@@ -13,7 +8,6 @@ using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 
 using Terraria.Utilities;
-using Terraria.WorldBuilding;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 namespace Everglow.Yggdrasil.WorldGeneration;
 public class YggdrasilTownGeneration
@@ -22,7 +16,7 @@ public class YggdrasilTownGeneration
 	{
 		Initialize();
 		Main.statusText = "Yggdrasil Town Bark Cliff...";
-		
+
 		PlaceRectangleAreaOfBlock(20, (Main.maxTilesY - 350), 155, Main.maxTilesY, ModContent.TileType<StoneScaleWood>());
 		PlaceRectangleAreaOfBlock(Main.maxTilesX - 155, (Main.maxTilesY - 350), Main.maxTilesX - 20, Main.maxTilesY, ModContent.TileType<StoneScaleWood>());
 		PlaceRectangleAreaOfBlock(0, (Main.maxTilesY - 350), Main.maxTilesX, Main.maxTilesY, ModContent.TileType<StoneScaleWood>());
@@ -30,7 +24,7 @@ public class YggdrasilTownGeneration
 		PlaceRectangleAreaOfWall(20, (Main.maxTilesY - 350), 155, Main.maxTilesY, ModContent.WallType<StoneDragonScaleWoodWall>());
 		PlaceRectangleAreaOfWall(Main.maxTilesX - 155, (Main.maxTilesY - 350), Main.maxTilesX - 20, Main.maxTilesY, ModContent.WallType<StoneDragonScaleWoodWall>());
 		PlaceRectangleAreaOfWall(0, (Main.maxTilesY - 300), Main.maxTilesX, Main.maxTilesY, ModContent.WallType<StoneDragonScaleWoodWall>());
-		
+
 		Main.statusText = "Filling Midnight Bayou With Mud...";
 		BuildMidnightBayou();
 
@@ -250,11 +244,11 @@ public class YggdrasilTownGeneration
 		int y0CoordPerlin = GenRand.Next(1024);
 		int upBound = Main.maxTilesY - 1900;
 
-		for (int i = 2;i < 9;i++)
+		for (int i = 2; i < 9; i++)
 		{
 			Vector2 point = new Vector2(GenRand.Next(-40, 40) + i * 200, Main.maxTilesY - 460);
 			int radious = GenRand.Next(50, 60);
-			if(i == 3 || i == 6)
+			if (i == 3 || i == 6)
 			{
 				radious = (int)(radious * 2.5);
 			}
@@ -268,7 +262,7 @@ public class YggdrasilTownGeneration
 			{
 				velocity = new Vector2(0, -6).RotatedBy(0.3);
 			}
-			if(i == 4)
+			if (i == 4)
 			{
 				point.X += 100;
 			}
@@ -283,7 +277,7 @@ public class YggdrasilTownGeneration
 			for (int step = 0; step < 400; step++)
 			{
 				point += velocity;
-				if(SafeGetTile((int)(point + velocity * 30).X, (int)(point + velocity).Y).HasTile)
+				if (SafeGetTile((int)(point + velocity * 30).X, (int)(point + velocity).Y).HasTile)
 				{
 					point -= velocity;
 					velocity.X *= -1;
@@ -293,7 +287,7 @@ public class YggdrasilTownGeneration
 				{
 					break;
 				}
-				if(point.Y < upBound)
+				if (point.Y < upBound)
 				{
 					break;
 				}
@@ -876,7 +870,7 @@ public class YggdrasilTownGeneration
 		int bottomBound = Main.maxTilesY - 460;
 		int countLamp = 0;
 		List<Vector2> roomPositions = new List<Vector2>();
-		for (int i = 0;i < 1000;i++)
+		for (int i = 0; i < 1000; i++)
 		{
 			int x0CoordPerlin = GenRand.Next(1024);
 			int y0CoordPerlin = GenRand.Next(1024);
@@ -884,16 +878,16 @@ public class YggdrasilTownGeneration
 			int checkX = GenRand.Next(50, Main.maxTilesX - 49);
 			int checkY = GenRand.Next(upBound, bottomBound);
 			//如果上下左右都有大于100的空间
-			if(CheckSpaceWidth(checkX, checkY) > 100 && CheckSpaceDown(checkX, checkY) > 100 && CheckSpaceUp(checkX, checkY) > 100)
+			if (CheckSpaceWidth(checkX, checkY) > 100 && CheckSpaceDown(checkX, checkY) > 100 && CheckSpaceUp(checkX, checkY) > 100)
 			{
 				//计入一个森林平台数量
 				countLamp++;
 				int startX = Math.Max(0, checkX - CheckSpaceLeft(checkX, checkY) - 60);
 				int endX = Math.Min(checkX + CheckSpaceRight(checkX, checkY) + 60, Main.maxTilesX);
 				//大致铺设一遍地形
-				for(int x = startX;x <= endX;x++)
+				for (int x = startX; x <= endX; x++)
 				{
-					for (int y = checkY - 30;y <= checkY + 30;y++)
+					for (int y = checkY - 30; y <= checkY + 30; y++)
 					{
 						Tile tile = SafeGetTile(x, y);
 						float addXValue = 0;
@@ -908,13 +902,13 @@ public class YggdrasilTownGeneration
 						{
 							type = ModContent.TileType<DarkForestGrass>();
 						}
-						if(value > 1)
+						if (value > 1)
 						{
 							continue;
 						}
 						tile.TileType = (ushort)type;
 						tile.HasTile = true;
-						if(value < 0.94)
+						if (value < 0.94)
 						{
 							tile.wall = WallID.Dirt;
 						}
@@ -931,9 +925,9 @@ public class YggdrasilTownGeneration
 
 							if (TerrianSurfaceDiscontinuity(x, y, 4) > 0.30f)
 							{
-								
 
-								for(int t = -7;t <= 7;t++)
+
+								for (int t = -7; t <= 7; t++)
 								{
 									Vector2 pos = new Vector2(x, y);
 									Vector2 vel = TerrianSurfaceNormal(x, y, 4, ModContent.TileType<FemaleLampWood>()).RotatedBy(t / 10f);
@@ -956,7 +950,7 @@ public class YggdrasilTownGeneration
 					for (int y = checkY - 50; y <= checkY + 50; y++)
 					{
 						Tile tile = SafeGetTile(x, y);
-						if(tile.TileType == (ushort)ModContent.TileType<FemaleLampWood>())
+						if (tile.TileType == (ushort)ModContent.TileType<FemaleLampWood>())
 						{
 							tile.TileType = (ushort)ModContent.TileType<DarkForestGrass>();
 							tile.HasTile = true;
@@ -980,7 +974,7 @@ public class YggdrasilTownGeneration
 					}
 				}
 				//平坦化
-				SmoothTile(startX - 10, checkY - 30, endX + 10, checkY -25);
+				SmoothTile(startX - 10, checkY - 30, endX + 10, checkY - 25);
 				SmoothTile(startX - 10, checkY + 25, endX + 10, checkY + 30);
 				//房子
 				int countCell = 0;
@@ -1071,7 +1065,7 @@ public class YggdrasilTownGeneration
 							}
 						}
 					}
-					if(built)
+					if (built)
 					{
 						break;
 					}
@@ -1414,7 +1408,7 @@ public class YggdrasilTownGeneration
 		while (count <= tunnelLength)
 		{
 			//前往大厅的道路和隧道
-			if(count == 0)
+			if (count == 0)
 			{
 				QuickBuild(x - 39, startY2 - 3, "YggdrasilTown/MapIOs/LiftRoomOfChallengerHall40x22.mapio");
 			}
@@ -1524,23 +1518,23 @@ public class YggdrasilTownGeneration
 			int y = GenRand.Next(upBound, bottomBound);
 			CrawlCarpetOfTile(x, y, GenRand.Next(150, 450), 12, ModContent.TileType<TwilightGrassBlock>());
 		}
-		for (int i = 0;i < 300;i++)
+		for (int i = 0; i < 300; i++)
 		{
 			int x = GenRand.Next(20, Main.maxTilesX - 19);
 			int y = GenRand.Next(upBound, bottomBound);
-			if(EmbeddingWallDepth(x, y, 100) > 80)
+			if (EmbeddingWallDepth(x, y, 100) > 80)
 			{
 				Vector2 basePos = new Vector2(x, y);
 				bool canBuild = true;
-				foreach(Vector2 v in oldPoses)
+				foreach (Vector2 v in oldPoses)
 				{
-					if((basePos - v).Length() < 500)
+					if ((basePos - v).Length() < 500)
 					{
 						canBuild = false;
 						break;
 					}
 				}
-				if(!canBuild)
+				if (!canBuild)
 				{
 					continue;
 				}
@@ -1561,7 +1555,7 @@ public class YggdrasilTownGeneration
 						float aValue = PerlinPixelR[Math.Abs((x0 + x0CoordPerlin) % 1024), Math.Abs((y0 + y0CoordPerlin) % 1024)] / 255f;
 						if (new Vector2(x0, y0).Length() <= radiusI - aValue * 10)
 						{
-							if(y0 > radiusI * 0.5f + aValue * 5)
+							if (y0 > radiusI * 0.5f + aValue * 5)
 							{
 								tile.TileType = (ushort)ModContent.TileType<TwilightGrassBlock>();
 								tile.HasTile = true;
@@ -1579,12 +1573,12 @@ public class YggdrasilTownGeneration
 				{
 					WorldGen.digTunnel(basePos.X, basePos.Y - range * 0.74f - j * 0.09f, GenRand.NextFloat(-0.2f, 0.2f), -1, GenRand.Next(127, 143), GenRand.Next(5, 8));
 				}
-				for(int j = 0;j < 6;j++)
+				for (int j = 0; j < 6; j++)
 				{
 					WorldGen.digTunnel(basePos.X, basePos.Y + range * 0.44f + j * 0.09f, GenRand.NextFloat(-0.5f, 0.5f), 1, GenRand.Next(127, 143), GenRand.Next(5, 8));
 				}
 			}
-			if(count > 2)
+			if (count > 2)
 			{
 				break;
 			}

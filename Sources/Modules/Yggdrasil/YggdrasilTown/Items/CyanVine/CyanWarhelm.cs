@@ -1,6 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Valiant;
 using Terraria.GameContent.Creative;
-namespace Everglow.Yggdrasil.YggdrasilTown.CyanVine
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.CyanVine
 {
 	[AutoloadEquip(EquipType.Head)]
 	public class CyanWarhelm : ModItem

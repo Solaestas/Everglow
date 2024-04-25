@@ -1,7 +1,7 @@
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.CyanVine;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.CyanVine;
 
 public class CyanVineThrowingSpear : ModItem
 {

@@ -3,7 +3,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Items;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.CyanVine;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.CyanVine;
 
 public class CyanVinePickaxe : ModItem
 {

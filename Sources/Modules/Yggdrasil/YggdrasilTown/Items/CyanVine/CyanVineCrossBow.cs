@@ -2,7 +2,7 @@ using Everglow.Commons.Weapons.CrossBow;
 using Everglow.Yggdrasil.YggdrasilTown.Items;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.CyanVine;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.CyanVine;
 
 public class CyanVineCrossBow : CrossBowItem
 {
