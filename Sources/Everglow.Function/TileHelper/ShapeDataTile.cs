@@ -158,5 +158,63 @@ public abstract class ShapeDataTile : ModTile
 			}
 		}
 	}
+	/// <summary>
+	/// 判定底部平坦以及能否容纳下异形块
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public bool CanPlaceAtBottomLeft(int x, int y)
+	{
+		if (x > Main.maxTilesX - TotalWidth || x < 0 || y > Main.maxTilesY || y - TotalHeight < 0)
+			return false;
+		for (int i = 0; i < TotalWidth; i++)
+		{
+			for (int j = 0; j < TotalHeight; j++)
+			{
+				if (PixelHasTile[i, TotalHeight - j - 1] >= 200)
+				{
+					Tile tile = Main.tile[x + i, y - j];
+					if(tile.HasTile)
+					{
+						bool fragile = false;
+						if (Main.tileCut[tile.TileType])
+						{
+							fragile = true;
+						}
+						if (Main.tilePile[tile.TileType])
+						{
+							fragile = true;
+						}
+						if(!fragile)
+						{
+							return false;
+						}
+					}
+					if(j == 0)
+					{
+						Tile tileBottom = Main.tile[x + i, y + 1];
+						if (!tileBottom.HasTile)
+						{
+							return false;
+						}
+						if (tileBottom.Slope != SlopeType.Solid)
+						{
+							return false;
+						}
+						if (tileBottom.IsHalfBlock)
+						{
+							return false;
+						}
+						if (!(Main.tileSolidTop[tileBottom.TileType] || Main.tileSolid[tileBottom.TileType]))
+						{
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
 }
 
