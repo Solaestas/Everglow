@@ -11,7 +11,7 @@ public class CyanVineBow : ModItem
 		Item.rare = ItemRarityID.White;
 		Item.noMelee = true;
 		Item.DamageType = DamageClass.Ranged;
-		Item.UseSound = SoundID.Item1;
+		Item.UseSound = SoundID.Item5;
 		Item.autoReuse = false;
 		Item.value = 1200;
 		Item.useTime = 26;
