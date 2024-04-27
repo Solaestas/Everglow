@@ -632,11 +632,11 @@ public static class FurnitureUtils
 		{
 			for (int n = y; n < y + tileY; n++)
 			{
+				tile = Main.tile[m, n];
 				if (!tile.HasTile)
 					continue;
 				if (tile.TileType == type)
-				{
-					tile = Main.tile[m, n];
+				{		
 					if (tile.TileFrameX < coordinateX * tileX)
 					{
 						tile = Main.tile[m, n];
@@ -690,11 +690,11 @@ public static class FurnitureUtils
 		{
 			for (int n = y; n < y + tileY; n++)
 			{
+				tile = Main.tile[m, n];
 				if (!tile.HasTile)
 					continue;
 				if (tile.TileType == type)
 				{
-					tile = Main.tile[m, n];
 					if (tile.TileFrameY < coordinateY * tileY)
 					{
 						tile = Main.tile[m, n];
