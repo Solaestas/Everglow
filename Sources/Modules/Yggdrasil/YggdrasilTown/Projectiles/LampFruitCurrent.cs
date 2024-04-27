@@ -60,7 +60,7 @@ public class LampFruitCurrent : TrailingProjectile
 		for(int i = 0;i < 15;i++)
 		{
 			Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<Dusts.LampWood_Dust_fluorescent_appear>());
-			dust.alpha = 0;
+			dust.alpha = 100;
 			dust.rotation = Main.rand.NextFloat(0.3f, 0.9f);
 			dust.velocity = Vector2.One.RotateRandom(6.283) * 3.4f;
 		}

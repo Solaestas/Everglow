@@ -22,7 +22,7 @@ public class CyanVineThrowingSpear : ModItem
 		Item.channel = true;
 		Item.noMelee = true;
 		Item.noUseGraphic = true;
-		Item.shoot = ModContent.ProjectileType<Projectiles.CyanVineThrowingSpear>();
+		Item.shoot = ModContent.ProjectileType<CyanVineThrowingSpear_Proj>();
 	}
 	public override void AddRecipes()
 	{
@@ -34,26 +34,55 @@ public class CyanVineThrowingSpear : ModItem
 	}
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		foreach(Projectile proj in Main.projectile)
+		//foreach(Projectile proj in Main.projectile)
+		//{
+		//	if(proj.active)
+		//	{
+		//		if(proj.owner == player.whoAmI)
+		//		{
+		//			if(proj.type == type)
+		//			{
+		//				Projectiles.CyanVineThrowingSpear cvts = proj.ModProjectile as Projectiles.CyanVineThrowingSpear;
+		//				if (cvts != null)
+		//				{
+		//					if(!cvts.Shot)
+		//					{
+		//						return false;
+		//					}
+		//				}
+		//			}
+		//		}
+		//	}
+		//}
+		return false;
+	}
+	public override void HoldItem(Player player)
+	{
+		bool hasTarget = player.itemAnimation > 0;
+		foreach (Projectile proj in Main.projectile)
 		{
-			if(proj.active)
+			if (proj.active)
 			{
-				if(proj.owner == player.whoAmI)
+				if (proj.owner == player.whoAmI)
 				{
-					if(proj.type == type)
+					if (proj.type == ModContent.ProjectileType<Projectiles.CyanVineThrowingSpear_Proj>())
 					{
-						Projectiles.CyanVineThrowingSpear cvts = proj.ModProjectile as Projectiles.CyanVineThrowingSpear;
+						Projectiles.CyanVineThrowingSpear_Proj cvts = proj.ModProjectile as Projectiles.CyanVineThrowingSpear_Proj;
 						if (cvts != null)
 						{
-							if(!cvts.Shot)
+							if (!cvts.Shot)
 							{
-								return false;
+								hasTarget = true;
 							}
 						}
 					}
 				}
 			}
 		}
-		return base.Shoot(player, source, position, velocity, type, damage, knockback);
+		if(!hasTarget && !player.controlUseItem)
+		{
+			Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.zeroVector, ModContent.ProjectileType<Projectiles.CyanVineThrowingSpear_Proj>(), Item.damage, Item.knockBack, player.whoAmI);
+		}
+		base.HoldItem(player);
 	}
 }
