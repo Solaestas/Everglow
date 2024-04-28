@@ -38,7 +38,7 @@ public class NPCSpawnManager : GlobalNPC
 		pool.Add(NPCID.Pinky, 0.1f);
 		if (Main.halloween)
 		{
-			pool.Add(NPCID.Pinky, 0.1f);
+			pool.Add(NPCID.SlimeMasked, 0.1f);
 		}
 		if (Main.xMas)
 		{
