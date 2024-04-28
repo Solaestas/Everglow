@@ -14,18 +14,50 @@ public class NPCSpawnManager : GlobalNPC
 		}
 
 		var dict = new Dictionary<int, float>(yggdrasilNPC.Count);
-		foreach(var pair in pool)
+		foreach (var pair in pool)
 		{
-			if(yggdrasilNPC.Contains(pair.Key))
+			if (yggdrasilNPC.Contains(pair.Key))
 			{
 				dict.Add(pair.Key, pair.Value);
 			}
 		}
 		pool.Clear();
-		foreach(var pair in dict)
+		foreach (var pair in dict)
 		{
 			pool.Add(pair.Key, pair.Value);
+
 		}
+		pool.Add(NPCID.BlueSlime, 0.1f);
+		pool.Add(NPCID.GreenSlime, 0.1f);
+		pool.Add(NPCID.RedSlime, 0.1f);
+		pool.Add(NPCID.PurpleSlime, 0.1f);
+		pool.Add(NPCID.YellowSlime, 0.1f);
+		pool.Add(NPCID.BlackSlime, 0.1f);
+		pool.Add(NPCID.GoldenSlime, 0.1f);
+		pool.Add(NPCID.MotherSlime, 0.1f);
+		pool.Add(NPCID.Pinky, 0.1f);
+		if (Main.halloween)
+		{
+			pool.Add(NPCID.Pinky, 0.1f);
+		}
+		if (Main.xMas)
+		{
+			pool.Add(NPCID.SlimeRibbonWhite, 0.1f);
+			pool.Add(NPCID.SlimeRibbonYellow, 0.1f);
+			pool.Add(NPCID.SlimeRibbonRed, 0.1f);
+			pool.Add(NPCID.SlimeRibbonGreen, 0.1f);
+		}
+		if (Main.hardMode)
+		{
+			pool.Add(NPCID.ToxicSludge, 0.1f);
+			if (Main.halloween)
+			{
+				pool.Add(NPCID.HoppinJack, 0.1f);
+			}
+		}
+
+
+
 	}
 	public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
 	{
