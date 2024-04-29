@@ -161,7 +161,11 @@ public class Rope
 				+ new Vector2(0, gravity * m.Mass);
 		}
 	}
-
+	public void ApplyForceSpecial(int index,Vector2 force)
+	{
+		ref _Mass m = ref m_masses[index];
+		m.Force += force;
+	}
 	public void ClearForce()
 	{
 		//for (int i = 0; i < m_masses.Length; i++)
@@ -173,7 +177,6 @@ public class Rope
 
 	public void Update(float deltaTime)
 	{
-		ApplyForce();
 		for (int i = 0; i < m_masses.Length; i++)
 		{
 			ref _Mass m = ref m_masses[i];
@@ -287,7 +290,7 @@ public class Rope
 
 				if (minTimeToCollision < 1)
 				{
-					Terraria.Main.NewText(minTimeToCollision);
+					//Terraria.Main.NewText(minTimeToCollision);
 					minTimeToCollision *= 0.9f;
 
 					Vector2 contVA = Av * (1 - minTimeToCollision);
@@ -359,6 +362,40 @@ public class Rope
 				Mass = mass,
 				Position = positions[i],
 				IsStatic = (i == positions.Count - 1)
+			};
+		}
+
+		for (int i = 0; i < positions.Count - 1; i++)
+		{
+			m_springs[i] = new _Spring
+			{
+				Elasticity = elasticity,
+				RestLength = (positions[i] - positions[i + 1]).Length(),
+				A = i,
+				B = i + 1
+			};
+		}
+	}
+	/// <summary>
+	/// 自动生成一串由两端位置决定的绳子链,且两端固定
+	/// </summary>
+	/// <param name="positions"></param>
+	public Rope(Vector2 start, Vector2 end, int count, float elasticity, float mass, RenderingTransformFunction renderingTransform, bool hasCollision = false)
+	{
+		List<Vector2> positions = new List<Vector2>();
+		for (int t = 0; t <= count; t++)
+		{
+			positions.Add(Vector2.Lerp(start, end, t / (float)count));
+		}
+		InitRopes(positions.Count, elasticity, renderingTransform, hasCollision);
+
+		for (int i = 0; i < positions.Count; i++)
+		{
+			m_masses[i] = new _Mass
+			{
+				Mass = mass,
+				Position = positions[i],
+				IsStatic = (i == positions.Count - 1) || (i == 0)
 			};
 		}
 
