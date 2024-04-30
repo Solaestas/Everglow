@@ -48,7 +48,6 @@ public class Rope
 			this.B = 0;
 		}
 	}
-
 	private _Mass[] m_masses;
 	private _Spring[] m_springs;
 	private Vector2[] m_dummyPos;
@@ -58,7 +57,6 @@ public class Rope
 	private float m_damping;
 	private float m_elasticity;
 	private bool m_hasCollision;
-
 	public _Mass[] GetMassList
 	{
 		get
@@ -73,7 +71,6 @@ public class Rope
 			return m_springs;
 		}
 	}
-
 	public RenderingTransformFunction RenderingTransform
 	{
 		get
@@ -81,8 +78,6 @@ public class Rope
 			return m_renderingTransform;
 		}
 	}
-
-
 	private float CrossProduct2D(Vector2 a, Vector2 b)
 	{
 		return a.X * b.Y - a.Y * b.X;
@@ -107,13 +102,11 @@ public class Rope
 		}
 		return clone;
 	}
-
 	private Rope()
 	{
 		m_damping = 0.99f;
 		m_hasCollision = false;
 	}
-
 	private Vector2 G_prime(int A, int B, float elasticity, float restLength)
 	{
 		var offset = m_dummyPos[A] - m_dummyPos[B];
@@ -122,7 +115,6 @@ public class Rope
 
 		return -elasticity * (length - restLength) * unit;
 	}
-
 	private Matrix<float> G_Hessian(float dt, int A, int B, float elasticity, float restLength)
 	{
 		ref _Mass mA = ref m_masses[A];
@@ -137,7 +129,6 @@ public class Rope
 		var term2 = (Matrix<float>.Build.DenseIdentity(2) - span / length2) * elasticity * (1 - restLength / length);
 		return Matrix<float>.Build.DenseIdentity(2) * mA.Mass / (dt * dt) + term1 + term2;
 	}
-
 	private Vector2 CheckCollision(int i, Vector2 oldPos, Vector2 newPos)
 	{
 		ref _Mass m = ref m_masses[i];
@@ -149,7 +140,6 @@ public class Rope
 		}
 		return newPos;
 	}
-
 	public void ApplyForce()
 	{
 		float gravity = 9;
@@ -174,7 +164,6 @@ public class Rope
 
 		//}
 	}
-
 	public void Update(float deltaTime)
 	{
 		for (int i = 0; i < m_masses.Length; i++)
@@ -333,7 +322,6 @@ public class Rope
 			m.Velocity += (m.Position - x_hat) / deltaTime;
 		}
 	}
-
 	private void InitRopes(int count, float elasticity, RenderingTransformFunction renderingTransform, bool hasCollision)
 	{
 		m_masses = new _Mass[count];
@@ -346,7 +334,6 @@ public class Rope
 		m_renderingTransform = renderingTransform;
 		m_hasCollision = hasCollision;
 	}
-
 	/// <summary>
 	/// 自动生成一串由位置决定的绳子链
 	/// </summary>
@@ -380,7 +367,7 @@ public class Rope
 	/// 自动生成一串由两端位置决定的绳子链,且两端固定
 	/// </summary>
 	/// <param name="positions"></param>
-	public Rope(Vector2 start, Vector2 end, int count, float elasticity, float mass, RenderingTransformFunction renderingTransform, bool hasCollision = false)
+	public Rope(Vector2 start, Vector2 end, int count, float elasticity, float mass, RenderingTransformFunction renderingTransform, bool hasCollision = false, int knotDistance = 0, float knotMass = 1)
 	{
 		List<Vector2> positions = new List<Vector2>();
 		for (int t = 0; t <= count; t++)
@@ -391,9 +378,17 @@ public class Rope
 
 		for (int i = 0; i < positions.Count; i++)
 		{
+			float specialMass = mass;
+			if(knotDistance > 0)
+			{
+				if(i % knotDistance == knotDistance / 2)
+				{
+					specialMass = knotMass;
+				}
+			}
 			m_masses[i] = new _Mass
 			{
-				Mass = mass,
+				Mass = specialMass,
 				Position = positions[i],
 				IsStatic = (i == positions.Count - 1) || (i == 0)
 			};
@@ -410,7 +405,6 @@ public class Rope
 			};
 		}
 	}
-
 	/// <summary>
 	/// 自动生成一串给定长度的绳子系统，质量和大小随机
 	/// </summary>
