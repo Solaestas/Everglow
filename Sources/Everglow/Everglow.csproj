@@ -12,7 +12,11 @@
 	</ItemGroup>
 	<Target Name="ReadResource"
 			BeforeTargets="Build">
-		<ReadResource Lists="@(ModuleReference->'$(EverglowIntermediateOutput)%(Filename).resource')">
+		<ItemGroup>
+			<Lists Include="@(ModuleReference->'$(EverglowIntermediateOutput)%(Filename).resource')"/>
+			<Lists Include="$(EverglowIntermediateOutput)Commons.resource" />
+		</ItemGroup>
+		<ReadResource Lists="@(Lists)">
 			<Output TaskParameter="Resources"
 					ItemName="AdditionalFiles" />
 		</ReadResource>

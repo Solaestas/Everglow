@@ -11,9 +11,10 @@
     <EnableModBuilder>false</EnableModBuilder>
     <EnablePathGenerator>true</EnablePathGenerator>
     <ProcessResource>true</ProcessResource>
+    <NotCopyLocal>true</NotCopyLocal>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.5" />
+    <PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.5.2" />
     <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,5 +23,6 @@
     <Publicize Include="MonoMod.RuntimeDetour" />
     <Publicize Include="MonoMod.Utils" />
     <AdditionalFiles Include="**\*.obj;**\*.bmp;**\*.mapio" Pack="true" ModPath="%(Identity)" Exclude="bin\**\*;obj\**\*" />
+    <AdditionalFiles Include="$(MSBuildThisFileFullPath)" Pack="false" ModPath="" Visible="false" />
   </ItemGroup>
 </Project>

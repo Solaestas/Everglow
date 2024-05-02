@@ -29,12 +29,12 @@ public class WriteResource : Task
 				if(Prefix == "Commons")
 				{
 					var location = Path.Combine("..", "Everglow.Function", item.ItemSpec);
-					list.Add((location, $"{Prefix}\\{path}"));
+					list.Add((location, path));
 				}
 				else
 				{
 					var location = Path.Combine("..", "Modules", Prefix, item.ItemSpec);
-					list.Add((location, $"{Prefix}\\{path}"));
+					list.Add((location, path));
 				}
 			}
 		}
