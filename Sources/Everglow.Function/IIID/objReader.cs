@@ -1,145 +1,98 @@
-namespace Everglow.Commons.IIID
+namespace Everglow.Commons.IIID;
+
+public static class ObjReader
 {
-	public class ObjReader
+	/// <summary>
+	/// Find the index of the first occurrence of a character in a string.<br/>
+	/// return the length of the string if the character is not found.
+	/// </summary>
+	/// <param name="str"></param>
+	/// <param name="c"></param>
+	/// <returns></returns>
+	private static int OfIndex(this ReadOnlySpan<char> str, char c)
 	{
-		public struct Face
+		int i = 0;
+		for (; i < str.Length; i++)
 		{
-			public int TextureType = new int();
-			public List<int> Positions = new List<int>();
-			public List<int> TextureCoords = new List<int>();
-			public List<int> Normals = new List<int>();
-
-			public Face()
+			if (str[i] == c)
 			{
+				return i;
 			}
 		}
-		public class Model
+		return i;
+	}
+
+	private static T ParseNext<T>(ref ReadOnlySpan<char> text)
+		where T : ISpanParsable<T>
+	{
+		int index = text.OfIndex(' ');
+		T result = T.Parse(text[..index], null);
+		text = index == text.Length ? default : text[(index + 1)..];
+		return result;
+	}
+
+	public static Model Load(Stream stream)
+	{
+		Model mesh = new Model();
+		using StreamReader objReader = new StreamReader(stream);
+		mesh.Positions.Add(Vector3.Zero);
+		mesh.TexCoords.Add(Vector2.Zero);
+		mesh.Normals.Add(Vector3.Zero);
+		while (objReader.ReadLine() is string text)
 		{
-			public List<Vector3> positions = new List<Vector3>();//V:代表顶点。格式为V X Y Z&#xff0c;V后面的X Y Z表示三个顶点坐标。浮点型
-			public List<Vector2> texCoords = new List<Vector2>();//表示纹理坐标。格式为VT TU TV。浮点型
-			public List<Vector3> normals = new List<Vector3>();//VN:法向量。每个三角形的三个顶点都要指定一个法向量。格式为VN NX NY NZ。浮点型
-			public List<Face> faces = new List<Face>();//F:面。面后面跟着的整型值分别是属于这个面的顶点、纹理坐标、法向量的索引。
-													   //面的格式为:f Vertex1/Texture1/Normal1 Vertex2/Texture2/Normal2 Vertex3/Texture3/Normal3
-		}
-		public static Model LoadFile(string fileName)
-		{
-			Model mesh = new Model();
-			var bytes = ModContent.GetFileBytes(fileName);
-			using (StreamReader objReader = new StreamReader(new MemoryStream(bytes)))
+			if (text.Length < 2)
 			{
-				mesh.positions.Add(Vector3.Zero);
-				mesh.texCoords.Add(Vector2.Zero);
-				mesh.normals.Add(Vector3.Zero);
-				int s = 0;
-				int Texturetype = 0;
-				bool newModel = false;
-				bool hasPos = false, hasTex = false, hasNormal = false;
-				while (objReader.Peek() != -1)
+				continue;
+			}
+			var span = text.AsSpan();
+			int index = span.OfIndex(' ');
+			var leader = span[..index];
+			if (leader[0] == 'v')
+			{
+				var content = span[(index + 1)..];
+				if (leader.Length == 1)
 				{
-					s++;
-					string text = objReader.ReadLine();
-					if (text.Length < 2)
-					{
-						continue;
-					}
-					string[] tempArray;
-					if (text.IndexOf("usemtl") == 0)
-					{
-						Texturetype++;
-						continue;
-					}
-					else if (text.IndexOf("v") == 0)
-					{
-						if (!newModel)
-						{
-							hasPos = hasTex = hasNormal = false;
-							newModel = true;
-						}
-						if (text.IndexOf("t") == 1)//vt 0.581151 0.979929 纹理
-						{
-							hasTex = true;
-							tempArray = text.Split(' ');
-							mesh.texCoords.Add(new Vector2(float.Parse(tempArray[1]), float.Parse(tempArray[2])));
-						}
-						else if (text.IndexOf("n") == 1)//vn 0.637005 -0.0421857 0.769705 法向量
-						{
-							hasNormal = true;
-							tempArray = text.Split(new char[] { '/', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-							if (tempArray[3] != "\\")
-							{
-								mesh.normals.Add(new Vector3(float.Parse(tempArray[1]), float.Parse(tempArray[2]), float.Parse(tempArray[3])));
-							}
-							else
-							{
-								text = objReader.ReadLine();
-								mesh.normals.Add(new Vector3(float.Parse(tempArray[1]), float.Parse(tempArray[2]), float.Parse(text)));
-							}
-						}
-						else
-						{//v -53.0413 158.84 -135.806 点
-							hasPos = true;
-							tempArray = text.Split(' ');
-							mesh.positions.Add(new Vector3(float.Parse(tempArray[1]), float.Parse(tempArray[2]), float.Parse(tempArray[3])));
-						}
-					}
-					else if (text.IndexOf("f") == 0)
-					{
-						newModel = false;
-						//f 2443//2656 2442//2656 2444//2656 面
-						var componentArray = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-						// componentArray[0] 是 f
-						// componentArray[1 ~ n] 是组成顶点的信息列表
-						Face face = new Face();
-
-						// 只允许读取三角网格，多边形网格请先三角化
-						Debug.Assert(componentArray.Length == 4, "We only support triangle meshes");
-						for (int i = 1; i < componentArray.Length; i++)
-						{
-							var components = componentArray[i].Split('/');
-
-							if (int.TryParse(components[0], out int idPos))
-							{
-								face.Positions.Add(idPos);
-							}
-
-							if (int.TryParse(components[1], out int idTex))
-							{
-								face.TextureCoords.Add(idTex);
-							}
-
-							if (int.TryParse(components[2], out int idNormal))
-							{
-								face.Normals.Add(idNormal);
-							}
-						}
-						face.TextureType = Texturetype;
-						// Debug.Assert(face.Positions.Count == 3 && face.Normals.Count == 3, "We only support triangle meshes");
-
-						//int k = 1;
-						//for (int i = 0; i < 3; i++)
-						//{
-						//    if (hasPos)
-						//    {
-						//        face.V[i] = int.Parse(tempArray[k]) - 1;
-						//        k++;
-						//    }
-						//    if (hasTex)
-						//    {
-						//        face.T[i] = int.Parse(tempArray[k]) - 1;
-						//        k++;
-						//    }
-						//    if (hasNormal)
-						//    {
-						//        face.N[i] = int.Parse(tempArray[k]) - 1;
-						//        k++;
-						//    }
-						//}
-						mesh.faces.Add(face);
-					}
+					// v -53.0413 158.84 -135.806 点
+					mesh.Positions.Add(new Vector3(
+						ParseNext<float>(ref content),
+						ParseNext<float>(ref content),
+						ParseNext<float>(ref content)));
 				}
+				else if (leader[1] == 't')
+				{
+					// vt 0.581151 0.979929 纹理
+					mesh.TexCoords.Add(new Vector2(
+						ParseNext<float>(ref content),
+						ParseNext<float>(ref content)));
+				}
+				else if (leader[1] == 'n')
+				{
+					// vn 0.637005 -0.0421857 0.769705 法向量
+					mesh.Normals.Add(new Vector3(
+						ParseNext<float>(ref content),
+						ParseNext<float>(ref content),
+						ParseNext<float>(ref content)));
+				}
+				Debug.Assert(content == default);
 			}
-			return mesh;
+			else if (leader[0] == 'f')
+			{
+				// f 2443//2656 2442//2656 2444//2656 面
+				var content = span[(index + 1)..];
+
+				Face face = default;
+				face[0] = ParseNext<Face.Array3<int>>(ref content);
+				face[1] = ParseNext<Face.Array3<int>>(ref content);
+				face[2] = ParseNext<Face.Array3<int>>(ref content);
+				Debug.Assert(content == default);
+				mesh.Faces.Add(face);
+			}
 		}
+		return mesh;
+	}
+
+	public static Model LoadFile(string fileName)
+	{
+		return Load(ModIns.Mod.GetFileStream(fileName));
 	}
 }
