@@ -9,19 +9,21 @@ public class LightbulbBand : CableTile
 {
 	public override void DrawCable(Rope rope, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing, Color color = default)
 	{
-		// 回声涂料	
+		// 回声涂料
 		if (!TileDrawing.IsVisible(Main.tile[pos]))
+		{
 			return;
+		}
 
 		var tile = Main.tile[pos];
 		ushort type = tile.TileType;
 		int paint = Main.tile[pos].TileColor;
-		Texture2D tex = ModAsset.LightbulbBand_bulb.Value;
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.LightbulbBand_bulb_Path, type, 1, paint, tileDrawing);
+		tex ??= ModAsset.LightbulbBand_bulb.Value;
 		var origin = new Vector2(0, 0);
 		var tileSpriteEffect = SpriteEffects.None;
 		for (int i = 0; i < rope.GetMassList.Length - 1; i++)
 		{
-
 			_Mass thisMass = rope.GetMassList[i];
 			_Mass nextMass = rope.GetMassList[i + 1];
 
@@ -29,7 +31,10 @@ public class LightbulbBand : CableTile
 			float pushForcePerFrame = 1.26f;
 			float windCycle = 0;
 			if (tileDrawing.InAPlaceWithWind((int)((thisMass.Position.X - 8) / 16f), (int)((thisMass.Position.Y - 8) / 16f), 1, 1))
+			{
 				windCycle = tileDrawing.GetWindCycle((int)((thisMass.Position.X - 8) / 16f), (int)((thisMass.Position.Y - 8) / 16f), tileDrawing._sunflowerWindCounter);
+			}
+
 			float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex((int)((thisMass.Position.X - 8) / 16f), (int)((thisMass.Position.Y - 8) / 16f), 1, 1, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
 			windCycle += highestWindGridPushComplex;
 			float rotation = -windCycle * 0.4f;
@@ -37,9 +42,10 @@ public class LightbulbBand : CableTile
 			{
 				rope.ApplyForceSpecial(i, new Vector2(windCycle * 1, 4 * thisMass.Mass));
 			}
+
 			// 支持发光涂料
 			Color tileLight;
-			if (color != new Color())
+			if (color != default(Color))
 			{
 				tileLight = color;
 			}
