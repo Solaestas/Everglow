@@ -52,15 +52,18 @@ public class BloodCultistPlayer : ModPlayer
 {
 
 	public bool hasBloodCultistSet;
+	public int BloodTimer=0;
 	public override void ResetEffects()
 	{
 		hasBloodCultistSet = false;
-	}
 
+	}
 	public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
 	{
+		
 		if (hit.DamageType == DamageClass.Magic && hasBloodCultistSet)
 		{
+			BloodTimer = 180;
 			Player.lifeRegen += 1;
 			if (Main.rand.NextBool(20))
 			{
@@ -69,5 +72,12 @@ public class BloodCultistPlayer : ModPlayer
 			}
 		}
 	}
-
+	public override void PostUpdateEquips()
+	{
+		if (BloodTimer >= 0)
+		{
+			BloodTimer--;
+			Player.lifeRegen += 1;
+		}
+	}
 }

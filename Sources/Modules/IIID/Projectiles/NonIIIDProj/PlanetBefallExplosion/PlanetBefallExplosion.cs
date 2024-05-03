@@ -187,7 +187,7 @@ public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 	}
 	public override void PostDraw(Color lightColor)
 	{
-		Texture2D shadow = Myth.ModAsset.CursedHitLight.Value;
+		Texture2D shadow = ModAsset.CursedHitLight.Value;
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50, 0);
 		Color c = new Color(1f * MathF.Sqrt(1 - timeValue), 1f * (1 - timeValue) * (1 - timeValue), 0.1f * (1 - timeValue), 0f);
@@ -198,7 +198,7 @@ public class PlanetBefallExplosion : ModProjectile//, IWarpProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D shadow = Myth.ModAsset.CursedHit.Value;
+		Texture2D shadow = ModAsset.CursedHit.Value;
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 25, 0);
 		Color c = new Color(1f * MathF.Sqrt(1 - timeValue), 1f * (1 - timeValue) * (1 - timeValue), 0.1f * (1 - timeValue), 0f);

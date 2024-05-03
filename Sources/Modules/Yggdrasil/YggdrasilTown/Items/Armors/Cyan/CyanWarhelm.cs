@@ -27,16 +27,17 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Cyan
 		}
 		public override bool IsArmorSet(Item head, Item body, Item legs)
 		{
-            return body.type == ModContent.ItemType<CyanBreastplate>() && legs.type == ModContent.ItemType<CyanLeggings>();
-        }
-        public override void UpdateArmorSet(Player player)
+			return body.type == ModContent.ItemType<CyanBreastplate>() && legs.type == ModContent.ItemType<CyanLeggings>();
+		}
+		public override void UpdateArmorSet(Player player)
 		{
-			player.GetDamage(DamageClass.Melee) += 0.01f;
+			CyanWarhelmPlayer CyanWarhelmPlayer = player.GetModPlayer<CyanWarhelmPlayer>();
+			CyanWarhelmPlayer.hasCyanWarhelmSet = true;
 			player.GetArmorPenetration(DamageClass.Melee) += 5;
 		}
 		public override void UpdateEquip(Player player)
 		{
-            player.GetDamage(DamageClass.Melee) += 0.04f;
+			player.GetDamage(DamageClass.Melee) += 0.04f;
 			player.GetCritChance(DamageClass.Melee) += 4;
 		}
 		public override void AddRecipes()
@@ -47,4 +48,24 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Cyan
 			recipe.Register();
 		}
 	}
+}
+public class CyanWarhelmPlayer : ModPlayer
+{
+
+	public bool hasCyanWarhelmSet;
+
+	public override void ResetEffects()
+	{
+		hasCyanWarhelmSet = false;
+
+	}
+	public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
+	{
+
+		if (hit.DamageType == DamageClass.Melee && hasCyanWarhelmSet)
+		{
+			Player.GetDamage(DamageClass.Melee).Flat += 1;
+		}
+	}
+
 }
