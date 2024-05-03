@@ -1,5 +1,7 @@
+using System.ComponentModel;
 using Everglow.Commons.Physics;
 using Microsoft.Xna.Framework.Input;
+using Terraria;
 using Terraria.GameContent.Drawing;
 using Terraria.GameInput;
 using Terraria.ModLoader.IO;
@@ -400,29 +402,28 @@ public class CableEneity : ModTileEntity
 	}
 
 	/// <summary>
-	/// 种类 头尾
+	/// 种类 列表 收XY放XY
 	/// </summary>
-	public Dictionary<int, List<(int, int, int, int)>> RopesOfAllThisTileInTheWorld = new Dictionary<int, List<(int, int, int, int)>>();
+	public Dictionary<string, List<(int, int, int, int)>> RopesOfAllThisTileInTheWorld = new Dictionary<string, List<(int, int, int, int)>>();
 
 	public override void SaveData(TagCompound tag)
 	{
-		// using MemoryStream stream = new MemoryStream();
-		// using BinaryWriter writer = new BinaryWriter(stream);
-		// var components = ((ModTileEntity)this).GetComponents();
-		// writer.Write(components.Count);
-		// foreach (var component in components)
-		// {
-		// writer.Write(component.GetType().FullName);
-		// if (component is IBinarySupport binary)
-		// {
-		// binary.WriteToBinary(writer);
-		// }
-		// }
-		// tag.Add("Loita:Components", stream.GetBuffer());
-		// base.SaveData(item, tag);
+		using MemoryStream stream = new MemoryStream();
+		using BinaryWriter writer = new BinaryWriter(stream);
+		tag.Add("CableTiles_Rope", stream.GetBuffer());
+		base.SaveData(tag);
 	}
 
-	public override void LoadData(TagCompound tag) => base.LoadData(tag);
+	public override void LoadData(TagCompound tag)
+	{
+		base.LoadData(tag);
+		if (tag.TryGet<byte[]>("CableTiles_Rope", out var bytes))
+		{
+			using MemoryStream stream = new MemoryStream(bytes);
+			using BinaryReader reader = new BinaryReader(stream);
+			int count = reader.ReadInt32();
+		}
+	}
 }
 
 
