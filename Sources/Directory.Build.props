@@ -14,7 +14,7 @@
     <NotCopyLocal>true</NotCopyLocal>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.5.2" />
+    <PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.5.3" />
     <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
