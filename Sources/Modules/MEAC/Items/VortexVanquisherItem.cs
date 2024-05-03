@@ -1,7 +1,6 @@
 using Everglow.IIID.Projectiles.PlanetBefall;
 using Everglow.MEAC.NonTrueMeleeProj;
 using Everglow.MEAC.Projectiles;
-using Everglow.Myth.TheFirefly.Items;
 using ReLogic.Graphics;
 using Terraria.GameContent;
 
