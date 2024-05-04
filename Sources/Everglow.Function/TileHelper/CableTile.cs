@@ -1,10 +1,12 @@
-using System.ComponentModel;
+using Everglow.Commons.Enums;
 using Everglow.Commons.Physics;
-using Microsoft.Xna.Framework.Input;
-using Terraria;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using Everglow.Commons.VFX.Pipelines;
+using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
-using Terraria.GameInput;
 using Terraria.ModLoader.IO;
+using Terraria.ObjectData;
 using static Everglow.Commons.Physics.Rope;
 
 namespace Everglow.Commons.TileHelper;
@@ -18,6 +20,13 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	{
 		Main.tileFrameImportant[Type] = true;
 		TileID.Sets.BlocksWaterDrawingBehindSelf[Type] = true;
+
+		// MyTileEntity refers to the tile entity mentioned in the previous section
+		TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<CableEneity>().Hook_AfterPlacement, -1, 0, true);
+
+		// This is required so the hook is actually called.
+		TileObjectData.newTile.UsesCustomCanPlace = true;
+
 		AddMapEntry(new Color(151, 31, 32));
 	}
 
@@ -59,6 +68,8 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		if (Main.LocalPlayer.HeldItem.ModItem is CableTileItem)
 		{
 			HasHoldRope.Add(Main.LocalPlayer, new Point(i, j));
+			CableTilePlaceHelpingSystem vfx = new CableTilePlaceHelpingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 1 };
+			Ins.VFXManager.Add(vfx);
 			return base.RightClick(i, j);
 		}
 		RemoveAllRope(i, j);
@@ -68,6 +79,9 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
 	{
 		RemoveAllRope(i, j);
+
+		// ModTileEntity.Kill() handles checking if the tile entity exists and destroying it if it does exist in the world for you
+		// The tile coordinate parameters already refer to the top-left corner of the multitile
 		base.KillTile(i, j, ref fail, ref effectOnly, ref noItem);
 	}
 
@@ -91,6 +105,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 					{
 						RemoveRopeEffect(rope);
 						RopesOfAllThisTileInTheWorld.Remove(point);
+						ModContent.GetInstance<CableEneity>().Kill(point.X, point.Y);
 						break;
 					}
 				}
@@ -111,11 +126,27 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 			RopesOfAllThisTileInTheWorld.TryGetValue(new Point(i, j), out rope);
 			RemoveRopeEffect(rope);
 			RopesOfAllThisTileInTheWorld.Remove(new Point(i, j));
+			ModContent.GetInstance<CableEneity>().Kill(i, j);
 		}
 	}
 
+	/// <summary>
+	/// 靠近时根据TE挂绳
+	/// </summary>
+	/// <param name="i"></param>
+	/// <param name="j"></param>
+	/// <param name="closer"></param>
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
+		if (!RopesOfAllThisTileInTheWorld.ContainsKey(new Point(i, j)))
+		{
+			CableEneity cableEneity;
+			TryGetCableEntityAs<CableEneity>(i, j, out cableEneity);
+			if (cableEneity != null)
+			{
+				AddRope(i, j, ConnectRope(i, j, i + cableEneity.ToTail.X, j + cableEneity.ToTail.Y));
+			}
+		}
 		base.NearbyEffects(i, j, closer);
 	}
 
@@ -161,11 +192,29 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	/// <param name="rope"></param>
 	public virtual void AddRope(int i, int j, Rope rope)
 	{
+		if (rope == null)
+		{
+			return;
+		}
 		if (RopesOfAllThisTileInTheWorld.ContainsKey(new Point(i, j)))
 		{
 			return;
 		}
 		RopesOfAllThisTileInTheWorld.Add(new Point(i, j), rope);
+
+		CableEneity cableEneity;
+		TryGetCableEntityAs<CableEneity>(i, j, out cableEneity);
+		if (cableEneity == null)
+		{
+			TileEntity.PlaceEntityNet(i, j, ModContent.TileEntityType<CableEneity>());
+			TryGetCableEntityAs<CableEneity>(i, j, out cableEneity);
+		}
+		if (cableEneity != null)
+		{
+			Vector2 tail = rope.GetMassList.Last().Position / 16f;
+			Point toTail = tail.ToPoint() - new Point(i, j);
+			cableEneity.ToTail = toTail;
+		}
 	}
 
 	/// <summary>
@@ -205,10 +254,19 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	public virtual Rope ConnectRope(int i, int j, int i2, int j2)
 	{
 		Tile tile = Main.tile[i2, j2];
+
+		// 挂在自己身上报错
+		if (i == i2 && j == j2)
+		{
+			CombatText.NewText(new Rectangle(i * 16, j * 16, 8, 8), Color.Red, "You can't connect rope in a same tile!");
+			return null;
+		}
+
+		// 只有同一种块之间才能连绳
 		if (tile.TileType == Type)
 		{
-			int counts = (int)new Vector2(i2 - i, j2 - j).Length() * 4;
-			Rope rope = new Rope(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i2, j2) * 16 + new Vector2(8), counts, 7, 0.05f, (Vector2) => Vector2.Zero, true, 16, 2);
+			int counts = (int)new Vector2(i2 - i, j2 - j).Length() * 2;
+			Rope rope = new Rope(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i2, j2) * 16 + new Vector2(8), counts, 7, 0.05f, (Vector2) => Vector2.Zero, true, 8, 2);
 			return rope;
 		}
 		return null;
@@ -216,96 +274,12 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		TileFluentDrawManager.AddFluentPoint(this, i, j);
-		if (HasHoldRope.ContainsKey(Main.LocalPlayer))
-		{
-			if (Main.LocalPlayer.HeldItem.ModItem is not CableTileItem)
-			{
-				HasHoldRope.Remove(Main.LocalPlayer);
-				return base.PreDraw(i, j, spriteBatch);
-			}
-			if (Main.mouseRight && Main.mouseRightRelease)
-			{
-				HasHoldRope.Remove(Main.LocalPlayer);
-				return base.PreDraw(i, j, spriteBatch);
-			}
-			if (HasHoldRope[Main.LocalPlayer] == new Point(i, j))
-			{
-				var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-				if (Main.drawToScreen)
-				{
-					zero = Vector2.Zero;
-				}
-				Vector2 vZoom = Main.GameViewMatrix.Zoom;
-				vZoom.Y *= Main.LocalPlayer.gravDir;
-
-				Vector2 ScreenCenter = Main.screenTarget.Size() / 2f + Main.screenPosition; // 世界位置屏幕中心
-				Vector2 CorrectedMouseScreenCenter = (Main.MouseScreen - Main.screenTarget.Size() / 2f) / vZoom; // 鼠标的中心指向位
-				Vector2 CorrectedMouseWorld = CorrectedMouseScreenCenter + ScreenCenter; // 鼠标世界坐标校正
-				Vector2 toTarget = new Vector2(i, j) * 16 + new Vector2(8) - CorrectedMouseWorld;
-				Color drawColor = Color.Lerp(new Color(0.15f, 0.15f, 0.4f, 1f), new Color(0.45f, 0.15f, 0.8f, 1f), MathF.Sin((float)Main.timeForVisualEffects * 0.08f) * 0.5f + 0.5f) * 0.5f;
-				Color lightColor = Lighting.GetColor(i, j);
-				Texture2D pixel = ModAsset.Trail.Value;
-				if (toTarget.Length() > 900)
-				{
-					HasHoldRope.Remove(Main.LocalPlayer);
-				}
-				if (toTarget.Length() > 600)
-				{
-					toTarget = Vector2.Normalize(toTarget) * 600.01f;
-					drawColor = new Color(1f * lightColor.R / 255f, 0, 0, 0.3f);
-					float step0 = toTarget.Length();
-
-					for (int t = 0; t <= step0; t += 8)
-					{
-						float value = t / step0;
-						Vector2 drawPos = Vector2.Lerp(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i, j) * 16 + new Vector2(8) - toTarget, value) - Main.screenPosition + zero;
-						spriteBatch.Draw(pixel, drawPos, new Rectangle(0, 127, 2, 2), drawColor, toTarget.ToRotation(), new Vector2(1), new Vector2(4f, 1f), SpriteEffects.None, 0);
-						if (t == 600)
-						{
-							spriteBatch.Draw(pixel, drawPos, new Rectangle(0, 127, 2, 2), drawColor, 0, new Vector2(1), new Vector2(5f, 5f), SpriteEffects.None, 0);
-						}
-					}
-					return base.PreDraw(i, j, spriteBatch);
-				}
-				int x = (int)(CorrectedMouseWorld.X / 16f);
-				int y = (int)(CorrectedMouseWorld.Y / 16f);
-				if (x > 20 && x < Main.maxTilesX - 20)
-				{
-					if (y > 20 && y < Main.maxTilesY - 20)
-					{
-						int type = Main.tile[x, y].TileType;
-						ModTile modTile0 = TileLoader.GetTile(type);
-						if (modTile0 is CableTile)
-						{
-							Texture2D block = ModAsset.TileBlock.Value;
-							drawColor = new Color(1f * lightColor.R / 255f + 0.4f, 0.4f, 0, 0.3f);
-							if(RopesOfAllThisTileInTheWorld.ContainsKey(new Point(x, y)))
-							{
-								drawColor = new Color(1f * lightColor.R / 255f + 0.4f, 0, 0, 0.5f);
-							}
-							if(i == x && j == y)
-							{
-								drawColor = new Color(1f * lightColor.R / 255f + 0.4f, 0, 0, 0.5f);
-							}
-							spriteBatch.Draw(block, new Vector2(x, y) * 16 + new Vector2(8) - Main.screenPosition + zero, null, drawColor, 0, block.Size() * 0.5f, 1f, SpriteEffects.None, 0);
-						}
-					}
-				}
-				float step = toTarget.Length();
-				for (int t = 0; t <= step; t += 8)
-				{
-					float value = t / step;
-					Vector2 drawPos = Vector2.Lerp(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i, j) * 16 + new Vector2(8) - toTarget, value) - Main.screenPosition + zero;
-					spriteBatch.Draw(pixel, drawPos, new Rectangle(0, 127, 2, 2), drawColor, toTarget.ToRotation(), new Vector2(1), new Vector2(4f, 1f), SpriteEffects.None, 0);
-					if (t == 600)
-					{
-						spriteBatch.Draw(pixel, drawPos, new Rectangle(0, 127, 2, 2), drawColor, 0, new Vector2(1), new Vector2(5f, 5f), SpriteEffects.None, 0);
-					}
-				}
-			}
-		}
 		return base.PreDraw(i, j, spriteBatch);
+	}
+
+	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+	{
+		TileFluentDrawManager.AddFluentPoint(this, i, j);
 	}
 
 	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
@@ -388,269 +362,346 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 			}
 		}
 	}
+
+	/// <summary>
+	/// Try to get the cable entity bound at (<paramref name="i"/>, <paramref name="j"/>).
+	/// </summary>
+	/// <typeparam name="T">The type to get the entity as</typeparam>
+	/// <param name="i">The tile X-coordinate</param>
+	/// <param name="j">The tile Y-coordinate</param>
+	/// <param name="entity">The found <typeparamref name="T"/> instance, if there was one.</param>
+	/// <returns><see langword="true"/> if there was a <typeparamref name="T"/> instance, or <see langword="false"/> if there was no entity present OR the entity was not a <typeparamref name="T"/> instance.</returns>
+	public static bool TryGetCableEntityAs<T>(int i, int j, out T entity)
+		where T : TileEntity
+	{
+		Point16 origin = new Point16(i, j);
+
+		// TileEntity.ByPosition is a Dictionary<Point16, TileEntity> which contains all placed TileEntity instances in the world
+		// TryGetValue is used to both check if the dictionary has the key, origin, and get the value from that key if it's there
+		if (TileEntity.ByPosition.TryGetValue(origin, out TileEntity existing) && existing is T existingAsT)
+		{
+			entity = existingAsT;
+			return true;
+		}
+
+		entity = null;
+		return false;
+	}
+
+	/// <summary>
+	/// 鼠标划过点位
+	/// </summary>
+	public Dictionary<Player, Point> MouseOverPoint = new Dictionary<Player, Point>();
+
+	public override void MouseOver(int i, int j)
+	{
+		if (!MouseOverPoint.ContainsKey(Main.LocalPlayer))
+		{
+			MouseOverPoint.Add(Main.LocalPlayer, new Point(i, j));
+			if (Main.LocalPlayer.HeldItem.ModItem is CableTileItem)
+			{
+				CableTilePlaceHelpingSystem vfx = new CableTilePlaceHelpingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 0 };
+				Ins.VFXManager.Add(vfx);
+			}
+		}
+		else if(MouseOverPoint[Main.LocalPlayer] != new Point(i, j))
+		{
+			MouseOverPoint.Remove(Main.LocalPlayer);
+		}
+	}
 }
 
 public class CableEneity : ModTileEntity
 {
+	public Point ToTail;
+
 	public override bool IsTileValidForEntity(int x, int y)
 	{
-		if (TileLoader.GetTile(Main.tile[x, y].TileType) is CableTile)
+		Tile tile = Main.tile[x, y];
+		if (TileLoader.GetTile(tile.TileType) is CableTile)
 		{
-			return true;
+			return tile.HasTile;
 		}
-		throw new NotImplementedException();
+		return false;
 	}
 
-	/// <summary>
-	/// 种类 列表 收XY放XY
-	/// </summary>
-	public Dictionary<string, List<(int, int, int, int)>> RopesOfAllThisTileInTheWorld = new Dictionary<string, List<(int, int, int, int)>>();
+	public override void OnNetPlace()
+	{
+		if (Main.netMode == NetmodeID.Server)
+		{
+			NetMessage.SendData(MessageID.TileEntitySharing, number: ID, number2: Position.X, number3: Position.Y);
+		}
+	}
+
+	public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
+	{
+		if (Main.netMode == NetmodeID.MultiplayerClient)
+		{
+			// Sync the entire multitile's area.  Modify "width" and "height" to the size of your multitile in tiles
+			int width = 1;
+			int height = 1;
+			NetMessage.SendTileSquare(Main.myPlayer, i, j, width, height);
+
+			// Sync the placement of the tile entity with other clients
+			// The "type" parameter refers to the tile type which placed the tile entity, so "Type" (the type of the tile entity) needs to be used here instead
+			NetMessage.SendData(MessageID.TileEntityPlacement, number: i, number2: j, number3: Type);
+			return -1;
+		}
+
+		// ModTileEntity.Place() handles checking if the entity can be placed, then places it for you
+		int placedEntity = Place(i, j);
+		return placedEntity;
+	}
 
 	public override void SaveData(TagCompound tag)
 	{
-		using MemoryStream stream = new MemoryStream();
-		using BinaryWriter writer = new BinaryWriter(stream);
-		tag.Add("CableTiles_Rope", stream.GetBuffer());
+		tag.Add("CableToTailX", ToTail.X);
+		tag.Add("CableToTailY", ToTail.Y);
 		base.SaveData(tag);
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);
-		if (tag.TryGet<byte[]>("CableTiles_Rope", out var bytes))
-		{
-			using MemoryStream stream = new MemoryStream(bytes);
-			using BinaryReader reader = new BinaryReader(stream);
-			int count = reader.ReadInt32();
-		}
+		tag.TryGet<int>("CableToTailX", out ToTail.X);
+		tag.TryGet<int>("CableToTailY", out ToTail.Y);
 	}
 }
 
+[Pipeline(typeof(WCSPipeline))]
+public class CableTilePlaceHelpingSystem : Visual
+{
+	public override CodeLayer DrawLayer => CodeLayer.PreDrawFilter;
 
-// public class CableEneity : ModTileEntity
-// {
-// public override bool IsTileValidForEntity(int x, int y)
-// {
-// if (TileLoader.GetTile(Main.tile[x, y].TileType) is CableTile)
-// {
-// return true;
-// }
-// throw new NotImplementedException();
-// }
-// public override void LoadData(TagCompound tag)
-// {
-// foreach (ModTile modTile in TileLoader.tiles)
-// {
-// if (modTile is CableTile)
-// {
-// CableTile cableTile = modTile as CableTile;
-// if (cableTile != null)
-// {
-// Dictionary<Point, Point> ropesOfTile;
-// string path = Path.Combine(Main.SavePath, "Mods", "ModDatas", Mod.Name, "RopeDatas");
-// if (!Directory.Exists(path))
-// {
-// return;
-// }
-// string WorldIDName = Main.worldID.ToString() + Main.worldName;
+	public Texture2D Texture;
+	public Point FixPoint;
+	public int Style;
 
-// string readPath = path + "\\Rope" + WorldIDName + cableTile.Name + ".ropeio";
-// Dictionary<Point, Point> ropesCoord = new Dictionary<Point, Point>();
-// tag.GetEnumerator(modTile.Name, List<(int, int)>);
-// if (ropesCoord != new Dictionary<Point, Point>())
-// {
-// foreach (Point point in ropesOfTile.Keys)
-// {
-// Point end = ropesOfTile[point];
-// Rope rope = cableTile.ConnectRope(point.X, point.Y, end.X, end.Y);
-// if (rope != null)
-// {
-// cableTile.AddRope(point.X, point.Y, rope);
-// }
-// }
-// }
-// }
-// }
-// }
-// base.LoadData(tag);
-// }
-// public override void SaveData(TagCompound tag)
-// {
-// foreach (ModTile modTile in TileLoader.tiles)
-// {
-// if (modTile is CableTile)
-// {
-// CableTile cableTile = modTile as CableTile;
-// if (cableTile != null)
-// {
-// string path = Path.Combine(Main.SavePath, "Mods", "ModDatas", Mod.Name, "RopeDatas");
-// if (!Directory.Exists(path))
-// {
-// Directory.CreateDirectory(path);
-// }
-// string WorldIDName = Main.worldID.ToString() + Main.worldName;
+	public override void OnSpawn()
+	{
+		Texture = ModAsset.TileBlock.Value;
+	}
 
-// string writePath = path + "\\Rope" + WorldIDName + cableTile.Name + ".ropeio";
-// // 将 Dictionary 写入Tag
-// Dictionary<Point, Point> ropesCoord = new Dictionary<Point, Point>();
-// foreach (Point point in cableTile.RopesOfAllThisTileInTheWorld.Keys)
-// {
-// Rope rope = cableTile.RopesOfAllThisTileInTheWorld[point];
-// Point end = (rope.GetMassList.Last().Position / 16f).ToPoint();
-// ropesCoord.Add(point, end);
-// }
-// foreach(Point point in ropesCoord.Keys)
-// {
-// tag.Add(modTile.Name + point.ToString(), ropesCoord[point].ToString());
-// }
-// }
-// }
-// }
-// base.SaveData(tag);
-// }
-// public static (int, int) OpenTag(string inputValue)
-// {
-// string cleanedInput = CleanInput(inputValue);
-// if (cleanedInput.Contains(","))
-// {
-// // 用逗号分割字符串
-// string[] parts = cleanedInput.Split(',');
-// // 尝试将分割后的字符串转换成整数
-// if (int.TryParse(parts[0], out int num1) && int.TryParse(parts[1], out int num2))
-// {
-// return (num1, num2);
-// }
-// else
-// {
-// Console.WriteLine("Wrong format string error.");
-// return (-1, -1);
-// }
-// }
-// else
-// {
-// Console.WriteLine("Wrong format string error.");
-// return (-1, -1);
-// }
-// }
-// static string CleanInput(string input)
-// {
-// // 剔除非数字和逗号
-// string cleanedInput = "";
-// foreach (char c in input)
-// {
-// if (char.IsDigit(c) || c == ',')
-// {
-// cleanedInput += c;
-// }
-// }
-// return cleanedInput;
-// }
-// }
+	public override void Update()
+	{
+		int i = FixPoint.X;
+		int j = FixPoint.Y;
+		if (i < 20 || i > Main.maxTilesX - 20)
+		{
+			if (j < 20 || j > Main.maxTilesY - 20)
+			{
+				Active = false;
+				return;
+			}
+		}
+		CableTile cableTile = TileLoader.GetTile(Main.tile[i, j].type) as CableTile;
+		if (cableTile == null)
+		{
+			Active = false;
+			return;
+		}
+		if (Style == 1)
+		{
+			if (!cableTile.HasHoldRope.ContainsKey(Main.LocalPlayer))
+			{
+				Active = false;
+				return;
+			}
+		}
+		if (Style == 0)
+		{
+			if (cableTile.HasHoldRope.ContainsKey(Main.LocalPlayer))
+			{
+				Active = false;
+				if (cableTile.MouseOverPoint.ContainsKey(Main.LocalPlayer))
+				{
+					cableTile.MouseOverPoint.Remove(Main.LocalPlayer);
+				}
+				return;
+			}
+			int x = (int)(Main.MouseWorld.X / 16f);
+			int y = (int)(Main.MouseWorld.Y / 16f);
+			if (x != FixPoint.X || y != FixPoint.Y)
+			{
+				Active = false;
+				if (cableTile.MouseOverPoint.ContainsKey(Main.LocalPlayer))
+				{
+					cableTile.MouseOverPoint.Remove(Main.LocalPlayer);
+				}
+				return;
+			}
+		}
+		base.Update();
+	}
 
-// public class CableSaveWorld : ModSystem
-// {
-// public override void LoadWorldData(TagCompound tag)
-// {
-// foreach (ModTile modTile in TileLoader.tiles)
-// {
-// if (modTile is CableTile)
-// {
-// CableTile cableTile = modTile as CableTile;
-// if (cableTile != null)
-// {
-// Dictionary<Point, Point> ropesOfTile;
-// string path = Path.Combine(Main.SavePath, "Mods", "ModDatas", Mod.Name, "RopeDatas");
-// if (!Directory.Exists(path))
-// {
-// return;
-// }
-// string WorldIDName = Main.worldID.ToString() + Main.worldName;
+	public override void Draw()
+	{
+		int i = FixPoint.X;
+		int j = FixPoint.Y;
+		if (i < 20 || i > Main.maxTilesX - 20)
+		{
+			if (j < 20 || j > Main.maxTilesY - 20)
+			{
+				Active = false;
+				return;
+			}
+		}
+		CableTile cableTile = TileLoader.GetTile(Main.tile[i, j].type) as CableTile;
+		if (cableTile == null)
+		{
+			Active = false;
+			return;
+		}
+		Color drawColor = Color.Lerp(new Color(0.75f, 0.75f, 1f, 0.5f), new Color(0.85f, 0.85f, 0.75f, 0.5f), MathF.Sin((float)Main.timeForVisualEffects * 0.08f) * 0.5f + 0.5f);
+		Ins.Batch.BindTexture<Vertex2D>(Texture);
+		Vector2 fixPos = FixPoint.ToVector2() * 16f;
 
-// string readPath = path + "\\Rope" + WorldIDName + cableTile.Name + ".ropeio";
-// ropesOfTile = DeserializeDictionary(readPath);
-// if (ropesOfTile != null)
-// {
-// foreach (Point point in ropesOfTile.Keys)
-// {
-// Point end = ropesOfTile[point];
-// Rope rope = cableTile.ConnectRope(point.X, point.Y, end.X, end.Y);
-// if (rope != null)
-// {
-// cableTile.AddRope(point.X, point.Y, rope);
-// }
-// }
-// }
-// }
-// }
-// }
-// base.LoadWorldData(tag);
-// }
-// public override void SaveWorldData(TagCompound tag)
-// {
-// foreach (ModTile modTile in TileLoader.tiles)
-// {
-// if (modTile is CableTile)
-// {
-// CableTile cableTile = modTile as CableTile;
-// if (cableTile != null)
-// {
-// string path = Path.Combine(Main.SavePath, "Mods", "ModDatas", Mod.Name, "RopeDatas");
-// if (!Directory.Exists(path))
-// {
-// Directory.CreateDirectory(path);
-// }
-// string WorldIDName = Main.worldID.ToString() + Main.worldName;
+		Player player = Main.LocalPlayer;
 
-// string writePath = path + "\\Rope" + WorldIDName + cableTile.Name + ".ropeio";
-// // 将 Dictionary 写入文件
-// Dictionary<Point, Point> ropesCoord = new Dictionary<Point, Point>();
-// foreach(Point point in cableTile.RopesOfAllThisTileInTheWorld.Keys)
-// {
-// Rope rope = cableTile.RopesOfAllThisTileInTheWorld[point];
-// Point end = (rope.GetMassList.Last().Position / 16f).ToPoint();
-// ropesCoord.Add(point, end);
-// }
-// SerializeDictionary(ropesCoord, writePath);
-// }
-// }
-// }
-// //Save的似乎不加一个占位符就不会被加载
-// tag.Add("", 0);
-// base.SaveWorldData(tag);
-// }
-// // 将 Dictionary 序列化并写入文件
-// public void SerializeDictionary(Dictionary<Point, Point> dictionary, string filename)
-// {
-// try
-// {
-// using (FileStream fs = new FileStream(filename, FileMode.Create))
-// {
-// BinaryFormatter formatter = new BinaryFormatter();
-// formatter.Serialize(fs, dictionary);
-// }
-// Console.WriteLine("Dictionary serialized and saved to file.");
-// }
-// catch (Exception ex)
-// {
-// Console.WriteLine($"An error occurred: {ex.Message}");
-// }
-// }
+		// 类型1 ： 牵线后
+		if (Style == 1)
+		{
+			if (cableTile.HasHoldRope.ContainsKey(player))
+			{
+				if (player.HeldItem.ModItem is not CableTileItem)
+				{
+					cableTile.HasHoldRope.Remove(player);
+					Active = false;
+					return;
+				}
+				if (cableTile.HasHoldRope[player] == new Point(i, j))
+				{
+					// 校正鼠标坐标
+					Vector2 toTarget = new Vector2(i, j) * 16 + new Vector2(8) - Main.MouseWorld;
 
-// // 从文件中反序列化 Dictionary
-// public Dictionary<Point, Point> DeserializeDictionary(string filename)
-// {
-// try
-// {
-// using (FileStream fs = new FileStream(filename, FileMode.Open))
-// {
-// BinaryFormatter formatter = new BinaryFormatter();
-// return (Dictionary<Point, Point>)formatter.Deserialize(fs);
-// }
-// }
-// catch (Exception ex)
-// {
-// Console.WriteLine($"An error occurred: {ex.Message}");
-// return null;
-// }
-// }
-// }
+					// 超过900距离取消选中
+					if (toTarget.Length() > 1500)
+					{
+						cableTile.HasHoldRope.Remove(player);
+						Active = false;
+						return;
+					}
+					if (Main.mouseRight && Main.mouseRightRelease && toTarget.Length() > 8 * MathF.Sqrt(2))
+					{
+						cableTile.HasHoldRope.Remove(player);
+						Active = false;
+						return;
+					}
+
+					int x = (int)(Main.MouseWorld.X / 16f);
+					int y = (int)(Main.MouseWorld.Y / 16f);
+
+					// 超过600距离标红
+					if (new Vector2(i - x, j - y).Length() * 16f > 600)
+					{
+						toTarget = Vector2.Normalize(toTarget) * 600.0001f;
+						drawColor = new Color(1f, 0, 0, 0.3f);
+
+						Vector2 destination = fixPos + new Vector2(8) - toTarget;
+						DrawLine(destination + new Vector2(10, 10), destination - new Vector2(10, 10), 3, drawColor);
+						DrawLine(destination + new Vector2(-10, 10), destination - new Vector2(-10, 10), 3, drawColor);
+					}
+
+					bool canDrawDestination = false;
+
+					// 绘制选中块
+					if (player.IsInTileInteractionRange(x, y, TileReachCheckSettings.Simple))
+					{
+						if (x > 20 && x < Main.maxTilesX - 20)
+						{
+							if (y > 20 && y < Main.maxTilesY - 20)
+							{
+								int type = Main.tile[x, y].TileType;
+								ModTile modTile0 = TileLoader.GetTile(type);
+								if (modTile0 is CableTile)
+								{
+									if (new Vector2(i - x, j - y).Length() * 16f <= 600)
+									{
+										drawColor = new Color(1f, 0.9f, 0, 0.4f);
+
+										// 试图连接到自己标红
+										if (i == x && j == y)
+										{
+											drawColor = new Color(1f, 0, 0, 0.5f);
+										}
+
+										// 已经被占据块标红
+										else if (cableTile.RopesOfAllThisTileInTheWorld.ContainsKey(new Point(x, y)))
+										{
+											drawColor = new Color(1f, 0, 0, 0.5f);
+											Vector2 anotherPoint = cableTile.RopesOfAllThisTileInTheWorld[new Point(x, y)].GetMassList.Last().Position;
+											Vector2 start0 = anotherPoint;
+											Vector2 end0 = fixPos + new Vector2(8) - toTarget;
+
+											Vector2 direction0 = Utils.SafeNormalize(start0 - end0, Vector2.zeroVector) * 16;
+											DrawLine(end0, end0 + direction0.RotatedBy(0.4), 3, drawColor);
+											DrawLine(end0, end0 + direction0.RotatedBy(-0.4), 3, drawColor);
+
+											DrawLine(anotherPoint, fixPos + new Vector2(8) - toTarget, 3, drawColor);
+											DrawBlockBound((int)((anotherPoint.X - 8) / 16f), (int)((anotherPoint.Y - 8) / 16f), drawColor);
+										}
+
+										canDrawDestination = true;
+									}
+								}
+							}
+						}
+					}
+
+					// 正常绘制
+					Vector2 start = fixPos + new Vector2(8);
+					Vector2 end = start - toTarget;
+
+					Vector2 direction = Utils.SafeNormalize(start - end, Vector2.zeroVector) * 16;
+					if (new Vector2(i - x, j - y).Length() * 16f <= 600)
+					{
+						DrawLine(end, end + direction.RotatedBy(0.4), 3, drawColor);
+						DrawLine(end, end + direction.RotatedBy(-0.4), 3, drawColor);
+					}
+
+					DrawLine(start, end, 3, drawColor);
+					if (canDrawDestination)
+					{
+						// 绘制
+						DrawBlockBound(x, y, drawColor);
+					}
+				}
+			}
+		}
+		DrawBlockBound(FixPoint.X, FixPoint.Y, drawColor);
+	}
+
+	public void DrawBlockBound(int i, int j, Color color)
+	{
+		Vector2 pos = new Vector2(i, j) * 16;
+		List<Vertex2D> bars = new List<Vertex2D>()
+		{
+			new Vertex2D(pos, color, new Vector3(0, 0, 0)),
+			new Vertex2D(pos + new Vector2(16, 0), color, new Vector3(1, 0, 0)),
+			new Vertex2D(pos + new Vector2(0, 16), color, new Vector3(0, 1, 0)),
+
+			new Vertex2D(pos + new Vector2(0, 16), color, new Vector3(0, 1, 0)),
+			new Vertex2D(pos + new Vector2(16, 0), color, new Vector3(1, 0, 0)),
+			new Vertex2D(pos + new Vector2(16), color, new Vector3(1, 1, 0)),
+		};
+
+		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+	}
+
+	public void DrawLine(Vector2 pos1, Vector2 pos2, float width, Color color)
+	{
+		Vector2 normal = Utils.SafeNormalize(pos1 - pos2, Vector2.zeroVector).RotatedBy(MathHelper.PiOver2) * width / 2f;
+		List<Vertex2D> bars = new List<Vertex2D>()
+		{
+			new Vertex2D(pos1 + normal, color, new Vector3(0, 0, 0)),
+			new Vertex2D(pos2 + normal, color, new Vector3(0.1f, 0, 0)),
+			new Vertex2D(pos1 - normal, color, new Vector3(0, 1, 0)),
+
+			new Vertex2D(pos1 - normal, color, new Vector3(0, 1, 0)),
+			new Vertex2D(pos2 + normal, color, new Vector3(0.1f, 0, 0)),
+			new Vertex2D(pos2 - normal, color, new Vector3(0.1f, 1, 0)),
+		};
+
+		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+	}
+}
