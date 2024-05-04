@@ -11,8 +11,9 @@
 		<ResourceList>$(EverglowIntermediateOutput)$(PathPrefix).resource</ResourceList>
 	</PropertyGroup>
 	<ItemGroup Condition="$(PathPrefix) != ''">
-		<UpToDateCheckInput Include="@(AdditionalFiles)" Kind="List"/>
-		<UpToDateCheckOutput Include="$(ResourceList)" Kind="List"/>
+		<!--FUTDC时AdditionalFiles里面还会包含其他临时文件-->
+		<UpToDateCheckInput Include="@(AdditionalFiles)" Set="List"/>
+		<UpToDateCheckOutput Include="$(ResourceList)" Set="List"/>
 	</ItemGroup>
 	<Target Name="WriteResource"
 			Condition="$(PathPrefix) != ''"
