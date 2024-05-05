@@ -50,6 +50,11 @@ Tiles: {
 	GlowWoodTable.MapEntry: Glow Wood Table
 	GlowWoodTorch.MapEntry: Glow Wood Torch
 	GlowWoodWorkBench.MapEntry: Glow Wood Work Bench
+	BoneAndPlatform_tile.MapEntry: Bone And Platform_tile
+	LampWoodCandelabra.MapEntry: Lamp Wood Candelabra
+	LampWoodCandle.MapEntry: Lamp Wood Candle
+	LampWoodChandelier.MapEntry: Lamp Wood Chandelier
+	LampWoodPlatform.MapEntry: Lamp Wood Platform
 	CyanVineBar.MapEntry: Cyan Vine Bar
 	CyanVineOreTile.MapEntry: Cyan Vine Ore Tile
 	CyanVineStone.MapEntry: Cyan Vine Stone
@@ -72,14 +77,19 @@ Biomes: {
 		TownNPCDialogueName: the Firefly Biome
 	}
 
-	YggdrasilTownBiome: {
-		DisplayName: Yggdrasil Town Biome
-		TownNPCDialogueName: the Yggdrasil Town Biome
-	}
-
 	KelpCurtainBiome: {
 		DisplayName: Kelp Curtain Biome
 		TownNPCDialogueName: the Kelp Curtain Biome
+	}
+
+	HurricaneMazeBiome: {
+		DisplayName: Hurricane Maze Biome
+		TownNPCDialogueName: the Hurricane Maze Biome
+	}
+
+	YggdrasilTownBiome: {
+		DisplayName: Yggdrasil Town Biome
+		TownNPCDialogueName: the Yggdrasil Town Biome
 	}
 }
 
@@ -816,6 +826,11 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.WaterBoltII.Description
 	}
 
+	LichenInfected: {
+		DisplayName: Lichen Infected
+		Description: Mods.Everglow.Buffs.LichenInfected.Description
+	}
+
 	DeathFlame: {
 		DisplayName: Death Flame
 		Description: Mods.Everglow.Buffs.DeathFlame.Description
@@ -828,13 +843,78 @@ Items: {
 		Tooltip: ""
 	}
 
+	ChinesePartitionLamp: {
+		DisplayName: Chinese Partition Lamp
+		Tooltip: ""
+	}
+
+	ChineseStyleFloorLamp: {
+		DisplayName: Chinese Style Floor Lamp
+		Tooltip: ""
+	}
+
+	DoubleArmsChineseStreetLamp: {
+		DisplayName: Double Arms Chinese Street Lamp
+		Tooltip: ""
+	}
+
+	GiantBell: {
+		DisplayName: Giant Bell
+		Tooltip: ""
+	}
+
+	GiantCampFire: {
+		DisplayName: Giant Camp Fire
+		Tooltip: ""
+	}
+
+	HangingSkyLantern: {
+		DisplayName: Hanging Sky Lantern
+		Tooltip: ""
+	}
+
+	HexagonalCeilingLamp: {
+		DisplayName: Hexagonal Ceiling Lamp
+		Tooltip: ""
+	}
+
+	PierWithSlabs: {
+		DisplayName: Pier With Slabs
+		Tooltip: ""
+	}
+
+	PierWithSlabsTop: {
+		DisplayName: Pier With Slabs Top
+		Tooltip: ""
+	}
+
 	PlumBlossomInABowl: {
 		DisplayName: Plum Blossom In A Bowl
 		Tooltip: ""
 	}
 
+	SideHangingLantern_Red: {
+		DisplayName: Side Hanging Lantern_ Red
+		Tooltip: ""
+	}
+
+	SideHangingLantern_White: {
+		DisplayName: Side Hanging Lantern_ White
+		Tooltip: ""
+	}
+
+	StreetLantern: {
+		DisplayName: Street Lantern
+		Tooltip: ""
+	}
+
 	WhiteLotusBonsai: {
 		DisplayName: White Lotus Bonsai
+		Tooltip: ""
+	}
+
+	YellowDynastyShingles: {
+		DisplayName: Yellow Dynasty Shingles
 		Tooltip: ""
 	}
 
@@ -1878,6 +1958,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	DarkFlower: {
+		DisplayName: Dark Flower
+		Tooltip: ""
+	}
+
 	FeatherMagic: {
 		DisplayName: Feather Magic
 		Tooltip: ""
@@ -2108,8 +2193,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	MithrilClub: {
-		DisplayName: Mithril Club
+	MythrilClub: {
+		DisplayName: Mythril Club
 		Tooltip: ""
 	}
 
@@ -2613,118 +2698,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	TreePlacer: {
-		DisplayName: Tree Placer
-		Tooltip: ""
-	}
-
-	TwilightWood: {
-		DisplayName: Twilight Wood
-		Tooltip: ""
-	}
-
 	YggdrasilImpression: {
 		DisplayName: Yggdrasil Impression
-		Tooltip: ""
-	}
-
-	ChinesePartitionLamp: {
-		DisplayName: Chinese Partition Lamp
-		Tooltip: ""
-	}
-
-	ChineseStyleFloorLamp: {
-		DisplayName: Chinese Style Floor Lamp
-		Tooltip: ""
-	}
-
-	CyanVineBar: {
-		DisplayName: Cyan Vine Bar
-		Tooltip: ""
-	}
-
-	CyanVineOre: {
-		DisplayName: Cyan Vine Ore
-		Tooltip: ""
-	}
-
-	DoubleArmsChineseStreetLamp: {
-		DisplayName: Double Arms Chinese Street Lamp
-		Tooltip: ""
-	}
-
-	HangingSkyLantern: {
-		DisplayName: Hanging Sky Lantern
-		Tooltip: ""
-	}
-
-	HexagonalCeilingLamp: {
-		DisplayName: Hexagonal Ceiling Lamp
-		Tooltip: ""
-	}
-
-	ShoreMud: {
-		DisplayName: Shore Mud
-		Tooltip: ""
-	}
-
-	SideHangingLantern: {
-		DisplayName: Side Hanging Lantern
-		Tooltip: ""
-	}
-
-	SideHangingLantern_White: {
-		DisplayName: Side Hanging Lantern_ White
-		Tooltip: ""
-	}
-
-	StoneDragonScaleWood: {
-		DisplayName: Stone Dragon Scale Wood
-		Tooltip: ""
-	}
-
-	StoneDragonScaleWoodWall: {
-		DisplayName: Stone Dragon Scale Wood Wall
-		Tooltip: ""
-	}
-
-	StreetLantern: {
-		DisplayName: Street Lantern
-		Tooltip: ""
-	}
-
-	YellowDynastyShingles: {
-		DisplayName: Yellow Dynasty Shingles
-		Tooltip: ""
-	}
-
-	YggdrasilAmber: {
-		DisplayName: Yggdrasil Amber
-		Tooltip: ""
-	}
-
-	CyanVineAxe: {
-		DisplayName: Cyan Vine Axe
-		Tooltip: ""
-	}
-
-	CyanVineHammer: {
-		DisplayName: Cyan Vine Hammer
-		Tooltip: ""
-	}
-
-	CyanVinePickaxe: {
-		DisplayName: Cyan Vine Pickaxe
-		Tooltip: ""
-	}
-
-	CyanVineSword: {
-		DisplayName: Cyan Vine Sword
-		Tooltip: ""
-	}
-
-	CyanVineThrowingSpear: {
-		DisplayName: Cyan Vine Throwing Spear
 		Tooltip: ""
 	}
 
@@ -2738,13 +2713,43 @@ Items: {
 		Tooltip: ""
 	}
 
+	KelpMoss_largeCreate: {
+		DisplayName: Kelp Moss_large Create
+		Tooltip: ""
+	}
+
+	MossProneSandSoil: {
+		DisplayName: Moss Prone Sand Soil
+		Tooltip: ""
+	}
+
 	OldMoss: {
 		DisplayName: Old Moss
 		Tooltip: ""
 	}
 
-	YggdrasilDirt: {
-		DisplayName: Yggdrasil Dirt
+	YggdrasilCyatheaWood: {
+		DisplayName: Yggdrasil Cyathea Wood
+		Tooltip: ""
+	}
+
+	AncientSyringe: {
+		DisplayName: Ancient Syringe
+		Tooltip: ""
+	}
+
+	BacterialAgent: {
+		DisplayName: Bacterial Agent
+		Tooltip: ""
+	}
+
+	HandheldCircularSaw: {
+		DisplayName: Handheld Circular Saw
+		Tooltip: ""
+	}
+
+	LichenTentacle: {
+		DisplayName: Lichen Tentacle
 		Tooltip: ""
 	}
 
@@ -2758,6 +2763,16 @@ Items: {
 		Tooltip: ""
 	}
 
+	CharonDoubleSickle_Item: {
+		DisplayName: Charon Double Sickle_ Item
+		Tooltip: ""
+	}
+
+	ShadowEulogist: {
+		DisplayName: Shadow Eulogist
+		Tooltip: ""
+	}
+
 	BloodLightCrystal: {
 		DisplayName: Blood Light Crystal
 		Tooltip: ""
@@ -2765,6 +2780,211 @@ Items: {
 
 	TrueDeathSickle: {
 		DisplayName: True Death Sickle
+		Tooltip: ""
+	}
+
+	TreePlacer: {
+		DisplayName: Tree Placer
+		Tooltip: ""
+	}
+
+	TwilightWood: {
+		DisplayName: Twilight Wood
+		Tooltip: ""
+	}
+
+	BoneAndPlatformCreate: {
+		DisplayName: Bone And Platform Create
+		Tooltip: ""
+	}
+
+	CyanVineBar: {
+		DisplayName: Cyan Vine Bar
+		Tooltip: ""
+	}
+
+	CyanVineOre: {
+		DisplayName: Cyan Vine Ore
+		Tooltip: ""
+	}
+
+	DarkForestSoil: {
+		DisplayName: Dark Forest Soil
+		Tooltip: ""
+	}
+
+	DarkSludge: {
+		DisplayName: Dark Sludge
+		Tooltip: ""
+	}
+
+	DilapidatedDangerSigns: {
+		DisplayName: Dilapidated Danger Signs
+		Tooltip: ""
+	}
+
+	FemaleLampLeaves_Item: {
+		DisplayName: Female Lamp Leaves_ Item
+		Tooltip: ""
+	}
+
+	GreyTownBrick_Item: {
+		DisplayName: Grey Town Brick_ Item
+		Tooltip: ""
+	}
+
+	IronTrackScaffolding: {
+		DisplayName: Iron Track Scaffolding
+		Tooltip: ""
+	}
+
+	StoneDragonScaleWood: {
+		DisplayName: Stone Dragon Scale Wood
+		Tooltip: ""
+	}
+
+	StoneDragonScaleWoodWall: {
+		DisplayName: Stone Dragon Scale Wood Wall
+		Tooltip: ""
+	}
+
+	YggdrasilAmber: {
+		DisplayName: Yggdrasil Amber
+		Tooltip: ""
+	}
+
+	AmberMagicOrb: {
+		DisplayName: Amber Magic Orb
+		Tooltip: ""
+	}
+
+	CyanVineAxe: {
+		DisplayName: Cyan Vine Axe
+		Tooltip: ""
+	}
+
+	CyanVineCrossBow: {
+		DisplayName: Cyan Vine Cross Bow
+		Tooltip: ""
+	}
+
+	CyanVineHammer: {
+		DisplayName: Cyan Vine Hammer
+		Tooltip: ""
+	}
+
+	CyanVinePickaxe: {
+		DisplayName: Cyan Vine Pickaxe
+		Tooltip: ""
+	}
+
+	CyanVineStaff: {
+		DisplayName: Cyan Vine Staff
+		Tooltip: ""
+	}
+
+	CyanVineSword: {
+		DisplayName: Cyan Vine Sword
+		Tooltip: ""
+	}
+
+	CyanVineThrowingSpear: {
+		DisplayName: Cyan Vine Throwing Spear
+		Tooltip: ""
+	}
+
+	YggdrasilAmberLaser: {
+		DisplayName: Yggdrasil Amber Laser
+		Tooltip: ""
+	}
+
+	DragonScaleHammer: {
+		DisplayName: Dragon Scale Hammer
+		Tooltip: ""
+	}
+
+	FlurryingBlades: {
+		DisplayName: Flurrying Blades
+		Tooltip: ""
+	}
+
+	RockArrow: {
+		DisplayName: Rock Arrow
+		Tooltip: ""
+	}
+
+	RockSpikeBallista: {
+		DisplayName: Rock Spike Ballista
+		Tooltip: ""
+	}
+
+	LampWoodBreastplate: {
+		DisplayName: Lamp Wood Breastplate
+		Tooltip: ""
+	}
+
+	LampWoodCandelabra_Item: {
+		DisplayName: Lamp Wood Candelabra_ Item
+		Tooltip: ""
+	}
+
+	LampWoodCandle_Item: {
+		DisplayName: Lamp Wood Candle_ Item
+		Tooltip: ""
+	}
+
+	LampWoodChandelier_Item: {
+		DisplayName: Lamp Wood Chandelier_ Item
+		Tooltip: ""
+	}
+
+	LampWoodHammer: {
+		DisplayName: Lamp Wood Hammer
+		Tooltip: ""
+	}
+
+	LampWoodHelmet: {
+		DisplayName: Lamp Wood Helmet
+		Tooltip: ""
+	}
+
+	LampWoodLamp_Item: {
+		DisplayName: Lamp Wood Lamp_ Item
+		Tooltip: ""
+	}
+
+	LampWoodLeggings: {
+		DisplayName: Lamp Wood Leggings
+		Tooltip: ""
+	}
+
+	LampWoodSword: {
+		DisplayName: Lamp Wood Sword
+		Tooltip: ""
+	}
+
+	LampWoodWall_item: {
+		DisplayName: Lamp Wood Wall_item
+		Tooltip: ""
+	}
+
+	LampWood_Chest_Item: {
+		DisplayName: Lamp Wood_ Chest_ Item
+		Tooltip: ""
+	}
+
+	LampWood_Platform: {
+		DisplayName: Lamp Wood_ Platform
+		Tooltip: ""
+	}
+
+	LampWood_Wood: {
+		DisplayName: Lamp Wood_ Wood
+		Tooltip: ""
+	}
+
+	LampWood_workBench: {
+		DisplayName: Lamp Wood_work Bench
 		Tooltip: ""
 	}
 
@@ -2778,8 +2998,18 @@ Items: {
 		Tooltip: ""
 	}
 
+	YggdrasilGrayRock_Item: {
+		DisplayName: Yggdrasil Gray Rock_ Item
+		Tooltip: ""
+	}
+
 	HardmodeItem: {
 		DisplayName: Hardmode Item
+		Tooltip: ""
+	}
+
+	ScreenPositionPrintItem: {
+		DisplayName: Screen Position Print Item
 		Tooltip: ""
 	}
 
@@ -2856,7 +3086,16 @@ NPCs: {
 	}
 
 	Acytaea_Boss.DisplayName: Acytaea_ Boss
+	BarkSpicyCaterpillar.DisplayName: Bark Spicy Caterpillar
+	BrownCaterpillar.DisplayName: Brown Caterpillar
+	Bulbling.DisplayName: Bulbling
+	CrimsonProtestant.DisplayName: Crimson Protestant
+	CrimsonSpell.DisplayName: Crimson Spell
 	CyanOreBeetle.DisplayName: Cyan Ore Beetle
+	DarkGlimmeringRods.DisplayName: Dark Glimmering Rods
+	LeafcutterAnt.DisplayName: Leafcutter Ant
+	LightBulb.DisplayName: Light Bulb
+	WhisperingGhost.DisplayName: Whispering Ghost
 	SquamousShell.DisplayName: Squamous Shell
 	TestNPC.DisplayName: Test N P C
 }
@@ -3154,8 +3393,8 @@ Projectiles: {
 	LeadClub_smash.DisplayName: Lead Club_smash
 	MeteorClub.DisplayName: Meteor Club
 	MeteorClub_smash.DisplayName: Meteor Club_smash
-	MithrilClub.DisplayName: Mithril Club
-	MithrilClub_smash.DisplayName: Mithril Club_smash
+	MythrilClub.DisplayName: Mythril Club
+	MythrilClub_smash.DisplayName: Mythril Club_smash
 	OrichalcumClub.DisplayName: Orichalcum Club
 	OrichalcumClub_smash.DisplayName: Orichalcum Club_smash
 	PalladiumClub.DisplayName: Palladium Club
@@ -3235,6 +3474,7 @@ Projectiles: {
 	CursedFlameBrust.DisplayName: Cursed Flame Brust
 	IchorCurrent.DisplayName: Ichor Current
 	IchorRing.DisplayName: Ichor Ring
+	DarkFlower_Proj.DisplayName: Dark Flower_ Proj
 	BloodLampProj.DisplayName: Blood Lamp Proj
 	Firework12Inches.DisplayName: Firework12 Inches
 	Firework6Inches.DisplayName: Firework6 Inches
@@ -3375,11 +3615,46 @@ Projectiles: {
 	SkullHand.DisplayName: Skull Hand
 	SkullII.DisplayName: Skull I I
 	BlackHole.DisplayName: Black Hole
-	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
-	AcroporaSpear.DisplayName: Acropora Spear
+	AcroporaSpear_proj.DisplayName: Acropora Spear_proj
 	AcroporaThumpEff.DisplayName: Acropora Thump Eff
+	Pycnidium_explosion.DisplayName: Pycnidium_explosion
+	AncientSyringe_proj.DisplayName: Ancient Syringe_proj
+	BacterialAgent_explosion.DisplayName: Bacterial Agent_explosion
+	BacterialAgent_proj.DisplayName: Bacterial Agent_proj
+	HandheldCircularSaw_proj.DisplayName: Handheld Circular Saw_proj
+	LichenTentacle_proj.DisplayName: Lichen Tentacle_proj
+	LichensPycnidium.DisplayName: Lichens Pycnidium
+	CharonDoubleSickle.DisplayName: Charon Double Sickle
+	ShadowEulogistProj.DisplayName: Shadow Eulogist Proj
 	TrueDeathSickle.DisplayName: True Death Sickle
 	TrueDeathSickleHit.DisplayName: True Death Sickle Hit
+	AmberBall.DisplayName: Amber Ball
+	AmberMagicOrb.DisplayName: Amber Magic Orb
+	CyanVineCrossBow_Proj.DisplayName: Cyan Vine Cross Bow_ Proj
+	CyanVineStaff_proj.DisplayName: Cyan Vine Staff_proj
+	CyanVineStaff_proj_Explosion.DisplayName: Cyan Vine Staff_proj_ Explosion
+	CyanVineStaff_proj_shoot.DisplayName: Cyan Vine Staff_proj_shoot
+	CyanVineSword_Projectile.DisplayName: Cyan Vine Sword_ Projectile
+	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
+	DragonScaleHammerProj.DisplayName: Dragon Scale Hammer Proj
+	LampWoodSword_Projectile.DisplayName: Lamp Wood Sword_ Projectile
+	LightSeed.DisplayName: Light Seed
+	RockArrow.DisplayName: Rock Arrow
+	RockExplosion_friendly.DisplayName: Rock Explosion_friendly
+	RockSpikeBallista_Proj.DisplayName: Rock Spike Ballista_ Proj
+	SquamousAirProj.DisplayName: Squamous Air Proj
+	SquamousRockExplosion.DisplayName: Squamous Rock Explosion
+	SquamousRockProj.DisplayName: Squamous Rock Proj
+	SquamousRockProj_small.DisplayName: Squamous Rock Proj_small
+	SquamousRockSpike.DisplayName: Squamous Rock Spike
+	SquamousRollingStone.DisplayName: Squamous Rolling Stone
+	Squamous_HitTile.DisplayName: Squamous_ Hit Tile
+	WindBladeBallHit.DisplayName: Wind Blade Ball Hit
+	YggdrasilAmberLaser_proj.DisplayName: Yggdrasil Amber Laser_proj
+	YggdrasilMoonBlade.DisplayName: Yggdrasil Moon Blade
+	YggdrasilMoonBladeHit.DisplayName: Yggdrasil Moon Blade Hit
+	YggdrasilMoonBlade_friendly.DisplayName: Yggdrasil Moon Blade_friendly
+	YggdrasilSlashBall.DisplayName: Yggdrasil Slash Ball
 	SightOfTileProj.DisplayName: Sight Of Tile Proj
 	SightOfTileProjRead.DisplayName: Sight Of Tile Proj Read
 }

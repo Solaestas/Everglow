@@ -1,27 +1,9 @@
-﻿using Terraria.GameContent;
+using Terraria.GameContent;
 
 namespace Everglow.Yggdrasil.Common;
 
 public class YggdrasilContent
 {
-	/// <summary>
-	/// 对于天穹模块专用的获取图片封装
-	/// </summary>
-	/// <param name="path"></param>
-	/// <returns></returns>
-	public static Texture2D QuickTexture(string path)
-	{
-		return ModContent.Request<Texture2D>("Everglow/Yggdrasil/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-	}
-	/// <summary>
-	/// 对于天穹模块专用的获取特效封装
-	/// </summary>
-	/// <param name="path"></param>
-	/// <returns></returns>
-	public static Effect QuickEffect(string path)
-	{
-		return ModContent.Request<Effect>("Everglow/Yggdrasil/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-	}
 	/// <summary>
 	/// 对于天穹模块专用的获取音乐封装
 	/// </summary>

@@ -7,7 +7,7 @@ public class DragonScaleWood : ModTile
 		Main.tileSolid[Type] = true;
 		Main.tileBlockLight[Type] = true;
 		Main.tileMerge[Type][ModContent.TileType<OldMoss>()] = true;
-		Main.tileMerge[Type][ModContent.TileType<YggdrasilDirt>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<MossProneSandSoil>()] = true;
 		Main.tileMerge[Type][TileID.Stone] = true;
 		Main.tileMerge[TileID.Stone][Type] = true;
 		Main.ugBackTransition = 1000;

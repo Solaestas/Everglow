@@ -227,7 +227,17 @@ public static class MathUtils
 			return (float)Math.Atan2(vector.Y, vector.X);
 		}
 	}
-
+	/// <summary>
+	/// 返回标准正态分布的一个随机数
+	/// </summary>
+	/// <param name="random"></param>
+	/// <returns></returns>
+	public static float NormalDistribution(Random random)
+	{
+		double u = -2 * Math.Log(random.NextDouble());
+		double v = 2 * Math.PI * random.NextDouble();
+		return (float)Math.Max(0, Math.Sqrt(u) * Math.Cos(v) * 0.3 + 0.5);
+	}
 	public static float Sqrt(this float num)
 	{
 		return (float)Math.Sqrt(num);
@@ -241,11 +251,6 @@ public static class MathUtils
 	public static float Sin(this float num)
 	{
 		return (float)Math.Sin(num);
-	}
-
-	public static float Lerp(this float value, float from, float to)
-	{
-		return (1 - value) * from + to * value;
 	}
 
 	public static Vector2 Lerp(this float value, Vector2 from, Vector2 to)

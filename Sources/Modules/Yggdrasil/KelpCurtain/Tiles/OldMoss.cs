@@ -9,26 +9,77 @@ public class OldMoss : ModTile
 		Main.tileBlendAll[Type] = true;
 		Main.tileBlockLight[Type] = true;
 		Main.tileMerge[Type][ModContent.TileType<DragonScaleWood>()] = true;
-		Main.tileMerge[Type][ModContent.TileType<YggdrasilDirt>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<MossProneSandSoil>()] = true;
 		Main.tileMerge[Type][TileID.Stone] = true;
 		Main.tileMerge[TileID.Stone][Type] = true;
 		Main.ugBackTransition = 1000;
 		DustType = DustID.BrownMoss;
 		MinPick = 50;
 		HitSound = SoundID.Dig;
-		AddMapEntry(new Color(81, 107, 18));
-	}
-	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
-	{
+		AddMapEntry(new Color(68, 91, 27));
 	}
 	public override void RandomUpdate(int i, int j)
 	{
+		if (Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].TileType == Type && Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].TileType == Type &&
+		!Main.tile[i, j + 1].HasTile && !Main.tile[i + 1, j + 1].HasTile && !Main.tile[i - 1, j + 1].HasTile)//巨大帘幕苔
+		{
+			WorldGen.PlaceTile(i, j + 1, ModContent.TileType<KelpMoss_large_tile>());
+		}
+		if (Main.tile[i, j].Slope == SlopeType.Solid && !Main.tile[i, j + 1].HasTile)//雨帘苔
+		{
+			Tile tile = Main.tile[i, j + 1];
+			tile.TileType = (ushort)ModContent.TileType<KelpMoss>();
+			tile.HasTile = true;
+		}
+		if (Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid &&
+				Main.tile[i, j + 1].Slope == SlopeType.Solid && Main.tile[i + 1, j + 1].Slope == SlopeType.Solid && Main.tile[i - 1, j + 1].Slope == SlopeType.Solid && Main.tile[i + 2, j + 1].Slope == SlopeType.Solid && Main.tile[i - 2, j + 1].Slope == SlopeType.Solid)//树木
+		{
+			int MaxHeight = 0;
+			for (int x = -2; x < 3; x++)
+			{
+				for (int y = -1; y > -8; y--)
+				{
+					if (j + y > 20)
+					{
+						if (Main.tile[i + x, j + y].HasTile || Main.tile[i + x, j + y].LiquidAmount > 3)
+							return;
+					}
+					MaxHeight = -y;
+				}
+			}
+			if (MaxHeight > 3)
+				BuildCyatheaTree(i, j - 1, MaxHeight);
+		}
 	}
-	public override void PlaceInWorld(int i, int j, Item item)
+	public static void BuildCyatheaTree(int i, int j, int height = 0)
 	{
-	}
-	public override bool CanExplode(int i, int j)
-	{
-		return false;
+		if (j < 30)
+			return;
+		int trueHeight = Main.rand.Next(3, height);
+
+		for (int g = 0; g < trueHeight; g++)
+		{
+			Tile tile = Main.tile[i, j - g];
+			if (g == 0)
+			{
+				tile.TileType = (ushort)ModContent.TileType<YggdrasilCyathea>();
+				tile.TileFrameY = 0;
+				tile.TileFrameX = (short)Main.rand.Next(2);
+				tile.HasTile = true;
+				continue;
+			}
+			if (g == trueHeight - 1)
+			{
+				tile.TileType = (ushort)ModContent.TileType<YggdrasilCyathea>();
+				tile.TileFrameY = 2;
+				tile.TileFrameX = (short)Main.rand.Next(2);
+				tile.HasTile = true;
+				continue;
+			}
+			tile.TileType = (ushort)ModContent.TileType<YggdrasilCyathea>();
+			tile.TileFrameY = 1;
+			tile.TileFrameX = (short)Main.rand.Next(4);
+			tile.HasTile = true;
+		}
 	}
 }

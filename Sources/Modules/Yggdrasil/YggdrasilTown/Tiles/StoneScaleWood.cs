@@ -1,4 +1,7 @@
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
+using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
@@ -8,23 +11,25 @@ public class StoneScaleWood : ModTile
 	{
 		Main.tileSolid[Type] = true;
 		Main.tileMergeDirt[Type] = false;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreTile>()] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineStone>()] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreSmallUp>()] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreSmall>()] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreLargeUp>()] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreLarge>()] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVineOreMiddle>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<CyanVineOreTile>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<CyanVineStone>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<CyanVineOreSmallUp>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<CyanVineOreSmall>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<CyanVineOreLargeUp>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<CyanVineOreLarge>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<CyanVineOreMiddle>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<DarkForestSoil>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<DarkForestGrass>()] = true;
+		Main.tileMerge[Type][ModContent.TileType<TwilightGrassBlock>()] = true;
 		Main.tileBlendAll[Type] = false;
 		Main.tileBlockLight[Type] = true;
 		Main.tileShine2[Type] = false;
 
-		Main.ugBackTransition = 1000;
-		DustType = DustID.BorealWood;
+		DustType = ModContent.DustType<StoneDragonScaleWoodDust>();
 		MinPick = 150;
 		HitSound = SoundID.Dig;
 
-		AddMapEntry(new Color(44, 40, 37));
+		AddMapEntry(new Color(77, 66, 63));
 	}
 	public override bool CanExplode(int i, int j)
 	{
@@ -33,37 +38,28 @@ public class StoneScaleWood : ModTile
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
 	{
 	}
-	public override void RandomUpdate(int i, int j)
+	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		int CountNoneA = 0;
-		int CountA = 0;
-		for (int x = -1; x < 2; x++)
-		{
-			for (int y = -4; y < 0; y++)
-			{
-				if (Main.tile[i + x, j + y].HasTile)
-					CountNoneA++;
-			}
-		}
-		for (int x = -1; x < 2; x++)
-		{
-			if (Main.tile[i + x, j].HasTile)
-				CountA++;
-		}
-		if (!Main.tile[i - 5, j - 1].HasTile && !Main.tile[i + 5, j - 1].HasTile && !Main.tile[i - 2, j - 1].HasTile && !Main.tile[i + 2, j - 1].HasTile && !Main.tile[i + 3, j - 1].HasTile && !Main.tile[i - 3, j - 1].HasTile && !Main.tile[i - 4, j - 1].HasTile && !Main.tile[i + 4, j - 1].HasTile)
-		{
-			if (Main.rand.NextBool(8))
-			{
-				if (CountNoneA == 0)
-				{
-					if (CountA == 3)
-					{
-						//int Dy = Main.rand.Next(5);
-						//WorldGen.Place3x4(i, j - 1, (ushort)ModContent.TileType<OceanMod.Tiles.Tree1.CyanVineOre>(), 0);
-						//CombatText.NewText(new Rectangle(i * 16, j * 16, 16, 16), Color.Cyan, Dy);
-					}
-				}
-			}
-		}
+		//Tile tile = Main.tile[i, j];
+		//if(!tile.HasTile)
+		//{
+		//	return false;
+		//}
+		//spriteBatch.End();
+		//spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
+
+		//Vector2 worldPos = new Vector2(i, j);
+		//Texture2D noiseTex = ModAsset.DragonSacleNoise.Value;
+		//Effect noise = ModAsset.DragonSacle.Value;
+		//noise.Parameters["tex0"].SetValue(noiseTex);
+		//noise.Parameters["worldPos"].SetValue(worldPos);
+		//noise.Parameters["textureWidth"].SetValue(512);
+		//noise.CurrentTechnique.Passes["newTexutre"].Apply();
+		return true;
+	}
+	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+	{
+		//spriteBatch.End();
+		//spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
 	}
 }
