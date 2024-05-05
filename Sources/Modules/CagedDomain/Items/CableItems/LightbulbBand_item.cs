@@ -1,10 +1,10 @@
 using Everglow.Commons.TileHelper;
 
-namespace Everglow.CagedDomain.Items;
+namespace Everglow.CagedDomain.Items.CableItems;
 
 public class LightbulbBand_item : CableTileItem
 {
-	public override int TileType => ModContent.TileType<Tiles.LightbulbBand>();
+	public override int TileType => ModContent.TileType<Tiles.CableTiles.LightbulbBand>();
 
 	public override void SetDefaults()
 	{

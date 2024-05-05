@@ -16,6 +16,28 @@ namespace Everglow.Commons.TileHelper;
 /// </summary>
 public abstract class CableTile : ModTile, ITileFluentlyDrawn
 {
+	public override string Texture => "Everglow/Commons/TileHelper/CableKnot";
+
+	/// <summary>
+	/// 最大绳长,默认900
+	/// </summary>
+	public int MaxCableLength = 900;
+
+	/// <summary>
+	/// 单个灯的重量,默认2
+	/// </summary>
+	public float SingleLampMass = 2;
+
+	/// <summary>
+	/// 单节绳重,默认0.05
+	/// </summary>
+	public float RopeUnitMass = 0.05f;
+
+	/// <summary>
+	/// 灯距,默认8
+	/// </summary>
+	public int LampDistance = 8;
+
 	public override void SetStaticDefaults()
 	{
 		Main.tileFrameImportant[Type] = true;
@@ -27,16 +49,24 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		// This is required so the hook is actually called.
 		TileObjectData.newTile.UsesCustomCanPlace = true;
 
-		AddMapEntry(new Color(151, 31, 32));
+		AddMapEntry(new Color(42, 42, 84));
 	}
 
 	/// <summary>
-	/// 绳头位置 绳子
+	/// 受绳端位置 绳子
 	/// </summary>
 	public Dictionary<Point, Rope> RopesOfAllThisTileInTheWorld = new Dictionary<Point, Rope>();
 
+	/// <summary>
+	/// 受绳端位置 发绳端位置
+	/// </summary>
+	public Dictionary<Point, Point> RopeHeadAndTail = new Dictionary<Point, Point>();
+
 	public override void HitWire(int i, int j)
 	{
+		Tile tile = Main.tile[i, j];
+		tile.TileFrameX = (short)((tile.TileFrameX + 18) % 36);
+		base.HitWire(i, j);
 	}
 
 	/// <summary>
@@ -57,9 +87,9 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 			Point point = HasHoldRope[Main.LocalPlayer];
 			if (i != point.X || j != point.Y)
 			{
-				if (new Vector2(point.X - i, point.Y - j).Length() * 16 < 600)
+				if (new Vector2(point.X - i, point.Y - j).Length() * 16 < MaxCableLength)
 				{
-					AddRope(i, j, ConnectRope(i, j, point.X, point.Y));
+					AddRope(i, j, point.X, point.Y);
 				}
 			}
 			HasHoldRope.Remove(Main.LocalPlayer);
@@ -86,39 +116,31 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	}
 
 	/// <summary>
-	/// 移除挂在这个点上所有的绳子无论头尾
+	/// 移除挂在这个点上所有绳
 	/// </summary>
 	/// <param name="i"></param>
 	/// <param name="j"></param>
 	public virtual void RemoveAllRope(int i, int j)
 	{
-		RemoveRopeHeadAt(i, j);
-		foreach (Rope rope in RopesOfAllThisTileInTheWorld.Values)
+		// 移除受绳
+		RemoveRopeStardAt(i, j);
+
+		// 移除发绳
+		foreach (Point point in RopeHeadAndTail.Keys)
 		{
-			if ((rope.GetMassList.Last().Position - new Vector2(i + 0.5f, j + 0.5f) * 16f).Length() < 4)
+			if (RopeHeadAndTail[point] == new Point(i, j))
 			{
-				foreach (Point point in RopesOfAllThisTileInTheWorld.Keys)
-				{
-					Rope tryRope;
-					RopesOfAllThisTileInTheWorld.TryGetValue(point, out tryRope);
-					if (tryRope == rope)
-					{
-						RemoveRopeEffect(rope);
-						RopesOfAllThisTileInTheWorld.Remove(point);
-						ModContent.GetInstance<CableEneity>().Kill(point.X, point.Y);
-						break;
-					}
-				}
+				RemoveRopeStardAt(point.X, point.Y);
 			}
 		}
 	}
 
 	/// <summary>
-	/// 移除此坐标为绳头的绳子
+	/// 移除此坐标所接受的绳
 	/// </summary>
 	/// <param name="i"></param>
 	/// <param name="j"></param>
-	public virtual void RemoveRopeHeadAt(int i, int j)
+	public virtual void RemoveRopeStardAt(int i, int j)
 	{
 		if (RopesOfAllThisTileInTheWorld.ContainsKey(new Point(i, j)))
 		{
@@ -127,6 +149,10 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 			RemoveRopeEffect(rope);
 			RopesOfAllThisTileInTheWorld.Remove(new Point(i, j));
 			ModContent.GetInstance<CableEneity>().Kill(i, j);
+		}
+		if(RopeHeadAndTail.ContainsKey(new Point(i, j)))
+		{
+			RopeHeadAndTail.Remove(new Point(i, j));
 		}
 	}
 
@@ -144,7 +170,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 			TryGetCableEntityAs<CableEneity>(i, j, out cableEneity);
 			if (cableEneity != null)
 			{
-				AddRope(i, j, ConnectRope(i, j, i + cableEneity.ToTail.X, j + cableEneity.ToTail.Y));
+				AddRope(i, j, i + cableEneity.ToTail.X, j + cableEneity.ToTail.Y);
 			}
 		}
 		base.NearbyEffects(i, j, closer);
@@ -190,8 +216,9 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	/// <param name="i"></param>
 	/// <param name="j"></param>
 	/// <param name="rope"></param>
-	public virtual void AddRope(int i, int j, Rope rope)
+	public virtual void AddRope(int i, int j, int i2, int j2)
 	{
+		Rope rope = ConnectRope(i, j, i2, j2);
 		if (rope == null)
 		{
 			return;
@@ -201,7 +228,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 			return;
 		}
 		RopesOfAllThisTileInTheWorld.Add(new Point(i, j), rope);
-
+		RopeHeadAndTail.Add(new Point(i, j), new Point(i2, j2));
 		CableEneity cableEneity;
 		TryGetCableEntityAs<CableEneity>(i, j, out cableEneity);
 		if (cableEneity == null)
@@ -215,32 +242,6 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 			Point toTail = tail.ToPoint() - new Point(i, j);
 			cableEneity.ToTail = toTail;
 		}
-	}
-
-	/// <summary>
-	/// 在附近遍历物块链接绳子
-	/// </summary>
-	/// <param name="i"></param>
-	/// <param name="j"></param>
-	/// <returns></returns>
-	public virtual Rope FindSameAndCreateRope(int i, int j)
-	{
-		for (int x = -30; x < 31; x++)
-		{
-			for (int y = -30; y < 31; y++)
-			{
-				Tile tile = Main.tile[i + x, j + y];
-				if (tile.TileType == Type && !(x == 0 && y == 0))
-				{
-					int counts = (int)new Vector2(x, y).Length() * 4;
-
-					Rope rope = new Rope(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i + x, j + y) * 16 + new Vector2(8), counts, 7, 0.05f, (Vector2) => Vector2.Zero, true, 16, 2);
-
-					return rope;
-				}
-			}
-		}
-		return null;
 	}
 
 	/// <summary>
@@ -266,7 +267,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		if (tile.TileType == Type)
 		{
 			int counts = (int)new Vector2(i2 - i, j2 - j).Length() * 2;
-			Rope rope = new Rope(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i2, j2) * 16 + new Vector2(8), counts, 7, 0.05f, (Vector2) => Vector2.Zero, true, 8, 2);
+			Rope rope = new Rope(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i2, j2) * 16 + new Vector2(8), counts, 7, RopeUnitMass, (Vector2) => Vector2.Zero, true, LampDistance, SingleLampMass);
 			return rope;
 		}
 		return null;
@@ -274,12 +275,21 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
+		// TileFluentDrawManager.AddFluentPoint(this, i, j);
 		return base.PreDraw(i, j, spriteBatch);
 	}
 
-	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+	public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
 	{
 		TileFluentDrawManager.AddFluentPoint(this, i, j);
+		foreach (Point point in RopeHeadAndTail.Keys)
+		{
+			if (RopeHeadAndTail[point] == new Point(i, j))
+			{
+				TileFluentDrawManager.AddFluentPoint(this, point.X, point.Y);
+			}
+		}
+		base.DrawEffects(i, j, spriteBatch, ref drawData);
 	}
 
 	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
@@ -299,7 +309,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	public string BulbTexturePath;
 
 	/// <summary>
-	/// 绘制挂绳
+	/// 绘制挂绳,只要有挂物必须完全重写
 	/// </summary>
 	/// <param name="rope"></param>
 	/// <param name="pos"></param>
@@ -334,7 +344,6 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 
 			float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex((int)((thisMass.Position.X - 8) / 16f), (int)((thisMass.Position.Y - 8) / 16f), 1, 1, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
 			windCycle += highestWindGridPushComplex;
-			float rotation = -windCycle * 0.4f;
 			if (!Main.gamePaused)
 			{
 				rope.ApplyForceSpecial(i, new Vector2(windCycle * 1, 4 * thisMass.Mass));
@@ -350,16 +359,9 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 			{
 				tileLight = Lighting.GetColor((int)((thisMass.Position.X - 8) / 16f), (int)((thisMass.Position.Y - 8) / 16f)) * 10;
 			}
-			tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(pos.X, pos.Y, tile, type, 0, 0, ref tileLight, tileDrawing._rand.NextBool(4));
-			tileLight = tileDrawing.DrawTiles_GetLightOverride(pos.X, pos.Y, tile, type, 0, 0, tileLight);
 			Vector2 toNextMass = nextMass.Position - thisMass.Position;
 			Vector2 drawPos = thisMass.Position - Main.screenPosition;
 			spriteBatch.Draw(tex, drawPos, new Rectangle(0, 2, 2, 2), tileLight, toNextMass.ToRotation(), new Vector2(1f), new Vector2(toNextMass.Length() / 2f, 1), tileSpriteEffect, 0);
-			if (thisMass.Mass == 2)
-			{
-				spriteBatch.Draw(tex, drawPos, new Rectangle(0, 6, 10, 18), tileLight, rotation, new Vector2(5f, 0), 1f, tileSpriteEffect, 0);
-				Lighting.AddLight(thisMass.Position, new Vector3(0.7f, 0.4f, 0.3f));
-			}
 		}
 	}
 
@@ -404,7 +406,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 				Ins.VFXManager.Add(vfx);
 			}
 		}
-		else if(MouseOverPoint[Main.LocalPlayer] != new Point(i, j))
+		else if (MouseOverPoint[Main.LocalPlayer] != new Point(i, j))
 		{
 			MouseOverPoint.Remove(Main.LocalPlayer);
 		}
@@ -574,8 +576,8 @@ public class CableTilePlaceHelpingSystem : Visual
 					// 校正鼠标坐标
 					Vector2 toTarget = new Vector2(i, j) * 16 + new Vector2(8) - Main.MouseWorld;
 
-					// 超过900距离取消选中
-					if (toTarget.Length() > 1500)
+					// 超过cableTile.MaxCableLength + 600距离取消选中
+					if (toTarget.Length() > cableTile.MaxCableLength + 600)
 					{
 						cableTile.HasHoldRope.Remove(player);
 						Active = false;
@@ -591,10 +593,10 @@ public class CableTilePlaceHelpingSystem : Visual
 					int x = (int)(Main.MouseWorld.X / 16f);
 					int y = (int)(Main.MouseWorld.Y / 16f);
 
-					// 超过600距离标红
-					if (new Vector2(i - x, j - y).Length() * 16f > 600)
+					// 超过cableTile.MaxCableLength距离标红
+					if (new Vector2(i - x, j - y).Length() * 16f > cableTile.MaxCableLength)
 					{
-						toTarget = Vector2.Normalize(toTarget) * 600.0001f;
+						toTarget = Vector2.Normalize(toTarget) * (cableTile.MaxCableLength + 0.0001f);
 						drawColor = new Color(1f, 0, 0, 0.3f);
 
 						Vector2 destination = fixPos + new Vector2(8) - toTarget;
@@ -615,7 +617,7 @@ public class CableTilePlaceHelpingSystem : Visual
 								ModTile modTile0 = TileLoader.GetTile(type);
 								if (modTile0 is CableTile)
 								{
-									if (new Vector2(i - x, j - y).Length() * 16f <= 600)
+									if (new Vector2(i - x, j - y).Length() * 16f <= cableTile.MaxCableLength)
 									{
 										drawColor = new Color(1f, 0.9f, 0, 0.4f);
 
@@ -653,7 +655,7 @@ public class CableTilePlaceHelpingSystem : Visual
 					Vector2 end = start - toTarget;
 
 					Vector2 direction = Utils.SafeNormalize(start - end, Vector2.zeroVector) * 16;
-					if (new Vector2(i - x, j - y).Length() * 16f <= 600)
+					if (new Vector2(i - x, j - y).Length() * 16f <= cableTile.MaxCableLength)
 					{
 						DrawLine(end, end + direction.RotatedBy(0.4), 3, drawColor);
 						DrawLine(end, end + direction.RotatedBy(-0.4), 3, drawColor);
