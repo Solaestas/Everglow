@@ -19,7 +19,9 @@
 			Condition="$(PathPrefix) != ''"
 			Inputs="@(AdditionalFiles)"
 		  	Outputs="$(ResourceList)"
-			BeforeTargets="Build">
+			AfterTargets="Build">
+		<Message Text="Begin Write AAA"
+				 Importance="high"/>
 		<WriteResource Resources="@(AdditionalFiles)"
 					   Prefix="$(PathPrefix)"
 					   OutputPath="$(ResourceList)" />
