@@ -10,7 +10,9 @@ public class BlueGlassbulbBand_bulb : CableTile
 	public override void PostSetDefaults()
 	{
 		LampDistance = 3;
-		RopeUnitMass = 0.02f;
+		RopeUnitMass = 0.04f;
+		SingleLampMass = 0.07f;
+		MaxWireStyle = 4;
 	}
 
 	public override void DrawCable(Rope rope, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing, Color color = default)
@@ -27,6 +29,11 @@ public class BlueGlassbulbBand_bulb : CableTile
 		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.BlueGlassbulbBand_bulb_Path, type, 1, paint, tileDrawing);
 		tex ??= ModAsset.BlueGlassbulbBand_bulb.Value;
 		var tileSpriteEffect = SpriteEffects.None;
+
+		// 获取发绳端物块信息
+		Tile endTile = Main.tile[RopeHeadAndTail[pos]];
+		int style = endTile.TileFrameX / 18 + (endTile.TileFrameY / 18) * 4;
+
 		for (int i = 0; i < rope.GetMassList.Length - 1; i++)
 		{
 			_Mass thisMass = rope.GetMassList[i];
@@ -61,16 +68,49 @@ public class BlueGlassbulbBand_bulb : CableTile
 			Vector2 toNextMass = nextMass.Position - thisMass.Position;
 			Vector2 drawPos = thisMass.Position - Main.screenPosition;
 			spriteBatch.Draw(tex, drawPos, new Rectangle(10, 2, 2, 2), tileLight, toNextMass.ToRotation(), new Vector2(1f), new Vector2(toNextMass.Length() / 2f, 1), tileSpriteEffect, 0);
-			Tile endTile = Main.tile[RopeHeadAndTail[pos]];
-			if (thisMass.Mass == 2 && endTile.TileFrameX == 18)
+			float timeValue;
+			float light;
+			if (thisMass.Mass == 0.07f)
 			{
-				spriteBatch.Draw(tex, drawPos, new Rectangle(2, 6, 6, 18), tileLight, rotation, new Vector2(3f, 0), 0.7f, tileSpriteEffect, 0);
-				Lighting.AddLight(thisMass.Position, new Vector3(0f, 0f, 0.7f)); // blue light is dimmer than red and green, so it's 0.7f.
-				spriteBatch.Draw(tex, drawPos, new Rectangle(0, 30, 30, 30), new Color(1f, 1f, 1f, 0), rotation, new Vector2(15f, 7f), 0.7f, tileSpriteEffect, 0);
-			}
-			if (thisMass.Mass == 2 && endTile.TileFrameX != 18)
-			{
-				spriteBatch.Draw(tex, drawPos, new Rectangle(12, 6, 10, 18), tileLight, rotation, new Vector2(3f, 0), 0.7f, tileSpriteEffect, 0);
+				switch (style)
+				{
+					case 0:
+						spriteBatch.Draw(tex, drawPos, new Rectangle(12, 6, 10, 18), tileLight, rotation, new Vector2(3f, 0), 0.7f, tileSpriteEffect, 0);
+						break;
+					case 1:
+						spriteBatch.Draw(tex, drawPos, new Rectangle(2, 6, 6, 18), tileLight, rotation, new Vector2(3f, 0), 0.7f, tileSpriteEffect, 0);
+						Lighting.AddLight(thisMass.Position, new Vector3(0f, 0f, 0.7f)); // blue light is dimmer than red and green, so it's 0.7f.
+						spriteBatch.Draw(tex, drawPos, new Rectangle(0, 30, 30, 30), new Color(1f, 1f, 1f, 0), rotation, new Vector2(15f, 7f), 0.7f, tileSpriteEffect, 0);
+						break;
+					case 2:
+						timeValue = (float)Main.time * 0.09f + 4;
+						light = MathF.Sin(timeValue + i / 3f * MathHelper.Pi);
+						if (light > 0)
+						{
+							spriteBatch.Draw(tex, drawPos, new Rectangle(2, 6, 6, 18), tileLight, rotation, new Vector2(3f, 0), 0.7f, tileSpriteEffect, 0);
+						}
+						else
+						{
+							spriteBatch.Draw(tex, drawPos, new Rectangle(12, 6, 10, 18), tileLight, rotation, new Vector2(3f, 0), 0.7f, tileSpriteEffect, 0);
+						}
+						Lighting.AddLight(thisMass.Position, new Vector3(0f, 0f, 0.7f) * light); // blue light is dimmer than red and green, so it's 0.7f.
+						spriteBatch.Draw(tex, drawPos, new Rectangle(0, 30, 30, 30), new Color(light, light, light, 0), rotation, new Vector2(15f, 7f), 0.7f, tileSpriteEffect, 0);
+						break;
+					case 3:
+						timeValue = (float)Main.time * 0.02f + 4;
+						light = MathF.Sin(timeValue);
+						if (light > 0)
+						{
+							spriteBatch.Draw(tex, drawPos, new Rectangle(2, 6, 6, 18), tileLight, rotation, new Vector2(3f, 0), 0.7f, tileSpriteEffect, 0);
+						}
+						else
+						{
+							spriteBatch.Draw(tex, drawPos, new Rectangle(12, 6, 10, 18), tileLight, rotation, new Vector2(3f, 0), 0.7f, tileSpriteEffect, 0);
+						}
+						Lighting.AddLight(thisMass.Position, new Vector3(0f, 0f, 0.7f) * light); // blue light is dimmer than red and green, so it's 0.7f.
+						spriteBatch.Draw(tex, drawPos, new Rectangle(0, 30, 30, 30), new Color(light, light, light, 0), rotation, new Vector2(15f, 7f), 0.7f, tileSpriteEffect, 0);
+						break;
+				}
 			}
 		}
 	}

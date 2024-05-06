@@ -3,6 +3,7 @@ using Everglow.Commons.Physics;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.ModLoader.IO;
@@ -38,6 +39,11 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	/// </summary>
 	public int LampDistance = 8;
 
+	/// <summary>
+	/// 最多电线形态,默认为2,最多16,原版的绝大多数物品都是2,但是这里提供了例外的可能
+	/// </summary>
+	public int MaxWireStyle = 2;
+
 	public override void SetStaticDefaults()
 	{
 		Main.tileFrameImportant[Type] = true;
@@ -65,7 +71,19 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	public override void HitWire(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
-		tile.TileFrameX = (short)((tile.TileFrameX + 18) % 36);
+		tile.TileFrameX += 18;
+		if (tile.TileFrameX > 54)
+		{
+			tile.TileFrameX = 0;
+			tile.TileFrameY += 18;
+		}
+		int style = tile.TileFrameX / 18 + (tile.TileFrameY / 18) * 4;
+		MaxWireStyle = Math.Min(MaxWireStyle, 16);
+		if (style >= MaxWireStyle)
+		{
+			tile.TileFrameX = 0;
+			tile.TileFrameY = 0;
+		}
 		base.HitWire(i, j);
 	}
 
@@ -82,6 +100,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	/// <returns></returns>
 	public override bool RightClick(int i, int j)
 	{
+		// 挂绳
 		if (HasHoldRope.ContainsKey(Main.LocalPlayer))
 		{
 			Point point = HasHoldRope[Main.LocalPlayer];
@@ -89,20 +108,33 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 			{
 				if (new Vector2(point.X - i, point.Y - j).Length() * 16 < MaxCableLength)
 				{
-					AddRope(i, j, point.X, point.Y);
+					if (Main.LocalPlayer.HeldItem.createTile == Main.tile[i, j].TileType)
+					{
+						AddRope(i, j, point.X, point.Y);
+						SoundEngine.PlaySound(SoundID.Item50.WithVolumeScale(0.8f), new Vector2(i, j) * 16);
+					}
 				}
 			}
 			HasHoldRope.Remove(Main.LocalPlayer);
 			return base.RightClick(i, j);
 		}
+
+		// 拉绳
 		if (Main.LocalPlayer.HeldItem.ModItem is CableTileItem)
 		{
-			HasHoldRope.Add(Main.LocalPlayer, new Point(i, j));
-			CableTilePlaceHelpingSystem vfx = new CableTilePlaceHelpingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 1 };
-			Ins.VFXManager.Add(vfx);
+			if (Main.LocalPlayer.HeldItem.createTile == Main.tile[i, j].TileType)
+			{
+				HasHoldRope.Add(Main.LocalPlayer, new Point(i, j));
+				CableTilePlaceHelpingSystem vfx = new CableTilePlaceHelpingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 1 };
+				Ins.VFXManager.Add(vfx);
+				SoundEngine.PlaySound(SoundID.Item17, new Vector2(i, j) * 16);
+			}
 			return base.RightClick(i, j);
 		}
+
+		// 拆绳
 		RemoveAllRope(i, j);
+		SoundEngine.PlaySound(SoundID.Item110, new Vector2(i, j) * 16);
 		return base.RightClick(i, j);
 	}
 
@@ -150,7 +182,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 			RopesOfAllThisTileInTheWorld.Remove(new Point(i, j));
 			ModContent.GetInstance<CableEneity>().Kill(i, j);
 		}
-		if(RopeHeadAndTail.ContainsKey(new Point(i, j)))
+		if (RopeHeadAndTail.ContainsKey(new Point(i, j)))
 		{
 			RopeHeadAndTail.Remove(new Point(i, j));
 		}
@@ -548,17 +580,24 @@ public class CableTilePlaceHelpingSystem : Visual
 				return;
 			}
 		}
-		CableTile cableTile = TileLoader.GetTile(Main.tile[i, j].type) as CableTile;
+		Player player = Main.LocalPlayer;
+		Tile tile = Main.tile[i, j];
+		CableTile cableTile = TileLoader.GetTile(tile.type) as CableTile;
 		if (cableTile == null)
 		{
 			Active = false;
 			return;
 		}
 		Color drawColor = Color.Lerp(new Color(0.75f, 0.75f, 1f, 0.5f), new Color(0.85f, 0.85f, 0.75f, 0.5f), MathF.Sin((float)Main.timeForVisualEffects * 0.08f) * 0.5f + 0.5f);
+
+		// 不同种类物块标红
+		if (player.HeldItem.createTile != tile.type)
+		{
+			drawColor = new Color(1f, 0, 0, 0.5f);
+			Main.instance.MouseText("Different Type Error", ItemRarityID.Red);
+		}
 		Ins.Batch.BindTexture<Vertex2D>(Texture);
 		Vector2 fixPos = FixPoint.ToVector2() * 16f;
-
-		Player player = Main.LocalPlayer;
 
 		// 类型1 ： 牵线后
 		if (Style == 1)
@@ -602,6 +641,7 @@ public class CableTilePlaceHelpingSystem : Visual
 						Vector2 destination = fixPos + new Vector2(8) - toTarget;
 						DrawLine(destination + new Vector2(10, 10), destination - new Vector2(10, 10), 3, drawColor);
 						DrawLine(destination + new Vector2(-10, 10), destination - new Vector2(-10, 10), 3, drawColor);
+						Main.instance.MouseText("Over Length", ItemRarityID.Red);
 					}
 
 					bool canDrawDestination = false;
@@ -621,10 +661,17 @@ public class CableTilePlaceHelpingSystem : Visual
 									{
 										drawColor = new Color(1f, 0.9f, 0, 0.4f);
 
+										// 如果是不同种类物块,标红
+										if (player.HeldItem.createTile != Main.tile[x, y].type)
+										{
+											drawColor = new Color(1f, 0, 0, 0.5f);
+										}
+
 										// 试图连接到自己标红
 										if (i == x && j == y)
 										{
 											drawColor = new Color(1f, 0, 0, 0.5f);
+											Main.instance.MouseText("Can Not Connect Selfly", ItemRarityID.Red);
 										}
 
 										// 已经被占据块标红
@@ -641,6 +688,7 @@ public class CableTilePlaceHelpingSystem : Visual
 
 											DrawLine(anotherPoint, fixPos + new Vector2(8) - toTarget, 3, drawColor);
 											DrawBlockBound((int)((anotherPoint.X - 8) / 16f), (int)((anotherPoint.Y - 8) / 16f), drawColor);
+											Main.instance.MouseText("Occupied", ItemRarityID.Red);
 										}
 
 										canDrawDestination = true;
