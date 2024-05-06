@@ -11,7 +11,7 @@ public class BlueGlassbulbBand_bulb : CableTile
 	{
 		LampDistance = 3;
 		RopeUnitMass = 0.04f;
-		SingleLampMass = 0.07f;
+		SingleLampMass = 0.2f;
 		MaxWireStyle = 4;
 	}
 
@@ -70,7 +70,7 @@ public class BlueGlassbulbBand_bulb : CableTile
 			spriteBatch.Draw(tex, drawPos, new Rectangle(10, 2, 2, 2), tileLight, toNextMass.ToRotation(), new Vector2(1f), new Vector2(toNextMass.Length() / 2f, 1), tileSpriteEffect, 0);
 			float timeValue;
 			float light;
-			if (thisMass.Mass == 0.07f)
+			if (thisMass.Mass == 0.2f)
 			{
 				switch (style)
 				{
