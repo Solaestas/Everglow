@@ -32,7 +32,7 @@ public static class Module
 
 	public static string[] GetEnabledModule()
 	{
-		var path = Path.Combine(Everglow, "Sources", "Everglow", "Module.Build.props");
+		var path = Path.Combine(Everglow, "Sources", "Directory.Build.props");
 
 		// Read XML
 		var doc = new XmlDocument();
@@ -47,7 +47,7 @@ public static class Module
 
 	public static void SetEnabledModule(string[] modules)
 	{
-		var path = Path.Combine(Everglow, "Sources", "Everglow", "Module.Build.props");
+		var path = Path.Combine(Everglow, "Sources", "Directory.Build.props");
 
 		// Read XML
 		var doc = new XmlDocument();

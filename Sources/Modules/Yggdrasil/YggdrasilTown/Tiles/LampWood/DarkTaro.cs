@@ -84,7 +84,7 @@ public class DarkTaro : ModTile, ITileFluentlyDrawn
 
 		int paint = Main.tile[paintPos].TileColor;
 		int textureStyle = tile.TileFrameX + frame.Y * 50;
-		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.DarkTaroPath, type, textureStyle, paint, tileDrawing);
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.DarkTaro_Path, type, textureStyle, paint, tileDrawing);
 		tex ??= ModAsset.DarkTaro.Value;
 
 		float windCycle = 0;

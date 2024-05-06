@@ -80,7 +80,7 @@ public class LampWoodPot : ModTile, ITileFluentlyDrawn
 
 		int paint = Main.tile[paintPos].TileColor;
 		int textureStyle = 255;
-		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.LampWoodPot_beadPath, type, textureStyle, paint, tileDrawing);
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.LampWoodPot_bead_Path, type, textureStyle, paint, tileDrawing);
 		tex ??= ModAsset.LampWoodPot_bead.Value;
 
 		float windCycle = 0;

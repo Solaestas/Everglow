@@ -102,7 +102,7 @@ public class ChinesePartitionLamp : ModTile, ITileFluentlyDrawn
 		var tile = Main.tile[tilePos];
 		ushort type = tile.TileType;
 		int paint = Main.tile[paintPos].TileColor;
-		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.ChinesePartitionLamp_DrawPath, type, frame.X, paint, tileDrawing);
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.ChinesePartitionLamp_Draw_Path, type, frame.X, paint, tileDrawing);
 		tex ??= ModAsset.ChinesePartitionLamp_Draw.Value;
 
 		int sizeX = 2;

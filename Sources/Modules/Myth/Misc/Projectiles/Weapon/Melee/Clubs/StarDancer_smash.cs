@@ -5,8 +5,8 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class StarDancer_smash : ClubProj_Smash_metal
 {
-	public override string TrailColorTex() => "Everglow/" + ModAsset.StarDancer_glowPath;
-	public override string Texture => "Everglow/" + ModAsset.Melee_StarDancerPath;
+	public override string TrailColorTex() => "Everglow/" + ModAsset.StarDancer_glow_Path;
+	public override string Texture => "Everglow/" + ModAsset.Melee_StarDancer_Path;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		if (Main.rand.NextBool(7))

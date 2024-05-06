@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<LangVersion>preview</LangVersion>
+	</PropertyGroup>
+
+	<Target Name="CopyOutput"
+			AfterTargets="Build">
+		<ItemGroup>
+			<OutputFiles Include="$(OutputPath)*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(OutputFiles)"
+			  DestinationFolder="..\" />
+	</Target>
+</Project>

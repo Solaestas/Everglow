@@ -6,7 +6,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class CurseClub_smash : ClubProj_Smash
 {
-	public override string Texture => "Everglow/" + ModAsset.Melee_CurseClubPath;
+	public override string Texture => "Everglow/" + ModAsset.Melee_CurseClub_Path;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(BuffID.CursedInferno, (int)(818 * Omega));
