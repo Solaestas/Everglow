@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<RootNamespace>Everglow.Commons</RootNamespace>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Everglow.Commons</RootNamespace>
 		<Solaestas-UseAssetPath>false</Solaestas-UseAssetPath>
 	</PropertyGroup>
 	<ItemGroup>

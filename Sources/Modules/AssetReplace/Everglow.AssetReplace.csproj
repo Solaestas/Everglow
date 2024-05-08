@@ -2,5 +2,6 @@
     <PropertyGroup>
 		<!--Disable Auto Generate ModAsset-->
 		<Solaestas-UseAssetPath>false</Solaestas-UseAssetPath>
+		<TargetFramework>net8.0</TargetFramework>
 	</PropertyGroup>
 </Project>

@@ -61,6 +61,11 @@ Tiles: {
 	LiftLamp.MapEntry: Lift Lamp
 }
 
+InfoDisplays: {
+	FoodSatietyInfoDisplay.DisplayName: Food Satiety Info Display
+	ThirstystateInfoDisplay.DisplayName: Thirstystate Info Display
+}
+
 Biomes: {
 	TuskBiome: {
 		DisplayName: Tusk Biome
@@ -90,6 +95,11 @@ Biomes: {
 	YggdrasilTownBiome: {
 		DisplayName: Yggdrasil Town Biome
 		TownNPCDialogueName: the Yggdrasil Town Biome
+	}
+
+	LampWoodForest: {
+		DisplayName: Lamp Wood Forest
+		TownNPCDialogueName: the Lamp Wood Forest
 	}
 }
 
@@ -2893,6 +2903,16 @@ Items: {
 		Tooltip: ""
 	}
 
+	SmeltingStaff: {
+		DisplayName: Smelting Staff
+		Tooltip: ""
+	}
+
+	ThermoprobeStaff: {
+		DisplayName: Thermoprobe Staff
+		Tooltip: ""
+	}
+
 	YggdrasilAmberLaser: {
 		DisplayName: Yggdrasil Amber Laser
 		Tooltip: ""
@@ -2988,6 +3008,101 @@ Items: {
 		Tooltip: ""
 	}
 
+	ValiantBreastplate: {
+		DisplayName: Valiant Breastplate
+		Tooltip: ""
+	}
+
+	ValiantHelmet: {
+		DisplayName: Valiant Helmet
+		Tooltip: ""
+	}
+
+	ValiantLeggings: {
+		DisplayName: Valiant Leggings
+		Tooltip: ""
+	}
+
+	ConventionalEquipment: {
+		DisplayName: Conventional Equipment
+		Tooltip: ""
+	}
+
+	SafetyHelmets: {
+		DisplayName: Safety Helmets
+		Tooltip: ""
+	}
+
+	StandardLeggings: {
+		DisplayName: Standard Leggings
+		Tooltip: ""
+	}
+
+	LightSeekerBreastplate: {
+		DisplayName: Light Seeker Breastplate
+		Tooltip: ""
+	}
+
+	LightSeekerHelmet_Magic: {
+		DisplayName: Light Seeker Helmet_ Magic
+		Tooltip: ""
+	}
+
+	LightSeekerHelmet_Ranged: {
+		DisplayName: Light Seeker Helmet_ Ranged
+		Tooltip: ""
+	}
+
+	LightSeekerLeggings: {
+		DisplayName: Light Seeker Leggings
+		Tooltip: ""
+	}
+
+	CyanBreastplate: {
+		DisplayName: Cyan Breastplate
+		Tooltip: ""
+	}
+
+	CyanHeavylet: {
+		DisplayName: Cyan Heavylet
+		Tooltip: ""
+	}
+
+	CyanLeggings: {
+		DisplayName: Cyan Leggings
+		Tooltip: ""
+	}
+
+	CyanWarhelm: {
+		DisplayName: Cyan Warhelm
+		Tooltip: ""
+	}
+
+	BloodDrenchedRobe: {
+		DisplayName: Blood Drenched Robe
+		Tooltip: ""
+	}
+
+	BloodStainedVeil: {
+		DisplayName: Blood Stained Veil
+		Tooltip: ""
+	}
+
+	AuburnBoots: {
+		DisplayName: Auburn Boots
+		Tooltip: ""
+	}
+
+	AuburnBreastplate: {
+		DisplayName: Auburn Breastplate
+		Tooltip: ""
+	}
+
+	AuburnHoodie: {
+		DisplayName: Auburn Hoodie
+		Tooltip: ""
+	}
+
 	LiftLamp: {
 		DisplayName: Lift Lamp
 		Tooltip: ""
@@ -3074,12 +3189,12 @@ NPCs: {
 		DisplayName: Acytaea
 
 		TownNPCMood: {
-			Content: I am content.
-			NoHome: I hate not having a home.
-			FarFromHome: I am too far from home.
-			LoveSpace: I love having so much space.
-			DislikeCrowded: I dislike how crowded I am.
-			HateCrowded: I hate how crowded I am.
+			Content: 我很满足。
+			NoHome: 我讨厌没有家。
+			FarFromHome: 我离家太远了。
+			LoveSpace: 我非常喜欢有这么大的空间。
+			DislikeCrowded: 我不喜欢这么拥挤。
+			HateCrowded: 我讨厌这么拥挤。
 			LikeNPC_Princess: I like {NPCName}.
 			Princess_LovesNPC: I like {NPCName}.
 		}
@@ -3088,13 +3203,16 @@ NPCs: {
 	Acytaea_Boss.DisplayName: Acytaea_ Boss
 	BarkSpicyCaterpillar.DisplayName: Bark Spicy Caterpillar
 	BrownCaterpillar.DisplayName: Brown Caterpillar
-	Bulbling.DisplayName: Bulbling
+	CarapaceCaterpillar.DisplayName: Carapace Caterpillar
 	CrimsonProtestant.DisplayName: Crimson Protestant
 	CrimsonSpell.DisplayName: Crimson Spell
 	CyanOreBeetle.DisplayName: Cyan Ore Beetle
 	DarkGlimmeringRods.DisplayName: Dark Glimmering Rods
+	GiantJellyBall.DisplayName: Giant Jelly Ball
+	JellyBall.DisplayName: Jelly Ball
 	LeafcutterAnt.DisplayName: Leafcutter Ant
 	LightBulb.DisplayName: Light Bulb
+	ShadowstrikeCaterpillar.DisplayName: Shadowstrike Caterpillar
 	WhisperingGhost.DisplayName: Whispering Ghost
 	SquamousShell.DisplayName: Squamous Shell
 	TestNPC.DisplayName: Test N P C
@@ -3655,6 +3773,10 @@ Projectiles: {
 	YggdrasilMoonBladeHit.DisplayName: Yggdrasil Moon Blade Hit
 	YggdrasilMoonBlade_friendly.DisplayName: Yggdrasil Moon Blade_friendly
 	YggdrasilSlashBall.DisplayName: Yggdrasil Slash Ball
+	MeltingFireRing.DisplayName: Melting Fire Ring
+	MeltingFireExplode.DisplayName: Melting Fire Explode
+	Thermoprobe.DisplayName: Thermoprobe
+	Thermoprobe_Fireball.DisplayName: Thermoprobe_ Fireball
 	SightOfTileProj.DisplayName: Sight Of Tile Proj
 	SightOfTileProjRead.DisplayName: Sight Of Tile Proj Read
 }
