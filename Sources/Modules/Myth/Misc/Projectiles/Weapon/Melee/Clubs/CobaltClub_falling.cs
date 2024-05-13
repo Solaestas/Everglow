@@ -6,7 +6,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class CobaltClub_falling : TrailingProjectile
 {
-	public override string Texture => "Everglow/" + ModAsset.Melee_CobaltClubPath;
+	public override string Texture => "Everglow/" + ModAsset.CobaltClub_Path;
 	public override void SetDef()
 	{
 		Projectile.width = 30;

@@ -1,4 +1,5 @@
-﻿sampler uImage0 : register(s0);
+﻿
+sampler uImage0 : register(s0);
 sampler uImage1 : register(s1);
 sampler uImage2 : register(s2);
 
@@ -11,96 +12,108 @@ sampler uImage2 : register(s2);
 * 如有需要可以自己加参数
 */
 
+
+float4x4 uTransform;
 float3 circleCenter;
 float radiusOfCircle;
 float uTime;
 float uPower;
 
+struct VSInput
+{
+	float2 Pos : POSITION0;
+	float4 Color : COLOR0;
+	float3 Texcoord : TEXCOORD0;
+};
+
 struct PSInput
 {
-    float4 Pos : SV_POSITION;
-    float4 Color : COLOR0;
-    float3 Texcoord : TEXCOORD0;
+	float4 Pos : SV_POSITION;
+	float4 Color : COLOR0;
+	float3 Texcoord : TEXCOORD0;
 };
+
+float3 hsv2rgb(float3 c)
+{
+	float4 K = float4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+	float3 p = abs((c.xxx + K.xyz - floor(c.xxx + K.xyz)) * 6.0 - K.www);
+	return c.z * lerp(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
-    float3 coord = input.Texcoord;
+	float3 coord = input.Texcoord;
 	
-    float3 dir = float3(coord.x, coord.y, -1);
-    float3 P = -circleCenter;
-    float A = dot(dir, dir);
-    float B = 2 * dot(dir, P);
-    float C = dot(P, P) - radiusOfCircle * radiusOfCircle;
+	float3 dir = float3(coord.x, coord.y, -1);
+	float3 P = -circleCenter;
+	float A = dot(dir, dir);
+	float B = 2 * dot(dir, P);
+	float C = dot(P, P) - radiusOfCircle * radiusOfCircle;
 	
 	// 解方程
-    float det = B * B - 4 * A * C;
-    if (det < 0)
-        return float4(0, 0, 0, 0);
-    float sqdet = sqrt(det);
-    float t1 = (-B + sqdet) / (2 * A);
-    float t2 = (-B - sqdet) / (2 * A);
-    float t = t1 < t2 ? t1 : t2;
-    float3 ligS = float3(0, 0, 1);
+	float det = B * B - 4 * A * C;
+	if (det < 0)
+		return float4(0, 0, 0, 0);
+	float sqdet = sqrt(det);
+	float t1 = (-B + sqdet) / (2 * A);
+	float t2 = (-B - sqdet) / (2 * A);
+	float t = t1 < t2 ? t1 : t2;
+	float3 ligS = float3(0, 0, 1);
 	// 求 theta 和 phi ，对应 x, y
-    float3 hitpos = dir * t - circleCenter;
-<<<<<<< HEAD:Sources/Modules/Myth/Effects/Shaders/SpherePerspective.fx
-    
-    float3 N = normalize(hitpos);
-    //删注解扭曲
-    //float4 Cwarp = tex2D(uImage0, coord.xy * 0.6f + float2(uTime * 1.8, sin(uTime)));
-    //删注解随时间变化
-    float x = atan2(hitpos.z, hitpos.x) / 3.14159 + 1.0/* + uTime + Cwarp.r * 0.05*/;
-    float y = hitpos.y / radiusOfCircle + 1.0 /*+ uTime + Cwarp.g * 0.05*/;
-=======
+	float3 hitpos = dir * t - circleCenter;
 
->>>>>>> dream weaver:Sources/Modules/Myth/TheFirefly/Projectiles/DreamWeaver/SpherePerspective_DreamWeaverBall.fx
-    float x0 = atan2(hitpos.z, hitpos.x) / 3.14159 + 1.0;
-    float y0 = hitpos.y / radiusOfCircle + 1.0;
-    float3 N = normalize(hitpos);
-    float4 Cwarp = tex2D(uImage1, float2(uTime * 1.8 + x0, sin(uTime) + y0));
+	float x0 = atan2(hitpos.z, hitpos.x) / 3.14159 + 1.0;
+	float y0 = hitpos.y / radiusOfCircle + 1.0;
+	float3 N = normalize(hitpos);
+	float4 Cwarp = tex2D(uImage1, float2(uTime * 1.8 + x0, sin(uTime) + y0));
     
-    float x = atan2(hitpos.z, hitpos.x) / 3.14159 + 1.0 + uTime + Cwarp.r * 0.05;
-    float y = hitpos.y / radiusOfCircle + 1.0 + uTime + Cwarp.g * 0.05;
+	float x = atan2(hitpos.z, hitpos.x) / 3.14159 + 1.0 + uTime + Cwarp.r * 0.05;
+	float y = hitpos.y / radiusOfCircle + 1.0 + uTime + Cwarp.g * 0.05;
 
     
 	
 	// 因为我坐标是 [-1, 1] 这个区间的，所以先要翻正再取模
-    float xx = fmod(x + 1, 1.0);
-    float yy = fmod(y + 1, 1.0);
+	float xx = fmod(x + 1, 1.0);
+	float yy = fmod(y + 1, 1.0);
     
-    if (hitpos.y > uPower + tex2D(uImage2, float2(xx, yy)).r * 0.05)
-    {
-        return float4(0, 0, 0, 0);
-    }
+	if (hitpos.y > uPower + tex2D(uImage2, float2(xx, yy)).r * 0.05)
+	{
+		return float4(0, 0, 0, 0);
+	}
     
-    float xx0 = fmod(x0 + 1, 1.0);
-    float yy0 = fmod(y0 + 1, 1.0);
-    float costheta = dot(ligS, N);
-    float4 Cz = tex2D(uImage0, float2(xx, yy));
+	float xx0 = fmod(x0 + 1, 1.0);
+	float yy0 = fmod(y0 + 1, 1.0);
+	float costheta = dot(ligS, N);
+	float4 Cz = tex2D(uImage0, float2(xx, yy));
 
-<<<<<<< HEAD:Sources/Modules/Myth/Effects/Shaders/SpherePerspective.fx
-    float4 ga = (costheta, costheta, costheta, costheta);
-    Cz *= ga;
-=======
 
-    float4 ga = (costheta, costheta, costheta, costheta);
-    Cz *= ga;
+	float4 ga = (costheta, costheta, costheta, costheta);
+	Cz *= ga;
     
-    if (hitpos.y < uPower + tex2D(uImage2, float2(xx, yy)).r * 0.05 && hitpos.y > uPower + tex2D(uImage2, float2(xx, yy)).r * 0.05 - 0.04)
-    {
-        return input.Color.rgba;
-    }
->>>>>>> dream weaver:Sources/Modules/Myth/TheFirefly/Projectiles/DreamWeaver/SpherePerspective_DreamWeaverBall.fx
-    return Cz * input.Color;
+	if (hitpos.y < uPower + tex2D(uImage2, float2(xx, yy)).r * 0.05 && hitpos.y > uPower + tex2D(uImage2, float2(xx, yy)).r * 0.05 - 0.04)
+	{
+		return input.Color.rgba;
+	}
+	return Cz * input.Color;
 
 }
 
+PSInput VertexShaderFunction(VSInput input)
+{
+	PSInput output;
+	output.Color = input.Color;
+	output.Texcoord = input.Texcoord;
+	output.Pos = mul(float4(input.Pos, 0, 1), uTransform);
+	return output;
+}
+
+
 technique Technique1
 {
-    pass ColorBar
-    {
-        VertexShader = compile vs_3_0 VertexShaderFunction();
-        PixelShader = compile ps_3_0 PixelShaderFunction();
-    }
+	pass ColorBar
+	{
+		VertexShader = compile vs_3_0 VertexShaderFunction();
+		PixelShader = compile ps_3_0 PixelShaderFunction();
+	}
 }

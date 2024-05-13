@@ -1,11 +1,13 @@
 using Everglow.Myth.Misc.Dusts;
+using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class MythrilClub_smashMagicBall : ModProjectile
 {
-	public override string Texture => "Everglow/" + ModAsset.Melee_MythrilClubPath;
+	public override string Texture => "Everglow/" + ModAsset.MythrilClub_Path;
+
 	public override void SetDefaults()
 	{
 		Projectile.width = 20;
@@ -16,19 +18,26 @@ public class MythrilClub_smashMagicBall : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = false;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		Projectile.scale = 0;
 		base.OnSpawn(source);
 	}
+
 	public override bool PreAI()
 	{
-		if(Projectile.timeLeft > 120)
+		if (Projectile.timeLeft > 120)
 		{
 			return false;
 		}
+		if (Projectile.timeLeft == 120)
+		{
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<MythrilClub_Shoot>(), (int)(Projectile.damage * 0.4f), Projectile.knockBack * 0.4f, Projectile.owner, 1f);
+		}
 		return base.PreAI();
 	}
+
 	public override bool ShouldUpdatePosition()
 	{
 		if (Projectile.timeLeft > 120)
@@ -41,13 +50,14 @@ public class MythrilClub_smashMagicBall : ModProjectile
 		}
 		return base.ShouldUpdatePosition();
 	}
+
 	public int RotatingTimer = 0;
+
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
 		Projectile.friendly = true;
 
-		
 		if (Projectile.timeLeft < 80)
 		{
 			Vector2 targetCenter = player.Center + new Vector2(-90 * player.direction, -75 * player.gravDir + MathF.Sin((float)Main.time * 0.03f) * 15) + new Vector2(0, 45).RotatedBy(Main.time * 0.13 + Projectile.whoAmI);
@@ -71,10 +81,11 @@ public class MythrilClub_smashMagicBall : ModProjectile
 
 			d0.scale *= Projectile.scale;
 
-			Lighting.AddLight(Projectile.Center, new Vector3(0.1f, 0.7f, 0.6f) * Projectile.scale);
+			Lighting.AddLight(Projectile.Center, new Vector3(0.1f, 0.4f, 0.6f) * Projectile.scale);
 		}
 		base.AI();
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		if (Projectile.timeLeft > 120)
@@ -95,9 +106,9 @@ public class MythrilClub_smashMagicBall : ModProjectile
 		Main.EntitySpriteDraw(light, Projectile.Center - Main.screenPosition, null, color, MathHelper.PiOver2 + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark * 2f) * 0.75f, SpriteEffects.None, 0);
 		return false;
 	}
+
 	public override void OnKill(int timeLeft)
 	{
 		base.OnKill(timeLeft);
 	}
 }
-

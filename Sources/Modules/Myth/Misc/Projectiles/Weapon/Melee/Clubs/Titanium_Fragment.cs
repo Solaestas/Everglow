@@ -1,3 +1,5 @@
+using Everglow.Myth.Misc.Items.Weapons.Clubs;
+using SteelSeries.GameSense;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -18,10 +20,12 @@ public class Titanium_Fragment : ModProjectile
 		Projectile.usesIDStaticNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 60;
 	}
+
 	public Vector2 OribTrack = Vector2.Zero;
 	public int AITimer = 0;
 	public float TimeValue = 0;
 	public float MulRange = 1f;
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		AITimer = Main.rand.Next(-40, 40);
@@ -33,6 +37,27 @@ public class Titanium_Fragment : ModProjectile
 		MulRange = 1f;
 		base.OnSpawn(source);
 	}
+
+	public void GenerateSpark(int frequency)
+	{
+		for (int g = 0; g < frequency; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(7f, 27f)).RotatedBy(Main.rand.NextFloat(MathHelper.TwoPi));
+			var spark = new FireSpark_TitaniumDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center,
+				maxTime = Main.rand.Next(5, 15),
+				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4.1f, 57.0f)),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) },
+			};
+			Ins.VFXManager.Add(spark);
+		}
+	}
+
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -57,11 +82,22 @@ public class Titanium_Fragment : ModProjectile
 				Projectile.velocity.Y *= Main.rand.NextFloat(-0.9f, -0.6f);
 				canFall = false;
 			}
-			if(canFall)
+			if (canFall)
 			{
 				Projectile.velocity += new Vector2(0, 0.6f);
 			}
 			return;
+		}
+		else
+		{
+			if (player.HeldItem.type != ModContent.ItemType<TitaniumClub_Item>())
+			{
+				if (Main.rand.NextBool(4))
+				{
+					Projectile.timeLeft = 149;
+					Projectile.velocity *= 0.2f;
+				}
+			}
 		}
 		TimeValue = (float)(Main.time / Projectile.ai[0] * 5f) + Projectile.whoAmI * 4.3742f;
 		float timeValue2 = TimeValue % MathHelper.TwoPi;
@@ -75,7 +111,7 @@ public class Titanium_Fragment : ModProjectile
 		}
 		OribTrack = new Vector2(Projectile.ai[0] * MulRange, 0).RotatedBy(TimeValue);
 		OribTrack.Y *= 0.2f;
-		if(timeValue2 > MathHelper.Pi)
+		if (timeValue2 > MathHelper.Pi)
 		{
 			Projectile.hide = true;
 		}
@@ -104,7 +140,7 @@ public class Titanium_Fragment : ModProjectile
 			}
 			if (toAim2.Length() > 800)
 			{
-				if(Projectile.timeLeft > 150)
+				if (Projectile.timeLeft > 150)
 				{
 					Projectile.timeLeft = 149;
 				}
@@ -115,14 +151,15 @@ public class Titanium_Fragment : ModProjectile
 			Vector2 acc = toAim * 0.07f;
 			Projectile.velocity += acc;
 		}
-		if(AITimer == 100 + (int)(Math.Sin(Projectile.whoAmI) * 25))
+		if (AITimer == 100 + (int)(Math.Sin(Projectile.whoAmI) * 25))
 		{
-			SoundEngine.PlaySound(SoundID.NPCHit4.WithVolume(Main.rand.NextFloat(0.02f, 0.08f)).WithPitchOffset(Main.rand.NextFloat(-0.5f, 0.5f)),Projectile.Center);
+			SoundEngine.PlaySound(SoundID.NPCHit4.WithVolume(Main.rand.NextFloat(0.02f, 0.08f)).WithPitchOffset(Main.rand.NextFloat(-0.5f, 0.5f)), Projectile.Center);
 		}
 	}
+
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 	{
-		if(Projectile.hide)
+		if (Projectile.hide)
 		{
 			behindNPCs.Add(index);
 		}
@@ -131,6 +168,7 @@ public class Titanium_Fragment : ModProjectile
 			overPlayers.Add(index);
 		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		float mulColor = (255 - Projectile.alpha) / 255f;
@@ -158,12 +196,14 @@ public class Titanium_Fragment : ModProjectile
 		Main.EntitySpriteDraw(texture_l2, drawPos, frame, light2 * value2 * mulColor, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
 		return false;
 	}
-	public override void OnKill(int timeLeft)
+
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		for(int i = 0; i < 4;i++)
+		if (Main.rand.NextBool(4))
 		{
-			Dust d0 = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, DustID.Titanium);
+			Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, DustID.Titanium);
 		}
-		base.OnKill(timeLeft);
+		GenerateSpark(3);
+		base.OnHitNPC(target, hit, damageDone);
 	}
 }

@@ -10,6 +10,7 @@ public class Smog_clubPipeline : Pipeline
 	{
 		effect = ModAsset.Smog_club;
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
@@ -28,10 +29,12 @@ public class Smog_clubPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(Smog_clubPipeline))]
 public class Smog_club_front : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public List<Vector2> oldPos = new List<Vector2>();
 	public Vector2 position;
 	public Vector2 velocity;
@@ -40,16 +43,25 @@ public class Smog_club_front : Visual
 	public float maxTime;
 	public float scale;
 	public float alpha;
-	public Smog_club_front() { }
+
+	public Smog_club_front()
+	{
+	}
 
 	public override void Update()
 	{
 		oldPos.Add(position);
 		if (oldPos.Count > 200)
+		{
 			oldPos.RemoveAt(0);
+		}
+
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		velocity *= 0.9f;
 		position += velocity;
 	}
@@ -59,8 +71,6 @@ public class Smog_club_front : Visual
 		Vector2[] pos = oldPos.Reverse<Vector2>().ToArray();
 		float fx = timer / maxTime;
 		int len = pos.Length;
-		if (len <= 2)
-			return;
 		var bars = new List<Vertex2D>();
 		for (int i = 1; i < len; i++)
 		{
@@ -71,6 +81,17 @@ public class Smog_club_front : Visual
 			bars.Add(oldPos[i] + normal * scale, lightColorWithPos, new Vector3(0, (i + 15 - len) / 75f + timer / 15000f, fx - width * 0.4f));
 			bars.Add(oldPos[i] - normal * scale, lightColorWithPos, new Vector3(1, (i + 15 - len) / 75f + timer / 15000f, fx - width * 0.4f));
 		}
+		if (len <= 2)
+		{
+			for (int i = 1; i < 3; i++)
+			{
+
+				var lightColorWithPos = new Color(1f, 1f, 1f, 0);
+				bars.Add(position, lightColorWithPos, new Vector3(0, (i + 15 - len) / 75f + timer / 15000f, fx));
+				bars.Add(position, lightColorWithPos, new Vector3(1, (i + 15 - len) / 75f + timer / 15000f, fx));
+			}
+		}
+
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
 }

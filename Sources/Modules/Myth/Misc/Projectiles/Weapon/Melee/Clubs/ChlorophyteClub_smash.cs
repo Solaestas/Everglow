@@ -2,7 +2,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class ChlorophyteClub_smash : ClubProj_Smash_metal
 {
-	public override string Texture => "Everglow/" + ModAsset.Melee_ChlorophyteClubPath;
+	public override string Texture => "Everglow/" + ModAsset.ChlorophyteClub_Path;
 	public override void Smash(int level)
 	{
 		Player player = Main.player[Projectile.owner];

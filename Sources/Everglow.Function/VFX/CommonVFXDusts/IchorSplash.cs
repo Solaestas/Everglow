@@ -99,8 +99,6 @@ public class IchorSplash : Visual
 		Vector2[] pos = oldPos.Reverse<Vector2>().ToArray();
 		float pocession = timer / maxTime;
 		int len = pos.Length;
-		if (len <= 2)
-			return;
 		var bars = new List<Vertex2D>();
 		for (int i = 1; i < len; i++)
 		{
@@ -136,6 +134,15 @@ public class IchorSplash : Visual
 
 			bars.Add(oldPos[i] + normal * width + widthUp, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0 + ai[0], (i + 15 - len) / 17f, pocession));
 			bars.Add(oldPos[i] - normal * width + widthDown, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0.6f + ai[0], (i + 15 - len) / 17f, pocession));
+		}
+		if (len <= 2)
+		{
+			for (int i = 1; i < 3; i++)
+			{
+				var lightColorWithPos = new Color(1f, 1f, 1f, 0);
+				bars.Add(position, lightColorWithPos, new Vector3(0, (i + 15 - len) / 75f + timer / 15000f, pocession));
+				bars.Add(position, lightColorWithPos, new Vector3(1, (i + 15 - len) / 75f + timer / 15000f, pocession));
+			}
 		}
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}

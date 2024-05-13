@@ -4,22 +4,24 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class MythrilClub_smash : ClubProj_Smash_metal
 {
-	public override string Texture => "Everglow/" + ModAsset.Melee_MythrilClubPath;
-	public override string TrailColorTex() => "Everglow/" + ModAsset.MythrilClub_lightPath;
+	public override string Texture => "Everglow/" + ModAsset.MythrilClub_Path;
+
+	public override string TrailColorTex() => "Everglow/" + ModAsset.MythrilClub_light_Path;
+
 	public override void Smash(int level)
 	{
 		Player player = Main.player[Projectile.owner];
 		if (level == 0)
 		{
-			Projectile.NewProjectileDirect(null, player.gravDir == 1 ? player.Bottom : player.Top, Vector2.zeroVector, ModContent.ProjectileType<MythrilClub_smash_explosion>(), 0, 0, player.whoAmI, 1);
+			Projectile.NewProjectileDirect(null, player.gravDir == 1 ? player.Bottom : player.Top, Vector2.zeroVector, ModContent.ProjectileType<MythrilClub_smash_explosion>(), 0, 0, player.whoAmI, 1 * Projectile.scale, Main.rand.NextFloat(MathHelper.TwoPi));
 			for (int i = 0; i <= 5; i++)
 			{
-				Projectile p1 = Projectile.NewProjectileDirect(null, player.gravDir == 1 ? player.Bottom : player.Top, Vector2.zeroVector, ModContent.ProjectileType<MythrilClub_smash_explosion2>(), 0, 0, player.whoAmI, 1, i / 5f);
+				Projectile p1 = Projectile.NewProjectileDirect(null, player.gravDir == 1 ? player.Bottom : player.Top, Vector2.zeroVector, ModContent.ProjectileType<MythrilClub_smash_explosion2>(), 0, 0, player.whoAmI, 1 * Projectile.scale, i / 5f);
 				p1.timeLeft = 65 + i * 3;
 			}
-			for (int i = -3;i <=3;i++)
+			for (int i = -3; i <= 3; i++)
 			{
-				if(i == 0)
+				if (i == 0)
 				{
 					continue;
 				}
@@ -55,10 +57,10 @@ public class MythrilClub_smash : ClubProj_Smash_metal
 		}
 		if (level == 1)
 		{
-			Projectile.NewProjectileDirect(null, player.gravDir == 1 ? player.Bottom : player.Top, Vector2.zeroVector, ModContent.ProjectileType<MythrilClub_smash_explosion>(), 0, 0, player.whoAmI, 1.4f);
+			Projectile.NewProjectileDirect(null, player.gravDir == 1 ? player.Bottom : player.Top, Vector2.zeroVector, ModContent.ProjectileType<MythrilClub_smash_explosion>(), 0, 0, player.whoAmI, 1.4f * Projectile.scale, Main.rand.NextFloat(MathHelper.TwoPi));
 			for (int i = 0; i <= 5; i++)
 			{
-				Projectile p1 = Projectile.NewProjectileDirect(null, player.gravDir == 1 ? player.Bottom : player.Top, Vector2.zeroVector, ModContent.ProjectileType<MythrilClub_smash_explosion2>(), 0, 0, player.whoAmI, 1.4f, i / 5f);
+				Projectile p1 = Projectile.NewProjectileDirect(null, player.gravDir == 1 ? player.Bottom : player.Top, Vector2.zeroVector, ModContent.ProjectileType<MythrilClub_smash_explosion2>(), 0, 0, player.whoAmI, 1.4f * Projectile.scale, i / 5f);
 				p1.timeLeft = 65 + i * 3;
 			}
 			for (int i = -6; i <= 6; i++)

@@ -5,7 +5,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class StarDancer_starProj : ModProjectile
 {
-	public override string Texture => "Everglow/" + ModAsset.Melee_StarDancerPath;
+	public override string Texture => "Everglow/" + ModAsset.StarDancer_Path;
 	public override void SetDefaults()
 	{
 		Projectile.timeLeft = 60;

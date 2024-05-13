@@ -39,10 +39,10 @@ namespace Everglow.Myth.Misc.Items.Weapons
 				UseCount = 0;
 				Vector2 p1 = new Vector2(Main.rand.NextFloat(-300, 300), -1000);
 				velocity = Vector2.Normalize(Main.MouseWorld - p1 - player.MountedCenter) * 60f;
-				Projectile.NewProjectile(source, player.MountedCenter + p1, velocity, ModContent.ProjectileType<Glow_Fall>(), damage * 3, knockback, player.whoAmI, player.direction * player.gravDir, player.itemAnimationMax, adjustedItemScale);
+				Projectile.NewProjectileDirect(source, player.MountedCenter + p1, velocity, ModContent.ProjectileType<Glow_Fall>(), damage * 3, knockback, player.whoAmI, player.direction * player.gravDir, adjustedItemScale);
 				Vector2 p2 = p1 + new Vector2(300 * player.direction , 0);
 				velocity = Vector2.Normalize(Main.MouseWorld - p2 - player.MountedCenter) * 60f;
-				Projectile.NewProjectile(source, player.MountedCenter + p2, velocity, ModContent.ProjectileType<Glow_Fall>(), damage * 3, knockback, player.whoAmI, player.direction * player.gravDir, player.itemAnimationMax, adjustedItemScale);
+				Projectile.NewProjectileDirect(source, player.MountedCenter + p2, velocity, ModContent.ProjectileType<Glow_Fall>(), damage * 3, knockback, player.whoAmI, player.direction * player.gravDir, adjustedItemScale);
 			}
 			return base.Shoot(player, source, position, velocity, type, damage, knockback);
 		}

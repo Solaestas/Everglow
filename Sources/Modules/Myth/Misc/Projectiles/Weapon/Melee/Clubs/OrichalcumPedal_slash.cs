@@ -1,5 +1,4 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -8,6 +7,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 {
 	public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+
 	public override void SetDefaults()
 	{
 		Projectile.width = 30;
@@ -23,10 +23,12 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		Projectile.localNPCHitCooldown = 60;
 		Projectile.usesLocalNPCImmunity = true;
 	}
+
 	public List<Vector3> OldPosSpace = new List<Vector3>();
 	public Vector3 SpacePos;
 	public Vector3 RotatedAxis;
 	public float Omega = 0;
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		Vector2 v0 = new Vector2(0, Main.rand.NextFloat(2, 3)).RotatedByRandom(6.283);
@@ -36,6 +38,7 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		SpacePos = RodriguesRotate(SpacePos, RotatedAxis, Main.rand.NextFloat(6.283f));
 		Omega = 0.7f;
 	}
+
 	public override bool PreAI()
 	{
 		if (Projectile.timeLeft > 120)
@@ -44,10 +47,12 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		}
 		return base.PreAI();
 	}
+
 	public override bool ShouldUpdatePosition()
 	{
 		return false;
 	}
+
 	public override void AI()
 	{
 		Projectile.friendly = true;
@@ -66,7 +71,9 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 			p0.scale = Main.rand.NextFloat(0.8f, 1.2f) * Projectile.ai[0];
 		}
 	}
+
 	public int HitTimes = 0;
+
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		for (int i = 0; i < SmoothTrail.Count - 4; i += 4)
@@ -76,7 +83,7 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 			{
 				Projectile.damage /= 2;
 				HitTimes++;
-				if(HitTimes > 3)
+				if (HitTimes > 3)
 				{
 					Projectile.friendly = false;
 				}
@@ -85,7 +92,9 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		}
 		return false;
 	}
+
 	public List<Vector2> SmoothTrail = new List<Vector2>();
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		if (Projectile.timeLeft > 120)
@@ -105,7 +114,6 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		value1 = MathF.Sin(value1 * MathF.PI);
 		float width = value1 * 70f;
 
-
 		List<Vector2> scales = new List<Vector2>();
 		List<Vector2> SmoothTrailProjectile = new List<Vector2>();
 		for (int x = 0; x <= OldPosSpace.Count - 1; x++)
@@ -116,21 +124,23 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		}
 
 		List<float> scalesSmooth = new List<float>();
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(SmoothTrailProjectile.ToList());//平滑
-		List<Vector2> Smoothscales = GraphicsUtils.CatmullRom(scales.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(SmoothTrailProjectile.ToList()); // 平滑
+		List<Vector2> Smoothscales = GraphicsUtils.CatmullRom(scales.ToList()); // 平滑
 		SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count; x++)
 		{
-			float value2 = x / (float)(SmoothTrailX.Count);
-			scalesSmooth.Add(Smoothscales[Math.Clamp((int)(value2), 0, Smoothscales.Count - 1)].X);
+			float value2 = x / (float)SmoothTrailX.Count;
+			scalesSmooth.Add(Smoothscales[Math.Clamp((int)value2, 0, Smoothscales.Count - 1)].X);
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
+		{
 			return false;
+		}
 
-		Color drawColor = new Color(0.9f, 0.9f, 0.9f, 0.9f);
+		Color drawColor = new Color(0.9f, 0.9f, 0.9f, 0.9f) * 0.5f;
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int i = 0; i < SmoothTrail.Count; i++)
 		{
@@ -140,7 +150,9 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StarSlash_black.Value;
 		if (bars.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
 
 		drawColor = new Color(1f * lightColor.R / 255f, 0.2f * lightColor.G / 255f * value1, 1.5f * lightColor.B / 255f * value1, 0) * value1;
 		bars = new List<Vertex2D>();
@@ -152,7 +164,9 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StarSlash.Value;
 		if (bars.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
 
 		if (value1 > 0.5f)
 		{
@@ -166,13 +180,16 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 			}
 			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StarSlash.Value;
 			if (bars.Count > 3)
+			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			}
 		}
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 		return false;
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		if (SmoothTrail.Count < 3)
@@ -190,7 +207,7 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		for (int i = 0; i < SmoothTrail.Count; i++)
 		{
 			Vector2 normal = Vector2.Normalize(SmoothTrail[i]).RotatedBy(rotValue);
-			Color drawColor0 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 0.2f, 0);
+			Color drawColor0 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 0.8f, 0);
 			Color drawColor1 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 0, 0);
 
 			bars.Add(SmoothTrail[i] + drawPos, drawColor0, new Vector3(0.5f, i / (float)(SmoothTrail.Count - 1), 1));
@@ -203,6 +220,7 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 			spriteBatch.Draw(Commons.ModAsset.StarSlash.Value, bars, PrimitiveType.TriangleStrip);
 		}
 	}
+
 	public static Vector3 RodriguesRotate(Vector3 origVec, Vector3 axis, float theta)
 	{
 		if (axis != new Vector3(0, 0, 0))
@@ -216,6 +234,7 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		float cos = MathF.Cos(theta);
 		return cos * origVec + (1 - cos) * Vector3.Dot(origVec, axis) * axis + MathF.Sin(theta) * Vector3.Cross(origVec, axis);
 	}
+
 	public static Vector2 Projection2D(Vector3 vector, Vector2 center, float viewZ, out float scale)
 	{
 		float value = -viewZ / (vector.Z - viewZ);

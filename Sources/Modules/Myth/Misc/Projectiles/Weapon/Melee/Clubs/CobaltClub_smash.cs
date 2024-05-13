@@ -5,8 +5,8 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class CobaltClub_smash : ClubProj_Smash_metal
 {
-	public override string Texture => "Everglow/" + ModAsset.Melee_CobaltClubPath;
-	public override string TrailColorTex() => "Everglow/" + ModAsset.CobaltClub_lightPath;
+	public override string Texture => "Everglow/" + ModAsset.CobaltClub_Path;
+	public override string TrailColorTex() => "Everglow/" + ModAsset.CobaltClub_light_Path;
 	public override void OnSpawn(IEntitySource source)
 	{
 		Projectile.ai[1] = -60;

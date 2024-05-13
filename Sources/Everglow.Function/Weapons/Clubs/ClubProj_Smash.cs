@@ -1,10 +1,10 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
-using Everglow.Commons.Physics;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
-using log4net.Core;
+using Terraria.Audio;
 using Terraria.DataStructures;
+
 namespace Everglow.Commons.Weapons.Clubs;
 
 public abstract class ClubProj_Smash : MeleeProj
@@ -35,30 +35,37 @@ public abstract class ClubProj_Smash : MeleeProj
 		AutoEnd = false;
 		selfWarp = false;
 	}
+
 	public bool Crash = false;
 	public int FixedDirection = 1;
 	public Vector2 StopPoint = Vector2.Zero;
 	public Queue<Vector2> trailVecs2 = new Queue<Vector2>();
 	public float Omega = 0;
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
+
 	public override string TrailShapeTex()
 	{
 		return "Everglow/Commons/Textures/Melee";
 	}
+
 	public override string TrailColorTex()
 	{
 		return Texture;
 	}
+
 	public override float TrailAlpha(float factor)
 	{
 		return base.TrailAlpha(factor) * 1.15f;
 	}
+
 	public override BlendState TrailBlendState()
 	{
 		return BlendState.NonPremultiplied;
 	}
+
 	public override void End()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -69,10 +76,12 @@ public abstract class ClubProj_Smash : MeleeProj
 		Projectile.Kill();
 		player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		OwnSmashClubPlayers.Add(Projectile.owner);
 	}
+
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -83,28 +92,31 @@ public abstract class ClubProj_Smash : MeleeProj
 		float timeMul = 1 / player.meleeSpeed;
 		if (attackType == 0)
 		{
-			if (timer < 14 * timeMul)//前摇
+			if (timer < 14 * timeMul)// 前摇
 			{
 				useTrail = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == (int)(14 * timeMul))
+			{
 				AttSound(SoundID.Item1);
+			}
+
 			if (timer > 14 * timeMul && timer < 35 * timeMul)
 			{
 				isAttacking = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.32f / timeMul;
 
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, 0f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, 0f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul) * Projectile.scale;
 				player.fullRotationOrigin = new Vector2(10, 42);
 				player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
 				player.legRotation = -player.fullRotation;
 			}
-			if(player.gravDir == 1)
+			if (player.gravDir == 1)
 			{
 				if (Collision.SolidCollision(player.BottomLeft, player.width, 64) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 16)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 0)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, -16)))
 				{
@@ -137,7 +149,7 @@ public abstract class ClubProj_Smash : MeleeProj
 				player.velocity.Y += player.gravDir;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
@@ -147,16 +159,19 @@ public abstract class ClubProj_Smash : MeleeProj
 			ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 14).RotatedByRandom(6.283);
 			player.direction = FixedDirection;
-			if (timer < 8 * timeMul)//前摇
+			if (timer < 8 * timeMul)// 前摇
 			{
 				useTrail = false;
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == (int)(2 * timeMul))
+			{
 				AttSound(SoundID.Item1);
+			}
+
 			if (timer > 8 * timeMul && timer < 90 * timeMul)
 			{
 				isAttacking = true;
@@ -164,7 +179,7 @@ public abstract class ClubProj_Smash : MeleeProj
 				Projectile.rotation -= Projectile.spriteDirection * Omega / timeMul;
 				float theta = 1.16f;
 				float phi = MathF.Sin((90 - timer) * (90 - timer) / 1000f) * player.direction;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, theta, phi), 0.4f / timeMul);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, theta, phi), 0.4f / timeMul) * Projectile.scale;
 				player.fullRotationOrigin = new Vector2(10, 42);
 				player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
 				player.legRotation = -player.fullRotation;
@@ -174,22 +189,25 @@ public abstract class ClubProj_Smash : MeleeProj
 				End();
 				Projectile.Kill();
 			}
-		}//强
+		}// 强
 		if (attackType == 2)
 		{
 			ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
 			player.direction = FixedDirection;
-			if (timer < 8 * timeMul)//前摇
+			if (timer < 8 * timeMul)// 前摇
 			{
 				useTrail = false;
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == (int)(2 * timeMul))
+			{
 				AttSound(SoundID.Item1);
+			}
+
 			if (timer > 8 * timeMul && timer < 40 * timeMul)
 			{
 				isAttacking = true;
@@ -197,7 +215,7 @@ public abstract class ClubProj_Smash : MeleeProj
 				Projectile.rotation -= Projectile.spriteDirection * Omega / timeMul;
 				float theta = 0.4f + timer / 71f;
 				float phi = (-1.2f + timer / 50f) * player.direction;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(90, Projectile.rotation, theta, phi), 0.9f / timeMul);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(90, Projectile.rotation, theta, phi), 0.9f / timeMul) * Projectile.scale;
 				player.fullRotationOrigin = new Vector2(10, 42);
 				player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
 				player.legRotation = -player.fullRotation;
@@ -207,16 +225,20 @@ public abstract class ClubProj_Smash : MeleeProj
 				End();
 				Projectile.Kill();
 			}
-		}//弱
+		}// 弱
 		trailVecs2.Enqueue(mainVec + Projectile.Center);
 		if (trailVecs2.Count > trailLength)
+		{
 			trailVecs2.Dequeue();
+		}
 	}
+
 	public virtual void Smash(int level)
 	{
 		Player player = Main.player[Projectile.owner];
-		if (level == 1)//强
+		if (level == 1)// 强
 		{
+			SoundEngine.PlaySound(SoundID.Research);
 			attackType = 1;
 			Omega = 0.8f;
 			for (int g = 0; g < 24; g++)
@@ -235,21 +257,22 @@ public abstract class ClubProj_Smash : MeleeProj
 					position = pos,
 					maxTime = Main.rand.Next(15, 48),
 					scale = Main.rand.NextFloat(40f, 60f),
-					ai = new float[] { 0, 0 }
+					ai = new float[] { 0, 0 },
 				};
 				Ins.VFXManager.Add(somg);
 			}
 			Projectile.damage = (int)(Projectile.damage * 1.85f);
 		}
-		if (level == 0)//弱
+		if (level == 0)// 弱
 		{
+			SoundEngine.PlaySound(SoundID.DrumFloorTom);
 			attackType = 2;
 			Omega = 0.4f;
 			for (int g = 0; g < 12; g++)
 			{
 				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(35f, 44f) * player.gravDir).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
 				Vector2 pos = player.Bottom + new Vector2(0, 48) - newVelocity * 0.2f;
-				if(player.gravDir == -1)
+				if (player.gravDir == -1)
 				{
 					pos = player.Top - new Vector2(0, 48) - newVelocity * 0.2f;
 				}
@@ -261,7 +284,7 @@ public abstract class ClubProj_Smash : MeleeProj
 					position = pos,
 					maxTime = Main.rand.Next(15, 38),
 					scale = Main.rand.NextFloat(40f, 60f),
-					ai = new float[] { 0, 0 }
+					ai = new float[] { 0, 0 },
 				};
 				Ins.VFXManager.Add(somg);
 			}
@@ -277,26 +300,33 @@ public abstract class ClubProj_Smash : MeleeProj
 	{
 		base.DrawSelf(spriteBatch, lightColor, diagonal, drawScale, glowTexture);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawTrail2(lightColor);
 		DrawSelf(Main.spriteBatch, lightColor);
 		return false;
 	}
+
 	public virtual void DrawTrail2(Color color)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs2.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs2.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (trailVecs2.Count != 0)
+		{
 			SmoothTrail.Add(trailVecs2.ToArray()[trailVecs2.Count - 1]);
+		}
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
+		{
 			return;
+		}
+
 		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
 
@@ -333,21 +363,26 @@ public abstract class ClubProj_Smash : MeleeProj
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
+
 	public override void OnKill(int timeLeft)
 	{
 		Player player = Main.player[Projectile.owner];
 		player.fullRotation = 0;
 		while (OwnSmashClubPlayers.Remove(Projectile.owner))
-			;
+		{
+		}
 	}
+
 	public static List<int> OwnSmashClubPlayers = new List<int>();
 }
+
 public class SmashClubOwner : ModPlayer
 {
 	public override void PostUpdateMiscEffects()
 	{
 		if (ClubProj_Smash.OwnSmashClubPlayers.Contains(Player.whoAmI))
+		{
 			Player.maxFallSpeed += 10000f;
+		}
 	}
 }
-

@@ -4,7 +4,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 
 public class MythrilClub_smash_explosion2 : ModProjectile
 {
-	public override string Texture => "Everglow/" + ModAsset.Melee_CobaltClubPath;
+	public override string Texture => "Everglow/" + ModAsset.CobaltClub_Path;
 	public override void SetDefaults()
 	{
 		Projectile.width = 20;

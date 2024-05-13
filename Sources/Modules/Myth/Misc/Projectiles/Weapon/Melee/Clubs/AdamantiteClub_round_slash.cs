@@ -97,7 +97,7 @@ public class AdamantiteClub_round_slash : ModProjectile, IWarpProjectile
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		float mulColor = width / 10f;
-		Color light = new Color(0.48f * lightColor.R / 255f, 0.02f * mulColor * mulColor * lightColor.G / 255f, 0.02f * mulColor * mulColor * lightColor.B / 255f, 0) * width * 0.15f;
+		Color light = new Color(1.48f * lightColor.R / 255f, 0.02f * mulColor * mulColor * lightColor.G / 255f, 0.02f * mulColor * mulColor * lightColor.B / 255f, 0) * width * 0.2f;
 		light *= width / 10f;
 		normalize *= width * width / 450f;
 		bars = new List<Vertex2D>
@@ -108,7 +108,7 @@ public class AdamantiteClub_round_slash : ModProjectile, IWarpProjectile
 				new Vertex2D(Projectile.Center - normalize - Main.screenPosition + deltaPos, light, new Vector3(1,1,0))
 			};
 		Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StabbingProjectile.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.AdamantiteSlash.Value;
 		//Draw Twice to make the color more vivid.
 		if (bars.Count > 3)
 		{

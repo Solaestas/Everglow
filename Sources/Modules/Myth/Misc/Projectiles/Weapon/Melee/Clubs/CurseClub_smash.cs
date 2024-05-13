@@ -1,16 +1,16 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Myth.Misc.VFXs;
-using SteelSeries.GameSense;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class CurseClub_smash : ClubProj_Smash
 {
-	public override string Texture => "Everglow/" + ModAsset.Melee_CurseClubPath;
+	public override string Texture => "Everglow/" + ModAsset.CurseClub_Path;
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(BuffID.CursedInferno, (int)(818 * Omega));
 	}
+
 	public override void AI()
 	{
 		base.AI();
@@ -21,7 +21,7 @@ public class CurseClub_smash : ClubProj_Smash
 			float factor = Main.rand.NextFloat(0, 1f);
 			if (trailVecs2.Count > 1)
 			{
-				pos = (trailVecs2.ToArray()[trailVecs2.Count - 1] * factor + trailVecs2.ToArray()[trailVecs2.Count - 2] * (1 - factor));
+				pos = trailVecs2.ToArray()[trailVecs2.Count - 1] * factor + trailVecs2.ToArray()[trailVecs2.Count - 2] * (1 - factor);
 			}
 			pos = (pos - Projectile.Center) * 0.9f + Projectile.Center - player.velocity * factor;
 			Vector2 vel = Vector2.zeroVector;
@@ -40,15 +40,15 @@ public class CurseClub_smash : ClubProj_Smash
 			{
 				rot = (trailVecs2.ToArray()[trailVecs2.Count - 1] - Projectile.Center).ToRotation() - (trailVecs2.ToArray()[trailVecs2.Count - 2] - Projectile.Center).ToRotation();
 			}
-			var fire = new CursedFlameDust
+			var fire = new CurseFlame_HighQualityDust
 			{
 				velocity = vel,
 				Active = true,
 				Visible = true,
 				position = pos,
-				maxTime = Main.rand.Next(36, 75),
+				maxTime = Main.rand.Next(16, 35),
 
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), rot * 0.1f, Main.rand.NextFloat(3.6f, 30f) }
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), rot * 0.1f, Main.rand.NextFloat(3.6f, 30f) },
 			};
 			Ins.VFXManager.Add(fire);
 			for (int g = 0; g < 1; g++)
@@ -59,31 +59,37 @@ public class CurseClub_smash : ClubProj_Smash
 					Active = true,
 					Visible = true,
 					position = pos,
-					maxTime = Main.rand.Next(36, 75),
+					maxTime = Main.rand.Next(6, Main.rand.Next(6, 75)),
 					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 47.0f)),
 					rotation = Main.rand.NextFloat(6.283f),
-					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), rot * 0.1f }
+					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), rot * 0.1f },
 				};
 				Ins.VFXManager.Add(spark);
-			}	
+			}
 		}
 	}
+
 	public override void DrawTrail2(Color color)
 	{
 		base.DrawTrail2(color);
 
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs2.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs2.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (trailVecs2.Count != 0)
+		{
 			SmoothTrail.Add(trailVecs2.ToArray()[trailVecs2.Count - 1]);
+		}
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
+		{
 			return;
+		}
+
 		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
 
@@ -99,7 +105,7 @@ public class CurseClub_smash : ClubProj_Smash
 			bars.Add(new Vertex2D(trail[i] - Main.screenPosition, c0, new Vector3(1, 0, 0)));
 		}
 
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Melee_CurseClub_glow.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.CurseClub_glow.Value;
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 	}

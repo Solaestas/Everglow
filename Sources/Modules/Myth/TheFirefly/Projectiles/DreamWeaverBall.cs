@@ -1,6 +1,5 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Myth.TheFirefly.Projectiles.DreamWeaver;
-using Everglow.SpellAndSkull.Common;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -27,9 +26,11 @@ public class DreamWeaverBall : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
 	}
+
 	public float BallPower = 0;
 	public float PosLerpValue = 0;
 	public Vector2 HitPoint = Vector2.Zero;
+
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -37,17 +38,17 @@ public class DreamWeaverBall : ModProjectile
 		Projectile.velocity *= 0.99f;
 		Projectile.scale = (float)Utils.Lerp(Projectile.scale, 1f, 0.01);
 		Projectile.timeLeft -= player.ownedProjectileCounts[Projectile.type];
-		if(HitPoint == Vector2.zeroVector)
+		if (HitPoint == Vector2.zeroVector)
 		{
 			HitPoint = player.Center;
 		}
-		if(PosLerpValue < 0.1f)
+		if (PosLerpValue < 0.1f)
 		{
 			PosLerpValue += 0.0005f;
 		}
 		Projectile.Center = Vector2.Lerp(Projectile.Center, HitPoint + new Vector2(0, -300), PosLerpValue);
-		
-		if(player.HeldItem.type == ModContent.ItemType<Myth.TheFirefly.Items.Weapons.DreamWeaver>())
+
+		if (player.HeldItem.type == ModContent.ItemType<Myth.TheFirefly.Items.Weapons.DreamWeaver>())
 		{
 			if (BallPower < 1.101)
 			{
@@ -73,12 +74,14 @@ public class DreamWeaverBall : ModProjectile
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, radius).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f)), new Vector2(0, 20), ModContent.ProjectileType<DreamWeaver_Rain>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner);
 		}
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		BallPower = -1;
 		Projectile.ai[0] = 0;
 		Projectile.scale = 0;
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		float timeValue = (float)(Main.time * 0.008f);
@@ -127,7 +130,7 @@ public class DreamWeaverBall : ModProjectile
 		baseColor = new Color(0.05f, 0.35f, 1, 0);
 
 		triangleList = new List<Vertex2D>();
-		for(int i = 0;i <= 120;i++)
+		for (int i = 0; i <= 120; i++)
 		{
 			Vector2 drawPoint = new Vector2(0, radius).RotatedBy(i / 120f * MathHelper.TwoPi);
 			Color drawColor = baseColor;
@@ -151,7 +154,6 @@ public class DreamWeaverBall : ModProjectile
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
 
 		triangleList = new List<Vertex2D>();
 
@@ -237,8 +239,6 @@ public class DreamWeaverBall : ModProjectile
 		return false;
 	}
 
-
-
 	public override void OnKill(int timeLeft)
 	{
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
@@ -255,19 +255,30 @@ public class DreamWeaverBall : ModProjectile
 	public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
 	{
 	}
+
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 	}
+
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
 		if (Projectile.velocity.X != oldVelocity.X)
+		{
 			Projectile.velocity.X = -oldVelocity.X;
+		}
+
 		if (Projectile.velocity.Y != oldVelocity.Y)
+		{
 			Projectile.velocity.Y = -oldVelocity.Y;
+		}
+
 		Projectile.velocity *= 0.98f;
 		Projectile.penetrate -= 5;
 		if (Projectile.penetrate < 0)
+		{
 			Projectile.Kill();
+		}
+
 		return false;
 	}
 }

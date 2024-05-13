@@ -11,6 +11,7 @@ public class DreamWeaverII : TrailingProjectile
 	{
 		base.SetDefaults();
 	}
+
 	public override void SetDef()
 	{
 		TrailColor = new Color(0, 0.2f, 0.6f, 0f);
@@ -23,7 +24,9 @@ public class DreamWeaverII : TrailingProjectile
 		TrailShader = Commons.ModAsset.Trailing.Value;
 		ProjectileID.Sets.DrawScreenCheckFluff[Type] = 10800;
 	}
-	int breakTime = 200;
+
+	private int breakTime = 200;
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		base.OnSpawn(source);
@@ -32,6 +35,7 @@ public class DreamWeaverII : TrailingProjectile
 			TrailWidth = 5f;
 		}
 	}
+
 	public override void AI()
 	{
 		base.AI();
@@ -54,6 +58,7 @@ public class DreamWeaverII : TrailingProjectile
 			d0.velocity = Projectile.velocity * 0.2f;
 		}
 	}
+
 	public override void KillMainStructure()
 	{
 		SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
@@ -73,14 +78,14 @@ public class DreamWeaverII : TrailingProjectile
 				SoundEngine.PlaySound(SoundID.Item54);
 			}
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(0, -17), Type, Projectile.damage / 2, Projectile.knockBack, Projectile.owner, 3f);
-			foreach(var proj in Main.projectile)
+			foreach (var proj in Main.projectile)
 			{
-				if(proj != null && proj.active)
+				if (proj != null && proj.active)
 				{
-					if(proj.owner == Projectile.owner && proj.type == ModContent.ProjectileType<DreamWeaverBall>())
+					if (proj.owner == Projectile.owner && proj.type == ModContent.ProjectileType<DreamWeaverBall>())
 					{
 						DreamWeaverBall dWB = proj.ModProjectile as DreamWeaverBall;
-						if(dWB != null)
+						if (dWB != null)
 						{
 							dWB.HitPoint = Projectile.Center;
 							dWB.PosLerpValue = 0;
@@ -103,6 +108,7 @@ public class DreamWeaverII : TrailingProjectile
 		}
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamWeaver_hit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, power);
 	}
+
 	public override void DrawSelf()
 	{
 		var texMain = Commons.ModAsset.Drop.Value;
@@ -113,9 +119,9 @@ public class DreamWeaverII : TrailingProjectile
 		}
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity * 0.1f, null, new Color(0, 0.6f, 1f, 0), Projectile.rotation, texMain.Size() / 2f, power, SpriteEffects.None, 0);
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		
 		base.OnHitNPC(target, hit, damageDone);
 	}
 }

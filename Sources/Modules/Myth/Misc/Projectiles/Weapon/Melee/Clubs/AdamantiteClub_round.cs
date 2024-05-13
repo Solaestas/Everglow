@@ -1,54 +1,63 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Microsoft.Xna.Framework.Graphics;
-using SteelSeries.GameSense;
 using Terraria.GameContent.Shaders;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 {
-	public override string Texture => "Everglow/" + ModAsset.Melee_AdamantiteClubPath;
+	public override string Texture => "Everglow/" + ModAsset.AdamantiteClub_Path;
+
 	/// <summary>
 	/// 角速度
 	/// </summary>
 	internal float Omega = 0;
+
 	/// <summary>
 	/// 角加速度
 	/// </summary>
 	internal float Beta = 0.005f;
+
 	/// <summary>
 	/// 最大角速度(受近战攻速影响)
 	/// </summary>
 	internal float MaxOmega = 0.5f;
+
 	/// <summary>
 	/// 伤害半径
 	/// </summary>
 	internal float HitLength = 32f;
+
 	/// <summary>
 	/// 命中敌人后对于角速度的削减率(会根据敌人的击退抗性而再次降低)
 	/// </summary>
 	internal float StrikeOmegaDecrease = 0.9f;
+
 	/// <summary>
 	/// 命中敌人后最低剩余角速度(默认40%,即0.4)
 	/// </summary>
 	internal float MinStrikeOmegaDecrease = 0.4f;
+
 	/// <summary>
 	/// 内部参数，用来计算伤害
 	/// </summary>
 	internal int DamageStartValue = 0;
+
 	/// <summary>
 	/// 拖尾长度
 	/// </summary>
 	internal int trailLength = 10;
+
 	/// <summary>
 	/// 是否正在攻击
 	/// </summary>
 	internal bool isAttacking = false;
+
 	/// <summary>
 	/// 拖尾
 	/// </summary>
 	internal Queue<Vector2> trailVecs;
+
 	public override void SetDefaults()
 	{
 		Projectile.width = 100;
@@ -73,14 +82,17 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 	{
 		hit.HitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
 	}
+
 	public BlendState TrailBlendState()
 	{
 		return BlendState.AlphaBlend;
 	}
+
 	public string TrailShapeTex()
 	{
 		return "Everglow/MEAC/Images/Melee";
 	}
+
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f, 6), MinStrikeOmegaDecrease);
@@ -88,6 +100,7 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 		modifiers.FinalDamage /= power;
 		modifiers.Knockback *= Omega * 3;
 	}
+
 	public override void AI()
 	{
 		if (DamageStartValue == 0)
@@ -95,17 +108,18 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 			DamageStartValue = Projectile.damage;
 			Projectile.damage = 0;
 			int count = 0;
-			while(GetHitTimes(Projectile.Center) == 0)
+			while (GetHitTimes(Projectile.Center) == 0)
 			{
 				count++;
 				Projectile.Center += new Vector2(0, 10);
-				if(count > 30)
+				if (count > 30)
 				{
 					break;
 				}
 			}
 		}
-		//造成伤害等于原伤害*转速*3.334
+
+		// 造成伤害等于原伤害*转速*3.334
 		Projectile.damage = Math.Max((int)(DamageStartValue * Omega * 3.334), 1);
 
 		Player player = Main.player[Projectile.owner];
@@ -116,7 +130,9 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 		{
 			Projectile.velocity *= 0.2f;
 			if (Omega < MeleeSpeed * MaxOmega)
+			{
 				Omega += Beta * MeleeSpeed * 12f;
+			}
 		}
 		else
 		{
@@ -127,26 +143,37 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 			}
 			UpdateMovement();
 			if (Projectile.timeLeft < 500)
+			{
 				Omega *= 0.98f;
+			}
 			else
 			{
 				if (Omega < MeleeSpeed * MaxOmega + 0.2f)
+				{
 					Omega += Beta * MeleeSpeed * 0.04f;
+				}
 			}
 		}
 		if (Projectile.timeLeft < 450)
+		{
 			Projectile.friendly = false;
+		}
+
 		Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * Projectile.scale;
 		trailVecs.Enqueue(HitRange);
 		if (trailVecs.Count > trailLength)
+		{
 			trailVecs.Dequeue();
+		}
 
 		if (player.dead)
+		{
 			Projectile.Kill();
+		}
 
 		ProduceWaterRipples(new Vector2(HitLength * Projectile.scale));
 
-		if(Projectile.timeLeft is > 450 and < 570)
+		if (Projectile.timeLeft is > 450 and < 570)
 		{
 			Vector2 v2 = new Vector2(0, Main.rand.NextFloat(46f, 92f)).RotatedByRandom(Math.PI * 2) * 0.25f;
 			Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, v2, ModContent.ProjectileType<AdamantiteClub_round_slash>(), Projectile.damage / 2, 0, player.whoAmI, Main.rand.NextFloat(-0.05f, 0.05f));
@@ -159,14 +186,15 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 			GenerateSpark((int)Projectile.velocity.Length() * 2);
 		}
 	}
+
 	public int MoveTimer = 0;
 	public Vector2 NormalToTiles;
+
 	public void UpdateMovement()
 	{
 		int totalHit = 0;
 		if (MoveTimer == 0)
 		{
-
 		}
 		NormalToTiles = Vector2.zeroVector;
 		for (int i = 0; i < 32; i++)
@@ -221,7 +249,7 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 		}
 		int maxTo12Hit = 12;
 		float adjustValue = 0;
-		for(int i = -8;i <=8;i++)
+		for (int i = -8; i <= 8; i++)
 		{
 			float value = i / 10f;
 			Vector2 checkVel = Projectile.velocity.RotatedBy(value);
@@ -234,6 +262,7 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 		}
 		Projectile.velocity = Projectile.velocity.RotatedBy(adjustValue);
 	}
+
 	public int GetHitTimes(Vector2 checkPoint)
 	{
 		int totalHit = 0;
@@ -253,6 +282,7 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 		}
 		return totalHit;
 	}
+
 	public void GenerateSpark(int Frequency)
 	{
 		float mulVelocity = Omega * 10;
@@ -268,16 +298,20 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 				maxTime = Main.rand.Next(27, 35),
 				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4.1f, 27.0f)),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) },
 			};
 			Ins.VFXManager.Add(spark);
 		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		SpriteEffects effects = SpriteEffects.None;
 		if (Projectile.spriteDirection == 1)
+		{
 			effects = SpriteEffects.FlipHorizontally;
+		}
+
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
 		float colorValue = Omega / 0.4f;
 		var color = new Color(colorValue, colorValue, colorValue, colorValue);
@@ -292,6 +326,7 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 		PostPreDraw();
 		return false;
 	}
+
 	public void PostPreDraw()
 	{
 		float colorValue = Omega / 0.1f * (MathF.Sin((float)Main.time * 0.15f + Projectile.whoAmI * 4.32f) * 0.4f + 0.3f);
@@ -303,20 +338,26 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 		Main.EntitySpriteDraw(starDark, Projectile.Center - Main.screenPosition - NormalToTiles * 40, null, Color.White * colorValue, NormalToTiles.ToRotation(), starDark.Size() / 2f, size, SpriteEffects.None, 0f);
 		Main.EntitySpriteDraw(star, Projectile.Center - Main.screenPosition - NormalToTiles * 40, null, redSlash * colorValue, NormalToTiles.ToRotation(), star.Size() / 2f, size, SpriteEffects.None, 0f);
 	}
+
 	public void DrawTrail()
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (trailVecs.Count != 0)
+		{
 			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+		}
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
+		{
 			return;
+		}
+
 		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
 
@@ -361,19 +402,26 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (trailVecs.Count != 0)
+		{
 			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+		}
+
 		int length = SmoothTrail.Count;
 		if (length <= 3)
+		{
 			return;
+		}
+
 		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
 		for (int i = 0; i < length; i++)
@@ -382,16 +430,21 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 
 			float d = trail[i].ToRotation() + 3.14f + 1.57f;
 			if (d > 6.28f)
+			{
 				d -= 6.28f;
-			float dir = d / MathHelper.TwoPi;
+			}
 
+			float dir = d / MathHelper.TwoPi;
 
 			float dir1 = dir;
 			if (i > 0)
 			{
 				float d1 = trail[i - 1].ToRotation() + 3.14f + 1.57f;
 				if (d1 > 6.28f)
+				{
 					d1 -= 6.28f;
+				}
+
 				dir1 = d1 / MathHelper.TwoPi;
 			}
 			if (dir - dir1 > 0.5)
@@ -424,7 +477,10 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 
 			float d = trail[i].ToRotation() + 3.14f + 1.57f;
 			if (d > 6.28f)
+			{
 				d -= 6.28f;
+			}
+
 			float dir = d / MathHelper.TwoPi;
 
 			float dir1 = dir;
@@ -432,7 +488,10 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 			{
 				float d1 = trail[i - 1].ToRotation() + 3.14f + 1.57f;
 				if (d1 > 6.28f)
+				{
 					d1 -= 6.28f;
+				}
+
 				dir1 = d1 / MathHelper.TwoPi;
 			}
 
@@ -461,16 +520,19 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 
 		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
 	}
+
 	public float TrailAlpha(float factor)
 	{
 		float w;
 		w = MathHelper.Lerp(0f, 1, factor);
 		return w;
 	}
+
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		return base.Colliding(projHitbox, targetHitbox);
 	}
+
 	private void ProduceWaterRipples(Vector2 beamDims)
 	{
 		var shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
