@@ -86,7 +86,7 @@ public class MothBall : ModProjectile
 	}
 	public override void OnKill(int timeLeft)
 	{
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<MothBallExplosion>(), 50, 3, Projectile.owner, 60f);
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<MothBallExplosion>(), 50, 3, Projectile.owner, 60f);
 		if (Main.masterMode)
 		{
 			for (int h = 0; h < 6; h++)
@@ -201,8 +201,8 @@ public class MothBall : ModProjectile
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.Parameters["uProcession"].SetValue(0.5f);
 		effect.CurrentTechnique.Passes[0].Apply();
-		Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_thick.Value;
-		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_thick.Value;
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}

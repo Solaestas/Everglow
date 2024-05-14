@@ -138,7 +138,7 @@ public class BranchedLightning : Visual
 	}
 
 	// LightningNode: 单独闪电节点
-	private class LightningNode
+	private class LightningNode 
 	{
 		// 长度(末尾位置)
 		private Vector2 rawOffset;
@@ -166,13 +166,13 @@ public class BranchedLightning : Visual
 		private float distortionX;
 
 		public LightningNode(
-			float nodeWidth,
-			Vector2 rawOffset,
-			float segmentLength = DEFAULT_SEGMENT_LENGTH,
+			float nodeWidth, 
+			Vector2 rawOffset, 
+			float segmentLength = DEFAULT_SEGMENT_LENGTH, 
 			float renderStripWidth = DEFAULT_RENDER_STRIP_WIDTH,
 			float wiggleAngularSpeedLimit = DEFAULT_ANGULAR_SPEED_LIMIT,
-			LightningNode parentNode = null,
-			int nodeDepth = 0)
+			LightningNode parentNode = null, 
+			int nodeDepth = 0) 
 		{
 			this.widthShrink = false;
 			this.rawOffset = rawOffset;
@@ -316,7 +316,7 @@ public class BranchedLightning : Visual
 
 				if (children != null)
 				{
-					foreach (LightningNode child in children)
+					foreach (LightningNode child in children) 
 					{
 						child.Update(rootPosition, lightningRotation);
 					}
