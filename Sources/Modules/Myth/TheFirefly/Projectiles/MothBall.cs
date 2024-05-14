@@ -1,3 +1,4 @@
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.TheFirefly.NPCs.Bosses;
 using Everglow.Myth.TheFirefly.VFXs;
 using Terraria.Audio;
