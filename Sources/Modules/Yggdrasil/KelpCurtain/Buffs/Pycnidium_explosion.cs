@@ -119,7 +119,7 @@ public class Pycnidium_explosion : ModProjectile, IWarpProjectile
 	}
 	public override void PostDraw(Color lightColor)
 	{
-		Texture2D shadow = Commons.ModAsset.Star.Value;
+		Texture2D shadow = Commons.ModAsset.StarSlash.Value;
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Color c = new Color(0.7f * MathF.Sqrt(1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 0.3f * (1 - timeValue), 0f);
@@ -134,7 +134,7 @@ public class Pycnidium_explosion : ModProjectile, IWarpProjectile
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Color c = new Color(0.7f * MathF.Sqrt(1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 0.3f * (1 - timeValue), 0f);
 
-		Texture2D light = Commons.ModAsset.Star.Value;
+		Texture2D light = Commons.ModAsset.StarSlash.Value;
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * 0.4f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * 0.4f, SpriteEffects.None, 0);
 		return false;

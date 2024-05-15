@@ -9,15 +9,12 @@ public class CurseClub : ClubProj
 	{
 		Beta = 0.005f;
 		MaxOmega = 0.45f;
-		vfxTimer = 0;
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(BuffID.CursedInferno, (int)(818 * Omega));
 	}
-
-	private float vfxTimer = 0;
 
 	public override void AI()
 	{
@@ -40,12 +37,7 @@ public class CurseClub : ClubProj
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CurseClub_fly>(), (int)(Projectile.damage * 0.3f), Projectile.knockBack * 0.4f, Projectile.owner);
 			}
 		}
-		vfxTimer += Omega * 16;
-		if (vfxTimer >= 1)
-		{
-			GenerateVFX();
-			vfxTimer = 0;
-		}
+		GenerateVFX();
 	}
 
 	private int flyClubCooling = 0;
@@ -87,16 +79,17 @@ public class CurseClub : ClubProj
 
 			v0 = v0.RotatedBy(Projectile.rotation + Main.rand.NextFloat(Omega));
 			Vector2 newVelocity = new Vector2(-v0.Y, v0.X) * Speed;
+			float v0Length = v0.Length();
 			var spark = new CurseFlameSparkDust
 			{
 				velocity = newVelocity,
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + v0,
-				maxTime = Main.rand.Next(7, 25),
+				maxTime = Main.rand.Next(37, Main.rand.Next(37, 225)),
 				scale = Main.rand.NextFloat(4f, 27.0f),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f), 15f },
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Omega * 0.1f * v0Length / 14f, 15f },
 			};
 			Ins.VFXManager.Add(spark);
 		}
@@ -121,21 +114,7 @@ public class CurseClub : ClubProj
 
 	public override void PostDraw(Color lightColor)
 	{
-		SpriteEffects effects = SpriteEffects.None;
-		if (Projectile.spriteDirection == 1)
-		{
-			effects = SpriteEffects.FlipHorizontally;
-		}
-
-		Texture2D texture = ModAsset.CurseClub_glow.Value;
-		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
-		for (int i = 0; i < 5; i++)
-		{
-			float fade = Omega * 2f + 0.2f;
-			fade *= (5 - i) / 5f;
-			var color2 = new Color(fade, fade, fade, 0);
-			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.75f * Omega, texture.Size() / 2f, Projectile.scale, effects, 0f);
-		}
+		base.PostDraw(lightColor);
 	}
 
 	public override void PostPreDraw()

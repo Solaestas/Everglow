@@ -99,6 +99,32 @@ public class CurseClub_fly : ModProjectile, IWarpProjectile
 			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Omega * 0.75f, Main.rand.NextFloat(3.6f, 30f) * mulVelocity },
 		};
 		Ins.VFXManager.Add(cf);
+		for (int g = 0; g < 4; g++)
+		{
+			v0 = new Vector2(1, 1);
+			v0 *= Main.rand.NextFloat(Main.rand.NextFloat(HitLength * 0.75f, HitLength), HitLength);
+			v0.X *= Projectile.spriteDirection;
+			if (Main.rand.NextBool(2))
+			{
+				v0 *= -1;
+			}
+
+			v0 = v0.RotatedBy(Projectile.rotation + Main.rand.NextFloat(Omega));
+			Vector2 newVelocity = new Vector2(-v0.Y, v0.X) * Speed * 0.2f;
+			float v0Length = v0.Length();
+			var spark = new CurseFlameSparkDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + v0,
+				maxTime = Main.rand.Next(37, Main.rand.Next(37, 185)),
+				scale = Main.rand.NextFloat(4f, 27.0f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Omega * 0.1f * v0Length / 14f, 15f },
+			};
+			Ins.VFXManager.Add(spark);
+		}
 	}
 
 	private void GenerateDust()

@@ -226,12 +226,12 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		}
 
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
+		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale * Projectile.scale, effects, 0f);
 		for (int i = 0; i < 5; i++)
 		{
 			float alp = Omega / 0.4f;
 			var color2 = new Color((int)(lightColor.R * (5 - i) / 5f * alp), (int)(lightColor.G * (5 - i) / 5f * alp), (int)(lightColor.B * (5 - i) / 5f * alp), (int)(lightColor.A * (5 - i) / 5f * alp));
-			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.75f * Omega, texture.Size() / 2f, Projectile.scale, effects, 0f);
+			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.75f * Omega, texture.Size() / 2f, Projectile.scale * Projectile.scale, effects, 0f);
 		}
 		DrawTrail();
 		PostPreDraw();

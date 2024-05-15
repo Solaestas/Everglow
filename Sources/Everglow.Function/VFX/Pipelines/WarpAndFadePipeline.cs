@@ -109,7 +109,6 @@ public class WarpAndFadePipeline : PostPipeline
 		gd.Clear(Color.Transparent);
 		sb.Draw(saveScreenTarget, Vector2.Zero, Color.White);
 		sb.Draw(canvasScreen, Vector2.Zero, Color.White);
-		Main.NewText(canvasScreen.Size());
 		sb.End();
 	}
 }
