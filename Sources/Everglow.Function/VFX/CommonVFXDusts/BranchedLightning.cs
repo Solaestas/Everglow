@@ -76,7 +76,7 @@ public class BranchedLightning : Visual
 	public const float BLUR_PROPORTION = 0.02f;
 
 	// 碰撞检测
-	public const float COLLISION_DETECTION_UNIT = 10f;
+	public const float COLLISION_DETECTION_UNIT = 2.5f;
 
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public Vector2 position;
@@ -223,14 +223,12 @@ public class BranchedLightning : Visual
 			}
 			else
 			{
-				//int testCollisionWidth = (int)(widthProportion * widthProgress * renderStripWidth);
-				//int testCollisionWidthParent = (int)(parent.widthProportion * parent.widthProgress * parent.renderStripWidth);
 				Vector2 currentWorldPos = Vector2.Lerp(parent.currentEndPos, currentEndPos, lengthProgress);
 				int detectIterations = (int)Math.Ceiling((currentWorldPos - parent.currentEndPos).Length() / COLLISION_DETECTION_UNIT);
 				for (int i = 0; i < detectIterations; i++)
 				{
 					Vector2 testPos = Vector2.Lerp(parent.currentEndPos, currentWorldPos, (float)i / detectIterations);
-					if (Collision.SolidCollision(testPos, 0, 0))
+					if (Collision.SolidCollision(testPos - Vector2.One * COLLISION_DETECTION_UNIT * 0.5f, (int)COLLISION_DETECTION_UNIT, (int)COLLISION_DETECTION_UNIT))
 					{
 						return testPos;
 					}
@@ -279,13 +277,6 @@ public class BranchedLightning : Visual
 				currentEndPos = parent.currentEndPos + rawOffset.RotatedBy(parentRotation + lightningRotation);
 			}
 
-			// 测试碰撞
-			Vector2? collisionPos = GetCollisionPosition();
-			if (collisionPos != null)
-			{
-				CollisionKill((Vector2)collisionPos);
-			}
-
 			if (lengthProgress < 1f)
 			{
 				// 成长未完成
@@ -304,16 +295,6 @@ public class BranchedLightning : Visual
 			else
 			{
 				// 成长已完成
-				if (widthShrink && widthProgress > 0)
-				{
-					widthProgress -= WIDTH_SHRINK_RATE;
-				}
-				else if (widthProgress < 1f)
-				{
-					// 更新宽度
-					widthProgress += WIDTH_EXPANSION_RATE;
-				}
-
 				if (children != null)
 				{
 					foreach (LightningNode child in children) 
@@ -328,18 +309,44 @@ public class BranchedLightning : Visual
 					}
 				}
 			}
+
+			// 更新宽度
+			if (lengthProgress >= 1f && widthProgress < 1f && !widthShrink)
+			{
+				// 长度成长完成，未开始萎缩，尚未完全扩张
+				widthProgress += WIDTH_EXPANSION_RATE;
+			}
+			else if (widthShrink && widthProgress > 0)
+			{
+				// 开始萎缩，且尚未萎缩完成
+				widthProgress -= WIDTH_SHRINK_RATE;
+			}
+
+			// 测试碰撞
+			Vector2? collisionPos = GetCollisionPosition();
+			if (collisionPos != null)
+			{
+				CollisionKill((Vector2)collisionPos);
+			}
 		}
 
 		private void CollisionKill(Vector2 collisionPos)
 		{
-			widthShrink = true;
-			widthProgress = -1f;
+			//widthShrink = true;
+			widthProgress = 0;
 
-			Dust d = Dust.NewDustDirect(collisionPos, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
-			d.scale *= 0.5f;
+			if (Main.rand.NextFloat() < 0.3f)
+			{
+				Dust d = Dust.NewDustDirect(collisionPos, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
+				d.scale *= 0.2f;
+			}
 
 			children = null;
-			currentEndPos = collisionPos;
+			if (parent != null)
+			{
+				//currentEndPos = collisionPos;
+				lengthProgress = (parent.currentEndPos - collisionPos).Length() / (parent.currentEndPos - currentEndPos).Length();
+			}
 			/*
 			if (children != null)
 			{
@@ -451,18 +458,11 @@ public class BranchedLightning : Visual
 				Vector2 parentNormalDisplacement = parent.GetRenderNormal();
 				if (parentNormalDisplacement == Vector2.Zero)
 				{
-					parentNormalDisplacement = normalDisplacement;
+					parentNormalDisplacement = GetNormalDir() * 4 * parent.renderStripWidth * LINE_PROPORTION;
 				}
 
 				float currentWidth = widthProportion * widthProgress * multiplyFactor;
 				float parentCurrentWidth = parent.widthProportion * parent.widthProgress * multiplyFactor;
-
-				/*
-				Vertex2D upperLeft = new Vertex2D(parentWorldPos - parentNormalDisplacement, new Color(0f,0f,1, useEdgeColor), new Vector3(parentCurrentWidth, parentWorldPos.X, parentWorldPos.Y));
-				Vertex2D upperRight = new Vertex2D(worldPos - normalDisplacement, new Color(1f, 0f, 1, useEdgeColor), new Vector3(currentWidth, worldPos.X, worldPos.Y));
-				Vertex2D lowerLeft = new Vertex2D(parentWorldPos + parentNormalDisplacement, new Color(0f, 1f, 1, useEdgeColor), new Vector3(parentCurrentWidth, parentWorldPos.X, parentWorldPos.Y));
-				Vertex2D lowerRight = new Vertex2D(worldPos + normalDisplacement, new Color(1f, 1f, 1, useEdgeColor), new Vector3(currentWidth, worldPos.X, worldPos.Y));
-				*/
 
 				float offSetLength = rawOffset.Length();
 				Vertex2D upperLeft = new Vertex2D(parentWorldPos - parentNormalDisplacement, new Color(0f, 0f, 1, useEdgeColor), new Vector3(parentCurrentWidth, distortionX, offSetLength));
@@ -483,7 +483,7 @@ public class BranchedLightning : Visual
 			barsList.Add(lowerRight);
 		}
 
-		private Vector2 GetRenderNormal()
+		private Vector2 GetNormalDir()
 		{
 			Vector2 renderNormal;
 			if (parent == null)
@@ -491,8 +491,16 @@ public class BranchedLightning : Visual
 				renderNormal = Vector2.Zero;
 			}
 			else
+			{
 				renderNormal = (currentEndPos - parent.currentEndPos).NormalizeSafe().RotatedBy(Math.PI / 2);
-			return 0.5f * renderStripWidth * renderNormal;
+			}
+
+			return renderNormal;
+		}
+
+		private Vector2 GetRenderNormal()
+		{
+			return 0.5f * renderStripWidth * GetNormalDir();
 		}
 	}
 }
