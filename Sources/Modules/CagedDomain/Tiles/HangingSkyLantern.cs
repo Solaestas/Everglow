@@ -101,7 +101,7 @@ public class HangingSkyLantern : ModTile, ITileFluentlyDrawn
 		var tile = Main.tile[tilePos];
 		ushort type = tile.TileType;
 		int paint = Main.tile[paintPos].TileColor;
-		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.HangingSkyLantern_DepartPath, type, frameX, paint, tileDrawing);
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.HangingSkyLantern_Depart_Path, type, frameX, paint, tileDrawing);
 		tex ??= ModAsset.HangingSkyLantern_Depart.Value;
 		var frame = new Rectangle(frameX, 0, 12, frameHeight);
 

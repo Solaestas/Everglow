@@ -34,7 +34,7 @@ internal class FireFeatherMagicArray : VisualProjectile
 	public bool OldControlUp = false;
 	public int timer = 0;
 	public Vector2 ringPos = Vector2.Zero;
-	public override string Texture => "Everglow/" + ModAsset.FireFeatherMagicPath;
+	public override string Texture => "Everglow/" + ModAsset.FireFeatherMagic_Path;
 	public override void SetDefaults()
 	{
 		Projectile.width = 28;

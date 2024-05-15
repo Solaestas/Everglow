@@ -253,8 +253,6 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
-
-
 	}
 	public float GetCurvatureRadius(Vector2 p0, Vector2 p1, Vector2 p2)
 	{

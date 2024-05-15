@@ -2208,7 +2208,7 @@ public class BloodTusk : ModNPC
 						new Vertex2D(BasePos + new Vector2(125, 172) + hangItem[z] - Main.screenPosition, color, new Vector3(1, 1, 0)),
 						new Vertex2D(BasePos + new Vector2(-95, 172) + hangItem[z] - Main.screenPosition, color, new Vector3(0, 1, 0))
 					};
-					Texture2D thang = ModContent.Request<Texture2D>("Everglow/" + ModAsset.BloodTuskDragLinePath + (3 + z).ToString()).Value;
+					Texture2D thang = ModContent.Request<Texture2D>("Everglow/" + ModAsset.BloodTuskDragLine_Path + (3 + z).ToString()).Value;
 					Main.graphics.GraphicsDevice.Textures[0] = thang;
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 				}

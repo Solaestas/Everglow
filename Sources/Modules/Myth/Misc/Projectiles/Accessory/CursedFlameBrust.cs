@@ -51,7 +51,7 @@ public class CursedFlameBrust : ModProjectile, IWarpProjectile
 		Texture2D Shadow = ModAsset.CursedHit.Value;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f, SpriteEffects.None, 0);
-		Texture2D light = Commons.ModAsset.Star.Value;
+		Texture2D light = Commons.ModAsset.Textures_Star.Value;
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(55, 255, 0, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * Projectile.ai[0] / 40f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(55, 255, 0, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * Projectile.ai[0] / 40f, SpriteEffects.None, 0);
 		return false;

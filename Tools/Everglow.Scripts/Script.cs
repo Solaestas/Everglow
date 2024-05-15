@@ -24,7 +24,6 @@ public class AddModule : Script
 		var modules = Module.GetEnabledModule();
 		modules = modules.Concat(args).ToHashSet().Intersect(Module.Modules).ToArray();
 		Module.SetEnabledModule(modules);
-		ClearCache.Clear();
 	}
 }
 
@@ -41,7 +40,6 @@ public class RemoveModule : Script
 		var modules = Module.GetEnabledModule();
 		modules = modules.Where(s => !args.Contains(s)).ToArray();
 		Module.SetEnabledModule(modules);
-		ClearCache.Clear();
 	}
 }
 
@@ -82,12 +80,33 @@ public class ClearModule : Script
 
 	public override void Run(string[] args)
 	{
-		Module.SetEnabledModule(Array.Empty<string>());
-		ClearCache.Clear();
+		Module.SetEnabledModule([]);
 		Console.WriteLine("All modules are disabled");
 	}
 }
 
+
+public class CreateModule : Script
+{
+	public override string Description => "Create a new module";
+
+	public override void Run(string[] args)
+	{
+		var name = args.FirstOrDefault();
+		if(name == null)
+		{
+			Console.WriteLine("Must provide module name");
+			return;
+		}
+
+		var dir = new DirectoryInfo(Path.Combine(Module.Everglow, "Sources", name));
+		dir.Create();
+		File.WriteAllText(Path.Combine(dir.FullName, $"Everglow.{name}.csproj"), """
+			<Project Sdk="Microsoft.NET.Sdk">
+			</Project>
+			""");
+	}
+}
 public class ResetModule : Script
 {
 	public override string Description => "Enable all module";
@@ -95,59 +114,7 @@ public class ResetModule : Script
 	public override void Run(string[] args)
 	{
 		Module.SetEnabledModule(Module.Modules);
-		ClearCache.Clear();
 		Console.Write("All modules are enabled");
-	}
-}
-
-public class ClearCache : Script
-{
-	public override string Description => "Delete cache directory(bin/, obj/)";
-
-	public static void Clear()
-	{
-		var path = Path.Combine(Module.Everglow, "Sources", "Everglow");
-		if (Directory.Exists(Path.Combine(path, "bin")))
-		{
-			Directory.Delete(Path.Combine(path, "bin"), true);
-		}
-		if (Directory.Exists(Path.Combine(path, "obj")))
-		{
-			Directory.Delete(Path.Combine(path, "obj"), true);
-		}
-	}
-
-	public override void Run(string[] args)
-	{
-		var path = Path.Combine(Module.Everglow, "Sources", "Everglow");
-		if (Directory.Exists(Path.Combine(path, "bin")))
-		{
-			Console.WriteLine($"Delete {path}\\bin");
-			Directory.Delete(Path.Combine(path, "bin"), true);
-		}
-		if (Directory.Exists(Path.Combine(path, "obj")))
-		{
-			Console.WriteLine($"Delete {path}\\obj");
-			Directory.Delete(Path.Combine(path, "obj"), true);
-		}
-
-		//path = Path.Combine(Module.Everglow, "Sources", "Everglow.Function");
-		//Console.WriteLine($"Deleting {path}\\bin");
-		//Directory.Delete(Path.Combine(path, "bin"), true);
-		//Console.WriteLine($"Deleting {path}\\obj");
-		//Directory.Delete(Path.Combine(path, "obj"), true);
-		//path = Path.Combine(Module.Everglow, "Sources", "Everglow.Core");
-		//Console.WriteLine($"Deleting {path}\\bin");
-		//Directory.Delete(Path.Combine(path, "bin"), true);
-		//Console.WriteLine($"Deleting {path}\\obj");
-		//Directory.Delete(Path.Combine(path, "obj"), true);
-		//foreach (var dir in Directory.EnumerateDirectories(Path.Combine(Module.Everglow, "Sources", "Modules")))
-		//{
-		//	Console.WriteLine($"Deleting {dir}\\bin");
-		//	Directory.Delete(Path.Combine(dir, "bin"), true);
-		//	Console.WriteLine($"Deleting {dir}\\obj");
-		//	Directory.Delete(Path.Combine(dir, "obj"), true);
-		//}
 	}
 }
 

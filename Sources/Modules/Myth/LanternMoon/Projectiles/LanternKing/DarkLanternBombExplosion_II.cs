@@ -4,7 +4,7 @@ using Terraria.DataStructures;
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 public class DarkLanternBombExplosion_II : ModProjectile, IWarpProjectile
 {
-	public override string Texture => "Everglow/" + ModAsset.DarkLanternBombExplosionPath;
+	public override string Texture => "Everglow/" + ModAsset.DarkLanternBombExplosion_Path;
 	public override void SetDefaults()
 	{
 		Projectile.width = 400;

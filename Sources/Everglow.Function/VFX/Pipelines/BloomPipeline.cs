@@ -24,7 +24,7 @@ public class BloomPipeline : PostPipeline
 			blurScreenSwap?.Dispose();
 			AllocateRenderTarget(size);
 		}, "Realloc RenderTarget");
-		effect = ModAsset.Bloom;
+		effect = ModAsset.VFX_Bloom;
 	}
 
 	private void AllocateRenderTarget(Vector2 blurSize)
@@ -32,7 +32,8 @@ public class BloomPipeline : PostPipeline
 		var gd = Main.instance.GraphicsDevice;
 		for (int i = 0; i < MAX_BLUR_LEVELS; i++)
 		{
-			blurScreens[i] = new RenderTarget2D(gd,
+			blurScreens[i] = new RenderTarget2D(
+				gd,
 				(int)blurSize.X >> i, (int)blurSize.Y >> i, false,
 				SurfaceFormat.Color, DepthFormat.None);
 		}

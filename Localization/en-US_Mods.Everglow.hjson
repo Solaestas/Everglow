@@ -1068,6 +1068,16 @@ Items: {
 		Tooltip: ""
 	}
 
+	HandholdItem: {
+		DisplayName: Handhold Item
+		Tooltip: ""
+	}
+
+	TestSkeletonOwl: {
+		DisplayName: Test Skeleton Owl
+		Tooltip: ""
+	}
+
 	CheeseYoyo: {
 		DisplayName: Cheese Yoyo
 		Tooltip: ""
@@ -2798,8 +2808,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	DoubleArmsChineseStreetLamp: {
-		DisplayName: Double Arms Chinese Street Lamp
+	DarkForestSoil: {
+		DisplayName: Dark Forest Soil
 		Tooltip: ""
 	}
 
@@ -2813,13 +2823,13 @@ Items: {
 		Tooltip: ""
 	}
 
-	ShoreMud: {
-		DisplayName: Shore Mud
+	FemaleLampLeaves_Item: {
+		DisplayName: Female Lamp Leaves_ Item
 		Tooltip: ""
 	}
 
-	SideHangingLantern: {
-		DisplayName: Side Hanging Lantern
+	GreyTownBrick_Item: {
+		DisplayName: Grey Town Brick_ Item
 		Tooltip: ""
 	}
 
@@ -2840,6 +2850,11 @@ Items: {
 
 	YggdrasilAmber: {
 		DisplayName: Yggdrasil Amber
+		Tooltip: ""
+	}
+
+	AmberMagicOrb: {
+		DisplayName: Amber Magic Orb
 		Tooltip: ""
 	}
 
@@ -2878,68 +2893,98 @@ Items: {
 		Tooltip: ""
 	}
 
-	DragonScaleWood: {
-		DisplayName: Dragon Scale Wood
+	YggdrasilAmberLaser: {
+		DisplayName: Yggdrasil Amber Laser
 		Tooltip: ""
 	}
 
-	DragonScaleWoodWall: {
-		DisplayName: Dragon Scale Wood Wall
+	DragonScaleHammer: {
+		DisplayName: Dragon Scale Hammer
 		Tooltip: ""
 	}
 
-	KelpMoss_largeCreate: {
-		DisplayName: Kelp Moss_large Create
+	FlurryingBlades: {
+		DisplayName: Flurrying Blades
 		Tooltip: ""
 	}
 
-	MossProneSandSoil: {
-		DisplayName: Moss Prone Sand Soil
+	RockArrow: {
+		DisplayName: Rock Arrow
 		Tooltip: ""
 	}
 
-	OldMoss: {
-		DisplayName: Old Moss
+	RockSpikeBallista: {
+		DisplayName: Rock Spike Ballista
 		Tooltip: ""
 	}
 
-	YggdrasilDirt: {
-		DisplayName: Yggdrasil Dirt
+	LampWoodBreastplate: {
+		DisplayName: Lamp Wood Breastplate
 		Tooltip: ""
 	}
 
-	HandheldCircularSaw: {
-		DisplayName: Handheld Circular Saw
+	LampWoodCandelabra_Item: {
+		DisplayName: Lamp Wood Candelabra_ Item
 		Tooltip: ""
 	}
 
-	LichenTentacle: {
-		DisplayName: Lichen Tentacle
+	LampWoodCandle_Item: {
+		DisplayName: Lamp Wood Candle_ Item
 		Tooltip: ""
 	}
 
-	AcroporaSpear: {
-		DisplayName: Acropora Spear
+	LampWoodChandelier_Item: {
+		DisplayName: Lamp Wood Chandelier_ Item
 		Tooltip: ""
 	}
 
-	CyanWindGranite: {
-		DisplayName: Cyan Wind Granite
+	LampWoodHammer: {
+		DisplayName: Lamp Wood Hammer
 		Tooltip: ""
 	}
 
-	CharonDoubleSickle_Item: {
-		DisplayName: Charon Double Sickle_ Item
+	LampWoodHelmet: {
+		DisplayName: Lamp Wood Helmet
 		Tooltip: ""
 	}
 
-	BloodLightCrystal: {
-		DisplayName: Blood Light Crystal
+	LampWoodLamp_Item: {
+		DisplayName: Lamp Wood Lamp_ Item
 		Tooltip: ""
 	}
 
-	TrueDeathSickle: {
-		DisplayName: True Death Sickle
+	LampWoodLeggings: {
+		DisplayName: Lamp Wood Leggings
+		Tooltip: ""
+	}
+
+	LampWoodSword: {
+		DisplayName: Lamp Wood Sword
+		Tooltip: ""
+	}
+
+	LampWoodWall_item: {
+		DisplayName: Lamp Wood Wall_item
+		Tooltip: ""
+	}
+
+	LampWood_Chest_Item: {
+		DisplayName: Lamp Wood_ Chest_ Item
+		Tooltip: ""
+	}
+
+	LampWood_Platform: {
+		DisplayName: Lamp Wood_ Platform
+		Tooltip: ""
+	}
+
+	LampWood_Wood: {
+		DisplayName: Lamp Wood_ Wood
+		Tooltip: ""
+	}
+
+	LampWood_workBench: {
+		DisplayName: Lamp Wood_work Bench
 		Tooltip: ""
 	}
 
@@ -3016,9 +3061,6 @@ NPCs: {
 	CorruptMoth.DisplayName: Corrupt Moth
 	EvilPack.DisplayName: Evil Pack
 	SummonedButterfly.DisplayName: Summoned Butterfly
-	ExplosiveLantern_growing.DisplayName: Explosive Lantern_growing
-	BombLantern.DisplayName: Bomb Lantern
-	CylindricalLantern.DisplayName: Cylindrical Lantern
 	FloatLantern.DisplayName: Float Lantern
 	RedPackBomber.DisplayName: Red Pack Bomber
 	LanternGhostKing.DisplayName: Lantern Ghost King
@@ -3140,7 +3182,6 @@ Projectiles: {
 	CreamChocolateCup_CreamFlow.DisplayName: Cream Chocolate Cup_ Cream Flow
 	FryingPan.DisplayName: Frying Pan
 	GrilledSquidTentacle_proj.DisplayName: Grilled Squid Tentacle_proj
-	SlashProjectile3D.DisplayName: Slash Projectile3 D
 	PlanetBeFall.DisplayName: Planet Be Fall
 	PlanetBefallExplosion.DisplayName: Planet Befall Explosion
 	PlanetBefallArray.DisplayName: Planet Befall Array
@@ -3313,9 +3354,6 @@ Projectiles: {
 	XiaoBlackWave.DisplayName: Xiao Black Wave
 	XiaoHit.DisplayName: Xiao Hit
 	AdamantiteClub.DisplayName: Adamantite Club
-	AdamantiteClub_round.DisplayName: Adamantite Club_round
-	AdamantiteClub_round_slash.DisplayName: Adamantite Club_round_slash
-	AdamantiteClub_slash.DisplayName: Adamantite Club_slash
 	AdamantiteClub_smash.DisplayName: Adamantite Club_smash
 	BorealWoodClub.DisplayName: Boreal Wood Club
 	BorealWoodClub_smash.DisplayName: Boreal Wood Club_smash
@@ -3328,7 +3366,6 @@ Projectiles: {
 	ChlorophyteClub_VFX.DisplayName: Chlorophyte Club_ V F X
 	ChlorophyteClub_VFX_2.DisplayName: Chlorophyte Club_ V F X_2
 	CobaltClub.DisplayName: Cobalt Club
-	CobaltClub_falling.DisplayName: Cobalt Club_falling
 	CobaltClub_smash.DisplayName: Cobalt Club_smash
 	CopperClub.DisplayName: Copper Club
 	CopperClub_smash.DisplayName: Copper Club_smash
@@ -3358,13 +3395,9 @@ Projectiles: {
 	MeteorClub_smash.DisplayName: Meteor Club_smash
 	MythrilClub.DisplayName: Mythril Club
 	MythrilClub_smash.DisplayName: Mythril Club_smash
-	MythrilClub_smashMagicBall.DisplayName: Mythril Club_smash Magic Ball
 	OrichalcumClub.DisplayName: Orichalcum Club
 	OrichalcumClub_smash.DisplayName: Orichalcum Club_smash
-	OrichalcumPedal.DisplayName: Orichalcum Pedal
-	OrichalcumPedal_slash.DisplayName: Orichalcum Pedal_slash
 	PalladiumClub.DisplayName: Palladium Club
-	PalladiumClub_small.DisplayName: Palladium Club_small
 	PalladiumClub_smash.DisplayName: Palladium Club_smash
 	PalmWoodClub.DisplayName: Palm Wood Club
 	PalmWoodClub_smash.DisplayName: Palm Wood Club_smash
@@ -3383,13 +3416,10 @@ Projectiles: {
 	SpikeClub_smash.DisplayName: Spike Club_smash
 	StarDancer.DisplayName: Star Dancer
 	StarDancer_smash.DisplayName: Star Dancer_smash
-	StarDancer_starProj.DisplayName: Star Dancer_star Proj
-	StarDancer_starProj2.DisplayName: Star Dancer_star Proj2
 	TinClub_smash.DisplayName: Tin Club_smash
 	TinClub.DisplayName: Tin Club
 	TitaniumClub.DisplayName: Titanium Club
 	TitaniumClub_smash.DisplayName: Titanium Club_smash
-	Titanium_Fragment.DisplayName: Titanium_ Fragment
 	TungstenClub.DisplayName: Tungsten Club
 	TungstenClub_smash.DisplayName: Tungsten Club_smash
 	WoodenClub.DisplayName: Wooden Club
@@ -3411,11 +3441,6 @@ Projectiles: {
 	FlameShoot.DisplayName: Flame Shoot
 	GiantFireFeather.DisplayName: Giant Fire Feather
 	GiantFireFeatherExplosion.DisplayName: Giant Fire Feather Explosion
-	CobaltClub_falling_Shoot.DisplayName: Cobalt Club_falling_ Shoot
-	MythrilClub_Shoot.DisplayName: Mythril Club_ Shoot
-	MythrilClub_smash_explosion.DisplayName: Mythril Club_smash_explosion
-	MythrilClub_smash_explosion2.DisplayName: Mythril Club_smash_explosion2
-	TitaniumClub_smash_explosion.DisplayName: Titanium Club_smash_explosion
 	BoneFeatherMagicArray.DisplayName: Bone Feather Magic Array
 	BoneFeatherMagicBook.DisplayName: Bone Feather Magic Book
 	BoneFeather_spine.DisplayName: Bone Feather_spine
@@ -3449,76 +3474,40 @@ Projectiles: {
 	CursedFlameBrust.DisplayName: Cursed Flame Brust
 	IchorCurrent.DisplayName: Ichor Current
 	IchorRing.DisplayName: Ichor Ring
-	NewWaterBolt.DisplayName: New Water Bolt
-	WaterBoltArray.DisplayName: Water Bolt Array
-	WaterBoltBook.DisplayName: Water Bolt Book
-	WaterTeleport.DisplayName: Water Teleport
-	HurricaneMask.DisplayName: Hurricane Mask
-	RazorbladeTyphoonArray.DisplayName: Razorblade Typhoon Array
-	RazorbladeTyphoonBook.DisplayName: Razorblade Typhoon Book
-	TyphoonII.DisplayName: Typhoon I I
-	MagnetSphereArray.DisplayName: Magnet Sphere Array
-	MagnetSphereBook.DisplayName: Magnet Sphere Book
-	MagnetSphereHit.DisplayName: Magnet Sphere Hit
-	MagnetSphereII.DisplayName: Magnet Sphere I I
-	MagnetSphereLighting.DisplayName: Magnet Sphere Lighting
-	LunarFlareArray.DisplayName: Lunar Flare Array
-	LunarFlareBook.DisplayName: Lunar Flare Book
-	LunarFlareHit.DisplayName: Lunar Flare Hit
-	LunarFlareII.DisplayName: Lunar Flare I I
-	StarProj.DisplayName: Star Proj
-	GoldenShowerArray.DisplayName: Golden Shower Array
-	GoldenShowerBomb.DisplayName: Golden Shower Bomb
-	GoldenShowerBook.DisplayName: Golden Shower Book
-	GoldenShowerII.DisplayName: Golden Shower I I
-	DreamWeaverBook.DisplayName: Dream Weaver Book
-	DreamWeaverII.DisplayName: Dream Weaver I I
-	DemoHit.DisplayName: Demo Hit
-	DemonScytheArray.DisplayName: Demon Scythe Array
-	DemonScytheBook.DisplayName: Demon Scythe Book
-	DemonScythePlus.DisplayName: Demon Scythe Plus
-	DemonScythePlusCrack.DisplayName: Demon Scythe Plus Crack
-	DemoSpark.DisplayName: Demo Spark
-	CursedFlameHit.DisplayName: Cursed Flame Hit
-	CursedFlamesArray.DisplayName: Cursed Flames Array
-	CursedFlamesBook.DisplayName: Cursed Flames Book
-	CursedFlamesII.DisplayName: Cursed Flames I I
-	CrystalExplosion.DisplayName: Crystal Explosion
-	CrystalStormArray.DisplayName: Crystal Storm Array
-	CrystalStormBook.DisplayName: Crystal Storm Book
-	CrystalStormII.DisplayName: Crystal Storm I I
-	CrystalWind.DisplayName: Crystal Wind
-	LargeCrystal.DisplayName: Large Crystal
-	Storm.DisplayName: Storm
-	BoneSpike.DisplayName: Bone Spike
-	BookofSkullsArray.DisplayName: Bookof Skulls Array
-	BookofSkullsBook.DisplayName: Bookof Skulls Book
-	SkullHand.DisplayName: Skull Hand
-	SkullII.DisplayName: Skull I I
-	BlackHole.DisplayName: Black Hole
+	DarkFlower_Proj.DisplayName: Dark Flower_ Proj
 	BloodLampProj.DisplayName: Blood Lamp Proj
 	Firework12Inches.DisplayName: Firework12 Inches
 	Firework6Inches.DisplayName: Firework6 Inches
 	FireworkSubExplosion.DisplayName: Firework Sub Explosion
-	FlameCylinder.DisplayName: Flame Cylinder
 	LBloodEffect.DisplayName: L Blood Effect
 	LBloodEffectGra.DisplayName: L Blood Effect Gra
-	RedLanternMeteor.DisplayName: Red Lantern Meteor
+	LMeteor.DisplayName: L Meteor
+	RainbowWave.DisplayName: Rainbow Wave
 	RisingFirework.DisplayName: Rising Firework
 	DarkLantern.DisplayName: Dark Lantern
 	DarkLantern3.DisplayName: Dark Lantern3
 	DarkLanternBomb2.DisplayName: Dark Lantern Bomb2
 	DarkLanternBombExplosion.DisplayName: Dark Lantern Bomb Explosion
 	DarkLanternBombExplosion_II.DisplayName: Dark Lantern Bomb Explosion_ I I
-	ExplosiveLantern.DisplayName: Explosive Lantern
-	FloatLantern_style2.DisplayName: Float Lantern_style2
-	FloatLantern_style3.DisplayName: Float Lantern_style3
-	FloatLantern_style4.DisplayName: Float Lantern_style4
+	ExplodeLantern.DisplayName: Explode Lantern
+	floatLantern.DisplayName: float Lantern
+	floatLantern2.DisplayName: float Lantern2
+	floatLantern3.DisplayName: float Lantern3
+	floatLantern4.DisplayName: float Lantern4
+	floatLantern5.DisplayName: float Lantern5
+	GoldLantern.DisplayName: Gold Lantern
 	GoldLanternLine.DisplayName: Gold Lantern Line
 	GoldLanternLine2.DisplayName: Gold Lantern Line2
 	GoldLanternLine3.DisplayName: Gold Lantern Line3
-	LanternFlow.DisplayName: Lantern Flow
-	LanternFlowLine.DisplayName: Lantern Flow Line
+	GoldLanternLine4.DisplayName: Gold Lantern Line4
+	GoldLanternLine5.DisplayName: Gold Lantern Line5
+	GoldLanternLine6.DisplayName: Gold Lantern Line6
+	GoldLanternLine7.DisplayName: Gold Lantern Line7
+	GoldLanternLine8.DisplayName: Gold Lantern Line8
+	GoldLanternRay.DisplayName: Gold Lantern Ray
+	GoldLanternStar.DisplayName: Gold Lantern Star
+	Redlight.DisplayName: Redlight
+	StrikePlayer.DisplayName: Strike Player
 	BlueFlame0.DisplayName: Blue Flame0
 	BlueFlame0Little.DisplayName: Blue Flame0 Little
 	BlueFlame0LittleSoon.DisplayName: Blue Flame0 Little Soon
@@ -3580,6 +3569,72 @@ Projectiles: {
 	TsunamiShark_missile_hit.DisplayName: Tsunami Shark_missile_hit
 	CactusBallProj.DisplayName: Cactus Ball Proj
 	CactusBallSpike.DisplayName: Cactus Ball Spike
+	NewWaterBolt.DisplayName: New Water Bolt
+	RipplingWave.DisplayName: Rippling Wave
+	WaterBoltArray.DisplayName: Water Bolt Array
+	WaterBoltBook.DisplayName: Water Bolt Book
+	WaterTeleport.DisplayName: Water Teleport
+	HurricaneMask.DisplayName: Hurricane Mask
+	RazorbladeTyphoonArray.DisplayName: Razorblade Typhoon Array
+	RazorbladeTyphoonBook.DisplayName: Razorblade Typhoon Book
+	TyphoonII.DisplayName: Typhoon I I
+	MagnetSphereArray.DisplayName: Magnet Sphere Array
+	MagnetSphereBook.DisplayName: Magnet Sphere Book
+	MagnetSphereHit.DisplayName: Magnet Sphere Hit
+	MagnetSphereII.DisplayName: Magnet Sphere I I
+	MagnetSphereLighting.DisplayName: Magnet Sphere Lighting
+	LunarFlareArray.DisplayName: Lunar Flare Array
+	LunarFlareBook.DisplayName: Lunar Flare Book
+	LunarFlareHit.DisplayName: Lunar Flare Hit
+	LunarFlareII.DisplayName: Lunar Flare I I
+	StarProj.DisplayName: Star Proj
+	GoldenShowerArray.DisplayName: Golden Shower Array
+	GoldenShowerBomb.DisplayName: Golden Shower Bomb
+	GoldenShowerBook.DisplayName: Golden Shower Book
+	GoldenShowerII.DisplayName: Golden Shower I I
+	DemoHit.DisplayName: Demo Hit
+	DemonScytheArray.DisplayName: Demon Scythe Array
+	DemonScytheBook.DisplayName: Demon Scythe Book
+	DemonScythePlus.DisplayName: Demon Scythe Plus
+	DemonScythePlusCrack.DisplayName: Demon Scythe Plus Crack
+	DemoSpark.DisplayName: Demo Spark
+	CursedFlameHit.DisplayName: Cursed Flame Hit
+	CursedFlamesArray.DisplayName: Cursed Flames Array
+	CursedFlamesBook.DisplayName: Cursed Flames Book
+	CursedFlamesII.DisplayName: Cursed Flames I I
+	CrystalExplosion.DisplayName: Crystal Explosion
+	CrystalStormArray.DisplayName: Crystal Storm Array
+	CrystalStormBook.DisplayName: Crystal Storm Book
+	CrystalStormII.DisplayName: Crystal Storm I I
+	CrystalWind.DisplayName: Crystal Wind
+	LargeCrystal.DisplayName: Large Crystal
+	Storm.DisplayName: Storm
+	BoneSpike.DisplayName: Bone Spike
+	BookofSkullsArray.DisplayName: Bookof Skulls Array
+	BookofSkullsBook.DisplayName: Bookof Skulls Book
+	SkullHand.DisplayName: Skull Hand
+	SkullII.DisplayName: Skull I I
+	BlackHole.DisplayName: Black Hole
+	AcroporaSpear_proj.DisplayName: Acropora Spear_proj
+	AcroporaThumpEff.DisplayName: Acropora Thump Eff
+	Pycnidium_explosion.DisplayName: Pycnidium_explosion
+	AncientSyringe_proj.DisplayName: Ancient Syringe_proj
+	BacterialAgent_explosion.DisplayName: Bacterial Agent_explosion
+	BacterialAgent_proj.DisplayName: Bacterial Agent_proj
+	HandheldCircularSaw_proj.DisplayName: Handheld Circular Saw_proj
+	LichenTentacle_proj.DisplayName: Lichen Tentacle_proj
+	LichensPycnidium.DisplayName: Lichens Pycnidium
+	CharonDoubleSickle.DisplayName: Charon Double Sickle
+	ShadowEulogistProj.DisplayName: Shadow Eulogist Proj
+	TrueDeathSickle.DisplayName: True Death Sickle
+	TrueDeathSickleHit.DisplayName: True Death Sickle Hit
+	AmberBall.DisplayName: Amber Ball
+	AmberMagicOrb.DisplayName: Amber Magic Orb
+	CyanVineCrossBow_Proj.DisplayName: Cyan Vine Cross Bow_ Proj
+	CyanVineStaff_proj.DisplayName: Cyan Vine Staff_proj
+	CyanVineStaff_proj_Explosion.DisplayName: Cyan Vine Staff_proj_ Explosion
+	CyanVineStaff_proj_shoot.DisplayName: Cyan Vine Staff_proj_shoot
+	CyanVineSword_Projectile.DisplayName: Cyan Vine Sword_ Projectile
 	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
 	DragonScaleHammerProj.DisplayName: Dragon Scale Hammer Proj
 	LampWoodSword_Projectile.DisplayName: Lamp Wood Sword_ Projectile
@@ -3600,18 +3655,6 @@ Projectiles: {
 	YggdrasilMoonBladeHit.DisplayName: Yggdrasil Moon Blade Hit
 	YggdrasilMoonBlade_friendly.DisplayName: Yggdrasil Moon Blade_friendly
 	YggdrasilSlashBall.DisplayName: Yggdrasil Slash Ball
-	AcroporaSpear_proj.DisplayName: Acropora Spear_proj
-	AcroporaThumpEff.DisplayName: Acropora Thump Eff
-	Pycnidium_explosion.DisplayName: Pycnidium_explosion
-	AncientSyringe_proj.DisplayName: Ancient Syringe_proj
-	BacterialAgent_explosion.DisplayName: Bacterial Agent_explosion
-	BacterialAgent_proj.DisplayName: Bacterial Agent_proj
-	HandheldCircularSaw_proj.DisplayName: Handheld Circular Saw_proj
-	LichenTentacle_proj.DisplayName: Lichen Tentacle_proj
-	LichensPycnidium.DisplayName: Lichens Pycnidium
-	CharonDoubleSickle.DisplayName: Charon Double Sickle
-	TrueDeathSickle.DisplayName: True Death Sickle
-	TrueDeathSickleHit.DisplayName: True Death Sickle Hit
 	SightOfTileProj.DisplayName: Sight Of Tile Proj
 	SightOfTileProjRead.DisplayName: Sight Of Tile Proj Read
 }

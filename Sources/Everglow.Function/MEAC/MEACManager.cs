@@ -121,12 +121,12 @@ internal class MEACManager : ILoadable
 		// 直接从RT池子里取
 		var renderTargets = Ins.RenderTargetPool.GetRenderTarget2DArray(1);
 		screen = renderTargets.Resource[0];
-		if (bloomTarget1 == null)
-			CreateRender(new Vector2(Main.screenWidth, Main.screenHeight));
+
 		GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
 
 		WarpStyle warpStyle = GetWarpStyle();
-		Main.NewText(warpStyle);
+		//Debug code
+		//Main.NewText(warpStyle);
         if (warpStyle == WarpStyle.Style1 || warpStyle == WarpStyle.Both) 
 		{
             GetOrig(graphicsDevice);
@@ -154,9 +154,8 @@ internal class MEACManager : ILoadable
 			graphicsDevice.Textures[1] = Main.screenTargetSwap;
 			graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			ScreenWarp.Parameters["strength"].SetValue(0.25f);//扭曲程度
-			ScreenWarp.CurrentTechnique.Passes["KScreen1"].Apply();
-
+			ScreenWarp.CurrentTechnique.Passes[1].Apply();
+			ScreenWarp.Parameters["strength"].SetValue(0.025f);//扭曲程度
 			Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
 			Main.spriteBatch.End();
 		}

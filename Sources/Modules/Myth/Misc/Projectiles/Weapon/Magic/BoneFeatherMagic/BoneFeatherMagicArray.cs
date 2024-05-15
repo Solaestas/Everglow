@@ -34,7 +34,7 @@ internal class BoneFeatherMagicArray : VisualProjectile
 	public int timer = 0;
 	public Vector2 ringPos = Vector2.Zero;
 
-	public override string Texture => "Everglow/" + ModAsset.BoneFeatherMagicPath;
+	public override string Texture => "Everglow/" + ModAsset.BoneFeatherMagic_Path;
 	public override void SetDefaults()
 	{
 		Projectile.width = 28;
