@@ -48,7 +48,7 @@ public class IchorClub_smash : ClubProj_Smash
 			{
 				rot = (trailVecs2.ToArray()[trailVecs2.Count - 1] - Projectile.Center).ToRotation() - (trailVecs2.ToArray()[trailVecs2.Count - 2] - Projectile.Center).ToRotation();
 			}
-			var fire = new IchorSplash
+			var ichor = new IchorSplash
 			{
 				velocity = vel,
 				Active = true,
@@ -58,7 +58,7 @@ public class IchorClub_smash : ClubProj_Smash
 				scale = Main.rand.NextFloat(6f, 12f),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), rot * 0.01f, Main.rand.NextFloat(3.6f, 30f) },
 			};
-			Ins.VFXManager.Add(fire);
+			Ins.VFXManager.Add(ichor);
 			for (int g = 0; g < 1; g++)
 			{
 				var spark = new IchorDrop

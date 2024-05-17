@@ -267,18 +267,18 @@ public class IchorClub_fly : ModProjectile, IWarpProjectile
 	public void GenerateVFX(int Frequency)
 	{
 		float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
-		for (int g = 0; g < Frequency * 2; g++)
+		for (int g = 0; g < Frequency * 4; g++)
 		{
-			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(MathHelper.TwoPi);
 			float mulScale = Main.rand.NextFloat(6f, 14f);
-			Vector2 startPos = new Vector2(MathF.Sqrt(Main.rand.NextFloat(0f, 1f)) * 56f, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection);
+			Vector2 startPos = new Vector2(MathF.Sqrt(Main.rand.NextFloat(0.99f, 1f)) * HitLength, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection);
 			if (Main.rand.NextBool(2))
 			{
 				startPos *= -1;
 			}
+			Vector2 velocity = startPos.RotatedBy(MathHelper.PiOver2) * Omega * Main.rand.NextFloat(0.2f, 0.9f);
 			var blood = new IchorDrop
 			{
-				velocity = afterVelocity * mulVelocity / mulScale + startPos.RotatedBy(MathHelper.PiOver2) * Omega * 0.1f + Projectile.velocity,
+				velocity = velocity,
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + startPos,
@@ -289,7 +289,29 @@ public class IchorClub_fly : ModProjectile, IWarpProjectile
 			};
 			Ins.VFXManager.Add(blood);
 		}
-		for (int g = 0; g < Frequency; g++)
+		for (int g = 0; g < Frequency * 40; g++)
+		{
+			float mulScale = Main.rand.NextFloat(2f, 4f);
+			Vector2 startPos = new Vector2(MathF.Sqrt(Main.rand.NextFloat(0.99f, 1f)) * HitLength, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection + Main.rand.NextFloat(-0.2f, 0.2f));
+			if (Main.rand.NextBool(2))
+			{
+				startPos *= -1;
+			}
+			Vector2 velocity = startPos.RotatedBy(MathHelper.PiOver2) * Omega * Main.rand.NextFloat(0.2f, 0.9f);
+			var blood = new IchorDrop
+			{
+				velocity = velocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + startPos,
+				maxTime = Main.rand.Next(6, 12),
+				scale = mulScale,
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) },
+			};
+			Ins.VFXManager.Add(blood);
+		}
+		for (int g = 0; g < Frequency * 4; g++)
 		{
 			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(3f)).RotatedByRandom(MathHelper.TwoPi);
 			Vector2 startPos = new Vector2(MathF.Sqrt(Main.rand.NextFloat(0f, 1f)) * 56f, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection);

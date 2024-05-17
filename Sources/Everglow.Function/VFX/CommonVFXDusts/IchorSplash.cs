@@ -10,6 +10,7 @@ public class IchorSplashPipeline : Pipeline
 	{
 		effect = ModAsset.IchorSplash;
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
@@ -28,10 +29,12 @@ public class IchorSplashPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(IchorSplashPipeline), typeof(BloomPipeline))]
 public class IchorSplash : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public List<Vector2> oldPos = new List<Vector2>();
 	public Vector2 position;
 	public Vector2 velocity;
@@ -40,7 +43,10 @@ public class IchorSplash : Visual
 	public float maxTime;
 	public float scale;
 	public float alpha;
-	public IchorSplash() { }
+
+	public IchorSplash()
+	{
+	}
 
 	public override void Update()
 	{
@@ -57,17 +63,23 @@ public class IchorSplash : Visual
 		}
 		oldPos.Add(position);
 		if (oldPos.Count > 15)
+		{
 			oldPos.RemoveAt(0);
+		}
+
 		velocity.Y += 0.14f;
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		velocity = velocity.RotatedBy(ai[1]);
 		scale += 0.4f;
 		if (Collision.SolidCollision(position, 0, 0))
 		{
 			velocity *= 0.2f;
-			if(velocity.Length() < 0.02f)
+			if (velocity.Length() < 0.02f)
 			{
 				Active = false;
 			}
@@ -77,7 +89,7 @@ public class IchorSplash : Visual
 			scale += 0.02f;
 			alpha += 0.004f;
 			velocity *= 0.9f;
-			if(MathF.Abs(velocity.X) > 2)
+			if (MathF.Abs(velocity.X) > 2)
 			{
 				velocity.X *= 0.8f;
 			}

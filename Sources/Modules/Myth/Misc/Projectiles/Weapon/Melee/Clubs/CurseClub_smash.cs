@@ -40,18 +40,22 @@ public class CurseClub_smash : ClubProj_Smash
 			{
 				rot = (trailVecs2.ToArray()[trailVecs2.Count - 1] - Projectile.Center).ToRotation() - (trailVecs2.ToArray()[trailVecs2.Count - 2] - Projectile.Center).ToRotation();
 			}
-			var fire = new CurseFlame_HighQualityDust
+			for (int g = 0; g < 3; g++)
 			{
-				velocity = vel,
-				Active = true,
-				Visible = true,
-				position = pos,
-				maxTime = Main.rand.Next(16, 35),
+				var fire = new CurseFlame_HighQualityDust
+				{
+					velocity = vel * 0.3f,
+					Active = true,
+					Visible = true,
+					position = pos + vel * g,
+					maxTime = Main.rand.Next(16, 35),
 
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), rot * 0.1f, Main.rand.NextFloat(3.6f, 30f) },
-			};
-			Ins.VFXManager.Add(fire);
-			for (int g = 0; g < 1; g++)
+					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), rot * 0.1f, Main.rand.NextFloat(3.6f, 30f) },
+				};
+				Ins.VFXManager.Add(fire);
+			}
+
+			for (int g = 0; g < 2; g++)
 			{
 				var spark = new CurseFlameSparkDust
 				{
@@ -67,6 +71,80 @@ public class CurseClub_smash : ClubProj_Smash
 				Ins.VFXManager.Add(spark);
 			}
 		}
+	}
+
+	public override void Smash(int level)
+	{
+		Player player = Main.player[Projectile.owner];
+		if (level == 0)
+		{
+			for (int t = 0; t < 15; t++)
+			{
+				Vector2 vel = new Vector2(0, -15).RotatedBy((t - 7) * 0.3f);
+				var fire = new CurseFlame_HighQualityDust
+				{
+					velocity = vel,
+					Active = true,
+					Visible = true,
+					position = player.Bottom - vel * 3,
+					maxTime = Main.rand.Next(16, 35),
+
+					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(3.6f, 30f) },
+				};
+				Ins.VFXManager.Add(fire);
+			}
+			for (int g = 0; g < 400; g++)
+			{
+				Vector2 vel = new Vector2(0, Main.rand.NextFloat(2f, 10f)).RotatedByRandom(MathHelper.TwoPi);
+				var spark = new CurseFlameSparkDust
+				{
+					velocity = vel.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)),
+					Active = true,
+					Visible = true,
+					position = player.Bottom - vel * 3,
+					maxTime = Main.rand.Next(6, Main.rand.Next(6, 405)),
+					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 47.0f)),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f) },
+				};
+				Ins.VFXManager.Add(spark);
+			}
+		}
+		if (level == 1)
+		{
+			for (int t = 0; t < 31; t++)
+			{
+				Vector2 vel = new Vector2(0, -25).RotatedBy((t - 7) * 0.3f);
+				var fire = new CurseFlame_HighQualityDust
+				{
+					velocity = vel,
+					Active = true,
+					Visible = true,
+					position = player.Bottom - vel * 2,
+					maxTime = Main.rand.Next(16, 35),
+
+					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(6f, 20f) },
+				};
+				Ins.VFXManager.Add(fire);
+			}
+			for (int g = 0; g < 1200; g++)
+			{
+				Vector2 vel = new Vector2(0, Main.rand.NextFloat(3f, 16f)).RotatedByRandom(MathHelper.TwoPi);
+				var spark = new CurseFlameSparkDust
+				{
+					velocity = vel.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)),
+					Active = true,
+					Visible = true,
+					position = player.Bottom - vel * 3,
+					maxTime = Main.rand.Next(6, Main.rand.Next(6, 405)),
+					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 47.0f)),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f) },
+				};
+				Ins.VFXManager.Add(spark);
+			}
+		}
+		base.Smash(level);
 	}
 
 	public override void DrawTrail2(Color color)

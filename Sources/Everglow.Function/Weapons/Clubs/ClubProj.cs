@@ -4,7 +4,6 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
-using Everglow.Commons.Weapons.StabbingSwords;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Shaders;

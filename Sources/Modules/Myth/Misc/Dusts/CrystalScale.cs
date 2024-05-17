@@ -1,5 +1,3 @@
-using Everglow.Commons.Weapons.Yoyos;
-
 namespace Everglow.Myth.Misc.Dusts;
 
 public class CrystalScale : ModDust
@@ -8,8 +6,9 @@ public class CrystalScale : ModDust
 	{
 		dust.noGravity = true;
 		dust.frame = new Rectangle(0, 0, 30, 30);
-		//dust.alpha = 0;
-		dust.dustIndex = (int)(dust.scale * 300);//用Index存尺寸极值
+
+		// dust.alpha = 0;
+		dust.dustIndex = (int)(dust.scale * 300); // 用Index存尺寸极值
 	}
 
 	public override bool Update(Dust dust)
@@ -22,7 +21,9 @@ public class CrystalScale : ModDust
 		dust.scale = (float)Math.Sin(dust.alpha / 255d * Math.PI) * dust.dustIndex / 300f;
 		Lighting.AddLight(dust.position, 0.0096f * dust.scale / 1.8f, 0.0955f * dust.scale / 1.8f, 0.4758f * dust.scale / 1.8f);
 		if (dust.alpha > 254)
+		{
 			dust.active = false;
+		}
 
 		return false;
 	}
@@ -49,15 +50,17 @@ public class CrystalScale : ModDust
 		return new Color?(new Color(r, g, b, 0f));
 	}
 }
+
 public class CrystalScale2 : ModDust
 {
 	public override string Texture => "Everglow/Myth/Misc/Dusts/IceScale";
+
 	public override void OnSpawn(Dust dust)
 	{
 		dust.noGravity = true;
 		dust.frame = new Rectangle(0, 0, 30, 30);
 		dust.alpha = 0;
-		dust.dustIndex = (int)(dust.scale * 300);//用旋转角度存尺寸极值
+		dust.dustIndex = (int)(dust.scale * 300); // 用旋转角度存尺寸极值
 	}
 
 	public override bool Update(Dust dust)
@@ -69,7 +72,9 @@ public class CrystalScale2 : ModDust
 		dust.scale = (float)Math.Sin(dust.alpha / 255d * Math.PI) * dust.dustIndex / 300f;
 		Lighting.AddLight(dust.position, 0.0096f * dust.scale / 1.8f, 0.0955f * dust.scale / 1.8f, 0.4758f * dust.scale / 1.8f);
 		if (dust.alpha > 254)
+		{
 			dust.active = false;
+		}
 
 		return false;
 	}
@@ -88,15 +93,17 @@ public class CrystalScale2 : ModDust
 		return new Color?(new Color(r, g, b, 0f));
 	}
 }
+
 public class CrystalScale3 : ModDust
 {
 	public override string Texture => "Everglow/Myth/Misc/Dusts/IceScale";
+
 	public override void OnSpawn(Dust dust)
 	{
 		dust.noGravity = true;
 		dust.frame = new Rectangle(0, 0, 30, 30);
 		dust.alpha = 0;
-		dust.dustIndex = (int)(dust.scale * 300);//用旋转角度存尺寸极值
+		dust.dustIndex = (int)(dust.scale * 300); // 用旋转角度存尺寸极值
 	}
 
 	public override bool Update(Dust dust)
@@ -108,7 +115,9 @@ public class CrystalScale3 : ModDust
 		dust.scale = (float)Math.Sin(dust.alpha / 255d * Math.PI) * dust.dustIndex / 300f;
 		Lighting.AddLight(dust.position, 0.0096f * dust.scale / 1.8f, 0.0955f * dust.scale / 1.8f, 0.4758f * dust.scale / 1.8f);
 		if (dust.alpha > 254)
+		{
 			dust.active = false;
+		}
 
 		return false;
 	}

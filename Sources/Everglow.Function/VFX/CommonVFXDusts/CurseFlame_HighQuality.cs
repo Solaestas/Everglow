@@ -1,8 +1,10 @@
 using Everglow.Commons.Enums;
+using Everglow.Commons.Interfaces;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
+
 public class CurseFlame_HighQualityPipeline : Pipeline
 {
 	public override void Load()
@@ -24,11 +26,20 @@ public class CurseFlame_HighQualityPipeline : Pipeline
 		effect.Value.CurrentTechnique.Passes[0].Apply();
 	}
 
+	public override void Render(IEnumerable<IVisual> visuals)
+	{
+		if (visuals.Count() > 0)
+		{
+			base.Render(visuals);
+		}
+	}
+
 	public override void EndRender()
 	{
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(CurseFlame_HighQualityPipeline), typeof(WarpAndFadePipeline), typeof(BloomPipeline))]
 public class CurseFlame_HighQualityDust : Visual
 {
@@ -73,7 +84,7 @@ public class CurseFlame_HighQualityDust : Visual
 		float pocession = 1 - timer / maxTime;
 		if (pocession < 0.2)
 		{
-			return;
+			pocession = 0.4f;
 		}
 		if (Main.gamePaused)
 		{
@@ -89,7 +100,7 @@ public class CurseFlame_HighQualityDust : Visual
 			pocession = 0.4f;
 			for (int i = 1; i < 3; i++)
 			{
-				float coordValue = i / (float)len;
+				float coordValue = (i - 1) / (float)len;
 				var drawcRopeUp = new Color(0.25f + coordValue * 0.5f, 0, 0, 0);
 				var drawcRopeDown = new Color(0.25f + coordValue * 0.5f, 1, 0, 0);
 				bars.Add(new Vertex2D(position, drawcRopeUp, new Vector3(ai[0] + coordValue * 0.4f, timeValue, pocession)));
@@ -102,7 +113,7 @@ public class CurseFlame_HighQualityDust : Visual
 			{
 				Vector2 normal = oldPos[i] - oldPos[i - 1];
 				normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
-				float coordValue = i / (float)len;
+				float coordValue = (i - 1) / (float)len;
 				var drawcRopeUp = new Color(0.25f + coordValue * 0.5f, 0, 0, 0);
 				var drawcRopeDown = new Color(0.25f + coordValue * 0.5f, 1, 0, 0);
 				float width = ai[2] * (float)Math.Sin(coordValue * Math.PI);
