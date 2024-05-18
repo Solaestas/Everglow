@@ -23,6 +23,7 @@ public class BranchedLightningPipeline : Pipeline
 		effect.Value.Parameters["uTransitPeriod"].SetValue(BranchedLightning.TRANSIT_PERIOD);
 		effect.Value.Parameters["uDeformPeriod"].SetValue(BranchedLightning.DEFORM_PERIOD);
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
@@ -43,6 +44,7 @@ public class BranchedLightningPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(BranchedLightningPipeline), typeof(BloomPipeline))]
 public class BranchedLightning : Visual
 {
@@ -56,14 +58,14 @@ public class BranchedLightning : Visual
 	public const float WIDTH_EXPANSION_RATE = 1 / 5f;
 	public const float WIDTH_SHRINK_RATE = 1 / 10f;
 
-	//子分支
+	// 子分支
 	public const float DEVIATION_ANGLE = (float)Math.PI / 4;
 	public const int MAX_BRANCH_COUNT = 2;
 	public const float WIDTH_DECAY = 0.85f;
 	public const float LENGTH_DECAY = 0.95f;
 	public const float CHILD_ANGLE_AMPLIFICATION = 1.5f;
 
-	//变形
+	// 变形
 	public const float DISPLACE_INTENSITY = 0.35f;
 	public const float TRANSIT_PERIOD = 20f;
 	public const float DEFORM_PERIOD = 120f;
@@ -79,6 +81,7 @@ public class BranchedLightning : Visual
 	public const float COLLISION_DETECTION_UNIT = 2.5f;
 
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public Vector2 position;
 	public float rotation;
 	public float timer;
@@ -127,6 +130,7 @@ public class BranchedLightning : Visual
 			lightningRoot.StartShrink();
 		}
 	}
+
 	public override void Draw()
 	{
 		List<Vertex2D> barsList = new List<Vertex2D>();
@@ -138,7 +142,7 @@ public class BranchedLightning : Visual
 	}
 
 	// LightningNode: 单独闪电节点
-	private class LightningNode 
+	private class LightningNode
 	{
 		// 长度(末尾位置)
 		private Vector2 rawOffset;
@@ -166,13 +170,13 @@ public class BranchedLightning : Visual
 		private float distortionX;
 
 		public LightningNode(
-			float nodeWidth, 
-			Vector2 rawOffset, 
-			float segmentLength = DEFAULT_SEGMENT_LENGTH, 
+			float nodeWidth,
+			Vector2 rawOffset,
+			float segmentLength = DEFAULT_SEGMENT_LENGTH,
 			float renderStripWidth = DEFAULT_RENDER_STRIP_WIDTH,
 			float wiggleAngularSpeedLimit = DEFAULT_ANGULAR_SPEED_LIMIT,
-			LightningNode parentNode = null, 
-			int nodeDepth = 0) 
+			LightningNode parentNode = null,
+			int nodeDepth = 0)
 		{
 			this.widthShrink = false;
 			this.rawOffset = rawOffset;
@@ -212,7 +216,6 @@ public class BranchedLightning : Visual
 
 		private Vector2? GetCollisionPosition()
 		{
-
 			if (parent == null)
 			{
 				int testCollisionWidth = (int)(renderStripWidth * widthProgress * LINE_PROPORTION);
@@ -240,7 +243,7 @@ public class BranchedLightning : Visual
 
 		public void Update(Vector2 rootPosition, float lightningRotation)
 		{
-			// 更新位置
+			// 更新位置和旋转
 			if (parent == null)
 			{
 				currentEndPos = rootPosition;
@@ -271,7 +274,7 @@ public class BranchedLightning : Visual
 				float parentRotation = 0;
 				if (parent.parent != null)
 				{
-					//parentRotation = (parent.currentEndPos - parent.parent.currentEndPos).ToRotation() * 0.5f;
+					// 获得parent的部分旋转
 					parentRotation = parent.rawOffset.ToRotation() * 0.5f;
 				}
 				currentEndPos = parent.currentEndPos + rawOffset.RotatedBy(parentRotation + lightningRotation);
@@ -297,7 +300,7 @@ public class BranchedLightning : Visual
 				// 成长已完成
 				if (children != null)
 				{
-					foreach (LightningNode child in children) 
+					foreach (LightningNode child in children)
 					{
 						child.Update(rootPosition, lightningRotation);
 					}
@@ -332,10 +335,9 @@ public class BranchedLightning : Visual
 
 		private void CollisionKill(Vector2 collisionPos)
 		{
-			//widthShrink = true;
 			widthProgress = 0;
 
-			if (Main.rand.NextFloat() < 0.3f)
+			if (Main.rand.NextFloat() < 0.25f)
 			{
 				Dust d = Dust.NewDustDirect(collisionPos, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
 				d.scale *= 0.2f;
@@ -344,20 +346,8 @@ public class BranchedLightning : Visual
 			children = null;
 			if (parent != null)
 			{
-				//currentEndPos = collisionPos;
 				lengthProgress = (parent.currentEndPos - collisionPos).Length() / (parent.currentEndPos - currentEndPos).Length();
 			}
-			/*
-			if (children != null)
-			{
-				
-				foreach (LightningNode child in children)
-				{
-					Dust d = Dust.NewDustDirect(child.currentEndPos, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
-					d.scale *= 0.5f;
-				}
-				
-			}*/
 		}
 
 		private void CreateChildren()
@@ -387,7 +377,6 @@ public class BranchedLightning : Visual
 				{
 					// 非主分支
 					childWidth *= 0.45f;
-					//childLengthDecay *= 0.9f;
 					childAngle *= CHILD_ANGLE_AMPLIFICATION;
 					childDepth += 2;
 				}
@@ -434,7 +423,12 @@ public class BranchedLightning : Visual
 
 			if (parent == null)
 			{
-				// 绘制原点（光球）
+				/* 绘制原点（光球）
+				 * 传入shader的顶点属性为：
+				 * - position: 绘制四边形的顶点位置
+				 * - color: (N/A, N/A, 0（绘制光球）, 是否使用闪电边缘颜色)
+				 * - texCoord: 绘制四边形的顶点uv
+				 */
 				float currentWidth = 2 * renderStripWidth * LINE_PROPORTION * widthProgress * multiplyFactor;
 				Color c = new Color(0, 0, 0, useEdgeColor);
 
@@ -450,7 +444,12 @@ public class BranchedLightning : Visual
 			}
 			else
 			{
-				// 绘制闪电段
+				/* 绘制闪电段
+				 * 传入shader的顶点属性为：
+				 * - position: 绘制四边形的顶点位置
+				 * - color: (噪波纹理u （用于使闪电段两端无位移）, 噪波纹理v, 1（绘制闪电段）, 是否使用闪电边缘颜色)
+				 * - texCoord: （当前宽度，噪波uv在u方向上的随机位移，闪电段长度）
+				 */
 				Vector2 worldPos = Vector2.Lerp(parent.currentEndPos, currentEndPos, lengthProgress);
 				Vector2 parentWorldPos = parent.currentEndPos;
 

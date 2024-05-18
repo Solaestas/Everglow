@@ -1,4 +1,4 @@
-﻿sampler2D uImage : register(s0);
+sampler2D uImage : register(s0);
 
 texture uDotLight;
 sampler uDotLightpSampler =
@@ -60,12 +60,6 @@ PSInput VertexShaderFunction(VSInput input)
     return output;
 }
 
-float PingPong(float val)
-{
-    val %= 2;
-    return val < 1 ? val : (2 - val);
-}
-
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
     float4 baseColor = (input.Color.a == 0 ? float4(1, 1, 1, 1) : uEdgeColor);
@@ -83,7 +77,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     float texU = input.Color.r;
     float texV = input.Color.g;
 
-    //float2 displaceCoord = (input.Texcoord.yz % uNoiseSize) / uNoiseSize;
+    
     float dispLerp = texU - (uDisplacementShift / uTransitPeriod) % 2.0;
     if (dispLerp < 0 && dispLerp >= -1) {
         dispLerp *= -1;
@@ -91,11 +85,12 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
         dispLerp += 2;
     }
     
-        float2 displaceCoord = float2(
-        noiseX + lerp(0, noiseRange / uNoiseSize, dispLerp /* + uDisplacementShift / uTransitPeriod*/),
+    float2 displaceCoord = float2(
+        noiseX + lerp(0, noiseRange / uNoiseSize, dispLerp),
         uDisplacementShift / uDeformPeriod);
     float rawDisplace = tex2D(uDisplacementSampler, displaceCoord).r;
 
+	// 每段闪电两端无位移 (位移量乘 1-(2texU - 1)^6, texU在[0,1]上)
     float refinedDisplace = (rawDisplace - 0.5) * uDisplaceIntensity * (-pow(2 * texU - 1, 6) + 1);
     float currentHalfWidthProportion = input.Texcoord.x * 0.5;
     float distFromCenter = abs(texV + refinedDisplace - 0.5);
