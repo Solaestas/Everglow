@@ -148,6 +148,11 @@ public class YggdrasilTownBackground : ModSystem
 					var lampFar = ModAsset.LampWoodFar.Value;
 					var lampSky = ModAsset.LampWoodSky.Value;
 					Vector2 correction = new Vector2(0, LampWoodCenterY - 4000) - BiomeCenter;
+					if(LampWoodCenterY - Main.screenPosition.Y < -Main.screenHeight)
+					{
+						LampWoodCenterY = Main.screenPosition.Y;
+						BackgroundSwitchingAlpha = 0;
+					}
 					float setSize = 1f;
 					if(BackgroundSwitchingAlpha < 1f)
 					{
@@ -181,7 +186,7 @@ public class YggdrasilTownBackground : ModSystem
 		}
 
 		//旧背景
-		BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000));
+		//BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000));
 		//BackgroundManager.QuickDrawBG(texC3, GetDrawRect(texClose.Size(), 0.05f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, false);
 		//BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texClose.Size(), 0.10f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, false);
 		//BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texClose.Size(), 0.15f, new Vector2(0, 7200)), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, true);
