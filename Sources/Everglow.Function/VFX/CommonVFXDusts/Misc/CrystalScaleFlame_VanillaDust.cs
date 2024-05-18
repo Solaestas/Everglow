@@ -43,6 +43,6 @@ public class CrystalScaleFlame_VanillaDust : ModDust
 			g *= (1 - MathF.Pow(MathF.Abs(MathF.Sin(rotValue * MathHelper.Pi / 2f)), 0.5f)) * 10;
 			b *= (1 - MathF.Pow(MathF.Abs(MathF.Sin(rotValue * MathHelper.Pi / 2f)), 0.5f)) * 10;
 		}
-		return new Color?(new Color(r, g, b, 0.1f));
+		return new Color?(new Color(r, g, b, 0.12f));
 	}
 }
