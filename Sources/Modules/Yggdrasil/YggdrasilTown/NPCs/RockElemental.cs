@@ -4,6 +4,7 @@ using Terraria.DataStructures;
 using Terraria.WorldBuilding;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
+
 [NoGameModeScale]
 public class RockElemental : ModNPC
 {
@@ -38,19 +39,21 @@ public class RockElemental : ModNPC
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
-
 	}
+
 	public override void FindFrame(int frameHeight)
 	{
 		NPC.frame.Y = (int)(NPC.frameCounter / 5 % 5) * frameHeight;
-
 	}
 
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
 		YggdrasilTownBiome YggdrasilTownBiome = ModContent.GetInstance<YggdrasilTownBiome>();
 		if (!YggdrasilTownBiome.IsBiomeActive(Main.LocalPlayer))
+		{
 			return 0f;
+		}
+
 		return 3f;
 	}
 
@@ -58,7 +61,8 @@ public class RockElemental : ModNPC
 	{
 		targetVel = new Vector2(Main.rand.NextBool(2) ? 10 : -10, 0);
 	}
-	int State;
+
+	private int state;
 	public bool Anger = false;
 
 	private enum NPCState
@@ -72,38 +76,46 @@ public class RockElemental : ModNPC
 		Rest,
 		Dash,
 	}
-	Vector2 targetVel;
+
+	private Vector2 targetVel;
+
+	private static Conditions.NotNull _cachedConditions_notNull = new Terraria.WorldBuilding.Conditions.NotNull();
+	private static Conditions.IsSolid _cachedConditions_solid = new Terraria.WorldBuilding.Conditions.IsSolid();
 
 	public override void AI()
 	{
-
-			if (NPC.collideX)
+		if (NPC.collideX)
 		{
-
-
 			NPC.velocity.X = NPC.velocity.X * -0.5f;
 			if (NPC.direction == -1 && NPC.velocity.X > 0f && NPC.velocity.X < 2f)
+			{
 				NPC.velocity.X = 2f;
+			}
 
 			if (NPC.direction == 1 && NPC.velocity.X < 0f && NPC.velocity.X > -2f)
+			{
 				NPC.velocity.X = -2f;
+			}
 		}
 
 		if (NPC.collideY)
 		{
-
 			NPC.velocity.Y = NPC.velocity.Y * -0.5f;
 			if (NPC.velocity.Y > 0f && NPC.velocity.Y < 1f)
+			{
 				NPC.velocity.Y = 1f;
+			}
 
 			if (NPC.velocity.Y < 0f && NPC.velocity.Y > -1f)
+			{
 				NPC.velocity.Y = -1f;
+			}
 		}
-		switch (State)
+		switch (state)
 		{
+			// 飞行
 			case (int)NPCState.Fly:
 				{
-
 					NPC.frameCounter++;
 					NPC.TargetClosest();
 					targetVel = new Vector2(1 * Math.Abs(targetVel.X) / targetVel.X, MathF.Cos((float)Main.time * 0.04f + NPC.whoAmI));
@@ -117,7 +129,7 @@ public class RockElemental : ModNPC
 					if (NPC.HasValidTarget && Anger)
 					{
 						NPC.localAI[0] = 0;
-						State = (int)NPCState.SmashDown_1;
+						state = (int)NPCState.SmashDown_1;
 						NPC.ai[0] = 0;
 						NPC.frameCounter = 0;
 						NPC.velocity = new Vector2(0, 1);
@@ -138,6 +150,8 @@ public class RockElemental : ModNPC
 					}
 					break;
 				}
+
+			// 下落
 			case (int)NPCState.SmashDown_1:
 				{
 					NPC.noTileCollide = true;
@@ -150,8 +164,7 @@ public class RockElemental : ModNPC
 					Tile tile = Main.tile[p.X, p.Y + 1];
 					if (tile != null && !tile.inActive() && tile.active() && Main.tileSolid[tile.type] && !Main.tileSolidTop[tile.type])
 					{
-						
-						State = (int)NPCState.Defense;
+						state = (int)NPCState.Defense;
 						NPC.ai[0] = 8;
 						NPC.frameCounter = 0;
 						NPC.velocity = Vector2.Zero;
@@ -164,6 +177,8 @@ public class RockElemental : ModNPC
 
 					break;
 				}
+
+			// 防御
 			case (int)NPCState.Defense:
 				{
 					NPC.noTileCollide = true;
@@ -173,7 +188,7 @@ public class RockElemental : ModNPC
 					NPC.TargetClosest();
 					if (NPC.HasValidTarget && Anger)
 					{
-						State = (int)NPCState.Throw;
+						state = (int)NPCState.Throw;
 						NPC.ai[0] = 539;
 						NPC.frameCounter = 0;
 						NPC.velocity = new Vector2(0, -2.5f);
@@ -182,6 +197,8 @@ public class RockElemental : ModNPC
 					}
 					break;
 				}
+
+			// 投掷
 			case (int)NPCState.Throw:
 				{
 					NPC.defense = 12;
@@ -197,7 +214,8 @@ public class RockElemental : ModNPC
 					NPC.rotation = MathHelper.Lerp(NPC.rotation, ro, 0.1f);
 
 					Vector2 dust = new Vector2(0, 75 + Main.rand.Next(50)).RotatedByRandom(Math.PI / 6);
-					//Dust d = Dust.NewDustDirect(NPC.Center + dust, 1,1,ModContent.DustType<MagicStone>(), -dust.X / 25, -dust.Y / 25);
+
+					// Dust d = Dust.NewDustDirect(NPC.Center + dust, 1,1,ModContent.DustType<MagicStone>(), -dust.X / 25, -dust.Y / 25);
 					NPC.rotation = Math.Clamp(NPC.velocity.X * 0.15f, -1f, 1f);
 					if (NPC.ai[0] % 180 == 0)
 					{
@@ -205,13 +223,15 @@ public class RockElemental : ModNPC
 					}
 					if (NPC.ai[0] <= 0)
 					{
-						State = (int)NPCState.Move;
+						state = (int)NPCState.Move;
 						NPC.ai[0] = 0;
 						NPC.frameCounter = 0;
 						NPC.velocity = new Vector2(0, -1);
 					}
 					break;
 				}
+
+			// 位移
 			case (int)NPCState.Move:
 				{
 					if (NPC.velocity.X == 0)
@@ -232,15 +252,15 @@ public class RockElemental : ModNPC
 					}
 
 					toAim = target.Center - NPC.Center + new Vector2(0, -200);
-					NPC.velocity = Vector2.Lerp(NPC.velocity , MathUtils.NormalizeSafe(toAim) * NPC.velocity.Length(),0.2f);
+					NPC.velocity = Vector2.Lerp(NPC.velocity, MathUtils.NormalizeSafe(toAim) * NPC.velocity.Length(), 0.2f);
 					if (NPC.velocity.Length() < 10)
 					{
 						NPC.velocity *= 1.02f;
 					}
-					NPC.rotation = MathHelper.Lerp(NPC.rotation, Math.Clamp(NPC.velocity.X * 0.15f, -1f, 1f),0.1f);
-					if (Vector2.Dot(target.Center - NPC.Center, Vector2.UnitY) / ((target.Center - NPC.Center).Length()) >= 0.96)
+					NPC.rotation = MathHelper.Lerp(NPC.rotation, Math.Clamp(NPC.velocity.X * 0.15f, -1f, 1f), 0.1f);
+					if (Vector2.Dot(target.Center - NPC.Center, Vector2.UnitY) / (target.Center - NPC.Center).Length() >= 0.96)
 					{
-						State = (int)NPCState.SmashDown_2;
+						state = (int)NPCState.SmashDown_2;
 						NPC.ai[0] = 60;
 						NPC.frameCounter = 0;
 						NPC.velocity = Vector2.Zero;
@@ -248,7 +268,7 @@ public class RockElemental : ModNPC
 
 					if (WorldUtils.Find(target.Center.ToTileCoordinates(), Searches.Chain(new Searches.Up(5), _cachedConditions_notNull, _cachedConditions_solid), out var _))
 					{
-						State = (int)NPCState.Dash;
+						state = (int)NPCState.Dash;
 						NPC.ai[0] = 0;
 						NPC.frameCounter = 0;
 						NPC.velocity = new Vector2(0, -1);
@@ -256,6 +276,8 @@ public class RockElemental : ModNPC
 
 					break;
 				}
+
+			// 下砸2
 			case (int)NPCState.SmashDown_2:
 				{
 					NPC.ai[0]--;
@@ -269,7 +291,7 @@ public class RockElemental : ModNPC
 					if (tile.active() && Main.tileSolid[tile.type] && !tile.halfBrick())
 					{
 						NPC.ai[0] = 60;
-						State = (int)NPCState.Rest;
+						state = (int)NPCState.Rest;
 						NPC.frameCounter = 0;
 						NPC.velocity = Vector2.Zero;
 						int num = Main.rand.Next(11, 15);
@@ -290,18 +312,22 @@ public class RockElemental : ModNPC
 					}
 					break;
 				}
+
+			// 休息
 			case (int)NPCState.Rest:
 				{
 					NPC.ai[0]--;
 					if (NPC.ai[0] <= 0)
 					{
-						State = (int)NPCState.Dash;
+						state = (int)NPCState.Dash;
 						NPC.ai[0] = 0;
 						NPC.frameCounter = 0;
 						NPC.velocity = new Vector2(0, -7.5f);
 					}
 					break;
 				}
+
+			// 冲刺
 			case (int)NPCState.Dash:
 				{
 					NPC.noTileCollide = false;
@@ -321,7 +347,7 @@ public class RockElemental : ModNPC
 					}
 					if (NPC.ai[0] >= 360)
 					{
-						State = (int)NPCState.Throw;
+						state = (int)NPCState.Throw;
 						NPC.ai[0] = 539;
 						NPC.frameCounter = 0;
 						NPC.velocity = new Vector2(0, -1);
@@ -330,15 +356,13 @@ public class RockElemental : ModNPC
 					break;
 				}
 		}
-
 	}
-	private static Terraria.WorldBuilding.Conditions.NotNull _cachedConditions_notNull = new Terraria.WorldBuilding.Conditions.NotNull();
-	private static Terraria.WorldBuilding.Conditions.IsSolid _cachedConditions_solid = new Terraria.WorldBuilding.Conditions.IsSolid();
+
 	public override void HitEffect(NPC.HitInfo hit)
 	{
 		if (!Anger)
 		{
-			switch (State)
+			switch (state)
 			{
 				case (int)NPCState.Fly:
 					{
@@ -347,28 +371,23 @@ public class RockElemental : ModNPC
 					}
 				case (int)NPCState.SmashDown_1:
 					{
-
 						break;
 					}
 				case (int)NPCState.Defense:
 					{
-
 						NPC.ai[0]--;
 						if (NPC.ai[0] == 0)
 						{
 							Anger = true;
-
 						}
 						break;
 					}
 				case (int)NPCState.Throw:
 					{
-
 						break;
 					}
 				case (int)NPCState.Move:
 					{
-
 						break;
 					}
 				case (int)NPCState.SmashDown_2:
@@ -377,7 +396,6 @@ public class RockElemental : ModNPC
 					}
 				case (int)NPCState.Rest:
 					{
-
 						break;
 					}
 				case (int)NPCState.Dash:
@@ -389,8 +407,20 @@ public class RockElemental : ModNPC
 
 		base.HitEffect(hit);
 	}
-	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-	{
 
+	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+	{
+		Texture2D glow = ModAsset.RockElemental_glow.Value;
+		Texture2D texture = ModAsset.RockElemental.Value;
+		Vector2 size = glow.Size();
+		size.Y *= 0.2f;
+		SpriteEffects spriteEffect = SpriteEffects.None;
+		if (NPC.spriteDirection == -1)
+		{
+			spriteEffect = SpriteEffects.FlipHorizontally;
+		}
+		spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
+		spriteBatch.Draw(glow, NPC.Center - Main.screenPosition, NPC.frame, new Color(0.4f, 0.2f, 1f, 0f), NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
+		return false;
 	}
 }
