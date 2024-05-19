@@ -55,7 +55,7 @@ public class MothBallExplosion : ModProjectile, IWarpProjectile
 			};
 			Ins.VFXManager.Add(electric);
 		}
-		//for (int g = 0; g < Frequency * 3; g++)
+
 		for (int g = 0; g < Frequency * 1.5f; g++)
 		{
 			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(20f, 30f)).RotatedByRandom(MathHelper.TwoPi);
