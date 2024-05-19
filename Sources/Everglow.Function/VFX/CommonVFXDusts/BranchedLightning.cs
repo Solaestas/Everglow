@@ -18,6 +18,8 @@ public class BranchedLightningPipeline : Pipeline
 		effect.Value.Parameters["uDisplaceIntensity"].SetValue(BranchedLightning.DISPLACE_INTENSITY);
 		effect.Value.Parameters["uNoiseSize"].SetValue(BranchedLightning.NOISE_SIZE);
 		effect.Value.Parameters["uLineProportion"].SetValue(BranchedLightning.LINE_PROPORTION);
+
+		// 设置闪电边缘颜色
 		effect.Value.Parameters["uEdgeColor"].SetValue((new Color(0, 200, 255)).ToVector4());
 		effect.Value.Parameters["uBlurProportion"].SetValue(BranchedLightning.BLUR_PROPORTION);
 		effect.Value.Parameters["uTransitPeriod"].SetValue(BranchedLightning.TRANSIT_PERIOD);
@@ -51,9 +53,8 @@ public class BranchedLightning : Visual
 	public const int MAX_SEGMENTS = 12;
 	public const float DEFAULT_RENDER_STRIP_WIDTH = 125f;
 
-
 	// 生长
-	public const float LENGTH_EXTENSION_SPEED = 175f; // pixel-length per frame
+	public const float LENGTH_EXTENSION_SPEED = 175f; // 单位：像素/帧
 	public const float DEFAULT_SEGMENT_LENGTH = 125f;
 	public const float WIDTH_EXPANSION_RATE = 1 / 5f;
 	public const float WIDTH_SHRINK_RATE = 1 / 10f;
@@ -135,7 +136,10 @@ public class BranchedLightning : Visual
 	{
 		List<Vertex2D> barsList = new List<Vertex2D>();
 
+		// 绘制底（边缘色）
 		lightningRoot.AddVertexesToList(barsList, true);
+
+		// 绘制主体（白色）
 		lightningRoot.AddVertexesToList(barsList, false);
 
 		Ins.Batch.Draw(barsList, PrimitiveType.TriangleList);
@@ -250,7 +254,7 @@ public class BranchedLightning : Visual
 			}
 			else
 			{
-				float angleLimit = (DEVIATION_ANGLE * ((depth - parent.depth <= 1) ? 1 : CHILD_ANGLE_AMPLIFICATION));
+				float angleLimit = DEVIATION_ANGLE * ((depth - parent.depth <= 1) ? 1 : CHILD_ANGLE_AMPLIFICATION);
 				float acceleration = Main.rand.NextFloat(-ANGULAR_ACCELERATION_PROPORTION, ANGULAR_ACCELERATION_PROPORTION) * this.wiggleAngularSpeedLimit;
 				float updatedAngularVel = angularVel + acceleration;
 
@@ -333,6 +337,12 @@ public class BranchedLightning : Visual
 			}
 		}
 
+		/* 碰撞物块效果：
+		 * - 碰撞闪电段宽度归零
+		 * - 碰撞闪电段生长进度调整至碰撞点对应的进度（会继续尝试生长和生成子闪电段）
+		 * - 随机生成电火花
+		 * - 消除所有子闪电段
+		 */
 		private void CollisionKill(Vector2 collisionPos)
 		{
 			widthProgress = 0;
@@ -418,8 +428,8 @@ public class BranchedLightning : Visual
 					child.AddVertexesToList(barsList, drawEgde);
 				}
 			}
-			float multiplyFactor = (drawEgde ? 1 : (1 - 2 * EDGE_LINE_RATIO));
-			float useEdgeColor = (drawEgde ? 1f : 0f);
+			float multiplyFactor = drawEgde ? 1 : (1 - 2 * EDGE_LINE_RATIO);
+			float useEdgeColor = drawEgde ? 1f : 0f;
 
 			if (parent == null)
 			{
@@ -432,13 +442,17 @@ public class BranchedLightning : Visual
 				float currentWidth = 2 * renderStripWidth * LINE_PROPORTION * widthProgress * multiplyFactor;
 				Color c = new Color(0, 0, 0, useEdgeColor);
 
-				Vertex2D upperLeft = new Vertex2D(currentEndPos + currentWidth * new Vector2(-1, -1),
+				Vertex2D upperLeft = new Vertex2D(
+					currentEndPos + currentWidth * new Vector2(-1, -1),
 					c, new Vector3(0, 0, 0));
-				Vertex2D upperRight = new Vertex2D(currentEndPos + currentWidth * new Vector2(1, -1),
+				Vertex2D upperRight = new Vertex2D(
+					currentEndPos + currentWidth * new Vector2(1, -1),
 					c, new Vector3(1, 0, 0));
-				Vertex2D lowerLeft = new Vertex2D(currentEndPos + currentWidth * new Vector2(-1, 1),
+				Vertex2D lowerLeft = new Vertex2D(
+					currentEndPos + currentWidth * new Vector2(-1, 1),
 					c, new Vector3(0, 1, 0));
-				Vertex2D lowerRight = new Vertex2D(currentEndPos + currentWidth * new Vector2(1, 1),
+				Vertex2D lowerRight = new Vertex2D(
+					currentEndPos + currentWidth * new Vector2(1, 1),
 					c, new Vector3(1, 1, 0));
 				AddVertexesForOne(barsList, upperLeft, upperRight, lowerLeft, lowerRight);
 			}
