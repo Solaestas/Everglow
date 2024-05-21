@@ -1,5 +1,5 @@
-using MathNet.Numerics.LinearAlgebra;
 using Everglow.Commons.Utilities;
+using MathNet.Numerics.LinearAlgebra;
 
 namespace Everglow.Commons.Physics;
 
@@ -24,23 +24,24 @@ public class Rope
 			this.IsStatic = false;
 		}
 	}
+
 	private static Vector2 RotateBy(Vector2 vector, float radians)
 	{
 		float cos = MathF.Cos(radians);
 		float sin = MathF.Sin(radians);
 		return new Vector2(
 			vector.X * cos - vector.Y * sin,
-			vector.X * sin + vector.Y * cos
-		);
+			vector.X * sin + vector.Y * cos);
 	}
-	public struct _Spring
+
+	public struct Spring
 	{
 		internal float Elasticity;
 		internal float RestLength;
 		internal int A;
 		internal int B;
 
-		public _Spring()
+		public Spring()
 		{
 			this.Elasticity = 1f;
 			this.RestLength = 0f;
@@ -49,28 +50,29 @@ public class Rope
 		}
 	}
 
-	private _Mass[] m_masses;
-	private _Spring[] m_springs;
-	private Vector2[] m_dummyPos;
-	private Vector2[] m_gradiants;
-	private RenderingTransformFunction m_renderingTransform;
+	private _Mass[] masses;
+	private Spring[] springs;
+	private Vector2[] dummyPos;
+	private Vector2[] gradiants;
+	private RenderingTransformFunction renderingTransform;
 
-	private float m_damping;
-	private float m_elasticity;
-	private bool m_hasCollision;
+	private float damping;
+	private float elasticity;
+	private bool hasCollision;
 
 	public _Mass[] GetMassList
 	{
 		get
 		{
-			return m_masses;
+			return masses;
 		}
 	}
-	public _Spring[] GetSpringList
+
+	public Spring[] GetSpringList
 	{
 		get
 		{
-			return m_springs;
+			return springs;
 		}
 	}
 
@@ -78,45 +80,45 @@ public class Rope
 	{
 		get
 		{
-			return m_renderingTransform;
+			return renderingTransform;
 		}
 	}
-
 
 	private float CrossProduct2D(Vector2 a, Vector2 b)
 	{
 		return a.X * b.Y - a.Y * b.X;
 	}
+
 	public Rope Clone(Vector2 deltaPosition)
 	{
 		Rope clone = new Rope();
-		clone.m_elasticity = m_elasticity;
-		clone.m_damping = m_damping;
-		clone.m_renderingTransform = m_renderingTransform;
-		clone.m_masses = new _Mass[m_masses.Length];
-		clone.m_springs = new _Spring[m_springs.Length];
-		clone.m_gradiants = new Vector2[m_gradiants.Length];
-		clone.m_dummyPos = new Vector2[m_dummyPos.Length];
-		m_masses.CopyTo(clone.m_masses, 0);
-		m_springs.CopyTo(clone.m_springs, 0);
-		m_gradiants.CopyTo(clone.m_gradiants, 0);
-		m_dummyPos.CopyTo(clone.m_dummyPos, 0);
-		for (int i = 0; i < clone.m_masses.Length; i++)
+		clone.elasticity = elasticity;
+		clone.damping = damping;
+		clone.renderingTransform = renderingTransform;
+		clone.masses = new _Mass[masses.Length];
+		clone.springs = new Spring[springs.Length];
+		clone.gradiants = new Vector2[gradiants.Length];
+		clone.dummyPos = new Vector2[dummyPos.Length];
+		masses.CopyTo(clone.masses, 0);
+		springs.CopyTo(clone.springs, 0);
+		gradiants.CopyTo(clone.gradiants, 0);
+		dummyPos.CopyTo(clone.dummyPos, 0);
+		for (int i = 0; i < clone.masses.Length; i++)
 		{
-			clone.m_masses[i].Position += deltaPosition;
+			clone.masses[i].Position += deltaPosition;
 		}
 		return clone;
 	}
 
 	private Rope()
 	{
-		m_damping = 0.99f;
-		m_hasCollision = false;
+		damping = 0.99f;
+		hasCollision = false;
 	}
 
 	private Vector2 G_prime(int A, int B, float elasticity, float restLength)
 	{
-		var offset = m_dummyPos[A] - m_dummyPos[B];
+		var offset = dummyPos[A] - dummyPos[B];
 		var length = offset.Length();
 		var unit = offset.NormalizeSafe();
 
@@ -125,10 +127,10 @@ public class Rope
 
 	private Matrix<float> G_Hessian(float dt, int A, int B, float elasticity, float restLength)
 	{
-		ref _Mass mA = ref m_masses[A];
-		ref _Mass mB = ref m_masses[B];
+		ref _Mass mA = ref masses[A];
+		ref _Mass mB = ref masses[B];
 
-		var offset = m_dummyPos[A] - m_dummyPos[B];
+		var offset = dummyPos[A] - dummyPos[B];
 		var length = (float)offset.Length();
 		var length2 = Vector2.Dot(offset, offset);
 
@@ -140,7 +142,7 @@ public class Rope
 
 	private Vector2 CheckCollision(int i, Vector2 oldPos, Vector2 newPos)
 	{
-		ref _Mass m = ref m_masses[i];
+		ref _Mass m = ref masses[i];
 		Vector3 sdf = SDFUtils.CalculateTileSDF(m.Position);
 		float EPS = 1e-2f;
 		if (sdf.X < EPS)
@@ -153,97 +155,101 @@ public class Rope
 	public void ApplyForce()
 	{
 		float gravity = 9;
-		for (int i = 0; i < m_masses.Length; i++)
+		for (int i = 0; i < masses.Length; i++)
 		{
-			ref _Mass m = ref m_masses[i];
+			ref _Mass m = ref masses[i];
 			m.Force += new Vector2(2 * (MathF.Sin((float)Main.timeForVisualEffects / 72f + m.Position.X / 13f + m.Position.Y / 4f) + 0.9f), 0)
 				* Main.windSpeedCurrent
 				+ new Vector2(0, gravity * m.Mass);
 		}
 	}
 
+	public void ApplyForceSpecial(int index, Vector2 force)
+	{
+		ref _Mass m = ref masses[index];
+		m.Force += force;
+	}
+
 	public void ClearForce()
 	{
-		//for (int i = 0; i < m_masses.Length; i++)
-		//{
+		// for (int i = 0; i < m_masses.Length; i++)
+		// {
 		//    ref _Mass m = ref m_masses[i];
 
-		//}
+		// }
 	}
 
 	public void Update(float deltaTime)
 	{
-		ApplyForce();
-		for (int i = 0; i < m_masses.Length; i++)
+		for (int i = 0; i < masses.Length; i++)
 		{
-			ref _Mass m = ref m_masses[i];
+			ref _Mass m = ref masses[i];
 			if (float.IsNaN(m.Position.X) && float.IsNaN(m.Position.Y))
 			{
 				Terraria.Main.NewText("!!");
 			}
 
-			m.Velocity *= (float)Math.Pow(m_damping, deltaTime);
-			m_dummyPos[i] = (m.Position + m.Velocity * deltaTime);
+			m.Velocity *= (float)Math.Pow(damping, deltaTime);
+			dummyPos[i] = m.Position + m.Velocity * deltaTime;
 
 			if (m.IsStatic)
 			{
-				m_dummyPos[i] = m.Position;
+				dummyPos[i] = m.Position;
 			}
 		}
 
 		for (int k = 0; k < 16; k++)
 		{
-			for (int i = 0; i < m_masses.Length; i++)
+			for (int i = 0; i < masses.Length; i++)
 			{
-				ref _Mass m = ref m_masses[i];
+				ref _Mass m = ref masses[i];
 				Vector2 x_hat = m.Position + deltaTime * m.Velocity;
-				m_gradiants[i] = m.Mass / (deltaTime * deltaTime) * (m_dummyPos[i] - x_hat);
-				m_gradiants[i] -= m.Force;
+				gradiants[i] = m.Mass / (deltaTime * deltaTime) * (dummyPos[i] - x_hat);
+				gradiants[i] -= m.Force;
 			}
 
-			for (int i = 0; i < m_springs.Length; i++)
+			for (int i = 0; i < springs.Length; i++)
 			{
-				ref _Spring spr = ref m_springs[i];
+				ref Spring spr = ref springs[i];
 				Vector2 v = G_prime(spr.A, spr.B, spr.Elasticity, spr.RestLength);
-				m_gradiants[spr.A] -= v;
-				m_gradiants[spr.B] -= -v;
+				gradiants[spr.A] -= v;
+				gradiants[spr.B] -= -v;
 
-				//var He = G_Hessian(deltaTime, spr.A, spr.B, spr.Elasticity, spr.RestLength);
-				//m_springH[spr.A, spr.A] = He;
-				//m_springH[spr.B, spr.B] = He;
-				//m_springH[spr.A, spr.B] = -He;
-				//m_springH[spr.B, spr.A] = -He;
+				// var He = G_Hessian(deltaTime, spr.A, spr.B, spr.Elasticity, spr.RestLength);
+				// m_springH[spr.A, spr.A] = He;
+				// m_springH[spr.B, spr.B] = He;
+				// m_springH[spr.A, spr.B] = -He;
+				// m_springH[spr.B, spr.A] = -He;
 			}
 
-			for (int i = 0; i < m_masses.Length; i++)
+			for (int i = 0; i < masses.Length; i++)
 			{
-				ref _Mass m = ref m_masses[i];
+				ref _Mass m = ref masses[i];
 				m.Force = Vector2.Zero;
 				if (m.IsStatic)
 				{
 					continue;
 				}
-				float alpha = 1f / (m.Mass / (deltaTime * deltaTime) + 4 * m_elasticity);
-				var dx = alpha * m_gradiants[i];
-				m_dummyPos[i] -= dx;
-
+				float alpha = 1f / (m.Mass / (deltaTime * deltaTime) + 4 * elasticity);
+				var dx = alpha * gradiants[i];
+				dummyPos[i] -= dx;
 			}
 		}
 
-		if (m_hasCollision)
+		if (hasCollision)
 		{
 			float tTest;
 			bool res = CollisionUtils.CCD_SegmentPoint(new Vector2(0, 2), new Vector2(1, -2), new Vector2(0, 0), new Vector2(0, -1), new Vector2(0.5f, 0.5f), Vector2.Zero, out tTest);
-			for (int i = 0; i < m_springs.Length; i++)
+			for (int i = 0; i < springs.Length; i++)
 			{
-				ref _Spring spr = ref m_springs[i];
-				ref _Mass A = ref m_masses[spr.A];
-				ref _Mass B = ref m_masses[spr.B];
+				ref Spring spr = ref springs[i];
+				ref _Mass A = ref masses[spr.A];
+				ref _Mass B = ref masses[spr.B];
 
-				Vector2 Av = m_dummyPos[spr.A] - A.Position;
-				Vector2 Bv = m_dummyPos[spr.B] - B.Position;
+				Vector2 Av = dummyPos[spr.A] - A.Position;
+				Vector2 Bv = dummyPos[spr.B] - B.Position;
 
-				Vector2 center = (m_dummyPos[spr.A] + m_dummyPos[spr.B]) / 2f;
+				Vector2 center = (dummyPos[spr.A] + dummyPos[spr.B]) / 2f;
 				int tileX = (int)(center.X / 16);
 				int tileY = (int)(center.Y / 16);
 
@@ -287,7 +293,7 @@ public class Rope
 
 				if (minTimeToCollision < 1)
 				{
-					Terraria.Main.NewText(minTimeToCollision);
+					// Terraria.Main.NewText(minTimeToCollision);
 					minTimeToCollision *= 0.9f;
 
 					Vector2 contVA = Av * (1 - minTimeToCollision);
@@ -303,28 +309,28 @@ public class Rope
 
 					var rot = -(torqueA + torqueB) / MoI * 10;
 					var rr = RotateBy(dummyA - targetPos, rot);
-					m_dummyPos[spr.A] = targetPos + RotateBy(dummyA - targetPos, rot);
-					m_dummyPos[spr.B] = targetPos + RotateBy(dummyB - targetPos, -rot);
+					dummyPos[spr.A] = targetPos + RotateBy(dummyA - targetPos, rot);
+					dummyPos[spr.B] = targetPos + RotateBy(dummyB - targetPos, -rot);
 				}
 			}
 		}
 
-		for (int i = 0; i < m_masses.Length; i++)
+		for (int i = 0; i < masses.Length; i++)
 		{
-			ref _Mass m = ref m_masses[i];
+			ref _Mass m = ref masses[i];
 			if (m.IsStatic)
 			{
 				continue;
 			}
 			Vector2 x_hat = m.Position + deltaTime * m.Velocity;
 
-			if (m_hasCollision)
+			if (hasCollision)
 			{
-				m.Position = CheckCollision(i, m.Position, m_dummyPos[i]);
+				m.Position = CheckCollision(i, m.Position, dummyPos[i]);
 			}
 			else
 			{
-				m.Position = m_dummyPos[i];
+				m.Position = dummyPos[i];
 			}
 
 			m.Velocity += (m.Position - x_hat) / deltaTime;
@@ -333,15 +339,15 @@ public class Rope
 
 	private void InitRopes(int count, float elasticity, RenderingTransformFunction renderingTransform, bool hasCollision)
 	{
-		m_masses = new _Mass[count];
-		m_dummyPos = new Vector2[count];
-		m_gradiants = new Vector2[count];
-		m_springs = new _Spring[count - 1];
-		m_damping = 0.99f;
+		masses = new _Mass[count];
+		dummyPos = new Vector2[count];
+		gradiants = new Vector2[count];
+		springs = new Spring[count - 1];
+		damping = 0.99f;
 
-		m_elasticity = elasticity;
-		m_renderingTransform = renderingTransform;
-		m_hasCollision = hasCollision;
+		this.elasticity = elasticity;
+		this.renderingTransform = renderingTransform;
+		this.hasCollision = hasCollision;
 	}
 
 	/// <summary>
@@ -354,22 +360,65 @@ public class Rope
 
 		for (int i = 0; i < positions.Count; i++)
 		{
-			m_masses[i] = new _Mass
+			masses[i] = new _Mass
 			{
 				Mass = mass,
 				Position = positions[i],
-				IsStatic = (i == positions.Count - 1)
+				IsStatic = i == positions.Count - 1,
 			};
 		}
 
 		for (int i = 0; i < positions.Count - 1; i++)
 		{
-			m_springs[i] = new _Spring
+			springs[i] = new Spring
 			{
 				Elasticity = elasticity,
 				RestLength = (positions[i] - positions[i + 1]).Length(),
 				A = i,
-				B = i + 1
+				B = i + 1,
+			};
+		}
+	}
+
+	/// <summary>
+	/// 自动生成一串由两端位置决定的绳子链,且两端固定
+	/// </summary>
+	/// <param name="positions"></param>
+	public Rope(Vector2 start, Vector2 end, int count, float elasticity, float mass, RenderingTransformFunction renderingTransform, bool hasCollision = false, int knotDistance = 0, float knotMass = 1)
+	{
+		List<Vector2> positions = new List<Vector2>();
+		for (int t = 0; t <= count; t++)
+		{
+			positions.Add(Vector2.Lerp(start, end, t / (float)count));
+		}
+		InitRopes(positions.Count, elasticity, renderingTransform, hasCollision);
+
+		for (int i = 0; i < positions.Count; i++)
+		{
+			float specialMass = mass;
+			if (knotDistance > 0)
+			{
+				if (i % knotDistance == knotDistance / 2)
+				{
+					specialMass = knotMass;
+				}
+			}
+			masses[i] = new _Mass
+			{
+				Mass = specialMass,
+				Position = positions[i],
+				IsStatic = (i == positions.Count - 1) || (i == 0),
+			};
+		}
+
+		for (int i = 0; i < positions.Count - 1; i++)
+		{
+			springs[i] = new Spring
+			{
+				Elasticity = elasticity,
+				RestLength = (positions[i] - positions[i + 1]).Length(),
+				A = i,
+				B = i + 1,
 			};
 		}
 	}
@@ -386,37 +435,37 @@ public class Rope
 		InitRopes(count, elasticity, renderingTransform, hasCollision);
 		Random rand = Random.Shared;
 
-		m_masses[0] = new _Mass
+		masses[0] = new _Mass
 		{
 			Mass = scale * ((float)rand.NextDouble() * 0.68f + 1),
 			Position = position,
-			IsStatic = true
+			IsStatic = true,
 		};
 
-		m_masses[^1] = new _Mass
+		masses[^1] = new _Mass
 		{
 			Mass = scale * ((float)rand.NextDouble() * 0.68f + 1) * 1.3f,
 			Position = position + new Vector2(0, 6 * count - 6),
-			IsStatic = false
+			IsStatic = false,
 		};
 		for (int i = 1; i < count - 1; i++)
 		{
-			m_masses[i] = new _Mass
+			masses[i] = new _Mass
 			{
 				Mass = scale * ((float)rand.NextDouble() * 0.68f + 1),
 				Position = position + new Vector2(0, 6 * i),
-				IsStatic = false
+				IsStatic = false,
 			};
 		}
 
 		for (int i = 0; i < count - 1; i++)
 		{
-			m_springs[i] = new _Spring
+			springs[i] = new Spring
 			{
 				Elasticity = elasticity,
 				RestLength = 20f,
 				A = i,
-				B = i + 1
+				B = i + 1,
 			};
 		}
 	}
