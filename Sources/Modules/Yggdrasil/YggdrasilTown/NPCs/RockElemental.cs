@@ -20,6 +20,11 @@ public class RockElemental : ModNPC
 		NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
 	}
 
+	public int State;
+	public bool Anger = false;
+	public Vector2 SuckPoint;
+	public Vector2 NextStandPoint;
+
 	public override void SetDefaults()
 	{
 		NPC.width = 64;
@@ -73,11 +78,9 @@ public class RockElemental : ModNPC
 
 	public override void OnSpawn(IEntitySource source)
 	{
+		NPC.spriteDirection = -1;
 		targetVel = new Vector2(Main.rand.NextBool(2) ? 10 : -10, 0);
 	}
-
-	public int State;
-	public bool Anger = false;
 
 	public enum BehaviorState
 	{
@@ -98,46 +101,13 @@ public class RockElemental : ModNPC
 
 	public override void AI()
 	{
-		if (NPC.collideX)
-		{
-			NPC.velocity.X = NPC.velocity.X * -0.5f;
-			if (NPC.direction == -1 && NPC.velocity.X > 0f && NPC.velocity.X < 2f)
-			{
-				NPC.velocity.X = 2f;
-			}
-
-			if (NPC.direction == 1 && NPC.velocity.X < 0f && NPC.velocity.X > -2f)
-			{
-				NPC.velocity.X = -2f;
-			}
-		}
-
-		if (NPC.collideY)
-		{
-			NPC.velocity.Y = NPC.velocity.Y * -0.5f;
-			if (NPC.velocity.Y > 0f && NPC.velocity.Y < 1f)
-			{
-				NPC.velocity.Y = 1f;
-			}
-
-			if (NPC.velocity.Y < 0f && NPC.velocity.Y > -1f)
-			{
-				NPC.velocity.Y = -1f;
-			}
-		}
-		if (NPC.ai[1] > 0)
-		{
-			NPC.ai[1] -= 0.5f;
-		}
-		else
-		{
-			NPC.ai[1] = 0f;
-		}
+		Player player = Main.player[NPC.target];
 		switch (State)
 		{
 			// 中立悬浮
 			case (int)BehaviorState.Fly:
 				{
+					Collide();
 					NPC.frameCounter++;
 					NPC.TargetClosest();
 					targetVel = new Vector2(1 * Math.Abs(targetVel.X) / targetVel.X, MathF.Cos((float)Main.time * 0.04f + NPC.whoAmI));
@@ -232,17 +202,27 @@ public class RockElemental : ModNPC
 					NPC.TargetClosest();
 					if (NPC.HasValidTarget && Anger)
 					{
-						State = (int)BehaviorState.Throw;
-						NPC.ai[0] = 539;
-						NPC.frameCounter = 0;
-						NPC.velocity = new Vector2(0, -2.5f);
-
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<HighSpeedStone>(), 6, 10, -1, NPC.target, NPC.whoAmI);
+						SuckPoint = GetClosestTilePos(player.Center + new Vector2(0, -200));
+						if (SuckPoint != Vector2.Zero)
+						{
+							NextStandPoint = SuckPoint + GetNormalOfTile(SuckPoint) * 150f;
+							State = (int)BehaviorState.Throw;
+							NPC.ai[0] = 400;
+							NPC.frameCounter = 0;
+							NPC.velocity = new Vector2(0, -2.5f);
+						}
+						else
+						{
+							State = (int)BehaviorState.Dash;
+							NPC.ai[0] = 0;
+							NPC.frameCounter = 0;
+							NPC.velocity = new Vector2(0, -7.5f);
+						}
 					}
 					break;
 				}
 
-			// 投掷
+			// 吸取石块 & 投掷
 			case (int)BehaviorState.Throw:
 				{
 					NPC.defense = 12;
@@ -250,38 +230,130 @@ public class RockElemental : ModNPC
 					NPC.ai[0]--;
 					NPC.frameCounter++;
 					NPC.TargetClosest();
-					Player target = Main.player[NPC.target];
-					Vector2 toAim = target.Center - NPC.Center + new Vector2(0, -75);
+					Vector2 toAim = NextStandPoint - NPC.Center;
+					if(SuckPoint == Vector2.zeroVector)
+					{
+						SuckPoint = GetClosestTilePos(player.Center + new Vector2(0, -200));
+						if (SuckPoint != Vector2.Zero)
+						{
+							NextStandPoint = SuckPoint + GetNormalOfTile(SuckPoint) * 150f;
+							State = (int)BehaviorState.Throw;
+							NPC.ai[0] = 400;
+							NPC.ai[3] = 0;
+							if (NPC.rotation > MathHelper.Pi)
+							{
+								NPC.rotation -= MathHelper.TwoPi;
+							}
+							if (NPC.rotation < -MathHelper.Pi)
+							{
+								NPC.rotation += MathHelper.TwoPi;
+							}
+						}
+						else
+						{
+							State = (int)BehaviorState.Dash;
+							NPC.ai[0] = 0;
+						}
+						return;
+					}
 					if (toAim.Length() > 50)
 					{
-						NPC.velocity = new Vector2(Vector2.Normalize(toAim).X * 2, Vector2.Normalize(toAim).Y * 4) + new Vector2(MathF.Sin((float)Main.time * 0.03f + NPC.whoAmI), MathF.Cos((float)Main.time * 0.04f + NPC.whoAmI));
-						float ro = Math.Clamp(MathF.Abs(toAim.X * (toAim.ToRotation() + MathF.PI / 2)) / toAim.X, -1f, 1f);
-						NPC.rotation = MathHelper.Lerp(NPC.rotation, ro, 0.1f);
+						if (NPC.ai[3] > 120)
+						{
+							NPC.ai[3] = 0;
+							SuckPoint = GetClosestTilePos(player.Center + new Vector2(0, -200));
+							NextStandPoint = SuckPoint + GetNormalOfTile(SuckPoint) * 150f;
+						}
+						NPC.velocity = Vector2.Lerp(NPC.velocity, Vector2.Normalize(toAim) * 3.25f, 0.1f);
+						float ro = Math.Clamp(NPC.velocity.X * 0.03f, -1f, 1f);
+						NPC.rotation = MathHelper.Lerp(NPC.rotation, ro, 0.05f);
+						NPC.ai[0]++;
+						NPC.ai[3]++;
 					}
 					else
 					{
 						NPC.velocity *= 0.9f;
-						NPC.rotation = MathHelper.Lerp(NPC.rotation, 0, 0.1f);
+						if (NPC.ai[0] > 280)
+						{
+							NPC.rotation = MathHelper.Lerp(NPC.rotation, (NextStandPoint - SuckPoint).ToRotation() + 0.3f, 0.1f);
+						}
 					}
 
-					Vector2 dust = new Vector2(0, 75 + Main.rand.Next(50)).RotatedByRandom(Math.PI / 6);
-
-					NPC.rotation = Math.Clamp(NPC.velocity.X * 0.15f, -1f, 1f);
-					if (NPC.ai[0] % 180 == 0 && GetMyHighSpeedStoneCount() < 10)
+					// 吸起一个石块
+					if (NPC.ai[0] == 380)
 					{
-						Projectile projectile = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<HighSpeedStone>(), 6, 10, -1, NPC.target, NPC.whoAmI);
-						HighSpeedStone highSpeedStone = projectile.ModProjectile as HighSpeedStone;
-						if (highSpeedStone != null)
+						Projectile projectile = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<RockElemental_ThrowingStone>(), 6, 10, -1, NPC.target, NPC.whoAmI);
+						RockElemental_ThrowingStone RockElemental_ThrowingStone = projectile.ModProjectile as RockElemental_ThrowingStone;
+						if (RockElemental_ThrowingStone != null)
 						{
-							highSpeedStone.MyOwner = NPC;
+							RockElemental_ThrowingStone.MyOwner = NPC;
 						}
+					}
+					if (NPC.ai[0] <= 260 && NPC.ai[0] > 30)
+					{
+						if (NPC.ai[2] < 0.5f)
+						{
+							NPC.ai[2] += 0.002f;
+						}
+						NPC.rotation -= NPC.ai[2];
+						if (NPC.ai[0] == 240)
+						{
+							SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithPitchOffset(-1f).WithVolume(0.2f), NPC.Center);
+						}
+						if (NPC.ai[0] == 210)
+						{
+							SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithPitchOffset(-0.8f).WithVolume(0.22f), NPC.Center);
+						}
+						if (NPC.ai[0] == 190)
+						{
+							SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithPitchOffset(-0.4f).WithVolume(0.24f), NPC.Center);
+						}
+						if (NPC.ai[0] == 175)
+						{
+							SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithPitchOffset(0f).WithVolume(0.26f), NPC.Center);
+						}
+						if (NPC.ai[0] == 162)
+						{
+							SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithPitchOffset(0f).WithVolume(0.28f), NPC.Center);
+						}
+						if (NPC.ai[0] == 150)
+						{
+							SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithPitchOffset(0f).WithVolume(0.3f), NPC.Center);
+						}
+					}
+					if (NPC.ai[0] == 29)
+					{
+						SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithPitchOffset(0f).WithVolume(0.7f), NPC.Center);
+						NPC.rotation %= MathHelper.TwoPi;
+					}
+					if (NPC.ai[0] <= 30)
+					{
+						NPC.rotation -= NPC.ai[2];
+						NPC.ai[2] *= 0.9f;
 					}
 					if (NPC.ai[0] <= 0)
 					{
-						State = (int)BehaviorState.Move;
-						NPC.ai[0] = 0;
-						NPC.frameCounter = 0;
-						NPC.velocity = new Vector2(0, -1);
+						SuckPoint = GetClosestTilePos(player.Center + new Vector2(0, -200));
+						if (SuckPoint != Vector2.Zero)
+						{
+							NextStandPoint = SuckPoint + GetNormalOfTile(SuckPoint) * 150f;
+							State = (int)BehaviorState.Throw;
+							NPC.ai[0] = 400;
+							NPC.ai[3] = 0;
+							if (NPC.rotation > MathHelper.Pi)
+							{
+								NPC.rotation -= MathHelper.TwoPi;
+							}
+							if (NPC.rotation < -MathHelper.Pi)
+							{
+								NPC.rotation += MathHelper.TwoPi;
+							}
+						}
+						else
+						{
+							State = (int)BehaviorState.Dash;
+							NPC.ai[0] = 0;
+						}
 					}
 					break;
 				}
@@ -342,7 +414,7 @@ public class RockElemental : ModNPC
 							{
 								v.Y = -v.Y;
 							}
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Stonefragment>(), 6, 0);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<RockElemental_Stonefragment>(), 6, 0);
 						}
 						for (int i = 0; i < 2; i++)
 						{
@@ -391,6 +463,7 @@ public class RockElemental : ModNPC
 			// 冲刺
 			case (int)BehaviorState.Dash:
 				{
+					Collide();
 					NPC.noTileCollide = false;
 					NPC.ai[0]++;
 					NPC.frameCounter++;
@@ -398,36 +471,182 @@ public class RockElemental : ModNPC
 					Player target = Main.player[NPC.target];
 					Vector2 toAim = target.Center - NPC.Center;
 
-					if (NPC.ai[0] % 60 == 0)
+					if (NPC.ai[0] % 120 == 0)
 					{
-						NPC.velocity = Vector2.Normalize(toAim) * 7.5f;
+						NPC.velocity = Vector2.Normalize(toAim) * 20.5f;
+						NPC.ai[2] = 0.7f * Math.Sign(NPC.velocity.X);
 					}
 					else
 					{
-						NPC.velocity *= 0.98f;
+						NPC.rotation += NPC.ai[2];
+						NPC.velocity *= 0.96f;
+						if (NPC.ai[0] % 120 > 90)
+						{
+							NPC.ai[2] -= 0.006f * Math.Sign(NPC.velocity.X);
+						}
+						else
+						{
+							NPC.ai[2] *= 0.968f;
+						}
 					}
 					if (NPC.ai[0] >= 360)
 					{
-						//State = (int)BehaviorState.Throw;
-						//NPC.ai[0] = 539;
-						//NPC.frameCounter = 0;
-						//NPC.velocity = new Vector2(0, -1);
-						//Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<HighSpeedStone>(), 6, 10, -1, NPC.target, NPC.whoAmI);
+						SuckPoint = GetClosestTilePos(player.Center + new Vector2(0, -200));
+						if (SuckPoint != Vector2.Zero)
+						{
+							NextStandPoint = SuckPoint + GetNormalOfTile(SuckPoint) * 150f;
+							State = (int)BehaviorState.Throw;
+							NPC.ai[0] = 400;
+							NPC.ai[3] = 0;
+							NPC.ai[2] = 0;
+							if (NPC.rotation > MathHelper.Pi)
+							{
+								NPC.rotation -= MathHelper.TwoPi;
+							}
+							if (NPC.rotation < -MathHelper.Pi)
+							{
+								NPC.rotation += MathHelper.TwoPi;
+							}
+						}
 					}
 					break;
 				}
 		}
+
+		// 防御状态下受击特效计时器
+		if (NPC.ai[1] > 0)
+		{
+			NPC.ai[1] -= 0.5f;
+		}
+		else
+		{
+			NPC.ai[1] = 0f;
+		}
 	}
 
-	public int GetMyHighSpeedStoneCount()
+	/// <summary>
+	/// 碰撞
+	/// </summary>
+	public void Collide()
+	{
+		bool collide = false;
+		if (Collision.SolidCollision(NPC.position + new Vector2(NPC.velocity.X, 0), NPC.width, NPC.height))
+		{
+			NPC.velocity.X *= -0.9f;
+			NPC.position += NPC.velocity;
+		}
+		if (Collision.SolidCollision(NPC.position + new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height))
+		{
+			NPC.velocity.Y *= -0.9f;
+			NPC.position += NPC.velocity;
+		}
+		foreach (NPC npc in Main.npc)
+		{
+			if (npc != null && npc.active && npc != NPC)
+			{
+				if (npc.type == Type)
+				{
+					if (Rectangle.Intersect(npc.Hitbox, NPC.Hitbox) != Rectangle.emptyRectangle)
+					{
+						npc.velocity += Utils.SafeNormalize(npc.Center - NPC.Center, Vector2.zeroVector) * 4f;
+						npc.velocity += NPC.velocity * 0.5f;
+						if (npc.velocity.Length() > 20f)
+						{
+							npc.velocity = npc.velocity / npc.velocity.Length() * 20f;
+						}
+						npc.position += npc.velocity;
+						NPC.velocity -= Utils.SafeNormalize(npc.Center - NPC.Center, Vector2.zeroVector) * 4f;
+						NPC.velocity += npc.velocity * 0.5f;
+						if (NPC.velocity.Length() > 20f)
+						{
+							NPC.velocity = NPC.velocity / NPC.velocity.Length() * 20f;
+						}
+						NPC.position += NPC.velocity;
+						collide = true;
+					}
+				}
+			}
+		}
+		if (collide)
+		{
+			SoundEngine.PlaySound(SoundID.NPCHit2.WithPitchOffset(0.5f).WithVolumeScale(0.5f), NPC.Center);
+		}
+	}
+
+	/// <summary>
+	/// 寻找最近的一个物块,精度一般
+	/// </summary>
+	/// <returns></returns>
+	public Vector2 GetClosestTilePos(Vector2 pos = default, float maxRange = 500)
+	{
+		if (pos == default)
+		{
+			pos = NPC.Center;
+		}
+		for (float radius = 0; radius < maxRange; radius += 10)
+		{
+			for (float rot = 0; rot < radius; rot += 10)
+			{
+				Vector2 v0 = pos + new Vector2(0, -radius).RotatedBy(rot / radius * MathHelper.TwoPi);
+				if (Collision.SolidCollision(v0, 0, 0))
+				{
+					return v0;
+				}
+			}
+		}
+		return Vector2.zeroVector;
+	}
+
+	/// <summary>
+	/// 获取一点附近地形朝外的向量
+	/// </summary>
+	/// <returns></returns>
+	public Vector2 GetNormalOfTile(Vector2 checkPoint)
+	{
+		Vector2 totalVector = Vector2.Zero;
+		int TCount = 0;
+		for (int a = 0; a < 12; a++)
+		{
+			Vector2 v0 = new Vector2(20, 0).RotatedBy(a / 6d * Math.PI);
+			if (Collision.SolidCollision(checkPoint + v0, 1, 1))
+			{
+				totalVector -= v0;
+				TCount++;
+			}
+			else
+			{
+				totalVector += v0;
+			}
+		}
+		for (int a = 0; a < 24; a++)
+		{
+			Vector2 v0 = new Vector2(40, 0).RotatedBy(a / 12d * Math.PI);
+			if (Collision.SolidCollision(checkPoint + v0, 1, 1))
+			{
+				totalVector -= v0 * 0.5f;
+				TCount++;
+			}
+			else
+			{
+				totalVector += v0 * 0.5f;
+			}
+		}
+		return Utils.SafeNormalize(totalVector, Vector2.zeroVector);
+	}
+
+	/// <summary>
+	/// 统计总共存在的投石数量
+	/// </summary>
+	/// <returns></returns>
+	public int GetMyRockElemental_ThrowingStoneCount()
 	{
 		int count = 0;
 		foreach (Projectile projectile in Main.projectile)
 		{
-			HighSpeedStone highSpeedStone = projectile.ModProjectile as HighSpeedStone;
-			if (highSpeedStone != null)
+			RockElemental_ThrowingStone RockElemental_ThrowingStone = projectile.ModProjectile as RockElemental_ThrowingStone;
+			if (RockElemental_ThrowingStone != null)
 			{
-				if (highSpeedStone.MyOwner == NPC)
+				if (RockElemental_ThrowingStone.MyOwner == NPC)
 				{
 					count++;
 				}
@@ -502,6 +721,7 @@ public class RockElemental : ModNPC
 	{
 		Texture2D glow = ModAsset.RockElemental_glow.Value;
 		Texture2D texture = ModAsset.RockElemental.Value;
+		Texture2D hiteffect = ModAsset.RockElemental_defense.Value;
 		Vector2 size = glow.Size();
 		size.Y /= 8;
 		SpriteEffects spriteEffect = SpriteEffects.None;
@@ -509,12 +729,25 @@ public class RockElemental : ModNPC
 		{
 			spriteEffect = SpriteEffects.FlipHorizontally;
 		}
+		if (State == (int)BehaviorState.Dash)
+		{
+			if (NPC.ai[0] % 120 > 90f)
+			{
+				float value = (NPC.ai[0] % 120f - 90f) / 30f;
+				for (int k = 0; k < 8; k++)
+				{
+					spriteBatch.Draw(hiteffect, NPC.Center - Main.screenPosition + new Vector2(0, 8).RotatedBy(k / 8d * MathHelper.TwoPi), null, new Color(0.4f, 0.2f, 1f, 0f) * value * 0.4f, NPC.rotation, size * 0.5f, NPC.scale * 1.05f, spriteEffect, 0);
+				}
+				spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
+				spriteBatch.Draw(glow, NPC.Center - Main.screenPosition, NPC.frame, new Color(0.4f, 0.2f, 1f, 0f) * ((value + 0.2f) * 5f), NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
+				return false;
+			}
+		}
 		spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
 		spriteBatch.Draw(glow, NPC.Center - Main.screenPosition, NPC.frame, new Color(0.4f, 0.2f, 1f, 0f), NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
 
 		if (NPC.ai[1] > 0)
 		{
-			Texture2D hiteffect = ModAsset.RockElemental_defense.Value;
 			SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);

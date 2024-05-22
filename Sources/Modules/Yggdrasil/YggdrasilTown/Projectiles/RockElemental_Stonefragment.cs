@@ -2,7 +2,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-public class Stonefragment : ModProjectile
+public class RockElemental_Stonefragment : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -40,7 +40,6 @@ public class Stonefragment : ModProjectile
 	{
 
 	}
-
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return base.PreDraw(ref lightColor);
