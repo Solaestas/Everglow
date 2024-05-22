@@ -1,4 +1,3 @@
-using Everglow.IIID.Projectiles.PlanetBefall;
 using Everglow.MEAC.NonTrueMeleeProj;
 using Everglow.MEAC.Projectiles;
 using ReLogic.Graphics;
@@ -90,7 +89,8 @@ public class VortexVanquisherItem : ModItem
 					{
 						CoolTimeForQ = 10;
 					}
-					Projectile PlanetBeFall = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), /*Main.MouseWorld*/new Vector2(player.Center.X, Main.MouseWorld.Y - 1500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), Item.damage * 27, Item.knockBack * 10, player.whoAmI);
+					// TODO IIID dependency
+					// Projectile PlanetBeFall = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), /*Main.MouseWorld*/new Vector2(player.Center.X, Main.MouseWorld.Y - 1500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), Item.damage * 27, Item.knockBack * 10, player.whoAmI);
 
 				}
 				if (player.altFunctionUse != 2)

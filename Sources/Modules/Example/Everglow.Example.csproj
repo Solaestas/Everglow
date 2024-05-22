@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<ItemGroup>
+		<ModuleReference Include="$(Modules.Split(';'))" />
+		<ProjectReference Include="@(ModuleReference->'..\%(Filename)\Everglow.%(Filename).csproj')" Exclude="Everglow.Example.csproj" />
 		<AdditionalFiles Include="Skeleton\**\*.json" Pack="true" ModPath="%(Identity)" />
 	</ItemGroup>
 </Project>

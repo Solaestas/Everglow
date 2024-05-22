@@ -1,4 +1,3 @@
-using Everglow.IIID.VFXs;
 using Terraria.Audio;
 using Terraria.GameContent.Shaders;
 

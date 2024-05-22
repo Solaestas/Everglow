@@ -1,3 +1,4 @@
+using ReLogic.Content;
 using Terraria.GameContent;
 
 namespace Everglow.Commons.IIID;
@@ -28,13 +29,13 @@ public abstract class IIIDProj : ModProjectile
 	/// 模型自发光贴图
 	/// The Emission Texture of Model
 	/// </summary>
-	public Texture2D EmissionTexture = TextureAssets.MagicPixel.Value;
+	public Asset<Texture2D> EmissionTexture = TextureAssets.MagicPixel;
 
 	/// <summary>
 	/// 模型主要贴图
 	/// The Main Texture of Model
 	/// </summary>
-	public Texture2D IIIDTexture = TextureAssets.MagicPixel.Value;
+	public Asset<Texture2D> IIIDTexture = TextureAssets.MagicPixel;
 
 	public Vector2 lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
 
@@ -42,7 +43,7 @@ public abstract class IIIDProj : ModProjectile
 	/// 模型材质贴图
 	/// The Material Texture of Model
 	/// </summary>
-	public Texture2D MaterialTexture = TextureAssets.MagicPixel.Value;
+	public Asset<Texture2D> MaterialTexture = TextureAssets.MagicPixel;
 
 	/// <summary>
 	/// 模型 ( 用ObjReader.LoadFile("")导入 )
@@ -54,7 +55,7 @@ public abstract class IIIDProj : ModProjectile
 	/// 模型法线贴图
 	/// The Normal Texture of Model
 	/// </summary>
-	public Texture2D NormalTexture = TextureAssets.MagicPixel.Value;
+	public Asset<Texture2D> NormalTexture = TextureAssets.MagicPixel;
 
 	public float rate = 2000F / Math.Max(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width);
 
@@ -72,6 +73,15 @@ public abstract class IIIDProj : ModProjectile
 		ZNear = 1f,
 		ZFar = 1200f,
 	};
+
+	public static float GetCos(Vector3 v1, Vector3 v2) => Vector3.Dot(v1, v2) / v1.Length() / v2.Length();
+
+	public static Vector3 SpinWithAxis(Vector3 orig, Vector3 axis, float Rotation)
+	{
+		axis = Vector3.Normalize(axis);
+		float k = (float)Math.Cos(Rotation);
+		return orig * k + Vector3.Cross(axis, orig * (float)Math.Sin(Rotation)) + Vector3.Dot(axis, orig) * axis * (1 - k);
+	}
 
 	public Matrix DefaultPerspectiveMatrix()
 	{
@@ -98,9 +108,7 @@ public abstract class IIIDProj : ModProjectile
 			Vector3 B = Model.Positions[Model.Faces[f].Positions[1]] * 103;
 			Vector3 C = Model.Positions[Model.Faces[f].Positions[2]] * 103;
 			Vector3 tangentVector = ModelEntity.CalculateTangentVector(
-				A,
-				B,
-				C,
+				A, B, C,
 				Model.TexCoords[Model.Faces[f].TextureCoords[0]],
 				Model.TexCoords[Model.Faces[f].TextureCoords[1]],
 				Model.TexCoords[Model.Faces[f].TextureCoords[2]]); // 每个面的切向量
@@ -123,10 +131,10 @@ public abstract class IIIDProj : ModProjectile
 		ModelEntity entity = new ModelEntity
 		{
 			Vertices = vertices,
-			Texture = IIIDTexture,
-			NormalTexture = NormalTexture,
-			MaterialTexture = MaterialTexture,
-			EmissionTexture = EmissionTexture,
+			Texture = IIIDTexture.Value,
+			NormalTexture = NormalTexture.Value,
+			MaterialTexture = MaterialTexture.Value,
+			EmissionTexture = EmissionTexture.Value,
 			ModelTransform = ModelMovementMatrix(),
 		};
 
@@ -142,11 +150,6 @@ public abstract class IIIDProj : ModProjectile
 			null, Color.White, 0, Vector2.One * 0.5f, 2f, SpriteEffects.None, 0);
 
 		return;
-	}
-
-	public float GetCos(Vector3 v1, Vector3 v2)
-	{
-		return Vector3.Dot(v1, v2) / v1.Length() / v2.Length();
 	}
 
 	/// <summary>
@@ -174,12 +177,5 @@ public abstract class IIIDProj : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.hide = true;
 		SetDef(out Model);
-	}
-
-	public Vector3 SpinWithAxis(Vector3 orig, Vector3 axis, float Rotation)
-	{
-		axis = Vector3.Normalize(axis);
-		float k = (float)Math.Cos(Rotation);
-		return orig * k + Vector3.Cross(axis, orig * (float)Math.Sin(Rotation)) + Vector3.Dot(axis, orig) * axis * (1 - k);
 	}
 }

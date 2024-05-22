@@ -10,8 +10,7 @@ public struct VertexRP(Vector3 position, Vector3 texcoord, Vector3 normal, Vecto
 
 	public Vector3 texcoord = texcoord;
 
-	private static VertexDeclaration _vertexDeclaration = new VertexDeclaration(
-					[
+	private static VertexDeclaration _vertexDeclaration = new VertexDeclaration([
 		new VertexElement(0, VertexElementFormat.Vector3, VertexElementUsage.Position, 0),
 		new VertexElement(12, VertexElementFormat.Vector3, VertexElementUsage.TextureCoordinate, 0),
 		new VertexElement(24, VertexElementFormat.Vector3, VertexElementUsage.Normal, 0),

@@ -1,6 +1,7 @@
 using Terraria.DataStructures;
 
 namespace Everglow.Example.Test;
+
 /// <summary>
 /// Devs only.
 /// </summary>
@@ -25,6 +26,7 @@ public class HandholdItem : ModItem
 		Item.shoot = ModContent.ProjectileType<HandholdProj>();
 		Item.shootSpeed = 12f;
 	}
+
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
 		if (player.ownedProjectileCounts[Item.shoot] < 1)

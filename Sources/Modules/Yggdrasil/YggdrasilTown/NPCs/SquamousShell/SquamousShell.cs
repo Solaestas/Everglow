@@ -10,6 +10,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs.SquamousShell;
 
+// TODO severely multiplayer incompatible
 [AutoloadBossHead]
 public class SquamousShell : ModNPC
 {
@@ -719,7 +720,7 @@ public class SquamousShell : ModNPC
 		//}
 		if(SquamousShellSkeleton == null)
 		{
-			var data = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monster.json");
+			var data = Mod.GetFileBytes(ModAsset.monster_Path);
 			SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(data, $"Everglow/Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/");
 		}
 		else

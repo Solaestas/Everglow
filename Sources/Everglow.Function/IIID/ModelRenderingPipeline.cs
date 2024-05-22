@@ -2,39 +2,26 @@ using ReLogic.Content;
 
 namespace Everglow.Commons.IIID;
 
-public struct BloomParams
-{
-	public float BlurRadius;
-	public float BlurIntensity;
-};
-
-public struct ViewProjectionParams
-{
-	public Matrix ViewTransform;
-	public float FieldOfView;
-	public float AspectRatio;
-	public float ZNear;
-	public float ZFar;
-}
-public struct ArtParameters
-{
-	public bool EnableOuterEdge;
-	public bool EnablePixelArt;
-}
-
+// TODO rework
 public class ModelRenderingPipeline : ModSystem
 {
 	private RenderTarget2D m_fakeScreenTarget;
+
 	private RenderTarget2D m_fakeScreenTargetSwap;
+
 	private RenderTarget2D m_emissionTarget;
+
 	private RenderTarget2D m_depthTarget;
 
 	private RenderTarget2D m_bloomTargetSwap;
+
 	private RenderTarget2D m_bloomTargetSwap1;
+
 	private RenderTarget2D[] m_blurRenderTargets;
 
 	private const int MAX_BLUR_LEVELS = 5;
-	private  int RenderTargetSize = Math.Max( GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height,GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width)/2;
+
+	private int RenderTargetSize = Math.Max(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width) / 2;
 
 	//private RenderTarget2D m_albedoTarget;
 	//private RenderTarget2D m_normalTarget;
@@ -44,14 +31,23 @@ public class ModelRenderingPipeline : ModSystem
 	private List<ModelEntity> m_models;
 
 	private ArtParameters m_artParams;
+
 	private BloomParams m_bloomParams;
+
 	private Matrix m_viewProjectionMatrix;
+
 	private Vector4 m_ZbufferParams;
+
 	private Asset<Effect> m_gbufferPassEffect;
+
 	private Asset<Effect> m_filtersEffect;
+
 	private Asset<Effect> m_toneMapping;
+
 	private Asset<Effect> m_ConcaveEdge;
+
 	private Asset<Effect> m_PixelArt;
+
 	private Asset<Effect> m_Edge;
 
 	public RenderTarget2D ModelTarget
@@ -61,14 +57,15 @@ public class ModelRenderingPipeline : ModSystem
 			return m_fakeScreenTarget;
 		}
 	}
+
 	public override void OnModLoad()
 	{
-		m_gbufferPassEffect = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/GBufferPass");
-		m_filtersEffect = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/Filters");
-		m_toneMapping = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/ToneMapping");
-		m_ConcaveEdge = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/ConcaveEdge");
-		m_PixelArt = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/PixelArt");
-		m_Edge = ModContent.Request<Effect>("Everglow/IIID/Effects/IIIDEffects/Edge");
+		m_gbufferPassEffect = ModAsset.GBufferPass_Async;
+		m_filtersEffect = ModAsset.Filters_Async;
+		m_toneMapping = ModAsset.ToneMapping_Async;
+		m_ConcaveEdge = ModAsset.ConcaveEdge_Async;
+		m_PixelArt = ModAsset.PixelArt_Async;
+		m_Edge = ModAsset.Edge_Async;
 
 		Main.OnResolutionChanged += Main_OnResolutionChanged;
 		Ins.MainThread.AddTask(() =>
@@ -104,16 +101,16 @@ public class ModelRenderingPipeline : ModSystem
 		base.OnModLoad();
 	}
 
-
 	public override void OnModUnload()
 	{
-
 		base.OnModUnload();
 	}
+
 	private void Main_OnResolutionChanged(Vector2 obj)
 	{
-		//  CreateRender(obj);
+		// CreateRender(obj);
 	}
+
 	public void PushModelEntity(ModelEntity entity)
 	{
 		m_models.Add(entity);
@@ -163,6 +160,7 @@ public class ModelRenderingPipeline : ModSystem
 		Blit(Main.screenTarget, Main.screenTargetSwap, null, "");
 
 		ShadingPass();
+
 		//BloomPass();
 		//ToneMappingPass();
 		//ConcaveEdgePass();
@@ -180,6 +178,7 @@ public class ModelRenderingPipeline : ModSystem
 		spriteBatch.Begin();
 		spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
 	}
+
 	private void ShadingPass()
 	{
 		var graphicsDevice = Main.graphics.GraphicsDevice;
@@ -209,6 +208,7 @@ public class ModelRenderingPipeline : ModSystem
 			DrawOneModel(i);
 		}
 	}
+
 	private void DrawOneModel(int index)
 	{
 		var graphicsDevice = Main.graphics.GraphicsDevice;
@@ -220,6 +220,7 @@ public class ModelRenderingPipeline : ModSystem
 
 		gBufferShader.Parameters["uModel"].SetValue(model.ModelTransform);
 		gBufferShader.Parameters["uViewProjection"].SetValue(m_viewProjectionMatrix);
+
 		// 如果Model有非均匀缩放，就要用法线变换矩阵而不是Model矩阵
 		gBufferShader.Parameters["uModelNormal"].SetValue(Matrix.Transpose(Matrix.Invert(model.ModelTransform)));
 		gBufferShader.Parameters["uCameraPosition"].SetValue(new Vector3(0, 0, 1000));
@@ -236,6 +237,7 @@ public class ModelRenderingPipeline : ModSystem
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices.ToArray(),
 			0, vertices.Count / 3);
 	}
+
 	private void BloomPass()
 	{
 		var graphicsDevice = Main.graphics.GraphicsDevice;
@@ -272,7 +274,6 @@ public class ModelRenderingPipeline : ModSystem
 				SamplerState.AnisotropicClamp);
 		}
 
-
 		for (int i = MAX_BLUR_LEVELS - 1; i > 0; i--)
 		{
 			filterEffect.Parameters["uInvImageSize"].SetValue(new Vector2(1.0f / m_blurRenderTargets[i].Width,
@@ -281,7 +282,6 @@ public class ModelRenderingPipeline : ModSystem
 			Blit(m_blurRenderTargets[i], m_blurRenderTargets[i - 1], filterEffect, "Box", BlendState.Opaque,
 				SamplerState.AnisotropicClamp);
 		}
-
 
 		// Draw to bloom renderTarget
 	}
@@ -338,16 +338,13 @@ public class ModelRenderingPipeline : ModSystem
 		Blit(m_fakeScreenTarget, m_fakeScreenTargetSwap, null, "");
 	}
 
-
-
-
-
 	private void FinalBlend()
 	{
 		var graphicsDevice = Main.graphics.GraphicsDevice;
 		var spriteBatch = Main.spriteBatch;
 
 		var filterEffect = m_filtersEffect.Value;
+
 		// Draw to m_fakeScreenTarget
 		graphicsDevice.SetRenderTarget(m_fakeScreenTarget);
 		graphicsDevice.Clear(Color.Transparent);
@@ -360,6 +357,7 @@ public class ModelRenderingPipeline : ModSystem
 		spriteBatch.Draw(m_fakeScreenTargetSwap, m_fakeScreenTarget.Bounds, Color.White);
 		spriteBatch.End();
 	}
+
 	private void PixelArt()
 	{
 		Blit(m_fakeScreenTarget, m_fakeScreenTargetSwap, null, "");
@@ -368,6 +366,7 @@ public class ModelRenderingPipeline : ModSystem
 		var spriteBatch = Main.spriteBatch;
 
 		var PixelEffect = m_PixelArt.Value;
+
 		// Draw to m_fakeScreenTarget
 		graphicsDevice.SetRenderTarget(m_fakeScreenTarget);
 		graphicsDevice.Clear(Color.Transparent);
@@ -381,6 +380,7 @@ public class ModelRenderingPipeline : ModSystem
 		spriteBatch.Draw(m_fakeScreenTargetSwap, m_fakeScreenTarget.Bounds, Color.White);
 		spriteBatch.End();
 	}
+
 	private void Edge()
 	{
 		Blit(m_fakeScreenTarget, m_fakeScreenTargetSwap, null, "");
@@ -389,6 +389,7 @@ public class ModelRenderingPipeline : ModSystem
 		var spriteBatch = Main.spriteBatch;
 
 		var EdgeEffect = m_Edge.Value;
+
 		// Draw to m_fakeScreenTarget
 		graphicsDevice.SetRenderTarget(m_fakeScreenTarget);
 		graphicsDevice.Clear(Color.Transparent);
@@ -459,7 +460,6 @@ public class ModelRenderingPipeline : ModSystem
 		if (Main.mouseRight && Main.mouseRightRelease)
 		{
 			Player player = Main.LocalPlayer;
-
 		}
 		base.PostUpdateProjectiles();
 	}

@@ -1,5 +1,2 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	<ItemGroup>
-		<ProjectReference Include="..\IIID\Everglow.IIID.csproj" />
-	</ItemGroup>
 </Project>
