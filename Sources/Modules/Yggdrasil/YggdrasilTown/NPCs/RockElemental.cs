@@ -1,5 +1,6 @@
 using Everglow.Commons.CustomTiles;
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
@@ -22,6 +23,7 @@ public class RockElemental : ModNPC
 
 	public int State;
 	public bool Anger = false;
+	public bool OpenEyes = true;
 	public Vector2 SuckPoint;
 	public Vector2 NextStandPoint;
 
@@ -31,7 +33,7 @@ public class RockElemental : ModNPC
 		NPC.height = 64;
 		NPC.lifeMax = 400;
 		NPC.damage = 30;
-		NPC.defense = 12;
+		NPC.defense = 6;
 		NPC.friendly = false;
 		NPC.aiStyle = -1;
 		NPC.knockBackResist = 0.9f;
@@ -39,10 +41,22 @@ public class RockElemental : ModNPC
 		NPC.noTileCollide = false;
 		NPC.value = 10000;
 		NPC.HitSound = SoundID.NPCHit2;
-		NPC.DeathSound = SoundID.NPCDeath2;
+		NPC.DeathSound = SoundID.NPCDeath43;
 		NPC.hide = false;
 		NPC.behindTiles = true;
 		NPC.scale = 1.2f;
+		if (Main.expertMode)
+		{
+			NPC.damage = 50;
+			NPC.defense = 8;
+			NPC.lifeMax = 800;
+		}
+		if (Main.masterMode)
+		{
+			NPC.damage = 75;
+			NPC.defense = 10;
+			NPC.lifeMax = 1080;
+		}
 	}
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
@@ -73,7 +87,7 @@ public class RockElemental : ModNPC
 			return 0f;
 		}
 
-		return 3f;
+		return 0.05f;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -102,6 +116,10 @@ public class RockElemental : ModNPC
 	public override void AI()
 	{
 		Player player = Main.player[NPC.target];
+		if(NPC.frame.Y <= 360)
+		{
+			Lighting.AddLight(NPC.Center, new Vector3(0.5f, 0.1f, 0.8f));
+		}
 		switch (State)
 		{
 			// 中立悬浮
@@ -231,7 +249,7 @@ public class RockElemental : ModNPC
 					NPC.frameCounter++;
 					NPC.TargetClosest();
 					Vector2 toAim = NextStandPoint - NPC.Center;
-					if(SuckPoint == Vector2.zeroVector)
+					if (SuckPoint == Vector2.zeroVector)
 					{
 						SuckPoint = GetClosestTilePos(player.Center + new Vector2(0, -200));
 						if (SuckPoint != Vector2.Zero)
@@ -258,11 +276,12 @@ public class RockElemental : ModNPC
 					}
 					if (toAim.Length() > 50)
 					{
+						OpenEyes = true;
+						NPC.noTileCollide = true;
 						if (NPC.ai[3] > 120)
 						{
 							NPC.ai[3] = 0;
-							SuckPoint = GetClosestTilePos(player.Center + new Vector2(0, -200));
-							NextStandPoint = SuckPoint + GetNormalOfTile(SuckPoint) * 150f;
+							RandomState();
 						}
 						NPC.velocity = Vector2.Lerp(NPC.velocity, Vector2.Normalize(toAim) * 3.25f, 0.1f);
 						float ro = Math.Clamp(NPC.velocity.X * 0.03f, -1f, 1f);
@@ -272,6 +291,8 @@ public class RockElemental : ModNPC
 					}
 					else
 					{
+						OpenEyes = false;
+						NPC.noTileCollide = false;
 						NPC.velocity *= 0.9f;
 						if (NPC.ai[0] > 280)
 						{
@@ -288,6 +309,11 @@ public class RockElemental : ModNPC
 						{
 							RockElemental_ThrowingStone.MyOwner = NPC;
 						}
+					}
+					if(NPC.ai[0] < 380 && NPC.ai[0] > 260)
+					{
+						float value = MathF.Sin((NPC.ai[0] - 260 / 120f) * MathHelper.Pi) * 4;
+						Lighting.AddLight(NPC.Center, new Vector3(0.5f, 0.1f, 0.8f) * value);
 					}
 					if (NPC.ai[0] <= 260 && NPC.ai[0] > 30)
 					{
@@ -333,52 +359,28 @@ public class RockElemental : ModNPC
 					}
 					if (NPC.ai[0] <= 0)
 					{
-						SuckPoint = GetClosestTilePos(player.Center + new Vector2(0, -200));
-						if (SuckPoint != Vector2.Zero)
-						{
-							NextStandPoint = SuckPoint + GetNormalOfTile(SuckPoint) * 150f;
-							State = (int)BehaviorState.Throw;
-							NPC.ai[0] = 400;
-							NPC.ai[3] = 0;
-							if (NPC.rotation > MathHelper.Pi)
-							{
-								NPC.rotation -= MathHelper.TwoPi;
-							}
-							if (NPC.rotation < -MathHelper.Pi)
-							{
-								NPC.rotation += MathHelper.TwoPi;
-							}
-						}
-						else
-						{
-							State = (int)BehaviorState.Dash;
-							NPC.ai[0] = 0;
-						}
+						RandomState();
 					}
 					break;
 				}
 
-			// 位移
+			// 挪到玩家头顶
 			case (int)BehaviorState.Move:
 				{
+					OpenEyes = true;
 					NPC.frameCounter++;
 					NPC.TargetClosest();
-					Player target = Main.player[NPC.target];
-					Vector2 toAim = target.Center - NPC.Center + new Vector2(0, -200);
-					NPC.velocity = Vector2.Lerp(NPC.velocity, MathUtils.NormalizeSafe(toAim) * NPC.velocity.Length(), 0.2f);
-					if (NPC.velocity.Length() < 10)
-					{
-						NPC.velocity *= 1.02f;
-					}
+					Vector2 toAim = player.Center - NPC.Center + new Vector2(0, -200);
+					NPC.velocity = Vector2.Lerp(NPC.velocity, MathUtils.NormalizeSafe(toAim) * 12f, 0.2f);
 					NPC.rotation = MathHelper.Lerp(NPC.rotation, Math.Clamp(NPC.velocity.X * 0.15f, -1f, 1f), 0.1f);
-					if (Vector2.Dot(target.Center - NPC.Center, Vector2.UnitY) / (target.Center - NPC.Center).Length() >= 0.96)
+					if (Vector2.Dot(player.Center - NPC.Center, Vector2.UnitY) / (player.Center - NPC.Center).Length() >= 0.96)
 					{
 						State = (int)BehaviorState.SmashDown_2;
 						NPC.ai[0] = 60;
 						NPC.frameCounter = 0;
 						NPC.velocity = Vector2.Zero;
 					}
-					if (WorldUtils.Find(target.Center.ToTileCoordinates(), Searches.Chain(new Searches.Up(5), _cachedConditions_notNull, _cachedConditions_solid), out var _))
+					if (WorldUtils.Find(player.Center.ToTileCoordinates(), Searches.Chain(new Searches.Up(5), _cachedConditions_notNull, _cachedConditions_solid), out var _))
 					{
 						State = (int)BehaviorState.Dash;
 						NPC.ai[0] = 0;
@@ -397,28 +399,34 @@ public class RockElemental : ModNPC
 					NPC.frameCounter++;
 					NPC.TargetClosest();
 					NPC.rotation = MathHelper.Lerp(NPC.rotation, 0, 0.1f);
-					Point p = NPC.Center.ToTileCoordinates();
-					Tile tile = Main.tile[p.X, p.Y + 1];
-					if (tile.active() && Main.tileSolid[tile.type] && !tile.halfBrick())
+					if (NPC.ai[0] <= 0 && NPC.velocity.Length() <= 45)
 					{
-						NPC.ai[0] = 60;
+						NPC.velocity += new Vector2(0, 2);
+					}
+					OpenEyes = false;
+
+					// 碰撞用SolidCollision
+					if (Collision.SolidCollision(NPC.Center, 0, 0))
+					{
+						NPC.ai[0] = 120;
+						NextStandPoint = NPC.Center + new Vector2(0, -150f);
 						State = (int)BehaviorState.Rest;
 						NPC.frameCounter = 0;
 						NPC.velocity = Vector2.Zero;
-						int num = Main.rand.Next(11, 15);
-						for (int i = 1; i <= num; i++)
+						int num = 12;
+						for (int i = 0; i <= num; i++)
 						{
-							Vector2 v = new Vector2(4.5f, 0);
-							v = v.RotatedBy(-Math.PI * i / (num - 1)).RotatedByRandom(Math.PI / 20);
-							if (v.Y > 0)
-							{
-								v.Y = -v.Y;
-							}
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<RockElemental_Stonefragment>(), 6, 0);
+							Vector2 v = new Vector2(0, Main.rand.NextFloat(-12, -7)).RotatedBy((float)(i - num * 0.5f) * 0.1f);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Top + new Vector2((i - num * 0.5f) * 4, 20), v, ModContent.ProjectileType<RockElemental_Stonefragment>(), 6, 0);
 						}
 						for (int i = 0; i < 2; i++)
 						{
 							Collision.HitTiles(NPC.position, new Vector2(0, 10), NPC.width, NPC.height);
+						}
+						for (int x = 0; x < 45; x++)
+						{
+							Dust d = Dust.NewDustDirect(NPC.position - new Vector2(4), NPC.width, NPC.height / 3, DustID.WitherLightning, 0f, 0f, 0, default, Main.rand.NextFloat(0.8f, 1.6f));
+							d.velocity = new Vector2(0, -Main.rand.NextFloat(0.7f, 15.1f)).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
 						}
 						SoundEngine.PlaySound(SoundID.Item89, NPC.Center);
 						ShakerManager.AddShaker(NPC.Center, new Vector2(0, -1), 60, 60, 120);
@@ -439,10 +447,6 @@ public class RockElemental : ModNPC
 							Ins.VFXManager.Add(somg);
 						}
 					}
-					if (NPC.ai[0] <= 0 && NPC.velocity.Length() <= 45)
-					{
-						NPC.velocity += new Vector2(0, 1);
-					}
 					break;
 				}
 
@@ -450,12 +454,29 @@ public class RockElemental : ModNPC
 			case (int)BehaviorState.Rest:
 				{
 					NPC.ai[0]--;
+					if (NPC.ai[0] == 60)
+					{
+						SoundEngine.PlaySound(SoundID.DD2_BetsysWrathShot, NPC.Center);
+					}
+					if (NPC.ai[0] == 30)
+					{
+						OpenEyes = true;
+					}
+					if (NPC.ai[0] <= 60)
+					{
+						Vector2 toNextPoint = NextStandPoint - NPC.Center;
+						if (toNextPoint.Length() > 30f)
+						{
+							NPC.velocity = Vector2.Lerp(NPC.velocity, Utils.SafeNormalize(toNextPoint, Vector2.zeroVector) * 15f, 0.3f);
+						}
+						else
+						{
+							NPC.velocity *= 0.8f;
+						}
+					}
 					if (NPC.ai[0] <= 0)
 					{
-						State = (int)BehaviorState.Dash;
-						NPC.ai[0] = 0;
-						NPC.frameCounter = 0;
-						NPC.velocity = new Vector2(0, -7.5f);
+						RandomState();
 					}
 					break;
 				}
@@ -463,18 +484,21 @@ public class RockElemental : ModNPC
 			// 冲刺
 			case (int)BehaviorState.Dash:
 				{
-					Collide();
+					if (!Collision.SolidCollision(NPC.Center, 0, 0))
+					{
+						Collide();
+					}
 					NPC.noTileCollide = false;
 					NPC.ai[0]++;
 					NPC.frameCounter++;
 					NPC.TargetClosest();
-					Player target = Main.player[NPC.target];
-					Vector2 toAim = target.Center - NPC.Center;
+					Vector2 toAim = player.Center - NPC.Center;
 
 					if (NPC.ai[0] % 120 == 0)
 					{
 						NPC.velocity = Vector2.Normalize(toAim) * 20.5f;
 						NPC.ai[2] = 0.7f * Math.Sign(NPC.velocity.X);
+						SoundEngine.PlaySound(SoundID.DD2_BetsysWrathShot, NPC.Center);
 					}
 					else
 					{
@@ -491,23 +515,7 @@ public class RockElemental : ModNPC
 					}
 					if (NPC.ai[0] >= 360)
 					{
-						SuckPoint = GetClosestTilePos(player.Center + new Vector2(0, -200));
-						if (SuckPoint != Vector2.Zero)
-						{
-							NextStandPoint = SuckPoint + GetNormalOfTile(SuckPoint) * 150f;
-							State = (int)BehaviorState.Throw;
-							NPC.ai[0] = 400;
-							NPC.ai[3] = 0;
-							NPC.ai[2] = 0;
-							if (NPC.rotation > MathHelper.Pi)
-							{
-								NPC.rotation -= MathHelper.TwoPi;
-							}
-							if (NPC.rotation < -MathHelper.Pi)
-							{
-								NPC.rotation += MathHelper.TwoPi;
-							}
-						}
+						RandomState();
 					}
 					break;
 				}
@@ -524,6 +532,50 @@ public class RockElemental : ModNPC
 		}
 	}
 
+	public void StartToSuckThrowingStone()
+	{
+		Player player = Main.player[NPC.target];
+		SuckPoint = GetClosestTilePos(player.Center + new Vector2(0, -200));
+		if (SuckPoint != Vector2.Zero)
+		{
+			NextStandPoint = SuckPoint + GetNormalOfTile(SuckPoint) * 150f;
+			State = (int)BehaviorState.Throw;
+			NPC.ai[0] = 400;
+		}
+	}
+
+	/// <summary>
+	/// 随机AI
+	/// </summary>
+	public void RandomState()
+	{
+		NPC.ai[3] = 0;
+		NPC.ai[2] = 0;
+		if (NPC.rotation > MathHelper.Pi)
+		{
+			NPC.rotation -= MathHelper.TwoPi;
+		}
+		if (NPC.rotation < -MathHelper.Pi)
+		{
+			NPC.rotation += MathHelper.TwoPi;
+		}
+		switch (Main.rand.Next(3))
+		{
+			case 0:
+				StartToSuckThrowingStone();
+				break;
+			case 1:
+				State = (int)BehaviorState.Dash;
+				NPC.ai[0] = 0;
+				NPC.frameCounter = 0;
+				break;
+			case 2:
+				SoundEngine.PlaySound(SoundID.DD2_BetsysWrathShot, NPC.Center);
+				State = (int)BehaviorState.Move;
+				break;
+		}
+	}
+
 	/// <summary>
 	/// 碰撞
 	/// </summary>
@@ -534,11 +586,13 @@ public class RockElemental : ModNPC
 		{
 			NPC.velocity.X *= -0.9f;
 			NPC.position += NPC.velocity;
+			collide = true;
 		}
 		if (Collision.SolidCollision(NPC.position + new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height))
 		{
 			NPC.velocity.Y *= -0.9f;
 			NPC.position += NPC.velocity;
+			collide = true;
 		}
 		foreach (NPC npc in Main.npc)
 		{
@@ -666,6 +720,7 @@ public class RockElemental : ModNPC
 						Anger = true;
 						NPC.frame.Y = 360;
 						NPC.frameCounter = 0;
+						OpenEyes = false;
 						break;
 					}
 				case (int)BehaviorState.SmashDown_1:
@@ -721,6 +776,7 @@ public class RockElemental : ModNPC
 	{
 		Texture2D glow = ModAsset.RockElemental_glow.Value;
 		Texture2D texture = ModAsset.RockElemental.Value;
+		Texture2D eyes = ModAsset.RockElemental_eye.Value;
 		Texture2D hiteffect = ModAsset.RockElemental_defense.Value;
 		Vector2 size = glow.Size();
 		size.Y /= 8;
@@ -728,6 +784,24 @@ public class RockElemental : ModNPC
 		if (NPC.spriteDirection == -1)
 		{
 			spriteEffect = SpriteEffects.FlipHorizontally;
+		}
+		if (State == (int)BehaviorState.Throw)
+		{
+			if (NPC.ai[0] < 380 && NPC.ai[0] > 260)
+			{
+				float value = MathF.Sin((NPC.ai[0] - 260 / 120f) * MathHelper.Pi) * 2;
+				for (int k = 0; k < 8; k++)
+				{
+					spriteBatch.Draw(hiteffect, NPC.Center - Main.screenPosition + new Vector2(0, 8).RotatedBy(k / 8d * MathHelper.TwoPi), null, new Color(0.4f, 0.2f, 1f, 0f) * value * 0.4f, NPC.rotation, size * 0.5f, NPC.scale * 1.05f, spriteEffect, 0);
+				}
+				spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
+				spriteBatch.Draw(glow, NPC.Center - Main.screenPosition, NPC.frame, new Color(0.4f, 0.2f, 1f, 0f) * ((value + 0.2f) * 5f), NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
+				if (OpenEyes)
+				{
+					spriteBatch.Draw(eyes, NPC.Center - Main.screenPosition, null, Color.White, NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
+				}
+				return false;
+			}
 		}
 		if (State == (int)BehaviorState.Dash)
 		{
@@ -740,12 +814,37 @@ public class RockElemental : ModNPC
 				}
 				spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
 				spriteBatch.Draw(glow, NPC.Center - Main.screenPosition, NPC.frame, new Color(0.4f, 0.2f, 1f, 0f) * ((value + 0.2f) * 5f), NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
+				if (OpenEyes)
+				{
+					spriteBatch.Draw(eyes, NPC.Center - Main.screenPosition, null, Color.White, NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
+				}
+				return false;
+			}
+		}
+		if (State == (int)BehaviorState.SmashDown_2)
+		{
+			if (NPC.ai[0] > 0)
+			{
+				float value = 1 - NPC.ai[0] / 60f;
+				for (int k = 0; k < 8; k++)
+				{
+					spriteBatch.Draw(hiteffect, NPC.Center - Main.screenPosition + new Vector2(0, 8).RotatedBy(k / 8d * MathHelper.TwoPi), null, new Color(0.4f, 0.2f, 1f, 0f) * value * 0.4f, NPC.rotation, size * 0.5f, NPC.scale * 1.05f, spriteEffect, 0);
+				}
+				spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
+				spriteBatch.Draw(glow, NPC.Center - Main.screenPosition, NPC.frame, new Color(0.4f, 0.2f, 1f, 0f) * ((value + 0.2f) * 5f), NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
+				if (OpenEyes)
+				{
+					spriteBatch.Draw(eyes, NPC.Center - Main.screenPosition, null, Color.White, NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
+				}
 				return false;
 			}
 		}
 		spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
 		spriteBatch.Draw(glow, NPC.Center - Main.screenPosition, NPC.frame, new Color(0.4f, 0.2f, 1f, 0f), NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
-
+		if (OpenEyes)
+		{
+			spriteBatch.Draw(eyes, NPC.Center - Main.screenPosition, null, Color.White, NPC.rotation, size * 0.5f, NPC.scale, spriteEffect, 0);
+		}
 		if (NPC.ai[1] > 0)
 		{
 			SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
@@ -780,6 +879,33 @@ public class RockElemental : ModNPC
 			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
 			int type = ModContent.Find<ModGore>("Everglow/RockElemental_gore" + i).Type;
 			Gore.NewGore(NPC.GetSource_Death(), NPC.Center, v0, type, NPC.scale);
+		}
+		for (int x = 0; x < 45; x++)
+		{
+			Dust d = Dust.NewDustDirect(NPC.position - new Vector2(4), NPC.width, NPC.height, DustID.WitherLightning, 0f, 0f, 0, default, Main.rand.NextFloat(0.8f, 1.6f));
+			d.velocity = new Vector2(0, -Main.rand.NextFloat(0.7f, 15.1f)).RotatedByRandom(MathHelper.TwoPi);
+		}
+		for (int x = 0; x < 64; x++)
+		{
+			Dust d = Dust.NewDustDirect(NPC.position - new Vector2(4), NPC.width, NPC.height, ModContent.DustType<RockElemental_fragments>(), 0f, 0f, 0, default, 0.7f);
+			d.scale = Main.rand.NextFloat(0.7f, 2.1f);
+			d.velocity = new Vector2(0, Main.rand.NextFloat(7f, 16f)).RotatedByRandom(6.283);
+		}
+		for (int g = 0; g < 15; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 16f)).RotatedByRandom(MathHelper.TwoPi);
+			var somg = new RockSmogDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = NPC.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
+				maxTime = Main.rand.Next(37, 45),
+				scale = Main.rand.NextFloat(40f, 55f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+			};
+			Ins.VFXManager.Add(somg);
 		}
 	}
 

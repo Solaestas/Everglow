@@ -6,12 +6,12 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-public class RockElemental_ThrowingStone : ModProjectile, IWarpProjectile_warpStyle2
+public class RockElemental_ThrowingStone : ModProjectile
 {
 	public override void SetDefaults()
 	{
-		Projectile.width = 50;
-		Projectile.height = 50;
+		Projectile.width = 32;
+		Projectile.height = 32;
 		Projectile.aiStyle = -1;
 		Projectile.friendly = false;
 		Projectile.hostile = true;
@@ -39,10 +39,19 @@ public class RockElemental_ThrowingStone : ModProjectile, IWarpProjectile_warpSt
 			Projectile.Kill();
 			return;
 		}
+
+		// 丢出去之后
 		if (Projectile.ai[0] == 5)
 		{
 			Projectile.rotation += 0.1f;
 			Projectile.velocity.Y += 0.15f;
+			for (int j = 0; j < 3; j++)
+			{
+				Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<RockElemental_Energy_normal>());
+				d.velocity = Projectile.velocity * 0.5f;
+				d.scale = Main.rand.NextFloat(0.75f, 1.4f);
+				d.noGravity = true;
+			}
 			return;
 		}
 		Player player = Main.player[MyOwner.target];
@@ -95,12 +104,16 @@ public class RockElemental_ThrowingStone : ModProjectile, IWarpProjectile_warpSt
 					OffestSuck = rockOwner.SuckPoint - Projectile.Center + Utils.SafeNormalize(rockOwner.SuckPoint - Projectile.Center, Vector2.zeroVector) * 8;
 				}
 			}
-			//震动
-			if(PolymerizationTimer == 88)
+
+			// 震动
+			if (PolymerizationTimer == 88)
 			{
 				ShakerManager.AddShaker(Projectile.Center, new Vector2(0, -1), 20, 10, 120);
+				Projectile.width = 32;
+				Projectile.height = 32;
 			}
-			//吸起音效
+
+			// 吸起音效
 			if (PolymerizationTimer == 90)
 			{
 				for (int g = 0; g < 30; g++)
@@ -116,12 +129,14 @@ public class RockElemental_ThrowingStone : ModProjectile, IWarpProjectile_warpSt
 			{
 				OffestSuck *= 0.85f;
 			}
+
 			// 吸力音效
 			if (PolymerizationTimer == 1)
 			{
 				SoundEngine.PlaySound(new SoundStyle("Everglow/Yggdrasil/YggdrasilTown/Sounds/RockElemental_Sucking").WithPitchOffset(0.5f).WithVolumeScale(0.5f), Projectile.Center);
 			}
 		}
+
 		// 跟随岩石元素一起旋转
 		else
 		{
@@ -210,7 +225,7 @@ public class RockElemental_ThrowingStone : ModProjectile, IWarpProjectile_warpSt
 	{
 		for (int x = 0; x < 16; x++)
 		{
-			Dust d = Dust.NewDustDirect(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone>(), 0f, 0f, 0, default, 0.7f);
+			Dust d = Dust.NewDustDirect(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<RockElemental_fragments>(), 0f, 0f, 0, default, 0.7f);
 			d.velocity = new Vector2(0, Main.rand.NextFloat(7f, 16f)).RotatedByRandom(6.283);
 		}
 		for (int x = 0; x < 32; x++)
@@ -269,10 +284,5 @@ public class RockElemental_ThrowingStone : ModProjectile, IWarpProjectile_warpSt
 			Main.EntitySpriteDraw(texture, drawCenter2 + shake, null, lightColor, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
 		}
 		return false;
-	}
-
-	public void DrawWarp(VFXBatch batch)
-	{
-		var bars = new List<Vertex2D>();
 	}
 }
