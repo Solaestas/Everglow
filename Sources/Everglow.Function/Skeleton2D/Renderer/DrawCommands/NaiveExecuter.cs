@@ -7,7 +7,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Everglow.Commons.Skeleton2D.Renderer.DrawCommands;
 
-public class ImmediateExecuter : IDrawCommandExecuter, IDrawCommandVisitor
+/// <summary>
+/// 立即模式绘制，什么也不管直接向GPU发送绘制请求，同步执行
+/// </summary>
+public class NaiveExecuter : IDrawCommandExecuter, IDrawCommandVisitor
 {
 	private GraphicsDevice graphicsDevice;
 

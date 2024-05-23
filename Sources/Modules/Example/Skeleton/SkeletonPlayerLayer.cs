@@ -68,7 +68,7 @@ public class SkeletonPlayerLayer : PlayerDrawLayer
 				FillMode = FillMode.Solid,
 			};
 			var cmdList = skeletonRenderer.Draw(skeleton2D);
-			ImmediateExecuter executer = new ImmediateExecuter();
+			NaiveExecuter executer = new NaiveExecuter();
 			executer.Execute(cmdList, Main.graphics.graphicsDevice);
 			Main.graphics.graphicsDevice.RasterizerState = new RasterizerState
 			{

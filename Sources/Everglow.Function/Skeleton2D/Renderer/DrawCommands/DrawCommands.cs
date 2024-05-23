@@ -33,7 +33,7 @@ public class DrawMesh<T> : DrawCommand where T : struct, IVertexType
 
 	public override void Accept(IDrawCommandVisitor visitor)
 	{
-		visitor.Visit<T>(this);
+		visitor.Visit(this);
 	}
 }
 
@@ -69,6 +69,6 @@ public class DrawIndexedMesh<T> : DrawCommand where T : struct, IVertexType
 
 	public override void Accept(IDrawCommandVisitor visitor)
 	{
-		visitor.Visit<T>(this);
+		visitor.Visit(this);
 	}
 }

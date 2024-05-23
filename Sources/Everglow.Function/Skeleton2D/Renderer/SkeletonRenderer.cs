@@ -206,7 +206,15 @@ public class SkeletonRenderer
 			}
 			List<Vertex2D> renderVertices = new List<Vertex2D>();
 			List<int> renderIndices = new List<int>();
-
+			//itemVertices[ii].Color = color;
+			//itemVertices[ii].Color2 = darkColor;
+			//itemVertices[ii].Position.X = vertices[v];
+			//itemVertices[ii].Position.Y = vertices[v+1];
+			//itemVertices[ii].Position.Z = attachmentZOffset;
+			//itemVertices[ii].TextureCoordinate.X = uvs[v];
+			//itemVertices[ii].TextureCoordinate.Y = uvs[v + 1];
+			//if (VertexEffect != null)
+			//	VertexEffect.Transform(ref itemVertices[ii]);
 			for (int ii = 0, nn = indicesCount; ii < nn; ii++)
 			{
 				renderIndices.Add(indices[ii]);
@@ -216,15 +224,6 @@ public class SkeletonRenderer
 				Vertex2D drawVertex = new Vertex2D(new Vector2(vertices[v], vertices[v + 1]),
 					color, new Vector3(uvs[v], uvs[v + 1], 0));
 				renderVertices.Add(drawVertex);
-				//itemVertices[ii].Color = color;
-				//itemVertices[ii].Color2 = darkColor;
-				//itemVertices[ii].Position.X = vertices[v];
-				//itemVertices[ii].Position.Y = vertices[v+1];
-				//itemVertices[ii].Position.Z = attachmentZOffset;
-				//itemVertices[ii].TextureCoordinate.X = uvs[v];
-				//itemVertices[ii].TextureCoordinate.Y = uvs[v + 1];
-				//if (VertexEffect != null)
-				//	VertexEffect.Transform(ref itemVertices[ii]);
 			}
 
 			commandList.EmitDrawIndexedTriangleMesh(pso, renderVertices, renderIndices);
