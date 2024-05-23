@@ -93,7 +93,7 @@ public class MothBackground : ModSystem
 			}
 			Ins.HookManager.Enable(TerrariaFunction.DrawBackground);
 		}
-		if (CorruptMoth.CorruptMothNPC != null && CorruptMoth.CorruptMothNPC.active)//发光物体在boss战时变暗
+		if (NPC.CountNPCS(ModContent.NPCType<CorruptMoth>()) > 0)//发光物体在boss战时变暗
 			luminance = MathHelper.Lerp(luminance, 0.1f, 0.02f);
 		else
 		{
@@ -101,7 +101,6 @@ public class MothBackground : ModSystem
 			if (luminance == 1)
 				CorruptMoth.CorruptMothNPC = null;
 		}
-
 	}
 	/// <summary>
 	/// 判定是否开启地形
@@ -361,7 +360,7 @@ public class MothBackground : ModSystem
 		Main.spriteBatch.End();
 
 		var texCloseII = ModAsset.FireflyClose2.Value;
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Rectangle rvcII = GetDrawRect(texCloseII.Size(), 0.57f, false);
 		rvcII.Y -= 300;
 		rvcII.X += 300;
@@ -387,7 +386,7 @@ public class MothBackground : ModSystem
 		if (CloseII.Count > 2)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = texCloseII;
-			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, CloseII.ToArray(), 0, 2);
 		}
 		if (DownY > 1)

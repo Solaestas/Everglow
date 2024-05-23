@@ -1,4 +1,4 @@
-using Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
+using Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
 
 namespace Everglow.Myth.TheTusk.Projectiles;
 

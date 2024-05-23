@@ -64,9 +64,9 @@ public class BloodLightCrystal : ModTile
 
 				Vector2 worldPos = new Vector2(i, j) * 16 + new Vector2(Main.offScreenRange);
 				Texture2D tex = ModContent.Request<Texture2D>(Texture, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-				Texture2D noiseTex = YggdrasilContent.QuickTexture("Effects/DissolveNoise");
+				Texture2D noiseTex = ModAsset.DissolveNoise.Value;
 				Main.graphics.GraphicsDevice.Textures[1] = noiseTex;
-				Effect dissolveEffect = YggdrasilContent.QuickEffect("Effects/NoiseDissolve");
+				Effect dissolveEffect = ModAsset.NoiseDissolve.Value;
 				dissolveEffect.Parameters["worldPos"].SetValue(worldPos);
 				dissolveEffect.Parameters["textureWidth"].SetValue(400);
 				dissolveEffect.Parameters["progress"].SetValue(dissolveProgress);

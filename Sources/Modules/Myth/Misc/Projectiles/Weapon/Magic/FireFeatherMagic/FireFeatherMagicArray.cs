@@ -1,5 +1,4 @@
-using Everglow.Commons.Coroutines;
-using Everglow.Myth.MagicWeaponsReplace.GlobalItems;
+using Everglow.SpellAndSkull.GlobalItems;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 internal class FlameRingPipeline : Pipeline
@@ -18,8 +17,8 @@ internal class FlameRingPipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D halo = Commons.ModAsset.Trail.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 
@@ -35,7 +34,7 @@ internal class FireFeatherMagicArray : VisualProjectile
 	public bool OldControlUp = false;
 	public int timer = 0;
 	public Vector2 ringPos = Vector2.Zero;
-	public override string Texture => "Everglow/" + ModAsset.FireFeatherMagicPath;
+	public override string Texture => "Everglow/" + ModAsset.FireFeatherMagic_Path;
 	public override void SetDefaults()
 	{
 		Projectile.width = 28;
@@ -47,7 +46,10 @@ internal class FireFeatherMagicArray : VisualProjectile
 		Projectile.tileCollide = false;
 		base.SetDefaults();
 	}
-
+	public override bool? CanCutTiles()
+	{
+		return false;
+	}
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];

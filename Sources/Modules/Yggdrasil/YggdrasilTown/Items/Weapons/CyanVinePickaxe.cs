@@ -13,7 +13,8 @@ public class CyanVinePickaxe : ModItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ModContent.ItemType<CyanVineBar>(), 16)
+			.AddIngredient(ModContent.ItemType<CyanVineBar>(), 20)
+			.AddIngredient(ModContent.ItemType<StoneDragonScaleWood>(), 20)
 			.AddTile(TileID.WorkBenches)
 			.Register();
 	}

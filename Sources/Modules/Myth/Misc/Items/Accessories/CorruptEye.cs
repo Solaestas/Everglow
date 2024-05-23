@@ -1,4 +1,5 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Myth.Misc.Projectiles.Accessory;
 using Terraria.Audio;
 namespace Everglow.Myth.Misc.Items.Accessories;
 public class CorruptEye : ModItem
@@ -34,7 +35,7 @@ class CorruptEyeEquiper : ModPlayer
 			for (int i = 0; i < 5; i++)
 			{
 				Vector2 velocity = new Vector2(0, Main.rand.NextFloat(4.3f, 6f)).RotatedByRandom(6.283);
-				var CursedFlame = Projectile.NewProjectileDirect(Player.GetSource_FromThis(), Player.Center, velocity, ProjectileID.CursedFlameFriendly, 60, 1.5f, Player.whoAmI);
+				var CursedFlame = Projectile.NewProjectileDirect(Player.GetSource_FromThis(), Player.Center, velocity, ModContent.ProjectileType<CursedFlameBall>(), 60, 1.5f, Player.whoAmI);
 				CursedFlame.timeLeft = Main.rand.Next(25, 45);
 			}
 			GenerateVFX(6, 1);

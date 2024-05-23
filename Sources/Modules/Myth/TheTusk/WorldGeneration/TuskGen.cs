@@ -37,10 +37,10 @@ public class TuskGen : ModSystem
 		{
 			return false;
 		}
-		TuskGen tuskGen = ModContent.GetInstance<TuskGen>();
-		Vector2 TuskBiomeCenter = new Vector2(tuskGen.tuskCenterX, tuskGen.tuskCenterY - 80) * 16;
-		Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - TuskBiomeCenter;
-		return v0.Length() < 1700;
+		else
+		{
+			return true;
+		}
 	}
 	internal float TuskS = 0;
 	public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor)
@@ -106,6 +106,8 @@ public class TuskGen : ModSystem
 		{
 			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildWorldTuskTable");
 			BuildTuskLand();
+			Main.spawnTileX = 150;
+			Main.spawnTileY = 220;
 		}
 	}
 	public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
@@ -278,20 +280,22 @@ public class TuskGen : ModSystem
 					}
 				}
 			}
+
 			if (score > 6000)
-			{
-				for (int j =0;j < score / 1000;j++)
-				{
-					Tile tile = Main.tile[x, y - j - 20];
-					tile.TileType = TileID.Stone;
-					tile.HasTile = true;
-				}
-				for (int j = 0; j < times; j++)
-				{
-					Tile tile = Main.tile[x + 1, y - j - 20];
-					tile.TileType = TileID.Copper;
-					tile.HasTile = true;
-				}
+			{           
+				//Debug Code.
+				//for (int j = 0; j < score / 1000; j++)
+				//{
+				//	Tile tile = Main.tile[x, y - j - 20];
+				//	tile.TileType = TileID.Stone;
+				//	tile.HasTile = true;
+				//}
+				//for (int j = 0; j < times; j++)
+				//{
+				//	Tile tile = Main.tile[x + 1, y - j - 20];
+				//	tile.TileType = TileID.Copper;
+				//	tile.HasTile = true;
+				//}
 				return new Point(x, y);
 			}
 		}

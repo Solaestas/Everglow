@@ -16,8 +16,8 @@ internal class BoneRingPipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D halo = Commons.ModAsset.Trail.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicWrap;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 
@@ -34,7 +34,7 @@ internal class BoneFeatherMagicArray : VisualProjectile
 	public int timer = 0;
 	public Vector2 ringPos = Vector2.Zero;
 
-	public override string Texture => "Everglow/" + ModAsset.BoneFeatherMagicPath;
+	public override string Texture => "Everglow/" + ModAsset.BoneFeatherMagic_Path;
 	public override void SetDefaults()
 	{
 		Projectile.width = 28;
@@ -45,6 +45,10 @@ internal class BoneFeatherMagicArray : VisualProjectile
 		Projectile.timeLeft = 100000;
 		Projectile.tileCollide = false;
 		base.SetDefaults();
+	}
+	public override bool? CanCutTiles()
+	{
+		return false;
 	}
 	public override void AI()
 	{

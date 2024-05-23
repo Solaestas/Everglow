@@ -16,11 +16,12 @@ public class CyanFrost : ModItem
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.knockBack = 2;
 		Item.value = 10000;
-		Item.rare = ItemRarityID.Blue;
+		Item.rare = ItemRarityID.LightRed;
 		Item.UseSound = SoundID.Item1;
 		Item.shoot = ModContent.ProjectileType<CyanFrostProj>();
-		Item.noMelee = true; // This is set the sword itself doesn't deal damage (only the projectile does).
-		Item.shootsEveryUse = true; // This makes sure Player.ItemAnimationJustStarted is set when swinging.
+		Item.noMelee = true;
+		Item.noUseGraphic = true;
+		Item.shootsEveryUse = true;
 		Item.autoReuse = true;
 		Item.crit = 16;
 	}

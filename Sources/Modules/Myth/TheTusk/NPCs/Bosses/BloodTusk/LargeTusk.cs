@@ -1,6 +1,5 @@
-using Terraria;
 using Terraria.Audio;
-using Terraria.Localization;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
 
@@ -9,7 +8,7 @@ public class LargeTusk : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Tusk Spike"); //Large Tusk Spike
-			}
+	}
 
 	private Vector2 V = Vector2.Zero;
 	private Vector2 VMax = Vector2.Zero;
@@ -40,6 +39,12 @@ public class LargeTusk : ModNPC
 	private bool squ = false;
 	private bool Down = true;
 	private bool Spr = false;
+	public int Style = 0;
+	public override void OnSpawn(IEntitySource source)
+	{
+		Style = Main.rand.Next(6);
+		base.OnSpawn(source);
+	}
 	public override void AI()
 	{
 		if (VBaseType1 == Vector2.Zero)
@@ -88,8 +93,6 @@ public class LargeTusk : ModNPC
 				NPC.position.Y += 16;
 			}
 			startFight = true;
-			if (NPC.alpha == 255)
-				RamInt = Main.rand.Next(6);
 			V = VMax;
 			NPC.alpha -= 25;
 		}
@@ -108,17 +111,6 @@ public class LargeTusk : ModNPC
 			if (Main.masterMode)
 				NPC.damage = 100;
 			V *= 0.6f;
-			/*if ((player.Center - NPC.Center).Length() < 400)
-                {
-                    MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
-                    mplayer.MinaShake = 4;
-                    float Str = 1;
-                    if ((player.Center - NPC.Center).Length() > 100)
-                    {
-                        Str = 100 / (player.Center - NPC.Center).Length();
-                    }
-                    mplayer.ShakeStrength = Str;
-                }*/
 			if (V.Y <= 0.5f)
 				squ = true;
 		}
@@ -141,41 +133,40 @@ public class LargeTusk : ModNPC
 		target.AddBuff(BuffID.Bleeding, 120);
 	}
 	private bool startFight = false;
-	private int RamInt = 0;
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		if (!startFight || NPC.velocity.Length() >= 0.5f)
 			return false;
-		var BackBase = new List<VertexBase.CustomVertexInfo>();
+		var BackBase = new List<Vertex2D>();
 		Color color = Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16));
 		float index = (84 - V.Y) / 84f;
-		BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(0, 1, 0)));
-		BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(0, 5) + VBase - Main.screenPosition, color, new Vector3(0.5f, 0, 0)));
-		BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(1, 1, 0)));
+		BackBase.Add(new Vertex2D(NPC.Bottom + new Vector2(-600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(0, 1, 0)));
+		BackBase.Add(new Vertex2D(NPC.Bottom + new Vector2(0, 5) + VBase - Main.screenPosition, color, new Vector3(0.5f, 0, 0)));
+		BackBase.Add(new Vertex2D(NPC.Bottom + new Vector2(600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(1, 1, 0)));
 		Texture2D thang = ModAsset.LargeTuskBase.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = thang;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, BackBase.ToArray(), 0, BackBase.Count / 3);
 
 
-		var Vx2 = new List<VertexBase.CustomVertexInfo>
+		var bars = new List<Vertex2D>
 		{
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-12, 5) - Main.screenPosition, color, new Vector3(0, index, 0)),
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(12, V.Y - 79) - Main.screenPosition, color, new Vector3(1, 0, 0)),
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(12, 5) - Main.screenPosition, color, new Vector3(1, index, 0)),
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-12, V.Y - 79) - Main.screenPosition, color, new Vector3(0, 0, 0)),
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(12, V.Y - 79) - Main.screenPosition, color, new Vector3(1, 0, 0)),
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-12, 5) - Main.screenPosition, color, new Vector3(0, index, 0))
+			new Vertex2D(NPC.Bottom + new Vector2(-12, 5) - Main.screenPosition, color, new Vector3(Style / 6f, index, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(12, V.Y - 79) - Main.screenPosition, color, new Vector3(Style / 6f + 1 / 6f, 0, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(12, 5) - Main.screenPosition, color, new Vector3(Style / 6f + 1 / 6f, index, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(-12, V.Y - 79) - Main.screenPosition, color, new Vector3(Style / 6f, 0, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(12, V.Y - 79) - Main.screenPosition, color, new Vector3(Style / 6f+ 1 / 6f, 0, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(-12, 5) - Main.screenPosition, color, new Vector3(Style / 6f, index, 0))
 		};
-		thang = ModAsset.Tuskplus0.Value;
+		thang = ModAsset.LargeTusk.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = thang;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
 
 
-		var ForeBase = new List<VertexBase.CustomVertexInfo>
+		var ForeBase = new List<Vertex2D>
 		{
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(0, 1, 0)),
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(0, 5) + VBase - Main.screenPosition, color, new Vector3(0.5f, 0, 0)),
-			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(1, 1, 0))
+			new Vertex2D(NPC.Bottom + new Vector2(-600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(0, 1, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(0, 5) + VBase - Main.screenPosition, color, new Vector3(0.5f, 0, 0)),
+			new Vertex2D(NPC.Bottom + new Vector2(600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(1, 1, 0))
 		};
 
 		thang = ModAsset.LargeTuskDrag.Value;

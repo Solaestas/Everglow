@@ -101,7 +101,7 @@ public class GlowingDrop : ModTile, ITileFluentlyDrawn
 		var tile = Main.tile[tilePos];
 		ushort type = tile.TileType;
 		int paint = Main.tile[paintPos].TileColor;
-		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.Tiles_GlowingDropPath, type, frameX, paint, tileDrawing);
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.Tiles_GlowingDrop_Path, type, frameX, paint, tileDrawing);
 		tex ??= ModAsset.Tiles_GlowingDrop.Value;
 		var frame = new Rectangle(frameX, frameY, 10, frameHeight);
 

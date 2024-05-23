@@ -1,4 +1,4 @@
-using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Myth.TheFirefly.NPCs.Bosses;
 using Everglow.Myth.TheFirefly.VFXs;
 using Terraria.Audio;
 
@@ -102,13 +102,13 @@ public class MothBall : ModProjectile
 			{
 				for (int i = 0; i < 5; i++)
 				{
-					var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), Projectile.Center, ModContent.NPCType<NPCs.Bosses.Butterfly>());
+					var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), Projectile.Center, ModContent.NPCType<SummonedButterfly>());
 					npc.velocity = Main.rand.NextVector2Unit() * Main.rand.Next(4, 12);
 					npc.netUpdate2 = true;
 				}
 				for (int i = 0; i < 4; i++)
 				{
-					var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), Projectile.Center, ModContent.NPCType<NPCs.Bosses.Butterfly>());
+					var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), Projectile.Center, ModContent.NPCType<SummonedButterfly>());
 					npc.velocity = Main.rand.NextVector2Unit() * Main.rand.Next(2, 5);
 					npc.netUpdate2 = true;
 				}
@@ -143,11 +143,11 @@ public class MothBall : ModProjectile
 			Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, Light.Size() / 2f, (60 - Projectile.timeLeft) / 30f, SpriteEffects.None, 0);
 
 		float range = 720f;
-		if(Projectile.timeLeft < 100)
+		if (Projectile.timeLeft < 100)
 		{
 			range += (100 - Projectile.timeLeft) * 16;
 		}
-		for(int k = 0;k < 9;k++)
+		for (int k = 0; k < 9; k++)
 		{
 			DrawCurrents(k - (float)Main.time * 0.03f, k, range);
 		}
@@ -178,14 +178,14 @@ public class MothBall : ModProjectile
 		{
 			float value = t / length;
 			Vector2 normalize = Vector2.Normalize(current[t].RotatedBy(Math.PI * 0.5));
-			if(t != 0)
+			if (t != 0)
 			{
 				normalize = Vector2.Normalize(current[t] - current[t - 1]).RotatedBy(-Math.PI * 0.5);
 			}
 			float width = 50 + randomSeed * 2;
 			normalize *= width;
 			float colorValue = 0f;
-			if(Projectile.timeLeft < 100)
+			if (Projectile.timeLeft < 100)
 			{
 				colorValue = value * value * (100 - Projectile.timeLeft) / 50f;
 			}

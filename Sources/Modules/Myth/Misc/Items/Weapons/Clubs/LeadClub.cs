@@ -7,11 +7,12 @@ public class LeadClub : ClubItem
 		Item.damage = 7;
 		Item.value = 88;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.LeadClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.LeadClub_smash>();
 	}
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.LeadBar, 18)
+			.AddIngredient(ItemID.LeadBar, 12)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

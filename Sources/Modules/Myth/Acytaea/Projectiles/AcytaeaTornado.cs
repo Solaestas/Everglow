@@ -57,7 +57,7 @@ public class AcytaeaTornado : ModProjectile
 		}
 		if (Projectile.timeLeft % 200 == 0)
 		{
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/MagicWeaponsReplace/Sounds/TyphoonBlackHoleStrong").WithVolumeScale(100f / ((player.Center - Projectile.Center).Length() + 100)), Projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/TyphoonBlackHoleStrong").WithVolumeScale(100f / ((player.Center - Projectile.Center).Length() + 100)), Projectile.Center);
 		}
 	}
 	public void GenerateVFX()
@@ -211,7 +211,7 @@ public class AcytaeaTornado : ModProjectile
 		tornado.Parameters["duration"].SetValue(value2 * 0.8f);
 		tornado.Parameters["dissolveRange"].SetValue(dissolveRange);
 		tornado.CurrentTechnique.Passes[pass].Apply();
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = tex;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);

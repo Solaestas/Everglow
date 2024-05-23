@@ -1,12 +1,10 @@
-using Everglow.Myth.MagicWeaponsReplace.Projectiles;
-using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
-using Terraria.Audio;
+using Everglow.SpellAndSkull.Projectiles;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 
 internal class FireFeatherMagicBook : MagicBookProjectile
 {
-	public override string Texture => "Everglow/" + ModAsset.FireFeatherMagicPath;
+	public override string Texture => "Everglow/" + ModAsset.FireFeatherMagic_Path;
 	public override void SetDef()
 	{
 		ProjType = ModContent.ProjectileType<FireFeather>();
@@ -14,9 +12,10 @@ internal class FireFeatherMagicBook : MagicBookProjectile
 		ItemType = ModContent.ItemType<Items.Weapons.FireFeatherMagic>();
 		MulStartPosByVelocity = 2f;
 		UseGlow = false;
-		GlowPath = "Misc/Items/Weapons/FireFeatherMagic";
-		FrontTexPath = "Misc/Projectiles/Weapon/Magic/FireFeatherMagic/FireFeatherMagic_front";
-		PaperTexPath = "Misc/Projectiles/Weapon/Magic/FireFeatherMagic/FireFeatherMagic_paper";
+		FrontTexture = ModAsset.FireFeatherMagic.Value;
+		PaperTexture = ModAsset.FireFeatherMagic_paper.Value;
+		GlowTexture = ModAsset.FireFeatherMagic.Value;
+
 		effectColor = new Color(105, 75, 45, 100);
 		TexCoordTop = new Vector2(16, -1);
 		TexCoordLeft = new Vector2(-1, 29);

@@ -143,7 +143,7 @@ class RedFlame2Split : ModProjectile
             if (bars.Count > 2)
             {
                 Vx2.Add(bars[0]);
-                var vertex = new Vertex2D((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, new Color(color0.R, color0.G, color0.B, 0), new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, new Color(color0.R, color0.G, color0.B, 0), new Vector3(0, 0.5f, 1));
                 Vx2.Add(bars[1]);
                 Vx2.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)

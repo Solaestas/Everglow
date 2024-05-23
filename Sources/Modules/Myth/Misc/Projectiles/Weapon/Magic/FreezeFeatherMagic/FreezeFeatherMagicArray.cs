@@ -18,8 +18,8 @@ internal class FrozenRingPipeline : Pipeline
 		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_turtleCrack.Value);
 		Texture2D halo = Commons.ModAsset.Trail_1.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicWrap;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 
@@ -36,7 +36,7 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 	public int timer = 0;
 	public Vector2 ringPos = Vector2.Zero;
 
-	public override string Texture => "Everglow/" + ModAsset.FreezeFeatherMagicPath;
+	public override string Texture => "Everglow/" + ModAsset.FreezeFeatherMagic_Path;
 	public override void SetDefaults()
 	{
 		Projectile.width = 28;
@@ -47,6 +47,10 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 		Projectile.timeLeft = 100000;
 		Projectile.tileCollide = false;
 		base.SetDefaults();
+	}
+	public override bool? CanCutTiles()
+	{
+		return false;
 	}
 	public override void AI()
 	{

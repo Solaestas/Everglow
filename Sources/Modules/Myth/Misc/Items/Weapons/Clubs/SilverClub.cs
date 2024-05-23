@@ -7,11 +7,12 @@ public class SilverClub : ClubItem
 		Item.damage = 8;
 		Item.value = 108;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.SilverClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.SilverClub_smash>();
 	}
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.SilverBar, 18)
+			.AddIngredient(ItemID.SilverBar, 12)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

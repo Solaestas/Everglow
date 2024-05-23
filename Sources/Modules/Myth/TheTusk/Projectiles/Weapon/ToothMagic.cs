@@ -1,7 +1,5 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheTusk.VFXs;
-using SteelSeries.GameSense;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -56,7 +54,7 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - Projectile.velocity * Main.rand.NextFloat(3f, 14f),
-				maxTime = Main.rand.Next(48, 56),
+				maxTime = Main.rand.Next(18, 26),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(18f, 28f) * mulWidth }
 			};
 			Ins.VFXManager.Add(blood);
@@ -167,7 +165,7 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
-		
+
 
 		if (Projectile.timeLeft > 500)
 			Projectile.scale = 0.8f;
@@ -358,7 +356,7 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 		}
 		Texture2D t = ModAsset.FogTrace.Value;
 		if (Shade)
-			t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceShade5xDark");
+			t = Commons.ModAsset.Trail_2_black_thick.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 
 		if (bars.Count > 3)
@@ -428,7 +426,7 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(9f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 			}
 		}
-		Texture2D t = ModAsset.FogTraceLight.Value;
+		Texture2D t = Commons.ModAsset.Trail_2.Value;
 
 		if (bars.Count > 3)
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);

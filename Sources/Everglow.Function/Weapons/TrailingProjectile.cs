@@ -1,5 +1,6 @@
 using System.Linq;
 using Everglow.Commons;
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
@@ -27,6 +28,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		TrailWidth = 30f;
 		SelfLuminous = false;
 		TrailTexture = ModAsset.Trail.Value;
+		TrailTextureBlack = ModAsset.Trail_black.Value;
 		TrailShader = ModAsset.Trailing.Value;
 		SetDef();
 	}
@@ -85,8 +87,6 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			Projectile.velocity *= 0f;
 			return;
 		}
-		Projectile.velocity += Vector2.Normalize(Main.MouseWorld - Projectile.Center - Projectile.velocity).RotatedBy(0) * 12.5f;
-		Projectile.velocity *= 0.95f;
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
@@ -105,7 +105,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 	public virtual void KillMainStructure()
 	{
 		Projectile.velocity = Projectile.oldVelocity;
-		Projectile.damage = 0;
+		Projectile.friendly = false;
 		if (TimeTokill < 0)
 		{
 			Explosion();
@@ -170,8 +170,8 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.CurrentTechnique.Passes[0].Apply();
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_black.Value;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.Textures[0] = TrailTextureBlack;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		if (bars2.Count > 3)
@@ -225,16 +225,17 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 				drawC.G = (byte)(lightC.G * drawC.G / 255f);
 				drawC.B = (byte)(lightC.B * drawC.B / 255f);
 			}
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor * 7 + timeValue, 1, width)));
-			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor * 7 + timeValue, 0.5f, width)));
-			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor * 7 + timeValue, 1, width)));
-			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(factor * 7 + timeValue, 0.5f, width)));
-			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor * 7 + timeValue, 1, width)));
-			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor * 7 + timeValue, 0.5f, width)));
+			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
+			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
+			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
+			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
 		}
 
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect effect = TrailShader;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
@@ -242,7 +243,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		effect.CurrentTechnique.Passes[0].Apply();
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 		Main.graphics.GraphicsDevice.Textures[0] = TrailTexture;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		if (bars2.Count > 3)
@@ -251,9 +252,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
 
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
-
+		Main.spriteBatch.Begin(sBS);
 	}
 	public float GetCurvatureRadius(Vector2 p0, Vector2 p1, Vector2 p2)
 	{
@@ -355,6 +354,5 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			spriteBatch.Draw(TrailTexture, bars2, PrimitiveType.TriangleStrip);
 		if (bars3.Count > 3)
 			spriteBatch.Draw(TrailTexture, bars3, PrimitiveType.TriangleStrip);
-
 	}
 }

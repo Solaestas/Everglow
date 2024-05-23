@@ -1,6 +1,5 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
+using Everglow.Myth.Misc.Projectiles.Accessory;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
@@ -19,7 +18,7 @@ public class IchorClub : ClubProj
 		for (int x = 0; x < 2; x++)
 		{
 			Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
-			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center + velocity * -2, velocity, ModContent.ProjectileType<GoldenShowerII>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center + velocity * -2, velocity, ModContent.ProjectileType<IchorCurrent>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
 			p.friendly = false;
 			p.CritChance = Projectile.CritChance;
 		}
@@ -56,7 +55,7 @@ public class IchorClub : ClubProj
 		SpriteEffects effects = SpriteEffects.None;
 		if (Projectile.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;
-		Texture2D texture = ModAsset.IchorClub_glow.Value;
+		Texture2D texture = ModAsset.Melee_IchorClub_glow.Value;
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
 		for (int i = 0; i < 5; i++)
 		{
@@ -107,7 +106,7 @@ public class IchorClub : ClubProj
 			bars.Add(new Vertex2D(Projectile.Center - trail[i] * 1.0f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 0, w)));
 		}
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
@@ -236,22 +235,29 @@ public class IchorClub : ClubProj
 			return;
 
 		var bars = new List<Vertex2D>();
-		var light = new Color(1f, 1f, 1f, 1f);
+		var light = new Color(1f, 1f, 1f, 0f);
 		light *= 2;
 		light.A /= 4;
 		light.G = (byte)(light.G * 0.8f);
 		light.B = 0;
+		float timeValue = (float)Main.time * 0.07f;
 		for (int i = 0; i < length; i++)
 		{
-			float factor = i / (length - 1f);
+			float factor = i / 30f - timeValue;
 			float delta = (1 - timeLeft / 64f * 0.45f) * Omega / MaxOmega + 1 - Omega / MaxOmega;
-			float maxValue = 20f;
-			if (length < maxValue)
-				delta = delta * length / maxValue + (maxValue - length) / maxValue;
-			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * delta * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 0, 0f)));
+			if(i < 10)
+			{
+				delta *= i / 10f;
+			}
+			if(length - i - 1 < 10)
+			{
+				delta *= (length - i - 1) / 10f;
+			}
+			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i].RotatedBy(timeValue * 1.5f) * delta * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 1, 0f)));
+			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i].RotatedBy(timeValue * 1.5f) * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 0, 0f)));
 		}
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.WaterLineShade.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_5.Value;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 	}
 	private void UpdateMoon(ref List<Vector2> listVec)

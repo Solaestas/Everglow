@@ -12,7 +12,7 @@ public class BlackStarFruit : ModNPC
 	private float EntityLightTime = 0;
 	private Vector2[] vectorRotationPosition = new Vector2[12];
 	private float[] floatLightPosition = new float[12];
-	//public override string Texture => "Everglow/" + ModAsset.FruitBombPath; // Best way I found to avoid path errors, and FruitBomb is empty anyways
+	//public override string Texture => "Everglow/" + ModAsset.FruitBomb_Path; // Best way I found to avoid path errors, and FruitBomb is empty anyways
 	public override void SetDefaults()
 	{
 		NPC.damage = 0;

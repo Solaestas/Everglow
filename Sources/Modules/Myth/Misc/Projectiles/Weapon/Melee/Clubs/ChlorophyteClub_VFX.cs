@@ -240,7 +240,7 @@ public class ChlorophyteClub_VFX : ModProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
 		if (circle.Count > 0)
 		{
-			Texture2D t = ModAsset.FogTraceLight.Value;
+			Texture2D t = Commons.ModAsset.Trail_2.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}

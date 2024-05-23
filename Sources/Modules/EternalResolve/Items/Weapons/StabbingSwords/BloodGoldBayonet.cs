@@ -15,7 +15,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		{
 			Item.damage = 11;
 			Item.knockBack = 1.61f;
-			Item.rare = ItemRarityID.Green;
+			Item.rare = ItemRarityID.Blue;
 			Item.value = Item.sellPrice(0, 1, 2, 0);
 			Item.shoot = ModContent.ProjectileType<BloodGoldBayonet_Pro>();
 			StabMulDamage = 4f;
@@ -45,7 +45,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		public override void AddRecipes()
 		{
 			CreateRecipe().
-				AddIngredient(ItemID.CrimtaneBar, 17).
+				AddIngredient(ItemID.CrimtaneBar, 10).
+				AddIngredient(ItemID.TissueSample, 5).
 				AddTile(TileID.Anvils).
 				Register();
 			base.AddRecipes();

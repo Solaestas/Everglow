@@ -15,8 +15,8 @@ public class MothBlueFirePipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D halo = Commons.ModAsset.Point.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 
@@ -49,7 +49,14 @@ public class MothBlueFireDust : Visual
 			timer = maxTime;
 		}
 		velocity *= 0.9f;
-		velocity += new Vector2(Main.windSpeedCurrent * 0.1f, -0.1f);
+		if(ai.Length >= 3)
+		{
+			velocity += new Vector2(Main.windSpeedCurrent * 0.1f, -0.1f) * ai[2];
+		}
+		else
+		{
+			velocity += new Vector2(Main.windSpeedCurrent * 0.1f, -0.1f);
+		}
 		if (scale < 160)
 		{
 			scale += 2f;

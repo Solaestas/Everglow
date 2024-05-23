@@ -7,6 +7,7 @@ public class CactusClub : ClubItem
 		Item.damage = 7;
 		Item.value = 68;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CactusClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CactusClub_smash>();
 	}
 	public override void AddRecipes()
 	{

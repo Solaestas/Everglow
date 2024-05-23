@@ -1,12 +1,13 @@
+using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Projectiles;
 using Terraria.GameContent;
-using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
 internal class LargeFireBulbTestItem : ModItem
 {
-	public override string Texture => "Everglow/" + ModAsset.LargeFireBulbPath;
+	public override string Texture => "Everglow/" + ModAsset.LargeFireBulb_item_Path;
 
 	public override void SetDefaults()
 	{
@@ -42,7 +43,7 @@ internal class LargeFireBulb : ModTile
 		Main.tileSolid[Type] = false;
 		Main.tileNoFail[Type] = true;
 		Main.tileLighted[Type] = true;
-
+		Main.tileCut[Type] = true;
 		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
 		TileObjectData.newTile.Height = 4;
@@ -57,8 +58,8 @@ internal class LargeFireBulb : ModTile
 		TileObjectData.newTile.DrawYOffset = -6;
 		TileObjectData.addTile(Type);
 
-		LocalizedText name = CreateMapEntryName();
-		AddMapEntry(new Color(28, 132, 255), name);
+		DustType = ModContent.DustType<FluorescentTreeDust>();
+		AddMapEntry(new Color(28, 132, 255));
 	}
 
 	/// <summary>
@@ -102,11 +103,10 @@ internal class LargeFireBulb : ModTile
 		succeed &= modTile.TryGrow(x, y + height, broadcast);
 		return succeed;
 	}
-
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
 	{
 		var tile = Main.tile[i, j];
-		int lx = i - tile.TileFrameX / 18;
+		int lx = i - (tile.TileFrameX % 90) / 18;
 		int ly = j - tile.TileFrameY / 18;
 
 		noBreak = true;
@@ -134,7 +134,6 @@ internal class LargeFireBulb : ModTile
 
 		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
 	}
-
 	public override void RandomUpdate(int i, int j)
 	{
 		var tile = Main.tile[i, j];
@@ -160,7 +159,6 @@ internal class LargeFireBulb : ModTile
 		}
 		base.RandomUpdate(i, j);
 	}
-
 	private bool TryGrow(int x, int y, bool broadcast = true)
 	{
 		for (int i = 0; i < 2; i++)
@@ -192,7 +190,6 @@ internal class LargeFireBulb : ModTile
 
 		return true;
 	}
-
 	private bool HasSameTileAt(int i, int j)
 	{
 		if (!WorldGen.InWorld(i, j, 10))
@@ -200,11 +197,10 @@ internal class LargeFireBulb : ModTile
 		var tile = Main.tile[i, j];
 		return tile != null && tile.HasTile && tile.type == Type;
 	}
-
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
-		if (tile.TileFrameX != 0 || tile.TileFrameY != 0)
+		if (tile.TileFrameX % 90 != 0 || tile.TileFrameY != 0)
 			return false;
 
 		Vector2 offscreenVector = new Vector2(Main.offScreenRange);
@@ -229,21 +225,44 @@ internal class LargeFireBulb : ModTile
 
 		var tex = ModAsset.LargeFireBulb_Root.Value;
 		Texture2D glow = null;
-		if (HasSameTileAt(i, j - 4)) // 上面有同样物块，不是根
+		if(tile.TileFrameX == 0)
 		{
-			if (!HasSameTileAt(i, j + 4)) // 下面没有同样物块，是果实2
+			if (HasSameTileAt(i, j - 4)) // 上面有同样物块，不是根
 			{
-				tex = ModAsset.LargeFireBulb_Fruit2.Value;
-				glow = ModAsset.LargeFireBulb_Fruit2_Glow.Value;
+				if (!HasSameTileAt(i, j + 4)) // 下面没有同样物块，是果实2
+				{
+					tex = ModAsset.LargeFireBulb_Fruit2.Value;
+					glow = ModAsset.LargeFireBulb_Fruit2_Glow.Value;
+				}
+				else if (!HasSameTileAt(i, j + 8)) // 下面有同样物块，但下面第二格有，是果实1
+				{
+					tex = ModAsset.LargeFireBulb_Fruit1.Value;
+					glow = ModAsset.LargeFireBulb_Fruit1_Glow.Value;
+				}
+				else // 下面有同样物块，下面第二格也有，是茎
+				{
+					tex = ModAsset.LargeFireBulb_Stem.Value;
+				}
 			}
-			else if (!HasSameTileAt(i, j + 8)) // 下面有同样物块，但下面第二格有，是果实1
+		}
+		if (tile.TileFrameX == 90)
+		{
+			if (HasSameTileAt(i, j - 4)) // 上面有同样物块，不是根
 			{
-				tex = ModAsset.LargeFireBulb_Fruit1.Value;
-				glow = ModAsset.LargeFireBulb_Fruit1_Glow.Value;
-			}
-			else // 下面有同样物块，下面第二格也有，是茎
-			{
-				tex = ModAsset.LargeFireBulb_Stem.Value;
+				if (!HasSameTileAt(i, j + 4)) // 下面没有同样物块，是果实2
+				{
+					tex = Commons.ModAsset.Empty.Value;
+					glow = Commons.ModAsset.Empty.Value;
+				}
+				else if (!HasSameTileAt(i, j + 8)) // 下面有同样物块，但下面第二格有，是果实1
+				{
+					tex = ModAsset.LargeFireBulb_Fruit1_cut.Value;
+					glow = Commons.ModAsset.Empty.Value;
+				}
+				else // 下面有同样物块，下面第二格也有，是茎
+				{
+					tex = ModAsset.LargeFireBulb_Stem.Value;
+				}
 			}
 		}
 
@@ -278,5 +297,102 @@ internal class LargeFireBulb : ModTile
 				b = 0;
 			}
 		}
+	}
+	public override void KillMultiTile(int i, int j, int frameX, int frameY)
+	{
+		if (HasSameTileAt(i, j + 4))
+		{
+			int k = 4;
+			while (HasSameTileAt(i, j + k))
+			{
+				if (j + k > Main.maxTilesY - 4)
+				{
+					break;
+				}
+				if (!HasSameTileAt(i, j + k + 4))// 下面空了
+				{
+					if(k == 4)
+					{
+						GenerateProjectileII(i, j + k);
+					}
+					else
+					{
+						GenerateProjectile(i, j + k);
+					}
+					break;
+				}
+				k += 4;
+			}
+		}
+		else
+		{
+			GenerateProjectile(i, j);
+		}
+		int z = 4;
+		while (HasSameTileAt(i, j - z))
+		{
+			if (j - z < 4)
+			{
+				break;
+			}
+			Main.tile[i, j - z].TileFrameX = 90;
+			z += 4;
+		}
+
+		base.KillMultiTile(i, j, frameX, frameY);
+	}
+	private void GenerateProjectile(int i, int j)
+	{
+		if (Main.tile[i, j - 4].TileFrameX == 0 && HasSameTileAt(i, j - 4)) //，上面没断
+		{
+			bool hasTarget = false;
+			foreach (var proj in Main.projectile)
+			{
+				if (proj != null && proj.active)
+				{
+					if (proj.type == ModContent.ProjectileType<FallenDropFruit>())
+					{
+						Vector2 center = new Vector2(i + 1, j + 4) * 16;
+						if (proj.Center.Y - center.Y < 144 && Math.Abs(proj.Center.X - center.X) < 16)
+						{
+							hasTarget = true;
+							break;
+						}
+					}
+				}
+			}
+			if (!hasTarget)
+			{
+				Projectile.NewProjectile(WorldGen.GetItemSource_FromTileBreak(i, j), new Vector2(i + 1, j + 4) * 16, Vector2.zeroVector, ModContent.ProjectileType<FallenDropFruit>(), 100, 10);
+			}
+		}	
+	}
+	private void GenerateProjectileII(int i, int j)
+	{
+		bool hasTarget = false;
+		foreach (var proj in Main.projectile)
+		{
+			if (proj != null && proj.active)
+			{
+				if (proj.type == ModContent.ProjectileType<FallenDropFruit>())
+				{
+					Vector2 center = new Vector2(i + 1, j + 4) * 16;
+					if (proj.Center.Y - center.Y < 144 && Math.Abs(proj.Center.X - center.X) < 16)
+					{
+						hasTarget = true;
+						break;
+					}
+				}
+			}
+		}
+		if (!hasTarget)
+		{
+			Projectile.NewProjectile(WorldGen.GetItemSource_FromTileBreak(i, j), new Vector2(i + 1, j + 4) * 16, Vector2.zeroVector, ModContent.ProjectileType<FallenDropFruit>(), 100, 10);
+		}
+	}
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 1;
+		base.NumDust(i, j, fail, ref num);
 	}
 }

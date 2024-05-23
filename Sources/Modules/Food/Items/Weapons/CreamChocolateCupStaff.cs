@@ -24,7 +24,7 @@ public class CreamChocolateCupStaff : ModItem
 		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.noMelee = true;
 		Item.noUseGraphic = true;
-		Item.UseSound = SoundID.Item132.WithVolumeScale(0.4f) with { MaxInstances = 3 };
+		Item.UseSound = SoundID.Item39.WithVolumeScale(0.8f) with { MaxInstances = 3 };
 		Item.knockBack = 2.5f;
 		Item.value = Item.sellPrice(0, 0, 20, 0);
 		Item.rare = ItemRarityID.Green;
@@ -51,10 +51,12 @@ public class CreamChocolateCupStaff : ModItem
 	{
 		if (player.altFunctionUse == 2)
 		{
+			Item.UseSound = SoundID.Item132.WithVolumeScale(0.8f);
 			Item.mana = 34;
 		}
 		else
 		{
+			Item.UseSound = SoundID.Item39.WithVolumeScale(0.8f) with { MaxInstances = 3 };
 			Item.mana = 9;
 		}
 		return true;

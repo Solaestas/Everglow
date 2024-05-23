@@ -25,7 +25,7 @@ internal class FlamePipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.VFXs_Flame;
-		effect.Value.Parameters["uNoise"].SetValue(ModAsset.Perlin.Value);
+		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
 	}
 	public override void BeginRender()
 	{
@@ -35,8 +35,8 @@ internal class FlamePipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D FlameColor = ModAsset.Flame_Color.Value;
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
-		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 

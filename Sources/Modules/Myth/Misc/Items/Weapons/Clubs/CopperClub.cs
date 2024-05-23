@@ -7,11 +7,12 @@ public class CopperClub : ClubItem
 		Item.damage = 6;
 		Item.value = 65;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CopperClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CopperClub_smash>();
 	}
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.CopperBar, 18)
+			.AddIngredient(ItemID.CopperBar, 8)
 			.AddTile(TileID.Anvils)
 			.Register();
 	}

@@ -155,7 +155,7 @@ public class ToothMagicSplit : ModProjectile
 			DelX = Main.rand.NextFloat(1f, 40f);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		var bars = new List<VertexBase.CustomVertexInfo>();
+		var bars = new List<Vertex2D>();
 		float width = 2;
 		if (Projectile.timeLeft < 45 && Tokill > 0)
 			width = Projectile.timeLeft / 22.5f;
@@ -234,18 +234,18 @@ public class ToothMagicSplit : ModProjectile
 			Vector2 P1 = Projectile.oldPos[i] + normalDir * SinFx0 + normalDir * -width * CosFx0 + new Vector2(9, 9);
 			Color c0 = Lighting.GetColor((int)(P0.X / 16f), (int)(P0.Y / 16f));
 			Color c1 = Lighting.GetColor((int)(P1.X / 16f), (int)(P1.Y / 16f));
-			bars.Add(new VertexBase.CustomVertexInfo(P0 - Main.screenPosition, c0, new Vector3(factor, 1, w)));
-			bars.Add(new VertexBase.CustomVertexInfo(P1 - Main.screenPosition, c1, new Vector3(factor, 0, w)));
+			bars.Add(new Vertex2D(P0 - Main.screenPosition, c0, new Vector3(factor, 1, w)));
+			bars.Add(new Vertex2D(P1 - Main.screenPosition, c1, new Vector3(factor, 0, w)));
 		}
-		var Vx = new List<VertexBase.CustomVertexInfo>();
+		var Vx = new List<Vertex2D>();
 		if (bars.Count > 2)
 		{
 			Vx.Add(bars[0]);
 			if (Projectile.velocity.Length() > 0.05f)
 				ovel = Projectile.velocity;
-			Vector2 P2 = (bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(ovel) * 30;
+			Vector2 P2 = (bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(ovel) * 30;
 			Color c2 = Lighting.GetColor((int)(P2.X / 16f), (int)(P2.Y / 16f));
-			var vertex = new VertexBase.CustomVertexInfo(P2, c2, new Vector3(0, 0.5f, 1));
+			var vertex = new Vertex2D(P2, c2, new Vector3(0, 0.5f, 1));
 			Vx.Add(bars[1]);
 			Vx.Add(vertex);
 			for (int i = 0; i < bars.Count - 2; i += 2)

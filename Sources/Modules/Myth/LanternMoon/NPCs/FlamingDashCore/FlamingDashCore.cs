@@ -125,12 +125,14 @@ public class FlamingDashCore : ModNPC
 				ColorShine = NPC.color;
 				//MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
 				//mplayer.Shake = 3;
-				ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
-				mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
+				//ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
+				//mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
+				ShakerManager.AddShaker(UndirectedShakerInfo.Create(Main.LocalPlayer.Center, 56));
 
 				if ((player.Center - NPC.Center).Length() > 100)
 					Str = 100 / (player.Center - NPC.Center).Length();
-				mplayer.DirFlyCamPosStrength = Str; //Using Direct FlyCamPosition because FlyCamPosition itself being used causes errors (see ScreenShaker ModPlayer) ~Setnour6
+				//mplayer.DirFlyCamPosStrength = Str; //Using Direct FlyCamPosition because FlyCamPosition itself being used causes errors (see ScreenShaker ModPlayer) ~Setnour6
+				ShakerManager.AddShaker(UndirectedShakerInfo.Create(Main.LocalPlayer.Center, Str));
 				SoundEngine.PlaySound(SoundID.Item36, NPC.Center);//特效
 				Vector2 vn = new Vector2(0, -20).RotatedBy(NPC.localAI[0] / 90d);
 				for (int h = 0; h < 6; h++)
@@ -897,8 +899,8 @@ public class FlamingDashCore : ModNPC
 			var NewFac = (float)Math.Sqrt(i + 1) / TrueL * 24 - NPC.localAI[0] / 30f;
 			var NewFac2 = (float)Math.Sqrt(i) / TrueL * 24 - NPC.localAI[0] / 30f;
 			Lighting.AddLight(NPC.oldPos[i], (255 - NPC.alpha) * 1.2f / 50f * ka * (1 - factor), (255 - NPC.alpha) * 0.7f / 50f * ka * (1 - factor), 0);
-			//bars.Add(new VertexBase.CustomVertexInfo(NPC.oldPos[i] + normalDir * width + new Vector2(20, 20) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(NewFac % 1f + 0.5f, 1, w)));
-			//bars.Add(new VertexBase.CustomVertexInfo(NPC.oldPos[i] + normalDir * -width + new Vector2(20, 20) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(NewFac % 1f + 0.5f, 0, w)));
+			//bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * width + new Vector2(20, 20) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(NewFac % 1f + 0.5f, 1, w)));
+			//bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * -width + new Vector2(20, 20) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(NewFac % 1f + 0.5f, 0, w)));
 			bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * width + new Vector2(20, 20) - Main.screenPosition, new Color(NPCOldColor[i].R, NPCOldColor[i].G, NPCOldColor[i].B, 0), new Vector3(factor, 1, w)));
 			bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * -width + new Vector2(20, 20) - Main.screenPosition, new Color(NPCOldColor[i].R, NPCOldColor[i].G, NPCOldColor[i].B, 0), new Vector3(factor, 0, w)));
 		}

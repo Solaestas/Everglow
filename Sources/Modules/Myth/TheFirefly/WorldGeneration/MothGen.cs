@@ -1,8 +1,8 @@
 using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Items;
 using Everglow.Myth.TheFirefly.Pylon;
 using Everglow.Myth.TheFirefly.Tiles;
 using Everglow.Myth.TheFirefly.Walls;
+using Everglow.SpellAndSkull.Items;
 using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.ModLoader.Default;
@@ -264,7 +264,7 @@ public class MothLand : ModSystem
 									//WorldGen.PlaceLiquid(x, y, byte.MaxValue, 255);
 								}
 							}
-							if(pixel.R == 28 && pixel.G == 198 && pixel.B == 255)
+							if (pixel.R == 28 && pixel.G == 198 && pixel.B == 255)
 							{
 								LargeFireBulb.PlaceMe(x + a, y + b, (ushort)Main.rand.Next(16));
 							}
@@ -650,7 +650,7 @@ public class MothLand : ModSystem
 					Tile t0 = Main.tile[i + x, j + y];
 					if (y == 0)
 					{
-						if(!t0.HasTile || t0.TileType !=(ushort)ModContent.TileType<DarkCocoon>() || t0.IsHalfBlock)
+						if (!t0.HasTile || t0.TileType != (ushort)ModContent.TileType<DarkCocoon>() || t0.IsHalfBlock)
 						{
 							count++;
 						}
@@ -669,11 +669,11 @@ public class MothLand : ModSystem
 				for (int y = 4; y <= 80; y++)
 				{
 					for (int x = 0; x <= 1; x++)
-			    	{	
+					{
 						Tile t0 = Main.tile[i + x, j + y];
 						if (!t0.HasTile)
 						{
-							length+= 1 / 8f;
+							length += 1 / 8f;
 						}
 						else
 						{

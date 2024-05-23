@@ -202,7 +202,7 @@ public class CrimsonTuskControlable : ModNPC
 			return;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-		var bars2 = new List<VertexBase.CustomVertexInfo>();
+		var bars2 = new List<Vertex2D>();
 
 		for (int i = 1; i < 400; ++i)
 		{
@@ -247,13 +247,13 @@ public class CrimsonTuskControlable : ModNPC
 
 			if (killing is < 178 and > 0)
 			{
-				bars2.Add(new VertexBase.CustomVertexInfo(vkilpos[i] + normalDir * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
-				bars2.Add(new VertexBase.CustomVertexInfo(vkilpos[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
+				bars2.Add(new Vertex2D(vkilpos[i] + normalDir * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
+				bars2.Add(new Vertex2D(vkilpos[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
 			}
 			else
 			{
-				bars2.Add(new VertexBase.CustomVertexInfo(vpos[i] + normalDir * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
-				bars2.Add(new VertexBase.CustomVertexInfo(vpos[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
+				bars2.Add(new Vertex2D(vpos[i] + normalDir * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
+				bars2.Add(new Vertex2D(vpos[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
 			}
 			if (killing is < 178 and > 0)
 			{
@@ -272,11 +272,11 @@ public class CrimsonTuskControlable : ModNPC
 			killing = 180;
 			NPC.ai[3] = 60;
 		}
-		var triangleList2 = new List<VertexBase.CustomVertexInfo>();
+		var triangleList2 = new List<Vertex2D>();
 		if (bars2.Count > 2)
 		{
 			triangleList2.Add(bars2[0]);
-			var vertex = new VertexBase.CustomVertexInfo((bars2[0].Position + bars2[1].Position) * 0.5f + Vector2.Normalize(NPC.velocity), Color.White, new Vector3(0, 0.5f, 0));
+			var vertex = new Vertex2D((bars2[0].position + bars2[1].position) * 0.5f + Vector2.Normalize(NPC.velocity), Color.White, new Vector3(0, 0.5f, 0));
 			triangleList2.Add(bars2[1]);
 			triangleList2.Add(vertex);
 			for (int i = 0; i < bars2.Count - 2; i += 2)

@@ -1,9 +1,9 @@
-using Everglow.Myth.MagicWeaponsReplace.Projectiles;
+using Everglow.SpellAndSkull.Projectiles;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.BoneFeatherMagic;
 internal class BoneFeatherMagicBook : MagicBookProjectile
 {
-	public override string Texture => "Everglow/" + ModAsset.BoneFeatherMagicPath;
+	public override string Texture => "Everglow/" + ModAsset.BoneFeatherMagic_Path;
 	public override void SetDef()
 	{
 		ProjType = ModContent.ProjectileType<BoneFeather>();
@@ -11,9 +11,10 @@ internal class BoneFeatherMagicBook : MagicBookProjectile
 		ItemType = ModContent.ItemType<Items.Weapons.BoneFeatherMagic>();
 		MulStartPosByVelocity = 2f;
 		UseGlow = true;
-		GlowPath = "Misc/Items/Weapons/BoneFeatherMagic";
-		FrontTexPath = "Misc/Projectiles/Weapon/Magic/BoneFeatherMagic/BoneFeatherMagic_book";
-		PaperTexPath = "Misc/Projectiles/Weapon/Magic/FireFeatherMagic/FireFeatherMagic_paper";
+
+		FrontTexture = ModAsset.BoneFeatherMagic_book.Value;
+		PaperTexture = ModAsset.FireFeatherMagic_paper.Value;
+		GlowTexture = ModAsset.BoneFeatherMagic.Value;
 		effectColor = new Color(50, 50, 31, 40);
 		//TexCoordTop = new Vector2(25, 0);
 		//TexCoordLeft = new Vector2(1, 24);
