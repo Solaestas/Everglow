@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Everglow.Commons.Skeleton2D.Renderer.DrawCommands;
 using MathNet.Numerics.Distributions;
 using Spine;
 
@@ -21,14 +22,13 @@ public class SkeletonDebugRenderer
 	public static Color clipDecomposedColor = new Color(0.8f, 0.8f, 0f, 1f);
 	public static Color aabbColor = new Color(0f, 1f, 0f, 0.5f);
 
-	public BasicEffect Effect { get { return renderer.Effect; } set { renderer.Effect = value; } }
-
 	/// <summary>A Z position offset added at each vertex.</summary>
 	private float z = 0.0f;
 
 	public float Z
 	{
-		get { return z; } set { z = value; }
+		get { return z; }
+		set { z = value; }
 	}
 
 	public bool DrawBones { get; set; }
@@ -77,22 +77,19 @@ public class SkeletonDebugRenderer
 	private SkeletonBounds bounds = new SkeletonBounds();
 	private Triangulator triangulator = new Triangulator();
 
-	public SkeletonDebugRenderer(GraphicsDevice device)
+	public SkeletonDebugRenderer()
 	{
-		renderer = new GeometryBuffer(device);
+		renderer = new GeometryBuffer();
 		EnableAll();
 	}
 
-	public void Begin()
-	{
-		renderer.Begin();
-	}
-
-	public void Draw(Skeleton2D skeleton2d)
+	public DrawCommandList Draw(Skeleton2D skeleton2d)
 	{
 		var skeleton = skeleton2d.Skeleton;
 		var skeletonX = skeleton.X;
 		var skeletonY = skeleton.Y;
+
+		renderer.Begin();
 
 		var bones = skeleton.Bones;
 		if (DrawBones)
@@ -243,10 +240,6 @@ public class SkeletonDebugRenderer
 				}
 			}
 		}
-	}
-
-	public void End()
-	{
-		renderer.End();
+		return renderer.End();
 	}
 }

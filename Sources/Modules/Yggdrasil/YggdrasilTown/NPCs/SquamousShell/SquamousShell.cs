@@ -728,7 +728,7 @@ public class SquamousShell : ModNPC
 			SquamousShellSkeleton.Rotation = NPC.rotation;
 			// skeleton2D.InverseKinematics(Main.MouseWorld);
 			float framesOfAnimation = 35;
-			SquamousShellSkeleton.PlayAnimation("walk", ((float)Main.timeForVisualEffects % framesOfAnimation / framesOfAnimation) * framesOfAnimation / 60f);
+			SquamousShellSkeleton.PlayAnimation(0, "walk", ((float)Main.timeForVisualEffects % framesOfAnimation / framesOfAnimation) * framesOfAnimation / 60f);
 			// SquamousShellSkeleton.DrawDebugView(spriteBatch);
 		}
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Everglow.Commons.Skeleton2D.Renderer.DrawCommands;
 using Everglow.Commons.Vertex;
 using Spine;
 using Terraria.GameContent;
@@ -10,21 +11,11 @@ using Terraria.GameContent;
 namespace Everglow.Commons.Skeleton2D.Renderer;
 public class GeometryBuffer
 {
-	private GraphicsDevice device;
 	private List<Vertex2D> vertices = new List<Vertex2D>();
 	private Color color = Color.White;
-	private BasicEffect effect;
 
-	public BasicEffect Effect { get { return effect; } set { effect = value; } }
-
-	public GeometryBuffer(GraphicsDevice device)
+	public GeometryBuffer()
 	{
-		this.device = device;
-		this.effect = new BasicEffect(device);
-		effect.World = Matrix.Identity;
-		effect.View = Matrix.CreateLookAt(new Vector3(0.0f, 0.0f, 1.0f), Vector3.Zero, Vector3.Up);
-		effect.TextureEnabled = false;
-		effect.VertexColorEnabled = true;
 	}
 
 	public void SetColor(Color color)
@@ -34,8 +25,9 @@ public class GeometryBuffer
 
 	public void Begin()
 	{
-		device.RasterizerState = new RasterizerState();
-		device.BlendState = BlendState.AlphaBlend;
+		vertices.Clear();
+		//device.RasterizerState = new RasterizerState();
+		//device.BlendState = BlendState.AlphaBlend;
 	}
 
 	public void Line(float x1, float y1, float x2, float y2, float z = 0f)
@@ -139,24 +131,19 @@ public class GeometryBuffer
 		Line(x, y + height, x, y, z);
 	}
 
-	public void End()
+	public DrawCommandList End()
 	{
+		DrawCommandList drawCommands = new DrawCommandList();
 		if (vertices.Count == 0)
 		{
-			return;
+			return drawCommands;
 		}
-		Main.graphics.GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };
-		vertices.Add(new Vertex2D(Vector2.Zero, Color.Red, Vector3.Zero));
-		vertices.Add(new Vertex2D(Vector2.One * 100f, Color.Red, Vector3.Zero));
 
-		var verticesArray = vertices.ToArray();
-
-		Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
-		if (vertices.Count > 2)
-		{ 
-			device.DrawUserPrimitives(PrimitiveType.LineList, verticesArray, 0, verticesArray.Length / 2);
-		}
-		Main.graphics.GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.Solid };
-		vertices.Clear();
+		PipelineStateObject pipelineState = new PipelineStateObject()
+		{
+			Texture = TextureAssets.MagicPixel.Value,
+		};
+		drawCommands.EmitDrawLines(pipelineState, vertices);
+		return drawCommands;
 	}
 }

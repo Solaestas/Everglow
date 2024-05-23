@@ -7,226 +7,226 @@ using static ReLogic.Peripherals.RGB.Corsair.CorsairDeviceGroup;
 
 namespace Everglow.Commons.Skeleton2D.Reader;
 
-/// <summary>
-/// Json: Skin块每个皮肤都描述了可分配给每个槽位的附件
-/// </summary>
-public class JSkin
-{
-	/// <summary>
-	/// 插槽的名字，对于每个skeleton来说，slot的名字是唯一的
-	/// </summary>
-	[JsonProperty("name")]
-	public string Name;
+///// <summary>
+///// Json: Skin块每个皮肤都描述了可分配给每个槽位的附件
+///// </summary>
+//public class JSkin
+//{
+//	/// <summary>
+//	/// 插槽的名字，对于每个skeleton来说，slot的名字是唯一的
+//	/// </summary>
+//	[JsonProperty("name")]
+//	public string Name;
 
-	/// <summary>
-	/// 在TPose的状态下该插槽里挂载的挂件的名字
-	/// </summary>
-	[JsonProperty("attachments")]
-	[JsonConverter(typeof(AttachmentsJsonConverter))]
-	public JAttachments Attachments;
-}
-
-
-/// <summary>
-/// Json: Slots数据块描述的是渲染顺序以及2D图片的挂件挂载到哪些插孔清单
-/// </summary>
-public class JSlot
-{
-	/// <summary>
-	/// 插槽的名字，对于每个skeleton来说，slot的名字是唯一的
-	/// </summary>
-	[JsonProperty("name")]
-	public string Name;
-
-	/// <summary>
-	/// 插槽所在的骨头的名字
-	/// </summary>
-	[JsonProperty("bone")]
-	public string Bone;
-
-	/// <summary>
-	/// 在TPose的状态下该插槽里挂载的挂件的名字
-	/// </summary>
-	[JsonProperty("attachment")]
-	public string Attachment;
-}
-
-/// <summary>
-/// Json: Bone 段存储的是骨头的信息
-/// </summary>
-public class JBone
-{
-	/// <summary>
-	/// 骨头的名字，在每一个骨架中，骨头的名字是唯一的
-	/// </summary>
-	[JsonProperty("name")]
-	public string Name;
-
-	[DefaultValue("")]
-	[JsonProperty(PropertyName = "parent", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-	public string Parent = "";
-
-	/// <summary>
-	/// 骨头的长度，这个东西在运行时没什么用，主要是为了Debug用的
-	/// </summary>
-	[DefaultValue(0)]
-	[JsonProperty(PropertyName = "length", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-	public float Length = 0f;
-
-	/// <summary>
-	/// TPose的时候该骨头相对于它的父亲节点的x的位置属性，如果这个属性没有出现在bone的属性列表里面的话，它的值是0
-	/// </summary>
-	[DefaultValue(0f)]
-	[JsonProperty(PropertyName = "x", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-	public float PosX = 0f;
-
-	/// <summary>
-	///  TPose的时候该骨头相对于它的父亲节点的y的位置属性，如果这个属性没有出现在bone的属性列表里面的话，它的值是0
-	/// </summary>
-	[DefaultValue(0f)]
-	[JsonProperty(PropertyName = "y", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-	public float PosY = 0f;
-
-	/// <summary>
-	/// TPose的时候该骨头相对于它的父亲节点的旋转角度，如果这个属性没有出现在bone的属性列表里面的话，它的值是0
-	/// </summary>
-	[DefaultValue(0f)]
-	[JsonProperty(PropertyName = "rotation", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-	public float Rotation = 0f;
-
-	/// <summary>
-	/// TPose的时候该骨头相对于它的父亲节点的X方向缩放倍数（暂时不用）
-	/// </summary>
-	[DefaultValue(1f)]
-	[JsonProperty(PropertyName = "scaleX", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-	public float ScaleX = 1f;
-
-	/// <summary>
-	/// TPose的时候该骨头相对于它的父亲节点的Y方向缩放倍数（暂时不用）
-	/// </summary>
-	[DefaultValue(1f)]
-	[JsonProperty(PropertyName = "scaleY", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-	public float ScaleY = 1f;
-
-	/// <summary>
-	/// 骨头的颜色RGBA（Debug用）
-	/// </summary>
-	[DefaultValue("#ffffffff")]
-	[JsonProperty(PropertyName = "color", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-	public string Color = "#ffffffff";
-
-	//       {
-	//	"name": "branch-1",
-	//	"parent": "root",
-	//	"length": 487.04,
-	//	"rotation": 27.67,
-	//	"x": -579.3,
-	//	"y": -239.11,
-	//	"color": "1a8600ff"
-	//},
-	public JBone()
-	{
-	}
-}
-
-/// <summary>
-/// Json: Skeleton 段存储的数据是关于骨架的一些元数据
-/// </summary>
-public class JSkeletonInfo
-{
-	[JsonProperty("hash")]
-	[JsonRequired]
-	public string Hash
-	{
-		get; set;
-	}
-
-	[JsonProperty("spine")]
-	[JsonRequired]
-	public string SpineVersion
-	{
-		get; set;
-	}
-
-	[JsonProperty("x")]
-	[JsonRequired]
-	public float BoundingBoxX
-	{
-		get; set;
-	}
-
-	[JsonProperty("y")]
-	[JsonRequired]
-	public float BoundingBoxY
-	{
-		get; set;
-	}
-
-	[JsonProperty("width")]
-	[JsonRequired]
-	public float BoundingBoxWidth
-	{
-		get; set;
-	}
-
-	[JsonProperty("height")]
-	[JsonRequired]
-	public float BoundingBoxHeight
-	{
-		get; set;
-	}
-
-	[JsonProperty("images")]
-	[JsonRequired]
-	public string ImagesPath
-	{
-		get; set;
-	}
-
-	[DefaultValue(30)]
-	[JsonProperty(PropertyName = "fps", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-
-	public int FramesPerSecond
-	{
-		get; set;
-	}
-
-	[JsonProperty("audio")]
-	public string AudioPath
-	{
-		get; set;
-	}
-
-	public JSkeletonInfo()
-	{
-	}
-}
-/// <summary>
-/// Json 骨架数据格式
-/// </summary>
-public class JSkeleton
-{
-	[JsonProperty("skeleton")]
-	public JSkeletonInfo SkeletonInfo;
-
-	[JsonProperty("bones")]
-	public List<JBone> Bones;
-
-	[JsonProperty("slots")]
-	public List<JSlot> Slots;
-
-	[JsonProperty("skins")]
-	public List<JSkin> Skins;
-
-	[JsonProperty(PropertyName = "animations", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-	public Dictionary<string, JAnimation> Animations;
-
-	public JSkeleton()
-	{
-	}
+//	/// <summary>
+//	/// 在TPose的状态下该插槽里挂载的挂件的名字
+//	/// </summary>
+//	[JsonProperty("attachments")]
+//	[JsonConverter(typeof(AttachmentsJsonConverter))]
+//	public JAttachments Attachments;
+//}
 
 
-}
+///// <summary>
+///// Json: Slots数据块描述的是渲染顺序以及2D图片的挂件挂载到哪些插孔清单
+///// </summary>
+//public class JSlot
+//{
+//	/// <summary>
+//	/// 插槽的名字，对于每个skeleton来说，slot的名字是唯一的
+//	/// </summary>
+//	[JsonProperty("name")]
+//	public string Name;
+
+//	/// <summary>
+//	/// 插槽所在的骨头的名字
+//	/// </summary>
+//	[JsonProperty("bone")]
+//	public string Bone;
+
+//	/// <summary>
+//	/// 在TPose的状态下该插槽里挂载的挂件的名字
+//	/// </summary>
+//	[JsonProperty("attachment")]
+//	public string Attachment;
+//}
+
+///// <summary>
+///// Json: Bone 段存储的是骨头的信息
+///// </summary>
+//public class JBone
+//{
+//	/// <summary>
+//	/// 骨头的名字，在每一个骨架中，骨头的名字是唯一的
+//	/// </summary>
+//	[JsonProperty("name")]
+//	public string Name;
+
+//	[DefaultValue("")]
+//	[JsonProperty(PropertyName = "parent", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+//	public string Parent = "";
+
+//	/// <summary>
+//	/// 骨头的长度，这个东西在运行时没什么用，主要是为了Debug用的
+//	/// </summary>
+//	[DefaultValue(0)]
+//	[JsonProperty(PropertyName = "length", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+//	public float Length = 0f;
+
+//	/// <summary>
+//	/// TPose的时候该骨头相对于它的父亲节点的x的位置属性，如果这个属性没有出现在bone的属性列表里面的话，它的值是0
+//	/// </summary>
+//	[DefaultValue(0f)]
+//	[JsonProperty(PropertyName = "x", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+//	public float PosX = 0f;
+
+//	/// <summary>
+//	///  TPose的时候该骨头相对于它的父亲节点的y的位置属性，如果这个属性没有出现在bone的属性列表里面的话，它的值是0
+//	/// </summary>
+//	[DefaultValue(0f)]
+//	[JsonProperty(PropertyName = "y", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+//	public float PosY = 0f;
+
+//	/// <summary>
+//	/// TPose的时候该骨头相对于它的父亲节点的旋转角度，如果这个属性没有出现在bone的属性列表里面的话，它的值是0
+//	/// </summary>
+//	[DefaultValue(0f)]
+//	[JsonProperty(PropertyName = "rotation", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+//	public float Rotation = 0f;
+
+//	/// <summary>
+//	/// TPose的时候该骨头相对于它的父亲节点的X方向缩放倍数（暂时不用）
+//	/// </summary>
+//	[DefaultValue(1f)]
+//	[JsonProperty(PropertyName = "scaleX", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+//	public float ScaleX = 1f;
+
+//	/// <summary>
+//	/// TPose的时候该骨头相对于它的父亲节点的Y方向缩放倍数（暂时不用）
+//	/// </summary>
+//	[DefaultValue(1f)]
+//	[JsonProperty(PropertyName = "scaleY", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+//	public float ScaleY = 1f;
+
+//	/// <summary>
+//	/// 骨头的颜色RGBA（Debug用）
+//	/// </summary>
+//	[DefaultValue("#ffffffff")]
+//	[JsonProperty(PropertyName = "color", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+//	public string Color = "#ffffffff";
+
+//	//       {
+//	//	"name": "branch-1",
+//	//	"parent": "root",
+//	//	"length": 487.04,
+//	//	"rotation": 27.67,
+//	//	"x": -579.3,
+//	//	"y": -239.11,
+//	//	"color": "1a8600ff"
+//	//},
+//	public JBone()
+//	{
+//	}
+//}
+
+///// <summary>
+///// Json: Skeleton 段存储的数据是关于骨架的一些元数据
+///// </summary>
+//public class JSkeletonInfo
+//{
+//	[JsonProperty("hash")]
+//	[JsonRequired]
+//	public string Hash
+//	{
+//		get; set;
+//	}
+
+//	[JsonProperty("spine")]
+//	[JsonRequired]
+//	public string SpineVersion
+//	{
+//		get; set;
+//	}
+
+//	[JsonProperty("x")]
+//	[JsonRequired]
+//	public float BoundingBoxX
+//	{
+//		get; set;
+//	}
+
+//	[JsonProperty("y")]
+//	[JsonRequired]
+//	public float BoundingBoxY
+//	{
+//		get; set;
+//	}
+
+//	[JsonProperty("width")]
+//	[JsonRequired]
+//	public float BoundingBoxWidth
+//	{
+//		get; set;
+//	}
+
+//	[JsonProperty("height")]
+//	[JsonRequired]
+//	public float BoundingBoxHeight
+//	{
+//		get; set;
+//	}
+
+//	[JsonProperty("images")]
+//	[JsonRequired]
+//	public string ImagesPath
+//	{
+//		get; set;
+//	}
+
+//	[DefaultValue(30)]
+//	[JsonProperty(PropertyName = "fps", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+
+//	public int FramesPerSecond
+//	{
+//		get; set;
+//	}
+
+//	[JsonProperty("audio")]
+//	public string AudioPath
+//	{
+//		get; set;
+//	}
+
+//	public JSkeletonInfo()
+//	{
+//	}
+//}
+///// <summary>
+///// Json 骨架数据格式
+///// </summary>
+//public class JSkeleton
+//{
+//	[JsonProperty("skeleton")]
+//	public JSkeletonInfo SkeletonInfo;
+
+//	[JsonProperty("bones")]
+//	public List<JBone> Bones;
+
+//	[JsonProperty("slots")]
+//	public List<JSlot> Slots;
+
+//	[JsonProperty("skins")]
+//	public List<JSkin> Skins;
+
+//	[JsonProperty(PropertyName = "animations", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+//	public Dictionary<string, JAnimation> Animations;
+
+//	public JSkeleton()
+//	{
+//	}
+
+
+//}
 public class Skeleton2DReader
 {
 	public static Skeleton2D ReadSkeleton(byte[] atlasData, byte[] jsonData, Texture2D atlasTexture)
