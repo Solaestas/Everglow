@@ -19,7 +19,7 @@ public class CrystalClub_fly_Explosion : ModProjectile, IWarpProjectile
 		Projectile.localNPCHitCooldown = 20;
 		Projectile.DamageType = DamageClass.Melee;
 	}
-	public override string Texture => "Everglow/" + ModAsset.EmptyPath;
+	public override string Texture => "Everglow/" + ModAsset.Empty_Path;
 	public override void AI()
 	{
 		Projectile.velocity *= 0;

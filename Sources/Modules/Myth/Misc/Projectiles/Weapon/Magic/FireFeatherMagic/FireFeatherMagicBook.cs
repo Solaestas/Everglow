@@ -4,7 +4,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 
 internal class FireFeatherMagicBook : MagicBookProjectile
 {
-	public override string Texture => "Everglow/" + ModAsset.FireFeatherMagicPath;
+	public override string Texture => "Everglow/" + ModAsset.FireFeatherMagic_Path;
 	public override void SetDef()
 	{
 		ProjType = ModContent.ProjectileType<FireFeather>();

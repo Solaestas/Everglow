@@ -9,7 +9,7 @@ public class CrystalClub_smash : ClubProj_Smash_metal
 		ReflectStrength = 8f;
 		base.SetDef();
 	}
-	public override string Texture => "Everglow/" + ModAsset.Melee_CrystalClubPath;
+	public override string Texture => "Everglow/" + ModAsset.Melee_CrystalClub_Path;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		int type = 0;

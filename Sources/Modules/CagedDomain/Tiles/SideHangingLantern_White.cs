@@ -116,7 +116,7 @@ public class SideHangingLantern_White : ModTile, ITileFluentlyDrawn
 		var tile = Main.tile[tilePos];
 		ushort type = tile.TileType;
 		int paint = Main.tile[paintPos].TileColor;
-		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.SideHangingLantern_White_DrawPath, type, 1, paint, tileDrawing);
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.SideHangingLantern_White_Draw_Path, type, 1, paint, tileDrawing);
 		tex ??= ModAsset.SideHangingLantern_White_Draw.Value;
 
 		int sizeX = 2;

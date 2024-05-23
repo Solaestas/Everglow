@@ -36,7 +36,7 @@ internal class FreezeFeatherMagicArray : VisualProjectile
 	public int timer = 0;
 	public Vector2 ringPos = Vector2.Zero;
 
-	public override string Texture => "Everglow/" + ModAsset.FreezeFeatherMagicPath;
+	public override string Texture => "Everglow/" + ModAsset.FreezeFeatherMagic_Path;
 	public override void SetDefaults()
 	{
 		Projectile.width = 28;
