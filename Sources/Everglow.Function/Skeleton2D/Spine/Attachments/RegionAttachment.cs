@@ -76,15 +76,29 @@ namespace Spine {
 		}
 
 		public void UpdateOffset () {
-			float regionScaleX = width / regionOriginalWidth * scaleX;
-			float regionScaleY = height / regionOriginalHeight * scaleY;
-			float localX = -width / 2 * scaleX + regionOffsetX * regionScaleX;
-			float localY = -height / 2 * scaleY + regionOffsetY * regionScaleY;
-			float localX2 = localX + regionWidth * regionScaleX;
-			float localY2 = localY + regionHeight * regionScaleY;
-			float cos = MathUtils.CosDeg(this.rotation);
-			float sin = MathUtils.SinDeg(this.rotation);
-			float x = this.x, y = this.y;
+			float width = this.width;
+			float height = this.height;
+			float localX2 = width * 0.5f;
+			float localY2 = height * 0.5f;
+			float localX = -localX2;
+			float localY = -localY2;
+			if (regionOriginalWidth != 0) { // if (region != null)
+				localX += regionOffsetX / regionOriginalWidth * width;
+				localY += regionOffsetY / regionOriginalHeight * height;
+				localX2 -= (regionOriginalWidth - regionOffsetX - regionWidth) / regionOriginalWidth * width;
+				localY2 -= (regionOriginalHeight - regionOffsetY - regionHeight) / regionOriginalHeight * height;
+			}
+			float scaleX = this.scaleX;
+			float scaleY = this.scaleY;
+			localX *= scaleX;
+			localY *= scaleY;
+			localX2 *= scaleX;
+			localY2 *= scaleY;
+			float rotation = this.rotation;
+			float cos = MathUtils.CosDeg(rotation);
+			float sin = MathUtils.SinDeg(rotation);
+			float x = this.x;
+			float y = this.y;
 			float localXCos = localX * cos + x;
 			float localXSin = localX * sin;
 			float localYCos = localY * cos + y;
@@ -104,10 +118,10 @@ namespace Spine {
 			offset[BRY] = localYCos + localX2Sin;
 		}
 
-		public void SetUVs (float u, float v, float u2, float v2, int degrees) {
+		public void SetUVs (float u, float v, float u2, float v2, bool rotate) {
 			float[] uvs = this.uvs;
-			// UV values differ from spine-libgdx.
-			if (degrees == 90) {
+			// UV values differ from RegionAttachment.java
+			if (rotate) {
 				uvs[URX] = u;
 				uvs[URY] = v2;
 				uvs[BRX] = u;

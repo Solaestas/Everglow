@@ -39,7 +39,7 @@ namespace Spine {
 		private Atlas[] atlasArray;
 
 		public AtlasAttachmentLoader (params Atlas[] atlasArray) {
-			if (atlasArray == null) throw new ArgumentNullException("atlas", "atlas array cannot be null.");
+			if (atlasArray == null) throw new ArgumentNullException("atlas array cannot be null.");
 			this.atlasArray = atlasArray;
 		}
 
@@ -48,7 +48,7 @@ namespace Spine {
 			if (region == null) throw new ArgumentException(string.Format("Region not found in atlas: {0} (region attachment: {1})", path, name));
 			RegionAttachment attachment = new RegionAttachment(name);
 			attachment.RendererObject = region;
-			attachment.SetUVs(region.u, region.v, region.u2, region.v2, region.degrees);
+			attachment.SetUVs(region.u, region.v, region.u2, region.v2, region.rotate);
 			attachment.regionOffsetX = region.offsetX;
 			attachment.regionOffsetY = region.offsetY;
 			attachment.regionWidth = region.width;
@@ -67,6 +67,7 @@ namespace Spine {
 			attachment.RegionV = region.v;
 			attachment.RegionU2 = region.u2;
 			attachment.RegionV2 = region.v2;
+			attachment.RegionRotate = region.rotate;
 			attachment.RegionDegrees = region.degrees;
 			attachment.regionOffsetX = region.offsetX;
 			attachment.regionOffsetY = region.offsetY;
@@ -89,7 +90,7 @@ namespace Spine {
 			return new PointAttachment(name);
 		}
 
-		public ClippingAttachment NewClippingAttachment (Skin skin, string name) {
+		public ClippingAttachment NewClippingAttachment(Skin skin, string name) {
 			return new ClippingAttachment(name);
 		}
 

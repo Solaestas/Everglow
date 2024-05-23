@@ -17,8 +17,8 @@ public class SkeletonPlayerLayer : PlayerDrawLayer
 	public override void Load()
 	{
 		var json = Mod.GetFileBytes("Example/Skeleton/Animations/raptor-pro.json");
-		var atlas = Mod.GetFileBytes("Example/Skeleton/Animations/raptor_a.atlas");
-		skeleton2D = Skeleton2DReader.ReadSkeleton(atlas, json, ModAsset.raptor.Value);
+		var atlas = Mod.GetFileBytes("Example/Skeleton/Animations/raptor-pro.atlas");
+		skeleton2D = Skeleton2DReader.ReadSkeleton(atlas, json, ModAsset.raptorqqq.Value);
 
 		skeleton2D.AnimationState.SetAnimation(0, "walk", true);
 		skeleton2D.AnimationState.AddAnimation(0, "jump", false, 2);

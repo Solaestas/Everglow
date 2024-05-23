@@ -32,7 +32,7 @@ using System;
 namespace Spine {
 
 	/// <summary>
-	/// Stores a slot's current pose. Slots organize attachments for <see cref="Skeleton.DrawOrder"/> purposes and provide a place to store
+	/// Stores a slot's current pose. Slots organize attachments for {@link Skeleton#drawOrder} purposes and provide a place to store
 	/// state for an attachment.State cannot be stored in an attachment itself because attachments are stateless and may be shared
 	/// across multiple skeletons.
 	/// </summary>
@@ -62,7 +62,7 @@ namespace Spine {
 		}
 
 		/// <summary>Copy constructor.</summary>
-		public Slot (Slot slot, Bone bone) {
+		public Slot(Slot slot, Bone bone) {
 			if (slot == null) throw new ArgumentNullException("slot", "slot cannot be null.");
 			if (bone == null) throw new ArgumentNullException("bone", "bone cannot be null.");
 			data = slot.data;
@@ -106,7 +106,7 @@ namespace Spine {
 		/// color tinting.</summary>
 		public float A { get { return a; } set { a = value; } }
 
-		public void ClampColor () {
+		public void ClampColor() {
 			r = MathUtils.Clamp(r, 0, 1);
 			g = MathUtils.Clamp(g, 0, 1);
 			b = MathUtils.Clamp(b, 0, 1);
@@ -135,18 +135,14 @@ namespace Spine {
 			/// <summary>The current attachment for the slot, or null if the slot has no attachment.</summary>
 			get { return attachment; }
 			/// <summary>
-			/// Sets the slot's attachment and, if the attachment changed, resets <see cref="AttachmentTime"/> and clears the <see cref="Deform"/>.
-			/// The deform is not cleared if the old attachment has the same <see cref="VertexAttachment.DeformAttachment"/> as the specified
-			/// attachment.</summary>
+			/// Sets the slot's attachment and, if the attachment changed, resets <see cref="AttachmentTime"/> and clears
+			/// <see cref="Deform">.</summary>
 			/// <param name="value">May be null.</param>
 			set {
 				if (attachment == value) return;
-				if (!(value is VertexAttachment) || !(this.attachment is VertexAttachment)
-					|| ((VertexAttachment)value).DeformAttachment != ((VertexAttachment)this.attachment).DeformAttachment) {
-					deform.Clear();
-				}
-				this.attachment = value;
+				attachment = value;
 				attachmentTime = bone.skeleton.time;
+				deform.Clear(false);
 			}
 		}
 

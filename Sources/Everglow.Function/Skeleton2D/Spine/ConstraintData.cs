@@ -30,7 +30,8 @@
 using System;
 using System.Collections.Generic;
 
-namespace Spine {
+namespace Spine
+{
 	/// <summary>The base class for all constraint datas.</summary>
 	public abstract class ConstraintData {
 		internal readonly string name;

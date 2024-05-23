@@ -56,6 +56,7 @@ namespace Spine {
 		public float RegionV { get; set; }
 		public float RegionU2 { get; set; }
 		public float RegionV2 { get; set; }
+		public bool RegionRotate { get; set; }
 		public int RegionDegrees { get; set; }
 		public float RegionOffsetX { get { return regionOffsetX; } set { regionOffsetX = value; } }
 		public float RegionOffsetY { get { return regionOffsetY; } set { regionOffsetY = value; } } // Pixels stripped from the bottom left, unrotated.
@@ -129,7 +130,7 @@ namespace Spine {
 				width = RegionOriginalHeight / textureWidth;
 				height = RegionOriginalWidth / textureHeight;
 
-				for (int i = 0, n = uvs.Length; i < n; i += 2) {
+				for (int i = 0, n = uvs.Length; i<n; i += 2) {
 					uvs[i] = u + (1 - regionUVs[i + 1]) * width;
 					uvs[i + 1] = v + regionUVs[i] * height;
 				}
@@ -159,6 +160,7 @@ namespace Spine {
 			copy.regionHeight = regionHeight;
 			copy.regionOriginalWidth = regionOriginalWidth;
 			copy.regionOriginalHeight = regionOriginalHeight;
+			copy.RegionRotate = RegionRotate;
 			copy.RegionDegrees = RegionDegrees;
 			copy.RegionU = RegionU;
 			copy.RegionV = RegionV;
@@ -201,6 +203,7 @@ namespace Spine {
 			mesh.regionOriginalWidth = regionOriginalWidth;
 			mesh.regionOriginalHeight = regionOriginalHeight;
 			mesh.RegionDegrees = RegionDegrees;
+			mesh.RegionRotate = RegionRotate;
 			mesh.RegionU = RegionU;
 			mesh.RegionV = RegionV;
 			mesh.RegionU2 = RegionU2;

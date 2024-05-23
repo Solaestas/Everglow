@@ -1,4 +1,4 @@
-//
+﻿//
 // System.Collections.Generic.List
 //
 // Authors:
@@ -93,6 +93,9 @@ namespace Spine {
 			var oldItems = Items;
 			if (newSize > itemsLength) {
 				Array.Resize(ref Items, newSize);
+//				var newItems = new T[newSize];
+//				Array.Copy(oldItems, newItems, Count);
+//				Items = newItems;
 			} else if (newSize < itemsLength) {
 				// Allow nulling of T reference type to allow GC.
 				for (int i = newSize; i < itemsLength; i++)
@@ -195,11 +198,10 @@ namespace Spine {
 			if (converter == null)
 				throw new ArgumentNullException("converter");
 			ExposedList<TOutput> u = new ExposedList<TOutput>(Count);
-			u.Count = Count;
-			T[] items = Items;
-			TOutput[] uItems = u.Items;
 			for (int i = 0; i < Count; i++)
-				uItems[i] = converter(items[i]);
+				u.Items[i] = converter(Items[i]);
+
+			u.Count = Count;
 			return u;
 		}
 
@@ -215,6 +217,8 @@ namespace Spine {
 			CheckRange(index, count);
 			Array.Copy(Items, index, array, arrayIndex, count);
 		}
+
+
 
 		public bool Exists (Predicate<T> match) {
 			CheckMatch(match);
@@ -298,7 +302,7 @@ namespace Spine {
 
 		private int GetLastIndex (int startIndex, int count, Predicate<T> match) {
 			// unlike FindLastIndex, takes regular params for search range
-			for (int i = startIndex + count; i != startIndex;)
+			for (int i = startIndex + count; i != startIndex; )
 				if (match(Items[--i]))
 					return i;
 			return -1;

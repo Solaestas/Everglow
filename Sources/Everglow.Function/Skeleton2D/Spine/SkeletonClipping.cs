@@ -137,7 +137,8 @@ namespace Spine {
 							s += 3;
 						}
 						index += clipOutputCount + 1;
-					} else {
+					}
+					else {
 						float[] clippedVerticesItems = clippedVertices.Resize(s + 3 * 2).Items;
 						float[] clippedUVsItems = clippedUVs.Resize(s + 3 * 2).Items;
 						clippedVerticesItems[s] = x1;
@@ -223,7 +224,8 @@ namespace Spine {
 							output.Add(edgeX);
 							output.Add(edgeY);
 						}
-					} else if (side2) { // v1 outside, v2 inside
+					}
+					else if (side2) { // v1 outside, v2 inside
 						float c0 = inputY2 - inputY, c2 = inputX2 - inputX;
 						float s = c0 * (edgeX2 - edgeX) - c2 * (edgeY2 - edgeY);
 						if (Math.Abs(s) > 0.000001f) {
@@ -257,10 +259,12 @@ namespace Spine {
 
 			if (originalOutput != output) {
 				originalOutput.Clear();
-				for (int i = 0, n = output.Count - 2; i < n; i++)
+				for (int i = 0, n = output.Count - 2; i < n; i++) {
 					originalOutput.Add(output.Items[i]);
-			} else
+				}
+			} else {
 				originalOutput.Resize(originalOutput.Count - 2);
+			}
 
 			return clipped;
 		}
