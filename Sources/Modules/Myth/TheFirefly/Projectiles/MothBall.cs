@@ -128,10 +128,10 @@ public class MothBall : ModProjectile
 				}
 			}
 		}
-
-		//Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
-	}
-	public override bool PreDraw(ref Color lightColor)
+        // base.OnKill(timeLeft);
+        //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
+    }
+    public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D Light = ModAsset.CorruptLight.Value;
 		int frameX = (Projectile.frame % 6);

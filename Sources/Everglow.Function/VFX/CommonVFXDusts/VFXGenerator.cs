@@ -17,8 +17,7 @@ class VFXGenerator : ModItem
 	public override bool CanUseItem(Player player)
 	{
 		float mulVelocity = 1f;
-		int type = 13;
-		//int type = Main.rand.Next(13);
+		int type = Main.rand.Next(14);
 		switch (type)
 		{
 			case 0://冰雾
@@ -308,9 +307,9 @@ class VFXGenerator : ModItem
 					Ins.VFXManager.Add(electric);
 				}
 				break;
-			case 13:
+			case 13: // 分叉闪电
 				{
-					var lightning = new BranchedLightning(100f, 9f, Main.MouseWorld, Main.rand.NextVector2Unit().ToRotation(), 300f, 0/*(float)(Math.PI/5)*/);
+					var lightning = new BranchedLightning(100f, 9f, Main.MouseWorld, Main.rand.NextVector2Unit().ToRotation(), 300f, (float)(Math.PI / 5));
 					Ins.VFXManager.Add(lightning);
 				}
 				break;
