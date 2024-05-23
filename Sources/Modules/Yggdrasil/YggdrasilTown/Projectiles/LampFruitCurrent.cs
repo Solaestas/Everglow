@@ -10,7 +10,7 @@ public class LampFruitCurrent : TrailingProjectile
 		Projectile.width = 20;
 		Projectile.height = 20;
 		Projectile.friendly = true;
-		Projectile.hostile = true;
+		Projectile.hostile = false;
 		Projectile.aiStyle = -1;
 		Projectile.penetrate = 6;
 		Projectile.timeLeft = 3600;
