@@ -1,20 +1,28 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Vertex;
 using Terraria.GameContent;
+using Spine;
 
 namespace Everglow.Commons.Skeleton2D;
 
 public class Skeleton2D
 {
-	private List<Bone2D> m_bones;
+	private Atlas atlas;
+	private Skeleton skeleton;
+	private AnimationState animation_state;
 
-	public Skeleton2D(List<Bone2D> bones)
+	public Skeleton Skeleton { get { return skeleton; } }
+
+	public AnimationState AnimationState { get { return animation_state; } }
+
+	public Skeleton2D(Skeleton skeleton, Atlas atlas, AnimationState state)
 	{
-		m_bones = bones;
-		Slots = new List<Slot>();
+		this.skeleton = skeleton;
+		this.atlas = atlas;
+		this.animation_state = state;
 	}
 
-	public Dictionary<string, Animation> Animations { get; set; }
+	// public Dictionary<string, Animation> Animations { get; set; }
 
 	public Vector2 Position { get; set; }
 
@@ -39,86 +47,86 @@ public class Skeleton2D
 		}
 	}
 
-	public void DrawDebugView(SpriteBatch sb)
-	{
-		using ((SpriteBatchState.Immediate with { BlendState = BlendState.NonPremultiplied }).BeginScope(sb))
-		{
-			Render();
-			Main.graphics.GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };
+	//public void DrawDebugView(SpriteBatch sb)
+	//{
+	//	using ((SpriteBatchState.Immediate with { BlendState = BlendState.NonPremultiplied }).BeginScope(sb))
+	//	{
+	//		Render();
+	//		Main.graphics.GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };
 
-			// 这里使用SpriteBatch默认Shader绘制三角形
-			SettleBoneTransforms(m_bones[0], Matrix.CreateRotationZ(Rotation), Position);
+	//		// 这里使用SpriteBatch默认Shader绘制三角形
+	//		SettleBoneTransforms(m_bones[0], Matrix.CreateRotationZ(Rotation), Position);
 
-			RenderBonesDebug();
-		}
-	}
+	//		RenderBonesDebug();
+	//	}
+	//}
 
-	public void InverseKinematics(Vector2 target)
-	{
-		var posArray = new List<Vector2>();
-		var rotationArray = new List<float>();
-		var t_bones = new List<Bone2D>();
-		var bone = m_bones[0];
-		float parentRot = Rotation;
-		float rotation = parentRot + bone.Rotation;
-		Vector2 pos = Position + bone.Position.RotatedBy(parentRot);
-		posArray.Add(pos);
-		rotationArray.Add(rotation);
-		pos += rotation.ToRotationVector2() * bone.Length;
-		parentRot = rotation;
-		t_bones.Add(bone);
+	//public void InverseKinematics(Vector2 target)
+	//{
+	//	var posArray = new List<Vector2>();
+	//	var rotationArray = new List<float>();
+	//	var t_bones = new List<Bone2D>();
+	//	var bone = m_bones[0];
+	//	float parentRot = Rotation;
+	//	float rotation = parentRot + bone.Rotation;
+	//	Vector2 pos = Position + bone.Position.RotatedBy(parentRot);
+	//	posArray.Add(pos);
+	//	rotationArray.Add(rotation);
+	//	pos += rotation.ToRotationVector2() * bone.Length;
+	//	parentRot = rotation;
+	//	t_bones.Add(bone);
 
-		while (bone.Children.Count > 0)
-		{
-			bone = bone.Children[0];
-			rotation = parentRot + bone.Rotation;
-			pos += bone.Position.RotatedBy(parentRot);
-			posArray.Add(pos);
-			rotationArray.Add(rotation);
-			pos += rotation.ToRotationVector2() * bone.Length;
-			parentRot = rotation;
-			t_bones.Add(bone);
-		}
+	//	while (bone.Children.Count > 0)
+	//	{
+	//		bone = bone.Children[0];
+	//		rotation = parentRot + bone.Rotation;
+	//		pos += bone.Position.RotatedBy(parentRot);
+	//		posArray.Add(pos);
+	//		rotationArray.Add(rotation);
+	//		pos += rotation.ToRotationVector2() * bone.Length;
+	//		parentRot = rotation;
+	//		t_bones.Add(bone);
+	//	}
 
-		var tailPos = posArray[t_bones.Count - 1] +
-			rotationArray[t_bones.Count - 1].ToRotationVector2() * t_bones[^1].Length;
+	//	var tailPos = posArray[t_bones.Count - 1] +
+	//		rotationArray[t_bones.Count - 1].ToRotationVector2() * t_bones[^1].Length;
 
-		for (int i = t_bones.Count - 1; i >= 0; i--)
-		{
-			var b = t_bones[i];
+	//	for (int i = t_bones.Count - 1; i >= 0; i--)
+	//	{
+	//		var b = t_bones[i];
 
-			// 离目标点足够近了，那就不用继续迭代
-			if (Vector2.DistanceSquared(target, tailPos) < 0.05)
-				break;
-			float rr = (target - posArray[i]).ToRotation();
-			float rr2 = MathHelper.WrapAngle((tailPos - posArray[i]).ToRotation());
-			float rrd = MathHelper.WrapAngle(rr - rr2);
-			b.Rotation = MathHelper.WrapAngle(b.Rotation + rrd);
+	//		// 离目标点足够近了，那就不用继续迭代
+	//		if (Vector2.DistanceSquared(target, tailPos) < 0.05)
+	//			break;
+	//		float rr = (target - posArray[i]).ToRotation();
+	//		float rr2 = MathHelper.WrapAngle((tailPos - posArray[i]).ToRotation());
+	//		float rrd = MathHelper.WrapAngle(rr - rr2);
+	//		b.Rotation = MathHelper.WrapAngle(b.Rotation + rrd);
 
-			tailPos = posArray[i] + (tailPos - posArray[i]).RotatedBy(rrd);
-		}
-	}
+	//		tailPos = posArray[i] + (tailPos - posArray[i]).RotatedBy(rrd);
+	//	}
+	//}
 
 	public void PlayAnimation(string name, float time)
 	{
-		var animation = Animations[name];
-		foreach (var boneTimeline in animation.BonesTimeline)
-		{
-			foreach (var track in boneTimeline.Tracks)
-			{
-				track.LocateKeyFrames(time, out IKeyFrame cur, out IKeyFrame next);
-				cur?.Interpolate(time, next);
-			}
-		}
+		//var animation = Animations[name];
+		//foreach (var boneTimeline in animation.BonesTimeline)
+		//{
+		//	foreach (var track in boneTimeline.Tracks)
+		//	{
+		//		track.LocateKeyFrames(time, out IKeyFrame cur, out IKeyFrame next);
+		//		cur?.Interpolate(time, next);
+		//	}
+		//}
 
-		foreach (var slotTimeline in animation.SlotsTimeline)
-		{
-			foreach (var track in slotTimeline.Tracks)
-			{
-				track.LocateKeyFrames(time, out IKeyFrame cur, out IKeyFrame next);
-				cur?.Interpolate(time, next);
-			}
-		}
+		//foreach (var slotTimeline in animation.SlotsTimeline)
+		//{
+		//	foreach (var track in slotTimeline.Tracks)
+		//	{
+		//		track.LocateKeyFrames(time, out IKeyFrame cur, out IKeyFrame next);
+		//		cur?.Interpolate(time, next);
+		//	}
+		//}
 	}
 
 	/// <summary>
@@ -141,27 +149,27 @@ public class Skeleton2D
 		}
 	}
 
-	private void Render()
-	{
-		foreach (var slot in Slots)
-		{
-			var bone = slot.Bone;
-			slot.Attachment?.Render(bone);
-		}
-	}
+	//private void Render()
+	//{
+	//	foreach (var slot in Slots)
+	//	{
+	//		var bone = slot.Bone;
+	//		slot.Attachment?.Render(bone);
+	//	}
+	//}
 
-	private void RenderBonesDebug()
-	{
-		var vertices = new List<Vertex2D>();
+	//private void RenderBonesDebug()
+	//{
+	//	var vertices = new List<Vertex2D>();
 
-		foreach (var slot in Slots)
-		{
-			var bone = slot.Bone;
-			RecRenderBones(bone, vertices);
-		}
+	//	foreach (var slot in Slots)
+	//	{
+	//		var bone = slot.Bone;
+	//		RecRenderBones(bone, vertices);
+	//	}
 
-		Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
-		if (vertices.Count > 2)
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices.ToArray(), 0, vertices.Count / 3);
-	}
+	//	Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
+	//	if (vertices.Count > 2)
+	//		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices.ToArray(), 0, vertices.Count / 3);
+	//}
 }

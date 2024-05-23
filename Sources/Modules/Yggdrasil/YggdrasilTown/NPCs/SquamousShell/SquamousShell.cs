@@ -51,7 +51,7 @@ public class SquamousShell : ModNPC
 		_coroutineManager.StartCoroutine(new Coroutine(Landing()));
 		_coroutineManager.StartCoroutine(new Coroutine(FlyingFrame()));
 		var data = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monster.json");
-		SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(data, $"Everglow/Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/");
+		SquamousShellSkeleton = null; //Skeleton2DReader.ReadSkeleton(data, $"Everglow/Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/");
 	}
 	public override void AI()
 	{
@@ -720,7 +720,7 @@ public class SquamousShell : ModNPC
 		if(SquamousShellSkeleton == null)
 		{
 			var data = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monster.json");
-			SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(data, $"Everglow/Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/");
+			SquamousShellSkeleton = null;//Skeleton2DReader.ReadSkeleton(data, $"Everglow/Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/");
 		}
 		else
 		{
@@ -729,7 +729,7 @@ public class SquamousShell : ModNPC
 			// skeleton2D.InverseKinematics(Main.MouseWorld);
 			float framesOfAnimation = 35;
 			SquamousShellSkeleton.PlayAnimation("walk", ((float)Main.timeForVisualEffects % framesOfAnimation / framesOfAnimation) * framesOfAnimation / 60f);
-			SquamousShellSkeleton.DrawDebugView(spriteBatch);
+			// SquamousShellSkeleton.DrawDebugView(spriteBatch);
 		}
 
 		return false;
