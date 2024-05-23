@@ -153,13 +153,13 @@ public class CyanOreBeetle : ModNPC
 		for (int f = 0; f < 13; f++)
 		{
 			Vector2 DustVelocity = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(6.28d);
-			Dust.NewDust(NPC.position + new Vector2(Main.rand.Next(NPC.width), Main.rand.Next(NPC.height)), 0, 0, ModContent.DustType<CyanVine>(), DustVelocity.X, DustVelocity.Y);
+			Dust.NewDust(NPC.position + new Vector2(Main.rand.Next(NPC.width), Main.rand.Next(NPC.height)), 0, 0, ModContent.DustType<Dusts.CyanVine>(), DustVelocity.X, DustVelocity.Y);
 			DustVelocity = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(6.28d);
 			Dust.NewDust(NPC.position + new Vector2(Main.rand.Next(NPC.width), Main.rand.Next(NPC.height)), 0, 0, DustID.WoodFurniture, DustVelocity.X, DustVelocity.Y);
 		}
 	}
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.CyanVineOre>(), 1, 1, 2));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.CyanVine.CyanVineOre>(), 1, 1, 2));
 	}
 }

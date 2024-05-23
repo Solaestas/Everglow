@@ -1,8 +1,7 @@
-using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.Audio;
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-public class CyanVineThrowingSpear : ModProjectile
+public class CyanVineThrowingSpear_Proj : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -37,33 +36,52 @@ public class CyanVineThrowingSpear : ModProjectile
 			Projectile.Center = player.MountedCenter + Projectile.velocity.RotatedBy(Math.PI * -0.5) * 20 * PlayerDir - Projectile.velocity * (Power / 3f - 54) + new Vector2(0, 6 * player.gravDir);
 			Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
 			if (Power < 100)
-				Power++;
+				Power += 1;
 
 			player.heldProj = Projectile.whoAmI;
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation + 0.337f * PlayerDir + (float)(Math.PI * 0.25 + Math.PI * 0.6 * PlayerDir - (Power / 80d + 0.2) * PlayerDir));
 			player.direction = PlayerDir;
 		}
 
-		if (!player.controlUseItem && !Shot)
+		if (player.controlUseItem && !Shot)
 		{
 			Shot = true;
 			Projectile.velocity = Utils.SafeNormalize(Main.MouseWorld - player.MountedCenter, new Vector2(0, -1 * player.gravDir)) * (Power + 100) / 8f;
-			Projectile.damage = (int)(Projectile.damage * (Power + 100) / 100f);
+			Projectile.damage = (int)(Projectile.damage * (Power / 30f + 1));
 			SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
+		}
+		if (player.HeldItem.type != ModContent.ItemType<Items.CyanVine.CyanVineThrowingSpear>())
+		{
+			Projectile.active = false;
 		}
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D tex = ModAsset.Projectiles_CyanVineThrowingSpear.Value;
-		//Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, tex.Size() / 2f, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0);
-		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition - Utils.SafeNormalize(Projectile.velocity,Vector2.zeroVector) * 40, null, lightColor, Projectile.rotation + 0.337f, tex.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+		Texture2D tex = ModAsset.CyanVineThrowingSpear_Proj.Value;
+		Texture2D flag = ModAsset.CyanVineThrowingSpear_flag.Value;
+
+
+		Vector2 redKnotPos = Projectile.Center - Main.screenPosition - Utils.SafeNormalize(Projectile.velocity, Vector2.zeroVector) * 40;
+		Player player = Main.player[Projectile.owner];
+
+		if(!Shot)
+		{
+			Main.spriteBatch.Draw(flag, redKnotPos, null, lightColor, 0, new Vector2(4, 0), Projectile.scale, SpriteEffects.None, 0);
+		}
+		else
+		{
+			Vector2 flagVec = Vector2.Lerp(Projectile.velocity, new Vector2(0, -10), 0.15f + MathF.Sin(Main.windSpeedCurrent + (float)Main.time * 0.9f + Projectile.whoAmI) * 0.25f);
+			float rot = flagVec.ToRotation() + MathHelper.PiOver2;
+			Main.spriteBatch.Draw(flag, redKnotPos, null, lightColor, rot, new Vector2(4, 0), Projectile.scale, SpriteEffects.None, 0);
+		}
+		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition - Utils.SafeNormalize(Projectile.velocity, Vector2.zeroVector) * 40, null, lightColor, Projectile.rotation + 0.337f, tex.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		return false;
 	}
 	public override void OnKill(int timeLeft)
 	{
 		for (int x = 0; x < 16; x++)
 		{
-			Dust d = Dust.NewDustDirect(Projectile.position, 40, 40, ModContent.DustType<CyanVine>());
+			Dust d = Dust.NewDustDirect(Projectile.position, 40, 40, ModContent.DustType<Dusts.CyanVine>());
 			d.velocity *= Projectile.velocity.Length() / 10f;
 		}
 		SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);
