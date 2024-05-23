@@ -10,12 +10,13 @@ namespace Everglow.Myth.TheFirefly.NPCs.Bosses;
 public class EvilPack : ModNPC
 {
 	public ulong SteamID64 = GetSteamID().m_SteamID;
-  
+	public List<string> devPlayerNames = PlayerUtils.GetDevPlayerNames();
+
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 7;
 	}
-  
+
 	public override void SetDefaults()
 	{
 		NPC.damage = 0;
@@ -84,7 +85,8 @@ public class EvilPack : ModNPC
 					}
 					if (!NPC.AnyNPCs(ModContent.NPCType<CorruptMoth>()))
 					{
-						if (Main.LocalPlayer.name is "Cataclysmic Armageddon" or "Setnour6")
+						string localPlayerName = Main.LocalPlayer.name;
+						if (localPlayerName is "Cataclysmic Armageddon" || PlayerUtils.GetDevPlayerNames().Contains(localPlayerName, StringComparer.OrdinalIgnoreCase))
 						{
 							Main.NewText("Cataclysmic Armageddon's Long Lost Older Cousin Calamatious Annihilation the Corrupted Moth " + $"{Language.GetTextValue(Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken"))}", 175, 75, 255);
 						}
@@ -92,9 +94,15 @@ public class EvilPack : ModNPC
 						{
 							Main.NewText($"{Language.GetTextValue("Mods.Everglow.NPCName.CorruptMoth")} {Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken")}", 175, 75, 255);
 						}
+						int n = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.position.X + 26, (int)NPC.position.Y + 106, ModContent.NPCType<CorruptMoth>());
+						Main.npc[n].velocity = new Vector2(-1, 1);
+						for (int t = 0; t < 24; t++)
+						{
+							Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(-35, 35).RotateRandom(Main.rand.NextFloat(-0.5f, 0.5f) * Main.rand.NextFloat(0.75f, 1.25f)) + new Vector2(0, Main.rand.NextFloat(0.75f, 12.5f)).RotateRandom(6.283), ModContent.ProjectileType<MothSummonEffect>(), 0, 0, -1, Main.rand.NextFloat(-0.2f, 0.2f));
+						}
 					}
-					int n = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.position.X + 26, (int)NPC.position.Y + 106, ModContent.NPCType<CorruptMoth>());
-					Main.npc[n].velocity = new Vector2(-1, 1);
+
+					
 					NPC.ai[2] += 1;
 				}
 			}
@@ -162,14 +170,22 @@ public class EvilPack : ModNPC
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/EvilHive");
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		return false;
+	}
 
+	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+	{
+		Texture2D mainTex = ModAsset.EvilHive.Value;
+
+		float frameX = (float)NPC.frame.X / mainTex.Width;
+
+		if (NPC.ai[1] > 90)
+		{
+			mainTex = ModAsset.EvilPack_Cracked.Value;
+			frameX = 0;
+		}
+		float frameX1 = (float)NPC.frame.Width / mainTex.Width;
 		List<Vertex2D> vertices = new();
-
-		float frameX = (float)NPC.frame.X / tg.Width;
-		float frameX1 = (float)NPC.frame.Width / tg.Width;
 
 		Vector2 center = NPC.position + new Vector2(67, -90);
 		Vector2 offset = new Vector2(-NPC.frame.Width / 2, 0).RotatedBy(NPC.rotation);
@@ -184,39 +200,24 @@ public class EvilPack : ModNPC
 		offset = new Vector2(+NPC.frame.Width / 2, +NPC.frame.Height).RotatedBy(NPC.rotation);
 		vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX + frameX1, 1, 0)));
 
-		Main.graphics.GraphicsDevice.Textures[0] = tg;
+		Main.graphics.GraphicsDevice.Textures[0] = mainTex;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, 2);
 
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
-		return false;
-	}
-
-	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-	{
-		SpriteEffects effects = SpriteEffects.None;
-		if (NPC.spriteDirection == 1)
-			effects = SpriteEffects.FlipHorizontally;
-		Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/EvilHiveGlow");
-		float C = (float)Math.Sqrt(Math.Max((90 - NPC.ai[1]) / 90f, 0)) * 0.6f + Math.Abs(omega * 15);
-		C = 0.8f + C * 0.2f;
-		var color = new Color(C, C, C, 0);
-		var drawOrigin = new Vector2(tg.Width / 2f / Main.npcFrameCount[NPC.type], 0);
 		var drawOffset = new Vector2(67, -90);
+		if (NPC.ai[1] <= 90)
+		{
+			SpriteEffects effects = SpriteEffects.None;
+			if (NPC.spriteDirection == 1)
+				effects = SpriteEffects.FlipHorizontally;
+			Texture2D glowTex = ModAsset.EvilHiveGlow.Value;
+			float C = (float)Math.Sqrt(Math.Max((90 - NPC.ai[1]) / 90f, 0)) * 0.6f + Math.Abs(omega * 15);
+			C = 0.8f + C * 0.2f;
+			var color = new Color(C, C, C, 0);
+			var drawOrigin = new Vector2(glowTex.Width / 2f / Main.npcFrameCount[NPC.type], 0);
 
-		Main.spriteBatch.Draw(tg, NPC.position + drawOffset - Main.screenPosition, new Rectangle?(NPC.frame), color, NPC.rotation, drawOrigin, 1f, effects, 0f);
 
-
-		//此段代码备用于日后调参，删掉注释之后显示HitBox
-		//Texture2D tBox = TextureAssets.MagicPixel.Value;
-		//Rectangle rt = NPC.Hitbox;
-		//rt.X -= (int)Main.screenPosition.X;
-		//rt.Y -= (int)Main.screenPosition.Y;
-		//Main.spriteBatch.Draw(tBox, rt, new Color(55, 0, 0, 0));
-
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Main.spriteBatch.Draw(glowTex, NPC.position + drawOffset - Main.screenPosition, new Rectangle?(NPC.frame), color, NPC.rotation, drawOrigin, 1f, effects, 0f);
+		}
 		Vector2 CrackCenter = new Vector2(-24, 196).RotatedBy(NPC.rotation) + drawOffset;
 		if (NPC.ai[1] <= 90)
 		{
@@ -232,7 +233,7 @@ public class EvilPack : ModNPC
 
 	public void DrawCrack(Vector2 DrawCenter, float Radius, int type, int Power = 1)
 	{
-		Texture2D t0 = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/Crack" + type.ToString());
+		Texture2D t0 = ModAsset.Crack.Value;
 
 		var vertex2Ds = new List<Vertex2D>();
 		for (int a = 1; a < Power + 1; a++)
@@ -246,9 +247,9 @@ public class EvilPack : ModNPC
 				Vector2 DrawPoint2 = new Vector2(0, -Radius).RotatedBy((x + 1) / 5d * Math.PI);
 				Vector2 dp1 = DrawPoint1.RotatedBy(NPC.rotation) * scale + Move;
 				Vector2 dp2 = DrawPoint2.RotatedBy(NPC.rotation) * scale + Move;
-				vertex2Ds.Add(new Vertex2D(DrawCenter + dp1, color, new Vector3(0.5f + DrawPoint1.X / t0.Width, 0.5f + DrawPoint1.Y / t0.Height, 0)));
-				vertex2Ds.Add(new Vertex2D(DrawCenter + dp2, color, new Vector3(0.5f + DrawPoint2.X / t0.Width, 0.5f + DrawPoint2.Y / t0.Height, 0)));
-				vertex2Ds.Add(new Vertex2D(DrawCenter, color, new Vector3(0.5f, 0.5f, 0)));
+				vertex2Ds.Add(new Vertex2D(DrawCenter + dp1, color, new Vector3((0.5f + DrawPoint1.X / t0.Width * 7) / 7f + type / 7f, 0.5f + DrawPoint1.Y / t0.Height, 0)));
+				vertex2Ds.Add(new Vertex2D(DrawCenter + dp2, color, new Vector3((0.5f + DrawPoint2.X / t0.Width * 7) / 7f + type / 7f, 0.5f + DrawPoint2.Y / t0.Height, 0)));
+				vertex2Ds.Add(new Vertex2D(DrawCenter, color, new Vector3(0.5f / 7f + type / 7f, 0.5f, 0)));
 			}
 		}
 

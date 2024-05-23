@@ -45,7 +45,7 @@ public class CyanVineOreMiddle : ModTile
 		int Times = Main.rand.Next(5, 9);
 		for (int d = 0; d < Times; d++)
 		{
-			Item.NewItem(null, i * 16 + Main.rand.Next(94) - 16, j * 16 + Main.rand.Next(64) - 48, 16, 16, ModContent.ItemType<CyanVineOre>());
+			Item.NewItem(null, i * 16 + Main.rand.Next(94) - 16, j * 16 + Main.rand.Next(64) - 48, 16, 16, ModContent.ItemType<Items.CyanVine.CyanVineOre>());
 		}
 		for (int f = 0; f < 8; f++)
 		{
@@ -72,7 +72,7 @@ public class CyanVineOreMiddle : ModTile
 				for (int y = -3; y < 1; y++)
 				{
 					Color cTile = Lighting.GetColor(i + x, j + y);
-					Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/CyanVine/CyanVineOreMiddle");
+					Texture2D tex = ModAsset.CyanVineOreMiddle.Value;
 					spriteBatch.Draw(tex, new Vector2((i + x) * 16, (j + y) * 16) - Main.screenPosition + zero, new Rectangle(x * 18 + tile.TileFrameX, y * 18 + tile.TileFrameY, 16, 18), cTile, 0, new Vector2(0), 1, SpriteEffects.None, 0);
 				}
 			}

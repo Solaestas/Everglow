@@ -16,6 +16,7 @@ internal class ShabbyPylon : BaseModPylon<ShabbyPylonTileEntity>
 	public override void PostSetDefaults()
 	{
 		DustType = DustID.Lead;
+		AddMapEntry(new Color(105, 113, 105));
 	}
 	public override int DropItemType => ModContent.ItemType<ShabbyPylonItem>();
 
@@ -97,14 +98,15 @@ internal class ShabbyPylonUpdate : GlobalNPC
 {
 	public override void OnKill(NPC npc)
 	{
-		if (npc.type is NPCID.BrainofCthulhu or NPCID.EaterofWorldsHead)
+		if (npc.type == NPCID.BrainofCthulhu || ((npc.type == NPCID.EaterofWorldsHead || npc.type == NPCID.EaterofWorldsBody || npc.type == NPCID.EaterofWorldsTail) && NPC.CountNPCS(NPCID.EaterofWorldsBody) + NPC.CountNPCS(NPCID.EaterofWorldsHead) + NPC.CountNPCS(NPCID.EaterofWorldsTail) == 1))
 		{
-			if (!PylonSystem.Instance.shabbyPylonEnable && NPC.downedBoss2)
+			do
 			{
 				PylonSystem.Instance.shabbyPylonEnable = true;
 				PylonSystem.Instance.firstEnableAnimation = true;
 				Main.NewText(Language.GetTextValue("Mods.Everglow.Common.PylonSystem.ShabbyPylonRepairedTip"));
 			}
+			while (!PylonSystem.Instance.shabbyPylonEnable && NPC.downedBoss2);
 		}
 	}
 }

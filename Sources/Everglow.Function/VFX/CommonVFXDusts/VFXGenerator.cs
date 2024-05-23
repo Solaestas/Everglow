@@ -17,7 +17,6 @@ class VFXGenerator : ModItem
 	{
 		float mulVelocity = 1f;
 		int type = Main.rand.Next(13);
-
 		switch (type)
 		{
 			case 0://冰雾
@@ -38,7 +37,7 @@ class VFXGenerator : ModItem
 					Ins.VFXManager.Add(somg);
 				}
 				break;
-			case 1://冰粒
+			case 1:
 				for (int g = 0; g < 80; g++)
 				{
 					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 12f)).RotatedByRandom(MathHelper.TwoPi);
@@ -55,7 +54,7 @@ class VFXGenerator : ModItem
 					};
 					Ins.VFXManager.Add(somg);
 				}
-				break;
+				break;//冰粒
 			case 2://雪花
 				for (int g = 0; g < 380; g++)
 				{

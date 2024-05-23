@@ -1,8 +1,8 @@
 # 如果要从更高级别的目录继承 .editorconfig 设置，请删除以下行
 root = true
 
-# c# 文件
-[*.cs]
+# 所有文件
+[*]
 
 #### Core EditorConfig 选项 ####
 
@@ -17,6 +17,13 @@ insert_final_newline = false
 
 # 编码
 charset = utf-8
+dotnet_style_qualification_for_field = false:silent
+dotnet_style_qualification_for_property = false:silent
+dotnet_style_qualification_for_method = false:silent
+dotnet_style_qualification_for_event = false:silent
+
+# c# 文件
+[*.cs]
 
 #### .NET 编码约定 ####
 
@@ -84,14 +91,14 @@ csharp_style_var_for_built_in_types = false:silent
 csharp_style_var_when_type_is_apparent = true:silent
 
 # Expression-bodied 成员
-csharp_style_expression_bodied_accessors = true:silent
-csharp_style_expression_bodied_constructors = false:silent
-csharp_style_expression_bodied_indexers = true:silent
-csharp_style_expression_bodied_lambdas = true:silent
-csharp_style_expression_bodied_local_functions = false:silent
-csharp_style_expression_bodied_methods = false:silent
-csharp_style_expression_bodied_operators = false:silent
-csharp_style_expression_bodied_properties = true:silent
+csharp_style_expression_bodied_accessors = true:none
+csharp_style_expression_bodied_constructors = false:none
+csharp_style_expression_bodied_indexers = true:none
+csharp_style_expression_bodied_lambdas = true:none
+csharp_style_expression_bodied_local_functions = when_on_single_line:none
+csharp_style_expression_bodied_methods = when_on_single_line:none
+csharp_style_expression_bodied_operators = when_on_single_line:none
+csharp_style_expression_bodied_properties = true:none
 
 # 模式匹配首选项
 csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
@@ -107,7 +114,7 @@ csharp_style_conditional_delegate_call = true:suggestion
 # 修饰符首选项
 csharp_prefer_static_local_function = true:suggestion
 csharp_preferred_modifier_order = public,private,protected,internal,file,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,required,volatile,async
-csharp_style_prefer_readonly_struct = true:suggestion
+csharp_style_prefer_readonly_struct = true:none
 
 # 代码块首选项
 csharp_prefer_braces = true:silent
@@ -272,9 +279,16 @@ dotnet_naming_style.begins_with_i.required_suffix =
 dotnet_naming_style.begins_with_i.word_separator = 
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
 
-# StyleCop Analyzers
+#### StyleCop Analyzers ####
+
 # Ignore Element Document
-dotnet_diagnostic.SA1600.severity = silent
+dotnet_diagnostic.SA1600.severity = none
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.DocumentationRules'
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.DocumentationRules.severity = none
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.OrderingRules'
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.OrderingRules.severity = none
 
 # Ignore Document Infomation
 dotnet_diagnostic.SA1633.severity = none
@@ -344,77 +358,14 @@ dotnet_diagnostic.SA1309.severity = none
 # SA1312: Variable names should begin with lower-case letter
 dotnet_diagnostic.SA1312.severity = none
 
-
-# Sonar Analyzers
-
-# S1104: Fields should not have public accessibility
-dotnet_diagnostic.S1104.severity = none
-
-# S112: General exceptions should never be thrown
-dotnet_diagnostic.S112.severity = suggestion
-
-# S2933: Fields that are only assigned in the constructor should be "readonly"
-dotnet_diagnostic.S2933.severity = none
-
-# S1121: Assignments should not be made from within sub-expressions
-dotnet_diagnostic.S1121.severity = none
-
-# S125: Sections of code should not be commented out
-dotnet_diagnostic.S125.severity = none
-
-
-
 # SA1313: Parameter names should begin with lower-case letter
 dotnet_diagnostic.SA1313.severity = none
 
-# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.DocumentationRules'
-dotnet_analyzer_diagnostic.category-StyleCop.CSharp.DocumentationRules.severity = none
-
 # SA1405: Debug.Assert should provide message text
 dotnet_diagnostic.SA1405.severity = none
-
-# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.OrderingRules'
-dotnet_analyzer_diagnostic.category-StyleCop.CSharp.OrderingRules.severity = none
 
 # SA1117: Parameters should be on same line or separate lines
 dotnet_diagnostic.SA1117.severity = none
 
 # SA1407: Arithmetic expressions should declare precedence
 dotnet_diagnostic.SA1407.severity = none
-csharp_style_allow_blank_line_after_token_in_conditional_expression_experimental = true:silent
-csharp_style_allow_blank_line_after_token_in_arrow_expression_clause_experimental = true:silent
-[*.{cs,vb}]
-end_of_line = crlf
-dotnet_style_qualification_for_field = false:silent
-dotnet_style_qualification_for_property = false:silent
-dotnet_style_qualification_for_method = false:silent
-dotnet_style_qualification_for_event = false:silent
-tab_width = 4
-indent_size = 4
-dotnet_style_operator_placement_when_wrapping = beginning_of_line
-dotnet_style_require_accessibility_modifiers = for_non_interface_members:silent
-dotnet_code_quality_unused_parameters = all:warning
-dotnet_style_readonly_field = false:suggestion
-dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:silent
-dotnet_style_parentheses_in_arithmetic_binary_operators = never_if_unnecessary:silent
-dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
-dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
-dotnet_style_allow_multiple_blank_lines_experimental = true:silent
-dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
-dotnet_style_coalesce_expression = true:suggestion
-dotnet_style_null_propagation = true:suggestion
-dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
-dotnet_style_prefer_auto_properties = true:silent
-dotnet_style_object_initializer = true:suggestion
-dotnet_style_collection_initializer = true:suggestion
-dotnet_style_prefer_simplified_boolean_expressions = false:silent
-dotnet_style_prefer_conditional_expression_over_assignment = true:silent
-dotnet_style_prefer_conditional_expression_over_return = true:silent
-dotnet_style_explicit_tuple_names = true:suggestion
-dotnet_style_prefer_inferred_tuple_names = true:suggestion
-dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
-dotnet_style_prefer_compound_assignment = true:suggestion
-dotnet_style_prefer_simplified_interpolation = true:suggestion
-dotnet_style_namespace_match_folder = true:suggestion
-dotnet_style_predefined_type_for_locals_parameters_members = true:silent
-dotnet_style_predefined_type_for_member_access = true:silent

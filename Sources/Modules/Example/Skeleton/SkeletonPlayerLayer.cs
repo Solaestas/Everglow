@@ -4,16 +4,13 @@ using Terraria.DataStructures;
 
 namespace Everglow.Example.Skeleton;
 
-// TODO Resource
-[Autoload(false)]
 public class SkeletonPlayerLayer : PlayerDrawLayer
 {
 	private Skeleton2D skeleton2D;
 	public override void Load()
 	{
-		var data = ModContent.GetFileBytes("Everglow/Resources/Animations/spineboy-ess.json");
-		skeleton2D = Skeleton2DReader.ReadSkeleton(data, "Everglow/Resources/Animations/");
-		base.Load();
+		var data = Mod.GetFileBytes("Example/Skeleton/Animations/owl-pro.json");
+		skeleton2D = Skeleton2DReader.ReadSkeleton(data, $"Everglow/Example/Skeleton/Animations/");
 	}
 	public override Position GetDefaultPosition()
 	{
@@ -28,7 +25,7 @@ public class SkeletonPlayerLayer : PlayerDrawLayer
 	public override void Draw(ref PlayerDrawSet drawInfo)
 	{
 		var player = drawInfo.drawPlayer;
-		if (player.HeldItem == null || player.HeldItem.type == ItemID.None)
+		if (player.HeldItem.type == ModContent.ItemType<TestSkeletonOwl>())
 		{
 			skeleton2D.Position = player.Center;
 			skeleton2D.Rotation = 0f;

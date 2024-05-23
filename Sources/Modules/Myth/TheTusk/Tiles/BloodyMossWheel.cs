@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Misc.FixCoins;
+using Everglow.Myth.Misc.FixCoins;
 using Terraria.Audio;
 using Terraria.Localization;
 using Terraria.ObjectData;
@@ -65,16 +65,16 @@ public class BloodyMossWheel : ModTile
 
 		Color color = Lighting.GetColor(i, j);
 		Vector2 v = new Vector2(0, 100).RotatedBy(Main.time / 60f);
-		Main.spriteBatch.Draw(BaseCo1, new Vector2(i * 16 - 16 + 6, j * 16 - 68 - 16) + origin - Main.screenPosition + zero, new Rectangle(256 + (int)v.X, 256 + (int)v.Y, 32, 32), new Color(255, 0, 0, 255), 0f, origin, 1f, SpriteEffects.None, 0f);
-		Main.spriteBatch.Draw(BaseCo1, new Vector2(i * 16 - 16 + 6, j * 16 - 68 - 16) + origin - Main.screenPosition + zero, new Rectangle(256 - (int)v.X, 256 - (int)v.Y, 32, 32), new Color(255, 125, 0, 0), 0f, origin, 1f, SpriteEffects.None, 0f);
-		Main.spriteBatch.Draw(Sp1a, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, color, 0f, origin, 1f, SpriteEffects.None, 0f);
+		spriteBatch.Draw(BaseCo1, new Vector2(i * 16 - 16 + 6, j * 16 - 68 - 16) + origin - Main.screenPosition + zero, new Rectangle(256 + (int)v.X, 256 + (int)v.Y, 32, 32), new Color(255, 0, 0, 255), 0f, origin, 1f, SpriteEffects.None, 0f);
+		spriteBatch.Draw(BaseCo1, new Vector2(i * 16 - 16 + 6, j * 16 - 68 - 16) + origin - Main.screenPosition + zero, new Rectangle(256 - (int)v.X, 256 - (int)v.Y, 32, 32), new Color(255, 125, 0, 0), 0f, origin, 1f, SpriteEffects.None, 0f);
+		spriteBatch.Draw(Sp1a, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, color, 0f, origin, 1f, SpriteEffects.None, 0f);
 		if (StepChange > 0)
 		{
 			if (StepChange > 10)
-				Main.spriteBatch.Draw(Sp1b, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0f, origin, (30 - StepChange) / 20f, SpriteEffects.None, 0f);
+				spriteBatch.Draw(Sp1b, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0f, origin, (30 - StepChange) / 20f, SpriteEffects.None, 0f);
 			else
 			{
-				Main.spriteBatch.Draw(Sp1b, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(StepChange * 25, StepChange * 25, StepChange * 25, 0), 0f, origin, 0.95f, SpriteEffects.None, 0f);
+				spriteBatch.Draw(Sp1b, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(StepChange * 25, StepChange * 25, StepChange * 25, 0), 0f, origin, 0.95f, SpriteEffects.None, 0f);
 			}
 			StepChange--;
 		}
@@ -102,8 +102,8 @@ public class BloodyMossWheel : ModTile
 				Rot2 = (float)Math.PI;
 			}
 		}
-		Main.spriteBatch.Draw(Sp1c, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, color, 0f, origin, 1f, SpriteEffects.None, 0f);
-		Main.spriteBatch.Draw(Sp2, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, color, Rot2, origin, 1f, SpriteEffects.None, 0f);
+		spriteBatch.Draw(Sp1c, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, color, 0f, origin, 1f, SpriteEffects.None, 0f);
+		spriteBatch.Draw(Sp2, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, color, Rot2, origin, 1f, SpriteEffects.None, 0f);
 		Symbol = Step + 1;
 		//0↑
 		//1→
@@ -141,10 +141,10 @@ public class BloodyMossWheel : ModTile
 		Vector2 CorrectedMouseScreenCenter = (Main.MouseScreen - Main.screenTarget.Size() / 2f) / vZoom.X;//鼠标的中心指向位
 		Vector2 CorrectedMouseWorld = CorrectedMouseScreenCenter + ScreenCenter;//鼠标世界坐标校正
 
-		Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/Symbol" + Symbol.ToString()).Value, new Vector2(i * 16 + 6, j * 16 - 68) + zero - Main.screenPosition, null, new Color(150 + (int)v.X, 150 + (int)v.X, 150 + (int)v.X, 0), 0f, origin, 1f, SpriteEffects.None, 0f);
-		if ((CorrectedMouseWorld - (new Vector2(i * 16 + 6, j * 16 - 64) + new Vector2(0, -50))).Length() < 12 * vZoom.X)
+		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/Symbol" + Symbol.ToString()).Value, new Vector2(i * 16 + 6, j * 16 - 68) + zero - Main.screenPosition, null, new Color(150 + (int)v.X, 150 + (int)v.X, 150 + (int)v.X, 0), 0f, origin, 1f, SpriteEffects.None, 0f);
+		if ((CorrectedMouseWorld - (new Vector2(i * 16 + 6, j * 16 - 64) + new Vector2(0, -50))).Length() < 12)
 		{
-			Main.spriteBatch.Draw(SpL1, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0, origin, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(SpL1, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0, origin, 1f, SpriteEffects.None, 0f);
 			if (Main.mouseRight && !Main.gamePaused)
 			{
 				if (Cooling[0] <= 0)
@@ -157,9 +157,9 @@ public class BloodyMossWheel : ModTile
 				}
 			}
 		}
-		if ((CorrectedMouseWorld - (new Vector2(i * 16 + 6, j * 16 - 68) + new Vector2(50, 0))).Length() < 12 * vZoom.X)
+		if ((CorrectedMouseWorld - (new Vector2(i * 16 + 6, j * 16 - 68) + new Vector2(50, 0))).Length() < 12)
 		{
-			Main.spriteBatch.Draw(SpL2, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0, origin, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(SpL2, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0, origin, 1f, SpriteEffects.None, 0f);
 			if (Main.mouseRight && !Main.gamePaused)
 			{
 				if (Cooling[1] <= 0)
@@ -172,9 +172,9 @@ public class BloodyMossWheel : ModTile
 				}
 			}
 		}
-		if ((CorrectedMouseWorld - (new Vector2(i * 16 + 6, j * 16 - 68) + new Vector2(0, 50))).Length() < 12 * vZoom.X)
+		if ((CorrectedMouseWorld - (new Vector2(i * 16 + 6, j * 16 - 68) + new Vector2(0, 50))).Length() < 12)
 		{
-			Main.spriteBatch.Draw(SpL3, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0, origin, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(SpL3, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0, origin, 1f, SpriteEffects.None, 0f);
 			if (Main.mouseRight && !Main.gamePaused)
 			{
 				if (Cooling[2] <= 0)
@@ -187,9 +187,9 @@ public class BloodyMossWheel : ModTile
 				}
 			}
 		}
-		if ((CorrectedMouseWorld - (new Vector2(i * 16 + 6, j * 16 - 68) + new Vector2(-50, 0))).Length() < 12 * vZoom.X)
+		if ((CorrectedMouseWorld - (new Vector2(i * 16 + 6, j * 16 - 68) + new Vector2(-50, 0))).Length() < 12)
 		{
-			Main.spriteBatch.Draw(SpL4, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0, origin, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(SpL4, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0, origin, 1f, SpriteEffects.None, 0f);
 			if (Main.mouseRight && !Main.gamePaused)
 			{
 				if (Cooling[3] <= 0)
@@ -202,10 +202,10 @@ public class BloodyMossWheel : ModTile
 				}
 			}
 		}
-		Main.spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68) + zero + new Vector2(0, -46) - Main.screenPosition, null, color, Rot[0], new Vector2(12), 1f, SpriteEffects.None, 0f);
-		Main.spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68) + zero + new Vector2(46, 0) - Main.screenPosition, null, color, Rot[1], new Vector2(12), 1f, SpriteEffects.None, 0f);
-		Main.spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68 - 4) + zero + new Vector2(0, 50) - Main.screenPosition, null, color, Rot[2], new Vector2(12), 1f, SpriteEffects.None, 0f);
-		Main.spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68) + zero + new Vector2(-46, 0) - Main.screenPosition, null, color, Rot[3], new Vector2(12), 1f, SpriteEffects.None, 0f);
+		spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68) + zero + new Vector2(0, -46) - Main.screenPosition, null, color, Rot[0], new Vector2(12), 1f, SpriteEffects.None, 0f);
+		spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68) + zero + new Vector2(46, 0) - Main.screenPosition, null, color, Rot[1], new Vector2(12), 1f, SpriteEffects.None, 0f);
+		spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68 - 4) + zero + new Vector2(0, 50) - Main.screenPosition, null, color, Rot[2], new Vector2(12), 1f, SpriteEffects.None, 0f);
+		spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68) + zero + new Vector2(-46, 0) - Main.screenPosition, null, color, Rot[3], new Vector2(12), 1f, SpriteEffects.None, 0f);
 		for (int l = 0; l < 4; l++)
 		{
 			if (Cooling[l] > 0)
@@ -227,42 +227,42 @@ public class BloodyMossWheel : ModTile
 			SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, new Vector2(i * 16 + 0, j * 16 - 72));
 			Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 			Vector2 vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak1").Type, 1f);
+			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/StonePanBreak1").Type, 1f);
 			vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 			vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak1").Type, 1f);
+			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/StonePanBreak1").Type, 1f);
 			vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 			vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak2").Type, 1f);
+			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/StonePanBreak2").Type, 1f);
 			vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 			vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak3").Type, 1f);
+			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/StonePanBreak3").Type, 1f);
 			vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 			vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak4").Type, 1f);
+			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/StonePanBreak4").Type, 1f);
 			vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 			vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak5").Type, 1f);
+			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/StonePanBreak5").Type, 1f);
 			vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 			vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak6").Type, 1f);
+			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/StonePanBreak6").Type, 1f);
 			for (int h = 0; h < 7; h++)
 			{
 				vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 				vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-				Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak7").Type, 1f);
+				Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/StonePanBreak7").Type, 1f);
 			}
 			for (int h = 0; h < 10; h++)
 			{
 				vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 				vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-				Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak8").Type, 1f);
+				Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/StonePanBreak8").Type, 1f);
 			}
 			for (int h = 0; h < 10; h++)
 			{
 				vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 				vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-				Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak9").Type, 1f);
+				Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/StonePanBreak9").Type, 1f);
 			}
 			for (int z = 0; z < 120; z++)
 			{
@@ -278,6 +278,7 @@ public class BloodyMossWheel : ModTile
 		}
 		TileI = i;
 		TileJ = j;
+		DrawAll(spriteBatch);
 	}
 	public static void DrawAll(SpriteBatch sb)
 	{
@@ -290,14 +291,40 @@ public class BloodyMossWheel : ModTile
 		Texture2D Tdoor3 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/CosmicPerlin").Value;
 		if (CanK)
 		{
-			Killing--;
-			var Correction = new Vector2(-186f, -260f);
-			Main.spriteBatch.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(100, 100, 100, 0), -(float)Main.time / 20f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 15f, new Vector2(56), (60 - Killing) / 50f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(Tdoor2, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(Tdoor3, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), -(float)Main.time / 20f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(Tdoor3, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 15f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
+			if(!Main.gamePaused)
+			{
+				Killing--;
+			}
+			sb.Draw(Tdoor, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 300f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
+			sb.Draw(Tdoor, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(100, 100, 100, 0), -(float)Main.time / 200f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
+			sb.Draw(Tdoor, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 150f, new Vector2(56), (60 - Killing) / 50f, SpriteEffects.None, 0f);
+			sb.Draw(Tdoor2, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 300f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
+			sb.Draw(Tdoor3, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), -(float)Main.time / 200f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
+			sb.Draw(Tdoor3, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 150f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
+
+			Texture2D scene = ModAsset.TuskMiddle_Square.Value;
+			Matrix matrix = sb.transformMatrix;
+
+			sb.End();
+			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, matrix);
+
+			Effect dissolve = ModAsset.Dissolve_WithCenter.Value;
+			var projection = Matrix.CreateOrthographicOffCenter(-Main.offScreenRange, Main.screenWidth + Main.offScreenRange, Main.screenHeight + Main.offScreenRange, -Main.offScreenRange, 0, 1);
+			float dissolveDuration = (60 - Killing) / 60f - 0.2f;
+
+			dissolve.Parameters["uTransform"].SetValue(matrix * projection);
+			dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_spiderNet.Value);
+			dissolve.Parameters["duration"].SetValue(dissolveDuration);
+			dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.8f, 0, 0.1f, 1f));
+			dissolve.Parameters["uNoiseSize"].SetValue(3f);
+			dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(0, (float)Main.timeForVisualEffects * 0.0003f));
+			dissolve.CurrentTechnique.Passes[0].Apply();
+
+			sb.Draw(scene, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition, null, Color.White * 0.8f, 0, scene.Size() * 0.5f, 0.25f, SpriteEffects.None, 0f);
+
+
+			sb.End();
+			sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, matrix);
 		}
 	}
 }

@@ -26,6 +26,7 @@ public abstract class SlingshotItem : ModItem
 		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.rare = ItemRarityID.White;
 		Item.value = Item.sellPrice(0, 0, 0, 50);
+		Item.channel = true;
 
 
 		Item.noMelee = true;

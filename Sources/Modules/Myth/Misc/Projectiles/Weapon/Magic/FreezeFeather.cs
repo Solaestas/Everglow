@@ -21,7 +21,7 @@ public class FreezeFeather : ModProjectile
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 2;
 	}
-	internal int TimeTokill = -1;
+	internal int timeTokill = -1;
 	ModProjectile MagicArray = null;
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -42,14 +42,14 @@ public class FreezeFeather : ModProjectile
 	}
 	public override void AI()
 	{
-		if (TimeTokill >= 0 && TimeTokill <= 2)
+		if (timeTokill >= 0 && timeTokill <= 2)
 			Projectile.Kill();
-		if (TimeTokill <= 15 && TimeTokill > 0)
+		if (timeTokill <= 15 && timeTokill > 0)
 			Projectile.velocity = Projectile.oldVelocity;
-		TimeTokill--;
-		if (TimeTokill >= 0)
+		timeTokill--;
+		if (timeTokill >= 0)
 		{
-			if (TimeTokill < 10)
+			if (timeTokill < 10)
 			{
 				Projectile.damage = 0;
 				Projectile.friendly = false;
@@ -104,7 +104,7 @@ public class FreezeFeather : ModProjectile
 					Active = true,
 					Visible = true,
 					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
-					maxTime = Main.rand.Next(137, 245),
+					maxTime = Main.rand.Next(67, 120),
 					scale = Main.rand.NextFloat(18f, 45f),
 					rotation = Main.rand.NextFloat(6.283f),
 					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.005f, 0.005f) }
@@ -120,7 +120,7 @@ public class FreezeFeather : ModProjectile
 					Active = true,
 					Visible = true,
 					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
-					maxTime = Main.rand.Next(137, 245),
+					maxTime = Main.rand.Next(67, 120),
 					scale = Main.rand.NextFloat(18f, 45f),
 					rotation = Main.rand.NextFloat(6.283f),
 					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.005f, 0.005f) }
@@ -149,7 +149,7 @@ public class FreezeFeather : ModProjectile
 				Ins.VFXManager.Add(smog);
 			}
 		}
-		if (Projectile.timeLeft <= 100 && TimeTokill < 0)
+		if (Projectile.timeLeft <= 100 && timeTokill < 0)
 		{
 			if (MagicArray != null)
 			{
@@ -173,7 +173,7 @@ public class FreezeFeather : ModProjectile
 	}
 	public override void PostDraw(Color lightColor)
 	{
-		if (TimeTokill >= 0)
+		if (timeTokill >= 0)
 		{
 			return;
 		}
@@ -247,13 +247,13 @@ public class FreezeFeather : ModProjectile
 		if (MagicArray != null)
 		{
 			var arrayProj = MagicArray as FreezeFeatherMagicArray;
-			arrayProj.WingPower += 2f;
+			arrayProj.WingPower += 3f;
 		}
 		AmmoHit();
 	}
 	public  void AmmoHit()
 	{
-		TimeTokill = 20;
+		timeTokill = 20;
 		Projectile.tileCollide = false;
 		Projectile.ignoreWater = true;
 		Projectile.velocity = Projectile.oldVelocity;
@@ -291,7 +291,7 @@ public class FreezeFeather : ModProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity * 16,
-				maxTime = Main.rand.Next(237, 345),
+				maxTime = Main.rand.Next(87, 175),
 				scale = Main.rand.NextFloat(320f, 435f),
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
@@ -307,7 +307,7 @@ public class FreezeFeather : ModProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + newVelocity * 16,
-				maxTime = Main.rand.Next(237, 345),
+				maxTime = Main.rand.Next(87, 175),
 				scale = Main.rand.NextFloat(220f, 235f),
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }

@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
@@ -15,7 +15,6 @@ public class GoldLanternLine3 : ModProjectile
 		Projectile.tileCollide = false;
 		Projectile.DamageType = DamageClass.Magic;
 	}
-	float Z = 0;
 	public override void AI()
 	{
 		Projectile.velocity = Projectile.velocity * 0.95f;
@@ -27,7 +26,7 @@ public class GoldLanternLine3 : ModProjectile
 		x += 0.01f;
 		float K = (float)(Math.Sin(x + Math.Sin(x) * 6) * (0.95 + Math.Sin(x + 0.24 + Math.Sin(x))) + 3) / 30f;
 		float M = (float)(Math.Sin(x + Math.Tan(x) * 6) * (0.95 + Math.Cos(x + 0.24 + Math.Sin(x))) + 3) / 30f;
-		Texture2D DrawTex = MythContent.QuickTexture("UIImages/VisualTextures/LightEffect");
+		Texture2D DrawTex = Commons.ModAsset.StarSlash.Value;
 		Vector2 DrawPos = Projectile.Center - Main.screenPosition;
 		Main.spriteBatch.Draw(DrawTex, DrawPos, null, new Color(1f, 0.8f, 0f, 0) * 0.4f, 0, DrawTex.Size() / 2f, K * 2.4f * Projectile.timeLeft / 90f, SpriteEffects.None, 0f);
 		Main.spriteBatch.Draw(DrawTex, DrawPos, null, new Color(1f, 0.8f, 0f, 0) * 0.4f, (float)(Math.PI * 0.5), DrawTex.Size() / 2f, K * 2.4f * Projectile.timeLeft / 90f, SpriteEffects.None, 0f);

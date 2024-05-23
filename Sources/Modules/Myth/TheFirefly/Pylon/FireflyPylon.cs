@@ -145,7 +145,7 @@ public abstract class BaseModPylon<T> : ModPylon where T : TEModdedPylon
 internal class FireflyPylon : BaseModPylon<FireflyPylonTileEntity>
 {
 	public override int DropItemType => ModContent.ItemType<FireflyPylonItem>();
-
+	public override void PostSetDefaults() => AddMapEntry(new Color(85, 62, 255));
 	public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		DrawModPylon(spriteBatch, i, j, crystalTexture, crystalHighlightTexture, new Vector2(0, DefaultVerticalOffset), new Color(5, 0, 55, 30), new Color(255, 0, 155, 20), 4, CrystalVerticalFrameCount, true, ModContent.DustType<FireflyPylonDust>());
@@ -167,7 +167,7 @@ internal class FireflyPylon : BaseModPylon<FireflyPylonTileEntity>
 
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
-		Texture2D tex = MythContent.QuickTexture("TheFirefly/Pylon/FireflyPylonGlow");
+		Texture2D tex = ModAsset.FireflyPylonGlow.Value;
 
 		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 	}

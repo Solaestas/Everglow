@@ -74,7 +74,7 @@ public class StarAmmo : SlingshotAmmo
 
 		if (bars.Count > 2)
 		{
-			Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/EShoot");
+			Texture2D t = ModAsset.EShoot.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
@@ -83,7 +83,7 @@ public class StarAmmo : SlingshotAmmo
 	{
 		float Power = Projectile.ai[0] * 0.5f + 0.5f;
 		var Light = new Color(Power, Power / 2.1f, 0, 0);
-		Texture2D star = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/Textures/SlingshotHitStar");
+		Texture2D star = ModAsset.SlingshotHitStar.Value;
 		float kSize = 1f;
 		if (TimeTokill > 0)
 			kSize = TimeTokill / 30f;

@@ -1,37 +1,40 @@
 using Everglow.Commons.Vertex;
+using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Misc;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
-using Terraria.GameContent;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class DreamStar_Pro : StabbingProjectile
-    {
+	public class DreamStar_Pro : StabbingProjectile
+	{
 		NPC LastHitTarget = null;
 		NPC StarNPC = null;
 		internal int ContinuousHit = 0;
 		public override int SoundTimer => 10;
-        public override void SetDefaults()
-        {
-            Color = Color.Gold;
+		public override void SetDefaults()
+		{
+			Color = Color.Gold;
 			TradeLength = 6;
 			TradeShade = 0.4f;
 			Shade = 0.2f;
-			FadeTradeShade = 0.74f;
+			FadeShade = 0.74f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
+
 			FadeLightColorValue = 0.9f;
 			MaxLength = 1.05f;
 			DrawWidth = 0.4f;
 			base.SetDefaults();
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 5;
         }
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			if(LastHitTarget != null)
+			if (LastHitTarget != null)
 			{
-				if(LastHitTarget == target)
+				if (LastHitTarget == target)
 				{
-					if(StarNPC != target)
+					if (StarNPC != target)
 					{
 						ContinuousHit++;
 						if (ContinuousHit >= 5)
@@ -59,15 +62,14 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				LastHitTarget = target;
 			}
 		}
-		public override void AI()
+		public override void VisualParticle()
 		{
-			base.AI();
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
 			Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.1f, 0.2f);
 			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))
 			{
 				int type = ModContent.DustType<StarShine_yellow>();
-				if(Main.rand.NextBool(3))
+				if (Main.rand.NextBool(3))
 				{
 					type = ModContent.DustType<StarShine_purple>();
 				}
@@ -76,7 +78,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 			if (StarNPC != null)
 			{
-				if(!StarNPC.active)
+				if (!StarNPC.active)
 				{
 					Projectile.NewProjectile(Projectile.GetSource_FromAI(), StarNPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 4.26), Projectile.knockBack * 4.26f);
 					Item.NewItem(StarNPC.GetSource_Death(), StarNPC.Hitbox, ModContent.ItemType<StarSeed>());
@@ -115,8 +117,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void PostDraw(Color lightColor)
 		{
-			Texture2D Shadow = ModAsset.StabbingProjectileShade.Value;
-			Texture2D light = ModAsset.StabbingProjectile.Value;
+			Texture2D Shadow = Commons.ModAsset.StabbingProjectileShade.Value;
+			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
 			DrawItem(lightColor);
@@ -128,7 +130,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					Color fadeLight = new Color(230, 120, 195) * (DarkDraw[f].Color.A / 255f);
 					fadeLight.A = 0;
 					fadeLight = fadeLight * TradeLightColorValue * MathF.Pow(FadeLightColorValue, f);
-					if(fadeLight.G > 20)
+					if (fadeLight.G > 20)
 					{
 						fadeLight.G -= 20;
 					}
@@ -146,7 +148,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(Color.R / 255f, Color.G / 255f, lightColor.B / 255f * Color.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			float drawTimer = (float)Main.time * 0.04f;
 			if (StarNPC != null)
 			{
@@ -155,7 +157,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Color drawColor = Color.Yellow;
 				drawColor.A = 0;
 				List<Vertex2D> bars = new List<Vertex2D>();
-				for(int x = 0;x < 5;x++)
+				for (int x = 0; x < 5; x++)
 				{
 					Vector2 bump = new Vector2(0, starSize).RotatedBy(x / 5.0 * Math.PI * 2 + drawTimer * -0.4);
 					bars.Add(new Vertex2D(drawStarCenter + bump, drawColor, new Vector3(x / 5.0f + drawTimer, 0, 0)));
@@ -163,14 +165,14 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					Vector2 dent = new Vector2(0, starSize * 0.5f).RotatedBy((x + 0.5) / 5.0 * Math.PI * 2 + drawTimer * -0.4);
 					bars.Add(new Vertex2D(drawStarCenter + dent, drawColor, new Vector3((x + 0.5f) / 5.0f + drawTimer, 0, 0)));
 					bars.Add(new Vertex2D(drawStarCenter + dent * 0.1f, drawColor, new Vector3((x + 0.5f) / 5.0f + drawTimer, 1, 0)));
-					if(x == 4)
+					if (x == 4)
 					{
 						bump = new Vector2(0, starSize).RotatedBy((x + 1) / 5.0 * Math.PI * 2 + drawTimer * -0.4);
 						bars.Add(new Vertex2D(drawStarCenter + bump, drawColor, new Vector3((x + 1) / 5.0f + drawTimer, 0, 0)));
 						bars.Add(new Vertex2D(drawStarCenter + bump * 0.1f, drawColor, new Vector3((x + 1) / 5.0f + drawTimer, 1, 0)));
 					}
 				}
-				Main.graphics.GraphicsDevice.Textures[0] = ModAsset.StabbingProjectile.Value;
+				Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StabbingProjectile.Value;
 				if (bars.Count > 3)
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			}
@@ -190,7 +192,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					bars.Add(new Vertex2D(drawTargetCenter + dent, drawColor, new Vector3((x + 0.5f) / 5.0f + drawTimer, 0, 0)));
 					bars.Add(new Vertex2D(drawTargetCenter + dent * 0.1f, drawColor, new Vector3((x + 0.5f) / 5.0f + drawTimer, 1, 0)));
 				}
-				Main.graphics.GraphicsDevice.Textures[0] = ModAsset.StabbingProjectile.Value;
+				Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StabbingProjectile.Value;
 				if (bars.Count > 3)
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			}

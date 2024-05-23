@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 using Terraria.GameContent;
 using Terraria.Localization;
 
@@ -22,8 +22,6 @@ public class SplieSpineBullet : ModProjectile
 		Projectile.timeLeft = 300;
 		Projectile.DamageType = DamageClass.Ranged;
 		Projectile.aiStyle = -1;
-		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
 	}
 
 	private int Tokill = -1;
@@ -66,7 +64,7 @@ public class SplieSpineBullet : ModProjectile
 		{
 			Vector2 newVelocity = Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(35));
 			newVelocity *= 0.6f - Main.rand.NextFloat(0.2f);
-			Projectile.NewProjectileDirect(Terraria.Entity.InheritSource(Projectile), Projectile.Center, newVelocity, (int)Projectile.ai[1], Projectile.damage, Projectile.knockBack, Projectile.owner);
+			Projectile.NewProjectileDirect(Terraria.Entity.InheritSource(Projectile), Projectile.Center - Vector2.Normalize(newVelocity) * 60, newVelocity, (int)Projectile.ai[1], Projectile.damage, Projectile.knockBack, Projectile.owner);
 		}
 		for (int i = 0; i < 26; i++)
 		{
@@ -95,16 +93,18 @@ public class SplieSpineBullet : ModProjectile
 		Explosion();
 		return false;
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 	}
 	public override void PostDraw(Color lightColor)
 	{
 	}
-
-	private int TrueL = 1;
 	public override bool PreDraw(ref Color lightColor)
 	{
+		if (Tokill > 0)
+		{
+			return false;
+		}
 		Texture2D t = TextureAssets.Projectile[Math.Clamp((int)Projectile.ai[1], 0, TextureAssets.Projectile.Length)].Value;
 		//获取贴图中央颜色像素块,后面用于光照
 		var Lig = new Color[t.Width * t.Height];
@@ -113,40 +113,29 @@ public class SplieSpineBullet : ModProjectile
 
 
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		var bars = new List<Vertex2D>();
-		float width = 2 * Projectile.scale;
-		if (Projectile.timeLeft < 60)
-			width = Projectile.timeLeft / 30f * Projectile.scale;
-		TrueL = 0;
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
-		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
+		float width = t.Width / 2f;
+		var normalDir = Projectile.velocity;
+		normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
+		Vector2 normalDirLeft = normalDir.RotatedBy(MathHelper.PiOver2);
+		float Tr = c0.R / 300f;
+		float Tg = c0.G / 300f;
+		float Tb = c0.B / 300f;
+		float mulLight = 0.2f;
+		if (Projectile.timeLeft < 60f)
+			mulLight = Projectile.timeLeft / 300f;
+		float lightValue = (255 - Projectile.alpha) / 50f * mulLight;
+		Lighting.AddLight(Projectile.Center, Tr * lightValue, Tg * lightValue, Tb * lightValue);
+		Vector2 drawCenter = Projectile.Center - Main.screenPosition;
 
-			TrueL++;
-		}
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
-		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
+		bars.Add(new Vertex2D(drawCenter + normalDir * width, Color.White, new Vector3(1, 0, 0)));
+		bars.Add(new Vertex2D(drawCenter + normalDir * -width, Color.White, new Vector3(0, 0, 0)));
 
-			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-			var factor = i / (float)TrueL;
+		bars.Add(new Vertex2D(drawCenter + normalDirLeft * t.Height + normalDir * width, Color.White, new Vector3(1, 1, 0)));
+		bars.Add(new Vertex2D(drawCenter + normalDirLeft * t.Height + normalDir * -width, Color.White, new Vector3(0, 1, 0)));
 
-			float Tr = c0.R / 300f;
-			float Tg = c0.G / 300f;
-			float Tb = c0.B / 300f;
-			float mulLight = 0.2f;
-			if (Projectile.timeLeft < 60f)
-				mulLight = Projectile.timeLeft / 300f;
-			float lightValue = (255 - Projectile.alpha) / 50f * mulLight * (1 - factor);
-			Lighting.AddLight(Projectile.oldPos[i], Tr * lightValue, Tg * lightValue, Tb * lightValue);
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(4f, 4f) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(1, factor, 0)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(4f, 4f) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(0, factor, 0)));
-		}
-		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+		Main.graphics.GraphicsDevice.Textures[0] = t;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);

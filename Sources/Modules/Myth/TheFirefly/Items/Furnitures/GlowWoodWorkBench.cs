@@ -12,17 +12,9 @@ public class GlowWoodWorkBench : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodWorkBench>(); // This sets the id of the tile that this item should place when used.
-		Item.width = 28; // The item texture's width
-		Item.height = 14; // The item texture's height
-		Item.useTurn = true;
-		Item.autoReuse = true;
-		Item.useStyle = ItemUseStyleID.Swing;
-		Item.useTime = 10;
-		Item.useAnimation = 15;
-		Item.maxStack = 99;
-		Item.consumable = true;
-		Item.value = 150;
+		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodWorkBench>());
+		Item.width = 28;
+		Item.height = 18;
 	}
 
 	public override void AddRecipes()

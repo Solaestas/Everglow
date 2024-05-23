@@ -5,6 +5,7 @@ using Everglow.Commons.Interfaces;
 using Everglow.Commons.Modules;
 using Everglow.Commons.Network.PacketHandle;
 using Everglow.Commons.ObjectPool;
+using Everglow.Commons.TileHelper;
 using Everglow.Commons.VFX;
 using log4net;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,18 +26,19 @@ public class Everglow : Mod
 
 		AddServices();
 		AddContents();
-
+		ShakeTreeTweak.Load();
 		m_packetResolver = new PacketResolver(this);
 	}
 
 	private void AddServices()
 	{
 		Ins.Begin();
-		Ins.Add<ILog>(Logger);
-		Ins.Add<GraphicsDevice>(Main.instance.GraphicsDevice);
+		Ins.Add(Logger);
+		Ins.Add(Main.instance.GraphicsDevice);
+		Ins.Add(Main.spriteBatch);
 		Ins.Add<IVisualQualityController, VisualQualityController>();
 		Ins.Add<ModuleManager>();
-		Ins.Add<IHookManager, HookManager.TrueHookManager>();
+		Ins.Add<IHookManager, HookManager>();
 		Ins.Add<IMainThreadContext, MainThreadContext>();
 		if (Main.netMode != NetmodeID.Server)
 		{

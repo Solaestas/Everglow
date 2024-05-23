@@ -1,3 +1,4 @@
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.EternalResolve.VFXs;
 using SteelSeries.GameSense;
 
@@ -30,24 +31,25 @@ public class OnElectric : ModBuff
 		}
 		if (Main.rand.NextBool(3))
 		{
-			Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustID.Electric);
-			dust.velocity = new Vector2(0, Main.rand.NextFloat(5f)).RotatedByRandom(6.283);
-			dust.scale = Main.rand.NextFloat(0.55f, 0.85f);
-			dust.noGravity = true;
+			Dust d = Dust.NewDustDirect(npc.Center, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
+			d.scale = Main.rand.NextFloat(0.85f, 1.15f) * 0.04f;
 		}
 
-		float mulWidth = 1f;
-		Vector2 newVelocity = npc.velocity * 0.3f + new Vector2(Main.rand.NextFloat(6f, 8f), 0).RotatedByRandom(6.283);
-		var yoenLeZedElecticFlowDust = new YoenLeZedElecticFlowDust_split_withoutPlayer
+		float mulVelocity = 1f;
+		float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(4f, 10f));
+		Vector2 afterVelocity = new Vector2(0, size * 1.3f).RotatedByRandom(MathHelper.TwoPi);
+		var electric = new ElectricCurrent
 		{
-			velocity = newVelocity,
+			velocity = afterVelocity * mulVelocity,
 			Active = true,
 			Visible = true,
-			position = npc.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + npc.velocity * Main.rand.NextFloat(-2.0f, -1.2f) - newVelocity * 2f,
-			maxTime = Main.rand.Next(6, 11),
-			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.08f, 0.08f), Main.rand.NextFloat(26.6f, 28f) * mulWidth}
+			position = npc.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - afterVelocity * mulVelocity * 2,
+			maxTime = size * size / 8f,
+			scale = size,
+			ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size, Main.rand.NextFloat(0.2f, Main.rand.NextFloat(0.2f, 0.4f)) }
 		};
-		Ins.VFXManager.Add(yoenLeZedElecticFlowDust);
+		Ins.VFXManager.Add(electric);
+
 		base.Update(npc, ref buffIndex);
 	}
 }

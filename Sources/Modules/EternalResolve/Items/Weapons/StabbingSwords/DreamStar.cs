@@ -1,3 +1,4 @@
+using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
@@ -16,11 +17,21 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		{
 			Item.damage = 10;
 			Item.knockBack = 1.5f;
-			Item.rare = ItemRarityID.LightRed;
+			Item.rare = ItemRarityID.Blue;
 			Item.value = Item.sellPrice(0, 2, 27, 15);
 			Item.shoot = ModContent.ProjectileType<DreamStar_Pro>();
-			PowerfulStabProj = 1;
+			StabMulDamage = 2.2f;
+			PowerfulStabProj = ModContent.ProjectileType<DreamStar_Pro_Stab>();
+			staminaCost -= 0.1f;
 			base.SetDefaults();
+		}
+		public override void AddRecipes()
+		{
+			CreateRecipe()
+				.AddIngredient(ItemID.FallenStar, 18)
+				.AddIngredient(ItemID.SunplateBlock, 45)
+				.AddTile(TileID.SkyMill)
+				.Register();
 		}
 	}
 }

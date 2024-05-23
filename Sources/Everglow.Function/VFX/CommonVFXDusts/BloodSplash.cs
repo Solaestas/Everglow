@@ -20,8 +20,8 @@ public class BloodSplashPipeline : Pipeline
 		effect.Parameters["uIlluminationThresholdII"].SetValue(0.05f);
 		Texture2D FlameColor = ModAsset.HeatMap_bloodSplash.Value;
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearClamp, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointClamp, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 
@@ -47,6 +47,16 @@ public class BloodSplash : Visual
 	public override void Update()
 	{
 		position += velocity * 0.001f;
+		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
+		{
+			Active = false;
+			return;
+		}
+		if (position.Y <= 320 || position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			Active = false;
+			return;
+		}
 		oldPos.Add(position);
 		if (oldPos.Count > 15)
 			oldPos.RemoveAt(0);

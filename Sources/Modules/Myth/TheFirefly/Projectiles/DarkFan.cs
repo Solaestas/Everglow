@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Buffs;
 using Terraria;
 
@@ -31,7 +31,7 @@ internal class DarkFan : ModProjectile
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Player player = Main.player[Projectile.owner];
-		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<FanHit>(), 0, 0, player.whoAmI, 0.75f);
+		Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<FanHit>(), 0, 0, player.whoAmI, 10, Main.rand.NextFloat(6.283f));
 		int[] array = Projectile.localNPCImmunity;
 		bool flag = !Projectile.usesLocalNPCImmunity && !Projectile.usesIDStaticNPCImmunity || Projectile.usesLocalNPCImmunity && array[target.whoAmI] == 0 || Projectile.usesIDStaticNPCImmunity && Projectile.IsNPCIndexImmuneToProjectileType(Projectile.type, target.whoAmI);
 		if (target.active && !target.dontTakeDamage && flag && (target.aiStyle != 112 || target.ai[2] <= 1f))
@@ -40,21 +40,14 @@ internal class DarkFan : ModProjectile
 				Main.player[Projectile.owner].MinionAttackTargetNPC = target.whoAmI;
 		}
 		target.AddBuff(ModContent.BuffType<OnMoth>(), 300);
-		int MaxS = -1;
-		for (int p = 0; p < 58; p++)
-		{
-			if (player.inventory[p].type == player.HeldItem.type)
-				MaxS += 1;
-		}
-		if (MaxS > 5)
-			MaxS = 5;
 
-		MothBuffTarget mothBuffTarget = target.GetGlobalNPC<MothBuffTarget>();
-		if (mothBuffTarget.MothStack < 5 + MaxS * 0)
-			mothBuffTarget.MothStack += 1;
+		target.AddBuff(ModContent.BuffType<FireflyInferno>(), 120);
+
+		if (MothBuffTarget.mothStack[target.whoAmI] < 5)
+			MothBuffTarget.mothStack[target.whoAmI] += 1;
 		else
 		{
-			mothBuffTarget.MothStack = 5 + MaxS * 0;
+			MothBuffTarget.mothStack[target.whoAmI] = 5;
 		}
 	}
 
@@ -107,15 +100,15 @@ internal class DarkFan : ModProjectile
 			ExtraKnife = true;
 			Projectile.timeLeft = 70;
 		}
-		int Freq = 270 / (2 + player.maxMinions);
-		if (Projectile.timeLeft % Freq == 0)
-			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), player.Center, (v1 + new Vector2(29, 29)) / 8f, ModContent.ProjectileType<GlowingButterfly>(), Projectile.damage / 3 * 2, Projectile.knockBack, player.whoAmI, player.GetCritChance(DamageClass.Summon) + 8, 0f);
+		int frequency = 270 / (2 + player.maxMinions);
+		if (Projectile.timeLeft % frequency == 0)
+			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), player.Center, (v1 + new Vector2(29, 29)) / 8f, ModContent.ProjectileType<GlowingButterfly>(), Projectile.damage / 3 * 2, Projectile.knockBack, player.whoAmI, Main.rand.Next(2), 0f);
 	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Player player = Main.player[Projectile.owner];
-		Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/DarkFan");
+		Texture2D t = ModAsset.DarkFan.Value;
 		var drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
 		if (ExtraKnife)
 		{
@@ -241,7 +234,7 @@ internal class DarkFan : ModProjectile
 		return false;
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 	}
 
@@ -289,7 +282,7 @@ internal class DarkFan : ModProjectile
 			}
 		}
 
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheFirefly/Items/Weapons/DarknessFan");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.DarknessFan.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 		for (int ad = 0; ad < 5; ad++)
 		{
@@ -327,7 +320,7 @@ internal class DarkFan : ModProjectile
 			}
 		}
 
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("Glows/DarknessFan_glow");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.DarknessFan_glow.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 	}
 }

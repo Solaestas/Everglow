@@ -150,7 +150,7 @@ internal class SightOfTileProjRead : ModProjectile
 	private void DrawNinePiecesForTiles(int LeftX, int RightX, int UpY, int DownY)
 	{
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Texture2D t = ModContent.Request<Texture2D>("Everglow/ZY/Items/Rectangle").Value;
 		var baseColor = new Color(0, 30, 120, 180);
 		if (LeftX == RightX)
@@ -273,7 +273,7 @@ internal class SightOfTileProjRead : ModProjectile
 		return baseColor;
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		if (timeLeft > 0)
 		{
@@ -295,6 +295,6 @@ internal class SightOfTileProjRead : ModProjectile
 			WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 			WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 		}
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 }

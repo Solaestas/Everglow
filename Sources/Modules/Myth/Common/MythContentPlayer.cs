@@ -1,4 +1,4 @@
-using Everglow.Myth.Misc.Projectiles.Weapon.Melee.Hepuyuan;
+using Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
 
 namespace Everglow.Myth.Common;
 
@@ -103,7 +103,7 @@ public class MythContentPlayer : ModPlayer
 			Player.wingAccRunSpeed += 0.05f;
 			Player.GetDamage(DamageClass.Generic) *= 1.05f;
 		}
-		if (Player.ownedProjectileCounts[ModContent.ProjectileType<Hepuyuan>()] + Player.ownedProjectileCounts[ModContent.ProjectileType<HepuyuanDown>()] > 0)
+		if (Player.ownedProjectileCounts[ModContent.ProjectileType<PrimordialJadeWinged_Spear>()] + Player.ownedProjectileCounts[ModContent.ProjectileType<PrimordialJadeWinged_SpearDown>()] > 0)
 			Player.maxFallSpeed += 10000f;
 	}
 

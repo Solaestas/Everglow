@@ -1,3 +1,4 @@
+using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
@@ -8,10 +9,12 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		{
 			Item.damage = 9;
 			Item.knockBack = 1.45f;
-			Item.rare = ItemRarityID.White;
+			Item.rare = ItemRarityID.Green;
 			Item.value = Item.sellPrice(0, 0, 24, 0);
 			Item.shoot = ModContent.ProjectileType<EnchantedBayonet_Pro>();
-			PowerfulStabProj = 1;
+			StabMulDamage = 4f;
+			staminaCost -= 0.1f;
+			PowerfulStabProj = ModContent.ProjectileType<EnchantedBayonet_Pro_Stab>();
 			base.SetDefaults();
 		}
 	}

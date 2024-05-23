@@ -1,15 +1,16 @@
-using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
-using Terraria;
+using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Myth.Misc.Projectiles.Accessory;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class IchorClub : ClubProj
 {
+	float vfxTimer = 0;
 	public override void SetDef()
 	{
 		Beta = 0.005f;
 		MaxOmega = 0.45f;
+		vfxTimer = 0;
 		WarpValue = 0.3f;
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -17,7 +18,7 @@ public class IchorClub : ClubProj
 		for (int x = 0; x < 2; x++)
 		{
 			Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
-			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center + velocity * -2, velocity, ModContent.ProjectileType<GoldenShowerII>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center + velocity * -2, velocity, ModContent.ProjectileType<IchorCurrent>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
 			p.friendly = false;
 			p.CritChance = Projectile.CritChance;
 		}
@@ -40,27 +41,21 @@ public class IchorClub : ClubProj
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<IchorClub_fly>(), (int)(Projectile.damage * 0.3f), Projectile.knockBack * 0.4f, Projectile.owner);
 			}
 		}
+		vfxTimer += (Omega * 4);
+		if (vfxTimer >= 1)
+		{
+			GenerateVFX((int)(vfxTimer));
+			vfxTimer = 0;
+		}
+
 	}
 	private int FlyClubCooling = 0;
-	private void GenerateDust()
-	{
-		var v0 = new Vector2(1, 1);
-		v0 *= Main.rand.NextFloat(Main.rand.NextFloat(1, HitLength), HitLength);
-		v0.X *= Projectile.spriteDirection;
-		if (Main.rand.NextBool(2))
-			v0 *= -1;
-		v0 = v0.RotatedBy(Projectile.rotation);
-		float Speed = Math.Min(Omega * 0.5f, 0.221f);
-		var D = Dust.NewDustDirect(Projectile.Center + v0 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.Ichor, -v0.Y * Speed, v0.X * Speed, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
-		D.noGravity = true;
-		D.velocity = new Vector2(-v0.Y * Speed, v0.X * Speed);
-	}
 	public override void PostDraw(Color lightColor)
 	{
 		SpriteEffects effects = SpriteEffects.None;
 		if (Projectile.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;
-		Texture2D texture = MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/Clubs/IchorClub_glow");
+		Texture2D texture = ModAsset.Melee_IchorClub_glow.Value;
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
 		for (int i = 0; i < 5; i++)
 		{
@@ -111,30 +106,12 @@ public class IchorClub : ClubProj
 			bars.Add(new Vertex2D(Projectile.Center - trail[i] * 1.0f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 0, w)));
 		}
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		//Effect MeleeTrail = MythContent.QuickEffect("Misc/Projectiles/Weapon/Melee/Clubs/MetalClubTrail");
-		//MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
-		//MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
-		//if (ReflectTexturePath != "")
-		//{
-		//    try
-		//    {
-		//        MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(ReflectTexturePath).Value);
-		//    }
-		//    catch
-		//    {
-		//        MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
-		//    }
-		//}
 		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
 		lightColor.W = 0.7f * Omega;
-		//MeleeTrail.Parameters["Light"].SetValue(lightColor);
-		//MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
@@ -258,22 +235,29 @@ public class IchorClub : ClubProj
 			return;
 
 		var bars = new List<Vertex2D>();
-		var light = new Color(1f, 1f, 1f, 1f);
+		var light = new Color(1f, 1f, 1f, 0f);
 		light *= 2;
 		light.A /= 4;
 		light.G = (byte)(light.G * 0.8f);
 		light.B = 0;
+		float timeValue = (float)Main.time * 0.07f;
 		for (int i = 0; i < length; i++)
 		{
-			float factor = i / (length - 1f);
+			float factor = i / 30f - timeValue;
 			float delta = (1 - timeLeft / 64f * 0.45f) * Omega / MaxOmega + 1 - Omega / MaxOmega;
-			float maxValue = 20f;
-			if (length < maxValue)
-				delta = delta * length / maxValue + (maxValue - length) / maxValue;
-			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * delta * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 0, 0f)));
+			if(i < 10)
+			{
+				delta *= i / 10f;
+			}
+			if(length - i - 1 < 10)
+			{
+				delta *= (length - i - 1) / 10f;
+			}
+			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i].RotatedBy(timeValue * 1.5f) * delta * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 1, 0f)));
+			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i].RotatedBy(timeValue * 1.5f) * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 0, 0f)));
 		}
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineShade");
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_5.Value;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 	}
 	private void UpdateMoon(ref List<Vector2> listVec)
@@ -317,5 +301,52 @@ public class IchorClub : ClubProj
 	private void DeactivateMoon(ref List<Vector2> listVec)
 	{
 		listVec.Clear();
+	}
+	public void GenerateVFX(int Frequency)
+	{
+		Player player = Main.player[Projectile.owner];
+		float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
+		for (int g = 0; g < Frequency * 2; g++)
+		{
+			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(MathHelper.TwoPi);
+			float mulScale = Main.rand.NextFloat(6f, 14f);
+			Vector2 startPos = new Vector2(MathF.Sqrt(Main.rand.NextFloat(0f, 1f)) * 56f, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection);
+			if (Main.rand.NextBool(2))
+			{
+				startPos *= -1;
+			}
+			var blood = new IchorDrop
+			{
+				velocity = afterVelocity * mulVelocity / mulScale + startPos.RotatedBy(MathHelper.PiOver2) * Omega * 0.4f + player.velocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + startPos,
+				maxTime = Main.rand.Next(6, 32),
+				scale = mulScale,
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
+			};
+			Ins.VFXManager.Add(blood);
+		}
+		for (int g = 0; g < Frequency; g++)
+		{
+			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(3f)).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 startPos = new Vector2(MathF.Sqrt(Main.rand.NextFloat(0f, 1f)) * 56f, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection);
+			if (Main.rand.NextBool(2))
+			{
+				startPos *= -1;
+			}
+			var blood = new IchorSplash
+			{
+				velocity = afterVelocity * mulVelocity + startPos.RotatedBy(MathHelper.PiOver2) * Omega * 0.4f + player.velocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + startPos,
+				maxTime = Main.rand.Next(6, 32),
+				scale = Main.rand.NextFloat(6f, 12f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 }
+			};
+			Ins.VFXManager.Add(blood);
+		}
 	}
 }

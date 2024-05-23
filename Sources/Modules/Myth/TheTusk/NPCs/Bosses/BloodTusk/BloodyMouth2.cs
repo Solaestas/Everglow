@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Bosses.Acytaea.Projectiles;
+using Everglow.Myth.Acytaea.Projectiles;
 using Terraria;
 using Terraria.Localization;
 
@@ -127,18 +127,6 @@ public class BloodyMouth2 : ModNPC
 					NPC.active = false;
 			}
 		}
-		if (!Main.gamePaused)
-		{
-			if (NPC.rotation != 0)
-			{
-				if (Coo >= 120)
-				{
-					if ((player.Center - NPC.Center).Length() < 120)
-						// 弹幕
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center, new Vector2(0), ModContent.ProjectileType<playerHit>(), 90, 3f, Main.myPlayer, 0);
-				}
-			}
-		}
 		if (Dam == 0)
 		{
 			Dam = 150;
@@ -161,24 +149,6 @@ public class BloodyMouth2 : ModNPC
 		Color color = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
 		color = NPC.GetAlpha(color) * ((255 - NPC.alpha) / 255f);
 		Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodyMouth2").Value;
-		if (!Main.gamePaused)
-		{
-			for (int x = 0; x < t0.Width - (int)V[1].Y - 40; x += 20)
-			{
-				if (Main.LocalPlayer.active)
-				{
-					if (!Main.LocalPlayer.dead)
-					{
-						if ((Main.LocalPlayer.Center - NPC.Center + new Vector2(-x, 0).RotatedBy(NPC.rotation)).Length() < 30)
-							// 弹幕
-							Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Dam / 8, 1, 0, 0, 0);
-						if ((Main.LocalPlayer.Center - NPC.Center + new Vector2(-x, 0).RotatedBy(NPC.rotation)).Length() < 30)
-							// 弹幕
-							Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Dam / 8, 1, 0, 0, 0);
-					}
-				}
-			}
-		}
 		if (Coo < 405)
 		{
 			if (Coo >= 120)

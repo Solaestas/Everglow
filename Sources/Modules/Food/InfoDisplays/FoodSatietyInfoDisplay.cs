@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Terraria.Localization;
 
 namespace Everglow.Food.InfoDisplays;
@@ -9,7 +10,7 @@ public class FoodSatietyInfoDisplay : InfoDisplay
 		return Main.LocalPlayer.GetModPlayer<FoodSatietyInfoDisplayplayer>().ShowCurrentSatiety;
 	}
 
-	public override string DisplayValue(ref Color displayColor)
+	public override string DisplayValue(ref Color displayColor, ref Color displayShadowColor)/* tModPorter Suggestion: Set displayColor to InactiveInfoTextColor if your display value is "zero"/shows no valuable information */
 	{
 		int currentSatiety = Main.LocalPlayer.GetModPlayer<FoodModPlayer>().CurrentSatiety;
 		int level = Main.LocalPlayer.GetModPlayer<FoodModPlayer>().SatietyLevel;

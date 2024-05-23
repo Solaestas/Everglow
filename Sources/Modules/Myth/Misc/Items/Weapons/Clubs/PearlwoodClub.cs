@@ -7,11 +7,12 @@ public class PearlwoodClub : ClubItem
 		Item.damage = 9;
 		Item.value = 111;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.PearlwoodClub>();
+		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.PearlwoodClub_smash>();
 	}
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ItemID.Pearlwood, 18)
+			.AddIngredient(ItemID.Pearlwood, 8)
 			.AddTile(TileID.WorkBenches)
 			.Register();
 	}

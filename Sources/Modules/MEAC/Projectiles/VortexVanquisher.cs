@@ -26,9 +26,32 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 	{
 		return BlendState.Additive;
 	}
-	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, string GlowPath, double DrawRotation)
+	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{
-		base.DrawSelf(spriteBatch, lightColor, 240, 40, 0.75f, "MEAC/Projectiles/VortexVanquisherGlow");
+		drawScale = new Vector2(-0.6f, 1.13f);
+		glowTexture = ModAsset.VortexVanquisherGlow.Value;
+		if (diagonal == new Vector4())
+		{
+			diagonal = new Vector4(0, 1, 1, 0);
+		}
+		if (drawScale == new Vector2())
+		{
+			drawScale = new Vector2(0, 1);
+			if (longHandle)
+			{
+				drawScale = new Vector2(-0.6f, 1);
+			}
+		}
+		Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+		Vector2 drawCenter = Projectile.Center - Main.screenPosition;
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+		DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
+		DrawVertexByTwoLine(glowTexture, new Color(1f, 1f, 1f, 0), diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
@@ -63,55 +86,44 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 		useTrail = true;
 
 		Vector2 vToMouse = Main.MouseWorld - player.Top;
-		float AddHeadRotation = (float)Math.Atan2(vToMouse.Y, vToMouse.X) + (1 - player.direction) * 1.57f;
-		if (player.gravDir == -1)
+		float addHeadRotation = ((float)Math.Atan2(vToMouse.Y, vToMouse.X) + 6.283f) % 6.283f;
+
+		/*if (player.direction == -1)
 		{
-			if (player.direction == -1)
-			{
-				if (AddHeadRotation >= 0.57f && AddHeadRotation < 2)
-					AddHeadRotation = 0.57f;
-			}
-			else
-			{
-				if (AddHeadRotation <= -0.57f)
-					AddHeadRotation = -0.57f;
-			}
+			if (addHeadRotation >= 2 && addHeadRotation < 5.71f)
+				addHeadRotation = 5.71f;
 		}
 		else
 		{
-			if (player.direction == -1)
-			{
-				if (AddHeadRotation >= 2 && AddHeadRotation < 5.71f)
-					AddHeadRotation = 5.71f;
-			}
-			else
-			{
-				if (AddHeadRotation >= 0.57f)
-					AddHeadRotation = 0.57f;
-			}
-		}
+			if (addHeadRotation >= 0.57f)
+				addHeadRotation = 0.57f;
+		}*/
+		float timeMul = 1f / player.meleeSpeed;
 
 		if (attackType == 0)
 		{
 			int t = timer;
-			if (t < 20)
+			if(t == 0)
 			{
+				player.direction = Projectile.spriteDirection;
+			}
+			if (t < 4 * timeMul)
+			{
+				LockPlayerDir(player);
 				useTrail = false;
-				LockPlayerDir(Player);
-				float targetRot = -MathHelper.PiOver2 - Player.direction * 0.8f;
-				mainVec = Vector2.Lerp(mainVec, Player.DirectionTo(MouseWorld_WithoutGravDir) * 150, 0.2f);
+				mainVec = Vector2.Lerp(mainVec, Player.DirectionTo(Main.MouseWorld) * 150, 0.9f / timeMul);
 				disFromPlayer = MathHelper.Lerp(disFromPlayer, -30, 0.2f);
 				Projectile.rotation = mainVec.ToRotation();
 			}
-			if (t >= 20 && t < 40)
+			if (t >= 4 * timeMul && t < 24 * timeMul)
 			{
-				if (t == 20)
+				if (t == (int)(5 * timeMul))
 				{
 					SoundEngine.PlaySound(SoundID.Item1);
 					if (Main.myPlayer == Projectile.owner)
 						Projectile.NewProjectile(Player.GetSource_FromAI(), Projectile.Center, Vector2.Normalize(mainVec) * 20, ModContent.ProjectileType<DashingLightEff>(), 1, 0, Projectile.owner);
 				}
-				if (t < 30)
+				if (t < 14 * timeMul)
 				{
 					disFromPlayer += 20;
 					isAttacking = true;
@@ -121,7 +133,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 					disFromPlayer -= 20;
 				}
 			}
-			if (t > 40)
+			if (t > 30 * timeMul)
 			{
 				disFromPlayer = 6;
 				NextAttackType();
@@ -133,33 +145,33 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
-				Tplayer.HeadRotation = -BodyRotation + AddHeadRotation;
+				//Tplayer.HeadRotation = -BodyRotation + addHeadRotation * player.gravDir;
 			}
 		}
 		if (attackType == 1)
 		{
-			if (timer < 20)
+			if (timer < 20 * timeMul)
 			{
 				useTrail = false;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 1.2f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(180, targetRot, -1.2f), 0.15f);
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(180, targetRot, -1.2f), 0.15f / timeMul);
 				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
-			if (timer == 8)
+			if (timer == (int)(8 * timeMul))
 			{
 				AttSound(new SoundStyle(
 			"Everglow/MEAC/Sounds/TrueMeleeSwing"));
 			}
-			if (timer > 20 && timer < 35)
+			if (timer > 20 * timeMul && timer < 35 * timeMul)
 			{
 				Lighting.AddLight(Projectile.Center + mainVec, 0.9f, 0.6f, 0f);
 				isAttacking = true;
-				Projectile.rotation += Projectile.spriteDirection * 0.4f;
+				Projectile.rotation += Projectile.spriteDirection * 0.4f / timeMul;
 				mainVec = Vector2Elipse(180, Projectile.rotation, -1.2f);
 			}
-			if (timer > 40)
+			if (timer > 40 * timeMul)
 				NextAttackType();
 			else if (timer > 1)
 			{
@@ -168,26 +180,26 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
-				Tplayer.HeadRotation = -BodyRotation;
+				//Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
 		if (attackType == 2)
 		{
 			useTrail = false;
 			drawScaleFactor = 0;
-			if (timer < 20)
+			if (timer < 20 * timeMul)
 			{
 				LockPlayerDir(Player);
 				float targetRot = MathHelper.PiOver2 - Player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, targetRot.ToRotationVector2() * 180, 0.15f);
+				mainVec = Vector2.Lerp(mainVec, targetRot.ToRotationVector2() * 180, 0.15f / timeMul);
 				Projectile.rotation = mainVec.ToRotation();
 			}
-			if (timer == 20)
+			if (timer == (int)(20 * timeMul))
 			{
 				for (int i = 0; i < 30; i++)
 				{
 					int r = 6;
-					Vector2 pos = Projectile.Center + Vector2.Lerp(-mainVec, mainVec, i / 30f) - new Vector2(r);
+					Vector2 pos = Projectile.Center + Vector2.Lerp(-mainVec, mainVec, i / 30f / timeMul) - new Vector2(r);
 					Dust s = Dust.NewDustDirect(pos, r * 2, r * 2, DustID.AmberBolt);
 					s.noGravity = true;
 					s.velocity *= 0.1f;
@@ -202,7 +214,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				}
 			}
 
-			if (timer >= 50)
+			if (timer >= 50 * timeMul)
 			{
 				NextAttackType();
 				drawScaleFactor = 1;
@@ -215,7 +227,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
-				Tplayer.HeadRotation = -BodyRotation + AddHeadRotation;
+				//Tplayer.HeadRotation = -BodyRotation + addHeadRotation;
 			}
 		}
 		if (attackType == 3)
@@ -226,21 +238,22 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				Projectile.velocity = Vector2.Zero;
 				LockPlayerDir(Player);
 			}
-			if (timer < 120)
+			if (timer < 120 * timeMul)
 			{
 				Lighting.AddLight(Projectile.Center + mainVec + Projectile.velocity, 0.9f, 0.6f, 0f);
-				if (timer % 10 == 0)
+				if (timer % (int)(10 * timeMul) == 0)
 					AttSound(SoundID.Item1);
 				CanIgnoreTile = true;
 				isAttacking = true;
 				Projectile.extraUpdates = 2;
 				Projectile.Center += Projectile.velocity;
-				Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Normalize(MouseWorld_WithoutGravDir - Player.Center) * 180, 0.06f);
-				Projectile.rotation += 0.3f * Projectile.spriteDirection;
+				Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Normalize(Main.MouseWorld - Player.Center) * 180, 0.06f);
+				Projectile.rotation += 0.3f * Projectile.spriteDirection / timeMul;
 				mainVec = Projectile.rotation.ToRotationVector2() * 160;
+				Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Vector2.Normalize(Main.MouseWorld - Player.Center).ToRotation() - 1.57f);
 			}
 
-			if (timer > 120)
+			if (timer > 120 * timeMul)
 			{
 				CanIgnoreTile = false;
 				NextAttackType();
@@ -253,7 +266,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 			{
 				useTrail = false;
 
-				Vector2 vec = Vector2.Normalize(MouseWorld_WithoutGravDir - Player.Center);
+				Vector2 vec = Vector2.Normalize(Main.MouseWorld - Player.Center);
 				Projectile.rotation = vec.ToRotation();
 				mainVec = vec * 160;
 				Player.velocity += Vector2.Normalize(Main.MouseWorld - Player.Center) * 20;
@@ -261,7 +274,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				if (Main.myPlayer == Projectile.owner)
 					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Normalize(mainVec) * 25, ModContent.ProjectileType<DashingLightEff>(), 0, 0, Projectile.owner);
 			}
-			if (timer < 20)
+			if (timer < 20 * timeMul)
 			{
 				if (Player.velocity.Length() > 15)
 					Player.velocity *= 0.9f;
@@ -275,9 +288,9 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 					disFromPlayer -= 30;
 				}
 			}
-			if (timer > 30)
+			if (timer > 30 * timeMul)
 				Player.velocity *= 0.9f;
-			if (timer > 40)
+			if (timer > 40 * timeMul)
 				NextAttackType();
 			else if (timer > 1)
 			{
@@ -287,7 +300,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
-				Tplayer.HeadRotation = -BodyRotation;
+				//Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
 	}

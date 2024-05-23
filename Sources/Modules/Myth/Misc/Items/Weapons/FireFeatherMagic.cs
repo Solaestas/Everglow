@@ -1,11 +1,13 @@
-using Everglow.Myth.MagicWeaponsReplace.GlobalItems;
+using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
+using Everglow.SpellAndSkull.GlobalItems;
+using Everglow.SpellAndSkull.Items;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Myth.Misc.Items.Weapons;
 
-public class FireFeatherMagic : ModItem
+public class FireFeatherMagic : SpellTomeItem
 {
 	public override void SetStaticDefaults()
 	{
@@ -30,6 +32,9 @@ public class FireFeatherMagic : ModItem
 		Item.shootSpeed = 4;
 		Item.crit = 16;
 		Item.mana = 12;
+
+		DecorativeProjectileTypes.Add(ModContent.ProjectileType<FireFeatherMagicBook>());
+		DecorativeProjectileTypes.Add(ModContent.ProjectileType<FireFeatherMagicArray>());
 	}
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
@@ -47,10 +52,6 @@ public class FireFeatherMagic : ModItem
 			}
 		}
 		return false;
-	}
-	float useSpeed = -1f;
-	public override void HoldItem(Player player)
-	{
 	}
 	public override void AddRecipes()
 	{

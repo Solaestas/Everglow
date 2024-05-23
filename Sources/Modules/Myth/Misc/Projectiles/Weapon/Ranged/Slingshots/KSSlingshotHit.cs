@@ -24,7 +24,7 @@ class KSSlingshotHit : ModProjectile
 		return false;
 	}
 	private Effect ef;
-	float radious = 0;
+	float radius = 0;
 	public override void PostDraw(Color lightColor)
 	{
 		Main.spriteBatch.End();
@@ -33,21 +33,21 @@ class KSSlingshotHit : ModProjectile
 		ef = ModContent.Request<Effect>("Everglow/Myth/Effects/FadeSlingshot").Value;
 		float widx = Projectile.timeLeft / 120f;
 		float widxM = 1f - widx;
-		radious = (float)(Math.Sqrt(5 * widxM) * 20);
+		radius = (float)(Math.Sqrt(5 * widxM) * 20);
 		float width = widx * widx * 80f + 10;
 		for (int i = 0; i < 41; ++i)
 		{
-			Vector2 vDp = new Vector2(0, radious).RotatedBy(i / 20d * Math.PI);
+			Vector2 vDp = new Vector2(0, radius).RotatedBy(i / 20d * Math.PI);
 			var normalDir = Vector2.Normalize(vDp);
 
 			var factor = i / 12.5f;
 			var color = Color.Lime;
 			var w = MathHelper.Lerp(1f, 0.05f, 0.5f);
-			float delk0 = (width - radious) / (float)width / 2f;
+			float delk0 = (width - radius) / (float)width / 2f;
 			if (delk0 < 0)
 				delk0 = 0;
 			bars.Add(new Vertex2D(vDp + Projectile.Center + normalDir * width, color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-			bars.Add(new Vertex2D(vDp + Projectile.Center + normalDir * -Math.Clamp(width, 0, radious), color, new Vector3((float)Math.Sqrt(factor), delk0, w)));
+			bars.Add(new Vertex2D(vDp + Projectile.Center + normalDir * -Math.Clamp(width, 0, radius), color, new Vector3((float)Math.Sqrt(factor), delk0, w)));
 		}
 
 		var triangleList = new List<Vertex2D>();

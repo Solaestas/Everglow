@@ -1,4 +1,4 @@
-﻿using Everglow.Commons.CustomTiles;
+using Everglow.Commons.CustomTiles;
 
 namespace Everglow.Yggdrasil.Common.Elevator.Tiles;
 
@@ -78,7 +78,7 @@ public class Winch : ModTile
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
 
-		Texture2D t = YggdrasilContent.QuickTexture("Common/Elevator/Tiles/LiftWinch");
+		Texture2D t = ModAsset.Tiles_LiftWinch.Value;
 		Color c0 = Lighting.GetColor(i, j);
 
 		spriteBatch.Draw(t, new Vector2(i * 16, j * 16) - Main.screenPosition + new Vector2(8, 6)/* + new Vector2((int)Vdrag.X, (int)Vdrag.Y)*/ + zero, null, c0, 0, t.Size() / 2f, 1, SpriteEffects.None, 0);

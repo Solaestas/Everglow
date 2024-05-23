@@ -1,4 +1,4 @@
-﻿using Everglow.Yggdrasil.Common;
+using Everglow.Yggdrasil.Common;
 
 namespace Everglow.Yggdrasil.CorruptWormHive.VFXs;
 
@@ -9,7 +9,7 @@ internal class DevilPipeline : PostPipeline
 	{
 		var sb = Main.spriteBatch;
 		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-		effect.Value.Parameters["tex1"].SetValue(YggdrasilContent.QuickTexture("CorruptWormHive/VFXs/DeathSickle_Color"));
+		effect.Value.Parameters["tex1"].SetValue(ModAsset.VFXs_DeathSickle_Color.Value);
 		effect.Value.Parameters["uTransform"].SetValue(
 			Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1)
 			);

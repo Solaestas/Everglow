@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic;
 
@@ -111,7 +111,7 @@ public class ThunderBallToNPC : ModProjectile
 				RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
 
 
-				Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIImages/VisualTextures/heatmapBlue2");
+				Main.graphics.GraphicsDevice.Textures[0] = ModAsset.heatmapBlue2.Value;
 
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
 

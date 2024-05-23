@@ -42,8 +42,8 @@ internal class GelSlingshot : SlingshotProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		DrawTexLine(Head1, SlingshotStringTail, 1, drawColor, MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/GelString"));
-		DrawTexLine(Head2, SlingshotStringTail, 1, drawColor, MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/GelString"));
+		DrawTexLine(Head1, SlingshotStringTail, 1, drawColor, ModAsset.GelString.Value);
+		DrawTexLine(Head2, SlingshotStringTail, 1, drawColor, ModAsset.GelString.Value);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}

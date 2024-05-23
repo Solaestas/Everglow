@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>Everglow.Commons</RootNamespace>
-		<Solaestas-UseAssetPath>false</Solaestas-UseAssetPath>
+		<EnablePathGenerator>false</EnablePathGenerator>
 	</PropertyGroup>
 	<ItemGroup>
 		<Reference Remove="$(tMLPath)" />
@@ -22,6 +22,7 @@
 		<Solaestas-TextFile Remove="Physics\Everglow.Commons.Physics.PBEngine\**" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="MathNet.Numerics" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
 	</ItemGroup>
 </Project>

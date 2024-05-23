@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.Misc.Dusts;
+namespace Everglow.Myth.Misc.Dusts;
 
 public class GreenEffect2 : ModDust
 {
@@ -18,7 +18,6 @@ public class GreenEffect2 : ModDust
 			return new Color?(new Color(1f, 1f, 1f, 0));
 		}
 	}
-	private float po = 0;
 	public override bool Update(Dust dust)
 	{
 		dust.position += dust.velocity;
