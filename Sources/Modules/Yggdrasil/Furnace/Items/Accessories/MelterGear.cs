@@ -6,11 +6,11 @@ namespace Everglow.Yggdrasil.Furnace.Items.Accessories;
 
 public class MelterGear : ModItem
 {
-	public static readonly int RangedAttackSpeedBonus = 9;
-	public static readonly int DefenseBonus = 2;
+	public const int RangedAttackSpeedBonus = 9;
+	public const int DefenseBonus = 2;
 
-	public static readonly double BuffTriggerRate = 0.33d;
-	public static readonly int BuffDuration = 300;
+	public const float BuffTriggerRate = 0.33f;
+	public const int BuffDuration = 300;
 
 	public override void SetDefaults()
 	{
@@ -37,23 +37,17 @@ internal class MelterGearPlayer : ModPlayer
 {
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		Random random = new();
-
 		if (target.onFire)
 		{
-			var playerRate = random.NextDouble();
-			if (playerRate < MelterGear.BuffTriggerRate)
+			if (Main.rand.NextFloat() < MelterGear.BuffTriggerRate)
 			{
 				Player.AddBuff(BuffID.OnFire, MelterGear.BuffDuration);
 			}
 		}
 
-		var targetRate = random.NextDouble();
-		if (targetRate < MelterGear.BuffTriggerRate)
+		if (Main.rand.NextFloat() < MelterGear.BuffTriggerRate)
 		{
 			target.AddBuff(BuffID.OnFire, MelterGear.BuffDuration);
 		}
-
-		base.OnHitNPC(target, hit, damageDone);
 	}
 }

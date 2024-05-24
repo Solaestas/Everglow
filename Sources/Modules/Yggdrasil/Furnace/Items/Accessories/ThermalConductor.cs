@@ -4,10 +4,10 @@ namespace Everglow.Yggdrasil.Furnace.Items.Accessories;
 
 public class ThermalConductor : ModItem
 {
-	public static readonly double StatusTriggerCondition = 0.2d;
-	public static readonly double StatusTriggerRate = 0.33d;
-	public static readonly int DebuffDuration = 300;
-	public static readonly int ManaHeal = 100;
+	public const float StatusTriggerCondition = 0.2f;
+	public const float StatusTriggerRate = 0.33f;
+	public const int DebuffDuration = 300;
+	public const int ManaHeal = 100;
 
 	public override void SetDefaults()
 	{
@@ -32,7 +32,7 @@ public class ThermalConductor : ModItem
 	}
 }
 
-public class ThermalConductorPlayer : ModPlayer
+internal class ThermalConductorPlayer : ModPlayer
 {
 	public override void PreUpdate()
 	{
@@ -45,8 +45,7 @@ public class ThermalConductorPlayer : ModPlayer
 			}
 
 			// Random
-			Random random = new Random();
-			if (random.NextDouble() >= ThermalConductor.StatusTriggerRate)
+			if (Main.rand.NextFloat() >= ThermalConductor.StatusTriggerRate)
 			{
 				return;
 			}

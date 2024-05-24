@@ -5,7 +5,7 @@ namespace Everglow.Yggdrasil.Furnace.Items.Accessories;
 [AutoloadEquip(EquipType.Balloon)]
 public class HotAirBalloon : ModItem
 {
-	public static readonly int JumpSpeedBoost = 2;
+	public const int JumpSpeedBoost = 2;
 
 	public override void SetDefaults()
 	{
@@ -29,7 +29,7 @@ public class HotAirBalloon : ModItem
 	}
 }
 
-public class HotAirBalloonPlayer : ModPlayer
+internal class HotAirBalloonPlayer : ModPlayer
 {
 	public override void PreUpdate()
 	{

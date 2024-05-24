@@ -4,8 +4,8 @@ namespace Everglow.Yggdrasil.Furnace.Items.Accessories;
 
 public class HeatEmblem : ModItem
 {
-	public static readonly double BuffTriggerRate = 0.33d;
-	public static readonly int BuffDuration = 300;
+	public const float BuffTriggerRate = 0.33f;
+	public const int BuffDuration = 300;
 
 	public override void SetDefaults()
 	{
@@ -29,13 +29,9 @@ internal class HeatEmblemPlayer : ModPlayer
 {
 	public override void OnHurt(Player.HurtInfo info)
 	{
-		Random random = new Random();
-
-		if(random.NextDouble() < HeatEmblem.BuffTriggerRate)
+		if (Main.rand.NextFloat() < HeatEmblem.BuffTriggerRate)
 		{
 			Player.AddBuff(BuffID.OnFire, HeatEmblem.BuffDuration);
 		}
-
-		base.OnHurt(info);
 	}
 }
