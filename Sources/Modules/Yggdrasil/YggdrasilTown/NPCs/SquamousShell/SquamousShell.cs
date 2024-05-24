@@ -3,8 +3,11 @@ using Everglow.Commons.Coroutines;
 using Everglow.Commons.CustomTiles;
 using Everglow.Commons.Skeleton2D;
 using Everglow.Commons.Skeleton2D.Reader;
+using Everglow.Commons.Skeleton2D.Renderer;
+using Everglow.Commons.Skeleton2D.Renderer.DrawCommands;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using Spine;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -33,9 +36,9 @@ public class SquamousShell : ModNPC
 	public bool Flying = false;
 	public float PhantomValue = 0f;
 	public Skeleton2D SquamousShellSkeleton;
+	private SkeletonRenderer skeletonRenderer = new SkeletonRenderer();
 	public override void Load()
 	{
-
 	}
 	public override void SetStaticDefaults()
 	{
@@ -55,6 +58,8 @@ public class SquamousShell : ModNPC
 	}
 	public override void AI()
 	{
+		SquamousShellSkeleton.AnimationState.Update(0.016f);
+		SquamousShellSkeleton.AnimationState.Apply(SquamousShellSkeleton.Skeleton);
 		NPC.localAI[0] += 1;
 		NPC.TargetClosest(false);
 		Player player = Main.player[NPC.target];
@@ -719,19 +724,24 @@ public class SquamousShell : ModNPC
 		//}
 		if(SquamousShellSkeleton == null)
 		{
-			var data = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monster.json");
-			SquamousShellSkeleton = null;//Skeleton2DReader.ReadSkeleton(data, $"Everglow/Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/");
+			var json = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monsterj.json");
+			var altas = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monstera.atlas");
+			SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(altas, json, ModAsset.monster.Value);
+			SquamousShellSkeleton.AnimationState.SetAnimation(0, "walk", true);
 		}
 		else
 		{
 			SquamousShellSkeleton.Position = NPC.Center;
 			SquamousShellSkeleton.Rotation = NPC.rotation;
-			// skeleton2D.InverseKinematics(Main.MouseWorld);
-			float framesOfAnimation = 35;
-			SquamousShellSkeleton.PlayAnimation(0, "walk", ((float)Main.timeForVisualEffects % framesOfAnimation / framesOfAnimation) * framesOfAnimation / 60f);
-			// SquamousShellSkeleton.DrawDebugView(spriteBatch);
+			//// skeleton2D.InverseKinematics(Main.MouseWorld);
+			//float framesOfAnimation = 35;
+			//SquamousShellSkeleton.PlayAnimation(0, "walk", ((float)Main.timeForVisualEffects % framesOfAnimation / framesOfAnimation) * framesOfAnimation / 60f);
+			//// SquamousShellSkeleton.DrawDebugView(spriteBatch);
 		}
 
+		var cmdList = skeletonRenderer.Draw(SquamousShellSkeleton);
+		NaiveExecuter executer = new NaiveExecuter();
+		executer.Execute(cmdList, Main.graphics.graphicsDevice);
 		return false;
 	}
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

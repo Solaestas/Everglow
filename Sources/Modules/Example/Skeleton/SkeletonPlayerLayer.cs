@@ -26,7 +26,7 @@ public class SkeletonPlayerLayer : PlayerDrawLayer
 		Main.QueueMainThreadAction(() =>
 		{
 			debugRenderer = new Commons.Skeleton2D.Renderer.SkeletonDebugRenderer();
-			skeletonRenderer = new Commons.Skeleton2D.Renderer.SkeletonRenderer(Main.graphics.GraphicsDevice);
+			skeletonRenderer = new Commons.Skeleton2D.Renderer.SkeletonRenderer();
 		});
 	}
 
@@ -45,23 +45,23 @@ public class SkeletonPlayerLayer : PlayerDrawLayer
 		var player = drawInfo.drawPlayer;
 		if (true)
 		{
-			skeleton2D.AnimationState.Update(0.02f);
-			skeleton2D.AnimationState.Apply(skeleton2D.Skeleton);
-			skeleton2D.ScreenPosition = new Vector2(Main.screenWidth / 2, Main.screenHeight);// .X = Main.screenWidth / 2;
-			skeleton2D.Rotation += 0.01f;
-			//debugRenderer.DisableAll();
-			//debugRenderer.DrawBones = true;
+			//skeleton2D.AnimationState.Update(0.02f);
+			//skeleton2D.AnimationState.Apply(skeleton2D.Skeleton);
+			//skeleton2D.ScreenPosition = new Vector2(Main.screenWidth / 2, Main.screenHeight);// .X = Main.screenWidth / 2;
+			//skeleton2D.Rotation += 0.01f;
+			////debugRenderer.DisableAll();
+			////debugRenderer.DrawBones = true;
 
-			//debugRenderer.Begin();
-			//debugRenderer.Draw(skeleton2D);
-			//debugRenderer.End();
+			////debugRenderer.Begin();
+			////debugRenderer.Draw(skeleton2D);
+			////debugRenderer.End();
 
-			skeletonRenderer.Begin();
+			//skeletonRenderer.Begin();
 
-			var cmdList = skeletonRenderer.Draw(skeleton2D);
-			cmdList.AddRange(debugRenderer.Draw(skeleton2D));
-			NaiveExecuter executer = new NaiveExecuter();
-			executer.Execute(cmdList, Main.graphics.graphicsDevice);
+			//var cmdList = skeletonRenderer.Draw(skeleton2D);
+			//cmdList.AddRange(debugRenderer.Draw(skeleton2D));
+			//NaiveExecuter executer = new NaiveExecuter();
+			//executer.Execute(cmdList, Main.graphics.graphicsDevice);
 		}
 	}
 }

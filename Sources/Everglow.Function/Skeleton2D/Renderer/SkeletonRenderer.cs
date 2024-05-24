@@ -18,20 +18,12 @@ public class SkeletonRenderer
 	private const int BR = 3;
 
 	private SkeletonClipping clipper = new SkeletonClipping();
-	private GraphicsDevice device;
-	//MeshBatcher batcher;
-	//public MeshBatcher Batcher { get { return batcher; } }
-
 	private RasterizerState rasterizerState;
 	private float[] vertices = new float[8];
 	private int[] quadTriangles = { 0, 1, 2, 2, 3, 0 };
 	private BlendState defaultBlendState;
-
-	private Effect effect;
-	public Effect Effect { get { return effect; } set { effect = value; } }
-	//public IVertexEffect VertexEffect { get; set; }
-
 	private bool premultipliedAlpha;
+
 	public bool PremultipliedAlpha { get { return premultipliedAlpha; } set { premultipliedAlpha = value; } }
 
 	/// <summary>Attachments are rendered back to front in the x/y plane by the SkeletonRenderer.
@@ -45,34 +37,18 @@ public class SkeletonRenderer
 	public float Z { get { return z; } set { z = value; } }
 
 
-	public SkeletonRenderer(GraphicsDevice device)
+	public SkeletonRenderer()
 	{
-		this.device = device;
-
-
-		var basicEffect = new BasicEffect(device);
-		basicEffect.World = Matrix.Identity;
-		basicEffect.View = Matrix.CreateLookAt(new Vector3(0.0f, 0.0f, 1.0f), Vector3.Zero, Vector3.Up);
-		basicEffect.TextureEnabled = true;
-		basicEffect.VertexColorEnabled = true;
-		effect = basicEffect;
-
 		rasterizerState = new RasterizerState();
 		rasterizerState.CullMode = CullMode.None;
 
 		Bone.yDown = true;
 	}
 
-	public void Begin()
+	public DrawCommandList Draw(Skeleton2D skeleton2d)
 	{
 		defaultBlendState = premultipliedAlpha ? BlendState.AlphaBlend : BlendState.NonPremultiplied;
 
-		device.RasterizerState = rasterizerState;
-		device.BlendState = defaultBlendState;
-	}
-
-	public DrawCommandList Draw(Skeleton2D skeleton2d)
-	{
 		Skeleton skeleton = skeleton2d.Skeleton;
 		var drawOrder = skeleton.DrawOrder;
 		var drawOrderItems = skeleton.DrawOrder.Items;
@@ -141,11 +117,11 @@ public class SkeletonRenderer
 
 			// set blend state
 			BlendState blend = slot.Data.BlendMode == BlendMode.Additive ? BlendState.Additive : defaultBlendState;
-			if (device.BlendState != blend)
-			{
-				//End();
-				//device.BlendState = blend;
-			}
+			//if (device.BlendState != blend)
+			//{
+			//	//End();
+			//	//device.BlendState = blend;
+			//}
 
 			// calculate color
 			float a = skeletonA * slot.A * attachmentColorA;
@@ -194,7 +170,11 @@ public class SkeletonRenderer
 
 			// submit to batch
 			// MeshItem item = batcher.NextItem(verticesCount, indicesCount);
-			PipelineStateObject pso = new PipelineStateObject();
+			PipelineStateObject pso = new PipelineStateObject()
+			{
+				RasterizerState = rasterizerState,
+				BlendState = blend,
+			};
 			if (textureObject is Texture2D)
 			{
 				pso.Texture = (Texture2D)textureObject;
@@ -221,8 +201,10 @@ public class SkeletonRenderer
 			}
 			for (int ii = 0, v = 0, nn = verticesCount << 1; v < nn; ii++, v += 2)
 			{
-				Vertex2D drawVertex = new Vertex2D(new Vector2(vertices[v], vertices[v + 1]),
-					color, new Vector3(uvs[v], uvs[v + 1], 0));
+				Vertex2D drawVertex = new Vertex2D(
+					new Vector2(vertices[v], vertices[v + 1]),
+					color,
+					new Vector3(uvs[v], uvs[v + 1], 0));
 				renderVertices.Add(drawVertex);
 			}
 
