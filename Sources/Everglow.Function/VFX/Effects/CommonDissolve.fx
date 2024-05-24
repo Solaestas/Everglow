@@ -1,6 +1,7 @@
 ﻿sampler2D uImage0 : register(s0);
 sampler2D uImage1 : register(s1);
-
+float uvMulti;
+float uDissolve;
 float4x4 uTransform;
 
 struct VSInput
@@ -31,15 +32,18 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     float4 drawColor=input.Color;
     float2 uv=input.Texcoord.xy;
     float4 col = tex2D(uImage0, uv);
-    float n=tex2D(uImage1, uv*0.3).r;
-    float a=smoothstep(-0.1,0.1,n-drawColor.a);
+    float uvm=0.3;
+    if(uvMulti!=0)
+        uvm=uvMulti;
+    float4 noise=tex2D(uImage1, uv*uvm);
+    float n=max(noise.r,max(noise.g,noise.b));
+    float a=smoothstep(-0.1,0.1,n-uDissolve);
     col*=a;
-    return col*float4(drawColor.rgb,1.);
+    return col*drawColor;
 }
-
 technique Technique1
 {
-    pass Shader2D
+    pass Test
     {
         VertexShader = compile vs_3_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 PixelShaderFunction();

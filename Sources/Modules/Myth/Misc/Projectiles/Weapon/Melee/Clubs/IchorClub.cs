@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.Graphics;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.Misc.Projectiles.Accessory;
 
@@ -51,7 +52,7 @@ public class IchorClub : ClubProj
 		vfxTimer += Omega * 4;
 		if (vfxTimer >= 1)
 		{
-			GenerateVFX((int)(vfxTimer * 10));
+			GenerateVFX((int)(vfxTimer * 3));
 			vfxTimer = 0;
 		}
 	}
@@ -140,7 +141,9 @@ public class IchorClub : ClubProj
 	{
 		Player player = Main.player[Projectile.owner];
 		float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
-		for (int g = 0; g < Frequency * 2; g++)
+
+
+        for (int g = 0; g < Frequency * 2; g++)
 		{
 			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(MathHelper.TwoPi);
 			float mulScale = Main.rand.NextFloat(1f, 6f);
@@ -162,7 +165,7 @@ public class IchorClub : ClubProj
 			};
 			Ins.VFXManager.Add(blood);
 		}
-		for (int g = 0; g < Frequency / 4; g++)
+		for (int g = 0; g < Frequency; g++)
 		{
 			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(3f)).RotatedByRandom(MathHelper.TwoPi);
 			Vector2 startPos = new Vector2(MathF.Sqrt(Main.rand.NextFloat(0f, 1f)) * HitLength * 1.9f, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection);

@@ -1,3 +1,4 @@
+using Everglow.Commons.Graphics;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.Misc.Projectiles.Accessory;
 
@@ -48,35 +49,100 @@ public class IchorClub_smash : ClubProj_Smash
 			{
 				rot = (trailVecs2.ToArray()[trailVecs2.Count - 1] - Projectile.Center).ToRotation() - (trailVecs2.ToArray()[trailVecs2.Count - 2] - Projectile.Center).ToRotation();
 			}
-			var ichor = new IchorSplash
+
+			if (Main.rand.NextBool(30))
 			{
-				velocity = vel,
-				Active = true,
-				Visible = true,
-				position = pos,
-				maxTime = Main.rand.Next(6, 32),
-				scale = Main.rand.NextFloat(6f, 12f),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), rot * 0.01f, Main.rand.NextFloat(3.6f, 30f) },
-			};
-			Ins.VFXManager.Add(ichor);
-			for (int g = 0; g < 1; g++)
-			{
-				var spark = new IchorDrop
+				var ichor = new IchorSplash
 				{
-					velocity = vel.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)),
+					velocity = vel,
 					Active = true,
 					Visible = true,
 					position = pos,
-					maxTime = Main.rand.Next(36, 75),
-					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(1f, 8.0f)),
-					rotation = Main.rand.NextFloat(6.283f),
-					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), rot * 0.1f },
+					maxTime = Main.rand.Next(6, 32),
+					scale = Main.rand.NextFloat(6f, 12f),
+					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), rot * 0.01f, Main.rand.NextFloat(3.6f, 30f) },
 				};
-				Ins.VFXManager.Add(spark);
+
+				Ins.VFXManager.Add(ichor);
+			}
+			if (Main.rand.NextBool(12))
+			{
+				int time = Main.rand.Next(10, 30);
+				GradientColor color = new GradientColor();
+				color.colorList.Add((Color.White, 0f));
+				color.colorList.Add((Color.Yellow, 0.2f));
+				color.colorList.Add((new Color(1f, 0.3f, 0f), 1f));
+
+				var splash = new Splash
+				{
+					position = Vector2.Lerp(pos, Projectile.Center, Main.rand.NextFloat(-0.2f, 0.5f)),
+
+					color = color,
+					gravity = 0.2f,
+					velocity = vel * 0.2f - new Vector2(0, 1f),
+					scale = Main.rand.NextFloat(0.1f, 0.4f),
+					maxTimeleft = time,
+					timeleft = time,
+				};
+				Ins.VFXManager.Add(splash);
+			}
+			if (Main.rand.NextBool(3))
+			{
+				for (int g = 0; g < 1; g++)
+				{
+					var spark = new IchorDrop
+					{
+						velocity = vel.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * 0.5f,
+						Active = true,
+						Visible = true,
+						position = pos,
+						maxTime = Main.rand.Next(36, 75),
+						scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(1f, 8.0f)),
+						rotation = Main.rand.NextFloat(6.283f),
+						ai = new float[] { Main.rand.NextFloat(0.1f, 1f), rot * 0.1f },
+					};
+					Ins.VFXManager.Add(spark);
+				}
 			}
 		}
 	}
+	public override void Smash(int level)
+	{
+		for (int i = 0; i < 10 + level * 5; i++)
+		{
+			var ichor = new IchorSplash
+			{
+				velocity = new Vector2(Main.rand.NextFloat(-15, 15), Main.rand.NextFloat(-10, -5)) * 1.5f * (1 + level * 0.3f),
+				Active = true,
+				Visible = true,
+				position = Player.Bottom+ new Vector2(0, 20),
+				maxTime = Main.rand.Next(15, 40),
+				scale = Main.rand.NextFloat(6f, 12f),
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 0.01f, Main.rand.NextFloat(3.6f, 30f) },
+			};
 
+			Ins.VFXManager.Add(ichor);
+		}
+
+            for (int g = 0; g < 20; g++)
+            {
+                var spark = new IchorDrop
+                {
+                    velocity = new Vector2(Main.rand.NextFloat(-15, 15), Main.rand.NextFloat(-10, -5)),
+                    Active = true,
+                    Visible = true,
+                    position = Player.Center ,
+                    maxTime = Main.rand.Next(36, 75),
+                    scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(1f, 8.0f)),
+                    rotation = Main.rand.NextFloat(6.283f),
+                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 0.2f },
+                };
+                Ins.VFXManager.Add(spark);
+            }
+
+        base.Smash(level);
+
+	}
 	public override void DrawTrail2(Color color)
 	{
 		base.DrawTrail2(color);
@@ -104,17 +170,18 @@ public class IchorClub_smash : ClubProj_Smash
 		for (int i = 0; i < length; i++)
 		{
 			float factor = i / (length - 1f);
-			Color c0 = new Color(1f * factor * factor, 1f * factor * factor, 1f * factor * factor * factor, 0);
+			Color c0 = new Color(1f, 1.2f * factor, 0.0f, 0) * factor ;
 			if (i == 0)
 			{
 				c0 = Color.Transparent;
 			}
-			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, c0, new Vector3(0, 1, 0f)));
-			bars.Add(new Vertex2D(trail[i] - Main.screenPosition, c0, new Vector3(1, 0, 0)));
+			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, c0, new Vector3(factor, 1.2f, 0f)));
+			bars.Add(new Vertex2D(trail[i] - Main.screenPosition, c0, new Vector3(factor, 0f, 0)));
 		}
 
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.IchorClub_glow.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.IchorClub_Trail2.Value;
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+
 	}
 }

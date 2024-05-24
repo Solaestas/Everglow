@@ -1,3 +1,4 @@
+using Everglow.Commons.Graphics;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Terraria.Audio;
 using Terraria.GameContent.Shaders;
@@ -89,6 +90,26 @@ public class CurseClub_fly : ModProjectile, IWarpProjectile
 		float Speed = Math.Min(Omega * 0.15f, 0.061f) * 7.2f;
 		var v1 = new Vector2(-v0.Y, v0.X) * Speed;
 
+        if (Main.rand.NextBool(2))
+        {
+
+            GradientColor color = new GradientColor();
+            color.colorList.Add((new Color(1f, 1f, 0.1f), 0f));
+            color.colorList.Add((new Color(0.1f, 0.6f, 0.1f), 0.3f));
+            int time = Main.rand.Next(15, 35);
+            var fire = new Flare()
+            {
+                position = Vector2.Lerp(Projectile.Center, Projectile.Center + Projectile.rotation.ToRotationVector2()*30, Main.rand.NextFloat(0.4f, 1.25f)),
+                velocity = Projectile.velocity*0.5f,
+				gravity = -0.3f,
+                color = color,
+                timeleft = time,
+                maxTimeleft = time,
+                scale = Main.rand.NextFloat(0.3f, 0.6f)
+            };
+            Ins.VFXManager.Add(fire);
+        }
+        /*
 		var cf = new CurseFlame_HighQualityDust
 		{
 			velocity = v1 + Projectile.velocity * 0.3f,
@@ -98,8 +119,8 @@ public class CurseClub_fly : ModProjectile, IWarpProjectile
 			maxTime = Main.rand.Next(12, 30),
 			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Omega * 0.75f, Main.rand.NextFloat(3.6f, 30f) * mulVelocity },
 		};
-		Ins.VFXManager.Add(cf);
-		for (int g = 0; g < 4; g++)
+		Ins.VFXManager.Add(cf);*/
+        for (int g = 0; g < 4; g++)
 		{
 			v0 = new Vector2(1, 1);
 			v0 *= Main.rand.NextFloat(Main.rand.NextFloat(HitLength * 0.75f, HitLength), HitLength);

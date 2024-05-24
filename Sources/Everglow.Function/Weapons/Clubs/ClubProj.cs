@@ -228,9 +228,9 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale * Projectile.scale, effects, 0f);
 		for (int i = 0; i < 5; i++)
 		{
-			float alp = Omega / 0.4f;
+			float alp = Omega / 0.4f *0.5f;
 			var color2 = new Color((int)(lightColor.R * (5 - i) / 5f * alp), (int)(lightColor.G * (5 - i) / 5f * alp), (int)(lightColor.B * (5 - i) / 5f * alp), (int)(lightColor.A * (5 - i) / 5f * alp));
-			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.75f * Omega, texture.Size() / 2f, Projectile.scale * Projectile.scale, effects, 0f);
+			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.1f * Omega, texture.Size() / 2f, Projectile.scale * Projectile.scale, effects, 0f);
 		}
 		DrawTrail();
 		PostPreDraw();
@@ -243,6 +243,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 
 	public virtual void DrawTrail()
 	{
+		
 		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
