@@ -229,7 +229,7 @@ namespace Everglow.Commons.Skeleton2D.Reader;
 //}
 public class Skeleton2DReader
 {
-	public static Skeleton2D ReadSkeleton(byte[] atlasData, byte[] jsonData, Texture2D atlasTexture)
+	public static Skeleton2D ReadSkeleton(byte[] atlasData, byte[] jsonData, Texture2D atlasTexture, float scale = 1.0f)
 	{
 		using var ms_atlas = new MemoryStream(atlasData);
 		using var sr_atlas = new StreamReader(ms_atlas);
@@ -240,7 +240,7 @@ public class Skeleton2DReader
 		using var ms_json = new MemoryStream(jsonData);
 		using var sr_json = new StreamReader(ms_json);
 		SkeletonJson json = new SkeletonJson(atlas);
-		json.Scale = 0.5f;
+		json.Scale = scale;
 		SkeletonData skeletonData = json.ReadSkeletonData(sr_json);
 
 		Skeleton skeleton = new Skeleton(skeletonData);

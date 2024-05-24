@@ -37,6 +37,7 @@ public class SquamousShell : ModNPC
 	public float PhantomValue = 0f;
 	public Skeleton2D SquamousShellSkeleton;
 	private SkeletonRenderer skeletonRenderer = new SkeletonRenderer();
+	private SkeletonDebugRenderer skeletonDebugRenderer = new SkeletonDebugRenderer();
 	public override void Load()
 	{
 	}
@@ -54,7 +55,13 @@ public class SquamousShell : ModNPC
 		_coroutineManager.StartCoroutine(new Coroutine(Landing()));
 		_coroutineManager.StartCoroutine(new Coroutine(FlyingFrame()));
 		var data = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monster.json");
-		SquamousShellSkeleton = null; //Skeleton2DReader.ReadSkeleton(data, $"Everglow/Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/");
+		if (SquamousShellSkeleton == null)
+		{
+			var json = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monsterj.json");
+			var altas = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monstera.atlas");
+			SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(altas, json, ModAsset.monster.Value);
+			SquamousShellSkeleton.AnimationState.SetAnimation(0, "walk", true);
+		}
 	}
 	public override void AI()
 	{
@@ -733,6 +740,17 @@ public class SquamousShell : ModNPC
 		{
 			SquamousShellSkeleton.Position = NPC.Center;
 			SquamousShellSkeleton.Rotation = NPC.rotation;
+			skeletonDebugRenderer.DisableAll();
+			skeletonDebugRenderer.DrawBones = true;
+			var ik = SquamousShellSkeleton.Skeleton.FindIkConstraint("Front3IK");
+			float x, y;
+			SquamousShellSkeleton.Skeleton.RootBone.WorldToLocal(Main.MouseScreen.X, Main.MouseScreen.Y, out x, out y);
+			ik.Target.X = x;
+			ik.Target.Y = y;
+			float a = ik.Target.WorldX;
+			float b = ik.Target.WorldY;
+
+			SquamousShellSkeleton.Skeleton.UpdateWorldTransform();
 			//// skeleton2D.InverseKinematics(Main.MouseWorld);
 			//float framesOfAnimation = 35;
 			//SquamousShellSkeleton.PlayAnimation(0, "walk", ((float)Main.timeForVisualEffects % framesOfAnimation / framesOfAnimation) * framesOfAnimation / 60f);
@@ -740,6 +758,7 @@ public class SquamousShell : ModNPC
 		}
 
 		var cmdList = skeletonRenderer.Draw(SquamousShellSkeleton);
+		cmdList.AddRange(skeletonDebugRenderer.Draw(SquamousShellSkeleton));
 		NaiveExecuter executer = new NaiveExecuter();
 		executer.Execute(cmdList, Main.graphics.graphicsDevice);
 		return false;
