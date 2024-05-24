@@ -1,13 +1,10 @@
-using System.Runtime.Intrinsics.X86;
 using Everglow.Commons.Coroutines;
-using Everglow.Commons.CustomTiles;
 using Everglow.Commons.Skeleton2D;
 using Everglow.Commons.Skeleton2D.Reader;
 using Everglow.Commons.Skeleton2D.Renderer;
 using Everglow.Commons.Skeleton2D.Renderer.DrawCommands;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using Spine;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -33,29 +30,35 @@ public class SquamousShell : ModNPC
 		NPC.value = 20000;
 		NPC.localAI[0] = 0;
 	}
+
 	public bool Flying = false;
 	public float PhantomValue = 0f;
 	public Skeleton2D SquamousShellSkeleton;
 	private SkeletonRenderer skeletonRenderer = new SkeletonRenderer();
+
 	public override void Load()
 	{
 	}
+
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 1;
 	}
+
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
 		return 0f;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		NPC.velocity.Y = 2f;
-		_coroutineManager.StartCoroutine(new Coroutine(Landing()));
-		_coroutineManager.StartCoroutine(new Coroutine(FlyingFrame()));
-		var data = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monster.json");
-		SquamousShellSkeleton = null; //Skeleton2DReader.ReadSkeleton(data, $"Everglow/Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/");
+		var json = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monsterj.json");
+		var altas = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monstera.atlas");
+		SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(altas, json, ModAsset.monster.Value);
+		SquamousShellSkeleton.AnimationState.SetAnimation(0, "walk", true);
 	}
+
 	public override void AI()
 	{
 		SquamousShellSkeleton.AnimationState.Update(0.016f);
@@ -65,6 +68,7 @@ public class SquamousShell : ModNPC
 		Player player = Main.player[NPC.target];
 		_coroutineManager.Update();
 	}
+
 	/// <summary>
 	/// 落地
 	/// </summary>
@@ -74,13 +78,15 @@ public class SquamousShell : ModNPC
 		while (NPC.velocity.Y != 0)
 		{
 			NPC.velocity.Y += 0.2f;
-			NPC.spriteDirection= 1;
+			NPC.spriteDirection = 1;
 			yield return new SkipThisFrame();
 		}
-		//这里需要一个震屏
+
+		// 这里需要一个震屏
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact, NPC.Center);
 		_coroutineManager.StartCoroutine(new Coroutine(Wake()));
 	}
+
 	/// <summary>
 	/// 苏醒
 	/// </summary>
@@ -89,7 +95,7 @@ public class SquamousShell : ModNPC
 	{
 		for (int x = 0; x <= 180; x++)
 		{
-			WakingTimer++;
+			wakingTimer++;
 			yield return new SkipThisFrame();
 		}
 		int direction = 1;
@@ -99,6 +105,7 @@ public class SquamousShell : ModNPC
 		}
 		_coroutineManager.StartCoroutine(new Coroutine(Rush(direction)));
 	}
+
 	/// <summary>
 	/// 冲撞
 	/// </summary>
@@ -109,9 +116,9 @@ public class SquamousShell : ModNPC
 	{
 		while (!NPC.collideX || NPC.velocity.Y != 0)
 		{
-			if(Math.Abs(NPC.velocity.X) < 20)
+			if (Math.Abs(NPC.velocity.X) < 20)
 			{
-				if(Collision.SolidCollision(NPC.Center + new Vector2(50, 80), 0, 0))
+				if (Collision.SolidCollision(NPC.Center + new Vector2(50, 80), 0, 0))
 				{
 					NPC.velocity.X += direction * acceleration / 3f;
 				}
@@ -125,16 +132,16 @@ public class SquamousShell : ModNPC
 				}
 				NPC.velocity.X += direction * acceleration / 2f;
 			}
-			if(NPC.collideX)
+			if (NPC.collideX)
 			{
 				NPC.velocity.Y -= 16;
 			}
-			if(!NPC.collideY)
+			if (!NPC.collideY)
 			{
 				NPC.velocity.Y += 0.6f;
 			}
 			NPC.spriteDirection = direction;
-			if(Math.Abs(Main.player[NPC.target].Center.X - NPC.Center.X) > 1000)
+			if (Math.Abs(Main.player[NPC.target].Center.X - NPC.Center.X) > 1000)
 			{
 				direction *= -1;
 				NPC.velocity *= 0;
@@ -153,7 +160,8 @@ public class SquamousShell : ModNPC
 			NPC.rotation = (float)GetVector2Rot(GetRotationVec());
 			yield return new SkipThisFrame();
 		}
-		//这里需要一个震屏
+
+		// 这里需要一个震屏
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolume(0.6f), NPC.Center);
 		yield return new WaitForFrames(30);
 		int newDirection = 1;
@@ -161,7 +169,7 @@ public class SquamousShell : ModNPC
 		{
 			newDirection = -1;
 		}
-		if(newDirection == direction)
+		if (newDirection == direction)
 		{
 			NPC.velocity.Y -= 16f;
 			NPC.position.Y -= 40f;
@@ -169,6 +177,7 @@ public class SquamousShell : ModNPC
 		NPC.position.X += newDirection * 20;
 		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(newDirection)));
 	}
+
 	/// <summary>
 	/// 坐地飞石雨
 	/// </summary>
@@ -178,7 +187,7 @@ public class SquamousShell : ModNPC
 	{
 		Player player = Main.player[NPC.target];
 		Vector2 vel = new Vector2((player.Center.X - NPC.Center.X) / 70f, -25);
-		for (int k = 0;k < 9;k++)
+		for (int k = 0; k < 9; k++)
 		{
 			NPC.position += new Vector2(0, -MathF.Sqrt(Main.rand.NextFloat(1f)) * 4).RotatedByRandom(6.283);
 			Vector2 vel2 = vel.RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f));
@@ -188,6 +197,7 @@ public class SquamousShell : ModNPC
 		}
 		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
 	}
+
 	/// <summary>
 	/// 飞石雨2
 	/// </summary>
@@ -207,6 +217,7 @@ public class SquamousShell : ModNPC
 		}
 		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
 	}
+
 	/// <summary>
 	/// 滚石
 	/// </summary>
@@ -229,7 +240,7 @@ public class SquamousShell : ModNPC
 		while (NPC.velocity != NPC.oldVelocity)
 		{
 			waitCount++;
-			if(waitCount > 600)
+			if (waitCount > 600)
 			{
 				break;
 			}
@@ -242,15 +253,15 @@ public class SquamousShell : ModNPC
 		rock.scale = 0;
 		NPC.spriteDirection = direction;
 		NPC.rotation = 0;
-		if(NPC.spriteDirection == -1)
+		if (NPC.spriteDirection == -1)
 		{
 			NPC.rotation = MathF.PI;
 		}
-		for(int x = 0;x < 20;x++)
+		for (int x = 0; x < 20; x++)
 		{
 			NPC.rotation -= 0.04f;
 			rock.scale += 0.05f;
-			rock.Center = NPC.Center + new Vector2(135 *direction, 20);
+			rock.Center = NPC.Center + new Vector2(135 * direction, 20);
 			NPC.velocity *= 0.95f;
 			if (!NPC.collideY)
 			{
@@ -282,6 +293,7 @@ public class SquamousShell : ModNPC
 		}
 		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
 	}
+
 	/// <summary>
 	/// 撼地跳
 	/// </summary>
@@ -326,7 +338,7 @@ public class SquamousShell : ModNPC
 					Flying = true;
 					NPC.frame = new Rectangle(0, 0, 244, 130);
 				}
-				if(NPC.velocity.Y < (player.Center.Y - NPC.Center.Y) / 60f)
+				if (NPC.velocity.Y < (player.Center.Y - NPC.Center.Y) / 60f)
 				{
 					NPC.velocity.Y += 1f;
 				}
@@ -337,7 +349,8 @@ public class SquamousShell : ModNPC
 			}
 			yield return new SkipThisFrame();
 		}
-		//短暂悬停
+
+		// 短暂悬停
 		Flying = false;
 		NPC.velocity *= 0;
 		NPC.velocity.Y = -2;
@@ -355,11 +368,11 @@ public class SquamousShell : ModNPC
 			if (NPC.collideY)
 			{
 				int count = 0;
-				while(Collision.SolidCollision(NPC.BottomLeft, NPC.width, 1))
+				while (Collision.SolidCollision(NPC.BottomLeft, NPC.width, 1))
 				{
 					count++;
 					NPC.position.Y -= 2f;
-					if(count > 100)
+					if (count > 100)
 					{
 						break;
 					}
@@ -373,6 +386,7 @@ public class SquamousShell : ModNPC
 		yield return new WaitForFrames(120);
 		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
 	}
+
 	/// <summary>
 	/// 飞天月刃
 	/// </summary>
@@ -391,22 +405,24 @@ public class SquamousShell : ModNPC
 		Flying = true;
 		for (int x = 0; x < 100; x++)
 		{
-			Vector2 aimPos = player.Center + new Vector2(-400 *direction, -300);
+			Vector2 aimPos = player.Center + new Vector2(-400 * direction, -300);
 			Vector2 toTarget = aimPos - NPC.Center - NPC.velocity;
 			NPC.velocity = NPC.velocity * 0.8f + toTarget * 0.2f * 0.1f;
-			if((NPC.Center - aimPos).Length() < 50)
+			if ((NPC.Center - aimPos).Length() < 50)
 			{
 				break;
 			}
 			yield return new SkipThisFrame();
 		}
-		//减速
+
+		// 减速
 		for (int x = 0; x < 12; x++)
 		{
 			NPC.velocity *= 0.8f;
 			yield return new SkipThisFrame();
 		}
-		//出刀
+
+		// 出刀
 		Vector2 playerPos = player.Center;
 		for (int x = 0; x < 140; x++)
 		{
@@ -422,7 +438,7 @@ public class SquamousShell : ModNPC
 			{
 				direction = 1;
 			}
-			if(NPC.spriteDirection > direction)
+			if (NPC.spriteDirection > direction)
 			{
 				NPC.rotation += MathF.PI;
 				NPC.spriteDirection = direction;
@@ -436,16 +452,16 @@ public class SquamousShell : ModNPC
 			Vector2 toTarget = aimPos - NPC.Center - NPC.velocity;
 			NPC.velocity = NPC.velocity * 0.995f + toTarget * 0.005f * 0.1f;
 			NPC.rotation -= 0.03f;
-			if(x % 60 == 16)
+			if (x % 60 == 16)
 			{
 				NPC.rotation = 1;
-				if(direction == -1)
+				if (direction == -1)
 				{
 					NPC.rotation = MathF.PI + 1;
 				}
 				Vector2 toPlayer = playerPos - NPC.Center;
 				int projDir = 1;
-				if(Main.rand.NextBool(2))
+				if (Main.rand.NextBool(2))
 				{
 					projDir = -1;
 				}
@@ -453,16 +469,17 @@ public class SquamousShell : ModNPC
 			}
 			yield return new SkipThisFrame();
 		}
-		//落地
+
+		// 落地
 		NPC.rotation = 0;
 		if (direction == -1)
 		{
 			NPC.rotation = MathF.PI;
 		}
 		Flying = false;
-		for(int x = 0;x < 300;x++)
+		for (int x = 0; x < 300; x++)
 		{
-			if(!NPC.collideY)
+			if (!NPC.collideY)
 			{
 				NPC.velocity.Y += 1f;
 			}
@@ -474,6 +491,7 @@ public class SquamousShell : ModNPC
 		}
 		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
 	}
+
 	/// <summary>
 	/// 飞天风球
 	/// </summary>
@@ -501,13 +519,15 @@ public class SquamousShell : ModNPC
 			}
 			yield return new SkipThisFrame();
 		}
-		//减速
+
+		// 减速
 		for (int x = 0; x < 12; x++)
 		{
 			NPC.velocity *= 0.8f;
 			yield return new SkipThisFrame();
 		}
-		//放球
+
+		// 放球
 		Vector2 playerPos = player.Center;
 		for (int x = 0; x < 30; x++)
 		{
@@ -522,7 +542,8 @@ public class SquamousShell : ModNPC
 			NPC.position += new Vector2(0, -MathF.Sqrt(Main.rand.NextFloat(1f)) * 4).RotatedByRandom(6.283);
 			yield return new SkipThisFrame();
 		}
-		//落地
+
+		// 落地
 		NPC.rotation = 0;
 		if (direction == -1)
 		{
@@ -543,6 +564,7 @@ public class SquamousShell : ModNPC
 		}
 		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
 	}
+
 	/// <summary>
 	/// 飞天岩牙
 	/// </summary>
@@ -570,13 +592,15 @@ public class SquamousShell : ModNPC
 			}
 			yield return new SkipThisFrame();
 		}
-		//减速
+
+		// 减速
 		for (int x = 0; x < 12; x++)
 		{
 			NPC.velocity *= 0.8f;
 			yield return new SkipThisFrame();
 		}
-		//放锥体
+
+		// 放锥体
 		Vector2 playerPos = player.Center;
 		for (int x = 0; x < 140; x++)
 		{
@@ -591,7 +615,8 @@ public class SquamousShell : ModNPC
 			}
 			yield return new SkipThisFrame();
 		}
-		//落地
+
+		// 落地
 		NPC.rotation = 0;
 		if (direction == -1)
 		{
@@ -612,6 +637,7 @@ public class SquamousShell : ModNPC
 		}
 		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
 	}
+
 	/// <summary>
 	/// 下一个技能
 	/// </summary>
@@ -665,6 +691,7 @@ public class SquamousShell : ModNPC
 		}
 		yield break;
 	}
+
 	private IEnumerator<ICoroutineInstruction> FlyingFrame()
 	{
 		while (NPC.active)
@@ -692,37 +719,38 @@ public class SquamousShell : ModNPC
 			}
 		}
 	}
+
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		//Texture2D mainTex = ModAsset.SquamousShell.Value;
-		//SpriteEffects spe = SpriteEffects.None;
-		//float drawRot = NPC.rotation * NPC.spriteDirection;
-		//if (NPC.spriteDirection == -1)
-		//{
-		//	spe = SpriteEffects.FlipHorizontally;
-		//	drawRot += MathF.PI;
-		//}
-		//if(Flying)
-		//{
-		//	mainTex = ModAsset.SquamousShell_fly.Value;
-		//	spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, NPC.frame, drawColor, drawRot, NPC.frame.Size() * 0.5f, NPC.scale, spe, 0);
-		//}
-		//else
-		//{
-		//	spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, null, drawColor, drawRot, mainTex.Size() * 0.5f, NPC.scale, spe, 0);
-		//	if (PhantomValue > 0)
-		//	{
-		//		spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, null, drawColor * (1 - PhantomValue), drawRot, mainTex.Size() * 0.5f, NPC.scale + PhantomValue, spe, 0);
-		//	}
-		//}
+		// Texture2D mainTex = ModAsset.SquamousShell.Value;
+		// SpriteEffects spe = SpriteEffects.None;
+		// float drawRot = NPC.rotation * NPC.spriteDirection;
+		// if (NPC.spriteDirection == -1)
+		// {
+		// spe = SpriteEffects.FlipHorizontally;
+		// drawRot += MathF.PI;
+		// }
+		// if(Flying)
+		// {
+		// mainTex = ModAsset.SquamousShell_fly.Value;
+		// spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, NPC.frame, drawColor, drawRot, NPC.frame.Size() * 0.5f, NPC.scale, spe, 0);
+		// }
+		// else
+		// {
+		// spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, null, drawColor, drawRot, mainTex.Size() * 0.5f, NPC.scale, spe, 0);
+		// if (PhantomValue > 0)
+		// {
+		// spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, null, drawColor * (1 - PhantomValue), drawRot, mainTex.Size() * 0.5f, NPC.scale + PhantomValue, spe, 0);
+		// }
+		// }
 
-		//if (WakingTimer < 180)
-		//{
-		//	Texture2D deadShell = ModAsset.DeadSquamousShell.Value;
-		//	float fade = 1 - WakingTimer / 180f;
-		//	spriteBatch.Draw(deadShell, NPC.Center - Main.screenPosition, null, drawColor * fade, drawRot, deadShell.Size() * 0.5f, NPC.scale, spe, 0);
-		//}
-		if(SquamousShellSkeleton == null)
+		// if (WakingTimer < 180)
+		// {
+		// Texture2D deadShell = ModAsset.DeadSquamousShell.Value;
+		// float fade = 1 - WakingTimer / 180f;
+		// spriteBatch.Draw(deadShell, NPC.Center - Main.screenPosition, null, drawColor * fade, drawRot, deadShell.Size() * 0.5f, NPC.scale, spe, 0);
+		// }
+		if (SquamousShellSkeleton == null)
 		{
 			var json = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monsterj.json");
 			var altas = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monstera.atlas");
@@ -731,11 +759,11 @@ public class SquamousShell : ModNPC
 		}
 		else
 		{
-			SquamousShellSkeleton.Position = NPC.Center;
+			SquamousShellSkeleton.Position = NPC.Bottom;
 			SquamousShellSkeleton.Rotation = NPC.rotation;
 			//// skeleton2D.InverseKinematics(Main.MouseWorld);
-			//float framesOfAnimation = 35;
-			//SquamousShellSkeleton.PlayAnimation(0, "walk", ((float)Main.timeForVisualEffects % framesOfAnimation / framesOfAnimation) * framesOfAnimation / 60f);
+			// float framesOfAnimation = 35;
+			// SquamousShellSkeleton.PlayAnimation(0, "walk", ((float)Main.timeForVisualEffects % framesOfAnimation / framesOfAnimation) * framesOfAnimation / 60f);
 			//// SquamousShellSkeleton.DrawDebugView(spriteBatch);
 		}
 
@@ -744,13 +772,12 @@ public class SquamousShell : ModNPC
 		executer.Execute(cmdList, Main.graphics.graphicsDevice);
 		return false;
 	}
+
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-
 	}
 
 	//--------------------------以下为辅助功能模块-------------------------------------------------以下为辅助功能模块-------------------------------------------------以下为辅助功能模块-------------------------------------------------以下为辅助功能模块-------------------------------------------------以下为辅助功能模块-------------------------------------------------
-
 	public void GenerateSmogAtBottom(int Frequency)
 	{
 		for (int g = 0; g < Frequency / 2 + 1; g++)
@@ -763,11 +790,11 @@ public class SquamousShell : ModNPC
 				velocity = newVelocity,
 				Active = true,
 				Visible = true,
-				position = NPC.Bottom + new Vector2(Main.rand.NextFloat(-6f, 6f), -20).RotatedByRandom(6.283) + new Vector2(newVelocity.X *10, 0),
+				position = NPC.Bottom + new Vector2(Main.rand.NextFloat(-6f, 6f), -20).RotatedByRandom(6.283) + new Vector2(newVelocity.X * 10, 0),
 				maxTime = Main.rand.Next(47, 145),
 				scale = Main.rand.NextFloat(20f, 75f),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
 			};
 			Ins.VFXManager.Add(somg);
 		}
@@ -777,7 +804,7 @@ public class SquamousShell : ModNPC
 	{
 		if (value == Vector2.zeroVector)
 		{
-			double value1 = 0;	
+			double value1 = 0;
 			if (NPC.spriteDirection == -1)
 			{
 				value1 = Math.PI;
@@ -786,14 +813,17 @@ public class SquamousShell : ModNPC
 		}
 		return Math.Atan2(value.Y, value.X) * NPC.spriteDirection + Math.PI / 2d;
 	}
+
 	public double CheckRotDir(double OldRot)
 	{
 		return -OldRot;
 	}
+
 	public void Exchange(ref float value1, ref float value2)
 	{
 		(value1, value2) = (value2, value1);
 	}
+
 	private Vector2 GetRotationVec()
 	{
 		Vector2 outValue = Vector2.Zero;
@@ -803,25 +833,33 @@ public class SquamousShell : ModNPC
 			{
 				float value = rot / (float)rad * 4f;
 				if (!Collision.SolidCollision(NPC.Center + new Vector2(0, rad).RotatedBy(value * MathHelper.TwoPi), 0, 0))
+				{
 					outValue += Vector2.Normalize(new Vector2(0, rad).RotatedBy(value * MathHelper.TwoPi)) / rad;
+				}
 				else
 				{
 					outValue -= Vector2.Normalize(new Vector2(0, rad).RotatedBy(value * MathHelper.TwoPi)) / rad;
 				}
 			}
 		}
-		if(outValue.Length() < 0.005)
+		if (outValue.Length() < 0.005)
 		{
-			outValue= Vector2.Zero;
+			outValue = Vector2.Zero;
 		}
 		return Utils.SafeNormalize(outValue, Vector2.Zero);
 	}
+
 	private void CheckSpriteDir()
 	{
 		if (NPC.velocity.X > 0)
+		{
 			NPC.spriteDirection = -1;
+		}
+
 		if (NPC.velocity.X < 0)
+		{
 			NPC.spriteDirection = 1;
+		}
 	}
 
 	private void MoveTo(Vector2 aimPosition, float Speed = 1)
@@ -829,6 +867,7 @@ public class SquamousShell : ModNPC
 		Vector2 v0 = Utils.SafeNormalize(aimPosition - NPC.Center, Vector2.Zero);
 		NPC.velocity.X = v0.X * Speed;
 	}
+
 	private void DashTo(Vector2 aim, float Speed)
 	{
 		NPC.noTileCollide = true;
@@ -836,6 +875,7 @@ public class SquamousShell : ModNPC
 		NPC.velocity = v0 * Speed;
 		NPC.noTileCollide = false;
 	}
+
 	private CoroutineManager _coroutineManager = new CoroutineManager();
-	private int WakingTimer = 0;
+	private int wakingTimer = 0;
 }
