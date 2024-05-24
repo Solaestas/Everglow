@@ -34,38 +34,30 @@ public class ThermalConductor : ModItem
 
 public class ThermalConductorPlayer : ModPlayer
 {
-	private int timer = 0;
-
 	public override void PreUpdate()
 	{
-		timer++;
-
-		if (timer <= 59)
+		if (Main.rand.NextBool(60))
 		{
-			return;
+			// statMana is more than trigger condition
+			if (Player.statMana >= ThermalConductor.StatusTriggerCondition * Player.statManaMax2)
+			{
+				return;
+			}
+
+			// Random
+			Random random = new Random();
+			if (random.NextDouble() >= ThermalConductor.StatusTriggerRate)
+			{
+				return;
+			}
+
+			// Heal Mana
+			Player.statMana = Player.statMana + ThermalConductor.ManaHeal > Player.statManaMax2 ?
+					Player.statManaMax2 :
+					Player.statMana + ThermalConductor.ManaHeal;
+
+			// Add Debuff
+			Player.AddBuff(BuffID.CursedInferno, ThermalConductor.DebuffDuration);
 		}
-
-		timer %= 60;
-
-		// statMana is more than trigger condition
-		if (Player.statMana >= ThermalConductor.StatusTriggerCondition * Player.statManaMax2)
-		{
-			return;
-		}
-
-		// Random
-		Random random = new Random();
-		if (random.NextDouble() >= ThermalConductor.StatusTriggerRate)
-		{
-			return;
-		}
-
-		// Heal Mana
-		Player.statMana = Player.statMana + ThermalConductor.ManaHeal > Player.statManaMax2 ?
-				Player.statManaMax2 :
-				Player.statMana + ThermalConductor.ManaHeal;
-
-		// Add Debuff
-		Player.AddBuff(BuffID.CursedInferno, ThermalConductor.DebuffDuration);
 	}
 }
