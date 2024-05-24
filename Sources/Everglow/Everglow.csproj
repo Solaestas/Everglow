@@ -21,4 +21,15 @@
 					ItemName="AdditionalFiles" />
 		</ReadResource>
 	</Target>
+	<Target Name="CheckGitStatus"
+			BeforeTargets="Compile">
+		<Exec Command="git rev-list --count HEAD..master"
+			  ConsoleToMSBuild="true">
+			<Output TaskParameter="ConsoleOutput"
+					PropertyName="CommitsBehind" />
+		</Exec>
+		<Error Condition="$(CommitsBehind) != 0"
+			   Text="Current branch behind master $(CommitsBehind) commits. Please update your branch"
+			   ContinueOnError="false" />
+	</Target>
 </Project>
