@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Everglow.Commons.Skeleton2D.Renderer.DrawCommands;
 using Everglow.Commons.Vertex;
 using Spine;
+using Terraria;
 using Terraria.GameContent;
 
 namespace Everglow.Commons.Skeleton2D.Renderer;
@@ -25,6 +26,22 @@ public class SkeletonRenderer
 	private bool premultipliedAlpha;
 
 	public bool PremultipliedAlpha { get { return premultipliedAlpha; } set { premultipliedAlpha = value; } }
+	public bool UseEnvironmentLight { get; set; }
+
+	/// <summary>
+	/// 绘制的时候将模型整体偏移的量
+	/// </summary>
+	public Vector2 DrawOffset { get; set; }
+
+	/// <summary>
+	/// 绘制的时候使用的绘制/变换中心，是TPose状态下的坐标，为空则为默认(root骨骼）中心
+	/// </summary>
+	public Vector2? DrawOrigin { get; set; }
+
+	/// <summary>
+	/// 绘制的时候使用的额外的旋转，DrawOrigin不为空的时候才会生效
+	/// </summary>
+	public float DrawRotation { get; set; }
 
 	/// <summary>Attachments are rendered back to front in the x/y plane by the SkeletonRenderer.
 	/// Each attachment is offset by a customizable z-spacing value on the z-axis to avoid z-fighting
@@ -39,6 +56,7 @@ public class SkeletonRenderer
 
 	public SkeletonRenderer()
 	{
+		UseEnvironmentLight = false;
 		rasterizerState = new RasterizerState();
 		rasterizerState.CullMode = CullMode.None;
 
@@ -117,11 +135,6 @@ public class SkeletonRenderer
 
 			// set blend state
 			BlendState blend = slot.Data.BlendMode == BlendMode.Additive ? BlendState.Additive : defaultBlendState;
-			//if (device.BlendState != blend)
-			//{
-			//	//End();
-			//	//device.BlendState = blend;
-			//}
 
 			// calculate color
 			float a = skeletonA * slot.A * attachmentColorA;
@@ -201,9 +214,24 @@ public class SkeletonRenderer
 			}
 			for (int ii = 0, v = 0, nn = verticesCount << 1; v < nn; ii++, v += 2)
 			{
+				Color lightColor = color;
+				Vector2 position = new Vector2(vertices[v], vertices[v + 1]);
+				if (UseEnvironmentLight)
+				{
+					Vector2 worldPos = new Vector2(vertices[v], vertices[v + 1]);
+					Point tileCoord = worldPos.ToTileCoordinates();
+					lightColor = Lighting.GetColor(tileCoord.X, tileCoord.Y).MultiplyRGB(color);
+					lightColor.A = color.A;
+				}
+				if (DrawOrigin.HasValue)
+				{
+					Vector2 preTransformPos = position - new Vector2(skeleton.RootBone.WorldX, skeleton.RootBone.WorldY) - DrawOrigin.Value;
+					preTransformPos = preTransformPos.RotatedBy(-skeleton.RootBone.rotation * MathUtils.DegRad);
+					position = preTransformPos.RotatedBy(DrawRotation) + DrawOrigin.Value + new Vector2(skeleton.RootBone.WorldX, skeleton.RootBone.WorldY);
+				}
 				Vertex2D drawVertex = new Vertex2D(
-					new Vector2(vertices[v], vertices[v + 1]),
-					color,
+					position + DrawOffset,
+					lightColor,
 					new Vector3(uvs[v], uvs[v + 1], 0));
 				renderVertices.Add(drawVertex);
 			}

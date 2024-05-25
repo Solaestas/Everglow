@@ -31,23 +31,6 @@ public class Skeleton2D
 	{
 		get
 		{
-			return new Vector2(skeleton.X, skeleton.Y) + Main.screenPosition;
-		}
-		set
-		{
-			skeleton.X = value.X - Main.screenPosition.X;
-			skeleton.Y = value.Y - Main.screenPosition.Y;
-			skeleton.UpdateWorldTransform();
-		}
-	}
-
-	/// <summary>
-	/// Screen space position of the skeleton relative to the root bone
-	/// </summary>
-	public Vector2 ScreenPosition
-	{
-		get
-		{
 			return new Vector2(skeleton.X, skeleton.Y);
 		}
 		set

@@ -762,26 +762,27 @@ public class SquamousShell : ModNPC
 			SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(altas, json, ModAsset.monster.Value);
 			SquamousShellSkeleton.AnimationState.SetAnimation(0, "walk", true);
 		}
-		else
-		{
-			SquamousShellSkeleton.Position = NPC.Bottom;
-			SquamousShellSkeleton.Rotation = NPC.rotation;
-			skeletonDebugRenderer.DisableAll();
-			skeletonDebugRenderer.DrawBones = true;
-			var ik = SquamousShellSkeleton.Skeleton.FindIkConstraint("Front3IK");
-			float x, y;
-			SquamousShellSkeleton.Skeleton.RootBone.WorldToLocal(Main.MouseScreen.X, Main.MouseScreen.Y, out x, out y);
-			ik.Target.X = x;
-			ik.Target.Y = y;
-			float a = ik.Target.WorldX;
-			float b = ik.Target.WorldY;
 
-			SquamousShellSkeleton.Skeleton.UpdateWorldTransform();
-			//// skeleton2D.InverseKinematics(Main.MouseWorld);
-			// float framesOfAnimation = 35;
-			// SquamousShellSkeleton.PlayAnimation(0, "walk", ((float)Main.timeForVisualEffects % framesOfAnimation / framesOfAnimation) * framesOfAnimation / 60f);
-			//// SquamousShellSkeleton.DrawDebugView(spriteBatch);
-		}
+		SquamousShellSkeleton.Position = NPC.Bottom;
+		SquamousShellSkeleton.Rotation = NPC.rotation;
+		skeletonDebugRenderer.DisableAll();
+		skeletonDebugRenderer.DrawBones = true;
+		var ik = SquamousShellSkeleton.Skeleton.FindIkConstraint("Front3IK");
+		float x, y;
+		SquamousShellSkeleton.Skeleton.RootBone.WorldToLocal(Main.MouseWorld.X, Main.MouseWorld.Y, out x, out y);
+		ik.Target.X = x;
+		ik.Target.Y = y;
+
+		SquamousShellSkeleton.Skeleton.UpdateWorldTransform();
+
+		skeletonRenderer.UseEnvironmentLight = true;
+		skeletonRenderer.DrawOffset = -Main.screenPosition;
+		skeletonRenderer.DrawOrigin = new Vector2(0, 100);
+		skeletonRenderer.DrawRotation = (float)Math.Sin(Main.time * 0.1f);
+		//// skeleton2D.InverseKinematics(Main.MouseWorld);
+		// float framesOfAnimation = 35;
+		// SquamousShellSkeleton.PlayAnimation(0, "walk", ((float)Main.timeForVisualEffects % framesOfAnimation / framesOfAnimation) * framesOfAnimation / 60f);
+		//// SquamousShellSkeleton.DrawDebugView(spriteBatch);
 
 		var cmdList = skeletonRenderer.Draw(SquamousShellSkeleton);
 		cmdList.AddRange(skeletonDebugRenderer.Draw(SquamousShellSkeleton));
