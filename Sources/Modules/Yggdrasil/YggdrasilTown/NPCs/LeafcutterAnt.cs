@@ -28,80 +28,79 @@ public class LeafcutterAnt : ModNPC
 
 	public override void FindFrame(int frameHeight)
 	{
-		if (NPC.ai[0] == 0f)
+		switch (NPC.ai[0])
 		{
-			NPC.rotation = 0f;
-			if (NPC.velocity.Y == 0f)
-			{
-				NPC.spriteDirection = NPC.direction;
-			}
-			else if (NPC.velocity.Y < 0f)
-			{
-				NPC.frameCounter = 0;
-			}
+			case 0:
+				NPC.rotation = 0f;
+				if (NPC.velocity.Y == 0f)
+				{
+					NPC.spriteDirection = NPC.direction;
+				}
+				else if (NPC.velocity.Y < 0f)
+				{
+					NPC.frameCounter = 0;
+				}
 
-			NPC.frameCounter += Math.Abs(NPC.velocity.X) * 1.1f;
-			if (NPC.frameCounter < 6)
-			{
-				NPC.frame.Y = 0;
-			}
-			else if (NPC.frameCounter < 12)
-			{
-				NPC.frame.Y = frameHeight;
-			}
-			else if (NPC.frameCounter < 18)
-			{
-				NPC.frame.Y = frameHeight * 2;
-			}
-			else if (NPC.frameCounter < 24)
-			{
-				NPC.frame.Y = frameHeight * 3;
-			}
-			else if (NPC.frameCounter < 32)
-			{
-				NPC.frame.Y = frameHeight * 4;
-			}
-			else
-			{
+				NPC.frameCounter += Math.Abs(NPC.velocity.X) * 1.1f;
+				if (NPC.frameCounter < 6)
+				{
+					NPC.frame.Y = 0;
+				}
+				else if (NPC.frameCounter < 12)
+				{
+					NPC.frame.Y = frameHeight;
+				}
+				else if (NPC.frameCounter < 18)
+				{
+					NPC.frame.Y = frameHeight * 2;
+				}
+				else if (NPC.frameCounter < 24)
+				{
+					NPC.frame.Y = frameHeight * 3;
+				}
+				else if (NPC.frameCounter < 32)
+				{
+					NPC.frame.Y = frameHeight * 4;
+				}
+				else
+				{
+					NPC.frameCounter = 0;
+				}
+				break;
+			case 1:
 				NPC.frameCounter = 0;
-			}
-		}
-		else if (NPC.ai[0] == 1f)
-		{
-			NPC.frameCounter = 0;
-			if (NPC.ai[1] < 10f)
-			{
-				NPC.frame.Y = frameHeight * 5;
-			}
-			else if (NPC.ai[1] < 20f)
-			{
-				NPC.frame.Y = frameHeight * 6;
-			}
-			else
-			{
+				if (NPC.ai[1] < 10f)
+				{
+					NPC.frame.Y = frameHeight * 5;
+				}
+				else if (NPC.ai[1] < 20f)
+				{
+					NPC.frame.Y = frameHeight * 6;
+				}
+				else
+				{
+					NPC.frame.Y = frameHeight * 7;
+				}
+				break;
+			case 5:
+				NPC.frameCounter = 0;
+				if (NPC.ai[1] < 10f)
+				{
+					NPC.frame.Y = frameHeight * 7;
+				}
+				else if (NPC.ai[1] < 20)
+				{
+					NPC.frame.Y = frameHeight * 6;
+				}
+				else
+				{
+					NPC.frame.Y = frameHeight * 5;
+				}
+				break;
+			default:
+				NPC.frameCounter = 0;
 				NPC.frame.Y = frameHeight * 7;
-			}
-		}
-		else if (NPC.ai[0] == 5f)
-		{
-			NPC.frameCounter = 0;
-			if (NPC.ai[1] < 10f)
-			{
-				NPC.frame.Y = frameHeight * 7;
-			}
-			else if (NPC.ai[1] < 20)
-			{
-				NPC.frame.Y = frameHeight * 6;
-			}
-			else
-			{
-				NPC.frame.Y = frameHeight * 5;
-			}
-		}
-		else
-		{
-			NPC.frameCounter = 0;
-			NPC.frame.Y = frameHeight * 7;
+				break;
 		}
 	}
 
@@ -109,22 +108,6 @@ public class LeafcutterAnt : ModNPC
 	{
 		NPC.type = NPCID.WalkingAntlion;
 		NPC.AI_003_Fighters();
-
-		// 逆集群化
-		foreach (NPC npc in Main.npc)
-		{
-			if (npc != null && npc.active && npc != NPC)
-			{
-				if (npc.type == Type)
-				{
-					Vector2 v0 = NPC.Center - npc.Center;
-					if (v0.Length() < 120)
-					{
-						NPC.velocity += Vector2.Normalize(v0) * 0.25f;
-					}
-				}
-			}
-		}
 		NPC.type = ModContent.NPCType<LeafcutterAnt>();
 	}
 

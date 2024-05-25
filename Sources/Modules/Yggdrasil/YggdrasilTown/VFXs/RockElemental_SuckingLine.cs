@@ -34,7 +34,7 @@ public class RockElemental_SuckingLine : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
-	public List<Vector2> oldPos = new List<Vector2>();
+	public Queue<Vector2> oldPos = new Queue<Vector2>();
 	public Projectile VFXOwner;
 	public Vector2 position;
 	public Vector2 velocity;
@@ -68,10 +68,10 @@ public class RockElemental_SuckingLine : Visual
 				velocity = Vector2.Lerp(velocity, Utils.SafeNormalize(pierceAim, Vector2.zeroVector) * 9f, 0.1f);
 			}
 		}
-		oldPos.Add(position);
+		oldPos.Enqueue(position);
 		if (oldPos.Count > 30)
 		{
-			oldPos.RemoveAt(0);
+			oldPos.Dequeue();
 		}
 		timer++;
 		if (timer > maxTime)
@@ -87,8 +87,7 @@ public class RockElemental_SuckingLine : Visual
 
 	public override void Draw()
 	{
-		Vector2[] pos = oldPos.Reverse<Vector2>().ToArray();
-		int len = pos.Length;
+		int len = oldPos.Count;
 		var bars = new List<Vertex2D>();
 		if (len <= 2)
 		{
@@ -100,6 +99,7 @@ public class RockElemental_SuckingLine : Visual
 		}
 		else
 		{
+			Vector2[] pos = oldPos.Reverse().ToArray();
 			for (int i = 1; i < len; i++)
 			{
 				float pocession = timer / maxTime;
@@ -108,11 +108,11 @@ public class RockElemental_SuckingLine : Visual
 					pocession += (20 - timer + i) / 20f;
 				}
 				pocession = Math.Clamp(pocession, 0, 1);
-				Vector2 normal = oldPos[i] - oldPos[i - 1];
+				Vector2 normal = pos[i] - pos[i - 1];
 				normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
 				float width = scale * (float)Math.Sin(i / (double)len * Math.PI);
-				bars.Add(oldPos[i] + normal * width, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0 + ai[0], (i + 15 - len) / 17f, pocession));
-				bars.Add(oldPos[i] - normal * width, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0.6f + ai[0], (i + 15 - len) / 17f, pocession));
+				bars.Add(pos[i] + normal * width, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0 + ai[0], (i + 15 - len) / 17f, pocession));
+				bars.Add(pos[i] - normal * width, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0.6f + ai[0], (i + 15 - len) / 17f, pocession));
 			}
 		}
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);

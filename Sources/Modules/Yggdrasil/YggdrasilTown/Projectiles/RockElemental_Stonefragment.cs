@@ -47,10 +47,6 @@ public class RockElemental_Stonefragment : ModProjectile
 		Projectile.ai[0] = Main.rand.NextFloat(-0.15f, 0.15f);
 	}
 
-	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
-	{
-	}
-
 	public override void OnKill(int timeLeft)
 	{
 		for (int x = 0; x < 3; x++)
@@ -101,7 +97,6 @@ public class RockElemental_Stonefragment : ModProjectile
 			}
 		}
 		Main.EntitySpriteDraw(texture, drawCenter, null, lightColor, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
-
 		return false;
 	}
 }

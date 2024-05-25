@@ -24,6 +24,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 	public NPC MyOwner;
 	public int PolymerizationTimer;
 	public Vector2 OffestSuck;
+	public bool ShotAway = false;
 
 	public override void AI()
 	{
@@ -41,7 +42,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 		}
 
 		// 丢出去之后
-		if (Projectile.ai[0] == 5)
+		if (ShotAway)
 		{
 			Projectile.rotation += 0.1f;
 			Projectile.velocity.Y += 0.15f;
@@ -95,6 +96,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 					Vector2 vel = new Vector2(0, Main.rand.NextFloat(2, 8)).RotatedByRandom(MathHelper.TwoPi);
 					Vector2 addPos = new Vector2(0, Main.rand.NextFloat(132, 181)).RotatedBy(MyOwner.rotation + MathHelper.PiOver2 + Main.rand.NextFloat(-0.1f, 0.1f));
 					Dust dust = Dust.NewDustDirect(Projectile.Center + addPos - vel * 15 - new Vector2(4), 0, 0, ModContent.DustType<RockElemental_Energy>());
+					dust.customData = Projectile;
 					dust.velocity = vel;
 					dust.scale = 0.07f;
 				}
@@ -121,6 +123,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 					Vector2 vel = new Vector2(0, Main.rand.NextFloat(8, 24)).RotatedByRandom(MathHelper.TwoPi);
 					Dust dust = Dust.NewDustDirect(Projectile.Center + OffestSuck, 0, 0, ModContent.DustType<RockElemental_Energy>());
 					dust.velocity = vel;
+					dust.customData = Projectile;
 					dust.scale = Main.rand.NextFloat(0.06f, 0.1f);
 				}
 				SoundEngine.PlaySound(SoundID.DD2_PhantomPhoenixShot, Projectile.Center);
@@ -133,7 +136,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 			// 吸力音效
 			if (PolymerizationTimer == 1)
 			{
-				SoundEngine.PlaySound(new SoundStyle("Everglow/Yggdrasil/YggdrasilTown/Sounds/RockElemental_Sucking").WithPitchOffset(0.5f).WithVolumeScale(0.5f), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/" + ModAsset.RockElemental_Sucking_Path).WithPitchOffset(0.5f).WithVolumeScale(0.5f), Projectile.Center);
 			}
 		}
 
@@ -147,7 +150,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 			float cosTheta = Vector2.Dot(toPlayer, release) / toPlayer.Length() / release.Length();
 			if (cosTheta > 0.95f && MyOwner.ai[2] > 0.2f)
 			{
-				Projectile.ai[0] = 5f;
+				ShotAway = true;
 				Projectile.velocity = Utils.SafeNormalize(toPlayer, Vector2.zeroVector) * 14f;
 				MyOwner.velocity -= Utils.SafeNormalize(toPlayer, Vector2.zeroVector) * 7f;
 				if (MyOwner.ai[0] > 30)
@@ -158,7 +161,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 			}
 			if (MyOwner.ai[2] > 0.4f)
 			{
-				Projectile.ai[0] = 5f;
+				ShotAway = true;
 				Projectile.velocity = Utils.SafeNormalize(toPlayer, Vector2.zeroVector) * 28f;
 				MyOwner.velocity -= Utils.SafeNormalize(toPlayer, Vector2.zeroVector) * 14f;
 				if (MyOwner.ai[0] > 30)

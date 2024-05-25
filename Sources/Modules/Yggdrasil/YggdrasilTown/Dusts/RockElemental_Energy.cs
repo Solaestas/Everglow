@@ -8,36 +8,33 @@ public class RockElemental_Energy : ModDust
 	{
 		dust.position += dust.velocity;
 		bool moved = false;
-		foreach(Projectile proj in Main.projectile)
+		if(dust.customData is Projectile proj)
 		{
-			if(proj != null && proj.active)
+			if (proj.active && proj.ModProjectile is RockElemental_ThrowingStone rockElemental_ThrowingStone)
 			{
-				if(proj.type == ModContent.ProjectileType<RockElemental_ThrowingStone>())
+				if (rockElemental_ThrowingStone.PolymerizationTimer > 0)
 				{
-					RockElemental_ThrowingStone rockElemental_ThrowingStone = proj.ModProjectile as RockElemental_ThrowingStone;
-					if(rockElemental_ThrowingStone != null)
+					Vector2 pierceAim = proj.Center - dust.velocity - dust.position;
+					if (pierceAim.Length() < 400)
 					{
-						if(rockElemental_ThrowingStone.PolymerizationTimer > 0)
+						dust.velocity = Vector2.Lerp(dust.velocity, Utils.SafeNormalize(pierceAim, Vector2.zeroVector) * 9f, 0.1f);
+						if (pierceAim.Length() < 30)
 						{
-							Vector2 pierceAim = proj.Center - dust.velocity - dust.position;
-							if (pierceAim.Length() < 400)
-							{
-								dust.velocity = Vector2.Lerp(dust.velocity, Utils.SafeNormalize(pierceAim, Vector2.zeroVector) * 9f, 0.1f);
-								if (pierceAim.Length() < 30)
-								{
-									dust.scale *= 0.9f;
-								}
-								else
-								{
-									dust.scale = dust.scale * 0.97f + 0.03f;
-								}
-								moved = true;
-								break;
-							}
+							dust.scale *= 0.9f;
 						}
+						else
+						{
+							dust.scale = dust.scale * 0.97f + 0.03f;
+						}
+						moved = true;
 					}
 				}
 			}
+		}
+		else
+		{
+			dust.active = false;
+			return false;
 		}
 		if(!moved)
 		{
