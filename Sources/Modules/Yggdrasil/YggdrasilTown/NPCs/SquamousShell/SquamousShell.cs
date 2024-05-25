@@ -64,6 +64,8 @@ public class SquamousShell : ModNPC
 			SquamousShellSkeleton.AnimationState.SetAnimation(0, "walk", true);
 		}
 	}
+
+	private Vector2 mousePos;
 	public override void AI()
 	{
 		SquamousShellSkeleton.AnimationState.Update(0.016f);
@@ -72,6 +74,9 @@ public class SquamousShell : ModNPC
 		NPC.TargetClosest(false);
 		Player player = Main.player[NPC.target];
 		_coroutineManager.Update();
+		mousePos = Main.MouseWorld;
+		SquamousShellSkeleton.Position = NPC.Bottom;
+		SquamousShellSkeleton.Rotation = NPC.rotation;
 	}
 
 	/// <summary>
@@ -762,14 +767,11 @@ public class SquamousShell : ModNPC
 			SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(altas, json, ModAsset.monster.Value);
 			SquamousShellSkeleton.AnimationState.SetAnimation(0, "walk", true);
 		}
-
-		SquamousShellSkeleton.Position = NPC.Bottom;
-		SquamousShellSkeleton.Rotation = NPC.rotation;
 		skeletonDebugRenderer.DisableAll();
 		skeletonDebugRenderer.DrawBones = true;
 		var ik = SquamousShellSkeleton.Skeleton.FindIkConstraint("Front3IK");
 		float x, y;
-		SquamousShellSkeleton.Skeleton.RootBone.WorldToLocal(Main.MouseWorld.X, Main.MouseWorld.Y, out x, out y);
+		SquamousShellSkeleton.Skeleton.RootBone.WorldToLocal(mousePos.X, mousePos.Y, out x, out y);
 		ik.Target.X = x;
 		ik.Target.Y = y;
 
