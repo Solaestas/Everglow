@@ -2,5 +2,8 @@
 	<ItemGroup>
 		<Solaestas-ResourceFile Include="Skeleton\**\*.json" />
 	</ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
 </Project>
     

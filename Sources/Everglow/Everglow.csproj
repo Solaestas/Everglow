@@ -7,6 +7,7 @@
 		<Solaestas-UseAssetPath>false</Solaestas-UseAssetPath>
 		<AssemblyName>$(MSBuildProjectName)</AssemblyName>
 		<AssetsPrefix>.</AssetsPrefix>
+		<TargetFramework>net8.0</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Everglow.Core\Everglow.Core.csproj" />
