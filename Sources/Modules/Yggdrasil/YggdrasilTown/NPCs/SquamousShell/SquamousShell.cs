@@ -777,8 +777,8 @@ public class SquamousShell : ModNPC
 
 		skeletonRenderer.UseEnvironmentLight = true;
 		skeletonRenderer.DrawOffset = -Main.screenPosition;
-		skeletonRenderer.DrawOrigin = new Vector2(0, 100);
-		skeletonRenderer.DrawRotation = (float)Math.Sin(Main.time * 0.1f);
+		skeletonRenderer.DrawOrigin = new Vector2(0, -77);
+		skeletonRenderer.DrawRotation = NPC.rotation;
 		//// skeleton2D.InverseKinematics(Main.MouseWorld);
 		// float framesOfAnimation = 35;
 		// SquamousShellSkeleton.PlayAnimation(0, "walk", ((float)Main.timeForVisualEffects % framesOfAnimation / framesOfAnimation) * framesOfAnimation / 60f);

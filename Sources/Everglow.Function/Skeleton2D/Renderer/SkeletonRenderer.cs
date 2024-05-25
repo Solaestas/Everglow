@@ -225,8 +225,9 @@ public class SkeletonRenderer
 				}
 				if (DrawOrigin.HasValue)
 				{
-					Vector2 preTransformPos = position - new Vector2(skeleton.RootBone.WorldX, skeleton.RootBone.WorldY) - DrawOrigin.Value;
+					Vector2 preTransformPos = position - new Vector2(skeleton.RootBone.WorldX, skeleton.RootBone.WorldY);
 					preTransformPos = preTransformPos.RotatedBy(-skeleton.RootBone.rotation * MathUtils.DegRad);
+					preTransformPos = preTransformPos - DrawOrigin.Value;
 					position = preTransformPos.RotatedBy(DrawRotation) + DrawOrigin.Value + new Vector2(skeleton.RootBone.WorldX, skeleton.RootBone.WorldY);
 				}
 				Vertex2D drawVertex = new Vertex2D(

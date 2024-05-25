@@ -32,8 +32,8 @@ public class GeometryBuffer
 
 	public void Line(float x1, float y1, float x2, float y2, float z = 0f)
 	{
-		vertices.Add(new Vertex2D(new Vector2(x1, y1), color, Vector3.Zero));
-		vertices.Add(new Vertex2D(new Vector2(x2, y2), color, Vector3.Zero));
+		vertices.Add(new Vertex2D(new Vector2(x1, y1) - Main.screenPosition, color, Vector3.Zero));
+		vertices.Add(new Vertex2D(new Vector2(x2, y2) - Main.screenPosition, color, Vector3.Zero));
 	}
 
 	/** Calls {@link #circle(float, float, float, int)} by estimating the number of segments needed for a smooth circle. */
@@ -57,30 +57,30 @@ public class GeometryBuffer
 
 		for (int i = 0; i < segments; i++)
 		{
-			vertices.Add(new Vertex2D(new Vector2(x + cx, y + cy), color, Vector3.Zero));
+			vertices.Add(new Vertex2D(new Vector2(x + cx, y + cy) - Main.screenPosition, color, Vector3.Zero));
 			temp = cx;
 			cx = cos * cx - sin * cy;
 			cy = sin * temp + cos * cy;
-			vertices.Add(new Vertex2D(new Vector2(x + cx, y + cy), color, Vector3.Zero));
+			vertices.Add(new Vertex2D(new Vector2(x + cx, y + cy) - Main.screenPosition, color, Vector3.Zero));
 		}
-		vertices.Add(new Vertex2D(new Vector2(x + cx, y + cy), color, Vector3.Zero));
+		vertices.Add(new Vertex2D(new Vector2(x + cx, y + cy) - Main.screenPosition, color, Vector3.Zero));
 
 		temp = cx;
 		cx = radius;
 		cy = 0;
-		vertices.Add(new Vertex2D(new Vector2(x + cx, y + cy), color, Vector3.Zero));
+		vertices.Add(new Vertex2D(new Vector2(x + cx, y + cy) - Main.screenPosition, color, Vector3.Zero));
 	}
 
 	public void Triangle(float x1, float y1, float x2, float y2, float x3, float y3, float z = 0f)
 	{
-		vertices.Add(new Vertex2D(new Vector2(x1, y1), color, Vector3.Zero));
-		vertices.Add(new Vertex2D(new Vector2(x2, y2), color, Vector3.Zero));
+		vertices.Add(new Vertex2D(new Vector2(x1, y1) - Main.screenPosition, color, Vector3.Zero));
+		vertices.Add(new Vertex2D(new Vector2(x2, y2) - Main.screenPosition, color, Vector3.Zero));
 
-		vertices.Add(new Vertex2D(new Vector2(x2, y2), color, Vector3.Zero));
-		vertices.Add(new Vertex2D(new Vector2(x3, y3), color, Vector3.Zero));
+		vertices.Add(new Vertex2D(new Vector2(x2, y2) - Main.screenPosition, color, Vector3.Zero));
+		vertices.Add(new Vertex2D(new Vector2(x3, y3) - Main.screenPosition, color, Vector3.Zero));
 
-		vertices.Add(new Vertex2D(new Vector2(x3, y3), color, Vector3.Zero));
-		vertices.Add(new Vertex2D(new Vector2(x1, y1), color, Vector3.Zero));
+		vertices.Add(new Vertex2D(new Vector2(x3, y3) - Main.screenPosition, color, Vector3.Zero));
+		vertices.Add(new Vertex2D(new Vector2(x1, y1) - Main.screenPosition, color, Vector3.Zero));
 	}
 
 	public void X(float x, float y, float len, float z = 0f)
