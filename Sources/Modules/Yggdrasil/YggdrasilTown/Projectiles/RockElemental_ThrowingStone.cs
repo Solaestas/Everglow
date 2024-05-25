@@ -136,7 +136,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 			// 吸力音效
 			if (PolymerizationTimer == 1)
 			{
-				SoundEngine.PlaySound(new SoundStyle("Everglow/" + ModAsset.RockElemental_Sucking_Path).WithPitchOffset(0.5f).WithVolumeScale(0.5f), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle($"Everglow/{ModAsset.RockElemental_Sucking_Path.Remove(ModAsset.RockElemental_Sucking_Path.Length - 4)}").WithPitchOffset(0.5f).WithVolumeScale(0.5f), Projectile.Center);
 			}
 		}
 
