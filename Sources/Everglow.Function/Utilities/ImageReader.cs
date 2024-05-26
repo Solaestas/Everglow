@@ -54,7 +54,7 @@ public static class ImageReader
 	{
 		path = ConvertImagePath(path);
 		using var memoryStream = new MemoryStream(ModContent.GetFileBytes(path));
-		using var image = Image.Load(memoryStream, out IImageFormat format);
+		using var image = Image.Load(memoryStream);
 		return image.CloneAs<TPixel>();
 	}
 

@@ -184,7 +184,12 @@ public class Rope
 	{
 		for (int i = 0; i < springs.Length; i++)
 		{
-			springs[i].Elasticity = 1f;
+			springs[i].Elasticity = 100f;
+		}
+		for (int i = 0; i < masses.Length; i++)
+		{
+			// masses[i].Mass = 1f;
+			masses[i].Force *= 0.1f;
 		}
 		//Update_Explict_Euler(deltaTime);
 		Update_XPBD(deltaTime);
@@ -192,7 +197,7 @@ public class Rope
 
 	private void Update_XPBD(float deltaTime)
 	{
-		int iterations = 20;
+		int iterations = 16;
 		float dt = deltaTime / iterations;
 		for (int k = 0; k < iterations; k++)
 		{
@@ -208,7 +213,7 @@ public class Rope
 
 				if (!m.IsStatic)
 				{
-					m.Velocity += dt * m.Force;
+					m.Velocity += dt * m.Force / m.Mass;
 					m.Position += dt * m.Velocity;
 				}
 			}
@@ -238,7 +243,7 @@ public class Rope
 
 				var W = 1.0f / p1.Mass + 1.0f / p2.Mass;
 				var compliance = 1.0f / (stiffness * dt * dt);
-				var lambda = -C / (invMa + invMb + compliance);
+				var lambda = -(C + compliance * spring.LambdaPrev) / (invMa + invMb + compliance);
 				var correction = -0.01f * gradient;
 				correction = gradient;
 
