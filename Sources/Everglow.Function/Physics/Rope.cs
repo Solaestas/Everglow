@@ -36,10 +36,11 @@ public class Rope
 
 	public struct Spring
 	{
-		internal float Elasticity;
-		internal float RestLength;
-		internal int A;
-		internal int B;
+		public float Elasticity;
+		public float RestLength;
+		public int A;
+		public int B;
+		public float LambdaPrev;
 
 		public Spring()
 		{
@@ -181,6 +182,172 @@ public class Rope
 
 	public void Update(float deltaTime)
 	{
+		for (int i = 0; i < springs.Length; i++)
+		{
+			springs[i].Elasticity = 1f;
+		}
+		//Update_Explict_Euler(deltaTime);
+		Update_XPBD(deltaTime);
+	}
+
+	private void Update_XPBD(float deltaTime)
+	{
+		int iterations = 20;
+		float dt = deltaTime / iterations;
+		for (int k = 0; k < iterations; k++)
+		{
+			for (int i = 0; i < masses.Length; i++)
+			{
+				ref _Mass m = ref masses[i];
+				if (float.IsNaN(m.Position.X) && float.IsNaN(m.Position.Y))
+				{
+					//Terraria.Main.NewText("!!");
+				}
+
+				dummyPos[i] = m.Position;
+
+				if (!m.IsStatic)
+				{
+					m.Velocity += dt * m.Force;
+					m.Position += dt * m.Velocity;
+				}
+			}
+
+			// Constraint solving
+			for (int i = 0; i < springs.Length; i++)
+			{
+				ref Spring spring = ref springs[i];
+				ref _Mass p1 = ref masses[spring.A];
+				ref _Mass p2 = ref masses[spring.B];
+				var restLength = spring.RestLength;
+				var stiffness = spring.Elasticity;
+
+				var d = p1.Position - p2.Position;
+				var L = d.Length();
+				var C = L - restLength;
+
+				if (L < 1e-6f) // To avoid division by zero
+				{
+					L = 1e-6f;
+				}
+
+				var gradient = d / L;
+
+				var invMa = p1.IsStatic ? 0 : 1.0f / p1.Mass;
+				var invMb = p2.IsStatic ? 0 : 1.0f / p2.Mass;
+
+				var W = 1.0f / p1.Mass + 1.0f / p2.Mass;
+				var compliance = 1.0f / (stiffness * dt * dt);
+				var lambda = -C / (invMa + invMb + compliance);
+				var correction = -0.01f * gradient;
+				correction = gradient;
+
+				p1.Position += correction * invMa * lambda;
+
+				p2.Position -= correction * invMb * lambda;
+
+				spring.LambdaPrev = lambda; // Update lambda_prev
+			}
+		}
+
+		if (hasCollision)
+		{
+			//float tTest;
+			//bool res = CollisionUtils.CCD_SegmentPoint(new Vector2(0, 2), new Vector2(1, -2), new Vector2(0, 0), new Vector2(0, -1), new Vector2(0.5f, 0.5f), Vector2.Zero, out tTest);
+			//for (int i = 0; i < springs.Length; i++)
+			//{
+			//	ref Spring spr = ref springs[i];
+			//	ref _Mass A = ref masses[spr.A];
+			//	ref _Mass B = ref masses[spr.B];
+
+			//	Vector2 Av = dummyPos[spr.A] - A.Position;
+			//	Vector2 Bv = dummyPos[spr.B] - B.Position;
+
+			//	Vector2 center = (dummyPos[spr.A] + dummyPos[spr.B]) / 2f;
+			//	int tileX = (int)(center.X / 16);
+			//	int tileY = (int)(center.Y / 16);
+
+			//	Vector2 baseOffset = new Vector2(tileX * 16 - 16, tileY * 16 - 16);
+
+			//	float minTimeToCollision = 1f;
+			//	Vector2 targetPos = Vector2.Zero;
+			//	Vector2 normal = Vector2.Zero;
+			//	for (int a = -3; a <= 3; a++)
+			//	{
+			//		for (int b = -3; b <= 3; b++)
+			//		{
+			//			if (tileX + b < 0 || tileX + b >= Terraria.Main.maxTilesX || tileY + a < 0 || tileY + a >= Terraria.Main.maxTilesY)
+			//			{
+			//				continue;
+			//			}
+			//			var tile = Terraria.Main.tile[tileX + b, tileY + a];
+			//			ICollider2D collider = SDFUtils.ExtractColliderFromTile(tile, tileX + b, tileY + a, false);
+
+			//			if (collider != null)
+			//			{
+			//				IPolygonalCollider2D collider2d = collider as IPolygonalCollider2D;
+			//				foreach (var point in collider2d.GetPolygon().Points)
+			//				{
+			//					float t;
+			//					if (CollisionUtils.CCD_SegmentPoint(A.Position - baseOffset, Av, B.Position - baseOffset, Bv, point - baseOffset, Vector2.Zero, out t))
+			//					{
+			//						if (t < 1 && t < minTimeToCollision)
+			//						{
+			//							minTimeToCollision = t;
+
+			//							var proj = A.Position + Vector2.Dot(B.Position - A.Position, point - A.Position) * Vector2.Normalize(B.Position - A.Position);
+			//							normal = Vector2.Normalize(point - proj);
+			//							targetPos = point;
+			//						}
+			//					}
+			//				}
+			//			}
+			//		}
+			//	}
+
+			//	if (minTimeToCollision < 1)
+			//	{
+			//		// Terraria.Main.NewText(minTimeToCollision);
+			//		minTimeToCollision *= 0.9f;
+
+			//		Vector2 contVA = Av * (1 - minTimeToCollision);
+			//		Vector2 contVB = Bv * (1 - minTimeToCollision);
+
+			//		Vector2 dummyA = A.Position + Av * minTimeToCollision;
+			//		Vector2 dummyB = B.Position + Bv * minTimeToCollision;
+
+			//		var torqueA = CrossProduct2D(dummyA - targetPos, contVA);
+			//		var torqueB = CrossProduct2D(dummyB - targetPos, contVB);
+
+			//		var MoI = (dummyA - targetPos).LengthSquared() * A.Mass + (dummyB - targetPos).LengthSquared() * B.Mass;
+
+			//		var rot = -(torqueA + torqueB) / MoI * 10;
+			//		var rr = RotateBy(dummyA - targetPos, rot);
+			//		dummyPos[spr.A] = targetPos + RotateBy(dummyA - targetPos, rot);
+			//		dummyPos[spr.B] = targetPos + RotateBy(dummyB - targetPos, -rot);
+			//	}
+			//}
+
+			// Update velocities
+			for (int i = 0; i < masses.Length; i++)
+			{
+				ref _Mass m = ref masses[i];
+				m.Force = Vector2.Zero;
+
+				if (!m.IsStatic)
+				{
+					//if (hasCollision)
+					//{
+					//	m.Position = CheckCollision(i, m.Position, dummyPos[i]);
+					//}
+					m.Velocity = (m.Position - dummyPos[i]) / dt;
+				}
+			}
+		}
+	}
+
+	private void Update_Explict_Euler(float deltaTime)
+	{
 		for (int i = 0; i < masses.Length; i++)
 		{
 			ref _Mass m = ref masses[i];
@@ -236,84 +403,84 @@ public class Rope
 			}
 		}
 
-		if (hasCollision)
-		{
-			float tTest;
-			bool res = CollisionUtils.CCD_SegmentPoint(new Vector2(0, 2), new Vector2(1, -2), new Vector2(0, 0), new Vector2(0, -1), new Vector2(0.5f, 0.5f), Vector2.Zero, out tTest);
-			for (int i = 0; i < springs.Length; i++)
-			{
-				ref Spring spr = ref springs[i];
-				ref _Mass A = ref masses[spr.A];
-				ref _Mass B = ref masses[spr.B];
+		//if (hasCollision)
+		//{
+		//	float tTest;
+		//	bool res = CollisionUtils.CCD_SegmentPoint(new Vector2(0, 2), new Vector2(1, -2), new Vector2(0, 0), new Vector2(0, -1), new Vector2(0.5f, 0.5f), Vector2.Zero, out tTest);
+		//	for (int i = 0; i < springs.Length; i++)
+		//	{
+		//		ref Spring spr = ref springs[i];
+		//		ref _Mass A = ref masses[spr.A];
+		//		ref _Mass B = ref masses[spr.B];
 
-				Vector2 Av = dummyPos[spr.A] - A.Position;
-				Vector2 Bv = dummyPos[spr.B] - B.Position;
+		//		Vector2 Av = dummyPos[spr.A] - A.Position;
+		//		Vector2 Bv = dummyPos[spr.B] - B.Position;
 
-				Vector2 center = (dummyPos[spr.A] + dummyPos[spr.B]) / 2f;
-				int tileX = (int)(center.X / 16);
-				int tileY = (int)(center.Y / 16);
+		//		Vector2 center = (dummyPos[spr.A] + dummyPos[spr.B]) / 2f;
+		//		int tileX = (int)(center.X / 16);
+		//		int tileY = (int)(center.Y / 16);
 
-				Vector2 baseOffset = new Vector2(tileX * 16 - 16, tileY * 16 - 16);
+		//		Vector2 baseOffset = new Vector2(tileX * 16 - 16, tileY * 16 - 16);
 
-				float minTimeToCollision = 1f;
-				Vector2 targetPos = Vector2.Zero;
-				Vector2 normal = Vector2.Zero;
-				for (int a = -3; a <= 3; a++)
-				{
-					for (int b = -3; b <= 3; b++)
-					{
-						if (tileX + b < 0 || tileX + b >= Terraria.Main.maxTilesX || tileY + a < 0 || tileY + a >= Terraria.Main.maxTilesY)
-						{
-							continue;
-						}
-						var tile = Terraria.Main.tile[tileX + b, tileY + a];
-						ICollider2D collider = SDFUtils.ExtractColliderFromTile(tile, tileX + b, tileY + a, false);
+		//		float minTimeToCollision = 1f;
+		//		Vector2 targetPos = Vector2.Zero;
+		//		Vector2 normal = Vector2.Zero;
+		//		for (int a = -3; a <= 3; a++)
+		//		{
+		//			for (int b = -3; b <= 3; b++)
+		//			{
+		//				if (tileX + b < 0 || tileX + b >= Terraria.Main.maxTilesX || tileY + a < 0 || tileY + a >= Terraria.Main.maxTilesY)
+		//				{
+		//					continue;
+		//				}
+		//				var tile = Terraria.Main.tile[tileX + b, tileY + a];
+		//				ICollider2D collider = SDFUtils.ExtractColliderFromTile(tile, tileX + b, tileY + a, false);
 
-						if (collider != null)
-						{
-							IPolygonalCollider2D collider2d = collider as IPolygonalCollider2D;
-							foreach (var point in collider2d.GetPolygon().Points)
-							{
-								float t;
-								if (CollisionUtils.CCD_SegmentPoint(A.Position - baseOffset, Av, B.Position - baseOffset, Bv, point - baseOffset, Vector2.Zero, out t))
-								{
-									if (t < 1 && t < minTimeToCollision)
-									{
-										minTimeToCollision = t;
+		//				if (collider != null)
+		//				{
+		//					IPolygonalCollider2D collider2d = collider as IPolygonalCollider2D;
+		//					foreach (var point in collider2d.GetPolygon().Points)
+		//					{
+		//						float t;
+		//						if (CollisionUtils.CCD_SegmentPoint(A.Position - baseOffset, Av, B.Position - baseOffset, Bv, point - baseOffset, Vector2.Zero, out t))
+		//						{
+		//							if (t < 1 && t < minTimeToCollision)
+		//							{
+		//								minTimeToCollision = t;
 
-										var proj = A.Position + Vector2.Dot(B.Position - A.Position, point - A.Position) * Vector2.Normalize(B.Position - A.Position);
-										normal = Vector2.Normalize(point - proj);
-										targetPos = point;
-									}
-								}
-							}
-						}
-					}
-				}
+		//								var proj = A.Position + Vector2.Dot(B.Position - A.Position, point - A.Position) * Vector2.Normalize(B.Position - A.Position);
+		//								normal = Vector2.Normalize(point - proj);
+		//								targetPos = point;
+		//							}
+		//						}
+		//					}
+		//				}
+		//			}
+		//		}
 
-				if (minTimeToCollision < 1)
-				{
-					// Terraria.Main.NewText(minTimeToCollision);
-					minTimeToCollision *= 0.9f;
+		//		if (minTimeToCollision < 1)
+		//		{
+		//			// Terraria.Main.NewText(minTimeToCollision);
+		//			minTimeToCollision *= 0.9f;
 
-					Vector2 contVA = Av * (1 - minTimeToCollision);
-					Vector2 contVB = Bv * (1 - minTimeToCollision);
+		//			Vector2 contVA = Av * (1 - minTimeToCollision);
+		//			Vector2 contVB = Bv * (1 - minTimeToCollision);
 
-					Vector2 dummyA = A.Position + Av * minTimeToCollision;
-					Vector2 dummyB = B.Position + Bv * minTimeToCollision;
+		//			Vector2 dummyA = A.Position + Av * minTimeToCollision;
+		//			Vector2 dummyB = B.Position + Bv * minTimeToCollision;
 
-					var torqueA = CrossProduct2D(dummyA - targetPos, contVA);
-					var torqueB = CrossProduct2D(dummyB - targetPos, contVB);
+		//			var torqueA = CrossProduct2D(dummyA - targetPos, contVA);
+		//			var torqueB = CrossProduct2D(dummyB - targetPos, contVB);
 
-					var MoI = (dummyA - targetPos).LengthSquared() * A.Mass + (dummyB - targetPos).LengthSquared() * B.Mass;
+		//			var MoI = (dummyA - targetPos).LengthSquared() * A.Mass + (dummyB - targetPos).LengthSquared() * B.Mass;
 
-					var rot = -(torqueA + torqueB) / MoI * 10;
-					var rr = RotateBy(dummyA - targetPos, rot);
-					dummyPos[spr.A] = targetPos + RotateBy(dummyA - targetPos, rot);
-					dummyPos[spr.B] = targetPos + RotateBy(dummyB - targetPos, -rot);
-				}
-			}
-		}
+		//			var rot = -(torqueA + torqueB) / MoI * 10;
+		//			var rr = RotateBy(dummyA - targetPos, rot);
+		//			dummyPos[spr.A] = targetPos + RotateBy(dummyA - targetPos, rot);
+		//			dummyPos[spr.B] = targetPos + RotateBy(dummyB - targetPos, -rot);
+		//		}
+		//	}
+		//}
 
 		for (int i = 0; i < masses.Length; i++)
 		{
