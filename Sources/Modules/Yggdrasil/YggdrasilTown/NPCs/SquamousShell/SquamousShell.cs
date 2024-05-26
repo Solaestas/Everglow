@@ -5,6 +5,7 @@ using Everglow.Commons.Skeleton2D.Renderer;
 using Everglow.Commons.Skeleton2D.Renderer.DrawCommands;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using Spine;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -76,7 +77,7 @@ public class SquamousShell : ModNPC
 		_coroutineManager.Update();
 		mousePos = Main.MouseWorld;
 		SquamousShellSkeleton.Position = NPC.Bottom;
-		SquamousShellSkeleton.Rotation = NPC.rotation;
+		SquamousShellSkeleton.Skeleton.FindBone("hips").Rotation = NPC.rotation / Spine.MathUtils.DegRad;
 	}
 
 	/// <summary>
@@ -769,23 +770,23 @@ public class SquamousShell : ModNPC
 		}
 		skeletonDebugRenderer.DisableAll();
 		skeletonDebugRenderer.DrawBones = true;
-		var ik = SquamousShellSkeleton.Skeleton.FindIkConstraint("Front3IK");
-		float x, y;
-		SquamousShellSkeleton.Skeleton.RootBone.WorldToLocal(mousePos.X, mousePos.Y, out x, out y);
-		ik.Target.X = x;
-		ik.Target.Y = y;
+		//var ik = SquamousShellSkeleton.Skeleton.FindIkConstraint("Front3IK");
+		//float x, y;
+		//SquamousShellSkeleton.Skeleton.RootBone.WorldToLocal(mousePos.X, mousePos.Y, out x, out y);
+		//ik.Target.X = x;
+		//ik.Target.Y = y;
 
 		SquamousShellSkeleton.Skeleton.UpdateWorldTransform();
 
 		skeletonRenderer.UseEnvironmentLight = true;
 		skeletonRenderer.DrawOffset = -Main.screenPosition;
-		skeletonRenderer.DrawOrigin = new Vector2(0, -77);
-		skeletonRenderer.DrawRotation = NPC.rotation;
+		// skeletonRenderer.DrawOrigin = new Vector2(0, -77);
+		// skeletonRenderer.DrawRotation = NPC.rotation;
 		//// skeleton2D.InverseKinematics(Main.MouseWorld);
 		// float framesOfAnimation = 35;
 		// SquamousShellSkeleton.PlayAnimation(0, "walk", ((float)Main.timeForVisualEffects % framesOfAnimation / framesOfAnimation) * framesOfAnimation / 60f);
 		//// SquamousShellSkeleton.DrawDebugView(spriteBatch);
-
+		
 		var cmdList = skeletonRenderer.Draw(SquamousShellSkeleton);
 		cmdList.AddRange(skeletonDebugRenderer.Draw(SquamousShellSkeleton));
 		NaiveExecuter executer = new NaiveExecuter();
