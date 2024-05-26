@@ -23,14 +23,12 @@ public class HotAirBalloon : ModItem
 
 		// 2. Increase Jump Speed (pixels/tick)
 		player.jumpSpeedBoost += JumpSpeedBoost;
-
-		// 3. Enable Fire Dust
-		player.GetModPlayer<HotAirBalloonPlayer>();
 	}
 }
 
 internal class HotAirBalloonPlayer : ModPlayer
 {
+	// 3. Enable Fire Dust
 	public override void PreUpdate()
 	{
 		if (Main.rand.NextBool(20))

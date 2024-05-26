@@ -27,9 +27,6 @@ public class MelterGear : ModItem
 
 		// 2. +2 Defense
 		player.statDefense += DefenseBonus;
-
-		// 3. Hit Enhancement
-		player.GetModPlayer<MelterGearPlayer>();
 	}
 }
 

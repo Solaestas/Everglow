@@ -19,14 +19,12 @@ public class HeatEmblem : ModItem
 	{
 		// 1. + 2/s Life Regeneration
 		player.lifeRegen += 4;
-
-		// 2. Gain "On Fire" debuff when get hurt
-		player.GetModPlayer<HeatEmblemPlayer>();
 	}
 }
 
 internal class HeatEmblemPlayer : ModPlayer
 {
+	// 2. Gain "On Fire" debuff when get hurt
 	public override void OnHurt(Player.HurtInfo info)
 	{
 		if (Main.rand.NextFloat() < HeatEmblem.BuffTriggerRate)
