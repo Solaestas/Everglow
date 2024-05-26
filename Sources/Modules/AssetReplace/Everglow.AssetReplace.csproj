@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
 		<!--Disable Auto Generate ModAsset-->
-		<Solaestas-UseAssetPath>false</Solaestas-UseAssetPath>
-		<TargetFramework>net8.0</TargetFramework>
+		<EnablePathGenerator>false</EnablePathGenerator>
 	</PropertyGroup>
 </Project>

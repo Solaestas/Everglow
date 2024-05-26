@@ -59,7 +59,7 @@ public class BloodCultistPlayer : ModPlayer
 
 	public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if (hit.DamageType == DamageClass.Magic)
+		if (hit.DamageType == DamageClass.Magic && hasBloodCultistSet)
 		{
 			Player.lifeRegen += 1;
 			if (Main.rand.NextBool(20))

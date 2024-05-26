@@ -1,10 +1,8 @@
 <Project>
-	<Import
-		Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props','$(MSBuildThisFileDirectory)..\'))" />
+	<Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props','$(MSBuildThisFileDirectory)..\'))" />
 	<PropertyGroup>
 		<ModuleName>$(MSBuildProjectName.SubString(9))</ModuleName>
-		<AssetsPrefix>$(ModuleName)</AssetsPrefix>
-		<Solaestas-AssetPrefix>$(ModuleName)</Solaestas-AssetPrefix>
+		<PathPrefix>$(ModuleName)</PathPrefix>
 		<DefineConstants>$(DefineConstants);$(ModuleName)</DefineConstants>
 	</PropertyGroup>
 	<ItemGroup>

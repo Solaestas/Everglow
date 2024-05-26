@@ -1,4 +1,5 @@
 using Everglow.Commons.TileHelper;
+using Everglow.Yggdrasil.YggdrasilTown.Items;
 using Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
 using Terraria.GameContent.Drawing;
 
@@ -16,11 +17,23 @@ public class LampWood_newStyleTree_0 : ShapeDataTile, ITileFluentlyDrawn
 	{
 		base.PostSetDefaults();
 		MultiItem = true;
+		TileID.Sets.IsATreeTrunk[Type] = true;
 		CustomItemType = ModContent.ItemType<LampWood_Wood>();
 	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		return false;
+	}
+	public override void CustomDropItem(int i, int j)
+	{
+		if (CustomItemType > 0)
+		{
+			Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 16, 16, new Item(CustomItemType, 1));
+			if(Main.rand.NextBool(6))
+			{
+				Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 16, 16, new Item(ModContent.ItemType<LampFruit>(), 1));
+			}
+		}
 	}
 	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
@@ -140,7 +153,7 @@ public class LampWood_newStyleTree_0 : ShapeDataTile, ITileFluentlyDrawn
 			return;
 		int paint = Main.tile[paintPos].TileColor;
 		int textureStyle = 1;
-		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.LampWood_newStyleTree_0_leavePath, type, textureStyle, paint, tileDrawing);
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.LampWood_newStyleTree_0_leave_Path, type, textureStyle, paint, tileDrawing);
 		tex ??= ModAsset.LampWood_newStyleTree_0_leave.Value;
 
 		float windCycle = 0;

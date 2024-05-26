@@ -1,6 +1,7 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 [NoGameModeScale]
@@ -69,10 +70,6 @@ public class BarkSpicyCaterpillar : Caterpillar
 			return 0f;
 		return 8f;
 	}
-	/// <summary>
-	/// 需要添加夜晚离开
-	/// </summary>
-	/// <returns></returns>
 	public override IEnumerator<ICoroutineInstruction> CrawlingII()
 	{
 		Crawl_2 = true;
@@ -270,5 +267,9 @@ public class BarkSpicyCaterpillar : Caterpillar
 			}
 		}
 		return base.PreKill();
+	}
+	public override void ModifyNPCLoot(NPCLoot npcLoot)
+	{
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.CaterpillarJuice>(), 1, 1, 2));
 	}
 }

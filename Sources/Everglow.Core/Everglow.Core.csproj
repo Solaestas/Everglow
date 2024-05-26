@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>Everglow.Commons</RootNamespace>
-		<Solaestas-UseAssetPath>false</Solaestas-UseAssetPath>
+		<RootNamespace>Everglow.Commons</RootNamespace>
+		<EnablePathGenerator>false</EnablePathGenerator>
 	</PropertyGroup>
 	<ItemGroup>
 		<Reference Remove="$(tMLPath)" />

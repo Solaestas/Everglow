@@ -1,16 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="Module.Build.props" />
-	<Import Project="Everglow.targets" />
 	<PropertyGroup>
-		<Solaestas-NotMod>false</Solaestas-NotMod>
-		<Solaestas-UseAssetPath>false</Solaestas-UseAssetPath>
+		<EnableModBuilder>true</EnableModBuilder>
+		<EnablePathGenerator>false</EnablePathGenerator>
 		<AssemblyName>$(MSBuildProjectName)</AssemblyName>
-		<AssetsPrefix>.</AssetsPrefix>
-		<TargetFramework>net8.0</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Everglow.Core\Everglow.Core.csproj" />
 		<ProjectReference Include="..\Everglow.Function\Everglow.Function.csproj" />
+		<ModuleReference Include="$(Modules.Split(';'))" />
+		<ProjectReference Include="@(ModuleReference->'..\Modules\%(Filename)\Everglow.%(Filename).csproj')" />
 	</ItemGroup>
+	<Target Name="ReadResource"
+			BeforeTargets="Build">
+		<ItemGroup>
+			<Lists Include="@(ModuleReference->'$(EverglowIntermediateOutput)%(Filename).resource')"/>
+			<Lists Include="$(EverglowIntermediateOutput)Commons.resource" />
+		</ItemGroup>
+		<ReadResource Lists="@(Lists)">
+			<Output TaskParameter="Resources"
+					ItemName="AdditionalFiles" />
+		</ReadResource>
+	</Target>
 </Project>

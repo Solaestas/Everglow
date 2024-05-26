@@ -1,6 +1,7 @@
 using Everglow.Commons.TileHelper;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Creative;
 using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 using Terraria.ObjectData;
@@ -631,11 +632,11 @@ public static class FurnitureUtils
 		{
 			for (int n = y; n < y + tileY; n++)
 			{
+				tile = Main.tile[m, n];
 				if (!tile.HasTile)
 					continue;
 				if (tile.TileType == type)
-				{
-					tile = Main.tile[m, n];
+				{		
 					if (tile.TileFrameX < coordinateX * tileX)
 					{
 						tile = Main.tile[m, n];
@@ -689,11 +690,11 @@ public static class FurnitureUtils
 		{
 			for (int n = y; n < y + tileY; n++)
 			{
+				tile = Main.tile[m, n];
 				if (!tile.HasTile)
 					continue;
 				if (tile.TileType == type)
 				{
-					tile = Main.tile[m, n];
 					if (tile.TileFrameY < coordinateY * tileY)
 					{
 						tile = Main.tile[m, n];
@@ -729,3 +730,384 @@ public static class FurnitureUtils
 		}
 	}
 }
+/// <summary>
+/// 桌物品模板
+/// </summary>
+public abstract class TableItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 26;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 椅物品模板
+/// </summary>
+public abstract class ChairItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 30;
+		Item.height = 12;
+		Item.value = 150;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 工作台物品模板
+/// </summary>
+public abstract class WorkBenchItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 28;
+		Item.height = 14;
+		Item.value = 150;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 吊灯物品模板
+/// </summary>
+public abstract class ChandelierItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 26;
+		Item.height = 26;
+		Item.value = 3000;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 蜡烛物品模板
+/// </summary>
+public abstract class CandleItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 8;
+		Item.height = 18;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 烛台物品模板
+/// </summary>
+public abstract class CandelabraItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 1500;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 灯物品模板
+/// </summary>
+public abstract class LampItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 10;
+		Item.height = 24;
+		Item.value = 500;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 灯笼物品模板
+/// </summary>
+public abstract class LanternItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 12;
+		Item.height = 28;
+		Item.value = 150;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 沙发物品模板
+/// </summary>
+public abstract class SofaItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 床物品模板
+/// </summary>
+public abstract class BedItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 28;
+		Item.height = 20;
+		Item.value = 2000;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 马桶物品模板
+/// </summary>
+public abstract class ToiletItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 14;
+		Item.height = 14;
+		Item.value = 150;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 平台物品模板
+/// </summary>
+public abstract class PlatformItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 8;
+		Item.height = 10;
+		Item.value = 0;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 书架物品模板
+/// </summary>
+public abstract class BookcaseItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 水盆物品模板
+/// </summary>
+public abstract class SinkItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 箱子物品模板
+/// </summary>
+public abstract class ChestItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 26;
+		Item.height = 22;
+		Item.value = 500;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 浴缸物品模板
+/// </summary>
+public abstract class BathtubItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 钢琴物品模板
+/// </summary>
+public abstract class PianoItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 钟物品模板
+/// </summary>
+public abstract class ClockItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 梳妆台物品模板
+/// </summary>
+public abstract class DresserItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 门物品模板
+/// </summary>
+public abstract class DoorItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 14;
+		Item.height = 28;
+		Item.value = 200;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+

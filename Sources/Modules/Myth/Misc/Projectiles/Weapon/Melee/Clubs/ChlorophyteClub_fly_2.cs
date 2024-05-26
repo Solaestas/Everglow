@@ -6,7 +6,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class ChlorophyteClub_fly_2 : ModProjectile, IWarpProjectile
 {
-	public override string Texture => "Everglow/" + ModAsset.ChlorophyteClub_flyPath;
+	public override string Texture => "Everglow/" + ModAsset.ChlorophyteClub_fly_Path;
 	/// <summary>
 	/// 角速度
 	/// </summary>

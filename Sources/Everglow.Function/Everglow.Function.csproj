@@ -1,27 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>Everglow.Commons</RootNamespace>
-		<AssetsPrefix>Commons</AssetsPrefix>
-		<Solaestas-AssetPrefix>$(AssetsPrefix)</Solaestas-AssetPrefix>
+		<RootNamespace>Everglow.Commons</RootNamespace>
+		<PathPrefix>Commons</PathPrefix>
 	</PropertyGroup>
 	<ItemGroup>
-	  <AdditionalFiles Remove="iiid\effects\iiideffects\edge.fx" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Solaestas-EffectFile Remove="IIID\Effects\Bloom.fx" />
-	  <Solaestas-EffectFile Remove="IIID\Effects\GoldenCrack.fx" />
-	  <Solaestas-EffectFile Remove="iiid\effects\iiideffects\edge.fx" />
-	  <Solaestas-EffectFile Remove="IIID\Effects\IIIDEffects\Filters.fx" />
-	  <Solaestas-EffectFile Remove="IIID\Effects\IIIDEffects\GBufferPass.fx" />
-	  <Solaestas-EffectFile Remove="IIID\Effects\IIIDEffects\MeshTest.fx" />
-	  <Solaestas-EffectFile Remove="IIID\Effects\IIIDEffects\PixelArt.fx" />
-	  <Solaestas-EffectFile Remove="IIID\Effects\IIIDEffects\ToneMapping.fx" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="2.1.8" />
 		<ProjectReference Include="..\Everglow.Core\Everglow.Core.csproj" />
 	</ItemGroup>
-
 </Project>

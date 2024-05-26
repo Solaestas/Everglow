@@ -34,7 +34,7 @@ public class LampWoodForest : ModBiome
 	public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 	public override string BestiaryIcon => "Everglow/Yggdrasil/YggdrasilTown/YggdrasilTownIcon";
 	public override string BackgroundPath => base.BackgroundPath;
-	public override string MapBackground => "Everglow/" + ModAsset.LampWood_MapBackgroundPath;
+	public override string MapBackground => "Everglow/" + ModAsset.LampWood_MapBackground_Path;
 	public override ModWaterStyle WaterStyle => ModContent.GetInstance<Water.YggdrasilTownWaterStyle>();
 	public override Color? BackgroundColor => base.BackgroundColor;
 

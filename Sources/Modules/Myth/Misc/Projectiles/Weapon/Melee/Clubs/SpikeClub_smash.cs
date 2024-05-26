@@ -2,7 +2,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class SpikeClub_smash : ClubProj_Smash_metal
 {
-	public override string Texture => "Everglow/" + ModAsset.Melee_SpikeClubPath;
+	public override string Texture => "Everglow/" + ModAsset.Melee_SpikeClub_Path;
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		int k = (int)(Omega * 10);
