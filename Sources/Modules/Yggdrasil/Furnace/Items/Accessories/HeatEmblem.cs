@@ -19,17 +19,32 @@ public class HeatEmblem : ModItem
 	{
 		// 1. + 2/s Life Regeneration
 		player.lifeRegen += 4;
+
+		// 2. Negative effect
+		// When the wearer get hurt,
+		// has 33% chance to inflict an "On Fire!" debuff on wearer.
+		player.GetModPlayer<HeatEmblemPlayer>().HeatEmblemEnable = true;
 	}
 }
 
 internal class HeatEmblemPlayer : ModPlayer
 {
+	public bool HeatEmblemEnable = false;
+
+	public override void ResetEffects()
+	{
+		HeatEmblemEnable = false;
+	}
+
 	// 2. Gain "On Fire" debuff when get hurt
 	public override void OnHurt(Player.HurtInfo info)
 	{
-		if (Main.rand.NextFloat() < HeatEmblem.BuffTriggerRate)
+		if (HeatEmblemEnable)
 		{
-			Player.AddBuff(BuffID.OnFire, HeatEmblem.BuffDuration);
+			if (Main.rand.NextFloat() < HeatEmblem.BuffTriggerRate)
+			{
+				Player.AddBuff(BuffID.OnFire, HeatEmblem.BuffDuration);
+			}
 		}
 	}
 }

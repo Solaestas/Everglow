@@ -24,11 +24,23 @@ public class ThermalConductor : ModItem
 
 		// 2. + 10% Mana Cost
 		player.manaCost += 0.1f;
+
+		// 3. When the player's mana falls below [StatusTriggerCondition],
+		// there is a [StatusTriggerRate] chance of gaining [ManaHeal] mana
+		// along with a Curse Inferno debuff with [DebuffDuration] duration.
+		player.GetModPlayer<ThermalConductorPlayer>().ThermalConductorEnable = true;
 	}
 }
 
 internal class ThermalConductorPlayer : ModPlayer
 {
+	public bool ThermalConductorEnable = false;
+
+	public override void ResetEffects()
+	{
+		ThermalConductorEnable = false;
+	}
+
 	// 3. When the player's mana falls below [StatusTriggerCondition],
 	// there is a [StatusTriggerRate] chance of gaining [ManaHeal] mana
 	// along with a Curse Inferno debuff with [DebuffDuration] duration.

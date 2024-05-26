@@ -1,6 +1,4 @@
-using Terraria.DataStructures;
 using Terraria.Enums;
-using Terraria.Social.Base;
 
 namespace Everglow.Yggdrasil.Furnace.Items.Accessories;
 
@@ -27,24 +25,48 @@ public class MelterGear : ModItem
 
 		// 2. +2 Defense
 		player.statDefense += DefenseBonus;
+
+		// 3. Hit Enhancement
+		// Upon striking an enemy,
+		// there is a 33% chance to inflict an "On Fire!" debuff on target, lasting for 5 seconds.
+		// Additionally, while the target has "On Fire" debuff,
+		// there is a 33% chance to inflict an "On Fire!" debuff on wearer, lasting for 5 seconds.
+		// (The "On Fire" debuff inflicted by this attack will not trigger the second effect.)
+		player.GetModPlayer<MelterGearPlayer>().MelterGearEnable = true;
 	}
 }
 
 internal class MelterGearPlayer : ModPlayer
 {
+	public bool MelterGearEnable = false;
+
+	public override void ResetEffects()
+	{
+		MelterGearEnable = false;
+	}
+
+	// 3. Hit Enhancement
+	// Upon striking an enemy,
+	// there is a 33% chance to inflict an "On Fire!" debuff on target, lasting for 5 seconds.
+	// Additionally, while the target has "On Fire" debuff,
+	// there is a 33% chance to inflict an "On Fire!" debuff on wearer, lasting for 5 seconds.
+	// (The "On Fire" debuff inflicted by this attack will not trigger the second effect.)
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if (target.onFire)
+		if (MelterGearEnable)
 		{
+			if (target.onFire)
+			{
+				if (Main.rand.NextFloat() < MelterGear.BuffTriggerRate)
+				{
+					Player.AddBuff(BuffID.OnFire, MelterGear.BuffDuration);
+				}
+			}
+
 			if (Main.rand.NextFloat() < MelterGear.BuffTriggerRate)
 			{
-				Player.AddBuff(BuffID.OnFire, MelterGear.BuffDuration);
+				target.AddBuff(BuffID.OnFire, MelterGear.BuffDuration);
 			}
-		}
-
-		if (Main.rand.NextFloat() < MelterGear.BuffTriggerRate)
-		{
-			target.AddBuff(BuffID.OnFire, MelterGear.BuffDuration);
 		}
 	}
 }
