@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Everglow.Commons.Graphics;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Microsoft.Build.Experimental.ProjectCache;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -16,7 +9,7 @@ public class ThermoprobeStaff : ModItem
 	{
 		Item.width = 45;
 		Item.height = 45;
-		Item.useStyle = 1;
+		Item.useStyle = ItemUseStyleID.Swing;
 		Item.useTime = 17;
 		Item.useAnimation = 17;
 		Item.damage = 11;
@@ -56,15 +49,15 @@ public class Thermoprobe : ModProjectile
 		Projectile.aiStyle = -1;
 		oldPos = new Vector2[6];
 		oldRot = new float[6];
-    }
+	}
 	public Vector2[] oldPos;
 	public float[] oldRot;
 	public override void AI()
 	{
-		ProjectileUtils.TrackOldValue(oldPos,Projectile.Center);
-        ProjectileUtils.TrackOldValue(oldRot, Projectile.rotation);
+		ProjectileUtils.TrackOldValue(oldPos, Projectile.Center);
+		ProjectileUtils.TrackOldValue(oldRot, Projectile.rotation);
 
-        if (Projectile.ai[0] > 0)
+		if (Projectile.ai[0] > 0)
 		{
 			Projectile.timeLeft++;
 		}
@@ -72,18 +65,18 @@ public class Thermoprobe : ModProjectile
 		{
 			Projectile.rotation = Projectile.velocity.ToRotation();
 			Projectile.velocity *= 0.98f;
-			if(Projectile.timeLeft==1)
+			if (Projectile.timeLeft == 1)
 			{
-				SoundEngine.PlaySound(SoundID.Item14,Projectile.Center);
-					FireSmogDust smoke = new()
-					{
-						maxTime = 40,
-						position = Projectile.Center,
-						velocity = -Vector2.UnitY * Main.rand.NextFloat(2f)
+				SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
+				FireSmogDust smoke = new()
+				{
+					maxTime = 40,
+					position = Projectile.Center,
+					velocity = -Vector2.UnitY * Main.rand.NextFloat(2f)
 
-					};
-					smoke.scale = Main.rand.Next(50, 110);
-					Ins.VFXManager.Add(smoke);
+				};
+				smoke.scale = Main.rand.Next(50, 110);
+				Ins.VFXManager.Add(smoke);
 				for (int i = 0; i < 10; i++)
 				{
 					FireSparkDust dust = new();
@@ -99,68 +92,68 @@ public class Thermoprobe : ModProjectile
 			return;
 		}
 		NPC target = null;
-        float mindis = 600;
-        foreach (NPC npc in Main.ActiveNPCs)
+		float mindis = 600;
+		foreach (NPC npc in Main.ActiveNPCs)
 		{
-			
-			if(npc.CanBeChasedBy())
+
+			if (npc.CanBeChasedBy())
 			{
 				float dis = Vector2.Distance(npc.Center, Projectile.Center);
-				if(dis<mindis)
+				if (dis < mindis)
 				{
 					target = npc;
 					mindis = dis;
-				}	
+				}
 			}
 		}
 
 
-        if (target != null) //攻击
+		if (target != null) //攻击
 		{
-            Vector2 targetPos = target.Center + target.DirectionTo(Projectile.Center) * 240;
-            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(targetPos) * 8, 0.1f);
+			Vector2 targetPos = target.Center + target.DirectionTo(Projectile.Center) * 240;
+			Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(targetPos) * 8, 0.1f);
 			Projectile.rotation = Terraria.Utils.AngleLerp(Projectile.rotation, Projectile.DirectionTo(target.Center).ToRotation(), 0.2f);
-			if(Vector2.Distance(Projectile.Center,targetPos)<360)
+			if (Vector2.Distance(Projectile.Center, targetPos) < 360)
 			{
-				if (++Projectile.ai[1] > 40 && Projectile.ai[0]>0)
+				if (++Projectile.ai[1] > 40 && Projectile.ai[0] > 0)
 				{
-                    SoundEngine.PlaySound(SoundID.Item11, Projectile.Center);
+					SoundEngine.PlaySound(SoundID.Item11, Projectile.Center);
 
-                    Projectile.ai[0]--;
+					Projectile.ai[0]--;
 					Projectile.ai[1] = 0;
-					if(Main.netMode!=1)
-						Projectile.NewProjectile(Projectile.GetSource_FromAI(),Projectile.Center+Projectile.rotation.ToRotationVector2()*20, Projectile.DirectionTo(target.Center)*30+  target.velocity,ModContent.ProjectileType<Thermoprobe_Fireball>(),Projectile.damage,Projectile.knockBack,Projectile.owner);
+					if (Main.netMode != NetmodeID.MultiplayerClient)
+						Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 20, Projectile.DirectionTo(target.Center) * 30 + target.velocity, ModContent.ProjectileType<Thermoprobe_Fireball>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 				}
 			}
-        }
-        else //游荡
+		}
+		else //游荡
 		{
 			Player player = Main.player[Projectile.owner];
 			Vector2 targetPos = player.Center + player.DirectionTo(Projectile.Center) * 100;
 			FlyTo(targetPos, 0.2f);
-			if(Projectile.velocity.Length()>12&& Vector2.Distance(Projectile.Center, player.Center) < 800)
+			if (Projectile.velocity.Length() > 12 && Vector2.Distance(Projectile.Center, player.Center) < 800)
 				Projectile.velocity *= 0.96f;
-			if(Vector2.Distance(Projectile.Center, player.Center) > 1200)
+			if (Vector2.Distance(Projectile.Center, player.Center) > 1200)
 			{
 				Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(player.Center) * 8, 0.1f);
 			}
-            if (Vector2.Distance(Projectile.Center, player.Center) > 5000)
+			if (Vector2.Distance(Projectile.Center, player.Center) > 5000)
 			{
 				Projectile.Center = player.Center;
 			}
-            Projectile.rotation = Projectile.velocity.ToRotation();
+			Projectile.rotation = Projectile.velocity.ToRotation();
 
-        }
-		Dust d = Dust.NewDustPerfect(Projectile.Center + (Projectile.rotation + 1.8f).ToRotationVector2()*10, 6);
+		}
+		Dust d = Dust.NewDustPerfect(Projectile.Center + (Projectile.rotation + 1.8f).ToRotationVector2() * 10, 6);
 		d.noGravity = true;
 
-        d = Dust.NewDustPerfect(Projectile.Center + (Projectile.rotation - 1.8f).ToRotationVector2() * 10, 6);
-        d.noGravity = true;
-    }
-    public void FlyTo(Vector2 pos,float acc)
+		d = Dust.NewDustPerfect(Projectile.Center + (Projectile.rotation - 1.8f).ToRotationVector2() * 10, 6);
+		d.noGravity = true;
+	}
+	public void FlyTo(Vector2 pos, float acc)
 	{
 
-        if (Projectile.Center.X < pos.X)
+		if (Projectile.Center.X < pos.X)
 		{
 
 			Projectile.velocity.X += acc;
@@ -169,15 +162,15 @@ public class Thermoprobe : ModProjectile
 		{
 			Projectile.velocity.X -= acc;
 		}
-        if (Projectile.Center.Y < pos.Y)
-        {
-            Projectile.velocity.Y += acc;
-        }
-        else
-        {
-            Projectile.velocity.Y -= acc;
-        }
-    }
+		if (Projectile.Center.Y < pos.Y)
+		{
+			Projectile.velocity.Y += acc;
+		}
+		else
+		{
+			Projectile.velocity.Y -= acc;
+		}
+	}
 	int frame = 0;
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -186,43 +179,43 @@ public class Thermoprobe : ModProjectile
 		if (Projectile.frameCounter > 5)
 		{
 			Projectile.frameCounter = 0;
-			if (++frame > maxFrame -1)
+			if (++frame > maxFrame - 1)
 				frame = 0;
 		}
 		Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
-		for(int i=0;i<oldPos.Length;i++)
-			Main.EntitySpriteDraw(tex, oldPos[i] - Main.screenPosition, tex.Frame(1, maxFrame, 0, frame), lightColor*(float)Math.Pow((1-((float)i/oldPos.Length)),1.5f)*0.2f, oldRot[i] + 1.57f, new Vector2(tex.Width,tex.Height/maxFrame)/2, Projectile.scale, 0, 0);
-        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, tex.Frame(1, maxFrame, 0, frame), lightColor , Projectile.rotation + 1.57f, new Vector2(tex.Width, tex.Height / maxFrame) / 2, Projectile.scale, 0, 0);
+		for (int i = 0; i < oldPos.Length; i++)
+			Main.EntitySpriteDraw(tex, oldPos[i] - Main.screenPosition, tex.Frame(1, maxFrame, 0, frame), lightColor * (float)Math.Pow((1 - ((float)i / oldPos.Length)), 1.5f) * 0.2f, oldRot[i] + 1.57f, new Vector2(tex.Width, tex.Height / maxFrame) / 2, Projectile.scale, 0, 0);
+		Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, tex.Frame(1, maxFrame, 0, frame), lightColor, Projectile.rotation + 1.57f, new Vector2(tex.Width, tex.Height / maxFrame) / 2, Projectile.scale, 0, 0);
 
-        return false;
+		return false;
 	}
 }
 public class Thermoprobe_Fireball : ModProjectile
 {
 	public override string Texture => "Terraria/Images/Projectile_0";
 	public override void SetDefaults()
-    {
-        Projectile.width = 16;
-        Projectile.height = 16;
-        Projectile.friendly = true;
-        Projectile.hostile = false;
-        Projectile.timeLeft = 200;
+	{
+		Projectile.width = 16;
+		Projectile.height = 16;
+		Projectile.friendly = true;
+		Projectile.hostile = false;
+		Projectile.timeLeft = 200;
 		Projectile.extraUpdates = 0;
-        Projectile.tileCollide = false;
-        Projectile.aiStyle = -1;
-    }
-    public override void AI()
-    {
-		Dust d = Dust.NewDustPerfect(Projectile.Center,6);
+		Projectile.tileCollide = false;
+		Projectile.aiStyle = -1;
+	}
+	public override void AI()
+	{
+		Dust d = Dust.NewDustPerfect(Projectile.Center, 6);
 
-    }
-    public override bool PreDraw(ref Color lightColor)
-    {
+	}
+	public override bool PreDraw(ref Color lightColor)
+	{
 		lightColor = Color.White;
 		Texture2D tex = ModContent.Request<Texture2D>("Terraria/Images/Projectile_666").Value;
-        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, lightColor , Projectile.velocity.ToRotation() + 1.57f, new Vector2(tex.Width, tex.Height) / 2, Projectile.scale, 0, 0);
+		Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.velocity.ToRotation() + 1.57f, new Vector2(tex.Width, tex.Height) / 2, Projectile.scale, 0, 0);
 
-        return true;
-    }
+		return true;
+	}
 }
 
