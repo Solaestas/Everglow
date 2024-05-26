@@ -45,7 +45,7 @@ public class CyanVineOreSmall : ModTile
 		int Times = Main.rand.Next(3, 6);
 		for (int d = 0; d < Times; d++)
 		{
-			Item.NewItem(null, i * 16 + Main.rand.Next(94) - 16, j * 16 + Main.rand.Next(64) - 48, 16, 16, ModContent.ItemType<Items.CyanVineOre>());
+			Item.NewItem(null, i * 16 + Main.rand.Next(94) - 16, j * 16 + Main.rand.Next(64) - 48, 16, 16, ModContent.ItemType<Items.CyanVine.CyanVineOre>());
 		}
 		for (int f = 0; f < 4; f++)
 		{

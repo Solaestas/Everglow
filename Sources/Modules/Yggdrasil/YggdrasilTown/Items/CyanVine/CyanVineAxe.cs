@@ -1,4 +1,6 @@
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+using Everglow.Yggdrasil.YggdrasilTown.Items;
+
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.CyanVine;
 
 public class CyanVineAxe : ModItem
 {

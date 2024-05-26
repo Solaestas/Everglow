@@ -1,6 +1,7 @@
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Terraria.Audio;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.CyanVine;
 
 public class CyanVineStaff : ModItem
 {
@@ -14,7 +15,7 @@ public class CyanVineStaff : ModItem
 		Item.knockBack = 4f;
 		Item.damage = 13;
 		Item.rare = ItemRarityID.White;
-		Item.UseSound = SoundID.Item1;
+		
 		Item.value = 4000;
 		Item.autoReuse = false;
 		Item.DamageType = DamageClass.Magic;
@@ -39,5 +40,9 @@ public class CyanVineStaff : ModItem
 	public override bool CanUseItem(Player player)
 	{
 		return player.ownedProjectileCounts[ModContent.ProjectileType<CyanVineStaff_proj>()] == 0;
+	}
+	public override bool? UseItem(Player player)
+	{
+		return base.UseItem(player);
 	}
 }

@@ -80,7 +80,7 @@ public class CyanVineStaff_proj_shoot : ModProjectile, IWarpProjectile
 		Projectile.friendly = false;
 		if (timeTokill < 0)
 		{
-			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<CyanVineStaff_proj_Explosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 1);
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<CyanVineStaff_proj_Explosion>(), 0, Projectile.knockBack, Projectile.owner, 1);
 			SoundEngine.PlaySound(SoundID.NPCHit4.WithVolumeScale(0.8f), Projectile.Center);
 		}
 		timeTokill = 90;

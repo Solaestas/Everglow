@@ -1,7 +1,7 @@
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.CyanVine;
 
 public class CyanVineSword : ModItem
 {

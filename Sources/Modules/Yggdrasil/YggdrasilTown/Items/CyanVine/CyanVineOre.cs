@@ -1,4 +1,4 @@
-namespace Everglow.Yggdrasil.YggdrasilTown.Items;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.CyanVine;
 
 public class CyanVineOre : ModItem
 {
