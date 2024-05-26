@@ -61,6 +61,11 @@ Tiles: {
 	LiftLamp.MapEntry: Lift Lamp
 }
 
+InfoDisplays: {
+	FoodSatietyInfoDisplay.DisplayName: Food Satiety Info Display
+	ThirstystateInfoDisplay.DisplayName: Thirstystate Info Display
+}
+
 Biomes: {
 	TuskBiome: {
 		DisplayName: Tusk Biome
@@ -90,6 +95,11 @@ Biomes: {
 	YggdrasilTownBiome: {
 		DisplayName: Yggdrasil Town Biome
 		TownNPCDialogueName: the Yggdrasil Town Biome
+	}
+
+	LampWoodForest: {
+		DisplayName: Lamp Wood Forest
+		TownNPCDialogueName: the Lamp Wood Forest
 	}
 }
 
@@ -835,11 +845,26 @@ Buffs: {
 		DisplayName: Death Flame
 		Description: Mods.Everglow.Buffs.DeathFlame.Description
 	}
+
+	Photolysis: {
+		DisplayName: Photolysis
+		Description: Mods.Everglow.Buffs.Photolysis.Description
+	}
 }
 
 Items: {
 	BottleOfNutShellFlowers: {
 		DisplayName: Bottle Of Nut Shell Flowers
+		Tooltip: ""
+	}
+
+	BronzeLamp_3_Item: {
+		DisplayName: Bronze Lamp_3_ Item
+		Tooltip: ""
+	}
+
+	BronzeLamp_Item: {
+		DisplayName: Bronze Lamp_ Item
 		Tooltip: ""
 	}
 
@@ -915,6 +940,26 @@ Items: {
 
 	YellowDynastyShingles: {
 		DisplayName: Yellow Dynasty Shingles
+		Tooltip: ""
+	}
+
+	BlueGlassbulbBand_item: {
+		DisplayName: Blue Glassbulb Band_item
+		Tooltip: ""
+	}
+
+	GreenGlassbulbBand_item: {
+		DisplayName: Green Glassbulb Band_item
+		Tooltip: ""
+	}
+
+	LightbulbBand_item: {
+		DisplayName: Lightbulb Band_item
+		Tooltip: ""
+	}
+
+	RedGlassbulbBand_item: {
+		DisplayName: Red Glassbulb Band_item
 		Tooltip: ""
 	}
 
@@ -2788,8 +2833,18 @@ Items: {
 		Tooltip: ""
 	}
 
+	TwilightCrystal: {
+		DisplayName: Twilight Crystal
+		Tooltip: ""
+	}
+
 	TwilightWood: {
 		DisplayName: Twilight Wood
+		Tooltip: ""
+	}
+
+	AuburnRodSkeleton: {
+		DisplayName: Auburn Rod Skeleton
 		Tooltip: ""
 	}
 
@@ -2798,13 +2853,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	CyanVineBar: {
-		DisplayName: Cyan Vine Bar
-		Tooltip: ""
-	}
-
-	CyanVineOre: {
-		DisplayName: Cyan Vine Ore
+	CaterpillarJuice: {
+		DisplayName: Caterpillar Juice
 		Tooltip: ""
 	}
 
@@ -2838,6 +2888,21 @@ Items: {
 		Tooltip: ""
 	}
 
+	LampFruit: {
+		DisplayName: Lamp Fruit
+		Tooltip: ""
+	}
+
+	LightBulbOvule: {
+		DisplayName: Light Bulb Ovule
+		Tooltip: ""
+	}
+
+	RodWing: {
+		DisplayName: Rod Wing
+		Tooltip: ""
+	}
+
 	StoneDragonScaleWood: {
 		DisplayName: Stone Dragon Scale Wood
 		Tooltip: ""
@@ -2848,6 +2913,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	UnstablePollen: {
+		DisplayName: Unstable Pollen
+		Tooltip: ""
+	}
+
 	YggdrasilAmber: {
 		DisplayName: Yggdrasil Amber
 		Tooltip: ""
@@ -2855,41 +2925,6 @@ Items: {
 
 	AmberMagicOrb: {
 		DisplayName: Amber Magic Orb
-		Tooltip: ""
-	}
-
-	CyanVineAxe: {
-		DisplayName: Cyan Vine Axe
-		Tooltip: ""
-	}
-
-	CyanVineCrossBow: {
-		DisplayName: Cyan Vine Cross Bow
-		Tooltip: ""
-	}
-
-	CyanVineHammer: {
-		DisplayName: Cyan Vine Hammer
-		Tooltip: ""
-	}
-
-	CyanVinePickaxe: {
-		DisplayName: Cyan Vine Pickaxe
-		Tooltip: ""
-	}
-
-	CyanVineStaff: {
-		DisplayName: Cyan Vine Staff
-		Tooltip: ""
-	}
-
-	CyanVineSword: {
-		DisplayName: Cyan Vine Sword
-		Tooltip: ""
-	}
-
-	CyanVineThrowingSpear: {
-		DisplayName: Cyan Vine Throwing Spear
 		Tooltip: ""
 	}
 
@@ -2988,6 +3023,171 @@ Items: {
 		Tooltip: ""
 	}
 
+	CyanAmberStaff: {
+		DisplayName: Cyan Amber Staff
+		Tooltip: ""
+	}
+
+	CyanBreastplate: {
+		DisplayName: Cyan Breastplate
+		Tooltip: ""
+	}
+
+	CyanHeavylet: {
+		DisplayName: Cyan Heavylet
+		Tooltip: ""
+	}
+
+	CyanLeggings: {
+		DisplayName: Cyan Leggings
+		Tooltip: ""
+	}
+
+	CyanVineAxe: {
+		DisplayName: Cyan Vine Axe
+		Tooltip: ""
+	}
+
+	CyanVineBar: {
+		DisplayName: Cyan Vine Bar
+		Tooltip: ""
+	}
+
+	CyanVineBow: {
+		DisplayName: Cyan Vine Bow
+		Tooltip: ""
+	}
+
+	CyanVineBullet: {
+		DisplayName: Cyan Vine Bullet
+		Tooltip: ""
+	}
+
+	CyanVineCrossBow: {
+		DisplayName: Cyan Vine Cross Bow
+		Tooltip: ""
+	}
+
+	CyanVineFlintlock: {
+		DisplayName: Cyan Vine Flintlock
+		Tooltip: ""
+	}
+
+	CyanVineHammer: {
+		DisplayName: Cyan Vine Hammer
+		Tooltip: ""
+	}
+
+	CyanVineOre: {
+		DisplayName: Cyan Vine Ore
+		Tooltip: ""
+	}
+
+	CyanVinePickaxe: {
+		DisplayName: Cyan Vine Pickaxe
+		Tooltip: ""
+	}
+
+	CyanVineShortsword: {
+		DisplayName: Cyan Vine Shortsword
+		Tooltip: ""
+	}
+
+	CyanVineStaff: {
+		DisplayName: Cyan Vine Staff
+		Tooltip: ""
+	}
+
+	CyanVineSword: {
+		DisplayName: Cyan Vine Sword
+		Tooltip: ""
+	}
+
+	CyanVineThrowingSpear: {
+		DisplayName: Cyan Vine Throwing Spear
+		Tooltip: ""
+	}
+
+	CyanWarhelm: {
+		DisplayName: Cyan Warhelm
+		Tooltip: ""
+	}
+
+	ValiantBreastplate: {
+		DisplayName: Valiant Breastplate
+		Tooltip: ""
+	}
+
+	ValiantHelmet: {
+		DisplayName: Valiant Helmet
+		Tooltip: ""
+	}
+
+	ValiantLeggings: {
+		DisplayName: Valiant Leggings
+		Tooltip: ""
+	}
+
+	ConventionalEquipment: {
+		DisplayName: Conventional Equipment
+		Tooltip: ""
+	}
+
+	SafetyHelmets: {
+		DisplayName: Safety Helmets
+		Tooltip: ""
+	}
+
+	StandardLeggings: {
+		DisplayName: Standard Leggings
+		Tooltip: ""
+	}
+
+	LightSeekerBreastplate: {
+		DisplayName: Light Seeker Breastplate
+		Tooltip: ""
+	}
+
+	LightSeekerHelmet_Magic: {
+		DisplayName: Light Seeker Helmet_ Magic
+		Tooltip: ""
+	}
+
+	LightSeekerHelmet_Ranged: {
+		DisplayName: Light Seeker Helmet_ Ranged
+		Tooltip: ""
+	}
+
+	LightSeekerLeggings: {
+		DisplayName: Light Seeker Leggings
+		Tooltip: ""
+	}
+
+	BloodDrenchedRobe: {
+		DisplayName: Blood Drenched Robe
+		Tooltip: ""
+	}
+
+	BloodStainedVeil: {
+		DisplayName: Blood Stained Veil
+		Tooltip: ""
+	}
+
+	AuburnBoots: {
+		DisplayName: Auburn Boots
+		Tooltip: ""
+	}
+
+	AuburnBreastplate: {
+		DisplayName: Auburn Breastplate
+		Tooltip: ""
+	}
+
+	AuburnHoodie: {
+		DisplayName: Auburn Hoodie
+		Tooltip: ""
+	}
+
 	LiftLamp: {
 		DisplayName: Lift Lamp
 		Tooltip: ""
@@ -3074,12 +3274,12 @@ NPCs: {
 		DisplayName: Acytaea
 
 		TownNPCMood: {
-			Content: I am content.
-			NoHome: I hate not having a home.
-			FarFromHome: I am too far from home.
-			LoveSpace: I love having so much space.
-			DislikeCrowded: I dislike how crowded I am.
-			HateCrowded: I hate how crowded I am.
+			Content: 我很满足。
+			NoHome: 我讨厌没有家。
+			FarFromHome: 我离家太远了。
+			LoveSpace: 我非常喜欢有这么大的空间。
+			DislikeCrowded: 我不喜欢这么拥挤。
+			HateCrowded: 我讨厌这么拥挤。
 			LikeNPC_Princess: I like {NPCName}.
 			Princess_LovesNPC: I like {NPCName}.
 		}
@@ -3088,13 +3288,17 @@ NPCs: {
 	Acytaea_Boss.DisplayName: Acytaea_ Boss
 	BarkSpicyCaterpillar.DisplayName: Bark Spicy Caterpillar
 	BrownCaterpillar.DisplayName: Brown Caterpillar
-	Bulbling.DisplayName: Bulbling
+	CarapaceCaterpillar.DisplayName: Carapace Caterpillar
 	CrimsonProtestant.DisplayName: Crimson Protestant
 	CrimsonSpell.DisplayName: Crimson Spell
 	CyanOreBeetle.DisplayName: Cyan Ore Beetle
 	DarkGlimmeringRods.DisplayName: Dark Glimmering Rods
+	GiantJellyBall.DisplayName: Giant Jelly Ball
+	JellyBall.DisplayName: Jelly Ball
 	LeafcutterAnt.DisplayName: Leafcutter Ant
 	LightBulb.DisplayName: Light Bulb
+	RockElemental.DisplayName: Rock Elemental
+	ShadowstrikeCaterpillar.DisplayName: Shadowstrike Caterpillar
 	WhisperingGhost.DisplayName: Whispering Ghost
 	SquamousShell.DisplayName: Squamous Shell
 	TestNPC.DisplayName: Test N P C
@@ -3629,14 +3833,20 @@ Projectiles: {
 	TrueDeathSickle.DisplayName: True Death Sickle
 	TrueDeathSickleHit.DisplayName: True Death Sickle Hit
 	AmberBall.DisplayName: Amber Ball
+	AmberLiquidProj.DisplayName: Amber Liquid Proj
+	AmberLiquidProj_Explosion.DisplayName: Amber Liquid Proj_ Explosion
 	AmberMagicOrb.DisplayName: Amber Magic Orb
+	CyanBullet.DisplayName: Cyan Bullet
 	CyanVineCrossBow_Proj.DisplayName: Cyan Vine Cross Bow_ Proj
+	CyanVineShortsword_Proj.DisplayName: Cyan Vine Shortsword_ Proj
 	CyanVineStaff_proj.DisplayName: Cyan Vine Staff_proj
 	CyanVineStaff_proj_Explosion.DisplayName: Cyan Vine Staff_proj_ Explosion
 	CyanVineStaff_proj_shoot.DisplayName: Cyan Vine Staff_proj_shoot
 	CyanVineSword_Projectile.DisplayName: Cyan Vine Sword_ Projectile
-	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
+	CyanVineThrowingSpear_Proj.DisplayName: Cyan Vine Throwing Spear_ Proj
 	DragonScaleHammerProj.DisplayName: Dragon Scale Hammer Proj
+	HighSpeedStone.DisplayName: High Speed Stone
+	LampFruitCurrent.DisplayName: Lamp Fruit Current
 	LampWoodSword_Projectile.DisplayName: Lamp Wood Sword_ Projectile
 	LightSeed.DisplayName: Light Seed
 	RockArrow.DisplayName: Rock Arrow
@@ -3649,6 +3859,7 @@ Projectiles: {
 	SquamousRockSpike.DisplayName: Squamous Rock Spike
 	SquamousRollingStone.DisplayName: Squamous Rolling Stone
 	Squamous_HitTile.DisplayName: Squamous_ Hit Tile
+	Stonefragment.DisplayName: Stonefragment
 	WindBladeBallHit.DisplayName: Wind Blade Ball Hit
 	YggdrasilAmberLaser_proj.DisplayName: Yggdrasil Amber Laser_proj
 	YggdrasilMoonBlade.DisplayName: Yggdrasil Moon Blade

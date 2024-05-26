@@ -11,6 +11,7 @@ public class Rope
 	{
 		public bool IsStatic;
 		public float Mass;
+		public float HessianDiag;
 		public Vector2 Position;
 		public Vector2 Velocity;
 		public Vector2 Force;
@@ -22,6 +23,7 @@ public class Rope
 			this.Force = Vector2.Zero;
 			this.Position = Vector2.Zero;
 			this.IsStatic = false;
+			this.HessianDiag = 0f;
 		}
 	}
 
@@ -188,11 +190,11 @@ public class Rope
 		}
 		for (int i = 0; i < masses.Length; i++)
 		{
-			// masses[i].Mass = 1f;
-			masses[i].Force *= 0.1f;
+			//masses[i].Mass = 1f;
+			//masses[i].Force *= 0.1f;
 		}
-		//Update_Explict_Euler(deltaTime);
-		Update_XPBD(deltaTime);
+		Update_Explict_Euler(deltaTime);
+		//Update_XPBD(deltaTime);
 	}
 
 	private void Update_XPBD(float deltaTime)
@@ -353,31 +355,36 @@ public class Rope
 
 	private void Update_Explict_Euler(float deltaTime)
 	{
+		int iterations = 16;
 		for (int i = 0; i < masses.Length; i++)
 		{
 			ref _Mass m = ref masses[i];
+
 			if (float.IsNaN(m.Position.X) && float.IsNaN(m.Position.Y))
 			{
 				Terraria.Main.NewText("!!");
 			}
 
-			m.Velocity *= (float)Math.Pow(damping, deltaTime);
-			dummyPos[i] = m.Position + m.Velocity * deltaTime;
-
+			// m.Velocity *= (float)Math.Pow(damping, deltaTime);
 			if (m.IsStatic)
 			{
 				dummyPos[i] = m.Position;
 			}
+			else
+			{
+				dummyPos[i] = m.Position + m.Velocity * deltaTime;
+				m.Position = dummyPos[i];
+			}
 		}
 
-		for (int k = 0; k < 16; k++)
+		for (int k = 0; k < iterations; k++)
 		{
 			for (int i = 0; i < masses.Length; i++)
 			{
 				ref _Mass m = ref masses[i];
-				Vector2 x_hat = m.Position + deltaTime * m.Velocity;
-				gradiants[i] = m.Mass / (deltaTime * deltaTime) * (dummyPos[i] - x_hat);
+				gradiants[i] = m.Mass / (deltaTime * deltaTime) * (dummyPos[i] - m.Position);
 				gradiants[i] -= m.Force;
+				m.HessianDiag = 0;
 			}
 
 			for (int i = 0; i < springs.Length; i++)
@@ -387,22 +394,20 @@ public class Rope
 				gradiants[spr.A] -= v;
 				gradiants[spr.B] -= -v;
 
-				// var He = G_Hessian(deltaTime, spr.A, spr.B, spr.Elasticity, spr.RestLength);
-				// m_springH[spr.A, spr.A] = He;
-				// m_springH[spr.B, spr.B] = He;
-				// m_springH[spr.A, spr.B] = -He;
-				// m_springH[spr.B, spr.A] = -He;
+				ref _Mass A = ref masses[spr.A];
+				ref _Mass B = ref masses[spr.B];
+				A.HessianDiag += spr.Elasticity;
+				B.HessianDiag += spr.Elasticity;
 			}
 
 			for (int i = 0; i < masses.Length; i++)
 			{
 				ref _Mass m = ref masses[i];
-				m.Force = Vector2.Zero;
 				if (m.IsStatic)
 				{
 					continue;
 				}
-				float alpha = 1f / (m.Mass / (deltaTime * deltaTime) + 4 * elasticity);
+				float alpha = 1f / (m.Mass / (deltaTime * deltaTime) + 4 * m.HessianDiag);
 				var dx = alpha * gradiants[i];
 				dummyPos[i] -= dx;
 			}
@@ -490,11 +495,12 @@ public class Rope
 		for (int i = 0; i < masses.Length; i++)
 		{
 			ref _Mass m = ref masses[i];
+			m.Force = Vector2.Zero;
 			if (m.IsStatic)
 			{
 				continue;
 			}
-			Vector2 x_hat = m.Position + deltaTime * m.Velocity;
+			Vector2 x_hat = m.Position;
 
 			if (hasCollision)
 			{
