@@ -78,6 +78,8 @@ public class SquamousShell : ModNPC
 		mousePos = Main.MouseWorld;
 		SquamousShellSkeleton.Position = NPC.Bottom;
 		SquamousShellSkeleton.Skeleton.FindBone("hips").Rotation = NPC.rotation / Spine.MathUtils.DegRad;
+		SquamousShellSkeleton.Skeleton.FindBone("hips").ScaleY = NPC.spriteDirection;
+		SquamousShellSkeleton.Skeleton.FindBone("hips").ScaleX = -1;
 	}
 
 	/// <summary>
