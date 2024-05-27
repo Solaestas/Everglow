@@ -72,7 +72,7 @@ public class IceCrystal : ModDust
 /// </summary>
 public class IceCrystal2 : ModDust
 {
-	public override string Texture => "Everglow/" + ModAsset.IceCrystalPath;
+	public override string Texture => "Everglow/" + ModAsset.IceCrystal_Path;
 	public override void OnSpawn(Dust dust)
 	{
 		dust.noGravity = true;

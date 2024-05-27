@@ -142,7 +142,7 @@ public class DoubleArmsChineseStreetLamp : ModTile, ITileFluentlyDrawn
 		var tile = Main.tile[tilePos];
 		ushort type = tile.TileType;
 		int paint = Main.tile[paintPos].TileColor;
-		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.DoubleArmsChineseStreetLamp_DrawPath, type, 1, paint, tileDrawing);
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.DoubleArmsChineseStreetLamp_Draw_Path, type, 1, paint, tileDrawing);
 		tex ??= ModAsset.DoubleArmsChineseStreetLamp_Draw.Value;
 
 		int sizeX = 1;

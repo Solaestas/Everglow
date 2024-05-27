@@ -2,23 +2,23 @@ sampler uImage0 : register(s0);
 
 float4 edge(float2 coords : TEXCOORD0) : COLOR0
 {
-    float4 color = float4(0);
+	float4 color = float4(0.0, 0.0, 0.0, 0.0);
     if (any(color))
         return color;
-    // »ñÈ¡Ã¿¸öÏñËØµÄÕıÈ·´óĞ¡
+    // è·å–æ¯ä¸ªåƒç´ çš„æ­£ç¡®å¤§å°
     float dx = 1 / 500;
     float dy = 1 / 500;
     bool flag = false;
-    // ¶ÔÖÜÎ§8¸ñ½øĞĞÅĞ¶¨
+    // å¯¹å‘¨å›´8æ ¼è¿›è¡Œåˆ¤å®š
     for (int i = -1; i <= 1; i++)
     {
         for (int j = -1; j <= 1; j++)
         {
             float4 c = tex2D(uImage0, coords + float2(dx * i, dy * j));
-            // Èç¹ûÈÎºÎÒ»¸öÏñËØÓĞÑÕÉ«
+            // å¦‚æœä»»ä½•ä¸€ä¸ªåƒç´ æœ‰é¢œè‰²
             if (any(c))
             {
-                // ²»ÖªµÀÎªÉ¶£¬ÕâÀïÖ±½Óreturn»á±»±àÒëÆ÷°²ÅÅ£¬ËùÒÔÖ»ÄÜ´ò±ê¼ÇÁË
+                // ä¸çŸ¥é“ä¸ºå•¥ï¼Œè¿™é‡Œç›´æ¥returnä¼šè¢«ç¼–è¯‘å™¨å®‰æ’ï¼Œæ‰€ä»¥åªèƒ½æ‰“æ ‡è®°äº†
                 flag = true;
             }
         }

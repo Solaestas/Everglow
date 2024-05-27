@@ -39,7 +39,7 @@ namespace Everglow.Commons.Menu.Entities
         }
         public virtual void Draw()
         {
-            Texture2D tex = ModAsset.Star.Value;
+            Texture2D tex = ModAsset.Entities_Star.Value;
             Main.spriteBatch.Draw(tex, position, null, color*alpha, 0, tex.Size() / 2, scale, SpriteEffects.None, 0);
             Main.spriteBatch.Draw(tex, position, null, color * alpha, 0, tex.Size() / 2, scale, SpriteEffects.None, 0);
         }

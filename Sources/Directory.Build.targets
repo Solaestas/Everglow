@@ -1,41 +1,34 @@
-﻿<Project>
-	<Target Condition="'$(AssetsPrefix)' != ''" Name="Solaestas-BuildImage"
-		BeforeTargets="BuildMod" Inputs="@(Solaestas-ImageFile)"
-		Outputs="@(Solaestas-ImageFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).rawimg')">
-		<BuildImage InputFiles="@(Solaestas-ImageFile)"
-			OutputDirectory="$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\" />
+<Project>
+	<UsingTask TaskName="WriteResource"
+			   AssemblyFile="$(MSBuildThisFileDirectory)..\Tools\Everglow.Tasks.dll" />
+	<UsingTask TaskName="ReadResource"
+			   AssemblyFile="$(MSBuildThisFileDirectory)..\Tools\Everglow.Tasks.dll" />
+	<PropertyGroup>
+		<EverglowDirectory>$(MSBuildThisFileDirectory)Everglow\</EverglowDirectory>
+		<EverglowOutputDirectory>$(EverglowDirectory)bin\$(Configuration)\$(TargetFramework)\</EverglowOutputDirectory>
+		<EverglowIntermediateOutput>$(EverglowDirectory)obj\</EverglowIntermediateOutput>
+		<ModName>Everglow</ModName>
+		<ResourceList>$(EverglowIntermediateOutput)$(PathPrefix).resource</ResourceList>
+	</PropertyGroup>
+	<ItemGroup Condition="$(PathPrefix) != ''">
+		<!--FUTDC时AdditionalFiles里面还会包含其他临时文件-->
+		<UpToDateCheckInput Include="@(AdditionalFiles)" Set="List"/>
+		<UpToDateCheckOutput Include="$(ResourceList)" Set="List"/>
+	</ItemGroup>
+	<Target Name="WriteResource"
+			Condition="$(PathPrefix) != ''"
+			Inputs="$(BaseIntermediateOutputPath)AssetInputs.cache"
+		  	Outputs="$(ResourceList)"
+			AfterTargets="ModHash">
+		<WriteResource Resources="@(AdditionalFiles)"
+					   Prefix="$(PathPrefix)"
+					   OutputPath="$(ResourceList)" />
 	</Target>
 
-	<Target Condition="'$(AssetsPrefix)' != ''" Name="Solaestas-BuildEffect"
-		BeforeTargets="BuildMod" Inputs="@(Solaestas-EffectFile)"
-		Outputs="@(Solaestas-EffectFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).xnb')">
-		<BuildEffect BuilderDirectory="$(Solaestas-ShaderBuilderDirectory)"
-			InputFiles="@(Solaestas-EffectFile)"
-			TargetPlatform="Windows" TargetProfile="HiDef" BuildConfiguration="Debug"
-			IntermediateDirectory="$(IntermediateOutputPath)Assets\"
-			OutputDirectory="$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\" />
+	<Target Name="CleanResource"
+		  Condition="$(PathPrefix) != ''"
+		  BeforeTargets="Clean;Rebuild">
+		<Delete Condition="Exists($(ResourceList))" Files="$(ResourceList)" />
 	</Target>
 
-	<Target Name="AssetList" BeforeTargets="Build" Condition="'$(AssetsPrefix)' != ''">
-		<PropertyGroup>
-			<!--单独构建Everglow.csproj时其依赖项的Configuration会延迟赋值-->
-			<EverglowOutputDirectory>$(EverglowDirectory)bin\$(Configuration)\$(TargetFramework)\</EverglowOutputDirectory>
-		</PropertyGroup>
-		<WriteLinesToFile File="$(EverglowDirectory)obj\$(AssetsPrefix).asset.list"
-			Lines="@(Solaestas-EffectFile);@(Solaestas-ImageFile)"
-			Overwrite="true" />
-	</Target>
-	<Target Name="ResourceList" BeforeTargets="Build" Condition="'$(AssetsPrefix)' != ''">
-		<WriteLinesToFile File="$(EverglowDirectory)obj\$(AssetsPrefix).resource.list"
-			Lines="@(Solaestas-ResourceFile)"
-			Overwrite="true" />
-	</Target>
-	<Target Name="CleanAsset" BeforeTargets="Clean">
-		<Delete
-			Files="@(Solaestas-ImageFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).rawimg')" />
-		<Delete
-			Files="@(Solaestas-EffectFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).xnb')" />
-		<Delete Files="$(IntermediateOutputPath)$(AssetsPrefix).asset.list" />
-		<Delete Files="$(IntermediateOutputPath)$(AssetsPrefix).resource.list" />
-	</Target>
 </Project>

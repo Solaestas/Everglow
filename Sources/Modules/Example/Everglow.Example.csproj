@@ -1,6 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<ItemGroup>
-		<Solaestas-ResourceFile Include="Skeleton\**\*.json" />
+		<AdditionalFiles Include="Skeleton\**\*.json" Pack="true" ModPath="%(Identity)" />
 	</ItemGroup>
 </Project>
     
