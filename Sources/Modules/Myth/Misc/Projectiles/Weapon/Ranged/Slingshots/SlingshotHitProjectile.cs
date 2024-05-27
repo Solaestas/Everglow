@@ -25,18 +25,18 @@ public abstract class SlingshotHitProjectile : ModProjectile, IWarpProjectile
 	{
 
 	}
-	private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	private static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radious / 2; h++)
+		for (int h = 0; h < radius / 2; h++)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 0, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
 		if (circle.Count > 0)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = tex;
@@ -47,7 +47,7 @@ public abstract class SlingshotHitProjectile : ModProjectile, IWarpProjectile
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
 		float colorV = 0.02f * MathF.Sqrt(Projectile.ai[0]) * (1 - value);
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/EShoot");
+		Texture2D t = ModAsset.EShoot.Value;
 		DrawTexCircle(value * 22 * MathF.Sqrt(Projectile.ai[0]), 8 * MathF.Sqrt(Projectile.ai[0]) * value, new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 	public override bool PreDraw(ref Color lightColor)
@@ -55,31 +55,31 @@ public abstract class SlingshotHitProjectile : ModProjectile, IWarpProjectile
 
 		return false;
 	}
-	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
 
-		for (int h = 0; h < radious / 2; h += 1)
+		for (int h = 0; h < radius / 2; h += 1)
 		{
-			float colorR = (h / radious * MathF.PI * 4 + (float)addRot + MathF.PI * 1.5f) % (MathF.PI * 2f) / (MathF.PI * 2f);
-			float color2R = ((h + 1) / radious * MathF.PI * 4 + (float)addRot + MathF.PI * 1.5f) % (MathF.PI * 2f) / (MathF.PI * 2f);
+			float colorR = (h / radius * MathF.PI * 4 + (float)addRot + MathF.PI * 1.5f) % (MathF.PI * 2f) / (MathF.PI * 2f);
+			float color2R = ((h + 1) / radius * MathF.PI * 4 + (float)addRot + MathF.PI * 1.5f) % (MathF.PI * 2f) / (MathF.PI * 2f);
 
 			color = new Color(colorR, color.G / 255f, 0, 0);
-			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.8f, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.2f, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 0.8f, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 0.2f, 0)));
 			if (Math.Abs(color2R - colorR) > 0.8f)
 			{
 				float midValue = (1f - colorR) / (float)(color2R + (1f - colorR));
 				color.R = 255;
-				circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.8f, 0)));
-				circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.2f, 0)));
+				circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy((h + midValue) / radius * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radius, 0.8f, 0)));
+				circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy((h + midValue) / radius * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radius, 0.2f, 0)));
 				color.R = 0;
-				circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.8f, 0)));
-				circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.2f, 0)));
+				circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy((h + midValue) / radius * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radius, 0.8f, 0)));
+				circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy((h + midValue) / radius * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radius, 0.2f, 0)));
 			}
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
 		if (circle.Count > 2)
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
 	}
@@ -87,7 +87,7 @@ public abstract class SlingshotHitProjectile : ModProjectile, IWarpProjectile
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
 		float colorV = 0.6f * MathF.Sqrt(Projectile.ai[0]) * (1 - value);
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/EShoot");
+		Texture2D t = ModAsset.EShoot.Value;
 		DrawTexCircle_VFXBatch(spriteBatch, value * 22 * MathF.Sqrt(Projectile.ai[0]), 8 * MathF.Sqrt(Projectile.ai[0]) * value, new Color(colorV, colorV * 0.4f * (1 - value), colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 }

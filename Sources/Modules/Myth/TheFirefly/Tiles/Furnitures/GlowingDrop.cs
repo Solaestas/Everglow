@@ -95,13 +95,13 @@ public class GlowingDrop : ModTile, ITileFluentlyDrawn
 	private void DrawLanternPiece(int frameX, int frameHeight, int frameY, int offsetX, Point tilePos, Point paintPos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		// 回声涂料	
-		if (!tileDrawing.IsVisible(Main.tile[paintPos]))
+		if (!TileDrawing.IsVisible(Main.tile[paintPos]))
 			return;
 
 		var tile = Main.tile[tilePos];
 		ushort type = tile.TileType;
 		int paint = Main.tile[paintPos].TileColor;
-		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.Tiles_GlowingDropPath, type, frameX, paint, tileDrawing);
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.Tiles_GlowingDrop_Path, type, frameX, paint, tileDrawing);
 		tex ??= ModAsset.Tiles_GlowingDrop.Value;
 		var frame = new Rectangle(frameX, frameY, 10, frameHeight);
 

@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework.Input;
 using SteelSeries.GameSense;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
@@ -16,7 +17,7 @@ class VFXGenerator : ModItem
 	public override bool CanUseItem(Player player)
 	{
 		float mulVelocity = 1f;
-		int type = Main.rand.Next(13);
+		int type = Main.rand.Next(14);
 		switch (type)
 		{
 			case 0://冰雾
@@ -37,7 +38,7 @@ class VFXGenerator : ModItem
 					Ins.VFXManager.Add(somg);
 				}
 				break;
-			case 1://冰粒
+			case 1:
 				for (int g = 0; g < 80; g++)
 				{
 					Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 12f)).RotatedByRandom(MathHelper.TwoPi);
@@ -54,7 +55,7 @@ class VFXGenerator : ModItem
 					};
 					Ins.VFXManager.Add(somg);
 				}
-				break;
+				break;//冰粒
 			case 2://雪花
 				for (int g = 0; g < 380; g++)
 				{
@@ -304,6 +305,12 @@ class VFXGenerator : ModItem
 						ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size, Main.rand.NextFloat(1.3f, Main.rand.NextFloat(1.3f, 4f)) }
 					};
 					Ins.VFXManager.Add(electric);
+				}
+				break;
+			case 13: // 分叉闪电
+				{
+					var lightning = new BranchedLightning(100f, 9f, Main.MouseWorld, Main.rand.NextVector2Unit().ToRotation(), 300f, (float)(Math.PI / 5));
+					Ins.VFXManager.Add(lightning);
 				}
 				break;
 		}

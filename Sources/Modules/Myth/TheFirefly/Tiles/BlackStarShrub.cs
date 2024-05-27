@@ -100,11 +100,11 @@ public class BlackStarShrub : ModTile, ITileFluentlyDrawn
 		ushort type = tile.TileType;
 		
 		// 回声涂料
-		if (!tileDrawing.IsVisible(tile)) return;
+		if (!TileDrawing.IsVisible(tile)) return;
 		
 		int paint = Main.tile[paintPos].TileColor;
 		int textureStyle = tile.TileFrameX + frame.Y * 50;
-		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.BlackStarShrubDrawPath, type, textureStyle, paint, tileDrawing);
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.BlackStarShrubDraw_Path, type, textureStyle, paint, tileDrawing);
 		tex ??= ModAsset.BlackStarShrubDraw.Value;
 
 		float windCycle = 0;

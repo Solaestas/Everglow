@@ -1,8 +1,8 @@
 using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Items;
 using Everglow.Myth.TheFirefly.Pylon;
 using Everglow.Myth.TheFirefly.Tiles;
 using Everglow.Myth.TheFirefly.Walls;
+using Everglow.SpellAndSkull.Items;
 using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.ModLoader.Default;
@@ -14,15 +14,6 @@ namespace Everglow.Myth.TheFirefly.WorldGeneration;
 
 public class MothLand : ModSystem
 {
-	public override void PostUpdateEverything()
-	{
-		//if (Main.mouseRight && Main.mouseRightRelease && Main.keyState.PressingShift())
-		//{
-		//    BuildShabbyCastle();
-		//    //Main.NewText(SubWorldModule.SubworldSystem.IsActive<MothWorld>());
-		//}
-
-	}
 	public static void QuickBuild(int x, int y, string Path)
 	{
 		var mapIO = new Commons.TileHelper.MapIO(x, y);
@@ -68,25 +59,6 @@ public class MothLand : ModSystem
 		TileObject.CanPlace(pylonBottom.X, pylonBottom.Y, PylonType, 0, 0, out var tileObject);
 		TileObject.Place(tileObject);
 		TileObjectData.CallPostPlacementPlayerHook(pylonBottom.X, pylonBottom.Y, PylonType, 0, 0, 0, tileObject);
-		//TODO:有概率会爆掉，需要修复
-		//switch (Main.rand.Next(5))
-		//{
-		//    case 0:
-		//        QuickBuild(sbpp.X, sbpp.Y - 13, "MapIOResources/ShabbyPylonWithCastle20x23Style2.mapio");
-		//        break;
-		//    case 1:
-		//        QuickBuild(sbpp.X, sbpp.Y - 13, "MapIOResources/ShabbyPylonWithCastle21x26Style1.mapio");
-		//        break;
-		//    case 2:
-		//        QuickBuild(sbpp.X, sbpp.Y - 13, "MapIOResources/ShabbyPylonWithCastle22x22Style0.mapio");
-		//        break;
-		//    case 3:
-		//        QuickBuild(sbpp.X, sbpp.Y - 13, "MapIOResources/ShabbyPylonWithCastle22x26Style3.mapio");
-		//        break;
-		//    case 4:
-		//        QuickBuild(sbpp.X, sbpp.Y - 13, "MapIOResources/ShabbyPylonWithCastle22x26Style4.mapio");
-		//        break;
-		//}
 	}
 
 	internal class MothLandGenPass : GenPass
@@ -292,7 +264,7 @@ public class MothLand : ModSystem
 									//WorldGen.PlaceLiquid(x, y, byte.MaxValue, 255);
 								}
 							}
-							if(pixel.R == 28 && pixel.G == 198 && pixel.B == 255)
+							if (pixel.R == 28 && pixel.G == 198 && pixel.B == 255)
 							{
 								LargeFireBulb.PlaceMe(x + a, y + b, (ushort)Main.rand.Next(16));
 							}
@@ -678,7 +650,7 @@ public class MothLand : ModSystem
 					Tile t0 = Main.tile[i + x, j + y];
 					if (y == 0)
 					{
-						if(!t0.HasTile || t0.TileType !=(ushort)ModContent.TileType<DarkCocoon>() || t0.IsHalfBlock)
+						if (!t0.HasTile || t0.TileType != (ushort)ModContent.TileType<DarkCocoon>() || t0.IsHalfBlock)
 						{
 							count++;
 						}
@@ -697,11 +669,11 @@ public class MothLand : ModSystem
 				for (int y = 4; y <= 80; y++)
 				{
 					for (int x = 0; x <= 1; x++)
-			    	{	
+					{
 						Tile t0 = Main.tile[i + x, j + y];
 						if (!t0.HasTile)
 						{
-							length+= 1 / 8f;
+							length += 1 / 8f;
 						}
 						else
 						{

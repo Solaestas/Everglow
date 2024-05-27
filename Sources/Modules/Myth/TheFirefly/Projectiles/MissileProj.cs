@@ -1,4 +1,3 @@
-using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.DataStructures;
 
@@ -71,26 +70,22 @@ public class MissileProj : ModProjectile, IWarpProjectile
 	{
 		if (Main.rand.NextBool((int)Math.Pow(Projectile.extraUpdates + Projectile.ai[0], 3)))
 		{
-			if (Projectile.extraUpdates == 1)
+			if (Projectile.timeLeft % 3 == 0)
 			{
-				if (Projectile.timeLeft % 3 == 0)
-				{
-					int index = Dust.NewDust(Projectile.position - new Vector2(2), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppearStoppedByTile>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f));
-					Main.dust[index].velocity = Projectile.velocity * 0.5f;
-				}
-				int index2 = Dust.NewDust(Projectile.position - new Vector2(2), Projectile.width, Projectile.height, ModContent.DustType<BlueParticleDark2StoppedByTile>(), 0f, 0f, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
-				Main.dust[index2].velocity = Projectile.velocity * 0.5f;
-				Main.dust[index2].alpha = (int)(Main.dust[index2].scale * 50);
+				int index = Dust.NewDust(Projectile.position - new Vector2(2), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppearStoppedByTile>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f));
+				Main.dust[index].velocity = Projectile.velocity * 0.5f;
 			}
+			int index2 = Dust.NewDust(Projectile.position - new Vector2(2), Projectile.width, Projectile.height, ModContent.DustType<BlueParticleDark2StoppedByTile>(), 0f, 0f, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
+			Main.dust[index2].velocity = Projectile.velocity * 0.5f;
+			Main.dust[index2].alpha = (int)(Main.dust[index2].scale * 50);
 		}
 	}
 	private void AddLight()
 	{
-		if(timeTokill < 0)
+		if (timeTokill < 0)
 		{
-			Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0, Projectile.ai[0] * Projectile.ai[0] * 0.0003f, Projectile.ai[0] * 0.03f);
+			Lighting.AddLight(Projectile.Center, 0, Projectile.ai[0] * Projectile.ai[0] * 0.0003f, Projectile.ai[0] * 0.03f);
 		}
-		
 	}
 	public override void AI()
 	{
@@ -137,8 +132,6 @@ public class MissileProj : ModProjectile, IWarpProjectile
 	private void HitToAnything()
 	{
 		Player player = Main.player[Projectile.owner];
-		ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
-
 		Projectile.velocity = Projectile.oldVelocity;
 		Projectile.friendly = false;
 		if (timeTokill < 0)
@@ -217,7 +210,7 @@ public class MissileProj : ModProjectile, IWarpProjectile
 		//Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Texture2D t = Commons.ModAsset.Trail_4.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		t = Commons.ModAsset.Trail_2_black_thick.Value;
@@ -241,7 +234,6 @@ public class MissileProj : ModProjectile, IWarpProjectile
 		}
 		return false;
 	}
-
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float width = 16;

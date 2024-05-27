@@ -43,6 +43,7 @@ internal class FlowLightMissile : ModProjectile
 			oldPo = Projectile.Center;
 			Projectile.Center = oldPo;
 			Projectile.velocity *= 0;
+			player.itemAnimation = 1;
 		}
 		if (!player.controlUseItem && release)
 		{
@@ -91,7 +92,6 @@ internal class FlowLightMissile : ModProjectile
 	private void HitToAnything()
 	{
 		Player player = Main.player[Projectile.owner];
-		ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
 
 		Projectile.velocity = Projectile.oldVelocity;
 		Projectile.friendly = false;
@@ -197,7 +197,7 @@ internal class FlowLightMissile : ModProjectile
 			bars2.Add(new Vertex2D(bulbPos + v0 * 0.7f - Main.screenPosition, c0, new Vector3(timeValue * 0.7f + 0.9f, 0.5f + (t % 2 - 1) * 0.4f, 0)));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_cell_black.Value;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars2.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
 
@@ -208,7 +208,7 @@ internal class FlowLightMissile : ModProjectile
 			bars.Add(new Vertex2D(bulbPos + v0 - Main.screenPosition, Color.Transparent, new Vector3(timeValue + 0.5f, 0.5f + (t % 2 - 1) * 0.1f, 0)));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_hiveCyber.Value;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 

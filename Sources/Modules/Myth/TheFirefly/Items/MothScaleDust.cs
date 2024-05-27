@@ -23,7 +23,7 @@ public class MothScaleDust : ModItem
 		{
 			for(float vel = 0f; vel < Item.velocity.Length();vel += 1f)
 			{
-				if (Main.rand.NextBool(6))
+				if (Main.rand.NextBool(24))
 				{
 					Dust.NewDustDirect(Item.position - Vector2.Normalize(Item.velocity) * vel, Item.width, Item.height, ModContent.DustType<FireButterflyShimmer>());
 				}
@@ -33,8 +33,11 @@ public class MothScaleDust : ModItem
 		{
 			for (float vel = 0f; vel < (Item.oldVelocity - Item.velocity).Length(); vel += 0.1f)
 			{
-				Dust d = Dust.NewDustDirect(Item.position - Vector2.Normalize(Item.velocity) * vel, Item.width, Item.height, ModContent.DustType<FireButterflyShimmer>());
-				d.velocity = new Vector2(0, (Item.oldVelocity - Item.velocity).Length() * Main.rand.NextFloat(0.85f, 1.15f)).RotatedByRandom(6.283f);
+				if (Main.rand.NextBool(4))
+				{
+					Dust d = Dust.NewDustDirect(Item.position - Vector2.Normalize(Item.velocity) * vel, Item.width, Item.height, ModContent.DustType<FireButterflyShimmer>());
+					d.velocity = new Vector2(0, (Item.oldVelocity - Item.velocity).Length() * Main.rand.NextFloat(0.85f, 1.15f)).RotatedByRandom(6.283f);
+				}
 			}
 		}
 		Item.oldVelocity = Item.velocity;

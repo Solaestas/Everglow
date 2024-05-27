@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.OmniElementItems.Dusts;
 
 namespace Everglow.Myth.OmniElementItems.Projectiles;
@@ -86,7 +86,7 @@ public class LilyHarpNote : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/LilyHarpNote" + ((int)Projectile.ai[0]).ToString());
+		Texture2D t = ModAsset.LilyHarpNote.Value;
 		SpriteEffects se = SpriteEffects.None;
 		if (Main.player[Projectile.owner].gravDir == -1)
 			se = SpriteEffects.FlipVertically;
@@ -99,7 +99,7 @@ public class LilyHarpNote : ModProjectile
 		behindProjectiles.Add(index);
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<LilyHarpNoteKill>(), 0, 0);
 		for (int i = 0; i < 18; i++)
@@ -114,12 +114,6 @@ public class LilyHarpNote : ModProjectile
 			int index2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<LilyLeaf>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, Main.rand.NextFloat(1.7f, 3.1f));
 			Main.dust[index2].velocity = new Vector2(0, Main.rand.NextFloat(2f, 4f)).RotatedByRandom(6.283);
 		}
-		/*float k0 = Main.rand.NextFloat(0, 6.283f);
-            for(int i = 0; i < 3; i++)
-            {
-                Vector2 v0 = new Vector2(0, 6).RotatedBy(k0 + i / 1.5d * Math.PI);
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, v0, ModContent.ProjectileType<VineProj>(), 0, 0, Projectile.owner, Main.rand.Next(100), Main.rand.NextFloat(0, 2f));
-            }*/
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 }

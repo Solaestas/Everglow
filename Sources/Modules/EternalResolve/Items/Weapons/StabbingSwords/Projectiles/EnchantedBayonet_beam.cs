@@ -89,7 +89,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				timeValue = (200 - Projectile.timeLeft) / 200f;
 			}
 			float dark = 0.75f;
-			Texture2D light = Commons.ModAsset.Star.Value;
+			Texture2D light = Commons.ModAsset.Entities_Star.Value;
 			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0f * (1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 1f, 0f), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * 0.2f, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0f * (1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 1f, 0f), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * 0.2f, SpriteEffects.None, 0);
 			return false;
@@ -102,7 +102,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			base.OnHitNPC(target, hit, damageDone);
 		}
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			if(Projectile.alpha < 180)
 			{

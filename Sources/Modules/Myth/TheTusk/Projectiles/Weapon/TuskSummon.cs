@@ -148,8 +148,8 @@ class TuskSummon : ModProjectile
 	private void AttackII()
 	{
 		Player player = Main.player[Projectile.owner];
-		float radious = 60 + MathF.Sqrt(Projectile.ai[0]) * 10f;
-		MoveTo(player.MountedCenter + new Vector2(0, radious).RotatedBy(Main.time / Math.Pow(radious, 1.5) * 600f + Projectile.ai[0]), 0.6f);
+		float radius = 60 + MathF.Sqrt(Projectile.ai[0]) * 10f;
+		MoveTo(player.MountedCenter + new Vector2(0, radius).RotatedBy(Main.time / Math.Pow(radius, 1.5) * 600f + Projectile.ai[0]), 0.6f);
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X) - MathF.PI / 2f;
 		AttackCooling = 0;
 	}

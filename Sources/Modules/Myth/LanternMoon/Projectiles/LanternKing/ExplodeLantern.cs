@@ -130,7 +130,7 @@ public class ExplodeLantern : ModProjectile, IWarpProjectile
 			Ins.VFXManager.Add(cf);
 		}
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);
@@ -168,7 +168,7 @@ public class ExplodeLantern : ModProjectile, IWarpProjectile
 					Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center, Vector2.Zero, HitType, Projectile.damage, Projectile.knockBack, Projectile.owner);
 			}
 		}
-		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.4f), Projectile.Center);
+		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.8f), Projectile.Center);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -181,7 +181,7 @@ public class ExplodeLantern : ModProjectile, IWarpProjectile
 			float ColorValue = 1f * Projectile.ai[0] * (float)(Math.Sin(Projectile.ai[1]) + 2) / 3f;
 			var colorT = new Color(ColorValue, ColorValue, ColorValue, 0.5f * ColorValue);
 			Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Rectangle?(new Rectangle(0, 0, texture2D.Width, frameHeight)), colorT, Projectile.rotation, new Vector2(texture2D.Width / 2f, frameHeight / 2f), Projectile.scale, SpriteEffects.None, 1f);
-			Main.spriteBatch.Draw(MythContent.QuickTexture("LanternMoon/Projectiles/LanternKing/LanternFire"), Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Rectangle?(new Rectangle(0, 30 * Projectile.frame, 20, 30)), colorT, 0, new Vector2(10, 15), Projectile.scale * 0.5f, SpriteEffects.None, 1f);
+			Main.spriteBatch.Draw(ModAsset.LanternFire.Value, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Rectangle?(new Rectangle(0, 30 * Projectile.frame, 20, 30)), colorT, 0, new Vector2(10, 15), Projectile.scale * 0.5f, SpriteEffects.None, 1f);
 		}
 
 		for (int j = 0; j < 6; j++)
@@ -191,7 +191,7 @@ public class ExplodeLantern : ModProjectile, IWarpProjectile
 			float S = 1f / v.Length() + 0.2f;
 			if (Projectile.velocity.Length() > 0.01f)
 				S /= Projectile.velocity.Length() * 100f;
-			Main.spriteBatch.Draw(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightEffect"), Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY) + v, new Rectangle?(new Rectangle(0, 0, 256, 256)), new Color(S, 0, 0, 0), 0, new Vector2(128, 128f), 0.7f * (S + 0.2f), SpriteEffects.None, 1f);
+			Main.spriteBatch.Draw(Commons.ModAsset.StarSlash.Value, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY) + v, new Rectangle?(new Rectangle(0, 0, 256, 256)), new Color(S, 0, 0, 0), 0, new Vector2(128, 128f), 0.7f * (S + 0.2f), SpriteEffects.None, 1f);
 		}
 		return false;
 	}
@@ -201,7 +201,7 @@ public class ExplodeLantern : ModProjectile, IWarpProjectile
 	}
 	public void DrawWarp(VFXBatch sb)
 	{
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightEffect");
+		Texture2D t = Commons.ModAsset.StarSlash.Value;
 		sb.BindTexture(t);
 		for (int j = 0; j < 6; j++)
 		{
@@ -249,7 +249,7 @@ public class ExplodeLantern : ModProjectile, IWarpProjectile
 
 		if (bars.Count > 2)
 		{
-			Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/EShoot");
+			Texture2D t = ModAsset.EShoot.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}

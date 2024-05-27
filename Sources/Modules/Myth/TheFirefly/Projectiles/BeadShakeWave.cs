@@ -1,4 +1,4 @@
-using Everglow.Myth.Common;
+using System;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
@@ -6,7 +6,7 @@ public class BeadShakeWave : ModProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
 	{
-		Projectile.extraUpdates = 3;
+		Projectile.extraUpdates = 6;
 		Projectile.width = 24;
 		Projectile.height = 24;
 		Projectile.hostile = false;
@@ -25,18 +25,18 @@ public class BeadShakeWave : ModProjectile, IWarpProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		float value = (200 - Projectile.timeLeft) / 200f;
-		value = MathF.Sqrt(value);
-		float colorV = 0.9f * (1 - value);
-		colorV *= 10;
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Lightline");
-		float width = 120;
-		if (Projectile.timeLeft < 120)
-			width = Projectile.timeLeft;
-		Ins.Batch.Begin();
-		DrawTexCircle_VFXBatch(Ins.Batch, value * 270 * Projectile.ai[0], width, new Color(0, colorV * 0.2f, colorV, 0f) * 0.4f, Projectile.Center - Main.screenPosition, t);
-		DrawTexCircle_VFXBatch(Ins.Batch, value * 160 * Projectile.ai[0], width * 0.6f, new Color(0, colorV * 0.2f, colorV, 0f) * 0.4f, Projectile.Center - Main.screenPosition, t);
-		Ins.Batch.End();
+		float timeValue = (200 - Projectile.timeLeft) / 200f;
+		Color c = new Color(0.2f * MathF.Sqrt(1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 3f * (1 - timeValue), 0f);
+		Color cDark = new Color(0, 0, 0, 1f - timeValue);
+		//DrawTexCircle(MathF.Sqrt(timeValue) * 11 * Projectile.ai[0], 20 * (1 - timeValue) * Projectile.ai[0], cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 4 * (1 - timeValue) * Projectile.ai[0], cDark * 0.5f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_black.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 6 * Projectile.ai[0], 3 * (1 - timeValue) * Projectile.ai[0], cDark * 0.5f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_black.Value);
+
+		DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 4 * (1 - timeValue) * Projectile.ai[0], c * 0.8f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 6 * Projectile.ai[0], 3 * (1 - timeValue) * Projectile.ai[0], c * 0.8f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail.Value);
+
+		DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 1f * (1 - timeValue) * Projectile.ai[0], c * 3f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 6 * Projectile.ai[0], 1f * (1 - timeValue) * Projectile.ai[0], c * 3f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail.Value);
 		return false;
 	}
 
@@ -45,61 +45,54 @@ public class BeadShakeWave : ModProjectile, IWarpProjectile
 		behindProjectiles.Add(index);
 	}
 
-	private static void DrawWarpTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	private static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
-
-		for (int h = 0; h < radious / 2; h += 1)
+		for (int h = 0; h < radius / 2; h++)
 		{
-			float colorR = (h / radious * MathF.PI * 4 + (float)addRot + 1.57f) % (MathF.PI * 2f) / (MathF.PI * 2f);
-			float color2R = ((h + 1) / radious * MathF.PI * 4 + (float)addRot + 1.57f) % (MathF.PI * 2f) / (MathF.PI * 2f);
-
-			color = new Color(colorR, color.G / 255f, 0, 0);
-			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.8f, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.2f, 0)));
-			if (Math.Abs(color2R - colorR) > 0.8f)
-			{
-				float midValue = (1f - colorR) / (float)(color2R + (1f - colorR));
-				color.R = 255;
-				circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.8f, 0)));
-				circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.2f, 0)));
-				color.R = 0;
-				circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.8f, 0)));
-				circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.2f, 0)));
-			}
+			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 24 / radius % 1, 0.8f, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 24 / radius % 1, 0.5f, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
-		if (circle.Count > 2)
-			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(1, 0.8f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(1, 0.5f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0.5f, 0)));
+		if (circle.Count > 0)
+		{
+			Main.graphics.GraphicsDevice.Textures[0] = tex;
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
+		}
 	}
-	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
 
-		for (int h = 0; h < radious / 2; h += 1)
+		Color c0 = color;
+		c0.R = 0;
+		for (int h = 0; h < radius / 2; h += 1)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.8f, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.2f, 0)));
+
+			c0.R = (byte)(h / radius * 2 * 255);
+			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / radius * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radius, 1, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radius, 0.5f, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), c0, new Vector3(1, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), c0, new Vector3(1, 0.5f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), c0, new Vector3(0, 1, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), c0, new Vector3(0, 0.5f, 0)));
 		if (circle.Count > 2)
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
 	}
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
-		value = MathF.Sqrt(value);
 		float colorV = 0.9f * (1 - value);
-		colorV *= 10;
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Lightline");
-		float width = 120;
-		if (Projectile.timeLeft < 120)
-			width = Projectile.timeLeft;
+		if (Projectile.ai[0] >= 10)
+			colorV *= Projectile.ai[0] / 10f;
+		Texture2D t = Commons.ModAsset.Trail.Value;
 
-		DrawWarpTexCircle_VFXBatch(spriteBatch, value * 270 * Projectile.ai[0], width, new Color(colorV, colorV * 0.7f * Projectile.ai[1], colorV, 0f), Projectile.Center - Main.screenPosition, t);
 
-		DrawWarpTexCircle_VFXBatch(spriteBatch, value * 160 * Projectile.ai[0], width * 0.6f, new Color(colorV, colorV * 0.7f * Projectile.ai[1], colorV, 0f), Projectile.Center - Main.screenPosition, t);
+		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 12f * Projectile.ai[0], 6 * (1 - value) * Projectile.ai[0], new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 6f * Projectile.ai[0], 4 * (1 - value) * Projectile.ai[0], new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 }

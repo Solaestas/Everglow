@@ -1,3 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<AdditionalFiles Include="Skeleton\**\*.json" Pack="true" ModPath="%(Identity)" />
+	</ItemGroup>
 </Project>
     

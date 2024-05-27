@@ -10,7 +10,7 @@ namespace Everglow.Commons.VFX;
 
 public class VFXManager : IVFXManager
 {
-	public static readonly CodeLayer[] drawLayers = new CodeLayer[]
+	public static readonly CodeLayer[] drawLayers =
 	{
 		CodeLayer.PreDrawFilter,
 		CodeLayer.PostDrawProjectiles,
@@ -20,6 +20,102 @@ public class VFXManager : IVFXManager
 		CodeLayer.PostDrawPlayers,
 		CodeLayer.PostDrawNPCs,
 	};
+
+	private const bool DefaultRt2DIndex = true;
+
+	/// <summary>
+	/// GraphicsDevice引用
+	/// </summary>
+	private GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
+
+	private Dictionary<(CodeLayer, PipelineIndex), IVisualCollection> lookup =
+			new();
+
+	/// <summary>
+	/// Pipeline的实例
+	/// </summary>
+	private List<IPipeline> pipelineInstances = new();
+
+	/// <summary>
+	/// Pipeline的Type
+	/// </summary>
+	private List<Type> pipelineTypes = new();
+
+	private Rt2DVisual renderingRt2D;
+
+	/// <summary>
+	/// 保存每一种Visual所需的Pipeline
+	/// </summary>
+	private List<PipelineIndex> requiredPipeline = new();
+
+	/// <summary>
+	/// 当前使用RenderTarget的Index
+	/// </summary>
+	private bool rt2DIndex = true;
+
+	/// <summary>
+	/// 用于Swap的RenderTarget
+	/// </summary>
+	private ResourceLocker<RenderTarget2D> tempRenderTarget;
+
+	/// <summary> 用绘制层 + 第一个调用的绘制层作为Key来储存List<IVisual> </summary>
+	private Dictionary<CodeLayer, List<IVisualCollection>> visuals =
+		new();
+
+	/// <summary>
+	/// 保存每一种Visual的Type
+	/// </summary>
+	private Dictionary<Type, int> visualTypes = new()
+	{
+		[typeof(Rt2DVisual)] = int.MaxValue,
+	};
+
+	public VFXManager(IHookManager hookManager, IMainThreadContext mainThread)
+	{
+		foreach (var layer in drawLayers)
+		{
+			visuals[layer] = new();
+			if (layer is CodeLayer.PostDrawNPCs or CodeLayer.PostDrawBG)
+			{
+				_ = Ins.HookManager.AddHook(layer, () =>
+				{
+					Main.spriteBatch.End();
+					Draw(layer);
+					Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
+						SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone,
+						null, Main.GameViewMatrix.TransformationMatrix);
+				}, $"VFX {layer}");
+			}
+			else
+			{
+				_ = Ins.HookManager.AddHook(layer, () => Draw(layer), $"VFX {layer}");
+			}
+		}
+		_ = hookManager.AddHook(CodeLayer.PostUpdateEverything, Update, "VFX Update");
+		_ = hookManager.AddHook(CodeLayer.PostExitWorld_Single, Clear, "VFX Clear");
+		mainThread.AddTask(() => tempRenderTarget = Ins.RenderTargetPool.GetRenderTarget2D());
+		foreach (var visual in Ins.ModuleManager.CreateInstances<IVisual>())
+		{
+			Register(visual);
+		}
+	}
+
+	private interface IVisualCollection : IEnumerable<IVisual>
+	{
+		int Count
+		{
+			get;
+		}
+
+		PipelineIndex Index
+		{
+			get;
+		}
+
+		void Add(IVisual visual);
+
+		void Collect();
+	}
 
 	/// <summary>
 	/// 包含uTransform，对s0进行采样的普通Shader
@@ -34,34 +130,15 @@ public class VFXManager : IVFXManager
 		get; private set;
 	}
 
-	public VFXManager(IHookManager hookManager, IMainThreadContext mainThread)
-	{
-		foreach (var layer in drawLayers)
-		{
-			visuals[layer] = new List<IVisualCollection>();
-			if (layer is CodeLayer.PostDrawNPCs or CodeLayer.PostDrawBG)
-			{
-				Ins.HookManager.AddHook(layer, () =>
-				{
-					Main.spriteBatch.End();
-					Draw(layer);
-					Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
-						SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
-						null, Main.GameViewMatrix.TransformationMatrix);
-				}, $"VFX {layer}");
-			}
-			else
-			{
-				Ins.HookManager.AddHook(layer, () => Draw(layer), $"VFX {layer}");
-			}
-		}
-		hookManager.AddHook(CodeLayer.PostUpdateEverything, Update, "VFX Update");
-		mainThread.AddTask(() => tempRenderTarget = Ins.RenderTargetPool.GetRenderTarget2D());
-		foreach (var visual in Ins.ModuleManager.CreateInstances<IVisual>())
-		{
-			Register(visual);
-		}
-	}
+	/// <summary>
+	/// 当前的RenderTarget
+	/// </summary>
+	private RenderTarget2D TrCurrentTarget => rt2DIndex ? Main.screenTarget : Main.screenTargetSwap;
+
+	/// <summary>
+	/// 下一个RenderTarget
+	/// </summary>
+	private RenderTarget2D TrNextTarget => rt2DIndex ? Main.screenTargetSwap : Main.screenTarget;
 
 	public static bool InScreen(Vector2 position, float exRange)
 	{
@@ -92,11 +169,26 @@ public class VFXManager : IVFXManager
 		{
 			visuals.Clear();
 		}
+		lookup.Clear();
+	}
+
+	public void Dispose()
+	{
+		Ins.MainThread.AddTask(() =>
+		{
+			foreach (var pipeline in pipelineInstances)
+			{
+				pipeline.Unload();
+			}
+			tempRenderTarget?.Release();
+			Ins.Batch.Dispose();
+		});
+		GC.SuppressFinalize(this);
 	}
 
 	public void Draw(CodeLayer layer)
 	{
-        var visuals = this.visuals[layer];
+		var visuals = this.visuals[layer];
 		int nextPipelineIndex = -1;
 		foreach (var innerVisuals in visuals)
 		{
@@ -125,7 +217,7 @@ public class VFXManager : IVFXManager
 					rt2DIndex = !rt2DIndex;
 				}
 			}
-			
+
 			pipelineInstances[pipelineIndex.index].Render(visibles);
 		}
 
@@ -139,17 +231,17 @@ public class VFXManager : IVFXManager
 		}
 	}
 
-	public void Flush()
+	public void Collect()
 	{
 		foreach (var (layer, visuals) in visuals)
 		{
 			for (int i = 0; i < visuals.Count; i++)
 			{
-				visuals[i].Flush();
+				visuals[i].Collect();
 
 				if (visuals[i].Count == 0)
 				{
-					lookup.Remove((layer, visuals[i].Index));
+					_ = lookup.Remove((layer, visuals[i].Index));
 					visuals.RemoveAt(i--);
 				}
 			}
@@ -167,7 +259,7 @@ public class VFXManager : IVFXManager
 
 			foreach (var index in waitToAdd)
 			{
-				GetOrAddCollection(layer, index);
+				_ = GetOrAddCollection(layer, index);
 			}
 		}
 	}
@@ -270,100 +362,9 @@ public class VFXManager : IVFXManager
 		}
 	}
 
-	public int VisualType<T>() => visualTypes[typeof(T)];
-
-	[ModuleHideType]
-	internal class Rt2DVisual : Visual
+	public int VisualType<T>()
 	{
-		public ResourceLocker<RenderTarget2D> locker;
-
-		public override CodeLayer DrawLayer => throw new InvalidOperationException("Don't use this manually!");
-
-		public Rt2DVisual(ResourceLocker<RenderTarget2D> locker)
-		{
-			this.locker = locker;
-		}
-
-		public override void Draw()
-		{
-			throw new NotImplementedException();
-		}
-	}
-
-	private const bool DefaultRt2DIndex = true;
-
-	/// <summary>
-	/// GraphicsDevice引用
-	/// </summary>
-	private GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
-
-	private Dictionary<(CodeLayer, PipelineIndex), IVisualCollection> lookup =
-		new();
-
-	/// <summary>
-	/// Pipeline的实例
-	/// </summary>
-	private List<IPipeline> pipelineInstances = new();
-
-	/// <summary>
-	/// Pipeline的Type
-	/// </summary>
-	private List<Type> pipelineTypes = new();
-
-	private Rt2DVisual renderingRt2D;
-
-	/// <summary>
-	/// 保存每一种Visual所需的Pipeline
-	/// </summary>
-	private List<PipelineIndex> requiredPipeline = new();
-
-	/// <summary>
-	/// 当前使用RenderTarget的Index
-	/// </summary>
-	private bool rt2DIndex = true;
-
-	/// <summary>
-	/// 用于Swap的RenderTarget
-	/// </summary>
-	private ResourceLocker<RenderTarget2D> tempRenderTarget;
-
-	/// <summary> 用绘制层 + 第一个调用的绘制层作为Key来储存List<IVisual> </summary>
-	private Dictionary<CodeLayer, List<IVisualCollection>> visuals =
-		new();
-
-	/// <summary>
-	/// 保存每一种Visual的Type
-	/// </summary>
-	private Dictionary<Type, int> visualTypes = new()
-	{
-		[typeof(Rt2DVisual)] = int.MaxValue,
-	};
-
-	/// <summary>
-	/// 当前的RenderTarget
-	/// </summary>
-	private RenderTarget2D TrCurrentTarget => rt2DIndex ? Main.screenTarget : Main.screenTargetSwap;
-
-	/// <summary>
-	/// 下一个RenderTarget
-	/// </summary>
-	private RenderTarget2D TrNextTarget => rt2DIndex ? Main.screenTargetSwap : Main.screenTarget;
-
-	private interface IVisualCollection : IEnumerable<IVisual>
-	{
-		int Count
-		{
-			get;
-		}
-
-		PipelineIndex Index
-		{
-			get;
-		}
-
-		void Add(IVisual visual);
-
-		void Flush();
+		return visualTypes[typeof(T)];
 	}
 
 	private IVisualCollection GetOrAddCollection(CodeLayer layer, PipelineIndex index, bool first = true)
@@ -387,18 +388,22 @@ public class VFXManager : IVFXManager
 		return collection;
 	}
 
-	public void Dispose()
+	[ModuleHideType]
+	internal class Rt2DVisual : Visual
 	{
-		Ins.MainThread.AddTask(() =>
+		public ResourceLocker<RenderTarget2D> locker;
+
+		public Rt2DVisual(ResourceLocker<RenderTarget2D> locker)
 		{
-			foreach (var pipeline in pipelineInstances)
-			{
-				pipeline.Unload();
-			}
-			tempRenderTarget?.Release();
-			Ins.Batch.Dispose();
-		});
-		GC.SuppressFinalize(this);
+			this.locker = locker;
+		}
+
+		public override CodeLayer DrawLayer => throw new InvalidOperationException("Don't use this manually!");
+
+		public override void Draw()
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 	private class SingleVisual : IVisualCollection
@@ -407,21 +412,21 @@ public class VFXManager : IVFXManager
 
 		public IVisual visual;
 
-		public int Count => visual == null ? 0 : 1;
-
-		public PipelineIndex Index => index;
-
 		public SingleVisual(PipelineIndex index)
 		{
 			this.index = index;
 		}
+
+		public int Count => visual == null ? 0 : 1;
+
+		public PipelineIndex Index => index;
 
 		public void Add(IVisual visual)
 		{
 			this.visual = visual;
 		}
 
-		public void Flush()
+		public void Collect()
 		{
 			if (!visual.Active)
 				visual = null;
@@ -443,9 +448,16 @@ public class VFXManager : IVFXManager
 
 	private class VisualCollection : IVisualCollection
 	{
-		public int Count => visuals.Count;
+		private const int FLUSH_COUNT = 50;
 
-		public PipelineIndex Index => index;
+		/// <summary>
+		/// 比较器
+		/// </summary>
+		private static VisualComparer compare = new();
+
+		private PipelineIndex index;
+
+		private SortedSet<IVisual> visuals;
 
 		public VisualCollection(PipelineIndex index)
 		{
@@ -453,14 +465,18 @@ public class VFXManager : IVFXManager
 			this.index = index;
 		}
 
+		public int Count => visuals.Count;
+
+		public PipelineIndex Index => index;
+
 		public void Add(IVisual visual)
 		{
 			if (visuals.Count % FLUSH_COUNT == 0)
-				Flush();
-			visuals.Add(visual);
+				Collect();
+			_ = visuals.Add(visual);
 		}
 
-		public void Flush()
+		public void Collect()
 		{
 			int b = visuals.RemoveWhere(visual => !visual.Active);
 		}
@@ -474,17 +490,6 @@ public class VFXManager : IVFXManager
 		{
 			return GetEnumerator();
 		}
-
-		private const int FLUSH_COUNT = 50;
-
-		/// <summary>
-		/// 比较器
-		/// </summary>
-		private static VisualComparer compare = new();
-
-		private PipelineIndex index;
-
-		private SortedSet<IVisual> visuals;
 
 		private class VisualComparer : Comparer<IVisual>
 		{

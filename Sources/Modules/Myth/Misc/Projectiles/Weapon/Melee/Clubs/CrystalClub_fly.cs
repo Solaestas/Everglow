@@ -82,7 +82,7 @@ public class CrystalClub_fly : ModProjectile, IWarpProjectile
 		SoundEngine.PlaySound(SoundID.Shatter.WithPitchOffset(Main.rand.NextFloat(0.2f, 0.9f)), Projectile.Center);
 		int type = 0;
 
-		for (int d = 0; d < 50; d += 1)
+		for (int d = 0; d < 25; d += 1)
 		{
 			switch (Main.rand.Next(3))
 			{
@@ -101,7 +101,7 @@ public class CrystalClub_fly : ModProjectile, IWarpProjectile
 			D.noGravity = true;
 			D.velocity = new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(6.283) * scale;
 		}
-		for (int d = 0; d < 120; d += 1)
+		for (int d = 0; d < 40; d += 1)
 		{
 			switch (Main.rand.Next(4))
 			{
@@ -124,6 +124,7 @@ public class CrystalClub_fly : ModProjectile, IWarpProjectile
 			D.velocity = new Vector2(0, Main.rand.NextFloat(20f)).RotatedByRandom(6.283) * scale;
 		}
 		hit.HitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<CrystalClub_fly_Explosion>(), Projectile.damage / 2, Projectile.knockBack * 0.1f, Projectile.owner, 8);
 		Projectile.Kill();
 	}
 	public BlendState TrailBlendState()
@@ -306,15 +307,15 @@ public class CrystalClub_fly : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.Center - trail[i] * Projectile.scale, Color.Black, new Vector3(factor, 0, w * 2f * Omega)));
 		}
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		Effect MeleeTrail = MythContent.QuickEffect("Misc/Projectiles/Weapon/Melee/Clubs/CrystalClubTrail");
+		Effect MeleeTrail = ModAsset.CrystalClubTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
-		MeleeTrail.Parameters["tex1"].SetValue(MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/Clubs/CrystalClub_fly"));
+		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.CrystalClub_fly.Value);
 		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
 		lightColor.W = 0.7f * Omega;
 		MeleeTrail.Parameters["Light"].SetValue(lightColor);
@@ -368,9 +369,9 @@ public class CrystalClub_fly : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.Center - trail[i] * 1.0f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 0, w)));
 		}
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/Clubs/CrystalClub_trail");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.CrystalClub_trail.Value;
 
 		lightColor.W = 0.7f * Omega;
 

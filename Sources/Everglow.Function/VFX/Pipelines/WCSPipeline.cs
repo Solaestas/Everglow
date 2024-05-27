@@ -1,3 +1,5 @@
+using Everglow.Commons.Vertex;
+
 namespace Everglow.Commons.VFX.Pipelines;
 
 /// <summary>
@@ -10,7 +12,7 @@ public class WCSPipeline : Pipeline
 		Ins.Batch.Begin();
 		effect.Value.Parameters["uTransform"].SetValue(
 			Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) *
-			Main.GameViewMatrix.ZoomMatrix *
+			Main.GameViewMatrix.TransformationMatrix *
 			Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
 		effect.Value.CurrentTechnique.Passes[0].Apply();
 	}

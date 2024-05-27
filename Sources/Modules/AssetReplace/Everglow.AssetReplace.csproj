@@ -1,3 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+		<!--Disable Auto Generate ModAsset-->
+		<EnablePathGenerator>false</EnablePathGenerator>
+	</PropertyGroup>
 </Project>
-    

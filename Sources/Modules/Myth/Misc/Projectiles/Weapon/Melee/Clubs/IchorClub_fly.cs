@@ -1,4 +1,5 @@
 using Everglow.Commons.MEAC;
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.Common;
 using Terraria;
 using Terraria.Audio;
@@ -49,6 +50,7 @@ public class IchorClub_fly : ModProjectile, IWarpProjectile
 	/// 拖尾
 	/// </summary>
 	internal Queue<Vector2> trailVecs;
+	float vfxTimer = 0;
 	public override void SetDefaults()
 	{
 		Projectile.width = 80;
@@ -65,6 +67,7 @@ public class IchorClub_fly : ModProjectile, IWarpProjectile
 		Projectile.DamageType = DamageClass.Melee;
 
 		trailVecs = new Queue<Vector2>(trailLength + 1);
+		vfxTimer = 0;
 	}
 	private void GenerateDust()
 	{
@@ -163,6 +166,12 @@ public class IchorClub_fly : ModProjectile, IWarpProjectile
 				{
 					GenerateDust();
 				}
+				vfxTimer += (Omega * 1.5f);
+				if (vfxTimer >= 1)
+				{
+					GenerateVFX((int)(vfxTimer));
+					vfxTimer = 0;
+				}
 			}
 			else
 			{
@@ -221,6 +230,52 @@ public class IchorClub_fly : ModProjectile, IWarpProjectile
 		}
 	}
 	internal int target = -1;
+	public void GenerateVFX(int Frequency)
+	{
+		float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
+		for (int g = 0; g < Frequency * 2; g++)
+		{
+			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(MathHelper.TwoPi);
+			float mulScale = Main.rand.NextFloat(6f, 14f);
+			Vector2 startPos = new Vector2(MathF.Sqrt(Main.rand.NextFloat(0f, 1f)) * 56f, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection);
+			if (Main.rand.NextBool(2))
+			{
+				startPos *= -1;
+			}
+			var blood = new IchorDrop
+			{
+				velocity = afterVelocity * mulVelocity / mulScale + startPos.RotatedBy(MathHelper.PiOver2) * Omega * 0.1f + Projectile.velocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + startPos,
+				maxTime = Main.rand.Next(6, 32),
+				scale = mulScale,
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
+			};
+			Ins.VFXManager.Add(blood);
+		}
+		for (int g = 0; g < Frequency; g++)
+		{
+			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(3f)).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 startPos = new Vector2(MathF.Sqrt(Main.rand.NextFloat(0f, 1f)) * 56f, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection);
+			if (Main.rand.NextBool(2))
+			{
+				startPos *= -1;
+			}
+			var blood = new IchorSplash
+			{
+				velocity = afterVelocity * mulVelocity + startPos.RotatedBy(MathHelper.PiOver2) * Omega * 0.1f + Projectile.velocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + startPos,
+				maxTime = Main.rand.Next(6, 32),
+				scale = Main.rand.NextFloat(6f, 12f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 }
+			};
+			Ins.VFXManager.Add(blood);
+		}
+	}
 	public override bool PreDraw(ref Color lightColor)
 	{
 		SpriteEffects effects = SpriteEffects.None;
@@ -281,9 +336,9 @@ public class IchorClub_fly : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.Center - trail[i] * 1.0f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 0, w)));
 		}
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/Clubs/IchorClub_trail");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.IchorClub_trail.Value;
 
 		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
 		lightColor.W = 0.7f * Omega;

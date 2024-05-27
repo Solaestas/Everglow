@@ -130,7 +130,7 @@ public class LanternMoonProgress : ModSystem//灯笼月
 
 
 		float fadinAlpha = 0.5f + Main.invasionProgressAlpha * 0.5f;
-		Texture2D lanternMoonImage = MythContent.QuickTexture("UIImages/LanternMoon/LanternMoonIcon");
+		Texture2D lanternMoonImage = ModAsset.LanternMoonIcon.Value;
 		//TODO Hjson，示例我在WorldSystem里写了
 		string LanternMoon = " Lantern Moon ";
 		Color BGColor = Color.White;

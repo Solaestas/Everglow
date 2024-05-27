@@ -1,5 +1,4 @@
-using Everglow.Commons.Coroutines;
-using Everglow.Myth.MagicWeaponsReplace.GlobalItems;
+using Everglow.SpellAndSkull.GlobalItems;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 internal class FlameRingPipeline : Pipeline
@@ -18,8 +17,8 @@ internal class FlameRingPipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D halo = Commons.ModAsset.Trail.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 
@@ -33,10 +32,9 @@ internal class FireFeatherMagicArray : VisualProjectile
 {
 	public float WingPower = 0;
 	public bool OldControlUp = false;
-	public int Timer = 0;
-	public Vector2 RingPos = Vector2.Zero;
-	//private CoroutineManager _coroutineManager = new CoroutineManager();
-	public override string Texture => "Everglow/" + ModAsset.FireFeatherMagicPath;
+	public int timer = 0;
+	public Vector2 ringPos = Vector2.Zero;
+	public override string Texture => "Everglow/" + ModAsset.FireFeatherMagic_Path;
 	public override void SetDefaults()
 	{
 		Projectile.width = 28;
@@ -48,27 +46,12 @@ internal class FireFeatherMagicArray : VisualProjectile
 		Projectile.tileCollide = false;
 		base.SetDefaults();
 	}
-	//private IEnumerator<ICoroutineInstruction> RightClick(int times)
-	//{
-	//	for (int x = 0; x < times; x++)
-	//	{
-	//		WingPower -= 21;
-	//		if (WingPower < 0)
-	//		{
-	//			WingPower = 0;
-	//			yield break;
-	//		}
-	//		Player player = Main.player[Projectile.owner];
-	//		Vector2 pos = Projectile.Center + new Vector2(Main.rand.NextFloat(-600, 600), -1600);
-	//		Vector2 vel = Vector2.Normalize(Main.MouseWorld - pos) * 60;
-	//		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), pos, vel, ModContent.ProjectileType<GiantFireFeather>(), player.HeldItem.damage * 5, 10, Projectile.owner);
-	//		Timer = 30;
-	//		yield return new WaitForFrames((uint)Main.rand.Next(5, 9));
-	//	}
-	//}
+	public override bool? CanCutTiles()
+	{
+		return false;
+	}
 	public override void AI()
 	{
-		//_coroutineManager.Update();
 		Player player = Main.player[Projectile.owner];
 		Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(-player.direction * 22, -12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
 		Projectile.spriteDirection = player.direction;
@@ -78,9 +61,9 @@ internal class FireFeatherMagicArray : VisualProjectile
 			Projectile.timeLeft = player.itemTime + 60;
 			if (player.itemTime > 0)
 			{
-				if (Timer < 30)
+				if (timer < 30)
 				{
-					Timer++;
+					timer++;
 				}
 				Player.CompositeArmStretchAmount playerCASA = Player.CompositeArmStretchAmount.Full;
 				player.SetCompositeArmFront(true, playerCASA, (float)(-Math.Sin(Main.timeForVisualEffects / 18d) * 0.6 + 1.2) * -player.direction);
@@ -89,21 +72,21 @@ internal class FireFeatherMagicArray : VisualProjectile
 			}
 			else
 			{
-				if (Timer > 15)
+				if (timer > 15)
 				{
-					Timer--;
+					timer--;
 				}
 			}
 		}
 		else
 		{
-			Timer--;
-			if (Timer < 0)
+			timer--;
+			if (timer < 0)
 				Projectile.Kill();
 		}
 
 		Projectile.rotation = player.fullRotation;
-		RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
+		ringPos = ringPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
 
 
 		FireFeatherOwner mplayer = player.GetModPlayer<FireFeatherOwner>();
@@ -151,7 +134,7 @@ internal class FireFeatherMagicArray : VisualProjectile
 			Vector2 pos = Projectile.Center + new Vector2(Main.rand.NextFloat(-600, 600), -1600);
 			Vector2 vel = Vector2.Normalize(Main.MouseWorld - pos) * 60;
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), pos, vel, ModContent.ProjectileType<GiantFireFeather>(), player.HeldItem.damage * 5, 10, Projectile.owner);
-			Timer = 30;
+			timer = 30;
 		}
 	}
 	public override bool PreDraw(ref Color lightColor)
@@ -166,16 +149,16 @@ internal class FireFeatherMagicArray : VisualProjectile
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int x = 0; x < 40; x++)
 		{
-			float pocession = 1 - Timer / 30f;
-			Vector2 radious = toBottom.RotatedBy(x / 20d * Math.PI);
+			float pocession = 1 - timer / 30f;
+			Vector2 radius = toBottom.RotatedBy(x / 20d * Math.PI);
 			float width = 75f;
 			if (x / 40f > WingPower / 210f)
 			{
 				pocession += 0.7f;
 			}
-			Vector2 normalizedRadious = radious / 40f * MathF.Sin(x / 40f * MathF.PI) * width;
-			bars.Add(new Vertex2D(Projectile.Center + radious + normalizedRadious, new Color(x / 40f, 0.0f, pocession, 0.0f), new Vector3(x / 25f, 0 + (float)Main.time * 0.009f, 0)));
-			bars.Add(new Vertex2D(Projectile.Center + radious, new Color(x / 40f, 0.8f, pocession, 0.0f), new Vector3(x / 25f, 0.5f + (float)Main.time * 0.009f, 0)));
+			Vector2 normalizedRadious = radius / 40f * MathF.Sin(x / 40f * MathF.PI) * width;
+			bars.Add(new Vertex2D(Projectile.Center + radius + normalizedRadious, new Color(x / 40f, 0.0f, pocession, 0.0f), new Vector3(x / 25f, 0 + (float)Main.time * 0.009f, 0)));
+			bars.Add(new Vertex2D(Projectile.Center + radius, new Color(x / 40f, 0.8f, pocession, 0.0f), new Vector3(x / 25f, 0.5f + (float)Main.time * 0.009f, 0)));
 		}
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}

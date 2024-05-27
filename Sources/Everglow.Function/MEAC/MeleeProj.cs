@@ -1,6 +1,8 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.GameContent.Shaders;
@@ -79,7 +81,8 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	public float disFromPlayer = 6;
 	public string shadertype = "Trail0";
 	public bool isRightClick = false;
-	public Player Player => Main.player[Projectile.owner];
+    public bool useBloom;
+    public Player Player => Main.player[Projectile.owner];
 	public Vector2 MainVec_WithoutGravDir
 	{
 		get
@@ -144,7 +147,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		Player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = true;
 		Projectile.Center = Player.Center + Utils.SafeNormalize(mainVec, Vector2.One) * disFromPlayer;
 		isAttacking = false;
-
+		Projectile.ownerHitCheck = !CanIgnoreTile;
 		Projectile.timeLeft++;
 		Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, mainVec.ToRotation() - 1.57f);
 		Attack();
@@ -279,12 +282,10 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		float point = 0;
-		if (isAttacking && Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), ProjCenter_WithoutGravDir + MainVec_WithoutGravDir * Projectile.scale * (longHandle ? 0.2f : 0.1f), ProjCenter_WithoutGravDir + MainVec_WithoutGravDir * Projectile.scale, Projectile.height, ref point))
+		if (isAttacking && Collision.CheckAABBvLineCollision2(targetHitbox.TopLeft(), targetHitbox.Size(), ProjCenter_WithoutGravDir + MainVec_WithoutGravDir * Projectile.scale * (longHandle ? 0.2f : 0.1f), ProjCenter_WithoutGravDir + MainVec_WithoutGravDir * Projectile.scale))
 		{
-			if (Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, targetHitbox.TopLeft(), targetHitbox.Width, targetHitbox.Height) || CanIgnoreTile)
-				return true;
+			return true;
 		}
-
 		return false;
 	}
 	public override bool PreDraw(ref Color lightColor)
@@ -294,105 +295,54 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		return false;
 	}
 
-	public virtual void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth = 10, float HorizontalHeight = 10, float DrawScale = 0.9f, string GlowPath = "", double DrawRotation = 0.7854)
+	public virtual void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = new Vector4(), Vector2 drawScale = new Vector2(), Texture2D glowTexture = null)
 	{
-		Player player = Main.player[Projectile.owner];
-		//Main.spriteBatch.End();
-		//Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		//Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-		//float exScale = longHandle ? 2 : 1;
-		//Vector2 origin = new Vector2(longHandle ? tex.Width / 2 : 5, tex.Height / 2);
-		//Main.spriteBatch.Draw(tex, ProjCenter_WithoutGravDir - Main.screenPosition, null, Projectile.GetAlpha(lightColor), MainVec_WithoutGravDir.ToRotation(), origin, new Vector2(exScale * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0);
-
-		//Main.spriteBatch.End();
-		//Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-
-		float texWidth = HorizontalWidth;//转换成水平贴图时候的宽度
-		float texHeight = HorizontalHeight;//转换成水平贴图时候的高度
-		float Size = DrawScale;//放大的几何倍数
-		double baseRotation = DrawRotation;//这个是刀刃倾斜度与水平的夹角,尽量不要是别的数值
-
-		float exScale = 1;
-		if (longHandle)
-			exScale += 1f;
-		var origin = new Vector2(longHandle ? texWidth / 2 : 5, texHeight / 2);
-
-		Vector2 Zoom = new Vector2(exScale * drawScaleFactor * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale;
-
-		double ProjRotation = MainVec_WithoutGravDir.ToRotation() + Math.PI / 4;
-
-		float QuarterSqrtTwo = 0.35355f;
-
-		Vector2 drawCenter = ProjCenter_WithoutGravDir - Main.screenPosition;
-		Vector2 CenterMoveByPlayerRotation = new Vector2(6 * player.direction, -player.height * player.gravDir) - new Vector2(0, -player.height * player.gravDir).RotatedBy(player.fullRotation);
-		Vector2 drawCenter2 = drawCenter - CenterMoveByPlayerRotation;
-
-		Vector2 INormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation - Math.PI / 4)) * Zoom.Y * Size;
-		Vector2 JNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation + Math.PI / 4)) * Zoom.X * Size;
-
-		Vector2 ITexNormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(-(baseRotation - Math.PI / 4));
-		ITexNormal.X /= tex.Width;
-		ITexNormal.Y /= tex.Height;
-		Vector2 JTexNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(-(baseRotation + Math.PI / 4));
-		JTexNormal.X /= tex.Width;
-		JTexNormal.Y /= tex.Height;
-
-		Vector2 TopLeft/*原水平贴图的左上角,以此类推*/ = Vector2.Normalize(INormal) * origin.Y - Vector2.Normalize(JNormal) * origin.X;
-		Vector2 TopRight = Vector2.Normalize(JNormal) * (JNormal.Length() * 2 - origin.X) + Vector2.Normalize(INormal) * origin.Y;
-		Vector2 BottomLeft = -Vector2.Normalize(INormal) * (INormal.Length() * 2 - origin.Y) - Vector2.Normalize(JNormal) * origin.X;
-		Vector2 BottomRight = Vector2.Normalize(JNormal) * (JNormal.Length() * 2 - origin.X) - Vector2.Normalize(INormal) * (INormal.Length() * 2 - origin.Y);
-
-
-		Vector2 sourceTopLeft = new Vector2(0.5f) + ITexNormal - JTexNormal;
-		Vector2 sourceTopRight = new Vector2(0.5f) + ITexNormal + JTexNormal;
-		Vector2 sourceBottomLeft = new Vector2(0.5f) - ITexNormal - JTexNormal;
-		Vector2 sourceBottomRight = new Vector2(0.5f) - ITexNormal + JTexNormal;
-
-		if (Player.direction * Player.gravDir == -1)
+		if(diagonal == new Vector4())
 		{
-			sourceTopLeft = sourceBottomLeft;
-			sourceTopRight = sourceBottomRight;
-			sourceBottomLeft = new Vector2(0.5f) + ITexNormal - JTexNormal;
-			sourceBottomRight = new Vector2(0.5f) + ITexNormal + JTexNormal;
+			diagonal = new Vector4(0, 1, 1, 0);
 		}
-
-		var vertex2Ds = new List<Vertex2D>
+		if (drawScale == new Vector2())
 		{
-				new Vertex2D(drawCenter2 + TopLeft, lightColor, new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
-				new Vertex2D(drawCenter2 + BottomLeft, lightColor, new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
-				new Vertex2D(drawCenter + TopRight, lightColor, new Vector3(sourceTopRight.X, sourceTopRight.Y, 0)),
-
-				new Vertex2D(drawCenter2 + BottomLeft, lightColor, new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
-				new Vertex2D(drawCenter + BottomRight, lightColor, new Vector3(sourceBottomRight.X, sourceBottomRight.Y, 0)),
-				new Vertex2D(drawCenter + TopRight, lightColor, new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
-		};
+			drawScale = new Vector2(0, 1);
+			if(longHandle)
+			{
+				drawScale = new Vector2(-0.6f, 1);
+			}
+			drawScale *= drawScaleFactor;
+		}
+		Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+		Vector2 drawCenter = Projectile.Center - Main.screenPosition;
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		Main.graphics.GraphicsDevice.Textures[0] = tex;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
-
-		if (GlowPath != "")
-		{
-			vertex2Ds = new List<Vertex2D>
-			{
-				new Vertex2D(drawCenter2 + TopLeft, new Color(255,255,255,0), new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
-				new Vertex2D(drawCenter2 + BottomLeft, new Color(255,255,255,0), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
-				new Vertex2D(drawCenter + TopRight, new Color(255,255,255,0), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0)),
-
-				new Vertex2D(drawCenter2 + BottomLeft, new Color(255,255,255,0), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
-				new Vertex2D(drawCenter + BottomRight, new Color(255,255,255,0), new Vector3(sourceBottomRight.X, sourceBottomRight.Y, 0)),
-				new Vertex2D(drawCenter + TopRight, new Color(255,255,255,0), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
-			};
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/" + GlowPath).Value;
-			;
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
-		}
+		DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+	}
+	public void DrawVertexByTwoLine(Texture2D texture, Color drawColor, Vector2 textureCoordStart, Vector2 textureCoordEnd, Vector2 positionStart, Vector2 positionEnd)
+	{
+		Vector2 coordVector = textureCoordEnd - textureCoordStart;
+		coordVector.X *= texture.Width;
+		coordVector.Y *= texture.Height;
+		float theta = MathF.Atan2(coordVector.Y, coordVector.X);
+		Vector2 drawVector = positionEnd - positionStart;
+
+		Vector2 mainVectorI = drawVector.RotatedBy(theta * -Projectile.spriteDirection) * MathF.Cos(theta);
+		Vector2 mainVectorJ = drawVector.RotatedBy((theta - MathHelper.PiOver2) * -Projectile.spriteDirection) * MathF.Sin(theta);
+
+		List<Vertex2D> vertex2Ds = new List<Vertex2D>
+		{
+			new Vertex2D(positionStart, drawColor, new Vector3(textureCoordStart, 0)),
+			new Vertex2D(positionStart + mainVectorI, drawColor, new Vector3(textureCoordEnd.X, textureCoordStart.Y, 0)),
+
+			new Vertex2D(positionStart + mainVectorJ, drawColor, new Vector3(textureCoordStart.X, textureCoordEnd.Y, 0)),
+			new Vertex2D(positionEnd, drawColor, new Vector3(textureCoordEnd, 0)),
+		};
+		Main.graphics.GraphicsDevice.Textures[0] = texture;
+		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
 	}
 	public virtual float TrailAlpha(float factor)
 	{
@@ -412,17 +362,24 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	{
 		return BlendState.NonPremultiplied;
 	}
+	
 	public virtual void DrawTrail(Color color)
 	{
 		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (trailVecs.Count != 0)
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+			Vector2 vec = SmoothTrailX[x];
 
+            SmoothTrail.Add(Vector2.Normalize(vec) * (vec.Length() + disFromPlayer));
+        }
+        if (trailVecs.Count != 0)
+		{
+			Vector2 vec = trailVecs.ToArray()[trailVecs.Count - 1];
+
+            SmoothTrail.Add(Vector2.Normalize(vec)*(vec.Length()+disFromPlayer));
+		}
+		Vector2 center = Projectile.Center - Vector2.Normalize(mainVec)*disFromPlayer;
 		int length = SmoothTrail.Count;
 		if (length <= 3)
 			return;
@@ -435,47 +392,51 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 			float w = TrailAlpha(factor);
 			if (!longHandle)
 			{
-				bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.15f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
-				bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w)));
+				bars.Add(new Vertex2D(center + trail[i] * 0.15f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
+				bars.Add(new Vertex2D(center + trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w)));
 			}
 			else
 			{
-				bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.3f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
-				bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w)));
+				bars.Add(new Vertex2D(center + trail[i] * 0.3f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
+				bars.Add(new Vertex2D(center + trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w)));
 			}
 		}
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
 		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-		//Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 	}
-
-	private Vector2 r = Vector2.One;
-	public void DrawWarp(VFXBatch spriteBatch)
+	public virtual void DrawWarp(VFXBatch spriteBatch)
 	{
 		if (selfWarp)
 			return;
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
-		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (trailVecs.Count != 0)
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
-		int length = SmoothTrail.Count;
+        List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+        var SmoothTrail = new List<Vector2>();
+        for (int x = 0; x < SmoothTrailX.Count - 1; x++)
+        {
+            Vector2 vec = SmoothTrailX[x];
+
+            SmoothTrail.Add(Vector2.Normalize(vec) * (vec.Length() + disFromPlayer));
+        }
+        if (trailVecs.Count != 0)
+        {
+            Vector2 vec = trailVecs.ToArray()[trailVecs.Count - 1];
+
+            SmoothTrail.Add(Vector2.Normalize(vec) * (vec.Length() + disFromPlayer));
+        }
+        Vector2 center = Projectile.Center - Vector2.Normalize(mainVec) * disFromPlayer;
+        int length = SmoothTrail.Count;
 		if (length <= 3)
 			return;
 		Vector2[] trail = SmoothTrail.ToArray();
@@ -502,26 +463,28 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 			{
 				var midValue = (1 - dir) / (1 - dir + dir1);
 				var midPoint = midValue * trail[i] + (1 - midValue) * trail[i - 1];
+				midPoint.X = 0;
 				var oldFactor = (i - 1) / (length - 1f);
 				var midFactor = midValue * factor + (1 - midValue) * oldFactor;
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(midFactor, 1, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(midFactor, 0, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(midFactor, 1, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(midFactor, 0, 1)));
+				bars.Add(new Vertex2D(center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(midFactor, 1, 1)));
+				bars.Add(new Vertex2D(center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(midFactor, 0, 1)));
+				bars.Add(new Vertex2D(center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(midFactor, 1, 1)));
+				bars.Add(new Vertex2D(center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(midFactor, 0, 1)));
 			}
 			if (dir1 - dir > 0.5)
 			{
 				var midValue = (1 - dir1) / (1 - dir1 + dir);
 				var midPoint = midValue * trail[i - 1] + (1 - midValue) * trail[i];
+				midPoint.X = 0;
 				var oldFactor = (i - 1) / (length - 1f);
 				var midFactor = midValue * oldFactor + (1 - midValue) * factor;
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(midFactor, 1, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(midFactor, 0, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(midFactor, 1, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(midFactor, 0, 1)));
+				bars.Add(new Vertex2D(center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(midFactor, 1, 1)));
+				bars.Add(new Vertex2D(center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(midFactor, 0, 1)));
+				bars.Add(new Vertex2D(center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(midFactor, 1, 1)));
+				bars.Add(new Vertex2D(center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(midFactor, 0, 1)));
 			}
-			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, w, 0, 1), new Vector3(factor, 1, w)));
-			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
+			bars.Add(new Vertex2D(center - Main.screenPosition, new Color(dir, w, 0, 1), new Vector3(factor, 1, w)));
+			bars.Add(new Vertex2D(center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
 		}
 
 		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
@@ -566,6 +529,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	}
 	public void DrawBloom()
 	{
+		if(useBloom)
 		DrawTrail(Color.White);
 	}
 }

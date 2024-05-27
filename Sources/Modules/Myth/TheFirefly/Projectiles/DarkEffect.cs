@@ -1,12 +1,9 @@
-﻿using Everglow.Myth.Common;
-
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
 public class DarkEffect : ModProjectile
 {
 	public override void SetStaticDefaults()
 	{
-		// DisplayName.SetDefault("");
 	}
 
 	public override void SetDefaults()
@@ -80,7 +77,7 @@ public class DarkEffect : ModProjectile
 				Vx.Add(bars[i + 3]);
 			}
 		}
-		Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/BlackLine");
+		Texture2D t = ModAsset.BlackLine.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 	}

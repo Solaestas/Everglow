@@ -1,4 +1,4 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
 
@@ -45,7 +45,7 @@ public class TuskWave : ModNPC
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 
-		var BackBase = new List<VertexBase.CustomVertexInfo>();
+		var BackBase = new List<Vertex2D>();
 		Color color = Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16));
 		float index = 1;
 		for (int x = -300; x < 300; x += 4)
@@ -55,17 +55,17 @@ public class TuskWave : ModNPC
 				index = (x + 300) / 40f;
 			if (x > 260)
 				index = (300 - x) / 40f;
-			BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(x, 0) - Main.screenPosition, color, new Vector3(0, 1, 0)));
-			BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(x + 4, -DelY * index * heig) - Main.screenPosition, color, new Vector3(1, 0, 0)));
-			BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(x + 4, 0) - Main.screenPosition, color, new Vector3(1, 1, 0)));
+			BackBase.Add(new Vertex2D(NPC.Bottom + new Vector2(x, 0) - Main.screenPosition, color, new Vector3(0, 1, 0)));
+			BackBase.Add(new Vertex2D(NPC.Bottom + new Vector2(x + 4, -DelY * index * heig) - Main.screenPosition, color, new Vector3(1, 0, 0)));
+			BackBase.Add(new Vertex2D(NPC.Bottom + new Vector2(x + 4, 0) - Main.screenPosition, color, new Vector3(1, 1, 0)));
 
 
-			BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(x, -DelY * index * heig) - Main.screenPosition, color, new Vector3(0, 0, 0)));
-			BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(x + 4, -DelY * index * heig) - Main.screenPosition, color, new Vector3(1, 0, 0)));
-			BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(x, 0) - Main.screenPosition, color, new Vector3(0, 1, 0)));
+			BackBase.Add(new Vertex2D(NPC.Bottom + new Vector2(x, -DelY * index * heig) - Main.screenPosition, color, new Vector3(0, 0, 0)));
+			BackBase.Add(new Vertex2D(NPC.Bottom + new Vector2(x + 4, -DelY * index * heig) - Main.screenPosition, color, new Vector3(1, 0, 0)));
+			BackBase.Add(new Vertex2D(NPC.Bottom + new Vector2(x, 0) - Main.screenPosition, color, new Vector3(0, 1, 0)));
 
 		}
-		Texture2D thang = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodWave").Value;
+		Texture2D thang = ModAsset.BloodWave.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = thang;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, BackBase.ToArray(), 0, BackBase.Count / 3);
 		return false;

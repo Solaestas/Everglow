@@ -531,13 +531,12 @@ public class LanternGhostKing : ModNPC
 			{
 				if (!player.dead)
 				{
-					Projectile.NewProjectile(null, player.Center, Vector2.Zero, ModContent.ProjectileType<Bosses.Acytaea.Projectiles.playerHit>(), NPC.damage / 4, 0, 0, 0, 0);
 					player.AddBuff(BuffID.OnFire, 300);
 				}
 			}
 		}
 
-		Texture2D tex0 = MythContent.QuickTexture("LanternMoon/NPCs/LanternFlame0");
+		Texture2D tex0 = ModAsset.LanternFlame0.Value;
 		DrawFlameRing((float)Main.timeForVisualEffects * 0.04f, 1300, RingCenter - Main.screenPosition, tex0);
 
 	}

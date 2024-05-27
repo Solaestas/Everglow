@@ -133,10 +133,10 @@ internal class RopeManager
 			{
 				if (Main.rand.NextBool(12) || (i, j) == (rectangle.Width / 2, rectangle.Height / 2))
 				{
-					int MaxCount = 4;
+					int maxCount = 4;
 					if (rectangle.Width > 10)
-						MaxCount = 6;
-					var rope = new Rope(new Vector2(i * 5, j * 5) + basePosition, (Main.rand.Next(0, 60) + 140) / 300f, Main.rand.Next(2, MaxCount + 1), offset);
+						maxCount = 6;
+					var rope = new Rope(new Vector2(i * 5, j * 5) + basePosition, (Main.rand.Next(0, 60) + 140) / 300f, Main.rand.Next(2, maxCount + 1), offset);
 					ropes.Add(rope);
 					result.Add(rope);
 				}
@@ -223,17 +223,16 @@ internal class RopeManager
 		}
 		if (vertices.Count < 3)
 			return;
-		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
+		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null,
 			Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
 
-		//gd.Textures[0] = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
 		gd.Textures[0] = TextureAssets.MagicPixel.Value;
 		gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertices.ToArray(), 0, vertices.Count, indices.ToArray(), 0, indices.Count / 3);
 
 		sb.End();
-		sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
+		sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null,
 				Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
-		Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
+		Texture2D dropTexture = ModAsset.Branch.Value;
 		for (int i = 0; i < ropes.Count; i++)
 		{
 			Vector2 offset = ropes[i].GetOffset();
