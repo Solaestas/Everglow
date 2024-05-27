@@ -7,6 +7,10 @@ namespace Everglow.CagedDomain.Tiles.CableTiles;
 
 public class LightbulbBand : CableTile
 {
+	public override void PostSetDefaults()
+	{
+	}
+
 	public override void DrawCable(Rope rope, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing, Color color = default)
 	{
 		// 回声涂料
@@ -20,7 +24,6 @@ public class LightbulbBand : CableTile
 		int paint = Main.tile[pos].TileColor;
 		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.LightbulbBand_bulb_Path, type, 1, paint, tileDrawing);
 		tex ??= ModAsset.LightbulbBand_bulb.Value;
-		var origin = new Vector2(0, 0);
 		var tileSpriteEffect = SpriteEffects.None;
 		for (int i = 0; i < rope.GetMassList.Length - 1; i++)
 		{
@@ -40,7 +43,7 @@ public class LightbulbBand : CableTile
 			float rotation = -windCycle * 0.4f;
 			if (!Main.gamePaused)
 			{
-				rope.ApplyForceSpecial(i, new Vector2(windCycle * 1, 0.4f * thisMass.Mass));
+				rope.ApplyForceSpecial(i, new Vector2(windCycle / 16f, 0.4f * thisMass.Mass));
 			}
 
 			// 支持发光涂料
