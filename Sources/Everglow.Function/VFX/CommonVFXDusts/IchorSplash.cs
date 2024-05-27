@@ -78,7 +78,7 @@ public class IchorSplash : Visual
 		scale += 0.4f;
 		if (Collision.SolidCollision(position, 0, 0))
 		{
-			velocity *= 0.2f;
+			velocity *= 0.8f;
 			if (velocity.Length() < 0.02f)
 			{
 				Active = false;
