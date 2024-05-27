@@ -46,27 +46,30 @@ internal class ThermalConductorPlayer : ModPlayer
 	// along with a Curse Inferno debuff with [DebuffDuration] duration.
 	public override void PreUpdate()
 	{
-		if (Main.rand.NextBool(60))
+		if (ThermalConductorEnable)
 		{
-			// statMana is more than trigger condition
-			if (Player.statMana >= ThermalConductor.StatusTriggerCondition * Player.statManaMax2)
+			if (Main.rand.NextBool(60))
 			{
-				return;
+				// statMana is more than trigger condition
+				if (Player.statMana >= ThermalConductor.StatusTriggerCondition * Player.statManaMax2)
+				{
+					return;
+				}
+
+				// Random
+				if (Main.rand.NextFloat() >= ThermalConductor.StatusTriggerRate)
+				{
+					return;
+				}
+
+				// Heal Mana
+				Player.statMana = Player.statMana + ThermalConductor.ManaHeal > Player.statManaMax2 ?
+						Player.statManaMax2 :
+						Player.statMana + ThermalConductor.ManaHeal;
+
+				// Add Debuff
+				Player.AddBuff(BuffID.CursedInferno, ThermalConductor.DebuffDuration);
 			}
-
-			// Random
-			if (Main.rand.NextFloat() >= ThermalConductor.StatusTriggerRate)
-			{
-				return;
-			}
-
-			// Heal Mana
-			Player.statMana = Player.statMana + ThermalConductor.ManaHeal > Player.statManaMax2 ?
-					Player.statManaMax2 :
-					Player.statMana + ThermalConductor.ManaHeal;
-
-			// Add Debuff
-			Player.AddBuff(BuffID.CursedInferno, ThermalConductor.DebuffDuration);
 		}
 	}
 }
