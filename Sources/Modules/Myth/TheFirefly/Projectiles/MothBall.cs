@@ -1,3 +1,4 @@
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.TheFirefly.NPCs.Bosses;
 using Everglow.Myth.TheFirefly.VFXs;
 using Terraria.Audio;
@@ -18,6 +19,13 @@ public class MothBall : ModProjectile
 		Projectile.timeLeft = 300;
 		Projectile.tileCollide = false;
 	}
+
+	public void GenerateBranchedLighting()
+	{
+		var lightning = new BranchedLightning(100f, 9f ,Projectile.position, Main.rand.NextVector2Unit().ToRotation(), 25f, 0);
+		Ins.VFXManager.Add(lightning);
+	}
+
 	public void GenerateLightingBolt()
 	{
 		float size = Main.rand.NextFloat(18f, Main.rand.NextFloat(20f, 40f));
@@ -48,7 +56,14 @@ public class MothBall : ModProjectile
 		{
 			Projectile.velocity *= 0.95f;
 			Projectile.scale *= 0.97f;
-			GenerateLightingBolt();
+
+			if (Projectile.timeLeft > 10 && Main.rand.NextFloat() < (0.15 + 0.2 * (50 - Projectile.timeLeft) / 40))
+			{
+				GenerateBranchedLighting();
+			} else
+			{
+				GenerateLightingBolt();
+			}
 		}
 		else
 		{
@@ -71,7 +86,7 @@ public class MothBall : ModProjectile
 	}
 	public override void OnKill(int timeLeft)
 	{
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<MothBallExplosion>(), 50, 3, Projectile.owner, 60f);
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<MothBallExplosion>(), 50, 3, Projectile.owner, 60f);
 		if (Main.masterMode)
 		{
 			for (int h = 0; h < 6; h++)
@@ -113,10 +128,10 @@ public class MothBall : ModProjectile
 				}
 			}
 		}
-
-		//Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
-	}
-	public override bool PreDraw(ref Color lightColor)
+        // base.OnKill(timeLeft);
+        //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
+    }
+    public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D Light = ModAsset.CorruptLight.Value;
 		int frameX = (Projectile.frame % 6);
@@ -186,8 +201,8 @@ public class MothBall : ModProjectile
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.Parameters["uProcession"].SetValue(0.5f);
 		effect.CurrentTechnique.Passes[0].Apply();
-		Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_thick.Value;
-		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_thick.Value;
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
