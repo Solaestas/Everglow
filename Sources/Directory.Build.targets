@@ -30,4 +30,5 @@
 		  BeforeTargets="Clean;Rebuild">
 		<Delete Condition="Exists($(ResourceList))" Files="$(ResourceList)" />
 	</Target>
+
 </Project>
