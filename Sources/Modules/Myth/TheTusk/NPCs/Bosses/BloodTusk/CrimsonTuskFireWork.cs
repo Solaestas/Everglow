@@ -126,7 +126,6 @@ public class CrimsonTuskFireWork : ModNPC
 			if (Bomb == 5 && i == 1 && !Main.gamePaused)
 			{
 				// 弹幕
-				Projectile.NewProjectile(null, VPos + new Vector2(0, 4), Vector2.Zero, ModContent.ProjectileType<ToothMagicHit>(), 0, 0);
 				for (int g = 0; g < 12; g++)
 				{
 					Projectile.NewProjectile(null, VPos + new Vector2(0, 4), new Vector2(lengTusk[g] / 2f, 0).RotatedBy(rotTusk[g]), ModContent.ProjectileType<CrimsonTuskProj>(), NPC.damage / 12, 0);

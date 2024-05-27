@@ -1,14 +1,9 @@
-﻿using Terraria.Localization;
+using Everglow.Myth.TheTusk.Tiles;
 
 namespace Everglow.Myth.TheTusk.Items;
 
-public class TuskFlesh : ModItem
+public class TuskFlesh_Item : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("Living Tissue");
-			}
-
 	public override void SetDefaults()
 	{
 		Item.width = 16;
@@ -20,6 +15,6 @@ public class TuskFlesh : ModItem
 		Item.useTime = 10;
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.consumable = true;
-		Item.createTile = ModContent.TileType<Tiles.TuskFlesh>();
+		Item.createTile = ModContent.TileType<TuskFlesh>();
 	}
 }
