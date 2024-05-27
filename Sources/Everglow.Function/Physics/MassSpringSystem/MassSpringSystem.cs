@@ -14,16 +14,21 @@ public class _Mass
 	public Vector2 Position;
 	public Vector2 Velocity;
 	public Vector2 Force;
-	public Vector2 PrevPosition;
 
-	public _Mass()
+	public Vector2 OldPos;
+	public Vector2 DeltaPos;
+	public float HessianDiag;
+	public _Mass(float mass, Vector2 position, bool isStatic)
 	{
-		this.Mass = 1f;
+		this.Mass = mass;
 		this.Velocity = Vector2.Zero;
 		this.Force = Vector2.Zero;
-		this.Position = Vector2.Zero;
-		this.PrevPosition = Vector2.Zero;
-		this.IsStatic = false;
+		this.Position = position;
+		this.IsStatic = isStatic;
+
+		this.OldPos = Vector2.Zero;
+		this.DeltaPos = Vector2.Zero;
+		this.HessianDiag = 0;
 	}
 }
 
@@ -41,13 +46,13 @@ public class ElasticConstrain
 		B = mass2;
 		RestLength = restLength;
 		Stiffness = stiffness;
-		LambdaPrev = 0.0f;
+		LambdaPrev = 0;
 	}
 }
 
 public class MassSpringSystem
 {
-	public List<_Mass> Masses 
+	public List<_Mass> Masses
 	{
 		get;
 	}
@@ -57,10 +62,15 @@ public class MassSpringSystem
 		get;
 	}
 
+	public float Damping { get; set; }
 
 	public MassSpringSystem()
 	{
 	}
 
-
+	public void AddMassSpringMesh(IMassSpringMesh mesh)
+	{
+		Masses.AddRange(mesh.GetMasses());
+		Springs.AddRange(mesh.GetElasticConstrains());
+	}
 }
