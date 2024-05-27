@@ -17,11 +17,9 @@
 	</ItemGroup>
 	<Target Name="WriteResource"
 			Condition="$(PathPrefix) != ''"
-			Inputs="@(AdditionalFiles)"
+			Inputs="$(BaseIntermediateOutputPath)AssetInputs.cache"
 		  	Outputs="$(ResourceList)"
-			AfterTargets="Build">
-		<Message Text="Begin Write AAA"
-				 Importance="high"/>
+			AfterTargets="ModHash">
 		<WriteResource Resources="@(AdditionalFiles)"
 					   Prefix="$(PathPrefix)"
 					   OutputPath="$(ResourceList)" />
