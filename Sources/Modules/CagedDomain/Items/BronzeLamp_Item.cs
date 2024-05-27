@@ -1,6 +1,7 @@
 using Everglow.CagedDomain.Tiles;
 
 namespace Everglow.CagedDomain.Items;
+
 public class BronzeLamp_Item : ModItem
 {
 	public override void SetDefaults()
@@ -9,7 +10,7 @@ public class BronzeLamp_Item : ModItem
 		Item.height = 30;
 		Item.maxStack = Item.CommonMaxStack;
 		Item.createTile = ModContent.TileType<BronzeLamp>();
-		Item.placeStyle = 1;
+		Item.placeStyle = 0;
 		Item.useTurn = true;
 		Item.autoReuse = true;
 		Item.useAnimation = 15;
@@ -19,10 +20,12 @@ public class BronzeLamp_Item : ModItem
 		Item.value = Item.sellPrice(0, 0, 1, 0);
 		Item.rare = ItemRarityID.White;
 	}
+
 	public override void HoldItem(Player player)
 	{
 		Main.placementPreview = true;
 	}
+
 	public override bool CanUseItem(Player player)
 	{
 		BronzeLamp bronzeLamp = TileLoader.GetTile(ModContent.TileType<BronzeLamp>()) as BronzeLamp;
@@ -35,12 +38,14 @@ public class BronzeLamp_Item : ModItem
 				if (bronzeLamp.CanPlaceAtBottomLeft(x, y))
 				{
 					bronzeLamp.PlaceOriginAtBottomLeft(x, y);
+					Item.stack--;
 					return false;
 				}
 			}
 		}
 		return false;
 	}
+
 	public override bool? UseItem(Player player)
 	{
 		return false;

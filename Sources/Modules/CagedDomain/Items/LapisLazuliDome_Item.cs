@@ -2,15 +2,14 @@ using Everglow.CagedDomain.Tiles;
 
 namespace Everglow.CagedDomain.Items;
 
-public class BronzeLamp_3_Item : ModItem
+public class LapisLazuliDome_Item : ModItem
 {
 	public override void SetDefaults()
 	{
-		Item.width = 10;
-		Item.height = 30;
+		Item.width = 48;
+		Item.height = 22;
 		Item.maxStack = Item.CommonMaxStack;
-		Item.createTile = ModContent.TileType<BronzeLamp_3>();
-		Item.placeStyle = 0;
+		Item.createTile = ModContent.TileType<LapisLazuliDome>();
 		Item.useTurn = true;
 		Item.autoReuse = true;
 		Item.useAnimation = 15;
@@ -28,16 +27,19 @@ public class BronzeLamp_3_Item : ModItem
 
 	public override bool CanUseItem(Player player)
 	{
-		BronzeLamp_3 bronzeLamp_3 = TileLoader.GetTile(ModContent.TileType<BronzeLamp_3>()) as BronzeLamp_3;
-		if (bronzeLamp_3 != null)
+		LapisLazuliDome lapisLazuliDome = TileLoader.GetTile(ModContent.TileType<LapisLazuliDome>()) as LapisLazuliDome;
+		if (lapisLazuliDome != null)
 		{
-			int x = (int)(Main.MouseWorld.X / 16 - 3);
+			int x = (int)(Main.MouseWorld.X / 16 - 8);
 			int y = (int)(Main.MouseWorld.Y / 16);
-			if (bronzeLamp_3.CanPlaceAtBottomLeft(x, y))
+			if (lapisLazuliDome.CanPlaceAtBottomLeft(x, y))
 			{
-				bronzeLamp_3.PlaceOriginAtBottomLeft(x, y);
-				Item.stack--;
-				return false;
+				if (lapisLazuliDome.CanPlaceAtBottomLeft(x, y))
+				{
+					lapisLazuliDome.PlaceOriginAtBottomLeft(x, y);
+					Item.stack--;
+					return false;
+				}
 			}
 		}
 		return false;
