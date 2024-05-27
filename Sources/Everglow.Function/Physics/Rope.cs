@@ -1,5 +1,6 @@
 using Everglow.Commons.Utilities;
 using MathNet.Numerics.LinearAlgebra;
+using static Everglow.Commons.Physics.Rope;
 
 namespace Everglow.Commons.Physics;
 
@@ -13,6 +14,7 @@ public class Rope
 		public float Mass;
 		public float HessianDiag;
 		public Vector2 Position;
+		public Vector2 DeltaPosition;
 		public Vector2 Velocity;
 		public Vector2 Force;
 
@@ -188,14 +190,14 @@ public class Rope
 		//{
 		//	springs[i].Elasticity = 100f;
 		//}
-		//for (int i = 0; i < masses.Length; i++)
-		//{
-		//	//masses[i].Mass = 1f;
-		//	//masses[i].Force *= 0.1f;
-		//}
-		Update_Old(deltaTime);
-		// Update_Explict_Euler(deltaTime);
-		//Update_XPBD(deltaTime);
+		for (int i = 0; i < masses.Length; i++)
+		{
+			//masses[i].Mass = 1;
+			//masses[i].Force = new Vector2(0, 4f);
+		}
+		//Update_Old(deltaTime);
+		//Update_Explict_Euler(deltaTime);
+		Update_XPBD(deltaTime);
 	}
 
 
@@ -371,6 +373,8 @@ public class Rope
 				}
 
 				dummyPos[i] = m.Position;
+				m.DeltaPosition = Vector2.Zero;
+				m.HessianDiag = 0;
 
 				if (!m.IsStatic)
 				{
@@ -408,12 +412,38 @@ public class Rope
 				var correction = -0.01f * gradient;
 				correction = gradient;
 
-				p1.Position += correction * invMa * lambda;
-
-				p2.Position -= correction * invMb * lambda;
+				p1.DeltaPosition += correction * invMa * lambda;
+				p1.HessianDiag += 1;
+				// p1.Position += correction * invMa * lambda;
+				p2.DeltaPosition -= correction * invMb * lambda;
+				p2.HessianDiag += 1;
 
 				spring.LambdaPrev = lambda; // Update lambda_prev
 			}
+
+			// Update velocities
+			for (int i = 0; i < masses.Length; i++)
+			{
+				ref _Mass m = ref masses[i];
+
+				if (!m.IsStatic)
+				{
+					//if (hasCollision)
+					//{
+					//	m.Position = CheckCollision(i, m.Position, dummyPos[i]);
+					//}
+					m.Position = m.Position + m.DeltaPosition / (m.HessianDiag);
+					m.Velocity = (m.Position - dummyPos[i]) / dt;
+				}
+			}
+		}
+
+		for (int i = 0; i < masses.Length; i++)
+		{
+			ref _Mass m = ref masses[i];
+			m.Force = Vector2.Zero;
+
+			m.Velocity *= (float)Math.Pow(damping, deltaTime);
 		}
 
 		if (hasCollision)
@@ -494,27 +524,26 @@ public class Rope
 			//	}
 			//}
 
-			// Update velocities
-			for (int i = 0; i < masses.Length; i++)
-			{
-				ref _Mass m = ref masses[i];
-				m.Force = Vector2.Zero;
 
-				if (!m.IsStatic)
-				{
-					//if (hasCollision)
-					//{
-					//	m.Position = CheckCollision(i, m.Position, dummyPos[i]);
-					//}
-					m.Velocity = (m.Position - dummyPos[i]) / dt;
-				}
-			}
+		}
+
+
+		for (int i = 0; i < springs.Length; i++)
+		{
+			ref Spring spring = ref springs[i];
+			ref _Mass p1 = ref masses[spring.A];
+			ref _Mass p2 = ref masses[spring.B];
+
+			float d = (p1.Position - p2.Position).Length();
+			float rest = spring.RestLength;
+
+			float c = d - rest;
 		}
 	}
 
 	private void Update_Explict_Euler(float deltaTime)
 	{
-		int iterations = 16;
+		int iterations = 32;
 		for (int i = 0; i < masses.Length; i++)
 		{
 			ref _Mass m = ref masses[i];
@@ -531,6 +560,8 @@ public class Rope
 			}
 			else
 			{
+				//m.Velocity += m.Force / m.Mass * deltaTime;
+				m.Velocity *= (float)Math.Pow(damping, deltaTime);
 				dummyPos[i] = m.Position + m.Velocity * deltaTime;
 				m.Position = dummyPos[i];
 			}
@@ -566,7 +597,7 @@ public class Rope
 				{
 					continue;
 				}
-				float alpha = 1f / (m.Mass / (deltaTime * deltaTime) + 4 * m.HessianDiag);
+				float alpha = 1f / (m.Mass / (deltaTime * deltaTime) + m.HessianDiag);
 				var dx = alpha * gradiants[i];
 				dummyPos[i] -= dx;
 			}
@@ -661,14 +692,14 @@ public class Rope
 			}
 			Vector2 x_hat = m.Position;
 
-			if (hasCollision)
-			{
-				m.Position = CheckCollision(i, m.Position, dummyPos[i]);
-			}
-			else
-			{
+			//if (hasCollision)
+			//{
+			//	m.Position = CheckCollision(i, m.Position, dummyPos[i]);
+			//}
+			//else
+			//{
 				m.Position = dummyPos[i];
-			}
+			//}
 
 			m.Velocity += (m.Position - x_hat) / deltaTime;
 		}

@@ -10,7 +10,7 @@ public class RedGlassbulbBand_bulb : CableTile
 	public override void PostSetDefaults()
 	{
 		LampDistance = 3;
-		RopeUnitMass = 0.04f;
+		RopeUnitMass = 0.4f;
 		SingleLampMass = 0.2f;
 		MaxWireStyle = 4;
 	}
@@ -52,7 +52,7 @@ public class RedGlassbulbBand_bulb : CableTile
 			float rotation = -windCycle * 0.4f;
 			if (!Main.gamePaused)
 			{
-				rope.ApplyForceSpecial(i, new Vector2(windCycle * 1, 4 * thisMass.Mass));
+				rope.ApplyForceSpecial(i, new Vector2(windCycle * 1, 0.4f * thisMass.Mass));
 			}
 
 			// 支持发光涂料

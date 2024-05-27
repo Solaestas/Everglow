@@ -32,7 +32,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	/// <summary>
 	/// 单节绳重,默认0.05
 	/// </summary>
-	public float RopeUnitMass = 0.05f;
+	public float RopeUnitMass = 0.8f;
 
 	/// <summary>
 	/// 灯距,默认8
@@ -299,7 +299,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		if (tile.TileType == Type)
 		{
 			int counts = (int)new Vector2(i2 - i, j2 - j).Length() * 2;
-			Rope rope = new Rope(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i2, j2) * 16 + new Vector2(8), counts, 7, RopeUnitMass, (Vector2) => Vector2.Zero, true, LampDistance, SingleLampMass);
+			Rope rope = new Rope(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i2, j2) * 16 + new Vector2(8), counts, 20, RopeUnitMass, (Vector2) => Vector2.Zero, true, LampDistance, SingleLampMass);
 			return rope;
 		}
 		return null;
@@ -378,7 +378,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 			windCycle += highestWindGridPushComplex;
 			if (!Main.gamePaused)
 			{
-				rope.ApplyForceSpecial(i, new Vector2(windCycle * 1, 4 * thisMass.Mass));
+				rope.ApplyForceSpecial(i, new Vector2(windCycle * 1, 0.4f * thisMass.Mass));
 			}
 
 			// 支持发光涂料
