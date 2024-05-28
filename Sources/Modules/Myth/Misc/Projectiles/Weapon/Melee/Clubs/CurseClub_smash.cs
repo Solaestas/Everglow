@@ -44,24 +44,23 @@ public class CurseClub_smash : ClubProj_Smash
 				rot = (trailVecs2.ToArray()[trailVecs2.Count - 1] - Projectile.Center).ToRotation() - (trailVecs2.ToArray()[trailVecs2.Count - 2] - Projectile.Center).ToRotation();
 			}
 
-			if(Main.rand.NextBool(5))
+			if (Main.rand.NextBool(5))
 			{
-				
 				GradientColor color = new GradientColor();
-				color.colorList.Add((new Color(1f,1f,0.1f),0f));
-                color.colorList.Add((new Color(0.1f, 0.6f, 0.1f), 0.3f));
+				color.colorList.Add((new Color(1f, 1f, 0.1f), 0f));
+				color.colorList.Add((new Color(0.1f, 0.6f, 0.1f), 0.3f));
 				int time = Main.rand.Next(15, 35);
-                var fire = new Flare()
+				var fire = new Flare()
 				{
-					position = Vector2.Lerp(player.Center,pos,Main.rand.NextFloat(0.4f,1.25f)),
-					velocity=vel*0.2f,
+					position = Vector2.Lerp(player.Center, pos, Main.rand.NextFloat(0.4f, 1.25f)),
+					velocity = vel * 0.2f,
 					color = color,
 					timeleft = time,
 					maxTimeleft = time,
-					scale = Main.rand.NextFloat(0.3f,0.6f) * (smashed?1:0.5f)
+					scale = Main.rand.NextFloat(0.3f, 0.6f) * (smashed ? 1 : 0.5f),
 				};
-                Ins.VFXManager.Add(fire);
-            }
+				Ins.VFXManager.Add(fire);
+			}
 			/*
 			for (int g = 0; g < 3; g++)
 			{
@@ -100,41 +99,39 @@ public class CurseClub_smash : ClubProj_Smash
 	{
 		Player player = Main.player[Projectile.owner];
 		smashed = true;
-        for (int t = 0; t < 5; t++)
-        {
+		for (int t = 0; t < 5; t++)
+		{
+			Vector2 vel = new Vector2(Main.rand.NextFloat(-15, 15), Main.rand.NextFloat(-10, -5)) * 1.5f * (1 + level * 0.3f);
+			var fire = new CurseFlame_HighQualityDust
+			{
+				velocity = vel,
+				Active = true,
+				Visible = true,
+				position = player.Bottom - vel * 3 + Main.rand.NextVector2Circular(30, 30),
+				maxTime = Main.rand.Next(10, 25),
 
-            Vector2 vel = new Vector2(Main.rand.NextFloat(-15, 15), Main.rand.NextFloat(-10, -5)) * 1.5f * (1 + level * 0.3f);
-            var fire = new CurseFlame_HighQualityDust
-            {
-                velocity = vel,
-                Active = true,
-                Visible = true,
-                position = player.Bottom - vel * 3 + Main.rand.NextVector2Circular(30, 30),
-                maxTime = Main.rand.Next(10, 25),
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(3.6f, 30f) },
+			};
+			Ins.VFXManager.Add(fire);
+		}
+		for (int g = 0; g < 20; g++)
+		{
+			Vector2 vel = new Vector2(0, -20).RotatedBy(Main.rand.NextFloatDirection());
+			var spark = new CurseFlameSparkDust
+			{
+				velocity = vel.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)),
+				Active = true,
+				Visible = true,
+				position = player.Bottom - vel * 3,
+				maxTime = Main.rand.Next(6, Main.rand.Next(6, 405)),
+				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 47.0f)),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f) },
+			};
+			Ins.VFXManager.Add(spark);
+		}
 
-                ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(3.6f, 30f) },
-            };
-            Ins.VFXManager.Add(fire);
-        }
-        for (int g = 0; g < 20; g++)
-        {
-            Vector2 vel = new Vector2(0, -20).RotatedBy(Main.rand.NextFloatDirection());
-            var spark = new CurseFlameSparkDust
-            {
-                velocity = vel.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)),
-                Active = true,
-                Visible = true,
-                position = player.Bottom - vel * 3,
-                maxTime = Main.rand.Next(6, Main.rand.Next(6, 405)),
-                scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 47.0f)),
-                rotation = Main.rand.NextFloat(6.283f),
-                ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f) },
-            };
-            Ins.VFXManager.Add(spark);
-        }
-
-
-        base.Smash(level);
+		base.Smash(level);
 	}
 
 	public override void DrawTrail2(Color color)

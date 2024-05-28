@@ -57,7 +57,7 @@ public class CurseClub : ClubProj
 		v0 = v0.RotatedBy(Projectile.rotation + Main.rand.NextFloat(Omega));
 		float Speed = Math.Min(Omega * 0.15f, 0.061f) * Main.rand.NextFloat(1.1f, Main.rand.NextFloat(1.1f, 7f));
 		var v1 = new Vector2(-v0.Y, v0.X) * Speed;
-        /*
+		/*
 		var cf = new CurseFlame_HighQualityDust
 		{
 			velocity = v1 + v2 * 0.9f,
@@ -68,25 +68,24 @@ public class CurseClub : ClubProj
 			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Omega * 0.5f, Main.rand.NextFloat(3.6f, 30f) * mulVelocity },
 		};
 		Ins.VFXManager.Add(cf);*/
-        if (Main.rand.NextBool(4))
-        {
-
-            GradientColor color = new GradientColor();
-            color.colorList.Add((new Color(1f, 1f, 0.1f), 0f));
-            color.colorList.Add((new Color(0.1f, 0.6f, 0.1f), 0.3f));
-            int time = Main.rand.Next(15, 35);
-            var fire = new Flare()
-            {
-                position = Vector2.Lerp(Projectile.Center, Projectile.Center + Projectile.rotation.ToRotationVector2() * 30, Main.rand.NextFloat(0.4f, 1.25f)),
-                velocity = Projectile.velocity * 0.5f,
-                color = color,
-                timeleft = time,
-                maxTimeleft = time,
-                scale = Main.rand.NextFloat(0.3f, 0.6f)
-            };
-            Ins.VFXManager.Add(fire);
-        }
-        for (int g = 0; g < 4; g++)
+		if (Main.rand.NextBool(4))
+		{
+			GradientColor color = new GradientColor();
+			color.colorList.Add((new Color(1f, 1f, 0.1f), 0f));
+			color.colorList.Add((new Color(0.1f, 0.6f, 0.1f), 0.3f));
+			int time = Main.rand.Next(15, 35);
+			var fire = new Flare()
+			{
+				position = Vector2.Lerp(Projectile.Center, Projectile.Center + Projectile.rotation.ToRotationVector2() * 30, Main.rand.NextFloat(0.4f, 1.25f)),
+				velocity = Projectile.velocity * 0.5f,
+				color = color,
+				timeleft = time,
+				maxTimeleft = time,
+				scale = Main.rand.NextFloat(0.3f, 0.6f),
+			};
+			Ins.VFXManager.Add(fire);
+		}
+		for (int g = 0; g < 4; g++)
 		{
 			v0 = new Vector2(1, 1);
 			v0 *= Main.rand.NextFloat(Main.rand.NextFloat(HitLength * 0.75f, HitLength), HitLength);

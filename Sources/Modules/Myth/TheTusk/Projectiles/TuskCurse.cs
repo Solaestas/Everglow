@@ -43,6 +43,7 @@ public class TuskCurse : TrailingProjectile
 		}
 		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<TuskBloodPool>(), 0, Projectile.knockBack, Projectile.owner, 0f, 0f);
 		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ToothMagicHit>(), 0, Projectile.knockBack, Projectile.owner, 0f, 0f);
+		base.KillMainStructure();
 	}
 
 	public override void DrawTrailDark()

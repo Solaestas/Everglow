@@ -20,74 +20,78 @@ public class TuskBloodPool_close : ModProjectile
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		foreach (Point point in DissolvingTile)
+		DissolvingTile = new List<Point>();
+	}
+
+	public override void AI()
+	{
+		if (Projectile.timeLeft == 180)
 		{
-			if (point.X < 20 || point.X > Main.maxTilesX - 20)
+			foreach (Point point in DissolvingTile)
 			{
-				Projectile.active = false;
-				return;
-			}
-			if (point.Y < 20 || point.Y > Main.maxTilesY - 20)
-			{
-				Projectile.active = false;
-				return;
+				if (point.X < 20 || point.X > Main.maxTilesX - 20)
+				{
+					Projectile.active = false;
+					return;
+				}
+				if (point.Y < 20 || point.Y > Main.maxTilesY - 20)
+				{
+					Projectile.active = false;
+					return;
+				}
 			}
 		}
-		base.OnSpawn(source);
+		if(Projectile.timeLeft == 90)
+		{
+			foreach (Point point in DissolvingTile)
+			{
+				if (point.X < 20 || point.X > Main.maxTilesX - 20)
+				{
+					continue;
+				}
+				if (point.Y < 20 || point.Y > Main.maxTilesY - 20)
+				{
+					continue;
+				}
+				Tile tile = Main.tile[point];
+				tile.TileType = (ushort)ModContent.TileType<TuskFlesh>();
+				tile.HasTile = true;
+			}
+		}
 	}
 
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 	{
-		Projectile.hide = true;
-		behindNPCsAndTiles.Add(index);
 	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		float timeValue = (Projectile.timeLeft - 150f) / 30f;
-		timeValue = Math.Max(timeValue, 0);
-		Color drawColor = new Color(0.5f + timeValue * 0.5f, 0.8f * timeValue * timeValue * timeValue, timeValue * timeValue, 1);
+		float timeValue = Projectile.timeLeft / 150f;
+		timeValue = Math.Min(timeValue, 1);
+		Color drawColor = new Color(0.5f + timeValue * 0.5f, 0.8f * timeValue * timeValue * timeValue, 0.4f * timeValue * timeValue, 1);
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, default, RasterizerState.CullNone, null);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null);
 		Effect dissolve = Commons.ModAsset.DissolveWithLight.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		float dissolveDuration = (1 - Projectile.timeLeft / 180f) * 1.2f - 0.2f;
+		float dissolveDuration = (1 - Math.Abs(Projectile.timeLeft / 90f - 1)) * 1.2f - 0.2f;
 		dissolve.Parameters["uTransform"].SetValue(model * projection);
 		dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_cell.Value);
 		dissolve.Parameters["duration"].SetValue(dissolveDuration);
 		dissolve.Parameters["uLightColor"].SetValue(drawColor.ToVector4());
 		dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.9f, 0.0f, 0.1f, 1f));
-		dissolve.Parameters["uNoiseSize"].SetValue(2f);
+		dissolve.Parameters["uNoiseSize"].SetValue(6f);
 		dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(Projectile.ai[1], Projectile.ai[2]));
 		dissolve.CurrentTechnique.Passes[0].Apply();
 		Texture2D tileTex = Commons.ModAsset.TileBlock.Value;
 		foreach (Point point in DissolvingTile)
 		{
-			Main.spriteBatch.Draw(tileTex, point.ToWorldCoordinates(), null, drawColor, 0, tileTex.Size() * 0.5f, 1, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(tileTex, point.ToWorldCoordinates(), new Rectangle(point.X * 16, point.Y * 16, 16, 16), drawColor, 0, tileTex.Size() * 0.5f, 1, SpriteEffects.None, 0);
 		}
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 		return false;
-	}
-
-	public override void OnKill(int timeLeft)
-	{
-		foreach (Point point in DissolvingTile)
-		{
-			if (point.X < 20 || point.X > Main.maxTilesX - 20)
-			{
-				continue;
-			}
-			if (point.Y < 20 || point.Y > Main.maxTilesY - 20)
-			{
-				continue;
-			}
-			Tile tile = Main.tile[point];
-			tile.TileType = (ushort)ModContent.TileType<TuskFlesh>();
-			tile.HasTile = true;
-		}
 	}
 }
