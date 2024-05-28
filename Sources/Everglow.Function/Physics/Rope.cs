@@ -190,14 +190,14 @@ public class Rope
 		//{
 		//	springs[i].Elasticity = 100f;
 		//}
-		for (int i = 0; i < masses.Length; i++)
-		{
-			//masses[i].Mass = 1;
-			//masses[i].Force = new Vector2(0, 4f);
-		}
+		//for (int i = 0; i < masses.Length; i++)
+		//{
+		//	masses[i].Mass = 1;
+		//	masses[i].Force = new Vector2(0, 4f);
+		//}
 		//Update_Old(deltaTime);
-		//Update_Explict_Euler(deltaTime);
-		Update_XPBD(deltaTime);
+		Update_Explict_Euler(deltaTime);
+		//Update_XPBD(deltaTime);
 	}
 
 

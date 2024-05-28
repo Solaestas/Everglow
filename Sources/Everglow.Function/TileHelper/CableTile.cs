@@ -47,7 +47,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	/// <summary>
 	/// 劲度系数
 	/// </summary>
-	public float Elasticity = 600;
+	public float Elasticity = 60;
 
 	public override void SetStaticDefaults()
 	{
