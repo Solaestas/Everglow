@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
@@ -7,15 +7,5 @@
   </ItemGroup>
   <ItemGroup>
 		<Solaestas-ResourceFile Include="YggdrasilTown\**\*.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="YggdrasilTown\Buffs\AuburnBell.png" />
-    <None Remove="YggdrasilTown\Items\Weapons\AuburnBell.png" />
-    <None Remove="YggdrasilTown\Projectiles\AuburnBellSummon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="YggdrasilTown\Buffs\AuburnBell.png" />
-    <AdditionalFiles Include="YggdrasilTown\Items\Weapons\AuburnBell.png" />
-    <AdditionalFiles Include="YggdrasilTown\Projectiles\AuburnBellSummon.png" />
   </ItemGroup>
 </Project>
