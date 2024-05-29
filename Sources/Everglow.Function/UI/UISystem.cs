@@ -2,7 +2,7 @@ using Terraria.UI;
 
 namespace Everglow.Commons.UI
 {
-	internal class UISystem : ModSystem
+	public class UISystem : ModSystem
 	{
 		public static EverglowUISystem EverglowUISystem
 		{

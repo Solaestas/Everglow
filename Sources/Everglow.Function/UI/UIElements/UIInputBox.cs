@@ -6,9 +6,9 @@ using ReLogic.OS;
 
 namespace Everglow.Commons.UI.UIElements
 {
-	internal delegate void TextChange(UIInputBox inputBox, string text);
+	public delegate void TextChange(UIInputBox inputBox, string text);
 
-	internal class UIInputBox : UIPanel
+	public class UIInputBox : UIPanel
 	{
 		private const string cursorSym = "|";
 		public string Text { get => _text; set => _text = value; }

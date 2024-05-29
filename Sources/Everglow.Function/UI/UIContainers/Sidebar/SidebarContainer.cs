@@ -5,7 +5,7 @@ using Terraria.GameContent;
 
 namespace Everglow.Commons.UI.UIContainers.Sidebar
 {
-	internal class SidebarContainer : UIContainerElement
+	public class SidebarContainer : UIContainerElement
 	{
 		public static readonly string ContainerFullName = typeof(SidebarContainer).FullName;
 		private UIPanel mainPanel;

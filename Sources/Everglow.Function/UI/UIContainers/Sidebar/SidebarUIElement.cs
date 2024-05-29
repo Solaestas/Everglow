@@ -2,9 +2,9 @@ using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.UI.UIContainers.Sidebar
 {
-	internal delegate void HandleTigger(SidebarUIElement quickElement);
+	public delegate void HandleTigger(SidebarUIElement quickElement);
 
-	internal abstract class SidebarUIElement : UIImage
+	public abstract class SidebarUIElement : UIImage
 	{
 		public bool IsMoveing => waitTime >= WaitTime;
 		private int waitTime = 0;

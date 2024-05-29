@@ -1,6 +1,6 @@
 namespace Everglow.Commons.UI
 {
-	internal class KeyCooldown
+	public class KeyCooldown
 	{
 		private int _coolDownTicks;
 		private Func<bool> _keyDown;

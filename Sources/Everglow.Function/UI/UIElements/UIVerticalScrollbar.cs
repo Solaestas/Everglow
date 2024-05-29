@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Everglow.Commons.UI.UIElements
 {
-	internal class UIVerticalScrollbar : BaseElement, IScrollbar
+	public class UIVerticalScrollbar : BaseElement, IScrollbar
 	{
 		private const int TOP_HEIGHT = 1;
 		private const int BUTTOM_HEIGHT = 1;
