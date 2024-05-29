@@ -15,6 +15,7 @@ public class TuskBloodPool_open : ModProjectile
 		Projectile.friendly = false;
 		Projectile.hostile = false;
 		Projectile.timeLeft = 180;
+		Projectile.extraUpdates = 3;
 	}
 
 	public override void OnSpawn(IEntitySource source)

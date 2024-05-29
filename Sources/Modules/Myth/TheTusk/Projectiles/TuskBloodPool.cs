@@ -14,8 +14,8 @@ public class TuskBloodPool : ModProjectile
 	{
 		Projectile.tileCollide = false;
 		Projectile.friendly = false;
-		Projectile.hostile = false;
-		Projectile.timeLeft = 720;
+		Projectile.hostile = true;
+		Projectile.timeLeft = 1080;
 		Projectile.width = 40;
 		Projectile.height = 40;
 		DissolvingTile = new List<Point>();
@@ -63,6 +63,22 @@ public class TuskBloodPool : ModProjectile
 		if (Projectile.timeLeft < 120)
 		{
 			Projectile.ai[0] = 36 + MathF.Pow((120 - Projectile.timeLeft) / 120f, 3) * 100;
+		}
+		else if (Projectile.timeLeft < 1000)
+		{
+			if (Projectile.timeLeft % 12 == 0)
+			{
+				Projectile projectile = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(Main.rand.NextFloat(-90, 90f), 50), new Vector2(0, -Main.rand.NextFloat(7f, 12f)).RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f)), ModContent.ProjectileType<Living_Jawbone>(), 25, 1.5f, Projectile.owner);
+				projectile.scale = Main.rand.NextFloat(0.5f, 1f);
+				if (Main.expertMode)
+				{
+					projectile.damage = 44;
+				}
+				if (Main.masterMode)
+				{
+					projectile.damage = 57;
+				}
+			}
 		}
 	}
 
@@ -113,12 +129,33 @@ public class TuskBloodPool : ModProjectile
 		return false;
 	}
 
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+	{
+		if (DissolvingTile != null)
+		{
+			foreach (var tilePos in DissolvingTile)
+			{
+				Rectangle check = new Rectangle(tilePos.X * 16, tilePos.Y * 16, 16, 16);
+				if(Rectangle.Intersect(check, targetHitbox) != Rectangle.emptyRectangle)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	private void AddBars(List<Vertex2D> bars, float x, int style = 0)
 	{
 		float timeValue = (float)(Main.time * 0.03f) + Projectile.whoAmI * 2.74f;
-		float upY = MathF.Sin(timeValue) * MathF.Sin(x / 10f) * 2f;
-		upY += MathF.Sin(timeValue * 1.4f) * MathF.Sin(x / 4f + 2 - timeValue * 1.3f) * 2f;
-		upY += MathF.Sin(timeValue * 0.6f) * MathF.Sin(x / 13f - 1) * 2f;
+		float mulTimeValue = 1f;
+		if (Projectile.timeLeft < 990)
+		{
+			mulTimeValue = 3f;
+		}
+		float upY = MathF.Sin(timeValue * mulTimeValue) * MathF.Sin(x / 10f * mulTimeValue) * 2f;
+		upY += MathF.Sin(timeValue * 1.4f * mulTimeValue) * MathF.Sin(x / 4f * mulTimeValue + 2 - timeValue * 1.3f) * 2f;
+		upY += MathF.Sin(timeValue * 0.6f * mulTimeValue) * MathF.Sin(x / 13f * mulTimeValue - 1) * 2f;
 		Vector2 drawPosUp = new Vector2(x * 4, upY + Projectile.ai[0]);
 
 		float upDistance = (drawPosUp.Length() - 120) / 60f;
@@ -142,13 +179,13 @@ public class TuskBloodPool : ModProjectile
 		}
 
 		float coordX = (x + 60) / 90f + timeValue * 0.05f + 50;
-		if(style == 1)
+		if (style == 1)
 		{
 			coordX = (x + 60) / 90f - timeValue * 0.03f + 50000;
 		}
 		Color colorUp = Lighting.GetColor(drawPosUp.ToTileCoordinates());
 		Color colorDown = Lighting.GetColor(drawPosDown.ToTileCoordinates());
-		if(style == 1)
+		if (style == 1)
 		{
 			colorUp.A = 120;
 			colorDown.A = 120;
