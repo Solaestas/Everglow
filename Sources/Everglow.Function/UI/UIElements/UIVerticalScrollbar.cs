@@ -8,6 +8,7 @@ namespace Everglow.Commons.UI.UIElements
 		private const int BUTTOM_HEIGHT = 1;
 
 		public Texture2D UIScrollbarInnerTexture { get; protected set; }
+
 		private UIImage inner;
 		private bool isMouseDown = false;
 		private float mouseY;
@@ -18,26 +19,41 @@ namespace Everglow.Commons.UI.UIElements
 		public float Alpha = 1f;
 		public bool AlwaysOnLight = false;
 		public float LightSpeed = 0.04f;
-		public float Scale => (float)Info.HitBox.Width / (float)UIScrollbarInnerTexture.Width;
+
+		public float Scale => Info.HitBox.Width / (float)UIScrollbarInnerTexture.Width;
+
 		public float TopMin => 116f * Scale;
+
 		public float TopMax => 142f * Scale;
 
 		public float WheelValue
 		{
-			get { return wheelValue; }
+			get
+			{
+				return wheelValue;
+			}
+
 			set
 			{
 				if (value > 1f)
+				{
 					waitToWheelValue = 1f;
+				}
 				else if (value < 0f)
+				{
 					waitToWheelValue = 0f;
+				}
 				else
+				{
 					waitToWheelValue = value;
+				}
 			}
 		}
 
 		private float _wheelValueMult = 1f;
+
 		public float WheelValueMult { get => _wheelValueMult; set => _wheelValueMult = value; }
+
 		public bool UseScrollWheel = true;
 
 		public UIVerticalScrollbar(float wheelValue = 0f)
@@ -62,7 +78,7 @@ namespace Everglow.Commons.UI.UIElements
 			base.Calculation();
 			inner.Info.Left.SetValue(-(inner.Info.Size.X - Info.Size.X) / 2f, 0f);
 			var t = ModAsset.VerticalScrollbarInner.Value;
-			inner.Info.Height.Pixel = (float)t.Height / (float)t.Width * inner.Info.Size.X;
+			inner.Info.Height.Pixel = t.Height / (float)t.Width * inner.Info.Size.X;
 			base.Calculation();
 		}
 
@@ -86,17 +102,26 @@ namespace Everglow.Commons.UI.UIElements
 		{
 			base.Update(gt);
 			if (ParentElement == null)
+			{
 				return;
+			}
 
 			bool isMouseHover = ParentElement.GetCanHitBox().Contains(Main.MouseScreen.ToPoint());
 			if (AlwaysOnLight)
+			{
 				alpha = 1f;
+			}
 			else
 			{
 				if ((isMouseHover || isMouseDown) && alpha < 1f)
+				{
 					alpha += LightSpeed;
+				}
+
 				if ((!(isMouseHover || isMouseDown)) && alpha > 0f)
+				{
 					alpha -= LightSpeed;
+				}
 			}
 
 			inner.ChangeColor(Color.White * alpha * Alpha);
@@ -104,16 +129,18 @@ namespace Everglow.Commons.UI.UIElements
 			MouseState state = Mouse.GetState();
 			float height = Info.Size.Y - TopMin - TopMax - inner.Info.Size.Y;
 			if (!isMouseHover)
+			{
 				whell = state.ScrollWheelValue;
+			}
 
 			if (UseScrollWheel && isMouseHover && whell != state.ScrollWheelValue)
 			{
-				WheelValue -= (float)(state.ScrollWheelValue - whell) / 6f / height * WheelValueMult;
+				WheelValue -= (state.ScrollWheelValue - whell) / 6f / height * WheelValueMult;
 				whell = state.ScrollWheelValue;
 			}
 			if (isMouseDown && mouseY != Main.mouseY)
 			{
-				WheelValue = ((float)Main.mouseY - Info.Location.Y - TopMin - inner.Info.Size.Y / 2f) / height;
+				WheelValue = (Main.mouseY - Info.Location.Y - TopMin - inner.Info.Size.Y / 2f) / height;
 				mouseY = Main.mouseY;
 			}
 
@@ -121,25 +148,30 @@ namespace Everglow.Commons.UI.UIElements
 			wheelValue += (waitToWheelValue - wheelValue) / 6f;
 
 			if (waitToWheelValue != wheelValue)
+			{
 				Calculation();
+			}
 		}
 
 		protected override void DrawSelf(SpriteBatch sb)
 		{
 			int cTopHeight = (int)(TOP_HEIGHT * Scale), cButtomHeight = (int)(BUTTOM_HEIGHT * Scale);
 
-			sb.Draw(UIScrollbarInnerTexture, new Rectangle(Info.HitBox.X,
+			sb.Draw(UIScrollbarInnerTexture, new Rectangle(
+				Info.HitBox.X,
 				Info.HitBox.Y, Info.HitBox.Width, cTopHeight),
 				new Rectangle(0, 0, UIScrollbarInnerTexture.Width, TOP_HEIGHT),
 				Color.White * MathHelper.SmoothStep(0, 1, alpha));
 
-			sb.Draw(UIScrollbarInnerTexture, new Rectangle(Info.HitBox.X,
+			sb.Draw(UIScrollbarInnerTexture, new Rectangle(
+				Info.HitBox.X,
 				Info.HitBox.Y + cTopHeight, Info.HitBox.Width, Info.HitBox.Height - cTopHeight - cButtomHeight),
 				new Rectangle(0, TOP_HEIGHT, UIScrollbarInnerTexture.Width,
 				UIScrollbarInnerTexture.Height - TOP_HEIGHT - BUTTOM_HEIGHT),
 				Color.White * MathHelper.SmoothStep(0, 1, alpha));
 
-			sb.Draw(UIScrollbarInnerTexture, new Rectangle(Info.HitBox.X,
+			sb.Draw(UIScrollbarInnerTexture, new Rectangle(
+				Info.HitBox.X,
 				Info.HitBox.Y - cButtomHeight + Info.HitBox.Height, Info.HitBox.Width, cButtomHeight),
 				new Rectangle(0, UIScrollbarInnerTexture.Height - BUTTOM_HEIGHT,
 				UIScrollbarInnerTexture.Width, BUTTOM_HEIGHT),

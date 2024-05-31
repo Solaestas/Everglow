@@ -359,7 +359,7 @@ namespace Everglow.Commons.UI.UIElements
 				Vector2 location = Vector2.Transform(Info.Location, Main.UIScaleMatrix),
 					bottomRight = Vector2.Transform(Info.Location + Info.Size, Main.UIScaleMatrix);
 
-				Rectangle rectangle = new Rectangle();
+				Rectangle rectangle = default(Rectangle);
 				rectangle.X = (int)location.X;
 				rectangle.Y = (int)location.Y;
 				rectangle.Width = (int)Math.Max(bottomRight.X - location.X, 0);
@@ -394,7 +394,7 @@ namespace Everglow.Commons.UI.UIElements
 		/// </summary>
 		public virtual void OnInitialization()
 		{
-			//ChildrenElements.ForEach(child => child.OnInitialization());
+			// ChildrenElements.ForEach(child => child.OnInitialization());
 			LoadEvents();
 		}
 
@@ -413,10 +413,12 @@ namespace Everglow.Commons.UI.UIElements
 		/// <param name="gt"></param>
 		public virtual void Update(GameTime gt)
 		{
-			ChildrenElements.ForEach(child => { if (child != null && child.IsVisible) child.Update(gt); });
+			ChildrenElements.ForEach(child => { if (child != null && child.IsVisible) { child.Update(gt); } });
 
 			if (IsVisible)
+			{
 				Events.Update(this, gt);
+			}
 		}
 
 		/// <summary>
@@ -425,52 +427,66 @@ namespace Everglow.Commons.UI.UIElements
 		/// <param name="sb">画笔</param>
 		public virtual void Draw(SpriteBatch sb)
 		{
-			//声明光栅化状态，剔除状态为不剔除，开启剪切测试
+			// 声明光栅化状态，剔除状态为不剔除，开启剪切测试
 			var overflowHiddenRasterizerState = new RasterizerState
 			{
 				CullMode = CullMode.None,
-				ScissorTestEnable = true
+				ScissorTestEnable = true,
 			};
-			//如果不隐藏UI部件
+
+			// 如果不隐藏UI部件
 			if (!Info.IsHidden && IsVisible)
 			{
-				//关闭画笔
+				// 关闭画笔
 				sb.End();
-				//启用画笔，传参：延迟绘制（纹理合批优化），alpha颜色混合模式，各向异性采样，不启用深度模式，UI大小矩阵
+
+				// 启用画笔，传参：延迟绘制（纹理合批优化），alpha颜色混合模式，各向异性采样，不启用深度模式，UI大小矩阵
 				sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
 					DepthStencilState.None, overflowHiddenRasterizerState, null, Main.UIScaleMatrix);
-				//绘制自己
+
+				// 绘制自己
 				DrawSelf(sb);
 			}
-			//设定gd是画笔绑定的图像设备
+
+			// 设定gd是画笔绑定的图像设备
 			var gd = sb.GraphicsDevice;
-			//储存绘制原剪切矩形
+
+			// 储存绘制原剪切矩形
 			var scissorRectangle = gd.ScissorRectangle;
-			//如果启用溢出隐藏
+
+			// 如果启用溢出隐藏
 			if (Info.HiddenOverflow)
 			{
-				//关闭画笔以便修改绘制参数
+				// 关闭画笔以便修改绘制参数
 				sb.End();
-				//修改光栅化状态
+
+				// 修改光栅化状态
 				sb.GraphicsDevice.RasterizerState = overflowHiddenRasterizerState;
-				//修改GD剪切矩形为原剪切矩形与现剪切矩形的交集
+
+				// 修改GD剪切矩形为原剪切矩形与现剪切矩形的交集
 				gd.ScissorRectangle = Rectangle.Intersect(gd.ScissorRectangle, HiddenOverflowRectangle);
-				//启用画笔，传参：延迟绘制（纹理合批优化），alpha颜色混合模式，各向异性采样，不启用深度模式，UI大小矩阵
+
+				// 启用画笔，传参：延迟绘制（纹理合批优化），alpha颜色混合模式，各向异性采样，不启用深度模式，UI大小矩阵
 				sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
 					DepthStencilState.None, overflowHiddenRasterizerState, null, Main.UIScaleMatrix);
 			}
-			//绘制子元素
+
+			// 绘制子元素
 			DrawChildren(sb);
-			//如果启用溢出隐藏
+
+			// 如果启用溢出隐藏
 			if (Info.HiddenOverflow)
 			{
-				//关闭画笔
+				// 关闭画笔
 				sb.End();
-				//修改光栅化状态
+
+				// 修改光栅化状态
 				gd.RasterizerState = overflowHiddenRasterizerState;
-				//将剪切矩形换回原剪切矩形
+
+				// 将剪切矩形换回原剪切矩形
 				gd.ScissorRectangle = scissorRectangle;
-				//启用画笔
+
+				// 启用画笔
 				sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
 					SamplerState.PointClamp, DepthStencilState.None,
 					overflowHiddenRasterizerState, null, Main.UIScaleMatrix);
@@ -491,7 +507,7 @@ namespace Everglow.Commons.UI.UIElements
 		/// <param name="sb">画笔</param>
 		protected virtual void DrawChildren(SpriteBatch sb)
 		{
-			ChildrenElements.ForEach(child => { if (child != null && child.IsVisible) child.Draw(sb); });
+			ChildrenElements.ForEach(child => { if (child != null && child.IsVisible) { child.Draw(sb); } });
 		}
 
 		/// <summary>
@@ -502,7 +518,10 @@ namespace Everglow.Commons.UI.UIElements
 		public virtual bool Register(BaseElement element)
 		{
 			if (element == null || ChildrenElements.Contains(element) || element.ParentElement != null)
+			{
 				return false;
+			}
+
 			element.ParentElement = this;
 			element.OnInitialization();
 			element.Calculation();
@@ -518,7 +537,10 @@ namespace Everglow.Commons.UI.UIElements
 		public virtual bool Remove(BaseElement element)
 		{
 			if (element == null || !ChildrenElements.Contains(element) || element.ParentElement == null)
+			{
 				return false;
+			}
+
 			element.ParentElement = null;
 			ChildrenElements.Remove(element);
 			return true;
@@ -646,14 +668,21 @@ namespace Everglow.Commons.UI.UIElements
 			}
 
 			if (ChildrenElements.Count > 0)
+			{
 				ChildrenElements.ForEach(child =>
 				{
 					if (child != null && child.IsVisible)
+					{
 						elements.AddRange(child.GetElementsContainsPoint(point));
+					}
 				});
+			}
 
 			if (elements.Count == 0 && contains && Info.CanBeInteract && !elements.Contains(this))
+			{
 				elements.Add(this);
+			}
+
 			return elements;
 		}
 
@@ -674,7 +703,10 @@ namespace Everglow.Commons.UI.UIElements
 		public virtual Rectangle GetCanHitBox()
 		{
 			if (ParentElement == null)
+			{
 				return Rectangle.Intersect(new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), HitBox);
+			}
+
 			return Rectangle.Intersect(Rectangle.Intersect(HitBox, ParentElement.HiddenOverflowRectangle), ParentElement.GetCanHitBox());
 		}
 
@@ -685,9 +717,15 @@ namespace Everglow.Commons.UI.UIElements
 		public bool GetParentElementIsHiddenOverflow()
 		{
 			if (Info.HiddenOverflow)
+			{
 				return true;
+			}
+
 			if (ParentElement == null)
+			{
 				return false;
+			}
+
 			return ParentElement.GetParentElementIsHiddenOverflow();
 		}
 	}
