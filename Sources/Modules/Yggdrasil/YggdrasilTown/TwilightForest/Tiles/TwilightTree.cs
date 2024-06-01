@@ -1,6 +1,7 @@
 using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Items;
+using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 
@@ -320,6 +321,10 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 			if (!Main.gamePaused)
 			{
 				vine.ApplyForceSpecial(i, new Vector2(windCycle / 4.0f, 0.4f * thisMass.Mass));
+				if (i == masses.Count - 2)
+				{
+					vine.ApplyForceSpecial(i + 1, new Vector2(windCycle / 4.0f, 0.4f * nextMass.Mass));
+				}
 			}
 
 			// 支持发光涂料
