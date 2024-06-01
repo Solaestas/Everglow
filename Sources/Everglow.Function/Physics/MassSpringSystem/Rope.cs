@@ -13,7 +13,7 @@ public class Rope : IMassSpringMesh
 	{
 		for (int i = 0; i < positions.Count; i++)
 		{
-			masses.Add(new _Mass(mass, positions[i], i == positions.Count - 1));
+			masses.Add(new _Mass(mass, positions[i], i == 0));
 		}
 
 		for (int i = 0; i < positions.Count - 1; i++)

@@ -41,4 +41,40 @@ public class RopeHelper
 		}
 		return rope;
 	}
+
+	/// <summary>
+	/// Fix one end of a rope at a point.
+	/// </summary>
+	/// <param name="start"></param>
+	/// <param name="end"></param>
+	/// <param name="count"></param>
+	/// <param name="elasticity"></param>
+	/// <param name="mass"></param>
+	/// <param name="knotDistance"></param>
+	/// <param name="knotMass"></param>
+	/// <returns></returns>
+	public static Rope FixRopeAt(Vector2 position, int count, float elasticity, float mass)
+	{
+		List<Vector2> positions = new List<Vector2>();
+		for (int t = 0; t <= count; t++)
+		{
+			positions.Add(position + new Vector2(0, mass * 10) * t);
+		}
+		Rope rope = new Rope(positions, elasticity, mass);
+		List<_Mass> massList = rope.GetMasses();
+		for (int i = 0; i < positions.Count; i++)
+		{
+			if (i == 0)
+			{
+				massList[i].IsStatic = true;
+			}
+			else
+			{
+				massList[i].IsStatic = false;
+			}
+			massList[i].Mass = mass;
+			massList[i].Position = positions[i];
+		}
+		return rope;
+	}
 }

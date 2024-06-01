@@ -1,7 +1,6 @@
 using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Commons.TileHelper;
 using Terraria.GameContent.Drawing;
-using static Everglow.Commons.Physics.MassSpringSystem.Rope;
 
 namespace Everglow.CagedDomain.Tiles.CableTiles;
 
