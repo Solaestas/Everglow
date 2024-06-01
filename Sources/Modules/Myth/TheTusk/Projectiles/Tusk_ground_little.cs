@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheTusk.Projectiles;
@@ -36,7 +37,7 @@ public class Tusk_ground_little : ModProjectile
 		Projectile.frame = Main.rand.Next(8);
 		for (int i = 0; i < 15; i++)
 		{
-			if(!Collision.SolidCollision(Projectile.Center, 0, 0))
+			if (!Collision.SolidCollision(Projectile.Center, 0, 0))
 			{
 				Projectile.position -= Projectile.rotation.ToRotationVector2() * 4;
 			}
@@ -55,7 +56,7 @@ public class Tusk_ground_little : ModProjectile
 		}
 		if (Projectile.timeLeft is > 94 and <= 107)
 		{
-			Projectile.ai[0] = MathHelper.Lerp(Projectile.ai[0], 0f, 0.7f);
+			Projectile.ai[0] = MathHelper.Lerp(Projectile.ai[0], 0.04f, 0.7f);
 		}
 		if (Projectile.timeLeft is > 90 and <= 94)
 		{
@@ -63,15 +64,38 @@ public class Tusk_ground_little : ModProjectile
 		}
 		if (Projectile.timeLeft is > 75 and <= 90)
 		{
-			Projectile.ai[0] = MathHelper.Lerp(Projectile.ai[0], 0f, 0.7f);
+			Projectile.ai[0] = MathHelper.Lerp(Projectile.ai[0], 0.03f, 0.7f);
 		}
 		if (Projectile.timeLeft is > 60 and <= 75)
 		{
 			Projectile.ai[0] = MathHelper.Lerp(Projectile.ai[0], 1f, 0.7f);
+			if (Projectile.timeLeft == 75)
+			{
+				SpillBlood();
+			}
 		}
-		if (Projectile.timeLeft is < 60)
+		if (Projectile.timeLeft is < 30)
 		{
 			Projectile.ai[0] = MathHelper.Lerp(Projectile.ai[0], 0f, 0.07f);
+		}
+	}
+
+	public void SpillBlood(int amount = 1)
+	{
+		for (int g = 0; g < amount * 2; g++)
+		{
+			var blood = new BloodDrop
+			{
+				velocity = Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)) * Main.rand.NextFloat(3.4f, 14.1f),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + Projectile.rotation.ToRotationVector2() * 10,
+				maxTime = Main.rand.Next(54, 74),
+				scale = Main.rand.NextFloat(6f, 25f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) },
+			};
+			Ins.VFXManager.Add(blood);
 		}
 	}
 
@@ -94,7 +118,7 @@ public class Tusk_ground_little : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Vector2 width = new Vector2(0, 10).RotatedBy(Projectile.rotation);
-		Vector2 gumWidth = new Vector2(0, 10 + (1 - Projectile.ai[0]) * 20).RotatedBy(Projectile.rotation);
+		Vector2 gumWidth = new Vector2(0, 10 / (Projectile.ai[0] + 0.5f)).RotatedBy(Projectile.rotation);
 		Vector2 direction = new Vector2(1, 0).RotatedBy(Projectile.rotation);
 		float height = 60 * Projectile.ai[0];
 
@@ -107,6 +131,8 @@ public class Tusk_ground_little : ModProjectile
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.CurrentTechnique.Passes[0].Apply();
+
+		// Tusk
 		List<Vertex2D> bars = new List<Vertex2D>();
 		AddVertex(bars, Projectile.Center - width, new Vector3(Projectile.frame / 8f, Projectile.ai[0], 0));
 		AddVertex(bars, Projectile.Center + width, new Vector3((Projectile.frame + 1) / 8f, Projectile.ai[0], 0));
@@ -117,19 +143,59 @@ public class Tusk_ground_little : ModProjectile
 		Texture2D tusk = ModAsset.Tusk_ground_little.Value;
 		Main.graphics.graphicsDevice.Textures[0] = tusk;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null);
+		Effect dissolve = ModAsset.BloodMembrane.Value;
+		float duration = 0.3f;
+		if (Projectile.timeLeft < 75)
+		{
+			duration = Math.Clamp(MathHelper.Lerp(1f, 0.3f, Projectile.timeLeft / 25f - 2), 0, 1f);
+		}
+		dissolve.Parameters["uTransform"].SetValue(model * projection);
+		dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_spiderNet.Value);
+		dissolve.Parameters["duration"].SetValue(duration);
+		dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.4f, 0, 0, 0.8f) * lightColor.ToVector4());
+		dissolve.Parameters["uNoiseSize"].SetValue(0.7f);
+		dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(Projectile.ai[1], Projectile.ai[2]));
+		dissolve.CurrentTechnique.Passes[0].Apply();
 
+		// Blood Membrane
 		bars = new List<Vertex2D>();
-		AddVertex(bars, Projectile.Center - width - direction * 12, new Vector3(0, 1, 0));
-		AddVertex(bars, Projectile.Center + width - direction * 12, new Vector3(1, 1, 0));
+		AddVertex(bars, Projectile.Center - width, new Vector3(Projectile.frame / 8f, Projectile.ai[0], 0.6f));
+		AddVertex(bars, Projectile.Center + width, new Vector3((Projectile.frame + 1) / 8f, Projectile.ai[0], 0.6f));
 
-		AddVertex(bars, Projectile.Center - width + direction * MathF.Pow(height, 0.5f), new Vector3(0, 0, 0));
-		AddVertex(bars, Projectile.Center + width + direction * MathF.Pow(height, 0.5f), new Vector3(1, 0, 0));
+		AddVertex(bars, Projectile.Center - width + direction * height, new Vector3(Projectile.frame / 8f, 0, 0));
+		AddVertex(bars, Projectile.Center + width + direction * height, new Vector3((Projectile.frame + 1) / 8f, 0, 0));
+
+		Main.graphics.graphicsDevice.Textures[0] = tusk;
+		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null);
+
+		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.CurrentTechnique.Passes[0].Apply();
+
+		// Gum
+		float frameY = 0;
+		if(Projectile.timeLeft is > 25 and < 72)
+		{
+			frameY = 0.5f;
+		}
+		bars = new List<Vertex2D>();
+		AddVertex(bars, Projectile.Center - gumWidth - direction * 12, new Vector3(0, 0.5f + frameY, 0));
+		AddVertex(bars, Projectile.Center + gumWidth - direction * 12, new Vector3(1, 0.5f + frameY, 0));
+
+		float gumHeight = height * 2f;
+		if (Projectile.timeLeft < 75)
+		{
+			gumHeight = MathF.Pow(height, 0.5f);
+		}
+		AddVertex(bars, Projectile.Center - gumWidth + direction * gumHeight, new Vector3(0, frameY, 0));
+		AddVertex(bars, Projectile.Center + gumWidth + direction * gumHeight, new Vector3(1, frameY, 0));
 
 		Texture2D gum = ModAsset.TuskGum.Value;
 		Main.graphics.graphicsDevice.Textures[0] = gum;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null);
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);

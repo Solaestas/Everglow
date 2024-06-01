@@ -43,4 +43,14 @@ public class TuskSpice : ModProjectile
 		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, new Rectangle(Projectile.frame * 24, 0, 24, 50), lightColor, Projectile.rotation, new Vector2(12, 25), Projectile.scale, SpriteEffects.None, 0);
 		return false;
 	}
+
+	public override void OnKill(int timeLeft)
+	{
+		for (int i = -5; i < 5; i++)
+		{
+			Vector2 pos = Projectile.Center + new Vector2(i * 6, 0).RotatedBy(Projectile.rotation) - new Vector2(0, 4);
+			Dust dust = Dust.NewDustDirect(pos, 0, 0, ModContent.DustType<Dusts.TuskBreak_small>());
+			dust.velocity = Projectile.velocity;
+		}
+	}
 }
