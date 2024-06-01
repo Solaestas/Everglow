@@ -32,7 +32,12 @@ public class RopeHelper
 					specialMass = knotMass;
 				}
 			}
-			massList[i] = new _Mass(specialMass, positions[i], (i == positions.Count - 1) || (i == 0));
+			if ((i == positions.Count - 1) || (i == 0))
+			{
+				massList[i].IsStatic = true;
+			}
+			massList[i].Mass = specialMass;
+			massList[i].Position = positions[i]; // = new _Mass(specialMass, positions[i], (i == positions.Count - 1) || (i == 0));
 		}
 		return rope;
 	}

@@ -765,7 +765,7 @@ public class CableTileUpdate : ModSystem
 	/// 物块质点系统
 	/// </summary>
 	public static MassSpringSystem CableTileMassSpringSystem = new MassSpringSystem();
-	public static PBDSolver CableTilePBDSolver = new PBDSolver(8);
+	public static EulerSolver CableTilePBDSolver = new EulerSolver(8);
 
 	public override void PostUpdateEverything()
 	{
@@ -774,6 +774,8 @@ public class CableTileUpdate : ModSystem
 		{
 			foreach(var rope in cableTile.RopesOfAllThisTileInTheWorld.Values)
 			{
+				bool s2 = object.ReferenceEquals(rope.GetElasticConstrains()[0].A, rope.GetMasses()[0]);
+
 				CableTileMassSpringSystem.AddMassSpringMesh(rope);
 			}
 		}

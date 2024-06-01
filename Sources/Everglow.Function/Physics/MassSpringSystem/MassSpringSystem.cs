@@ -17,6 +17,7 @@ public class _Mass
 
 	public Vector2 OldPos;
 	public Vector2 DeltaPos;
+	public Vector2 Gradient;
 	public float HessianDiag;
 	public _Mass(float mass, Vector2 position, bool isStatic)
 	{
@@ -27,6 +28,7 @@ public class _Mass
 		this.IsStatic = isStatic;
 
 		this.OldPos = Vector2.Zero;
+		this.Gradient = Vector2.Zero;
 		this.DeltaPos = Vector2.Zero;
 		this.HessianDiag = 0;
 	}
@@ -52,14 +54,17 @@ public class ElasticConstrain
 
 public class MassSpringSystem
 {
-	public List<_Mass> Masses { get; } = new List<_Mass>();
+	public List<_Mass> Masses { get; }
 
-	public List<ElasticConstrain> Springs { get; } = new List<ElasticConstrain>();
+	public List<ElasticConstrain> Springs { get; }
 
 	public float Damping { get; set; }
 
 	public MassSpringSystem()
 	{
+		Masses = new List<_Mass>();
+		Springs = new List<ElasticConstrain>();
+		Damping = 0.99f;
 	}
 
 	public void AddMassSpringMesh(IMassSpringMesh mesh)

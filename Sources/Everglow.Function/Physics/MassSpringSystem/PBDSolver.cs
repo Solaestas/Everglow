@@ -75,8 +75,11 @@ public class PBDSolver : Solver
 					//{
 					//	m.Position = CheckCollision(i, m.Position, dummyPos[i]);
 					//}
-					m.Position += m.DeltaPos / (m.HessianDiag);
-					m.Velocity = (m.Position - m.OldPos) / dt;
+					if (m.HessianDiag > 0)
+					{
+						m.Position += m.DeltaPos / (m.HessianDiag);
+						m.Velocity = (m.Position - m.OldPos) / dt;
+					}
 				}
 			}
 		}
