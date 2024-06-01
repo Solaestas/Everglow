@@ -1,7 +1,6 @@
-using Everglow.Commons.Physics;
+using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Commons.TileHelper;
 using Terraria.GameContent.Drawing;
-using static Everglow.Commons.Physics.Rope;
 
 namespace Everglow.CagedDomain.Tiles.CableTiles;
 
@@ -25,10 +24,12 @@ public class LightbulbBand : CableTile
 		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.LightbulbBand_bulb_Path, type, 1, paint, tileDrawing);
 		tex ??= ModAsset.LightbulbBand_bulb.Value;
 		var tileSpriteEffect = SpriteEffects.None;
-		for (int i = 0; i < rope.GetMassList.Length - 1; i++)
+
+		List<_Mass> masses = rope.GetMasses();
+		for (int i = 0; i < masses.Count - 1; i++)
 		{
-			_Mass thisMass = rope.GetMassList[i];
-			_Mass nextMass = rope.GetMassList[i + 1];
+			_Mass thisMass = masses[i];
+			_Mass nextMass = masses[i + 1];
 
 			int totalPushTime = 80;
 			float pushForcePerFrame = 1.26f;

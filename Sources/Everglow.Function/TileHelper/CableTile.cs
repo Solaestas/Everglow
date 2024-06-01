@@ -1,5 +1,5 @@
 using Everglow.Commons.Enums;
-using Everglow.Commons.Physics;
+using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
@@ -8,7 +8,6 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
-using static Everglow.Commons.Physics.Rope;
 
 namespace Everglow.Commons.TileHelper;
 
@@ -219,9 +218,10 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	/// <param name="rope"></param>
 	public virtual void RemoveRopeEffect(Rope rope)
 	{
-		for (int i = 0; i <= rope.GetMassList.Length - 1; i++)
+		List<_Mass> masses = rope.GetMasses();
+		for (int i = 0; i <= masses.Count - 1; i++)
 		{
-			_Mass thisMass = rope.GetMassList[i];
+			_Mass thisMass = masses[i];
 			Dust d0 = Dust.NewDustDirect(thisMass.Position - new Vector2(4), 0, 0, DustID.Asphalt);
 			d0.noGravity = true;
 			d0.velocity *= 0f;
@@ -235,7 +235,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 					d.scale = Main.rand.NextFloat(0.1f, 0.3f);
 				}
 			}
-			if (i == 0 || i == rope.GetMassList.Length - 1)
+			if (i == 0 || i == masses.Count - 1)
 			{
 				for (int t = 0; t < 5; t++)
 				{
@@ -264,6 +264,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		{
 			return;
 		}
+		List<_Mass> masses = rope.GetMasses();
 		RopesOfAllThisTileInTheWorld.Add(new Point(i, j), rope);
 		RopeHeadAndTail.Add(new Point(i, j), new Point(i2, j2));
 		CableEneity cableEneity;
@@ -275,7 +276,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		}
 		if (cableEneity != null)
 		{
-			Vector2 tail = rope.GetMassList.Last().Position / 16f;
+			Vector2 tail = masses.Last().Position / 16f;
 			Point toTail = tail.ToPoint() - new Point(i, j);
 			cableEneity.ToTail = toTail;
 		}
@@ -303,8 +304,8 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		// 只有同一种块之间才能连绳
 		if (tile.TileType == Type)
 		{
-			int counts = (int)new Vector2(i2 - i, j2 - j).Length() * 2;
-			Rope rope = new Rope(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i2, j2) * 16 + new Vector2(8), counts, Elasticity, RopeUnitMass, (Vector2) => Vector2.Zero, true, LampDistance, SingleLampMass);
+			int counts = (int)new Vector2(i2 - i, j2 - j).Length() * 2 + 2;
+			Rope rope = RopeHelper.CreateConnectRope2Points(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i2, j2) * 16 + new Vector2(8), counts, Elasticity, RopeUnitMass, LampDistance, SingleLampMass);
 			return rope;
 		}
 		return null;
@@ -335,10 +336,6 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		RopesOfAllThisTileInTheWorld.TryGetValue(pos, out rope);
 		if (rope != null)
 		{
-			if (!Main.gamePaused)
-			{
-				rope.Update(1);
-			}
 			DrawCable(rope, pos, spriteBatch, tileDrawing);
 		}
 	}
@@ -366,10 +363,11 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		int paint = Main.tile[pos].TileColor;
 		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(BulbTexturePath, type, 1, paint, tileDrawing);
 		var tileSpriteEffect = SpriteEffects.None;
-		for (int i = 0; i < rope.GetMassList.Length - 1; i++)
+		List<_Mass> masses = rope.GetMasses();
+		for (int i = 0; i < masses.Count - 1; i++)
 		{
-			_Mass thisMass = rope.GetMassList[i];
-			_Mass nextMass = rope.GetMassList[i + 1];
+			_Mass thisMass = masses[i];
+			_Mass nextMass = masses[i + 1];
 
 			int totalPushTime = 80;
 			float pushForcePerFrame = 1.26f;
@@ -683,7 +681,7 @@ public class CableTilePlaceHelpingSystem : Visual
 										else if (cableTile.RopesOfAllThisTileInTheWorld.ContainsKey(new Point(x, y)))
 										{
 											drawColor = new Color(1f, 0, 0, 0.5f);
-											Vector2 anotherPoint = cableTile.RopesOfAllThisTileInTheWorld[new Point(x, y)].GetMassList.Last().Position;
+											Vector2 anotherPoint = cableTile.RopesOfAllThisTileInTheWorld[new Point(x, y)].GetMasses().Last().Position;
 											Vector2 start0 = anotherPoint;
 											Vector2 end0 = fixPos + new Vector2(8) - toTarget;
 
@@ -758,5 +756,27 @@ public class CableTilePlaceHelpingSystem : Visual
 		};
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+	}
+}
+
+public class CableTileUpdate : ModSystem
+{
+	/// <summary>
+	/// 物块质点系统
+	/// </summary>
+	public static MassSpringSystem CableTileMassSpringSystem = new MassSpringSystem();
+	public static PBDSolver CableTilePBDSolver = new PBDSolver(8);
+
+	public override void PostUpdateEverything()
+	{
+		CableTileMassSpringSystem = new MassSpringSystem();
+		foreach(var cableTile in TileLoader.tiles.OfType<CableTile>())
+		{
+			foreach(var rope in cableTile.RopesOfAllThisTileInTheWorld.Values)
+			{
+				CableTileMassSpringSystem.AddMassSpringMesh(rope);
+			}
+		}
+		CableTilePBDSolver.Step(CableTileMassSpringSystem, 1);
 	}
 }

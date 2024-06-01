@@ -52,15 +52,9 @@ public class ElasticConstrain
 
 public class MassSpringSystem
 {
-	public List<_Mass> Masses
-	{
-		get;
-	}
+	public List<_Mass> Masses { get; } = new List<_Mass>();
 
-	public List<ElasticConstrain> Springs
-	{
-		get;
-	}
+	public List<ElasticConstrain> Springs { get; } = new List<ElasticConstrain>();
 
 	public float Damping { get; set; }
 

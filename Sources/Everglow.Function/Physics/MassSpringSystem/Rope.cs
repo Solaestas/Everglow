@@ -1,19 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Everglow.Commons.Physics.MassSpringSystem;
+
 public class Rope : IMassSpringMesh
 {
-	private List<_Mass> masses;
-	private List<ElasticConstrain> springs;
+	private List<_Mass> masses = new List<_Mass>();
+	private List<ElasticConstrain> springs = new List<ElasticConstrain>();
+
 	/// <summary>
 	/// 自动生成一串由位置决定的绳子链
 	/// </summary>
 	/// <param name="positions"></param>
-	public Rope(List<Vector2> positions, float elasticity, float mass, RenderingTransformFunction renderingTransform, bool hasCollision = false)
+	public Rope(List<Vector2> positions, float elasticity, float mass)
 	{
 		for (int i = 0; i < positions.Count; i++)
 		{
