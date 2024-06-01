@@ -10,6 +10,7 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 {
 	public List<Vector2> RotationBaseUp = new List<Vector2>();
 	public List<Vector2> RotationBaseDown = new List<Vector2>();
+	public Vector2 DiveOffset = default;
 
 	public override string Texture => ModAsset.Living_Jawbone_Huge_Mod;
 
@@ -28,7 +29,7 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		Vector2 checkDir = GetTopographicGradient(Projectile.Center);
+		Vector2 checkDir = ProjectileUtils.GetTopographicGradient(Projectile.Center, 20);
 		for (int y = 0; y < 100; y++)
 		{
 			if (Collision.SolidCollision(Projectile.Center, 0, 0))
@@ -41,7 +42,7 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 				Projectile.active = false;
 			}
 		}
-		Projectile.rotation = GetTopographicGradient(Projectile.Center).ToRotation();
+		Projectile.rotation = ProjectileUtils.GetTopographicGradient(Projectile.Center, 20).ToRotation();
 		Projectile.position -= Projectile.rotation.ToRotationVector2() * 20;
 		for (int t = 0; t < 100; t++)
 		{
@@ -105,31 +106,6 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 			}
 		}
 		return times;
-	}
-
-	public Vector2 GetTopographicGradient(Vector2 position)
-	{
-		Vector2 normal = Vector2.zeroVector;
-		for (int i = -20; i < 21; i++)
-		{
-			for (int j = -20; j < 21; j++)
-			{
-				float length = new Vector2(i, j).Length();
-				if (length is < 20 and > 0)
-				{
-					if (Collision.SolidCollision(position + new Vector2(i, j) * 16, 0, 0))
-					{
-						normal -= Utils.SafeNormalize(new Vector2(i, j), Vector2.zeroVector) / (length + 5);
-					}
-					else
-					{
-						normal += Utils.SafeNormalize(new Vector2(i, j), Vector2.zeroVector) / (length + 5);
-					}
-				}
-			}
-		}
-		normal = Utils.SafeNormalize(normal, Vector2.zeroVector);
-		return normal;
 	}
 
 	public void UpdateRotationBase()
@@ -295,30 +271,74 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 				}
 			}
 		}
-		if (Projectile.timeLeft < 90)
+		if (Projectile.timeLeft == 115)
+		{
+			Projectile.damage /= 5;
+		}
+		if (Projectile.timeLeft is < 90 and > 60)
 		{
 			Projectile.ai[0] = (float)Utils.Lerp(Projectile.ai[0], 0.4f, 0.05f);
 			Projectile.ai[1] = (float)Utils.Lerp(Projectile.ai[0], 0.4f, 0.05f);
+		}
+		if (Projectile.timeLeft < 60)
+		{
+			Projectile.ai[0] = (float)Utils.Lerp(Projectile.ai[0], 0.0f, 0.05f);
+			Projectile.ai[1] = (float)Utils.Lerp(Projectile.ai[0], 0.0f, 0.05f);
+
+			float depth = (60 - Projectile.timeLeft) / 60f;
+			depth *= depth * 450;
+			DiveOffset = new Vector2(-depth, 0).RotatedBy(Projectile.rotation);
+			for (int i = 0; i < 6; i++)
+			{
+				Vector2 position = Projectile.Center + new Vector2(Main.rand.NextFloat(-80, 80), -30).RotatedBy(Projectile.rotation + MathHelper.PiOver2);
+				if(Collision.SolidCollision(position, 0, 0))
+				{
+					for (int j = 0; j < 20; j++)
+					{
+						position += new Vector2(4, 0).RotatedBy(Projectile.rotation);
+						if (!Collision.SolidCollision(position, 0, 0))
+						{
+							break;
+						}
+					}
+				}
+				else
+				{
+					for (int j = 0; j < 20; j++)
+					{
+						position -= new Vector2(4, 0).RotatedBy(Projectile.rotation);
+						if (Collision.SolidCollision(position, 0, 0))
+						{
+							break;
+						}
+					}
+				}
+				Dust dust = Dust.NewDustDirect(position - new Vector2(4), 0, 0, DustID.Blood);
+				dust.scale = Main.rand.NextFloat(0.9f, 2.6f);
+				dust.noGravity = true;
+				dust.velocity *= 0;
+			}
 		}
 	}
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		float k = 0;
+		float hitRange = MathF.Max(430 - DiveOffset.Length(), 0);
 		if (Projectile.timeLeft == 121)
 		{
 			for (int i = 0; i < 20; i++)
 			{
-				bool b2 = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(430 * Projectile.scale, 0).RotatedBy(Projectile.rotation - Projectile.ai[0] / 20f * i), 60, ref k);
-				bool b3 = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(430 * Projectile.scale, 0).RotatedBy(Projectile.rotation + Projectile.ai[1] / 20f * i), 60, ref k);
+				bool b2 = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(hitRange * Projectile.scale, 0).RotatedBy(Projectile.rotation - Projectile.ai[0] / 20f * i), 60, ref k);
+				bool b3 = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(hitRange * Projectile.scale, 0).RotatedBy(Projectile.rotation + Projectile.ai[1] / 20f * i), 60, ref k);
 				if (b2 || b3)
 				{
 					return true;
 				}
 			}
 		}
-		bool b0 = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(430 * Projectile.scale, 0).RotatedBy(Projectile.rotation - Projectile.ai[0]), 60, ref k);
-		bool b1 = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(430 * Projectile.scale, 0).RotatedBy(Projectile.rotation + Projectile.ai[1]), 60, ref k);
+		bool b0 = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(hitRange * Projectile.scale, 0).RotatedBy(Projectile.rotation - Projectile.ai[0]), 60, ref k);
+		bool b1 = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + new Vector2(hitRange * Projectile.scale, 0).RotatedBy(Projectile.rotation + Projectile.ai[1]), 60, ref k);
 		return b0 || b1;
 	}
 
@@ -331,7 +351,7 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
-		BeginDissolveShader(Math.Clamp(Projectile.timeLeft / 50f - 0.2f, -0.2f, 1), new Vector4(0.5f, 0f, 0f, 0.7f));
+		BeginDissolveShader(Math.Clamp(Projectile.timeLeft / 50f - 0.2f, -0.2f, 1), new Vector4(0.3f, 0f, 0f, 0.7f));
 		Texture stickyBlood = ModAsset.Living_Jawbone_BloodLines.Value;
 
 		List<Vertex2D> bars = new List<Vertex2D>();
@@ -339,7 +359,7 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 		for (int i = 0; i < 20; i++)
 		{
 			AddVertex(bars, RotationBaseUp[i], new Vector3(i / 10f, 1, 0));
-			AddVertex(bars, bonePlaceUp * i / 20f + Projectile.Center, new Vector3(i / 10f, 0, 0));
+			AddVertex(bars, bonePlaceUp * i / 20f + Projectile.Center + DiveOffset, new Vector3(i / 10f, 0, 0));
 		}
 		Main.graphics.graphicsDevice.Textures[0] = stickyBlood;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -349,19 +369,25 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 		for (int i = 0; i < 20; i++)
 		{
 			AddVertex(bars, RotationBaseDown[i], new Vector3(i / 10f, 1, 0));
-			AddVertex(bars, bonePlaceDown * i / 20f + Projectile.Center, new Vector3(i / 10f, 0, 0));
+			AddVertex(bars, bonePlaceDown * i / 20f + Projectile.Center + DiveOffset, new Vector3(i / 10f, 0, 0));
 		}
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		BeginDissolveShader(Math.Clamp(Projectile.timeLeft / 20f - 0.2f, -0.2f, 1), new Vector4(0.5f, 0.4f, 0.4f, 0.7f));
 
+		BeginDissolveShader(1f, new Vector4(0.5f, 0f, 0f, 0.7f));
 		Texture2D upJaw = ModAsset.Living_Jawbone_Huge_up.Value;
 		bonePlaceUp = new Vector2(upJaw.Width, 0).RotatedBy(Projectile.rotation - Projectile.ai[0]);
+
 		bars = new List<Vertex2D>();
-		for (int i = 0; i < 11; i++)
+		bool insertTile = false;
+		for (int i = 10; i >= 0; i--)
 		{
 			Vector2 width = Vector2.Normalize(bonePlaceUp.RotatedBy(MathHelper.PiOver2)) * upJaw.Height * 0.5f;
-			AddVertex(bars, bonePlaceUp * i / 10f + width + Projectile.Center, new Vector3(i / 10f, 1, 0));
-			AddVertex(bars, bonePlaceUp * i / 10f - width + Projectile.Center, new Vector3(i / 10f, 0, 0));
+			AddVertex(bars, bonePlaceUp * i / 10f + width + Projectile.Center + DiveOffset, new Vector3(i / 10f, 1, 0), insertTile);
+			AddVertex(bars, bonePlaceUp * i / 10f - width + Projectile.Center + DiveOffset, new Vector3(i / 10f, 0, 0), insertTile);
+			if (!insertTile && Collision.SolidCollision(bonePlaceUp * i / 10f + Projectile.Center + DiveOffset, 0, 0) && Projectile.timeLeft < 60)
+			{
+				insertTile = true;
+			}
 		}
 		Main.graphics.graphicsDevice.Textures[0] = upJaw;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -369,11 +395,16 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 		Texture2D downJaw = ModAsset.Living_Jawbone_Huge_down.Value;
 		bonePlaceDown = new Vector2(downJaw.Width, 0).RotatedBy(Projectile.rotation + Projectile.ai[1]);
 		bars = new List<Vertex2D>();
-		for (int i = 0; i < 11; i++)
+		insertTile = false;
+		for (int i = 10; i >= 0; i--)
 		{
 			Vector2 width = Vector2.Normalize(bonePlaceDown.RotatedBy(MathHelper.PiOver2)) * downJaw.Height * 0.5f;
-			AddVertex(bars, bonePlaceDown * i / 10f + width + Projectile.Center, new Vector3(i / 10f, 1, 0));
-			AddVertex(bars, bonePlaceDown * i / 10f - width + Projectile.Center, new Vector3(i / 10f, 0, 0));
+			AddVertex(bars, bonePlaceDown * i / 10f + width + Projectile.Center + DiveOffset, new Vector3(i / 10f, 1, 0), insertTile);
+			AddVertex(bars, bonePlaceDown * i / 10f - width + Projectile.Center + DiveOffset, new Vector3(i / 10f, 0, 0), insertTile);
+			if (!insertTile && Collision.SolidCollision(bonePlaceUp * i / 10f + Projectile.Center + DiveOffset, 0, 0) && Projectile.timeLeft < 60)
+			{
+				insertTile = true;
+			}
 		}
 		Main.graphics.graphicsDevice.Textures[0] = downJaw;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -383,9 +414,9 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 		return false;
 	}
 
-	public void AddVertex(List<Vertex2D> bars, Vector2 pos, Vector3 coords)
+	public void AddVertex(List<Vertex2D> bars, Vector2 pos, Vector3 coords, bool transparent = false)
 	{
-		bars.Add(pos, Lighting.GetColor(pos.ToTileCoordinates()), coords);
+		bars.Add(pos, Lighting.GetColor(pos.ToTileCoordinates()) * (transparent ? 0 : 1), coords);
 	}
 
 	public void BeginDissolveShader(float dissolveValue, Vector4 dissolveColor)
@@ -394,7 +425,7 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null);
 		Effect dissolve = ModAsset.Living_Jawbone_Huge_dissolve.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		float dissolveDuration = dissolveValue;
 		dissolve.Parameters["uTransform"].SetValue(model * projection);
 		dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_spiderNet.Value);

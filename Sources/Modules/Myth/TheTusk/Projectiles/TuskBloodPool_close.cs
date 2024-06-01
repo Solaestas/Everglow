@@ -78,10 +78,10 @@ public class TuskBloodPool_close : ModProjectile
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		float dissolveDuration = (1 - Math.Abs(Projectile.timeLeft / 90f - 1)) * 1.2f - 0.2f;
 		dissolve.Parameters["uTransform"].SetValue(model * projection);
-		dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_cell.Value);
+		dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_hiveCyber.Value);
 		dissolve.Parameters["duration"].SetValue(dissolveDuration);
 		dissolve.Parameters["uLightColor"].SetValue(drawColor.ToVector4());
-		dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.9f, 0.0f, 0.1f, 1f));
+		dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.3f, 0.0f, 0.0f, 0.7f));
 		dissolve.Parameters["uNoiseSize"].SetValue(6f);
 		dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(Projectile.ai[1], Projectile.ai[2]));
 		dissolve.CurrentTechnique.Passes[0].Apply();

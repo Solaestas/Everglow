@@ -1881,7 +1881,6 @@ public class BloodTusk : ModNPC
 				for (int h = 0; h < 15; h++)
 				{
 					// Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 50), Vector2.Zero, ModContent.ProjectileType<Projectiles.TuskKillEffect>(), 0, 0, Main.myPlayer, 0);
-					NPC.NewNPC(null, (int)NPC.Center.X - 3, (int)NPC.Center.Y + 50, ModContent.NPCType<Projectiles.TuskKillEffect>());
 				}
 			}
 			if (Killing <= 0)
