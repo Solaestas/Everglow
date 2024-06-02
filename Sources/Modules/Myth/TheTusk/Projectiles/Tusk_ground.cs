@@ -7,7 +7,7 @@ namespace Everglow.Myth.TheTusk.Projectiles;
 /// <summary>
 /// Projectile.ai[0] is the length of tusk over gum.
 /// </summary>
-public class Tusk_ground_little : ModProjectile
+public class Tusk_ground : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -34,7 +34,7 @@ public class Tusk_ground_little : ModProjectile
 			Projectile.active = false;
 			return;
 		}
-		Projectile.frame = Main.rand.Next(8);
+		Projectile.frame = Main.rand.Next(6);
 		for (int i = 0; i < 15; i++)
 		{
 			if (!Collision.SolidCollision(Projectile.Center, 0, 0))
@@ -86,11 +86,11 @@ public class Tusk_ground_little : ModProjectile
 
 	public void SpillBlood(int amount = 1)
 	{
-		for (int g = 0; g < amount * 2; g++)
+		for (int g = 0; g < amount * 3; g++)
 		{
 			var blood = new BloodDrop
 			{
-				velocity = Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)) * Main.rand.NextFloat(3.4f, 14.1f),
+				velocity = Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)) * Main.rand.NextFloat(3.4f, 22.1f),
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + Projectile.rotation.ToRotationVector2() * 10,
@@ -106,7 +106,7 @@ public class Tusk_ground_little : ModProjectile
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		float value = 0;
-		if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, new Vector2(Projectile.ai[0] * 60, 0).RotatedBy(Projectile.rotation) + Projectile.Center, 10, ref value))
+		if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, new Vector2(Projectile.ai[0] * 90, 0).RotatedBy(Projectile.rotation) + Projectile.Center, 10, ref value))
 		{
 			return true;
 		}
@@ -123,7 +123,7 @@ public class Tusk_ground_little : ModProjectile
 	{
 		Vector2 width = new Vector2(0, 10).RotatedBy(Projectile.rotation);
 		Vector2 direction = new Vector2(1, 0).RotatedBy(Projectile.rotation);
-		float height = 60 * Projectile.ai[0];
+		float height = 90 * Projectile.ai[0];
 
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
@@ -137,13 +137,13 @@ public class Tusk_ground_little : ModProjectile
 
 		// Tusk
 		List<Vertex2D> bars = new List<Vertex2D>();
-		AddVertex(bars, Projectile.Center - width, new Vector3(Projectile.frame / 8f, Projectile.ai[0], 0));
-		AddVertex(bars, Projectile.Center + width, new Vector3((Projectile.frame + 1) / 8f, Projectile.ai[0], 0));
+		AddVertex(bars, Projectile.Center - width, new Vector3(Projectile.frame / 6f, Projectile.ai[0], 0));
+		AddVertex(bars, Projectile.Center + width, new Vector3((Projectile.frame + 1) / 6f, Projectile.ai[0], 0));
 
-		AddVertex(bars, Projectile.Center - width + direction * height, new Vector3(Projectile.frame / 8f, 0, 0));
-		AddVertex(bars, Projectile.Center + width + direction * height, new Vector3((Projectile.frame + 1) / 8f, 0, 0));
+		AddVertex(bars, Projectile.Center - width + direction * height, new Vector3(Projectile.frame / 6f, 0, 0));
+		AddVertex(bars, Projectile.Center + width + direction * height, new Vector3((Projectile.frame + 1) / 6f, 0, 0));
 
-		Texture2D tusk = ModAsset.Tusk_ground_little.Value;
+		Texture2D tusk = ModAsset.Tusk_ground.Value;
 		Main.graphics.graphicsDevice.Textures[0] = tusk;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
@@ -164,11 +164,11 @@ public class Tusk_ground_little : ModProjectile
 
 		// Blood Membrane
 		bars = new List<Vertex2D>();
-		AddVertex(bars, Projectile.Center - width, new Vector3(Projectile.frame / 8f, Projectile.ai[0], 0.6f));
-		AddVertex(bars, Projectile.Center + width, new Vector3((Projectile.frame + 1) / 8f, Projectile.ai[0], 0.6f));
+		AddVertex(bars, Projectile.Center - width, new Vector3(Projectile.frame / 6f, Projectile.ai[0], 0.6f));
+		AddVertex(bars, Projectile.Center + width, new Vector3((Projectile.frame + 1) / 6f, Projectile.ai[0], 0.6f));
 
-		AddVertex(bars, Projectile.Center - width + direction * height, new Vector3(Projectile.frame / 8f, 0, 0));
-		AddVertex(bars, Projectile.Center + width + direction * height, new Vector3((Projectile.frame + 1) / 8f, 0, 0));
+		AddVertex(bars, Projectile.Center - width + direction * height, new Vector3(Projectile.frame / 6f, 0, 0));
+		AddVertex(bars, Projectile.Center + width + direction * height, new Vector3((Projectile.frame + 1) / 6f, 0, 0));
 
 		Main.graphics.graphicsDevice.Textures[0] = tusk;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);

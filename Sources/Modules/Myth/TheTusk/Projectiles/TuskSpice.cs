@@ -12,7 +12,7 @@ public class TuskSpice : ModProjectile
 		Projectile.friendly = false;
 		Projectile.hostile = true;
 		Projectile.ignoreWater = true;
-		Projectile.tileCollide = false;
+		Projectile.tileCollide = true;
 		Projectile.timeLeft = 400;
 		Projectile.penetrate = -1;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
@@ -23,11 +23,15 @@ public class TuskSpice : ModProjectile
 	public override void OnSpawn(IEntitySource source)
 	{
 		Projectile.frame = Main.rand.Next(5);
+		Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+		Projectile.ai[0] = Projectile.rotation;
+		Projectile.ai[1] = Projectile.rotation;
+		Projectile.ai[2] = Projectile.rotation;
 	}
 
 	public override void AI()
 	{
-		Projectile.rotation = Projectile.velocity.ToRotation();
+		Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 		Projectile.ai[0] = (float)Utils.Lerp(Projectile.ai[0], Projectile.rotation, 0.5f);
 		Projectile.ai[1] = (float)Utils.Lerp(Projectile.ai[1], Projectile.ai[0], 0.5f);
 		Projectile.ai[2] = (float)Utils.Lerp(Projectile.ai[2], Projectile.ai[1], 0.5f);
@@ -48,7 +52,7 @@ public class TuskSpice : ModProjectile
 	{
 		for (int i = -5; i < 5; i++)
 		{
-			Vector2 pos = Projectile.Center + new Vector2(i * 6, 0).RotatedBy(Projectile.rotation) - new Vector2(0, 4);
+			Vector2 pos = Projectile.Center + new Vector2(i * 6, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver2) - new Vector2(0, 4);
 			Dust dust = Dust.NewDustDirect(pos, 0, 0, ModContent.DustType<Dusts.TuskBreak_small>());
 			dust.velocity = Projectile.velocity;
 		}
