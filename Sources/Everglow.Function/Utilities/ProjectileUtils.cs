@@ -28,46 +28,6 @@ public static class ProjectileUtils
 		}
 		return true;
 	}
-
-	/// <summary>
-	/// Get a terrain normal toward the air.
-	/// </summary>
-	/// <param name="position"></param>
-	/// <param name="maxRange"></param>
-	/// <returns></returns>
-	public static Vector2 GetTopographicGradient(Vector2 position, int maxRange)
-	{
-		if(maxRange <= 0)
-		{
-			maxRange = 1;
-		}
-		Vector2 normal = Vector2.zeroVector;
-		for (int i = -maxRange; i <= maxRange; i++)
-		{
-			for (int j = -maxRange; j <= maxRange; j++)
-			{
-				float length = new Vector2(i, j).Length();
-				if (length <= maxRange && length > 0)
-				{
-					if (Collision.SolidCollision(position + new Vector2(i, j) * 16, 0, 0))
-					{
-						normal -= Utils.SafeNormalize(new Vector2(i, j), Vector2.zeroVector) / (length + 5);
-					}
-					else
-					{
-						normal += Utils.SafeNormalize(new Vector2(i, j), Vector2.zeroVector) / (length + 5);
-					}
-				}
-			}
-		}
-		if(normal.Length() < 0.01)
-		{
-			return Vector2.zeroVector;
-		}
-		normal = Utils.SafeNormalize(normal, Vector2.zeroVector);
-		return normal;
-	}
-
 	public abstract class StickNPCProjectile : ModProjectile
 	{
 		/// <summary>

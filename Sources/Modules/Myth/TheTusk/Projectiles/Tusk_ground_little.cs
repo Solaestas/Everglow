@@ -24,10 +24,10 @@ public class Tusk_ground_little : ModProjectile
 	public override void OnSpawn(IEntitySource source)
 	{
 		Projectile.ai[0] = 0;
-		Vector2 rot = ProjectileUtils.GetTopographicGradient(Projectile.Center, 3);
+		Vector2 rot = TileCollisionUtils.GetTopographicGradient(Projectile.Center, 3);
 		if (rot != Vector2.zeroVector)
 		{
-			Projectile.rotation = ProjectileUtils.GetTopographicGradient(Projectile.Center, 3).ToRotation();
+			Projectile.rotation = TileCollisionUtils.GetTopographicGradient(Projectile.Center, 3).ToRotation();
 		}
 		else
 		{
@@ -47,7 +47,6 @@ public class Tusk_ground_little : ModProjectile
 			}
 		}
 		Projectile.velocity *= 0;
-		Projectile.damage = 10;
 	}
 
 	public override void AI()

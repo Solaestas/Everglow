@@ -1,6 +1,6 @@
 using Everglow.Myth.TheTusk.Items.Accessories;
 using Everglow.Myth.TheTusk.Items.Weapons;
-using Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
+using Everglow.Myth.TheTusk.NPCs.BloodTusk;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.Items.BossDrop;
