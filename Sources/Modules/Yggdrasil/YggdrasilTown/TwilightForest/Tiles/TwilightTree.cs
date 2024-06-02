@@ -106,7 +106,7 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		yield return new Item(ModContent.ItemType<Items.TwilightWood>());
+		yield return new Item(ModContent.ItemType<TwilightWood>());
 	}
 
 	public override bool CanDrop(int i, int j)
@@ -131,19 +131,6 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 		{
 			Gore.NewGore(null, new Vector2(i * 16, j * 16) + new Vector2(Main.rand.Next(16), Main.rand.Next(16)), new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(6.283), ModContent.GoreType<TwilightTree_Leaf>(), Main.rand.NextFloat(0.65f, 1.45f));
 		}
-
-		// foreach (var r in ropes)
-		// {
-		// var acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
-		// for (int a = 0; a < r.GetMassList.Length; a++)
-		// {
-		// r.GetMassList[a].Force += acc;
-		// if (Main.rand.NextBool(100))
-		// {
-		// Gore.NewGoreDirect(null, r.GetMassList[a].Position, r.GetMassList[a].Velocity * 0.1f, ModContent.GoreType<TwilightTree_Vine>());
-		// }
-		// }
-		// }
 		return true;
 	}
 
@@ -176,6 +163,7 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 		bool isLeft = tile.TileFrameY == 1;
 		if (!fail)// 判定为已破碎
 		{
+			noItem = true;
 			if (isLeft)
 			{
 				KillToTop(i, j);
