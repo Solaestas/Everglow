@@ -43,9 +43,21 @@ internal class HotAirBalloonPlayer : ModPlayer
 	{
 		if (HotAirBalloonEnable)
 		{
-			if (Main.rand.NextBool(6))
+			if (!HotAirBalloonEnable)
 			{
-				Dust.NewDust(Player.position, Player.width, Player.height, DustID.Firefly);
+				return;
+			}
+
+			// Check if the player is moving
+			if (Player.velocity.Length() <= 1E-05f)
+			{
+				return;
+			}
+
+			// Draw dust
+			if (Main.rand.NextBool(1))
+			{
+				Dust.NewDust(Player.position, Player.width, Player.height, DustID.Torch);
 			}
 		}
 	}

@@ -17,8 +17,8 @@ public class HeatEmblem : ModItem
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
-		// 1. + 2/s Life Regeneration
-		player.lifeRegen += 4;
+		// 1. + 2 Life Regeneration
+		player.lifeRegen += 2;
 
 		// 2. Negative effect
 		// When the wearer get hurt,
