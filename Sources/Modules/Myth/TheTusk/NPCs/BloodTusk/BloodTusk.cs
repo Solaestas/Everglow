@@ -1,5 +1,6 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.TheTusk.Items;
 using Everglow.Myth.TheTusk.Items.Accessories;
 using Everglow.Myth.TheTusk.Items.BossDrop;
@@ -23,6 +24,11 @@ public class BloodTusk : ModNPC
 	public int SecondStageHeadSlot = -1;
 
 	/// <summary>
+	/// NPC State.
+	/// </summary>
+	public int State = -1;
+
+	/// <summary>
 	/// Draw offset added when being hit.
 	/// </summary>
 	public Vector2 BeatOffset = Vector2.Zero;
@@ -33,6 +39,11 @@ public class BloodTusk : ModNPC
 	public float CowerValue;
 
 	/// <summary>
+	/// 0~1,0 is confront (normal) while 1 is cowered, only for main tusk.
+	/// </summary>
+	public float CowerValueSpecial_MainTusk;
+
+	/// <summary>
 	/// Drawing sequence.
 	/// </summary>
 	public List<DrawPiece> DrawPieceSequence = new List<DrawPiece>();
@@ -41,6 +52,28 @@ public class BloodTusk : ModNPC
 	/// A coroutine to run the state pattern.
 	/// </summary>
 	public CoroutineManager BloodTuskCoroutine = new CoroutineManager();
+
+	/// <summary>
+	/// Coroutine to be implemented, time.
+	/// </summary>
+	public List<IEnumerator<ICoroutineInstruction>> CoroutineList = new List<IEnumerator<ICoroutineInstruction>>();
+
+	/// <summary>
+	/// AIPool, choose action for coroutine.
+	/// </summary>
+	public List<AIAction> AIPool = new List<AIAction>();
+
+	public struct AIAction
+	{
+		public List<IEnumerator<ICoroutineInstruction>> AICoroutine;
+		public float Weight;
+
+		public AIAction(List<IEnumerator<ICoroutineInstruction>> aICoroutine, float weight)
+		{
+			AICoroutine = aICoroutine;
+			Weight = weight;
+		}
+	}
 
 	public enum States
 	{
@@ -77,7 +110,7 @@ public class BloodTusk : ModNPC
 		NPC.behindTiles = true;
 		NPC.damage = 0;
 		NPC.width = 40;
-		NPC.height = 142;
+		NPC.height = 184;
 		NPC.defense = 15;
 		NPC.lifeMax = 7800;
 		if (Main.expertMode)
@@ -123,12 +156,16 @@ public class BloodTusk : ModNPC
 			}
 		}
 		CowerValue = 1;
-		BloodTuskCoroutine.StartCoroutine(new Coroutine(Rise()));
+		CowerValueSpecial_MainTusk = -1;
 		DrawPieceSequence = new List<DrawPiece>
 		{
 			 Gum_Middle, SubTusk3, SubTusk5, Tusk0, SubTusk0, SubTusk1,
 			 SubTusk6, SubTusk7, Gum_Bottom, Gum_Surface, SubTusk2, SubTusk4, Gum_Surface_Center,
 		};
+		SetAIPool();
+		CoroutineList.Add(Rise());
+		BloodTuskCoroutine.StartCoroutine(new Coroutine(DoCoroutineList()));
+		State = (int)States.Phase1;
 	}
 
 	public override void BossHeadSlot(ref int index)
@@ -152,11 +189,66 @@ public class BloodTusk : ModNPC
 	{
 		NPC.TargetClosest();
 		BloodTuskCoroutine.Update();
+		if (CoroutineList.Count <= 1)
+		{
+			SwitchAction();
+		}
+	}
+
+	public void SetAIPool()
+	{
+		Player player = Main.player[NPC.target];
+		AIPool = new List<AIAction>();
+		AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { Cower(), SimultaneouslyGroundSpike(1), Rise(), Wait(GetWatingTime(150)) }, 1f));
+		AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { Cower(), SimultaneouslyGroundSpike(3), Rise(), Wait(GetWatingTime(150)) }, 0.7f));
+		AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { Cower(), Rise(), Wait(GetWatingTime(60)) }, 1f));
+		AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { Cower(), SlowWaveGroundSpike(), Rise(), Wait(GetWatingTime(150)) }, 1f));
+		AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { Cower(), FastWaveGroundSpike(), Rise(), Wait(GetWatingTime(150)) }, 1f));
+		AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { SprayTuskSpice(), Wait(GetWatingTime(60)), Cower(), Rise() }, player.Center.Y > NPC.Top.Y ? 0.2f : 10f));
+	}
+
+	public void SwitchAction()
+	{
+		SetAIPool();
+		float value = Main.rand.NextFloat(AIPool.Sum(action => action.Weight));
+		float check = 0;
+		CoroutineList.AddRange(AIPool.Aggregate((selectedAction, nextAction) =>
+		{
+			check += selectedAction.Weight;
+			if (value >= check && value < check + nextAction.Weight)
+			{
+				return nextAction;
+			}
+			return selectedAction;
+		}).AICoroutine);
+	}
+
+	/// <summary>
+	/// Allow to control the next action.
+	/// </summary>
+	/// <returns></returns>
+	protected IEnumerator<ICoroutineInstruction> DoCoroutineList()
+	{
+		while (true)
+		{
+			while (CoroutineList.Count == 0)
+			{
+				yield return new SkipThisFrame();
+			}
+			yield return new AwaitForTask(CoroutineList[0]);
+			CoroutineList.RemoveAt(0);
+		}
+	}
+
+	public IEnumerator<ICoroutineInstruction> Wait(uint waitTime)
+	{
+		yield return new WaitForFrames(waitTime);
 	}
 
 	public IEnumerator<ICoroutineInstruction> Rise()
 	{
 		Vector2 vector = NPC.Bottom;
+		NPC.dontTakeDamage = false;
 		for (int i = 0; i <= 60; i++)
 		{
 			CowerValue *= 0.9f;
@@ -164,7 +256,7 @@ public class BloodTusk : ModNPC
 			{
 				CowerValue = 0;
 			}
-			NPC.height = (int)MathHelper.Lerp(142, 10, CowerValue);
+			NPC.height = (int)MathHelper.Lerp(184, 10, CowerValue);
 			NPC.Bottom = vector;
 			if (NPC.alpha > 25)
 			{
@@ -176,9 +268,8 @@ public class BloodTusk : ModNPC
 			}
 			yield return new SkipThisFrame();
 		}
-		NPC.height = 142;
+		NPC.height = 184;
 		NPC.Bottom = vector;
-		BloodTuskCoroutine.StartCoroutine(new Coroutine(Cower()));
 	}
 
 	public IEnumerator<ICoroutineInstruction> Cower()
@@ -191,11 +282,12 @@ public class BloodTusk : ModNPC
 			{
 				CowerValue = 1;
 			}
-			NPC.height = (int)MathHelper.Lerp(142, 10, CowerValue);
+			NPC.height = (int)MathHelper.Lerp(184, 10, CowerValue);
 			NPC.Bottom = vector;
 			if (i > 13)
 			{
 				NPC.alpha += 10;
+				NPC.dontTakeDamage = true;
 			}
 			yield return new SkipThisFrame();
 		}
@@ -203,7 +295,6 @@ public class BloodTusk : ModNPC
 		NPC.alpha = 255;
 		NPC.Bottom = vector;
 		Relocation();
-		SwitchActionRise();
 	}
 
 	/// <summary>
@@ -235,7 +326,7 @@ public class BloodTusk : ModNPC
 						break;
 					}
 				}
-				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), leftSpikePos, Vector2.zeroVector, ModContent.ProjectileType<Tusk_ground_little>(), 30, 1, NPC.target);
+				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), leftSpikePos, Vector2.zeroVector, GetTusk_groundType(), 30, 1, NPC.target);
 				leftSpikePos += TileCollisionUtils.GetTopographicGradient(leftSpikePos, 8).RotatedBy(-MathHelper.PiOver2) * 100;
 
 				Vector2 rightNormal = -TileCollisionUtils.GetTopographicGradient(rightSpikePos, 8);
@@ -254,12 +345,11 @@ public class BloodTusk : ModNPC
 						break;
 					}
 				}
-				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), rightSpikePos, Vector2.zeroVector, ModContent.ProjectileType<Tusk_ground_little>(), 30, 1, NPC.target);
+				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), rightSpikePos, Vector2.zeroVector, GetTusk_groundType(), 30, 1, NPC.target);
 				rightSpikePos += TileCollisionUtils.GetTopographicGradient(rightSpikePos, 8).RotatedBy(MathHelper.PiOver2) * 100;
 			}
 			yield return new WaitForFrames(50);
 		}
-		BloodTuskCoroutine.StartCoroutine(new Coroutine(Rise()));
 	}
 
 	/// <summary>
@@ -288,7 +378,7 @@ public class BloodTusk : ModNPC
 					break;
 				}
 			}
-			Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), leftSpikePos, Vector2.zeroVector, ModContent.ProjectileType<Tusk_ground_little>(), 30, 1, NPC.target);
+			Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), leftSpikePos, Vector2.zeroVector, GetTusk_groundType(), 30, 1, NPC.target);
 			p0.timeLeft = Main.rand.Next(101, 110);
 			leftSpikePos += TileCollisionUtils.GetTopographicGradient(leftSpikePos, 8).RotatedBy(-MathHelper.PiOver2) * 30;
 
@@ -308,31 +398,140 @@ public class BloodTusk : ModNPC
 					break;
 				}
 			}
-			Projectile p1 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), rightSpikePos, Vector2.zeroVector, ModContent.ProjectileType<Tusk_ground_little>(), 30, 1, NPC.target);
+			Projectile p1 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), rightSpikePos, Vector2.zeroVector, GetTusk_groundType(), 30, 1, NPC.target);
 			p1.timeLeft = Main.rand.Next(101, 110);
 			rightSpikePos += TileCollisionUtils.GetTopographicGradient(rightSpikePos, 8).RotatedBy(MathHelper.PiOver2) * 30;
 			yield return new WaitForFrames(4);
 		}
-		BloodTuskCoroutine.StartCoroutine(new Coroutine(Rise()));
 	}
 
-	public void SwitchActionRise()
+	/// <summary>
+	/// A fast wave of spike, but sparser.
+	/// </summary>
+	/// <returns></returns>
+	public IEnumerator<ICoroutineInstruction> FastWaveGroundSpike()
 	{
-		switch (Main.rand.Next(4))
+		Vector2 leftSpikePos = NPC.Bottom + new Vector2(-40, 0);
+		Vector2 rightSpikePos = NPC.Bottom + new Vector2(40, 0);
+		for (int i = 0; i < 60; i++)
 		{
-			case 0:
-				BloodTuskCoroutine.StartCoroutine(new Coroutine(Rise()));
-				break;
-			case 1:
-				BloodTuskCoroutine.StartCoroutine(new Coroutine(SimultaneouslyGroundSpike(1)));
-				break;
-			case 2:
-				BloodTuskCoroutine.StartCoroutine(new Coroutine(SimultaneouslyGroundSpike(3)));
-				break;
-			case 3:
-				BloodTuskCoroutine.StartCoroutine(new Coroutine(SlowWaveGroundSpike()));
-				break;
+			Vector2 leftNormal = -TileCollisionUtils.GetTopographicGradient(leftSpikePos, 8);
+			for (int k = 0; k < 15; k++)
+			{
+				if (!Collision.SolidCollision(leftSpikePos, 0, 0))
+				{
+					leftSpikePos += leftNormal * 20;
+				}
+				else if (Collision.SolidCollision(leftSpikePos - leftNormal * 20, 0, 0))
+				{
+					leftSpikePos -= leftNormal * 20;
+				}
+				else
+				{
+					break;
+				}
+			}
+			Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), leftSpikePos, Vector2.zeroVector, GetTusk_groundType(), 30, 1, NPC.target);
+			p0.timeLeft = Main.rand.Next(101, 110);
+			leftSpikePos += TileCollisionUtils.GetTopographicGradient(leftSpikePos, 8).RotatedBy(-MathHelper.PiOver2) * 160;
+
+			Vector2 rightNormal = -TileCollisionUtils.GetTopographicGradient(rightSpikePos, 8);
+			for (int k = 0; k < 15; k++)
+			{
+				if (!Collision.SolidCollision(rightSpikePos, 0, 0))
+				{
+					rightSpikePos += rightNormal * 20;
+				}
+				else if (Collision.SolidCollision(rightSpikePos - rightNormal * 20, 0, 0))
+				{
+					rightSpikePos -= rightNormal * 20;
+				}
+				else
+				{
+					break;
+				}
+			}
+			Projectile p1 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), rightSpikePos, Vector2.zeroVector, GetTusk_groundType(), 30, 1, NPC.target);
+			p1.timeLeft = Main.rand.Next(101, 110);
+			rightSpikePos += TileCollisionUtils.GetTopographicGradient(rightSpikePos, 8).RotatedBy(MathHelper.PiOver2) * 160;
+			yield return new WaitForFrames(2);
 		}
+	}
+
+	public IEnumerator<ICoroutineInstruction> SprayTuskSpice()
+	{
+		for (int i = 0; i <= 60; i++)
+		{
+			CowerValueSpecial_MainTusk = MathHelper.Lerp(CowerValueSpecial_MainTusk, 1f, 0.1f);
+			if (i == 60)
+			{
+				CowerValueSpecial_MainTusk = 1;
+			}
+			if (i > 13)
+			{
+				NPC.dontTakeDamage = true;
+			}
+			yield return new SkipThisFrame();
+		}
+		for (int i = 0; i <= 800; i++)
+		{
+			float speed = Math.Min(400 - Math.Abs(i - 400), 100) / 100f;
+			speed = MathF.Sqrt(speed);
+			for (int g = 0; g < 3; g++)
+			{
+				var blood = new BloodDrop
+				{
+					velocity = new Vector2(0, -speed * 25).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)) * Main.rand.NextFloat(0.8f, 1.5f),
+					Active = true,
+					Visible = true,
+					position = NPC.Bottom + new Vector2(0, -30),
+					maxTime = Main.rand.Next(54, 360),
+					scale = Main.rand.NextFloat(6f, 55f) * (speed + 0.01f),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) },
+				};
+				Ins.VFXManager.Add(blood);
+			}
+			var bloodSplash = new BloodSplash
+			{
+				velocity = new Vector2(0, -speed * 9).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)) * Main.rand.NextFloat(0.8f, 1.5f),
+				Active = true,
+				Visible = true,
+				position = NPC.Bottom + new Vector2(0, -30),
+				maxTime = Main.rand.Next(54, 75),
+				scale = Main.rand.NextFloat(6f, 18f) * (speed + 0.01f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(20.0f, 40.0f) },
+			};
+			Ins.VFXManager.Add(bloodSplash);
+			if (i % 9 == 0 && speed > 0.5f)
+			{
+				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(0, -30), new Vector2(0, -speed * 35).RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f)) * Main.rand.NextFloat(0.8f, 1.2f), ModContent.ProjectileType<TuskSpice_WithGravity>(), 10, 1, NPC.target);
+			}
+			yield return new SkipThisFrame();
+		}
+		NPC.dontTakeDamage = false;
+		for (int i = 0; i <= 60; i++)
+		{
+			CowerValueSpecial_MainTusk *= 0.9f;
+			if (i == 60)
+			{
+				CowerValueSpecial_MainTusk = -1;
+			}
+			yield return new SkipThisFrame();
+		}
+	}
+
+	/// <summary>
+	/// A animation to next phase.
+	/// </summary>
+	/// <returns></returns>
+	public IEnumerator<ICoroutineInstruction> SwitchToPhase2()
+	{
+		for (int i = 0; i < 300; i++)
+		{
+			yield return new SkipThisFrame();
+		}
+		State = (int)States.Phase2;
 	}
 
 	/// <summary>
@@ -354,6 +553,30 @@ public class BloodTusk : ModNPC
 				randomPoint.Y += 10;
 			}
 		}
+	}
+
+	public uint GetWatingTime(int time_orig)
+	{
+		uint waitTime = (uint)time_orig;
+		if (Main.expertMode)
+		{
+			waitTime = (uint)(waitTime * 0.8f);
+		}
+		if (Main.masterMode)
+		{
+			waitTime = (uint)(waitTime * 0.5f);
+		}
+		return waitTime;
+	}
+
+	public int GetTusk_groundType()
+	{
+		int type = ModContent.ProjectileType<Tusk_ground_little>();
+		if (Main.rand.NextBool(3))
+		{
+			type = ModContent.ProjectileType<Tusk_ground>();
+		}
+		return type;
 	}
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
@@ -379,6 +602,10 @@ public class BloodTusk : ModNPC
 
 	public override void HitEffect(NPC.HitInfo hit)
 	{
+		if(State == (int)States.Phase1 && NPC.life < NPC.lifeMax * 0.5)
+		{
+			CoroutineList.Add(SwitchToPhase2());
+		}
 		if (NPC.life <= 0)
 		{
 		}
@@ -398,7 +625,8 @@ public class BloodTusk : ModNPC
 		effect.CurrentTechnique.Passes[0].Apply();
 
 		List<Vertex2D> bars = new List<Vertex2D>();
-		DrawPieceSequence.ForEach(drawPiece => drawPiece.Draw(NPC, bars));
+		DrawMyNPC(bars);
+
 		Main.graphics.graphicsDevice.Textures[0] = tuskAtlas;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
 
@@ -407,9 +635,41 @@ public class BloodTusk : ModNPC
 		return false;
 	}
 
+	public void DrawMyNPC(List<Vertex2D> bars)
+	{
+		if (CowerValueSpecial_MainTusk is >= 0 and <= 1)
+		{
+			DrawPieceSequence.ForEach(drawPiece =>
+			{
+				if (drawPiece.Equals(Tusk0))
+				{
+					drawPiece.Draw(NPC, bars, CowerValueSpecial_MainTusk);
+				}
+				else
+				{
+					drawPiece.Draw(NPC, bars);
+				}
+			});
+		}
+		else
+		{
+			DrawPieceSequence.ForEach(drawPiece => drawPiece.Draw(NPC, bars));
+		}
+	}
+
 	public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
 	{
 		return base.DrawHealthBar(hbPosition, ref scale, ref position);
+	}
+
+	public override void ModifyHoverBoundingBox(ref Rectangle boundingBox)
+	{
+		Rectangle rectangle = NPC.Hitbox;
+		if (NPC.dontTakeDamage)
+		{
+			rectangle = Rectangle.emptyRectangle;
+		}
+		boundingBox = rectangle;
 	}
 
 	public override void OnKill()

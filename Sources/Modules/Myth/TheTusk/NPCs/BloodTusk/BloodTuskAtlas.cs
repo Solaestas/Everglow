@@ -57,11 +57,15 @@ public class BloodTuskAtlas
 
 public static class DrawPieceExtensions
 {
-	public static void Draw(this BloodTuskAtlas.DrawPiece drawPiece, NPC tusk, List<Vertex2D> bars)
+	public static void Draw(this BloodTuskAtlas.DrawPiece drawPiece, NPC tusk, List<Vertex2D> bars, float specialCower = -1)
 	{
 		Texture2D texture = ModAsset.BloodTusk_Atlas.Value;
 		float cower = (tusk.ModNPC as BloodTusk)?.CowerValue ?? 0;
-		Vector2 drawPos = tusk.Center + Vector2.Lerp(drawPiece.Offset0, drawPiece.Offset1, cower) + new Vector2(0, -40);
+		if(specialCower is >= 0 and <= 1)
+		{
+			cower = specialCower;
+		}
+		Vector2 drawPos = tusk.Center + Vector2.Lerp(drawPiece.Offset0, drawPiece.Offset1, cower) + new Vector2(0, -20);
 		Rectangle rectangle = drawPiece.DrawRectangle;
 		if (rectangle.Height / 2 + drawPos.Y > tusk.Bottom.Y + 64)
 		{

@@ -41,6 +41,10 @@ public class Tusk_ground_little : ModProjectile
 			{
 				Projectile.position -= Projectile.rotation.ToRotationVector2() * 4;
 			}
+			else if (Collision.SolidCollision(Projectile.Center + Projectile.rotation.ToRotationVector2() * 4, 0, 0))
+			{
+				Projectile.position += Projectile.rotation.ToRotationVector2() * 4;
+			}
 			else
 			{
 				break;
