@@ -5,7 +5,4 @@
   <ItemGroup>
 		<Solaestas-ResourceFile Include="YggdrasilTown\**\*.json" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Furnace\Buffs\MelterGearCooldown.png" />
-  </ItemGroup>
 </Project>
