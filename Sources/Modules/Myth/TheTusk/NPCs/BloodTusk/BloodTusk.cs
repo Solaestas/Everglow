@@ -44,9 +44,19 @@ public class BloodTusk : ModNPC
 	public float CowerValueSpecial_MainTusk;
 
 	/// <summary>
+	/// 0~1,0 for phase1 1 for phase2.
+	/// </summary>
+	public float FadeValue_ToPhase2;
+
+	/// <summary>
 	/// Drawing sequence.
 	/// </summary>
 	public List<DrawPiece> DrawPieceSequence = new List<DrawPiece>();
+
+	/// <summary>
+	/// Shader drawing sequence when switch to phase2.
+	/// </summary>
+	public List<DrawPiece> ShaderDrawPieceSequence = new List<DrawPiece>();
 
 	/// <summary>
 	/// A coroutine to run the state pattern.
@@ -527,10 +537,19 @@ public class BloodTusk : ModNPC
 	/// <returns></returns>
 	public IEnumerator<ICoroutineInstruction> SwitchToPhase2()
 	{
+		ShaderDrawPieceSequence = [.. DrawPieceSequence];
+		DrawPieceSequence.Clear();
+		DrawPieceSequence = new List<DrawPiece>
+		{
+			 Gum_Middle, SubTusk3_2, SubTusk5_2, Tusk_Black, Tusk1, SubTusk0_2, SubTusk1_2,
+			 SubTusk6_2, SubTusk7_2, Gum_Bottom, Gum_Surface, SubTusk2_2, SubTusk4_2, Gum_Surface_Center,
+		};
 		for (int i = 0; i < 300; i++)
 		{
+			FadeValue_ToPhase2 = i / 300f;
 			yield return new SkipThisFrame();
 		}
+		FadeValue_ToPhase2 = 1;
 		State = (int)States.Phase2;
 	}
 
@@ -625,21 +644,42 @@ public class BloodTusk : ModNPC
 		effect.CurrentTechnique.Passes[0].Apply();
 
 		List<Vertex2D> bars = new List<Vertex2D>();
-		DrawMyNPC(bars);
+		DrawMyNPC(bars, DrawPieceSequence);
 
 		Main.graphics.graphicsDevice.Textures[0] = tuskAtlas;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
+
+		if(FadeValue_ToPhase2 is > 0 and < 1)
+		{
+			spriteBatch.End();
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null);
+
+			Effect dissolve = ModAsset.BloodTusk_dissolve.Value;
+			float dissolveDuration = FadeValue_ToPhase2;
+			dissolve.Parameters["uTransform"].SetValue(model * projection);
+			dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_spiderNet.Value);
+			dissolve.Parameters["duration"].SetValue(1 - dissolveDuration);
+			dissolve.Parameters["uNoiseSize"].SetValue(1f);
+			dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(0.5f, 0.5f));
+			dissolve.CurrentTechnique.Passes[0].Apply();
+
+			bars = new List<Vertex2D>();
+			DrawMyNPC(bars, ShaderDrawPieceSequence);
+
+			Main.graphics.graphicsDevice.Textures[0] = tuskAtlas;
+			Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
+		}
 
 		spriteBatch.End();
 		spriteBatch.Begin(sBS);
 		return false;
 	}
 
-	public void DrawMyNPC(List<Vertex2D> bars)
+	public void DrawMyNPC(List<Vertex2D> bars, List<DrawPiece> pieces)
 	{
 		if (CowerValueSpecial_MainTusk is >= 0 and <= 1)
 		{
-			DrawPieceSequence.ForEach(drawPiece =>
+			pieces.ForEach(drawPiece =>
 			{
 				if (drawPiece.Equals(Tusk0))
 				{
@@ -653,7 +693,7 @@ public class BloodTusk : ModNPC
 		}
 		else
 		{
-			DrawPieceSequence.ForEach(drawPiece => drawPiece.Draw(NPC, bars));
+			pieces.ForEach(drawPiece => drawPiece.Draw(NPC, bars));
 		}
 	}
 
