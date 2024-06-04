@@ -55,10 +55,7 @@ internal class HotAirBalloonPlayer : ModPlayer
 			}
 
 			// Draw dust
-			if (Main.rand.NextBool(1))
-			{
-				Dust.NewDust(Player.position, Player.width, Player.height, DustID.Torch);
-			}
+			Dust.NewDust(Player.position, Player.width, Player.height, DustID.Torch);
 		}
 	}
 }
