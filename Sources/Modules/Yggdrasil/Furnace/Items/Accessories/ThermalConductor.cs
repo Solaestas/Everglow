@@ -4,9 +4,10 @@ namespace Everglow.Yggdrasil.Furnace.Items.Accessories;
 
 public class ThermalConductor : ModItem
 {
+	public const int EffectCheckFrameCount = 60;
 	public const float StatusTriggerCondition = 0.2f;
 	public const float StatusTriggerRate = 0.33f;
-	public const int DebuffDuration = 300;
+	public const int DebuffDuration = 180;
 	public const int ManaHeal = 100;
 
 	public override void SetDefaults()
@@ -34,7 +35,9 @@ public class ThermalConductor : ModItem
 
 internal class ThermalConductorPlayer : ModPlayer
 {
-	public bool ThermalConductorEnable = false;
+	public bool ThermalConductorEnable { get; set; } = false;
+
+	private int FrameTimer { get; set; } = 0;
 
 	public override void ResetEffects()
 	{
@@ -46,27 +49,39 @@ internal class ThermalConductorPlayer : ModPlayer
 	// along with a Curse Inferno debuff with [DebuffDuration] duration.
 	public override void PreUpdate()
 	{
-		if (Main.rand.NextBool(60))
+		if (ThermalConductorEnable)
 		{
-			// statMana is more than trigger condition
-			if (Player.statMana >= ThermalConductor.StatusTriggerCondition * Player.statManaMax2)
+			FrameTimer++;
+
+			if (FrameTimer >= ThermalConductor.EffectCheckFrameCount)
 			{
-				return;
+				// reset timer
+				FrameTimer = 0;
+
+				// statMana is more than trigger condition
+				if (Player.statMana >= ThermalConductor.StatusTriggerCondition * Player.statManaMax2)
+				{
+					return;
+				}
+
+				// Random
+				if (Main.rand.NextFloat() >= ThermalConductor.StatusTriggerRate)
+				{
+					return;
+				}
+
+				// Heal Mana
+				Player.statMana = Player.statMana + ThermalConductor.ManaHeal > Player.statManaMax2 ?
+						Player.statManaMax2 :
+						Player.statMana + ThermalConductor.ManaHeal;
+
+				// Show mana heal number
+				Color manaHealColor = new Color(0, 100, 255);
+				CombatText.NewText(Player.getRect(), manaHealColor, ThermalConductor.ManaHeal, dramatic: true, dot: false);
+
+				// Add Debuff
+				Player.AddBuff(BuffID.CursedInferno, ThermalConductor.DebuffDuration);
 			}
-
-			// Random
-			if (Main.rand.NextFloat() >= ThermalConductor.StatusTriggerRate)
-			{
-				return;
-			}
-
-			// Heal Mana
-			Player.statMana = Player.statMana + ThermalConductor.ManaHeal > Player.statManaMax2 ?
-					Player.statManaMax2 :
-					Player.statMana + ThermalConductor.ManaHeal;
-
-			// Add Debuff
-			Player.AddBuff(BuffID.CursedInferno, ThermalConductor.DebuffDuration);
 		}
 	}
 }
