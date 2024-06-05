@@ -51,7 +51,6 @@ public class Tusk_ground : ModProjectile
 			}
 		}
 		Projectile.velocity *= 0;
-		Projectile.damage = 10;
 	}
 
 	public override void AI()

@@ -1,5 +1,3 @@
-using Terraria;
-
 namespace Everglow.Myth.TheTusk.NPCs.BloodTusk;
 
 public class BloodTuskAtlas
@@ -39,6 +37,20 @@ public class BloodTuskAtlas
 	public static DrawPiece SubTusk6_2 = new DrawPiece(new Rectangle(376, 238, 20, 34), new Vector2(41, 69), new Vector2(30, 90));
 	public static DrawPiece SubTusk7_2 = new DrawPiece(new Rectangle(404, 240, 30, 30), new Vector2(68, 79), new Vector2(40, 96));
 
+	public static DrawPiece SubTusk0_3 = new DrawPiece(new Rectangle(774, 24, 148, 50), new Vector2(-153, 79), new Vector2(-5, 140));
+	public static DrawPiece SubTusk1_3 = new DrawPiece(new Rectangle(926, 2, 32, 74), new Vector2(-99, 70), new Vector2(-60, 144));
+	public static DrawPiece SubTusk2_3 = new DrawPiece(new Rectangle(784, 88, 78, 150), new Vector2(-102, 6), new Vector2(-22, 156));
+	public static DrawPiece SubTusk3_3 = new DrawPiece(new Rectangle(896, 94, 32, 132), new Vector2(-55, 12), new Vector2(-23, 144));
+	public static DrawPiece SubTusk4_3 = new DrawPiece(new Rectangle(936, 114, 60, 106), new Vector2(-43, 43), new Vector2(23, 149));
+	public static DrawPiece SubTusk5_3 = new DrawPiece(new Rectangle(1042, 8, 32, 114), new Vector2(-17, 10), new Vector2(-49, 124));
+	public static DrawPiece SubTusk6_3 = new DrawPiece(new Rectangle(986, 10, 32, 90), new Vector2(-21, -1), new Vector2(-53, 89));
+	public static DrawPiece SubTusk7_3 = new DrawPiece(new Rectangle(1094, 12, 38, 128), new Vector2(20, 38), new Vector2(-18, 166));
+	public static DrawPiece SubTusk8_3 = new DrawPiece(new Rectangle(1154, 12, 40, 136), new Vector2(47, 8), new Vector2(7, 144));
+	public static DrawPiece SubTusk9_3 = new DrawPiece(new Rectangle(1010, 130, 40, 116), new Vector2(49, 30), new Vector2(9, 146));
+	public static DrawPiece SubTusk10_3 = new DrawPiece(new Rectangle(682, 158, 90, 138), new Vector2(92, 37), new Vector2(2, 175));
+	public static DrawPiece SubTusk11_3 = new DrawPiece(new Rectangle(1164, 330, 26, 132), new Vector2(98, 26), new Vector2(72, 158));
+	public static DrawPiece SubTusk12_3 = new DrawPiece(new Rectangle(1024, 248, 156, 46), new Vector2(153, 88), new Vector2(-3, 134));
+
 	public static DrawPiece Gum_Surface = new DrawPiece(new Rectangle(26, 252, 174, 68), new Vector2(2, 94));
 	public static DrawPiece Gum_Surface_Center = new DrawPiece(new Rectangle(92, 270, 30, 50), new Vector2(-4, 103));
 	public static DrawPiece Gum_Middle = new DrawPiece(new Rectangle(26, 328, 174, 60), new Vector2(2, 88));
@@ -47,6 +59,7 @@ public class BloodTuskAtlas
 	public static DrawPiece Tusk0 = new DrawPiece(new Rectangle(366, 346, 50, 160), Vector2.zeroVector, new Vector2(0, 150));
 	public static DrawPiece Tusk_Black = new DrawPiece(new Rectangle(300, 346, 50, 160), Vector2.zeroVector, new Vector2(0, 150));
 	public static DrawPiece Tusk1 = new DrawPiece(new Rectangle(232, 346, 50, 160), Vector2.zeroVector, new Vector2(0, 150));
+	public static DrawPiece Tusk2 = new DrawPiece(new Rectangle(612, 298, 458, 216), new Vector2(2, 28));
 
 	public static DrawPiece StickyBlood = new DrawPiece(new Rectangle(450, 0, 152, 450));
 	public static DrawPiece BloodDrop0 = new DrawPiece(new Rectangle(620, 0, 30, 192));
@@ -61,7 +74,7 @@ public static class DrawPieceExtensions
 	{
 		Texture2D texture = ModAsset.BloodTusk_Atlas.Value;
 		float cower = (tusk.ModNPC as BloodTusk)?.CowerValue ?? 0;
-		if(specialCower is >= 0 and <= 1)
+		if (specialCower is >= 0 and <= 1)
 		{
 			cower = specialCower;
 		}
@@ -72,6 +85,27 @@ public static class DrawPieceExtensions
 			rectangle.Height -= (int)(rectangle.Height / 2f + drawPos.Y - tusk.Bottom.Y - 64) * 2;
 		}
 		rectangle.Height = Math.Max(rectangle.Height, 0);
+		float alpha = (255 - tusk.alpha) / 255f;
+		float rotation = tusk.rotation;
+		Vector2 topLeft = rectangle.TopLeft() / texture.Size();
+		Vector2 topRight = rectangle.TopRight() / texture.Size();
+		Vector2 bottomLeft = rectangle.BottomLeft() / texture.Size();
+		Vector2 bottomRight = rectangle.BottomRight() / texture.Size();
+		AddVertex(bars, drawPos + new Vector2(-rectangle.Width, -rectangle.Height).RotatedBy(rotation) * 0.5f, new Vector3(topLeft, 0), alpha);
+		AddVertex(bars, drawPos + new Vector2(rectangle.Width, -rectangle.Height).RotatedBy(rotation) * 0.5f, new Vector3(topRight, 0), alpha);
+		AddVertex(bars, drawPos + new Vector2(-rectangle.Width, rectangle.Height).RotatedBy(rotation) * 0.5f, new Vector3(bottomLeft, 0), alpha);
+
+		AddVertex(bars, drawPos + new Vector2(rectangle.Width, -rectangle.Height).RotatedBy(rotation) * 0.5f, new Vector3(topRight, 0), alpha);
+		AddVertex(bars, drawPos + new Vector2(rectangle.Width, rectangle.Height).RotatedBy(rotation) * 0.5f, new Vector3(bottomRight, 0), alpha);
+		AddVertex(bars, drawPos + new Vector2(-rectangle.Width, rectangle.Height).RotatedBy(rotation) * 0.5f, new Vector3(bottomLeft, 0), alpha);
+	}
+
+	public static void Draw(this BloodTuskAtlas.DrawPiece drawPiece, NPC tusk, List<Vertex2D> bars, Vector2 offset)
+	{
+		Texture2D texture = ModAsset.BloodTusk_Atlas.Value;
+		float cower = (tusk.ModNPC as BloodTusk)?.CowerValue ?? 0;
+		Vector2 drawPos = tusk.Center + Vector2.Lerp(drawPiece.Offset0, drawPiece.Offset1, cower) + new Vector2(0, -20) + offset;
+		Rectangle rectangle = drawPiece.DrawRectangle;
 		float alpha = (255 - tusk.alpha) / 255f;
 		float rotation = tusk.rotation;
 		Vector2 topLeft = rectangle.TopLeft() / texture.Size();

@@ -4,6 +4,8 @@ namespace Everglow.Myth.TheTusk.Projectiles;
 
 public class TuskSpice_WithGravity : ModProjectile
 {
+	public Vector2 StartPos = default;
+
 	public override void SetDefaults()
 	{
 		Projectile.width = 20;
@@ -22,6 +24,7 @@ public class TuskSpice_WithGravity : ModProjectile
 
 	public override void OnSpawn(IEntitySource source)
 	{
+		StartPos = Projectile.Center;
 		Projectile.frame = Main.rand.Next(5);
 		Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 		Projectile.ai[0] = Projectile.rotation;
@@ -47,7 +50,7 @@ public class TuskSpice_WithGravity : ModProjectile
 			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, new Rectangle(Projectile.frame * 18, 0, 18, 72), lightColor * ((3 - i) / 5f), Projectile.ai[i], new Vector2(9, 36), Projectile.scale, SpriteEffects.None, 0);
 		}
 		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, new Rectangle(Projectile.frame * 18, 0, 18, 72), lightColor, Projectile.rotation, new Vector2(9, 36), Projectile.scale, SpriteEffects.None, 0);
-		if(VFXManager.InScreen(Projectile.Center, 200))
+		if (VFXManager.InScreen(Projectile.Center, 200))
 		{
 			for (int j = 0; j < 55; j++)
 			{
@@ -59,12 +62,16 @@ public class TuskSpice_WithGravity : ModProjectile
 					if (tile.HasTile)
 					{
 						float colorValue = (55 - j + Projectile.velocity.Y * 0.4f) / 40f;
-						if(colorValue < 0)
+						if (colorValue < 0)
 						{
 							break;
 						}
 						colorValue = Math.Clamp(MathF.Pow(colorValue, 1.6f), 0, 1);
 						Texture2D shadow = ModAsset.TuskSpice_WithGravity_shadow.Value;
+						if (Math.Abs(StartPos.X - Projectile.Center.X) < 150)
+						{
+							colorValue *= Math.Abs(StartPos.X - Projectile.Center.X) / 150f;
+						}
 						Main.EntitySpriteDraw(shadow, new Vector2(shadowPos.X, shadowPoint.Y * 16 + 24) - Main.screenPosition, new Rectangle(Projectile.frame * 18, 0, 18, 72), Color.White * colorValue, Projectile.rotation, new Vector2(9, 36), Projectile.scale, SpriteEffects.None, 0);
 						break;
 					}

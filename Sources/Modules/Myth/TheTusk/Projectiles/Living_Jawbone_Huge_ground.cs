@@ -32,7 +32,7 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 		Vector2 checkDir = TileCollisionUtils.GetTopographicGradient(Projectile.Center, 20);
 		for (int y = 0; y < 100; y++)
 		{
-			if (Collision.SolidCollision(Projectile.Center, 0, 0))
+			if (Collision.SolidCollision(Projectile.Center - new Vector2(8), 16, 16))
 			{
 				break;
 			}
