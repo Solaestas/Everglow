@@ -81,7 +81,6 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 			RotationBaseUp.Add(new Vector2(18 * i, 0).RotatedBy(Projectile.rotation - Projectile.ai[0]) + Projectile.Center);
 			RotationBaseDown.Add(new Vector2(18 * i, 0).RotatedBy(Projectile.rotation + Projectile.ai[1]) + Projectile.Center);
 		}
-		Projectile.damage = 100;
 	}
 
 	/// <summary>

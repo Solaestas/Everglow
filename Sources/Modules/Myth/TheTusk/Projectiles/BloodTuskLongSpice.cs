@@ -11,7 +11,6 @@ public class BloodTuskLongSpice : ModProjectile
 	public NPC Tusk;
 
 	public Vector2 StartPos = default;
-	public Vector2 StartNPCCenter = default;
 	public Vector2 StartDeltaPos = default;
 
 	public override void SetDefaults()
@@ -38,10 +37,9 @@ public class BloodTuskLongSpice : ModProjectile
 	{
 		if(Tusk != null)
 		{
-			if(StartNPCCenter == default)
+			if(StartDeltaPos == default)
 			{
-				StartNPCCenter = Tusk.Center;
-				StartDeltaPos = StartPos - StartNPCCenter;
+				StartDeltaPos = StartPos - Tusk.Center;
 			}
 			StartPos = Tusk.Center + StartDeltaPos;
 			BloodTusk bloodTusk = Tusk.ModNPC as BloodTusk;

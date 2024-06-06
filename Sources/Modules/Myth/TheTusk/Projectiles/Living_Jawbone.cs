@@ -107,8 +107,8 @@ public class Living_Jawbone : ModProjectile
 		{
 			spriteEffects = SpriteEffects.FlipVertically;
 		}
-		Main.EntitySpriteDraw(upJaw, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation + Projectile.ai[0], new Vector2(8f, 18f), Projectile.scale, spriteEffects, 0);
-		Main.EntitySpriteDraw(downJaw, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation - Projectile.ai[0], new Vector2(8f, 18f), Projectile.scale, spriteEffects, 0);
+		Main.EntitySpriteDraw(upJaw, Projectile.Center - Main.screenPosition, null, Lighting.GetColor(Projectile.Center.ToTileCoordinates()), Projectile.rotation + Projectile.ai[0], new Vector2(8f, 18f), Projectile.scale, spriteEffects, 0);
+		Main.EntitySpriteDraw(downJaw, Projectile.Center - Main.screenPosition, null, Lighting.GetColor(Projectile.Center.ToTileCoordinates()), Projectile.rotation - Projectile.ai[0], new Vector2(8f, 18f), Projectile.scale, spriteEffects, 0);
 		return false;
 	}
 }

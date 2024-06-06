@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Myth.TheTusk.Buffs;
 using Everglow.Myth.TheTusk.Tiles;
 using Terraria.DataStructures;
 
@@ -15,7 +16,7 @@ public class TuskBloodPool : ModProjectile
 		Projectile.tileCollide = false;
 		Projectile.friendly = false;
 		Projectile.hostile = true;
-		Projectile.timeLeft = 1080;
+		Projectile.timeLeft = 480;
 		Projectile.width = 40;
 		Projectile.height = 40;
 		DissolvingTile = new List<Point>();
@@ -64,7 +65,7 @@ public class TuskBloodPool : ModProjectile
 		{
 			Projectile.ai[0] = 36 + MathF.Pow((120 - Projectile.timeLeft) / 120f, 3) * 100;
 		}
-		else if (Projectile.timeLeft < 1000)
+		else if (Projectile.timeLeft < 400)
 		{
 			if (Projectile.timeLeft % 12 == 0)
 			{
@@ -136,13 +137,18 @@ public class TuskBloodPool : ModProjectile
 			foreach (var tilePos in DissolvingTile)
 			{
 				Rectangle check = new Rectangle(tilePos.X * 16, tilePos.Y * 16, 16, 16);
-				if(Rectangle.Intersect(check, targetHitbox) != Rectangle.emptyRectangle)
+				if (Rectangle.Intersect(check, targetHitbox) != Rectangle.emptyRectangle)
 				{
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+
+	public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
+	{
+		target.AddBuff(ModContent.BuffType<TuskCursed>(), 450);
 	}
 
 	private void AddBars(List<Vertex2D> bars, float x, int style = 0)
