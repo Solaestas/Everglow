@@ -1,4 +1,5 @@
 using Everglow.Myth.TheTusk.NPCs.BloodTusk;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheTusk.Tiles;
 
@@ -27,7 +28,11 @@ public class AbTuskFlesh : ModTile
 
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
-		NPC.NewNPC(null, i * 16, j * 16, ModContent.NPCType<BloodTusk>());
+		if(NPC.CountNPCS(ModContent.NPCType<BloodTusk>()) <= 0)
+		{
+			NPC tusk = NPC.NewNPCDirect(default, i * 16, j * 16 - 1000, ModContent.NPCType<BloodTusk>());
+			tusk.active = true;
+		}
 	}
 
 	public override void RandomUpdate(int i, int j)

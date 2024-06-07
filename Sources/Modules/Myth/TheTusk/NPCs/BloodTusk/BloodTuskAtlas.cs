@@ -80,11 +80,6 @@ public static class DrawPieceExtensions
 		}
 		Vector2 drawPos = tusk.Center + Vector2.Lerp(drawPiece.Offset0, drawPiece.Offset1, cower) + new Vector2(0, -20);
 		Rectangle rectangle = drawPiece.DrawRectangle;
-		if (rectangle.Height / 2 + drawPos.Y > tusk.Bottom.Y + 64)
-		{
-			rectangle.Height -= (int)(rectangle.Height / 2f + drawPos.Y - tusk.Bottom.Y - 64) * 2;
-		}
-		rectangle.Height = Math.Max(rectangle.Height, 0);
 		float alpha = (255 - tusk.alpha) / 255f;
 		float rotation = tusk.rotation;
 		Vector2 topLeft = rectangle.TopLeft() / texture.Size();

@@ -197,6 +197,9 @@ public class BloodTusk : ModNPC
 			 SubTusk6, SubTusk7, Gum_Bottom, Gum_Surface, SubTusk2, SubTusk4, Gum_Surface_Center,
 		};
 		State = (int)States.Sleep;
+		Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<BloodTusk_Sleep_Crack>(), 0, 0);
+		BloodTusk_Sleep_Crack crack = proj.ModProjectile as BloodTusk_Sleep_Crack;
+		crack.Tusk = NPC;
 	}
 
 	public override void BossHeadSlot(ref int index)
@@ -1306,12 +1309,22 @@ public class BloodTusk : ModNPC
 		SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
 		Texture2D tuskAtlas = ModAsset.BloodTusk_Atlas.Value;
 		spriteBatch.End();
-		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null);
-
-		Effect effect = Commons.ModAsset.Shader2D.Value;
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, default, RasterizerState.CullNone, null);
+		Effect effect = ModAsset.BloodTuskShader.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.Parameters["uNoiseSize"].SetValue(0.2f);
+		Vector2 result = Vector2.Transform(NPC.Bottom + new Vector2(0, -300 * Main.screenHeight), model * projection);
+		//Main.NewText(result);
+		effect.Parameters["drawOrigin"].SetValue(result);
+		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_rgb.Value);
+		effect.Parameters["warpValue1"].SetValue(0.01f);
+		effect.Parameters["warpValue2"].SetValue(1f);
+		effect.Parameters["warpValue3"].SetValue(1f);
+
+		effect.Parameters["warpValue4"].SetValue(0);
+		effect.Parameters["warpValue5"].SetValue(1f);
 		effect.CurrentTechnique.Passes[0].Apply();
 
 		List<Vertex2D> bars = new List<Vertex2D>();
@@ -1320,7 +1333,7 @@ public class BloodTusk : ModNPC
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
 
 		bars = new List<Vertex2D>();
-		if (DrawShaderNPC(bars, spriteBatch))
+		if (DrawDissolveNPC(bars, spriteBatch))
 		{
 			Main.graphics.graphicsDevice.Textures[0] = tuskAtlas;
 			Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
@@ -1388,7 +1401,7 @@ public class BloodTusk : ModNPC
 		AddVertex(bars, drawPos + new Vector2(-rectangle.Width, StandBottomOffset.Y * 2 + 60).RotatedBy(rotation) * 0.5f, new Vector3(bottomLeft, 0), alpha);
 	}
 
-	public bool DrawShaderNPC(List<Vertex2D> bars, SpriteBatch spriteBatch)
+	public bool DrawDissolveNPC(List<Vertex2D> bars, SpriteBatch spriteBatch)
 	{
 		if (FadeValue_ToPhase2 is >= 0 and < 1)
 		{
