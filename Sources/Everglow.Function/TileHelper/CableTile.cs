@@ -218,15 +218,15 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	/// <param name="rope"></param>
 	public virtual void RemoveRopeEffect(Rope rope)
 	{
-		List<_Mass> masses = rope.GetMasses();
-		for (int i = 0; i <= masses.Count - 1; i++)
+		var masses = rope.Masses;
+		for (int i = 0; i < masses.Length; i++)
 		{
-			_Mass thisMass = masses[i];
+			Mass thisMass = masses[i];
 			Dust d0 = Dust.NewDustDirect(thisMass.Position - new Vector2(4), 0, 0, DustID.Asphalt);
 			d0.noGravity = true;
 			d0.velocity *= 0f;
 			d0.scale = 0.8f;
-			if (thisMass.Mass == 2)
+			if (thisMass.Value == 2)
 			{
 				for (int t = 0; t < 3; t++)
 				{
@@ -235,7 +235,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 					d.scale = Main.rand.NextFloat(0.1f, 0.3f);
 				}
 			}
-			if (i == 0 || i == masses.Count - 1)
+			if (i == 0 || i == masses.Length - 1)
 			{
 				for (int t = 0; t < 5; t++)
 				{
@@ -264,15 +264,14 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		{
 			return;
 		}
-		List<_Mass> masses = rope.GetMasses();
+		var masses = rope.Masses;
 		RopesOfAllThisTileInTheWorld.Add(new Point(i, j), rope);
 		RopeHeadAndTail.Add(new Point(i, j), new Point(i2, j2));
-		CableEneity cableEneity;
-		TryGetCableEntityAs<CableEneity>(i, j, out cableEneity);
+		TryGetCableEntityAs(i, j, out CableEneity cableEneity);
 		if (cableEneity == null)
 		{
 			TileEntity.PlaceEntityNet(i, j, ModContent.TileEntityType<CableEneity>());
-			TryGetCableEntityAs<CableEneity>(i, j, out cableEneity);
+			TryGetCableEntityAs(i, j, out cableEneity);
 		}
 		if (cableEneity != null)
 		{
@@ -305,7 +304,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		if (tile.TileType == Type)
 		{
 			int counts = (int)new Vector2(i2 - i, j2 - j).Length() * 2 + 2;
-			Rope rope = RopeHelper.CreateConnectRope2Points(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i2, j2) * 16 + new Vector2(8), counts, Elasticity, RopeUnitMass, LampDistance, SingleLampMass);
+			Rope rope = Rope.Create(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i2, j2) * 16 + new Vector2(8), counts, Elasticity, RopeUnitMass, LampDistance, SingleLampMass);
 			return rope;
 		}
 		return null;
@@ -363,11 +362,11 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		int paint = Main.tile[pos].TileColor;
 		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(BulbTexturePath, type, 1, paint, tileDrawing);
 		var tileSpriteEffect = SpriteEffects.None;
-		List<_Mass> masses = rope.GetMasses();
-		for (int i = 0; i < masses.Count - 1; i++)
+		var masses = rope.Masses;
+		for (int i = 0; i < masses.Length - 1; i++)
 		{
-			_Mass thisMass = masses[i];
-			_Mass nextMass = masses[i + 1];
+			Mass thisMass = masses[i];
+			Mass nextMass = masses[i + 1];
 
 			int totalPushTime = 80;
 			float pushForcePerFrame = 1.26f;
@@ -381,12 +380,12 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 			windCycle += highestWindGridPushComplex;
 			if (!Main.gamePaused)
 			{
-				rope.ApplyForceSpecial(i, new Vector2(windCycle / 16f, 0.4f * thisMass.Mass));
+				rope.ApplyForceSpecial(i, new Vector2(windCycle / 16f, 0.4f * thisMass.Value));
 			}
 
 			// 支持发光涂料
 			Color tileLight;
-			if (color != default(Color))
+			if (color != default)
 			{
 				tileLight = color;
 			}
@@ -681,7 +680,7 @@ public class CableTilePlaceHelpingSystem : Visual
 										else if (cableTile.RopesOfAllThisTileInTheWorld.ContainsKey(new Point(x, y)))
 										{
 											drawColor = new Color(1f, 0, 0, 0.5f);
-											Vector2 anotherPoint = cableTile.RopesOfAllThisTileInTheWorld[new Point(x, y)].GetMasses().Last().Position;
+											Vector2 anotherPoint = cableTile.RopesOfAllThisTileInTheWorld[new Point(x, y)].Masses.Last().Position;
 											Vector2 start0 = anotherPoint;
 											Vector2 end0 = fixPos + new Vector2(8) - toTarget;
 

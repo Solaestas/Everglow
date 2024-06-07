@@ -66,9 +66,7 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 				{
 					Vector2 offset = GetStyleOffset(k);
 
-					Rope rope = RopeHelper.FixRopeAt(offset + new Vector2(i, j) * 16, WorldGen.genRand.Next(10, 20), 10f, 2f);
-					rope.GetMasses().Last().Mass = 2;
-					rope.GetMasses().Last().IsStatic = false;
+					Rope rope = Rope.Create(offset + new Vector2(i, j) * 16, Main.rand.Next(10, 20), 10f, 2f);
 					style.Add(new Point(i, j), rope);
 				}
 			}
@@ -287,11 +285,11 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 		var tileSpriteEffect = SpriteEffects.None;
 		float treeRot = tileDrawing.GetHighestWindGridPushComplex(pos.X, pos.Y - 3, 3, 3, 150, 0.06f, 4, swapLoopDir: true);
 
-		List<_Mass> masses = vine.GetMasses();
+		List<Mass> masses = vine.GetMasses();
 		for (int i = 0; i < masses.Count - 1; i++)
 		{
-			_Mass thisMass = masses[i];
-			_Mass nextMass = masses[i + 1];
+			Mass thisMass = masses[i];
+			Mass nextMass = masses[i + 1];
 			if (i == 0)
 			{
 				thisMass.Position = pos.ToVector2() * 16f + new Vector2(16, 24) + GetStyleOffset(style).RotatedBy(treeRot);
@@ -308,10 +306,10 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 			windCycle += highestWindGridPushComplex;
 			if (!Main.gamePaused)
 			{
-				vine.ApplyForceSpecial(i, new Vector2(windCycle / 4.0f, 0.4f * thisMass.Mass));
+				vine.ApplyForceSpecial(i, new Vector2(windCycle / 4.0f, 0.4f * thisMass.Value));
 				if (i == masses.Count - 2)
 				{
-					vine.ApplyForceSpecial(i + 1, new Vector2(windCycle / 4.0f, 0.4f * nextMass.Mass));
+					vine.ApplyForceSpecial(i + 1, new Vector2(windCycle / 4.0f, 0.4f * nextMass.Value));
 				}
 			}
 
