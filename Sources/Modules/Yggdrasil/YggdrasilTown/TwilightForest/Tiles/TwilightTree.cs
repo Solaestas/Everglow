@@ -285,8 +285,8 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 		var tileSpriteEffect = SpriteEffects.None;
 		float treeRot = tileDrawing.GetHighestWindGridPushComplex(pos.X, pos.Y - 3, 3, 3, 150, 0.06f, 4, swapLoopDir: true);
 
-		List<Mass> masses = vine.GetMasses();
-		for (int i = 0; i < masses.Count - 1; i++)
+		var masses = vine.Masses;
+		for (int i = 0; i < masses.Length - 1; i++)
 		{
 			Mass thisMass = masses[i];
 			Mass nextMass = masses[i + 1];
