@@ -1,10 +1,38 @@
-using Everglow.Commons.Physics;
+using Everglow.Commons.Physics.MassSpringSystem;
+using Everglow.Commons.TileHelper;
+using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Items;
+using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles;
 
-public class TwilightTree : ModTile
+public class TwilightTree : ModTile, ITileFluentlyDrawn
 {
+	/// <summary>
+	/// 挂藤质点
+	/// </summary>
+	public static MassSpringSystem TwilightTreeVineMassSpringSystem = new MassSpringSystem();
+	public static EulerSolver TwilightTreeVineEulerSolver = new EulerSolver(8);
+	public Dictionary<int, Dictionary<Point, Rope>> StyleVines = new Dictionary<int, Dictionary<Point, Rope>>();
+
+	public override void AnimateTile(ref int frame, ref int frameCounter)
+	{
+		if (Main.gamePaused)
+		{
+			return;
+		}
+		TwilightTreeVineMassSpringSystem = new MassSpringSystem();
+		foreach (var style in StyleVines.Values)
+		{
+			foreach (var vine in style.Values)
+			{
+				TwilightTreeVineMassSpringSystem.AddMassSpringMesh(vine);
+			}
+		}
+		TwilightTreeVineEulerSolver.Step(TwilightTreeVineMassSpringSystem, 1);
+	}
+
 	public override void PostSetDefaults()
 	{
 		Main.tileSolid[Type] = false;
@@ -20,47 +48,65 @@ public class TwilightTree : ModTile
 		AddMapEntry(new Color(58, 53, 50), modTranslation);
 		DustType = ModContent.DustType<Dusts.TwilightTreeDust>();
 		AdjTiles = new int[] { Type };
-
-		Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, DrawRopes);
+		for (int i = 0; i < 4; i++)
+		{
+			StyleVines.Add(i, new Dictionary<Point, Rope>());
+		}
 	}
-	public List<Rope> LoadRope(Vector2 basePosition, int style, RenderingTransformFunction renderingTransform)
+
+	public override void NearbyEffects(int i, int j, bool closer)
 	{
-		var result = new List<Rope>();
+		Tile tile = Main.tile[i, j];
+		if (tile.TileFrameY == 3)
+		{
+			for (int k = 0; k < 4; k++)
+			{
+				var style = StyleVines[k];
+				if (!style.ContainsKey(new Point(i, j)))
+				{
+					Vector2 offset = GetStyleOffset(k);
+
+					Rope rope = Rope.Create(offset + new Vector2(i, j) * 16, Main.rand.Next(10, 20), 10f, 2f);
+					style.Add(new Point(i, j), rope);
+				}
+			}
+		}
+	}
+
+	public Vector2 GetStyleOffset(int style)
+	{
+		Vector2 offset = Vector2.zeroVector;
 		switch (style)
 		{
+			case 0:
+				{
+					offset = new Vector2(-128, -66);
+					break;
+				}
+			case 1:
+				{
+					offset = new Vector2(-112, -64);
+					break;
+				}
+			case 2:
+				{
+					offset = new Vector2(54, -44);
+					break;
+				}
 			case 3:
-				var rope = new Rope(new Vector2(74, 196) + basePosition, 1f, (WorldGen.genRand.Next(0, 60) + 140) / 500f, WorldGen.genRand.Next(7, 12), renderingTransform, true);
-				result.Add(rope);
-				rope = new Rope(new Vector2(148, 196) + basePosition, 1f, (WorldGen.genRand.Next(0, 60) + 140) / 500f, WorldGen.genRand.Next(7, 12), renderingTransform, true);
-				result.Add(rope);
-				rope = new Rope(new Vector2(261, 218) + basePosition, 1f, (WorldGen.genRand.Next(0, 60) + 140) / 500f, WorldGen.genRand.Next(7, 12), renderingTransform, true);
-				result.Add(rope);
-				rope = new Rope(new Vector2(270, 192) + basePosition, 1f, (WorldGen.genRand.Next(0, 60) + 140) / 500f, WorldGen.genRand.Next(7, 12), renderingTransform, true);
-				result.Add(rope);
-				break;
+				{
+					offset = new Vector2(134, -84);
+					break;
+				}
 		}
-		return result;
+		return offset;
 	}
 
-	private List<Rope>[] ropes = new List<Rope>[16];
-	private Vector2[] basePositions = new Vector2[16];
-	private Dictionary<(int x, int y), (int style, List<Rope> ropes)> hasRope = new();
-	/// <summary>
-	/// 记录当前每个有树枝的节点的绳子Style（即TileFrameX / 256）
-	/// </summary>
-	public List<(int x, int y, int style)> GetRopeStyleList()
-	{
-		var result = new List<(int x, int y, int style)>();
-		foreach (var keyvaluepair in hasRope)
-		{
-			result.Add((keyvaluepair.Key.x, keyvaluepair.Key.y, keyvaluepair.Value.style));
-		}
-		return result;
-	}
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		yield return new Item(ModContent.ItemType<Items.TwilightWood>());
+		yield return new Item(ModContent.ItemType<TwilightWood>());
 	}
+
 	public override bool CanDrop(int i, int j)
 	{
 		for (int x = 0; x < 6; x++)
@@ -80,29 +126,12 @@ public class TwilightTree : ModTile
 			}
 		}
 		if (tile.TileFrameY > 3)
+		{
 			Gore.NewGore(null, new Vector2(i * 16, j * 16) + new Vector2(Main.rand.Next(16), Main.rand.Next(16)), new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(6.283), ModContent.GoreType<TwilightTree_Leaf>(), Main.rand.NextFloat(0.65f, 1.45f));
-
-		if (!hasRope.ContainsKey((i, j)))
-		{
-			Ins.Logger.Warn("Drop: Trying to access an non-existent TwilightTree rope" + (i, j).ToString());
-			return false;
 		}
-
-		var ropes = hasRope[(i, j)].ropes;
-		foreach (var r in ropes)
-		{
-			var acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
-			for (int a = 0; a < r.GetMassList.Length; a++)
-			{
-				r.GetMassList[a].Force += acc;
-				if (Main.rand.NextBool(100))
-					Gore.NewGoreDirect(null, r.GetMassList[a].Position, r.GetMassList[a].Velocity * 0.1f, ModContent.GoreType<TwilightTree_Vine>());
-				//被砍时对mass操纵写这里
-			}
-		}
-		hasRope.Remove((i, j));
 		return true;
 	}
+
 	private void Shake(int i, int j, int frameY)
 	{
 		if (Main.rand.NextBool(7))
@@ -115,301 +144,213 @@ public class TwilightTree : ModTile
 				}
 			}
 			if (frameY > 3)
-				Gore.NewGore(null, new Vector2(i * 16, j * 16) + new Vector2(Main.rand.Next(16), Main.rand.Next(16)), new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(6.283), ModContent.GoreType<TwilightTree_Leaf>(), Main.rand.NextFloat(0.65f, 1.45f));
-		}
-
-		if (!hasRope.ContainsKey((i, j)))
-		{
-			Ins.Logger.Warn("Shake: Trying to access an non-existent TwilightTree rope" + (i, j).ToString());
-			return;
-		}
-
-		var ropes = hasRope[(i, j)].ropes;
-		foreach (var r in ropes)
-		{
-			var acc = new Vector2(Main.rand.NextFloat(-120, 120), 0);
-			for (int a = 0; a < r.GetMassList.Length; a++)
 			{
-				r.GetMassList[a].Force += acc;
-				if (Main.rand.NextBool(100))
-					Gore.NewGoreDirect(null, r.GetMassList[a].Position, r.GetMassList[a].Velocity * 0.1f, ModContent.GoreType<TwilightTree_Vine>());
-				//被砍时对mass操纵写这里
+				Gore.NewGore(null, new Vector2(i * 16, j * 16) + new Vector2(Main.rand.Next(16), Main.rand.Next(16)), new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(6.283), ModContent.GoreType<TwilightTree_Leaf>(), Main.rand.NextFloat(0.65f, 1.45f));
 			}
 		}
 	}
-	// TODO 144
+
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
 	{
 		Tile tile = Main.tile[i, j];
-		Main.NewText(tile.TileFrameX);
-		int Dy = -1;//向上破坏的自变化Y坐标
-		if (!fail)//判定为已破碎
+		if (effectOnly)
 		{
-			//以下是破坏的特效,比如落叶
-			if (tile.TileFrameY < 4)
-			{
-				Tile tileLeft;
-				Tile tileRight;
-				tileLeft = Main.tile[i - 1, j];
-				if (tileLeft.TileType == Type)
-				{
-					Shake(i - 1, j, tileLeft.TileFrameY);
-				}
-				tileRight = Main.tile[i + 1, j];
-				if (tileRight.TileType == Type)
-				{
-					Shake(i + 1, j, tileRight.TileFrameY);
-				}
-				while (Main.tile[i, j + Dy].HasTile && Main.tile[i, j + Dy].TileType == Type && Dy > -100)
-				{
-					Shake(i, j + Dy, Main.tile[i, j + Dy].TileFrameY);
-
-					tileLeft = Main.tile[i - 1, j + Dy];
-					tileRight = Main.tile[i + 1, j + Dy];
-					if (tileLeft.TileType == Type)
-					{
-						if (tileLeft.TileFrameY == 2)
-							break;
-						Shake(i - 1, j + Dy, tileLeft.TileFrameY);
-					}
-					if (tileRight.TileType == Type)
-					{
-						if (tileRight.TileFrameY == 2)
-							break;
-						Shake(i + 1, j + Dy, tileRight.TileFrameY);
-					}
-					Dy -= 1;
-				}
-				Dy = -1;//向上破坏的自变化Y坐标
-				tileLeft = Main.tile[i - 1, j];
-				if (tileLeft.TileType == Type)
-					tileLeft.HasTile = false;
-				tileRight = Main.tile[i + 1, j];
-				if (tileRight.TileType == Type)
-					tileRight.HasTile = false;
-				while (Main.tile[i, j + Dy].TileType == Type && Dy > -100)
-				{
-					Tile baseTile = Main.tile[i, j + Dy];
-					baseTile.HasTile = false;
-					if (hasRope.ContainsKey((i, j + Dy)))
-					{
-						hasRope.Remove((i, j + Dy));
-					}
-
-					tileLeft = Main.tile[i - 1, j + Dy];
-					tileRight = Main.tile[i + 1, j + Dy];
-					if (tileLeft.TileType == Type)
-					{
-						//清除吊挂的藤条
-						tileLeft.HasTile = false;
-						if (hasRope.ContainsKey((i - 1, j + Dy)))
-						{
-							hasRope.Remove((i - 1, j + Dy));
-						}
-					}
-
-					if (tileRight.TileType == Type)
-					{
-						//清除吊挂的藤条
-						tileRight.HasTile = false;
-						if (hasRope.ContainsKey((i + 1, j + Dy)))
-						{
-							hasRope.Remove((i + 1, j + Dy));
-						}
-					}
-					Dy -= 1;
-				}
-			}
+			return;
 		}
-		else
+
+		bool isLeft = tile.TileFrameY == 1;
+		if (!fail)// 判定为已破碎
 		{
-			Tile tileLeft;
-			Tile tileRight;
-			while (Main.tile[i, j + Dy].HasTile && Main.tile[i, j + Dy].TileType == Type && Dy > -100)
+			noItem = true;
+			if (isLeft)
 			{
-				Shake(i, j + Dy, Main.tile[i, j + Dy].TileFrameY);
-				tileLeft = Main.tile[i - 1, j + Dy];
-				tileRight = Main.tile[i + 1, j + Dy];
-				if (tileLeft.TileType == Type)
-				{
-					if (tileLeft.TileFrameY == 2)
-						break;
-					Shake(i - 1, j + Dy, tileLeft.TileFrameY);
-				}
-				if (tileRight.TileType == Type)
-				{
-					if (tileRight.TileFrameY == 2)
-						break;
-					Shake(i + 1, j + Dy, tileRight.TileFrameY);
-				}
-				Dy -= 1;
+				KillToTop(i, j);
+			}
+			else
+			{
+				KillToTop(i - 1, j);
 			}
 		}
 	}
+
+	public override void KillMultiTile(int i, int j, int frameX, int frameY)
+	{
+
+	}
+
+	/// <summary>
+	/// fill the left tile coords.
+	/// </summary>
+	/// <param name="i"></param>
+	/// <param name="j"></param>
+	public void KillToTop(int i, int j)
+	{
+		int breakingY = j; // 向上破坏的自变化Y坐标
+		while (true)
+		{
+			Tile tile = Main.tile[i, breakingY];
+			Tile tileRight = Main.tile[i + 1, breakingY];
+			breakingY--;
+			if ((tile.HasTile && tile.TileType == Type) || breakingY == j)
+			{
+				WorldGen.KillTile(i, breakingY, false, true, false);
+				WorldGen.KillTile(i + 1, breakingY, false, true, false);
+				tile.ClearEverything();
+				tileRight.ClearEverything();
+				for (int x = 0; x < 2; x++)
+				{
+					Dust.NewDust(new Vector2(i, breakingY) * 16, 16, 16, DustType);
+					Dust.NewDust(new Vector2(i + 1, breakingY) * 16, 16, 16, DustType);
+				}
+				Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, breakingY), i * 16, breakingY * 16, 16, 16, new Item(ModContent.ItemType<TwilightWood>(), 1));
+				Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, breakingY), i * 16 + 16, breakingY * 16, 16, 16, new Item(ModContent.ItemType<TwilightWood>(), 1));
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		Texture2D treeTexture = ModAsset.TwilightTree.Value;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
+		{
 			zero = Vector2.Zero;
+		}
+
 		Tile tile = Main.tile[i, j];
 		int Width;
 		int Height = 16;
 		int TexCoordY;
 		int OffsetY = 20;
 		int OffsetX = 8;
-		float Rot = 0;
 		Color color = Lighting.GetColor(i, j);
 		switch (tile.TileFrameY)
 		{
-			default://别的表示空,最好写-1
+			default: // 别的表示空,最好写-1
 				return false;
-			case 0:  //树桩
+			case 0: // 树桩
 				Width = 116;
 				Height = 42;
 				TexCoordY = 298;
 				break;
-			case 1:  //左树干
+			case 1: // 左树干
 				Width = 16;
 				TexCoordY = 264;
 				OffsetX += -8;
 				break;
-			case 2:  //右树干
+			case 2: // 右树干
 				Width = 16;
 				TexCoordY = 280;
 				OffsetX += -8;
 				break;
-			case 3:  //树冠
-				Width = 410;
-				Height = 262;
-				TexCoordY = 0;
-				float Wind = Main.windSpeedCurrent / 15f;
-				Rot = Wind + (float)Math.Sin(j + Main.timeForVisualEffects / 30f) * Wind * 0.3f;
-				OffsetY = 24;
-				//对挂条的生成
-				if (!hasRope.ContainsKey((i, j)))
-					InsertOneTreeRope(i, j, tile.TileFrameY);
-				break;
+			case 3: // 树冠
+				TileFluentDrawManager.AddFluentPoint(this, i, j);
+				return false;
 		}
 		var origin = new Vector2(Width / 2f, Height);
-		spriteBatch.Draw(treeTexture, new Vector2(i * 16 + OffsetX + 8, j * 16 + OffsetY) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX * Width, TexCoordY, Width, Height), color, Rot, origin, 1, SpriteEffects.None, 0);
-
-		if (tile.TileFrameY >= 3)
-		{
-			var point = new Point(i, j);
-			Vector2 tileCenterWS = point.ToWorldCoordinates(8f, 8f);
-			if (tileCenterWS.Distance(Main.LocalPlayer.position) < 200)
-			{
-				var playerRect = Main.LocalPlayer.Hitbox;
-				var (_, ropes) = hasRope[(i, j)];
-				foreach (var rope in ropes)
-				{
-					for (int a = 0; a < rope.GetMassList.Length; a++)
-					{
-						if (playerRect.Contains(rope.GetMassList[a].Position.ToPoint()))
-						{
-							rope.GetMassList[a].Force += Main.LocalPlayer.velocity * 10;
-							if (Main.rand.NextBool(100))
-								Gore.NewGoreDirect(null, rope.GetMassList[a].Position, rope.GetMassList[a].Velocity * 0.1f, ModContent.GoreType<TwilightTree_Vine>());
-						}
-					}
-				}
-			}
-		}
+		spriteBatch.Draw(treeTexture, new Vector2(i * 16 + OffsetX + 8, j * 16 + OffsetY) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX * Width, TexCoordY, Width, Height), color, 0, origin, 1, SpriteEffects.None, 0);
 		return false;
 	}
-	public void DrawRopes()
+
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
-		foreach (var keyvaluepair in hasRope)
+		for (int k = 0; k < 4; k++)
 		{
-			Vector2 pos = new Vector2(keyvaluepair.Key.x, keyvaluepair.Key.y) * 16;
-			if (!VFXManager.InScreen(pos, 200))
+			var style = StyleVines[k];
+			if (style.ContainsKey(pos))
 			{
-				hasRope.Remove(keyvaluepair.Key);
+				Rope rope = style[pos];
+				DrawVine(rope, pos, spriteBatch, tileDrawing, k);
 			}
-		}
-		Color color = Color.White;
-
-		List<Vertex2D> bars = new List<Vertex2D>();
-		foreach (var keyvaluepair in hasRope)
-		{
-			foreach (Rope rope in hasRope[keyvaluepair.Key].ropes)
-			{
-				if (rope.GetMassList.Length <= 1)
-				{
-					continue;
-				}
-				if (!Main.gamePaused)
-				{
-					rope.Update(1);
-				}
-				float wind = Main.windSpeedCurrent / 15f;
-				float rot = wind + (float)Math.Sin(keyvaluepair.Key.y + Main.timeForVisualEffects / 30f) * wind * 0.3f;
-				List<Vector2> massPositionsSmooth = GraphicsUtils.CatmullRom(rope.GetMassList.Select(m => m.Position), 4);
-
-				for (int i = 1; i < massPositionsSmooth.Count; i++)
-				{
-					float coordY = (4 + i - massPositionsSmooth.Count) / 3f;
-					coordY = Math.Max(coordY, 0);
-					Vector2 normalized = massPositionsSmooth[i] - massPositionsSmooth[i - 1];
-					normalized.Normalize();
-					normalized = normalized.RotatedBy(MathHelper.PiOver2) * 2;
-					Vector2 drawPos = massPositionsSmooth[i] - Main.screenPosition;
-					Vector2 rootPos = new Vector2(keyvaluepair.Key.x, keyvaluepair.Key.y) * 16f;
-					Vector2 deltaPos = rootPos - massPositionsSmooth[0];
-					Vector2 rotPos = deltaPos.RotatedBy(rot);
-					drawPos -= rotPos - deltaPos;
-					if (i == 1)
-					{
-						bars.Add(drawPos - normalized, Color.Transparent, new Vector3(0, 0, 0));
-						bars.Add(drawPos + normalized, Color.Transparent, new Vector3(1, 0, 0));
-					}
-					bars.Add(drawPos - normalized, Color.White, new Vector3(0, coordY, 0));
-					bars.Add(drawPos + normalized, Color.White, new Vector3(1, coordY, 0));
-					if (i == massPositionsSmooth.Count - 1)
-					{
-						bars.Add(drawPos - normalized, Color.Transparent, new Vector3(0, 1, 0));
-						bars.Add(drawPos + normalized, Color.Transparent, new Vector3(1, 1, 0));
-					}
-				}
-			}
-		}
-		if (bars.Count > 0)
-		{
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.TwilightTree_Vine.Value;
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-			Main.spriteBatch.End();
 		}
 	}
-	public void InsertOneTreeRope(int xTS, int yTS, int style)
+
+	public void DrawVine(Rope vine, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing, int style, Color color = default)
 	{
-		var point = new Point(xTS, yTS);
-		Vector2 tileCenterWS = point.ToWorldCoordinates(0, 0);
-		if (ropes[style] is null)
+		// 回声涂料
+		if (!TileDrawing.IsVisible(Main.tile[pos]))
 		{
-			if (style != 3)
+			return;
+		}
+
+		var tile = Main.tile[pos];
+		ushort type = tile.TileType;
+		int paint = Main.tile[pos].TileColor;
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.TwilightTree_Path, type, 1, paint, tileDrawing);
+		tex ??= ModAsset.TwilightTree.Value;
+		var tileSpriteEffect = SpriteEffects.None;
+		float treeRot = tileDrawing.GetHighestWindGridPushComplex(pos.X, pos.Y - 3, 3, 3, 150, 0.06f, 4, swapLoopDir: true);
+
+		var masses = vine.Masses;
+		for (int i = 0; i < masses.Length - 1; i++)
+		{
+			Mass thisMass = masses[i];
+			Mass nextMass = masses[i + 1];
+			if (i == 0)
 			{
-				var HalfSize = new Vector2(-5, 24);
-				ropes[style] = LoadRope(tileCenterWS + HalfSize, style, (Vector2) => Vector2.Zero);
-				hasRope.Add((xTS, yTS), (style, ropes[style]));
+				thisMass.Position = pos.ToVector2() * 16f + new Vector2(16, 24) + GetStyleOffset(style).RotatedBy(treeRot);
+			}
+			int totalPushTime = 80;
+			float pushForcePerFrame = 1.26f;
+			float windCycle = 0;
+			if (tileDrawing.InAPlaceWithWind((int)((thisMass.Position.X - 8) / 16f), (int)((thisMass.Position.Y - 8) / 16f), 1, 1))
+			{
+				windCycle = tileDrawing.GetWindCycle((int)((thisMass.Position.X - 8) / 16f), (int)((thisMass.Position.Y - 8) / 16f), tileDrawing._sunflowerWindCounter);
+			}
+
+			float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex((int)((thisMass.Position.X - 8) / 16f), (int)((thisMass.Position.Y - 8) / 16f), 1, 1, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+			windCycle += highestWindGridPushComplex;
+			if (!Main.gamePaused)
+			{
+				vine.ApplyForceSpecial(i, new Vector2(windCycle / 4.0f, 0.4f * thisMass.Value));
+				if (i == masses.Length - 2)
+				{
+					vine.ApplyForceSpecial(i + 1, new Vector2(windCycle / 4.0f, 0.4f * nextMass.Value));
+				}
+			}
+
+			// 支持发光涂料
+			Color tileLight;
+			if (color != default(Color))
+			{
+				tileLight = color;
 			}
 			else
 			{
-				var HalfSize = new Vector2(-188, -244);
-				ropes[style] = LoadRope(tileCenterWS + HalfSize, style, (Vector2) => Vector2.Zero);
-				hasRope.Add((xTS, yTS), (style, ropes[style]));
+				tileLight = Lighting.GetColor((int)((thisMass.Position.X - 8) / 16f), (int)((thisMass.Position.Y - 8) / 16f));
 			}
-			basePositions[style] = tileCenterWS;
-		}
-		else if (!hasRope.ContainsKey((xTS, yTS)))
-		{
-			Vector2 deltaPosition = tileCenterWS - basePositions[style];
-			var rs = ropes[style].Select(r => r.Clone(deltaPosition)).ToList();
+			Vector2 toNextMass = nextMass.Position - thisMass.Position;
+			Vector2 drawPos = thisMass.Position - Main.screenPosition;
 
-			hasRope.Add((xTS, yTS), (style, rs));
+			if (i == masses.Length - 2)
+			{
+				spriteBatch.Draw(tex, drawPos, new Rectangle(0, 352, 6, 14), tileLight, toNextMass.ToRotation() + MathHelper.PiOver2 * 3, new Vector2(3f, 0), 1f, tileSpriteEffect, 0);
+				spriteBatch.Draw(tex, drawPos, new Rectangle(0, 352, 6, 14), new Color(1f, 1f, 1f, 0), toNextMass.ToRotation() + MathHelper.PiOver2 * 3, new Vector2(3f, 0), 1f, tileSpriteEffect, 0);
+				Lighting.AddLight(drawPos + Main.screenPosition, new Vector3(0f, 0.4f, 0.7f));
+			}
+			else
+			{
+				spriteBatch.Draw(tex, drawPos, new Rectangle(0, 342, 6, 6), tileLight, toNextMass.ToRotation() + MathHelper.PiOver2 * 3, new Vector2(3f, 0), new Vector2(1f, toNextMass.Length() / 6f), tileSpriteEffect, 0);
+			}
 		}
+
+		Color tileLight2;
+		if (color != default)
+		{
+			tileLight2 = color;
+		}
+		else
+		{
+			tileLight2 = Lighting.GetColor(pos);
+		}
+
+		spriteBatch.Draw(tex, pos.ToVector2() * 16 + new Vector2(16, 24) - Main.screenPosition, new Rectangle(0, 0, 410, 262), tileLight2, treeRot, new Vector2(205, 262), 1, SpriteEffects.None, 0);
 	}
+
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{
 		Tile tile = Main.tile[i, j];
