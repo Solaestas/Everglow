@@ -285,8 +285,8 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 		var tileSpriteEffect = SpriteEffects.None;
 		float treeRot = tileDrawing.GetHighestWindGridPushComplex(pos.X, pos.Y - 3, 3, 3, 150, 0.06f, 4, swapLoopDir: true);
 
-		List<Mass> masses = vine.GetMasses();
-		for (int i = 0; i < masses.Count - 1; i++)
+		var masses = vine.Masses;
+		for (int i = 0; i < masses.Length; i++)
 		{
 			Mass thisMass = masses[i];
 			Mass nextMass = masses[i + 1];
@@ -307,7 +307,7 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 			if (!Main.gamePaused)
 			{
 				vine.ApplyForceSpecial(i, new Vector2(windCycle / 4.0f, 0.4f * thisMass.Value));
-				if (i == masses.Count - 2)
+				if (i == masses.Length - 2)
 				{
 					vine.ApplyForceSpecial(i + 1, new Vector2(windCycle / 4.0f, 0.4f * nextMass.Value));
 				}
@@ -326,7 +326,7 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 			Vector2 toNextMass = nextMass.Position - thisMass.Position;
 			Vector2 drawPos = thisMass.Position - Main.screenPosition;
 
-			if (i == masses.Count - 2)
+			if (i == masses.Length - 2)
 			{
 				spriteBatch.Draw(tex, drawPos, new Rectangle(0, 352, 6, 14), tileLight, toNextMass.ToRotation() + MathHelper.PiOver2 * 3, new Vector2(3f, 0), 1f, tileSpriteEffect, 0);
 				spriteBatch.Draw(tex, drawPos, new Rectangle(0, 352, 6, 14), new Color(1f, 1f, 1f, 0), toNextMass.ToRotation() + MathHelper.PiOver2 * 3, new Vector2(3f, 0), 1f, tileSpriteEffect, 0);
