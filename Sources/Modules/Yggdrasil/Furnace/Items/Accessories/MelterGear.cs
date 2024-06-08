@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.Furnace.Buffs;
 using Terraria.Enums;
 
 namespace Everglow.Yggdrasil.Furnace.Items.Accessories;
@@ -9,6 +10,8 @@ public class MelterGear : ModItem
 
 	public const float BuffTriggerRate = 0.33f;
 	public const int BuffDuration = 300;
+
+	public const int EffectCooldown = 900;
 
 	public override void SetDefaults()
 	{
@@ -51,15 +54,17 @@ internal class MelterGearPlayer : ModPlayer
 	// Additionally, while the target has "On Fire" debuff,
 	// there is a 33% chance to inflict an "On Fire!" debuff on wearer, lasting for 5 seconds.
 	// (The "On Fire" debuff inflicted by this attack will not trigger the second effect.)
+	// The second effect has 15s cooldown
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		if (MelterGearEnable)
 		{
-			if (target.onFire)
+			if (target.onFire && !Player.HasBuff<MelterGearCooldown>())
 			{
 				if (Main.rand.NextFloat() < MelterGear.BuffTriggerRate)
 				{
 					Player.AddBuff(BuffID.OnFire, MelterGear.BuffDuration);
+					Player.AddBuff(ModContent.BuffType<MelterGearCooldown>(), MelterGear.EffectCooldown);
 				}
 			}
 
