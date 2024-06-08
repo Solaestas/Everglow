@@ -32,11 +32,11 @@ public class RedGlassbulbBand_bulb : CableTile
 		// 获取发绳端物块信息
 		Tile endTile = Main.tile[RopeHeadAndTail[pos]];
 		int style = endTile.TileFrameX / 18 + (endTile.TileFrameY / 18) * 4;
-		List<_Mass> masses = rope.GetMasses();
-		for (int i = 0; i < masses.Count - 1; i++)
+		var masses = rope.Masses;
+		for (int i = 0; i < masses.Length - 1; i++)
 		{
-			_Mass thisMass = masses[i];
-			_Mass nextMass = masses[i + 1];
+			Mass thisMass = masses[i];
+			Mass nextMass = masses[i + 1];
 
 			int totalPushTime = 80;
 			float pushForcePerFrame = 1.26f;
@@ -51,7 +51,7 @@ public class RedGlassbulbBand_bulb : CableTile
 			float rotation = -windCycle * 0.4f;
 			if (!Main.gamePaused)
 			{
-				rope.ApplyForceSpecial(i, new Vector2(windCycle / 4.0f, 0.4f * thisMass.Mass));
+				rope.ApplyForceSpecial(i, new Vector2(windCycle / 4.0f, 0.4f * thisMass.Value));
 			}
 
 			// 支持发光涂料
@@ -69,7 +69,7 @@ public class RedGlassbulbBand_bulb : CableTile
 			spriteBatch.Draw(tex, drawPos, new Rectangle(10, 2, 2, 2), tileLight, toNextMass.ToRotation(), new Vector2(1f), new Vector2(toNextMass.Length() / 2f, 1), tileSpriteEffect, 0);
 			float timeValue;
 			float light;
-			if (thisMass.Mass == 0.2f)
+			if (thisMass.Value == 0.2f)
 			{
 				switch (style)
 				{
