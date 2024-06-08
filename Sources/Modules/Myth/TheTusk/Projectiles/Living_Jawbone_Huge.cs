@@ -109,6 +109,7 @@ public class Living_Jawbone_Huge : ModProjectile
 		{
 			spriteEffects = SpriteEffects.FlipVertically;
 		}
+		lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
 		Main.EntitySpriteDraw(upJaw, Projectile.Center - Main.screenPosition, null, lightColor * 0.25f, Projectile.rotation - Projectile.ai[2], new Vector2(16f, 92f), Projectile.scale, spriteEffects, 0);
 		Main.EntitySpriteDraw(downJaw, Projectile.Center - Main.screenPosition, null, lightColor * 0.25f, Projectile.rotation + Projectile.ai[2], new Vector2(16f, 92f), Projectile.scale, spriteEffects, 0);
 

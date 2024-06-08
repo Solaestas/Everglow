@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Myth.TheTusk.NPCs.BloodTusk;
 
 namespace Everglow.Myth.TheTusk.Projectiles;
 
@@ -25,7 +26,7 @@ public class BloodTusk_Sleep_Crack : ModProjectile
 	{
 		if (Tusk != null)
 		{
-			if (Tusk.life == Tusk.lifeMax)
+			if (Tusk.active && Tusk.life == Tusk.lifeMax && Tusk.type == ModContent.NPCType<BloodTusk>())
 			{
 				Projectile.Center = Tusk.Top + new Vector2(0, -30);
 				if (Projectile.ai[0] < 1)

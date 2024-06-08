@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Myth.TheTusk.Buffs;
+using Everglow.Myth.TheTusk.NPCs.BloodTusk;
 using Everglow.Myth.TheTusk.Tiles;
 using Terraria.DataStructures;
 
@@ -67,17 +68,19 @@ public class TuskBloodPool : ModProjectile
 		}
 		else if (Projectile.timeLeft < 400)
 		{
-			if (Projectile.timeLeft % 12 == 0)
+			if (Projectile.timeLeft % 60 == 0)
 			{
-				Projectile projectile = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(Main.rand.NextFloat(-90, 90f), 50), new Vector2(0, -Main.rand.NextFloat(7f, 12f)).RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f)), ModContent.ProjectileType<Living_Jawbone>(), 25, 1.5f, Projectile.owner);
-				projectile.scale = Main.rand.NextFloat(0.5f, 1f);
+				NPC jaw = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(Main.rand.NextFloat(-90, 90f), 50), ModContent.NPCType<Living_Jawbone>());
+				jaw.scale = Main.rand.NextFloat(0.5f, 1f);
+				jaw.velocity = new Vector2(0, -Main.rand.NextFloat(7f, 12f)).RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f));
+				jaw.damage = 33;
 				if (Main.expertMode)
 				{
-					projectile.damage = 44;
+					jaw.damage = 44;
 				}
 				if (Main.masterMode)
 				{
-					projectile.damage = 57;
+					jaw.damage = 57;
 				}
 			}
 		}

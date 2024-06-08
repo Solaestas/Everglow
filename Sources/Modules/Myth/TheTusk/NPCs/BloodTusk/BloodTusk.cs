@@ -11,6 +11,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
+using Terraria.Map;
 using static Everglow.Myth.TheTusk.NPCs.BloodTusk.BloodTuskAtlas;
 
 namespace Everglow.Myth.TheTusk.NPCs.BloodTusk;
@@ -43,6 +44,11 @@ public class BloodTusk : ModNPC
 	/// X refer to TuskWall Left, Y refer to TuskWall Right.
 	/// </summary>
 	public Vector2 TuskWallClampRange = Vector2.Zero;
+
+	/// <summary>
+	/// Part below this point will has a dissolve shader.
+	/// </summary>
+	public Vector2 BottomDissolvePoint = Vector2.Zero;
 
 	/// <summary>
 	/// 0~1,0 is confront (normal) while 1 is cowered.
@@ -200,6 +206,7 @@ public class BloodTusk : ModNPC
 		Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<BloodTusk_Sleep_Crack>(), 0, 0);
 		BloodTusk_Sleep_Crack crack = proj.ModProjectile as BloodTusk_Sleep_Crack;
 		crack.Tusk = NPC;
+		BottomDissolvePoint = NPC.Bottom;
 	}
 
 	public override void BossHeadSlot(ref int index)
@@ -230,6 +237,17 @@ public class BloodTusk : ModNPC
 				SwitchAction();
 			}
 		}
+		if(State == (int)States.Phase2)
+		{
+			if (Main.rand.NextBool(135))
+			{
+				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), new Vector2((Main.maxTilesX * 0.94f) * 16, (Main.maxTilesY * 0.9f) * 16), new Vector2(-21, -Main.rand.NextFloat(25, 30)), ModContent.ProjectileType<Living_Jawbone_Huge>(), 400, 10, NPC.target);
+			}
+			if (Main.rand.NextBool(135))
+			{
+				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), new Vector2((Main.maxTilesX * 0.1f) * 16, (Main.maxTilesY * 0.9f) * 16), new Vector2(21, -Main.rand.NextFloat(25, 30)), ModContent.ProjectileType<Living_Jawbone_Huge>(), 400, 10, NPC.target);
+			}
+		}
 	}
 
 	public void SetAIPool()
@@ -243,7 +261,7 @@ public class BloodTusk : ModNPC
 			AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { Cower(), Rise(), Wait(GetWatingTime(60)) }, 1f));
 			AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { Cower(), SlowWaveGroundSpike(), Rise(), Wait(GetWatingTime(150)) }, 1f));
 			AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { Cower(), FastWaveGroundSpike(), Rise(), Wait(GetWatingTime(150)) }, 1f));
-			AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { SprayTuskSpice(), Wait(GetWatingTime(60)), Cower(), Rise() }, player.Center.Y > NPC.Top.Y ? 0.2f : 10f));
+			AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { SprayTuskSpice(300), Wait(GetWatingTime(60)), Cower(), Rise() }, player.Center.Y > NPC.Top.Y ? 0.2f : 10f));
 		}
 		if (State == (int)States.Phase2)
 		{
@@ -261,8 +279,8 @@ public class BloodTusk : ModNPC
 				spiceAroundWeight = 20;
 			}
 			AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { SpikeAround(), Wait(GetWatingTime(30)) }, spiceAroundWeight));
-			AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { CowerToCenter(), Rise(), SprayTuskSpice_Style2(), Wait(GetWatingTime(60)) }, player.Center.Y > NPC.Top.Y ? 0.2f : 4f));
-			AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { CowerToCenter(), Rise(), SprayTuskSpice_Style3(), Wait(GetWatingTime(60)) }, player.Center.Y > NPC.Top.Y ? 0.2f : 4f));
+			AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { CowerToCenter(), Rise(), SprayTuskSpice_Style2(300), Wait(GetWatingTime(60)) }, player.Center.Y > NPC.Top.Y ? 0.2f : 4f));
+			AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { CowerToCenter(), Rise(), SprayTuskSpice_Style3(300), Wait(GetWatingTime(60)) }, player.Center.Y > NPC.Top.Y ? 0.2f : 4f));
 			AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { CowerToCenter(), Rise(), ShootBloodCursed(), Wait(GetWatingTime(600)) }, 0.5f));
 
 			AIPool.Add(new AIAction(new List<IEnumerator<ICoroutineInstruction>> { SpicyBloodTentacle(), Wait(GetWatingTime(30)) }, 1f));
@@ -602,7 +620,7 @@ public class BloodTusk : ModNPC
 	/// When player fly, chance increased.
 	/// </summary>
 	/// <returns></returns>
-	public IEnumerator<ICoroutineInstruction> SprayTuskSpice()
+	public IEnumerator<ICoroutineInstruction> SprayTuskSpice(int maxTime)
 	{
 		for (int i = 0; i <= 60; i++)
 		{
@@ -617,14 +635,14 @@ public class BloodTusk : ModNPC
 			}
 			if (i == 40)
 			{
-				Projectile fountain = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(4, -34), Vector2.zeroVector, ModContent.ProjectileType<BloodFountain>(), GetDamage(14), 1, NPC.target, 860);
+				Projectile fountain = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(4, -34), Vector2.zeroVector, ModContent.ProjectileType<BloodFountain>(), GetDamage(14), 1, NPC.target, maxTime + 60);
 				fountain.scale = 1.5f;
 			}
 			yield return new SkipThisFrame();
 		}
-		for (int i = 0; i <= 800; i++)
+		for (int i = 0; i <= maxTime; i++)
 		{
-			float speed = Math.Min(400 - Math.Abs(i - 400), 100) / 100f;
+			float speed = Math.Min(maxTime / 2f - Math.Abs(i - maxTime / 2f), 100) / 100f;
 			speed = MathF.Sqrt(speed);
 			for (int g = 0; g < 3; g++)
 			{
@@ -652,14 +670,14 @@ public class BloodTusk : ModNPC
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(20.0f, 40.0f) },
 			};
 			Ins.VFXManager.Add(bloodSplash);
-			int timeInterval = 9;
+			int timeInterval = 15;
 			if (Main.expertMode)
 			{
-				timeInterval = 6;
+				timeInterval = 12;
 			}
 			if (Main.masterMode)
 			{
-				timeInterval = 3;
+				timeInterval = 8;
 			}
 			float mulSpeed = 1f;
 			if (Main.expertMode)
@@ -892,7 +910,7 @@ public class BloodTusk : ModNPC
 	/// When player fly, chance increased.
 	/// </summary>
 	/// <returns></returns>
-	public IEnumerator<ICoroutineInstruction> SprayTuskSpice_Style2()
+	public IEnumerator<ICoroutineInstruction> SprayTuskSpice_Style2(int maxTime)
 	{
 		for (int i = 0; i <= 60; i++)
 		{
@@ -907,14 +925,14 @@ public class BloodTusk : ModNPC
 			}
 			if (i == 40)
 			{
-				Projectile fountain = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(4, -34), Vector2.zeroVector, ModContent.ProjectileType<BloodFountain>(), GetDamage(14), 1, NPC.target, 860);
+				Projectile fountain = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(4, -34), Vector2.zeroVector, ModContent.ProjectileType<BloodFountain>(), GetDamage(14), 1, NPC.target, maxTime + 60);
 				fountain.scale = 1.5f;
 			}
 			yield return new SkipThisFrame();
 		}
-		for (int i = 0; i <= 800; i++)
+		for (int i = 0; i <= maxTime; i++)
 		{
-			float speed = Math.Min(400 - Math.Abs(i - 400), 100) / 100f;
+			float speed = Math.Min(maxTime / 2f - Math.Abs(i - maxTime / 2f), 100) / 100f;
 			speed = MathF.Sqrt(speed);
 			for (int g = 0; g < 3; g++)
 			{
@@ -942,10 +960,10 @@ public class BloodTusk : ModNPC
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(20.0f, 40.0f) },
 			};
 			Ins.VFXManager.Add(bloodSplash);
-			int timeInterval = 60;
+			int timeInterval = 40;
 			if (Main.expertMode)
 			{
-				timeInterval = 45;
+				timeInterval = 35;
 			}
 			if (Main.masterMode)
 			{
@@ -961,12 +979,21 @@ public class BloodTusk : ModNPC
 				mulSpeed = 1.2f;
 			}
 			speed *= mulSpeed;
+			int maxCount = 4;
+			if (Main.expertMode)
+			{
+				maxCount = 5;
+			}
+			if (Main.masterMode)
+			{
+				maxCount = 6;
+			}
 			if (i % timeInterval == 0 && speed >= 1)
 			{
 				float rotation = Main.rand.NextFloat(-0.6f, 0.6f);
-				for (int t = -6; t < 7; t++)
+				for (int t = -maxCount; t < maxCount + 1; t++)
 				{
-					Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(4, -34), new Vector2(0, -speed * 24).RotatedBy(rotation + t * 0.1f), ModContent.ProjectileType<TuskSpice_WithGravity>(), GetDamage(23), 1, NPC.target);
+					Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(4, -34), new Vector2(0, -speed * 24).RotatedBy(rotation + t / (float)maxCount * 0.6f), ModContent.ProjectileType<TuskSpice_WithGravity>(), GetDamage(23), 1, NPC.target);
 				}
 			}
 			yield return new SkipThisFrame();
@@ -988,7 +1015,7 @@ public class BloodTusk : ModNPC
 	/// When player fly, chance increased.
 	/// </summary>
 	/// <returns></returns>
-	public IEnumerator<ICoroutineInstruction> SprayTuskSpice_Style3()
+	public IEnumerator<ICoroutineInstruction> SprayTuskSpice_Style3(int maxTime)
 	{
 		for (int i = 0; i <= 60; i++)
 		{
@@ -1003,14 +1030,14 @@ public class BloodTusk : ModNPC
 			}
 			if (i == 40)
 			{
-				Projectile fountain = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(4, -34), Vector2.zeroVector, ModContent.ProjectileType<BloodFountain>(), GetDamage(14), 1, NPC.target, 860);
+				Projectile fountain = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(4, -34), Vector2.zeroVector, ModContent.ProjectileType<BloodFountain>(), GetDamage(14), 1, NPC.target, maxTime + 60);
 				fountain.scale = 1.5f;
 			}
 			yield return new SkipThisFrame();
 		}
-		for (int i = 0; i <= 800; i++)
+		for (int i = 0; i <= maxTime; i++)
 		{
-			float speed = Math.Min(400 - Math.Abs(i - 400), 100) / 100f;
+			float speed = Math.Min(maxTime / 2f - Math.Abs(i - maxTime / 2f), 100) / 100f;
 			speed = MathF.Sqrt(speed);
 			for (int g = 0; g < 3; g++)
 			{
@@ -1161,7 +1188,7 @@ public class BloodTusk : ModNPC
 	public IEnumerator<ICoroutineInstruction> GiantJaw()
 	{
 		Player player = Main.player[NPC.target];
-		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), player.Bottom - TileCollisionUtils.GetTopographicGradient(player.Bottom, 15) * 30, Vector2.zeroVector, ModContent.ProjectileType<Living_Jawbone_Huge_ground_Wave>(), GetDamage(150), 1, NPC.target);
+		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), player.Bottom - TileCollisionUtils.GetTopographicGradient(player.Bottom, 6) * 80, Vector2.zeroVector, ModContent.ProjectileType<Living_Jawbone_Huge_ground_Wave>(), GetDamage(150), 1, NPC.target);
 		yield return new WaitForFrames(30);
 	}
 
@@ -1203,11 +1230,13 @@ public class BloodTusk : ModNPC
 				if (Collision.SolidCollision(randomPoint, 0, 0))
 				{
 					NPC.Bottom = randomPoint;
+					BottomDissolvePoint = NPC.Bottom;
 					return;
 				}
 				randomPoint.Y += 10;
 			}
 		}
+		BottomDissolvePoint = NPC.Bottom;
 	}
 
 	/// <summary>
@@ -1221,10 +1250,12 @@ public class BloodTusk : ModNPC
 			if (Collision.SolidCollision(randomPoint, 0, 0))
 			{
 				NPC.Bottom = randomPoint;
+				BottomDissolvePoint = NPC.Bottom;
 				return;
 			}
 			randomPoint.Y += 10;
 		}
+		BottomDissolvePoint = NPC.Bottom;
 	}
 
 	public uint GetWatingTime(int time_orig)
@@ -1314,23 +1345,24 @@ public class BloodTusk : ModNPC
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
-		effect.Parameters["uNoiseSize"].SetValue(0.2f);
-		Vector2 result = Vector2.Transform(NPC.Bottom + new Vector2(0, -300 * Main.screenHeight), model * projection);
-		//Main.NewText(result);
-		effect.Parameters["drawOrigin"].SetValue(result);
-		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_rgb.Value);
-		effect.Parameters["warpValue1"].SetValue(0.01f);
-		effect.Parameters["warpValue2"].SetValue(1f);
-		effect.Parameters["warpValue3"].SetValue(1f);
+		effect.Parameters["uNoiseSize"].SetValue(0.4f);
 
-		effect.Parameters["warpValue4"].SetValue(0);
-		effect.Parameters["warpValue5"].SetValue(1f);
+		Vector2 result1 = Vector2.Transform(BottomDissolvePoint, model * projection);
+		result1 += Vector2.One;
+		result1.Y = 2 - result1.Y;
+		result1 *= new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
+		effect.Parameters["drawOrigin"].SetValue(result1);
+		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_rgb.Value);
+		effect.Parameters["noiseCoord"].SetValue(new Vector2(0, (float)Main.time * 0.0005f));
+
 		effect.CurrentTechnique.Passes[0].Apply();
 
 		List<Vertex2D> bars = new List<Vertex2D>();
-		DrawMyNPC(bars, DrawPieceSequence);
-		Main.graphics.graphicsDevice.Textures[0] = tuskAtlas;
-		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
+		if (DrawMyNPC(bars, DrawPieceSequence))
+		{
+			Main.graphics.graphicsDevice.Textures[0] = tuskAtlas;
+			Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
+		}
 
 		bars = new List<Vertex2D>();
 		if (DrawDissolveNPC(bars, spriteBatch))
@@ -1344,8 +1376,12 @@ public class BloodTusk : ModNPC
 		return false;
 	}
 
-	public void DrawMyNPC(List<Vertex2D> bars, List<DrawPiece> pieces)
+	public bool DrawMyNPC(List<Vertex2D> bars, List<DrawPiece> pieces)
 	{
+		if(pieces.Count <= 0)
+		{
+			return false;
+		}
 		if (CowerValueSpecial_MainTusk is >= 0 and <= 1)
 		{
 			pieces.ForEach(drawPiece =>
@@ -1379,6 +1415,7 @@ public class BloodTusk : ModNPC
 		{
 			pieces.ForEach(drawPiece => drawPiece.Draw(NPC, bars));
 		}
+		return true;
 	}
 
 	public void DrawStickyBlood(List<Vertex2D> bars)

@@ -13,11 +13,7 @@ sampler_state
 float uNoiseSize; //不允许填0
 float4x4 uTransform;
 float2 drawOrigin;
-float warpValue1;
-float warpValue2;
-float warpValue3;
-float warpValue4;
-float warpValue5;
+float2 noiseCoord;
 
 struct VSInput
 {
@@ -46,15 +42,14 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
 {
 	//float4 newDrawOrigin = mul(float4(drawOrigin, 0, 1), uTransform);
 	float distance = length(input.Pos.xy - drawOrigin.xy);
-	float deltaY = input.Pos.y - drawOrigin.y;
-	float value = distance * warpValue4 + 2 * warpValue5 * deltaY;
+	float deltaY = drawOrigin.y - input.Pos.y;
+	float value = distance * -0.0005 + 2 * -0.0014 * deltaY;
 	if (value > 0)
 	{
-		float4 noise = tex2D(uNoiseSampler, input.Texcoord * uNoiseSize);
-		value *= warpValue1;
+		float4 noise = tex2D(uNoiseSampler, input.Texcoord * uNoiseSize + noiseCoord);
 		float2 addCoord = (noise.rg - float2(0.5, 0.5)) * (noise.b * value);
 		float4 tex = tex2D(uImage0, input.Texcoord + addCoord) * input.Color;
-		return tex * max(warpValue3 - value, 0) * warpValue2;
+		return tex * max(0.2 - value, 0) / 0.2;
 	}
 	return tex2D(uImage0, input.Texcoord) * input.Color;
 }
