@@ -11,7 +11,6 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
-using Terraria.Map;
 using static Everglow.Myth.TheTusk.NPCs.BloodTusk.BloodTuskAtlas;
 
 namespace Everglow.Myth.TheTusk.NPCs.BloodTusk;
@@ -237,15 +236,22 @@ public class BloodTusk : ModNPC
 				SwitchAction();
 			}
 		}
-		if(State == (int)States.Phase2)
+		if (State == (int)States.Phase2)
 		{
-			if (Main.rand.NextBool(135))
+			foreach(Player player in Main.player)
 			{
-				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), new Vector2((Main.maxTilesX * 0.94f) * 16, (Main.maxTilesY * 0.9f) * 16), new Vector2(-21, -Main.rand.NextFloat(25, 30)), ModContent.ProjectileType<Living_Jawbone_Huge>(), 400, 10, NPC.target);
-			}
-			if (Main.rand.NextBool(135))
-			{
-				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), new Vector2((Main.maxTilesX * 0.1f) * 16, (Main.maxTilesY * 0.9f) * 16), new Vector2(21, -Main.rand.NextFloat(25, 30)), ModContent.ProjectileType<Living_Jawbone_Huge>(), 400, 10, NPC.target);
+				if (player.Center.Y < NPC.Top.Y - 100)
+				{
+					if (Main.rand.NextBool(135))
+					{
+						Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), new Vector2((Main.maxTilesX * 0.94f) * 16, (Main.maxTilesY * 0.9f) * 16), new Vector2(-21, -Main.rand.NextFloat(25, 30)), ModContent.ProjectileType<Living_Jawbone_Huge>(), 400, 10, NPC.target);
+					}
+					if (Main.rand.NextBool(135))
+					{
+						Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), new Vector2((Main.maxTilesX * 0.1f) * 16, (Main.maxTilesY * 0.9f) * 16), new Vector2(21, -Main.rand.NextFloat(25, 30)), ModContent.ProjectileType<Living_Jawbone_Huge>(), 400, 10, NPC.target);
+					}
+					break;
+				}
 			}
 		}
 	}
@@ -720,14 +726,14 @@ public class BloodTusk : ModNPC
 			NPC.Bottom = NPC.Bottom * 0.94f + targetBottom * 0.06f;
 			if (i == 15)
 			{
-				float speed = 0.3f;
+				float speed = 0.34f;
 				if (Main.expertMode)
 				{
-					speed = 0.4f;
+					speed = 0.38f;
 				}
 				if (Main.masterMode)
 				{
-					speed = 0.45f;
+					speed = 0.4f;
 				}
 				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, new Vector2(speed, 0), ModContent.ProjectileType<BloodTusk_Tentacle>(), GetDamage(90), 2, NPC.target, 0, 1);
 				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, new Vector2(-speed, 0), ModContent.ProjectileType<BloodTusk_Tentacle>(), GetDamage(90), 2, NPC.target, 0, -1);
@@ -1378,7 +1384,7 @@ public class BloodTusk : ModNPC
 
 	public bool DrawMyNPC(List<Vertex2D> bars, List<DrawPiece> pieces)
 	{
-		if(pieces.Count <= 0)
+		if (pieces.Count <= 0)
 		{
 			return false;
 		}
@@ -1487,6 +1493,10 @@ public class BloodTusk : ModNPC
 		if (Main.netMode == NetmodeID.Server)
 		{
 			NetMessage.SendData(MessageID.WorldData);
+		}
+		for (int i = 0; i < 20; i++)
+		{
+			Gore.NewGore(NPC.GetSource_FromAI(), NPC.position + new Vector2(Main.rand.NextFloat(NPC.width), Main.rand.NextFloat(NPC.height)), new Vector2(0, -Main.rand.NextFloat(3, 16)).RotatedBy(Main.rand.NextFloat(-1.2f, 1.2f)), ModContent.Find<ModGore>("Everglow/BloodTusk_gore" + i).Type);
 		}
 	}
 

@@ -31,8 +31,7 @@ public class TuskWall : DBlock
 			}
 			BottomY += 15;
 		}
-		size.Y = Math.Min(Timer * 3, 840);
-		size.Y = Math.Max(1, size.Y);
+		size.Y = Math.Clamp(Timer * 3, 1, 840);
 		position.Y = BottomY - size.Y;
 		if (Tusk != null && Tusk.active)
 		{

@@ -71,7 +71,6 @@ public class Living_Jawbone_Huge : ModProjectile
 			Projectile.ai[0] = (float)Utils.Lerp(Projectile.ai[0], 2, 0.06f);
 			if (Projectile.ai[0] > 1.8f)
 			{
-				SoundEngine.PlaySound(SoundID.DD2_SkeletonDeath.WithVolume(0.4f * Projectile.scale), Projectile.Center);
 				Projectile.ai[0] = 0;
 				OpenMouth = false;
 			}

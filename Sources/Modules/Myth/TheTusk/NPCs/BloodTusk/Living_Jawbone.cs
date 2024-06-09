@@ -3,6 +3,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheTusk.NPCs.BloodTusk;
+
 [NoGameModeScale]
 public class Living_Jawbone : ModNPC
 {
@@ -16,6 +17,8 @@ public class Living_Jawbone : ModNPC
 		NPC.noTileCollide = false;
 		NPC.lifeMax = 120;
 		NPC.behindTiles = true;
+		NPC.HitSound = SoundID.DD2_SkeletonHurt;
+		NPC.DeathSound = SoundID.DD2_SkeletonDeath;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -83,7 +86,7 @@ public class Living_Jawbone : ModNPC
 		}
 		if (NPC.collideY)
 		{
-			if(Main.rand.NextBool(15))
+			if (Main.rand.NextBool(15))
 			{
 				NPC.velocity.Y -= Main.rand.NextFloat(4f, 8f);
 			}
@@ -102,5 +105,17 @@ public class Living_Jawbone : ModNPC
 		spriteBatch.Draw(upJaw, NPC.Center - Main.screenPosition, null, Lighting.GetColor(NPC.Center.ToTileCoordinates()), NPC.rotation + NPC.ai[0], new Vector2(8f, 18f), NPC.scale, spriteEffects, 0);
 		spriteBatch.Draw(downJaw, NPC.Center - Main.screenPosition, null, Lighting.GetColor(NPC.Center.ToTileCoordinates()), NPC.rotation - NPC.ai[0], new Vector2(8f, 18f), NPC.scale, spriteEffects, 0);
 		return false;
+	}
+
+	public override void OnKill()
+	{
+		Gore.NewGore(NPC.GetSource_FromAI(), NPC.position + new Vector2(Main.rand.NextFloat(NPC.width), Main.rand.NextFloat(NPC.height)), new Vector2(0, -Main.rand.NextFloat(2, 4)).RotatedByRandom(MathHelper.TwoPi) + NPC.velocity, ModContent.Find<ModGore>("Everglow/Living_Jawbone_gore0").Type);
+		Gore.NewGore(NPC.GetSource_FromAI(), NPC.position + new Vector2(Main.rand.NextFloat(NPC.width), Main.rand.NextFloat(NPC.height)), new Vector2(0, -Main.rand.NextFloat(2, 4)).RotatedByRandom(MathHelper.TwoPi) + NPC.velocity, ModContent.Find<ModGore>("Everglow/Living_Jawbone_gore1").Type);
+		for (int i = 0; i < 16; i++)
+		{
+			Vector2 pos = NPC.position + new Vector2(Main.rand.NextFloat(NPC.width), Main.rand.NextFloat(NPC.height));
+			Dust dust = Dust.NewDustDirect(pos, 0, 0, ModContent.DustType<Dusts.TuskBreak_small>());
+			dust.velocity = NPC.velocity + new Vector2(0, -Main.rand.NextFloat(0.7f, 1.2f)).RotatedByRandom(MathHelper.TwoPi);
+		}
 	}
 }
