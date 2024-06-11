@@ -152,8 +152,8 @@ public class RockElemental_ThrowingStone : ModProjectile
 			if (cosTheta > 0.95f && MyOwner.ai[2] > 0.2f)
 			{
 				ShotAway = true;
-				Projectile.velocity = GetPredictVec(Projectile.position, player, 14f, 0.163f);
-				MyOwner.velocity -= Utils.SafeNormalize(toPlayer, Vector2.zeroVector) * 7f;
+				Projectile.velocity = PredictVec(Projectile.position, player, 14f, 0.163f);
+				MyOwner.velocity -= PredictVec(Projectile.position, player, 7f, 0.163f);
 				if (MyOwner.ai[0] > 30)
 				{
 					MyOwner.ai[0] = 30;
@@ -163,9 +163,9 @@ public class RockElemental_ThrowingStone : ModProjectile
 			if (MyOwner.ai[2] > 0.4f)
 			{
 				ShotAway = true;
-				Projectile.velocity = GetPredictVec(Projectile.position, player, 28f, 0.163f);
+				Projectile.velocity = PredictVec(Projectile.position, player, 28f, 0.163f);
 
-				MyOwner.velocity -= Utils.SafeNormalize(toPlayer, Vector2.zeroVector) * 14f;
+				MyOwner.velocity -= PredictVec(Projectile.position, player, 14f, 0.163f);
 				if (MyOwner.ai[0] > 30)
 				{
 					MyOwner.ai[0] = 30;
@@ -312,7 +312,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 		L = 5 * MathF.PI / 4;
 		R = -MathF.PI / 4;
 
-		Tuple<Vector2, int> ans = new Tuple<Vector2, int>(Vector2.Zero, 0);
+		Tuple<Vector2, int> parabola = new Tuple<Vector2, int>(Vector2.Zero, 0);
 		for (int i = 0; i < 25; i++)
 		{
 			float mid = (L + R) / 2;
@@ -326,23 +326,23 @@ public class RockElemental_ThrowingStone : ModProjectile
 			{
 				R = mid;
 			}
-			ans = new Tuple<Vector2, int>(Vec, fakepoint.Item2);
+			parabola = new Tuple<Vector2, int>(Vec, fakepoint.Item2);
 		}
-		return ans;
+		return parabola;
 	}
-	private Vector2 GetPredictVec(Vector2 pos, Player player, float speed, float gravity)
+	private Vector2 PredictVec(Vector2 pos, Player player, float speed, float gravity)
 	{
 		Vector2 target = player.Center - pos;
 		for (int i = 0; i < 25; i++)
 		{
-			Tuple<Vector2, int> info = GetShootVec(pos, target, speed, gravity);
-			Vector2 playerPos = player.Center + info.Item2 * player.velocity;
+			Tuple<Vector2, int> parabola = GetShootVec(pos, target, speed, gravity);
+			Vector2 playerPos = player.Center + parabola.Item2 * player.velocity;
 			if (Vector2.Distance(target, playerPos) < 0.1f)
 			{
-				return info.Item1;
+				return parabola.Item1;
 			}
 			target = playerPos;
 		}
-		return target;
+		return target*speed;
 	}
 }
