@@ -3,6 +3,7 @@ using Everglow.Yggdrasil.YggdrasilTown.NPCs;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.Utilities.Terraria.Utilities;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -17,7 +18,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 		Projectile.hostile = true;
 		Projectile.ignoreWater = false;
 		Projectile.tileCollide = false;
-		Projectile.timeLeft = 99999999;
+		Projectile.timeLeft = 1023;
 		Projectile.scale = 0;
 	}
 
@@ -45,7 +46,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 		if (ShotAway)
 		{
 			Projectile.rotation += 0.1f;
-			Projectile.velocity.Y += 0.15f;
+			Projectile.velocity.Y += 0.163f;
 			for (int j = 0; j < 3; j++)
 			{
 				Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<RockElemental_Energy_normal>());
@@ -151,7 +152,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 			if (cosTheta > 0.95f && MyOwner.ai[2] > 0.2f)
 			{
 				ShotAway = true;
-				Projectile.velocity = Utils.SafeNormalize(toPlayer, Vector2.zeroVector) * 14f;
+				Projectile.velocity = GetPredictVec(Projectile.position, player, 14f, 0.163f);
 				MyOwner.velocity -= Utils.SafeNormalize(toPlayer, Vector2.zeroVector) * 7f;
 				if (MyOwner.ai[0] > 30)
 				{
@@ -162,7 +163,8 @@ public class RockElemental_ThrowingStone : ModProjectile
 			if (MyOwner.ai[2] > 0.4f)
 			{
 				ShotAway = true;
-				Projectile.velocity = Utils.SafeNormalize(toPlayer, Vector2.zeroVector) * 28f;
+				Projectile.velocity = GetPredictVec(Projectile.position, player, 28f, 0.163f);
+
 				MyOwner.velocity -= Utils.SafeNormalize(toPlayer, Vector2.zeroVector) * 14f;
 				if (MyOwner.ai[0] > 30)
 				{
@@ -287,5 +289,60 @@ public class RockElemental_ThrowingStone : ModProjectile
 			Main.EntitySpriteDraw(texture, drawCenter2 + shake, null, lightColor, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
 		}
 		return false;
+	}
+
+	private Tuple<float, int> GetHitPoint(Vector2 pos, Vector2 Vec, Vector2 targetPos, float gravity)
+	{
+		int t = 1;
+		while (true)
+		{
+			pos += Vec;
+			if (Vec.Y > 0 && pos.Y > targetPos.Y)
+			{
+				return new Tuple<float, int>(pos.X, t);
+			}
+			Vec.Y += gravity;
+			t++;
+		}
+	}
+	private Tuple<Vector2, int> GetShootVec(Vector2 pos, Vector2 target, float speed, float gravity)
+	{
+		float L, R;
+
+		L = 5 * MathF.PI / 4;
+		R = -MathF.PI / 4;
+
+		Tuple<Vector2, int> ans = new Tuple<Vector2, int>(Vector2.Zero, 0);
+		for (int i = 0; i < 25; i++)
+		{
+			float mid = (L + R) / 2;
+			Vector2 Vec = Vector2.UnitX.RotatedBy(mid) * speed;
+			Tuple<float, int> fakepoint = GetHitPoint(pos, Vec, target, gravity);
+			if (fakepoint.Item1 < target.X)
+			{
+				L = mid;
+			}
+			else
+			{
+				R = mid;
+			}
+			ans = new Tuple<Vector2, int>(Vec, fakepoint.Item2);
+		}
+		return ans;
+	}
+	private Vector2 GetPredictVec(Vector2 pos, Player player, float speed, float gravity)
+	{
+		Vector2 target = player.Center - pos;
+		for (int i = 0; i < 25; i++)
+		{
+			Tuple<Vector2, int> info = GetShootVec(pos, target, speed, gravity);
+			Vector2 playerPos = player.Center + info.Item2 * player.velocity;
+			if (Vector2.Distance(target, playerPos) < 0.1f)
+			{
+				return info.Item1;
+			}
+			target = playerPos;
+		}
+		return target;
 	}
 }
