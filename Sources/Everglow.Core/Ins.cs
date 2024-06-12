@@ -56,10 +56,13 @@ public static class Ins
 
 	public static void Clear()
 	{
-		services.RemoveAll<GraphicsDevice>();
-		services.RemoveAll<SpriteBatch>();
-		provider.Dispose();
-		services.Clear();
+		if (services is not null)
+		{
+			services.RemoveAll<GraphicsDevice>();
+			services.RemoveAll<SpriteBatch>();
+			services.Clear();
+		}
+		provider?.Dispose();
 	}
 
 	private static ServiceCollection services = null;

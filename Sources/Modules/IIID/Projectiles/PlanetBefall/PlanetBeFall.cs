@@ -19,11 +19,14 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 
 		public override void SetDef()
 		{
-			model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
-			IIIDTexture = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture").Value;
-			NormalTexture = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture").Value;
-			MaterialTexture = TextureAssets.MagicPixel.Value;
-			EmissionTexture = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallEmission").Value;
+			if (!Main.dedServ)
+			{
+				model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
+				IIIDTexture = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture").Value;
+				NormalTexture = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture").Value;
+				MaterialTexture = TextureAssets.MagicPixel.Value;
+				EmissionTexture = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallEmission").Value;
+			}
 			bloom = new BloomParams
 			{
 				BlurIntensity = 1.0f,
