@@ -2938,6 +2938,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	RodSpear: {
+		DisplayName: Rod Spear
+		Tooltip: ""
+	}
+
 	SmeltingStaff: {
 		DisplayName: Smelting Staff
 		Tooltip: ""
@@ -3873,6 +3878,7 @@ Projectiles: {
 	RockArrow.DisplayName: Rock Arrow
 	RockExplosion_friendly.DisplayName: Rock Explosion_friendly
 	RockSpikeBallista_Proj.DisplayName: Rock Spike Ballista_ Proj
+	RodSpear.DisplayName: Rod Spear
 	SquamousAirProj.DisplayName: Squamous Air Proj
 	SquamousRockExplosion.DisplayName: Squamous Rock Explosion
 	SquamousRockProj.DisplayName: Squamous Rock Proj
