@@ -6,13 +6,18 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 public class AuburnBellSummon : ModProjectile
 {
 	private const float MaxSpeed = 25f;
-	private const float MinInitialDashSpeed = 8f;
 	private const float Acceleration = 0.05f;
 	private const float Deceleration = 0.95f;
 	private const float HitDistance = 50f;
 	private const float MinSpeed = 0.1f;
 	private const float RotationSpeed = 0.1f;
+
+	private const float MinInitialDashSpeed = 8f;
 	private const int DashTimeLimit = 60;
+
+	private float ZigzagAmplitude = 10f; // Amplitude of the zigzag motion
+	private float ZigzagFrequency = 1f; // Frequency of the zigzag motion
+	private float ZigzagTime; // To track the elapsed time for the zigzag motion
 
 	private float DashTime { get; set; }
 
@@ -177,14 +182,20 @@ public class AuburnBellSummon : ModProjectile
 		{
 			if (Math.Abs(directionToTarget.Y / directionToTarget.X) > MathF.Tan(MathF.PI / 4)) // Check if the target angle exceeds 45° pitch angle; if so, move in the Y direction towards the target
 			{
+				// Apply zigzag motion while moving towards the target's Y position
+				ZigzagTime += ZigzagFrequency;
+				float zigzagOffset = MathF.Sin(ZigzagTime) * ZigzagAmplitude;
+
 				if (directionToTarget.Y >= 0)
 				{
-					MoveTo(new Vector2(Projectile.Center.X, target.position.Y));
+					MoveTo(new Vector2(Projectile.Center.X + zigzagOffset, target.position.Y));
 				}
 				else
 				{
-					MoveTo(new Vector2(Projectile.Center.X, target.position.Y));
+					MoveTo(new Vector2(Projectile.Center.X + zigzagOffset, target.position.Y));
 				}
+
+				Projectile.rotation += MathF.Sign(0 - Projectile.rotation) * RotationSpeed;
 			}
 			else if (Math.Abs(MathF.Tan(Projectile.rotation - angleToTarget)) > 0.01f) // Adjust to the direction of the target
 			{
