@@ -60,7 +60,7 @@ internal class LargeFireBulb : ModTile, ITileFluentlyDrawn
 		TileObjectData.newTile.StyleWrapLimit = 111;
 		TileObjectData.newTile.DrawYOffset = -6;
 		TileObjectData.addTile(Type);
-
+		HitSound = SoundID.Grass;
 		DustType = ModContent.DustType<FluorescentTreeDust>();
 		AddMapEntry(new Color(28, 132, 255));
 	}

@@ -15,11 +15,9 @@ Tiles: {
 	BlackStarShrub.MapEntry: Black Star Shrub
 	BlackStarShrubSmall.MapEntry: Black Star Shrub Small
 	BlackVine.MapEntry: Black Vine
-	BlueBlossom.MapEntry: Blue Blossom
 	DarkCocoonGrass.MapEntry: Dark Cocoon Grass
 	FireflyPiranhaBanner.MapEntry: Firefly Piranha Banner
 	GlowingReed.MapEntry: Glowing Reed
-	LampLotus.MapEntry: Lamp Lotus
 	MothWorldDoor.MapEntry: Moth World Door
 	GlowingDrop.MapEntry: Glowing Drop
 	GlowWoodBathtub.MapEntry: Glow Wood Bathtub
@@ -726,6 +724,11 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.Petrification.Description
 	}
 
+	TuskCursed: {
+		DisplayName: Tusk Cursed
+		Description: Mods.Everglow.Buffs.TuskCursed.Description
+	}
+
 	TuskStaff: {
 		DisplayName: Tusk Staff
 		Description: Mods.Everglow.Buffs.TuskStaff.Description
@@ -839,6 +842,11 @@ Buffs: {
 	LichenInfected: {
 		DisplayName: Lichen Infected
 		Description: Mods.Everglow.Buffs.LichenInfected.Description
+	}
+
+	MelterGearCooldown: {
+		DisplayName: Melter Gear Cooldown
+		Description: Mods.Everglow.Buffs.MelterGearCooldown.Description
 	}
 
 	DeathFlame: {
@@ -1373,6 +1381,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	TileDataReader: {
+		DisplayName: Tile Data Reader
+		Tooltip: ""
+	}
+
 	VortexVanquisherItem: {
 		DisplayName: Vortex Vanquisher Item
 		Tooltip: ""
@@ -1633,6 +1646,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	DarkCocoonWithPetal: {
+		DisplayName: Dark Cocoon With Petal
+		Tooltip: ""
+	}
+
 	EvilCocoon: {
 		DisplayName: Evil Cocoon
 		Tooltip: ""
@@ -1643,8 +1661,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	FireflyMoss: {
-		DisplayName: Firefly Moss
+	FireflyMoss_Item: {
+		DisplayName: Firefly Moss_ Item
 		Tooltip: ""
 	}
 
@@ -1658,18 +1676,13 @@ Items: {
 		Tooltip: ""
 	}
 
-	GlowCrystal: {
-		DisplayName: Glow Crystal
-		Tooltip: ""
-	}
-
 	GlowingFirefly: {
 		DisplayName: Glowing Firefly
 		Tooltip: ""
 	}
 
-	GlowingPedal: {
-		DisplayName: Glowing Pedal
+	GlowingPetal: {
+		DisplayName: Glowing Petal
 		Tooltip: ""
 	}
 
@@ -3262,19 +3275,7 @@ Items: {
 NPCs: {
 	RapierMaster_Boss.DisplayName: Rapier Master_ Boss
 	BloodTusk.DisplayName: Blood Tusk
-	BloodyMouth1.DisplayName: Bloody Mouth1
-	BloodyMouth2.DisplayName: Bloody Mouth2
-	CrimsonTusk.DisplayName: Crimson Tusk
-	CrimsonTusk1.DisplayName: Crimson Tusk1
-	CrimsonTuskControlable.DisplayName: Crimson Tusk Controlable
-	CrimsonTuskFireWork.DisplayName: Crimson Tusk Fire Work
-	LargeTusk.DisplayName: Large Tusk
-	LargeTusk2.DisplayName: Large Tusk2
-	LittleTusk.DisplayName: Little Tusk
-	TuskCooling.DisplayName: Tusk Cooling
-	TuskWallLeft.DisplayName: Tusk Wall Left
-	TuskWallRight.DisplayName: Tusk Wall Right
-	TuskWave.DisplayName: Tusk Wave
+	Living_Jawbone.DisplayName: Living_ Jawbone
 	GlowingHeal.DisplayName: Glowing Heal
 	BlackStarFruit.DisplayName: Black Star Fruit
 	CentipedeHead.DisplayName: Centipede Head
@@ -3307,12 +3308,12 @@ NPCs: {
 		DisplayName: Acytaea
 
 		TownNPCMood: {
-			Content: 我很满足。
-			NoHome: 我讨厌没有家。
-			FarFromHome: 我离家太远了。
-			LoveSpace: 我非常喜欢有这么大的空间。
-			DislikeCrowded: 我不喜欢这么拥挤。
-			HateCrowded: 我讨厌这么拥挤。
+			Content: I am content.
+			NoHome: I hate not having a home.
+			FarFromHome: I am too far from home.
+			LoveSpace: I love having so much space.
+			DislikeCrowded: I dislike how crowded I am.
+			HateCrowded: I hate how crowded I am.
 			LikeNPC_Princess: I like {NPCName}.
 			Princess_LovesNPC: I like {NPCName}.
 		}
@@ -3440,19 +3441,21 @@ Projectiles: {
 	PineSprite.DisplayName: Pine Sprite
 	PineStab_Pro.DisplayName: Pine Stab_ Pro
 	PineStab_Pro_Stab.DisplayName: Pine Stab_ Pro_ Stab
-	CrimsonTuskProj.DisplayName: Crimson Tusk Proj
-	CrimsonTuskProjGra.DisplayName: Crimson Tusk Proj Gra
-	EarthTusk.DisplayName: Earth Tusk
-	EarthTuskHostile.DisplayName: Earth Tusk Hostile
-	Living_Jawbone.DisplayName: Living_ Jawbone
+	BloodFountain.DisplayName: Blood Fountain
+	BloodTuskLongSpice.DisplayName: Blood Tusk Long Spice
+	BloodTusk_Sleep_Crack.DisplayName: Blood Tusk_ Sleep_ Crack
+	BloodTusk_Tentacle.DisplayName: Blood Tusk_ Tentacle
 	Living_Jawbone_Huge.DisplayName: Living_ Jawbone_ Huge
 	Living_Jawbone_Huge_ground.DisplayName: Living_ Jawbone_ Huge_ground
+	Living_Jawbone_Huge_ground_Wave.DisplayName: Living_ Jawbone_ Huge_ground_ Wave
 	TuskBloodPool.DisplayName: Tusk Blood Pool
 	TuskBloodPool_close.DisplayName: Tusk Blood Pool_close
 	TuskBloodPool_open.DisplayName: Tusk Blood Pool_open
 	TuskCurse.DisplayName: Tusk Curse
 	TuskSpice.DisplayName: Tusk Spice
-	TuskSpicePro.DisplayName: Tusk Spice Pro
+	TuskSpice_WithGravity.DisplayName: Tusk Spice_ With Gravity
+	TuskWall_Wave.DisplayName: Tusk Wall_ Wave
+	Tusk_ground.DisplayName: Tusk_ground
 	Tusk_ground_little.DisplayName: Tusk_ground_little
 	BloodyBoneYoyo.DisplayName: Bloody Bone Yoyo
 	SpineGun.DisplayName: Spine Gun
@@ -3462,7 +3465,6 @@ Projectiles: {
 	ToothKnife.DisplayName: Tooth Knife
 	ToothMagic.DisplayName: Tooth Magic
 	ToothMagicBall.DisplayName: Tooth Magic Ball
-	ToothMagicHit.DisplayName: Tooth Magic Hit
 	ToothMagicSplit.DisplayName: Tooth Magic Split
 	ToothMagicSplit2.DisplayName: Tooth Magic Split2
 	ToothSpear_proj.DisplayName: Tooth Spear_proj

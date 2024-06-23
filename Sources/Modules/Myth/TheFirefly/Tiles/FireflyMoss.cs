@@ -17,6 +17,7 @@ public class FireflyMoss : ModTile, ITileFluentlyDrawn
 		Main.tileCut[Type] = true;
 		AddMapEntry(new Color(51, 107, 204));
 		DustType = ModContent.DustType<FluorescentTreeDust>();
+		HitSound = SoundID.Grass;
 	}
 
 	public override bool CreateDust(int i, int j, ref int type)

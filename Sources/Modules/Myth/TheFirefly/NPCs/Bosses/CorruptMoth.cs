@@ -105,18 +105,7 @@ public class CorruptMoth : ModNPC
 		NPCID.Sets.TrailCacheLength[NPC.type] = 4;
 		if (!Main.dedServ)
 		{
-			if (EverglowClientConfig.ReplaceMothAudio == 0) // ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace == MothAudioReplaceMode.MothFighting
-			{
-				Music = MythContent.QuickMusic("MothFighting");
-			}
-			else if (EverglowClientConfig.ReplaceMothAudio == 1)
-			{
-				Music = MythContent.QuickMusic("MothFightingAlt");
-			}
-			else if (EverglowClientConfig.ReplaceMothAudio == 2)
-			{
-				Music = MythContent.QuickMusic("MothFightingOld2");
-			}
+			Music = MythContent.QuickMusic("MothFightingAlt");
 		}
 	}
 
