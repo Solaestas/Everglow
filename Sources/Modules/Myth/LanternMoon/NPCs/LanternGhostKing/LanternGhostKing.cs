@@ -33,6 +33,7 @@ public class LanternGhostKing : ModNPC
 	private static Texture2D right_glow;
 	public float ShakeStrength = 2;
 	public int Phase = 1;
+
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 3;
@@ -49,11 +50,14 @@ public class LanternGhostKing : ModNPC
 			breads[i] = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/NPCs/LanternGhostKing/LanternGhostKing_bread_" + i.ToString()).Value;
 		}
 	}
+
 	public override void SetDefaults()
 	{
 		NPC.damage = 100;
 		if (Main.expertMode)
+		{
 			NPC.lifeMax = 20000;
+		}
 		else
 		{
 			NPC.lifeMax = 30000;
@@ -71,10 +75,12 @@ public class LanternGhostKing : ModNPC
 		NPC.HitSound = SoundID.NPCHit3;
 		Music = MythContent.QuickMusic("DashCore");
 	}
+
 	public override bool CheckActive()
 	{
 		return Main.dayTime;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		for (int i = 0; i < 10; i++)
@@ -88,7 +94,7 @@ public class LanternGhostKing : ModNPC
 			OwnerLanternKing = NPC,
 			Active = true,
 			Visible = true,
-			maxTime = 240
+			maxTime = 240,
 		};
 		Ins.VFXManager.Add(spark);
 		var warp = new LanternFlameRing_warpDust
@@ -96,17 +102,19 @@ public class LanternGhostKing : ModNPC
 			OwnerLanternKing = NPC,
 			Active = true,
 			Visible = true,
-			maxTime = 240
+			maxTime = 240,
 		};
 		Ins.VFXManager.Add(warp);
 		RingCenter = NPC.Center;
 	}
+
 	public void UpdateDrawParameter()
 	{
 		LeftRotation = (float)Utils.Lerp(LeftRotation, NPC.rotation, 0.02f);
 		RightRotation = (float)Utils.Lerp(RightRotation, NPC.rotation, 0.02f);
 		ShakeStrength = (float)Utils.Lerp(ShakeStrength, 2, 0.02f);
 	}
+
 	public void CheckPlayerTouchRing()
 	{
 		if (RingRadius < 1000)
@@ -131,6 +139,7 @@ public class LanternGhostKing : ModNPC
 			}
 		}
 	}
+
 	public override void AI()
 	{
 		NPC.localAI[0] += 1;
@@ -138,7 +147,9 @@ public class LanternGhostKing : ModNPC
 		NPC.TargetClosest(false);
 		Player player = Main.player[NPC.target];
 		if (NPC.localAI[0] > 14400)
+		{
 			NPC.ai[0] = (14680 - NPC.localAI[0]) / 240f;
+		}
 		else
 		{
 			NPC.ai[0] = 1;
@@ -146,11 +157,16 @@ public class LanternGhostKing : ModNPC
 
 		Lighting.AddLight(NPC.Center, new Vector3(0.75f, 0.2f, 0) * ((255 - NPC.alpha) / 255f));
 		if (!NearDie)
+		{
 			NPC.dontTakeDamage = false;
+		}
+
 		if (player.dead)
 		{
 			if (NPC.life < NPC.lifeMax)
+			{
 				NPC.life += 10;
+			}
 			else
 			{
 				NPC.life = NPC.lifeMax;
@@ -162,7 +178,10 @@ public class LanternGhostKing : ModNPC
 			NPC.rotation = NPC.velocity.X / 120f;
 			Vector2 v = player.Center + new Vector2((float)Math.Sin(NPC.localAI[0] / 40f) * 500f, (float)Math.Sin((NPC.localAI[0] + 200) / 40f) * 50f - 350) - NPC.Center;
 			if (NPC.velocity.Length() < 9f)
+			{
 				NPC.velocity += v / v.Length() * 0.35f;
+			}
+
 			NPC.velocity *= 0.96f;
 			RingCenterTrend = NPC.Center;
 			RingRadiusTrend = 1800;
@@ -182,7 +201,7 @@ public class LanternGhostKing : ModNPC
 		}
 		if (Phase == 1)
 		{
-			//闪烁金线 ai1借用为晃动力
+			// 闪烁金线 ai1借用为晃动力
 			if (NPC.localAI[0] < 700 && NPC.localAI[0] > 0)
 			{
 				float duration = NPC.localAI[0] % 100;
@@ -205,7 +224,6 @@ public class LanternGhostKing : ModNPC
 						NPC.rotation = 0.6f;
 						NPC.ai[1] = -0.2f;
 						ShakeStrength = 25;
-
 					}
 					if (duration % 2 == 1)
 					{
@@ -230,11 +248,15 @@ public class LanternGhostKing : ModNPC
 				RingCenterTrend = NPC.Center;
 				RingRadiusTrend = 1200;
 			}
-			//灯火炸环
+
+			// 灯火炸环
 			if (NPC.localAI[0] >= 700 && NPC.localAI[0] < 1500)
 			{
 				if (NPC.localAI[0] % 250 == 0)
+				{
 					Lantern3RingCenter = new Vector2(0, -300).RotatedBy(Main.rand.NextFloat(-0.25f, 0.25f) * Math.PI);
+				}
+
 				if (NPC.localAI[0] % 250 < 20)
 				{
 					NPC.velocity *= 0.95f;
@@ -322,7 +344,9 @@ public class LanternGhostKing : ModNPC
 					Vector2 v = player.Center + Lantern3RingCenter + player.velocity * 30f;
 					NPC.velocity += (v - NPC.Center) / (v - NPC.Center).Length() * 0.25f;
 					if (NPC.velocity.Length() > 20f)
+					{
 						NPC.velocity *= 0.96f;
+					}
 				}
 				if (NPC.localAI[0] >= 999)
 				{
@@ -331,7 +355,8 @@ public class LanternGhostKing : ModNPC
 				RingCenterTrend = NPC.Center;
 				RingRadiusTrend = 1200;
 			}
-			//灯火炸弹阵法
+
+			// 灯火炸弹阵法
 			if (NPC.localAI[0] >= 1500 && NPC.localAI[0] < 1700)
 			{
 				NPC.rotation *= 0.95f;
@@ -364,7 +389,8 @@ public class LanternGhostKing : ModNPC
 					}
 				}
 			}
-			//游离灯火
+
+			// 游离灯火
 			if (NPC.localAI[0] >= 1700 && NPC.localAI[0] < 2300)
 			{
 				NPC.rotation *= 0.95f;
@@ -442,7 +468,7 @@ public class LanternGhostKing : ModNPC
 		}
 		if (Phase == 2)
 		{
-			//召唤小弟
+			// 召唤小弟
 			if (NPC.localAI[0] < 400)
 			{
 				NPC.defense = 1000;
@@ -460,7 +486,9 @@ public class LanternGhostKing : ModNPC
 					if (NPC.localAI[0] < 388)
 					{
 						if (NPC.localAI[0] % 7 == 0)
+						{
 							NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y + 100, ModContent.NPCType<FloatLantern>(), 0, 0, 0, 0, 0, 255);
+						}
 					}
 				}
 
@@ -488,7 +516,8 @@ public class LanternGhostKing : ModNPC
 					}
 				}
 			}
-			//流灯河 ai1借用为位置
+
+			// 流灯河 ai1借用为位置
 			if (NPC.localAI[0] > 400 && NPC.localAI[0] < 1200)
 			{
 				if (NPC.localAI[0] == 406)
@@ -567,7 +596,8 @@ public class LanternGhostKing : ModNPC
 					}
 				}
 			}
-			//千灯夜雨
+
+			// 千灯夜雨
 			if (NPC.localAI[0] >= 1200 && NPC.localAI[0] < 1600)
 			{
 				NPC.rotation *= 0.96f;
@@ -614,7 +644,8 @@ public class LanternGhostKing : ModNPC
 					NPC.alpha = 0;
 					RingCenterTrend = NPC.Center;
 				}
-				//释放一波灯雨
+
+				// 释放一波灯雨
 				if (NPC.localAI[0] >= 1250 && NPC.localAI[0] % 67 == 0)
 				{
 					for (int x = -10; x < 11; x++)
@@ -633,7 +664,8 @@ public class LanternGhostKing : ModNPC
 					SwitchAttackTypeInPhase2();
 				}
 			}
-			//甩出金丝 ai3借用存方向  临时向量0借为旋转中心,临时向量1借为转动半径
+
+			// 甩出金丝 ai3借用存方向  临时向量0借为旋转中心,临时向量1借为转动半径
 			if (NPC.localAI[0] >= 1600 && NPC.localAI[0] < 2000)
 			{
 				if (NPC.localAI[0] == 1601)
@@ -717,7 +749,8 @@ public class LanternGhostKing : ModNPC
 					SwitchAttackTypeInPhase2();
 				}
 			}
-			//闪烁金线2 ai1借用为晃动力
+
+			// 闪烁金线2 ai1借用为晃动力
 			if (NPC.localAI[0] >= 2000 && NPC.localAI[0] < 2300)
 			{
 				float duration = NPC.localAI[0] % 60;
@@ -770,13 +803,17 @@ public class LanternGhostKing : ModNPC
 					SwitchAttackTypeInPhase2();
 				}
 			}
-			//灯火炸环2
+
+			// 灯火炸环2
 			if (NPC.localAI[0] >= 2400 && NPC.localAI[0] < 3100)
 			{
 				if (NPC.localAI[0] < 3000)
 				{
 					if (NPC.localAI[0] % 250 == 0)
+					{
 						Lantern3RingCenter = new Vector2(0, -300).RotatedBy(Main.rand.NextFloat(-1.3f, 1.3f));
+					}
+
 					if (NPC.localAI[0] % 250 < 20)
 					{
 						NPC.velocity *= 0.95f;
@@ -879,7 +916,8 @@ public class LanternGhostKing : ModNPC
 					}
 				}
 			}
-			//落灯柱,临时向量0借为位移目标
+
+			// 落灯柱,临时向量0借为位移目标
 			if (NPC.localAI[0] >= 3100 && NPC.localAI[0] < 3600)
 			{
 				if (NPC.localAI[0] == 3103)
@@ -987,11 +1025,13 @@ public class LanternGhostKing : ModNPC
 		RingRadius = RingRadius * 0.99f + RingRadiusTrend * 0.01f;
 		RingCenter = RingCenter * 0.99f + RingCenterTrend * 0.01f;
 	}
+
 	/// <summary>
 	/// 内部临时向量，用来存各种技能位置
 	/// </summary>
 	private Vector2 innerVector0 = Vector2.zeroVector;
 	private Vector2 innerVector1 = Vector2.zeroVector;
+
 	public override void HitEffect(NPC.HitInfo hit)
 	{
 		if (NPC.life <= 0)
@@ -1007,7 +1047,7 @@ public class LanternGhostKing : ModNPC
 					Visible = true,
 					velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 					noGravity = false,
-					position = NPC.Center
+					position = NPC.Center,
 				};
 				Ins.VFXManager.Add(gore2);
 				var gore3 = new FloatLanternGore4
@@ -1016,7 +1056,7 @@ public class LanternGhostKing : ModNPC
 					Visible = true,
 					velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 					noGravity = false,
-					position = NPC.Center
+					position = NPC.Center,
 				};
 				Ins.VFXManager.Add(gore3);
 				var gore4 = new FloatLanternGore5
@@ -1025,7 +1065,7 @@ public class LanternGhostKing : ModNPC
 					Visible = true,
 					velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 					noGravity = false,
-					position = NPC.Center
+					position = NPC.Center,
 				};
 				Ins.VFXManager.Add(gore4);
 				var gore5 = new FloatLanternGore6
@@ -1034,7 +1074,7 @@ public class LanternGhostKing : ModNPC
 					Visible = true,
 					velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 					noGravity = false,
-					position = NPC.Center
+					position = NPC.Center,
 				};
 				Ins.VFXManager.Add(gore5);
 			}
@@ -1044,7 +1084,7 @@ public class LanternGhostKing : ModNPC
 				Visible = true,
 				velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 				noGravity = false,
-				position = NPC.Center
+				position = NPC.Center,
 			};
 			Ins.VFXManager.Add(gore0Large);
 
@@ -1054,7 +1094,7 @@ public class LanternGhostKing : ModNPC
 				Visible = true,
 				velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 				noGravity = false,
-				position = NPC.Center
+				position = NPC.Center,
 			};
 			Ins.VFXManager.Add(gore7Large);
 
@@ -1064,7 +1104,7 @@ public class LanternGhostKing : ModNPC
 				Visible = true,
 				velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 				noGravity = false,
-				position = NPC.Center
+				position = NPC.Center,
 			};
 			Ins.VFXManager.Add(gore8Large);
 
@@ -1074,7 +1114,7 @@ public class LanternGhostKing : ModNPC
 				Visible = true,
 				velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 				noGravity = false,
-				position = NPC.Center
+				position = NPC.Center,
 			};
 			Ins.VFXManager.Add(gore9Large);
 
@@ -1099,21 +1139,18 @@ public class LanternGhostKing : ModNPC
 			Main.gore[gr16].timeLeft = 900;
 			for (int i = 0; i < 8; i++)
 			{
-
 				goreVelocity = new Vector2(Main.rand.NextFloat(0.4f), 0).RotatedByRandom(6.283);
 				int gr17 = Gore.NewGore(null, NPC.position + new Vector2(Main.rand.NextFloat(-60, 60f), 40), goreVelocity, ModContent.Find<ModGore>("Everglow/LanternGhostKingGore11").Type, 1f);
 				Main.gore[gr17].timeLeft = 900;
 			}
 			for (int i = 0; i < 8; i++)
 			{
-
 				goreVelocity = new Vector2(Main.rand.NextFloat(0.4f), 0).RotatedByRandom(6.283);
 				int gr18 = Gore.NewGore(null, NPC.position + new Vector2(Main.rand.NextFloat(-60, 60f), 40), goreVelocity, ModContent.Find<ModGore>("Everglow/LanternGhostKingGore12").Type, 1f);
 				Main.gore[gr18].timeLeft = 900;
 			}
 			for (int i = 0; i < 8; i++)
 			{
-
 				goreVelocity = new Vector2(Main.rand.NextFloat(0.4f), 0).RotatedByRandom(6.283);
 				int gr19 = Gore.NewGore(null, NPC.position + new Vector2(Main.rand.NextFloat(-60, 60f), 40), goreVelocity, ModContent.Find<ModGore>("Everglow/LanternGhostKingGore13").Type, 1f);
 				Main.gore[gr19].timeLeft = 900;
@@ -1130,8 +1167,8 @@ public class LanternGhostKing : ModNPC
 				FireBallVelocity = new Vector2[]
 	{
 				RandomVector2(2f, 0.01f),
-				RandomVector2(1f, 0.01f)
-	}
+				RandomVector2(1f, 0.01f),
+	},
 			};
 			Ins.VFXManager.Add(lanternExplosion);
 
@@ -1144,11 +1181,12 @@ public class LanternGhostKing : ModNPC
 					Visible = true,
 					position = NPC.Center,
 					maxTime = Main.rand.Next(26, 96),
-					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 0, Main.rand.NextFloat(1f, 3.4f) }
+					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 0, Main.rand.NextFloat(1f, 3.4f) },
 				};
 				Ins.VFXManager.Add(flameDust);
 			}
-			//Projectile.NewProjectile(NPC.GetSource_Death(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion_II>(), 10000, 10);
+
+			// Projectile.NewProjectile(NPC.GetSource_Death(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion_II>(), 10000, 10);
 			SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithPitchOffset(-1f), NPC.Center);
 		}
 		if (NPC.life < NPC.lifeMax / 2)
@@ -1160,6 +1198,7 @@ public class LanternGhostKing : ModNPC
 			}
 		}
 	}
+
 	public void SwitchAttackTypeInPhase2()
 	{
 		switch (Main.rand.Next(5))
@@ -1181,10 +1220,12 @@ public class LanternGhostKing : ModNPC
 				break;
 		}
 	}
+
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		return false;
 	}
+
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		Vector2 originOfTexture = front.Size() * 0.5f;
@@ -1194,7 +1235,7 @@ public class LanternGhostKing : ModNPC
 		DrawVertexTexture(ModAsset.LanternGhostKing_side.Value, new Vector2(-160, -20), LeftRotation);
 		DrawVertexTexture(ModAsset.LanternGhostKing_side.Value, new Vector2(160, -20), RightRotation, true);
 
-		//第一阶段全屏炸雷时发光
+		// 第一阶段全屏炸雷时发光
 		if (Phase == 1)
 		{
 			if (NPC.localAI[0] >= 1600 && NPC.localAI[0] < 1700)
@@ -1210,7 +1251,6 @@ public class LanternGhostKing : ModNPC
 			}
 		}
 
-
 		for (int i = 9; i >= 0; i--)
 		{
 			Color breadColor = Lighting.GetColor((NPC.Center / 16f).ToPoint() + new Point(5 - i, 8));
@@ -1220,7 +1260,8 @@ public class LanternGhostKing : ModNPC
 		}
 		Color shellColor = drawColor * 0.6f;
 		shellColor.A = 255;
-		//第二阶段变透明
+
+		// 第二阶段变透明
 		if (Phase == 2)
 		{
 			if (NPC.localAI[0] >= 700)
@@ -1237,7 +1278,8 @@ public class LanternGhostKing : ModNPC
 		shellColor = drawColor * 0.6f;
 		shellColor.A = 255;
 		spriteBatch.Draw(front, NPC.Center - Main.screenPosition, null, GetColorRed(shellColor), NPC.rotation, originOfTexture, 1f, SpriteEffects.None, 0f);
-		//第二阶段十字光辉
+
+		// 第二阶段十字光辉
 		if (Phase == 2)
 		{
 			if (NPC.localAI[0] >= 700)
@@ -1254,8 +1296,8 @@ public class LanternGhostKing : ModNPC
 				spriteBatch.Draw(star, NPC.Center - Main.screenPosition + offset, null, new Color(1f, 0.7f, 0.5f, 0), MathHelper.PiOver2, orig, new Vector2(value, 2.5f * mulSize) * mulSize * value2, SpriteEffects.None, 0f);
 			}
 		}
-
 	}
+
 	public void DrawVertexTexture(Texture2D tex, Vector2 offset, float rotation, bool flipH = false)
 	{
 		float width = tex.Width;
@@ -1279,7 +1321,7 @@ public class LanternGhostKing : ModNPC
 			new Vertex2D(v1 - Main.screenPosition, c1, new Vector3(1, 0, 0)),
 
 			new Vertex2D(v2 - Main.screenPosition, c2, new Vector3(0, 1, 0)),
-			new Vertex2D(v3 - Main.screenPosition, c3, new Vector3(1, 1, 0))
+			new Vertex2D(v3 - Main.screenPosition, c3, new Vector3(1, 1, 0)),
 		};
 		if (flipH)
 		{
@@ -1289,12 +1331,13 @@ public class LanternGhostKing : ModNPC
 			new Vertex2D(v1 - Main.screenPosition, c1, new Vector3(0, 0, 0)),
 
 			new Vertex2D(v2 - Main.screenPosition, c2, new Vector3(1, 1, 0)),
-			new Vertex2D(v3 - Main.screenPosition, c3, new Vector3(0, 1, 0))
+			new Vertex2D(v3 - Main.screenPosition, c3, new Vector3(0, 1, 0)),
 		};
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = tex;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 	}
+
 	public void DrawFlame()
 	{
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
@@ -1345,6 +1388,7 @@ public class LanternGhostKing : ModNPC
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
+
 	public Color GetColorRed(Color c0)
 	{
 		Vector4 v0 = c0.ToVector4();
@@ -1355,6 +1399,7 @@ public class LanternGhostKing : ModNPC
 		v0.Z *= MathF.Pow(value, 3.3f);
 		return new Color(v0.X, v0.Y, v0.Z, v0.W);
 	}
+
 	public Vector2 RandomVector2(float maxLength, float minLength = 0)
 	{
 		if (maxLength <= minLength)
@@ -1364,4 +1409,3 @@ public class LanternGhostKing : ModNPC
 		return new Vector2(Main.rand.NextFloat(minLength, maxLength), 0).RotatedByRandom(6.283);
 	}
 }
-

@@ -13,19 +13,21 @@ public class DarkCocoon : ModTile
 		DustType = 191;
 		AddMapEntry(new Color(17, 16, 17));
 	}
+
 	public override void RandomUpdate(int i, int j)
 	{
 		var thisTile = Main.tile[i, j];
 		bool slope = thisTile.Slope != SlopeType.Solid;
-		if(slope)
+		if (slope)
 		{
 			return;
 		}
-		//种树
+
+		// 种树
 		if (Main.rand.NextBool(6))
 		{
 			if (Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid &&
-				Main.tile[i, j + 1].Slope == SlopeType.Solid && Main.tile[i + 1, j + 1].Slope == SlopeType.Solid && Main.tile[i - 1, j + 1].Slope == SlopeType.Solid && Main.tile[i + 2, j + 1].Slope == SlopeType.Solid && Main.tile[i - 2, j + 1].Slope == SlopeType.Solid)//树木
+				Main.tile[i, j + 1].Slope == SlopeType.Solid && Main.tile[i + 1, j + 1].Slope == SlopeType.Solid && Main.tile[i - 1, j + 1].Slope == SlopeType.Solid && Main.tile[i + 2, j + 1].Slope == SlopeType.Solid && Main.tile[i - 2, j + 1].Slope == SlopeType.Solid)// 树木
 			{
 				int MaxHeight = 0;
 				for (int x = -2; x < 3; x++)
@@ -35,16 +37,21 @@ public class DarkCocoon : ModTile
 						if (j + y > 20)
 						{
 							if (Main.tile[i + x, j + y].HasTile || Main.tile[i + x, j + y].LiquidAmount > 3)
+							{
 								return;
+							}
 						}
 						MaxHeight = -y;
 					}
 				}
 				if (MaxHeight > 7)
+				{
 					BuildFluorescentTree(i, j - 1, MaxHeight);
+				}
 			}
 		}
-		//种植灯莲
+
+		// 种植灯莲
 		if (!Main.tile[i, j - 1].HasTile && Main.tile[i, j - 1].LiquidAmount > 0)
 		{
 			Tile tile = Main.tile[i, j - 1];
@@ -53,7 +60,7 @@ public class DarkCocoon : ModTile
 			tile.TileFrameX = (short)(28 * Main.rand.Next(8));
 		}
 
-		//黑萤藤蔓
+		// 黑萤藤蔓
 		if (Main.rand.NextBool(6))
 		{
 			Tile t2 = Main.tile[i, j + 1];
@@ -69,7 +76,9 @@ public class DarkCocoon : ModTile
 			for (int y = -3; y < 0; y++)
 			{
 				if (Main.tile[i + x, j + y].HasTile)
+				{
 					canPlaceShrub = false;
+				}
 			}
 		}
 		bool nearWater = false;
@@ -78,7 +87,9 @@ public class DarkCocoon : ModTile
 			for (int y = -3; y < 4; y++)
 			{
 				if (Main.tile[i + x, j + y].LiquidAmount > 3)
+				{
 					nearWater = true;
+				}
 			}
 		}
 		bool canPlace1x1 = true;
@@ -100,7 +111,7 @@ public class DarkCocoon : ModTile
 				}
 			}
 		}
-		if (Main.rand.NextBool(16))//巨型萤火吊
+		if (Main.rand.NextBool(12))// 巨型萤火吊
 		{
 			int count = 0;
 			float length = 0;
@@ -145,7 +156,10 @@ public class DarkCocoon : ModTile
 				}
 				if (Main.netMode != NetmodeID.Server)
 				{
-					LargeFireBulb.PlaceMe(i, j, (ushort)Main.rand.Next((int)Math.Floor(length)));
+					if(length > 3)
+					{
+						LargeFireBulb.PlaceMe(i, j + 1, (ushort)Main.rand.Next(4));
+					}
 				}
 			}
 		}
@@ -159,7 +173,7 @@ public class DarkCocoon : ModTile
 				{
 					canPlace2x1 = false;
 				}
-				if(y == 0)
+				if (y == 0)
 				{
 					if (!checkTile.HasTile || checkTile.Slope != SlopeType.Solid)
 					{
@@ -206,28 +220,17 @@ public class DarkCocoon : ModTile
 				}
 			}
 		}
-		//黑萤苣
+
+		// 黑萤苣
 		if (canPlaceShrub && !nearWater && Main.rand.NextBool(3))
 		{
 			Tile t1 = Main.tile[i, j - 1];
 			Tile t2 = Main.tile[i, j - 2];
 			Tile t3 = Main.tile[i, j - 3];
-			switch (Main.rand.Next(4))
+			switch (Main.rand.Next(5))
 			{
 				case 0:
-					t1.TileType = (ushort)ModContent.TileType<BlueBlossom>();
-					t2.TileType = (ushort)ModContent.TileType<BlueBlossom>();
-					t3.TileType = (ushort)ModContent.TileType<BlueBlossom>();
-					t1.HasTile = true;
-					t2.HasTile = true;
-					t3.HasTile = true;
-					short num2 = (short)(Main.rand.Next(0, 12) * 120);
-					t3.TileFrameX = num2;
-					t2.TileFrameX = num2;
-					t1.TileFrameX = num2;
-					t1.TileFrameY = 32;
-					t2.TileFrameY = 16;
-					t3.TileFrameY = 0;
+					WorldGenMisc.PlaceFrameImportantTiles(i, j - 3, 1, 3, ModContent.TileType<BluishGiantGentian>(), 120 * Main.rand.Next(12));
 					break;
 				case 1:
 					t1.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
@@ -268,53 +271,74 @@ public class DarkCocoon : ModTile
 					t2.TileFrameY = 16;
 					t3.TileFrameY = 0;
 					break;
+				case 4:
+					WorldGenMisc.PlaceFrameImportantTiles(i, j - 2, 1, 2, (ushort)ModContent.TileType<BluishGiantGentian_small>(), 48 * Main.rand.Next(6));
+					break;
 			}
 			return;
 		}
-		//蕨和岩石
+
+		// 蕨和岩石
 		if (Main.rand.NextBool(2) && !nearWater)
 		{
 			if (Main.rand.NextBool(2))
 			{
 				switch (Main.rand.Next(6))
 				{
-
 					case 0:
 						if (canPlace3x2)
+						{
 							Common.MythUtils.PlaceFrameImportantTiles(i, j - 2, 3, 2, ModContent.TileType<BlackFrenLarge>(), 54 * Main.rand.Next(3));
+						}
+
 						break;
 
 					case 1:
 						if (canPlace2x2)
+						{
 							Common.MythUtils.PlaceFrameImportantTiles(i, j - 2, 2, 2, ModContent.TileType<BlackFren>(), 36 * Main.rand.Next(3));
+						}
+
 						break;
 
 					case 2:
 						if (canPlace3x2)
+						{
 							Common.MythUtils.PlaceFrameImportantTiles(i, j - 2, 3, 2, ModContent.TileType<BlackFrenLarge>(), 54 * Main.rand.Next(3));
+						}
+
 						break;
 
 					case 3:
 						if (canPlace2x2)
+						{
 							Common.MythUtils.PlaceFrameImportantTiles(i, j - 2, 2, 2, ModContent.TileType<BlackFren>(), 36 * Main.rand.Next(3));
+						}
+
 						break;
 
 					case 4:
 						if (canPlace2x1)
+						{
 							Common.MythUtils.PlaceFrameImportantTiles(i, j - 1, 2, 1, ModContent.TileType<CocoonRock>(), 36 * Main.rand.Next(3));
+						}
+
 						break;
 
 					case 5:
 						if (canPlace2x1)
+						{
 							Common.MythUtils.PlaceFrameImportantTiles(i, j - 1, 2, 1, ModContent.TileType<CocoonRock>(), 36 * Main.rand.Next(3));
+						}
+
 						break;
 				}
 			}
 			return;
 		}
-		if(canPlace1x1)
+		if (canPlace1x1)
 		{
-			if(nearWater)
+			if (nearWater)
 			{
 				Common.MythUtils.PlaceFrameImportantTiles(i, j - 1, 1, 1, ModContent.TileType<GlowingReed>(), 18 * Main.rand.Next(5));
 			}
@@ -322,22 +346,25 @@ public class DarkCocoon : ModTile
 			{
 				switch (Main.rand.Next(2))
 				{
-
 					case 0:
 						Common.MythUtils.PlaceFrameImportantTiles(i, j - 1, 1, 1, ModContent.TileType<DarkCocoonGrass>(), 18 * Main.rand.Next(6));
 						break;
 
 					case 1:
-						WorldGen.PlaceTile(i,j - 1, ModContent.TileType<Tiles.PurpleThorns>());
+						WorldGen.PlaceTile(i, j - 1, ModContent.TileType<Tiles.PurpleThorns>());
 						break;
 				}
 			}
 		}
 	}
+
 	public static void BuildFluorescentTree(int i, int j, int height = 0)
 	{
 		if (j < 30)
+		{
 			return;
+		}
+
 		int Height = Main.rand.Next(7, height);
 
 		for (int g = 0; g < Height; g++)
@@ -400,6 +427,7 @@ public class DarkCocoon : ModTile
 			tile.HasTile = true;
 		}
 	}
+
 	public override bool CanExplode(int i, int j)
 	{
 		return false;

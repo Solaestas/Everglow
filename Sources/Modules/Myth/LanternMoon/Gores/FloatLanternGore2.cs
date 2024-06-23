@@ -10,6 +10,7 @@ public class FloatLanternGore2 : DissolveGore
 		NoDissolvePartTexture = ModAsset.FloatLanternGore2B.Value;
 		base.OnSpawn();
 	}
+
 	public override void Update()
 	{
 		base.Update();

@@ -1,6 +1,6 @@
 namespace Everglow.Myth.TheFirefly.Items;
 
-public class FireflyMoss : ModItem
+public class FireflyMoss_Item : ModItem
 {
 	public override void SetDefaults()
 	{
@@ -14,12 +14,13 @@ public class FireflyMoss : ModItem
 		Item.consumable = true;
 		Item.maxStack = Item.CommonMaxStack;
 	}
+
 	public override bool? UseItem(Player player)
 	{
 		int i = (int)(Main.MouseWorld.X / 16);
 		int j = (int)(Main.MouseWorld.Y / 16);
 		Tile tile = Main.tile[i, j];
-		if(tile.TileType == ModContent.TileType<Tiles.DarkCocoon>())
+		if (tile.TileType == ModContent.TileType<Tiles.DarkCocoon>())
 		{
 			tile.TileType = (ushort)ModContent.TileType<Tiles.DarkCocoonMoss>();
 			WorldGen.SquareTileFrame(i, j, true);
@@ -31,6 +32,7 @@ public class FireflyMoss : ModItem
 			return false;
 		}
 	}
+
 	public override bool CanUseItem(Player player)
 	{
 		int i = (int)(Main.MouseWorld.X / 16);

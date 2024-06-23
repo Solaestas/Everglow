@@ -15,7 +15,7 @@ namespace Everglow.Myth.TheFirefly.Items.Armors
 			Item.width = 26;
 			Item.height = 28;
 			Item.value = 6100;
-			Item.rare = ItemRarityID.White; 
+			Item.rare = ItemRarityID.White;
 			Item.defense = 6;
 		}
 
@@ -25,13 +25,14 @@ namespace Everglow.Myth.TheFirefly.Items.Armors
 			player.statManaMax2 += 20;
 			player.maxMinions++;
 		}
+
 		public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
 			recipe.AddIngredient<GlowWood>(50);
 			recipe.AddIngredient<BlackStarShrub>(10);
-			recipe.AddIngredient<GlowingPedal>(15);
-			recipe.AddIngredient<FireflyMoss>(5);
+			recipe.AddIngredient<GlowingPetal>(15);
+			recipe.AddIngredient<FireflyMoss_Item>(5);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.Register();
 		}

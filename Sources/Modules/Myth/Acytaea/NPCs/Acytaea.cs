@@ -10,6 +10,7 @@ namespace Everglow.Myth.Acytaea.NPCs;
 public class Acytaea : VisualNPC
 {
 	private bool canDespawn = false;
+
 	public override string HeadTexture => NPC.boss ?
 		"Everglow/Myth/Acytaea/NPCs/Acytaea_Head_Boss" :
 		"Everglow/Myth/Acytaea/NPCs/Acytaea_Head";
@@ -52,20 +53,25 @@ public class Acytaea : VisualNPC
 	{
 		return canDespawn;
 	}
+
 	public override void FindFrame(int frameHeight)
 	{
-		if(Math.Abs(NPC.velocity.X) > 0.2f)
+		if (Math.Abs(NPC.velocity.X) > 0.2f)
 		{
 			NPC.frameCounter -= 2;
 		}
 		base.FindFrame(frameHeight);
 	}
+
 	public override void OnKill()
 	{
 		NPC.SetEventFlagCleared(ref DownedBossSystem.downedAcytaea, -1);
 		if (Main.netMode == NetmodeID.Server)
+		{
 			NetMessage.SendData(MessageID.WorldData);
+		}
 	}
+
 	public override void AI()
 	{
 		NPCHappiness NH = NPC.Happiness;
@@ -79,9 +85,10 @@ public class Acytaea : VisualNPC
 		NH.SetBiomeAffection<OceanBiome>((AffectionLevel)50);
 		NH.SetBiomeAffection<JungleBiome>((AffectionLevel)30);
 	}
+
 	public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
 	{
-		//TODO hjson
+		// TODO hjson
 		string tx1 = "我很喜欢这种鸟语花香的绿色树林";
 		string tx2 = "去抓蝴蝶吗?";
 		if (Language.ActiveCulture.Name == "en-US")
@@ -99,34 +106,39 @@ public class Acytaea : VisualNPC
 			tx1 = "I love the forest with birds singing and flowers blooming";
 			tx2 = "Catching butterflies?";
 		}
+
 		// We can use AddRange instead of calling Add multiple times in order to add multiple items at once
-		bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+		bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+		{
 				// Sets the preferred biomes of this town NPC listed in the bestiary.
 				// With Town NPCs, you usually set this to what biome it likes the most in regards to NPC happiness.
 				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
 
 				// Sets your NPC's flavor text in the bestiary.
-
 				new FlavorTextBestiaryInfoElement(tx1),
-			new FlavorTextBestiaryInfoElement(tx2),
-			new FlavorTextBestiaryInfoElement("Mods.Everglow.Bestiary.Acytaea")
+				new FlavorTextBestiaryInfoElement(tx2),
+				new FlavorTextBestiaryInfoElement("Mods.Everglow.Bestiary.Acytaea"),
 		});
 	}
+
 	public override bool PreKill()
 	{
 		return base.PreKill();
 	}
+
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
 		return 0;
 	}
+
 	public override bool CanChat()
 	{
 		return !NPC.boss;
 	}
+
 	public override string GetChat()
 	{
-		//TODO Hjson 重写
+		// TODO Hjson 重写
 		IList<string> list = new List<string>();
 		if (Language.ActiveCulture.Name == "zh-Hans")
 		{
@@ -134,9 +146,15 @@ public class Acytaea : VisualNPC
 			{
 				list.Add("你在干嘛啊");
 				if (NPC.CountNPCS(22) != 0)
+				{
 					list.Add("对了,要好好感谢向导");
+				}
+
 				if (NPC.CountNPCS(54) != 0)
+				{
 					list.Add("其实服装师以前成就厉害的,暗影魔法大师呢");
+				}
+
 				list.Add("没事不要烦我");
 				list.Add("干嘛!");
 				list.Add("额，好吧，我承认我的脾气有点暴躁");
@@ -150,9 +168,15 @@ public class Acytaea : VisualNPC
 				list.Add("晚上就应该出去浪");
 				list.Add("你在干嘛啊");
 				if (NPC.CountNPCS(22) != 0)
+				{
 					list.Add("对了,要好好感谢向导");
+				}
+
 				if (NPC.CountNPCS(54) != 0)
+				{
 					list.Add("其实服装师以前成就厉害的,暗影魔法大师呢");
+				}
+
 				list.Add("没事不要烦我");
 				list.Add("干嘛!");
 				list.Add("额,好吧,我承认我的脾气有点暴躁");
@@ -168,9 +192,15 @@ public class Acytaea : VisualNPC
 			{
 				list.Add("What are you doing?");
 				if (NPC.CountNPCS(22) != 0)
+				{
 					list.Add("Btw, you should be thankful to the Guide");
+				}
+
 				if (NPC.CountNPCS(54) != 0)
+				{
 					list.Add("The Clothier was actually a Senior dark Mage");
+				}
+
 				list.Add("Don't bother me if you only tell nonsense");
 				list.Add("What's up?");
 				list.Add("Err, well, I am a little grumpy");
@@ -184,9 +214,15 @@ public class Acytaea : VisualNPC
 				list.Add("YOLO, go on adventures at night");
 				list.Add("What are you doing?");
 				if (NPC.CountNPCS(22) != 0)
+				{
 					list.Add("Btw, you should be thankful to the Guide");
+				}
+
 				if (NPC.CountNPCS(54) != 0)
+				{
 					list.Add("The Clothier was actually a Senior dark Mage");
+				}
+
 				list.Add("Don't bother me if you only tell nonsense");
 				list.Add("What's up?");
 				list.Add("Err, well, I am a little grumpy");
@@ -202,9 +238,15 @@ public class Acytaea : VisualNPC
 			{
 				list.Add("Что ты делаешь?");
 				if (NPC.CountNPCS(22) != 0)
+				{
 					list.Add("Кстати, ты должен быть благодарен Гиду");
+				}
+
 				if (NPC.CountNPCS(54) != 0)
+				{
 					list.Add("Портной на самом деле был Старшим Тёмным Магом");
+				}
+
 				list.Add("Не беспокойся меня если ты говоришь только глупости");
 				list.Add("Как дела?");
 				list.Add("Эээ, да, я немного сварливая");
@@ -218,9 +260,15 @@ public class Acytaea : VisualNPC
 				list.Add("Ты живёшь один раз, иди путешествовать ночью");
 				list.Add("Что ты делаешь?");
 				if (NPC.CountNPCS(22) != 0)
+				{
 					list.Add("Кстати, ты должен быть благодарен Гиду");
+				}
+
 				if (NPC.CountNPCS(54) != 0)
+				{
 					list.Add("Портной на самом деле был Старшим Тёмным Магом");
+				}
+
 				list.Add("Не беспокойся меня если ты говоришь только глупости");
 				list.Add("Как дела?");
 				list.Add("Эээ, да, я немного сварливая");
@@ -236,9 +284,15 @@ public class Acytaea : VisualNPC
 			{
 				list.Add("What are you doing?");
 				if (NPC.CountNPCS(22) != 0)
+				{
 					list.Add("Btw, you should be thankful to the Guide");
+				}
+
 				if (NPC.CountNPCS(54) != 0)
+				{
 					list.Add("The Clothier was actually a Senior dark Mage");
+				}
+
 				list.Add("Don't bother me if you only tell nonsense");
 				list.Add("What's up?");
 				list.Add("Err, well, I am a little grumpy");
@@ -252,9 +306,15 @@ public class Acytaea : VisualNPC
 				list.Add("YOLO, go on adventures at night");
 				list.Add("What are you doing?");
 				if (NPC.CountNPCS(22) != 0)
+				{
 					list.Add("Btw, you should be thankful to the Guide");
+				}
+
 				if (NPC.CountNPCS(54) != 0)
+				{
 					list.Add("The Clothier was actually a Senior dark Mage");
+				}
+
 				list.Add("Don't bother me if you only tell nonsense");
 				list.Add("What's up?");
 				list.Add("Err, well, I am a little grumpy");
@@ -266,9 +326,10 @@ public class Acytaea : VisualNPC
 		}
 		return list[Main.rand.Next(list.Count)];
 	}
+
 	public override void SetChatButtons(ref string button, ref string button2)
 	{
-		//TODO Hjson
+		// TODO Hjson
 		if (Language.ActiveCulture.Name == "zh-Hans")
 		{
 			button = Language.GetTextValue("挑战");
@@ -280,6 +341,7 @@ public class Acytaea : VisualNPC
 			button2 = Language.GetTextValue("Help");
 		}
 	}
+
 	public override void OnChatButtonClicked(bool firstButton, ref string shopName)
 	{
 		if (firstButton)
@@ -289,40 +351,48 @@ public class Acytaea : VisualNPC
 		}
 		else
 		{
-
 		}
 	}
+
 	public override void TownNPCAttackStrength(ref int damage, ref float knockback)
 	{
 		damage = 30;
 		knockback = 2f;
 	}
+
 	public override void TownNPCAttackCooldown(ref int cooldown, ref int randExtraCooldown)
 	{
 		cooldown = 60;
 		randExtraCooldown = 60;
 	}
+
 	public override void TownNPCAttackMagic(ref float auraLightMultiplier)
 	{
 		for (int d = 0; d < Main.projectile.Length; d++)
 		{
 			if (Main.projectile[d].type == ModContent.ProjectileType<AcytaeaSword_projectile_TownNPC>())
+			{
 				return;
+			}
 		}
 		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaSword_projectile_TownNPC>(), 50, 6, Main.myPlayer, NPC.whoAmI);
 	}
+
 	public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
 	{
 		projType = ModContent.ProjectileType<AcytaeaSword_projectile_TownNPC>();
 		attackDelay = 60;
 	}
+
 	public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
 	{
 		multiplier = 2f;
 	}
+
 	public override void Draw()
 	{
 	}
+
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		return true;

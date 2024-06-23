@@ -240,17 +240,20 @@ public class BloodTusk : ModNPC
 		{
 			foreach(Player player in Main.player)
 			{
-				if (player.Center.Y < NPC.Top.Y - 100)
+				if(player.active)
 				{
-					if (Main.rand.NextBool(135))
+					if (player.Center.Y < NPC.Top.Y - 400)
 					{
-						Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), new Vector2((Main.maxTilesX * 0.94f) * 16, (Main.maxTilesY * 0.9f) * 16), new Vector2(-21, -Main.rand.NextFloat(25, 30)), ModContent.ProjectileType<Living_Jawbone_Huge>(), 400, 10, NPC.target);
+						if (Main.rand.NextBool(135))
+						{
+							Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), new Vector2((Main.maxTilesX * 0.94f) * 16, (Main.maxTilesY * 0.9f) * 16), new Vector2(-21, -Main.rand.NextFloat(25, 30)), ModContent.ProjectileType<Living_Jawbone_Huge>(), 400, 10, NPC.target);
+						}
+						if (Main.rand.NextBool(135))
+						{
+							Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), new Vector2((Main.maxTilesX * 0.1f) * 16, (Main.maxTilesY * 0.9f) * 16), new Vector2(21, -Main.rand.NextFloat(25, 30)), ModContent.ProjectileType<Living_Jawbone_Huge>(), 400, 10, NPC.target);
+						}
+						break;
 					}
-					if (Main.rand.NextBool(135))
-					{
-						Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), new Vector2((Main.maxTilesX * 0.1f) * 16, (Main.maxTilesY * 0.9f) * 16), new Vector2(21, -Main.rand.NextFloat(25, 30)), ModContent.ProjectileType<Living_Jawbone_Huge>(), 400, 10, NPC.target);
-					}
-					break;
 				}
 			}
 		}
@@ -1194,7 +1197,7 @@ public class BloodTusk : ModNPC
 	public IEnumerator<ICoroutineInstruction> GiantJaw()
 	{
 		Player player = Main.player[NPC.target];
-		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), player.Bottom - TileCollisionUtils.GetTopographicGradient(player.Bottom, 6) * 80, Vector2.zeroVector, ModContent.ProjectileType<Living_Jawbone_Huge_ground_Wave>(), GetDamage(150), 1, NPC.target);
+		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom - TileCollisionUtils.GetTopographicGradient(NPC.Bottom, 6) * 10, Vector2.zeroVector, ModContent.ProjectileType<Living_Jawbone_Huge_ground_Wave>(), GetDamage(150), 1, NPC.target);
 		yield return new WaitForFrames(30);
 	}
 

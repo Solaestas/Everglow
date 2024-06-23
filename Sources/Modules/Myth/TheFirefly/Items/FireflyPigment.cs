@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.TheFirefly.Items;
+namespace Everglow.Myth.TheFirefly.Items;
 
 public class FireflyPigment : ModItem
 {
@@ -23,12 +23,12 @@ public class FireflyPigment : ModItem
 		recipe.Register();
 
 		Recipe recipe2 = CreateRecipe();
-		recipe2.AddIngredient(ModContent.ItemType<FireflyMoss>(), 6);
+		recipe2.AddIngredient(ModContent.ItemType<FireflyMoss_Item>(), 6);
 		recipe2.AddTile(TileID.WorkBenches);
 		recipe2.Register();
 
 		Recipe recipe3 = CreateRecipe();
-		recipe3.AddIngredient(ModContent.ItemType<GlowingPedal>(), 5);
+		recipe3.AddIngredient(ModContent.ItemType<GlowingPetal>(), 5);
 		recipe3.AddTile(TileID.WorkBenches);
 		recipe3.Register();
 
