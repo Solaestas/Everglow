@@ -3,7 +3,6 @@ using Everglow.Yggdrasil.YggdrasilTown.NPCs;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.Utilities.Terraria.Utilities;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -145,26 +144,13 @@ public class RockElemental_ThrowingStone : ModProjectile
 		{
 			Projectile.rotation = MyOwner.rotation;
 			Vector2 newPos = MyOwner.Center + new Vector2(-24, 36).RotatedBy(MyOwner.rotation);
-			Vector2 toPlayer = player.Center - Projectile.Center;
-			Vector2 release = newPos - Projectile.Center;
-			float cosTheta = Vector2.Dot(toPlayer, release) / toPlayer.Length() / release.Length();
-			if (cosTheta > 0.95f && MyOwner.ai[2] > 0.2f)
-			{
-				ShotAway = true;
-				Projectile.velocity = PredictVec(Projectile.Center, player, 14f, 0.163f);
-				MyOwner.velocity -= PredictVec(Projectile.Center, player, 7f, 0.163f);
-				if (MyOwner.ai[0] > 30)
-				{
-					MyOwner.ai[0] = 30;
-				}
-				Projectile.tileCollide = true;
-			}
-			if (MyOwner.ai[2] > 0.4f)
-			{
-				ShotAway = true;
-				Projectile.velocity = PredictVec(Projectile.Center, player, 28f, 0.163f);
 
-				MyOwner.velocity -= PredictVec(Projectile.Center, player, 14f, 0.163f);
+			Vector2 shootVelocity = Utils.SafeNormalize(newPos - Projectile.Center, Vector2.zeroVector) * 14f;
+			if(MinDistanceToClosestTarget(shootVelocity) < 30)
+			{
+				ShotAway = true;
+				Projectile.velocity = shootVelocity;
+				MyOwner.velocity -= shootVelocity * 0.5f;
 				if (MyOwner.ai[0] > 30)
 				{
 					MyOwner.ai[0] = 30;
@@ -290,65 +276,30 @@ public class RockElemental_ThrowingStone : ModProjectile
 		return false;
 	}
 
-	private Tuple<Vector2, int> GetHitPoint(Vector2 pos, Vector2 Vec, Vector2 targetPos, float gravity)
+	/// <summary>
+	/// 求当前发射速度3秒内,能飞到距离玩家的最短距离
+	/// </summary>
+	/// <param name="shootVelocity"></param>
+	/// <returns></returns>
+	public float MinDistanceToClosestTarget(Vector2 shootVelocity)
 	{
-		int t = 1;
-		while (true)
+		int index = Player.FindClosest(Projectile.Center, 0, 0);
+		if (index < 0)
 		{
-			pos += Vec;
-			if (Vec.Y > 0 && pos.Y > targetPos.Y)
-			{
-				return new Tuple<Vector2, int>(pos, t);
-			}
-			Vec.Y += gravity;
-			t++;
+			return float.NaN;
 		}
-	}
-	private Tuple<Vector2, int> GetShootVec(Vector2 pos, Vector2 target, float speed, float gravity)
-	{
-		float L, R;
-		L = 5 * MathF.PI / 4;
-		R = -MathF.PI / 4;
+		Player player = Main.player[Player.FindClosest(Projectile.Center, 0, 0)];
+		float distance = (Projectile.Center - player.Center).Length();
+		Vector2 trackPos = Projectile.Center;
 
-		Tuple<Vector2, int> parabola = new Tuple<Vector2, int>(Vector2.Zero, 0);
-		Tuple<Vector2, int> fakepoint = new Tuple<Vector2, int>(Vector2.Zero, 0);
-		for (int i = 0; i < 25; i++)
+		// 寻找3秒之内擦得最近的点位
+		for (int time = 0; time < 180; time++)
 		{
-			float mid = (L + R) / 2;
-			Vector2 Vec = Vector2.UnitX.RotatedBy(mid) * speed;
-			fakepoint = GetHitPoint(pos, Vec, target, gravity);
-			if (fakepoint.Item1.X < target.X)
-			{
-				L = mid;
-			}
-			else
-			{
-				R = mid;
-			}
-			parabola = new Tuple<Vector2, int>(Vec, fakepoint.Item2);
+			trackPos += shootVelocity;
+			shootVelocity.Y += 0.163f;
+			float currentDistance = (trackPos - player.Center).Length();
+			distance = currentDistance < distance ? currentDistance : distance;
 		}
-		if (fakepoint.Item1.Y - target.Y > 10f)
-		{
-			return new Tuple<Vector2, int>(Vector2.Normalize(target - pos) * speed, 0);
-		}
-		else
-		{
-			return parabola;
-		}
-	}
-	private Vector2 PredictVec(Vector2 pos, Player player, float speed, float gravity)
-	{
-		Vector2 target = player.Center;
-		for (int i = 0; i < 100; i++)
-		{
-			Tuple<Vector2, int> parabola = GetShootVec(pos, target, speed, gravity);
-			Vector2 playerPos = player.Center + parabola.Item2 * player.velocity;
-			if (Vector2.Distance(target, playerPos) < 0.1f)
-			{
-				return parabola.Item1;
-			}
-			target = playerPos;
-		}
-		return Vector2.Normalize(target - pos) * speed;
+		return distance;
 	}
 }
