@@ -125,7 +125,7 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D shadow = Commons.ModAsset.StarSlash.Value;
+		Texture2D shadow = Commons.ModAsset.Textures_Star.Value;
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Color c = new Color(0.7f * MathF.Sqrt(1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 0.3f * (1 - timeValue), 0f);
@@ -143,7 +143,7 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Color c = new Color(0.7f * MathF.Sqrt(1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 0.3f * (1 - timeValue), 0f);
 
-		Texture2D light = Commons.ModAsset.StarSlash.Value;
+		Texture2D light = Commons.ModAsset.Textures_Star.Value;
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * 0.8f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * 0.8f, SpriteEffects.None, 0);
 		return false;
