@@ -144,9 +144,20 @@ public class RockElemental_ThrowingStone : ModProjectile
 		{
 			Projectile.rotation = MyOwner.rotation;
 			Vector2 newPos = MyOwner.Center + new Vector2(-24, 36).RotatedBy(MyOwner.rotation);
-
-			Vector2 shootVelocity = Utils.SafeNormalize(newPos - Projectile.Center, Vector2.zeroVector) * 14f;
-			if(MinDistanceToClosestTarget(shootVelocity) < 30)
+			Vector2 shootVelocity = Utils.SafeNormalize(newPos - Projectile.Center, Vector2.zeroVector) * 14f * (280 - MyOwner.ai[0]) / 200f;
+			if(MinDistanceToClosestTarget(shootVelocity) < 30 && MyOwner.ai[0] < 240)
+			{
+				ShotAway = true;
+				Projectile.velocity = shootVelocity;
+				MyOwner.velocity -= shootVelocity * 0.5f;
+				if (MyOwner.ai[0] > 30)
+				{
+					MyOwner.ai[0] = 30;
+				}
+				Projectile.tileCollide = true;
+			}
+			// 小于2直接甩出去
+			if(MyOwner.ai[0] < 2)
 			{
 				ShotAway = true;
 				Projectile.velocity = shootVelocity;
@@ -293,7 +304,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 		Vector2 trackPos = Projectile.Center;
 
 		// 寻找3秒之内擦得最近的点位
-		for (int time = 0; time < 180; time++)
+		for (int time = 0; time < 60; time++)
 		{
 			trackPos += shootVelocity;
 			shootVelocity.Y += 0.163f;
