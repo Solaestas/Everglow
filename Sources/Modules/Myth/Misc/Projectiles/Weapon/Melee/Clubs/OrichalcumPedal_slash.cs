@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Myth.Misc.Dusts;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -28,6 +29,7 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 	public Vector3 SpacePos;
 	public Vector3 RotatedAxis;
 	public float Omega = 0;
+	public Vector2 DeltaVelocity = default;
 
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -65,11 +67,12 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		{
 			SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/Slash").WithVolumeScale(0.33f), Projectile.Center);
 		}
-		if (Main.rand.NextBool(2) && Omega > 0.4f)
+		if (Main.rand.NextBool(8) && Omega > 0.4f)
 		{
 			Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(SpacePos.X, SpacePos.Y), new Vector2(delta0.X, delta0.Y) * 1.5f, ModContent.ProjectileType<OrichalcumPedal>(), Projectile.damage / 8, 0, Projectile.owner, Main.rand.NextFloat(-0.4f, 0.4f), Main.rand.Next(3));
 			p0.scale = Main.rand.NextFloat(0.8f, 1.2f) * Projectile.ai[0];
 		}
+		DeltaVelocity = new Vector2(delta0.X, delta0.Y);
 	}
 
 	public int HitTimes = 0;
@@ -138,6 +141,18 @@ public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 		if (length <= 3)
 		{
 			return false;
+		}
+
+		if (!Main.gamePaused && Omega > 0.06f)
+		{
+			for (int i = 0; i < (120 - Projectile.timeLeft) / 15f * Projectile.ai[0]; i++)
+			{
+				int index = Main.rand.Next(1, SmoothTrail.Count);
+				float range = Main.rand.NextFloat(0.6f, 0.96f);
+				Dust dust = Dust.NewDustDirect(Projectile.Center + SmoothTrail[index] * range - new Vector2(4), 0, 0, ModContent.DustType<OrichalcunPetals_dust>());
+				dust.velocity = (SmoothTrail[index] - SmoothTrail[index - 1]) * 0.75f * range;
+				dust.scale = Main.rand.NextFloat(0.85f, 1.15f);
+			}
 		}
 
 		Color drawColor = new Color(0.9f, 0.9f, 0.9f, 0.9f) * 0.5f;

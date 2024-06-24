@@ -20,7 +20,7 @@ public class OrichalcumPedal : ModProjectile
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		for (int g = 0; g < 7; g++)
+		for (int g = 0; g < 1; g++)
 		{
 			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 7f)).RotatedByRandom(MathHelper.TwoPi);
 			var fire = new BlossomFlameDust
@@ -30,7 +30,7 @@ public class OrichalcumPedal : ModProjectile
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) + newVelocity * 3,
 				maxTime = Main.rand.Next(6, 15),
-				scale = Main.rand.NextFloat(20f, 60f),
+				scale = Main.rand.NextFloat(10f, 60f),
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
 			};
