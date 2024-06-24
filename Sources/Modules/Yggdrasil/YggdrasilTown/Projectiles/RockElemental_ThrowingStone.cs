@@ -124,7 +124,6 @@ public class RockElemental_ThrowingStone : ModProjectile
 					Vector2 vel = new Vector2(0, Main.rand.NextFloat(8, 24)).RotatedByRandom(MathHelper.TwoPi);
 					Dust dust = Dust.NewDustDirect(Projectile.Center + OffestSuck, 0, 0, ModContent.DustType<RockElemental_Energy>());
 					dust.velocity = vel;
-					dust.customData = Projectile;
 					dust.scale = Main.rand.NextFloat(0.06f, 0.1f);
 				}
 				SoundEngine.PlaySound(SoundID.DD2_PhantomPhoenixShot, Projectile.Center);
@@ -152,8 +151,8 @@ public class RockElemental_ThrowingStone : ModProjectile
 			if (cosTheta > 0.95f && MyOwner.ai[2] > 0.2f)
 			{
 				ShotAway = true;
-				Projectile.velocity = PredictVec(Projectile.position, player, 14f, 0.163f);
-				MyOwner.velocity -= PredictVec(Projectile.position, player, 7f, 0.163f);
+				Projectile.velocity = PredictVec(Projectile.Center, player, 14f, 0.163f);
+				MyOwner.velocity -= PredictVec(Projectile.Center, player, 7f, 0.163f);
 				if (MyOwner.ai[0] > 30)
 				{
 					MyOwner.ai[0] = 30;
@@ -163,9 +162,9 @@ public class RockElemental_ThrowingStone : ModProjectile
 			if (MyOwner.ai[2] > 0.4f)
 			{
 				ShotAway = true;
-				Projectile.velocity = PredictVec(Projectile.position, player, 28f, 0.163f);
+				Projectile.velocity = PredictVec(Projectile.Center, player, 28f, 0.163f);
 
-				MyOwner.velocity -= PredictVec(Projectile.position, player, 14f, 0.163f);
+				MyOwner.velocity -= PredictVec(Projectile.Center, player, 14f, 0.163f);
 				if (MyOwner.ai[0] > 30)
 				{
 					MyOwner.ai[0] = 30;
@@ -291,7 +290,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 		return false;
 	}
 
-	private Tuple<float, int> GetHitPoint(Vector2 pos, Vector2 Vec, Vector2 targetPos, float gravity)
+	private Tuple<Vector2, int> GetHitPoint(Vector2 pos, Vector2 Vec, Vector2 targetPos, float gravity)
 	{
 		int t = 1;
 		while (true)
@@ -299,7 +298,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 			pos += Vec;
 			if (Vec.Y > 0 && pos.Y > targetPos.Y)
 			{
-				return new Tuple<float, int>(pos.X, t);
+				return new Tuple<Vector2, int>(pos, t);
 			}
 			Vec.Y += gravity;
 			t++;
@@ -308,17 +307,17 @@ public class RockElemental_ThrowingStone : ModProjectile
 	private Tuple<Vector2, int> GetShootVec(Vector2 pos, Vector2 target, float speed, float gravity)
 	{
 		float L, R;
-
 		L = 5 * MathF.PI / 4;
 		R = -MathF.PI / 4;
 
 		Tuple<Vector2, int> parabola = new Tuple<Vector2, int>(Vector2.Zero, 0);
+		Tuple<Vector2, int> fakepoint = new Tuple<Vector2, int>(Vector2.Zero, 0);
 		for (int i = 0; i < 25; i++)
 		{
 			float mid = (L + R) / 2;
 			Vector2 Vec = Vector2.UnitX.RotatedBy(mid) * speed;
-			Tuple<float, int> fakepoint = GetHitPoint(pos, Vec, target, gravity);
-			if (fakepoint.Item1 < target.X)
+			fakepoint = GetHitPoint(pos, Vec, target, gravity);
+			if (fakepoint.Item1.X < target.X)
 			{
 				L = mid;
 			}
@@ -328,12 +327,19 @@ public class RockElemental_ThrowingStone : ModProjectile
 			}
 			parabola = new Tuple<Vector2, int>(Vec, fakepoint.Item2);
 		}
-		return parabola;
+		if (fakepoint.Item1.Y - target.Y > 10f)
+		{
+			return new Tuple<Vector2, int>(Vector2.Normalize(target - pos) * speed, 0);
+		}
+		else
+		{
+			return parabola;
+		}
 	}
 	private Vector2 PredictVec(Vector2 pos, Player player, float speed, float gravity)
 	{
-		Vector2 target = player.Center - pos;
-		for (int i = 0; i < 25; i++)
+		Vector2 target = player.Center;
+		for (int i = 0; i < 100; i++)
 		{
 			Tuple<Vector2, int> parabola = GetShootVec(pos, target, speed, gravity);
 			Vector2 playerPos = player.Center + parabola.Item2 * player.velocity;
@@ -343,6 +349,6 @@ public class RockElemental_ThrowingStone : ModProjectile
 			}
 			target = playerPos;
 		}
-		return target*speed;
+		return Vector2.Normalize(target - pos) * speed;
 	}
 }
