@@ -505,9 +505,13 @@ public class FluorescentTree : ModTile, ITileFluentlyDrawn
 					var frameVine = new Rectangle(18 * ((tilePos.X + tilePos.Y + k) % 3), 274 + (int)((k * 18) % 32), 18, 22);
 
 					spriteBatch.Draw(tex, drawPos, frameVine, tileLightVine, toNextMass.ToRotation() + MathHelper.PiOver2 * 3, new Vector2(9f, 0), 1f, tileSpriteEffect, 0);
+					frameVine.Y += 324;
+					spriteBatch.Draw(tex, drawPos, frameVine, new Color(1f, 1f, 1f, 0), toNextMass.ToRotation() + MathHelper.PiOver2 * 3, new Vector2(9f, 0), 1f, tileSpriteEffect, 0);
 				}
 			}
 		}
 		spriteBatch.Draw(tex, drawCenterPos + offset, frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
+		frame.Y += 324;
+		spriteBatch.Draw(tex, drawCenterPos + offset, frame, new Color(1f, 1f, 1f, 0), rotation, origin, 1f, tileSpriteEffect, 0f);
 	}
 }

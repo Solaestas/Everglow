@@ -162,6 +162,10 @@ internal class LargeFireBulb : ModTile, ITileFluentlyDrawn
 		var tile = Main.tile[i, j];
 		if (tile.TileFrameX % 36 != 0)
 		{
+			i -= 1;
+		}
+		if(!Main.rand.NextBool(15))
+		{
 			return;
 		}
 		var keyCoord = new Point(i, j + GetSameTileBelow(i, j) - 4);
@@ -326,7 +330,7 @@ internal class LargeFireBulb : ModTile, ITileFluentlyDrawn
 
 	public int GetSameTileUpon(int i, int j)
 	{
-		for (int y = 0; y < 1000; y++)
+		for (int y = 0; y < 6000; y++)
 		{
 			if (j - y < 20)
 			{
@@ -343,7 +347,7 @@ internal class LargeFireBulb : ModTile, ITileFluentlyDrawn
 
 	public int GetSameTileBelow(int i, int j)
 	{
-		for (int y = 0; y < 1000; y++)
+		for (int y = 0; y < 6000; y++)
 		{
 			if (j - y > Main.maxTilesY - 20)
 			{
