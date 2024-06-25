@@ -6,7 +6,6 @@ using Everglow.SpellAndSkull.Items;
 using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.ModLoader.Default;
-using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 using Terraria.WorldBuilding;
 
@@ -27,6 +26,7 @@ public class MothLand : ModSystem
 			WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 		}
 	}
+
 	public static void BuildShabbyCastle()
 	{
 		Point16 sbpp = ShabbyPylonPos();
@@ -63,7 +63,8 @@ public class MothLand : ModSystem
 
 	internal class MothLandGenPass : GenPass
 	{
-		public MothLandGenPass() : base("MothLand", 500)
+		public MothLandGenPass()
+			: base("MothLand", 500)
 		{
 		}
 
@@ -78,7 +79,8 @@ public class MothLand : ModSystem
 
 	internal class WorldMothLandGenPass : GenPass
 	{
-		public WorldMothLandGenPass() : base("MothLand", 500)
+		public WorldMothLandGenPass()
+			: base("MothLand", 500)
 		{
 		}
 
@@ -90,7 +92,6 @@ public class MothLand : ModSystem
 		}
 	}
 
-
 	public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) => tasks.Add(new WorldMothLandGenPass());
 
 	/// <summary>
@@ -99,98 +100,6 @@ public class MothLand : ModSystem
 	public int fireflyCenterX = 400;
 
 	public int fireflyCenterY = 300;
-
-	public override void SaveWorldData(TagCompound tag)
-	{
-		tag["FIREFLYcenterX"] = fireflyCenterX;
-		tag["FIREFLYcenterY"] = fireflyCenterY;
-
-		var fireFlyTree = ModContent.GetInstance<FluorescentTree>();
-		var list = new List<TagCompound>();
-		foreach (var (x, y, style) in fireFlyTree.GetRopeStyleList())
-		{
-			list.Add(new TagCompound() {
-				{ "x", x },
-				{ "y", y },
-				{ "style", style },
-			});
-		}
-		tag.Set("FIREFLY_FireflyTree", list);
-
-		//using (MemoryStream stream = new())
-		//{
-		//    using (BinaryWriter writer = new(stream))
-		//    {
-		//        var ropeinfos = ModContent.GetInstance<FluorescentTree>().GetRopeStyleList();
-		//        writer.Write(ropeinfos.Count);
-		//        ropeinfos.ForEach(info =>
-		//        {
-		//            writer.Write(info.x);
-		//            writer.Write(info.y);
-		//            writer.Write(info.style);
-		//        });
-		//        tag.Set("Ropes", stream.GetBuffer());
-		//    }
-		//}
-
-		//if (Main.ActiveWorldFileData == SubWorldModule.SubworldSystem.root && SubWorldModule.SubworldSystem.current is not null)
-		//{
-		//    tag.Add("ExitTo", SubWorldModule.SubworldSystem.current.FullName);
-		//    tag.Add("ExitPosX", Main.LocalPlayer.Center.X);
-		//    tag.Add("ExitPosY", Main.LocalPlayer.Center.Y);
-		//}
-
-		//tag["DepartX"] = (int)(Main.LocalPlayer.Center.X - Main.LocalPlayer.velocity.X);
-		//tag["DepartY"] = (int)(Main.LocalPlayer.Center.Y - Main.LocalPlayer.velocity.Y);
-	}
-
-	public override void LoadWorldData(TagCompound tag)
-	{
-		fireflyCenterX = tag.GetAsInt("FIREFLYcenterX");
-		fireflyCenterY = tag.GetAsInt("FIREFLYcenterY");
-
-		if (tag.ContainsKey("FIREFLY_FireflyTree"))
-		{
-			var fireFlyTree = ModContent.GetInstance<FluorescentTree>();
-			var listTag = tag.GetList<TagCompound>("FIREFLY_FireflyTree");
-			var ropeData = new List<(int x, int y, int style)>();
-			foreach (var item in listTag)
-			{
-				int x = item.Get<int>("x");
-				int y = item.Get<int>("y");
-				int style = item.GetInt("style");
-				ropeData.Add((x, y, style));
-			}
-			fireFlyTree.InitTreeRopes(ropeData);
-		}
-
-		//if (tag.TryGet("Ropes", out byte[] ropedata))
-		//{
-		//    using (MemoryStream stream = new(ropedata))
-		//    {
-		//        using (BinaryReader reader = new(stream))
-		//        {
-		//            List<(int, int, int)> ropes = new();
-		//            int count = reader.ReadInt32();
-		//            for (int i = 0; i < count; i++)
-		//            {
-		//                ropes.Add((reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32()));
-		//            }
-		//            ModContent.GetInstance<FluorescentTree>().InitTreeRopes(ropes);
-		//        }
-		//    }
-		//}
-
-		//if (tag.TryGet("ExitTo", out string subworldname) && SubWorldModule.SubworldSystem.cache is not null && SubWorldModule.SubworldSystem.cache.Name == subworldname)
-		//{
-		//    Main.LocalPlayer.Center = new(tag.Get<int>("ExitPosX"), tag.Get<int>("ExitPosY"));
-		//}
-
-		//if(tag.ContainsKey("DepartX") && tag.ContainsKey("DepartY"))
-		//{
-		//    Main.LocalPlayer.position = new Vector2(tag.GetAsInt("DepartX"), tag.GetAsInt("DepartY"));
-		//}
-	}
 
 	/// <summary>
 	/// type = 0:Kill,type = 1:place Tiles,type = 2:place Walls
@@ -208,24 +117,38 @@ public class MothLand : ModSystem
 			{
 				var pixelRow = accessor.GetRowSpan(y);
 				if (y + b < 20)
+				{
 					continue;
+				}
+
 				if (y + b > Main.maxTilesY - 20)
+				{
 					break;
+				}
+
 				for (int x = 0; x < pixelRow.Length; x++)
 				{
 					if (x + a < 20)
+					{
 						continue;
+					}
+
 					if (x + a > Main.maxTilesX - 20)
+					{
 						break;
+					}
+
 					ref var pixel = ref pixelRow[x];
 					Tile tile = Main.tile[x + a, y + b];
-					switch (type)//21是箱子
+					switch (type)// 21是箱子
 					{
 						case 0:
 							if (pixel.R == 255 && pixel.G == 0 && pixel.B == 0)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(255, 0, 0))
 							{
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+								{
 									tile.ClearEverything();
+								}
 							}
 							break;
 
@@ -254,14 +177,15 @@ public class MothLand : ModSystem
 									tile.HasTile = true;
 								}
 							}
-							if (pixel.R == 0 && pixel.G == 0 && pixel.B == 255)//pixel == new SixLabors.ImageSharp.PixelFormats.Rgb24(0, 0, 255))
+							if (pixel.R == 0 && pixel.G == 0 && pixel.B == 255)// pixel == new SixLabors.ImageSharp.PixelFormats.Rgb24(0, 0, 255))
 							{
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 								{
 									tile.LiquidType = LiquidID.Water;
 									tile.LiquidAmount = 200;
 									tile.HasTile = false;
-									//WorldGen.PlaceLiquid(x, y, byte.MaxValue, 255);
+
+									// WorldGen.PlaceLiquid(x, y, byte.MaxValue, 255);
 								}
 							}
 							if (pixel.R == 28 && pixel.G == 198 && pixel.B == 255)
@@ -278,20 +202,25 @@ public class MothLand : ModSystem
 							if (pixel.R == 0 && pixel.G == 0 && pixel.B == 5)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(0, 0, 5))
 							{
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+								{
 									tile.WallType = (ushort)ModContent.WallType<DarkCocoonWall>();
+								}
 							}
 							break;
 
 						case 3:
 							if (pixel.R == 165 && pixel.G == 0 && pixel.B == 255)
+							{
 								MythUtils.PlaceFrameImportantTiles(a + x, b + y, 5, 7, ModContent.TileType<MothWorldDoor>());
+							}
+
 							if (pixel.R == 45 && pixel.G == 49 && pixel.B == 255)
 							{
 								MythUtils.PlaceFrameImportantTiles(a + x, b + y, 3, 4, ModContent.TileType<FireflyPylon>());
 								TEModdedPylon moddedPylon = ModContent.GetInstance<FireflyPylonTileEntity>();
 								moddedPylon.Position = new Point16(a + x, b + y);
-								//TODO:I need help to generate map Icon;
 
+								// TODO:I need help to generate map Icon;
 								ushort PylonType = (ushort)ModContent.TileType<FireflyPylon>();
 								var bottom = new Point(a + x, b + y);
 								for (int i = -2; i <= 2; i++)
@@ -320,9 +249,9 @@ public class MothLand : ModSystem
 	/// </summary>
 	public static void BuildMothCave()
 	{
-		//Point16 AB = CocoonPos();
-		int a = 230;//AB.X;
-		int b = 200;//AB.Y;
+		// Point16 AB = CocoonPos();
+		int a = 230; // AB.X;
+		int b = 200; // AB.Y;
 		MothLand mothLand = ModContent.GetInstance<MothLand>();
 		mothLand.fireflyCenterX = a + 140;
 		mothLand.fireflyCenterY = b + 140;
@@ -379,26 +308,28 @@ public class MothLand : ModSystem
 		int CrashCount = 0;
 		ushort[] DangerTileType = new ushort[]
 		{
-			41,//蓝地牢砖
-                43,//绿地牢砖
-                44,//粉地牢砖
-                48,//尖刺
-                49,//水蜡烛
-                50,//书
-                137,//神庙机关
-                226,//神庙石砖
-                232,//木刺
-                237,//神庙祭坛
-                481,//碎蓝地牢砖
-                482,//碎绿地牢砖
-                483//碎粉地牢砖
-            };
+			41, // 蓝地牢砖
+			43, // 绿地牢砖
+			44, // 粉地牢砖
+			48, // 尖刺
+			49, // 水蜡烛
+			50, // 书
+			137, // 神庙机关
+			226, // 神庙石砖
+			232, // 木刺
+			237, // 神庙祭坛
+			481, // 碎蓝地牢砖
+			482, // 碎绿地牢砖
+			483, // 碎粉地牢砖
+		};
 		for (int x = -256; x < 257; x += 8)
 		{
 			for (int y = -128; y < 129; y += 8)
 			{
 				if (Array.Exists(DangerTileType, Ttype => Ttype == Main.tile[x + PoX, y + PoY].TileType))
+				{
 					CrashCount++;
+				}
 			}
 		}
 		return CrashCount;
@@ -409,18 +340,20 @@ public class MothLand : ModSystem
 		int CrashCount = 0;
 		ushort[] MustHaveTileType = new ushort[]
 		{
-			TileID.JungleGrass,//丛林草方块
-                TileID.JunglePlants,//丛林草
-                TileID.JungleVines,//丛林藤
-                TileID.JunglePlants2,//高大丛林草
-                TileID.PlantDetritus//丛林花
-            };
+			TileID.JungleGrass, // 丛林草方块
+			TileID.JunglePlants, // 丛林草
+			TileID.JungleVines, // 丛林藤
+			TileID.JunglePlants2, // 高大丛林草
+			TileID.PlantDetritus, // 丛林花
+		};
 		for (int x = -256; x < 257; x += 8)
 		{
 			for (int y = -128; y < 129; y += 8)
 			{
 				if (Array.Exists(MustHaveTileType, Ttype => Ttype == Main.tile[x + PoX, y + PoY].TileType))
+				{
 					CrashCount++;
+				}
 			}
 		}
 		return CrashCount;
@@ -466,6 +399,7 @@ public class MothLand : ModSystem
 		}
 		return new Point16(PoX, PoY);
 	}
+
 	/// <summary>
 	/// 判定是否平坦
 	/// </summary>
@@ -475,7 +409,10 @@ public class MothLand : ModSystem
 	private static bool IsTileSmooth(Point point, int Width = 22)
 	{
 		if (point.X > Main.maxTilesX - 20 || point.Y > Main.maxTilesY - 20 || point.X < 20 || point.Y < 20)
+		{
 			return false;
+		}
+
 		int x = point.X;
 		int y = point.Y;
 		var LeftTile = Main.tile[x, y];
@@ -485,10 +422,13 @@ public class MothLand : ModSystem
 		if (!LeftTileUp.HasTile && !RightTileUp.HasTile)
 		{
 			if (LeftTile.HasTile && RightTile.HasTile)
+			{
 				return true;
+			}
 		}
 		return false;
 	}
+
 	private static void SmoothMothTile(int a, int b, int width = 256, int height = 512)
 	{
 		for (int y = 0; y < width; y += 1)
@@ -508,10 +448,14 @@ public class MothLand : ModSystem
 			}
 		}
 	}
+
 	public static void BuildFluorescentTree(int i, int j, int height = 0)
 	{
 		if (j < 30)
+		{
 			return;
+		}
+
 		int Height = Main.rand.Next(7, height);
 
 		for (int g = 0; g < Height; g++)
@@ -574,14 +518,18 @@ public class MothLand : ModSystem
 			tile.HasTile = true;
 		}
 	}
+
 	public static void RandomUpdate(int i, int j, int Type)
 	{
 		if (Main.tile[i, j].TileType != Type || !Main.tile[i, j].HasTile)
+		{
 			return;
+		}
+
 		if (Main.rand.NextBool(4))
 		{
 			if (Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid &&
-				Main.tile[i, j + 1].Slope == SlopeType.Solid && Main.tile[i + 1, j + 1].Slope == SlopeType.Solid && Main.tile[i - 1, j + 1].Slope == SlopeType.Solid && Main.tile[i + 2, j + 1].Slope == SlopeType.Solid && Main.tile[i - 2, j + 1].Slope == SlopeType.Solid)//树木
+				Main.tile[i, j + 1].Slope == SlopeType.Solid && Main.tile[i + 1, j + 1].Slope == SlopeType.Solid && Main.tile[i - 1, j + 1].Slope == SlopeType.Solid && Main.tile[i + 2, j + 1].Slope == SlopeType.Solid && Main.tile[i - 2, j + 1].Slope == SlopeType.Solid)// 树木
 			{
 				int MaxHeight = 0;
 				for (int x = -2; x < 3; x++)
@@ -591,13 +539,17 @@ public class MothLand : ModSystem
 						if (j + y > 20)
 						{
 							if (Main.tile[i + x, j + y].HasTile || Main.tile[i + x, j + y].LiquidAmount > 3)
+							{
 								return;
+							}
 						}
 						MaxHeight = -y;
 					}
 				}
 				if (MaxHeight > 7)
+				{
 					BuildFluorescentTree(i, j - 1, MaxHeight);
+				}
 			}
 		}
 
@@ -608,7 +560,7 @@ public class MothLand : ModSystem
 			tile.HasTile = true;
 			tile.TileFrameX = (short)(28 * Main.rand.Next(8));
 		}
-		if (Main.rand.NextBool(6))//黑萤藤蔓
+		if (Main.rand.NextBool(6))// 黑萤藤蔓
 		{
 			Tile t0 = Main.tile[i, j];
 
@@ -620,7 +572,7 @@ public class MothLand : ModSystem
 				t2.TileFrameY = (short)(Main.rand.Next(6, 9) * 18);
 			}
 		}
-		if (Main.rand.NextBool(16))//流萤滴
+		if (Main.rand.NextBool(16))// 流萤滴
 		{
 			int count = 0;
 			for (int x = -1; x <= 1; x++)
@@ -629,17 +581,23 @@ public class MothLand : ModSystem
 				{
 					Tile t0 = Main.tile[i + x, j + y];
 					if (t0.HasTile)
+					{
 						count++;
+					}
+
 					Tile t1 = Main.tile[i + x, j + y - 1];
 					if (y == 1 && (!t1.HasTile || t1.Slope != SlopeType.Solid))
+					{
 						count++;
+					}
 				}
 			}
 			if (count == 0)
+			{
 				MythUtils.PlaceFrameImportantTiles(i - 1, j + 1, 3, 3, ModContent.TileType<Tiles.Furnitures.GlowingDrop>());
-
+			}
 		}
-		if (Main.rand.NextBool(16))//巨型萤火吊
+		if (Main.rand.NextBool(16))// 巨型萤火吊
 		{
 			int count = 0;
 			float length = 0;
@@ -688,7 +646,7 @@ public class MothLand : ModSystem
 				}
 			}
 		}
-		if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid)//黑萤苣
+		if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid)// 黑萤苣
 		{
 			Tile t1 = Main.tile[i, j - 1];
 			Tile t2 = Main.tile[i, j - 2];
@@ -698,7 +656,9 @@ public class MothLand : ModSystem
 				for (int y = -3; y < 4; y++)
 				{
 					if (Main.tile[i + x, j + y].LiquidAmount > 3)
+					{
 						return;
+					}
 				}
 			}
 			if (Main.rand.NextBool(2))
@@ -788,6 +748,7 @@ public class MothLand : ModSystem
 			}
 		}
 	}
+
 	//public override void PostWorldGen()
 	//{
 	//	bool placed = false;
@@ -796,7 +757,9 @@ public class MothLand : ModSystem
 	//		for (int offY = -36; offY < 12; offY++)
 	//		{
 	//			if (!placed)
+	//			{
 	//				placed = TrySpellbookChest(Main.spawnTileX + offX, Main.spawnTileY + offY, 36);
+	//			}
 	//			else
 	//			{
 	//				break;
@@ -804,6 +767,7 @@ public class MothLand : ModSystem
 	//		}
 	//	}
 	//}
+
 	//private bool TrySpellbookChest(int startX, int startY, int rangeX = 16)
 	//{
 	//	int[] legalTile = new int[]
@@ -816,16 +780,22 @@ public class MothLand : ModSystem
 	//			TileID.ClayBlock,
 	//			TileID.Mud,
 	//			TileID.JungleGrass,
-	//			TileID.Sand
+	//			TileID.Sand,
 	//	};
 	//	bool canPlace = true;
 	//	int dir = -1;
 	//	if (startY < 4 || startY > Main.maxTilesY - 1)
+	//	{
 	//		return false;
+	//	}
+
 	//	for (int x = startX; dir > 0 ? x <= startX + rangeX : x >= startX - rangeX; x += dir)
 	//	{
 	//		if (x < 0 || x > Main.maxTilesX - 4)
+	//		{
 	//			continue;
+	//		}
+
 	//		for (int i = 0; i < 4; i++)
 	//		{
 	//			for (int j = 0; j < 4; j++)
@@ -878,10 +848,6 @@ public class MothLand : ModSystem
 	//				chest.item[7].SetDefaults(ItemID.MagnetSphere);
 	//				chest.item[8].SetDefaults(ItemID.RazorbladeTyphoon);
 	//				chest.item[9].SetDefaults(ItemID.LunarFlareBook);
-	//				chest.item[10].SetDefaults(ModContent.ItemType<DreamWeaver>());
-	//				chest.item[11].SetDefaults(ModContent.ItemType<BoneFeatherMagic>());
-	//				chest.item[12].SetDefaults(ModContent.ItemType<FireFeatherMagic>());
-	//				chest.item[13].SetDefaults(ModContent.ItemType<FreezeFeatherMagic>());
 	//			}
 	//			return true;
 	//		}
