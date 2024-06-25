@@ -1,4 +1,6 @@
 using Terraria.GameContent.Creative;
+using Terraria.Localization;
+
 namespace Everglow.Myth.TheFirefly.Items.Armors
 {
 	[AutoloadEquip(EquipType.Head)]
@@ -30,7 +32,7 @@ namespace Everglow.Myth.TheFirefly.Items.Armors
 		}
 		public override void UpdateArmorSet(Player player)
 		{
-			player.setBonus = "Increases dealt damage by 20%"; //TODO: Use Localization Keys Instead
+			player.setBonus = Language.GetTextValue("Mods.Everglow.Items.FireflyWoodHelmet.SetBonus"); //TODO: Use Localization Keys Instead
 			player.GetDamage(DamageClass.Generic) += 0.2f;
 		}
 		public override void UpdateEquip(Player player)

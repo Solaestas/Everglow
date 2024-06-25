@@ -25,6 +25,7 @@ public class FlowLightMissile : ModItem
 		Item.knockBack = 2.5f;
 		Item.value = Item.sellPrice(0, 0, 20, 0);
 		Item.rare = ItemRarityID.Green;
+		//Item.channel = true;
 		Item.shoot = ModContent.ProjectileType<Projectiles.FlowLightMissile>();
 		Item.shootSpeed = 12f;
 	}

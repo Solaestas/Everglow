@@ -1,4 +1,6 @@
 using Everglow.Food.Items.Weapons;
+using Microsoft.Xna.Framework.Audio;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Food.Projectiles;
@@ -42,6 +44,7 @@ public class CreamChocolateCupStaff_proj : ModProjectile
 				{
 					player.ItemCheck_ApplyManaRegenDelay(player.HeldItem);
 					player.itemTime = player.itemTimeMax;
+					SoundEngine.PlaySound(SoundID.Item39.WithVolumeScale(0.8f) with { MaxInstances = 3 });
 					Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, mouseToPlayer * 16f, ModContent.ProjectileType<CreamChocolateCup_ChocolateBars>(), Projectile.damage * 3, 0.4f, player.whoAmI);
 				}
 				else

@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Everglow.Commons;
 
-namespace Everglow.Sources.Menu.Entities
+namespace Everglow.Commons.Menu.Entities
 {
-    internal class Star
+    public class Star
     {
         public Vector2 position;
         public Color color = Color.White;

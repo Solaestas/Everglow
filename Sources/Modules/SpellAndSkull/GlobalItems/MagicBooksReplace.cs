@@ -73,6 +73,12 @@ public class MagicBooksReplace : GlobalItem
 				tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("RazorbladeTyphoon")));
 			if (item.type == ItemID.LunarFlareBook)
 				tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("LunarFlareBook")));
+			if (ModContent.TryFind<ModItem>("Everglow/BoneFeatherMagic", out ModItem boneFeatherMagic) && item.type == boneFeatherMagic.Type)
+				tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("BoneFeatherMagic")));
+			if (ModContent.TryFind<ModItem>("Everglow/FireFeatherMagic", out ModItem fireFeatherMagic) && item.type == fireFeatherMagic.Type)
+				tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("FireFeatherMagic")));
+			if (ModContent.TryFind<ModItem>("Everglow/FreezeFeatherMagic", out ModItem freezeFeatherMagic) && item.type == freezeFeatherMagic.Type)
+				tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("FreezeFeatherMagic")));
 		}
 	}
 	internal void CheckItemIsSpellOrNot(Item item, Player player)

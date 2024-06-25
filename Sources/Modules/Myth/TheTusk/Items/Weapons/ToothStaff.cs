@@ -1,4 +1,4 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 namespace Everglow.Myth.TheTusk.Items.Weapons;
 
@@ -32,7 +32,7 @@ public class ToothStaff : ModItem
 		Item.value = 2054;
 
 		Item.rare = ItemRarityID.Green;
-		Item.UseSound = SoundID.Item71;
+		Item.UseSound = SoundID.Item44;
 		Item.DamageType = DamageClass.Summon;
 		Item.useStyle = ItemUseStyleID.Swing;
 

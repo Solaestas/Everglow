@@ -181,7 +181,7 @@ public class GiantBoneFeather : ModProjectile
 	}
 	public void AmmoHit()
 	{
-		SoundEngine.PlaySound(SoundID.Shatter.WithVolumeScale(0.8f), Projectile.Center);
+		SoundEngine.PlaySound(SoundID.Shatter.WithVolumeScale(0.8f).WithPitchOffset(-0.1f), Projectile.Center);
 		if (timeTokill > 0)
 		{
 			return;

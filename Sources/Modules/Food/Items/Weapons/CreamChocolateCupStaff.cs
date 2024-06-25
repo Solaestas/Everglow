@@ -1,5 +1,5 @@
 using Everglow.Food.Projectiles;
-using Mono.Cecil;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ModLoader.Core;
 
@@ -24,6 +24,7 @@ public class CreamChocolateCupStaff : ModItem
 		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.noMelee = true;
 		Item.noUseGraphic = true;
+		Item.channel = true;
 		Item.UseSound = SoundID.Item39.WithVolumeScale(0.8f) with { MaxInstances = 3 };
 		Item.knockBack = 2.5f;
 		Item.value = Item.sellPrice(0, 0, 20, 0);
@@ -51,7 +52,7 @@ public class CreamChocolateCupStaff : ModItem
 	{
 		if (player.altFunctionUse == 2)
 		{
-			Item.UseSound = SoundID.Item132.WithVolumeScale(0.8f);
+			Item.UseSound = new SoundStyle("Everglow/Food/Sounds/CreamSpray");
 			Item.mana = 34;
 		}
 		else

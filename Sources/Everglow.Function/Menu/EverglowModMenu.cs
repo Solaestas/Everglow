@@ -1,5 +1,5 @@
 using Everglow.Commons;
-using Everglow.Sources.Menu.Entities;
+using Everglow.Commons.Menu.Entities;
 using Everglow.Commons.Vertex;
 using ReLogic.Content;
 using System;
@@ -8,10 +8,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Star = Everglow.Sources.Menu.Entities.Star;
+using Star = Everglow.Commons.Menu.Entities.Star;
 using Terraria.ModLoader;
 
-namespace Everglow.Sources.Menu
+namespace Everglow.Commons.Menu
 {
 	public sealed class MenuManualMusicRegistration : ILoadable
 	{
@@ -24,8 +24,17 @@ namespace Everglow.Sources.Menu
 		{
 		}
 	}
-	internal class EverglowModMenu : ModMenu
+	public class EverglowModMenu : ModMenu
 	{
+		public static bool InModMenu;
+		public override void OnSelected()
+		{
+			InModMenu = true;
+		}
+		public override void OnDeselected()
+		{
+			InModMenu = false;
+		}
 		public override int Music => MusicLoader.GetMusicSlot(ModIns.Mod, "Commons/Menu/Music/MenuMusic");
 
 		public List<Star> stars = new();
@@ -52,7 +61,7 @@ namespace Everglow.Sources.Menu
 
             if(Main.rand.NextBool(25))//生成流星
             {
-                TraillingStar star = new TraillingStar();
+                TrailingStar star = new TrailingStar();
 
                 byte c = (byte)(50 + Main.rand.Next(100));
                 star.color.R -= c;

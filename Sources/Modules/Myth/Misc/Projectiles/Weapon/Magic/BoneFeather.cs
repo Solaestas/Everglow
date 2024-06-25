@@ -1,5 +1,6 @@
 using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Myth.Misc.Projectiles.Weapon.Magic.BoneFeatherMagic;
+using Everglow.SpellAndSkull.GlobalItems;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -144,7 +145,7 @@ public class BoneFeather : StickNPCProjectile
 	}
 	public void AmmoHit()
 	{
-		SoundEngine.PlaySound((SoundID.DD2_BetsyFlameBreath.WithVolume(0.3f)).WithPitchOffset(0.8f), Projectile.Center);
+		SoundEngine.PlaySound((SoundID.DD2_SkeletonHurt.WithVolume(0.6f)).WithPitchOffset(0.8f), Projectile.Center);
 		for (int j = 0; j < 4; j++)
 		{
 			Vector2 v = new Vector2(0, Main.rand.NextFloat(7, 20)).RotatedByRandom(MathHelper.TwoPi);
@@ -161,6 +162,7 @@ public class BoneNPCModifier : GlobalNPC
 {
 	public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
 	{
+		Player player = Main.LocalPlayer;
 		foreach (Projectile p in Main.projectile)
 		{
 			if (p.type == ModContent.ProjectileType<BoneFeather>() && p.active && p != projectile)
@@ -170,7 +172,12 @@ public class BoneNPCModifier : GlobalNPC
 				{
 					if(bf.timeTokill > 0)
 					{
-						if((p.type == projectile.type && bf.timeTokill < 540 * (p.extraUpdates + 1)) || p.type != projectile.type)
+						npc.AddBuff(BuffID.Weak, 420);
+						if (Main.rand.NextBool(10) && player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
+						{
+							npc.AddBuff(BuffID.Weak, 1800);
+						}
+						if ((p.type == projectile.type && bf.timeTokill < 540 * (p.extraUpdates + 1)) || p.type != projectile.type)
 						{
 							modifiers.ScalingBonusDamage += 0.07f;
 							bf.AmmoHit();

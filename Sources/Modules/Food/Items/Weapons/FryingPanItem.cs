@@ -60,6 +60,7 @@ public class FryingPanItem : ModItem
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
+		Item.UseSound = SoundID.Item1 with { MaxInstances = 8 }; //MaxInstances needed to prevent sound cutout from thrown projectile and item use, since both sounds used are the same.
 		if (player.altFunctionUse != 2)//左键
 		{
 			Projectile proj = Projectile.NewProjectileDirect(source, player.Center, velocity * 1.5f, type, damage, knockback * 2, Main.LocalPlayer.whoAmI, 0f, 0f);

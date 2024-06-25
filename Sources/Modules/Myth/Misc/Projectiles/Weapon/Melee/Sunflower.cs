@@ -9,7 +9,7 @@ public class Sunflower : ModProjectile
 		Projectile.height = 20;
 		Projectile.friendly = true;
 		Projectile.hostile = false;
-		Projectile.penetrate = -1;
+		Projectile.penetrate = 5;
 		Projectile.timeLeft = 3000;
 		Main.projFrames[Projectile.type] = 5;
 	}
