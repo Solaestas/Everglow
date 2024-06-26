@@ -1,6 +1,5 @@
-using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.TheFirefly.VFXs;
-using SteelSeries.GameSense;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
@@ -18,29 +17,50 @@ public class FallenDropFruit : ModProjectile
 		Projectile.height = 70;
 		Projectile.penetrate = -1;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
+		foreach(Projectile projectile in Main.projectile)
+		{
+			if(projectile.active)
+			{
+				if(projectile.timeLeft == 6000 && projectile.type == Type)
+				{
+					if(projectile.Center == Projectile.Center)
+					{
+						if(projectile != Projectile)
+						{
+							projectile.Kill();
+						}
+					}
+				}
+			}
+		}
 		base.OnSpawn(source);
 	}
+
 	public override void AI()
 	{
 		Projectile.rotation = 0;
 		Projectile.velocity.Y += 0.15f;
+		Lighting.AddLight(Projectile.Center, new Vector3(1f, 1.6f, 1.8f));
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
-		if(!Projectile.tileCollide)
+		if (!Projectile.tileCollide)
 		{
 			return false;
 		}
 		Texture2D glow = ModContent.Request<Texture2D>(Texture).Value;
 		Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, glow.Size() / 2f, Projectile.scale, SpriteEffects.None);
-		Main.EntitySpriteDraw(glow, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, glow.Size() / 2f, Projectile.scale, SpriteEffects.None);
 		return false;
 	}
+
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
 		GenerateSplash();
+		SoundEngine.PlaySound(SoundID.Drown, Projectile.Center);
 		Projectile.timeLeft = 10;
 		Vector2 v0 = Projectile.Center;
 		Projectile.width = 360;
@@ -50,13 +70,14 @@ public class FallenDropFruit : ModProjectile
 		Projectile.tileCollide = false;
 		return false;
 	}
+
 	public void GenerateSplash()
 	{
 		Vector2 spawnPoint = Projectile.Center + new Vector2(0, 32);
-		while(Collision.SolidCollision(spawnPoint, 5, 5))
+		while (Collision.SolidCollision(spawnPoint, 5, 5))
 		{
 			spawnPoint.Y -= 5;
-			if(spawnPoint.Y < 320)
+			if (spawnPoint.Y < 320)
 			{
 				return;
 			}
@@ -74,7 +95,7 @@ public class FallenDropFruit : ModProjectile
 				maxTime = Main.rand.Next(82, 164),
 				scale = mulScale,
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
+				ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) },
 			};
 			Ins.VFXManager.Add(blood);
 		}
@@ -89,7 +110,7 @@ public class FallenDropFruit : ModProjectile
 				position = spawnPoint + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - afterVelocity,
 				maxTime = Main.rand.Next(42, 164),
 				scale = Main.rand.NextFloat(6f, 24f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 },
 			};
 			Ins.VFXManager.Add(blood);
 		}
@@ -105,11 +126,12 @@ public class FallenDropFruit : ModProjectile
 				maxTime = Main.rand.Next(19, 75),
 				scale = Main.rand.NextFloat(8f, 15f),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, 0 }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, 0 },
 			};
 			Ins.VFXManager.Add(fire);
 		}
 	}
+
 	public override bool? CanCutTiles()
 	{
 		return false;

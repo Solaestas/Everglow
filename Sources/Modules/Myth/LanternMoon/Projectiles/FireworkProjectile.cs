@@ -49,6 +49,7 @@ public abstract class FireworkProjectile : ModProjectile
 		Projectile.penetrate = -1;
 		Projectile.ignoreWater = true;
 		Stars = new List<FlameTrail>();
+		ProjectileID.Sets.DrawScreenCheckFluff[Type] = 10800;
 		SetDef();
 	}
 	public virtual void SetDef()
@@ -131,7 +132,7 @@ public abstract class FireworkProjectile : ModProjectile
 						Vector3 velocity = new Vector3(MathF.Cos(phi / length / starsCount * MathHelper.TwoPi) * length, MathF.Sin(theta / (float)starsCount * MathF.PI), MathF.Sin(phi / length / starsCount * MathHelper.TwoPi) * length) * 9f * Main.rand.NextFloat(0.95f, 1.05f);
 						velocity = RodriguesRotate(velocity, axis, rot);
 						FlameTrail flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, color, Main.rand.NextFloat(0.85f, 1.15f) * 0.7f, true);
-						flame.FlameTimer = Main.rand.Next(-20, 0);
+						flame.FlameTimer = Main.rand.Next(-70, 0);
 						Stars.Add(flame);
 					}
 				}
@@ -798,18 +799,23 @@ public class FireworkProjectileDraw : GlobalProjectile
 									trailBars0.Add(v2Pos + new Vector2(length, 0.5f).RotatedBy(rot) * scaleValue2, Color.Transparent, new Vector3(1, 1, 0));
 								}
 							}
-							trailBars0.Add(v2Pos + new Vector2(-0.5f, -0.5f) * sizeValue, Color.Transparent, new Vector3(0, 0, 0));
-							trailBars0.Add(v2Pos + new Vector2(0.5f, -0.5f) * sizeValue, Color.Transparent, new Vector3(1, 0, 0));
+							float mulLight = (20 + flameTrail.ai[0] - flameTrail.FlameTimer) / 30f;
+							mulLight = Math.Clamp(mulLight,0,1);
+							for (int j = 1; j < 5 * mulLight; j++)
+							{
+								trailBars0.Add(v2Pos + new Vector2(-0.5f, -0.5f) * sizeValue * j * 2, Color.Transparent, new Vector3(0, 0, 0));
+								trailBars0.Add(v2Pos + new Vector2(0.5f, -0.5f) * sizeValue * j * 2, Color.Transparent, new Vector3(1, 0, 0));
 
-							trailBars0.Add(v2Pos + new Vector2(-0.5f, -0.5f) * sizeValue, flameTrail.Color * 0.4f, new Vector3(0, 0, 0));
-							trailBars0.Add(v2Pos + new Vector2(0.5f, -0.5f) * sizeValue, flameTrail.Color * 0.4f, new Vector3(1, 0, 0));
+								trailBars0.Add(v2Pos + new Vector2(-0.5f, -0.5f) * sizeValue * j * 2, flameTrail.Color * (0.1f / j), new Vector3(0, 0, 0));
+								trailBars0.Add(v2Pos + new Vector2(0.5f, -0.5f) * sizeValue * j * 2, flameTrail.Color * (0.1f / j), new Vector3(1, 0, 0));
 
-							trailBars0.Add(v2Pos + new Vector2(-0.5f, 0.5f) * sizeValue, flameTrail.Color * 0.4f, new Vector3(0, 1, 0));
-							trailBars0.Add(v2Pos + new Vector2(0.5f, 0.5f) * sizeValue, flameTrail.Color * 0.4f, new Vector3(1, 1, 0));
+								trailBars0.Add(v2Pos + new Vector2(-0.5f, 0.5f) * sizeValue * j * 2, flameTrail.Color * (0.1f / j), new Vector3(0, 1, 0));
+								trailBars0.Add(v2Pos + new Vector2(0.5f, 0.5f) * sizeValue * j * 2, flameTrail.Color * (0.1f / j), new Vector3(1, 1, 0));
 
-							trailBars0.Add(v2Pos + new Vector2(-0.5f, 0.5f) * sizeValue, Color.Transparent, new Vector3(0, 1, 0));
-							trailBars0.Add(v2Pos + new Vector2(0.5f, 0.5f) * sizeValue, Color.Transparent, new Vector3(1, 1, 0));
-
+								trailBars0.Add(v2Pos + new Vector2(-0.5f, 0.5f) * sizeValue * j * 2, Color.Transparent, new Vector3(0, 1, 0));
+								trailBars0.Add(v2Pos + new Vector2(0.5f, 0.5f) * sizeValue * j * 2, Color.Transparent, new Vector3(1, 1, 0));
+							}
+							
 							trailBars0.Add(v2Pos + new Vector2(-0.5f, -0.5f) * scaleValue2, Color.Transparent, new Vector3(0, 0, 0));
 							trailBars0.Add(v2Pos + new Vector2(0.5f, -0.5f) * scaleValue2, Color.Transparent, new Vector3(1, 0, 0));
 

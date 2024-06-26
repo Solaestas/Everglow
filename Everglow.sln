@@ -10,13 +10,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.Function", "Sources\Everglow.Function\Everglow.Function.csproj", "{8DADB5DD-A1F2-4427-8CFD-47EF0C432410}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{49C8E04B-858D-4FAB-9345-03C9C3D1ED4E}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		.gitignore = .gitignore
-		Sources\Directory.Build.props = Sources\Directory.Build.props
-		Sources\Directory.Build.targets = Sources\Directory.Build.targets
-		README.md = README.md
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.ZY", "Sources\Modules\ZY\Everglow.ZY.csproj", "{24834CB3-3CC4-4CD8-869B-457DD20E83ED}"
 EndProject
@@ -55,9 +48,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{87E92AC3-08E3-41E6-AADF-CF744CD941FC}"
-	ProjectSection(SolutionItems) = preProject
-		Sources\Modules\Directory.Build.props = Sources\Modules\Directory.Build.props
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -150,13 +140,10 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{24834CB3-3CC4-4CD8-869B-457DD20E83ED} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
 		{3537398A-34CA-4BE8-89BB-AD9EE6B873B2} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
 		{BB040ED2-6C68-419C-BD10-668508893AC9} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
 		{40BCB52F-5626-4F8F-8CA2-C6AC24143182} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
-		{BD542DD6-0F5E-4AEE-AAA8-C4581E3D5730} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
 		{851FE00D-EB8C-4CDA-8A04-AC9DECC5C093} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
-		{BA174713-BA7C-4A04-843A-E221AF495FAD} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
 		{5F627CB0-E1F3-4830-B8B3-C7DC27615659} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
 		{612927F6-ACE5-478C-84D4-7D1CC36DF178} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
 		{B2E4591C-B4D3-4F3A-98DC-DA4E37F4127A} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}

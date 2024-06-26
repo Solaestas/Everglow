@@ -1,6 +1,4 @@
 using Everglow.Commons.TileHelper;
-using Everglow.Myth.Common;
-using Everglow.Myth.TheFirefly;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;
@@ -19,7 +17,7 @@ public class BlackStarShrubSmall : ModTile, ITileFluentlyDrawn
 		TileObjectData.newTile.CoordinateHeights = new int[]
 		{
 			16,
-			18
+			18,
 		};
 		TileObjectData.newTile.CoordinateWidth = 48;
 		TileObjectData.addTile(Type);
@@ -33,6 +31,7 @@ public class BlackStarShrubSmall : ModTile, ITileFluentlyDrawn
 	{
 		num = fail ? 1 : 3;
 	}
+
 	public override void PlaceInWorld(int i, int j, Item item)
 	{
 		short num = (short)Main.rand.Next(0, 6);
@@ -50,19 +49,21 @@ public class BlackStarShrubSmall : ModTile, ITileFluentlyDrawn
 		return false;
 	}
 
-	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	{
 		var tile = Main.tile[pos];
 		var drawCenterPos = pos.ToWorldCoordinates(autoAddY: 16) - screenPosition;
 		Rectangle Frame(int y) => new Rectangle(tile.TileFrameX, y + 2, 48, 34);
 		Point SwayHitboxPos(int addX) => new Point(pos.X + addX, pos.Y);
 		Point PaintPos(int addY) => new Point(pos.X, pos.Y - addY);
 
-		var drawInfo = new BlackStarShrub.BasicDrawInfo() {
+		var drawInfo = new BlackStarShrub.BasicDrawInfo()
+		{
 			DrawCenterPos = drawCenterPos,
 			SpriteBatch = spriteBatch,
-			TileDrawing = tileDrawing
+			TileDrawing = tileDrawing,
 		};
-		
+
 		DrawShrubPiece(Frame(2), 0.025f, SwayHitboxPos(0), PaintPos(0), drawInfo);
 		DrawShrubPiece(Frame(38), 0.1f, SwayHitboxPos(0), PaintPos(0), drawInfo);
 		DrawShrubPiece(Frame(218), 0.1f, SwayHitboxPos(0), PaintPos(0), drawInfo, new Color(0.27f, 0.27f, 0.27f, 0));
@@ -78,14 +79,18 @@ public class BlackStarShrubSmall : ModTile, ITileFluentlyDrawn
 	/// <summary>
 	/// 绘制灌木的一个小Piece
 	/// </summary>
-	private void DrawShrubPiece(Rectangle frame, float swayStrength, Point tilePos, Point paintPos, BlackStarShrub.BasicDrawInfo drawInfo, Color? specialColor = null) {
+	private void DrawShrubPiece(Rectangle frame, float swayStrength, Point tilePos, Point paintPos, BlackStarShrub.BasicDrawInfo drawInfo, Color? specialColor = null)
+	{
 		var drawCenterPos = drawInfo.DrawCenterPos;
 		var spriteBatch = drawInfo.SpriteBatch;
 		var tileDrawing = drawInfo.TileDrawing;
-	
-		// 回声涂料	
-		if (!TileDrawing.IsVisible(Main.tile[tilePos])) return;	
-		
+
+		// 回声涂料
+		if (!TileDrawing.IsVisible(Main.tile[tilePos]))
+		{
+			return;
+		}
+
 		var tile = Main.tile[tilePos];
 		ushort type = tile.TileType;
 		int paint = Main.tile[paintPos].TileColor;
@@ -94,31 +99,35 @@ public class BlackStarShrubSmall : ModTile, ITileFluentlyDrawn
 
 		float windCycle = 0;
 		if (tileDrawing.InAPlaceWithWind(tilePos.X, tilePos.Y, 1, 1))
+		{
 			windCycle = tileDrawing.GetWindCycle(tilePos.X, tilePos.Y, tileDrawing._sunflowerWindCounter);
+		}
 
 		int totalPushTime = 80;
 		float pushForcePerFrame = 1.26f;
 		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X, tilePos.Y, 1, 1, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
 		windCycle += highestWindGridPushComplex;
 		float rotation = windCycle * swayStrength;
-		
+
 		// 角速度计算，源码乱抄与瞎写代码的结合，用于抖花粉
-        float factor = tilePos.X + tilePos.Y / 100;
-        float radiusNow = (float) Math.Cos(tileDrawing._sunflowerWindCounter * Math.PI * 2.0 + (double) factor);
-        float radiusPrev = (float) Math.Cos(_ooldWindCounter * Math.PI * 2.0 + (double) factor);
+		float factor = tilePos.X + tilePos.Y / 100;
+		float radiusNow = (float)Math.Cos(tileDrawing._sunflowerWindCounter * Math.PI * 2.0 + (double)factor);
+		float radiusPrev = (float)Math.Cos(_ooldWindCounter * Math.PI * 2.0 + (double)factor);
 		float angularVelocity = highestWindGridPushComplex + radiusNow - radiusPrev;
 
 		// 支持发光涂料
 		Color tileLight = Lighting.GetColor(tilePos);
+
 		// 万象写的specialColor特效，似乎是摇曳越强越亮
-		if (specialColor is not null) {
+		if (specialColor is not null)
+		{
 			float maxC = Math.Max(specialColor.Value.R / 255f, Math.Abs(rotation * 6));
 			maxC = Math.Clamp(maxC, 0, 1);
 			tileLight = new Color(maxC, maxC, maxC, 0);
 		}
 		tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(paintPos.X, paintPos.Y, tile, type, 0, 0, ref tileLight, tileDrawing._rand.NextBool(4));
 		tileLight = tileDrawing.DrawTiles_GetLightOverride(paintPos.Y, paintPos.X, tile, type, 0, 0, tileLight);
-		
+
 		var origin = new Vector2(24, 36);
 		var tileSpriteEffect = SpriteEffects.None;
 		spriteBatch.Draw(tex, drawCenterPos + new Vector2(0, 8), frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
@@ -130,7 +139,10 @@ public class BlackStarShrubSmall : ModTile, ITileFluentlyDrawn
 			var dustSpawnPos = drawCenterPos + dustSpawnOffset.RotatedBy(rotation) + Main.screenPosition;
 			var dustVelocity = new Vector2(-1f, 0f).RotatedBy(angularVelocity) * 0.7f;
 			if (angularVelocity > 0)
+			{
 				dustVelocity = -dustVelocity;
+			}
+
 			var d = Dust.NewDustDirect(dustSpawnPos, 14, 16, ModContent.DustType<BlueParticleDark>(), Alpha: 150);
 			var d2 = Dust.NewDustDirect(dustSpawnPos, 14, 16, ModContent.DustType<BlueParticle>(), Alpha: 150);
 			d.scale = Main.rand.NextFloat() * 0.2f + 0.2f;

@@ -1,4 +1,4 @@
-using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheTusk.Projectiles;
 
@@ -12,124 +12,49 @@ public class TuskSpice : ModProjectile
 		Projectile.friendly = false;
 		Projectile.hostile = true;
 		Projectile.ignoreWater = true;
-		Projectile.tileCollide = false;
+		Projectile.tileCollide = true;
 		Projectile.timeLeft = 400;
-		Projectile.alpha = 0;
 		Projectile.penetrate = -1;
-		Projectile.scale = 1f;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 3;
-		Projectile.damage = 0;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
 	}
-	Vector2 SP = Vector2.Zero;
-	float omega = 0;
-	bool OnPlac = false;
-	bool Down = false;
-	bool Collid = false;
-	int Fra = 0;
+
+	public override void OnSpawn(IEntitySource source)
+	{
+		Projectile.frame = Main.rand.Next(5);
+		Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+		Projectile.ai[0] = Projectile.rotation;
+		Projectile.ai[1] = Projectile.rotation;
+		Projectile.ai[2] = Projectile.rotation;
+	}
+
 	public override void AI()
 	{
-		if (SP == Vector2.Zero)
-		{
-			Fra = Main.rand.Next(5);
-			SP = Projectile.Center;
-		}
-		if (!OnPlac)
-		{
-			Vector2 v = SP + new Vector2(Projectile.ai[0], -320);
-			Vector2 v0 = v - Projectile.Center;
-			if (Projectile.timeLeft < 360)
-			{
-				Projectile.velocity += v0 * (float)Math.Log(v0.Length() / 30f + 1) * 0.005f;
-				if (v0.Length() < 25 && Projectile.velocity.Length() < 2)
-					OnPlac = true;
-				float k0 = (float)Math.Log(v0.Length() / 30f + 1);
-				if (k0 > 1.00f)
-					k0 = 1.00f;
-
-				Projectile.velocity *= k0;
-				if (Projectile.velocity.Length() > 20)
-					Projectile.velocity *= 20f / Projectile.velocity.Length();
-			}
-
-			Projectile.rotation = (float)((Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 2.5d) % MathHelper.TwoPi);
-		}
-		else
-		{
-			if (!Down)
-			{
-				omega += (float)(Math.PI - Projectile.rotation) / 23f;
-				omega *= 0.96f;
-				Projectile.rotation += omega;
-				Projectile.velocity = new Vector2(0, 0.01f);
-				if (Math.Abs(Math.PI - Projectile.rotation) < 0.05f && Math.Abs(omega) < 0.05f)
-				{
-					Down = true;
-					Projectile.velocity.Y += 0.25f;
-				}
-			}
-			else
-			{
-				if (!Collid)
-				{
-					Projectile.velocity.Y += 1.5f;
-					if (Collision.SolidCollision(Projectile.Center - Vector2.One * 5f, 10, 10))
-					{
-						for (int f = 0; f < 12; f++)
-						{
-							Vector2 vd = new Vector2(0, Main.rand.NextFloat(-7f, -4f)).RotatedBy(Main.rand.NextFloat(-0.25f, 0.25f));
-							Dust.NewDust(Projectile.Bottom - new Vector2(4, 4), 0, 0, DustID.Blood, vd.X, vd.Y, 0, default, Main.rand.NextFloat(1f, 2f));
-						}
-						SoundEngine.PlaySound(SoundID.NPCHit18.WithVolumeScale(.8f), Projectile.Center);
-						Collid = true;
-						Projectile.velocity *= 0;
-					}
-				}
-				else
-				{
-					Projectile.velocity *= 0;
-					Projectile.alpha += 5;
-					if (Projectile.alpha > 254)
-						Projectile.Kill();
-				}
-			}
-		}
-		if (Dam == 0)
-		{
-			Dam = 60;
-			if (Main.expertMode)
-				Dam = 90;
-			if (Main.masterMode)
-				Dam = 120;
-		}
+		Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+		Projectile.ai[0] = (float)Utils.Lerp(Projectile.ai[0], Projectile.rotation, 0.5f);
+		Projectile.ai[1] = (float)Utils.Lerp(Projectile.ai[1], Projectile.ai[0], 0.5f);
+		Projectile.ai[2] = (float)Utils.Lerp(Projectile.ai[2], Projectile.ai[1], 0.5f);
 	}
-	int Dam = 0;
+
 	public override bool PreDraw(ref Color lightColor)
 	{
+		Texture2D texture = ModAsset.TuskSpice.Value;
+		for (int i = 0; i < Projectile.oldPos.Length; i++)
+		{
+			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, new Rectangle(Projectile.frame * 24, 0, 24, 50), lightColor, Projectile.ai[i], new Vector2(12, 25), Projectile.scale, SpriteEffects.None, 0);
+		}
+		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, new Rectangle(Projectile.frame * 24, 0, 24, 50), lightColor, Projectile.rotation, new Vector2(12, 25), Projectile.scale, SpriteEffects.None, 0);
 		return false;
 	}
-	public override void PostDraw(Color lightColor)
-	{
 
-		Color colorz = Lighting.GetColor((int)(Projectile.Center.X / 16d), (int)(Projectile.Center.Y / 16d));
-		colorz = Projectile.GetAlpha(colorz) * ((255 - Projectile.alpha) / 255f);
-		Texture2D texture = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Projectiles/TuskSpice" + Fra.ToString()).Value;
-		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, colorz, Projectile.rotation, new Vector2(12f, 25f), Projectile.scale, SpriteEffects.None, 0);
-		if (!Down)
-			return;
-		if (Projectile.alpha == 0)
+	public override void OnKill(int timeLeft)
+	{
+		for (int i = -5; i < 5; i++)
 		{
-			for (int f = 0; f < Projectile.oldPos.Length; f++)
-			{
-				Vector2 vpos = Projectile.oldPos[f] + new Vector2(Projectile.width / 2f, Projectile.height / 2f);
-				Color color = Lighting.GetColor((int)(vpos.X / 16), (int)(vpos.Y / 16));
-				float alpha = 1 - f / (float)Projectile.oldPos.Length;
-				color.R = (byte)(color.R * alpha);
-				color.G = (byte)(color.G * alpha);
-				color.B = (byte)(color.B * alpha);
-				color.A = (byte)(color.A * alpha);
-				Main.spriteBatch.Draw(texture, vpos - Main.screenPosition, null, color, Projectile.rotation, texture.Size() / 2f, 1f, SpriteEffects.None, 0);
-			}
+			Vector2 pos = Projectile.Center + new Vector2(i * 6, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver2) - new Vector2(0, 4);
+			Dust dust = Dust.NewDustDirect(pos, 0, 0, ModContent.DustType<Dusts.TuskBreak_small>());
+			dust.velocity = Projectile.velocity;
 		}
 	}
 }

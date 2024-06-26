@@ -26,6 +26,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 4;
 			Projectile.aiStyle = -1;
+			ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 12800;
 		}
 		public int timeToKill = 0;
 		public int targetNPC = -1;

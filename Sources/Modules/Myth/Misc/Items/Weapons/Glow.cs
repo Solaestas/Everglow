@@ -7,7 +7,7 @@ namespace Everglow.Myth.Misc.Items.Weapons
 	{
 		public override void SetDefaults()
 		{
-			Item.damage = 30;
+			Item.damage = 174;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 52;
 			Item.height = 52;
@@ -15,8 +15,8 @@ namespace Everglow.Myth.Misc.Items.Weapons
 			Item.useAnimation = 17;
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.knockBack = 2;
-			Item.value = 10000;
-			Item.rare = ItemRarityID.Blue;
+			Item.value = 90000;
+			Item.rare = ItemRarityID.Red;
 			Item.UseSound = SoundID.Item1;
 			Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Melee.Glow>();
 			Item.noMelee = true;
@@ -39,10 +39,10 @@ namespace Everglow.Myth.Misc.Items.Weapons
 				UseCount = 0;
 				Vector2 p1 = new Vector2(Main.rand.NextFloat(-300, 300), -1000);
 				velocity = Vector2.Normalize(Main.MouseWorld - p1 - player.MountedCenter) * 60f;
-				Projectile.NewProjectile(source, player.MountedCenter + p1, velocity, ModContent.ProjectileType<Glow_Fall>(), damage * 3, knockback, player.whoAmI, player.direction * player.gravDir, player.itemAnimationMax, adjustedItemScale);
+				Projectile.NewProjectileDirect(source, player.MountedCenter + p1, velocity, ModContent.ProjectileType<Glow_Fall>(), damage * 3, knockback, player.whoAmI, player.direction * player.gravDir, adjustedItemScale);
 				Vector2 p2 = p1 + new Vector2(300 * player.direction , 0);
 				velocity = Vector2.Normalize(Main.MouseWorld - p2 - player.MountedCenter) * 60f;
-				Projectile.NewProjectile(source, player.MountedCenter + p2, velocity, ModContent.ProjectileType<Glow_Fall>(), damage * 3, knockback, player.whoAmI, player.direction * player.gravDir, player.itemAnimationMax, adjustedItemScale);
+				Projectile.NewProjectileDirect(source, player.MountedCenter + p2, velocity, ModContent.ProjectileType<Glow_Fall>(), damage * 3, knockback, player.whoAmI, player.direction * player.gravDir, adjustedItemScale);
 			}
 			return base.Shoot(player, source, position, velocity, type, damage, knockback);
 		}

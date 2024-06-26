@@ -5,19 +5,21 @@ namespace Everglow.Commons.Weapons.Whips;
 public abstract class WhipItem : ModItem
 {
 	public float WhipLength;
+
 	public override void SetDefaults()
 	{
 		Item.knockBack = 2f;
 		SetDef();
 		DefaultToWhip(Item.damage, Item.knockBack, Item.shootSpeed);
 	}
+
 	/// <summary>
 	/// These tags should be filled: shoot, shootSpeed, useAnimation, damage, rare, value, width, height
 	/// </summary>
 	public virtual void SetDef()
 	{
-
 	}
+
 	public override bool? UseItem(Player player)
 	{
 		if (player.autoReuseGlove)
@@ -28,12 +30,16 @@ public abstract class WhipItem : ModItem
 		Item.autoReuse = false;
 		return true;
 	}
+
 	public void DefaultToWhip(int dmg, float kb, float shootspeed)
 	{
 		Player player = Main.LocalPlayer;
 		Item.autoReuse = false;
 		if (player.autoReuseGlove)
+		{
 			Item.autoReuse = true;
+		}
+
 		Item.autoReuse = false;
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.UseSound = SoundID.Item152;

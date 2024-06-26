@@ -87,10 +87,11 @@ public class GoldenShowerBomb : ModProjectile, IWarpProjectile
 		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(255, 205, 0, 0) * dark2, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark2, SpriteEffects.None, 0);
 
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
-		Color cDark = new Color(0, 0, 0, 1f - timeValue);
+		Color cDark = new Color(0, 0, 0, 1f - timeValue) * 0.5f;
 		DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 20 * (1 - timeValue) * Projectile.ai[0], cDark * dark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
-		DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 4 * (1 - timeValue) * Projectile.ai[0], new Color(255, 205, 0, 0) * dark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
-		DrawTexCircle(MathF.Sqrt(timeValue) * 48 * Projectile.ai[0], 40 * Projectile.ai[0], new Color(255, 205, 0, 0) * dark2, Projectile.Center - Main.screenPosition, Commons.ModAsset.Noise_hiveCyber.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 4 * (1 - timeValue) * Projectile.ai[0], new Color(255, 145, 0, 0) * dark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_10_black.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 4 * (1 - timeValue) * Projectile.ai[0], new Color(255, 145, 0, 0) * dark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_10.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 48 * Projectile.ai[0], 40 * Projectile.ai[0], new Color(255, 145, 0, 0) * dark2, Projectile.Center - Main.screenPosition, Commons.ModAsset.Noise_hiveCyber.Value);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -130,7 +131,8 @@ public class GoldenShowerBomb : ModProjectile, IWarpProjectile
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft;
 
-		SpellAndSkullUtils.DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 64 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 2f * value, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		SpellAndSkullUtils.DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 64 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 1.1f * value, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		SpellAndSkullUtils.DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 32 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 2f * value, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{

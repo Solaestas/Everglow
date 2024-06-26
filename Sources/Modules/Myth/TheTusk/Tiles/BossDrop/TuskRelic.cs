@@ -1,4 +1,3 @@
-using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheTusk.Tiles.BossDrop;
@@ -26,25 +25,33 @@ public class TuskRelic : ModTile
 		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(233, 207, 94), modTranslation);
 	}
+
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
 		num = fail ? 1 : 3;
 	}
+
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
+		{
 			zero = Vector2.Zero;
+		}
+
 		Tile tile = Main.tile[i, j];
 		if (tile.TileFrameX != 18 || !(tile.TileFrameY == 54 || tile.TileFrameX == 126))
+		{
 			return;
+		}
+
 		for (int x = 0; x < 2; x++)
 		{
 			var point = new Point(i, j);
 
 			if (tile != null && tile.HasTile)
 			{
-				Texture2D value = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/BossDrop/Tusk").Value;
+				Texture2D value = ModAsset.Tiles_TuskRelic.Value;
 				int frameY = tile.TileFrameX / 54;
 				bool flag = tile.TileFrameY / 72 != 0;
 				int horizontalFrames = 1;
@@ -64,10 +71,10 @@ public class TuskRelic : ModTile
 				for (float num4 = 0f; num4 < 1f; num4 += 0.166666672f)
 				{
 					Main.spriteBatch.Draw(value, value3 - Main.screenPosition + (6.28318548f * num4).ToRotationVector2() * (6f + num3 * 2f) + zero + new Vector2(8, 16), null, color2, 0f, value.Size() / 2f, 1f, effects, 0f);
-					;
 				}
 			}
 		}
-		//base.PostDraw(i, j, spriteBatch);
+
+		// base.PostDraw(i, j, spriteBatch);
 	}
 }

@@ -74,7 +74,7 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 
 		if (Main.rand.NextBool(3))
 		{
-			var cf = new CursedFlameDust
+			var cf = new CurseFlame_HighQualityDust
 			{
 				velocity = Projectile.velocity * 2.7f,
 				Active = true,

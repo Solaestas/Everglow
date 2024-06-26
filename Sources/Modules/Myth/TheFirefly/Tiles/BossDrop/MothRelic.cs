@@ -20,16 +20,18 @@ public class MothRelic : ModTile
 
 	// Every relic has its own extra floating part, should be 50x50. Optional: Expand this sheet if you want to add more, stacked vertically
 	// If you do not go the optional way, and you extend from this class, you can override this to point to a different texture
-	public virtual string RelicTextureName => "Everglow/Myth/TheFirefly/Tiles/BossDrop/MothRelic";
+	public virtual string RelicTextureName => ModAsset.Tiles_MothRelic_Mod;
 
 	// All relics use the same pedestal texture, this one is copied from vanilla
-	public override string Texture => "Everglow/Myth/Common/ModelTextures/RelicPedestal";
+	public override string Texture => ModAsset.RelicPedestal_Mod;
 
 	public override void Load()
 	{
 		if (!Main.dedServ)
+		{
 			// Cache the extra texture displayed on the pedestal
 			RelicTexture = ModContent.Request<Texture2D>(RelicTextureName);
+		}
 	}
 
 	public override void Unload()
@@ -68,6 +70,7 @@ public class MothRelic : ModTile
 		// "MapObject.Relic" refers to the translation key for the vanilla "Relic" text
 		AddMapEntry(new Color(233, 207, 94), Language.GetText("MapObject.Relic"));
 	}
+
 	public override bool CreateDust(int i, int j, ref int type)
 	{
 		return false;
@@ -88,7 +91,9 @@ public class MothRelic : ModTile
 		// Therefore we register the top-left of the tile as a "special point"
 		// This allows us to draw things in SpecialDraw
 		if (drawData.tileFrameX % FrameWidth == 0 && drawData.tileFrameY % FrameHeight == 0)
+		{
 			Main.instance.TilesRenderer.AddSpecialLegacyPoint(i, j);
+		}
 	}
 
 	public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
@@ -96,13 +101,17 @@ public class MothRelic : ModTile
 		// This is lighting-mode specific, always include this if you draw tiles manually
 		var offScreen = new Vector2(Main.offScreenRange);
 		if (Main.drawToScreen)
+		{
 			offScreen = Vector2.Zero;
+		}
 
 		// Take the tile, check if it actually exists
 		var p = new Point(i, j);
 		Tile tile = Main.tile[p.X, p.Y];
 		if (tile == null || !tile.HasTile)
+		{
 			return;
+		}
 
 		// Get the initial draw parameters
 		Texture2D texture = RelicTexture.Value;

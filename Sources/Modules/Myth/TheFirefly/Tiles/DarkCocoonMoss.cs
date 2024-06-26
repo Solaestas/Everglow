@@ -13,6 +13,12 @@ public class DarkCocoonMoss : ModTile
 		DustType = 191;
 		AddMapEntry(new Color(35, 49, 122));
 	}
+
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
+	{
+		yield return new Item(ModContent.ItemType<Items.DarkCocoon>());
+	}
+
 	public override void RandomUpdate(int i, int j)
 	{
 		Tile t0 = Main.tile[i, j];
@@ -20,7 +26,7 @@ public class DarkCocoonMoss : ModTile
 		Tile t2 = Main.tile[i, j + 1];
 		Tile t3 = Main.tile[i + 1, j];
 		Tile t4 = Main.tile[i - 1, j];
-		if (Main.rand.NextBool(2))//黑萤苔藓
+		if (Main.rand.NextBool(2))// 黑萤苔藓
 		{
 			switch (Main.rand.Next(4))
 			{
@@ -97,11 +103,12 @@ public class DarkCocoonMoss : ModTile
 			}
 		}
 	}
-	//判定周围有多少个同样的块
+
+	// 判定周围有多少个同样的块
 	private int CheckDarkBeside(int i, int j)
 	{
 		int count = 0;
-		for(int x = -6;x < 7;x++)
+		for (int x = -6; x < 7; x++)
 		{
 			for (int y = -6; y < 7; y++)
 			{
@@ -114,6 +121,7 @@ public class DarkCocoonMoss : ModTile
 		}
 		return count;
 	}
+
 	private bool CheckDarkCocoon(Tile tile)
 	{
 		if (tile.HasTile)
@@ -125,13 +133,17 @@ public class DarkCocoonMoss : ModTile
 		}
 		return false;
 	}
+
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 
 		if (Main.drawToScreen)
+		{
 			zero = Vector2.Zero;
+		}
+
 		Texture2D tex = ModAsset.DarkCocoonMossGlow.Value;
 
 		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(55, 55, 55, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);

@@ -1,5 +1,3 @@
-using Terraria.ObjectData;
-
 namespace Everglow.Myth.TheFirefly.Tiles;
 
 public class PurpleThorns : ModTile
@@ -11,16 +9,19 @@ public class PurpleThorns : ModTile
 		TileID.Sets.TouchDamageDestroyTile[Type] = true;
 		TileID.Sets.TouchDamageImmediate[Type] = 12;
 		DustType = 191;
+		HitSound = SoundID.Grass;
 		AddMapEntry(new Color(35, 9, 35));
 	}
+
 	public override bool IsTileDangerous(int i, int j, Player player)
 	{
-		if(player.HasBuff(BuffID.Dangersense))
+		if (player.HasBuff(BuffID.Dangersense))
 		{
 			return true;
 		}
 		return false;
 	}
+
 	public override void RandomUpdate(int i, int j)
 	{
 		int nearCount = 0;
@@ -92,12 +93,13 @@ public class PurpleThorns : ModTile
 			WorldGen.PlaceTile(nextPos.Item1, nextPos.Item2, Type);
 		}
 	}
+
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
 	}
+
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-
 		base.PostDraw(i, j, spriteBatch);
 	}
 }

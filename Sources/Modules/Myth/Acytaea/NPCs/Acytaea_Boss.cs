@@ -1,8 +1,6 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.CustomTiles;
 using Everglow.Myth.Acytaea.Projectiles;
-using Everglow.Myth.Acytaea.VFXs;
-using SteelSeries.GameSense.DeviceZone;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -12,7 +10,9 @@ namespace Everglow.Myth.Acytaea.NPCs;
 public class Acytaea_Boss : ModNPC
 {
 	private bool canDespawn = false;
+
 	public override string Texture => "Everglow/Myth/Acytaea/NPCs/Acytaea";
+
 	public override string HeadTexture => "Everglow/Myth/Acytaea/NPCs/Acytaea_Head_Boss";
 
 	public override void SetDefaults()
@@ -31,6 +31,7 @@ public class Acytaea_Boss : ModNPC
 		NPC.noTileCollide = true;
 		Music = Common.MythContent.QuickMusic("AcytaeaFighting");
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		NPC.friendly = false;
@@ -55,17 +56,22 @@ public class Acytaea_Boss : ModNPC
 		NPC.height = 56;
 		StartToBeABoss();
 	}
+
 	public override bool CheckActive()
 	{
 		return canDespawn;
 	}
+
 	public override void OnKill()
 	{
 		NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea>());
 		NPC.SetEventFlagCleared(ref DownedBossSystem.downedAcytaea, -1);
 		if (Main.netMode == NetmodeID.Server)
+		{
 			NetMessage.SendData(MessageID.WorldData);
+		}
 	}
+
 	public override void AI()
 	{
 		Player player = Main.player[NPC.target];
@@ -77,21 +83,23 @@ public class Acytaea_Boss : ModNPC
 			NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea>());
 		}
 		NPC.damage = 0;
-		if(!NPC.collideY)
+		if (!NPC.collideY)
 		{
 			LegFrameCounter++;
 		}
 	}
-	#region Boss
+
 	private int wingFrame = 0;
 	private int wingFrameCounter = 0;
 	private CoroutineManager _acytaeaCoroutine = new CoroutineManager();
+
 	public void StartToBeABoss()
 	{
 		NPC.TargetClosest(true);
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(StartFighting()));
 		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_following>(), 0, 0f, -1, NPC.whoAmI);
 	}
+
 	public void UpdateWings()
 	{
 		if (!NPC.collideY)
@@ -109,6 +117,7 @@ public class Acytaea_Boss : ModNPC
 			}
 		}
 	}
+
 	private IEnumerator<ICoroutineInstruction> StartFighting()
 	{
 		Player player = Main.player[NPC.target];
@@ -127,7 +136,8 @@ public class Acytaea_Boss : ModNPC
 		}
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(SlashPlayer()));
 	}
-	//砍一刀
+
+	// 砍一刀
 	private IEnumerator<ICoroutineInstruction> SlashPlayer()
 	{
 		Player player = Main.player[NPC.target];
@@ -142,27 +152,27 @@ public class Acytaea_Boss : ModNPC
 		{
 			float value = t / 20f;
 			Vector2 targetPos = player.Center + new Vector2(-130 * NPC.direction, -60);
-			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			NPC.position = targetPos * value + NPC.position * (1 - value);
 			yield return new SkipThisFrame();
 		}
 		ClearFollowingSword();
 		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_projectile_Boss>(), 60, 4f, player.whoAmI, NPC.whoAmI);
-		
+
 		for (int t = 0; t < 10; t++)
 		{
 			float value = 0.05f;
 			Vector2 targetPos = player.Center + new Vector2(-130 * NPC.direction, -60);
-			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			NPC.position = targetPos * value + NPC.position * (1 - value);
 			HeadRot -= 0.04f * NPC.direction;
 			yield return new SkipThisFrame();
 		}
 		for (int t = 0; t < 90; t++)
 		{
-			if(t > 20 && t <= 35)
+			if (t > 20 && t <= 35)
 			{
 				HeadRot += 0.07f * NPC.direction;
 			}
-			else if(t > 35)
+			else if (t > 35)
 			{
 				HeadRot *= 0.9f;
 			}
@@ -172,7 +182,8 @@ public class Acytaea_Boss : ModNPC
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
 		yield return new SkipThisFrame();
 	}
-	//瞬间砍一刀
+
+	// 瞬间砍一刀
 	private IEnumerator<ICoroutineInstruction> SuddenSlash()
 	{
 		Player player = Main.player[NPC.target];
@@ -184,7 +195,7 @@ public class Acytaea_Boss : ModNPC
 		{
 			float value = 0.05f;
 			Vector2 targetPos = player.Center + new Vector2(-130 * NPC.direction, -60);
-			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			NPC.position = targetPos * value + NPC.position * (1 - value);
 			HeadRot -= 0.2f * NPC.direction;
 			yield return new SkipThisFrame();
 		}
@@ -204,7 +215,8 @@ public class Acytaea_Boss : ModNPC
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
 		yield return new SkipThisFrame();
 	}
-	//龙爪划过
+
+	// 龙爪划过
 	private IEnumerator<ICoroutineInstruction> ScratchPlayer()
 	{
 		Player player = Main.player[NPC.target];
@@ -221,7 +233,7 @@ public class Acytaea_Boss : ModNPC
 		for (int t = 0; t < 20; t++)
 		{
 			float value = t / 20f;
-			NPC.position = (aimPos + new Vector2(-640 * NPC.direction, -240)) * (value) + NPC.position * (1 - value);
+			NPC.position = (aimPos + new Vector2(-640 * NPC.direction, -240)) * value + NPC.position * (1 - value);
 			yield return new SkipThisFrame();
 		}
 		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<Acytaea_ShineStar>(), 0, 0f, player.whoAmI, NPC.whoAmI);
@@ -263,7 +275,8 @@ public class Acytaea_Boss : ModNPC
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
 		yield return new SkipThisFrame();
 	}
-	//3x龙爪划过
+
+	// 3x龙爪划过
 	private IEnumerator<ICoroutineInstruction> Scratch3Player()
 	{
 		Player player = Main.player[NPC.target];
@@ -275,8 +288,6 @@ public class Acytaea_Boss : ModNPC
 		}
 		NPC.spriteDirection = NPC.direction;
 
-
-
 		for (int x = 0; x < 3; x++)
 		{
 			Vector2 aimPos = player.Center;
@@ -285,7 +296,7 @@ public class Acytaea_Boss : ModNPC
 			for (int t = 0; t < 10; t++)
 			{
 				float value = t / 5f;
-				NPC.position = aimPos2 * (value) + NPC.position * (1 - value);
+				NPC.position = aimPos2 * value + NPC.position * (1 - value);
 				yield return new SkipThisFrame();
 			}
 			Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<Acytaea_ShineStar>(), 0, 0f, player.whoAmI, NPC.whoAmI);
@@ -328,7 +339,8 @@ public class Acytaea_Boss : ModNPC
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
 		yield return new SkipThisFrame();
 	}
-	//连续龙爪划过
+
+	// 连续龙爪划过
 	private IEnumerator<ICoroutineInstruction> ContinueScratchPlayer(int times = 5)
 	{
 		Player player = Main.player[NPC.target];
@@ -345,10 +357,9 @@ public class Acytaea_Boss : ModNPC
 		for (int t = 0; t < 10; t++)
 		{
 			float value = t / 5f;
-			NPC.position = aimPos2 * (value) + NPC.position * (1 - value);
+			NPC.position = aimPos2 * value + NPC.position * (1 - value);
 			yield return new SkipThisFrame();
 		}
-
 
 		for (int x = 0; x < times; x++)
 		{
@@ -392,7 +403,7 @@ public class Acytaea_Boss : ModNPC
 					yield return new SkipThisFrame();
 				}
 			}
-			else if(!Main.masterMode)
+			else if (!Main.masterMode)
 			{
 				for (int t = 0; t < 25; t++)
 				{
@@ -420,7 +431,8 @@ public class Acytaea_Boss : ModNPC
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
 		yield return new SkipThisFrame();
 	}
-	//剑阵
+
+	// 剑阵
 	private IEnumerator<ICoroutineInstruction> SwordArray()
 	{
 		NPC.TargetClosest();
@@ -437,11 +449,11 @@ public class Acytaea_Boss : ModNPC
 			NPC.velocity *= 0.1f;
 			float value = t / 20f;
 			Vector2 targetPos = player.Center + new Vector2(0 * NPC.direction, -300);
-			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			NPC.position = targetPos * value + NPC.position * (1 - value);
 			HeadFrameCounter++;
 			yield return new SkipThisFrame();
 		}
-		if(Main.expertMode)
+		if (Main.expertMode)
 		{
 			for (int x = -7; x <= 7; x++)
 			{
@@ -516,7 +528,8 @@ public class Acytaea_Boss : ModNPC
 		yield return new WaitForFrames(60);
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer(20)));
 	}
-	//轮状剑阵
+
+	// 轮状剑阵
 	private IEnumerator<ICoroutineInstruction> SwordArray_Round()
 	{
 		NPC.TargetClosest();
@@ -541,11 +554,11 @@ public class Acytaea_Boss : ModNPC
 					break;
 				}
 			}
-			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			NPC.position = targetPos * value + NPC.position * (1 - value);
 			HeadFrameCounter++;
 			yield return new SkipThisFrame();
 		}
-		ClearFollowingSword();	
+		ClearFollowingSword();
 		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<AcytaeaMagicArraySword>(), 0, 4f, player.whoAmI, NPC.whoAmI);
 		yield return new WaitForFrames(1);
 		Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -455), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordArray_1>(), 60, 4f, player.whoAmI, NPC.whoAmI, 8, 1.6f);
@@ -555,7 +568,7 @@ public class Acytaea_Boss : ModNPC
 			HeadFrameCounter++;
 			yield return new SkipThisFrame();
 		}
-		if(Main.expertMode)
+		if (Main.expertMode)
 		{
 			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -455), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordArray_1>(), 60, 4f, player.whoAmI, NPC.whoAmI, 12, 2.7f);
 		}
@@ -582,7 +595,7 @@ public class Acytaea_Boss : ModNPC
 					break;
 				}
 			}
-			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			NPC.position = targetPos * value + NPC.position * (1 - value);
 			HeadFrameCounter++;
 			yield return new SkipThisFrame();
 		}
@@ -594,7 +607,8 @@ public class Acytaea_Boss : ModNPC
 		}
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer(20)));
 	}
-	//龙卷
+
+	// 龙卷
 	private IEnumerator<ICoroutineInstruction> SwordArray_Tornado()
 	{
 		Player player = Main.player[NPC.target];
@@ -609,7 +623,7 @@ public class Acytaea_Boss : ModNPC
 		{
 			float value = t / 20f;
 			Vector2 targetPos = player.Center + new Vector2(-130 * NPC.direction, -60);
-			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			NPC.position = targetPos * value + NPC.position * (1 - value);
 			yield return new SkipThisFrame();
 		}
 		ClearFollowingSword();
@@ -619,14 +633,14 @@ public class Acytaea_Boss : ModNPC
 		{
 			NPC.velocity.Y *= 0.5f;
 			float value = 0;
-			foreach(var proj in Main.projectile)
+			foreach (var proj in Main.projectile)
 			{
-				if(proj != null && proj.active)
+				if (proj != null && proj.active)
 				{
-					if(proj.type == ModContent.ProjectileType<AcytaeaSword_projectile_Tornado>())
+					if (proj.type == ModContent.ProjectileType<AcytaeaSword_projectile_Tornado>())
 					{
 						AcytaeaSword_projectile_Tornado aSPT = proj.ModProjectile as AcytaeaSword_projectile_Tornado;
-						if(aSPT.mainVec.X > 0)
+						if (aSPT.mainVec.X > 0)
 						{
 							NPC.spriteDirection = 1;
 						}
@@ -639,19 +653,19 @@ public class Acytaea_Boss : ModNPC
 					}
 				}
 			}
-			if(t == 319)
+			if (t == 319)
 			{
 				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - new Vector2(Math.Sign((player.Center - NPC.Center).X) * 240, 0), new Vector2(Math.Sign((player.Center - NPC.Center).X) * 60, 0), ModContent.ProjectileType<AcytaeaTornado>(), 60, 4f, player.whoAmI, NPC.whoAmI);
 			}
 			Vector2 targetPos = player.Center;
 			Vector2 toTarget = targetPos - NPC.Center - NPC.velocity;
-			if(toTarget.Length() > 200)
+			if (toTarget.Length() > 200)
 			{
 				toTarget = Utils.SafeNormalize(toTarget, Vector2.zeroVector) * 200;
 			}
 			toTarget *= 0.4f * value;
 			float valueVelocity = 0.0015f;
-			if(Main.expertMode)
+			if (Main.expertMode)
 			{
 				valueVelocity = 0.006f;
 			}
@@ -665,7 +679,8 @@ public class Acytaea_Boss : ModNPC
 		}
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
 	}
-	//飞剑斩
+
+	// 飞剑斩
 	private IEnumerator<ICoroutineInstruction> SlashPlayerAndReleaseSword()
 	{
 		Player player = Main.player[NPC.target];
@@ -682,7 +697,7 @@ public class Acytaea_Boss : ModNPC
 		for (int t = 0; t < 20; t++)
 		{
 			float value = t / 20f;
-			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			NPC.position = targetPos * value + NPC.position * (1 - value);
 			if (proj.type == ModContent.ProjectileType<AcytaeaMagicArray>())
 			{
 				proj.Center = NPC.Center;
@@ -693,7 +708,7 @@ public class Acytaea_Boss : ModNPC
 		Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -5), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_projectile_Boss_shoot>(), 60, 4f, player.whoAmI, NPC.whoAmI);
 		for (int t = 0; t < 50; t++)
 		{
-			if(t < 10)
+			if (t < 10)
 			{
 				HeadRot -= 0.04f * NPC.direction;
 			}
@@ -714,7 +729,7 @@ public class Acytaea_Boss : ModNPC
 		{
 			HeadRot *= 0.9f;
 			NPC.velocity *= 0.6f;
-			foreach(Projectile projectile in Main.projectile)
+			foreach (Projectile projectile in Main.projectile)
 			{
 				if (projectile != null && projectile.active)
 				{
@@ -733,13 +748,13 @@ public class Acytaea_Boss : ModNPC
 			NPC.velocity *= 0.6f;
 			foreach (Projectile projectile in Main.projectile)
 			{
-				if(projectile != null && projectile.active)
+				if (projectile != null && projectile.active)
 				{
 					if (projectile.type == ModContent.ProjectileType<AcytaeaFlySword_1>())
 					{
 						Vector2 toAim = aimPos - projectile.Center - projectile.velocity;
 						AcytaeaFlySword_1 acytaeaFlySword_1 = projectile.ModProjectile as AcytaeaFlySword_1;
-						if(acytaeaFlySword_1 != null)
+						if (acytaeaFlySword_1 != null)
 						{
 							if (toAim.Length() < 72f)
 							{
@@ -753,14 +768,15 @@ public class Acytaea_Boss : ModNPC
 							}
 						}
 					}
-				}				
+				}
 			}
 			yield return new SkipThisFrame();
 		}
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
 		yield return new SkipThisFrame();
 	}
-	//3连飞剑斩
+
+	// 3连飞剑斩
 	private IEnumerator<ICoroutineInstruction> Slash3xPlayerAndReleaseSword()
 	{
 		Player player = Main.player[NPC.target];
@@ -781,7 +797,7 @@ public class Acytaea_Boss : ModNPC
 			for (int t = 0; t < 20; t++)
 			{
 				float value = t / 20f;
-				NPC.position = targetPos * (value) + NPC.position * (1 - value);
+				NPC.position = targetPos * value + NPC.position * (1 - value);
 				if (proj.type == ModContent.ProjectileType<AcytaeaMagicArray>())
 				{
 					proj.Center = NPC.Center;
@@ -859,7 +875,8 @@ public class Acytaea_Boss : ModNPC
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer()));
 		yield return new SkipThisFrame();
 	}
-	//剑雨
+
+	// 剑雨
 	private IEnumerator<ICoroutineInstruction> SwordRainLine()
 	{
 		NPC.TargetClosest();
@@ -884,7 +901,7 @@ public class Acytaea_Boss : ModNPC
 					break;
 				}
 			}
-			NPC.position = targetPos * (value) + NPC.position * (1 - value);
+			NPC.position = targetPos * value + NPC.position * (1 - value);
 			HeadFrameCounter++;
 			yield return new SkipThisFrame();
 		}
@@ -894,18 +911,18 @@ public class Acytaea_Boss : ModNPC
 		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -400), Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSwordRain>(), 60, 4f, player.whoAmI, NPC.whoAmI);
 		for (int t = 0; t < 260; t++)
 		{
-
 			NPC.velocity *= 0.8f;
-			
+
 			HeadFrameCounter++;
 			yield return new SkipThisFrame();
 		}
 		_acytaeaCoroutine.StartCoroutine(new Coroutine(FaceToPlayer(20)));
 	}
-	//技能更迭
+
+	// 技能更迭
 	private IEnumerator<ICoroutineInstruction> FaceToPlayer(int time = 60)
 	{
-		if(Main.expertMode)
+		if (Main.expertMode)
 		{
 			time = 45;
 		}
@@ -930,7 +947,8 @@ public class Acytaea_Boss : ModNPC
 			NPC.position = targetPos * 0.05f + NPC.position * 0.95f;
 			yield return new SkipThisFrame();
 		}
-		//_acytaeaCoroutine.StartCoroutine(new Coroutine(Slash3xPlayerAndReleaseSword()));
+
+		// _acytaeaCoroutine.StartCoroutine(new Coroutine(Slash3xPlayerAndReleaseSword()));
 		if (NPC.life > NPC.lifeMax * 0.5f)
 		{
 			switch (Main.rand.Next(2))
@@ -985,27 +1003,29 @@ public class Acytaea_Boss : ModNPC
 			}
 		}
 	}
+
 	private void ClearFollowingSword()
 	{
-		foreach(var proj in Main.projectile)
+		foreach (var proj in Main.projectile)
 		{
-			if(proj != null && proj.active)
+			if (proj != null && proj.active)
 			{
-				if(proj.type == ModContent.ProjectileType<AcytaeaSword_following>())
+				if (proj.type == ModContent.ProjectileType<AcytaeaSword_following>())
 				{
 					proj.Kill();
 				}
 			}
 		}
 	}
+
 	public void DrawSelfBoss(SpriteBatch spriteBatch, Color drawColor)
 	{
-		if(HeadFrameCounter > 6)
+		if (HeadFrameCounter > 6)
 		{
 			HeadFrame++;
 			HeadFrameCounter = 0;
 		}
-		if(HeadFrame > 11)
+		if (HeadFrame > 11)
 		{
 			HeadFrame = 0;
 		}
@@ -1038,7 +1058,7 @@ public class Acytaea_Boss : ModNPC
 		Texture2D legs = ModAsset.AcytaeaLeg.Value;
 		Texture2D frontArm = ModAsset.AcytaeaFrontArm.Value;
 		Texture2D head = ModAsset.AcytaeaHead_frame.Value;
-		if(!NPC.collideY)
+		if (!NPC.collideY)
 		{
 			spriteBatch.Draw(backWing, drawPos, new Rectangle(0, 56 * wingFrame, 86, 56), drawColor, NPC.rotation, wingorigin, 1f, drawEffect, 0);
 			spriteBatch.Draw(frontWing, drawPos, new Rectangle(0, 56 * wingFrame, 86, 56), drawColor, NPC.rotation, wingorigin, 1f, drawEffect, 0);
@@ -1049,12 +1069,13 @@ public class Acytaea_Boss : ModNPC
 		spriteBatch.Draw(frontArm, drawPos, null, drawColor, NPC.rotation, commonOrigin, 1f, drawEffect, 0);
 		spriteBatch.Draw(head, drawPos + new Vector2(6, 1), new Rectangle(0, 64 * HeadFrame, 50, 64), drawColor, NPC.rotation + HeadRot, new Vector2(26, 29), 1f, drawEffect, 0);
 	}
+
 	public float HeadRot = 0;
 	public int HeadFrame = 0;
 	public int HeadFrameCounter = 0;
 	public int LegFrame = 0;
 	public int LegFrameCounter = 0;
-	#endregion
+
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		DrawSelfBoss(spriteBatch, drawColor);

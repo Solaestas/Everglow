@@ -1,7 +1,6 @@
-﻿sampler uImage0 : register(s0);
+sampler uImage0 : register(s0);
 
 float4x4 uTransform;
-float uTime;
 
 struct VSInput
 {
@@ -28,10 +27,10 @@ PSInput VertexShaderFunction(VSInput input)
 }
 
 
-float4 PixelShaderFunction(float3 coords : TEXCOORD0) : COLOR0
+float4 PixelShaderFunction(PSInput input) : COLOR0
 {
-	float4 BackG = tex2D(uImage0, float2(coords.x + uTime, saturate(coords.y)));
-	return BackG;
+	float4 BackG = tex2D(uImage0, float2(input.Texcoord.x, saturate(input.Texcoord.y)));
+	return BackG * input.Color;
 }
 
 technique Technique1

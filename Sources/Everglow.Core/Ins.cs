@@ -45,7 +45,7 @@ public static class Ins
 
 	public static T Get<T>() where T : class
 	{
-		var service = provider.GetService<T>();
+		var service = provider?.GetService<T>();
 		Debug.Assert(service != null);
 		return service;
 	}
@@ -58,7 +58,7 @@ public static class Ins
 	{
 		services.RemoveAll<GraphicsDevice>();
 		services.RemoveAll<SpriteBatch>();
-		provider.Dispose();
+		provider?.Dispose();
 		services.Clear();
 	}
 
