@@ -1,7 +1,6 @@
-using Everglow.Commons.Physics;
+using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Commons.TileHelper;
 using Terraria.GameContent.Drawing;
-using static Everglow.Commons.Physics.Rope;
 
 namespace Everglow.CagedDomain.Tiles.CableTiles;
 
@@ -10,7 +9,7 @@ public class BlueGlassbulbBand_bulb : CableTile
 	public override void PostSetDefaults()
 	{
 		LampDistance = 3;
-		RopeUnitMass = 0.04f;
+		RopeUnitMass = 0.4f;
 		SingleLampMass = 0.2f;
 		MaxWireStyle = 4;
 	}
@@ -33,11 +32,11 @@ public class BlueGlassbulbBand_bulb : CableTile
 		// 获取发绳端物块信息
 		Tile endTile = Main.tile[RopeHeadAndTail[pos]];
 		int style = endTile.TileFrameX / 18 + (endTile.TileFrameY / 18) * 4;
-
-		for (int i = 0; i < rope.GetMassList.Length - 1; i++)
+		var masses = rope.Masses;
+		for (int i = 0; i < masses.Length - 1; i++)
 		{
-			_Mass thisMass = rope.GetMassList[i];
-			_Mass nextMass = rope.GetMassList[i + 1];
+			Mass thisMass = masses[i];
+			Mass nextMass = masses[i + 1];
 
 			int totalPushTime = 80;
 			float pushForcePerFrame = 1.26f;
@@ -52,7 +51,7 @@ public class BlueGlassbulbBand_bulb : CableTile
 			float rotation = -windCycle * 0.4f;
 			if (!Main.gamePaused)
 			{
-				rope.ApplyForceSpecial(i, new Vector2(windCycle * 1, 4 * thisMass.Mass));
+				rope.ApplyForceSpecial(i, new Vector2(windCycle / 4.0f, 0.4f * thisMass.Value));
 			}
 
 			// 支持发光涂料
@@ -70,7 +69,7 @@ public class BlueGlassbulbBand_bulb : CableTile
 			spriteBatch.Draw(tex, drawPos, new Rectangle(10, 2, 2, 2), tileLight, toNextMass.ToRotation(), new Vector2(1f), new Vector2(toNextMass.Length() / 2f, 1), tileSpriteEffect, 0);
 			float timeValue;
 			float light;
-			if (thisMass.Mass == 0.2f)
+			if (thisMass.Value == 0.2f)
 			{
 				switch (style)
 				{

@@ -4,7 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-	  <NotCopyLocal>false</NotCopyLocal>
+	<NotCopyLocal>false</NotCopyLocal>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +12,10 @@
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Everglow.Function\Everglow.Function.csproj" />
   </ItemGroup>
 
 </Project>
