@@ -2933,16 +2933,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	AuburnBell: {
-		DisplayName: Auburn Bell
-		Tooltip: ""
-	}
-
-	RodSpear: {
-		DisplayName: Rod Spear
-		Tooltip: ""
-	}
-
 	SmeltingStaff: {
 		DisplayName: Smelting Staff
 		Tooltip: ""
@@ -2955,6 +2945,36 @@ Items: {
 
 	YggdrasilAmberLaser: {
 		DisplayName: Yggdrasil Amber Laser
+		Tooltip: ""
+	}
+
+	BowOfEnlightment: {
+		DisplayName: Bow Of Enlightment
+		Tooltip: ""
+	}
+
+	HandgunOfEnlightment: {
+		DisplayName: Handgun Of Enlightment
+		Tooltip: ""
+	}
+
+	LightBeamStaff: {
+		DisplayName: Light Beam Staff
+		Tooltip: ""
+	}
+
+	AuburnBell: {
+		DisplayName: Auburn Bell
+		Tooltip: ""
+	}
+
+	FeatheredStaff: {
+		DisplayName: Feathered Staff
+		Tooltip: ""
+	}
+
+	RodSpear: {
+		DisplayName: Rod Spear
 		Tooltip: ""
 	}
 
@@ -3210,6 +3230,16 @@ Items: {
 
 	AuburnHoodie: {
 		DisplayName: Auburn Hoodie
+		Tooltip: ""
+	}
+
+	LightArrow: {
+		DisplayName: Light Arrow
+		Tooltip: ""
+	}
+
+	LightBullet: {
+		DisplayName: Light Bullet
 		Tooltip: ""
 	}
 
@@ -3871,9 +3901,13 @@ Projectiles: {
 	CyanVineSword_Projectile.DisplayName: Cyan Vine Sword_ Projectile
 	CyanVineThrowingSpear_Proj.DisplayName: Cyan Vine Throwing Spear_ Proj
 	DragonScaleHammerProj.DisplayName: Dragon Scale Hammer Proj
+	FeatheredStaff.DisplayName: Feathered Staff
 	HighSpeedStone.DisplayName: High Speed Stone
 	LampFruitCurrent.DisplayName: Lamp Fruit Current
 	LampWoodSword_Projectile.DisplayName: Lamp Wood Sword_ Projectile
+	LightArrow.DisplayName: Light Arrow
+	LightBeam.DisplayName: Light Beam
+	LightBullet.DisplayName: Light Bullet
 	LightSeed.DisplayName: Light Seed
 	RockArrow.DisplayName: Rock Arrow
 	RockExplosion_friendly.DisplayName: Rock Explosion_friendly
