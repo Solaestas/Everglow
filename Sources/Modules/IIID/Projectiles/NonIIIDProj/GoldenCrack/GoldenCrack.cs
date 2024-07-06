@@ -280,7 +280,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack
 		public override void Load()
 		{
 			Bloom1 = ModAsset.Bloom1.Value;
-			GoldenCrackVFX = ModAsset.Effects_GoldenCrack.Value;
+			GoldenCrackVFX = ModAsset.GoldenCrack_xnb.Value;
 			Radial = ModAsset.Radial.Value;
 			On_FilterManager.EndCapture += FilterManager_EndCapture;//原版绘制场景的最后部分——滤镜。在这里运用render保证不会与原版冲突
 			Main.OnResolutionChanged += Main_OnResolutionChanged;
