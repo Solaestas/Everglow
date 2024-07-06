@@ -2,7 +2,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.Auburn;
 
 public class AuburnBell : ModItem
 {

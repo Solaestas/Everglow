@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.Enums;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.Auburn;
 
 internal class FeatheredStaff : ModItem
 {
