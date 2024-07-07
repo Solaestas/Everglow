@@ -10,8 +10,8 @@ public class HyperockSpear : ModItem
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.width = 54;
 		Item.height = 108;
-		Item.useAnimation = 26;
-		Item.useTime = 26;
+		Item.useAnimation = 20;
+		Item.useTime = 20;
 		Item.knockBack = 8f;
 		Item.damage = 25;
 		Item.crit = 6;
@@ -29,7 +29,6 @@ public class HyperockSpear : ModItem
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-
 		return false;
 	}
 	public override void HoldItem(Player player)
@@ -46,7 +45,7 @@ public class HyperockSpear : ModItem
 						HyperockSpearProj cvts = proj.ModProjectile as HyperockSpearProj;
 						if (cvts != null)
 						{
-							if (!cvts.Shot )
+							if (!cvts.Shot && !cvts.CollideOnNPC && !cvts.CollideOnTile)
 							{
 								hasTarget = true;
 							}

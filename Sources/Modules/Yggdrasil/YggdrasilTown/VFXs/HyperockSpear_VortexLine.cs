@@ -39,7 +39,7 @@ public class HyperockSpear_VortexLine : Visual
 	public Projectile VFXOwner;
 	public Vector2 positiontoProjectile;
 	public Vector2 velocity;
-	public bool InHand;
+	public bool OnTile;
 	public float[] ai;
 	public float timer;
 	public float maxTime;
@@ -52,8 +52,8 @@ public class HyperockSpear_VortexLine : Visual
 			Active = false;
 			return;
 		}
-		Vector2 point = VFXOwner.Center + (InHand ? Vector2.One.RotatedBy(VFXOwner.rotation + MathF.PI * 0.48) * 12.5f :
-													Vector2.One.RotatedBy(VFXOwner.rotation - MathF.PI * 0.51) * 6f);
+		Vector2 point = VFXOwner.Center + (OnTile ? Vector2.One.RotatedBy(VFXOwner.rotation - MathF.PI * 0.51) * 6f :
+													Vector2.One.RotatedBy(VFXOwner.rotation + MathF.PI * 0.48) * 12.5f);
 		HyperockSpearProj HyperockSpearProj = VFXOwner.ModProjectile as HyperockSpearProj;
 		if (HyperockSpearProj != null)
 		{
@@ -64,9 +64,9 @@ public class HyperockSpear_VortexLine : Visual
 				timer += 2;
 			}
 			velocity += Utils.SafeNormalize(pierceAim, Vector2.zeroVector);
-			if(HyperockSpearProj.Shot == true)
+			if (HyperockSpearProj.Shot == true)
 			{
-				timer ++;
+				timer++;
 			}
 		}
 		oldPos.Enqueue(positiontoProjectile);
@@ -90,8 +90,8 @@ public class HyperockSpear_VortexLine : Visual
 	{
 		int len = oldPos.Count;
 		var bars = new List<Vertex2D>();
-		Vector2 point = VFXOwner.Center + (InHand ? Vector2.One.RotatedBy(VFXOwner.rotation + MathF.PI * 0.48) * 12.5f :
-											Vector2.One.RotatedBy(VFXOwner.rotation - MathF.PI * 0.51) * 6f);
+		Vector2 point = VFXOwner.Center + (OnTile ? Vector2.One.RotatedBy(VFXOwner.rotation - MathF.PI * 0.51) * 6f :
+											        Vector2.One.RotatedBy(VFXOwner.rotation + MathF.PI * 0.48) * 12.5f);
 		if (len <= 2)
 		{
 			for (int i = 1; i < 3; i++)

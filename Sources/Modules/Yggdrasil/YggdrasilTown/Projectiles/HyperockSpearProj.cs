@@ -33,7 +33,8 @@ public class HyperockSpearProj : ModProjectile
 	public Vector2 oldpos = Vector2.Zero;
 	public bool CollideOnTile = false;
 	public bool CollideOnNPC = false;
-	public NPC NPCStickTo;
+	public NPC NPCStickTo = null;
+	public Vector2 PostoNPC;
 
 	public override void AI()
 	{
@@ -54,14 +55,14 @@ public class HyperockSpearProj : ModProjectile
 		}
 		else if (CollideOnNPC)
 		{
-			Vector2 vel = -Vector2.UnitX.RotatedByRandom(MathF.PI * 2) * 6 * MathF.Cos(Projectile.timeLeft * MathF.PI / 40);
+			Vector2 vel = -Vector2.UnitX.RotatedByRandom(MathF.PI * 2) * 6 * MathF.Cos(Projectile.timeLeft * MathF.PI / 40) * Power / 45;
 			var Vortex = new HyperockSpear_VortexLine
 			{
 				velocity = vel,
 				Active = true,
 				Visible = true,
 				positiontoProjectile = vel.RotatedBy(MathF.PI * 0.5) * 5 * MathF.Min(MathF.Cos(Projectile.timeLeft * MathF.PI / 40), 0),
-				InHand = false,
+				OnTile = false,
 				maxTime = Main.rand.Next(120, 180),
 				scale = 6,
 				VFXOwner = Projectile,
@@ -69,68 +70,27 @@ public class HyperockSpearProj : ModProjectile
 			};
 			Ins.VFXManager.Add(Vortex);
 			SticktoNPC();
-			/*if (NPCStickTo.active)
-			{
-				Projectile.velocity = (NPCStickTo.Center - Projectile.Center) * 0.75f;
-				Projectile.netUpdate = true;
-				
-				if (Projectile.timeLeft <= 35 && Projectile.timeLeft >= 27)
-				{
-					foreach (NPC npc in Main.npc)
-					{
-						if (npc.active)
-						{
+			AbsorbNPC();
 
-							Vector2 distance = Projectile.Center - npc.Center;
-							if (distance.Length() < Power * 8 && !npc.dontTakeDamage && !npc.friendly)
-							{
-								npc.velocity += Utils.SafeNormalize(distance, Vector2.zeroVector)
-							* MathF.Min(Power / 30, npc.knockBackResist * 1145 / (distance.Length() * Power / 30));
-
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-				Projectile.Kill();
-			}*/
 		}
 		else if (CollideOnTile)
 		{
 			Projectile.velocity = Vector2.Zero;
-			Vector2 vel = -Vector2.UnitX.RotatedByRandom(MathF.PI * 2) * 6 * MathF.Cos(Projectile.timeLeft * MathF.PI / 40);
+			Vector2 vel = -Vector2.UnitX.RotatedByRandom(MathF.PI * 2) * 6 * MathF.Cos(Projectile.timeLeft * MathF.PI / 40) * Power / 45;
 			var Vortex = new HyperockSpear_VortexLine
 			{
 				velocity = vel,
 				Active = true,
 				Visible = true,
 				positiontoProjectile = vel.RotatedBy(MathF.PI * 0.5) * 5 * MathF.Min(MathF.Cos(Projectile.timeLeft * MathF.PI / 40), 0),
-				InHand = false,
+				OnTile = true,
 				maxTime = Main.rand.Next(120, 180),
 				scale = 6,
 				VFXOwner = Projectile,
 				ai = new float[] { 1, 0 },
 			};
 			Ins.VFXManager.Add(Vortex);
-			if (Projectile.timeLeft <= 35 && Projectile.timeLeft >= 27)
-			{
-				foreach (NPC npc in Main.npc)
-				{
-					if (npc.active)
-					{
-
-						Vector2 distance = Projectile.Center - npc.Center;
-						if (distance.Length() < Power * 8 && !npc.dontTakeDamage && !npc.friendly)
-						{
-							npc.velocity += Utils.SafeNormalize(distance, Vector2.zeroVector)
-						* MathF.Min(Power / 30, npc.knockBackResist * 1145 / (distance.Length() * Power / 30));
-						}
-					}
-				}
-			}
-
+			AbsorbNPC();
 		}
 		else
 		{
@@ -143,7 +103,7 @@ public class HyperockSpearProj : ModProjectile
 					Active = true,
 					Visible = true,
 					positiontoProjectile = vel.RotatedBy(MathF.PI * 0.5) * 10,
-					InHand = true,
+					OnTile = false,
 					maxTime = Main.rand.Next(120, 180),
 					scale = 6,
 					VFXOwner = Projectile,
@@ -169,7 +129,7 @@ public class HyperockSpearProj : ModProjectile
 						Active = true,
 						Visible = true,
 						positiontoProjectile = Vector2.Zero,
-						InHand = true,
+						OnTile = false,
 						maxTime = Main.rand.Next(90, 120),
 						scale = 6,
 						VFXOwner = Projectile,
@@ -186,8 +146,8 @@ public class HyperockSpearProj : ModProjectile
 		if (player.controlUseItem && !Shot && !CollideOnNPC && !CollideOnTile)
 		{
 			Shot = true;
-			Projectile.velocity = Utils.SafeNormalize(Main.MouseWorld - player.MountedCenter, new Vector2(0, -1 * player.gravDir)) * (Power + 100) / 9f;
-			Projectile.damage = (int)(Projectile.damage * (Power / 30f + 1));
+			Projectile.velocity = Utils.SafeNormalize(Main.MouseWorld - player.MountedCenter, new Vector2(0, -1 * player.gravDir)) * (Power + 180) / 18;
+			Projectile.damage = (int)(Projectile.damage * (Power / 90 + 1));
 			SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 			player.heldProj = -1;
 		}
@@ -206,95 +166,91 @@ public class HyperockSpearProj : ModProjectile
 
 		Player player = Main.player[Projectile.owner];
 		Vector2 pos = Projectile.Center - Main.screenPosition - Utils.SafeNormalize(Projectile.velocity, Vector2.zeroVector) * 30;
+		if (CollideOnNPC)
+		{
+			pos = Projectile.Center - Main.screenPosition + Vector2.UnitY.RotatedBy(Projectile.rotation + MathF.PI * 0.25) * 30;
+		}
 		Main.spriteBatch.Draw(tex, pos, null, lightColor, Projectile.rotation, tex.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(glow, pos, null, Color.White, Projectile.rotation, glow.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+
 		return false;
 	}
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
-		Projectile.velocity = Vector2.Zero;
-		CollideOnTile = true;
-		Projectile.timeLeft = 60;
-		Shot = false;
-		return false;
+		if (!CollideOnNPC && !CollideOnTile)
+		{
+			Projectile.velocity = Vector2.Zero;
+			CollideOnTile = true;
+			Projectile.timeLeft = 60;
+			Shot = false;
+			return false;
+		}
+		return true;
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if (!CollideOnNPC)
+		if (!CollideOnNPC && !CollideOnTile)
 		{
 			Projectile.ai[0] = 1;
 			CollideOnNPC = true;
 			NPCStickTo = target;
-			Projectile.velocity = Vector2.Zero;
 			Projectile.timeLeft = 60;
 			Shot = false;
+			PostoNPC = NPCStickTo.Center - Projectile.Center;
 			SticktoNPC();
 		}
-
 	}
+
+	public void AbsorbNPC()
+	{
+		if (Projectile.timeLeft <= 40 && Projectile.timeLeft >= 30)
+		{
+			foreach (NPC npc in Main.npc)
+			{
+				if (npc.active && npc != NPCStickTo)
+				{
+
+					Vector2 distance = Projectile.Center - npc.Center;
+					if (distance.Length() < Power * 8 && !npc.dontTakeDamage && !npc.friendly)
+					{
+						npc.velocity += Utils.SafeNormalize(distance, Vector2.zeroVector)
+					* MathF.Min(Power / 45, npc.knockBackResist * 1145.14f / ((distance.Length() + 191) * Power / 98.10f));
+					}
+				}
+			}
+		}
+	}
+
 	public void SticktoNPC()
 	{
 		Projectile.ai[0] = 1;
 		Projectile.ai[1] = NPCStickTo.whoAmI;
-		Projectile.velocity = (NPCStickTo.Center - Projectile.Center) * 0.75f;
+
+		Projectile.velocity = Vector2.Zero;
 		Projectile.netUpdate = true;
 
-		Vector2 center17 = Projectile.Center;
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = false;
-		int num907 = 15;
 
-
-		bool flag52 = false;
-		bool flag53 = false;
-		Projectile.localAI[0]++;
-		if (Projectile.localAI[0] % 30f == 0f)
-			flag53 = true;
-
-		int num908 = (int)Projectile.ai[1];
-		if (Projectile.localAI[0] >= (float)(60 * num907))
+		if (NPCStickTo.active && !NPCStickTo.dontTakeDamage)
 		{
-			flag52 = true;
-		}
-		else if (NPCStickTo.whoAmI < 0 || NPCStickTo.whoAmI >= 200)
-		{
-			flag52 = true;
-		}
-		else if (NPCStickTo.active && !NPCStickTo.dontTakeDamage)
-		{
-			Projectile.Center = NPCStickTo.Center - Projectile.velocity * 2f;
+			Projectile.Center = NPCStickTo.Center - PostoNPC;
 			Projectile.gfxOffY = NPCStickTo.gfxOffY;
-			if (flag53)
-			{
-				NPCStickTo.HitEffect(0, 1.0);
-			}
 		}
 		else
 		{
 			Projectile.Kill();
 		}
 	}
-
-
-
+	public override bool? CanDamage()
+	{
+		if (CollideOnNPC && Projectile.timeLeft <= 50)
+		{
+			return false;
+		}
+		return base.CanDamage();
+	}
 }
 
-/*public override void OnKill(int timeLeft)
-{
-	/*for (int x = 0; x < 16; x++)
-	{
-		Dust d = Dust.NewDustDirect(Projectile.position, 40, 40, ModContent.DustType<Dusts.CyanVine>());
-		d.velocity *= Projectile.velocity.Length() / 10f;
-	}*/
-/*SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);
-*/
-/*Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28d) * Projectile.velocity.Length() / 10f;
-Gore.NewGore(null, Projectile.Center + vF, vF, ModContent.Find<ModGore>("Everglow/CyanVineThrowingSpearGore0").Type, 1f);
-
-vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28d) * Projectile.velocity.Length() / 10f;
-Gore.NewGore(null, Projectile.Center + vF, vF, ModContent.Find<ModGore>("Everglow/CyanVineThrowingSpearGore1").Type, 1f);
-
-vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28d) * Projectile.velocity.Length() / 10f;
-Gore.NewGore(null, Projectile.Center + vF, vF, ModContent.Find<ModGore>("Everglow/CyanVineOre" + Main.rand.Next(11, 13).ToString()).Type, 1f);*/
 
