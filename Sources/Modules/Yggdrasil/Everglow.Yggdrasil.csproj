@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
                 <ProjectReference Include="..\CagedDomain\Everglow.CagedDomain.csproj" />
+                <ProjectReference Include="..\Food\Everglow.Food.csproj" />
+                <ProjectReference Include="..\SubSpace\Everglow.SubSpace.csproj" />
   </ItemGroup>
   <ItemGroup>
 		<Solaestas-ResourceFile Include="YggdrasilTown\**\*.json" />

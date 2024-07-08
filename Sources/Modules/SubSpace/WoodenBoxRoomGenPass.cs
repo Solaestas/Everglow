@@ -6,32 +6,37 @@ namespace Everglow.SubSpace;
 
 public class WoodenBoxRoomGenPass : GenPass
 {
-	public WoodenBoxRoomGenPass() : base("Wooden Box", 500)
+	public WoodenBoxRoomGenPass()
+		: base("Wooden Box", 500)
 	{
 	}
+
 	/// <summary>
 	/// 预设的房间
 	/// </summary>
 	public static string MapIOPathOfNewRoom;
+
 	public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 	{
 		Main.statusText = "Test";
 		BuildWoodenRoom();
 	}
+
 	/// <summary>
 	/// 建造一个木制世界房间
 	/// </summary>
 	public static void BuildWoodenRoom()
 	{
-		//如果没有记录就开一个新房间
-		if(!ReadWorldSave())
+		// 如果没有记录就开一个新房间
+		if (!ReadWorldSave())
 		{
-			//如果没有预设的房间就搓一个房间
-			if (MapIOPathOfNewRoom == "")
+			// 如果没有预设的房间就搓一个房间
+			if (MapIOPathOfNewRoom == string.Empty)
 			{
-				//获取对应层级的世界材料
+				// 获取对应层级的世界材料
 				GetLayerMaterial();
-				//用木头填满世界
+
+				// 用木头填满世界
 				for (int x = 20; x < Main.maxTilesX - 20; x++)
 				{
 					for (int y = 20; y < Main.maxTilesY - 20; y++)
@@ -50,14 +55,16 @@ public class WoodenBoxRoomGenPass : GenPass
 					}
 				}
 			}
-			//有的话就启用
+
+			// 有的话就启用
 			else
 			{
 				QuickBuildInside(5, 5);
-				MapIOPathOfNewRoom = "";
+				MapIOPathOfNewRoom = string.Empty;
 			}
 		}
 	}
+
 	/// <summary>
 	/// 建造一个固定好模板的房间
 	/// </summary>
@@ -65,9 +72,10 @@ public class WoodenBoxRoomGenPass : GenPass
 	{
 		if (QuickBuild(5, 5, MapIOPathOfNewRoom))
 		{
-			MapIOPathOfNewRoom = "";
+			MapIOPathOfNewRoom = string.Empty;
 		}
 	}
+
 	/// <summary>
 	/// 读取已有部分
 	/// </summary>
@@ -82,6 +90,7 @@ public class WoodenBoxRoomGenPass : GenPass
 		string readPath = path + "\\RoomMapIO" + RoomWorld.AnchorWorldCoordinate.X.ToString() + "_" + RoomWorld.AnchorWorldCoordinate.Y.ToString() + "_" + RoomWorld.LayerDepth + ".mapio";
 		return QuickBuild(5, 5, readPath);
 	}
+
 	/// <summary>
 	/// 建造内部已有的
 	/// </summary>
@@ -100,6 +109,7 @@ public class WoodenBoxRoomGenPass : GenPass
 			WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 		}
 	}
+
 	/// <summary>
 	/// 建造规定路径的建筑
 	/// </summary>
@@ -126,6 +136,7 @@ public class WoodenBoxRoomGenPass : GenPass
 		}
 		return true;
 	}
+
 	public static void GetLayerMaterial()
 	{
 		switch (RoomWorld.LayerDepth)
@@ -152,6 +163,7 @@ public class WoodenBoxRoomGenPass : GenPass
 				break;
 		}
 	}
+
 	public static int RoomTileType;
 	public static int RoomWallType;
 }
