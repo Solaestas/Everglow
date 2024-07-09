@@ -3,8 +3,64 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.RockElemental;
 public class VitalizedRocks : ModItem
 {
+	public override void SetDefaults()
+	{
+		Item.useStyle = ItemUseStyleID.Shoot;
+		Item.width = 52;
+		Item.height = 52;
+		Item.useAnimation = 15;
+		Item.useTime = 15;
+		Item.knockBack = 3f;
+		Item.damage = 12;
+		Item.rare = ItemRarityID.Blue;
+		Item.UseSound = SoundID.Item1;
+		Item.value = 12000;
+		Item.autoReuse = false;
+		Item.DamageType = DamageClass.Magic;
+		Item.mana = 10;
+		Item.noUseGraphic = true;
+		Item.autoReuse = true;
+		Item.noMelee = true;
+
+		Item.shoot = ModContent.ProjectileType<Projectiles.AmberMagicOrb>();
+		Item.shootSpeed = 12;
+	}
+
+	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+	{
+		return false;
+	}
+
+	public override void HoldItem(Player player)
+	{
+		bool hasTarget = player.itemAnimation > 0;
+		foreach (Projectile proj in Main.projectile)
+		{
+			if (proj.active)
+			{
+				if (proj.owner == player.whoAmI)
+				{
+					if (proj.type == ModContent.ProjectileType<VitalizedRocksrProj>())
+					{
+						VitalizedRocksrProj cvts = proj.ModProjectile as VitalizedRocksrProj;
+						if (cvts != null)
+						{
+							hasTarget = true;
+						}
+					}
+				}
+			}
+		}
+		if (!hasTarget)
+		{
+			Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.zeroVector, ModContent.ProjectileType<VitalizedRocksrProj>(), Item.damage, Item.knockBack, player.whoAmI);
+		}
+		base.HoldItem(player);
+	}
 }
