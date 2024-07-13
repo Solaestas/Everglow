@@ -367,7 +367,10 @@ public abstract class PotUI
 		{
 			CookTimer = 0;
 		}
-
+		if (!Open)
+		{
+			return;
+		}
 		// Close incident
 		if (HitPanel(Close, 100, drawPos + ClosePanelPos))
 		{

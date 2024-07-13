@@ -63,7 +63,8 @@ public class KitchenSystemUI : GameInterfaceLayer
 	{
 		if (FoodRequests.Count < 5 && Main.rand.NextBool(30))
 		{
-			FoodRequestPanel foodRequestPanel = new FoodRequestPanel(ModContent.ItemType<Mapo_Tofu>(), 600, 60);
+			Vector3 value = GetRandomFoodType();
+			FoodRequestPanel foodRequestPanel = new FoodRequestPanel((int)value.X, (int)value.Y, (int)value.Z);
 			foodRequestPanel.AnchorPos = new Vector2(FoodRequests.Count * 160 + 200, Main.screenHeight - 300);
 			FoodRequests.Add(foodRequestPanel);
 		}
@@ -83,6 +84,20 @@ public class KitchenSystemUI : GameInterfaceLayer
 		{
 			panel.CheckFinish();
 		}
+	}
+
+	public Vector3 GetRandomFoodType()
+	{
+		switch (Main.rand.Next(3))
+		{
+			case 0:
+				return new Vector3(ModContent.ItemType<Mapo_Tofu>(), 600, 60);
+			case 1:
+				return new Vector3(ModContent.ItemType<YuxiangEggplant>(), 600, 90);
+			case 2:
+				return new Vector3(ModContent.ItemType<BoiledBullfrog>(), 600, 130);
+		}
+		return new Vector3(0);
 	}
 
 	public static void AddScore(int Value)

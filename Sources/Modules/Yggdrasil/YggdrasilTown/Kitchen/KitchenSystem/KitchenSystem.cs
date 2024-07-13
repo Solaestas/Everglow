@@ -1,3 +1,5 @@
+using Everglow.SubSpace;
+using SubworldLibrary;
 using Terraria.UI;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Kitchen.KitchenSystem;
@@ -6,7 +8,7 @@ public class KitchenSystem : ModSystem
 {
 	public KitchenSystemUI KitchenSystemUI;
 
-	public bool Active = true;
+	public bool Active => SubworldSystem.IsActive<RoomWorld>();
 
 	public override void Load()
 	{
