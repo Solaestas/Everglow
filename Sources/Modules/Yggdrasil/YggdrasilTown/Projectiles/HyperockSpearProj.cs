@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.NetUtils;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -148,6 +149,7 @@ public class HyperockSpearProj : ModProjectile
 			Shot = true;
 			Projectile.velocity = Utils.SafeNormalize(Main.MouseWorld - player.MountedCenter, new Vector2(0, -1 * player.gravDir)) * (Power + 180) / 18;
 			Projectile.damage = (int)(Projectile.damage * (Power / 90 + 1));
+			Projectile.CritChance= (int)(Projectile.CritChance * (Power / 90 + 1));
 			SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 			player.heldProj = -1;
 		}
@@ -186,6 +188,42 @@ public class HyperockSpearProj : ModProjectile
 			return false;
 		}
 		return true;
+	}
+
+	public override void OnKill(int timeLeft)
+	{
+		for (int x = 0; x < 8; x++)
+		{
+			Dust d = Dust.NewDustDirect(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<RockElemental_fragments>(), 0f, 0f, 0, default, 0.7f);
+			d.velocity = new Vector2(0, Main.rand.NextFloat(7f, 16f)).RotatedByRandom(6.283);
+		}
+		for (int x = 0; x < 16; x++)
+		{
+			Dust d = Dust.NewDustDirect(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, DustID.WitherLightning, 0f, 0f, 0, default, Main.rand.NextFloat(0.6f, 1.1f));
+			d.velocity = new Vector2(0, Main.rand.NextFloat(2f, 11f)).RotatedByRandom(6.283);
+		}
+		GenerateSmog(4);
+		SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode.WithVolume(0.5f), Projectile.Center);
+	}
+
+	public void GenerateSmog(int Frequency)
+	{
+		for (int g = 0; g < Frequency / 2 + 1; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
+			var somg = new RockSmogDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
+				maxTime = Main.rand.Next(37, 45),
+				scale = Main.rand.NextFloat(40f, 55f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+			};
+			Ins.VFXManager.Add(somg);
+		}
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -243,6 +281,7 @@ public class HyperockSpearProj : ModProjectile
 			Projectile.Kill();
 		}
 	}
+
 	public override bool? CanDamage()
 	{
 		if (CollideOnNPC && Projectile.timeLeft <= 50)
@@ -252,5 +291,3 @@ public class HyperockSpearProj : ModProjectile
 		return base.CanDamage();
 	}
 }
-
-
