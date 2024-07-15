@@ -1,10 +1,9 @@
-using Everglow.Myth.Common;
+using Everglow.Commons.Vertex;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Everglow.Commons.Weapons.Slingshots;
 
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
+namespace Everglow.Commons.Weapons.Slingshots;
 
 public class StarAmmo : SlingshotAmmo
 {

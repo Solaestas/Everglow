@@ -1,7 +1,8 @@
-using Everglow.Myth.Common;
+
+using Everglow.Commons.Vertex;
 using Terraria.Audio;
 
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
+namespace Everglow.Commons.Weapons.Slingshots;
 
 public abstract class SlingshotProjectile : ModProjectile
 {
@@ -20,27 +21,27 @@ public abstract class SlingshotProjectile : ModProjectile
 	/// <summary>
 	/// 内部变量,别动
 	/// </summary>
-	internal bool Release = true;
+	protected bool Release = true;
 	/// <summary>
 	/// 内部变量,别动
 	/// </summary>
-	internal int Power = 0;
+	protected int Power = 0;
 	/// <summary>
 	/// 默认NormalAmmo(常规弹)
 	/// </summary>
-	internal int ShootProjType = ModContent.ProjectileType<NormalAmmo>();
+	protected int ShootProjType = ModContent.ProjectileType<NormalAmmo>();
 	/// <summary>
 	/// 中心到弹幕绑绳子位置的距离,默认14
 	/// </summary>
-	internal int SlingshotLength = 14;
+	protected int SlingshotLength = 14;
 	/// <summary>
 	/// Y形弹弓两头的距离,默认5
 	/// </summary>
-	internal int SplitBranchDis = 5;
+	protected int SplitBranchDis = 5;
 	/// <summary>
 	/// 最大蓄力,默认120(2s时间)
 	/// </summary>
-	internal int MaxPower = 120;
+	protected int MaxPower = 120;
 	//TODO:以下的MouseLeft需要联机同步
 	public override void AI()
 	{

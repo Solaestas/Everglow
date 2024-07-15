@@ -1,6 +1,8 @@
-using Everglow.Myth.Common;
+using Everglow.Commons.VFX;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
 
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
+namespace Everglow.Commons.Weapons.Slingshots;
 
 /// <summary>
 /// ai[0]强度ai[1]角度
