@@ -14,7 +14,7 @@ using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-public class VitalizedRocksrProj : ModProjectile
+public class VitalizedRocksProj : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -105,7 +105,7 @@ public class VitalizedRocksrProj : ModProjectile
 
 	public void DrawCore()
 	{
-		Texture2D core = ModAsset.VitalizedRocksrProj_Core.Value;
+		Texture2D core = ModAsset.VitalizedRocksProj_Core.Value;
 
 		Vector2 pos = Projectile.Center - Main.screenPosition;
 		Main.spriteBatch.Draw(core, pos + new Vector2(-25, -25), Color.White);
@@ -113,7 +113,7 @@ public class VitalizedRocksrProj : ModProjectile
 
 	public void DrawShell(bool isfront)
 	{
-		Texture2D Shell = ModAsset.VitalizedRocksrProj.Value;
+		Texture2D Shell = ModAsset.VitalizedRocksProj.Value;
 
 		Vector2 pos = Projectile.Center - Main.screenPosition;
 		if (25 * MathF.Cos((float)Main.timeForVisualEffects / 20) < 0)
