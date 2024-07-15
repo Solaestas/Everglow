@@ -1,8 +1,7 @@
 using Terraria.Audio;
-using Everglow.Commons.Utilities;
 using Terraria.DataStructures;
 
-namespace Everglow.Commons.Weapons.Slingshots;
+namespace Everglow.Myth.Misc.Items.Weapons.Slingshots;
 
 /// <summary>
 /// Default damage = 6 width*height = 36*36 useT = useA = 21 crit = 8  useStyle = ItemUseStyleID.Shoot rare = ItemRarityID.White value = Item.sellPrice(0, 0, 0, 50) 
@@ -47,7 +46,7 @@ public abstract class SlingshotItem : ModItem
 	{
 
 	}
-	public int ProjType;
+	internal int ProjType;
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
 		if (player.ownedProjectileCounts[ProjType] < 1)
