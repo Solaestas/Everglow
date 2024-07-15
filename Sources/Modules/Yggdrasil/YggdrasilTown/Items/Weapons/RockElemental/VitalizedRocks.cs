@@ -46,9 +46,9 @@ public class VitalizedRocks : ModItem
 			{
 				if (proj.owner == player.whoAmI)
 				{
-					if (proj.type == ModContent.ProjectileType<VitalizedRocksrProj>())
+					if (proj.type == ModContent.ProjectileType<VitalizedRocksProj>())
 					{
-						VitalizedRocksrProj cvts = proj.ModProjectile as VitalizedRocksrProj;
+						VitalizedRocksProj cvts = proj.ModProjectile as VitalizedRocksProj;
 						if (cvts != null)
 						{
 							hasTarget = true;
@@ -59,7 +59,7 @@ public class VitalizedRocks : ModItem
 		}
 		if (!hasTarget)
 		{
-			Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.zeroVector, ModContent.ProjectileType<VitalizedRocksrProj>(), Item.damage, Item.knockBack, player.whoAmI);
+			Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.zeroVector, ModContent.ProjectileType<VitalizedRocksProj>(), Item.damage, Item.knockBack, player.whoAmI);
 		}
 		base.HoldItem(player);
 	}

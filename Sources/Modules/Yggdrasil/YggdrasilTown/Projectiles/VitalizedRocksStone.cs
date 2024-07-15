@@ -38,6 +38,11 @@ public class VitalizedRocksStone : ModProjectile
 		{
 			Projectile.ai[0] += 3f;
 		}
+		float value = (Projectile.timeLeft - 540) / 30f;
+		Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<RockElemental_Energy_normal>());
+		d.velocity = Projectile.velocity * 0.5f;
+		d.scale = Main.rand.NextFloat(0.75f, 1f) * Math.Min(value, 1);
+		d.noGravity = true;
 	}
 
 	public override void OnSpawn(IEntitySource source)
