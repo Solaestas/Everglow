@@ -50,17 +50,17 @@ public class RockPortal : Visual
 	public override void Draw()
 	{
 		float pocession = timer / maxTime;
-		float timeValue = (float)(Main.time * 0.002);
+		float timeValue = (float)(Main.time * 0.001);
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
 		Vector3 lightValue = Lighting.GetColor(position.ToTileCoordinates()).ToVector3();
 		float light = (lightValue.Length());
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + toCorner,new Color(0, 0,pocession), new Vector3(0,0,1)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5)*0.5f,new Color(0, 1, pocession), new Vector3(1, 0, 1)),
+			new Vertex2D(position + toCorner,new Color(0, 0,pocession), new Vector3(0,timeValue,light)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5)*0.5f,new Color(0, 1, pocession), new Vector3(0, timeValue + 0.2f, light)),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5)*0.5f,new Color(1, 0 ,pocession), new Vector3(0 , 1, 1)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession), new Vector3(1, 1, 1))
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5)*0.5f,new Color(1, 0 ,pocession), new Vector3(1, timeValue, light)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession), new Vector3(1, timeValue + 0.2f, light))
 		};
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
