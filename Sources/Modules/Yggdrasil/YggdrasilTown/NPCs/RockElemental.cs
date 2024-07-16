@@ -125,7 +125,10 @@ public class RockElemental : ModNPC
 			// 中立悬浮
 			case (int)BehaviorState.Fly:
 				{
-					Collide();
+					if (Collide())
+					{
+						SoundEngine.PlaySound(SoundID.NPCHit2.WithPitchOffset(0.5f).WithVolumeScale(0.5f), NPC.Center);
+					}
 					NPC.frameCounter++;
 					NPC.TargetClosest();
 					targetVel = new Vector2(1 * Math.Abs(targetVel.X) / targetVel.X, MathF.Cos((float)Main.time * 0.04f + NPC.whoAmI));
@@ -134,8 +137,13 @@ public class RockElemental : ModNPC
 						targetVel.X = -targetVel.X;
 					}
 					NPC.velocity = Vector2.Lerp(NPC.velocity, targetVel, 0.25f);
+					if (WorldUtils.Find(NPC.Center.ToTileCoordinates(), Searches.Chain(new Searches.Down(10), _cachedConditions_notNull, _cachedConditions_solid), out var _))
+					{
+						float length = NPC.velocity.Length();
+						NPC.velocity -= 0.5f*Vector2.UnitY;
+						NPC.velocity = Vector2.Normalize(NPC.velocity) * length;
+					}
 					NPC.rotation = Math.Clamp(NPC.velocity.X * 0.15f, -1f, 1f);
-
 					if (NPC.HasValidTarget && Anger)
 					{
 						NPC.localAI[0] = 0;
@@ -486,7 +494,10 @@ public class RockElemental : ModNPC
 				{
 					if (!Collision.SolidCollision(NPC.Center, 0, 0))
 					{
-						Collide();
+						if (Collide())
+						{
+							SoundEngine.PlaySound(SoundID.NPCHit2.WithPitchOffset(0.5f).WithVolumeScale(0.5f), NPC.Center);
+						}
 					}
 					NPC.noTileCollide = false;
 					NPC.ai[0]++;
@@ -576,10 +587,11 @@ public class RockElemental : ModNPC
 		}
 	}
 
+	private int collidetimer = 0;
 	/// <summary>
 	/// 碰撞
 	/// </summary>
-	public void Collide()
+	public bool Collide()
 	{
 		bool collide = false;
 		if (Collision.SolidCollision(NPC.position + new Vector2(NPC.velocity.X, 0), NPC.width, NPC.height))
@@ -621,10 +633,24 @@ public class RockElemental : ModNPC
 				}
 			}
 		}
+		if (collidetimer > 1)
+		{
+			NPC.noTileCollide = true;
+			NPC.velocity = -2*Vector2.UnitY;
+		}
+		else
+		{
+			NPC.noTileCollide = false;
+		}
 		if (collide)
 		{
-			SoundEngine.PlaySound(SoundID.NPCHit2.WithPitchOffset(0.5f).WithVolumeScale(0.5f), NPC.Center);
+			collidetimer++;
 		}
+		else
+		{
+			collidetimer = 0;
+		}
+		return collide && !NPC.noTileCollide;
 	}
 
 	/// <summary>
