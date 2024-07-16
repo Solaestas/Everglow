@@ -105,7 +105,7 @@ public class CorruptMoth : ModNPC
 		NPCID.Sets.TrailCacheLength[NPC.type] = 4;
 		if (!Main.dedServ)
 		{
-			Music = MythContent.QuickMusic("MothFightingAlt");
+			Music = MythContent.QuickMusic("MothFighting");
 		}
 	}
 
