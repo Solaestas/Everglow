@@ -39,8 +39,8 @@ PSInput VertexShaderFunction(VSInput input)
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
     float4 color = tex2D(uNoiseSampler, input.Texcoord.xy);
-    float light = color.r - input.Texcoord.z - abs(input.Texcoord.x - input.Color.r) * 0.3;
-    float4 flame = tex2D(uImage, float2(light, 0.5));
+    float light = color.r - input.Color.g - abs(input.Texcoord.x - input.Color.r) * 0.3;
+    float4 flame = tex2D(uImage, float2(light, input.Texcoord.z));
     flame.a *= 0.6;
     return flame;
 }
