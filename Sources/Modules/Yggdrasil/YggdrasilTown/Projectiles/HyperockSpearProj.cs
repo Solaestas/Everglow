@@ -1,14 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Everglow.Commons.DataStructures;
-using Everglow.Commons.NetUtils;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -149,7 +140,7 @@ public class HyperockSpearProj : ModProjectile
 			Shot = true;
 			Projectile.velocity = Utils.SafeNormalize(Main.MouseWorld - player.MountedCenter, new Vector2(0, -1 * player.gravDir)) * (Power + 180) / 18;
 			Projectile.damage = (int)(Projectile.damage * (Power / 90 + 1));
-			Projectile.CritChance= (int)(Projectile.CritChance * (Power / 90 + 1));
+			Projectile.CritChance = (int)(Projectile.CritChance * (Power / 90 + 1));
 			SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 			player.heldProj = -1;
 		}

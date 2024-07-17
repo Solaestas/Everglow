@@ -1,4 +1,5 @@
-
+using Everglow.Commons.DataStructures;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Terraria.Audio;
 
@@ -14,43 +15,56 @@ public abstract class SlingshotProjectile : ModProjectile
 		Projectile.DamageType = DamageClass.Ranged;
 		SetDef();
 	}
+
 	public virtual void SetDef()
 	{
-
 	}
+
 	/// <summary>
 	/// 内部变量,别动
 	/// </summary>
-	protected bool Release = true;
+	public bool Release = true;
+
 	/// <summary>
 	/// 内部变量,别动
 	/// </summary>
-	protected int Power = 0;
+	public int Power = 0;
+
 	/// <summary>
 	/// 默认NormalAmmo(常规弹)
 	/// </summary>
-	protected int ShootProjType = ModContent.ProjectileType<NormalAmmo>();
+	public int ShootProjType = ModContent.ProjectileType<NormalAmmo>();
+
 	/// <summary>
 	/// 中心到弹幕绑绳子位置的距离,默认14
 	/// </summary>
-	protected int SlingshotLength = 14;
+	public int SlingshotLength = 14;
+
 	/// <summary>
 	/// Y形弹弓两头的距离,默认5
 	/// </summary>
-	protected int SplitBranchDis = 5;
+	public int SplitBranchDis = 5;
+
 	/// <summary>
 	/// 最大蓄力,默认120(2s时间)
 	/// </summary>
-	protected int MaxPower = 120;
-	//TODO:以下的MouseLeft需要联机同步
+	public int MaxPower = 120;
+
+	// TODO:以下的MouseLeft需要联机同步
 	public override void AI()
 	{
 		if (Power < MaxPower)
+		{
 			Power++;
+		}
+
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
 		if (Power == 24 && player.controlUseItem)
+		{
 			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Misc/Sounds/NewSlingshot" + Main.rand.Next(8).ToString()).WithVolumeScale(0.8f), Projectile.Center);
+		}
+
 		Vector2 MouseToPlayer = Main.MouseWorld - player.MountedCenter;
 		if (player.controlUseItem && Release)
 		{
@@ -81,14 +95,19 @@ public abstract class SlingshotProjectile : ModProjectile
 			Projectile.Center = player.MountedCenter + Vector2.Normalize(MouseToPlayer) * 15f + new Vector2(0, -4);
 			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Misc/Sounds/SlingshotShoot"), Projectile.Center);
 			if (Power == MaxPower)
+			{
 				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Misc/Sounds/SlingshotShoot2"), Projectile.Center);
+			}
+
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + SlingshotStringHead, -Vector2.Normalize(MinusShootDir) * (float)(Power / 5f + 8f), ShootProjType, (int)(Projectile.damage * (1 + Power / 40f)), Projectile.knockBack, player.whoAmI, Power / 450f);
 
 			Projectile.timeLeft = 5;
 			Release = false;
 		}
 		if (!player.controlUseItem && !Release)
+		{
 			Projectile.Center = player.MountedCenter + Vector2.Normalize(MouseToPlayer) * 15f + new Vector2(0, -4);
+		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)
@@ -137,6 +156,7 @@ public abstract class SlingshotProjectile : ModProjectile
 		Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition, null, drawColor, DrawRot, TexMain.Size() / 2f, 1f, spriteEffect, 0);
 		DrawString();
 	}
+
 	/// <summary>
 	/// 绘制弹弓的弦 TODO:这部分的绘制移到玩家身后
 	/// </summary>
@@ -147,7 +167,10 @@ public abstract class SlingshotProjectile : ModProjectile
 		float DrawRot = Projectile.rotation - MathF.PI / 4f;
 		Vector2 HeadCenter = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot);
 		if (player.direction == -1)
+		{
 			HeadCenter = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot + Math.PI / 2d);
+		}
+
 		HeadCenter += Projectile.Center - Main.screenPosition;
 		Vector2 SlingshotStringHead = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot) + Projectile.Center - Main.MouseWorld;
 		Vector2 SlingshotStringTail = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot) + Vector2.Normalize(SlingshotStringHead) * Power * 0.2625f;
@@ -164,14 +187,16 @@ public abstract class SlingshotProjectile : ModProjectile
 			Head1 = HeadCenter + HeadCenter.RotatedBy(Math.PI / 8 * 5 + DrawRot).SafeNormalize(Vector2.Zero) * SplitBranchDis;
 			Head2 = HeadCenter - HeadCenter.RotatedBy(Math.PI / 8 * 5 + DrawRot).SafeNormalize(Vector2.Zero) * SplitBranchDis;
 		}
+		SpriteBatchState spriteBatchState = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		DrawTexLine(Head1, SlingshotStringTail, 1, drawColor, ModAsset.String.Value);
 		DrawTexLine(Head2, SlingshotStringTail, 1, drawColor, ModAsset.String.Value);
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(spriteBatchState);
 	}
-	private void DrawTexLine(Vector2 StartPos, Vector2 EndPos, float width, Color color, Texture2D tex)
+
+	public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, float width, Color color, Texture2D tex)
 	{
 		Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * width;
 

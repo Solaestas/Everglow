@@ -1,16 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using Everglow.Commons.DataStructures;
-using Everglow.Commons.NetUtils;
-using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using Microsoft.Xna.Framework.Graphics;
-using SteelSeries.GameSense.DeviceZone;
-using Terraria;
-using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -58,9 +46,9 @@ public class VitalizedRocksProj : ModProjectile
 		if (timer <= 0 && player.controlUseItem && player.HeldItem.type == ModContent.ItemType<Items.Weapons.RockElemental.VitalizedRocks>())
 		{
 			timer = 30;
-			for(int i = 0; i < 3; i++)
+			for (int i = 0; i < 3; i++)
 			{
-				Vector2 Pos = player.Center + Vector2.unitXVector.RotatedByRandom(MathF.PI*2) * player.direction * Main.rand.NextFloat(25, 75);
+				Vector2 Pos = player.Center + Vector2.unitXVector.RotatedByRandom(MathF.PI * 2) * player.direction * Main.rand.NextFloat(25, 75);
 				for (int j = 0; j < 50; j++)
 				{
 					Pos = player.Center + Vector2.unitXVector.RotatedByRandom(MathF.PI * 2) * player.direction * Main.rand.NextFloat(25, 75);

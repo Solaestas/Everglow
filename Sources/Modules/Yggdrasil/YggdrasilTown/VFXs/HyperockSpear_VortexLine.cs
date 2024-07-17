@@ -1,4 +1,3 @@
-using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.RockElemental;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
@@ -91,7 +90,7 @@ public class HyperockSpear_VortexLine : Visual
 		int len = oldPos.Count;
 		var bars = new List<Vertex2D>();
 		Vector2 point = VFXOwner.Center + (OnTile ? Vector2.One.RotatedBy(VFXOwner.rotation - MathF.PI * 0.51) * 6f :
-											        Vector2.One.RotatedBy(VFXOwner.rotation + MathF.PI * 0.48) * 12.5f);
+													Vector2.One.RotatedBy(VFXOwner.rotation + MathF.PI * 0.48) * 12.5f);
 		if (len <= 2)
 		{
 			for (int i = 1; i < 3; i++)

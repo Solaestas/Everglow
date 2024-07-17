@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Everglow.Commons.Weapons.Slingshots;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.RockElemental;

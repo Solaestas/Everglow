@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Weapons.Slingshots;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -16,6 +11,7 @@ public class BrittleRockSlingshotProj : SlingshotProjectile
 		ShootProjType = ModContent.ProjectileType<BrittleRockSlingshotStone>();
 		SlingshotLength = 12;
 		MaxPower = 60;
+		SplitBranchDis = 10;
 	}
 
 	public override void AI()
@@ -76,15 +72,15 @@ public class BrittleRockSlingshotProj : SlingshotProjectile
 
 	public override void DrawString()
 	{
-		base.DrawString();
 		Player player = Main.player[Projectile.owner];
-		Color drawColor = Lighting.GetColor((int)(Projectile.Center.X / 16.0), (int)(Projectile.Center.Y / 16.0));
+		Color drawColor = new Color(0.6f, 0.2f, 0.9f, 0.7f);
 		float DrawRot = Projectile.rotation - MathF.PI / 4f;
 		Vector2 HeadCenter = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot);
 		if (player.direction == -1)
 		{
 			HeadCenter = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot + Math.PI / 2d);
 		}
+
 		HeadCenter += Projectile.Center - Main.screenPosition;
 		Vector2 SlingshotStringHead = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot) + Projectile.Center - Main.MouseWorld;
 		Vector2 SlingshotStringTail = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot) + Vector2.Normalize(SlingshotStringHead) * Power * 0.2625f;
@@ -101,17 +97,12 @@ public class BrittleRockSlingshotProj : SlingshotProjectile
 			Head1 = HeadCenter + HeadCenter.RotatedBy(Math.PI / 8 * 5 + DrawRot).SafeNormalize(Vector2.Zero) * SplitBranchDis;
 			Head2 = HeadCenter - HeadCenter.RotatedBy(Math.PI / 8 * 5 + DrawRot).SafeNormalize(Vector2.Zero) * SplitBranchDis;
 		}
-
-		var newcolor = Color.Lerp(drawColor, new Color(255, 255, 255, 200), Power / 130f + 0.1f);
-		Texture2D tex = ModAsset.BrittleRockString.Value;
-		Main.spriteBatch.Draw(tex, Head1 * 0.67f + SlingshotStringTail * 0.33f, null, newcolor, DrawRot, tex.Size() / 2f, 1f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(tex, Head1 * 0.95f + SlingshotStringTail * 0.05f, null, newcolor, DrawRot, tex.Size() / 2f, 0.85f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(tex, Head1 * 0.33f + SlingshotStringTail * 0.67f, null, newcolor, DrawRot, tex.Size() / 2f, 1f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(tex, SlingshotStringTail, null, newcolor, DrawRot, tex.Size() / 2f, 1f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(tex, Head2 * 0.33f + SlingshotStringTail * 0.67f, null, newcolor, DrawRot, tex.Size() / 2f, 1f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(tex, Head2 * 0.95f + SlingshotStringTail * 0.05f, null, newcolor, DrawRot, tex.Size() / 2f, 0.85f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(tex, Head2 * 0.67f + SlingshotStringTail * 0.33f, null, newcolor, DrawRot, tex.Size() / 2f, 1f, SpriteEffects.None, 0);
+		SpriteBatchState spriteBatchState = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		DrawTexLine(Head1, SlingshotStringTail, 1, drawColor, Commons.ModAsset.String.Value);
+		DrawTexLine(Head2, SlingshotStringTail, 1, drawColor, Commons.ModAsset.String.Value);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(spriteBatchState);
 	}
-
-	
 }
