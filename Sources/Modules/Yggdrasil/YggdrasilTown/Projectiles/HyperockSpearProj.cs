@@ -27,7 +27,7 @@ public class HyperockSpearProj : ModProjectile
 	public bool CollideOnNPC = false;
 	public NPC NPCStickTo = null;
 	public Vector2 PostoNPC;
-
+	public float rotationtoNPC;
 	public override void AI()
 	{
 
@@ -227,6 +227,7 @@ public class HyperockSpearProj : ModProjectile
 			Projectile.timeLeft = 60;
 			Shot = false;
 			PostoNPC = NPCStickTo.Center - Projectile.Center;
+			rotationtoNPC = NPCStickTo.rotation;
 			SticktoNPC();
 		}
 	}
@@ -239,12 +240,11 @@ public class HyperockSpearProj : ModProjectile
 			{
 				if (npc.active && npc != NPCStickTo)
 				{
-
 					Vector2 distance = Projectile.Center - npc.Center;
 					if (distance.Length() < Power * 8 && !npc.dontTakeDamage && !npc.friendly)
 					{
 						npc.velocity += Utils.SafeNormalize(distance, Vector2.zeroVector)
-					* MathF.Min(Power / 45, npc.knockBackResist * 1145.14f / ((distance.Length() + 191) * Power / 98.10f));
+					    * MathF.Min(Power / 45, npc.knockBackResist * 1145.14f / ((distance.Length() + 191) * Power / 98.10f));
 					}
 				}
 			}
@@ -261,15 +261,19 @@ public class HyperockSpearProj : ModProjectile
 
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = false;
+		Vector2 PCcenter = Vector2.Zero;
 
 		if (NPCStickTo.active && !NPCStickTo.dontTakeDamage)
 		{
+			PostoNPC = PostoNPC.RotatedBy(NPCStickTo.rotation - rotationtoNPC);
+			Projectile.rotation = Projectile.rotation + NPCStickTo.rotation - rotationtoNPC;
+			rotationtoNPC = NPCStickTo.rotation;
 			Projectile.Center = NPCStickTo.Center - PostoNPC;
 			Projectile.gfxOffY = NPCStickTo.gfxOffY;
 		}
 		else
 		{
-			Projectile.Kill();
+			Projectile.active = false;
 		}
 	}
 
