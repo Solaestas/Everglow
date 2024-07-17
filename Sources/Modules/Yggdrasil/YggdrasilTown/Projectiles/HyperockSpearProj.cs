@@ -327,6 +327,12 @@ public class HyperockSpearProj : ModProjectile
 		}
 	}
 
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		modifiers.HitDirectionOverride = target.Center.X > Projectile.Center.X ? 1 : -1;
+		base.ModifyHitNPC(target, ref modifiers);
+	}
+
 	public void AbsorbNPC()
 	{
 		if (Projectile.timeLeft <= 40 && Projectile.timeLeft >= 30)

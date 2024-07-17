@@ -1,5 +1,4 @@
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using SteelSeries.GameSense;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -29,7 +28,7 @@ public class BrittleRockSlingshotStone_Explosion : ModProjectile, IWarpProjectil
 		int n = Main.rand.Next(9, 10);
 		for (int i = 0; i < n; i++)
 		{
-			Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(0, Main.rand.NextFloat(7,14f)).RotatedByRandom(MathHelper.TwoPi), ModContent.ProjectileType<BrittleRockSlingshotStone>(), Projectile.damage / n, Projectile.knockBack / n, Projectile.owner, 0, 1, 0.8f);
+			Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(0, Main.rand.NextFloat(7, 14f)).RotatedByRandom(MathHelper.TwoPi), ModContent.ProjectileType<BrittleRockSlingshotStone>(), Projectile.damage / n, Projectile.knockBack / n, Projectile.owner, 0, 1, 0.8f);
 			p.scale = Projectile.scale / MathF.Sqrt(n);
 			p.penetrate = 1;
 			p.ai[1] = 1;
@@ -124,5 +123,11 @@ public class BrittleRockSlingshotStone_Explosion : ModProjectile, IWarpProjectil
 
 		Texture2D t = Commons.ModAsset.Trail.Value;
 		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 150f * Projectile.ai[0], 15 * (1 - value) * Projectile.ai[0], new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+	}
+
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		modifiers.HitDirectionOverride = target.Center.X > Projectile.Center.X ? 1 : -1;
+		base.ModifyHitNPC(target, ref modifiers);
 	}
 }
