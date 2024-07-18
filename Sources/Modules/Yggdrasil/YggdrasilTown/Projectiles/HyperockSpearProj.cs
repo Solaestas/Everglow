@@ -335,7 +335,7 @@ public class HyperockSpearProj : ModProjectile
 
 	public void AbsorbNPC()
 	{
-		if (Projectile.timeLeft <= 40 && Projectile.timeLeft >= 30)
+		if (Projectile.timeLeft <= 40 && Projectile.timeLeft >= 32)
 		{
 			foreach (NPC npc in Main.npc)
 			{
