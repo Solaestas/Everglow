@@ -8,7 +8,7 @@ public class RoomManager
 	/// <summary>
 	/// 向内深入一层房间
 	/// </summary>
-	public static void EnterNextLevelRoom(Point point, string mapPath = "")
+	public static void EnterNextLevelRoom(Point point, Action roomGen = default)
 	{
 		// 如果已经在房间里了,向下一层
 		if (SubworldSystem.IsActive<RoomWorld>())
@@ -20,8 +20,8 @@ public class RoomManager
 			// 没有记录就新建
 			if (!WoodenBoxRoomGenPass.ReadWorldSave())
 			{
-				// 没有给定的地图数据直接搓一个木制空洞
-				WoodenBoxRoomGenPass.MapIOPathOfNewRoom = mapPath;
+				// 没有给定的地图数据直接搓一个木制空洞,有的话手动挂delegate
+				WoodenBoxRoomGenPass.RoomGen += roomGen;
 				WoodenBoxRoomGenPass.BuildWoodenRoom();
 			}
 		}
@@ -38,7 +38,7 @@ public class RoomManager
 			{
 				RoomWorld.OriginalWorld = null;
 			}
-			WoodenBoxRoomGenPass.MapIOPathOfNewRoom = mapPath;
+			WoodenBoxRoomGenPass.RoomGen += roomGen;
 			RoomWorld.AnchorWorldCoordinate = point;
 			RoomWorld.LayerDepth = 1;
 			SubworldSystem.Enter<RoomWorld>();
