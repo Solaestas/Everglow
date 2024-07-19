@@ -1,4 +1,5 @@
 using Everglow.SubSpace;
+using Everglow.Yggdrasil.YggdrasilTown.Kitchen.Tiles;
 using SubworldLibrary;
 using Terraria.UI;
 
@@ -8,7 +9,14 @@ public class KitchenSystem : ModSystem
 {
 	public KitchenSystemUI KitchenSystemUI;
 
-	public bool Active => SubworldSystem.IsActive<RoomWorld>();
+	public int RestaurantBoardCount;
+
+	public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
+	{
+		RestaurantBoardCount = tileCounts[ModContent.TileType<RestaurantLogoBoard>()];
+	}
+
+	public bool Active => SubworldSystem.IsActive<RoomWorld>() && IsInAKitchenWorld();
 
 	public override void Load()
 	{
@@ -28,5 +36,8 @@ public class KitchenSystem : ModSystem
 		}
 	}
 
-	public delegate void KitchenSystemDraw();
+	public bool IsInAKitchenWorld()
+	{
+		return RestaurantBoardCount > 0;
+	}
 }
