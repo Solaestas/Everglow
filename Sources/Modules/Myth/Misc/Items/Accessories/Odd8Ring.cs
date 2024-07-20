@@ -15,8 +15,19 @@ public class Odd8Ring : ModItem
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
+		//player.allDamage.Flat += 8;
 		Odd8RingEquiper o8RE = player.GetModPlayer<Odd8RingEquiper>();
 		o8RE.Odd8Enable = true;
+	}
+
+	public override void AddRecipes()
+	{
+		CreateRecipe()
+			.AddIngredient(ItemID.Topaz, 8)
+			.AddIngredient(RecipeGroupID.IronBar, 4)
+			.AddTile(TileID.Anvils)
+			.Register();
+		base.AddRecipes();
 	}
 }
 

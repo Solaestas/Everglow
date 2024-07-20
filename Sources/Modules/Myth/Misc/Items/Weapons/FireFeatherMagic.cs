@@ -30,7 +30,7 @@ public class FireFeatherMagic : SpellTomeItem
 		Item.autoReuse = true;
 		Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Magic.FireFeather>();
 		Item.shootSpeed = 4;
-		Item.crit = 16;
+		Item.crit = 12;
 		Item.mana = 12;
 
 		DecorativeProjectileTypes.Add(ModContent.ProjectileType<FireFeatherMagicBook>());

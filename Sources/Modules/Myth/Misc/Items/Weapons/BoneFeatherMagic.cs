@@ -20,7 +20,7 @@ public class BoneFeatherMagic : SpellTomeItem
 	}
 	public override void SetDefaults()
 	{
-		Item.damage = 40;
+		Item.damage = 50;
 		Item.DamageType = DamageClass.Magic;
 		Item.width = 28;
 		Item.height = 30;

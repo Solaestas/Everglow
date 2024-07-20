@@ -22,6 +22,7 @@ public class FrostBomb : ModItem
 		Item.shoot = ModContent.ProjectileType<FrostBall>();
 		Item.shootSpeed = 7f;
 		Item.useStyle = ItemUseStyleID.Swing;
+		Item.UseSound = SoundID.Item1;
 		Item.DamageType = DamageClass.Magic;
 		Item.mana = 14;
 	}

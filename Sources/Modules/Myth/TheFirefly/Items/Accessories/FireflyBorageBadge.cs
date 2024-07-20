@@ -32,17 +32,21 @@ public class FireflyBorageBadge : ModItem
 			player.GetAttackSpeed(DamageClass.Melee) *= 1.1f;
 			if (player.GetCritChance(DamageClass.Melee) > 0)
 			{
-				player.GetTotalCritChance(DamageClass.Melee);
+				float totalCritMelee = player.GetTotalCritChance(DamageClass.Melee);
+				totalCritMelee *= 0;
 				player.GetCritChance(DamageClass.Melee) = 0;
+				player.meleeCrit *= 0;
 			}
 			if (player.GetCritChance(DamageClass.MeleeNoSpeed) > 0)
 			{
-				player.GetTotalCritChance(DamageClass.MeleeNoSpeed);
+				float totalCritMeleeNoSpeed = player.GetTotalCritChance(DamageClass.MeleeNoSpeed);
+				totalCritMeleeNoSpeed *= 0;
 				player.GetCritChance(DamageClass.MeleeNoSpeed) = 0;
 			}
 			if (player.GetCritChance(DamageClass.SummonMeleeSpeed) > 0)
 			{
-				player.GetTotalCritChance(DamageClass.SummonMeleeSpeed);
+				float totalCritSummonMeleeSpeed = player.GetTotalCritChance(DamageClass.SummonMeleeSpeed);
+				totalCritSummonMeleeSpeed *= 0;
 				player.GetCritChance(DamageClass.SummonMeleeSpeed) = 0;
 				player.GetCritChance(DamageClass.SummonMeleeSpeed) *= 0;
 			}

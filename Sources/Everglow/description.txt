@@ -42,6 +42,7 @@ Developers (in no particular order):
 - Musics
 	- 東の明るさ
 	- Dirty Octopus
+	- ENNWAY
 	- Setnour6
 - Sound Effects
 	- Setnour6
@@ -114,6 +115,7 @@ Mod将支持联机
 - 音乐
 	- 東の明るさ
 	- 脏渔歌
+	- ENNWAY
 	- Setnour6
 - 音效
 	- Setnour6
