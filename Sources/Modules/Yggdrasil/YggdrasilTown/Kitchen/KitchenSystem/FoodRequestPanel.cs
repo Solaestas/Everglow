@@ -47,17 +47,18 @@ public class FoodRequestPanel
 		{
 			panelColor = new Color(0.8f, 0.0f, 0.2f);
 		}
-		Draw9Pieces(AnchorPos, 60, 120, panelColor, Alpha);
+		Vector2 drawPos = MainPanelOrigin + AnchorPos;
+		Draw9Pieces(drawPos, 60, 120, panelColor, Alpha);
 
 		// Timer bar
-		Draw9Pieces(AnchorPos + new Vector2(0, 50), 46, 8, new Color(0.3f, 0.3f, 0.6f), Alpha);
-		Draw9Pieces(AnchorPos + new Vector2(0, 50), 44, 6, new Color(0f, 0f, 0f), Alpha);
+		Draw9Pieces(drawPos + new Vector2(0, 50), 46, 8, new Color(0.3f, 0.3f, 0.6f), Alpha);
+		Draw9Pieces(drawPos + new Vector2(0, 50), 44, 6, new Color(0f, 0f, 0f), Alpha);
 		float timeValue = TimeLeft / (float)MaxTime;
 
 		Texture2D timer = ModAsset.FoodRequestUIPanelTimer.Value;
-		Main.spriteBatch.Draw(timer, AnchorPos + new Vector2(0, 50), new Rectangle(0, 0, (int)(timer.Width * timeValue), timer.Height), Color.Lerp(new Color(1f, 0f, 0f), new Color(0f, 1f, 0f), timeValue) * 0.9f, 0, timer.Size() * 0.5f, new Vector2(0.7f, 1.6f), SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(timer, AnchorPos + new Vector2(96 * timeValue, 50), new Rectangle((int)(timer.Width * timeValue), 0, 2, timer.Height), Color.Lerp(new Color(1f, 0f, 0f), new Color(0f, 1f, 0f), timeValue) * 3, 0, timer.Size() * 0.5f, new Vector2(0.7f, 0.8f), SpriteEffects.None, 0);
-		Draw9Pieces(AnchorPos + new Vector2(0, -40), 48, 48, new Color(0.2f, 0.1f, 0.15f), Alpha);
+		Main.spriteBatch.Draw(timer, drawPos + new Vector2(0, 50), new Rectangle(0, 0, (int)(timer.Width * timeValue), timer.Height), Color.Lerp(new Color(1f, 0f, 0f), new Color(0f, 1f, 0f), timeValue) * 0.9f, 0, timer.Size() * 0.5f, new Vector2(0.7f, 1.6f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(timer, drawPos + new Vector2(96 * timeValue, 50), new Rectangle((int)(timer.Width * timeValue), 0, 2, timer.Height), Color.Lerp(new Color(1f, 0f, 0f), new Color(0f, 1f, 0f), timeValue) * 3, 0, timer.Size() * 0.5f, new Vector2(0.7f, 0.8f), SpriteEffects.None, 0);
+		Draw9Pieces(drawPos + new Vector2(0, -40), 48, 48, new Color(0.2f, 0.1f, 0.15f), Alpha);
 
 		// Item slot
 		Item item = new Item(FoodType);
@@ -66,11 +67,11 @@ public class FoodRequestPanel
 		Rectangle frame = (Main.itemAnimations[FoodType] == null) ? food.Frame() : Main.itemAnimations[FoodType].GetFrame(food);
 		float scale;
 		ItemSlot.DrawItem_GetColorAndScale(item, 1, ref color, 20000, ref frame, out color, out scale);
-		Main.spriteBatch.Draw(food, AnchorPos + new Vector2(0, -40), frame, color, 0f, new Vector2(frame.Width, frame.Height) * 0.5f, scale, SpriteEffects.None, 0f);
+		Main.spriteBatch.Draw(food, drawPos + new Vector2(0, -40), frame, color, 0f, new Vector2(frame.Width, frame.Height) * 0.5f, scale, SpriteEffects.None, 0f);
 
 		// Value display
 		Vector2 textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, Value.ToString(), Vector2.One);
-		Main.spriteBatch.DrawString(FontAssets.MouseText.Value, Value.ToString(), AnchorPos + new Vector2(0, 30), color, 0, textSize * 0.5f, 1, SpriteEffects.None, 0);
+		Main.spriteBatch.DrawString(FontAssets.MouseText.Value, Value.ToString(), drawPos + new Vector2(0, 30), color, 0, textSize * 0.5f, 1, SpriteEffects.None, 0);
 
 		// Cancel button
 		Color buttomColor = new Color(0.5f, 0.5f, 0.5f);
@@ -80,9 +81,9 @@ public class FoodRequestPanel
 			buttomColor = new Color(0.2f, 0.1f, 0.1f);
 			textColor = new Color(1f, 0.1f, 0.1f);
 		}
-		Draw9Pieces(AnchorPos + new Vector2(0, 90), 40, 14, buttomColor, Alpha);
+		Draw9Pieces(drawPos + new Vector2(0, 90), 40, 14, buttomColor, Alpha);
 		textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, "Cancel", Vector2.One);
-		Main.spriteBatch.DrawString(FontAssets.MouseText.Value, "Cancel", AnchorPos + new Vector2(0, 94), textColor, 0, textSize * 0.5f, 1, SpriteEffects.None, 0);
+		Main.spriteBatch.DrawString(FontAssets.MouseText.Value, "Cancel", drawPos + new Vector2(0, 94), textColor, 0, textSize * 0.5f, 1, SpriteEffects.None, 0);
 	}
 
 	public void Update(int index)
@@ -101,7 +102,7 @@ public class FoodRequestPanel
 			}
 			else
 			{
-				AnchorPos = Vector2.Lerp(AnchorPos, new Vector2(index * 160 + 200, Main.screenHeight - 300), 0.2f);
+				AnchorPos = Vector2.Lerp(AnchorPos, new Vector2(index * 160 - 330, 0), 0.2f);
 			}
 		}
 		if (!Active)
@@ -111,7 +112,7 @@ public class FoodRequestPanel
 		}
 
 		// Allow cancel manually
-		Rectangle cancelBox = new Rectangle((int)(AnchorPos + new Vector2(0, 90)).X - 40, (int)(AnchorPos + new Vector2(0, 90)).Y - 14, 80, 20);
+		Rectangle cancelBox = new Rectangle((int)(AnchorPos + MainPanelOrigin + new Vector2(0, 90)).X - 40, (int)(AnchorPos + MainPanelOrigin + new Vector2(0, 90)).Y - 14, 80, 20);
 		if (cancelBox.Contains((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y))
 		{
 			if (!IsMouseOverCancelButtom)

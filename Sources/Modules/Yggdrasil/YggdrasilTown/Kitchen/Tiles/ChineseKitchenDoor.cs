@@ -21,7 +21,18 @@ public class ChineseKitchenDoor : RoomDoorTile
 			WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 			WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 		}
-		PlaceFrameImportantTiles(148, 156, 5, 4, ModContent.TileType<WoodenRoomDoor_exit>(), 0, 0);
+		PlaceFrameImportantTiles(156, 156, 5, 4, ModContent.TileType<WoodenRoomDoor_exit>(), 0, 0);
+		PlaceFrameImportantTiles(146, 158, 2, 2, ModContent.TileType<FoodChest>(), 0, 0);
+		PlaceFrameImportantTiles(144, 158, 2, 2, ModContent.TileType<FoodChest>(), 36, 0);
+		PlaceFrameImportantTiles(142, 158, 2, 2, ModContent.TileType<FoodChest>(), 72, 0);
+		PlaceFrameImportantTiles(146, 156, 2, 2, ModContent.TileType<FoodChest>(), 108, 0);
+		PlaceFrameImportantTiles(144, 156, 2, 2, ModContent.TileType<FoodChest>(), 144, 0);
+		PlaceFrameImportantTiles(142, 156, 2, 2, ModContent.TileType<FoodChest>(), 180, 0);
+		PlaceFrameImportantTiles(146, 154, 2, 2, ModContent.TileType<FoodChest>(), 216, 0);
+		PlaceFrameImportantTiles(144, 154, 2, 2, ModContent.TileType<FoodChest>(), 252, 0);
+		PlaceFrameImportantTiles(142, 154, 2, 2, ModContent.TileType<FoodChest>(), 288, 0);
+		PlaceFrameImportantTiles(146, 152, 2, 2, ModContent.TileType<FoodChest>(), 324, 0);
+		PlaceFrameImportantTiles(144, 152, 2, 2, ModContent.TileType<FoodChest>(), 360, 0);
 	}
 
 	public override bool RightClick(int i, int j)

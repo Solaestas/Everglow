@@ -21,6 +21,7 @@ public class KitchenSystem : ModSystem
 	public override void Load()
 	{
 		KitchenSystemUI = new KitchenSystemUI("KitchenSystemInterface", InterfaceScaleType.UI);
+		KitchenSystemUI.Reset();
 	}
 
 	public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)

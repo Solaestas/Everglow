@@ -51,7 +51,7 @@ public class ScoreChange
 		}
 		else
 		{
-			AnchorPos = new Vector2(220, Main.screenHeight - 100);
+			AnchorPos = KitchenSystemUI.MainPanelOrigin + new Vector2(-310, 200);
 		}
 	}
 }
