@@ -1,3 +1,5 @@
+using Everglow.Food.Items;
+using Everglow.Food.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Kitchen.Tiles;
 using ReLogic.Graphics;
 using Terraria.Audio;
@@ -58,20 +60,46 @@ public class FoodRequestPanel
 		Texture2D timer = ModAsset.FoodRequestUIPanelTimer.Value;
 		Main.spriteBatch.Draw(timer, drawPos + new Vector2(0, 50), new Rectangle(0, 0, (int)(timer.Width * timeValue), timer.Height), Color.Lerp(new Color(1f, 0f, 0f), new Color(0f, 1f, 0f), timeValue) * 0.9f, 0, timer.Size() * 0.5f, new Vector2(0.7f, 1.6f), SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(timer, drawPos + new Vector2(96 * timeValue, 50), new Rectangle((int)(timer.Width * timeValue), 0, 2, timer.Height), Color.Lerp(new Color(1f, 0f, 0f), new Color(0f, 1f, 0f), timeValue) * 3, 0, timer.Size() * 0.5f, new Vector2(0.7f, 0.8f), SpriteEffects.None, 0);
-		Draw9Pieces(drawPos + new Vector2(0, -40), 48, 48, new Color(0.2f, 0.1f, 0.15f), Alpha);
 
 		// Item slot
+		Vector2 itemSlotPos = drawPos + new Vector2(0, -30);
+		Draw9Pieces(itemSlotPos, 40, 40, new Color(0.2f, 0.1f, 0.15f), Alpha);
 		Item item = new Item(FoodType);
 		Color color = Color.White * (1 - Alpha);
 		Texture2D food = TextureAssets.Item[FoodType].Value;
 		Rectangle frame = (Main.itemAnimations[FoodType] == null) ? food.Frame() : Main.itemAnimations[FoodType].GetFrame(food);
 		float scale;
 		ItemSlot.DrawItem_GetColorAndScale(item, 1, ref color, 20000, ref frame, out color, out scale);
-		Main.spriteBatch.Draw(food, drawPos + new Vector2(0, -40), frame, color, 0f, new Vector2(frame.Width, frame.Height) * 0.5f, scale, SpriteEffects.None, 0f);
+		Main.spriteBatch.Draw(food, itemSlotPos, frame, color, 0f, new Vector2(frame.Width, frame.Height) * 0.5f, scale, SpriteEffects.None, 0f);
 
 		// Value display
 		Vector2 textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, Value.ToString(), Vector2.One);
 		Main.spriteBatch.DrawString(FontAssets.MouseText.Value, Value.ToString(), drawPos + new Vector2(0, 30), color, 0, textSize * 0.5f, 1, SpriteEffects.None, 0);
+
+		// Name display
+		string displayName = item.Name;
+		textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, displayName, Vector2.One);
+		if (textSize.X < 110)
+		{
+			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, displayName, drawPos + new Vector2(0, -90), color, 0, textSize * 0.5f, 1, SpriteEffects.None, 0);
+		}
+		else
+		{
+			displayName += "    ";
+			int length = displayName.Length;
+			int substringPos = (int)(Main.timeForVisualEffects * 0.1f) % length;
+			string result = displayName.Substring(substringPos) + displayName.Substring(0, substringPos);
+			for (int t = 0; t < 500; t++)
+			{
+				result = result.Remove(result.Length - 1);
+				textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, result, Vector2.One);
+				if (textSize.X <= 100)
+				{
+					break;
+				}
+			}
+			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, result, drawPos + new Vector2(0, -90), color, 0, new Vector2(50, textSize.Y * 0.5f), 1, SpriteEffects.None, 0);
+		}
 
 		// Cancel button
 		Color buttomColor = new Color(0.5f, 0.5f, 0.5f);
@@ -97,7 +125,7 @@ public class FoodRequestPanel
 				SoundEngine.PlaySound(SoundID.MenuClose);
 				TimeLeft = 0;
 				Active = false;
-				AddScore(-Value);
+				AddScore(-Value / 2);
 				State = 2;
 			}
 			else
@@ -125,12 +153,51 @@ public class FoodRequestPanel
 				SoundEngine.PlaySound(SoundID.MenuClose);
 				Active = false;
 				State = 2;
-				AddScore(-(int)(Value * (1 - (float)TimeLeft / MaxTime)));
+				AddScore(-(int)(Value * (1 - (float)TimeLeft / MaxTime) * 0.5f));
 			}
 		}
 		else
 		{
 			IsMouseOverCancelButtom = false;
+		}
+
+		// display ingredients
+		string mouseText = string.Empty;
+		Rectangle foodBox = new Rectangle((int)(AnchorPos + MainPanelOrigin + new Vector2(0, -30)).X - 30, (int)(AnchorPos + MainPanelOrigin + new Vector2(0, -30)).Y - 30, 60, 60);
+		if (foodBox.Contains((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y))
+		{
+			if (CasseroleUI.PotMenu.Count == 0)
+			{
+				CasseroleUI.SetMenu();
+			}
+			foreach (var cookingUnit in CasseroleUI.PotMenu)
+			{
+				if (cookingUnit.Type == FoodType)
+				{
+					int count = 0;
+					foreach (var ingredient in cookingUnit.Ingredients)
+					{
+						if (ingredient > 0)
+						{
+							count++;
+							mouseText += "[i:" + ingredient + "]";
+							if (count == 3)
+							{
+								mouseText += "\n";
+							}
+						}
+					}
+					mouseText += "\n";
+					mouseText += "[i:" + 3454 + "]";
+					mouseText += "[i:" + ModContent.ItemType<Casserole_Item>() + "]";
+					mouseText += "[i:" + 3454 + "]";
+					mouseText += "\n";
+				}
+			}
+		}
+		if (mouseText != string.Empty)
+		{
+			Main.instance.MouseText(mouseText, ItemRarityID.White);
 		}
 	}
 
@@ -140,14 +207,14 @@ public class FoodRequestPanel
 		{
 			foreach (var item in Main.item)
 			{
-				if (item.active && item.type == FoodType && (item.Center - Main.LocalPlayer.Center).Length() < 3000)
+				if (item.active && item.type == FoodType && item.stack >= 1 && (item.Center - Main.LocalPlayer.Center).Length() < 3000)
 				{
 					for (int j = 0; j < 3; j++)
 					{
 						Point point = item.Center.ToTileCoordinates();
 						if (Main.tile[point + new Point(0, j)].TileType == ModContent.TileType<ServingCounter_ChineseStyle>())
 						{
-							if (item.stack >= 1)
+							if (item.stack > 1)
 							{
 								item.stack--;
 							}
@@ -191,5 +258,11 @@ public class FoodRequestPanel
 				}
 			}
 		}
+	}
+
+	public void KillAtTimeOut()
+	{
+		Active = false;
+		State = 1;
 	}
 }

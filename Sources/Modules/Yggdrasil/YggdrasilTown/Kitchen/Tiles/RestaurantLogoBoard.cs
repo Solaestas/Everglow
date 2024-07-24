@@ -24,7 +24,12 @@ public class RestaurantLogoBoard : ModTile
 		TileObjectData.addTile(Type);
 		AddMapEntry(new Color(153, 132, 123));
 		MinPick = 99999999;
+	}
 
+	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
+	{
+		noBreak = true;
+		return false;
 	}
 
 	public override bool CanExplode(int i, int j)

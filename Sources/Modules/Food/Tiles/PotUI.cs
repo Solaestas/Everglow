@@ -70,6 +70,27 @@ public abstract class PotUI
 	/// </summary>
 	public int CuisineType = -1;
 
+	public struct CookingUnit
+	{
+		public List<int> Ingredients;
+		public int Type;
+
+		public CookingUnit(int type, int item1 = -1, int item2 = -1, int item3 = -1, int item4 = -1, int item5 = -1, int item6 = -1)
+		{
+			Ingredients = new List<int>
+			{
+				item1,
+				item2,
+				item3,
+				item4,
+				item5,
+				item6,
+			};
+
+			Type = type;
+		}
+	}
+
 	public PotUI(Point anchorTilePos)
 	{
 		AnchorTilePos = anchorTilePos;
@@ -119,7 +140,7 @@ public abstract class PotUI
 		}
 
 		// DrawCloseButtom();
-		if(CookTimer == 0 || CookTimer > CookTimerMax - 3)
+		if (CookTimer == 0 || CookTimer > CookTimerMax - 3)
 		{
 			DrawButtom(100, ClosePanelPos, new Color(0.8f, 0, 0), new Color(1f, 0.3f, 0.2f), 0, 0);
 			DrawMaximizeButtom();
@@ -188,12 +209,13 @@ public abstract class PotUI
 			{
 				if (MouseOverIndex == i)
 				{
-					Draw9Pieces(drawPos + IngredientsSlotPos[i], 16, 16, new Color(86, 69, 58, 200), 0);
+					Draw9Pieces(drawPos + IngredientsSlotPos[i], 16, 16, new Color(240, 60, 50, 200), 0);
 				}
 				else
 				{
-					Draw9Pieces(drawPos + IngredientsSlotPos[i], 16, 16, new Color(20, 20, 20, 90), 0);
+					Draw9Pieces(drawPos + IngredientsSlotPos[i], 16, 16, new Color(120, 60, 50, 90), 0);
 				}
+				Draw9Pieces(drawPos + IngredientsSlotPos[i], 16, 16, new Color(210, 210, 185), 0, ModAsset.StoveUIPanel_outline_thin.Value);
 				if (Ingredients[i] >= 0)
 				{
 					Item item = new Item(Ingredients[i]);
@@ -231,7 +253,7 @@ public abstract class PotUI
 		Rectangle frame = (Main.itemAnimations[CuisineType] == null) ? food.Frame() : Main.itemAnimations[CuisineType].GetFrame(food);
 		float scale;
 		ItemSlot.DrawItem_GetColorAndScale(item, 1, ref color, 20000, ref frame, out color, out scale);
-		if(!Maximized)
+		if (!Maximized)
 		{
 			scale *= 0.6f;
 		}
@@ -239,7 +261,7 @@ public abstract class PotUI
 
 		// Timer bar
 		Vector2 offsetTimer = new Vector2(0, 50);
-		if(!Maximized)
+		if (!Maximized)
 		{
 			offsetTimer = new Vector2(0, 92);
 			Draw9Pieces(drawPos + offsetTimer, 26, 5, new Color(0.3f, 0.3f, 0.6f), 0);
@@ -285,11 +307,13 @@ public abstract class PotUI
 		if (MouseOverIndex == index)
 		{
 			Draw9Pieces(CloseButtonPos, sizeX * 1.2f, sizeY * 1.2f, colorHit, 0.2f);
+			Draw9Pieces(CloseButtonPos, sizeX * 1f, sizeY * 1f, colorHit * 2, 0, ModAsset.StoveUIPanel_outline_thin.Value);
 			Main.spriteBatch.Draw(iconAtlas, CloseButtonPos, frame, darkerColor, 0f, frame.Size() * 0.5f, iconSize * 1.33f, SpriteEffects.None, 0f);
 		}
 		else
 		{
 			Draw9Pieces(CloseButtonPos, sizeX, sizeY, color, 0.2f);
+			Draw9Pieces(CloseButtonPos, sizeX * 1f, sizeY * 1f, color * 2, 0, ModAsset.StoveUIPanel_outline_thin.Value);
 			Main.spriteBatch.Draw(iconAtlas, CloseButtonPos, frame, darkerColor, 0f, frame.Size() * 0.5f, iconSize, SpriteEffects.None, 0f);
 		}
 	}
@@ -318,11 +342,13 @@ public abstract class PotUI
 		if (MouseOverIndex == 104)
 		{
 			Draw9Pieces(CloseButtonPos, sizeX * 1.2f, sizeY * 1.2f, colorHit, 0.2f);
+			Draw9Pieces(CloseButtonPos, sizeX * 1f, sizeY * 1f, colorHit * 2, 0, ModAsset.StoveUIPanel_outline_thin.Value);
 			Main.spriteBatch.Draw(iconAtlas, CloseButtonPos, frame, darkerColor, 0f, frame.Size() * 0.5f, iconSize * 1.33f, SpriteEffects.None, 0f);
 		}
 		else
 		{
 			Draw9Pieces(CloseButtonPos, sizeX, sizeY, color, 0.2f);
+			Draw9Pieces(CloseButtonPos, sizeX * 1f, sizeY * 1f, color * 2, 0, ModAsset.StoveUIPanel_outline_thin.Value);
 			Main.spriteBatch.Draw(iconAtlas, CloseButtonPos, frame, darkerColor, 0f, frame.Size() * 0.5f, iconSize, SpriteEffects.None, 0f);
 		}
 	}
@@ -371,6 +397,7 @@ public abstract class PotUI
 		{
 			return;
 		}
+
 		// Close incident
 		if (HitPanel(Close, 100, drawPos + ClosePanelPos))
 		{
@@ -407,10 +434,10 @@ public abstract class PotUI
 		for (int i = 0; i < MaxSlotCount; i++)
 		{
 			Vector2 slotPos = drawPos + IngredientsSlotPos[i];
-			int size = 48;
+			int size = 32;
 			if (Maximized)
 			{
-				size = 32;
+				size = 48;
 			}
 			Rectangle ingredientBox = new Rectangle((int)slotPos.X - size / 2, (int)slotPos.Y - size / 2, size, size);
 			if (ingredientBox.Contains((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y))
@@ -469,7 +496,7 @@ public abstract class PotUI
 	{
 		int sizeX = 20;
 		int sizeY = 16;
-		if(!Maximized)
+		if (!Maximized)
 		{
 			sizeX = 12;
 			sizeY = 12;
@@ -523,7 +550,7 @@ public abstract class PotUI
 			return;
 		}
 		Tile tile = Main.tile[AnchorTilePos];
-		if(tile.TileFrameX < 36)
+		if (tile.TileFrameX < 36)
 		{
 			FurnitureUtils.LightHitwire(AnchorTilePos.X, AnchorTilePos.Y, ModContent.TileType<Stove>(), 2, 3);
 		}

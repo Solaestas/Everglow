@@ -48,13 +48,32 @@ public class FoodChest : ModTile
 	public override bool RightClick(int i, int j)
 	{
 		var tile = Main.tile[i, j];
+		if (!KitchenSystemUI.Started)
+		{
+			return false;
+		}
 		Point frameCoord = new Point((tile.TileFrameX - tile.TileFrameX % 36) / 36, (tile.TileFrameY - tile.TileFrameY % 36) / 36);
 		int style = frameCoord.X + frameCoord.Y * 16;
 		int itemType = GetStyleItemType(style);
 		if (itemType != -1)
 		{
-			Item.NewItem(null, new Point(i, j).ToWorldCoordinates(), itemType, 1);
-			KitchenSystemUI.AddScore(-10);
+			int itemCountInventory = 0;
+			foreach (var item in Main.LocalPlayer.inventory)
+			{
+				if (item.active && item.type == itemType && item.stack > 0)
+				{
+					itemCountInventory += item.stack;
+				}
+			}
+			if (itemCountInventory < 5)
+			{
+				Item.NewItem(null, new Point(i, j).ToWorldCoordinates(), itemType, 1);
+				KitchenSystemUI.AddScore(-10);
+			}
+			else
+			{
+				CombatText.NewText(new Rectangle(i * 16, j * 16, 16, 16), Color.LightCoral, "You can't hold one ingerdient more than 5.");
+			}
 		}
 
 		return false;
@@ -87,6 +106,8 @@ public class FoodChest : ModTile
 			case 10:
 				return ModContent.ItemType<Tofu>();
 			case 11:
+				return ItemID.SpicyPepper;
+			case 12:
 				return ModContent.ItemType<Gelatin_Sheet>();
 		}
 		return -1;
@@ -118,6 +139,17 @@ public class FoodChest : ModTile
 			Rectangle frame = (Main.itemAnimations[itemType] == null) ? food.Frame() : Main.itemAnimations[itemType].GetFrame(food);
 			float scale;
 			ItemSlot.DrawItem_GetColorAndScale(item, 0.5f, ref color, 20000, ref frame, out color, out scale);
+			spriteBatch.Draw(food, drawPos, frame, color, 0f, frame.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+		}
+		if (!KitchenSystemUI.Started)
+		{
+			itemType = ItemID.BowTopper;
+			Item item = new Item(itemType);
+			Color color = Lighting.GetColor(i, j) * 0.5f;
+			Texture2D food = TextureAssets.Item[itemType].Value;
+			Rectangle frame = (Main.itemAnimations[itemType] == null) ? food.Frame() : Main.itemAnimations[itemType].GetFrame(food);
+			float scale;
+			ItemSlot.DrawItem_GetColorAndScale(item, 1f, ref color, 20000, ref frame, out color, out scale);
 			spriteBatch.Draw(food, drawPos, frame, color, 0f, frame.Size() * 0.5f, scale, SpriteEffects.None, 0f);
 		}
 	}

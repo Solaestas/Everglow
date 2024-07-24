@@ -114,6 +114,8 @@ public class ServingCounter_ChineseStyle : ModTile, ITileFluentlyDrawn
 			spriteBatch.Draw(tex, drawCenterPos + new Vector2(-37, -46) + new Vector2(0, 10).RotatedBy(rotation), frame, tileLight, rotation * 2, new Vector2(frame.Width * 0.5f, 0), 1f, tileSpriteEffect, 0f);
 			frame = new Rectangle(76, 60, 6, 8);
 			spriteBatch.Draw(tex, drawCenterPos + new Vector2(-37, -46) + new Vector2(0, 10).RotatedBy(rotation) + new Vector2(0, 10).RotatedBy(rotation * 2), frame, tileLight, rotation * 4, new Vector2(frame.Width * 0.5f, 0), 1f, tileSpriteEffect, 0f);
+
+			Lighting.AddLight(drawCenterPos + new Vector2(-37, -46) + new Vector2(0, 10).RotatedBy(rotation) + Main.screenPosition, new Vector3(1f, 0.2f, 0.1f));
 		}
 		else
 		{
@@ -135,6 +137,8 @@ public class ServingCounter_ChineseStyle : ModTile, ITileFluentlyDrawn
 			spriteBatch.Draw(tex, drawCenterPos + new Vector2(37, -46) + new Vector2(0, 10).RotatedBy(rotation), frame, tileLight, rotation * 2, new Vector2(frame.Width * 0.5f, 0), 1f, tileSpriteEffect, 0f);
 			frame = new Rectangle(76, 60, 6, 8);
 			spriteBatch.Draw(tex, drawCenterPos + new Vector2(37, -46) + new Vector2(0, 10).RotatedBy(rotation) + new Vector2(0, 10).RotatedBy(rotation * 2), frame, tileLight, rotation * 4, new Vector2(frame.Width * 0.5f, 0), 1f, tileSpriteEffect, 0f);
+
+			Lighting.AddLight(drawCenterPos + new Vector2(-37, -46) + new Vector2(0, 10).RotatedBy(rotation) + Main.screenPosition, new Vector3(1f, 0.2f, 0.1f));
 		}
 	}
 }

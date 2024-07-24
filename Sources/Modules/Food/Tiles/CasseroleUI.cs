@@ -10,28 +10,15 @@ public class CasseroleUI : PotUI
 	public Vector2 PanelPos2 = new Vector2(104, -88);
 	public Vector2 PanelPos3 = new Vector2(140, -50);
 	public Vector2 PanelPos4 = new Vector2(60, -100);
-	public static List<CookingUnit> CassroleMenu = new List<CookingUnit>();
 
-	public struct CookingUnit
-	{
-		public List<int> Ingredients;
-		public int Type;
+	public static CookingUnit MapoTofu;
+	public static CookingUnit YuxiangEggplant;
+	public static CookingUnit BoiledBullfrog;
 
-		public CookingUnit(int type, int item1 = -1, int item2 = -1, int item3 = -1, int item4 = -1, int item5 = -1, int item6 = -1)
-		{
-			Ingredients = new List<int>
-			{
-				item1,
-				item2,
-				item3,
-				item4,
-				item5,
-				item6,
-			};
-
-			Type = type;
-		}
-	}
+	/// <summary>
+	/// Menus of this pot can cook
+	/// </summary>
+	public static List<CookingUnit> PotMenu = new List<CookingUnit>();
 
 	public CasseroleUI(Point anchorTilePos)
 		: base(anchorTilePos)
@@ -53,9 +40,21 @@ public class CasseroleUI : PotUI
 			}
 		}
 		MaxSlotCount = maxSlotCount;
-		CassroleMenu.Add(MapoTofu);
-		CassroleMenu.Add(YuxiangEggplant);
-		CassroleMenu.Add(BoiledBullfrog);
+		if (PotMenu.Count == 0)
+		{
+			SetMenu();
+		}
+	}
+
+	public static void SetMenu()
+	{
+		PotMenu.Clear();
+		MapoTofu = new CookingUnit(ModContent.ItemType<Mapo_Tofu>(), ModContent.ItemType<Doubanjiang>(), ModContent.ItemType<TofuCubes>(), ModContent.ItemType<ChoppedScallion>(), ModContent.ItemType<SpicyPepperRing>(), ModContent.ItemType<SichuanPepper>(), ModContent.ItemType<GroundMeat>());
+		YuxiangEggplant = new CookingUnit(ModContent.ItemType<YuxiangEggplant>(), ModContent.ItemType<GroundMeat>(), ModContent.ItemType<MincedGarlic>(), ModContent.ItemType<ChoppedScallion>(), ModContent.ItemType<Doubanjiang>(), ModContent.ItemType<Rice>(), ModContent.ItemType<EggplantCubes>());
+		BoiledBullfrog = new CookingUnit(ModContent.ItemType<BoiledBullfrog>(), ModContent.ItemType<FrogMeat>(), ModContent.ItemType<SichuanPepper>(), ModContent.ItemType<SpicyPepperRing>(), ModContent.ItemType<ChoppedScallion>());
+		PotMenu.Add(MapoTofu);
+		PotMenu.Add(YuxiangEggplant);
+		PotMenu.Add(BoiledBullfrog);
 	}
 
 	public override void Update()
@@ -144,7 +143,7 @@ public class CasseroleUI : PotUI
 
 	public int CheckCuisineType()
 	{
-		foreach (var cookingUnit in CassroleMenu)
+		foreach (var cookingUnit in PotMenu)
 		{
 			if (CanCook(cookingUnit))
 			{
@@ -153,8 +152,4 @@ public class CasseroleUI : PotUI
 		}
 		return -1;
 	}
-
-	public CookingUnit MapoTofu = new CookingUnit(ModContent.ItemType<Mapo_Tofu>(), ModContent.ItemType<Doubanjiang>(), ModContent.ItemType<TofuCubes>(), ModContent.ItemType<ChoppedScallion>(), ModContent.ItemType<SpicyPepperRing>(), ModContent.ItemType<SichuanPepper>(), ModContent.ItemType<GroundMeat>());
-	public CookingUnit YuxiangEggplant = new CookingUnit(ModContent.ItemType<YuxiangEggplant>(), ModContent.ItemType<GroundMeat>(), ModContent.ItemType<MincedGarlic>(), ModContent.ItemType<ChoppedScallion>(), ModContent.ItemType<Doubanjiang>(), ModContent.ItemType<Rice>(), ModContent.ItemType<EggplantCubes>());
-	public CookingUnit BoiledBullfrog = new CookingUnit(ModContent.ItemType<BoiledBullfrog>(), ModContent.ItemType<FrogMeat>(), ModContent.ItemType<SichuanPepper>(), ModContent.ItemType<SpicyPepperRing>(), ModContent.ItemType<ChoppedScallion>());
 }
