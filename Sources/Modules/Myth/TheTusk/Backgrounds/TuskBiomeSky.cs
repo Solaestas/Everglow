@@ -206,7 +206,7 @@ public class TuskBiomeSky : CustomSky
 	public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
 	{
 		spriteBatch.End();
-		spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
+		spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		TuskGen tuskGen = ModContent.GetInstance<TuskGen>();
 		Vector2 TuskBiomeCenter = new Vector2(tuskGen.tuskCenterX, tuskGen.tuskCenterY) * 16;
 		Vector2 TuskBiomeCenterToScreenPosition = Main.screenPosition - TuskBiomeCenter;
@@ -220,7 +220,7 @@ public class TuskBiomeSky : CustomSky
 		#region #2：风暴
 
 		spriteBatch.End();
-		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 
 		Vector2 FarS = new Vector2(Main.screenWidth / 2f, Main.screenHeight + 80) - TuskBiomeCenterToScreenPosition * 0.04f;
@@ -237,12 +237,12 @@ public class TuskBiomeSky : CustomSky
 
 
 		spriteBatch.End();
-		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 		//计算矩阵
 		var camPos = new Vector3(Main.screenWidth / 2 + Main.screenPosition.X, Main.screenHeight / 2 + Main.screenPosition.Y, -300);
 		int lookup = 50;//往上看
-		var matrix = Matrix.CreateLookAt(camPos, new Vector3(camPos.X, camPos.Y - lookup, 1), Vector3.Down);
+		var matrix = Matrix.CreateLookAt(camPos, new Vector3(camPos.X, camPos.Y - lookup, 1), Vector3.Down * Main.LocalPlayer.gravDir);
 		matrix *= Matrix.CreatePerspectiveFieldOfView(MathHelper.Pi / 5, Main.graphics.GraphicsDevice.Viewport.AspectRatio, 1, 12500);
 
 		Effect eff = MythContent.QuickEffect("Effects/DrawPrim3D");
@@ -359,7 +359,7 @@ public class TuskBiomeSky : CustomSky
 		#endregion
 		#region #3：前景
 		spriteBatch.End();
-		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		var texCloseII = ModAsset.TuskMiddle.Value;
 		Rectangle rvcII = GetDrawRect(texCloseII.Size(), 0.14f, 1.3f);
 		rvcII.X += 460;
@@ -384,7 +384,7 @@ public class TuskBiomeSky : CustomSky
 		}
 
 		spriteBatch.End();
-		spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
+		spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		#endregion
 	}
 	public override void Update(GameTime gameTime)

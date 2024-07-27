@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Myth.Common;
 using Everglow.Myth.Misc.Dusts;
 using Terraria.Audio;
@@ -144,11 +145,31 @@ public class ChlorophyteClub_VFX : ModProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Player player = Main.player[Projectile.owner];
-
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
+		for (int i = 0; i < 4; i++)
+		{
+			float value = (60 - Projectile.timeLeft) / 30f;
+			if (value < 1)
+			{
+				DrawCircleDark(MathF.Pow(value, 0.3f) * 140 * Projectile.ai[0] * 2.2f, 85 * (1 - value) + 62 * Projectile.ai[0] * 2.2f, (1 - value), Projectile.Center - Main.screenPosition, Main.time / 16f);
+				float x = (value - 0.5f) * 2f;
+				float mulColor = MathF.Pow(Math.Min(MathF.Cos(MathHelper.PiOver2 * x), 1 - Math.Abs(x)), 2) * 2;
+				Color c0 = new Color(0.2f * (1 - value), 1.5f * (1 - value), 0.8f * (1 - value), 0) * mulColor;
+				DrawCircle(MathF.Pow(value, 0.3f) * 140 * Projectile.ai[0] * 2.2f, 85 * (1 - value) + 62 * Projectile.ai[0] * 2.2f, c0, Projectile.Center - Main.screenPosition, Main.time / 16f);
+			}
+			value -= 0.2f;
+			if (value is < 1 and > 0)
+			{
+				float x = (value - 0.5f) * 2f;
+				float mulColor = MathF.Pow(Math.Min(MathF.Cos(MathHelper.PiOver2 * x), 1 - Math.Abs(x)), 2) * 5;
+				Color c0 = new Color(0.2f * (1 - value), 1f * (1 - value), 0.8f * (1 - value), 0) * mulColor;
+				DrawCircleDark(MathF.Pow(value, 0.3f) * 104 * Projectile.ai[0] * 2.2f, 47 * (1 - value) + 32 * Projectile.ai[0] * 2.2f, (1 - value), Projectile.Center - Main.screenPosition, -Main.time / 32f);
+				DrawCircle(MathF.Pow(value, 0.3f) * 104 * Projectile.ai[0] * 2.2f, 47 * (1 - value) + 32 * Projectile.ai[0] * 2.2f, c0, Projectile.Center - Main.screenPosition, -Main.time / 32f);
+			}
+		}
 		for (int i = 0; i < 900; i++)
 		{
 			if (Position[i] == Vector2.Zero || !Active[i])
@@ -186,9 +207,9 @@ public class ChlorophyteClub_VFX : ModProjectile
 				var w = MathHelper.Lerp(1f, 0.05f, factor);
 				Lighting.AddLight(OldPosition[i, j], colorLight * 0f * (1 - factor), colorLight * 0.3f * (1 - factor), 0);
 				Vector2 DrawPos = Projectile.Center + OldPosition[i, j] - StartPosition[i] + new Vector2(4) - Main.screenPosition;
-				var color = new Color(0.6f, 1f, 0.1f, 0f);
+				var color = new Color(0.2f, 1f, 0.7f, 0f);
 				if (Smaller[i])
-					color = new Color(0.2f, 0.4f, 0.0f, 0);
+					color = new Color(0.0f, 0.4f, 0.3f, 0);
 				bars.Add(new Vertex2D(DrawPos + normalDir * width, color, new Vector3(factor + 0.008f, 1, w)));
 				bars.Add(new Vertex2D(DrawPos - normalDir * width, color, new Vector3(factor + 0.008f, 0, w)));
 			}
@@ -216,32 +237,42 @@ public class ChlorophyteClub_VFX : ModProjectile
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 			}
-			float value = (60 - Projectile.timeLeft) / 30f;
-			if (value < 1)
-				DrawCircle(MathF.Pow(value, 0.3f) * 140 * Projectile.ai[0] * 2.2f, 85 * (1 - value) + 62 * Projectile.ai[0] * 2.2f, new Color(0.08f * (1 - value), 0.15f * (1 - value), 0.03f * (1 - value), 0), Projectile.Center - Main.screenPosition, Main.time / 16f);
-			value -= 0.2f;
-			if (value is < 1 and > 0)
-				DrawCircle(MathF.Pow(value, 0.3f) * 104 * Projectile.ai[0] * 2.2f, 47 * (1 - value) + 32 * Projectile.ai[0] * 2.2f, new Color(0.08f * (1 - value), 0.10f * (1 - value), 0.02f * (1 - value), 0), Projectile.Center - Main.screenPosition, -Main.time / 32f);
 		}
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
+
 		return false;
 	}
-
 	private static void DrawCircle(float radius, float width, Color color, Vector2 center, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radius / 2; h++)
+		for (int h = 0; h <= 150; h++)
 		{
-			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 0, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / 150f * MathHelper.TwoPi + addRot), color, new Vector3(1, h / 50f, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / 150f * MathHelper.TwoPi + addRot), color, new Vector3(0, h / 50f, 0)));
 		}
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
 		if (circle.Count > 0)
 		{
-			Texture2D t = Commons.ModAsset.Trail_2.Value;
+			Texture2D t = Commons.ModAsset.Noise_spine.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
+			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
+		}
+	}
+	private void DrawCircleDark(float radius, float width, float alpha, Vector2 center, double addRot = 0)
+	{
+		Color color = new Color(1f, 1f, 1f, alpha * 1.6f);
+		var circle = new List<Vertex2D>();
+		for (int h = 0; h <= 150; h++)
+		{
+			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / 150f * MathHelper.TwoPi + addRot), color, new Vector3(1, h / 50f, 0)));
+			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / 150f * MathHelper.TwoPi + addRot), color, new Vector3(0, h / 50f, 0)));
+		}
+		if (circle.Count > 0)
+		{
+			Texture2D t = Commons.ModAsset.Noise_spine_black.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = t;
+			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}

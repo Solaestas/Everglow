@@ -1,4 +1,6 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Weapons;
+
 namespace Everglow.Myth.TheFirefly.Projectiles.DreamWeaver;
 
 internal class DreamWeaverArray : NoTextureProjectile, IWarpProjectile
@@ -14,10 +16,12 @@ internal class DreamWeaverArray : NoTextureProjectile, IWarpProjectile
 		Projectile.DamageType = DamageClass.Summon;
 		Projectile.tileCollide = false;
 	}
+
 	public override bool? CanCutTiles()
 	{
 		return false;
 	}
+
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -28,13 +32,17 @@ internal class DreamWeaverArray : NoTextureProjectile, IWarpProjectile
 		{
 			Projectile.timeLeft = player.itemTime + 60;
 			if (projPower < 30)
+			{
 				projPower++;
+			}
 		}
 		else
 		{
 			projPower--;
 			if (projPower < 0)
+			{
 				Projectile.Kill();
+			}
 		}
 		Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
@@ -45,6 +53,7 @@ internal class DreamWeaverArray : NoTextureProjectile, IWarpProjectile
 
 		ringPos = ringPos * 0.9f + new Vector2(-72 * player.direction, -24 * player.gravDir) * 0.1f;
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawMagicArray();
@@ -79,6 +88,7 @@ internal class DreamWeaverArray : NoTextureProjectile, IWarpProjectile
 				omega -= omegaStep;
 			}
 		}
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect effect = Commons.ModAsset.Trailing.Value;
@@ -90,10 +100,14 @@ internal class DreamWeaverArray : NoTextureProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_4.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 	}

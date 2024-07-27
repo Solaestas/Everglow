@@ -1,10 +1,10 @@
-using Everglow.Myth.Common;
-using Everglow.Myth.TheFirefly;
+using Everglow.Commons.TileHelper;
+using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
-public class LampLotus : ModTile
+public class LampLotus : ModTile, ITileFluentlyDrawn
 {
 	public override void PostSetDefaults()
 	{
@@ -18,10 +18,11 @@ public class LampLotus : ModTile
 		TileObjectData.newTile.CoordinateWidth = 28;
 		TileObjectData.addTile(Type);
 		DustType = 191;
-		var modTranslation = CreateMapEntryName();
-		AddMapEntry(new Color(81, 110, 255), modTranslation);
+
+		AddMapEntry(new Color(81, 110, 255));
 		HitSound = SoundID.Grass;
 	}
+
 	public override void RandomUpdate(int i, int j)
 	{
 		var tile = Main.tile[i, j];
@@ -38,63 +39,16 @@ public class LampLotus : ModTile
 			{
 				tile2.TileType = (ushort)ModContent.TileType<LampLotus>();
 				tile2.HasTile = true;
-				tile2.TileFrameX = (short)(Main.rand.Next(8) * 16);
+				tile2.TileFrameX = (short)(Main.rand.Next(8) * 18);
 			}
 		}
 	}
+
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{
 		r = 0.0f;
 		g = 0.6f;
 		b = 1.3f;
-	}
-	public override void NearbyEffects(int i, int j, bool closer)
-	{
-		if (closer)
-		{
-			var tile = Main.tile[i, j];
-			if (Main.tile[i, j + 1].TileType != tile.TileType)
-			{
-				int length = 0;
-				while (Main.tile[i, j - length].TileType == tile.TileType)
-				{
-					length++;
-				}
-				foreach (Player player in Main.player)
-				{
-					if (player.Hitbox.Intersects(new Rectangle(i * 16, (j - length) * 16, 16, 16 * length)))
-					{
-						if (!TileSpin.TileRotation.ContainsKey((i, j)))
-							TileSpin.TileRotation.Add((i, j), new Vector2(Math.Clamp(player.velocity.X * 0.02f, -1, 1) * 0.2f));
-						else
-						{
-							float rot;
-							float omega;
-							omega = TileSpin.TileRotation[(i, j)].X;
-							rot = TileSpin.TileRotation[(i, j)].Y;
-							if (Math.Abs(omega) < 0.4f && Math.Abs(rot) < 0.4f)
-								TileSpin.TileRotation[(i, j)] = new Vector2(omega + Math.Clamp(player.velocity.X * 0.02f, -1, 1) * 2f, rot + omega + Math.Clamp(player.velocity.X * 0.02f, -1, 1) * 2f);
-							if (Math.Abs(omega) < 0.001f && Math.Abs(rot) < 0.001f)
-								TileSpin.TileRotation.Remove((i, j));
-						}
-					}
-					if (Main.tile[i, j - length].WallType == 0)
-					{
-						if (!TileSpin.TileRotation.ContainsKey((i, j)))
-							TileSpin.TileRotation.Add((i, j), new Vector2(Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.2f)));
-						else
-						{
-							float rot;
-							float omega;
-							omega = TileSpin.TileRotation[(i, j)].X;
-							rot = TileSpin.TileRotation[(i, j)].Y;
-							if (Math.Abs(omega) < 4f && Math.Abs(rot) < 4f)
-								TileSpin.TileRotation[(i, j)] = new Vector2(omega * 0.999f + Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f) * 0.002f, rot * 0.999f + Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f) * 0.002f);
-						}
-					}
-				}
-			}
-		}
 	}
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
@@ -102,18 +56,89 @@ public class LampLotus : ModTile
 		var tile = Main.tile[i, j];
 		if (Main.tile[i, j + 1].TileType != tile.TileType)
 		{
-			int length = 0;
-			while (Main.tile[i, j - length].TileType == tile.TileType)
-			{
-				length++;
-			}
-			Texture2D texflower = ModAsset.LampLotus.Value;
-			Texture2D texflowerGlow = ModAsset.LampLotusGlow.Value;
-			var tsp = new TileSpin();
-			tsp.Update(i, j);
-			tsp.DrawReed(spriteBatch, i, j, length, texflower, texflower, new Rectangle(tile.TileFrameX / 16 * 28, 0, 28, 34), new Rectangle(tile.TileFrameX / 16 * 28, 36, 28, 16), new Vector2(14, 34), new Vector2(14, 16), 8, 16);
-			tsp.DrawReed(spriteBatch, i, j, length, texflower, texflowerGlow, new Rectangle(tile.TileFrameX / 16 * 28, 0, 28, 34), new Rectangle(tile.TileFrameX / 16 * 28, 36, 28, 16), new Vector2(14, 34), new Vector2(14, 16), 8, 16, 1, true, new Color(0, 155, 255, 0));
+			TileFluentDrawManager.AddFluentPoint(this, i, j);
 		}
 		return false;
+	}
+
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	{
+		DrawLotusPiece(pos, pos.ToWorldCoordinates() - screenPosition, spriteBatch, tileDrawing);
+	}
+
+	/// <summary>
+	/// Draw a piece of lotus
+	/// </summary>
+	private void DrawLotusPiece(Point tilePos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	{
+		Vector2 lastOffset = new Vector2(0, 8);
+		for (int j = 0; j < 30; j++)
+		{
+			if(tilePos.Y - j < 21)
+			{
+				return;
+			}
+			var tile = Main.tile[tilePos + new Point(0, -j)];
+			if(!(tile.TileType == Type && tile.HasTile))
+			{
+				return;
+			}
+			var tileUp = Main.tile[tilePos + new Point(0, -j - 1)];
+			bool lastTile = false;
+			if (!(tileUp.TileType == Type && tileUp.HasTile))
+			{
+				lastTile = true;
+			}
+			ushort type = tile.TileType;
+			var frame = new Rectangle(5, 62, 18, 18);
+			if(lastTile)
+			{
+				frame = new Rectangle(28 * tile.TileFrameX / 18, 42, 28, 28);
+			}
+
+			// 回声涂料
+			if (!TileDrawing.IsVisible(tile))
+			{
+				continue;
+			}
+
+			int paint = Main.tile[tilePos].TileColor;
+			Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.LampLotus_Path, type, 1, paint, tileDrawing);
+			tex ??= ModAsset.LampLotus.Value;
+
+			float windCycle = 0;
+			if (tileDrawing.InAPlaceWithWind(tilePos.X, tilePos.Y, 1, 1))
+			{
+				windCycle = tileDrawing.GetWindCycle(tilePos.X, tilePos.Y, tileDrawing._sunflowerWindCounter);
+			}
+
+			int totalPushTime = 140;
+			float pushForcePerFrame = 0.96f;
+			float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X, tilePos.Y - j, 1, 1, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+			windCycle += highestWindGridPushComplex;
+			float rotation = windCycle * 0.21f;
+
+			var tileLight = Lighting.GetColor(tilePos);
+
+			// 支持发光涂料
+			tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(tilePos.X, tilePos.Y - j, tile, type, 0, 0, ref tileLight, tileDrawing._rand.NextBool(4));
+			tileLight = tileDrawing.DrawTiles_GetLightOverride(tilePos.X, tilePos.Y - j, tile, type, 0, 0, tileLight);
+
+
+			var origin = new Vector2(9, 18);
+			if (lastTile)
+			{
+				origin = new Vector2(14, 28);
+			}
+
+			var tileSpriteEffect = SpriteEffects.None;
+			spriteBatch.Draw(tex, drawCenterPos + lastOffset, frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
+			if (lastTile)
+			{
+				frame.Y -= 37;
+				spriteBatch.Draw(tex, drawCenterPos + lastOffset, frame, new Color(1f, 1f, 1f ,0), rotation, origin, 1f, tileSpriteEffect, 0f);
+			}
+			lastOffset += new Vector2(0, -16).RotatedBy(rotation);
+		}
 	}
 }

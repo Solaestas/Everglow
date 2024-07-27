@@ -1,4 +1,3 @@
-using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Myth.TheFirefly.NPCs.Bosses;
 using Everglow.Myth.TheFirefly.WorldGeneration;
 using SubworldLibrary;
@@ -17,8 +16,6 @@ public class MothBackground : ModSystem
 	private float backgroundAlpha = 0f;
 
 	private float luminance = 1f; // 发光物亮度，boss战时变暗
-
-	private List<Rope> ropes = new List<Rope>();
 
 	/// <summary>
 	/// 初始化
@@ -290,16 +287,6 @@ public class MothBackground : ModSystem
 		return new Rectangle(RX, RY, (int)screenSize.X, (int)screenSize.Y);
 	}
 
-	/// <summary>
-	/// 绳子的图片坐标转到近景纹理下的坐标
-	/// </summary>
-	/// <returns> </returns>
-	private Vector2 ImageSpaceToCloseTextureSpace(Vector2 posIS, Vector2 texSize)
-	{
-		Vector2 mappedIS = posIS + new Vector2(0, 465);
-		return mappedIS / texSize;
-	}
-
 	private void DrawFarBG(Color baseColor)
 	{
 		var texSky = ModAsset.FireflySky.Value;
@@ -309,7 +296,7 @@ public class MothBackground : ModSystem
 		var texMidClose = ModAsset.FireflyMidClose.Value;
 		var texClose = ModAsset.FireflyClose.Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Vector2 ScreenCen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
 		Vector2 DrawPos = ScreenCen;
 		Main.spriteBatch.Draw(texSky, DrawPos, GetDrawRect(texSky.Size(), 0, true), baseColor, 0,
@@ -336,29 +323,26 @@ public class MothBackground : ModSystem
 		Main.spriteBatch.End();
 
 		// 便于合批，顶点绘制分开处置
-		Texture2D VineTexture = ModAsset.Dark.Value;
 		var texCloseII = ModAsset.FireflyClose2.Value;
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Rectangle rvcII = GetDrawRect(texCloseII.Size(), 0.57f, false);
-		rvcII.Y -= 300;
+		rvcII.Y += -300;
 		rvcII.X += 300;
-		Color colorCloseII = GetLuminace(Color.White * backgroundAlpha);
 		float UpY = rvcII.Y / (float)texCloseII.Height;
 		float DownY = (rvcII.Y + rvcII.Height) / (float)texCloseII.Height;
 		var CloseII = new List<Vertex2D>
 		{
-			new Vertex2D(new Vector2(0, 0), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, UpY, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth, 0), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
-			new Vertex2D(new Vector2(0, Main.screenHeight), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
+			new Vertex2D(new Vector2(0, 0), baseColor, new Vector3(rvcII.X / (float)texCloseII.Width, UpY, 0)),
+			new Vertex2D(new Vector2(Main.screenWidth, 0), baseColor, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
+			new Vertex2D(new Vector2(0, Main.screenHeight), baseColor, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
 
-			new Vertex2D(new Vector2(0, Main.screenHeight), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth, 0), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth, Main.screenHeight), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, DownY, 0)),
+			new Vertex2D(new Vector2(0, Main.screenHeight), baseColor, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
+			new Vertex2D(new Vector2(Main.screenWidth, 0), baseColor, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
+			new Vertex2D(new Vector2(Main.screenWidth, Main.screenHeight), baseColor, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, DownY, 0)),
 		};
 		Effect bgW = ModAsset.BackgroundWrap.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		bgW.Parameters["uTransform"].SetValue(projection);
-		bgW.Parameters["uTime"].SetValue(0.34f);
 		bgW.CurrentTechnique.Passes[0].Apply();
 
 		if (CloseII.Count > 2)
@@ -370,11 +354,11 @@ public class MothBackground : ModSystem
 		if (DownY > 1)
 		{
 			float DrawY = (1 - UpY) / (DownY - UpY) * Main.screenHeight - 5;
-			Main.spriteBatch.Draw(texCloseII, new Rectangle(0, (int)DrawY, Main.screenWidth, Main.screenHeight - (int)DrawY), new Rectangle(1000, 1100, 1, 1), colorCloseII);
+			Main.spriteBatch.Draw(texCloseII, new Rectangle(0, (int)DrawY, Main.screenWidth, Main.screenHeight - (int)DrawY), new Rectangle(1000, 1100, 1, 1), baseColor);
 		}
 
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
 
 	/// <summary>

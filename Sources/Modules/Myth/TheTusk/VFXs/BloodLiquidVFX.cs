@@ -9,7 +9,6 @@ internal class BloodLiquidPipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModContent.Request<Effect>("Everglow/Myth/TheTusk/VFXs/BloodLiquidVFX", AssetRequestMode.ImmediateLoad);
-		effect.Value.Parameters["uNoise"].SetValue(ModAsset.HiveCyberNoise.Value);
 	}
 	public override void BeginRender()
 	{
@@ -17,6 +16,7 @@ internal class BloodLiquidPipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.Parameters["uNoise"].SetValue(ModAsset.HiveCyberNoise.Value);
 		Texture2D FlameColor = ModAsset.BloodLiquid_Color.Value;
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
 		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
@@ -34,7 +34,6 @@ internal class ThickBloodLiquidPipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModContent.Request<Effect>("Everglow/Myth/TheTusk/VFXs/BloodLiquidVFX", AssetRequestMode.ImmediateLoad);
-		effect.Value.Parameters["uNoise"].SetValue(ModAsset.HiveCyberNoiseThicker.Value);
 	}
 	public override void BeginRender()
 	{
@@ -42,6 +41,7 @@ internal class ThickBloodLiquidPipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.Parameters["uNoise"].SetValue(ModAsset.HiveCyberNoiseThicker.Value);
 		Texture2D FlameColor = ModAsset.BloodLiquid_Color_Thicker.Value;
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
 		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;

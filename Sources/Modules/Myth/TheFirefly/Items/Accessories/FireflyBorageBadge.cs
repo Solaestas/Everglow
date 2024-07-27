@@ -73,7 +73,7 @@ public class FireflyBorageBadge : ModItem
 		CreateRecipe()
 			//.AddIngredient(ModContent.ItemType<Everglow.PlantAndFarm.Items.Materials.WindMoveSeed>(), 8) // 15
 			.AddIngredient(ModContent.ItemType<BlackStarShrub>(), 24)
-			.AddIngredient(ModContent.ItemType<GlowingPedal>(), 6)
+			.AddIngredient(ModContent.ItemType<GlowingPetal>(), 6)
 			.AddTile(TileID.LivingLoom)
 			.Register();
 	}

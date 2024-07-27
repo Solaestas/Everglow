@@ -1,6 +1,5 @@
 using Everglow.Myth.Misc.FixCoins;
 using Terraria.Audio;
-using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheTusk.Tiles;
@@ -16,51 +15,56 @@ public class BloodyMossWheel : ModTile
 		TileObjectData.newTile.Width = 1;
 		TileObjectData.newTile.CoordinateHeights = new int[]
 		{
-			16
+			16,
 		};
 		TileObjectData.newTile.CoordinateWidth = 16;
 		TileObjectData.addTile(Type);
 		DustType = 4;
 		var modTranslation = CreateMapEntryName();
-						AddMapEntry(new Color(96, 93, 91), modTranslation);
+		AddMapEntry(new Color(96, 93, 91), modTranslation);
 	}
+
 	public override bool CanExplode(int i, int j)
 	{
 		return CanK;
 	}
+
 	public override bool CanKillTile(int i, int j, ref bool blockDamaged)
 	{
 		return CanK;
 	}
 
-	private float[] Rot = new float[24];
-	private float[] AimRot = new float[24];
-	private float Rot2 = 0;
-	private int[] Cooling = new int[24];
-	private int[] Dir = new int[24];
+	private float[] rot = new float[24];
+	private float[] aimRot = new float[24];
+	private float rot2 = 0;
+	private int[] cooling = new int[24];
+	private int[] dir = new int[24];
 	public static int Symbol = 1;
-	private int Step = 0;
-	private int StepChange = 0;
+	private int step = 0;
+	private int stepChange = 0;
 	public static int Killing = 0;
 	public static float TileI = 0;
 	public static float TileJ = 0;
 	public static bool CanK = false;
+
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
+		{
 			zero = Vector2.Zero;
+		}
 
-		Texture2D BaseCo1 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/ForgeWave").Value;
-		Texture2D Sp1a = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanBottomLine").Value;
-		Texture2D Sp1b = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanBottomRedLight").Value;
-		Texture2D Sp1c = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanBottomFace").Value;
-		Texture2D Sp2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanPin").Value;
-		Texture2D SpL1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanL1").Value;
-		Texture2D SpL2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanL2").Value;
-		Texture2D SpL3 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanL3").Value;
-		Texture2D SpL4 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanL4").Value;
-		Texture2D SpIC = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanStrick").Value;
+		Texture2D BaseCo1 = ModAsset.ForgeWave.Value;
+		Texture2D Sp1a = ModAsset.StonePanBottomLine.Value;
+		Texture2D Sp1b = ModAsset.StonePanBottomRedLight.Value;
+		Texture2D Sp1c = ModAsset.StonePanBottomFace.Value;
+		Texture2D Sp2 = ModAsset.StonePanPin.Value;
+		Texture2D SpL1 = ModAsset.StonePanL1.Value;
+		Texture2D SpL2 = ModAsset.StonePanL2.Value;
+		Texture2D SpL3 = ModAsset.StonePanL3.Value;
+		Texture2D SpL4 = ModAsset.StonePanL4.Value;
+		Texture2D SpIC = ModAsset.StonePanStrick.Value;
 		var origin = new Vector2(56);
 
 		Color color = Lighting.GetColor(i, j);
@@ -68,78 +72,88 @@ public class BloodyMossWheel : ModTile
 		spriteBatch.Draw(BaseCo1, new Vector2(i * 16 - 16 + 6, j * 16 - 68 - 16) + origin - Main.screenPosition + zero, new Rectangle(256 + (int)v.X, 256 + (int)v.Y, 32, 32), new Color(255, 0, 0, 255), 0f, origin, 1f, SpriteEffects.None, 0f);
 		spriteBatch.Draw(BaseCo1, new Vector2(i * 16 - 16 + 6, j * 16 - 68 - 16) + origin - Main.screenPosition + zero, new Rectangle(256 - (int)v.X, 256 - (int)v.Y, 32, 32), new Color(255, 125, 0, 0), 0f, origin, 1f, SpriteEffects.None, 0f);
 		spriteBatch.Draw(Sp1a, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, color, 0f, origin, 1f, SpriteEffects.None, 0f);
-		if (StepChange > 0)
+		if (stepChange > 0)
 		{
-			if (StepChange > 10)
-				spriteBatch.Draw(Sp1b, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0f, origin, (30 - StepChange) / 20f, SpriteEffects.None, 0f);
+			if (stepChange > 10)
+			{
+				spriteBatch.Draw(Sp1b, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0f, origin, (30 - stepChange) / 20f, SpriteEffects.None, 0f);
+			}
 			else
 			{
-				spriteBatch.Draw(Sp1b, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(StepChange * 25, StepChange * 25, StepChange * 25, 0), 0f, origin, 0.95f, SpriteEffects.None, 0f);
+				spriteBatch.Draw(Sp1b, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(stepChange * 25, stepChange * 25, stepChange * 25, 0), 0f, origin, 0.95f, SpriteEffects.None, 0f);
 			}
-			StepChange--;
+			stepChange--;
 		}
 		else
 		{
-			StepChange = 0;
+			stepChange = 0;
 		}
-		if (Step == 0)
-			Rot2 = 0;
-		if (Step == 1)
+		if (step == 0)
 		{
-			if (StepChange > 0)
-				Rot2 = (float)(Math.PI / 2d) * (30 - StepChange) / 30f;
+			rot2 = 0;
+		}
+
+		if (step == 1)
+		{
+			if (stepChange > 0)
+			{
+				rot2 = (float)(Math.PI / 2d) * (30 - stepChange) / 30f;
+			}
 			else
 			{
-				Rot2 = (float)(Math.PI / 2d);
+				rot2 = (float)(Math.PI / 2d);
 			}
 		}
-		if (Step == 2)
+		if (step == 2)
 		{
-			if (StepChange > 0)
-				Rot2 = (float)(Math.PI / 2d) * (30 - StepChange) / 30f + (float)(Math.PI / 2d);
+			if (stepChange > 0)
+			{
+				rot2 = (float)(Math.PI / 2d) * (30 - stepChange) / 30f + (float)(Math.PI / 2d);
+			}
 			else
 			{
-				Rot2 = (float)Math.PI;
+				rot2 = (float)Math.PI;
 			}
 		}
 		spriteBatch.Draw(Sp1c, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, color, 0f, origin, 1f, SpriteEffects.None, 0f);
-		spriteBatch.Draw(Sp2, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, color, Rot2, origin, 1f, SpriteEffects.None, 0f);
-		Symbol = Step + 1;
-		//0↑
-		//1→
-		//2↓
-		//3←
-		if (Dir[0] == 6 && Dir[1] == 1 && Dir[2] == 2 && Dir[3] == 0)
+		spriteBatch.Draw(Sp2, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, color, rot2, origin, 1f, SpriteEffects.None, 0f);
+		Symbol = step + 1;
+
+		// 0↑
+		// 1→
+		// 2↓
+		// 3←
+		if (dir[0] == 6 && dir[1] == 1 && dir[2] == 2 && dir[3] == 0)
 		{
-			if (Step == 0)
+			if (step == 0)
 			{
-				Step += 1;
-				StepChange = 30;
+				step += 1;
+				stepChange = 30;
 			}
 		}
-		if (Dir[0] == 7 && Dir[1] == 0 && Dir[2] == 4 && Dir[3] == 0)
+		if (dir[0] == 7 && dir[1] == 0 && dir[2] == 4 && dir[3] == 0)
 		{
-			if (Step == 1)
+			if (step == 1)
 			{
-				Step += 1;
-				StepChange = 30;
+				step += 1;
+				stepChange = 30;
 			}
 		}
-		if (Dir[0] == 3 && Dir[1] == 2 && Dir[2] == 3 && Dir[3] == 5)
+		if (dir[0] == 3 && dir[1] == 2 && dir[2] == 3 && dir[3] == 5)
 		{
-			if (Step == 2)
+			if (step == 2)
 			{
 				SoundEngine.PlaySound(SoundID.Chat, new Vector2(i * 16 + 6, j * 16 - 64));
-				Step += 1;
+				step += 1;
 				CanK = true;
 				Killing = 60;
 			}
 		}
 		Vector2 vZoom = Main.GameViewMatrix.Zoom;
 
-		Vector2 ScreenCenter = Main.screenTarget.Size() / 2f + Main.screenPosition;//世界位置屏幕中心
-		Vector2 CorrectedMouseScreenCenter = (Main.MouseScreen - Main.screenTarget.Size() / 2f) / vZoom.X;//鼠标的中心指向位
-		Vector2 CorrectedMouseWorld = CorrectedMouseScreenCenter + ScreenCenter;//鼠标世界坐标校正
+		Vector2 ScreenCenter = Main.screenTarget.Size() / 2f + Main.screenPosition; // 世界位置屏幕中心
+		Vector2 CorrectedMouseScreenCenter = (Main.MouseScreen - Main.screenTarget.Size() / 2f) / vZoom.X; // 鼠标的中心指向位
+		Vector2 CorrectedMouseWorld = CorrectedMouseScreenCenter + ScreenCenter; // 鼠标世界坐标校正
 
 		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/Symbol" + Symbol.ToString()).Value, new Vector2(i * 16 + 6, j * 16 - 68) + zero - Main.screenPosition, null, new Color(150 + (int)v.X, 150 + (int)v.X, 150 + (int)v.X, 0), 0f, origin, 1f, SpriteEffects.None, 0f);
 		if ((CorrectedMouseWorld - (new Vector2(i * 16 + 6, j * 16 - 64) + new Vector2(0, -50))).Length() < 12)
@@ -147,13 +161,16 @@ public class BloodyMossWheel : ModTile
 			spriteBatch.Draw(SpL1, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0, origin, 1f, SpriteEffects.None, 0f);
 			if (Main.mouseRight && !Main.gamePaused)
 			{
-				if (Cooling[0] <= 0)
+				if (cooling[0] <= 0)
 				{
-					Dir[0]++;
-					if (Dir[0] >= 8)
-						Dir[0] = 0;
-					AimRot[0] = (float)Math.PI / 4f * Dir[0];
-					Cooling[0] = 4;
+					dir[0]++;
+					if (dir[0] >= 8)
+					{
+						dir[0] = 0;
+					}
+
+					aimRot[0] = (float)Math.PI / 4f * dir[0];
+					cooling[0] = 4;
 				}
 			}
 		}
@@ -162,13 +179,16 @@ public class BloodyMossWheel : ModTile
 			spriteBatch.Draw(SpL2, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0, origin, 1f, SpriteEffects.None, 0f);
 			if (Main.mouseRight && !Main.gamePaused)
 			{
-				if (Cooling[1] <= 0)
+				if (cooling[1] <= 0)
 				{
-					Dir[1]++;
-					if (Dir[1] >= 8)
-						Dir[1] = 0;
-					AimRot[1] = (float)Math.PI / 4f * Dir[1];
-					Cooling[1] = 4;
+					dir[1]++;
+					if (dir[1] >= 8)
+					{
+						dir[1] = 0;
+					}
+
+					aimRot[1] = (float)Math.PI / 4f * dir[1];
+					cooling[1] = 4;
 				}
 			}
 		}
@@ -177,13 +197,16 @@ public class BloodyMossWheel : ModTile
 			spriteBatch.Draw(SpL3, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0, origin, 1f, SpriteEffects.None, 0f);
 			if (Main.mouseRight && !Main.gamePaused)
 			{
-				if (Cooling[2] <= 0)
+				if (cooling[2] <= 0)
 				{
-					Dir[2]++;
-					if (Dir[2] >= 8)
-						Dir[2] = 0;
-					AimRot[2] = (float)Math.PI / 4f * Dir[2];
-					Cooling[2] = 4;
+					dir[2]++;
+					if (dir[2] >= 8)
+					{
+						dir[2] = 0;
+					}
+
+					aimRot[2] = (float)Math.PI / 4f * dir[2];
+					cooling[2] = 4;
 				}
 			}
 		}
@@ -192,30 +215,33 @@ public class BloodyMossWheel : ModTile
 			spriteBatch.Draw(SpL4, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0, origin, 1f, SpriteEffects.None, 0f);
 			if (Main.mouseRight && !Main.gamePaused)
 			{
-				if (Cooling[3] <= 0)
+				if (cooling[3] <= 0)
 				{
-					Dir[3]++;
-					if (Dir[3] >= 8)
-						Dir[3] = 0;
-					AimRot[3] = (float)Math.PI / 4f * Dir[3];
-					Cooling[3] = 4;
+					dir[3]++;
+					if (dir[3] >= 8)
+					{
+						dir[3] = 0;
+					}
+
+					aimRot[3] = (float)Math.PI / 4f * dir[3];
+					cooling[3] = 4;
 				}
 			}
 		}
-		spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68) + zero + new Vector2(0, -46) - Main.screenPosition, null, color, Rot[0], new Vector2(12), 1f, SpriteEffects.None, 0f);
-		spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68) + zero + new Vector2(46, 0) - Main.screenPosition, null, color, Rot[1], new Vector2(12), 1f, SpriteEffects.None, 0f);
-		spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68 - 4) + zero + new Vector2(0, 50) - Main.screenPosition, null, color, Rot[2], new Vector2(12), 1f, SpriteEffects.None, 0f);
-		spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68) + zero + new Vector2(-46, 0) - Main.screenPosition, null, color, Rot[3], new Vector2(12), 1f, SpriteEffects.None, 0f);
+		spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68) + zero + new Vector2(0, -46) - Main.screenPosition, null, color, rot[0], new Vector2(12), 1f, SpriteEffects.None, 0f);
+		spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68) + zero + new Vector2(46, 0) - Main.screenPosition, null, color, rot[1], new Vector2(12), 1f, SpriteEffects.None, 0f);
+		spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68 - 4) + zero + new Vector2(0, 50) - Main.screenPosition, null, color, rot[2], new Vector2(12), 1f, SpriteEffects.None, 0f);
+		spriteBatch.Draw(SpIC, new Vector2(i * 16 + 6, j * 16 - 68) + zero + new Vector2(-46, 0) - Main.screenPosition, null, color, rot[3], new Vector2(12), 1f, SpriteEffects.None, 0f);
 		for (int l = 0; l < 4; l++)
 		{
-			if (Cooling[l] > 0)
+			if (cooling[l] > 0)
 			{
-				Rot[l] += (float)Math.PI / 20f;
-				Cooling[l]--;
+				rot[l] += (float)Math.PI / 20f;
+				cooling[l]--;
 			}
 			else
 			{
-				Rot[l] = AimRot[l];
+				rot[l] = aimRot[l];
 			}
 		}
 
@@ -280,18 +306,21 @@ public class BloodyMossWheel : ModTile
 		TileJ = j;
 		DrawAll(spriteBatch);
 	}
+
 	public static void DrawAll(SpriteBatch sb)
 	{
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
+		{
 			zero = Vector2.Zero;
+		}
 
-		Texture2D Tdoor = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/CosmicFlame").Value;
-		Texture2D Tdoor2 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/CosmicVort").Value;
-		Texture2D Tdoor3 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/CosmicPerlin").Value;
+		Texture2D Tdoor = ModAsset.CosmicFlame.Value;
+		Texture2D Tdoor2 =ModAsset.CosmicVort.Value;
+		Texture2D Tdoor3 = ModAsset.CosmicPerlin.Value;
 		if (CanK)
 		{
-			if(!Main.gamePaused)
+			if (!Main.gamePaused)
 			{
 				Killing--;
 			}
@@ -321,7 +350,6 @@ public class BloodyMossWheel : ModTile
 			dissolve.CurrentTechnique.Passes[0].Apply();
 
 			sb.Draw(scene, new Vector2(TileI * 16 + 8, TileJ * 16 - 68) - Main.screenPosition, null, Color.White * 0.8f, 0, scene.Size() * 0.5f, 0.25f, SpriteEffects.None, 0f);
-
 
 			sb.End();
 			sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, matrix);

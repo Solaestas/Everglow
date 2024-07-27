@@ -38,7 +38,7 @@ namespace Everglow.Myth.TheFirefly.Items.Potions
 		public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ModContent.ItemType<GlowingPedal>(), 1);
+			recipe.AddIngredient(ModContent.ItemType<GlowingPetal>(), 1);
 			recipe.AddIngredient(ModContent.ItemType<GlowingFirefly>(), 1);
 			recipe.AddIngredient(ItemID.Moonglow, 1);
 			recipe.AddIngredient(ItemID.BottledWater, 1);

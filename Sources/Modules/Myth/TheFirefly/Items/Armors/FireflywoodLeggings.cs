@@ -29,8 +29,8 @@ namespace Everglow.Myth.TheFirefly.Items.Armors
 		{
 			Recipe recipe = CreateRecipe();
 			recipe.AddIngredient<GlowWood>(40);
-			recipe.AddIngredient<GlowingPedal>(5);
-			recipe.AddIngredient<FireflyMoss>(10);
+			recipe.AddIngredient<GlowingPetal>(5);
+			recipe.AddIngredient<FireflyMoss_Item>(10);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.Register();
 		}

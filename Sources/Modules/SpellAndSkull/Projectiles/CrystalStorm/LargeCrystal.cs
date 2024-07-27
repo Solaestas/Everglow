@@ -1,11 +1,10 @@
 using Everglow.Commons.Vertex;
-using Everglow.SpellAndSkull.Common;
 using Everglow.SpellAndSkull.Dusts;
 using Terraria.Audio;
 
 namespace Everglow.SpellAndSkull.Projectiles.CrystalStorm;
 
-public class LargeCrystal : ModProjectile//This proj summon storm at breaking 
+public class LargeCrystal : ModProjectile// This proj summon storm at breaking
 {
 	public override void SetDefaults()
 	{
@@ -26,11 +25,13 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
 	}
+
 	private int timeToKill = 0;
+
 	public override void AI()
 	{
 		timeToKill--;
-		if(timeToKill < 0)
+		if (timeToKill < 0)
 		{
 			Projectile.velocity *= 0.9993f;
 			Projectile.velocity.Y += 0.02f;
@@ -41,28 +42,33 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 			{
 				Projectile.ai[1] -= 1;
 				if (Projectile.ai[1] == 1)
+				{
 					Projectile.Kill();
+				}
 			}
 			Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 		}
 		else
 		{
 			Projectile.velocity *= 0;
-			if(timeToKill == 0)
+			if (timeToKill == 0)
 			{
 				Projectile.Kill();
 			}
 		}
 	}
+
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
 		HitTile();
 		return false;
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		HitTile();
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D light = ModAsset.LargeCrystal.Value;
@@ -70,9 +76,14 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 		float k0 = (1000 - Projectile.timeLeft) / k1;
 		float k2 = 1f;
 		if (Projectile.timeLeft <= 1000 - k1)
+		{
 			k0 = 1;
+		}
+
 		if (Projectile.timeLeft < 200)
+		{
 			k2 = Projectile.timeLeft / 200f;
+		}
 
 		var bars = new List<Vertex2D>();
 		float width = 24;
@@ -81,14 +92,19 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
 
 			trueL++;
 		}
 		for (int i = 1; i < trueL; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
+
 			if (i < 31)
 			{
 				float k3 = (i - 1) / 30f;
@@ -111,7 +127,7 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
 
-		if(timeToKill < 0)
+		if (timeToKill < 0)
 		{
 			Color c1 = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16));
 			c1.A = 200;
@@ -121,6 +137,7 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 
 		return false;
 	}
+
 	public void HitTile()
 	{
 		var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Storm>(), (int)(Projectile.damage * 0.6f), Projectile.knockBack, Projectile.owner);
@@ -138,11 +155,10 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 				velocity = new Vector2(Main.rand.NextFloat(2.5f, 7.5f), 0).RotatedByRandom(6.283),
 				Active = true,
 				Visible = true,
-				position = Projectile.Center
+				position = Projectile.Center,
 			};
 
 			Ins.VFXManager.Add(cp);
-
 		}
 		for (int j = 0; j < 15; j++)
 		{
@@ -166,7 +182,7 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 		SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);
 		Projectile.tileCollide = false;
 		Projectile.friendly = false;
-		Projectile.hostile= false;
+		Projectile.hostile = false;
 		Projectile.damage = 0;
 		timeToKill = 60;
 	}

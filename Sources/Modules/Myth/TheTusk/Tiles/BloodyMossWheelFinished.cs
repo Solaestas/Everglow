@@ -87,7 +87,7 @@ public class BloodyMossWheelFinished : ModTile
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
 
-		Texture2D Tdoor = ModAsset.Tusk_CosmicFlame.Value;
+		Texture2D Tdoor = Commons.ModAsset.Noise_flame_2.Value;
 		Texture2D Tdoor2 = ModAsset.CosmicVort.Value;
 		Texture2D Tdoor3 = ModAsset.CosmicPerlin.Value;
 

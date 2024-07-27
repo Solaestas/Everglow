@@ -1,6 +1,4 @@
 using Everglow.Commons.Coroutines;
-using Everglow.Myth.Common;
-using Everglow.Myth.LanternMoon.Dusts;
 using ReLogic.Content;
 using Terraria.Audio;
 
@@ -10,14 +8,6 @@ public class BloodLampProj : ModProjectile
 {
 	private CoroutineManager _coroutineManager = new CoroutineManager();
 
-	public override void SetStaticDefaults()
-	{
-		for (int x = -1; x < 15; x++)
-		{
-			BLantern[x + 1] = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/BloodLampFrame/BloodLamp_" + x.ToString());
-		}
-		// DisplayName.SetDefault("Blood Lamp");
-	}
 	public override void SetDefaults()
 	{
 		Projectile.width = 38;
@@ -29,17 +19,24 @@ public class BloodLampProj : ModProjectile
 		Projectile.tileCollide = false;
 		Projectile.timeLeft = 600;
 		Projectile.scale = 1;
+		for (int x = -1; x < 15; x++)
+		{
+			bLantern[x + 1] = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/BloodLampFrame/BloodLamp_" + x.ToString());
+		}
 	}
-	//这种贴图每个Proj都是一样的也不会变化，干脆直接readonly然后在SSD里Request，然后所有Proj共用一个数组
-	private Asset<Texture2D>[] BLantern = new Asset<Texture2D>[16];
-	//这个bool数组每个Proj不同，所以要到Clone里new，但是直接构造是不必要的，因为不是clone获得的那个实例不会调用AI与Draw
-	private bool[] NoPedal;
-	//值类型就不必在clone里重新初始化了
-	private float PearlRot = 0;
-	private float PearlOmega = 0;
-	private int Col = 0;
+
+	// 这种贴图每个Proj都是一样的也不会变化，干脆直接readonly然后在SSD里Request，然后所有Proj共用一个数组
+	private static Asset<Texture2D>[] bLantern = new Asset<Texture2D>[16];
+
+	// 这个bool数组每个Proj不同，所以要到Clone里new，但是直接构造是不必要的，因为不是clone获得的那个实例不会调用AI与Draw
+	private bool[] noPedal;
+
+	// 值类型就不必在clone里重新初始化了
+	private float pearlRot = 0;
+	private float pearlOmega = 0;
+	private int col = 0;
 	private int timer = 0;
-	private static Vector2[] PedalPos = new Vector2[]
+	private static Vector2[] pedalPos = new Vector2[]
 	{
 			new Vector2(19, 19),
 			new Vector2(19, 19),
@@ -56,16 +53,9 @@ public class BloodLampProj : ModProjectile
 			new Vector2(6, 21),
 			new Vector2(19, 23),
 			new Vector2(23, 16),
-			new Vector2(15, 16)
+			new Vector2(15, 16),
 	};
 
-	public override ModProjectile Clone(Projectile projectile)
-	{
-		var clone = base.Clone(projectile) as BloodLampProj;
-		NoPedal = new bool[16];
-		_coroutineManager = new CoroutineManager();
-		return clone;
-	}
 	public override void AI()
 	{
 		timer++;
@@ -79,23 +69,28 @@ public class BloodLampProj : ModProjectile
 		Projectile.rotation = Projectile.velocity.X * 0.05f;
 		Projectile.velocity *= 0.9f * Projectile.timeLeft / 600f;
 		if (Projectile.velocity.Length() > 0.3f)
+		{
 			Projectile.velocity.Y -= 0.15f * Projectile.timeLeft / 600f;
+		}
 	}
 
 	public override void PostDraw(Color lightColor)
 	{
-		PearlOmega += (Projectile.rotation - PearlRot) / 75f;
-		PearlOmega *= 0.95f;
-		PearlRot += PearlOmega;
+		pearlOmega += (Projectile.rotation - pearlRot) / 75f;
+		pearlOmega *= 0.95f;
+		pearlRot += pearlOmega;
 		Color color = Lighting.GetColor((int)(Projectile.Center.X / 16d), (int)(Projectile.Center.Y / 16d));
-		if (NoPedal == null)
-			NoPedal = new bool[16];
-		if (BLantern == null)
+		if (noPedal == null)
 		{
-			BLantern = new Asset<Texture2D>[16];
+			noPedal = new bool[16];
+		}
+
+		if (bLantern == null)
+		{
+			bLantern = new Asset<Texture2D>[16];
 			for (int x = -1; x < 15; x++)
 			{
-				BLantern[x + 1] = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/BloodLampFrame/BloodLamp_" + x.ToString());
+				bLantern[x + 1] = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/BloodLampFrame/BloodLamp_" + x.ToString());
 			}
 		}
 		for (int x = 0; x < 16; x++)
@@ -103,24 +98,27 @@ public class BloodLampProj : ModProjectile
 			float Rot = Projectile.rotation;
 			var Cen = new Vector2(19f, 19f);
 			if (x >= 2)
+			{
 				Rot = -(float)Math.Sin(Main.time / 26d + x) / 7f + Projectile.rotation;
+			}
 			else if (x == 0)
 			{
-				Rot = PearlRot;
+				Rot = pearlRot;
 				Cen = new Vector2(19f, 51f);
 			}
-			if (!NoPedal[x] || x < 1)
+			if (!noPedal[x] || x < 1)
 			{
-				Main.spriteBatch.Draw(BLantern[x].Value, Projectile.Center - Main.screenPosition + Cen - BLantern[x].Size() / 2f/*坐标校正*/, null, color, Rot, Cen, 1, SpriteEffects.None, 0);
-				if (!NoPedal[x] && x == 1)
+				Main.spriteBatch.Draw(bLantern[x].Value, Projectile.Center - Main.screenPosition + Cen - bLantern[x].Size() / 2f/*坐标校正*/, null, color, Rot, Cen, 1, SpriteEffects.None, 0);
+				if (!noPedal[x] && x == 1)
 				{
 					var Cen2 = new Vector2(19f, 19f);
 					Texture2D Glow = ModAsset.BloodLamp_Glow.Value;
-					Main.spriteBatch.Draw(Glow, Projectile.Center - Main.screenPosition + Cen2 - Glow.Size() / 2f/*坐标校正*/, null, new Color(Col, Col, Col, 0), Projectile.rotation, Cen2, 1, SpriteEffects.None, 0);
+					Main.spriteBatch.Draw(Glow, Projectile.Center - Main.screenPosition + Cen2 - Glow.Size() / 2f/*坐标校正*/, null, new Color(col, col, col, 0), Projectile.rotation, Cen2, 1, SpriteEffects.None, 0);
 				}
 			}
 		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return false;
@@ -128,25 +126,18 @@ public class BloodLampProj : ModProjectile
 
 	private IEnumerator<ICoroutineInstruction> Task()
 	{
-		SoundEngine.PlaySound(new SoundStyle(
+		SoundEngine.PlaySound(
+			new SoundStyle(
 			"Everglow/Myth/LanternMoon/Sounds/PowerBomb"), Projectile.Center);
 		_coroutineManager.StartCoroutine(new Coroutine(ControlVolume()));
 		_coroutineManager.StartCoroutine(new Coroutine(JitterFlash()));
 		yield return new WaitForFrames(170);
-		_coroutineManager.StartCoroutine(new Coroutine(DropPedal()));
 		yield return new WaitForFrames(75);
-		Col = 255;
-		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, new Vector2(0, -1), ModContent.ProjectileType<LMeteor>(), 0, 0, Projectile.owner);//金色的核心
-		Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Vector2.Zero, ModContent.GoreType<Gores.BloodLanternBody>());
-		for (int h = 0; h < 11; h++)
-		{
-			int f = Projectile.NewProjectile(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(9, 24f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffectGra>(), 0, 0, Projectile.owner, Projectile.whoAmI);
-			Main.projectile[f].scale = Main.rand.NextFloat(0.75f, 1.25f);
-			Main.projectile[f].timeLeft = Main.rand.Next(80, 130);
-		}
-		NoPedal[1] = true;
+		col = 255;
+
+		noPedal[1] = true;
 		yield return new WaitForFrames(5);
-		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, new Vector2(0, -1), ModContent.ProjectileType<RainbowWave>(), 0, 0, Projectile.owner);//彩虹光环
+
 		yield return new WaitForFrames(10);
 
 		yield return new WaitForFrames(65);
@@ -158,11 +149,10 @@ public class BloodLampProj : ModProjectile
 		while (true)
 		{
 			double x0 = timer * 0.0156923;
-			Col = (int)(Math.Clamp(Math.Sin(x0 * x0) + Math.Log(x0 + 1), 0, 2) / 2d * 255);
+			col = (int)(Math.Clamp(Math.Sin(x0 * x0) + Math.Log(x0 + 1), 0, 2) / 2d * 255);
 			yield return new SkipThisFrame();
 		}
 	}
-
 
 	private IEnumerator<ICoroutineInstruction> ControlVolume()
 	{
@@ -178,26 +168,5 @@ public class BloodLampProj : ModProjectile
 			yield return new SkipThisFrame();
 		}
 		Main.musicVolume = originalVolume;
-	}
-
-
-	private IEnumerator<ICoroutineInstruction> DropPedal()
-	{
-		while (true)
-		{
-			for (int x = 2; x < 16; x++)
-			{
-				if (!NoPedal[x] && Main.rand.Next(Projectile.timeLeft) < 3)
-				{
-					NoPedal[x] = true;
-					Vector2 Cen = PedalPos[x] - new Vector2(6f, 7f);
-					Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<BloodPedal>());
-					Projectile.NewProjectile(null, Projectile.Center + Cen - BLantern[x].Size() / 2f,
-						new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283),
-						ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
-				}
-			}
-			yield return new SkipThisFrame();
-		}
 	}
 }

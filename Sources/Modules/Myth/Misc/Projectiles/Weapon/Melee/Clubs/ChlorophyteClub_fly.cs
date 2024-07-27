@@ -1,5 +1,3 @@
-using Everglow.Myth.Common;
-using Terraria;
 using Terraria.GameContent.Shaders;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
@@ -79,11 +77,8 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 	{
 		float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f, 3), MinStrikeOmegaDecrease);
 
-		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
-		float ShakeStrength = Omega * 0.4f;
 		Omega *= power;
 		modifiers.FinalDamage /= power;
-		Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
 		modifiers.Knockback *= Omega * 3;
 	}
 	public override void AI()
