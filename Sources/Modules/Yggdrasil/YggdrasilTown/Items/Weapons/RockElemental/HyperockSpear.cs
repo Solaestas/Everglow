@@ -8,12 +8,12 @@ public class HyperockSpear : ModItem
 	public override void SetDefaults()
 	{
 		Item.useStyle = ItemUseStyleID.Swing;
-		Item.width = 54;
-		Item.height = 108;
+		Item.width = 64;
+		Item.height = 64;
 		Item.useAnimation = 20;
 		Item.useTime = 20;
 		Item.knockBack = 8f;
-		Item.damage = 25;
+		Item.damage = 18;
 		Item.crit = 6;
 		Item.rare = ItemRarityID.Green;
 		Item.UseSound = SoundID.Item1;
@@ -31,6 +31,7 @@ public class HyperockSpear : ModItem
 	{
 		return false;
 	}
+
 	public override void HoldItem(Player player)
 	{
 		bool hasTarget = player.itemAnimation > 0;

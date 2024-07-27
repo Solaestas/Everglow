@@ -35,6 +35,7 @@ public class HyperockSpearProj : ModProjectile
 	{
 		if(Projectile.timeLeft <= 3 && Power > 40)
 		{
+			Projectile.tileCollide = false;
 			Vector2 oldCenter = Projectile.Center;
 			Projectile.width = 150;
 			Projectile.height = 150;
@@ -135,7 +136,7 @@ public class HyperockSpearProj : ModProjectile
 			Projectile.velocity = Utils.SafeNormalize(Main.MouseWorld - player.MountedCenter, new Vector2(0, -1 * player.gravDir));
 			Projectile.Center = player.MountedCenter + Projectile.velocity.RotatedBy(Math.PI * -0.5) * 20 * PlayerDir - Projectile.velocity * (Power / 3f - 50) + new Vector2(0, 6 * player.gravDir);
 			Projectile.rotation = (float)(MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + MathF.PI * 0.25);
-			if (Power == 44)
+			if (Power == 36)
 			{
 				for (int i = 0; i < 30; i++)
 				{
@@ -163,9 +164,13 @@ public class HyperockSpearProj : ModProjectile
 		if (player.controlUseItem && !Shot && !CollideOnNPC && !CollideOnTile)
 		{
 			Shot = true;
-			Projectile.velocity = Utils.SafeNormalize(Main.MouseWorld - player.MountedCenter, new Vector2(0, -1 * player.gravDir)) * (Power + 180) / 18;
-			Projectile.damage = Projectile.damage * (Power / 90 + 1);
-			Projectile.CritChance = Projectile.CritChance * (Power / 90 + 1);
+			Projectile.velocity = Utils.SafeNormalize(Main.MouseWorld - player.MountedCenter, new Vector2(0, -1 * player.gravDir)) * (Power + 40) / 4f;
+			Projectile.damage = (int)(Projectile.damage * (Power / 90f + 1));
+			Projectile.CritChance = (int)(Projectile.CritChance * (Power / 90f + 1));
+			if(Power > 30)
+			{
+				Power = 45;
+			}
 			SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 			player.heldProj = -1;
 		}
@@ -193,7 +198,8 @@ public class HyperockSpearProj : ModProjectile
 		if(Power > 30)
 		{
 			float value = Power - 30;
-			value /= 15f;
+			value /= 4f;
+			value = Math.Min(value, (48 - Power) * 0.3f);
 			Texture2D star = Commons.ModAsset.StarSlash.Value;
 			Vector2 starPos = Projectile.Center - Main.screenPosition - Utils.SafeNormalize(Projectile.velocity, Vector2.zeroVector) * 18;
 			Main.spriteBatch.Draw(star, starPos, null, new Color(0.6f, 0.1f, 1f, 0f), 0, star.Size() / 2f, new Vector2(0.4f, 0.5f) * value, SpriteEffects.None, 0);
@@ -213,6 +219,7 @@ public class HyperockSpearProj : ModProjectile
 			Projectile.velocity = Vector2.Zero;
 			CollideOnTile = true;
 			Projectile.timeLeft = 60;
+			SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact, Projectile.Center);
 			return false;
 		}
 		return true;
@@ -323,6 +330,7 @@ public class HyperockSpearProj : ModProjectile
 			Projectile.timeLeft = 60;
 			PostoNPC = NPCStickTo.Center - Projectile.Center;
 			rotationtoNPC = NPCStickTo.rotation;
+			SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact, Projectile.Center);
 			SticktoNPC();
 		}
 	}
@@ -335,7 +343,10 @@ public class HyperockSpearProj : ModProjectile
 
 	public void AbsorbNPC()
 	{
-		if (Projectile.timeLeft <= 40 && Projectile.timeLeft >= 32)
+		float value = (Projectile.timeLeft - 6) / 34f;
+		value = MathF.Sin(value * MathHelper.Pi);
+		Lighting.AddLight(Projectile.Center, new Vector3(0.7f, 0.2f, 1f) * value * 2);
+		if (Projectile.timeLeft <= 20 && Projectile.timeLeft >= 8)
 		{
 			foreach (NPC npc in Main.npc)
 			{

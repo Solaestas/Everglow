@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.RockElemental;
+
 public class VitalizedRocks : ModItem
 {
 	public override void SetDefaults()
@@ -17,7 +13,7 @@ public class VitalizedRocks : ModItem
 		Item.useAnimation = 15;
 		Item.useTime = 15;
 		Item.knockBack = 3f;
-		Item.damage = 18;
+		Item.damage = 25;
 		Item.rare = ItemRarityID.Blue;
 		Item.UseSound = SoundID.Item1;
 		Item.value = 12000;

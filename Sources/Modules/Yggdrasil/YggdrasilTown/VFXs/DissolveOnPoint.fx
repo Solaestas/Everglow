@@ -5,9 +5,19 @@ float range2;
 float2 p1;
 float2 p2;
 float2 p3;
-float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0
+
+struct PSInput
 {
-	float4 c = tex2D(uImage0, coords);
+    float4 Pos : SV_POSITION;
+    float4 Color : COLOR0;
+    float3 Texcoord : TEXCOORD0;
+};
+
+
+float4 PixelShaderFunction(PSInput input) : COLOR0
+{
+    float2 coords = input.Texcoord.xy;
+	float4 c = tex2D(uImage0, coords) * input.Color;
 	float d1 = length(p1 - coords);
 	float d2 = length(p2 - coords);
 	float d3 = length(p3 - coords);

@@ -5,12 +5,12 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-public class VitalizedRocksStone : ModProjectile
+public class VitalizedRocksStone_small : ModProjectile
 {
 	public override void SetDefaults()
 	{
-		Projectile.width = 32;
-		Projectile.height = 32;
+		Projectile.width = 12;
+		Projectile.height = 12;
 		Projectile.aiStyle = -1;
 		Projectile.friendly = true;
 		Projectile.hostile = false;
@@ -24,7 +24,7 @@ public class VitalizedRocksStone : ModProjectile
 	{
 		if (Projectile.ai[0] < 36)
 		{
-			Projectile.ai[0] += 3f;
+			Projectile.ai[0] += 12f;
 			Projectile.rotation = Projectile.velocity.ToRotation();
 			Projectile.ai[1] = Main.rand.NextFloat(-0.3f, 0.3f);
 		}
@@ -32,11 +32,14 @@ public class VitalizedRocksStone : ModProjectile
 		{
 			Projectile.rotation += Projectile.ai[1];
 		}
-		float value = (Projectile.timeLeft - 540) / 30f;
-		Dust d = Dust.NewDustDirect(Projectile.position - Projectile.velocity * 2, Projectile.width, Projectile.height, ModContent.DustType<RockElemental_Energy_normal>());
-		d.velocity = Projectile.velocity * 0.5f;
-		d.scale = Main.rand.NextFloat(0.75f, 1f) * Math.Min(value, 1);
-		d.noGravity = true;
+		if (Main.rand.NextBool(4))
+		{
+			float value = (Projectile.timeLeft - 540) / 30f;
+			Dust d = Dust.NewDustDirect(Projectile.position - Projectile.velocity * 1, Projectile.width, Projectile.height, ModContent.DustType<RockElemental_Energy_normal>());
+			d.velocity = Projectile.velocity * 0.5f;
+			d.scale = Main.rand.NextFloat(0.45f, 1f) * Math.Min(value, 1);
+			d.noGravity = true;
+		}
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -49,8 +52,8 @@ public class VitalizedRocksStone : ModProjectile
 			Visible = true,
 			position = Projectile.Center,
 			maxTime = Main.rand.Next(12, 30),
-			scale = Main.rand.NextFloat(30, 54),
-			maxScale = 160,
+			scale = Main.rand.NextFloat(10, 24),
+			maxScale = 80,
 			rotation = Projectile.rotation,
 			ai = new float[] { 1 },
 		};
@@ -64,35 +67,34 @@ public class VitalizedRocksStone : ModProjectile
 
 	public override void OnKill(int timeLeft)
 	{
+		for (int x = 0; x < 4; x++)
+		{
+			Dust d = Dust.NewDustDirect(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<RockElemental_fragments>(), 0f, 0f, 0, default, 0.5f);
+			d.velocity = new Vector2(0, Main.rand.NextFloat(3f, 8f)).RotatedByRandom(6.283);
+		}
 		for (int x = 0; x < 8; x++)
 		{
-			Dust d = Dust.NewDustDirect(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<RockElemental_fragments>(), 0f, 0f, 0, default, 0.7f);
-			d.velocity = new Vector2(0, Main.rand.NextFloat(7f, 16f)).RotatedByRandom(6.283);
+			Dust d = Dust.NewDustDirect(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, DustID.WitherLightning, 0f, 0f, 0, default, Main.rand.NextFloat(0.3f, 0.8f));
+			d.velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283);
 		}
-		for (int x = 0; x < 16; x++)
-		{
-			Dust d = Dust.NewDustDirect(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, DustID.WitherLightning, 0f, 0f, 0, default, Main.rand.NextFloat(0.6f, 1.1f));
-			d.velocity = new Vector2(0, Main.rand.NextFloat(2f, 11f)).RotatedByRandom(6.283);
-		}
-		GenerateSmog(12);
+		GenerateSmog(4);
 		SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode.WithVolume(0.5f), Projectile.Center);
 		ShakerManager.AddShaker(Projectile.Center, new Vector2(0, -1), 1, 30, 120);
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<VitalizedRocksProj_Explosion>(), (int)(Projectile.damage * 0.4f), Projectile.knockBack, Projectile.owner, 1f);
 	}
 
 	public void GenerateSmog(int Frequency)
 	{
 		for (int g = 0; g < Frequency; g++)
 		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 12f)).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
 			var somg = new RockSmogDust
 			{
 				velocity = newVelocity,
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
-				maxTime = Main.rand.Next(37, 75),
-				scale = Main.rand.NextFloat(40f, 55f),
+				maxTime = Main.rand.Next(37, 45),
+				scale = Main.rand.NextFloat(20f, 35f),
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
 			};
@@ -104,8 +106,7 @@ public class VitalizedRocksStone : ModProjectile
 	{
 		Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 		Vector2 pos = Projectile.position - Main.screenPosition;
-		Main.spriteBatch.Draw(tex, new Rectangle((int)pos.X + 18, (int)pos.Y + 18, (int)Projectile.ai[0], 36),
-							   new Rectangle((int)(36 - Projectile.ai[0]), 0, (int)Projectile.ai[0], 36), lightColor, Projectile.rotation, new Vector2(18, 18), 0, 0);
+		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, tex.Size() * 0.5f, 1f, 0, 0);
 		return false;
 	}
 }

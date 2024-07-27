@@ -72,7 +72,7 @@ public class BrittleRockSlingshotStone : TrailingProjectile
 			d.velocity = new Vector2(0, Main.rand.NextFloat(0.7f, 4.1f)).RotatedByRandom(6.283);
 		}
 		GenerateSmog(3);
-		SoundEngine.PlaySound(SoundID.NPCHit2.WithVolume(Projectile.ai[2]), Projectile.Center);
+
 		if (Projectile.ai[1] != 1)
 		{
 			int n = Main.rand.Next(3, 4);
@@ -87,13 +87,18 @@ public class BrittleRockSlingshotStone : TrailingProjectile
 			{
 				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<BrittleRockSlingshotStone_Explosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 1);
 			}
+			SoundEngine.PlaySound(SoundID.DD2_GoblinBomb, Projectile.Center);
+		}
+		else
+		{
+			SoundEngine.PlaySound(SoundID.NPCHit2.WithVolume(Projectile.ai[2]), Projectile.Center);
 		}
 		base.KillMainStructure();
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if(Projectile.penetrate == 1)
+		if (Projectile.penetrate == 1)
 		{
 			KillMainStructure();
 		}

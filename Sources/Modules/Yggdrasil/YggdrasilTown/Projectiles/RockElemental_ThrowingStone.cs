@@ -48,7 +48,7 @@ public class RockElemental_ThrowingStone : ModProjectile
 			Projectile.velocity.Y += 0.163f;
 			for (int j = 0; j < 3; j++)
 			{
-				Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<RockElemental_Energy_normal>());
+				Dust d = Dust.NewDustDirect(Projectile.position - Projectile.velocity * 2, Projectile.width, Projectile.height, ModContent.DustType<RockElemental_Energy_normal>());
 				d.velocity = Projectile.velocity * 0.5f;
 				d.scale = Main.rand.NextFloat(0.75f, 1.4f);
 				d.noGravity = true;

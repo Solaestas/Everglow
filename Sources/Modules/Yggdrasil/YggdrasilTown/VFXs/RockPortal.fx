@@ -60,9 +60,8 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
 	if (colorHeatMap.g <= 0.1)
 	{
 		return float4(0, 0, 0, 0);
-
 	}
-		return colorHeatMap;
+	return colorHeatMap;
 }
 
 technique Technique1

@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -23,8 +24,19 @@ public class VitalizedRocksProj : ModProjectile
 
 	public override void AI()
 	{
+		Projectile.frameCounter++;
+		if (Projectile.frameCounter > 6)
+		{
+			Projectile.frameCounter = 0;
+			Projectile.frame++;
+			if (Projectile.frame >= 6)
+			{
+				Projectile.frame = 0;
+			}
+		}
 		timer--;
 		Player player = Main.player[Projectile.owner];
+		PlayerHeadToMouse();
 		if (player.HeldItem.type == ModContent.ItemType<Items.Weapons.RockElemental.VitalizedRocks>())
 		{
 			Projectile.timeLeft = 120;
@@ -43,9 +55,19 @@ public class VitalizedRocksProj : ModProjectile
 			Projectile.ai[1] -= 0.66f;
 		}
 		Projectile.Center = Vector2.Lerp(Projectile.Center, player.Center + new Vector2(player.direction * 2, MathF.Sin((float)Main.timeForVisualEffects / 20)) * 20, 0.2f);
-		if (timer <= 0 && player.controlUseItem && player.HeldItem.type == ModContent.ItemType<Items.Weapons.RockElemental.VitalizedRocks>())
+		if (timer <= 0 && player.controlUseItem && player.HeldItem.type == ModContent.ItemType<Items.Weapons.RockElemental.VitalizedRocks>() && player.CheckMana(player.HeldItem.mana, true))
 		{
 			timer = 30;
+			player.itemTime = 33;
+			player.itemAnimation = 33;
+			if(Main.MouseWorld.X > player.Center.X)
+			{
+				player.direction = 1;
+			}
+			else
+			{
+				player.direction = -1;
+			}
 			for (int i = 0; i < 3; i++)
 			{
 				Vector2 Pos = player.Center + Vector2.unitXVector.RotatedByRandom(MathF.PI * 2) * player.direction * Main.rand.NextFloat(25, 75);
@@ -58,9 +80,48 @@ public class VitalizedRocksProj : ModProjectile
 					}
 				}
 				Vector2 toMouse = (Main.MouseWorld - Pos).NormalizeSafe();
-				Projectile.NewProjectileDirect(player.GetSource_FromAI(), Pos, toMouse * 9, ModContent.ProjectileType<VitalizedRocksStone>(), Projectile.damage, Projectile.knockBack, player.whoAmI);
+				int type = ModContent.ProjectileType<VitalizedRocksStone>();
+				float speed = 9;
+				float damageScale = 1;
+				if (i >= 1)
+				{
+					type = ModContent.ProjectileType<VitalizedRocksStone_small>();
+					speed = 8;
+					damageScale = 0.6f;
+					Vector2 dustPos = Projectile.Center;
+					for (int t = 0; t < 200; t++)
+					{
+						dustPos += Utils.SafeNormalize(Pos - dustPos, Vector2.zeroVector) * 2;
+						Dust dust = Dust.NewDustDirect(dustPos - new Vector2(4), 0, 0, ModContent.DustType<RockElemental_Energy_normal>());
+						dust.velocity *= 0;
+						dust.noGravity = true;
+						dust.scale = 0.6f;
+						if ((Pos - dustPos).Length() < 1)
+						{
+							break;
+						}
+					}
+				}
+				else
+				{
+					Vector2 dustPos = Projectile.Center;
+					for (int t = 0; t < 200; t++)
+					{
+						dustPos += Utils.SafeNormalize(Pos - dustPos, Vector2.zeroVector) * 2;
+						Dust dust = Dust.NewDustDirect(dustPos - new Vector2(4), 0, 0, ModContent.DustType<RockElemental_Energy_normal>());
+						dust.velocity *= 0;
+						dust.noGravity = true;
+						dust.scale = 1f;
+						if ((Pos - dustPos).Length() < 1)
+						{
+							break;
+						}
+					}
+				}
+				Projectile.NewProjectileDirect(player.GetSource_FromAI(), Pos, toMouse * speed, type, (int)(Projectile.damage * damageScale), Projectile.knockBack, player.whoAmI);
 			}
 		}
+		Lighting.AddLight(Projectile.Center, new Vector3(0.7f, 0.2f, 1f) * Projectile.ai[0] / 60f);
 	}
 
 	public override bool PreDraw(ref Color lightColor)
@@ -81,58 +142,19 @@ public class VitalizedRocksProj : ModProjectile
 		dissolve.Parameters["p3"].SetValue(p3);
 
 		dissolve.CurrentTechnique.Passes[0].Apply();
-		DrawShell(false);
-		DrawCore();
-		DrawShell(true);
-
+		Texture2D texture = ModAsset.VitalizedRocksProj.Value;
+		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, new Rectangle(0, Projectile.frame * 50, 50, 50), lightColor, Projectile.rotation, new Vector2(25), Projectile.scale, SpriteEffects.None, 0);
+		texture = ModAsset.VitalizedRocksProj_glow.Value;
+		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, new Rectangle(0, Projectile.frame * 50, 50, 50), new Color(0.7f, 0.1f, 1f, 0), Projectile.rotation, new Vector2(25), Projectile.scale, SpriteEffects.None, 0);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 
 		return false;
 	}
 
-	public void DrawCore()
+	public void PlayerHeadToMouse()
 	{
-		Texture2D core = ModAsset.VitalizedRocksProj_Core.Value;
-
-		Vector2 pos = Projectile.Center - Main.screenPosition;
-		Main.spriteBatch.Draw(core, pos + new Vector2(-25, -25), Color.White);
-	}
-
-	public void DrawShell(bool isfront)
-	{
-		Texture2D Shell = ModAsset.VitalizedRocksProj.Value;
-
-		Vector2 pos = Projectile.Center - Main.screenPosition;
-		if (25 * MathF.Cos((float)Main.timeForVisualEffects / 20) < 0)
-		{
-			if (isfront)
-			{
-				Main.spriteBatch.Draw(Shell, new Rectangle((int)pos.X + (25 * MathF.Sin((float)Main.timeForVisualEffects / 20) > 0 ? 1 : 0), (int)(pos.Y - 25),
-							   (int)(-25 * MathF.Sin((float)Main.timeForVisualEffects / 20)), 50),
-							   new Rectangle(0, 0, 25, 50), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
-			}
-			else
-			{
-				Main.spriteBatch.Draw(Shell, new Rectangle((int)(pos.X + 25 * MathF.Sin((float)Main.timeForVisualEffects / 20) + (25 * MathF.Sin((float)Main.timeForVisualEffects / 20) > 0 ? 0 : 1)), (int)(pos.Y - 25),
-																   (int)(-25 * MathF.Sin((float)Main.timeForVisualEffects / 20)), 50),
-																   new Rectangle(25, 0, 25, 50), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
-			}
-		}
-		else
-		{
-			if (!isfront)
-			{
-				Main.spriteBatch.Draw(Shell, new Rectangle((int)pos.X + (25 * MathF.Sin((float)Main.timeForVisualEffects / 20) < 0 ? 0 : 1), (int)(pos.Y - 25),
-							   (int)(-25 * MathF.Sin((float)Main.timeForVisualEffects / 20)), 50),
-							   new Rectangle(0, 0, 25, 50), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
-			}
-			else
-			{
-				Main.spriteBatch.Draw(Shell, new Rectangle((int)(pos.X + 25 * MathF.Sin((float)Main.timeForVisualEffects / 20) + (25 * MathF.Sin((float)Main.timeForVisualEffects / 20) > 0 ? 0 : 1)), (int)(pos.Y - 25),
-																   (int)(-25 * MathF.Sin((float)Main.timeForVisualEffects / 20)), 50),
-																   new Rectangle(25, 0, 25, 50), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
-			}
-		}
+		Player player = Main.player[Projectile.owner];
+		player.headRotation = (Main.MouseWorld - player.Center).ToRotation();
 	}
 }
