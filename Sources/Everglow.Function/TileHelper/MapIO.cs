@@ -162,9 +162,10 @@ public class MapIO
 		ReadTile(reader, new TileAccessor(x, y, x + width, y + height), entry);
 		ReadChest(reader, Rectangle);
 		ReadSign(reader, Rectangle);
-		ReadTileEntity(reader, Rectangle, entry);
+		stream.Seek(0, SeekOrigin.Begin);
 		if (stream.Length != stream.Position)
 		{
+			ReadTileEntity(reader, Rectangle, entry);
 		}
 	}
 
