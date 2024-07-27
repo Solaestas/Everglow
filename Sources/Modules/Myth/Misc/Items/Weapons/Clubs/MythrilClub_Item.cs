@@ -6,6 +6,7 @@ public class MythrilClub_Item : ClubItem
 	{
 		Item.damage = 56;
 		Item.value = 2682;
+		Item.rare = ItemRarityID.LightRed;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.MythrilClub>();
 		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.MythrilClub_smash>();
 	}
