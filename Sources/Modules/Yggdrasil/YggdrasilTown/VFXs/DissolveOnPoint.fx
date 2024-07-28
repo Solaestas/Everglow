@@ -5,7 +5,7 @@ float range2;
 float2 p1;
 float2 p2;
 float2 p3;
-
+int frames;
 struct PSInput
 {
     float4 Pos : SV_POSITION;
@@ -16,11 +16,15 @@ struct PSInput
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
-    float2 coords = input.Texcoord.xy;
+    float2 coords = input.Texcoord.xy;	
 	float4 c = tex2D(uImage0, coords) * input.Color;
-	float d1 = length(p1 - coords);
-	float d2 = length(p2 - coords);
-	float d3 = length(p3 - coords);
+	
+
+	float d1 = length(p1 - float2(coords.x, fmod(coords.y * frames, 1)));
+	float d2 = length(p2 - float2(coords.x, fmod(coords.y * frames, 1)));
+	float d3 = length(p3 - float2(coords.x, fmod(coords.y * frames, 1)));
+
+		
 	if (d1 < range1 || d2 < range1 || d3 < range1)
 	{
 		return c;

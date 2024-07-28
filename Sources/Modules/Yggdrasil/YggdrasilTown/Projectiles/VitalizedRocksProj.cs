@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Terraria;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -124,17 +125,21 @@ public class VitalizedRocksProj : ModProjectile
 		Lighting.AddLight(Projectile.Center, new Vector3(0.7f, 0.2f, 1f) * Projectile.ai[0] / 60f);
 	}
 
+	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+	{
+		overPlayers.Add(index);
+	}
 	public override bool PreDraw(ref Color lightColor)
 	{
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Texture2D hiteffect = ModAsset.RockElemental_defense.Value;
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 		Effect dissolve = ModAsset.DissolveOnPoint.Value;
 		float range1 = Projectile.ai[0] / 60;
 		float range2 = Projectile.ai[1] / 60;
 
+		dissolve.Parameters["frames"].SetValue(6);
 		dissolve.Parameters["range1"].SetValue(range1);
 		dissolve.Parameters["range2"].SetValue(range2);
 		dissolve.Parameters["p1"].SetValue(p1);
