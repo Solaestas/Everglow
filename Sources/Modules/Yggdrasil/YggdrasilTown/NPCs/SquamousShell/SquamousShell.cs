@@ -5,7 +5,6 @@ using Everglow.Commons.Skeleton2D.Renderer;
 using Everglow.Commons.Skeleton2D.Renderer.DrawCommands;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using Spine;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -37,6 +36,7 @@ public class SquamousShell : ModNPC
 	public Skeleton2D SquamousShellSkeleton;
 	private SkeletonRenderer skeletonRenderer = new SkeletonRenderer();
 	private SkeletonDebugRenderer skeletonDebugRenderer = new SkeletonDebugRenderer();
+
 	public override void Load()
 	{
 	}
@@ -56,17 +56,18 @@ public class SquamousShell : ModNPC
 		NPC.velocity.Y = 2f;
 		_coroutineManager.StartCoroutine(new Coroutine(Landing()));
 		_coroutineManager.StartCoroutine(new Coroutine(FlyingFrame()));
-		var data = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monster.json");
+		var data = Mod.GetFileBytes(ModAsset.monsterj_Path);
 		if (SquamousShellSkeleton == null)
 		{
-			var json = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monsterj.json");
-			var altas = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monstera.atlas");
+			var json = Mod.GetFileBytes(ModAsset.monsterj_Path);
+			var altas = Mod.GetFileBytes(ModAsset.monstera_Path);
 			SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(altas, json, ModAsset.monster.Value);
 			SquamousShellSkeleton.AnimationState.SetAnimation(0, "walk", true);
 		}
 	}
 
 	private Vector2 mousePos;
+
 	public override void AI()
 	{
 		SquamousShellSkeleton.AnimationState.Update(0.016f);
@@ -735,62 +736,26 @@ public class SquamousShell : ModNPC
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		// Texture2D mainTex = ModAsset.SquamousShell.Value;
-		// SpriteEffects spe = SpriteEffects.None;
-		// float drawRot = NPC.rotation * NPC.spriteDirection;
-		// if (NPC.spriteDirection == -1)
-		// {
-		// spe = SpriteEffects.FlipHorizontally;
-		// drawRot += MathF.PI;
-		// }
-		// if(Flying)
-		// {
-		// mainTex = ModAsset.SquamousShell_fly.Value;
-		// spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, NPC.frame, drawColor, drawRot, NPC.frame.Size() * 0.5f, NPC.scale, spe, 0);
-		// }
-		// else
-		// {
-		// spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, null, drawColor, drawRot, mainTex.Size() * 0.5f, NPC.scale, spe, 0);
-		// if (PhantomValue > 0)
-		// {
-		// spriteBatch.Draw(mainTex, NPC.Center - Main.screenPosition, null, drawColor * (1 - PhantomValue), drawRot, mainTex.Size() * 0.5f, NPC.scale + PhantomValue, spe, 0);
-		// }
-		// }
-
-		// if (WakingTimer < 180)
-		// {
-		// Texture2D deadShell = ModAsset.DeadSquamousShell.Value;
-		// float fade = 1 - WakingTimer / 180f;
-		// spriteBatch.Draw(deadShell, NPC.Center - Main.screenPosition, null, drawColor * fade, drawRot, deadShell.Size() * 0.5f, NPC.scale, spe, 0);
-		// }
 		if (SquamousShellSkeleton == null)
 		{
-			var json = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monsterj.json");
-			var altas = Mod.GetFileBytes("Yggdrasil/YggdrasilTown/NPCs/SquamousShell/Skeletons/monstera.atlas");
+			var json = Mod.GetFileBytes(ModAsset.monsterj_Path);
+			var altas = Mod.GetFileBytes(ModAsset.monstera_Path);
 			SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(altas, json, ModAsset.monster.Value);
 			SquamousShellSkeleton.AnimationState.SetAnimation(0, "walk", true);
 		}
 		skeletonDebugRenderer.DisableAll();
 		skeletonDebugRenderer.DrawBones = true;
-		//var ik = SquamousShellSkeleton.Skeleton.FindIkConstraint("Front3IK");
-		//float x, y;
-		//SquamousShellSkeleton.Skeleton.RootBone.WorldToLocal(mousePos.X, mousePos.Y, out x, out y);
-		//ik.Target.X = x;
-		//ik.Target.Y = y;
 
 		SquamousShellSkeleton.Skeleton.UpdateWorldTransform();
 
 		skeletonRenderer.UseEnvironmentLight = true;
 		skeletonRenderer.DrawOffset = -Main.screenPosition;
-		// skeletonRenderer.DrawOrigin = new Vector2(0, -77);
-		// skeletonRenderer.DrawRotation = NPC.rotation;
-		//// skeleton2D.InverseKinematics(Main.MouseWorld);
-		// float framesOfAnimation = 35;
-		// SquamousShellSkeleton.PlayAnimation(0, "walk", ((float)Main.timeForVisualEffects % framesOfAnimation / framesOfAnimation) * framesOfAnimation / 60f);
-		//// SquamousShellSkeleton.DrawDebugView(spriteBatch);
-		
+
 		var cmdList = skeletonRenderer.Draw(SquamousShellSkeleton);
-		cmdList.AddRange(skeletonDebugRenderer.Draw(SquamousShellSkeleton));
+		if(Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SkeletonSight>())
+		{
+			cmdList.AddRange(skeletonDebugRenderer.Draw(SquamousShellSkeleton));
+		}
 		NaiveExecuter executer = new NaiveExecuter();
 		executer.Execute(cmdList, Main.graphics.graphicsDevice);
 		return false;
