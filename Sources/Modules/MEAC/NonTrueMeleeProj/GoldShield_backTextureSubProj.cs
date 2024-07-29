@@ -94,7 +94,7 @@ public class GoldShield_backTextureSubProj : ModProjectile
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			Effect Post = ModAsset.Effects_Post.Value;
+			Effect Post = ModAsset.Post_xnb.Value;
 			Post.Parameters["uTime"].SetValue(-(float)Main.time * 0.002f);
 			Post.CurrentTechnique.Passes["Test2"].Apply();
 			if (GoldShield.ShieldTexture != null)

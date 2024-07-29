@@ -845,6 +845,11 @@ Buffs: {
 		DisplayName: Death Flame
 		Description: Mods.Everglow.Buffs.DeathFlame.Description
 	}
+
+	Photolysis: {
+		DisplayName: Photolysis
+		Description: Mods.Everglow.Buffs.Photolysis.Description
+	}
 }
 
 Items: {
@@ -2853,16 +2858,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	CyanVineBar: {
-		DisplayName: Cyan Vine Bar
-		Tooltip: ""
-	}
-
-	CyanVineOre: {
-		DisplayName: Cyan Vine Ore
-		Tooltip: ""
-	}
-
 	DarkForestSoil: {
 		DisplayName: Dark Forest Soil
 		Tooltip: ""
@@ -2930,41 +2925,6 @@ Items: {
 
 	AmberMagicOrb: {
 		DisplayName: Amber Magic Orb
-		Tooltip: ""
-	}
-
-	CyanVineAxe: {
-		DisplayName: Cyan Vine Axe
-		Tooltip: ""
-	}
-
-	CyanVineCrossBow: {
-		DisplayName: Cyan Vine Cross Bow
-		Tooltip: ""
-	}
-
-	CyanVineHammer: {
-		DisplayName: Cyan Vine Hammer
-		Tooltip: ""
-	}
-
-	CyanVinePickaxe: {
-		DisplayName: Cyan Vine Pickaxe
-		Tooltip: ""
-	}
-
-	CyanVineStaff: {
-		DisplayName: Cyan Vine Staff
-		Tooltip: ""
-	}
-
-	CyanVineSword: {
-		DisplayName: Cyan Vine Sword
-		Tooltip: ""
-	}
-
-	CyanVineThrowingSpear: {
-		DisplayName: Cyan Vine Throwing Spear
 		Tooltip: ""
 	}
 
@@ -3063,6 +3023,96 @@ Items: {
 		Tooltip: ""
 	}
 
+	CyanAmberStaff: {
+		DisplayName: Cyan Amber Staff
+		Tooltip: ""
+	}
+
+	CyanBreastplate: {
+		DisplayName: Cyan Breastplate
+		Tooltip: ""
+	}
+
+	CyanHeavylet: {
+		DisplayName: Cyan Heavylet
+		Tooltip: ""
+	}
+
+	CyanLeggings: {
+		DisplayName: Cyan Leggings
+		Tooltip: ""
+	}
+
+	CyanVineAxe: {
+		DisplayName: Cyan Vine Axe
+		Tooltip: ""
+	}
+
+	CyanVineBar: {
+		DisplayName: Cyan Vine Bar
+		Tooltip: ""
+	}
+
+	CyanVineBow: {
+		DisplayName: Cyan Vine Bow
+		Tooltip: ""
+	}
+
+	CyanVineBullet: {
+		DisplayName: Cyan Vine Bullet
+		Tooltip: ""
+	}
+
+	CyanVineCrossBow: {
+		DisplayName: Cyan Vine Cross Bow
+		Tooltip: ""
+	}
+
+	CyanVineFlintlock: {
+		DisplayName: Cyan Vine Flintlock
+		Tooltip: ""
+	}
+
+	CyanVineHammer: {
+		DisplayName: Cyan Vine Hammer
+		Tooltip: ""
+	}
+
+	CyanVineOre: {
+		DisplayName: Cyan Vine Ore
+		Tooltip: ""
+	}
+
+	CyanVinePickaxe: {
+		DisplayName: Cyan Vine Pickaxe
+		Tooltip: ""
+	}
+
+	CyanVineShortsword: {
+		DisplayName: Cyan Vine Shortsword
+		Tooltip: ""
+	}
+
+	CyanVineStaff: {
+		DisplayName: Cyan Vine Staff
+		Tooltip: ""
+	}
+
+	CyanVineSword: {
+		DisplayName: Cyan Vine Sword
+		Tooltip: ""
+	}
+
+	CyanVineThrowingSpear: {
+		DisplayName: Cyan Vine Throwing Spear
+		Tooltip: ""
+	}
+
+	CyanWarhelm: {
+		DisplayName: Cyan Warhelm
+		Tooltip: ""
+	}
+
 	ValiantBreastplate: {
 		DisplayName: Valiant Breastplate
 		Tooltip: ""
@@ -3110,26 +3160,6 @@ Items: {
 
 	LightSeekerLeggings: {
 		DisplayName: Light Seeker Leggings
-		Tooltip: ""
-	}
-
-	CyanBreastplate: {
-		DisplayName: Cyan Breastplate
-		Tooltip: ""
-	}
-
-	CyanHeavylet: {
-		DisplayName: Cyan Heavylet
-		Tooltip: ""
-	}
-
-	CyanLeggings: {
-		DisplayName: Cyan Leggings
-		Tooltip: ""
-	}
-
-	CyanWarhelm: {
-		DisplayName: Cyan Warhelm
 		Tooltip: ""
 	}
 
@@ -3803,15 +3833,20 @@ Projectiles: {
 	TrueDeathSickle.DisplayName: True Death Sickle
 	TrueDeathSickleHit.DisplayName: True Death Sickle Hit
 	AmberBall.DisplayName: Amber Ball
+	AmberLiquidProj.DisplayName: Amber Liquid Proj
+	AmberLiquidProj_Explosion.DisplayName: Amber Liquid Proj_ Explosion
 	AmberMagicOrb.DisplayName: Amber Magic Orb
+	CyanBullet.DisplayName: Cyan Bullet
 	CyanVineCrossBow_Proj.DisplayName: Cyan Vine Cross Bow_ Proj
+	CyanVineShortsword_Proj.DisplayName: Cyan Vine Shortsword_ Proj
 	CyanVineStaff_proj.DisplayName: Cyan Vine Staff_proj
 	CyanVineStaff_proj_Explosion.DisplayName: Cyan Vine Staff_proj_ Explosion
 	CyanVineStaff_proj_shoot.DisplayName: Cyan Vine Staff_proj_shoot
 	CyanVineSword_Projectile.DisplayName: Cyan Vine Sword_ Projectile
-	CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
+	CyanVineThrowingSpear_Proj.DisplayName: Cyan Vine Throwing Spear_ Proj
 	DragonScaleHammerProj.DisplayName: Dragon Scale Hammer Proj
 	HighSpeedStone.DisplayName: High Speed Stone
+	LampFruitCurrent.DisplayName: Lamp Fruit Current
 	LampWoodSword_Projectile.DisplayName: Lamp Wood Sword_ Projectile
 	LightSeed.DisplayName: Light Seed
 	RockArrow.DisplayName: Rock Arrow

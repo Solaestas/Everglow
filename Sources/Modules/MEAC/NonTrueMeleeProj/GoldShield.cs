@@ -313,7 +313,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition + new Vector2(0, -12), null, new Color(255, 255, 255, 0), Projectile.rotation, new Vector2(tex.Width / 2f, tex.Height / 2f), 1, SpriteEffects.None, 0);
 		if (Ins.VisualQuality.High)
 		{
-			Effect Post = ModAsset.Effects_Post.Value;
+			Effect Post = ModAsset.Post_xnb.Value;
 			Texture2D shieldTexture = ShieldTexture;
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -338,7 +338,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			Effect Post = ModAsset.Effects_Post.Value;
+			Effect Post = ModAsset.Post_xnb.Value;
 			Post.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.003));
 			Post.CurrentTechnique.Passes[0].Apply();
 
