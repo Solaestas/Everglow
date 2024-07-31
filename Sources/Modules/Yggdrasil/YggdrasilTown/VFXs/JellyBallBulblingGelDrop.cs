@@ -1,36 +1,10 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
-public class JellyBallGelDropPipeline : Pipeline
-{
-	public override void Load()
-	{
-		effect = ModAsset.JellyBallGelDrop;
-
-	}
-	public override void BeginRender()
-	{
-		var effect = this.effect.Value;
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		effect.Parameters["uTransform"].SetValue(model * projection);
-		effect.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_JellyBallGelDrop.Value);
-		effect.Parameters["uIlluminationThreshold"].SetValue(0.99f);
-		Texture2D lightness = Commons.ModAsset.Point_lowContrast.Value;
-		Ins.Batch.BindTexture<Vertex2D>(lightness);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointClamp, RasterizerState.CullNone);
-		effect.CurrentTechnique.Passes[0].Apply();
-	}
-
-	public override void EndRender()
-	{
-		Ins.Batch.End();
-	}
-}
 [Pipeline(typeof(JellyBallGelDropPipeline))]
 public class JellyBallGelDrop : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public Vector2 position;
 	public Vector2 velocity;
 	public float[] ai;
@@ -38,7 +12,11 @@ public class JellyBallGelDrop : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-	public JellyBallGelDrop() { }
+
+	public JellyBallGelDrop()
+	{
+	}
+
 	public override void Update()
 	{
 		position += velocity;
@@ -54,11 +32,14 @@ public class JellyBallGelDrop : Visual
 		velocity += new Vector2(Main.windSpeedCurrent * 0.1f, 0.21f * scale * 0.1f);
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		if (Collision.SolidCollision(position, 0, 0))
 		{
 			velocity *= -0.02f;
-			if(Ins.VisualQuality.Low)
+			if (Ins.VisualQuality.Low)
 			{
 				timer += 4;
 			}
@@ -80,7 +61,7 @@ public class JellyBallGelDrop : Visual
 			timer += 20;
 		}
 		float pocession = 1 - timer / maxTime;
-	    float c = pocession * scale * 0.08f;
+		float c = pocession * scale * 0.08f;
 		Lighting.AddLight(position, 0, c * 0.1f, c * 0.8f);
 	}
 
@@ -91,11 +72,11 @@ public class JellyBallGelDrop : Visual
 		Color lightColor = Color.White;
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + velocity + toCorner,lightColor, new Vector3(0, 0,pocession)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),lightColor, new Vector3(0, 1,pocession)),
+			new Vertex2D(position + velocity + toCorner, lightColor, new Vector3(0, 0, pocession)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), lightColor, new Vector3(0, 1, pocession)),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),lightColor, new Vector3(1, 0,pocession)),
-			new Vertex2D(position - velocity * ai[1] + toCorner.RotatedBy(Math.PI * 1),lightColor, new Vector3(1, 1,pocession))
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5), lightColor, new Vector3(1, 0, pocession)),
+			new Vertex2D(position - velocity * ai[1] + toCorner.RotatedBy(Math.PI * 1), lightColor, new Vector3(1, 1, pocession)),
 		};
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);

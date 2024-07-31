@@ -2,6 +2,8 @@ using Everglow.Myth.Common;
 using Everglow.Myth.Misc.Buffs;
 using Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots.AmbiguousNightEffects;
 using Terraria.Audio;
+using Everglow.Commons.Weapons.Slingshots;
+
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
 
 public class AmbiguousNightAmmo : SlingshotAmmo
