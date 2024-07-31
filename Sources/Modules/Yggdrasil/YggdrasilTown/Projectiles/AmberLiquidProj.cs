@@ -1,4 +1,3 @@
-using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 
@@ -16,11 +15,14 @@ public class AmberLiquidProj : ModProjectile
 		Projectile.tileCollide = true;
 		Projectile.timeLeft = 3600;
 	}
+
 	public bool Collided = false;
+
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
 		return true;
 	}
+
 	public override void AI()
 	{
 		Projectile.frameCounter++;
@@ -28,13 +30,13 @@ public class AmberLiquidProj : ModProjectile
 		{
 			Projectile.frameCounter = 0;
 			Projectile.frame++;
-			if(Projectile.frame >= 8)
+			if (Projectile.frame >= 8)
 			{
 				Projectile.frame = 0;
 			}
 		}
 		Projectile.rotation = Projectile.velocity.ToRotation();
-		if(!Collided)
+		if (!Collided)
 		{
 			if (Collision.SolidCollision(Projectile.position + new Vector2(Projectile.velocity.X, 0), 20, 20))
 			{
@@ -51,7 +53,7 @@ public class AmberLiquidProj : ModProjectile
 			{
 				Collided = true;
 				Projectile.velocity.Y *= -1;
-				for(int i = 0;i < 15;i++)
+				for (int i = 0; i < 15; i++)
 				{
 					GenerateOrangeSpark();
 					GenerateSmog();
@@ -62,6 +64,7 @@ public class AmberLiquidProj : ModProjectile
 
 		base.AI();
 	}
+
 	public void GenerateSmog()
 	{
 		Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 8f)).RotatedByRandom(MathHelper.TwoPi);
@@ -74,10 +77,11 @@ public class AmberLiquidProj : ModProjectile
 			maxTime = Main.rand.Next(30, 45),
 			scale = Main.rand.NextFloat(50f, 65f),
 			rotation = Main.rand.NextFloat(6.283f),
-			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
 		};
 		Ins.VFXManager.Add(somg);
 	}
+
 	public void GenerateOrangeSpark()
 	{
 		Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(4.0f, 8f)).RotatedByRandom(MathHelper.TwoPi);
@@ -90,24 +94,27 @@ public class AmberLiquidProj : ModProjectile
 			maxTime = Main.rand.Next(30, 45),
 			scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(17f, 27.0f)),
 			rotation = Main.rand.NextFloat(6.283f),
-			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f) }
+			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f) },
 		};
 		Ins.VFXManager.Add(spark);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D texture = ModAsset.AmberLiquidProj.Value;
 		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, new Rectangle(0, Projectile.frame * 50, 44, 50), lightColor, Projectile.rotation, new Vector2(22, 25), Projectile.scale, SpriteEffects.None, 0);
-		if(Projectile.timeLeft > 3500)
+		if (Projectile.timeLeft > 3500)
 		{
 			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, new Rectangle(0, Projectile.frame * 50, 44, 50), new Color(1f, 1f, 1f, 0) * ((Projectile.timeLeft - 3500) / 100f), Projectile.rotation, new Vector2(22, 25), Projectile.scale, SpriteEffects.None, 0);
 		}
 		return false;
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		base.OnHitNPC(target, hit, damageDone);
 	}
+
 	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.8f).WithPitchOffset(1f), Projectile.Center);

@@ -1,9 +1,10 @@
-using Everglow.Myth.Common;
+
+using Everglow.Commons.Vertex;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
+namespace Everglow.Commons.Weapons.Slingshots;
 
 public abstract class SlingshotAmmo : ModProjectile
 {
@@ -36,15 +37,15 @@ public abstract class SlingshotAmmo : ModProjectile
 	/// <summary>
 	/// 内部变量,别动
 	/// </summary>
-	internal int TimeTokill = -1;
+	protected int TimeTokill = -1;
 	/// <summary>
 	/// 碰撞长宽,默认10
 	/// </summary>
-	internal int HitBoxSize = 10;
+	protected int HitBoxSize = 10;
 	/// <summary>
 	/// 撞激弹幕
 	/// </summary>
-	internal int HitProjType = ModContent.ProjectileType<NormalHit>();
+	protected int HitProjType = ModContent.ProjectileType<NormalHit>();
 	public override void AI()
 	{
 		if (TimeTokill >= 0 && TimeTokill <= 2)
