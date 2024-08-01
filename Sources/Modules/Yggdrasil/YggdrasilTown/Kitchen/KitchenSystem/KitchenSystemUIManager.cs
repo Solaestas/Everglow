@@ -1,4 +1,5 @@
 using Everglow.Food.Items.ModFood;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 using ReLogic.Graphics;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -26,6 +27,7 @@ public class KitchenSystemUI : GameInterfaceLayer
 	public static int OldTargetScore;
 	public static int StartInterfaceAnimationTimer = 30;
 	public static Vector2 MainPanelOrigin;
+	public static Vector2 MainPanelOriginMinimized;
 	public static Vector2 PauseContinuePanelOffset;
 	public static Vector2 DragPanelOffset;
 	public static Vector2 RestartPanelOffset;
@@ -101,7 +103,10 @@ public class KitchenSystemUI : GameInterfaceLayer
 		}
 
 		// Main panel
-		Draw9Pieces(MainPanelOrigin, 400, 160, new Color(0.3f, 0.2f, 0.2f), 0);
+		if (Maximized)
+		{
+			Draw9Pieces(MainPanelOrigin, 400, 160, new Color(0.3f, 0.2f, 0.2f), 0);
+		}
 
 		// foodRequsets panel
 		if (FoodRequests.Count > 0)
@@ -126,48 +131,84 @@ public class KitchenSystemUI : GameInterfaceLayer
 			scoreChange.Draw();
 		}
 
-		// default panel
+		// pause panel
 		Color defaulePanel = new Color(0.3f, 0.2f, 0.2f);
+		float scalePause = 2f;
 		if (IsMouseOverPauseContinue)
 		{
 			defaulePanel = new Color(0.1f, 0.05f, 0.04f);
+			if (!Maximized)
+			{
+				scalePause = 3f;
+			}
 		}
-		Draw9Pieces(PauseContinuePanelOffset, 24, 24, defaulePanel, 0);
+		if (Maximized)
+		{
+			Draw9Pieces(PauseContinuePanelOffset, 24, 24, defaulePanel, 0);
+		}
 		Texture2D icons = ModAsset.FoodRequestUIPanelIcons.Value;
 		Rectangle pauseFrame = new Rectangle(0, 0, 13, 13);
 		Rectangle continueFrame = new Rectangle(0, 13, 13, 13);
-		Main.spriteBatch.Draw(icons, PauseContinuePanelOffset, Pause ? continueFrame : pauseFrame, Color.AliceBlue, 0, pauseFrame.Size() * 0.5f, 2f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(icons, PauseContinuePanelOffset, Pause ? continueFrame : pauseFrame, Color.AliceBlue, 0, pauseFrame.Size() * 0.5f, scalePause, SpriteEffects.None, 0);
 
 		// drag panel
 		defaulePanel = new Color(0.3f, 0.2f, 0.2f);
+		float scaleDrag = 2f;
 		if (IsMouseOverDrag)
 		{
 			defaulePanel = new Color(0.1f, 0.05f, 0.04f);
+			if (!Maximized)
+			{
+				scaleDrag = 3f;
+			}
 		}
-		Draw9Pieces(DragPanelOffset, 24, 24, defaulePanel, 0);
 		Rectangle dragFrame = new Rectangle(0, 39, 13, 13);
-		Main.spriteBatch.Draw(icons, DragPanelOffset, dragFrame, Color.AliceBlue, 0, dragFrame.Size() * 0.5f, 2f, SpriteEffects.None, 0);
+		if (Maximized)
+		{
+			Draw9Pieces(DragPanelOffset, 24, 24, defaulePanel, 0);
+		}
+		else
+		{
+			dragFrame = new Rectangle(13, 39, 13, 13);
+		}
+		Main.spriteBatch.Draw(icons, DragPanelOffset, dragFrame, Color.AliceBlue, 0, dragFrame.Size() * 0.5f, scaleDrag, SpriteEffects.None, 0);
 
 		// restart panel
 		defaulePanel = new Color(0.3f, 0.2f, 0.2f);
+		float scaleRestart = 2f;
 		if (IsMouseOverRestart)
 		{
 			defaulePanel = new Color(0.1f, 0.05f, 0.04f);
+			if (!Maximized)
+			{
+				scaleRestart = 3f;
+			}
 		}
-		Draw9Pieces(RestartPanelOffset, 24, 24, defaulePanel, 0);
+		if (Maximized)
+		{
+			Draw9Pieces(RestartPanelOffset, 24, 24, defaulePanel, 0);
+		}
 		Rectangle resetFrame = new Rectangle(0, 26, 13, 13);
-		Main.spriteBatch.Draw(icons, RestartPanelOffset, resetFrame, Color.AliceBlue, 0, resetFrame.Size() * 0.5f, 2f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(icons, RestartPanelOffset, resetFrame, Color.AliceBlue, 0, resetFrame.Size() * 0.5f, scaleRestart, SpriteEffects.None, 0);
 
 		// maximize panel
 		defaulePanel = new Color(0.3f, 0.2f, 0.2f);
+		float scaleMaximize = 2f;
 		if (IsMouseOverMaximize)
 		{
 			defaulePanel = new Color(0.1f, 0.05f, 0.04f);
+			if (!Maximized)
+			{
+				scaleMaximize = 3f;
+			}
 		}
-		Draw9Pieces(MaximizePanelOffset, 24, 24, defaulePanel, 0);
+		if (Maximized)
+		{
+			Draw9Pieces(MaximizePanelOffset, 24, 24, defaulePanel, 0);
+		}
 		Rectangle maximizeFrame = new Rectangle(13, 0, 13, 13);
 		Rectangle minimizeFrame = new Rectangle(13, 13, 13, 13);
-		Main.spriteBatch.Draw(icons, MaximizePanelOffset, Maximized ? minimizeFrame : maximizeFrame, Color.AliceBlue, 0, minimizeFrame.Size() * 0.5f, 2f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(icons, MaximizePanelOffset, Maximized ? minimizeFrame : maximizeFrame, Color.AliceBlue, 0, minimizeFrame.Size() * 0.5f, scaleMaximize, SpriteEffects.None, 0);
 		return true;
 	}
 
@@ -183,22 +224,57 @@ public class KitchenSystemUI : GameInterfaceLayer
 		float startAnimationValue = MathF.Pow(StartInterfaceAnimationTimer / 30f, 3);
 		defaulePanel *= 1 - startAnimationValue;
 		defauleIcon *= 1 - startAnimationValue;
-		StartNewGamePanelOffset = MainPanelOrigin + new Vector2(0, -startAnimationValue * 80);
-		if (Level is > 1 and <= 5)
+		if (Maximized)
 		{
-			StartNewGamePanelOffset = MainPanelOrigin + new Vector2(-80, -startAnimationValue * 80);
-		}
-		if (Level < 6)
-		{
-			Draw9Pieces(StartNewGamePanelOffset, 48, 48, defaulePanel, 0);
-			Texture2D startNewGame = ModAsset.StartNewGame.Value;
-			if (Failed)
+			StartNewGamePanelOffset = MainPanelOrigin + new Vector2(0, -startAnimationValue * 80);
+			if (Level is > 1 and <= 5)
 			{
-				startNewGame = ModAsset.StartNewGame_Fail.Value;
+				StartNewGamePanelOffset = MainPanelOrigin + new Vector2(-80, -startAnimationValue * 80);
 			}
-			Main.spriteBatch.Draw(startNewGame, StartNewGamePanelOffset, null, defauleIcon, 0, startNewGame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		}
+
+		// Minimized
+		else
+		{
+			StartNewGamePanelOffset = MainPanelOriginMinimized + new Vector2(0, -startAnimationValue * 80);
+			if (Level is > 1 and <= 5)
+			{
+				StartNewGamePanelOffset = MainPanelOriginMinimized + new Vector2(-30, -startAnimationValue * 80);
+			}
+		}
+
+		// Start Green Triangle
+		if (Maximized)
+		{
+			if (Level < 6)
+			{
+				Draw9Pieces(StartNewGamePanelOffset, 48, 48, defaulePanel, 0);
+				Texture2D startNewGame = ModAsset.StartNewGame.Value;
+				if (Failed)
+				{
+					startNewGame = ModAsset.StartNewGame_Fail.Value;
+				}
+				Main.spriteBatch.Draw(startNewGame, StartNewGamePanelOffset, null, defauleIcon, 0, startNewGame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+			}
+		}
+		else
+		{
+			if (Level < 6)
+			{
+				Draw9Pieces(StartNewGamePanelOffset, 20, 20, defaulePanel, 0);
+				Texture2D startNewGame = ModAsset.StartNewGame.Value;
+				if (Failed)
+				{
+					startNewGame = ModAsset.StartNewGame_Fail.Value;
+				}
+				Main.spriteBatch.Draw(startNewGame, StartNewGamePanelOffset, null, defauleIcon, 0, startNewGame.Size() * 0.5f, 0.5f, SpriteEffects.None, 0);
+			}
 		}
 		Vector2 StartTextOffset = MainPanelOrigin + new Vector2(0, startAnimationValue * 80);
+		if (!Maximized)
+		{
+			StartTextOffset = MainPanelOriginMinimized + new Vector2(0, startAnimationValue * 40 + 40);
+		}
 		Color textColor = new Color(1f, 1f, 0.5f) * (1 - startAnimationValue);
 		string textStart = "Click to start a cooking...";
 		if (Level is > 1 and <= 5)
@@ -208,9 +284,17 @@ public class KitchenSystemUI : GameInterfaceLayer
 		Vector2 textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, textStart, Vector2.One);
 		if (Level < 6)
 		{
-			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, textStart, StartTextOffset + new Vector2(0, 70), textColor, 0, textSize * 0.5f, 1f, SpriteEffects.None, 0);
-			textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, "Target profit : " + GetTargetScore(), Vector2.One);
-			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, "Target profit : " + GetTargetScore(), StartTextOffset + new Vector2(0, 100), textColor, 0, textSize * 0.5f, 1f, SpriteEffects.None, 0);
+			if (Maximized)
+			{
+				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, textStart, StartTextOffset + new Vector2(0, 70), textColor, 0, textSize * 0.5f, 1f, SpriteEffects.None, 0);
+				string textTarget = "Target profit : " + GetTargetScore();
+				textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, textTarget, Vector2.One);
+				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, textTarget, StartTextOffset + new Vector2(0, 100), textColor, 0, textSize * 0.5f, 1f, SpriteEffects.None, 0);
+			}
+			else
+			{
+				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, textStart, MainPanelOriginMinimized + new Vector2(0, 50), textColor, 0, textSize * 0.5f, 1f, SpriteEffects.None, 0);
+			}
 		}
 		else
 		{
@@ -222,13 +306,13 @@ public class KitchenSystemUI : GameInterfaceLayer
 		{
 			string textFail = "Fail!";
 			textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, textFail, Vector2.One);
-			Vector2 StartTextOffsetTop = MainPanelOrigin + new Vector2(0, -startAnimationValue * 80);
 			textColor = new Color(0.3f, 0.4f, 0.3f) * (1 - startAnimationValue);
 			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, textFail, StartTextOffset + new Vector2(0, -120), textColor, 0, textSize * 0.5f, 2f, SpriteEffects.None, 0);
 		}
 
 		if (Level is > 1 and <= 6)
 		{
+			// Account Money
 			defauleIcon = new Color(0.5f, 0.4f, 0f);
 			if (Level == 6)
 			{
@@ -241,22 +325,44 @@ public class KitchenSystemUI : GameInterfaceLayer
 				defaulePanel = new Color(0.1f, 0.05f, 0.04f);
 			}
 			AccountPanelOffset = MainPanelOrigin + new Vector2(80, -startAnimationValue * 80);
-			if(Level == 6)
+			if (Level == 6)
 			{
 				AccountPanelOffset = MainPanelOrigin + new Vector2(0, -startAnimationValue * 80);
 			}
-			Draw9Pieces(AccountPanelOffset, 48, 48, defaulePanel, 0);
+			if (!Maximized)
+			{
+				AccountPanelOffset = MainPanelOriginMinimized + new Vector2(30, -startAnimationValue * 80);
+				if (Level == 6)
+				{
+					AccountPanelOffset = MainPanelOriginMinimized + new Vector2(0, -startAnimationValue * 80);
+				}
+			}
 			Texture2D Account = ModAsset.WithdrawAccount.Value;
-			Main.spriteBatch.Draw(Account, AccountPanelOffset, null, defauleIcon, 0, Account.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+			if (Maximized)
+			{
+				Draw9Pieces(AccountPanelOffset, 48, 48, defaulePanel, 0);
+				Main.spriteBatch.Draw(Account, AccountPanelOffset, null, defauleIcon, 0, Account.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+			}
+			else
+			{
+				Draw9Pieces(AccountPanelOffset, 20, 20, defaulePanel, 0);
+				Main.spriteBatch.Draw(Account, AccountPanelOffset, null, defauleIcon, 0, Account.Size() * 0.5f, 0.5f, SpriteEffects.None, 0);
+			}
+
 			string textAcount = "Total profit : " + TotalScore + "(x" + (Level - 1) + ")";
 			textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, textAcount, Vector2.One);
 			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, textAcount, StartTextOffset + new Vector2(0, 130), textColor, 0, textSize * 0.5f, 1f, SpriteEffects.None, 0);
 
 			string textSuccess = "Success!";
 			textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, textSuccess, Vector2.One);
-			Vector2 StartTextOffsetTop = MainPanelOrigin + new Vector2(0, -startAnimationValue * 80);
-			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, textSuccess, StartTextOffset + new Vector2(0, -110), textColor, 0, textSize * 0.5f, 2f, SpriteEffects.None, 0);
-
+			if (Maximized)
+			{
+				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, textSuccess, StartTextOffset + new Vector2(0, -110), textColor, 0, textSize * 0.5f, 2f, SpriteEffects.None, 0);
+			}
+			else
+			{
+				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, textSuccess, StartTextOffset + new Vector2(0, -110), textColor, 0, textSize * 0.5f, 1.5f, SpriteEffects.None, 0);
+			}
 			string textStars = string.Empty;
 			int startCount = GetStarCount();
 			for (int i = 0; i < startCount; i++)
@@ -265,7 +371,14 @@ public class KitchenSystemUI : GameInterfaceLayer
 			}
 
 			textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, textStars, Vector2.One);
-			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, textStars, StartTextOffset + new Vector2(0, -70), textColor, 0, textSize * 0.5f, 2f, SpriteEffects.None, 0);
+			if (Maximized)
+			{
+				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, textStars, StartTextOffset + new Vector2(0, -70), textColor, 0, textSize * 0.5f, 2f, SpriteEffects.None, 0);
+			}
+			else
+			{
+				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, textStars, StartTextOffset + new Vector2(0, -70), textColor, 0, textSize * 0.5f, 1.5f, SpriteEffects.None, 0);
+			}
 		}
 	}
 
@@ -410,7 +523,14 @@ public class KitchenSystemUI : GameInterfaceLayer
 				SoundEngine.PlaySound(SoundID.MenuClose);
 				IsDragging = true;
 				DragStartMousePos = Main.MouseScreen;
-				DragStartPanelPos = MainPanelOrigin;
+				if(Maximized)
+				{
+					DragStartPanelPos = MainPanelOrigin;
+				}
+				else
+				{
+					DragStartPanelPos =MainPanelOriginMinimized;
+				}
 			}
 			if (Main.mouseLeftRelease && IsDragging)
 			{
@@ -480,6 +600,10 @@ public class KitchenSystemUI : GameInterfaceLayer
 		if (StartInterfaceAnimationTimer < 30 && Level < 6)
 		{
 			Rectangle startNewGameBox = new Rectangle((int)StartNewGamePanelOffset.X - 48, (int)StartNewGamePanelOffset.Y - 48, 96, 96);
+			if (!Maximized)
+			{
+				startNewGameBox = new Rectangle((int)StartNewGamePanelOffset.X - 20, (int)StartNewGamePanelOffset.Y - 20, 40, 40);
+			}
 			if (startNewGameBox.Contains((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y))
 			{
 				if (!IsMouseOverStartNewGame)
@@ -505,8 +629,12 @@ public class KitchenSystemUI : GameInterfaceLayer
 		// Account panel
 		if (StartInterfaceAnimationTimer < 30 && Level >= 2)
 		{
-			Rectangle AccountBox = new Rectangle((int)AccountPanelOffset.X - 48, (int)AccountPanelOffset.Y - 48, 96, 96);
-			if (AccountBox.Contains((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y))
+			Rectangle accountBox = new Rectangle((int)AccountPanelOffset.X - 48, (int)AccountPanelOffset.Y - 48, 96, 96);
+			if (!Maximized)
+			{
+				accountBox = new Rectangle((int)AccountPanelOffset.X - 20, (int)AccountPanelOffset.Y - 20, 40, 40);
+			}
+			if (accountBox.Contains((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y))
 			{
 				if (!IsMouseOverAccount)
 				{
@@ -532,34 +660,64 @@ public class KitchenSystemUI : GameInterfaceLayer
 	{
 		if (IsDragging)
 		{
-			MainPanelOrigin = DragStartPanelPos + Main.MouseScreen - DragStartMousePos;
+			if(Maximized)
+			{
+				MainPanelOrigin = DragStartPanelPos + Main.MouseScreen - DragStartMousePos;
+			}
+			else
+			{
+				MainPanelOriginMinimized.X = (DragStartPanelPos + Main.MouseScreen - DragStartMousePos).X;
+			}
 		}
+
+		MainPanelOriginMinimized.Y = Main.screenHeight - 100;
+
 		PauseContinuePanelOffset = MainPanelOrigin + new Vector2(340, 200);
-
 		DragPanelOffset = MainPanelOrigin + new Vector2(280, 200);
-
 		RestartPanelOffset = MainPanelOrigin + new Vector2(220, 200);
-
 		MaximizePanelOffset = MainPanelOrigin + new Vector2(160, 200);
+		if (!Maximized)
+		{
+			PauseContinuePanelOffset = MainPanelOriginMinimized + new Vector2(200, -100);
+			DragPanelOffset = MainPanelOriginMinimized + new Vector2(160, -100);
+			RestartPanelOffset = MainPanelOriginMinimized + new Vector2(120, -100);
+			MaximizePanelOffset = MainPanelOriginMinimized + new Vector2(80, -100);
+		}
 	}
 
 	public void DrawScoreBar()
 	{
-		Draw9Pieces(MainPanelOrigin + new Vector2(0, 220), 400, 60, new Color(0.3f, 0.2f, 0.2f), 0);
-
-		// Value display
-		Main.spriteBatch.DrawString(FontAssets.MouseText.Value, "Profit: " + Score.ToString(), MainPanelOrigin + new Vector2(-370, 180), new Color(1f, 1f, 0.5f));
-		Main.spriteBatch.DrawString(FontAssets.MouseText.Value, "Target Profit: " + TargetScore.ToString(), MainPanelOrigin + new Vector2(-370, 210), new Color(1f, 1f, 0.5f));
-		if (Timer < 1200 && Timer != 0)
+		if (Maximized)
 		{
-			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, "Relest Time: " + (int)(Timer / 60f), MainPanelOrigin + new Vector2(-370, 240), Color.Lerp(new Color(1f, 1f, 0.5f), new Color(1f, 0f, 0f), MathF.Sin((float)Main.timeForVisualEffects * 0.21f) * 0.5f + 0.5f));
+			Draw9Pieces(MainPanelOrigin + new Vector2(0, 220), 400, 60, new Color(0.3f, 0.2f, 0.2f), 0);
+
+			// Value display
+			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, "Profit: " + Score.ToString(), MainPanelOrigin + new Vector2(-370, 180), new Color(1f, 1f, 0.5f));
+			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, "Target Profit: " + TargetScore.ToString(), MainPanelOrigin + new Vector2(-370, 210), new Color(1f, 1f, 0.5f));
+			if (Timer < 1200 && Timer != 0)
+			{
+				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, "Relest Time: " + (int)(Timer / 60f), MainPanelOrigin + new Vector2(-370, 240), Color.Lerp(new Color(1f, 1f, 0.5f), new Color(1f, 0f, 0f), MathF.Sin((float)Main.timeForVisualEffects * 0.21f) * 0.5f + 0.5f));
+			}
+			else
+			{
+				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, "Relest Time: " + (int)(Timer / 60f), MainPanelOrigin + new Vector2(-370, 240), new Color(1f, 1f, 0.5f));
+			}
+
+			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, "Level: " + Level, MainPanelOrigin + new Vector2(-150, 210), new Color(1f, 1f, 0.5f));
 		}
 		else
 		{
-			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, "Relest Time: " + (int)(Timer / 60f), MainPanelOrigin + new Vector2(-370, 240), new Color(1f, 1f, 0.5f));
-		}
+			string text = Score + " / " + TargetScore;
+			Vector2 textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, text, Vector2.One);
+			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, text, MainPanelOriginMinimized + new Vector2(0, 70), new Color(1f, 1f, 0.5f), 0, textSize * 0.5f, 1f, SpriteEffects.None, 0);
 
-		Main.spriteBatch.DrawString(FontAssets.MouseText.Value, "Level: " + Level, MainPanelOrigin + new Vector2(-150, 210), new Color(1f, 1f, 0.5f));
+			Draw9Pieces(MainPanelOriginMinimized + new Vector2(0, 50), 246, 8, new Color(0.3f, 0.3f, 0.6f), 0);
+			Draw9Pieces(MainPanelOriginMinimized + new Vector2(0, 50), 244, 6, new Color(0f, 0f, 0f), 0);
+			float timeValue = Timer / (float)MaxTime;
+
+			Color cTime = Color.Lerp(new Color(1f, 0f, 0f), new Color(0f, 1f, 0f), timeValue) * 0.9f * (StartInterfaceAnimationTimer / 30f);
+			Draw9Pieces(MainPanelOriginMinimized + new Vector2(-244 * (1 - timeValue), 50), 244 * timeValue, 6, cTime, 0);
+		}
 	}
 
 	public void UpdateFoodRequest()
@@ -681,8 +839,8 @@ public class KitchenSystemUI : GameInterfaceLayer
 			AddRectangleBars(bars, anchorCenter + new Vector2(-width, -height) + new Vector2(10, 0), anchorCenter + new Vector2(width, -height) + new Vector2(-10, 10), new Vector2(0.5f, 0), new Vector2(0.5f, 0.2f), color);
 			AddRectangleBars(bars, anchorCenter + new Vector2(width, -height) + new Vector2(-10, 0), anchorCenter + new Vector2(width, -height) + new Vector2(0, 10), new Vector2(0.8f, 0), new Vector2(1f, 0.2f), color);
 
-			AddRectangleBars(bars, anchorCenter + new Vector2(-width, -height) + new Vector2(0, 10), anchorCenter + new Vector2(-width, height) + new Vector2(10, -10), new Vector2(0, 0.4f), new Vector2(0.2f, 0.6f), color);
-			AddRectangleBars(bars, anchorCenter + new Vector2(-width, -height) + new Vector2(10, 10), anchorCenter + new Vector2(width, height) + new Vector2(-10, -10), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), color);
+			AddRectangleBars(bars, anchorCenter + new Vector2(-width, -height) + new Vector2(0, 10), anchorCenter + new Vector2(-width, height) + new Vector2(10, -10), new Vector2(0, 0.2f), new Vector2(0.2f, 0.8f), color);
+			AddRectangleBars(bars, anchorCenter + new Vector2(-width, -height) + new Vector2(10, 10), anchorCenter + new Vector2(width, height) + new Vector2(-10, -10), new Vector2(0.5f, 0.2f), new Vector2(0.5f, 0.8f), color);
 			AddRectangleBars(bars, anchorCenter + new Vector2(width, -height) + new Vector2(-10, 10), anchorCenter + new Vector2(width, height) + new Vector2(0, -10), new Vector2(0.8f, 0.2f), new Vector2(1f, 0.8f), color);
 
 			AddRectangleBars(bars, anchorCenter + new Vector2(-width, height) + new Vector2(0, -10), anchorCenter + new Vector2(-width, height) + new Vector2(10, 0), new Vector2(0f, 0.8f), new Vector2(0.2f, 1f), color);

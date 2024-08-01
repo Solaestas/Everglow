@@ -1,6 +1,8 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Food.Items;
 using Everglow.Food.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Kitchen.Tiles;
+using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -40,6 +42,11 @@ public class FoodRequestPanel
 
 	public virtual void Draw()
 	{
+		if (!KitchenSystemUI.Maximized)
+		{
+			DrawMinimized();
+			return;
+		}
 		Color panelColor = new Color(0.4f, 0.3f, 0.2f);
 		if (State == 1)
 		{
@@ -114,6 +121,66 @@ public class FoodRequestPanel
 		Main.spriteBatch.DrawString(FontAssets.MouseText.Value, "Cancel", drawPos + new Vector2(0, 94), textColor, 0, textSize * 0.5f, 1, SpriteEffects.None, 0);
 	}
 
+	public void DrawMinimized()
+	{
+		Color panelColor = new Color(0.2f, 0.15f, 0.1f);
+		if (State == 1)
+		{
+			panelColor = new Color(0.1f, 0.8f, 0.3f);
+		}
+		if (State == 2)
+		{
+			panelColor = new Color(0.8f, 0.0f, 0.2f);
+		}
+		Vector2 drawPos = MainPanelOriginMinimized + AnchorPos;
+		Vector2 itemSlotPos = drawPos + new Vector2(0, -30);
+
+		// Timer bar
+
+		float timeValue = TimeLeft / (float)MaxTime;
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, sBS.TransformMatrix);
+		Effect timer = ModAsset.FoodRequsetTimer.Value;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		timer.Parameters["uTransform"].SetValue(model * projection);
+		timer.Parameters["uTime"].SetValue(1 - timeValue);
+		timer.CurrentTechnique.Passes[0].Apply();
+		Draw9Pieces(itemSlotPos, 44, 44, Color.Lerp(new Color(1f, 0f, 0f), new Color(0f, 1f, 0f), timeValue) * 0.9f, Alpha);
+		Main.spriteBatch.End();
+
+		// Item slot
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, sBS.TransformMatrix);
+		Draw9Pieces(itemSlotPos, 34, 34, panelColor, Alpha);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
+		Item item = new Item(FoodType);
+		Color color = Color.White * (1 - Alpha);
+		Texture2D food = TextureAssets.Item[FoodType].Value;
+		Rectangle frame = (Main.itemAnimations[FoodType] == null) ? food.Frame() : Main.itemAnimations[FoodType].GetFrame(food);
+		float scale;
+		ItemSlot.DrawItem_GetColorAndScale(item, 1, ref color, 20000, ref frame, out color, out scale);
+		Main.spriteBatch.Draw(food, itemSlotPos, frame, color, 0f, new Vector2(frame.Width, frame.Height) * 0.5f, scale, SpriteEffects.None, 0f);
+
+		// Value display
+		Vector2 textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, Value.ToString(), Vector2.One);
+		Main.spriteBatch.DrawString(FontAssets.MouseText.Value, Value.ToString(), drawPos + new Vector2(0, 30), color, 0, textSize * 0.5f, 1, SpriteEffects.None, 0);
+
+		// Cancel button
+		Texture2D icons = ModAsset.FoodRequestUIPanelIcons.Value;
+		frame = new Rectangle(26, 0, 13, 13);
+		Vector2 cancelPos = AnchorPos + MainPanelOriginMinimized + new Vector2(30, -60);
+		if (IsMouseOverCancelButtom)
+		{
+			Main.spriteBatch.Draw(icons, cancelPos, frame, new Color(255, 50, 0), 0f, new Vector2(frame.Width, frame.Height) * 0.5f, scale * 3f, SpriteEffects.None, 0f);
+		}
+		else
+		{
+			Main.spriteBatch.Draw(icons, cancelPos, frame, new Color(155, 0, 0, 150), 0f, new Vector2(frame.Width, frame.Height) * 0.5f, scale * 2, SpriteEffects.None, 0f);
+		}
+	}
+
 	public void Update(int index)
 	{
 		// Timer
@@ -130,7 +197,14 @@ public class FoodRequestPanel
 			}
 			else
 			{
-				AnchorPos = Vector2.Lerp(AnchorPos, new Vector2(index * 160 - 330, 0), 0.2f);
+				if (Maximized)
+				{
+					AnchorPos = Vector2.Lerp(AnchorPos, new Vector2(index * 160 - 330, 0), 0.2f);
+				}
+				else
+				{
+					AnchorPos = Vector2.Lerp(AnchorPos, new Vector2(index * 100 - 200, 0), 0.2f);
+				}
 			}
 		}
 		if (!Active)
@@ -141,6 +215,10 @@ public class FoodRequestPanel
 
 		// Allow cancel manually
 		Rectangle cancelBox = new Rectangle((int)(AnchorPos + MainPanelOrigin + new Vector2(0, 90)).X - 40, (int)(AnchorPos + MainPanelOrigin + new Vector2(0, 90)).Y - 14, 80, 20);
+		if(!Maximized)
+		{
+			cancelBox = new Rectangle((int)(AnchorPos + MainPanelOriginMinimized).X + 30 - 15, (int)(AnchorPos + MainPanelOriginMinimized).Y - 60 - 15, 30, 30);
+		}
 		if (cancelBox.Contains((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y))
 		{
 			if (!IsMouseOverCancelButtom)
@@ -164,6 +242,10 @@ public class FoodRequestPanel
 		// display ingredients
 		string mouseText = string.Empty;
 		Rectangle foodBox = new Rectangle((int)(AnchorPos + MainPanelOrigin + new Vector2(0, -30)).X - 30, (int)(AnchorPos + MainPanelOrigin + new Vector2(0, -30)).Y - 30, 60, 60);
+		if(!Maximized)
+		{
+			foodBox = new Rectangle((int)(AnchorPos + MainPanelOriginMinimized + new Vector2(0, -30)).X - 17, (int)(AnchorPos + MainPanelOriginMinimized + new Vector2(0, -30)).Y - 17, 34, 34);
+		}
 		if (foodBox.Contains((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y))
 		{
 			if (CasseroleUI.PotMenu.Count == 0)
