@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -37,12 +38,19 @@ internal class LightArrow : ModProjectile
 		{
 			Projectile.velocity.Y = 16f;
 		}
+		Lighting.AddLight(Projectile.Center + Utils.SafeNormalize(Projectile.velocity, Vector2.zeroVector) * 20, new Vector3(0.8f, 0.6f, 0));
+		Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<LampWood_Dust_fluorescent_appear>());
+		dust.alpha = 0;
+		dust.rotation = Main.rand.NextFloat(0.3f, 0.7f);
+		dust.scale *= 2f;
 	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		var TexMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation + MathF.PI, TexMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
+		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation + MathF.PI, texMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+		var texGlow = ModAsset.LightArrow_glow.Value;
+		Main.spriteBatch.Draw(texGlow, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation + MathF.PI, texGlow.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		return false;
 	}
 
@@ -57,11 +65,10 @@ internal class LightArrow : ModProjectile
 		Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
 		for (int i = 0; i < 20; i++)
 		{
-			Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Cloud, newColor: Color.Yellow);
-			dust.noGravity = true;
-			dust.velocity *= 1.5f;
-			dust.scale *= 4f;
-			dust.fadeIn = Main.rand.NextFloat(420, 600);
+			Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<LampWood_Dust_fluorescent_appear>());
+			dust.alpha = 0;
+			dust.rotation = Main.rand.NextFloat(0.3f, 0.7f);
+			dust.scale *= 2f;
 		}
 	}
 }
