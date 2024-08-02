@@ -2,6 +2,7 @@ using Everglow.Myth.Common;
 using Everglow.Myth.Misc.Dusts.Slingshots;
 using Newtonsoft.Json.Linq;
 using Terraria.Audio;
+using Everglow.Commons.Weapons.Slingshots;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
 

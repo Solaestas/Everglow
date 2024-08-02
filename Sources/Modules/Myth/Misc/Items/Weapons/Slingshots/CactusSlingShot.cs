@@ -1,3 +1,5 @@
+using Everglow.Commons.Weapons.Slingshots;
+
 namespace Everglow.Myth.Misc.Items.Weapons.Slingshots;
 
 public class CactusSlingShot : SlingshotItem

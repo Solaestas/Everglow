@@ -1,3 +1,5 @@
+using Everglow.Commons.Weapons.Slingshots;
+
 using Everglow.Myth.Common;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
