@@ -1,4 +1,8 @@
+using System;
+using System.Linq;
 using Everglow.Commons.DataStructures;
+using Terraria;
+using static Terraria.WorldBuilding.Actions;
 
 namespace Everglow.Commons.Utilities;
 
@@ -74,6 +78,49 @@ public static class GraphicsUtils
 		return result;
 	}
 
+	/// <summary>
+	/// 根据输入点的List获得一条贝塞尔曲线
+	/// </summary>
+	/// <param name="origPath"> </param>
+	/// <param name="precision"> 最少为2 ,不建议超过100</param>
+	/// <returns> </returns>
+	public static List<Vector2> BezierCurve(IEnumerable<Vector2> origPath, int precision = 10)
+	{
+		int count = origPath.Count() - 1;
+		if (count <= 2)
+		{
+			return origPath.ToList();
+		}
+		if (precision < 2)
+		{
+			precision = 2;
+		}
+		Main.NewText(count);
+
+		float factor = 1.00f / (precision*count);
+		List<Vector2> result = new List<Vector2>();
+		for (float t = 0; t < 1.0f; t += factor)
+		{
+			Vector2 point = Vector2.Zero;
+
+			Vector2[] p = new Vector2[count + 1];
+			var it = origPath.GetEnumerator();
+			int index = 0;
+			while (it.MoveNext())
+			{
+				p[index] = it.Current;
+				index++;
+			}
+
+			for (int i = 0; i < count; i++)
+			{
+				point += p[i] * MathF.Pow(1 - t, count - i) * MathF.Pow(t, i) * MathUtils.Combination(count, i);
+			}
+			result.Add(point);
+		}
+
+		return result;
+	}
 	public static SpriteBatchState? GetState(this SpriteBatch spriteBatch)
 	{
 		if (!spriteBatch.beginCalled)
@@ -89,4 +136,28 @@ public static class GraphicsUtils
 			spriteBatch.transformMatrix,
 			spriteBatch.customEffect);
 	}
+
+
+
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="t"></param>
+	/// <param name="p"></param>
+	/// <returns></returns>
+	private static Vector2 GetBezierPoint(float t, params Vector2[] p)
+	{
+		int n = p.Length - 1;
+		float u = 1 - t;
+
+		Vector2 result = Vector2.Zero;
+
+		for (int i = 0; i < p.Length; i++)
+		{
+			result += p[i] * MathF.Pow(u, n - i) * MathF.Pow(t, i) * MathUtils.Combination(n, i);
+		}
+		return result;
+	}
+
 }
