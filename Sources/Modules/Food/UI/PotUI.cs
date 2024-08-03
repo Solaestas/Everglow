@@ -1,13 +1,15 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
-using Everglow.Food.Items;
+using Everglow.Food.Items.Cookers;
+using Everglow.Food.Tiles;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.UI;
 using static Everglow.Commons.Utilities.FoodIngredientItem;
-using static Everglow.Food.Tiles.StoveSystemUI;
+using static Everglow.Food.UI.StoveSystemUI;
 
-namespace Everglow.Food.Tiles;
+namespace Everglow.Food.UI;
 
 public abstract class PotUI
 {
@@ -116,7 +118,7 @@ public abstract class PotUI
 	public virtual Vector2 GetDrawPos()
 	{
 		// Adjust draw position between effectMatrix(UI) and transformationMatrix(World).
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Vector2 drawPos = AnchorTilePos.ToWorldCoordinates() - Main.screenPosition;
 		drawPos = Vector2.Transform(drawPos, Main.GameViewMatrix.TransformationMatrix);
 		drawPos = Vector2.Transform(drawPos, Matrix.Invert(sBS.TransformMatrix));
@@ -152,7 +154,7 @@ public abstract class PotUI
 		{
 			DrawMainPanel();
 		}
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		var sBS2 = sBS;
 		sBS2.SortMode = SpriteSortMode.Immediate;
@@ -192,10 +194,10 @@ public abstract class PotUI
 				}
 				if (Ingredients[i] >= 0)
 				{
-					Item item = new Item(Ingredients[i]);
+					var item = new Item(Ingredients[i]);
 					Color color = Color.White;
 					Texture2D food = TextureAssets.Item[Ingredients[i]].Value;
-					Rectangle frame = (Main.itemAnimations[Ingredients[i]] == null) ? food.Frame() : Main.itemAnimations[Ingredients[i]].GetFrame(food);
+					Rectangle frame = Main.itemAnimations[Ingredients[i]] == null ? food.Frame() : Main.itemAnimations[Ingredients[i]].GetFrame(food);
 					float scale;
 					ItemSlot.DrawItem_GetColorAndScale(item, 1, ref color, 20000, ref frame, out color, out scale);
 					Main.spriteBatch.Draw(food, drawPos + IngredientsSlotPos[i], frame, color, 0f, frame.Size() * 0.5f, scale, SpriteEffects.None, 0f);
@@ -218,10 +220,10 @@ public abstract class PotUI
 				Draw9Pieces(drawPos + IngredientsSlotPos[i], 16, 16, new Color(210, 210, 185), 0, ModAsset.StoveUIPanel_outline_thin.Value);
 				if (Ingredients[i] >= 0)
 				{
-					Item item = new Item(Ingredients[i]);
+					var item = new Item(Ingredients[i]);
 					Color color = Color.White;
 					Texture2D food = TextureAssets.Item[Ingredients[i]].Value;
-					Rectangle frame = (Main.itemAnimations[Ingredients[i]] == null) ? food.Frame() : Main.itemAnimations[Ingredients[i]].GetFrame(food);
+					Rectangle frame = Main.itemAnimations[Ingredients[i]] == null ? food.Frame() : Main.itemAnimations[Ingredients[i]].GetFrame(food);
 					float scale;
 					ItemSlot.DrawItem_GetColorAndScale(item, 1, ref color, 20000, ref frame, out color, out scale);
 					Main.spriteBatch.Draw(food, drawPos + IngredientsSlotPos[i], frame, color, 0f, frame.Size() * 0.5f, scale, SpriteEffects.None, 0f);
@@ -233,7 +235,7 @@ public abstract class PotUI
 	public virtual void DrawCookingAnimation()
 	{
 		Vector2 drawPos = GetDrawPos();
-		Vector2 offsetPanel = new Vector2(0, 0);
+		var offsetPanel = new Vector2(0, 0);
 		if (!Maximized)
 		{
 			offsetPanel = new Vector2(0, 70);
@@ -247,10 +249,10 @@ public abstract class PotUI
 		{
 			return;
 		}
-		Item item = new Item(CuisineType);
+		var item = new Item(CuisineType);
 		Color color = Color.White;
 		Texture2D food = TextureAssets.Item[CuisineType].Value;
-		Rectangle frame = (Main.itemAnimations[CuisineType] == null) ? food.Frame() : Main.itemAnimations[CuisineType].GetFrame(food);
+		Rectangle frame = Main.itemAnimations[CuisineType] == null ? food.Frame() : Main.itemAnimations[CuisineType].GetFrame(food);
 		float scale;
 		ItemSlot.DrawItem_GetColorAndScale(item, 1, ref color, 20000, ref frame, out color, out scale);
 		if (!Maximized)
@@ -260,7 +262,7 @@ public abstract class PotUI
 		Main.spriteBatch.Draw(food, drawPos + offsetPanel, frame, color, 0f, frame.Size() * 0.5f, scale, SpriteEffects.None, 0f);
 
 		// Timer bar
-		Vector2 offsetTimer = new Vector2(0, 50);
+		var offsetTimer = new Vector2(0, 50);
 		if (!Maximized)
 		{
 			offsetTimer = new Vector2(0, 92);
@@ -294,7 +296,7 @@ public abstract class PotUI
 		int sizeX = 20;
 		int sizeY = 16;
 		float iconSize = 1.5f;
-		Rectangle frame = new Rectangle(frameX, frameY, 14, 14);
+		var frame = new Rectangle(frameX, frameY, 14, 14);
 		if (!Maximized)
 		{
 			sizeX = 12;
@@ -320,15 +322,15 @@ public abstract class PotUI
 
 	public virtual void DrawMaximizeButtom()
 	{
-		Color color = new Color(0.3f, 0.4f, 0.9f);
-		Color colorHit = new Color(0.5f, 0.7f, 1f);
+		var color = new Color(0.3f, 0.4f, 0.9f);
+		var colorHit = new Color(0.5f, 0.7f, 1f);
 		Vector2 drawPos = GetDrawPos();
 		Texture2D iconAtlas = ModAsset.StoveUIIcons.Value;
 		Vector2 CloseButtonPos = drawPos + MaximizePanelPos + new Vector2(10, 16);
 		int sizeX = 20;
 		int sizeY = 16;
 		float iconSize = 1.5f;
-		Rectangle frame = new Rectangle(14, 28, 14, 14);
+		var frame = new Rectangle(14, 28, 14, 14);
 		if (!Maximized)
 		{
 			sizeX = 12;
@@ -370,7 +372,7 @@ public abstract class PotUI
 
 	public virtual void Update()
 	{
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Vector2 drawPos = GetDrawPos();
 
 		if (CookTimer > 0)
@@ -439,7 +441,7 @@ public abstract class PotUI
 			{
 				size = 48;
 			}
-			Rectangle ingredientBox = new Rectangle((int)slotPos.X - size / 2, (int)slotPos.Y - size / 2, size, size);
+			var ingredientBox = new Rectangle((int)slotPos.X - size / 2, (int)slotPos.Y - size / 2, size, size);
 			if (ingredientBox.Contains((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y))
 			{
 				if (MouseOverIndex != i)
@@ -501,7 +503,7 @@ public abstract class PotUI
 			sizeX = 12;
 			sizeY = 12;
 		}
-		Rectangle cancelBox = new Rectangle((int)position.X - sizeX / 2, (int)position.Y, 2 * sizeX, 2 * sizeY);
+		var cancelBox = new Rectangle((int)position.X - sizeX / 2, (int)position.Y, 2 * sizeX, 2 * sizeY);
 		if (cancelBox.Contains((int)Main.MouseScreen.X, (int)Main.MouseScreen.Y))
 		{
 			if (MouseOverIndex != mouseIndex)
@@ -528,12 +530,34 @@ public abstract class PotUI
 	{
 		StoveEntity stoveEneity;
 		Stove.TryGetStoveEntityAs(AnchorTilePos.X, AnchorTilePos.Y, out stoveEneity);
+		switch (stoveEneity.PotState)
+		{
+			case 1:
+				{
+					Item.NewItem(null, AnchorTilePos.ToWorldCoordinates(), ModContent.ItemType<Casserole_Item>(), 1);
+					break;
+				}
+			case 2:
+				{
+					Item.NewItem(null, AnchorTilePos.ToWorldCoordinates(), ModContent.ItemType<SteamBox_Item>(), 1);
+					break;
+				}
+			case 3:
+				{
+					Item.NewItem(null, AnchorTilePos.ToWorldCoordinates(), ModContent.ItemType<SteamBox_Item>(), 2);
+					break;
+				}
+			default:
+				{
+					break;
+				}
+		}
 		if (stoveEneity != null)
 		{
 			stoveEneity.PotState = 0;
 		}
 		ClearPot();
-		Item.NewItem(null, AnchorTilePos.ToWorldCoordinates(), ModContent.ItemType<Casserole_Item>(), 1);
+
 		Open = false;
 	}
 

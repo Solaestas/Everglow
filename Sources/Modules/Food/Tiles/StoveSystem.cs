@@ -1,3 +1,4 @@
+using Everglow.Food.UI;
 using Terraria.UI;
 
 namespace Everglow.Food.Tiles;

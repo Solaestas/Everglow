@@ -1,6 +1,6 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Food.Items;
-using Everglow.Food.Tiles;
+using Everglow.Food.Items.Cookers;
+using Everglow.Food.UI;
 using Everglow.Yggdrasil.YggdrasilTown.Kitchen.Tiles;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;

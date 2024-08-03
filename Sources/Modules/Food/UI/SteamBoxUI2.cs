@@ -1,9 +1,10 @@
 using Everglow.Food.Items.Ingredients;
 using Everglow.Food.Items.ModFood;
+using Everglow.Food.UI;
 
-namespace Everglow.Food.Tiles;
+namespace Everglow.Food.UI;
 
-public class CasseroleUI : PotUI
+public class SteamBoxUI2 : PotUI
 {
 	public Vector2 PanelPos0 = new Vector2(100, -100);
 	public Vector2 PanelPos1 = new Vector2(80, -92);
@@ -11,34 +12,36 @@ public class CasseroleUI : PotUI
 	public Vector2 PanelPos3 = new Vector2(140, -50);
 	public Vector2 PanelPos4 = new Vector2(60, -100);
 
-	public static CookingUnit MapoTofu;
-	public static CookingUnit YuxiangEggplant;
-	public static CookingUnit BoiledBullfrog;
+	public static CookingUnit XiaoLongBao;
+
 
 	/// <summary>
 	/// Menus of this pot can cook
 	/// </summary>
 	public static List<CookingUnit> PotMenu = new List<CookingUnit>();
 
-	public CasseroleUI(Point anchorTilePos)
+	public SteamBoxUI2(Point anchorTilePos)
 		: base(anchorTilePos)
 	{
 	}
 
 	public override void SetDefault(int count)
 	{
-		int maxSlotCount = 6;
+		int maxSlotCount = 13;
 		Ingredients = new int[maxSlotCount];
 		IngredientsSlotPos = new Vector2[maxSlotCount];
-		for (int y = 0; y < 2; y++)
+		for (int i = 0; i < 6; i++)
 		{
-			for (int x = 0; x < 3; x++)
-			{
-				int index = 3 * y + x;
-				IngredientsSlotPos[index] = new Vector2(x - 1, y - 0.3f) * 50;
-				Ingredients[index] = -1;
-			}
+			IngredientsSlotPos[i] = new Vector2(i - 2.5f, 0.1f) * 50;
+			Ingredients[i] = -1;
 		}
+		for (int i = 0; i < 6; i++)
+		{
+			IngredientsSlotPos[i + 6] = new Vector2(i - 2.5f, -0.9f) * 50;
+			Ingredients[i + 6] = -1;
+		}
+		IngredientsSlotPos[12] = new Vector2(0, 1.2f) * 50;
+		Ingredients[12] = -1;
 		MaxSlotCount = maxSlotCount;
 		if (PotMenu.Count == 0)
 		{
@@ -49,47 +52,47 @@ public class CasseroleUI : PotUI
 	public static void SetMenu()
 	{
 		PotMenu.Clear();
-		MapoTofu = new CookingUnit(ModContent.ItemType<Mapo_Tofu>(), ModContent.ItemType<Doubanjiang>(), ModContent.ItemType<TofuCubes>(), ModContent.ItemType<ChoppedScallion>(), ModContent.ItemType<SpicyPepperRing>(), ModContent.ItemType<SichuanPepper>(), ModContent.ItemType<GroundMeat>());
-		YuxiangEggplant = new CookingUnit(ModContent.ItemType<YuxiangEggplant>(), ModContent.ItemType<GroundMeat>(), ModContent.ItemType<MincedGarlic>(), ModContent.ItemType<ChoppedScallion>(), ModContent.ItemType<Doubanjiang>(), ModContent.ItemType<Rice>(), ModContent.ItemType<EggplantCubes>());
-		BoiledBullfrog = new CookingUnit(ModContent.ItemType<BoiledBullfrog>(), ModContent.ItemType<FrogMeat>(), ModContent.ItemType<SichuanPepper>(), ModContent.ItemType<SpicyPepperRing>(), ModContent.ItemType<ChoppedScallion>());
-		PotMenu.Add(MapoTofu);
-		PotMenu.Add(YuxiangEggplant);
-		PotMenu.Add(BoiledBullfrog);
+		XiaoLongBao = new CookingUnit(ModContent.ItemType<Mapo_Tofu>(), ModContent.ItemType<Doubanjiang>(), ModContent.ItemType<TofuCubes>(), ModContent.ItemType<ChoppedScallion>(), ModContent.ItemType<SpicyPepperRing>(), ModContent.ItemType<SichuanPepper>(), ModContent.ItemType<GroundMeat>());
+		PotMenu.Add(XiaoLongBao);
+
 	}
 
 	public override void Update()
 	{
 		if (Maximized)
 		{
-			PanelPos0 = new Vector2(140, -90);
+			PanelPos0 = new Vector2(140, -150);
 			PanelPos1 = new Vector2(-60, 82);
 			PanelPos2 = new Vector2(40, 82);
 			PanelPos3 = new Vector2(-10, 82);
-			PanelPos4 = new Vector2(100, -90);
-			for (int y = 0; y < 2; y++)
+			PanelPos4 = new Vector2(100, -150);
+			for (int i = 0; i < 6; i++)
 			{
-				for (int x = 0; x < 3; x++)
-				{
-					int index = 3 * y + x;
-					IngredientsSlotPos[index] = new Vector2(x - 1, y - 0.3f) * 50;
-				}
+				IngredientsSlotPos[i] = new Vector2(i - 2.5f, 0.1f) * 50;
 			}
+			for (int i = 0; i < 6; i++)
+			{
+				IngredientsSlotPos[i + 6] = new Vector2(i - 2.5f, -0.9f) * 50;
+			}
+			IngredientsSlotPos[12] = new Vector2(0, 1.2f) * 50;
+
 		}
 		else
 		{
-			PanelPos0 = new Vector2(44, -14);
+			PanelPos0 = new Vector2(44, -124);
 			PanelPos1 = new Vector2(-34, 70);
 			PanelPos2 = new Vector2(14, 70);
 			PanelPos3 = new Vector2(-10, 70);
-			PanelPos4 = new Vector2(20, -14);
-			for (int y = 0; y < 2; y++)
+			PanelPos4 = new Vector2(20, -124);
+			for (int y = 0; y < 4; y++)
 			{
 				for (int x = 0; x < 3; x++)
 				{
 					int index = 3 * y + x;
-					IngredientsSlotPos[index] = new Vector2(x - 1, y + 1) * 30;
+					IngredientsSlotPos[index] = new Vector2(x - 1, y - 2.4f) * 30;
 				}
 			}
+			IngredientsSlotPos[12] = new Vector2(0, 1f) * 50;
 		}
 		if (CookTimer > 0)
 		{
@@ -120,7 +123,7 @@ public class CasseroleUI : PotUI
 	public override void DrawMainPanel()
 	{
 		Vector2 drawPos = GetDrawPos();
-		Texture2D casserole = ModAsset.CasseroleUIPanel.Value;
+		Texture2D casserole = ModAsset.SteamBoxUI2Panel.Value;
 		Main.spriteBatch.Draw(casserole, drawPos, null, Color.White, 0, casserole.Size() * 0.5f, 2, SpriteEffects.None, 0);
 	}
 

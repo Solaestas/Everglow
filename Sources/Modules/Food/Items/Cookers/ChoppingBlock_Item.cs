@@ -1,6 +1,6 @@
 using Everglow.Food.Tiles;
 
-namespace Everglow.Food.Items;
+namespace Everglow.Food.Items.Cookers;
 
 public class ChoppingBlock_Item : ModItem
 {
@@ -17,14 +17,14 @@ public class ChoppingBlock_Item : ModItem
 		var point = Main.MouseWorld.ToTileCoordinates();
 		var tile = Main.tile[point];
 		var tileBelow = Main.tile[point + new Point(0, 1)];
-		if(tileBelow.HasTile)
+		if (tileBelow.HasTile)
 		{
 			Item.DefaultToPlaceableTile(ModContent.TileType<ChoppingBlock>());
 			Item.width = 32;
 			Item.height = 40;
 			Item.value = 1000;
 		}
-		else if(tile.wall != 0)
+		else if (tile.wall != 0)
 		{
 			Item.DefaultToPlaceableTile(ModContent.TileType<ChoppingBlock_Hang>());
 			Item.width = 32;

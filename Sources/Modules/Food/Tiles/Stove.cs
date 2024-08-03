@@ -1,6 +1,7 @@
 using Everglow.Commons.TileHelper;
 using Everglow.Commons.Utilities;
-using Everglow.Food.Items;
+using Everglow.Food.Items.Cookers;
+using Everglow.Food.UI;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
@@ -52,39 +53,111 @@ public class Stove : ModTile, ITileFluentlyDrawn
 		TryGetStoveEntityAs(hitPoint.X, hitPoint.Y, out stoveEneity);
 		if (stoveEneity != null)
 		{
-			if (stoveEneity.PotState == 0)
+			switch (stoveEneity.PotState)
 			{
-				Item item = Main.LocalPlayer.HeldItem;
-				if (item.type == ModContent.ItemType<Casserole_Item>())
-				{
-					item.stack--;
-					if (item.stack <= 0)
+				case 0:
 					{
-						item.active = false;
-					}
-					stoveEneity.PotState = 1;
-					return false;
-				}
-			}
-			else
-			{
-				CasseroleUI casseroleUI = new CasseroleUI(hitPoint);
-				bool checkSame = false;
-				foreach (var casserole in StoveSystemUI.PotUIs)
-				{
-					if (casserole.AnchorTilePos == hitPoint)
-					{
-						checkSame = true;
-						casserole.Open = !casserole.Open;
+						Item item = Main.LocalPlayer.HeldItem;
+						if (item.type == ModContent.ItemType<Casserole_Item>())
+						{
+							item.stack--;
+							if (item.stack <= 0)
+							{
+								item.active = false;
+							}
+							stoveEneity.PotState = 1;
+							return false;
+						}
+						if (item.type == ModContent.ItemType<SteamBox_Item>())
+						{
+							item.stack--;
+							if (item.stack <= 0)
+							{
+								item.active = false;
+							}
+							stoveEneity.PotState = 2;
+							return false;
+						}
 						break;
 					}
-				}
-				if (!checkSame)
-				{
-					StoveSystemUI.PotUIs.Add(casseroleUI);
-				}
-				return false;
+				case 1:
+					{
+						CasseroleUI casseroleUI = new CasseroleUI(hitPoint);
+						bool checkSame = false;
+						foreach (var casserole in StoveSystemUI.PotUIs)
+						{
+							if (casserole.AnchorTilePos == hitPoint)
+							{
+								checkSame = true;
+								casserole.Open = !casserole.Open;
+								break;
+							}
+						}
+						if (!checkSame)
+						{
+							StoveSystemUI.PotUIs.Add(casseroleUI);
+						}
+						return false;
+					}
+				case 2:
+					{
+						Item item = Main.LocalPlayer.HeldItem;
+						if (item.type == ModContent.ItemType<SteamBox_Item>())
+						{
+							item.stack--;
+							if (item.stack <= 0)
+							{
+								item.active = false;
+							}
+							stoveEneity.PotState = 3;
+							return false;
+						}
+						else
+						{
+							SteamBoxUI steamboxUI = new SteamBoxUI(hitPoint);
+							bool checkSame = false;
+							foreach (var casserole in StoveSystemUI.PotUIs)
+							{
+								if (casserole.AnchorTilePos == hitPoint)
+								{
+									checkSame = true;
+									casserole.Open = !casserole.Open;
+									break;
+								}
+							}
+							if (!checkSame)
+							{
+								StoveSystemUI.PotUIs.Add(steamboxUI);
+							}
+						}
+						break;
+					}
+				case 3:
+					{
+						SteamBoxUI2 steamboxUI2 = new SteamBoxUI2(hitPoint);
+						bool checkSame = false;
+						foreach (var casserole in StoveSystemUI.PotUIs)
+						{
+							if (casserole.AnchorTilePos == hitPoint)
+							{
+								checkSame = true;
+								casserole.Open = !casserole.Open;
+								break;
+							}
+						}
+						if (!checkSame)
+						{
+							StoveSystemUI.PotUIs.Add(steamboxUI2);
+						}
+
+						break;
+					}
+				default:
+					{
+						break;
+					}
 			}
+
 		}
 		FurnitureUtils.LightHitwire(i, j, Type, 2, 3);
 		return base.RightClick(i, j);
@@ -97,6 +170,7 @@ public class Stove : ModTile, ITileFluentlyDrawn
 
 	public override void MouseOver(int i, int j)
 	{
+
 	}
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
@@ -156,6 +230,18 @@ public class Stove : ModTile, ITileFluentlyDrawn
 				case 1:
 					{
 						Rectangle frame = new Rectangle(2, 2, 56, 26);
+						spriteBatch.Draw(pot, pos.ToWorldCoordinates() - Main.screenPosition + offset, frame, Lighting.GetColor(pos), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
+						break;
+					}
+				case 2:
+					{
+						Rectangle frame = new Rectangle(6, 51, 48, 14);
+						spriteBatch.Draw(pot, pos.ToWorldCoordinates() - Main.screenPosition + offset, frame, Lighting.GetColor(pos), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
+						break;
+					}
+				case 3:
+					{
+						Rectangle frame = new Rectangle(6, 51, 48, 28);
 						spriteBatch.Draw(pot, pos.ToWorldCoordinates() - Main.screenPosition + offset, frame, Lighting.GetColor(pos), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
 						break;
 					}

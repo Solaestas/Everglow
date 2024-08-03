@@ -1,8 +1,8 @@
 using Everglow.Food.Tiles;
 
-namespace Everglow.Food.Items;
+namespace Everglow.Food.Items.Cookers;
 
-public class Casserole_Item : ModItem
+public class SteamBox_Item : ModItem
 {
 	public override void SetDefaults()
 	{
@@ -10,10 +10,5 @@ public class Casserole_Item : ModItem
 		Item.width = 32;
 		Item.height = 40;
 		Item.value = 1000;
-	}
-
-	public override void HoldItem(Player player)
-	{
-
 	}
 }

@@ -1,7 +1,7 @@
 using Everglow.Commons.Vertex;
 using Terraria.UI;
 
-namespace Everglow.Food.Tiles;
+namespace Everglow.Food.UI;
 
 public class StoveSystemUI : GameInterfaceLayer
 {
@@ -58,7 +58,7 @@ public class StoveSystemUI : GameInterfaceLayer
 	public static void Draw9Pieces(Vector2 anchorCenter, float width, float height, Color color, float alpha, Texture2D texture = default)
 	{
 		color *= 1 - alpha;
-		List<Vertex2D> bars = new List<Vertex2D>();
+		var bars = new List<Vertex2D>();
 
 		if (width > 10 && height > 10)
 		{

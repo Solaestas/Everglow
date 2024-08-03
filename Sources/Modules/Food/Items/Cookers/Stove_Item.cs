@@ -1,6 +1,6 @@
 using Everglow.Food.Tiles;
 
-namespace Everglow.Food.Items;
+namespace Everglow.Food.Items.Cookers;
 
 public class Stove_Item : ModItem
 {
