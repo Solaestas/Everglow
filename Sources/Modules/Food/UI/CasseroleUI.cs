@@ -113,7 +113,8 @@ public class CasseroleUI : PotUI
 
 	public override void Cook()
 	{
-		CuisineType = CheckCuisineType();
+		CuisineType = CheckCuisineType().Item1;
+		CuisineNum = CheckCuisineType().Item2;
 		base.Cook();
 	}
 
@@ -141,15 +142,15 @@ public class CasseroleUI : PotUI
 		return false;
 	}
 
-	public int CheckCuisineType()
+	public Tuple<int, int> CheckCuisineType()
 	{
 		foreach (var cookingUnit in PotMenu)
 		{
 			if (CanCook(cookingUnit))
 			{
-				return cookingUnit.Type;
+				return new Tuple<int, int>(cookingUnit.Type, cookingUnit.Num);
 			}
 		}
-		return -1;
+		return new Tuple<int, int>(-1, -1);
 	}
 }

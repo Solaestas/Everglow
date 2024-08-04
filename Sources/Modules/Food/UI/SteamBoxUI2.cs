@@ -12,13 +12,14 @@ public class SteamBoxUI2 : PotUI
 	public Vector2 PanelPos3 = new Vector2(140, -50);
 	public Vector2 PanelPos4 = new Vector2(60, -100);
 
-	public static CookingUnit XiaoLongBao;
+	public static CookingUnitWithOrder XiaoLongBao;
 
 
 	/// <summary>
 	/// Menus of this pot can cook
 	/// </summary>
 	public static List<CookingUnit> PotMenu = new List<CookingUnit>();
+	public static List<CookingUnitWithOrder> PotMenuWithOrder = new List<CookingUnitWithOrder>();
 
 	public SteamBoxUI2(Point anchorTilePos)
 		: base(anchorTilePos)
@@ -52,8 +53,25 @@ public class SteamBoxUI2 : PotUI
 	public static void SetMenu()
 	{
 		PotMenu.Clear();
-		XiaoLongBao = new CookingUnit(ModContent.ItemType<Mapo_Tofu>(), ModContent.ItemType<Doubanjiang>(), ModContent.ItemType<TofuCubes>(), ModContent.ItemType<ChoppedScallion>(), ModContent.ItemType<SpicyPepperRing>(), ModContent.ItemType<SichuanPepper>(), ModContent.ItemType<GroundMeat>());
-		PotMenu.Add(XiaoLongBao);
+		PotMenuWithOrder.Clear();
+		int[] XiaoLongBaoIngredients = new int[]
+		{
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ItemID.BottledWater,
+		};
+		XiaoLongBao = new CookingUnitWithOrder(ModContent.ItemType<XiaoLongBao>(), XiaoLongBaoIngredients,2);
+		PotMenuWithOrder.Add(XiaoLongBao);
 
 	}
 
@@ -62,9 +80,9 @@ public class SteamBoxUI2 : PotUI
 		if (Maximized)
 		{
 			PanelPos0 = new Vector2(140, -150);
-			PanelPos1 = new Vector2(-60, 82);
-			PanelPos2 = new Vector2(40, 82);
-			PanelPos3 = new Vector2(-10, 82);
+			PanelPos1 = new Vector2(-60, 132);
+			PanelPos2 = new Vector2(40, 132);
+			PanelPos3 = new Vector2(-10, 132);
 			PanelPos4 = new Vector2(100, -150);
 			for (int i = 0; i < 6; i++)
 			{
@@ -116,7 +134,8 @@ public class SteamBoxUI2 : PotUI
 
 	public override void Cook()
 	{
-		CuisineType = CheckCuisineType();
+		CuisineType = CheckCuisineType().Item1;
+		CuisineNum = CheckCuisineType().Item2;
 		base.Cook();
 	}
 
@@ -144,15 +163,31 @@ public class SteamBoxUI2 : PotUI
 		return false;
 	}
 
-	public int CheckCuisineType()
+	public bool CanCookWithOrder(CookingUnitWithOrder cookingUnitwithorder)
+	{
+		if (cookingUnitwithorder.Ingredients.SequenceEqual(Ingredients))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	public Tuple<int, int> CheckCuisineType()
 	{
 		foreach (var cookingUnit in PotMenu)
 		{
 			if (CanCook(cookingUnit))
 			{
-				return cookingUnit.Type;
+				return new Tuple<int, int>(cookingUnit.Type, cookingUnit.Num);
 			}
 		}
-		return -1;
+		foreach (var cookingUnitwithorder in PotMenuWithOrder)
+		{
+			if (CanCookWithOrder(cookingUnitwithorder))
+			{
+				return new Tuple<int, int>(cookingUnitwithorder.Type, cookingUnitwithorder.Num);
+			}
+		}
+		return new Tuple<int, int>(-1, -1);
 	}
 }

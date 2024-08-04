@@ -1,6 +1,7 @@
 using Everglow.Food.Items.Ingredients;
 using Everglow.Food.Items.ModFood;
 using Everglow.Food.UI;
+using static Everglow.Food.UI.PotUI;
 
 namespace Everglow.Food.UI;
 
@@ -12,14 +13,13 @@ public class SteamBoxUI : PotUI
 	public Vector2 PanelPos3 = new Vector2(140, -50);
 	public Vector2 PanelPos4 = new Vector2(60, -100);
 
-	public static CookingUnit MapoTofu;
-	public static CookingUnit YuxiangEggplant;
-	public static CookingUnit BoiledBullfrog;
+	public static CookingUnitWithOrder XiaoLongBao;
 
 	/// <summary>
 	/// Menus of this pot can cook
 	/// </summary>
 	public static List<CookingUnit> PotMenu = new List<CookingUnit>();
+	public static List<CookingUnitWithOrder> PotMenuWithOrder = new List<CookingUnitWithOrder>();
 
 	public SteamBoxUI(Point anchorTilePos)
 		: base(anchorTilePos)
@@ -48,12 +48,19 @@ public class SteamBoxUI : PotUI
 	public static void SetMenu()
 	{
 		PotMenu.Clear();
-		MapoTofu = new CookingUnit(ModContent.ItemType<Mapo_Tofu>(), ModContent.ItemType<Doubanjiang>(), ModContent.ItemType<TofuCubes>(), ModContent.ItemType<ChoppedScallion>(), ModContent.ItemType<SpicyPepperRing>(), ModContent.ItemType<SichuanPepper>(), ModContent.ItemType<GroundMeat>());
-		YuxiangEggplant = new CookingUnit(ModContent.ItemType<YuxiangEggplant>(), ModContent.ItemType<GroundMeat>(), ModContent.ItemType<MincedGarlic>(), ModContent.ItemType<ChoppedScallion>(), ModContent.ItemType<Doubanjiang>(), ModContent.ItemType<Rice>(), ModContent.ItemType<EggplantCubes>());
-		BoiledBullfrog = new CookingUnit(ModContent.ItemType<BoiledBullfrog>(), ModContent.ItemType<FrogMeat>(), ModContent.ItemType<SichuanPepper>(), ModContent.ItemType<SpicyPepperRing>(), ModContent.ItemType<ChoppedScallion>());
-		PotMenu.Add(MapoTofu);
-		PotMenu.Add(YuxiangEggplant);
-		PotMenu.Add(BoiledBullfrog);
+		PotMenuWithOrder.Clear();
+		int[] XiaoLongBaoIngredients = new int[]
+		{
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ModContent.ItemType<RawXiaoLongBao>(),
+			ItemID.BottledWater,
+		};
+		XiaoLongBao = new CookingUnitWithOrder(ModContent.ItemType<XiaoLongBao>(), XiaoLongBaoIngredients);
+		PotMenuWithOrder.Add(XiaoLongBao);
 	}
 
 	public override void Update()
@@ -110,7 +117,8 @@ public class SteamBoxUI : PotUI
 
 	public override void Cook()
 	{
-		CuisineType = CheckCuisineType();
+		CuisineType = CheckCuisineType().Item1;
+		CuisineNum = CheckCuisineType().Item2;
 		base.Cook();
 	}
 
@@ -138,15 +146,31 @@ public class SteamBoxUI : PotUI
 		return false;
 	}
 
-	public int CheckCuisineType()
+	public bool CanCookWithOrder(CookingUnitWithOrder cookingUnitwithorder)
+	{
+		if (cookingUnitwithorder.Ingredients.SequenceEqual(Ingredients))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	public Tuple<int, int>  CheckCuisineType()
 	{
 		foreach (var cookingUnit in PotMenu)
 		{
 			if (CanCook(cookingUnit))
 			{
-				return cookingUnit.Type;
+				return new Tuple<int, int>(cookingUnit.Type, cookingUnit.Num);
 			}
 		}
-		return -1;
+		foreach (var cookingUnitwithorder in PotMenuWithOrder)
+		{
+			if (CanCookWithOrder(cookingUnitwithorder))
+			{
+				return new Tuple<int, int>(cookingUnitwithorder.Type, cookingUnitwithorder.Num);
+			}
+		}
+		return new Tuple<int, int>(-1, -1);
 	}
 }

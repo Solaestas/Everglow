@@ -1,3 +1,4 @@
+using System;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
 using Everglow.Food.Items.Cookers;
@@ -71,13 +72,16 @@ public abstract class PotUI
 	/// The cooking cuisine
 	/// </summary>
 	public int CuisineType = -1;
-
+	/// <summary>
+	/// The number of the cooking cuisine
+	/// </summary>
+	public int CuisineNum = -1;
 	public struct CookingUnit
 	{
 		public List<int> Ingredients;
 		public int Type;
-
-		public CookingUnit(int type, int item1 = -1, int item2 = -1, int item3 = -1, int item4 = -1, int item5 = -1, int item6 = -1)
+		public int Num;
+		public CookingUnit(int type, int item1 = -1, int item2 = -1, int item3 = -1, int item4 = -1, int item5 = -1, int item6 = -1, int num = 1)
 		{
 			Ingredients = new List<int>
 			{
@@ -90,6 +94,25 @@ public abstract class PotUI
 			};
 
 			Type = type;
+
+
+			Num = num;
+		}
+	}
+
+	public struct CookingUnitWithOrder
+	{
+		public int[] Ingredients;
+		public int Type;
+		public int Num;
+
+		public CookingUnitWithOrder(int type, int[] item,int num = 1)
+		{
+			Ingredients = item;
+
+			Type = type;
+
+			Num = num;
 		}
 	}
 
@@ -384,9 +407,10 @@ public abstract class PotUI
 			CookTimer--;
 			if (CookTimer == 0)
 			{
-				Item.NewItem(null, AnchorTilePos.ToWorldCoordinates(), CuisineType, 1);
+				Item.NewItem(null, AnchorTilePos.ToWorldCoordinates(), CuisineType, CuisineNum);
 				ClearPot(true);
 				CuisineType = -1;
+				CuisineNum = -1;
 				Open = false;
 			}
 			return;
@@ -585,4 +609,5 @@ public abstract class PotUI
 	{
 		Maximized = !Maximized;
 	}
+
 }

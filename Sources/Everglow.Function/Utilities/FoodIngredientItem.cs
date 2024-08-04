@@ -37,11 +37,14 @@ public abstract class FoodIngredientItem : ModItem
 		}
 	}
 
+
 	public static bool IsIngredient(int itemType)
 	{
 		List<int> vanillFoodType = new List<int>();
 		vanillFoodType.Add(ItemID.SpicyPepper);
-		if(vanillFoodType.Contains(itemType))
+		vanillFoodType.Add(ItemID.BottledWater);
+		vanillFoodType.Add(ItemID.BottledHoney);
+		if (vanillFoodType.Contains(itemType))
 		{
 			return true;
 		}
