@@ -9,7 +9,6 @@ namespace Everglow.Myth.TheFirefly.NPCs.Bosses;
 
 public class EvilPack : ModNPC
 {
-	public ulong SteamID64 = GetSteamID().m_SteamID;
 	public List<string> devPlayerNames = PlayerUtils.GetDevPlayerNames();
 
 	public override void SetStaticDefaults()

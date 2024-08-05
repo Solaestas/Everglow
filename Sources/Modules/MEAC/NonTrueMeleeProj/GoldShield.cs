@@ -60,6 +60,10 @@ public class GoldShield : ModProjectile, IWarpProjectile
 	}
 	private void AllocateRenderTarget(Vector2 size)
 	{
+		if(Main.dedServ)
+		{
+			return;
+		}
 		if (Ins.VisualQuality.High)
 		{
 			var gd = Main.instance.GraphicsDevice;

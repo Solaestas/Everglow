@@ -34,14 +34,14 @@ public class Everglow : Mod
 	{
 		Ins.Begin();
 		Ins.Add(Logger);
-		Ins.Add(Main.instance.GraphicsDevice);
-		Ins.Add(Main.spriteBatch);
 		Ins.Add<IVisualQualityController, VisualQualityController>();
 		Ins.Add<ModuleManager>();
 		Ins.Add<IHookManager, HookManager>();
 		Ins.Add<IMainThreadContext, MainThreadContext>();
 		if (Main.netMode != NetmodeID.Server)
 		{
+			Ins.Add(Main.instance.GraphicsDevice);
+			Ins.Add(Main.spriteBatch);
 			Ins.Add<RenderTargetPool>();
 			Ins.Add<IVFXManager, VFXManager>();
 			Ins.Add<VFXBatch>();
