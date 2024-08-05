@@ -1,4 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <None Remove="Items\Ingredients\RawXiaoLongBao.png" />
+  </ItemGroup>
 </Project>
     
     
