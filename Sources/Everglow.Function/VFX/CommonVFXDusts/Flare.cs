@@ -1,6 +1,7 @@
 using Everglow.Commons.Enums;
 using Everglow.Commons.Graphics;
 using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX.Pipelines;
 using SteelSeries.GameSense;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
@@ -30,17 +31,19 @@ public class FlarePipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.Flare;
+		
 	}
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
 		Ins.Batch.Begin(BlendState.Additive, DepthStencilState.None, SamplerState.AnisotropicClamp, RasterizerState.CullNone);
-		//Main.graphics.graphicsDevice.Textures[0] = ModAsset.fl;
-		Ins.Batch.BindTexture(ModAsset.Flare_Tex.Value);
 		Main.graphics.graphicsDevice.Textures[1] = ModAsset.Noise_perlin.Value;
-
-		effect.CurrentTechnique.Passes[0].Apply();
-	}
+        effect.Parameters["uTransform"].SetValue(
+            Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) *
+            Main.GameViewMatrix.TransformationMatrix *
+            Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
+        effect.CurrentTechnique.Passes[0].Apply();
+    }
 
 	public override void EndRender()
 	{
@@ -60,6 +63,8 @@ public class Flare : Visual
 	public GradientColor color;
 	float rotation;
 	public Entity Owner;
+
+	public float speedLimits = 1;
 	public Flare() {
         
     }
@@ -71,6 +76,7 @@ public class Flare : Visual
 	{
 		position += velocity;
 		velocity.Y += gravity;
+		velocity *= speedLimits;
         //scale *= 0.99f;
        
         timeleft--;
@@ -89,6 +95,7 @@ public class Flare : Visual
 		Vector2 drawPos = position;
 		if (Owner != null)
 			drawPos += Owner.Center;
-		Ins.Batch.Draw(drawPos-Main.screenPosition, null, c, rotation, new Vector2(64), scale, 0);
+		
+		Ins.Batch.Draw(ModAsset.Flare_Tex.Value,drawPos, null, c, rotation, new Vector2(64), scale, 0);
 	}
 }

@@ -2,5 +2,8 @@
 	<ItemGroup>
 		<AdditionalFiles Include="Skeleton\**\*.json" Pack="true" ModPath="%(Identity)" />
 	</ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
 </Project>
     
