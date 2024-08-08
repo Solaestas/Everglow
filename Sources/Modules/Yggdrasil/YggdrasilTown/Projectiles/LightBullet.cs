@@ -1,7 +1,6 @@
-using Everglow.Commons.Weapons;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
-using Terraria.GameContent;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -24,12 +23,30 @@ internal class LightBullet : ModProjectile
 		Projectile.penetrate = 5;
 		Projectile.timeLeft = 600;
 		Projectile.alpha = 255;
-		Projectile.light = 0.5f;
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = true;
 		Projectile.extraUpdates = 1;
 
 		AIType = ProjectileID.Bullet;
+	}
+
+	public override void AI()
+	{
+		Vector2 newVelocity = Vector2.zeroVector;
+		var somg = new LightFruitParticleDust
+		{
+			velocity = Projectile.velocity * 0.3f,
+			Active = true,
+			Visible = true,
+			position = Projectile.Center,
+			maxTime = Main.rand.Next(12, 15),
+			scale = Main.rand.NextFloat(12.20f, 32.35f),
+			rotation = Main.rand.NextFloat(6.283f),
+			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+		};
+		Ins.VFXManager.Add(somg);
+		Lighting.AddLight(Projectile.Center + Utils.SafeNormalize(Projectile.velocity, Vector2.zeroVector) * 20, new Vector3(0.4f, 0.3f, 0.1f));
+		base.AI();
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -39,30 +56,55 @@ internal class LightBullet : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D texture = TextureAssets.Projectile[Type].Value;
+		var texMain = Commons.ModAsset.StarSlash.Value;
+		Color drawColor = new Color(1f, 0.8f, 0f, 0f);
+		float scale = 0.2f;
+		Vector2 drawPos = Projectile.Center - Main.screenPosition;
+		Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, 0, texMain.Size() / 2f, scale, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, MathHelper.PiOver2, texMain.Size() / 2f, scale, SpriteEffects.None, 0);
+		drawColor = new Color(0.6f, 0.4f, 0.2f, 0f);
+		Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, Projectile.velocity.ToRotation() + MathHelper.PiOver2, texMain.Size() / 2f, new Vector2(0.5f, 1f), SpriteEffects.None, 0);
 
-		Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
-		for (int k = 0; k < Projectile.oldPos.Length; k++)
-		{
-			Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-			Color color = new Color(1f, 0.8f, 0, 0) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-			Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
-		}
+		Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, -MathHelper.PiOver4, texMain.Size() / 2f, new Vector2(0.3f, scale * 0.7f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, MathHelper.PiOver4, texMain.Size() / 2f, new Vector2(0.3f, scale * 0.7f), SpriteEffects.None, 0);
 
-		return true;
+		return false;
 	}
 
 	public override void OnKill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
 		Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
-		for (int i = 0; i < 20; i++)
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<LightStartEffect_bullet>(), 0, 0, Projectile.owner);
+
+		List<Projectile> lightStartEffectProjectiles = new List<Projectile>();
+
+		// Collect all active LightStartEffect_bullet projectiles
+		foreach (Projectile proj in Main.projectile)
 		{
-			Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Cloud, newColor: Color.Yellow);
-			dust.noGravity = true;
-			dust.velocity *= 1.5f;
-			dust.scale *= 4f;
-			dust.fadeIn = Main.rand.NextFloat(420, 600);
+			if (proj.active && proj.type == ModContent.ProjectileType<LightStartEffect_bullet>())
+			{
+				lightStartEffectProjectiles.Add(proj);
+			}
+		}
+
+		// Sort the collected projectiles by timeLeft in descending order
+		lightStartEffectProjectiles.Sort((a, b) => b.timeLeft.CompareTo(a.timeLeft));
+
+		// Get the top 5 projectiles (if they exist)
+		HashSet<Projectile> topFiveProjectiles = new HashSet<Projectile>();
+		for (int i = 0; i < Math.Min(8, lightStartEffectProjectiles.Count); i++)
+		{
+			topFiveProjectiles.Add(lightStartEffectProjectiles[i]);
+		}
+
+		// Set timeLeft to 150 for other projectiles with timeLeft > 150
+		foreach (Projectile proj in Main.projectile)
+		{
+			if (proj.active && proj.type == ModContent.ProjectileType<LightStartEffect_bullet>() && proj.timeLeft > 150 && !topFiveProjectiles.Contains(proj))
+			{
+				proj.timeLeft = 150;
+			}
 		}
 	}
 }

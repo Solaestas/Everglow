@@ -1,6 +1,6 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Ammos;
 
-internal class LightArrow : ModItem
+public class LightArrow : ModItem
 {
 	public override void SetStaticDefaults()
 	{
