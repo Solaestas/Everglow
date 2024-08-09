@@ -13,7 +13,7 @@ public class LightStartEffect_bullet : ModProjectile
 		Projectile.height = 10;
 		Projectile.DamageType = DamageClass.Default;
 		Projectile.penetrate = -1;
-		Projectile.timeLeft = 300;
+		Projectile.timeLeft = 600;
 		Projectile.tileCollide = false;
 		Projectile.ignoreWater = true;
 		Projectile.ai[0] = 0;
@@ -21,7 +21,7 @@ public class LightStartEffect_bullet : ModProjectile
 
 	public override void AI()
 	{
-		if (Projectile.timeLeft is > 294)
+		if (Projectile.timeLeft is > 594)
 		{
 			Projectile.ai[0] = (float)Utils.Lerp(Projectile.ai[0], 3, 0.1f);
 			for (int i = 0; i < 3; i++)
@@ -33,7 +33,7 @@ public class LightStartEffect_bullet : ModProjectile
 				dust.velocity = new Vector2(0, Main.rand.NextFloat(6f)).RotatedByRandom(6.283f);
 			}
 		}
-		else if (Projectile.timeLeft is > 270)
+		else if (Projectile.timeLeft is > 570)
 		{
 			Projectile.ai[0] = (float)Utils.Lerp(Projectile.ai[0], 0.4f, 0.3f);
 		}
@@ -53,9 +53,9 @@ public class LightStartEffect_bullet : ModProjectile
 	public void GenerateParticles(int duplicateTimes = 1)
 	{
 		float mulMaxTime = 1f;
-		if (Projectile.timeLeft > 200)
+		if (Projectile.timeLeft > 500)
 		{
-			mulMaxTime = 1f - (Projectile.timeLeft - 200) / 100f;
+			mulMaxTime = 1f - (Projectile.timeLeft - 500) / 100f;
 		}
 		if (Projectile.timeLeft < 150)
 		{
@@ -102,14 +102,14 @@ public class LightStartEffect_bullet : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		var texMain = Commons.ModAsset.StarSlash.Value;
-		Color drawColor = new Color(1f, 0.8f, 0f, 0f);
+		Color drawColor = new Color(0.5f, 0.4f, 0.2f, 0f);
 		float timeValue = (float)Main.time * 0.03f;
-		float scale = Projectile.scale * Projectile.ai[0] * 0.5f;
+		float scale = Projectile.scale * Projectile.ai[0] * 0.75f;
 		Vector2 drawPos = Projectile.Center - Main.screenPosition;
 		Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, 0, texMain.Size() / 2f, scale, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, MathHelper.PiOver2, texMain.Size() / 2f, scale, SpriteEffects.None, 0);
 
-		drawColor = new Color(0.6f, 0.4f, 0.2f, 0f);
+		drawColor = new Color(0.3f, 0.2f, 0.1f, 0f);
 		Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, -MathHelper.PiOver4, texMain.Size() / 2f, new Vector2(0.3f, scale * 0.7f), SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, MathHelper.PiOver4, texMain.Size() / 2f, new Vector2(0.3f, scale * 0.7f), SpriteEffects.None, 0);
 

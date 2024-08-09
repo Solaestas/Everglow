@@ -103,14 +103,14 @@ public class LightStartEffect_arrow : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		var texMain = Commons.ModAsset.StarSlash.Value;
-		Color drawColor = new Color(1f, 0.8f, 0f, 0f);
+		Color drawColor = new Color(0.5f, 0.4f, 0.2f, 0f);
 		float timeValue = (float)Main.time * 0.03f;
 		float scale = Projectile.scale * Projectile.ai[0];
 		Vector2 drawPos = Projectile.Center - Main.screenPosition;
 		Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, 0, texMain.Size() / 2f, scale, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, MathHelper.PiOver2, texMain.Size() / 2f, scale, SpriteEffects.None, 0);
 
-		drawColor = new Color(0.6f, 0.4f, 0.2f, 0f);
+		drawColor = new Color(0.3f, 0.2f, 0.1f, 0f);
 		Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, -MathHelper.PiOver4, texMain.Size() / 2f, new Vector2(0.3f, scale * 0.7f), SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, MathHelper.PiOver4, texMain.Size() / 2f, new Vector2(0.3f, scale * 0.7f), SpriteEffects.None, 0);
 

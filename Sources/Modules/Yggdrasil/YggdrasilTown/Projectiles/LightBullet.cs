@@ -32,7 +32,6 @@ internal class LightBullet : ModProjectile
 
 	public override void AI()
 	{
-		Vector2 newVelocity = Vector2.zeroVector;
 		var somg = new LightFruitParticleDust
 		{
 			velocity = Projectile.velocity * 0.3f,
