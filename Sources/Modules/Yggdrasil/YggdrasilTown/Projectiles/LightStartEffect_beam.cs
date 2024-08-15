@@ -6,7 +6,7 @@ using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-public class LightStartEffect_arrow : ModProjectile
+public class LightStartEffect_beam : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -68,7 +68,7 @@ public class LightStartEffect_arrow : ModProjectile
 		}
 		for (int i = 0; i < duplicateTimes; i++)
 		{
-			Vector2 newVelocity = new Vector2(0, 1.2f).RotatedBy(Main.time * 0.05f + Projectile.whoAmI + (float)i / duplicateTimes * MathHelper.TwoPi);
+			Vector2 newVelocity = new Vector2(0, 1.2f).RotatedBy(Main.time * 0.02f + Projectile.whoAmI + (float)i / duplicateTimes * MathHelper.TwoPi);
 			var somg = new LightFruitParticleDust
 			{
 				velocity = newVelocity,
@@ -78,13 +78,13 @@ public class LightStartEffect_arrow : ModProjectile
 				maxTime = Main.rand.Next(37, 145) * mulMaxTime,
 				scale = Main.rand.NextFloat(12.20f, 32.35f),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(3.0f, 10f), 0 },
+				ai = new float[] { Main.rand.NextFloat(1, 8f), 0 },
 			};
 			Ins.VFXManager.Add(somg);
 		}
 		for (int i = 0; i < duplicateTimes; i++)
 		{
-			Vector2 newVelocity = new Vector2(0, 1.2f).RotatedBy(-Main.time * 0.03f + Projectile.whoAmI + (float)i / duplicateTimes * MathHelper.TwoPi);
+			Vector2 newVelocity = new Vector2(0, 1.2f).RotatedBy(-Main.time * 0.05f + Projectile.whoAmI + (float)i / duplicateTimes * MathHelper.TwoPi + Math.Sin(Main.time* 0.14f) * 0.6);
 			var somg = new LightFruitParticleDust
 			{
 				velocity = newVelocity,
@@ -94,7 +94,7 @@ public class LightStartEffect_arrow : ModProjectile
 				maxTime = Main.rand.Next(37, 145) * mulMaxTime,
 				scale = Main.rand.NextFloat(12.20f, 32.35f),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(3.0f, 10f), 0 },
+				ai = new float[] { Main.rand.NextFloat(1, 8f), 0 },
 			};
 			Ins.VFXManager.Add(somg);
 		}

@@ -56,7 +56,7 @@ public class LightFruitParticleDust : Visual
 			timer = maxTime;
 		}
 		velocity *= 0.995f;
-		scale = MathF.Sin(timer / maxTime * MathHelper.Pi) * 4;
+		scale = MathF.Sin(timer / maxTime * MathHelper.Pi) * ai[0];
 		timer++;
 		if (timer > maxTime)
 		{

@@ -77,7 +77,7 @@ public class LightStartEffect_bullet : ModProjectile
 				maxTime = Main.rand.Next(37, 145) * mulMaxTime,
 				scale = Main.rand.NextFloat(12.20f, 32.35f),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+				ai = new float[] { 4, 0 },
 			};
 			Ins.VFXManager.Add(somg);
 		}
@@ -93,7 +93,7 @@ public class LightStartEffect_bullet : ModProjectile
 				maxTime = Main.rand.Next(37, 145) * mulMaxTime,
 				scale = Main.rand.NextFloat(12.20f, 32.35f),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+				ai = new float[] { 4, 0 },
 			};
 			Ins.VFXManager.Add(somg);
 		}
@@ -115,7 +115,7 @@ public class LightStartEffect_bullet : ModProjectile
 
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float radiusScale = (20 + scale) / 40f;
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int i = 0; i <= 40; i++)

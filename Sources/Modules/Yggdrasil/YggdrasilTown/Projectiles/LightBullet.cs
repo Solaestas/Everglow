@@ -20,7 +20,7 @@ internal class LightBullet : ModProjectile
 		Projectile.friendly = true;
 		Projectile.hostile = false;
 		Projectile.DamageType = DamageClass.Ranged;
-		Projectile.penetrate = 5;
+		Projectile.penetrate = 1;
 		Projectile.timeLeft = 600;
 		Projectile.alpha = 255;
 		Projectile.ignoreWater = true;

@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Terraria.DataStructures;
 using Terraria.Enums;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.LightSeeker;
@@ -20,21 +21,20 @@ internal class LightBeamStaff : ModItem
 		Item.useAnimation = 36;
 		Item.UseSound = SoundID.Item12;
 		Item.autoReuse = true;
-
+		Item.noUseGraphic = true;
 		Item.mana = 5;
 
 		Item.SetShopValues(
 			ItemRarityColor.Green2,
 			Item.buyPrice(silver: 8));
 
-		Item.shoot = ModContent.ProjectileType<LightBeam>();
+		Item.shoot = ModContent.ProjectileType<LightBeamStaff_proj>();
 		Item.shootSpeed = 15f;
 	}
 
-	public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
+	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		rotation += MathF.PI / 2;
-
-		return true;
+		Projectile.NewProjectile(Item.GetSource_FromAI(), position, velocity, type, damage, knockback, player.whoAmI);
+		return false;
 	}
 }

@@ -381,7 +381,7 @@ public class AuburnBellSummon : ModProjectile
 		Vector2 drawCenter = Projectile.Center - Main.screenPosition + new Vector2(BodyLength * 5f * 0.75f, 0).RotatedBy(Projectile.rotation) * Projectile.scale;
 		for (int i = 0; i < BodyLength; i++)
 		{
-			Color drawColor = lightColor;
+			Color drawColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
 			float jointIndex = i / (float)BodyLength;
 			int frameY = (int)(Projectile.frame + i) % Main.projFrames[Projectile.type];
 			float frameYValue = frameY / (float)Main.projFrames[Projectile.type];

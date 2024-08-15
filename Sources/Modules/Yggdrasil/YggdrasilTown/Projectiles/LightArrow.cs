@@ -48,7 +48,7 @@ public class LightArrow : ModProjectile
 				maxTime = Main.rand.Next(37, 145) * mulMaxTime,
 				scale = Main.rand.NextFloat(12.20f, 32.35f),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+				ai = new float[] { Main.rand.NextFloat(1.0f, 6.3f), 0 },
 			};
 			Ins.VFXManager.Add(somg);
 		}
@@ -64,7 +64,7 @@ public class LightArrow : ModProjectile
 				maxTime = Main.rand.Next(37, 145) * mulMaxTime,
 				scale = Main.rand.NextFloat(12.20f, 32.35f),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+				ai = new float[] { Main.rand.NextFloat(1.0f, 6.3f), 0 },
 			};
 			Ins.VFXManager.Add(somg);
 		}
