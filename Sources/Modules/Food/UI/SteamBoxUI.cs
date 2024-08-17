@@ -1,7 +1,10 @@
 using Everglow.Food.Items.Ingredients;
 using Everglow.Food.Items.ModFood;
+using static Everglow.Food.FoodRecipes.FoodRecipes;
 using Everglow.Food.UI;
 using static Everglow.Food.UI.PotUI;
+using Everglow.Food.FoodRecipes;
+using System.Linq;
 
 namespace Everglow.Food.UI;
 
@@ -15,11 +18,6 @@ public class SteamBoxUI : PotUI
 
 	public static CookingUnitWithOrder XiaoLongBao;
 
-	/// <summary>
-	/// Menus of this pot can cook
-	/// </summary>
-	public static List<CookingUnit> PotMenu = new List<CookingUnit>();
-	public static List<CookingUnitWithOrder> PotMenuWithOrder = new List<CookingUnitWithOrder>();
 
 	public SteamBoxUI(Point anchorTilePos)
 		: base(anchorTilePos)
@@ -33,8 +31,8 @@ public class SteamBoxUI : PotUI
 		IngredientsSlotPos = new Vector2[maxSlotCount];
 		for (int i = 0; i < 6; i++)
 		{
-				IngredientsSlotPos[i] = new Vector2(i - 2.5f, 0.1f) * 50;
-				Ingredients[i] = -1;
+			IngredientsSlotPos[i] = new Vector2(i - 2.5f, 0.1f) * 50;
+			Ingredients[i] = -1;
 		}
 		IngredientsSlotPos[6] = new Vector2(0, 0.5f) * 50;
 		Ingredients[6] = -1;
@@ -47,20 +45,9 @@ public class SteamBoxUI : PotUI
 
 	public static void SetMenu()
 	{
-		PotMenu.Clear();
-		PotMenuWithOrder.Clear();
-		int[] XiaoLongBaoIngredients = new int[]
-		{
-			ModContent.ItemType<RawXiaoLongBao>(),
-			ModContent.ItemType<RawXiaoLongBao>(),
-			ModContent.ItemType<RawXiaoLongBao>(),
-			ModContent.ItemType<RawXiaoLongBao>(),
-			ModContent.ItemType<RawXiaoLongBao>(),
-			ModContent.ItemType<RawXiaoLongBao>(),
-			ItemID.BottledWater,
-		};
-		XiaoLongBao = new CookingUnitWithOrder(ModContent.ItemType<XiaoLongBao>(), XiaoLongBaoIngredients);
-		PotMenuWithOrder.Add(XiaoLongBao);
+		SteamBoxRecipe SteamBoxRecipe = new SteamBoxRecipe();
+		PotMenuWithOrder = SteamBoxRecipe.CookingUnitWithOrderMenu;
+		PotMenu = SteamBoxRecipe.CookingUnitMenu;
 	}
 
 	public override void Update()
@@ -129,46 +116,74 @@ public class SteamBoxUI : PotUI
 		Main.spriteBatch.Draw(casserole, drawPos, null, Color.White, 0, casserole.Size() * 0.5f, 2, SpriteEffects.None, 0);
 	}
 
-	public bool CanCook(CookingUnit cookingUnit)
-	{
-		List<int> ingredientsCopy = [.. cookingUnit.Ingredients];
-		foreach (int type in Ingredients)
-		{
-			if (ingredientsCopy.Contains(type))
-			{
-				ingredientsCopy.Remove(type);
-			}
-		}
-		if (ingredientsCopy.Count == 0)
-		{
-			return true;
-		}
-		return false;
-	}
 
 	public bool CanCookWithOrder(CookingUnitWithOrder cookingUnitwithorder)
 	{
-		if (cookingUnitwithorder.Ingredients.SequenceEqual(Ingredients))
+		for (int index = 0; index < cookingUnitwithorder.Ingredients.Length; index++)
+		{
+			if (!cookingUnitwithorder.Ingredients[index].Contains(Ingredients[index]))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public bool CanCook(CookingUnit cookingUnit)
+	{
+		List<int[]> ingredientsCopy = [.. cookingUnit.Ingredients];
+		List<int> CopyInUI = Ingredients.ToList();
+		for (int i = 0; i < ingredientsCopy.Count(); i++)
+		{
+			Main.NewText(ingredientsCopy[i][0]);
+		}
+
+		foreach (int type in Ingredients)
+		{
+			if (type == -1) // 如果槽内为空则不管
+			{
+				continue;
+			}
+			else // 如果槽内有东西则检测是否在配方组中
+			{
+				foreach (int[] group in cookingUnit.Ingredients)
+				{
+					if (group.Contains(type))
+					{
+						if (!ingredientsCopy.Remove(group)) // 如果配方组里面没有则return false
+						{
+							return false;
+						}
+						CopyInUI.Remove(type);
+						break;
+					}
+				}
+			}
+		}
+		CopyInUI.RemoveAll(n => n == -1);
+
+		if (ingredientsCopy.Count == 0 && CopyInUI.Count == 0)
 		{
 			return true;
 		}
 		return false;
 	}
 
-	public Tuple<int, int>  CheckCuisineType()
+	public Tuple<int, int> CheckCuisineType()
 	{
-		foreach (var cookingUnit in PotMenu)
-		{
-			if (CanCook(cookingUnit))
-			{
-				return new Tuple<int, int>(cookingUnit.Type, cookingUnit.Num);
-			}
-		}
+
 		foreach (var cookingUnitwithorder in PotMenuWithOrder)
 		{
 			if (CanCookWithOrder(cookingUnitwithorder))
 			{
 				return new Tuple<int, int>(cookingUnitwithorder.Type, cookingUnitwithorder.Num);
+			}
+		}
+		foreach (var cookingUnit in PotMenu)
+		{
+			if (CanCook(cookingUnit))
+			{
+				return new Tuple<int, int>(cookingUnit.Type, cookingUnit.Num);
 			}
 		}
 		return new Tuple<int, int>(-1, -1);

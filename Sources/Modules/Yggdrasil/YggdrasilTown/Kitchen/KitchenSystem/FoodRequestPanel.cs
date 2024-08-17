@@ -259,10 +259,10 @@ public class FoodRequestPanel
 					int count = 0;
 					foreach (var ingredient in cookingUnit.Ingredients)
 					{
-						if (ingredient > 0)
+						if (ingredient[0] > 0)
 						{
 							count++;
-							mouseText += "[i:" + ingredient + "]";
+							mouseText += "[i:" + ingredient[0] + "]";
 							if (count == 3)
 							{
 								mouseText += "\n";

@@ -1,5 +1,7 @@
+using Everglow.Food.FoodRecipes;
 using Everglow.Food.Items.Ingredients;
 using Everglow.Food.Items.ModFood;
+using static Everglow.Food.FoodRecipes.FoodRecipes;
 
 namespace Everglow.Food.UI;
 
@@ -14,11 +16,6 @@ public class CasseroleUI : PotUI
 	public static CookingUnit MapoTofu;
 	public static CookingUnit YuxiangEggplant;
 	public static CookingUnit BoiledBullfrog;
-
-	/// <summary>
-	/// Menus of this pot can cook
-	/// </summary>
-	public static List<CookingUnit> PotMenu = new List<CookingUnit>();
 
 	public CasseroleUI(Point anchorTilePos)
 		: base(anchorTilePos)
@@ -48,13 +45,9 @@ public class CasseroleUI : PotUI
 
 	public static void SetMenu()
 	{
-		PotMenu.Clear();
-		MapoTofu = new CookingUnit(ModContent.ItemType<Mapo_Tofu>(), ModContent.ItemType<Doubanjiang>(), ModContent.ItemType<TofuCubes>(), ModContent.ItemType<ChoppedScallion>(), ModContent.ItemType<SpicyPepperRing>(), ModContent.ItemType<SichuanPepper>(), ModContent.ItemType<GroundMeat>());
-		YuxiangEggplant = new CookingUnit(ModContent.ItemType<YuxiangEggplant>(), ModContent.ItemType<GroundMeat>(), ModContent.ItemType<MincedGarlic>(), ModContent.ItemType<ChoppedScallion>(), ModContent.ItemType<Doubanjiang>(), ModContent.ItemType<Rice>(), ModContent.ItemType<EggplantCubes>());
-		BoiledBullfrog = new CookingUnit(ModContent.ItemType<BoiledBullfrog>(), ModContent.ItemType<FrogMeat>(), ModContent.ItemType<SichuanPepper>(), ModContent.ItemType<SpicyPepperRing>(), ModContent.ItemType<ChoppedScallion>());
-		PotMenu.Add(MapoTofu);
-		PotMenu.Add(YuxiangEggplant);
-		PotMenu.Add(BoiledBullfrog);
+		CasseroleRecipe CasseroleRecipe = new CasseroleRecipe();
+		PotMenuWithOrder = CasseroleRecipe.CookingUnitWithOrderMenu;
+		PotMenu = CasseroleRecipe.CookingUnitMenu;
 	}
 
 	public override void Update()
@@ -124,18 +117,54 @@ public class CasseroleUI : PotUI
 		Texture2D casserole = ModAsset.CasseroleUIPanel.Value;
 		Main.spriteBatch.Draw(casserole, drawPos, null, Color.White, 0, casserole.Size() * 0.5f, 2, SpriteEffects.None, 0);
 	}
+	
+
+	public bool CanCookWithOrder(CookingUnitWithOrder cookingUnitwithorder)
+	{
+		for (int index = 0; index < cookingUnitwithorder.Ingredients.Length; index++)
+		{
+			if (!cookingUnitwithorder.Ingredients[index].Contains(Ingredients[index]))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 
 	public bool CanCook(CookingUnit cookingUnit)
 	{
-		List<int> ingredientsCopy = [.. cookingUnit.Ingredients];
+		List<int[]> ingredientsCopy = [.. cookingUnit.Ingredients];
+		List<int> CopyInUI = Ingredients.ToList();
+		for (int i = 0; i < ingredientsCopy.Count(); i++)
+		{
+			Main.NewText(ingredientsCopy[i][0]);
+		}
+
 		foreach (int type in Ingredients)
 		{
-			if (ingredientsCopy.Contains(type))
+			if (type == -1) // 如果槽内为空则不管
 			{
-				ingredientsCopy.Remove(type);
+				continue;
+			}
+			else // 如果槽内有东西则检测是否在配方组中
+			{
+				foreach (int[] group in cookingUnit.Ingredients)
+				{
+					if (group.Contains(type))
+					{
+						if (!ingredientsCopy.Remove(group)) // 如果配方组里面没有则return false
+						{
+							return false;
+						}
+						CopyInUI.Remove(type);
+						break;
+					}
+				}
 			}
 		}
-		if (ingredientsCopy.Count == 0)
+		CopyInUI.RemoveAll(n => n == -1);
+
+		if (ingredientsCopy.Count == 0 && CopyInUI.Count == 0)
 		{
 			return true;
 		}
@@ -144,6 +173,14 @@ public class CasseroleUI : PotUI
 
 	public Tuple<int, int> CheckCuisineType()
 	{
+
+		foreach (var cookingUnitwithorder in PotMenuWithOrder)
+		{
+			if (CanCookWithOrder(cookingUnitwithorder))
+			{
+				return new Tuple<int, int>(cookingUnitwithorder.Type, cookingUnitwithorder.Num);
+			}
+		}
 		foreach (var cookingUnit in PotMenu)
 		{
 			if (CanCook(cookingUnit))

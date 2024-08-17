@@ -6,8 +6,11 @@ using Everglow.Food.Tiles;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.ID;
+using Terraria.ModLoader;
 using Terraria.UI;
 using static Everglow.Commons.Utilities.FoodIngredientItem;
+using static Everglow.Food.FoodRecipes.FoodRecipes;
 using static Everglow.Food.UI.StoveSystemUI;
 
 namespace Everglow.Food.UI;
@@ -76,46 +79,9 @@ public abstract class PotUI
 	/// The number of the cooking cuisine
 	/// </summary>
 	public int CuisineNum = -1;
-	public struct CookingUnit
-	{
-		public List<int> Ingredients;
-		public int Type;
-		public int Num;
-		public CookingUnit(int type, int item1 = -1, int item2 = -1, int item3 = -1, int item4 = -1, int item5 = -1, int item6 = -1, int num = 1)
-		{
-			Ingredients = new List<int>
-			{
-				item1,
-				item2,
-				item3,
-				item4,
-				item5,
-				item6,
-			};
 
-			Type = type;
-
-
-			Num = num;
-		}
-	}
-
-	public struct CookingUnitWithOrder
-	{
-		public int[] Ingredients;
-		public int Type;
-		public int Num;
-
-		public CookingUnitWithOrder(int type, int[] item,int num = 1)
-		{
-			Ingredients = item;
-
-			Type = type;
-
-			Num = num;
-		}
-	}
-
+	public static List<CookingUnit> PotMenu = new List<CookingUnit>();
+	public static List<CookingUnitWithOrder> PotMenuWithOrder = new List<CookingUnitWithOrder>();
 	public PotUI(Point anchorTilePos)
 	{
 		AnchorTilePos = anchorTilePos;
@@ -479,7 +445,7 @@ public abstract class PotUI
 				{
 					if (IsIngredient(player.HeldItem.type))
 					{
-						if (Main.mouseLeft && Main.mouseLeftRelease)
+						if (Main.mouseRight && Main.mouseRightRelease)
 						{
 							player.HeldItem.stack--;
 							Ingredients[i] = player.HeldItem.type;
