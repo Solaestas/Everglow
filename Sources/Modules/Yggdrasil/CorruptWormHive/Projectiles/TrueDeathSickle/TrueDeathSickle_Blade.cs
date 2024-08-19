@@ -1,0 +1,491 @@
+using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.CorruptWormHive.Buffs;
+using Everglow.Yggdrasil.CorruptWormHive.VFXs;
+using Terraria.Audio;
+using Terraria.DataStructures;
+
+namespace Everglow.Yggdrasil.CorruptWormHive.Projectiles.TrueDeathSickle;
+
+public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProjectile
+{
+	public override void SetDefaults()
+	{
+		Projectile.width = 30;
+		Projectile.height = 30;
+		Projectile.aiStyle = -1;
+		Projectile.friendly = false;
+		Projectile.tileCollide = false;
+		Projectile.DamageType = DamageClass.Melee;
+		Projectile.penetrate = -1;
+		Projectile.timeLeft = 120;
+		Projectile.extraUpdates = 3;
+
+		Projectile.localNPCHitCooldown = 60;
+		Projectile.usesLocalNPCImmunity = true;
+	}
+
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		Player player = Main.player[Projectile.owner];
+
+		ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
+		float ShakeStrength = 3f;
+		Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 24f * ShakeStrength, 100)).RotatedByRandom(6.283);
+		modifiers.Knockback *= 5f;
+		int HitType = ModContent.ProjectileType<TrueDeathSickleHit>();
+		GenerateVFXFromTarget(target, 18, 2f);
+		if (player.ownedProjectileCounts[HitType] < 5)
+		{
+			Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, 0, 0, Projectile.owner, 15, Projectile.rotation);
+		}
+	}
+
+	public int HitTimes = 0;
+	public List<Vector3> OldPosSpace = new List<Vector3>();
+	public Vector3 SpacePos;
+	public Vector3 StartSpacePos;
+	public Vector3 RotatedAxis;
+	public float Omega = 0;
+	public Vector2 DeltaVelocity = default;
+	public List<Vector2> SmoothTrail = new List<Vector2>();
+	public float TimeCounter = 0;
+
+	public override void OnSpawn(IEntitySource source)
+	{
+		Player player = Main.player[Projectile.owner];
+		Projectile.spriteDirection = player.direction;
+		Projectile.ai[1] = 0;
+		Vector2 v0 = new Vector2(0, Main.rand.NextFloat(2, 3)).RotatedByRandom(6.283);
+		RotatedAxis = new Vector3(v0.X, -6, MathF.Abs(v0.Y));
+		RotatedAxis = Vector3.Normalize(RotatedAxis);
+		SpacePos = GetPerpendicularUnitVector(RotatedAxis) * Projectile.ai[0];
+		SpacePos = RodriguesRotate(SpacePos, RotatedAxis, -1f);
+		if (player.direction == -1)
+		{
+			SpacePos = RodriguesRotate(SpacePos, RotatedAxis, -1.2f);
+		}
+		StartSpacePos = SpacePos;
+		Omega = 0.27f * -player.direction;
+	}
+
+	public override bool PreAI()
+	{
+		if (Projectile.timeLeft > 120)
+		{
+			return false;
+		}
+		return base.PreAI();
+	}
+
+	public override bool ShouldUpdatePosition()
+	{
+		return false;
+	}
+
+	public override void AI()
+	{
+		Player player = Main.player[Projectile.owner];
+		Projectile.Center = player.Center;
+		Projectile.friendly = true;
+		OldPosSpace.Add(SpacePos);
+		Vector3 delta0 = SpacePos;
+		SpacePos = RodriguesRotate(SpacePos, RotatedAxis, Omega * (MathF.Log(player.meleeSpeed * MathF.E) + 1));
+		Projectile.ai[1] += Omega * player.meleeSpeed;
+		delta0 = SpacePos - delta0;
+		Omega *= 0.9f;
+		if (Projectile.timeLeft == 114)
+		{
+			SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/Slash").WithVolumeScale(0.33f), Projectile.Center);
+		}
+		DeltaVelocity = new Vector2(delta0.X, delta0.Y);
+		float size;
+		if (Projectile.timeLeft > 15)
+		{
+			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projection2D(SpacePos, Vector2.zeroVector, 500, out size).ToRotation() - MathHelper.PiOver2);
+		}
+		TimeCounter += player.meleeSpeed - 1;
+		if (TimeCounter > 1)
+		{
+			TimeCounter -= 1;
+			Projectile.timeLeft -= 1;
+			if (Projectile.timeLeft == 114)
+			{
+				SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/Slash").WithVolumeScale(0.33f), Projectile.Center);
+			}
+		}
+		if (TimeCounter < -1)
+		{
+			TimeCounter += 1;
+			Projectile.timeLeft += 1;
+		}
+		if (DeltaVelocity.Length() > 5)
+		{
+			DevilFlame((int)DeltaVelocity.Length() / 8);
+		}
+	}
+
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		target.AddBuff(ModContent.BuffType<DeathFlame>(), 1800);
+	}
+
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+	{
+		for (int i = 0; i < SmoothTrail.Count - 4; i += 4)
+		{
+			Rectangle rectangle = new Rectangle((int)(SmoothTrail[i].X - 40 + Projectile.Center.X), (int)(SmoothTrail[i].Y - 40 + Projectile.Center.Y), 80, 80);
+			if (Rectangle.Intersect(rectangle, targetHitbox) != Rectangle.emptyRectangle)
+			{
+				Projectile.damage /= 2;
+				HitTimes++;
+				if (HitTimes > 3)
+				{
+					Projectile.friendly = false;
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void GenerateVFXFromTarget(NPC target, int Frequency, float mulVelocity = 1f)
+	{
+		for (int g = 0; g < Frequency; g++)
+		{
+			var df = new DevilFlameDust
+			{
+				velocity = new Vector2(0, Main.rand.NextFloat(4.5f, 9f)).RotatedByRandom(6.283) * mulVelocity,
+				Active = true,
+				Visible = true,
+				position = target.Center,
+				maxTime = Main.rand.Next(12, 30),
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(8f, 32f) },
+			};
+			Ins.VFXManager.Add(df);
+		}
+	}
+
+	public void DevilFlame(int times = 1)
+	{
+		for (int g = 0; g < times; g++)
+		{
+			var df = new DevilFlame3DSickleDust
+			{
+				velocity3D = (SpacePos - OldPosSpace[OldPosSpace.Count - 1]) * 0.15f,
+				Active = true,
+				Visible = true,
+				position3D = Vector3.Lerp(OldPosSpace[OldPosSpace.Count - 1], SpacePos, Main.rand.NextFloat(0, 1f)),
+				rotateAxis = RotatedAxis,
+				scale = 10,
+				maxTime = Main.rand.Next(26, 40),
+				ownerWhoAmI = Projectile.owner,
+				ai = new float[] { Main.rand.NextFloat(0, 1f), Main.rand.NextFloat(0, 0.1f) * -Projectile.spriteDirection, Main.rand.NextFloat(4f, 12f) },
+			};
+			Ins.VFXManager.Add(df);
+		}
+	}
+
+	public override bool PreDraw(ref Color lightColor)
+	{
+		if (Projectile.timeLeft > 120)
+		{
+			return false;
+		}
+		if (OldPosSpace.Count < 3)
+		{
+			return false;
+		}
+
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		float value0 = (120 - Projectile.timeLeft) / 120f;
+		float value1 = MathF.Pow(value0, 0.3f);
+		value1 = MathF.Sin(value1 * MathF.PI);
+		float width = value1 * 100f;
+
+		List<Vector2> scales = new List<Vector2>();
+		List<Vector2> SmoothTrailProjectile = new List<Vector2>();
+		for (int x = 0; x <= OldPosSpace.Count - 1; x++)
+		{
+			float scaleValue;
+			SmoothTrailProjectile.Add(Projection2D(OldPosSpace[x], Vector2.zeroVector, 500, out scaleValue));
+			scales.Add(new Vector2(scaleValue, x * 40));
+		}
+
+		List<float> scalesSmooth = new List<float>();
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(SmoothTrailProjectile.ToList()); // 平滑
+		List<Vector2> Smoothscales = GraphicsUtils.CatmullRom(scales.ToList()); // 平滑
+		SmoothTrail = new List<Vector2>();
+		for (int x = 0; x < SmoothTrailX.Count; x++)
+		{
+			float value2 = x / (float)SmoothTrailX.Count;
+			scalesSmooth.Add(Smoothscales[Math.Clamp((int)value2, 0, Smoothscales.Count - 1)].X);
+			SmoothTrail.Add(SmoothTrailX[x]);
+		}
+
+		int length = SmoothTrail.Count;
+		if (length <= 3)
+		{
+			return false;
+		}
+
+		// dark background color.
+		Color drawColor = Color.White;
+		List<Vertex2D> bars = new List<Vertex2D>();
+		for (int i = 0; i < SmoothTrail.Count; i++)
+		{
+			Vector2 drawPos = Projectile.Center - Main.screenPosition;
+			float colorSize = 1f;
+			if (i >= SmoothTrail.Count - 15)
+			{
+				colorSize *= (SmoothTrail.Count - i - 1) / 15f;
+			}
+			if (i < 24)
+			{
+				colorSize *= i / 24f;
+			}
+			bars.Add(SmoothTrail[i] + drawPos, drawColor * colorSize, new Vector3(i / (float)(SmoothTrail.Count - 1), 0.5f, 0));
+			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor * colorSize, new Vector3(i / (float)(SmoothTrail.Count - 1), 0f, 0));
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_0_black.Value;
+		if (bars.Count > 3)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+
+		// flame color
+		drawColor = new Color(0.25f, 0, 0.13f, 0) * value1;
+		bars = new List<Vertex2D>();
+		for (int i = 0; i < SmoothTrail.Count; i++)
+		{
+			Color newColor = Color.Lerp(new Color(0.1f, 0.8f, 1f, 0), drawColor, MathF.Pow(1 - i / (float)SmoothTrail.Count, 0.6f));
+			Vector2 drawPos = Projectile.Center - Main.screenPosition;
+
+			float colorSize = 1f;
+			if (i >= SmoothTrail.Count - 15)
+			{
+				colorSize *= (SmoothTrail.Count - i - 1) / 15f;
+			}
+			if (i < 24)
+			{
+				colorSize *= i / 24f;
+			}
+			bars.Add(SmoothTrail[i] + drawPos, newColor * colorSize, new Vector3(i / (float)(SmoothTrail.Count - 1), 0.5f, 0));
+			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, newColor * colorSize, new Vector3(i / (float)(SmoothTrail.Count - 1), 0f, 0));
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_0.Value;
+		if (bars.Count > 3)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+
+		// add flame color
+		if (value1 > 0.5f)
+		{
+			drawColor = new Color(1.6f * lightColor.R / 255f, 0.8f * lightColor.G / 255f, 3f * lightColor.B / 255f, 0) * (value1 - 0.5f) * 8;
+			bars = new List<Vertex2D>();
+			for (int i = 0; i < SmoothTrail.Count; i++)
+			{
+				Vector2 drawPos = Projectile.Center - Main.screenPosition;
+				bars.Add(SmoothTrail[i] + drawPos, drawColor, new Vector3(0.5f, i / (float)(SmoothTrail.Count - 1), 0));
+				bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor, new Vector3(0.24f, i / (float)(SmoothTrail.Count - 1), 0));
+			}
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StarSlash.Value;
+			if (bars.Count > 3)
+			{
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			}
+		}
+
+		// rim of blade trade.
+		drawColor = new Color(0.6f, 1f, 1f, 0);
+		bars = new List<Vertex2D>();
+		for (int i = 0; i < SmoothTrail.Count; i++)
+		{
+			Color newColor = Color.Lerp(drawColor, new Color(0.3f, 0.0f, 0.1f, 0), i / (float)SmoothTrail.Count);
+			Vector2 drawPos = Projectile.Center - Main.screenPosition;
+			bars.Add(SmoothTrail[i] + new Vector2(0, -4) + drawPos, newColor, new Vector3(0.56f, i / (float)(SmoothTrail.Count - 1), 0));
+			bars.Add(SmoothTrail[i] + new Vector2(0, 4) + drawPos, newColor, new Vector3(0.44f, i / (float)(SmoothTrail.Count - 1), 0));
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_0.Value;
+		if (bars.Count > 3)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+		DrawSickle();
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
+		return false;
+	}
+
+	public void DrawSickle()
+	{
+		List<Vertex2D> bars = new List<Vertex2D>();
+		float scaleValue;
+
+		// Get the normal of rotated axis and Z axis.
+		Vector3 normalOfRotatedAxisAndZ = Vector3.Normalize(Vector3.Cross(new Vector3(0, 0, -1), RotatedAxis));
+		float angleOfZAndRotatedAxis = GetAngleBetweenVectors(new Vector3(0, 0, -1), RotatedAxis);
+
+		// Texture coords
+		List<Vector3> texCoordsOrig = new List<Vector3>
+		{
+			new Vector3(155, 58, 0),
+			new Vector3(42, 174, 0),
+			new Vector3(6, 174, 0),
+			new Vector3(7, 13, 0),
+			new Vector3(127, 15, 0),
+		};
+
+		// Roteted texcoords to get space coords.
+		// Then rotated the space coords to sickel rotation.
+		float sickleRot = GetAngleBetweenVectors(StartSpacePos, SpacePos);
+		List<Vector3> texCoordsRotated = new List<Vector3>();
+		for (int i = 0; i < texCoordsOrig.Count; i++)
+		{
+			Vector3 unrotatedCoord = texCoordsOrig[i];
+			if (Projectile.spriteDirection == 1)
+			{
+				(unrotatedCoord.Y, unrotatedCoord.X) = (unrotatedCoord.X, unrotatedCoord.Y);
+			}
+			Vector3 unrotatedCoord1 = texCoordsOrig[1];
+			if (Projectile.spriteDirection == 1)
+			{
+				(unrotatedCoord1.Y, unrotatedCoord1.X) = (unrotatedCoord1.X, unrotatedCoord1.Y);
+			}
+			Vector3 firstSpaceCoord = RodriguesRotate(unrotatedCoord, normalOfRotatedAxisAndZ, -angleOfZAndRotatedAxis);
+			firstSpaceCoord -= RodriguesRotate(unrotatedCoord1, normalOfRotatedAxisAndZ, -angleOfZAndRotatedAxis);
+			if (Projectile.spriteDirection == -1)
+			{
+				texCoordsRotated.Add(RodriguesRotate(firstSpaceCoord, RotatedAxis, sickleRot * Projectile.spriteDirection + 1.2f));
+			}
+			else
+			{
+				texCoordsRotated.Add(RodriguesRotate(firstSpaceCoord, RotatedAxis, sickleRot * Projectile.spriteDirection));
+			}
+		}
+		List<Vector2> texCoordsProjected = new List<Vector2>();
+		for (int i = 0; i < texCoordsRotated.Count; i++)
+		{
+			texCoordsProjected.Add(Projection2D(texCoordsRotated[i], Vector2.zeroVector, 500, out scaleValue) * Projectile.ai[0] / 170f/* + sickleTip - projectedSickleTip*/);
+		}
+		float size = 174f;
+		AddVertexWCS(bars, texCoordsProjected[0] + Projectile.Center, texCoordsOrig[0] / size);
+		AddVertexWCS(bars, texCoordsProjected[1] + Projectile.Center, texCoordsOrig[1] / size);
+		AddVertexWCS(bars, texCoordsProjected[4] + Projectile.Center, texCoordsOrig[4] / size);
+
+		AddVertexWCS(bars, texCoordsProjected[4] + Projectile.Center, texCoordsOrig[4] / size);
+		AddVertexWCS(bars, texCoordsProjected[1] + Projectile.Center, texCoordsOrig[1] / size);
+		AddVertexWCS(bars, texCoordsProjected[3] + Projectile.Center, texCoordsOrig[3] / size);
+
+		AddVertexWCS(bars, texCoordsProjected[3] + Projectile.Center, texCoordsOrig[3] / size);
+		AddVertexWCS(bars, texCoordsProjected[1] + Projectile.Center, texCoordsOrig[1] / size);
+		AddVertexWCS(bars, texCoordsProjected[2] + Projectile.Center, texCoordsOrig[2] / size);
+
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.TrueDeathSickle_proj.Value;
+		if (bars.Count > 3)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+	}
+
+	public static float GetAngleBetweenVectors(Vector3 v1, Vector3 v2)
+	{
+		// 计算点积
+		float dotProduct = Vector3.Dot(v1, v2);
+
+		// 计算向量的长度
+		float lengthV1 = v1.Length();
+		float lengthV2 = v2.Length();
+
+		// 计算夹角（弧度制）
+		float angleInRadians = (float)Math.Acos(dotProduct / (lengthV1 * lengthV2));
+
+		return angleInRadians;
+	}
+
+	public void AddVertexWCS(List<Vertex2D> bars, Vector2 position, Vector3 texCoord)
+	{
+		bars.Add(position - Main.screenPosition, Lighting.GetColor(position.ToTileCoordinates()), texCoord);
+	}
+
+	public void DrawBloom()
+	{
+	}
+
+	public void DrawWarp(VFXBatch spriteBatch)
+	{
+		if (SmoothTrail.Count < 3)
+		{
+			return;
+		}
+		float value0 = (120 - Projectile.timeLeft) / 120f;
+		float value1 = MathF.Pow(value0, 0.3f);
+		value1 = MathF.Sin(value1 * MathF.PI);
+		float width = value1 * 20f;
+		Vector2 drawPos = Projectile.Center - Main.screenPosition;
+		float rotValue = 4.71f;
+
+		List<Vertex2D> bars = new List<Vertex2D>();
+		for (int i = 0; i < SmoothTrail.Count; i++)
+		{
+			Vector2 normal = Vector2.Normalize(SmoothTrail[i]).RotatedBy(rotValue);
+			Color drawColor0 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 0.8f, 0);
+			Color drawColor1 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 0, 0);
+
+			bars.Add(SmoothTrail[i] + drawPos, drawColor0, new Vector3(0.5f, i / (float)(SmoothTrail.Count - 1), 1));
+			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor1, new Vector3(0.44f, i / (float)(SmoothTrail.Count - 1), 1));
+		}
+
+		if (bars.Count > 3)
+		{
+			Main.graphics.graphicsDevice.RasterizerState = RasterizerState.CullNone;
+			spriteBatch.Draw(Commons.ModAsset.StarSlash.Value, bars, PrimitiveType.TriangleStrip);
+		}
+	}
+
+	public static Vector3 RodriguesRotate(Vector3 origVec, Vector3 axis, float theta)
+	{
+		if (axis != new Vector3(0, 0, 0))
+		{
+			axis = Vector3.Normalize(axis);
+		}
+		else
+		{
+			axis = new Vector3(0, 0, -1);
+		}
+		float cos = MathF.Cos(theta);
+		return cos * origVec + (1 - cos) * Vector3.Dot(origVec, axis) * axis + MathF.Sin(theta) * Vector3.Cross(origVec, axis);
+	}
+
+	public static Vector2 Projection2D(Vector3 vector, Vector2 center, float viewZ, out float scale)
+	{
+		float value = -viewZ / (vector.Z - viewZ);
+		scale = value;
+		var v = new Vector2(vector.X, vector.Y);
+		return v + (value - 1) * (v - center);
+	}
+
+	public static Vector3 GetPerpendicularUnitVector(Vector3 v1)
+	{
+		// 计算任意一个不平行的向量
+		Vector3 arbitraryVector = Vector3.Cross(v1, new Vector3(1, 0, 0));
+
+		// 如果 arbitraryVector 是零向量，说明 v1 与 (1,0,0) 平行，我们需要选择一个不同的向量
+		if (arbitraryVector.LengthSquared() == 0)
+		{
+			arbitraryVector = Vector3.Cross(v1, new Vector3(0, 1, 0));
+		}
+
+		// 计算垂直向量并归一化
+		Vector3 perpendicularVector = Vector3.Cross(v1, arbitraryVector);
+		perpendicularVector.Normalize();
+
+		return perpendicularVector;
+	}
+}
