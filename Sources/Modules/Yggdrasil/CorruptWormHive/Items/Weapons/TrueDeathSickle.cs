@@ -29,11 +29,11 @@ public class TrueDeathSickle : ModItem
 		{
 			if (Main.myPlayer == player.whoAmI && player.itemTime == 0 && player.itemAnimation == 0)
 			{
-				if (player.altFunctionUse != 2)
+				if (player.altFunctionUse != 2 && player.ownedProjectileCounts[ModContent.ProjectileType<TrueDeathSickleManager>()] <= 0)
 				{
 					player.itemTime = (int)(Item.useTime / player.meleeSpeed);
 					player.itemAnimation = (int)(Item.useAnimation / player.meleeSpeed);
-					Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Blade>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI, 240f);
+					Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickleManager>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
 				}
 
 				// else//右键

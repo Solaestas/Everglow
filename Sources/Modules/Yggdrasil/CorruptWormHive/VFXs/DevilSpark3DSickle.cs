@@ -1,10 +1,9 @@
-using Terraria;
 using static Everglow.Yggdrasil.CorruptWormHive.Projectiles.TrueDeathSickle.TrueDeathSickle_Blade;
 
 namespace Everglow.Yggdrasil.CorruptWormHive.VFXs;
 
-[Pipeline(typeof(DevilFlamePipeline), typeof(BloomPipeline))]
-internal class DevilFlame3DSickleDust : Visual
+[Pipeline(typeof(DevilSparkPipeline), typeof(BloomPipeline))]
+public class DevilSpark3DSickleDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
@@ -33,23 +32,33 @@ internal class DevilFlame3DSickleDust : Visual
 			Active = false;
 			return;
 		}
-		if(ownerWhoAmI == -1)
+		if (ownerWhoAmI == -1)
+		{
+			Active = false;
+			return;
+		}
+		if (scale <= 0.5)
 		{
 			Active = false;
 			return;
 		}
 		Player player = Main.player[ownerWhoAmI];
 		trails.Enqueue(position3D);
-		if (trails.Count > 40)
+		if (trails.Count > 10)
 		{
 			trails.Dequeue();
 		}
 		position3D += velocity3D;
-		velocity3D *= 0.96f;
+		if(velocity3D.Length() > 10f)
+		{
+			velocity3D *= 0.9f;
+		}
+		velocity3D *= 0.98f;
 		velocity3D = RodriguesRotate(velocity3D, rotateAxis, ai[1]);
+		scale *= 0.92f;
 		float delC = 1f * (float)Math.Sin((maxTime - timer) / 40d * Math.PI);
 		float size;
-		Lighting.AddLight(Projection2D(position3D, Vector2.zeroVector, 500, out size) + player.Center + Offset, 0.25f * delC, 0f, 0.95f * delC);
+		Lighting.AddLight(Projection2D(position3D, Vector2.zeroVector, 500, out size) + player.Center + Offset, 0, 0.25f * delC, 0.36f * delC);
 	}
 
 	public override void Draw()
@@ -65,18 +74,14 @@ internal class DevilFlame3DSickleDust : Visual
 		{
 			Vector3 pos3D = trails.ToArray()[i];
 			Vector3 pos3DOld = trails.ToArray()[i - 1];
-			float width = (i - 1) / (float)(trails.Count - 0.5f);
-			width = MathF.Sin(width * MathF.PI) * scale;
 			float size;
 			Vector2 posOld = Projection2D(pos3DOld, Vector2.zeroVector, 500, out size);
 			Vector2 pos = Projection2D(pos3D, Vector2.zeroVector, 500, out size) + player.Center + Offset;
 			Vector2 normal = Utils.SafeNormalize(pos - posOld, Vector2.zeroVector).RotatedBy(MathHelper.PiOver2);
-			normal *= width * size;
-			float timeValue = -(float)Main.timeForVisualEffects * 0.0015f;
-			float fx = timer / maxTime;
-			var drawcRope = new Color(fx * fx * fx * 2, 0.5f, 1, 50 / 255f);
-			bars.Add(pos - normal, drawcRope, new Vector3(timeValue + i / 60f, ai[0], 0));
-			bars.Add(pos + normal, drawcRope, new Vector3(timeValue + i / 60f, ai[0] + 0.3f, 0));
+			normal *= size * scale;
+			var drawColor = new Color(1f, 1f, 1f, 0f);
+			bars.Add(pos - normal, drawColor, new Vector3(i / 10f, 0, 0));
+			bars.Add(pos + normal, drawColor, new Vector3(i / 10f, 1, 0));
 		}
 		if (bars.Count <= 2)
 		{

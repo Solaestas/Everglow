@@ -1,4 +1,4 @@
-namespace Everglow.Yggdrasil.CorruptWormHive.Projectiles;
+namespace Everglow.Yggdrasil.CorruptWormHive.Projectiles.TrueDeathSickle;
 
 public class TrueDeathSickleHit : ModProjectile, IWarpProjectile, IBloomProjectile
 {
@@ -124,9 +124,11 @@ public class TrueDeathSickleHit : ModProjectile, IWarpProjectile, IBloomProjecti
 		Texture2D Shadow = ModAsset.TrueDeathSickleHit.Value;
 		float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * Dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f, SpriteEffects.None, 0);
-		Texture2D light = ModAsset.TrueDeathSickleHitStar.Value;
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f - Dark, Dark, 1f, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f - Dark, Dark, 1f, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, Dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
+		Texture2D light = Commons.ModAsset.StarSlash.Value;
+		Texture2D dark = Commons.ModAsset.StarSlash_black.Value;
+		Main.spriteBatch.Draw(dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.ai[1], dark.Size() / 2f, new Vector2(0.5f * Dark * Dark, 0.72f) * Projectile.ai[0] / 3f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f - Dark, Dark, 1f, 0), Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f * Dark * Dark, 0.72f) * Projectile.ai[0] / 3f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f - Dark, Dark, 1f, 0), Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f * Dark * Dark, 0.72f) * Projectile.ai[0] / 3f, SpriteEffects.None, 0);
 		float size = Math.Clamp(Projectile.timeLeft / 8f - 10, 0f, 20f);
 		if (size > 0)
 		{
@@ -242,7 +244,7 @@ public class TrueDeathSickleHit : ModProjectile, IWarpProjectile, IBloomProjecti
 			return;
 		}
 
-		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 27 * Projectile.ai[0], width * 4, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 27 * Projectile.ai[0], width * 4, new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 
 	public void DrawBloom()

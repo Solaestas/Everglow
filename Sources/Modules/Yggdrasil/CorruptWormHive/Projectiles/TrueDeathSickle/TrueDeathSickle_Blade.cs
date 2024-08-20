@@ -3,10 +3,11 @@ using Everglow.Yggdrasil.CorruptWormHive.Buffs;
 using Everglow.Yggdrasil.CorruptWormHive.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.Enums;
 
 namespace Everglow.Yggdrasil.CorruptWormHive.Projectiles.TrueDeathSickle;
 
-public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProjectile
+public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, IBloomProjectile
 {
 	public override void SetDefaults()
 	{
@@ -19,7 +20,7 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 		Projectile.penetrate = -1;
 		Projectile.timeLeft = 120;
 		Projectile.extraUpdates = 3;
-
+		Projectile.noEnchantmentVisuals = true;
 		Projectile.localNPCHitCooldown = 60;
 		Projectile.usesLocalNPCImmunity = true;
 	}
@@ -36,10 +37,11 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 		GenerateVFXFromTarget(target, 18, 2f);
 		if (player.ownedProjectileCounts[HitType] < 5)
 		{
-			Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, 0, 0, Projectile.owner, 15, Projectile.rotation);
+			float s;
+			Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, 0, 0, Projectile.owner, 15, Projection2D(SpacePos, Vector2.Zero, 500, out s).ToRotation() + Main.rand.NextFloat(-0.4f, 0.4f));
 		}
 	}
-
+	public bool NoSickleSelf = false;
 	public int HitTimes = 0;
 	public List<Vector3> OldPosSpace = new List<Vector3>();
 	public Vector3 SpacePos;
@@ -49,14 +51,17 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 	public Vector2 DeltaVelocity = default;
 	public List<Vector2> SmoothTrail = new List<Vector2>();
 	public float TimeCounter = 0;
+	public static Vector2 Offset = new Vector2(0, -10);
 
 	public override void OnSpawn(IEntitySource source)
 	{
 		Player player = Main.player[Projectile.owner];
 		Projectile.spriteDirection = player.direction;
-		Projectile.ai[1] = 0;
+
 		Vector2 v0 = new Vector2(0, Main.rand.NextFloat(2, 3)).RotatedByRandom(6.283);
-		RotatedAxis = new Vector3(v0.X, -6, MathF.Abs(v0.Y));
+
+		v0 = Vector2.Normalize(Main.MouseWorld - player.MountedCenter).RotatedBy(Projectile.ai[1]);
+		RotatedAxis = new Vector3(-v0.Y, v0.X, Projectile.ai[2] * Projectile.spriteDirection);
 		RotatedAxis = Vector3.Normalize(RotatedAxis);
 		SpacePos = GetPerpendicularUnitVector(RotatedAxis) * Projectile.ai[0];
 		SpacePos = RodriguesRotate(SpacePos, RotatedAxis, -1f);
@@ -66,15 +71,7 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 		}
 		StartSpacePos = SpacePos;
 		Omega = 0.27f * -player.direction;
-	}
-
-	public override bool PreAI()
-	{
-		if (Projectile.timeLeft > 120)
-		{
-			return false;
-		}
-		return base.PreAI();
+		Projectile.ai[1] = 0;
 	}
 
 	public override bool ShouldUpdatePosition()
@@ -85,12 +82,12 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
-		Projectile.Center = player.Center;
+		Projectile.Center = player.MountedCenter + Offset;
 		Projectile.friendly = true;
 		OldPosSpace.Add(SpacePos);
 		Vector3 delta0 = SpacePos;
 		SpacePos = RodriguesRotate(SpacePos, RotatedAxis, Omega * (MathF.Log(player.meleeSpeed * MathF.E) + 1));
-		Projectile.ai[1] += Omega * player.meleeSpeed;
+		Projectile.ai[1] += Omega * (MathF.Log(player.meleeSpeed * MathF.E) + 1);
 		delta0 = SpacePos - delta0;
 		Omega *= 0.9f;
 		if (Projectile.timeLeft == 114)
@@ -120,7 +117,9 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 		}
 		if (DeltaVelocity.Length() > 5)
 		{
-			DevilFlame((int)DeltaVelocity.Length() / 8);
+			float mulAi1 = Math.Min(MathF.Abs(Projectile.ai[1] * 0.5f), 2f);
+			DevilFlame((int)(DeltaVelocity.Length() / 24 * mulAi1));
+			DevilSpark((int)(DeltaVelocity.Length() / 10 * mulAi1));
 		}
 	}
 
@@ -148,9 +147,38 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 		return false;
 	}
 
-	public void GenerateVFXFromTarget(NPC target, int Frequency, float mulVelocity = 1f)
+	public override void CutTiles()
 	{
-		for (int g = 0; g < Frequency; g++)
+		DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
+		var cut = new Terraria.Utils.TileActionAttempt(DelegateMethods.CutTiles);
+		Vector2 beamStartPos = Projectile.Center;
+		float scale;
+		Vector2 beamEndPos = Projection2D(SpacePos, Vector2.zeroVector, 500, out scale) + Projectile.Center;
+		Utils.PlotTileLine(beamStartPos, beamEndPos, Projectile.width * Projectile.scale, cut);
+	}
+
+	public override void OnKill(int timeLeft)
+	{
+		foreach (Projectile projectile in Main.projectile)
+		{
+			if (projectile.active && projectile.type == Type)
+			{
+				if (projectile.timeLeft > Projectile.timeLeft)
+				{
+					return;
+				}
+			}
+		}
+		Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_SickleBack>(), 0, 0, Projectile.owner, Projectile.ai[0], Projectile.ai[1]);
+		proj.spriteDirection = Projectile.spriteDirection;
+		var tDSSB = proj.ModProjectile as TrueDeathSickle_SickleBack;
+		tDSSB.SpacePos = SpacePos;
+		tDSSB.RotatedAxis = RotatedAxis;
+	}
+
+	public void GenerateVFXFromTarget(NPC target, int frequency, float mulVelocity = 1f)
+	{
+		for (int g = 0; g < frequency; g++)
 		{
 			var df = new DevilFlameDust
 			{
@@ -171,15 +199,35 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 		{
 			var df = new DevilFlame3DSickleDust
 			{
-				velocity3D = (SpacePos - OldPosSpace[OldPosSpace.Count - 1]) * 0.15f,
+				velocity3D = Vector3.Normalize(SpacePos - OldPosSpace[OldPosSpace.Count - 1]) * 15f,
 				Active = true,
 				Visible = true,
 				position3D = Vector3.Lerp(OldPosSpace[OldPosSpace.Count - 1], SpacePos, Main.rand.NextFloat(0, 1f)),
 				rotateAxis = RotatedAxis,
-				scale = 10,
+				scale = Main.rand.NextFloat(12, 26),
 				maxTime = Main.rand.Next(26, 40),
 				ownerWhoAmI = Projectile.owner,
 				ai = new float[] { Main.rand.NextFloat(0, 1f), Main.rand.NextFloat(0, 0.1f) * -Projectile.spriteDirection, Main.rand.NextFloat(4f, 12f) },
+			};
+			Ins.VFXManager.Add(df);
+		}
+	}
+
+	public void DevilSpark(int times = 1)
+	{
+		for (int g = 0; g < times; g++)
+		{
+			var df = new DevilSpark3DSickleDust
+			{
+				velocity3D = Vector3.Normalize(SpacePos - OldPosSpace[OldPosSpace.Count - 1]) * Main.rand.NextFloat(5f, 24f),
+				Active = true,
+				Visible = true,
+				position3D = Vector3.Lerp(OldPosSpace[OldPosSpace.Count - 1], SpacePos, Main.rand.NextFloat(0, 1f)),
+				rotateAxis = RotatedAxis,
+				scale = Main.rand.NextFloat(1, 6),
+				maxTime = Main.rand.Next(6, 70),
+				ownerWhoAmI = Projectile.owner,
+				ai = new float[] { Main.rand.NextFloat(0, 1f), Main.rand.NextFloat(0.01f, 0.1f) * -Projectile.spriteDirection, Main.rand.NextFloat(4f, 12f) },
 			};
 			Ins.VFXManager.Add(df);
 		}
@@ -198,11 +246,13 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float value0 = (120 - Projectile.timeLeft) / 120f;
 		float value1 = MathF.Pow(value0, 0.3f);
 		value1 = MathF.Sin(value1 * MathF.PI);
 		float width = value1 * 100f;
+		DrawSickle(0.5f, -Omega * 20);
+		DrawSickle(0.25f, -Omega * 50);
 
 		List<Vector2> scales = new List<Vector2>();
 		List<Vector2> SmoothTrailProjectile = new List<Vector2>();
@@ -229,6 +279,8 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 		{
 			return false;
 		}
+		float flameSize = 24f;
+		float flameTimer = -(float)Main.time * 0.06f;
 
 		// dark background color.
 		Color drawColor = Color.White;
@@ -245,8 +297,8 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 			{
 				colorSize *= i / 24f;
 			}
-			bars.Add(SmoothTrail[i] + drawPos, drawColor * colorSize, new Vector3(i / (float)(SmoothTrail.Count - 1), 0.5f, 0));
-			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor * colorSize, new Vector3(i / (float)(SmoothTrail.Count - 1), 0f, 0));
+			bars.Add(SmoothTrail[i] + drawPos, drawColor * colorSize, new Vector3(i / flameSize + flameTimer, 0.5f, 0));
+			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor * colorSize, new Vector3(i / flameSize * 1.3f + flameTimer, 0f, 0));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_0_black.Value;
 		if (bars.Count > 3)
@@ -272,8 +324,8 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 			{
 				colorSize *= i / 24f;
 			}
-			bars.Add(SmoothTrail[i] + drawPos, newColor * colorSize, new Vector3(i / (float)(SmoothTrail.Count - 1), 0.5f, 0));
-			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, newColor * colorSize, new Vector3(i / (float)(SmoothTrail.Count - 1), 0f, 0));
+			bars.Add(SmoothTrail[i] + drawPos, newColor * colorSize, new Vector3(i / flameSize + flameTimer, 0.5f, 0));
+			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, newColor * colorSize, new Vector3(i / flameSize * 1.3f + flameTimer, 0f, 0));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_0.Value;
 		if (bars.Count > 3)
@@ -292,8 +344,17 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 			for (int i = 0; i < SmoothTrail.Count; i++)
 			{
 				Vector2 drawPos = Projectile.Center - Main.screenPosition;
-				bars.Add(SmoothTrail[i] + drawPos, drawColor, new Vector3(0.5f, i / (float)(SmoothTrail.Count - 1), 0));
-				bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor, new Vector3(0.24f, i / (float)(SmoothTrail.Count - 1), 0));
+				float colorSize = 1f;
+				if (i >= SmoothTrail.Count - 15)
+				{
+					colorSize *= (SmoothTrail.Count - i - 1) / 15f;
+				}
+				if (i < 24)
+				{
+					colorSize *= i / 24f;
+				}
+				bars.Add(SmoothTrail[i] + drawPos, drawColor * colorSize, new Vector3(0.5f, i / flameSize, 0));
+				bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor * colorSize, new Vector3(0.24f, i / flameSize, 0));
 			}
 			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StarSlash.Value;
 			if (bars.Count > 3)
@@ -318,13 +379,18 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
 		DrawSickle();
+		DrawSickle(1, 0, true);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 		return false;
 	}
 
-	public void DrawSickle()
+	public void DrawSickle(float fade = 1, float addRotation = 0, bool glowMask = false)
 	{
+		if(NoSickleSelf)
+		{
+			return;
+		}
 		List<Vertex2D> bars = new List<Vertex2D>();
 		float scaleValue;
 
@@ -344,7 +410,18 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 
 		// Roteted texcoords to get space coords.
 		// Then rotated the space coords to sickel rotation.
-		float sickleRot = GetAngleBetweenVectors(StartSpacePos, SpacePos);
+		float sickleRot = Projectile.ai[1];
+
+		// GetAngleBetweenVectors(StartSpacePos, SpacePos);
+		sickleRot += MathHelper.Pi / 5f - MathHelper.Pi / 3f * Projectile.spriteDirection;
+		sickleRot += addRotation;
+
+		// This is a magic value that coorded in the handle, the rotated center of the sickle.
+		Vector3 unrotatedCoord1 = new Vector3(34, 132, 0);
+		if (Projectile.spriteDirection == 1)
+		{
+			(unrotatedCoord1.Y, unrotatedCoord1.X) = (unrotatedCoord1.X, unrotatedCoord1.Y);
+		}
 		List<Vector3> texCoordsRotated = new List<Vector3>();
 		for (int i = 0; i < texCoordsOrig.Count; i++)
 		{
@@ -353,44 +430,92 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 			{
 				(unrotatedCoord.Y, unrotatedCoord.X) = (unrotatedCoord.X, unrotatedCoord.Y);
 			}
-			Vector3 unrotatedCoord1 = texCoordsOrig[1];
-			if (Projectile.spriteDirection == 1)
-			{
-				(unrotatedCoord1.Y, unrotatedCoord1.X) = (unrotatedCoord1.X, unrotatedCoord1.Y);
-			}
 			Vector3 firstSpaceCoord = RodriguesRotate(unrotatedCoord, normalOfRotatedAxisAndZ, -angleOfZAndRotatedAxis);
 			firstSpaceCoord -= RodriguesRotate(unrotatedCoord1, normalOfRotatedAxisAndZ, -angleOfZAndRotatedAxis);
-			if (Projectile.spriteDirection == -1)
-			{
-				texCoordsRotated.Add(RodriguesRotate(firstSpaceCoord, RotatedAxis, sickleRot * Projectile.spriteDirection + 1.2f));
-			}
-			else
-			{
-				texCoordsRotated.Add(RodriguesRotate(firstSpaceCoord, RotatedAxis, sickleRot * Projectile.spriteDirection));
-			}
+			firstSpaceCoord.Y += 8;
+			texCoordsRotated.Add(RodriguesRotate(firstSpaceCoord, RotatedAxis, sickleRot));
 		}
 		List<Vector2> texCoordsProjected = new List<Vector2>();
 		for (int i = 0; i < texCoordsRotated.Count; i++)
 		{
-			texCoordsProjected.Add(Projection2D(texCoordsRotated[i], Vector2.zeroVector, 500, out scaleValue) * Projectile.ai[0] / 170f/* + sickleTip - projectedSickleTip*/);
+			// Set the sickle size by ai[0].
+			texCoordsProjected.Add(Projection2D(texCoordsRotated[i], Vector2.zeroVector, 500, out scaleValue) * Projectile.ai[0] / 130f/* + sickleTip - projectedSickleTip*/);
 		}
 		float size = 174f;
-		AddVertexWCS(bars, texCoordsProjected[0] + Projectile.Center, texCoordsOrig[0] / size);
-		AddVertexWCS(bars, texCoordsProjected[1] + Projectile.Center, texCoordsOrig[1] / size);
-		AddVertexWCS(bars, texCoordsProjected[4] + Projectile.Center, texCoordsOrig[4] / size);
+		if (!glowMask)
+		{
+			AddVertexWCS(bars, texCoordsProjected[0] + Projectile.Center, texCoordsOrig[0] / size, fade);
+			AddVertexWCS(bars, texCoordsProjected[1] + Projectile.Center, texCoordsOrig[1] / size, fade);
+			AddVertexWCS(bars, texCoordsProjected[4] + Projectile.Center, texCoordsOrig[4] / size, fade);
 
-		AddVertexWCS(bars, texCoordsProjected[4] + Projectile.Center, texCoordsOrig[4] / size);
-		AddVertexWCS(bars, texCoordsProjected[1] + Projectile.Center, texCoordsOrig[1] / size);
-		AddVertexWCS(bars, texCoordsProjected[3] + Projectile.Center, texCoordsOrig[3] / size);
+			AddVertexWCS(bars, texCoordsProjected[4] + Projectile.Center, texCoordsOrig[4] / size, fade);
+			AddVertexWCS(bars, texCoordsProjected[1] + Projectile.Center, texCoordsOrig[1] / size, fade);
+			AddVertexWCS(bars, texCoordsProjected[3] + Projectile.Center, texCoordsOrig[3] / size, fade);
 
-		AddVertexWCS(bars, texCoordsProjected[3] + Projectile.Center, texCoordsOrig[3] / size);
-		AddVertexWCS(bars, texCoordsProjected[1] + Projectile.Center, texCoordsOrig[1] / size);
-		AddVertexWCS(bars, texCoordsProjected[2] + Projectile.Center, texCoordsOrig[2] / size);
+			AddVertexWCS(bars, texCoordsProjected[3] + Projectile.Center, texCoordsOrig[3] / size, fade);
+			AddVertexWCS(bars, texCoordsProjected[1] + Projectile.Center, texCoordsOrig[1] / size, fade);
+			AddVertexWCS(bars, texCoordsProjected[2] + Projectile.Center, texCoordsOrig[2] / size, fade);
+		}
+		else
+		{
+			Color color = new Color(1f, 1f, 1f, 0) * fade;
+			Vector2 offset = Projectile.Center - Main.screenPosition;
+			bars.Add(texCoordsProjected[0] + offset, color, texCoordsOrig[0] / size);
+			bars.Add(texCoordsProjected[1] + offset, color, texCoordsOrig[1] / size);
+			bars.Add(texCoordsProjected[4] + offset, color, texCoordsOrig[4] / size);
+
+			bars.Add(texCoordsProjected[4] + offset, color, texCoordsOrig[4] / size);
+			bars.Add(texCoordsProjected[1] + offset, color, texCoordsOrig[1] / size);
+			bars.Add(texCoordsProjected[3] + offset, color, texCoordsOrig[3] / size);
+
+			bars.Add(texCoordsProjected[3] + offset, color, texCoordsOrig[3] / size);
+			bars.Add(texCoordsProjected[1] + offset, color, texCoordsOrig[1] / size);
+			bars.Add(texCoordsProjected[2] + offset, color, texCoordsOrig[2] / size);
+		}
 
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.TrueDeathSickle_proj.Value;
+		if (glowMask)
+		{
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.TrueDeathSickle_proj_glow.Value;
+		}
 		if (bars.Count > 3)
 		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
+		}
+	}
+
+	public void DrawBloom()
+	{
+	}
+
+	public void DrawWarp(VFXBatch spriteBatch)
+	{
+		if (SmoothTrail.Count < 3)
+		{
+			return;
+		}
+		float value0 = (120 - Projectile.timeLeft) / 120f;
+		float value1 = MathF.Pow(value0, 0.3f);
+		value1 = MathF.Sin(value1 * MathF.PI);
+		float width = value1 * 60f;
+		Vector2 drawPos = Projectile.Center - Main.screenPosition;
+		float rotValue = 4.71f;
+
+		List<Vertex2D> bars = new List<Vertex2D>();
+		for (int i = 0; i < SmoothTrail.Count; i++)
+		{
+			Vector2 normal = Vector2.Normalize(SmoothTrail[i]).RotatedBy(rotValue);
+			Color drawColor0 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 1f, 0);
+			Color drawColor1 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 0, 0);
+
+			bars.Add(SmoothTrail[i] + drawPos, drawColor0, new Vector3(0.5f, i / (float)(SmoothTrail.Count - 1), 1));
+			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor1, new Vector3(0.14f, i / (float)(SmoothTrail.Count - 1), 1));
+		}
+
+		if (bars.Count > 3)
+		{
+			Main.graphics.graphicsDevice.RasterizerState = RasterizerState.CullNone;
+			spriteBatch.Draw(Commons.ModAsset.Trail_6.Value, bars, PrimitiveType.TriangleStrip);
 		}
 	}
 
@@ -409,44 +534,9 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile, IBloomProje
 		return angleInRadians;
 	}
 
-	public void AddVertexWCS(List<Vertex2D> bars, Vector2 position, Vector3 texCoord)
+	public static void AddVertexWCS(List<Vertex2D> bars, Vector2 position, Vector3 texCoord, float fade = 1f)
 	{
-		bars.Add(position - Main.screenPosition, Lighting.GetColor(position.ToTileCoordinates()), texCoord);
-	}
-
-	public void DrawBloom()
-	{
-	}
-
-	public void DrawWarp(VFXBatch spriteBatch)
-	{
-		if (SmoothTrail.Count < 3)
-		{
-			return;
-		}
-		float value0 = (120 - Projectile.timeLeft) / 120f;
-		float value1 = MathF.Pow(value0, 0.3f);
-		value1 = MathF.Sin(value1 * MathF.PI);
-		float width = value1 * 20f;
-		Vector2 drawPos = Projectile.Center - Main.screenPosition;
-		float rotValue = 4.71f;
-
-		List<Vertex2D> bars = new List<Vertex2D>();
-		for (int i = 0; i < SmoothTrail.Count; i++)
-		{
-			Vector2 normal = Vector2.Normalize(SmoothTrail[i]).RotatedBy(rotValue);
-			Color drawColor0 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 0.8f, 0);
-			Color drawColor1 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 0, 0);
-
-			bars.Add(SmoothTrail[i] + drawPos, drawColor0, new Vector3(0.5f, i / (float)(SmoothTrail.Count - 1), 1));
-			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor1, new Vector3(0.44f, i / (float)(SmoothTrail.Count - 1), 1));
-		}
-
-		if (bars.Count > 3)
-		{
-			Main.graphics.graphicsDevice.RasterizerState = RasterizerState.CullNone;
-			spriteBatch.Draw(Commons.ModAsset.StarSlash.Value, bars, PrimitiveType.TriangleStrip);
-		}
+		bars.Add(position - Main.screenPosition, Lighting.GetColor(position.ToTileCoordinates()) * fade, texCoord);
 	}
 
 	public static Vector3 RodriguesRotate(Vector3 origVec, Vector3 axis, float theta)
