@@ -1,19 +1,16 @@
 sampler2D uImage : register(s0);
-texture uNoise;
-sampler uNoiseSampler =
+texture uHeatMap;
+sampler uHeatMapSampler =
 sampler_state
 {
-    Texture = <uNoise>;
+    Texture = <uHeatMap>;
     MipFilter = LINEAR;
     MinFilter = LINEAR;
     MagFilter = LINEAR;
-    AddressU = WRAP;
-    AddressV = WRAP;
+    AddressU = CLAMP;
+    AddressV = CLAMP;
 };
-//valueC由Color.r代替
-//float valueC;
-//utime由Color.g代替
-//float utime;
+
 float4x4 uTransform;
 
 struct VSInput
@@ -41,20 +38,17 @@ PSInput VertexShaderFunction(VSInput input)
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
-	float4 color = tex2D(uNoiseSampler, float2(input.Texcoord.x, input.Texcoord.y + input.Color.g));
-	float4 colorFlame = tex2D(uImage, input.Texcoord.xy);
-    
-	float4 flame = tex2D(uImage, float2(1 - color.r, input.Texcoord.z));
-	flame.a *= input.Color.a;
-	if (color.r < 1 - input.Color.a)
-		return float4(0, 0, 0, 0);
-	return flame;
+	float4 colorHalo = tex2D(uImage, input.Texcoord.xy);
+	float light = colorHalo.r;
+    float4 colorHeatMap = tex2D(uHeatMapSampler, float2(light, 0));
+	return colorHeatMap;
 }
+
 technique Technique1
 {
     pass Test
     {
-        VertexShader = compile vs_2_0 VertexShaderFunction();
-        PixelShader = compile ps_2_0 PixelShaderFunction();
+        VertexShader = compile vs_3_0 VertexShaderFunction();
+        PixelShader = compile ps_3_0 PixelShaderFunction();
     }
 }

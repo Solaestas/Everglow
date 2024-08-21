@@ -1,6 +1,6 @@
 namespace Everglow.Yggdrasil.CorruptWormHive.Projectiles.TrueDeathSickle;
 
-public class TrueDeathSickleHit : ModProjectile, IWarpProjectile, IBloomProjectile
+public class TrueDeathSickleHit : ModProjectile, IWarpProjectile
 {
 	private float r = 20;
 	private Vector2 v0;
@@ -62,43 +62,6 @@ public class TrueDeathSickleHit : ModProjectile, IWarpProjectile, IBloomProjecti
 		{
 			Projectile.friendly = true;
 		}
-
-		int MaxC = (int)Projectile.ai[0];
-		MaxC = Math.Min(9, MaxC);
-		if (Projectile.timeLeft >= 200)
-		{
-			for (int x = 0; x < MaxC; x++)
-			{
-				sparkVelocity[x] = new Vector2(0, Projectile.ai[0]).RotatedByRandom(6.283) * Main.rand.NextFloat(0.05f, 1.2f);
-				sparkOldPos[x, 0] = Projectile.Center;
-			}
-		}
-
-		for (int x = 0; x < MaxC; x++)
-		{
-			for (int y = 39; y > 0; y--)
-			{
-				sparkOldPos[x, y] = sparkOldPos[x, y - 1];
-			}
-			if (Collision.SolidCollision(sparkOldPos[x, 0] + new Vector2(sparkVelocity[x].X, 0), 0, 0))
-			{
-				sparkVelocity[x].X *= -0.95f;
-			}
-
-			if (Collision.SolidCollision(sparkOldPos[x, 0] + new Vector2(0, sparkVelocity[x].Y), 0, 0))
-			{
-				sparkVelocity[x].Y *= -0.95f;
-			}
-
-			sparkOldPos[x, 0] += sparkVelocity[x];
-
-			if (sparkVelocity[x].Length() > 0.3f)
-			{
-				sparkVelocity[x] *= 0.95f;
-			}
-
-			sparkVelocity[x].Y += 0.04f;
-		}
 		Projectile.velocity *= 0;
 	}
 
@@ -129,67 +92,8 @@ public class TrueDeathSickleHit : ModProjectile, IWarpProjectile, IBloomProjecti
 		Main.spriteBatch.Draw(dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.ai[1], dark.Size() / 2f, new Vector2(0.5f * Dark * Dark, 0.72f) * Projectile.ai[0] / 3f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f - Dark, Dark, 1f, 0), Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f * Dark * Dark, 0.72f) * Projectile.ai[0] / 3f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f - Dark, Dark, 1f, 0), Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f * Dark * Dark, 0.72f) * Projectile.ai[0] / 3f, SpriteEffects.None, 0);
-		float size = Math.Clamp(Projectile.timeLeft / 8f - 10, 0f, 20f);
-		if (size > 0)
-		{
-			DrawSpark(Color.White, size, Commons.ModAsset.StarSlash_black.Value);
-			DrawSpark(new Color(131, 0, 255, 0), size, Commons.ModAsset.StarSlash.Value);
-		}
+
 		return false;
-	}
-
-	private Vector2[,] sparkOldPos = new Vector2[27, 40];
-	private Vector2[] sparkVelocity = new Vector2[27];
-
-	internal void DrawSpark(Color c0, float width, Texture2D tex)
-	{
-		int MaxC = (int)Projectile.ai[0];
-		MaxC = Math.Min(26, MaxC);
-		var bars = new List<Vertex2D>();
-		for (int x = 0; x < MaxC; x++)
-		{
-			int TrueL = 0;
-			for (int i = 1; i < 40; ++i)
-			{
-				if (sparkOldPos[x, i] == Vector2.Zero)
-				{
-					break;
-				}
-
-				TrueL++;
-			}
-			for (int i = 1; i < 40; ++i)
-			{
-				if (sparkOldPos[x, i] == Vector2.Zero)
-				{
-					break;
-				}
-
-				var normalDir = sparkOldPos[x, i - 1] - sparkOldPos[x, i];
-				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-				var factor = i / (float)TrueL;
-				var w = MathHelper.Lerp(1f, 0.05f, factor);
-				float x0 = 1 - factor;
-				if (i == 1)
-				{
-					bars.Add(new Vertex2D(sparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
-					bars.Add(new Vertex2D(sparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
-				}
-				bars.Add(new Vertex2D(sparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
-				bars.Add(new Vertex2D(sparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
-				if (i == 39)
-				{
-					bars.Add(new Vertex2D(sparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
-					bars.Add(new Vertex2D(sparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
-				}
-			}
-			Texture2D t = tex;
-			Main.graphics.GraphicsDevice.Textures[0] = t;
-		}
-		if (bars.Count > 3)
-		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		}
 	}
 
 	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
@@ -245,14 +149,5 @@ public class TrueDeathSickleHit : ModProjectile, IWarpProjectile, IBloomProjecti
 		}
 
 		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 27 * Projectile.ai[0], width * 4, new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
-	}
-
-	public void DrawBloom()
-	{
-		float size = Math.Clamp(Projectile.timeLeft / 8f - 60, 0f, 20f);
-		if (size > 0)
-		{
-			DrawSpark(new Color(255, 255, 255, 0), size, Commons.ModAsset.StarSlash.Value);
-		}
 	}
 }

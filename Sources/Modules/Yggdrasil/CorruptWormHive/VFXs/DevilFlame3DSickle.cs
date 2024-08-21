@@ -1,4 +1,3 @@
-using Terraria;
 using static Everglow.Yggdrasil.CorruptWormHive.Projectiles.TrueDeathSickle.TrueDeathSickle_Blade;
 
 namespace Everglow.Yggdrasil.CorruptWormHive.VFXs;
@@ -33,7 +32,7 @@ internal class DevilFlame3DSickleDust : Visual
 			Active = false;
 			return;
 		}
-		if(ownerWhoAmI == -1)
+		if (ownerWhoAmI == -1)
 		{
 			Active = false;
 			return;
@@ -44,8 +43,13 @@ internal class DevilFlame3DSickleDust : Visual
 		{
 			trails.Dequeue();
 		}
+		if(maxTime - timer < 22)
+		{
+			ai[2] = MathHelper.Lerp(ai[2], 1f, 0.18f);
+		}
 		position3D += velocity3D;
 		velocity3D *= 0.96f;
+		velocity3D.Y -= 3 * MathF.Abs(ai[1]);
 		velocity3D = RodriguesRotate(velocity3D, rotateAxis, ai[1]);
 		float delC = 1f * (float)Math.Sin((maxTime - timer) / 40d * Math.PI);
 		float size;
@@ -65,18 +69,22 @@ internal class DevilFlame3DSickleDust : Visual
 		{
 			Vector3 pos3D = trails.ToArray()[i];
 			Vector3 pos3DOld = trails.ToArray()[i - 1];
-			float width = (i - 1) / (float)(trails.Count - 0.5f);
+			float width = (i - 1) / (float)Math.Max(trails.Count - 2f, 1);
 			width = MathF.Sin(width * MathF.PI) * scale;
+			if(trails.Count <= 4)
+			{
+				width = 0f;
+			}
 			float size;
-			Vector2 posOld = Projection2D(pos3DOld, Vector2.zeroVector, 500, out size);
+			Vector2 posOld = Projection2D(pos3DOld, Vector2.zeroVector, 500, out size) + player.Center + Offset;
 			Vector2 pos = Projection2D(pos3D, Vector2.zeroVector, 500, out size) + player.Center + Offset;
 			Vector2 normal = Utils.SafeNormalize(pos - posOld, Vector2.zeroVector).RotatedBy(MathHelper.PiOver2);
 			normal *= width * size;
 			float timeValue = -(float)Main.timeForVisualEffects * 0.0015f;
 			float fx = timer / maxTime;
-			var drawcRope = new Color(fx * fx * fx * 2, 0.5f, 1, 50 / 255f);
-			bars.Add(pos - normal, drawcRope, new Vector3(timeValue + i / 60f, ai[0], 0));
-			bars.Add(pos + normal, drawcRope, new Vector3(timeValue + i / 60f, ai[0] + 0.3f, 0));
+			var drawcRope = new Color(fx * fx * fx * 2, 0.5f, 1, Math.Clamp(1 - fx, 0, 0.6f));
+			bars.Add(pos - normal, drawcRope, new Vector3(timeValue + i / 60f, ai[0], ai[2]));
+			bars.Add(pos + normal, drawcRope, new Vector3(timeValue + i / 60f, ai[0] + 0.3f, ai[2]));
 		}
 		if (bars.Count <= 2)
 		{

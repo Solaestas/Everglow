@@ -75,7 +75,7 @@ public class DevilSpark3DSickleDust : Visual
 			Vector3 pos3D = trails.ToArray()[i];
 			Vector3 pos3DOld = trails.ToArray()[i - 1];
 			float size;
-			Vector2 posOld = Projection2D(pos3DOld, Vector2.zeroVector, 500, out size);
+			Vector2 posOld = Projection2D(pos3DOld, Vector2.zeroVector, 500, out size) + player.Center + Offset;
 			Vector2 pos = Projection2D(pos3D, Vector2.zeroVector, 500, out size) + player.Center + Offset;
 			Vector2 normal = Utils.SafeNormalize(pos - posOld, Vector2.zeroVector).RotatedBy(MathHelper.PiOver2);
 			normal *= size * scale;

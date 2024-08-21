@@ -41,6 +41,7 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, 
 			Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, 0, 0, Projectile.owner, 15, Projection2D(SpacePos, Vector2.Zero, 500, out s).ToRotation() + Main.rand.NextFloat(-0.4f, 0.4f));
 		}
 	}
+
 	public bool NoSickleSelf = false;
 	public int HitTimes = 0;
 	public List<Vector3> OldPosSpace = new List<Vector3>();
@@ -118,7 +119,7 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, 
 		if (DeltaVelocity.Length() > 5)
 		{
 			float mulAi1 = Math.Min(MathF.Abs(Projectile.ai[1] * 0.5f), 2f);
-			DevilFlame((int)(DeltaVelocity.Length() / 24 * mulAi1));
+			DevilFlame((int)(DeltaVelocity.Length() / 64 * mulAi1 + 1));
 			DevilSpark((int)(DeltaVelocity.Length() / 10 * mulAi1));
 		}
 	}
@@ -205,9 +206,9 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, 
 				position3D = Vector3.Lerp(OldPosSpace[OldPosSpace.Count - 1], SpacePos, Main.rand.NextFloat(0, 1f)),
 				rotateAxis = RotatedAxis,
 				scale = Main.rand.NextFloat(12, 26),
-				maxTime = Main.rand.Next(26, 40),
+				maxTime = Main.rand.Next(36, 40),
 				ownerWhoAmI = Projectile.owner,
-				ai = new float[] { Main.rand.NextFloat(0, 1f), Main.rand.NextFloat(0, 0.1f) * -Projectile.spriteDirection, Main.rand.NextFloat(4f, 12f) },
+				ai = new float[] { Main.rand.NextFloat(0, 1f), Main.rand.NextFloat(0, 0.1f) * -Projectile.spriteDirection, 0f },
 			};
 			Ins.VFXManager.Add(df);
 		}
@@ -247,6 +248,7 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, 
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 		float value0 = (120 - Projectile.timeLeft) / 120f;
 		float value1 = MathF.Pow(value0, 0.3f);
 		value1 = MathF.Sin(value1 * MathF.PI);
@@ -387,7 +389,7 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, 
 
 	public void DrawSickle(float fade = 1, float addRotation = 0, bool glowMask = false)
 	{
-		if(NoSickleSelf)
+		if (NoSickleSelf)
 		{
 			return;
 		}
