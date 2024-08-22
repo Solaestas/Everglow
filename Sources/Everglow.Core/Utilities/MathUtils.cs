@@ -257,4 +257,32 @@ public static class MathUtils
 	{
 		return (1 - value) * from + to * value;
 	}
+
+	/// <summary>
+	/// n的阶乘
+	/// </summary>
+	/// <param name="n"></param>
+	/// <returns></returns>
+	public static int Factorial(int n)
+	{
+		if (n <= 0)
+		{
+			return 1;
+		}
+		else
+		{
+			return n * Factorial(n - 1);
+		}
+	}
+
+	/// <summary>
+	/// 组合数
+	/// </summary>
+	/// <param name="n"></param>
+	/// <param name="m"></param>
+	/// <returns></returns>
+	public static int Combination(int n, int m)
+	{
+		return Factorial(n) / (Factorial(m) * Factorial(n - m));
+	}
 }
