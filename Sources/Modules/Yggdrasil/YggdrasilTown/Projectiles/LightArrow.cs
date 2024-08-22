@@ -116,6 +116,8 @@ public class LightArrow : ModProjectile
 
 	public override void OnKill(int timeLeft)
 	{
+		// Basic OnKill Instructions
+		// -----------------------
 		SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
 		Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
 		for (int i = 0; i < 20; i++)
@@ -125,36 +127,37 @@ public class LightArrow : ModProjectile
 			dust.rotation = Main.rand.NextFloat(0.3f, 0.7f);
 			dust.scale *= 2f;
 		}
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<LightStartEffect_arrow>(), 0, 0, Projectile.owner);
 
-		List<Projectile> lightStartEffectProjectiles = new List<Projectile>();
+		// Generate Post-destruction VFX
+		// -----------------------------
+		// Create new LightStartEffect_arrow projectile at the locaiton where this projectile is killed
+		Projectile.NewProjectileDirect(
+			Projectile.GetSource_FromAI(),
+			Projectile.Center,
+			Vector2.Zero,
+			ModContent.ProjectileType<LightStartEffect_arrow>(),
+			0,
+			0,
+			Projectile.owner);
 
 		// Collect all active LightStartEffect_arrow projectiles
-		foreach (Projectile proj in Main.projectile)
-		{
-			if (proj.active && proj.type == ModContent.ProjectileType<LightStartEffect_arrow>())
-			{
-				lightStartEffectProjectiles.Add(proj);
-			}
-		}
-
 		// Sort the collected projectiles by timeLeft in descending order
-		lightStartEffectProjectiles.Sort((a, b) => b.timeLeft.CompareTo(a.timeLeft));
-
 		// Get the top 5 projectiles (if they exist)
-		HashSet<Projectile> topFiveProjectiles = new HashSet<Projectile>();
-		for (int i = 0; i < Math.Min(5, lightStartEffectProjectiles.Count); i++)
-		{
-			topFiveProjectiles.Add(lightStartEffectProjectiles[i]);
-		}
+		HashSet<Projectile> topFiveActiveProjectiles = Main.projectile
+			.Where(proj => proj.active && proj.type == ModContent.ProjectileType<LightStartEffect_arrow>())
+			.OrderByDescending(l => l.timeLeft)
+			.Take(5)
+			.ToHashSet();
 
-		// Set timeLeft to 150 for other projectiles with timeLeft > 150
-		foreach (Projectile proj in Main.projectile)
+		// Set timeLeft to 150 for other projectiles with timeLeft more than 150
+		foreach (var item in Main.projectile
+			.Where(proj =>
+				proj.active &&
+				proj.type == ModContent.ProjectileType<LightStartEffect_arrow>() &&
+				proj.timeLeft > 150 &&
+				!topFiveActiveProjectiles.Contains(proj)))
 		{
-			if (proj.active && proj.type == ModContent.ProjectileType<LightStartEffect_arrow>() && proj.timeLeft > 150 && !topFiveProjectiles.Contains(proj))
-			{
-				proj.timeLeft = 150;
-			}
+			item.timeLeft = 150;
 		}
 	}
 }

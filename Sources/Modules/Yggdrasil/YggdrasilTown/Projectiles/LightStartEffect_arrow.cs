@@ -1,3 +1,4 @@
+using System;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
@@ -54,7 +55,7 @@ public class LightStartEffect_arrow : ModProjectile
 	public void GenerateParticles(int duplicateTimes = 1)
 	{
 		float mulMaxTime = 1f;
-		if(Projectile.timeLeft > 1100)
+		if (Projectile.timeLeft > 1100)
 		{
 			mulMaxTime = 1f - (Projectile.timeLeft - 1100) / 100f;
 		}
@@ -62,13 +63,15 @@ public class LightStartEffect_arrow : ModProjectile
 		{
 			mulMaxTime = (Projectile.timeLeft - 90f) / 60f;
 		}
-		if(mulMaxTime < 0)
+		if (mulMaxTime < 0)
 		{
 			return;
 		}
-		for (int i = 0; i < duplicateTimes; i++)
+
+		Action<float, int> generateParticleDust = (float rotateRatio, int currentTime) =>
 		{
-			Vector2 newVelocity = new Vector2(0, 1.2f).RotatedBy(Main.time * 0.05f + Projectile.whoAmI + (float)i / duplicateTimes * MathHelper.TwoPi);
+			float deltaRotation = (float)currentTime / duplicateTimes * MathHelper.TwoPi;
+			Vector2 newVelocity = new Vector2(0, 1.2f).RotatedBy(Main.time * rotateRatio + Projectile.whoAmI + deltaRotation);
 			var somg = new LightFruitParticleDust
 			{
 				velocity = newVelocity,
@@ -81,22 +84,13 @@ public class LightStartEffect_arrow : ModProjectile
 				ai = new float[] { Main.rand.NextFloat(3.0f, 10f), 0 },
 			};
 			Ins.VFXManager.Add(somg);
-		}
+		};
+
+		// Generate pairs of particles
 		for (int i = 0; i < duplicateTimes; i++)
 		{
-			Vector2 newVelocity = new Vector2(0, 1.2f).RotatedBy(-Main.time * 0.03f + Projectile.whoAmI + (float)i / duplicateTimes * MathHelper.TwoPi);
-			var somg = new LightFruitParticleDust
-			{
-				velocity = newVelocity,
-				Active = true,
-				Visible = true,
-				position = Projectile.Center,
-				maxTime = Main.rand.Next(37, 145) * mulMaxTime,
-				scale = Main.rand.NextFloat(12.20f, 32.35f),
-				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(3.0f, 10f), 0 },
-			};
-			Ins.VFXManager.Add(somg);
+			generateParticleDust(0.05f, i);
+			generateParticleDust(-0.03f, i);
 		}
 	}
 
