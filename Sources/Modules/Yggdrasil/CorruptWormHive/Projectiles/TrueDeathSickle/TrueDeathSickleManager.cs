@@ -33,19 +33,19 @@ public class TrueDeathSickleManager : ModProjectile
 		if (Projectile.ai[0] >= 0 && !AttackState[0])
 		{
 			SetPlayerDirection(player);
-			Projectile.NewProjectile(player.GetSource_ItemUse(item), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Blade>(), player.GetWeaponDamage(item), item.knockBack, player.whoAmI, 240f, 0, -Main.rand.NextFloat(0.0f, 0.3f));
+			Projectile.NewProjectile(player.GetSource_ItemUse(item), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Blade>(), (int)(player.GetWeaponDamage(item) * 2.6f), item.knockBack, player.whoAmI, 240f, 0, -Main.rand.NextFloat(0.0f, 0.3f));
 			AttackState[0] = true;
 		}
 		if (Projectile.ai[0] >= 30 && !AttackState[1])
 		{
 			SetPlayerDirection(player);
-			Projectile.NewProjectile(player.GetSource_ItemUse(item), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Blade>(), player.GetWeaponDamage(item), item.knockBack, player.whoAmI, 240f, 0, -Main.rand.NextFloat(0.4f, 0.5f));
+			Projectile.NewProjectile(player.GetSource_ItemUse(item), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Blade>(), (int)(player.GetWeaponDamage(item) * 2.9f), item.knockBack, player.whoAmI, 240f, 0, -Main.rand.NextFloat(0.4f, 0.5f));
 			AttackState[1] = true;
 		}
 		if (Projectile.ai[0] >= 48 && !AttackState[2])
 		{
 			SetPlayerDirection(player);
-			Projectile proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(item), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Blade>(), player.GetWeaponDamage(item), item.knockBack, player.whoAmI, 240f, 0, -Main.rand.NextFloat(0f, 0.05f));
+			Projectile proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(item), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Blade>(), (int)(player.GetWeaponDamage(item) * 1.4f), item.knockBack, player.whoAmI, 240f, 0, -Main.rand.NextFloat(0f, 0.05f));
 			TrueDeathSickle_Blade tDSB = proj.ModProjectile as TrueDeathSickle_Blade;
 			tDSB.NoSickleSelf = true;
 			AttackState[2] = true;
@@ -53,7 +53,7 @@ public class TrueDeathSickleManager : ModProjectile
 		if (Projectile.ai[0] >= 54 && !AttackState[3])
 		{
 			SetPlayerDirection(player);
-			Projectile proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(item), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Blade>(), player.GetWeaponDamage(item), item.knockBack, player.whoAmI, 240f, 0.7f, -Main.rand.NextFloat(0.1f, 0.2f));
+			Projectile proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(item), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Blade>(), (int)(player.GetWeaponDamage(item) * 1.1f), item.knockBack, player.whoAmI, 240f, 0.7f, -Main.rand.NextFloat(0.1f, 0.2f));
 			TrueDeathSickle_Blade tDSB = proj.ModProjectile as TrueDeathSickle_Blade;
 			tDSB.NoSickleSelf = true;
 			AttackState[3] = true;
@@ -61,13 +61,13 @@ public class TrueDeathSickleManager : ModProjectile
 		if (Projectile.ai[0] >= 60 && !AttackState[4])
 		{
 			SetPlayerDirection(player);
-			Projectile.NewProjectile(player.GetSource_ItemUse(item), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Blade>(), player.GetWeaponDamage(item), item.knockBack, player.whoAmI, 240f, -0.7f, -Main.rand.NextFloat(0.1f, 0.2f));
+			Projectile.NewProjectile(player.GetSource_ItemUse(item), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Blade>(), (int)(player.GetWeaponDamage(item) * 1.1f), item.knockBack, player.whoAmI, 240f, -0.7f, -Main.rand.NextFloat(0.1f, 0.2f));
 			AttackState[4] = true;
 		}
 		if (Projectile.ai[0] >= 95 && !AttackState[5])
 		{
 			SetPlayerDirection(player);
-			Projectile proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(item), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Blade>(), player.GetWeaponDamage(item), item.knockBack, player.whoAmI, 240f, 0, -5);
+			Projectile proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(item), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Blade>(), (int)(player.GetWeaponDamage(item) * 3.4f), item.knockBack, player.whoAmI, 240f, 0, -5);
 			AttackState[5] = true;
 		}
 		if (player.controlUseItem)

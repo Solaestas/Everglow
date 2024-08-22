@@ -119,7 +119,7 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, 
 		if (DeltaVelocity.Length() > 5)
 		{
 			float mulAi1 = Math.Min(MathF.Abs(Projectile.ai[1] * 0.5f), 2f);
-			DevilFlame((int)(DeltaVelocity.Length() / 64 * mulAi1 + 1));
+			DevilFlame((int)(DeltaVelocity.Length() / 100 * mulAi1 + 1));
 			DevilSpark((int)(DeltaVelocity.Length() / 10 * mulAi1));
 		}
 	}
@@ -136,12 +136,7 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, 
 			Rectangle rectangle = new Rectangle((int)(SmoothTrail[i].X - 40 + Projectile.Center.X), (int)(SmoothTrail[i].Y - 40 + Projectile.Center.Y), 80, 80);
 			if (Rectangle.Intersect(rectangle, targetHitbox) != Rectangle.emptyRectangle)
 			{
-				Projectile.damage /= 2;
 				HitTimes++;
-				if (HitTimes > 3)
-				{
-					Projectile.friendly = false;
-				}
 				return true;
 			}
 		}
@@ -510,14 +505,14 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, 
 			Color drawColor0 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 1f, 0);
 			Color drawColor1 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, 0, 0);
 
-			bars.Add(SmoothTrail[i] + drawPos, drawColor0, new Vector3(0.5f, i / (float)(SmoothTrail.Count - 1), 1));
-			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor1, new Vector3(0.14f, i / (float)(SmoothTrail.Count - 1), 1));
+			bars.Add(SmoothTrail[i] + drawPos, drawColor0, new Vector3(0, 1 - i / (float)(SmoothTrail.Count - 1), 1));
+			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor1, new Vector3(1f, i / (float)(SmoothTrail.Count - 1), 1));
 		}
 
 		if (bars.Count > 3)
 		{
 			Main.graphics.graphicsDevice.RasterizerState = RasterizerState.CullNone;
-			spriteBatch.Draw(Commons.ModAsset.Trail_6.Value, bars, PrimitiveType.TriangleStrip);
+			spriteBatch.Draw(Commons.ModAsset.Melee.Value, bars, PrimitiveType.TriangleStrip);
 		}
 	}
 

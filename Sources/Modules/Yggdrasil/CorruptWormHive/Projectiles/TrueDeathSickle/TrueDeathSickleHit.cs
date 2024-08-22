@@ -26,6 +26,8 @@ public class TrueDeathSickleHit : ModProjectile, IWarpProjectile
 		Projectile.timeLeft = 200;
 		Projectile.tileCollide = false;
 		Projectile.extraUpdates = 2;
+		Projectile.localNPCHitCooldown = 60;
+		Projectile.usesLocalNPCImmunity = true;
 	}
 
 	public override void AI()
@@ -51,17 +53,6 @@ public class TrueDeathSickleHit : ModProjectile, IWarpProjectile
 			r -= 1f;
 		}
 
-		fra = (600 - Projectile.timeLeft) / 3 % 30;
-		fraX = fra % 6 * 270;
-		fraY = fra / 6 * 290;
-		if (v0 != Vector2.Zero)
-		{
-			// Projectile.position = v0 - new Vector2(Dx, Dy) / 2f;
-		}
-		if (Projectile.timeLeft < 10)
-		{
-			Projectile.friendly = true;
-		}
 		Projectile.velocity *= 0;
 	}
 
