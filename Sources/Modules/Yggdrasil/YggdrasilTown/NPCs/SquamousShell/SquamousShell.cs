@@ -55,14 +55,13 @@ public class SquamousShell : ModNPC
 	{
 		NPC.velocity.Y = 2f;
 		_coroutineManager.StartCoroutine(new Coroutine(Landing()));
-		_coroutineManager.StartCoroutine(new Coroutine(FlyingFrame()));
 		var data = Mod.GetFileBytes(ModAsset.monsterj_Path);
 		if (SquamousShellSkeleton == null)
 		{
 			var json = Mod.GetFileBytes(ModAsset.monsterj_Path);
-			var altas = Mod.GetFileBytes(ModAsset.monstera_Path);
-			SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(altas, json, ModAsset.monster.Value);
-			SquamousShellSkeleton.AnimationState.SetAnimation(0, "walk", true);
+			var atlas = Mod.GetFileBytes(ModAsset.monstera_Path);
+			SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(atlas, json, ModAsset.monster.Value);
+			SquamousShellSkeleton.AnimationState.SetAnimation(0, "walk4", true);
 		}
 	}
 
@@ -70,7 +69,7 @@ public class SquamousShell : ModNPC
 
 	public override void AI()
 	{
-		SquamousShellSkeleton.AnimationState.Update(0.016f);
+		SquamousShellSkeleton.AnimationState.Update(Math.Clamp(Math.Abs(NPC.velocity.X) / 300f, 0f, 0.08f));
 		SquamousShellSkeleton.AnimationState.Apply(SquamousShellSkeleton.Skeleton);
 		NPC.localAI[0] += 1;
 		NPC.TargetClosest(false);
@@ -78,9 +77,9 @@ public class SquamousShell : ModNPC
 		_coroutineManager.Update();
 		mousePos = Main.MouseWorld;
 		SquamousShellSkeleton.Position = NPC.Bottom;
-		SquamousShellSkeleton.Skeleton.FindBone("hips").Rotation = NPC.rotation / Spine.MathUtils.DegRad;
-		SquamousShellSkeleton.Skeleton.FindBone("hips").ScaleY = NPC.spriteDirection;
-		SquamousShellSkeleton.Skeleton.FindBone("hips").ScaleX = -1;
+		SquamousShellSkeleton.Skeleton.FindBone("root").Rotation = NPC.rotation / Spine.MathUtils.DegRad;
+		SquamousShellSkeleton.Skeleton.FindBone("root").ScaleY = NPC.spriteDirection;
+		SquamousShellSkeleton.Skeleton.FindBone("root").ScaleX = -1;
 	}
 
 	/// <summary>
@@ -739,10 +738,11 @@ public class SquamousShell : ModNPC
 		if (SquamousShellSkeleton == null)
 		{
 			var json = Mod.GetFileBytes(ModAsset.monsterj_Path);
-			var altas = Mod.GetFileBytes(ModAsset.monstera_Path);
-			SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(altas, json, ModAsset.monster.Value);
-			SquamousShellSkeleton.AnimationState.SetAnimation(0, "walk", true);
+			var atlas = Mod.GetFileBytes(ModAsset.monstera_Path);
+			SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(atlas, json, ModAsset.monster.Value);
+			SquamousShellSkeleton.AnimationState.SetAnimation(0, "walk4", true);
 		}
+
 		skeletonDebugRenderer.DisableAll();
 		skeletonDebugRenderer.DrawBones = true;
 
