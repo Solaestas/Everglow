@@ -1,6 +1,6 @@
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.Furnace.Projectiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class ThermostatBobber : ModProjectile
 {

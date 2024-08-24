@@ -1,6 +1,6 @@
 using Terraria.Enums;
 
-namespace Everglow.Yggdrasil.Furnace.Items.Accessories;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 
 public class HeatEmblem : ModItem
 {
