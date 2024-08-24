@@ -25,23 +25,6 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, 
 		Projectile.usesLocalNPCImmunity = true;
 	}
 
-	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
-	{
-		Player player = Main.player[Projectile.owner];
-
-		ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
-		float ShakeStrength = 3f;
-		Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 24f * ShakeStrength, 100)).RotatedByRandom(6.283);
-		modifiers.Knockback *= 5f;
-		int HitType = ModContent.ProjectileType<TrueDeathSickleHit>();
-		GenerateVFXFromTarget(target, 18, 2f);
-		if (player.ownedProjectileCounts[HitType] < 5)
-		{
-			float s;
-			Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, 0, 0, Projectile.owner, 15, Projection2D(SpacePos, Vector2.Zero, 500, out s).ToRotation() + Main.rand.NextFloat(-0.4f, 0.4f));
-		}
-	}
-
 	public bool NoSickleSelf = false;
 	public int HitTimes = 0;
 	public List<Vector3> OldPosSpace = new List<Vector3>();
@@ -59,9 +42,7 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, 
 		Player player = Main.player[Projectile.owner];
 		Projectile.spriteDirection = player.direction;
 
-		Vector2 v0 = new Vector2(0, Main.rand.NextFloat(2, 3)).RotatedByRandom(6.283);
-
-		v0 = Vector2.Normalize(Main.MouseWorld - player.MountedCenter).RotatedBy(Projectile.ai[1]);
+		Vector2 v0 = Vector2.Normalize(Main.MouseWorld - player.MountedCenter).RotatedBy(Projectile.ai[1]);
 		RotatedAxis = new Vector3(-v0.Y, v0.X, Projectile.ai[2] * Projectile.spriteDirection);
 		RotatedAxis = Vector3.Normalize(RotatedAxis);
 		SpacePos = GetPerpendicularUnitVector(RotatedAxis) * Projectile.ai[0];
@@ -124,6 +105,23 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, 
 		}
 	}
 
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		Player player = Main.player[Projectile.owner];
+
+		ScreenShaker playerShaker = player.GetModPlayer<ScreenShaker>();
+		float ShakeStrength = 3f;
+		playerShaker.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 240f * ShakeStrength, 10)).RotatedByRandom(6.283);
+		modifiers.Knockback *= 5f;
+		int HitType = ModContent.ProjectileType<TrueDeathSickleHit>();
+		GenerateVFXFromTarget(target, 18);
+		if (player.ownedProjectileCounts[HitType] < 5)
+		{
+			float s;
+			Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, 0, 0, Projectile.owner, 15, Projection2D(SpacePos, Vector2.Zero, 500, out s).ToRotation() + Main.rand.NextFloat(-0.4f, 0.4f));
+		}
+	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(ModContent.BuffType<DeathFlame>(), 1800);
@@ -133,7 +131,7 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, 
 	{
 		for (int i = 0; i < SmoothTrail.Count - 4; i += 4)
 		{
-			Rectangle rectangle = new Rectangle((int)(SmoothTrail[i].X - 40 + Projectile.Center.X), (int)(SmoothTrail[i].Y - 40 + Projectile.Center.Y), 80, 80);
+			Rectangle rectangle = new Rectangle((int)(SmoothTrail[i].X - 60 + Projectile.Center.X), (int)(SmoothTrail[i].Y - 60 + Projectile.Center.Y), 120, 120);
 			if (Rectangle.Intersect(rectangle, targetHitbox) != Rectangle.emptyRectangle)
 			{
 				HitTimes++;
@@ -172,18 +170,21 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, 
 		tDSSB.RotatedAxis = RotatedAxis;
 	}
 
-	public void GenerateVFXFromTarget(NPC target, int frequency, float mulVelocity = 1f)
+	public void GenerateVFXFromTarget(NPC target, int frequency)
 	{
 		for (int g = 0; g < frequency; g++)
 		{
-			var df = new DevilFlameDust
+			var df = new DevilFlame3DSickle_worldCoordDust
 			{
-				velocity = new Vector2(0, Main.rand.NextFloat(4.5f, 9f)).RotatedByRandom(6.283) * mulVelocity,
+				velocity3D = new Vector3(new Vector2(0, Main.rand.NextFloat(6, 9f)).RotatedByRandom(MathHelper.TwoPi), 0),
 				Active = true,
 				Visible = true,
-				position = target.Center,
-				maxTime = Main.rand.Next(12, 30),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(8f, 32f) },
+				position3D = new Vector3(target.Center, 0),
+				rotateAxis = new Vector3(0, 0, 1),
+				scale = Main.rand.NextFloat(6, 12),
+				maxTime = Main.rand.Next(36, 40),
+				ownerWhoAmI = Projectile.owner,
+				ai = new float[] { Main.rand.NextFloat(0, 1f), Main.rand.NextFloat(-0.1f, 0.1f), 0f },
 			};
 			Ins.VFXManager.Add(df);
 		}

@@ -1,10 +1,11 @@
 using Everglow.Commons.DataStructures;
+using Terraria;
 using Terraria.DataStructures;
 using static Everglow.Yggdrasil.CorruptWormHive.Projectiles.TrueDeathSickle.TrueDeathSickle_Blade;
 
 namespace Everglow.Yggdrasil.CorruptWormHive.Projectiles.TrueDeathSickle;
 
-public class TrueDeathSickle_SickleBack : ModProjectile
+public class TrueDeathSickle_RightClick : ModProjectile
 {
 	public override string Texture => ModAsset.TrueDeathSickleHit_Mod;
 
@@ -29,8 +30,19 @@ public class TrueDeathSickle_SickleBack : ModProjectile
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		Projectile.ai[1] += MathHelper.Pi * 20;
-		Projectile.ai[1] %= MathHelper.TwoPi;
+		Projectile.ai[1] = 0;
+		Player player = Main.player[Projectile.owner];
+		Projectile.spriteDirection = player.direction;
+
+		Vector2 v0 = Vector2.Normalize(Main.MouseWorld - player.MountedCenter).RotatedBy(Projectile.ai[1]);
+		RotatedAxis = new Vector3(-v0.Y, v0.X, Projectile.ai[2] * Projectile.spriteDirection);
+		RotatedAxis = Vector3.Normalize(RotatedAxis);
+		SpacePos = GetPerpendicularUnitVector(RotatedAxis) * Projectile.ai[0];
+		SpacePos = RodriguesRotate(SpacePos, RotatedAxis, -1f);
+		if (player.direction == -1)
+		{
+			SpacePos = RodriguesRotate(SpacePos, RotatedAxis, -1.2f);
+		}
 	}
 
 	public override bool ShouldUpdatePosition()
@@ -42,17 +54,16 @@ public class TrueDeathSickle_SickleBack : ModProjectile
 	{
 		Player player = Main.player[Projectile.owner];
 		Projectile.Center = player.MountedCenter + new Vector2(0, -10);
-		RotatedAxis = Vector3.Lerp(RotatedAxis, new Vector3(0, 0, -1), 0.1f);
-		float aimRot = 5.3f;
-		if(Projectile.spriteDirection == 1)
+		float aimRot = -1.3f;
+		if (Projectile.spriteDirection == 1)
 		{
 			aimRot = 1.3f;
 		}
 		Projectile.ai[1] = MathHelper.Lerp(Projectile.ai[1], aimRot, 0.1f);
-		Projectile.ai[0] = MathHelper.Lerp(Projectile.ai[0], 80, 0.1f);
+
 		foreach (Projectile projectile in Main.projectile)
 		{
-			if (projectile.active && (projectile.type == ModContent.ProjectileType<TrueDeathSickle_Blade>() || projectile.type == ModContent.ProjectileType<TrueDeathSickle_RightClick>()))
+			if (projectile.active && projectile.type == ModContent.ProjectileType<TrueDeathSickle_Blade>())
 			{
 				if (projectile.timeLeft > Projectile.timeLeft)
 				{
@@ -60,6 +71,21 @@ public class TrueDeathSickle_SickleBack : ModProjectile
 					return;
 				}
 			}
+		}
+		if (player.controlUseTile)
+		{
+			Projectile.timeLeft = 120;
+			Vector2 v0 = Vector2.Normalize(Main.MouseWorld - player.MountedCenter);
+			Vector3 v1 = new Vector3(-v0.Y, v0.X, Projectile.ai[2] * Projectile.spriteDirection);
+			v1 = Vector3.Normalize(v1);
+			RotatedAxis = Vector3.Lerp(RotatedAxis, v1, 0.01f);
+		}
+		else if(Projectile.timeLeft < 120 - 20f / player.meleeSpeed)
+		{
+			Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Blade>(), (int)(Projectile.damage * 3.6), Projectile.knockBack, player.whoAmI, 250f, 0, Projectile.ai[2]);
+			Vector2 vel = Utils.SafeNormalize(Main.MouseWorld - player.MountedCenter, Vector2.One) * 15f;
+			Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center - vel * 15, vel, ModContent.ProjectileType<TrueDeathSickle_MoonBlade>(), (int)(Projectile.damage * 1.2), Projectile.knockBack, player.whoAmI, 160f, 1.8f, 0);
+			Projectile.active = false;
 		}
 	}
 
