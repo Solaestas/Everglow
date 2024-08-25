@@ -2981,6 +2981,21 @@ Items: {
 		Tooltip: ""
 	}
 
+	BrittleRockSlingshot: {
+		DisplayName: Brittle Rock Slingshot
+		Tooltip: ""
+	}
+
+	HyperockSpear: {
+		DisplayName: Hyperock Spear
+		Tooltip: ""
+	}
+
+	VitalizedRocks: {
+		DisplayName: Vitalized Rocks
+		Tooltip: ""
+	}
+
 	DragonScaleHammer: {
 		DisplayName: Dragon Scale Hammer
 		Tooltip: ""
@@ -3420,6 +3435,9 @@ Projectiles: {
 	CreamChocolateCup_CreamFlow.DisplayName: Cream Chocolate Cup_ Cream Flow
 	FryingPan.DisplayName: Frying Pan
 	GrilledSquidTentacle_proj.DisplayName: Grilled Squid Tentacle_proj
+	NormalAmmo.DisplayName: Normal Ammo
+	NormalHit.DisplayName: Normal Hit
+	StarAmmo.DisplayName: Star Ammo
 	SlashProjectile3D.DisplayName: Slash Projectile3 D
 	HolyCrystalProjectile.DisplayName: Holy Crystal Projectile
 	PlanetBeFall.DisplayName: Planet Be Fall
@@ -3560,8 +3578,6 @@ Projectiles: {
 	JungleSlingshotHit.DisplayName: Jungle Slingshot Hit
 	KSSlingshotHit.DisplayName: K S Slingshot Hit
 	KSSlingshotHitPink.DisplayName: K S Slingshot Hit Pink
-	NormalAmmo.DisplayName: Normal Ammo
-	NormalHit.DisplayName: Normal Hit
 	PalmWoodSlingshot.DisplayName: Palm Wood Slingshot
 	PearlwoodSlingshot.DisplayName: Pearlwood Slingshot
 	RichMahoganySlingshot.DisplayName: Rich Mahogany Slingshot
@@ -3570,7 +3586,6 @@ Projectiles: {
 	SapphireBead.DisplayName: Sapphire Bead
 	SapphireSlingshot.DisplayName: Sapphire Slingshot
 	ShadewoodSlingShot.DisplayName: Shadewood Sling Shot
-	StarAmmo.DisplayName: Star Ammo
 	StarSlingshot.DisplayName: Star Slingshot
 	TopazBead.DisplayName: Topaz Bead
 	TopazSlingshot.DisplayName: Topaz Slingshot
@@ -3883,6 +3898,9 @@ Projectiles: {
 	AmberLiquidProj.DisplayName: Amber Liquid Proj
 	AmberLiquidProj_Explosion.DisplayName: Amber Liquid Proj_ Explosion
 	AmberMagicOrb.DisplayName: Amber Magic Orb
+	BrittleRockSlingshotProj.DisplayName: Brittle Rock Slingshot Proj
+	BrittleRockSlingshotStone.DisplayName: Brittle Rock Slingshot Stone
+	BrittleRockSlingshotStone_Explosion.DisplayName: Brittle Rock Slingshot Stone_ Explosion
 	CyanBullet.DisplayName: Cyan Bullet
 	CyanVineCrossBow_Proj.DisplayName: Cyan Vine Cross Bow_ Proj
 	CyanVineShortsword_Proj.DisplayName: Cyan Vine Shortsword_ Proj
@@ -3892,11 +3910,13 @@ Projectiles: {
 	CyanVineSword_Projectile.DisplayName: Cyan Vine Sword_ Projectile
 	CyanVineThrowingSpear_Proj.DisplayName: Cyan Vine Throwing Spear_ Proj
 	DragonScaleHammerProj.DisplayName: Dragon Scale Hammer Proj
-	HighSpeedStone.DisplayName: High Speed Stone
+	HyperockSpearProj.DisplayName: Hyperock Spear Proj
 	LampFruitCurrent.DisplayName: Lamp Fruit Current
 	LampWoodSword_Projectile.DisplayName: Lamp Wood Sword_ Projectile
 	LightSeed.DisplayName: Light Seed
 	RockArrow.DisplayName: Rock Arrow
+	RockElemental_Stonefragment.DisplayName: Rock Elemental_ Stonefragment
+	RockElemental_ThrowingStone.DisplayName: Rock Elemental_ Throwing Stone
 	RockExplosion_friendly.DisplayName: Rock Explosion_friendly
 	RockSpikeBallista_Proj.DisplayName: Rock Spike Ballista_ Proj
 	SquamousAirProj.DisplayName: Squamous Air Proj
@@ -3906,7 +3926,10 @@ Projectiles: {
 	SquamousRockSpike.DisplayName: Squamous Rock Spike
 	SquamousRollingStone.DisplayName: Squamous Rolling Stone
 	Squamous_HitTile.DisplayName: Squamous_ Hit Tile
-	Stonefragment.DisplayName: Stonefragment
+	VitalizedRocksProj.DisplayName: Vitalized Rocks Proj
+	VitalizedRocksProj_Explosion.DisplayName: Vitalized Rocks Proj_ Explosion
+	VitalizedRocksStone.DisplayName: Vitalized Rocks Stone
+	VitalizedRocksStone_small.DisplayName: Vitalized Rocks Stone_small
 	WindBladeBallHit.DisplayName: Wind Blade Ball Hit
 	YggdrasilAmberLaser_proj.DisplayName: Yggdrasil Amber Laser_proj
 	YggdrasilMoonBlade.DisplayName: Yggdrasil Moon Blade
