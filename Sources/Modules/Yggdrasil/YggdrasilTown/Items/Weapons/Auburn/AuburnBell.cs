@@ -32,7 +32,7 @@ public class AuburnBell : ModItem
 		Item.noMelee = true;
 
 		Item.shootSpeed = 1;
-		Item.shoot = ModContent.ProjectileType<Projectiles.AuburnBellSummon>();
+		Item.shoot = ModContent.ProjectileType<Projectiles.AuburnBellMinion>();
 	}
 
 	public override bool Shoot(
@@ -57,8 +57,8 @@ public class AuburnBell : ModItem
 			type,
 			damage,
 			knockback,
-			player.whoAmI,
-			player.ownedProjectileCounts[type] + 1);
+			Owner: player.whoAmI,
+			ai0: player.ownedProjectileCounts[type] + 1);
 
 		int ai0 = 1;
 		foreach (Projectile proj in Main.projectile)
