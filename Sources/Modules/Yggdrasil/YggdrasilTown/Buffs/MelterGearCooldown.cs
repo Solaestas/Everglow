@@ -1,4 +1,4 @@
-namespace Everglow.Yggdrasil.Furnace.Buffs;
+namespace Everglow.Yggdrasil.YggdrasilTown.Buffs;
 
 public class MelterGearCooldown : ModBuff
 {

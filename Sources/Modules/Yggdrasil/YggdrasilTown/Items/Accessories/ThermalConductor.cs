@@ -1,6 +1,6 @@
 using Terraria.Enums;
 
-namespace Everglow.Yggdrasil.Furnace.Items.Accessories;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 
 public class ThermalConductor : ModItem
 {
@@ -76,7 +76,7 @@ internal class ThermalConductorPlayer : ModPlayer
 						Player.statMana + ThermalConductor.ManaHeal;
 
 				// Show mana heal number
-				Color manaHealColor = new Color(0, 100, 255);
+				var manaHealColor = new Color(0, 100, 255);
 				CombatText.NewText(Player.getRect(), manaHealColor, ThermalConductor.ManaHeal, dramatic: true, dot: false);
 
 				// Add Debuff

@@ -1,8 +1,8 @@
-using Everglow.Yggdrasil.Furnace.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Terraria.DataStructures;
 using Terraria.Enums;
 
-namespace Everglow.Yggdrasil.Furnace.Items.Tools;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Tools;
 
 public class ThermostatRod : ModItem
 {

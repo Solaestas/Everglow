@@ -23,10 +23,29 @@ internal class FeatheredStaff : ModItem
 		Item.mana = 6;
 
 		Item.shoot = ModContent.ProjectileType<Projectiles.FeatheredStaff>();
-		Item.shootSpeed = 12;
+		Item.shootSpeed = 10;
 
 		Item.SetShopValues(
 			ItemRarityColor.Green2,
 			Item.buyPrice(silver: 20));
+	}
+
+	public override bool? UseItem(Player player)
+	{
+		int projectileNumber = 3;
+
+		for (int i = 1; i <= projectileNumber; i++)
+		{
+			Vector2 shootDirection = Vector2.Normalize(Main.MouseWorld - player.position) * Item.shootSpeed;
+			Projectile.NewProjectile(
+				player.GetSource_ItemUse(Item),
+				player.Center,
+				shootDirection.RotatedByRandom(MathHelper.ToRadians(15)),
+				Item.shoot,
+				Item.damage,
+				Item.knockBack,
+				player.whoAmI);
+		}
+		return true;
 	}
 }
