@@ -27,7 +27,7 @@ public class TrueDeathSickle : ModItem
 	{
 		if (base.CanUseItem(player))
 		{
-			if (Main.myPlayer == player.whoAmI && player.itemTime == 0 && player.itemAnimation == 0 && player.ownedProjectileCounts[ModContent.ProjectileType<TrueDeathSickleManager>()] + player.ownedProjectileCounts[ModContent.ProjectileType<TrueDeathSickle_RightClick>()] <= 0)
+			if (Main.myPlayer == player.whoAmI && player.itemTime == 0 && player.itemAnimation == 0 && player.ownedProjectileCounts[ModContent.ProjectileType<TrueDeathSickleManager>()] + player.ownedProjectileCounts[ModContent.ProjectileType<TrueDeathSickle_RightClick>()] + player.ownedProjectileCounts[ModContent.ProjectileType<TrueDeathSickle_Blade>()] <= 0)
 			{
 				if (player.altFunctionUse != 2)
 				{
