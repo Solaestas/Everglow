@@ -43,7 +43,7 @@ class LBloodEffect : ModProjectile
 			AIMpos = Main.projectile[(int)Projectile.ai[0]].Center;
 			for (int f = 0; f < Main.projectile.Length; f++)
 			{
-				if (Main.projectile[f].active && Main.projectile[f].type == ModContent.ProjectileType<LMeteor>())
+				if (Main.projectile[f].active && Main.projectile[f].type == ModContent.ProjectileType<RedLanternMeteor>())
 				{
 					AimProj = f;
 					break;

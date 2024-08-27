@@ -13,7 +13,7 @@ public class GlowingReed : ModTile
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.CoordinateHeights = new int[]
 		{
-			34
+			34,
 		};
 		TileObjectData.newTile.CoordinateWidth = 16;
 		TileObjectData.newTile.DrawYOffset = -16;
@@ -24,15 +24,17 @@ public class GlowingReed : ModTile
 		AddMapEntry(new Color(11, 11, 160), modTranslation);
 		HitSound = SoundID.Grass;
 	}
+
 	public override void RandomUpdate(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
-		if(tile.TileFrameX < 180)
+		if (tile.TileFrameX < 180)
 		{
 			tile.TileFrameX += 90;
 		}
 		base.RandomUpdate(i, j);
 	}
+
 	public override void PlaceInWorld(int i, int j, Item item)
 	{
 		Tile tile = Main.tile[i, j];
@@ -40,10 +42,12 @@ public class GlowingReed : ModTile
 		tile.TileFrameX = frameXStyle;
 		base.PlaceInWorld(i, j, item);
 	}
+
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
 		yield break;
 	}
+
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		return true;

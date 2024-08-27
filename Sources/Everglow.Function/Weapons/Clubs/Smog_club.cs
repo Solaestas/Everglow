@@ -9,17 +9,17 @@ public class Smog_clubPipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.Smog_club;
-		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_flame_0.Value);
-		effect.Value.Parameters["uLine"].SetValue(ModAsset.TrailV.Value);
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_flame_0.Value);
+		effect.Parameters["uLine"].SetValue(ModAsset.TrailV.Value);
 		Ins.Batch.BindTexture<Vertex2D>(ModAsset.Smog_club_Heatmap.Value);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearClamp, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
@@ -29,10 +29,12 @@ public class Smog_clubPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(Smog_clubPipeline))]
 public class Smog_club_front : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public List<Vector2> oldPos = new List<Vector2>();
 	public Vector2 position;
 	public Vector2 velocity;
@@ -41,16 +43,25 @@ public class Smog_club_front : Visual
 	public float maxTime;
 	public float scale;
 	public float alpha;
-	public Smog_club_front() { }
+
+	public Smog_club_front()
+	{
+	}
 
 	public override void Update()
 	{
 		oldPos.Add(position);
 		if (oldPos.Count > 200)
+		{
 			oldPos.RemoveAt(0);
+		}
+
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		velocity *= 0.9f;
 		position += velocity;
 	}
@@ -60,8 +71,6 @@ public class Smog_club_front : Visual
 		Vector2[] pos = oldPos.Reverse<Vector2>().ToArray();
 		float fx = timer / maxTime;
 		int len = pos.Length;
-		if (len <= 2)
-			return;
 		var bars = new List<Vertex2D>();
 		for (int i = 1; i < len; i++)
 		{
@@ -72,9 +81,17 @@ public class Smog_club_front : Visual
 			bars.Add(oldPos[i] + normal * scale, lightColorWithPos, new Vector3(0, (i + 15 - len) / 75f + timer / 15000f, fx - width * 0.4f));
 			bars.Add(oldPos[i] - normal * scale, lightColorWithPos, new Vector3(1, (i + 15 - len) / 75f + timer / 15000f, fx - width * 0.4f));
 		}
-		if (bars.Count > 0)
+		if (len <= 2)
 		{
-			Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+			for (int i = 1; i < 3; i++)
+			{
+
+				var lightColorWithPos = new Color(1f, 1f, 1f, 0);
+				bars.Add(position, lightColorWithPos, new Vector3(0, (i + 15 - len) / 75f + timer / 15000f, fx));
+				bars.Add(position, lightColorWithPos, new Vector3(1, (i + 15 - len) / 75f + timer / 15000f, fx));
+			}
 		}
+
+		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
 }
