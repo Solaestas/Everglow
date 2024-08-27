@@ -15,11 +15,9 @@ Tiles: {
 	BlackStarShrub.MapEntry: Black Star Shrub
 	BlackStarShrubSmall.MapEntry: Black Star Shrub Small
 	BlackVine.MapEntry: Black Vine
-	BlueBlossom.MapEntry: Blue Blossom
 	DarkCocoonGrass.MapEntry: Dark Cocoon Grass
 	FireflyPiranhaBanner.MapEntry: Firefly Piranha Banner
 	GlowingReed.MapEntry: Glowing Reed
-	LampLotus.MapEntry: Lamp Lotus
 	MothWorldDoor.MapEntry: Moth World Door
 	GlowingDrop.MapEntry: Glowing Drop
 	GlowWoodBathtub.MapEntry: Glow Wood Bathtub
@@ -726,6 +724,11 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.Petrification.Description
 	}
 
+	TuskCursed: {
+		DisplayName: Tusk Cursed
+		Description: Mods.Everglow.Buffs.TuskCursed.Description
+	}
+
 	TuskStaff: {
 		DisplayName: Tusk Staff
 		Description: Mods.Everglow.Buffs.TuskStaff.Description
@@ -1133,6 +1136,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	SoundIDPlayItem: {
+		DisplayName: Sound I D Play Item
+		Tooltip: ""
+	}
+
 	TestSkeletonOwl: {
 		DisplayName: Test Skeleton Owl
 		Tooltip: ""
@@ -1373,6 +1381,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	TileDataReader: {
+		DisplayName: Tile Data Reader
+		Tooltip: ""
+	}
+
 	VortexVanquisherItem: {
 		DisplayName: Vortex Vanquisher Item
 		Tooltip: ""
@@ -1488,11 +1501,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	Tester: {
-		DisplayName: Tester
-		Tooltip: ""
-	}
-
 	BloodMossStone: {
 		DisplayName: Blood Moss Stone
 		Tooltip: ""
@@ -1508,8 +1516,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	TuskFlesh: {
-		DisplayName: Tusk Flesh
+	TuskFlesh_Item: {
+		DisplayName: Tusk Flesh_ Item
 		Tooltip: ""
 	}
 
@@ -1638,6 +1646,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	DarkCocoonWithPetal: {
+		DisplayName: Dark Cocoon With Petal
+		Tooltip: ""
+	}
+
 	EvilCocoon: {
 		DisplayName: Evil Cocoon
 		Tooltip: ""
@@ -1648,8 +1661,8 @@ Items: {
 		Tooltip: ""
 	}
 
-	FireflyMoss: {
-		DisplayName: Firefly Moss
+	FireflyMoss_Item: {
+		DisplayName: Firefly Moss_ Item
 		Tooltip: ""
 	}
 
@@ -1663,18 +1676,13 @@ Items: {
 		Tooltip: ""
 	}
 
-	GlowCrystal: {
-		DisplayName: Glow Crystal
-		Tooltip: ""
-	}
-
 	GlowingFirefly: {
 		DisplayName: Glowing Firefly
 		Tooltip: ""
 	}
 
-	GlowingPedal: {
-		DisplayName: Glowing Pedal
+	GlowingPetal: {
+		DisplayName: Glowing Petal
 		Tooltip: ""
 	}
 
@@ -2173,158 +2181,158 @@ Items: {
 		Tooltip: ""
 	}
 
-	AdamantiteClub: {
-		DisplayName: Adamantite Club
+	AdamantiteClub_Item: {
+		DisplayName: Adamantite Club_ Item
 		Tooltip: ""
 	}
 
-	BorealWoodClub: {
-		DisplayName: Boreal Wood Club
+	BorealWoodClub_Item: {
+		DisplayName: Boreal Wood Club_ Item
 		Tooltip: ""
 	}
 
-	CactusClub: {
-		DisplayName: Cactus Club
+	CactusClub_Item: {
+		DisplayName: Cactus Club_ Item
 		Tooltip: ""
 	}
 
-	ChlorophyteClub: {
-		DisplayName: Chlorophyte Club
+	ChlorophyteClub_Item: {
+		DisplayName: Chlorophyte Club_ Item
 		Tooltip: ""
 	}
 
-	CobaltClub: {
-		DisplayName: Cobalt Club
+	CobaltClub_Item: {
+		DisplayName: Cobalt Club_ Item
 		Tooltip: ""
 	}
 
-	CopperClub: {
-		DisplayName: Copper Club
+	CopperClub_Item: {
+		DisplayName: Copper Club_ Item
 		Tooltip: ""
 	}
 
-	CorruptClub: {
-		DisplayName: Corrupt Club
+	CorruptClub_Item: {
+		DisplayName: Corrupt Club_ Item
 		Tooltip: ""
 	}
 
-	CrimsonClub: {
-		DisplayName: Crimson Club
+	CrimsonClub_Item: {
+		DisplayName: Crimson Club_ Item
 		Tooltip: ""
 	}
 
-	CrystalClub: {
-		DisplayName: Crystal Club
+	CrystalClub_Item: {
+		DisplayName: Crystal Club_ Item
 		Tooltip: ""
 	}
 
-	CurseClub: {
-		DisplayName: Curse Club
+	CurseClub_Item: {
+		DisplayName: Curse Club_ Item
 		Tooltip: ""
 	}
 
-	EbonwoodClub: {
-		DisplayName: Ebonwood Club
+	EbonwoodClub_Item: {
+		DisplayName: Ebonwood Club_ Item
 		Tooltip: ""
 	}
 
-	GoldClub: {
-		DisplayName: Gold Club
+	GoldClub_Item: {
+		DisplayName: Gold Club_ Item
 		Tooltip: ""
 	}
 
-	IchorClub: {
-		DisplayName: Ichor Club
+	IchorClub_Item: {
+		DisplayName: Ichor Club_ Item
 		Tooltip: ""
 	}
 
-	IronClub: {
-		DisplayName: Iron Club
+	IronClub_Item: {
+		DisplayName: Iron Club_ Item
 		Tooltip: ""
 	}
 
-	LeadClub: {
-		DisplayName: Lead Club
+	LeadClub_Item: {
+		DisplayName: Lead Club_ Item
 		Tooltip: ""
 	}
 
-	MeteorClub: {
-		DisplayName: Meteor Club
+	MeteorClub_Item: {
+		DisplayName: Meteor Club_ Item
 		Tooltip: ""
 	}
 
-	MythrilClub: {
-		DisplayName: Mythril Club
+	MythrilClub_Item: {
+		DisplayName: Mythril Club_ Item
 		Tooltip: ""
 	}
 
-	OrichalcumClub: {
-		DisplayName: Orichalcum Club
+	OrichalcumClub_Item: {
+		DisplayName: Orichalcum Club_ Item
 		Tooltip: ""
 	}
 
-	PalladiumClub: {
-		DisplayName: Palladium Club
+	PalladiumClub_Item: {
+		DisplayName: Palladium Club_ Item
 		Tooltip: ""
 	}
 
-	PalmWoodClub: {
-		DisplayName: Palm Wood Club
+	PalmWoodClub_Item: {
+		DisplayName: Palm Wood Club_ Item
 		Tooltip: ""
 	}
 
-	PearlwoodClub: {
-		DisplayName: Pearlwood Club
+	PearlwoodClub_Item: {
+		DisplayName: Pearlwood Club_ Item
 		Tooltip: ""
 	}
 
-	PlatinumClub: {
-		DisplayName: Platinum Club
+	PlatinumClub_Item: {
+		DisplayName: Platinum Club_ Item
 		Tooltip: ""
 	}
 
-	RichMahoganyClub: {
-		DisplayName: Rich Mahogany Club
+	RichMahoganyClub_Item: {
+		DisplayName: Rich Mahogany Club_ Item
 		Tooltip: ""
 	}
 
-	ShadewoodClub: {
-		DisplayName: Shadewood Club
+	ShadewoodClub_Item: {
+		DisplayName: Shadewood Club_ Item
 		Tooltip: ""
 	}
 
-	SilverClub: {
-		DisplayName: Silver Club
+	SilverClub_Item: {
+		DisplayName: Silver Club_ Item
 		Tooltip: ""
 	}
 
-	SpikeClub: {
-		DisplayName: Spike Club
+	SpikeClub_Item: {
+		DisplayName: Spike Club_ Item
 		Tooltip: ""
 	}
 
-	StarDancer: {
-		DisplayName: Star Dancer
+	StarDancer_Item: {
+		DisplayName: Star Dancer_ Item
 		Tooltip: ""
 	}
 
-	TinClub: {
-		DisplayName: Tin Club
+	TinClub_Item: {
+		DisplayName: Tin Club_ Item
 		Tooltip: ""
 	}
 
-	TitaniumClub: {
-		DisplayName: Titanium Club
+	TitaniumClub_Item: {
+		DisplayName: Titanium Club_ Item
 		Tooltip: ""
 	}
 
-	TungstenClub: {
-		DisplayName: Tungsten Club
+	TungstenClub_Item: {
+		DisplayName: Tungsten Club_ Item
 		Tooltip: ""
 	}
 
-	WoodenClub: {
-		DisplayName: Wooden Club
+	WoodenClub_Item: {
+		DisplayName: Wooden Club_ Item
 		Tooltip: ""
 	}
 
@@ -3281,26 +3289,8 @@ Items: {
 
 NPCs: {
 	RapierMaster_Boss.DisplayName: Rapier Master_ Boss
-	TuskKillEffect.DisplayName: Tusk Kill Effect
 	BloodTusk.DisplayName: Blood Tusk
-	BloodyMouth1.DisplayName: Bloody Mouth1
-	BloodyMouth2.DisplayName: Bloody Mouth2
-	CrimsonTusk.DisplayName: Crimson Tusk
-	CrimsonTusk1.DisplayName: Crimson Tusk1
-	CrimsonTuskControlable.DisplayName: Crimson Tusk Controlable
-	CrimsonTuskFireWork.DisplayName: Crimson Tusk Fire Work
-	HugeMouth.DisplayName: Huge Mouth
-	LargeTusk.DisplayName: Large Tusk
-	LargeTusk2.DisplayName: Large Tusk2
-	LittleMouth.DisplayName: Little Mouth
-	LittleTusk.DisplayName: Little Tusk
-	TuskCooling.DisplayName: Tusk Cooling
-	TuskPoolWave.DisplayName: Tusk Pool Wave
-	TuskRedLight.DisplayName: Tusk Red Light
-	TuskWallLeft.DisplayName: Tusk Wall Left
-	TuskWallRight.DisplayName: Tusk Wall Right
-	TuskWave.DisplayName: Tusk Wave
-	TuskWaveHuge.DisplayName: Tusk Wave Huge
+	Living_Jawbone.DisplayName: Living_ Jawbone
 	GlowingHeal.DisplayName: Glowing Heal
 	BlackStarFruit.DisplayName: Black Star Fruit
 	CentipedeHead.DisplayName: Centipede Head
@@ -3316,6 +3306,10 @@ NPCs: {
 	CorruptMoth.DisplayName: Corrupt Moth
 	EvilPack.DisplayName: Evil Pack
 	SummonedButterfly.DisplayName: Summoned Butterfly
+	ExplosiveLantern_growing.DisplayName: Explosive Lantern_growing
+	BloodLanternGhost.DisplayName: Blood Lantern Ghost
+	BombLantern.DisplayName: Bomb Lantern
+	CylindricalLantern.DisplayName: Cylindrical Lantern
 	FloatLantern.DisplayName: Float Lantern
 	RedPackBomber.DisplayName: Red Pack Bomber
 	LanternGhostKing.DisplayName: Lantern Ghost King
@@ -3329,12 +3323,12 @@ NPCs: {
 		DisplayName: Acytaea
 
 		TownNPCMood: {
-			Content: 我很满足。
-			NoHome: 我讨厌没有家。
-			FarFromHome: 我离家太远了。
-			LoveSpace: 我非常喜欢有这么大的空间。
-			DislikeCrowded: 我不喜欢这么拥挤。
-			HateCrowded: 我讨厌这么拥挤。
+			Content: I am content.
+			NoHome: I hate not having a home.
+			FarFromHome: I am too far from home.
+			LoveSpace: I love having so much space.
+			DislikeCrowded: I dislike how crowded I am.
+			HateCrowded: I hate how crowded I am.
 			LikeNPC_Princess: I like {NPCName}.
 			Princess_LovesNPC: I like {NPCName}.
 		}
@@ -3444,6 +3438,8 @@ Projectiles: {
 	NormalAmmo.DisplayName: Normal Ammo
 	NormalHit.DisplayName: Normal Hit
 	StarAmmo.DisplayName: Star Ammo
+	SlashProjectile3D.DisplayName: Slash Projectile3 D
+	HolyCrystalProjectile.DisplayName: Holy Crystal Projectile
 	PlanetBeFall.DisplayName: Planet Be Fall
 	PlanetBefallExplosion.DisplayName: Planet Befall Explosion
 	PlanetBefallArray.DisplayName: Planet Befall Array
@@ -3463,15 +3459,22 @@ Projectiles: {
 	PineSprite.DisplayName: Pine Sprite
 	PineStab_Pro.DisplayName: Pine Stab_ Pro
 	PineStab_Pro_Stab.DisplayName: Pine Stab_ Pro_ Stab
-	CrimsonTuskProj.DisplayName: Crimson Tusk Proj
-	CrimsonTuskProjGra.DisplayName: Crimson Tusk Proj Gra
-	EarthTusk.DisplayName: Earth Tusk
-	EarthTuskHostile.DisplayName: Earth Tusk Hostile
-	TuskCrack.DisplayName: Tusk Crack
+	BloodFountain.DisplayName: Blood Fountain
+	BloodTuskLongSpice.DisplayName: Blood Tusk Long Spice
+	BloodTusk_Sleep_Crack.DisplayName: Blood Tusk_ Sleep_ Crack
+	BloodTusk_Tentacle.DisplayName: Blood Tusk_ Tentacle
+	Living_Jawbone_Huge.DisplayName: Living_ Jawbone_ Huge
+	Living_Jawbone_Huge_ground.DisplayName: Living_ Jawbone_ Huge_ground
+	Living_Jawbone_Huge_ground_Wave.DisplayName: Living_ Jawbone_ Huge_ground_ Wave
+	TuskBloodPool.DisplayName: Tusk Blood Pool
+	TuskBloodPool_close.DisplayName: Tusk Blood Pool_close
+	TuskBloodPool_open.DisplayName: Tusk Blood Pool_open
 	TuskCurse.DisplayName: Tusk Curse
 	TuskSpice.DisplayName: Tusk Spice
-	TuskSpiceBlack.DisplayName: Tusk Spice Black
-	TuskSpicePro.DisplayName: Tusk Spice Pro
+	TuskSpice_WithGravity.DisplayName: Tusk Spice_ With Gravity
+	TuskWall_Wave.DisplayName: Tusk Wall_ Wave
+	Tusk_ground.DisplayName: Tusk_ground
+	Tusk_ground_little.DisplayName: Tusk_ground_little
 	BloodyBoneYoyo.DisplayName: Bloody Bone Yoyo
 	SpineGun.DisplayName: Spine Gun
 	SplieSpineBullet.DisplayName: Splie Spine Bullet
@@ -3480,7 +3483,6 @@ Projectiles: {
 	ToothKnife.DisplayName: Tooth Knife
 	ToothMagic.DisplayName: Tooth Magic
 	ToothMagicBall.DisplayName: Tooth Magic Ball
-	ToothMagicHit.DisplayName: Tooth Magic Hit
 	ToothMagicSplit.DisplayName: Tooth Magic Split
 	ToothMagicSplit2.DisplayName: Tooth Magic Split2
 	ToothSpear_proj.DisplayName: Tooth Spear_proj
@@ -3500,9 +3502,9 @@ Projectiles: {
 	ButterflyDreamFriendly.DisplayName: Butterfly Dream Friendly
 	CorMoth4DProj.DisplayName: Cor Moth4 D Proj
 	CorruptDust.DisplayName: Corrupt Dust
-	DarkEffect.DisplayName: Dark Effect
 	DarkFan.DisplayName: Dark Fan
 	DarkFanFly.DisplayName: Dark Fan Fly
+	DreamWeaverBall.DisplayName: Dream Weaver Ball
 	DreamWeaver_proj.DisplayName: Dream Weaver_proj
 	EvilChrysalis.DisplayName: Evil Chrysalis
 	EvilChrysalisRightClick.DisplayName: Evil Chrysalis Right Click
@@ -3524,7 +3526,6 @@ Projectiles: {
 	MothBall.DisplayName: Moth Ball
 	MothBallExplosion.DisplayName: Moth Ball Explosion
 	MothBulletExplosion.DisplayName: Moth Bullet Explosion
-	MothGrey.DisplayName: Moth Grey
 	MothMagicArray.DisplayName: Moth Magic Array
 	MothMiddleBullet.DisplayName: Moth Middle Bullet
 	MothYoyoProjectile.DisplayName: Moth Yoyo Projectile
@@ -3544,6 +3545,8 @@ Projectiles: {
 	DreamWeaverArray.DisplayName: Dream Weaver Array
 	DreamWeaverBook.DisplayName: Dream Weaver Book
 	DreamWeaverII.DisplayName: Dream Weaver I I
+	DreamWeaver_hit.DisplayName: Dream Weaver_hit
+	DreamWeaver_Rain.DisplayName: Dream Weaver_ Rain
 	MothSummonEffect.DisplayName: Moth Summon Effect
 	LilyHarpNote.DisplayName: Lily Harp Note
 	LilyHarpNoteKill.DisplayName: Lily Harp Note Kill
@@ -3596,6 +3599,7 @@ Projectiles: {
 	GlowMoonBlade.DisplayName: Glow Moon Blade
 	GlowMoonBlade_ash.DisplayName: Glow Moon Blade_ash
 	Glow_Fall.DisplayName: Glow_ Fall
+	Glow_Fall_Explosion.DisplayName: Glow_ Fall_ Explosion
 	GoldRound.DisplayName: Gold Round
 	GoldRoundYoyo.DisplayName: Gold Round Yoyo
 	MeleeHit.DisplayName: Melee Hit
@@ -3613,6 +3617,9 @@ Projectiles: {
 	XiaoBlackWave.DisplayName: Xiao Black Wave
 	XiaoHit.DisplayName: Xiao Hit
 	AdamantiteClub.DisplayName: Adamantite Club
+	AdamantiteClub_round.DisplayName: Adamantite Club_round
+	AdamantiteClub_round_slash.DisplayName: Adamantite Club_round_slash
+	AdamantiteClub_slash.DisplayName: Adamantite Club_slash
 	AdamantiteClub_smash.DisplayName: Adamantite Club_smash
 	BorealWoodClub.DisplayName: Boreal Wood Club
 	BorealWoodClub_smash.DisplayName: Boreal Wood Club_smash
@@ -3625,6 +3632,7 @@ Projectiles: {
 	ChlorophyteClub_VFX.DisplayName: Chlorophyte Club_ V F X
 	ChlorophyteClub_VFX_2.DisplayName: Chlorophyte Club_ V F X_2
 	CobaltClub.DisplayName: Cobalt Club
+	CobaltClub_falling.DisplayName: Cobalt Club_falling
 	CobaltClub_smash.DisplayName: Cobalt Club_smash
 	CopperClub.DisplayName: Copper Club
 	CopperClub_smash.DisplayName: Copper Club_smash
@@ -3654,9 +3662,14 @@ Projectiles: {
 	MeteorClub_smash.DisplayName: Meteor Club_smash
 	MythrilClub.DisplayName: Mythril Club
 	MythrilClub_smash.DisplayName: Mythril Club_smash
+	MythrilClub_smashMagicBall.DisplayName: Mythril Club_smash Magic Ball
+	MythrilClub_smash_explosion.DisplayName: Mythril Club_smash_explosion
 	OrichalcumClub.DisplayName: Orichalcum Club
 	OrichalcumClub_smash.DisplayName: Orichalcum Club_smash
+	OrichalcumPedal.DisplayName: Orichalcum Pedal
+	OrichalcumPedal_slash.DisplayName: Orichalcum Pedal_slash
 	PalladiumClub.DisplayName: Palladium Club
+	PalladiumClub_small.DisplayName: Palladium Club_small
 	PalladiumClub_smash.DisplayName: Palladium Club_smash
 	PalmWoodClub.DisplayName: Palm Wood Club
 	PalmWoodClub_smash.DisplayName: Palm Wood Club_smash
@@ -3675,10 +3688,14 @@ Projectiles: {
 	SpikeClub_smash.DisplayName: Spike Club_smash
 	StarDancer.DisplayName: Star Dancer
 	StarDancer_smash.DisplayName: Star Dancer_smash
+	StarDancer_starProj.DisplayName: Star Dancer_star Proj
+	StarDancer_starProj2.DisplayName: Star Dancer_star Proj2
 	TinClub_smash.DisplayName: Tin Club_smash
 	TinClub.DisplayName: Tin Club
 	TitaniumClub.DisplayName: Titanium Club
 	TitaniumClub_smash.DisplayName: Titanium Club_smash
+	TitaniumClub_smash_explosion.DisplayName: Titanium Club_smash_explosion
+	Titanium_Fragment.DisplayName: Titanium_ Fragment
 	TungstenClub.DisplayName: Tungsten Club
 	TungstenClub_smash.DisplayName: Tungsten Club_smash
 	WoodenClub.DisplayName: Wooden Club
@@ -3700,6 +3717,9 @@ Projectiles: {
 	FlameShoot.DisplayName: Flame Shoot
 	GiantFireFeather.DisplayName: Giant Fire Feather
 	GiantFireFeatherExplosion.DisplayName: Giant Fire Feather Explosion
+	CobaltClub_falling_Shoot.DisplayName: Cobalt Club_falling_ Shoot
+	MythrilClub_Shoot.DisplayName: Mythril Club_ Shoot
+	MythrilClub_smash_explosion2.DisplayName: Mythril Club_smash_explosion2
 	BoneFeatherMagicArray.DisplayName: Bone Feather Magic Array
 	BoneFeatherMagicBook.DisplayName: Bone Feather Magic Book
 	BoneFeather_spine.DisplayName: Bone Feather_spine
@@ -3738,43 +3758,29 @@ Projectiles: {
 	Firework12Inches.DisplayName: Firework12 Inches
 	Firework6Inches.DisplayName: Firework6 Inches
 	FireworkSubExplosion.DisplayName: Firework Sub Explosion
+	FlameCylinder.DisplayName: Flame Cylinder
 	LBloodEffect.DisplayName: L Blood Effect
-	LBloodEffectGra.DisplayName: L Blood Effect Gra
-	LMeteor.DisplayName: L Meteor
-	RainbowWave.DisplayName: Rainbow Wave
+	RedLanternMeteor.DisplayName: Red Lantern Meteor
 	RisingFirework.DisplayName: Rising Firework
 	DarkLantern.DisplayName: Dark Lantern
 	DarkLantern3.DisplayName: Dark Lantern3
 	DarkLanternBomb2.DisplayName: Dark Lantern Bomb2
 	DarkLanternBombExplosion.DisplayName: Dark Lantern Bomb Explosion
 	DarkLanternBombExplosion_II.DisplayName: Dark Lantern Bomb Explosion_ I I
-	ExplodeLantern.DisplayName: Explode Lantern
-	floatLantern.DisplayName: float Lantern
-	floatLantern2.DisplayName: float Lantern2
-	floatLantern3.DisplayName: float Lantern3
-	floatLantern4.DisplayName: float Lantern4
-	floatLantern5.DisplayName: float Lantern5
-	GoldLantern.DisplayName: Gold Lantern
+	ExplosiveLantern.DisplayName: Explosive Lantern
+	FloatLantern_style2.DisplayName: Float Lantern_style2
+	FloatLantern_style3.DisplayName: Float Lantern_style3
+	FloatLantern_style4.DisplayName: Float Lantern_style4
 	GoldLanternLine.DisplayName: Gold Lantern Line
-	GoldLanternLine2.DisplayName: Gold Lantern Line2
 	GoldLanternLine3.DisplayName: Gold Lantern Line3
-	GoldLanternLine4.DisplayName: Gold Lantern Line4
-	GoldLanternLine5.DisplayName: Gold Lantern Line5
-	GoldLanternLine6.DisplayName: Gold Lantern Line6
-	GoldLanternLine7.DisplayName: Gold Lantern Line7
-	GoldLanternLine8.DisplayName: Gold Lantern Line8
-	GoldLanternRay.DisplayName: Gold Lantern Ray
-	GoldLanternStar.DisplayName: Gold Lantern Star
-	Redlight.DisplayName: Redlight
-	StrikePlayer.DisplayName: Strike Player
+	LanternFlow.DisplayName: Lantern Flow
+	LanternFlowLine.DisplayName: Lantern Flow Line
 	BlueFlame0.DisplayName: Blue Flame0
 	BlueFlame0Little.DisplayName: Blue Flame0 Little
 	BlueFlame0LittleSoon.DisplayName: Blue Flame0 Little Soon
 	BlueFlame1Boom.DisplayName: Blue Flame1 Boom
-	BlueStarTrail.DisplayName: Blue Star Trail
 	BrownFlame0.DisplayName: Brown Flame0
 	BrownFlame0Little.DisplayName: Brown Flame0 Little
-	GoldDashLine.DisplayName: Gold Dash Line
 	GreenFlame0.DisplayName: Green Flame0
 	GreenFlame0Little.DisplayName: Green Flame0 Little
 	GreenFlame0Split.DisplayName: Green Flame0 Split

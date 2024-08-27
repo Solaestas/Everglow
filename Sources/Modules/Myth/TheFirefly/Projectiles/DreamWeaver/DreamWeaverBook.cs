@@ -16,6 +16,7 @@ internal class DreamWeaverBook : MagicBookProjectile
 		TexCoordRight = new Vector2(34, 9);
 		effectColor = new Color(0, 0, 55, 175);
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		GlowTexture = ModAsset.DreamWeaverFrontGlow.Value;
@@ -25,32 +26,29 @@ internal class DreamWeaverBook : MagicBookProjectile
 		FrontTexture = ModAsset.DreamWeaverFront.Value;
 		base.OnSpawn(source);
 	}
+
+	public int UseCount = 0;
+
 	public override void SpecialAI()
 	{
 		Player player = Main.player[Projectile.owner];
 		if (player.itemTime <= 0 || player.HeldItem.type != ModContent.ItemType<TheFirefly.Items.Weapons.DreamWeaver>())
 		{
 			if (timer < 0)
+			{
 				Projectile.Kill();
+			}
 		}
 		if (player.itemTime == 2 && player.HeldItem.type == ItemType)
 		{
-			if (Main.mouseRight)
+			Vector2 velocity = (Main.MouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * player.HeldItem.shootSpeed * 3.3f;
+			UseCount++;
+			if (UseCount >= 6)
 			{
-				player.statMana -= 7;
-				for (int d = 0; d < 2; d++)
-				{
-					Vector2 velocity = (Main.MouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)) * player.HeldItem.shootSpeed * 1.3f;
-					var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<DreamWeaverII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
-					p.CritChance = player.GetWeaponCrit(player.HeldItem);
-				}
+				UseCount = 0;
 			}
-			else
-			{
-				Vector2 velocity = (Main.MouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * player.HeldItem.shootSpeed * 1.3f;
-				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<DreamWeaverII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
-				p.CritChance = player.GetWeaponCrit(player.HeldItem);
-			}
+			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<DreamWeaverII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+			p.CritChance = player.GetWeaponCrit(player.HeldItem);
 		}
 	}
 }

@@ -30,12 +30,12 @@ public class MothLand : ModSystem
 	public static void BuildShabbyCastle()
 	{
 		Point16 sbpp = ShabbyPylonPos();
-		string Path = "MapIOResources/ShabbyCastle0" + (Main.rand.Next(7) + 1) + ".mapio";
+		string Path = "MapIOResources/ShabbyCastle0" + (WorldGen.genRand.Next(7) + 1) + ".mapio";
 		var mapIO = new Commons.TileHelper.MapIO(sbpp.X, sbpp.Y);
 		int Height = mapIO.ReadHeight(ModIns.Mod.GetFileStream("Myth/" + Path));
 		QuickBuild(sbpp.X, sbpp.Y - Height / 2, Path);
 
-		var pylonBottom = new Point(sbpp.X + Main.rand.Next(8, 16), sbpp.Y - Height / 2 + 8);
+		var pylonBottom = new Point(sbpp.X + WorldGen.genRand.Next(8, 16), sbpp.Y - Height / 2 + 8);
 		ushort PylonType = (ushort)ModContent.TileType<ShabbyPylon>();
 		PylonSystem.Instance.shabbyPylonEnable = false;
 		for (int a = 0; a < 12; a++)
@@ -153,7 +153,7 @@ public class MothLand : ModSystem
 							break;
 
 						case 1:
-							if (pixel.R == 56 && pixel.G == 48 && pixel.B == 61)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(56, 48, 61))
+							if (pixel.R == 56 && pixel.G == 48 && pixel.B == 61)
 							{
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 								{
@@ -161,7 +161,7 @@ public class MothLand : ModSystem
 									tile.HasTile = true;
 								}
 							}
-							if (pixel.R == 255 && pixel.G == 0 && pixel.B == 0)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(56, 48, 61))
+							if (pixel.R == 255 && pixel.G == 0 && pixel.B == 0)
 							{
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 								{
@@ -169,7 +169,7 @@ public class MothLand : ModSystem
 									tile.HasTile = true;
 								}
 							}
-							if (pixel.R == 35 && pixel.G == 49 && pixel.B == 122)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(56, 48, 61))
+							if (pixel.R == 35 && pixel.G == 49 && pixel.B == 122)
 							{
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 								{
@@ -177,7 +177,15 @@ public class MothLand : ModSystem
 									tile.HasTile = true;
 								}
 							}
-							if (pixel.R == 0 && pixel.G == 0 && pixel.B == 255)// pixel == new SixLabors.ImageSharp.PixelFormats.Rgb24(0, 0, 255))
+							if (pixel.R == 112 && pixel.G == 130 && pixel.B == 175)
+							{
+								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+								{
+									tile.TileType = (ushort)ModContent.TileType<DarkCocoon_petal>();
+									tile.HasTile = true;
+								}
+							}
+							if (pixel.R == 0 && pixel.G == 0 && pixel.B == 255)
 							{
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 								{
@@ -190,16 +198,16 @@ public class MothLand : ModSystem
 							}
 							if (pixel.R == 28 && pixel.G == 198 && pixel.B == 255)
 							{
-								LargeFireBulb.PlaceMe(x + a, y + b, (ushort)Main.rand.Next(16));
+								LargeFireBulb.PlaceMe(x + a, y + b, (ushort)WorldGen.genRand.Next(16));
 							}
 							if (pixel.R == 28 && pixel.G == 132 && pixel.B == 255)
 							{
-								LargeFireBulb.PlaceMe(x + a, y + b, (ushort)Main.rand.Next(4));
+								LargeFireBulb.PlaceMe(x + a, y + b, (ushort)WorldGen.genRand.Next(2));
 							}
 							break;
 
 						case 2:
-							if (pixel.R == 0 && pixel.G == 0 && pixel.B == 5)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(0, 0, 5))
+							if (pixel.R == 0 && pixel.G == 0 && pixel.B == 5)
 							{
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 								{
@@ -365,13 +373,13 @@ public class MothLand : ModSystem
 	/// <returns></returns>
 	private static Point16 CocoonPos()
 	{
-		int PoX = Main.rand.Next(300, Main.maxTilesX - 600);
-		int PoY = Main.rand.Next(500, Main.maxTilesY - 700);
+		int PoX = WorldGen.genRand.Next(300, Main.maxTilesX - 600);
+		int PoY = WorldGen.genRand.Next(500, Main.maxTilesY - 700);
 
 		while (GetCrash(PoX, PoY) > 0 || GetMergeToJungle(PoX, PoY) <= 10)
 		{
-			PoX = Main.rand.Next(300, Main.maxTilesX - 600);
-			PoY = Main.rand.Next(500, Main.maxTilesY - 700);
+			PoX = WorldGen.genRand.Next(300, Main.maxTilesX - 600);
+			PoY = WorldGen.genRand.Next(500, Main.maxTilesY - 700);
 		}
 		return new Point16(PoX, PoY);
 	}
@@ -382,12 +390,12 @@ public class MothLand : ModSystem
 	/// <returns></returns>
 	private static Point16 ShabbyPylonPos()
 	{
-		int PoX = (int)(Main.rand.Next(80, 160) * (Main.rand.Next(2) - 0.5f) * 2 - 20 + Main.maxTilesX / 2);
+		int PoX = (int)(WorldGen.genRand.Next(80, 160) * (WorldGen.genRand.Next(2) - 0.5f) * 2 - 20 + Main.maxTilesX / 2);
 		int PoY = 160;
 
 		while (!IsTileSmooth(new Point(PoX, PoY)))
 		{
-			PoX = (int)(Main.rand.Next(80, 240) * (Main.rand.Next(2) - 0.5f) * 2 - 20 + Main.maxTilesX / 2);
+			PoX = (int)(WorldGen.genRand.Next(80, 240) * (WorldGen.genRand.Next(2) - 0.5f) * 2 - 20 + Main.maxTilesX / 2);
 			for (int y = 160; y < Main.maxTilesY / 3; y++)
 			{
 				if (Main.tile[PoX, y].HasTile && Main.tile[PoX, y].TileType != TileID.Trees)
@@ -456,27 +464,27 @@ public class MothLand : ModSystem
 			return;
 		}
 
-		int Height = Main.rand.Next(7, height);
+		int Height = WorldGen.genRand.Next(7, height);
 
 		for (int g = 0; g < Height; g++)
 		{
 			Tile tile = Main.tile[i, j - g];
 			if (g > 3)
 			{
-				if (Main.rand.NextBool(5))
+				if (WorldGen.genRand.NextBool(5))
 				{
 					Tile tileLeft = Main.tile[i - 1, j - g];
 					tileLeft.TileType = (ushort)ModContent.TileType<FluorescentTree>();
 					tileLeft.TileFrameY = 4;
-					tileLeft.TileFrameX = (short)Main.rand.Next(4);
+					tileLeft.TileFrameX = (short)WorldGen.genRand.Next(4);
 					tileLeft.HasTile = true;
 				}
-				if (Main.rand.NextBool(5))
+				if (WorldGen.genRand.NextBool(5))
 				{
 					Tile tileRight = Main.tile[i + 1, j - g];
 					tileRight.TileType = (ushort)ModContent.TileType<FluorescentTree>();
 					tileRight.TileFrameY = 5;
-					tileRight.TileFrameX = (short)Main.rand.Next(4);
+					tileRight.TileFrameX = (short)WorldGen.genRand.Next(4);
 					tileRight.HasTile = true;
 				}
 			}
@@ -500,7 +508,7 @@ public class MothLand : ModSystem
 			{
 				tile.TileType = (ushort)ModContent.TileType<FluorescentTree>();
 				tile.TileFrameY = 3;
-				tile.TileFrameX = (short)Main.rand.Next(4);
+				tile.TileFrameX = (short)WorldGen.genRand.Next(4);
 				tile.HasTile = true;
 				continue;
 			}
@@ -514,7 +522,7 @@ public class MothLand : ModSystem
 			}
 			tile.TileType = (ushort)ModContent.TileType<FluorescentTree>();
 			tile.TileFrameY = 1;
-			tile.TileFrameX = (short)Main.rand.Next(12);
+			tile.TileFrameX = (short)WorldGen.genRand.Next(12);
 			tile.HasTile = true;
 		}
 	}
@@ -526,7 +534,7 @@ public class MothLand : ModSystem
 			return;
 		}
 
-		if (Main.rand.NextBool(4))
+		if (WorldGen.genRand.NextBool(4))
 		{
 			if (Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid &&
 				Main.tile[i, j + 1].Slope == SlopeType.Solid && Main.tile[i + 1, j + 1].Slope == SlopeType.Solid && Main.tile[i - 1, j + 1].Slope == SlopeType.Solid && Main.tile[i + 2, j + 1].Slope == SlopeType.Solid && Main.tile[i - 2, j + 1].Slope == SlopeType.Solid)// 树木
@@ -558,9 +566,9 @@ public class MothLand : ModSystem
 			Tile tile = Main.tile[i, j - 1];
 			tile.TileType = (ushort)ModContent.TileType<LampLotus>();
 			tile.HasTile = true;
-			tile.TileFrameX = (short)(28 * Main.rand.Next(8));
+			tile.TileFrameX = (short)(28 * WorldGen.genRand.Next(8));
 		}
-		if (Main.rand.NextBool(6))// 黑萤藤蔓
+		if (WorldGen.genRand.NextBool(6))// 黑萤藤蔓
 		{
 			Tile t0 = Main.tile[i, j];
 
@@ -569,10 +577,10 @@ public class MothLand : ModSystem
 			{
 				t2.TileType = (ushort)ModContent.TileType<BlackVine>();
 				t2.HasTile = true;
-				t2.TileFrameY = (short)(Main.rand.Next(6, 9) * 18);
+				t2.TileFrameY = (short)(WorldGen.genRand.Next(6, 9) * 18);
 			}
 		}
-		if (Main.rand.NextBool(16))// 流萤滴
+		if (WorldGen.genRand.NextBool(16))// 流萤滴
 		{
 			int count = 0;
 			for (int x = -1; x <= 1; x++)
@@ -597,7 +605,7 @@ public class MothLand : ModSystem
 				MythUtils.PlaceFrameImportantTiles(i - 1, j + 1, 3, 3, ModContent.TileType<Tiles.Furnitures.GlowingDrop>());
 			}
 		}
-		if (Main.rand.NextBool(16))// 巨型萤火吊
+		if (WorldGen.genRand.NextBool(16))// 巨型萤火吊
 		{
 			int count = 0;
 			float length = 0;
@@ -642,7 +650,7 @@ public class MothLand : ModSystem
 				}
 				if (Main.netMode != NetmodeID.Server)
 				{
-					LargeFireBulb.PlaceMe(i, j, (ushort)Main.rand.Next((int)Math.Floor(length)));
+					LargeFireBulb.PlaceMe(i, j, (ushort)WorldGen.genRand.Next((int)Math.Floor(length)));
 				}
 			}
 		}
@@ -661,16 +669,16 @@ public class MothLand : ModSystem
 					}
 				}
 			}
-			if (Main.rand.NextBool(2))
+			if (WorldGen.genRand.NextBool(2))
 			{
-				switch (Main.rand.Next(1, 10))
+				switch (WorldGen.genRand.Next(1, 10))
 				{
 					case 1:
 						t1.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
 						t2.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
 						t1.HasTile = true;
 						t2.HasTile = true;
-						short numa = (short)(Main.rand.Next(0, 6) * 48);
+						short numa = (short)(WorldGen.genRand.Next(0, 6) * 48);
 						t1.TileFrameX = numa;
 						t2.TileFrameX = numa;
 						t1.TileFrameY = 16;
@@ -682,7 +690,7 @@ public class MothLand : ModSystem
 						t2.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
 						t1.HasTile = true;
 						t2.HasTile = true;
-						short num = (short)(Main.rand.Next(0, 6) * 48);
+						short num = (short)(WorldGen.genRand.Next(0, 6) * 48);
 						t2.TileFrameX = num;
 						t1.TileFrameX = num;
 						t1.TileFrameY = 16;
@@ -696,7 +704,7 @@ public class MothLand : ModSystem
 						t1.HasTile = true;
 						t2.HasTile = true;
 						t3.HasTile = true;
-						short num1 = (short)(Main.rand.Next(0, 6) * 72);
+						short num1 = (short)(WorldGen.genRand.Next(0, 6) * 72);
 						t3.TileFrameX = num1;
 						t2.TileFrameX = num1;
 						t1.TileFrameX = num1;
@@ -706,43 +714,43 @@ public class MothLand : ModSystem
 						break;
 
 					case 4:
-						t1.TileType = (ushort)ModContent.TileType<BlueBlossom>();
-						t2.TileType = (ushort)ModContent.TileType<BlueBlossom>();
-						t3.TileType = (ushort)ModContent.TileType<BlueBlossom>();
+						t1.TileType = (ushort)ModContent.TileType<BluishGiantGentian>();
+						t2.TileType = (ushort)ModContent.TileType<BluishGiantGentian>();
+						t3.TileType = (ushort)ModContent.TileType<BluishGiantGentian>();
 						t1.HasTile = true;
 						t2.HasTile = true;
 						t3.HasTile = true;
-						short num2 = (short)(Main.rand.Next(0, 12) * 120);
+						short num2 = (short)(WorldGen.genRand.Next(0, 12) * 120);
 						t3.TileFrameX = num2;
 						t2.TileFrameX = num2;
 						t1.TileFrameX = num2;
-						t1.TileFrameY = 32;
-						t2.TileFrameY = 16;
+						t1.TileFrameY = 36;
+						t2.TileFrameY = 18;
 						t3.TileFrameY = 0;
 						break;
 
 					case 5:
-						WorldGen.Place3x2(i - 1, j - 1, (ushort)ModContent.TileType<BlackFrenLarge>(), Main.rand.Next(3));
+						WorldGen.Place3x2(i - 1, j - 1, (ushort)ModContent.TileType<BlackFrenLarge>(), WorldGen.genRand.Next(3));
 						break;
 
 					case 6:
-						WorldGen.Place2x2Horizontal(i, j - 1, (ushort)ModContent.TileType<BlackFren>(), Main.rand.Next(3));
+						WorldGen.Place2x2Horizontal(i, j - 1, (ushort)ModContent.TileType<BlackFren>(), WorldGen.genRand.Next(3));
 						break;
 
 					case 7:
-						WorldGen.Place3x2(i - 1, j - 1, (ushort)ModContent.TileType<BlackFrenLarge>(), Main.rand.Next(3));
+						WorldGen.Place3x2(i - 1, j - 1, (ushort)ModContent.TileType<BlackFrenLarge>(), WorldGen.genRand.Next(3));
 						break;
 
 					case 8:
-						WorldGen.Place2x2Horizontal(i, j - 1, (ushort)ModContent.TileType<BlackFren>(), Main.rand.Next(3));
+						WorldGen.Place2x2Horizontal(i, j - 1, (ushort)ModContent.TileType<BlackFren>(), WorldGen.genRand.Next(3));
 						break;
 
 					case 9:
-						WorldGen.Place2x1(i - 1, j - 1, (ushort)ModContent.TileType<CocoonRock>(), Main.rand.Next(3));
+						WorldGen.Place2x1(i - 1, j - 1, (ushort)ModContent.TileType<CocoonRock>(), WorldGen.genRand.Next(3));
 						break;
 
 					case 10:
-						WorldGen.Place2x1(i - 1, j - 1, (ushort)ModContent.TileType<CocoonRock>(), Main.rand.Next(3));
+						WorldGen.Place2x1(i - 1, j - 1, (ushort)ModContent.TileType<CocoonRock>(), WorldGen.genRand.Next(3));
 						break;
 				}
 			}

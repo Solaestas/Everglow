@@ -1,11 +1,8 @@
-using System.Linq;
-using Everglow.Commons;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 
 namespace Everglow.Commons.Weapons;
@@ -56,6 +53,10 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 	/// The width of trailing track.
 	/// </summary>
 	public float TrailWidth;
+	/// <summary>
+	/// The value of warp strength.
+	/// </summary>
+	public float WarpStrength = 1f;
 	/// <summary>
 	/// The first texture of a trailing track.
 	/// </summary>
@@ -161,7 +162,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
 			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
 		}
-
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect effect = TrailShader;
@@ -180,7 +181,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
 
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 	}
 	public virtual void DrawTrail()
 	{
@@ -207,7 +208,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		for (int i = 1; i < SmoothTrail.Count; ++i)
 		{
 			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
-			if(mulFac > 1f)
+			if (mulFac > 1f)
 			{
 				mulFac = 1f;
 			}
@@ -218,7 +219,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 
 			Vector2 drawPos = SmoothTrail[i] + halfSize;
 			Color drawC = TrailColor;
-			if(!SelfLuminous)
+			if (!SelfLuminous)
 			{
 				Color lightC = Lighting.GetColor((drawPos / 16f).ToPoint());
 				drawC.R = (byte)(lightC.R * drawC.R / 255f);
@@ -232,7 +233,6 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
 			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
 		}
-
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -335,7 +335,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			}
 			float factor = i / (float)SmoothTrail.Count * mulFac;
 			float widthZ = TrailWidthFunction(factor);
-			var c0 = new Color(1 - (normalDir.X + 25f) / 50f, 1 - (normalDir.Y + 25f) / 50f, 0.1f, 1);
+			var c0 = new Color(1 - (normalDir.X + 25f) / 50f, 1 - (normalDir.Y + 25f) / 50f, 0.1f * WarpStrength, 1);
 
 
 			float x0 = factor * 1.3f + (float)(Main.time * 0.03f);

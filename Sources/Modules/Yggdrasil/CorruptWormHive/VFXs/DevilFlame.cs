@@ -22,7 +22,6 @@ internal class DevilFlamePipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModContent.Request<Effect>("Everglow/Yggdrasil/CorruptWormHive/VFXs/DevilFlame", AssetRequestMode.ImmediateLoad);
-		effect.Value.Parameters["uNoise"].SetValue(ModContent.Request<Texture2D>("Everglow/Example/VFX/Perlin", AssetRequestMode.ImmediateLoad).Value);
 	}
 	public override void BeginRender()
 	{

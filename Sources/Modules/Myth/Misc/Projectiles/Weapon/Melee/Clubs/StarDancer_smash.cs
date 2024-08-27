@@ -6,7 +6,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 public class StarDancer_smash : ClubProj_Smash_metal
 {
 	public override string TrailColorTex() => "Everglow/" + ModAsset.StarDancer_glow_Path;
-	public override string Texture => "Everglow/" + ModAsset.Melee_StarDancer_Path;
+	public override string Texture => "Everglow/" + ModAsset.StarDancer_Path;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		if (Main.rand.NextBool(7))
@@ -78,6 +78,35 @@ public class StarDancer_smash : ClubProj_Smash_metal
 	}
 	public override void Smash(int level = 0)
 	{
+		Player player = Main.player[Projectile.owner];
+		if (level == 0)
+		{
+			for(int i = 0;i < 12;i++)
+			{
+				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, 40 * player.gravDir), Vector2.zeroVector, ModContent.ProjectileType<StarDancer_starProj>(), Projectile.damage / 3, Projectile.knockBack * 0.2f, Projectile.owner);
+				Vector2 addPos = new Vector2(0, Main.rand.NextFloat(-35, -120) * player.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
+				p0.Center += addPos;
+				p0.timeLeft = (int)(addPos.Length() * 0.2f + 4);
+			}
+		}
+		if (level == 1)
+		{
+			for (int i = 0; i < 12; i++)
+			{
+				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, 40 * player.gravDir), Vector2.zeroVector, ModContent.ProjectileType<StarDancer_starProj>(), Projectile.damage / 3, Projectile.knockBack * 0.2f, Projectile.owner);
+				Vector2 addPos = new Vector2(0, Main.rand.NextFloat(-35, -120) * player.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
+				p0.Center += addPos;
+				p0.timeLeft = (int)(addPos.Length() * 0.2f + 4 + Main.rand.Next(5));
+			}
+			for (int i = 0; i < 24; i++)
+			{
+				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, 40 * player.gravDir), Vector2.zeroVector, ModContent.ProjectileType<StarDancer_starProj2>(), Projectile.damage / 3, Projectile.knockBack * 0.2f, Projectile.owner);
+				Vector2 addPos = new Vector2(0, Main.rand.NextFloat(-25, -260) * player.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
+				p0.Center += addPos;
+				p0.timeLeft = (int)(addPos.Length() * 0.26f + 10 + Main.rand.Next(5));
+				p0.scale = Main.rand.NextFloat(0.5f, 2);
+			}
+		}
 		base.Smash(level);
 	}
 	public override void AI()
