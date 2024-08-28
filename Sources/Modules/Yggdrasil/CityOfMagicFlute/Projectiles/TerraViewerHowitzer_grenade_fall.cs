@@ -59,10 +59,16 @@ public class TerraViewerHowitzer_grenade_fall : TrailingProjectile
 			}
 			Projectile.velocity *= 0f;
 		}
-		if(Projectile.timeLeft < 2380)
+		if (Projectile.timeLeft < 2380)
 		{
 			Projectile.tileCollide = true;
 		}
+		Projectile.hide = true;
+	}
+
+	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+	{
+		behindNPCsAndTiles.Add(index);
 	}
 
 	public int timeTokill = -1;

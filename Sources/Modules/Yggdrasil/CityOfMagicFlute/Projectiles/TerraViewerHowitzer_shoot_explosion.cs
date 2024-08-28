@@ -1,5 +1,6 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Yggdrasil.CityOfMagicFlute.VFXs;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.CityOfMagicFlute.Projectiles;
@@ -22,6 +23,7 @@ public class TerraViewerHowitzer_shoot_explosion : ModProjectile, IWarpProjectil
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 20;
 		Projectile.DamageType = DamageClass.Magic;
+		ProjectileID.Sets.DrawScreenCheckFluff[Type] = 30000;
 	}
 
 	public void Spark()
@@ -104,9 +106,9 @@ public class TerraViewerHowitzer_shoot_explosion : ModProjectile, IWarpProjectil
 			velocity = newVelocity,
 			Active = true,
 			Visible = true,
-			position = Projectile.Center + new Vector2(Main.rand.NextFloat(60), 0).RotatedByRandom(6.283),
+			position = Projectile.Center + new Vector2(MathF.Sqrt(Main.rand.NextFloat(1)) * 250, 0).RotatedByRandom(6.283),
 			maxTime = Main.rand.Next(30, 105),
-			scale = Main.rand.NextFloat(24f, 62f),
+			scale = Main.rand.NextFloat(124f, 162f),
 			rotation = Main.rand.NextFloat(6.283f),
 			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.1f, 0.1f), 0 },
 		};
@@ -160,11 +162,11 @@ public class TerraViewerHowitzer_shoot_explosion : ModProjectile, IWarpProjectil
 			for (int x = 0; x < 150; x++)
 			{
 				LargeFlame();
+				NanoCloud();
 			}
 			for (int x = 0; x < 600; x++)
 			{
 				SmallFlame();
-				NanoCloud();
 			}
 		}
 		if (Projectile.timeLeft <= 190)
@@ -191,10 +193,10 @@ public class TerraViewerHowitzer_shoot_explosion : ModProjectile, IWarpProjectil
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		bool bool0 = (targetHitbox.TopLeft() - projHitbox.Center()).Length() < 180;
-		bool bool1 = (targetHitbox.TopRight() - projHitbox.Center()).Length() < 180;
-		bool bool2 = (targetHitbox.BottomLeft() - projHitbox.Center()).Length() < 180;
-		bool bool3 = (targetHitbox.BottomRight() - projHitbox.Center()).Length() < 180;
+		bool bool0 = (targetHitbox.TopLeft() - projHitbox.Center()).Length() < 420;
+		bool bool1 = (targetHitbox.TopRight() - projHitbox.Center()).Length() < 420;
+		bool bool2 = (targetHitbox.BottomLeft() - projHitbox.Center()).Length() < 420;
+		bool bool3 = (targetHitbox.BottomRight() - projHitbox.Center()).Length() < 420;
 		return bool0 || bool1 || bool2 || bool3;
 	}
 
@@ -209,12 +211,12 @@ public class TerraViewerHowitzer_shoot_explosion : ModProjectile, IWarpProjectil
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		var c = new Color(0.3f * (1 - timeValue) * (1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 3f * (1 - timeValue), 0f);
 		Texture2D light = Commons.ModAsset.StarSlash.Value;
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 9; i++)
 		{
-			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, light.Width / 2, light.Height), c, MathF.Sin(Projectile.whoAmI - Projectile.position.X) * 6 + Projectile.ai[1] + i * 2, light.Size() / 2f, new Vector2(dark * dark, timeValue * 8) * Projectile.ai[0] * 1.62f, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, light.Width / 2, light.Height), c, MathF.Sin(Projectile.whoAmI) * 6 + Projectile.ai[1] + i * 2, light.Size() / 2f, new Vector2(MathF.Sqrt(dark), timeValue * 6) * Projectile.ai[0] * 1.62f, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, MathF.Sin(Projectile.whoAmI + Projectile.position.Y) * 6 + Projectile.ai[1] + i * 2, light.Size() / 2f, new Vector2(dark * dark, timeValue * 8) * Projectile.ai[0] * 1.62f, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, light.Width / 2, light.Height), c, MathF.Sin(Projectile.type * 0.4f + Projectile.whoAmI) * 6 + Projectile.ai[1] + i * 2, light.Size() / 2f, new Vector2(dark * dark, timeValue * 8) * Projectile.ai[0] * 1.62f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, light.Width / 2, light.Height), c, MathF.Sin(Projectile.whoAmI - Projectile.position.X) * 6 + Projectile.ai[1] + i * 0.6f, light.Size() / 2f, new Vector2(dark * dark, timeValue * 8) * Projectile.ai[0] * 1.62f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, light.Width / 2, light.Height), c, MathF.Sin(Projectile.whoAmI) * 6 + Projectile.ai[1] + i * 0.6f, light.Size() / 2f, new Vector2(MathF.Sqrt(dark), timeValue * 6) * Projectile.ai[0] * 1.62f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, MathF.Sin(Projectile.whoAmI + Projectile.position.Y) * 6 + Projectile.ai[1] + i * 0.6f, light.Size() / 2f, new Vector2(dark * dark, timeValue * 8) * Projectile.ai[0] * 1.62f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, light.Width / 2, light.Height), c, MathF.Sin(Projectile.type * 0.4f + Projectile.whoAmI) * 6 + Projectile.ai[1] + i * 0.6f, light.Size() / 2f, new Vector2(dark * dark, timeValue * 8) * Projectile.ai[0] * 1.62f, SpriteEffects.None, 0);
 		}
 		return false;
 	}

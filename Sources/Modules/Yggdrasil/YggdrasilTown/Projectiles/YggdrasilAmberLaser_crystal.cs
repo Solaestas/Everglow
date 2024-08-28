@@ -206,7 +206,7 @@ public class YggdrasilAmberLaser_crystal : ModProjectile
 				effect.Parameters["uHeatMap"].SetValue(ModAsset.YggdrasilAmberLaser_crystal_heatMap.Value);
 				effect.CurrentTechnique.Passes[0].Apply();
 
-				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_9.Value;
+				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_11.Value;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
 				Main.spriteBatch.End();
@@ -218,7 +218,7 @@ public class YggdrasilAmberLaser_crystal : ModProjectile
 				effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_lava.Value);
 				effect.Parameters["uHeatMap"].SetValue(ModAsset.YggdrasilAmberLaser_crystal_light_heatMap.Value);
 				effect.CurrentTechnique.Passes[0].Apply();
-				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_9.Value;
+				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_11.Value;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, barsReflect.ToArray(), 0, barsReflect.Count - 2);
 
 				Main.spriteBatch.End();

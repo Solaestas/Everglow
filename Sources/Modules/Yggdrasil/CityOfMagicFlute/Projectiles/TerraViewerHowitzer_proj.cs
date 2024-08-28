@@ -60,7 +60,7 @@ public class TerraViewerHowitzer_proj : ModProjectile
 				Projectile.Center + offset + toMuzzle + random,
 				velocity,
 				tVH.ShootType,
-				(int)(overridedamage == -1 ? item.damage : overridedamage * 0.1f),
+				(int)((overridedamage == -1 ? item.damage : overridedamage) * 0.1f),
 				item.knockBack,
 				player.whoAmI);
 			p.CritChance = (int)(item.crit + player.GetCritChance(DamageClass.Generic));
@@ -88,7 +88,7 @@ public class TerraViewerHowitzer_proj : ModProjectile
 			summonPos,
 			Vector2.Normalize(Main.MouseWorld - summonPos) * 60,
 			ModContent.ProjectileType<TerraViewerHowitzer_grenade_fall>(),
-			(int)(overridedamage == -1 ? item.damage : overridedamage * 0.9f),
+			(int)((overridedamage == -1 ? item.damage : overridedamage) * 0.9f),
 			item.knockBack,
 			player.whoAmI,
 			1);
@@ -153,12 +153,11 @@ public class TerraViewerHowitzer_proj : ModProjectile
 					Projectile.Center + offset + toMuzzle,
 					velocity,
 					ModContent.ProjectileType<TerraViewerHowitzer_shoot>(),
-					(int)(overridedamage == -1 ? item.damage : overridedamage * 0.1f),
+					(int)((overridedamage == -1 ? item.damage : overridedamage) * 7.2f),
 					item.knockBack,
 					player.whoAmI,
 					10);
 					p.CritChance = (int)(item.crit + player.GetCritChance(DamageClass.Generic));
-
 					float rot = velocity.ToRotation();
 
 					// TODO:子弹伤害校正，要求和被消耗的弹药种类挂钩
@@ -176,7 +175,7 @@ public class TerraViewerHowitzer_proj : ModProjectile
 			}
 			controlCount++;
 		}
-		if(controlCount == 0)
+		if (controlCount == 0)
 		{
 			Projectile.Kill();
 		}
@@ -236,7 +235,7 @@ public class TerraViewerHowitzer_proj : ModProjectile
 
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition + offset - random, drawFrame, lightColor, Projectile.rotation - (float)(Math.PI * 0.25), origin, 1f, se, 0);
 		Main.spriteBatch.Draw(texMainGlow, Projectile.Center - Main.screenPosition + offset - random, drawFrame, new Color(1f, 1f, 1f, 0), Projectile.rotation - (float)(Math.PI * 0.25), origin, 1f, se, 0);
-		if(tsunamiS.RightClickCooling < 160)
+		if (tsunamiS.RightClickCooling < 160)
 		{
 			int framePower = (int)Math.Clamp((180 - tsunamiS.RightClickCooling) / 180f * 5, 0, 4);
 

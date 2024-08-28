@@ -1,8 +1,10 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
+
 [Pipeline(typeof(WCSPipeline))]
-internal class WhiteTriangle : Visual
+public class WhiteTriangle : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public Vector2 position;
 	public Vector2 velocity;
 	public float[] ai;
@@ -10,7 +12,11 @@ internal class WhiteTriangle : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-	public WhiteTriangle() { }
+
+	public WhiteTriangle()
+	{
+	}
+
 	public override void Update()
 	{
 		position += velocity;
@@ -32,7 +38,10 @@ internal class WhiteTriangle : Visual
 		scale = ai[0] * MathF.Sin(timer / maxTime * MathF.PI);
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		if (Collision.SolidCollision(position, 0, 0))
 		{
 			velocity *= -0.2f;
@@ -47,7 +56,8 @@ internal class WhiteTriangle : Visual
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
 		Color lightColor = Color.White;
 		Ins.Batch.BindTexture<Vertex2D>(Terraria.GameContent.TextureAssets.MagicPixel.Value);
-		//lightColor = Color.Lerp(color2, color1, Math.Clamp((606 * 16 - position.X) / (8f * 16),0, 1));
+
+		// lightColor = Color.Lerp(color2, color1, Math.Clamp((606 * 16 - position.X) / (8f * 16),0, 1));
 		int maxLength = 15;
 		for (int y = 0; y < maxLength; y++)
 		{
@@ -59,9 +69,9 @@ internal class WhiteTriangle : Visual
 			lightColor *= 0.8f;
 			List<Vertex2D> bars = new List<Vertex2D>()
 			{
-				new Vertex2D(position + deltaY,lightColor, new Vector3(0, 0, 0)),
-				new Vertex2D(position + deltaY + toCorner.RotatedBy(Math.PI * 0.5 + rotation),lightColor, new Vector3(0, 1, 0)),
-				new Vertex2D(position + deltaY + toCorner.RotatedBy(Math.PI * 0+ rotation),lightColor, new Vector3(1, 0, 0))
+				new Vertex2D(position + deltaY, lightColor, new Vector3(0, 0, 0)),
+				new Vertex2D(position + deltaY + toCorner.RotatedBy(Math.PI * 0.5 + rotation), lightColor, new Vector3(0, 1, 0)),
+				new Vertex2D(position + deltaY + toCorner.RotatedBy(Math.PI * 0 + rotation), lightColor, new Vector3(1, 0, 0)),
 			};
 			Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
 		}

@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Weapons;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.CityOfMagicFlute.Projectiles;
@@ -59,6 +60,11 @@ public class TerraViewerHowitzer_shoot : TrailingProjectile
 			}
 			Projectile.velocity *= 0f;
 		}
+		Projectile.hide = true;
+	}
+	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+	{
+		behindNPCsAndTiles.Add(index);
 	}
 
 	public int timeTokill = -1;
@@ -69,8 +75,11 @@ public class TerraViewerHowitzer_shoot : TrailingProjectile
 		Projectile.friendly = false;
 		if (timeTokill < 0)
 		{
-			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<TerraViewerHowitzer_shoot_explosion>(), Projectile.damage / 3, Projectile.knockBack * 0.4f, Projectile.owner, MathF.Sqrt(Projectile.ai[0]) * 3);
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<TerraViewerHowitzer_shoot_explosion>(), Projectile.damage, Projectile.knockBack * 0.4f, Projectile.owner, MathF.Sqrt(Projectile.ai[0]) * 3);
 		}
+		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+		Gsplayer.FlyCamPosition = new Vector2(0, 120).RotatedByRandom(6.283);
+		SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
 		timeTokill = 90;
 	}
 

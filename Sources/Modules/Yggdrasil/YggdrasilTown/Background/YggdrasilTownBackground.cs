@@ -24,32 +24,48 @@ public class YggdrasilTownBackground : ModSystem
 		}
 	}
 
-	public float BackgroundSwitchAlpha = 0f;
+	// Total background alpha.
+	public float BackgroundAlpha = 0f;
+
+	/// <summary>
+	/// LampWoodAnchor Y
+	/// </summary>
+	public float LampWoodCenterY = 0;
+
+	/// <summary>
+	/// Background alpha of lampwood
+	/// </summary>
+	public float BackgroundAlphaLampWood = 0f;
+
+	/// <summary>
+	/// Background alpha of lampwood
+	/// </summary>
+	public float BackgroundAlphaTwilight = 0f;
 
 	public override void PostUpdateEverything()// 开启地下背景
 	{
 		const float increase = 0.02f;
 		if (BiomeActive() && Main.BackgroundEnabled)
 		{
-			if (BackgroundSwitchAlpha < 1)
+			if (BackgroundAlpha < 1)
 			{
-				BackgroundSwitchAlpha += increase;
+				BackgroundAlpha += increase;
 			}
 			else
 			{
-				BackgroundSwitchAlpha = 1;
+				BackgroundAlpha = 1;
 				Ins.HookManager.Disable(TerrariaFunction.DrawBackground);
 			}
 		}
 		else
 		{
-			if (BackgroundSwitchAlpha > 0)
+			if (BackgroundAlpha > 0)
 			{
-				BackgroundSwitchAlpha -= increase;
+				BackgroundAlpha -= increase;
 			}
 			else
 			{
-				BackgroundSwitchAlpha = 0;
+				BackgroundAlpha = 0;
 			}
 			Ins.HookManager.Enable(TerrariaFunction.DrawBackground);
 		}
@@ -71,16 +87,6 @@ public class YggdrasilTownBackground : ModSystem
 		}
 		return false;
 	}
-
-	/// <summary>
-	/// 灯木背景的绘制中心
-	/// </summary>
-	public float LampWoodCenterY = 0;
-
-	/// <summary>
-	/// 切换背景造成的颜色变化
-	/// </summary>
-	public float BackgroundSwitchingAlpha = 0f;
 
 	/// <summary>
 	/// 绘制天穹城镇背景
@@ -128,121 +134,149 @@ public class YggdrasilTownBackground : ModSystem
 				}
 
 				// 如果在挑战者石牢附近
-				if (Math.Abs(yWorld.StoneCageOfChallengesCenter.X - screenCenter.X) < 240 * 16)
-				{
-					if (Math.Abs(yWorld.StoneCageOfChallengesCenter.Y - screenCenter.Y) < 60 * 16)
-					{
-						var stoneClose2 = ModAsset.StoneCageOfChallengesClose2.Value;
-						var stoneClose = ModAsset.StoneCageOfChallengesClose.Value;
-						var stoneMiddle = ModAsset.StoneCageOfChallengesMiddle.Value;
-						var stoneFar = ModAsset.StoneCageOfChallengesFar.Value;
-						var stoneSky = ModAsset.StoneCageOfChallengesSky.Value;
-						Vector2 correction = yWorld.StoneCageOfChallengesCenter + new Vector2(0, -8000) - BiomeCenter;
-						float setSize = 1f;
-						BackgroundManager.QuickDrawBG(stoneSky, GetDrawRect(stoneSky.Size(), 0f, correction, setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-						BackgroundManager.QuickDrawBG(stoneFar, GetDrawRect(stoneFar.Size(), 0.05f, correction, setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-						BackgroundManager.QuickDrawBG(stoneMiddle, GetDrawRect(stoneMiddle.Size(), 0.10f, correction + new Vector2(0, 5000), setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-						BackgroundManager.QuickDrawBG(stoneClose, GetDrawRect(stoneFar.Size(), 0.15f, correction + new Vector2(0, 6000), setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-						BackgroundManager.QuickDrawBG(stoneClose2, GetDrawRect(stoneMiddle.Size(), 0.20f, correction + new Vector2(0, 7000), setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-						return;
-					}
-				}
-				if (ModContent.GetInstance<LampWoodForest>().IsBiomeActive(Main.LocalPlayer))
-				{
-					var lampClose = ModAsset.LampWoodClose.Value;
-					var lampMiddle = ModAsset.LampWoodMiddle.Value;
-					var lampFar = ModAsset.LampWoodFar.Value;
-					var lampSky = ModAsset.LampWoodSky.Value;
-					Vector2 correction = new Vector2(0, LampWoodCenterY - 4000) - BiomeCenter;
-					if (LampWoodCenterY - Main.screenPosition.Y < -Main.screenHeight)
-					{
-						LampWoodCenterY = Main.screenPosition.Y;
-						BackgroundSwitchingAlpha = 0;
-					}
-					float setSize = 1f;
-					if (BackgroundSwitchingAlpha < 1f)
-					{
-						BackgroundSwitchingAlpha += 0.02f;
-					}
-					else
-					{
-						BackgroundSwitchingAlpha = 1f;
-					}
-					BackgroundManager.QuickDrawBG(lampSky, GetDrawRect(lampSky.Size(), 0f, correction, setSize), baseColor * BackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
-					BackgroundManager.QuickDrawBG(lampFar, GetDrawRect(lampFar.Size(), 0.05f, correction, setSize), baseColor * BackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
-					BackgroundManager.QuickDrawBG(lampMiddle, GetDrawRect(lampMiddle.Size(), 0.10f, correction + new Vector2(0, 5000), setSize), baseColor * BackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
-					BackgroundManager.QuickDrawBG(lampClose, GetDrawRect(lampFar.Size(), 0.15f, correction + new Vector2(0, 6000), setSize), baseColor * BackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
-				}
-				else
-				{
-					if (Math.Abs(LampWoodCenterY - Main.screenPosition.Y) > 200)
-					{
-						LampWoodCenterY = Main.screenPosition.Y;
-					}
-					if (BackgroundSwitchingAlpha > 0f)
-					{
-						BackgroundSwitchingAlpha -= 0.02f;
-					}
-					else
-					{
-						BackgroundSwitchingAlpha = 0f;
-					}
-				}
+				// if (Math.Abs(yWorld.StoneCageOfChallengesCenter.X - screenCenter.X) < 240 * 16)
+				// {
+				// if (Math.Abs(yWorld.StoneCageOfChallengesCenter.Y - screenCenter.Y) < 60 * 16)
+				// {
+				// var stoneClose2 = ModAsset.StoneCageOfChallengesClose2.Value;
+				// var stoneClose = ModAsset.StoneCageOfChallengesClose.Value;
+				// var stoneMiddle = ModAsset.StoneCageOfChallengesMiddle.Value;
+				// var stoneFar = ModAsset.StoneCageOfChallengesFar.Value;
+				// var stoneSky = ModAsset.StoneCageOfChallengesSky.Value;
+				// Vector2 correction = yWorld.StoneCageOfChallengesCenter + new Vector2(0, -8000) - BiomeCenter;
+				// float setSize = 1f;
+				// BackgroundManager.QuickDrawBG(stoneSky, GetDrawRect(stoneSky.Size(), 0f, correction, setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
+				// BackgroundManager.QuickDrawBG(stoneFar, GetDrawRect(stoneFar.Size(), 0.05f, correction, setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
+				// BackgroundManager.QuickDrawBG(stoneMiddle, GetDrawRect(stoneMiddle.Size(), 0.10f, correction + new Vector2(0, 5000), setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
+				// BackgroundManager.QuickDrawBG(stoneClose, GetDrawRect(stoneFar.Size(), 0.15f, correction + new Vector2(0, 6000), setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
+				// BackgroundManager.QuickDrawBG(stoneClose2, GetDrawRect(stoneMiddle.Size(), 0.20f, correction + new Vector2(0, 7000), setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
+				// return;
+				// }
+				// }
+				// if (ModContent.GetInstance<LampWoodForest>().IsBiomeActive(Main.LocalPlayer))
+				// {
+
+				// }
+				// else
+				// {
+				// if (Math.Abs(LampWoodCenterY - Main.screenPosition.Y) > 200)
+				// {
+				// LampWoodCenterY = Main.screenPosition.Y;
+				// }
+				// if (BackgroundSwitchingAlpha > 0f)
+				// {
+				// BackgroundSwitchingAlpha -= 0.02f;
+				// }
+				// else
+				// {
+				// BackgroundSwitchingAlpha = 0f;
+				// }
+				// }
 			}
 		}
 
 		// 旧背景
-		// BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000));
-		// BackgroundManager.QuickDrawBG(texC3, GetDrawRect(texClose.Size(), 0.05f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, false);
-		// BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texClose.Size(), 0.10f, Vector2.Zero), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, false);
-		// BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texClose.Size(), 0.15f, new Vector2(0, 7200)), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000), false, true);
-		float AntiBackgroundSwitchingAlpha = 1 - BackgroundSwitchingAlpha;
-		Vector2 deltaPos = screenCenter - BiomeCenter;
-		float MoveStep = 0.15f;
-		deltaPos *= MoveStep;
-		for (int x = -5; x < 6; x++)
-		{
-			Vector2 DrawCenter = new Vector2(Main.screenWidth, Main.screenHeight) / 2f - deltaPos + new Vector2(-650 + texC1.Width * x, -400);
-			if (DrawCenter.X >= -60 && DrawCenter.X <= Main.screenWidth + 60)
-			{
-				BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.15f, DrawCenter, 20f, 750f, baseColor * 0.06f * AntiBackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), texC1.Size(), false, false);
-			}
+		BackgroundManager.QuickDrawBG(texSky, float.PositiveInfinity, BiomeCenter, baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000));
 
-			DrawCenter = new Vector2(Main.screenWidth, Main.screenHeight) / 2f - deltaPos + new Vector2(-1350 + texC1.Width * x, -100);
-			if (DrawCenter.X >= -60 && DrawCenter.X <= Main.screenWidth + 60)
-			{
-				BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.15f, DrawCenter, 20f, 750f, baseColor * 0.06f * AntiBackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), texC1.Size(), false, false);
-			}
-		}
-		Rectangle drawArea = GetDrawRect(texClose.Size(), 0.08f, Vector2.Zero);
-		drawArea.Width = (int)(drawArea.Width * 0.6f);
-		drawArea.Height = (int)(drawArea.Height * 0.6f);
-		drawArea.Y += 200;
-		drawArea.X += 500;
-		BackgroundManager.QuickDrawBG(texClose, drawArea, baseColor * AntiBackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-
-		// BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.35f, new Vector2(-650, -400), 60f, 550f, baseColor * 0.12f, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), texClose.Size());
-		BackgroundManager.QuickDrawBG(texBound, GetDrawRect(texBound.Size(), 1f, Vector2.Zero), baseColor * AntiBackgroundSwitchingAlpha, (int)(BiomeCenter.Y - 20720), (int)(BiomeCenter.Y - 20420), false, false);
+		DrawLampWood(baseColor);
+		DrawTwilightForsetAndRelic(baseColor);
 	}
 
-	/// <summary>
-	/// 获取绘制矩形
-	/// </summary>
-	/// <param name="texSize"></param>
-	/// <param name="MoveStep"></param>
-	/// <returns></returns>
-	public Rectangle GetDrawRect(Vector2 texSize, float moveStep, Vector2 correction = default(Vector2), float scale = 1f)
+	public void DrawLampWood(Color baseColor)
 	{
-		Vector2 sampleTopleft = Vector2.Zero;
-		Vector2 sampleCenter = sampleTopleft + texSize / 2;
-		var screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
-		Vector2 drawCenter = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
-		Vector2 deltaPos = drawCenter - (BiomeCenter + correction);
-		deltaPos *= moveStep;
-		int RX = (int)(sampleCenter.X - screenSize.X / 2f / scale + deltaPos.X);
-		int RY = (int)(sampleCenter.Y - screenSize.Y / 2f / scale + deltaPos.Y);
+		if (ModContent.GetInstance<LampWoodForest>().IsBiomeActive(Main.LocalPlayer))
+		{
+			if(Math.Abs(LampWoodCenterY - Main.screenPosition.Y) < Main.screenHeight)
+			{
+				if (BackgroundAlphaLampWood < 1f)
+				{
+					BackgroundAlphaLampWood += 0.02f;
+				}
+				else
+				{
+					BackgroundAlphaLampWood = 1f;
+				}
+			}
+			else
+			{
+				if (BackgroundAlphaLampWood > 0f)
+				{
+					BackgroundAlphaLampWood -= 0.02f;
+				}
+				else
+				{
+					LampWoodCenterY = Main.screenPosition.Y;
+					BackgroundAlphaLampWood = 0;
+				}
+			}
+		}
+		else
+		{
+			if (BackgroundAlphaLampWood > 0f)
+			{
+				BackgroundAlphaLampWood -= 0.02f;
+			}
+			else
+			{
+				BackgroundAlphaLampWood = 0;
+			}
+		}
 
-		return new Rectangle(RX, RY, (int)(screenSize.X / scale), (int)(screenSize.Y / scale));
+		if(BackgroundAlphaLampWood > 0)
+		{
+			var lampClose = ModAsset.LampWoodClose.Value;
+			var lampMiddle = ModAsset.LampWoodMiddle.Value;
+			var lampFar = ModAsset.LampWoodFar.Value;
+			var lampSky = ModAsset.LampWoodSky.Value;
+			Vector2 correction = new Vector2(0, LampWoodCenterY - 4000);
+
+			BackgroundManager.QuickDrawBG(lampSky, float.PositiveInfinity, correction, baseColor * BackgroundAlphaLampWood, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
+			BackgroundManager.QuickDrawBG(lampFar, 20f, correction, baseColor * BackgroundAlphaLampWood, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
+			BackgroundManager.QuickDrawBG(lampMiddle, 10f, correction, baseColor * BackgroundAlphaLampWood, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
+			BackgroundManager.QuickDrawBG(lampClose, 6f, correction + new Vector2(0, 6000), baseColor * BackgroundAlphaLampWood, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
+		}
+	}
+
+	public void DrawTwilightForsetAndRelic(Color baseColor)
+	{
+		if (ModContent.GetInstance<TwilightForsetAndRelic>().IsBiomeActive(Main.LocalPlayer))
+		{
+			if (BackgroundAlphaTwilight < 1f)
+			{
+				BackgroundAlphaTwilight += 0.02f;
+			}
+			else
+			{
+				BackgroundAlphaTwilight = 1f;
+			}
+		}
+		else
+		{
+			if (BackgroundAlphaTwilight > 0f)
+			{
+				BackgroundAlphaTwilight -= 0.02f;
+			}
+			else
+			{
+				BackgroundAlphaTwilight = 0;
+			}
+		}
+
+		if (BackgroundAlphaTwilight > 0)
+		{
+			var twilightClose = ModAsset.TwilightClose.Value;
+			var twilightMiddleClose = ModAsset.TwilightMiddleClose.Value;
+			var twilightMiddle = ModAsset.TwilightMiddle.Value;
+			var twilightMiddleFar = ModAsset.TwilightMiddleFar.Value;
+			var twilightFar = ModAsset.TwilightFar.Value;
+			var twilightSky = ModAsset.TwilightSky.Value;
+			BackgroundManager.QuickDrawBG(twilightSky, float.PositiveInfinity, BiomeCenter, baseColor * BackgroundAlphaTwilight, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
+			BackgroundManager.QuickDrawBG(twilightFar, 40, BiomeCenter, baseColor * BackgroundAlphaTwilight, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
+			BackgroundManager.QuickDrawBG(twilightMiddleFar, 30, BiomeCenter, baseColor * BackgroundAlphaTwilight, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
+			BackgroundManager.QuickDrawBG(twilightMiddle, 16, BiomeCenter, baseColor * BackgroundAlphaTwilight, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
+			BackgroundManager.QuickDrawBG(twilightMiddleClose, 10, BiomeCenter, baseColor * BackgroundAlphaTwilight, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
+			BackgroundManager.QuickDrawBG(twilightClose, 5, BiomeCenter, baseColor * BackgroundAlphaTwilight, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
+		}
 	}
 
 	/// <summary>
@@ -255,12 +289,12 @@ public class YggdrasilTownBackground : ModSystem
 		sBS2.BlendState = BlendState.NonPremultiplied;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS2);
-		if (BackgroundSwitchAlpha <= 0)
+		if (BackgroundAlpha <= 0)
 		{
 			return;
 		}
 
-		Color baseColor = Color.White * BackgroundSwitchAlpha;
+		Color baseColor = Color.White * BackgroundAlpha;
 		DrawYggdrasilTownBackground(baseColor);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);

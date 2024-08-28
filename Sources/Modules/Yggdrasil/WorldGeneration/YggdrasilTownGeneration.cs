@@ -808,7 +808,7 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildTownBelow()
 	{
-		QuickBuild(40, Main.maxTilesY - 450, "YggdrasilTown/MapIOs/434x159YggdrasilTown.mapio");
+		QuickBuild(40, Main.maxTilesY - 400, "YggdrasilTown/MapIOs/YggdrasilTown_Town.mapio");
 	}
 
 	/// <summary>
@@ -863,7 +863,7 @@ public class YggdrasilTownGeneration
 						tile.HasTile = true;
 						if (value < 0.94)
 						{
-							tile.wall = WallID.Dirt;
+							tile.wall = (ushort)ModContent.WallType<DarkForestSoilWall>();
 						}
 					}
 				}
@@ -1526,7 +1526,7 @@ public class YggdrasilTownGeneration
 							{
 								tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
 								tile.HasTile = true;
-								tile.wall = WallID.Dirt;
+								tile.wall = (ushort)ModContent.WallType<DarkForestSoilWall>();
 							}
 						}
 					}
