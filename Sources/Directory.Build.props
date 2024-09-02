@@ -14,6 +14,13 @@
 		<NotCopyLocal>true</NotCopyLocal>
 	</PropertyGroup>
 	<ItemGroup>
+		<AdditionalFiles Include="**\*.json" Pack="true" ModPath="%(Identity)" />
+	</ItemGroup>
+	<ItemGroup>
+		<AdditionalFiles Include="**\*.atlas" Pack="true" ModPath="%(Identity)" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Solaestas.tModLoader.ModBuilder"
 						  Version="1.5.11" />
 		<PackageReference Include="StyleCop.Analyzers.Unstable"
