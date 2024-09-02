@@ -1,7 +1,6 @@
 using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Items;
-using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 
@@ -52,6 +51,12 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 		{
 			StyleVines.Add(i, new Dictionary<Point, Rope>());
 		}
+	}
+
+	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
+	{
+		noBreak = true;
+		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
 	}
 
 	public override void NearbyEffects(int i, int j, bool closer)
@@ -175,7 +180,6 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)
 	{
-
 	}
 
 	/// <summary>

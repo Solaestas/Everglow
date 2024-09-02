@@ -20,6 +20,7 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 
 		AddMapEntry(new Color(39, 155, 170));
 	}
+
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
 	{
 		if (VFXManager.InScreen(new Vector2(i, j) * 16, 200))
@@ -28,6 +29,7 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 		}
 		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
 	}
+
 	public override void RandomUpdate(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
@@ -45,9 +47,9 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 		}
 		if (blockCount >= 9)
 		{
-			tile.TileType = (ushort)(ModContent.TileType<DarkForestSoil>());
+			tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
 		}
-		for(int z = 0; z < 20; z++)
+		for (int z = 0; z < 20; z++)
 		{
 			blockCount = 0;
 			int spreadX = Main.rand.Next(-5, 6);
@@ -236,10 +238,12 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 				break;
 		}
 	}
+
 	public void PlaceTree(int i, int j, int height)
 	{
 		TreePlacer.BuildTwilightTree(i, j, height);
 	}
+
 	public void AddScene(int i, int j)
 	{
 		TwilightGrass_grass_fore leaf = new TwilightGrass_grass_fore { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };

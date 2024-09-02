@@ -24,7 +24,7 @@ public class ResetTheYggdrasilTown : ModItem
 				Main.tile[i, j].ClearEverything();
 			}
 		}
-		YggdrasilTownGeneration.BuildYggdrasilTown();
+		YggdrasilTownGeneration.BuildMidnightBayou();
 		return false;
 	}
 
