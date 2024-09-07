@@ -34,7 +34,7 @@ internal class FeatheredStaff : ModItem
 	{
 		int projectileNumber = 3;
 
-		for (int i = 1; i <= projectileNumber; i++)
+		for (int i = 1; i < projectileNumber; i++)
 		{
 			Vector2 shootDirection = Vector2.Normalize(Main.MouseWorld - player.position) * Item.shootSpeed;
 			Projectile.NewProjectile(
