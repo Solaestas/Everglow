@@ -1,6 +1,5 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
-using rail;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 

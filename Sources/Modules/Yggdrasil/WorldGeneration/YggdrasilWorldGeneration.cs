@@ -5,7 +5,7 @@ using Everglow.Yggdrasil.KelpCurtain.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Walls;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
-using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 using Terraria.IO;
 using Terraria.WorldBuilding;

@@ -5,7 +5,7 @@ using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 
 public class LampWood_Chest : ModTile
 {

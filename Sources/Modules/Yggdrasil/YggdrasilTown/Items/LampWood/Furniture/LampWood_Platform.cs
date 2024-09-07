@@ -1,5 +1,6 @@
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 using Terraria.GameContent.Creative;
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.LampWood.Furniture;
 
 public class LampWood_Platform : ModItem
 {
@@ -10,7 +11,7 @@ public class LampWood_Platform : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.LampWood.LampWoodPlatform>());
+		Item.DefaultToPlaceableTile(ModContent.TileType<LampWoodPlatform>());
 		Item.width = 24;
 		Item.height = 18;
 	}

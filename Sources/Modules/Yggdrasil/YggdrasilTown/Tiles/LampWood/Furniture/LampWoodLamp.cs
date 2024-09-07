@@ -2,7 +2,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 
 public class LampWoodLamp : ModTile
 {

@@ -3,7 +3,7 @@ using ReLogic.Content;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 
 public class LampWoodCandle : ModTile
 {
@@ -31,7 +31,7 @@ public class LampWoodCandle : ModTile
 		if (!Main.dedServ)
 		{
 			if (!Main.dedServ)
-				flameTexture = ModAsset.LampWoodCandle_Flame ;
+				flameTexture = ModAsset.LampWoodCandle_Flame;
 		}
 
 		LocalizedText name = CreateMapEntryName();
