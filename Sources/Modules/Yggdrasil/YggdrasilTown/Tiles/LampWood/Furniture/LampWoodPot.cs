@@ -3,7 +3,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 
 public class LampWoodPot : ModTile, ITileFluentlyDrawn
 {
@@ -108,10 +108,10 @@ public class LampWoodPot : ModTile, ITileFluentlyDrawn
 		switch (Main.rand.Next(7))
 		{
 			case 0:
-				Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j),i * 16, j * 16, 48, 48, new Item(ItemID.Rope, Main.rand.Next(9, 85)));
+				Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 48, 48, new Item(ItemID.Rope, Main.rand.Next(9, 85)));
 				break;
 			case 1:
-				if(Main.rand.NextBool(3))
+				if (Main.rand.NextBool(3))
 				{
 					Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 48, 48, new Item(ItemID.GoldCoin, Main.rand.Next(1, 3)));
 				}

@@ -4,6 +4,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Items;
 using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Walls;

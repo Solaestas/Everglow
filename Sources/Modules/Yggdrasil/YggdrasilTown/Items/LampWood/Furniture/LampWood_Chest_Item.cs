@@ -1,6 +1,7 @@
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.LampWood.Furniture;
 
 public class LampWood_Chest_Item : ModItem
 {
@@ -10,7 +11,7 @@ public class LampWood_Chest_Item : ModItem
 	}
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.LampWood.LampWood_Chest>());
+		Item.DefaultToPlaceableTile(ModContent.TileType<LampWood_Chest>());
 	}
 	public override void AddRecipes()
 	{
