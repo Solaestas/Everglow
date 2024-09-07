@@ -1,9 +1,11 @@
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 internal class FeatheredStaff : ModProjectile
 {
 	private const int MaxCollideCount = 2;
-	private const int Phase1Duration = 120;
+	private const int Phase1Duration = 90;
 
 	// Phase 1
 	private const float FOVDistance = 500;
@@ -101,16 +103,54 @@ internal class FeatheredStaff : ModProjectile
 		}
 	}
 
+	public void GenerateParticles(int duplicateTimes = 1)
+	{
+		for (int i = 0; i < duplicateTimes; i++)
+		{
+			Vector2 newVelocity = Projectile.velocity.NormalizeSafe() * 1.5f;
+			var somg = new DarkGlimmeringParticleDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + Projectile.velocity * i / (float)duplicateTimes,
+				maxTime = Main.rand.Next(27, 66),
+				scale = 1,
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { 7, (float)(Main.time + i / (float)duplicateTimes) * 1.8f },
+			};
+			Ins.VFXManager.Add(somg);
+		}
+	}
+
+	public void GenerateParticlesExposion(int duplicateTimes = 1)
+	{
+		for (int i = 0; i < duplicateTimes; i++)
+		{
+			float speed = MathF.Pow(Main.rand.NextFloat(1f), 0.15f) * 5f;
+			Vector2 newVelocity = new Vector2(0, speed).RotatedByRandom(MathHelper.TwoPi);
+			var somg = new DarkGlimmeringParticleDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center,
+				maxTime = Main.rand.Next(27, 36),
+				scale = 1,
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { 5, (float)Main.time * 1.8f - speed * 2.4f },
+			};
+			Ins.VFXManager.Add(somg);
+		}
+	}
+
 	// Phase 2: Gravity gradually increase to max value
 	// ---------------------------------------------------------------------
 	private void Phase2AI()
 	{
 		if (!Bursted)
 		{
-			for (int i = 0; i < 5; i++)
-			{
-				Dust.NewDust(Projectile.Center, 2, 2, DustID.Cloud, newColor: Color.SandyBrown);
-			}
+			GenerateParticlesExposion(50);
 
 			// Draw gores
 			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
@@ -122,7 +162,8 @@ internal class FeatheredStaff : ModProjectile
 
 			Bursted = true;
 		}
-
+		GenerateParticles(5);
+		Projectile.velocity *= 0.99f;
 		// Gravity
 		Projectile.velocity.Y =
 			Projectile.velocity.Y + Gravity < VelocityLimitY ?
@@ -205,11 +246,15 @@ internal class FeatheredStaff : ModProjectile
 		Projectile.ai[0]++;
 		if (Projectile.ai[0] >= MaxCollideCount)
 		{
-			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Dirt);
+			GenerateParticles(5);
 			Projectile.Kill();
 			return true;
 		}
-
+		if(Projectile.ai[1] >= Phase1Duration)
+		{
+			Projectile.Kill();
+			return true;
+		}
 		if (Projectile.velocity.X != oldVelocity.X)
 		{
 			Projectile.velocity.X = -oldVelocity.X * 0.8f;
@@ -286,8 +331,6 @@ internal class FeatheredStaff : ModProjectile
 				scale: 1,
 				effects: effects,
 				0);
-
-			Dust.NewDust(Projectile.position - Projectile.velocity.NormalizeSafe() * 6, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, new Color(184, 134, 11, 0), 1.0f);
 		}
 
 		return false;

@@ -42,6 +42,11 @@ public class YggdrasilTownBackground : ModSystem
 	/// </summary>
 	public float BackgroundAlphaTwilight = 0f;
 
+	/// <summary>
+	/// Background alpha of cage
+	/// </summary>
+	public float BackgroundAlphaCage = 0f;
+
 	public override void PostUpdateEverything()// 开启地下背景
 	{
 		const float increase = 0.02f;
@@ -77,7 +82,7 @@ public class YggdrasilTownBackground : ModSystem
 	/// <returns></returns>
 	public static bool BiomeActive()
 	{
-		if (Main.screenPosition.Y > (BiomeCenter.Y - 16000))
+		if (Main.screenPosition.Y > (BiomeCenter.Y - 18000))
 		{
 			if (SubworldSystem.IsActive<YggdrasilWorld>())
 			{
@@ -95,13 +100,17 @@ public class YggdrasilTownBackground : ModSystem
 	private void DrawYggdrasilTownBackground(Color baseColor)
 	{
 		var texSky = ModAsset.YggdrasilTownBackgroundSky.Value;
-		var texClose = ModAsset.Great_Outpost.Value;
-		var texC1 = ModAsset.YggdrasilTownBackgroundC1.Value;
-		var texC2 = ModAsset.YggdrasilTownBackgroundC2.Value;
-		var texC3 = ModAsset.YggdrasilTownBackgroundC3.Value;
-		var texBound = ModAsset.KelpCurtainBound.Value;
 
-		Vector2 screenCenter = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f;
+		// 旧背景
+		BackgroundManager.QuickDrawBG(texSky, float.PositiveInfinity, BiomeCenter, baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000));
+
+		DrawLampWood(baseColor);
+		DrawTwilightForsetAndRelic(baseColor);
+		DrawCageOfChallengers(baseColor);
+	}
+
+	public void DrawCageOfChallengers(Color baseColor)
+	{
 		if (SubworldSystem.Current != null)
 		{
 			YggdrasilWorld yWorld = SubworldSystem.Current as YggdrasilWorld;
@@ -132,61 +141,71 @@ public class YggdrasilTownBackground : ModSystem
 						yWorld.StoneCageOfChallengesCenter = new Vector2(Main.maxTilesX * 16 / 2, Main.maxTilesY - 9000);
 					}
 				}
+				Vector2 screenCenter = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f;
+				Vector2 backgroundCenter = yWorld.StoneCageOfChallengesCenter + new Vector2(0, -600);
 
 				// 如果在挑战者石牢附近
-				// if (Math.Abs(yWorld.StoneCageOfChallengesCenter.X - screenCenter.X) < 240 * 16)
-				// {
-				// if (Math.Abs(yWorld.StoneCageOfChallengesCenter.Y - screenCenter.Y) < 60 * 16)
-				// {
-				// var stoneClose2 = ModAsset.StoneCageOfChallengesClose2.Value;
-				// var stoneClose = ModAsset.StoneCageOfChallengesClose.Value;
-				// var stoneMiddle = ModAsset.StoneCageOfChallengesMiddle.Value;
-				// var stoneFar = ModAsset.StoneCageOfChallengesFar.Value;
-				// var stoneSky = ModAsset.StoneCageOfChallengesSky.Value;
-				// Vector2 correction = yWorld.StoneCageOfChallengesCenter + new Vector2(0, -8000) - BiomeCenter;
-				// float setSize = 1f;
-				// BackgroundManager.QuickDrawBG(stoneSky, GetDrawRect(stoneSky.Size(), 0f, correction, setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-				// BackgroundManager.QuickDrawBG(stoneFar, GetDrawRect(stoneFar.Size(), 0.05f, correction, setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-				// BackgroundManager.QuickDrawBG(stoneMiddle, GetDrawRect(stoneMiddle.Size(), 0.10f, correction + new Vector2(0, 5000), setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-				// BackgroundManager.QuickDrawBG(stoneClose, GetDrawRect(stoneFar.Size(), 0.15f, correction + new Vector2(0, 6000), setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-				// BackgroundManager.QuickDrawBG(stoneClose2, GetDrawRect(stoneMiddle.Size(), 0.20f, correction + new Vector2(0, 7000), setSize), baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-				// return;
-				// }
-				// }
-				// if (ModContent.GetInstance<LampWoodForest>().IsBiomeActive(Main.LocalPlayer))
-				// {
+				if (Math.Abs(yWorld.StoneCageOfChallengesCenter.X - screenCenter.X) < 240 * 16)
+				{
+					if (Math.Abs(yWorld.StoneCageOfChallengesCenter.Y - screenCenter.Y) < 60 * 16)
+					{
+						if (BackgroundAlphaCage < 1f)
+						{
+							BackgroundAlphaCage += 0.02f;
+						}
+						else
+						{
+							BackgroundAlphaCage = 1f;
+						}
+					}
+					else
+					{
+						if (BackgroundAlphaCage > 0f)
+						{
+							BackgroundAlphaCage -= 0.02f;
+						}
+						else
+						{
+							LampWoodCenterY = Main.screenPosition.Y;
+							BackgroundAlphaCage = 0;
+						}
+					}
+				}
+				else
+				{
+					if (BackgroundAlphaCage > 0f)
+					{
+						BackgroundAlphaCage -= 0.02f;
+					}
+					else
+					{
+						LampWoodCenterY = Main.screenPosition.Y;
+						BackgroundAlphaCage = 0;
+					}
+				}
+				if (BackgroundAlphaCage > 0)
+				{
+					var stoneClose2 = ModAsset.StoneCageOfChallengesClose2.Value;
+					var stoneClose = ModAsset.StoneCageOfChallengesClose.Value;
+					var stoneMiddle = ModAsset.StoneCageOfChallengesMiddle.Value;
+					var stoneFar = ModAsset.StoneCageOfChallengesFar.Value;
+					var stoneSky = ModAsset.StoneCageOfChallengesSky.Value;
 
-				// }
-				// else
-				// {
-				// if (Math.Abs(LampWoodCenterY - Main.screenPosition.Y) > 200)
-				// {
-				// LampWoodCenterY = Main.screenPosition.Y;
-				// }
-				// if (BackgroundSwitchingAlpha > 0f)
-				// {
-				// BackgroundSwitchingAlpha -= 0.02f;
-				// }
-				// else
-				// {
-				// BackgroundSwitchingAlpha = 0f;
-				// }
-				// }
+					BackgroundManager.QuickDrawBG(stoneSky, float.PositiveInfinity, backgroundCenter + new Vector2(0, -1800), baseColor * BackgroundAlphaCage, (int)(BiomeCenter.Y - 25600), (int)(BiomeCenter.Y + 8000), true, true);
+					BackgroundManager.QuickDrawBG(stoneFar, 30, backgroundCenter + new Vector2(0, -9000), baseColor * BackgroundAlphaCage, (int)(BiomeCenter.Y - 25600), (int)(BiomeCenter.Y + 8000), true, true);
+					BackgroundManager.QuickDrawBG(stoneMiddle, 20, backgroundCenter + new Vector2(0, -4800), baseColor * BackgroundAlphaCage, (int)(BiomeCenter.Y - 25600), (int)(BiomeCenter.Y + 8000), true, true);
+					BackgroundManager.QuickDrawBG(stoneClose, 12, backgroundCenter + new Vector2(0, -1800), baseColor * BackgroundAlphaCage, (int)(BiomeCenter.Y - 25600), (int)(BiomeCenter.Y + 8000), true, true);
+					BackgroundManager.QuickDrawBG(stoneClose2, 3, backgroundCenter + new Vector2(0, 100), baseColor * BackgroundAlphaCage, (int)(BiomeCenter.Y - 25600), (int)(BiomeCenter.Y + 8000), true, true);
+				}
 			}
 		}
-
-		// 旧背景
-		BackgroundManager.QuickDrawBG(texSky, float.PositiveInfinity, BiomeCenter, baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000));
-
-		DrawLampWood(baseColor);
-		DrawTwilightForsetAndRelic(baseColor);
 	}
 
 	public void DrawLampWood(Color baseColor)
 	{
 		if (ModContent.GetInstance<LampWoodForest>().IsBiomeActive(Main.LocalPlayer))
 		{
-			if(Math.Abs(LampWoodCenterY - Main.screenPosition.Y) < Main.screenHeight)
+			if (Math.Abs(LampWoodCenterY - Main.screenPosition.Y) < Main.screenHeight)
 			{
 				if (BackgroundAlphaLampWood < 1f)
 				{
@@ -222,7 +241,7 @@ public class YggdrasilTownBackground : ModSystem
 			}
 		}
 
-		if(BackgroundAlphaLampWood > 0)
+		if (BackgroundAlphaLampWood > 0)
 		{
 			var lampClose = ModAsset.LampWoodClose.Value;
 			var lampMiddle = ModAsset.LampWoodMiddle.Value;

@@ -44,7 +44,9 @@ internal class FeatheredStaff : ModItem
 				Item.shoot,
 				Item.damage,
 				Item.knockBack,
-				player.whoAmI);
+				player.whoAmI,
+				0,
+				Main.rand.Next(20));
 		}
 		return true;
 	}

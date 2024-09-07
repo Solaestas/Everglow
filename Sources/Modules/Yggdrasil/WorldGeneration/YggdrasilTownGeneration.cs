@@ -52,6 +52,7 @@ public class YggdrasilTownGeneration
 		BuildHeavenlyPortal();
 		Main.statusText = "Constructing The Yggdrasil Town Below...";
 		BuildTownBelow();
+		BuildStoneCageOfChallenges();
 
 		// Main.statusText = "Growing LampWoods...";
 		// BuildLampWoodLand();
@@ -263,7 +264,7 @@ public class YggdrasilTownGeneration
 	{
 		int x0CoordPerlin = GenRand.Next(1024);
 		int y0CoordPerlin = GenRand.Next(1024);
-		int upBound = Main.maxTilesY - 1900;
+		int upBound = Main.maxTilesY - 2080;
 
 		// 7次循环
 		for (int i = 2; i < 9; i++)
@@ -308,7 +309,9 @@ public class YggdrasilTownGeneration
 				}
 				if (point.X < 50 || point.X > 1950)
 				{
-					break;
+					point -= velocity;
+					velocity.X *= -1;
+					point += velocity;
 				}
 				if (point.Y < upBound)
 				{
@@ -1279,166 +1282,132 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildStoneCageOfChallenges()
 	{
-		int startY = 10900;
-		while (!SafeGetTile(AzureGrottoCenterX, startY).HasTile)
-		{
-			startY--;
-			if (startY < 10500)
-			{
-				break;
-			}
-		}
-		startY -= 30;
-		int randX = GenRand.Next(1024);
-		int randY = GenRand.Next(1024);
-		int step = -1;
-		if (AzureGrottoCenterX > 600)
-		{
-			step = 1;
-		}
-		int x = AzureGrottoCenterX - step * 240;
+		int buildX = Main.maxTilesX / 2 - 300;
+		int buildY = Main.maxTilesY - 1960;
+		int x0CoordPerlin = GenRand.Next(1024);
+		int y0CoordPerlin = GenRand.Next(1024);
 
-		// 盖上石木
-		while (x >= 50 && x <= 1150)
+		// 清扫周围物块腾出空间
+		for (int x = 0; x < 450; x += 30)
 		{
-			x += step;
-			float noiseX = PerlinPixelG[(randX + x) % 1024, randY] / 256f;
-			float valueX = Math.Abs(x - (AzureGrottoCenterX - step * 170) + noiseX * 27f) / 550f;
-			float valueY = 1 - MathF.Cos(valueX * MathF.PI);
-			valueY *= 200;
-			for (int y = startY; y <= startY + valueY; y++)
+			CircleTileWithRandomNoise(new Vector2(buildX + x, buildY), 90, -1, 20, true);
+		}
+		CircleTileWithRandomNoise(new Vector2(buildX + 480, buildY), 90, ModContent.TileType<StoneScaleWood>(), 30, true);
+
+		// 第一层与第二层交界处的穹顶
+		for (int x = 0; x <= Main.maxTilesX - 1; x += 1)
+		{
+			for (int y = Main.maxTilesY - 2400; y <= Main.maxTilesY - 1800; y += 1)
 			{
-				Tile target = SafeGetTile(x, y);
-				target.HasTile = true;
-				target.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
-				if (y <= startY + valueY - 6)
+				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
+				float bValue = MathF.Abs((y - Main.maxTilesY + 2100) / 100f);
+				float cValue = (x - Main.maxTilesX / 2f) / (Main.maxTilesX / 2f);
+				cValue *= cValue;
+				if (bValue > cValue)
 				{
-					target.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
-				}
-			}
-		}
-		int tunnelLength = GenRand.Next(447, 528);
-		x = AzureGrottoCenterX;
-		if (step > 0)
-		{
-			while (x + tunnelLength > Main.maxTilesX - 50)
-			{
-				tunnelLength--;
-			}
-		}
-		else
-		{
-			while (x - tunnelLength < 50)
-			{
-				tunnelLength--;
-			}
-		}
-		int count = 0;
-		int startY2 = startY + 170;
-		int cageMiddleX = AzureGrottoCenterX + (tunnelLength - 100) * step;
-		randX = GenRand.Next(1024);
-		randY = GenRand.Next(1024);
-
-		while (count <= tunnelLength)
-		{
-			// 前往大厅的道路和隧道
-			if (count == 0)
-			{
-				QuickBuild(x - 39, startY2 - 3, "YggdrasilTown/MapIOs/LiftRoomOfChallengerHall40x22.mapio");
-			}
-			count++;
-			x += step;
-			for (int y = startY2; y <= startY2 + 8; y++)
-			{
-				Tile target = SafeGetTile(x, y);
-
-				if (y != startY2 + 8)
-				{
-					target.HasTile = false;
+					bValue = -1 + (bValue - cValue) * 4;
 				}
 				else
 				{
-					target.TileType = TileID.GrayBrick;
-					target.HasTile = true;
+					bValue = -1;
+				}
+				if (aValue + bValue < 0.8f)
+				{
+					Tile tile = SafeGetTile(x, y);
+					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+					tile.HasTile = true;
 				}
 			}
+		}
 
-			// 挖出大厅
-			if (count > tunnelLength - 200)
+		// 电梯间
+		QuickBuild(buildX, buildY, "YggdrasilTown/MapIOs/LiftRoomOfChallengerHall40x22.mapio");
+		int step2X = buildX + 40;
+		int step2Y = buildY + 3;
+		PlaceRectangleAreaOfBlock(step2X, step2Y, step2X + 480, step2Y + 9, ModContent.TileType<StoneScaleWood>());
+		KillRectangleAreaOfTile(step2X, step2Y + 2, step2X + 480, step2Y + 7);
+
+		// 上半部分石壁
+		for (int x = step2X; x <= step2X + 480; x += 1)
+		{
+			for (int y = Main.maxTilesY - 2100; y <= step2Y; y += 1)
 			{
-				float valueX = tunnelLength - count;
-				valueX -= 100;
-				float deltaY = 80 - valueX * valueX / 450f;
-				deltaY += PerlinPixelB[(randX + count) % 1024, randY] / 90f;
-				for (int y = startY2 - (int)deltaY; y <= startY2 + 8; y++)
+				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
+				float bValue = MathF.Abs((y - step2Y) / 100f);
+				float cValue = (x - step2X + 20) / 50f;
+				cValue *= cValue;
+				cValue = MathF.Pow(cValue, 0.9f);
+				if (aValue + bValue < cValue)
 				{
-					Tile target = SafeGetTile(x, y);
-					target.HasTile = false;
-					Vector2 centerPoint = new Vector2(cageMiddleX, startY2 - deltaY * 0.5f);
-					float colorValue = 1 - CellPixel[(x * 4 + randX) % 1024, (y * 4 + randY) % 1024] / 255f;
-					colorValue *= colorValue * 2;
-					if (colorValue > (centerPoint - new Vector2(x, y)).Length() / 100f - 0.7f)
+					Tile tile = SafeGetTile(x, y);
+					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+					tile.HasTile = true;
+				}
+			}
+		}
+
+		// 上半部分挖空
+		for (int x = step2X; x <= step2X + 480; x += 1)
+		{
+			for (int y = Main.maxTilesY - 2200; y <= step2Y + 1; y += 1)
+			{
+				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
+				float bValue = MathF.Abs((y - step2Y) / 70f);
+				float cValue = (x - step2X - 240) / 200f;
+				cValue *= cValue;
+				cValue = 1 - cValue;
+				cValue = MathF.Pow(cValue, 0.9f);
+				if (aValue * 0.3f + bValue < cValue)
+				{
+					Tile tile = SafeGetTile(x, y);
+					tile.HasTile = false;
+				}
+			}
+		}
+
+		// 下半部分石壁
+		for (int x = step2X; x <= step2X + 480; x += 1)
+		{
+			float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), y0CoordPerlin % 1024] / 255f;
+			float aValueNext = PerlinPixelR[(int)Math.Abs(((x + 1) * 4.3f + x0CoordPerlin) % 1024), y0CoordPerlin % 1024] / 255f;
+			float aValueBack = PerlinPixelR[(int)Math.Abs(((x - 1) * 4.3f + x0CoordPerlin) % 1024), y0CoordPerlin % 1024] / 255f;
+			for (int y = step2Y + 7; y <= step2Y + 500; y += 1)
+			{
+				float bValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)(y * 4.3f + y0CoordPerlin) % 1024] / 255f;
+				int thick = y - step2Y - 7;
+				float value = (x - step2X) / 480f;
+				value *= value;
+				value = MathF.Pow(value, 0.7f);
+				if (thick > value * 300)
+				{
+					break;
+				}
+				if (thick > value * 240)
+				{
+					bValue += (thick - value * 240) / 60f;
+				}
+				Tile tile = SafeGetTile(x, y);
+				if (tile.HasTile)
+				{
+					bValue += 1f;
+				}
+				if (tile.wall > 0)
+				{
+					bValue += 0.5f;
+					if (x > step2X + 400)
 					{
-						target.ClearEverything();
+						bValue += (x - step2X - 400) / 80f;
 					}
 				}
-			}
-		}
-		int sealY = startY2 - 20;
-		int sealCountY = 0;
-		while (!SafeGetTile(cageMiddleX, sealY + sealCountY).HasTile)
-		{
-			sealCountY++;
-			if (sealCountY > 100)
-			{
-				break;
-			}
-		}
-		sealY = sealY + sealCountY - 10;
-		PlaceFrameImportantTiles(cageMiddleX, sealY, 20, 10, ModContent.TileType<SquamousShellSeal>());
-		Point centerOfCage = new Point(cageMiddleX, startY2 - 40);
-		randX = GenRand.Next(1024);
-		randY = GenRand.Next(1024);
-		int startX = Math.Max(cageMiddleX - 300, 0);
-		int endX = Math.Min(cageMiddleX + 300, Main.maxTilesX);
-
-		// 大厅顶部的琥珀
-		for (int x0 = startX; x0 <= endX; x0++)
-		{
-			for (int y = centerOfCage.Y - 200; y <= centerOfCage.Y + 30; y++)
-			{
-				Tile target = SafeGetTile(x0, y);
-				if (target.TileType == ModContent.TileType<StoneScaleWood>() && target.HasTile)
+				if (bValue < 1f)
 				{
-					Vector2 dis = new Vector2(x0, y) - new Vector2(centerOfCage.X, centerOfCage.Y + 40);
-					dis.X *= 1f;
-					float myLength = dis.Length();
-					float cellC = 1 - CellPixel[(int)(x0 * 3.5f + randX) % 1024, (int)(myLength * 3 + randY) % 1024] / 255f;
-
-					// float xValue = Math.Abs(x0 - cageMiddleX) / 300f;
-					// xValue = 1 - xValue;
-					// xValue *= 3;
-					// xValue = Math.Min(xValue, 1);
-					Vector2 angle = new Vector2(Math.Abs(x0 - cageMiddleX), y - startY2);
-					float xValue = angle.X / angle.Length();
-					float lengthValue = myLength / 300f;
-					if (cellC > lengthValue + xValue)
-					{
-						target.ClearEverything();
-						target.TileType = (ushort)ModContent.TileType<YggdrasilAmber>();
-						target.HasTile = true;
-					}
+					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+					tile.HasTile = true;
 				}
 			}
 		}
-		if (SubworldLibrary.SubworldSystem.Current != null)
-		{
-			YggdrasilWorld yWorld = SubworldLibrary.SubworldSystem.Current as YggdrasilWorld;
-			if (yWorld != null)
-			{
-				yWorld.StoneCageOfChallengesCenter = new Vector2(cageMiddleX, startY2 - 40) * 16;
-			}
-		}
+
+		PlaceFrameImportantTiles(step2X + 236, step2Y - 3, 20, 10, ModContent.TileType<SquamousShellSeal>());
 	}
 
 	/// <summary>
@@ -1446,7 +1415,7 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildTwilightLand()
 	{
-		int upBound = Main.maxTilesY - 1900;
+		int upBound = Main.maxTilesY - 1700;
 		int bottomBound = Main.maxTilesY - 660;
 		int count = 0;
 		List<Vector2> oldPoses = new List<Vector2>();
@@ -1456,7 +1425,7 @@ public class YggdrasilTownGeneration
 		{
 			int x = GenRand.Next(20, Main.maxTilesX - 19);
 			int y = GenRand.Next(upBound, bottomBound);
-			if((new Vector2(x, y) - TwilightRelicCenter).Length() > 300)
+			if ((new Vector2(x, y) - TwilightRelicCenter).Length() > 300)
 			{
 				CrawlCarpetOfTile(x, y, GenRand.Next(150, 450), 12, ModContent.TileType<TwilightGrassBlock>());
 			}
@@ -1474,7 +1443,7 @@ public class YggdrasilTownGeneration
 				foreach (Vector2 v in oldPoses)
 				{
 					// 空出中心并且与另外一个点保持距离
-					if ((basePos - v).Length() < 500 || (basePos - TwilightRelicCenter).Length() < 600)
+					if ((basePos - v).Length() < 500 || (basePos - TwilightRelicCenter).Length() < 700)
 					{
 						canBuild = false;
 						break;
@@ -1534,6 +1503,9 @@ public class YggdrasilTownGeneration
 		}
 	}
 
+	/// <summary>
+	/// 中心暮光之地附带遗迹
+	/// </summary>
 	public static void BuildTwilightRelic()
 	{
 		int range = GenRand.Next(330, 340);
