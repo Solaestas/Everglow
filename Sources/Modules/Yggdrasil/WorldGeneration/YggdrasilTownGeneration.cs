@@ -762,8 +762,8 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildLampWoodLand()
 	{
-		int upBound = Main.maxTilesY - 1900;
-		int bottomBound = Main.maxTilesY - 460;
+		int upBound = Main.maxTilesY - 1660;
+		int bottomBound = Main.maxTilesY - 380;
 		int countLamp = 0;
 		List<Vector2> roomPositions = new List<Vector2>();
 		for (int i = 0; i < 1000; i++)
@@ -878,6 +878,7 @@ public class YggdrasilTownGeneration
 
 				// 房子
 				int countCell = 0;
+				int roomCenterX = 0;
 				bool built = false;
 				while (countCell < 100)
 				{
@@ -888,6 +889,7 @@ public class YggdrasilTownGeneration
 					{
 						continue;
 					}
+					roomCenterX = x;
 					for (int y = checkY - 25; y > checkY - 30; y--)
 					{
 						int roomHeight = GenRand.Next(8, 10);
@@ -988,15 +990,15 @@ public class YggdrasilTownGeneration
 						{
 							if (!tile0.HasTile && !tile1.HasTile && !tile4.HasTile && !tile5.HasTile && tile2.HasTile && tile3.HasTile && tile2.Slope == SlopeType.Solid && (tile2.TileType == ModContent.TileType<DarkForestGrass>() || tile2.TileType == ModContent.TileType<DarkForestSoil>()) && tile3.Slope == SlopeType.Solid && (tile3.TileType == ModContent.TileType<DarkForestGrass>() || tile3.TileType == ModContent.TileType<DarkForestSoil>()))
 							{
-								if (Main.rand.NextBool(3))
+								if (GenRand.NextBool(3))
 								{
-									if (Main.rand.NextBool(2))
+									if (GenRand.NextBool(2))
 									{
-										PlaceFrameImportantTiles(x, y - 1, 2, 2, ModContent.TileType<LampWoodPot>(), Main.rand.Next(6) * 36);
+										PlaceFrameImportantTiles(x, y - 1, 2, 2, ModContent.TileType<LampWoodPot>(), GenRand.Next(6) * 36);
 									}
 									else
 									{
-										PlaceFrameImportantTiles(x, y - 1, 2, 2, TileID.Pots, Main.rand.Next(3) * 36, 36);
+										PlaceFrameImportantTiles(x, y - 1, 2, 2, TileID.Pots, GenRand.Next(3) * 36, 36);
 									}
 								}
 							}
@@ -1005,165 +1007,137 @@ public class YggdrasilTownGeneration
 				}
 				if (countLamp > 12)
 				{
+					// 生命灯木
+					for (int j = 0; j < 3000; j++)
+					{
+						// 选址
+						checkX = GenRand.Next(50, Main.maxTilesX - 49);
+						checkY = GenRand.Next(upBound, bottomBound);
+						if (SafeGetTile(checkX, checkY + 1).TileType == ModContent.TileType<DarkForestGrass>())
+						{
+							if (CheckSpaceWidth(checkX, checkY) > 20 && CheckSpaceUp(checkX, checkY) > 160 && (new Vector2(checkX, checkY) - TwilightRelicCenter).Length() > 400)
+							{
+								Vector2 checkTrunk = new Vector2(checkX + (roomCenterX > checkX ? 50 : -50), checkY);
+								List<(Vector2 TrunkPos, float Width)> trunkPoints = new List<(Vector2, float)>();
+
+								LifeLampTreeStructure(trunkPoints, checkTrunk, new Vector2(0, -10), 50, 12);
+								for (int t = 0; t < trunkPoints.Count; t++)
+								{
+									Vector2 trunkPoint = trunkPoints[t].TrunkPos;
+									float jointWidth = trunkPoints[t].Width;
+									CircleTile(trunkPoint, jointWidth, ModContent.TileType<FemaleLampWood>());
+									CircleWall(trunkPoint, Math.Max(jointWidth - 1, 0), ModContent.WallType<FemaleLampWoodWall>());
+								}
+								for (int t = 0; t < trunkPoints.Count; t++)
+								{
+									Vector2 trunkPoint = trunkPoints[t].TrunkPos;
+									float jointWidth = trunkPoints[t].Width;
+									CircleTile(trunkPoint, Math.Max(jointWidth - 3, 0), -1, true);
+								}
+								for (int t = 5; t < trunkPoints.Count; t++)
+								{
+									Vector2 trunkPoint = trunkPoints[t].TrunkPos;
+									float jointWidth = trunkPoints[t].Width + Main.rand.NextFloat(3) - 2;
+									Vector2 placePos = trunkPoint + new Vector2(jointWidth * (GenRand.NextBool(2) ? -1 : 1), 0).RotatedByRandom(MathHelper.TwoPi);
+									float distanceToLeaves = To100NearestTileTypeBlockDistance((int)placePos.X, (int)placePos.Y, ModContent.TileType<FemaleLampLeaves>());
+									float distanceToWood = To100NearestTileTypeBlockDistance((int)placePos.X, (int)placePos.Y, ModContent.TileType<FemaleLampWood>());
+									if (distanceToLeaves > 7 && jointWidth > 2 && distanceToWood <= 2)
+									{
+										Tile tile = SafeGetTile(placePos);
+										if (tile.wall != ModContent.WallType<FemaleLampWoodWall>())
+										{
+											tile.TileType = (ushort)ModContent.TileType<FemaleLampLeaves>();
+											tile.HasTile = true;
+										}
+									}
+								}
+								break;
+							}
+						}
+					}
 					break;
 				}
 			}
 		}
+	}
 
-		// int direction = 1;
-		// int randX = AzureGrottoCenterX;
-		// if (AzureGrottoCenterX > 600)
-		// {
-		// direction = -1;
-		// randX = AzureGrottoCenterX;
-		// }
-		// int startY = 11400;
-		// int countX = 0;
-		// int coordX = GenRand.Next(100, 200) + 1024;
-		// int coordY = GenRand.Next(100, 200) + 1024;
-		////放置泥块,草块
-		// while (countX < 600)
-		// {
-		// countX++;
-		// int x = randX + countX * direction;
-		// float yMin = 11040 - countX * countX / 2000f;
-		// for(int y = startY + PerlinPixelG[(x + coordX) % 1024, 200] / 20; y > yMin;y--)
-		// {
-		// float valueR = PerlinPixelR[(int)(x + coordX) % 1024, (int)(y * 3.3 + coordY) % 1024] / 255f;
-		// if(y < yMin + 100)
-		// {
-		// valueR -= (yMin - y) / 100f + 1;
-		// }
-		// Tile tile = SafeGetTile(x, y);
-		// if(!tile.HasTile && tile.LiquidAmount<=0)
-		// {
-		// //边缘区域为草方块
-		// if(valueR > 0.32f)
-		// {
-		// tile.TileType = (ushort)ModContent.TileType<DarkForestGrass>();
-		// tile.HasTile = true;
-		// }
-		// //其他区域是泥
-		// if (valueR > 0.45f)
-		// {
-		// tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
-		// tile.HasTile = true;
-		// }
-		// }
-		// }
-		// }
-		// 放置含有宝箱的房间
+	/// <summary>
+	/// 创建一个生命灯树
+	/// </summary>
+	/// <param name="trunkPoints"></param>
+	/// <param name="startPoint"></param>
+	/// <param name="maxStep"></param>
+	/// <param name="width"></param>
+	public static void LifeLampTreeStructure(List<(Vector2 TrunkPos, float Width)> trunkPoints, Vector2 startPoint, Vector2 velocity, float maxStep, float width)
+	{
+		Vector2 checkTrunk = startPoint;
+		float maxWidth = width;
+		float direction = GenRand.NextBool(2) ? -1 : 1;
+		float omega = 0;
+		for (int checkMax = 5; checkMax < 100; checkMax++)
+		{
+			Vector2 checkPoint = startPoint + velocity * width / 24f * checkMax;
+			bool end = false;
+			foreach (var point in trunkPoints)
+			{
+				if ((checkPoint - point.TrunkPos).Length() < width)
+				{
+					end = true;
+					break;
+				}
+			}
+			if (end)
+			{
+				if (maxStep > checkMax)
+				{
+					maxStep = checkMax;
+				}
+				break;
+			}
+		}
+		for (int step = 0; step < maxStep; step++)
+		{
+			trunkPoints.Add((checkTrunk, width));
+			checkTrunk += (velocity + velocity.RotatedBy(MathHelper.PiOver2) * GenRand.NextFloat(-0.2f, 0.2f)) * width / 24f;
 
-		////放置罐子
-		// countX = -100;
-		// coordX = GenRand.Next(1024) + 1024;
-		// coordY = GenRand.Next(1024) + 1024;
-		// while (countX < 800)
-		// {
-		// countX++;
-		// int x = randX + countX * direction;
-		// float yMin = 11040 - countX * countX / 2000f;
-		// for (int y = startY + 150; y > yMin; y--)
-		// {
-		// float valueG = PerlinPixelG[(int)(x * 0.24f + coordX) % 1024, (int)(y * 0.24 + coordY) % 1024] / 255f;
-		// Tile tile0 = SafeGetTile(x, y);
-		// Tile tile1 = SafeGetTile(x + 1, y);
-		// Tile tile2 = SafeGetTile(x, y + 1);
-		// Tile tile3 = SafeGetTile(x + 1, y + 1);
-		// Tile tile4 = SafeGetTile(x, y - 1);
-		// Tile tile5 = SafeGetTile(x + 1, y - 1);
-		// //罐子
-		// if(valueG > 0.4f)
-		// {
-		// if (!tile0.HasTile && !tile1.HasTile && !tile4.HasTile && !tile5.HasTile && tile2.HasTile && tile3.HasTile && tile2.Slope == SlopeType.Solid && (tile2.TileType == ModContent.TileType<DarkForestGrass>() || tile2.TileType == ModContent.TileType<DarkForestSoil>()) && tile3.Slope == SlopeType.Solid && (tile3.TileType == ModContent.TileType<DarkForestGrass>() || tile3.TileType == ModContent.TileType<DarkForestSoil>()))
-		// {
-		// if (Main.rand.NextBool(3))
-		// {
-		// if (Main.rand.NextBool(2))
-		// {
-		// PlaceFrameImportantTiles(x, y - 1, 2, 2, ModContent.TileType<LampWoodPot>(), Main.rand.Next(6) * 36);
-		// }
-		// else
-		// {
-		// PlaceFrameImportantTiles(x, y - 1, 2, 2, TileID.Pots, Main.rand.Next(3) * 36, 36);
-		// }
-		// }
-		// }
-		// }
-		// }
-		// }
-		// int smoothX = randX;
-		// if (AzureGrottoCenterX > 600)
-		// {
-		// smoothX = randX - 500;
-		// }
-		////平滑区间
-		// SmoothTile(smoothX, 11000, smoothX + 500, 11250);
-		// Point treeRotPos = new Point(200, 11000);
-		// if(AzureGrottoCenterX < 600)
-		// {
-		// treeRotPos = new Point(1000, 11000);
-		// }
-		////大灯塔树母树
-		// ShapeData shapeData = new ShapeData();
-		// WorldUtils.Gen(treeRotPos, new Shapes.Circle(15, 15), new Actions.Blank().Output(shapeData));
-		// Vector2 offset = new Vector2(0);
-		// Vector2 offsetVel = new Vector2(0, -3);
-		// Point treeHat = treeRotPos;
-		// float width = 13f;
-		// for (int i = 0;i < 75;i++)
-		// {
-		// offset += offsetVel;
-		// offsetVel = offsetVel.RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f));
-		// offsetVel = offsetVel * 0.85f + new Vector2(i * i / 3000f * -direction, -3) * 0.15f;
-		// width *= 0.98f;
-		// WorldUtils.Gen(treeRotPos, new Shapes.Circle((int)width, (int)width), Actions.Chain(new GenAction[]{new Modifiers.Offset((int)offset.X, (int)offset.Y), new Actions.Blank().Output(shapeData)}));
-		// if(i > 24)
-		// {
-		// if(Main.rand.NextBool(15))
-		// {
-		// Vector2 offset2 = offset;
-		// float dir2 = (Main.rand.Next(2) - 0.5f) * 2;
-		// Vector2 offsetVel2 = offsetVel.RotatedBy(Main.rand.NextFloat(-1.3f, -0.5f) * dir2);
-		// Vector2 offsetVel2final = offsetVel.RotatedBy(Main.rand.NextFloat(-1.7f, -1.0f) * dir2);
-		// float width2 =  width * 0.97f;
-		// int length = 75 - i + Main.rand.Next(-11, 45);
+			// 超过步数收缩
+			if (step > maxStep * 0.6f)
+			{
+				width = maxWidth * (1 - MathF.Cos((maxStep - step) / (maxStep * 0.4f) * MathF.PI)) * 0.5f;
+			}
 
-		// for (int j = 0; j < length; j++)
-		// {
-		// offset2 += offsetVel2;
-		// offsetVel2 = offsetVel2.RotatedBy(Main.rand.NextFloat(-0.04f, 0.04f));
-		// offsetVel2 = offsetVel2 * 0.85f + offsetVel2final * 0.15f;
-		// width2 *= 0.98f;
-		// WorldUtils.Gen(treeRotPos, new Shapes.Circle((int)width2, (int)width2), Actions.Chain(new GenAction[] { new Modifiers.Offset((int)offset2.X, (int)offset2.Y), new Actions.Blank().Output(shapeData) }));
-		// }
-		// }
-		// if(i == 53)
-		// {
-		// treeHat += new Point((int)offset.X, (int)offset.Y);
-		// }
-		// }
-		// }
-
-		// for(int i = -250;i < 251;i++)
-		// {
-		// for (int j = -100; j < 101; j++)
-		// {
-		// float length = new Vector2(i, j * 2.5f).Length() / 250f;
-		// float valueG = PerlinPixelR[(int)(i * 0.24f + coordX + 140) % 1024, (int)(j * 1.3 + coordY + 140) % 1024] / 255f;
-		// if(Main.rand.NextBool(15) && length + valueG < 1)
-		// {
-		// int x = treeHat.X + i;
-		// int y = treeHat.Y + j;
-		// Tile tile = SafeGetTile(x, y);
-		// if(tile != null && !tile.HasTile)
-		// {
-		// tile.TileType = (ushort)ModContent.TileType<FemaleLampLeaves>();
-		// tile.HasTile = true;
-		// }
-		// }
-		// }
-		// }
+			// 超过距离回旋
+			if ((checkTrunk - startPoint).Length() > 10 * width)
+			{
+				if (MathF.Abs(omega) < 0.1f)
+				{
+					omega += direction * 0.01f;
+				}
+				maxWidth *= 0.995f;
+			}
+			velocity = velocity.RotatedBy(omega);
+			width = Math.Min(width, maxWidth);
+			if (width < 2)
+			{
+				break;
+			}
+			if (MathF.Abs(omega) >= 0.01f)
+			{
+				velocity *= 0.99f;
+			}
+			if (velocity.Length() < 5)
+			{
+				break;
+			}
+			if (step > maxStep * 0.2f)
+			{
+				if (!GenRand.NextBool(3) && trunkPoints.Count < 3000 && width > 5)
+				{
+					Vector2 newVel = velocity.RotatedBy(GenRand.NextFloat(0.8f, 1.3f) * (GenRand.NextBool(2) ? -1 : 1));
+					LifeLampTreeStructure(trunkPoints, checkTrunk + newVel * 0.2f, newVel, (maxStep - step) * GenRand.NextFloat(0.6f, 3.7f), width * GenRand.NextFloat(0.35f, 0.55f));
+				}
+			}
+		}
 	}
 
 	/// <summary>
@@ -1428,7 +1402,7 @@ public class YggdrasilTownGeneration
 			int y = GenRand.Next(upBound, bottomBound);
 			if ((new Vector2(x, y) - TwilightRelicCenter).Length() > 300)
 			{
-				CrawlCarpetOfTile(x, y, GenRand.Next(150, 450), 12, ModContent.TileType<TwilightGrassBlock>());
+				CrawlCarpetOfTypeTile(x, y, GenRand.Next(150, 450), 12, ModContent.TileType<TwilightGrassBlock>(), ModContent.TileType<StoneScaleWood>());
 			}
 		}
 
@@ -1444,7 +1418,7 @@ public class YggdrasilTownGeneration
 				foreach (Vector2 v in oldPoses)
 				{
 					// 空出中心并且与另外一个点保持距离
-					if ((basePos - v).Length() < 500 || (basePos - TwilightRelicCenter).Length() < 700)
+					if ((basePos - v).Length() < 500 || (basePos - TwilightRelicCenter).Length() < 780)
 					{
 						canBuild = false;
 						break;
@@ -1572,11 +1546,11 @@ public class YggdrasilTownGeneration
 		{
 			for (int y0 = -radiusI; y0 <= radiusI; y0++)
 			{
-				int height = Main.rand.Next(7, 60);
+				int height = GenRand.Next(7, 60);
 				Tile tile = SafeGetTile(TwilightRelicCenter + new Vector2(x0, y0));
 				if (tile.TileType == ModContent.TileType<TwilightGrassBlock>())
 				{
-					if (Main.rand.NextBool(3) && TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(centerX + x0 - 3, centerY + y0, 8, height))
+					if (GenRand.NextBool(3) && TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(centerX + x0 - 3, centerY + y0, 8, height))
 					{
 						TreePlacer.BuildTwilightTree(centerX + x0, centerY + y0 - 1, height);
 					}

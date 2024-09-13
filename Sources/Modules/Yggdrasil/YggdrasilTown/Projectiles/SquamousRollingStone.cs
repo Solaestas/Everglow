@@ -62,12 +62,6 @@ public class SquamousRollingStone : ModProjectile
 		Projectile.velocity.X += StartDirection * 0.04f;
 		Projectile.velocity.Y += 0.2f;
 		Projectile.rotation += Projectile.velocity.X * 0.01f;
-		if (Projectile.velocity.Length() > 4)
-		{
-			//Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone>(), Projectile.velocity.X * Main.rand.NextFloat(0.3f, 0.6f), Projectile.velocity.Y * Main.rand.NextFloat(0.3f, 0.6f), 0, default, Main.rand.NextFloat(0.9f, 1.6f));
-			//dust.noGravity = false;
-			//GenerateSmogAtBottom(1);
-		}
 	}
 
 	public void GenerateSmogAtBottom(int Frequency)
@@ -92,15 +86,6 @@ public class SquamousRollingStone : ModProjectile
 
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
-		if (MathF.Abs(Projectile.velocity.Y) > 2)
-		{
-			for (int x = 0; x < Projectile.velocity.Length() * 5; x++)
-			{
-				Vector2 newVel = Projectile.velocity.RotateRandom(6.283);
-				//Dust dust = Dust.NewDustDirect(Projectile.Bottom, 0, 0, ModContent.DustType<SquamousShellStone>(), newVel.X * Main.rand.NextFloat(0.3f, 0.6f), newVel.Y * Main.rand.NextFloat(0.3f, 0.6f), 0, default, Main.rand.NextFloat(0.9f, 1.6f));
-				//dust.noGravity = false;
-			}
-		}
 		if (Projectile.velocity.X * Projectile.oldVelocity.X < 0)
 		{
 			Projectile.velocity.X = 0;

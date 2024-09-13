@@ -6,6 +6,7 @@ using Everglow.Commons.Skeleton2D.Renderer.DrawCommands;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using SteelSeries.GameSense;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -1002,6 +1003,61 @@ public class SquamousShell : ModNPC
 
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
+	}
+
+	public override void OnKill()
+	{
+		for (int i = 0; i < 14; i++)
+		{
+			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
+			int type = ModContent.Find<ModGore>("Everglow/SquamousShell_gore" + i).Type;
+			Gore.NewGore(NPC.GetSource_Death(), NPC.position + new Vector2(Main.rand.Next(NPC.width), Main.rand.Next(NPC.height)), v0, type, NPC.scale);
+		}
+		for (int i = 5; i < 14; i++)
+		{
+			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
+			int type = ModContent.Find<ModGore>("Everglow/SquamousShell_gore" + i).Type;
+			Gore.NewGore(NPC.GetSource_Death(), NPC.position + new Vector2(Main.rand.Next(NPC.width), Main.rand.Next(NPC.height)), v0, type, NPC.scale);
+		}
+		for (int i = 5; i < 14; i++)
+		{
+			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
+			int type = ModContent.Find<ModGore>("Everglow/SquamousShell_gore" + i).Type;
+			Gore.NewGore(NPC.GetSource_Death(), NPC.position + new Vector2(Main.rand.Next(NPC.width), Main.rand.Next(NPC.height)), v0, type, NPC.scale);
+		}
+		for (int g = 0; g < 20; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
+			var somg = new RockSmogDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = NPC.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
+				maxTime = Main.rand.Next(37, 45),
+				scale = Main.rand.NextFloat(40f, 55f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+			};
+			Ins.VFXManager.Add(somg);
+		}
+		for (int g = 0; g < 400; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1.0f, 34f)).RotatedByRandom(MathHelper.TwoPi);
+			var spark = new Spark_MoonBladeDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = NPC.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
+				maxTime = Main.rand.Next(70, 125),
+				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(9f, 47.0f)),
+				rotation = Main.rand.NextFloat(6.283f),
+				noGravity = true,
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f) },
+			};
+			Ins.VFXManager.Add(spark);
+		}
 	}
 
 	//--------------------------以下为辅助功能模块-------------------------------------------------以下为辅助功能模块-------------------------------------------------以下为辅助功能模块-------------------------------------------------以下为辅助功能模块-------------------------------------------------以下为辅助功能模块-------------------------------------------------
