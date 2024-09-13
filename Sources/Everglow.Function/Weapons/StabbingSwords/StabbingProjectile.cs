@@ -1,3 +1,4 @@
+using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
@@ -10,6 +11,10 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 {
 	public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
     {
+		/// <summary>
+		/// 常规情况下的ExtraUpdates
+		/// </summary>
+		public const int NormalExtraUpdates = 20;
 		/// <summary>
 		/// 常规颜色
 		/// </summary>
@@ -41,7 +46,7 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 		/// <summary>
 		/// 重影深度缩变,小于1
 		/// </summary>
-		public float FadeTradeShade = 0f;
+		public float FadeShade = 0f;
 		/// <summary>
 		/// 重影彩色部分亮度缩变,小于1
 		/// </summary>
@@ -73,8 +78,10 @@ namespace Everglow.Commons.Weapons.StabbingSwords
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 4;
-        }
-        public virtual int SoundTimer { get; private set; } = 6;
+			Projectile.extraUpdates = 20;
+		}
+		public virtual int SoundTimer { get; private set; } = 6;
+		public int UpdateTimer = 0;
         public override void SendExtraAI(BinaryWriter writer)
         {
             writer.Write(SoundTimer);
@@ -88,10 +95,11 @@ namespace Everglow.Commons.Weapons.StabbingSwords
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-
-            int animation = 9;
+			UpdateTimer++;
+			Projectile.extraUpdates = (int)(NormalExtraUpdates * player.meleeSpeed);
+			int animation = 9;
             float rotationRange = Main.rand.NextFloatDirection() * (MathF.PI * 2f) * 0.05f;
-			Projectile.ai[0] += 1f;
+			Projectile.ai[0] += 1f / 20f;
             if (Projectile.ai[0] >= 8f)
             {
                 Projectile.ai[0] = 0f;
@@ -100,13 +108,11 @@ namespace Everglow.Commons.Weapons.StabbingSwords
             Projectile.soundDelay--;
             if (Projectile.soundDelay <= 0)
             {
-				//SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
+                Projectile.soundDelay = SoundTimer * (1 + NormalExtraUpdates);
 				SoundStyle ss = SoundID.Item1;
-				SoundEngine.PlaySound(ss, Projectile.Center);
-                Projectile.soundDelay = SoundTimer;
-            }
-
-            if (Main.myPlayer == Projectile.owner)
+				SoundEngine.PlaySound(ss.WithPitchOffset(player.meleeSpeed - 1), Projectile.Center);
+			}
+			if (Main.myPlayer == Projectile.owner)
             {
                 if (player.channel && !player.noItems && !player.CCed)
                 {
@@ -123,16 +129,16 @@ namespace Everglow.Commons.Weapons.StabbingSwords
                         Projectile.netUpdate = true;
                     }
                     Projectile.velocity = toMouse;
-					Projectile.timeLeft = TradeLength;
+					Projectile.timeLeft = TradeLength * (NormalExtraUpdates + 1);
 				}
 			}
-			if (!player.controlUseItem && Projectile.timeLeft > TradeLength)
+			if (!player.controlUseItem && Projectile.timeLeft > TradeLength * (NormalExtraUpdates + 1))
 			{
-				Projectile.timeLeft = TradeLength;
+				Projectile.timeLeft = TradeLength * (NormalExtraUpdates + 1);
 			}
 			if (player.HeldItem.ModItem is StabbingSwordItem modItem)
 			{
-				if (!player.GetModPlayer<PlayerStamina>().CheckStamina(modItem.staminaCost))
+				if (!player.GetModPlayer<PlayerStamina>().CheckStamina(modItem.staminaCost / Projectile.extraUpdates))
 					Projectile.Kill();//Return一堆怪问题，杀了就好了
 			}
 			Projectile.position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f;
@@ -146,23 +152,36 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 			UpdateItemDraw();
 			UpdateDarkDraw();
 			UpdateLightDraw();
+			if (Main.rand.NextBool(NormalExtraUpdates))
+			{
+				VisualParticle();
+			}
+		}
+		public virtual void VisualParticle()
+		{
+
 		}
 		public virtual void HitTileSound(float scale)
 		{
 			//SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/StabCollide");
 			SoundStyle ss = SoundID.NPCHit4;
 			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)).WithVolume(0.3f), Projectile.Center);
-			Projectile.soundDelay = SoundTimer;
+			Projectile.soundDelay = SoundTimer * (1 + Projectile.extraUpdates);
 		}
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-			float point = 0;
-			Vector2 HitRange = Projectile.velocity.SafeNormalize(Vector2.Zero) * MaxLength * 100;
-			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, new Vector2(targetHitbox.Left + targetHitbox.Width / 2f, targetHitbox.Top + targetHitbox.Height / 2f), 0, 0))
+			if(UpdateTimer % (NormalExtraUpdates * Projectile.localNPCHitCooldown) == NormalExtraUpdates / 2)
 			{
-				if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + HitRange, Projectile.width, ref point))
+				if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, new Vector2(targetHitbox.Left + targetHitbox.Width / 2f, targetHitbox.Top + targetHitbox.Height / 2f), 0, 0))
 				{
-					return true;
+					foreach(DrawParameters draw in DarkDraw)
+					{
+						Vector2 HitRange = new Vector2(1, 0).RotatedBy(draw.Rotation) * MaxLength * 72;
+						if (CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, draw.Postion, draw.Postion + HitRange, draw.Size.Y * 10))
+						{
+							return true;
+						}
+					}
 				}
 			}
 			return false;
@@ -254,58 +273,75 @@ namespace Everglow.Commons.Weapons.StabbingSwords
 				HitTileSound(volumn);
 			}
 			Vector2 drawSize = new Vector2(volumn, DrawWidth) * lerpedTwice;
-			if (TradeLength > 0)
+			for (int f = TradeLength - 1; f >= 0; f--)
 			{
-				for (int f = TradeLength - 1; f > 0; f--)
+				DarkDraw[f].Color.A = (byte)(DarkDraw[f].Color.A * MathF.Pow(FadeShade, 1f / NormalExtraUpdates));
+				DarkDraw[f].Size.Y *= MathF.Pow(FadeScale, 1f / NormalExtraUpdates);
+
+			}
+			if (UpdateTimer % NormalExtraUpdates == NormalExtraUpdates / 2)
+			{
+				if (TradeLength > 0)
 				{
-					DarkDraw[f] = DarkDraw[f - 1];
-					DarkDraw[f].Postion = DarkDraw[f - 1].Postion + Main.player[Projectile.owner].velocity;
-					DarkDraw[f].Color.A = (byte)(DarkDraw[f - 1].Color.A * FadeTradeShade);
-					DarkDraw[f].Size.Y = DarkDraw[f - 1].Size.Y * FadeScale;
+					for (int f = TradeLength - 1; f > 0; f--)
+					{
+						DarkDraw[f] = DarkDraw[f - 1];
+						DarkDraw[f].Postion = DarkDraw[f - 1].Postion + Main.player[Projectile.owner].velocity;
+						DarkDraw[f].Color.A = (byte)(DarkDraw[f - 1].Color.A * MathF.Pow(FadeShade, 1f / NormalExtraUpdates));
+						DarkDraw[f].Size.Y = DarkDraw[f - 1].Size.Y * MathF.Pow(FadeScale, 1f / NormalExtraUpdates);
+					}
 				}
-			}
-			if(Projectile.timeLeft >= TradeLength - 1)
-			{
-				DarkDraw[0].Color.A = (byte)(TradeShade * 255);
-				DarkDraw[0].Postion = drawPos;
-				DarkDraw[0].Size = drawSize;
-				DarkDraw[0].Rotation = drawRotation;
-			}
-			else
-			{
-				DarkDraw[0].Color.A = (byte)(DarkDraw[0].Color.A * FadeTradeShade);
-				DarkDraw[0].Postion = drawPos + Main.player[Projectile.owner].velocity;
-				DarkDraw[0].Size.Y = drawSize.Y * FadeScale;
-				DarkDraw[0].Rotation = drawRotation;
+				if (Projectile.timeLeft >= (TradeLength - 1) * (NormalExtraUpdates + 1))
+				{
+					DarkDraw[0].Color.A = (byte)(TradeShade * 255);
+					DarkDraw[0].Postion = drawPos;
+					DarkDraw[0].Size = drawSize;
+					DarkDraw[0].Rotation = drawRotation;
+				}
+				else
+				{
+					DarkDraw[0].Color.A = (byte)(DarkDraw[0].Color.A * MathF.Pow(FadeShade, 1f / NormalExtraUpdates));
+					DarkDraw[0].Postion = drawPos + Main.player[Projectile.owner].velocity;
+					DarkDraw[0].Size.Y = drawSize.Y * MathF.Pow(FadeScale, 1f / NormalExtraUpdates);
+					DarkDraw[0].Rotation = drawRotation;
+				}
 			}
 		}
 		public DrawParameters LightDraw = new DrawParameters();
 		public void UpdateLightDraw()
 		{
-			UnifiedRandom rand = Main.rand;
-			Vector2 Pos = Projectile.Center - Projectile.rotation.ToRotationVector2() * 2;
-			float rndFloat = rand.NextFloat();
-			float lerpedFloat = Utils.GetLerpValue(0f, 0.3f, rndFloat, clamped: true) * Utils.GetLerpValue(1f, 0.5f, rndFloat, clamped: true);
-			float lerpedTwice = MathHelper.Lerp(0.6f, 1f, lerpedFloat);
-
-			float rndRange = rand.NextFloat(MaxLength * 0.5f, MaxLength * 1.21f) * 2f;
-			float rndDirction = rand.NextFloatDirection();
-			float drawRotation = Projectile.rotation + rndDirction * (MathF.PI * 2f) * 0.03f;
-			float additiveDrawPos = MaxLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
-			Vector2 drawPos = Pos + drawRotation.ToRotationVector2() * additiveDrawPos + rand.NextVector2Circular(20f, 20f);
-			while (!Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice, 0, 0))
+			if(UpdateTimer % NormalExtraUpdates == NormalExtraUpdates / 2)
 			{
-				rndRange *= 0.9f;
-				drawPos -= Projectile.velocity * 0.2f;
-				if (rndRange < 0.3f)
+				UnifiedRandom rand = Main.rand;
+				Vector2 Pos = Projectile.Center - Projectile.rotation.ToRotationVector2() * 2;
+				float rndFloat = rand.NextFloat();
+				float lerpedFloat = Utils.GetLerpValue(0f, 0.3f, rndFloat, clamped: true) * Utils.GetLerpValue(1f, 0.5f, rndFloat, clamped: true);
+				float lerpedTwice = MathHelper.Lerp(0.6f, 1f, lerpedFloat);
+
+				float rndRange = rand.NextFloat(MaxLength * 0.5f, MaxLength * 1.21f) * 2f;
+				float rndDirction = rand.NextFloatDirection();
+				float drawRotation = Projectile.rotation + rndDirction * (MathF.PI * 2f) * 0.03f;
+				float additiveDrawPos = MaxLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
+				Vector2 drawPos = Pos + drawRotation.ToRotationVector2() * additiveDrawPos + rand.NextVector2Circular(20f, 20f);
+				while (!Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice, 0, 0))
 				{
-					break;
-				}		
+					rndRange *= 0.9f;
+					drawPos -= Projectile.velocity * 0.2f;
+					if (rndRange < 0.3f)
+					{
+						break;
+					}
+				}
+				Vector2 drawSize = new Vector2(rndRange, DrawWidth) * lerpedTwice;
+				LightDraw.Postion = drawPos;
+				LightDraw.Size = drawSize;
+				LightDraw.Rotation = drawRotation;
 			}
-			Vector2 drawSize = new Vector2(rndRange, DrawWidth) * lerpedTwice;
-			LightDraw.Postion = drawPos;
-			LightDraw.Size = drawSize;
-			LightDraw.Rotation = drawRotation;
+			else
+			{
+				LightDraw.Color.A = (byte)(LightDraw.Color.A * MathF.Pow(FadeShade, 1f / NormalExtraUpdates));
+				LightDraw.Size.Y *= MathF.Pow((FadeScale * 0.2f), 1f / NormalExtraUpdates);
+			}
 		}
 		public virtual void DrawBeforeItem()
 		{

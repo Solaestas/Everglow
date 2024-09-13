@@ -6,7 +6,7 @@ public class CobaltClub : ClubProj_metal
 	{
 		Beta = 0.005f;
 		MaxOmega = 0.4f;
-		ReflectTexturePath = "Everglow/Myth/Misc/Projectiles/Weapon/Melee/Clubs/CobaltClub_light ";
+		ReflectTexturePath = "Everglow/Myth/Misc/Projectiles/Weapon/Melee/Clubs/CobaltClub_light";
 		ReflectStrength = 2f;
 	}
 }

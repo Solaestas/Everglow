@@ -1,3 +1,5 @@
+using Everglow.Commons.Vertex;
+
 namespace Everglow.Commons.VFX.Pipelines;
 
 /// <summary>

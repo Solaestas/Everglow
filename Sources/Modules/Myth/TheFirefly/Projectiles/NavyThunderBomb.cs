@@ -130,8 +130,8 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		float lightValue = (Projectile.timeLeft - 100f) / 200f;
-		Texture2D Water = ModAsset.Projectiles_ElecLine.Value;
-		Texture2D WaterS = ModAsset.WaterLineBlackShade.Value;
+		Texture2D Water = ModAsset.ElecLine.Value;
+		Texture2D WaterS = Commons.ModAsset.Trail_5_black.Value;
 		float value0 = (float)(Math.Sin(800d / (Projectile.timeLeft + 35)) * 0.75f + 0.25f) * (300 - Projectile.timeLeft) / 300f;
 		value0 = Math.Max(0, value0);
 		DrawTexCircle(122, 42, new Color(0.33f * value0, 0.33f * value0, 0.33f * value0, 0.33f * value0), Projectile.Center - Main.screenPosition, WaterS, Main.time / 17);
@@ -159,7 +159,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 				Main.spriteBatch.Draw(dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, dark.Size() / 2f, k3, SpriteEffects.None, 0);
 
 			}
-			Texture2D Star = ModAsset.LineLight.Value;
+			Texture2D Star = Commons.ModAsset.Trail.Value;
 			Main.spriteBatch.Draw(Star, Projectile.Center - Main.screenPosition, null, new Color(0f, k3, 1f, 0), 0, Star.Size() / 2f, new Vector2(k3 * 1, 0.4f), SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(Star, Projectile.Center - Main.screenPosition, null, new Color(0f, k3, 1f, 0), MathF.PI / 2, Star.Size() / 2, new Vector2(k3 * 0.7f, 0.4f), SpriteEffects.None, 0);
 
@@ -167,7 +167,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 		else if(Projectile.timeLeft <= 5)
 		{
 			Main.spriteBatch.Draw(dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, dark.Size() / 2f, Projectile.timeLeft / 5f, SpriteEffects.None, 0f);
-			Texture2D Star = ModAsset.LineLight.Value;
+			Texture2D Star = Commons.ModAsset.Trail.Value;
 			Main.spriteBatch.Draw(Star, Projectile.Center - Main.screenPosition, null, new Color(0f, 1f, 1f, 0), 0, Star.Size() / 2f, new Vector2(0.75f, 0.4f * Projectile.timeLeft / 10f), SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(Star, Projectile.Center - Main.screenPosition, null, new Color(0f, 1f, 1f, 0), MathF.PI / 2, Star.Size() / 2, new Vector2(0.52f, 0.4f * Projectile.timeLeft / 10f), SpriteEffects.None, 0);
 		}
@@ -202,7 +202,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
 			colorV *= 10;
-		Texture2D t = ModAsset.SparkLight.Value;
+		Texture2D t = Commons.ModAsset.SparkLight.Value;
 		float width = 60;
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft;

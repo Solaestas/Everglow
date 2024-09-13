@@ -1,7 +1,7 @@
 using Everglow.Commons.TileHelper;
-using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Creative;
 using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 using Terraria.ObjectData;
@@ -11,19 +11,19 @@ namespace Everglow.Commons.Utilities;
 public static class FurnitureUtils
 {
 	#region Swingable Object Drawing
-	
+
 	public static void BannerFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		int top = pos.Y - Main.tile[pos].TileFrameY / 18;
 		HangingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(pos.X, top), -4);
 	}
-	
+
 	public static void LanternFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		int top = pos.Y - Main.tile[pos].TileFrameY / 18;
 		HangingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(pos.X, top), 0);
 	}
-	
+
 	public static void Chandelier3x3FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		int left = Main.tile[pos].TileFrameX / 18;
@@ -45,13 +45,13 @@ public static class FurnitureUtils
 	public static void HangingObjectFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing, Point topLeft, float swayOffset = -4f, float swayStrength = 0.15f)
 	{
 		var tile = Main.tile[pos];
-        var tileData = TileObjectData.GetTileData(tile.type, 0);
+		var tileData = TileObjectData.GetTileData(tile.type, 0);
 
 		if (!TileDrawing.IsVisible(tile) || tileData is null) return;
 
 		// 油漆
 		Texture2D tex = tileDrawing.GetTileDrawTexture(tile, pos.X, pos.Y);
-		
+
 		short tileFrameX = tile.frameX;
 		short tileFrameY = tile.frameY;
 
@@ -63,7 +63,8 @@ public static class FurnitureUtils
 
 		int offsetY = tileData.DrawYOffset;
 		// 锤子是这样的
-		if (WorldGen.IsBelowANonHammeredPlatform(topTileX, topTileY)) {
+		if (WorldGen.IsBelowANonHammeredPlatform(topTileX, topTileY))
+		{
 			offsetY -= 8;
 		}
 
@@ -108,13 +109,15 @@ public static class FurnitureUtils
 
 		// 绘制
 		spriteBatch.Draw(tex, finalDrawPos, rectangle, tileLight, rotation, finalOrigin, 1f, SpriteEffects.None, 0f);
-	
+
 		// 有火的话绘制火
-		if (TileLoader.GetTile(tile.type) is not ITileFlameData tileFlame) return;
+		if (TileLoader.GetTile(tile.type) is not ITileFlameData tileFlame)
+			return;
 
 		TileDrawing.TileFlameData tileFlameData = tileFlame.GetTileFlameData(pos.X, pos.Y, tile.type, tileFrameY);
 		ulong seed = tileFlameData.flameSeed is 0 ? Main.TileFrameSeed ^ (ulong)(((long)pos.X << 32) | (uint)pos.Y) : tileFlameData.flameSeed;
-		for (int k = 0; k < tileFlameData.flameCount; k++) {
+		for (int k = 0; k < tileFlameData.flameCount; k++)
+		{
 			float x = Utils.RandomInt(ref seed, tileFlameData.flameRangeXMin, tileFlameData.flameRangeXMax) * tileFlameData.flameRangeMultX;
 			float y = Utils.RandomInt(ref seed, tileFlameData.flameRangeYMin, tileFlameData.flameRangeYMax) * tileFlameData.flameRangeMultY;
 			Main.spriteBatch.Draw(tileFlameData.flameTexture, finalDrawPos + new Vector2(x, y), rectangle, tileFlameData.flameColor, rotation, finalOrigin, 1f, SpriteEffects.None, 0f);
@@ -124,9 +127,10 @@ public static class FurnitureUtils
 	public static void MultiTileGrassFluentDraw(Vector2 screenPosition, TileDrawing tileDrawing, SpriteBatch spriteBatch, Point topLeft, Texture2D glowmask = null)
 	{
 		var tileTopLeft = Main.tile[topLeft];
-        var tileData = TileObjectData.GetTileData(tileTopLeft.type, 0);
+		var tileData = TileObjectData.GetTileData(tileTopLeft.type, 0);
 
-		if (tileData is null) return;
+		if (tileData is null)
+			return;
 
 		int bottomTileX = topLeft.X + tileData.Origin.X;
 		int bottomTileY = topLeft.Y + tileData.Origin.Y;
@@ -147,8 +151,10 @@ public static class FurnitureUtils
 		float num = 0.15f;
 		ushort type = Main.tile[topLeft].type;
 
-		for (int i = topLeft.X; i < topLeft.X + sizeX; i++) {
-			for (int j = topLeft.Y; j < topLeft.Y + sizeY; j++) {
+		for (int i = topLeft.X; i < topLeft.X + sizeX; i++)
+		{
+			for (int j = topLeft.Y; j < topLeft.Y + sizeY; j++)
+			{
 				Tile tile = Main.tile[i, j];
 				if (tile.type != type || !TileDrawing.IsVisible(tile))
 					continue;
@@ -170,7 +176,8 @@ public static class FurnitureUtils
 				float swayCorrection = Math.Abs(windCycle) * 2f * heightStrength;
 				Vector2 origin = center - vector2;
 				Texture2D tileDrawTexture = tileDrawing.GetTileDrawTexture(tile, i, j);
-				if (tileDrawTexture != null) {
+				if (tileDrawTexture != null)
+				{
 					spriteBatch.Draw(tileDrawTexture, center + new Vector2(0f, swayCorrection), new Rectangle(tileFrameX, tileFrameY, tileWidth, tileHeight - halfBrickHeight), tileLight, windCycle * num * heightStrength, origin, 1f, tileSpriteEffect, 0f);
 					if (glowmask != null)
 						spriteBatch.Draw(glowmask, center + new Vector2(0f, swayCorrection), new Rectangle(tileFrameX, tileFrameY, tileWidth, tileHeight - halfBrickHeight), Color.White, windCycle * num * heightStrength, origin, 1f, tileSpriteEffect, 0f);
@@ -606,7 +613,7 @@ public static class FurnitureUtils
 	}
 
 	/// <summary>
-	///
+	///触发电线信号(正常的StyleHorizontal物块)
 	/// </summary>
 	/// <param name="i"></param>
 	/// <param name="j"></param>
@@ -624,11 +631,11 @@ public static class FurnitureUtils
 		{
 			for (int n = y; n < y + tileY; n++)
 			{
+				tile = Main.tile[m, n];
 				if (!tile.HasTile)
 					continue;
 				if (tile.TileType == type)
-				{
-					tile = Main.tile[m, n];
+				{		
 					if (tile.TileFrameX < coordinateX * tileX)
 					{
 						tile = Main.tile[m, n];
@@ -648,8 +655,458 @@ public static class FurnitureUtils
 		{
 			for (int l = 0; l < tileY; l++)
 			{
-				Wiring.SkipWire(x + k, y + l);
+				//安全化处理
+				if (x + k > 0 && x + k < Main.maxTilesX)
+				{
+					if (y + l > 0 && y + l < Main.maxTilesY)
+					{
+						//异形MultiTile检测
+						if (Main.tile[x + k, y + l].TileType == type)
+						{
+							Wiring.SkipWire(x + k, y + l);
+						}
+					}
+				}
+			}
+		}
+	}
+	/// <summary>
+	///触发电线信号(特例StyleVertical物块)
+	/// </summary>
+	/// <param name="i"></param>
+	/// <param name="j"></param>
+	/// <param name="type"></param>
+	/// <param name="tileX"></param>物块组合体横向占多少块
+	/// <param name="tileY"></param>物块组合体纵向占多少块
+	/// <param name="coordinateX"></param>物块组合体横向每一帧宽度(单位像素)
+	/// <param name="coordinateY"></param>物块组合体纵向每一帧高度(单位像素)
+	public static void LightHitwireStyleVertical(int i, int j, int type, int tileX, int tileY, int coordinateX = 18, int coordinateY = 18)
+	{
+		Tile tile = Main.tile[i, j];
+		int x = i - tile.TileFrameX / coordinateX % tileX;
+		int y = j - tile.TileFrameY / coordinateY % tileY;
+		for (int m = x; m < x + tileX; m++)
+		{
+			for (int n = y; n < y + tileY; n++)
+			{
+				tile = Main.tile[m, n];
+				if (!tile.HasTile)
+					continue;
+				if (tile.TileType == type)
+				{
+					if (tile.TileFrameY < coordinateY * tileY)
+					{
+						tile = Main.tile[m, n];
+						tile.TileFrameY += (short)(coordinateY * tileY);
+					}
+					else
+					{
+						tile = Main.tile[m, n];
+						tile.TileFrameY -= (short)(coordinateY * tileY);
+					}
+				}
+			}
+		}
+		if (!Wiring.running)
+			return;
+		for (int k = 0; k < tileX; k++)
+		{
+			for (int l = 0; l < tileY; l++)
+			{
+				//安全化处理
+				if(x + k > 0 && x + k < Main.maxTilesX)
+				{
+					if (y + l > 0 && y + l < Main.maxTilesY)
+					{
+						//异形MultiTile检测
+						if (Main.tile[x + k, y + l].TileType == type)
+						{
+							Wiring.SkipWire(x + k, y + l);
+						}
+					}
+				}
 			}
 		}
 	}
 }
+/// <summary>
+/// 桌物品模板
+/// </summary>
+public abstract class TableItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 26;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 椅物品模板
+/// </summary>
+public abstract class ChairItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 30;
+		Item.height = 12;
+		Item.value = 150;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 工作台物品模板
+/// </summary>
+public abstract class WorkBenchItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 28;
+		Item.height = 14;
+		Item.value = 150;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 吊灯物品模板
+/// </summary>
+public abstract class ChandelierItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 26;
+		Item.height = 26;
+		Item.value = 3000;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 蜡烛物品模板
+/// </summary>
+public abstract class CandleItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 8;
+		Item.height = 18;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 烛台物品模板
+/// </summary>
+public abstract class CandelabraItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 1500;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 灯物品模板
+/// </summary>
+public abstract class LampItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 10;
+		Item.height = 24;
+		Item.value = 500;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 灯笼物品模板
+/// </summary>
+public abstract class LanternItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 12;
+		Item.height = 28;
+		Item.value = 150;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 沙发物品模板
+/// </summary>
+public abstract class SofaItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 床物品模板
+/// </summary>
+public abstract class BedItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 28;
+		Item.height = 20;
+		Item.value = 2000;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 马桶物品模板
+/// </summary>
+public abstract class ToiletItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 14;
+		Item.height = 14;
+		Item.value = 150;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 平台物品模板
+/// </summary>
+public abstract class PlatformItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 8;
+		Item.height = 10;
+		Item.value = 0;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 书架物品模板
+/// </summary>
+public abstract class BookcaseItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 水盆物品模板
+/// </summary>
+public abstract class SinkItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 箱子物品模板
+/// </summary>
+public abstract class ChestItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 26;
+		Item.height = 22;
+		Item.value = 500;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 浴缸物品模板
+/// </summary>
+public abstract class BathtubItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 钢琴物品模板
+/// </summary>
+public abstract class PianoItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 钟物品模板
+/// </summary>
+public abstract class ClockItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 梳妆台物品模板
+/// </summary>
+public abstract class DresserItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 20;
+		Item.height = 20;
+		Item.value = 300;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+/// <summary>
+/// 门物品模板
+/// </summary>
+public abstract class DoorItem : ModItem
+{
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
+
+	public override void SetDefaults()
+	{
+		Item.width = 14;
+		Item.height = 28;
+		Item.value = 200;
+		Item.maxStack = Item.CommonMaxStack;
+		Item.useAnimation = 14;
+	}
+}
+

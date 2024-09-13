@@ -120,7 +120,7 @@ internal class CentipedeHead : FireWormHead
 	}
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		Texture2D tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeHead_Glow");
+		Texture2D tex = ModAsset.CentipedeHead_Glow.Value;
 		spriteBatch.Draw(tex, NPC.Center - Main.screenPosition + new Vector2(0, -28), null, new Color(255, 255, 255, 0), NPC.rotation, tex.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
 	}
 	private bool HeadAI_CheckCollisionForDustSpawns()
@@ -493,14 +493,14 @@ internal class CentipedeBody : FireWormBody
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		float AddRot = (float)(Math.Sin(Main.timeForVisualEffects * 0.2 + NPC.ai[2] * 0.7) * 0.3f);
-		Texture2D tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody");
+		Texture2D tex = ModAsset.CentipedeBody.Value;
 		int FrameType = (int)NPC.ai[2] % 2;
 		if (FrameType == 1 && (int)NPC.ai[2] % 4 == 1)
 			FrameType = 2;
 		if (FrameType == 1)
-			tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody1");
+			tex = ModAsset.CentipedeBody1.Value;
 		if (FrameType == 2)
-			tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody2");
+			tex = ModAsset.CentipedeBody2.Value;
 		spriteBatch.Draw(tex, NPC.Center - Main.screenPosition + new Vector2(0, -28), null, Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16)), NPC.rotation + AddRot, tex.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
 		return false;
 	}
@@ -513,12 +513,12 @@ internal class CentipedeBody : FireWormBody
 			FrameType = 2;
 		if (FrameType == 1)
 		{
-			Texture2D tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody1_Glow");
+			Texture2D tex = ModAsset.CentipedeBody1_Glow.Value;
 			spriteBatch.Draw(tex, NPC.Center - Main.screenPosition + new Vector2(0, -28), null, new Color(255, 255, 255, 0), NPC.rotation + AddRot, tex.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
 		}
 		if (FrameType == 2)
 		{
-			Texture2D tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody2_Glow");
+			Texture2D tex = ModAsset.CentipedeBody2_Glow.Value;
 			spriteBatch.Draw(tex, NPC.Center - Main.screenPosition + new Vector2(0, -28), null, new Color(255, 255, 255, 0), NPC.rotation + AddRot, tex.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
 		}
 	}
@@ -626,7 +626,7 @@ internal class CentipedeTail : FireWormTail
 	}
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		Texture2D tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeTail_Glow");
+		Texture2D tex = ModAsset.CentipedeTail_Glow.Value;
 		spriteBatch.Draw(tex, NPC.Center - Main.screenPosition + new Vector2(0, -28), null, new Color(255, 255, 255, 0), NPC.rotation, tex.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
 	}
 

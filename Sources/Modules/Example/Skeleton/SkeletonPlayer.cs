@@ -1,4 +1,5 @@
-﻿using Terraria.ModLoader;
+using Terraria.ModLoader;
+using Spine;
 
 namespace Everglow.Example.Skeleton;
 

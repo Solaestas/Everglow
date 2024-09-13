@@ -1,9 +1,9 @@
-using Everglow.Myth.MagicWeaponsReplace.Projectiles;
+using Everglow.SpellAndSkull.Projectiles;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.BoneFeatherMagic;
 internal class BoneFeatherMagicBook : MagicBookProjectile
 {
-	public override string Texture => "Everglow/" + ModAsset.BoneFeatherMagicPath;
+	public override string Texture => "Everglow/" + ModAsset.BoneFeatherMagic_Path;
 	public override void SetDef()
 	{
 		ProjType = ModContent.ProjectileType<BoneFeather>();
@@ -11,14 +11,16 @@ internal class BoneFeatherMagicBook : MagicBookProjectile
 		ItemType = ModContent.ItemType<Items.Weapons.BoneFeatherMagic>();
 		MulStartPosByVelocity = 2f;
 		UseGlow = true;
-		GlowPath = "Misc/Items/Weapons/BoneFeatherMagic";
-		FrontTexPath = "Misc/Projectiles/Weapon/Magic/BoneFeatherMagic/BoneFeatherMagic_book";
-		PaperTexPath = "Misc/Projectiles/Weapon/Magic/FireFeatherMagic/FireFeatherMagic_paper";
+
+		FrontTexture = ModAsset.BoneFeatherMagic.Value;
+		PaperTexture = ModAsset.FireFeatherMagic_paper.Value;
+		GlowTexture = ModAsset.BoneFeatherMagic.Value;
+		GlowColor = Color.Transparent;
 		effectColor = new Color(50, 50, 31, 40);
-		//TexCoordTop = new Vector2(25, 0);
-		//TexCoordLeft = new Vector2(1, 24);
-		//TexCoordDown = new Vector2(32, 32);
-		//TexCoordRight = new Vector2(57, 10);
+		TexCoordTop = new Vector2(10, 0);
+		TexCoordLeft = new Vector2(-1, 29);
+		TexCoordDown = new Vector2(28, 39);
+		TexCoordRight = new Vector2(43, 9);
 	}
 	public override void AI()
 	{

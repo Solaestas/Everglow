@@ -1,13 +1,7 @@
-﻿using Terraria.Localization;
-
 namespace Everglow.Myth.TheTusk.Items.BossDrop;
 
 public class TuskRelic : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("The Tusk Relic");
-			}
 	public override void SetDefaults()
 	{
 		Item.width = 38;
@@ -26,5 +20,4 @@ public class TuskRelic : ModItem
 		Item.autoReuse = true;
 		Item.createTile = ModContent.TileType<Tiles.BossDrop.TuskRelic>();
 	}
-
 }

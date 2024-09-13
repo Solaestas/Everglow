@@ -1,8 +1,11 @@
+using Everglow.Commons.TileHelper;
 using Everglow.Myth.TheFirefly.Dusts;
+using Terraria.GameContent.Drawing;
+using Terraria.ModLoader.IO;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
-public class FireflyMoss : ModTile
+public class FireflyMoss : ModTile, ITileFluentlyDrawn
 {
 	public override void PostSetDefaults()
 	{
@@ -14,35 +17,39 @@ public class FireflyMoss : ModTile
 		Main.tileCut[Type] = true;
 		AddMapEntry(new Color(51, 107, 204));
 		DustType = ModContent.DustType<FluorescentTreeDust>();
+		HitSound = SoundID.Grass;
 	}
+
 	public override bool CreateDust(int i, int j, ref int type)
 	{
-		Dust d = Dust.NewDustDirect(new Vector2(i, j) * 16, 16, 16, DustType,0,0,0,default, Main.rand.NextFloat(0.3f, 0.6f));
+		Dust.NewDustDirect(new Vector2(i, j) * 16, 16, 16, DustType, 0, 0, 0, default, Main.rand.NextFloat(0.3f, 0.6f));
 		return false;
 	}
+
 	public override void MouseOver(int i, int j)
 	{
 		Player player = Main.LocalPlayer;
-		if(player.HeldItem.type == ItemID.PaintScraper || player.HeldItem.type == ItemID.SpectrePaintScraper)
+		if (player.HeldItem.type == ItemID.PaintScraper || player.HeldItem.type == ItemID.SpectrePaintScraper)
 		{
 			player.noThrow = 2;
 			player.cursorItemIconEnabled = true;
 			player.cursorItemIconID = player.HeldItem.type;
-			if(player.controlUseItem)
+			if (player.controlUseItem)
 			{
 				WorldGen.KillTile(i, j);
 			}
 		}
 		base.MouseOver(i, j);
 	}
+
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
 		Player player = Main.LocalPlayer;
 		if (player.HeldItem.type == ItemID.PaintScraper || player.HeldItem.type == ItemID.SpectrePaintScraper)
 		{
-			if(Main.rand.NextBool(10))
+			if (Main.rand.NextBool(10))
 			{
-				yield return new Item(ModContent.ItemType<Items.FireflyMoss>());
+				yield return new Item(ModContent.ItemType<Items.FireflyMoss_Item>());
 			}
 		}
 		else
@@ -50,130 +57,84 @@ public class FireflyMoss : ModTile
 			yield break;
 		}
 	}
+
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
-		if (closer)
-		{
-			var tile = Main.tile[i, j];
-			foreach (Player player in Main.player)
-			{
-				if(player != null)
-				{
-					if (player.Hitbox.Intersects(new Rectangle(i * 16, j * 16, 16, 16)))
-					{
-						float referenceValue = player.velocity.X;
-						if(tile.TileFrameY >= 54)
-						{
-							referenceValue = -player.velocity.X;
-						}
-						if (tile.TileFrameY >= 108)
-						{
-							referenceValue = player.velocity.Y;
-						}
-						if (tile.TileFrameY >= 162)
-						{
-							referenceValue = -player.velocity.Y;
-						}
-						if (!TileSpin.TileRotation.ContainsKey((i, j)))
-							TileSpin.TileRotation.Add((i, j), new Vector2(Math.Clamp(referenceValue * 0.02f, -1, 1) * 0.2f));
-						else
-						{
-							float rot;
-							float omega;
-							omega = TileSpin.TileRotation[(i, j)].X;
-							rot = TileSpin.TileRotation[(i, j)].Y;
-							if (Math.Abs(omega) < 0.4f && Math.Abs(rot) < 0.4f)
-								TileSpin.TileRotation[(i, j)] = new Vector2(omega + Math.Clamp(referenceValue * 0.02f, -1, 1) * 2f, rot + omega + Math.Clamp(referenceValue * 0.02f, -1, 1) * 2f);
-							if (Math.Abs(omega) < 0.001f && Math.Abs(rot) < 0.001f)
-								TileSpin.TileRotation.Remove((i, j));
-						}
-					}
-					if (Main.tile[i, j].WallType == 0)
-					{
-						float referenceValue = Main.windSpeedCurrent;
-						if (tile.TileFrameY >= 54)
-						{
-							referenceValue = -Main.windSpeedCurrent;
-						}
-						if (tile.TileFrameY >= 108)
-						{
-							referenceValue = Main.windSpeedCurrent;
-						}
-						if (tile.TileFrameY >= 162)
-						{
-							referenceValue = -Main.windSpeedCurrent;
-						}
-						if (!TileSpin.TileRotation.ContainsKey((i, j)))
-							TileSpin.TileRotation.Add((i, j), new Vector2(Math.Clamp(referenceValue, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.2f)));
-						else
-						{
-							float rot;
-							float omega;
-							omega = TileSpin.TileRotation[(i, j)].X;
-							rot = TileSpin.TileRotation[(i, j)].Y;
-							if (Math.Abs(omega) < 4f && Math.Abs(rot) < 4f)
-								TileSpin.TileRotation[(i, j)] = new Vector2(omega * 0.999f + Math.Clamp(referenceValue, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f) * 0.002f, rot * 0.999f + Math.Clamp(referenceValue, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f) * 0.002f);
-						}
-					}
-				}
-			}
-		}
 	}
-	
+
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		var tile = Main.tile[i, j];
-
-		var tileUp = Main.tile[i, j - 1];
-		var tileDown = Main.tile[i, j + 1];
-		var tileLeft = Main.tile[i - 1, j];
-		var tileRight = Main.tile[i + 1, j];
-		int offsetX = 0;
-		int offsetY = 0;
-		if(CheckDarkCocoonMoss(tileUp))
-		{
-			offsetY -= 2;
-		}
-		if (CheckDarkCocoonMoss(tileDown))
-		{
-			offsetY += 2;
-		}
-		if (CheckDarkCocoonMoss(tileLeft))
-		{
-			offsetX -= 2;
-		}
-		if (CheckDarkCocoonMoss(tileRight))
-		{
-			offsetX += 2;
-		}
-		if(offsetX == 0 && offsetY == 0)
-		{
-			WorldGen.KillTile(i, j, false, false, true);
-		}
-		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-		if (Main.drawToScreen)
-			zero = Vector2.Zero;
-
-		Texture2D texMain = ModAsset.Tiles_FireflyMoss.Value;
-		Texture2D texGlow = ModAsset.FireflyMossGlow.Value;
-
-		var tsp = new TileSpin();
-		tsp.Update(i, j);
-		tsp.DrawRotatedTile(spriteBatch, i, j, texMain, new Rectangle(tile.TileFrameX, tile.TileFrameY, 20, 16), new Vector2(10 + offsetX * 4, 8 + offsetY * 4), offsetX * 5.5f + 8, offsetY * 5.5f + 8, false);
-		tsp.DrawRotatedTile(spriteBatch, i, j, texGlow, new Rectangle(tile.TileFrameX, tile.TileFrameY, 20, 16), new Vector2(10 + offsetX * 4, 8 + offsetY * 4), offsetX * 5.5f + 8, offsetY * 5.5f + 8, true, new Color(55, 55, 55, 0));
-
-		base.PostDraw(i, j, spriteBatch);
+		TileFluentDrawManager.AddFluentPoint(this, i, j);
 		return false;
 	}
-	private bool CheckDarkCocoonMoss(Tile tile)
+
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
-		if(tile.HasTile)
+		DrawMossPiece(pos, pos.ToWorldCoordinates() - screenPosition, spriteBatch, tileDrawing);
+	}
+
+	/// <summary>
+	/// Draw a piece of moss
+	/// </summary>
+	private void DrawMossPiece(Point tilePos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	{
+		var tile = Main.tile[tilePos];
+		ushort type = tile.TileType;
+		var frame = new Rectangle(tile.TileFrameX, tile.TileFrameY, 18, 18);
+
+		// 回声涂料
+		if (!TileDrawing.IsVisible(tile))
 		{
-			if (tile.TileType == ModContent.TileType<DarkCocoonMoss>())
-			{
-				return true;
-			}
+			return;
 		}
-		return false;
+
+		int paint = Main.tile[tilePos].TileColor;
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.FireflyMoss_Path, type, 1, paint, tileDrawing);
+		tex ??= ModAsset.FireflyMoss.Value;
+
+		float windCycle = 0;
+		if (tileDrawing.InAPlaceWithWind(tilePos.X, tilePos.Y, 1, 1))
+		{
+			windCycle = tileDrawing.GetWindCycle(tilePos.X, tilePos.Y, tileDrawing._sunflowerWindCounter);
+		}
+
+		int totalPushTime = 140;
+		float pushForcePerFrame = 0.96f;
+		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X, tilePos.Y, 1, 1, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+		windCycle += highestWindGridPushComplex;
+		float rotation = windCycle * 0.21f;
+
+		var tileLight = Lighting.GetColor(tilePos);
+
+		// 支持发光涂料
+		tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(tilePos.X, tilePos.Y, tile, type, 0, 0, ref tileLight, tileDrawing._rand.NextBool(4));
+		tileLight = tileDrawing.DrawTiles_GetLightOverride(tilePos.X, tilePos.Y, tile, type, 0, 0, tileLight);
+
+		var offset = new Vector2(0);
+		var origin = new Vector2(0);
+		switch (tile.TileFrameY / 54)
+		{
+			case 0:
+				origin = new Vector2(9, 18);
+				offset = new Vector2(0, 14);
+				break;
+			case 1:
+				origin = new Vector2(9, 0);
+				offset = new Vector2(0, -10);
+				break;
+			case 2:
+				origin = new Vector2(0, 9);
+				offset = new Vector2(-10, 0);
+				break;
+			case 3:
+				origin = new Vector2(18, 9);
+				offset = new Vector2(10, 0);
+				break;
+		}
+
+		var tileSpriteEffect = SpriteEffects.None;
+		spriteBatch.Draw(tex, drawCenterPos + offset, frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
+		frame.X += 20;
+		spriteBatch.Draw(tex, drawCenterPos + offset, frame, new Color(0.1f, 0.3f + 0.2f * MathF.Sin(tilePos.X * 2.4f + tilePos.Y), 0.6f + 0.3f * MathF.Sin(tilePos.X - tilePos.Y * 3), 0), rotation, origin, 1f, tileSpriteEffect, 0f);
 	}
 }

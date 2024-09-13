@@ -1,4 +1,5 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Myth.TheFirefly.NPCs.Bosses;
 using Everglow.Myth.TheFirefly.VFXs;
 using Terraria.Audio;
 
@@ -18,6 +19,13 @@ public class MothBall : ModProjectile
 		Projectile.timeLeft = 300;
 		Projectile.tileCollide = false;
 	}
+
+	public void GenerateBranchedLighting()
+	{
+		var lightning = new BranchedLightning(100f, 9f ,Projectile.position, Main.rand.NextVector2Unit().ToRotation(), 25f, 0);
+		Ins.VFXManager.Add(lightning);
+	}
+
 	public void GenerateLightingBolt()
 	{
 		float size = Main.rand.NextFloat(18f, Main.rand.NextFloat(20f, 40f));
@@ -48,7 +56,14 @@ public class MothBall : ModProjectile
 		{
 			Projectile.velocity *= 0.95f;
 			Projectile.scale *= 0.97f;
-			GenerateLightingBolt();
+
+			if (Projectile.timeLeft > 10 && Main.rand.NextFloat() < (0.15 + 0.2 * (50 - Projectile.timeLeft) / 40))
+			{
+				GenerateBranchedLighting();
+			} else
+			{
+				GenerateLightingBolt();
+			}
 		}
 		else
 		{
@@ -71,7 +86,7 @@ public class MothBall : ModProjectile
 	}
 	public override void OnKill(int timeLeft)
 	{
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<MothBallExplosion>(), 50, 3, Projectile.owner, 60f);
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<MothBallExplosion>(), 50, 3, Projectile.owner, 60f);
 		if (Main.masterMode)
 		{
 			for (int h = 0; h < 6; h++)
@@ -88,13 +103,13 @@ public class MothBall : ModProjectile
 			{
 				for (int i = 0; i < 5; i++)
 				{
-					var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), Projectile.Center, ModContent.NPCType<NPCs.Bosses.Butterfly>());
+					var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), Projectile.Center, ModContent.NPCType<SummonedButterfly>());
 					npc.velocity = Main.rand.NextVector2Unit() * Main.rand.Next(4, 12);
 					npc.netUpdate2 = true;
 				}
 				for (int i = 0; i < 4; i++)
 				{
-					var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), Projectile.Center, ModContent.NPCType<NPCs.Bosses.Butterfly>());
+					var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), Projectile.Center, ModContent.NPCType<SummonedButterfly>());
 					npc.velocity = Main.rand.NextVector2Unit() * Main.rand.Next(2, 5);
 					npc.netUpdate2 = true;
 				}
@@ -113,10 +128,10 @@ public class MothBall : ModProjectile
 				}
 			}
 		}
-
-		//Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
-	}
-	public override bool PreDraw(ref Color lightColor)
+        // base.OnKill(timeLeft);
+        //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
+    }
+    public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D Light = ModAsset.CorruptLight.Value;
 		int frameX = (Projectile.frame % 6);
@@ -129,11 +144,11 @@ public class MothBall : ModProjectile
 			Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, Light.Size() / 2f, (60 - Projectile.timeLeft) / 30f, SpriteEffects.None, 0);
 
 		float range = 720f;
-		if(Projectile.timeLeft < 100)
+		if (Projectile.timeLeft < 100)
 		{
 			range += (100 - Projectile.timeLeft) * 16;
 		}
-		for(int k = 0;k < 9;k++)
+		for (int k = 0; k < 9; k++)
 		{
 			DrawCurrents(k - (float)Main.time * 0.03f, k, range);
 		}
@@ -164,14 +179,14 @@ public class MothBall : ModProjectile
 		{
 			float value = t / length;
 			Vector2 normalize = Vector2.Normalize(current[t].RotatedBy(Math.PI * 0.5));
-			if(t != 0)
+			if (t != 0)
 			{
 				normalize = Vector2.Normalize(current[t] - current[t - 1]).RotatedBy(-Math.PI * 0.5);
 			}
 			float width = 50 + randomSeed * 2;
 			normalize *= width;
 			float colorValue = 0f;
-			if(Projectile.timeLeft < 100)
+			if (Projectile.timeLeft < 100)
 			{
 				colorValue = value * value * (100 - Projectile.timeLeft) / 50f;
 			}
@@ -186,8 +201,8 @@ public class MothBall : ModProjectile
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.Parameters["uProcession"].SetValue(0.5f);
 		effect.CurrentTechnique.Passes[0].Apply();
-		Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_thick.Value;
-		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_thick.Value;
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}

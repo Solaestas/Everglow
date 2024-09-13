@@ -1,5 +1,6 @@
 using Everglow.Commons.Enums;
 using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
 
@@ -8,18 +9,17 @@ public class IchorSplashPipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.IchorSplash;
-		
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		effect.Parameters["uNoise"].SetValue(ModAsset.Noise_cell.Value);
 		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.Parameters["uNoise"].SetValue(ModAsset.Noise_cell.Value);
 		Texture2D FlameColor = ModAsset.HeatMap_ichorSplash.Value;
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearClamp, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
@@ -29,10 +29,12 @@ public class IchorSplashPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
-[Pipeline(typeof(IchorSplashPipeline))]
+
+[Pipeline(typeof(IchorSplashPipeline), typeof(BloomPipeline))]
 public class IchorSplash : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public List<Vector2> oldPos = new List<Vector2>();
 	public Vector2 position;
 	public Vector2 velocity;
@@ -41,24 +43,43 @@ public class IchorSplash : Visual
 	public float maxTime;
 	public float scale;
 	public float alpha;
-	public IchorSplash() { }
+
+	public IchorSplash()
+	{
+	}
 
 	public override void Update()
 	{
 		position += velocity * 0.001f;
+		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
+		{
+			Active = false;
+			return;
+		}
+		if (position.Y <= 320 || position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			Active = false;
+			return;
+		}
 		oldPos.Add(position);
 		if (oldPos.Count > 15)
+		{
 			oldPos.RemoveAt(0);
+		}
+
 		velocity.Y += 0.14f;
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		velocity = velocity.RotatedBy(ai[1]);
 		scale += 0.4f;
 		if (Collision.SolidCollision(position, 0, 0))
 		{
-			velocity *= 0.2f;
-			if(velocity.Length() < 0.02f)
+			velocity *= 0.8f;
+			if (velocity.Length() < 0.02f)
 			{
 				Active = false;
 			}
@@ -68,7 +89,7 @@ public class IchorSplash : Visual
 			scale += 0.02f;
 			alpha += 0.004f;
 			velocity *= 0.9f;
-			if(MathF.Abs(velocity.X) > 2)
+			if (MathF.Abs(velocity.X) > 2)
 			{
 				velocity.X *= 0.8f;
 			}
@@ -90,9 +111,7 @@ public class IchorSplash : Visual
 		Vector2[] pos = oldPos.Reverse<Vector2>().ToArray();
 		float pocession = timer / maxTime;
 		int len = pos.Length;
-		if (len <= 2)
-			return;
-		var bars = new Vertex2D[len * 2 - 1];
+		var bars = new List<Vertex2D>();
 		for (int i = 1; i < len; i++)
 		{
 			Vector2 normal = oldPos[i] - oldPos[i - 1];
@@ -102,27 +121,41 @@ public class IchorSplash : Visual
 			Vector2 pointDown = oldPos[i] - normal * width;
 			Vector2 widthUp = new Vector2(normal.X * width, 0);
 			Vector2 widthDown = -new Vector2(normal.X * width, 0);
-			if (Main.tile[(int)(pointUp.X / 16f), (int)(pointUp.Y / 16f) - 1].LiquidAmount > 0)
+
+			if (pointUp.X <= 320 || pointUp.X >= Main.maxTilesX * 16 - 320)
 			{
-				widthUp *= MathF.Sqrt(alpha) * 4f;
+				Active = false;
+				return;
 			}
-			else
+			if (pointUp.Y <= 320 || pointUp.Y >= Main.maxTilesY * 16 - 320)
 			{
-				widthUp *= 0f;
+				Active = false;
+				return;
 			}
-			if (Main.tile[(int)(pointDown.X / 16f), (int)(pointDown.Y / 16f) - 1].LiquidAmount > 0)
+
+			if (pointDown.X <= 320 || pointDown.X >= Main.maxTilesX * 16 - 320)
 			{
-				widthDown *= MathF.Sqrt(alpha) * 4f;
+				Active = false;
+				return;
 			}
-			else
+			if (pointDown.Y <= 320 || pointDown.Y >= Main.maxTilesY * 16 - 320)
 			{
-				widthDown *= 0f;
+				Active = false;
+				return;
 			}
-			
-			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width + widthUp, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0 + ai[0], (i + 15 - len) / 17f, pocession));
-			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width + widthDown, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0.6f + ai[0], (i + 15 - len) / 17f, pocession));
+
+			bars.Add(oldPos[i] + normal * width + widthUp, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0 + ai[0], (i + 15 - len) / 17f, pocession));
+			bars.Add(oldPos[i] - normal * width + widthDown, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0.6f + ai[0], (i + 15 - len) / 17f, pocession));
 		}
-		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
+		if (len <= 2)
+		{
+			for (int i = 1; i < 3; i++)
+			{
+				var lightColorWithPos = new Color(1f, 1f, 1f, 0);
+				bars.Add(position, lightColorWithPos, new Vector3(0, (i + 15 - len) / 75f + timer / 15000f, pocession));
+				bars.Add(position, lightColorWithPos, new Vector3(1, (i + 15 - len) / 75f + timer / 15000f, pocession));
+			}
+		}
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
 }

@@ -1,112 +1,185 @@
-﻿using Terraria;
+using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Commons.Weapons;
+
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
-class GoldLanternLine : ModProjectile
+public class GoldLanternLine : TrailingProjectile
 {
-	public override void SetDefaults()
+	public override string Texture => "Everglow/" + ModAsset.GoldLaser_Path;
+
+	public override void SetDef()
 	{
-		Projectile.width = 20;
-		Projectile.height = 20;
-		Projectile.friendly = false;
+		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
+		TrailColor = new Color(1, 0.65f, 0, 0f);
+		TrailWidth = 2f;
+		SelfLuminous = true;
+		TrailTexture = Commons.ModAsset.Trail.Value;
+		TrailTextureBlack = Commons.ModAsset.Trail_black.Value;
+		TrailShader = Commons.ModAsset.Trailing.Value;
+		Projectile.timeLeft = 300;
 		Projectile.hostile = true;
-		Projectile.penetrate = -1;
-		Projectile.timeLeft = 240;
-		Projectile.tileCollide = true;
-		Projectile.DamageType = DamageClass.Magic;
-		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 70;
+		Projectile.friendly = false;
 	}
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
-	}
-	bool HasColid = false;
-	bool HasPro = false;
+
 	public override void AI()
 	{
-		Player player = Main.player[Player.FindClosest(Projectile.position, Projectile.width, Projectile.height)];
-
-		if (Projectile.timeLeft >= 60)
+		Player player = Main.player[Player.FindClosest(Projectile.Center, 0, 0)];
+		if (Projectile.timeLeft > 200)
 		{
-			Vector2 v2 = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.2f, 0.2f));
-			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, v2, ModContent.ProjectileType<GoldLanternLine2>(), 2, 0, player.whoAmI, 0, 0);
+			Projectile.velocity *= 0.97f;
 		}
-
-		Vector2 v = Vector2.Normalize(player.Center - Projectile.Center) * 0.15f;
-		Projectile.velocity.Y += 0.2f;
-		Projectile.velocity += v;
-		if (HasColid)
+		if (Projectile.timeLeft == 200)
 		{
-			if (!HasPro)
+			TrailWidth = 10f;
+			Projectile.velocity = Vector2.Normalize(player.Center - Projectile.Center) * 15;
+			for (int x = 0; x < 15; x++)
 			{
-				for (int j = 0; j < 10; j++)
+				var spark = new RayDustDust
 				{
-					Vector2 va = Projectile.velocity.RotatedBy(j / 5f * Math.PI);
-					Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, va * 3f, ModContent.ProjectileType<GoldLanternLine3>(), 0, 0, player.whoAmI, 0, 0);
-				}
-				HasPro = true;
+					velocity = new Vector2(0, Main.rand.NextFloat(2, 3f)).RotateRandom(MathHelper.TwoPi),
+					Active = true,
+					Visible = true,
+					position = Projectile.Center,
+					maxTime = Main.rand.Next(67, 75),
+					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(9f, 12.0f)),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { 0 },
+				};
+				Ins.VFXManager.Add(spark);
 			}
 		}
-	}
-	public override bool OnTileCollide(Vector2 oldVelocity)
-	{
-		if (!HasColid)
-		{
-			HasColid = true;
-			if (Projectile.timeLeft >= 60)
-				Projectile.timeLeft = 60;
-		}
-		Projectile.velocity *= 0.2f;
-		return false;
-	}
-	public override void OnKill(int timeLeft)
-	{
+		Lighting.AddLight(Projectile.Center, new Vector3(1f, 1f, 0) * TrailWidth / 7f);
+		base.AI();
 	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		float k1 = 60f;
-		float k0 = (240 - Projectile.timeLeft) / k1;
+		return base.PreDraw(ref lightColor);
+	}
 
-		if (Projectile.timeLeft <= 240 - k1)
-			k0 = 1;
+	public override void DrawSelf()
+	{
+		Texture2D star = Commons.ModAsset.StarSlash.Value;
+		float width = 0.5f;
+		if (Projectile.timeLeft < 200)
+		{
+			width = 2f;
+		}
+		if (Projectile.timeLeft < 150)
+		{
+			width *= Projectile.timeLeft / 150f;
+		}
+		width *= 1 + (MathF.Sin((float)Main.time * 0.23f + Projectile.whoAmI) + 0.5f) * 0.7f;
+		float timeValue = MathF.Sin((float)Main.time * 0.07f + Projectile.whoAmI) * 0.5f + 0.5f;
+		Color c0 = new Color(1f, 0.75f * timeValue, 0, 0) * timeValue;
+		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, c0, MathHelper.PiOver2, star.Size() / 2f, width / 4.5f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, c0, 0, star.Size() / 2f, new Vector2(3f, width / 4.5f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, c0, MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, c0, (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
+	}
 
-		var c0 = new Color(k0 * 0.8f + 0.2f, k0 * k0 * 0.4f + 0.2f, 0f, 0);
+	public override void DrawTrail()
+	{
+		List<Vector2> unSmoothPos = new List<Vector2>();
+		for (int i = 0; i < Projectile.oldPos.Length; ++i)
+		{
+			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
+				break;
+			}
+
+			unSmoothPos.Add(Projectile.oldPos[i]);
+		}
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
+		var SmoothTrail = new List<Vector2>();
+		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
+		{
+			SmoothTrail.Add(SmoothTrailX[x]);
+		}
+		if (unSmoothPos.Count != 0)
+		{
+			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
+		}
+
+		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
 		var bars = new List<Vertex2D>();
-
-
-		int TrueL = 0;
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
+		var bars2 = new List<Vertex2D>();
+		var bars3 = new List<Vertex2D>();
+		for (int i = 1; i < SmoothTrail.Count; ++i)
 		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
+			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
+			if (mulFac > 1f)
+			{
+				mulFac = 1f;
+			}
+			float factor = i / (float)SmoothTrail.Count * mulFac;
+			float width = TrailWidthFunction(factor);
+			float timeValue = (float)Main.time * 0.0005f;
+			factor += timeValue;
 
-			TrueL++;
+			Vector2 drawPos = SmoothTrail[i] + halfSize;
+			Color drawC = TrailColor;
+			drawC *= 1 - i / (float)SmoothTrail.Count;
+			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
+			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
+			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
+			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
 		}
-		for (int i = 1; i < Projectile.oldPos.Length; ++i)
-		{
-			float width = 36;
-			if (Projectile.timeLeft <= 40)
-				width = Projectile.timeLeft * 0.9f;
-			if (i < 10)
-				width *= i / 10f;
-			if (Projectile.ai[0] == 3)
-				width *= 0.5f;
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
 
-			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-			var factor = i / (float)TrueL;
-			var w = MathHelper.Lerp(1f, 0.05f, factor);
-			float x0 = factor * 0.6f - (float)(Main.timeForVisualEffects / 35d) + 10000;
-			x0 %= 1f;
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
-		}
-		Texture2D t = Common.MythContent.QuickTexture("LanternMoon/Projectiles/LanternKing/GoldLaser");
-		Main.graphics.GraphicsDevice.Textures[0] = t;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Effect effect = TrailShader;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.CurrentTechnique.Passes[0].Apply();
+		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+		Main.graphics.GraphicsDevice.Textures[0] = TrailTexture;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 		if (bars.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		return true;
+		}
+
+		if (bars2.Count > 3)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
+		}
+
+		if (bars3.Count > 3)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
+		}
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+	}
+
+	public override void DrawTrailDark()
+	{
+		base.DrawTrailDark();
+	}
+
+	public override void KillMainStructure()
+	{
+		for (int x = 0; x < 25; x++)
+		{
+			var spark = new RayDustDust
+			{
+				velocity = new Vector2(0, Main.rand.NextFloat(2, 6f)).RotateRandom(MathHelper.TwoPi),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center,
+				maxTime = Main.rand.Next(57, 255),
+				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(8f, 17.0f)),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { 0 },
+			};
+			Ins.VFXManager.Add(spark);
+		}
+		base.KillMainStructure();
 	}
 }

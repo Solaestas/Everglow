@@ -14,7 +14,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		{
 			Item.damage = 9;
 			Item.knockBack = 1.08f;
-			Item.rare = ItemRarityID.White;
+			Item.rare = ItemRarityID.Orange;
 			Item.value = Item.sellPrice(0, 0, 90, 0);
 			Item.shoot = ModContent.ProjectileType<VegetationBayonet_Pro>();
 			StabMulDamage = 4f;
@@ -24,8 +24,10 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		public override void AddRecipes()
 		{
 			CreateRecipe().
-				AddIngredient(ItemID.Vine, 9).
-				//任意木头*14
+				AddIngredient(ItemID.Stinger, 2).
+				AddIngredient(ItemID.Vine, 8).
+				AddIngredient(ItemID.JungleSpores, 2).
+				AddRecipeGroup(RecipeGroupID.Wood, 14).
 				AddTile(TileID.Anvils).
 				Register();
 			base.AddRecipes();

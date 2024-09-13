@@ -1,11 +1,14 @@
-using Everglow.Myth.MagicWeaponsReplace.GlobalItems;
+using Everglow.Myth.Misc.Projectiles.Weapon.Magic.BoneFeatherMagic;
+using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FreezeFeatherMagic;
+using Everglow.SpellAndSkull.GlobalItems;
+using Everglow.SpellAndSkull.Items;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Myth.Misc.Items.Weapons;
 
-public class BoneFeatherMagic : ModItem
+public class BoneFeatherMagic : SpellTomeItem
 {
 	//骨羽会插在怪物身上10s
 	//每一根骨羽会增加下次攻击7%的伤害上不封顶
@@ -33,10 +36,13 @@ public class BoneFeatherMagic : ModItem
 		Item.shootSpeed = 4;
 		Item.crit = 16;
 		Item.mana = 12;
+
+		DecorativeProjectileTypes.Add(ModContent.ProjectileType<BoneFeatherMagicBook>());
+		DecorativeProjectileTypes.Add(ModContent.ProjectileType<BoneFeatherMagicArray>());
 	}
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		if (player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
+		if (player.GetModPlayer<MagicBookPlayer> ().MagicBookLevel == 1)
 		{
 			return false;
 		}

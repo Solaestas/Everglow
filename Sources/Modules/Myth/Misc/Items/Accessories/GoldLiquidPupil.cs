@@ -47,7 +47,7 @@ class GoldLiquidPupilEquiper : ModPlayer
 	{
 		if(GoldLiquidPupilEnable)
 		{
-			modifiers.FinalDamage += target.defense * 0.175f;
+			//modifiers.FinalDamage += target.defense * 0.175f;
 		}
 	}
 

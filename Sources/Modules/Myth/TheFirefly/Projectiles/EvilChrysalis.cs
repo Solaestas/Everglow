@@ -1,13 +1,11 @@
-using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Buffs;
 using Everglow.Myth.TheFirefly.Dusts;
-using Newtonsoft.Json.Linq;
-using Terraria;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
 internal class EvilChrysalis : ModProjectile
 {
+	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis0";
 	public override void SetDefaults()
 	{
 		Projectile.width = 50;
@@ -37,7 +35,7 @@ internal class EvilChrysalis : ModProjectile
 
 			for (int f = 0; f < 12; f++)
 			{
-				Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), player.Bottom + new Vector2(Main.rand.NextFloat((f - 5.5f) * 10, (f - 4.5f) * 10), Main.rand.NextFloat(-5, 15)), new Vector2(0, Main.rand.NextFloat(-12, -4)), ModContent.ProjectileType<DarkEffect>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(7f, 15f), 0);
+				//Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), player.Bottom + new Vector2(Main.rand.NextFloat((f - 5.5f) * 10, (f - 4.5f) * 10), Main.rand.NextFloat(-5, 15)), new Vector2(0, Main.rand.NextFloat(-12, -4)), ModContent.ProjectileType<DarkEffect>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(7f, 15f), 0);
 
 				for (int z = 0; z < 4; z++)
 				{
@@ -71,8 +69,8 @@ internal class EvilChrysalis : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Player player = Main.player[Projectile.owner];
-		Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis");
-		Texture2D tG = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalisG");
+		Texture2D t = ModAsset.EvilChrysalis.Value;
+		Texture2D tG = ModAsset.EvilChrysalisG.Value;
 		var drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
 		Color c0 = Lighting.GetColor((int)(player.Center.X / 16f), (int)(player.Center.Y / 16f));
 		SpriteEffects sp = SpriteEffects.None;
@@ -87,63 +85,63 @@ internal class EvilChrysalis : ModProjectile
 		}
 		if (Projectile.timeLeft < 72)
 		{
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis1");
-			tG = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis1G");
+			t = ModAsset.EvilChrysalis1.Value;
+			tG = ModAsset.EvilChrysalis1G.Value;
 		}
 		if (Projectile.timeLeft < 66)
 		{
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis2");
-			tG = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis2G");
+			t = ModAsset.EvilChrysalis2.Value;
+			tG = ModAsset.EvilChrysalis2G.Value;
 		}
 		if (Projectile.timeLeft < 60)
 		{
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis3");
-			tG = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis3G");
+			t = ModAsset.EvilChrysalis3.Value;
+			tG = ModAsset.EvilChrysalis3G.Value;
 		}
 		if (Projectile.timeLeft < 54)
 		{
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis");
-			tG = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalisG");
+			t = ModAsset.EvilChrysalis.Value;
+			tG = ModAsset.EvilChrysalisG.Value;
 		}
 		if (Projectile.timeLeft < 48)
 		{
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis2");
-			tG = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis2G");
+			t = ModAsset.EvilChrysalis2.Value;
+			tG = ModAsset.EvilChrysalis2G.Value;
 		}
 		if (Projectile.timeLeft < 42)
 		{
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis");
-			tG = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalisG");
+			t = ModAsset.EvilChrysalis.Value;
+			tG = ModAsset.EvilChrysalisG.Value;
 		}
 		if (Projectile.timeLeft < 36)
 		{
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis3");
-			tG = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis3G");
+			t = ModAsset.EvilChrysalis3.Value;
+			tG = ModAsset.EvilChrysalis3G.Value;
 		}
 		if (Projectile.timeLeft < 30)
 		{
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis");
-			tG = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalisG");
+			t = ModAsset.EvilChrysalis.Value;
+			tG = ModAsset.EvilChrysalisG.Value;
 		}
 		if (Projectile.timeLeft < 24)
 		{
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis4");
-			tG = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis4G");
+			t = ModAsset.EvilChrysalis4.Value;
+			tG = ModAsset.EvilChrysalis4G.Value;
 		}
 		if (Projectile.timeLeft < 18)
 		{
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis");
-			tG = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalisG");
+			t = ModAsset.EvilChrysalis.Value;
+			tG = ModAsset.EvilChrysalisG.Value;
 		}
 		if (Projectile.timeLeft < 12)
 		{
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis5");
-			tG = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis5G");
+			t = ModAsset.EvilChrysalis5.Value;
+			tG = ModAsset.EvilChrysalis5G.Value;
 		}
 		if (Projectile.timeLeft < 6)
 		{
-			t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis");
-			tG = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalisG");
+			t = ModAsset.EvilChrysalis.Value;
+			tG = ModAsset.EvilChrysalisG.Value;
 		}
 		Main.spriteBatch.Draw(t, player.Center + new Vector2(20 * player.direction, -5 - Dy) - Main.screenPosition, null, c0, (float)(-0.25 * Math.PI * player.direction), drawOrigin, 1, sp, 0);
 		Main.spriteBatch.Draw(tG, player.Center + new Vector2(20 * player.direction, -5 - Dy) - Main.screenPosition, null, new Color(255, 255, 255, 0), (float)(-0.25 * Math.PI * player.direction), drawOrigin, 1, sp, 0);
@@ -192,7 +190,7 @@ internal class EvilChrysalis : ModProjectile
 				Vx3.Add(new Vertex2D(Vbase + new Vector2(0, -0.3f * Rad) - new Vector2(0, Cy2), Color.White, new Vector3((0.5f + h + cirpro) / 30f % 1f, 1, 0)));
 			}
 
-			Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/BlackHalo");
+			Texture2D t = ModAsset.BlackHalo.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx3.ToArray(), 0, Vx3.Count / 3);
 		}
