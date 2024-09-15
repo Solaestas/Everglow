@@ -33,6 +33,7 @@ public class GiantBell_Tile : ModTile, ITileFluentlyDrawn
 
 		AddMapEntry(new Color(225, 195, 78));
 	}
+
 	public override bool RightClick(int i, int j)
 	{
 		SoundEngine.PlaySound(HitSound, new Vector2(i, j) * 16);
@@ -48,11 +49,13 @@ public class GiantBell_Tile : ModTile, ITileFluentlyDrawn
 		}
 		return false;
 	}
+
 	public override void PlaceInWorld(int i, int j, Item item)
 	{
 		SoundEngine.PlaySound(HitSound, new Vector2(i, j) * 16);
 		base.PlaceInWorld(i, j, item);
 	}
+
 	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		var drawCenterPos = pos.ToWorldCoordinates(autoAddY: 0) - screenPosition;
@@ -71,9 +74,11 @@ public class GiantBell_Tile : ModTile, ITileFluentlyDrawn
 	/// <param name="tileDrawing">原版TileDrawing类的实例，有很多好用的方法</param>
 	private void DrawGiantBellPiece(float swayCoefficient, int offsetX, Point tilePos, Point paintPos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
-		// 回声涂料	
+		// 回声涂料
 		if (!TileDrawing.IsVisible(Main.tile[paintPos]))
+		{
 			return;
+		}
 
 		var tile = Main.tile[tilePos];
 		ushort type = tile.TileType;
@@ -87,7 +92,9 @@ public class GiantBell_Tile : ModTile, ITileFluentlyDrawn
 
 		float windCycle = 0;
 		if (tileDrawing.InAPlaceWithWind(tilePos.X, tilePos.Y, sizeX, sizeY))
+		{
 			windCycle = tileDrawing.GetWindCycle(tilePos.X, tilePos.Y, tileDrawing._sunflowerWindCounter);
+		}
 
 		int totalPushTime = 80;
 		float pushForcePerFrame = 1.26f;

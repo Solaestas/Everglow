@@ -1,6 +1,4 @@
-using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Myth.Misc.Projectiles.Weapon.Magic.BoneFeatherMagic;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using static Everglow.Commons.Utilities.ProjectileUtils;
@@ -22,8 +20,10 @@ public class BoneFeather : StickNPCProjectile
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 2;
 	}
+
 	internal int timeTokill = -1;
-	ModProjectile MagicArray = null;
+	private ModProjectile magicArray = null;
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		foreach (Projectile projectile in Main.projectile)
@@ -34,13 +34,14 @@ public class BoneFeather : StickNPCProjectile
 				{
 					if (projectile.owner == Projectile.owner)
 					{
-						MagicArray = projectile.ModProjectile;
+						magicArray = projectile.ModProjectile;
 						break;
 					}
 				}
 			}
 		}
 	}
+
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		if (timeTokill >= 4 && timeTokill <= 6)
@@ -57,6 +58,7 @@ public class BoneFeather : StickNPCProjectile
 		}
 		return base.Colliding(projHitbox, targetHitbox);
 	}
+
 	public override void AI()
 	{
 		if (timeTokill >= 0 && timeTokill <= 2)
@@ -90,7 +92,7 @@ public class BoneFeather : StickNPCProjectile
 		}
 		else
 		{
-			if(StuckNPC == -2)
+			if (StuckNPC == -2)
 			{
 				Projectile.Kill();
 			}
@@ -105,41 +107,49 @@ public class BoneFeather : StickNPCProjectile
 		}
 		base.AI();
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return false;
 	}
+
 	public override void PostDraw(Color lightColor)
 	{
 		SpriteEffects spriteEffects = SpriteEffects.None;
 		if (Projectile.spriteDirection == -1)
+		{
 			spriteEffects = SpriteEffects.FlipHorizontally;
+		}
+
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
 
 		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale, spriteEffects, 0);
 	}
+
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
-		if (MagicArray != null)
+		if (magicArray != null)
 		{
-			var arrayProj = MagicArray as BoneFeatherMagicArray;
+			var arrayProj = magicArray as BoneFeatherMagicArray;
 			arrayProj.WingPower += 0.1f;
 		}
 		AmmoHit();
 		return false;
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if (MagicArray != null)
+		if (magicArray != null)
 		{
-			var arrayProj = MagicArray as BoneFeatherMagicArray;
+			var arrayProj = magicArray as BoneFeatherMagicArray;
 			arrayProj.WingPower += 2.6f;
 		}
 		timeTokill = 600 * (1 + Projectile.extraUpdates);
 	}
+
 	public void AmmoHit()
 	{
-		SoundEngine.PlaySound((SoundID.DD2_BetsyFlameBreath.WithVolume(0.3f)).WithPitchOffset(0.8f), Projectile.Center);
+		SoundEngine.PlaySound(SoundID.DD2_BetsyFlameBreath.WithVolume(0.3f).WithPitchOffset(0.8f), Projectile.Center);
 		for (int j = 0; j < 4; j++)
 		{
 			Vector2 v = new Vector2(0, Main.rand.NextFloat(7, 20)).RotatedByRandom(MathHelper.TwoPi);
@@ -147,11 +157,13 @@ public class BoneFeather : StickNPCProjectile
 		}
 		Projectile.Kill();
 	}
+
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		base.ModifyHitNPC(target, ref modifiers);
 	}
 }
+
 public class BoneNPCModifier : GlobalNPC
 {
 	public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
@@ -163,9 +175,9 @@ public class BoneNPCModifier : GlobalNPC
 				BoneFeather bf = p.ModProjectile as BoneFeather;
 				if (bf.StuckNPC == npc.whoAmI)
 				{
-					if(bf.timeTokill > 0)
+					if (bf.timeTokill > 0)
 					{
-						if((p.type == projectile.type && bf.timeTokill < 540 * (p.extraUpdates + 1)) || p.type != projectile.type)
+						if ((p.type == projectile.type && bf.timeTokill < 540 * (p.extraUpdates + 1)) || p.type != projectile.type)
 						{
 							modifiers.ScalingBonusDamage += 0.07f;
 							bf.AmmoHit();
@@ -176,6 +188,7 @@ public class BoneNPCModifier : GlobalNPC
 		}
 		base.ModifyHitByProjectile(npc, projectile, ref modifiers);
 	}
+
 	public override void ModifyHitByItem(NPC npc, Player player, Item item, ref NPC.HitModifiers modifiers)
 	{
 		foreach (Projectile p in Main.projectile)

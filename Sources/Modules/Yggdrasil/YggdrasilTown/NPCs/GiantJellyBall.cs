@@ -1,9 +1,9 @@
-using Everglow.Commons.CustomTiles;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
+
 public class GiantJellyBall : ModNPC
 {
 	public override void SetStaticDefaults()
@@ -11,6 +11,7 @@ public class GiantJellyBall : ModNPC
 		Main.npcFrameCount[NPC.type] = 11;
 		NPCSpawnManager.RegisterNPC(Type);
 	}
+
 	public override void SetDefaults()
 	{
 		NPC.width = 80;
@@ -27,16 +28,19 @@ public class GiantJellyBall : ModNPC
 		NPC.value = 200;
 		NPC.buffImmune[BuffID.Confused] = true;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		Anger = false;
 		BloomLightColor = new Vector3(0f, 0.5f, 1f);
-		State = (int)NPCState.Sleep;
+		state = (int)NPCState.Sleep;
 		NPC.scale = Main.rand.NextFloat(0.75f, 1.18f);
 	}
-	int State;
+
+	private int state;
 	public bool Anger = false;
 	public Vector3 BloomLightColor;
+
 	private enum NPCState
 	{
 		Sleep,
@@ -47,11 +51,15 @@ public class GiantJellyBall : ModNPC
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
 	}
+
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
 		YggdrasilTownBiome YggdrasilTownBiome = ModContent.GetInstance<YggdrasilTownBiome>();
 		if (!YggdrasilTownBiome.IsBiomeActive(Main.LocalPlayer))
+		{
 			return 0f;
+		}
+
 		return 3f;
 	}
 
@@ -67,7 +75,7 @@ public class GiantJellyBall : ModNPC
 		{
 			NPC.frame.X = 0;
 		}
-		switch (State)
+		switch (state)
 		{
 			case (int)NPCState.Dash:
 				{
@@ -86,9 +94,10 @@ public class GiantJellyBall : ModNPC
 				}
 		}
 	}
+
 	public override void AI()
 	{
-		switch (State)
+		switch (state)
 		{
 			case (int)NPCState.Sleep:
 				{
@@ -101,19 +110,20 @@ public class GiantJellyBall : ModNPC
 							 && Anger)
 					{
 						NPC.localAI[0] = 0;
-						State = (int)NPCState.Dash;
+						state = (int)NPCState.Dash;
 						NPC.ai[0] = 0;
 						NPC.frameCounter = 0;
 					}
-					//逆集群化
-					foreach(NPC npc in Main.npc)
+
+					// 逆集群化
+					foreach (NPC npc in Main.npc)
 					{
-						if(npc != null && npc.active && npc != NPC)
+						if (npc != null && npc.active && npc != NPC)
 						{
-							if(npc.type == Type)
+							if (npc.type == Type)
 							{
 								Vector2 v0 = NPC.Center - npc.Center;
-								if(v0.Length() < 120)
+								if (v0.Length() < 120)
 								{
 									NPC.velocity += Vector2.Normalize(v0) * 0.25f;
 								}
@@ -124,12 +134,12 @@ public class GiantJellyBall : ModNPC
 				}
 			case (int)NPCState.Dash:
 				{
-					
 					NPC.TargetClosest();
 					Player target = Main.player[NPC.target];
 					Vector2 toAim = target.Center - NPC.Center;
-					//差异化
-					if(NPC.localAI[0] == 0)
+
+					// 差异化
+					if (NPC.localAI[0] == 0)
 					{
 						if (MathF.Sin((float)Main.time * 0.004f + NPC.whoAmI) > -0.8)
 						{
@@ -156,11 +166,11 @@ public class GiantJellyBall : ModNPC
 					NPC.frameCounter++;
 					if (NPC.frameCounter >= 55)
 					{
-						State = (int)NPCState.Rest;
+						state = (int)NPCState.Rest;
 						NPC.frameCounter = 0;
 					}
 					break;
-				} 
+				}
 			case (int)NPCState.Rest:
 				{
 					NPC.velocity *= 0.92f;
@@ -169,21 +179,22 @@ public class GiantJellyBall : ModNPC
 					{
 						NPC.velocity *= 0;
 						NPC.localAI[0] = 0;
-						State = (int)NPCState.Dash;
+						state = (int)NPCState.Dash;
 						NPC.frameCounter = 0;
 						NPC.TargetClosest();
 						if (NPC.HasValidTarget && Collision.CanHit(NPC.Center, 1, 1, Main.player[NPC.target].Center, 1, 1)
 										   && Main.player[NPC.target].Distance(NPC.Center) > 1000)
 						{
 							Anger = false;
-							State = (int)NPCState.Sleep;
+							state = (int)NPCState.Sleep;
 							NPC.frameCounter = 0;
 						}
-						//第二层差异化处理,400距离以上,1/15的概率解除仇恨
-						if(Main.rand.NextBool(15) && Main.player[NPC.target].Distance(NPC.Center) > 400)
+
+						// 第二层差异化处理,400距离以上,1/15的概率解除仇恨
+						if (Main.rand.NextBool(15) && Main.player[NPC.target].Distance(NPC.Center) > 400)
 						{
 							Anger = false;
-							State = (int)NPCState.Sleep;
+							state = (int)NPCState.Sleep;
 							NPC.frameCounter = 0;
 						}
 					}
@@ -191,21 +202,20 @@ public class GiantJellyBall : ModNPC
 					break;
 				}
 		}
-		float glowStrength = 0.4f;
-		if (State == (int)NPCState.Sleep)
+		if (state == (int)NPCState.Sleep)
 		{
-			glowStrength = 0.1f;
 		}
-		
+
 		Lighting.AddLight(NPC.Center, BloomLightColor);
 	}
+
 	public override void HitEffect(NPC.HitInfo hit)
 	{
-		if(!Anger)
+		if (!Anger)
 		{
 			Anger = true;
 		}
-		if(NPC.life <= 0)
+		if (NPC.life <= 0)
 		{
 			for (int i = 0; i < 30; i++)
 			{
@@ -231,7 +241,7 @@ public class GiantJellyBall : ModNPC
 					maxTime = Main.rand.Next(62, 144),
 					scale = mulScale,
 					rotation = Main.rand.NextFloat(6.283f),
-					ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
+					ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) },
 				};
 				Ins.VFXManager.Add(blood);
 			}
@@ -246,7 +256,7 @@ public class GiantJellyBall : ModNPC
 					position = NPC.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - afterVelocity,
 					maxTime = Main.rand.Next(32, 94),
 					scale = Main.rand.NextFloat(6f, 34f),
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 }
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 },
 				};
 				Ins.VFXManager.Add(blood);
 			}
@@ -267,30 +277,32 @@ public class GiantJellyBall : ModNPC
 		}
 		base.HitEffect(hit);
 	}
+
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		float glowStrength = 1f;
-		if (State == (int)NPCState.Sleep)
+		if (state == (int)NPCState.Sleep)
 		{
 			glowStrength = 0.4f;
 		}
 		Texture2D texture = ModAsset.GiantJellyBall.Value;
-		//Texture2D textureG = ModAsset.JellyBall_glow.Value;
+
+		// Texture2D textureG = ModAsset.JellyBall_glow.Value;
 		Texture2D textureB = ModAsset.GiantJellyBall_bloom.Value;
 		spriteBatch.Draw(textureB, NPC.Center - Main.screenPosition, NPC.frame, new Color(1f, 1f, 1f, 0f) * glowStrength, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
 		spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, Color.Lerp(drawColor * 0.7f, new Color(0.6f, 1f, 1f, 1f), 0.4f), NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
 
-		//spriteBatch.Draw(textureG, NPC.Center - Main.screenPosition, NPC.frame, new Color(1f, 1f, 1f, 0f) * glowStrength, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
-
+		// spriteBatch.Draw(textureG, NPC.Center - Main.screenPosition, NPC.frame, new Color(1f, 1f, 1f, 0f) * glowStrength, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
 
 		return false;
 	}
+
 	public override void OnKill()
 	{
-
 	}
+
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		//TODO 掉落物
+		// TODO 掉落物
 	}
 }
