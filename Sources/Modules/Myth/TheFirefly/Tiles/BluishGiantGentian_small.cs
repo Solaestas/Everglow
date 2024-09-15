@@ -104,7 +104,6 @@ public class BluishGiantGentian_small : ModTile, ITileFluentlyDrawn
 		if (!TileDrawing.IsVisible(tile))
 		{
 			return;
-		}
 
 		int paint = Main.tile[tilePos].TileColor;
 		int textureStyle = tile.TileFrameX;

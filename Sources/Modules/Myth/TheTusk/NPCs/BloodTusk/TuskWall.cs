@@ -1,10 +1,10 @@
-using Everglow.Commons.CustomTiles.Tiles;
+using Everglow.Commons.Collider;
 using Everglow.Commons.DataStructures;
 using Everglow.Myth.TheTusk.Projectiles;
 
 namespace Everglow.Myth.TheTusk.NPCs.BloodTusk;
 
-public class TuskWall : DBlock
+public class TuskWall : BoxEntity
 {
 	public bool Flip;
 	public int Timer = 2;
@@ -15,12 +15,13 @@ public class TuskWall : DBlock
 
 	public override void AI()
 	{
+		MapColor = new Color(153, 113, 90);
 		if (BottomY == -1)
 		{
-			BottomY = position.Y + size.Y;
+			BottomY = Position.Y + Size.Y;
 			for (int t = 0; t < 300; t++)
 			{
-				if (!Terraria.Collision.SolidCollision(new Vector2(position.X - 5, BottomY + 5), 10, 10))
+				if (!Terraria.Collision.SolidCollision(new Vector2(Position.X - 5, BottomY + 5), 10, 10))
 				{
 					BottomY += 4;
 				}
@@ -31,8 +32,8 @@ public class TuskWall : DBlock
 			}
 			BottomY += 15;
 		}
-		size.Y = Math.Clamp(Timer * 3, 1, 840);
-		position.Y = BottomY - size.Y;
+		Size = new Vector2(Size.X, Math.Clamp(Timer * 3, 1, 840));
+		Position = new Vector2(Position.X, BottomY - Size.Y);
 		if (Tusk != null && Tusk.active)
 		{
 			BloodTusk bloodTusk = Tusk.ModNPC as BloodTusk;
@@ -42,23 +43,23 @@ public class TuskWall : DBlock
 			}
 			if (Flip)
 			{
-				bloodTusk.TuskWallClampRange.X = position.X + size.X + 100;
+				bloodTusk.TuskWallClampRange.X = Position.X + Size.X + 100;
 			}
 			else
 			{
-				bloodTusk.TuskWallClampRange.Y = position.X - 100;
+				bloodTusk.TuskWallClampRange.Y = Position.X - 100;
 			}
 			Timer++;
 			if (!StartShake)
 			{
-				Point point = (position + new Vector2(size.X * 0.5f, size.Y)).ToTileCoordinates();
-				Projectile.NewProjectile(WorldGen.GetProjectileSource_TileBreak(point.X, point.Y), position + new Vector2(size.X * 0.5f, size.Y), Vector2.zeroVector, ModContent.ProjectileType<TuskWall_Wave>(), 0, 0);
-				ShakerManager.AddShaker(position + new Vector2(size.X * 0.5f, size.Y), new Vector2(0, 1), 6, 30, 120, 0.999f, 0.999f, 280);
+				Point point = (Position + new Vector2(Size.X * 0.5f, Size.Y)).ToTileCoordinates();
+				Projectile.NewProjectile(WorldGen.GetProjectileSource_TileBreak(point.X, point.Y), Position + new Vector2(Size.X * 0.5f, Size.Y), Vector2.zeroVector, ModContent.ProjectileType<TuskWall_Wave>(), 0, 0);
+				ShakerManager.AddShaker(Position + new Vector2(Size.X * 0.5f, Size.Y), new Vector2(0, 1), 6, 30, 120, 0.999f, 0.999f, 280);
 				StartShake = true;
 			}
 			if (Timer == 280)
 			{
-				ShakerManager.AddShaker(position + new Vector2(size.X * 0.5f, size.Y), new Vector2(0, 1), 120, 30, 120, 0.9f, 0.9f, 120);
+				ShakerManager.AddShaker(Position + new Vector2(Size.X * 0.5f, Size.Y), new Vector2(0, 1), 120, 30, 120, 0.9f, 0.9f, 120);
 			}
 		}
 		else
@@ -72,10 +73,10 @@ public class TuskWall : DBlock
 				Timer--;
 				if (!EndShake)
 				{
-					Point point = (position + new Vector2(size.X * 0.5f, size.Y)).ToTileCoordinates();
-					Projectile.NewProjectile(WorldGen.GetProjectileSource_TileBreak(point.X, point.Y), position + new Vector2(size.X * 0.5f, size.Y), Vector2.zeroVector, ModContent.ProjectileType<TuskWall_Wave>(), 0, 0);
-					ShakerManager.AddShaker(position + new Vector2(size.X * 0.5f, size.Y), new Vector2(0, 1), 60, 30, 120, 0.9f, 0.9f, 120);
-					ShakerManager.AddShaker(position + new Vector2(size.X * 0.5f, size.Y), new Vector2(0, 1), 6, 30, 120, 0.999f, 0.999f, Timer);
+					Point point = (Position + new Vector2(Size.X * 0.5f, Size.Y)).ToTileCoordinates();
+					Projectile.NewProjectile(WorldGen.GetProjectileSource_TileBreak(point.X, point.Y), Position + new Vector2(Size.X * 0.5f, Size.Y), Vector2.zeroVector, ModContent.ProjectileType<TuskWall_Wave>(), 0, 0);
+					ShakerManager.AddShaker(Position + new Vector2(Size.X * 0.5f, Size.Y), new Vector2(0, 1), 60, 30, 120, 0.9f, 0.9f, 120);
+					ShakerManager.AddShaker(Position + new Vector2(Size.X * 0.5f, Size.Y), new Vector2(0, 1), 6, 30, 120, 0.999f, 0.999f, Timer);
 					EndShake = true;
 				}
 			}
@@ -87,8 +88,6 @@ public class TuskWall : DBlock
 		}
 		base.AI();
 	}
-
-	public override Color MapColor => new Color(153, 113, 90);
 
 	public override void Draw()
 	{
@@ -108,16 +107,16 @@ public class TuskWall : DBlock
 			for (int j = 0; j < 20; j++)
 			{
 				Vector2 drawPos = new Vector2(i * 53, j * 44);
-				Vector2 pos0 = position + drawPos;
-				Vector2 pos1 = position + drawPos + new Vector2(53, 0);
+				Vector2 pos0 = Position + drawPos;
+				Vector2 pos1 = Position + drawPos + new Vector2(53, 0);
 
-				Vector2 pos2 = position + drawPos + new Vector2(0, 44);
-				Vector2 pos3 = position + drawPos + new Vector2(53, 44);
+				Vector2 pos2 = Position + drawPos + new Vector2(0, 44);
+				Vector2 pos3 = Position + drawPos + new Vector2(53, 44);
 				bool shouldBreak = false;
-				if (drawPos.Y + 44 > size.Y)
+				if (drawPos.Y + 44 > Size.Y)
 				{
-					pos2 = position + new Vector2(drawPos.X, size.Y);
-					pos3 = position + new Vector2(drawPos.X + 53, size.Y);
+					pos2 = Position + new Vector2(drawPos.X, Size.Y);
+					pos3 = Position + new Vector2(drawPos.X + 53, Size.Y);
 					shouldBreak = true;
 				}
 				AddVertex(bars, pos0);
@@ -142,7 +141,7 @@ public class TuskWall : DBlock
 	public void AddVertex(List<Vertex2D> bars, Vector2 pos)
 	{
 		Texture2D tuskWall = ModAsset.TuskWall.Value;
-		Vector3 coord = new Vector3((pos - position) / tuskWall.Size(), 0);
+		Vector3 coord = new Vector3((pos - Position) / tuskWall.Size(), 0);
 		if (!Flip)
 		{
 			coord.X = 1 - coord.X;
