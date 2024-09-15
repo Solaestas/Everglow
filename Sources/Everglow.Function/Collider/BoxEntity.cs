@@ -12,6 +12,8 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 
 	public float Gravity => 1;
 
+	public Color MapColor { get; set; }
+
 	public override bool Collision(IBox obj, Vector2 stride, out CollisionResult result)
 	{
 		result = default;
@@ -102,7 +104,7 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 				var destination = new Rectangle((int)position.X - 1, (int)position.Y - 1, 2, 2);
 				if (mapRect != null ? destination.Intersects(mapRect.Value) : true)
 				{
-					Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, position, new Rectangle(0, 0, 1, 1), Color.White, 0, Vector2.Zero, mapScale, SpriteEffects.None, 0);
+					Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, position, new Rectangle(0, 0, 1, 1), MapColor, 0, Vector2.Zero, mapScale, SpriteEffects.None, 0);
 				}
 			}
 		}

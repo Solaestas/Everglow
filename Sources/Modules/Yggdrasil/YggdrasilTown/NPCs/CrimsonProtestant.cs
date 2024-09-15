@@ -1,12 +1,6 @@
-using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.GameContent.ItemDropRules;
 using Terraria.Audio;
-using Everglow.Commons.NetUtils;
-using Everglow.Commons.CustomTiles;
-using Everglow.Yggdrasil.Common.Elevator.Tiles;
-using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
+using Terraria.DataStructures;
+using Terraria.ID;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 
@@ -17,9 +11,9 @@ public class CrimsonProtestant : ModNPC
 		Main.npcFrameCount[NPC.type] = 6;
 		NPCSpawnManager.RegisterNPC(Type);
 	}
+
 	public override void SetDefaults()
 	{
-
 		NPC.width = 54;
 		NPC.height = 42;
 		NPC.lifeMax = 200;
@@ -34,68 +28,76 @@ public class CrimsonProtestant : ModNPC
 
 		AnimationType = NPCID.Tim;
 	}
+
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
 	}
+
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
 		YggdrasilTownBiome YggdrasilTownBiome = ModContent.GetInstance<YggdrasilTownBiome>();
 		if (!YggdrasilTownBiome.IsBiomeActive(Main.LocalPlayer))
+		{
 			return 0f;
+		}
+
 		return 3f;
 	}
-	bool HasSpell=false;
+
+	private bool hasSpell = false;
+
 	public override void AI()
 	{
-
 		NPC.TargetClosest();
 		NPC.velocity.X *= 0.93f;
-		if ((double)NPC.velocity.X > -0.1 && (double)NPC.velocity.X < 0.1)
+		if (NPC.velocity.X > -0.1 && NPC.velocity.X < 0.1)
+		{
 			NPC.velocity.X = 0f;
-
+		}
 
 		if (NPC.ai[0] == 0f)
+		{
 			NPC.ai[0] = 400;
-
+		}
 
 		if (NPC.ai[2] != 0f && NPC.ai[3] != 0f)
 		{
-			NPC.position += NPC.netOffset;;
+			NPC.position += NPC.netOffset;
 
 			SoundEngine.PlaySound(SoundID.Item8, NPC.position);
 			for (int i = 0; i < 50; i++)
 			{
-
-				int num71 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 27, 0f, 0f, 100, default(Color), Main.rand.Next(1, 3));
+				int num71 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Shadowflame, 0f, 0f, 100, default(Color), Main.rand.Next(1, 3));
 				Dust dust = Main.dust[num71];
 				dust.velocity *= 3f;
 				if (Main.dust[num71].scale > 1f)
+				{
 					Main.dust[num71].noGravity = true;
-
+				}
 			}
-			
+
 			NPC.position -= NPC.netOffset;
-			NPC.position.X = NPC.ai[2] * 16f - (float)(NPC.width / 2) + 8f;
-			NPC.position.Y = NPC.ai[3] * 16f - (float)NPC.height;
+			NPC.position.X = NPC.ai[2] * 16f - NPC.width / 2 + 8f;
+			NPC.position.Y = NPC.ai[3] * 16f - NPC.height;
 			NPC.netOffset *= 0f;
 			NPC.velocity.X = 0f;
 			NPC.velocity.Y = 0f;
 			NPC.ai[2] = 0f;
 			NPC.ai[3] = 0f;
-			HasSpell = false;
+			hasSpell = false;
 			SoundEngine.PlaySound(SoundID.Item8, NPC.position);
 			for (int i = 0; i < 50; i++)
 			{
-
-				int num80 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 27, 0f, 0f, 100, default(Color), Main.rand.Next(1, 3));
+				int num80 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Shadowflame, 0f, 0f, 100, default(Color), Main.rand.Next(1, 3));
 				Dust dust = Main.dust[num80];
 				dust.velocity *= 3f;
 				if (Main.dust[num80].scale > 1f)
+				{
 					Main.dust[num80].noGravity = true;
-
+				}
 			}
 		}
-		if (NPC.ai[0] >= 420 && Main.netMode != 1)
+		if (NPC.ai[0] >= 420 && Main.netMode != NetmodeID.MultiplayerClient)
 		{
 			NPC.ai[0] = 0f;
 			int targetTileX = (int)Main.player[NPC.target].Center.X / 16;
@@ -117,23 +119,20 @@ public class CrimsonProtestant : ModNPC
 			NPC.ai[1] -= 1f;
 			if (NPC.ai[1] == 0)
 			{
-
-				if (!HasSpell && Main.netMode != 1)
+				if (!hasSpell && Main.netMode != NetmodeID.MultiplayerClient)
 				{
 					for (int i = 1; i <= 3; i++)
 					{
-
-						Vector2 Position = new Vector2(new Vector2(0, -50).RotatedBy(-Math.PI * i * 2 / 3).X,
+						Vector2 Position = new Vector2(
+							new Vector2(0, -50).RotatedBy(-Math.PI * i * 2 / 3).X,
 													   new Vector2(0, -50).RotatedBy(-Math.PI * i * 2 / 3).Y);
-						int Spell=NPC.NewNPC(NPC.GetSpawnSourceForProjectileNPC(), (int)(NPC.Center.X + (int)Position.X), (int)(NPC.Center.Y + Position.Y), ModContent.NPCType<CrimsonSpell>(), 0, NPC.whoAmI, 115 * i +60 );
-						Main.npc[Spell].velocity = Vector2.Normalize(Position.RotatedBy(Math.PI/ 2))*3;
+						int Spell = NPC.NewNPC(NPC.GetSpawnSourceForProjectileNPC(), (int)(NPC.Center.X + (int)Position.X), (int)(NPC.Center.Y + Position.Y), ModContent.NPCType<CrimsonSpell>(), 0, NPC.whoAmI, 115 * i + 60);
+						Main.npc[Spell].velocity = Vector2.Normalize(Position.RotatedBy(Math.PI / 2)) * 3;
 					}
 
-					HasSpell = true;
+					hasSpell = true;
 					NPC.ai[1] = 115;
-
 				}
-
 			}
 		}
 		if (Main.rand.NextBool(5))
@@ -154,10 +153,10 @@ public class CrimsonProtestant : ModNPC
 
 	public override void OnKill()
 	{
-
 	}
+
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		//TODO 掉落物
+		// TODO 掉落物
 	}
 }

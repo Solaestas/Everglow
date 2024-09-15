@@ -1,6 +1,7 @@
 namespace Everglow.Commons.Collider;
 
-public interface IEntityCollider<T> : IBox where T : Entity
+public interface IEntityCollider<T> : IBox
+	where T : Entity
 {
 	public T Entity { get; }
 
@@ -22,7 +23,6 @@ public interface IEntityCollider<T> : IBox where T : Entity
 			OffsetY = 0;
 		}
 		OldPosition = Entity.position;
-
 	}
 
 	public void Update()

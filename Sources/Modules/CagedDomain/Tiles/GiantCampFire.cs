@@ -24,7 +24,7 @@ public class GiantCampFire : ModTile, ISceneTile
 			16,
 			16,
 			16,
-			18
+			18,
 		};
 		TileObjectData.newTile.CoordinateWidth = 16;
 		TileObjectData.newTile.Origin = new Point16(2, 1);
@@ -32,6 +32,7 @@ public class GiantCampFire : ModTile, ISceneTile
 		DustType = DustID.WoodFurniture;
 		AddMapEntry(new Color(91, 62, 39));
 	}
+
 	public void AddScene(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
@@ -42,12 +43,13 @@ public class GiantCampFire : ModTile, ISceneTile
 			Ins.VFXManager.Add(flame);
 		}
 	}
+
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
 		Tile tile = Main.tile[i, j];
 		if (tile.TileFrameX == 36 && tile.TileFrameY == 18 && !Main.gamePaused)
 		{
-			if(Main.rand.NextBool(3))
+			if (Main.rand.NextBool(3))
 			{
 				var spark = new FireSparkDust
 				{
@@ -58,7 +60,7 @@ public class GiantCampFire : ModTile, ISceneTile
 					maxTime = Main.rand.Next(37, 195),
 					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(12.1f, 27.0f)),
 					rotation = Main.rand.NextFloat(6.283f),
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.003f, 0.003f) }
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.003f, 0.003f) },
 				};
 				Ins.VFXManager.Add(spark);
 			}
@@ -73,7 +75,7 @@ public class GiantCampFire : ModTile, ISceneTile
 					maxTime = Main.rand.Next(37, 305),
 					scale = Main.rand.NextFloat(40, 100),
 					rotation = Main.rand.NextFloat(6.283f),
-					ai = new float[] { Main.rand.NextFloat(-0.05f, -0.01f), 0 }
+					ai = new float[] { Main.rand.NextFloat(-0.05f, -0.01f), 0 },
 				};
 				Ins.VFXManager.Add(somg);
 			}
@@ -81,12 +83,14 @@ public class GiantCampFire : ModTile, ISceneTile
 		base.NearbyEffects(i, j, closer);
 	}
 }
+
 public class GiantCampFire_flame_fore_Pipeline : Pipeline
 {
 	public override void Load()
 	{
 		effect = ModAsset.GiantCampFire_shader;
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
@@ -101,11 +105,13 @@ public class GiantCampFire_flame_fore_Pipeline : Pipeline
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
+
 	public override void EndRender()
 	{
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(GiantCampFire_flame_fore_Pipeline), typeof(BloomPipeline))]
 public class GiantCampFire_flame_fore : ForegroundVFX
 {
@@ -113,11 +119,13 @@ public class GiantCampFire_flame_fore : ForegroundVFX
 	{
 		texture = Commons.ModAsset.Noise_flame_0.Value;
 	}
+
 	public override void Update()
 	{
 		Lighting.AddLight(position, new Vector3(1, 0.7f, 0.2f) * 2);
 		base.Update();
 	}
+
 	public override void Draw()
 	{
 		float timeValue = (float)Main.time * 0.014f;
@@ -130,14 +138,14 @@ public class GiantCampFire_flame_fore : ForegroundVFX
 			zValue = MathF.Pow(zValue, 0.4f);
 			float colorR = MathF.Sin(MathF.Pow(value, 0.2f) * MathF.PI) * 0.95f;
 			float colorG = 0;
-			if(t == 0)
+			if (t == 0)
 			{
 				colorG = MathF.Pow(value, 0.4f);
 			}
 			float xValue = 9 * MathF.Sin(value * 32 + timeValue * 16) * value + value * value * Main.windSpeedCurrent * 870f;
 			bars.Add(position + new Vector2(30 * (1 - value) + xValue, -t * 9f), new Color(colorR, colorG, value, 0f), new Vector3(0, value * 1.3f - timeValue, zValue));
 			bars.Add(position + new Vector2(-30 * (1 - value) + xValue, -t * 9f), new Color(colorR, colorG, value, 0f), new Vector3(1, value * 1.3f - timeValue, zValue));
-			if(t == 39)
+			if (t == 39)
 			{
 				bars.Add(position + new Vector2(xValue, -t * 9f), new Color(0, colorG, 1, 0f), new Vector3(0, value * 1.3f - timeValue, zValue));
 				bars.Add(position + new Vector2(xValue, -t * 9f), new Color(0, colorG, 1, 0f), new Vector3(1, value * 1.3f - timeValue, zValue));

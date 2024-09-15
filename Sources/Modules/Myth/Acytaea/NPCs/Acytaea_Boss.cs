@@ -1,5 +1,4 @@
 using Everglow.Commons.Coroutines;
-using Everglow.Commons.CustomTiles;
 using Everglow.Myth.Acytaea.Projectiles;
 using Terraria.Audio;
 using Terraria.DataStructures;

@@ -1,4 +1,4 @@
-using Everglow.Commons.CustomTiles.Collide;
+using Everglow.Commons.Collider;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Utilities;
