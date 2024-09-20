@@ -4,21 +4,45 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 internal class FeatheredStaff : ModProjectile
 {
-	private const int MaxCollideCount = 2;
-	private const int Phase1Duration = 90;
+	private const int MaxCollisionCount = 2;
 
-	// Phase 1
-	private const float FOVDistance = 500;
-	private const float FOVAngle = MathF.PI / 2.0f;
-	private const float RotationSpeed = 0.02f;
+	private const int Phase1Duration = 90;
+	private const float Phase1FOVDistance = 500;
+	private const float Phase1FOVAngle = MathF.PI / 2.0f;
+	private const float Phase1RotationSpeed = 0.02f;
+
+	private const float Phase2VelocityLimitY = 10f;
+	private const float Phase2Gravity = 0.2f;
 
 	private int TargetWhoAmI { get; set; } = -1;
 
-	// Phase 2
-	private const float VelocityLimitY = 10f;
-	private const float Gravity = 0.2f;
+	private bool HasNotBursted { get; set; } = true;
 
-	private bool Bursted { get; set; } = false;
+	private int CollisionCounter
+	{
+		get
+		{
+			return (int)Projectile.ai[0];
+		}
+
+		set
+		{
+			Projectile.ai[0] = value;
+		}
+	}
+
+	private int LifeTimer
+	{
+		get
+		{
+			return (int)Projectile.ai[1];
+		}
+
+		set
+		{
+			Projectile.ai[1] = value;
+		}
+	}
 
 	public override void SetStaticDefaults()
 	{
@@ -36,8 +60,8 @@ internal class FeatheredStaff : ModProjectile
 		Projectile.timeLeft = 300;
 		Projectile.tileCollide = true;
 
-		Projectile.ai[0] = 0f; // CollideCounter
-		Projectile.ai[1] = 0f; // Timer
+		CollisionCounter = 0;
+		LifeTimer = 0;
 	}
 
 	public override void AI()
@@ -47,7 +71,7 @@ internal class FeatheredStaff : ModProjectile
 			Projectile.velocity.Y = 10f;
 		}
 
-		if (Projectile.ai[1] < Phase1Duration)
+		if (LifeTimer < Phase1Duration)
 		{
 			Phase1AI();
 		}
@@ -56,8 +80,7 @@ internal class FeatheredStaff : ModProjectile
 			Phase2AI();
 		}
 
-		// Increase timer
-		Projectile.ai[1]++;
+		LifeTimer++;
 	}
 
 	// Phase 1: No gravity, track enemy within the field of view (a sector)
@@ -71,9 +94,8 @@ internal class FeatheredStaff : ModProjectile
 			FindEnemy();
 			return;
 		}
-		else
+		else // track enemy
 		{
-			// track enemy
 			NPC npc = Main.npc[TargetWhoAmI];
 
 			Vector2 directionToTarget = npc.Center - Projectile.Center;
@@ -83,16 +105,16 @@ internal class FeatheredStaff : ModProjectile
 				directionToTarget.ToRotation() -
 				Projectile.velocity.ToRotation());
 
-			if (Math.Abs(angleToTarget) > RotationSpeed)
+			if (Math.Abs(angleToTarget) > Phase1RotationSpeed)
 			{
 				// Rotate by the rotation speed
 				if (angleToTarget > 0)
 				{
-					Projectile.velocity = Projectile.velocity.RotatedBy(RotationSpeed);
+					Projectile.velocity = Projectile.velocity.RotatedBy(Phase1RotationSpeed);
 				}
 				else
 				{
-					Projectile.velocity = Projectile.velocity.RotatedBy(-RotationSpeed);
+					Projectile.velocity = Projectile.velocity.RotatedBy(-Phase1RotationSpeed);
 				}
 			}
 			else
@@ -145,37 +167,31 @@ internal class FeatheredStaff : ModProjectile
 	}
 
 	// Phase 2: Gravity gradually increase to max value
-	// ---------------------------------------------------------------------
+	// ------------------------------------------------
 	private void Phase2AI()
 	{
-		if (!Bursted)
+		if (HasNotBursted)
 		{
 			GenerateParticlesExposion(50);
 
-			// Draw gores
-			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
-			int type0 = ModContent.Find<ModGore>("Everglow/FeatheredStaff_gore1").Type;
-			int type1 = ModContent.Find<ModGore>("Everglow/FeatheredStaff_gore0").Type;
+			Gore.NewGore(Projectile.Center, Projectile.velocity, ModContent.Find<ModGore>("Everglow/FeatheredStaff_gore0").Type, Projectile.scale);
+			Gore.NewGore(Projectile.Center, Projectile.velocity, ModContent.Find<ModGore>("Everglow/FeatheredStaff_gore1").Type, Projectile.scale);
 
-			Gore.NewGore(Projectile.Center, v0, type0, Projectile.scale);
-			Gore.NewGore(Projectile.Center, v0, type1, Projectile.scale);
-
-			Bursted = true;
+			HasNotBursted = false;
 		}
 		GenerateParticles(5);
 		Projectile.velocity *= 0.99f;
+
 		// Gravity
 		Projectile.velocity.Y =
-			Projectile.velocity.Y + Gravity < VelocityLimitY ?
-			Projectile.velocity.Y + Gravity :
-			VelocityLimitY;
+			Projectile.velocity.Y + Phase2Gravity < Phase2VelocityLimitY ?
+			Projectile.velocity.Y + Phase2Gravity :
+			Phase2VelocityLimitY;
 	}
 
 	private void FindEnemy()
 	{
-		Vector2 detectCenter = Projectile.Center;
-
-		float minDistance = FOVDistance + 1;
+		float minDistance = Phase1FOVDistance + 1;
 
 		foreach (NPC npc in Main.npc)
 		{
@@ -233,24 +249,23 @@ internal class FeatheredStaff : ModProjectile
 
 		float angleToTarget = MathHelper.WrapAngle(projectileDirection.ToRotation() - directionToTarget.ToRotation());
 
-		bool angleCheck = MathF.Abs(angleToTarget) <= FOVAngle / 2;
+		bool angleCheck = MathF.Abs(angleToTarget) <= Phase1FOVAngle / 2;
 
-		bool distanceCheck = Projectile.Center.Distance(npc.Center) <= FOVDistance;
+		bool distanceCheck = Projectile.Center.Distance(npc.Center) <= Phase1FOVDistance;
 
 		return angleCheck && distanceCheck;
 	}
 
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
-		// Check collision count
-		Projectile.ai[0]++;
-		if (Projectile.ai[0] >= MaxCollideCount)
+		CollisionCounter++;
+		if (CollisionCounter >= MaxCollisionCount)
 		{
 			GenerateParticles(5);
 			Projectile.Kill();
 			return true;
 		}
-		if(Projectile.ai[1] >= Phase1Duration)
+		if (LifeTimer >= Phase1Duration)
 		{
 			Projectile.Kill();
 			return true;
@@ -268,7 +283,7 @@ internal class FeatheredStaff : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		if (Projectile.ai[1] < Phase1Duration)
+		if (LifeTimer < Phase1Duration)
 		{
 			Texture2D texture = ModAsset.Projectiles_FeatheredStaff.Value;
 
@@ -281,7 +296,7 @@ internal class FeatheredStaff : ModProjectile
 			var rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 			SpriteEffects effects = SpriteEffects.None;
 
-			// Check if the projectile is facing left
+			// If the projectile is facing left
 			if (Projectile.velocity.X < 0 &&
 				Projectile.oldVelocity.X < 0)
 			{
@@ -300,7 +315,6 @@ internal class FeatheredStaff : ModProjectile
 				effects: effects,
 				0);
 
-			// Loop frame count.
 			Projectile.frame = (Projectile.frame + 1) % Main.projFrames[Projectile.type];
 		}
 		else
@@ -313,7 +327,7 @@ internal class FeatheredStaff : ModProjectile
 
 			SpriteEffects effects = SpriteEffects.None;
 
-			// Check if the projectile is facing left
+			// If the projectile is facing left
 			if (Projectile.velocity.X < 0 &&
 				Projectile.oldVelocity.X < 0)
 			{
