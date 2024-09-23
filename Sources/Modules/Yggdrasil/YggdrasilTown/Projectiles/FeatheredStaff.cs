@@ -6,13 +6,13 @@ internal class FeatheredStaff : ModProjectile
 {
 	private const int MaxCollisionCount = 2;
 
-	private const int Phase1Duration = 90;
-	private const float Phase1FOVDistance = 500;
-	private const float Phase1FOVAngle = MathF.PI / 2.0f;
-	private const float Phase1RotationSpeed = 0.02f;
+	private const int P1Duration = 90;
+	private const float P1FOVDistance = 500;
+	private const float P1FOVAngle = MathF.PI / 2.0f;
+	private const float P1RotationSpeed = 0.02f;
 
-	private const float Phase2VelocityLimitY = 10f;
-	private const float Phase2Gravity = 0.2f;
+	private const float P2VelocityLimitY = 10f;
+	private const float P2GravityCoef = 0.2f;
 
 	private int TargetWhoAmI { get; set; } = -1;
 
@@ -20,28 +20,16 @@ internal class FeatheredStaff : ModProjectile
 
 	private int CollisionCounter
 	{
-		get
-		{
-			return (int)Projectile.ai[0];
-		}
+		get => (int)Projectile.ai[0];
 
-		set
-		{
-			Projectile.ai[0] = value;
-		}
+		set => Projectile.ai[0] = value;
 	}
 
 	private int LifeTimer
 	{
-		get
-		{
-			return (int)Projectile.ai[1];
-		}
+		get => (int)Projectile.ai[1];
 
-		set
-		{
-			Projectile.ai[1] = value;
-		}
+		set => Projectile.ai[1] = value;
 	}
 
 	public override void SetStaticDefaults()
@@ -71,13 +59,13 @@ internal class FeatheredStaff : ModProjectile
 			Projectile.velocity.Y = 10f;
 		}
 
-		if (LifeTimer < Phase1Duration)
+		if (LifeTimer < P1Duration)
 		{
-			Phase1AI();
+			P1AI();
 		}
 		else
 		{
-			Phase2AI();
+			P2AI();
 		}
 
 		LifeTimer++;
@@ -85,7 +73,7 @@ internal class FeatheredStaff : ModProjectile
 
 	// Phase 1: No gravity, track enemy within the field of view (a sector)
 	// --------------------------------------------------------------------
-	private void Phase1AI()
+	private void P1AI()
 	{
 		CheckTargetActive();
 
@@ -105,16 +93,16 @@ internal class FeatheredStaff : ModProjectile
 				directionToTarget.ToRotation() -
 				Projectile.velocity.ToRotation());
 
-			if (Math.Abs(angleToTarget) > Phase1RotationSpeed)
+			if (Math.Abs(angleToTarget) > P1RotationSpeed)
 			{
 				// Rotate by the rotation speed
 				if (angleToTarget > 0)
 				{
-					Projectile.velocity = Projectile.velocity.RotatedBy(Phase1RotationSpeed);
+					Projectile.velocity = Projectile.velocity.RotatedBy(P1RotationSpeed);
 				}
 				else
 				{
-					Projectile.velocity = Projectile.velocity.RotatedBy(-Phase1RotationSpeed);
+					Projectile.velocity = Projectile.velocity.RotatedBy(-P1RotationSpeed);
 				}
 			}
 			else
@@ -168,7 +156,7 @@ internal class FeatheredStaff : ModProjectile
 
 	// Phase 2: Gravity gradually increase to max value
 	// ------------------------------------------------
-	private void Phase2AI()
+	private void P2AI()
 	{
 		if (HasNotBursted)
 		{
@@ -184,14 +172,14 @@ internal class FeatheredStaff : ModProjectile
 
 		// Gravity
 		Projectile.velocity.Y =
-			Projectile.velocity.Y + Phase2Gravity < Phase2VelocityLimitY ?
-			Projectile.velocity.Y + Phase2Gravity :
-			Phase2VelocityLimitY;
+			Projectile.velocity.Y + P2GravityCoef < P2VelocityLimitY ?
+			Projectile.velocity.Y + P2GravityCoef :
+			P2VelocityLimitY;
 	}
 
 	private void FindEnemy()
 	{
-		float minDistance = Phase1FOVDistance + 1;
+		float minDistance = P1FOVDistance + 1;
 
 		foreach (NPC npc in Main.npc)
 		{
@@ -249,9 +237,9 @@ internal class FeatheredStaff : ModProjectile
 
 		float angleToTarget = MathHelper.WrapAngle(projectileDirection.ToRotation() - directionToTarget.ToRotation());
 
-		bool angleCheck = MathF.Abs(angleToTarget) <= Phase1FOVAngle / 2;
+		bool angleCheck = MathF.Abs(angleToTarget) <= P1FOVAngle / 2;
 
-		bool distanceCheck = Projectile.Center.Distance(npc.Center) <= Phase1FOVDistance;
+		bool distanceCheck = Projectile.Center.Distance(npc.Center) <= P1FOVDistance;
 
 		return angleCheck && distanceCheck;
 	}
@@ -265,7 +253,7 @@ internal class FeatheredStaff : ModProjectile
 			Projectile.Kill();
 			return true;
 		}
-		if (LifeTimer >= Phase1Duration)
+		if (LifeTimer >= P1Duration)
 		{
 			Projectile.Kill();
 			return true;
@@ -283,7 +271,7 @@ internal class FeatheredStaff : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		if (LifeTimer < Phase1Duration)
+		if (LifeTimer < P1Duration)
 		{
 			Texture2D texture = ModAsset.Projectiles_FeatheredStaff.Value;
 
