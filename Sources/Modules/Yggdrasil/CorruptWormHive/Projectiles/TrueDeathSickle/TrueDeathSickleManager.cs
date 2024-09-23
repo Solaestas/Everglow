@@ -78,6 +78,10 @@ public class TrueDeathSickleManager : ModProjectile
 		{
 			Reset();
 		}
+		if (player.HeldItem.type != ModContent.ItemType<Items.Weapons.TrueDeathSickle>())
+		{
+			Projectile.Kill();
+		}
 	}
 
 	public void SetPlayerDirection(Player player)

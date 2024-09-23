@@ -1,25 +1,25 @@
-namespace Everglow.Commons;
+namespace Everglow.Commons.TileHelper;
 
 public class WorldGenMisc
 {
 	/// <summary>
 	/// 以给定的坐标为左下角，放置内含物品的箱子
 	/// </summary>
-	public static void PlaceChest(int x, int y, int type, List<Item> itemList)
+	public static void PlaceChest(int x, int y, int type, List<Item> itemList, int style = 0)
 	{
-		if(x >= Main.maxTilesX - 2 || x <= 2 || y >= Main.maxTilesY - 2 || y <= 2)
+		if (x >= Main.maxTilesX - 2 || x <= 2 || y >= Main.maxTilesY - 2 || y <= 2)
 		{
 			throw new Exception("the chest stand out of the world!");
 		}
 		SmoothTileOfAreaXYWH(x - 1, y + 1, 4, 2);
-		WorldGen.PlaceChest(x, y, (ushort)type);
+		WorldGen.PlaceChest(x, y, (ushort)type, false, style);
 		foreach (Chest chest in Main.chest)
 		{
 			if (chest != null)
 			{
 				if (chest.x == x && chest.y + 1 == y)
 				{
-					for(int t = 0;t < itemList.Count;t++)
+					for (int t = 0; t < itemList.Count; t++)
 					{
 						chest.item[t] = itemList[t];
 					}
@@ -27,6 +27,7 @@ public class WorldGenMisc
 			}
 		}
 	}
+
 	/// <summary>
 	/// 以[x,y]为左上顶点放置大件连续物块,此类物块必须是18x18(不算分隔线就16x16)一帧的
 	/// </summary>
@@ -35,7 +36,10 @@ public class WorldGenMisc
 	public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type, int xStartAt = 0, int yStartAt = 0)
 	{
 		if (x > Main.maxTilesX - width || x < 0 || y > Main.maxTilesY - height || y < 0)
+		{
 			return;
+		}
+
 		for (int i = 0; i < width; i++)
 		{
 			for (int j = 0; j < height; j++)
@@ -48,6 +52,7 @@ public class WorldGenMisc
 			}
 		}
 	}
+
 	/// <summary>
 	/// 以[x0,y0]为左上顶点,[x1,y1]为右下顶点平滑物块
 	/// </summary>
@@ -81,6 +86,7 @@ public class WorldGenMisc
 			}
 		}
 	}
+
 	/// <summary>
 	/// 以x, y, width, height的格式确定区域平滑物块
 	/// </summary>
@@ -92,7 +98,7 @@ public class WorldGenMisc
 	{
 		x = Math.Clamp(x, 20, Main.maxTilesX - 20);
 		y = Math.Clamp(y, 20, Main.maxTilesY - 20);
-		if(x + width > Main.maxTilesX - 20)
+		if (x + width > Main.maxTilesX - 20)
 		{
 			x += Main.maxTilesX - 20 - (x + width);
 		}

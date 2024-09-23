@@ -1,5 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -44,7 +45,7 @@ public class SquamousRollingStone : ModProjectile
 		{
 			return;
 		}
-		if (Projectile.velocity.Length() <= 0.01f)
+		if (MathF.Abs(Projectile.velocity.X) <= 0.1f && MathF.Abs(Projectile.velocity.Y) <= 1f)
 		{
 			StopTimer++;
 			if (StopTimer > 60)
@@ -58,6 +59,10 @@ public class SquamousRollingStone : ModProjectile
 		else
 		{
 			StopTimer = 0;
+		}
+		if(Projectile.timeLeft == 55)
+		{
+			SoundEngine.PlaySound(new SoundStyle(ModAsset.SquamousShell_RockExplosion_Mod), Projectile.Center);
 		}
 		Projectile.velocity.X += StartDirection * 0.04f;
 		Projectile.velocity.Y += 0.2f;

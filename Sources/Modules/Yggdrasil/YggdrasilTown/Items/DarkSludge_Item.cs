@@ -1,6 +1,6 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.Items;
 
-public class DarkSludge : ModItem
+public class DarkSludge_Item : ModItem
 {
 	public override void SetDefaults()
 	{

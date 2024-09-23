@@ -26,21 +26,26 @@ public abstract class ShapeDataTile : ModTile
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.addTile(Type);
 	}
+
 	public int[,] PixelHasTile;
 	public int TotalWidth;
 	public int TotalHeight;
+
 	/// <summary>
 	/// 是否掉落多个物品
 	/// </summary>
 	public bool MultiItem = false;
+
 	/// <summary>
 	/// 物品种类
 	/// </summary>
 	public int CustomItemType = -1;
+
 	/// <summary>
 	/// 必填项,实际有物块的轮廓
 	/// </summary>
 	public virtual string ShapePath => Texture + "_shape.bmp";
+
 	public override void Load()
 	{
 		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>(ShapePath);
@@ -61,15 +66,20 @@ public abstract class ShapeDataTile : ModTile
 		});
 		base.Load();
 	}
+
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
 	{
 		noBreak = true;
 		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
 	}
+
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
 	{
 		if (fail)
+		{
 			return;
+		}
+
 		var thisTile = Main.tile[i, j];
 		int x0 = i - thisTile.TileFrameX / 18;
 		int y0 = j - thisTile.TileFrameY / 18;
@@ -103,6 +113,7 @@ public abstract class ShapeDataTile : ModTile
 		}
 		SoundEngine.PlaySound(HitSound, new Vector2(i * 16, j * 16));
 	}
+
 	public virtual void CustomDropItem(int i, int j)
 	{
 		if (CustomItemType > 0)
@@ -110,6 +121,7 @@ public abstract class ShapeDataTile : ModTile
 			Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 16, 16, new Item(CustomItemType, 1));
 		}
 	}
+
 	/// <summary>
 	/// 从左上角安置一个造型物块
 	/// </summary>
@@ -118,7 +130,10 @@ public abstract class ShapeDataTile : ModTile
 	public virtual void PlaceOriginAtTopLeft(int x, int y)
 	{
 		if (x > Main.maxTilesX - TotalWidth || x < 0 || y > Main.maxTilesY - TotalHeight || y < 0)
+		{
 			return;
+		}
+
 		for (int i = 0; i < TotalWidth; i++)
 		{
 			for (int j = 0; j < TotalHeight; j++)
@@ -134,6 +149,7 @@ public abstract class ShapeDataTile : ModTile
 			}
 		}
 	}
+
 	/// <summary>
 	/// 从左下角安置一个造型物块
 	/// </summary>
@@ -142,7 +158,10 @@ public abstract class ShapeDataTile : ModTile
 	public virtual void PlaceOriginAtBottomLeft(int x, int y)
 	{
 		if (x > Main.maxTilesX - TotalWidth || x < 0 || y > Main.maxTilesY || y - TotalHeight < 0)
+		{
 			return;
+		}
+
 		for (int i = 0; i < TotalWidth; i++)
 		{
 			for (int j = 0; j < TotalHeight; j++)
@@ -158,6 +177,7 @@ public abstract class ShapeDataTile : ModTile
 			}
 		}
 	}
+
 	/// <summary>
 	/// 判定底部平坦以及能否容纳下异形块
 	/// </summary>
@@ -167,7 +187,10 @@ public abstract class ShapeDataTile : ModTile
 	public bool CanPlaceAtBottomLeft(int x, int y)
 	{
 		if (x > Main.maxTilesX - TotalWidth || x < 0 || y > Main.maxTilesY || y - TotalHeight < 0)
+		{
 			return false;
+		}
+
 		for (int i = 0; i < TotalWidth; i++)
 		{
 			for (int j = 0; j < TotalHeight; j++)
@@ -175,7 +198,7 @@ public abstract class ShapeDataTile : ModTile
 				if (PixelHasTile[i, TotalHeight - j - 1] >= 200)
 				{
 					Tile tile = Main.tile[x + i, y - j];
-					if(tile.HasTile)
+					if (tile.HasTile)
 					{
 						bool fragile = false;
 						if (Main.tileCut[tile.TileType])
@@ -186,12 +209,12 @@ public abstract class ShapeDataTile : ModTile
 						{
 							fragile = true;
 						}
-						if(!fragile)
+						if (!fragile)
 						{
 							return false;
 						}
 					}
-					if(j == 0)
+					if (j == 0)
 					{
 						Tile tileBottom = Main.tile[x + i, y + 1];
 						if (!tileBottom.HasTile)
@@ -217,4 +240,3 @@ public abstract class ShapeDataTile : ModTile
 		return true;
 	}
 }
-

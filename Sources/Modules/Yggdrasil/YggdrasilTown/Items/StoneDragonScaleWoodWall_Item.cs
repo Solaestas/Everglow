@@ -1,6 +1,6 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.Items;
 
-public class StoneDragonScaleWoodWall : ModItem
+public class StoneDragonScaleWoodWall_Item : ModItem
 {
 	public override void SetDefaults()
 	{
@@ -8,6 +8,7 @@ public class StoneDragonScaleWoodWall : ModItem
 		Item.width = 24;
 		Item.height = 24;
 	}
+
 	public override void AddRecipes()
 	{
 		CreateRecipe(4)

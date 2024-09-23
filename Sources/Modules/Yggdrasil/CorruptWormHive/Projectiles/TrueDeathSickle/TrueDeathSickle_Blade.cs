@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.CorruptWormHive.Buffs;
+using Everglow.Yggdrasil.CorruptWormHive.Items.Weapons;
 using Everglow.Yggdrasil.CorruptWormHive.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
