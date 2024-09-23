@@ -1,5 +1,7 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Terraria.Audio;
+using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class LampWoodSword_Projectile : MeleeProj
@@ -29,23 +31,29 @@ public class LampWoodSword_Projectile : MeleeProj
 		shadertype = "Trail";
 		AutoEnd = false;
 	}
+
 	public float power = 0f;
+
 	public override string TrailShapeTex()
 	{
 		return "Everglow/Commons/Textures/Melee";
 	}
+
 	public override string TrailColorTex()
 	{
 		return "Everglow/Yggdrasil/YggdrasilTown/Projectiles/LampWood_meleeColor";
 	}
+
 	public override float TrailAlpha(float factor)
 	{
 		return base.TrailAlpha(factor) * (0.25f + power);
 	}
+
 	public override BlendState TrailBlendState()
 	{
 		return BlendState.NonPremultiplied;
 	}
+
 	public override void End()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -56,6 +64,7 @@ public class LampWoodSword_Projectile : MeleeProj
 		Projectile.Kill();
 		player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
 	}
+
 	public override void AI()
 	{
 		power *= 0.9f;
@@ -67,7 +76,7 @@ public class LampWoodSword_Projectile : MeleeProj
 		float timeMul = 1 / player.meleeSpeed;
 		if (attackType == 0)
 		{
-			if (timer < 3 * timeMul)//前摇
+			if (timer < 3 * timeMul)// 前摇
 			{
 				useTrail = false;
 				LockPlayerDir(player);
@@ -77,7 +86,10 @@ public class LampWoodSword_Projectile : MeleeProj
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == (int)(20 * timeMul))
+			{
 				AttSound(SoundID.Item1);
+			}
+
 			if (timer > 3 * timeMul && timer < 24 * timeMul)
 			{
 				isAttacking = true;
@@ -104,6 +116,7 @@ public class LampWoodSword_Projectile : MeleeProj
 			}
 		}
 	}
+
 	private void GenerateVFX()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -125,30 +138,38 @@ public class LampWoodSword_Projectile : MeleeProj
 			d.alpha = 190;
 		}
 	}
+
 	public override void OnKill(int timeLeft)
 	{
 		Player player = Main.player[Projectile.owner];
 		player.fullRotation = 0;
 	}
+
 	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{
 		drawScale = new Vector2(-0.1f, 1.02f);
 		base.DrawSelf(spriteBatch, lightColor, diagonal, drawScale, glowTexture);
 	}
+
 	public override void DrawTrail(Color color)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (trailVecs.Count != 0)
+		{
 			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+		}
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
+		{
 			return;
+		}
+
 		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
 
@@ -166,23 +187,25 @@ public class LampWoodSword_Projectile : MeleeProj
 		}
 		bars.Add(new Vertex2D(Projectile.Center + mainVec * 0.3f * Projectile.scale, Color.White, new Vector3(0, 1, 0f)));
 		bars.Add(new Vertex2D(Projectile.Center + mainVec * Projectile.scale, Color.White, new Vector3(0, 0, 1)));
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
 		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-		//Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
+		// Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		power = 1f;

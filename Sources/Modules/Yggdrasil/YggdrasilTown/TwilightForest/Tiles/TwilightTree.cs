@@ -1,5 +1,6 @@
 using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Commons.TileHelper;
+using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Items;
 using Terraria.GameContent.Drawing;
 using Terraria.Localization;
@@ -27,6 +28,14 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 			foreach (var vine in style.Values)
 			{
 				TwilightTreeVineMassSpringSystem.AddMassSpringMesh(vine);
+			}
+			foreach (var poses in style.Keys)
+			{
+				Tile tile = YggdrasilWorldGeneration.SafeGetTile(poses);
+				if (tile.TileType != Type)
+				{
+					style.Remove(poses);
+				}
 			}
 		}
 		TwilightTreeVineEulerSolver.Step(TwilightTreeVineMassSpringSystem, 1);
@@ -163,17 +172,33 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 			return;
 		}
 
-		bool isLeft = tile.TileFrameY == 1;
 		if (!fail)// 判定为已破碎
 		{
+			bool isLeft = tile.TileFrameY == 1;
 			noItem = true;
 			if (isLeft)
 			{
 				KillToTop(i, j);
 			}
-			else
+			else if(tile.TileFrameY == 2)
 			{
 				KillToTop(i - 1, j);
+			}
+			else if (tile.TileFrameY == 0)
+			{
+				KillToTop(i, j);
+			}
+			else if (tile.TileFrameY == -1)
+			{
+				var tileRight = Main.tile[i + 1, j];
+				if(tileRight.TileType == Type)
+				{
+					KillToTop(i, j);
+				}
+				else
+				{
+					KillToTop(i - 1, j);
+				}
 			}
 		}
 	}

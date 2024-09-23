@@ -765,17 +765,38 @@ public class CableTileUpdate : ModSystem
 	/// </summary>
 	public static MassSpringSystem CableTileMassSpringSystem = new MassSpringSystem();
 	public static EulerSolver CableTileEulerSolver = new EulerSolver(8);
+	public static PBDSolver CableTilePBDSolver = new PBDSolver(8);
 
 	public override void PostUpdateEverything()
 	{
 		CableTileMassSpringSystem = new MassSpringSystem();
-		foreach(var cableTile in TileLoader.tiles.OfType<CableTile>())
+		foreach (var cableTile in TileLoader.tiles.OfType<CableTile>())
 		{
-			foreach(var rope in cableTile.RopesOfAllThisTileInTheWorld.Values)
+			foreach (var rope in cableTile.RopesOfAllThisTileInTheWorld.Values)
 			{
 				CableTileMassSpringSystem.AddMassSpringMesh(rope);
 			}
 		}
 		CableTileEulerSolver.Step(CableTileMassSpringSystem, 1);
+	}
+
+	public override void OnWorldLoad()
+	{
+		foreach (var cableTile in TileLoader.tiles.OfType<CableTile>())
+		{
+			cableTile.RopesOfAllThisTileInTheWorld.Clear();
+			cableTile.RopeHeadAndTail.Clear();
+		}
+		base.OnWorldLoad();
+	}
+
+	public override void OnWorldUnload()
+	{
+		foreach (var cableTile in TileLoader.tiles.OfType<CableTile>())
+		{
+			cableTile.RopesOfAllThisTileInTheWorld.Clear();
+			cableTile.RopeHeadAndTail.Clear();
+		}
+		base.OnWorldUnload();
 	}
 }

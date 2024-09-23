@@ -1,5 +1,8 @@
 using Everglow.CagedDomain.Tiles;
+using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.Common.Blocks;
+using Everglow.Yggdrasil.YggdrasilTown.Items;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
@@ -77,6 +80,8 @@ public class YggdrasilTownGeneration
 	public static UnifiedRandom GenRand = new UnifiedRandom();
 	public static List<YggdrasilTownStreetElement> StreetConstructorsSheet;
 	public static List<YggdrasilTownStreetElement> InDoorChineseStyleHangingSheet;
+	public static List<int> TwilightBonusList;
+	public static List<int> VanillaJuniorGems;
 
 	/// <summary>
 	/// 初始化
@@ -132,6 +137,26 @@ public class YggdrasilTownGeneration
 			new BurningBowl(),
 			new PlantBowl(),
 			new EmptyAnchoredTop(),
+		};
+		TwilightBonusList = new List<int>
+		{
+			ModContent.ItemType<BloodTearCrystalCrown>(),
+			ModContent.ItemType<CelesteStoneWaistPendant>(),
+			ModContent.ItemType<CyanVineRing>(),
+			ModContent.ItemType<SpicyShield>(),
+			ModContent.ItemType<DarkMassacreDagger>(),
+			ModContent.ItemType<AmberFlowerHook>(),
+		};
+		AddTwilightLegacyBonusContain(TwilightBonusList, 14);
+		VanillaJuniorGems = new List<int>()
+		{
+			ItemID.Ruby,
+			ItemID.Diamond,
+			ItemID.Amber,
+			ItemID.Sapphire,
+			ItemID.Topaz,
+			ItemID.Amethyst,
+			ItemID.Emerald,
 		};
 	}
 
@@ -861,7 +886,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int y = checkY - 40; y <= checkY + 40; y++)
 					{
-						float aValue = PerlinPixelR[(x + x0CoordPerlin) % 1024, (y + y0CoordPerlin) % 1024] / 255f;
+						float aValue = PerlinPixelR[(x + x0CoordPerlin + 10) % 1024, (y + y0CoordPerlin) % 1024] / 255f;
 						float bValue = Math.Abs(checkY - y) / 120f - 0.1f + Math.Max(0, Math.Abs(checkX - x) / 120f - 0.6f);
 						if (aValue + bValue < 0.2f)
 						{
@@ -1519,9 +1544,10 @@ public class YggdrasilTownGeneration
 		int centerY = (int)TwilightRelicCenter.Y;
 
 		// 中心建筑遗迹 150 * 300
+		// 风化外壳
 		for (int x = centerX - 80; x <= centerX + 80; x += 1)
 		{
-			for (int y = centerY - 103; y <= centerY + 210; y += 1)
+			for (int y = centerY - 103; y <= centerY + 200; y += 1)
 			{
 				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
 				if (aValue < 0.4f)
@@ -1532,8 +1558,21 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
-		PlaceRectangleAreaOfBlock(centerX - 75, centerY - 100, centerX + 75, centerY + 200, ModContent.TileType<GreenRelicBrick>());
-		PlaceRectangleAreaOfWall(centerX - 78, centerY - 98, centerX + 78, centerY + 204, ModContent.WallType<GreenRelicWall>());
+		for (int x = centerX - 120; x <= centerX + 120; x += 1)
+		{
+			for (int y = centerY + 199; y <= centerY + 240; y += 1)
+			{
+				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
+				if (aValue < 0.4f)
+				{
+					Tile tile = SafeGetTile(x, y);
+					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
+					tile.HasTile = true;
+				}
+			}
+		}
+		PlaceRectangleAreaOfBlock(centerX - 75, centerY - 100, centerX + 75, centerY + 230, ModContent.TileType<GreenRelicBrick>());
+		PlaceRectangleAreaOfWall(centerX - 78, centerY - 98, centerX + 78, centerY + 234, ModContent.WallType<GreenRelicWall>());
 
 		// 顶部方波
 		for (int x = -75; x < 75; x += 20)
@@ -1558,15 +1597,168 @@ public class YggdrasilTownGeneration
 			}
 		}
 
-		// 房间矩阵？
+		// 房间布设
+		int directionGate = GenRand.NextBool() ? 1 : -1;
 		for (int x = 0; x < 3; x++)
 		{
-			for (int y = 0; y < 12; y++)
+			if (x == 1)
+			{
+				continue;
+			}
+			for (int y = 0; y < 10; y++)
 			{
 				int roomOriginX = centerX - 75 + x * 50 + 25;
 				int roomOriginY = centerY - 100 + y * 25 + 12;
 				KillRectangleAreaOfTile(roomOriginX - 18, roomOriginY - 9, roomOriginX + 18, roomOriginY + 9);
+
+				// 房间通道
+				if (y == 9 && directionGate + 1 == x)
+				{
+					// 外侧大门
+					if (directionGate == -1)
+					{
+						KillRectangleAreaOfTile(roomOriginX - 30, roomOriginY + 2, roomOriginX - 18, roomOriginY + 9);
+					}
+					else
+					{
+						KillRectangleAreaOfTile(roomOriginX + 18, roomOriginY + 2, roomOriginX + 30, roomOriginY + 9);
+					}
+				}
+
+				// 对内侧开门
+				if (x == 0)
+				{
+					KillRectangleAreaOfTile(roomOriginX + 18, roomOriginY + 2, roomOriginX + 31, roomOriginY + 9);
+					PlaceRectangleAreaOfBlock(roomOriginX + 19, roomOriginY + 2, roomOriginX + 22, roomOriginY + 6, ModContent.TileType<GreenRelicBrick>());
+					PlaceFrameImportantTiles(roomOriginX + 20, roomOriginY + 7, 1, 3, TileID.ClosedDoor, 0, 918);
+				}
+				if (x == 2)
+				{
+					KillRectangleAreaOfTile(roomOriginX - 31, roomOriginY + 2, roomOriginX - 18, roomOriginY + 9);
+					PlaceRectangleAreaOfBlock(roomOriginX - 22, roomOriginY + 2, roomOriginX - 19, roomOriginY + 6, ModContent.TileType<GreenRelicBrick>());
+					PlaceFrameImportantTiles(roomOriginX - 20, roomOriginY + 7, 1, 3, TileID.ClosedDoor, 0, 918);
+				}
+				PlaceTwilightLegacyBiomeChest(roomOriginX, roomOriginY + 9);
 			}
+		}
+
+		// 清理中央垂直通道
+		KillRectangleAreaOfTile(centerX - 18, centerY - 100 + 12 - 9, centerX + 18, centerY + 146);
+		PlaceFrameImportantTiles(centerX - 1, centerY + 144, 3, 3, ModContent.TileType<GreenRelicSlotTable>());
+
+		// 副塔 60 * 120
+		int directionSubTower = GenRand.NextBool() ? 1 : -1;
+		int subTowerCenterX = centerX + directionSubTower * 150;
+		int subTowerCenterY = centerY + GenRand.Next(-30, 10);
+
+		// 风化外壳
+		for (int x = subTowerCenterX - 35; x <= subTowerCenterX + 35; x += 1)
+		{
+			for (int y = subTowerCenterY - 63; y <= subTowerCenterY + 63; y += 1)
+			{
+				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
+				if (aValue < 0.4f)
+				{
+					Tile tile = SafeGetTile(x, y);
+					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
+					tile.HasTile = true;
+				}
+			}
+		}
+		PlaceRectangleAreaOfBlock(subTowerCenterX - 30, subTowerCenterY - 60, subTowerCenterX + 30, subTowerCenterY + 60, ModContent.TileType<GreenRelicBrick>());
+		PlaceRectangleAreaOfWall(subTowerCenterX - 28, subTowerCenterY - 58, subTowerCenterX + 28, subTowerCenterY + 58, ModContent.WallType<GreenRelicWall>());
+		for (int x = -30; x < 30; x += 20)
+		{
+			PlaceRectangleAreaOfBlock(subTowerCenterX + x, subTowerCenterY - 68, subTowerCenterX + 10 + x, subTowerCenterY - 60, ModContent.TileType<GreenRelicBrick>());
+		}
+		KillRectangleAreaOfTile(subTowerCenterX - 26, subTowerCenterY - 56, subTowerCenterX + 26, subTowerCenterY + 56);
+
+		// 连接廊道
+		int subTowerFloor = subTowerCenterY + 56;
+		int roomTailX = centerX - 75 + (directionSubTower + 1) * 50 + 25 + 19 * directionSubTower;
+		int subTowerHeadX = subTowerCenterX - 28 * directionSubTower;
+		for (int y = 0; y < 10; y++)
+		{
+			int roomOriginY = centerY - 100 + y * 25 + 12;
+			if (roomOriginY > subTowerFloor)
+			{
+				int minX = Math.Min(roomTailX, subTowerHeadX);
+				int maxX = Math.Max(roomTailX, subTowerHeadX);
+				for (int x = minX; x <= maxX; x++)
+				{
+					float value = (float)Utils.Lerp(subTowerFloor, roomOriginY + 8, 1 - (x - minX) / (float)(maxX - minX));
+					PlaceRectangleAreaOfBlock(x, (int)value - 12, x + 1, (int)value + 4, ModContent.TileType<GreenRelicBrick>());
+					PlaceRectangleAreaOfWall(x, (int)value - 11, x + 1, (int)value + 3, ModContent.WallType<GreenRelicWall>());
+					KillRectangleAreaOfTile(x, (int)value - 8, x + 1, (int)value + 1);
+				}
+				break;
+			}
+		}
+
+		// 铺设激光网
+		for (int x = 0; x < 6; x++)
+		{
+			for (int y = 0; y < 11; y++)
+			{
+				int checkX = subTowerCenterX - 25 + x * 10;
+				int checkY = subTowerCenterY - 55 + y * 10;
+				Tile tile = SafeGetTile(checkX, checkY);
+				if ((x + y) % 2 == 1)
+				{
+					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick_Trap>();
+				}
+				else
+				{
+					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
+				}
+				tile.HasTile = true;
+			}
+		}
+
+		// 激光镀层和奖励砖
+		for (int x = 0; x < 5; x++)
+		{
+			for (int y = 0; y < 11; y++)
+			{
+				int checkX = subTowerCenterX - 20 + x * 10;
+				int checkY = subTowerCenterY - 50 + y * 10;
+				Tile tile = SafeGetTile(checkX, checkY);
+				tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick_plating>();
+				if (x == 2 && y == 0)
+				{
+					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick_BonusKey>();
+				}
+				if (x == 0 && y == 3)
+				{
+					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick_BonusKey>();
+				}
+				if (x == 4 && y == 3)
+				{
+					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick_BonusKey>();
+				}
+				tile.HasTile = true;
+				if (tile.TileType == (ushort)ModContent.TileType<GreenRelicBrick_plating>())
+				{
+					tile.TileFrameX = (short)(18 * GenRand.Next(2));
+				}
+				else
+				{
+					tile.TileFrameX = 0;
+				}
+				if (x == 2 && y == 10)
+				{
+					WorldGenMisc.PlaceChest(checkX, checkY + 6, ModContent.TileType<RustBronzeTreasureChest_Lock>(), new List<Item>() { new Item(setDefaultsToType: ModContent.ItemType<CelticKeyStone>()) }, 0);
+				}
+			}
+		}
+
+		// 地下金库
+		for (int subY = 0; subY < 30; subY++)
+		{
+			int y = centerY + subY + 180;
+			float lengthX = MathF.Pow(subY / 10f, 0.3f);
+			lengthX = Math.Clamp(lengthX, 0, 1);
+			KillRectangleAreaOfTile(centerX - (int)(40 * lengthX), y, centerX + (int)(40 * lengthX), y);
 		}
 	}
 
@@ -2868,5 +3060,125 @@ public class YggdrasilTownGeneration
 		int type = ModContent.TileType<LampWood_Chest>();
 
 		WorldGenMisc.PlaceChest(x, y, (ushort)type, chestContents);
+	}
+
+	/// <summary>
+	/// 生成一个暮光林地遗迹专属的宝箱
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	public static void PlaceTwilightLegacyBiomeChest(int x, int y)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				Tile tile = SafeGetTile(i + x, y - j);
+				if (tile.HasTile)
+				{
+					tile.ClearEverything();
+				}
+			}
+		}
+		List<Item> chestContents = new List<Item>();
+		if (TwilightBonusList.Count > 0)
+		{
+			int mainItem = WorldGen.genRand.Next(TwilightBonusList.Count);
+
+			// 尽可能出现不同奖励
+			chestContents.Add(new Item(setDefaultsToType: TwilightBonusList[mainItem], 1));
+			TwilightBonusList.RemoveAt(mainItem);
+		}
+
+		// 金币
+		if (WorldGen.genRand.NextBool(4))
+		{
+			chestContents.Add(new Item(setDefaultsToType: ItemID.GoldCoin, WorldGen.genRand.Next(3, 12)));
+		}
+
+		// 宝石
+		for (int i = 0; i < 4; i++)
+		{
+			if (WorldGen.genRand.NextBool(12))
+			{
+				chestContents.Add(new Item(setDefaultsToType: VanillaJuniorGems[GenRand.Next(VanillaJuniorGems.Count)], WorldGen.genRand.Next(15, WorldGen.genRand.Next(17, WorldGen.genRand.Next(19, 75)))));
+			}
+		}
+
+		// 绳子
+		chestContents.Add(new Item(setDefaultsToType: ItemID.Rope, WorldGen.genRand.Next(70, 151)));
+
+		// 药水
+		int potionType = 1;
+		switch (WorldGen.genRand.Next(5))
+		{
+			case 0:
+				potionType = ItemID.WarmthPotion;
+				break;
+			case 1:
+				potionType = ItemID.GillsPotion;
+				break;
+			case 2:
+				potionType = ItemID.WaterWalkingPotion;
+				break;
+			case 3:
+				potionType = ItemID.SpelunkerPotion;
+				break;
+			case 4:
+				potionType = ItemID.MiningPotion;
+				break;
+		}
+		chestContents.Add(new Item(setDefaultsToType: potionType, WorldGen.genRand.Next(1, 4)));
+		if (WorldGen.genRand.NextBool(2))
+		{
+			if (WorldGen.genRand.NextBool(5))
+			{
+				chestContents.Add(new Item(setDefaultsToType: ItemID.StickyGlowstick, WorldGen.genRand.Next(20, 61)));
+			}
+			else
+			{
+				chestContents.Add(new Item(setDefaultsToType: ItemID.Glowstick, WorldGen.genRand.Next(20, 61)));
+			}
+		}
+		int type = 21;
+
+		WorldGenMisc.PlaceChest(x, y, (ushort)type, chestContents, 0);
+	}
+
+	public static void AddTwilightLegacyBonusContain(List<int> bonus, int times = 1)
+	{
+		List<int> potentialList = new List<int>()
+		{
+			ItemID.CobaltShield,
+			ItemID.LuckyHorseshoe,
+			ItemID.Spear,
+			ItemID.AnkletoftheWind,
+			ItemID.Trident,
+			ItemID.DivingHelmet,
+			ItemID.FeralClaws,
+			ItemID.Shackle,
+			ItemID.Handgun,
+			ItemID.AquaScepter,
+			ItemID.Starfury,
+			ItemID.Vilethorn,
+			ItemID.CrimsonRod,
+			ItemID.Harpoon,
+			ItemID.SlimeStaff,
+			ItemID.CloudinaBottle,
+			ItemID.BandofRegeneration,
+			ItemID.HermesBoots,
+			ItemID.BandofStarpower,
+			ItemID.Aglet,
+			ItemID.Compass,
+			ItemID.Flipper,
+			ItemID.ShinyRedBalloon,
+			ItemID.DepthMeter,
+			ItemID.Umbrella,
+		};
+
+		for (int i = 0; i < times; i++)
+		{
+			bonus.Add(potentialList[GenRand.Next(potentialList.Count)]);
+		}
 	}
 }
