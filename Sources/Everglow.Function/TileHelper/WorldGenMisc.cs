@@ -116,4 +116,37 @@ public class WorldGenMisc
 			}
 		}
 	}
+
+	/// <summary>
+	/// 给定两点挂绳
+	/// </summary>
+	/// <param name="i0"></param>
+	/// <param name="j0"></param>
+	/// <param name="i1"></param>
+	/// <param name="j1"></param>
+	/// <param name="type"></param>
+	/// <param name="style"></param>
+	/// <returns></returns>
+	public static bool PlaceRope(int i0, int j0, int i1, int j1, int type, int style = 0)
+	{
+		if((i0, j0) == (i1, j1))
+		{
+			return false;
+		}
+		i0 = Math.Clamp(i0, 20, Main.maxTilesX - 20);
+		j0 = Math.Clamp(j0, 20, Main.maxTilesY - 20);
+		i1 = Math.Clamp(i1, 20, Main.maxTilesX - 20);
+		j1 = Math.Clamp(j1, 20, Main.maxTilesY - 20);
+		if (Main.tile[i0, j0].HasTile || Main.tile[i1, j1].HasTile)
+		{
+			return false;
+		}
+		if (TileLoader.GetTile(type) is CableTile)
+		{
+			CableTile cableTile = TileLoader.GetTile(type) as CableTile;
+			cableTile.CreateACableTile(i0, j0, i1, j1, style);
+			return true;
+		}
+		return false;
+	}
 }

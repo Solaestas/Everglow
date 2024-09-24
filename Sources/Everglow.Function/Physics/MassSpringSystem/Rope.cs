@@ -84,6 +84,42 @@ public class Rope : IMassSpringMesh
 		return rope;
 	}
 
+
+	/// <summary>
+	/// Create a rope at <paramref name="start" /> extending to the positive y-axis.
+	/// <br /><paramref name="start" /> is fixed.
+	/// </summary>
+	/// <param name="start"> </param>
+	/// <param name="count"> </param>
+	/// <param name="elasticity"> </param>
+	/// <param name="mass"> </param>
+	/// <returns> </returns>
+	public static Rope CreateWithHangHead(Vector2 start, int count, float elasticity, float mass, float headMass, int restCount = 0)
+	{
+		Rope rope = new Rope(count);
+		for (int i = 0; i < count; i++)
+		{
+			int posY = i - restCount;
+			if(posY < 0)
+			{
+				posY = 0;
+			}
+			var position = start + new Vector2(0, mass * 10 * posY);
+			var m = rope._masses[i] = new Mass(mass, position, i == 0);
+			if(i == count - 1)
+			{
+				m.Value = headMass;
+			}
+			if (i != 0)
+			{
+				var prev = rope._masses[i - 1];
+				rope._springs[i - 1] = new ElasticConstrain(prev, rope._masses[i],
+					6, elasticity);
+			}
+		}
+		return rope;
+	}
+
 	public void ApplyForce()
 	{
 		for (int i = 0; i < _masses.Length; i++)

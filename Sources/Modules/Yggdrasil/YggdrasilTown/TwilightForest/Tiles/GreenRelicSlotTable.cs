@@ -1,6 +1,9 @@
 using Everglow.Yggdrasil.WorldGeneration;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Items;
+using Terraria.Audio;
+using Terraria.GameContent.Animations;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles;
@@ -40,7 +43,7 @@ public class GreenRelicSlotTable : ModTile
 		Player player = Main.LocalPlayer;
 		foreach (var item in player.inventory)
 		{
-			if(item.type == ModContent.ItemType<CelticKeyStone>())
+			if (item.type == ModContent.ItemType<CelticKeyStone>())
 			{
 				item.stack--;
 				if (item.stack <= 0)
@@ -52,6 +55,20 @@ public class GreenRelicSlotTable : ModTile
 				Point topLeftPoint = new Point(i - tile.TileFrameX / 18, j - tile.TileFrameY / 18);
 				YggdrasilWorldGeneration.KillRectangleAreaOfTile(topLeftPoint.X - 1, topLeftPoint.Y, topLeftPoint.X + 3, topLeftPoint.Y + 42);
 				YggdrasilWorldGeneration.SmoothTile(topLeftPoint.X - 2, topLeftPoint.Y, topLeftPoint.X + 4, topLeftPoint.Y + 42);
+				for (int x = -2; x < 3; x++)
+				{
+					for (int y = 0; y < 40; y++)
+					{
+						if(Main.rand.NextBool(4))
+						{
+							Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
+							int type = ModContent.Find<ModGore>("Everglow/CyanBrickGore" + Main.rand.Next(7)).Type;
+							Gore.NewGore(WorldGen.GetProjectileSource_TileBreak(i, j), (topLeftPoint + new Point(x, y)).ToWorldCoordinates(), v0, type, Main.rand.NextFloat(0.75f, 1.25f));
+						}
+					}
+				}
+				ShakerManager.AddShaker(topLeftPoint.ToWorldCoordinates() + new Vector2(8), Vector2.One.RotatedByRandom(MathHelper.Pi), 120, 20f, 120, 0.9f, 0.8f, 300);
+				SoundEngine.PlaySound(SoundID.DD2_OgreGroundPound, topLeftPoint.ToWorldCoordinates() + new Vector2(8));
 			}
 		}
 		return false;
@@ -59,7 +76,7 @@ public class GreenRelicSlotTable : ModTile
 
 	public override void MouseOver(int i, int j)
 	{
-		if(Main.netMode == NetmodeID.Server)
+		if (Main.netMode == NetmodeID.Server)
 		{
 			return;
 		}

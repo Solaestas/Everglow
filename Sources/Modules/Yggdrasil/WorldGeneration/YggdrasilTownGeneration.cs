@@ -1,4 +1,6 @@
 using Everglow.CagedDomain.Tiles;
+using Everglow.CagedDomain.Tiles.CableTiles;
+using Everglow.CagedDomain.Tiles.HangingTiles;
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.Common.Blocks;
 using Everglow.Yggdrasil.YggdrasilTown.Items;
@@ -779,7 +781,39 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildTownBelow()
 	{
-		QuickBuild(40, Main.maxTilesY - 400, "YggdrasilTown/MapIOs/YggdrasilTown_Town.mapio");
+		// 圆壳罩住天穹镇
+		Point topLeft = new Point(20, Main.maxTilesY - 680);
+		int length = 1100;
+		int height = 370;
+		int x0CoordPerlin = GenRand.Next(1024);
+		int y0CoordPerlin = GenRand.Next(1024);
+		float thick = 30;
+		for (int i = 0; i < length; i++)
+		{
+			float value = 1 - i / (float)length;
+			value = MathF.Pow(value, 0.4f) * height;
+			if(i > 300)
+			{
+				thick += 0.15f;
+			}
+			for (int j = 0; j < height; j++)
+			{
+				Point pos = new Point(i, j) + topLeft;
+				Tile tile = SafeGetTile(pos);
+				float noiseValueUp = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + y0CoordPerlin) % 1024] / 255f * 0.5f;
+				float noiseValueDown = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + 50 + y0CoordPerlin) % 1024] / 255f * 0.5f;
+				if (j > height - value + noiseValueUp * 15 && j < height - value + thick + noiseValueDown * 25)
+				{
+					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+					tile.HasTile = true;
+				}
+				if(j >= height - value + thick + noiseValueDown * 25)
+				{
+					tile.ClearEverything();
+				}
+			}
+		}
+		QuickBuild(340, Main.maxTilesY - 400, "YggdrasilTown/MapIOs/YggdrasilTown_Town.mapio");
 	}
 
 	/// <summary>
@@ -1033,7 +1067,7 @@ public class YggdrasilTownGeneration
 				if (countLamp > 12)
 				{
 					// 生命灯木
-					for (int j = 0; j < 3000; j++)
+					for (int j = 0; j < 5000; j++)
 					{
 						// 选址
 						checkX = GenRand.Next(50, Main.maxTilesX - 49);
@@ -1560,7 +1594,7 @@ public class YggdrasilTownGeneration
 		}
 		for (int x = centerX - 120; x <= centerX + 120; x += 1)
 		{
-			for (int y = centerY + 199; y <= centerY + 240; y += 1)
+			for (int y = centerY + 160; y <= centerY + 260; y += 1)
 			{
 				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
 				if (aValue < 0.4f)
@@ -1572,7 +1606,8 @@ public class YggdrasilTownGeneration
 			}
 		}
 		PlaceRectangleAreaOfBlock(centerX - 75, centerY - 100, centerX + 75, centerY + 230, ModContent.TileType<GreenRelicBrick>());
-		PlaceRectangleAreaOfWall(centerX - 78, centerY - 98, centerX + 78, centerY + 234, ModContent.WallType<GreenRelicWall>());
+		PlaceRectangleAreaOfBlock(centerX - 105, centerY + 160, centerX + 105, centerY + 250, ModContent.TileType<GreenRelicBrick>());
+		PlaceRectangleAreaOfWall(centerX - 78, centerY - 98, centerX + 78, centerY + 244, ModContent.WallType<GreenRelicWall>());
 
 		// 顶部方波
 		for (int x = -75; x < 75; x += 20)
@@ -1610,6 +1645,39 @@ public class YggdrasilTownGeneration
 				int roomOriginX = centerX - 75 + x * 50 + 25;
 				int roomOriginY = centerY - 100 + y * 25 + 12;
 				KillRectangleAreaOfTile(roomOriginX - 18, roomOriginY - 9, roomOriginX + 18, roomOriginY + 9);
+				int randLampCount = GenRand.Next(1, 4);
+				for (int i = 0; i < randLampCount; i++)
+				{
+					int lampX = roomOriginX + (int)(36f / randLampCount * (i + 0.5f) - 18f + GenRand.Next(-2, 3));
+					var tile = SafeGetTile(lampX, roomOriginY - 9);
+					tile.TileType = (ushort)ModContent.TileType<HangingFluoriteLamp>();
+					tile.HasTile = true;
+					tile.TileFrameY = (short)GenRand.Next(2, 30);
+				}
+				int chainCount = GenRand.Next(1, 3);
+				for (int i = 0; i < chainCount; i++)
+				{
+					int randPos = GenRand.Next(8, 24);
+					int randNeg = GenRand.Next(8, 24);
+					int addX0 = (int)(randPos + ((i + 0.5f) / chainCount - 0.5f) * 12);
+					int addY0 = 0;
+					if (addX0 > 18)
+					{
+						addY0 = addX0 - 18;
+						addX0 = 18;
+					}
+
+					int addX1 = (int)(randNeg + ((i + 0.5f) / chainCount - 0.5f) * 12);
+					int addY1 = 0;
+					if (addX1 > 18)
+					{
+						addY1 = addX1 - 18;
+						addX1 = 18;
+					}
+					addX1 *= -1;
+
+					WorldGenMisc.PlaceRope(roomOriginX + addX0, roomOriginY + addY0 - 9, roomOriginX + addX1, roomOriginY + addY1 - 9, ModContent.TileType<ChainCable>());
+				}
 
 				// 房间通道
 				if (y == 9 && directionGate + 1 == x)
@@ -1675,8 +1743,12 @@ public class YggdrasilTownGeneration
 
 		// 连接廊道
 		int subTowerFloor = subTowerCenterY + 56;
-		int roomTailX = centerX - 75 + (directionSubTower + 1) * 50 + 25 + 19 * directionSubTower;
+		int roomTailX = centerX - 50 + (directionSubTower + 1) * 50 + 19 * directionSubTower;
 		int subTowerHeadX = subTowerCenterX - 28 * directionSubTower;
+		if (directionSubTower < 0)
+		{
+			subTowerHeadX -= 1;
+		}
 		for (int y = 0; y < 10; y++)
 		{
 			int roomOriginY = centerY - 100 + y * 25 + 12;
@@ -1686,7 +1758,12 @@ public class YggdrasilTownGeneration
 				int maxX = Math.Max(roomTailX, subTowerHeadX);
 				for (int x = minX; x <= maxX; x++)
 				{
-					float value = (float)Utils.Lerp(subTowerFloor, roomOriginY + 8, 1 - (x - minX) / (float)(maxX - minX));
+					float lerpValue = (x - minX) / (float)(maxX - minX);
+					if (directionSubTower > 0)
+					{
+						lerpValue = 1 - lerpValue;
+					}
+					float value = (float)Utils.Lerp(subTowerFloor, roomOriginY + 8, lerpValue);
 					PlaceRectangleAreaOfBlock(x, (int)value - 12, x + 1, (int)value + 4, ModContent.TileType<GreenRelicBrick>());
 					PlaceRectangleAreaOfWall(x, (int)value - 11, x + 1, (int)value + 3, ModContent.WallType<GreenRelicWall>());
 					KillRectangleAreaOfTile(x, (int)value - 8, x + 1, (int)value + 1);
@@ -1753,12 +1830,31 @@ public class YggdrasilTownGeneration
 		}
 
 		// 地下金库
-		for (int subY = 0; subY < 30; subY++)
+		for (int subY = 0; subY < 50; subY++)
 		{
 			int y = centerY + subY + 180;
-			float lengthX = MathF.Pow(subY / 10f, 0.3f);
+			float lengthX = MathF.Pow(subY / 20f, 0.3f);
 			lengthX = Math.Clamp(lengthX, 0, 1);
-			KillRectangleAreaOfTile(centerX - (int)(40 * lengthX), y, centerX + (int)(40 * lengthX), y);
+			KillRectangleAreaOfTile(centerX - (int)(60 * lengthX), y, centerX + (int)(60 * lengthX), y);
+		}
+		WorldGenMisc.PlaceChest(centerX, centerY + 229, 21, new List<Item>() { new Item(setDefaultsToType: ModContent.ItemType<RingOfMatter>()) }, 1);
+		for (int x0 = -60; x0 < 61; x0++)
+		{
+			int y = centerY + 180;
+			for (int y0 = 10; y0 < 50; y0++)
+			{
+				Tile tile = SafeGetTile(centerX + x0, y + y0);
+				if (!tile.HasTile)
+				{
+					float height = 0.15f;
+					float value = Math.Abs(x0) * height + GenRand.NextFloat(1f);
+					if (y0 > value + 50 - (60 * height))
+					{
+						tile.TileType = TileID.GoldCoinPile;
+						tile.HasTile = true;
+					}
+				}
+			}
 		}
 	}
 

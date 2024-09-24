@@ -1,4 +1,3 @@
-using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Dusts;
@@ -15,7 +14,12 @@ public class GreenRelicBrick : ModTile
 		Main.tileBlockLight[Type] = true;
 		DustType = ModContent.DustType<GreenRelicBrick_dust>();
 		HitSound = SoundID.Dig;
-
+		MinPick = 160;
 		AddMapEntry(new Color(35, 58, 58));
+	}
+
+	public override bool CanExplode(int i, int j)
+	{
+		return false;
 	}
 }

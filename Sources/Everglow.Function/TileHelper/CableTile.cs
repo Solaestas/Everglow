@@ -312,7 +312,6 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		// TileFluentDrawManager.AddFluentPoint(this, i, j);
 		return base.PreDraw(i, j, spriteBatch);
 	}
 
@@ -444,6 +443,19 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		{
 			MouseOverPoint.Remove(Main.LocalPlayer);
 		}
+	}
+
+	public void CreateACableTile(int i0, int j0, int i1, int j1, int style = 0)
+	{
+		var tile0 = Main.tile[Math.Clamp(i0, 20, Main.maxTilesX - 20), Math.Clamp(j0, 20, Main.maxTilesY - 20)];
+		var tile1 = Main.tile[Math.Clamp(i1, 20, Main.maxTilesX - 20), Math.Clamp(j1, 20, Main.maxTilesY - 20)];
+		tile1.TileType = tile0.TileType = Type;
+		tile1.HasTile = tile0.HasTile = true;
+		int styleX = style % 4;
+		int styleY = (style - styleX) / 4;
+		tile1.TileFrameX = tile0.TileFrameX = (short)(18 * styleX);
+		tile1.TileFrameY = tile0.TileFrameY = (short)(18 * styleY);
+		AddRope(i0, j0, i1, j1);
 	}
 }
 
