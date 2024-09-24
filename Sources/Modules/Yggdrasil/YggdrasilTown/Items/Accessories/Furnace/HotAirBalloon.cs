@@ -19,12 +19,15 @@ public class HotAirBalloon : ModItem
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
 		// 1. Enable Jump Boost
+		// ====================
 		player.jumpBoost = true;
 
-		// 2. Increase Jump Speed (pixels/tick)
+		// 2. Increase Jump Speed
+		// ====================================
 		player.jumpSpeedBoost += JumpSpeedBoost;
 
-		// 3. Enable Fire Dust
+		// 3. Enable Fire Dust VFX
+		// =======================
 		player.GetModPlayer<HotAirBalloonPlayer>().HotAirBalloonEnable = true;
 	}
 }
@@ -38,24 +41,23 @@ internal class HotAirBalloonPlayer : ModPlayer
 		HotAirBalloonEnable = false;
 	}
 
-	// 3. Enable Fire Dust
+	// 3. Enable Fire Dust VFX
+	// =======================
 	public override void PreUpdate()
 	{
 		if (HotAirBalloonEnable)
 		{
-			if (!HotAirBalloonEnable)
-			{
-				return;
-			}
-
-			// Check if the player is moving
+			// If the player is moving
 			if (Player.velocity.Length() <= 1E-05f)
 			{
 				return;
 			}
 
 			// Draw dust
-			//Dust.NewDust(Player.position, Player.width, Player.height, DustID.Torch);
+			for (int i = 0; i < 2; i++)
+			{
+				Dust.NewDust(Player.position, Player.width, Player.height, DustID.Torch);
+			}
 		}
 	}
 }

@@ -1,10 +1,11 @@
-using Everglow.Commons.VFX.CommonVFXDusts;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-internal class RodSpear : ModProjectile
+public class RodSpear : ModProjectile
 {
+	private const int NoTarget = -1;
+
 	public override void SetDefaults()
 	{
 		Projectile.friendly = true;
@@ -19,73 +20,71 @@ internal class RodSpear : ModProjectile
 		Projectile.localNPCHitCooldown = 15;
 	}
 
-	internal bool shot = false;
-	internal int power = 0;
-	public int stickNPC = -1;
-	public float relativeAngle = 0;
-	public float hitTargetAngle = 0;
-	public float hitTargetScale = 1;
-	public Vector2 relativePos = Vector2.zeroVector;
+	private bool HasNotShot { get; set; } = true;
+
+	private int StickTarWho { get; set; } = NoTarget;
+
+	private float RelativeAngle { get; set; } = 0;
+
+	private float HitTargetAngle { get; set; } = 0;
+
+	private float HitTargetScale { get; set; } = 1;
+
+	private Vector2 RelativePos { get; set; } = Vector2.zeroVector;
 
 	public override void AI()
 	{
-		Player player = Main.player[Projectile.owner];
+		Player owner = Main.player[Projectile.owner];
 
-		if (!shot)
+		if (HasNotShot)
 		{
-			shot = true;
-			power = 50;
-			Projectile.velocity = Utils.SafeNormalize(Main.MouseWorld - player.Center, new Vector2(0, -1 * player.gravDir)) * (power + 100) / 8f;
-			Projectile.damage = (int)(Projectile.damage * (power + 100) / 100f);
+			HasNotShot = false;
 			SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 		}
-		else
+		if (Projectile.wet)
 		{
-			if (Projectile.wet)
-			{
-				Projectile.timeLeft -= 2;
-			}
-			if (Projectile.lavaWet)
-			{
-				Projectile.timeLeft -= 24;
-			}
+			Projectile.timeLeft -= 2;
+		}
+		if (Projectile.lavaWet)
+		{
+			Projectile.timeLeft -= 24;
+		}
 
-			if (stickNPC != -1)
+		if (StickTarWho == NoTarget)
+		{
+			Projectile.tileCollide = true;
+
+			if (NPCCollision())
 			{
-				NPC stick = Main.npc[stickNPC];
-				if (stick != null && stick.active)
-				{
-					Projectile.rotation = stick.rotation + relativeAngle;
-					Projectile.Center = stick.Center + relativePos.RotatedBy(stick.rotation + relativeAngle - hitTargetAngle) * stick.scale / hitTargetScale;
-				}
-				else
-				{
-					stickNPC = -1;
-				}
+				StickNPC(Main.npc[StickTarWho]);
+			}
+			else if (Collision.SolidCollision(Projectile.Center, 0, 0))
+			{
+				Projectile.Kill();
 			}
 			else
 			{
-				Projectile.tileCollide = true;
-				if (Collide(Projectile.Center))
-				{
-					Projectile.damage = (int)(Projectile.damage * 0.1f);
-					if (Projectile.damage == 0)
-					{
-						Projectile.damage = 1;
-					}
-					Projectile.knockBack = 0;
-				}
-				else if (!Collision.SolidCollision(Projectile.Center, 0, 0))
-				{
-					Projectile.velocity.Y += 0.25f;
-					Projectile.velocity *= 0.995f;
-					Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
-				}
+				Projectile.velocity.Y += 0.25f;
+				Projectile.velocity *= 0.995f;
+				Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
+			}
+		}
+		else
+		{
+			NPC target = Main.npc[StickTarWho];
+			if (target != null && target.active)
+			{
+				Projectile.rotation = target.rotation + RelativeAngle;
+				Projectile.Center = target.Center + RelativePos.RotatedBy(target.rotation + RelativeAngle - HitTargetAngle) * target.scale / HitTargetScale;
+			}
+			else
+			{
+				Projectile.Kill();
 			}
 		}
 	}
 
-	public bool Collide(Vector2 positon)
+	private bool NPCCollision()
 	{
 		foreach (NPC npc in Main.npc)
 		{
@@ -93,17 +92,27 @@ internal class RodSpear : ModProjectile
 			{
 				if (new Rectangle((int)Projectile.Center.X, (int)Projectile.Center.Y, 1, 1).Intersects(npc.Hitbox))
 				{
-					Projectile.velocity *= 0;
-					relativeAngle = Projectile.rotation - npc.rotation;
-					hitTargetAngle = Projectile.rotation;
-					relativePos = Projectile.Center - npc.Center;
-					hitTargetScale = npc.scale;
-					stickNPC = npc.whoAmI;
+					StickTarWho = npc.whoAmI;
 					return true;
 				}
 			}
 		}
-		return Collision.SolidCollision(positon, 0, 0);
+		return false;
+	}
+
+	private void StickNPC(NPC npc)
+	{
+		Projectile.damage = (int)(Projectile.damage * 0.1f);
+		if (Projectile.damage == 0)
+		{
+			Projectile.damage = 1;
+		}
+		Projectile.knockBack = 0;
+		Projectile.velocity *= 0;
+		RelativeAngle = Projectile.rotation - npc.rotation;
+		HitTargetAngle = Projectile.rotation;
+		RelativePos = Projectile.Center - npc.Center;
+		HitTargetScale = npc.scale;
 	}
 
 	public override bool OnTileCollide(Vector2 oldVelocity)

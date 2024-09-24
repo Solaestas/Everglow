@@ -21,14 +21,15 @@ public class ThermalConductor : ModItem
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
 		// 1. + 60 Mana
+		// ============
 		player.statManaMax2 += 60;
 
 		// 2. + 10% Mana Cost
+		// ==================
 		player.manaCost += 0.1f;
 
-		// 3. When the player's mana falls below [StatusTriggerCondition],
-		// there is a [StatusTriggerRate] chance of gaining [ManaHeal] mana
-		// along with a Curse Inferno debuff with [DebuffDuration] duration.
+		// 3. Mana regeneration with a penalty mechanic
+		// ============================================
 		player.GetModPlayer<ThermalConductorPlayer>().ThermalConductorEnable = true;
 	}
 }
@@ -37,34 +38,29 @@ internal class ThermalConductorPlayer : ModPlayer
 {
 	public bool ThermalConductorEnable { get; set; } = false;
 
-	private int FrameTimer { get; set; } = 0;
-
 	public override void ResetEffects()
 	{
 		ThermalConductorEnable = false;
 	}
 
-	// 3. When the player's mana falls below [StatusTriggerCondition],
+	// 3. Mana regeneration with a penalty mechanic
+	// ============================================
+	// When the player's mana falls below [StatusTriggerCondition],
 	// there is a [StatusTriggerRate] chance of gaining [ManaHeal] mana
 	// along with a Curse Inferno debuff with [DebuffDuration] duration.
 	public override void PreUpdate()
 	{
 		if (ThermalConductorEnable)
 		{
-			FrameTimer++;
-
-			if (FrameTimer >= ThermalConductor.EffectCheckFrameCount)
+			if (Main.time % ThermalConductor.EffectCheckFrameCount == 0)
 			{
-				// reset timer
-				FrameTimer = 0;
-
 				// statMana is more than trigger condition
 				if (Player.statMana >= ThermalConductor.StatusTriggerCondition * Player.statManaMax2)
 				{
 					return;
 				}
 
-				// Random
+				// RNG
 				if (Main.rand.NextFloat() >= ThermalConductor.StatusTriggerRate)
 				{
 					return;
