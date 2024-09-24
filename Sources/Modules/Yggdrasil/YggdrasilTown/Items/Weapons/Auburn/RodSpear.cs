@@ -26,9 +26,8 @@ internal class RodSpear : ModItem
 			ItemRarityColor.Green2,
 			Item.buyPrice(silver: 20));
 
-		Item.channel = false;
-
 		Item.shoot = ModContent.ProjectileType<Projectiles.RodSpear>();
+		Item.shootSpeed = 20;
 	}
 
 	public override void AddRecipes()
