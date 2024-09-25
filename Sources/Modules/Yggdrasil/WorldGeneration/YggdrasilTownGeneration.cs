@@ -58,6 +58,7 @@ public class YggdrasilTownGeneration
 		BuildHeavenlyPortal();
 		Main.statusText = "Constructing The Yggdrasil Town Below...";
 		BuildTownBelow();
+		BuildTangledSubmine();
 		BuildStoneCageOfChallenges();
 
 		// Main.statusText = "Growing LampWoods...";
@@ -534,63 +535,25 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildTangledSubmine()
 	{
-		if (AzureGrottoCenterX > 600)
+		int leftX = 40;
+		int rightX = 280;
+		int upY = Main.maxTilesY - 700;
+		int downY = Main.maxTilesY - 200;
+		for (int x = 0; x < 110; x++)
 		{
-			for (int x = 0; x < 110; x++)
-			{
-				WorldGen.digTunnel(GenRand.NextFloat(AzureGrottoCenterX + 90, 1140), GenRand.NextFloat(11120, 11600), GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, 72), GenRand.Next(3, 7));
-			}
-			for (int x = 0; x < 30; x++)
-			{
-				WorldGen.digTunnel(GenRand.NextFloat(AzureGrottoCenterX + 200, 1140), GenRand.NextFloat(11020, 11240), GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, 72), GenRand.Next(3, 7));
-			}
-			for (int x = 0; x < 30; x++)
-			{
-				WorldGen.digTunnel(GenRand.NextFloat(AzureGrottoCenterX + 160, 1140), GenRand.NextFloat(11140, 11500), GenRand.NextFloat(-1, 1), GenRand.NextFloat(-1, 1), GenRand.Next(81, 144), GenRand.Next(8, 12));
-			}
+			WorldGen.digTunnel(GenRand.NextFloat(leftX, rightX), GenRand.NextFloat(upY, downY), GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, 72), GenRand.Next(3, 7));
 		}
-		else
+		for (int x = 0; x < 30; x++)
 		{
-			for (int x = 0; x < 110; x++)
-			{
-				WorldGen.digTunnel(GenRand.NextFloat(60, AzureGrottoCenterX - 90), GenRand.NextFloat(11120, 11600), GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, 72), GenRand.Next(3, 7));
-			}
-			for (int x = 0; x < 30; x++)
-			{
-				WorldGen.digTunnel(GenRand.NextFloat(60, AzureGrottoCenterX - 200), GenRand.NextFloat(11020, 11240), GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, 72), GenRand.Next(3, 7));
-			}
-			for (int x = 0; x < 30; x++)
-			{
-				WorldGen.digTunnel(GenRand.NextFloat(60, AzureGrottoCenterX - 160), GenRand.NextFloat(11140, 11500), GenRand.NextFloat(-1, 1), GenRand.NextFloat(-1, 1), GenRand.Next(81, 144), GenRand.Next(8, 12));
-			}
+			WorldGen.digTunnel(GenRand.NextFloat(leftX, rightX), GenRand.NextFloat(upY, downY), GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, 72), GenRand.Next(3, 7));
 		}
-		for (int x = 20; x < 1180; x++)
+		for (int x = 0; x < 30; x++)
 		{
-			for (int y = 11000; y < 11800; y++)
-			{
-				Tile tile = SafeGetTile(x, y);
-				Tile tileUp = SafeGetTile(x, y - 1);
-				if (tile.LiquidAmount < tileUp.LiquidAmount)
-				{
-					for (int y1 = 0; y1 < 8; y1++)
-					{
-						Tile newTile = SafeGetTile(x, y + y1);
-						newTile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
-						newTile.HasTile = true;
-					}
-				}
-			}
+			WorldGen.digTunnel(GenRand.NextFloat(leftX, rightX), GenRand.NextFloat(upY, downY), GenRand.NextFloat(-1, 1), GenRand.NextFloat(-1, 1), GenRand.Next(81, 144), GenRand.Next(8, 12));
 		}
-		int mineLeft = AzureGrottoCenterX + 90;
-		int mineRight = 1140;
-		if (AzureGrottoCenterX < 600)
+		for (int x = leftX; x < rightX; x++)
 		{
-			mineLeft = 60;
-			mineRight = AzureGrottoCenterX - 90;
-		}
-		for (int x = mineLeft; x < mineRight; x++)
-		{
-			for (int y = 11000; y < 11680; y++)
+			for (int y = upY; y < downY; y++)
 			{
 				Tile tile = SafeGetTile(x, y);
 				Tile tileUp = SafeGetTile(x, y - 1);
@@ -658,10 +621,9 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
-
-		for (int x = 60; x < 1140; x++)
+		for (int x = leftX; x < rightX + 400; x++)
 		{
-			for (int y = 11000; y < Main.maxTilesY; y++)
+			for (int y = upY; y < downY; y++)
 			{
 				if (GenRand.NextBool(1500))
 				{
@@ -794,7 +756,7 @@ public class YggdrasilTownGeneration
 			value = MathF.Pow(value, 0.4f) * height;
 			if(i > 300)
 			{
-				thick += 0.15f;
+				thick += (i - 300) / 800f * 0.25f;
 			}
 			for (int j = 0; j < height; j++)
 			{
@@ -807,13 +769,31 @@ public class YggdrasilTownGeneration
 					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 					tile.HasTile = true;
 				}
-				if(j >= height - value + thick + noiseValueDown * 25)
+				if(j >= height + thick - value + noiseValueDown * 25)
 				{
 					tile.ClearEverything();
 				}
 			}
 		}
-		QuickBuild(340, Main.maxTilesY - 400, "YggdrasilTown/MapIOs/YggdrasilTown_Town.mapio");
+		length = 400;
+		height = 370;
+		for (int i = 0; i < length; i++)
+		{
+			float value = i / (float)length;
+			value = height - MathF.Pow(value, 1.8f) * height;
+			for (int j = 0; j < height; j++)
+			{
+				Point pos = new Point(i, j) + topLeft;
+				Tile tile = SafeGetTile(pos);
+				float noiseValue = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + 50 + y0CoordPerlin) % 1024] / 255f * 0.5f;
+				if (j >= height - value - noiseValue * 25)
+				{
+					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+					tile.HasTile = true;
+				}
+			}
+		}
+		QuickBuild(400, Main.maxTilesY - 400, "YggdrasilTown/MapIOs/YggdrasilTown_Town.mapio");
 	}
 
 	/// <summary>
