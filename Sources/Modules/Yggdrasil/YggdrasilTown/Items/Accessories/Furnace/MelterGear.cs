@@ -1,7 +1,7 @@
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
 using Terraria.Enums;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.Furnace;
 
 public class MelterGear : ModItem
 {

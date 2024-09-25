@@ -1,6 +1,6 @@
 using Terraria.Enums;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.Furnace;
 
 public class ThermalConductor : ModItem
 {
