@@ -58,7 +58,6 @@ public class YggdrasilTownGeneration
 		BuildHeavenlyPortal();
 		Main.statusText = "Constructing The Yggdrasil Town Below...";
 		BuildTownBelow();
-		BuildTangledSubmine();
 		BuildStoneCageOfChallenges();
 
 		// Main.statusText = "Growing LampWoods...";
@@ -535,19 +534,25 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildTangledSubmine()
 	{
-		int leftX = 40;
-		int rightX = 280;
-		int upY = Main.maxTilesY - 700;
-		int downY = Main.maxTilesY - 200;
-		for (int x = 0; x < 110; x++)
+		Minerization(40, Main.maxTilesY - 700, 280, Main.maxTilesY - 360);
+		Minerization(280, Main.maxTilesY - 500, 350, Main.maxTilesY - 360);
+		Minerization(40, Main.maxTilesY - 360, 1100, Main.maxTilesY - 50);
+		SmoothTile(40, Main.maxTilesY - 700, 1100, Main.maxTilesY - 50);
+	}
+
+	// 青缎矿化
+	public static void Minerization(int leftX, int upY, int rightX, int downY)
+	{
+		float area = (downY - upY) * (rightX - leftX) / 180000f;
+		for (int x = 0; x < 110 * area; x++)
 		{
 			WorldGen.digTunnel(GenRand.NextFloat(leftX, rightX), GenRand.NextFloat(upY, downY), GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, 72), GenRand.Next(3, 7));
 		}
-		for (int x = 0; x < 30; x++)
+		for (int x = 0; x < 30 * area; x++)
 		{
 			WorldGen.digTunnel(GenRand.NextFloat(leftX, rightX), GenRand.NextFloat(upY, downY), GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, 72), GenRand.Next(3, 7));
 		}
-		for (int x = 0; x < 30; x++)
+		for (int x = 0; x < 30 * area; x++)
 		{
 			WorldGen.digTunnel(GenRand.NextFloat(leftX, rightX), GenRand.NextFloat(upY, downY), GenRand.NextFloat(-1, 1), GenRand.NextFloat(-1, 1), GenRand.Next(81, 144), GenRand.Next(8, 12));
 		}
@@ -621,7 +626,7 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
-		for (int x = leftX; x < rightX + 400; x++)
+		for (int x = leftX; x < rightX; x++)
 		{
 			for (int y = upY; y < downY; y++)
 			{
@@ -754,7 +759,7 @@ public class YggdrasilTownGeneration
 		{
 			float value = 1 - i / (float)length;
 			value = MathF.Pow(value, 0.4f) * height;
-			if(i > 300)
+			if (i > 300)
 			{
 				thick += (i - 300) / 800f * 0.25f;
 			}
@@ -769,14 +774,18 @@ public class YggdrasilTownGeneration
 					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 					tile.HasTile = true;
 				}
-				if(j >= height + thick - value + noiseValueDown * 25)
+				if (j > height - value + noiseValueUp * 15 + 3 && j < height - value + thick + noiseValueDown * 25 - 3)
+				{
+					tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+				}
+				if (j >= height + thick - value + noiseValueDown * 25)
 				{
 					tile.ClearEverything();
 				}
 			}
 		}
 		length = 400;
-		height = 370;
+		height = 400;
 		for (int i = 0; i < length; i++)
 		{
 			float value = i / (float)length;
@@ -786,14 +795,32 @@ public class YggdrasilTownGeneration
 				Point pos = new Point(i, j) + topLeft;
 				Tile tile = SafeGetTile(pos);
 				float noiseValue = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + 50 + y0CoordPerlin) % 1024] / 255f * 0.5f;
-				if (j >= height - value - noiseValue * 25)
+				if (j >= height - value + noiseValue * 25)
 				{
 					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 					tile.HasTile = true;
 				}
+				if (j >= height - value + noiseValue * 25 + 3)
+				{
+					tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+				}
 			}
 		}
-		QuickBuild(400, Main.maxTilesY - 400, "YggdrasilTown/MapIOs/YggdrasilTown_Town.mapio");
+		BuildTangledSubmine();
+		QuickBuild(430, Main.maxTilesY - 400, "YggdrasilTown/MapIOs/YggdrasilTown_Town.mapio");
+		for (int i = 0; i < 501; i += 6)
+		{
+			for (int j = 0; j < 100; j++)
+			{
+				int x = 430 + i;
+				int y = Main.maxTilesY - 400 + 91 + j;
+				Tile tile = SafeGetTile(x, y);
+				if(!tile.HasTile && tile.wall <= 0)
+				{
+					tile.wall = WallID.Ebonwood;
+				}
+			}
+		}
 	}
 
 	/// <summary>
@@ -870,7 +897,6 @@ public class YggdrasilTownGeneration
 									for (int u = 0; u < 5; u++)
 									{
 										pos += vel;
-
 										Tile tile = SafeGetTile((int)pos.X, (int)pos.Y);
 										tile.TileType = (ushort)ModContent.TileType<FemaleLampWood>();
 										tile.HasTile = true;
