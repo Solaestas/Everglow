@@ -2,6 +2,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
+// TODO: Replace sprite
 public class Nehemoth : ModItem
 {
 	public override void SetDefaults()

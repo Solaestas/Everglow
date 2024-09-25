@@ -1,4 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
+using Terraria.Audio;
+using Terraria.GameContent;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -7,6 +9,12 @@ public class NehemothBullet : ModProjectile
 	public const int BuffDuration = 4 * 60;
 
 	public bool HasNotShot { get; private set; } = true;
+
+	public override void SetStaticDefaults()
+	{
+		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
+		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+	}
 
 	public override void SetDefaults()
 	{
@@ -23,20 +31,10 @@ public class NehemothBullet : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = true;
 		Projectile.extraUpdates = 1;
+		Projectile.scale = 0.6f;
 
 		AIType = ProjectileID.Bullet;
-	}
-
-	public override void AI()
-	{
-		// TODO: Init speed
-		if (HasNotShot)
-		{
-			Projectile.velocity = Projectile.velocity.NormalizeSafe() * 30f;
-			HasNotShot = false;
-		}
-
-		base.AI();
+		Projectile.velocity = Projectile.velocity.NormalizeSafe() * 24f;
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -53,5 +51,26 @@ public class NehemothBullet : ModProjectile
 		{
 			target.AddBuff(ModContent.BuffType<Plague>(), BuffDuration);
 		}
+	}
+
+	public override bool PreDraw(ref Color lightColor)
+	{
+		Texture2D texture = TextureAssets.Projectile[Type].Value;
+
+		Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
+		for (int k = 0; k < Projectile.oldPos.Length; k++)
+		{
+			Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+			Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+			Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+		}
+
+		return true;
+	}
+
+	public override void OnKill(int timeLeft)
+	{
+		Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
+		SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
 	}
 }

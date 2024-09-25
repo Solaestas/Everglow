@@ -1,6 +1,5 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Ammos;
 
-// TODO: Replace item sprite with the correct one
 public class CaterpillarJuiceArrow : ModItem
 {
 	public override void SetDefaults()
