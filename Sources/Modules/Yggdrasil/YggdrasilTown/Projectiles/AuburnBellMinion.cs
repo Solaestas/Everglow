@@ -12,22 +12,13 @@ public class AuburnBellMinion : ModProjectile
 
 	private const int TeleportCooldownValue = 60;
 
-	/// <summary>
-	/// Summon Number
-	/// </summary>
 	private int MinionNumber
 	{
 		get => (int)Projectile.ai[0];
 	}
 
-	/// <summary>
-	/// Target
-	/// </summary>
 	private int TargetWhoAmI { get; set; } = NoTarget;
 
-	/// <summary>
-	/// Teleport Cooldown
-	/// </summary>
 	private int TeleportCooldown { get; set; } = 0;
 
 	public override void SetStaticDefaults()
@@ -75,6 +66,7 @@ public class AuburnBellMinion : ModProjectile
 
 	public override void AI()
 	{
+		Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
 		Player owner = Main.player[Projectile.owner];
 
 		if (!CheckPlayerActive(owner))
@@ -82,7 +74,6 @@ public class AuburnBellMinion : ModProjectile
 			return;
 		}
 
-		// Manage distance to owner
 		if (TeleportCooldown > 0)
 		{
 			TeleportCooldown--;
@@ -99,7 +90,7 @@ public class AuburnBellMinion : ModProjectile
 		if (TargetWhoAmI == NoTarget)
 		{
 			GeneralBehavior();
-			SearchForTargets(owner);
+			SearchTarget(owner);
 		}
 		else
 		{
@@ -108,12 +99,8 @@ public class AuburnBellMinion : ModProjectile
 		}
 	}
 
-	/// <summary>
-	/// Active check, makes sure the minion is alive while the owner is alive, and despawns if not
-	/// </summary>
 	private bool CheckPlayerActive(Player owner)
 	{
-		// Check if player is dead or not active in the game
 		if (owner.dead || owner.active is not true)
 		{
 			owner.ClearBuff(ModContent.BuffType<AuburnBell>());
@@ -121,20 +108,14 @@ public class AuburnBellMinion : ModProjectile
 			return false;
 		}
 
-		// Check if the player has the [AuburnBell] buff
 		if (owner.HasBuff(ModContent.BuffType<AuburnBell>()))
 		{
-			// keep the projectile alive by resetting its time left
 			Projectile.timeLeft = 2;
 		}
 
 		return true;
 	}
 
-	/// <summary>
-	/// Teleport to a position
-	/// </summary>
-	/// <param name="aim"></param>
 	private void TelePortTo(Vector2 aim)
 	{
 		TeleportCooldown = TeleportCooldownValue;
@@ -151,11 +132,6 @@ public class AuburnBellMinion : ModProjectile
 		}
 	}
 
-	/// <summary>
-	/// Move to a position
-	/// </summary>
-	/// <param name="aim"></param>
-	/// <param name="speedValue"></param>
 	private void MoveTo(Vector2 aim)
 	{
 		float timeValue = (float)(Main.time * 0.014f);
@@ -170,10 +146,7 @@ public class AuburnBellMinion : ModProjectile
 		}
 	}
 
-	/// <summary>
-	/// Find the MinionAttackTargetNPC specified by player or the nearest enemy
-	/// </summary>
-	private void SearchForTargets(Player owner)
+	private void SearchTarget(Player owner)
 	{
 		float minDistance = 1600f;
 
@@ -219,9 +192,6 @@ public class AuburnBellMinion : ModProjectile
 		Projectile.friendly = foundTarget;
 	}
 
-	/// <summary>
-	/// Check if target is available
-	/// </summary>
 	private void CheckTargetActive()
 	{
 		if (TargetWhoAmI == NoTarget)
@@ -230,7 +200,7 @@ public class AuburnBellMinion : ModProjectile
 		}
 
 		NPC target = Main.npc[TargetWhoAmI];
-		if (target.active && !Main.npc[TargetWhoAmI].dontTakeDamage)
+		if (target.active && !target.dontTakeDamage)
 		{
 			return;
 		}
@@ -238,9 +208,6 @@ public class AuburnBellMinion : ModProjectile
 		ResetTarget();
 	}
 
-	/// <summary>
-	/// Attack logic
-	/// </summary>
 	private void Attack()
 	{
 		if (TargetWhoAmI == NoTarget)
@@ -250,7 +217,6 @@ public class AuburnBellMinion : ModProjectile
 
 		NPC target = Main.npc[TargetWhoAmI];
 
-		// One-AttackPhase AI
 		MoveTo(target.Center);
 	}
 
@@ -259,9 +225,6 @@ public class AuburnBellMinion : ModProjectile
 		TargetWhoAmI = NoTarget;
 	}
 
-	/// <summary>
-	/// Follow projectile's owner
-	/// </summary>
 	private void GeneralBehavior()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -354,9 +317,6 @@ public class AuburnBellMinion : ModProjectile
 
 		spriteBatch.End();
 		spriteBatch.Begin(sBS);
-
-		// Loop frame count.
-		Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
 
 		return false;
 	}
