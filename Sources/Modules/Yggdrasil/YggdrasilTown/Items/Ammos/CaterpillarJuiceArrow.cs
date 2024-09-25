@@ -1,6 +1,7 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Ammos;
 
-public class LightArrow : ModItem
+// TODO: Replace item sprite with the correct one
+public class CaterpillarJuiceArrow : ModItem
 {
 	public override void SetDefaults()
 	{
@@ -9,15 +10,15 @@ public class LightArrow : ModItem
 
 		Item.damage = 6;
 		Item.DamageType = DamageClass.Ranged;
-		Item.knockBack = 4f;
+		Item.knockBack = 2f;
 
 		Item.maxStack = Item.CommonMaxStack;
 		Item.consumable = true;
 		Item.ammo = AmmoID.Arrow;
 
 		Item.rare = ItemRarityID.White;
-		Item.value = Item.sellPrice(copper: 3);
+		Item.value = Item.sellPrice(copper: 4);
 
-		Item.shoot = ModContent.ProjectileType<Projectiles.LightArrow>();
+		Item.shoot = ModContent.ProjectileType<Projectiles.CaterpillarJuiceArrow>();
 	}
 }

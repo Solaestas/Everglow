@@ -1,6 +1,6 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Ammos;
 
-internal class LightBullet : ModItem
+public class LightBullet : ModItem
 {
 	public override void SetDefaults()
 	{
@@ -11,6 +11,7 @@ internal class LightBullet : ModItem
 		Item.damage = 7;
 		Item.knockBack = 4;
 
+		Item.rare = ItemRarityID.White;
 		Item.value = Item.buyPrice(copper: 3);
 
 		Item.ammo = AmmoID.Bullet;
