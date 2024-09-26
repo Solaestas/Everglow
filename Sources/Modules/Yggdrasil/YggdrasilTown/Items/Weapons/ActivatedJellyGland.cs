@@ -45,21 +45,38 @@ public class ActivatedJellyGland : ModItem
 		int damage,
 		float knockback)
 	{
-		if (player.numMinions >= player.maxMinions)
+		if (player.numMinions >= player.maxMinions || player.ownedProjectileCounts[type] != 0)
 		{
 			return false;
 		}
-
-		player.AddBuff(ModContent.BuffType<Buffs.AuburnBell>(), 18000);
-		Projectile.NewProjectile(
-			player.GetSource_ItemUse(Item),
-			position,
-			velocity,
-			type,
-			damage,
-			knockback,
-			Owner: player.whoAmI,
-			ai0: player.ownedProjectileCounts[type] + 1);
+		int summonAmount = Math.Min(4, player.maxMinions - player.numMinions);
+		if (summonAmount == 1)
+		{
+			Projectile.NewProjectile(
+				player.GetSource_ItemUse(Item),
+				position,
+				velocity,
+				type,
+				damage,
+				knockback,
+				Owner: player.whoAmI,
+				ai0: player.ownedProjectileCounts[type] + 1);
+		}
+		else
+		{
+			for (int i = 0; i < summonAmount; i++)
+			{
+				Projectile.NewProjectile(
+					player.GetSource_ItemUse(Item),
+					position + new Vector2(5 * MathF.Cos(MathF.PI * 2 * i / summonAmount), 5 * MathF.Sin(MathF.PI * 2 * i / summonAmount)),
+					velocity,
+					type,
+					damage,
+					knockback,
+					Owner: player.whoAmI,
+					ai0: player.ownedProjectileCounts[type] + 1);
+			}
+		}
 
 		int ai0 = 1;
 		foreach (Projectile proj in Main.projectile)
