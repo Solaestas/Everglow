@@ -1,6 +1,7 @@
+using Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
 using Terraria.Audio;
 using Terraria.DataStructures;
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.LampWood;
 
 public class LampWoodSword : ModItem
 {

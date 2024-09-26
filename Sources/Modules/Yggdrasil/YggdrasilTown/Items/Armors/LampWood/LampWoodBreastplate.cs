@@ -1,5 +1,6 @@
+using Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
 using Terraria.GameContent.Creative;
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.LampWood
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.LampWood
 {
 	[AutoloadEquip(EquipType.Body)]
 	public class LampWoodBreastplate : ModItem
@@ -14,7 +15,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.LampWood
 			Item.width = 28;
 			Item.height = 18;
 			Item.value = 1562;
-			Item.rare = ItemRarityID.White; 
+			Item.rare = ItemRarityID.White;
 			Item.defense = 7;
 		}
 		public override void AddRecipes()

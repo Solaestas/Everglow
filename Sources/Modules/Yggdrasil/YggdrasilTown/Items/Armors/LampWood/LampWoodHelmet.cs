@@ -1,6 +1,7 @@
+using Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.LampWood;
 [AutoloadEquip(EquipType.Head)]
 public class LampWoodHelmet : ModItem
 {

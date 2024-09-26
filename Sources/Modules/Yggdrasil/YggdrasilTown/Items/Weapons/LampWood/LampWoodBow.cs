@@ -1,4 +1,4 @@
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.LampWood;
 
 // TODO: Replace sprite
 public class LampWoodBow : ModItem
