@@ -7,6 +7,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 public class NehemothBullet : ModProjectile
 {
 	public const int BuffDuration = 4 * 60;
+	public const float DebuffTriggerChance = 0.66f;
 
 	public bool HasNotShot { get; private set; } = true;
 
@@ -39,7 +40,7 @@ public class NehemothBullet : ModProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if (Main.rand.NextFloat() > 0.34)
+		if (Main.rand.NextFloat() < DebuffTriggerChance)
 		{
 			target.AddBuff(ModContent.BuffType<Plague>(), BuffDuration);
 		}
@@ -47,7 +48,7 @@ public class NehemothBullet : ModProjectile
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
-		if (Main.rand.NextFloat() > 0.34)
+		if (Main.rand.NextFloat() < DebuffTriggerChance)
 		{
 			target.AddBuff(ModContent.BuffType<Plague>(), BuffDuration);
 		}
