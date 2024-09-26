@@ -4,7 +4,9 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 
 public class RingOfMatter : ModItem
 {
-	private float Bonus { get; set; } = 0;
+	private const int MaxBonus = 10;
+
+	private float Bonus { get; set; }
 
 	public override void SetDefaults()
 	{
@@ -21,16 +23,15 @@ public class RingOfMatter : ModItem
 			int goldCoinNum = player.CountItem(ItemID.GoldCoin);
 			int platinumCoinNum = player.CountItem(ItemID.PlatinumCoin);
 			Bonus = (goldCoinNum + platinumCoinNum * 100) / 50;
-			if (Bonus > 10)
+			if (Bonus > MaxBonus)
 			{
-				Bonus = 10;
+				Bonus = MaxBonus;
 			}
-			Bonus /= 100;
 		}
 
-		player.GetDamage(DamageClass.Generic) += Bonus;
-		player.statDefense *= 1 + Bonus;
-		player.statLifeMax2 -= (int)(player.statLifeMax2 * (2 * Bonus));
+		player.GetDamage(DamageClass.Generic) += Bonus / 100;
+		player.statDefense *= 1 + Bonus / 100;
+		player.statLifeMax2 -= (int)(player.statLifeMax2 * (2 * Bonus / 100));
 
 		player.GetModPlayer<RingOfMatterPlayer>().HasRingOfMatter = true;
 	}

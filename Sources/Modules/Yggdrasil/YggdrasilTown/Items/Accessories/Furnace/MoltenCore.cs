@@ -4,13 +4,13 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.Furnace;
 
 public class MoltenCore : ModItem
 {
-	public const float OnePercent = 1f;
-	public const float DamageReduction = 0.05f;
-	public const int DefenseBonus = 5;
-	public const int CritBonus = 5;
-	public const float DamageBonus = 0.05f;
-	public const float MoveSpeedBonus = 0.05f;
-	public const float JumpSpeedBonus = 0.05f;
+	private const float OnePercent = 1f;
+	private const int DamageReduction = 5;
+	private const int DefenseBonus = 5;
+	private const int CritBonus = 5;
+	private const int DamageBonus = 5;
+	private const int MoveSpeedBonus = 5;
+	private const int JumpSpeedBonus = 5;
 
 	public override void SetDefaults()
 	{
@@ -30,12 +30,12 @@ public class MoltenCore : ModItem
 		// Increasing 5% damage receive, 5 def, 5% crit, 5% damage, 5% speed, 5% jump speed
 		if (player.HasBuff(BuffID.OnFire) || player.HasBuff(BuffID.OnFire3) || player.HasBuff(BuffID.CursedInferno))
 		{
-			player.endurance = OnePercent - (DamageReduction * (OnePercent - player.endurance));
+			player.endurance = OnePercent - ((OnePercent - player.endurance) * DamageReduction / 100f);
 			player.statDefense += DefenseBonus;
 			player.GetCritChance(DamageClass.Generic) += CritBonus;
-			player.GetDamage(DamageClass.Generic) += DamageBonus;
-			player.moveSpeed *= OnePercent + MoveSpeedBonus;
-			player.jumpSpeedBoost += JumpSpeedBonus;
+			player.GetDamage(DamageClass.Generic) += DamageBonus / 100f;
+			player.moveSpeed += MoveSpeedBonus / 100f;
+			player.jumpSpeedBoost += JumpSpeedBonus / 100f;
 		}
 	}
 }
