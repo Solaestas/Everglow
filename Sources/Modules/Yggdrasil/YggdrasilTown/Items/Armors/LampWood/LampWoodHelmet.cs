@@ -38,7 +38,7 @@ public class LampWoodHelmet : ModItem
 	public override void UpdateArmorSet(Player player)
 	{
 		player.statDefense += ArmorSetDefenseBonus;
-		player.lifeRegen += ArmorSetLifeRegenBonus * 2;
+		player.lifeRegen += ArmorSetLifeRegenBonus;
 		player.pickSpeed -= ArmorSetPickSpeedBonus / 100f;
 		Lighting.AddLight(player.Center, 0.5f, 0.5f, 0f);
 	}

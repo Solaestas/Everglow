@@ -24,7 +24,7 @@ public class LampWoodBreastplate : ModItem
 
 	public override void UpdateEquip(Player player)
 	{
-		player.lifeRegen += LifeRegenBonus * 2;
+		player.lifeRegen += LifeRegenBonus;
 	}
 
 	public override void AddRecipes()
