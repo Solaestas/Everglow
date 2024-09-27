@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
+using Microsoft.Build.Framework;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -7,17 +8,22 @@ public class AuburnBellMinion : ModProjectile
 {
 	private const float NotMovingVelocity = 1E-05f;
 	private const int NoTarget = -1;
-
 	private const float MAXDistanceToPlayer = 1000f;
-
 	private const int TeleportCooldownValue = 60;
+	private const int SearchDistance = 1000;
 
 	private int MinionNumber
 	{
 		get => (int)Projectile.ai[0];
 	}
 
-	private int TargetWhoAmI { get; set; } = NoTarget;
+	private int targetWhoAmI;
+
+	private int TargetWhoAmI
+	{
+		get => targetWhoAmI;
+		set => targetWhoAmI = value;
+	}
 
 	private int TeleportCooldown { get; set; } = 0;
 
@@ -50,6 +56,8 @@ public class AuburnBellMinion : ModProjectile
 		ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
 
 		Main.projPet[Projectile.type] = true;
+
+		TargetWhoAmI = NoTarget;
 	}
 
 	public override bool? CanCutTiles() => false;
@@ -78,37 +86,34 @@ public class AuburnBellMinion : ModProjectile
 		{
 			TeleportCooldown--;
 		}
-		else if (Projectile.Center.Distance(owner.Center) > MAXDistanceToPlayer)
+		else if (CheckDistanceToPlayer(owner))
 		{
-			ResetTarget();
-			TelePortTo(
-				owner.MountedCenter +
-				new Vector2((10 - MinionNumber * 30) * owner.direction, -40 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f - MinionNumber) * 35f));
+			TargetWhoAmI = NoTarget;
+			TelePortTo(owner.MountedCenter + new Vector2((10 - MinionNumber * 30) * owner.direction, -40 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f - MinionNumber) * 35f));
 			return;
 		}
 
-		if (TargetWhoAmI == NoTarget)
+		if (TargetWhoAmI == NoTarget || !CheckTargetActive())
 		{
 			GeneralBehavior();
-			SearchTarget(owner);
+			SearchTarget();
 		}
 		else
 		{
-			CheckTargetActive();
 			Attack();
 		}
 	}
 
-	private bool CheckPlayerActive(Player owner)
+	private bool CheckPlayerActive(Player player)
 	{
-		if (owner.dead || owner.active is not true)
+		if (player.dead || player.active is not true)
 		{
-			owner.ClearBuff(ModContent.BuffType<AuburnBell>());
+			player.ClearBuff(ModContent.BuffType<AuburnBell>());
 
 			return false;
 		}
 
-		if (owner.HasBuff(ModContent.BuffType<AuburnBell>()))
+		if (player.HasBuff(ModContent.BuffType<AuburnBell>()))
 		{
 			Projectile.timeLeft = 2;
 		}
@@ -116,20 +121,12 @@ public class AuburnBellMinion : ModProjectile
 		return true;
 	}
 
+	private bool CheckDistanceToPlayer(Player player) => Projectile.Center.Distance(player.Center) > MAXDistanceToPlayer;
+
 	private void TelePortTo(Vector2 aim)
 	{
 		TeleportCooldown = TeleportCooldownValue;
 		Projectile.Center = aim;
-		for (int f = 0; f < 15; f++)
-		{
-			var g = Gore.NewGoreDirect(
-				null,
-				aim,
-				new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(6.283),
-				0,
-				Main.rand.NextFloat(0.65f, Main.rand.NextFloat(2.5f, 3.75f)));
-			g.timeLeft = Main.rand.Next(250, 500);
-		}
 	}
 
 	private void MoveTo(Vector2 aim)
@@ -146,83 +143,33 @@ public class AuburnBellMinion : ModProjectile
 		}
 	}
 
-	private void SearchTarget(Player owner)
+	private void SearchTarget()
 	{
-		float minDistance = 1600f;
-
-		Vector2 detectCenter = owner.Center;
-		if (MinionNumber > 5)
-		{
-			detectCenter = Projectile.Center;
-		}
-
-		bool foundTarget = false;
-		if (owner.HasMinionAttackTargetNPC)
-		{
-			NPC npc = Main.npc[owner.MinionAttackTargetNPC];
-
-			float between = Vector2.Distance(owner.Center, detectCenter);
-
-			if (between < minDistance)
-			{
-				TargetWhoAmI = npc.whoAmI;
-				foundTarget = true;
-			}
-		}
-
-		if (!foundTarget)
-		{
-			foreach (var npc in Main.ActiveNPCs)
-			{
-				if (npc.dontTakeDamage || npc.friendly || !npc.CanBeChasedBy() || !Collision.CanHit(Projectile, npc))
-				{
-					continue;
-				}
-
-				float distance = (npc.Center - detectCenter).Length();
-				if (distance < minDistance)
-				{
-					TargetWhoAmI = npc.whoAmI;
-					minDistance = distance;
-					foundTarget = true;
-				}
-			}
-		}
-
-		Projectile.friendly = foundTarget;
+		Projectile.Minion_FindTargetInRange(SearchDistance, ref targetWhoAmI, false);
 	}
 
-	private void CheckTargetActive()
+	private bool CheckTargetActive()
 	{
 		if (TargetWhoAmI == NoTarget)
 		{
-			return;
+			return false;
 		}
 
 		NPC target = Main.npc[TargetWhoAmI];
-		if (target.active && !target.dontTakeDamage)
+		if (!target.active || target.dontTakeDamage)
 		{
-			return;
+			TargetWhoAmI = NoTarget;
+			return false;
 		}
 
-		ResetTarget();
+		return true;
 	}
 
 	private void Attack()
 	{
-		if (TargetWhoAmI == NoTarget)
-		{
-			return;
-		}
-
 		NPC target = Main.npc[TargetWhoAmI];
 
 		MoveTo(target.Center);
-	}
-
-	private void ResetTarget()
-	{
-		TargetWhoAmI = NoTarget;
 	}
 
 	private void GeneralBehavior()

@@ -48,7 +48,7 @@ internal class HotAirBalloonPlayer : ModPlayer
 
 	// 3. Enable Fire Dust VFX
 	// =======================
-	public override void PreUpdate()
+	public override void PostUpdateMiscEffects()
 	{
 		if (HotAirBalloonEnable)
 		{
