@@ -170,13 +170,12 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	{
 		Color lightColor = Lighting.GetColor(i, j);
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-
 		if (Main.drawToScreen)
 		{
 			zero = Vector2.Zero;
 		}
-
 		spriteBatch.Draw(ModAsset.HangingWinch.Value, new Vector2(i, j) * 16 - Main.screenPosition + zero, new Rectangle(0, 0, 16, 16), lightColor, 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
+
 		TileFluentDrawManager.AddFluentPoint(this, i, j);
 		return false;
 	}

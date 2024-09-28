@@ -1,22 +1,47 @@
 using Everglow.Commons.Physics.MassSpringSystem;
-using Everglow.Commons.TileHelper;
+using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 
-namespace Everglow.CagedDomain.Tiles.CableTiles;
+namespace Everglow.Commons.TileHelper;
 
-public class ChainCable : CableTile
+/// <summary>
+/// 缆车节点
+/// </summary>
+public class CableCarJoint : CableTile
 {
 	public override void PostSetDefaults()
 	{
 		LampDistance = 2;
 		RopeUnitMass = 0.8f;
-		SingleLampMass = 0.2f;
-		MaxWireStyle = 1;
+		SingleLampMass = 0.8f;
+		Elasticity = 180;
+		MaxWireStyle = 6;
+		MaxCableLength = 2500;
 	}
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		return base.PreDraw(i, j, spriteBatch);
+		Color lightColor = Lighting.GetColor(i, j);
+		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+		if (Main.drawToScreen)
+		{
+			zero = Vector2.Zero;
+		}
+		spriteBatch.Draw(ModAsset.CableCarJoint.Value, new Point(i, j).ToWorldCoordinates() - Main.screenPosition + zero + new Vector2(0, 16), new Rectangle(0, 0, 88, 56), lightColor, 0, new Vector2(44, 28), 1, SpriteEffects.None, 0);
+
+		TileFluentDrawManager.AddFluentPoint(this, i, j);
+		foreach (Point point in RopeHeadAndTail.Keys)
+		{
+			if (RopeHeadAndTail[point] == new Point(i, j))
+			{
+				TileFluentDrawManager.AddFluentPoint(this, point.X, point.Y);
+			}
+		}
+		return false;
+	}
+
+	public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
+	{
 	}
 
 	public override void DrawCable(Rope rope, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing, Color color = default)
@@ -30,8 +55,8 @@ public class ChainCable : CableTile
 		var tile = Main.tile[pos];
 		ushort type = tile.TileType;
 		int paint = Main.tile[pos].TileColor;
-		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.ChainCable_Path, type, 1, paint, tileDrawing);
-		tex ??= ModAsset.ChainCable.Value;
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.CableCarJoint_Path, type, 1, paint, tileDrawing);
+		tex ??= ModAsset.CableCarJoint.Value;
 		var tileSpriteEffect = SpriteEffects.None;
 
 		// 获取发绳端物块信息
@@ -68,10 +93,7 @@ public class ChainCable : CableTile
 			}
 			Vector2 toNextMass = nextMass.Position - thisMass.Position;
 			Vector2 drawPos = thisMass.Position - Main.screenPosition;
-			if (i % 2 == 0)
-			{
-				spriteBatch.Draw(tex, drawPos, null, tileLight, toNextMass.ToRotation() + MathHelper.PiOver2, tex.Size() * 0.5f, 1, tileSpriteEffect, 0);
-			}
+			spriteBatch.Draw(tex, drawPos, new Rectangle(0, 56, 8, 8), tileLight, toNextMass.ToRotation(), new Vector2(4), new Vector2(toNextMass.Length() / 8f, 0.5f), tileSpriteEffect, 0);
 		}
 	}
 }

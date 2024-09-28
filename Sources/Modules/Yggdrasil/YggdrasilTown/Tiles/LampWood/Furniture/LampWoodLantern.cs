@@ -51,9 +51,9 @@ public class LampWoodLantern : ModTile, ITileFluentlyDrawn
 		Tile tile = Main.tile[i, j];
 		if (tile.TileFrameX < 18)
 		{
-			r = 0.1f;
-			g = 0.9f;
-			b = 1f;
+			r = 1f;
+			g = 0.7f;
+			b = 0f;
 		}
 		else
 		{
@@ -62,6 +62,7 @@ public class LampWoodLantern : ModTile, ITileFluentlyDrawn
 			b = 0f;
 		}
 	}
+
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		TileFluentDrawManager.AddFluentPoint(this, i, j);
