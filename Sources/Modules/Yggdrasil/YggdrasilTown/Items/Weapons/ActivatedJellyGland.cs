@@ -50,6 +50,7 @@ public class ActivatedJellyGland : ModItem
 			return false;
 		}
 		int summonAmount = Math.Min(4, player.maxMinions - player.numMinions);
+		position = Main.MouseWorld;
 		if (summonAmount == 1)
 		{
 			Projectile.NewProjectile(
@@ -64,11 +65,12 @@ public class ActivatedJellyGland : ModItem
 		}
 		else
 		{
+			int summonRadiusOffset = 50;
 			for (int i = 0; i < summonAmount; i++)
 			{
 				Projectile.NewProjectile(
 					player.GetSource_ItemUse(Item),
-					position + new Vector2(5 * MathF.Cos(MathF.PI * 2 * i / summonAmount), 5 * MathF.Sin(MathF.PI * 2 * i / summonAmount)),
+					position + new Vector2(summonRadiusOffset * MathF.Cos(MathF.PI * 2 * i / summonAmount), summonRadiusOffset * MathF.Sin(MathF.PI * 2 * i / summonAmount)),
 					velocity,
 					type,
 					damage,

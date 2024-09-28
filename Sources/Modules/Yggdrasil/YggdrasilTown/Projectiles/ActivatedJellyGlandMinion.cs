@@ -25,6 +25,8 @@ public class ActivatedJellyGlandMinion : ModProjectile
 
 	private AttackState MinionAttackState { get; set; } = AttackState.Dash;
 
+	private int DashTimer { get; set; } = 0;
+
 	private int ExplosionTimer { get; set; } = 0;
 
 	private float ExplosionScaleFrequency { get; set; } = 0.2f;
@@ -49,7 +51,7 @@ public class ActivatedJellyGlandMinion : ModProjectile
 
 		Projectile.width = 10;
 		Projectile.height = 10;
-		Projectile.scale = 0.5f;
+		Projectile.scale = 0.6f;
 
 		Projectile.DamageType = DamageClass.Summon;
 		Projectile.minion = true;
@@ -166,18 +168,20 @@ public class ActivatedJellyGlandMinion : ModProjectile
 	{
 		NPC target = Main.npc[TargetWhoAmI];
 		var movement = target.Center - Projectile.Center;
-		float ExplodeStateDistance = 100f;
+		float ExplodeStateDistance = 200f;
 
 		switch (MinionAttackState)
 		{
 			case AttackState.Dash:
 				{
+					DashTimer++;
 					var DashSpeed = 3f;
 					Projectile.velocity = (movement + new Vector2(0, MathF.Sin((float)Main.time * 0.0005f + Projectile.whoAmI * 7 + 2.1f))).NormalizeSafe() * DashSpeed;
 					Projectile.rotation = Projectile.velocity.ToRotation() + 1.57f;
 
-					if (Projectile.frameCounter == 0)
+					if (DashTimer > 15)
 					{
+						DashTimer = 0;
 						MinionAttackState = AttackState.Rest;
 					}
 					if (movement.Length() <= ExplodeStateDistance)
@@ -192,10 +196,8 @@ public class ActivatedJellyGlandMinion : ModProjectile
 					Projectile.velocity *= 0.92f;
 					if (Projectile.velocity.Length() <= 0.5f)
 					{
-						if (Projectile.frameCounter == 0)
-						{
-							MinionAttackState = AttackState.Dash;
-						}
+						MinionAttackState = AttackState.Dash;
+
 						if (movement.Length() <= ExplodeStateDistance)
 						{
 							MinionAttackState = AttackState.Explode;
@@ -206,28 +208,23 @@ public class ActivatedJellyGlandMinion : ModProjectile
 				}
 			case AttackState.Explode:
 				{
-					if (ExplosionTimer < ExplosionDuration &&
-						Projectile.timeLeft > ExplosionDuration - ExplosionTimer)
+					ExplosionTimer++;
+					ExplosionScaleFrequency += ExplosionScaleFrequency < ExplosionScaleFrequencyLimit ? 0.005f : 0f;
+					Projectile.scale = 0.5f + 0.1f * MathF.Sin((float)Main.time * 0.1f * ExplosionScaleFrequency);
+
+					if (ExplosionTimer > ExplosionDuration ||
+						Projectile.timeLeft <= 1)
 					{
-						ExplosionScaleFrequency += ExplosionScaleFrequency < ExplosionScaleFrequencyLimit ? 0.005f : 0f;
-						Projectile.scale = 0.5f + 0.1f * MathF.Sin((float)Main.time * 0.8f * ExplosionScaleFrequency);
-					}
-					else
-					{
-						// TODO: Replace the test projectile with a lightning projectile (blue & white)
 						Projectile.NewProjectile(
-							Terraria.Entity.InheritSource(Projectile),
-							Projectile.Center.X,
-							Projectile.Center.Y,
-							movement.NormalizeSafe().X * 2f,
-							movement.NormalizeSafe().Y * 2f,
-							ProjectileID.Bullet,
+							Projectile.GetSource_FromAI(),
+							Projectile.Center,
+							movement.NormalizeSafe() * 2f,
+							ModContent.ProjectileType<ActivatedJellyGlandCurrentBeam>(),
 							Projectile.damage,
 							Projectile.knockBack,
 							Projectile.owner);
 						Projectile.Kill();
 					}
-					ExplosionTimer++;
 					break;
 				}
 		}
