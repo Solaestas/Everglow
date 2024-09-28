@@ -7,6 +7,11 @@ public class HotAirBalloon : ModItem
 {
 	public const int JumpSpeedBoost = 2;
 
+	public override void SetStaticDefaults()
+	{
+		Item.SetNameOverride("Hot Air-balloon");
+	}
+
 	public override void SetDefaults()
 	{
 		Item.width = 44;
@@ -43,7 +48,7 @@ internal class HotAirBalloonPlayer : ModPlayer
 
 	// 3. Enable Fire Dust VFX
 	// =======================
-	public override void PreUpdate()
+	public override void PostUpdateMiscEffects()
 	{
 		if (HotAirBalloonEnable)
 		{

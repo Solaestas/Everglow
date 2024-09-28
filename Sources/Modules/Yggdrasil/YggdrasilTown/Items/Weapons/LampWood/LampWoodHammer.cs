@@ -1,6 +1,7 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.LampWood;
 
 public class LampWoodHammer : ModItem
 {
@@ -22,7 +23,7 @@ public class LampWoodHammer : ModItem
 	}
 	public override void MeleeEffects(Player player, Rectangle hitbox)
 	{
-		Dust d = Dust.NewDustDirect(hitbox.TopLeft(), hitbox.Width, hitbox.Height, ModContent.DustType<LampWood_Dust_fluorescent_appear>());
+		var d = Dust.NewDustDirect(hitbox.TopLeft(), hitbox.Width, hitbox.Height, ModContent.DustType<LampWood_Dust_fluorescent_appear>());
 		d.velocity = new Vector2(0, Main.rand.NextFloat(4f)).RotatedByRandom(6.283);
 		d.rotation = Main.rand.NextFloat(0.4f, 1.2f);
 		base.MeleeEffects(player, hitbox);

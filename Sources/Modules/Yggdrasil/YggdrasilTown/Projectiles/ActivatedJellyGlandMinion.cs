@@ -5,21 +5,33 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class ActivatedJellyGlandMinion : ModProjectile
 {
-	private enum MinionState
+	private enum AttackState
 	{
 		Dash,
 		Rest,
+		Explode,
 	}
 
 	private const int NoTarget = -1;
+	private const int SearchDistance = 1200;
+	private const int ExplosionDuration = 80;
+	private const float ExplosionScaleFrequencyLimit = 0.4f;
 
-	private MinionState State { get; set; } = MinionState.Rest;
+	private int targetWhoAmI = NoTarget;
 
-	private int TargetWhoAmI { get; set; } = NoTarget;
+	private int TargetWhoAmI { get => targetWhoAmI; set => targetWhoAmI = value; }
+
+	private Vector3 BloomLightColor { get; set; } = new Vector3(0f, 0.5f, 1f);
+
+	private AttackState MinionAttackState { get; set; } = AttackState.Dash;
+
+	private int ExplosionTimer { get; set; } = 0;
+
+	private float ExplosionScaleFrequency { get; set; } = 0.2f;
 
 	public override void SetStaticDefaults()
 	{
-		Main.projFrames[Projectile.type] = 10;
+		Main.projFrames[Projectile.type] = 5;
 	}
 
 	public override void SetDefaults()
@@ -31,10 +43,13 @@ public class ActivatedJellyGlandMinion : ModProjectile
 		Projectile.localNPCHitCooldown = 20;
 		Projectile.timeLeft = 600;
 
+		Projectile.tileCollide = true;
 		Projectile.penetrate = -1;
 		Projectile.aiStyle = -1;
+
 		Projectile.width = 10;
 		Projectile.height = 10;
+		Projectile.scale = 0.5f;
 
 		Projectile.DamageType = DamageClass.Summon;
 		Projectile.minion = true;
@@ -42,13 +57,14 @@ public class ActivatedJellyGlandMinion : ModProjectile
 
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
+
 		ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 		ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
 
 		Main.projPet[Projectile.type] = true;
 	}
 
-	public override bool? CanCutTiles() => false;
+	public override bool? CanCutTiles() => true;
 
 	public override bool MinionContactDamage() => false;
 
@@ -64,7 +80,7 @@ public class ActivatedJellyGlandMinion : ModProjectile
 	{
 		if (Main.time % 10 == 0)
 		{
-			Projectile.frame = (Projectile.frame + 1) % Main.projFrames[Projectile.type];
+			Projectile.frameCounter = (Projectile.frameCounter + 1) % Main.projFrames[Projectile.type];
 		}
 
 		Player owner = Main.player[Projectile.owner];
@@ -74,15 +90,16 @@ public class ActivatedJellyGlandMinion : ModProjectile
 			return;
 		}
 
-		if (TargetWhoAmI == NoTarget)
-		{
-			GeneralBehavior();
-			SearchTarget(owner);
-		}
-		else if (CheckTargetNotActive())
+		Bloom();
+		if (CheckTargetNotActive())
 		{
 			TargetWhoAmI = NoTarget;
-			SearchTarget(owner);
+		}
+
+		if (HasNoTarget)
+		{
+			GeneralBehavior();
+			SearchTarget();
 		}
 		else
 		{
@@ -94,7 +111,7 @@ public class ActivatedJellyGlandMinion : ModProjectile
 
 	private bool CheckTargetNotActive()
 	{
-		if (TargetWhoAmI == NoTarget)
+		if (HasNoTarget)
 		{
 			return true;
 		}
@@ -108,52 +125,112 @@ public class ActivatedJellyGlandMinion : ModProjectile
 		return false;
 	}
 
-	private void SearchTarget(Player owner)
+	private void SearchTarget()
 	{
-		float minDistance = 800f;
-
-		Vector2 detectCenter = owner.Center;
-
-		bool foundTarget = false;
-		if (owner.HasMinionAttackTargetNPC)
+		Projectile.Minion_FindTargetInRange(SearchDistance, ref targetWhoAmI, false, (entiy, npcid) =>
 		{
-			NPC npc = Main.npc[owner.MinionAttackTargetNPC];
+			return true;
+		});
+	}
 
-			float between = Vector2.Distance(owner.Center, detectCenter);
+	private bool HasNoTarget => TargetWhoAmI == NoTarget;
 
-			if (between < minDistance)
+	private bool HasTarget => TargetWhoAmI != NoTarget;
+
+	private void Bloom()
+	{
+		float glowStrength = 0.4f;
+		if (HasTarget)
+		{
+			if (Projectile.frameCounter == 1)
 			{
-				TargetWhoAmI = npc.whoAmI;
-				foundTarget = true;
+				BloomLightColor = Vector3.Lerp(BloomLightColor, new Vector3(0.5f, 2f, 4f) * glowStrength, 0.3f);
+			}
+			else if (Projectile.frameCounter == 2)
+			{
+				BloomLightColor = Vector3.Lerp(BloomLightColor, new Vector3(0f, 1f, 2f) * glowStrength, 0.3f);
+			}
+			else
+			{
+				BloomLightColor = Vector3.Lerp(BloomLightColor, new Vector3(0f, 0.3f, 0.6f) * glowStrength, 0.3f);
 			}
 		}
-
-		if (!foundTarget)
+		else
 		{
-			foreach (var npc in Main.ActiveNPCs)
-			{
-				if (npc.dontTakeDamage || npc.friendly || !npc.CanBeChasedBy() || !Collision.CanHit(Projectile, npc))
-				{
-					continue;
-				}
-
-				float distance = (npc.Center - detectCenter).Length();
-				if (distance < minDistance)
-				{
-					TargetWhoAmI = npc.whoAmI;
-					minDistance = distance;
-					foundTarget = true;
-				}
-			}
+			BloomLightColor = Vector3.Lerp(BloomLightColor, new Vector3(0f, 0.5f, 1f) * glowStrength, 0.3f);
 		}
-
-		Projectile.friendly = foundTarget;
+		Lighting.AddLight(Projectile.Center, BloomLightColor);
 	}
 
 	private void Attack()
 	{
-		// TODO: Complete code
-		Projectile.velocity = Vector2.Zero;
+		NPC target = Main.npc[TargetWhoAmI];
+		var movement = target.Center - Projectile.Center;
+		float ExplodeStateDistance = 100f;
+
+		switch (MinionAttackState)
+		{
+			case AttackState.Dash:
+				{
+					var DashSpeed = 3f;
+					Projectile.velocity = (movement + new Vector2(0, MathF.Sin((float)Main.time * 0.0005f + Projectile.whoAmI * 7 + 2.1f))).NormalizeSafe() * DashSpeed;
+					Projectile.rotation = Projectile.velocity.ToRotation() + 1.57f;
+
+					if (Projectile.frameCounter == 0)
+					{
+						MinionAttackState = AttackState.Rest;
+					}
+					if (movement.Length() <= ExplodeStateDistance)
+					{
+						MinionAttackState = AttackState.Explode;
+						Projectile.velocity = Vector2.Zero;
+					}
+					break;
+				}
+			case AttackState.Rest:
+				{
+					Projectile.velocity *= 0.92f;
+					if (Projectile.velocity.Length() <= 0.5f)
+					{
+						if (Projectile.frameCounter == 0)
+						{
+							MinionAttackState = AttackState.Dash;
+						}
+						if (movement.Length() <= ExplodeStateDistance)
+						{
+							MinionAttackState = AttackState.Explode;
+							Projectile.velocity = Vector2.Zero;
+						}
+					}
+					break;
+				}
+			case AttackState.Explode:
+				{
+					if (ExplosionTimer < ExplosionDuration &&
+						Projectile.timeLeft > ExplosionDuration - ExplosionTimer)
+					{
+						ExplosionScaleFrequency += ExplosionScaleFrequency < ExplosionScaleFrequencyLimit ? 0.005f : 0f;
+						Projectile.scale = 0.5f + 0.1f * MathF.Sin((float)Main.time * 0.8f * ExplosionScaleFrequency);
+					}
+					else
+					{
+						// TODO: Replace the test projectile with a lightning projectile (blue & white)
+						Projectile.NewProjectile(
+							Terraria.Entity.InheritSource(Projectile),
+							Projectile.Center.X,
+							Projectile.Center.Y,
+							movement.NormalizeSafe().X * 2f,
+							movement.NormalizeSafe().Y * 2f,
+							ProjectileID.Bullet,
+							Projectile.damage,
+							Projectile.knockBack,
+							Projectile.owner);
+						Projectile.Kill();
+					}
+					ExplosionTimer++;
+					break;
+				}
+		}
 	}
 
 	public void GeneralBehavior()
@@ -162,9 +239,16 @@ public class ActivatedJellyGlandMinion : ModProjectile
 		Projectile.velocity = Vector2.Zero;
 	}
 
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		modifiers.FinalDamage *= 0.15f;
+
+		base.ModifyHitNPC(target, ref modifiers);
+	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
-		float glowStrength = State == MinionState.Rest ? 0.4f : 1f;
+		float glowStrength = HasTarget ? 1f : 0.4f;
 
 		Texture2D texture = ModAsset.JellyBall.Value;
 		Texture2D textureG = ModAsset.JellyBall_glow.Value;
@@ -173,21 +257,27 @@ public class ActivatedJellyGlandMinion : ModProjectile
 		Color drawColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
 		int frameWidth = texture.Width / 2;
 		int frameHeight = texture.Height / 5;
-		int frameX = frameWidth * (Projectile.frame / 5);
-		int frameY = frameHeight * (Projectile.frame % 5);
+		int frameX = HasTarget ? 0 : frameWidth;
+		int frameY = frameHeight * (Projectile.frameCounter % 5);
 
 		Rectangle sourceRect = new Rectangle(frameX, frameY, frameWidth, frameHeight);
 
-		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, sourceRect, Color.Lerp(drawColor * 0.7f, new Color(0.6f, 1f, 1f, 1f), 0.4f), Projectile.rotation, origin: new Vector2(texture.Width / 4f, texture.Height / 10f), Projectile.scale, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(textureB, Projectile.Center - Main.screenPosition, sourceRect, new Color(1f, 1f, 1f, 0f) * glowStrength, Projectile.rotation, origin: new Vector2(80), Projectile.scale, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(textureG, Projectile.Center - Main.screenPosition, sourceRect, new Color(1f, 1f, 1f, 0f) * glowStrength, Projectile.rotation, origin: new Vector2(texture.Width / 4f, texture.Height / 10f), Projectile.scale, SpriteEffects.None, 0);
+		int bloomFrameWidth = textureB.Width / 2;
+		int bloomFrameHeight = textureB.Height / 5;
+		int bloomFrameX = HasTarget ? 0 : bloomFrameWidth;
+		int bloomFrameY = bloomFrameHeight * (Projectile.frameCounter % 5);
+		Rectangle bloomSourceRect = new Rectangle(bloomFrameX, bloomFrameY, bloomFrameWidth, bloomFrameHeight);
+
+		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, sourceRect, Color.Lerp(drawColor * 0.7f, new Color(0.6f, 1f, 1f, 1f), 0.4f), Projectile.rotation, new Vector2(texture.Width / 4f, texture.Height / 10f), Projectile.scale, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(textureB, Projectile.Center - Main.screenPosition, bloomSourceRect, new Color(1f, 1f, 1f, 0f) * glowStrength, Projectile.rotation, new Vector2(textureB.Width / 4f, textureB.Height / 10f), Projectile.scale, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(textureG, Projectile.Center - Main.screenPosition, sourceRect, new Color(1f, 1f, 1f, 0f) * glowStrength, Projectile.rotation, new Vector2(textureG.Width / 4f, textureG.Height / 10f), Projectile.scale, SpriteEffects.None, 0);
 
 		return false;
 	}
 
 	public override void OnKill(int timeLeft)
 	{
-		if (Projectile.timeLeft < 200)
+		if (Projectile.timeLeft > 200)
 		{
 			for (int i = 0; i < 12; i++)
 			{

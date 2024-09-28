@@ -48,7 +48,7 @@ internal class ThermalConductorPlayer : ModPlayer
 	// When the player's mana falls below [StatusTriggerCondition],
 	// there is a [StatusTriggerRate] chance of gaining [ManaHeal] mana
 	// along with a Curse Inferno debuff with [DebuffDuration] duration.
-	public override void PreUpdate()
+	public override void PostUpdateMiscEffects()
 	{
 		if (ThermalConductorEnable)
 		{
