@@ -4,7 +4,7 @@ public class Plague : ModBuff
 {
 	public const int PlayerLifeDecreasePerSecond = 4;
 	public const int NPCLifeDecreasePerSecond = 12;
-	public const int SpreadRange = 6;
+	public const int SpreadRange = 6 * 16;
 	public const int SpreadedBuffDuration = 240;
 	public const int EnemySpreadLimit = 6;
 
@@ -24,14 +24,14 @@ public class Plague : ModBuff
 		{
 			int counter = 0;
 
-			foreach(var target in Main.npc)
+			foreach (var target in Main.npc)
 			{
-				if (target.friendly || target.dontTakeDamage)
+				if (target.friendly || target.dontTakeDamage || npc != target)
 				{
 					continue;
 				}
 
-				if(npc.position.Distance(target.position) > SpreadRange)
+				if (npc.position.Distance(target.position) > SpreadRange)
 				{
 					continue;
 				}
@@ -69,7 +69,8 @@ public class Plague : ModBuff
 
 			foreach (var playerTarget in Main.player)
 			{
-				if(player.position.Distance(playerTarget.position) > SpreadRange)
+				if (player.position.Distance(playerTarget.position) > SpreadRange ||
+					playerTarget == player)
 				{
 					continue;
 				}
