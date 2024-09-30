@@ -13,7 +13,7 @@ public class RodSpear : ModProjectile
 		Projectile.width = 20;
 		Projectile.height = 20;
 		Projectile.tileCollide = false;
-		Projectile.timeLeft = 240;
+		Projectile.timeLeft = 600;
 		Projectile.aiStyle = -1;
 		Projectile.penetrate = -1;
 		Projectile.usesLocalNPCImmunity = true;
@@ -35,7 +35,14 @@ public class RodSpear : ModProjectile
 	public override void AI()
 	{
 		Player owner = Main.player[Projectile.owner];
-
+		if(Projectile.timeLeft % 4 == 0)
+		{
+			Projectile.frame++;
+		}
+		if(Projectile.frame >= 3)
+		{
+			Projectile.frame = 0;
+		}
 		if (HasNotShot)
 		{
 			HasNotShot = false;
@@ -64,8 +71,7 @@ public class RodSpear : ModProjectile
 			}
 			else
 			{
-				Projectile.velocity.Y += 0.25f;
-				Projectile.velocity *= 0.995f;
+				Projectile.velocity.Y += 0.05f;
 				Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
 			}
 		}
@@ -123,13 +129,14 @@ public class RodSpear : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D texStick = (Texture2D)ModContent.Request<Texture2D>(Texture);
+		Rectangle frame = new Rectangle(0, Projectile.frame * 52, 52, 52);
 		Main.spriteBatch.Draw(
 			texStick,
 			Projectile.Center - Main.screenPosition,
-			null,
+			frame,
 			lightColor,
 			Projectile.rotation,
-			texStick.Size() / 2f,
+			frame.Size() / 2f,
 			Projectile.scale,
 			SpriteEffects.None,
 			0);

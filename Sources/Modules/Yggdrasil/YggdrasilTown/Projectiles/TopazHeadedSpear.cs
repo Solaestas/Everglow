@@ -2,7 +2,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-public class AmethystHeadedSpear : ModProjectile
+public class TopazHeadedSpear : ModProjectile
 {
 	protected virtual float HoldoutRangeMin => 24f;
 
@@ -33,7 +33,7 @@ public class AmethystHeadedSpear : ModProjectile
 		if (Projectile.timeLeft < halfDuration)
 		{
 			progress = Projectile.timeLeft / halfDuration;
-			Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<AmethystSpearDust>(), 0, 0);
+			Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<TopazSpearDust>(), 0, 0);
 			dust.noGravity = true;
 			dust.velocity *= 0;
 		}
@@ -56,7 +56,7 @@ public class AmethystHeadedSpear : ModProjectile
 		{
 			oldPos = Projectile.Center;
 		}
-		Texture2D flag = ModAsset.AmethystHeadedSpear_flag.Value;
+		Texture2D flag = ModAsset.TopazHeadedSpear_flag.Value;
 		Vector2 normalVel = Vector2.Normalize(Projectile.velocity);
 		float rotation = (Projectile.Center - oldPos).ToRotation() + MathHelper.PiOver2;
 		Main.spriteBatch.Draw(flag, Projectile.Center - Main.screenPosition - normalVel * 28f, null, lightColor, rotation, new Vector2(3, 0), new Vector2(1f, 2f), SpriteEffects.None, 0);
@@ -67,7 +67,7 @@ public class AmethystHeadedSpear : ModProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		Player player = Main.player[Projectile.owner];
-		Texture2D head = ModAsset.AmethystHead.Value;
+		Texture2D head = ModAsset.TopazHead.Value;
 		Vector2 normalVel = Vector2.Normalize(Projectile.velocity);
 		Main.spriteBatch.Draw(head, Projectile.Center - Main.screenPosition - normalVel * 14.142f, null, lightColor * 0.9f, Projectile.rotation, head.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 		float duration = Projectile.timeLeft / (float)player.itemAnimationMax;

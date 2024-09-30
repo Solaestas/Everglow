@@ -123,7 +123,7 @@ internal class FeatheredStaff : ModProjectile
 				velocity = newVelocity,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center + Projectile.velocity * i / (float)duplicateTimes,
+				position = Projectile.Center + Projectile.velocity * i / duplicateTimes,
 				maxTime = Main.rand.Next(27, 66),
 				scale = 1,
 				rotation = Main.rand.NextFloat(6.283f),
@@ -164,7 +164,7 @@ internal class FeatheredStaff : ModProjectile
 
 			Gore.NewGore(Projectile.Center, Projectile.velocity, ModContent.Find<ModGore>("Everglow/FeatheredStaff_gore0").Type, Projectile.scale);
 			Gore.NewGore(Projectile.Center, Projectile.velocity, ModContent.Find<ModGore>("Everglow/FeatheredStaff_gore1").Type, Projectile.scale);
-
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<FeatheredStaff_break>(), (int)(Projectile.damage * 0.4f), Projectile.knockBack * 0.2f, Projectile.owner, 0.57f);
 			HasNotBursted = false;
 		}
 		GenerateParticles(5);
@@ -247,17 +247,22 @@ internal class FeatheredStaff : ModProjectile
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
 		CollisionCounter++;
-		if (CollisionCounter >= MaxCollisionCount)
-		{
-			GenerateParticles(5);
-			Projectile.Kill();
-			return true;
-		}
 		if (LifeTimer >= P1Duration)
 		{
 			Projectile.Kill();
+			GenerateParticlesExposion(20);
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<FeatheredStaff_break>(), (int)(Projectile.damage * 0.4f), Projectile.knockBack * 0.15f, Projectile.owner, 0.8f);
 			return true;
 		}
+		if (CollisionCounter >= MaxCollisionCount)
+		{
+			Projectile.Kill();
+			GenerateParticlesExposion(20);
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<FeatheredStaff_break>(), (int)(Projectile.damage * 0.4f), Projectile.knockBack * 0.15f, Projectile.owner, 0.35f);
+			return true;
+		}
+		GenerateParticlesExposion(13);
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<FeatheredStaff_break>(), (int)(Projectile.damage * 0.4f), Projectile.knockBack * 0.1f, Projectile.owner, 0.27f);
 		if (Projectile.velocity.X != oldVelocity.X)
 		{
 			Projectile.velocity.X = -oldVelocity.X * 0.8f;
@@ -327,10 +332,42 @@ internal class FeatheredStaff : ModProjectile
 				texture,
 				Projectile.Center - Main.screenPosition,
 				null,
-				color,
+				new Color(1f, 1f, 0.4f, 0),
 				rotation,
 				origin: new Vector2(texture.Width, texture.Width) / 2.0f,
 				scale: 1,
+				effects: effects,
+				0);
+			Texture2D light = Commons.ModAsset.StarSlash.Value;
+			Color lightHalo = Color.Lerp(new Color(1f, 0.8f, 0.5f, 0), new Color(0.7f, 0.2f, 0.1f, 0), (float)(Math.Sin(Main.time * 0.3f + Projectile.whoAmI) + 1) * 0.5f);
+			Main.spriteBatch.Draw(
+				light,
+				Projectile.Center - Main.screenPosition,
+				null,
+				lightHalo,
+				rotation + MathHelper.PiOver2,
+				light.Size() * 0.5f,
+				new Vector2(0.5f, 0.7f),
+				effects: effects,
+				0);
+			Main.spriteBatch.Draw(
+				light,
+				Projectile.Center - Main.screenPosition,
+				null,
+				lightHalo,
+				0.75f,
+				light.Size() * 0.5f,
+				new Vector2(0.2f, 0.3f),
+				effects: effects,
+				0);
+			Main.spriteBatch.Draw(
+				light,
+				Projectile.Center - Main.screenPosition,
+				null,
+				lightHalo,
+				-0.75f,
+				light.Size() * 0.5f,
+				new Vector2(0.2f, 0.3f),
 				effects: effects,
 				0);
 		}
@@ -342,9 +379,11 @@ internal class FeatheredStaff : ModProjectile
 
 	public override void OnKill(int timeLeft)
 	{
-		for (int i = 0; i < 20; i++)
-		{
-			Dust.NewDust(Projectile.Center, 3, 3, DustID.Cloud, newColor: Color.SandyBrown);
-		}
+	}
+
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		GenerateParticlesExposion(20);
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<FeatheredStaff_break>(), (int)(Projectile.damage * 0.4f), Projectile.knockBack * 0.15f, Projectile.owner, 0.35f);
 	}
 }

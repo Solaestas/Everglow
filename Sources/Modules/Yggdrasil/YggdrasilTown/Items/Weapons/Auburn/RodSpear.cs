@@ -27,7 +27,7 @@ internal class RodSpear : ModItem
 			Item.buyPrice(silver: 20));
 
 		Item.shoot = ModContent.ProjectileType<Projectiles.RodSpear>();
-		Item.shootSpeed = 20;
+		Item.shootSpeed = 12;
 	}
 
 	public override void AddRecipes()
