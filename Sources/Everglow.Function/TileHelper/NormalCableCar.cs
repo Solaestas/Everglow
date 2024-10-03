@@ -1,0 +1,133 @@
+using Everglow.Commons.CustomTiles.Tiles;
+using Everglow.Commons.DataStructures;
+using Everglow.Commons.Physics.MassSpringSystem;
+using Everglow.Commons.Utilities;
+using Everglow.Commons.Vertex;
+
+namespace Everglow.Commons.TileHelper;
+
+public class NormalCableCar : DBlock
+{
+	public int RopeDuration;
+	public Point AnchorCableTile;
+	public Rope Cable;
+	public int Direction = 1;
+	public bool Initialized = false;
+
+	public override void AI()
+	{
+		if (!Initialized)
+		{
+			ChangeCableCarJoint();
+			Initialized = true;
+		}
+		if (Cable != null && Cable != default)
+		{
+			float minLength = 500;
+			int minIndex = 0;
+			for (int i = 0; i < Cable.Masses.Length; i++)
+			{
+				float thisLength = (Cable.Masses[i].Position - position).Length();
+				if ((Cable.Masses[i].Position - position).Length() < minLength)
+				{
+					minLength = thisLength;
+					minIndex = i;
+				}
+			}
+			Vector2 closestPos = Cable.Masses[minIndex].Position;
+			Vector2 targetMassPos = Cable.Masses[Math.Clamp(minIndex + Direction, 0, Cable.Masses.Length - 1)].Position;
+
+			// TODO:如果点到直线距离超过3立刻拉到直线上
+			Vector2 deltaPos = targetMassPos - closestPos;
+			Vector2 normalizedDelta = Utils.SafeNormalize(deltaPos, new Vector2(0, -1));
+			Vector2 toClosestPos = position - closestPos;
+			float projectionLength = toClosestPos.Length() * Vector2.Dot(toClosestPos, deltaPos) / (toClosestPos.Length() * deltaPos.Length());
+			Vector2 projection = closestPos + projectionLength * normalizedDelta;
+			float toVelocityLineLength = (projection - position).Length();
+			if(toVelocityLineLength > 1)
+			{
+				position = projection;
+			}
+			velocity = Utils.SafeNormalize(targetMassPos + velocity - closestPos, Vector2.zeroVector) * 3f;
+			if (RopeDuration >= Cable.Masses.Length)
+			{
+				ChangeCableCarJoint();
+			}
+			RopeDuration = minIndex + 1;
+		}
+		else
+		{
+			Active = false;
+			return;
+		}
+		base.AI();
+	}
+
+	public void ChangeCableCarJoint()
+	{
+		Point pointPos = position.ToTileCoordinates();
+		pointPos.X = Math.Clamp(pointPos.X, 20, Main.maxTilesX - 20);
+		pointPos.Y = Math.Clamp(pointPos.Y, 20, Main.maxTilesY - 20);
+		for (int i = -2; i < 3; i++)
+		{
+			for (int j = -2; j < 3; j++)
+			{
+				Point newPointPos = pointPos + new Point(i, j);
+				Tile tile = Main.tile[newPointPos];
+				if (tile.HasTile && tile.TileType == ModContent.TileType<CableCarJoint>())
+				{
+					AnchorCableTile = newPointPos;
+					CableTile cableCarJoint = TileLoader.GetTile(tile.TileType) as CableTile;
+					if(Direction == -1)
+					{
+						Point newpoint;
+						cableCarJoint.RopeHeadAndTail.TryGetValue(newPointPos, out newpoint);
+						newPointPos = newpoint;
+					}
+					cableCarJoint.RopesOfAllThisTileInTheWorld.TryGetValue(newPointPos, out Cable);
+				}
+			}
+		}
+	}
+
+	public override Color MapColor => new Color(73, 68, 65);
+
+	public override void Draw()
+	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null);
+		Effect effect = ModAsset.Shader2D.Value;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.CurrentTechnique.Passes[0].Apply();
+		Texture2D tuskWall = ModAsset.NormalCableCar.Value;
+
+		var bars = new List<Vertex2D>();
+		AddVertex(bars, position + new Vector2(-2, -8), new Vector3(0.5f, 0.05f, 0));
+		AddVertex(bars, position + new Vector2(2, -8), new Vector3(0.5f, 0.05f, 0));
+		AddVertex(bars, position + new Vector2(-2, 16), new Vector3(0.5f, 0.05f, 0));
+
+		AddVertex(bars, position + new Vector2(-2, 16), new Vector3(0.5f, 0.05f, 0));
+		AddVertex(bars, position + new Vector2(2, -8), new Vector3(0.5f, 0.05f, 0));
+		AddVertex(bars, position + new Vector2(2, 16), new Vector3(0.5f, 0.05f, 0));
+
+		AddVertex(bars, position + new Vector2(-43, 16), new Vector3(0f, 18 / 134f, 0));
+		AddVertex(bars, position + new Vector2(43, 16), new Vector3(1f, 18 / 134f, 0));
+		AddVertex(bars, position + new Vector2(-43, 132), new Vector3(0f, 1, 0));
+
+		AddVertex(bars, position + new Vector2(-43, 132), new Vector3(0f, 1, 0));
+		AddVertex(bars, position + new Vector2(43, 16), new Vector3(1f, 18 / 134f, 0));
+		AddVertex(bars, position + new Vector2(43, 132), new Vector3(1f, 1, 0));
+		Main.graphics.graphicsDevice.Textures[0] = tuskWall;
+		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
+	}
+
+	public void AddVertex(List<Vertex2D> bars, Vector2 pos, Vector3 coord)
+	{
+		bars.Add(pos, Lighting.GetColor(pos.ToTileCoordinates()), coord);
+	}
+}
