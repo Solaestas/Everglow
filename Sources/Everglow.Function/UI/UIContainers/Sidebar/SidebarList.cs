@@ -2,7 +2,7 @@ using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.UI.UIContainers.Sidebar
 {
-	internal class SidebarList : BaseElement
+	public class SidebarList : BaseElement
 	{
 		private float elementSpacing = 6f;
 		private List<SidebarUIElement> elements = new List<SidebarUIElement>();

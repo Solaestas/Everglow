@@ -1,11 +1,11 @@
 namespace Everglow.Commons.UI.UIElements
 {
-	internal class BaseElement
+	public class BaseElement
 	{
 		/// <summary>
 		/// 表示位置信息
 		/// </summary>
-		internal struct PositionStyle
+		public struct PositionStyle
 		{
 			public static readonly PositionStyle Empty = new PositionStyle();
 			public static readonly PositionStyle Full = new PositionStyle(0f, 1f);
@@ -99,7 +99,7 @@ namespace Everglow.Commons.UI.UIElements
 		/// <summary>
 		/// 储存位置、大小等信息
 		/// </summary>
-		internal struct ElementInfo
+		public struct ElementInfo
 		{
 			/// <summary>
 			/// 左坐标
@@ -221,7 +221,7 @@ namespace Everglow.Commons.UI.UIElements
 		/// <summary>
 		/// 储存事件
 		/// </summary>
-		internal class ElementEvents
+		public class ElementEvents
 		{
 			/// <summary>
 			/// 被鼠标点击的委托

@@ -1,6 +1,6 @@
 namespace Everglow.Commons.UI.UIElements
 {
-	internal class UIContainerPanel : BaseElement
+	public class UIContainerPanel : BaseElement
 	{
 		private class InnerPanel : BaseElement
 		{

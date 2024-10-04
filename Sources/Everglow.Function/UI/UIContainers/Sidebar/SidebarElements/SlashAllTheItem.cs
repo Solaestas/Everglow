@@ -1,6 +1,6 @@
 namespace Everglow.Commons.UI.UIContainers.Sidebar.SidebarElements;
 
-internal class SlashAllTheItem : SidebarElementBase
+public class SlashAllTheItem : SidebarElementBase
 {
 	public override Texture2D Icon => ModAsset.SlashAllTheItem.Value;
 	public override string Tooltip => "清理背包";

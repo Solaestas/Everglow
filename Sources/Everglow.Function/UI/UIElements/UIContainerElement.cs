@@ -1,6 +1,6 @@
-﻿namespace Everglow.Commons.UI.UIElements
+namespace Everglow.Commons.UI.UIElements
 {
-	internal abstract class UIContainerElement : BaseElement
+	public abstract class UIContainerElement : BaseElement
 	{
 		public virtual string Name { get => GetType().FullName; }
 		public virtual bool AutoLoad { get => true; }
