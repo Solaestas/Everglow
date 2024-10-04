@@ -1,7 +1,8 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import os from 'node:os';
 
-const [, , name, tile, item, tileSpace, itemSpace, tileOutput, itemOutput] =
+let [, , name, tile, item, tileSpace, itemSpace, tileOutput, itemOutput] =
     process.argv;
 const types = [
     'Bed',
@@ -27,16 +28,63 @@ const types = [
 ];
 
 (async () => {
+    if (!itemOutput) {
+        const home = tileOutput
+            ? tileOutput
+            : path.join(os.homedir(), 'Documents');
+        const modSource = `My Games/Terraria/tModLoader/ModSources/Everglow/Sources/Modules`;
+        const dir = path.join(home, modSource);
+
+        try {
+            await fs.readdir(dir);
+        } catch {
+            console.error(
+                `Cannot find documents dir in C:/~. Please deliver $6 and $7, or deliver $6 only with your Documents folder.`
+            );
+            return;
+        }
+
+        const tileSplit = tileSpace.split('.').slice(1).join('/');
+        const itemSplit = itemSpace.split('.').slice(1).join('/');
+
+        tileOutput = path.join(dir, tileSplit);
+        itemOutput = path.join(dir, itemSplit);
+
+        try {
+            await fs.readdir(tileOutput);
+        } catch {
+            console.log(`默认输出文件夹不存在，已新建`);
+            await fs.mkdir(tileOutput, { recursive: true });
+        }
+
+        try {
+            await fs.readdir(itemOutput);
+        } catch {
+            console.log(`默认输出文件夹不存在，已新建`);
+            await fs.mkdir(itemOutput, { recursive: true });
+        }
+    }
+    if (tileOutput && !itemOutput) {
+        console.error(
+            `Arguments $6 and $7 need be delivered at the same time when needed.`
+        );
+        return;
+    }
+
     const tileList = new Set(await fs.readdir(tile));
     const itemList = new Set(await fs.readdir(item));
 
     for (const type of types) {
         const realName = name + type;
         const relatedTile = [...tileList].filter(
-            v => v.startsWith(realName) && v.endsWith('.png')
+            v =>
+                (v.startsWith(type) || v.startsWith(realName)) &&
+                v.endsWith('.png')
         );
         const relatedItem = [...itemList].filter(
-            v => v.startsWith(realName) && v.endsWith('.png')
+            v =>
+                (v.startsWith(type) || v.startsWith(realName)) &&
+                v.endsWith('.png')
         );
         relatedTile.forEach(v => tileList.delete(v));
         relatedItem.forEach(v => itemList.delete(v));
@@ -44,17 +92,37 @@ const types = [
 
         await Promise.all([
             ...relatedTile.map(v =>
-                fs.copyFile(path.resolve(tile, v), path.resolve(tileOutput, v))
+                fs.copyFile(
+                    path.resolve(tile, v),
+                    path.resolve(
+                        tileOutput,
+                        v.startsWith(realName) ? v : name + v
+                    )
+                )
             ),
             ...relatedItem.map(v =>
-                fs.copyFile(path.resolve(item, v), path.resolve(itemOutput, v))
+                fs.copyFile(
+                    path.resolve(item, v),
+                    path.resolve(
+                        itemOutput,
+                        v.startsWith(realName) ? v : name + v
+                    )
+                )
             )
         ]);
 
         if (type === 'Door') {
-            const itemCS = itemTemplate(realName, itemSpace, type);
-            const tileOpen = tileTemplate.DoorOpen(realName, tileSpace);
-            const tileClosed = tileTemplate.DoorClosed(realName, tileSpace);
+            const itemCS = itemTemplate(realName, itemSpace, type, tileSpace);
+            const tileOpen = tileTemplate.DoorOpen(
+                realName,
+                tileSpace,
+                itemSpace
+            );
+            const tileClosed = tileTemplate.DoorClosed(
+                realName,
+                tileSpace,
+                itemSpace
+            );
 
             await Promise.all([
                 fs.writeFile(
@@ -74,8 +142,8 @@ const types = [
                 )
             ]);
         } else {
-            const tileCS = tileTemplate[type](realName, tileSpace);
-            const itemCS = itemTemplate(realName, itemSpace, type);
+            const tileCS = tileTemplate[type](realName, tileSpace, itemSpace);
+            const itemCS = itemTemplate(realName, itemSpace, type, tileSpace);
 
             await Promise.all([
                 fs.writeFile(
@@ -106,7 +174,7 @@ const types = [
 
 // ----- template
 const tileTemplate = {
-    Bed: (name, space) => /* cs */ `using Everglow.Myth.Common;
+    Bed: (name, space, itemSpace) => /* cs */ `using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
@@ -169,11 +237,11 @@ public class ${name} : ModTile
 	}
 
 	public override void MouseOver(int i, int j) {
-		FurnitureUtils.BedMouseOver<Items.Furnitures.${name}>(i, j);
+		FurnitureUtils.BedMouseOver<${itemSpace}.${name}>(i, j);
 	}
 }
 `,
-    Chair: (name, space) => /* cs */ `using Everglow.Myth.Common;
+    Chair: (name, space, itemSpace) => /* cs */ `using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
@@ -256,11 +324,11 @@ public class ${name} : ModTile
 	}
 
 	public override void MouseOver(int i, int j) {
-		FurnitureUtils.ChairMouseOver<Items.Furnitures.${name}>(i, j);
+		FurnitureUtils.ChairMouseOver<${itemSpace}.${name}>(i, j);
 	}
 }
 `,
-    Chest: (name, space) => `using Everglow.Myth.Common;
+    Chest: (name, space, itemSpace) => `using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
@@ -299,7 +367,7 @@ public class ${name} : ModTile
 
 		// Style 1 is ExampleChest when locked. We want that tile style to drop the ExampleChest item as well. Use the Chest Lock item to lock this chest.
 		// No item places ExampleChest in the locked style, so the automatically determined item drop is unknown, this is why RegisterItemDrop is necessary in this situation. 
-		RegisterItemDrop(ModContent.ItemType<Items.Furnitures.${name}>(), 1);
+		RegisterItemDrop(ModContent.ItemType<${itemSpace}.${name}>(), 1);
 		// Sometimes mods remove content, such as tile styles, or tiles accidentally get corrupted. We can, if desired, register a fallback item for any tile style that doesn't have an automatically determined item drop. This is done by omitting the tileStyles parameter.
 		RegisterItemDrop(ItemID.Chest);
 
@@ -394,7 +462,7 @@ public class ${name} : ModTile
 			string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY); // This gets the ContainerName text for the currently selected language
 			player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
 			if (player.cursorItemIconText == defaultName) {
-				player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.${name}>();
+				player.cursorItemIconID = ModContent.ItemType<${itemSpace}.${name}>();
 				if (Main.tile[left, top].TileFrameX / 36 == 1) {
 					// player.cursorItemIconID = ModContent.ItemType<>();
 				}
@@ -417,7 +485,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Clock: (name, space) => `using Everglow.Myth.Common;
+    Clock: (name, space, itemSpace) => `using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
@@ -457,7 +525,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    DoorClosed: (name, space) => `using Everglow.Myth.Common;
+    DoorClosed: (name, space, itemSpace) => `using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
@@ -504,11 +572,11 @@ public class ${name}Closed : ModTile
 		Player player = Main.LocalPlayer;
 		player.noThrow = 2;
 		player.cursorItemIconEnabled = true;
-		player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.${name}>();
+		player.cursorItemIconID = ModContent.ItemType<${itemSpace}.${name}>();
 	}
 }
 `,
-    DoorOpen: (name, space) => `using Everglow.Myth.Common;
+    DoorOpen: (name, space, itemSpace) => `using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
@@ -535,7 +603,7 @@ public class ${name}Open : ModTile
 		DustType = ModContent.DustType<>();
 		AdjTiles = new int[] { TileID.OpenDoor };
 		// Tiles usually drop their corresponding item automatically, but RegisterItemDrop is needed here since the ExampleDoor item places ExampleDoorClosed, not this tile.
-		RegisterItemDrop(ModContent.ItemType<Items.Furnitures.${name}>(), 0);
+		RegisterItemDrop(ModContent.ItemType<${itemSpace}.${name}>(), 0);
 		TileID.Sets.CloseDoorID[Type] = ModContent.TileType<${name}Closed>();
 
 		// Names
@@ -597,11 +665,11 @@ public class ${name}Open : ModTile
 		Player player = Main.LocalPlayer;
 		player.noThrow = 2;
 		player.cursorItemIconEnabled = true;
-		player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.${name}>();
+		player.cursorItemIconID = ModContent.ItemType<${itemSpace}.${name}>();
 	}
 }
 `,
-    Dresser: (name, space) => `using Terraria.DataStructures;
+    Dresser: (name, space, itemSpace) => `using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
@@ -690,7 +758,7 @@ public class ${name} : ModTile
 				player.cursorItemIconText = defaultName;
 			}
 			if (player.cursorItemIconText == defaultName) {
-				player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.${name}>();
+				player.cursorItemIconID = ModContent.ItemType<${itemSpace}.${name}>();
 				player.cursorItemIconText = "";
 			}
 		}
@@ -749,7 +817,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Platform: (name, space) => `using Everglow.Myth.Common;
+    Platform: (name, space, itemSpace) => `using Everglow.Myth.Common;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
@@ -792,7 +860,7 @@ public class ${name} : ModTile
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 }
 `,
-    Table: (name, space) => `using Everglow.Myth.Common;
+    Table: (name, space, itemSpace) => `using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ObjectData;
@@ -831,7 +899,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Toilet: (name, space) => `using Terraria.DataStructures;
+    Toilet: (name, space, itemSpace) => `using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
@@ -937,7 +1005,7 @@ public class ${name} : ModTile
 
 		player.noThrow = 2;
 		player.cursorItemIconEnabled = true;
-		player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.${name}>();
+		player.cursorItemIconID = ModContent.ItemType<${itemSpace}.${name}>();
 
 		if (Main.tile[i, j].TileFrameX / 18 < 1) {
 			player.cursorItemIconReversed = true;
@@ -960,7 +1028,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Workbench: (name, space) => `using Everglow.Myth.Common;
+    Workbench: (name, space, itemSpace) => `using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ObjectData;
@@ -998,7 +1066,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Sink: (name, space) => `using Everglow.Myth.Common;
+    Sink: (name, space, itemSpace) => `using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ObjectData;
@@ -1031,7 +1099,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Chandelier: (name, space) => `using System;
+    Chandelier: (name, space, itemSpace) => `using System;
 using Everglow.Commons.TileHelper;
 using ReLogic.Content;
 using Terraria.DataStructures;
@@ -1128,7 +1196,7 @@ public class ${name} : ModTile, ITileFluentlyDrawn, ITileFlameData
 		};
 }
 `,
-    Lantern: (name, space) => `using Everglow.Myth.Common;
+    Lantern: (name, space, itemSpace) => `using Everglow.Myth.Common;
 using Everglow.Commons.TileHelper;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -1206,7 +1274,7 @@ public class ${name} : ModTile, ITileFluentlyDrawn
 	}
 }
 `,
-    Candle: (name, space) => `using ReLogic.Content;
+    Candle: (name, space, itemSpace) => `using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ObjectData;
@@ -1313,7 +1381,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Candelabra: (name, space) => `using ReLogic.Content;
+    Candelabra: (name, space, itemSpace) => `using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ObjectData;
@@ -1421,7 +1489,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Bathtub: (name, space) => `using Everglow.Myth.Common;
+    Bathtub: (name, space, itemSpace) => `using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
@@ -1458,7 +1526,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Bookcase: (name, space) => `using Everglow.Myth.Common;
+    Bookcase: (name, space, itemSpace) => `using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 
@@ -1494,7 +1562,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Lamp: (name, space) => `using Terraria.DataStructures;
+    Lamp: (name, space, itemSpace) => `using Terraria.DataStructures;
 using Terraria.ObjectData;
 
 namespace ${space};
@@ -1552,7 +1620,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Piano: (name, space) => `using Everglow.Myth.Common;
+    Piano: (name, space, itemSpace) => `using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ObjectData;
@@ -1592,7 +1660,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Sofa: (name, space) => `using Everglow.Myth.Common;
+    Sofa: (name, space, itemSpace) => `using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
@@ -1659,7 +1727,7 @@ public class ${name} : ModTile
 `
 };
 
-const itemTemplate = (name, space, type) => {
+const itemTemplate = (name, space, type, tileSpace) => {
     return `using Terraria.GameContent.Creative;
 using Everglow.Commons.Utilities;
 
@@ -1669,9 +1737,9 @@ public class ${name} : ${type === 'Workbench' ? 'WorkBench' : type}Item
 {
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.${
-            type === 'Door' ? name + 'Closed' : name
-        }>());
+		Item.DefaultToPlaceableTile(ModContent.TileType<${tileSpace}.${
+        type === 'Door' ? name + 'Closed' : name
+    }>());
 		base.SetDefaults();
 	}
 
