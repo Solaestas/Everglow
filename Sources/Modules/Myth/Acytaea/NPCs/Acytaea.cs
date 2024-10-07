@@ -19,6 +19,7 @@ public class Acytaea : VisualNPC
 	public CoroutineManager _townNPCGeneralCoroutine = new CoroutineManager();
 	public Queue<Coroutine> AICoroutines = new Queue<Coroutine>();
 	public bool Idle = true;
+	public bool Talking = false;
 	public bool Sit = false;
 	public int TextureStyle = 0;
 	public int Attack0Cooling = 0;
@@ -125,32 +126,40 @@ public class Acytaea : VisualNPC
 		Idle = true;
 		_townNPCBehaviorCoroutine.Update();
 		_townNPCGeneralCoroutine.Update();
-		if (Main.rand.NextBool(120) && AICoroutines.Count <= 1)
+		if (!Talking)
 		{
-			AICoroutines.Enqueue(new Coroutine(Walk(Main.rand.Next(60, 1500))));
-		}
-		if (Main.rand.NextBool(120) && AICoroutines.Count <= 1)
-		{
-			AICoroutines.Enqueue(new Coroutine(Stand(Main.rand.Next(60, 300))));
-		}
-		if ((int)(Main.time * 0.1f) % 6 == 0)
-		{
-			if (AICoroutines.Count <= 1)
+			if (Main.rand.NextBool(120) && AICoroutines.Count <= 1)
 			{
-				if (CanAttack0())
+				AICoroutines.Enqueue(new Coroutine(Walk(Main.rand.Next(60, 900))));
+			}
+			if (Main.rand.NextBool(120) && AICoroutines.Count <= 1)
+			{
+				AICoroutines.Enqueue(new Coroutine(Stand(Main.rand.Next(60, 900))));
+			}
+			if ((int)(Main.time * 0.1f) % 6 == 0)
+			{
+				if (AICoroutines.Count <= 1)
 				{
-					AICoroutines.Enqueue(new Coroutine(Attack0()));
-				}
-				if (CanAttack1())
-				{
-					AICoroutines.Enqueue(new Coroutine(Attack1()));
+					if (CanAttack0())
+					{
+						AICoroutines.Enqueue(new Coroutine(Attack0()));
+					}
+					if (CanAttack1())
+					{
+						AICoroutines.Enqueue(new Coroutine(Attack1()));
+					}
 				}
 			}
 		}
-		if (Main.rand.NextBool(120) && AICoroutines.Count <= 1)
+		else
 		{
-			// AICoroutines.Enqueue(new Coroutine(Stand(Main.rand.Next(60, 150))));
+			if (!CheckTalkingPlayer())
+			{
+				Talking = false;
+			}
 		}
+
+
 		if (aiMainCount == 0)
 		{
 			Idle = true;
@@ -169,6 +178,26 @@ public class Acytaea : VisualNPC
 			NPC.aiStyle = -1;
 			NPC.ai[0] = 0;
 		}
+	}
+
+	public bool CheckTalkingPlayer()
+	{
+		for (int j = 0; j < 255; j++)
+		{
+			if (Main.player[j].active && Main.player[j].talkNPC == NPC.whoAmI)
+			{
+				if (Main.player[j].position.X + Main.player[j].width / 2 < NPC.position.X + NPC.width / 2)
+				{
+					NPC.direction = -1;
+				}
+				else
+				{
+					NPC.direction = 1;
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public bool CanAttack0()
@@ -292,6 +321,10 @@ public class Acytaea : VisualNPC
 				NPC.frame.Y = 64;
 			}
 			if (!CanContinueWalk(NPC))
+			{
+				break;
+			}
+			if (Talking)
 			{
 				break;
 			}
@@ -420,11 +453,13 @@ public class Acytaea : VisualNPC
 
 	public override bool CanChat()
 	{
-		return !NPC.boss;
+		return true;
 	}
 
 	public override string GetChat()
 	{
+		Talking = true;
+
 		// TODO Hjson 重写
 		IList<string> list = new List<string>();
 		if (Language.ActiveCulture.Name == "zh-Hans")
