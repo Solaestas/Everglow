@@ -2,8 +2,19 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 
-let [, , name, tile, item, tileSpace, itemSpace, tileOutput, itemOutput] =
-    process.argv;
+let [
+    ,
+    ,
+    name,
+    tile,
+    item,
+    tileSpace,
+    itemSpace,
+    tileOutput,
+    itemOutput,
+    _0,
+    _1
+] = process.argv;
 const types = [
     'Bed',
     'Chair',
@@ -28,6 +39,20 @@ const types = [
 ];
 
 (async () => {
+    if (
+        (itemOutput?.startsWith('Games/Terraria/tModLoader') ||
+            itemOutput?.startsWith('Games\\Terraria\\tModLoader')) &&
+        tileOutput?.endsWith('My')
+    ) {
+        tileOutput += ' ' + itemOutput;
+    }
+    if (
+        (_1?.startsWith('Games/Terraria/tModLoader') ||
+            _1?.startsWith('Games\\Terraria\\tModLoader')) &&
+        _0?.endsWith('My')
+    ) {
+        itemOutput = _0 + ' ' + _1;
+    }
     if (!itemOutput) {
         const home = tileOutput
             ? tileOutput
@@ -49,20 +74,6 @@ const types = [
 
         tileOutput = path.join(dir, tileSplit);
         itemOutput = path.join(dir, itemSplit);
-
-        try {
-            await fs.readdir(tileOutput);
-        } catch {
-            console.log(`默认输出文件夹不存在，已新建`);
-            await fs.mkdir(tileOutput, { recursive: true });
-        }
-
-        try {
-            await fs.readdir(itemOutput);
-        } catch {
-            console.log(`默认输出文件夹不存在，已新建`);
-            await fs.mkdir(itemOutput, { recursive: true });
-        }
     }
     if (tileOutput && !itemOutput) {
         console.error(
@@ -70,6 +81,14 @@ const types = [
         );
         return;
     }
+
+    try {
+        await fs.mkdir(tileOutput, { recursive: true });
+    } catch {}
+
+    try {
+        await fs.mkdir(itemOutput, { recursive: true });
+    } catch {}
 
     const tileList = new Set(await fs.readdir(tile));
     const itemList = new Set(await fs.readdir(item));
@@ -174,8 +193,7 @@ const types = [
 
 // ----- template
 const tileTemplate = {
-    Bed: (name, space, itemSpace) => /* cs */ `using Everglow.Myth.Common;
-using Terraria.DataStructures;
+    Bed: (name, space, itemSpace) => /* cs */ `using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
 using Terraria.ObjectData;
@@ -198,7 +216,7 @@ public class ${name} : ModTile
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair); // Beds count as chairs for the purpose of suitable room creation
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.Beds };
 
 		// Placement
@@ -241,8 +259,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Chair: (name, space, itemSpace) => /* cs */ `using Everglow.Myth.Common;
-using Terraria.DataStructures;
+    Chair: (name, space, itemSpace) => /* cs */ `using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
@@ -267,7 +284,7 @@ public class ${name} : ModTile
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.Chairs };
 
 		// Names
@@ -328,8 +345,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Chest: (name, space, itemSpace) => `using Everglow.Myth.Common;
-using Terraria.DataStructures;
+    Chest: (name, space, itemSpace) => `using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
@@ -357,7 +373,7 @@ public class ${name} : ModTile
 		TileID.Sets.FriendlyFairyCanLureTo[Type] = true;
 		TileID.Sets.GeneralPlacementTiles[Type] = false;
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.Containers };
 
 		// Other tiles with just one map entry use CreateMapEntryName() to use the default translationkey, "MapEntry"
@@ -485,8 +501,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Clock: (name, space, itemSpace) => `using Everglow.Myth.Common;
-using Terraria.DataStructures;
+    Clock: (name, space, itemSpace) => `using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
@@ -503,7 +518,7 @@ public class ${name} : ModTile
 		Main.tileLavaDeath[Type] = true;
 		TileID.Sets.Clock[Type] = true;
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.GrandfatherClocks };
 
 		// Placement
@@ -525,8 +540,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    DoorClosed: (name, space, itemSpace) => `using Everglow.Myth.Common;
-using Terraria.DataStructures;
+    DoorClosed: (name, space, itemSpace) => `using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
@@ -551,7 +565,7 @@ public class ${name}Closed : ModTile
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.ClosedDoor };
 
 		// Names
@@ -576,8 +590,7 @@ public class ${name}Closed : ModTile
 	}
 }
 `,
-    DoorOpen: (name, space, itemSpace) => `using Everglow.Myth.Common;
-using Terraria.DataStructures;
+    DoorOpen: (name, space, itemSpace) => `using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
@@ -600,7 +613,7 @@ public class ${name}Open : ModTile
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.OpenDoor };
 		// Tiles usually drop their corresponding item automatically, but RegisterItemDrop is needed here since the ExampleDoor item places ExampleDoorClosed, not this tile.
 		RegisterItemDrop(ModContent.ItemType<${itemSpace}.${name}>(), 0);
@@ -696,7 +709,7 @@ public class ${name} : ModTile
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
 
 		AdjTiles = new int[] { TileID.Dressers };
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 
 		// Names
 		AddMapEntry(new Color(200, 200, 200), CreateMapEntryName(), MapChestName);
@@ -817,8 +830,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Platform: (name, space, itemSpace) => `using Everglow.Myth.Common;
-using Terraria.Localization;
+    Platform: (name, space, itemSpace) => `using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace ${space};
@@ -840,7 +852,7 @@ public class ${name} : ModTile
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
 		AddMapEntry(new Color(200, 200, 200));
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.Platforms };
 
 		// Placement
@@ -860,8 +872,7 @@ public class ${name} : ModTile
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 }
 `,
-    Table: (name, space, itemSpace) => `using Everglow.Myth.Common;
-using Terraria.DataStructures;
+    Table: (name, space, itemSpace) => `using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
@@ -879,7 +890,7 @@ public class ${name} : ModTile
 		TileID.Sets.DisableSmartCursor[Type] = true;
 		TileID.Sets.IgnoredByNpcStepUp[Type] = true; // This line makes NPCs not try to step up this tile during their movement. Only use this for furniture with solid tops.
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.Tables };
 
 		// Placement
@@ -924,7 +935,7 @@ public class ${name} : ModTile
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.Toilets }; // Consider adding TileID.Chairs to AdjTiles to mirror "(regular) Toilet" and "Golden Toilet" behavior for crafting stations
 
 		// Names
@@ -1028,8 +1039,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Workbench: (name, space, itemSpace) => `using Everglow.Myth.Common;
-using Terraria.DataStructures;
+    Workbench: (name, space, itemSpace) => `using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
@@ -1047,7 +1057,7 @@ public class ${name} : ModTile
 		TileID.Sets.DisableSmartCursor[Type] = true;
 		TileID.Sets.IgnoredByNpcStepUp[Type] = true; // This line makes NPCs not try to step up this tile during their movement. Only use this for furniture with solid tops.
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.WorkBenches };
 
 		// Placement
@@ -1066,8 +1076,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Sink: (name, space, itemSpace) => `using Everglow.Myth.Common;
-using Terraria.DataStructures;
+    Sink: (name, space, itemSpace) => `using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
@@ -1087,7 +1096,7 @@ public class ${name} : ModTile
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
 		TileObjectData.addTile(Type);
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { Type };
 
 		LocalizedText name = CreateMapEntryName();
@@ -1127,7 +1136,7 @@ public class ${name} : ModTile, ITileFluentlyDrawn, ITileFlameData
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.Chandeliers };
 
 		// Placement - Standard Chandelier Setup Below
@@ -1196,8 +1205,7 @@ public class ${name} : ModTile, ITileFluentlyDrawn, ITileFlameData
 		};
 }
 `,
-    Lantern: (name, space, itemSpace) => `using Everglow.Myth.Common;
-using Everglow.Commons.TileHelper;
+    Lantern: (name, space, itemSpace) => `using Everglow.Commons.TileHelper;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.Localization;
@@ -1298,7 +1306,7 @@ public class ${name} : ModTile
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.Candles };
 		TileObjectData.newTile.CopyFrom(TileObjectData.StyleOnTable1x1);
 		TileObjectData.addTile(Type);
@@ -1407,7 +1415,7 @@ public class ${name} : ModTile
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.Candelabras };
 
 		// Placement
@@ -1489,8 +1497,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Bathtub: (name, space, itemSpace) => `using Everglow.Myth.Common;
-using Terraria.DataStructures;
+    Bathtub: (name, space, itemSpace) => `using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
 using Terraria.ObjectData;
@@ -1508,7 +1515,7 @@ public class ${name} : ModTile
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair); // Beds count as chairs for the purpose of suitable room creation
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.Bathtubs };
 
 		// Placement
@@ -1526,8 +1533,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Bookcase: (name, space, itemSpace) => `using Everglow.Myth.Common;
-using Terraria.DataStructures;
+    Bookcase: (name, space, itemSpace) => `using Terraria.DataStructures;
 using Terraria.ObjectData;
 
 namespace ${space};
@@ -1545,7 +1551,7 @@ public class ${name} : ModTile
 		TileID.Sets.DisableSmartCursor[Type] = true;
 		TileID.Sets.IgnoredByNpcStepUp[Type] = true; // This line makes NPCs not try to step up this tile during their movement. Only use this for furniture with solid tops.
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.Bookcases };
 
 		// Placement
@@ -1584,7 +1590,7 @@ public class ${name} : ModTile
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.Lamps };
 
 		// Placement
@@ -1620,8 +1626,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Piano: (name, space, itemSpace) => `using Everglow.Myth.Common;
-using Terraria.DataStructures;
+    Piano: (name, space, itemSpace) => `using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
@@ -1640,7 +1645,7 @@ public class ${name} : ModTile
 		TileID.Sets.DisableSmartCursor[Type] = true;
 		TileID.Sets.IgnoredByNpcStepUp[Type] = true; // This line makes NPCs not try to step up this tile during their movement. Only use this for furniture with solid tops.
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.Pianos };
 
 		// Placement
@@ -1660,8 +1665,7 @@ public class ${name} : ModTile
 	}
 }
 `,
-    Sofa: (name, space, itemSpace) => `using Everglow.Myth.Common;
-using Terraria.DataStructures;
+    Sofa: (name, space, itemSpace) => `using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
@@ -1685,7 +1689,7 @@ public class ${name} : ModTile
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
 
-		DustType = ModContent.DustType<>();
+		DustType = DustID.Dirt; // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.Benches };
 
 		// Placement

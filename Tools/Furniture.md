@@ -6,7 +6,7 @@
 
 ### 使用说明
 
-使用命令行执行 `node FurnitureGenerator.mjs '$1' '$2' '$3' '$4' '$5' '$6'? '$7'?`;
+使用命令行执行 `node FurnitureGenerator.mjs "$1" "$2" "$3" "$4" "$5" "$6"? "$7"?`;
 
 其中，七个参数分别表示：
 
@@ -22,18 +22,16 @@
 
 注意，生成之后的家具代码中会有一些需要自己设置的内容，例如 DustType 等，这些地方会给出报错，需要填写后再生成。同时也不会包含合成表，也需要自己填写。
 
-注意，`cmd`运行时参数不应该加引号，`powershell`可加可不加
-
 ### 使用样例
 
 ```shell
-node FurnitureGenerator.mjs 'Heatproof' 'E:/Tiles/Heatproof' 'E:/Items/Heatproof' 'Everglow.MyFurnitures.Tiles.Furnitures' 'Everglow.Myfurnitures.Items.Furnitures' 'C:\Documents\My Games\Terraria\tModLoader\ModSources\Everglow\Sources\MyFurnitures\Tiles\Furnitures' 'C:\Documents\My Games\Terraria\tModLoader\ModSources\Everglow\Sources\MyFurnitures\Items\Furnitures'
+node FurnitureGenerator.mjs "Heatproof" "E:/Tiles/Heatproof" "E:/Items/Heatproof" "Everglow.MyFurnitures.Tiles.Furnitures" "Everglow.Myfurnitures.Items.Furnitures" "C:\Documents\My Games\Terraria\tModLoader\ModSources\Everglow\Sources\MyFurnitures\Tiles\Furnitures" "C:\Documents\My Games\Terraria\tModLoader\ModSources\Everglow\Sources\MyFurnitures\Items\Furnitures"
 ```
 
 ```shell
-node FurnitureGenerator.mjs 'Heatproof' 'E:/Tiles/Heatproof' 'E:/Items/Heatproof' 'Everglow.MyFurnitures.Tiles.Furnitures' 'Everglow.Myfurnitures.Items.Furnitures'
+node FurnitureGenerator.mjs "Heatproof" "E:/Tiles/Heatproof" "E:/Items/Heatproof" "Everglow.MyFurnitures.Tiles.Furnitures" "Everglow.Myfurnitures.Items.Furnitures"
 ```
 
 ```shell
-node FurnitureGenerator.mjs 'Heatproof' 'E:/Tiles/Heatproof' 'E:/Items/Heatproof' 'Everglow.MyFurnitures.Tiles.Furnitures' 'Everglow.Myfurnitures.Items.Furnitures' 'E:/Documents'
+node FurnitureGenerator.mjs "Heatproof" "E:/Tiles/Heatproof" "E:/Items/Heatproof" "Everglow.MyFurnitures.Tiles.Furnitures" "Everglow.Myfurnitures.Items.Furnitures" "E:/Documents"
 ```
