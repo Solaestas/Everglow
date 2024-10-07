@@ -47,10 +47,6 @@ public class EverglowClientConfig : ModConfig
 	[DefaultValue(true)]
 	public bool ItemPickSoundReplace;
 
-	[DefaultValue(MothAudioReplaceMode.MothFighting)]
-	[DrawTicks]
-	public MothAudioReplaceMode MothAudioReplace;
-
 	[DefaultValue(TuskAudioReplaceMode.TuskFighting)]
 	[DrawTicks]
 	public TuskAudioReplaceMode TuskAudioReplace;
@@ -59,8 +55,6 @@ public class EverglowClientConfig : ModConfig
 	{
 		if ((int)TextureReplace >= 5)
 			TextureReplace = TextureReplaceMode.Terraria;
-		if ((int)MothAudioReplace >= 3)
-			MothAudioReplace = MothAudioReplaceMode.MothFighting;
 		if ((int)TuskAudioReplace >= 2)
 			TuskAudioReplace = TuskAudioReplaceMode.TuskFighting;
 		if (UIReplaceModule.IsLoaded)
@@ -71,11 +65,11 @@ public class EverglowClientConfig : ModConfig
 		base.OnChanged();
 	}
 
-	public static int ReplaceMothAudio
+	public static int ReplaceTuskAudio
 	{
 		get
 		{
-			return (int)ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace;
+			return (int)ModContent.GetInstance<EverglowClientConfig>().TuskAudioReplace;
 		}
 	}
 }
@@ -86,14 +80,9 @@ public enum TextureReplaceMode
 	Default,
 	EternalResolve,
 	Everglow,
-	Myth
+	Myth,
 }
-public enum MothAudioReplaceMode
-{
-	MothFighting,
-	AltMothFighting,
-	OldMothFighting,
-}
+
 public enum TuskAudioReplaceMode
 {
 	TuskFighting,

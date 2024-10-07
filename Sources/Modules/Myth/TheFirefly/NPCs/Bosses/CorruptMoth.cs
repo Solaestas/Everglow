@@ -16,23 +16,24 @@ namespace Everglow.Myth.TheFirefly.NPCs.Bosses;
 public class CorruptMoth : ModNPC
 {
 	public static NPC CorruptMothNPC;
+
 	public override bool CloneNewInstances => true;
 
-	private readonly Color IdentifierValue = new Color(58, 169, 255);
+	private readonly Color identifierValue = new Color(58, 169, 255);
 
-	private static List<ImageKeyPoint> BBowColors;
+	private static List<ImageKeyPoint> bBowColors;
 	private const int BBowColorsWidth = 60;
 	private const int BBowColorsHeight = 60;
 
-	private static List<ImageKeyPoint> BArrowColors;
+	private static List<ImageKeyPoint> bArrowColors;
 	private const int BArrowColorsWidth = 60;
 	private const int BArrowColorsHeight = 60;
 
-	private static List<ImageKeyPoint> BSwordColors;
+	private static List<ImageKeyPoint> bSwordColors;
 	private const int BSwordColorsWidth = 60;
 	private const int BSwordColorsHeight = 60;
 
-	private static List<ImageKeyPoint> BFistColors;
+	private static List<ImageKeyPoint> bFistColors;
 	private const int BFistColorsWidth = 60;
 	private const int BFistColorsHeight = 60;
 	private static bool startLoading = false;
@@ -41,13 +42,14 @@ public class CorruptMoth : ModNPC
 	private bool start = false;
 	private float lightVisual = 0;
 
-	//public static int secondStageHeadSlot = -1;
-	//public static int StaTime = 0;
-	private float PhamtomDis//特效幻影的距离和透明度
+	// public static int secondStageHeadSlot = -1;
+	// public static int StaTime = 0;
+	private float PhamtomDis// 特效幻影的距离和透明度
 	{
 		get => NPC.localAI[2];
 		set => NPC.localAI[2] = value;
 	}
+
 	public int Timer
 	{
 		set => NPC.ai[1] = value;
@@ -55,11 +57,13 @@ public class CorruptMoth : ModNPC
 	}
 
 	private Player Player => Main.player[NPC.target];
+
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 11;
 		NPCID.Sets.TrailCacheLength[NPC.type] = 4;
 	}
+
 	public override void SetDefaults()
 	{
 		NPC.behindTiles = true;
@@ -101,22 +105,13 @@ public class CorruptMoth : ModNPC
 		NPCID.Sets.TrailCacheLength[NPC.type] = 4;
 		if (!Main.dedServ)
 		{
-			if (EverglowClientConfig.ReplaceMothAudio == 0) //ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace == MothAudioReplaceMode.MothFighting
-			{
-				Music = MythContent.QuickMusic("MothFighting");
-			}
-			else if (EverglowClientConfig.ReplaceMothAudio == 1)
-			{
-				Music = MythContent.QuickMusic("MothFightingAlt");
-			}
-			else if (EverglowClientConfig.ReplaceMothAudio == 2)
-			{
-				Music = MythContent.QuickMusic("MothFightingOld2");
-			}
+			Music = MythContent.QuickMusic("MothFighting");
 		}
 	}
+
 	public int SummonButterfliesCount = 0;
 	public float ShieldHealthValue;
+
 	public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
 	{
 		// We can use AddRange instead of calling Add multiple times in order to add multiple items at once
@@ -127,15 +122,18 @@ public class CorruptMoth : ModNPC
 			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCorruption,
 
 			// Sets the description of this NPC that is listed in the bestiary.
-
-			new FlavorTextBestiaryInfoElement(Language.GetTextValue("Mods.Everglow.Bestiary.CorruptMoth.Flavor"))
+			new FlavorTextBestiaryInfoElement(Language.GetTextValue("Mods.Everglow.Bestiary.CorruptMoth.Flavor")),
 		});
 	}
+
 	public override void OnKill()
 	{
-		//NPC.SetEventFlagCleared(ref DownedBossSystem.downedMoth, -1);
+		// NPC.SetEventFlagCleared(ref DownedBossSystem.downedMoth, -1);
 		if (Main.netMode == NetmodeID.Server)
+		{
 			NetMessage.SendData(MessageID.WorldData);
+		}
+
 		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.3f + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 13).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/CorruptMothGore_3").Type);
 		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.3f + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 13).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/CorruptMothGore_3").Type);
 		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.3f + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 13).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/CorruptMothGore_0").Type);
@@ -143,13 +141,16 @@ public class CorruptMoth : ModNPC
 		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.3f + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 13).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/CorruptMothGore_1").Type);
 		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.3f + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 13).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/CorruptMothGore_2").Type);
 	}
+
 	public override bool CheckActive()
 	{
 		return canDespawn;
 	}
+
 	public override void BossHeadSlot(ref int index)
 	{
 	}
+
 	/// <summary>
 	/// 发射弹幕，调用前检测服务端
 	/// </summary>
@@ -195,23 +196,28 @@ public class CorruptMoth : ModNPC
 			}
 		}
 	}
+
 	public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
 	{
 		if (ShieldHealthValue > 0)
 		{
 			float damage = modifiers.GetDamage(projectile.damage, Main.rand.Next(100) < projectile.CritChance);
 			ShieldHealthValue -= damage;
-			if(ShieldHealthValue <= 0)
+			if (ShieldHealthValue <= 0)
 			{
 				BreakShield();
 			}
 			modifiers.FinalDamage *= 0.01f;
 			SoundEngine.PlaySound(SoundID.NPCHit4, NPC.Center);
 			if (lightVisual < 0.6f)
+			{
 				lightVisual += 1.2f;
+			}
 
 			if ((ShieldHealthValue % 200 - damage < 0) && Main.netMode != NetmodeID.MultiplayerClient)
+			{
 				Projectile.NewProjectile(NPC.GetSource_OnHurt(projectile), projectile.Center, (projectile.Center - NPC.Center).SafeNormalize(Vector2.One) * 12, ModContent.ProjectileType<MothMiddleBullet>(), NPC.damage / 6, 0, Main.myPlayer); // Higher number on NPC.damage / int = less damage
+			}
 		}
 	}
 
@@ -224,34 +230,41 @@ public class CorruptMoth : ModNPC
 			startLoading = true;
 			Task.Factory.StartNew(() =>
 			{
-				BBowColors = ImageReader.ReadImageKeyPoints("Everglow/Myth/TheFirefly/Projectiles/BBow", IdentifierValue);
-				BArrowColors = ImageReader.ReadImageKeyPoints("Everglow/Myth/TheFirefly/Projectiles/BArrow", IdentifierValue);
-				BSwordColors = ImageReader.ReadImageKeyPoints("Everglow/Myth/TheFirefly/Projectiles/BSword", IdentifierValue);
-				BFistColors = ImageReader.ReadImageKeyPoints("Everglow/Myth/TheFirefly/Projectiles/BFist", IdentifierValue);
+				bBowColors = ImageReader.ReadImageKeyPoints("Everglow/Myth/TheFirefly/Projectiles/BBow", identifierValue);
+				bArrowColors = ImageReader.ReadImageKeyPoints("Everglow/Myth/TheFirefly/Projectiles/BArrow", identifierValue);
+				bSwordColors = ImageReader.ReadImageKeyPoints("Everglow/Myth/TheFirefly/Projectiles/BSword", identifierValue);
+				bFistColors = ImageReader.ReadImageKeyPoints("Everglow/Myth/TheFirefly/Projectiles/BFist", identifierValue);
 			});
 		}
 		bool phase2 = NPC.life < NPC.lifeMax * 0.6f;
 		Lighting.AddLight(NPC.Center, 0.2f, 0.2f, 0.2f + 0.4f * (1 - NPC.alpha / 255f));
 		NPC.friendly = NPC.dontTakeDamage;
-		if (lightVisual > 0)//光效
+		if (lightVisual > 0)// 光效
+		{
 			lightVisual -= 0.04f;
+		}
 		else
 		{
 			lightVisual = 0;
 		}
 		if (Timer % 15 == 0)
+		{
 			NPC.netUpdate2 = true;
-		//贴图旋转
+		}
+
+		// 贴图旋转
 		if (NPC.spriteDirection > 0)
+		{
 			NPC.rotation = NPC.velocity.Y / 20;
+		}
 		else
 		{
 			NPC.rotation = -NPC.velocity.Y / 20;
 		}
 		if (Math.Abs(NPC.rotation) > 1.2f)
+		{
 			NPC.rotation = Math.Sign(NPC.rotation) * 1.2f;
-
-		#region #前言
+		}
 
 		if (!start)
 		{
@@ -271,7 +284,8 @@ public class CorruptMoth : ModNPC
 			NPC.localAI[0] = 0;
 			return;
 		}
-		//StaTime++;
+
+		// StaTime++;
 		Player player = Main.player[NPC.target];
 		NPC.TargetClosest(false);
 		if (!player.active || player.dead)
@@ -282,12 +296,13 @@ public class CorruptMoth : ModNPC
 			{
 				NPC.velocity = new Vector2(0f, 10f);
 				if (NPC.timeLeft > 150)
+				{
 					NPC.timeLeft = 150;
+				}
+
 				return;
 			}
 		}
-
-		#endregion #前言
 
 		if (NPC.ai[0] == 0)
 		{
@@ -303,7 +318,7 @@ public class CorruptMoth : ModNPC
 				NPC.ai[0]++;
 				Timer = 0;
 			}
-		}//苏醒
+		}// 苏醒
 		if (NPC.ai[0] == 1)
 		{
 			if (++Timer < 200)
@@ -312,26 +327,40 @@ public class CorruptMoth : ModNPC
 				GetDir_ByPlayer();
 			}
 			if (Timer == 200)
+			{
 				NPC.ai[2] = phase2 ? 1 : 0;
-			if (Timer > 200 && Timer < 650 && NPC.ai[2] == 0)//冲刺
+			}
+
+			if (Timer > 200 && Timer < 650 && NPC.ai[2] == 0)// 冲刺
 			{
 				int tt = (Timer - 200) % 150;
 				var getVec = new Vector2(NPC.direction);
 				if (Timer > 500)
+				{
 					getVec = new Vector2(NPC.direction, 0);
+				}
 
 				if (tt < 50)
 				{
 					GetDir_ByPlayer();
 					MoveTo(player.Center - getVec * 300, 15, 15);
 				}
-				if (tt is > 50 and < 70)//前摇
+				if (tt is > 50 and < 70)// 前摇
+				{
 					NPC.velocity = Vector2.Lerp(NPC.velocity, -getVec * 10, 0.1f);
+				}
+
 				if (tt is > 30 and < 70)
+				{
 					PhamtomDis += (50 - tt) * 0.5f;
+				}
+
 				if (tt == 70)
+				{
 					lightVisual = 2;
-				if (tt is > 70 and < 120)//冲刺
+				}
+
+				if (tt is > 70 and < 120)// 冲刺
 				{
 					if (Main.netMode != NetmodeID.MultiplayerClient)
 					{
@@ -354,7 +383,9 @@ public class CorruptMoth : ModNPC
 						dust.velocity = NPC.velocity * scale * 0.3f;
 					}
 					if (Timer > 500)
+					{
 						NPC.velocity = Vector2.Lerp(NPC.velocity, getVec * 20, 0.15f);
+					}
 					else if (Vector2.Distance(NPC.Center, player.Center) > 100)
 					{
 						NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center) * 20, 0.1f);
@@ -363,31 +394,44 @@ public class CorruptMoth : ModNPC
 				if (tt > 120)
 				{
 					if (Vector2.Distance(NPC.Center, player.Center) > 600)
+					{
 						Timer++;
+					}
 
 					GetDir_ByPlayer();
 					MoveTo(player.Center, 6, 20);
 				}
 			}
-			if (Timer > 200 && Timer < 500 && NPC.ai[2] == 1)//二阶段冲刺
+			if (Timer > 200 && Timer < 500 && NPC.ai[2] == 1)// 二阶段冲刺
 			{
 				int tt = Timer % 100;
 				var getVec = new Vector2(NPC.direction);
 				if (Timer > 400)
+				{
 					getVec = new Vector2(NPC.direction, 0);
+				}
 
 				if (tt < 20)
 				{
 					GetDir_ByPlayer();
 					MoveTo(player.Center + player.velocity * 10 - getVec * 300, 15, 15);
 				}
-				if (tt is > 20 and < 40)//前摇
+				if (tt is > 20 and < 40)// 前摇
+				{
 					NPC.velocity = Vector2.Lerp(NPC.velocity, -getVec * 10, 0.1f);
+				}
+
 				if (tt is > 0 and < 40)
+				{
 					PhamtomDis += (20 - tt) * 0.5f;
+				}
+
 				if (tt == 40)
+				{
 					lightVisual = 2;
-				if (tt is > 40 and < 80)//冲刺
+				}
+
+				if (tt is > 40 and < 80)// 冲刺
 				{
 					if (Main.netMode != NetmodeID.MultiplayerClient)
 					{
@@ -410,7 +454,9 @@ public class CorruptMoth : ModNPC
 						dust.velocity = NPC.velocity * scale * 0.3f;
 					}
 					if (Timer > 500)
+					{
 						NPC.velocity = Vector2.Lerp(NPC.velocity, getVec * 20, 0.15f);
+					}
 					else if (Vector2.Distance(NPC.Center, player.Center) > 100)
 					{
 						NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center) * 21, 0.1f);
@@ -419,7 +465,9 @@ public class CorruptMoth : ModNPC
 				if (tt > 80)
 				{
 					if (Vector2.Distance(NPC.Center, player.Center) > 600)
+					{
 						Timer++;
+					}
 
 					GetDir_ByPlayer();
 					MoveTo(player.Center, 6, 20);
@@ -432,9 +480,11 @@ public class CorruptMoth : ModNPC
 				NPC.ai[0]++;
 				Timer = 0;
 				if (phase2)
+				{
 					Timer += 80;
+				}
 			}
-		}//冲刺1
+		}// 冲刺1
 		if (NPC.ai[0] == 2)
 		{
 			if (++Timer < 100)
@@ -446,20 +496,33 @@ public class CorruptMoth : ModNPC
 			{
 				int tt = (Timer - 100) % 150;
 				if (tt < 20)
+				{
 					NPC.velocity = Vector2.Lerp(NPC.velocity, new Vector2(0, -8), 0.1f);
+				}
 
 				if (tt is > 20 and < 120)
 				{
 					int Freq = 27;
 					if (Main.expertMode)
+					{
 						Freq = 20;
+					}
+
 					if (Main.masterMode)
+					{
 						Freq = 16;
+					}
+
 					if (Main.getGoodWorld)
+					{
 						Freq -= 4;
+					}
+
 					GetDir_ByVel();
 					if (!phase2)
+					{
 						MoveTo(player.Center + new Vector2(0, -230), Timer > 400 ? 18 : 10, 30);
+					}
 					else
 					{
 						MoveTo(player.Center + new Vector2(0, -200), Timer > 400 ? 22 : 13, 30);
@@ -470,7 +533,10 @@ public class CorruptMoth : ModNPC
 					{
 						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, 1), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 						if (Main.expertMode && !Main.masterMode)
+						{
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+						}
+
 						if (Main.masterMode)
 						{
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
@@ -478,25 +544,29 @@ public class CorruptMoth : ModNPC
 						}
 						if (Main.getGoodWorld)
 						{
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.8f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1); //Originally: NPC.damage / 4
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.8f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1); // Originally: NPC.damage / 4
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.8f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 						}
 					}
 				}
 				if (tt is > 120 and < 150)
+				{
 					MoveTo(player.Center + NPC.DirectionFrom(player.Center) * 150, 10, 20);
+				}
 			}
 			if (Timer > 550)
 			{
 				Timer = 0;
 				if (NPC.life < NPC.lifeMax * 0.9f)
+				{
 					NPC.ai[0]++;
+				}
 				else
 				{
 					NPC.ai[0] = 1;
 				}
 			}
-		}//光球
+		}// 光球
 		if (NPC.ai[0] == 3)
 		{
 			int endTime = 220;
@@ -520,21 +590,27 @@ public class CorruptMoth : ModNPC
 				NPC.alpha = 255;
 				NPC.netUpdate2 = true;
 				if (phase2)
+				{
 					Timer += 20;
+				}
 			}
 			if (Timer is > 60 and < 90)
 			{
 				if (Timer == 70)
+				{
 					NPC.dontTakeDamage = false;
+				}
 
 				NPC.alpha -= (int)(255 / 30f);
 				PhamtomDis += 75 - Timer;
 				NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionFrom(player.Center) * 10, 0.08f);
 			}
 			if (Timer == 90)
+			{
 				lightVisual = 2;
+			}
 
-			if (Timer is > 90 and < 130)//冲刺中
+			if (Timer is > 90 and < 130)// 冲刺中
 			{
 				GenerateGrayVFX(1);
 				GetDir_ByVel();
@@ -556,7 +632,9 @@ public class CorruptMoth : ModNPC
 				}
 
 				if (Vector2.Distance(NPC.Center, player.Center) > 100)
+				{
 					NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center) * 20, 0.1f);
+				}
 			}
 			if (Timer > 130 && Timer < endTime)
 			{
@@ -582,11 +660,13 @@ public class CorruptMoth : ModNPC
 					NPC.ai[2] = 0;
 				}
 			}
-		}//瞬移冲刺
+		}// 瞬移冲刺
 		if (NPC.ai[0] == 4)
 		{
 			if (PhamtomDis > 0)
+			{
 				PhamtomDis -= 1;
+			}
 
 			if (++Timer < 60)
 			{
@@ -598,18 +678,18 @@ public class CorruptMoth : ModNPC
 				NPC.ai[2] = phase2 ? 1 : 0;
 			}
 			if (Timer >= 60)
-			{   //90,240,390
-				//140,240,340
+			{ // 90,240,390
+			  // 140,240,340
 				if ((Timer + 60) % (NPC.ai[2] == 1 ? 100 : 150) == 0)
 				{
-					//NPC.Center += NPC.DirectionTo(player.Center)*Main.rand.Next(100,150);
+					// NPC.Center += NPC.DirectionTo(player.Center)*Main.rand.Next(100,150);
 					for (int y = 0; y < 60; y++)
 					{
 						int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
 						Main.dust[index].noGravity = true;
 						Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
 					}
-					if (Main.netMode != NetmodeID.MultiplayerClient)//发射弹幕
+					if (Main.netMode != NetmodeID.MultiplayerClient)// 发射弹幕
 					{
 						lightVisual = 1.5f;
 						PhamtomDis = 80;
@@ -636,13 +716,15 @@ public class CorruptMoth : ModNPC
 				NPC.ai[2] = 0;
 				Timer = 0;
 				if (phase2)
+				{
 					NPC.ai[0]++;
+				}
 				else
 				{
 					NPC.ai[0] = 1;
 				}
 			}
-		}//弹幕
+		}// 弹幕
 		if (NPC.ai[0] is 5 or 7)
 		{
 			if (++Timer < 50)
@@ -650,7 +732,9 @@ public class CorruptMoth : ModNPC
 				MoveTo(player.Center, 8, 20);
 				GetDir_ByPlayer();
 				if (Timer > 20)
+				{
 					PhamtomDis = MathHelper.Lerp(PhamtomDis, 120, 0.1f);
+				}
 			}
 
 			if (Timer is > 50 and < 80)
@@ -659,9 +743,15 @@ public class CorruptMoth : ModNPC
 				GetDir_ByPlayer();
 			}
 			if (Timer is > 70 and < 90)
+			{
 				PhamtomDis = MathHelper.Lerp(PhamtomDis, 0, 0.1f);
+			}
+
 			if (Timer is > 80 and < 90)
+			{
 				NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center).RotatedBy(NPC.spriteDirection * 1.57f) * 20f, 0.1f);
+			}
+
 			if (Timer is > 90 and < 140)
 			{
 				lightVisual = 1;
@@ -678,7 +768,8 @@ public class CorruptMoth : ModNPC
 						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.15f + new Vector2(1.4f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 					}
 				}
-				//GetDir_ByVel();
+
+				// GetDir_ByVel();
 			}
 			if (Timer > 140)
 			{
@@ -687,7 +778,7 @@ public class CorruptMoth : ModNPC
 
 				Timer = 0;
 			}
-		}//绕玩家转圈发弹幕
+		}// 绕玩家转圈发弹幕
 		if (NPC.ai[0] == 6)
 		{
 			if (++Timer < 60)
@@ -700,7 +791,9 @@ public class CorruptMoth : ModNPC
 				ShieldHealthValue = 25000;
 				lightVisual += 1;
 				if (Main.netMode != NetmodeID.MultiplayerClient)
+				{
 					Create4DCube();
+				}
 			}
 			if (Timer >= 60 && Timer <= 210 && (Timer - 10) % 50 == 0)
 			{
@@ -717,7 +810,7 @@ public class CorruptMoth : ModNPC
 				for (int i = 0; i < 30; i++)
 				{
 					Vector2 vel = (i * MathHelper.TwoPi / 30).ToRotationVector2();
-					var proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, vel, ModContent.ProjectileType<ButterflyDream>(), NPC.damage / 10, 0, Main.myPlayer, NPC.whoAmI, 1); //This circles around the 4D Cube
+					var proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, vel, ModContent.ProjectileType<ButterflyDream>(), NPC.damage / 10, 0, Main.myPlayer, NPC.whoAmI, 1); // This circles around the 4D Cube
 					proj.timeLeft = 800;
 					proj.netUpdate2 = true;
 				}
@@ -738,18 +831,23 @@ public class CorruptMoth : ModNPC
 			{
 				Timer = 0;
 				if (NPC.life < NPC.lifeMax * 0.5f)
+				{
 					NPC.ai[0]++;
+				}
 				else
 				{
 					NPC.ai[0] = 1;
 					Timer += 150;
 				}
 			}
-		}//超立方体
+		}// 超立方体
 		if (NPC.ai[0] == 8)
 		{
 			if (++Timer < 60)
+			{
 				MoveTo(player.Center - new Vector2(0, 500), 10, 20);
+			}
+
 			if (Timer is > 60 and < 120)
 			{
 				GetDir_ByPlayer();
@@ -758,14 +856,16 @@ public class CorruptMoth : ModNPC
 			if (Timer == 120)
 			{
 				NPC.velocity = new Vector2(0, 25);
-				NPC.ai[2] = 6;//ai2->发射数量
+				NPC.ai[2] = 6; // ai2->发射数量
 			}
 			if (Timer is >= 120 and <= 160)
 			{
 				if (Timer % 8 == 0)
 				{
 					if (Timer < 140)
+					{
 						NPC.ai[2] += 2;
+					}
 					else
 					{
 						NPC.ai[2] -= 2;
@@ -813,7 +913,7 @@ public class CorruptMoth : ModNPC
 				NPC.ai[0]++;
 				Timer = 0;
 			}
-		}//下冲+蝶弹
+		}// 下冲+蝶弹
 		if (NPC.ai[0] == 9)
 		{
 			if (++Timer < 60)
@@ -822,7 +922,10 @@ public class CorruptMoth : ModNPC
 				GetDir_ByPlayer();
 			}
 			if (Timer == 60 && Main.netMode != NetmodeID.MultiplayerClient)
+			{
 				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<MothBall>(), NPC.damage / 4, 0, Main.myPlayer);
+			}
+
 			if (Timer is > 60 and < 700)
 			{
 				MoveTo(player.Center, 6, 20);
@@ -833,33 +936,35 @@ public class CorruptMoth : ModNPC
 				NPC.ai[0]++;
 				Timer = 0;
 			}
-		}//飞蛾球
+		}// 飞蛾球
 		if (NPC.ai[0] == 10)
 		{
 			if (Timer == 0)
 			{
 				Stack<NPC> butterfies = new();
-				foreach (NPC NPC in Main.npc)//记录所有蝴蝶
+				foreach (NPC NPC in Main.npc)// 记录所有蝴蝶
 				{
 					if (NPC.active && NPC.type == ModContent.NPCType<SummonedButterfly>())
+					{
 						butterfies.Push(NPC);
+					}
 				}
 
 				int scale = 15;
-				float rot = 3.14f;//把贴图旋转为向右边
+				float rot = 3.14f; // 把贴图旋转为向右边
 
-				//TODO 只需要一个通道就可以了，有时间可以来稍微优化下
+				// TODO 只需要一个通道就可以了，有时间可以来稍微优化下
 
-				//切换为弓AI
-				//清空计时器
-				FormatButterfliesFlocks(BBowColors, butterfies, scale, rot, 1);
+				// 切换为弓AI
+				// 清空计时器
+				FormatButterfliesFlocks(bBowColors, butterfies, scale, rot, 1);
 
-				//切换为箭AI
-				//清空计时器
-				FormatButterfliesFlocks(BArrowColors, butterfies, scale, rot, 2);
+				// 切换为箭AI
+				// 清空计时器
+				FormatButterfliesFlocks(bArrowColors, butterfies, scale, rot, 2);
 
-				//foreach (var keypoint in BBowColors)
-				//{
+				// foreach (var keypoint in BBowColors)
+				// {
 				//    if (butterfies.Count == 0)
 				//    {
 				//        break;
@@ -870,10 +975,10 @@ public class CorruptMoth : ModNPC
 				//    butterfly.ai[3] = NPC.whoAmI;
 				//    butterfly.velocity = Vector2.Zero;
 				//    (butterfly.ModNPC as SummonedButterfly).targetPos = new Vector2((keypoint.Column - BBowColorsWidth / 2f) * scale, (keypoint.Row - BBowColorsHeight / 2f) * scale).RotatedBy(rot);//指定其目标
-				//}
+				// }
 
-				//for (int x = 0; x < BBowColorsWidth; x++)
-				//{
+				// for (int x = 0; x < BBowColorsWidth; x++)
+				// {
 				//    for (int y = 0; y < BBowColorsHeight; y++)
 				//    {
 				//        if (BBowColors[x, y] == new Rgba32(58, 169, 255) && butterfies.Count > 0)
@@ -886,10 +991,10 @@ public class CorruptMoth : ModNPC
 				//            (butterfly.ModNPC as SummonedButterfly).targetPos = new Vector2((x - BBowColorsWidth / 2f) * scale, (y - BBowColorsHeight / 2f) * scale).RotatedBy(rot);//指定其目标
 				//        }
 				//    }
-				//}
+				// }
 
-				//for (int x = 0; x < BArrowColorsWidth; x++)
-				//{
+				// for (int x = 0; x < BArrowColorsWidth; x++)
+				// {
 				//    for (int y = 0; y < BArrowColorsHeight; y++)
 				//    {
 				//        if (BArrowColors[x, y] == new Color(58, 169, 255) && butterfies.Count > 0)
@@ -902,11 +1007,11 @@ public class CorruptMoth : ModNPC
 				//            (butterfly.ModNPC as SummonedButterfly).targetPos = new Vector2((x - BArrowColorsWidth / 2f) * scale, (y - BArrowColorsHeight / 2f) * scale).RotatedBy(rot);//指定其目标
 				//        }
 				//    }
-				//}
-				foreach (NPC butterfly in butterfies)//对于剩余蝴蝶
+				// }
+				foreach (NPC butterfly in butterfies)// 对于剩余蝴蝶
 				{
-					butterfly.ai[0] = -1;//切换为游荡AI
-					butterfly.ai[1] = 0;//清空计时器
+					butterfly.ai[0] = -1; // 切换为游荡AI
+					butterfly.ai[1] = 0; // 清空计时器
 					butterfly.ai[3] = NPC.whoAmI;
 				}
 			}
@@ -924,7 +1029,9 @@ public class CorruptMoth : ModNPC
 			if (Timer is > 120 and < 180)
 			{
 				if (Timer < 150)
+				{
 					PhamtomDis += 4;
+				}
 				else
 				{
 					PhamtomDis -= 4;
@@ -933,13 +1040,15 @@ public class CorruptMoth : ModNPC
 			if (Timer is > 340 and < 400)
 			{
 				if (Timer < 370)
+				{
 					PhamtomDis += 4;
+				}
 				else
 				{
 					PhamtomDis -= 4;
 				}
 			}
-			if (Timer == 400)//第二次射箭
+			if (Timer == 400)// 第二次射箭
 			{
 			}
 			if (Timer > 480)
@@ -947,53 +1056,63 @@ public class CorruptMoth : ModNPC
 				NPC.ai[0]++;
 				Timer = 0;
 			}
-		}//弓
+		}// 弓
 		if (NPC.ai[0] == 11)
 		{
 			if (Timer < 180)
 			{
 				MoveTo(player.Center + new Vector2(0, -200), 8, 20);
 				if (Timer is > 140 and < 160)
+				{
 					PhamtomDis += 5;
+				}
 				else
 				{
 					PhamtomDis -= 5;
 				}
 			}
-			if (Timer == 180)//开始挥剑
+			if (Timer == 180)// 开始挥剑
 			{
 				lightVisual += 2;
 				NPC.velocity = NPC.DirectionTo(player.Center) * 20;
 			}
 			if (Timer > 220)
+			{
 				MoveTo(player.Center, 5, 20);
+			}
+
 			GetDir_ByPlayer();
 			if (Timer == 0)
 			{
 				Stack<NPC> butterfies = new();
-				foreach (NPC NPC in Main.npc)//记录所有蝴蝶
+				foreach (NPC NPC in Main.npc)// 记录所有蝴蝶
 				{
 					if (NPC.active && NPC.type == ModContent.NPCType<SummonedButterfly>())
+					{
 						butterfies.Push(NPC);
+					}
 				}
 
 				float rot = 0.785f;
 				int scale = 15;
 
-				foreach (var keypoint in BSwordColors)
+				foreach (var keypoint in bSwordColors)
 				{
 					if (butterfies.Count == 0)
+					{
 						break;
+					}
+
 					NPC butterfly = butterfies.Pop();
-					butterfly.ai[0] = 3;            //切换为剑AI
-					butterfly.ai[1] = 0;            //清空计时器
+					butterfly.ai[0] = 3;            // 切换为剑AI
+					butterfly.ai[1] = 0;            // 清空计时器
 					butterfly.ai[3] = NPC.whoAmI;
 					butterfly.velocity = Vector2.Zero;
-					(butterfly.ModNPC as SummonedButterfly).targetPos = new Vector2(keypoint.Column * scale, (keypoint.Row - BSwordColorsHeight) * scale).RotatedBy(rot);//指定其目标
+					(butterfly.ModNPC as SummonedButterfly).targetPos = new Vector2(keypoint.Column * scale, (keypoint.Row - BSwordColorsHeight) * scale).RotatedBy(rot); // 指定其目标
 				}
 
-				//for (int x = 0; x < BSwordColorsWidth; x++)
-				//{
+				// for (int x = 0; x < BSwordColorsWidth; x++)
+				// {
 				//    for (int y = 0; y < BSwordColorsHeight; y++)
 				//    {
 				//        if (BSwordColors[x, y] == new Color(58, 169, 255) && butterfies.Count > 0)
@@ -1006,11 +1125,11 @@ public class CorruptMoth : ModNPC
 				//            (butterfly.ModNPC as SummonedButterfly).targetPos = new Vector2(x * scale, (y - BSwordColorsHeight) * scale).RotatedBy(rot);//指定其目标
 				//        }
 				//    }
-				//}
-				foreach (NPC butterfly in butterfies)//对于剩余蝴蝶
+				// }
+				foreach (NPC butterfly in butterfies)// 对于剩余蝴蝶
 				{
-					butterfly.ai[0] = -1;//切换为游荡AI
-					butterfly.ai[1] = 0;//清空计时器
+					butterfly.ai[0] = -1; // 切换为游荡AI
+					butterfly.ai[1] = 0; // 清空计时器
 					butterfly.ai[3] = NPC.whoAmI;
 				}
 			}
@@ -1027,14 +1146,16 @@ public class CorruptMoth : ModNPC
 				Timer = 0;
 				NPC.ai[0]++;
 			}
-		}//剑
+		}// 剑
 		if (NPC.ai[0] == 12)
 		{
 			if (Timer is > 120 and < 160)
 			{
 				MoveTo(player.Center + NPC.DirectionFrom(player.Center) * 600, 8, 20);
 				if (Timer < 140)
+				{
 					PhamtomDis += 5;
+				}
 				else
 				{
 					PhamtomDis -= 5;
@@ -1049,28 +1170,34 @@ public class CorruptMoth : ModNPC
 			if (Timer == 0)
 			{
 				Stack<NPC> butterfies = new();
-				foreach (NPC NPC in Main.npc)//记录所有蝴蝶
+				foreach (NPC NPC in Main.npc)// 记录所有蝴蝶
 				{
 					if (NPC.active && NPC.type == ModContent.NPCType<SummonedButterfly>())
+					{
 						butterfies.Push(NPC);
+					}
 				}
 
 				float rot = 3.14f;
 				int scale = 10;
 
-				foreach (var keypoint in BFistColors)
+				foreach (var keypoint in bFistColors)
 				{
 					if (butterfies.Count == 0)
+					{
 						break;
+					}
+
 					NPC butterfly = butterfies.Pop();
-					butterfly.ai[0] = 4;            //切换为拳AI
-					butterfly.ai[1] = 0;            //清空计时器
+					butterfly.ai[0] = 4;            // 切换为拳AI
+					butterfly.ai[1] = 0;            // 清空计时器
 					butterfly.ai[3] = NPC.whoAmI;
 					butterfly.velocity = Vector2.Zero;
-					(butterfly.ModNPC as SummonedButterfly).targetPos = new Vector2((keypoint.Column - BFistColorsWidth / 2) * scale, (keypoint.Row - BFistColorsHeight / 2) * scale).RotatedBy(rot);//指定其目标
+					(butterfly.ModNPC as SummonedButterfly).targetPos = new Vector2((keypoint.Column - BFistColorsWidth / 2) * scale, (keypoint.Row - BFistColorsHeight / 2) * scale).RotatedBy(rot); // 指定其目标
 				}
-				//for (int y = 0; y < BFistColorsHeight; y++)
-				//{
+
+				// for (int y = 0; y < BFistColorsHeight; y++)
+				// {
 				//    for (int x = 0; x < BFistColorsWidth; x++)
 				//    {
 				//        if (BFistColors[x, y] == new Color(58, 169, 255) && butterfies.Count > 0)
@@ -1083,11 +1210,11 @@ public class CorruptMoth : ModNPC
 				//            (butterfly.ModNPC as SummonedButterfly).targetPos = new Vector2((x - BFistColorsWidth / 2) * scale, (y - BFistColorsHeight / 2) * scale).RotatedBy(rot);//指定其目标
 				//        }
 				//    }
-				//}
-				foreach (NPC butterfly in butterfies)//对于剩余蝴蝶
+				// }
+				foreach (NPC butterfly in butterfies)// 对于剩余蝴蝶
 				{
-					butterfly.ai[0] = -1;//切换为游荡AI
-					butterfly.ai[1] = 0;//清空计时器
+					butterfly.ai[0] = -1; // 切换为游荡AI
+					butterfly.ai[1] = 0; // 清空计时器
 					butterfly.ai[3] = NPC.whoAmI;
 				}
 			}
@@ -1097,8 +1224,8 @@ public class CorruptMoth : ModNPC
 				NPC.ai[0]++;
 				Timer = 0;
 			}
-		}//拳
-		if (NPC.ai[0] == 13)//
+		}// 拳
+		if (NPC.ai[0] == 13)
 		{
 			if (Timer == 0)
 			{
@@ -1117,7 +1244,10 @@ public class CorruptMoth : ModNPC
 				{
 					Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, 1), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 					if (Main.expertMode && !Main.masterMode)
+					{
 						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+					}
+
 					if (Main.masterMode)
 					{
 						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
@@ -1154,6 +1284,7 @@ public class CorruptMoth : ModNPC
 		}
 		NPC.oldPos[0] = NPC.Center;
 	}
+
 	public void BreakShield()
 	{
 		for (int d = 0; d < 150; d++)
@@ -1163,6 +1294,7 @@ public class CorruptMoth : ModNPC
 			dust.velocity = NPC.velocity * 0.8f + new Vector2(0, Main.rand.NextFloat(16f, 25f)).RotateRandom(MathHelper.TwoPi);
 		}
 	}
+
 	public void GenerateDust()
 	{
 		if (NPC.alpha == 0 && NPC.velocity.Length() > 0.5f)
@@ -1188,9 +1320,8 @@ public class CorruptMoth : ModNPC
 				dust.velocity = NPC.velocity * 0.8f + new Vector2(0, -y * NPC.direction * MathF.Sin(value * MathHelper.TwoPi) * 0.04f).RotatedBy(NPC.rotation);
 			}
 		}
-		
-		
 	}
+
 	private void MoveTo(Vector2 targetPos, float Speed, float n)
 	{
 		Vector2 targetVec = (targetPos - NPC.Center).SafeNormalize(Vector2.Zero) * Speed;
@@ -1211,13 +1342,16 @@ public class CorruptMoth : ModNPC
 		foreach (var keypoint in keypoints)
 		{
 			if (butterflies.Count == 0)
+			{
 				break;
+			}
+
 			NPC butterfly = butterflies.Pop();
 			butterfly.ai[0] = AISwitch;
-			butterfly.ai[1] = 0;            //清空计时器
+			butterfly.ai[1] = 0;            // 清空计时器
 			butterfly.ai[3] = NPC.whoAmI;
 			butterfly.velocity = Vector2.Zero;
-			(butterfly.ModNPC as SummonedButterfly).targetPos = new Vector2((keypoint.Column - BBowColorsWidth / 2f) * scale, (keypoint.Row - BBowColorsHeight / 2f) * scale).RotatedBy(rot);//指定其目标
+			(butterfly.ModNPC as SummonedButterfly).targetPos = new Vector2((keypoint.Column - BBowColorsWidth / 2f) * scale, (keypoint.Row - BBowColorsHeight / 2f) * scale).RotatedBy(rot); // 指定其目标
 		}
 	}
 
@@ -1250,7 +1384,7 @@ public class CorruptMoth : ModNPC
 					Visible = true,
 					position = NPC.Center + new Vector2(Main.rand.NextFloat(-50f, 50f), 0).RotatedByRandom(6.283) - NPC.velocity * 12,
 					maxTime = Main.rand.Next(25, 40),
-					ai = new float[] { Main.rand.NextFloat(-1f, 1f), -rotatedVelocity * 0.2f * Main.rand.NextFloat(0.5f, 1.5f), Main.rand.NextFloat(1.8f, 2f) }
+					ai = new float[] { Main.rand.NextFloat(-1f, 1f), -rotatedVelocity * 0.2f * Main.rand.NextFloat(0.5f, 1.5f), Main.rand.NextFloat(1.8f, 2f) },
 				};
 				Ins.VFXManager.Add(gFL);
 			}
@@ -1270,7 +1404,9 @@ public class CorruptMoth : ModNPC
 	public override void HitEffect(NPC.HitInfo hit)
 	{
 		if (lightVisual < 1)
+		{
 			lightVisual += 0.3f;
+		}
 	}
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
@@ -1281,23 +1417,32 @@ public class CorruptMoth : ModNPC
 	{
 		npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<CorruptMothTreasureBag>()));
 		npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<MothRelic>()));
-		npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<DarknessFan>(), 100, 1, 1, 1)); //Classic Darkness Fan
+		npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<DarknessFan>(), 100, 1, 1, 1)); // Classic Darkness Fan
 		if (Main.expertMode && !Main.masterMode)
-			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsExpert(), ModContent.ItemType<DarknessFan>(), 25, 1, 1, 1)); //Expert Darkness Fan
+		{
+			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsExpert(), ModContent.ItemType<DarknessFan>(), 25, 1, 1, 1)); // Expert Darkness Fan
+		}
 		else if (Main.masterMode)
-			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<DarknessFan>(), 10, 1, 1, 1)); //Master Darkness Fan
-		npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), 80, 1, 1, 1)); //Classic Bead Gun
+		{
+			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<DarknessFan>(), 10, 1, 1, 1)); // Master Darkness Fan
+		}
+
+		npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), 80, 1, 1, 1)); // Classic Bead Gun
 		if (Main.expertMode)
-			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsExpert(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), 20, 1, 1, 1)); //Expert Bead Gun
+		{
+			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsExpert(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), 20, 1, 1, 1)); // Expert Bead Gun
+		}
 		else if (Main.masterMode)
-			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), 8, 1, 1, 1)); //Master Bead Gun
+		{
+			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), 8, 1, 1, 1)); // Master Bead Gun
+		}
 
 		var rule = new LeadingConditionRule(new Conditions.NotExpert());
 		rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<Items.Weapons.ShadowWingBow>(), ModContent.ItemType<ScaleWingBlade>(), ModContent.ItemType<Items.Weapons.PhosphorescenceGun>(), ModContent.ItemType<Items.Weapons.EvilChrysalis>(), ModContent.ItemType<DustOfCorrupt>(), ModContent.ItemType<MothYoyo>(), ModContent.ItemType<Items.Weapons.DreamWeaver>(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), ModContent.ItemType<Items.Weapons.FlowLightMissile>()));
 
 		npcLoot.Add(rule);
 
-		npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Accessories.MothEye>(), 3, 1, 1, 1)); //Classic Moth Eye Accessory
+		npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Accessories.MothEye>(), 3, 1, 1, 1)); // Classic Moth Eye Accessory
 	}
 
 	public override void FindFrame(int frameHeight)
@@ -1308,6 +1453,7 @@ public class CorruptMoth : ModNPC
 		int num = (int)NPC.frameCounter % Main.npcFrameCount[NPC.type];
 		NPC.frame.Y = num * frameHeight;
 	}
+
 	private static Vector3 RodriguesRotate(Vector3 origVec, Vector3 axis, float theta)
 	{
 		if (axis != new Vector3(0, 0, 0))
@@ -1321,28 +1467,30 @@ public class CorruptMoth : ModNPC
 		float cos = MathF.Cos(theta);
 		return cos * origVec + (1 - cos) * Vector3.Dot(origVec, axis) * axis + MathF.Sin(theta) * Vector3.Cross(origVec, axis);
 	}
+
 	[CloneByReference]
 	private readonly Vector3[] cubeVec = new Vector3[]
 	{
-		new Vector3(1,1,1),//*
-		new Vector3(1,1,-1),//-
-		new Vector3(1,-1,-1),//|
-		new Vector3(1,-1,1),//-
-		new Vector3(-1,1,1),//-
-		new Vector3(-1,1,-1),//|
-		new Vector3(-1,-1,-1),//*
-		new Vector3(-1,-1,1)//|
-    };
+		new Vector3(1, 1, 1), // *
+		new Vector3(1, 1, -1), // -
+		new Vector3(1, -1, -1), // |
+		new Vector3(1, -1, 1), // -
+		new Vector3(-1, 1, 1), // -
+		new Vector3(-1, 1, -1), // |
+		new Vector3(-1, -1, -1), // *
+		new Vector3(-1, -1, 1), // |
+	};
+
 	public void DrawCube(bool front = false)
 	{
 		int[][] array = new int[][]
 		{
-			 new int[] { 1,2,4,3},
-			 new int[] { 5,6,8,7},
-			 new int[] {1,4,5,8},
-			 new int[] { 2,3,6,7},
-			 new int[] { 4,3,8,7},
-			 new int[] { 1,2,5,6}
+			 new int[] { 1, 2, 4, 3 },
+			 new int[] { 5, 6, 8, 7 },
+			 new int[] { 1, 4, 5, 8 },
+			 new int[] { 2, 3, 6, 7 },
+			 new int[] { 4, 3, 8, 7 },
+			 new int[] { 1, 2, 5, 6 },
 		};
 		List<Vertex2D> vertices = new();
 		Main.spriteBatch.End();
@@ -1506,12 +1654,14 @@ public class CorruptMoth : ModNPC
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
+
 	private static Vector2 Projection2(Vector3 v3, Vector2 center, float viewZ)
 	{
 		float k2 = -viewZ / (v3.Z - viewZ);
 		var v = new Vector2(v3.X, v3.Y);
 		return v + (k2 - 1) * (v - center);
 	}
+
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		Texture2D tx = ModContent.Request<Texture2D>(Texture).Value;
@@ -1541,7 +1691,7 @@ public class CorruptMoth : ModNPC
 			NPC.rotation = -1.7f;
 			NPC.Center = cocoon.Top + new Vector2(-25, -95) + new Vector2(0, 200).RotatedBy(cocoon.rotation);
 
-			float value = (1 - Timer / 200f);
+			float value = 1 - Timer / 200f;
 			value *= value;
 			spriteBatch.Draw(bloom, NPC.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0) * value, NPC.rotation + cocoon.rotation, bloom.Size() / 2, NPC.scale, SpriteEffects.FlipHorizontally, 0f);
 
@@ -1551,14 +1701,18 @@ public class CorruptMoth : ModNPC
 			return false;
 		}
 		if (NPC.spriteDirection == 1)
+		{
 			effects = SpriteEffects.FlipHorizontally;
-		if (NPC.ai[0] >= 6 && ShieldHealthValue > 0)
-			DrawCube();
+		}
 
+		if (NPC.ai[0] >= 6 && ShieldHealthValue > 0)
+		{
+			DrawCube();
+		}
 
 		for (int k = 0; k < NPC.oldPos.Length; k++)
 		{
-			float fadeValue = ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
+			float fadeValue = (NPC.oldPos.Length - k) / (float)NPC.oldPos.Length;
 			fadeValue *= fadeValue;
 			if (NPC.velocity.Length() < 10)
 			{
@@ -1576,12 +1730,14 @@ public class CorruptMoth : ModNPC
 		spriteBatch.Draw(GlowTexture, NPC.Center - Main.screenPosition, new Rectangle?(NPC.frame), new Color(1f, 1f, 1f, 0) * ((255 - NPC.alpha) / 255f), NPC.rotation, origin, NPC.scale, effects, 0f);
 		spriteBatch.Draw(WingDustTexture, NPC.Center - Main.screenPosition, new Rectangle?(NPC.frame), new Color(1f, 1f, 1f, 0) * (MathF.Pow(NPC.velocity.Length() / 20f, 1.0f) * ((255 - NPC.alpha) / 255f)), NPC.rotation, origin, NPC.scale, effects, 0f);
 
-
 		if (NPC.ai[0] >= 6 && ShieldHealthValue > 0)
+		{
 			DrawCube(true);
+		}
 
 		return false;
 	}
+
 	public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
 	{
 		return base.DrawHealthBar(hbPosition, ref scale, ref position);

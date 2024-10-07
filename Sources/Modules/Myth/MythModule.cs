@@ -16,9 +16,9 @@ public class MythModule : EverglowModule
 {
 	public static EffectPass ReplaceEffectPass = null;
 
-	private FogPass m_fogPass = null;
+	private FogPass fogPass = null;
 
-	private Asset<Effect> m_waveDisortionScreen = null;
+	private Asset<Effect> waveDisortionScreen = null;
 
 	public override string Name => "Myth";
 
@@ -27,8 +27,8 @@ public class MythModule : EverglowModule
 		if (Main.netMode != NetmodeID.Server)
 		{
 			// 水波扰动Shader
-			m_waveDisortionScreen = ModContent.Request<Effect>("Everglow/Myth/Effects/WaterDisortion", AssetRequestMode.ImmediateLoad);
-			ReplaceEffectPass = m_waveDisortionScreen.Value.CurrentTechnique.Passes[0];
+			waveDisortionScreen = ModContent.Request<Effect>("Everglow/Myth/Effects/WaterDisortion", AssetRequestMode.ImmediateLoad);
+			ReplaceEffectPass = waveDisortionScreen.Value.CurrentTechnique.Passes[0];
 
 			On_WaterShaderData.Update += WaterShaderData_Update;
 			IL_WaterShaderData.Apply += WaterShaderData_Apply;
@@ -38,9 +38,10 @@ public class MythModule : EverglowModule
 			SkyManager.Instance["TuskSky"] = new TheTusk.Backgrounds.TuskBiomeSky();
 
 			On_WorldGen.oceanDepths += WorldGen_oceanDepths;
-			m_fogPass = new FogPass();
+			fogPass = new FogPass();
 		}
 	}
+
 	private bool WorldGen_oceanDepths(On_WorldGen.orig_oceanDepths orig, int x, int y)
 	{
 		if (SubworldSystem.IsActive<MothWorld>() || SubworldSystem.IsActive<TuskWorld>())
@@ -49,6 +50,7 @@ public class MythModule : EverglowModule
 		}
 		return orig(x, y);
 	}
+
 	public override void Unload()
 	{
 		ReplaceEffectPass = null;
@@ -56,8 +58,8 @@ public class MythModule : EverglowModule
 
 	private void FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
 	{
-		m_fogPass.Update();
-		m_fogPass.Apply(screenTarget1, screenTarget2);
+		fogPass.Update();
+		fogPass.Apply(screenTarget1, screenTarget2);
 		orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
 	}
 
@@ -67,9 +69,11 @@ public class MythModule : EverglowModule
 
 		// Try to find where 566 is placed onto the stack
 		if (!c.TryGotoNext(i => i.MatchCall(typeof(ScreenShaderData).FullName, "Apply")))
+		{
 			return; // Patch unable to be applied
+		}
 
-		//c.Remove();
+		// c.Remove();
 		c.Index++;
 
 		c.Emit(Mono.Cecil.Cil.OpCodes.Ldarg_0);
@@ -77,7 +81,10 @@ public class MythModule : EverglowModule
 		c.EmitDelegate<Action<WaterShaderData, EffectPass>>((shaderData, effect) =>
 		{
 			if (!MothBackground.BiomeActive())
+			{
 				return;
+			}
+
 			var targetPos = shaderData.Shader.Parameters["uTargetPosition"].GetValueVector2();
 			var imageOffset = shaderData.Shader.Parameters["uImageOffset"].GetValueVector2();
 			var screenPos = Main.screenPosition - targetPos;
@@ -88,7 +95,7 @@ public class MythModule : EverglowModule
 			var noiseSize = shaderData.Shader.Parameters["uImageSize1"].GetValueVector2();
 			var waterTargetSize = shaderData.Shader.Parameters["uImageSize3"].GetValueVector2();
 
-			var shader = m_waveDisortionScreen.Value;
+			var shader = waveDisortionScreen.Value;
 			shader.Parameters["cb0"].SetValue(new Vector4(1 / noiseSize.X, 1 / noiseSize.Y, 0, 0));
 			shader.Parameters["cb1"].SetValue(new Vector4(progress * 0.05f, 0, 0, 0));
 			shader.Parameters["cb2"].SetValue(new Vector4(-progress * 0.05f, 0, 0, 0));
@@ -118,6 +125,8 @@ public class MythModule : EverglowModule
 		// 关掉_useViscosityFilter来防止出现明显视觉bug
 		orig(self, gameTime);
 		if (MothBackground.BiomeActive())
+		{
 			self._useViscosityFilter = false;
+		}
 	}
 }

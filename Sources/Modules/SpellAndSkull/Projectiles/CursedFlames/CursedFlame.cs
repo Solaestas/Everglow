@@ -26,7 +26,6 @@ internal class CursedFlamePipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.CursedFlame;
-		effect.Value.Parameters["uNoise"].SetValue(ModAsset.Perlin.Value);
 	}
 	public override void BeginRender()
 	{

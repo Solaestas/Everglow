@@ -1,6 +1,3 @@
-using Everglow.Myth.Common;
-using Terraria;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class CrystalClub : ClubProj
@@ -11,6 +8,7 @@ public class CrystalClub : ClubProj
 		MaxOmega = 0.45f;
 		WarpValue = 0.3f;
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		int type = 0;
@@ -33,6 +31,7 @@ public class CrystalClub : ClubProj
 			D.velocity = new Vector2(0, Main.rand.NextFloat(Omega * 25f)).RotatedByRandom(6.283);
 		}
 	}
+
 	public override void AI()
 	{
 		base.AI();
@@ -41,25 +40,33 @@ public class CrystalClub : ClubProj
 			for (float d = 0.1f; d < Omega; d += 0.1f)
 			{
 			}
-			if (FlyClubCooling > 0)
-				FlyClubCooling--;
-			if (FlyClubCooling <= 0 && Omega > 0.2f)
+			if (flyClubCooling > 0)
 			{
-				FlyClubCooling = 44;
+				flyClubCooling--;
+			}
+
+			if (flyClubCooling <= 0 && Omega > 0.2f)
+			{
+				flyClubCooling = 36;
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CrystalClub_fly>(), (int)(Projectile.damage * 0.3f), Projectile.knockBack * 0.4f, Projectile.owner);
 			}
 			GenerateDust();
 		}
 	}
+
 	internal float ReflectStrength = 1.2f;
-	private int FlyClubCooling = 0;
+	private int flyClubCooling = 0;
+
 	private void GenerateDust()
 	{
 		var v0 = new Vector2(1, 1);
 		v0 *= Main.rand.NextFloat(Main.rand.NextFloat(1, HitLength), HitLength);
 		v0.X *= Projectile.spriteDirection;
 		if (Main.rand.NextBool(2))
+		{
 			v0 *= -1;
+		}
+
 		v0 = v0.RotatedBy(Projectile.rotation);
 		float Speed = Math.Min(Omega * 0.5f, 0.181f);
 		int type = 0;
@@ -82,20 +89,26 @@ public class CrystalClub : ClubProj
 			D.velocity = new Vector2(-v0.Y * Speed, v0.X * Speed);
 		}
 	}
+
 	public override void PostPreDraw()
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (trailVecs.Count != 0)
+		{
 			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+		}
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
+		{
 			return;
+		}
+
 		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
 

@@ -42,7 +42,7 @@ namespace Everglow.Myth.TheFirefly.Items.Armors
 			Recipe recipe = CreateRecipe();
 			recipe.AddIngredient<GlowWood>(30);
 			recipe.AddIngredient<BlackStarShrub>(10);
-			recipe.AddIngredient<GlowingPedal>(5);
+			recipe.AddIngredient<GlowingPetal>(5);
 			recipe.AddTile(TileID.WorkBenches);
 			recipe.Register();
 		}

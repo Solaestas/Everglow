@@ -1,5 +1,6 @@
 using Everglow.Commons.Enums;
 using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
 
@@ -30,7 +31,7 @@ public class IchorDropPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
-[Pipeline(typeof(IchorDropPipeline))]
+[Pipeline(typeof(IchorDropPipeline), typeof(BloomPipeline))]
 public class IchorDrop : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
