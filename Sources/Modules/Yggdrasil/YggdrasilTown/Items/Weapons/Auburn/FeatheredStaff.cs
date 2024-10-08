@@ -9,12 +9,15 @@ internal class FeatheredStaff : ModItem
 		Item.width = 50;
 		Item.height = 54;
 
-		Item.useStyle = ItemUseStyleID.HoldUp;
+		Item.useStyle = ItemUseStyleID.Swing;
 		Item.useAnimation = 35;
 		Item.useTime = 35;
 		Item.UseSound = SoundID.Item20;
 		Item.autoReuse = true;
+		Item.channel = true;
+
 		Item.noMelee = true;
+		Item.noUseGraphic = true;
 
 		Item.damage = 12;
 		Item.DamageType = DamageClass.Magic;
@@ -22,7 +25,7 @@ internal class FeatheredStaff : ModItem
 		Item.knockBack = 3.25f;
 		Item.mana = 6;
 
-		Item.shoot = ModContent.ProjectileType<Projectiles.FeatheredStaff>();
+		Item.shoot = ModContent.ProjectileType<Projectiles.FeatheredStaff_staff>();
 		Item.shootSpeed = 10;
 
 		Item.SetShopValues(
@@ -30,24 +33,13 @@ internal class FeatheredStaff : ModItem
 			Item.buyPrice(silver: 20));
 	}
 
+	public override bool CanUseItem(Player player)
+	{
+		return player.ownedProjectileCounts[Item.shoot] == 0;
+	}
+
 	public override bool? UseItem(Player player)
 	{
-		int projectileNumber = 3;
-
-		for (int i = 1; i < projectileNumber; i++)
-		{
-			Vector2 shootDirection = Vector2.Normalize(Main.MouseWorld - player.position) * Item.shootSpeed;
-			Projectile.NewProjectile(
-				player.GetSource_ItemUse(Item),
-				player.Center,
-				shootDirection.RotatedByRandom(MathHelper.ToRadians(15)),
-				Item.shoot,
-				Item.damage,
-				Item.knockBack,
-				player.whoAmI,
-				0,
-				Main.rand.Next(20));
-		}
-		return true;
+		return base.UseItem(player);
 	}
 }

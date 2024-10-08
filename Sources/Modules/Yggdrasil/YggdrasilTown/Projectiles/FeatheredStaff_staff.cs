@@ -1,10 +1,11 @@
 using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-public class CyanVineStaff_proj : ModProjectile
+public class FeatheredStaff_staff : ModProjectile
 {
-	public override string Texture => "Everglow/Yggdrasil/YggdrasilTown/Projectiles/CyanVineStaff_proj";
+	public override string Texture => ModAsset.Auburn_FeatheredStaff_Mod;
 
 	public override void SetDefaults()
 	{
@@ -16,9 +17,8 @@ public class CyanVineStaff_proj : ModProjectile
 		Projectile.DamageType = DamageClass.Magic;
 	}
 
-	public override Color? GetAlpha(Color lightColor)
+	public override void OnSpawn(IEntitySource source)
 	{
-		return new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0);
 	}
 
 	private bool release = true;
@@ -35,10 +35,8 @@ public class CyanVineStaff_proj : ModProjectile
 		{
 			Projectile.ai[0] *= 0.9f;
 			Projectile.ai[1] -= 1f;
-			float useDuration = (player.itemTime - 5) / (float)player.itemTimeMax;
-			useDuration *= useDuration;
-			Projectile.rotation = (float)(Math.Atan2(MouseToPlayer.Y, MouseToPlayer.X) + Math.PI * 0.25) - useDuration * player.direction * 0.6f;
-			Projectile.Center = player.MountedCenter + Vector2.Normalize(MouseToPlayer).RotatedBy(Projectile.ai[0] / 0.8d) * (8f - Projectile.ai[0] * 8) + new Vector2(0, 0);
+			Projectile.rotation = (float)(Math.Atan2(MouseToPlayer.Y, MouseToPlayer.X) + Math.PI * 0.25);
+			Projectile.Center = player.MountedCenter + Vector2.Normalize(MouseToPlayer).RotatedBy(Projectile.ai[0] / 0.8d) * 28f + new Vector2(0, 0);
 			Projectile.velocity *= 0;
 			if (player.itemTime == player.itemTimeMax - 1)
 			{
@@ -63,7 +61,7 @@ public class CyanVineStaff_proj : ModProjectile
 			{
 				Projectile.ai[0] *= 0.9f;
 				Projectile.ai[1] -= 1f;
-				Projectile.Center = player.MountedCenter + Vector2.Normalize(MouseToPlayer).RotatedBy(Projectile.ai[0] / 4d) * (8f - Projectile.ai[0] * 4);
+				Projectile.Center = player.MountedCenter + Vector2.Normalize(MouseToPlayer).RotatedBy(Projectile.ai[0] / 4d) * 28f;
 			}
 			else
 			{
@@ -82,12 +80,23 @@ public class CyanVineStaff_proj : ModProjectile
 
 	private void Shoot()
 	{
-		SoundEngine.PlaySound(SoundID.Item72.WithVolumeScale(0.8f), Projectile.Center);
-		Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
-		v0 = Vector2.Normalize(v0);
 		Player player = Main.player[Projectile.owner];
-
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v0 * 36, v0 * player.HeldItem.shootSpeed * 0.5f, ModContent.ProjectileType<CyanVineStaff_proj_shoot>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 20);
+		int projectileNumber = 3;
+		Item item = player.HeldItem;
+		for (int i = 1; i < projectileNumber; i++)
+		{
+			Vector2 shootDirection = Vector2.Normalize(Main.MouseWorld - player.position) * item.shootSpeed;
+			Projectile.NewProjectile(
+				player.GetSource_ItemUse( item),
+				player.Center,
+				shootDirection.RotatedByRandom(MathHelper.ToRadians(15)),
+				ModContent.ProjectileType<FeatheredStaff>(),
+				item.damage,
+				item.knockBack,
+				player.whoAmI,
+				0,
+				Main.rand.Next(20));
+		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)
@@ -113,6 +122,6 @@ public class CyanVineStaff_proj : ModProjectile
 		}
 
 		float rot0 = Projectile.rotation - (float)(Math.PI * 0.25) + MathF.PI * 0.3f * player.direction;
-		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - new Vector2(0, 6), null, drawColor, rot0, texMain.Size() / 2f, 1f, se, 0);
+		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition, null, drawColor, rot0, texMain.Size() / 2f, 1f, se, 0);
 	}
 }
