@@ -59,13 +59,18 @@ public abstract class ClubItem : ModItem
 	public int ProjType;
 	public int ProjTypeSmash;
 	public bool CanDown;
+
 	public override bool AltFunctionUse(Player player) => true;
+
 	public override void UpdateInventory(Player player)
 	{
 		for (int h = 0; h < 7; h++)
 		{
 			Vector2 pos = player.Center + new Vector2(0, h * 16 * player.gravDir);
-			if (TileCollisionUtils.PlatformCollision(pos))
+			Point bottomPos = pos.ToTileCoordinates();
+			bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
+			bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
+			if (TileCollisionUtils.PlatformCollision(pos) || ((player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0))
 			{
 				CanDown = false;
 				return;
@@ -74,7 +79,10 @@ public abstract class ClubItem : ModItem
 		for (int h = 7; h < 120; h++)
 		{
 			Vector2 pos = player.Center + new Vector2(0, h * 16 * player.gravDir);
-			if (TileCollisionUtils.PlatformCollision(pos))
+			Point bottomPos = pos.ToTileCoordinates();
+			bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
+			bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
+			if (TileCollisionUtils.PlatformCollision(pos) || ((player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0))
 			{
 				CanDown = true;
 				return;
@@ -85,7 +93,7 @@ public abstract class ClubItem : ModItem
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		if(player.altFunctionUse != 2)
+		if (player.altFunctionUse != 2)
 		{
 			if (player.ownedProjectileCounts[type] < 1)
 			{
