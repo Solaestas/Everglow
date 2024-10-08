@@ -52,6 +52,7 @@ public class KitchenSystemUI : GameInterfaceLayer
 	{
 		Restart();
 		MainPanelOrigin = new Vector2(530, Main.screenHeight - 300);
+		MainPanelOriginMinimized = new Vector2(330, Main.screenHeight - 300);
 		Failed = false;
 	}
 

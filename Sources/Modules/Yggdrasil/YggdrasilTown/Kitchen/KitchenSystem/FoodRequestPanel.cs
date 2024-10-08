@@ -143,7 +143,7 @@ public class FoodRequestPanel
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, sBS.TransformMatrix);
 		Effect timer = ModAsset.FoodRequsetTimer.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.EffectMatrix;
 		timer.Parameters["uTransform"].SetValue(model * projection);
 		timer.Parameters["uTime"].SetValue(1 - timeValue);
 		timer.CurrentTechnique.Passes[0].Apply();
