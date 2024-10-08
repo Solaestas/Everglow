@@ -159,7 +159,6 @@ public class Acytaea : VisualNPC
 			}
 		}
 
-
 		if (aiMainCount == 0)
 		{
 			Idle = true;
@@ -178,6 +177,21 @@ public class Acytaea : VisualNPC
 			NPC.aiStyle = -1;
 			NPC.ai[0] = 0;
 		}
+	}
+
+	public bool CheckInSnow()
+	{
+		for (int j = 0; j < Main.player.Length; j++)
+		{
+			if (Main.player[j].active && Main.player[j].ZoneSnow)
+			{
+				if ((Main.player[j].Center - NPC.Center).Length() < 2000)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public bool CheckTalkingPlayer()
@@ -212,7 +226,7 @@ public class Acytaea : VisualNPC
 		}
 		foreach (var npc in Main.npc)
 		{
-			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy)
+			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy && (!npc.CountsAsACritter || CheckInSnow()))
 			{
 				Vector2 distance = npc.Center - NPC.Center;
 				if (MathF.Abs(distance.X) < 240 && distance.Y < 0 && distance.Y > -300)
@@ -239,7 +253,7 @@ public class Acytaea : VisualNPC
 		float minDis = 300;
 		foreach (var npc in Main.npc)
 		{
-			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy)
+			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy && (!npc.CountsAsACritter || CheckInSnow()))
 			{
 				Vector2 distance = npc.Center - NPC.Center;
 				if (MathF.Abs(distance.X) < 240 && distance.Y < 0 && distance.Y > -300 && distance.Length() < minDis)
@@ -263,7 +277,7 @@ public class Acytaea : VisualNPC
 	{
 		foreach (var npc in Main.npc)
 		{
-			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy)
+			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy && (!npc.CountsAsACritter || CheckInSnow()))
 			{
 				Vector2 distance = npc.Center - NPC.Center;
 				if (MathF.Abs(distance.X) < 120 && MathF.Abs(distance.Y) < 50)
@@ -706,10 +720,10 @@ public class Acytaea : VisualNPC
 		Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height + 8) * 0.5f;
 		Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 
-		// Point checkPoint = (NPC.Bottom + new Vector2(8 * NPC.direction, 0)).ToTileCoordinates() + new Point(NPC.direction, -1);
-		// Tile tile = Main.tile[checkPoint];
-		// Texture2D block = Commons.ModAsset.TileBlock.Value;
-		// Main.spriteBatch.Draw(block, checkPoint.ToWorldCoordinates() - Main.screenPosition, null, new Color(1f, 0f, 0f, 0.5f), 0, block.Size() * 0.5f, 1, SpriteEffects.None, 0);
+		//Point checkPoint = (NPC.Bottom + new Vector2(8 * NPC.direction, 8)).ToTileCoordinates() + new Point(NPC.direction, -1);
+		//Tile tile = Main.tile[checkPoint];
+		//Texture2D block = Commons.ModAsset.TileBlock.Value;
+		//Main.spriteBatch.Draw(block, checkPoint.ToWorldCoordinates() - Main.screenPosition, null, new Color(1f, 0f, 0f, 0.5f), 0, block.Size() * 0.5f, 1, SpriteEffects.None, 0);
 		return false;
 	}
 

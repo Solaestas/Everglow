@@ -30,6 +30,7 @@ public class AcytaeaSword_projectile_TownNPC : MeleeProj
 		maxAttackType = 0;
 		trailLength = 20;
 		shadertype = "Trail";
+		CanIgnoreTile = true;
 		AutoEnd = false;
 	}
 

@@ -176,7 +176,7 @@ public class NPCUtils
 		{
 			return false;
 		}
-		Point checkPoint = (npc.Bottom + new Vector2(8 * npc.direction, 0)).ToTileCoordinates() + new Point(npc.direction, -1);
+		Point checkPoint = (npc.Bottom + new Vector2(8 * npc.direction, 8)).ToTileCoordinates() + new Point(npc.direction, -1);
 		Tile checkTile = Main.tile[checkPoint];
 		if (TileLoader.IsClosedDoor(checkTile.TileType) || checkTile.TileType == 388)
 		{
@@ -210,6 +210,10 @@ public class NPCUtils
 		if (obstructionHeight >= 1 && npc.collideX)
 		{
 			npc.velocity.Y = -2.5f * obstructionHeight;
+		}
+		else if(checkTile.IsHalfBlock)
+		{
+			npc.velocity.Y = -2.5f;
 		}
 		if (obstructionHeight >= 5)
 		{
