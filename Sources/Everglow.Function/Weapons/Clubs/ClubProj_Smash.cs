@@ -118,7 +118,10 @@ public abstract class ClubProj_Smash : MeleeProj
 			}
 			if (player.gravDir == 1)
 			{
-				if (Collision.SolidCollision(player.BottomLeft, player.width, 64) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 16)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 0)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, -16)))
+				Point bottomPos = player.Bottom.ToTileCoordinates();
+				bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
+				bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
+				if (Collision.SolidCollision(player.BottomLeft, player.width, 64) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 16)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 0)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, -16)) || ((player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet))
 				{
 					if (timer <= 70)
 					{
