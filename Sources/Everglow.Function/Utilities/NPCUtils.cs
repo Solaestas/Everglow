@@ -161,6 +161,7 @@ public class NPCUtils
 			{
 				Vector2 bottom = default;
 				npc.SitDown(npc.Center.ToTileCoordinates(), out npc.direction, out bottom);
+				Main.NewText(bottom);
 				npc.spriteDirection = npc.direction;
 				npc.velocity *= 0;
 				npc.Bottom = bottom + new Vector2(0, 16);

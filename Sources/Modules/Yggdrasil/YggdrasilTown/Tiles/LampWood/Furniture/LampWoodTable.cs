@@ -20,7 +20,7 @@ public class LampWoodTable : ModTile
 		DustType = ModContent.DustType<LampWood_Dust>();
 		AdjTiles = new int[] { TileID.Tables };
 
-		// Placement
+		// Placement·
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
@@ -29,7 +29,7 @@ public class LampWoodTable : ModTile
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
 
 		LocalizedText name = CreateMapEntryName();
-		AddMapEntry(new Color(200, 200, 200), name);
+		AddMapEntry(new Color(191, 142, 111), name);
 	}
 
 	public override void NumDust(int i, int j, bool fail, ref int num)
