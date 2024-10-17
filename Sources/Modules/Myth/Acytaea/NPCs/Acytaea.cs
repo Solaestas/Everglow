@@ -157,6 +157,11 @@ public class Acytaea : VisualNPC
 			{
 				Talking = false;
 			}
+			else if (Sit)
+			{
+				Sit = false;
+				AICoroutines.Enqueue(new Coroutine(Stand(Main.rand.Next(60, 900))));
+			}
 		}
 
 		if (aiMainCount == 0)
@@ -692,7 +697,7 @@ public class Acytaea : VisualNPC
 
 	public override void FindFrame(int frameHeight)
 	{
-		if (Idle)
+		if (Idle || Talking)
 		{
 			if (Sit)
 			{
