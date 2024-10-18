@@ -1,5 +1,6 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Myth.Acytaea.Projectiles;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
@@ -156,6 +157,25 @@ public class Acytaea : VisualNPC
 			if (!CheckTalkingPlayer())
 			{
 				Talking = false;
+			}
+			else if (Sit)
+			{
+				Sit = false;
+				Idle = true;
+				aiMainCount = 0;
+				AICoroutines.Clear();
+			}
+		}
+
+		if (Sit)
+		{
+			var tile = Main.tile[NPC.Center.ToTileCoordinates()];
+			if (tile == null || !TileID.Sets.CanBeSatOnForNPCs[tile.type])
+			{
+				Sit = false;
+				Idle = true;
+				aiMainCount = 0;
+				AICoroutines.Clear();
 			}
 		}
 
@@ -692,7 +712,7 @@ public class Acytaea : VisualNPC
 
 	public override void FindFrame(int frameHeight)
 	{
-		if (Idle)
+		if (Idle || Talking)
 		{
 			if (Sit)
 			{

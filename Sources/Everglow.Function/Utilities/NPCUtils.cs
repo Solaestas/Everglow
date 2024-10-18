@@ -164,7 +164,6 @@ public class NPCUtils
 				Main.NewText(bottom);
 				npc.spriteDirection = npc.direction;
 				npc.velocity *= 0;
-				npc.Bottom = bottom + new Vector2(0, 16);
 				return true;
 			}
 		}
@@ -212,7 +211,7 @@ public class NPCUtils
 		{
 			npc.velocity.Y = -2.5f * obstructionHeight;
 		}
-		else if(checkTile.IsHalfBlock)
+		else if (checkTile.IsHalfBlock)
 		{
 			npc.velocity.Y = -2.5f;
 		}
