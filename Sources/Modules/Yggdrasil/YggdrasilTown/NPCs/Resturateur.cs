@@ -7,7 +7,7 @@ using static Everglow.Commons.Utilities.NPCUtils;
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 
 [AutoloadHead]
-public class Guard_of_YggdrasilTown : ModNPC
+public class Resturateur : ModNPC
 {
 	private bool canDespawn = false;
 	private int aiMainCount = 0;
@@ -21,7 +21,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 
 	public int MySlimyWhoAmI = -1;
 
-	public override string HeadTexture => ModAsset.Guard_of_YggdrasilTown_Head_Mod;
+	public override string HeadTexture => ModAsset.Resturateur_Head_Mod;
 
 	public override void SetStaticDefaults()
 	{
@@ -130,18 +130,6 @@ public class Guard_of_YggdrasilTown : ModNPC
 		}
 	}
 
-	/// <summary>
-	/// This NPC will always be with her pet slime.
-	/// </summary>
-	public void CheckSlimy()
-	{
-		if (MySlimyWhoAmI == -1 || !Main.npc[MySlimyWhoAmI].active || Main.npc[MySlimyWhoAmI].type != ModContent.NPCType<Guard_Slimy>())
-		{
-			NPC slimy = NPC.NewNPCDirect(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<Guard_Slimy>());
-			MySlimyWhoAmI = slimy.whoAmI;
-		}
-	}
-
 	public bool CheckTalkingPlayer()
 	{
 		for (int j = 0; j < 255; j++)
@@ -237,7 +225,6 @@ public class Guard_of_YggdrasilTown : ModNPC
 	{
 		while (true)
 		{
-			CheckSlimy();
 			aiMainCount++;
 			if (AICoroutines.Count > 0 && Idle)
 			{
@@ -314,7 +301,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 			NPC.velocity *= 0;
 			yield return new SkipThisFrame();
 		}
-		NPC.frame = new Rectangle(0, 0, 40, 56);
+		NPC.frame = new Rectangle(0, 0, 32, 56);
 		yield return new WaitForFrames(16);
 		EndAIPiece();
 	}
@@ -330,7 +317,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 		}
 		NPC.direction *= -1;
 		NPC.spriteDirection = NPC.direction;
-		NPC.frame = new Rectangle(0, 0, 40, 56);
+		NPC.frame = new Rectangle(0, 0, 32, 56);
 		EndAIPiece();
 	}
 
@@ -339,7 +326,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 		for (int t = 0; t < time; t++)
 		{
 			NPC.spriteDirection = NPC.direction;
-			NPC.frame = new Rectangle(0, 0, 40, 56);
+			NPC.frame = new Rectangle(0, 0, 32, 56);
 			NPC.velocity.X = 0;
 			Idle = false;
 			if (CanAttack0())
@@ -412,7 +399,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		Texture2D texMain = ModAsset.Guard_of_YggdrasilTown.Value;
+		Texture2D texMain = ModAsset.Resturateur.Value;
 		Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height + 8) * 0.5f;
 		Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 
