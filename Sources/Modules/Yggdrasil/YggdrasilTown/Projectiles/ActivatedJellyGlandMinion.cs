@@ -1,4 +1,3 @@
-using Everglow.Commons.Events;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
