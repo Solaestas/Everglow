@@ -22,6 +22,7 @@ public class CyanVineStaff_proj : ModProjectile
 	}
 
 	private bool release = true;
+
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -70,12 +71,15 @@ public class CyanVineStaff_proj : ModProjectile
 			}
 		}
 		if (Projectile.Center.X < player.MountedCenter.X)
+		{
 			player.direction = -1;
+		}
 		else
 		{
 			player.direction = 1;
 		}
 	}
+
 	private void Shoot()
 	{
 		SoundEngine.PlaySound(SoundID.Item72.WithVolumeScale(0.8f), Projectile.Center);
@@ -94,14 +98,20 @@ public class CyanVineStaff_proj : ModProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		if (!release)
+		{
 			return;
+		}
+
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
 		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
 		Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 		SpriteEffects se = SpriteEffects.None;
 		if (player.direction == -1)
+		{
 			se = SpriteEffects.FlipVertically;
+		}
+
 		float rot0 = Projectile.rotation - (float)(Math.PI * 0.25) + MathF.PI * 0.3f * player.direction;
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - new Vector2(0, 6), null, drawColor, rot0, texMain.Size() / 2f, 1f, se, 0);
 	}
