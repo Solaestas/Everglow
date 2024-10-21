@@ -33,13 +33,5 @@ internal class FeatheredStaff : ModItem
 			Item.buyPrice(silver: 20));
 	}
 
-	public override bool CanUseItem(Player player)
-	{
-		return player.ownedProjectileCounts[Item.shoot] == 0;
-	}
-
-	public override bool? UseItem(Player player)
-	{
-		return base.UseItem(player);
-	}
+	public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] == 0;
 }
