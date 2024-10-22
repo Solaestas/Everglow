@@ -8,7 +8,6 @@ public class ActivatedJellyGland : ModItem
 {
 	public override void SetStaticDefaults()
 	{
-		// TODO: Replace sprite
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
 
@@ -65,31 +64,19 @@ public class ActivatedJellyGland : ModItem
 		}
 		else
 		{
-			int summonRadiusOffset = 50;
+			int summonRadiusOffset = 40 + summonAmount * 5;
 			for (int i = 0; i < summonAmount; i++)
 			{
+				var positionOffset = new Vector2(summonRadiusOffset * MathF.Cos(MathF.PI * 2 * i / summonAmount), summonRadiusOffset * MathF.Sin(MathF.PI * 2 * i / summonAmount));
 				Projectile.NewProjectile(
 					player.GetSource_ItemUse(Item),
-					position + new Vector2(summonRadiusOffset * MathF.Cos(MathF.PI * 2 * i / summonAmount), summonRadiusOffset * MathF.Sin(MathF.PI * 2 * i / summonAmount)),
-					velocity,
+					position + positionOffset,
+					velocity.Length() * positionOffset.NormalizeSafe(),
 					type,
 					damage,
 					knockback,
 					Owner: player.whoAmI,
 					ai0: player.ownedProjectileCounts[type] + 1);
-			}
-		}
-
-		int ai0 = 1;
-		foreach (Projectile proj in Main.projectile)
-		{
-			if (proj.type == type)
-			{
-				if (proj.owner == player.whoAmI)
-				{
-					proj.ai[0] = ai0;
-					ai0++;
-				}
 			}
 		}
 		return false;

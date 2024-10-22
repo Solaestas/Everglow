@@ -44,7 +44,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
 	float4 colorHeatMap = tex2D(uHeatMapSampler, float2(light, input.Color.b));
 	colorHeatMap *= float4(input.Texcoord.xyz, 1);
 	colorHeatMap.a = input.Color.a;
-	return colorHeatMap;
+	return colorHeatMap.bgra;
 }
 
 technique Technique1

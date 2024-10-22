@@ -5,25 +5,40 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class ActivatedJellyGlandMinion : ModProjectile
 {
-	private enum AttackState
+	private enum State
+	{
+		Patrol,
+		Chase,
+		Attack,
+	}
+
+	private enum ChaseState
 	{
 		Dash,
 		Rest,
-		Explode,
 	}
 
 	private const int NoTarget = -1;
 	private const int SearchDistance = 1200;
+	private const float ExplodeStateDistance = 200f;
 	private const int ExplosionDuration = 80;
 	private const float ExplosionScaleFrequencyLimit = 0.4f;
 
 	private int targetWhoAmI = NoTarget;
 
-	private int TargetWhoAmI { get => targetWhoAmI; set => targetWhoAmI = value; }
+	private int TargetWhoAmI
+	{
+		get => targetWhoAmI;
+		set => targetWhoAmI = value;
+	}
+
+	private State MinionState { get; set; } = State.Patrol;
+
+	private ChaseState MinionAttackState { get; set; } = ChaseState.Dash;
 
 	private Vector3 BloomLightColor { get; set; } = new Vector3(0f, 0.5f, 1f);
 
-	private AttackState MinionAttackState { get; set; } = AttackState.Dash;
+	private Vector2 TargetCenter { get; set; } = Vector2.Zero;
 
 	private int DashTimer { get; set; } = 0;
 
@@ -91,21 +106,24 @@ public class ActivatedJellyGlandMinion : ModProjectile
 			Projectile.Kill();
 			return;
 		}
-
-		Bloom();
 		if (CheckTargetNotActive())
 		{
 			TargetWhoAmI = NoTarget;
 		}
 
-		if (HasNoTarget)
+		GeneralBehavior();
+
+		switch (MinionState)
 		{
-			GeneralBehavior();
-			SearchTarget();
-		}
-		else
-		{
-			Attack();
+			case State.Patrol:
+				Patrol();
+				break;
+			case State.Chase:
+				Chase();
+				break;
+			case State.Attack:
+				Attack();
+				break;
 		}
 	}
 
@@ -129,17 +147,24 @@ public class ActivatedJellyGlandMinion : ModProjectile
 
 	private void SearchTarget()
 	{
-		Projectile.Minion_FindTargetInRange(SearchDistance, ref targetWhoAmI, false, (entiy, npcid) =>
+		var oldTarget = TargetWhoAmI;
+		Projectile.Minion_FindTargetInRange(SearchDistance, ref targetWhoAmI, false, (entiy, npcid) => true);
+		if (oldTarget != TargetWhoAmI)
 		{
-			return true;
-		});
+			Projectile.netUpdate = true;
+		}
 	}
 
 	private bool HasNoTarget => TargetWhoAmI == NoTarget;
 
 	private bool HasTarget => TargetWhoAmI != NoTarget;
 
-	private void Bloom()
+	private void GeneralBehavior()
+	{
+		GeneralBehavior_Bloom();
+	}
+
+	private void GeneralBehavior_Bloom()
 	{
 		float glowStrength = 0.4f;
 		if (HasTarget)
@@ -164,76 +189,87 @@ public class ActivatedJellyGlandMinion : ModProjectile
 		Lighting.AddLight(Projectile.Center, BloomLightColor);
 	}
 
-	private void Attack()
+	public void Patrol()
 	{
-		NPC target = Main.npc[TargetWhoAmI];
-		var movement = target.Center - Projectile.Center;
-		float ExplodeStateDistance = 200f;
+		Vector2 targetVel = new Vector2(MathF.Sin((float)Main.time * 0.03f + Projectile.whoAmI), MathF.Sin((float)Main.time * 0.06f + MathF.PI + Projectile.whoAmI)) * Projectile.scale;
+		Projectile.velocity = Vector2.Lerp(Projectile.velocity, targetVel, 0.4f);
+		Projectile.rotation = Math.Clamp(Projectile.velocity.X * 0.3f, -1f, 1f);
 
-		switch (MinionAttackState)
+		SearchTarget();
+		if (HasTarget)
 		{
-			case AttackState.Dash:
-				{
-					DashTimer++;
-					var DashSpeed = 3f;
-					Projectile.velocity = (movement + new Vector2(0, MathF.Sin((float)Main.time * 0.0005f + Projectile.whoAmI * 7 + 2.1f))).NormalizeSafe() * DashSpeed;
-					Projectile.rotation = Projectile.velocity.ToRotation() + 1.57f;
-
-					if (DashTimer > 15)
-					{
-						DashTimer = 0;
-						MinionAttackState = AttackState.Rest;
-					}
-					if (movement.Length() <= ExplodeStateDistance)
-					{
-						MinionAttackState = AttackState.Explode;
-						Projectile.velocity = Vector2.Zero;
-					}
-					break;
-				}
-			case AttackState.Rest:
-				{
-					Projectile.velocity *= 0.92f;
-					if (Projectile.velocity.Length() <= 0.5f)
-					{
-						MinionAttackState = AttackState.Dash;
-
-						if (movement.Length() <= ExplodeStateDistance)
-						{
-							MinionAttackState = AttackState.Explode;
-							Projectile.velocity = Vector2.Zero;
-						}
-					}
-					break;
-				}
-			case AttackState.Explode:
-				{
-					ExplosionTimer++;
-					ExplosionScaleFrequency += ExplosionScaleFrequency < ExplosionScaleFrequencyLimit ? 0.005f : 0f;
-					Projectile.scale = 0.5f + 0.1f * MathF.Sin((float)Main.time * 0.1f * ExplosionScaleFrequency);
-
-					if (ExplosionTimer > ExplosionDuration ||
-						Projectile.timeLeft <= 1)
-					{
-						Projectile.NewProjectile(
-							Projectile.GetSource_FromAI(),
-							Projectile.Center,
-							movement.NormalizeSafe() * 2f,
-							ModContent.ProjectileType<ActivatedJellyGlandCurrentBeam>(),
-							Projectile.damage,
-							Projectile.knockBack,
-							Projectile.owner);
-						Projectile.Kill();
-					}
-					break;
-				}
+			MinionState = State.Chase;
 		}
 	}
 
-	public void GeneralBehavior()
+	private void Chase()
 	{
-		// TODO: Complete code
-		Projectile.velocity = Vector2.Zero;
+		if (HasTarget)
+		{
+			NPC target = Main.npc[TargetWhoAmI];
+			TargetCenter = target.Center;
+		}
+		else
+		{
+			MinionState = State.Patrol;
+			return;
+		}
+		Vector2 movement = TargetCenter - Projectile.Center;
+
+		switch (MinionAttackState)
+		{
+			case ChaseState.Dash:
+				var DashSpeed = 3f;
+				Projectile.velocity = (movement + new Vector2(0, MathF.Sin((float)Main.time * 0.0005f + Projectile.whoAmI * 7 + 2.1f))).NormalizeSafe() * DashSpeed;
+				Projectile.rotation = Projectile.velocity.ToRotation() + 1.57f;
+				if (++DashTimer > 15)
+				{
+					DashTimer = 0;
+					MinionAttackState = ChaseState.Rest;
+				}
+				break;
+
+			case ChaseState.Rest:
+				Projectile.velocity *= 0.92f;
+				if (Projectile.velocity.Length() <= 0.5f)
+				{
+					MinionAttackState = ChaseState.Dash;
+				}
+				break;
+		}
+
+		if (movement.Length() <= ExplodeStateDistance)
+		{
+			MinionState = State.Attack;
+			Projectile.velocity = Vector2.Zero;
+		}
+	}
+
+	private void Attack()
+	{
+		if (HasTarget)
+		{
+			NPC target = Main.npc[TargetWhoAmI];
+			TargetCenter = target.Center;
+		}
+		var direction = (TargetCenter - Projectile.Center).NormalizeSafe();
+
+		ExplosionScaleFrequency += ExplosionScaleFrequency < ExplosionScaleFrequencyLimit ? 0.005f : 0f;
+		Projectile.scale = 0.5f + 0.1f * MathF.Sin((float)Main.time * 0.1f * ExplosionScaleFrequency);
+
+		if (++ExplosionTimer > ExplosionDuration ||
+			Projectile.timeLeft <= 1)
+		{
+			Projectile.NewProjectile(
+				Projectile.GetSource_FromAI(),
+				Projectile.Center,
+				direction * 2f,
+				ModContent.ProjectileType<ActivatedJellyGlandCurrentBeam>(),
+				Projectile.damage,
+				Projectile.knockBack,
+				Projectile.owner);
+			Projectile.Kill();
+		}
 	}
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
