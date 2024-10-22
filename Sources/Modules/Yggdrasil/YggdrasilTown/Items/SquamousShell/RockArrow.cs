@@ -22,7 +22,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.SquamousShell
 			Item.rare = ItemRarityID.Blue;
 			Item.shoot = ModContent.ProjectileType<Projectiles.RockArrow>();
 
-			Item.ammo = AmmoID.Arrow; 
+			Item.ammo = AmmoID.Arrow;
 		}
 	}
 }

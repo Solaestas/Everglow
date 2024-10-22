@@ -1,4 +1,5 @@
 using Everglow.Commons.VFX.Scene;
+using Everglow.Yggdrasil.Common.Projectiles;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using SubworldLibrary;
 using Terraria.ObjectData;
@@ -125,17 +126,12 @@ public class OriginPylon : ModTile, ISceneTile
 
 	public override bool RightClick(int i, int j)
 	{
-		Ins.VFXManager.Clear();
-		if (SubworldSystem.IsActive<YggdrasilWorld>())
+		Player player = Main.LocalPlayer;
+		int projectileType = ModContent.ProjectileType<TeleportToYggdrasil>();
+		if (player.ownedProjectileCounts[projectileType] <= 0)
 		{
-			SubworldSystem.Exit();
-		}
-		else
-		{
-			if (!SubworldSystem.Enter<YggdrasilWorld>())
-			{
-				Main.NewText("Fail!");
-			}
+			player.AddBuff(BuffID.Shimmer, 30);
+			Projectile.NewProjectileDirect(WorldGen.GetProjectileSource_PlayerOrWires(i, j, false, player), Main.MouseWorld, Vector2.zeroVector, projectileType, 0, 0, player.whoAmI);
 		}
 		return base.RightClick(i, j);
 	}

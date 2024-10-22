@@ -1,6 +1,6 @@
 using Everglow.Yggdrasil.Common.Dusts;
+using Everglow.Yggdrasil.Common.Projectiles;
 using ReLogic.Content;
-using SubworldLibrary;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Map;
@@ -177,19 +177,14 @@ public class YggdrasilWorldPylon : BaseModPylon<YggdrasilWorldPylonTileEntity>
 
 	public override bool RightClick(int i, int j)
 	{
-		Ins.VFXManager.Clear();
-		if (SubworldSystem.IsActive<YggdrasilWorld>())
+		Player player = Main.LocalPlayer;
+		int projectileType = ModContent.ProjectileType<TeleportToYggdrasil>();
+		if (player.ownedProjectileCounts[projectileType] <= 0)
 		{
-			SubworldSystem.Exit();
+			player.AddBuff(BuffID.Shimmer, 30);
+			Projectile.NewProjectileDirect(WorldGen.GetProjectileSource_PlayerOrWires(i, j, false, player), Main.MouseWorld, Vector2.zeroVector, projectileType, 0, 0, player.whoAmI);
 		}
-		else
-		{
-			if (!SubworldSystem.Enter<YggdrasilWorld>())
-			{
-				Main.NewText("Fail!");
-			}
-		}
-		return base.RightClick(i, j);
+		return false;
 	}
 }
 

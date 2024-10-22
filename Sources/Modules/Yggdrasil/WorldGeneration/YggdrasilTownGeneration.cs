@@ -767,20 +767,24 @@ public class YggdrasilTownGeneration
 			{
 				Point pos = new Point(i, j) + topLeft;
 				Tile tile = SafeGetTile(pos);
+				Tile tileUp = SafeGetTile(pos + new Point(0, -1));
 				float noiseValueUp = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + y0CoordPerlin) % 1024] / 255f * 0.5f;
 				float noiseValueDown = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + 50 + y0CoordPerlin) % 1024] / 255f * 0.5f;
-				if (j > height - value + noiseValueUp * 15 && j < height - value + thick + noiseValueDown * 25)
+				if(!TileID.Sets.BasicChest[tile.TileType] && !TileID.Sets.BasicChest[tileUp.TileType])
 				{
-					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
-					tile.HasTile = true;
-				}
-				if (j > height - value + noiseValueUp * 15 + 3 && j < height - value + thick + noiseValueDown * 25 - 3)
-				{
-					tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
-				}
-				if (j >= height + thick - value + noiseValueDown * 25)
-				{
-					tile.ClearEverything();
+					if (j > height - value + noiseValueUp * 15 && j < height - value + thick + noiseValueDown * 25)
+					{
+						tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+						tile.HasTile = true;
+					}
+					if (j > height - value + noiseValueUp * 15 + 3 && j < height - value + thick + noiseValueDown * 25 - 3)
+					{
+						tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+					}
+					if (j >= height + thick - value + noiseValueDown * 25)
+					{
+						tile.ClearEverything();
+					}
 				}
 			}
 		}

@@ -45,9 +45,12 @@ public class YggdrasilWorldGeneration : ModSystem
 
 		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
-
+			progress.Message = "Inserting Yggdrasil Relic...";
+			MainWorldGeneratioin_Yggdrasil.BuildYggdrasilPylonRelic();
 		}
 	}
+
+	public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) => tasks.Add(new MainWorldPylonRelicGenPass_Yggdrasil());
 
 	public static int[,] GlobalPerlinPixelR = new int[1024, 1024];
 	public static int[,] GlobalPerlinPixelG = new int[1024, 1024];
@@ -175,7 +178,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 平坦化,x0左y0上x1右y1下
+	/// Smooth tiles by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>
 	/// <param name="y0"></param>
@@ -209,7 +212,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 放置一个矩形区域的物块,x0左y0上x1右y1下
+	/// Fill tiles by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>
 	/// <param name="y0"></param>
@@ -234,7 +237,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 放置一个矩形区域的墙壁,x0左y0上x1右y1下
+	/// Fill walls by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>
 	/// <param name="y0"></param>
@@ -255,7 +258,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 清除给定区域的一切,x0左y0上x1右y1下
+	/// Clear everything by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>
 	/// <param name="y0"></param>
@@ -276,7 +279,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 清除给定区域的物块,x0左y0上x1右y1下
+	/// Clear tiles by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>
 	/// <param name="y0"></param>
@@ -297,7 +300,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 清除给定区域的墙壁,x0左y0上x1右y1下
+	/// Clear walls by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>
 	/// <param name="y0"></param>
@@ -318,7 +321,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 快速建好一个MapIO
+	/// Place a prefabricated mapIO anchored top left at (x, y).
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -338,7 +341,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点上下两侧的空旷高度
+	/// Return the summary of air-to-tile distances of given point to top and to bottom.
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -376,7 +379,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点左右两侧的空旷长度
+	/// Return the summary of air-to-tile distances of given point to left and to right.
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -414,7 +417,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点到左侧的空旷长度
+	/// Return the air-to-tile distance from given point to LEFT.
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -441,7 +444,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点到右侧的空旷长度
+	/// Return the air-to-tile distance from given point to RIGHT.
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -468,7 +471,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点到上缘的空旷高度
+	/// Return the air-to-tile distance from given point to TOP.
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -495,7 +498,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点到下缘的空旷高度
+	/// Return the air-to-tile distance from given point to BOTTOM.
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -522,7 +525,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点嵌入固体块的深度
+	/// Return the tile-embedded-depth by the given point.
 	/// </summary>
 	/// <returns></returns>
 	public static int EmbeddingDepth(int x, int y, int maxRange = 4)
@@ -545,7 +548,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回墙壁上的一点到外面的最短距离
+	/// Return the wall-embedded-depth by the given point.
 	/// </summary>
 	/// <returns></returns>
 	public static float EmbeddingWallDepth(int x, int y, int maxRange = 50)
@@ -568,7 +571,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点嵌入某种物块的深度
+	/// Return the certain type tile-embedded-depth by the given point.
 	/// </summary>
 	/// <returns></returns>
 	public static int EmbeddingDepthOfTileType(int x, int y, int type, int maxRange = 4)
@@ -592,7 +595,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点附近的地势法线
+	/// Return a unit normal perpendicular to tile edge near by the given point.
 	/// </summary>
 	/// <returns></returns>
 	public static Vector2 TerrianSurfaceNormal(int x, int y, int maxRange = 4, int excludeTileType = -1)
@@ -625,7 +628,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点附近的地势倾角
+	/// Return tilt angle of tile edge near by the given point(in rad).
 	/// </summary>
 	/// <returns></returns>
 	public static float TerrianSurfaceAngle(int x, int y, int maxRange = 4, int excludeTileType = -1)
