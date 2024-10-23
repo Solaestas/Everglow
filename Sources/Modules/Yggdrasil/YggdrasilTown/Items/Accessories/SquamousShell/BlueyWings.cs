@@ -7,10 +7,7 @@ public class BlueyWings : ModItem
 {
 	public override void SetStaticDefaults()
 	{
-		// Fly time: 120 ticks = 2 seconds
-		// Fly speed: 6
-		// Acceleration multiplier: 1.5
-		ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(120, 6f, 1.5f);
+		ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(120, 6.25f, 1.5f);
 	}
 
 	public override void SetDefaults()
@@ -22,19 +19,23 @@ public class BlueyWings : ModItem
 		Item.accessory = true;
 	}
 
-	public override void VerticalWingSpeeds(Player player, ref float ascentWhenFalling, ref float ascentWhenRising,
-		ref float maxCanAscendMultiplier, ref float maxAscentMultiplier, ref float constantAscend)
+	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
-		ascentWhenFalling = 0.85f; // Falling glide speed
-		ascentWhenRising = 0.15f; // Rising speed
-		maxCanAscendMultiplier = 1f;
-		maxAscentMultiplier = 3f;
-		constantAscend = 0.135f;
+		player.GetModPlayer<BlueyWingsPlayer>().EnableBlueyWings = true;
+	}
+}
+
+public class BlueyWingsPlayer : ModPlayer
+{
+	public bool EnableBlueyWings { get; set; } = false;
+
+	public override void ResetEffects()
+	{
+		EnableBlueyWings = false;
 	}
 
-	public override void AddRecipes()
+	public override void PostUpdate()
 	{
-		CreateRecipe()
-			.Register();
+		bool inYggdrasilTownBiome = Player.InModBiome(ModContent.GetInstance<YggdrasilTownBiome>());
 	}
 }

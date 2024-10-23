@@ -1,7 +1,7 @@
 using Everglow.Commons.Weapons.CrossBow;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.SquamousShell;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 
 public class RockSpikeBallista : CrossBowItem
 {

@@ -2,7 +2,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.SquamousShell;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 
 public class FlurryingBlades : ModItem
 {
