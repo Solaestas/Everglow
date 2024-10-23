@@ -1,4 +1,4 @@
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.SquamousShell
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Ammos
 {
 	public class RockArrow : ModItem
 	{
@@ -22,7 +22,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.SquamousShell
 			Item.rare = ItemRarityID.Blue;
 			Item.shoot = ModContent.ProjectileType<Projectiles.RockArrow>();
 
-			Item.ammo = AmmoID.Arrow; 
+			Item.ammo = AmmoID.Arrow;
 		}
 	}
 }
