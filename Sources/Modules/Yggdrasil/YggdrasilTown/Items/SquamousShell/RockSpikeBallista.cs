@@ -10,7 +10,7 @@ public class RockSpikeBallista : CrossBowItem
 		Item.width = 108;
 		Item.height = 38;
 		Item.rare = ItemRarityID.White;
-		Item.value = 4200;
+		Item.value = 8200;
 
 		Item.useTime = 24;
 		Item.useAnimation = 24;

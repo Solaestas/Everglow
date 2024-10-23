@@ -1,4 +1,5 @@
 using Everglow.Commons.VFX.Scene;
+using Everglow.Yggdrasil.Common.Projectiles;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using SubworldLibrary;
 using Terraria.ObjectData;
@@ -35,7 +36,7 @@ public class OriginPylon : ModTile, ISceneTile
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.addTile(Type);
-		AddMapEntry(new Color(64, 64, 61));
+		AddMapEntry(new Color(188, 189, 185));
 		MinPick = int.MaxValue;
 	}
 
@@ -121,6 +122,18 @@ public class OriginPylon : ModTile, ISceneTile
 			OriginalPylon_VFX oPVFX = new OriginalPylon_VFX { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = ModContent.TileType<OriginPylon>() };
 			Ins.VFXManager.Add(oPVFX);
 		}
+	}
+
+	public override bool RightClick(int i, int j)
+	{
+		Player player = Main.LocalPlayer;
+		int projectileType = ModContent.ProjectileType<TeleportToYggdrasil>();
+		if (player.ownedProjectileCounts[projectileType] <= 0)
+		{
+			player.AddBuff(BuffID.Shimmer, 30);
+			Projectile.NewProjectileDirect(WorldGen.GetProjectileSource_PlayerOrWires(i, j, false, player), Main.MouseWorld, Vector2.zeroVector, projectileType, 0, 0, player.whoAmI);
+		}
+		return base.RightClick(i, j);
 	}
 }
 

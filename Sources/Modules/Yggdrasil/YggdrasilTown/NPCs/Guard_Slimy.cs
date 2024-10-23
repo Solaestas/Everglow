@@ -31,7 +31,6 @@ public class Guard_Slimy : ModNPC
 		NPC.DeathSound = SoundID.NPCDeath1;
 		NPC.hide = false;
 		NPC.noGravity = false;
-		NPC.behindTiles = true;
 		NPC.scale = 1f;
 	}
 

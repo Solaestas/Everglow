@@ -767,20 +767,24 @@ public class YggdrasilTownGeneration
 			{
 				Point pos = new Point(i, j) + topLeft;
 				Tile tile = SafeGetTile(pos);
+				Tile tileUp = SafeGetTile(pos + new Point(0, -1));
 				float noiseValueUp = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + y0CoordPerlin) % 1024] / 255f * 0.5f;
 				float noiseValueDown = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + 50 + y0CoordPerlin) % 1024] / 255f * 0.5f;
-				if (j > height - value + noiseValueUp * 15 && j < height - value + thick + noiseValueDown * 25)
+				if(!TileID.Sets.BasicChest[tile.TileType] && !TileID.Sets.BasicChest[tileUp.TileType])
 				{
-					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
-					tile.HasTile = true;
-				}
-				if (j > height - value + noiseValueUp * 15 + 3 && j < height - value + thick + noiseValueDown * 25 - 3)
-				{
-					tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
-				}
-				if (j >= height + thick - value + noiseValueDown * 25)
-				{
-					tile.ClearEverything();
+					if (j > height - value + noiseValueUp * 15 && j < height - value + thick + noiseValueDown * 25)
+					{
+						tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+						tile.HasTile = true;
+					}
+					if (j > height - value + noiseValueUp * 15 + 3 && j < height - value + thick + noiseValueDown * 25 - 3)
+					{
+						tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+					}
+					if (j >= height + thick - value + noiseValueDown * 25)
+					{
+						tile.ClearEverything();
+					}
 				}
 			}
 		}
@@ -807,7 +811,7 @@ public class YggdrasilTownGeneration
 			}
 		}
 		BuildTangledSubmine();
-		QuickBuild(430, Main.maxTilesY - 400, "YggdrasilTown/MapIOs/YggdrasilTown_Town.mapio");
+		QuickBuild(430, Main.maxTilesY - 400, ModAsset.YggdrasilTown_Town_Path);
 		for (int i = 0; i < 501; i += 6)
 		{
 			for (int j = 0; j < 100; j++)
@@ -1361,7 +1365,7 @@ public class YggdrasilTownGeneration
 		}
 
 		// 电梯间
-		QuickBuild(buildX, buildY, "YggdrasilTown/MapIOs/LiftRoomOfChallengerHall40x22.mapio");
+		QuickBuild(buildX, buildY, ModAsset.LiftRoomOfChallengerHall40x22_Path);
 		int step2X = buildX + 40;
 		int step2Y = buildY + 3;
 		PlaceRectangleAreaOfBlock(step2X, step2Y, step2X + 480, step2Y + 9, ModContent.TileType<StoneScaleWood>());
@@ -1947,10 +1951,10 @@ public class YggdrasilTownGeneration
 						switch (WorldGen.genRand.Next(2))
 						{
 							case 0:
-								QuickBuild(startX, endY - 11, "YggdrasilTown/MapIOs/1FolkHouseofChineseStyleTypeA28x11.mapio");
+								QuickBuild(startX, endY - 11, ModAsset.MapIOs_1FolkHouseofChineseStyleTypeA28x11_Path);
 								break;
 							case 1:
-								QuickBuild(startX, endY - 11, "YggdrasilTown/MapIOs/1FolkHouseofChineseStyleTypeB28x11.mapio");
+								QuickBuild(startX, endY - 11, ModAsset.MapIOs_1FolkHouseofChineseStyleTypeB28x11_Path);
 								break;
 						}
 						return;
@@ -1966,10 +1970,10 @@ public class YggdrasilTownGeneration
 						switch (WorldGen.genRand.Next(2))
 						{
 							case 0:
-								QuickBuild(startX, endY - 8, "YggdrasilTown/MapIOs/3SmithyTypeA22x8.mapio");
+								QuickBuild(startX, endY - 8, ModAsset.MapIOs_3SmithyTypeA22x8_Path);
 								break;
 							case 1:
-								QuickBuild(startX, endY - 8, "YggdrasilTown/MapIOs/3SmithyTypeB22x8.mapio");
+								QuickBuild(startX, endY - 8, ModAsset.MapIOs_3SmithyTypeB22x8_Path);
 								break;
 						}
 						return;
@@ -1985,16 +1989,16 @@ public class YggdrasilTownGeneration
 						switch (WorldGen.genRand.Next(4))
 						{
 							case 0:
-								QuickBuild(startX, endY - 11, "YggdrasilTown/MapIOs/2FolkHouseofWoodAndStoneStrutureTypeA28x11.mapio");
+								QuickBuild(startX, endY - 11, ModAsset.MapIOs_2FolkHouseofWoodAndStoneStrutureTypeA28x11_Path);
 								break;
 							case 1:
-								QuickBuild(startX, endY - 11, "YggdrasilTown/MapIOs/2FolkHouseofWoodAndStoneStrutureTypeB28x11.mapio");
+								QuickBuild(startX, endY - 11, ModAsset.MapIOs_2FolkHouseofWoodAndStoneStrutureTypeB28x11_Path);
 								break;
 							case 2:
-								QuickBuild(startX, endY - 11, "YggdrasilTown/MapIOs/2FolkHouseofWoodStoneStrutureTypeA28x11.mapio");
+								QuickBuild(startX, endY - 11, ModAsset.MapIOs_2FolkHouseofWoodStoneStrutureTypeA28x11_Path);
 								break;
 							case 3:
-								QuickBuild(startX, endY - 11, "YggdrasilTown/MapIOs/2FolkHouseofWoodStoneStrutureTypeB28x11.mapio");
+								QuickBuild(startX, endY - 11, ModAsset.MapIOs_2FolkHouseofWoodStoneStrutureTypeB28x11_Path);
 								break;
 						}
 						return;
@@ -2010,16 +2014,16 @@ public class YggdrasilTownGeneration
 						switch (WorldGen.genRand.Next(4))
 						{
 							case 0:
-								QuickBuild(startX, endY - 10, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeA22x10.mapio");
+								QuickBuild(startX, endY - 10, ModAsset.MapIOs_4FolkHouseofWoodStrutureTypeA22x10_Path);
 								break;
 							case 1:
-								QuickBuild(startX, endY - 10, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeB22x10.mapio");
+								QuickBuild(startX, endY - 10, ModAsset.MapIOs_4FolkHouseofWoodStrutureTypeB22x10_Path);
 								break;
 							case 2:
-								QuickBuild(startX, endY - 10, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeC22x10.mapio");
+								QuickBuild(startX, endY - 10, ModAsset.MapIOs_4FolkHouseofWoodStrutureTypeC22x10_Path);
 								break;
 							case 3:
-								QuickBuild(startX, endY - 10, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeD22x10.mapio");
+								QuickBuild(startX, endY - 10, ModAsset.MapIOs_4FolkHouseofWoodStrutureTypeD22x10_Path);
 								break;
 						}
 						return;
@@ -2035,13 +2039,13 @@ public class YggdrasilTownGeneration
 						switch (WorldGen.genRand.Next(3))
 						{
 							case 0:
-								QuickBuild(startX, endY - 13, "YggdrasilTown/MapIOs/5TwoStoriedFolkHouseTypeA23x13.mapio");
+								QuickBuild(startX, endY - 13, ModAsset.MapIOs_5TwoStoriedFolkHouseTypeA23x13_Path);
 								break;
 							case 1:
-								QuickBuild(startX, endY - 13, "YggdrasilTown/MapIOs/5TwoStoriedFolkHouseTypeB23x13.mapio");
+								QuickBuild(startX, endY - 13, ModAsset.MapIOs_5TwoStoriedFolkHouseTypeB23x13_Path);
 								break;
 							case 2:
-								QuickBuild(startX, endY - 13, "YggdrasilTown/MapIOs/5TwoStoriedFolkHouseTypeC23x13.mapio");
+								QuickBuild(startX, endY - 13, ModAsset.MapIOs_5TwoStoriedFolkHouseTypeC23x13_Path);
 								break;
 						}
 						return;
