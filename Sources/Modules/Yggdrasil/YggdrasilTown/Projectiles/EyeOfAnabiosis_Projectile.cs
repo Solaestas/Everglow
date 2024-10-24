@@ -2,7 +2,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class EyeOfAnabiosis_Projectile : ModProjectile
 {
-	public override string Texture => ModAsset.EyeOfAnabiosis_Mod;
+	public override string Texture => ModAsset.Projectiles_LampWoodYoyo_Mod;
 
 	private Player Owner => Main.player[Projectile.owner];
 

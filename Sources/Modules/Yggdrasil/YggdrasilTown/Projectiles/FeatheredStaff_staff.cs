@@ -4,10 +4,6 @@ public class FeatheredStaff_staff : ModProjectile
 {
 	public override string Texture => ModAsset.Auburn_FeatheredStaff_Mod;
 
-	private float AI0 { get => Projectile.ai[0]; set => Projectile.ai[0] = value; }
-
-	private float AI1 { get => Projectile.ai[1]; set => Projectile.ai[1] = value; }
-
 	private Player Owner => Main.player[Projectile.owner];
 
 	public override void SetDefaults()
@@ -30,10 +26,8 @@ public class FeatheredStaff_staff : ModProjectile
 		MouseToPlayer = Vector2.Normalize(MouseToPlayer);
 		if (Owner.controlUseItem)
 		{
-			AI0 *= 0.9f;
-			AI1 -= 1f;
 			Projectile.rotation = (float)(Math.Atan2(MouseToPlayer.Y, MouseToPlayer.X) + Math.PI * 0.25);
-			Projectile.Center = Owner.MountedCenter + Vector2.Normalize(MouseToPlayer).RotatedBy(AI0 / 0.8d) * 28f + new Vector2(0, 0);
+			Projectile.Center = Owner.MountedCenter + Vector2.Normalize(MouseToPlayer) * 28f + new Vector2(0, 0);
 			Projectile.velocity *= 0;
 			if (Owner.itemTime == Owner.itemTimeMax - 1)
 			{
@@ -51,27 +45,12 @@ public class FeatheredStaff_staff : ModProjectile
 					Projectile.Kill();
 				}
 			}
-		}
-		if (!Owner.controlUseItem)
-		{
-			if (AI1 > 0)
-			{
-				AI0 *= 0.9f;
-				AI1 -= 1f;
-				Projectile.Center = Owner.MountedCenter + Vector2.Normalize(MouseToPlayer).RotatedBy(AI0 / 4d) * 28f;
-			}
-			else
-			{
-				Projectile.Kill();
-			}
-		}
-		if (Projectile.Center.X < Owner.MountedCenter.X)
-		{
-			Owner.direction = -1;
+
+			Owner.direction = Projectile.Center.X < Owner.MountedCenter.X ? -1 : 1;
 		}
 		else
 		{
-			Owner.direction = 1;
+			Projectile.Kill();
 		}
 	}
 

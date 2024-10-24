@@ -1,10 +1,13 @@
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Terraria.DataStructures;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 
 public class EyeOfAnabiosis : ModItem
 {
-	private int ProjIndex { get; set; } = 0;
+	private int WeaponProjectileIndex { get; set; } = 0;
 
-	private Projectile Proj => Main.projectile[ProjIndex];
+	private Projectile WeaponProjectile => Main.projectile[WeaponProjectileIndex];
 
 	public override void SetDefaults()
 	{
@@ -20,28 +23,29 @@ public class EyeOfAnabiosis : ModItem
 		Item.useTime = 22;
 		Item.useAnimation = 22;
 		Item.useStyle = ItemUseStyleID.Shoot;
+		Item.UseSound = SoundID.Item117;
+		Item.autoReuse = true;
 		Item.noMelee = true;
+		Item.noUseGraphic = true;
+		Item.channel = true;
 
 		Item.value = Item.sellPrice(gold: 1, silver: 3);
 		Item.rare = ItemRarityID.Green;
-		Item.autoReuse = true;
 
-		Item.shoot = ModContent.ProjectileType<Projectiles.EyeOfAnabiosis>();
+		Item.shoot = ModContent.ProjectileType<EyeOfAnabiosis_Weapon>();
 		Item.shootSpeed = 7;
 	}
 
-	public override void UpdateInventory(Player player)
+	public override void HoldItem(Player player)
 	{
-		bool generated = false;
-		if (player.HeldItem == Item && !generated)
+		bool hasGeneratedWeaponProj = WeaponProjectileIndex > -1 && WeaponProjectile is not null && WeaponProjectile.type == ModContent.ProjectileType<EyeOfAnabiosis_Weapon>() && WeaponProjectile.owner == player.whoAmI && WeaponProjectile.timeLeft > 0;
+
+		Vector2 position = player.Center;
+		if (player.HeldItem == Item && hasGeneratedWeaponProj is false)
 		{
-			ProjIndex = Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Bottom, player.velocity, Item.shoot, 0, 0);
-			Console.WriteLine("Created");
-		}
-		else if (player.HeldItem != Item && generated)
-		{
-			Proj.Kill();
-			Console.WriteLine("Killed");
+			WeaponProjectileIndex = Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, Vector2.Zero, ModContent.ProjectileType<EyeOfAnabiosis_Weapon>(), 0, 0, player.whoAmI);
 		}
 	}
+
+	public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] == 0;
 }
