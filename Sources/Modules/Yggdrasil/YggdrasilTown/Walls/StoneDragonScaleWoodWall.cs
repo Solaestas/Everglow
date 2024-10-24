@@ -6,8 +6,9 @@ public class StoneDragonScaleWoodWall : ModWall
 	{
 		Main.wallHouse[Type] = true;
 		DustType = DustID.WoodFurniture;
-		AddMapEntry(new Color(10, 8, 8));
+		AddMapEntry(new Color(28, 26, 25));
 	}
+
 	public override bool CanExplode(int i, int j)
 	{
 		return false;

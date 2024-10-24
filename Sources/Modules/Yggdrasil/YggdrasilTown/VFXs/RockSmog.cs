@@ -1,4 +1,5 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
+
 public class RockSmogPipeline : Pipeline
 {
 	public override void Load()
@@ -7,6 +8,7 @@ public class RockSmogPipeline : Pipeline
 		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
 		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_rockSmog.Value);
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
@@ -25,10 +27,12 @@ public class RockSmogPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(RockSmogPipeline))]
 public class RockSmogDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawNPCs;
+
 	public Vector2 position;
 	public Vector2 velocity;
 	public float[] ai;
@@ -36,7 +40,7 @@ public class RockSmogDust : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-	public RockSmogDust() { }
+
 	public override void Update()
 	{
 		position += velocity;
@@ -50,7 +54,7 @@ public class RockSmogDust : Visual
 		}
 		velocity *= 0.9f;
 		velocity += new Vector2(Main.windSpeedCurrent * 0.1f, 0.1f);
-		if(position.X < Main.maxTilesX * 16 - 320 && position.X > 320)
+		if (position.X < Main.maxTilesX * 16 - 320 && position.X > 320)
 		{
 			if (position.Y < Main.maxTilesY * 16 - 320 && position.Y > 320)
 			{
@@ -66,23 +70,27 @@ public class RockSmogDust : Visual
 		}
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		velocity = velocity.RotatedBy(ai[1]);
 	}
+
 	public override void Draw()
 	{
 		float pocession = timer / maxTime;
 		float timeValue = (float)(Main.time * 0.002);
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
 		Vector3 lightValue = Lighting.GetColor(position.ToTileCoordinates()).ToVector3();
-		float light = (lightValue.Length());
+		float light = lightValue.Length();
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + toCorner,new Color(0, 0,pocession), new Vector3(ai[0],timeValue,light)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 1, pocession), new Vector3(ai[0], timeValue + 0.4f, light)),
+			new Vertex2D(position + toCorner, new Color(0, 0, pocession), new Vector3(ai[0], timeValue, light)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), new Color(0, 1, pocession), new Vector3(ai[0], timeValue + 0.4f, light)),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0 ,pocession), new Vector3(ai[0] + 0.4f, timeValue, light)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession), new Vector3(ai[0] + 0.4f, timeValue + 0.4f, light))
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5), new Color(1, 0, pocession), new Vector3(ai[0] + 0.4f, timeValue, light)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1), new Color(1, 1, pocession), new Vector3(ai[0] + 0.4f, timeValue + 0.4f, light)),
 		};
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
