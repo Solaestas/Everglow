@@ -15,7 +15,7 @@ namespace Everglow.Yggdrasil.WorldGeneration;
 
 public class YggdrasilWorldGeneration : ModSystem
 {
-	internal class YggdrasilWorldGenPass : GenPass
+	public class YggdrasilWorldGenPass : GenPass
 	{
 		public YggdrasilWorldGenPass()
 			: base("Yggdrasil, the Tree World", 500)
@@ -35,6 +35,22 @@ public class YggdrasilWorldGeneration : ModSystem
 			Main.statusText = string.Empty;
 		}
 	}
+
+	public class MainWorldPylonRelicGenPass_Yggdrasil : GenPass
+	{
+		public MainWorldPylonRelicGenPass_Yggdrasil()
+			: base("Inserting Yggdrasil Relic...", 501)
+		{
+		}
+
+		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+		{
+			progress.Message = "Inserting Yggdrasil Relic...";
+			MainWorldGeneratioin_Yggdrasil.BuildYggdrasilPylonRelic();
+		}
+	}
+
+	public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) => tasks.Add(new MainWorldPylonRelicGenPass_Yggdrasil());
 
 	public static int[,] GlobalPerlinPixelR = new int[1024, 1024];
 	public static int[,] GlobalPerlinPixelG = new int[1024, 1024];
@@ -162,7 +178,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 平坦化,x0左y0上x1右y1下
+	/// Smooth tiles by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>
 	/// <param name="y0"></param>
@@ -196,7 +212,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 放置一个矩形区域的物块,x0左y0上x1右y1下
+	/// Fill tiles by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>
 	/// <param name="y0"></param>
@@ -221,7 +237,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 放置一个矩形区域的墙壁,x0左y0上x1右y1下
+	/// Fill walls by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>
 	/// <param name="y0"></param>
@@ -242,7 +258,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 清除给定区域的一切,x0左y0上x1右y1下
+	/// Clear everything by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>
 	/// <param name="y0"></param>
@@ -263,7 +279,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 清除给定区域的物块,x0左y0上x1右y1下
+	/// Clear tiles by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>
 	/// <param name="y0"></param>
@@ -284,7 +300,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 清除给定区域的墙壁,x0左y0上x1右y1下
+	/// Clear walls by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>
 	/// <param name="y0"></param>
@@ -305,7 +321,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 快速建好一个MapIO
+	/// Place a prefabricated mapIO anchored top left at (x, y).
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -314,7 +330,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	{
 		var mapIO = new MapIO(x, y);
 
-		mapIO.Read(ModIns.Mod.GetFileStream("Yggdrasil/" + Path));
+		mapIO.Read(ModIns.Mod.GetFileStream(Path));
 
 		var it = mapIO.GetEnumerator();
 		while (it.MoveNext())
@@ -325,7 +341,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点上下两侧的空旷高度
+	/// Return the summary of air-to-tile distances of given point to top and to bottom.
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -363,7 +379,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点左右两侧的空旷长度
+	/// Return the summary of air-to-tile distances of given point to left and to right.
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -401,7 +417,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点到左侧的空旷长度
+	/// Return the air-to-tile distance from given point to LEFT.
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -428,7 +444,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点到右侧的空旷长度
+	/// Return the air-to-tile distance from given point to RIGHT.
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -455,7 +471,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点到上缘的空旷高度
+	/// Return the air-to-tile distance from given point to TOP.
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -482,7 +498,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点到下缘的空旷高度
+	/// Return the air-to-tile distance from given point to BOTTOM.
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -509,7 +525,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点嵌入固体块的深度
+	/// Return the tile-embedded-depth by the given point.
 	/// </summary>
 	/// <returns></returns>
 	public static int EmbeddingDepth(int x, int y, int maxRange = 4)
@@ -532,7 +548,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回墙壁上的一点到外面的最短距离
+	/// Return the wall-embedded-depth by the given point.
 	/// </summary>
 	/// <returns></returns>
 	public static float EmbeddingWallDepth(int x, int y, int maxRange = 50)
@@ -555,7 +571,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点嵌入某种物块的深度
+	/// Return the certain type tile-embedded-depth by the given point.
 	/// </summary>
 	/// <returns></returns>
 	public static int EmbeddingDepthOfTileType(int x, int y, int type, int maxRange = 4)
@@ -579,7 +595,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点附近的地势法线
+	/// Return a unit normal perpendicular to tile edge near by the given point.
 	/// </summary>
 	/// <returns></returns>
 	public static Vector2 TerrianSurfaceNormal(int x, int y, int maxRange = 4, int excludeTileType = -1)
@@ -612,7 +628,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 返回一点附近的地势倾角
+	/// Return tilt angle of tile edge near by the given point(in rad).
 	/// </summary>
 	/// <returns></returns>
 	public static float TerrianSurfaceAngle(int x, int y, int maxRange = 4, int excludeTileType = -1)
@@ -1264,72 +1280,72 @@ public class YggdrasilWorldGeneration : ModSystem
 						case 3: // 天穹古道建筑
 							if (pixel.R == 121 && pixel.G == 5 && pixel.B == 255)// FolkHouseofChineseStyle TypeA  28x11
 							{
-								QuickBuild(x, y, "YggdrasilTown/MapIOs/1FolkHouseofChineseStyleTypeA28x11.mapio");
+								QuickBuild(x, y, ModAsset.MapIOs_1FolkHouseofChineseStyleTypeA28x11_Path);
 							}
 
 							if (pixel.R == 120 && pixel.G == 5 && pixel.B == 255)// FolkHouseofChineseStyle TypeB  28x11
 							{
-								QuickBuild(x, y, "YggdrasilTown/MapIOs/1FolkHouseofChineseStyleTypeB28x11.mapio");
+								QuickBuild(x, y, ModAsset.MapIOs_1FolkHouseofChineseStyleTypeB28x11_Path);
 							}
 
 							if (pixel.R == 122 && pixel.G == 5 && pixel.B == 255)// FolkHouseofWood＆StoneStruture TypeA  28x11
 							{
-								QuickBuild(x, y, "YggdrasilTown/MapIOs/2FolkHouseofWoodStoneStrutureTypeA28x11.mapio");
+								QuickBuild(x, y, ModAsset.MapIOs_2FolkHouseofWoodAndStoneStrutureTypeA28x11_Path);
 							}
 
 							if (pixel.R == 123 && pixel.G == 5 && pixel.B == 255)// FolkHouseofWood＆StoneStruture TypeB  28x11
 							{
-								QuickBuild(x, y, "YggdrasilTown/MapIOs/2FolkHouseofWoodStoneStrutureTypeB28x11.mapio");
+								QuickBuild(x, y, ModAsset.MapIOs_2FolkHouseofWoodAndStoneStrutureTypeB28x11_Path);
 							}
 
 							if (pixel.R == 124 && pixel.G == 5 && pixel.B == 255)// Smithy TypeA  22x8
 							{
-								QuickBuild(x, y, "YggdrasilTown/MapIOs/3SmithyTypeA22x8.mapio");
+								QuickBuild(x, y, ModAsset.MapIOs_3SmithyTypeA22x8_Path);
 							}
 
 							if (pixel.R == 125 && pixel.G == 5 && pixel.B == 255)// Smithy TypeB  22x8
 							{
-								QuickBuild(x, y, "YggdrasilTown/MapIOs/3SmithyTypeB22x8.mapio");
+								QuickBuild(x, y, ModAsset.MapIOs_3SmithyTypeB22x8_Path);
 							}
 
 							if (pixel.R == 126 && pixel.G == 5 && pixel.B == 255)// FolkHouseofWoodStruture TypeA  22x10
 							{
-								QuickBuild(x, y, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeA22x10.mapio");
+								QuickBuild(x, y, ModAsset.MapIOs_4FolkHouseofWoodStrutureTypeA22x10_Path);
 							}
 
 							if (pixel.R == 127 && pixel.G == 5 && pixel.B == 255)// FolkHouseofWoodStruture TypeB  22x10
 							{
-								QuickBuild(x, y, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeB22x10.mapio");
+								QuickBuild(x, y, ModAsset.MapIOs_4FolkHouseofWoodStrutureTypeB22x10_Path);
 							}
 
 							if (pixel.R == 128 && pixel.G == 5 && pixel.B == 255)// FolkHouseofWoodStruture TypeC  22x10
 							{
-								QuickBuild(x, y, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeC22x10.mapio");
+								QuickBuild(x, y, ModAsset.MapIOs_4FolkHouseofWoodStrutureTypeC22x10_Path);
 							}
 
 							if (pixel.R == 129 && pixel.G == 5 && pixel.B == 255)// FolkHouseofWoodStruture TypeD  22x10
 							{
-								QuickBuild(x, y, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeD22x10.mapio");
+								QuickBuild(x, y, ModAsset.MapIOs_4FolkHouseofWoodStrutureTypeD22x10_Path);
 							}
 
 							if (pixel.R == 130 && pixel.G == 5 && pixel.B == 255)// FolkHouseofWoodStruture TypeA  23x13
 							{
-								QuickBuild(x, y, "YggdrasilTown/MapIOs/5TwoStoriedFolkHouseTypeA23x13.mapio");
+								QuickBuild(x, y, ModAsset.MapIOs_5TwoStoriedFolkHouseTypeA23x13_Path);
 							}
 
 							if (pixel.R == 131 && pixel.G == 5 && pixel.B == 255)// FolkHouseofWoodStruture TypeB  23x13
 							{
-								QuickBuild(x, y, "YggdrasilTown/MapIOs/5TwoStoriedFolkHouseTypeB23x13.mapio");
+								QuickBuild(x, y, ModAsset.MapIOs_5TwoStoriedFolkHouseTypeB23x13_Path);
 							}
 
 							if (pixel.R == 132 && pixel.G == 5 && pixel.B == 255)// FolkHouseofWoodStruture TypeC  23x13
 							{
-								QuickBuild(x, y, "YggdrasilTown/MapIOs/5TwoStoriedFolkHouseTypeC23x13.mapio");
+								QuickBuild(x, y, ModAsset.MapIOs_5TwoStoriedFolkHouseTypeC23x13_Path);
 							}
 
 							if (pixel.R == 133 && pixel.G == 5 && pixel.B == 255)// Church 80x51
 							{
-								QuickBuild(x, y, "YggdrasilTown/MapIOs/Church80x51.mapio");
+								QuickBuild(x, y, ModAsset.Church80x51_Path);
 							}
 
 							break;

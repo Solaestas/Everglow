@@ -2,7 +2,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.SquamousShell;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 
 public class FlurryingBlades : ModItem
 {
@@ -10,6 +10,7 @@ public class FlurryingBlades : ModItem
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
+
 	public override void SetDefaults()
 	{
 		Item.damage = 21;
@@ -20,7 +21,7 @@ public class FlurryingBlades : ModItem
 		Item.useAnimation = 11;
 		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.noMelee = true;
-		Item.knockBack = 8;
+		Item.knockBack = 0.8f;
 		Item.value = 12400;
 		Item.rare = ItemRarityID.Green;
 		Item.autoReuse = true;
@@ -29,6 +30,7 @@ public class FlurryingBlades : ModItem
 		Item.crit = 16;
 		Item.mana = 12;
 	}
+
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
 		if (player.ownedProjectileCounts[type] < 1)
@@ -39,6 +41,7 @@ public class FlurryingBlades : ModItem
 		}
 		return false;
 	}
+
 	public override void HoldItem(Player player)
 	{
 	}
