@@ -43,9 +43,10 @@ public class EyeOfAnabiosis : ModItem
 		Vector2 position = player.Center;
 		if (player.HeldItem == Item && hasGeneratedWeaponProj is false)
 		{
-			WeaponProjectileIndex = Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, Vector2.Zero, ModContent.ProjectileType<EyeOfAnabiosis_Weapon>(), 0, 0, player.whoAmI);
+			WeaponProjectileIndex = Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, Vector2.Zero, ModContent.ProjectileType<EyeOfAnabiosis_Weapon>(), 0, 0, player.whoAmI, Main.MouseWorld.X, Main.MouseWorld.Y);
 		}
 	}
 
+	// TODO: A bug need to be fixed - item can consume mana even it's CanUseItem is false
 	public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] == 0;
 }

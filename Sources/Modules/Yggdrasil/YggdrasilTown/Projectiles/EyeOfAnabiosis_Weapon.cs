@@ -6,6 +6,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 public class EyeOfAnabiosis_Weapon : ModProjectile
 {
 	private const int MaxChargeTime = 720;
+	private const int MaxTargetCount = 3;
 	private const int SearchDistance = 500;
 
 	private int ChargeTimer { get; set; } = 0;
@@ -15,6 +16,16 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 	private Player Owner => Main.player[Projectile.owner];
 
 	private Item HeldItem => Main.mouseItem.IsAir ? Owner.HeldItem : Main.mouseItem;
+
+	private Vector2 OwnerMouseWorld
+	{
+		get => new Vector2(Projectile.ai[0], Projectile.ai[1]);
+		set
+		{
+			Projectile.ai[0] = value.X;
+			Projectile.ai[1] = value.Y;
+		}
+	}
 
 	public override void SetDefaults()
 	{
@@ -30,12 +41,29 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 
 	public override void AI()
 	{
+		SyncOwnerMouseWorld();
 		KillHoldout();
 		ManageHoldout();
 		HoldoutAI();
 	}
 
-	public void KillHoldout()
+	private void SyncOwnerMouseWorld()
+	{
+		if (Projectile.owner != Main.myPlayer)
+		{
+			return;
+		}
+
+		if (Main.MouseWorld == OwnerMouseWorld)
+		{
+			return;
+		}
+
+		OwnerMouseWorld = Main.MouseWorld;
+		Projectile.netUpdate = true;
+	}
+
+	private void KillHoldout()
 	{
 		bool canUseHoldout =
 			Owner == null
@@ -67,7 +95,7 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		}
 	}
 
-	public void ManageHoldout()
+	private void ManageHoldout()
 	{
 		Owner.heldProj = Projectile.whoAmI;
 		Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, MathF.PI + Owner.direction * MathF.PI * 2 / 3);
@@ -76,12 +104,19 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		Projectile.velocity *= 0;
 	}
 
-	public void HoldoutAI()
+	private void HoldoutAI()
 	{
 		if (ChargeTimer++ < MaxChargeTime)
 		{
-			Console.WriteLine($"Charging: {ChargeTimer} / {MaxChargeTime}");
 			return;
+		}
+		else
+		{
+			if (Main.time % 3 == 0)
+			{
+				var offset = new Vector2(MathF.Cos((float)Main.time * 3f) * Owner.width / 2, MathF.Sin((float)Main.time * 2f) * Owner.width / 2);
+				Dust.NewDust(Owner.Center + offset, 1, 1, DustID.Shadowflame, newColor: new Color(51, 202, 235), Scale: Main.rand.NextFloat(0.8f, 1.1f));
+			}
 		}
 
 		if (!Owner.controlUseItem)
@@ -94,33 +129,27 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 			bool manaCostPaid = Owner.CheckMana(HeldItem, pay: true);
 			if (manaCostPaid)
 			{
-				SoundEngine.PlaySound(SoundID.Item91, Projectile.Center);
-
 				Vector2 projPosition = Projectile.Center + new Vector2(Owner.direction * Projectile.width, Projectile.height / 6);
 				if (Owner.direction == -1)
 				{
-					projPosition.X += Projectile.width / 2;
+					projPosition.X += Projectile.width * 2 / 3;
 				}
-				Vector2 projVelocity;
-				int type = ModContent.ProjectileType<EyeOfAnabiosis_Projectile>();
+				Vector2 projVelocity = Vector2.Normalize(OwnerMouseWorld - projPosition) * HeldItem.shootSpeed;
 
 				List<NPC> targets = SearchTargets();
-				if (targets.Count > 0)
+				foreach (NPC target in targets)
 				{
-					foreach (NPC target in targets)
-					{
-						projVelocity = Vector2.Normalize(target.Center - projPosition) * HeldItem.shootSpeed;
-						Projectile.NewProjectile(Owner.GetSource_ItemUse(HeldItem), projPosition, projVelocity, type, HeldItem.damage, HeldItem.knockBack, Projectile.owner, target.whoAmI);
-					}
+					projVelocity.RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f));
+					Projectile.NewProjectile(Owner.GetSource_ItemUse(HeldItem), projPosition, projVelocity, ModContent.ProjectileType<EyeOfAnabiosis_Projectile>(), HeldItem.damage, HeldItem.knockBack, Projectile.owner, target.whoAmI);
 				}
-				else
+				for (int i = 0; i < MaxTargetCount - targets.Count; i++)
 				{
-					projVelocity = Vector2.Normalize(Main.MouseWorld - projPosition) * HeldItem.shootSpeed;
-					Projectile.NewProjectile(Owner.GetSource_ItemUse(HeldItem), projPosition, projVelocity, type, HeldItem.damage, HeldItem.knockBack, Projectile.owner, -1);
+					projVelocity.RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f));
+					Projectile.NewProjectile(Owner.GetSource_ItemUse(HeldItem), projPosition, projVelocity, ModContent.ProjectileType<EyeOfAnabiosis_Projectile>(), HeldItem.damage, HeldItem.knockBack, Projectile.owner, -1);
 				}
 
+				SoundEngine.PlaySound(SoundID.Item91, Projectile.Center);
 				Owner.ItemCheck_ApplyManaRegenDelay(HeldItem);
-				Owner.itemTime = Owner.itemTimeMax;
 				Owner.itemTime = HeldItem.useTime;
 			}
 		}
@@ -143,13 +172,13 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 			}
 		}
 
-		return targets.OrderBy(x => Vector2.Distance(Owner.Center, x.Center)).Take(3).ToList();
+		return targets.OrderBy(x => Vector2.Distance(Owner.Center, x.Center)).Take(MaxTargetCount).ToList();
 	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
 		// Weapon
-		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+		var texture = ModContent.Request<Texture2D>(Texture).Value;
 		var drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 		var effects = Owner.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipVertically;
 		var rotation = Owner.direction == 1 ? 0f : MathF.PI;
@@ -157,10 +186,10 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		Main.spriteBatch.Draw(texture, position, null, drawColor, rotation, texture.Size() / 2, 1f, effects, 0);
 
 		// Magic Circle
-		var texture2 = ModAsset.YggdrasilAmberLaser_crystal.Value;
+		var texture2 = ModAsset.EyeOfAnabiosis_MagicCircle.Value;
 		var position2 = Owner.Bottom - Main.screenPosition;
-		var circleScale = ChargeTimer < MaxChargeTime ? new Vector2(0.5f, 0.2f) : new Vector2(0.5f, 0.5f);
-		Main.spriteBatch.Draw(texture2, position2, null, drawColor, 0, texture.Size() / 2, circleScale, SpriteEffects.None, 0);
+		position2 += texture2.Size() / 2;
+		Main.spriteBatch.Draw(texture2, position2, null, drawColor, 0, texture.Size() / 2, 1, SpriteEffects.None, -1);
 
 		return false;
 	}

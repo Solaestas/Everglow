@@ -1,4 +1,3 @@
-using Terraria;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -8,8 +7,6 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 	private const int SearchDistance = 600;
 
 	private int targetWhoAmI = 0;
-
-	private Player Owner => Main.player[Projectile.owner];
 
 	private int TargetWhoAmI
 	{
@@ -24,12 +21,13 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 
 	public override void SetDefaults()
 	{
-		Projectile.width = 36;
-		Projectile.height = 36;
+		Projectile.width = 14;
+		Projectile.height = 26;
 		Projectile.aiStyle = -1;
 		Projectile.timeLeft = 240;
 		Projectile.DamageType = DamageClass.Magic;
-		Projectile.penetrate = -1;
+		Projectile.penetrate = 1;
+		Projectile.friendly = true;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -49,14 +47,24 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 			Projectile.frame = (Projectile.frame + 1) % Main.projFrames[Projectile.type];
 		}
 
-		//if (!HasTarget)
-		//{
-		//	Projectile.Minion_FindTargetInRange(SearchDistance, ref targetWhoAmI, false);
-		//}
+		if (HasTarget)
+		{
+			var targetPos = HasTarget ? Main.npc[targetWhoAmI].Center : Vector2.Zero;
+			var targetVel = Vector2.Normalize(targetPos - Projectile.Center) * 10f;
+			Projectile.velocity = (targetVel + Projectile.velocity * 10) / 11f;
+		}
+		else
+		{
+			Projectile.Minion_FindTargetInRange(SearchDistance, ref targetWhoAmI, false);
+		}
+	}
 
-		var targetPos = HasTarget ? Main.npc[targetWhoAmI].Center : Vector2.Zero;
-		var targetVel = Vector2.Normalize(targetPos - Projectile.Center) * 10f;
-		Projectile.velocity = (targetVel + Projectile.velocity * 10) / 11f;
+	public override void OnKill(int timeLeft)
+	{
+		for (int i = 0; i < 15; i++)
+		{
+			Dust.NewDust(Projectile.Center, 1, 1, DustID.Shadowflame, newColor: new Color(51, 202, 235), Scale: Main.rand.NextFloat(1f, 2));
+		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)
