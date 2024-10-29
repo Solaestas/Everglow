@@ -19,6 +19,23 @@ public class CableCarJoint : CableTile
 		MaxCableLength = 2500;
 	}
 
+	public override void NearbyEffects(int i, int j, bool closer)
+	{
+		if (!RopesOfAllThisTileInTheWorld.ContainsKey(new Point(i, j)))
+		{
+			CableEneity cableEneity;
+			TryGetCableEntityAs(i, j, out cableEneity);
+			if (cableEneity != null)
+			{
+				AddRope(i, j, i + cableEneity.ToTail.X, j + cableEneity.ToTail.Y);
+			}
+
+			// Only use for Cable Car
+			FindAndConnectRopeNearBy(i, j, 3);
+		}
+		base.NearbyEffects(i, j, closer);
+	}
+
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		Color lightColor = Lighting.GetColor(i, j);
@@ -27,7 +44,21 @@ public class CableCarJoint : CableTile
 		{
 			zero = Vector2.Zero;
 		}
-		spriteBatch.Draw(ModAsset.CableCarJoint.Value, new Point(i, j).ToWorldCoordinates() - Main.screenPosition + zero + new Vector2(0, 16), new Rectangle(0, 0, 88, 56), lightColor, 0, new Vector2(44, 28), 1, SpriteEffects.None, 0);
+		Tile tile = Main.tile[i, j];
+		float rotation = 0;
+		if (tile.TileFrameX == 18)
+		{
+			rotation = MathHelper.PiOver2;
+		}
+		if (tile.TileFrameX == 36)
+		{
+			rotation = MathHelper.Pi;
+		}
+		if (tile.TileFrameX == 54)
+		{
+			rotation = MathHelper.PiOver2 * 3;
+		}
+		spriteBatch.Draw(ModAsset.CableCarJoint.Value, new Point(i, j).ToWorldCoordinates() - Main.screenPosition + zero, new Rectangle(0, 0, 88, 56), lightColor, rotation, new Vector2(44, 6), 1, SpriteEffects.None, 0);
 
 		TileFluentDrawManager.AddFluentPoint(this, i, j);
 		foreach (Point point in RopeHeadAndTail.Keys)

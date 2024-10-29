@@ -23,8 +23,10 @@ public class NormalCableCar : DBlock
 		}
 		if (Cable != null && Cable != default)
 		{
-			float minLength = 500;
+			float minLength = 2500;
 			int minIndex = 0;
+
+			// find the closest rope joint unit.
 			for (int i = 0; i < Cable.Masses.Length; i++)
 			{
 				float thisLength = (Cable.Masses[i].Position - position).Length();
@@ -37,19 +39,23 @@ public class NormalCableCar : DBlock
 			Vector2 closestPos = Cable.Masses[minIndex].Position;
 			Vector2 targetMassPos = Cable.Masses[Math.Clamp(minIndex + Direction, 0, Cable.Masses.Length - 1)].Position;
 
-			// TODO:如果点到直线距离超过3立刻拉到直线上
+			// If depart from the cable over 3 unit, force postion to the cable.
 			Vector2 deltaPos = targetMassPos - closestPos;
 			Vector2 normalizedDelta = Utils.SafeNormalize(deltaPos, new Vector2(0, -1));
 			Vector2 toClosestPos = position - closestPos;
 			float projectionLength = toClosestPos.Length() * Vector2.Dot(toClosestPos, deltaPos) / (toClosestPos.Length() * deltaPos.Length());
 			Vector2 projection = closestPos + projectionLength * normalizedDelta;
 			float toVelocityLineLength = (projection - position).Length();
-			if(toVelocityLineLength > 1)
+			if (toVelocityLineLength > 1)
 			{
 				position = projection;
 			}
 			velocity = Utils.SafeNormalize(targetMassPos + velocity - closestPos, Vector2.zeroVector) * 3f;
-			if (RopeDuration >= Cable.Masses.Length)
+			if (Direction == 1 && RopeDuration >= Cable.Masses.Length)
+			{
+				ChangeCableCarJoint();
+			}
+			if (Direction == -1 && RopeDuration <= 1)
 			{
 				ChangeCableCarJoint();
 			}
@@ -68,6 +74,10 @@ public class NormalCableCar : DBlock
 		Point pointPos = position.ToTileCoordinates();
 		pointPos.X = Math.Clamp(pointPos.X, 20, Main.maxTilesX - 20);
 		pointPos.Y = Math.Clamp(pointPos.Y, 20, Main.maxTilesY - 20);
+
+		// find a closest cable tile in a 5*5 area near by cable car entity.
+		float minDis = 4;
+		Point minDisPoint = new Point(114, 514);
 		for (int i = -2; i < 3; i++)
 		{
 			for (int j = -2; j < 3; j++)
@@ -76,17 +86,55 @@ public class NormalCableCar : DBlock
 				Tile tile = Main.tile[newPointPos];
 				if (tile.HasTile && tile.TileType == ModContent.TileType<CableCarJoint>())
 				{
-					AnchorCableTile = newPointPos;
-					CableTile cableCarJoint = TileLoader.GetTile(tile.TileType) as CableTile;
-					if(Direction == -1)
+					float distance = new Vector2(i, j).Length();
+					if (distance < minDis)
 					{
-						Point newpoint;
-						cableCarJoint.RopeHeadAndTail.TryGetValue(newPointPos, out newpoint);
-						newPointPos = newpoint;
+						minDis = distance;
+						minDisPoint = new Point(i, j);
 					}
-					cableCarJoint.RopesOfAllThisTileInTheWorld.TryGetValue(newPointPos, out Cable);
 				}
 			}
+		}
+		if (minDisPoint != new Point(114, 514))
+		{
+			Point newPointPos = pointPos + minDisPoint;
+			Tile tile = Main.tile[newPointPos];
+			if (tile.HasTile && tile.TileType == ModContent.TileType<CableCarJoint>())
+			{
+				AnchorCableTile = newPointPos;
+
+				// the cable pos is the previous result while direction = 1.
+				CableTile cableCarJoint = TileLoader.GetTile(tile.TileType) as CableTile;
+				if (Direction == -1)
+				{
+					// else, chose a random rope that end at previous result.
+					// inasmuch as the cable tile data structure design, a cable joint tile can spread more than 1 rope but can only receive 1 at most.
+					List<Point> points = new List<Point>();
+					foreach (Point point in cableCarJoint.RopeHeadAndTail.Keys)
+					{
+						if (cableCarJoint.RopeHeadAndTail[point] == newPointPos)
+						{
+							points.Add(point);
+						}
+					}
+					if(points.Count > 0)
+					{
+						int randIndex = Main.rand.Next(points.Count);
+						newPointPos = points[randIndex];
+					}
+					else
+					{
+						velocity *= 0;
+						Cable = null;
+						return;
+					}
+				}
+				cableCarJoint.RopesOfAllThisTileInTheWorld.TryGetValue(newPointPos, out Cable);
+			}
+		}
+		else
+		{
+			velocity *= 0;
 		}
 	}
 

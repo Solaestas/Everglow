@@ -983,7 +983,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 圆心和直径布设圆形物块,=-1清理物块,-2清理全部
+	/// Set a center and radius of a circle in tile coordinate, and (type >= 0, place that type of tile, type = -1,clear tiles; tile = -2,clear everything).
 	/// </summary>
 	/// <param name="center"></param>
 	/// <param name="radius"></param>
@@ -1029,7 +1029,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 两点为直径布设圆形物块
+	/// Set 2 point as diameter that defines a circle in tile coordinate, and (type >= 0, place that type of tile, type = -1,clear tiles; tile = -2,clear everything).
 	/// </summary>
 	/// <param name="center"></param>
 	/// <param name="radius"></param>

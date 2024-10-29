@@ -33,6 +33,13 @@ public class YggdrasilImpression : ModItem
 				}
 			}
 		}
+
+		// int projectileType = ModContent.ProjectileType<TeleportToYggdrasil>();
+		// if (player.ownedProjectileCounts[projectileType] <= 0)
+		// {
+		// Projectile proj = Projectile.NewProjectileDirect(player.GetSource_FromAI(), player.Center, Vector2.zeroVector, projectileType, 0, 0, player.whoAmI);
+		// proj.extraUpdates = 8;
+		// }
 		return false;
 	}
 

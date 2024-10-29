@@ -262,18 +262,19 @@ public class YggdrasilTownGeneration
 		}
 
 		// 确定左右界限
-		int deltaX = 40;
-		if (AzureGrottoCenterX > 600)
-		{
-			deltaX = -40;
-		}
-		int leftBound = GenRand.Next(1080, 1100) + deltaX;
-		int rightBound = GenRand.Next(1700, 1720) + deltaX;
+		//if (AzureGrottoCenterX > 600)
+		//{
+		//	deltaX = -40;
+		//}
+		int leftBound = 1250;
+		int rightBound = 1440;
 		int startY = Main.maxTilesY - 368;
 		KillRectangleAreaOfTile(leftBound, startY - 10, rightBound, startY);
 
 		// 源晶塔
 		PlaceFrameImportantTiles(1395, startY - 37, 8, 12, ModContent.TileType<OriginPylon>());
+		PlaceFrameImportantTiles(1257, startY, 3, 1, ModContent.TileType<StoneBridgeTile>(), 0, 18);
+		PlaceFrameImportantTiles(1253, startY + 7, 7, 1, ModContent.TileType<StoneBridgeTile>(), 36, 36);
 		for (int x = leftBound + 5; x < rightBound - 5; x++)
 		{
 			if (x % 20 == 0)
@@ -283,6 +284,10 @@ public class YggdrasilTownGeneration
 				PlaceFrameImportantTiles(x, startY + 7, 20, 1, ModContent.TileType<StoneBridgeTile>(), 36, 36);
 			}
 		}
+		PlaceFrameImportantTiles(1440, startY, 8, 1, ModContent.TileType<StoneBridgeTile>(), 0, 54);
+		PlaceFrameImportantTiles(1440, startY + 7, 12, 1, ModContent.TileType<StoneBridgeTile>(), 36, 36);
+
+		PlaceFrameImportantTiles(1470, startY + 7, 16, 1, ModContent.TileType<StoneBridgeTile>(), 0, 72);
 	}
 
 	/// <summary>
@@ -770,7 +775,7 @@ public class YggdrasilTownGeneration
 				Tile tileUp = SafeGetTile(pos + new Point(0, -1));
 				float noiseValueUp = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + y0CoordPerlin) % 1024] / 255f * 0.5f;
 				float noiseValueDown = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + 50 + y0CoordPerlin) % 1024] / 255f * 0.5f;
-				if(!TileID.Sets.BasicChest[tile.TileType] && !TileID.Sets.BasicChest[tileUp.TileType])
+				if (!TileID.Sets.BasicChest[tile.TileType] && !TileID.Sets.BasicChest[tileUp.TileType])
 				{
 					if (j > height - value + noiseValueUp * 15 && j < height - value + thick + noiseValueDown * 25)
 					{
@@ -812,6 +817,8 @@ public class YggdrasilTownGeneration
 		}
 		BuildTangledSubmine();
 		QuickBuild(430, Main.maxTilesY - 400, ModAsset.YggdrasilTown_Town_Path);
+
+		// fill ebonwood wall as piers below town ground.
 		for (int i = 0; i < 501; i += 6)
 		{
 			for (int j = 0; j < 100; j++)
@@ -819,11 +826,157 @@ public class YggdrasilTownGeneration
 				int x = 430 + i;
 				int y = Main.maxTilesY - 400 + 91 + j;
 				Tile tile = SafeGetTile(x, y);
-				if(!tile.HasTile && tile.wall <= 0)
+				if (!tile.HasTile && tile.wall <= 0)
 				{
 					tile.wall = WallID.Ebonwood;
 				}
 			}
+		}
+
+		// cable tunnel
+
+		int tunnelLeftX = 1000;
+		int tunnelRightX = 1170;
+		int tunnelLeftY = Main.maxTilesY - 333;
+		for (int x = tunnelLeftX; x < tunnelRightX; x += 3)
+		{
+			CircleTile(new Vector2(x, tunnelLeftY - (x - tunnelLeftX) * 0.3f), GenRand.NextFloat(12f, 17f), -1, true);
+		}
+		KillRectangleAreaOfTile(1180, Main.maxTilesY - 400, 1240, Main.maxTilesY - 370);
+
+		// first cable joint
+		WorldGenMisc.PlaceRope(930, Main.maxTilesY - 326, 1000, Main.maxTilesY - 339, ModContent.TileType<CableCarJoint>());
+		Tile firstJoint = SafeGetTile(1000, Main.maxTilesY - 339);
+		firstJoint.TileFrameX = 0;
+		for (int j = 1; j < 100; j++)
+		{
+			Tile tile = SafeGetTile(1000, Main.maxTilesY - 339 + j);
+			if (tile.HasTile)
+			{
+				break;
+			}
+			else
+			{
+				tile.TileType = TileID.WoodenBeam;
+				tile.HasTile = true;
+			}
+		}
+		for (int j = 1; j < 100; j++)
+		{
+			Tile tile = SafeGetTile(930, Main.maxTilesY - 326 + j);
+			if (tile.HasTile)
+			{
+				break;
+			}
+			else
+			{
+				tile.TileType = TileID.WoodenBeam;
+				tile.HasTile = true;
+			}
+		}
+
+		// Cable car telpher
+		int lastPosX = 0;
+		int lastPosY = 0;
+
+		for (int x = tunnelLeftX; x < tunnelRightX; x += 60)
+		{
+			int y = (int)(tunnelLeftY - (x - tunnelLeftX) * 0.3f) - 6;
+			if (lastPosX != 0 && lastPosY != 0)
+			{
+				WorldGenMisc.PlaceRope(lastPosX, lastPosY, x, y, ModContent.TileType<CableCarJoint>());
+				if(x > tunnelLeftX + 60)
+				{
+					Tile joint = SafeGetTile(lastPosX, lastPosY);
+					joint.TileFrameX = 36;
+				}
+				for (int j = 1; j < 100; j++)
+				{
+					Tile tile = SafeGetTile(x, y - j);
+					if (tile.HasTile)
+					{
+						break;
+					}
+					else
+					{
+						tile.TileType = TileID.WoodenBeam;
+						tile.HasTile = true;
+					}
+				}
+			}
+			lastPosX = x;
+			lastPosY = y;
+		}
+
+		int telpherY = Main.maxTilesY - 390;
+		int tunntelpherLeftX = 1180;
+		int tunntelpherRightX = 1360;
+		for (int x = tunntelpherLeftX; x < tunntelpherRightX; x += 60)
+		{
+			int y = telpherY;
+			if(x > 1350)
+			{
+				y += 8;
+			}
+			if (x == 1240)
+			{
+				x += 30;
+				y -= 16;
+			}
+			if (lastPosX != 0 && lastPosY != 0)
+			{
+				WorldGenMisc.PlaceRope(lastPosX, lastPosY, x, y, ModContent.TileType<CableCarJoint>());
+				Tile joint = SafeGetTile(x, y);
+				joint.TileFrameX = 0;
+				if(x == tunntelpherLeftX)
+				{
+					joint = SafeGetTile(lastPosX, lastPosY);
+					joint.TileFrameX = 36;
+				}
+				for (int j = 1; j < 100; j++)
+				{
+					Tile tile = SafeGetTile(x, y + j);
+					if (tile.HasTile)
+					{
+						break;
+					}
+					else
+					{
+						tile.TileType = TileID.WoodenBeam;
+						tile.HasTile = true;
+					}
+				}
+			}
+			lastPosX = x;
+			lastPosY = y;
+		}
+		tunntelpherLeftX = 1360;
+		tunntelpherRightX = 1440;
+		telpherY = Main.maxTilesY - 382;
+		for (int x = tunntelpherLeftX; x < tunntelpherRightX; x += 20)
+		{
+			int y = telpherY;
+			if (lastPosX != 0 && lastPosY != 0)
+			{
+				WorldGenMisc.PlaceRope(lastPosX, lastPosY, x, y, ModContent.TileType<CableCarJoint>());
+				Tile joint = SafeGetTile(x, y);
+				joint.TileFrameX = 0;
+				for (int j = 1; j < 100; j++)
+				{
+					Tile tile = SafeGetTile(x, y + j);
+					if (tile.HasTile)
+					{
+						break;
+					}
+					else
+					{
+						tile.TileType = TileID.WoodenBeam;
+						tile.HasTile = true;
+					}
+				}
+			}
+			lastPosX = x;
+			lastPosY = y;
 		}
 	}
 

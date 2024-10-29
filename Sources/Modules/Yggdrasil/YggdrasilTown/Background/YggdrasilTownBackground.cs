@@ -14,6 +14,11 @@ public class YggdrasilTownBackground : ModSystem
 	public static Vector2 BiomeCenter => new Vector2(Main.maxTilesX / 2f * 16, (Main.maxTilesY - 1000) * 16);
 
 	/// <summary>
+	/// Origin Pylon
+	/// </summary>
+	public static Vector2 OriginPylonCenter => new Vector2(1395, Main.maxTilesY - 405) * 16;
+
+	/// <summary>
 	/// 初始化
 	/// </summary>
 	public override void OnModLoad()
@@ -31,6 +36,16 @@ public class YggdrasilTownBackground : ModSystem
 	/// LampWoodAnchor Y
 	/// </summary>
 	public float LampWoodCenterY = 0;
+
+	/// <summary>
+	/// Background alpha of Yggdrasil Town
+	/// </summary>
+	public float BackgroundAlphaYggdrasilTown = 0f;
+
+	/// <summary>
+	/// Background alpha of midnight bayou
+	/// </summary>
+	public float BackgroundAlphaMidnightBayou = 0f;
 
 	/// <summary>
 	/// Background alpha of lampwood
@@ -104,9 +119,89 @@ public class YggdrasilTownBackground : ModSystem
 		// 旧背景
 		BackgroundManager.QuickDrawBG(texSky, float.PositiveInfinity, BiomeCenter, baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000));
 
+		DrawYggdrasilTown_Town(baseColor);
+		DrawMidnightBayou(baseColor);
 		DrawLampWood(baseColor);
 		DrawTwilightForsetAndRelic(baseColor);
 		DrawCageOfChallengers(baseColor);
+	}
+
+	public void DrawYggdrasilTown_Town(Color baseColor)
+	{
+		if (YggdrasilTownCentralSystem.InYggdrasilTown(Main.LocalPlayer.Center))
+		{
+			if (BackgroundAlphaYggdrasilTown < 1f)
+			{
+				BackgroundAlphaYggdrasilTown += 0.02f;
+			}
+			else
+			{
+				BackgroundAlphaYggdrasilTown = 1f;
+			}
+		}
+		else
+		{
+			if (BackgroundAlphaYggdrasilTown > 0f)
+			{
+				BackgroundAlphaYggdrasilTown -= 0.02f;
+			}
+			else
+			{
+				BackgroundAlphaYggdrasilTown = 0;
+			}
+		}
+
+		if (BackgroundAlphaYggdrasilTown > 0)
+		{
+			var bayouClose = ModAsset.Town_Close.Value;
+			var bayouFar = ModAsset.Town_Far.Value;
+			Vector2 correction = OriginPylonCenter;
+
+			BackgroundManager.QuickDrawBG(bayouFar, 15f, correction, baseColor * BackgroundAlphaYggdrasilTown, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 18000), false, true);
+			BackgroundManager.QuickDrawBG(bayouClose, 6f, correction + new Vector2(0, 1000), baseColor * BackgroundAlphaYggdrasilTown, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 18000), false, true);
+		}
+	}
+
+	public void DrawMidnightBayou(Color baseColor)
+	{
+		if (ModContent.GetInstance<MidnightBayouBiome>().IsBiomeActive(Main.LocalPlayer))
+		{
+			if (BackgroundAlphaMidnightBayou < 1f)
+			{
+				BackgroundAlphaMidnightBayou += 0.02f;
+			}
+			else
+			{
+				BackgroundAlphaMidnightBayou = 1f;
+			}
+		}
+		else
+		{
+			if (BackgroundAlphaMidnightBayou > 0f)
+			{
+				BackgroundAlphaMidnightBayou -= 0.02f;
+			}
+			else
+			{
+				BackgroundAlphaMidnightBayou = 0;
+			}
+		}
+
+		if (BackgroundAlphaMidnightBayou > 0)
+		{
+			var bayouClose = ModAsset.MidnightBayou_Close.Value;
+			var bayouMiddle0 = ModAsset.MidnightBayou_Middle_0.Value;
+			var bayouMiddle1 = ModAsset.MidnightBayou_Middle_1.Value;
+			var bayouMiddle2 = ModAsset.MidnightBayou_Middle_2.Value;
+			var bayouSky = ModAsset.MidnightBayou_Sky.Value;
+			Vector2 correction = OriginPylonCenter;
+
+			BackgroundManager.QuickDrawBG(bayouSky, float.PositiveInfinity, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 18000), false, true);
+			BackgroundManager.QuickDrawBG(bayouMiddle2, 80f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 18000), false, true);
+			BackgroundManager.QuickDrawBG(bayouMiddle1, 20f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 18000), false, true);
+			BackgroundManager.QuickDrawBG(bayouMiddle0, 10f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 18000), false, true);
+			BackgroundManager.QuickDrawBG(bayouClose, 6f, correction + new Vector2(0, 3000), baseColor * BackgroundAlphaMidnightBayou, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 18000), false, true);
+		}
 	}
 
 	public void DrawCageOfChallengers(Color baseColor)
@@ -129,7 +224,6 @@ public class YggdrasilTownBackground : ModSystem
 								if (tile.TileFrameX == 180 && tile.TileFrameY == 162)
 								{
 									yWorld.StoneCageOfChallengesCenter = new Vector2(x, y - 40) * 16;
-									Main.NewText((x, y));
 									x = Main.maxTilesX - 50;
 									break;
 								}

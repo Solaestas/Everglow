@@ -48,6 +48,9 @@ public class Rope : IMassSpringMesh
 				}
 			}
 			var m = rope._masses[i] = new Mass(specialMass, position, i == 0 || i == count - 1);
+
+			// give a tiny force to break the initial balance.
+			m.Velocity = new Vector2(0, 0.1f).RotatedBy(i);
 			if (i != 0)
 			{
 				var prev = rope._masses[i - 1];
@@ -84,7 +87,6 @@ public class Rope : IMassSpringMesh
 		return rope;
 	}
 
-
 	/// <summary>
 	/// Create a rope at <paramref name="start" /> extending to the positive y-axis.
 	/// <br /><paramref name="start" /> is fixed.
@@ -100,13 +102,13 @@ public class Rope : IMassSpringMesh
 		for (int i = 0; i < count; i++)
 		{
 			int posY = i - restCount;
-			if(posY < 0)
+			if (posY < 0)
 			{
 				posY = 0;
 			}
 			var position = start + new Vector2(0, mass * 10 * posY);
 			var m = rope._masses[i] = new Mass(mass, position, i == 0);
-			if(i == count - 1)
+			if (i == count - 1)
 			{
 				m.Value = headMass;
 			}

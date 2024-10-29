@@ -86,6 +86,14 @@ public class YggdrasilWorldSystem : ModSystem
 		if (YggdrasilWorld.InYggdrasil)
 		{
 			YggdrasilWorld.YggdrasilTimer++;
+			if(Main.bloodMoon)
+			{
+				Main.bloodMoon = false;
+			}
+			if(Main.slimeRain)
+			{
+				Main.slimeRain = false;
+			}
 		}
 		base.PostUpdateEverything();
 	}

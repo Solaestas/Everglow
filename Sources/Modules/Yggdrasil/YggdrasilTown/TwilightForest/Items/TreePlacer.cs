@@ -26,9 +26,6 @@ internal class TreePlacer : ModItem
 		{
 			int i = (int)(Main.MouseWorld.X / 16);
 			int j = (int)(Main.MouseWorld.Y / 16);
-			Main.NewText(Main.tile[i, j].TileType);
-			Main.NewText(Main.tile[i, j].TileFrameX, Color.Green);
-			Main.NewText(Main.tile[i, j].TileFrameY, Color.GreenYellow);
 			Main.tile[i, j].TileType = (ushort)ModContent.TileType<TwilightGrassBlock>();
 		}
 	}

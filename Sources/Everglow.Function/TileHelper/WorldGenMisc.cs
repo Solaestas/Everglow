@@ -118,7 +118,7 @@ public class WorldGenMisc
 	}
 
 	/// <summary>
-	/// 给定两点挂绳
+	/// Connect a cable tile by 2 given points.
 	/// </summary>
 	/// <param name="i0"></param>
 	/// <param name="j0"></param>
@@ -137,7 +137,7 @@ public class WorldGenMisc
 		j0 = Math.Clamp(j0, 20, Main.maxTilesY - 20);
 		i1 = Math.Clamp(i1, 20, Main.maxTilesX - 20);
 		j1 = Math.Clamp(j1, 20, Main.maxTilesY - 20);
-		if (Main.tile[i0, j0].HasTile || Main.tile[i1, j1].HasTile)
+		if ((Main.tile[i0, j0].HasTile && Main.tile[i0, j0].TileType != type) || Main.tile[i1, j1].HasTile)
 		{
 			return false;
 		}
