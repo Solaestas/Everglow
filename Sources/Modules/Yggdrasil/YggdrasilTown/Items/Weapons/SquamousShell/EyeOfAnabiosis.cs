@@ -1,10 +1,11 @@
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
-using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 
 public class EyeOfAnabiosis : ModItem
 {
+	public const int UseTime = 22;
+
 	private int WeaponProjectileIndex { get; set; } = 0;
 
 	private Projectile WeaponProjectile => Main.projectile[WeaponProjectileIndex];
@@ -20,8 +21,7 @@ public class EyeOfAnabiosis : ModItem
 		Item.crit = 14;
 		Item.mana = 8;
 
-		Item.useTime = 22;
-		Item.useAnimation = 22;
+		Item.useTime = Item.useAnimation = UseTime;
 		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.UseSound = SoundID.Item117;
 		Item.autoReuse = true;
@@ -43,9 +43,10 @@ public class EyeOfAnabiosis : ModItem
 		Vector2 position = player.Center;
 		if (player.HeldItem == Item && hasGeneratedWeaponProj is false)
 		{
-			WeaponProjectileIndex = Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, Vector2.Zero, ModContent.ProjectileType<EyeOfAnabiosis_Weapon>(), 0, 0, player.whoAmI);
+			WeaponProjectileIndex = Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, Vector2.Zero, ModContent.ProjectileType<EyeOfAnabiosis_Weapon>(), 0, 0, player.whoAmI, Main.MouseWorld.X, Main.MouseWorld.Y);
 		}
 	}
 
+	// TODO: A bug need to be fixed - item can consume mana even it's CanUseItem is false
 	public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] == 0;
 }
