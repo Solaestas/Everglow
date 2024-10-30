@@ -26,4 +26,8 @@ public class GunOfAvariceBullet : ModProjectile
 	{
 		target.value += GunOfAvarice.TargetValueBonusInCopper;
 	}
+
+	public override void AI()
+	{
+	}
 }

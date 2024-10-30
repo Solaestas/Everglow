@@ -24,6 +24,10 @@ public class GunOfAvariceManualReload : ModProjectile
 			HasNotPlayedSound = false;
 			SoundEngine.PlaySound(new SoundStyle("Everglow/Yggdrasil/YggdrasilTown/Sounds/GunReload2"));
 		}
-		
+	}
+
+	public override bool PreDraw(ref Color lightColor)
+	{
+		return true;
 	}
 }

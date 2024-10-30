@@ -1,7 +1,7 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
 [Pipeline(typeof(WCSPipeline))]
-public class BloodFlame_trail : Visual
+public class Avarice_Fail_dust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
@@ -34,20 +34,12 @@ public class BloodFlame_trail : Visual
 			trails.Dequeue();
 		}
 		position += velocity;
-		velocity += new Vector2(0, ai[2]).RotatedBy(ai[1]);
-		velocity += new Vector2(0, 0.5f);
+		velocity *= 0.95f;
 		scale = ai[0] * (1 - MathF.Sin(timer / maxTime * MathF.PI * 0.5f));
 		timer++;
 		if (timer > maxTime)
 		{
 			Active = false;
-		}
-		rotation += ai[1];
-		if (Collision.SolidCollision(position - new Vector2(scale), (int)(scale * 2), (int)(scale * 2)))
-		{
-			position -= velocity;
-			velocity *= 0;
-			timer += 10;
 		}
 		Lighting.AddLight(position, scale * 0.1f, 0, 0);
 	}

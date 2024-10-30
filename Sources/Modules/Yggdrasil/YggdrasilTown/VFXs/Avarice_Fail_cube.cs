@@ -1,0 +1,59 @@
+using Spine;
+
+namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
+
+[Pipeline(typeof(WCSPipeline))]
+public class Avarice_Fail_cube : Visual
+{
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
+	public Vector2 position;
+	public Vector2 velocity;
+	public float[] ai;
+	public float timer;
+	public float maxTime;
+	public float scale;
+	public float rotation;
+
+	public override void Update()
+	{
+		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
+		{
+			timer = maxTime;
+			Active = false;
+			return;
+		}
+		if (position.Y <= 320 || position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			timer = maxTime;
+			Active = false;
+			return;
+		}
+		position += velocity;
+		velocity *= 0.95f;
+		rotation += ai[1];
+		scale = ai[0] * (1 - MathF.Sin(timer / maxTime * MathF.PI * 0.5f));
+		timer++;
+		if (timer > maxTime)
+		{
+			Active = false;
+		}
+		Lighting.AddLight(position, scale * 0.1f, 0, 0);
+	}
+
+	public override void Draw()
+	{
+		Vector2 toCorner = new Vector2(0, scale);
+		Color lightColor = new Color(0.5f, 0, 0, 0.5f) * 6;
+		Ins.Batch.BindTexture<Vertex2D>(Commons.ModAsset.TileBlock.Value);
+		List<Vertex2D> bars = new List<Vertex2D>();
+		bars.Add(position + toCorner.RotatedBy(Math.PI * 1 + rotation), lightColor, new Vector3(1, 0, 0));
+		bars.Add(position + toCorner.RotatedBy(Math.PI * 0.5 + rotation), lightColor, new Vector3(0, 0, 0));
+		bars.Add(position + toCorner.RotatedBy(Math.PI * 0 + rotation), lightColor, new Vector3(0, 1, 0));
+
+		bars.Add(position + toCorner.RotatedBy(Math.PI * -0.5 + rotation), lightColor, new Vector3(1, 1, 0));
+		bars.Add(position + toCorner.RotatedBy(Math.PI * 0 + rotation), lightColor, new Vector3(0, 1, 0));
+		bars.Add(position + toCorner.RotatedBy(Math.PI * 1 + rotation), lightColor, new Vector3(1, 0, 0));
+		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+	}
+}
