@@ -1,3 +1,4 @@
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -65,6 +66,7 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 		{
 			Dust.NewDust(Projectile.Center, 1, 1, DustID.Shadowflame, newColor: new Color(81, 235, 202), Scale: Main.rand.NextFloat(1f, 2));
 		}
+		SoundEngine.PlaySound(SoundID.DD2_BetsysWrathImpact);
 	}
 
 	public override bool PreDraw(ref Color lightColor)
