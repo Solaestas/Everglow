@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.Common.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 
@@ -26,18 +27,30 @@ public class GunOfAvariceManualReload : ModProjectile
 			HasNotPlayedSound = false;
 			SoundEngine.PlaySound(new SoundStyle("Everglow/Yggdrasil/YggdrasilTown/Sounds/GunReload2"));
 			VisualEffect(Projectile.ai[1]);
+			for (int i = 0; i < 14; i++)
+			{
+				Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BulletShell_yggdrasil>());
+				dust.velocity = new Vector2(0, -Main.rand.NextFloat(5, 8)).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
+			}
 		}
-		float timeValue = Projectile.timeLeft / 90f;
-		float timeValue2 = 1 - timeValue;
-		timeValue2 = MathF.Pow(timeValue2, 2.4f) * 2f;
-		float deltaRot = 2 - timeValue2;
-		if (deltaRot < 0.6f)
+		float timeValue = 1 - Projectile.timeLeft / 30f;
+		float deltaRot = 1.8f;
+		if (timeValue < 0.2f)
 		{
-			deltaRot = 0.6f;
+			deltaRot = 1.8f - MathF.Pow(timeValue / 0.2f, 0.5f) * 1.4f;
+		}
+		if (timeValue >= 0.2f)
+		{
+			deltaRot = 0.6f + MathF.Pow((timeValue - 0.2f) / 0.8f, 0.5f) * 1.2f;
 		}
 		Projectile.rotation = -MathHelper.PiOver2 + Owner.direction * deltaRot;
+		Vector2 offset = new Vector2(-15f * Owner.direction, 0);
+		if (timeValue is > 0.1f and < 0.3f)
+		{
+			offset = new Vector2((0.5f - Math.Abs(timeValue - 0.2f) / 0.1f) * -15f, 0).RotatedBy(Projectile.rotation) + new Vector2(-15f * Owner.direction, 0);
+		}
 		Projectile.spriteDirection = Owner.direction;
-		Projectile.Center = Owner.Center + new Vector2(-timeValue * 15f * Owner.direction, 0) + new Vector2(16 * Owner.direction, -4);
+		Projectile.Center = Owner.Center + offset + new Vector2(24 * Owner.direction, -8);
 	}
 
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)

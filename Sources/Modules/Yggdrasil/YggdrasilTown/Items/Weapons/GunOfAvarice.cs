@@ -92,7 +92,7 @@ public class GunOfAvarice : ModItem
 				}
 
 				// save damage value for hurting player while fail.
-				Projectile.NewProjectile(source, position, Vector2.Zero, ModContent.ProjectileType<GunOfAvariceAutoReload>(), (int)(Item.damage * (1 + DamageBonusPerLevel * Level) * 2.8f), 0, player.whoAmI, ai0: result, ai1: Level);
+				Projectile.NewProjectile(source, position, Vector2.Zero, ModContent.ProjectileType<GunOfAvariceAutoReload>(), (int)(Item.damage * (1 + DamageBonusPerLevel * OldLevel) * 2.8f), 0, player.whoAmI, ai0: result, ai1: Level);
 				AmmoAmount = MagazineCapacity;
 			}
 		}
