@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 using Terraria.Audio;
 
@@ -175,21 +176,36 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		return targets.OrderBy(x => Vector2.Distance(Owner.Center, x.Center)).Take(MaxTargetCount).ToList();
 	}
 
+	public override void PostDraw(Color lightColor)
+	{
+		var magicCircleTexture = ModAsset.EyeOfAnabiosis_MagicCircle.Value;
+		var magicCirclePosition = Owner.Bottom - Main.screenPosition;
+		Main.spriteBatch.Draw(magicCircleTexture, magicCirclePosition, null, Color.White, 0, magicCircleTexture.Size() / 2, 1, SpriteEffects.None, 0);
+	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
-		// Weapon
 		var texture = ModContent.Request<Texture2D>(Texture).Value;
 		var drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 		var effects = Owner.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipVertically;
 		var rotation = Owner.direction == 1 ? 0f : MathF.PI;
 		var position = Projectile.Center - Main.screenPosition + new Vector2(Owner.direction * (texture.Width / 2 - 12), -texture.Height / 2 + 16);
+		float chargeProgress = (float)ChargeTimer / MaxChargeTime > 1f ? 1f : (float)ChargeTimer / MaxChargeTime * 0.7f;
+
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+		Effect shineEffect = ModAsset.EyeOfAnabiosis_Shine.Value;
+		shineEffect.Parameters["uImageSize"].SetValue(texture.Size());
+		shineEffect.Parameters["uChargeProgress"].SetValue(chargeProgress);
+		shineEffect.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects);
+		shineEffect.CurrentTechnique.Passes["Pixel"].Apply();
+
 		Main.spriteBatch.Draw(texture, position, null, drawColor, rotation, texture.Size() / 2, 1f, effects, 0);
 
-		// Magic Circle
-		var texture2 = ModAsset.EyeOfAnabiosis_MagicCircle.Value;
-		var position2 = Owner.Bottom - Main.screenPosition;
-		position2 += texture2.Size() / 2;
-		Main.spriteBatch.Draw(texture2, position2, null, drawColor, 0, texture.Size() / 2, 1, SpriteEffects.None, -1);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 
 		return false;
 	}

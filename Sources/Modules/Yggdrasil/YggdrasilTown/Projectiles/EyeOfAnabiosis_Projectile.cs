@@ -63,7 +63,7 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 	{
 		for (int i = 0; i < 15; i++)
 		{
-			Dust.NewDust(Projectile.Center, 1, 1, DustID.Shadowflame, newColor: new Color(51, 202, 235), Scale: Main.rand.NextFloat(1f, 2));
+			Dust.NewDust(Projectile.Center, 1, 1, DustID.Shadowflame, newColor: new Color(81, 235, 202), Scale: Main.rand.NextFloat(1f, 2));
 		}
 	}
 
