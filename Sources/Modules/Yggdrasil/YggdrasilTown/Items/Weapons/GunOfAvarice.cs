@@ -30,6 +30,7 @@ public class GunOfAvarice : ModItem
 		Item.rare = ItemRarityID.Orange;
 		Item.value = Item.sellPrice(gold: 10);
 
+		Item.shoot = ProjectileID.Bullet;
 		Item.shootSpeed = 12f;
 		Item.useAmmo = AmmoID.Bullet;
 	}
@@ -64,12 +65,17 @@ public class GunOfAvarice : ModItem
 	{
 		if (player.altFunctionUse != 2)
 		{
+			Item.noUseGraphic = false;
 			SoundEngine.PlaySound(SoundID.Item41);
 			AmmoAmount--;
-			Projectile.NewProjectile(source, position, velocity, type, (int)(damage * (1 + DamageBonusPerLevel * Level)), knockback);
+
+			// A offset of new Vector2(0, -5) is calculate by texture and HoldoutOffset().
+			Projectile.NewProjectile(source, position + new Vector2(0, -5), velocity, type, (int)(damage * (1 + DamageBonusPerLevel * Level)), knockback);
 
 			if (AmmoAmount <= 0)
 			{
+				// disable graphic when shifting magazine.
+				Item.noUseGraphic = true;
 				int result = 0;
 				if (Main.rand.NextFloat() >= AutoReloadSuccessChance)
 				{
@@ -92,7 +98,9 @@ public class GunOfAvarice : ModItem
 		}
 		else if (AmmoAmount < MagazineCapacity)
 		{
-			Projectile.NewProjectile(source, position, Vector2.Zero, ModContent.ProjectileType<GunOfAvariceManualReload>(), 0, 0);
+			// disable graphic when shifting magazine.
+			Item.noUseGraphic = true;
+			Projectile.NewProjectile(source, position, Vector2.Zero, ModContent.ProjectileType<GunOfAvariceManualReload>(), 0, 0, player.whoAmI, ai1: Level);
 			AmmoAmount = MagazineCapacity;
 			OldLevel = Level;
 			Level = 1;
@@ -124,7 +132,7 @@ public class GunOfAvarice : ModItem
 
 	public override Vector2? HoldoutOffset()
 	{
-		return new Vector2(-16, 1);
+		return new Vector2(-16, -4);
 	}
 
 	public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
