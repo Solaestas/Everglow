@@ -1,7 +1,7 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
 [Pipeline(typeof(WCSPipeline))]
-public class Avarice_Fail_wave : Visual
+public class AvariceFailureWave : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 

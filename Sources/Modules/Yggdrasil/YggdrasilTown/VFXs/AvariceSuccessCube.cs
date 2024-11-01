@@ -3,7 +3,7 @@ using Spine;
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
 [Pipeline(typeof(WCSPipeline))]
-public class Avarice_Fail_cube : Visual
+public class AvariceSuccessCube : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
@@ -31,20 +31,20 @@ public class Avarice_Fail_cube : Visual
 		}
 		position += velocity;
 		velocity *= 0.95f;
-		rotation += ai[1];
 		scale = ai[0] * (1 - MathF.Sin(timer / maxTime * MathF.PI * 0.5f));
+		rotation = ai[1];
 		timer++;
 		if (timer > maxTime)
 		{
 			Active = false;
 		}
-		Lighting.AddLight(position, scale * 0.1f, 0, 0);
+		Lighting.AddLight(position, 0, scale * 0.06f, scale * 0.08f);
 	}
 
 	public override void Draw()
 	{
 		Vector2 toCorner = new Vector2(0, scale);
-		Color lightColor = new Color(0.5f, 0, 0, 0.5f) * 6;
+		Color lightColor = new Color(0f, 0.6f, 0.8f, 0.5f);
 		Ins.Batch.BindTexture<Vertex2D>(Commons.ModAsset.TileBlock.Value);
 		List<Vertex2D> bars = new List<Vertex2D>();
 		bars.Add(position + toCorner.RotatedBy(Math.PI * 1 + rotation), lightColor, new Vector3(1, 0, 0));

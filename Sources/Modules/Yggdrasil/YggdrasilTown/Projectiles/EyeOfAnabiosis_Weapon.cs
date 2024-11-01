@@ -1,6 +1,7 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 using Terraria.Audio;
+using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -8,10 +9,9 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 {
 	private const int MaxChargeTime = 720;
 	private const int MaxTargetCount = 3;
-	private const int SearchDistance = 500;
 	private const float ProjectileRandomRotation = 0.2f;
 
-	private int ChargeTimer { get; set; } = 0;
+	private int ChargeTimer { get; set; }
 
 	public override string Texture => ModAsset.EyeOfAnabiosis_Mod;
 
@@ -29,6 +29,11 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		}
 	}
 
+	public override void SetStaticDefaults()
+	{
+		Main.projFrames[Type] = 4;
+	}
+
 	public override void SetDefaults()
 	{
 		Projectile.width = 72;
@@ -39,10 +44,16 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		Projectile.DamageType = DamageClass.Magic;
 		Projectile.penetrate = -1;
 		Projectile.ignoreWater = true;
+
+		ChargeTimer = 0;
 	}
 
 	public override void AI()
 	{
+		if (Main.time % Main.projFrames[Type] == 0)
+		{
+			Projectile.frame = (Projectile.frame + 1) % Main.projFrames[Type];
+		}
 		SyncOwnerMouseWorld();
 		KillHoldout();
 		ManageHoldout();
@@ -105,14 +116,6 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		{
 			return;
 		}
-		else
-		{
-			if (Main.time % 3 == 0)
-			{
-				var offset = new Vector2(MathF.Cos((float)Main.time * 3f) * Owner.width / 2, MathF.Sin((float)Main.time * 2f) * Owner.width / 2);
-				Dust.NewDust(Owner.Center + offset, 1, 1, DustID.Shadowflame, newColor: new Color(51, 202, 235), Scale: Main.rand.NextFloat(0.8f, 1.1f));
-			}
-		}
 
 		if (!Owner.controlUseItem)
 		{
@@ -124,21 +127,17 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 			bool manaCostPaid = Owner.CheckMana(HeldItem, pay: true);
 			if (manaCostPaid)
 			{
-				Vector2 projPosition = Projectile.Center + new Vector2(Owner.direction * Projectile.width, 0);
+				Vector2 projPosition = Owner.Center + new Vector2(Owner.direction * Projectile.width, 0) * Projectile.scale;
 				if (Owner.direction == -1)
 				{
-					projPosition.X += Projectile.width * 2 / 3;
+					projPosition.X += Projectile.width * 0.66f * Projectile.scale;
 				}
+
 				Vector2 projVelocity = Vector2.Normalize(OwnerMouseWorld - projPosition) * HeldItem.shootSpeed;
 
-				List<NPC> targets = SearchTargets();
-				foreach (NPC target in targets)
+				for (int i = 0; i < MaxTargetCount; i++)
 				{
-					Projectile.NewProjectile(Owner.GetSource_ItemUse(HeldItem), projPosition, projVelocity.RotatedBy(Main.rand.NextFloat(-ProjectileRandomRotation, ProjectileRandomRotation)), ModContent.ProjectileType<EyeOfAnabiosis_Projectile>(), HeldItem.damage, HeldItem.knockBack, Projectile.owner, target.whoAmI);
-				}
-				for (int i = 0; i < MaxTargetCount - targets.Count; i++)
-				{
-					Projectile.NewProjectile(Owner.GetSource_ItemUse(HeldItem), projPosition, projVelocity.RotatedBy(Main.rand.NextFloat(-ProjectileRandomRotation, ProjectileRandomRotation)), ModContent.ProjectileType<EyeOfAnabiosis_Projectile>(), HeldItem.damage, HeldItem.knockBack, Projectile.owner, -1);
+					Projectile.NewProjectile(Owner.GetSource_ItemUse(HeldItem), projPosition, projVelocity.RotatedBy(Main.rand.NextFloat(-ProjectileRandomRotation, ProjectileRandomRotation)), ModContent.ProjectileType<EyeOfAnabiosis_Projectile>(), HeldItem.damage, HeldItem.knockBack, Projectile.owner);
 				}
 
 				SoundEngine.PlaySound(SoundID.DD2_BetsysWrathShot, Projectile.Center);
@@ -150,35 +149,36 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		Owner.direction = (Main.MouseWorld - Owner.MountedCenter).X < 0 ? -1 : 1;
 	}
 
-	private List<NPC> SearchTargets()
-	{
-		List<NPC> targets = [];
-
-		foreach (NPC npc in Main.ActiveNPCs)
-		{
-			if (!npc.friendly
-				&& !npc.dontTakeDamage
-				&& npc.CanBeChasedBy()
-				&& Vector2.Distance(Owner.Center, npc.Center) <= SearchDistance)
-			{
-				targets.Add(npc);
-			}
-		}
-
-		return targets.OrderBy(x => Vector2.Distance(Owner.Center, x.Center)).Take(MaxTargetCount).ToList();
-	}
-
 	public override void PostDraw(Color lightColor)
 	{
-		var magicCircleTexture = ModAsset.EyeOfAnabiosis_MagicCircle.Value;
-		var magicCirclePosition = Owner.Bottom - Main.screenPosition;
-		//Main.spriteBatch.Draw(magicCircleTexture, magicCirclePosition, null, Color.White, 0, magicCircleTexture.Size() / 2, 1, SpriteEffects.None, 0);
+		float chargeProgress = (float)ChargeTimer / MaxChargeTime > 1f ? 1f : (float)ChargeTimer / MaxChargeTime;
+		if (chargeProgress == 1)
+		{
+			SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+			Effect shineEffect = ModAsset.EyeOfAnabiosis_Shine.Value;
+			shineEffect.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects);
+			shineEffect.Parameters["uNoise"].SetValue(Commons.ModAsset.NoiseWave.Value);
+			shineEffect.Parameters["uChargeProgress"].SetValue(chargeProgress);
+			shineEffect.CurrentTechnique.Passes["MagicCircle_Pixel"].Apply();
+
+			var magicCirTexture = Commons.ModAsset.Point.Value;
+			var magicCirPosition = Owner.gravDir == 1 ? Owner.Bottom : Owner.Top;
+			magicCirPosition = magicCirPosition - Main.screenPosition + new Vector2(0, 2 * Owner.gravDir);
+			var magicCirScale = new Vector2(0.2f, 0.12f);
+			Main.spriteBatch.Draw(magicCirTexture, magicCirPosition, null, Color.White, Owner.gravDir == 1 ? 0 : MathF.PI, new Vector2(magicCirTexture.Width / 2, magicCirTexture.Height), magicCirScale, SpriteEffects.None, 0);
+
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin(sBS);
+		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		float chargeProgress = (float)ChargeTimer / MaxChargeTime > 1f ? 1f : (float)ChargeTimer / MaxChargeTime * 0.7f;
-		var drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
+		float chargeProgress = (float)ChargeTimer / MaxChargeTime > 1f ? 1f : (float)ChargeTimer / MaxChargeTime;
+		lightColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 
 		var body_texture = ModAsset.EyeOfAnabiosis_Body.Value;
 		var body_position_offset = new Vector2(Owner.direction * (body_texture.Width / 2 - 12), Owner.gravDir * (-body_texture.Height / 2 + 16)) * Projectile.scale;
@@ -187,43 +187,79 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		var body_effects = (Owner.direction == 1 && Owner.gravDir == 1) || (Owner.gravDir == -1 && Owner.direction == -1) ? SpriteEffects.None : SpriteEffects.FlipVertically;
 		var body_origin = body_texture.Size() / 2;
 
-		Main.spriteBatch.Draw(body_texture, body_position, null, drawColor, body_rotation, body_origin, Projectile.scale, body_effects, 0);
+		Main.spriteBatch.Draw(body_texture, body_position, null, lightColor, body_rotation, body_origin, Projectile.scale, body_effects, 0);
 
 		var head_texture = ModAsset.EyeOfAnabiosis_Head.Value;
 		var head_position_offset = new Vector2(Owner.direction * 23, Owner.gravDir * -10) * Projectile.scale;
 		var head_position = body_position + head_position_offset;
 		var head_rotation = Owner.gravDir == 1 ? 0 : MathF.PI;
-		head_rotation += 0.2f * MathF.Sin((float)Main.timeForVisualEffects * 0.05f);
+		{
+			// TODO: Physical Simulation Interface
+			head_rotation += 0.2f * MathF.Sin((float)Main.timeForVisualEffects * 0.05f);
+		}
 		var head_effects = (Owner.direction == 1 && Owner.gravDir == 1) || (Owner.gravDir == -1 && Owner.direction == -1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
 		var head_rope_texture = ModAsset.EyeOfAnabiosis_Rope.Value;
 		var head_rope_origin = new Vector2(head_rope_texture.Width / 2, 0);
 		var head_ball_texture = ModAsset.EyeOfAnabiosis_Head_Ball.Value;
-		var head_ball_origin = head_rope_origin + new Vector2(0, -12);
+		var head_ball_origin = head_rope_origin + new Vector2((head_ball_texture.Width - head_rope_texture.Width) / 2, -head_rope_texture.Height + 2);
 		var head_ballbg_texture = ModAsset.EyeOfAnabiosis_Head_BallBG.Value;
 		var head_ballbg_origin = head_ball_origin + new Vector2((head_ballbg_texture.Width - head_ball_texture.Width) / 2, (head_ballbg_texture.Height - head_ball_texture.Height) / 2);
-		var head_container_texture = ModAsset.EyeOfAnabiosis_Head_Container.Value;
-		var head_container_origin = head_ball_origin + new Vector2((head_container_texture.Width - head_ball_texture.Width) / 2, -10);
 
-		#region Effects
+		var head_container_texture = ModAsset.EyeOfAnabiosis_Head_Container.Value;
+		var head_container_position_offset = (-head_ballbg_origin + new Vector2(head_ball_texture.Width + (head_container_texture.Width - head_ball_texture.Width) / 2) / 2).RotatedBy(head_rotation) * Projectile.scale;
+		var head_container_position = head_position + head_container_position_offset;
+		var head_container_origin = new Vector2(head_container_texture.Width / 2, 0);
+		var head_container_rotation = head_rotation;
+		{
+			// TODO: Physical Simulation Interface
+			head_container_rotation = 0.3f * head_rotation;
+		}
+
+		var fireProgress = 0.2f + 0.8f * chargeProgress;
+		var head_fire_texture = ModAsset.EyeOfAnabiosis_Projectile.Value;
+		var head_fire_origin = new Vector2(head_fire_texture.Width / 8, head_fire_texture.Height * (1.5f - 1 / fireProgress) / 2);
+		var frame = head_fire_texture.Frame(horizontalFrames: Main.projFrames[Type], frameX: Projectile.frame);
+
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+		// Draw charge progress UI
+		if (Main.myPlayer == Projectile.owner)
+		{
+			var progressTexture = Commons.ModAsset.TileBlock.Value;
+			var progressPosition = Owner.Center - Main.screenPosition + Owner.gravDir * new Vector2(0, 36);
+
+			Color frameColor = Color.Black;
+			Vector2 frameScale = new Vector2(1.9f, 0.6f);
+
+			Color lineColor = Color.SkyBlue;
+			Vector2 lineScale = new Vector2(1.6f * chargeProgress, 0.3f);
+			Vector2 linePositionOffset = new Vector2(-1.6f * (1 - chargeProgress) * progressTexture.Width / 2f, 0);
+
+			Main.spriteBatch.Draw(progressTexture, progressPosition, null, frameColor, 0, progressTexture.Size() / 2, frameScale, SpriteEffects.None, 0);
+
+			Main.spriteBatch.Draw(progressTexture, progressPosition + linePositionOffset, null, lineColor, 0, progressTexture.Size() / 2, lineScale, SpriteEffects.None, 0);
+		}
+
+		Main.spriteBatch.Draw(head_ball_texture, head_position, null, lightColor, head_rotation, head_ball_origin, Projectile.scale, head_effects, 0);
+		Main.spriteBatch.Draw(head_rope_texture, head_position, null, lightColor, head_rotation, head_rope_origin, Projectile.scale, head_effects, 0);
 
 		Effect shineEffect = ModAsset.EyeOfAnabiosis_Shine.Value;
 		shineEffect.Parameters["uImageSize"].SetValue(head_texture.Size());
 		shineEffect.Parameters["uChargeProgress"].SetValue(chargeProgress);
 		shineEffect.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects);
-		shineEffect.CurrentTechnique.Passes["Pixel"].Apply();
-		Main.spriteBatch.Draw(head_ballbg_texture, head_position, null, drawColor, head_rotation, head_ballbg_origin, Projectile.scale, head_effects, 0);
+		shineEffect.CurrentTechnique.Passes["Ball_Pixel"].Apply();
+		Main.spriteBatch.Draw(head_ballbg_texture, head_position, null, lightColor, head_rotation, head_ballbg_origin, Projectile.scale, head_effects, 0);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
-		#endregion
 
-		Main.spriteBatch.Draw(head_container_texture, head_position, null, drawColor, head_rotation, head_container_origin, Projectile.scale, head_effects, 0);
-		Main.spriteBatch.Draw(head_ball_texture, head_position, null, drawColor, head_rotation, head_ball_origin, Projectile.scale, head_effects, 0);
-		Main.spriteBatch.Draw(head_rope_texture, head_position, null, drawColor, head_rotation, head_rope_origin, Projectile.scale, head_effects, 0);
+		Main.spriteBatch.Draw(head_fire_texture, head_container_position, frame, lightColor, head_container_rotation, head_fire_origin, Projectile.scale * fireProgress, head_effects, 0);
+		Main.spriteBatch.Draw(head_container_texture, head_container_position, null, lightColor, head_container_rotation, head_container_origin, Projectile.scale, head_effects, 0);
 
+		var lightPosition = head_container_position + Main.screenPosition - head_ball_texture.Size() * Projectile.scale / 4;
+		Lighting.AddLight(lightPosition, new Vector3(51, 235, 202) * 0.005f * chargeProgress);
 		return false;
 	}
 }

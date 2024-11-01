@@ -6,7 +6,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class NehemothBullet : ModProjectile
 {
-	public const int BuffDuration = 4 * 60;
+	public const int BuffDuration = 240;
 	public const float DebuffTriggerChance = 0.66f;
 
 	public bool HasNotShot { get; private set; } = true;
@@ -63,7 +63,7 @@ public class NehemothBullet : ModProjectile
 		{
 			Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
 			Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-			Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale * 0.5f, SpriteEffects.None);
 		}
 
 		return true;

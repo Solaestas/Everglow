@@ -1,5 +1,4 @@
 using Terraria.Audio;
-using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -7,7 +6,7 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 {
 	private const int SearchDistance = 600;
 
-	private int targetWhoAmI = 0;
+	private int targetWhoAmI = -1;
 
 	private int TargetWhoAmI
 	{
@@ -31,19 +30,11 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 		Projectile.friendly = true;
 	}
 
-	public override void OnSpawn(IEntitySource source)
-	{
-		if (TargetWhoAmI >= 0)
-		{
-			TargetWhoAmI = (int)Projectile.ai[0];
-		}
-	}
-
 	private bool HasTarget => TargetWhoAmI >= 0;
 
 	public override void AI()
 	{
-		if (Main.time % 4 == 0)
+		if (Main.time % Main.projFrames[Projectile.type] == 0)
 		{
 			Projectile.frame = (Projectile.frame + 1) % Main.projFrames[Projectile.type];
 		}

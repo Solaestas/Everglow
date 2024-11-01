@@ -25,8 +25,8 @@ public class GunOfAvariceManualReload : ModProjectile
 		if (Projectile.timeLeft <= 15 && HasNotPlayedSound)
 		{
 			HasNotPlayedSound = false;
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Yggdrasil/YggdrasilTown/Sounds/GunReload2"));
-			VisualEffect(Projectile.ai[1]);
+			SoundEngine.PlaySound(new SoundStyle(ModAsset.GunReload2_Mod));
+			VFX(Projectile.ai[1]);
 			for (int i = 0; i < 14; i++)
 			{
 				Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BulletShell_yggdrasil>());
@@ -66,14 +66,14 @@ public class GunOfAvariceManualReload : ModProjectile
 		return false;
 	}
 
-	public void VisualEffect(float level)
+	public void VFX(float level)
 	{
 		for (int i = 0; i < level * 3 + 10; i++)
 		{
 			Vector2 vel = new Vector2(0, Main.rand.NextFloat(3.6f, 6.4f)).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f));
 			Vector2 pos = new Vector2(0, Main.rand.NextFloat(0f, 22.4f)).RotatedByRandom(MathHelper.TwoPi);
 			pos.Y *= 0.1f;
-			var dust = new Avarice_Success_dust
+			var dust = new AvariceSuccessDust
 			{
 				velocity = vel,
 				Active = true,
@@ -91,7 +91,7 @@ public class GunOfAvariceManualReload : ModProjectile
 			Vector2 vel = new Vector2(0, Main.rand.NextFloat(1.6f, 6.4f)).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f));
 			Vector2 pos = new Vector2(0, Main.rand.NextFloat(0f, 50.4f)).RotatedByRandom(MathHelper.TwoPi);
 			pos.Y *= 0.1f;
-			var cube = new Avarice_Success_cube
+			var cube = new AvariceSuccessCube
 			{
 				velocity = vel,
 				Active = true,

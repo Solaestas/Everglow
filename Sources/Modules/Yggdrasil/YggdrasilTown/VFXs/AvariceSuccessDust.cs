@@ -1,9 +1,7 @@
-using Spine;
-
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
 [Pipeline(typeof(WCSPipeline))]
-public class Avarice_Success_cube : Visual
+public class AvariceSuccessDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
@@ -14,6 +12,7 @@ public class Avarice_Success_cube : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
+	public Queue<Vector2> trails = new Queue<Vector2>();
 
 	public override void Update()
 	{
@@ -29,10 +28,14 @@ public class Avarice_Success_cube : Visual
 			Active = false;
 			return;
 		}
+		trails.Enqueue(position);
+		if (trails.Count > 40)
+		{
+			trails.Dequeue();
+		}
 		position += velocity;
 		velocity *= 0.95f;
 		scale = ai[0] * (1 - MathF.Sin(timer / maxTime * MathF.PI * 0.5f));
-		rotation = ai[1];
 		timer++;
 		if (timer > maxTime)
 		{
@@ -45,15 +48,20 @@ public class Avarice_Success_cube : Visual
 	{
 		Vector2 toCorner = new Vector2(0, scale);
 		Color lightColor = new Color(0f, 0.6f, 0.8f, 0.5f);
-		Ins.Batch.BindTexture<Vertex2D>(Commons.ModAsset.TileBlock.Value);
+		Ins.Batch.BindTexture<Vertex2D>(ModAsset.BloodFlame_noise.Value);
 		List<Vertex2D> bars = new List<Vertex2D>();
-		bars.Add(position + toCorner.RotatedBy(Math.PI * 1 + rotation), lightColor, new Vector3(1, 0, 0));
-		bars.Add(position + toCorner.RotatedBy(Math.PI * 0.5 + rotation), lightColor, new Vector3(0, 0, 0));
-		bars.Add(position + toCorner.RotatedBy(Math.PI * 0 + rotation), lightColor, new Vector3(0, 1, 0));
+		for (int i = 0; i < trails.Count; i++)
+		{
+			Vector2 pos = trails.ToArray()[i];
+			float size = i / (float)trails.Count;
+			bars.Add(pos + toCorner.RotatedBy(Math.PI * 1 + rotation) * size, lightColor * size, new Vector3(1, 0, 0));
+			bars.Add(pos + toCorner.RotatedBy(Math.PI * 0.5 + rotation) * size, lightColor * size, new Vector3(0, 0, 0));
+			bars.Add(pos + toCorner.RotatedBy(Math.PI * 0 + rotation) * size, lightColor * size, new Vector3(0, 1, 0));
 
-		bars.Add(position + toCorner.RotatedBy(Math.PI * -0.5 + rotation), lightColor, new Vector3(1, 1, 0));
-		bars.Add(position + toCorner.RotatedBy(Math.PI * 0 + rotation), lightColor, new Vector3(0, 1, 0));
-		bars.Add(position + toCorner.RotatedBy(Math.PI * 1 + rotation), lightColor, new Vector3(1, 0, 0));
+			bars.Add(pos + toCorner.RotatedBy(Math.PI * -0.5 + rotation) * size, lightColor * size, new Vector3(1, 1, 0));
+			bars.Add(pos + toCorner.RotatedBy(Math.PI * 0 + rotation) * size, lightColor * size, new Vector3(0, 1, 0));
+			bars.Add(pos + toCorner.RotatedBy(Math.PI * 1 + rotation) * size, lightColor * size, new Vector3(1, 0, 0));
+		}
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
 	}
 }

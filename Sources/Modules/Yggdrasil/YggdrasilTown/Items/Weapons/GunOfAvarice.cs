@@ -60,7 +60,6 @@ public class GunOfAvarice : ModItem
 		player.ownedProjectileCounts[ModContent.ProjectileType<GunOfAvariceAutoReload>()] <= 0 &&
 		player.ownedProjectileCounts[ModContent.ProjectileType<GunOfAvariceManualReload>()] <= 0;
 
-	// TODO: Keep holding weapon when it's selected
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
 		if (player.altFunctionUse != 2)
@@ -135,6 +134,16 @@ public class GunOfAvarice : ModItem
 		return new Vector2(-16, -4);
 	}
 
+	/// <summary>
+	/// Draw UI
+	/// </summary>
+	/// <param name="spriteBatch"></param>
+	/// <param name="position"></param>
+	/// <param name="frame"></param>
+	/// <param name="drawColor"></param>
+	/// <param name="itemColor"></param>
+	/// <param name="origin"></param>
+	/// <param name="scale"></param>
 	public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
 	{
 		Player player = Main.LocalPlayer;

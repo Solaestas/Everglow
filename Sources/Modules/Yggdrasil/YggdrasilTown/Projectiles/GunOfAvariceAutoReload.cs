@@ -8,7 +8,9 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class GunOfAvariceAutoReload : ModProjectile
 {
-	private bool ReloadStatus { get => !(Projectile.ai[0] == 0); }
+	private bool ReloadStatus => Projectile.ai[0] == 0;
+
+	private int Level => (int)Projectile.ai[1];
 
 	private bool HasNotPlayedSound { get; set; } = true;
 
@@ -29,15 +31,16 @@ public class GunOfAvariceAutoReload : ModProjectile
 		if (Projectile.timeLeft <= 15 && HasNotPlayedSound)
 		{
 			HasNotPlayedSound = false;
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Yggdrasil/YggdrasilTown/Sounds/GunReload2"));
-			if (Projectile.ai[0] == 1)
+			SoundEngine.PlaySound(new SoundStyle(ModAsset.GunReload2_Mod));
+
+			if (ReloadStatus)
 			{
-				VisualEffectFail(Projectile.ai[1]);
-				Owner.Hurt(PlayerDeathReason.ByCustomReason($"{Owner.name} died in explosion!"), Projectile.damage, 0, false, false, 0);
+				SuccessVFX(Level);
 			}
-			if (Projectile.ai[0] == 0)
+			else
 			{
-				VisualEffectSuccess(Projectile.ai[1]);
+				FailureVFX(Level);
+				Owner.Hurt(PlayerDeathReason.ByCustomReason($"{Owner.name} died in explosion!"), Projectile.damage, 0, false, false, 0);
 			}
 			for (int i = 0; i < 14; i++)
 			{
@@ -48,7 +51,7 @@ public class GunOfAvariceAutoReload : ModProjectile
 		float timeValue = 1 - Projectile.timeLeft / 30f;
 		float deltaRot = 1.8f;
 		Vector2 offset = new Vector2(-15f * Owner.direction, 0);
-		if(Projectile.timeLeft <= 30)
+		if (Projectile.timeLeft <= 30)
 		{
 			if (timeValue < 0.2f)
 			{
@@ -154,12 +157,12 @@ public class GunOfAvariceAutoReload : ModProjectile
 		return false;
 	}
 
-	public void VisualEffectFail(float level)
+	public void FailureVFX(int level)
 	{
 		for (int i = 0; i < level * 12 + 40; i++)
 		{
 			Vector2 vel = new Vector2(0, Main.rand.NextFloat(5.6f, 8.4f)).RotatedByRandom(MathHelper.TwoPi);
-			var dust = new Avarice_Fail_dust
+			var dust = new AvariceFailureDust
 			{
 				velocity = vel,
 				Active = true,
@@ -175,7 +178,7 @@ public class GunOfAvariceAutoReload : ModProjectile
 		for (int i = 0; i < level * 4 + 14; i++)
 		{
 			Vector2 vel = new Vector2(0, Main.rand.NextFloat(5.6f, 13.4f)).RotatedByRandom(MathHelper.TwoPi);
-			var cube = new Avarice_Fail_cube
+			var cube = new AvariceFailureCube
 			{
 				velocity = vel,
 				Active = true,
@@ -191,7 +194,7 @@ public class GunOfAvariceAutoReload : ModProjectile
 		float waveRot = Main.rand.NextFloat(6.283f);
 		for (int i = 0; i < 2; i++)
 		{
-			var wave = new Avarice_Fail_wave
+			var wave = new AvariceFailureWave
 			{
 				velocity = Vector2.zeroVector,
 				Active = true,
@@ -206,14 +209,14 @@ public class GunOfAvariceAutoReload : ModProjectile
 		}
 	}
 
-	public void VisualEffectSuccess(float level)
+	public void SuccessVFX(int level)
 	{
 		for (int i = 0; i < level * 3 + 10; i++)
 		{
 			Vector2 vel = new Vector2(0, -Main.rand.NextFloat(3.6f, 6.4f));
 			Vector2 pos = new Vector2(0, Main.rand.NextFloat(0f, 22.4f)).RotatedByRandom(MathHelper.TwoPi);
 			pos.Y *= 0.1f;
-			var dust = new Avarice_Success_dust
+			var dust = new AvariceSuccessDust
 			{
 				velocity = vel,
 				Active = true,
@@ -231,7 +234,7 @@ public class GunOfAvariceAutoReload : ModProjectile
 			Vector2 vel = new Vector2(0, -Main.rand.NextFloat(1.6f, 6.4f));
 			Vector2 pos = new Vector2(0, Main.rand.NextFloat(0f, 50.4f)).RotatedByRandom(MathHelper.TwoPi);
 			pos.Y *= 0.1f;
-			var cube = new Avarice_Success_cube
+			var cube = new AvariceSuccessCube
 			{
 				velocity = vel,
 				Active = true,
