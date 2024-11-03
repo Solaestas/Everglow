@@ -54,7 +54,7 @@ float4 PixelShaderFunction_MagicCircle(PSInput input) : COLOR0
 	float greenComponent = 0.8f + 0.2f * cos(timeFactorWithTexCoordY);
 	float blueComponent = 0.7f + 0.3f * sin(timeFactorWithTexCoordX);
 	float4 shineColor = float4(redComponent, greenComponent, blueComponent, 1);
-	if ((input.Texcoord.x < 0.8 || input.Texcoord.x > 0.2) && input.Texcoord.y > 0.9)
+	if ((input.Texcoord.x < 0.8f || input.Texcoord.x > 0.2f) && input.Texcoord.y > 0.9)
 	{
 		return shineColor;
 	}

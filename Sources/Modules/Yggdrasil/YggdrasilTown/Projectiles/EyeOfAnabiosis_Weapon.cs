@@ -167,7 +167,7 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 			var magicCirTexture = Commons.ModAsset.Point.Value;
 			var magicCirPosition = Owner.gravDir == 1 ? Owner.Bottom : Owner.Top;
 			magicCirPosition = magicCirPosition - Main.screenPosition + new Vector2(0, 2 * Owner.gravDir);
-			var magicCirScale = new Vector2(0.2f, 0.12f);
+			var magicCirScale = new Vector2(0.18f, 0.12f);
 			Main.spriteBatch.Draw(magicCirTexture, magicCirPosition, null, Color.White, Owner.gravDir == 1 ? 0 : MathF.PI, new Vector2(magicCirTexture.Width / 2, magicCirTexture.Height), magicCirScale, SpriteEffects.None, 0);
 
 			Main.spriteBatch.End();
@@ -226,17 +226,17 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 		// Draw charge progress UI
-		if (Main.myPlayer == Projectile.owner)
+		if (Main.myPlayer == Projectile.owner && chargeProgress < 1)
 		{
-			var progressTexture = Commons.ModAsset.TileBlock.Value;
+			var progressTexture = Commons.ModAsset.White.Value;
 			var progressPosition = Owner.Center - Main.screenPosition + Owner.gravDir * new Vector2(0, 36);
 
 			Color frameColor = Color.Black;
-			Vector2 frameScale = new Vector2(1.9f, 0.6f);
+			Vector2 frameScale = new Vector2(2f, 0.6f) * 0.05f;
 
 			Color lineColor = Color.SkyBlue;
-			Vector2 lineScale = new Vector2(1.6f * chargeProgress, 0.3f);
-			Vector2 linePositionOffset = new Vector2(-1.6f * (1 - chargeProgress) * progressTexture.Width / 2f, 0);
+			Vector2 lineScale = new Vector2(1.6f * chargeProgress, 0.3f) * 0.05f;
+			Vector2 linePositionOffset = new Vector2(-1.6f * (1 - chargeProgress) * progressTexture.Width * 0.025f, 0);
 
 			Main.spriteBatch.Draw(progressTexture, progressPosition, null, frameColor, 0, progressTexture.Size() / 2, frameScale, SpriteEffects.None, 0);
 
