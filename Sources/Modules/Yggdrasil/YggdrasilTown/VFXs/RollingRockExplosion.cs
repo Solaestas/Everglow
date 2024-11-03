@@ -1,12 +1,10 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
-public class RockSmogPipeline : Pipeline
+public class RollingRockExplosionPipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModAsset.RockSmog;
-		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
-		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_rockSmog.Value);
+		effect = ModAsset.RollingRockExplosion;
 	}
 
 	public override void BeginRender()
@@ -15,6 +13,14 @@ public class RockSmogPipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
+
+		// effect.Parameters["blur"].SetValue(0.1f);
+		// effect.Parameters["speed"].SetValue(4);
+		// effect.Parameters["peaks"].SetValue(4);
+		// effect.Parameters["peakStrength"].SetValue(0.3f);
+		// effect.Parameters["ringSpeed"].SetValue(1.5f);
+		// effect.Parameters["smoke"].SetValue(0.4f);
+		// effect.Parameters["smokeTime"].SetValue(40);
 		Texture2D halo = Commons.ModAsset.Point.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
@@ -28,8 +34,8 @@ public class RockSmogPipeline : Pipeline
 	}
 }
 
-[Pipeline(typeof(RockSmogPipeline))]
-public class RockSmogDust : Visual
+[Pipeline(typeof(RollingRockExplosionPipeline))]
+public class RollingRockExplosion : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawNPCs;
 
@@ -56,45 +62,37 @@ public class RockSmogDust : Visual
 			Active = false;
 			return;
 		}
-		velocity *= 0.9f;
-		velocity += new Vector2(Main.windSpeedCurrent * 0.1f, 0.1f);
-		if (position.X < Main.maxTilesX * 16 - 320 && position.X > 320)
-		{
-			if (position.Y < Main.maxTilesY * 16 - 320 && position.Y > 320)
-			{
-				if (Collision.SolidCollision(position, 0, 0))
-				{
-					velocity.Y -= 0.1f;
-				}
-			}
-		}
-		if (scale < 160)
-		{
-			scale += 2f;
-		}
 		timer++;
 		if (timer > maxTime)
 		{
 			Active = false;
 		}
-
-		velocity = velocity.RotatedBy(ai[1]);
+		if (timer < 30f)
+		{
+			Lighting.AddLight(position, new Vector3(0.03f, 0.4f, 0.6f) * timer / 30f);
+		}
+		else
+		{
+			Lighting.AddLight(position, new Vector3(0.03f, 0.4f, 0.6f) * Math.Clamp((120 - timer) / 30f, 0, 5));
+		}
 	}
 
 	public override void Draw()
 	{
-		float pocession = timer / maxTime;
-		float timeValue = (float)(Main.time * 0.002);
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
-		Vector3 lightValue = Lighting.GetColor(position.ToTileCoordinates()).ToVector3();
-		float light = lightValue.Length();
+		Color drawColor = new Color(0.05f, 0.05f, 0.05f, 0f);
+		if (timer > maxTime - 20)
+		{
+			drawColor *= (maxTime - timer) / 20f;
+		}
+		float timeValue = timer * 0.02f;
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + toCorner, new Color(0, 0, pocession), new Vector3(ai[0], timeValue, light)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), new Color(0, 1, pocession), new Vector3(ai[0], timeValue + 0.4f, light)),
+			new Vertex2D(position + toCorner, drawColor, new Vector3(0.2f, 0.2f, timeValue)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), drawColor, new Vector3(0.8f, 0.2f,  timeValue)),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5), new Color(1, 0, pocession), new Vector3(ai[0] + 0.4f, timeValue, light)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1), new Color(1, 1, pocession), new Vector3(ai[0] + 0.4f, timeValue + 0.4f, light)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5), drawColor, new Vector3(0.2f, 0.8f, timeValue)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1), drawColor, new Vector3(0.8f, 0.8f,  timeValue)),
 		};
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}

@@ -97,6 +97,23 @@ public class SquamousAirProj : ModProjectile
 			};
 			Ins.VFXManager.Add(somg);
 		}
+		for (int g = 0; g < Frequency * 2; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1.0f, 12f)).RotatedByRandom(MathHelper.TwoPi);
+			var spark = new Spark_MoonBladeDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
+				maxTime = Main.rand.Next(70, 125),
+				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(9f, 17.0f)),
+				rotation = Main.rand.NextFloat(6.283f),
+				noGravity = true,
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f) },
+			};
+			Ins.VFXManager.Add(spark);
+		}
 	}
 
 	public override bool OnTileCollide(Vector2 oldVelocity)

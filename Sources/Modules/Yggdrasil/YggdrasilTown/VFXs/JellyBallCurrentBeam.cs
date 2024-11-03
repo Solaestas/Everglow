@@ -55,10 +55,14 @@ public class JellyBallCurrentBeamDust : Visual
 		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
 		{
 			timer = maxTime;
+			Active = false;
+			return;
 		}
 		if (position.Y <= 320 || position.Y >= Main.maxTilesY * 16 - 320)
 		{
 			timer = maxTime;
+			Active = false;
+			return;
 		}
 
 		scale = MathF.Sin(timer / maxTime * MathHelper.Pi) * scaleCoef;

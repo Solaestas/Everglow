@@ -1,5 +1,7 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using SteelSeries.GameSense;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -75,6 +77,10 @@ public class SquamousRockSpike : ModProjectile
 			}
 			Projectile.velocity *= 0f;
 		}
+		if(Projectile.timeLeft > 3550)
+		{
+			ConcentratingDust(1);
+		}
 	}
 
 	public void GenerateSmog(int Frequency)
@@ -113,6 +119,26 @@ public class SquamousRockSpike : ModProjectile
 		}
 	}
 
+	public void ConcentratingDust(int Frequency)
+	{
+		for (int g = 0; g < Frequency * 10; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1f, 2f)).RotatedByRandom(MathHelper.TwoPi);
+			var somg = new Rock_Concentrating_dust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(0, 160f), 0).RotatedByRandom(6.283),
+				maxTime = Main.rand.Next(120, 142),
+				scale = Main.rand.NextFloat(0.6f, 5f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(3f, 15f), Projectile.whoAmI, Projectile.type, Main.rand.NextFloat(10f) },
+			};
+			Ins.VFXManager.Add(somg);
+		}
+	}
+
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
 		Projectile.tileCollide = false;
@@ -126,9 +152,13 @@ public class SquamousRockSpike : ModProjectile
 	{
 		TimeTokill = 240;
 		Projectile.velocity = Projectile.oldVelocity;
-		for (int x = 0; x < 16; x++)
+		for (int x = 0; x < 8; x++)
 		{
 			Dust.NewDust(Projectile.Center - Projectile.velocity * 2 - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone>(), 0f, 0f, 0, default, 0.7f);
+		}
+		for (int x = 0; x < 8; x++)
+		{
+			Dust.NewDust(Projectile.Center - Projectile.velocity * 2 - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone_dark>(), 0f, 0f, 0, default, 0.7f);
 		}
 		GenerateSmog(8);
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolume(0.4f), Projectile.Center);
@@ -141,22 +171,155 @@ public class SquamousRockSpike : ModProjectile
 		{
 			return false;
 		}
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		float timerProj = 3600 - Projectile.timeLeft;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		if (timerProj <= 80)
+		{
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
+			// draw concentrated energy flow
+			Effect effect = ModAsset.TeleportToYggdrasilFlowEffect.Value;
+			effect.Parameters["uTransform"].SetValue(model * projection);
+			effect.CurrentTechnique.Passes[0].Apply();
+			Vector2 drawCenter = Projectile.Center;
+
+			// inner timer.
+			float timeValue = (float)Main.time * 0.04f;
+			float decrease = 1 - timerProj / 80f;
+			float addTimeValue = MathF.Pow(0.75f - decrease, 3) * 10f;
+			decrease = MathF.Pow(decrease, 3);
+			decrease = MathF.Sin(decrease * MathHelper.Pi) * 14f;
+
+			for (int r = 0; r < 6; r++)
+			{
+				List<Vertex2D> flows = new List<Vertex2D>();
+				for (int i = 0; i <= 20; i++)
+				{
+					Vector2 thisJoint = new Vector2(0, i * 10).RotatedBy(GetFlowEffectRotation(i, r));
+					Vector2 nextJoint = new Vector2(0, (i + 1) * 10).RotatedBy(GetFlowEffectRotation(i + 1, r));
+					Vector2 normalWidth = Vector2.Normalize(nextJoint - thisJoint).RotatedBy(MathHelper.PiOver2);
+					float vertexWidth = 40 + MathF.Sin(r) * 10;
+					normalWidth *= vertexWidth;
+					float drawWidth = MathF.Sin(Math.Min(i / 10f, 0.5f) * MathF.PI);
+					float fade = 1;
+					if (i > decrease)
+					{
+						fade *= Math.Clamp((decrease + 6 - i) / 6f, 0, 1);
+					}
+					if (timerProj > 50)
+					{
+						fade *= Math.Clamp((70 - timerProj) / 20f, 0, 1);
+					}
+
+					Color drawColor = new Color(1f, 1f, 1f, 1);
+					flows.Add(drawCenter + thisJoint - normalWidth, drawColor * fade, new Vector3(i * 0.07f + timeValue + r * 0.2f + addTimeValue, 0, drawWidth));
+					flows.Add(drawCenter + thisJoint + normalWidth, drawColor * fade, new Vector3(i * 0.07f + timeValue + r * 0.2f + addTimeValue, 1, drawWidth));
+				}
+				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_black_thick.Value;
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, flows.ToArray(), 0, flows.Count - 2);
+			}
+			for (int r = 0; r < 6; r++)
+			{
+				List<Vertex2D> flows = new List<Vertex2D>();
+				for (int i = 0; i <= 20; i++)
+				{
+					Vector2 thisJoint = new Vector2(0, i * 6).RotatedBy(GetFlowEffectRotation(i * 0.5f, r) + MathHelper.Pi / 6f);
+					Vector2 nextJoint = new Vector2(0, (i + 1) * 6).RotatedBy(GetFlowEffectRotation(i * 0.5f + 0.5f, r) + MathHelper.Pi / 6f);
+					Vector2 normalWidth = Vector2.Normalize(nextJoint - thisJoint).RotatedBy(MathHelper.PiOver2);
+					float vertexWidth = 34 + MathF.Sin(r) * 5;
+					normalWidth *= vertexWidth;
+					float drawWidth = MathF.Sin(Math.Min(i / 4f, 0.5f) * MathF.PI);
+					float fade = 1;
+					if (i > decrease)
+					{
+						fade *= Math.Clamp((decrease + 6 - i) / 6f, 0, 1);
+					}
+					if (timerProj > 50)
+					{
+						fade *= Math.Clamp((70 - timerProj) / 20f, 0, 1);
+					}
+
+					Color drawColor = new Color(1f, 1f, 1f, 1);
+					flows.Add(drawCenter + thisJoint - normalWidth, drawColor * fade, new Vector3(i * 0.035f + timeValue + r * 0.2f + addTimeValue, 0, drawWidth));
+					flows.Add(drawCenter + thisJoint + normalWidth, drawColor * fade, new Vector3(i * 0.035f + timeValue + r * 0.2f + addTimeValue, 1, drawWidth));
+				}
+				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_3_black.Value;
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, flows.ToArray(), 0, flows.Count - 2);
+			}
+
+			for (int r = 0; r < 6; r++)
+			{
+				List<Vertex2D> flows = new List<Vertex2D>();
+				for (int i = 0; i <= 20; i++)
+				{
+					Vector2 thisJoint = new Vector2(0, i * 10).RotatedBy(GetFlowEffectRotation(i, r));
+					Vector2 nextJoint = new Vector2(0, (i + 1) * 10).RotatedBy(GetFlowEffectRotation(i + 1, r));
+					Vector2 normalWidth = Vector2.Normalize(nextJoint - thisJoint).RotatedBy(MathHelper.PiOver2);
+					float vertexWidth = 40 + MathF.Sin(r) * 10;
+					normalWidth *= vertexWidth;
+					float drawWidth = MathF.Sin(Math.Min(i / 10f, 0.5f) * MathF.PI);
+					float fade = 1;
+					if (i > decrease)
+					{
+						fade *= Math.Clamp((decrease + 6 - i) / 6f, 0, 1);
+					}
+					if (timerProj > 50)
+					{
+						fade *= Math.Clamp((70 - timerProj) / 20f, 0, 1);
+					}
+
+					Color drawColor = new Color(0.4f, 0.3f, 0.3f, 0);
+					flows.Add(drawCenter + thisJoint - normalWidth, drawColor * fade, new Vector3(i * 0.07f + timeValue + r * 0.2f + addTimeValue, 0, drawWidth));
+					flows.Add(drawCenter + thisJoint + normalWidth, drawColor * fade, new Vector3(i * 0.07f + timeValue + r * 0.2f + addTimeValue, 1, drawWidth));
+				}
+				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_thick.Value;
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, flows.ToArray(), 0, flows.Count - 2);
+			}
+			for (int r = 0; r < 6; r++)
+			{
+				List<Vertex2D> flows = new List<Vertex2D>();
+				for (int i = 0; i <= 20; i++)
+				{
+					Vector2 thisJoint = new Vector2(0, i * 6).RotatedBy(GetFlowEffectRotation(i * 0.5f, r) + MathHelper.Pi / 6f);
+					Vector2 nextJoint = new Vector2(0, (i + 1) * 6).RotatedBy(GetFlowEffectRotation(i * 0.5f + 0.5f, r) + MathHelper.Pi / 6f);
+					Vector2 normalWidth = Vector2.Normalize(nextJoint - thisJoint).RotatedBy(MathHelper.PiOver2);
+					float vertexWidth = 34 + MathF.Sin(r) * 5;
+					normalWidth *= vertexWidth;
+					float drawWidth = MathF.Sin(Math.Min(i / 4f, 0.5f) * MathF.PI);
+					float fade = 1;
+					if (i > decrease)
+					{
+						fade *= Math.Clamp((decrease + 6 - i) / 6f, 0, 1);
+					}
+					if (timerProj > 50)
+					{
+						fade *= Math.Clamp((70 - timerProj) / 20f, 0, 1);
+					}
+
+					Color drawColor = new Color(0.4f, 0.3f, 0.3f, 0);
+					flows.Add(drawCenter + thisJoint - normalWidth, drawColor * fade, new Vector3(i * 0.035f + timeValue + r * 0.2f + addTimeValue, 0, drawWidth));
+					flows.Add(drawCenter + thisJoint + normalWidth, drawColor * fade, new Vector3(i * 0.035f + timeValue + r * 0.2f + addTimeValue, 1, drawWidth));
+				}
+				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_3.Value;
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, flows.ToArray(), 0, flows.Count - 2);
+			}
+		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect dissolve = Commons.ModAsset.DissolveWithLight.Value;
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		float dissolveDuration = (3600 - Projectile.timeLeft) / 80f * 1.2f - 0.2f;
+		float dissolveDuration = timerProj / 80f * 1f - 0.5f;
 		if (Projectile.timeLeft < 3520)
 		{
-			dissolveDuration = 1;
+			dissolveDuration = 1.2f;
 		}
 		dissolve.Parameters["uTransform"].SetValue(model * projection);
-		dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_cell.Value);
+		dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_Sand.Value);
 		dissolve.Parameters["duration"].SetValue(dissolveDuration);
 		dissolve.Parameters["uLightColor"].SetValue(lightColor.ToVector4());
-		dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.2f, 0.6f, 0.7f, 1f));
+		dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.4f, 0.3f, 0.3f, 1f));
 		dissolve.Parameters["uNoiseSize"].SetValue(2f);
 		dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(Projectile.ai[1], Projectile.ai[2]));
 		dissolve.CurrentTechnique.Passes[0].Apply();
@@ -164,16 +327,27 @@ public class SquamousRockSpike : ModProjectile
 		var TexMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
 		Main.spriteBatch.Draw(TexMain, Projectile.Center, null, lightColor, Projectile.rotation, TexMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 		return false;
+	}
+
+	private float GetFlowEffectRotation(float i, float r)
+	{
+		float timeValue = (float)Main.time * 0.04f;
+		timeValue *= 0.5f;
+
+		return r / 6f * MathHelper.TwoPi + MathF.Sin(i * 0.07f + r * 0.03f + timeValue + Projectile.whoAmI) * 1.4f + MathF.Sin(i * 0.12f + r + timeValue) * 0.2f;
 	}
 
 	public override void PostDraw(Color lightColor)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		DrawTrail_dark(lightColor);
 		DrawTrail(lightColor);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 	}
 
 	public void DrawTrail(Color light)

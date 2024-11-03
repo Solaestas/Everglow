@@ -548,6 +548,33 @@ public class SquamousShell : ModNPC
 			};
 			Ins.VFXManager.Add(somg);
 		}
+		for (int g = 0; g < 20; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(6f, 14f)).RotatedByRandom(MathHelper.TwoPi);
+			newVelocity.Y = -Math.Abs(newVelocity.Y);
+			var somg = new RockSmog_ConeDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = NPC.Bottom + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + new Vector2(newVelocity.X * 3, 0),
+				maxTime = Main.rand.Next(54, 72),
+				scale = Main.rand.NextFloat(0.6f, 12f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+			};
+			Ins.VFXManager.Add(somg);
+		}
+		for (int x = 0; x < 40; x++)
+		{
+			Dust dust = Dust.NewDustDirect(NPC.Center + new Vector2(-4 + (x - 20) * 10, -4), 0, 0, ModContent.DustType<SquamousShellStone>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
+			dust.velocity = new Vector2((x - 20) * 0.15f, -Main.rand.NextFloat(6f, 13f) * (MathF.Sin(x / 40 * MathF.PI) + 1.5f));
+		}
+		for (int x = 0; x < 40; x++)
+		{
+			Dust dust = Dust.NewDustDirect(NPC.Center + new Vector2(-4 + (x - 20) * 10, -4), 0, 0, ModContent.DustType<SquamousShellStone_dark>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
+			dust.velocity = new Vector2((x - 20) * 0.15f, -Main.rand.NextFloat(6f, 13f) * (MathF.Sin(x / 40 * MathF.PI) + 1.5f));
+		}
 		SquamousShellSkeleton.AnimationState.SetAnimation(0, "drop", false);
 		for (int i = 0; i < 10; i++)
 		{
@@ -952,6 +979,8 @@ public class SquamousShell : ModNPC
 		skeletonRenderer.DrawOffset = -Main.screenPosition;
 
 		var cmdList = skeletonRenderer.Draw(SquamousShellSkeleton);
+		skeletonRenderer.UseEnvironmentLight = false;
+		cmdList.AddRange(skeletonRenderer.DrawWithOtherTexture(SquamousShellSkeleton, ModAsset.monster_glow.Value));
 		if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SkeletonSight>())
 		{
 			cmdList.AddRange(skeletonDebugRenderer.Draw(SquamousShellSkeleton));

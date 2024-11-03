@@ -60,9 +60,24 @@ public class SquamousRollingStone : ModProjectile
 		{
 			StopTimer = 0;
 		}
-		if(Projectile.timeLeft == 55)
+		if(Projectile.timeLeft == 59)
 		{
 			SoundEngine.PlaySound(new SoundStyle(ModAsset.SquamousShell_RockExplosion_Mod), Projectile.Center);
+		}
+		if(Projectile.timeLeft == 30)
+		{
+			var explosion = new RollingRockExplosion
+			{
+				velocity = Vector2.zeroVector,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center,
+				maxTime = 240f,
+				scale = Main.rand.NextFloat(920f, 980f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f) },
+			};
+			Ins.VFXManager.Add(explosion);
 		}
 		Projectile.velocity.X += StartDirection * 0.04f;
 		Projectile.velocity.Y += 0.2f;
@@ -119,7 +134,7 @@ public class SquamousRollingStone : ModProjectile
 			Dust.NewDust(Projectile.Center - Projectile.velocity * 2 - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone>(), 0f, 0f, 0, default, 0.7f);
 		}
 		GenerateSmog(8);
-		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<SquamousRockExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 16);
+		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<SquamousRockExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 40);
 		ShakerManager.AddShaker(Projectile.Center, Vector2.One.RotatedByRandom(MathHelper.Pi), 120, 20f, 120, 0.9f, 0.8f, 150);
 	}
 

@@ -1,7 +1,7 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
-[Pipeline(typeof(JellyBallGelDropPipeline))]
-public class JellyBallGelDrop : Visual
+[Pipeline(typeof(CaterpillarJuicePipeline))]
+public class CaterpillarJuice_Drop : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
@@ -13,7 +13,7 @@ public class JellyBallGelDrop : Visual
 	public float scale;
 	public float rotation;
 
-	public JellyBallGelDrop()
+	public CaterpillarJuice_Drop()
 	{
 	}
 
@@ -33,7 +33,7 @@ public class JellyBallGelDrop : Visual
 			return;
 		}
 		velocity *= 0.98f;
-		velocity += new Vector2(Main.windSpeedCurrent * 0.1f, 0.21f * scale * 0.1f);
+		velocity += new Vector2(Main.windSpeedCurrent * 0.01f, 0.1f);
 		timer++;
 		if (timer > maxTime)
 		{
@@ -64,16 +64,14 @@ public class JellyBallGelDrop : Visual
 		{
 			timer += 20;
 		}
-		float pocession = 1 - timer / maxTime;
-		float c = pocession * scale * 0.08f;
-		Lighting.AddLight(position, 0, c * 0.1f, c * 0.8f);
 	}
 
 	public override void Draw()
 	{
 		float pocession = timer / maxTime * 0.6f;
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
-		Color lightColor = Color.White;
+		Color lightColor = Lighting.GetColor(position.ToTileCoordinates());
+		;
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
 			new Vertex2D(position + velocity + toCorner, lightColor, new Vector3(0, 0, pocession)),

@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
@@ -28,10 +29,15 @@ public class SquamousRockExplosion : ModProjectile, IWarpProjectile
 		else
 		{
 			GenerateSmog(20);
-			for (int x = 0; x < 4 * Projectile.ai[0]; x++)
+			for (int x = 0; x < 2 * Projectile.ai[0]; x++)
 			{
 				Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<SquamousShellStone>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
-				dust.velocity = new Vector2(0, Main.rand.NextFloat(0f, 1f * Projectile.ai[0])).RotatedByRandom(MathHelper.TwoPi);
+				dust.velocity = new Vector2(0, Main.rand.NextFloat(0f, 2f * Projectile.ai[0])).RotatedByRandom(MathHelper.TwoPi);
+			}
+			for (int x = 0; x < 2 * Projectile.ai[0]; x++)
+			{
+				Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<SquamousShellStone_dark>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
+				dust.velocity = new Vector2(0, Main.rand.NextFloat(0f, 2f * Projectile.ai[0])).RotatedByRandom(MathHelper.TwoPi);
 			}
 		}
 	}
@@ -68,8 +74,13 @@ public class SquamousRockExplosion : ModProjectile, IWarpProjectile
 	{
 		Vector4 light = lightColor.ToVector4();
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 8 * (1 - timeValue) * Projectile.ai[0], lightColor * (1 - timeValue) * 0.75f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_black.Value);
 		DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 8 * (1 - timeValue) * Projectile.ai[0], new Color(0.32f * light.X, 0.18f * light.Y, 0.24f * light.Z, 0f) * (1 - timeValue), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 	}
 
 	public void GenerateSmog(int Frequency)
@@ -94,6 +105,29 @@ public class SquamousRockExplosion : ModProjectile, IWarpProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
+		//SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		//Main.spriteBatch.End();
+		//Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		//Effect explosion = ModAsset.SquamousRollingStoneExplosionShader.Value;
+		//var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		//var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		//explosion.Parameters["uTransform"].SetValue(model * projection);
+		//explosion.Parameters["uTime"].SetValue((200 - Projectile.timeLeft) * 0.01f);
+		//explosion.CurrentTechnique.Passes[0].Apply();
+
+		//var texMain = Commons.ModAsset.Noise_forceField_sparse.Value;
+		//Color drawColor = new Color(1f, 1f, 1f, 1f);
+		//Vector2 drawCenter = Projectile.Center;
+		//List<Vertex2D> bars = new List<Vertex2D>();
+		//bars.Add(drawCenter + new Vector2(0, -200), drawColor, new Vector3(0, 0, 0));
+		//bars.Add(drawCenter + new Vector2(200, 0), drawColor, new Vector3(1, 0, 0));
+
+		//bars.Add(drawCenter + new Vector2(-200, 0), drawColor, new Vector3(0, 1, 0));
+		//bars.Add(drawCenter + new Vector2(0, 200), drawColor, new Vector3(1, 1, 0));
+		//Main.graphics.graphicsDevice.Textures[0] = texMain;
+		//Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		//Main.spriteBatch.End();
+		//Main.spriteBatch.Begin(sBS);
 		return false;
 	}
 

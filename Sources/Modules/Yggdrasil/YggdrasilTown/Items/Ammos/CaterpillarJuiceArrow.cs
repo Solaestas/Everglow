@@ -19,5 +19,6 @@ public class CaterpillarJuiceArrow : ModItem
 		Item.value = Item.sellPrice(copper: 4);
 
 		Item.shoot = ModContent.ProjectileType<Projectiles.CaterpillarJuiceArrow>();
+		Item.shootSpeed = 6f;
 	}
 }

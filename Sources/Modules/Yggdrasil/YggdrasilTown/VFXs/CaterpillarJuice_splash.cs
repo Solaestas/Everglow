@@ -1,7 +1,7 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
-[Pipeline(typeof(JellyBallGelSplashPipeline))]
-public class JellyBallGelSplash : Visual
+[Pipeline(typeof(CaterpillarJuice_splash_pipeline))]
+public class CaterpillarJuice_splash : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
@@ -14,7 +14,7 @@ public class JellyBallGelSplash : Visual
 	public float scale;
 	public float alpha;
 
-	public JellyBallGelSplash()
+	public CaterpillarJuice_splash()
 	{
 	}
 
@@ -73,9 +73,6 @@ public class JellyBallGelSplash : Visual
 		{
 			position += velocity;
 		}
-		float pocession = 1 - timer / maxTime;
-		float c = pocession * scale * 0.04f;
-		Lighting.AddLight(position, 0, c * 0.1f, c * 0.8f);
 	}
 
 	public override void Draw()
@@ -114,9 +111,9 @@ public class JellyBallGelSplash : Visual
 			{
 				widthDown *= 0f;
 			}
-
-			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width + widthUp, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0 + ai[0], (i + 15 - len) / 17f, pocession));
-			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width + widthDown, new Color(0.3f + ai[0], 0, 0, 0), new Vector3(0.6f + ai[0], (i + 15 - len) / 17f, pocession));
+			Color drawColor = Lighting.GetColor(oldPos[i].ToTileCoordinates());
+			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width + widthUp, drawColor, new Vector3(0 + ai[0], (i + 15 - len) / 17f, pocession));
+			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width + widthDown, drawColor, new Vector3(0.6f + ai[0], (i + 15 - len) / 17f, pocession));
 		}
 		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
