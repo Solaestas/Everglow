@@ -15,12 +15,15 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 		Projectile.timeLeft = 300;
 		Projectile.aiStyle = -1;
 	}
+
 	public Vector2 startVelocity;
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		startVelocity = Vector2.Normalize(Projectile.velocity);
 		base.OnSpawn(source);
 	}
+
 	public void GenerateSmog(int Frequency)
 	{
 		for (int g = 0; g < Frequency; g++)
@@ -35,18 +38,19 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
 				maxTime = Main.rand.Next(27, 72),
 				scale = mulWidth,
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
 			};
 			Ins.VFXManager.Add(darknessNight);
 		}
 	}
+
 	public override void AI()
 	{
 		if (Projectile.timeLeft == 295)
 		{
 			Projectile.extraUpdates = 4;
 		}
-		if(Projectile.timeLeft == 260)
+		if (Projectile.timeLeft == 260)
 		{
 			Projectile.extraUpdates = 0;
 		}
@@ -65,15 +69,16 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 			maxTime = Main.rand.Next(7, 45),
 			scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 7.0f)),
 			rotation = Main.rand.NextFloat(6.283f),
-			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f) }
+			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f) },
 		};
 		Ins.VFXManager.Add(spark);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		float colorValue = 0.1f;
 		int maxLength = 280 - Projectile.timeLeft;
-		if(Projectile.timeLeft < 260)
+		if (Projectile.timeLeft < 260)
 		{
 			maxLength = 20;
 			colorValue = 1f;
@@ -106,6 +111,7 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		return false;
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		int maxLength = 280 - Projectile.timeLeft;
@@ -120,25 +126,29 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 		{
 			Vector2 v0 = startVelocity.RotatedBy(x / 20f * Projectile.ai[1]) * 90f;
 			Vector2 pos = Projectile.Center + v0 - Main.screenPosition - startVelocity * 40f;
-			bars.Add(pos, new Color(redValue, 0.02f * (Math.Abs(x)+12), 0, 0), new Vector3(0.2f + timeValue, x / 35f, 0));
+			bars.Add(pos, new Color(redValue, 0.02f * (Math.Abs(x) + 12), 0, 0), new Vector3(0.2f + timeValue, x / 35f, 0));
 			bars.Add(pos - startVelocity * 50f, new Color(redValue, 0, 0, 0), new Vector3(0 + timeValue, x / 35f, 0));
 		}
 		Texture2D t = Commons.ModAsset.Noise_melting.Value;
 
 		if (bars.Count > 3)
+		{
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
+		}
 	}
+
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
 		return true;
 	}
+
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		return base.Colliding(projHitbox, targetHitbox);
 	}
+
 	public override void OnKill(int timeLeft)
 	{
 		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<YggdrasilMoonBladeHit>(), 0, 0, -1, 20, startVelocity.ToRotation());
 	}
 }
-

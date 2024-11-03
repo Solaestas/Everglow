@@ -15,6 +15,7 @@ public class CyanVineBullet : ModItem
 		Item.shoot = ModContent.ProjectileType<Projectiles.CyanBullet>();
 		Item.shootSpeed = 16f;
 	}
+
 	public override void AddRecipes()
 	{
 		CreateRecipe(60)
