@@ -1,5 +1,3 @@
-using Terraria.Enums;
-
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 
 public class CelesteStoneWaistPendant : ModItem
@@ -9,7 +7,8 @@ public class CelesteStoneWaistPendant : ModItem
 		Item.width = 24;
 		Item.height = 44;
 		Item.accessory = true;
-		Item.SetShopValues(ItemRarityColor.Green2, 9200);
+		Item.rare = ItemRarityID.Green;
+		Item.value = Item.buyPrice(silver: 92);
 	}
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
@@ -17,10 +16,10 @@ public class CelesteStoneWaistPendant : ModItem
 		// 1. + 30 Mana
 		player.statManaMax2 += 30;
 
-		// 2. Add mana regen in some case.
-		if(player.statMana > player.statManaMax * 0.4 && player.statMana < player.statManaMax * 0.6)
+		// 2. + 2 mana regen (if mana is between 40% and 60%)
+		if (player.statMana > player.statManaMax * 0.4f && player.statMana < player.statManaMax * 0.6f)
 		{
-			player.manaRegen += 1;
+			player.manaRegen += 2;
 		}
 	}
 }

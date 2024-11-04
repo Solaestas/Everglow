@@ -14,7 +14,7 @@ public class BlueyWings : ModItem
 	{
 		Item.width = 22;
 		Item.height = 20;
-		Item.value = Item.sellPrice(gold: 1, silver: 33);
+		Item.value = Item.buyPrice(gold: 1, silver: 33);
 		Item.rare = ItemRarityID.Green;
 		Item.accessory = true;
 	}

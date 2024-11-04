@@ -1,5 +1,3 @@
-using Terraria.Enums;
-
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.Furnace;
 
 [AutoloadEquip(EquipType.Balloon)]
@@ -18,7 +16,8 @@ public class HotAirBalloon : ModItem
 		Item.height = 46;
 		Item.accessory = true;
 		Item.hasVanityEffects = true;
-		Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(gold: 1, silver: 50));
+		Item.rare = ItemRarityID.Blue;
+		Item.value = Item.buyPrice(gold: 1, silver: 50);
 	}
 
 	public override void UpdateAccessory(Player player, bool hideVisual)

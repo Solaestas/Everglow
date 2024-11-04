@@ -1,16 +1,18 @@
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
-using Terraria.Enums;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 
 public class CyanVineRing : ModItem
 {
+	public const int BuffDuration = 900;
+
 	public override void SetDefaults()
 	{
 		Item.width = 20;
 		Item.height = 12;
 		Item.accessory = true;
-		Item.SetShopValues(ItemRarityColor.Green2, 8800);
+		Item.rare = ItemRarityID.Green;
+		Item.value = Item.buyPrice(silver: 88);
 	}
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
@@ -49,9 +51,9 @@ public class CyanVineRingPlayer : ModPlayer
 
 	public override void OnHitAnything(float x, float y, Entity victim)
 	{
-		if(HurtTimer > 0)
+		if (HurtTimer > 0)
 		{
-			Player.AddBuff(ModContent.BuffType<CyanVineRingCrit>(), 750);
+			Player.AddBuff(ModContent.BuffType<CyanVineRingCrit>(), CyanVineRing.BuffDuration);
 		}
 	}
 }

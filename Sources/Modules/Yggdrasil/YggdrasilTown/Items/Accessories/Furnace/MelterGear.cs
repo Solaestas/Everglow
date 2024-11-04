@@ -1,5 +1,4 @@
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
-using Terraria.Enums;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.Furnace;
 
@@ -19,7 +18,8 @@ public class MelterGear : ModItem
 		Item.width = 44;
 		Item.height = 46;
 		Item.accessory = true;
-		Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(gold: 2));
+		Item.rare = ItemRarityID.Blue;
+		Item.value = Item.buyPrice(gold: 2);
 	}
 
 	public override void UpdateAccessory(Player player, bool hideVisual)

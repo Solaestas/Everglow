@@ -1,5 +1,3 @@
-using Terraria.Enums;
-
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 
 public class RingOfMatter : ModItem
@@ -13,7 +11,8 @@ public class RingOfMatter : ModItem
 		Item.width = 20;
 		Item.height = 12;
 		Item.accessory = true;
-		Item.SetShopValues(ItemRarityColor.Orange3, Item.sellPrice(gold: 10));
+		Item.rare = ItemRarityID.Orange;
+		Item.value = Item.buyPrice(gold: 10);
 	}
 
 	public override void UpdateAccessory(Player player, bool hideVisual)

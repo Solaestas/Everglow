@@ -108,6 +108,8 @@ public class GunOfAvarice : ModItem
 		return false;
 	}
 
+	public override bool CanConsumeAmmo(Item ammo, Player player) => player.altFunctionUse != 2;
+
 	public override bool AltFunctionUse(Player player) => true;
 
 	public override void ModifyTooltips(List<TooltipLine> tooltips)
