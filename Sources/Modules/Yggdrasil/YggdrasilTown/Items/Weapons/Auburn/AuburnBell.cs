@@ -1,5 +1,4 @@
 using Terraria.DataStructures;
-using Terraria.Enums;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.Auburn;
@@ -16,7 +15,8 @@ public class AuburnBell : ModItem
 		Item.width = 40;
 		Item.height = 52;
 
-		Item.SetShopValues(ItemRarityColor.Green2, Item.buyPrice(silver: 10));
+		Item.rare = ItemRarityID.Green;
+		Item.value = Item.buyPrice(silver: 10);
 
 		Item.DamageType = DamageClass.Summon;
 		Item.damage = 14;

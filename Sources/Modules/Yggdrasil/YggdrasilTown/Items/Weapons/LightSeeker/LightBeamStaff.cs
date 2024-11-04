@@ -1,10 +1,9 @@
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Terraria.DataStructures;
-using Terraria.Enums;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.LightSeeker;
 
-internal class LightBeamStaff : ModItem
+public class LightBeamStaff : ModItem
 {
 	public override void SetDefaults()
 	{
@@ -24,9 +23,8 @@ internal class LightBeamStaff : ModItem
 		Item.noUseGraphic = true;
 		Item.mana = 5;
 
-		Item.SetShopValues(
-			ItemRarityColor.Green2,
-			Item.buyPrice(silver: 8));
+		Item.value = ItemRarityID.Green;
+		Item.value = Item.buyPrice(silver: 8);
 
 		Item.shoot = ModContent.ProjectileType<LightBeamStaff_proj>();
 		Item.shootSpeed = 15f;

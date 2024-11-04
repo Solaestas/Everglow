@@ -28,7 +28,7 @@ public class GunOfAvarice : ModItem
 		Item.autoReuse = false;
 
 		Item.rare = ItemRarityID.Orange;
-		Item.value = Item.sellPrice(gold: 10);
+		Item.value = Item.buyPrice(gold: 10);
 
 		Item.shoot = ProjectileID.Bullet;
 		Item.shootSpeed = 12f;

@@ -1,9 +1,8 @@
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
-using Terraria.Enums;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.LightSeeker;
 
-internal class BowOfEnlightment : ModItem
+public class BowOfEnlightment : ModItem
 {
 	public override void SetDefaults()
 	{
@@ -28,9 +27,8 @@ internal class BowOfEnlightment : ModItem
 		Item.shootSpeed = 12f;
 		Item.useAmmo = AmmoID.Arrow;
 
-		Item.SetShopValues(
-			ItemRarityColor.Green2,
-			Item.buyPrice(silver: 5));
+		Item.rare = ItemRarityID.Green;
+		Item.value = Item.buyPrice(silver: 5);
 	}
 
 	public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)

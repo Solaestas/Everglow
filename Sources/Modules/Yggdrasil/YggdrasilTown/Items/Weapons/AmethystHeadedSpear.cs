@@ -1,4 +1,4 @@
-﻿using Terraria.Audio;
+using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
@@ -29,7 +29,7 @@ public class AmethystHeadedSpear : ModItem
 		Item.shoot = ModContent.ProjectileType<Projectiles.AmethystHeadedSpear>();
 
 		Item.rare = ItemRarityID.Blue;
-		Item.value = Item.sellPrice(silver: 20);
+		Item.value = Item.buyPrice(silver: 20);
 	}
 
 	public override bool CanUseItem(Player player)

@@ -30,7 +30,7 @@ public class TopaztHeadedSpear : ModItem
 		Item.shoot = ModContent.ProjectileType<Projectiles.TopazHeadedSpear>();
 
 		Item.rare = ItemRarityID.Blue;
-		Item.value = Item.sellPrice(silver: 20);
+		Item.value = Item.buyPrice(silver: 20);
 	}
 
 	public override bool CanUseItem(Player player)

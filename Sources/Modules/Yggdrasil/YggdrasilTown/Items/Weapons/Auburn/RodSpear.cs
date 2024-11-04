@@ -1,8 +1,6 @@
-using Terraria.Enums;
-
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.Auburn;
 
-internal class RodSpear : ModItem
+public class RodSpear : ModItem
 {
 	public override void SetDefaults()
 	{
@@ -22,20 +20,10 @@ internal class RodSpear : ModItem
 		Item.crit = 4;
 		Item.knockBack = 4f;
 
-		Item.SetShopValues(
-			ItemRarityColor.Green2,
-			Item.buyPrice(silver: 20));
+		Item.value = ItemRarityID.Green;
+		Item.value = Item.buyPrice(silver: 20);
 
 		Item.shoot = ModContent.ProjectileType<Projectiles.RodSpear>();
 		Item.shootSpeed = 12;
-	}
-
-	public override void AddRecipes()
-	{
-		CreateRecipe(8)
-			.AddIngredient(ItemID.BorealWood, 2)
-			.AddIngredient(ItemID.IceBlock, 1)
-			.AddTile(TileID.IceBlock)
-			.Register();
 	}
 }

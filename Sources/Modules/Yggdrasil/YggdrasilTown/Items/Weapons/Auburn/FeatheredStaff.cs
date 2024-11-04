@@ -1,8 +1,6 @@
-using Terraria.Enums;
-
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.Auburn;
 
-internal class FeatheredStaff : ModItem
+public class FeatheredStaff : ModItem
 {
 	public override void SetDefaults()
 	{
@@ -28,9 +26,8 @@ internal class FeatheredStaff : ModItem
 		Item.shoot = ModContent.ProjectileType<Projectiles.FeatheredStaff_staff>();
 		Item.shootSpeed = 10;
 
-		Item.SetShopValues(
-			ItemRarityColor.Green2,
-			Item.buyPrice(silver: 20));
+		Item.rare = ItemRarityID.Green;
+		Item.value = Item.buyPrice(silver: 20);
 	}
 
 	public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] == 0;

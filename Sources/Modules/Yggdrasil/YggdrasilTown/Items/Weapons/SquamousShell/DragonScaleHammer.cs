@@ -16,14 +16,14 @@ public class DragonScaleHammer : ModItem
 		Item.shootSpeed = 5f;
 		Item.knockBack = 3.3f;
 		Item.damage = 30;
-		Item.rare = ItemRarityID.Green;
 
 		Item.DamageType = DamageClass.Melee;
 		Item.noMelee = true;
 		Item.noUseGraphic = true;
 		Item.hammer = 50;
 
-		Item.value = 8900;
+		Item.rare = ItemRarityID.Green;
+		Item.value = Item.buyPrice(silver: 89);
 	}
 
 	public override bool CanUseItem(Player player)

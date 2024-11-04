@@ -22,6 +22,7 @@ public class SmeltingStaff : ModItem
 		Item.shoot = ModContent.ProjectileType<MeltingFireExplode>();
 		Item.UseSound = SoundID.Item20;
 		Item.rare = ItemRarityID.Green;
+		Item.value = Item.buyPrice(gold: 2);
 	}
 
 	public override void HoldItem(Player player)

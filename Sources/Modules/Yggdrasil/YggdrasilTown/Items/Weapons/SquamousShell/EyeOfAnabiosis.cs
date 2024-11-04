@@ -29,7 +29,7 @@ public class EyeOfAnabiosis : ModItem
 		Item.noUseGraphic = true;
 		Item.channel = true;
 
-		Item.value = Item.sellPrice(gold: 1, silver: 3);
+		Item.value = Item.buyPrice(gold: 1, silver: 3);
 		Item.rare = ItemRarityID.Green;
 
 		Item.shoot = ModContent.ProjectileType<EyeOfAnabiosis_Weapon>();
@@ -47,6 +47,5 @@ public class EyeOfAnabiosis : ModItem
 		}
 	}
 
-	// TODO: A bug need to be fixed - item can consume mana even it's CanUseItem is false
 	public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] == 0;
 }
