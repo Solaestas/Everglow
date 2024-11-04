@@ -1,19 +1,17 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
-public class AmberSmogPipeline : Pipeline
+public class ColorfulDreamPipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModAsset.AmberSmog;
-		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
-		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_AmberSmog.Value);
+		effect = ModAsset.ColorfulDream;
 	}
 
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D halo = Commons.ModAsset.Point.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
@@ -28,8 +26,8 @@ public class AmberSmogPipeline : Pipeline
 	}
 }
 
-[Pipeline(typeof(AmberSmogPipeline))]
-public class AmberSmogDust : Visual
+[Pipeline(typeof(ColorfulDreamPipeline))]
+public class ColorfulDreamDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawNPCs;
 
@@ -40,10 +38,6 @@ public class AmberSmogDust : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-
-	public AmberSmogDust()
-	{
-	}
 
 	public override void Update()
 	{
@@ -61,20 +55,6 @@ public class AmberSmogDust : Visual
 			return;
 		}
 		velocity *= 0.9f;
-
-		if (position.X < Main.maxTilesX * 16 - 320 && position.X > 320)
-		{
-			if (position.Y < Main.maxTilesY * 16 - 320 && position.Y > 320)
-			{
-				if (Collision.SolidCollision(position, 0, 0))
-				{
-				}
-			}
-		}
-		if (scale < 160)
-		{
-			scale += 2f;
-		}
 		timer++;
 		if (timer > maxTime)
 		{
@@ -86,18 +66,22 @@ public class AmberSmogDust : Visual
 
 	public override void Draw()
 	{
-		float pocession = timer / maxTime;
-		float timeValue = (float)(Main.time * 0.002);
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
-		Vector3 lightValue = Lighting.GetColor(position.ToTileCoordinates()).ToVector3();
-		float light = lightValue.Length();
+		Color drawColor = new Color(0.1f, 0.2f, 0.3f, 0f);
+		//if (timer > maxTime - 20)
+		//{
+		//	drawColor *= (maxTime - timer) / 20f;
+		//}
+		float timeValue = timer * 0.02f;
+		float max = 1f;
+		float min = 0f;
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + toCorner, new Color(0, 0, pocession), new Vector3(ai[0], timeValue, light)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), new Color(0, 1, pocession), new Vector3(ai[0], timeValue + 0.4f, light)),
+			new Vertex2D(position + toCorner, drawColor, new Vector3(min, min, timeValue)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), drawColor, new Vector3(max, min,  timeValue)),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5), new Color(1, 0, pocession), new Vector3(ai[0] + 0.4f, timeValue, light)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1), new Color(1, 1, pocession), new Vector3(ai[0] + 0.4f, timeValue + 0.4f, light)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5), drawColor, new Vector3(min, max, timeValue)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1), drawColor, new Vector3(max, max,  timeValue)),
 		};
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}

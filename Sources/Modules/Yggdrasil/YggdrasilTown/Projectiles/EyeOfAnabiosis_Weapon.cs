@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -10,7 +11,7 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 	private const int MaxTargetCount = 3;
 	private const float ProjectileRandomRotation = 0.2f;
 
-	private int ChargeTimer { get; set; }
+	public int ChargeTimer { get; set; }
 
 	public override string Texture => ModAsset.EyeOfAnabiosis_Mod;
 
@@ -117,6 +118,10 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 	{
 		if (ChargeTimer++ < MaxChargeTime)
 		{
+			if (ChargeTimer == 710)
+			{
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Owner.Center, Vector2.zeroVector, ModContent.ProjectileType<EyeOfAnabiosis_Matrix>(), 0, 0, Projectile.owner);
+			}
 			return;
 		}
 
@@ -140,7 +145,7 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 
 				for (int i = 0; i < MaxTargetCount; i++)
 				{
-					Projectile.NewProjectile(Owner.GetSource_ItemUse(HeldItem), projPosition, projVelocity.RotatedBy(Main.rand.NextFloat(-ProjectileRandomRotation, ProjectileRandomRotation)), ModContent.ProjectileType<EyeOfAnabiosis_Projectile>(), HeldItem.damage, HeldItem.knockBack, Projectile.owner);
+					Projectile.NewProjectile(Owner.GetSource_ItemUse(HeldItem), Owner.Center + new Vector2(0, -24), projVelocity.RotatedBy(Main.rand.NextFloat(-ProjectileRandomRotation, ProjectileRandomRotation)), ModContent.ProjectileType<EyeOfAnabiosis_Projectile>(), HeldItem.damage, HeldItem.knockBack, Projectile.owner);
 				}
 
 				SoundEngine.PlaySound(SoundID.DD2_BetsysWrathShot, Projectile.Center);
@@ -251,7 +256,7 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 			var progressTexture = Commons.ModAsset.White.Value;
 			var progressPosition = Owner.Center - Main.screenPosition + Owner.gravDir * new Vector2(0, 36);
 
-			Color frameColor = Color.Black;
+			Color frameColor = new Color(0.05f,0.05f, 0.08f, 0.4f);
 			Vector2 frameScale = new Vector2(2f, 0.6f) * 0.05f;
 
 			Color lineColor = Color.SkyBlue;
