@@ -1,7 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 using Terraria.Audio;
-using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -58,6 +57,7 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		KillHoldout();
 		ManageHoldout();
 		HoldoutAI();
+		UpdateRotationSuspension();
 	}
 
 	private void SyncOwnerMouseWorld()
@@ -110,6 +110,9 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		Projectile.velocity *= 0;
 	}
 
+	public float Suspension_Rotation;
+	public float Suspension_Omega;
+
 	private void HoldoutAI()
 	{
 		if (ChargeTimer++ < MaxChargeTime)
@@ -147,6 +150,23 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		}
 
 		Owner.direction = (Main.MouseWorld - Owner.MountedCenter).X < 0 ? -1 : 1;
+	}
+
+	private void UpdateRotationSuspension()
+	{
+		if (MathF.Abs(Suspension_Rotation) < 1.5f)
+		{
+			Suspension_Omega += 0.01f * (MathF.Sin((float)Main.timeForVisualEffects * 0.05f) + 0.75f) * Main.windSpeedCurrent + Owner.velocity.X * 0.006f;
+			Suspension_Omega -= Suspension_Rotation * 0.04f;
+			Suspension_Omega *= 0.99f;
+			Suspension_Rotation += Suspension_Omega;
+		}
+		else
+		{
+			Suspension_Omega -= Suspension_Rotation * 0.04f;
+			Suspension_Omega *= 0.99f;
+			Suspension_Rotation += Suspension_Omega;
+		}
 	}
 
 	public override void PostDraw(Color lightColor)
@@ -195,7 +215,7 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		var head_rotation = Owner.gravDir == 1 ? 0 : MathF.PI;
 		{
 			// TODO: Physical Simulation Interface
-			head_rotation += 0.2f * MathF.Sin((float)Main.timeForVisualEffects * 0.05f);
+			head_rotation += Suspension_Rotation; // 0.1f * (MathF.Sin((float)Main.timeForVisualEffects * 0.05f) + 0.75f) * Main.windSpeedCurrent + Owner.velocity.X * 0.1f;
 		}
 		var head_effects = (Owner.direction == 1 && Owner.gravDir == 1) || (Owner.gravDir == -1 && Owner.direction == -1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
