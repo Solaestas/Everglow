@@ -18,7 +18,6 @@ public class Plague : ModBuff
 	public override void Update(NPC npc, ref int buffIndex)
 	{
 		npc.lifeRegen -= NPCLifeDecreasePerSecond * 2;
-		Console.WriteLine(npc.buffTime[buffIndex]);
 
 		if (npc.buffTime[buffIndex] == 1 && !npc.friendly)
 		{
@@ -26,7 +25,7 @@ public class Plague : ModBuff
 
 			foreach (var target in Main.npc)
 			{
-				if (target.friendly || target.dontTakeDamage || npc != target)
+				if (target.friendly || target.dontTakeDamage || npc.whoAmI == target.whoAmI)
 				{
 					continue;
 				}

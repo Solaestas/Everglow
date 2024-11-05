@@ -1,6 +1,5 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
-using Microsoft.Build.Framework;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -8,16 +7,15 @@ public class AuburnBellMinion : ModProjectile
 {
 	private const float NotMovingVelocity = 1E-05f;
 	private const int NoTarget = -1;
-	private const float MAXDistanceToPlayer = 1000f;
+	private const float MAXDistanceToOwner = 1000f;
 	private const int TeleportCooldownValue = 60;
 	private const int SearchDistance = 1000;
 
-	private int MinionNumber
-	{
-		get => (int)Projectile.ai[0];
-	}
+	private int MinionNumber => (int)Projectile.ai[0];
 
-	private int targetWhoAmI;
+	private Player Owner => Main.player[Projectile.owner];
+
+	private int targetWhoAmI = NoTarget;
 
 	private int TargetWhoAmI
 	{
@@ -29,7 +27,12 @@ public class AuburnBellMinion : ModProjectile
 
 	public override void SetStaticDefaults()
 	{
+		Main.projPet[Projectile.type] = true;
 		Main.projFrames[Projectile.type] = 8;
+		ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
+		ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
+		ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
 	}
 
 	public override void SetDefaults()
@@ -38,46 +41,32 @@ public class AuburnBellMinion : ModProjectile
 		Projectile.friendly = true;
 		Projectile.hostile = false;
 		Projectile.usesLocalNPCImmunity = true;
-		Projectile.localNPCHitCooldown = 20;
-		Projectile.timeLeft = 720;
+		Projectile.localNPCHitCooldown = 30;
+		Projectile.timeLeft = 18000;
 
 		Projectile.penetrate = -1;
 		Projectile.aiStyle = -1;
-		Projectile.width = 10;
+		Projectile.width = 70;
 		Projectile.height = 10;
 
 		Projectile.DamageType = DamageClass.Summon;
 		Projectile.minion = true;
 		Projectile.minionSlots = 1;
 
-		ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
-		ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
-		ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
-
-		Main.projPet[Projectile.type] = true;
-
-		TargetWhoAmI = NoTarget;
+		Projectile.netImportant = true;
 	}
 
 	public override bool? CanCutTiles() => false;
 
 	public override bool MinionContactDamage() => true;
 
-	public override void DrawBehind(
-		int index,
-		List<int> behindNPCsAndTiles,
-		List<int> behindNPCs,
-		List<int> behindProjectiles,
-		List<int> overPlayers,
-		List<int> overWiresUI) => behindNPCsAndTiles.Add(index);
+	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => behindNPCsAndTiles.Add(index);
 
 	public override void AI()
 	{
 		Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
-		Player owner = Main.player[Projectile.owner];
 
-		if (!CheckPlayerActive(owner))
+		if (!CheckOwnerActive())
 		{
 			return;
 		}
@@ -86,10 +75,10 @@ public class AuburnBellMinion : ModProjectile
 		{
 			TeleportCooldown--;
 		}
-		else if (CheckDistanceToPlayer(owner))
+		else if (CheckDistanceToOwner())
 		{
 			TargetWhoAmI = NoTarget;
-			TelePortTo(owner.MountedCenter + new Vector2((10 - MinionNumber * 30) * owner.direction, -40 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f - MinionNumber) * 35f));
+			TelePortTo(Owner.MountedCenter + new Vector2((10 - MinionNumber * 30) * Owner.direction, -40 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f - MinionNumber) * 35f));
 			return;
 		}
 
@@ -104,24 +93,24 @@ public class AuburnBellMinion : ModProjectile
 		}
 	}
 
-	private bool CheckPlayerActive(Player player)
+	private bool CheckOwnerActive()
 	{
-		if (player.dead || player.active is not true)
+		if (Owner.dead || Owner.active is false)
 		{
-			player.ClearBuff(ModContent.BuffType<AuburnBell>());
-
+			Owner.ClearBuff(ModContent.BuffType<AuburnBell>());
 			return false;
 		}
 
-		if (player.HasBuff(ModContent.BuffType<AuburnBell>()))
+		if (Owner.HasBuff(ModContent.BuffType<AuburnBell>()))
 		{
+			Owner.AddBuff(ModContent.BuffType<AuburnBell>(), 3600);
 			Projectile.timeLeft = 2;
 		}
 
 		return true;
 	}
 
-	private bool CheckDistanceToPlayer(Player player) => Projectile.Center.Distance(player.Center) > MAXDistanceToPlayer;
+	private bool CheckDistanceToOwner() => Projectile.Center.Distance(Owner.Center) > MAXDistanceToOwner;
 
 	private void TelePortTo(Vector2 aim)
 	{
@@ -134,9 +123,18 @@ public class AuburnBellMinion : ModProjectile
 		float timeValue = (float)(Main.time * 0.014f);
 
 		Projectile.velocity *= 0.97f;
-		Projectile.rotation = MathF.Log(MathF.Abs(Projectile.velocity.X + 1)) * 0.2f * Projectile.direction * 0.05f + Projectile.rotation * 0.95f;
-		Vector2 aimTarget = aim + new Vector2(210f * MathF.Sin(timeValue * 2 + Projectile.whoAmI) * Projectile.scale, -50f + 30f * MathF.Sin(timeValue * 0.15f + Projectile.whoAmI));
-		Vector2 toAim = aimTarget - Projectile.Center - Projectile.velocity;
+
+		var newRotation = MathF.Log(MathF.Abs(Projectile.velocity.X) + 1) * 0.2f * Projectile.direction;
+		Projectile.rotation = Projectile.rotation * 0.95f + newRotation * 0.05f;
+
+		int dirY = Projectile.velocity.Y >= 0 ? 1 : -1;
+		Vector2 aimPosition =
+			aim +
+			new Vector2(
+				210f * MathF.Sin(timeValue * 2 + Projectile.whoAmI) * Projectile.direction,
+				(-50 + 30f * MathF.Sin(timeValue * 0.15f + Projectile.whoAmI)) * dirY)
+			* Projectile.scale;
+		Vector2 toAim = aimPosition - Projectile.Center - Projectile.velocity;
 		if (toAim.Length() > 50)
 		{
 			Projectile.velocity += Vector2.Normalize(toAim) * 0.15f * Projectile.scale;
@@ -174,21 +172,20 @@ public class AuburnBellMinion : ModProjectile
 
 	private void GeneralBehavior()
 	{
-		Player player = Main.player[Projectile.owner];
 		Vector2 aim;
 
-		if (player.velocity.Length() > NotMovingVelocity) // Player is moving
+		if (Owner.velocity.Length() > NotMovingVelocity) // Player is moving
 		{
-			aim = player.MountedCenter
+			aim = Owner.MountedCenter
 				+ new Vector2(
-					x: (10 - MinionNumber * 30) * player.direction,
+					x: (10 - MinionNumber * 30) * Owner.direction,
 					y: -40 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f - MinionNumber) * 35f);
 		}
 		else
 		{
-			aim = player.MountedCenter
+			aim = Owner.MountedCenter
 				+ new Vector2(
-					x: player.direction * (MathF.Sin((float)Main.timeForVisualEffects * 0.02f) * 40f - MinionNumber * 30),
+					x: Owner.direction * (MathF.Sin((float)Main.timeForVisualEffects * 0.02f) * 40f - MinionNumber * 30),
 					y: -50 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f) * 20f);
 		}
 
