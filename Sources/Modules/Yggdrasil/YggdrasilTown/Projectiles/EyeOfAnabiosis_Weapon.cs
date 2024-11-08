@@ -7,7 +7,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class EyeOfAnabiosis_Weapon : ModProjectile
 {
-	private const int MaxChargeTime = 720;
+	public const int MaxChargeTime = 720;
 	private const int MaxTargetCount = 3;
 	private const float ProjectileRandomRotation = 0.2f;
 
@@ -118,7 +118,7 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 	{
 		if (ChargeTimer++ < MaxChargeTime)
 		{
-			if (ChargeTimer == 710)
+			if (ChargeTimer == MaxChargeTime - 10)
 			{
 				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Owner.Center, Vector2.zeroVector, ModContent.ProjectileType<EyeOfAnabiosis_Matrix>(), 0, 0, Projectile.owner);
 			}
@@ -219,7 +219,6 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		var head_position = body_position + head_position_offset;
 		var head_rotation = Owner.gravDir == 1 ? 0 : MathF.PI;
 		{
-			// TODO: Physical Simulation Interface
 			head_rotation += Suspension_Rotation; // 0.1f * (MathF.Sin((float)Main.timeForVisualEffects * 0.05f) + 0.75f) * Main.windSpeedCurrent + Owner.velocity.X * 0.1f;
 		}
 		var head_effects = (Owner.direction == 1 && Owner.gravDir == 1) || (Owner.gravDir == -1 && Owner.direction == -1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
@@ -235,11 +234,7 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		var head_container_position_offset = (-head_ballbg_origin + new Vector2(head_ball_texture.Width + (head_container_texture.Width - head_ball_texture.Width) / 2) / 2).RotatedBy(head_rotation) * Projectile.scale;
 		var head_container_position = head_position + head_container_position_offset;
 		var head_container_origin = new Vector2(head_container_texture.Width / 2, 0);
-		var head_container_rotation = head_rotation;
-		{
-			// TODO: Physical Simulation Interface
-			head_container_rotation = 0.3f * head_rotation;
-		}
+		var head_container_rotation = 0.3f * head_rotation;
 
 		var fireProgress = 0.2f + 0.8f * chargeProgress;
 		var head_fire_texture = ModAsset.EyeOfAnabiosis_Projectile.Value;
@@ -256,7 +251,7 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 			var progressTexture = Commons.ModAsset.White.Value;
 			var progressPosition = Owner.Center - Main.screenPosition + Owner.gravDir * new Vector2(0, 36);
 
-			Color frameColor = new Color(0.05f,0.05f, 0.08f, 0.4f);
+			Color frameColor = new Color(0.05f, 0.05f, 0.08f, 0.4f);
 			Vector2 frameScale = new Vector2(2f, 0.6f) * 0.05f;
 
 			Color lineColor = Color.SkyBlue;

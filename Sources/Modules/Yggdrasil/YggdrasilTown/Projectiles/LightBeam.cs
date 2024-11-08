@@ -124,7 +124,6 @@ internal class LightBeam : ModProjectile
 		{
 			if (buffType == target.buffType[i])
 			{
-				Console.WriteLine(target.buffTime[i]);
 				return;
 			}
 		}

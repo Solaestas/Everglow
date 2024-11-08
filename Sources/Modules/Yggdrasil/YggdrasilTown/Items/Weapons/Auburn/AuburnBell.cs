@@ -24,14 +24,13 @@ public class AuburnBell : ModItem
 		Item.mana = 18;
 		Item.crit = 0;
 
-		Item.useTime = 15;
-		Item.useAnimation = 15;
+		Item.useTime = Item.useAnimation = 15;
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.UseSound = SoundID.Item1;
 		Item.autoReuse = true;
 		Item.noMelee = true;
 
-		Item.shootSpeed = 1;
+		Item.shootSpeed = 10f;
 		Item.shoot = ModContent.ProjectileType<Projectiles.AuburnBellMinion>();
 	}
 
@@ -50,15 +49,11 @@ public class AuburnBell : ModItem
 		}
 
 		player.AddBuff(ModContent.BuffType<Buffs.AuburnBell>(), 18000);
-		Projectile.NewProjectile(
-			player.GetSource_ItemUse(Item),
-			position,
-			velocity,
-			type,
-			damage,
-			knockback,
-			Owner: player.whoAmI,
-			ai0: player.ownedProjectileCounts[type] + 1);
+		int p = Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, player.ownedProjectileCounts[type] + 1);
+		if (Main.projectile.IndexInRange(p))
+		{
+			Main.projectile[p].originalDamage = Item.damage;
+		}
 
 		int ai0 = 1;
 		foreach (Projectile proj in Main.projectile)
