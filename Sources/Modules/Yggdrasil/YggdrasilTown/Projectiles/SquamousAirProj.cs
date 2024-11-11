@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -153,6 +154,9 @@ public class SquamousAirProj : ModProjectile
 
 	public void DrawTrail(Color light)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float drawC = 0.4f;
 
 		var bars = new List<Vertex2D>();
@@ -201,5 +205,7 @@ public class SquamousAirProj : ModProjectile
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 	}
 }
