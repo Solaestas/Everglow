@@ -104,6 +104,19 @@ public class DeadBeetleEgg_egg : ModProjectile
 		Rectangle frame = new Rectangle(0, Projectile.frame * 40, 44, 40);
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, frame, lightColor, 0, frame.Size() * 0.5f, Projectile.scale, Owner.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		Main.spriteBatch.Draw(texture_glow, Projectile.Center - Main.screenPosition, frame, new Color(1f, 1f, 1f, 0), 0, frame.Size() * 0.5f, Projectile.scale, Owner.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+
+		float newTimer = 40 - Projectile.timeLeft;
+		if (newTimer > 0 && newTimer < 20)
+		{
+			Texture2D star = Commons.ModAsset.StarSlash.Value;
+			float sinValue = MathF.Sin(newTimer / 20f * MathHelper.Pi);
+			Vector2 drawCenter = Projectile.Center - Main.screenPosition + new Vector2(0, -12);
+			Color drawColor = new Color(0.1f, 0.7f, 0.9f, 0);
+			Main.spriteBatch.Draw(star, drawCenter, null, drawColor, 0, star.Size() * 0.5f, new Vector2(0.8f * sinValue, 0.85f), SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(star, drawCenter, null, drawColor, MathHelper.PiOver2, star.Size() * 0.5f, new Vector2(0.5f * sinValue, 1f), SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(star, drawCenter, null, drawColor, -MathHelper.PiOver4, star.Size() * 0.5f, new Vector2(0.5f * sinValue, 0.35f), SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(star, drawCenter, null, drawColor, MathHelper.PiOver4, star.Size() * 0.5f, new Vector2(0.5f * sinValue, 0.35f), SpriteEffects.None, 0);
+		}
 		return false;
 	}
 }

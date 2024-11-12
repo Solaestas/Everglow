@@ -17,6 +17,8 @@ public class DeadBeetleEgg_beetle_proj : ModProjectile
 		Projectile.aiStyle = -1;
 		Projectile.penetrate = -1;
 		Projectile.timeLeft = 3600;
+		Projectile.usesLocalNPCImmunity = true;
+		Projectile.localNPCHitCooldown = 12;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
 		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
@@ -50,9 +52,10 @@ public class DeadBeetleEgg_beetle_proj : ModProjectile
 		{
 			Projectile.Kill();
 		}
-		if (TimeTokill <= 15 && TimeTokill > 0)
+		if (TimeTokill <= 55 && TimeTokill > 0)
 		{
-			Projectile.velocity = Projectile.oldVelocity;
+			Projectile.friendly = false;
+			Projectile.velocity *= 0;
 		}
 
 		TimeTokill--;
@@ -136,16 +139,22 @@ public class DeadBeetleEgg_beetle_proj : ModProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		AmmoHit();
+		if(TimeTokill < 0)
+		{
+			AmmoHit();
+		}
 	}
 
 	public void AmmoHit()
 	{
+		Vector2 oldCenter = Projectile.Center;
+		Projectile.tileCollide = false;
 		TimeTokill = 60;
 		Projectile.velocity = Projectile.oldVelocity;
 		GenerateSmog(8);
-		Projectile.friendly = false;
-		Projectile.damage = 0;
+		Projectile.width = 80;
+		Projectile.height = 80;
+		Projectile.Center = oldCenter;
 		SoundEngine.PlaySound(SoundID.Item98.WithVolume(Main.rand.NextFloat(0.14f, 0.22f)).WithPitchOffset(Main.rand.NextFloat(0.7f, 0.9f)), Projectile.Center);
 	}
 

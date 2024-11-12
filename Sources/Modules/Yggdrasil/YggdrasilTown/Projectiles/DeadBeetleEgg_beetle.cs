@@ -195,6 +195,10 @@ public class DeadBeetleEgg_beetle : ModProjectile
 					if (Collision.CanHit(npc.Center - Vector2.One, 2, 2, Projectile.Center - Vector2.One, 2, 2))
 					{
 						float distance = (npc.Center - Projectile.Center).Length();
+						if(npc.boss)
+						{
+							distance -= 600;
+						}
 						if (distance < minDetectionRange)
 						{
 							targeWhoAmI = npc.whoAmI;
@@ -226,7 +230,7 @@ public class DeadBeetleEgg_beetle : ModProjectile
 		if (Projectile.ai[0] <= 0)
 		{
 			Projectile.rotation *= 0.8f;
-			if (toTarget.Length() > 8)
+			if (toTarget.Length() > 80)
 			{
 				toTarget = Vector2.Normalize(toTarget);
 				Projectile.velocity += toTarget * 0.5f;
