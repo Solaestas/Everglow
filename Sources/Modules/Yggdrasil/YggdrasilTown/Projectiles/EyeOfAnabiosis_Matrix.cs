@@ -185,8 +185,8 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 			bars.Add(drawCenter + new Vector2(deltaX, -height - 10), drawColor, new Vector3(i / 25f, 0f, 0));
 			bars.Add(drawCenter + new Vector2(deltaX, -height), drawColor, new Vector3(i / 25f, 0.5f, 0));
 
-			barsBlack.Add(drawCenter + new Vector2(deltaX, -height - 10), Color.White, new Vector3(i / 25f, 0f, 0));
-			barsBlack.Add(drawCenter + new Vector2(deltaX, -height), Color.White, new Vector3(i / 25f, 0.5f, 0));
+			barsBlack.Add(drawCenter + new Vector2(deltaX, -height - 10), Color.White * wink * 0.7f, new Vector3(i / 25f, 0f, 0));
+			barsBlack.Add(drawCenter + new Vector2(deltaX, -height), Color.White * wink * 0.7f, new Vector3(i / 25f, 0.5f, 0));
 			if (i % 10 == 0)
 			{
 				Vector2 eyelashStart = new Vector2(deltaX, -height);
@@ -237,7 +237,7 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
 		// pupil
-		Vector2 addPos = (Main.MouseScreen - drawCenter) * 0.06f;
+		Vector2 addPos = (Main.MouseScreen - drawCenter) * 0.04f;
 		if (addPos.Length() > 10)
 		{
 			addPos = Vector2.Normalize(addPos) * 10;
