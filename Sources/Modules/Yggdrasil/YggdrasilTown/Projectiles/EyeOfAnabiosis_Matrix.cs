@@ -10,6 +10,8 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 
 	private Player Owner => Main.player[Projectile.owner];
 
+	public float LightStrength { get; set; }
+
 	public int WinkTimer = 0;
 
 	public override void SetDefaults()
@@ -17,6 +19,7 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 		Projectile.friendly = false;
 		Projectile.hostile = false;
 		Projectile.aiStyle = -1;
+		Projectile.penetrate = -1;
 		Projectile.tileCollide = false;
 		Projectile.ignoreWater = true;
 		Projectile.timeLeft = 60;
@@ -29,33 +32,71 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 
 	public override void AI()
 	{
-		if (CanExist())
+		UpdateLifeTime();
+		Projectile.Center = Owner.MountedCenter + new Vector2(0, -24) * Owner.gravDir;
+
+		if (Owner.controlUseItem)
 		{
-			Projectile.timeLeft = 60;
-			Projectile.Center = Owner.Center + new Vector2(0, -24);
+			LightStrength += 0.01f;
 		}
+		else
+		{
+			LightStrength -= 0.01f;
+		}
+		if (LightStrength >= 1)
+		{
+			LightStrength = 1;
+		}
+		else if (LightStrength <= 0.3f)
+		{
+			LightStrength = 0.3f;
+		}
+
 		WinkTimer++;
 	}
 
-	public bool CanExist()
+	public void UpdateLifeTime()
 	{
+		if (Owner == null
+			|| !Owner.active
+			|| Owner.dead
+			|| Owner.CCed
+			|| Owner.noItems)
+		{
+			Projectile.Kill();
+			return;
+		}
+
 		if (Owner.HeldItem.type == ModContent.ItemType<EyeOfAnabiosis>())
 		{
-			if (Owner.heldProj >= 0 && Main.projectile[Owner.heldProj].type == ModContent.ProjectileType<EyeOfAnabiosis_Weapon>())
-			{
-				EyeOfAnabiosis_Weapon eOAW = Main.projectile[Owner.heldProj].ModProjectile as EyeOfAnabiosis_Weapon;
-				if (eOAW.ChargeTimer >= EyeOfAnabiosis_Weapon.MaxChargeTime - 10)
-				{
-					return true;
-				}
-			}
+			Projectile.timeLeft = 60;
 		}
-		return false;
 	}
 
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 	{
 		base.DrawBehind(index, behindNPCsAndTiles, behindNPCs, behindProjectiles, overPlayers, overWiresUI);
+	}
+
+	private void DrawEquilateralTriangle(Vector2 drawCenter, float scale, Color drawColor, float rotation = 0)
+	{
+		int length = 10;
+		int step = 8;
+
+		for (int i = 0; i < 3; i++)
+		{
+			List<Vertex2D> vertexArray = [];
+			for (int j = -length; j <= length; j++)
+			{
+				float yoffset = j % 2 == 0 ? 0 : -step;
+				Vector2 positionOffset = new Vector2(step * j * MathF.Sqrt(3), step * length + yoffset).RotatedBy(rotation + i * MathHelper.Pi / 3);
+				float lerpValue = (MathF.Sin(20 * positionOffset.ToRotation()) + 1) * 0.5f;
+				Color finColor = Color.Lerp(drawColor, new Color(0f, 0f, 0.3f, 0f), lerpValue);
+				Vector3 texCoord = new Vector3(j, j % 2 != 0 ? 1 : 0, 0);
+				vertexArray.Add(drawCenter + scale * positionOffset, finColor, texCoord);
+			}
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertexArray.ToArray(), 0, vertexArray.Count - 2);
+		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)
@@ -76,7 +117,7 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int i = 0; i <= 100; i++)
 		{
-			Color drawColor = Color.White * 0.3f * wink;
+			Color drawColor = Color.White * 0.8f * wink;
 			float rotValue = i / 100f * MathHelper.TwoPi + timeValue * 0.1f;
 			bars.Add(drawCenter + new Vector2(0, 100).RotatedBy(rotValue), drawColor, new Vector3(i / 50f, frameHeightOut, 0));
 			bars.Add(drawCenter + new Vector2(0, 80).RotatedBy(rotValue), drawColor, new Vector3(i / 50f, frameHeightIn, 0));
@@ -114,7 +155,7 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 		for (int i = 0; i <= 100; i++)
 		{
 			float lerpValue = (MathF.Sin(i / 6.25f * MathHelper.TwoPi + timeValue) + 1) * 0.5f;
-			Color drawColor = Color.Lerp(new Color(0f, 0.7f, 1f, 0f), new Color(0f, 0f, 0.3f, 0f), lerpValue) * wink;
+			Color drawColor = Color.Lerp(new Color(0f, 0.7f, 1f, 0f), new Color(0.1f, 0.2f, 0.6f, 0f), lerpValue) * wink;
 			float rotValue = i / 100f * MathHelper.TwoPi + timeValue * -0.03f;
 			bars.Add(drawCenter + new Vector2(0, 74).RotatedBy(rotValue), drawColor, new Vector3(i / 50f, frameHeightOut, 0));
 			bars.Add(drawCenter + new Vector2(0, 62).RotatedBy(rotValue), drawColor, new Vector3(i / 50f, frameHeightIn, 0));
@@ -138,7 +179,7 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 		bars = new List<Vertex2D>();
 		for (int i = 0; i <= 100; i++)
 		{
-			float lerpValue = (MathF.Sin(i / 6.25f * MathHelper.TwoPi + timeValue) + 1) * 0.5f;
+			float lerpValue = (MathF.Sin(i / 12.5f * MathHelper.TwoPi + timeValue) + 1) * 0.5f;
 			Color drawColor = Color.Lerp(new Color(0f, 0.7f, 1f, 0f), new Color(0f, 0f, 0.3f, 0f), lerpValue) * wink;
 			float rotValue = i / 100f * MathHelper.TwoPi + timeValue * 0.03f;
 			bars.Add(drawCenter + new Vector2(0, 88).RotatedBy(rotValue), drawColor, new Vector3(i / 25f, 0.2f, 0));
@@ -172,15 +213,18 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Textures_Star.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
+		// Upper eyelids
 		bars = new List<Vertex2D>();
 		List<Vertex2D> eyelash = new List<Vertex2D>();
 		for (int i = 0; i <= 100; i++)
 		{
 			float lerpValue = (MathF.Sin(i / 33f * MathHelper.TwoPi + timeValue) + 1) * 0.5f;
 			Color drawColor = Color.Lerp(new Color(0f, 0.7f, 1f, 0f), new Color(0f, 0f, 0.3f, 0f), lerpValue) * wink;
-			float height = (MathF.Cos((i - 50) / 50f * MathHelper.Pi) + 1) * wink * 17;
-			float deltaX = (i - 50) * 1.4f;
-			bars.Add(drawCenter + new Vector2(deltaX, -height - 10), drawColor, new Vector3(i / 25f, 0f, 0));
+			var x = (i - 50) / 50f;
+			var y = -1f / MathF.Sqrt(3f) + MathF.Sqrt((4f / 3) - x * x);
+			float height = y * wink * 30;
+			float deltaX = (i - 50) * 0.5f;
+			bars.Add(drawCenter + new Vector2(deltaX, -height - 5), drawColor, new Vector3(i / 25f, 0f, 0));
 			bars.Add(drawCenter + new Vector2(deltaX, -height), drawColor, new Vector3(i / 25f, 0.5f, 0));
 			if (i % 10 == 0)
 			{
@@ -199,56 +243,97 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_1.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_perlin.Value;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, eyelash.ToArray(), 0, eyelash.Count / 3);
-
-		// eyelash bottom
+		// Lower eyelids
 		bars = new List<Vertex2D>();
+		eyelash = new List<Vertex2D>();
 		for (int i = 0; i <= 100; i++)
 		{
-			float lerpValue = (MathF.Sin(i / 33f * MathHelper.TwoPi + timeValue) + 1) * 0.5f;
+			float lerpValue = (MathF.Sin((100 - i) / 100f * MathHelper.TwoPi + timeValue) + 1) * 0.5f;
 			Color drawColor = Color.Lerp(new Color(0f, 0.7f, 1f, 0f), new Color(0f, 0f, 0.3f, 0f), lerpValue) * wink;
-			float height = (MathF.Cos((i - 50) / 50f * MathHelper.Pi) + 1) * wink * 17;
-			float deltaX = (i - 50) * 1.4f;
-			bars.Add(drawCenter + new Vector2(deltaX, height + 10), drawColor, new Vector3(i / 25f, 0f, 0));
-			bars.Add(drawCenter + new Vector2(deltaX, height), drawColor, new Vector3(i / 25f, 0.5f, 0));
+			var x = (i - 50) / 50f;
+			var y = -1f / MathF.Sqrt(3f) + MathF.Sqrt((4f / 3) - x * x);
+			float height = y * wink * -30;
+			float deltaX = (i - 50) * 0.5f;
+			bars.Add(drawCenter + new Vector2(deltaX, -height - 5), drawColor, new Vector3(i / 25f, 0f, 0));
+			bars.Add(drawCenter + new Vector2(deltaX, -height), drawColor, new Vector3(i / 25f, 0.5f, 0));
+			if (i % 10 == 0)
+			{
+				Vector2 eyelashStart = new Vector2(deltaX, -height);
+				Vector2 eyelashEnd = Vector2.Normalize(eyelashStart) * 76;
+				Vector2 eyelashWidth = Vector2.Normalize(eyelashEnd - eyelashStart).RotatedBy(MathHelper.PiOver2) * 0.5f;
+				eyelash.Add(drawCenter + eyelashStart + eyelashWidth * 2, drawColor, new Vector3(i / 25f, 0f + timeValue * 0.1f, 0));
+				eyelash.Add(drawCenter + eyelashStart - eyelashWidth * 2, drawColor, new Vector3(i / 25f + 0.25f, 0f + timeValue * 0.1f, 0));
+				eyelash.Add(drawCenter + eyelashEnd - eyelashWidth, drawColor, new Vector3(i / 25f + 0.25f, 0.2f + timeValue * 0.1f, 0));
+
+				eyelash.Add(drawCenter + eyelashEnd - eyelashWidth, drawColor, new Vector3(i / 25f + 0.25f, 0.2f + timeValue * 0.1f, 0));
+				eyelash.Add(drawCenter + eyelashEnd + eyelashWidth, drawColor, new Vector3(i / 25f, 0.2f + timeValue * 0.1f, 0));
+				eyelash.Add(drawCenter + eyelashStart + eyelashWidth * 2, drawColor, new Vector3(i / 25f, 0f + timeValue * 0.1f, 0));
+			}
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_1.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
+		// Hexagram
+		float rotation = timeValue * 0.05f;
+		Color hexColor = new Color(0f, 0.7f, 1f, 0f) * LightStrength;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_burn.Value;
+		DrawEquilateralTriangle(drawCenter, 0.4f, hexColor, rotation);
+		DrawEquilateralTriangle(drawCenter, -0.4f, hexColor, rotation);
+
 		// pupil black
+		float pupilOuterRadius = 24 * 0.4f;
+		float pupilInnerRadius = 10 * 0.4f;
 		bars = new List<Vertex2D>();
 		for (int i = 0; i <= 100; i++)
 		{
 			Color drawColor = Color.Black * wink;
 			float rotValue = i / 100f * MathHelper.TwoPi + timeValue * 0.03f;
-			bars.Add(drawCenter + new Vector2(0, 24 * wink).RotatedBy(rotValue), drawColor, new Vector3(i / 20f, 0.2f + timeValue * 0.05f, 0));
-			bars.Add(drawCenter + new Vector2(0, 10 * wink).RotatedBy(rotValue), new Color(0f, 0f, 0.3f, 0f), new Vector3(i / 20f, 0.4f + timeValue * 0.05f, 0));
+			bars.Add(drawCenter + new Vector2(0, pupilOuterRadius * wink).RotatedBy(rotValue), drawColor, new Vector3(i / 20f, 0.2f + timeValue * 0.05f, 0));
+			bars.Add(drawCenter + new Vector2(0, pupilInnerRadius * wink).RotatedBy(rotValue), new Color(0f, 0f, 0.3f, 0f), new Vector3(i / 20f, 0.4f + timeValue * 0.05f, 0));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_melting.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
 		// pupil
+		Vector2 addPos = (Main.MouseScreen - drawCenter) * 0.06f;
+		if (addPos.Length() > 10)
+		{
+			addPos = Vector2.Normalize(addPos) * 10;
+		}
 		bars = new List<Vertex2D>();
 		for (int i = 0; i <= 100; i++)
 		{
 			float lerpValue = (MathF.Sin(i / 50f * MathHelper.TwoPi + timeValue) + 1) * 0.5f;
-			Color drawColor = Color.Lerp(new Color(0f, 0.7f, 1f, 0f), new Color(0f, 0.4f, 0.7f, 0f), lerpValue) * wink;
+			Color drawColor = Color.Lerp(new Color(0f, 0.7f, 1f, 0f), new Color(0f, 0.4f, 0.7f, 0f), lerpValue) * wink * LightStrength;
 			float rotValue = i / 100f * MathHelper.TwoPi + timeValue * 0.03f;
-			bars.Add(drawCenter + new Vector2(0, 24 * wink).RotatedBy(rotValue), drawColor, new Vector3(i / 20f, 0.2f + timeValue * 0.05f, 0));
-			bars.Add(drawCenter + new Vector2(0, 10 * wink).RotatedBy(rotValue), new Color(0f, 0f, 0.3f, 0f), new Vector3(i / 20f, 0.4f + timeValue * 0.05f, 0));
+			bars.Add(drawCenter + new Vector2(0, pupilOuterRadius * wink).RotatedBy(rotValue), drawColor, new Vector3(i / 20f, 0.2f + timeValue * 0.05f, 0));
+			bars.Add(drawCenter + new Vector2(0, pupilInnerRadius * wink).RotatedBy(rotValue), new Color(0f, 0f, 0.3f, 0f), new Vector3(i / 20f, 0.4f + timeValue * 0.05f, 0));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_melting.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
+		// pupil edge
 		bars = new List<Vertex2D>();
 		for (int i = 0; i <= 100; i++)
 		{
 			float lerpValue = (MathF.Sin(i / 50f * MathHelper.TwoPi + timeValue) + 1) * 0.5f;
-			Color drawColor = Color.Lerp(new Color(0f, 0.7f, 1f, 0f), new Color(0f, 0.4f, 0.7f, 0f), lerpValue) * wink;
+			Color drawColor = Color.Lerp(new Color(0f, 0.7f, 1f, 0f), new Color(0f, 0.4f, 0.7f, 0f), lerpValue) * wink * LightStrength;
 			float rotValue = i / 100f * MathHelper.TwoPi + timeValue * 0.03f;
-			bars.Add(drawCenter + new Vector2(0, 24 * wink).RotatedBy(rotValue), drawColor, new Vector3(i / 25f, 0.5f, 0));
-			bars.Add(drawCenter + new Vector2(0, 10 * wink).RotatedBy(rotValue), new Color(0f, 0f, 0.3f, 0f), new Vector3(i / 25f, 1, 0));
+			bars.Add(drawCenter + new Vector2(0, pupilOuterRadius * wink).RotatedBy(rotValue), drawColor, new Vector3(i / 25f, 0.5f, 0));
+			bars.Add(drawCenter + new Vector2(0, 20 * wink).RotatedBy(rotValue), new Color(0f, 0f, 0.3f, 0f), new Vector3(i / 25f, 0.7f, 0));
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_6.Value;
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+
+		// pupil center
+		bars = new List<Vertex2D>();
+		for (int i = 0; i <= 10; i++)
+		{
+			float lerpValue = (MathF.Sin(i / 5f * MathHelper.TwoPi + timeValue) + 1) * 0.5f;
+			Color drawColor = Color.Lerp(new Color(0f, 0.7f, 1f, 0f), new Color(0f, 0.4f, 0.7f, 0f), lerpValue) * wink;
+			float rotValue = i / 10f * MathHelper.TwoPi + timeValue * 0.03f;
+			bars.Add(drawCenter + addPos + new Vector2(0, 6 * wink).RotatedBy(rotValue), drawColor, new Vector3(i / 25f, 0.5f, 0));
+			bars.Add(drawCenter + addPos + new Vector2(0, 3 * wink).RotatedBy(rotValue), new Color(0f, 0f, 0.3f, 0f), new Vector3(i / 25f, 0.7f, 0));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_6.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);

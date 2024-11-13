@@ -14,6 +14,8 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 		set => targetWhoAmI = value;
 	}
 
+	private NPC Target => Main.npc[TargetWhoAmI];
+
 	public override void SetStaticDefaults()
 	{
 		Main.projFrames[Type] = 4;
@@ -41,6 +43,11 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 
 		if (HasTarget)
 		{
+			if (!Target.active || Target.friendly || !Target.CanBeChasedBy())
+			{
+				return;
+			}
+
 			var targetPos = HasTarget ? Main.npc[targetWhoAmI].Center : Vector2.Zero;
 			var targetVel = Vector2.Normalize(targetPos - Projectile.Center) * 10f;
 			Projectile.velocity = (targetVel + Projectile.velocity * 10) / 11f;
@@ -64,7 +71,8 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 	{
 		var texture = ModContent.Request<Texture2D>(Texture).Value;
 		var frame = texture.Frame(horizontalFrames: Main.projFrames[Type], frameX: Projectile.frame);
-		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, 0, texture.Size() / 2, 1, SpriteEffects.None, 0);
+		var origin = new Vector2(texture.Width / 8, texture.Height / 2);
+		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, 0, origin, 1, SpriteEffects.None, 0);
 		return false;
 	}
 }
