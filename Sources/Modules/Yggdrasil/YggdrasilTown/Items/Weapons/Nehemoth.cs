@@ -2,14 +2,13 @@ using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
-// TODO: Replace sprite
 public class Nehemoth : ModItem
 {
 	public override void SetDefaults()
 	{
-		Item.width = 62;
-		Item.height = 32;
-		Item.scale = 0.75f;
+		Item.width = 154;
+		Item.height = 40;
+		Item.scale = 0.6f;
 
 		Item.damage = 36;
 		Item.DamageType = DamageClass.Ranged;
@@ -17,8 +16,7 @@ public class Nehemoth : ModItem
 		Item.crit = 15;
 		Item.noMelee = true;
 
-		Item.useTime = 90;
-		Item.useAnimation = 90;
+		Item.useTime = Item.useAnimation = 90;
 		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.UseSound = SoundID.Item41;
 		Item.autoReuse = false;
@@ -38,4 +36,6 @@ public class Nehemoth : ModItem
 			type = ModContent.ProjectileType<NehemothBullet>();
 		}
 	}
+
+	public override Vector2? HoldoutOffset() => new Vector2(-32, 0);
 }
