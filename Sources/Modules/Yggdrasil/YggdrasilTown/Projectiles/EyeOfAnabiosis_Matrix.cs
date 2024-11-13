@@ -167,7 +167,7 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 		bars = new List<Vertex2D>();
 		for (int i = 0; i <= 100; i++)
 		{
-			Color drawColor = Color.White * 0.3f * wink;
+			Color drawColor = Color.White * 0.8f * wink;
 			float rotValue = i / 100f * MathHelper.TwoPi + timeValue * 0.03f;
 			bars.Add(drawCenter + new Vector2(0, 88).RotatedBy(rotValue), drawColor, new Vector3(i / 25f, 0.2f, 0));
 			bars.Add(drawCenter + new Vector2(0, 76).RotatedBy(rotValue), drawColor, new Vector3(i / 25f, 0.5f, 0));
@@ -215,6 +215,7 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 
 		// Upper eyelids
 		bars = new List<Vertex2D>();
+		List<Vertex2D> barsBlack = new List<Vertex2D>();
 		List<Vertex2D> eyelash = new List<Vertex2D>();
 		for (int i = 0; i <= 100; i++)
 		{
@@ -226,6 +227,9 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 			float deltaX = (i - 50) * 0.5f;
 			bars.Add(drawCenter + new Vector2(deltaX, -height - 5), drawColor, new Vector3(i / 25f, 0f, 0));
 			bars.Add(drawCenter + new Vector2(deltaX, -height), drawColor, new Vector3(i / 25f, 0.5f, 0));
+
+			barsBlack.Add(drawCenter + new Vector2(deltaX, -height - 10), Color.White * wink * 0.7f, new Vector3(i / 25f, 0f, 0));
+			barsBlack.Add(drawCenter + new Vector2(deltaX, -height), Color.White * wink * 0.7f, new Vector3(i / 25f, 0.5f, 0));
 			if (i % 10 == 0)
 			{
 				Vector2 eyelashStart = new Vector2(deltaX, -height);
@@ -240,6 +244,9 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 				eyelash.Add(drawCenter + eyelashStart + eyelashWidth * 2, drawColor, new Vector3(i / 25f, 0f + timeValue * 0.1f, 0));
 			}
 		}
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_1_black.Value;
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, barsBlack.ToArray(), 0, barsBlack.Count - 2);
+
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_1.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 

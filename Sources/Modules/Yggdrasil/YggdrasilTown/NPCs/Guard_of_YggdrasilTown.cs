@@ -1,3 +1,4 @@
+using System;
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -28,12 +29,14 @@ public class Guard_of_YggdrasilTown : ModNPC
 	public int MySlimyWhoAmI = -1;
 
 	public int Attack0Cooling = 0;
+	public int Attack1Cooling = 0;
 
 	/// <summary>
 	/// Spear direction during attack style 0. 0 means forward, 1 means backward.
 	/// </summary>
 	public int Attack0Direction = 0;
 	public Projectile SpearProjectile = null;
+	public Projectile FistProjectile = null;
 	public Vector2 LockCenter = Vector2.Zero;
 
 	public override string HeadTexture => ModAsset.Guard_of_YggdrasilTown_Head_Mod;
@@ -189,7 +192,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 		}
 		foreach (var npc in Main.npc)
 		{
-			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && !npc.CountsAsACritter)
+			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy && !npc.CountsAsACritter)
 			{
 				Vector2 distance = npc.Center - NPC.Center;
 				if (MathF.Abs(distance.X) < 120 && MathF.Abs(distance.Y) < 120)
@@ -211,7 +214,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 		float minDis = 300;
 		foreach (var npc in Main.npc)
 		{
-			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && !npc.CountsAsACritter)
+			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy && !npc.CountsAsACritter)
 			{
 				Vector2 distance = npc.Center - NPC.Center;
 				if (MathF.Abs(distance.X) < 120 && MathF.Abs(distance.Y) < 120 && distance.Length() < minDis)
@@ -230,10 +233,17 @@ public class Guard_of_YggdrasilTown : ModNPC
 
 	public bool CanAttack1()
 	{
-		return false;
+		if (Attack1Cooling > 0)
+		{
+			return false;
+		}
+		if (AICoroutines.Count > 1)
+		{
+			return false;
+		}
 		foreach (var npc in Main.npc)
 		{
-			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy && !npc.CountsAsACritter)
+			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.type != NPCID.TargetDummy && npc.life > 0 && !npc.CountsAsACritter)
 			{
 				Vector2 distance = npc.Center - NPC.Center;
 				if (MathF.Abs(distance.X) < 120 && MathF.Abs(distance.Y) < 50)
@@ -243,6 +253,25 @@ public class Guard_of_YggdrasilTown : ModNPC
 			}
 		}
 		return false;
+	}
+
+	public int ChooseAttack1Direction()
+	{
+		int direction = -1;
+		float minDis = 120;
+		foreach (var npc in Main.npc)
+		{
+			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.type != NPCID.TargetDummy && npc.life > 0 && !npc.CountsAsACritter)
+			{
+				Vector2 distance = npc.Center - NPC.Center;
+				if (MathF.Abs(distance.X) < 120 && MathF.Abs(distance.Y) < 50 && distance.Length() < minDis)
+				{
+					direction = MathF.Sign(distance.X);
+					minDis = distance.Length();
+				}
+			}
+		}
+		return direction;
 	}
 
 	public IEnumerator<ICoroutineInstruction> AI_Main()
@@ -260,6 +289,10 @@ public class Guard_of_YggdrasilTown : ModNPC
 			if (Attack0Cooling > 0)
 			{
 				Attack0Cooling--;
+			}
+			if (Attack1Cooling > 0)
+			{
+				Attack1Cooling--;
 			}
 			if (aiMainCount >= 2)
 			{
@@ -383,16 +416,23 @@ public class Guard_of_YggdrasilTown : ModNPC
 	public IEnumerator<ICoroutineInstruction> Attack1()
 	{
 		TextureStyle = 2;
-		for (int t = 0; t < 60; t++)
+		Attack1Cooling = 240;
+		int direction = ChooseAttack1Direction();
+		NPC.direction = direction;
+		NPC.spriteDirection = direction;
+		Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction, 0), ModContent.ProjectileType<Guard_Attack_Fist>(), NPC.damage, 2, Main.myPlayer, NPC.whoAmI);
+		FistProjectile = proj;
+		for (int t = 0; t < 30; t++)
 		{
+			NPC.direction = direction;
 			NPC.spriteDirection = NPC.direction;
 			NPC.velocity *= 0;
 			Idle = false;
 			yield return new SkipThisFrame();
 		}
-		NPC.direction *= -1;
-		NPC.spriteDirection = NPC.direction;
+		FistProjectile = null;
 		NPC.frame = new Rectangle(0, 0, 40, 56);
+		TextureStyle = 0;
 		EndAIPiece();
 	}
 
@@ -581,17 +621,10 @@ public class Guard_of_YggdrasilTown : ModNPC
 			Main.spriteBatch.Begin(sBS);
 			Main.spriteBatch.Draw(texArm, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		}
-		else if (TextureStyle == 3)
+		else if (TextureStyle == 2)
 		{
 			Texture2D texMain = ModAsset.Guard_of_YggdrasilTown.Value;
 			Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-
-			SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
-			Main.spriteBatch.End();
-
-
-
-			Main.spriteBatch.Begin(sBS);
 		}
 
 		// Point checkPoint = (NPC.Bottom + new Vector2(8 * NPC.direction, 8)).ToTileCoordinates() + new Point(NPC.direction, -1);

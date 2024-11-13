@@ -36,7 +36,7 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 
 	public override void AI()
 	{
-		if (Main.time % Main.projFrames[Projectile.type] == 0)
+		if (Projectile.timeLeft % 8 == 0)
 		{
 			Projectile.frame = (Projectile.frame + 1) % Main.projFrames[Projectile.type];
 		}

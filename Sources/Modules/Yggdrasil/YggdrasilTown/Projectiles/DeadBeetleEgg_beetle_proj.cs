@@ -1,21 +1,24 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-public class SquamousAirProj : ModProjectile
+public class DeadBeetleEgg_beetle_proj : ModProjectile
 {
 	public override void SetDefaults()
 	{
 		Projectile.width = 20;
 		Projectile.height = 20;
-		Projectile.friendly = false;
-		Projectile.hostile = true;
+		Projectile.friendly = true;
+		Projectile.hostile = false;
 		Projectile.aiStyle = -1;
-		Projectile.penetrate = 1;
+		Projectile.penetrate = -1;
 		Projectile.timeLeft = 3600;
+		Projectile.usesLocalNPCImmunity = true;
+		Projectile.localNPCHitCooldown = 12;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
 		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
@@ -36,32 +39,41 @@ public class SquamousAirProj : ModProjectile
 			Projectile.Kill();
 			return;
 		}
-		Player player = Main.player[Target];
+		NPC target = Main.npc[Target];
+		if (!(target != null && target.active && target.life > 0 && !target.friendly && target.type != NPCID.TargetDummy && !target.CountsAsACritter && target.CanBeChasedBy() && !target.dontTakeDamage))
+		{
+			if(Projectile.timeLeft > 60)
+			{
+				Projectile.timeLeft = 60;
+			}
+		}
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 		if (TimeTokill >= 0 && TimeTokill <= 2)
 		{
 			Projectile.Kill();
 		}
-
-		if (TimeTokill <= 15 && TimeTokill > 0)
+		if (TimeTokill <= 55 && TimeTokill > 0)
 		{
-			Projectile.velocity = Projectile.oldVelocity;
+			Projectile.friendly = false;
+			Projectile.velocity *= 0;
 		}
 
 		TimeTokill--;
 		if (TimeTokill < 0)
 		{
-			if (Projectile.timeLeft > 3480)
+			if (Projectile.timeLeft > 60)
 			{
-				if ((player.Center - Projectile.Center).Length() > 100)
+				if ((target.Center - Projectile.Center).Length() > 1)
 				{
-					float timeValue = (Projectile.timeLeft - 3480) / 120f;
-					Vector2 aimVel = player.Center + player.velocity - Projectile.Center - Projectile.velocity;
-					aimVel = Vector2.Normalize(aimVel);
-					Projectile.velocity = Projectile.velocity * 0.9f + aimVel * 0.1f * (1 - timeValue) * 8f;
+					Vector2 aimVel = target.Center + target.velocity - Projectile.Center - Projectile.velocity;
+					aimVel = Vector2.Normalize(aimVel) * 22;
+					Projectile.velocity = Projectile.velocity * 0.9f + aimVel * 0.1f;
 				}
 			}
-			Projectile.velocity.Y += 0.05f;
+			if(Projectile.timeLeft < 60)
+			{
+				Projectile.velocity.Y += 0.05f;
+			}
 			Lighting.AddLight(Projectile.Center, 0, 0.4f, 0.7f);
 		}
 		else
@@ -125,11 +137,24 @@ public class SquamousAirProj : ModProjectile
 		return false;
 	}
 
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		if(TimeTokill < 0)
+		{
+			AmmoHit();
+		}
+	}
+
 	public void AmmoHit()
 	{
+		Vector2 oldCenter = Projectile.Center;
+		Projectile.tileCollide = false;
 		TimeTokill = 60;
 		Projectile.velocity = Projectile.oldVelocity;
 		GenerateSmog(8);
+		Projectile.width = 80;
+		Projectile.height = 80;
+		Projectile.Center = oldCenter;
 		SoundEngine.PlaySound(SoundID.Item98.WithVolume(Main.rand.NextFloat(0.14f, 0.22f)).WithPitchOffset(Main.rand.NextFloat(0.7f, 0.9f)), Projectile.Center);
 	}
 
@@ -200,7 +225,7 @@ public class SquamousAirProj : ModProjectile
 		}
 		if (bars.Count > 2)
 		{
-			Texture2D t = Commons.ModAsset.Trail_2_thick.Value;
+			Texture2D t = Commons.ModAsset.Trail_8.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
