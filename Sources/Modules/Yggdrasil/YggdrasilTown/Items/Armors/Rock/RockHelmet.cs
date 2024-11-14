@@ -11,7 +11,7 @@ public class RockHelmet : ModItem
 	{
 		Item.width = 28;
 		Item.height = 26;
-		Item.value = Item.sellPrice(silver: 95);
+		Item.value = Item.buyPrice(silver: 95);
 		Item.rare = ItemRarityID.Green;
 		Item.defense = 6;
 	}

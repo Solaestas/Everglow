@@ -19,7 +19,7 @@ public class CyanVineShortsword : ModItem
 		Item.noMelee = true; // The projectile will do the damage and not the item
 
 		Item.rare = ItemRarityID.White;
-		Item.value = Item.sellPrice(0, 0, 12, 0);
+		Item.value = Item.buyPrice(0, 0, 12, 0);
 
 		Item.shoot = ModContent.ProjectileType<CyanVineShortsword_Proj>(); // The projectile is what makes a shortsword work
 		Item.shootSpeed = 2.1f; // This value bleeds into the behavior of the projectile as velocity, keep that in mind when tweaking values

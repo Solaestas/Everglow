@@ -18,7 +18,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Ammos
 			Item.maxStack = Item.CommonMaxStack;
 			Item.consumable = true;
 			Item.knockBack = 2f;
-			Item.value = Item.sellPrice(0, 0, 0, 75);
+			Item.value = Item.buyPrice(0, 0, 0, 75);
 			Item.rare = ItemRarityID.Blue;
 			Item.shoot = ModContent.ProjectileType<Projectiles.RockArrow>();
 

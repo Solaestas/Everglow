@@ -16,7 +16,7 @@ public class LightArrow : ModItem
 		Item.ammo = AmmoID.Arrow;
 
 		Item.rare = ItemRarityID.White;
-		Item.value = Item.sellPrice(copper: 3);
+		Item.value = Item.buyPrice(copper: 3);
 
 		Item.shoot = ModContent.ProjectileType<Projectiles.LightArrow>();
 	}

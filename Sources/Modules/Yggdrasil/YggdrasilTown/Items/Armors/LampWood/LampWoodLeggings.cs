@@ -17,7 +17,7 @@ public class LampWoodLeggings : ModItem
 	{
 		Item.width = 20;
 		Item.height = 16;
-		Item.value = Item.sellPrice(silver: 20);
+		Item.value = Item.buyPrice(silver: 20);
 		Item.rare = ItemRarityID.Green;
 		Item.defense = 2;
 	}

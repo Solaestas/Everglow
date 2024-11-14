@@ -10,6 +10,6 @@ public class BrittleRockSlingshot : SlingshotItem
 		Item.knockBack = 10;
 		ProjType = ModContent.ProjectileType<Projectiles.BrittleRockSlingshotProj>();
 		Item.rare = ItemRarityID.Green;
-		Item.value = Item.sellPrice(0, 0, 55, 0);
+		Item.value = Item.buyPrice(0, 0, 55, 0);
 	}
 }
