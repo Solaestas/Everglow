@@ -12,7 +12,7 @@ public class TwilightWoodLeggings : ModItem
 	{
 		Item.width = 28;
 		Item.height = 26;
-		Item.value = Item.sellPrice(silver: 37, copper: 50);
+		Item.value = Item.buyPrice(silver: 37, copper: 50);
 		Item.rare = ItemRarityID.White;
 		Item.defense = 2;
 	}

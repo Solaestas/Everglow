@@ -20,7 +20,7 @@ public class LampWoodHelmet : ModItem
 	{
 		Item.width = 38;
 		Item.height = 24;
-		Item.value = Item.sellPrice(silver: 20);
+		Item.value = Item.buyPrice(silver: 20);
 		Item.rare = ItemRarityID.Green;
 		Item.defense = 2;
 	}

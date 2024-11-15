@@ -9,7 +9,7 @@ public class RockGreaves : ModItem
 	{
 		Item.width = 28;
 		Item.height = 26;
-		Item.value = Item.sellPrice(silver: 94);
+		Item.value = Item.buyPrice(silver: 94);
 		Item.rare = ItemRarityID.Green;
 		Item.defense = 6;
 	}

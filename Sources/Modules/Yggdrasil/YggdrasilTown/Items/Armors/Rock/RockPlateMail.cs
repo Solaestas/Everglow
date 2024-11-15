@@ -9,7 +9,7 @@ public class RockPlateMail : ModItem
 	{
 		Item.width = 28;
 		Item.height = 26;
-		Item.value = Item.sellPrice(gold: 1, silver: 7);
+		Item.value = Item.buyPrice(gold: 1, silver: 7);
 		Item.rare = ItemRarityID.Green;
 		Item.defense = 8;
 	}

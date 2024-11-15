@@ -26,6 +26,6 @@ public class LampWoodBow : ModItem
 		Item.useAmmo = AmmoID.Arrow;
 
 		Item.rare = ItemRarityID.White;
-		Item.value = Item.sellPrice(silver: 1);
+		Item.value = Item.buyPrice(silver: 1);
 	}
 }

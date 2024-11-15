@@ -1,6 +1,5 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
-using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -9,9 +8,15 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 {
 	public const int MaxChargeTime = 720;
 	private const int MaxTargetCount = 3;
-	private const float ProjectileRandomRotation = 0.2f;
+	private const float ProjectileRandomRotation = 0.5f;
+
+	public bool CanDisplay { get; set; } = true;
 
 	public int ChargeTimer { get; set; }
+
+	public bool HasCreateMatrix { get; set; } = false;
+
+	public bool HasCreateMagicCircle { get; set; } = false;
 
 	public override string Texture => ModAsset.EyeOfAnabiosis_Mod;
 
@@ -79,13 +84,11 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 
 	private void KillHoldout()
 	{
-		bool canUseHoldout =
-			Owner == null
+		if (Owner == null
 			|| !Owner.active
 			|| Owner.dead
 			|| Owner.CCed
-			|| Owner.noItems;
-		if (canUseHoldout)
+			|| Owner.noItems)
 		{
 			Projectile.Kill();
 			return;
@@ -93,19 +96,22 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 
 		if (HeldItem.type == ModContent.ItemType<EyeOfAnabiosis>())
 		{
-			Projectile.timeLeft = 2;
+			Projectile.timeLeft = 60;
+			CanDisplay = true;
 		}
 		else
 		{
-			Projectile.Kill();
-			return;
+			CanDisplay = false;
 		}
 	}
 
 	private void ManageHoldout()
 	{
-		Owner.heldProj = Projectile.whoAmI;
-		Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, MathF.PI + Owner.direction * MathF.PI * 2 / 3);
+		if (CanDisplay)
+		{
+			Owner.heldProj = Projectile.whoAmI;
+			Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, MathF.PI + Owner.direction * MathF.PI * 2 / 3);
+		}
 
 		Projectile.Center = Owner.MountedCenter;
 		Projectile.velocity *= 0;
@@ -116,13 +122,26 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 
 	private void HoldoutAI()
 	{
+		if (!CanDisplay)
+		{
+			return;
+		}
+
 		if (ChargeTimer++ < MaxChargeTime)
 		{
-			if (ChargeTimer == MaxChargeTime - 10)
-			{
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Owner.Center, Vector2.zeroVector, ModContent.ProjectileType<EyeOfAnabiosis_Matrix>(), 0, 0, Projectile.owner);
-			}
 			return;
+		}
+
+		if (!HasCreateMatrix)
+		{
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Owner.Center, Vector2.zeroVector, ModContent.ProjectileType<EyeOfAnabiosis_Matrix>(), 0, 0, Projectile.owner);
+			HasCreateMatrix = true;
+		}
+		if (!HasCreateMagicCircle)
+		{
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Owner.Center, Vector2.zeroVector, ModContent.ProjectileType<EyeOfAnabiosis_MagicCircleFront>(), 0, 0, Projectile.owner);
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Owner.Center, Vector2.zeroVector, ModContent.ProjectileType<EyeOfAnabiosis_MagicCircleBack>(), 0, 0, Projectile.owner);
+			HasCreateMagicCircle = true;
 		}
 
 		if (!Owner.controlUseItem)
@@ -135,17 +154,13 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 			bool manaCostPaid = Owner.CheckMana(HeldItem, pay: true);
 			if (manaCostPaid)
 			{
-				Vector2 projPosition = Owner.Center + new Vector2(Owner.direction * Projectile.width, 0) * Projectile.scale;
-				if (Owner.direction == -1)
-				{
-					projPosition.X += Projectile.width * 0.66f * Projectile.scale;
-				}
+				Vector2 projPosition = Owner.Center + new Vector2(0, -24) * Owner.gravDir;
 
 				Vector2 projVelocity = Vector2.Normalize(OwnerMouseWorld - projPosition) * HeldItem.shootSpeed;
 
 				for (int i = 0; i < MaxTargetCount; i++)
 				{
-					Projectile.NewProjectile(Owner.GetSource_ItemUse(HeldItem), Owner.Center + new Vector2(0, -24), projVelocity.RotatedBy(Main.rand.NextFloat(-ProjectileRandomRotation, ProjectileRandomRotation)), ModContent.ProjectileType<EyeOfAnabiosis_Projectile>(), HeldItem.damage, HeldItem.knockBack, Projectile.owner);
+					Projectile.NewProjectile(Owner.GetSource_ItemUse(HeldItem), projPosition, projVelocity.RotatedBy(Main.rand.NextFloat(-ProjectileRandomRotation, ProjectileRandomRotation)), ModContent.ProjectileType<EyeOfAnabiosis_Projectile>(), HeldItem.damage, HeldItem.knockBack, Projectile.owner);
 				}
 
 				SoundEngine.PlaySound(SoundID.DD2_BetsysWrathShot, Projectile.Center);
@@ -174,34 +189,13 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		}
 	}
 
-	public override void PostDraw(Color lightColor)
-	{
-		float chargeProgress = (float)ChargeTimer / MaxChargeTime > 1f ? 1f : (float)ChargeTimer / MaxChargeTime;
-		if (chargeProgress == 1)
-		{
-			SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
-			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
-			Effect shineEffect = ModAsset.EyeOfAnabiosis_Shine.Value;
-			shineEffect.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects);
-			shineEffect.Parameters["uNoise"].SetValue(Commons.ModAsset.NoiseWave.Value);
-			shineEffect.Parameters["uChargeProgress"].SetValue(chargeProgress);
-			shineEffect.CurrentTechnique.Passes["MagicCircle_Pixel"].Apply();
-
-			var magicCirTexture = Commons.ModAsset.Point.Value;
-			var magicCirPosition = Owner.gravDir == 1 ? Owner.Bottom : Owner.Top;
-			magicCirPosition = magicCirPosition - Main.screenPosition + new Vector2(0, 2 * Owner.gravDir);
-			var magicCirScale = new Vector2(0.18f, 0.12f);
-			Main.spriteBatch.Draw(magicCirTexture, magicCirPosition, null, Color.White, Owner.gravDir == 1 ? 0 : MathF.PI, new Vector2(magicCirTexture.Width / 2, magicCirTexture.Height), magicCirScale, SpriteEffects.None, 0);
-
-			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(sBS);
-		}
-	}
-
 	public override bool PreDraw(ref Color lightColor)
 	{
+		if (!CanDisplay)
+		{
+			return false;
+		}
+
 		float chargeProgress = (float)ChargeTimer / MaxChargeTime > 1f ? 1f : (float)ChargeTimer / MaxChargeTime;
 		lightColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 
