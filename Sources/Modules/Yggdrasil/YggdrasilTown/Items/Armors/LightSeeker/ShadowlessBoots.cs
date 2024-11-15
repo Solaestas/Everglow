@@ -6,9 +6,10 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.LightSeeker
 	// The AutoloadEquip attribute automatically attaches an equip texture to this item.
 	// Providing the EquipType.Legs value here will result in TML expecting a X_Legs.png file to be placed next to the item's main texture.
 	[AutoloadEquip(EquipType.Legs)]
-	public class LightSeekerLeggings : ModItem
+	public class ShadowlessBoots : ModItem
 	{
-		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(3);//TODO
+		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(3); // TODO
+
 		public override void SetStaticDefaults()
 		{
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
@@ -27,9 +28,9 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.LightSeeker
 		{
 			player.moveSpeed += 0.1f;
 		}
+
 		public override void AddRecipes()
 		{
-
 		}
 	}
 }

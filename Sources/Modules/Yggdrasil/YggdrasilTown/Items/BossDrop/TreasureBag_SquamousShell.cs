@@ -21,7 +21,7 @@ public class TreasureBag_SquamousShell : ModItem
 
 	public override void RightClick(Player player)
 	{
-		switch (Main.rand.Next(2))
+		switch (Main.rand.Next(5))
 		{
 			case 0:
 				player.QuickSpawnItem(null, ModContent.ItemType<EyeOfAnabiosis>(), 1);

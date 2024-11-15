@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Buffs;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
@@ -51,6 +52,7 @@ public class DeadBeetleEgg_egg : ModProjectile
 	public void Crack()
 	{
 		Vector2 addVel = Owner.velocity;
+		Owner.AddBuff(ModContent.BuffType<DeadBeetleEggBuff>(), 1800000);
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(Owner.direction * 4, -6) + addVel, ModContent.ProjectileType<DeadBeetleEgg_beetle>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 		for (int i = 0; i < 10; i++)
 		{

@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.WorldGeneration;
+using Everglow.Yggdrasil.YggdrasilTown.Buffs;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 
@@ -49,7 +50,7 @@ public class DeadBeetleEgg_beetle : ModProjectile
 
 	public override void AI()
 	{
-		Projectile.timeLeft = 300;
+		CheckKill();
 		if (Projectile.velocity.X > 1)
 		{
 			Projectile.spriteDirection = -1;
@@ -501,6 +502,24 @@ public class DeadBeetleEgg_beetle : ModProjectile
 			{
 				Projectile.rotation *= 0.8f;
 			}
+		}
+	}
+
+	private void CheckKill()
+	{
+		Player player = Main.player[Projectile.owner];
+		if (player.dead || !player.active)
+		{
+			player.ClearBuff(ModContent.BuffType<DeadBeetleEggBuff>());
+			Projectile.Kill();
+		}
+		if (player.HasBuff(ModContent.BuffType<DeadBeetleEggBuff>()))
+		{
+			Projectile.timeLeft = 2;
+		}
+		else
+		{
+			Projectile.Kill();
 		}
 	}
 

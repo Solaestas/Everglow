@@ -4,9 +4,10 @@ using Terraria.Localization;
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.LightSeeker
 {
 	[AutoloadEquip(EquipType.Body)]
-	public class LightSeekerBreastplate : ModItem
+	public class ConcentratingJacket : ModItem
 	{
 		public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(20, 20);
+
 		public override void SetStaticDefaults()
 		{
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
@@ -25,9 +26,9 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.LightSeeker
 		{
 			player.GetCritChance(DamageClass.Generic) += 5f;
 		}
+
 		public override void AddRecipes()
 		{
-
 		}
 	}
 }
