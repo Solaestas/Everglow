@@ -66,6 +66,19 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		ManageHoldout();
 		HoldoutAI();
 		UpdateRotationSuspension();
+		UpdateVFX();
+	}
+
+	private void UpdateVFX()
+	{
+		if (!CanDisplay)
+		{
+			return;
+		}
+		if (ChargeTimer++ < MaxChargeTime)
+		{
+			return;
+		}
 		float size = Main.rand.NextFloat(0.3f, 0.5f);
 		var acytaeaFlame = new AnabiosisFlameDust_OverPlayer
 		{
