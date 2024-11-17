@@ -56,7 +56,7 @@ float4 PixelShaderFunction_MagicCircle(PSInput input) : COLOR0
 	
 	float alpha = 1;
 	float sinTheta = sqrt(1 - pow(2 * input.Texcoord.x - 1, 2)); // θ 为 该点和圆心的连线 与 x轴 的夹角
-    
+     
     // 对距离顶部0.2以内的像素，启用波浪alpha
 	if (input.Texcoord.y < 0.2f)
 	{
@@ -76,6 +76,24 @@ float4 PixelShaderFunction_MagicCircle(PSInput input) : COLOR0
 	return shineColor * alpha;
 }
 
+float u_test;
+
+float4 PixelShaderFunction_MagicCircleCore(PSInput input) : COLOR0
+{
+	float4 mainTex = tex2D(uImage, input.Texcoord.xy);
+	float c = pow(mainTex.r * 1.1, 5);
+	return float4(c, c, c, c) * input.Color;
+	if (!any(mainTex.xyz))
+	{
+		//resultColor = input.Color * smoothstep(0.0, u_test, 1 - length(input.Texcoord.xy - float2(0.5, 0.5)) * sqrt(2.0) / 2.0);
+		return mainTex;
+	}
+	else
+	{
+		return mainTex * input.Color * smoothstep(0.0, 1, 1 - length(input.Texcoord.x - float1(0.5)));
+	}
+}
+
 technique Technique1
 {
 	pass Ball_Pixel
@@ -86,5 +104,11 @@ technique Technique1
 	pass MagicCircle_Pixel
 	{
 		PixelShader = compile ps_3_0 PixelShaderFunction_MagicCircle();
+	}
+
+	pass MagicCircleCore_Pixel
+	{
+		PixelShader = compile ps_3_0 PixelShaderFunction_MagicCircleCore();
+
 	}
 }
