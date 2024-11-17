@@ -8,7 +8,7 @@ public class Nehemoth : ModItem
 	{
 		Item.width = 154;
 		Item.height = 40;
-		Item.scale = 0.6f;
+		Item.scale = 0.8f;
 
 		Item.damage = 36;
 		Item.DamageType = DamageClass.Ranged;
@@ -37,5 +37,5 @@ public class Nehemoth : ModItem
 		}
 	}
 
-	public override Vector2? HoldoutOffset() => new Vector2(-32, 0);
+	public override Vector2? HoldoutOffset() => new Vector2(-45, 0);
 }

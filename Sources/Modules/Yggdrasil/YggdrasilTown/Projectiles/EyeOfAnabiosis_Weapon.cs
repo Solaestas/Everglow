@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -9,6 +10,7 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 	public const int MaxChargeTime = 720;
 	private const int MaxTargetCount = 3;
 	private const float ProjectileRandomRotation = 0.5f;
+	public Vector2 HangingItemPos;
 
 	public bool CanDisplay { get; set; } = true;
 
@@ -64,6 +66,20 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		ManageHoldout();
 		HoldoutAI();
 		UpdateRotationSuspension();
+		float size = Main.rand.NextFloat(0.3f, 0.5f);
+		var acytaeaFlame = new AnabiosisFlameDust_OverPlayer
+		{
+			Velocity = new Vector2(0, -Main.rand.NextFloat(1, 1.2f)) + Owner.velocity * 0.85f,
+			Active = true,
+			Visible = true,
+			Position = HangingItemPos,
+			MaxTime = Main.rand.Next(24, 36),
+			Scale = 25f * size,
+			Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+			Frame = Main.rand.Next(3),
+			ai = new float[] { Projectile.Center.X, Main.rand.NextFloat(-0.8f, 0.8f) },
+		};
+		Ins.VFXManager.Add(acytaeaFlame);
 	}
 
 	private void SyncOwnerMouseWorld()
@@ -154,13 +170,12 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 			bool manaCostPaid = Owner.CheckMana(HeldItem, pay: true);
 			if (manaCostPaid)
 			{
-				Vector2 projPosition = Owner.Center + new Vector2(0, -24) * Owner.gravDir;
-
-				Vector2 projVelocity = Vector2.Normalize(OwnerMouseWorld - projPosition) * HeldItem.shootSpeed;
+				Vector2 projVelocity = Vector2.Normalize(OwnerMouseWorld - HangingItemPos) * HeldItem.shootSpeed;
 
 				for (int i = 0; i < MaxTargetCount; i++)
 				{
-					Projectile.NewProjectile(Owner.GetSource_ItemUse(HeldItem), projPosition, projVelocity.RotatedBy(Main.rand.NextFloat(-ProjectileRandomRotation, ProjectileRandomRotation)), ModContent.ProjectileType<EyeOfAnabiosis_Projectile>(), HeldItem.damage, HeldItem.knockBack, Projectile.owner);
+					Projectile proj = Projectile.NewProjectileDirect(Owner.GetSource_ItemUse(HeldItem), HangingItemPos, projVelocity.RotatedBy(Main.rand.NextFloat(-ProjectileRandomRotation, ProjectileRandomRotation)), ModContent.ProjectileType<EyeOfAnabiosis_Projectile>(), HeldItem.damage, HeldItem.knockBack, Projectile.owner);
+					proj.frame = Main.rand.Next(4);
 				}
 
 				SoundEngine.PlaySound(SoundID.DD2_BetsysWrathShot, Projectile.Center);
@@ -227,6 +242,9 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		var head_container_texture = ModAsset.EyeOfAnabiosis_Head_Container.Value;
 		var head_container_position_offset = (-head_ballbg_origin + new Vector2(head_ball_texture.Width + (head_container_texture.Width - head_ball_texture.Width) / 2) / 2).RotatedBy(head_rotation) * Projectile.scale;
 		var head_container_position = head_position + head_container_position_offset;
+
+		// shoot proj from here.
+		HangingItemPos = head_container_position + Main.screenPosition;
 		var head_container_origin = new Vector2(head_container_texture.Width / 2, 0);
 		var head_container_rotation = 0.3f * head_rotation;
 
@@ -273,7 +291,7 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 		Main.spriteBatch.Draw(head_container_texture, head_container_position, null, lightColor, head_container_rotation, head_container_origin, Projectile.scale, head_effects, 0);
 
 		var lightPosition = head_container_position + Main.screenPosition - head_ball_texture.Size() * Projectile.scale / 4;
-		Lighting.AddLight(lightPosition, new Vector3(51, 235, 202) * 0.005f * chargeProgress);
+		Lighting.AddLight(lightPosition, new Vector3(0.05f, 0.3f, 0.9f) * chargeProgress);
 		return false;
 	}
 }

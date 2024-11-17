@@ -100,22 +100,28 @@ public class EyeOfAnabiosis_MagicCircleFront : ModProjectile
 		Main.spriteBatch.Draw(magicCirTexture, magicCirPosition, null, magicCirColor, magicCirRotation, new Vector2(magicCirTexture.Width / 2, magicCirTexture.Height), magicCirScale, SpriteEffects.None, 0);
 
 		// Core of magic circle
-		var coreTexture = Commons.ModAsset.Star_black.Value;
-		var coreColor = new Color(51, 230, 255, 0);
+		var coreColor = new Color(0.4f, 0.8f, 2f, 0);
 		var coreScale = new Vector2(0.2f, 0.32f) * 1.6f;
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 
-		//Main.spriteBatch.Draw(coreTexture, magicCirPosition, null, Color.White, magicCirRotation, coreTexture.Size() / 2, coreScale / 3f, SpriteEffects.None, 0);
-
+		// Main.spriteBatch.Draw(coreTexture, magicCirPosition, null, Color.White, magicCirRotation, coreTexture.Size() / 2, coreScale / 3f, SpriteEffects.None, 0);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		shineEffect.Parameters["u_test"].SetValue(0.5f);
+		shineEffect.Parameters["uPow"].SetValue(24f);
+		shineEffect.Parameters["uMul"].SetValue(1.3f);
 		shineEffect.CurrentTechnique.Passes["MagicCircleCore_Pixel"].Apply();
-		coreTexture = Commons.ModAsset.Textures_Star.Value;
-		Main.spriteBatch.Draw(coreTexture, magicCirPosition, null, coreColor, magicCirRotation, coreTexture.Size() / 2, coreScale, SpriteEffects.None, 0);
+
+		Texture2D coreTextureDark = Commons.ModAsset.Star_black.Value;
+		Texture2D coreTexture = Commons.ModAsset.Textures_Star.Value;
+		Texture2D bloom = Commons.ModAsset.Point.Value;
+
+		Main.spriteBatch.Draw(coreTextureDark, magicCirPosition, null, Color.White * 0.5f, magicCirRotation, coreTextureDark.Size() / 2, coreScale * new Vector2(3f, 1f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(bloom, magicCirPosition, null, new Color(0.2f, 0.3f, 1f, 0) * 0.75f, magicCirRotation, bloom.Size() / 2, new Vector2(1.2f, 0.6f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(coreTexture, magicCirPosition, null, coreColor, magicCirRotation, coreTexture.Size() / 2, coreScale * new Vector2(3f, 1f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(bloom, magicCirPosition, null, new Color(1f, 1f, 1f, 0) * 0.76f, magicCirRotation, bloom.Size() / 2, new Vector2(0.4f, 0.2f), SpriteEffects.None, 0);
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
@@ -206,6 +212,7 @@ public class EyeOfAnabiosis_MagicCircleBack : ModProjectile
 		var magicCirPosition = Owner.gravDir == 1 ? Owner.Bottom : Owner.Top;
 		magicCirPosition = magicCirPosition - Main.screenPosition + new Vector2(0, 2 * Owner.gravDir);
 		var magicCirRotation = Owner.gravDir == 1 ? 0 : MathF.PI;
+
 		// Text of magic circle
 		var textTexture = Commons.ModAsset.AlienWriting.Value;
 		foreach (var text in TextList)

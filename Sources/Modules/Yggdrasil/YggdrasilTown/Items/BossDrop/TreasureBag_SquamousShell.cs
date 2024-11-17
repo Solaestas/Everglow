@@ -1,3 +1,5 @@
+using Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.SquamousShell;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Rock;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.BossDrop;
@@ -21,7 +23,7 @@ public class TreasureBag_SquamousShell : ModItem
 
 	public override void RightClick(Player player)
 	{
-		switch (Main.rand.Next(5))
+		switch (Main.rand.Next(6))
 		{
 			case 0:
 				player.QuickSpawnItem(null, ModContent.ItemType<EyeOfAnabiosis>(), 1);
@@ -29,8 +31,29 @@ public class TreasureBag_SquamousShell : ModItem
 			case 1:
 				player.QuickSpawnItem(null, ModContent.ItemType<FlurryingBlades>(), 1);
 				break;
-			case 3:
+			case 2:
 				player.QuickSpawnItem(null, ModContent.ItemType<RockSpikeBallista>(), 1);
+				break;
+			case 3:
+				player.QuickSpawnItem(null, ModContent.ItemType<DeadBeetleEgg>(), 1);
+				break;
+			case 4:
+				player.QuickSpawnItem(null, ModContent.ItemType<DragonScaleHammer>(), 1);
+				break;
+			case 5:
+				player.QuickSpawnItem(null, ModContent.ItemType<BlueyWings>(), 1);
+				break;
+		}
+		switch (Main.rand.Next(3))
+		{
+			case 0:
+				player.QuickSpawnItem(null, ModContent.ItemType<RockGreaves>(), 1);
+				break;
+			case 1:
+				player.QuickSpawnItem(null, ModContent.ItemType<RockHelmet>(), 1);
+				break;
+			case 2:
+				player.QuickSpawnItem(null, ModContent.ItemType<RockPlateMail>(), 1);
 				break;
 		}
 		player.QuickSpawnItem(null, ItemID.GoldCoin, 15);

@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -30,6 +31,7 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 		Projectile.DamageType = DamageClass.Magic;
 		Projectile.penetrate = 1;
 		Projectile.friendly = true;
+		Projectile.hide = true;
 	}
 
 	private bool HasTarget => TargetWhoAmI >= 0;
@@ -62,7 +64,20 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 	{
 		for (int i = 0; i < 15; i++)
 		{
-			Dust.NewDust(Projectile.Center, 1, 1, DustID.Shadowflame, newColor: new Color(81, 235, 202), Scale: Main.rand.NextFloat(1f, 2));
+			float size = Main.rand.NextFloat(0.3f, 0.96f);
+			var acytaeaFlame = new AnabiosisFlameDust
+			{
+				Velocity = new Vector2(0, Main.rand.NextFloat(3, 4f)).RotatedByRandom(MathHelper.TwoPi),
+				Active = true,
+				Visible = true,
+				Position = Projectile.Center,
+				MaxTime = Main.rand.Next(24, 36),
+				Scale = 25f * size,
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				Frame = Main.rand.Next(3),
+				ai = new float[] { Projectile.Center.X, Main.rand.NextFloat(-0.8f, 0.8f) },
+			};
+			Ins.VFXManager.Add(acytaeaFlame);
 		}
 		SoundEngine.PlaySound(SoundID.DD2_BetsysWrathImpact);
 	}
@@ -74,5 +89,11 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 		var origin = new Vector2(texture.Width / 8, texture.Height / 2);
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, 0, origin, 1, SpriteEffects.None, 0);
 		return false;
+	}
+
+	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+	{
+		overPlayers.Add(index);
+		base.DrawBehind(index, behindNPCsAndTiles, behindNPCs, behindProjectiles, overPlayers, overWiresUI);
 	}
 }

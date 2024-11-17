@@ -76,22 +76,14 @@ float4 PixelShaderFunction_MagicCircle(PSInput input) : COLOR0
 	return shineColor * alpha;
 }
 
-float u_test;
+float uPow;
+float uMul;
 
 float4 PixelShaderFunction_MagicCircleCore(PSInput input) : COLOR0
 {
 	float4 mainTex = tex2D(uImage, input.Texcoord.xy);
-	float c = pow(mainTex.r * 1.1, 5);
-	return float4(c, c, c, c) * input.Color;
-	if (!any(mainTex.xyz))
-	{
-		//resultColor = input.Color * smoothstep(0.0, u_test, 1 - length(input.Texcoord.xy - float2(0.5, 0.5)) * sqrt(2.0) / 2.0);
-		return mainTex;
-	}
-	else
-	{
-		return mainTex * input.Color * smoothstep(0.0, 1, 1 - length(input.Texcoord.x - float1(0.5)));
-	}
+	float4 c = pow(mainTex * input.Color * uMul, uPow);
+	return c;
 }
 
 technique Technique1

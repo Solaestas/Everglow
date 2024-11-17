@@ -139,7 +139,7 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 		int step = 8;
 		float rotation = timeValue * 0.05f;
 
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_burn.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.AlienWriting.Value;
 		for (int i = 0; i < 3; i++)
 		{
 			List<Vertex2D> vertexArray = [];
@@ -149,7 +149,7 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 				Vector2 positionOffset = new Vector2(step * j * MathF.Sqrt(3), step * length + yoffset).RotatedBy(rotation + i * MathHelper.Pi / 3);
 				float lerpValue = (MathF.Sin(20 * positionOffset.ToRotation()) + 1) * 0.5f;
 				Color finColor = Color.Lerp(drawColor, new Color(0f, 0f, 0.3f, 0f), lerpValue);
-				Vector3 texCoord = new Vector3(j, j % 2 != 0 ? 1 : 0, 0);
+				Vector3 texCoord = new Vector3(j * 0.1f + (float)Main.timeForVisualEffects * 0.003f, j % 2 != 0 ? 1 : 0.92f, 0);
 				vertexArray.Add(drawCenter + scale * positionOffset, finColor, texCoord);
 			}
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertexArray.ToArray(), 0, vertexArray.Count - 2);
@@ -206,7 +206,7 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 			Color drawColor = Color.Lerp(new Color(0f, 0.7f, 1f, 0f), new Color(0.1f, 0.2f, 0.6f, 0f), lerpValue) * wink;
 			float rotValue = i / 100f * MathHelper.TwoPi + timeValue * -0.03f;
 			bars.Add(drawCenter + new Vector2(0, 74).RotatedBy(rotValue), drawColor, new Vector3(i / 50f, frameHeightOut, 0));
-			bars.Add(drawCenter + new Vector2(0, 62).RotatedBy(rotValue), drawColor, new Vector3(i / 50f, frameHeightIn, 0));
+			bars.Add(drawCenter + new Vector2(0, 62).RotatedBy(rotValue), new Color(0f, 0.7f, 1f, 0f) * wink, new Vector3(i / 50f, frameHeightIn, 0));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.AlienWriting.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -230,7 +230,7 @@ public class EyeOfAnabiosis_Matrix : ModProjectile
 			float lerpValue = (MathF.Sin(i / 12.5f * MathHelper.TwoPi + timeValue) + 1) * 0.5f;
 			Color drawColor = Color.Lerp(new Color(0f, 0.7f, 1f, 0f), new Color(0f, 0f, 0.3f, 0f), lerpValue) * wink;
 			float rotValue = i / 100f * MathHelper.TwoPi + timeValue * 0.03f;
-			bars.Add(drawCenter + new Vector2(0, 88).RotatedBy(rotValue), drawColor, new Vector3(i / 25f, 0.2f, 0));
+			bars.Add(drawCenter + new Vector2(0, 88).RotatedBy(rotValue), new Color(0f, 0.7f, 1f, 0f) * wink * 0.9f, new Vector3(i / 25f, 0.2f, 0));
 			bars.Add(drawCenter + new Vector2(0, 76).RotatedBy(rotValue), drawColor, new Vector3(i / 25f, 0.5f, 0));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_1.Value;
