@@ -29,11 +29,11 @@ public class AnabiosisFlameDust : Visual
 		Color flame;
 		if (pocession > 0.5f)
 		{
-			flame = Color.Lerp(new Color(1f, 0.6f, 0f, 0), new Color(1f, 1f, 1f, 0), (pocession - 0.5f) * 2f);
+			flame = Color.Lerp(new Color(0f, 0.6f, 1f, 0), new Color(1f, 1f, 1f, 0), (pocession - 0.5f) * 2f);
 		}
 		else
 		{
-			flame = Color.Lerp(new Color(0.5f, 0f, 0f, 0), new Color(1f, 0.6f, 0f, 0), pocession * 2f);
+			flame = Color.Lerp(new Color(0f, 0f, 0.5f, 0), new Color(0f, 0.6f, 1f, 0), pocession * 2f);
 		}
 		if (MaxTime - Timer < 10f)
 		{
@@ -102,11 +102,11 @@ public class AnabiosisFlameDust_OverPlayer : Visual
 		Color flame;
 		if (pocession > 0.5f)
 		{
-			flame = Color.Lerp(new Color(1f, 0.6f, 0f, 0), new Color(1f, 1f, 1f, 0), (pocession - 0.5f) * 2f);
+			flame = Color.Lerp(new Color(0f, 0.6f, 1f, 0), new Color(1f, 1f, 1f, 0), (pocession - 0.5f) * 2f);
 		}
 		else
 		{
-			flame = Color.Lerp(new Color(0.5f, 0f, 0f, 0), new Color(1f, 0.6f, 0f, 0), pocession * 2f);
+			flame = Color.Lerp(new Color(0f, 0f, 0.5f, 0), new Color(0f, 0.6f, 1f, 0), pocession * 2f);
 		}
 		if (MaxTime - Timer < 10f)
 		{
