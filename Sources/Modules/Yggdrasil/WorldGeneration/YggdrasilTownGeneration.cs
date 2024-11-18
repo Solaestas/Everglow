@@ -262,10 +262,10 @@ public class YggdrasilTownGeneration
 		}
 
 		// 确定左右界限
-		//if (AzureGrottoCenterX > 600)
-		//{
-		//	deltaX = -40;
-		//}
+		// if (AzureGrottoCenterX > 600)
+		// {
+		// deltaX = -40;
+		// }
 		int leftBound = 1250;
 		int rightBound = 1440;
 		int startY = Main.maxTilesY - 368;
@@ -285,6 +285,9 @@ public class YggdrasilTownGeneration
 			}
 		}
 		PlaceFrameImportantTiles(1440, startY, 8, 1, ModContent.TileType<StoneBridgeTile>(), 0, 54);
+
+		PlaceFrameImportantTiles(1440, startY - 3, 4, 3, ModContent.TileType<DilapidatedDangerSigns4x3>(), 0, 0);
+
 		PlaceFrameImportantTiles(1440, startY + 7, 12, 1, ModContent.TileType<StoneBridgeTile>(), 36, 36);
 
 		PlaceFrameImportantTiles(1470, startY + 7, 16, 1, ModContent.TileType<StoneBridgeTile>(), 0, 72);
@@ -834,7 +837,6 @@ public class YggdrasilTownGeneration
 		}
 
 		// cable tunnel
-
 		int tunnelLeftX = 1000;
 		int tunnelRightX = 1170;
 		int tunnelLeftY = Main.maxTilesY - 333;
@@ -885,7 +887,7 @@ public class YggdrasilTownGeneration
 			if (lastPosX != 0 && lastPosY != 0)
 			{
 				WorldGenMisc.PlaceRope(lastPosX, lastPosY, x, y, ModContent.TileType<CableCarJoint>());
-				if(x > tunnelLeftX + 60)
+				if (x > tunnelLeftX + 60)
 				{
 					Tile joint = SafeGetTile(lastPosX, lastPosY);
 					joint.TileFrameX = 36;
@@ -914,7 +916,7 @@ public class YggdrasilTownGeneration
 		for (int x = tunntelpherLeftX; x < tunntelpherRightX; x += 60)
 		{
 			int y = telpherY;
-			if(x > 1350)
+			if (x > 1350)
 			{
 				y += 8;
 			}
@@ -928,7 +930,7 @@ public class YggdrasilTownGeneration
 				WorldGenMisc.PlaceRope(lastPosX, lastPosY, x, y, ModContent.TileType<CableCarJoint>());
 				Tile joint = SafeGetTile(x, y);
 				joint.TileFrameX = 0;
-				if(x == tunntelpherLeftX)
+				if (x == tunntelpherLeftX)
 				{
 					joint = SafeGetTile(lastPosX, lastPosY);
 					joint.TileFrameX = 36;
@@ -986,7 +988,7 @@ public class YggdrasilTownGeneration
 	public static void BuildLampWoodLand()
 	{
 		int upBound = Main.maxTilesY - 1660;
-		int bottomBound = Main.maxTilesY - 380;
+		int bottomBound = Main.maxTilesY - 480;
 		int countLamp = 0;
 		List<Vector2> roomPositions = new List<Vector2>();
 		for (int i = 0; i < 1000; i++)

@@ -13,6 +13,7 @@ public class NormalCableCar : DBlock
 	public Rope Cable;
 	public int Direction = 1;
 	public bool Initialized = false;
+	public List<int> InsidePlayers = new List<int>();
 
 	public override void AI()
 	{
@@ -66,7 +67,38 @@ public class NormalCableCar : DBlock
 			Active = false;
 			return;
 		}
+		CheckMouseClick();
+		foreach(Player player in Main.player)
+		{
+			if (InsidePlayers.Contains(player.whoAmI))
+			{
+				player.Center = position + size * 0.5f + new Vector2(0, 60);
+			}
+		}
 		base.AI();
+	}
+
+	public void CheckMouseClick()
+	{
+		if (Main.mouseRight && Main.mouseRightRelease)
+		{
+			if (Main.MouseWorld.X > position.X && Main.MouseWorld.X < position.X + size.X)
+			{
+				if (Main.MouseWorld.Y > position.Y && Main.MouseWorld.Y < position.Y + size.Y)
+				{
+					if(!InsidePlayers.Contains(Main.myPlayer))
+					{
+						InsidePlayers.Add(Main.myPlayer);
+						CombatText.NewText(new Rectangle((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y, 0, 0), Color.White, "Now you sit in the cable car.");
+					}
+					else
+					{
+						InsidePlayers.Remove(Main.myPlayer);
+						CombatText.NewText(new Rectangle((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y, 0, 0), Color.White, "Now you left the cable car.");
+					}
+				}
+			}
+		}
 	}
 
 	public void ChangeCableCarJoint()
@@ -117,7 +149,7 @@ public class NormalCableCar : DBlock
 							points.Add(point);
 						}
 					}
-					if(points.Count > 0)
+					if (points.Count > 0)
 					{
 						int randIndex = Main.rand.Next(points.Count);
 						newPointPos = points[randIndex];
@@ -151,23 +183,24 @@ public class NormalCableCar : DBlock
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.CurrentTechnique.Passes[0].Apply();
 		Texture2D tuskWall = ModAsset.NormalCableCar.Value;
+		Vector2 drawPos = position + new Vector2(size.X * 0.5f, 8);
 
 		var bars = new List<Vertex2D>();
-		AddVertex(bars, position + new Vector2(-2, -8), new Vector3(0.5f, 0.05f, 0));
-		AddVertex(bars, position + new Vector2(2, -8), new Vector3(0.5f, 0.05f, 0));
-		AddVertex(bars, position + new Vector2(-2, 16), new Vector3(0.5f, 0.05f, 0));
+		AddVertex(bars, drawPos + new Vector2(-2, -8), new Vector3(0.5f, 0.05f, 0));
+		AddVertex(bars, drawPos + new Vector2(2, -8), new Vector3(0.5f, 0.05f, 0));
+		AddVertex(bars, drawPos + new Vector2(-2, 16), new Vector3(0.5f, 0.05f, 0));
 
-		AddVertex(bars, position + new Vector2(-2, 16), new Vector3(0.5f, 0.05f, 0));
-		AddVertex(bars, position + new Vector2(2, -8), new Vector3(0.5f, 0.05f, 0));
-		AddVertex(bars, position + new Vector2(2, 16), new Vector3(0.5f, 0.05f, 0));
+		AddVertex(bars, drawPos + new Vector2(-2, 16), new Vector3(0.5f, 0.05f, 0));
+		AddVertex(bars, drawPos + new Vector2(2, -8), new Vector3(0.5f, 0.05f, 0));
+		AddVertex(bars, drawPos + new Vector2(2, 16), new Vector3(0.5f, 0.05f, 0));
 
-		AddVertex(bars, position + new Vector2(-43, 16), new Vector3(0f, 18 / 134f, 0));
-		AddVertex(bars, position + new Vector2(43, 16), new Vector3(1f, 18 / 134f, 0));
-		AddVertex(bars, position + new Vector2(-43, 132), new Vector3(0f, 1, 0));
+		AddVertex(bars, drawPos + new Vector2(-43, 16), new Vector3(0f, 18 / 134f, 0));
+		AddVertex(bars, drawPos + new Vector2(43, 16), new Vector3(1f, 18 / 134f, 0));
+		AddVertex(bars, drawPos + new Vector2(-43, 132), new Vector3(0f, 1, 0));
 
-		AddVertex(bars, position + new Vector2(-43, 132), new Vector3(0f, 1, 0));
-		AddVertex(bars, position + new Vector2(43, 16), new Vector3(1f, 18 / 134f, 0));
-		AddVertex(bars, position + new Vector2(43, 132), new Vector3(1f, 1, 0));
+		AddVertex(bars, drawPos + new Vector2(-43, 132), new Vector3(0f, 1, 0));
+		AddVertex(bars, drawPos + new Vector2(43, 16), new Vector3(1f, 18 / 134f, 0));
+		AddVertex(bars, drawPos + new Vector2(43, 132), new Vector3(1f, 1, 0));
 		Main.graphics.graphicsDevice.Textures[0] = tuskWall;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
 		Main.spriteBatch.End();
