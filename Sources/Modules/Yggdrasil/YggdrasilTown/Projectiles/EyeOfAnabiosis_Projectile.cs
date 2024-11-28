@@ -1,5 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -36,6 +37,15 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 
 	private bool HasTarget => TargetWhoAmI >= 0;
 
+	/// <summary>
+	/// Choose target closest to mouse while spawn.
+	/// </summary>
+	/// <param name="source"></param>
+	public override void OnSpawn(IEntitySource source)
+	{
+		targetWhoAmI = FindTarget(Main.MouseWorld);
+	}
+
 	public override void AI()
 	{
 		if (Projectile.timeLeft % 8 == 0)
@@ -56,8 +66,36 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 		}
 		else
 		{
-			Projectile.Minion_FindTargetInRange(SearchDistance, ref targetWhoAmI, false);
+			// If there is no target after spawned, search target by projectile center.
+			targetWhoAmI = FindTarget(Projectile.Center);
 		}
+	}
+
+	/// <summary>
+	/// Find closest target by given position.
+	/// </summary>
+	/// <param name="fromWhere"></param>
+	/// <returns></returns>
+	public int FindTarget(Vector2 fromWhere)
+	{
+		int target = -1;
+		float minDis = SearchDistance;
+		foreach (NPC npc in Main.npc)
+		{
+			if (npc != null && npc.active)
+			{
+				if (npc.CanBeChasedBy() && !npc.dontTakeDamage && npc.life > 0)
+				{
+					float dis = (npc.Center - fromWhere).Length() - npc.Hitbox.Size().Length() * 0.5f;
+					if (dis < minDis)
+					{
+						minDis = dis;
+						target = npc.whoAmI;
+					}
+				}
+			}
+		}
+		return target;
 	}
 
 	public override void OnKill(int timeLeft)
