@@ -32,16 +32,6 @@ public class AuburnBellMinion : ModProjectile
 	private const int DashPhaseDistanceMin = 150;
 	private const int DashPhaseDistanceMax = 400;
 
-	private int MinionIndex => (int)Projectile.ai[0];
-
-	private int Timer
-	{
-		get { return (int)Projectile.ai[1]; }
-		set { Projectile.ai[1] = value; }
-	}
-
-	private Player Owner => Main.player[Projectile.owner];
-
 	private Vector2 dashStartPos;
 	private Vector2 dashEndPos;
 
@@ -51,6 +41,16 @@ public class AuburnBellMinion : ModProjectile
 	{
 		get => targetWhoAmI;
 		set => targetWhoAmI = value;
+	}
+
+	private Player Owner => Main.player[Projectile.owner];
+
+	private int MinionIndex => (int)Projectile.ai[0];
+
+	private int Timer
+	{
+		get { return (int)Projectile.ai[1]; }
+		set { Projectile.ai[1] = value; }
 	}
 
 	private AttackPhaseEnum AttackPhase { get; set; }
@@ -98,30 +98,9 @@ public class AuburnBellMinion : ModProjectile
 
 	public override void AI()
 	{
-		Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
+		UpdateLifeCycle();
 
-		// Update life cycle
-		if (CheckOwnerActive())
-		{
-			Owner.AddBuff(ModContent.BuffType<AuburnBell>(), 3600);
-			Projectile.timeLeft = 2;
-		}
-		else
-		{
-			return;
-		}
-
-		// Keep minion close enough to owner
-		if (TeleportCooldown > 0)
-		{
-			TeleportCooldown--;
-		}
-		else if (CheckDistanceToOwner())
-		{
-			ResetTarget();
-			TelePortTo(Owner.MountedCenter + new Vector2((10 - MinionIndex * 30) * Owner.direction, -40 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f - MinionIndex) * 35f));
-			return;
-		}
+		LimitDistanceFromOwner();
 
 		if (TargetWhoAmI == -1 || !CheckTargetActive())
 		{
@@ -134,28 +113,40 @@ public class AuburnBellMinion : ModProjectile
 		}
 	}
 
-	private bool CheckOwnerActive()
+	#region AI
+
+	/// <summary>
+	/// 1. Reset timeleft and buff duration to keep projectile alive.
+	/// 2. Update projectile frame.
+	/// </summary>
+	private void UpdateLifeCycle()
 	{
-		if (Owner.dead || Owner.active is false)
+		if (CheckOwnerActive())
 		{
-			Owner.ClearBuff(ModContent.BuffType<AuburnBell>());
-			return false;
+			Owner.AddBuff(ModContent.BuffType<AuburnBell>(), 3600);
+			Projectile.timeLeft = 2;
 		}
 
-		if (!Owner.HasBuff(ModContent.BuffType<AuburnBell>()))
-		{
-			return false;
-		}
-
-		return true;
+		Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
 	}
 
-	private bool CheckDistanceToOwner() => Projectile.Center.Distance(Owner.Center) > MaxDistanceToOwner;
-
-	private void TelePortTo(Vector2 aim)
+	/// <summary>
+	/// Keep the distance between minion and owner within a certain amount
+	/// </summary>
+	private void LimitDistanceFromOwner()
 	{
-		TeleportCooldown = MaxTeleportCooldown;
-		Projectile.Center = aim;
+		if (TeleportCooldown > 0)
+		{
+			TeleportCooldown--;
+		}
+		else if (Projectile.Center.Distance(Owner.Center) > MaxDistanceToOwner)
+		{
+			ResetTarget();
+
+			// Teleport to
+			TeleportCooldown = MaxTeleportCooldown;
+			Projectile.Center = Owner.MountedCenter + new Vector2((10 - MinionIndex * 30) * Owner.direction, -40 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f - MinionIndex) * 35f);
+		}
 	}
 
 	private void MoveTo(Vector2 aim)
@@ -180,6 +171,31 @@ public class AuburnBellMinion : ModProjectile
 		}
 	}
 
+	/// <summary>
+	/// Check if owner is active
+	/// </summary>
+	/// <returns>
+	/// active: true | inactive: false
+	/// </returns>
+	private bool CheckOwnerActive()
+	{
+		if (Owner.dead || Owner.active is false)
+		{
+			Owner.ClearBuff(ModContent.BuffType<AuburnBell>());
+			return false;
+		}
+
+		if (!Owner.HasBuff(ModContent.BuffType<AuburnBell>()))
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/// <summary>
+	/// Search target within attack distance
+	/// </summary>
 	private void SearchTarget()
 	{
 		Projectile.Minion_FindTargetInRange(SearchDistance, ref targetWhoAmI, false);
@@ -191,6 +207,12 @@ public class AuburnBellMinion : ModProjectile
 		AttackPhase = AttackPhaseEnum.Aim;
 	}
 
+	/// <summary>
+	/// Check if target is active
+	/// </summary>
+	/// <returns>
+	/// active: true | inactive: false
+	/// </returns>
 	private bool CheckTargetActive()
 	{
 		if (TargetWhoAmI == -1)
@@ -208,6 +230,9 @@ public class AuburnBellMinion : ModProjectile
 		return true;
 	}
 
+	/// <summary>
+	/// Move around owner and patrol
+	/// </summary>
 	private void Idle()
 	{
 		Vector2 aim;
@@ -231,6 +256,9 @@ public class AuburnBellMinion : ModProjectile
 		Projectile.rotation = Projectile.rotation * 0.95f + Projectile.velocity.X * 0.002f;
 	}
 
+	/// <summary>
+	/// Attack target
+	/// </summary>
 	private void Attack()
 	{
 		switch (AttackPhase)
@@ -324,6 +352,8 @@ public class AuburnBellMinion : ModProjectile
 			AttackPhase = AttackPhaseEnum.Aim;
 		}
 	}
+
+	#endregion
 
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => behindNPCsAndTiles.Add(index);
 
