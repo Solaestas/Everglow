@@ -182,11 +182,11 @@ public class JellyBallLifeAbsorb : ModProjectile
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		if (powerFlow.Count > 3)
 		{
-			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_9.Value;
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, powerFlow.ToArray(), 0, powerFlow.Count - 2);
-
 			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_9_black.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, powerFlow_dark.ToArray(), 0, powerFlow_dark.Count - 2);
+
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_9.Value;
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, powerFlow.ToArray(), 0, powerFlow.Count - 2);
 		}
 		if (Projectile.timeLeft is > 30 and < 150)
 		{

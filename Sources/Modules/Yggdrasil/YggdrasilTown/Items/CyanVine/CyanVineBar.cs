@@ -9,6 +9,7 @@ public class CyanVineBar : ModItem
 		Item.height = 24;
 		Item.value = 1600;
 	}
+
 	public override void AddRecipes()
 	{
 		CreateRecipe(1)

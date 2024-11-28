@@ -127,6 +127,22 @@ public class JellyBall : ModNPC
 									NPC.velocity += Vector2.Normalize(v0) * 0.25f;
 								}
 							}
+							if(npc.type == ModContent.NPCType<GiantJellyBall>())
+							{
+								Vector2 v0 = NPC.Center - npc.Center;
+								if (v0.Length() < 120)
+								{
+									NPC.velocity += Vector2.Normalize(v0) * 0.25f;
+								}
+							}
+							if (npc.type == ModContent.NPCType<KingJellyBall.KingJellyBall>())
+							{
+								Vector2 v0 = NPC.Center - npc.Center;
+								if (v0.Length() < 450)
+								{
+									NPC.velocity += Vector2.Normalize(v0) * 0.45f;
+								}
+							}
 						}
 					}
 					break;

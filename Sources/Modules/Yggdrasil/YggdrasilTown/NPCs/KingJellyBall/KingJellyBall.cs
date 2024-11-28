@@ -1,5 +1,7 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs.KingJellyBall;
@@ -11,6 +13,8 @@ public class KingJellyBall : ModNPC
 	public override string Texture => ModAsset.KingJellyBall_Core_Mod;
 
 	public float HealLightValue = 0f;
+
+	public int TotalDamageTakeIn = 0;
 
 	public override void SetStaticDefaults()
 	{
@@ -77,7 +81,7 @@ public class KingJellyBall : ModNPC
 		ShootGelStream,
 		ShootCrystal,
 		AbsorbJellyBall,
-		KillJellBall,
+		KillJellyBall,
 	}
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
@@ -112,21 +116,29 @@ public class KingJellyBall : ModNPC
 		Lighting.AddLight(NPC.Center, BloomLightColor);
 
 		ControlScale();
-
+		NPC.TargetClosest();
+		Player player = Main.player[NPC.target];
 		if (State == (int)NPCState.Approach)
 		{
 			ApproachTarget();
-			Player player = Main.player[NPC.target];
 			Vector2 toPlayer = player.Center - NPC.Center;
-			if (GetInteractableTargetCount() > 2 && Main.rand.NextBool(120) && NPC.life < NPC.lifeMax * 0.8f)
+			if (GetInteractableTargetCount(300, 1200) > 2 && Main.rand.NextBool((int)Math.Max(NPC.life / (float)NPC.lifeMax * 120, 10)) && NPC.life < NPC.lifeMax * 0.8f)
 			{
 				State = (int)NPCState.AbsorbJellyBall;
 				NPC.localAI[0] = 0;
+				return;
+			}
+			if (GetInteractableTargetCount(500, 2000) > 2 && Main.rand.NextBool(Math.Max(120 - GetInteractableTargetCount(500, 2000) * 10, 1)))
+			{
+				State = (int)NPCState.KillJellyBall;
+				NPC.localAI[0] = 0;
+				return;
 			}
 			if (Main.rand.NextBool(120) && toPlayer.Length() > 150 && toPlayer.Length() < 600)
 			{
 				State = (int)NPCState.ShootGelStream;
 				NPC.localAI[0] = 0;
+				return;
 			}
 		}
 
@@ -138,7 +150,7 @@ public class KingJellyBall : ModNPC
 			if (NPC.localAI[0] >= 600)
 			{
 				State = (int)NPCState.Approach;
-			} 
+			}
 		}
 
 		if (State == (int)NPCState.AbsorbJellyBall)
@@ -161,10 +173,20 @@ public class KingJellyBall : ModNPC
 			}
 		}
 
+		if (State == (int)NPCState.KillJellyBall)
+		{
+			KillJellyBall();
+			NPC.localAI[0]++;
+			if (NPC.localAI[0] >= 300)
+			{
+				State = (int)NPCState.Approach;
+			}
+		}
+
 		if (State == (int)NPCState.Sleep)
 		{
 			NPC.velocity.Y = MathF.Sin((float)Main.time * 0.006f) * 0.05f;
-			NPC.velocity *= 0.96f;
+			NPC.velocity *= 0.996f;
 		}
 
 		if (HealLightValue > 0)
@@ -175,6 +197,83 @@ public class KingJellyBall : ModNPC
 		{
 			HealLightValue = 0;
 		}
+
+		// Escape when player dead
+		if (!player.active || player.dead)
+		{
+			NPC.velocity.Y += 0.25f;
+			NPC.noTileCollide = true;
+		}
+		else
+		{
+			NPC.noTileCollide = false;
+		}
+	}
+
+	public override bool CheckActive()
+	{
+		if(NPC.target > 0)
+		{
+			Player player = Main.player[NPC.target];
+			if(player.active && !player.dead)
+			{
+				if((player.Center - NPC.Center).Length() < 8000)
+				{
+					return false;
+				}
+			}
+		}
+		return base.CheckActive();
+	}
+
+	public void KillJellyBall()
+	{
+		NPC.velocity *= 0.96f;
+		int maxCount = 8;
+		if (Main.expertMode)
+		{
+			maxCount = 12;
+		}
+		if (Main.masterMode)
+		{
+			maxCount = 16;
+		}
+		if (NPC.localAI[0] < maxCount * 10 && GetInteractableTargetCount(500, 2000) > 0)
+		{
+			if (NPC.localAI[0] % 10 == 0)
+			{
+				Projectile projectile = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<JellyBallElectricKill>(), (int)(NPC.damage * 0.5f * 1.1f), 0, NPC.target);
+				JellyBallElectricKill jellyBallElectricKill = projectile.ModProjectile as JellyBallElectricKill;
+				if (jellyBallElectricKill != null)
+				{
+					jellyBallElectricKill.OwnerBoss = NPC;
+					jellyBallElectricKill.Killee = Main.npc[InteractableJellyBalls[Main.rand.Next(InteractableJellyBalls.Count)]];
+				}
+			}
+		}
+		else
+		{
+			if (KillProjCount() <= 0)
+			{
+				State = (int)NPCState.Approach;
+			}
+		}
+	}
+
+	public int KillProjCount()
+	{
+		int count = 0;
+		foreach (Projectile projectile in Main.projectile)
+		{
+			if (projectile != null && projectile.active)
+			{
+				if (projectile.type == ModContent.ProjectileType<JellyBallElectricKill>())
+				{
+					count++;
+				}
+			}
+		}
+		return count;
 	}
 
 	public void AbsorbJellyBall()
@@ -189,7 +288,7 @@ public class KingJellyBall : ModNPC
 		{
 			maxCount = 6;
 		}
-		if (NPC.localAI[0] < maxCount * 10 && GetInteractableTargetCount() > 0)
+		if (NPC.localAI[0] < maxCount * 10 && GetInteractableTargetCount(300, 1200) > 0)
 		{
 			if (NPC.localAI[0] % 10 == 0)
 			{
@@ -227,7 +326,7 @@ public class KingJellyBall : ModNPC
 		return count;
 	}
 
-	public int GetInteractableTargetCount()
+	public int GetInteractableTargetCount(float minDis = 600, float maxDis = 1800)
 	{
 		InteractableJellyBalls = new List<int>();
 		int count = 0;
@@ -237,7 +336,7 @@ public class KingJellyBall : ModNPC
 			{
 				if (npc.type == ModContent.NPCType<JellyBall>() || npc.type == ModContent.NPCType<GiantJellyBall>())
 				{
-					if (Collision.CanHit(npc, NPC) && (NPC.Center - npc.Center).Length() < 1200 && (NPC.Center - npc.Center).Length() > 200)
+					if (Collision.CanHit(npc, NPC) && (NPC.Center - npc.Center).Length() < maxDis && (NPC.Center - npc.Center).Length() > minDis)
 					{
 						bool canCount = true;
 						foreach (Projectile projectile in Main.projectile)
@@ -275,7 +374,16 @@ public class KingJellyBall : ModNPC
 		NPC.TargetClosest();
 		Player player = Main.player[NPC.target];
 		NPC.velocity *= 0.95f;
-		if (NPC.localAI[0] % 60 == 0)
+		int interval = 72;
+		if(Main.expertMode)
+		{
+			interval = 60;
+		}
+		if(Main.masterMode)
+		{
+			interval = 48;
+		}
+		if (NPC.localAI[0] % interval == 0)
 		{
 			for (int i = 0; i < 1080; i++)
 			{
@@ -302,15 +410,19 @@ public class KingJellyBall : ModNPC
 
 	public void ApproachTarget()
 	{
-		NPC.TargetClosest();
 		Player player = Main.player[NPC.target];
 		Vector2 toPlayer = player.Center - NPC.Center;
+		float speedLimit = 4f;
+		if(NPC.life < NPC.lifeMax * 0.5f)
+		{
+			speedLimit = 15f;
+		}
 		if (toPlayer.Length() > 240)
 		{
 			NPC.velocity += Vector2.Normalize(player.Center - NPC.Center) * 0.03f / NPC.scale;
-			if (NPC.velocity.Length() > 4f / NPC.scale)
+			if (NPC.velocity.Length() > speedLimit / NPC.scale)
 			{
-				NPC.velocity = Vector2.Normalize(NPC.velocity) * 4f / NPC.scale;
+				NPC.velocity = Vector2.Normalize(NPC.velocity) * speedLimit / NPC.scale;
 			}
 			NPC.velocity *= 0.96f;
 		}
@@ -383,12 +495,152 @@ public class KingJellyBall : ModNPC
 		{
 			State = (int)NPCState.Approach;
 		}
+		TotalDamageTakeIn += hit.Damage;
+		int thresholdDamage = 60;
+		if (Main.expertMode)
+		{
+			thresholdDamage = 40;
+		}
+		if (Main.masterMode)
+		{
+			thresholdDamage = 30;
+		}
+		while (TotalDamageTakeIn > thresholdDamage)
+		{
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 60f).RotatedByRandom(MathHelper.TwoPi), new Vector2(0, -Main.rand.NextFloat(4f, 8f)).RotatedBy(Main.rand.NextFloat(-1.2f, 1.2f)), ModContent.ProjectileType<JellyBallGelStream>(), (int)(NPC.damage * 0.375), 2, NPC.target);
+			TotalDamageTakeIn -= thresholdDamage;
+		}
+		for (int g = 0; g < 3; g++)
+		{
+			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(2, 24)).RotatedByRandom(MathHelper.TwoPi);
+			float mulScale = Main.rand.NextFloat(6f, 12f);
+			var blood = new JellyBallGelDrop
+			{
+				velocity = afterVelocity / mulScale,
+				Active = true,
+				Visible = true,
+				position = NPC.Center + new Vector2(Main.rand.NextFloat(-200f, 200f) * NPC.scale, 0).RotatedByRandom(6.283),
+				maxTime = Main.rand.Next(42, 84),
+				scale = mulScale,
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) },
+			};
+			Ins.VFXManager.Add(blood);
+		}
+		for (int g = 0; g < 1; g++)
+		{
+			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(2, 4)).RotatedByRandom(MathHelper.TwoPi);
+			var blood = new JellyBallGelSplash
+			{
+				velocity = afterVelocity,
+				Active = true,
+				Visible = true,
+				position = NPC.Center + new Vector2(Main.rand.NextFloat(-200f, 200f) * NPC.scale, 0).RotatedByRandom(6.283) - afterVelocity,
+				maxTime = Main.rand.Next(32, 94),
+				scale = Main.rand.NextFloat(6f, 24f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 },
+			};
+			Ins.VFXManager.Add(blood);
+		}
+
+		if (NPC.life <= 0)
+		{
+			for (int i = 0; i < 120; i++)
+			{
+				Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<JellyBallGel>());
+				d.scale *= Main.rand.NextFloat(0.7f, 1.4f);
+				d.velocity = new Vector2(Main.rand.NextFloat(2, 36f), 0).RotatedByRandom(MathHelper.TwoPi);
+			}
+			for (int i = 0; i < 40; i++)
+			{
+				Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<JellyBallSpark>());
+				d.velocity = new Vector2(Main.rand.NextFloat(2, 36f), 0).RotatedByRandom(MathHelper.TwoPi);
+			}
+			for (int g = 0; g < 320; g++)
+			{
+				Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(2, 240)).RotatedByRandom(MathHelper.TwoPi);
+				float mulScale = Main.rand.NextFloat(6f, 12f);
+				var blood = new JellyBallGelDrop
+				{
+					velocity = afterVelocity / mulScale,
+					Active = true,
+					Visible = true,
+					position = NPC.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
+					maxTime = Main.rand.Next(42, 84),
+					scale = mulScale,
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) },
+				};
+				Ins.VFXManager.Add(blood);
+			}
+			for (int g = 0; g < 80; g++)
+			{
+				Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(2, 16)).RotatedByRandom(MathHelper.TwoPi);
+				var blood = new JellyBallGelSplash
+				{
+					velocity = afterVelocity,
+					Active = true,
+					Visible = true,
+					position = NPC.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - afterVelocity,
+					maxTime = Main.rand.Next(32, 94),
+					scale = Main.rand.NextFloat(6f, 24f),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 },
+				};
+				Ins.VFXManager.Add(blood);
+			}
+			float scaleGore = 1;
+			for (int i = 0; i < 4; i++)
+			{
+				Vector2 v0 = new Vector2(0, Main.rand.NextFloat(6, 12f)).RotatedByRandom(MathHelper.TwoPi);
+				int type = ModContent.Find<ModGore>("Everglow/KingJellyBall_gore" + i).Type;
+				Gore.NewGore(NPC.GetSource_Death(), NPC.Center, v0, type, scaleGore);
+			}
+			for (int i = 0; i < 4; i++)
+			{
+				Vector2 v0 = new Vector2(0, Main.rand.NextFloat(6, 18f)).RotatedByRandom(MathHelper.TwoPi);
+				int type = ModContent.Find<ModGore>("Everglow/KingJellyBall_gore4").Type;
+				Gore.NewGore(NPC.GetSource_Death(), NPC.Center, v0, type, scaleGore);
+				for (int j = 0; j < 3; j++)
+				{
+					v0 = new Vector2(0, Main.rand.NextFloat(2, 7f + j * 3)).RotatedByRandom(MathHelper.TwoPi);
+					type = ModContent.Find<ModGore>("Everglow/KingJellyBall_gore5").Type;
+					Gore.NewGore(NPC.GetSource_Death(), NPC.Center, v0, type, scaleGore);
+					v0 = new Vector2(0, Main.rand.NextFloat(2, 7f + j * 3)).RotatedByRandom(MathHelper.TwoPi);
+					type = ModContent.Find<ModGore>("Everglow/KingJellyBall_gore6").Type;
+					Gore.NewGore(NPC.GetSource_Death(), NPC.Center, v0, type, scaleGore);
+					v0 = new Vector2(0, Main.rand.NextFloat(2, 7f + j * 3)).RotatedByRandom(MathHelper.TwoPi);
+					type = ModContent.Find<ModGore>("Everglow/KingJellyBall_gore7").Type;
+					Gore.NewGore(NPC.GetSource_Death(), NPC.Center, v0, type, scaleGore);
+				}
+			}
+			for (int i = 0; i < 35; i++)
+			{
+				var dustVFX = new JellyBallSparkElectricity
+				{
+					velocity = new Vector2(0, Main.rand.NextFloat(3, 44)).RotatedBy(Main.rand.NextFloat(MathHelper.TwoPi)),
+					Active = true,
+					Visible = true,
+					position = NPC.Center,
+					maxTime = Main.rand.Next(20, 1190),
+					scale = Main.rand.Next(4, 16),
+					ai = new float[] { Main.rand.NextFloat(1f, 8f), 0 },
+				};
+				Ins.VFXManager.Add(dustVFX);
+			}
+		}
 		base.HitEffect(hit);
 	}
 
 	public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
 	{
-		NPC.StrikeNPC((int)(NPC.life * 0.012f), 0, Main.rand.NextFloat(-2, 2) > 0 ? -1 : 1);
+		if (NPC.life > NPC.lifeMax * 0.5f)
+		{
+			NPC.StrikeNPC((int)(NPC.life * 0.012f), 0, Main.rand.NextFloat(-2, 2) > 0 ? -1 : 1);
+		}
+		else
+		{
+			modifiers.FinalDamage *= 2.1f;
+		}
 		base.ModifyHitPlayer(target, ref modifiers);
 	}
 

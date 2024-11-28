@@ -21,6 +21,7 @@ public class LightBeamStaff : ModItem
 		Item.UseSound = SoundID.Item12;
 		Item.autoReuse = true;
 		Item.noUseGraphic = true;
+		Item.noMelee = true;
 		Item.mana = 5;
 
 		Item.value = ItemRarityID.Green;

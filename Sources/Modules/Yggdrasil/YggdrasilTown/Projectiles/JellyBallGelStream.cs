@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Weapons;
+using Everglow.Yggdrasil.YggdrasilTown.Buffs;
 using Everglow.Yggdrasil.YggdrasilTown.NPCs;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
@@ -76,7 +77,7 @@ public class JellyBallGelStream : TrailingProjectile
 			Ins.VFXManager.Add(blood);
 		}
 		NPC.NewNPCDirect(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.oldVelocity, ModContent.NPCType<JellyBall>());
-		SoundEngine.PlaySound(SoundID.NPCHit2.WithVolume(1f), Projectile.Center);
+		SoundEngine.PlaySound(SoundID.Item127.WithVolume(1f), Projectile.Center);
 		base.KillMainStructure();
 	}
 
@@ -86,6 +87,16 @@ public class JellyBallGelStream : TrailingProjectile
 		{
 			KillMainStructure();
 		}
+		int maxTime = 60;
+		if (Main.expertMode)
+		{
+			maxTime = 120;
+		}
+		if (Main.masterMode)
+		{
+			maxTime = 150;
+		}
+		target.AddBuff(ModContent.BuffType<JellyBallStick>(), maxTime);
 	}
 
 	public void GenerateSmog(int Frequency)

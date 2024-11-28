@@ -16,6 +16,7 @@ public class LightBeamStaff_proj : HandholdProjectile, IWarpProjectile
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 5;
 		Projectile.ArmorPenetration = 45;
+		Projectile.friendly = false;
 		base.SetDef();
 	}
 
