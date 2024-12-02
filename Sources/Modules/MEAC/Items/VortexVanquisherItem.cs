@@ -1,7 +1,6 @@
 using Everglow.IIID.Projectiles.PlanetBefall;
 using Everglow.MEAC.NonTrueMeleeProj;
 using Everglow.MEAC.Projectiles;
-using Everglow.Myth.TheFirefly.Items;
 using ReLogic.Graphics;
 using Terraria.GameContent;
 
@@ -28,38 +27,39 @@ public class VortexVanquisherItem : ModItem
 		Item.value = 648000;
 	}
 
-	private int CoolTimeForE = 0;
-	private int CoolTimeForQ = 0;
+	private int coolTimeForE = 0;
+	private int coolTimeForQ = 0;
+
 	public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
 	{
 		var slotSize = new Vector2(42f, 42f);
 		position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
 		Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f;
-		Texture2D RArr1 = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/Post").Value;
-		Texture2D RArr2 = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/PlanetBeFall").Value;
+		Texture2D vortexE = ModAsset.Post_png.Value;
+		Texture2D vortexQ = ModAsset.PlanetBeFall.Value;
 		if (!Main.gamePaused)
 		{
-			if (CoolTimeForE > 0)
+			if (coolTimeForE > 0)
 			{
-				CoolTimeForE--;
-				spriteBatch.Draw(RArr, drawPos + new Vector2(6.23f) * scale + new Vector2(0, 0), null, new Color(0, 0, 0, 255), 0f, RArr.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
-				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (CoolTimeForE / 60f).ToString("#.#"), drawPos + new Vector2(6.23f) * scale, Color.White, 0f, Vector2.Zero, scale * 1.91f, SpriteEffects.None, 0);
+				coolTimeForE--;
+				spriteBatch.Draw(vortexE, drawPos + new Vector2(6.23f) * scale + new Vector2(0, 0), null, new Color(0, 0, 0, 255), 0f, vortexE.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (coolTimeForE / 60f).ToString("#.#"), drawPos + new Vector2(6.23f) * scale, Color.White, 0f, Vector2.Zero, scale * 1.91f, SpriteEffects.None, 0);
 			}
 			else
 			{
-				CoolTimeForE = 0;
-				spriteBatch.Draw(RArr, drawPos + new Vector2(6.23f) * scale + new Vector2(0, 0), null, new Color(155, 155, 155, 50), 0f, RArr.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+				coolTimeForE = 0;
+				spriteBatch.Draw(vortexE, drawPos + new Vector2(6.23f) * scale + new Vector2(0, 0), null, new Color(155, 155, 155, 50), 0f, vortexE.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
 			}
-			if (CoolTimeForQ > 0)
+			if (coolTimeForQ > 0)
 			{
-				CoolTimeForQ--;
-				spriteBatch.Draw(RArr2, position + new Vector2(0, slotSize.Y * Main.inventoryScale / 2f), null, new Color(0, 0, 0, 255), 0f, RArr2.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
-				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (CoolTimeForQ / 60f).ToString("#.#"), drawPos + new Vector2(22.91f) * scale + new Vector2(-30, 0), Color.White, 0f, Vector2.Zero, scale * 1.91f, SpriteEffects.None, 0);
+				coolTimeForQ--;
+				spriteBatch.Draw(vortexQ, position + new Vector2(0, slotSize.Y * Main.inventoryScale / 2f), null, new Color(0, 0, 0, 255), 0f, vortexQ.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (coolTimeForQ / 60f).ToString("#.#"), drawPos + new Vector2(22.91f) * scale + new Vector2(-30, 0), Color.White, 0f, Vector2.Zero, scale * 1.91f, SpriteEffects.None, 0);
 			}
 			else
 			{
-				CoolTimeForQ = 0;
-				spriteBatch.Draw(RArr2, position + new Vector2(0, slotSize.Y * Main.inventoryScale / 2f), null, new Color(155, 155, 155, 50), 0f, RArr2.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+				coolTimeForQ = 0;
+				spriteBatch.Draw(vortexQ, position + new Vector2(0, slotSize.Y * Main.inventoryScale / 2f), null, new Color(155, 155, 155, 50), 0f, vortexQ.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
 			}
 		}
 	}
@@ -68,12 +68,13 @@ public class VortexVanquisherItem : ModItem
 	{
 		if (base.CanUseItem(player))
 		{
-
 			return false;
 		}
 		return base.CanUseItem(player);
 	}
+
 	internal bool LeftClick = false;
+
 	public override void HoldItem(Player player)
 	{
 		if (player.ownedProjectileCounts[ModContent.ProjectileType<VortexVanquisher>()] + player.ownedProjectileCounts[ModContent.ProjectileType<VortexVanquisherThump>()] < 1)
@@ -82,17 +83,16 @@ public class VortexVanquisherItem : ModItem
 			{
 				if (Main.mouseMiddle && Main.mouseMiddleRelease)
 				{
-					if (CoolTimeForQ > 0)
+					if (coolTimeForQ > 0)
 					{
 						return;
 					}
-					CoolTimeForQ = 1440;
+					coolTimeForQ = 1440;
 					if (player.name == "Omni")
 					{
-						CoolTimeForQ = 10;
+						coolTimeForQ = 10;
 					}
 					Projectile PlanetBeFall = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), /*Main.MouseWorld*/new Vector2(player.Center.X, Main.MouseWorld.Y - 1500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), Item.damage * 27, Item.knockBack * 10, player.whoAmI);
-
 				}
 				if (player.altFunctionUse != 2)
 				{
@@ -104,14 +104,14 @@ public class VortexVanquisherItem : ModItem
 				}
 				else
 				{
-					if (CoolTimeForE > 0)
+					if (coolTimeForE > 0)
 					{
 						return;
 					}
-					CoolTimeForE = 720;
+					coolTimeForE = 720;
 					if (player.name == "Omni")
 					{
-						CoolTimeForE = 10;
+						coolTimeForE = 10;
 					}
 					bool HasProj = false;
 					foreach (Projectile proj in Main.projectile)
@@ -119,7 +119,7 @@ public class VortexVanquisherItem : ModItem
 						if (proj.owner == player.whoAmI && proj.type == ModContent.ProjectileType<GoldShield>() && proj.active)
 						{
 							proj.timeLeft = 1200;
-							proj.ai[1] = player.statLifeMax * 0.6f;//盾量
+							proj.ai[1] = player.statLifeMax * 0.6f; // 盾量
 							HasProj = true;
 						}
 						if (proj.owner == player.whoAmI && proj.type == ModContent.ProjectileType<GoldShield_backTextureSubProj>() && proj.active)
@@ -130,7 +130,7 @@ public class VortexVanquisherItem : ModItem
 					if (!HasProj)
 					{
 						Projectile proj2 = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<GoldShield>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
-						proj2.ai[1] = player.statLifeMax * 0.6f;//盾量
+						proj2.ai[1] = player.statLifeMax * 0.6f; // 盾量
 						Projectile subProj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.zeroVector, ModContent.ProjectileType<GoldShield_backTextureSubProj>(), 0, 0, player.whoAmI);
 						if (subProj != null)
 						{
@@ -155,8 +155,7 @@ public class VortexVanquisherItem : ModItem
 						return;
 					}
 
-
-					Vector2 TotalVector = Vector2.Zero;//合向量
+					Vector2 TotalVector = Vector2.Zero; // 合向量
 					int TCount = 0;
 					for (int a = 0; a < 12; a++)
 					{
@@ -196,28 +195,31 @@ public class VortexVanquisherItem : ModItem
 			}
 			if (LeftClick)
 			{
-				ClickTime++;
-				if (ClickTime > 30)
+				clickTime++;
+				if (clickTime > 30)
 				{
 					int playerdir = Main.MouseWorld.X > player.Center.X ? 1 : -1;
 					player.direction = playerdir;
-					Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, new Vector2(Math.Sign(Main.MouseWorld.X - player.Center.X), 0), ModContent.ProjectileType<VortexVanquisherThump>(), Item.damage, 0, player.whoAmI); //Original: Item.damage * 6
-					ClickTime = 0;
+					Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, new Vector2(Math.Sign(Main.MouseWorld.X - player.Center.X), 0), ModContent.ProjectileType<VortexVanquisherThump>(), Item.damage, 0, player.whoAmI); // Original: Item.damage * 6
+					clickTime = 0;
 				}
 			}
 		}
 		else
 		{
-			ClickTime = 0;
+			clickTime = 0;
 		}
 		LeftClick = Main.mouseLeft;
 		base.HoldItem(player);
 	}
-	int ClickTime = 0;
+
+	private int clickTime = 0;
+
 	public override bool AltFunctionUse(Player player)
 	{
 		return true;
 	}
+
 	public override void AddRecipes()
 	{
 		Recipe recipe = CreateRecipe();
@@ -230,4 +232,3 @@ public class VortexVanquisherItem : ModItem
 		recipe.Register();
 	}
 }
-
