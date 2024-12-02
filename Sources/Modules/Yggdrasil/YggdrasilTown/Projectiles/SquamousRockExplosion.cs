@@ -17,6 +17,7 @@ public class SquamousRockExplosion : ModProjectile, IWarpProjectile
 		Projectile.timeLeft = 200;
 		Projectile.tileCollide = false;
 		Projectile.extraUpdates = 6;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 	}
 
 	public override void AI()

@@ -69,6 +69,11 @@ public class JellyBallLifeAbsorb : ModProjectile
 					OwnerBoss.life = OwnerBoss.lifeMax;
 				}
 			}
+			if(Main.expertMode)
+			{
+				NPC largeJelly = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), OwnerBoss.Center, ModContent.NPCType<GiantJellyBall>(), default, default, 127);
+				largeJelly.velocity = new Vector2(16, 0).RotatedBy(Main.rand.NextFloat(MathHelper.TwoPi));
+			}
 			KingJellyBall kingJellyBall = OwnerBoss.ModNPC as KingJellyBall;
 			if (kingJellyBall != null)
 			{

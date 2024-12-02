@@ -2,8 +2,6 @@ using Everglow.Commons.Enums;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
-using Terraria;
-using Terraria.Localization;
 
 namespace Everglow.Commons.TileHelper;
 
@@ -41,6 +39,8 @@ public class TileDataReaderSystem : Visual
 	public Texture2D Texture;
 	public Point FixPoint;
 	public static List<int> OwnerPlayerWhoAmI = new List<int>();
+	public List<Point> ContinueTiles = new List<Point>();
+	public Point OldTilePos = new Point(0, 0);
 
 	public override void OnSpawn()
 	{
@@ -69,6 +69,11 @@ public class TileDataReaderSystem : Visual
 			OwnerPlayerWhoAmI.Remove(player.whoAmI);
 			return;
 		}
+		if(OldTilePos != new Point(i, j))
+		{
+			UpdateContinueTiles(i, j);
+		}
+		OldTilePos = new Point(i, j);
 		base.Update();
 	}
 
@@ -90,27 +95,91 @@ public class TileDataReaderSystem : Visual
 		Ins.Batch.BindTexture<Vertex2D>(Texture);
 		int colorType = ItemRarityID.White;
 		Color drawColor = Color.White;
-		if(!tile.HasTile)
+		if (!tile.HasTile)
 		{
 			colorType = ItemRarityID.Gray;
 			drawColor = Color.Gray;
 		}
 		DrawBlockBound(i, j, drawColor);
+		if(ContinueTiles.Count < 514)
+		{
+			Color drawContinueColor = new Color(0.12f, 0.24f, 0.4f, 0);
+			foreach (Point point in ContinueTiles)
+			{
+				DrawBlockBound(point.X, point.Y, drawContinueColor);
+			}
+		}
 		string datas = GetDatas(i, j);
 		Main.instance.MouseText(datas, colorType);
 	}
 
 	public string GetDatas(int i, int j)
 	{
-		Tile tile = Main.tile[i, j];
-		string datas = "HasTile: " + tile.HasTile;
+		Tile tile = SafeGetTile(i, j);
+
+		string datas = "\nCoordinate: [" + i + ", " + j + "]";
+		datas += "\nHasTile: " + tile.HasTile;
 		datas += "\nType :" + tile.TileType;
-		if(tile.HasTile)
+		if (tile.HasTile)
 		{
-			datas += "\nCoordinate: [" + i + ", " + j + "]";
 			datas += "\nFrame : [" + tile.TileFrameX + ", " + tile.TileFrameY + "]";
+			if(ContinueTiles.Count < 512)
+			{
+				datas += "\nContinue Tiles : " + ContinueTiles.Count;
+			}
 		}
 		return datas;
+	}
+
+	/// <summary>
+	/// When there is an isolated tile area(<=512 tiles), you can check the number of continue tiles.
+	/// </summary>
+	/// <returns></returns>
+	public void UpdateContinueTiles(int i, int j)
+	{
+		ContinueTiles = new List<Point>();
+		CheckTileContinue(i, j);
+	}
+
+	public void CheckHasTileAndAddToContinueTile(int i, int j)
+	{
+		Tile tile = SafeGetTile(i, j);
+		if (tile.HasTile)
+		{
+			if (!ContinueTiles.Contains(new Point(i, j)) && ContinueTiles.Count < 512)
+			{
+				ContinueTiles.Add(new Point(i, j));
+				CheckTileContinue(i, j);
+			}
+		}
+	}
+
+	public void CheckTileContinue(int i, int j)
+	{
+		Tile tile = SafeGetTile(i, j);
+		if(!tile.HasTile)
+		{
+			return;
+		}
+		if (ContinueTiles.Count < 512)
+		{
+			CheckHasTileAndAddToContinueTile(i, j);
+			switch((i + j) % 2)
+			{
+				case 0:
+					CheckHasTileAndAddToContinueTile(i, j - 1);
+					CheckHasTileAndAddToContinueTile(i, j + 1);
+					CheckHasTileAndAddToContinueTile(i - 1, j);
+					CheckHasTileAndAddToContinueTile(i + 1, j);
+					break;
+				case 1:
+					CheckHasTileAndAddToContinueTile(i, j - 1);
+					CheckHasTileAndAddToContinueTile(i, j + 1);
+					CheckHasTileAndAddToContinueTile(i + 1, j);
+					CheckHasTileAndAddToContinueTile(i - 1, j);
+					break;
+			}
+		}
 	}
 
 	public void DrawBlockBound(int i, int j, Color color)
@@ -128,5 +197,10 @@ public class TileDataReaderSystem : Visual
 		};
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+	}
+
+	public static Tile SafeGetTile(int i, int j)
+	{
+		return Main.tile[Math.Clamp(i, 20, Main.maxTilesX - 20), Math.Clamp(j, 20, Main.maxTilesY - 20)];
 	}
 }

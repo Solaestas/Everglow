@@ -75,6 +75,7 @@ public class NormalCableCar : DBlock
 				player.Center = position + size * 0.5f + new Vector2(0, 60);
 			}
 		}
+		Lighting.AddLight(position + size * 0.5f, new Vector3(1f, 0.9f, 0.6f));
 		base.AI();
 	}
 
@@ -182,7 +183,7 @@ public class NormalCableCar : DBlock
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.CurrentTechnique.Passes[0].Apply();
-		Texture2D tuskWall = ModAsset.NormalCableCar.Value;
+		Texture2D cableCar = ModAsset.NormalCableCar.Value;
 		Vector2 drawPos = position + new Vector2(size.X * 0.5f, 8);
 
 		var bars = new List<Vertex2D>();
@@ -201,8 +202,21 @@ public class NormalCableCar : DBlock
 		AddVertex(bars, drawPos + new Vector2(-43, 132), new Vector3(0f, 1, 0));
 		AddVertex(bars, drawPos + new Vector2(43, 16), new Vector3(1f, 18 / 134f, 0));
 		AddVertex(bars, drawPos + new Vector2(43, 132), new Vector3(1f, 1, 0));
-		Main.graphics.graphicsDevice.Textures[0] = tuskWall;
+		Main.graphics.graphicsDevice.Textures[0] = cableCar;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
+
+		//glow
+		Texture2D cableCarGlow = ModAsset.NormalCableCar_glow.Value;
+		Color glowColor = new Color(1f, 1f, 1f, 0) * 0.6f;
+		bars = new List<Vertex2D>();
+		bars.Add(drawPos + new Vector2(-43, 16), glowColor, new Vector3(0f, 18 / 134f, 0));
+		bars.Add(drawPos + new Vector2(43, 16), glowColor, new Vector3(1f, 18 / 134f, 0));
+
+		bars.Add(drawPos + new Vector2(-43, 132), glowColor, new Vector3(0f, 1f, 0));
+		bars.Add(drawPos + new Vector2(43, 132), glowColor, new Vector3(1f, 1f, 0));
+
+		Main.graphics.graphicsDevice.Textures[0] = cableCarGlow;
+		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}

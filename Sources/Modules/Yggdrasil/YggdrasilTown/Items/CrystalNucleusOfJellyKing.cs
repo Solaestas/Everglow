@@ -7,5 +7,7 @@ public class CrystalNucleusOfJellyKing : ModItem
 		Item.width = 46;
 		Item.height = 52;
 		Item.rare = ItemRarityID.White;
+		Item.value = 5000;
+		Item.maxStack = Item.CommonMaxStack;
 	}
 }

@@ -23,13 +23,13 @@ public class TownSteelBrick : ModTile
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
-		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+		var offsetScreen = new Vector2(Main.offScreenRange);
 		if (Main.drawToScreen)
 		{
-			zero = Vector2.Zero;
+			offsetScreen = Vector2.Zero;
 		}
 		Texture2D tex = ModAsset.TownSteelBrick_glow.Value;
-		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(155, 155, 155, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
+		spriteBatch.Draw(tex, new Point(i, j).ToWorldCoordinates() - Main.screenPosition + offsetScreen, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(155, 155, 155, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 		base.PostDraw(i, j, spriteBatch);
 	}
 }

@@ -17,6 +17,7 @@ public class SquamousRockProj : ModProjectile
 		Projectile.timeLeft = 3600;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 	}
 
 	internal int TimeTokill = -1;

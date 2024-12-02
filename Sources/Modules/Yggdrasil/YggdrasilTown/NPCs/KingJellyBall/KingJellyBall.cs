@@ -1,8 +1,10 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs.KingJellyBall;
 
@@ -45,9 +47,10 @@ public class KingJellyBall : ModNPC
 		NPC.HitSound = SoundID.NPCHit3;
 		NPC.DeathSound = SoundID.NPCDeath3;
 		NPC.noGravity = true;
-		NPC.noTileCollide = false;
+		NPC.noTileCollide = true;
 		NPC.knockBackResist = 0.02f;
-		NPC.value = 90;
+		NPC.value = 10960;
+		NPC.boss = true;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -212,12 +215,12 @@ public class KingJellyBall : ModNPC
 
 	public override bool CheckActive()
 	{
-		if(NPC.target > 0)
+		if (NPC.target > 0)
 		{
 			Player player = Main.player[NPC.target];
-			if(player.active && !player.dead)
+			if (player.active && !player.dead)
 			{
-				if((player.Center - NPC.Center).Length() < 8000)
+				if ((player.Center - NPC.Center).Length() < 8000)
 				{
 					return false;
 				}
@@ -375,11 +378,11 @@ public class KingJellyBall : ModNPC
 		Player player = Main.player[NPC.target];
 		NPC.velocity *= 0.95f;
 		int interval = 72;
-		if(Main.expertMode)
+		if (Main.expertMode)
 		{
 			interval = 60;
 		}
-		if(Main.masterMode)
+		if (Main.masterMode)
 		{
 			interval = 48;
 		}
@@ -413,7 +416,7 @@ public class KingJellyBall : ModNPC
 		Player player = Main.player[NPC.target];
 		Vector2 toPlayer = player.Center - NPC.Center;
 		float speedLimit = 4f;
-		if(NPC.life < NPC.lifeMax * 0.5f)
+		if (NPC.life < NPC.lifeMax * 0.5f)
 		{
 			speedLimit = 15f;
 		}
@@ -509,6 +512,23 @@ public class KingJellyBall : ModNPC
 		{
 			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 60f).RotatedByRandom(MathHelper.TwoPi), new Vector2(0, -Main.rand.NextFloat(4f, 8f)).RotatedBy(Main.rand.NextFloat(-1.2f, 1.2f)), ModContent.ProjectileType<JellyBallGelStream>(), (int)(NPC.damage * 0.375), 2, NPC.target);
 			TotalDamageTakeIn -= thresholdDamage;
+		}
+		if (NPC.life < NPC.lifeMax * 0.5 && NPC.life + hit.Damage >= NPC.lifeMax * 0.5)
+		{
+			int maxJellyBall = 2;
+			if (Main.expertMode)
+			{
+				maxJellyBall = 4;
+			}
+			if (Main.masterMode)
+			{
+				maxJellyBall = 8;
+			}
+			for (int i = 0; i < maxJellyBall; i++)
+			{
+				NPC largeJelly = NPC.NewNPCDirect(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<GiantJellyBall>(), default, default, 127);
+				largeJelly.velocity = new Vector2(16, 0).RotatedBy((i / (float)maxJellyBall) * MathHelper.TwoPi);
+			}
 		}
 		for (int g = 0; g < 3; g++)
 		{
@@ -801,6 +821,7 @@ public class KingJellyBall : ModNPC
 
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		// TODO 掉落物
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CrystalNucleusOfJellyKing>(), 1, 4, 6));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<JellyBallCube>(), 1, 24, 40));
 	}
 }

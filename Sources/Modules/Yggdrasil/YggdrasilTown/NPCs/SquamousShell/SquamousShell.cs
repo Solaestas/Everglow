@@ -9,9 +9,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Rock;
 using Everglow.Yggdrasil.YggdrasilTown.Items.BossDrop;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
-using Everglow.Yggdrasil.YggdrasilTown.Tiles.BossDrops;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using SteelSeries.GameSense;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
@@ -31,28 +29,33 @@ public class SquamousShell : ModNPC
 		NPC.lavaImmune = true;
 		NPC.noGravity = true;
 		NPC.noTileCollide = false;
+		NPC.boss = true;
 		NPC.HitSound = SoundID.NPCHit1;
 		NPC.DeathSound = SoundID.NPCDeath1;
-		NPC.value = 20000;
+		NPC.value = 32000;
 		NPC.localAI[0] = 0;
-		NPC.damage = 30;
+		NPC.damage = 48;
 		NPC.defense = 15;
 		NPC.lifeMax = 3300;
 		if (Main.expertMode)
 		{
-			NPC.damage = 42;
+			NPC.damage = 65;
 			NPC.defense = 21;
 			NPC.lifeMax = 4650;
+			NPC.value = 54000;
 		}
 		if (Main.masterMode)
 		{
-			NPC.damage = 57;
+			NPC.damage = 71;
 			NPC.defense = 24;
 			NPC.lifeMax = 6130;
+			NPC.value = 81000;
 		}
 	}
 
 	public bool Flying = false;
+	public bool Smashing = false;
+	public bool Dashing = false;
 	public float PhantomValue = 0f;
 	public Skeleton2D SquamousShellSkeleton;
 	public SkeletonRenderer skeletonRenderer = new SkeletonRenderer();
@@ -197,6 +200,7 @@ public class SquamousShell : ModNPC
 		while (!NPC.collideX || NPC.velocity.Y != 0)
 		{
 			// 音效
+			Dashing = true;
 			deathTimer++;
 			soundTimer += Math.Clamp(Math.Abs(NPC.velocity.X) / 60f, 0f, 1f);
 			if (soundTimer > 1)
@@ -268,6 +272,7 @@ public class SquamousShell : ModNPC
 			}
 			yield return new SkipThisFrame();
 		}
+		Dashing = false;
 
 		// 这里需要一个震屏
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolume(0.6f), NPC.Center);
@@ -300,8 +305,31 @@ public class SquamousShell : ModNPC
 			NPC.position += new Vector2(0, -MathF.Sqrt(Main.rand.NextFloat(1f)) * 4).RotatedByRandom(6.283);
 			Vector2 vel2 = vel.RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f));
 			Vector2 pos = NPC.Center + new Vector2(0, -MathF.Sqrt(Main.rand.NextFloat(1f)) * 40).RotatedBy(Main.rand.NextFloat(-1.5f, 1.5f));
-			Projectile.NewProjectile(NPC.GetSource_FromAI(), pos, vel2, ModContent.ProjectileType<SquamousRockProj_small>(), 20, 3, NPC.whoAmI);
+			SoundEngine.PlaySound(SoundID.Item152, NPC.Center);
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), pos, vel2, ModContent.ProjectileType<SquamousRockProj_small>(), (int)(NPC.damage * 0.35f), 3, NPC.target);
 			yield return new SkipThisFrame();
+		}
+		for (int k = 0; k < 30; k++)
+		{
+			if (!Collision.SolidCollision(NPC.Bottom + new Vector2(0, 2), 2, 2))
+			{
+				NPC.position.Y += 6;
+			}
+			else
+			{
+				break;
+			}
+		}
+		for (int k = 0; k < 30; k++)
+		{
+			if (Collision.SolidCollision(NPC.Bottom + new Vector2(0, -2), 2, 2))
+			{
+				NPC.position.Y -= 6;
+			}
+			else
+			{
+				break;
+			}
 		}
 		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
 	}
@@ -320,7 +348,8 @@ public class SquamousShell : ModNPC
 			NPC.position += new Vector2(0, -MathF.Sqrt(Main.rand.NextFloat(1f)) * 4).RotatedByRandom(6.283);
 			Vector2 vel2 = vel.RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f));
 			Vector2 pos = NPC.Center + new Vector2(0, -MathF.Sqrt(Main.rand.NextFloat(1f)) * 40).RotatedBy(Main.rand.NextFloat(-1.5f, 1.5f));
-			Projectile.NewProjectile(NPC.GetSource_FromAI(), pos, vel2, ModContent.ProjectileType<SquamousRockProj>(), 40, 3, 0);
+			SoundEngine.PlaySound(SoundID.DD2_JavelinThrowersAttack, NPC.Center);
+			Projectile.NewProjectile(NPC.GetSource_FromAI(), pos, vel2, ModContent.ProjectileType<SquamousRockProj>(), (int)(NPC.damage * 0.54f), 3, 0);
 			yield return new WaitForFrames(5);
 		}
 		_coroutineManager.StartCoroutine(new Coroutine(NextAttack(NPC.direction)));
@@ -361,7 +390,7 @@ public class SquamousShell : ModNPC
 		// 动画设置
 		SquamousShellSkeleton.AnimationState.SetAnimation(0, "pushBall", true);
 		NPC.velocity *= 0;
-		Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction * 4, 0), ModContent.ProjectileType<Projectiles.SquamousRollingStone>(), 60, 6, 0, direction);
+		Projectile rock = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction * 4, 0), ModContent.ProjectileType<Projectiles.SquamousRollingStone>(), (int)(NPC.damage * 0.6f), 6, 0, direction);
 		rock.scale = 0;
 		rock.width = 0;
 		rock.height = 0;
@@ -518,6 +547,7 @@ public class SquamousShell : ModNPC
 			SquamousShellSkeleton.AnimationState.Update(1 / 100f);
 			NPC.velocity.X = 0;
 			NPC.velocity.Y = 40;
+			Smashing = true;
 			if (NPC.collideY)
 			{
 				int count = 0;
@@ -581,6 +611,7 @@ public class SquamousShell : ModNPC
 			Dust dust = Dust.NewDustDirect(NPC.Center + new Vector2(-4 + (x - 20) * 10, -4), 0, 0, ModContent.DustType<SquamousShellStone_dark>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
 			dust.velocity = new Vector2((x - 20) * 0.15f, -Main.rand.NextFloat(6f, 13f) * (MathF.Sin(x / 40 * MathF.PI) + 1.5f));
 		}
+		Smashing = false;
 		SquamousShellSkeleton.AnimationState.SetAnimation(0, "drop", false);
 		for (int i = 0; i < 10; i++)
 		{
@@ -687,7 +718,7 @@ public class SquamousShell : ModNPC
 				{
 					projDir = -1;
 				}
-				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Normalize(toPlayer).RotatedBy(-0.05f) * 4f, ModContent.ProjectileType<YggdrasilMoonBlade>(), 40, 2, player.whoAmI, 10, projDir);
+				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Normalize(toPlayer).RotatedBy(-0.05f) * 4f, ModContent.ProjectileType<YggdrasilMoonBlade>(), (int)(NPC.damage * 1.2f), 2, player.whoAmI, 10, projDir);
 			}
 			if (x == 13)
 			{
@@ -701,9 +732,30 @@ public class SquamousShell : ModNPC
 				{
 					projDir = -1;
 				}
-				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Normalize(toPlayer).RotatedBy(0.03f) * 4.1f, ModContent.ProjectileType<YggdrasilMoonBlade>(), 40, 2f, player.whoAmI, 0, projDir);
+				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Normalize(toPlayer).RotatedBy(0.03f) * 4.1f, ModContent.ProjectileType<YggdrasilMoonBlade>(), (int)(NPC.damage * 1.2f), 2f, player.whoAmI, 0, projDir);
 			}
 			yield return new SkipThisFrame();
+		}
+		SquamousShellSkeleton.AnimationState.SetAnimation(0, "fly", false);
+		Flying = true;
+		for (int x = 0; x < 120; x++)
+		{
+			SquamousShellSkeleton.AnimationState.Update(1 / 100f);
+			Vector2 targetPoint = new Vector2(0, -280) + player.Center;
+			Vector2 toTarget = targetPoint - NPC.Center;
+			if (toTarget.Length() > 20)
+			{
+				NPC.velocity = NPC.velocity * 0.9f + Vector2.Normalize(toTarget) * 14f * 0.1f;
+			}
+			else
+			{
+				break;
+			}
+			yield return new SkipThisFrame();
+		}
+		for (int x = 0; x < 10; x++)
+		{
+			NPC.velocity *= 0.74f;
 		}
 
 		// 落地
@@ -784,7 +836,7 @@ public class SquamousShell : ModNPC
 		for (int x = 0; x < 30; x++)
 		{
 			SquamousShellSkeleton.AnimationState.Update(1 / 100f);
-			Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, -15 * Main.rand.NextFloat(0.75f, 1.25f)).RotatedBy(Main.rand.NextFloat(-1.5f, 1.5f)), ModContent.ProjectileType<SquamousAirProj>(), 16, 0, 0, player.whoAmI);
+			Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, -15 * Main.rand.NextFloat(0.75f, 1.25f)).RotatedBy(Main.rand.NextFloat(-1.5f, 1.5f)), ModContent.ProjectileType<SquamousAirProj>(), (int)(NPC.damage * 0.45f), 0, 0, player.whoAmI);
 			if (x % 20 == 0)
 			{
 				playerPos = player.Center;
@@ -881,7 +933,7 @@ public class SquamousShell : ModNPC
 			if (x % 20 == 0)
 			{
 				Vector2 toPlayer = playerPos - NPC.Center;
-				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -50).RotatedBy(x / 7f * Math.PI), Vector2.Normalize(toPlayer), ModContent.ProjectileType<SquamousRockSpike>(), 40, 2, 0, player.whoAmI);
+				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -50).RotatedBy(x / 7f * Math.PI), Vector2.Normalize(toPlayer), ModContent.ProjectileType<SquamousRockSpike>(), (int)(NPC.damage * 0.7f), 2, 0, player.whoAmI);
 			}
 			yield return new SkipThisFrame();
 		}
@@ -922,14 +974,18 @@ public class SquamousShell : ModNPC
 	/// <returns></returns>
 	public IEnumerator<ICoroutineInstruction> NextAttack(int direction)
 	{
+		if (Main.player[NPC.target].Center.X < NPC.Center.X)
+		{
+		}
+
+		// NPC.position.X += newDirection * 20;
+		float randAttack = Main.rand.NextFloat(18f);
+
 		int newDirection = 1;
 		if (Main.player[NPC.target].Center.X < NPC.Center.X)
 		{
 			newDirection = -1;
 		}
-
-		// NPC.position.X += newDirection * 20;
-		float randAttack = Main.rand.NextFloat(18f);
 		if (randAttack <= 4)
 		{
 			NPC.velocity.Y -= 16f;
@@ -949,11 +1005,25 @@ public class SquamousShell : ModNPC
 		}
 		if (randAttack > 10 && randAttack <= 12)
 		{
-			_coroutineManager.StartCoroutine(new Coroutine(ShootSmallRocks()));
+			if(Main.expertMode)
+			{
+				_coroutineManager.StartCoroutine(new Coroutine(ShootSmallRocks()));
+			}
+			else
+			{
+				_coroutineManager.StartCoroutine(new Coroutine(Rush(newDirection)));
+			}
 		}
 		if (randAttack > 12 && randAttack <= 14)
 		{
-			_coroutineManager.StartCoroutine(new Coroutine(ShootSmallRocks2()));
+			if (Main.expertMode)
+			{
+				_coroutineManager.StartCoroutine(new Coroutine(ShootSmallRocks2()));
+			}
+			else
+			{
+				_coroutineManager.StartCoroutine(new Coroutine(Rush(newDirection)));
+			}
 		}
 		if (randAttack > 14 && randAttack <= 16)
 		{
@@ -964,6 +1034,19 @@ public class SquamousShell : ModNPC
 			_coroutineManager.StartCoroutine(new Coroutine(FlyingRockTusk(newDirection)));
 		}
 		yield break;
+	}
+
+	public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
+	{
+		if (Dashing)
+		{
+			modifiers.FinalDamage *= 1.5f;
+		}
+		if (Smashing)
+		{
+			modifiers.FinalDamage *= 2.1f;
+		}
+		base.ModifyHitPlayer(target, ref modifiers);
 	}
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

@@ -76,7 +76,7 @@ public class JellyBallGelStream : TrailingProjectile
 			};
 			Ins.VFXManager.Add(blood);
 		}
-		NPC.NewNPCDirect(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.oldVelocity, ModContent.NPCType<JellyBall>());
+		NPC.NewNPCDirect(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.oldVelocity, ModContent.NPCType<JellyBall>(), default, 0, 127);
 		SoundEngine.PlaySound(SoundID.Item127.WithVolume(1f), Projectile.Center);
 		base.KillMainStructure();
 	}

@@ -14,6 +14,7 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 		Projectile.tileCollide = true;
 		Projectile.timeLeft = 300;
 		Projectile.aiStyle = -1;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 	}
 
 	public Vector2 startVelocity;
@@ -135,6 +136,19 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 		{
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
 		}
+	}
+
+	public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
+	{
+		if(Main.expertMode)
+		{
+			target.AddBuff(BuffID.BrokenArmor, 180);
+		}
+		if (Main.masterMode)
+		{
+			target.AddBuff(BuffID.BrokenArmor, 240);
+		}
+		base.ModifyHitPlayer(target, ref modifiers);
 	}
 
 	public override bool OnTileCollide(Vector2 oldVelocity)

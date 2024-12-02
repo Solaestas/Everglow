@@ -59,6 +59,7 @@ public class YggdrasilTownGeneration
 		Main.statusText = "Constructing The Yggdrasil Town Below...";
 		BuildTownBelow();
 		BuildStoneCageOfChallenges();
+		BuildJellyBallHotbed();
 
 		// Main.statusText = "Growing LampWoods...";
 		// BuildLampWoodLand();
@@ -548,7 +549,13 @@ public class YggdrasilTownGeneration
 		SmoothTile(40, Main.maxTilesY - 700, 1100, Main.maxTilesY - 50);
 	}
 
-	// 青缎矿化
+	/// <summary>
+	/// 青缎矿化
+	/// </summary>
+	/// <param name="leftX"></param>
+	/// <param name="upY"></param>
+	/// <param name="rightX"></param>
+	/// <param name="downY"></param>
 	public static void Minerization(int leftX, int upY, int rightX, int downY)
 	{
 		float area = (downY - upY) * (rightX - leftX) / 180000f;
@@ -980,6 +987,121 @@ public class YggdrasilTownGeneration
 			lastPosX = x;
 			lastPosY = y;
 		}
+	}
+
+	/// <summary>
+	/// 球冻温床
+	/// </summary>
+	public static void BuildJellyBallHotbed()
+	{
+		int upBound = Main.maxTilesY - 500;
+		int bottomBound = Main.maxTilesY - 40;
+		int leftBound = Main.maxTilesX - 350;
+		int rightBound = Main.maxTilesX;
+		Vector2 Center = new Vector2((leftBound + rightBound) / 2f, (upBound + bottomBound) / 2f - 120f);
+		float a = 150;
+		float b = 83;
+		for (int x = leftBound; x <= rightBound; x++)
+		{
+			for (int y = upBound; y <= bottomBound; y++)
+			{
+				Tile tile = SafeGetTile(x, y);
+				Vector2 toCenter = Center - new Vector2(x, y);
+				float r = a - b * MathF.Sin(toCenter.ToRotation());
+				toCenter.Y /= 1.2f;
+				float valueNoise = PerlinPixelG[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
+				float valueNoiseWall = CellPixel[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
+				float valueNoiseWallWood = PerlinPixelR[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
+				float valueNoiseSecretion = PerlinPixelB[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.6f) % 1024] / 255f;
+				float clearRange = 90f;
+				float boundThick = 60f;
+				if (toCenter.Length() > r)
+				{
+					valueNoise += 1;
+					valueNoiseSecretion += 1;
+				}
+				else if (toCenter.Length() > r - boundThick)
+				{
+					valueNoise += 1 + (toCenter.Length() - r) / boundThick;
+					valueNoiseSecretion += 1 + (toCenter.Length() - r) / boundThick;
+				}
+				else if(toCenter.Length() < clearRange)
+				{
+					valueNoise -= (clearRange - toCenter.Length()) / clearRange;
+					valueNoiseSecretion -= (clearRange - toCenter.Length()) / clearRange;
+				}
+				if (valueNoise < 0.6f)
+				{
+					tile.HasTile = false;
+				}
+				else if(valueNoise <= 1)
+				{
+					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+					tile.HasTile = true;
+				}
+				if (valueNoiseWall < 0.5f)
+				{
+					tile.wall = 0;
+				}
+				else if(valueNoise <= 1)
+				{
+					tile.wall = (ushort)ModContent.WallType<JellyBallSecretionWall>();
+				}
+				if (valueNoiseWallWood >= 0.5f && valueNoise <= 1)
+				{
+					tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+				}
+				if (valueNoiseSecretion >= 0.5f && !tile.HasTile && valueNoise <= 1)
+				{
+					tile.TileType = (ushort)ModContent.TileType<JellyBallSecretion>();
+					tile.HasTile = true;
+				}
+				float valueNoise2 = PerlinPixelG[x % 1024,y % 1024] / 255f;
+				if(y < upBound + 30)
+				{
+					valueNoise2 += (upBound + 30 - y) / 30f;
+				}
+				if (toCenter.Y > -120)
+				{
+					if(valueNoise > 1)
+					{
+						if (valueNoise2 < 0.5f)
+						{
+							if(!tile.HasTile)
+							{
+								tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+								tile.HasTile = true;
+							}
+						}
+						if (valueNoise2 < 0.45f)
+						{
+							if (tile.wall == 0)
+							{
+								tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for (int x = leftBound; x <= rightBound; x++)
+		{
+			for (int y = upBound; y <= bottomBound; y++)
+			{
+				Vector2 toCenter = Center - new Vector2(x, y);
+				toCenter.Y /= 1.2f;
+				float r = a - b * MathF.Sin(toCenter.ToRotation());
+				if (toCenter.Length() <= r)
+				{
+					if (GenRand.NextBool(22))
+					{
+						CrawlCarpetOfTile(x, y, GenRand.Next(20, 70), 5, ModContent.TileType<JellyBallSecretion>(), GenRand.NextBool());
+					}
+				}
+			}
+		}
+		SmoothTile(leftBound, upBound, rightBound, bottomBound);
 	}
 
 	/// <summary>
