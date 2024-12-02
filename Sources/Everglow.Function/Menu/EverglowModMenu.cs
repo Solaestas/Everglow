@@ -179,7 +179,7 @@ namespace Everglow.Commons.Menu
 
 			// TODO 绘制标题字
 			Texture2D front0 = ModAsset.Logo.Value;
-			spriteBatch.Draw(front0, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
+			spriteBatch.Draw(front0, new Rectangle(120, 0, Main.screenWidth, Main.screenHeight), Color.White);
 
 			bg = null;
 			renderTargets.Release();
