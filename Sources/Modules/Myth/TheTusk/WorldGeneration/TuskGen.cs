@@ -33,14 +33,14 @@ public class TuskGen : ModSystem
 	/// <returns></returns>
 	public static bool TuskLandActive()
 	{
-		if(SubworldSystem.AnyActive(ModIns.Mod))
+		if(!SubworldSystem.IsActive<TuskWorld>())
 		{
 			return false;
 		}
-		TuskGen tuskGen = ModContent.GetInstance<TuskGen>();
-		Vector2 TuskBiomeCenter = new Vector2(tuskGen.tuskCenterX, tuskGen.tuskCenterY) * 16;
-		Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - TuskBiomeCenter;
-		return v0.Length() < 1000;
+		else
+		{
+			return true;
+		}
 	}
 	internal float TuskS = 0;
 	public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor)
@@ -92,7 +92,22 @@ public class TuskGen : ModSystem
 		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
 			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildWorldTuskTable");
+			Point point = GetFlattenPoint();
+			BuildTuskArray(point.X, point.Y);
+		}
+	}
+	internal class SubWorldTuskLandGenPass : GenPass
+	{
+		public SubWorldTuskLandGenPass() : base("TuskLand", 500)//TODO:给大地安装血肉之颌
+		{
+		}
+
+		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+		{
+			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildWorldTuskTable");
 			BuildTuskLand();
+			Main.spawnTileX = 150;
+			Main.spawnTileY = 220;
 		}
 	}
 	public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
@@ -103,9 +118,9 @@ public class TuskGen : ModSystem
 	/// <summary>
 	/// 地形中心坐标
 	/// </summary>
-	public int tuskCenterX = 400;
+	public int tuskCenterX = 250;
 
-	public int tuskCenterY = 300;
+	public int tuskCenterY = 380;
 
 	/// <summary>
 	/// 这里偷懒,用固定点标记獠牙的生物群系
@@ -220,9 +235,8 @@ public class TuskGen : ModSystem
 	/// </summary>
 	public static void BuildTuskLand()
 	{
-		Point abPos = GetTuskLandPosition();
-		int a = abPos.X;
-		int b = abPos.Y;
+		int a = 130;
+		int b = 200;
 		Main.statusText = "CocoonStart";
 		ShapeTile("BloodPlat.bmp", a, b, 1);
 		Main.statusText = "TuskWallStart";
@@ -231,7 +245,61 @@ public class TuskGen : ModSystem
 		TuskGen tuskGen = ModContent.GetInstance<TuskGen>();
 		tuskGen.tuskCenterX = a + 80;
 		tuskGen.tuskCenterY = b + 10;
-		BuildTuskArray(a, b);
+		//BuildTuskArray(a, b);
+	}
+	public static Point GetFlattenPoint()
+	{
+		for(int times = 0;times < 200;times++)
+		{
+			int x = WorldGen.genRand.Next(400, Main.maxTilesX - 399);
+			int y = 200;
+			while (y < Main.rockLayer)
+			{
+				y++;
+				if (Main.tile[x, y].HasTile)
+				{
+					break;
+				}
+			}
+			int score = 0;
+			for(int i = -20;i < 21;i++)
+			{
+				for (int j = -20; j < 21; j++)
+				{
+					if(new Vector2(i, j).Length() <= 20)
+					{
+						Tile tile = Main.tile[x + i, y + j];
+						if(tile.HasTile)
+						{
+							score += j;
+						}
+						else
+						{
+							score -= j;
+						}
+					}
+				}
+			}
+
+			if (score > 6000)
+			{           
+				//Debug Code.
+				//for (int j = 0; j < score / 1000; j++)
+				//{
+				//	Tile tile = Main.tile[x, y - j - 20];
+				//	tile.TileType = TileID.Stone;
+				//	tile.HasTile = true;
+				//}
+				//for (int j = 0; j < times; j++)
+				//{
+				//	Tile tile = Main.tile[x + 1, y - j - 20];
+				//	tile.TileType = TileID.Copper;
+				//	tile.HasTile = true;
+				//}
+				return new Point(x, y);
+			}
+		}
+		return new Point(Main.maxTilesX / 3, 600);
 	}
 	/// <summary>
 	/// 制造獠牙地形下半部分的一个盘状物
@@ -240,8 +308,6 @@ public class TuskGen : ModSystem
 	/// <param name="y"></param>
 	public static void BuildTuskArray(int x, int y)
 	{
-		x += 80;
-		y += 120;
 		for (int Dy = 0; Dy < 300; Dy++)
 		{
 			if (Main.tile[x, y + Dy].HasTile)
@@ -340,26 +406,6 @@ public class TuskGen : ModSystem
 				break;
 			}
 		}
-	}
-	/// <summary>
-	/// 抽选獠牙地形的地址
-	/// </summary>
-	/// <returns></returns>
-	public static Point GetTuskLandPosition()
-	{
-		int a = (int)(Main.maxTilesX * 0.3);
-		int b = (int)(Main.maxTilesY * 0.1);
-		while (!CanPlaceTusk(new Point(a, b)))
-		{
-			a = (int)(Main.maxTilesX * Main.rand.NextFloat(0.1f, 0.88f));
-			while (Math.Abs(a - Main.maxTilesX * 0.5f) < Main.maxTilesX * 0.1f)
-			{
-				a = (int)(Main.maxTilesX * Main.rand.NextFloat(0.1f, 0.88f));
-			}
-
-			b = (int)(Main.maxTilesY * Main.rand.NextFloat(0.11f, 0.31f));
-		}
-		return new Point(a, b);
 	}
 	/// <summary>
 	/// 判定被抽出来的点是否具备建造獠牙地形的条件

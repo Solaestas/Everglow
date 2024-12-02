@@ -12,13 +12,14 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.White;
 			Item.value = Item.sellPrice(0, 0, 22, 0);
 			Item.shoot = ModContent.ProjectileType<IronStabbingSword_Pro>();
-			PowerfulStabProj = 1;
+			StabMulDamage = 4f;
+			PowerfulStabProj = ModContent.ProjectileType<IronStabbingSword_Pro_Stab>();
 			base.SetDefaults();
 		}
 		public override void AddRecipes()
 		{
 			CreateRecipe().
-				AddIngredient(ItemID.IronBar, 17).
+				AddIngredient(ItemID.IronBar, 10).
 				AddTile(TileID.Anvils).
 				Register();
 			base.AddRecipes();

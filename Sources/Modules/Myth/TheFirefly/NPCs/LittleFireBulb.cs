@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria;
 
@@ -136,8 +136,8 @@ public class LittleFireBulb : ModNPC
 		SpriteEffects effects = SpriteEffects.None;
 		if (NPC.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;
-		Texture2D tx = MythContent.QuickTexture("TheFirefly/NPCs/LittleFireBulb");
-		Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/LittleFireBulb_Glow");
+		Texture2D tx = ModAsset.LittleFireBulb.Value;
+		Texture2D tg = ModAsset.LittleFireBulb_Glow.Value;
 		var vector = new Vector2(tx.Width / 2f, tx.Height / (float)Main.npcFrameCount[NPC.type] / 2f);
 
 		Color color0 = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));

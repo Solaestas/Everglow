@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.OmniElementItems.Projectiles;
 
@@ -107,7 +107,7 @@ public class VineProj2 : ModProjectile
 		}
 		if (Vx.Count > 2)
 		{
-			Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/VineLine");
+			Texture2D t = ModAsset.VineLine.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 		}

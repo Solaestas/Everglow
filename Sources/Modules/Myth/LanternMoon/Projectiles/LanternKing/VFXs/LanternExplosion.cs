@@ -20,8 +20,8 @@ internal class ExplosionFlamePipeline : Pipeline
 		Texture2D FlameColor = ModAsset.ExplosionTexture.Value;
 
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
-		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 	public override void EndRender()
@@ -60,10 +60,10 @@ internal class LanternExplosion : ShaderDraw
 		int times = FireBallVelocity.Length;
 		var bars = new List<Vertex2D>();
 		var drawcRope = new Color(timerValue * timerValue * timerValue * 2, 0.5f, 1, 150 / 255f);
-		for (int i = 10; i < times; i++)
+		for (int i = 0; i < times; i++)
 		{
 			float size = ai[1];
-			float iProgress = i / 12f;
+			float iProgress = i / 2f;
 			Vector2 maxDis = FireBallVelocity[i] * timer * 0.9f;
 			Vector2 normalize = -Vector2.Normalize(FireBallVelocity[i]);
 			for (int x = 0;x < 25;x++)
@@ -75,8 +75,8 @@ internal class LanternExplosion : ShaderDraw
 					bars.Add(new Vertex2D(position + maxDis * sinProgress + normalize.RotatedBy(progress * MathHelper.TwoPi) * (sinProgress * (1 - iProgress) + iProgress) * MathF.Sqrt(timer) * (8 - FireBallVelocity[i].Length()) * size, drawcRope, new Vector3(progress * (timer / 350f + 1.2f), 0, 1)));
 					bars.Add(new Vertex2D(position + maxDis * sinProgress, drawcRope, new Vector3(progress * (timer / 350f + 1.2f), timer / 90f + 0.1f, 1)));
 				}
-				bars.Add(new Vertex2D(position + maxDis * sinProgress + normalize.RotatedBy(progress * MathHelper.TwoPi) * (sinProgress * (1 - iProgress) + iProgress) * MathF.Sqrt(timer) * (8 - FireBallVelocity[i].Length()) * size, drawcRope, new Vector3(progress * (timer / 350f + 1.2f), 0, timerValue * timerValue + (12 - i) / 24f)));
-				bars.Add(new Vertex2D(position + maxDis * sinProgress, drawcRope, new Vector3(progress * (timer / 350f + 1.2f), timer / 90f + 0.1f, timerValue * timerValue + (12 - i) / 24f)));
+				bars.Add(new Vertex2D(position + maxDis * sinProgress + normalize.RotatedBy(progress * MathHelper.TwoPi) * (sinProgress * (1 - iProgress) + iProgress) * MathF.Sqrt(timer) * (8 - FireBallVelocity[i].Length()) * size, drawcRope, new Vector3(progress * (timer / 350f + 1.2f), 0, timerValue * timerValue + (2 - i) / 4f)));
+				bars.Add(new Vertex2D(position + maxDis * sinProgress, drawcRope, new Vector3(progress * (timer / 350f + 1.2f), timer / 90f + 0.1f, timerValue * timerValue + (2 - i) / 4f)));
 				if(x == 24)
 				{
 					bars.Add(new Vertex2D(position + maxDis * sinProgress + normalize.RotatedBy(progress * MathHelper.TwoPi) * (sinProgress * (1 - iProgress) + iProgress) * MathF.Sqrt(timer) * (8 - FireBallVelocity[i].Length()) * size, drawcRope, new Vector3(progress * (timer / 350f + 1.2f), 0, 1)));

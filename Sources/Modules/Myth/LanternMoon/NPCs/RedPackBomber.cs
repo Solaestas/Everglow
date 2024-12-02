@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 using Terraria.Localization;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
@@ -6,25 +6,8 @@ namespace Everglow.Myth.LanternMoon.NPCs;
 
 public class RedPackBomber : ModNPC
 {
-	private bool A = true;
-	private int num10;
-	private int num11;
-	private int num12;
-	private int num13;
-	private int num14;
-	private int num15;
-	private int num16;
-	private int num17;
-	private int num18;
-	private int num19;
-	private int num20;
-	private int num21;
-	private int num22;
-	private int num23;
-	private int num24;
 	public override void SetStaticDefaults()
 	{
-		// DisplayName.SetDefault("Redpack Bomber");
 		Main.npcFrameCount[NPC.type] = 4;
 		
 	}

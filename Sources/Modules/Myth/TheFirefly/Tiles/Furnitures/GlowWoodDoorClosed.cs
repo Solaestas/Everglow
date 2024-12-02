@@ -4,6 +4,7 @@ using Everglow.Myth.TheFirefly.Items.Furnitures;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -48,16 +49,17 @@ public class GlowWoodDoorClosed : ModTile
 		TileObjectData.newAlternate.Origin = new Point16(0, 2);
 		TileObjectData.addAlternate(0);
 		TileObjectData.addTile(Type);
-	}
 
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
+	}
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+	}
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 	{
 		return true;
-	}
-
-	public override void NumDust(int i, int j, bool fail, ref int num)
-	{
-		num = 1;
 	}
 	public override void MouseOver(int i, int j)
 	{
@@ -73,7 +75,7 @@ public class GlowWoodDoorClosed : ModTile
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
-		Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodDoorClosedGlow");
+		Texture2D tex = ModAsset.GlowWoodDoorClosedGlow.Value;
 		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 
 		base.PostDraw(i, j, spriteBatch);

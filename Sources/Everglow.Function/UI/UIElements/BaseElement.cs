@@ -437,7 +437,7 @@ namespace Everglow.Commons.UI.UIElements
 				//关闭画笔
 				sb.End();
 				//启用画笔，传参：延迟绘制（纹理合批优化），alpha颜色混合模式，各向异性采样，不启用深度模式，UI大小矩阵
-				sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
+				sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
 					DepthStencilState.None, overflowHiddenRasterizerState, null, Main.UIScaleMatrix);
 				//绘制自己
 				DrawSelf(sb);
@@ -456,7 +456,7 @@ namespace Everglow.Commons.UI.UIElements
 				//修改GD剪切矩形为原剪切矩形与现剪切矩形的交集
 				gd.ScissorRectangle = Rectangle.Intersect(gd.ScissorRectangle, HiddenOverflowRectangle);
 				//启用画笔，传参：延迟绘制（纹理合批优化），alpha颜色混合模式，各向异性采样，不启用深度模式，UI大小矩阵
-				sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
+				sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
 					DepthStencilState.None, overflowHiddenRasterizerState, null, Main.UIScaleMatrix);
 			}
 			//绘制子元素
@@ -472,7 +472,7 @@ namespace Everglow.Commons.UI.UIElements
 				gd.ScissorRectangle = scissorRectangle;
 				//启用画笔
 				sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
-					SamplerState.AnisotropicClamp, DepthStencilState.None,
+					SamplerState.PointClamp, DepthStencilState.None,
 					overflowHiddenRasterizerState, null, Main.UIScaleMatrix);
 			}
 		}

@@ -10,10 +10,11 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		{
 			Item.damage = 9;
 			Item.knockBack = 0.97f;
-			Item.rare = ItemRarityID.Blue;
+			Item.rare = ItemRarityID.Orange;
 			Item.value = Item.sellPrice(0, 2, 38, 0);
 			Item.shoot = ModContent.ProjectileType<BlossomThorn_Pro>();
-			PowerfulStabProj = 1;
+			StabMulDamage = 4f;
+			PowerfulStabProj = ModContent.ProjectileType<BlossomThorn_Pro_Stab>();
 			base.SetDefaults();
 		}
 		public override void AddRecipes()

@@ -1,5 +1,7 @@
 using Everglow.Myth.Common;
 using Terraria.Audio;
+using Everglow.Commons.Weapons.Slingshots;
+
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
 
 public class GelBall : SlingshotAmmo
@@ -92,7 +94,7 @@ public class GelBall : SlingshotAmmo
 
 		if (bars.Count > 2)
 		{
-			Texture2D t = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/Textures/SlingshotTrailKS");
+			Texture2D t = ModAsset.SlingshotTrailKS.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
@@ -172,7 +174,7 @@ public class GelBall : SlingshotAmmo
 		}
 		if (bars.Count > 2)
 		{
-			Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Darkline");
+			Texture2D t = Commons.ModAsset.Trail_black.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}

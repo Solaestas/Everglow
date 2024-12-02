@@ -1,4 +1,4 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
@@ -64,7 +64,7 @@ public class TsunamiShark_marking : ModProjectile, IWarpProjectile
 			Lighting.AddLight(Projectile.Center + radious, 0, valueLight * valueLight, valueLight);
 		}
 	}
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		if(PotentialTargets.Count > 0)
 		{
@@ -98,7 +98,7 @@ public class TsunamiShark_marking : ModProjectile, IWarpProjectile
 					tsunamiS.MarkedTarget = target;
 			}
 		}
-		base.Kill(timeLeft);
+		base.OnKill(timeLeft);
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -109,7 +109,7 @@ public class TsunamiShark_marking : ModProjectile, IWarpProjectile
 		float width = 120;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.Default, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.Default, SamplerState.PointWrap, RasterizerState.CullNone);
 		DrawTexRing_VFXBatch(Ins.Batch, value * 400, width, new Color(0, colorV * colorV * 1.6f, colorV * 12f, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)(Main.time) * 0.01f);
 		Ins.Batch.End();
 
@@ -128,12 +128,12 @@ public class TsunamiShark_marking : ModProjectile, IWarpProjectile
 		float colorV = 0.9f * (1 - value);
 		Color color = new Color(0, colorV * colorV * 1.6f, colorV * 12f, 0f);
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		DrawTexLine(StartPos, Projectile.Center, color, Projectile.timeLeft / 40f, ModAsset.Lightline.Value);
 		Texture2D ball = ModAsset.LightBall.Value;
 		Main.spriteBatch.Draw(ball, Projectile.Center - Main.screenPosition, null, color, 0, ball.Size() * 0.5f, Projectile.timeLeft / 120f, SpriteEffects.None,0);
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 		//绘制枪的部分
 		if(Projectile.timeLeft > 150)

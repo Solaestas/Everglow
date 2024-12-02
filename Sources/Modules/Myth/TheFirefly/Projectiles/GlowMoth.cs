@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Buffs;
 using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Items.Accessories;
@@ -130,9 +130,9 @@ public class GlowMoth : ModProjectile
 	private void CheckPlayerDistance()
 	{
 		Player player = Main.player[Projectile.owner];
-		if ((player.Center - Projectile.Center).Length() > 2000)
+		if ((player.MountedCenter - Projectile.Center).Length() > 2000)
 		{
-			Projectile.Center = player.Center + new Vector2(0, Main.rand.Next(-80, -20)).RotatedBy(Main.rand.NextFloat(-1.8f, 1.8f));
+			Projectile.Center = player.MountedCenter + new Vector2(0, Main.rand.Next(-80, -20)).RotatedBy(Main.rand.NextFloat(-1.8f, 1.8f));
 			for (int i = 0; i < 18; i++)
 			{
 				Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
@@ -309,7 +309,7 @@ public class GlowMoth : ModProjectile
 		}
 	}
 
-	public override void Kill(int timeLeft)
+	public override void OnKill(int timeLeft)
 	{
 		Player player = Main.player[Projectile.owner];
 		MothOwner mothOwner = player.GetModPlayer<MothOwner>();
@@ -344,7 +344,7 @@ public class GlowMoth : ModProjectile
 				break;
 
 			var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-			Texture2D Gtexture = MythContent.QuickTexture("TheFirefly/Projectiles/GlowMothGlow");
+			Texture2D Gtexture = ModAsset.GlowMothGlow.Value;
 			Vector2 DrawPos = Projectile.oldPos[i] + new Vector2(Projectile.width / 2f, Projectile.height / 2f) - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
 			SpriteEffects sf = SpriteEffects.None;
 			float AddRotation = 0;

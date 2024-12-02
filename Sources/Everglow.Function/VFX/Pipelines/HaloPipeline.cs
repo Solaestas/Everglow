@@ -7,30 +7,26 @@ public class HaloPipeline : PostPipeline
 	private RenderTarget2D haloScreen;
 	private RenderTarget2D haloScreenSwap;
 
-	private static int ScreenWidth => Main.screenWidth;
-
-	private static int ScreenHeight => Main.screenHeight;
-
 	public override void Load()
 	{
 		Ins.MainThread.AddTask(() =>
 		{
-			AllocateRenderTarget();
+			AllocateRenderTarget(new Vector2(Main.screenWidth, Main.screenHeight));
 		});
-		Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, () =>
+		Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, (Vector2 size) =>
 		{
 			haloScreen?.Dispose();
 			haloScreenSwap?.Dispose();
-			AllocateRenderTarget();
+			AllocateRenderTarget(size);
 		}, "Realloc RenderTarget");
 		effect = ModAsset.SolarHalo;
 	}
 
-	private void AllocateRenderTarget()
+	private void AllocateRenderTarget(Vector2 size)
 	{
 		var gd = Main.instance.GraphicsDevice;
-		haloScreen = new RenderTarget2D(gd, ScreenWidth, ScreenHeight, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
-		haloScreenSwap = new RenderTarget2D(gd, ScreenWidth, ScreenHeight, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
+		haloScreen = new RenderTarget2D(gd, (int)size.X, (int)size.Y, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
+		haloScreenSwap = new RenderTarget2D(gd, (int)size.X, (int)size.Y, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
 	}
 
 	public override void Render(RenderTarget2D rt2D)
@@ -39,7 +35,7 @@ public class HaloPipeline : PostPipeline
 		var gd = Main.instance.GraphicsDevice;
 		var effect = this.effect.Value;
 
-		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 
 
 		gd.SetRenderTarget(haloScreen);
@@ -58,7 +54,7 @@ public class HaloPipeline : PostPipeline
 		var cur = Ins.VFXManager.CurrentRenderTarget;
 		Ins.VFXManager.SwapRenderTarget();
 		gd.SetRenderTarget(Ins.VFXManager.CurrentRenderTarget);
-		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 		sb.Draw(cur, Vector2.Zero, Color.White);
 
 		gd.BlendState = BlendState.AlphaBlend;

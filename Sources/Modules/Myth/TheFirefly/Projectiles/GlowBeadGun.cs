@@ -146,8 +146,8 @@ internal class GlowBeadGun : ModProjectile
 		Vector2 v0 = Projectile.Center - player.MountedCenter;
 		if (Main.mouseLeft)
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
-		Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGunOff");
-		Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGunGlow");
+		Texture2D TexMain = ModAsset.GlowBeadGunOff.Value;
+		Texture2D TexMainG = ModAsset.GlowBeadGunGlow.Value;
 		Projectile.frame = (int)(Energy % 45 / 5f);
 
 		Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));

@@ -13,7 +13,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.Blue;
 			Item.value = Item.sellPrice(0, 2, 24, 0);
 			Item.shoot = ModContent.ProjectileType<CrutchBayonet_Pro>();
-			PowerfulStabProj = 1;
+			StabMulDamage = 4f;
+			PowerfulStabProj = ModContent.ProjectileType<CrutchBayonet_Pro_Stab>();
 			base.SetDefaults();
 		}
 	}

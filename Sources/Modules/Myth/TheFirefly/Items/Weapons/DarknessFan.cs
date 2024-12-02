@@ -2,6 +2,7 @@ using Everglow.Myth;
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Items.Accessories;
 using Everglow.Myth.TheFirefly.Projectiles;
+using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -12,17 +13,12 @@ namespace Everglow.Myth.TheFirefly.Items.Weapons;
 public class DarknessFan : ModItem
 {
 	FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
-	public override void SetStaticDefaults()
-	{
-		
-	}
-
 	public override void SetDefaults()
 	{
 		
-		Item.damage = 17;
+		Item.damage = 9;
 		Item.DamageType = DamageClass.Summon;
-		Item.mana = 7;
+		Item.mana = 12;
 		Item.width = 74;
 		Item.height = 90;
 		Item.useTime = 36;
@@ -38,42 +34,25 @@ public class DarknessFan : ModItem
 		Item.shoot = ModContent.ProjectileType<GlowingButterfly>();
 		Item.shootSpeed = 8;
 	}
-
-	private int l = 0;
-
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		if (player.altFunctionUse == 2 && CoolRarr == 0)
+		if (player.altFunctionUse == 2 && colling == 0)
 		{
-			CoolRarr = 120;
-			Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity * 3.4f, ModContent.ProjectileType<DarkFanFly>(), damage * 2, knockback, player.whoAmI, 6 + player.maxMinions * 1.5f, 0f);
+			colling = 120;
+			Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity * 3.4f, ModContent.ProjectileType<DarkFanFly>(), (int)(damage * 1.4), knockback, player.whoAmI, 6 + player.maxMinions * 1.5f, 0f);
 			Item.useTime = 6;
 			Item.useAnimation = 6;
 			//Item.UseSound = SoundID.DD2_JavelinThrowersAttack;
 			return false;
 		}
-		if (l % 4 == 0)
-			type = ModContent.ProjectileType<DarkFan>();
-		else if (l % 4 == 1)
-		{
-			type = ModContent.ProjectileType<DarkFan>();
-		}
-		else if (l % 4 == 2)
-		{
-			type = ModContent.ProjectileType<DarkFan>();
-		}
-		else
-		{
-			type = ModContent.ProjectileType<DarkFan>();
-		}
+		type = ModContent.ProjectileType<DarkFan>();
 		Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity, type, damage, knockback, player.whoAmI, 0f, 0f);
 		Item.useTime = 36;
 		Item.useAnimation = 36;
-		l++;
 		return false;
 	}
 
-	private int CoolRarr = 0;
+	private int colling = 0;
 
 	public override bool AltFunctionUse(Player player)
 	{
@@ -82,7 +61,7 @@ public class DarknessFan : ModItem
 
 	public override bool CanUseItem(Player player)
 	{
-		if (player.altFunctionUse == 2 && CoolRarr == 0)
+		if (player.altFunctionUse == 2 && colling == 0)
 		{
 			Item.useTime = 6;
 			Item.useAnimation = 6;
@@ -110,26 +89,15 @@ public class DarknessFan : ModItem
 			}
 		}
 	}
-	public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+	public override void UpdateInventory(Player player)
 	{
-		var slotSize = new Vector2(42f, 42f);
-		position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
-		Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f/* - texture.Size() * Main.inventoryScale / 2f*/;
-		Texture2D RArr = MythContent.QuickTexture("TheFirefly/Projectiles/GlowFanTex/RightDFan");
-		//ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/RightDFan").Value;
-		if (!Main.gamePaused)
+		if (colling > 0)
 		{
-			if (CoolRarr > 0)
-			{
-				CoolRarr--;
-				spriteBatch.Draw(RArr, drawPos + new Vector2(6.6f) * scale, null, new Color(0, 0, 0, 255), 0f, new Vector2(8), scale * 2.4f, SpriteEffects.None, 0f);
-				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, ((int)(CoolRarr / 60f)).ToString(), drawPos + new Vector2(6.23f) * scale, Color.Red, 0f, Vector2.Zero, scale * 2.4f, SpriteEffects.None, 0);
-			}
-			else
-			{
-				CoolRarr = 0;
-				spriteBatch.Draw(RArr, drawPos + new Vector2(6.6f) * scale, null, new Color(255, 255, 255, 150), 0f, new Vector2(8), scale * 2.4f, SpriteEffects.None, 0f);
-			}
+			colling--;
+		}
+		else
+		{
+			colling = 0;
 		}
 	}
 }

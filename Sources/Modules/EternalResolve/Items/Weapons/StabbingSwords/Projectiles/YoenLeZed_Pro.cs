@@ -1,10 +1,8 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Buffs;
-using SteelSeries.GameSense;
 using Terraria.Audio;
 using Terraria.GameContent;
-using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
@@ -17,25 +15,30 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			TradeLength = 6;
 			TradeShade = 0.2f;
 			Shade = 0.2f;
-			FadeTradeShade = 0.74f;
+			FadeShade = 0.74f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.8f;
 			MaxLength = 1.15f;
 			DrawWidth = 0.4f;
 		}
+		public override void VisualParticle()
+		{
+			GenerateVFX(1);
+			SplitVFX(2);
+		}
 		public override void AI()
 		{
 			base.AI();
-			GenerateVFX(1);
-			SplitVFX(2);
-
-			if (Main.timeForVisualEffects % 10 == 0)
+			if (UpdateTimer % Projectile.extraUpdates == 0)
 			{
-				SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f), Projectile.Center);
+				if (Main.timeForVisualEffects % 10 == 0)
+				{
+					SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f), Projectile.Center);
+				}
 			}
 		}
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			ActiveSound sound = SoundEngine.FindActiveSound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f));
 			if (sound != null)

@@ -5,6 +5,7 @@ using Everglow.Commons.ObjectPool;
 using Everglow.Commons.VFX;
 using log4net;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Everglow.Commons;
 
@@ -14,6 +15,8 @@ namespace Everglow.Commons;
 public static class Ins
 {
 	public static VFXBatch Batch => Get<VFXBatch>();
+
+	public static SpriteBatch SpriteBatch => Get<SpriteBatch>();
 
 	public static GraphicsDevice Device => Get<GraphicsDevice>();
 
@@ -42,8 +45,8 @@ public static class Ins
 
 	public static T Get<T>() where T : class
 	{
-		var service = provider.GetService<T>();
-		Contract.Ensures(Contract.Result<T>() != null);
+		var service = provider?.GetService<T>();
+		Debug.Assert(service != null);
 		return service;
 	}
 
@@ -53,8 +56,9 @@ public static class Ins
 
 	public static void Clear()
 	{
-		services.Remove(services.FirstOrDefault(s => s.ServiceType == typeof(GraphicsDevice)));
-		provider.Dispose();
+		services.RemoveAll<GraphicsDevice>();
+		services.RemoveAll<SpriteBatch>();
+		provider?.Dispose();
 		services.Clear();
 	}
 

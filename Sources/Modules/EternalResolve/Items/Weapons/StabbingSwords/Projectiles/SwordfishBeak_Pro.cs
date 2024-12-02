@@ -13,7 +13,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			TradeLength = 4;
 			TradeShade = 0.3f;
 			Shade = 0.2f;
-			FadeTradeShade = 0.64f;
+			FadeShade = 0.64f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.4f;
@@ -33,15 +33,23 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				modifiers.ArmorPenetration += 4;
 			}
 		}
-		public override void AI()
+		public override void VisualParticle()
 		{
-			base.AI();
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
 			Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.24f);
 			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))
 			{
 				Dust dust = Dust.NewDustDirect(pos, Projectile.width, Projectile.height, ModContent.DustType<SeaWater>(), 0, 0, 0, default, Main.rand.NextFloat(0.95f, 1.7f));
 				dust.velocity = vel;
+			}
+			Player player = Main.player[Projectile.owner];
+			if(player.wet)
+			{
+				MaxLength = 1.125f;
+			}
+			else
+			{
+				MaxLength = 0.75f;
 			}
 		}
 		public override void HitTileSound(float scale)

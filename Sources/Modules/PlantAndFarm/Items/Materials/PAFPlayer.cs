@@ -2,7 +2,7 @@ using Everglow.PlantAndFarm.Items.Accessories;
 
 namespace Everglow.PlantAndFarm.Items.Materials;
 
-public class PAFPlayer:ModPlayer
+public class PAFPlayer : ModPlayer
 {
 	public bool FlowerBrochure;
 	public ThreeColorCrown ThreeColorCrown;

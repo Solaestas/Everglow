@@ -1,129 +1,100 @@
+using Everglow.Commons.CustomTiles.Collide;
+using Everglow.Myth.Misc.Projectiles.Weapon.Magic.BoneFeatherMagic;
 using Terraria;
 using Terraria.Audio;
-using Terraria.Localization;
+using Terraria.DataStructures;
+using static Everglow.Commons.Utilities.ProjectileUtils;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic;
 
-public class BoneFeather : ModProjectile
+public class BoneFeather : StickNPCProjectile
 {
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("BoneFeather");
-			}
 	public override void SetDefaults()
 	{
-		Projectile.width = 34;
-		Projectile.height = 34;
-		Projectile.aiStyle = -1;
+		Projectile.width = 10;
+		Projectile.height = 10;
 		Projectile.friendly = true;
-		Projectile.hostile = false;
-		Projectile.ignoreWater = true;
+		Projectile.ignoreWater = false;
 		Projectile.DamageType = DamageClass.Magic;
 		Projectile.tileCollide = true;
-		Projectile.timeLeft = 360;
-		Projectile.alpha = 0;
-		Projectile.penetrate = 3;
-		Projectile.scale = 1;
+		Projectile.timeLeft = 3600;
+		Projectile.penetrate = -1;
+		Projectile.usesLocalNPCImmunity = true;
+		Projectile.localNPCHitCooldown = 2;
 	}
-	private bool stick = false;
-	private int u = 0;
-	private NPC m = Main.npc[0];
-	private Vector2 v = new Vector2(0, 0);
-	private int r = 0;
-	private float r2 = 120;
-	public override void AI()
+	internal int timeTokill = -1;
+	ModProjectile MagicArray = null;
+	public override void OnSpawn(IEntitySource source)
 	{
-		Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-		Projectile.velocity *= 1.01f;
-		if (Main.rand.NextBool(6))
+		foreach (Projectile projectile in Main.projectile)
 		{
-			/*int num90 = */
-			var d = Dust.NewDustDirect(Projectile.Center - new Vector2(2, 2), 0, 0, ModContent.DustType<Dusts.Bones>(), Alpha: 0, Scale: Main.rand.NextFloat(0.3f, 1.1f));
-			//int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(12, 12) - Projectile.velocity, 16, 16, 4, 0f, 0f, 100, default(Color), 1.2f);
-			d.noGravity = true;
-			d.velocity *= 0.25f;
-		}
-		if (r2 > 0)
-		{
-			var d = Dust.NewDustDirect(Projectile.Center - new Vector2(2, 2), 0, 0, ModContent.DustType<Dusts.BoneFlame>(), Alpha: 0, Scale: 2.5f * r2 / 90f);
-			d.noGravity = true;
-			d.velocity *= 0f;
-			r2 -= 2;
-		}
-		if (Projectile.timeLeft % 2 == 0)
-		{
-			int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 12f, 0, 0, ModContent.DustType<Dusts.Bones2>(), 0, 0, 0, default, 1f);
-			Main.dust[r].noGravity = true;
-			Main.dust[r].velocity = Projectile.velocity;
-			Main.dust[r].rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + 0.95f;
-			int r2 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 12f, 0, 0, ModContent.DustType<Dusts.Bones2>(), 0, 0, 0, default, 1f);
-			Main.dust[r2].noGravity = true;
-			Main.dust[r2].velocity = Projectile.velocity;
-			Main.dust[r2].rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) - 0.95f;
-		}
-		if (stick && m.active)
-		{
-			r += 1;
-			float yz = m.Hitbox.Width * m.Hitbox.Width + m.Hitbox.Height * m.Hitbox.Height;
-			yz = (float)Math.Sqrt(yz) / 3f;
-			Projectile.position = m.Center - v * yz / v.Length();
-			if (r % 4 == 0)
+			if (projectile.active)
 			{
-				int Dam = (int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f) / 4d);
-				if (Dam < 1)
-					Dam = 1;
-
-				Player player = Main.LocalPlayer;
-				NPC.HitModifiers npchitmodifier = new NPC.HitModifiers();
-				NPC.HitInfo hit = npchitmodifier.ToHitInfo(Dam, false, Projectile.knockBack);
-				m.StrikeNPC(hit, true, true);
-				NetMessage.SendStrikeNPC(m, hit);
-
-
-				player.dpsDamage += (int)(Dam * (100 + Projectile.ai[0]) / 100d);
-				Projectile.penetrate--;
-			}
-		}
-		if (stick && !m.active)
-			Projectile.active = false;
-		float num2 = Projectile.Center.X;
-		float num3 = Projectile.Center.Y;
-		float num4 = 400f;
-		bool flag = false;
-		for (int j = 0; j < 200; j++)
-		{
-			if (Main.npc[j].CanBeChasedBy(Projectile, false) && Collision.CanHit(Projectile.Center, 1, 1, Main.npc[j].Center, 1, 1))
-			{
-				float num5 = Main.npc[j].position.X + Main.npc[j].width / 2;
-				float num6 = Main.npc[j].position.Y + Main.npc[j].height / 2;
-				float num7 = Math.Abs(Projectile.position.X + Projectile.width / 2 - num5) + Math.Abs(Projectile.position.Y + Projectile.height / 2 - num6);
-				if (num7 < num4)
+				if (projectile.type == ModContent.ProjectileType<BoneFeatherMagicArray>())
 				{
-					num4 = num7;
-					num2 = num5;
-					num3 = num6;
-					flag = true;
+					if (projectile.owner == Projectile.owner)
+					{
+						MagicArray = projectile.ModProjectile;
+						break;
+					}
 				}
 			}
 		}
-		if (flag)
+	}
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+	{
+		if (timeTokill >= 4 && timeTokill <= 6)
 		{
-			float num8 = 20f;
-			var vector1 = new Vector2(Projectile.position.X + Projectile.width * 0.5f, Projectile.position.Y + Projectile.height * 0.5f);
-			float num9 = num2 - vector1.X;
-			float num10 = num3 - vector1.Y;
-			float num11 = (float)Math.Sqrt((double)(num9 * num9 + num10 * num10));
-			num11 = num8 / num11;
-			num9 *= num11;
-			num10 *= num11;
-			Projectile.velocity.X = (Projectile.velocity.X * 90f + num9) / 91f;
-			Projectile.velocity.Y = (Projectile.velocity.Y * 90f + num10) / 91f;
+			bool bool0 = (targetHitbox.TopLeft() - projHitbox.Center()).Length() < 60;
+			bool bool1 = (targetHitbox.TopRight() - projHitbox.Center()).Length() < 60;
+			bool bool2 = (targetHitbox.BottomLeft() - projHitbox.Center()).Length() < 60;
+			bool bool3 = (targetHitbox.BottomRight() - projHitbox.Center()).Length() < 60;
+			return bool0 || bool1 || bool2 || bool3;
 		}
-
-
-
-
-
+		if (timeTokill > 0)
+		{
+			return false;
+		}
+		return base.Colliding(projHitbox, targetHitbox);
+	}
+	public override void AI()
+	{
+		if (timeTokill >= 0 && timeTokill <= 2)
+		{
+			AmmoHit();
+		}
+		timeTokill--;
+		if (StuckNPC == -1)
+		{
+			if (timeTokill < 0)
+			{
+				Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
+				if (Projectile.timeLeft < 320)
+				{
+					if (Projectile.wet)
+					{
+						Projectile.velocity.Y -= 0.3f;
+						Projectile.velocity *= 0.96f;
+					}
+				}
+			}
+			if (Main.rand.NextBool(6))
+			{
+				Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 1)).RotatedByRandom(MathHelper.TwoPi);
+				Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<Dusts.Bones>(), v.X, v.Y, 0, default, Main.rand.NextFloat(0.8f, 1.2f));
+			}
+			if (Projectile.timeLeft <= 100 && timeTokill < 0)
+			{
+				AmmoHit();
+			}
+		}
+		else
+		{
+			if(StuckNPC == -2)
+			{
+				Projectile.Kill();
+			}
+		}
 		if (Projectile.position.X <= 320 || Projectile.position.X >= Main.maxTilesX * 16 - 320)
 		{
 			Projectile.Kill();
@@ -132,66 +103,96 @@ public class BoneFeather : ModProjectile
 		{
 			Projectile.Kill();
 		}
-	}
-	public override void Kill(int timeLeft)
-	{
-		SoundEngine.PlaySound(SoundID.DD2_SkeletonHurt, Projectile.Center);
-		for (int j = 0; j < 15; j++)
-		{
-			/*int num2 = */
-			var d = Dust.NewDustDirect(Projectile.Center - new Vector2(2, 2), 0, 0, ModContent.DustType<Dusts.Bones>(), Alpha: 0, Scale: Main.rand.NextFloat(0.3f, 1.1f));
-			d.noGravity = true;
-			if (r2 > 0)
-			{
-				Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 16f)).RotatedByRandom(MathHelper.TwoPi);
-				var d2 = Dust.NewDustDirect(Projectile.Center - new Vector2(2, 2) + v0, 0, 0, ModContent.DustType<Dusts.BoneFlame>(), Alpha: 0, Scale: 5f * r2 / 90f);
-				d2.noGravity = true;
-				//d.velocity *= 0f;
-				r2 -= 2;
-			}
-		}
-	}
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
-		stick = true;
-		v = Projectile.position - target.position;
-		Projectile.friendly = false;
-		m = target;
-		target.defense = (int)(target.defense * 0.96f);
+		base.AI();
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		// SpriteEffects helps to flip texture horizontally and vertically
+		return false;
+	}
+	public override void PostDraw(Color lightColor)
+	{
 		SpriteEffects spriteEffects = SpriteEffects.None;
 		if (Projectile.spriteDirection == -1)
 			spriteEffects = SpriteEffects.FlipHorizontally;
-
-		// Getting texture of projectile
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
 
-		// Calculating frameHeight and current Y pos dependence of frame
-		// If texture without animation frameHeight = texture.Height is always and startY is always 0
-		int frameHeight = texture.Height / Main.projFrames[Projectile.type];
-		int startY = frameHeight * Projectile.frame;
-
-		// Get this frame on texture
-		var sourceRectangle = new Rectangle(0, startY, texture.Width, frameHeight);
-		Vector2 origin = sourceRectangle.Size() / 2f;
-
-		// If image isn't centered or symetrical you can specify origin of the sprite
-		// (0,0) for the upper-left corner 
-		float offsetX = 20f;
-		origin.X = Projectile.spriteDirection == 1 ? sourceRectangle.Width - offsetX : offsetX;
-
-		// If sprite is vertical
-		// float offsetY = 20f;
-		// origin.Y = (float)(Projectile.spriteDirection == 1 ? sourceRectangle.Height - offsetY : offsetY);
-
-
-		// Appling lighting and draw current frame
-		Color drawColor = Projectile.GetAlpha(lightColor);
-		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), sourceRectangle, drawColor, Projectile.rotation, origin, Projectile.scale, spriteEffects, 0);
-		// It's important to return false, otherwise we also draw the original texture.
+		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale, spriteEffects, 0);
+	}
+	public override bool OnTileCollide(Vector2 oldVelocity)
+	{
+		if (MagicArray != null)
+		{
+			var arrayProj = MagicArray as BoneFeatherMagicArray;
+			arrayProj.WingPower += 0.1f;
+		}
+		AmmoHit();
 		return false;
+	}
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		if (MagicArray != null)
+		{
+			var arrayProj = MagicArray as BoneFeatherMagicArray;
+			arrayProj.WingPower += 2.6f;
+		}
+		timeTokill = 600 * (1 + Projectile.extraUpdates);
+	}
+	public void AmmoHit()
+	{
+		SoundEngine.PlaySound((SoundID.DD2_BetsyFlameBreath.WithVolume(0.3f)).WithPitchOffset(0.8f), Projectile.Center);
+		for (int j = 0; j < 4; j++)
+		{
+			Vector2 v = new Vector2(0, Main.rand.NextFloat(7, 20)).RotatedByRandom(MathHelper.TwoPi);
+			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.BoneFeather>(), v.X, v.Y, 0, default, Main.rand.NextFloat(1.8f, 3.7f));
+		}
+		Projectile.Kill();
+	}
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		base.ModifyHitNPC(target, ref modifiers);
+	}
+}
+public class BoneNPCModifier : GlobalNPC
+{
+	public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
+	{
+		foreach (Projectile p in Main.projectile)
+		{
+			if (p.type == ModContent.ProjectileType<BoneFeather>() && p.active && p != projectile)
+			{
+				BoneFeather bf = p.ModProjectile as BoneFeather;
+				if (bf.StuckNPC == npc.whoAmI)
+				{
+					if(bf.timeTokill > 0)
+					{
+						if((p.type == projectile.type && bf.timeTokill < 540 * (p.extraUpdates + 1)) || p.type != projectile.type)
+						{
+							modifiers.ScalingBonusDamage += 0.07f;
+							bf.AmmoHit();
+						}
+					}
+				}
+			}
+		}
+		base.ModifyHitByProjectile(npc, projectile, ref modifiers);
+	}
+	public override void ModifyHitByItem(NPC npc, Player player, Item item, ref NPC.HitModifiers modifiers)
+	{
+		foreach (Projectile p in Main.projectile)
+		{
+			if (p.type == ModContent.ProjectileType<BoneFeather>() && p.active)
+			{
+				BoneFeather bf = p.ModProjectile as BoneFeather;
+				if (bf.StuckNPC == npc.whoAmI)
+				{
+					if (bf.timeTokill > 0)
+					{
+						modifiers.ScalingBonusDamage += 0.07f;
+						bf.AmmoHit();
+					}
+				}
+			}
+		}
+		base.ModifyHitByItem(npc, player, item, ref modifiers);
 	}
 }

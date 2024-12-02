@@ -96,10 +96,10 @@ public class TrueDeathSickleHit : ModProjectile, IWarpProjectile, IBloomProjecti
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Shadow = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickleHit");
+		Texture2D Shadow = ModAsset.TrueDeathSickleHit.Value;
 		float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * Dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f, SpriteEffects.None, 0);
-		Texture2D light = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickleHitStar");
+		Texture2D light = ModAsset.TrueDeathSickleHitStar.Value;
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f - Dark, Dark, 1f, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(1f - Dark, Dark, 1f, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, Dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
 		float size = Math.Clamp(Projectile.timeLeft / 8f - 10, 0f, 20f);

@@ -1,4 +1,5 @@
 using Everglow.Myth.Common;
+using Everglow.Commons.Weapons.Slingshots;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
 
@@ -37,8 +38,8 @@ internal class JungleSlingshot : SlingshotProjectile
 		}
 
 		var newcolor = Color.Lerp(drawColor, new Color(255, 255, 255, 200), Power / 130f + 0.1f);
-		Texture2D TexMain = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/GlowingSpore");
-		Texture2D TexMainII = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/GlowSporeBead");
+		Texture2D TexMain = ModAsset.GlowingSpore.Value;
+		Texture2D TexMainII = ModAsset.GlowSporeBead.Value;
 		Main.spriteBatch.Draw(TexMain, Head1 * 0.67f + SlingshotStringTail * 0.33f, null, newcolor, DrawRot, TexMain.Size() / 2f, 1f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(TexMainII, Head1 * 0.95f + SlingshotStringTail * 0.05f, null, newcolor, DrawRot, TexMainII.Size() / 2f, 0.85f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(TexMain, Head1 * 0.33f + SlingshotStringTail * 0.67f, null, newcolor, DrawRot, TexMain.Size() / 2f, 1f, SpriteEffects.None, 0);

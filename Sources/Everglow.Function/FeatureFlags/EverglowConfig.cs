@@ -1,5 +1,5 @@
 using System.ComponentModel;
-
+using Everglow.Commons.AssetReplace.UIReplace.Core;
 using Terraria.ModLoader.Config;
 
 namespace Everglow.Commons.FeatureFlags;
@@ -15,8 +15,9 @@ public class EverglowConfig : ModConfig
 	/// 是否是Debug模式，如果是那么我们可以打印很多debug信息，或者运行一些debug下才有的逻辑
 	/// </summary>
 	[DefaultValue(false)]
-	[Label("Enable Debug Mode")]
-	[Tooltip("[For developers] Enable debug mode to allow debug functions to run")]
+	// TODO 转移到hjson中
+	//[Label("Enable Debug Mode")]
+	//[Tooltip("[For developers] Enable debug mode to allow debug functions to run")]
 	public bool debugMode;
 
 	public static bool DebugMode
@@ -36,52 +37,39 @@ public class EverglowClientConfig : ModConfig
 	/// </summary>
 	public override ConfigScope Mode => ConfigScope.ClientSide;
 
-	[Header("$Mods.Everglow.Config.Header.TextureReplace")]
+	[Header("TextureReplace")]
 	[DefaultValue(TextureReplaceMode.Terraria)]
-	[Label("$Mods.Everglow.Config.TextureReplace.Label")]
-	[Tooltip("$Mods.Everglow.Config.TextureReplace.Tooltip")]
 	[DrawTicks]
 	public TextureReplaceMode TextureReplace;
 
-	[Header("$Mods.Everglow.Config.Header.AudioReplace")]
+	[Header("AudioReplace")]
 
 	[DefaultValue(true)]
-	[Label("$Mods.Everglow.Config.ItemPickSoundReplace.Label")]
 	public bool ItemPickSoundReplace;
 
-	[DefaultValue(MothAudioReplaceMode.MothFighting)]
-	[Label("$Mods.Everglow.Config.MothAudioReplace.Label")]
-	[Tooltip("$Mods.Everglow.Config.MothAudioReplace.Tooltip")]
-	[DrawTicks]
-	public MothAudioReplaceMode MothAudioReplace;
-
 	[DefaultValue(TuskAudioReplaceMode.TuskFighting)]
-	[Label("$Mods.Everglow.Config.TuskAudioReplace.Label")]
-	[Tooltip("$Mods.Everglow.Config.TuskAudioReplace.Tooltip")]
 	[DrawTicks]
 	public TuskAudioReplaceMode TuskAudioReplace;
 
 	public override void OnChanged()
 	{
-		if ((int)TextureReplace >= 3)
+		if ((int)TextureReplace >= 5)
 			TextureReplace = TextureReplaceMode.Terraria;
-		if ((int)MothAudioReplace >= 3)
-			MothAudioReplace = MothAudioReplaceMode.MothFighting;
 		if ((int)TuskAudioReplace >= 2)
 			TuskAudioReplace = TuskAudioReplaceMode.TuskFighting;
-		//if (AssetReplaceModule.IsLoaded)
-		//{
-		//	AssetReplaceModule.ReplaceTextures(TextureReplace);
-		//}
+		if (UIReplaceModule.IsLoaded)
+		{
+			UIReplaceModule.ReplaceTextures(TextureReplace);
+		}
 
 		base.OnChanged();
 	}
 
-	public static int ReplaceMothAudio
+	public static int ReplaceTuskAudio
 	{
 		get
 		{
-			return (int)ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace;
+			return (int)ModContent.GetInstance<EverglowClientConfig>().TuskAudioReplace;
 		}
 	}
 }
@@ -89,23 +77,14 @@ public class EverglowClientConfig : ModConfig
 public enum TextureReplaceMode
 {
 	Terraria,
-	[Label("Eternal Resolve")]
+	Default,
 	EternalResolve,
+	Everglow,
 	Myth,
 }
-public enum MothAudioReplaceMode
-{
-	[Label("Original")]
-	MothFighting,
-	[Label("Alternate")]
-	AltMothFighting,
-	[Label("Old")]
-	OldMothFighting,
-}
+
 public enum TuskAudioReplaceMode
 {
-	[Label("Original")]
 	TuskFighting,
-	[Label("Old")]
 	OldTuskFighting,
 }

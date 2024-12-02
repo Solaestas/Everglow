@@ -1,4 +1,5 @@
 using Terraria.Localization;
+using Terraria.ID;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic;
 
@@ -43,7 +44,7 @@ public class ThunderBall2 : ModProjectile
 				for (int θ = 0; θ < 8; θ++)
 				{
 					Vector2 v = new Vector2(0, Main.rand.Next(25, 75) / 50f).RotatedByRandom(Math.PI * 2);
-					int num25 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, v.X, v.Y, 150, default, 0.6f);
+					int num25 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GemSapphire, v.X, v.Y, 150, default, 0.6f);
 					Main.dust[num25].noGravity = false;
 				}
 			}
@@ -60,8 +61,6 @@ public class ThunderBall2 : ModProjectile
 			return new Color?(new Color(Tokill / 45f, Tokill / 45f, Tokill / 45f, 0));
 		}
 	}
-	private Vector2[] vdp = new Vector2[65];
-	private Effect ef;
 	public override void PostDraw(Color lightColor)
 	{
 		Projectile.ai[0] = Tokill;

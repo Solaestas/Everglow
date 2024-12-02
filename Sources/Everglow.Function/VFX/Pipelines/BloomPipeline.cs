@@ -8,40 +8,36 @@ public class BloomPipeline : PostPipeline
 	private RenderTarget2D blurScreenSwap;
 	private const int MAX_BLUR_LEVELS = 4;
 
-	private static int MaxBlurWidth => Main.screenWidth;
-
-	private static int MaxBlurHeight => Main.screenHeight;
-
 	public override void Load()
 	{
 		blurScreens = new RenderTarget2D[MAX_BLUR_LEVELS];
 		Ins.MainThread.AddTask(() =>
 		{
-			AllocateRenderTarget();
+			AllocateRenderTarget(new Vector2(Main.screenWidth, Main.screenHeight));
 		});
-		Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, () =>
+		Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, (Vector2 size) =>
 		{
 			for (int i = 0; i < blurScreens.Length; i++)
 			{
 				blurScreens[i]?.Dispose();
 			}
 			blurScreenSwap?.Dispose();
-			AllocateRenderTarget();
+			AllocateRenderTarget(size);
 		}, "Realloc RenderTarget");
-		effect = ModAsset.Bloom;
+		effect = ModAsset.VFX_Bloom;
 	}
 
-	private void AllocateRenderTarget()
+	private void AllocateRenderTarget(Vector2 blurSize)
 	{
 		var gd = Main.instance.GraphicsDevice;
 		for (int i = 0; i < MAX_BLUR_LEVELS; i++)
 		{
 			blurScreens[i] = new RenderTarget2D(
 				gd,
-				MaxBlurWidth >> i, MaxBlurHeight >> i, false,
+				(int)blurSize.X >> i, (int)blurSize.Y >> i, false,
 				SurfaceFormat.Color, DepthFormat.None);
 		}
-		blurScreenSwap = new RenderTarget2D(gd, MaxBlurWidth >> MAX_BLUR_LEVELS, MaxBlurHeight >> MAX_BLUR_LEVELS,
+		blurScreenSwap = new RenderTarget2D(gd, (int)blurSize.X >> MAX_BLUR_LEVELS, (int)blurSize.Y >> MAX_BLUR_LEVELS,
 			false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
 	}
 
@@ -52,7 +48,7 @@ public class BloomPipeline : PostPipeline
 		var effect = this.effect.Value;
 		Rectangle rectangle = new(0, 0, 1, 1);
 
-		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 
 		effect.Parameters["uTransform"].SetValue(
 			Matrix.CreateOrthographicOffCenter(0, 1, 1, 0, 0, 1));
@@ -77,13 +73,13 @@ public class BloomPipeline : PostPipeline
 		effect.Parameters["uIntensity"].SetValue(1);
 
 		gd.SetRenderTarget(blurScreenSwap);
-		gd.Clear(Color.Transparent);
+		gd.Clear(Color.Black);
 		effect.Parameters["uSize"].SetValue(blurScreenSwap.Size());
 		effect.CurrentTechnique.Passes["BloomH"].Apply();
 		sb.Draw(blurScreens[^1], rectangle, Color.White);
 
 		gd.SetRenderTarget(blurScreens[^1]);
-		gd.Clear(Color.Transparent);
+		gd.Clear(Color.Black);
 		effect.Parameters["uSize"].SetValue(blurScreens[^1].Size());
 		effect.CurrentTechnique.Passes["BloomV"].Apply();
 		sb.Draw(blurScreenSwap, rectangle, Color.White);
@@ -102,7 +98,7 @@ public class BloomPipeline : PostPipeline
 		var cur = Ins.VFXManager.CurrentRenderTarget;
 		Ins.VFXManager.SwapRenderTarget();
 		gd.SetRenderTarget(Ins.VFXManager.CurrentRenderTarget);
-		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 		sb.Draw(cur, Vector2.Zero, Color.White);
 
 		gd.BlendState = BlendState.AlphaBlend;

@@ -1,6 +1,4 @@
 using Everglow.Myth.TheTusk.Buffs;
-using Everglow.Myth.TheTusk.Gores;
-using Terraria;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
@@ -31,11 +29,6 @@ class TuskSummon : ModProjectile
 	{
 		TelePortCooling = 60;
 		Projectile.Center = aim;
-		for (int f = 0; f < 15; f++)
-		{
-			var g = Gore.NewGoreDirect(null, aim, new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(6.283), ModContent.GoreType<BloodVFX>(), Main.rand.NextFloat(0.65f, Main.rand.NextFloat(2.5f, 3.75f)));
-			g.timeLeft = Main.rand.Next(250, 500);
-		}
 	}
 	private void MoveTo(Vector2 aim, float speedValue = 0.1f)
 	{
@@ -148,8 +141,8 @@ class TuskSummon : ModProjectile
 	private void AttackII()
 	{
 		Player player = Main.player[Projectile.owner];
-		float radious = 60 + MathF.Sqrt(Projectile.ai[0]) * 10f;
-		MoveTo(player.MountedCenter + new Vector2(0, radious).RotatedBy(Main.time / Math.Pow(radious, 1.5) * 600f + Projectile.ai[0]), 0.6f);
+		float radius = 60 + MathF.Sqrt(Projectile.ai[0]) * 10f;
+		MoveTo(player.MountedCenter + new Vector2(0, radius).RotatedBy(Main.time / Math.Pow(radius, 1.5) * 600f + Projectile.ai[0]), 0.6f);
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X) - MathF.PI / 2f;
 		AttackCooling = 0;
 	}
