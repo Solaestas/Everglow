@@ -255,7 +255,7 @@ public class CanteenMaid : ModNPC
 				NPC.frame.Y += FrameHeight;
 				NPC.frameCounter = 0;
 			}
-			if (NPC.frame.Y > 13 * FrameHeight)
+			if (NPC.frame.Y > 12 * FrameHeight)
 			{
 				NPC.frame.Y = FrameHeight;
 			}
@@ -400,7 +400,7 @@ public class CanteenMaid : ModNPC
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		Texture2D texMain = ModAsset.Resturateur.Value;
+		Texture2D texMain = ModAsset.CanteenMaid.Value;
 		Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height + 8) * 0.5f;
 		Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 

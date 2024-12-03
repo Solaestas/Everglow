@@ -50,7 +50,7 @@ public class AmberBall : ModProjectile
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		return false;
+		return base.Colliding(projHitbox, targetHitbox);
 	}
 
 	public override bool PreDraw(ref Color lightColor)
