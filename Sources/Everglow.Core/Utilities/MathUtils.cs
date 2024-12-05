@@ -120,7 +120,7 @@ public static class MathUtils
 	/// <returns> </returns>
 	public static float SmoothStep(this float value, float from, float to)
 	{
-		value = Clamp(0, 1, (value - from) / (to - from));
+		value = Clamp((value - from) / (to - from), 0, 1);
 		return value * value * (3 - 2 * value);
 	}
 
