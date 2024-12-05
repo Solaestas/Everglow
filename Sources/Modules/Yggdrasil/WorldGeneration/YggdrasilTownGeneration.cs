@@ -42,35 +42,17 @@ public class YggdrasilTownGeneration
 
 		Main.statusText = "Carving The Heavenly Portal...";
 
-		// BuildHeavenlyPortal();
 		BuildTwilightRelic();
 		BuildLampWoodLand();
 		BuildTwilightLand();
 
 		Main.statusText = "LampWood Forest...";
 
-		// Main.statusText = "Flooding The Azure Grotto...";
-		// BuildAzureGrotto();
-		// Main.statusText = "Digging The Tangled Submine...";
-		// BuildTangledSubmine();
-		// Main.statusText = "Another Side, The Fossilized Mine Road...";
-		// BuildFossilizedMineRoad();
 		BuildHeavenlyPortal();
 		Main.statusText = "Constructing The Yggdrasil Town Below...";
 		BuildTownBelow();
 		BuildStoneCageOfChallenges();
 		BuildJellyBallHotbed();
-
-		// Main.statusText = "Growing LampWoods...";
-		// BuildLampWoodLand();
-		// Main.statusText = "Constructing The Yggdrasil Town Upper...";
-		// BuildTownUpper();
-		// Main.statusText = "The Barrier To 2rd Floor Of Yggdrasil...";
-		// BuildDuskfallBarrier();
-		// Main.statusText = "The Stone Cage Of Challenges...";
-		// BuildStoneCageOfChallenges();
-		// Main.statusText = "Twilight Forest...";
-		// BuildTwilightLand();
 	}
 
 	public static int[,] PerlinPixelR = new int[1024, 1024];
@@ -1025,7 +1007,7 @@ public class YggdrasilTownGeneration
 					valueNoise += 1 + (toCenter.Length() - r) / boundThick;
 					valueNoiseSecretion += 1 + (toCenter.Length() - r) / boundThick;
 				}
-				else if(toCenter.Length() < clearRange)
+				else if (toCenter.Length() < clearRange)
 				{
 					valueNoise -= (clearRange - toCenter.Length()) / clearRange;
 					valueNoiseSecretion -= (clearRange - toCenter.Length()) / clearRange;
@@ -1034,7 +1016,7 @@ public class YggdrasilTownGeneration
 				{
 					tile.HasTile = false;
 				}
-				else if(valueNoise <= 1)
+				else if (valueNoise <= 1)
 				{
 					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 					tile.HasTile = true;
@@ -1043,7 +1025,7 @@ public class YggdrasilTownGeneration
 				{
 					tile.wall = 0;
 				}
-				else if(valueNoise <= 1)
+				else if (valueNoise <= 1)
 				{
 					tile.wall = (ushort)ModContent.WallType<JellyBallSecretionWall>();
 				}
@@ -1056,18 +1038,18 @@ public class YggdrasilTownGeneration
 					tile.TileType = (ushort)ModContent.TileType<JellyBallSecretion>();
 					tile.HasTile = true;
 				}
-				float valueNoise2 = PerlinPixelG[x % 1024,y % 1024] / 255f;
-				if(y < upBound + 30)
+				float valueNoise2 = PerlinPixelG[x % 1024, y % 1024] / 255f;
+				if (y < upBound + 30)
 				{
 					valueNoise2 += (upBound + 30 - y) / 30f;
 				}
 				if (toCenter.Y > -120)
 				{
-					if(valueNoise > 1)
+					if (valueNoise > 1)
 					{
 						if (valueNoise2 < 0.5f)
 						{
-							if(!tile.HasTile)
+							if (!tile.HasTile)
 							{
 								tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 								tile.HasTile = true;
@@ -1229,17 +1211,53 @@ public class YggdrasilTownGeneration
 				while (countCell < 100)
 				{
 					countCell++;
-					int x = 10 + GenRand.Next(startX, endX);
-					int halfWidth = GenRand.Next(10, 13);
-					if (x - halfWidth < 50 || x + halfWidth > Main.maxTilesX - 50)
+					int minX = startX + 2;
+					int maxX = endX - 20;
+					if(minX > maxX)
 					{
-						continue;
+						(minX, maxX) = (maxX, minX);
 					}
+					int x = 10 + GenRand.Next(minX, maxX);
 					roomCenterX = x;
 					for (int y = checkY - 25; y > checkY - 30; y--)
 					{
-						int roomHeight = GenRand.Next(8, 10);
-						int chestPosXI = GenRand.Next(-halfWidth + 2, halfWidth - 1);
+						string mapIOPath = string.Empty;
+						switch (Main.rand.Next(8))
+						{
+							case 0:
+								mapIOPath = ModAsset.LampWood_Legacy_1_17x13_Path;
+								break;
+							case 1:
+								mapIOPath = ModAsset.LampWood_Legacy_2_22x14_Path;
+								break;
+							case 2:
+								mapIOPath = ModAsset.LampWood_Legacy_3_18x14_Path;
+								break;
+							case 3:
+								mapIOPath = ModAsset.LampWood_Legacy_4_26x22_Path;
+								break;
+							case 4:
+								mapIOPath = ModAsset.LampWood_Legacy_5_17x8_Path;
+								break;
+							case 5:
+								mapIOPath = ModAsset.LampWood_Legacy_6_16x11_Path;
+								break;
+							case 6:
+								mapIOPath = ModAsset.LampWood_Legacy_7_23x15_Path;
+								break;
+							case 7:
+								mapIOPath = ModAsset.LampWood_Legacy_8_16x16_Path;
+								break;
+						}
+
+						var mapIO = new MapIO(x, y);
+						int roomHeight = mapIO.ReadHeight(ModIns.Mod.GetFileStream(mapIOPath));
+						int roomWidth = mapIO.ReadWidth(ModIns.Mod.GetFileStream(mapIOPath));
+						int halfWidth = roomWidth / 2;
+						if (x - halfWidth < 50 || x + halfWidth > Main.maxTilesX - 50)
+						{
+							continue;
+						}
 						bool canBuild = true;
 						int xj = 0;
 						int yj = 0;
@@ -1284,33 +1302,8 @@ public class YggdrasilTownGeneration
 						{
 							continue;
 						}
-						for (int xi = x - halfWidth; xi <= x + halfWidth; xi++)
-						{
-							for (int yi = y + yj - roomHeight; yi <= y + yj; yi++)
-							{
-								Tile tile = SafeGetTile(xi, yi);
-								if (xi == x - halfWidth || xi == x + halfWidth || yi == y + yj || yi == y + yj - roomHeight)
-								{
-									tile.TileType = (ushort)ModContent.TileType<LampWood_Wood_Tile>();
-									tile.HasTile = true;
-								}
-								else
-								{
-									tile.wall = (ushort)ModContent.WallType<LampWood_Wood_Wall>();
-									tile.HasTile = false;
-								}
-							}
-						}
-						for (int xi = x - halfWidth; xi <= x + halfWidth; xi++)
-						{
-							for (int yi = y + yj - roomHeight; yi <= y + yj; yi++)
-							{
-								if (xi == x + chestPosXI && yi == y + yj - 1)
-								{
-									PlaceLampWoodBiomeChest(xi, yi);
-								}
-							}
-						}
+
+						QuickBuild(x, y + yj - roomHeight, mapIOPath);
 					}
 					if (built)
 					{
@@ -1363,7 +1356,7 @@ public class YggdrasilTownGeneration
 						{
 							if (CheckSpaceWidth(checkX, checkY) > 20 && CheckSpaceUp(checkX, checkY) > 160 && (new Vector2(checkX, checkY) - TwilightRelicCenter).Length() > 400)
 							{
-								Vector2 checkTrunk = new Vector2(checkX + (roomCenterX > checkX ? 50 : -50), checkY);
+								Vector2 checkTrunk = new Vector2(checkX + (roomCenterX > checkX ? -50 : 50), checkY);
 								List<(Vector2 TrunkPos, float Width)> trunkPoints = new List<(Vector2, float)>();
 
 								LifeLampTreeStructure(trunkPoints, checkTrunk, new Vector2(0, -10), 50, 12);
