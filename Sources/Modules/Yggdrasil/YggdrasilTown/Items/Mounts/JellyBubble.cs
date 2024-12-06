@@ -5,9 +5,11 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Mounts;
 public class JellyBubble : ModMount
 {
 	public const int Distance = 16;
-
+	public const int MaxMountStamina = 180;
 	public const float GravityAcceleration = 5f;
 	public const float BuoyancyAcceleration = 8f;
+	public int Stamina = 180;
+	public float FlyGlowValue = 0f;
 
 	public override void SetStaticDefaults()
 	{
@@ -96,6 +98,44 @@ public class JellyBubble : ModMount
 			var buoyancyFact = 1 - distanceToBottomTile.SmoothStep((Distance - offset) * 16f, (Distance + offset) * 16f);
 			var acceleration = (GravityAcceleration - BuoyancyAcceleration * buoyancyFact) * 0.1f;
 			player.velocity.Y += acceleration;
+
+			// Lower than 300, regen stamina.
+			if (distanceToBottomTile < 300)
+			{
+				if (Stamina < MaxMountStamina)
+				{
+					Stamina++;
+				}
+				else
+				{
+					Stamina = MaxMountStamina;
+					if (FlyGlowValue > 0f)
+					{
+						FlyGlowValue -= 0.05f;
+					}
+					else
+					{
+						FlyGlowValue = 0f;
+					}
+				}
+			}
+		}
+		if (player.controlUp)
+		{
+			Stamina--;
+			if (Stamina <= 0)
+			{
+				Stamina = 0;
+				player.mount.Dismount(player);
+			}
+			if (FlyGlowValue < 1f)
+			{
+				FlyGlowValue += 0.05f;
+			}
+			else
+			{
+				FlyGlowValue = 1f;
+			}
 		}
 		Lighting.AddLight(player.Center, new Vector3(0f, 0.4f, 1f));
 	}
@@ -163,6 +203,7 @@ public class JellyBubble : ModMount
 		var scaleFrequencyFact = 0.11f;
 
 		var jellyBallGlowTexture = ModAsset.JellyBubble_JellyBall_Glow.Value;
+		var jellyBallGlowStaminaTexture = ModAsset.JellyBubble_JellyBall_glow2.Value;
 		var jellyBallTexture = ModAsset.JellyBubble_JellyBall.Value;
 		var jellyBallPosition = drawPlayer.Bottom - Main.screenPosition + new Vector2(0, -21f);
 		var jellyBallGlowDrawColor = new Color(0f, 0.04f, 0.3f, 0f);
@@ -172,8 +213,21 @@ public class JellyBubble : ModMount
 		var jellyBallScale = new Vector2(
 			1.6f * (0.9f + scaleMagnitudeFact) * (scaleMagnitudeFact * MathF.Cos((float)Main.time * scaleFrequencyFact) + (1 - scaleMagnitudeFact)),
 			1.2f * (0.9f + scaleMagnitudeFact) * (scaleMagnitudeFact * MathF.Sin((float)Main.time * scaleFrequencyFact) + (1 - scaleMagnitudeFact)));
+		var staminaValue = Stamina / (float)MaxMountStamina;
+		var staminaColor = new Color(staminaValue, staminaValue + 0.3f, staminaValue * 1.8f + 0.3f, 0) * FlyGlowValue;
 		Main.spriteBatch.Draw(jellyBallGlowTexture, jellyBallPosition, null, jellyBallGlowDrawColor, 0, jellyBallGlowOrigin, jellyBallScale, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(jellyBallTexture, jellyBallPosition, null, jellyBallDrawColor, 0, jellyBallOrigin, jellyBallScale, SpriteEffects.None, 0);
+
+		// Use a simple pixel shader to display rest stamina.
+		var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Effect shader = ModAsset.JellyBallStamina.Value;
+		shader.Parameters["duration"].SetValue(1 - staminaValue);
+		shader.CurrentTechnique.Passes[0].Apply();
+		Main.spriteBatch.Draw(jellyBallGlowStaminaTexture, jellyBallPosition, null, staminaColor, 0, jellyBallOrigin, jellyBallScale, SpriteEffects.None, 0);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 
 		// Saddle Part
 		// ===========

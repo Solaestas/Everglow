@@ -1105,7 +1105,7 @@ public class YggdrasilTownGeneration
 			int checkY = GenRand.Next(upBound, bottomBound);
 
 			// 如果上下左右都有大于100的空间且不在中心遗迹区
-			if (CheckSpaceWidth(checkX, checkY) > 100 && CheckSpaceDown(checkX, checkY) > 100 && CheckSpaceUp(checkX, checkY) > 100 && (new Vector2(checkX, checkY) - TwilightRelicCenter).Length() > 400)
+			if (CheckSpaceWidth(checkX, checkY) > 100 && CheckSpaceDown(checkX, checkY) > 100 && CheckSpaceUp(checkX, checkY) > 100 && (new Vector2(checkX, checkY) - TwilightRelicCenter).Length() > 400 && (checkX < Main.maxTilesX - 200 && checkY < Main.maxTilesY - 620))
 			{
 				// 计入一个森林平台数量
 				countLamp++;
@@ -1355,9 +1355,36 @@ public class YggdrasilTownGeneration
 				}
 				if (countLamp > 12)
 				{
+					Vector2 checkTrunk = new Vector2(Main.maxTilesX - 100, Main.maxTilesY - 500);
+
+					// Lamp wood mesa
+					// 低于某个点位则填满泥土
+					int radiusI = 125;
+					Vector2 mesaOffset = new Vector2(0, -60);
+					for (int x0 = -radiusI; x0 <= radiusI; x0++)
+					{
+						for (int y0 = -radiusI; y0 <= radiusI; y0++)
+						{
+							Tile tile = SafeGetTile(checkTrunk + mesaOffset + new Vector2(x0, y0));
+							float aValue = PerlinPixelR[Math.Abs((x0 + x0CoordPerlin) % 1024), Math.Abs((y0 + y0CoordPerlin) % 1024)] / 255f;
+							if (new Vector2(x0, y0).Length() <= radiusI - aValue * 10)
+							{
+								if (y0 > radiusI * 0.5f + aValue * 5)
+								{
+									tile.TileType = (ushort)ModContent.TileType<DarkForestGrass>();
+									tile.HasTile = true;
+								}
+								if (y0 > radiusI * 0.51f + aValue * 5)
+								{
+									tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
+									tile.HasTile = true;
+									tile.wall = (ushort)ModContent.WallType<DarkForestSoilWall>();
+								}
+							}
+						}
+					}
+
 					// 生命灯木
-					Vector2 checkTrunk = new Vector2(Main.maxTilesX - 100, Main.maxTilesY - 450);
-					CircleTile(checkTrunk, 80, -1, true);
 					List<(Vector2 TrunkPos, float Width)> trunkPoints = new List<(Vector2, float)>();
 
 					LifeLampTreeStructure(trunkPoints, checkTrunk, new Vector2(0, -10), 50, 12);

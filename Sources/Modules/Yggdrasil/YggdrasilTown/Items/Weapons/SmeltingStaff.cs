@@ -163,6 +163,7 @@ public class MeltingFireRing : ModProjectile
 			vertices2.Add(Projectile.Center - Main.screenPosition + (i * MathHelper.TwoPi / verticeCounts + 3.14f).ToRotationVector2() * (radius - 40 + offset1), drawColor * 1.5f, new Vector3(-6 * i / 120f + t, 1, 1));
 		}
 
+		var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, /* CustomBlendStates.SoftAdditive*/BlendState.Additive, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
@@ -179,7 +180,7 @@ public class MeltingFireRing : ModProjectile
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices1.ToArray(), 0, vertices1.Count - 2);
 
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 
 		return false;
 	}
