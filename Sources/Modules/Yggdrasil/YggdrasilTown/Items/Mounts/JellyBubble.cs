@@ -97,6 +97,7 @@ public class JellyBubble : ModMount
 			var acceleration = (GravityAcceleration - BuoyancyAcceleration * buoyancyFact) * 0.1f;
 			player.velocity.Y += acceleration;
 		}
+		Lighting.AddLight(player.Center, new Vector3(0f, 0.4f, 1f));
 	}
 
 	public static Vector2 FindSentryRestingSpot(Player player, Vector2 position, out int worldX, out int worldY)
@@ -161,13 +162,17 @@ public class JellyBubble : ModMount
 		var scaleMagnitudeFact = 0.1f + speedPercentForVFX * 0.1f;
 		var scaleFrequencyFact = 0.11f;
 
+		var jellyBallGlowTexture = ModAsset.JellyBubble_JellyBall_Glow.Value;
 		var jellyBallTexture = ModAsset.JellyBubble_JellyBall.Value;
 		var jellyBallPosition = drawPlayer.Bottom - Main.screenPosition + new Vector2(0, -21f);
+		var jellyBallGlowDrawColor = new Color(0f, 0.04f, 0.3f, 0f);
 		var jellyBallDrawColor = drawColor * 3f;
+		var jellyBallGlowOrigin = new Vector2(jellyBallGlowTexture.Width / 2, (jellyBallGlowTexture.Height - jellyBallTexture.Height) * 0.5f);
 		var jellyBallOrigin = new Vector2(jellyBallTexture.Width / 2, 0);
 		var jellyBallScale = new Vector2(
 			1.6f * (0.9f + scaleMagnitudeFact) * (scaleMagnitudeFact * MathF.Cos((float)Main.time * scaleFrequencyFact) + (1 - scaleMagnitudeFact)),
 			1.2f * (0.9f + scaleMagnitudeFact) * (scaleMagnitudeFact * MathF.Sin((float)Main.time * scaleFrequencyFact) + (1 - scaleMagnitudeFact)));
+		Main.spriteBatch.Draw(jellyBallGlowTexture, jellyBallPosition, null, jellyBallGlowDrawColor, 0, jellyBallGlowOrigin, jellyBallScale, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(jellyBallTexture, jellyBallPosition, null, jellyBallDrawColor, 0, jellyBallOrigin, jellyBallScale, SpriteEffects.None, 0);
 
 		// Saddle Part
