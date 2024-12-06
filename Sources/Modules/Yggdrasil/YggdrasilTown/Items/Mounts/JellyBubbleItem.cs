@@ -1,6 +1,6 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Mounts;
 
-public class JellyBallBubbleItem : ModItem
+public class JellyBubbleItem : ModItem
 {
 	public override void SetDefaults()
 	{
@@ -8,12 +8,11 @@ public class JellyBallBubbleItem : ModItem
 		Item.height = 64;
 		Item.useTime = 20;
 		Item.useAnimation = 20;
-		Item.useStyle = ItemUseStyleID.Swing;
+		Item.useStyle = ItemUseStyleID.RaiseLamp;
 
-		// TODO: Adjust sound
-		Item.UseSound = SoundID.Item3;
+		Item.UseSound = SoundID.Item81;
 		Item.noMelee = true;
-		Item.mountType = ModContent.MountType<JellyBallBubble>();
+		Item.mountType = ModContent.MountType<JellyBubble>();
 
 		Item.value = Item.buyPrice(silver: 63, copper: 50);
 		Item.rare = ItemRarityID.Blue;

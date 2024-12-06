@@ -1,6 +1,8 @@
+using Terraria.DataStructures;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Mounts;
 
-public class JellyBallBubble : ModMount
+public class JellyBubble : ModMount
 {
 	public const int Distance = 16;
 
@@ -26,10 +28,10 @@ public class JellyBallBubble : ModMount
 		MountData.constantJump = false;
 
 		// Misc
-		MountData.buff = ModContent.BuffType<Buffs.JellyBallBubbleMount>();
+		MountData.buff = ModContent.BuffType<Buffs.JellyBubbleMount>();
 
 		// Visual Effects
-		MountData.spawnDust = ModContent.DustType<Dusts.JellyBallSpark>();
+		MountData.spawnDust = ModContent.DustType<Dusts.JellyBallGel>();
 		MountData.spawnDustNoGravity = true;
 
 		// Frame data and player offsets
@@ -87,22 +89,15 @@ public class JellyBallBubble : ModMount
 
 		// Buoyancy simulation
 		var bottomTilePosition = FindSentryRestingSpot(player, player.MountedCenter, out int xPosition, out int yPosition);
-		var playerIsNotMoving = !(player.controlLeft || player.controlRight || player.controlUp || player.controlDown);
-		if (playerIsNotMoving)
+		var playerIsNotMovingOnY = !(player.controlUp || player.controlDown);
+		if (playerIsNotMovingOnY)
 		{
-			MountData.acceleration = 0.05f;
+			MountData.acceleration = 0.08f;
 			var distanceToBottomTile = bottomTilePosition.Y - player.MountedCenter.Y;
 			var offset = MathF.Abs(MountData.heightBoost) / (16f * 2f);
 			var buoyancyFact = 1 - distanceToBottomTile.SmoothStep((Distance - offset) * 16f, (Distance + offset) * 16f);
 			var acceleration = (GravityAcceleration - BuoyancyAcceleration * buoyancyFact) * 0.1f;
 			player.velocity.Y += acceleration;
-		}
-
-		// Make positions visualizable
-		if (Main.timeForVisualEffects % 3 == 0)
-		{
-			Dust.NewDust(player.MountedCenter, 2, 2, DustID.Cloud, 0, 0, 1);
-			Dust.NewDust(bottomTilePosition, 1, 1, DustID.Torch, 0, 0, 1);
 		}
 	}
 
@@ -143,8 +138,7 @@ public class JellyBallBubble : ModMount
 		int i = (int)pointPoisition.Y / 16;
 		worldX = num * 16 + 8;
 
-		for (;
-			i < Main.maxTilesY - 10
+		for (; i < Main.maxTilesY - 10
 			 && Main.tile[num, i] != null
 			 && !WorldGen.SolidTile2(num, i)
 			 && Main.tile[num - 1, i] != null
@@ -155,8 +149,38 @@ public class JellyBallBubble : ModMount
 		{
 		}
 
-		worldY = i * 16;
+		worldY = i * 16 - 14;
 
 		return new(worldX, worldY);
+	}
+
+	public override bool Draw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow)
+	{
+		// Jelly Ball Part
+		// ===============
+		// Adjust the scale magnitude of jelly ball proportional to the speed of player
+		var speedPercentForVFX = drawPlayer.velocity.Length().SmoothStep(0, drawPlayer.maxRunSpeed);
+		var scaleMagnitudeFact = 0.1f + speedPercentForVFX * 0.1f;
+		var scaleFrequencyFact = 0.11f;
+
+		var jellyBallTexture = ModAsset.JellyBubble_JellyBall.Value;
+		var jellyBallPosition = drawPlayer.Bottom - Main.screenPosition + new Vector2(0, -14.5f);
+		var jellyBallDrawColor = drawColor * 3f;
+		var jellyBallOrigin = new Vector2(jellyBallTexture.Width / 2, 0);
+		var jellyBallScale = new Vector2(
+			1.2f * (0.9f + scaleMagnitudeFact) * (scaleMagnitudeFact * MathF.Cos((float)Main.timeForVisualEffects * scaleFrequencyFact) + (1 - scaleMagnitudeFact)),
+			1.0f * (0.9f + scaleMagnitudeFact) * (scaleMagnitudeFact * MathF.Sin((float)Main.timeForVisualEffects * scaleFrequencyFact) + (1 - scaleMagnitudeFact)));
+		Main.spriteBatch.Draw(jellyBallTexture, jellyBallPosition, null, jellyBallDrawColor, 0, jellyBallOrigin, jellyBallScale, SpriteEffects.None, 0);
+
+		// Saddle Part
+		// ===========
+		var saddleTexture = ModAsset.JellyBubble_Saddle.Value;
+		var saddlePosition = drawPlayer.Bottom - Main.screenPosition + new Vector2(0, -12);
+		var saddleDrawColor = drawColor;
+		var saddleOrigin = new Vector2(saddleTexture.Width / 2, saddleTexture.Height);
+		var saddleScale = new Vector2(1.2f, 1.2f);
+		Main.spriteBatch.Draw(saddleTexture, saddlePosition, null, saddleDrawColor, 0, saddleOrigin, saddleScale, SpriteEffects.None, 0);
+
+		return true;
 	}
 }
