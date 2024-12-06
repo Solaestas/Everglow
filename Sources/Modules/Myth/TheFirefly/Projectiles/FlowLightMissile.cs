@@ -29,6 +29,7 @@ internal class FlowLightMissile : ModProjectile
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
+		int holdMana = player.statManaMax - 8;
 		player.heldProj = Projectile.whoAmI;
 		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathF.PI * 0.75f);
 		energy += 2;
@@ -100,7 +101,7 @@ internal class FlowLightMissile : ModProjectile
 	}
 	private void Shoot()
 	{
-		SoundEngine.PlaySound(SoundID.Item72.WithVolumeScale(0.6f), Projectile.Center);
+		SoundEngine.PlaySound(SoundID.Item72.WithVolumeScale(0.5f), Projectile.Center);
 		Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
 		v0 = Vector2.Normalize(v0);
 		Player player = Main.player[Projectile.owner];
