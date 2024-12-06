@@ -32,19 +32,25 @@ public class ActivatedJellyGlandMinion : ModProjectile
 		set => targetWhoAmI = value;
 	}
 
+	private float Timer
+	{
+		get => Projectile.ai[0];
+		set => Projectile.ai[0] = value;
+	}
+
 	private State MinionState { get; set; } = State.Patrol;
 
-	private ChaseState MinionAttackState { get; set; } = ChaseState.Dash;
+	private ChaseState MinionChaseState { get; set; } = ChaseState.Dash;
 
 	private Vector3 BloomLightColor { get; set; } = new Vector3(0f, 0.5f, 1f);
 
 	private Vector2 TargetCenter { get; set; } = Vector2.Zero;
 
-	private int DashTimer { get; set; } = 0;
-
-	private int ExplosionTimer { get; set; } = 0;
-
 	private float ExplosionScaleFrequency { get; set; } = 0.2f;
+
+	private Player Owner => Main.player[Projectile.owner];
+
+	private bool HasTarget => TargetWhoAmI != NoTarget;
 
 	public override void SetStaticDefaults()
 	{
@@ -85,33 +91,13 @@ public class ActivatedJellyGlandMinion : ModProjectile
 
 	public override bool MinionContactDamage() => false;
 
-	public override void DrawBehind(
-		int index,
-		List<int> behindNPCsAndTiles,
-		List<int> behindNPCs,
-		List<int> behindProjectiles,
-		List<int> overPlayers,
-		List<int> overWiresUI) => behindNPCsAndTiles.Add(index);
+	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => behindNPCsAndTiles.Add(index);
 
 	public override void AI()
 	{
-		if (Main.time % 10 == 0)
-		{
-			Projectile.frameCounter = (Projectile.frameCounter + 1) % Main.projFrames[Projectile.type];
-		}
+		BaseMinionAI();
 
-		Player owner = Main.player[Projectile.owner];
-		if (CheckPlayerNotActive(owner))
-		{
-			Projectile.Kill();
-			return;
-		}
-		if (CheckTargetNotActive())
-		{
-			TargetWhoAmI = NoTarget;
-		}
-
-		GeneralBehavior();
+		GeneralBehavior_Bloom();
 
 		switch (MinionState)
 		{
@@ -127,41 +113,46 @@ public class ActivatedJellyGlandMinion : ModProjectile
 		}
 	}
 
-	private bool CheckPlayerNotActive(Player owner) => owner.dead || !owner.active ? true : false;
+	#region AI
 
-	private bool CheckTargetNotActive()
+	private void BaseMinionAI()
 	{
-		if (HasNoTarget)
+		// Update frame counter
+		if (Main.time % 10 == 0)
 		{
-			return true;
+			Projectile.frameCounter = (Projectile.frameCounter + 1) % Main.projFrames[Projectile.type];
 		}
 
-		NPC target = Main.npc[TargetWhoAmI];
-		if (!target.active || target.dontTakeDamage)
+		// Check owner
+		if (Owner.dead || !Owner.active)
 		{
-			return true;
+			Projectile.Kill();
+			return;
 		}
 
-		return false;
+		// Check and update target
+		if (!HasTarget)
+		{
+			TargetWhoAmI = NoTarget;
+		}
+		else
+		{
+			NPC target = Main.npc[TargetWhoAmI];
+			if (!target.active || target.dontTakeDamage || !target.CanBeChasedBy())
+			{
+				TargetWhoAmI = NoTarget;
+			}
+		}
 	}
 
 	private void SearchTarget()
 	{
 		var oldTarget = TargetWhoAmI;
-		Projectile.Minion_FindTargetInRange(SearchDistance, ref targetWhoAmI, false, (entiy, npcid) => true);
+		Projectile.Minion_FindTargetInRange(SearchDistance, ref targetWhoAmI, false);
 		if (oldTarget != TargetWhoAmI)
 		{
 			Projectile.netUpdate = true;
 		}
-	}
-
-	private bool HasNoTarget => TargetWhoAmI == NoTarget;
-
-	private bool HasTarget => TargetWhoAmI != NoTarget;
-
-	private void GeneralBehavior()
-	{
-		GeneralBehavior_Bloom();
 	}
 
 	private void GeneralBehavior_Bloom()
@@ -216,37 +207,49 @@ public class ActivatedJellyGlandMinion : ModProjectile
 		}
 		Vector2 movement = TargetCenter - Projectile.Center;
 
-		switch (MinionAttackState)
+		switch (MinionChaseState)
 		{
 			case ChaseState.Dash:
 				var DashSpeed = 3f;
 				Projectile.velocity = (movement + new Vector2(0, MathF.Sin((float)Main.time * 0.0005f + Projectile.whoAmI * 7 + 2.1f))).NormalizeSafe() * DashSpeed;
-				Projectile.rotation = Projectile.velocity.ToRotation() + 1.57f;
-				if (++DashTimer > 15)
+				Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+
+				const int DashDuration = 15;
+				if (++Timer > DashDuration)
 				{
-					DashTimer = 0;
-					MinionAttackState = ChaseState.Rest;
+					Timer = 0;
+					MinionChaseState = ChaseState.Rest;
 				}
 				break;
-
 			case ChaseState.Rest:
 				Projectile.velocity *= 0.92f;
 				if (Projectile.velocity.Length() <= 0.5f)
 				{
-					MinionAttackState = ChaseState.Dash;
+					MinionChaseState = ChaseState.Dash;
 				}
 				break;
 		}
 
 		if (movement.Length() <= ExplodeStateDistance)
 		{
+			Timer = 0;
 			MinionState = State.Attack;
-			Projectile.velocity = Vector2.Zero;
 		}
 	}
 
 	private void Attack()
 	{
+		// Decelerate until stop
+		if (Projectile.velocity.Length() > 0.5f)
+		{
+			Projectile.velocity *= 0.92f;
+		}
+		else if (Projectile.velocity.Length() > 0)
+		{
+			Projectile.velocity = Vector2.Zero;
+		}
+
+		// Update target position if target is available
 		if (HasTarget)
 		{
 			NPC target = Main.npc[TargetWhoAmI];
@@ -254,23 +257,21 @@ public class ActivatedJellyGlandMinion : ModProjectile
 		}
 		var direction = (TargetCenter - Projectile.Center).NormalizeSafe();
 
+		// Do random stretching and squishing frequently before explosion
 		ExplosionScaleFrequency += ExplosionScaleFrequency < ExplosionScaleFrequencyLimit ? 0.005f : 0f;
-		Projectile.scale = 0.5f + 0.1f * MathF.Sin((float)Main.time * 0.1f * ExplosionScaleFrequency);
+		Projectile.scale = 0.5f + 0.1f * MathF.Sin(Timer * 1.5f * ExplosionScaleFrequency);
 
-		if (++ExplosionTimer > ExplosionDuration ||
-			Projectile.timeLeft <= 1)
+		// Keep projectile active before explosion is happening
+		Projectile.timeLeft += 2;
+		if (++Timer > ExplosionDuration)
 		{
-			Projectile.NewProjectile(
-				Projectile.GetSource_FromAI(),
-				Projectile.Center,
-				direction * 2f,
-				ModContent.ProjectileType<ActivatedJellyGlandCurrentBeam>(),
-				Projectile.damage,
-				Projectile.knockBack,
-				Projectile.owner);
+			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ActivatedJellyGlandExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, direction * 60f, ModContent.ProjectileType<ActivatedJellyGlandBeam>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 			Projectile.Kill();
 		}
 	}
+
+	#endregion
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
@@ -283,27 +284,27 @@ public class ActivatedJellyGlandMinion : ModProjectile
 	{
 		float glowStrength = HasTarget ? 1f : 0.4f;
 
-		Texture2D texture = ModAsset.JellyBall.Value;
-		Texture2D textureG = ModAsset.JellyBall_glow.Value;
-		Texture2D textureB = ModAsset.JellyBall_bloom.Value;
+		Texture2D textureMain = ModAsset.JellyBall.Value;
+		Texture2D textureGlow = ModAsset.JellyBall_glow.Value;
+		Texture2D textureBloom = ModAsset.JellyBall_bloom.Value;
 
 		Color drawColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
-		int frameWidth = texture.Width / 2;
-		int frameHeight = texture.Height / 5;
+		int frameWidth = textureMain.Width / 2;
+		int frameHeight = textureMain.Height / 5;
 		int frameX = HasTarget ? 0 : frameWidth;
 		int frameY = frameHeight * (Projectile.frameCounter % 5);
 
 		Rectangle sourceRect = new Rectangle(frameX, frameY, frameWidth, frameHeight);
 
-		int bloomFrameWidth = textureB.Width / 2;
-		int bloomFrameHeight = textureB.Height / 5;
+		int bloomFrameWidth = textureBloom.Width / 2;
+		int bloomFrameHeight = textureBloom.Height / 5;
 		int bloomFrameX = HasTarget ? 0 : bloomFrameWidth;
 		int bloomFrameY = bloomFrameHeight * (Projectile.frameCounter % 5);
 		Rectangle bloomSourceRect = new Rectangle(bloomFrameX, bloomFrameY, bloomFrameWidth, bloomFrameHeight);
 
-		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, sourceRect, Color.Lerp(drawColor * 0.7f, new Color(0.6f, 1f, 1f, 1f), 0.4f), Projectile.rotation, new Vector2(texture.Width / 4f, texture.Height / 10f), Projectile.scale, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(textureB, Projectile.Center - Main.screenPosition, bloomSourceRect, new Color(1f, 1f, 1f, 0f) * glowStrength, Projectile.rotation, new Vector2(textureB.Width / 4f, textureB.Height / 10f), Projectile.scale, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(textureG, Projectile.Center - Main.screenPosition, sourceRect, new Color(1f, 1f, 1f, 0f) * glowStrength, Projectile.rotation, new Vector2(textureG.Width / 4f, textureG.Height / 10f), Projectile.scale, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(textureMain, Projectile.Center - Main.screenPosition, sourceRect, Color.Lerp(drawColor * 0.7f, new Color(0.6f, 1f, 1f, 1f), 0.4f), Projectile.rotation, new Vector2(textureMain.Width / 4f, textureMain.Height / 10f), Projectile.scale, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(textureBloom, Projectile.Center - Main.screenPosition, bloomSourceRect, new Color(1f, 1f, 1f, 0f) * glowStrength, Projectile.rotation, new Vector2(textureBloom.Width / 4f, textureBloom.Height / 10f), Projectile.scale, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(textureGlow, Projectile.Center - Main.screenPosition, sourceRect, new Color(1f, 1f, 1f, 0f) * glowStrength, Projectile.rotation, new Vector2(textureGlow.Width / 4f, textureGlow.Height / 10f), Projectile.scale, SpriteEffects.None, 0);
 
 		return false;
 	}
