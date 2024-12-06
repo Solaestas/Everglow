@@ -1,5 +1,6 @@
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.JellyBall;
 
+[AutoloadEquip(EquipType.Head)]
 public class JellyBallBathingCap : ModItem
 {
 	public const float EffectTriggerChance = 0.05f;
@@ -9,12 +10,11 @@ public class JellyBallBathingCap : ModItem
 	{
 		Item.width = 44;
 		Item.height = 46;
-		Item.accessory = true;
 		Item.rare = ItemRarityID.Blue;
 		Item.value = Item.buyPrice(silver: 43, copper: 50);
 	}
 
-	public override void UpdateAccessory(Player player, bool hideVisual)
+	public override void UpdateEquip(Player player)
 	{
 		// 1. + 2 defense
 		// ==============

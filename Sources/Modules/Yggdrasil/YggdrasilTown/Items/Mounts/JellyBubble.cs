@@ -20,7 +20,7 @@ public class JellyBubble : ModMount
 
 		MountData.runSpeed = 11f;
 		MountData.dashSpeed = 8f;
-		MountData.acceleration = 0.19f;
+		MountData.acceleration = 0.08f;
 
 		MountData.jumpHeight = 5;
 		MountData.jumpSpeed = 4f;
@@ -85,14 +85,12 @@ public class JellyBubble : ModMount
 		// Update the max speed of mount to player's max speed
 		MountData.runSpeed = player.maxRunSpeed;
 		MountData.dashSpeed = player.maxRunSpeed;
-		MountData.acceleration = 0.19f;
 
 		// Buoyancy simulation
 		var bottomTilePosition = FindSentryRestingSpot(player, player.MountedCenter, out int xPosition, out int yPosition);
 		var playerIsNotMovingOnY = !(player.controlUp || player.controlDown);
 		if (playerIsNotMovingOnY)
 		{
-			MountData.acceleration = 0.08f;
 			var distanceToBottomTile = bottomTilePosition.Y - player.MountedCenter.Y;
 			var offset = MathF.Abs(MountData.heightBoost) / (16f * 2f);
 			var buoyancyFact = 1 - distanceToBottomTile.SmoothStep((Distance - offset) * 16f, (Distance + offset) * 16f);
@@ -164,21 +162,21 @@ public class JellyBubble : ModMount
 		var scaleFrequencyFact = 0.11f;
 
 		var jellyBallTexture = ModAsset.JellyBubble_JellyBall.Value;
-		var jellyBallPosition = drawPlayer.Bottom - Main.screenPosition + new Vector2(0, -14.5f);
+		var jellyBallPosition = drawPlayer.Bottom - Main.screenPosition + new Vector2(0, -21f);
 		var jellyBallDrawColor = drawColor * 3f;
 		var jellyBallOrigin = new Vector2(jellyBallTexture.Width / 2, 0);
 		var jellyBallScale = new Vector2(
-			1.2f * (0.9f + scaleMagnitudeFact) * (scaleMagnitudeFact * MathF.Cos((float)Main.timeForVisualEffects * scaleFrequencyFact) + (1 - scaleMagnitudeFact)),
-			1.0f * (0.9f + scaleMagnitudeFact) * (scaleMagnitudeFact * MathF.Sin((float)Main.timeForVisualEffects * scaleFrequencyFact) + (1 - scaleMagnitudeFact)));
+			1.6f * (0.9f + scaleMagnitudeFact) * (scaleMagnitudeFact * MathF.Cos((float)Main.time * scaleFrequencyFact) + (1 - scaleMagnitudeFact)),
+			1.2f * (0.9f + scaleMagnitudeFact) * (scaleMagnitudeFact * MathF.Sin((float)Main.time * scaleFrequencyFact) + (1 - scaleMagnitudeFact)));
 		Main.spriteBatch.Draw(jellyBallTexture, jellyBallPosition, null, jellyBallDrawColor, 0, jellyBallOrigin, jellyBallScale, SpriteEffects.None, 0);
 
 		// Saddle Part
 		// ===========
 		var saddleTexture = ModAsset.JellyBubble_Saddle.Value;
-		var saddlePosition = drawPlayer.Bottom - Main.screenPosition + new Vector2(0, -12);
+		var saddlePosition = drawPlayer.Bottom - Main.screenPosition + new Vector2(0, -15f);
 		var saddleDrawColor = drawColor;
 		var saddleOrigin = new Vector2(saddleTexture.Width / 2, saddleTexture.Height);
-		var saddleScale = new Vector2(1.2f, 1.2f);
+		var saddleScale = 1.4f;
 		Main.spriteBatch.Draw(saddleTexture, saddlePosition, null, saddleDrawColor, 0, saddleOrigin, saddleScale, SpriteEffects.None, 0);
 
 		return true;

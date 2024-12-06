@@ -7,6 +7,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 public class ActivatedJellyGland : ModItem
 {
 	public const int MaxMinionAmount = 4;
+	public const int SummonDistance = 300;
 
 	public override void SetStaticDefaults()
 	{
@@ -37,20 +38,13 @@ public class ActivatedJellyGland : ModItem
 		Item.shoot = ModContent.ProjectileType<Projectiles.ActivatedJellyGlandMinion>();
 	}
 
+	public override bool CanUseItem(Player player) => (player.numMinions < player.maxMinions) && player.ownedProjectileCounts[Item.shoot] == 0;
+
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		if (player.numMinions >= player.maxMinions)
-		{
-			Main.PrintTimedMessage("No available minion slots");
-			return false;
-		}
-		else if (player.ownedProjectileCounts[type] != 0)
-		{
-			Main.PrintTimedMessage("Minions already exists");
-			return false;
-		}
-
-		position = Main.MouseWorld;
+		position = (Main.MouseWorld - player.Center).Length() <= SummonDistance
+			? Main.MouseWorld
+			: player.Center + (Main.MouseWorld - player.Center).NormalizeSafe() * SummonDistance;
 		int summonAmount = Math.Min(MaxMinionAmount, player.maxMinions - player.numMinions);
 		if (summonAmount == 1)
 		{
