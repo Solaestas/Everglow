@@ -1045,7 +1045,7 @@ public class YggdrasilTownGeneration
 				}
 				if (toCenter.Y > -120)
 				{
-					if (valueNoise > 1)
+					if (valueNoise > 1 && x > Center.X)
 					{
 						if (valueNoise2 < 0.5f)
 						{
@@ -1211,13 +1211,13 @@ public class YggdrasilTownGeneration
 				while (countCell < 100)
 				{
 					countCell++;
-					int minX = startX + 2;
-					int maxX = endX - 20;
-					if(minX > maxX)
+					int minX = startX + 40;
+					int maxX = endX - 40;
+					if (minX > maxX)
 					{
 						(minX, maxX) = (maxX, minX);
 					}
-					int x = 10 + GenRand.Next(minX, maxX);
+					int x = GenRand.Next(minX, maxX);
 					roomCenterX = x;
 					for (int y = checkY - 25; y > checkY - 30; y--)
 					{
@@ -1304,6 +1304,15 @@ public class YggdrasilTownGeneration
 						}
 
 						QuickBuild(x, y + yj - roomHeight, mapIOPath);
+						for (int xi = x; xi < x + roomWidth; xi++)
+						{
+							for (int yi = y + yj; yi < y + yj + 5; yi++)
+							{
+								Tile tileBottomGrass = SafeGetTile(xi, yi);
+								tileBottomGrass.TileType = (ushort)ModContent.TileType<DarkForestGrass>();
+								tileBottomGrass.HasTile = true;
+							}
+						}
 					}
 					if (built)
 					{
@@ -1347,50 +1356,38 @@ public class YggdrasilTownGeneration
 				if (countLamp > 12)
 				{
 					// 生命灯木
-					for (int j = 0; j < 5000; j++)
-					{
-						// 选址
-						checkX = GenRand.Next(50, Main.maxTilesX - 49);
-						checkY = GenRand.Next(upBound, bottomBound);
-						if (SafeGetTile(checkX, checkY + 1).TileType == ModContent.TileType<DarkForestGrass>())
-						{
-							if (CheckSpaceWidth(checkX, checkY) > 20 && CheckSpaceUp(checkX, checkY) > 160 && (new Vector2(checkX, checkY) - TwilightRelicCenter).Length() > 400)
-							{
-								Vector2 checkTrunk = new Vector2(checkX + (roomCenterX > checkX ? -50 : 50), checkY);
-								List<(Vector2 TrunkPos, float Width)> trunkPoints = new List<(Vector2, float)>();
+					Vector2 checkTrunk = new Vector2(Main.maxTilesX - 100, Main.maxTilesY - 450);
+					CircleTile(checkTrunk, 80, -1, true);
+					List<(Vector2 TrunkPos, float Width)> trunkPoints = new List<(Vector2, float)>();
 
-								LifeLampTreeStructure(trunkPoints, checkTrunk, new Vector2(0, -10), 50, 12);
-								for (int t = 0; t < trunkPoints.Count; t++)
-								{
-									Vector2 trunkPoint = trunkPoints[t].TrunkPos;
-									float jointWidth = trunkPoints[t].Width;
-									CircleTile(trunkPoint, jointWidth, ModContent.TileType<FemaleLampWood>());
-									CircleWall(trunkPoint, Math.Max(jointWidth - 1, 0), ModContent.WallType<FemaleLampWoodWall>());
-								}
-								for (int t = 0; t < trunkPoints.Count; t++)
-								{
-									Vector2 trunkPoint = trunkPoints[t].TrunkPos;
-									float jointWidth = trunkPoints[t].Width;
-									CircleTile(trunkPoint, Math.Max(jointWidth - 3, 0), -1, true);
-								}
-								for (int t = 5; t < trunkPoints.Count; t++)
-								{
-									Vector2 trunkPoint = trunkPoints[t].TrunkPos;
-									float jointWidth = trunkPoints[t].Width + Main.rand.NextFloat(3) - 2;
-									Vector2 placePos = trunkPoint + new Vector2(jointWidth * (GenRand.NextBool(2) ? -1 : 1), 0).RotatedByRandom(MathHelper.TwoPi);
-									float distanceToLeaves = To100NearestTileTypeBlockDistance((int)placePos.X, (int)placePos.Y, ModContent.TileType<FemaleLampLeaves>());
-									float distanceToWood = To100NearestTileTypeBlockDistance((int)placePos.X, (int)placePos.Y, ModContent.TileType<FemaleLampWood>());
-									if (distanceToLeaves > 7 && jointWidth > 2 && distanceToWood <= 2)
-									{
-										Tile tile = SafeGetTile(placePos);
-										if (tile.wall != ModContent.WallType<FemaleLampWoodWall>())
-										{
-											tile.TileType = (ushort)ModContent.TileType<FemaleLampLeaves>();
-											tile.HasTile = true;
-										}
-									}
-								}
-								break;
+					LifeLampTreeStructure(trunkPoints, checkTrunk, new Vector2(0, -10), 50, 12);
+					for (int t = 0; t < trunkPoints.Count; t++)
+					{
+						Vector2 trunkPoint = trunkPoints[t].TrunkPos;
+						float jointWidth = trunkPoints[t].Width;
+						CircleTile(trunkPoint, jointWidth, ModContent.TileType<FemaleLampWood>());
+						CircleWall(trunkPoint, Math.Max(jointWidth - 1, 0), ModContent.WallType<FemaleLampWoodWall>());
+					}
+					for (int t = 0; t < trunkPoints.Count; t++)
+					{
+						Vector2 trunkPoint = trunkPoints[t].TrunkPos;
+						float jointWidth = trunkPoints[t].Width;
+						CircleTile(trunkPoint, Math.Max(jointWidth - 3, 0), -1, true);
+					}
+					for (int t = 5; t < trunkPoints.Count; t++)
+					{
+						Vector2 trunkPoint = trunkPoints[t].TrunkPos;
+						float jointWidth = trunkPoints[t].Width + Main.rand.NextFloat(3) - 2;
+						Vector2 placePos = trunkPoint + new Vector2(jointWidth * (GenRand.NextBool(2) ? -1 : 1), 0).RotatedByRandom(MathHelper.TwoPi);
+						float distanceToLeaves = To100NearestTileTypeBlockDistance((int)placePos.X, (int)placePos.Y, ModContent.TileType<FemaleLampLeaves>());
+						float distanceToWood = To100NearestTileTypeBlockDistance((int)placePos.X, (int)placePos.Y, ModContent.TileType<FemaleLampWood>());
+						if (distanceToLeaves > 7 && jointWidth > 2 && distanceToWood <= 2)
+						{
+							Tile tile = SafeGetTile(placePos);
+							if (tile.wall != ModContent.WallType<FemaleLampWoodWall>())
+							{
+								tile.TileType = (ushort)ModContent.TileType<FemaleLampLeaves>();
+								tile.HasTile = true;
 							}
 						}
 					}
