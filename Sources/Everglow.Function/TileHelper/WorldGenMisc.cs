@@ -29,6 +29,34 @@ public class WorldGenMisc
 	}
 
 	/// <summary>
+	/// Fill chest by given coord, make sure this point is the left bottom tile of a chest.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="itemList"></param>
+	/// <exception cref="Exception"></exception>
+	public static void TryFillChest(int x, int y, List<Item> itemList)
+	{
+		if (x >= Main.maxTilesX - 2 || x <= 2 || y >= Main.maxTilesY - 2 || y <= 2)
+		{
+			throw new Exception("the chest stand out of the world!");
+		}
+		foreach (Chest chest in Main.chest)
+		{
+			if (chest != null)
+			{
+				if (chest.x == x && chest.y + 1 == y)
+				{
+					for (int t = 0; t < itemList.Count; t++)
+					{
+						chest.item[t] = itemList[t];
+					}
+				}
+			}
+		}
+	}
+
+	/// <summary>
 	/// 以[x,y]为左上顶点放置大件连续物块,此类物块必须是18x18(不算分隔线就16x16)一帧的
 	/// </summary>
 	/// <param name="path"></param>

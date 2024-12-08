@@ -25,9 +25,11 @@ public class CyanVineStaff_proj_shoot : ModProjectile, IWarpProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 90;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 	}
+
 	private void AddLight()
 	{
 		if (timeTokill < 0)
@@ -35,18 +37,27 @@ public class CyanVineStaff_proj_shoot : ModProjectile, IWarpProjectile
 			Lighting.AddLight(Projectile.Center, Projectile.ai[0] * 0.01f, Projectile.ai[0] * 0.03f, Projectile.ai[0] * Projectile.ai[0] * 0.003f);
 		}
 	}
+
 	public override void AI()
 	{
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 		if (timeTokill >= 0 && timeTokill <= 2)
+		{
 			Projectile.Kill();
+		}
+
 		if (timeTokill <= 15 && timeTokill > 0)
+		{
 			Projectile.velocity = Projectile.oldVelocity;
+		}
+
 		timeTokill--;
 		if (timeTokill < 0)
 		{
 			if (Projectile.timeLeft == 2310)
+			{
 				Projectile.friendly = true;
+			}
 		}
 		else
 		{
@@ -59,21 +70,26 @@ public class CyanVineStaff_proj_shoot : ModProjectile, IWarpProjectile
 		}
 		AddLight();
 	}
+
 	private int timeTokill = -1;
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		HitToAnything();
 	}
+
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		HitToAnything();
 	}
+
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
 		HitToAnything();
 		Projectile.tileCollide = false;
 		return false;
 	}
+
 	private void HitToAnything()
 	{
 		Projectile.velocity = Projectile.oldVelocity;
@@ -85,19 +101,24 @@ public class CyanVineStaff_proj_shoot : ModProjectile, IWarpProjectile
 		}
 		timeTokill = 90;
 	}
+
 	private void DrawTrail()
 	{
 		float k1 = 20f;
 		float colorValue0 = (2400 - Projectile.timeLeft) / k1;
 
 		if (Projectile.timeLeft <= 2400 - k1)
+		{
 			colorValue0 = 1;
+		}
 
 		int trueLength = 0;
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
 
 			trueLength++;
 		}
@@ -111,13 +132,24 @@ public class CyanVineStaff_proj_shoot : ModProjectile, IWarpProjectile
 		{
 			float width = 24;
 			if (Projectile.timeLeft <= 40)
+			{
 				width = Projectile.timeLeft * 0.9f;
+			}
+
 			if (i < 10)
+			{
 				width *= i / 10f;
+			}
+
 			if (Projectile.ai[0] == 3)
+			{
 				width *= 0.5f;
+			}
+
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
 
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -134,13 +166,24 @@ public class CyanVineStaff_proj_shoot : ModProjectile, IWarpProjectile
 		{
 			float width = 20;
 			if (Projectile.timeLeft <= 40)
+			{
 				width = Projectile.timeLeft * 0.9f;
+			}
+
 			if (i < 4)
+			{
 				width *= i / 4f;
+			}
+
 			if (Projectile.ai[0] == 3)
+			{
 				width *= 0.5f;
+			}
+
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
 
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -156,12 +199,18 @@ public class CyanVineStaff_proj_shoot : ModProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+
 		t = Commons.ModAsset.Trail_3_black.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (barsDark.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, barsDark.ToArray(), 0, barsDark.Count - 2);
+		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawTrail();
@@ -174,6 +223,7 @@ public class CyanVineStaff_proj_shoot : ModProjectile, IWarpProjectile
 		}
 		return false;
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float width = 16;
@@ -183,38 +233,54 @@ public class CyanVineStaff_proj_shoot : ModProjectile, IWarpProjectile
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
+
 			trueLength++;
 		}
 		var bars = new List<Vertex2D>();
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
+
 			float MulColor = 1f;
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 			if (i == 1)
+			{
 				MulColor = 0f;
+			}
+
 			if (i >= 2)
 			{
 				var normalDirII = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
 				normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 				if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
+				{
 					MulColor = 0f;
+				}
 			}
 			if (i < Projectile.oldPos.Length - 1)
 			{
 				var normalDirII = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
 				normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 				if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
+				{
 					MulColor = 0f;
+				}
 			}
 
 			float colorValue0 = (float)Math.Atan2(normalDir.Y, normalDir.X);
 			colorValue0 += 3.14f + 1.57f;
 			if (colorValue0 > 6.28f)
+			{
 				colorValue0 -= 6.28f;
+			}
+
 			var c0 = new Color(colorValue0, 0.4f * colorValueG * MulColor, 0, 0);
 
 			var factor = i / (float)trueLength;
@@ -239,6 +305,8 @@ public class CyanVineStaff_proj_shoot : ModProjectile, IWarpProjectile
 		Texture2D t = Commons.ModAsset.Trail_4.Value;
 
 		if (bars.Count > 3)
+		{
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
+		}
 	}
 }

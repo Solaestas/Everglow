@@ -37,21 +37,29 @@ public class YggdrasilTownGeneration
 
 		Main.statusText = "Filling Midnight Bayou With Mud...";
 		BuildMidnightBayou();
-		Main.statusText = "Giant Pillars...";
+
+		Main.statusText = "Giant Cavenours Pillars...";
 		BuildGiantYggdrasilPosts();
 
-		Main.statusText = "Carving The Heavenly Portal...";
-
+		Main.statusText = "Building Twilight Castle...";
 		BuildTwilightRelic();
+
+		Main.statusText = "Constructing LampWood Forest Mesa...";
 		BuildLampWoodLand();
+
+		Main.statusText = "Planting Twilight Crystal Forest...";
 		BuildTwilightLand();
 
-		Main.statusText = "LampWood Forest...";
-
+		Main.statusText = "Carving the Heavenly Portal...";
 		BuildHeavenlyPortal();
-		Main.statusText = "Constructing The Yggdrasil Town Below...";
+
+		Main.statusText = "Constructing the Yggdrasil Town Below...";
 		BuildTownBelow();
+
+		Main.statusText = "Engraving Cage of Challengers...";
 		BuildStoneCageOfChallenges();
+
+		Main.statusText = "Growing Jelly Ball Hotbed...";
 		BuildJellyBallHotbed();
 	}
 
@@ -1023,7 +1031,10 @@ public class YggdrasilTownGeneration
 				}
 				if (valueNoiseWall < 0.5f)
 				{
-					tile.wall = 0;
+					if (valueNoise <= 1)
+					{
+						tile.wall = 0;
+					}
 				}
 				else if (valueNoise <= 1)
 				{
@@ -1304,6 +1315,7 @@ public class YggdrasilTownGeneration
 						}
 
 						QuickBuild(x, y + yj - roomHeight, mapIOPath);
+						FillLampWoodChestXYWH(x, y + yj - roomHeight, roomWidth, roomHeight);
 						for (int xi = x; xi < x + roomWidth; xi++)
 						{
 							for (int yi = y + yj; yi < y + yj + 5; yi++)
@@ -1353,13 +1365,15 @@ public class YggdrasilTownGeneration
 						}
 					}
 				}
+
+				// 生命灯木
 				if (countLamp > 12)
 				{
-					Vector2 checkTrunk = new Vector2(Main.maxTilesX - 100, Main.maxTilesY - 500);
+					Vector2 checkTrunk = new Vector2(Main.maxTilesX - 100, Main.maxTilesY - 560);
 
 					// Lamp wood mesa
 					// 低于某个点位则填满泥土
-					int radiusI = 125;
+					int radiusI = 240;
 					Vector2 mesaOffset = new Vector2(0, -60);
 					for (int x0 = -radiusI; x0 <= radiusI; x0++)
 					{
@@ -1369,12 +1383,12 @@ public class YggdrasilTownGeneration
 							float aValue = PerlinPixelR[Math.Abs((x0 + x0CoordPerlin) % 1024), Math.Abs((y0 + y0CoordPerlin) % 1024)] / 255f;
 							if (new Vector2(x0, y0).Length() <= radiusI - aValue * 10)
 							{
-								if (y0 > radiusI * 0.5f + aValue * 5)
+								if (y0 > radiusI * 0.4f + aValue * 5)
 								{
 									tile.TileType = (ushort)ModContent.TileType<DarkForestGrass>();
 									tile.HasTile = true;
 								}
-								if (y0 > radiusI * 0.51f + aValue * 5)
+								if (y0 > radiusI * 0.41f + aValue * 5)
 								{
 									tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
 									tile.HasTile = true;
@@ -1384,9 +1398,8 @@ public class YggdrasilTownGeneration
 						}
 					}
 
-					// 生命灯木
 					List<(Vector2 TrunkPos, float Width)> trunkPoints = new List<(Vector2, float)>();
-
+					checkTrunk = new Vector2(Main.maxTilesX - 100, Main.maxTilesY - 500);
 					LifeLampTreeStructure(trunkPoints, checkTrunk, new Vector2(0, -10), 50, 12);
 					for (int t = 0; t < trunkPoints.Count; t++)
 					{
@@ -1420,6 +1433,24 @@ public class YggdrasilTownGeneration
 					}
 					break;
 				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Fill all lampwood chest by given area if exist.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="width"></param>
+	/// <param name="height"></param>
+	public static void FillLampWoodChestXYWH(int x, int y, int width, int height)
+	{
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				WorldGenMisc.TryFillChest(x + i, y + j, LampWoodChestContents());
 			}
 		}
 	}
@@ -3395,6 +3426,13 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
+
+		int type = ModContent.TileType<LampWood_Chest>();
+		WorldGenMisc.PlaceChest(x, y, (ushort)type, LampWoodChestContents());
+	}
+
+	public static List<Item> LampWoodChestContents()
+	{
 		List<Item> chestContents = new List<Item>();
 		int mainItem = WorldGen.genRand.Next(2);
 
@@ -3440,11 +3478,6 @@ public class YggdrasilTownGeneration
 		}
 		chestContents.Add(new Item(setDefaultsToType: potionType, WorldGen.genRand.Next(1, 4)));
 
-		// 冰雪火把
-		// if (WorldGen.genRand.NextBool(2))
-		// {
-		// chestContents.Add(new Item(setDefaultsToType: ItemID.IceTorch, WorldGen.genRand.Next(40, 91)));
-		// }
 		// 荧光棒
 		if (WorldGen.genRand.NextBool(2))
 		{
@@ -3457,9 +3490,7 @@ public class YggdrasilTownGeneration
 				chestContents.Add(new Item(setDefaultsToType: ItemID.Glowstick, WorldGen.genRand.Next(20, 61)));
 			}
 		}
-		int type = ModContent.TileType<LampWood_Chest>();
-
-		WorldGenMisc.PlaceChest(x, y, (ushort)type, chestContents);
+		return chestContents;
 	}
 
 	/// <summary>

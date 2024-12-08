@@ -125,7 +125,11 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 		var texture = ModContent.Request<Texture2D>(Texture).Value;
 		var frame = texture.Frame(horizontalFrames: Main.projFrames[Type], frameX: Projectile.frame);
 		var origin = new Vector2(texture.Width / 8, texture.Height / 2);
-		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, 0, origin, 1, SpriteEffects.None, 0);
+		var textureGlow = ModAsset.EyeOfAnabiosis_Projectile_glow.Value;
+		Main.spriteBatch.Draw(textureGlow, Projectile.Center - Main.screenPosition, frame, new Color(0.5f, 0.5f, 0.5f, 0.5f), 0, origin, 1, SpriteEffects.None, 0);
+		float glow = MathF.Sin((float)Main.time * 0.3f + Projectile.whoAmI) + 1;
+		glow *= 0.5f;
+		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, frame,new Color(glow, glow, glow, 0), 0, origin, 1, SpriteEffects.None, 0);
 		return false;
 	}
 

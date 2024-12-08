@@ -43,20 +43,6 @@ public class DragonScaleHammer : ModItem
 					var proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<DragonScaleHammerProj>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
 					proj.netUpdate2 = true;
 				}
-				else// 右键
-				{
-					// Item.shoot = -1;
-					// Item.shootSpeed = 0;
-					// Item.useAnimation = 25;
-					// Item.useTime = 25;
-					Item.noMelee = false;
-
-					// Item.noUseGraphic = false;
-					Item.autoReuse = true;
-					Item.useStyle = ItemUseStyleID.Swing;
-					Item.hammer = 20;
-					return base.CanUseItem(player);
-				}
 			}
 			return false;
 		}
@@ -66,15 +52,5 @@ public class DragonScaleHammer : ModItem
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
 		return false;
-	}
-
-	public override bool? UseItem(Player player)
-	{
-		return base.UseItem(player);
-	}
-
-	public override bool AltFunctionUse(Player player)
-	{
-		return true;
 	}
 }

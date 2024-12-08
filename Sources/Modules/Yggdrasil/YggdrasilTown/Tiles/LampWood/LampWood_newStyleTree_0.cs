@@ -1,6 +1,8 @@
 using Everglow.Commons.TileHelper;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Items;
 using Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
+using Everglow.Yggdrasil.YggdrasilTown.NPCs;
 using Terraria.GameContent.Drawing;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
@@ -11,6 +13,7 @@ public class LampWood_newStyleTree_0 : ShapeDataTile, ITileFluentlyDrawn
 	{
 		base.SetStaticDefaults();
 		Main.tileAxe[Type] = true;
+		DustType = ModContent.DustType<LampWood_Dust>();
 		AddMapEntry(new Color(49, 41, 96));
 	}
 
@@ -35,6 +38,14 @@ public class LampWood_newStyleTree_0 : ShapeDataTile, ITileFluentlyDrawn
 			if (Main.rand.NextBool(6))
 			{
 				Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 16, 16, new Item(ModContent.ItemType<LampFruit>(), 1));
+			}
+			if (Main.rand.NextBool(360))
+			{
+				int maxBorer = Main.rand.Next(4, 8);
+				for (int h = 0; h < maxBorer; h++)
+				{
+					NPC.NewNPCDirect(WorldGen.GetItemSource_FromTileBreak(i, j), new Point(i, j).ToWorldCoordinates() + new Vector2(0, h * 12).RotatedByRandom(MathHelper.TwoPi), ModContent.NPCType<LampFruitBorer>());
+				}
 			}
 		}
 	}

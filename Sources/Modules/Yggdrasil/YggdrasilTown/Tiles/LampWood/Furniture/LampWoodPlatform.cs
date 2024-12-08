@@ -1,5 +1,5 @@
-using Terraria.Localization;
 using Terraria.ObjectData;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 
 public class LampWoodPlatform : ModTile
@@ -33,9 +33,9 @@ public class LampWoodPlatform : ModTile
 		TileObjectData.newTile.LavaDeath = true;
 		TileObjectData.addTile(Type);
 
-		LocalizedText name = CreateMapEntryName();
-		AddMapEntry(new Color(69, 36, 78), name);
+		AddMapEntry(new Color(191, 142, 111));
 	}
+
 	public override void PostSetDefaults() => Main.tileNoSunLight[Type] = false;
 
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
@@ -46,7 +46,10 @@ public class LampWoodPlatform : ModTile
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 
 		if (Main.drawToScreen)
+		{
 			zero = Vector2.Zero;
+		}
+
 		Texture2D tex = ModAsset.LampWoodPlatform_Glow.Value;
 
 		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);

@@ -178,6 +178,25 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
+	///  Fill all chest by given area if exist.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="width"></param>
+	/// <param name="height"></param>
+	/// <param name="contents"></param>
+	public static void FillChestXYWH(int x, int y, int width, int height, List<Item> contents)
+	{
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				WorldGenMisc.TryFillChest(x + i, y + j, contents);
+			}
+		}
+	}
+
+	/// <summary>
 	/// Smooth tiles by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>

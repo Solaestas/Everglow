@@ -1,3 +1,5 @@
+using Terraria.GameContent.Creative;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.JellyBall;
 
 [AutoloadEquip(EquipType.Head)]
@@ -5,6 +7,12 @@ public class JellyBallBathingCap : ModItem
 {
 	public const float EffectTriggerChance = 0.05f;
 	public const float DamageReduction = 0.5f;
+
+	public override void SetStaticDefaults()
+	{
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+		ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
+	}
 
 	public override void SetDefaults()
 	{

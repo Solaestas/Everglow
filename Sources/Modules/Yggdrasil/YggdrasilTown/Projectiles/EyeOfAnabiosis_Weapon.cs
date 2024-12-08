@@ -276,16 +276,24 @@ public class EyeOfAnabiosis_Weapon : ModProjectile
 			var progressTexture = Commons.ModAsset.White.Value;
 			var progressPosition = Owner.Center - Main.screenPosition + Owner.gravDir * new Vector2(0, 36);
 
-			Color frameColor = new Color(0.05f, 0.05f, 0.08f, 0.4f);
-			Vector2 frameScale = new Vector2(2f, 0.6f) * 0.05f;
+			Color frameColor = new Color(0.05f, 0.05f, 0.08f, 0.9f);
+			Color frameColor2 = new Color(0.15f, 0.25f, 0.38f, 0.4f);
+			Vector2 frameScale = new Vector2(2f, 0.4f) * 0.05f;
+			Vector2 frameScale2 = new Vector2(1.8f, 0.2f) * 0.05f;
 
-			Color lineColor = Color.SkyBlue;
-			Vector2 lineScale = new Vector2(1.6f * chargeProgress, 0.3f) * 0.05f;
-			Vector2 linePositionOffset = new Vector2(-1.6f * (1 - chargeProgress) * progressTexture.Width * 0.025f, 0);
+			Color lineColor = Color.Lerp(new Color(0f, 0.3f, 0.7f, 0.8f), new Color(0.7f, 1f, 0.8f, 0.8f), chargeProgress);
+			Color lineColorInner = Color.Lerp(new Color(0f, 0f, 0.6f, 0.9f), new Color(0.3f, 0.8f, 0.8f, 0.9f), chargeProgress);
+			Vector2 lineScaleOuter = new Vector2(2.2f * chargeProgress + 0.2f, 0.7f) * 0.05f;
+			Vector2 lineScale = new Vector2(2.2f * chargeProgress, 0.5f) * 0.05f;
+			Vector2 lineScale2 = new Vector2(2.2f * chargeProgress - 0.2f, 0.3f) * 0.05f;
+			Vector2 linePositionOffset = new Vector2(-2.2f * (1 - chargeProgress) * progressTexture.Width * 0.025f, 0);
 
 			Main.spriteBatch.Draw(progressTexture, progressPosition, null, frameColor, 0, progressTexture.Size() / 2, frameScale, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(progressTexture, progressPosition, null, frameColor2, 0, progressTexture.Size() / 2f, frameScale2, SpriteEffects.None, 0);
 
+			Main.spriteBatch.Draw(progressTexture, progressPosition + linePositionOffset, null, frameColor, 0, progressTexture.Size() / 2, lineScaleOuter, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(progressTexture, progressPosition + linePositionOffset, null, lineColor, 0, progressTexture.Size() / 2, lineScale, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(progressTexture, progressPosition + linePositionOffset, null, lineColorInner, 0, progressTexture.Size() / 2, lineScale2, SpriteEffects.None, 0);
 		}
 
 		Main.spriteBatch.Draw(head_ball_texture, head_position, null, lightColor, head_rotation, head_ball_origin, Projectile.scale, head_effects, 0);
