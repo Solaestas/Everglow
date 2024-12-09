@@ -85,7 +85,6 @@ public class AntiHeavenSicknessPillPlayer : ModPlayer
 
 	public override void ModifyMaxStats(out StatModifier health, out StatModifier mana)
 	{
-		Console.WriteLine($"{antiHeavenSicknessPills} {AntiHeavenSicknessPill.GetHealthMaxIncreasing(antiHeavenSicknessPills)}");
 		health = StatModifier.Default;
 		health.Base = AntiHeavenSicknessPill.GetHealthMaxIncreasing(antiHeavenSicknessPills);
 		mana = StatModifier.Default;
