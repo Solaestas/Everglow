@@ -5,6 +5,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class ActivatedJellyGlandBeam : ModProjectile
 {
+	public int TargetWhoAmI => (int)Projectile.ai[0];
+
 	public override string Texture => ModAsset.ActivatedJellyGlandExplosion_Mod;
 
 	public override void SetDefaults()
@@ -21,8 +23,18 @@ public class ActivatedJellyGlandBeam : ModProjectile
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		var lightning = new BranchedLightning(50f, 3f, Projectile.Center, Projectile.velocity.ToRotation(), 30f, (float)(Math.PI / 50));
+		var lightning = new BranchedLightning(50f, 3f, Projectile.Center, Projectile.velocity.ToRotation(), 24f, (float)(Math.PI / 200));
 		Ins.VFXManager.Add(lightning);
+	}
+
+	public override void AI()
+	{
+		if (TargetWhoAmI >= 0)
+		{
+			NPC target = Main.npc[TargetWhoAmI];
+			Vector2 direction = (target.Center - Projectile.Center).NormalizeSafe();
+			Projectile.velocity = Projectile.velocity.Length() * direction;
+		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)

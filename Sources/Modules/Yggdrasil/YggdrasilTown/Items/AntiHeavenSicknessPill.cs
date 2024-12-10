@@ -14,9 +14,6 @@ public class AntiHeavenSicknessPill : ModItem
 		{ 5, 2 },
 	};
 
-	// TODO: Replace texture
-	public override string Texture => ModAsset.Ammos_LightBullet_Mod;
-
 	public override void SetDefaults()
 	{
 		Item.SetNameOverride("Anti-heaven Sickness Pill");
@@ -24,7 +21,7 @@ public class AntiHeavenSicknessPill : ModItem
 		Item.width = 18;
 		Item.height = 18;
 
-		Item.useStyle = ItemUseStyleID.HoldUp;
+		Item.useStyle = ItemUseStyleID.DrinkLiquid;
 		Item.useTime = Item.useAnimation = 30;
 		Item.UseSound = SoundID.Item4;
 
@@ -93,11 +90,12 @@ public class AntiHeavenSicknessPillPlayer : ModPlayer
 	public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
 	{
 		ModPacket packet = Mod.GetPacket();
-		// TODO: Add message type code
-		//packet.Write((byte)Everglow.);
-		packet.Write((byte)Player.whoAmI);
-		packet.Write((byte)antiHeavenSicknessPills);
-		packet.Send(toWho, fromWho);
+
+		// TODO: Add netcode
+		// packet.Write((byte)Everglow.); // Need a 
+		// packet.Write((byte)Player.whoAmI);
+		// packet.Write((byte)antiHeavenSicknessPills);
+		// packet.Send(toWho, fromWho);
 	}
 
 	public void ReceivePlayerSync(BinaryReader reader)

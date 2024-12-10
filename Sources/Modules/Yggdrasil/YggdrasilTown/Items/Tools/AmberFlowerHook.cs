@@ -1,6 +1,6 @@
 using ReLogic.Content;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Tools
 {
 	internal class AmberFlowerHook : ModItem
 	{

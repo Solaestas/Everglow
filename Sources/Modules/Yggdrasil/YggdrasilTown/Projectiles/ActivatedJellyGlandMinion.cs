@@ -24,13 +24,7 @@ public class ActivatedJellyGlandMinion : ModProjectile
 	private const int ExplosionDuration = 50;
 	private const float ExplosionScaleFrequencyLimit = 0.4f;
 
-	private int targetWhoAmI = NoTarget;
-
-	private int TargetWhoAmI
-	{
-		get => targetWhoAmI;
-		set => targetWhoAmI = value;
-	}
+	private int TargetWhoAmI { get; set; }
 
 	private float Timer
 	{
@@ -117,10 +111,10 @@ public class ActivatedJellyGlandMinion : ModProjectile
 
 	private void BaseMinionAI()
 	{
-		// Update frame counter
+		// Update frame
 		if (Main.time % 10 == 0)
 		{
-			Projectile.frameCounter = (Projectile.frameCounter + 1) % Main.projFrames[Projectile.type];
+			Projectile.frame = (Projectile.frame + 1) % Main.projFrames[Projectile.type];
 		}
 
 		// Check owner
@@ -148,7 +142,26 @@ public class ActivatedJellyGlandMinion : ModProjectile
 	private void SearchTarget()
 	{
 		var oldTarget = TargetWhoAmI;
-		Projectile.Minion_FindTargetInRange(SearchDistance, ref targetWhoAmI, false);
+
+		int target = -1;
+		float minDis = SearchDistance;
+		foreach (NPC npc in Main.npc)
+		{
+			if (npc != null && npc.active)
+			{
+				if (npc.CanBeChasedBy() && !npc.dontTakeDamage && npc.life > 0)
+				{
+					float dis = (npc.Center - Projectile.Center).Length() - npc.Hitbox.Size().Length() * 0.5f;
+					if (dis < minDis)
+					{
+						minDis = dis;
+						target = npc.whoAmI;
+					}
+				}
+			}
+		}
+		TargetWhoAmI = target;
+
 		if (oldTarget != TargetWhoAmI)
 		{
 			Projectile.netUpdate = true;
@@ -160,11 +173,11 @@ public class ActivatedJellyGlandMinion : ModProjectile
 		float glowStrength = 0.4f;
 		if (HasTarget)
 		{
-			if (Projectile.frameCounter == 1)
+			if (Projectile.frame == 1)
 			{
 				BloomLightColor = Vector3.Lerp(BloomLightColor, new Vector3(0.5f, 2f, 4f) * glowStrength, 0.3f);
 			}
-			else if (Projectile.frameCounter == 2)
+			else if (Projectile.frame == 2)
 			{
 				BloomLightColor = Vector3.Lerp(BloomLightColor, new Vector3(0f, 1f, 2f) * glowStrength, 0.3f);
 			}
@@ -266,7 +279,7 @@ public class ActivatedJellyGlandMinion : ModProjectile
 		if (++Timer > ExplosionDuration)
 		{
 			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ActivatedJellyGlandExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
-			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, direction * 60f, ModContent.ProjectileType<ActivatedJellyGlandBeam>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, direction.NormalizeSafe() * 10f, ModContent.ProjectileType<ActivatedJellyGlandBeam>(), Projectile.damage, Projectile.knockBack, Projectile.owner, TargetWhoAmI);
 			Projectile.Kill();
 		}
 	}
@@ -292,14 +305,14 @@ public class ActivatedJellyGlandMinion : ModProjectile
 		int frameWidth = textureMain.Width / 2;
 		int frameHeight = textureMain.Height / 5;
 		int frameX = HasTarget ? 0 : frameWidth;
-		int frameY = frameHeight * (Projectile.frameCounter % 5);
+		int frameY = frameHeight * (Projectile.frame % 5);
 
 		Rectangle sourceRect = new Rectangle(frameX, frameY, frameWidth, frameHeight);
 
 		int bloomFrameWidth = textureBloom.Width / 2;
 		int bloomFrameHeight = textureBloom.Height / 5;
 		int bloomFrameX = HasTarget ? 0 : bloomFrameWidth;
-		int bloomFrameY = bloomFrameHeight * (Projectile.frameCounter % 5);
+		int bloomFrameY = bloomFrameHeight * (Projectile.frame % 5);
 		Rectangle bloomSourceRect = new Rectangle(bloomFrameX, bloomFrameY, bloomFrameWidth, bloomFrameHeight);
 
 		Main.spriteBatch.Draw(textureMain, Projectile.Center - Main.screenPosition, sourceRect, Color.Lerp(drawColor * 0.7f, new Color(0.6f, 1f, 1f, 1f), 0.4f), Projectile.rotation, new Vector2(textureMain.Width / 4f, textureMain.Height / 10f), Projectile.scale, SpriteEffects.None, 0);
