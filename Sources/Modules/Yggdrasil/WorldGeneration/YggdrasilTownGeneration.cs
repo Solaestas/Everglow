@@ -1000,8 +1000,6 @@ public class YggdrasilTownGeneration
 				float r = a - b * MathF.Sin(toCenter.ToRotation());
 				toCenter.Y /= 1.2f;
 				float valueNoise = PerlinPixelG[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
-				float valueNoiseWall = CellPixel[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
-				float valueNoiseWallWood = PerlinPixelR[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
 				float valueNoiseSecretion = PerlinPixelB[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.6f) % 1024] / 255f;
 				float clearRange = 90f;
 				float boundThick = 60f;
@@ -1029,21 +1027,6 @@ public class YggdrasilTownGeneration
 					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 					tile.HasTile = true;
 				}
-				if (valueNoiseWall < 0.5f)
-				{
-					if (valueNoise <= 1)
-					{
-						tile.wall = 0;
-					}
-				}
-				else if (valueNoise <= 1)
-				{
-					tile.wall = (ushort)ModContent.WallType<JellyBallSecretionWall>();
-				}
-				if (valueNoiseWallWood >= 0.5f && valueNoise <= 1)
-				{
-					tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
-				}
 				if (valueNoiseSecretion >= 0.5f && !tile.HasTile && valueNoise <= 1)
 				{
 					tile.TileType = (ushort)ModContent.TileType<JellyBallSecretion>();
@@ -1064,13 +1047,6 @@ public class YggdrasilTownGeneration
 							{
 								tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 								tile.HasTile = true;
-							}
-						}
-						if (valueNoise2 < 0.45f)
-						{
-							if (tile.wall == 0)
-							{
-								tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 							}
 						}
 					}
@@ -1095,6 +1071,69 @@ public class YggdrasilTownGeneration
 			}
 		}
 		SmoothTile(leftBound, upBound, rightBound, bottomBound);
+		string mapIOPath = ModAsset.HotbedObervatory_66x44_Path;
+		QuickBuild(rightBound - 100, (int)Center.Y, mapIOPath);
+
+		for (int x = leftBound; x <= rightBound; x++)
+		{
+			for (int y = upBound; y <= bottomBound; y++)
+			{
+				Tile tile = SafeGetTile(x, y);
+				Vector2 toCenter = Center - new Vector2(x, y);
+				float r = a - b * MathF.Sin(toCenter.ToRotation());
+				toCenter.Y /= 1.2f;
+				float valueNoise = PerlinPixelG[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
+				float valueNoiseWall = CellPixel[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
+				float valueNoiseWallWood = PerlinPixelR[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
+				float clearRange = 90f;
+				float boundThick = 60f;
+				if (toCenter.Length() > r)
+				{
+					valueNoise += 1;
+				}
+				else if (toCenter.Length() > r - boundThick)
+				{
+					valueNoise += 1 + (toCenter.Length() - r) / boundThick;
+				}
+				else if (toCenter.Length() < clearRange)
+				{
+					valueNoise -= (clearRange - toCenter.Length()) / clearRange;
+				}
+				if (valueNoiseWall < 0.5f)
+				{
+					if (valueNoise <= 1 && (tile.wall == (ushort)ModContent.WallType<StoneDragonScaleWoodWall>() || tile.wall == (ushort)ModContent.WallType<JellyBallSecretionWall>() || tile.wall == (ushort)ModContent.WallType<DarkForestSoilWall>()))
+					{
+						tile.wall = 0;
+					}
+				}
+				else if (valueNoise <= 1)
+				{
+					tile.wall = (ushort)ModContent.WallType<JellyBallSecretionWall>();
+				}
+				if (valueNoiseWallWood >= 0.5f && valueNoise <= 1)
+				{
+					tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+				}
+				float valueNoise2 = PerlinPixelG[x % 1024, y % 1024] / 255f;
+				if (y < upBound + 30)
+				{
+					valueNoise2 += (upBound + 30 - y) / 30f;
+				}
+				if (toCenter.Y > -120)
+				{
+					if (valueNoise > 1 && x > Center.X)
+					{
+						if (valueNoise2 < 0.45f)
+						{
+							if (tile.wall == 0)
+							{
+								tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/// <summary>
@@ -3434,7 +3473,7 @@ public class YggdrasilTownGeneration
 	public static List<Item> LampWoodChestContents()
 	{
 		List<Item> chestContents = new List<Item>();
-		int mainItem = WorldGen.genRand.Next(2);
+		int mainItem = WorldGen.genRand.Next(7);
 
 		// 尽可能出现不同奖励
 		switch (mainItem)
@@ -3444,6 +3483,21 @@ public class YggdrasilTownGeneration
 				break;
 			case 1:
 				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<YggdrasilAmberLaser>(), 1));
+				break;
+			case 2:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<SevenShotGun>(), 1));
+				break;
+			case 3:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<YggdrasilStoneGyroscope>(), 1));
+				break;
+			case 4:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<LampWoodPollenBottle>(), 1));
+				break;
+			case 5:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<CelticSeal>(), 1));
+				break;
+			case 6:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<ConcealSpell>(), 1));
 				break;
 		}
 

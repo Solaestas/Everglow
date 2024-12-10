@@ -9,7 +9,7 @@ public class SevenShotGun : ModItem
 		Item.width = 48;
 		Item.height = 28;
 
-		Item.damage = 36;
+		Item.damage = 8;
 		Item.DamageType = DamageClass.Ranged;
 		Item.knockBack = 5f;
 		Item.crit = 15;
