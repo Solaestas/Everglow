@@ -23,7 +23,6 @@ public class Caltrop : ModProjectile
 
 	public override void AI()
 	{
-		Console.WriteLine(Projectile.velocity);
 		Projectile.velocity.Y = Projectile.velocity.Y + 0.4f;
 		if (Projectile.velocity.Y > 16f)
 		{
