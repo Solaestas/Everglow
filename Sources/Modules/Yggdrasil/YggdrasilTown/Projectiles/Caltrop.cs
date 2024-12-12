@@ -68,4 +68,12 @@ public class Caltrop : ModProjectile
 	{
 		Dust.NewDust(Projectile.Center, 1, 1, DustID.Iron);
 	}
+
+	public override bool PreDraw(ref Color lightColor)
+	{
+		var texture = ModContent.Request<Texture2D>(Texture).Value;
+		var origin = texture.Size() * 0.5f;
+		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, origin, 1, SpriteEffects.None, 0);
+		return false;
+	}
 }
