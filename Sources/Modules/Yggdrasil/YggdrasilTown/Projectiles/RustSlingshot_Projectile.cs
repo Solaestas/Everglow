@@ -6,6 +6,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 public class RustSlingshot_Projectile : SlingshotAmmo
 {
 	public const int BuffDuration = 600;
+	public const float FinalDamageBounusPerStack = 0.05f;
 
 	public override string Texture => Commons.ModAsset.NormalAmmo_Mod;
 
@@ -23,7 +24,7 @@ public class RustSlingshot_Projectile : SlingshotAmmo
 		if (indexThree >= 0)
 		{
 			target.AddBuff(ModContent.BuffType<Buffs.RustSlingshotBuffThree>(), BuffDuration);
-			modifiers.FinalDamage *= 1f + 0.05f * 3;
+			modifiers.FinalDamage *= 1f + FinalDamageBounusPerStack * 3;
 		}
 		else if (indexTwo >= 0)
 		{
@@ -33,7 +34,7 @@ public class RustSlingshot_Projectile : SlingshotAmmo
 			}
 
 			target.AddBuff(ModContent.BuffType<Buffs.RustSlingshotBuffThree>(), BuffDuration);
-			modifiers.FinalDamage *= 1f + 0.05f * 2;
+			modifiers.FinalDamage *= 1f + FinalDamageBounusPerStack * 2;
 		}
 		else if (indexOne >= 0)
 		{
@@ -43,7 +44,7 @@ public class RustSlingshot_Projectile : SlingshotAmmo
 			}
 
 			target.AddBuff(ModContent.BuffType<Buffs.RustSlingshotBuffTwo>(), BuffDuration);
-			modifiers.FinalDamage *= 1f + 0.05f * 1;
+			modifiers.FinalDamage *= 1f + FinalDamageBounusPerStack * 1;
 		}
 		else
 		{
