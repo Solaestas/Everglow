@@ -53,6 +53,14 @@ public class DarkSludge_Scene : ForegroundVFX
 		Ins.Batch.BindTexture<Vertex2D>(ModAsset.DarkSludge_Liquid.Value);
 		List<Vertex2D> bars = [];
 		List<Vertex2D> bars2 = [];
+		if (MinX >= MaxX)
+		{
+			for (int x = 0; x < 4; x++)
+			{
+				bars.Add(Vector2.zeroVector, Color.Transparent, new Vector3(0, 0, 1));
+				bars2.Add(Vector2.zeroVector, Color.Transparent, new Vector3(0, 0, 1));
+			}
+		}
 		for (int i = MinX; i <= MaxX; i++)
 		{
 			Vector2 position = new Point(i, originTile.Y).ToVector2() * 16;
