@@ -39,7 +39,6 @@ public class Caltrop : ModProjectile
 		{
 			Projectile.Kill();
 		}
-
 		base.OnHitNPC(target, hit, damageDone);
 	}
 
