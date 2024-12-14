@@ -18,6 +18,8 @@ public class EulerSolver(int iterations) : Solver
 		for (int i = 0; i < system.Masses.Count; i++)
 		{
 			Mass m = system.Masses[i];
+			m.OldPos -= Main.screenPosition;
+			m.Position -= Main.screenPosition;
 
 			// Detect Nans
 			Debug.Assert(!m.Position.HasNaNs());
@@ -41,7 +43,10 @@ public class EulerSolver(int iterations) : Solver
 			for (int i = 0; i < system.Masses.Count; i++)
 			{
 				Mass m = system.Masses[i];
-				m.Gradient = m.Value / (deltaTime * deltaTime) * (m.Position - m.OldPos);
+				double deltaX = m.Position.X - (double)m.OldPos.X;
+				double deltaY = m.Position.Y - (double)m.OldPos.Y;
+				Vector2 deltaPos = new Vector2((float)deltaX, (float)deltaY);
+				m.Gradient = m.Value / (deltaTime * deltaTime) * deltaPos;
 				m.Gradient -= m.Force;
 				m.HessianDiag = 0;
 			}
@@ -74,11 +79,16 @@ public class EulerSolver(int iterations) : Solver
 		{
 			Mass m = system.Masses[i];
 			m.Force = Vector2.Zero;
+			m.OldPos += Main.screenPosition;
+			m.Position += Main.screenPosition;
 			if (m.IsStatic)
 			{
 				continue;
 			}
-			m.Velocity += (m.Position - m.OldPos) / deltaTime;
+			double deltaX = m.Position.X - (double)m.OldPos.X;
+			double deltaY = m.Position.Y - (double)m.OldPos.Y;
+			Vector2 deltaPos = new Vector2((float)deltaX, (float)deltaY);
+			m.Velocity += deltaPos / deltaTime;
 		}
 	}
 }

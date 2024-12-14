@@ -129,12 +129,12 @@ internal class YggdrasilModule : EverglowModule
 		{
 			return;
 		}
-		if (y > 10700)
+		if (y > Main.maxTilesY - 2100)
 		{
 			color = new Color(0, 0, 0);
 			return;
 		}
-		else if (y <= 10700 && y > 9600)
+		else if (y <= Main.maxTilesY - 2100 && y > Main.maxTilesY - 4200)
 		{
 			color = new Color(73, 99, 62);
 			return;
