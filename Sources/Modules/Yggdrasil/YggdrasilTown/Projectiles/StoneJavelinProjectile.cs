@@ -26,8 +26,6 @@ public class StoneJavelinProjectile : ModProjectile
 		Projectile.DamageType = DamageClass.Ranged; // Makes the projectile deal ranged damage. You can set in to DamageClass.Throwing, but that is not used by any vanilla items
 		Projectile.penetrate = 2; // How many monsters the projectile can penetrate.
 		Projectile.timeLeft = 600; // The live time for the projectile (60 = 1 second, so 600 is 10 seconds)
-		Projectile.alpha = 255; // The transparency of the projectile, 255 for completely transparent. Our custom AI below fades our projectile in. Make sure to delete this if you aren't using an aiStyle that fades in.
-		Projectile.light = 0.5f; // How much light emit around the projectile
 		Projectile.ignoreWater = true; // Does the projectile's speed be influenced by water?
 		Projectile.tileCollide = true; // Can the projectile collide with tiles?
 		Projectile.hide = true; // Makes the projectile completely invisible. We need this to draw our projectile behind enemies/tiles in DrawBehind()
@@ -57,20 +55,6 @@ public class StoneJavelinProjectile : ModProjectile
 
 		// Offset the rotation by 90 degrees because the sprite is oriented vertically.
 		Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(90f);
-
-		// Spawn some random dusts as the javelin travels
-		if (Main.rand.NextBool(3))
-		{
-			Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.height, Projectile.width, DustID.Stone, Projectile.velocity.X * .2f, Projectile.velocity.Y * .2f, 200, Scale: 1.2f);
-			dust.velocity += Projectile.velocity * 0.3f;
-			dust.velocity *= 0.2f;
-		}
-		if (Main.rand.NextBool(4))
-		{
-			Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.height, Projectile.width, DustID.Stone, 0, 0, 254, Scale: 0.3f);
-			dust.velocity += Projectile.velocity * 0.5f;
-			dust.velocity *= 0.5f;
-		}
 	}
 
 	public override void OnKill(int timeLeft)
