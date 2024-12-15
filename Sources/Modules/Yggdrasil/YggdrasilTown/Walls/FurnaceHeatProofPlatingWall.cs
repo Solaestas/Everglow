@@ -1,6 +1,4 @@
-using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Terraria;
 using Terraria.GameContent.Drawing;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Walls;
@@ -22,13 +20,12 @@ public class FurnaceHeatProofPlatingWall : ModWall
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		Tile tile = Main.tile[i, j];
+
 		// 回声涂料
 		if (!TileDrawing.IsVisible(tile))
 		{
 			return;
 		}
-		var tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.LampWood_newStyleTree_1_leave_Path, Type, textureStyle, paint, tileDrawing);
-		tex ??= ModAsset.LampWood_newStyleTree_1_leave.Value;
 		var texture = ModContent.Request<Texture2D>(Texture).Value;
 		var offsetScreen = new Vector2(Main.offScreenRange);
 		if (Main.drawToScreen)
