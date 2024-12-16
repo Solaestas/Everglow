@@ -14,7 +14,7 @@ public class ValueBarHelper
 	/// <param name="value"></param>
 	/// <param name="color0"></param>
 	/// <param name="color1"></param>
-	public void DrawValueBar(SpriteBatch spriteBatch, Vector2 center, float value, Color color0, Color color1, float scale = 1)
+	public static void DrawValueBar(SpriteBatch spriteBatch, Vector2 center, float value, Color color0, Color color1, float scale = 1)
 	{
 		float powerProgress = value;
 		var progressTexture = ModAsset.White.Value;

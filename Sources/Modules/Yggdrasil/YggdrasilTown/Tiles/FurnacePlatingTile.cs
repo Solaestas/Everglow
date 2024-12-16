@@ -1,4 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Terraria;
+using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
@@ -38,5 +40,9 @@ public class FurnacePlatingTile : ModTile
 		Rectangle frameSide = new Rectangle(tile.TileFrameX, tile.TileFrameY + 90, 16, 16);
 		spriteBatch.Draw(texture, drawPos, frameSide, Lighting.GetColor(i, j), 0, frameSide.Size() * 0.5f, 1, SpriteEffects.None, 0);
 		return false;
+	}
+
+	public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
+	{
 	}
 }

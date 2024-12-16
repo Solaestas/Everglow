@@ -103,7 +103,7 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 		for (int i = 0; i < 15; i++)
 		{
 			float size = Main.rand.NextFloat(0.3f, 0.96f);
-			var acytaeaFlame = new AnabiosisFlameDust
+			var anabiosisFlame = new AnabiosisFlameDust
 			{
 				Velocity = new Vector2(0, Main.rand.NextFloat(3, 4f)).RotatedByRandom(MathHelper.TwoPi),
 				Active = true,
@@ -115,7 +115,7 @@ public class EyeOfAnabiosis_Projectile : ModProjectile
 				Frame = Main.rand.Next(3),
 				ai = new float[] { Projectile.Center.X, Main.rand.NextFloat(-0.8f, 0.8f) },
 			};
-			Ins.VFXManager.Add(acytaeaFlame);
+			Ins.VFXManager.Add(anabiosisFlame);
 		}
 		SoundEngine.PlaySound(SoundID.DD2_BetsysWrathImpact);
 	}

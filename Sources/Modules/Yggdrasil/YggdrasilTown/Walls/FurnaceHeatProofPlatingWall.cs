@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Walls;
@@ -20,7 +21,6 @@ public class FurnaceHeatProofPlatingWall : ModWall
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		Tile tile = Main.tile[i, j];
-
 		// 回声涂料
 		if (!TileDrawing.IsVisible(tile))
 		{
