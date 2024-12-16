@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
+using Terraria.DataStructures;
 
 namespace Everglow.Commons.Utilities;
 
@@ -7,15 +8,38 @@ public class ValueBuffSystem : ModSystem
 {
 	public struct NPCValueBuff
 	{
-		public int Target;
-		public int Type;
-		public int Value;
-		public int ValueMax;
-		public bool BreakOut;
-		public bool Active;
+		/// <summary>
+		/// 
+		/// </summary>
+		public int Target { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public int Type { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public int Value { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public int ValueMax { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool BreakOut { get; set; }
+
+		/// <summary>
+		/// If the value buff is active
+		/// </summary>
+		public bool Active { get; set; }
 	}
 
-	public static List<NPCValueBuff> AllBuffs = new List<NPCValueBuff>();
+	public static List<NPCValueBuff> AllBuffs { get; set; } = [];
 
 	public override void PostDrawInterface(SpriteBatch spriteBatch)
 	{
@@ -114,38 +138,3 @@ public class ValueBuffSystem : ModSystem
 		}
 	}
 }
-
-// public class ValueBuffSystem : GlobalNPC
-// {
-// public struct NPCValueBuff
-// {
-// public int Target;
-// public int Type;
-// public int Value;
-// public int ValueMax;
-// public bool BreakOut;
-// public bool Active;
-// }
-
-// public static List<NPCValueBuff> AllBuffs = new List<NPCValueBuff>();
-
-// public override void PostAI(NPC npc)
-// {
-// base.PostAI(npc);
-// }
-
-// public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-// {
-// foreach (var buff in AllBuffs)
-// {
-// if (buff.Target >= 0)
-// {
-// if (npc.whoAmI == buff.Target)
-// {
-
-// }
-// }
-// }
-// base.PostDraw(npc, spriteBatch, screenPos, drawColor);
-// }
-// }

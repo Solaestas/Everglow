@@ -44,6 +44,7 @@ public class BronzeLotusLamp_Flame : ModProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
+		target.GetGlobalNPC<EverglowGlobalNPC>().elementDebuffs[(int)ElementDebuff.ElementDebuffType.Necrosis].AddBuildUp(50);
 		// Delete explain to enable value buff.
 		// bool hasValueBuff = false;
 		// for (int i = 0; i < ValueBuffSystem.AllBuffs.Count; i++)
