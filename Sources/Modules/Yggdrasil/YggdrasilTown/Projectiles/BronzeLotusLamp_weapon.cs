@@ -106,11 +106,15 @@ public class BronzeLotusLamp_weapon : ModProjectile
 				for (float k = 0; k < MathF.Abs(deltaSinValue); k += maxPrecise)
 				{
 					Vector2 v1 = v0.RotatedBy(k * Math.Sign(deltaSinValue));
-					Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v1 * (36 + distance * k / MathF.Abs(deltaSinValue)), v1 * player.HeldItem.shootSpeed + player.velocity, ModContent.ProjectileType<BronzeLotusLamp_Flame>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 20);
+					Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v1 * (58 + distance * k / MathF.Abs(deltaSinValue)), v1 * player.HeldItem.shootSpeed + player.velocity, ModContent.ProjectileType<BronzeLotusLamp_Flame>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 20);
 				}
 			}
 		}
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v0 * 36, v0 * player.HeldItem.shootSpeed + player.velocity, ModContent.ProjectileType<BronzeLotusLamp_Flame>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 20);
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v0 * 58, v0 * player.HeldItem.shootSpeed + player.velocity, ModContent.ProjectileType<BronzeLotusLamp_Flame>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 20);
+		if(Main.rand.NextBool(6))
+		{
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v0 * 36, v0 * player.HeldItem.shootSpeed * 0.5f + player.velocity, ModContent.ProjectileType<BronzeLotusLamp_Blossom>(), (int)(Projectile.damage * 1.5f), Projectile.knockBack, player.whoAmI, 20);
+		}
 		OldRotationShoot = v0;
 	}
 

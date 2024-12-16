@@ -12,7 +12,7 @@ public class CyanLotusFlameDust : Visual
 	public Vector2 Velocity;
 	public float[] ai;
 
-	public override CodeLayer DrawLayer => CodeLayer.PostDrawNPCs;
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawPlayers;
 
 	public override void Update()
 	{

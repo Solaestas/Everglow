@@ -18,7 +18,7 @@ public class BronzeLotusLamp_Flame : ModProjectile
 
 	public override void AI()
 	{
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 2; i++)
 		{
 			float size = Main.rand.NextFloat(0.1f, 0.96f);
 			var lotusFlame = new CyanLotusFlameDust
@@ -28,7 +28,7 @@ public class BronzeLotusLamp_Flame : ModProjectile
 				Visible = true,
 				Position = Projectile.Center,
 				MaxTime = Main.rand.Next(24, 36),
-				Scale = 24f * size,
+				Scale = 14f * size,
 				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
 				Frame = Main.rand.Next(3),
 				ai = new float[] { Main.rand.NextFloat(-0.8f, 0.8f) },
