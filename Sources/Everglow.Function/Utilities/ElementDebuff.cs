@@ -1,6 +1,23 @@
 namespace Everglow.Commons.Utilities;
 
-public partial class ElementDebuff
+/// <summary>
+/// Element debuff types. (For more details, please go to <a href="https://prts.wiki/w/%E5%85%83%E7%B4%A0">Arknights Wiki</a>)
+/// <list type="number">
+///     <item>Nervous Impairment</item>
+///     <item>Corrosion</item>
+///     <item>Burn</item>
+///     <item>Necrosis</item>
+/// </list>
+/// </summary>
+public enum ElementDebuffType
+{
+	NervousImpairment,
+	Corrosion,
+	Burn,
+	Necrosis,
+}
+
+public class ElementDebuff
 {
 	public ElementDebuff(ElementDebuffType type)
 	{
@@ -93,6 +110,7 @@ public partial class ElementDebuff
 
 	/// <summary>
 	/// Update the debuff and apply proc effect to npc
+	/// <para/> Should only be called in <see cref="GlobalNPC.AI(NPC)"/>
 	/// </summary>
 	/// <param name="npc"></param>
 	public void UpdateBuildUp(NPC npc)
@@ -115,6 +133,11 @@ public partial class ElementDebuff
 				BuildUp = 0;
 				Duration = DurationMax;
 
+				if (npc.dontTakeDamage || npc.life <= 0)
+				{
+					return;
+				}
+
 				npc.life -= ProcDamage;
 				if (npc.life <= 0)
 				{
@@ -125,34 +148,45 @@ public partial class ElementDebuff
 	}
 
 	/// <summary>
-	/// Apply proc state effect dot damage to npc, which can reduce npc's life regen
+	/// Apply proc state effect dot damage to npc, which can reduce npc's life regen.
+	/// <para/> Should only be called in <see cref="GlobalNPC.UpdateLifeRegen(NPC, ref int)"/>
 	/// </summary>
 	/// <param name="npc"></param>
-	public void ApplyEffect(NPC npc)
+	public void ApplyDotDamage(NPC npc)
 	{
 		if (Proc)
 		{
+			if (npc.dontTakeDamage)
+			{
+				return;
+			}
+
 			npc.lifeRegen -= DotDamage;
 		}
 	}
 
-	public void SetBuildUpMax(int buildUpMax)
+	internal void SetBuildUpMax(int buildUpMax)
 	{
 		BuildUpMax = buildUpMax;
 	}
 
-	public void SetDurationMax(int durationMax)
+	internal void SetDurationMax(int durationMax)
 	{
 		DurationMax = durationMax;
 	}
 
-	public void SetDotDamage(int dotDamage)
+	internal void SetDotDamage(int dotDamage)
 	{
 		DotDamage = dotDamage;
 	}
 
-	public void SetProcDamage(int procDamage)
+	internal void SetProcDamage(int procDamage)
 	{
 		ProcDamage = procDamage;
+	}
+
+	internal void SetElementResistance(float elementResistance)
+	{
+		ElementResistance = elementResistance;
 	}
 }

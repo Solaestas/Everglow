@@ -44,7 +44,8 @@ public class BronzeLotusLamp_Flame : ModProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		target.GetGlobalNPC<EverglowGlobalNPC>().ElementDebuffs[ElementDebuffType.Necrosis].AddBuildUp(50);
+		// target.GetGlobalNPC<EverglowGlobalNPC>().ElementDebuffs[ElementDebuffType.Necrosis].AddBuildUp(50, 0.2f);
+
 		// Delete explain to enable value buff.
 		// bool hasValueBuff = false;
 		// for (int i = 0; i < ValueBuffSystem.AllBuffs.Count; i++)
@@ -70,6 +71,5 @@ public class BronzeLotusLamp_Flame : ModProjectile
 		// lotusFlame.ValueMax = 300;
 		// ValueBuffSystem.AllBuffs.Add(lotusFlame);
 		// }
-		base.OnHitNPC(target, hit, damageDone);
 	}
 }

@@ -15,7 +15,7 @@ public partial class EverglowGlobalNPC : GlobalNPC
 	{
 		foreach (var elementType in Enum.GetValues(typeof(ElementDebuffType)))
 		{
-			elementDebuffs.Add((ElementDebuffType)elementType, new((ElementDebuffType)elementType));
+			elementDebuffs.Add((ElementDebuffType)elementType, new ElementDebuff((ElementDebuffType)elementType));
 		}
 	}
 
@@ -23,7 +23,7 @@ public partial class EverglowGlobalNPC : GlobalNPC
 	{
 		foreach (var element in elementDebuffs)
 		{
-			element.Value.ApplyEffect(npc);
+			element.Value.ApplyDotDamage(npc);
 		}
 	}
 
@@ -44,10 +44,8 @@ public partial class EverglowGlobalNPC : GlobalNPC
 		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, default, null, Main.GameViewMatrix.TransformationMatrix);
 
 		var element = elementDebuffs[ElementDebuffType.Necrosis];
-		var buildUpColor = Color.White;
-		//buildUpColor = buildUpColor.MultiplyRGBA(lightColor);
-		var durationColor = Color.Gray;
-		//durationColor = durationColor.MultiplyRGBA(lightColor);
+		var buildUpColor = Color.Lerp(Color.White, lightColor, 0.5f);
+		var durationColor = Color.Lerp(Color.Gray, lightColor, 0.5f);
 		if (element.Proc)
 		{
 			ValueBarHelper.DrawValueBar(spriteBatch, npc.Bottom - Main.screenPosition, element.Duration / (float)element.DurationMax, durationColor, durationColor);
