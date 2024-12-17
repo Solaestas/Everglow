@@ -10,6 +10,8 @@ namespace Everglow.Commons.TileHelper;
 /// </summary>
 public class TileDataReader : ModItem
 {
+	public bool EnableResidentEffect = false;
+
 	public override void SetDefaults()
 	{
 		Item.width = 16;
@@ -25,8 +27,19 @@ public class TileDataReader : ModItem
 		if (!TileDataReaderSystem.OwnerPlayerWhoAmI.Contains(player.whoAmI))
 		{
 			TileDataReaderSystem.OwnerPlayerWhoAmI.Add(player.whoAmI);
-			TileDataReaderSystem vfx = new TileDataReaderSystem { FixPoint = new Point(i, j), Active = true, Visible = true };
+			TileDataReaderSystem vfx = new TileDataReaderSystem { FixPoint = new Point(i, j), Active = true, Visible = true, EverLasting = EnableResidentEffect };
 			Ins.VFXManager.Add(vfx);
+		}
+
+		// Right click to enable resident tile reader effect.
+		if (Main.mouseRight && Main.mouseRightRelease)
+		{
+			EnableResidentEffect = !EnableResidentEffect;
+			CombatText.NewText(player.Hitbox, Color.White, (EnableResidentEffect ? "Enable" : "Disable") + "everlasting tile reading effect.");
+			if (TileDataReaderSystem.OwnerPlayerWhoAmI.Contains(player.whoAmI))
+			{
+				TileDataReaderSystem.OwnerPlayerWhoAmI.Remove(player.whoAmI);
+			}
 		}
 	}
 }
@@ -41,6 +54,7 @@ public class TileDataReaderSystem : Visual
 	public static List<int> OwnerPlayerWhoAmI = new List<int>();
 	public List<Point> ContinueTiles = new List<Point>();
 	public Point OldTilePos = new Point(0, 0);
+	public bool EverLasting = false;
 
 	public override void OnSpawn()
 	{
@@ -53,6 +67,11 @@ public class TileDataReaderSystem : Visual
 		int i = FixPoint.X;
 		int j = FixPoint.Y;
 		Player player = Main.LocalPlayer;
+		if (!OwnerPlayerWhoAmI.Contains(player.whoAmI))
+		{
+			Active = false;
+			return;
+		}
 		if (i < 20 || i > Main.maxTilesX - 20)
 		{
 			if (j < 20 || j > Main.maxTilesY - 20)
@@ -63,13 +82,13 @@ public class TileDataReaderSystem : Visual
 			}
 		}
 
-		if (player.HeldItem.type != ModContent.ItemType<TileDataReader>())
+		if (player.HeldItem.type != ModContent.ItemType<TileDataReader>() && !EverLasting)
 		{
 			Active = false;
 			OwnerPlayerWhoAmI.Remove(player.whoAmI);
 			return;
 		}
-		if(OldTilePos != new Point(i, j))
+		if (OldTilePos != new Point(i, j))
 		{
 			UpdateContinueTiles(i, j);
 		}
@@ -101,7 +120,7 @@ public class TileDataReaderSystem : Visual
 			drawColor = Color.Gray;
 		}
 		DrawBlockBound(i, j, drawColor);
-		if(ContinueTiles.Count < 514)
+		if (ContinueTiles.Count < 512)
 		{
 			Color drawContinueColor = new Color(0.12f, 0.24f, 0.4f, 0);
 			foreach (Point point in ContinueTiles)
@@ -123,7 +142,7 @@ public class TileDataReaderSystem : Visual
 		if (tile.HasTile)
 		{
 			datas += "\nFrame : [" + tile.TileFrameX + ", " + tile.TileFrameY + "]";
-			if(ContinueTiles.Count < 512)
+			if (ContinueTiles.Count < 512)
 			{
 				datas += "\nContinue Tiles : " + ContinueTiles.Count;
 			}
@@ -157,14 +176,14 @@ public class TileDataReaderSystem : Visual
 	public void CheckTileContinue(int i, int j)
 	{
 		Tile tile = SafeGetTile(i, j);
-		if(!tile.HasTile)
+		if (!tile.HasTile)
 		{
 			return;
 		}
 		if (ContinueTiles.Count < 512)
 		{
 			CheckHasTileAndAddToContinueTile(i, j);
-			switch((i + j) % 2)
+			switch ((i + j) % 2)
 			{
 				case 0:
 					CheckHasTileAndAddToContinueTile(i, j - 1);

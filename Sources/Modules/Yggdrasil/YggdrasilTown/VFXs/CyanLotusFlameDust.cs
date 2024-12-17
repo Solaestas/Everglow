@@ -24,7 +24,7 @@ public class CyanLotusFlameDust : Visual
 		}
 		Position += Velocity;
 		Velocity *= 0.98f;
-		Rotation += ai[0];
+		Rotation += ai[0] * 0.4f;
 		float pocession = (MaxTime - Timer) / MaxTime - 0.2f;
 		Color flame;
 		if (pocession > 0.5f)

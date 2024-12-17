@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
 using Terraria.Localization;
@@ -21,30 +22,13 @@ public class RuinTorch : ModTile
 		TileID.Sets.DisableSmartInteract[Type] = true;
 		TileID.Sets.Torch[Type] = true;
 
-		DustType = DustID.WhiteTorch;
+		DustType = ModContent.DustType<RuinTorchDust>();
 		AdjTiles = new int[] { TileID.Torches };
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
-		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.GetTileData(TileID.Torches, 0));
-		/*  This is what is copied from the Torches tile
-		TileObjectData.newTile.CopyFrom(TileObjectData.StyleTorch);
-		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
-		TileObjectData.newAlternate.CopyFrom(TileObjectData.StyleTorch);
-		TileObjectData.newAlternate.AnchorLeft = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.Tree | AnchorType.AlternateTile, TileObjectData.newTile.Height, 0);
-		TileObjectData.newAlternate.AnchorAlternateTiles = new[] { 124, 561, 574, 575, 576, 577, 578 };
-		TileObjectData.addAlternate(1);
-		TileObjectData.newAlternate.CopyFrom(TileObjectData.StyleTorch);
-		TileObjectData.newAlternate.AnchorRight = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.Tree | AnchorType.AlternateTile, TileObjectData.newTile.Height, 0);
-		TileObjectData.newAlternate.AnchorAlternateTiles = new[] { 124, 561, 574, 575, 576, 577, 578 };
-		TileObjectData.addAlternate(2);
-		TileObjectData.newAlternate.CopyFrom(TileObjectData.StyleTorch);
-		TileObjectData.newAlternate.AnchorWall = true;
-		TileObjectData.addAlternate(0);
-		*/
 
-		// This code adds style-specific properties to style 1. Style 1 is used by ExampleWaterTorch. This code allows the tile to be placed in liquids. More info can be found in the guide: https://github.com/tModLoader/tModLoader/wiki/Basic-Tile#newsubtile-and-newalternate
 		TileObjectData.newSubTile.CopyFrom(TileObjectData.newTile);
 		TileObjectData.newSubTile.LinkedAlternates = true;
 		TileObjectData.newSubTile.WaterDeath = false;
@@ -54,9 +38,6 @@ public class RuinTorch : ModTile
 		TileObjectData.addSubTile(1);
 
 		TileObjectData.addTile(Type);
-
-		// Etc
-		//AddMapEntry(new Color(200, 200, 200), Language.GetText("ItemName.Torch"));
 	}
 
 	public override void MouseOver(int i, int j)
@@ -85,20 +66,9 @@ public class RuinTorch : ModTile
 		// If the torch is on
 		if (tile.TileFrameX < 66)
 		{
-			int style = TileObjectData.GetTileStyle(Main.tile[i, j]);
-			// Make it emit the following light.
-			if (style == 0)
-			{
-				r = 0.9f;
-				g = 0.9f;
-				b = 0.9f;
-			}
-			else if (style == 1)
-			{
-				r = 0.5f;
-				g = 1.5f;
-				b = 0.5f;
-			}
+			r = 0.5f;
+			g = 1.1f;
+			b = 1.1f;
 		}
 	}
 
@@ -138,24 +108,17 @@ public class RuinTorch : ModTile
 		}
 
 		ulong randSeed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (long)(uint)i); // Don't remove any casts.
-		Color color = new Color(100, 100, 100, 0);
+		Color color = new Color(100, 100, 100, 60);
 		int width = 20;
 		int height = 20;
 		int frameX = tile.TileFrameX;
 		int frameY = tile.TileFrameY;
-		int style = TileObjectData.GetTileStyle(Main.tile[i, j]);
-		if (style == 1)
-		{
-			// ExampleWaterTorch should be a bit greener.
-			color.G = 255;
-		}
-
 		for (int k = 0; k < 7; k++)
 		{
 			float xx = Utils.RandomInt(ref randSeed, -10, 11) * 0.15f;
 			float yy = Utils.RandomInt(ref randSeed, -10, 1) * 0.35f;
 
-			spriteBatch.Draw(ModAsset.Placeables_RuinTorch_Flame.Value, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + offsetY + yy) + zero, new Rectangle(frameX, frameY, width, height), color, 0f, default, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(ModAsset.Tiles_RuinTorch_Flame.Value, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + offsetY + yy) + zero, new Rectangle(frameX, frameY, width, height), color, 0f, default, 1f, SpriteEffects.None, 0f);
 		}
 	}
 }

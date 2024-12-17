@@ -7,7 +7,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
 public class DarkSludge : ModTile, ISceneTile
 {
-	public override void PostSetDefaults()
+	public override void SetStaticDefaults()
 	{
 		Main.tileSolid[Type] = true;
 		Main.tileMerge[Type][(ushort)ModContent.TileType<StoneScaleWood>()] = true;

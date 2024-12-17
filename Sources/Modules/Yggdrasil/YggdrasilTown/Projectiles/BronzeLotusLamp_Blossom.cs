@@ -172,7 +172,10 @@ public class BronzeLotusLamp_Blossom : TrailingProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		KillMainStructure();
+		if (TimeTokill < 0)
+		{
+			KillMainStructure();
+		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)
