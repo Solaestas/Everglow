@@ -10,7 +10,7 @@ public static class TileCollisionUtils
 		}
 		Vector2 coord = checkPoint / 16f;
 		Tile tile = Main.tile[(int)coord.X, (int)coord.Y];
-		return TileID.Sets.Platforms[tile.TileType] || Collision.SolidCollision(checkPoint, 0, 0);
+		return TileID.Sets.Platforms[tile.TileType] || TileID.Sets.IgnoredByNpcStepUp[tile.TileType] || Collision.SolidCollision(checkPoint, 0, 0);
 	}
 
 	public static bool CanPlaceMultiAtTopTowardsUpRight(int i, int j, int width, int height)

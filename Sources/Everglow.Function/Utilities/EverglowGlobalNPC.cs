@@ -1,20 +1,21 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
-using Steamworks;
 
 namespace Everglow.Commons.Utilities;
 
 public partial class EverglowGlobalNPC : GlobalNPC
 {
-	public List<ElementDebuff> elementDebuffs = [];
+	private Dictionary<ElementDebuffType, ElementDebuff> elementDebuffs = [];
+
+	public IReadOnlyDictionary<ElementDebuffType, ElementDebuff> ElementDebuffs => elementDebuffs.AsReadOnly();
 
 	public override bool InstancePerEntity => true;
 
 	public override void SetDefaults(NPC entity)
 	{
-		foreach (var elementType in Enum.GetValues(typeof(ElementDebuff.ElementDebuffType)))
+		foreach (var elementType in Enum.GetValues(typeof(ElementDebuffType)))
 		{
-			elementDebuffs.Add(new((ElementDebuff.ElementDebuffType)elementType));
+			elementDebuffs.Add((ElementDebuffType)elementType, new ElementDebuff((ElementDebuffType)elementType));
 		}
 	}
 
@@ -22,7 +23,7 @@ public partial class EverglowGlobalNPC : GlobalNPC
 	{
 		foreach (var element in elementDebuffs)
 		{
-			element.ApplyEffect(npc);
+			element.Value.ApplyDotDamage(npc);
 		}
 	}
 
@@ -30,24 +31,28 @@ public partial class EverglowGlobalNPC : GlobalNPC
 	{
 		foreach (var element in elementDebuffs)
 		{
-			element.UpdateBuildUp(npc);
+			element.Value.UpdateBuildUp(npc);
 		}
 	}
 
 	public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
+		var lightColor = Lighting.GetColor((int)npc.position.X, (int)npc.position.Y);
+
 		SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
 		spriteBatch.End();
 		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, default, null, Main.GameViewMatrix.TransformationMatrix);
 
-		var element = elementDebuffs[(int)ElementDebuff.ElementDebuffType.Necrosis];
+		var element = elementDebuffs[ElementDebuffType.Necrosis];
+		var buildUpColor = Color.Lerp(Color.White, lightColor, 0.5f);
+		var durationColor = Color.Lerp(Color.Gray, lightColor, 0.5f);
 		if (element.Proc)
 		{
-			ValueBarHelper.DrawValueBar(spriteBatch, npc.Bottom - Main.screenPosition, element.Duration / (float)element.DurationMax, Color.Gray, Color.Gray);
+			ValueBarHelper.DrawValueBar(spriteBatch, npc.Bottom - Main.screenPosition, element.Duration / (float)element.DurationMax, durationColor, durationColor);
 		}
 		else if (element.BuildUp > 0)
 		{
-			ValueBarHelper.DrawValueBar(spriteBatch, npc.Bottom - Main.screenPosition, element.BuildUp / (float)element.BuildUpMax, Color.White, Color.White);
+			ValueBarHelper.DrawValueBar(spriteBatch, npc.Bottom - Main.screenPosition, element.BuildUp / (float)element.BuildUpMax, buildUpColor, buildUpColor);
 		}
 
 		spriteBatch.End();
