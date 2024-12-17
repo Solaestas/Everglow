@@ -1,10 +1,6 @@
-using Everglow.Commons.DataStructures;
-using Everglow.Commons.Graphics;
-using Terraria.DataStructures;
-
 namespace Everglow.Commons.Utilities;
 
-public class ElementDebuff
+public partial class ElementDebuff
 {
 	public ElementDebuff(ElementDebuffType type)
 	{
@@ -19,26 +15,40 @@ public class ElementDebuff
 		ProcDamage = 200;
 	}
 
-	public enum ElementDebuffType
-	{
-		NervousImpairment,
-		Corrosion,
-		Burn,
-		Necrosis,
-	}
-
+	/// <summary>
+	/// The type of element debuff
+	/// </summary>
 	public ElementDebuffType Type { get; init; }
 
+	/// <summary>
+	/// The element debuff build-up, use <see cref="ElementDebuff.AddBuildUp"/> to edit this property.
+	/// </summary>
 	public int BuildUp { get; private set; }
 
+	/// <summary>
+	/// The element debuff build-up limitation. Once the build-up is more than this max value, the element debuff will proc
+	/// </summary>
 	public int BuildUpMax { get; private set; }
 
+	/// <summary>
+	/// Elemental Resistance can reduce the Elemental Debuff build-up they took
+	/// </summary>
 	public float ElementResistance { get; private set; }
 
+	/// <summary>
+	/// Determine whether this element debuff is in proc state.
+	/// <para/>This property should only be edit by <see cref="ElementDebuff.UpdateBuildUp(NPC)"/>.
+	/// </summary>
 	public bool Proc { get; private set; }
 
+	/// <summary>
+	/// The timer of element debuff proc state
+	/// </summary>
 	public int Duration { get; private set; }
 
+	/// <summary>
+	/// The duration of element debuff proc state
+	/// </summary>
 	public int DurationMax { get; private set; }
 
 	/// <summary>
@@ -51,19 +61,40 @@ public class ElementDebuff
 	/// </summary>
 	public int ProcDamage { get; private set; }
 
-	public bool AddBuildUp(int buildUp)
+	/// <summary>
+	/// Add element debuff build-up, calculate resistance and penetration.
+	/// </summary>
+	/// <param name="buildUp">Build-up value</param>
+	/// <param name="elementPenetration">Element penetration</param>
+	/// <returns></returns>
+	public bool AddBuildUp(int buildUp, float elementPenetration = 0)
 	{
-		if (Proc || buildUp <= 0)
+		if (Proc || buildUp <= 0 || elementPenetration < 0)
 		{
 			return false;
 		}
 		else
 		{
-			BuildUp += (int)(buildUp * (1 - ElementResistance));
+			// Calculate element resistance and penetration
+			float finElementResisitance = ElementResistance - elementPenetration;
+			if (finElementResisitance < 0)
+			{
+				finElementResisitance = 0;
+			}
+			else if (finElementResisitance > 1)
+			{
+				finElementResisitance = 1;
+			}
+
+			BuildUp += (int)(buildUp * (1 - finElementResisitance));
 			return true;
 		}
 	}
 
+	/// <summary>
+	/// Update the debuff and apply proc effect to npc
+	/// </summary>
+	/// <param name="npc"></param>
 	public void UpdateBuildUp(NPC npc)
 	{
 		if (Proc)
@@ -93,11 +124,35 @@ public class ElementDebuff
 		}
 	}
 
+	/// <summary>
+	/// Apply proc state effect dot damage to npc, which can reduce npc's life regen
+	/// </summary>
+	/// <param name="npc"></param>
 	public void ApplyEffect(NPC npc)
 	{
 		if (Proc)
 		{
 			npc.lifeRegen -= DotDamage;
 		}
+	}
+
+	public void SetBuildUpMax(int buildUpMax)
+	{
+		BuildUpMax = buildUpMax;
+	}
+
+	public void SetDurationMax(int durationMax)
+	{
+		DurationMax = durationMax;
+	}
+
+	public void SetDotDamage(int dotDamage)
+	{
+		DotDamage = dotDamage;
+	}
+
+	public void SetProcDamage(int procDamage)
+	{
+		ProcDamage = procDamage;
 	}
 }
