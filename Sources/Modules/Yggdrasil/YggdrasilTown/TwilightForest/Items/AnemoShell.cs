@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.Graphics;
 using Everglow.Commons.Interfaces;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Microsoft.Build.Tasks;
@@ -26,6 +27,21 @@ namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Items
 			AnemoPlayer p = player.GetModPlayer<AnemoPlayer>();
 			p.AnemoEquipped = true;
 			p.Shell = Item;
+		}
+
+		public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+		{
+			Player player = Main.LocalPlayer;
+			if (!player.armor.Contains(Item))
+			{
+				return;
+			}
+			AnemoPlayer p = player.GetModPlayer<AnemoPlayer>();
+			if(p.Cooldown != 0)
+			{
+				ValueBarHelper.DrawValueBar(spriteBatch, position + new Vector2(0, 16),1 - p.Cooldown / (float)p.ProtectionCooldown, new Color(122, 226, 204), new Color(122, 226, 204));
+			}
+			base.PostDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
 		}
 	}
 
