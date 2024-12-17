@@ -44,7 +44,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Items
 		public int ProtectionDuration = 12;
 		public int ProtectionEndDuration = 32;
 		public int ProtectionEaseoutDuration = 16;
-		public int ProtectionCooldown = 1;
+		public int ProtectionCooldown = 3600;
 		public int Radius = 24;
 
 		public Vector2 CollidePosition = new(0, 0);
