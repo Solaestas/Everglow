@@ -42,13 +42,13 @@ public class RockHelmet : ModItem
 
 	public override void UpdateArmorSet(Player player)
 	{
-		player.GetModPlayer<RockArmorSetPlayer>().EnableRockArmorSet = true;
+		player.GetModPlayer<RockArmorSetPlayer>().RockArmorSetEnable = true;
 	}
 }
 
 public class RockArmorSetPlayer : ModPlayer
 {
-	public bool EnableRockArmorSet { get; set; } = false;
+	public bool RockArmorSetEnable { get; set; } = false;
 
 	public bool DrawRockHelmet { get; set; } = false;
 
@@ -60,13 +60,16 @@ public class RockArmorSetPlayer : ModPlayer
 
 	public override void ResetEffects()
 	{
-		//DrawRockHelmet = false;
+		RockArmorSetEnable = false;
 	}
 
 	public override void PostUpdate()
 	{
-		MoveDistance += (int)(Player.position - Player.oldPosition).Length();
-		Player.statDefense += DefenseBonus;
+		if (RockArmorSetEnable)
+		{
+			MoveDistance += (int)(Player.position - Player.oldPosition).Length();
+			Player.statDefense += DefenseBonus;
+		}
 	}
 
 	public override void OnHurt(Player.HurtInfo info)
@@ -89,7 +92,7 @@ public class RockArmorSetPlayer : ModPlayer
 			Vector2 drawPos = drawInfo.Position - Main.screenPosition;
 			float offsetX = drawInfo.drawPlayer.bodyFrame.Width / 2f + drawInfo.drawPlayer.width / 2f;
 			float offsetY = drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height + 4f;
-			if(drawInfo.playerEffect == SpriteEffects.None)
+			if (drawInfo.playerEffect == SpriteEffects.None)
 			{
 				offsetX -= helmetFrame.Width - drawInfo.drawPlayer.bodyFrame.Width;
 				drawInfo.helmetOffset = new Vector2(-4, 0);
