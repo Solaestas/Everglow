@@ -4,7 +4,7 @@ using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Dusts;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles;
 
-public class GreenRelicBrick : ModTile
+public class TwilightEucalyptusWood : ModTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -13,13 +13,7 @@ public class GreenRelicBrick : ModTile
 		Main.tileMerge[Type][ModContent.TileType<StoneScaleWood>()] = true;
 		Main.tileBlockLight[Type] = true;
 		DustType = ModContent.DustType<GreenRelicBrick_dust>();
-		HitSound = SoundID.Dig;
-		MinPick = 160;
-		AddMapEntry(new Color(35, 58, 58));
-	}
-
-	public override bool CanExplode(int i, int j)
-	{
-		return false;
+		HitSound = default;
+		AddMapEntry(new Color(79, 76, 70));
 	}
 }

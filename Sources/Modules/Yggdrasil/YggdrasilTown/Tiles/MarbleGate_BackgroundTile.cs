@@ -28,9 +28,11 @@ public class MarbleGate_BackgroundTile : BackgroundVFX
 		Color lightColor3 = Lighting.GetColor((int)(position.X + texture.Width) / 16, (int)(position.Y + texture.Height) / 16);
 
 		Vector2 subBackgroundScale = texture.Size() / ModAsset.MarbleGate_Background.Value.Size();
-		//Vector2 offsetMouse = new Vector2((Main.MouseScreen.X / 150) % 1f, (Main.MouseScreen.Y / 150) % 1f);
+
+		// Vector2 offsetMouse = new Vector2((Main.MouseScreen.X / 150) % 1f, (Main.MouseScreen.Y / 150) % 1f);
 		Vector2 viewOffset = (position - Main.LocalPlayer.position) * 0.0004f + new Vector2(10000) + new Vector2(0.44f);
-		//Main.NewText(offsetMouse);
+
+		// Main.NewText(offsetMouse);
 		viewOffset.X %= 1;
 		viewOffset.Y %= 1;
 		Ins.Batch.BindTexture<Vertex2D>(ModAsset.MarbleGate_Background.Value);

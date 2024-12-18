@@ -1,8 +1,8 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Items;
 
-public class TwilightWood : ModItem
+public class TwilightEucalyptusWood : ModItem
 {
-	//TODO:暮木
+	// TODO:暮木
 	public override void SetDefaults()
 	{
 		Item.width = 16;
