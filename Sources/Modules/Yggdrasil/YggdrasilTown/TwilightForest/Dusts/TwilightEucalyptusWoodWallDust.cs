@@ -1,0 +1,5 @@
+namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Dusts;
+
+public class TwilightEucalyptusWoodWallDust : ModDust
+{
+}

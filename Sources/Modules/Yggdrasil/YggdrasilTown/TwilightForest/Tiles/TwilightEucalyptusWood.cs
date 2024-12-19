@@ -14,6 +14,6 @@ public class TwilightEucalyptusWood : ModTile
 		Main.tileBlockLight[Type] = true;
 		DustType = ModContent.DustType<GreenRelicBrick_dust>();
 		HitSound = default;
-		AddMapEntry(new Color(79, 76, 70));
+		AddMapEntry(new Color(58, 53, 50));
 	}
 }
