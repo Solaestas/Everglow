@@ -18,8 +18,9 @@ public class RecoveryBand : ModItem
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
-		// 1. On player hurt by anything, if damage received is more than 5,
-		// then recover 5 life and 10 mana
+		// 1. Recover a bit life and mana on hurt
+		// ======================================
+		// On player hurt by anything, if damage is more than 5, then recover 5 life and 10 mana
 		player.GetModPlayer<RecoveryBandPlayer>().RecoveryBandEnable = true;
 	}
 }

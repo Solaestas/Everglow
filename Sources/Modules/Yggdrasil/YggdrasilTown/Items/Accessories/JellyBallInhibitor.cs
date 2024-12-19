@@ -17,6 +17,10 @@ public class JellyBallInhibitor : ModItem
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
+		// 1. Increase damage to Jelly Ball by 60%
+		// =======================================
+		// 2. Decrease damage from Jelly Ball by 25%
+		// =========================================
 		player.GetModPlayer<JellyBallInhibitorPlayer>().JellyBallInhibitorEnable = true;
 	}
 }

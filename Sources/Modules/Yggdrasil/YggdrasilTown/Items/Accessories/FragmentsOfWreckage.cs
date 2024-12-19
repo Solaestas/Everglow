@@ -20,8 +20,11 @@ public class FragmentsOfWreckage : ModItem
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
+		// 1. Slightly increases stats based on life loss
+		// ==============================================
 		var lifeLoss = player.statLifeMax2 - player.statLife;
 
+		// A maximum of 400 life loss will be counted
 		var bonusScaler = lifeLoss / LifeLossForBonusMax;
 		if (bonusScaler > 1)
 		{
@@ -32,9 +35,16 @@ public class FragmentsOfWreckage : ModItem
 			bonusScaler = 0;
 		}
 
+		// +10% damage
 		player.GetDamage(DamageClass.Generic) += DamageBonus * bonusScaler;
+
+		// +10% melee speed
 		player.meleeSpeed += MeleeSpeedBonus * bonusScaler;
+
+		// +12 defense
 		player.statDefense += (int)(DefenseBonus * bonusScaler);
+
+		// +15% pick speed
 		player.pickSpeed -= PickSpeedBonus * bonusScaler;
 	}
 }
