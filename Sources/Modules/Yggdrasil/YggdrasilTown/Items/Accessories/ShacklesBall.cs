@@ -19,10 +19,19 @@ public class ShacklesBall : ModItem
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
+		// 1. +10% damage reduction
 		player.endurance += EnduranceBonus;
+
+		// 2. -15% move speed
 		player.moveSpeed -= MoveSpeedReduction;
+
+		// 3. -15% jump speed
 		player.jumpSpeedBoost -= Player.jumpSpeed * JumpSpeedReduction;
+
+		// 4. -7% jump height
 		player.jump = (int)(player.jump * (1 - JumpHeightReduction));
+
+		// 5. Immune to 'Slow' debuff
 		player.buffImmune[BuffID.Slow] = true;
 	}
 }

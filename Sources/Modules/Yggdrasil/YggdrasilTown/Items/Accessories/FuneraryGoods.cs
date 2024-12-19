@@ -17,6 +17,8 @@ public class FuneraryGoods : ModItem
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
+		// 1. On kill enemy, has a 12.5% chance to recover 100 mana immediately
+		// ====================================================================
 		player.GetModPlayer<FuneraryGoodsPlayer>().FuneraryGoodsEnable = true;
 	}
 }

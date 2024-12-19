@@ -21,6 +21,7 @@ public class SkullCollection : ModItem
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
+
 		if (--BuffCooldown < 0)
 		{
 			BuffCooldown = 0;
@@ -33,18 +34,21 @@ public class SkullCollection : ModItem
 				continue;
 			}
 
+			// If there's any enemy within 6 blocks / 96 pixels around the player
 			var distance = Vector2.Distance(npc.Center, player.Center);
 			if (distance <= DetectRange)
 			{
+				// 1. Add a 3s Mana Regeneration buff to the caster, then this effect goes to a 2s cooldown
+				// ========================================================================================
 				if (BuffCooldown <= 0)
 				{
 					player.AddBuff(BuffID.ManaRegeneration, BuffDuration);
 					BuffCooldown = BuffCooldownMax;
 				}
 
-				// TODO: Fix the following line to 5% final mana regen bonus
-				player.manaRegen += FinalManaRegenBonus;
-
+				// 2. +5 mana regeneration rate
+				// ============================
+				player.manaRegenBonus += 5;
 				break;
 			}
 		}
