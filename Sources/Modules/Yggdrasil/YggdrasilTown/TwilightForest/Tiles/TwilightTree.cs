@@ -118,7 +118,7 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		yield return new Item(ModContent.ItemType<TwilightWood>());
+		yield return new Item(ModContent.ItemType<TwilightEucalyptusWood_Item>());
 	}
 
 	public override bool CanDrop(int i, int j)
@@ -231,8 +231,8 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 					Dust.NewDust(new Vector2(i, breakingY) * 16, 16, 16, DustType);
 					Dust.NewDust(new Vector2(i + 1, breakingY) * 16, 16, 16, DustType);
 				}
-				Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, breakingY), i * 16, breakingY * 16, 16, 16, new Item(ModContent.ItemType<TwilightWood>(), 1));
-				Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, breakingY), i * 16 + 16, breakingY * 16, 16, 16, new Item(ModContent.ItemType<TwilightWood>(), 1));
+				Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, breakingY), i * 16, breakingY * 16, 16, 16, new Item(ModContent.ItemType<TwilightEucalyptusWood_Item>(), 1));
+				Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, breakingY), i * 16 + 16, breakingY * 16, 16, 16, new Item(ModContent.ItemType<TwilightEucalyptusWood_Item>(), 1));
 			}
 			else
 			{
