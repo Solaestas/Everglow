@@ -138,7 +138,7 @@ public abstract class ShapeDataTile : ModTile
 		{
 			for (int j = 0; j < TotalHeight; j++)
 			{
-				if (PixelHasTile[i, TotalHeight - j] >= 200)
+				if (PixelHasTile[i, j] >= 200)
 				{
 					Tile tile = Main.tile[x + i, y + j];
 					tile.TileType = Type;
@@ -230,6 +230,68 @@ public abstract class ShapeDataTile : ModTile
 							return false;
 						}
 						if (!(Main.tileSolidTop[tileBottom.TileType] || Main.tileSolid[tileBottom.TileType]))
+						{
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	/// <summary>
+	/// 判定顶部平坦以及能否容纳下异形块
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public bool CanPlaceAtTopLeft(int x, int y)
+	{
+		if (x > Main.maxTilesX - TotalWidth || x < 0 || y > Main.maxTilesY || y - TotalHeight < 0)
+		{
+			return false;
+		}
+
+		for (int i = 0; i < TotalWidth; i++)
+		{
+			for (int j = 0; j < TotalHeight; j++)
+			{
+				if (PixelHasTile[i, j] >= 200)
+				{
+					Tile tile = Main.tile[x + i, y + j];
+					if (tile.HasTile)
+					{
+						bool fragile = false;
+						if (Main.tileCut[tile.TileType])
+						{
+							fragile = true;
+						}
+						if (Main.tilePile[tile.TileType])
+						{
+							fragile = true;
+						}
+						if (!fragile)
+						{
+							return false;
+						}
+					}
+					if (j == 0)
+					{
+						Tile tileTop = Main.tile[x + i, y - 1];
+						if (!tileTop.HasTile)
+						{
+							return false;
+						}
+						if (tileTop.Slope != SlopeType.Solid)
+						{
+							return false;
+						}
+						if (tileTop.IsHalfBlock)
+						{
+							return false;
+						}
+						if (!(Main.tileSolidTop[tileTop.TileType] || Main.tileSolid[tileTop.TileType]))
 						{
 							return false;
 						}
