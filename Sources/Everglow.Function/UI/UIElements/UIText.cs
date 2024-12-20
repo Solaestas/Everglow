@@ -34,6 +34,12 @@ namespace Everglow.Commons.UI.UIElements
 			font = spriteFont;
 			Scale = scale;
 			Color = Color.White;
+
+			Vector2 size = font.MeasureString(text) * Scale;
+			Info.Width.Pixel = size.X;
+			Info.Height.Pixel = size.Y;
+			Info.Width.Percent = 0f;
+			Info.Height.Percent = 0f;
 		}
 
 		public UIText(string t, DynamicSpriteFont spriteFont, Color textColor, float scale = 1f)
@@ -42,6 +48,12 @@ namespace Everglow.Commons.UI.UIElements
 			font = spriteFont;
 			Scale = scale;
 			Color = textColor;
+
+			Vector2 size = font.MeasureString(text) * Scale;
+			Info.Width.Pixel = size.X;
+			Info.Height.Pixel = size.Y;
+			Info.Width.Percent = 0f;
+			Info.Height.Percent = 0f;
 		}
 
 		public override void Calculation()

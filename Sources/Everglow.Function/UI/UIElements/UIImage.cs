@@ -3,12 +3,12 @@ namespace Everglow.Commons.UI.UIElements
 	public class UIImage : BaseElement
 	{
 		/// <summary>
-		/// 计算实际位置时的方式
+		/// 计算实际大小时的方式
 		/// </summary>
 		public enum CalculationStyle
 		{
 			/// <summary>
-			/// 默认
+			/// 不计算
 			/// </summary>
 			None,
 
@@ -23,30 +23,38 @@ namespace Everglow.Commons.UI.UIElements
 			LockedAspectRatioMainHeight,
 		}
 
-		private Texture2D _texture;
-		private Color _color;
+		protected Texture2D _texture;
+		protected Color _color;
 		public CalculationStyle Style = CalculationStyle.None;
 		public Vector2 Origin = Vector2.Zero;
 		public SpriteEffects SpriteEffects = SpriteEffects.None;
 		public float Rotation = 0f;
 		public Rectangle? SourceRectangle = null;
 
+		public Texture2D Texture { get => _texture; set => _texture = value; }
+
+		public Color Color { get => _color; set => _color = value; }
+
 		public UIImage(Texture2D texture, Color color)
 		{
 			_texture = texture;
 			_color = color;
-			Info.Width.Pixel = texture.Width;
-			Info.Height.Pixel = texture.Height;
+			if (texture != null)
+			{
+				Info.Width.Pixel = texture.Width;
+				Info.Height.Pixel = texture.Height;
+			}
 		}
 
 		protected override void DrawSelf(SpriteBatch sb)
 		{
 			base.DrawSelf(sb);
-			sb.Draw(_texture, Info.TotalHitBox, SourceRectangle,
-				_color, Rotation, Origin, SpriteEffects, 0f);
+			if (_texture != null)
+			{
+				sb.Draw(_texture, Info.TotalHitBox, SourceRectangle,
+					_color, Rotation, Origin, SpriteEffects, 0f);
+			}
 		}
-
-		public void ChangeColor(Color color) => _color = color;
 
 		public override void Calculation()
 		{
@@ -64,11 +72,5 @@ namespace Everglow.Commons.UI.UIElements
 				base.Calculation();
 			}
 		}
-
-		public void ChangeImage(Texture2D texture) => _texture = texture;
-
-		public Texture2D GetImage() => _texture;
-
-		public Color GetColor() => _color;
 	}
 }

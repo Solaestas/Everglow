@@ -108,7 +108,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 				Info.Location.X = Info.TotalLocation.X + left;
 				Info.Location.Y = Info.TotalLocation.Y + top;
 				Info.Size.X = Info.TotalSize.X - Info.RightMargin.GetPixelBaseParent(Main.screenWidth) - left;
-				Info.Size.Y = Info.TotalSize.Y - Info.ButtomMargin.GetPixelBaseParent(Main.screenHeight) - top;
+				Info.Size.Y = Info.TotalSize.Y - Info.BottomMargin.GetPixelBaseParent(Main.screenHeight) - top;
 			}
 			else
 			{
@@ -122,7 +122,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 				Info.Location.X = Info.TotalLocation.X + left;
 				Info.Location.Y = Info.TotalLocation.Y + top;
 				Info.Size.X = Info.TotalSize.X - Info.RightMargin.GetPixelBaseParent(ParentElement.Info.Size.X) - left;
-				Info.Size.Y = Info.TotalSize.Y - Info.ButtomMargin.GetPixelBaseParent(ParentElement.Info.Size.Y) - top;
+				Info.Size.Y = Info.TotalSize.Y - Info.BottomMargin.GetPixelBaseParent(ParentElement.Info.Size.Y) - top;
 			}
 			Info.HitBox = new Rectangle((int)Info.Location.X, (int)Info.Location.Y, (int)Info.Size.X, (int)Info.Size.Y);
 			Info.TotalHitBox = new Rectangle((int)Info.TotalLocation.X, (int)Info.TotalLocation.Y, (int)Info.TotalSize.X, (int)Info.TotalSize.Y);

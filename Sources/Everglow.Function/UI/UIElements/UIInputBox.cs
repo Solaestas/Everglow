@@ -104,7 +104,11 @@ namespace Everglow.Commons.UI.UIElements
 		private Rectangle symHitBox;
 		private Vector2 offset;
 		private bool isEnableIME = false;
-		private KeyCooldown up, down, left, right, enter;
+		private KeyCooldown up;
+		private KeyCooldown down;
+		private KeyCooldown left;
+		private KeyCooldown right;
+		private KeyCooldown enter;
 		private DynamicSpriteFont _font;
 		private float LineYHight = 0f;
 

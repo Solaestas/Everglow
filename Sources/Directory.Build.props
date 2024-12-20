@@ -31,7 +31,7 @@
 		<Publicize Include="ReLogic" />
 		<Publicize Include="MonoMod.RuntimeDetour" />
 		<Publicize Include="MonoMod.Utils" />
-		<AdditionalFiles Include="**\*.obj;**\*.bmp;**\*.mapio"
+		<AdditionalFiles Include="**\*.obj;**\*.bmp;**\*.mapio;**\*.ttf"
 						 Pack="true"
 						 ModPath="%(Identity)"
 						 Exclude="bin\**\*;obj\**\*" />

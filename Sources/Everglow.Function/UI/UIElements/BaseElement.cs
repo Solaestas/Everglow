@@ -7,33 +7,56 @@ namespace Everglow.Commons.UI.UIElements
 		/// </summary>
 		public struct PositionStyle
 		{
-			public static readonly PositionStyle Empty = new PositionStyle();
+			public static readonly PositionStyle Empty = CreatePositionStyle();
 			public static readonly PositionStyle Full = new PositionStyle(0f, 1f);
 			public static readonly PositionStyle Half = new PositionStyle(0f, 0.5f);
 
 			/// <summary>
 			/// 绝对距离，单位为像素
 			/// </summary>
-			public float Pixel = 0f;
+			public float Pixel;
 
 			/// <summary>
 			/// 相对距离
 			/// </summary>
-			public float Percent = 0f;
+			public float Percent;
 
-			public PositionStyle()
+			public static PositionStyle CreatePositionStyle()
 			{
+				PositionStyle style = new PositionStyle();
+				style.Pixel = 0f;
+				style.Percent = 0f;
+				return style;
 			}
 
 			public PositionStyle(float pixel)
 			{
 				Pixel = pixel;
+				Percent = 0f;
 			}
 
 			public PositionStyle(float pixel, float percent)
 			{
 				Pixel = pixel;
 				Percent = percent;
+			}
+
+			public void SetEmpty()
+			{
+				Pixel = 0f;
+				Percent = 0f;
+			}
+
+			public void SetFull()
+			{
+				Pixel = 0f;
+				Percent = 1f;
+			}
+
+			public void SetHalf()
+			{
+				Pixel = 0f;
+				Percent = 0.5f;
 			}
 
 			/// <summary>
@@ -46,16 +69,26 @@ namespace Everglow.Commons.UI.UIElements
 				return Percent * pixel + Pixel;
 			}
 
-			public void SetValue(PositionStyle style)
+			public void SetValue(float pixel)
 			{
-				Pixel = style.Pixel;
-				Percent = style.Percent;
+				Pixel = pixel;
 			}
 
 			public void SetValue(float pixel, float percent)
 			{
 				Pixel = pixel;
 				Percent = percent;
+			}
+
+			public void SetValue(PositionStyle style)
+			{
+				Pixel = style.Pixel;
+				Percent = style.Percent;
+			}
+
+			public static PositionStyle Lerp(PositionStyle ps1, PositionStyle ps2, float value)
+			{
+				return ps1 + (ps2 - ps1) * value;
 			}
 
 			public static PositionStyle operator +(PositionStyle ps1, PositionStyle ps2)
@@ -90,6 +123,11 @@ namespace Everglow.Commons.UI.UIElements
 				return output;
 			}
 
+			public static implicit operator PositionStyle((float pixel, float percent) value)
+			{
+				return new PositionStyle(value.pixel, value.percent);
+			}
+
 			public override string ToString()
 			{
 				return $"Pixel:{Pixel} Percent:{Percent}";
@@ -104,105 +142,136 @@ namespace Everglow.Commons.UI.UIElements
 			/// <summary>
 			/// 左坐标
 			/// </summary>
-			public PositionStyle Left = PositionStyle.Empty;
+			public PositionStyle Left;
 
 			/// <summary>
 			/// 上坐标
 			/// </summary>
-			public PositionStyle Top = PositionStyle.Empty;
+			public PositionStyle Top;
 
 			/// <summary>
 			/// 宽度
 			/// </summary>
-			public PositionStyle Width = PositionStyle.Empty;
+			public PositionStyle Width;
 
 			/// <summary>
 			/// 高度
 			/// </summary>
-			public PositionStyle Height = PositionStyle.Empty;
+			public PositionStyle Height;
 
 			/// <summary>
 			/// 左边距
 			/// </summary>
-			public PositionStyle LeftMargin = PositionStyle.Empty;
+			public PositionStyle LeftMargin;
 
 			/// <summary>
 			/// 右边距
 			/// </summary>
-			public PositionStyle RightMargin = PositionStyle.Empty;
+			public PositionStyle RightMargin;
 
 			/// <summary>
 			/// 上边距
 			/// </summary>
-			public PositionStyle TopMargin = PositionStyle.Empty;
+			public PositionStyle TopMargin;
 
 			/// <summary>
 			/// 下边距
 			/// </summary>
-			public PositionStyle ButtomMargin = PositionStyle.Empty;
+			public PositionStyle BottomMargin;
+
+			public SamplerState SamplerState;
 
 			/// <summary>
 			/// 是否隐藏溢出
 			/// </summary>
-			public bool HiddenOverflow = false;
+			public bool HiddenOverflow;
 
 			/// <summary>
 			/// UI部件是否激活
 			/// </summary>
-			public bool IsVisible = true;
+			public bool IsVisible;
 
 			/// <summary>
 			/// UI部件是否隐藏（不调用 DrawSelf 方法）
 			/// </summary>
-			public bool IsHidden = false;
+			public bool IsHidden;
 
 			/// <summary>
 			/// 是否敏感（触发子元素事件时同时触发此元素事件）
 			/// </summary>
-			public bool IsSensitive = false;
+			public bool IsSensitive;
 
 			/// <summary>
 			/// 是否可以被交互
 			/// </summary>
-			public bool CanBeInteract = true;
+			public bool CanBeInteract;
 
 			/// <summary>
 			/// 指示实际坐标与实际大小是否已经经过计算
 			/// </summary>
-			public bool InitDone = false;
+			public bool InitDone;
+
+			/// <summary>
+			/// UI事件遮罩，在开启时不再处理被次UI部件遮挡的UI部件的鼠标事件
+			/// </summary>
+			public bool InteractiveMask;
 
 			/// <summary>
 			/// 实际坐标（被内边距裁切过）
 			/// </summary>
-			public Vector2 Location = Vector2.Zero;
+			public Vector2 Location;
 
 			/// <summary>
 			/// 实际大小（被内边距裁切过）
 			/// </summary>
-			public Vector2 Size = Vector2.Zero;
+			public Vector2 Size;
 
 			/// <summary>
 			/// 实际坐标（无内边距裁切）
 			/// </summary>
-			public Vector2 TotalLocation = Vector2.Zero;
+			public Vector2 TotalLocation;
 
 			/// <summary>
 			/// 实际大小（无内边距裁切）
 			/// </summary>
-			public Vector2 TotalSize = Vector2.Zero;
+			public Vector2 TotalSize;
 
 			/// <summary>
 			/// 碰撞箱（被内边距裁切过）
 			/// </summary>
-			public Rectangle HitBox = Rectangle.Empty;
+			public Rectangle HitBox;
 
 			/// <summary>
 			/// 完整碰撞箱（无内边距裁切）
 			/// </summary>
-			public Rectangle TotalHitBox = Rectangle.Empty;
+			public Rectangle TotalHitBox;
 
-			public ElementInfo()
+			public static ElementInfo CreateElementInfo()
 			{
+				ElementInfo info = new ElementInfo();
+				info.Left = PositionStyle.Empty;
+				info.Top = PositionStyle.Empty;
+				info.Width = PositionStyle.Empty;
+				info.Height = PositionStyle.Empty;
+				info.LeftMargin = PositionStyle.Empty;
+				info.RightMargin = PositionStyle.Empty;
+				info.TopMargin = PositionStyle.Empty;
+				info.BottomMargin = PositionStyle.Empty;
+				info.HiddenOverflow = false;
+				info.IsVisible = true;
+				info.IsHidden = false;
+				info.IsSensitive = false;
+				info.CanBeInteract = true;
+				info.InitDone = false;
+				info.InteractiveMask = false;
+				info.Location = Vector2.Zero;
+				info.Size = Vector2.Zero;
+				info.TotalLocation = Vector2.Zero;
+				info.TotalSize = Vector2.Zero;
+				info.HitBox = Rectangle.Empty;
+				info.TotalHitBox = Rectangle.Empty;
+				info.SamplerState = SamplerState.PointWrap;
+				return info;
 			}
 
 			/// <summary>
@@ -214,7 +283,35 @@ namespace Everglow.Commons.UI.UIElements
 				LeftMargin.Pixel = pixel;
 				RightMargin.Pixel = pixel;
 				TopMargin.Pixel = pixel;
-				ButtomMargin.Pixel = pixel;
+				BottomMargin.Pixel = pixel;
+			}
+
+			public void SetToCenter() => SetCenter(PositionStyle.Half, PositionStyle.Half);
+
+			public void SetCenter(PositionStyle centerX, PositionStyle centerY)
+			{
+				Left.SetValue(centerX - Width / 2f);
+				Top.SetValue(centerY - Height / 2f);
+			}
+
+			public void SetToRight() => SetRight(PositionStyle.Full);
+
+			public void SetRight(PositionStyle right)
+			{
+				Left.SetValue(right - Width);
+			}
+
+			public void SetToBottom() => SetBottom(PositionStyle.Full);
+
+			public void SetBottom(PositionStyle bottom)
+			{
+				Top.SetValue(bottom - Height);
+			}
+
+			public void SetScale(float scale)
+			{
+				Width *= scale;
+				Height *= scale;
 			}
 		}
 
@@ -378,7 +475,7 @@ namespace Everglow.Commons.UI.UIElements
 		public BaseElement()
 		{
 			events = new ElementEvents();
-			Info = new ElementInfo();
+			Info = ElementInfo.CreateElementInfo();
 			ChildrenElements = new List<BaseElement>();
 		}
 
@@ -556,7 +653,7 @@ namespace Everglow.Commons.UI.UIElements
 				Info.Location.X = Info.TotalLocation.X + left;
 				Info.Location.Y = Info.TotalLocation.Y + top;
 				Info.Size.X = Info.TotalSize.X - Info.RightMargin.GetPixelBaseParent(Main.screenWidth) - left;
-				Info.Size.Y = Info.TotalSize.Y - Info.ButtomMargin.GetPixelBaseParent(Main.screenHeight) - top;
+				Info.Size.Y = Info.TotalSize.Y - Info.BottomMargin.GetPixelBaseParent(Main.screenHeight) - top;
 			}
 			else
 			{
@@ -570,7 +667,7 @@ namespace Everglow.Commons.UI.UIElements
 				Info.Location.X = Info.TotalLocation.X + left;
 				Info.Location.Y = Info.TotalLocation.Y + top;
 				Info.Size.X = Info.TotalSize.X - Info.RightMargin.GetPixelBaseParent(ParentElement.Info.Size.X) - left;
-				Info.Size.Y = Info.TotalSize.Y - Info.ButtomMargin.GetPixelBaseParent(ParentElement.Info.Size.Y) - top;
+				Info.Size.Y = Info.TotalSize.Y - Info.BottomMargin.GetPixelBaseParent(ParentElement.Info.Size.Y) - top;
 			}
 			Info.HitBox = new Rectangle((int)Info.Location.X, (int)Info.Location.Y, (int)Info.Size.X, (int)Info.Size.Y);
 			Info.TotalHitBox = new Rectangle((int)Info.TotalLocation.X, (int)Info.TotalLocation.Y, (int)Info.TotalSize.X, (int)Info.TotalSize.Y);
@@ -592,7 +689,7 @@ namespace Everglow.Commons.UI.UIElements
 					Info.Location.X = Info.TotalLocation.X + left;
 					Info.Location.Y = Info.TotalLocation.Y + top;
 					Info.Size.X = Info.TotalSize.X - Info.RightMargin.GetPixelBaseParent(Main.screenWidth) - left;
-					Info.Size.Y = Info.TotalSize.Y - Info.ButtomMargin.GetPixelBaseParent(Main.screenHeight) - top;
+					Info.Size.Y = Info.TotalSize.Y - Info.BottomMargin.GetPixelBaseParent(Main.screenHeight) - top;
 				}
 				else
 				{
@@ -606,7 +703,7 @@ namespace Everglow.Commons.UI.UIElements
 					Info.Location.X = Info.TotalLocation.X + left;
 					Info.Location.Y = Info.TotalLocation.Y + top;
 					Info.Size.X = Info.TotalSize.X - Info.RightMargin.GetPixelBaseParent(ParentElement.Info.Size.X) - left;
-					Info.Size.Y = Info.TotalSize.Y - Info.ButtomMargin.GetPixelBaseParent(ParentElement.Info.Size.Y) - top;
+					Info.Size.Y = Info.TotalSize.Y - Info.BottomMargin.GetPixelBaseParent(ParentElement.Info.Size.Y) - top;
 				}
 				Info.HitBox = new Rectangle((int)Info.Location.X, (int)Info.Location.Y, (int)Info.Size.X, (int)Info.Size.Y);
 				Info.TotalHitBox = new Rectangle((int)Info.TotalLocation.X, (int)Info.TotalLocation.Y, (int)Info.TotalSize.X, (int)Info.TotalSize.Y);

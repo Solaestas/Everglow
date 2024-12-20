@@ -97,7 +97,7 @@ namespace Everglow.Commons.UI.UIElements
 					alpha -= 0.01f;
 			}
 
-			inner.ChangeColor(Color.White * alpha);
+			inner.Color = Color.White * alpha;
 
 			MouseState state = Mouse.GetState();
 			float width = Info.Size.X - LeftMin - LeftMax - inner.Info.Size.X;

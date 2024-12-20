@@ -7,7 +7,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 {
 	public class SidebarContainer : UIContainerElement
 	{
-		public static readonly string ContainerFullName = typeof(SidebarContainer).FullName;
+		public static SidebarContainer Instance => (SidebarContainer)UISystem.EverglowUISystem.Elements[typeof(SidebarContainer).FullName];
 		private UIPanel mainPanel;
 		private bool open = true;
 		private KeyCooldown cardModeVisibleCoolDown = new KeyCooldown(() => true, 14);
@@ -33,16 +33,15 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 			quickBar.Info.Left.SetValue(0f, 0.15f);
 			quickBar.Events.OnCalculation += element =>
 			{
-				mainPanel.Info.Height.SetValue(element.Info.Size.Y + mainPanel.Info.TopMargin.Pixel + mainPanel.Info.ButtomMargin.Pixel,
-					0f + mainPanel.Info.TopMargin.Percent + mainPanel.Info.ButtomMargin.Percent);
+				mainPanel.Info.Height.SetValue(element.Info.Size.Y + mainPanel.Info.TopMargin.Pixel + mainPanel.Info.BottomMargin.Pixel,
+					0f + mainPanel.Info.TopMargin.Percent + mainPanel.Info.BottomMargin.Percent);
 				return false;
 			};
 			mainPanel.Register(quickBar);
 
 			LoadSidebarElement(quickBar);
 
-			//这是展开和收回箭头
-
+			// 这是展开和收回箭头
 			UIImage image = new UIImage(ModAsset.Array.Value, Color.White);
 			image.Info.Left.SetValue(2f, 1f);
 			image.Info.Top.SetValue(-image.Info.Height.Pixel / 2f, 0.5f);
@@ -62,14 +61,10 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 
 		private void LoadSidebarElement(SidebarList quickBar)
 		{
-			var containers = from c in GetType().Assembly.GetTypes()
-							 where !c.IsAbstract && c.IsSubclassOf(typeof(SidebarElementBase))
-							 select c;
+			var sidebarElements = Ins.ModuleManager.CreateInstances<SidebarElementBase>();
 			TriggeredTypeSidebarUIElement quickElement;
-			SidebarElementBase sidebarElement;
-			foreach (var c in containers)
+			foreach (var sidebarElement in sidebarElements)
 			{
-				sidebarElement = (SidebarElementBase)Activator.CreateInstance(c);
 				quickElement = new TriggeredTypeSidebarUIElement(sidebarElement.Icon, Color.White);
 				quickElement.Tooltip = sidebarElement.Tooltip;
 				quickElement.OnTigger += element =>
