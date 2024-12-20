@@ -176,6 +176,14 @@ public class MissionManager
 		Array.ForEach(_missionPools, m => m.ForEach(m => m.Update()));
 	}
 
+	public void Clear()
+	{
+		foreach (var mp in _missionPools)
+		{
+			mp.Clear();
+		}
+	}
+
 	/// <summary>
 	/// 保存任务
 	/// </summary>

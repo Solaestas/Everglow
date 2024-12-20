@@ -50,6 +50,7 @@ public class MissionPlayer : ModPlayer
 	{
 		base.SaveData(tag);
 		MissionManager.Save(tag);
+		MissionManager.Clear();
 	}
 
 	public override void LoadData(TagCompound tag)
