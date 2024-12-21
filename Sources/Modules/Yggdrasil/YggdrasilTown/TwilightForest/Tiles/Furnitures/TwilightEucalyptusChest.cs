@@ -1,16 +1,15 @@
-using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Dusts;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
 using Terraria.ObjectData;
+using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Dusts;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles.Furnitures;
 
 public class TwilightEucalyptusChest : ModTile
 {
-	public override void SetStaticDefaults()
-	{
+	public override void SetStaticDefaults() {
 		// Properties
 		Main.tileSpelunker[Type] = true;
 		Main.tileContainer[Type] = true;
@@ -45,7 +44,7 @@ public class TwilightEucalyptusChest : ModTile
 		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
 		TileObjectData.newTile.Origin = new Point16(0, 1);
-		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16 };
+		TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
 		TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(Chest.FindEmptyChest, -1, 0, true);
 		TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(Chest.AfterPlacement_Hook, -1, 0, false);
 		TileObjectData.newTile.AnchorInvalidTiles = new int[] {
@@ -61,98 +60,80 @@ public class TwilightEucalyptusChest : ModTile
 		TileObjectData.addTile(Type);
 	}
 
-	public override ushort GetMapOption(int i, int j)
-	{
+	public override ushort GetMapOption(int i, int j) {
 		return (ushort)(Main.tile[i, j].TileFrameX / 36);
 	}
 
-	public override LocalizedText DefaultContainerName(int frameX, int frameY)
-	{
+	public override LocalizedText DefaultContainerName(int frameX, int frameY) {
 		int option = frameX / 36;
 		return this.GetLocalization("MapEntry" + option);
 	}
 
-	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
-	{
+	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) {
 		return true;
 	}
 
-	public static string MapChestName(string name, int i, int j)
-	{
+	public static string MapChestName(string name, int i, int j) {
 		int left = i;
 		int top = j;
 		Tile tile = Main.tile[i, j];
-		if (tile.TileFrameX % 36 != 0)
-		{
+		if (tile.TileFrameX % 36 != 0) {
 			left--;
 		}
 
-		if (tile.TileFrameY != 0)
-		{
+		if (tile.TileFrameY != 0) {
 			top--;
 		}
 
 		int chest = Chest.FindChest(left, top);
-		if (chest < 0)
-		{
+		if (chest < 0) {
 			return Language.GetTextValue("LegacyChestType.0");
 		}
 
-		if (Main.chest[chest].name == "")
-		{
+		if (Main.chest[chest].name == "") {
 			return name;
 		}
 
 		return name + ": " + Main.chest[chest].name;
 	}
 
-	public override void NumDust(int i, int j, bool fail, ref int num)
-	{
+	public override void NumDust(int i, int j, bool fail, ref int num) {
 		num = 1;
 	}
 
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
+	public override void KillMultiTile(int i, int j, int frameX, int frameY) {
 		// We override KillMultiTile to handle additional logic other than the item drop. In this case, unregistering the Chest from the world
 		Chest.DestroyChest(i, j);
 	}
 
-	public override bool RightClick(int i, int j)
-	{
+	public override bool RightClick(int i, int j) {
 		return FurnitureUtils.ChestRightClick(i, j);
 	}
 
-	public override void MouseOver(int i, int j)
-	{
+	public override void MouseOver(int i, int j) {
 		Player player = Main.LocalPlayer;
 		Tile tile = Main.tile[i, j];
 		int left = i;
 		int top = j;
-		if (tile.TileFrameX % 36 != 0)
-		{
+		if (tile.TileFrameX % 36 != 0) {
 			left--;
 		}
 
-		if (tile.TileFrameY != 0)
-		{
+		if (tile.TileFrameY != 0) {
 			top--;
 		}
 
 		int chest = Chest.FindChest(left, top);
 		player.cursorItemIconID = -1;
-		if (chest < 0)
-		{
+		if (chest < 0) {
 			player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
 		}
-		else
-		{
+		else {
 			string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY); // This gets the ContainerName text for the currently selected language
 			player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
-			if (player.cursorItemIconText == defaultName)
-			{
+			if (player.cursorItemIconText == defaultName) {
 				player.cursorItemIconID = ModContent.ItemType<Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Items.Furnitures.TwilightEucalyptusChest>();
-				if (Main.tile[left, top].TileFrameX / 36 == 1)
-				{
+				if (Main.tile[left, top].TileFrameX / 36 == 1) {
 					// player.cursorItemIconID = ModContent.ItemType<>();
 				}
 
@@ -164,12 +145,10 @@ public class TwilightEucalyptusChest : ModTile
 		player.cursorItemIconEnabled = true;
 	}
 
-	public override void MouseOverFar(int i, int j)
-	{
+	public override void MouseOverFar(int i, int j) {
 		MouseOver(i, j);
 		Player player = Main.LocalPlayer;
-		if (player.cursorItemIconText == "")
-		{
+		if (player.cursorItemIconText == "") {
 			player.cursorItemIconEnabled = false;
 			player.cursorItemIconID = 0;
 		}

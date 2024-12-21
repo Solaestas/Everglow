@@ -1,3 +1,6 @@
+using Terraria.GameContent.Creative;
+using Everglow.Commons.Utilities;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Items.Furnitures;
 
 public class TwilightEucalyptusChest : ChestItem
