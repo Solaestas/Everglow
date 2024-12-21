@@ -11,10 +11,10 @@ public class AcytaeaInferno : ModBuff
 	}
 	public override void Update(NPC npc, ref int buffIndex)
 	{
-		int buffDamage = 2000;
+		int buffDamage = 100;
 
 		npc.lifeRegen = -buffDamage;
-		npc.lifeRegenExpectedLossPerSecond = 150;
+		npc.lifeRegenExpectedLossPerSecond = 10;
 
 		GenerateFire(1, npc.Center);
 
