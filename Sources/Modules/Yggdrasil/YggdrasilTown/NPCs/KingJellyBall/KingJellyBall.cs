@@ -788,10 +788,10 @@ public class KingJellyBall : ModNPC
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		effect = ModAsset.KingJellyBall_CoreCrystalOverSurface.Value;
-		effect.Parameters["uTransform"].SetValue(model * projection);
-		effect.Parameters["uHeatMap"].SetValue(ModAsset.KingJellyBall_Zaxis.Value);
-		effect.CurrentTechnique.Passes["Test"].Apply();
+		Effect crystalOverBody = ModAsset.KingJellyBall_CoreCrystalOverSurface.Value;
+		crystalOverBody.Parameters["uTransform"].SetValue(model * projection);
+		crystalOverBody.Parameters["uHeatMap"].SetValue(ModAsset.KingJellyBall_Zaxis.Value);
+		crystalOverBody.CurrentTechnique.Passes["Test"].Apply();
 		float sizeX = texture.Size().X * 0.5f;
 		float sizeY = texture.Size().Y * 0.5f;
 		float scaleZ = NPC.scale + 0.3f + 0.05f * MathF.Sin(timeValue * 0.6f);

@@ -12,17 +12,31 @@ public class UnionMarblePost_Body_Khaki : ModTile
 		Main.tileFrameImportant[Type] = true;
 		Main.tileLighted[Type] = true;
 		Main.tileLavaDeath[Type] = false;
-
+		Main.tileNoAttach[Type] = false;
 		Main.tileWaterDeath[Type] = false;
+
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
-		TileObjectData.newAlternate.AnchorAlternateTiles = new[] { Type, Type | ModContent.TileType<UnionMarblePost_Body_Khaki>() };
-		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, TileObjectData.newTile.Width, 0);
-		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.None, TileObjectData.newTile.Width, 0);
+		TileObjectData.newTile.Origin = new(0, 0);
 		TileObjectData.newTile.Height = 1;
 		TileObjectData.newTile.Width = 3;
+
+		TileObjectData.newTile.AnchorAlternateTiles = new[] { Type, ModContent.TileType<UnionMarblePost_Bottom_Khaki>() | ModContent.TileType<UnionMarblePost_Body_Khaki>() | ModContent.TileType<UnionMarblePost_Top_Khaki>() };
+
+		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.None, 0, 0);
+		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
 		TileObjectData.newTile.CoordinateHeights = new[] { 16 };
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = false;
+		TileObjectData.newTile.Origin = new Point16(1, 0);
+
+		//TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+		//TileObjectData.newAlternate.AnchorBottom = new AnchorData(AnchorType.AlternateTile, TileObjectData.newTile.Width, 0);
+		//TileObjectData.newAlternate.AnchorTop = new AnchorData(AnchorType.None, 0, 0);
+		//TileObjectData.addAlternate(0);
+
+		//TileObjectData.newTile.AnchorAlternateTiles = new[] { ModContent.TileType<UnionMarblePost_Bottom_Khaki>() | ModContent.TileType<UnionMarblePost_Body_Khaki>() | ModContent.TileType<UnionMarblePost_Top_Khaki>() };
+		//TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.AlternateTile, TileObjectData.newTile.Width, 0);
+		//TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
 		TileObjectData.addTile(Type);
 		DustType = ModContent.DustType<UnionMarblePost_Dust_Khaki>();
 		AddMapEntry(new Color(226, 202, 181));

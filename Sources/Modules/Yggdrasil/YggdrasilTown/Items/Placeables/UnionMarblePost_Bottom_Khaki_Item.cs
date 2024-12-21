@@ -10,7 +10,7 @@ public class UnionMarblePost_Bottom_Khaki_Item : ModItem
 		Item.height = 34;
 		Item.maxStack = Item.CommonMaxStack;
 		Item.createTile = ModContent.TileType<UnionMarblePost_Bottom_Khaki>();
-		Item.placeStyle = 1;
+		Item.placeStyle = 0;
 		Item.useTurn = true;
 		Item.autoReuse = true;
 		Item.useAnimation = 15;

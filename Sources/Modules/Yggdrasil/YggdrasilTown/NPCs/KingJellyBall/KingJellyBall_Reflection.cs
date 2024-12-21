@@ -21,7 +21,7 @@ public class KingJellyBall_Reflection : Visual
 
 	public override void Update()
 	{
-		if (MyKingJellyBallOwner == null || !MyKingJellyBallOwner.active || MyKingJellyBallOwner.type != ModContent.NPCType<KingJellyBall>() || MyKingJellyBallOwner.life <= 0)
+		if (MyKingJellyBallOwner == null || !MyKingJellyBallOwner.active || MyKingJellyBallOwner.type != ModContent.NPCType<KingJellyBall>() || MyKingJellyBallOwner.life <= 0 || Ins.VisualQuality.Low)
 		{
 			Active = false;
 			return;
@@ -40,6 +40,19 @@ public class KingJellyBall_Reflection : Visual
 
 	public override void Draw()
 	{
+		if (MyKingJellyBallOwner == null || !MyKingJellyBallOwner.active || MyKingJellyBallOwner.type != ModContent.NPCType<KingJellyBall>() || MyKingJellyBallOwner.life <= 0 || Ins.VisualQuality.Low)
+		{
+			Active = false;
+			return;
+		}
+		KingJellyBall kingJellyBall = MyKingJellyBallOwner.ModNPC as KingJellyBall;
+		if (kingJellyBall == null)
+		{
+			Active = false;
+			return;
+		}
+
+		var textureOld = Main.graphics.GraphicsDevice.Textures[1];
 		Main.graphics.GraphicsDevice.Textures[1] = ModAsset.KingJellyBall_Reflect.Value;
 		float timeValue = (float)Main.time * 0.03f;
 		List<MirrorFaceVertex> jellyBallBodyInner = new List<MirrorFaceVertex>();
@@ -73,5 +86,15 @@ public class KingJellyBall_Reflection : Visual
 		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, jellyBallBodyInner.ToArray(), 0, jellyBallBodyInner.Count - 2);
 		}
+		else
+		{
+			jellyBallBodyInner.Add(new MirrorFaceVertex(new Vector3(0), new Color(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 0.5f, 0)));
+			jellyBallBodyInner.Add(new MirrorFaceVertex(new Vector3(0), new Color(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 0.5f, 0)));
+			jellyBallBodyInner.Add(new MirrorFaceVertex(new Vector3(0), new Color(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 0.5f, 0)));
+			jellyBallBodyInner.Add(new MirrorFaceVertex(new Vector3(0), new Color(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 0.5f, 0)));
+
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, jellyBallBodyInner.ToArray(), 0, jellyBallBodyInner.Count - 2);
+		}
+		Main.graphics.GraphicsDevice.Textures[1] = textureOld;
 	}
 }

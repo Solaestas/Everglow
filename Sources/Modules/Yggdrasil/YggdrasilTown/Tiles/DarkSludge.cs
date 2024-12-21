@@ -59,7 +59,7 @@ public class DarkSludge : ModTile, ISceneTile
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		if(!Main.tile[i, j - 1].HasTile)
+		if(!Main.tile[i, j - 1].HasTile && !Ins.VisualQuality.Low)
 		{
 			return false;
 		}
@@ -68,7 +68,7 @@ public class DarkSludge : ModTile, ISceneTile
 
 	public void AddScene(int i, int j)
 	{
-		if (i == 1330 && j == Main.maxTilesY - 329)
+		if (i == 1330 && j == Main.maxTilesY - 329 && !Ins.VisualQuality.Low)
 		{
 			DarkSludge_Scene scene = new DarkSludge_Scene { position = new Vector2(i, j), Active = true, originTile = new Point(i, j), originType = ModContent.TileType<BoneAndPlatform_tile>() };
 			Ins.VFXManager.Add(scene);

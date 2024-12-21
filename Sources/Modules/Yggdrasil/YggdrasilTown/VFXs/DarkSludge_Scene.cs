@@ -19,6 +19,12 @@ public class DarkSludge_Scene : ForegroundVFX
 
 	public override void Update()
 	{
+		if(Ins.VisualQuality.Low)
+		{
+			Active = false;
+			SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+			return;
+		}
 		if(MaxX == 0)
 		{
 			MinX = originTile.X;
