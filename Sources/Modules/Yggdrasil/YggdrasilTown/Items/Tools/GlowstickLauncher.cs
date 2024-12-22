@@ -38,7 +38,7 @@ public class GlowstickLauncher : ModItem
 		Item.shootSpeed = 12;
 	}
 
-	public override bool CanUseItem(Player player) => ammoTypes.Select(player.HasItem).Where(has => has).Any();
+	public override bool CanUseItem(Player player) => ammoTypes.Select(player.HasItem).Any(has => has);
 
 	public override bool? UseItem(Player player)
 	{
@@ -65,7 +65,8 @@ public class GlowstickLauncher : ModItem
 						ConsumedAmmoType = ProjectileID.SpelunkerGlowstick;
 						break;
 				}
-				return base.UseItem(player);
+
+				return true;
 			}
 		}
 

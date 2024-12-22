@@ -27,8 +27,8 @@ public class KissOfCthulhu_Projectile : ModProjectile
 
 	public override void SetDefaults()
 	{
-		Projectile.width = 8;
-		Projectile.height = 8;
+		Projectile.width = 24;
+		Projectile.height = 24;
 		Projectile.timeLeft = 300;
 
 		Projectile.friendly = true;
