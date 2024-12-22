@@ -20,7 +20,7 @@ public class UnionMarblePost_Bottom_Khaki : ModTile
 		TileObjectData.newAlternate.AnchorAlternateTiles = new[] { Type, ModContent.TileType<UnionMarblePost_Bottom_Khaki>() | ModContent.TileType<UnionMarblePost_Body_Khaki>() | ModContent.TileType<UnionMarblePost_Top_Khaki>() };
 		TileObjectData.newTile.AnchorBottom = new(Terraria.Enums.AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
 
-		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
+		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 18 };
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.addTile(Type);

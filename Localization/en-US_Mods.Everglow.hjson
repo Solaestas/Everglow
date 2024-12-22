@@ -48,11 +48,48 @@ Tiles: {
 	GlowWoodTable.MapEntry: Glow Wood Table
 	GlowWoodTorch.MapEntry: Glow Wood Torch
 	GlowWoodWorkBench.MapEntry: Glow Wood Work Bench
+	TwilightEucalyptusBathtub.MapEntry: Twilight Eucalyptus Bathtub
+	TwilightEucalyptusCandelabra.MapEntry: Twilight Eucalyptus Candelabra
+	TwilightEucalyptusCandle.MapEntry: Twilight Eucalyptus Candle
+	TwilightEucalyptusChandelier.MapEntry: Twilight Eucalyptus Chandelier
+
+	TwilightEucalyptusChest: {
+		MapEntry0: Mods.Everglow.Tiles.TwilightEucalyptusChest.MapEntry0
+		MapEntry1: Mods.Everglow.Tiles.TwilightEucalyptusChest.MapEntry1
+	}
+
+	TwilightEucalyptusDresser.MapEntry: Twilight Eucalyptus Dresser
+	TwilightEucalyptusLantern.MapEntry: Twilight Eucalyptus Lantern
+	TwilightEucalyptusPiano.MapEntry: Twilight Eucalyptus Piano
+	TwilightEucalyptusSink.MapEntry: Twilight Eucalyptus Sink
+	TwilightEucalyptusSofa.MapEntry: Twilight Eucalyptus Sofa
+	TwilightEucalyptusSofa_Type2.MapEntry: Twilight Eucalyptus Sofa_ Type2
 	BoneAndPlatform_tile.MapEntry: Bone And Platform_tile
+	LampWoodBathtub.MapEntry: Lamp Wood Bathtub
 	LampWoodCandelabra.MapEntry: Lamp Wood Candelabra
 	LampWoodCandle.MapEntry: Lamp Wood Candle
 	LampWoodChandelier.MapEntry: Lamp Wood Chandelier
-	LampWoodPlatform.MapEntry: Lamp Wood Platform
+	LampWoodDresser.MapEntry: Lamp Wood Dresser
+	LampWoodLantern.MapEntry: Lamp Wood Lantern
+	LampWoodPiano.MapEntry: Lamp Wood Piano
+	LampWoodSink.MapEntry: Lamp Wood Sink
+	LampWoodSofa.MapEntry: Lamp Wood Sofa
+	LampWoodTable.MapEntry: Lamp Wood Table
+	HeatproofBathtub.MapEntry: Heatproof Bathtub
+	HeatproofCandelabra.MapEntry: Heatproof Candelabra
+	HeatproofCandle.MapEntry: Heatproof Candle
+	HeatproofChandelier.MapEntry: Heatproof Chandelier
+
+	HeatproofChest: {
+		MapEntry0: Mods.Everglow.Tiles.HeatproofChest.MapEntry0
+		MapEntry1: Mods.Everglow.Tiles.HeatproofChest.MapEntry1
+	}
+
+	HeatproofDresser.MapEntry: Heatproof Dresser
+	HeatproofLantern.MapEntry: Heatproof Lantern
+	HeatproofPiano.MapEntry: Heatproof Piano
+	HeatproofSink.MapEntry: Heatproof Sink
+	HeatproofSofa.MapEntry: Heatproof Sofa
 	CyanVineBar.MapEntry: Cyan Vine Bar
 	CyanVineOreTile.MapEntry: Cyan Vine Ore Tile
 	CyanVineStone.MapEntry: Cyan Vine Stone
@@ -90,14 +127,24 @@ Biomes: {
 		TownNPCDialogueName: the Hurricane Maze Biome
 	}
 
-	YggdrasilTownBiome: {
-		DisplayName: Yggdrasil Town Biome
-		TownNPCDialogueName: the Yggdrasil Town Biome
-	}
-
 	LampWoodForest: {
 		DisplayName: Lamp Wood Forest
 		TownNPCDialogueName: the Lamp Wood Forest
+	}
+
+	MidnightBayouBiome: {
+		DisplayName: Midnight Bayou Biome
+		TownNPCDialogueName: the Midnight Bayou Biome
+	}
+
+	TwilightForsetAndRelic: {
+		DisplayName: Twilight Forset And Relic
+		TownNPCDialogueName: the Twilight Forset And Relic
+	}
+
+	YggdrasilTownBiome: {
+		DisplayName: Yggdrasil Town Biome
+		TownNPCDialogueName: the Yggdrasil Town Biome
 	}
 }
 
@@ -844,19 +891,99 @@ Buffs: {
 		Description: Mods.Everglow.Buffs.LichenInfected.Description
 	}
 
-	MelterGearCooldown: {
-		DisplayName: Melter Gear Cooldown
-		Description: Mods.Everglow.Buffs.MelterGearCooldown.Description
-	}
-
 	DeathFlame: {
 		DisplayName: Death Flame
 		Description: Mods.Everglow.Buffs.DeathFlame.Description
 	}
 
+	AmberStick: {
+		DisplayName: Amber Stick
+		Description: Mods.Everglow.Buffs.AmberStick.Description
+	}
+
+	AuburnBell: {
+		DisplayName: Auburn Bell
+		Description: Mods.Everglow.Buffs.AuburnBell.Description
+	}
+
+	AuburnSelfReinforcing: {
+		DisplayName: Auburn Self Reinforcing
+		Description: Mods.Everglow.Buffs.AuburnSelfReinforcing.Description
+	}
+
+	AuburnSelfReinforcingCooldown: {
+		DisplayName: Auburn Self Reinforcing Cooldown
+		Description: Mods.Everglow.Buffs.AuburnSelfReinforcingCooldown.Description
+	}
+
+	CyanVineRingCrit: {
+		DisplayName: Cyan Vine Ring Crit
+		Description: Mods.Everglow.Buffs.CyanVineRingCrit.Description
+	}
+
+	DeadBeetleEggBuff: {
+		DisplayName: Dead Beetle Egg Buff
+		Description: Mods.Everglow.Buffs.DeadBeetleEggBuff.Description
+	}
+
+	GuideBuff: {
+		DisplayName: Guide Buff
+		Description: Mods.Everglow.Buffs.GuideBuff.Description
+	}
+
+	JellyBallStick: {
+		DisplayName: Jelly Ball Stick
+		Description: Mods.Everglow.Buffs.JellyBallStick.Description
+	}
+
+	JellyBubbleMount: {
+		DisplayName: Jelly Bubble Mount
+		Description: Mods.Everglow.Buffs.JellyBubbleMount.Description
+	}
+
+	MelterGearCooldown: {
+		DisplayName: Melter Gear Cooldown
+		Description: Mods.Everglow.Buffs.MelterGearCooldown.Description
+	}
+
 	Photolysis: {
 		DisplayName: Photolysis
 		Description: Mods.Everglow.Buffs.Photolysis.Description
+	}
+
+	Plague: {
+		DisplayName: Plague
+		Description: Mods.Everglow.Buffs.Plague.Description
+	}
+
+	RayBuff: {
+		DisplayName: Ray Buff
+		Description: Mods.Everglow.Buffs.RayBuff.Description
+	}
+
+	RustSlingshotBuffOne: {
+		DisplayName: Rust Slingshot Buff One
+		Description: Mods.Everglow.Buffs.RustSlingshotBuffOne.Description
+	}
+
+	RustSlingshotBuffTwo: {
+		DisplayName: Rust Slingshot Buff Two
+		Description: Mods.Everglow.Buffs.RustSlingshotBuffTwo.Description
+	}
+
+	RustSlingshotBuffThree: {
+		DisplayName: Rust Slingshot Buff Three
+		Description: Mods.Everglow.Buffs.RustSlingshotBuffThree.Description
+	}
+
+	SpritialDamage: {
+		DisplayName: Spritial Damage
+		Description: Mods.Everglow.Buffs.SpritialDamage.Description
+	}
+
+	YggdrasilStoneGyroscopeBuff: {
+		DisplayName: Yggdrasil Stone Gyroscope Buff
+		Description: Mods.Everglow.Buffs.YggdrasilStoneGyroscopeBuff.Description
 	}
 }
 
@@ -888,6 +1015,16 @@ Items: {
 
 	DoubleArmsChineseStreetLamp: {
 		DisplayName: Double Arms Chinese Street Lamp
+		Tooltip: ""
+	}
+
+	FluoriteHangLamp: {
+		DisplayName: Fluorite Hang Lamp
+		Tooltip: ""
+	}
+
+	FluoriteLampPost_Item: {
+		DisplayName: Fluorite Lamp Post_ Item
 		Tooltip: ""
 	}
 
@@ -963,6 +1100,11 @@ Items: {
 
 	BlueGlassbulbBand_item: {
 		DisplayName: Blue Glassbulb Band_item
+		Tooltip: ""
+	}
+
+	ChainCable_item: {
+		DisplayName: Chain Cable_item
 		Tooltip: ""
 	}
 
@@ -1378,6 +1520,16 @@ Items: {
 
 	AirWallItem: {
 		DisplayName: Air Wall Item
+		Tooltip: ""
+	}
+
+	CableCarJoin_item: {
+		DisplayName: Cable Car Join_item
+		Tooltip: ""
+	}
+
+	NormalCableCar_item: {
+		DisplayName: Normal Cable Car_item
 		Tooltip: ""
 	}
 
@@ -2846,31 +2998,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	ThermostatRod: {
-		DisplayName: Thermostat Rod
-		Tooltip: ""
-	}
-
-	HeatEmblem: {
-		DisplayName: Heat Emblem
-		Tooltip: ""
-	}
-
-	HotAirBalloon: {
-		DisplayName: Hot Air Balloon
-		Tooltip: ""
-	}
-
-	MelterGear: {
-		DisplayName: Melter Gear
-		Tooltip: ""
-	}
-
-	ThermalConductor: {
-		DisplayName: Thermal Conductor
-		Tooltip: ""
-	}
-
 	BloodLightCrystal: {
 		DisplayName: Blood Light Crystal
 		Tooltip: ""
@@ -2878,6 +3005,31 @@ Items: {
 
 	TrueDeathSickle: {
 		DisplayName: True Death Sickle
+		Tooltip: ""
+	}
+
+	AnemoShell: {
+		DisplayName: Anemo Shell
+		Tooltip: ""
+	}
+
+	CelticKeyStone: {
+		DisplayName: Celtic Key Stone
+		Tooltip: ""
+	}
+
+	GreenRelicBrick_Item: {
+		DisplayName: Green Relic Brick_ Item
+		Tooltip: ""
+	}
+
+	GreenRelicWall_Item: {
+		DisplayName: Green Relic Wall_ Item
+		Tooltip: ""
+	}
+
+	RustBronzeTreasureChest_Item: {
+		DisplayName: Rust Bronze Treasure Chest_ Item
 		Tooltip: ""
 	}
 
@@ -2891,8 +3043,123 @@ Items: {
 		Tooltip: ""
 	}
 
-	TwilightWood: {
-		DisplayName: Twilight Wood
+	TwilightEucalyptusWoodWall_Item: {
+		DisplayName: Twilight Eucalyptus Wood Wall_ Item
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusWood_Item: {
+		DisplayName: Twilight Eucalyptus Wood_ Item
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusBathtub: {
+		DisplayName: Twilight Eucalyptus Bathtub
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusBed: {
+		DisplayName: Twilight Eucalyptus Bed
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusBookcase: {
+		DisplayName: Twilight Eucalyptus Bookcase
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusCandelabra: {
+		DisplayName: Twilight Eucalyptus Candelabra
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusCandle: {
+		DisplayName: Twilight Eucalyptus Candle
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusChair: {
+		DisplayName: Twilight Eucalyptus Chair
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusChandelier: {
+		DisplayName: Twilight Eucalyptus Chandelier
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusChest: {
+		DisplayName: Twilight Eucalyptus Chest
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusClock: {
+		DisplayName: Twilight Eucalyptus Clock
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusDoor: {
+		DisplayName: Twilight Eucalyptus Door
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusDresser: {
+		DisplayName: Twilight Eucalyptus Dresser
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusLamp: {
+		DisplayName: Twilight Eucalyptus Lamp
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusLantern: {
+		DisplayName: Twilight Eucalyptus Lantern
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusPiano: {
+		DisplayName: Twilight Eucalyptus Piano
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusPlatform: {
+		DisplayName: Twilight Eucalyptus Platform
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusSink: {
+		DisplayName: Twilight Eucalyptus Sink
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusSofa: {
+		DisplayName: Twilight Eucalyptus Sofa
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusSofa_Type2: {
+		DisplayName: Twilight Eucalyptus Sofa_ Type2
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusTable: {
+		DisplayName: Twilight Eucalyptus Table
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusToilet: {
+		DisplayName: Twilight Eucalyptus Toilet
+		Tooltip: ""
+	}
+
+	TwilightEucalyptusWorkBench: {
+		DisplayName: Twilight Eucalyptus Work Bench
+		Tooltip: ""
+	}
+
+	AntiHeavenSicknessPill: {
+		DisplayName: Anti Heaven Sickness Pill
 		Tooltip: ""
 	}
 
@@ -2911,13 +3178,18 @@ Items: {
 		Tooltip: ""
 	}
 
-	DarkForestSoil: {
-		DisplayName: Dark Forest Soil
+	CrystalNucleusOfJellyKing: {
+		DisplayName: Crystal Nucleus Of Jelly King
 		Tooltip: ""
 	}
 
-	DarkSludge: {
-		DisplayName: Dark Sludge
+	DarkForestSoil_Item: {
+		DisplayName: Dark Forest Soil_ Item
+		Tooltip: ""
+	}
+
+	DarkSludge_Item: {
+		DisplayName: Dark Sludge_ Item
 		Tooltip: ""
 	}
 
@@ -2931,13 +3203,48 @@ Items: {
 		Tooltip: ""
 	}
 
+	FurnaceHeatProofPlatingWall_Item: {
+		DisplayName: Furnace Heat Proof Plating Wall_ Item
+		Tooltip: ""
+	}
+
+	FurnacePlatingBlock: {
+		DisplayName: Furnace Plating Block
+		Tooltip: ""
+	}
+
 	GreyTownBrick_Item: {
 		DisplayName: Grey Town Brick_ Item
 		Tooltip: ""
 	}
 
+	HeatProofPlatingWall_Item: {
+		DisplayName: Heat Proof Plating Wall_ Item
+		Tooltip: ""
+	}
+
 	IronTrackScaffolding: {
 		DisplayName: Iron Track Scaffolding
+		Tooltip: ""
+	}
+
+	JellyBallCube: {
+		DisplayName: Jelly Ball Cube
+		Tooltip: ""
+	}
+
+	JellyBallDaifuku: {
+		DisplayName: Jelly Ball Daifuku
+		Tooltip: ""
+	}
+
+	JellyBallSecretionWall_Item: {
+		DisplayName: Jelly Ball Secretion Wall_ Item
+		Tooltip: ""
+	}
+
+	LampBorerHoney: {
+		DisplayName: Lamp Borer Honey
 		Tooltip: ""
 	}
 
@@ -2951,8 +3258,18 @@ Items: {
 		Tooltip: ""
 	}
 
+	ResetTheYggdrasilTown: {
+		DisplayName: Reset The Yggdrasil Town
+		Tooltip: ""
+	}
+
 	RodWing: {
 		DisplayName: Rod Wing
+		Tooltip: ""
+	}
+
+	SquamousCore: {
+		DisplayName: Squamous Core
 		Tooltip: ""
 	}
 
@@ -2961,8 +3278,33 @@ Items: {
 		Tooltip: ""
 	}
 
-	StoneDragonScaleWoodWall: {
-		DisplayName: Stone Dragon Scale Wood Wall
+	StoneDragonScaleWoodWall_Item: {
+		DisplayName: Stone Dragon Scale Wood Wall_ Item
+		Tooltip: ""
+	}
+
+	TownBrick_Gray_Item: {
+		DisplayName: Town Brick_ Gray_ Item
+		Tooltip: ""
+	}
+
+	TownBrick_Gray_Wall_Item: {
+		DisplayName: Town Brick_ Gray_ Wall_ Item
+		Tooltip: ""
+	}
+
+	TownBrick_Khaki_Item: {
+		DisplayName: Town Brick_ Khaki_ Item
+		Tooltip: ""
+	}
+
+	TownBrick_Khaki_Wall_Item: {
+		DisplayName: Town Brick_ Khaki_ Wall_ Item
+		Tooltip: ""
+	}
+
+	TownSteelBrick_Item: {
+		DisplayName: Town Steel Brick_ Item
 		Tooltip: ""
 	}
 
@@ -2976,13 +3318,128 @@ Items: {
 		Tooltip: ""
 	}
 
+	YggdrasilTown_TradeUnionGate: {
+		DisplayName: Yggdrasil Town_ Trade Union Gate
+		Tooltip: ""
+	}
+
+	ActivatedJellyGland: {
+		DisplayName: Activated Jelly Gland
+		Tooltip: ""
+	}
+
+	AmberHeadedSpear: {
+		DisplayName: Amber Headed Spear
+		Tooltip: ""
+	}
+
 	AmberMagicOrb: {
 		DisplayName: Amber Magic Orb
 		Tooltip: ""
 	}
 
+	AmethystHeadedSpear: {
+		DisplayName: Amethyst Headed Spear
+		Tooltip: ""
+	}
+
+	BronzeLotusLamp: {
+		DisplayName: Bronze Lotus Lamp
+		Tooltip: ""
+	}
+
+	Caltrop: {
+		DisplayName: Caltrop
+		Tooltip: ""
+	}
+
+	DarkMassacreDagger: {
+		DisplayName: Dark Massacre Dagger
+		Tooltip: ""
+	}
+
+	GunOfAvarice: {
+		DisplayName: Gun Of Avarice
+		Tooltip: ""
+	}
+
+	KissOfCthulhu: {
+		DisplayName: Kiss Of Cthulhu
+		Tooltip: ""
+	}
+
+	MysteriousTablet: {
+		DisplayName: Mysterious Tablet
+		Tooltip: ""
+	}
+
+	Nehemoth: {
+		DisplayName: Nehemoth
+		Tooltip: ""
+	}
+
+	RustSlingshot: {
+		DisplayName: Rust Slingshot
+		Tooltip: ""
+	}
+
+	SevenShotGun: {
+		DisplayName: Seven Shot Gun
+		Tooltip: ""
+	}
+
+	SmeltingStaff: {
+		DisplayName: Smelting Staff
+		Tooltip: ""
+	}
+
+	StoneJavelin: {
+		DisplayName: Stone Javelin
+		Tooltip: ""
+	}
+
+	ThermoprobeStaff: {
+		DisplayName: Thermoprobe Staff
+		Tooltip: ""
+	}
+
+	TopaztHeadedSpear: {
+		DisplayName: Topazt Headed Spear
+		Tooltip: ""
+	}
+
 	YggdrasilAmberLaser: {
 		DisplayName: Yggdrasil Amber Laser
+		Tooltip: ""
+	}
+
+	YggdrasilStoneGyroscope: {
+		DisplayName: Yggdrasil Stone Gyroscope
+		Tooltip: ""
+	}
+
+	DeadBeetleEgg: {
+		DisplayName: Dead Beetle Egg
+		Tooltip: ""
+	}
+
+	DragonScaleHammer: {
+		DisplayName: Dragon Scale Hammer
+		Tooltip: ""
+	}
+
+	EyeOfAnabiosis: {
+		DisplayName: Eye Of Anabiosis
+		Tooltip: ""
+	}
+
+	FlurryingBlades: {
+		DisplayName: Flurrying Blades
+		Tooltip: ""
+	}
+
+	RockSpikeBallista: {
+		DisplayName: Rock Spike Ballista
 		Tooltip: ""
 	}
 
@@ -3001,28 +3458,178 @@ Items: {
 		Tooltip: ""
 	}
 
-	DragonScaleHammer: {
-		DisplayName: Dragon Scale Hammer
+	BowOfEnlightment: {
+		DisplayName: Bow Of Enlightment
 		Tooltip: ""
 	}
 
-	FlurryingBlades: {
-		DisplayName: Flurrying Blades
+	HandgunOfEnlightment: {
+		DisplayName: Handgun Of Enlightment
 		Tooltip: ""
 	}
 
-	RockArrow: {
-		DisplayName: Rock Arrow
+	LightBeamStaff: {
+		DisplayName: Light Beam Staff
 		Tooltip: ""
 	}
 
-	RockSpikeBallista: {
-		DisplayName: Rock Spike Ballista
+	LampWoodBow: {
+		DisplayName: Lamp Wood Bow
 		Tooltip: ""
 	}
 
-	LampWoodBreastplate: {
-		DisplayName: Lamp Wood Breastplate
+	LampWoodHammer: {
+		DisplayName: Lamp Wood Hammer
+		Tooltip: ""
+	}
+
+	LampWoodSword: {
+		DisplayName: Lamp Wood Sword
+		Tooltip: ""
+	}
+
+	LampWoodYoyo: {
+		DisplayName: Lamp Wood Yoyo
+		Tooltip: ""
+	}
+
+	AuburnBell: {
+		DisplayName: Auburn Bell
+		Tooltip: ""
+	}
+
+	FeatheredStaff: {
+		DisplayName: Feathered Staff
+		Tooltip: ""
+	}
+
+	RodSpear: {
+		DisplayName: Rod Spear
+		Tooltip: ""
+	}
+
+	AmberFlowerHook: {
+		DisplayName: Amber Flower Hook
+		Tooltip: ""
+	}
+
+	ClimbingPickaxe: {
+		DisplayName: Climbing Pickaxe
+		Tooltip: ""
+	}
+
+	FlappedHangGlider: {
+		DisplayName: Flapped Hang Glider
+		Tooltip: ""
+	}
+
+	GlowstickLauncher: {
+		DisplayName: Glowstick Launcher
+		Tooltip: ""
+	}
+
+	HangGlider: {
+		DisplayName: Hang Glider
+		Tooltip: ""
+	}
+
+	OldPickaxe: {
+		DisplayName: Old Pickaxe
+		Tooltip: ""
+	}
+
+	OldPortableLamp: {
+		DisplayName: Old Portable Lamp
+		Tooltip: ""
+	}
+
+	ThermostatRod: {
+		DisplayName: Thermostat Rod
+		Tooltip: ""
+	}
+
+	GuidePotion: {
+		DisplayName: Guide Potion
+		Tooltip: ""
+	}
+
+	RayPotion: {
+		DisplayName: Ray Potion
+		Tooltip: ""
+	}
+
+	RuinTorch: {
+		DisplayName: Ruin Torch
+		Tooltip: ""
+	}
+
+	UnionGiantChandelier_Item: {
+		DisplayName: Union Giant Chandelier_ Item
+		Tooltip: ""
+	}
+
+	UnionMarblePost_Body_Khaki_Item: {
+		DisplayName: Union Marble Post_ Body_ Khaki_ Item
+		Tooltip: ""
+	}
+
+	UnionMarblePost_Bottom_Khaki_Item: {
+		DisplayName: Union Marble Post_ Bottom_ Khaki_ Item
+		Tooltip: ""
+	}
+
+	UnionMarblePost_Top_Corinth_Khaki_Item: {
+		DisplayName: Union Marble Post_ Top_ Corinth_ Khaki_ Item
+		Tooltip: ""
+	}
+
+	UnionMarblePost_Top_Doric_Khaki_Item: {
+		DisplayName: Union Marble Post_ Top_ Doric_ Khaki_ Item
+		Tooltip: ""
+	}
+
+	UnionMarblePost_Top_Ionic_Khaki_Item: {
+		DisplayName: Union Marble Post_ Top_ Ionic_ Khaki_ Item
+		Tooltip: ""
+	}
+
+	UnionMarbleTile_Khaki_Item: {
+		DisplayName: Union Marble Tile_ Khaki_ Item
+		Tooltip: ""
+	}
+
+	Union_Y_Stairs_Item: {
+		DisplayName: Union_ Y_ Stairs_ Item
+		Tooltip: ""
+	}
+
+	JellyBubbleItem: {
+		DisplayName: Jelly Bubble Item
+		Tooltip: ""
+	}
+
+	LampWoodWall_item: {
+		DisplayName: Lamp Wood Wall_item
+		Tooltip: ""
+	}
+
+	LampWood_Wood: {
+		DisplayName: Lamp Wood_ Wood
+		Tooltip: ""
+	}
+
+	LampWoodBathtub: {
+		DisplayName: Lamp Wood Bathtub
+		Tooltip: ""
+	}
+
+	LampWoodBed: {
+		DisplayName: Lamp Wood Bed
+		Tooltip: ""
+	}
+
+	LampWoodBookcase: {
+		DisplayName: Lamp Wood Bookcase
 		Tooltip: ""
 	}
 
@@ -3036,18 +3643,28 @@ Items: {
 		Tooltip: ""
 	}
 
+	LampWoodChair: {
+		DisplayName: Lamp Wood Chair
+		Tooltip: ""
+	}
+
 	LampWoodChandelier_Item: {
 		DisplayName: Lamp Wood Chandelier_ Item
 		Tooltip: ""
 	}
 
-	LampWoodHammer: {
-		DisplayName: Lamp Wood Hammer
+	LampWoodClock: {
+		DisplayName: Lamp Wood Clock
 		Tooltip: ""
 	}
 
-	LampWoodHelmet: {
-		DisplayName: Lamp Wood Helmet
+	LampWoodDoor: {
+		DisplayName: Lamp Wood Door
+		Tooltip: ""
+	}
+
+	LampWoodDresser: {
+		DisplayName: Lamp Wood Dresser
 		Tooltip: ""
 	}
 
@@ -3056,18 +3673,33 @@ Items: {
 		Tooltip: ""
 	}
 
-	LampWoodLeggings: {
-		DisplayName: Lamp Wood Leggings
+	LampWoodLantern: {
+		DisplayName: Lamp Wood Lantern
 		Tooltip: ""
 	}
 
-	LampWoodSword: {
-		DisplayName: Lamp Wood Sword
+	LampWoodPiano: {
+		DisplayName: Lamp Wood Piano
 		Tooltip: ""
 	}
 
-	LampWoodWall_item: {
-		DisplayName: Lamp Wood Wall_item
+	LampWoodSink: {
+		DisplayName: Lamp Wood Sink
+		Tooltip: ""
+	}
+
+	LampWoodSofa: {
+		DisplayName: Lamp Wood Sofa
+		Tooltip: ""
+	}
+
+	LampWoodTable: {
+		DisplayName: Lamp Wood Table
+		Tooltip: ""
+	}
+
+	LampWoodToilet: {
+		DisplayName: Lamp Wood Toilet
 		Tooltip: ""
 	}
 
@@ -3081,13 +3713,103 @@ Items: {
 		Tooltip: ""
 	}
 
-	LampWood_Wood: {
-		DisplayName: Lamp Wood_ Wood
+	LampWood_workBench: {
+		DisplayName: Lamp Wood_work Bench
 		Tooltip: ""
 	}
 
-	LampWood_workBench: {
-		DisplayName: Lamp Wood_work Bench
+	HeatproofBathtub_item: {
+		DisplayName: Heatproof Bathtub_item
+		Tooltip: ""
+	}
+
+	HeatproofBed_item: {
+		DisplayName: Heatproof Bed_item
+		Tooltip: ""
+	}
+
+	HeatproofBookcase_item: {
+		DisplayName: Heatproof Bookcase_item
+		Tooltip: ""
+	}
+
+	HeatproofCandelabra_item: {
+		DisplayName: Heatproof Candelabra_item
+		Tooltip: ""
+	}
+
+	HeatproofCandle_item: {
+		DisplayName: Heatproof Candle_item
+		Tooltip: ""
+	}
+
+	HeatproofChair_item: {
+		DisplayName: Heatproof Chair_item
+		Tooltip: ""
+	}
+
+	HeatproofChandelier_item: {
+		DisplayName: Heatproof Chandelier_item
+		Tooltip: ""
+	}
+
+	HeatproofChest_item: {
+		DisplayName: Heatproof Chest_item
+		Tooltip: ""
+	}
+
+	HeatproofClock_item: {
+		DisplayName: Heatproof Clock_item
+		Tooltip: ""
+	}
+
+	HeatproofDoor_item: {
+		DisplayName: Heatproof Door_item
+		Tooltip: ""
+	}
+
+	HeatproofDresser_item: {
+		DisplayName: Heatproof Dresser_item
+		Tooltip: ""
+	}
+
+	HeatproofLamp_item: {
+		DisplayName: Heatproof Lamp_item
+		Tooltip: ""
+	}
+
+	HeatproofLantern_item: {
+		DisplayName: Heatproof Lantern_item
+		Tooltip: ""
+	}
+
+	HeatproofPiano_item: {
+		DisplayName: Heatproof Piano_item
+		Tooltip: ""
+	}
+
+	HeatproofSink_item: {
+		DisplayName: Heatproof Sink_item
+		Tooltip: ""
+	}
+
+	HeatproofSofa_item: {
+		DisplayName: Heatproof Sofa_item
+		Tooltip: ""
+	}
+
+	HeatproofTable_item: {
+		DisplayName: Heatproof Table_item
+		Tooltip: ""
+	}
+
+	HeatproofToilet_item: {
+		DisplayName: Heatproof Toilet_item
+		Tooltip: ""
+	}
+
+	HeatproofWorkbench_item: {
+		DisplayName: Heatproof Workbench_item
 		Tooltip: ""
 	}
 
@@ -3181,6 +3903,21 @@ Items: {
 		Tooltip: ""
 	}
 
+	Relic_SquamousShell: {
+		DisplayName: Relic_ Squamous Shell
+		Tooltip: ""
+	}
+
+	TreasureBag_SquamousShell: {
+		DisplayName: Treasure Bag_ Squamous Shell
+		Tooltip: ""
+	}
+
+	Trophy_SquamousShell: {
+		DisplayName: Trophy_ Squamous Shell
+		Tooltip: ""
+	}
+
 	ValiantBreastplate: {
 		DisplayName: Valiant Breastplate
 		Tooltip: ""
@@ -3193,6 +3930,21 @@ Items: {
 
 	ValiantLeggings: {
 		DisplayName: Valiant Leggings
+		Tooltip: ""
+	}
+
+	TwilightWoodBreastplate: {
+		DisplayName: Twilight Wood Breastplate
+		Tooltip: ""
+	}
+
+	TwilightWoodHelmet: {
+		DisplayName: Twilight Wood Helmet
+		Tooltip: ""
+	}
+
+	TwilightWoodLeggings: {
+		DisplayName: Twilight Wood Leggings
 		Tooltip: ""
 	}
 
@@ -3211,23 +3963,58 @@ Items: {
 		Tooltip: ""
 	}
 
-	LightSeekerBreastplate: {
-		DisplayName: Light Seeker Breastplate
+	RockGreaves: {
+		DisplayName: Rock Greaves
 		Tooltip: ""
 	}
 
-	LightSeekerHelmet_Magic: {
-		DisplayName: Light Seeker Helmet_ Magic
+	RockHelmet: {
+		DisplayName: Rock Helmet
 		Tooltip: ""
 	}
 
-	LightSeekerHelmet_Ranged: {
-		DisplayName: Light Seeker Helmet_ Ranged
+	RockPlateMail: {
+		DisplayName: Rock Plate Mail
 		Tooltip: ""
 	}
 
-	LightSeekerLeggings: {
-		DisplayName: Light Seeker Leggings
+	ConcentratingJacket: {
+		DisplayName: Concentrating Jacket
+		Tooltip: ""
+	}
+
+	ExplorationHelmet: {
+		DisplayName: Exploration Helmet
+		Tooltip: ""
+	}
+
+	OvineHairpin: {
+		DisplayName: Ovine Hairpin
+		Tooltip: ""
+	}
+
+	ShadowlessBoots: {
+		DisplayName: Shadowless Boots
+		Tooltip: ""
+	}
+
+	LampWoodBreastplate: {
+		DisplayName: Lamp Wood Breastplate
+		Tooltip: ""
+	}
+
+	LampWoodHelmet: {
+		DisplayName: Lamp Wood Helmet
+		Tooltip: ""
+	}
+
+	LampWoodLeggings: {
+		DisplayName: Lamp Wood Leggings
+		Tooltip: ""
+	}
+
+	JellyBallBathingCap: {
+		DisplayName: Jelly Ball Bathing Cap
 		Tooltip: ""
 	}
 
@@ -3256,6 +4043,131 @@ Items: {
 		Tooltip: ""
 	}
 
+	CaterpillarJuiceArrow: {
+		DisplayName: Caterpillar Juice Arrow
+		Tooltip: ""
+	}
+
+	LightArrow: {
+		DisplayName: Light Arrow
+		Tooltip: ""
+	}
+
+	LightBullet: {
+		DisplayName: Light Bullet
+		Tooltip: ""
+	}
+
+	RockArrow: {
+		DisplayName: Rock Arrow
+		Tooltip: ""
+	}
+
+	BloodTearCrystalCrown: {
+		DisplayName: Blood Tear Crystal Crown
+		Tooltip: ""
+	}
+
+	CelesteStoneWaistPendant: {
+		DisplayName: Celeste Stone Waist Pendant
+		Tooltip: ""
+	}
+
+	CelticSeal: {
+		DisplayName: Celtic Seal
+		Tooltip: ""
+	}
+
+	ConcealSpell: {
+		DisplayName: Conceal Spell
+		Tooltip: ""
+	}
+
+	CyanVineRing: {
+		DisplayName: Cyan Vine Ring
+		Tooltip: ""
+	}
+
+	ForsakenBoots: {
+		DisplayName: Forsaken Boots
+		Tooltip: ""
+	}
+
+	FragmentsOfWreckage: {
+		DisplayName: Fragments Of Wreckage
+		Tooltip: ""
+	}
+
+	FuneraryGoods: {
+		DisplayName: Funerary Goods
+		Tooltip: ""
+	}
+
+	JellyBallInhibitor: {
+		DisplayName: Jelly Ball Inhibitor
+		Tooltip: ""
+	}
+
+	LampWoodPollenBottle: {
+		DisplayName: Lamp Wood Pollen Bottle
+		Tooltip: ""
+	}
+
+	RecoveryBand: {
+		DisplayName: Recovery Band
+		Tooltip: ""
+	}
+
+	RingOfMatter: {
+		DisplayName: Ring Of Matter
+		Tooltip: ""
+	}
+
+	ShacklesBall: {
+		DisplayName: Shackles Ball
+		Tooltip: ""
+	}
+
+	SkullCollection: {
+		DisplayName: Skull Collection
+		Tooltip: ""
+	}
+
+	SpicyShield: {
+		DisplayName: Spicy Shield
+		Tooltip: ""
+	}
+
+	BlueyWings: {
+		DisplayName: Bluey Wings
+		Tooltip: ""
+	}
+
+	HeatEmblem: {
+		DisplayName: Heat Emblem
+		Tooltip: ""
+	}
+
+	HotAirBalloon: {
+		DisplayName: Hot Air Balloon
+		Tooltip: ""
+	}
+
+	MelterGear: {
+		DisplayName: Melter Gear
+		Tooltip: ""
+	}
+
+	MoltenCore: {
+		DisplayName: Molten Core
+		Tooltip: ""
+	}
+
+	ThermalConductor: {
+		DisplayName: Thermal Conductor
+		Tooltip: ""
+	}
+
 	LiftLamp: {
 		DisplayName: Lift Lamp
 		Tooltip: ""
@@ -3268,6 +4180,16 @@ Items: {
 
 	YggdrasilGrayRock_Item: {
 		DisplayName: Yggdrasil Gray Rock_ Item
+		Tooltip: ""
+	}
+
+	YggdrasilWorldPylon_Item: {
+		DisplayName: Yggdrasil World Pylon_ Item
+		Tooltip: ""
+	}
+
+	TerraViewerHowitzer: {
+		DisplayName: Terra Viewer Howitzer
 		Tooltip: ""
 	}
 
@@ -3344,19 +4266,75 @@ NPCs: {
 	Acytaea_Boss.DisplayName: Acytaea_ Boss
 	BarkSpicyCaterpillar.DisplayName: Bark Spicy Caterpillar
 	BrownCaterpillar.DisplayName: Brown Caterpillar
+
+	CanteenMaid: {
+		DisplayName: Canteen Maid
+
+		TownNPCMood: {
+			Content: I am content.
+			NoHome: I hate not having a home.
+			FarFromHome: I am too far from home.
+			LoveSpace: I love having so much space.
+			DislikeCrowded: I dislike how crowded I am.
+			HateCrowded: I hate how crowded I am.
+			LikeBiome: I like {BiomeName}.
+			DislikeBiome: I dislike {BiomeName}.
+			LikeNPC_Princess: I like {NPCName}.
+			Princess_LovesNPC: I like {NPCName}.
+		}
+	}
+
 	CarapaceCaterpillar.DisplayName: Carapace Caterpillar
-	CrimsonProtestant.DisplayName: Crimson Protestant
 	CrimsonSpell.DisplayName: Crimson Spell
 	CyanOreBeetle.DisplayName: Cyan Ore Beetle
 	DarkGlimmeringRods.DisplayName: Dark Glimmering Rods
 	GiantJellyBall.DisplayName: Giant Jelly Ball
+
+	Guard_of_YggdrasilTown: {
+		DisplayName: Guard_of_ Yggdrasil Town
+
+		TownNPCMood: {
+			Content: I am content.
+			NoHome: I hate not having a home.
+			FarFromHome: I am too far from home.
+			LoveSpace: I love having so much space.
+			DislikeCrowded: I dislike how crowded I am.
+			HateCrowded: I hate how crowded I am.
+			LikeBiome: I like {BiomeName}.
+			DislikeBiome: I dislike {BiomeName}.
+			LikeNPC_Princess: I like {NPCName}.
+			Princess_LovesNPC: I like {NPCName}.
+		}
+	}
+
+	Guard_Slimy.DisplayName: Guard_ Slimy
 	JellyBall.DisplayName: Jelly Ball
+	LampFruitBorer.DisplayName: Lamp Fruit Borer
 	LeafcutterAnt.DisplayName: Leafcutter Ant
 	LightBulb.DisplayName: Light Bulb
+
+	Resturateur: {
+		DisplayName: Resturateur
+
+		TownNPCMood: {
+			Content: I am content.
+			NoHome: I hate not having a home.
+			FarFromHome: I am too far from home.
+			LoveSpace: I love having so much space.
+			DislikeCrowded: I dislike how crowded I am.
+			HateCrowded: I hate how crowded I am.
+			LikeBiome: I like {BiomeName}.
+			DislikeBiome: I dislike {BiomeName}.
+			LikeNPC_Princess: I like {NPCName}.
+			Princess_LovesNPC: I like {NPCName}.
+		}
+	}
+
 	RockElemental.DisplayName: Rock Elemental
 	ShadowstrikeCaterpillar.DisplayName: Shadowstrike Caterpillar
 	WhisperingGhost.DisplayName: Whispering Ghost
 	SquamousShell.DisplayName: Squamous Shell
+	KingJellyBall.DisplayName: King Jelly Ball
 	TestNPC.DisplayName: Test N P C
 }
 
@@ -3901,16 +4879,32 @@ Projectiles: {
 	LichensPycnidium.DisplayName: Lichens Pycnidium
 	CharonDoubleSickle.DisplayName: Charon Double Sickle
 	ShadowEulogistProj.DisplayName: Shadow Eulogist Proj
-	ThermostatBobber.DisplayName: Thermostat Bobber
-	TrueDeathSickle.DisplayName: True Death Sickle
 	TrueDeathSickleHit.DisplayName: True Death Sickle Hit
+	TrueDeathSickleManager.DisplayName: True Death Sickle Manager
+	TrueDeathSickle_Blade.DisplayName: True Death Sickle_ Blade
+	TrueDeathSickle_MoonBlade.DisplayName: True Death Sickle_ Moon Blade
+	TrueDeathSickle_RightClick.DisplayName: True Death Sickle_ Right Click
+	TrueDeathSickle_SickleBack.DisplayName: True Death Sickle_ Sickle Back
+	ActivatedJellyGlandBeam.DisplayName: Activated Jelly Gland Beam
+	ActivatedJellyGlandExplosion.DisplayName: Activated Jelly Gland Explosion
+	ActivatedJellyGlandMinion.DisplayName: Activated Jelly Gland Minion
 	AmberBall.DisplayName: Amber Ball
+	AmberHeadedSpear.DisplayName: Amber Headed Spear
 	AmberLiquidProj.DisplayName: Amber Liquid Proj
 	AmberLiquidProj_Explosion.DisplayName: Amber Liquid Proj_ Explosion
 	AmberMagicOrb.DisplayName: Amber Magic Orb
+	AmethystHeadedSpear.DisplayName: Amethyst Headed Spear
+	AuburnBellMinion.DisplayName: Auburn Bell Minion
+	BloodSpell.DisplayName: Blood Spell
 	BrittleRockSlingshotProj.DisplayName: Brittle Rock Slingshot Proj
 	BrittleRockSlingshotStone.DisplayName: Brittle Rock Slingshot Stone
 	BrittleRockSlingshotStone_Explosion.DisplayName: Brittle Rock Slingshot Stone_ Explosion
+	BronzeLotusLamp_Blossom.DisplayName: Bronze Lotus Lamp_ Blossom
+	BronzeLotusLamp_Flame.DisplayName: Bronze Lotus Lamp_ Flame
+	BronzeLotusLamp_SubBlossom.DisplayName: Bronze Lotus Lamp_ Sub Blossom
+	BronzeLotusLamp_weapon.DisplayName: Bronze Lotus Lamp_weapon
+	Caltrop.DisplayName: Caltrop
+	CaterpillarJuiceArrow.DisplayName: Caterpillar Juice Arrow
 	CyanBullet.DisplayName: Cyan Bullet
 	CyanVineCrossBow_Proj.DisplayName: Cyan Vine Cross Bow_ Proj
 	CyanVineShortsword_Proj.DisplayName: Cyan Vine Shortsword_ Proj
@@ -3919,16 +4913,52 @@ Projectiles: {
 	CyanVineStaff_proj_shoot.DisplayName: Cyan Vine Staff_proj_shoot
 	CyanVineSword_Projectile.DisplayName: Cyan Vine Sword_ Projectile
 	CyanVineThrowingSpear_Proj.DisplayName: Cyan Vine Throwing Spear_ Proj
+	DarkMassacreDagger_Projectile.DisplayName: Dark Massacre Dagger_ Projectile
+	DarkMassacreDagger_Projectile_thrust.DisplayName: Dark Massacre Dagger_ Projectile_thrust
+	DeadBeetleEgg_beetle.DisplayName: Dead Beetle Egg_beetle
+	DeadBeetleEgg_beetle_proj.DisplayName: Dead Beetle Egg_beetle_proj
+	DeadBeetleEgg_egg.DisplayName: Dead Beetle Egg_egg
 	DragonScaleHammerProj.DisplayName: Dragon Scale Hammer Proj
+	EyeOfAnabiosis_MagicCircleFront.DisplayName: Eye Of Anabiosis_ Magic Circle Front
+	EyeOfAnabiosis_MagicCircleBack.DisplayName: Eye Of Anabiosis_ Magic Circle Back
+	EyeOfAnabiosis_Matrix.DisplayName: Eye Of Anabiosis_ Matrix
+	EyeOfAnabiosis_Projectile.DisplayName: Eye Of Anabiosis_ Projectile
+	EyeOfAnabiosis_Weapon.DisplayName: Eye Of Anabiosis_ Weapon
+	FeatheredStaff.DisplayName: Feathered Staff
+	FeatheredStaff_break.DisplayName: Feathered Staff_break
+	FeatheredStaff_staff.DisplayName: Feathered Staff_staff
+	Guard_Attack_Fist.DisplayName: Guard_ Attack_ Fist
+	Guard_Attack_Spear.DisplayName: Guard_ Attack_ Spear
+	GunOfAvariceAutoReload.DisplayName: Gun Of Avarice Auto Reload
+	GunOfAvariceManualReload.DisplayName: Gun Of Avarice Manual Reload
 	HyperockSpearProj.DisplayName: Hyperock Spear Proj
+	JellyBallCrystal.DisplayName: Jelly Ball Crystal
+	JellyBallElectricKill.DisplayName: Jelly Ball Electric Kill
+	JellyBallGelStream.DisplayName: Jelly Ball Gel Stream
+	JellyBallLifeAbsorb.DisplayName: Jelly Ball Life Absorb
+	JellyBall_Electric_Explosion.DisplayName: Jelly Ball_ Electric_ Explosion
+	KissOfCthulhu_Projectile.DisplayName: Kiss Of Cthulhu_ Projectile
 	LampFruitCurrent.DisplayName: Lamp Fruit Current
 	LampWoodSword_Projectile.DisplayName: Lamp Wood Sword_ Projectile
+	LampWoodYoyo.DisplayName: Lamp Wood Yoyo
+	LightArrow.DisplayName: Light Arrow
+	LightBeam.DisplayName: Light Beam
+	LightBeamStaff_proj.DisplayName: Light Beam Staff_proj
+	LightBullet.DisplayName: Light Bullet
 	LightSeed.DisplayName: Light Seed
+	LightStartEffect_arrow.DisplayName: Light Start Effect_arrow
+	LightStartEffect_beam.DisplayName: Light Start Effect_beam
+	LightStartEffect_bullet.DisplayName: Light Start Effect_bullet
+	MysteriousTablet.DisplayName: Mysterious Tablet
+	NehemothBullet.DisplayName: Nehemoth Bullet
 	RockArrow.DisplayName: Rock Arrow
 	RockElemental_Stonefragment.DisplayName: Rock Elemental_ Stonefragment
 	RockElemental_ThrowingStone.DisplayName: Rock Elemental_ Throwing Stone
 	RockExplosion_friendly.DisplayName: Rock Explosion_friendly
 	RockSpikeBallista_Proj.DisplayName: Rock Spike Ballista_ Proj
+	RodSpear.DisplayName: Rod Spear
+	RustSlingshot_Projectile.DisplayName: Rust Slingshot_ Projectile
+	RustSlingshot_Weapon.DisplayName: Rust Slingshot_ Weapon
 	SquamousAirProj.DisplayName: Squamous Air Proj
 	SquamousRockExplosion.DisplayName: Squamous Rock Explosion
 	SquamousRockProj.DisplayName: Squamous Rock Proj
@@ -3936,16 +4966,35 @@ Projectiles: {
 	SquamousRockSpike.DisplayName: Squamous Rock Spike
 	SquamousRollingStone.DisplayName: Squamous Rolling Stone
 	Squamous_HitTile.DisplayName: Squamous_ Hit Tile
+	StoneJavelinProjectile.DisplayName: Stone Javelin Projectile
+	ThermostatBobber.DisplayName: Thermostat Bobber
+	TopazHeadedSpear.DisplayName: Topaz Headed Spear
 	VitalizedRocksProj.DisplayName: Vitalized Rocks Proj
 	VitalizedRocksProj_Explosion.DisplayName: Vitalized Rocks Proj_ Explosion
 	VitalizedRocksStone.DisplayName: Vitalized Rocks Stone
 	VitalizedRocksStone_small.DisplayName: Vitalized Rocks Stone_small
 	WindBladeBallHit.DisplayName: Wind Blade Ball Hit
+	YggdrasilAmberLaser_crystal.DisplayName: Yggdrasil Amber Laser_crystal
 	YggdrasilAmberLaser_proj.DisplayName: Yggdrasil Amber Laser_proj
 	YggdrasilMoonBlade.DisplayName: Yggdrasil Moon Blade
 	YggdrasilMoonBladeHit.DisplayName: Yggdrasil Moon Blade Hit
 	YggdrasilMoonBlade_friendly.DisplayName: Yggdrasil Moon Blade_friendly
 	YggdrasilSlashBall.DisplayName: Yggdrasil Slash Ball
+	YggdrasilStoneGyroscope_Proj.DisplayName: Yggdrasil Stone Gyroscope_ Proj
+	MeltingFireRing.DisplayName: Melting Fire Ring
+	MeltingFireExplode.DisplayName: Melting Fire Explode
+	Thermoprobe.DisplayName: Thermoprobe
+	Thermoprobe_Fireball.DisplayName: Thermoprobe_ Fireball
+	AmberFlowerHookProjectile.DisplayName: Amber Flower Hook Projectile
+	ClimbingPickaxeProjectile.DisplayName: Climbing Pickaxe Projectile
+	TeleportToYggdrasil.DisplayName: Teleport To Yggdrasil
+	TerraViewerHowitzer_grenade_fall.DisplayName: Terra Viewer Howitzer_grenade_fall
+	TerraViewerHowitzer_grenade_fall_explosion.DisplayName: Terra Viewer Howitzer_grenade_fall_explosion
+	TerraViewerHowitzer_proj.DisplayName: Terra Viewer Howitzer_proj
+	TerraViewerHowitzer_proj_flame.DisplayName: Terra Viewer Howitzer_proj_flame
+	TerraViewerHowitzer_proj_flame_blue.DisplayName: Terra Viewer Howitzer_proj_flame_blue
+	TerraViewerHowitzer_shoot.DisplayName: Terra Viewer Howitzer_shoot
+	TerraViewerHowitzer_shoot_explosion.DisplayName: Terra Viewer Howitzer_shoot_explosion
 	SightOfTileProj.DisplayName: Sight Of Tile Proj
 	SightOfTileProjRead.DisplayName: Sight Of Tile Proj Read
 }
