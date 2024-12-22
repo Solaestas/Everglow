@@ -4,7 +4,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles.Furnitures;
 
-public class TwilightEucalyptusWorkBench : ModTile
+public class TwilightEucalyptusWorkbench : ModTile
 {
 	public override void SetStaticDefaults()
 	{
