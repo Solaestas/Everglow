@@ -5,30 +5,37 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 	public class SidebarList : BaseElement
 	{
 		private float elementSpacing = 6f;
-		private List<SidebarUIElement> elements = new List<SidebarUIElement>();
+		private List<SidebarUIElement> elements = [];
 
 		public override bool Register(BaseElement element)
 		{
-			if (element is SidebarUIElement)
+			if (element is SidebarUIElement sideUIElement)
 			{
 				element.Info.Width.SetValue(0f, 1f);
 
 				var op = base.Register(element);
 				if (!op)
+				{
 					return op;
+				}
 
-				elements.Add((SidebarUIElement)element);
+				elements.Add(sideUIElement);
 				Calculation();
 				return op;
 			}
 			else
+			{
 				return false;
+			}
 		}
 
 		public override bool Remove(BaseElement element)
 		{
-			if (!(element is SidebarUIElement))
+			if (element is not SidebarUIElement)
+			{
 				return false;
+			}
+
 			var op = elements.Remove((SidebarUIElement)element) && base.Remove(element);
 			Calculation();
 			return op;
@@ -41,20 +48,25 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 			Calculation();
 		}
 
+		/// <summary>
+		/// 计算所有快捷按钮元素的中心位置
+		/// </summary>
 		public void CalculationQuickElementCenter()
 		{
-			int count = elements.Count;
-			for (int i = 0; i < count; i++)
+			for (int i = 0; i < elements.Count; i++)
 			{
 				SidebarUIElement element = elements[i];
-				element.Center = Info.Location + new Vector2(Info.HitBox.Width / 2f, 5f + (2 * i + 1) * (3f + Info.HitBox.Width / 2f));
+				element.Center = Info.Location + new Vector2(Info.HitBox.Width / 2f, 5f + (2 * i + 1) * (4f + Info.HitBox.Width / 2f));
 			}
 		}
 
 		public void SwapCenter(int index, int index1)
 		{
 			if (index == -1 || index1 == -1 || index >= elements.Count || index1 >= elements.Count)
+			{
 				return;
+			}
+
 			SidebarUIElement element = elements[index], element1 = elements[index1];
 			elements.RemoveAt(index);
 			elements.Insert(index1, element);
@@ -78,7 +90,9 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 				}
 			}
 			if (movingElement == null || index < 0)
+			{
 				return;
+			}
 			if (index > 0 && movingElement.Info.Location.Y <
 				(elements[index - 1].Center.Y + elements[index - 1].Info.Size.Y / 2f + elementSpacing / 2f))
 			{

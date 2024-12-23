@@ -41,7 +41,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 
 			LoadSidebarElement(quickBar);
 
-			// 这是展开和收回箭头
+			// 展开侧边栏/收回侧边栏按钮
 			UIImage image = new UIImage(ModAsset.Array.Value, Color.White);
 			image.Info.Left.SetValue(2f, 1f);
 			image.Info.Top.SetValue(-image.Info.Height.Pixel / 2f, 0.5f);
@@ -62,16 +62,13 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 		private void LoadSidebarElement(SidebarList quickBar)
 		{
 			var sidebarElements = Ins.ModuleManager.CreateInstances<SidebarElementBase>();
-			TriggeredTypeSidebarUIElement quickElement;
 			foreach (var sidebarElement in sidebarElements)
 			{
-				if (sidebarElement.Visible is false)
+				var quickElement = new TriggeredTypeSidebarUIElement(sidebarElement.Icon, Color.White)
 				{
-					continue;
-				}
+					Tooltip = sidebarElement.Tooltip,
+				};
 
-				quickElement = new TriggeredTypeSidebarUIElement(sidebarElement.Icon, Color.White);
-				quickElement.Tooltip = sidebarElement.Tooltip;
 				quickElement.OnTigger += element =>
 				{
 					sidebarElement.Invoke();
