@@ -7,7 +7,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
 public class StoneScaleWood : ModTile
 {
-	public override void PostSetDefaults()
+	public override void SetStaticDefaults()
 	{
 		Main.tileSolid[Type] = true;
 		Main.tileMergeDirt[Type] = false;

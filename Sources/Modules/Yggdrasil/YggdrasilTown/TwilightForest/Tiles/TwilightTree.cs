@@ -1,7 +1,7 @@
 using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Commons.TileHelper;
+using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Items;
-using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 
@@ -29,6 +29,14 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 			{
 				TwilightTreeVineMassSpringSystem.AddMassSpringMesh(vine);
 			}
+			foreach (var poses in style.Keys)
+			{
+				Tile tile = YggdrasilWorldGeneration.SafeGetTile(poses);
+				if (tile.TileType != Type)
+				{
+					style.Remove(poses);
+				}
+			}
 		}
 		TwilightTreeVineEulerSolver.Step(TwilightTreeVineMassSpringSystem, 1);
 	}
@@ -52,6 +60,12 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 		{
 			StyleVines.Add(i, new Dictionary<Point, Rope>());
 		}
+	}
+
+	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
+	{
+		noBreak = true;
+		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
 	}
 
 	public override void NearbyEffects(int i, int j, bool closer)
@@ -104,7 +118,7 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		yield return new Item(ModContent.ItemType<TwilightWood>());
+		yield return new Item(ModContent.ItemType<TwilightEucalyptusWood_Item>());
 	}
 
 	public override bool CanDrop(int i, int j)
@@ -158,24 +172,39 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 			return;
 		}
 
-		bool isLeft = tile.TileFrameY == 1;
 		if (!fail)// 判定为已破碎
 		{
+			bool isLeft = tile.TileFrameY == 1;
 			noItem = true;
 			if (isLeft)
 			{
 				KillToTop(i, j);
 			}
-			else
+			else if(tile.TileFrameY == 2)
 			{
 				KillToTop(i - 1, j);
+			}
+			else if (tile.TileFrameY == 0)
+			{
+				KillToTop(i, j);
+			}
+			else if (tile.TileFrameY == -1)
+			{
+				var tileRight = Main.tile[i + 1, j];
+				if(tileRight.TileType == Type)
+				{
+					KillToTop(i, j);
+				}
+				else
+				{
+					KillToTop(i - 1, j);
+				}
 			}
 		}
 	}
 
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)
 	{
-
 	}
 
 	/// <summary>
@@ -202,8 +231,8 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 					Dust.NewDust(new Vector2(i, breakingY) * 16, 16, 16, DustType);
 					Dust.NewDust(new Vector2(i + 1, breakingY) * 16, 16, 16, DustType);
 				}
-				Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, breakingY), i * 16, breakingY * 16, 16, 16, new Item(ModContent.ItemType<TwilightWood>(), 1));
-				Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, breakingY), i * 16 + 16, breakingY * 16, 16, 16, new Item(ModContent.ItemType<TwilightWood>(), 1));
+				Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, breakingY), i * 16, breakingY * 16, 16, 16, new Item(ModContent.ItemType<TwilightEucalyptusWood_Item>(), 1));
+				Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, breakingY), i * 16 + 16, breakingY * 16, 16, 16, new Item(ModContent.ItemType<TwilightEucalyptusWood_Item>(), 1));
 			}
 			else
 			{

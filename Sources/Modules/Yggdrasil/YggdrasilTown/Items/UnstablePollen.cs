@@ -8,6 +8,7 @@ public class UnstablePollen : ModItem
 	{
 		Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(5, 7));
 	}
+
 	public override void SetDefaults()
 	{
 		Item.width = 24;
@@ -15,6 +16,7 @@ public class UnstablePollen : ModItem
 		Item.value = 90;
 		Item.maxStack = Item.CommonMaxStack;
 	}
+
 	public override void Update(ref float gravity, ref float maxFallSpeed)
 	{
 		float timeValue = (float)(Main.time * 0.13f + Item.whoAmI) % 7;
@@ -23,6 +25,7 @@ public class UnstablePollen : ModItem
 
 		base.Update(ref gravity, ref maxFallSpeed);
 	}
+
 	public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
 	{
 		Texture2D texture2D = ModAsset.UnstablePollen.Value;

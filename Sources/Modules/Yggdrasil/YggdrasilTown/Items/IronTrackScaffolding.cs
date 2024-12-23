@@ -1,5 +1,3 @@
-using Everglow.Yggdrasil.YggdrasilTown.Walls;
-
 namespace Everglow.Yggdrasil.YggdrasilTown.Items;
 
 public class IronTrackScaffolding : ModItem
