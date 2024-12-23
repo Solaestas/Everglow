@@ -119,7 +119,7 @@ public class Union_Y_Stairs : ShapeDataTile, ISceneTile
 					if ((tile.TileFrameX is >= 252 and < 432) && (tile.TileFrameY is >= 288 and < 360))
 					{
 						tile.TileType = (ushort)ModContent.TileType<Union_Y_Platform>();
-						if (tile.TileFrameX is >= 144 and < 198)
+						if (tile.TileFrameX is >= 288 and < 396)
 						{
 							tile.TileType = (ushort)ModContent.TileType<Union_Y_PlatformRed>();
 						}
@@ -128,7 +128,7 @@ public class Union_Y_Stairs : ShapeDataTile, ISceneTile
 					else if ((tile.TileFrameX is >= 270 and < 414) && (tile.TileFrameY is >= 216 and < 288))
 					{
 						tile.TileType = (ushort)ModContent.TileType<Union_Y_Platform>();
-						if (tile.TileFrameX is >= 144 and < 198)
+						if (tile.TileFrameX is >= 288 and < 396)
 						{
 							tile.TileType = (ushort)ModContent.TileType<Union_Y_PlatformRed>();
 						}

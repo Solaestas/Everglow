@@ -18,7 +18,7 @@ public class Union_Y_PlatformRed : ModTile
 		TileID.Sets.Platforms[Type] = true;
 		TileID.Sets.DisableSmartCursor[Type] = true;
 		DustType = ModContent.DustType<Union_Y_PlatformRed_Dust>();
-
+		MinPick = 300;
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
 
 		DustType = DustID.DynastyWood;
@@ -37,6 +37,8 @@ public class Union_Y_PlatformRed : ModTile
 
 		AddMapEntry(new Color(204, 38, 52));
 	}
+
+	public override bool CanExplode(int i, int j) => false;
 
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
 	{

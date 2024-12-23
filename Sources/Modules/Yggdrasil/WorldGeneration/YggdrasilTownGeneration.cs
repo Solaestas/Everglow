@@ -2018,40 +2018,60 @@ public class YggdrasilTownGeneration
 			{
 				int roomOriginX = centerX - 75 + x * 50 + 25;
 				int roomOriginY = centerY - 100 + y * 25 + 12;
-				KillRectangleAreaOfTile(roomOriginX - 18, roomOriginY - 9, roomOriginX + 18, roomOriginY + 9);
-				int randLampCount = GenRand.Next(1, 4);
-				for (int i = 0; i < randLampCount; i++)
+				string[] randomRooms = new string[]
 				{
-					int lampX = roomOriginX + (int)(36f / randLampCount * (i + 0.5f) - 18f + GenRand.Next(-2, 3));
-					var tile = SafeGetTile(lampX, roomOriginY - 9);
-					tile.TileType = (ushort)ModContent.TileType<HangingFluoriteLamp>();
-					tile.HasTile = true;
-					tile.TileFrameY = (short)GenRand.Next(2, 30);
-				}
-				int chainCount = GenRand.Next(1, 3);
-				for (int i = 0; i < chainCount; i++)
-				{
-					int randPos = GenRand.Next(8, 24);
-					int randNeg = GenRand.Next(8, 24);
-					int addX0 = (int)(randPos + ((i + 0.5f) / chainCount - 0.5f) * 12);
-					int addY0 = 0;
-					if (addX0 > 18)
-					{
-						addY0 = addX0 - 18;
-						addX0 = 18;
-					}
+					ModAsset.TwilightCastle_Room_1_40x21_Path,
+					ModAsset.TwilightCastle_Room_2_40x21_Path,
+					ModAsset.TwilightCastle_Room_3_40x21_Path,
+					ModAsset.TwilightCastle_Room_4_40x21_Path,
+					ModAsset.TwilightCastle_Room_5_40x21_Path,
+					ModAsset.TwilightCastle_Room_6_40x21_Path,
+					ModAsset.TwilightCastle_Room_7_40x21_Path,
+					ModAsset.TwilightCastle_Room_8_40x21_Path,
+					ModAsset.TwilightCastle_Room_9_40x21_Path,
+					ModAsset.TwilightCastle_Room_10_40x21_Path,
+					ModAsset.TwilightCastle_Room_11_40x21_Path,
+					ModAsset.TwilightCastle_Room_12_40x21_Path,
+					ModAsset.TwilightCastle_Room_13_40x21_Path,
+					ModAsset.TwilightCastle_Room_14_40x21_Path,
+					ModAsset.TwilightCastle_Room_15_40x21_Path,
+				};
+				QuickBuild(roomOriginX - 20, roomOriginY - 10, randomRooms[GenRand.Next(randomRooms.Length)]);
 
-					int addX1 = (int)(randNeg + ((i + 0.5f) / chainCount - 0.5f) * 12);
-					int addY1 = 0;
-					if (addX1 > 18)
-					{
-						addY1 = addX1 - 18;
-						addX1 = 18;
-					}
-					addX1 *= -1;
+				//KillRectangleAreaOfTile(roomOriginX - 18, roomOriginY - 9, roomOriginX + 18, roomOriginY + 9);
+				//int randLampCount = GenRand.Next(1, 4);
+				//for (int i = 0; i < randLampCount; i++)
+				//{
+				//	int lampX = roomOriginX + (int)(36f / randLampCount * (i + 0.5f) - 18f + GenRand.Next(-2, 3));
+				//	var tile = SafeGetTile(lampX, roomOriginY - 9);
+				//	tile.TileType = (ushort)ModContent.TileType<HangingFluoriteLamp>();
+				//	tile.HasTile = true;
+				//	tile.TileFrameY = (short)GenRand.Next(2, 30);
+				//}
+				//int chainCount = GenRand.Next(1, 3);
+				//for (int i = 0; i < chainCount; i++)
+				//{
+				//	int randPos = GenRand.Next(8, 24);
+				//	int randNeg = GenRand.Next(8, 24);
+				//	int addX0 = (int)(randPos + ((i + 0.5f) / chainCount - 0.5f) * 12);
+				//	int addY0 = 0;
+				//	if (addX0 > 18)
+				//	{
+				//		addY0 = addX0 - 18;
+				//		addX0 = 18;
+				//	}
 
-					WorldGenMisc.PlaceRope(roomOriginX + addX0, roomOriginY + addY0 - 9, roomOriginX + addX1, roomOriginY + addY1 - 9, ModContent.TileType<ChainCable>());
-				}
+				//	int addX1 = (int)(randNeg + ((i + 0.5f) / chainCount - 0.5f) * 12);
+				//	int addY1 = 0;
+				//	if (addX1 > 18)
+				//	{
+				//		addY1 = addX1 - 18;
+				//		addX1 = 18;
+				//	}
+				//	addX1 *= -1;
+
+				//	WorldGenMisc.PlaceRope(roomOriginX + addX0, roomOriginY + addY0 - 9, roomOriginX + addX1, roomOriginY + addY1 - 9, ModContent.TileType<ChainCable>());
+				//}
 
 				// 房间通道
 				if (y == 9 && directionGate + 1 == x)
@@ -2080,7 +2100,7 @@ public class YggdrasilTownGeneration
 					PlaceRectangleAreaOfBlock(roomOriginX - 22, roomOriginY + 2, roomOriginX - 19, roomOriginY + 6, ModContent.TileType<GreenRelicBrick>());
 					PlaceFrameImportantTiles(roomOriginX - 20, roomOriginY + 7, 1, 3, TileID.ClosedDoor, 0, 918);
 				}
-				PlaceTwilightLegacyBiomeChest(roomOriginX, roomOriginY + 9);
+				//PlaceTwilightLegacyBiomeChest(roomOriginX, roomOriginY + 9);
 			}
 		}
 

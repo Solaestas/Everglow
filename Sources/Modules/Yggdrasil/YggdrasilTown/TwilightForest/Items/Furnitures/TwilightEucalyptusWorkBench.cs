@@ -4,7 +4,7 @@ public class TwilightEucalyptusWorkBench : WorkBenchItem
 {
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles.Furnitures.TwilightEucalyptusWorkbench>());
+		Item.DefaultToPlaceableTile(ModContent.TileType<Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles.Furnitures.TwilightEucalyptusWorkBench>());
 		base.SetDefaults();
 	}
 
