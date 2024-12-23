@@ -19,7 +19,7 @@ public class MissionPlayer : ModPlayer
 			item.SetDefaults(2);
 			item.stack = 10;
 			mission.DemandItem = [item];
-			MissionManager.AddMission(mission, MissionManager.PoolType.CanTaken);
+			MissionManager.AddMission(mission, MissionManager.PoolType.Available);
 
 			mission = new GainItemMission();
 			mission.SetInfo("Test2", "获取10个木头", "测试介绍2\n" +
@@ -28,7 +28,7 @@ public class MissionPlayer : ModPlayer
 			item.SetDefaults(9);
 			item.stack = 10;
 			mission.DemandItem = [item];
-			MissionManager.AddMission(mission, MissionManager.PoolType.BeenTaken);
+			MissionManager.AddMission(mission, MissionManager.PoolType.Accepted);
 
 			mission = new GainItemMission();
 			mission.SetInfo("Test3", "获取10个铁矿", "测试介绍3");
@@ -36,7 +36,7 @@ public class MissionPlayer : ModPlayer
 			item.SetDefaults(11);
 			item.stack = 10;
 			mission.DemandItem = [item];
-			MissionManager.AddMission(mission, MissionManager.PoolType.CanTaken);
+			MissionManager.AddMission(mission, MissionManager.PoolType.Available);
 		}
 	}
 

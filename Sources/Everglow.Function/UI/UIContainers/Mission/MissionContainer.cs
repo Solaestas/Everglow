@@ -168,13 +168,13 @@ public class MissionContainer : UIContainerElement
 		{
 			if (SelectedItem != null)
 			{
-				if (SelectedItem.Mission.PoolType == PoolType.BeenTaken)
+				if (SelectedItem.Mission.PoolType == PoolType.Accepted)
 				{
 					_yes.Info.IsVisible = _no.Info.IsVisible = true;
 				}
-				else if (SelectedItem.Mission.PoolType == PoolType.CanTaken)
+				else if (SelectedItem.Mission.PoolType == PoolType.Available)
 				{
-					MissionManager.Instance.MoveMission(SelectedItem.Mission, PoolType.CanTaken, PoolType.BeenTaken);
+					MissionManager.Instance.MoveMission(SelectedItem.Mission, PoolType.Available, PoolType.Accepted);
 					ChangeSelectedItem(SelectedItem);
 				}
 			}
@@ -193,9 +193,9 @@ public class MissionContainer : UIContainerElement
 		};
 		_yes.Events.OnLeftClick += e =>
 		{
-			if (SelectedItem != null && SelectedItem.Mission.PoolType == PoolType.BeenTaken)
+			if (SelectedItem != null && SelectedItem.Mission.PoolType == PoolType.Accepted)
 			{
-				MissionManager.Instance.MoveMission(SelectedItem.Mission, PoolType.BeenTaken, PoolType.Fail);
+				MissionManager.Instance.MoveMission(SelectedItem.Mission, PoolType.Accepted, PoolType.Failed);
 				ChangeSelectedItem(SelectedItem);
 				_yes.Info.IsVisible = _no.Info.IsVisible = false;
 			}
@@ -245,9 +245,9 @@ public class MissionContainer : UIContainerElement
 	{
 		List<BaseElement> elements = [];
 		PositionStyle top = (2f, 0f);
-		for (int i = 0; i < Enum.GetValues<PoolType>().Length; i++)
+		foreach (var type in Enum.GetValues<PoolType>())
 		{
-			var mp = MissionManager.Instance.GetMissionPool((PoolType)i);
+			var mp = MissionManager.Instance.GetMissionPool(type);
 			foreach (var m in mp)
 			{
 				var element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [m]);
@@ -283,18 +283,31 @@ public class MissionContainer : UIContainerElement
 			_descriptionContainer.ClearAllElements();
 			_descriptionContainer.AddElement(des);
 
-			if (item.Mission.PoolType == PoolType.CanTaken)
+			if (item.Mission.PoolType == PoolType.Available)
 			{
 				_changeText.Text = "接取";
 			}
-			else if (item.Mission.PoolType == PoolType.BeenTaken)
+			else if (item.Mission.PoolType == PoolType.Accepted)
 			{
 				_changeText.Text = "放弃";
 			}
+			else if (item.Mission.PoolType == PoolType.Completed)
+			{
+				_changeText.Text = "[TextDrawer,Text='完成',Color='126,126,126']";
+			}
+			else if(item.Mission.PoolType == PoolType.Overdue)
+			{
+				_changeText.Text = "[TextDrawer,Text='过期',Color='126,126,126']";
+			}
+			else if(item.Mission.PoolType == PoolType.Failed)
+			{
+				_changeText.Text = "[TextDrawer,Text='失败',Color='126,126,126']";
+			}
 			else
 			{
-				_changeText.Text = "[TextDrawer,Text='接取',Color='126,126,126']";
+				_changeText.Text = "[TextDrawer,Text='未知',Color='126,126,126']";
 			}
+
 			_changeText.Info.SetToCenter();
 
 			_yes.Info.IsVisible = _no.Info.IsVisible = false;

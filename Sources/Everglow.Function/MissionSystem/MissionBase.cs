@@ -84,7 +84,7 @@ public abstract class MissionBase
 	/// <param name="gt"></param>
 	public virtual void Update()
 	{
-		if (PoolType == MissionManager.PoolType.BeenTaken && TimeMax > 0)
+		if (PoolType == MissionManager.PoolType.Accepted && TimeMax > 0)
 		{
 			if (Time < TimeMax)
 			{
@@ -103,7 +103,7 @@ public abstract class MissionBase
 	/// </summary>
 	public virtual void OnFinish()
 	{
-		MissionManager.Instance.MoveMission(this, MissionManager.PoolType.BeenTaken, MissionManager.PoolType.Finish);
+		MissionManager.Instance.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Completed);
 	}
 
 	/// <summary>
@@ -111,7 +111,7 @@ public abstract class MissionBase
 	/// </summary>
 	public virtual void OnExpire()
 	{
-		MissionManager.Instance.MoveMission(this, MissionManager.PoolType.BeenTaken, MissionManager.PoolType.Overdue);
+		MissionManager.Instance.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Overdue);
 	}
 
 	/// <summary>
@@ -119,7 +119,7 @@ public abstract class MissionBase
 	/// </summary>
 	public virtual void OnFail()
 	{
-		MissionManager.Instance.MoveMission(this, MissionManager.PoolType.BeenTaken, MissionManager.PoolType.Fail);
+		MissionManager.Instance.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Failed);
 	}
 
 	/// <summary>
