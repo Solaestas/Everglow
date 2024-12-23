@@ -89,7 +89,7 @@ public class Union_Y_Stairs : ShapeDataTile, ISceneTile
 	public void AddScene(int i, int j)
 	{
 		Tile tile = YggdrasilWorldGeneration.SafeGetTile(i, j);
-		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
+		if (tile.TileFrameX == 900 && tile.TileFrameY == 900)
 		{
 			Union_Y_Stairs_Front uYSF = new Union_Y_Stairs_Front { position = new Vector2(i, j) * 16 + new Vector2(0, -70), Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
 			Ins.VFXManager.Add(uYSF);
@@ -139,8 +139,63 @@ public class Union_Y_Stairs : ShapeDataTile, ISceneTile
 						tile.TileType = Type;
 						tile.HasTile = true;
 					}
+					if (i is >= 3 and <= 13)
+					{
+						if (j == i - 1)
+						{
+							tile.Slope = SlopeType.SlopeUpRight;
+						}
+					}
+					if (i is >= 24 and <= 34)
+					{
+						if (j == 36 - i)
+						{
+							tile.Slope = SlopeType.SlopeUpLeft;
+						}
+					}
+					tile.TileFrameX += 900;
+					tile.TileFrameY += 900;
 				}
 			}
 		}
+	}
+
+	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+	{
+		Tile tile = Main.tile[i, j];
+		bool shouldPostDraw = false;
+		int tfX = tile.TileFrameX - 900;
+		int tfY = tile.TileFrameY - 900;
+		int fX = tfX / 18;
+		int fY = tfY / 18;
+		if (fX is >= 2 and <= 13)
+		{
+			if (fY == fX - 1)
+			{
+				shouldPostDraw = true;
+			}
+		}
+		if (fX is >= 24 and <= 35)
+		{
+			if (fY == 36 - fX)
+			{
+				shouldPostDraw = true;
+			}
+		}
+		Color lightColor = Lighting.GetColor(i, j);
+
+		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+		if (Main.drawToScreen)
+		{
+			zero = Vector2.Zero;
+		}
+		spriteBatch.Draw(ModAsset.Union_Y_Stairs.Value, new Vector2(i, j) * 16 - Main.screenPosition + zero, new Rectangle(tfX, tfY, 16, 16), lightColor, 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
+		if (shouldPostDraw)
+		{
+			Color lightColorDown = Lighting.GetColor(i, j + 1);
+			spriteBatch.Draw(ModAsset.Union_Y_Stairs.Value, new Vector2(i, j + 1) * 16 - Main.screenPosition + zero, new Rectangle(tfX, tfY + 18, 16, 16), lightColorDown, 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
+		}
+
+		return false;
 	}
 }

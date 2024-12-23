@@ -56,10 +56,12 @@ public class Union_Y_Platform : ModTile
 		{
 			offsetScreen = Vector2.Zero;
 		}
+		int tfX = tile.TileFrameX - 900;
+		int tfY = tile.TileFrameY - 900;
 		if (!Ins.VisualQuality.High)
 		{
 			Vector2 drawPos = new Point(i, j).ToWorldCoordinates() - Main.screenPosition + offsetScreen;
-			Rectangle frame = new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16);
+			Rectangle frame = new Rectangle(tfX, tfY, 16, 16);
 			spriteBatch.Draw(texture, drawPos, frame, Lighting.GetColor(i, j), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
 		}
 		else
@@ -70,13 +72,13 @@ public class Union_Y_Platform : ModTile
 			{
 				for (int y = 0; y < 3; y++)
 				{
-					Rectangle frame = new Rectangle(tile.TileFrameX + x * 6, tile.TileFrameY + y * 6, 6, 6);
+					Rectangle frame = new Rectangle(tfX + x * 6, tfY + y * 6, 6, 6);
 					Vector2 offset = new Vector2(x, y) * 6;
 					if (x == 2)
 					{
 						frame.Width = 4;
 					}
-					if (y == 2 && tile.TileFrameY != 19 * 18)
+					if (y == 2 && tfY != 19 * 18)
 					{
 						frame.Height = 4;
 					}
