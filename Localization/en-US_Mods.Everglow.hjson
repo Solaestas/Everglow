@@ -3328,14 +3328,16 @@ NPCs: {
 		DisplayName: Acytaea
 
 		TownNPCMood: {
-			Content: 我很满足。
-			NoHome: 我讨厌没有家。
-			FarFromHome: 我离家太远了。
-			LoveSpace: 我非常喜欢有这么大的空间。
-			DislikeCrowded: 我不喜欢这么拥挤。
-			HateCrowded: 我讨厌这么拥挤。
-			LikeNPC_Princess: 我喜欢 {NPCName}。
-			Princess_LovesNPC: 我喜欢 {NPCName}。
+			Content: I am content.
+			NoHome: I hate not having a home.
+			FarFromHome: I am too far from home.
+			LoveSpace: I love having so much space.
+			DislikeCrowded: I dislike how crowded I am.
+			HateCrowded: I hate how crowded I am.
+			LikeBiome: I like {BiomeName}.
+			DislikeBiome: I dislike {BiomeName}.
+			LikeNPC_Princess: I like {NPCName}.
+			Princess_LovesNPC: I like {NPCName}.
 		}
 	}
 
@@ -3443,6 +3445,7 @@ Projectiles: {
 	NormalAmmo.DisplayName: Normal Ammo
 	NormalHit.DisplayName: Normal Hit
 	StarAmmo.DisplayName: Star Ammo
+	SlashProjectile3D.DisplayName: Slash Projectile3 D
 	HolyCrystalProjectile.DisplayName: Holy Crystal Projectile
 	PlanetBeFall.DisplayName: Planet Be Fall
 	PlanetBefallExplosion.DisplayName: Planet Befall Explosion
@@ -3825,8 +3828,11 @@ Projectiles: {
 	AcytaeaSword_projectile_Tornado.DisplayName: Acytaea Sword_projectile_ Tornado
 	AcytaeaSword_projectile_TownNPC.DisplayName: Acytaea Sword_projectile_ Town N P C
 	AcytaeaTornado.DisplayName: Acytaea Tornado
+	Acytaea_FlamePost.DisplayName: Acytaea_ Flame Post
 	Acytaea_Lock.DisplayName: Acytaea_ Lock
 	Acytaea_ShineStar.DisplayName: Acytaea_ Shine Star
+	Acytaea_ShineStar_Town.DisplayName: Acytaea_ Shine Star_ Town
+	Acytaea_SmashGround.DisplayName: Acytaea_ Smash Ground
 	RampageShark.DisplayName: Rampage Shark
 	RampageSharkHit.DisplayName: Rampage Shark Hit
 	TsunamiShark.DisplayName: Tsunami Shark
