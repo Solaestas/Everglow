@@ -33,6 +33,9 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 			base.LoadEvents();
 			Events.OnLeftDown += Events_OnLeftDown;
 			Events.OnLeftUp += Events_OnLeftUp;
+			Events.OnMouseHover += Events_OnMouseHover;
+			Events.OnMouseOut += Events_OnMouseOut;
+			Events.OnMouseOver += Events_OnMouseHover;
 		}
 
 		private void Events_OnLeftUp(BaseElement baseElement)
@@ -47,6 +50,22 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 		private void Events_OnLeftDown(BaseElement baseElement)
 		{
 			mouseDown = true;
+		}
+
+		private void Events_OnMouseHover(BaseElement baseElement)
+		{
+			if (baseElement is SidebarUIElement element)
+			{
+				element._color = Color.White;
+			}
+		}
+
+		private void Events_OnMouseOut(BaseElement baseElement)
+		{
+			if (baseElement is SidebarUIElement element)
+			{
+				element._color = Color.Gray;
+			}
 		}
 
 		public override void Update(GameTime gt)

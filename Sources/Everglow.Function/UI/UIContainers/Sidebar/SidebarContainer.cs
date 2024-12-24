@@ -67,7 +67,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 
 			foreach (var sidebarElement in sidebarElements)
 			{
-				var quickElement = new TriggeredTypeSidebarUIElement(sidebarElement.Icon, Color.White);
+				var quickElement = new TriggeredTypeSidebarUIElement(sidebarElement.Icon, Color.Gray);
 
 				quickElement.SetInfo(sidebarElement);
 				quickElement.Events.OnMouseHover += element =>
