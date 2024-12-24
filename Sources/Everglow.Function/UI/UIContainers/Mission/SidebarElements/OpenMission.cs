@@ -4,7 +4,7 @@ namespace Everglow.Commons.UI.UIContainers.Mission.SidebarElements;
 
 internal class OpenMission : ISidebarElementBase
 {
-	public Texture2D Icon => ModAsset.SlashAllTheItem.Value;
+	public Texture2D Icon => ModAsset.OpenMission.Value;
 
 	public string Tooltip => "打开任务面板";
 
