@@ -48,20 +48,72 @@ public class UIMissionItem : UIBlock
 		_block.Register(name);
 
 		Info.IsSensitive = true;
+
+		// 鼠标悬停时改变颜色
+		Events.OnMouseHover += OnMouseOver;
+		Events.OnMouseOver += OnMouseOver;
+
+		// 鼠标离开时恢复颜色
+		Events.OnMouseOut += OnMouseLeave;
+	}
+
+	/// <summary>
+	/// 鼠标悬停时
+	/// <para/>更新任务的颜色，但不更新选中的任务的颜色
+	/// </summary>
+	/// <param name="e"></param>
+	private void OnMouseOver(BaseElement e)
+	{
+		if (MissionContainer.Instance.SelectedItem != this)
+		{
+			PanelColor = Color.Gray;
+		}
+	}
+
+	/// <summary>
+	/// 鼠标离开时
+	/// <para/>更新任务的颜色，但不更新选中的任务的颜色
+	/// </summary>
+	/// <param name="e"></param>
+	private void OnMouseLeave(BaseElement e)
+	{
+		if (MissionContainer.Instance.SelectedItem != this)
+		{
+			OnUnselected();
+		}
+	}
+
+	/// <summary>
+	/// 选中任务时
+	/// <para/>更新任务的颜色
+	/// </summary>
+	public void OnSelected()
+	{
+		PanelColor = MissionContainer.Instance.GetThemeColor(MissionContainer.ColorType.Dark, MissionContainer.ColorStyle.Light);
+	}
+
+	/// <summary>
+	/// 取消选中任务时
+	/// <para/>更新任务的颜色
+	/// </summary>
+	public void OnUnselected()
+	{
+		PanelColor = MissionContainer.Instance.GetThemeColor(MissionContainer.ColorType.Dark, MissionContainer.ColorStyle.Normal);
 	}
 
 	public override void Update(GameTime gt)
 	{
 		base.Update(gt);
-		PanelColor = MissionContainer.Instance.GetThemeColor(MissionContainer.ColorType.Dark, 
-			MissionContainer.Instance.SelectedItem == this ? MissionContainer.ColorStyle.Light : MissionContainer.ColorStyle.Normal);
 	}
 
 	protected override void DrawChildren(SpriteBatch sb)
 	{
 		base.DrawChildren(sb);
 		if (Mission.TimeMax < 0)
+		{
 			return;
+		}
+
 		var scissorRectangle = sb.GraphicsDevice.ScissorRectangle;
 		var overflowHiddenRasterizerState = new RasterizerState
 		{

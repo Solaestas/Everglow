@@ -41,7 +41,11 @@ public class MissionContainer : UIContainerElement
 	private UITextPlus _yes;
 	private UITextPlus _no;
 
-	public UIMissionItem SelectedItem;
+	/// <summary>
+	/// 选中的任务
+	/// <para/>注: 请通过<see cref="ChangeSelectedItem(UIMissionItem)"/>来修改此属性
+	/// </summary>
+	public UIMissionItem SelectedItem { get; private set; }
 
 	public Color GetThemeColor(ColorType type = ColorType.Dark, ColorStyle style = ColorStyle.Normal)
 	{
@@ -269,9 +273,20 @@ public class MissionContainer : UIContainerElement
 		_missionContainer.AddElements(elements);
 	}
 
+	/// <summary>
+	/// 改变选中的任务
+	/// </summary>
+	/// <param name="item"></param>
 	public void ChangeSelectedItem(UIMissionItem item)
 	{
+		// 更新选中的任务
+		var oldSelectedItem = SelectedItem;
 		SelectedItem = item;
+
+		// 更新选中的任务的颜色
+		oldSelectedItem?.OnUnselected();
+		SelectedItem?.OnSelected();
+
 		if (SelectedItem != null)
 		{
 			_icon.Texture = SelectedItem.Mission.Icon;
@@ -295,11 +310,11 @@ public class MissionContainer : UIContainerElement
 			{
 				_changeText.Text = "[TextDrawer,Text='完成',Color='126,126,126']";
 			}
-			else if(item.Mission.PoolType == PoolType.Overdue)
+			else if (item.Mission.PoolType == PoolType.Overdue)
 			{
 				_changeText.Text = "[TextDrawer,Text='过期',Color='126,126,126']";
 			}
-			else if(item.Mission.PoolType == PoolType.Failed)
+			else if (item.Mission.PoolType == PoolType.Failed)
 			{
 				_changeText.Text = "[TextDrawer,Text='失败',Color='126,126,126']";
 			}
@@ -316,7 +331,7 @@ public class MissionContainer : UIContainerElement
 		{
 			_icon.Texture = null;
 			_textScrollbal.WheelValue = 0f;
-			_changeText.Text = "[TextDrawer,Text='接取',Color='126,126,126']";
+			_changeText.Text = "[TextDrawer,Text='',Color='126,126,126']";
 			_changeText.Info.SetToCenter();
 			_descriptionContainer.ClearAllElements();
 			_yes.Info.IsVisible = _no.Info.IsVisible = false;

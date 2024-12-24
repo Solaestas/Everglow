@@ -34,8 +34,8 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 			Events.OnLeftDown += Events_OnLeftDown;
 			Events.OnLeftUp += Events_OnLeftUp;
 			Events.OnMouseHover += Events_OnMouseHover;
-			Events.OnMouseOut += Events_OnMouseOut;
 			Events.OnMouseOver += Events_OnMouseHover;
+			Events.OnMouseOut += Events_OnMouseOut;
 		}
 
 		private void Events_OnLeftUp(BaseElement baseElement)
