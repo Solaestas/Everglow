@@ -109,7 +109,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 
 		public override void Calculation()
 		{
-			Info.Height.SetValue(elements.Count * (Info.Size.X + elementSpacing) + 10f, 0f);
+			Info.Height.SetValue(elements.Where(e => e.Info.IsVisible).Count() * (Info.Size.X + elementSpacing) + 14f, 0f);
 
 			float left, top;
 			if (ParentElement == null)
