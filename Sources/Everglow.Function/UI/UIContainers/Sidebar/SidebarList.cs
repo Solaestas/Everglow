@@ -82,6 +82,8 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 			int index = -1;
 			for (int i = 0; i < elements.Count; i++)
 			{
+				elements[i].UpdateInfo();
+
 				if (elements[i].IsMoveing)
 				{
 					movingElement = elements[i];

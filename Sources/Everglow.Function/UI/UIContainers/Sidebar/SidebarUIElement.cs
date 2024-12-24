@@ -1,3 +1,4 @@
+using Everglow.Commons.UI.UIContainers.Sidebar.SidebarElements;
 using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.UI.UIContainers.Sidebar
@@ -6,17 +7,22 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 
 	public abstract class SidebarUIElement : UIImage
 	{
-		public bool IsMoveing => waitTime >= WaitTime;
 		private int waitTime = 0;
 		public int WaitTime = 30;
 		private Vector2 waitToMouse = Vector2.Zero;
 		private bool mouseDown = false;
 		public Vector2 Center = Vector2.Zero;
-		public string Tooltip = string.Empty;
+
+		public bool IsMoveing => waitTime >= WaitTime;
+
+		public string Tooltip => BaseInfo.Tooltip;
 
 		public event HandleTigger OnTigger;
 
-		public SidebarUIElement(Texture2D texture, Color color) : base(texture, color)
+		public ISidebarElementBase BaseInfo { get; private set; }
+
+		public SidebarUIElement(Texture2D texture, Color color)
+			: base(texture, color)
 		{
 			Style = CalculationStyle.LockAspectRatioMainWidth;
 			Info.Width.SetValue(0f, 1f);
@@ -46,6 +52,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 		public override void Update(GameTime gt)
 		{
 			base.Update(gt);
+
 			if (mouseDown)
 				waitTime++;
 			else
@@ -88,6 +95,23 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 			}
 			else
 				return true;
+		}
+
+		public void SetInfo(ISidebarElementBase sidebarElement)
+		{
+			BaseInfo = sidebarElement;
+			OnTigger += element =>
+			{
+				sidebarElement.Invoke();
+			};
+		}
+
+		public void UpdateInfo()
+		{
+			if (Info.IsVisible != BaseInfo.IsVisible())
+			{
+				Info.IsVisible = BaseInfo.IsVisible();
+			}
 		}
 	}
 }
