@@ -68,6 +68,16 @@ public class MissionContainer : UIContainerElement
 	public override void OnInitialization()
 	{
 		base.OnInitialization();
+
+		// 在进入世界时关闭UI
+		Player.Hooks.OnEnterWorld += p =>
+		{
+			if (p.whoAmI == Main.myPlayer)
+			{
+				Close();
+			}
+		};
+
 		_panel = new UIBlock();
 		_panel.Info.Width.SetValue(527f, 0f);
 		_panel.Info.Height.SetValue(369f, 0f);
