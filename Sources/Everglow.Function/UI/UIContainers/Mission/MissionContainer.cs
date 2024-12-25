@@ -41,7 +41,11 @@ public class MissionContainer : UIContainerElement
 	private UITextPlus _yes;
 	private UITextPlus _no;
 
-	public UIMissionItem SelectedItem;
+	/// <summary>
+	/// 选中的任务
+	/// <para/>注: 请通过<see cref="ChangeSelectedItem(UIMissionItem)"/>来修改此属性
+	/// </summary>
+	public UIMissionItem SelectedItem { get; private set; }
 
 	public Color GetThemeColor(ColorType type = ColorType.Dark, ColorStyle style = ColorStyle.Normal)
 	{
@@ -64,6 +68,16 @@ public class MissionContainer : UIContainerElement
 	public override void OnInitialization()
 	{
 		base.OnInitialization();
+
+		// 在进入世界时关闭UI
+		Player.Hooks.OnEnterWorld += p =>
+		{
+			if (p.whoAmI == Main.myPlayer)
+			{
+				Close();
+			}
+		};
+
 		_panel = new UIBlock();
 		_panel.Info.Width.SetValue(527f, 0f);
 		_panel.Info.Height.SetValue(369f, 0f);
@@ -168,13 +182,13 @@ public class MissionContainer : UIContainerElement
 		{
 			if (SelectedItem != null)
 			{
-				if (SelectedItem.Mission.PoolType == PoolType.BeenTaken)
+				if (SelectedItem.Mission.PoolType == PoolType.Accepted)
 				{
 					_yes.Info.IsVisible = _no.Info.IsVisible = true;
 				}
-				else if (SelectedItem.Mission.PoolType == PoolType.CanTaken)
+				else if (SelectedItem.Mission.PoolType == PoolType.Available)
 				{
-					MissionManager.Instance.MoveMission(SelectedItem.Mission, PoolType.CanTaken, PoolType.BeenTaken);
+					MissionManager.Instance.MoveMission(SelectedItem.Mission, PoolType.Available, PoolType.Accepted);
 					ChangeSelectedItem(SelectedItem);
 				}
 			}
@@ -193,9 +207,9 @@ public class MissionContainer : UIContainerElement
 		};
 		_yes.Events.OnLeftClick += e =>
 		{
-			if (SelectedItem != null && SelectedItem.Mission.PoolType == PoolType.BeenTaken)
+			if (SelectedItem != null && SelectedItem.Mission.PoolType == PoolType.Accepted)
 			{
-				MissionManager.Instance.MoveMission(SelectedItem.Mission, PoolType.BeenTaken, PoolType.Fail);
+				MissionManager.Instance.MoveMission(SelectedItem.Mission, PoolType.Accepted, PoolType.Failed);
 				ChangeSelectedItem(SelectedItem);
 				_yes.Info.IsVisible = _no.Info.IsVisible = false;
 			}
@@ -245,9 +259,9 @@ public class MissionContainer : UIContainerElement
 	{
 		List<BaseElement> elements = [];
 		PositionStyle top = (2f, 0f);
-		for (int i = 0; i < Enum.GetValues<PoolType>().Length; i++)
+		foreach (var type in Enum.GetValues<PoolType>())
 		{
-			var mp = MissionManager.Instance.GetMissionPool((PoolType)i);
+			var mp = MissionManager.Instance.GetMissionPool(type);
 			foreach (var m in mp)
 			{
 				var element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [m]);
@@ -269,9 +283,20 @@ public class MissionContainer : UIContainerElement
 		_missionContainer.AddElements(elements);
 	}
 
+	/// <summary>
+	/// 改变选中的任务
+	/// </summary>
+	/// <param name="item"></param>
 	public void ChangeSelectedItem(UIMissionItem item)
 	{
+		// 更新选中的任务
+		var oldSelectedItem = SelectedItem;
 		SelectedItem = item;
+
+		// 更新选中的任务的颜色
+		oldSelectedItem?.OnUnselected();
+		SelectedItem?.OnSelected();
+
 		if (SelectedItem != null)
 		{
 			_icon.Texture = SelectedItem.Mission.Icon;
@@ -283,18 +308,31 @@ public class MissionContainer : UIContainerElement
 			_descriptionContainer.ClearAllElements();
 			_descriptionContainer.AddElement(des);
 
-			if (item.Mission.PoolType == PoolType.CanTaken)
+			if (item.Mission.PoolType == PoolType.Available)
 			{
 				_changeText.Text = "接取";
 			}
-			else if (item.Mission.PoolType == PoolType.BeenTaken)
+			else if (item.Mission.PoolType == PoolType.Accepted)
 			{
 				_changeText.Text = "放弃";
 			}
+			else if (item.Mission.PoolType == PoolType.Completed)
+			{
+				_changeText.Text = "[TextDrawer,Text='完成',Color='126,126,126']";
+			}
+			else if (item.Mission.PoolType == PoolType.Overdue)
+			{
+				_changeText.Text = "[TextDrawer,Text='过期',Color='126,126,126']";
+			}
+			else if (item.Mission.PoolType == PoolType.Failed)
+			{
+				_changeText.Text = "[TextDrawer,Text='失败',Color='126,126,126']";
+			}
 			else
 			{
-				_changeText.Text = "[TextDrawer,Text='接取',Color='126,126,126']";
+				_changeText.Text = "[TextDrawer,Text='未知',Color='126,126,126']";
 			}
+
 			_changeText.Info.SetToCenter();
 
 			_yes.Info.IsVisible = _no.Info.IsVisible = false;
@@ -303,7 +341,7 @@ public class MissionContainer : UIContainerElement
 		{
 			_icon.Texture = null;
 			_textScrollbal.WheelValue = 0f;
-			_changeText.Text = "[TextDrawer,Text='接取',Color='126,126,126']";
+			_changeText.Text = "[TextDrawer,Text='',Color='126,126,126']";
 			_changeText.Info.SetToCenter();
 			_descriptionContainer.ClearAllElements();
 			_yes.Info.IsVisible = _no.Info.IsVisible = false;

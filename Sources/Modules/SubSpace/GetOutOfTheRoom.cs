@@ -1,13 +1,15 @@
 using Everglow.Commons.UI.UIContainers.Sidebar.SidebarElements;
-namespace Everglow.SubSpace;
-public class GetOutOfTheRoom : SidebarElementBase
-{
-	public override Texture2D Icon => ModAsset.GetOutOfTheRoom.Value;
-	public override string Tooltip => "离开房间";
+using SubworldLibrary;
 
-	public override void Invoke()
-	{
-		base.Invoke();
-		RoomManager.ExitALevelOfRoom();
-	}
+namespace Everglow.SubSpace;
+
+public class GetOutOfTheRoom : ISidebarElementBase
+{
+	public Texture2D Icon => ModAsset.GetOutOfTheRoom.Value;
+
+	public string Tooltip => "离开房间";
+
+	public void Invoke() => RoomManager.ExitALevelOfRoom();
+
+	public bool IsVisible() => SubworldSystem.IsActive<RoomWorld>();
 }

@@ -2,14 +2,16 @@ using Everglow.Commons.UI.UIContainers.Sidebar.SidebarElements;
 
 namespace Everglow.Commons.UI.UIContainers.Mission.SidebarElements;
 
-internal class OpenMission : SidebarElementBase
+internal class OpenMission : ISidebarElementBase
 {
-	public override Texture2D Icon => ModAsset.SlashAllTheItem.Value;
-	public override string Tooltip => "打开任务面板";
+	public Texture2D Icon => ModAsset.OpenMission.Value;
 
-	public override void Invoke()
+	public string Tooltip => "打开任务面板";
+
+	public bool Visible => true;
+
+	public void Invoke()
 	{
-		base.Invoke();
 		if (MissionContainer.Instance.IsVisible)
 			MissionContainer.Instance.Close();
 		else

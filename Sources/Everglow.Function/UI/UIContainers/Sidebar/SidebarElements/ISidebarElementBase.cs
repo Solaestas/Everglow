@@ -1,21 +1,21 @@
 namespace Everglow.Commons.UI.UIContainers.Sidebar.SidebarElements;
 
-public abstract class SidebarElementBase
+public interface ISidebarElementBase
 {
 	/// <summary>
 	/// 快捷栏元素的标识
 	/// </summary>
-	public abstract Texture2D Icon { get; }
+	public Texture2D Icon { get; }
 
 	/// <summary>
 	/// 快捷栏元素的说明
 	/// </summary>
-	public virtual string Tooltip { get => string.Empty; }
+	public string Tooltip { get => string.Empty; }
 
 	/// <summary>
 	/// 快捷栏元素被触发的事件
 	/// </summary>
-	public virtual void Invoke()
-	{
-	}
+	public void Invoke();
+
+	public bool IsVisible() => true;
 }

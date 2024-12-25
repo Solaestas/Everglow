@@ -81,8 +81,10 @@ public class GainItemMission : MissionBase
 
 	public override void UpdateProgress(params object[] objs)
 	{
-		if (PoolType != MissionManager.PoolType.BeenTaken)
+		if (PoolType != MissionManager.PoolType.Accepted)
+		{
 			return;
+		}
 
 		var param = objs switch
 		{
@@ -91,7 +93,9 @@ public class GainItemMission : MissionBase
 		};
 
 		if (param == null)
+		{
 			return;
+		}
 
 		int demandSum = 0, backpackSum = 0;
 		Dictionary<int, int> demandItemStack = [];
@@ -121,8 +125,12 @@ public class GainItemMission : MissionBase
 			}
 		}
 		if (demandSum == 0)
+		{
 			_progress = 0f;
+		}
 		else
+		{
 			_progress = Math.Min(1f, Math.Max(0f, backpackSum / (float)demandSum));
+		}
 	}
 }
