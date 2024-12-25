@@ -12,7 +12,7 @@ public class FurnaceCopperPipe_Large_H : ModTile
 		Main.tileSolid[Type] = false;
 		Main.tileMergeDirt[Type] = false;
 		Main.tileNoAttach[Type] = true;
-		Main.tileBlendAll[Type] = true;
+		Main.tileBlendAll[Type] = false;
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
 		TileObjectData.newTile.Height = 2;
@@ -36,12 +36,11 @@ public class FurnaceCopperPipe_Large_H : ModTile
 		var tile = Main.tile[i, j];
 		Point topLeft = new Point(i - (tile.TileFrameX % 54) / 18, j - tile.TileFrameY / 18);
 		int style = 3;
-
 		var leftTile = Main.tile[topLeft + new Point(-1, 0)];
 		var rightTile = Main.tile[topLeft + new Point(3, 0)];
 		if (ConnectLeft(leftTile))
 		{
-			if (ConnectLeft(rightTile))
+			if (ConnectRight(rightTile))
 			{
 				style = 1;
 			}
@@ -59,12 +58,12 @@ public class FurnaceCopperPipe_Large_H : ModTile
 				SetFrame(1, topLeft - new Point(3, 0));
 			}
 		}
-		else if (ConnectLeft(rightTile))
+		else if (ConnectRight(rightTile))
 		{
 			style = 0;
 		}
 
-		if (ConnectLeft(rightTile))
+		if (ConnectRight(rightTile))
 		{
 			int rightStyle = rightTile.TileFrameX / 54;
 			if (rightStyle == 3)
@@ -77,31 +76,42 @@ public class FurnaceCopperPipe_Large_H : ModTile
 			}
 		}
 		SetFrame(style, topLeft);
+		resetFrame = false;
 		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
 	}
 
 	public bool ConnectLeft(Tile tile)
 	{
+		if(tile.TileType == ModContent.TileType<FurnaceCopperPipe_Large_Corner>())
+		{
+			return (tile.TileFrameX == 36 && tile.TileFrameY == 0) || (tile.TileFrameX == 144 && tile.TileFrameY == 18);
+		}
 		return tile.TileType == Type && tile.TileFrameX % 54 == 36 && tile.TileFrameY == 0;
 	}
 
 	public bool ConnectRight(Tile tile)
 	{
+		if (tile.TileType == ModContent.TileType<FurnaceCopperPipe_Large_Corner>())
+		{
+			return (tile.TileFrameX == 54 && tile.TileFrameY == 0) || (tile.TileFrameX == 162 && tile.TileFrameY == 18);
+		}
 		return tile.TileType == Type && tile.TileFrameX % 54 == 0 && tile.TileFrameY == 0;
 	}
 
 	public void SetFrame(int style, Point topLeft)
 	{
-		for (int x = 0; x < 3; x++)
+		var tile = Main.tile[topLeft];
+		if (tile.TileType == Type)
 		{
-			for (int y = 0; y < 2; y++)
+			for (int x = 0; x < 3; x++)
 			{
-				var framedTile = Main.tile[topLeft + new Point(x, y)];
-				framedTile.TileFrameX = (short)(style * 54 + x * 18);
-				framedTile.TileFrameY = (short)(y * 18);
+				for (int y = 0; y < 2; y++)
+				{
+					var framedTile = Main.tile[topLeft + new Point(x, y)];
+					framedTile.TileFrameX = (short)(style * 54 + x * 18);
+					framedTile.TileFrameY = (short)(y * 18);
+				}
 			}
 		}
 	}
-
-	public override void PlaceInWorld(int i, int j, Item item) => base.PlaceInWorld(i, j, item);
 }

@@ -1,18 +1,15 @@
-using Terraria.DataStructures;
-using Terraria.Enums;
-using Terraria.ObjectData;
-
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
 public class FurnaceCopperPipe : ModTile
 {
 	public override void SetStaticDefaults()
 	{
-		Main.tileSolid[Type] = true;
-		Main.tileSolidTop[Type] = true;
+		Main.tileSolid[Type] = false;
+		Main.tilePile[Type] = true;
+		;
 		Main.tileMergeDirt[Type] = false;
 		Main.tileNoAttach[Type] = true;
-		Main.tileBlendAll[Type] = true;
+		Main.tileBlendAll[Type] = false;
 		Main.tileBlockLight[Type] = false;
 		DustType = DustID.Copper;
 		HitSound = default;
