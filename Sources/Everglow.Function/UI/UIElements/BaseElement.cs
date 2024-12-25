@@ -453,15 +453,26 @@ namespace Everglow.Commons.UI.UIElements
 		{
 			get
 			{
-				Vector2 location = Vector2.Transform(Info.Location, Main.UIScaleMatrix),
-					bottomRight = Vector2.Transform(Info.Location + Info.Size, Main.UIScaleMatrix);
+				return new Rectangle(
+					(int)Info.Location.X,
+					(int)Info.Location.Y,
+					(int)Info.Size.X,
+					(int)Info.Size.Y);
+			}
+		}
 
-				Rectangle rectangle = new Rectangle();
-				rectangle.X = (int)location.X;
-				rectangle.Y = (int)location.Y;
-				rectangle.Width = (int)Math.Max(bottomRight.X - location.X, 0);
-				rectangle.Height = (int)Math.Max(bottomRight.Y - location.Y, 0);
-				return rectangle;
+		public virtual Rectangle TransformedHiddenOverflowRectangle
+		{
+			get
+			{
+				var location = Vector2.Transform(Info.Location, Main.UIScaleMatrix);
+				var bottomRight = Vector2.Transform(Info.Location + Info.Size, Main.UIScaleMatrix);
+
+				return new Rectangle(
+					(int)location.X,
+					(int)location.Y,
+					(int)Math.Max(bottomRight.X - location.X, 0),
+					(int)Math.Max(bottomRight.Y - location.Y, 0));
 			}
 		}
 
@@ -551,7 +562,7 @@ namespace Everglow.Commons.UI.UIElements
 				//修改光栅化状态
 				sb.GraphicsDevice.RasterizerState = overflowHiddenRasterizerState;
 				//修改GD剪切矩形为原剪切矩形与现剪切矩形的交集
-				gd.ScissorRectangle = Rectangle.Intersect(gd.ScissorRectangle, HiddenOverflowRectangle);
+				gd.ScissorRectangle = Rectangle.Intersect(gd.ScissorRectangle, TransformedHiddenOverflowRectangle);
 				//启用画笔，传参：延迟绘制（纹理合批优化），alpha颜色混合模式，各向异性采样，不启用深度模式，UI大小矩阵
 				sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
 					DepthStencilState.None, overflowHiddenRasterizerState, null, Main.UIScaleMatrix);

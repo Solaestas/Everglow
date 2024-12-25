@@ -1,9 +1,13 @@
 using Everglow.Commons.MissionSystem;
 using Everglow.Commons.UI.UIElements;
+using Everglow.Commons.Utilities;
 using Terraria.GameContent;
 
 namespace Everglow.Commons.UI.UIContainers.Mission.UIElements;
 
+/// <summary>
+/// 任务列表<see cref="MissionContainer"/>的任务项
+/// </summary>
 public class UIMissionItem : UIBlock
 {
 	private UIBlock _block;
@@ -11,12 +15,22 @@ public class UIMissionItem : UIBlock
 
 	public UIMissionItem(MissionBase missionBase)
 	{
+		// 初始化属性
 		Mission = missionBase;
+		PanelColor = MissionContainer.Instance.GetThemeColor();
+
+		// 初始化UI信息
 		Info.Width.SetValue(-24f, 1f);
 		Info.Height.SetValue(42f, 0f);
 		Info.SetToCenter();
-		PanelColor = MissionContainer.Instance.GetThemeColor();
+		Info.IsSensitive = true;
 
+		// 鼠标悬停时改变颜色
+		Events.OnMouseHover += OnMouseOver;
+		Events.OnMouseOver += OnMouseOver;
+		Events.OnMouseOut += OnMouseLeave;
+
+		// 任务项容器
 		_block = new UIBlock();
 		_block.Info.Width.SetValue(-24f - 8f, 1f);
 		_block.Info.Height.SetValue(32f, 0f);
@@ -26,6 +40,7 @@ public class UIMissionItem : UIBlock
 		_block.PanelColor = MissionContainer.Instance.GetThemeColor(MissionContainer.ColorType.Dark, MissionContainer.ColorStyle.Dark);
 		Register(_block);
 
+		// 任务进度
 		UIProgress progress = new UIProgress();
 		progress.Info.SetToCenter();
 		progress.Info.Left.SetValue(PositionStyle.Full - progress.Info.Width - (4f, 0f));
@@ -35,6 +50,7 @@ public class UIMissionItem : UIBlock
 		};
 		_block.Register(progress);
 
+		// 任务名称
 		var font = FontManager.FusionPixel12.GetFont(_block.Info.Height.Pixel - _block.Info.TopMargin.Pixel - _block.Info.BottomMargin.Pixel - 2f);
 		UITextPlus name = new UITextPlus(Mission.DisplayName);
 		name.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
@@ -46,15 +62,6 @@ public class UIMissionItem : UIBlock
 			name.Calculation();
 		};
 		_block.Register(name);
-
-		Info.IsSensitive = true;
-
-		// 鼠标悬停时改变颜色
-		Events.OnMouseHover += OnMouseOver;
-		Events.OnMouseOver += OnMouseOver;
-
-		// 鼠标离开时恢复颜色
-		Events.OnMouseOut += OnMouseLeave;
 	}
 
 	/// <summary>
@@ -104,11 +111,13 @@ public class UIMissionItem : UIBlock
 	public override void Update(GameTime gt)
 	{
 		base.Update(gt);
+		Calculation();
 	}
 
 	protected override void DrawChildren(SpriteBatch sb)
 	{
 		base.DrawChildren(sb);
+
 		if (Mission.TimeMax < 0)
 		{
 			return;
@@ -121,6 +130,7 @@ public class UIMissionItem : UIBlock
 			ScissorTestEnable = true,
 		};
 
+		var sbS = GraphicsUtils.GetState(sb).Value;
 		sb.End();
 		Effect effect = ModAsset.MissionProgressBar.Value;
 		sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
@@ -144,8 +154,7 @@ public class UIMissionItem : UIBlock
 				16, 16), Color.White);
 
 		sb.End();
-		sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
-			DepthStencilState.None, overflowHiddenRasterizerState, null, Main.UIScaleMatrix);
+		sb.Begin(sbS);
 	}
 
 	private class UIProgress : UIImage
