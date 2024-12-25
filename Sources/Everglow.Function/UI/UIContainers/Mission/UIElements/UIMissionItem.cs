@@ -111,7 +111,6 @@ public class UIMissionItem : UIBlock
 	public override void Update(GameTime gt)
 	{
 		base.Update(gt);
-		Calculation();
 	}
 
 	protected override void DrawChildren(SpriteBatch sb)
