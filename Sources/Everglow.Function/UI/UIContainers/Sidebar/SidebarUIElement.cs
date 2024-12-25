@@ -5,27 +5,50 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 {
 	public delegate void HandleTigger(SidebarUIElement quickElement);
 
-	public abstract class SidebarUIElement : UIImage
+	public abstract class SidebarUIElement : BaseElement
 	{
-		private int waitTime = 0;
-		public int WaitTime = 30;
-		private Vector2 waitToMouse = Vector2.Zero;
-		private bool mouseDown = false;
+		private UIImage _icon;
+		private int _waitTime = 0;
+		private Vector2 _waitToMouse = Vector2.Zero;
+		private bool _mouseDown = false;
+
 		public Vector2 Center = Vector2.Zero;
-
-		public bool IsMoveing => waitTime >= WaitTime;
-
-		public string Tooltip => BaseInfo.Tooltip;
 
 		public event HandleTigger OnTigger;
 
+		public int WaitTime { get; set; } = 30;
+
 		public ISidebarElementBase BaseInfo { get; private set; }
 
+		public bool IsMoveing => _waitTime >= WaitTime;
+
+		public string Tooltip => BaseInfo.Tooltip;
+
 		public SidebarUIElement(Texture2D texture, Color color)
-			: base(texture, color)
 		{
-			Style = CalculationStyle.LockAspectRatioMainWidth;
-			Info.Width.SetValue(0f, 1f);
+			float size = 0.64f * SidebarContainer.SidebarContainerWidth;
+			Info.Width.SetValue(size, 0);
+			Info.Height.SetValue(size, 0);
+			Info.IsSensitive = true;
+
+			_icon = new(texture, color);
+			_icon.Events.OnUpdate += (e, gt) =>
+			{
+				e.Info.SetToCenter();
+			};
+			_icon.Info.IsSensitive = true;
+			if (texture.Width > texture.Height)
+			{
+				_icon.Style = UIImage.CalculationStyle.LockAspectRatioMainWidth;
+				_icon.Info.Width.SetValue(0f, 1f);
+			}
+			else
+			{
+				_icon.Style = UIImage.CalculationStyle.LockedAspectRatioMainHeight;
+				_icon.Info.Height.SetValue(0f, 1f);
+			}
+			_icon.Info.SetToCenter();
+			Register(_icon);
 		}
 
 		public override void LoadEvents()
@@ -40,7 +63,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 
 		private void Events_OnLeftUp(BaseElement baseElement)
 		{
-			mouseDown = false;
+			_mouseDown = false;
 			if (!IsMoveing)
 			{
 				OnTigger?.Invoke(this);
@@ -49,33 +72,27 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 
 		private void Events_OnLeftDown(BaseElement baseElement)
 		{
-			mouseDown = true;
+			_mouseDown = true;
 		}
 
 		private void Events_OnMouseHover(BaseElement baseElement)
 		{
-			if (baseElement is SidebarUIElement element)
-			{
-				element._color = Color.White;
-			}
+			_icon.Color = Color.White;
 		}
 
 		private void Events_OnMouseOut(BaseElement baseElement)
 		{
-			if (baseElement is SidebarUIElement element)
-			{
-				element._color = Color.Gray;
-			}
+			_icon.Color = Color.Gray;
 		}
 
 		public override void Update(GameTime gt)
 		{
 			base.Update(gt);
 
-			if (mouseDown)
-				waitTime++;
+			if (_mouseDown)
+				_waitTime++;
 			else
-				waitTime = 0;
+				_waitTime = 0;
 
 			if (IsMoveing)
 			{
@@ -104,11 +121,11 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 
 		public bool MoveTo(Vector2 center)
 		{
-			if (waitToMouse != center)
+			if (_waitToMouse != center)
 			{
-				waitToMouse += (center - waitToMouse) / 4f;
-				Info.Left.SetValue(waitToMouse.X - (ParentElement == null ? 0 : ParentElement.Info.Location.X) - Info.Size.X / 2f, 0f);
-				Info.Top.SetValue(waitToMouse.Y - (ParentElement == null ? 0 : ParentElement.Info.Location.Y) - Info.Size.Y / 2f, 0f);
+				_waitToMouse += (center - _waitToMouse) / 4f;
+				Info.Left.SetValue(_waitToMouse.X - (ParentElement == null ? 0 : ParentElement.Info.Location.X) - Info.Size.X / 2f, 0f);
+				Info.Top.SetValue(_waitToMouse.Y - (ParentElement == null ? 0 : ParentElement.Info.Location.Y) - Info.Size.Y / 2f, 0f);
 				Calculation();
 				return false;
 			}

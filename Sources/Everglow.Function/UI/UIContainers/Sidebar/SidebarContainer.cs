@@ -7,6 +7,8 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 {
 	public class SidebarContainer : UIContainerElement
 	{
+		public const float SidebarContainerWidth = 50f;
+
 		private UIPanel mainPanel;
 		private bool open = true;
 		private string mouseText = string.Empty;
@@ -21,7 +23,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 			base.OnInitialization();
 
 			mainPanel = new UIPanel();
-			mainPanel.Info.Width.SetValue(50f, 0f);
+			mainPanel.Info.Width.SetValue(SidebarContainerWidth, 0f);
 			mainPanel.Events.OnCalculation += element =>
 			{
 				element.Info.Top.SetValue(-element.Info.Size.Y / 2f, 0.5f);
@@ -50,9 +52,9 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 			image.Events.OnUpdate += (element, gt) =>
 			{
 				if (mainPanel.Info.TotalLocation.X - mainPanel.Info.TotalSize.X < 4f)
-					((UIImage)element).SpriteEffects = SpriteEffects.FlipHorizontally;
-				if (mainPanel.Info.TotalLocation.X < 2f && mainPanel.Info.TotalLocation.X > -2f)
 					((UIImage)element).SpriteEffects = SpriteEffects.None;
+				if (mainPanel.Info.TotalLocation.X < 2f && mainPanel.Info.TotalLocation.X > -2f)
+					((UIImage)element).SpriteEffects = SpriteEffects.FlipHorizontally;
 			};
 			image.Events.OnLeftClick += element =>
 			{
