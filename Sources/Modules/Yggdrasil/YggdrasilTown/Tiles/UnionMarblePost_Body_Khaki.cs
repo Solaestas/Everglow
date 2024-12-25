@@ -16,7 +16,6 @@ public class UnionMarblePost_Body_Khaki : ModTile
 		Main.tileWaterDeath[Type] = false;
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
-		TileObjectData.newTile.Origin = new(0, 0);
 		TileObjectData.newTile.Height = 1;
 		TileObjectData.newTile.Width = 3;
 
