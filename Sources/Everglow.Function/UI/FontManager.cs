@@ -1,34 +1,57 @@
+using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 using FontStashSharp;
 
 namespace Everglow.Commons.UI;
 
 public class FontManager : ILoadable
 {
+	private static readonly ReadOnlyCollection<string> AcceptableFontExtensionList =
+		new ReadOnlyCollectionBuilder<string>() { ".ttf" }
+		.ToReadOnlyCollection();
+
 	public static FontManager Instance { get; private set; }
 
-	public static FontSystem FusionPixel12;
-	public Dictionary<string, FontSystem> Fonts = [];
+	public static FontSystem FusionPixel12 => Instance.Fonts[nameof(FusionPixel12)];
+
+	private Dictionary<string, FontSystem> _fonts = [];
+
+	public IReadOnlyDictionary<string, FontSystem> Fonts => _fonts;
 
 	public FontManager()
 	{
-		Instance = this;
+		Instance = Instance == null
+			? this
+			: throw new InvalidOperationException("Mutiple font manager created, please check the loading of font manager.");
 	}
 
 	public void Load(Mod mod)
 	{
-		mod.GetFileNames().ForEach(n =>
+		mod.GetFileNames().ForEach(fileName =>
 		{
-			if (Path.GetExtension(n) == ".ttf")
+			if (AcceptableFontExtensionList.Contains(Path.GetExtension(fileName)))
 			{
-				var fs = new FontSystem();
-				fs.AddFont(mod.GetFileBytes(n));
-				Fonts.Add(Path.GetFileNameWithoutExtension(n), fs);
+				var settings = new FontSystemSettings()
+				{
+					FontResolutionFactor = 2f,
+					KernelWidth = 2,
+					KernelHeight = 2,
+				};
+
+				var fs = new FontSystem(settings);
+				fs.AddFont(mod.GetFileBytes(fileName));
+				_fonts.Add(Path.GetFileNameWithoutExtension(fileName), fs);
 			}
 		});
-		FusionPixel12 = Fonts["FusionPixel12"];
 	}
 
 	public void Unload()
 	{
+		foreach (var (_, fs) in _fonts)
+		{
+			fs.Dispose();
+		}
+		_fonts.Clear();
+		Instance = null;
 	}
 }
