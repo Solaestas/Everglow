@@ -1,32 +1,51 @@
 using Everglow.Commons.UI.StringDrawerSystem;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Everglow.Commons.UI.UIElements
 {
 	public class UITextPlus : BaseElement
 	{
-		public StringDrawer StringDrawer;
-		private string text;
+		public StringDrawer StringDrawer { get; init; }
 
+		private string _text;
+
+		/// <summary>
+		/// 显示的文本内容
+		/// <para/>注: 被赋值时自动调用<see cref="StringDrawer"/>的<see cref="StringDrawer.Init(string)"/>方法
+		/// </summary>
 		public string Text
 		{
-			get { return text; }
+			get
+			{
+				return _text;
+			}
+
 			set
 			{
-				text = value;
-				StringDrawer.Init(text);
+				_text = value;
+				StringDrawer.Init(_text);
 			}
 		}
 
 		/// <summary>
 		/// 绘制大小，不改变部件碰撞箱，不改变绘制中心
 		/// </summary>
-		public float Scale;
+		[Obsolete("The Scale property has been deprecated, it will affect nothing", true)]
+		public float Scale { get; private set; }
 
-		public bool CalculateSize = true;
-		public PositionStyle? CenterX;
-		public PositionStyle? CenterY;
+		/// <summary>
+		/// 是否自动修改Size为<see cref="StringDrawer"/>的Size
+		/// </summary>
+		public bool CalculateSize { get; private set; } = true;
+
+		/// <summary>
+		/// 自定义中心位置的X坐标
+		/// </summary>
+		public PositionStyle? CenterX { get; private set; }
+
+		/// <summary>
+		/// 自定义中心位置的Y坐标
+		/// </summary>
+		public PositionStyle? CenterY { get; private set; }
 
 		public UITextPlus(string t)
 		{
