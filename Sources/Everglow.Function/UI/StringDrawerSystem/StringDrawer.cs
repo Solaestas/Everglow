@@ -111,23 +111,30 @@ namespace Everglow.Commons.UI.StringDrawerSystem
 
 		public void Init(string initText)
 		{
+			if (string.IsNullOrEmpty(initText))
+			{
+				return;
+			}
+
 			DrawerItems.Clear();
 			OnAddDrawerItem = null;
-			if (string.IsNullOrEmpty(initText))
-				return;
+
 			int line = 0;
 			Array.ForEach(initText.Split('\n'), text =>
 			{
-				//tIndex:text index,无需匹配的普通内容
-				//teIndex:text end index,无需匹配的普通内容的结尾
-				//dIndex:drawer index,[]内的内容
-				//sIndex:string index,''内的内容
-				//nIndex:name index,特殊处理项的匹配名
-				//pIndex:parameter index,参数名
+				// tIndex: text index, 无需匹配的普通内容
+				// teIndex: text end index, 无需匹配的普通内容的结尾
+				// dIndex: drawer index, []内的内容
+				// sIndex: string index, ''内的内容
+				// nIndex: name index, 特殊处理项的匹配名
+				// pIndex: parameter index, 参数名
 				int tIndex = 0, teIndex = 0, dIndex = -1, sIndex = -1, nIndex = -1, pIndex = -1;
+
 				bool escActivable = false;
 				StringParameters stringParameters = null;
-				string parameterName = string.Empty, parameterValue = string.Empty, drawerName = string.Empty;
+				string parameterName = string.Empty,
+					parameterValue = string.Empty,
+					drawerName = string.Empty;
 				for (int i = 0; i < text.Length;)
 				{
 					if (!escActivable && text[i] == '/')

@@ -1,0 +1,45 @@
+name: Run build and unit test
+run-name: ${{ github.actor }} is pushing new commit to ${{ github.ref_name}}
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - master
+  push:
+
+jobs:
+  build:
+    name: ${{ matrix.platform.name }} (${{ matrix.configuration }})
+    runs-on: ${{ matrix.platform.os }}
+    timeout-minutes: 45
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+        platform:
+          - { name: win-x64,     os: windows-latest, zip_os_name: win_x64     }
+          - { name: linux-x64,   os: ubuntu-latest,  zip_os_name: linux_x64   }
+          - { name: linux-arm64, os: ubuntu-latest,  zip_os_name: linux_arm64 }
+      
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0'
+      
+      - name: Get git short hash
+        id: git_short_hash
+        run: echo "result=$(git rev-parse --short "${{ github.sha }}")" >> $GITHUB_OUTPUT
+        shell: bash    
+      
+      - name: Build project
+        run: dotnet build -c "${{ matrix.configuration }}"
+      
+      - name: Test
+        uses: TSRBerry/unstable-commands@v1
+        with:
+          commands: dotnet test --no-build -c "${{ matrix.configuration }}"
+          timeout-minutes: 10
+          retry-codes: 139
