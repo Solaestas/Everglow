@@ -73,7 +73,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 				sidebarElement = (SidebarElementBase)Activator.CreateInstance(c);
 				quickElement = new TriggeredTypeSidebarUIElement(sidebarElement.Icon, Color.White);
 				quickElement.Tooltip = sidebarElement.Tooltip;
-				quickElement.OnTigger += element =>
+				quickElement.OnTrigger += element =>
 				{
 					sidebarElement.Invoke();
 				};

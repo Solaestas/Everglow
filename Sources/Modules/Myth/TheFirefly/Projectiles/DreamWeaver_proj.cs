@@ -1,6 +1,5 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Myth.TheFirefly.Dusts;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -26,21 +25,29 @@ public class DreamWeaver_proj : ModProjectile, IWarpProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
 	}
+
 	internal int breakTime = 200;
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		breakTime = Main.rand.Next(200, 232);
 	}
+
 	public override void AI()
 	{
 		if (Projectile.ai[0] == 3)
 		{
 			if (Projectile.velocity.Length() > 5f)
+			{
 				Projectile.velocity *= 0.95f;
+			}
 		}
 		float kTime = 1f;
 		if (Projectile.timeLeft < 90f)
+		{
 			kTime = Projectile.timeLeft / 90f;
+		}
+
 		Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0.32f * kTime, 0.23f * kTime, 0);
 		if (Projectile.timeLeft < breakTime && Projectile.ai[0] != 3)
 		{
@@ -113,12 +120,17 @@ public class DreamWeaver_proj : ModProjectile, IWarpProjectile
 			else
 			{
 				if (Projectile.extraUpdates == 2)
+				{
 					Projectile.extraUpdates = 1;
+				}
 			}
 		}
 		if (Projectile.timeLeft == 210)
+		{
 			Projectile.friendly = true;
+		}
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
@@ -139,23 +151,27 @@ public class DreamWeaver_proj : ModProjectile, IWarpProjectile
 			}
 		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		float k1 = 60f;
 		float k0 = (240 - Projectile.timeLeft) / k1;
 
 		if (Projectile.timeLeft <= 240 - k1)
+		{
 			k0 = 1;
+		}
 
 		var c0 = new Color(0, k0 * k0 * 0.4f + 0.2f, k0 * 0.8f + 0.2f, 0);
 		var bars = new List<Vertex2D>();
-
 
 		int TrueL = 0;
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
 
 			TrueL++;
 		}
@@ -163,13 +179,24 @@ public class DreamWeaver_proj : ModProjectile, IWarpProjectile
 		{
 			float width = 36;
 			if (Projectile.timeLeft <= 40)
+			{
 				width = Projectile.timeLeft * 0.9f;
+			}
+
 			if (i < 10)
+			{
 				width *= i / 10f;
+			}
+
 			if (Projectile.ai[0] == 3)
+			{
 				width *= 0.5f;
+			}
+
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
 
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -183,10 +210,13 @@ public class DreamWeaver_proj : ModProjectile, IWarpProjectile
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D t = ModAsset.GoldLine.Value;
+		Texture2D t = ModAsset.GoldLine2.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (bars.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 		return false;
@@ -200,38 +230,54 @@ public class DreamWeaver_proj : ModProjectile, IWarpProjectile
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
+
 			TrueL++;
 		}
 		var bars = new List<Vertex2D>();
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
+
 			float MulColor = 1f;
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 			if (i == 1)
+			{
 				MulColor = 0f;
+			}
+
 			if (i >= 2)
 			{
 				var normalDirII = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
 				normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 				if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
+				{
 					MulColor = 0f;
+				}
 			}
 			if (i < Projectile.oldPos.Length - 1)
 			{
 				var normalDirII = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
 				normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 				if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
+				{
 					MulColor = 0f;
+				}
 			}
 
 			float k0 = (float)Math.Atan2(normalDir.Y, normalDir.X);
 			k0 += 3.14f + 1.57f;
 			if (k0 > 6.28f)
+			{
 				k0 -= 6.28f;
+			}
+
 			var c0 = new Color(k0, 0.4f, 0, 0);
 
 			var factor = i / (float)TrueL;
