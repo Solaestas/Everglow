@@ -65,6 +65,12 @@ Tiles: {
 	TwilightEucalyptusSofa.MapEntry: Twilight Eucalyptus Sofa
 	TwilightEucalyptusSofa_Type2.MapEntry: Twilight Eucalyptus Sofa_ Type2
 	BoneAndPlatform_tile.MapEntry: Bone And Platform_tile
+
+	StoneBridge_Chest: {
+		MapEntry0: Mods.Everglow.Tiles.StoneBridge_Chest.MapEntry0
+		MapEntry1: Mods.Everglow.Tiles.StoneBridge_Chest.MapEntry1
+	}
+
 	LampWoodBathtub.MapEntry: Lamp Wood Bathtub
 	LampWoodCandelabra.MapEntry: Lamp Wood Candelabra
 	LampWoodCandle.MapEntry: Lamp Wood Candle
@@ -3378,6 +3384,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	NightfireStaff: {
+		DisplayName: Nightfire Staff
+		Tooltip: ""
+	}
+
 	RustSlingshot: {
 		DisplayName: Rust Slingshot
 		Tooltip: ""
@@ -3558,13 +3569,88 @@ Items: {
 		Tooltip: ""
 	}
 
+	FurnaceCopperGear_Large_Item: {
+		DisplayName: Furnace Copper Gear_ Large_ Item
+		Tooltip: ""
+	}
+
+	FurnaceCopperGear_Middle_Item: {
+		DisplayName: Furnace Copper Gear_ Middle_ Item
+		Tooltip: ""
+	}
+
+	FurnaceCopperPipe_Item: {
+		DisplayName: Furnace Copper Pipe_ Item
+		Tooltip: ""
+	}
+
+	FurnaceCopperPipe_Large_Corner_Item: {
+		DisplayName: Furnace Copper Pipe_ Large_ Corner_ Item
+		Tooltip: ""
+	}
+
+	FurnaceCopperPipe_Large_Item: {
+		DisplayName: Furnace Copper Pipe_ Large_ Item
+		Tooltip: ""
+	}
+
+	FurnaceEmergencyLamp_Item: {
+		DisplayName: Furnace Emergency Lamp_ Item
+		Tooltip: ""
+	}
+
+	FurnaceLavaband_Item: {
+		DisplayName: Furnace Lavaband_ Item
+		Tooltip: ""
+	}
+
+	FurnaceLavaLamp_Item: {
+		DisplayName: Furnace Lava Lamp_ Item
+		Tooltip: ""
+	}
+
 	RuinTorch: {
 		DisplayName: Ruin Torch
 		Tooltip: ""
 	}
 
+	StoneBridge_Chest_item: {
+		DisplayName: Stone Bridge_ Chest_item
+		Tooltip: ""
+	}
+
+	UnionAcanthusWallLace_Item: {
+		DisplayName: Union Acanthus Wall Lace_ Item
+		Tooltip: ""
+	}
+
 	UnionGiantChandelier_Item: {
 		DisplayName: Union Giant Chandelier_ Item
+		Tooltip: ""
+	}
+
+	UnionGiantChandelier_Style1_Item: {
+		DisplayName: Union Giant Chandelier_ Style1_ Item
+		Tooltip: ""
+	}
+
+	UnionGoldAcanthusWall_Item: {
+		DisplayName: Union Gold Acanthus Wall_ Item
+		Tooltip: ""
+	}
+
+	UnionLampPost_Style0_Item: {
+		DisplayName: Union Lamp Post_ Style0_ Item
+		Tooltip: ""
+	}
+
+	UnionLampPost_Style1_Item: {
+		DisplayName: Union Lamp Post_ Style1_ Item
+		Tooltip: ""
+	}
+
+	UnionLampPost_Style2_Item: {
+		DisplayName: Union Lamp Post_ Style2_ Item
 		Tooltip: ""
 	}
 
@@ -3595,6 +3681,26 @@ Items: {
 
 	UnionMarbleTile_Khaki_Item: {
 		DisplayName: Union Marble Tile_ Khaki_ Item
+		Tooltip: ""
+	}
+
+	UnionMarbleWall_Dark_Item: {
+		DisplayName: Union Marble Wall_ Dark_ Item
+		Tooltip: ""
+	}
+
+	UnionSideLantern_Style0_Item: {
+		DisplayName: Union Side Lantern_ Style0_ Item
+		Tooltip: ""
+	}
+
+	UnionWallLamp_Style0_Item: {
+		DisplayName: Union Wall Lamp_ Style0_ Item
+		Tooltip: ""
+	}
+
+	UnionWindow_Style0_Item: {
+		DisplayName: Union Window_ Style0_ Item
 		Tooltip: ""
 	}
 
@@ -4951,6 +5057,7 @@ Projectiles: {
 	LightStartEffect_bullet.DisplayName: Light Start Effect_bullet
 	MysteriousTablet.DisplayName: Mysterious Tablet
 	NehemothBullet.DisplayName: Nehemoth Bullet
+	NightfireStaff_Projectile.DisplayName: Nightfire Staff_ Projectile
 	RockArrow.DisplayName: Rock Arrow
 	RockElemental_Stonefragment.DisplayName: Rock Elemental_ Stonefragment
 	RockElemental_ThrowingStone.DisplayName: Rock Elemental_ Throwing Stone

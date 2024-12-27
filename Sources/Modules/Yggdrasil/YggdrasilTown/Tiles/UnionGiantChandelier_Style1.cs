@@ -60,7 +60,7 @@ public class UnionGiantChandelier_Style1 : ShapeDataTile, ITileFluentlyDrawn
 
 	public override void HitWire(int i, int j)
 	{
-		FurnitureUtils.LightHitwire(i, j, Type, 7, 5);
+		FurnitureUtils.LightHitwire(i, j, Type, 8, 7);
 	}
 
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
@@ -84,19 +84,19 @@ public class UnionGiantChandelier_Style1 : ShapeDataTile, ITileFluentlyDrawn
 					{
 						times++;
 						tile.HasTile = false;
-						bool glassDust = false;
 						Dust dust = Dust.NewDustDirect(new Vector2(x0 + x, y0 + y) * 16, 16, 16, DustType, 0, 0, 0, default, 1);
 						dust.frame = new Rectangle(0, Main.rand.Next(3) * 10, 8, 8);
-						//if (tile.TileFrameY >= 36)
-						//{
-						//	glassDust = true;
-						//}
-						//int max = glassDust ? 5 : 1;
-						//for (int a = 0; a < max; a++)
-						//{
-						//	Dust dust = Dust.NewDustDirect(new Vector2(x0 + x, y0 + y) * 16, 16, 16, DustType, 0, 0, 0, default, 1);
-						//	dust.frame = new Rectangle(glassDust ? 10 : 0, Main.rand.Next(3) * 10, 8, 8);
-						//}
+
+						// if (tile.TileFrameY >= 36)
+						// {
+						// glassDust = true;
+						// }
+						// int max = glassDust ? 5 : 1;
+						// for (int a = 0; a < max; a++)
+						// {
+						// Dust dust = Dust.NewDustDirect(new Vector2(x0 + x, y0 + y) * 16, 16, 16, DustType, 0, 0, 0, default, 1);
+						// dust.frame = new Rectangle(glassDust ? 10 : 0, Main.rand.Next(3) * 10, 8, 8);
+						// }
 					}
 				}
 			}
@@ -148,7 +148,7 @@ public class UnionGiantChandelier_Style1 : ShapeDataTile, ITileFluentlyDrawn
 		Texture2D tex = tileDrawing.GetTileDrawTexture(tile, pos.X, pos.Y);
 
 		short tileFrameX = tile.frameX;
-		short tileFrameY = tile.frameY;
+		short tileFrameY = (short)(tile.frameY + 126);
 
 		// 用于风速、推力等一系列判定的物块坐标，通常来说是挂在墙上的那一格（这边是origin格）
 		int topTileX = topLeft.X + tileData.Origin.X;
@@ -171,9 +171,9 @@ public class UnionGiantChandelier_Style1 : ShapeDataTile, ITileFluentlyDrawn
 		}
 
 		// 普通源码罢了
-		int totalPushTime = 60;
+		int totalPushTime = 240;
 		float pushForcePerFrame = 1.26f;
-		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(topTileX, topTileY, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(topTileX, topTileY, sizeX, sizeY, totalPushTime, pushForcePerFrame, 5, swapLoopDir: true);
 		windCycle += highestWindGridPushComplex;
 
 		// 适配发光涂料
@@ -205,13 +205,73 @@ public class UnionGiantChandelier_Style1 : ShapeDataTile, ITileFluentlyDrawn
 		}
 
 		float rotation = -windCycle * swayStrength * heightStrength;
-
-		// 绘制
-		//if (tile.TileFrameX == 0 && tile.TileFrameY == 36)
-		//{
-		//	Color c0 = new Color(1f, 1f, 1f, 0) * 0.3f;
-		//	spriteBatch.Draw(tex, finalDrawPos, new Rectangle(0, 90, 200, 128), c0, rotation, new Vector2(100, 14), 1f, SpriteEffects.None, 0f);
-		//}
 		spriteBatch.Draw(tex, finalDrawPos, rectangle, tileLight, rotation, finalOrigin, 1f, SpriteEffects.None, 0f);
+		if (tileFrameY - 126 == 54)
+		{
+			int style = (tileFrameX % 144) / 18;
+			var frame = new Rectangle(style * 12, 252, 12, 46);
+			if(tileFrameX >= 144)
+			{
+				frame.X += 144;
+			}
+			float windCycle2 = 0;
+			if (tileDrawing.InAPlaceWithWind(topLeft.X + style, topLeft.Y + 3, 1, 2))
+			{
+				windCycle2 = tileDrawing.GetWindCycle(topLeft.X + style, topLeft.Y + 3, tileDrawing._sunflowerWindCounter);
+			}
+			int totalPushTime2 = 60;
+			float pushForcePerFrame2 = 2f;
+			float highestWindGridPushComplex2 = tileDrawing.GetHighestWindGridPushComplex(topTileX, topTileY, sizeX, sizeY, totalPushTime2, pushForcePerFrame2, 3, swapLoopDir: true);
+			windCycle2 += highestWindGridPushComplex2;
+			float rotation2 = windCycle2 * 0.1f;
+			Vector2 anchorPos = finalDrawPos + new Vector2(8, 0);
+			if (tileFrameX % 144 == 0)
+			{
+				anchorPos += new Vector2(-28, 66).RotatedBy(rotation);
+				spriteBatch.Draw(tex, anchorPos, frame, tileLight, rotation2, new Vector2(5, 0), 1f, SpriteEffects.None, 0f);
+			}
+			// 18 and 36 inverse frame because of perspective relation.
+			if (tileFrameX % 144 == 36)
+			{
+				anchorPos += new Vector2(-16, 66).RotatedBy(rotation);
+				frame = new Rectangle((style - 1) * 12, 252, 12, 46);
+				if (tileFrameX >= 144)
+				{
+					frame.X += 144;
+				}
+				spriteBatch.Draw(tex, anchorPos, frame, tileLight, rotation2, new Vector2(5, 0), 1f, SpriteEffects.None, 0f);
+			}
+			if (tileFrameX % 144 == 18)
+			{
+				anchorPos += new Vector2(-10, 66).RotatedBy(rotation);
+				frame = new Rectangle((style + 1) * 12, 252, 12, 46);
+				if (tileFrameX >= 144)
+				{
+					frame.X += 144;
+				}
+				spriteBatch.Draw(tex, anchorPos, frame, tileLight, rotation2, new Vector2(5, 0), 1f, SpriteEffects.None, 0f);
+			}
+			if (tileFrameX % 144 == 72)
+			{
+				anchorPos += new Vector2(10, 66).RotatedBy(rotation);
+				spriteBatch.Draw(tex, anchorPos, frame, tileLight, rotation2, new Vector2(5, 0), 1f, SpriteEffects.None, 0f);
+			}
+			if (tileFrameX % 144 == 54)
+			{
+				anchorPos += new Vector2(0, 66).RotatedBy(rotation);
+				spriteBatch.Draw(tex, anchorPos, frame, tileLight, rotation2, new Vector2(6, 0), 1f, SpriteEffects.None, 0f);
+			}
+
+			if (tileFrameX % 144 == 90)
+			{
+				anchorPos += new Vector2(16, 66).RotatedBy(rotation);
+				spriteBatch.Draw(tex, anchorPos, frame, tileLight, rotation2, new Vector2(5, 0), 1f, SpriteEffects.None, 0f);
+			}
+			if (tileFrameX % 144 == 108)
+			{
+				anchorPos += new Vector2(28, 66).RotatedBy(rotation);
+				spriteBatch.Draw(tex, anchorPos, frame, tileLight, rotation2, new Vector2(5, 0), 1f, SpriteEffects.None, 0f);
+			}
+		}
 	}
 }

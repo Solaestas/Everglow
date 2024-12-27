@@ -169,9 +169,9 @@ public class UnionGiantChandelier : ShapeDataTile, ITileFluentlyDrawn
 		}
 
 		// 普通源码罢了
-		int totalPushTime = 60;
+		int totalPushTime = 160;
 		float pushForcePerFrame = 1.26f;
-		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(topTileX, topTileY, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(topTileX, topTileY, sizeX, sizeY, totalPushTime, pushForcePerFrame, 5, swapLoopDir: true);
 		windCycle += highestWindGridPushComplex;
 
 		// 适配发光涂料
