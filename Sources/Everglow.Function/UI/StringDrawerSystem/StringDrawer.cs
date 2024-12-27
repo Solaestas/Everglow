@@ -6,7 +6,7 @@ namespace Everglow.Commons.UI.StringDrawerSystem;
 /// <summary>
 /// 文本绘制工具
 /// </summary>
-public class StringDrawer
+public class StringDrawer : IDrawable
 {
 	/// <summary>
 	/// 绘制元素被添加事件处理器
