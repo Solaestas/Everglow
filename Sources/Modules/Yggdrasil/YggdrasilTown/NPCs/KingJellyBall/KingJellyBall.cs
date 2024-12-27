@@ -51,6 +51,14 @@ public class KingJellyBall : ModNPC
 		NPC.knockBackResist = 0.02f;
 		NPC.value = 10960;
 		NPC.boss = true;
+		if (!Main.dedServ)
+		{
+			Mod everglow = ModLoader.GetMod("Everglow");
+			if (everglow != null)
+			{
+				Music = MusicLoader.GetMusicSlot(everglow, ModAsset.KingJellyBallBGM_Path);
+			}
+		}
 	}
 
 	public override void OnSpawn(IEntitySource source)

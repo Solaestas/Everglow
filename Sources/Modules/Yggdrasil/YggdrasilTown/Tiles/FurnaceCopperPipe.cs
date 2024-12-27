@@ -6,7 +6,6 @@ public class FurnaceCopperPipe : ModTile
 	{
 		Main.tileSolid[Type] = false;
 		Main.tilePile[Type] = true;
-		;
 		Main.tileMergeDirt[Type] = false;
 		Main.tileNoAttach[Type] = true;
 		Main.tileBlendAll[Type] = false;
