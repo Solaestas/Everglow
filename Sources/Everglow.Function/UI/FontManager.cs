@@ -6,6 +6,8 @@ namespace Everglow.Commons.UI;
 
 public class FontManager : ILoadable
 {
+	private const int ResolutionFactor = 8;
+
 	private static readonly ReadOnlyCollection<string> AcceptableFontExtensionList =
 		new ReadOnlyCollectionBuilder<string>() { ".ttf" }
 		.ToReadOnlyCollection();
@@ -33,9 +35,9 @@ public class FontManager : ILoadable
 			{
 				var settings = new FontSystemSettings()
 				{
-					FontResolutionFactor = 2f,
-					KernelWidth = 2,
-					KernelHeight = 2,
+					FontResolutionFactor = ResolutionFactor,
+					KernelWidth = ResolutionFactor,
+					KernelHeight = ResolutionFactor,
 				};
 
 				var fs = new FontSystem(settings);
