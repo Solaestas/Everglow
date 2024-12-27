@@ -5,8 +5,6 @@ namespace Everglow.Myth.TheFirefly.Projectiles;
 
 internal class FlowLightMissile : ModProjectile
 {
-	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/FlowLightMissile";
-
 	public override void SetDefaults()
 	{
 		Projectile.width = 36;
@@ -29,6 +27,7 @@ internal class FlowLightMissile : ModProjectile
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
+		int holdMana = player.statManaMax - 8;
 		player.heldProj = Projectile.whoAmI;
 		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathF.PI * 0.75f);
 		energy += 2;
@@ -59,9 +58,15 @@ internal class FlowLightMissile : ModProjectile
 			}
 		}
 		if (energy > 450)
+		{
 			energy = 450;
+		}
+
 		if (player.statMana <= 0)
+		{
 			Shoot();
+		}
+
 		if (energy >= 180)
 		{
 			//player.velocity += MouseToPlayer;
@@ -69,43 +74,48 @@ internal class FlowLightMissile : ModProjectile
 			//	player.velocity *= 20f / player.velocity.Length();
 			Vector2 HitPoint = player.Center + MouseToPlayer * 105;
 			if (Collision.SolidCollision(HitPoint, 0, 0))
-				HitToAnything();
-			foreach (var target in Main.npc)
 			{
-				if (target.active)
+				HitToAnything();
+			}
+
+			foreach (var target in Main.ActiveNPCs)
+			{
+				if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy())
 				{
-					if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy())
+					if (Rectangle.Intersect(target.Hitbox, new Rectangle((int)HitPoint.X, (int)HitPoint.Y, 0, 0)) != new Rectangle(0, 0, 0, 0))
 					{
-						if (Rectangle.Intersect(target.Hitbox, new Rectangle((int)HitPoint.X, (int)HitPoint.Y, 0, 0)) != new Rectangle(0, 0, 0, 0))
-							HitToAnything();
+						HitToAnything();
 					}
 				}
 			}
 		}
+
 		if (Projectile.Center.X < player.MountedCenter.X)
+		{
 			player.direction = -1;
+		}
 		else
 		{
 			player.direction = 1;
 		}
 	}
+
 	private void HitToAnything()
 	{
-		Player player = Main.player[Projectile.owner];
-
 		Projectile.velocity = Projectile.oldVelocity;
 		Projectile.friendly = false;
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<MissileExplosion>(), (int)(Projectile.damage * (energy + 150) / 100f), Projectile.knockBack * 0.4f, Projectile.owner, energy / 15f + 5f);
 		Projectile.Kill();
 	}
+
 	private void Shoot()
 	{
-		SoundEngine.PlaySound(SoundID.Item72.WithVolumeScale(0.6f), Projectile.Center);
+		SoundEngine.PlaySound(SoundID.Item72.WithVolumeScale(0.5f), Projectile.Center);
 		Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
 		v0 = Vector2.Normalize(v0);
 		Player player = Main.player[Projectile.owner];
 		float ai1 = 1.57f;
-		if(Main.rand.NextBool(2))
+		if (Main.rand.NextBool(2))
 		{
 			ai1 *= -1;
 		}
@@ -140,8 +150,8 @@ internal class FlowLightMissile : ModProjectile
 			int num21 = Dust.NewDust(basePos + new Vector2(4, 4.5f), 0, 0, ModContent.DustType<MothSmog>(), v1.X, v1.Y, 100, default, Scale);
 			Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
 		}
-		//player.velocity -= newVelocity;
 
+		// player.velocity -= newVelocity;
 		Projectile.Kill();
 	}
 
@@ -153,15 +163,17 @@ internal class FlowLightMissile : ModProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		if (!release)
+		{
 			return;
+		}
+
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
 		Vector2 v0 = Projectile.Center - player.MountedCenter;
-
-
-
 		if (player.controlUseTile)
+		{
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
+		}
 
 		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
 		Texture2D texMainG = ModAsset.FlowLightMissileGlow.Value;
@@ -171,15 +183,18 @@ internal class FlowLightMissile : ModProjectile
 		Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 		SpriteEffects se = SpriteEffects.None;
 		if (player.direction == -1)
+		{
 			se = SpriteEffects.FlipVertically;
+		}
+
 		float rot0 = Projectile.rotation - (float)(Math.PI * 0.25) + MathF.PI * 0.36f * player.direction;
 		float rot1 = Projectile.rotation - (float)(Math.PI * 0.25);
-		//Main.spriteBatch.Draw(texMainBloom, Projectile.Center + new Vector2(56, 0).RotatedBy(rot1) - Main.screenPosition - new Vector2(0, 6), null, new Color(energy, energy, energy, 0) * MathF.Sin(0.4f * (float)Main.time), rot0, texMainBloom.Size() / 2f, 0.6f, se, 0);
+		// Main.spriteBatch.Draw(texMainBloom, Projectile.Center + new Vector2(56, 0).RotatedBy(rot1) - Main.screenPosition - new Vector2(0, 6), null, new Color(energy, energy, energy, 0) * MathF.Sin(0.4f * (float)Main.time), rot0, texMainBloom.Size() / 2f, 0.6f, se, 0);
 		DrawPowerEffect();
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - new Vector2(0, 6), null, drawColor, rot0, texMain.Size() / 2f, 1f, se, 0);
 		Main.spriteBatch.Draw(texMainG, Projectile.Center - Main.screenPosition - new Vector2(0, 6), null, new Color(energy, energy, energy, 0), rot0, texMainG.Size() / 2f, 1f, se, 0);
-
 	}
+
 	public void DrawPowerEffect()
 	{
 		float rot0 = Projectile.rotation - (float)(Math.PI * 0.25);
@@ -199,7 +214,9 @@ internal class FlowLightMissile : ModProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_cell_black.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars2.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
+		}
 
 		for (int t = 0; t <= accuracy; t++)
 		{
@@ -210,7 +227,8 @@ internal class FlowLightMissile : ModProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_hiveCyber.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-
+		}
 	}
 }
