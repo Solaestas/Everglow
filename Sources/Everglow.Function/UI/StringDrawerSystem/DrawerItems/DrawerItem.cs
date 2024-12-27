@@ -83,7 +83,7 @@ namespace Everglow.Commons.UI.StringDrawerSystem.DrawerItems
 			StringDrawer = stringDrawer;
 			if (!string.IsNullOrEmpty(LinkID) || !string.IsNullOrEmpty(BeLinkID))
 			{
-				stringDrawer.OnAddDrawerItem += di =>
+				stringDrawer.PreDrawerItemAdded += di =>
 				{
 					if (di != this)
 					{

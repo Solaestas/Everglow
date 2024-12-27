@@ -1,87 +1,83 @@
 using Everglow.Commons.UI.StringDrawerSystem;
 
-namespace Everglow.Commons.UI.UIElements
+namespace Everglow.Commons.UI.UIElements;
+
+/// <summary>
+/// Everglow UI 的富文本组件，使用自定义的富文本渲染库<see cref="FontStashSharp"/>
+/// </summary>
+public class UITextPlus : BaseElement, IUIText
 {
-	public class UITextPlus : BaseElement
+	private string text;
+
+	/// <summary>
+	/// 显示的文本内容
+	/// <para/>注: 被赋值时自动调用<see cref="StringDrawer"/>的<see cref="StringDrawer.Init(string)"/>方法
+	/// </summary>
+	public string Text
 	{
-		public StringDrawer StringDrawer { get; init; }
-
-		private string _text;
-
-		/// <summary>
-		/// 显示的文本内容
-		/// <para/>注: 被赋值时自动调用<see cref="StringDrawer"/>的<see cref="StringDrawer.Init(string)"/>方法
-		/// </summary>
-		public string Text
+		get
 		{
-			get
-			{
-				return _text;
-			}
-
-			set
-			{
-				_text = value;
-				StringDrawer.Init(_text);
-			}
+			return text;
 		}
 
-		/// <summary>
-		/// 绘制大小，不改变部件碰撞箱，不改变绘制中心
-		/// </summary>
-		[Obsolete("The Scale property has been deprecated, it will affect nothing", true)]
-		public float Scale { get; private set; }
-
-		/// <summary>
-		/// 是否自动修改Size为<see cref="StringDrawer"/>的Size
-		/// </summary>
-		public bool CalculateSize { get; private set; } = true;
-
-		/// <summary>
-		/// 自定义中心位置的X坐标
-		/// </summary>
-		public PositionStyle? CenterX { get; private set; }
-
-		/// <summary>
-		/// 自定义中心位置的Y坐标
-		/// </summary>
-		public PositionStyle? CenterY { get; private set; }
-
-		public UITextPlus(string t)
+		set
 		{
-			StringDrawer = new StringDrawer();
-			Text = t;
+			text = value;
+			StringDrawer.Init(text);
+		}
+	}
 
+	/// <summary>
+	/// 文本绘制工具
+	/// </summary>
+	public StringDrawer StringDrawer { get; init; }
+
+	[Obsolete("The Scale property has been deprecated, it will affect nothing", true)]
+	public float Scale { get; set; }
+
+	/// <summary>
+	/// 是否自动修改Size为<see cref="StringDrawer"/>的Size
+	/// </summary>
+	public bool CalculateSize { get; set; } = true;
+
+	public PositionStyle? CenterX { get; set; }
+
+	public PositionStyle? CenterY { get; set; }
+
+	public UITextPlus(string t)
+	{
+		StringDrawer = new StringDrawer();
+		Text = t;
+
+		Info.Width.Pixel = StringDrawer.Size.X;
+		Info.Height.Pixel = StringDrawer.Size.Y;
+	}
+
+	public override void Calculation()
+	{
+		if (CalculateSize)
+		{
 			Info.Width.Pixel = StringDrawer.Size.X;
 			Info.Height.Pixel = StringDrawer.Size.Y;
+			Info.Width.Percent = 0f;
+			Info.Height.Percent = 0f;
 		}
-
-		public override void Calculation()
+		if (CenterX != null && CenterY != null)
 		{
-			if (CalculateSize)
-			{
-				Info.Width.Pixel = StringDrawer.Size.X;
-				Info.Height.Pixel = StringDrawer.Size.Y;
-				Info.Width.Percent = 0f;
-				Info.Height.Percent = 0f;
-			}
-			if (CenterX != null && CenterY != null)
-			{
-				var x = CenterX.Value;
-				var y = CenterY.Value;
-				Info.Left.Percent = x.Percent;
-				Info.Top.Percent = y.Percent;
-				Info.Left.Pixel = x.Pixel - Info.Width.Pixel / 2f;
-				Info.Top.Pixel = y.Pixel - Info.Height.Pixel / 2f;
-			}
-			base.Calculation();
-			StringDrawer.SetPosition(Info.Location);
+			var x = CenterX.Value;
+			var y = CenterY.Value;
+			Info.Left.Percent = x.Percent;
+			Info.Top.Percent = y.Percent;
+			Info.Left.Pixel = x.Pixel - Info.Width.Pixel / 2f;
+			Info.Top.Pixel = y.Pixel - Info.Height.Pixel / 2f;
 		}
+		base.Calculation();
+		StringDrawer.SetPosition(Info.Location);
+	}
 
-		protected override void DrawSelf(SpriteBatch sb)
-		{
-			base.DrawSelf(sb);
-			StringDrawer.Draw(sb);
-		}
+	protected override void DrawSelf(SpriteBatch sb)
+	{
+		base.DrawSelf(sb);
+		StringDrawer.Draw(sb);
 	}
 }
