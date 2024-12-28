@@ -18,11 +18,14 @@ public class GainItemMission : MissionBase
 	public override string Description => _description;
 
 	public override float Progress => _progress;
-	public override long TimeMax => _timeMax;
-	public override Texture2D Icon => DemandItem.Count > 0 ? TextureAssets.Item[DemandItem[0].type].Value : null;
 
-	public List<Item> DemandItem = [];
-	public List<Item> RewardItem = [];
+	public override long TimeMax => _timeMax;
+
+	public override Texture2D Icon => DemandItem.Count > 0 ? TextureAssets.Item[DemandItem.First().type].Value : null;
+
+	public List<Item> DemandItem { get; init; } = [];
+
+	public List<Item> RewardItem { get; init; } = [];
 
 	public void SetInfo(string name, string displayName, string description, long timeMax = -1)
 	{
@@ -59,6 +62,15 @@ public class GainItemMission : MissionBase
 			{
 				RewardItem.Add(ItemIO.Load(iTag));
 			}
+		}
+
+		// Load not-loaded texture for required vanilla items (DemandItem, RewardItem)
+		foreach (var type in DemandItem.Select(x => x.type)
+			.Concat(RewardItem.Select(x => x.type))
+			.Distinct())
+		{
+			// The Main.LoadItem function will skip the loaded items
+			Main.instance.LoadItem(type);
 		}
 	}
 

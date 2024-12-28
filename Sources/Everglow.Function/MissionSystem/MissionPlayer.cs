@@ -16,26 +16,26 @@ public class MissionPlayer : ModPlayer
 			var mission = new GainItemMission();
 			mission.SetInfo("Test1", "获取10个土块", "测试[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
 			item = new Item();
-			item.SetDefaults(2);
+			item.SetDefaults(ItemID.DirtBlock);
 			item.stack = 10;
-			mission.DemandItem = [item];
+			mission.DemandItem.AddRange([item]);
 			MissionManager.AddMission(mission, MissionManager.PoolType.Available);
 
 			mission = new GainItemMission();
 			mission.SetInfo("Test2", "获取10个木头", "测试介绍2\n" +
 				"[TimerIconDrawer,MissionName='Test2'] 剩余时间:[TimerStringDrawer,MissionName='Test2']", 30000);
 			item = new Item();
-			item.SetDefaults(9);
+			item.SetDefaults(ItemID.Wood);
 			item.stack = 10;
-			mission.DemandItem = [item];
+			mission.DemandItem.AddRange([item]);
 			MissionManager.AddMission(mission, MissionManager.PoolType.Accepted);
 
 			mission = new GainItemMission();
 			mission.SetInfo("Test3", "获取10个铁矿", "测试介绍3");
 			item = new Item();
-			item.SetDefaults(11);
+			item.SetDefaults(ItemID.IronOre);
 			item.stack = 10;
-			mission.DemandItem = [item];
+			mission.DemandItem.AddRange([item]);
 			MissionManager.AddMission(mission, MissionManager.PoolType.Available);
 		}
 	}

@@ -172,7 +172,7 @@ public class UIMissionItem : UIBlock
 			sb.Draw(
 				texture,
 				new Rectangle(Info.TotalHitBox.X, Info.TotalHitBox.Y + sr.Y, sr.Width, sr.Height),
-				sr, _color, Rotation, Origin, SpriteEffects, 0f);
+				sr, color, Rotation, Origin, SpriteEffects, 0f);
 			base.DrawChildren(sb);
 		}
 	}
