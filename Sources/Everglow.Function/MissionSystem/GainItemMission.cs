@@ -37,6 +37,7 @@ public class GainItemMission : MissionBase
 
 	public override void OnFinish()
 	{
+		base.OnFinish();
 		RewardItem.ForEach(i => Main.LocalPlayer.QuickSpawnItemDirect(Main.LocalPlayer.GetSource_Misc($"Everglow.GainItemMission.{Name}"), i));
 	}
 
@@ -47,24 +48,26 @@ public class GainItemMission : MissionBase
 		tag.TryGet("DisplayName", out _displayName);
 		tag.TryGet("Description", out _description);
 		tag.TryGet<long>("TimeMax", out _timeMax);
+
 		DemandItem.Clear();
-		if (tag.TryGet<IList<TagCompound>>("DemandItem", out var diTag))
+		if (tag.TryGet<IList<TagCompound>>(nameof(DemandItem), out var diTag))
 		{
 			foreach (var iTag in diTag)
 			{
 				DemandItem.Add(ItemIO.Load(iTag));
 			}
 		}
+
 		RewardItem.Clear();
-		if (tag.TryGet("RewardItem", out diTag))
+		if (tag.TryGet<IList<TagCompound>>(nameof(RewardItem), out var riTag))
 		{
-			foreach (var iTag in diTag)
+			foreach (var iTag in riTag)
 			{
 				RewardItem.Add(ItemIO.Load(iTag));
 			}
 		}
 
-		// Load not-loaded texture for required vanilla items (DemandItem, RewardItem)
+		// Load not-loaded textures for required vanilla items (DemandItem, RewardItem)
 		foreach (var type in DemandItem.Select(x => x.type)
 			.Concat(RewardItem.Select(x => x.type))
 			.Distinct())
@@ -98,51 +101,47 @@ public class GainItemMission : MissionBase
 			return;
 		}
 
-		var param = objs switch
+		var paramItems = objs switch
 		{
 		[List<Item> items] => items,
 			_ => null,
 		};
-
-		if (param == null)
+		if (paramItems == null)
 		{
 			return;
 		}
 
-		int demandSum = 0, backpackSum = 0;
-		Dictionary<int, int> demandItemStack = [];
-		foreach (var item in DemandItem)
+		// Calculate required item types and their stack
+		Dictionary<int, int> demandItemStacks = DemandItem
+			.GroupBy(item => item.type)
+			.ToDictionary(
+				group => group.Key,
+				group => group.Sum(item => item.stack));
+
+		// Calculate owned item types and their stack
+		Dictionary<int, int> ownedItemStacks = paramItems
+			.Where(item => demandItemStacks.Select(x => x.Key).Contains(item.type))
+			.GroupBy(item => item.type)
+			.ToDictionary(
+				group => group.Key,
+				group => group.Sum(item => item.stack));
+		foreach (var demandItemType in demandItemStacks.Keys)
 		{
-			if (!demandItemStack.TryAdd(item.type, item.stack))
-			{
-				demandItemStack[item.type] += item.stack;
-			}
-			demandSum += item.stack;
+			ownedItemStacks.TryAdd(demandItemType, 0);
 		}
 
-		Dictionary<int, int> itemStack = [];
-		foreach (var item in param)
+		// Calculate mission progress
+		if (demandItemStacks.Count == 0 || demandItemStacks.Values.Sum() == 0)
 		{
-			if (!itemStack.TryAdd(item.type, item.stack))
-			{
-				itemStack[item.type] += item.stack;
-			}
-			if (demandItemStack.TryGetValue(item.type, out int dis))
-			{
-				if (itemStack[item.type] > dis)
-				{
-					itemStack[item.type] = dis;
-				}
-				backpackSum += itemStack[item.type];
-			}
-		}
-		if (demandSum == 0)
-		{
-			_progress = 0f;
+			_progress = 1f;
 		}
 		else
 		{
-			_progress = Math.Min(1f, Math.Max(0f, backpackSum / (float)demandSum));
+			// The final progress is calculated as the average of the individual progress
+			// for each item type, where individual progress is the ratio of owned items
+			// to required items (capped at 1 and floored at 0) for that item type.
+			float IndividualProgress(KeyValuePair<int, int> requiredItem) => Math.Min(1f, Math.Max(0f, ownedItemStacks[requiredItem.Key] / (float)requiredItem.Value));
+			_progress = demandItemStacks.Select(IndividualProgress).Average();
 		}
 	}
 }
