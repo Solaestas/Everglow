@@ -16,6 +16,7 @@ public class NightfireStaff : ModItem
 		Item.mana = 8;
 
 		Item.useStyle = ItemUseStyleID.Swing;
+		Item.UseSound = SoundID.Item20;
 		Item.useTime = Item.useAnimation = 32;
 		Item.noMelee = true;
 		Item.autoReuse = false;
