@@ -5,6 +5,9 @@ using ReLogic.Graphics;
 
 namespace Everglow.Commons.UI.UIContainers.Mission.UIElements;
 
+/// <summary>
+/// The filter bar of mission panel
+/// </summary>
 public class UIMissionFilter : UIBlock
 {
 	public event EventHandler<PoolType?> StatusFilterChanged;
@@ -67,12 +70,6 @@ public class UIMissionFilter : UIBlock
 			};
 			Register(statusFilterItem);
 
-			//var statusFilterItemText = new UITextPlus(type?.ToString() ?? AllStatus);
-			//statusFilterItemText.StringDrawer.DefaultParameters.SetParameter("FontSize", 18f);
-			//statusFilterItemText.StringDrawer.Init(statusFilterItemText.Text);
-			//statusFilterItem.Register(statusFilterItemText);
-			//statusFilterItemText.Info.SetToCenter();
-
 			var statusFilterItemIcon = new UIImage(IconPicker(type), Color.White);
 			statusFilterItem.Register(statusFilterItemIcon);
 			statusFilterItemIcon.Info.SetToCenter();
@@ -86,7 +83,7 @@ public class UIMissionFilter : UIBlock
 		MissionSystem.MissionManager.PoolType.Completed => ModAsset.MissionStatus_Completed.Value,
 		MissionSystem.MissionManager.PoolType.Overdue => ModAsset.MissionStatus_Failed.Value,
 		MissionSystem.MissionManager.PoolType.Failed => ModAsset.MissionStatus_Failed.Value,
-		null => ModAsset.MissionStatus.Value,
+		null => ModAsset.MissionStatus_All.Value,
 		_ => ModAsset.MissionStatus.Value,
 	};
 
@@ -127,7 +124,7 @@ public class UIMissionFilter : UIBlock
 	{
 		base.Draw(sb);
 
-		// 绘制鼠标悬停在按钮上时要显示的文本
+		// Draw filter item tooltip
 		if (!string.IsNullOrEmpty(mouseText))
 		{
 			var pos = Main.MouseScreen + new Vector2(10f, 18f);
@@ -155,19 +152,20 @@ public class UIMissionFilter : UIBlock
 			Point textureSize = new Point(texture.Width, texture.Height);
 			Rectangle rectangle = new Rectangle((int)pos.X, (int)pos.Y, (int)textSize.X, (int)textSize.Y);
 
-			// 绘制四个角
+			// Draw 4 corners
 			sb.Draw(texture, new Vector2(rectangle.X, rectangle.Y), new Rectangle(0, 0, 6, 6), PanelColor);
 			sb.Draw(texture, new Vector2(rectangle.X + rectangle.Width - 6, rectangle.Y), new Rectangle(textureSize.X - 6, 0, 6, 6), PanelColor);
 			sb.Draw(texture, new Vector2(rectangle.X, rectangle.Y + rectangle.Height - 6), new Rectangle(0, textureSize.Y - 6, 6, 6), PanelColor);
 			sb.Draw(texture, new Vector2(rectangle.X + rectangle.Width - 6, rectangle.Y + rectangle.Height - 6), new Rectangle(textureSize.X - 6, textureSize.Y - 6, 6, 6), PanelColor);
 
-			// 绘制本体
+			// Draw main part
 			sb.Draw(texture, new Rectangle(rectangle.X + 6, rectangle.Y, rectangle.Width - 12, 6), new Rectangle(6, 0, textureSize.X - 12, 6), PanelColor);
 			sb.Draw(texture, new Rectangle(rectangle.X + 6, rectangle.Y + rectangle.Height - 6, rectangle.Width - 12, 6), new Rectangle(6, textureSize.Y - 6, textureSize.X - 12, 6), PanelColor);
 			sb.Draw(texture, new Rectangle(rectangle.X, rectangle.Y + 6, 6, rectangle.Height - 12), new Rectangle(0, 6, 6, textureSize.Y - 12), PanelColor);
 			sb.Draw(texture, new Rectangle(rectangle.X + rectangle.Width - 6, rectangle.Y + 6, 6, rectangle.Height - 12), new Rectangle(textureSize.X - 6, 6, 6, textureSize.Y - 12), PanelColor);
 			sb.Draw(texture, new Rectangle(rectangle.X + 6, rectangle.Y + 6, rectangle.Width - 12, rectangle.Height - 12), new Rectangle(6, 6, textureSize.X - 12, textureSize.Y - 12), PanelColor);
 
+			// Draw text
 			sb.DrawString(FontAssets.MouseText.Value, mouseText, pos + new Vector2(0f, 5f), Color.Cyan);
 
 			mouseText = string.Empty;

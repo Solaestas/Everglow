@@ -101,7 +101,7 @@ public abstract class MissionBase
 	/// <summary>
 	/// 任务完成时
 	/// </summary>
-	public virtual void OnFinish()
+	public virtual void OnComplete()
 	{
 		MissionManager.Instance.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Completed);
 	}

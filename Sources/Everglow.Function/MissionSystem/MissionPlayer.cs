@@ -12,30 +12,30 @@ public class MissionPlayer : ModPlayer
 		base.OnEnterWorld();
 		if (!MissionManager.HasMission<GainItemMission>())
 		{
-			Item item = new Item();
 			var mission = new GainItemMission();
 			mission.SetInfo("Test1", "获取10个土块", "测试[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
-			item = new Item();
-			item.SetDefaults(ItemID.DirtBlock);
-			item.stack = 10;
-			mission.DemandItem.AddRange([item]);
+			mission.DemandItem.AddRange([
+				new Item(ItemID.DirtBlock, 10)]);
+			mission.RewardItem.AddRange([
+				new Item(ItemID.Wood, 10)]);
 			MissionManager.AddMission(mission, MissionManager.PoolType.Available);
 
 			mission = new GainItemMission();
 			mission.SetInfo("Test2", "获取10个木头", "测试介绍2\n" +
 				"[TimerIconDrawer,MissionName='Test2'] 剩余时间:[TimerStringDrawer,MissionName='Test2']", 30000);
-			item = new Item();
-			item.SetDefaults(ItemID.Wood);
-			item.stack = 10;
-			mission.DemandItem.AddRange([item]);
+			mission.DemandItem.AddRange([
+				new Item(ItemID.Wood, 10)
+				]);
+			mission.RewardItem.AddRange([
+				new Item(ItemID.IronOre, 10)]);
 			MissionManager.AddMission(mission, MissionManager.PoolType.Accepted);
 
 			mission = new GainItemMission();
 			mission.SetInfo("Test3", "获取10个铁矿", "测试介绍3");
-			item = new Item();
-			item.SetDefaults(ItemID.IronOre);
-			item.stack = 10;
-			mission.DemandItem.AddRange([item]);
+			mission.DemandItem.AddRange([
+				new Item(ItemID.IronOre, 10)]);
+			mission.RewardItem.AddRange([
+				new Item(ItemID.Zenith, 10)]);
 			MissionManager.AddMission(mission, MissionManager.PoolType.Available);
 		}
 	}

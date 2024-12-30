@@ -23,6 +23,8 @@ public class GainItemMission : MissionBase
 
 	public override Texture2D Icon => DemandItem.Count > 0 ? TextureAssets.Item[DemandItem.First().type].Value : null;
 
+	public string SourceContext => $"{nameof(Everglow)}.{nameof(GainItemMission)}.{Name}";
+
 	public List<Item> DemandItem { get; init; } = [];
 
 	public List<Item> RewardItem { get; init; } = [];
@@ -35,12 +37,14 @@ public class GainItemMission : MissionBase
 		_timeMax = timeMax;
 	}
 
-	public override void OnFinish()
+	public override void OnComplete()
 	{
-		base.OnFinish();
+		base.OnComplete();
 
-		string sourceContext = $"{nameof(Everglow)}.{nameof(GainItemMission)}.{Name}";
-		RewardItem.ForEach(i => Main.LocalPlayer.QuickSpawnItemDirect(Main.LocalPlayer.GetSource_Misc(sourceContext), i));
+		foreach (var item in RewardItem)
+		{
+			Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(SourceContext), item, item.stack);
+		}
 	}
 
 	public override void Load(TagCompound tag)
