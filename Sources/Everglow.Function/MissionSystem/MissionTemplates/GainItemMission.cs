@@ -1,8 +1,11 @@
 using Terraria.GameContent;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.MissionSystem;
+namespace Everglow.Commons.MissionSystem.MissionTemplates;
 
+/// <summary>
+/// Represents a mission where the player needs to obtain a specified item or a quantity of items.
+/// </summary>
 public class GainItemMission : MissionBase
 {
 	private string _name = string.Empty;
@@ -21,16 +24,39 @@ public class GainItemMission : MissionBase
 
 	public override long TimeMax => _timeMax;
 
-	public override Texture2D Icon => DemandItem.Count > 0 ? TextureAssets.Item[DemandItem.First().type].Value : null;
+	public override Texture2D Icon => DemandItems.Count > 0 ? TextureAssets.Item[DemandItems.First().type].Value : null;
 
 	public string SourceContext => $"{nameof(Everglow)}.{nameof(GainItemMission)}.{Name}";
 
-	public List<Item> DemandItem { get; init; } = [];
+	public List<Item> DemandItems { get; init; } = [];
 
-	public List<Item> RewardItem { get; init; } = [];
+	public List<Item> RewardItems { get; init; } = [];
 
+	/// <summary>
+	/// Sets the basic information for the mission.
+	/// </summary>
+	/// <param name="name">The unique name of the mission.</param>
+	/// <param name="displayName">The display name of the mission.</param>
+	/// <param name="description">A brief description of the mission.</param>
+	/// <param name="timeMax">The maximum time allowed to complete the mission, in ticks. Use -1 for no time limit.</param>
+	/// <exception cref="ArgumentNullException">Thrown if any of the string parameters are null.</exception>
 	public void SetInfo(string name, string displayName, string description, long timeMax = -1)
 	{
+		if (string.IsNullOrWhiteSpace(name))
+		{
+			throw new ArgumentNullException(nameof(name), "Mission name cannot be null or empty.");
+		}
+
+		if (string.IsNullOrWhiteSpace(displayName))
+		{
+			throw new ArgumentNullException(nameof(displayName), "Mission display name cannot be null or empty.");
+		}
+
+		if (string.IsNullOrWhiteSpace(description))
+		{
+			throw new ArgumentNullException(nameof(description), "Mission description cannot be null or empty.");
+		}
+
 		_name = name;
 		_displayName = displayName;
 		_description = description;
@@ -41,7 +67,7 @@ public class GainItemMission : MissionBase
 	{
 		base.OnComplete();
 
-		foreach (var item in RewardItem)
+		foreach (var item in RewardItems)
 		{
 			Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(SourceContext), item, item.stack);
 		}
@@ -55,27 +81,27 @@ public class GainItemMission : MissionBase
 		tag.TryGet("Description", out _description);
 		tag.TryGet("TimeMax", out _timeMax);
 
-		DemandItem.Clear();
-		if (tag.TryGet<IList<TagCompound>>(nameof(DemandItem), out var diTag))
+		DemandItems.Clear();
+		if (tag.TryGet<IList<TagCompound>>(nameof(DemandItems), out var diTag))
 		{
 			foreach (var iTag in diTag)
 			{
-				DemandItem.Add(ItemIO.Load(iTag));
+				DemandItems.Add(ItemIO.Load(iTag));
 			}
 		}
 
-		RewardItem.Clear();
-		if (tag.TryGet<IList<TagCompound>>(nameof(RewardItem), out var riTag))
+		RewardItems.Clear();
+		if (tag.TryGet<IList<TagCompound>>(nameof(RewardItems), out var riTag))
 		{
 			foreach (var iTag in riTag)
 			{
-				RewardItem.Add(ItemIO.Load(iTag));
+				RewardItems.Add(ItemIO.Load(iTag));
 			}
 		}
 
 		// Load not-loaded textures for required vanilla items (DemandItem, RewardItem)
-		foreach (var type in DemandItem.Select(x => x.type)
-			.Concat(RewardItem.Select(x => x.type))
+		foreach (var type in DemandItems.Select(x => x.type)
+			.Concat(RewardItems.Select(x => x.type))
 			.Distinct())
 		{
 			// The Main.LoadItem function will skip the loaded items
@@ -90,14 +116,15 @@ public class GainItemMission : MissionBase
 		tag.Add("Name", Name);
 		tag.Add("DisplayName", DisplayName);
 		tag.Add("Description", Description);
-		tag.Add("DemandItem", DemandItem.ConvertAll(ItemIO.Save));
-		tag.Add("RewardItem", RewardItem.ConvertAll(ItemIO.Save));
+		tag.Add("DemandItem", DemandItems.ConvertAll(ItemIO.Save));
+		tag.Add("RewardItem", RewardItems.ConvertAll(ItemIO.Save));
 	}
 
 	public override void Update()
 	{
 		base.Update();
-		UpdateProgress(new List<Item>(Main.LocalPlayer.inventory));
+
+		UpdateProgress(Main.LocalPlayer.inventory.ToList());
 	}
 
 	public override void UpdateProgress(params object[] objs)
@@ -118,14 +145,14 @@ public class GainItemMission : MissionBase
 		}
 
 		// Calculate required item types and their stack
-		Dictionary<int, int> demandItemStacks = DemandItem
+		var demandItemStacks = DemandItems
 			.GroupBy(item => item.type)
 			.ToDictionary(
 				group => group.Key,
 				group => group.Sum(item => item.stack));
 
 		// Calculate owned item types and their stack
-		Dictionary<int, int> ownedItemStacks = paramItems
+		var ownedItemStacks = paramItems
 			.Where(item => demandItemStacks.ContainsKey(item.type))
 			.GroupBy(item => item.type)
 			.ToDictionary(
