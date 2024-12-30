@@ -2,6 +2,7 @@ using Everglow.Commons.MissionSystem;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Utilities;
 using Terraria.GameContent;
+using static Everglow.Commons.MissionSystem.MissionManager;
 
 namespace Everglow.Commons.UI.UIContainers.Mission.UIElements;
 
@@ -10,8 +11,9 @@ namespace Everglow.Commons.UI.UIContainers.Mission.UIElements;
 /// </summary>
 public class UIMissionItem : UIBlock
 {
-	private UIBlock _block;
-	public MissionBase Mission;
+	private UIBlock block;
+
+	public MissionBase Mission { get; private set; }
 
 	public UIMissionItem(MissionBase missionBase)
 	{
@@ -31,27 +33,28 @@ public class UIMissionItem : UIBlock
 		Events.OnMouseOut += OnMouseLeave;
 
 		// 任务项容器
-		_block = new UIBlock();
-		_block.Info.Width.SetValue(-24f - 8f, 1f);
-		_block.Info.Height.SetValue(32f, 0f);
-		_block.Info.SetToCenter();
-		_block.Info.Left.SetValue(24f, 0f);
-		_block.Info.SetMargin(6f);
-		_block.PanelColor = MissionContainer.Instance.GetThemeColor(MissionContainer.ColorType.Dark, MissionContainer.ColorStyle.Dark);
-		Register(_block);
+		block = new UIBlock();
+		block.Info.Width.SetValue(-24f - 8f, 1f);
+		block.Info.Height.SetValue(32f, 0f);
+		block.Info.SetToCenter();
+		block.Info.Left.SetValue(24f, 0f);
+		block.Info.SetMargin(6f);
+		block.PanelColor = MissionContainer.Instance.GetThemeColor(MissionContainer.ColorType.Dark, MissionContainer.ColorStyle.Dark);
+		Register(block);
 
 		// 任务进度
-		UIProgress progress = new UIProgress();
-		progress.Info.SetToCenter();
-		progress.Info.Left.SetValue(PositionStyle.Full - progress.Info.Width - (4f, 0f));
-		progress.Events.OnUpdate += (e, gt) =>
+		UIMissionStatus statusBar = new UIMissionStatus();
+		statusBar.Info.SetToCenter();
+		statusBar.Info.Left.SetValue(PositionStyle.Full - statusBar.Info.Width - (4f, 0f));
+		statusBar.Events.OnUpdate += (e, gt) =>
 		{
-			progress.Progress = Mission.Progress;
+			statusBar.Progress = Mission.Progress;
+			statusBar.Status = Mission.PoolType;
 		};
-		_block.Register(progress);
+		block.Register(statusBar);
 
 		// 任务名称
-		var font = FontManager.FusionPixel12.GetFont(_block.Info.Height.Pixel - _block.Info.TopMargin.Pixel - _block.Info.BottomMargin.Pixel - 2f);
+		var font = FontManager.FusionPixel12.GetFont(block.Info.Height.Pixel - block.Info.TopMargin.Pixel - block.Info.BottomMargin.Pixel - 2f);
 		UITextPlus name = new UITextPlus(Mission.DisplayName);
 		name.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
 		name.StringDrawer.Init(name.Text);
@@ -61,7 +64,7 @@ public class UIMissionItem : UIBlock
 			name.Info.Left.SetEmpty();
 			name.Calculation();
 		};
-		_block.Register(name);
+		block.Register(name);
 	}
 
 	/// <summary>
@@ -122,7 +125,7 @@ public class UIMissionItem : UIBlock
 			return;
 		}
 
-		var scissorRectangle = sb.GraphicsDevice.ScissorRectangle;
+		// var scissorRectangle = sb.GraphicsDevice.ScissorRectangle;
 		var overflowHiddenRasterizerState = new RasterizerState
 		{
 			CullMode = CullMode.None,
@@ -132,8 +135,7 @@ public class UIMissionItem : UIBlock
 		var sbS = GraphicsUtils.GetState(sb).Value;
 		sb.End();
 		Effect effect = ModAsset.MissionProgressBar.Value;
-		sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
-			DepthStencilState.None, overflowHiddenRasterizerState, effect, Main.UIScaleMatrix);
+		sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, overflowHiddenRasterizerState, effect, Main.UIScaleMatrix);
 
 		effect.Parameters["uScaleFactor"].SetValue(Vector2.One / 16f);
 		effect.Parameters["uRadius"].SetValue(8f);
@@ -148,32 +150,51 @@ public class UIMissionItem : UIBlock
 		sb.Draw(
 			TextureAssets.MagicPixel.Value,
 			new Rectangle(
-				(int)(Info.Location.X + (_block.Info.TotalLocation.X - Info.Location.X - 16f) / 2f),
+				(int)(Info.Location.X + (block.Info.TotalLocation.X - Info.Location.X - 16f) / 2f),
 				(int)(Info.Location.Y + (Info.Size.Y - 16f) / 2f),
-				16, 16), Color.White);
+				16, 16),
+			Color.White);
 
 		sb.End();
 		sb.Begin(sbS);
 	}
 
-	private class UIProgress : UIImage
+	private class UIMissionStatus : UIImage
 	{
-		public float Progress = 0f;
+		public float Progress { get; set; }
 
-		public UIProgress()
-			: base(ModAsset.MissionDuration.Value, Color.White)
+		public PoolType Status { get; set; }
+
+		public UIMissionStatus()
+			: base(ModAsset.MissionStatus.Value, Color.White)
 		{
 		}
 
 		protected override void DrawChildren(SpriteBatch sb)
 		{
-			var texture = Progress >= 1f ? ModAsset.MissionDurationFinish.Value : ModAsset.MissionDurationBar.Value;
-			Rectangle sr = new Rectangle(0, (int)(texture.Height * (1f - Progress)), texture.Width, (int)(texture.Height * Progress));
-			sb.Draw(
-				texture,
-				new Rectangle(Info.TotalHitBox.X, Info.TotalHitBox.Y + sr.Y, sr.Width, sr.Height),
-				sr, color, Rotation, Origin, SpriteEffects, 0f);
 			base.DrawChildren(sb);
+
+			// Draw status block to represent the status of mission
+			var texture = Status switch
+			{
+				PoolType.Accepted => ModAsset.MissionStatus_Accepted.Value,
+				PoolType.Available => ModAsset.MissionStatus_Available.Value,
+				PoolType.Completed => ModAsset.MissionStatus_Completed.Value,
+				PoolType.Overdue => ModAsset.MissionStatus_Failed.Value,
+				PoolType.Failed => ModAsset.MissionStatus_Failed.Value,
+				_ => ModAsset.MissionStatus.Value,
+			};
+			if (Status != PoolType.Accepted) // If status is not Accepted, then draw the status block directly
+			{
+				sb.Draw(texture, new Vector2(Info.TotalHitBox.X, Info.TotalHitBox.Y), null, color, Rotation, Origin, 1f, SpriteEffects, 0f);
+			}
+			else // If status is Accepted, then draw the plotted status block to represent progress and its background status block
+			{
+				var bgTexture = ModAsset.MissionStatus_Accepted_BG.Value;
+				Rectangle sR = new Rectangle(0, (int)(texture.Height * (1f - Progress)), texture.Width, (int)(texture.Height * Progress));
+				sb.Draw(bgTexture, new Vector2(Info.TotalHitBox.X, Info.TotalHitBox.Y), null, color, Rotation, Origin, 1f, SpriteEffects, 0f);
+				sb.Draw(texture, new Rectangle(Info.TotalHitBox.X, Info.TotalHitBox.Y + sR.Y, sR.Width, sR.Height), sR, color, Rotation, Origin, SpriteEffects, 0f);
+			}
 		}
 	}
 }
