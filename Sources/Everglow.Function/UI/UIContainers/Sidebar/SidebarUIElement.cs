@@ -18,7 +18,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 
 		public int WaitTime { get; set; } = 30;
 
-		public ISidebarElementBase BaseInfo { get; private set; }
+		public ISidebarElement BaseInfo { get; private set; }
 
 		public bool IsMoveing => _waitTime >= WaitTime;
 
@@ -133,7 +133,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 				return true;
 		}
 
-		public void SetInfo(ISidebarElementBase sidebarElement)
+		public void SetInfo(ISidebarElement sidebarElement)
 		{
 			BaseInfo = sidebarElement;
 			OnTigger += element =>

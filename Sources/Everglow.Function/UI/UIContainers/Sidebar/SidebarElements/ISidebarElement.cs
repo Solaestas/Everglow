@@ -1,6 +1,6 @@
 namespace Everglow.Commons.UI.UIContainers.Sidebar.SidebarElements;
 
-public interface ISidebarElementBase
+public interface ISidebarElement
 {
 	/// <summary>
 	/// 快捷栏元素的标识

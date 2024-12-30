@@ -65,7 +65,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 
 		private void LoadSidebarElement(SidebarList quickBar)
 		{
-			var sidebarElements = Ins.ModuleManager.CreateInstances<ISidebarElementBase>();
+			var sidebarElements = Ins.ModuleManager.CreateInstances<ISidebarElement>();
 
 			foreach (var sidebarElement in sidebarElements)
 			{

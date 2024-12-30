@@ -1,6 +1,6 @@
 namespace Everglow.Commons.UI.UIContainers.Sidebar.SidebarElements;
 
-public class SlashAllTheItem : ISidebarElementBase
+public class SlashAllTheItem : ISidebarElement
 {
 	public Texture2D Icon => ModAsset.SlashAllTheItem.Value;
 

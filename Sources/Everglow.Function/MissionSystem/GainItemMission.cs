@@ -38,7 +38,9 @@ public class GainItemMission : MissionBase
 	public override void OnFinish()
 	{
 		base.OnFinish();
-		RewardItem.ForEach(i => Main.LocalPlayer.QuickSpawnItemDirect(Main.LocalPlayer.GetSource_Misc($"Everglow.GainItemMission.{Name}"), i));
+
+		string sourceContext = $"{nameof(Everglow)}.{nameof(GainItemMission)}.{Name}";
+		RewardItem.ForEach(i => Main.LocalPlayer.QuickSpawnItemDirect(Main.LocalPlayer.GetSource_Misc(sourceContext), i));
 	}
 
 	public override void Load(TagCompound tag)
@@ -47,7 +49,7 @@ public class GainItemMission : MissionBase
 		tag.TryGet("Name", out _name);
 		tag.TryGet("DisplayName", out _displayName);
 		tag.TryGet("Description", out _description);
-		tag.TryGet<long>("TimeMax", out _timeMax);
+		tag.TryGet("TimeMax", out _timeMax);
 
 		DemandItem.Clear();
 		if (tag.TryGet<IList<TagCompound>>(nameof(DemandItem), out var diTag))
@@ -120,15 +122,11 @@ public class GainItemMission : MissionBase
 
 		// Calculate owned item types and their stack
 		Dictionary<int, int> ownedItemStacks = paramItems
-			.Where(item => demandItemStacks.Select(x => x.Key).Contains(item.type))
+			.Where(item => demandItemStacks.ContainsKey(item.type))
 			.GroupBy(item => item.type)
 			.ToDictionary(
 				group => group.Key,
 				group => group.Sum(item => item.stack));
-		foreach (var demandItemType in demandItemStacks.Keys)
-		{
-			ownedItemStacks.TryAdd(demandItemType, 0);
-		}
 
 		// Calculate mission progress
 		if (demandItemStacks.Count == 0 || demandItemStacks.Values.Sum() == 0)
@@ -140,7 +138,12 @@ public class GainItemMission : MissionBase
 			// The final progress is calculated as the average of the individual progress
 			// for each item type, where individual progress is the ratio of owned items
 			// to required items (capped at 1 and floored at 0) for that item type.
-			float IndividualProgress(KeyValuePair<int, int> requiredItem) => Math.Min(1f, Math.Max(0f, ownedItemStacks[requiredItem.Key] / (float)requiredItem.Value));
+			float IndividualProgress(KeyValuePair<int, int> requiredItem)
+			{
+				var ownedStack = ownedItemStacks.GetValueOrDefault(requiredItem.Key, 0);
+				var requiredStack = requiredItem.Value;
+				return Math.Min(1f, Math.Max(0f, ownedStack / requiredStack));
+			}
 			_progress = demandItemStacks.Select(IndividualProgress).Average();
 		}
 	}

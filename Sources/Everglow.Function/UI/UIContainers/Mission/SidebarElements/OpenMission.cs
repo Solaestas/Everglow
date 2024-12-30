@@ -2,7 +2,7 @@ using Everglow.Commons.UI.UIContainers.Sidebar.SidebarElements;
 
 namespace Everglow.Commons.UI.UIContainers.Mission.SidebarElements;
 
-internal class OpenMission : ISidebarElementBase
+internal class OpenMission : ISidebarElement
 {
 	public Texture2D Icon => ModAsset.OpenMission.Value;
 
@@ -13,8 +13,12 @@ internal class OpenMission : ISidebarElementBase
 	public void Invoke()
 	{
 		if (MissionContainer.Instance.IsVisible)
+		{
 			MissionContainer.Instance.Close();
+		}
 		else
+		{
 			MissionContainer.Instance.Show();
+		}
 	}
 }
