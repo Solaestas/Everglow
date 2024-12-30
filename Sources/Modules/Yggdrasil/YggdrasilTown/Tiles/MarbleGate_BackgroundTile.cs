@@ -8,10 +8,6 @@ public class MarbleGate_BackgroundTile : BackgroundVFX
 {
 	public override void Update()
 	{
-		if (!SubworldSystem.IsActive<YggdrasilWorld>())
-		{
-			Active = false;
-		}
 		base.Update();
 	}
 

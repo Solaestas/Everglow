@@ -17,7 +17,7 @@ internal class YggdrasilWorld : Subworld
 
 	public override bool NormalUpdates => true;
 
-	public override bool ShouldSave => false; // Only in debug mode,when published,turn true.
+	public override bool ShouldSave => true; // Only in debug mode,when published,turn true.
 
 	public override List<GenPass> Tasks => new List<GenPass>()
 	{

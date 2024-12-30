@@ -1,9 +1,10 @@
 using Everglow.Commons.VFX.Scene;
+using Everglow.SubSpace.Tiles;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
-public class MarbleGate : ModTile, ISceneTile
+public class MarbleGate : RoomDoorTile, ISceneTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -50,5 +51,10 @@ public class MarbleGate : ModTile, ISceneTile
 			MarbleGate_BackgroundTile mGBT = new MarbleGate_BackgroundTile { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
 			Ins.VFXManager.Add(mGBT);
 		}
+	}
+
+	public override bool RightClick(int i, int j)
+	{
+		return base.RightClick(i, j);
 	}
 }
