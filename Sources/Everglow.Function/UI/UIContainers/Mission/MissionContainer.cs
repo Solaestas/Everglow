@@ -24,6 +24,7 @@ public class MissionContainer : UIContainerElement
 
 	private UIBlock _panel;
 	private UIBlock _headshot;
+	private UIMissionFilter _missionFilter;
 	private UIBlock _missionPanel;
 	private UIBlock _description;
 	private UIBlock _changeMission;
@@ -99,13 +100,6 @@ public class MissionContainer : UIContainerElement
 		_icon.Info.Height.SetFull();
 		_headshot.Register(_icon);
 
-		_missionPanel = new UIBlock();
-		_panel.Register(_missionPanel);
-
-		_missionContainer = new UIContainerPanel();
-		_missionContainer.Info.SetMargin(0f);
-		_missionPanel.Register(_missionContainer);
-
 		_description = new UIBlock();
 		_description.Info.Left.SetValue(38f, 0f);
 		_description.Info.Top.SetValue(_headshot.Info.Top + _headshot.Info.Height + (20f, 0f));
@@ -114,16 +108,38 @@ public class MissionContainer : UIContainerElement
 		_description.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
 		_panel.Register(_description);
 
+		_missionPanel = new UIBlock();
+		_panel.Register(_missionPanel);
+
+		_missionContainer = new UIContainerPanel();
+		_missionContainer.Info.SetMargin(0f);
+		_missionPanel.Register(_missionContainer);
+
 		_missionScrollbar = new UIMissionVerticalScrollbar();
 		_missionScrollbar.Info.Left.SetValue(PositionStyle.Full - _missionScrollbar.Info.Width - (10f, 0f));
 		_missionContainer.SetVerticalScrollbar(_missionScrollbar);
 		_panel.Register(_missionScrollbar);
 
-		_missionPanel.Info.Top.SetValue(_headshot.Info.Top - (20f, 0f));
+		_missionFilter = new UIMissionFilter();
+		_missionFilter.StatusFilterChanged += (_, type) =>
+		{
+			RefreshList();
+		};
+		_panel.Register(_missionFilter);
+
+		_missionFilter.Info.Top.SetValue(_headshot.Info.Top - (16f, 0f));
+		_missionFilter.Info.Left.SetValue(_description.Info.Left * 2f + _description.Info.Width);
+		_missionFilter.Info.Width.SetValue(PositionStyle.Full - _description.Info.Left * 2f - _description.Info.Width - _missionScrollbar.Info.Width - (PositionStyle.Full - _missionScrollbar.Info.Width - _missionScrollbar.Info.Left) * 2f);
+		_missionFilter.Info.Height.SetValue(40f, 0f);
+		_missionFilter.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
+		_missionFilter.ShowBorder.BottomBorder = false;
+
+		_missionPanel.Info.Top.SetValue(_missionFilter.Info.Top + _missionFilter.Info.Height);
 		_missionPanel.Info.Left.SetValue(_description.Info.Left * 2f + _description.Info.Width);
 		_missionPanel.Info.Width.SetValue(PositionStyle.Full - _description.Info.Left * 2f - _description.Info.Width - _missionScrollbar.Info.Width - (PositionStyle.Full - _missionScrollbar.Info.Width - _missionScrollbar.Info.Left) * 2f);
-		_missionPanel.Info.Height.SetValue(_description.Info.Top + _description.Info.Height - _missionPanel.Info.Top);
+		_missionPanel.Info.Height.SetValue(_panel.Info.Height - _missionFilter.Info.Height - (62f, 0f));
 		_missionPanel.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
+		_missionPanel.ShowBorder.TopBorder = false;
 
 		_missionScrollbar.Info.Height.SetValue(_missionPanel.Info.Height);
 		_missionScrollbar.Info.Top.SetValue(_missionPanel.Info.Top);
@@ -145,7 +161,7 @@ public class MissionContainer : UIContainerElement
 		_closeButton = new UIBlock();
 		_closeButton.Info.Width.SetValue(36f, 0f);
 		_closeButton.Info.Height.SetValue(22f, 0f);
-		_closeButton.Info.Left.SetValue(PositionStyle.Full - _closeButton.Info.Width - (2f, 0f));
+		_closeButton.Info.Left.SetValue(PositionStyle.Full - _closeButton.Info.Width - (6f, 0f));
 		_closeButton.Info.Top.SetValue(6f, 0f);
 		_closeButton.PanelColor = GetThemeColor();
 		_closeButton.BorderColor = GetThemeColor(ColorType.Light, ColorStyle.Normal);
@@ -157,18 +173,18 @@ public class MissionContainer : UIContainerElement
 		_close.Info.SetToCenter();
 		_closeButton.Register(_close);
 
-		_maximizeButton = new UIBlock();
-		_maximizeButton.Info.Width.SetValue(_closeButton.Info.Width);
-		_maximizeButton.Info.Height.SetValue(_closeButton.Info.Height);
-		_maximizeButton.Info.Left.SetValue(_closeButton.Info.Left - _maximizeButton.Info.Width - (2f, 0f));
-		_maximizeButton.Info.Top.SetValue(_closeButton.Info.Top);
-		_maximizeButton.PanelColor = GetThemeColor();
-		_maximizeButton.BorderColor = GetThemeColor(ColorType.Light, ColorStyle.Normal);
-		_panel.Register(_maximizeButton);
+		// _maximizeButton = new UIBlock();
+		// _maximizeButton.Info.Width.SetValue(_closeButton.Info.Width);
+		// _maximizeButton.Info.Height.SetValue(_closeButton.Info.Height);
+		// _maximizeButton.Info.Left.SetValue(_closeButton.Info.Left - _maximizeButton.Info.Width - (2f, 0f));
+		// _maximizeButton.Info.Top.SetValue(_closeButton.Info.Top);
+		// _maximizeButton.PanelColor = GetThemeColor();
+		// _maximizeButton.BorderColor = GetThemeColor(ColorType.Light, ColorStyle.Normal);
+		// _panel.Register(_maximizeButton);
 
-		_maximization = new UIImage(ModAsset.MissionMaximization.Value, Color.White);
-		_maximization.Info.SetToCenter();
-		_maximizeButton.Register(_maximization);
+		// _maximization = new UIImage(ModAsset.MissionMaximization.Value, Color.White);
+		// _maximization.Info.SetToCenter();
+		// _maximizeButton.Register(_maximization);
 
 		_changeMission = new UIBlock();
 		_changeMission.Info.Width.SetValue(48f, 0f);
@@ -177,7 +193,7 @@ public class MissionContainer : UIContainerElement
 		_changeMission.Info.Top.SetValue(_description.Info.Top + _description.Info.Height +
 			((PositionStyle.Full - _description.Info.Top - _description.Info.Height) - _changeMission.Info.Height) / 2f);
 		_changeMission.Info.IsSensitive = true;
-		_changeMission.PanelColor = Instance.GetThemeColor();
+		_changeMission.PanelColor = GetThemeColor();
 		_changeMission.Events.OnLeftClick += e =>
 		{
 			if (SelectedItem != null)
@@ -249,19 +265,23 @@ public class MissionContainer : UIContainerElement
 		Calculation();
 	}
 
+	/// <summary>
+	/// 打开任务面板
+	/// </summary>
+	/// <param name="args"></param>
 	public override void Show(params object[] args)
 	{
 		base.Show(args);
 		RefreshList();
 	}
 
+	/// <summary>
+	/// 刷新任务列表
+	/// </summary>
 	public void RefreshList()
 	{
-		List<BaseElement> elements = [];
-		PositionStyle top = (2f, 0f);
-		foreach (var type in Enum.GetValues<PoolType>())
+		PositionStyle IteratePool(List<BaseElement> elements, PositionStyle top, List<MissionBase> mp)
 		{
-			var mp = MissionManager.Instance.GetMissionPool(type);
 			foreach (var m in mp)
 			{
 				var element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [m]);
@@ -276,6 +296,24 @@ public class MissionContainer : UIContainerElement
 				elements.Add(element);
 				top += element.Info.Height;
 				top.Pixel += 2f;
+			}
+
+			return top;
+		}
+
+		List<BaseElement> elements = [];
+		PositionStyle top = (2f, 0f);
+		if (_missionFilter.PoolType.HasValue)
+		{
+			var mp = MissionManager.Instance.GetMissionPool(_missionFilter.PoolType.Value);
+			top = IteratePool(elements, top, mp);
+		}
+		else
+		{
+			foreach (var type in Enum.GetValues<PoolType>())
+			{
+				var mp = MissionManager.Instance.GetMissionPool(type);
+				top = IteratePool(elements, top, mp);
 			}
 		}
 		ChangeSelectedItem(null);
