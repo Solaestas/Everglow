@@ -141,7 +141,7 @@ public class GainItemMission : MissionBase
 			float IndividualProgress(KeyValuePair<int, int> requiredItem)
 			{
 				var ownedStack = ownedItemStacks.GetValueOrDefault(requiredItem.Key, 0);
-				var requiredStack = requiredItem.Value;
+				var requiredStack = (float)requiredItem.Value;
 				return Math.Min(1f, Math.Max(0f, ownedStack / requiredStack));
 			}
 			_progress = demandItemStacks.Select(IndividualProgress).Average();
