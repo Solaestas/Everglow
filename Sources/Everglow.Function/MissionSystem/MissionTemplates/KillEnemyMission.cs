@@ -2,6 +2,9 @@ using Terraria.GameContent;
 
 namespace Everglow.Commons.MissionSystem.MissionTemplates;
 
+/// <summary>
+/// Represents a mission where the player needs to kill a specified enemy or a quantity of enemies.
+/// </summary>
 public class KillEnemyMission : MissionBase
 {
 	private string name = string.Empty;

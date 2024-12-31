@@ -1,6 +1,6 @@
 namespace Everglow.Commons.MissionSystem.MissionTemplates;
 
-public class CompleteEventMission : MissionBase
+public class SeriesOfMission : MissionBase
 {
 	public override string Name => throw new NotImplementedException();
 
