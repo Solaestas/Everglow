@@ -102,6 +102,7 @@ public class GainItemMission : MissionBase
 		// Load not-loaded textures for required vanilla items (DemandItem, RewardItem)
 		foreach (var type in DemandItems.Select(x => x.type)
 			.Concat(RewardItems.Select(x => x.type))
+			.Where(type => type <= ItemID.Count)
 			.Distinct())
 		{
 			// The Main.LoadItem function will skip the loaded items

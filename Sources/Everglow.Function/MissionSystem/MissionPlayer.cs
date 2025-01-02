@@ -1,5 +1,6 @@
 using Everglow.Commons.MissionSystem.MissionTemplates;
 using Terraria.ModLoader.IO;
+using static Everglow.Commons.MissionSystem.MissionTemplates.KillNPCMission;
 
 namespace Everglow.Commons.MissionSystem;
 
@@ -10,53 +11,94 @@ public class MissionPlayer : ModPlayer
 
 	public override void OnEnterWorld()
 	{
-		base.OnEnterWorld();
-		if (!MissionManager.HasMission<GainItemMission>())
+		if (Player.whoAmI == Main.myPlayer)
 		{
-			var mission = new GainItemMission();
-			mission.SetInfo("Test1", "获取10个土块", "测试[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
-			mission.DemandItems.AddRange([
-				new Item(ItemID.DirtBlock, 10)]);
-			mission.RewardItems.AddRange([
-				new Item(ItemID.Wood, 10)]);
-			MissionManager.AddMission(mission, MissionManager.PoolType.Available);
+			if (!MissionManager.HasMission<GainItemMission>())
+			{
+				var mission = new GainItemMission();
+				mission.SetInfo("Test1", "获取10个土块", "测试[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
+				mission.DemandItems.AddRange([
+					new Item(ItemID.DirtBlock, 10)]);
+				mission.RewardItems.AddRange([
+					new Item(ItemID.Wood, 10)]);
+				MissionManager.AddMission(mission, MissionManager.PoolType.Available);
 
-			mission = new GainItemMission();
-			mission.SetInfo("Test2", "获取10个木头", "测试介绍2\n" +
-				"[TimerIconDrawer,MissionName='Test2'] 剩余时间:[TimerStringDrawer,MissionName='Test2']", 30000);
-			mission.DemandItems.AddRange([
-				new Item(ItemID.Wood, 10)
+				mission = new GainItemMission();
+				mission.SetInfo("Test2", "获取10个木头", "测试介绍2\n" +
+					"[TimerIconDrawer,MissionName='Test2'] 剩余时间:[TimerStringDrawer,MissionName='Test2']", 30000);
+				mission.DemandItems.AddRange([
+					new Item(ItemID.Wood, 10)
+					]);
+				mission.RewardItems.AddRange([
+					new Item(ItemID.IronOre, 10)]);
+				MissionManager.AddMission(mission, MissionManager.PoolType.Accepted);
+
+				mission = new GainItemMission();
+				mission.SetInfo("Test3", "获取10个铁矿", "测试介绍3");
+				mission.DemandItems.AddRange([
+					new Item(ItemID.IronOre, 10)]);
+				mission.RewardItems.AddRange([
+					new Item(ItemID.Zenith, 10)]);
+				MissionManager.AddMission(mission, MissionManager.PoolType.Available);
+
+				var killNPCMission = new KillNPCMission();
+				killNPCMission.SetInfo("Test4", "击杀10个史莱姆", "测试介绍: \n" + "[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
+				killNPCMission.DemandNPCs.AddRange([
+					KillNPCRequirement.Create(
+					[
+						NPCID.BlueSlime,
+						NPCID.IceSlime,
+						NPCID.SpikedJungleSlime,
+						NPCID.MotherSlime,
+					], 10, true),
+				KillNPCRequirement.Create(
+					[
+						NPCID.DemonEye,
+					], 3, true),
 				]);
-			mission.RewardItems.AddRange([
-				new Item(ItemID.IronOre, 10)]);
-			MissionManager.AddMission(mission, MissionManager.PoolType.Accepted);
-
-			mission = new GainItemMission();
-			mission.SetInfo("Test3", "获取10个铁矿", "测试介绍3");
-			mission.DemandItems.AddRange([
-				new Item(ItemID.IronOre, 10)]);
-			mission.RewardItems.AddRange([
-				new Item(ItemID.Zenith, 10)]);
-			MissionManager.AddMission(mission, MissionManager.PoolType.Available);
+				killNPCMission.RewardItems.AddRange([
+					new Item(ItemID.Zenith),
+				new Item(ItemID.GoldAxe, 10),
+				]);
+				MissionManager.AddMission(killNPCMission, MissionManager.PoolType.Available);
+			}
 		}
 	}
 
 	public override void PostUpdate()
 	{
-		MissionManager.Update();
-		base.PostUpdate();
+		if (Player.whoAmI == Main.myPlayer)
+		{
+			MissionManager.Update();
+		}
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
-		base.SaveData(tag);
-		MissionManager.Save(tag);
-		MissionManager.Clear();
+		if (Player.whoAmI == Main.myPlayer)
+		{
+			MissionManager.Save(tag);
+			MissionManager.Clear();
+		}
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
-		base.LoadData(tag);
-		MissionManager.Load(tag);
+		if (Player.whoAmI == Main.myPlayer)
+		{
+			MissionManager.Load(tag);
+		}
+	}
+
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		if (Player.whoAmI == Main.myPlayer)
+		{
+			// If player killed the target, then count this kill
+			if (!target.active)
+			{
+				MissionManager.CountKill(target.type);
+			}
+		}
 	}
 }

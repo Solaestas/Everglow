@@ -1,3 +1,5 @@
+using Everglow.Commons.MissionSystem.MissionTemplates;
+using MathNet.Numerics;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem;
@@ -46,6 +48,11 @@ public class MissionManager
 	/// 任务池
 	/// </summary>
 	private Dictionary<PoolType, List<MissionBase>> _missionPools = [];
+
+	/// <summary>
+	/// 历史杀怪计数
+	/// </summary>
+	public Dictionary<int, int> NPCKillCounter { get; } = [];
 
 	/// <summary>
 	/// 任务管理器实例
@@ -212,11 +219,50 @@ public class MissionManager
 	}
 
 	/// <summary>
+	/// 记录杀怪
+	/// </summary>
+	/// <param name="type">NPC类型</param>
+	/// <param name="count">击杀数量，默认为1</param>
+	/// <exception cref="InvalidParameterException"></exception>
+	public void CountKill(int type, int count = 1)
+	{
+		if (type < 0
+			|| count <= 0)
+		{
+			throw new InvalidParameterException();
+		}
+
+		// Update NPC kill history
+		if (!NPCKillCounter.TryAdd(type, count))
+		{
+			NPCKillCounter[type] += count;
+		}
+
+		// Update NPC kill mission
+		foreach (var m in _missionPools[PoolType.Accepted])
+		{
+			if (m is not KillNPCMission km)
+			{
+				continue;
+			}
+
+			foreach (var kmDemand in km.DemandNPCs.Where(x => x.NPCs.Contains(type)))
+			{
+				if (kmDemand.EnableIndividualCounter)
+				{
+					kmDemand.Count(count);
+				}
+			}
+		}
+	}
+
+	/// <summary>
 	/// 保存任务
 	/// </summary>
 	/// <param name="tag"></param>
 	public void Save(TagCompound tag)
 	{
+		// TODO: NPCKillCounter persisitence
 		foreach (var (poolType, missionPool) in _missionPools)
 		{
 			tag.Add(
@@ -239,6 +285,7 @@ public class MissionManager
 	/// <param name="tag"></param>
 	public void Load(TagCompound tag)
 	{
+		// TODO: NPCKillCounter persisitence
 		foreach (var (poolType, missionPool) in _missionPools)
 		{
 			missionPool.Clear();
