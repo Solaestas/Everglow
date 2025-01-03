@@ -1,7 +1,7 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
 [Pipeline(typeof(WCSPipeline))]
-public class AvariceFailureDust : Visual
+public class Fevens_LightingBoltDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
@@ -29,11 +29,15 @@ public class AvariceFailureDust : Visual
 			return;
 		}
 		trails.Enqueue(position);
-		if (trails.Count > 20)
+		if (trails.Count > 15)
 		{
 			trails.Dequeue();
 		}
 		position += velocity;
+		if(Main.rand.NextBool(8))
+		{
+			velocity = velocity.RotatedBy(Main.rand.NextFloat(-0.8f, 0.8f));
+		}
 		velocity *= 0.95f;
 		scale = ai[0] * (1 - MathF.Sin(timer / maxTime * MathF.PI * 0.5f));
 		timer++;

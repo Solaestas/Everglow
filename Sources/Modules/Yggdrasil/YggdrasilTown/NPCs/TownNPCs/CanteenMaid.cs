@@ -4,10 +4,10 @@ using Terraria.GameContent.Personalities;
 using Terraria.Localization;
 using static Everglow.Commons.Utilities.NPCUtils;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
+namespace Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 
 [AutoloadHead]
-public class Resturateur : ModNPC
+public class CanteenMaid : ModNPC
 {
 	private bool canDespawn = false;
 	private int aiMainCount = 0;
@@ -18,14 +18,15 @@ public class Resturateur : ModNPC
 	public bool Idle = true;
 	public bool Talking = false;
 	public bool Sit = false;
+	public int FrameHeight = 52;
 
 	public int MySlimyWhoAmI = -1;
 
-	public override string HeadTexture => ModAsset.Resturateur_Head_Mod;
+	public override string HeadTexture => ModAsset.CanteenMaid_Head_Mod;
 
 	public override void SetStaticDefaults()
 	{
-		Main.npcFrameCount[NPC.type] = 15;
+		Main.npcFrameCount[NPC.type] = 13;
 	}
 
 	public override void SetDefaults()
@@ -251,12 +252,12 @@ public class Resturateur : ModNPC
 			NPC.frameCounter += Math.Abs(NPC.velocity.X);
 			if (NPC.frameCounter > 4)
 			{
-				NPC.frame.Y += 56;
+				NPC.frame.Y += FrameHeight;
 				NPC.frameCounter = 0;
 			}
-			if (NPC.frame.Y > 13 * 56)
+			if (NPC.frame.Y > 12 * FrameHeight)
 			{
-				NPC.frame.Y = 56;
+				NPC.frame.Y = FrameHeight;
 			}
 			if (!CanContinueWalk(NPC))
 			{
@@ -301,7 +302,7 @@ public class Resturateur : ModNPC
 			NPC.velocity *= 0;
 			yield return new SkipThisFrame();
 		}
-		NPC.frame = new Rectangle(0, 0, 32, 56);
+		NPC.frame = new Rectangle(0, 0, 32, FrameHeight);
 		yield return new WaitForFrames(16);
 		EndAIPiece();
 	}
@@ -317,7 +318,7 @@ public class Resturateur : ModNPC
 		}
 		NPC.direction *= -1;
 		NPC.spriteDirection = NPC.direction;
-		NPC.frame = new Rectangle(0, 0, 32, 56);
+		NPC.frame = new Rectangle(0, 0, 38, FrameHeight);
 		EndAIPiece();
 	}
 
@@ -326,7 +327,7 @@ public class Resturateur : ModNPC
 		for (int t = 0; t < time; t++)
 		{
 			NPC.spriteDirection = NPC.direction;
-			NPC.frame = new Rectangle(0, 0, 32, 56);
+			NPC.frame = new Rectangle(0, 0, 38, FrameHeight);
 			NPC.velocity.X = 0;
 			Idle = false;
 			if (CanAttack0())
@@ -399,7 +400,7 @@ public class Resturateur : ModNPC
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		Texture2D texMain = ModAsset.Resturateur.Value;
+		Texture2D texMain = ModAsset.CanteenMaid.Value;
 		Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height + 8) * 0.5f;
 		Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 

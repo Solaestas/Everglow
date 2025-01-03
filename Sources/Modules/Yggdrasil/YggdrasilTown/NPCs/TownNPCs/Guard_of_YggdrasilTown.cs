@@ -1,4 +1,3 @@
-using System;
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -7,7 +6,7 @@ using Terraria.GameContent.Personalities;
 using Terraria.Localization;
 using static Everglow.Commons.Utilities.NPCUtils;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
+namespace Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 
 [AutoloadHead]
 public class Guard_of_YggdrasilTown : ModNPC
@@ -155,7 +154,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 	{
 		if (MySlimyWhoAmI == -1 || !Main.npc[MySlimyWhoAmI].active || Main.npc[MySlimyWhoAmI].type != ModContent.NPCType<Guard_Slimy>())
 		{
-			NPC slimy = NPC.NewNPCDirect(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<Guard_Slimy>());
+			var slimy = NPC.NewNPCDirect(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<Guard_Slimy>());
 			MySlimyWhoAmI = slimy.whoAmI;
 		}
 	}
@@ -198,7 +197,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 				if (MathF.Abs(distance.X) < 120 && MathF.Abs(distance.Y) < 120)
 				{
 					float angle = MathF.Atan2(distance.Y, distance.X);
-					if ((angle < MathF.PI / 4 && angle > -MathF.PI * 2 / 9) || (angle > MathF.PI * 3 / 4 || angle < -MathF.PI * 7 / 9))
+					if (angle < MathF.PI / 4 && angle > -MathF.PI * 2 / 9 || angle > MathF.PI * 3 / 4 || angle < -MathF.PI * 7 / 9)
 					{
 						return true;
 					}
@@ -220,7 +219,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 				if (MathF.Abs(distance.X) < 120 && MathF.Abs(distance.Y) < 120 && distance.Length() < minDis)
 				{
 					float angle = MathF.Atan2(distance.Y, distance.X);
-					if ((angle < MathF.PI / 4 && angle > -MathF.PI * 2 / 9) || (angle > MathF.PI * 3 / 4 || angle < -MathF.PI * 7 / 9))
+					if (angle < MathF.PI / 4 && angle > -MathF.PI * 2 / 9 || angle > MathF.PI * 3 / 4 || angle < -MathF.PI * 7 / 9)
 					{
 						minDis = distance.Length();
 						nearestDir = distance;
@@ -368,7 +367,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 		NPC.spriteDirection = NPC.direction;
 		NPC.frame = new Rectangle(0, 0, 76, 62);
 		NPC.frameCounter = 0;
-		Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 8), distance, ModContent.ProjectileType<Guard_Attack_Spear>(), NPC.damage, 2, Main.myPlayer, NPC.whoAmI);
+		var proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 8), distance, ModContent.ProjectileType<Guard_Attack_Spear>(), NPC.damage, 2, Main.myPlayer, NPC.whoAmI);
 		SpearProjectile = proj;
 		for (int t = 0; t < 22; t++)
 		{
@@ -420,7 +419,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 		int direction = ChooseAttack1Direction();
 		NPC.direction = direction;
 		NPC.spriteDirection = direction;
-		Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction, 0), ModContent.ProjectileType<Guard_Attack_Fist>(), NPC.damage, 2, Main.myPlayer, NPC.whoAmI);
+		var proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction, 0), ModContent.ProjectileType<Guard_Attack_Fist>(), NPC.damage, 2, Main.myPlayer, NPC.whoAmI);
 		FistProjectile = proj;
 		for (int t = 0; t < 30; t++)
 		{
@@ -526,7 +525,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 			Texture2D texBody = ModAsset.Guard_of_YggdrasilTown_attack_body.Value;
 			Texture2D texArm = ModAsset.Guard_of_YggdrasilTown_attack_arm.Value;
 			Texture2D spear = ModAsset.Guard_Attack_Spear.Value;
-			Rectangle spearRect = new Rectangle(0, 0, 10, 64);
+			var spearRect = new Rectangle(0, 0, 10, 64);
 			Vector2 spearPos = SpearProjectile.Center - screenPos - Vector2.Normalize(SpearProjectile.velocity) * 32f * 1.2f;
 
 			Main.spriteBatch.Draw(texBody, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
@@ -549,13 +548,13 @@ public class Guard_of_YggdrasilTown : ModNPC
 			{
 				LockCenter = spearPos;
 			}
-			Vector2 vel = Vector2.Normalize(SpearProjectile.velocity);
+			var vel = Vector2.Normalize(SpearProjectile.velocity);
 			Vector2 width = vel.RotatedBy(MathF.PI * 0.5) * 90;
 			Color color = drawColor;
 			color.A = 0;
 			int trailLength = 16;
 			float timeEffectValue = (float)(Main.time * 0.10f);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			for (int x = 0; x < trailLength; x++)
 			{
 				float value = 0.8f;
@@ -577,7 +576,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 			}
 
 			color = drawColor;
-			List<Vertex2D> barsHighLight = new List<Vertex2D>();
+			var barsHighLight = new List<Vertex2D>();
 			for (int x = 0; x < trailLength; x++)
 			{
 				float value = 1;
@@ -590,7 +589,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 				barsHighLight.Add(LockCenter - vel * 6 * x - width * 0.4f, color, new Vector3(x / 30f - timeEffectValue, 0, MathF.Sin(x / 8f)));
 			}
 
-			SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+			SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 			Effect effect = Commons.ModAsset.StabSwordEffect.Value;
