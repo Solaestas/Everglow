@@ -3,6 +3,29 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem;
 
+public enum MissionType
+{
+	/// <summary>
+	/// 主线任务
+	/// </summary>
+	MainStory,
+
+	/// <summary>
+	/// 支线任务
+	/// </summary>
+	SideStory,
+
+	/// <summary>
+	/// 挑战任务
+	/// </summary>
+	Challenge,
+
+	/// <summary>
+	/// 日常任务
+	/// </summary>
+	Daily,
+}
+
 /// <summary>
 /// 任务基类
 /// <br>!继承后必须保证存在一个无参构造函数</br>
@@ -66,7 +89,12 @@ public abstract class MissionBase
 	/// <summary>
 	/// 任务所在的任务池类型
 	/// </summary>
-	public MissionManager.PoolType PoolType;
+	public MissionManager.PoolType PoolType { get; set; }
+
+	/// <summary>
+	/// 任务类型
+	/// </summary>
+	public MissionType MissionType { get; set; }
 
 	/// <summary>
 	/// 检查任务是否完成
@@ -85,6 +113,15 @@ public abstract class MissionBase
 	/// </summary>
 	/// <param name="gt"></param>
 	public virtual void Update()
+	{
+		CheckExpire();
+	}
+
+	/// <summary>
+	/// 检查任务是否过期
+	/// <para/>重写该方法以扩展过期条件
+	/// </summary>
+	private void CheckExpire()
 	{
 		if (PoolType == MissionManager.PoolType.Accepted && TimeMax > 0)
 		{
@@ -131,6 +168,7 @@ public abstract class MissionBase
 	public virtual void Save(TagCompound tag)
 	{
 		tag.Add(TimeSaveKey, Time);
+		tag.Add(nameof(MissionType), (int)MissionType);
 	}
 
 	/// <summary>
@@ -143,6 +181,11 @@ public abstract class MissionBase
 		{
 			Time = mt;
 		}
+
+		if (tag.TryGet<int>(nameof(MissionType), out var missionType))
+		{
+			MissionType = (MissionType)missionType;
+		}
 	}
 
 	/// <summary>
@@ -151,7 +194,7 @@ public abstract class MissionBase
 	/// <param name="types"></param>
 	public static void LoadVanillaItemTextures(IEnumerable<int> types)
 	{
-		foreach(var type in types.Distinct())
+		foreach (var type in types.Distinct())
 		{
 			// The Main.LoadItem function will skip the loaded items
 			Main.instance.LoadItem(type);
