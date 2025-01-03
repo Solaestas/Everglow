@@ -1,8 +1,23 @@
 using Everglow.Commons.MissionSystem.MissionTemplates;
 using MathNet.Numerics;
+using MonoMod.Utils;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem;
+
+public class DictionarySerializer : TagSerializer<KeyValuePair<int, int>, TagCompound>
+{
+	private const string Key = nameof(Key);
+	private const string Value = nameof(Value);
+
+	public override KeyValuePair<int, int> Deserialize(TagCompound tag) => new(tag.GetInt(Key), tag.GetInt(Value));
+
+	public override TagCompound Serialize(KeyValuePair<int, int> value) => new TagCompound()
+	{
+		[Key] = value.Key,
+		[Value] = value.Value,
+	};
+}
 
 public class MissionManager
 {
@@ -203,7 +218,7 @@ public class MissionManager
 			pool.ForEach(m => m.Update());
 		}
 
-		// 更新结束后检测所有进度100%的Accpted任务，触发其OnFinish()方法
+		// 更新结束后检测所有进度100%的Accpted任务，触发其OnComplete()方法
 		_missionPools[PoolType.Accepted].Where(x => x.CheckFinish()).ToList().ForEach(x => x.OnComplete());
 	}
 
@@ -254,7 +269,8 @@ public class MissionManager
 	/// <param name="tag"></param>
 	public void Save(TagCompound tag)
 	{
-		// TODO: NPCKillCounter persisitence
+		tag.Add(nameof(NPCKillCounter), NPCKillCounter.ToList());
+
 		foreach (var (poolType, missionPool) in _missionPools)
 		{
 			tag.Add(
@@ -264,9 +280,9 @@ public class MissionManager
 				$"Everglow.MissionManage.{poolType}.Missions",
 				missionPool.ConvertAll(m =>
 				{
-					TagCompound mt = new TagCompound();
-					m.Save(mt);
-					return mt;
+					TagCompound t = [];
+					m.Save(t);
+					return t;
 				}));
 		}
 	}
@@ -277,7 +293,13 @@ public class MissionManager
 	/// <param name="tag"></param>
 	public void Load(TagCompound tag)
 	{
-		// TODO: NPCKillCounter persisitence
+		NPCKillCounter.Clear();
+		tag.TryGet<List<KeyValuePair<int, int>>>(nameof(NPCKillCounter), out var nPCKillCounter);
+		if (nPCKillCounter != null && nPCKillCounter.Count > 0)
+		{
+			NPCKillCounter.AddRange(nPCKillCounter.ToDictionary());
+		}
+
 		foreach (var (poolType, missionPool) in _missionPools)
 		{
 			missionPool.Clear();
