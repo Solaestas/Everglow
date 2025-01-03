@@ -8,21 +8,21 @@ namespace Everglow.Commons.MissionSystem.MissionTemplates;
 /// </summary>
 public class GainItemMission : MissionBase
 {
-	private string _name = string.Empty;
-	private string _displayName = string.Empty;
-	private string _description = string.Empty;
+	private string name = string.Empty;
+	private string displayName = string.Empty;
+	private string description = string.Empty;
 	private float _progress = 0f;
-	private long _timeMax = -1;
+	private long timeMax = -1;
 
-	public override string Name => _name;
+	public override string Name => name;
 
-	public override string DisplayName => _displayName;
+	public override string DisplayName => displayName;
 
-	public override string Description => _description;
+	public override string Description => description;
 
 	public override float Progress => _progress;
 
-	public override long TimeMax => _timeMax;
+	public override long TimeMax => timeMax;
 
 	public override Texture2D Icon => DemandItems.Count > 0 ? TextureAssets.Item[DemandItems.First().type].Value : null;
 
@@ -57,10 +57,10 @@ public class GainItemMission : MissionBase
 			throw new ArgumentNullException(nameof(description), "Mission description cannot be null or empty.");
 		}
 
-		_name = name;
-		_displayName = displayName;
-		_description = description;
-		_timeMax = timeMax;
+		this.name = name;
+		this.displayName = displayName;
+		this.description = description;
+		this.timeMax = timeMax;
 	}
 
 	public override void OnComplete()
@@ -76,10 +76,10 @@ public class GainItemMission : MissionBase
 	public override void Load(TagCompound tag)
 	{
 		base.Load(tag);
-		tag.TryGet("Name", out _name);
-		tag.TryGet("DisplayName", out _displayName);
-		tag.TryGet("Description", out _description);
-		tag.TryGet("TimeMax", out _timeMax);
+		tag.TryGet(nameof(Name), out name);
+		tag.TryGet(nameof(DisplayName), out displayName);
+		tag.TryGet(nameof(Description), out description);
+		tag.TryGet(nameof(TimeMax), out timeMax);
 
 		DemandItems.Clear();
 		if (tag.TryGet<IList<TagCompound>>(nameof(DemandItems), out var diTag))
@@ -99,26 +99,20 @@ public class GainItemMission : MissionBase
 			}
 		}
 
-		// Load not-loaded textures for required vanilla items (DemandItem, RewardItem)
-		foreach (var type in DemandItems.Select(x => x.type)
-			.Concat(RewardItems.Select(x => x.type))
-			.Where(type => type <= ItemID.Count)
-			.Distinct())
-		{
-			// The Main.LoadItem function will skip the loaded items
-			Main.instance.LoadItem(type);
-		}
+		LoadVanillaItemTextures(
+			DemandItems.Select(x => x.type)
+			.Concat(RewardItems.Select(x => x.type)));
 	}
 
 	public override void Save(TagCompound tag)
 	{
 		base.Save(tag);
-		tag.Add("TimeMax", TimeMax);
-		tag.Add("Name", Name);
-		tag.Add("DisplayName", DisplayName);
-		tag.Add("Description", Description);
-		tag.Add("DemandItem", DemandItems.ConvertAll(ItemIO.Save));
-		tag.Add("RewardItem", RewardItems.ConvertAll(ItemIO.Save));
+		tag.Add(nameof(TimeMax), TimeMax);
+		tag.Add(nameof(Name), Name);
+		tag.Add(nameof(DisplayName), DisplayName);
+		tag.Add(nameof(Description), Description);
+		tag.Add(nameof(DemandItems), DemandItems.ConvertAll(ItemIO.Save));
+		tag.Add(nameof(RewardItems), RewardItems.ConvertAll(ItemIO.Save));
 	}
 
 	public override void Update()

@@ -61,6 +61,8 @@ public abstract class MissionBase
 	}
 	= 0;
 
+	public const string TimeSaveKey = "MissionTime";
+
 	/// <summary>
 	/// 任务所在的任务池类型
 	/// </summary>
@@ -128,7 +130,7 @@ public abstract class MissionBase
 	/// <param name="tag"></param>
 	public virtual void Save(TagCompound tag)
 	{
-		tag.Add("MissionTime", Time);
+		tag.Add(TimeSaveKey, Time);
 	}
 
 	/// <summary>
@@ -137,9 +139,22 @@ public abstract class MissionBase
 	/// <param name="tag"></param>
 	public virtual void Load(TagCompound tag)
 	{
-		if (tag.TryGet<long>("MissionTime", out var mt))
+		if (tag.TryGet<long>(TimeSaveKey, out var mt))
 		{
 			Time = mt;
+		}
+	}
+
+	/// <summary>
+	/// Load not-loaded textures for required vanilla items (DemandItem, RewardItem)
+	/// </summary>
+	/// <param name="types"></param>
+	public static void LoadVanillaItemTextures(IEnumerable<int> types)
+	{
+		foreach(var type in types.Distinct())
+		{
+			// The Main.LoadItem function will skip the loaded items
+			Main.instance.LoadItem(type);
 		}
 	}
 }
