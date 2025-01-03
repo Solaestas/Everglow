@@ -239,19 +239,11 @@ public class MissionManager
 		}
 
 		// Update NPC kill mission
-		foreach (var m in _missionPools[PoolType.Accepted])
+		foreach (MissionBase m in _missionPools[PoolType.Accepted])
 		{
-			if (m is not KillNPCMission km)
+			if (m is KillNPCMission km)
 			{
-				continue;
-			}
-
-			foreach (var kmDemand in km.DemandNPCs.Where(x => x.NPCs.Contains(type)))
-			{
-				if (kmDemand.EnableIndividualCounter)
-				{
-					kmDemand.Count(count);
-				}
+				km.CountKill(type, count);
 			}
 		}
 	}

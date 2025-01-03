@@ -10,15 +10,12 @@ public class KillNPCMission : MissionBase
 {
 	public class KillNPCRequirement
 	{
-		private KillNPCRequirement(List<int> nPCs, int requirement, bool enableIndividualCounter)
+		private KillNPCRequirement(IEnumerable<int> nPCs, int requirement, bool enableIndividualCounter, int counter = 0)
 		{
-			NPCs = nPCs;
+			NPCs = nPCs.ToList();
 			Requirement = requirement;
 			EnableIndividualCounter = enableIndividualCounter;
-			if (EnableIndividualCounter)
-			{
-				Counter = 0;
-			}
+			this.counter = counter;
 		}
 
 		private int counter = 0;
@@ -101,6 +98,24 @@ public class KillNPCMission : MissionBase
 			{
 				Counter = Requirement;
 			}
+		}
+
+		public class KillNPCRequirementSerializer : TagSerializer<KillNPCRequirement, TagCompound>
+		{
+			public override TagCompound Serialize(KillNPCRequirement value) => new TagCompound()
+			{
+				[nameof(NPCs)] = value.NPCs,
+				[nameof(Requirement)] = value.Requirement,
+				[nameof(EnableIndividualCounter)] = value.EnableIndividualCounter,
+				[nameof(Counter)] = value.counter,
+			};
+
+			public override KillNPCRequirement Deserialize(TagCompound tag) =>
+				new KillNPCRequirement(
+					tag.GetList<int>(nameof(NPCs)),
+					tag.GetInt(nameof(Requirement)),
+					tag.GetBool(nameof(EnableIndividualCounter)),
+					tag.GetInt(nameof(Counter)));
 		}
 	}
 
@@ -193,8 +208,57 @@ public class KillNPCMission : MissionBase
 		progress = DemandNPCs.Select(x => x.Progress).Average();
 	}
 
-	public override void Load(TagCompound tag) => base.Load(tag);
+	/// <summary>
+	/// Count kill for each demand group
+	/// </summary>
+	/// <param name="type">The type of NPC</param>
+	/// <param name="count">The count of kill. Default to 1.</param>
+	public void CountKill(int type, int count = 1)
+	{
+		foreach (var kmDemand in DemandNPCs.Where(x => x.NPCs.Contains(type)))
+		{
+			if (kmDemand.EnableIndividualCounter)
+			{
+				kmDemand.Count(count);
+			}
+		}
+	}
 
-	// TODO: DemandNPCs and RewardItems persistence
-	public override void Save(TagCompound tag) => base.Save(tag);
+	public override void Load(TagCompound tag)
+	{
+		base.Load(tag);
+		tag.TryGet(nameof(Name), out name);
+		tag.TryGet(nameof(DisplayName), out displayName);
+		tag.TryGet(nameof(Description), out description);
+		tag.TryGet(nameof(TimeMax), out timeMax);
+
+		DemandNPCs.Clear();
+		tag.TryGet<List<KillNPCRequirement>>(nameof(DemandNPCs), out var demandNPCs);
+		if (demandNPCs != null && demandNPCs.Count != 0)
+		{
+			DemandNPCs.AddRange(demandNPCs);
+		}
+
+		RewardItems.Clear();
+		if (tag.TryGet<IList<TagCompound>>(nameof(RewardItems), out var riTag))
+		{
+			foreach (var iTag in riTag)
+			{
+				RewardItems.Add(ItemIO.Load(iTag));
+			}
+		}
+
+		LoadVanillaItemTextures(RewardItems.Select(x => x.type));
+	}
+
+	public override void Save(TagCompound tag)
+	{
+		base.Save(tag);
+		tag.Add(nameof(TimeMax), TimeMax);
+		tag.Add(nameof(Name), Name);
+		tag.Add(nameof(DisplayName), DisplayName);
+		tag.Add(nameof(Description), Description);
+		tag.Add(nameof(DemandNPCs), DemandNPCs);
+		tag.Add(nameof(RewardItems), RewardItems.ConvertAll(ItemIO.Save));
+	}
 }
