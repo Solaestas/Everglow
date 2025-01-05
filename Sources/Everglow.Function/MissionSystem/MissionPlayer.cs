@@ -13,6 +13,32 @@ public class MissionPlayer : ModPlayer
 	{
 		if (Player.whoAmI == Main.myPlayer)
 		{
+			MissionManager.Clear();
+
+			var mMission = new MultipleMission();
+			mMission.SetInfo("测试层级任务", "含2个子任务", "测试[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
+
+			var subM1 = new GainItemMission();
+			subM1.SetInfo("子任务1", "子任务1", "测试[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
+			subM1.DemandItems.AddRange([
+				new Item(ItemID.DirtBlock, 10)]);
+			subM1.RewardItems.AddRange([
+				new Item(ItemID.Wood, 10)]);
+
+			var subM2 = new GainItemMission();
+			subM2.SetInfo("子任务2", "子任务2", "测试[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
+			subM2.DemandItems.AddRange([
+				new Item(ItemID.DirtBlock, 8)]);
+			subM2.RewardItems.AddRange([
+				new Item(ItemID.Wood, 8)]);
+
+			mMission.SubMissions.Add(subM1);
+			mMission.SubMissions.Add(subM2);
+
+			MissionManager.AddMission(mMission, MissionManager.PoolType.Available);
+
+			return;
+
 			if (!MissionManager.HasMission<GainItemMission>())
 			{
 				var mission = new GainItemMission();

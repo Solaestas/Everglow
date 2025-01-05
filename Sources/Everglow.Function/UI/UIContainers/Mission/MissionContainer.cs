@@ -1,4 +1,5 @@
 using Everglow.Commons.MissionSystem;
+using Everglow.Commons.MissionSystem.MissionTemplates;
 using Everglow.Commons.UI.UIContainers.Mission.UIElements;
 using Everglow.Commons.UI.UIElements;
 using static Everglow.Commons.MissionSystem.MissionManager;
@@ -284,7 +285,16 @@ public class MissionContainer : UIContainerElement
 		{
 			foreach (var m in mp)
 			{
-				var element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [m]);
+				BaseElement element;
+				if (m is not MultipleMission sOM)
+				{
+					element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [m]);
+				}
+				else
+				{
+					element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [sOM.CurrentMission]);
+				}
+
 				element.Info.Top.SetValue(top);
 				element.Events.OnLeftClick += e =>
 				{
@@ -293,7 +303,9 @@ public class MissionContainer : UIContainerElement
 						ChangeSelectedItem((UIMissionItem)e);
 					}
 				};
+
 				elements.Add(element);
+
 				top += element.Info.Height;
 				top.Pixel += 2f;
 			}
