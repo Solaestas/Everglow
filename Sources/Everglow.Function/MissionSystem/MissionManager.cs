@@ -5,20 +5,6 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem;
 
-public class DictionarySerializer : TagSerializer<KeyValuePair<int, int>, TagCompound>
-{
-	private const string Key = nameof(Key);
-	private const string Value = nameof(Value);
-
-	public override KeyValuePair<int, int> Deserialize(TagCompound tag) => new(tag.GetInt(Key), tag.GetInt(Value));
-
-	public override TagCompound Serialize(KeyValuePair<int, int> value) => new TagCompound()
-	{
-		[Key] = value.Key,
-		[Value] = value.Value,
-	};
-}
-
 public class MissionManager
 {
 	/// <summary>

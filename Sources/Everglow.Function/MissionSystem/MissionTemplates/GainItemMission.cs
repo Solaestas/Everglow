@@ -28,6 +28,9 @@ public class GainItemMission : MissionBase
 
 	public string SourceContext => $"{nameof(Everglow)}.{nameof(GainItemMission)}.{Name}";
 
+	/// <summary>
+	/// Determine if the demand items will be consumed on mission complete.
+	/// </summary>
 	public bool Consume { get; set; } = false;
 
 	public List<Item> DemandItems { get; init; } = [];

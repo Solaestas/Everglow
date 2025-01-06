@@ -162,6 +162,7 @@ public abstract class MissionBase
 
 	/// <summary>
 	/// 任务完成时
+	/// <para/>对于完成时HOOK，请重写<see cref="OnCompleteCustom"/>方法，本方法仅用于<see cref="MissionManager.Update"/>
 	/// </summary>
 	public void OnComplete()
 	{
@@ -172,6 +173,7 @@ public abstract class MissionBase
 
 	/// <summary>
 	/// 任务完成时的额外处理
+	/// <para/>此方法自<see cref="OnComplete"/>抽离，用于给<see cref="MissionTemplates.MultipleMission"/>提供单独的完成处理
 	/// </summary>
 	public virtual void OnCompleteCustom()
 	{

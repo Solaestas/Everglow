@@ -292,9 +292,11 @@ public class MissionContainer : UIContainerElement
 				}
 				else
 				{
+					// TODO: Optimize multiple mission rendering
 					element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [sOM.CurrentMission]);
 				}
 
+				// TODO: Optimize visible option
 				// Inherit the visibility of UIMissionItem
 				element.Info.IsVisible = m.IsVisible;
 
