@@ -104,7 +104,6 @@ public class MissionPlayer : ModPlayer
 		if (Player.whoAmI == Main.myPlayer)
 		{
 			MissionManager.Save(tag);
-			MissionManager.Clear();
 		}
 	}
 
