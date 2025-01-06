@@ -115,6 +115,11 @@ public abstract class MissionBase
 	public MissionType MissionType { get; set; }
 
 	/// <summary>
+	/// 是否显示在任务列表中
+	/// </summary>
+	public bool IsVisible { get; set; } = true;
+
+	/// <summary>
 	/// 检查任务是否完成
 	/// </summary>
 	/// <returns></returns>

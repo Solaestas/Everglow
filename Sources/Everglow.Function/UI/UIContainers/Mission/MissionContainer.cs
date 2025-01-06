@@ -295,6 +295,9 @@ public class MissionContainer : UIContainerElement
 					element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [sOM.CurrentMission]);
 				}
 
+				// Inherit the visibility of UIMissionItem
+				element.Info.IsVisible = m.IsVisible;
+
 				element.Info.Top.SetValue(top);
 				element.Events.OnLeftClick += e =>
 				{
