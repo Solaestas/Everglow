@@ -28,6 +28,8 @@ public class GainItemMission : MissionBase
 
 	public string SourceContext => $"{nameof(Everglow)}.{nameof(GainItemMission)}.{Name}";
 
+	public bool Consume { get; set; } = false;
+
 	public List<Item> DemandItems { get; init; } = [];
 
 	public List<Item> RewardItems { get; init; } = [];
@@ -79,7 +81,7 @@ public class GainItemMission : MissionBase
 						inventoryItem.stack = 0;
 					}
 					else
-	{
+					{
 						inventoryItem.stack -= stack;
 						break;
 					}

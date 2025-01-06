@@ -24,6 +24,7 @@ public class MissionPlayer : ModPlayer
 				new Item(ItemID.DirtBlock, 10)]);
 			subM1.RewardItems.AddRange([
 				new Item(ItemID.Wood, 10)]);
+			subM1.Consume = true;
 
 			var subM2 = new GainItemMission();
 			subM2.SetInfo("子任务2", "子任务2", "测试[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
