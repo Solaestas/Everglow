@@ -3,6 +3,10 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.MissionTemplates;
 
+/// <summary>
+/// Represent a mission which contains serveral sub missions
+/// </summary>
+[Obsolete("This mission template will cause a lot bug", true)]
 public class MultipleMission : MissionBase
 {
 	private string name = string.Empty;
