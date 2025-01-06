@@ -66,11 +66,25 @@ public class MultipleMission : MissionBase
 	{
 		base.Update();
 
-		if (CurrentMission.CheckFinish() && currentIndex < SubMissions.Count - 1)
+		// If current is not the last sub mission
+		if (currentIndex < SubMissions.Count - 1)
 		{
-			CurrentMission.PoolType = MissionManager.PoolType.Completed;
-			currentIndex++;
+			if (CurrentMission.CheckFinish())
+			{
+				CurrentMission.OnCompleteCustom();
+				CurrentMission.PoolType = MissionManager.PoolType.Completed;
+				currentIndex++;
+			}
 		}
+		else // If current is the last sub mission
+		{
+			if (CurrentMission.CheckFinish() && CurrentMission.PoolType != MissionManager.PoolType.Completed)
+			{
+				CurrentMission.OnCompleteCustom();
+				CurrentMission.PoolType = MissionManager.PoolType.Completed;
+			}
+		}
+
 		CurrentMission.Update();
 	}
 

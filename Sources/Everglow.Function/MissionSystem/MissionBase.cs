@@ -158,9 +158,18 @@ public abstract class MissionBase
 	/// <summary>
 	/// 任务完成时
 	/// </summary>
-	public virtual void OnComplete()
+	public void OnComplete()
 	{
 		MissionManager.Instance.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Completed);
+
+		OnCompleteCustom();
+	}
+
+	/// <summary>
+	/// 任务完成时的额外处理
+	/// </summary>
+	public virtual void OnCompleteCustom()
+	{
 	}
 
 	/// <summary>

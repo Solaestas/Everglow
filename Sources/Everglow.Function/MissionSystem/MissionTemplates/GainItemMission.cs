@@ -63,9 +63,29 @@ public class GainItemMission : MissionBase
 		this.timeMax = timeMax;
 	}
 
-	public override void OnComplete()
+	public override void OnCompleteCustom()
 	{
-		base.OnComplete();
+		if (Consume)
+		{
+			foreach (var item in DemandItems)
+			{
+				var stack = item.stack;
+
+				foreach (var inventoryItem in Main.LocalPlayer.inventory.Where(x => x.type == item.type))
+				{
+					if (inventoryItem.stack < stack)
+					{
+						stack -= inventoryItem.stack;
+						inventoryItem.stack = 0;
+					}
+					else
+	{
+						inventoryItem.stack -= stack;
+						break;
+					}
+				}
+			}
+		}
 
 		foreach (var item in RewardItems)
 		{

@@ -174,10 +174,8 @@ public class KillNPCMission : MissionBase
 		this.timeMax = timeMax;
 	}
 
-	public override void OnComplete()
+	public override void OnCompleteCustom()
 	{
-		base.OnComplete();
-
 		foreach (var item in RewardItems)
 		{
 			Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(SourceContext), item, item.stack);
