@@ -1,5 +1,4 @@
 using Everglow.Commons.MissionSystem;
-using Everglow.Commons.MissionSystem.MissionTemplates;
 using Everglow.Commons.UI.UIContainers.Mission.UIElements;
 using Everglow.Commons.UI.UIElements;
 using static Everglow.Commons.MissionSystem.MissionManager;
@@ -286,15 +285,8 @@ public class MissionContainer : UIContainerElement
 			foreach (var m in mp)
 			{
 				BaseElement element;
-				if (m is not MultipleMission sOM)
-				{
-					element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [m]);
-				}
-				else
-				{
-					// TODO: Optimize multiple mission rendering
-					element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [sOM.CurrentMission]);
-				}
+
+				element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [m]);
 
 				// TODO: Optimize visible option
 				// Inherit the visibility of UIMissionItem
