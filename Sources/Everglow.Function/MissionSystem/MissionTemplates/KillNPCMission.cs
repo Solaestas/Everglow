@@ -161,7 +161,7 @@ public class KillNPCMission : MissionBase
 
 	public override string Description => description;
 
-	public override Texture2D Icon => TextureAssets.NpcHead[DemandNPCs.First()?.NPCs.First() ?? NPCID.BlueSlime].Value;
+	public override Texture2D Icon => TextureAssets.Npc[DemandNPCs.First()?.NPCs.First() ?? NPCID.BlueSlime].Value;
 
 	public override float Progress => progress;
 

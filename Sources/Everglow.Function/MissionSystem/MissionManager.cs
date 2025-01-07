@@ -294,7 +294,7 @@ public class MissionManager
 			{
 				for (int j = 0; j < mt.Count; j++)
 				{
-					var mission = (MissionBase)Activator.CreateInstance(Type.GetType(mt[j]));
+					var mission = (MissionBase)Activator.CreateInstance(Ins.ModuleManager.Types.First(t => t.FullName == mt[j]));
 					mission.Load(m[j]);
 					missionPool.Add(mission);
 					mission.PoolType = poolType;

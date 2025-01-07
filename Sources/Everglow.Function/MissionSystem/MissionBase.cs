@@ -228,7 +228,7 @@ public abstract class MissionBase
 	/// <param name="types"></param>
 	public static void LoadVanillaItemTextures(IEnumerable<int> types)
 	{
-		foreach (var type in types.Distinct())
+		foreach (var type in types.Distinct().Where(t => t <= ItemID.Count))
 		{
 			// The Main.LoadItem function will skip the loaded items
 			Main.instance.LoadItem(type);
