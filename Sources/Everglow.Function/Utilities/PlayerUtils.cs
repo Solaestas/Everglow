@@ -52,4 +52,20 @@ public static class PlayerUtils
 
 		return devPlayerNames;
 	}
+
+	/// <summary>
+	/// Sets the player's arm position to align with the mouse position, with an optional offset.
+	/// </summary>
+	/// <param name="player">The player instance to modify.</param>
+	/// <param name="offset">An optional float value to adjust the rotation by. Defaults to 0f.</param>
+	/// <returns>The modified player instance.</returns>
+	public static Player SetArmToFitMousePosition(this Player player, float offset = 0f)
+	{
+		var rotation = (Main.MouseWorld - player.MountedCenter).ToRotation() * player.gravDir + offset * player.direction - MathHelper.PiOver2;
+
+		// Set the player's composite arm to be in front, fully stretched, and rotated to the calculated rotation.
+		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation);
+
+		return player;
+	}
 }
