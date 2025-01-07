@@ -60,6 +60,11 @@ public class MissionManager
 	/// </summary>
 	public static MissionManager Instance => Main.LocalPlayer.GetModPlayer<MissionPlayer>().MissionManager;
 
+	/// <summary>
+	/// 任务列表是否需要更新
+	/// </summary>
+	public static bool NeedRefresh { get; set; } = false;
+
 	public MissionManager()
 	{
 		foreach (var missionPoolType in Enum.GetValues<PoolType>())

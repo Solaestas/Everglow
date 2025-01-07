@@ -168,6 +168,9 @@ public abstract class MissionBase
 	{
 		MissionManager.Instance.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Completed);
 
+		IsVisible = true;
+		MissionManager.NeedRefresh = true;
+
 		OnCompleteCustom();
 	}
 

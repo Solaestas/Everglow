@@ -262,6 +262,14 @@ public class MissionContainer : UIContainerElement
 	public override void Update(GameTime gt)
 	{
 		base.Update(gt);
+
+		if (MissionManager.NeedRefresh)
+		{
+			RefreshList();
+
+			MissionManager.NeedRefresh = false;
+		}
+
 		Calculation();
 	}
 
