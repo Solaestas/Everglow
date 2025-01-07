@@ -23,7 +23,8 @@ public class MissionPlayer : ModPlayer
 					GainItemRequirement.Create([ItemID.DirtBlock], 10)]);
 				mission.RewardItems.AddRange([
 					new Item(ItemID.Wood, 10)]);
-				MissionManager.AddMission(mission, MissionManager.PoolType.Available);
+				mission.IsVisible = false;
+				MissionManager.AddMission(mission, MissionManager.PoolType.Accepted);
 
 				mission = new GainItemMission();
 				mission.SetInfo("Test2", "获取10个木头", "测试介绍2\n" +

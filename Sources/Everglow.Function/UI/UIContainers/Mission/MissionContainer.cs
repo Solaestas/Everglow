@@ -284,13 +284,14 @@ public class MissionContainer : UIContainerElement
 		{
 			foreach (var m in mp)
 			{
+				if(!m.IsVisible)
+				{
+					continue;
+				}
+
 				BaseElement element;
 
 				element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [m]);
-
-				// TODO: Optimize visible option
-				// Inherit the visibility of UIMissionItem
-				element.Info.IsVisible = m.IsVisible;
 
 				element.Info.Top.SetValue(top);
 				element.Events.OnLeftClick += e =>
