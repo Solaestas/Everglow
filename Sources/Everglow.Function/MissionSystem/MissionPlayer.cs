@@ -1,5 +1,6 @@
 using Everglow.Commons.MissionSystem.MissionTemplates;
 using Terraria.ModLoader.IO;
+using static Everglow.Commons.MissionSystem.MissionTemplates.GainItemMission;
 using static Everglow.Commons.MissionSystem.MissionTemplates.KillNPCMission;
 
 namespace Everglow.Commons.MissionSystem;
@@ -15,11 +16,11 @@ public class MissionPlayer : ModPlayer
 		{
 			MissionManager.Clear();
 			if (!MissionManager.Instance.HasMission<MissionBase>())
-			{ 
+			{
 				var mission = new GainItemMission();
 				mission.SetInfo("Test1", "获取10个土块", "测试[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
 				mission.DemandItems.AddRange([
-					new Item(ItemID.DirtBlock, 10)]);
+					GainItemRequirement.Create([ItemID.DirtBlock], 10)]);
 				mission.RewardItems.AddRange([
 					new Item(ItemID.Wood, 10)]);
 				MissionManager.AddMission(mission, MissionManager.PoolType.Available);
@@ -28,8 +29,7 @@ public class MissionPlayer : ModPlayer
 				mission.SetInfo("Test2", "获取10个木头", "测试介绍2\n" +
 					"[TimerIconDrawer,MissionName='Test2'] 剩余时间:[TimerStringDrawer,MissionName='Test2']", 30000);
 				mission.DemandItems.AddRange([
-					new Item(ItemID.Wood, 10)
-					]);
+					GainItemRequirement.Create([ItemID.Wood], 10)]);
 				mission.RewardItems.AddRange([
 					new Item(ItemID.IronOre, 10)]);
 				MissionManager.AddMission(mission, MissionManager.PoolType.Accepted);
@@ -37,7 +37,7 @@ public class MissionPlayer : ModPlayer
 				mission = new GainItemMission();
 				mission.SetInfo("Test3", "获取10个铁矿", "测试介绍3");
 				mission.DemandItems.AddRange([
-					new Item(ItemID.IronOre, 10)]);
+					GainItemRequirement.Create([ItemID.IronOre], 10)]);
 				mission.RewardItems.AddRange([
 					new Item(ItemID.Zenith, 10)]);
 				MissionManager.AddMission(mission, MissionManager.PoolType.Available);

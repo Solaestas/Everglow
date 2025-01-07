@@ -8,6 +8,73 @@ namespace Everglow.Commons.MissionSystem.MissionTemplates;
 /// </summary>
 public class GainItemMission : MissionBase
 {
+	/// <summary>
+	/// A group of items which use the same requirement
+	/// </summary>
+	public class GainItemRequirement
+	{
+		private GainItemRequirement(IEnumerable<int> items, int requirement)
+		{
+			Items = items.ToList();
+			Requirement = requirement;
+		}
+
+		/// <summary>
+		/// Item types
+		/// </summary>
+		public List<int> Items { get; init; }
+
+		/// <summary>
+		/// Gain count requirement
+		/// </summary>
+		public int Requirement { get; init; }
+
+		/// <summary>
+		/// Represents the progress towards fulfilling the item requirement.
+		/// </summary>
+		/// <remarks>
+		/// This property returns a floating-point number between 0 and 1, representing the ratio of the current items' stack to the required number.
+		/// <para/>
+		/// The returned value is clamped to the range [0, 1], ensuring that the progress is always represented as a percentage (0% to 100%).
+		/// </remarks>
+		public float Progress(IEnumerable<Item> inventory) =>
+			Math.Min(1f, Math.Max(0f, inventory.Where(x => Items.Contains(x.type)).Select(x => x.stack).Sum() / (float)Requirement));
+
+		/// <summary>
+		/// Create a new instance of <see cref="GainItemRequirement"/> class if the input is valid.
+		/// </summary>
+		/// <param name="items">A list of NPC id. Must not be empty.</param>
+		/// <param name="requirement">The requirement value. Must be greater than 0.</param>
+		/// <returns>A new <see cref="GainItemRequirement"/> instance if the input is valid; otherwise, returns <c>null</c>.</returns>
+		public static GainItemRequirement Create(List<int> items, int requirement)
+		{
+			if (items.Count == 0)
+			{
+				return null;
+			}
+
+			if (requirement <= 0)
+			{
+				return null;
+			}
+
+			return new GainItemRequirement(items, requirement);
+		}
+
+		public class GainItemRequirementSerializer : TagSerializer<GainItemRequirement, TagCompound>
+		{
+			public override TagCompound Serialize(GainItemRequirement value) => new TagCompound()
+			{
+				[nameof(Items)] = value.Items,
+				[nameof(Requirement)] = value.Requirement,
+			};
+
+			public override GainItemRequirement Deserialize(TagCompound tag) => new GainItemRequirement(
+				tag.GetList<int>(nameof(Items)),
+				tag.GetInt(nameof(Requirement)));
+		}
+	}
+
 	private string name = string.Empty;
 	private string displayName = string.Empty;
 	private string description = string.Empty;
@@ -24,7 +91,7 @@ public class GainItemMission : MissionBase
 
 	public override long TimeMax => timeMax;
 
-	public override Texture2D Icon => DemandItems.Count > 0 ? TextureAssets.Item[DemandItems.First().type].Value : null;
+	public override Texture2D Icon => DemandItems.Count > 0 ? TextureAssets.Item[DemandItems.First().Items.First()].Value : null;
 
 	public string SourceContext => $"{nameof(Everglow)}.{nameof(GainItemMission)}.{Name}";
 
@@ -33,7 +100,7 @@ public class GainItemMission : MissionBase
 	/// </summary>
 	public bool Consume { get; set; } = false;
 
-	public List<Item> DemandItems { get; init; } = [];
+	public List<GainItemRequirement> DemandItems { get; init; } = [];
 
 	public List<Item> RewardItems { get; init; } = [];
 
@@ -74,9 +141,9 @@ public class GainItemMission : MissionBase
 		{
 			foreach (var item in DemandItems)
 			{
-				var stack = item.stack;
+				var stack = item.Requirement;
 
-				foreach (var inventoryItem in Main.LocalPlayer.inventory.Where(x => x.type == item.type))
+				foreach (var inventoryItem in Main.LocalPlayer.inventory.Where(x => item.Items.Contains(x.type)))
 				{
 					if (inventoryItem.stack < stack)
 					{
@@ -107,12 +174,9 @@ public class GainItemMission : MissionBase
 		tag.TryGet(nameof(TimeMax), out timeMax);
 
 		DemandItems.Clear();
-		if (tag.TryGet<IList<TagCompound>>(nameof(DemandItems), out var diTag))
+		if (tag.TryGet<List<GainItemRequirement>>(nameof(DemandItems), out var demandItems))
 		{
-			foreach (var iTag in diTag)
-			{
-				DemandItems.Add(ItemIO.Load(iTag));
-			}
+			DemandItems.AddRange(demandItems);
 		}
 
 		RewardItems.Clear();
@@ -125,7 +189,7 @@ public class GainItemMission : MissionBase
 		}
 
 		LoadVanillaItemTextures(
-			DemandItems.Select(x => x.type)
+			DemandItems.SelectMany(x => x.Items)
 			.Concat(RewardItems.Select(x => x.type)));
 	}
 
@@ -136,7 +200,7 @@ public class GainItemMission : MissionBase
 		tag.Add(nameof(Name), Name);
 		tag.Add(nameof(DisplayName), DisplayName);
 		tag.Add(nameof(Description), Description);
-		tag.Add(nameof(DemandItems), DemandItems.ConvertAll(ItemIO.Save));
+		tag.Add(nameof(DemandItems), DemandItems);
 		tag.Add(nameof(RewardItems), RewardItems.ConvertAll(ItemIO.Save));
 	}
 
@@ -164,38 +228,14 @@ public class GainItemMission : MissionBase
 			return;
 		}
 
-		// Calculate required item types and their stack
-		var demandItemStacks = DemandItems
-			.GroupBy(item => item.type)
-			.ToDictionary(
-				group => group.Key,
-				group => group.Sum(item => item.stack));
-
-		// Calculate owned item types and their stack
-		var ownedItemStacks = paramItems
-			.Where(item => demandItemStacks.ContainsKey(item.type))
-			.GroupBy(item => item.type)
-			.ToDictionary(
-				group => group.Key,
-				group => group.Sum(item => item.stack));
-
 		// Calculate mission progress
-		if (demandItemStacks.Count == 0 || demandItemStacks.Values.Sum() == 0)
+		if (DemandItems.Count == 0 || DemandItems.Select(x => x.Requirement).Sum() == 0)
 		{
 			_progress = 1f;
 		}
 		else
 		{
-			// The final progress is calculated as the average of the individual progress
-			// for each item type, where individual progress is the ratio of owned items
-			// to required items (capped at 1 and floored at 0) for that item type.
-			float IndividualProgress(KeyValuePair<int, int> requiredItem)
-			{
-				var ownedStack = ownedItemStacks.GetValueOrDefault(requiredItem.Key, 0);
-				var requiredStack = (float)requiredItem.Value;
-				return Math.Min(1f, Math.Max(0f, ownedStack / requiredStack));
-			}
-			_progress = demandItemStacks.Select(IndividualProgress).Average();
+			_progress = DemandItems.Select(x => x.Progress(paramItems)).Average();
 		}
 	}
 }
