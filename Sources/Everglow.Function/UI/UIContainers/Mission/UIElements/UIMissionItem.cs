@@ -218,20 +218,19 @@ public class UIMissionItem : UIBlock
 
 		protected override void DrawChildren(SpriteBatch sb)
 		{
-			// Draw status block to represent the status of mission
 			var texture = Type switch
 			{
-				MissionType.None => ModAsset.MissionType_Black.Value,
-				MissionType.MainStory => ModAsset.MissionType_Gold.Value,
+				MissionType.None => ModAsset.MissionType_Grey.Value,
+				MissionType.MainStory => ModAsset.MissionType_Yellow.Value,
 				MissionType.SideStory => ModAsset.MissionType_Purple.Value,
 				MissionType.Achievement => ModAsset.MissionType_White.Value,
 				MissionType.Challenge => ModAsset.MissionType_Red.Value,
 				MissionType.Daily => ModAsset.MissionType_Blue.Value,
-				MissionType.Legendary => ModAsset.MissionType_Black.Value,
+				MissionType.Legendary => ModAsset.MissionType_Prism.Value,
 				_ => ModAsset.MissionStatus.Value,
 			};
 
-			sb.Draw(texture, new Vector2(Info.TotalHitBox.X, Info.TotalHitBox.Y), null, color, Rotation, Origin, 0.04f, SpriteEffects, 0f);
+			sb.Draw(texture, new Vector2(Info.TotalHitBox.X, Info.TotalHitBox.Y), null, color, Rotation, Origin, 0.4f, SpriteEffects, 0f);
 		}
 	}
 }
