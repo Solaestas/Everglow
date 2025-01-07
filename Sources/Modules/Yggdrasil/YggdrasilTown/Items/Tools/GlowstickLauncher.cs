@@ -17,11 +17,13 @@ public class GlowstickLauncher : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.width = 22;
-		Item.height = 22;
+		Item.width = 50;
+		Item.height = 25;
+		Item.scale = 1.6f;
 
 		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.useTime = Item.useAnimation = 20;
+		Item.UseSound = SoundID.Item108;
+		Item.useTime = Item.useAnimation = 16;
 		Item.autoReuse = true;
 		Item.noMelee = true;
 		Item.channel = true;
@@ -35,7 +37,7 @@ public class GlowstickLauncher : ModItem
 		Item.rare = ItemRarityID.Blue;
 
 		Item.shoot = ProjectileID.StickyGlowstick;
-		Item.shootSpeed = 12;
+		Item.shootSpeed = 16;
 	}
 
 	public override bool CanUseItem(Player player) => ammoTypes.Select(player.HasItem).Any(has => has);
@@ -75,7 +77,19 @@ public class GlowstickLauncher : ModItem
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		Projectile.NewProjectile(source, position, velocity, ConsumedAmmoType, damage, knockback, player.whoAmI);
+		Projectile.NewProjectile(source, position + 36f * velocity.NormalizeSafe(), velocity, ConsumedAmmoType, damage, knockback, player.whoAmI);
 		return false;
 	}
+
+	public override void HoldItem(Player player)
+	{
+		if (player.controlUseItem)
+		{
+			player.SetArmToFitMousePosition(0.1f);
+		}
+	}
+
+	public override Vector2? HoldoutOffset() => new Vector2(-16f, -7f);
+
+	public override Vector2? HoldoutOrigin() => new Vector2(25, -25f);
 }
