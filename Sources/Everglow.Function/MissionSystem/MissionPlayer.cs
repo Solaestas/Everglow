@@ -24,6 +24,7 @@ public class MissionPlayer : ModPlayer
 				mission.RewardItems.AddRange([
 					new Item(ItemID.Wood, 10)]);
 				mission.IsVisible = false;
+				mission.MissionType = MissionType.Daily;
 				MissionManager.AddMission(mission, MissionManager.PoolType.Accepted);
 
 				mission = new GainItemMission();
@@ -33,6 +34,7 @@ public class MissionPlayer : ModPlayer
 					GainItemRequirement.Create([ItemID.Wood], 10)]);
 				mission.RewardItems.AddRange([
 					new Item(ItemID.IronOre, 10)]);
+				mission.MissionType = MissionType.Achievement;
 				MissionManager.AddMission(mission, MissionManager.PoolType.Accepted);
 
 				mission = new GainItemMission();
@@ -41,6 +43,7 @@ public class MissionPlayer : ModPlayer
 					GainItemRequirement.Create([ItemID.IronOre], 10)]);
 				mission.RewardItems.AddRange([
 					new Item(ItemID.Zenith, 10)]);
+				mission.MissionType = MissionType.MainStory;
 				MissionManager.AddMission(mission, MissionManager.PoolType.Available);
 
 				var killNPCMission = new KillNPCMission();
@@ -62,6 +65,51 @@ public class MissionPlayer : ModPlayer
 					new Item(ItemID.Zenith),
 				new Item(ItemID.GoldAxe, 10),
 				]);
+				killNPCMission.MissionType = MissionType.SideStory;
+				MissionManager.AddMission(killNPCMission, MissionManager.PoolType.Available);
+
+				killNPCMission = new KillNPCMission();
+				killNPCMission.SetInfo("Test5", "击杀12个史莱姆", "测试介绍: \n" + "[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
+				killNPCMission.DemandNPCs.AddRange([
+					KillNPCRequirement.Create(
+					[
+						NPCID.BlueSlime,
+						NPCID.IceSlime,
+						NPCID.SpikedJungleSlime,
+						NPCID.MotherSlime,
+					], 12, true),
+				KillNPCRequirement.Create(
+					[
+						NPCID.DemonEye,
+					], 3, true),
+				]);
+				killNPCMission.RewardItems.AddRange([
+					new Item(ItemID.Zenith),
+				new Item(ItemID.GoldAxe, 10),
+				]);
+				killNPCMission.MissionType = MissionType.Challenge;
+				MissionManager.AddMission(killNPCMission, MissionManager.PoolType.Available);
+
+				killNPCMission = new KillNPCMission();
+				killNPCMission.SetInfo("Test5", "击杀13个史莱姆", "测试介绍: \n" + "[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
+				killNPCMission.DemandNPCs.AddRange([
+					KillNPCRequirement.Create(
+					[
+						NPCID.BlueSlime,
+						NPCID.IceSlime,
+						NPCID.SpikedJungleSlime,
+						NPCID.MotherSlime,
+					], 12, true),
+				KillNPCRequirement.Create(
+					[
+						NPCID.DemonEye,
+					], 3, true),
+				]);
+				killNPCMission.RewardItems.AddRange([
+					new Item(ItemID.Zenith),
+				new Item(ItemID.GoldAxe, 10),
+				]);
+				killNPCMission.MissionType = MissionType.Legendary;
 				MissionManager.AddMission(killNPCMission, MissionManager.PoolType.Available);
 			}
 		}

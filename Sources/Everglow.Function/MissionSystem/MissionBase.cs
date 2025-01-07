@@ -4,47 +4,6 @@ using Terraria.ModLoader.IO;
 namespace Everglow.Commons.MissionSystem;
 
 /// <summary>
-/// 任务类型
-/// </summary>
-public enum MissionType
-{
-	/// <summary>
-	/// 未分配类型的任务，用于适配初始数据
-	/// </summary>
-	None,
-
-	/// <summary>
-	/// 主线任务
-	/// </summary>
-	MainStory,
-
-	/// <summary>
-	/// 支线任务
-	/// </summary>
-	SideStory,
-
-	/// <summary>
-	/// 成就任务
-	/// </summary>
-	Achievement,
-
-	/// <summary>
-	/// 挑战任务
-	/// </summary>
-	Challenge,
-
-	/// <summary>
-	/// 日常任务
-	/// </summary>
-	Daily,
-
-	/// <summary>
-	/// 传说任务
-	/// </summary>
-	Legendary,
-}
-
-/// <summary>
 /// 任务基类
 /// <br>!继承后必须保证存在一个无参构造函数</br>
 /// </summary>

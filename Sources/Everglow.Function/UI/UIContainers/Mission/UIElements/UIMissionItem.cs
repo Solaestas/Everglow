@@ -53,6 +53,16 @@ public class UIMissionItem : UIBlock
 		};
 		block.Register(statusBar);
 
+		// 任务类型
+		UIMissionType typeBar = new UIMissionType();
+		typeBar.Info.SetToCenter();
+		typeBar.Info.Left.SetEmpty();
+		typeBar.Events.OnUpdate += (e, gt) =>
+		{
+			typeBar.Type = Mission.MissionType;
+		};
+		block.Register(typeBar);
+
 		// 任务名称
 		var font = FontManager.FusionPixel12.GetFont(block.Info.Height.Pixel - block.Info.TopMargin.Pixel - block.Info.BottomMargin.Pixel - 2f);
 		UITextPlus name = new UITextPlus(Mission.DisplayName);
@@ -61,7 +71,7 @@ public class UIMissionItem : UIBlock
 		name.Events.OnUpdate += (e, gt) =>
 		{
 			name.Info.SetToCenter();
-			name.Info.Left.SetEmpty();
+			name.Info.Left.SetValue((16f, 0f));
 			name.Calculation();
 		};
 		block.Register(name);
@@ -125,7 +135,6 @@ public class UIMissionItem : UIBlock
 			return;
 		}
 
-		// var scissorRectangle = sb.GraphicsDevice.ScissorRectangle;
 		var overflowHiddenRasterizerState = new RasterizerState
 		{
 			CullMode = CullMode.None,
@@ -195,6 +204,34 @@ public class UIMissionItem : UIBlock
 				sb.Draw(bgTexture, new Vector2(Info.TotalHitBox.X, Info.TotalHitBox.Y), null, color, Rotation, Origin, 1f, SpriteEffects, 0f);
 				sb.Draw(texture, new Rectangle(Info.TotalHitBox.X, Info.TotalHitBox.Y + sR.Y, sR.Width, sR.Height), sR, color, Rotation, Origin, SpriteEffects, 0f);
 			}
+		}
+	}
+
+	private class UIMissionType : UIImage
+	{
+		public MissionType Type { get; set; }
+
+		public UIMissionType()
+			: base(ModAsset.MissionStatus_Transparent.Value, Color.White)
+		{
+		}
+
+		protected override void DrawChildren(SpriteBatch sb)
+		{
+			// Draw status block to represent the status of mission
+			var texture = Type switch
+			{
+				MissionType.None => ModAsset.MissionType_Black.Value,
+				MissionType.MainStory => ModAsset.MissionType_Gold.Value,
+				MissionType.SideStory => ModAsset.MissionType_Purple.Value,
+				MissionType.Achievement => ModAsset.MissionType_White.Value,
+				MissionType.Challenge => ModAsset.MissionType_Red.Value,
+				MissionType.Daily => ModAsset.MissionType_Blue.Value,
+				MissionType.Legendary => ModAsset.MissionType_Black.Value,
+				_ => ModAsset.MissionStatus.Value,
+			};
+
+			sb.Draw(texture, new Vector2(Info.TotalHitBox.X, Info.TotalHitBox.Y), null, color, Rotation, Origin, 0.04f, SpriteEffects, 0f);
 		}
 	}
 }
