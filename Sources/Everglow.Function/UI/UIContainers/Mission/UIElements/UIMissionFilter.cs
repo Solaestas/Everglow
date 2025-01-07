@@ -74,6 +74,8 @@ public class UIMissionFilter : UIBlock
 			statusFilterItem.Register(statusFilterItemIcon);
 			statusFilterItemIcon.Info.SetToCenter();
 		}
+
+		UpdateBlockColor(ChildrenElements.First());
 	}
 
 	private static Texture2D IconPicker(PoolType? type) => type switch
@@ -98,6 +100,15 @@ public class UIMissionFilter : UIBlock
 
 	public void ChangeStatus(PoolType? type, BaseElement e)
 	{
+		UpdateBlockColor(e);
+
+		// Update mission list
+		poolType = type;
+		StatusFilterChanged.Invoke(this, type);
+	}
+
+	private void UpdateBlockColor(BaseElement e)
+	{
 		if (e is not UIBlock block)
 		{
 			return;
@@ -114,10 +125,6 @@ public class UIMissionFilter : UIBlock
 		selectedStatusItem = block;
 		block.PanelColor = MissionContainer.Instance.GetThemeColor(style: MissionContainer.ColorStyle.Dark);
 		block.ShowBorder.BottomBorder = false;
-
-		// Mission list
-		poolType = type;
-		StatusFilterChanged.Invoke(this, type);
 	}
 
 	public override void Draw(SpriteBatch sb)
