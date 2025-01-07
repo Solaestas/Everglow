@@ -16,8 +16,8 @@ public class ActivatedJellyGlandBeam : ModProjectile
 		Projectile.aiStyle = -1;
 		Projectile.friendly = true;
 		Projectile.magic = true;
-		Projectile.extraUpdates = 200;
-		Projectile.timeLeft = 200;
+		Projectile.extraUpdates = 60;
+		Projectile.timeLeft = 60;
 		Projectile.penetrate = 3;
 	}
 
@@ -39,6 +39,6 @@ public class ActivatedJellyGlandBeam : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		return true;
+		return false;
 	}
 }

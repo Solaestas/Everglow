@@ -1,3 +1,5 @@
+using Terraria.Audio;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class NightfireStaff_Projectile : ModProjectile
@@ -76,7 +78,7 @@ public class NightfireStaff_Projectile : ModProjectile
 		// Generate dusts
 		if (Main.rand.NextBool(4))
 		{
-			Dust.NewDust(Projectile.Center, 1, 1, DustID.CursedTorch, Projectile.velocity.X, Projectile.velocity.Y);
+			Dust.NewDust(Projectile.Center, 2, 2, DustID.CursedTorch, Projectile.velocity.X, Projectile.velocity.Y);
 		}
 	}
 
@@ -89,5 +91,15 @@ public class NightfireStaff_Projectile : ModProjectile
 		SpriteEffects spriteEffect = SpriteEffects.FlipHorizontally;
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, frame, lightColor, rotation, frame.Size() / 2, Projectile.scale, spriteEffect, 0);
 		return false;
+	}
+
+	public override void OnKill(int timeLeft)
+	{
+		for (int i = 0; i < 30; i++)
+		{
+			Dust.NewDust(Projectile.Center, 2, 2, DustID.CursedTorch, Projectile.velocity.X, Projectile.velocity.Y);
+		}
+
+		SoundEngine.PlaySound(SoundID.DD2_BetsysWrathImpact, Projectile.Center);
 	}
 }

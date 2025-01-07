@@ -1,5 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -278,6 +279,7 @@ public class ActivatedJellyGlandMinion : ModProjectile
 		Projectile.timeLeft += 2;
 		if (++Timer > ExplosionDuration)
 		{
+			SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, Projectile.Center);
 			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ActivatedJellyGlandExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, direction.NormalizeSafe() * 10f, ModContent.ProjectileType<ActivatedJellyGlandBeam>(), Projectile.damage, Projectile.knockBack, Projectile.owner, TargetWhoAmI);
 			Projectile.Kill();
