@@ -61,7 +61,7 @@ public class SquamousCorePlayer : ModPlayer
 	public override void ModifyMaxStats(out StatModifier health, out StatModifier mana)
 	{
 		health = StatModifier.Default;
-		health.Base = SquamousCore.LifePerCore;
+		health.Base = SquamousCore.LifePerCore * SquamousCoreCount;
 		mana = StatModifier.Default;
 	}
 
