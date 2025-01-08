@@ -31,7 +31,7 @@ public class KissOfCthulhu : ModItem
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		position += new Vector2((Item.width - 24) * Item.scale, 0).RotatedBy(velocity.ToRotation());
+		position += new Vector2((Item.width - 40) * Item.scale, 0).RotatedBy(velocity.ToRotation());
 
 		// Shoot 2-4 normal bullet once
 		int projNum = Main.rand.Next(2, 5);
@@ -46,11 +46,12 @@ public class KissOfCthulhu : ModItem
 		if (Main.rand.NextBool(3))
 		{
 			Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<KissOfCthulhu_Projectile>(), 1, knockback, player.whoAmI);
-
-			// Play special sound
-			//SoundEngine.PlaySound(SoundID.Item103);
 		}
 
 		return false;
 	}
+
+	public override Vector2? HoldoutOffset() => new Vector2(-26, -2);
+
+	public override Vector2? HoldoutOrigin() => new Vector2(0, 0);
 }
