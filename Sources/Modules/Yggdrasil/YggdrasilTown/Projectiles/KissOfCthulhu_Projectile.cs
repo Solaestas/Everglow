@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Interfaces;
+using Everglow.Commons.Mechanics.ElementDebuff;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -82,7 +83,7 @@ public class KissOfCthulhu_Projectile : ModProjectile
 	{
 		ActiveProjectile();
 
-		target.GetGlobalNPC<EverglowGlobalNPC>().ElementDebuffs[ElementDebuffType.Necrosis].AddBuildUp(100);
+		target.GetGlobalNPC<ElementDebuffGlobalNPC>().ElementDebuffs[ElementDebuffType.Necrosis].AddBuildUp(100);
 	}
 
 	private void ActiveProjectile()

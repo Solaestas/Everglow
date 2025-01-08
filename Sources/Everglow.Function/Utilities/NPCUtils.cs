@@ -1,4 +1,5 @@
 using System.Reflection;
+using Everglow.Commons.Mechanics.ElementDebuff;
 
 namespace Everglow.Commons.Utilities;
 
@@ -236,7 +237,7 @@ public static class NPCUtils
 	/// <param name="elementResistance"></param>
 	public static void SetElementDebuff(this NPC npc, ElementDebuffType type, int? buildUpMax = null, int? durationMax = null, int? dotDamage = null, int? procDamage = null, float? elementResistance = null)
 	{
-		var global = npc.GetGlobalNPC<EverglowGlobalNPC>();
+		var global = npc.GetGlobalNPC<ElementDebuffGlobalNPC>();
 		if (global == null)
 		{
 			return;

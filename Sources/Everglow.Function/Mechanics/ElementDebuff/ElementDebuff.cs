@@ -1,27 +1,15 @@
-namespace Everglow.Commons.Utilities;
+using ReLogic.Content;
 
-/// <summary>
-/// Element debuff types. (For more details, please go to <a href="https://prts.wiki/w/%E5%85%83%E7%B4%A0">Arknights Wiki</a>)
-/// <list type="number">
-///     <item>Nervous Impairment</item>
-///     <item>Corrosion</item>
-///     <item>Burn</item>
-///     <item>Necrosis</item>
-/// </list>
-/// </summary>
-public enum ElementDebuffType
-{
-	NervousImpairment,
-	Corrosion,
-	Burn,
-	Necrosis,
-}
+namespace Everglow.Commons.Mechanics.ElementDebuff;
 
-public class ElementDebuff
+public abstract class ElementDebuff
 {
-	public ElementDebuff(ElementDebuffType type)
+	public ElementDebuff(ElementDebuffType type, Asset<Texture2D> icon, Color color)
 	{
 		Type = type;
+		Icon = icon;
+		Color = color;
+
 		BuildUp = 0;
 		BuildUpMax = 1000;
 		ElementResistance = 0f;
@@ -38,45 +26,60 @@ public class ElementDebuff
 	public ElementDebuffType Type { get; init; }
 
 	/// <summary>
-	/// The element debuff build-up, use <see cref="ElementDebuff.AddBuildUp"/> to edit this property.
+	/// The icon of element debuff
 	/// </summary>
-	public int BuildUp { get; private set; }
+	public Asset<Texture2D> Icon { get; init; }
+
+	/// <summary>
+	/// The background color of element debuff in-game icon
+	/// </summary>
+	public Color Color { get; init; }
+
+	/// <summary>
+	/// The element debuff build-up, use <see cref="AddBuildUp"/> to edit this property.
+	/// </summary>
+	public int BuildUp { get; protected set; }
 
 	/// <summary>
 	/// The element debuff build-up limitation. Once the build-up is more than this max value, the element debuff will proc
 	/// </summary>
-	public int BuildUpMax { get; private set; }
+	public int BuildUpMax { get; protected set; }
+
+	/// <summary>
+	/// If the element debuff has build-up
+	/// </summary>
+	public bool HasBuildUp => BuildUp > 0;
 
 	/// <summary>
 	/// Elemental Resistance can reduce the Elemental Debuff build-up they took
 	/// </summary>
-	public float ElementResistance { get; private set; }
+	public float ElementResistance { get; protected set; }
 
 	/// <summary>
 	/// Determine whether this element debuff is in proc state.
-	/// <para/>This property should only be edit by <see cref="ElementDebuff.UpdateBuildUp(NPC)"/>.
+	/// <para/>This property should only be edit by <see cref="UpdateBuildUp(NPC)"/>.
 	/// </summary>
-	public bool Proc { get; private set; }
+	public bool Proc { get; protected set; }
 
 	/// <summary>
 	/// The timer of element debuff proc state
 	/// </summary>
-	public int Duration { get; private set; }
+	public int Duration { get; protected set; }
 
 	/// <summary>
 	/// The duration of element debuff proc state
 	/// </summary>
-	public int DurationMax { get; private set; }
+	public int DurationMax { get; protected set; }
 
 	/// <summary>
 	/// Damage per second when element debuff is proc
 	/// </summary>
-	public int DotDamage { get; private set; }
+	public int DotDamage { get; protected set; }
 
 	/// <summary>
 	/// Damage on element debuff proc
 	/// </summary>
-	public int ProcDamage { get; private set; }
+	public int ProcDamage { get; protected set; }
 
 	/// <summary>
 	/// Add element debuff build-up, calculate resistance and penetration.
@@ -189,4 +192,6 @@ public class ElementDebuff
 	{
 		ElementResistance = elementResistance;
 	}
+
+	public abstract void Draw(SpriteBatch spriteBatch);
 }
