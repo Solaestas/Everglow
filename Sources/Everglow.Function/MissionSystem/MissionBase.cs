@@ -90,6 +90,19 @@ public abstract class MissionBase
 	public virtual bool CheckFinish() => Progress >= 1f;
 
 	/// <summary>
+	/// 任务可提交状态的旧状态
+	/// </summary>
+	public bool OldCheckFinish { get; internal set; } = false;
+
+	/// <summary>
+	/// 任务可提交状态改变后HOOK
+	/// </summary>
+	public virtual void PostCheckFinishChange()
+	{
+		MissionManager.NeedRefresh = true;
+	}
+
+	/// <summary>
 	/// 更新任务进度
 	/// </summary>
 	/// <param name="objs"></param>

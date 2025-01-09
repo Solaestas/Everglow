@@ -1,6 +1,9 @@
 using Everglow.Commons.MissionSystem.MissionTemplates;
+using Everglow.Commons.UI.UIContainers.Mission;
 using MathNet.Numerics;
 using MonoMod.Utils;
+using Terraria.Localization;
+using Terraria;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem;
@@ -207,6 +210,22 @@ public class MissionManager
 		foreach (var pool in _missionPools.Values)
 		{
 			pool.ForEach(m => m.Update());
+		}
+
+		foreach (var m in _missionPools[PoolType.Accepted].ToList())
+		{
+			if (m.CheckFinish() != m.OldCheckFinish)
+			{
+				m.OldCheckFinish = m.CheckFinish();
+
+				m.PostCheckFinishChange();
+
+				if (m.CheckFinish() && Main.netMode != NetmodeID.Server)
+				{
+					string text = $"{m.Name}任务可以提交了";
+					Main.NewText(text, 150, 250, 150);
+				}
+			}
 		}
 	}
 
