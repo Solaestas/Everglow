@@ -7,6 +7,19 @@ namespace Everglow.Commons.UI.UIContainers.Mission;
 
 public class MissionContainer : UIContainerElement
 {
+	public class ChangeButtonText
+	{
+		public const string Failed = "失败";
+		public const string Overdue = "过期";
+		public const string Completed = "完成";
+		public const string Cancel = "放弃";
+		public const string Commit = "提交";
+		public const string Accept = "接取";
+		public const string Unknown = "未知";
+		public const string Yes = "是";
+		public const string No = "否";
+	}
+
 	public enum ColorType
 	{
 		Dark,
@@ -30,7 +43,7 @@ public class MissionContainer : UIContainerElement
 	private UIBlock _changeMission;
 	private UIMissionItem _mission;
 	private UIMissionVerticalScrollbar _missionScrollbar;
-	private UITextVerticalScrollbar _textScrollbal;
+	private UITextVerticalScrollbar _textScrollbar;
 	private UIBlock _closeButton;
 	private UIBlock _maximizeButton;
 	private UIContainerPanel _missionContainer;
@@ -147,18 +160,19 @@ public class MissionContainer : UIContainerElement
 		_missionScrollbar.Info.Height.SetValue(_missionPanel.Info.Height);
 		_missionScrollbar.Info.Top.SetValue(_missionPanel.Info.Top);
 
-		_textScrollbal = new UITextVerticalScrollbar();
-		_textScrollbal.Info.Height.SetValue(-16f, 1f);
-		_textScrollbal.Info.SetToCenter();
-		_textScrollbal.Info.Left.SetValue(-8f, 1f);
-		_description.Register(_textScrollbal);
+		_textScrollbar = new UITextVerticalScrollbar();
+		_textScrollbar.Info.Height.SetValue(-16f, 1f);
+		_textScrollbar.Info.SetToCenter();
+		_textScrollbar.Info.Left.SetValue(-8f, 1f);
+		_description.Register(_textScrollbar);
 
 		_descriptionContainer = new UIContainerPanel();
-		_descriptionContainer.Info.Width.SetValue(PositionStyle.Full - _textScrollbal.Info.Width -
-			(PositionStyle.Full - _textScrollbal.Info.Left - _textScrollbal.Info.Width) * 3f);
-		_descriptionContainer.Info.Height.SetValue(_textScrollbal.Info.Height);
-		_descriptionContainer.Info.Left.SetValue(PositionStyle.Full - _textScrollbal.Info.Left - _textScrollbal.Info.Width);
-		_descriptionContainer.Info.Top.SetValue(_textScrollbal.Info.Top);
+		_descriptionContainer.Info.Width.SetValue(PositionStyle.Full - _textScrollbar.Info.Width -
+			(PositionStyle.Full - _textScrollbar.Info.Left - _textScrollbar.Info.Width) * 3f);
+		_descriptionContainer.Info.Height.SetValue(_textScrollbar.Info.Height);
+		_descriptionContainer.Info.Left.SetValue(PositionStyle.Full - _textScrollbar.Info.Left - _textScrollbar.Info.Width);
+		_descriptionContainer.Info.Top.SetValue(_textScrollbar.Info.Top);
+		_descriptionContainer.SetVerticalScrollbar(_textScrollbar);
 		_description.Register(_descriptionContainer);
 
 		_closeButton = new UIBlock();
@@ -214,7 +228,7 @@ public class MissionContainer : UIContainerElement
 		};
 		_panel.Register(_changeMission);
 
-		_yes = new UITextPlus("是");
+		_yes = new UITextPlus(ChangeButtonText.Yes);
 		_yes.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
 		_yes.StringDrawer.Init(_yes.Text);
 		_yes.Info.IsVisible = false;
@@ -244,7 +258,7 @@ public class MissionContainer : UIContainerElement
 		};
 		_changeMission.Register(_yes);
 
-		_no = new UITextPlus("否");
+		_no = new UITextPlus(ChangeButtonText.No);
 		_no.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
 		_no.StringDrawer.Init(_no.Text);
 		_no.Info.IsVisible = false;
@@ -260,7 +274,7 @@ public class MissionContainer : UIContainerElement
 		};
 		_changeMission.Register(_no);
 
-		_changeText = new UITextPlus("接取");
+		_changeText = new UITextPlus(ChangeButtonText.Accept);
 		_changeText.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
 		_changeText.StringDrawer.Init(_changeText.Text);
 		_changeText.Events.OnUpdate += (e, gt) =>
@@ -344,7 +358,7 @@ public class MissionContainer : UIContainerElement
 				// NPC模式，去掉非对应NPC的
 				if (nPCMode)
 				{
-					if(sourceNPC != m.SourceNPC)
+					if (sourceNPC != m.SourceNPC)
 					{
 						continue;
 					}
@@ -420,47 +434,64 @@ public class MissionContainer : UIContainerElement
 		oldSelectedItem?.OnUnselected();
 		SelectedItem?.OnSelected();
 
+		UpdateChangeButton();
+
 		if (SelectedItem != null)
 		{
 			_icon.Texture = SelectedItem.Mission.Icon;
-			_textScrollbal.WheelValue = 0f;
+			_textScrollbar.WheelValue = 0f;
 
 			UITextPlus des = new UITextPlus(SelectedItem.Mission.Description);
 			des.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
 			des.StringDrawer.Init(des.Text);
 			_descriptionContainer.ClearAllElements();
 			_descriptionContainer.AddElement(des);
+		}
+		else
+		{
+			_icon.Texture = null;
+			_textScrollbar.WheelValue = 0f;
+			_descriptionContainer.ClearAllElements();
+		}
+	}
 
-			if (item.Mission.PoolType == PoolType.Available)
+	/// <summary>
+	/// 更新按钮的状态
+	/// </summary>
+	public void UpdateChangeButton()
+	{
+		if (SelectedItem != null)
+		{
+			if (SelectedItem.Mission.PoolType == PoolType.Available)
 			{
-				_changeText.Text = "接取";
+				_changeText.Text = ChangeButtonText.Accept;
 			}
-			else if (item.Mission.PoolType == PoolType.Accepted)
+			else if (SelectedItem.Mission.PoolType == PoolType.Accepted)
 			{
-				if (item.Mission.CheckFinish())
+				if (SelectedItem.Mission.CheckFinish())
 				{
-					_changeText.Text = "提交";
+					_changeText.Text = ChangeButtonText.Commit;
 				}
 				else
 				{
-					_changeText.Text = "放弃";
+					_changeText.Text = ChangeButtonText.Cancel;
 				}
 			}
-			else if (item.Mission.PoolType == PoolType.Completed)
+			else if (SelectedItem.Mission.PoolType == PoolType.Completed)
 			{
-				_changeText.Text = "[TextDrawer,Text='完成',Color='126,126,126']";
+				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Completed}',Color='126,126,126']";
 			}
-			else if (item.Mission.PoolType == PoolType.Overdue)
+			else if (SelectedItem.Mission.PoolType == PoolType.Overdue)
 			{
-				_changeText.Text = "[TextDrawer,Text='过期',Color='126,126,126']";
+				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Overdue}',Color='126,126,126']";
 			}
-			else if (item.Mission.PoolType == PoolType.Failed)
+			else if (SelectedItem.Mission.PoolType == PoolType.Failed)
 			{
-				_changeText.Text = "[TextDrawer,Text='失败',Color='126,126,126']";
+				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Failed}',Color='126,126,126']";
 			}
 			else
 			{
-				_changeText.Text = "[TextDrawer,Text='未知',Color='126,126,126']";
+				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Unknown}',Color='126,126,126']";
 			}
 
 			_changeText.Info.SetToCenter();
@@ -469,11 +500,8 @@ public class MissionContainer : UIContainerElement
 		}
 		else
 		{
-			_icon.Texture = null;
-			_textScrollbal.WheelValue = 0f;
 			_changeText.Text = "[TextDrawer,Text='',Color='126,126,126']";
 			_changeText.Info.SetToCenter();
-			_descriptionContainer.ClearAllElements();
 			_yes.Info.IsVisible = _no.Info.IsVisible = false;
 		}
 	}
