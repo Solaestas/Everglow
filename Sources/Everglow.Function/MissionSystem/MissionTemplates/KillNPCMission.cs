@@ -204,7 +204,7 @@ public class KillNPCMission : MissionBase
 		this.timeMax = timeMax;
 	}
 
-	public override void OnCompleteCustom()
+	public override void PostComplete()
 	{
 		foreach (var item in RewardItems)
 		{

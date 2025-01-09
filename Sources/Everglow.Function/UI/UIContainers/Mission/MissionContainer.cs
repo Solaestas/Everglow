@@ -42,6 +42,9 @@ public class MissionContainer : UIContainerElement
 	private UITextPlus _yes;
 	private UITextPlus _no;
 
+	private bool nPCMode = false;
+	private int sourceNPC = 0;
+
 	/// <summary>
 	/// 选中的任务
 	/// <para/>注: 请通过<see cref="ChangeSelectedItem(UIMissionItem)"/>来修改此属性
@@ -225,9 +228,18 @@ public class MissionContainer : UIContainerElement
 		{
 			if (SelectedItem != null && SelectedItem.Mission.PoolType == PoolType.Accepted)
 			{
-				MissionManager.Instance.MoveMission(SelectedItem.Mission, PoolType.Accepted, PoolType.Failed);
-				ChangeSelectedItem(SelectedItem);
-				_yes.Info.IsVisible = _no.Info.IsVisible = false;
+				if (SelectedItem.Mission.CheckFinish())
+				{
+					SelectedItem.Mission.OnComplete();
+					ChangeSelectedItem(SelectedItem);
+					_yes.Info.IsVisible = _no.Info.IsVisible = false;
+				}
+				else
+				{
+					MissionManager.Instance.MoveMission(SelectedItem.Mission, PoolType.Accepted, PoolType.Failed);
+					ChangeSelectedItem(SelectedItem);
+					_yes.Info.IsVisible = _no.Info.IsVisible = false;
+				}
 			}
 		};
 		_changeMission.Register(_yes);
@@ -263,11 +275,11 @@ public class MissionContainer : UIContainerElement
 	{
 		base.Update(gt);
 
-		if (MissionManager.NeedRefresh)
+		if (NeedRefresh)
 		{
 			RefreshList();
 
-			MissionManager.NeedRefresh = false;
+			NeedRefresh = false;
 		}
 
 		Calculation();
@@ -275,11 +287,43 @@ public class MissionContainer : UIContainerElement
 
 	/// <summary>
 	/// 打开任务面板
+	/// 该方法用于显示任务面板，并根据传入的参数设置 NPC 模式和 NPC 来源。
+	/// <para/>打开全局任务面板：无需参数
+	/// <para/>打开NPC任务面板：
+	/// 1. nPCMode (bool): 表示是否启用 NPC 模式。
+	/// 2. nPCSource (int): 表示来源 NPC 的 ID。
 	/// </summary>
 	/// <param name="args"></param>
+	/// <exception cref="ArgumentException">
+	/// 如果参数类型不正确，抛出此异常。
+	/// </exception>
 	public override void Show(params object[] args)
 	{
+		// 检查参数数量是否足够
+		if (args.Length == 1)
+		{
+			// 使用模式匹配提取并转换参数
+			if (args[0] is int npcSource)
+			{
+				// 设置 NPC 模式和来源 NPC
+				nPCMode = true;
+				sourceNPC = npcSource;
+			}
+			else
+			{
+				// 如果参数类型不正确，抛出异常
+				throw new ArgumentException("Invalid argument types. Expected: nPCMode (bool) and nPCSource (int).");
+			}
+		}
+		else
+		{
+			nPCMode = false;
+		}
+
+		// 调用基类的 Show 方法
 		base.Show(args);
+
+		// 刷新任务列表
 		RefreshList();
 	}
 
@@ -292,9 +336,25 @@ public class MissionContainer : UIContainerElement
 		{
 			foreach (var m in mp)
 			{
-				if(!m.IsVisible)
+				if (!m.IsVisible)
 				{
 					continue;
+				}
+
+				// NPC模式，去掉非对应NPC的
+				if (nPCMode)
+				{
+					if(sourceNPC != m.SourceNPC)
+					{
+						continue;
+					}
+				}
+				else // 全局模式，去掉未接取中有来源NPC的
+				{
+					if (m.PoolType is PoolType.Available && m.SourceNPC >= 0)
+					{
+						continue;
+					}
 				}
 
 				BaseElement element;
@@ -330,10 +390,17 @@ public class MissionContainer : UIContainerElement
 		{
 			foreach (var type in Enum.GetValues<PoolType>())
 			{
+				// NPC模式，只看未接取的
+				if (nPCMode && type is not PoolType.Available)
+				{
+					continue;
+				}
+
 				var mp = MissionManager.Instance.GetMissionPool(type);
 				top = IteratePool(elements, top, mp);
 			}
 		}
+
 		ChangeSelectedItem(null);
 		_missionContainer.ClearAllElements();
 		_missionContainer.AddElements(elements);
@@ -370,7 +437,14 @@ public class MissionContainer : UIContainerElement
 			}
 			else if (item.Mission.PoolType == PoolType.Accepted)
 			{
-				_changeText.Text = "放弃";
+				if (item.Mission.CheckFinish())
+				{
+					_changeText.Text = "提交";
+				}
+				else
+				{
+					_changeText.Text = "放弃";
+				}
 			}
 			else if (item.Mission.PoolType == PoolType.Completed)
 			{

@@ -1,6 +1,6 @@
 using Everglow.Commons.UI.StringDrawerSystem;
 
-namespace Everglow.UnitTests.Functions;
+namespace Everglow.UnitTests.Functions.MissionSystem;
 
 [TestClass]
 public class StringParameterKeyTest

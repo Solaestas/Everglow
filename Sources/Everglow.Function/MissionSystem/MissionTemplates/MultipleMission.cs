@@ -75,7 +75,7 @@ public class MultipleMission : MissionBase
 		{
 			if (CurrentMission.CheckFinish())
 			{
-				CurrentMission.OnCompleteCustom();
+				CurrentMission.PostComplete();
 				CurrentMission.PoolType = MissionManager.PoolType.Completed;
 				currentIndex++;
 			}
@@ -84,7 +84,7 @@ public class MultipleMission : MissionBase
 		{
 			if (CurrentMission.CheckFinish() && CurrentMission.PoolType != MissionManager.PoolType.Completed)
 			{
-				CurrentMission.OnCompleteCustom();
+				CurrentMission.PostComplete();
 				CurrentMission.PoolType = MissionManager.PoolType.Completed;
 			}
 		}

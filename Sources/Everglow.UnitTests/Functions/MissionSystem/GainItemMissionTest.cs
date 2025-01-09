@@ -2,8 +2,9 @@ using Everglow.Commons.MissionSystem;
 using Everglow.Commons.MissionSystem.MissionTemplates;
 using Terraria;
 using Terraria.ID;
+using static Everglow.Commons.MissionSystem.MissionTemplates.GainItemMission;
 
-namespace Everglow.UnitTests.Functions;
+namespace Everglow.UnitTests.Functions.MissionSystem;
 
 [TestClass]
 public class GainItemMissionTest
@@ -20,11 +21,7 @@ public class GainItemMissionTest
 
 		int testStack = 97;
 		mission.DemandItems.AddRange([
-			new Item()
-			{
-				type = ItemID.DirtBlock,
-				stack = testStack,
-			}
+			GainItemRequirement.Create([ ItemID.DirtBlock], testStack),
 			]);
 
 		Assert.IsTrue(mission.Progress == 0f);
@@ -55,28 +52,16 @@ public class GainItemMissionTest
 			{
 				PoolType = MissionManager.PoolType.Accepted,
 			};
-			Random random = new Random();
+			var random = new Random();
 
 			int testStack1 = (int)random.NextInt64(23, 61);
 			int testStack2 = (int)random.NextInt64(23, 61);
 			int testStack3 = (int)random.NextInt64(23, 61);
 
 			mission.DemandItems.AddRange([
-				new Item()
-				{
-					type = ItemID.DirtBlock,
-					stack = testStack1,
-				},
-				new Item()
-				{
-					type = ItemID.Wood,
-					stack = testStack2,
-				},
-				new Item()
-				{
-					type = ItemID.IronOre,
-					stack = testStack3,
-				},
+				GainItemRequirement.Create([ ItemID.DirtBlock], testStack1),
+				GainItemRequirement.Create([ ItemID.Wood], testStack2),
+				GainItemRequirement.Create([ ItemID.IronOre], testStack3),
 			]);
 
 			Assert.IsTrue(mission.Progress == 0f);
@@ -122,7 +107,7 @@ public class GainItemMissionTest
 	[TestMethod]
 	public void Progress_Should_CappedAtOne()
 	{
-		for(int i = 0; i < 100; i++)
+		for (int i = 0; i < 100; i++)
 		{
 			var mission = new GainItemMission
 			{
@@ -131,11 +116,7 @@ public class GainItemMissionTest
 
 			int testStack = (int)new Random().NextInt64(50, 200);
 			mission.DemandItems.AddRange([
-				new Item()
-				{
-					type = ItemID.DirtBlock,
-					stack = testStack,
-				}
+				GainItemRequirement.Create([ ItemID.DirtBlock], testStack),
 				]);
 
 			Assert.IsTrue(mission.Progress == 0f);

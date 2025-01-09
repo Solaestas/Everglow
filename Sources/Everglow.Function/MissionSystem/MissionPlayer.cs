@@ -40,10 +40,11 @@ public class MissionPlayer : ModPlayer
 				mission = new GainItemMission();
 				mission.SetInfo("Test3", "获取10个铁矿", "测试介绍3");
 				mission.DemandItems.AddRange([
-					GainItemRequirement.Create([ItemID.IronOre], 10)]);
+					GainItemRequirement.Create([ItemID.IronOre], 1000)]);
 				mission.RewardItems.AddRange([
-					new Item(ItemID.Zenith, 10)]);
+					new Item(ItemID.Zenith, 1000)]);
 				mission.MissionType = MissionType.MainStory;
+				mission.SourceNPC = 1;
 				MissionManager.AddMission(mission, MissionManager.PoolType.Available);
 
 				var killNPCMission = new KillNPCMission();

@@ -25,6 +25,11 @@ public abstract class MissionBase
 	public abstract string Description { get; }
 
 	/// <summary>
+	/// 任务来源NPC
+	/// </summary>
+	public virtual int SourceNPC { get; set; } = -1;
+
+	/// <summary>
 	/// 任务图标
 	/// <br>!为null时不显示</br>
 	/// </summary>
@@ -121,23 +126,36 @@ public abstract class MissionBase
 
 	/// <summary>
 	/// 任务完成时
-	/// <para/>对于完成时HOOK，请重写<see cref="OnCompleteCustom"/>方法，本方法仅用于<see cref="MissionManager.Update"/>
+	/// <para/>对于完成HOOK，请重写<see cref="PostComplete"/>方法
 	/// </summary>
 	public void OnComplete()
 	{
+		if (!PreComplete())
+		{
+			return;
+		}
+
 		MissionManager.Instance.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Completed);
 
 		IsVisible = true;
 		MissionManager.NeedRefresh = true;
 
-		OnCompleteCustom();
+		PostComplete();
 	}
 
 	/// <summary>
-	/// 任务完成时的额外处理
-	/// <para/>此方法自<see cref="OnComplete"/>抽离，用于给<see cref="MissionTemplates.MultipleMission"/>提供单独的完成处理
+	/// 任务完成 <see cref="OnComplete"/> 前HOOK.
 	/// </summary>
-	public virtual void OnCompleteCustom()
+	/// <returns></returns>
+	public virtual bool PreComplete()
+	{
+		return true;
+	}
+
+	/// <summary>
+	/// 任务完成 <see cref="OnComplete"/> 后HOOK.
+	/// </summary>
+	public virtual void PostComplete()
 	{
 	}
 
@@ -165,6 +183,7 @@ public abstract class MissionBase
 	{
 		tag.Add(TimeSaveKey, Time);
 		tag.Add(nameof(MissionType), (int)MissionType);
+		tag.Add(nameof(SourceNPC), SourceNPC);
 	}
 
 	/// <summary>
@@ -181,6 +200,11 @@ public abstract class MissionBase
 		if (tag.TryGet<int>(nameof(MissionType), out var missionType))
 		{
 			MissionType = (MissionType)missionType;
+		}
+
+		if (tag.TryGet<int>(nameof(SourceNPC), out var sourceNPC))
+		{
+			MissionType = (MissionType)sourceNPC;
 		}
 	}
 

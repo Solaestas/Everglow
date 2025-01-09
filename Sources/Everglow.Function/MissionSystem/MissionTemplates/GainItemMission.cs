@@ -135,7 +135,7 @@ public class GainItemMission : MissionBase
 		this.timeMax = timeMax;
 	}
 
-	public override void OnCompleteCustom()
+	public override void PostComplete()
 	{
 		if (Consume)
 		{

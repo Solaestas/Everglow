@@ -208,9 +208,6 @@ public class MissionManager
 		{
 			pool.ForEach(m => m.Update());
 		}
-
-		// 更新结束后检测所有进度100%的Accpted任务，触发其OnComplete()方法
-		_missionPools[PoolType.Accepted].Where(x => x.CheckFinish()).ToList().ForEach(x => x.OnComplete());
 	}
 
 	/// <summary>

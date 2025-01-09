@@ -4,7 +4,7 @@ using Terraria.ID;
 using Terraria;
 using Everglow.Commons.MissionSystem;
 
-namespace Everglow.UnitTests.Functions;
+namespace Everglow.UnitTests.Functions.MissionSystem;
 
 [TestClass]
 public class KillNPCMissionTest
