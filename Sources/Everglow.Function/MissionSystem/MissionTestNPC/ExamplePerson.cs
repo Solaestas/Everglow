@@ -1,6 +1,4 @@
 using Everglow.Commons.UI.UIContainers.Mission;
-using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.Weapons.StabbingSwords.VFX;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -11,7 +9,7 @@ using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 
-namespace Everglow.Commons.MissionSystem.TestMissionNPC;
+namespace Everglow.Commons.MissionSystem.MissionTestNPC;
 
 // [AutoloadHead] and NPC.townNPC are extremely important and absolutely both necessary for any Town NPC to work at all.
 [AutoloadHead]
@@ -44,13 +42,10 @@ public class ExamplePerson : ModNPC
 
 		NPCID.Sets.ShimmerTownTransform[Type] = true; // Allows for this NPC to have a different texture after touching the Shimmer liquid.
 
-		// Influences how the NPC looks in the Bestiary
 		var drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
 		{
-			Velocity = 1f, // Draws the NPC in the bestiary as if its walking +1 tiles in the x direction
-			Direction = 1 // -1 is left and 1 is right. NPCs are drawn facing the left by default but ExamplePerson will be drawn facing the right
-						  // Rotation = MathHelper.ToRadians(180) // You can also change the rotation of an NPC. Rotation is measured in radians
-						  // If you want to see an example of manually modifying these when the NPC is drawn, see PreDraw
+			Velocity = 1f,
+			Direction = 1,
 		};
 
 		NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
