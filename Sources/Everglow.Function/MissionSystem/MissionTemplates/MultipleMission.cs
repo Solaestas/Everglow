@@ -94,9 +94,9 @@ public class MultipleMission : MissionBase
 
 	private string SubMissionTypesSaveKey => nameof(SubMissions) + ".Type";
 
-	public override void Save(TagCompound tag)
+	public override void SaveData(TagCompound tag)
 	{
-		base.Save(tag);
+		base.SaveData(tag);
 		tag.Add(nameof(TimeMax), TimeMax);
 		tag.Add(nameof(Name), Name);
 		tag.Add(nameof(DisplayName), DisplayName);
@@ -111,12 +111,12 @@ public class MultipleMission : MissionBase
 			SubMissions.ConvertAll(m =>
 			{
 				TagCompound t = [];
-				m.Save(t);
+				m.SaveData(t);
 				return t;
 			}));
 	}
 
-	public override void Load(TagCompound tag)
+	public override void LoadData(TagCompound tag)
 	{
 		tag.TryGet(nameof(TimeMax), out timeMax);
 		tag.TryGet(nameof(Name), out name);
@@ -131,7 +131,7 @@ public class MultipleMission : MissionBase
 			for (int j = 0; j < smt.Count; j++)
 			{
 				var mission = (MissionBase)Activator.CreateInstance(Type.GetType(smt[j]));
-				mission.Load(sm[j]);
+				mission.LoadData(sm[j]);
 				SubMissions.Add(mission);
 			}
 		}

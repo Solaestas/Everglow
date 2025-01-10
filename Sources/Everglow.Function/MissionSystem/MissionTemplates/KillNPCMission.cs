@@ -252,9 +252,9 @@ public class KillNPCMission : MissionBase
 		}
 	}
 
-	public override void Load(TagCompound tag)
+	public override void LoadData(TagCompound tag)
 	{
-		base.Load(tag);
+		base.LoadData(tag);
 		tag.TryGet(nameof(Name), out name);
 		tag.TryGet(nameof(DisplayName), out displayName);
 		tag.TryGet(nameof(Description), out description);
@@ -279,9 +279,9 @@ public class KillNPCMission : MissionBase
 		LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
 
-	public override void Save(TagCompound tag)
+	public override void SaveData(TagCompound tag)
 	{
-		base.Save(tag);
+		base.SaveData(tag);
 		tag.Add(nameof(TimeMax), TimeMax);
 		tag.Add(nameof(Name), Name);
 		tag.Add(nameof(DisplayName), DisplayName);

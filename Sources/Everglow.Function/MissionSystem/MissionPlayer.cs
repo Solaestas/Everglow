@@ -129,7 +129,7 @@ public class MissionPlayer : ModPlayer
 	{
 		if (Player.whoAmI == Main.myPlayer)
 		{
-			MissionManager.Save(tag);
+			MissionManager.SaveData(tag);
 		}
 	}
 
@@ -137,7 +137,7 @@ public class MissionPlayer : ModPlayer
 	{
 		if (Player.whoAmI == Main.myPlayer)
 		{
-			MissionManager.Load(tag);
+			MissionManager.LoadData(tag);
 		}
 	}
 

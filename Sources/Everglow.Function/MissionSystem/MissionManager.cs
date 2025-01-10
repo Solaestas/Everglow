@@ -5,7 +5,7 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem;
 
-public class MissionManager
+public class MissionManager : ITagCompoundEntity
 {
 	/// <summary>
 	/// 任务池类型
@@ -276,7 +276,7 @@ public class MissionManager
 	/// 保存任务
 	/// </summary>
 	/// <param name="tag"></param>
-	public void Save(TagCompound tag)
+	public void SaveData(TagCompound tag)
 	{
 		tag.Add(nameof(NPCKillCounter), NPCKillCounter.ToList());
 
@@ -290,7 +290,7 @@ public class MissionManager
 				missionPool.ConvertAll(m =>
 				{
 					TagCompound t = [];
-					m.Save(t);
+					m.SaveData(t);
 					return t;
 				}));
 		}
@@ -300,7 +300,7 @@ public class MissionManager
 	/// 加载任务
 	/// </summary>
 	/// <param name="tag"></param>
-	public void Load(TagCompound tag)
+	public void LoadData(TagCompound tag)
 	{
 		NPCKillCounter.Clear();
 		tag.TryGet<List<KeyValuePair<int, int>>>(nameof(NPCKillCounter), out var nPCKillCounter);
@@ -318,7 +318,7 @@ public class MissionManager
 				for (int j = 0; j < mt.Count; j++)
 				{
 					var mission = (MissionBase)Activator.CreateInstance(Ins.ModuleManager.Types.First(t => t.FullName == mt[j]));
-					mission.Load(m[j]);
+					mission.LoadData(m[j]);
 					missionPool.Add(mission);
 					mission.PoolType = poolType;
 				}

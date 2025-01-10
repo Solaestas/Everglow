@@ -7,7 +7,7 @@ namespace Everglow.Commons.MissionSystem;
 /// 任务基类
 /// <br>!继承后必须保证存在一个无参构造函数</br>
 /// </summary>
-public abstract class MissionBase
+public abstract class MissionBase : ITagCompoundEntity
 {
 	/// <summary>
 	/// 用于进行内部标识的名字，作用类似 ID
@@ -200,7 +200,7 @@ public abstract class MissionBase
 	/// 保存任务
 	/// </summary>
 	/// <param name="tag"></param>
-	public virtual void Save(TagCompound tag)
+	public virtual void SaveData(TagCompound tag)
 	{
 		tag.Add(TimeSaveKey, Time);
 		tag.Add(nameof(MissionType), (int)MissionType);
@@ -213,7 +213,7 @@ public abstract class MissionBase
 	/// 加载任务
 	/// </summary>
 	/// <param name="tag"></param>
-	public virtual void Load(TagCompound tag)
+	public virtual void LoadData(TagCompound tag)
 	{
 		if (tag.TryGet<long>(TimeSaveKey, out var mt))
 		{
