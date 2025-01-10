@@ -276,6 +276,7 @@ public class KillNPCMission : MissionBase
 			}
 		}
 
+		LoadVanillaNPCTextures(DemandNPCs.SelectMany(x => x.NPCs));
 		LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
 
