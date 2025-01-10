@@ -49,7 +49,7 @@ public class MissionContainer : UIContainerElement
 	private UIContainerPanel _missionContainer;
 	private UIImage _close;
 	private UIImage _maximization;
-	private UIImage _icon;
+	private UIMissionIcon _icon;
 	private UIContainerPanel _descriptionContainer;
 	private UITextPlus _changeText;
 	private UITextPlus _yes;
@@ -111,7 +111,7 @@ public class MissionContainer : UIContainerElement
 		_headshot.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
 		_panel.Register(_headshot);
 
-		_icon = new UIImage(null, Color.White);
+		_icon = new UIMissionIcon(null, Color.White);
 		_icon.Info.Width.SetFull();
 		_icon.Info.Height.SetFull();
 		_headshot.Register(_icon);
@@ -438,7 +438,7 @@ public class MissionContainer : UIContainerElement
 
 		if (SelectedItem != null)
 		{
-			_icon.Texture = SelectedItem.Mission.Icon;
+			_icon.SetIconGroup(SelectedItem.Mission.Icon);
 			_textScrollbar.WheelValue = 0f;
 
 			UITextPlus des = new UITextPlus(SelectedItem.Mission.Description);

@@ -1,3 +1,4 @@
+using Everglow.Commons.MissionSystem.MissionIcons;
 using Terraria.GameContent;
 using Terraria.ModLoader.IO;
 
@@ -161,7 +162,10 @@ public class KillNPCMission : MissionBase
 
 	public override string Description => description;
 
-	public override Texture2D Icon => TextureAssets.Npc[DemandNPCs.First()?.NPCs.First() ?? NPCID.BlueSlime].Value;
+	public override MissionIconGroup Icon => new MissionIconGroup(
+		[
+			NPCMissionIcon.Create(DemandNPCs.First()?.NPCs.First() ?? NPCID.BlueSlime)
+		]);
 
 	public override float Progress => progress;
 

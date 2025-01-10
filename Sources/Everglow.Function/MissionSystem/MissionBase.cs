@@ -33,7 +33,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// 任务图标
 	/// <br>!为null时不显示</br>
 	/// </summary>
-	public abstract Texture2D Icon { get; }
+	public abstract MissionIconGroup Icon { get; }
 
 	/// <summary>
 	/// 绑定的UI显示

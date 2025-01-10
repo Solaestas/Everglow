@@ -38,7 +38,7 @@ public class ReachTargetMission : MissionBase
 
 	public override long TimeMax => _timeMax;
 
-	public override Texture2D Icon => null;
+	public override MissionIconGroup Icon => null;
 
 	/// <summary>
 	/// Check distance

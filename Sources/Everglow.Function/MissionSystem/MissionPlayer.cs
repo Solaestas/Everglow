@@ -1,4 +1,5 @@
 using Everglow.Commons.MissionSystem.MissionTemplates;
+using Everglow.Commons.MissionSystem.TestMissions;
 using Terraria.ModLoader.IO;
 using static Everglow.Commons.MissionSystem.MissionTemplates.GainItemMission;
 using static Everglow.Commons.MissionSystem.MissionTemplates.KillNPCMission;
@@ -15,7 +16,7 @@ public class MissionPlayer : ModPlayer
 		if (Player.whoAmI == Main.myPlayer)
 		{
 			MissionManager.Clear();
-			if (!MissionManager.Instance.HasMission<MissionBase>())
+			if (!MissionManager.HasMission<MissionBase>())
 			{
 				var mission = new GainItemMission();
 				mission.SetInfo("Test1", "获取10个土块", "测试[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
@@ -113,6 +114,8 @@ public class MissionPlayer : ModPlayer
 				]);
 				killNPCMission.MissionType = MissionType.Legendary;
 				MissionManager.AddMission(killNPCMission, MissionManager.PoolType.Available);
+
+				MissionManager.Instance.AddMission(TextureMissionIconTestMission.Create(), MissionManager.PoolType.Available);
 			}
 		}
 	}

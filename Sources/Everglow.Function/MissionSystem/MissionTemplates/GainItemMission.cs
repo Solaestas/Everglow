@@ -1,3 +1,4 @@
+using Everglow.Commons.MissionSystem.MissionIcons;
 using Terraria.GameContent;
 using Terraria.ModLoader.IO;
 
@@ -91,7 +92,12 @@ public class GainItemMission : MissionBase
 
 	public override long TimeMax => timeMax;
 
-	public override Texture2D Icon => DemandItems.Count > 0 ? TextureAssets.Item[DemandItems.First().Items.First()].Value : null;
+	public override MissionIconGroup Icon => new MissionIconGroup(
+		[
+			ItemMissionIcon.Create(DemandItems.Count > 0
+				? DemandItems.First().Items.First()
+				: 1)
+		]);
 
 	public string SourceContext => $"{nameof(Everglow)}.{nameof(GainItemMission)}.{Name}";
 

@@ -27,7 +27,7 @@ public class MultipleMission : MissionBase
 
 	public override long TimeMax => timeMax;
 
-	public override Texture2D Icon => TextureAssets.MagicPixel.Value;
+	public override MissionIconGroup Icon => null;
 
 	public List<MissionBase> SubMissions { get; } = [];
 
