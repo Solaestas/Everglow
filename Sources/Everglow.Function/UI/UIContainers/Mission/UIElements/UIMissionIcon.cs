@@ -51,6 +51,7 @@ public class UIMissionIcon : UIImage
 		base.OnInitialization();
 
 		prevBtn = new UIBlock();
+
 		prevBtn.Info.CanBeInteract = true;
 		prevBtn.Info.IsHidden = true;
 		prevBtn.Info.IsVisible = false;
@@ -58,7 +59,7 @@ public class UIMissionIcon : UIImage
 		prevBtn.Info.IsSensitive = true;
 		prevBtn.Info.Width.SetValue(0, 0.3f);
 		prevBtn.Info.Height.SetValue(0, 0.3f);
-		prevBtn.Info.RightMargin.SetValue(0, 1.1f);
+		prevBtn.Info.Left.SetValue(0, 1.1f);
 		prevBtn.Info.Top.SetValue(0, 0.1f);
 		prevBtn.Events.OnLeftClick += e =>
 		{
@@ -77,15 +78,23 @@ public class UIMissionIcon : UIImage
 		};
 		prevBtn.Events.OnMouseOut += e =>
 		{
-			prevBtn.PanelColor = Color.Black;
+			prevBtn.PanelColor = Color.Brown;
 		};
 		Register(prevBtn);
 
+		var prevIcon = new UIImage(ModAsset.ArrowUp.Value, Color.Brown);
+		prevIcon.Info.Width.SetValue(0, 0.8f);
+		prevIcon.Info.Height.SetValue(0, 0.8f);
+		prevBtn.Register(prevIcon);
+		prevIcon.Info.SetToCenter();
+
 		nextBtn = new UIBlock();
+
 		nextBtn.Info.CanBeInteract = true;
 		nextBtn.Info.IsHidden = true;
 		nextBtn.Info.IsVisible = false;
 
+		nextBtn.Info.IsSensitive = true;
 		nextBtn.Info.Width.SetValue(0, 0.3f);
 		nextBtn.Info.Height.SetValue(0, 0.3f);
 		nextBtn.Info.Left.SetValue(0, 1.1f);
@@ -107,9 +116,15 @@ public class UIMissionIcon : UIImage
 		};
 		nextBtn.Events.OnMouseOut += e =>
 		{
-			nextBtn.PanelColor = Color.Black;
+			nextBtn.PanelColor = Color.Brown;
 		};
 		Register(nextBtn);
+
+		var nextIcon = new UIImage(ModAsset.ArrowDown.Value, Color.Brown);
+		nextBtn.Register(nextIcon);
+		nextIcon.Info.Width.SetValue(0, 0.8f);
+		nextIcon.Info.Height.SetValue(0, 0.8f);
+		nextIcon.Info.SetToCenter();
 	}
 
 	protected override void DrawSelf(SpriteBatch sb)

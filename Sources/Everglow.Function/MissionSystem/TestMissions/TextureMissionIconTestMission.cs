@@ -1,5 +1,6 @@
 using Everglow.Commons.MissionSystem.MissionIcons;
 using Everglow.Commons.MissionSystem.MissionTemplates;
+using ReLogic.Content;
 
 namespace Everglow.Commons.MissionSystem.TestMissions;
 
@@ -15,6 +16,7 @@ public class TextureMissionIconTestMission : GainItemMission
 
 	public static TextureMissionIconTestMission Create()
 	{
+		LoadVanillaNPCTextures([NPCID.BlueSlime]);
 		LoadVanillaItemTextures([ItemID.LargeRuby]);
 		var mission = new TextureMissionIconTestMission();
 		mission.SetInfo("TestMissionIconTest1", "测试TextureMissionIcon", "测试介绍3");
