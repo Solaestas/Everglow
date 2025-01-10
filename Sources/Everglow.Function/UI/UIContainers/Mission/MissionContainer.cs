@@ -342,6 +342,27 @@ public class MissionContainer : UIContainerElement
 	}
 
 	/// <summary>
+	/// 打开任务面板，同时选中指定任务
+	/// </summary>
+	/// <param name="missionName"></param>
+	public void ShowWithMission(string missionName)
+	{
+		Show();
+
+		foreach (var e in _missionContainer.Elements)
+		{
+			if (e is UIMissionItem missionItem)
+			{
+				if (missionItem.Mission.Name == missionName)
+				{
+					ChangeSelectedItem(missionItem);
+					return;
+				}
+			}
+		}
+	}
+
+	/// <summary>
 	/// 刷新任务列表
 	/// </summary>
 	public void RefreshList()
