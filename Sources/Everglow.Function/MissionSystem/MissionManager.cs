@@ -1,9 +1,6 @@
 using Everglow.Commons.MissionSystem.MissionTemplates;
-using Everglow.Commons.UI.UIContainers.Mission;
 using MathNet.Numerics;
 using MonoMod.Utils;
-using Terraria.Localization;
-using Terraria;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem;
@@ -207,23 +204,28 @@ public class MissionManager
 	/// </summary>
 	public void Update()
 	{
+		// 更新所有任务
 		foreach (var pool in _missionPools.Values)
 		{
 			pool.ForEach(m => m.Update());
 		}
 
+		// 处理自动提交任务
+		_missionPools[PoolType.Accepted].Where(m => m.CheckFinish() && m.AutoComplete).ToList().ForEach(m => m.OnComplete());
+
+		// 检测可提交状态改变的任务，将状态改变为可提交的任务抛出信息
 		foreach (var m in _missionPools[PoolType.Accepted].ToList())
 		{
 			if (m.CheckFinish() != m.OldCheckFinish)
 			{
 				m.OldCheckFinish = m.CheckFinish();
 
-				m.PostCheckFinishChange();
+				m.OnCheckFinishChange();
 
-				if (m.CheckFinish() && Main.netMode != NetmodeID.Server)
+				// 由不可提交改变到可提交状态的任务, 发送消息提示
+				if (m.CheckFinish())
 				{
-					string text = $"{m.Name}任务可以提交了";
-					Main.NewText(text, 150, 250, 150);
+					Main.NewText($"[{m.Name}]任务可以提交了", 250, 250, 150);
 				}
 			}
 		}

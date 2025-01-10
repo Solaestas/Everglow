@@ -84,6 +84,11 @@ public abstract class MissionBase
 	public bool IsVisible { get; set; } = true;
 
 	/// <summary>
+	/// 是否由任务管理器自动检测完成并提交
+	/// </summary>
+	public bool AutoComplete { get; set; } = false;
+
+	/// <summary>
 	/// 检查任务是否完成
 	/// </summary>
 	/// <returns></returns>
@@ -91,13 +96,14 @@ public abstract class MissionBase
 
 	/// <summary>
 	/// 任务可提交状态的旧状态
+	/// <para/>该属性不需要持久化，保证每次重新进入世界时都会发送信息
 	/// </summary>
 	public bool OldCheckFinish { get; internal set; } = false;
 
 	/// <summary>
 	/// 任务可提交状态改变后HOOK
 	/// </summary>
-	public virtual void PostCheckFinishChange()
+	public virtual void OnCheckFinishChange()
 	{
 		MissionManager.NeedRefresh = true;
 	}
@@ -153,6 +159,8 @@ public abstract class MissionBase
 		IsVisible = true;
 		MissionManager.NeedRefresh = true;
 
+		Main.NewText($"[{Name}]任务已完成", 150, 250, 150);
+
 		PostComplete();
 	}
 
@@ -198,6 +206,7 @@ public abstract class MissionBase
 		tag.Add(nameof(MissionType), (int)MissionType);
 		tag.Add(nameof(SourceNPC), SourceNPC);
 		tag.Add(nameof(IsVisible), IsVisible);
+		tag.Add(nameof(AutoComplete), AutoComplete);
 	}
 
 	/// <summary>
@@ -224,6 +233,11 @@ public abstract class MissionBase
 		if (tag.TryGet<bool>(nameof(IsVisible), out var isVisible))
 		{
 			IsVisible = isVisible;
+		}
+
+		if (tag.TryGet<bool>(nameof(AutoComplete), out var autoComplete))
+		{
+			AutoComplete = autoComplete;
 		}
 	}
 

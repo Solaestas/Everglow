@@ -24,6 +24,7 @@ public class MissionPlayer : ModPlayer
 				mission.RewardItems.AddRange([
 					new Item(ItemID.Wood, 10)]);
 				mission.IsVisible = false;
+				mission.AutoComplete = true;
 				mission.MissionType = MissionType.Daily;
 				MissionManager.AddMission(mission, MissionManager.PoolType.Accepted);
 
