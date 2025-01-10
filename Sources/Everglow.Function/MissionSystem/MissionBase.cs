@@ -197,6 +197,7 @@ public abstract class MissionBase
 		tag.Add(TimeSaveKey, Time);
 		tag.Add(nameof(MissionType), (int)MissionType);
 		tag.Add(nameof(SourceNPC), SourceNPC);
+		tag.Add(nameof(IsVisible), IsVisible);
 	}
 
 	/// <summary>
@@ -217,7 +218,12 @@ public abstract class MissionBase
 
 		if (tag.TryGet<int>(nameof(SourceNPC), out var sourceNPC))
 		{
-			MissionType = (MissionType)sourceNPC;
+			SourceNPC = sourceNPC;
+		}
+
+		if (tag.TryGet<bool>(nameof(IsVisible), out var isVisible))
+		{
+			IsVisible = isVisible;
 		}
 	}
 
