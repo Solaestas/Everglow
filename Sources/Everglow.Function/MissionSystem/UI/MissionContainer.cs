@@ -274,14 +274,9 @@ public class MissionContainer : UIContainerElement
 		};
 		_changeMission.Register(_no);
 
-		_changeText = new UITextPlus(ChangeButtonText.Accept);
+		_changeText = new UITextPlus(string.Empty);
 		_changeText.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
 		_changeText.StringDrawer.Init(_changeText.Text);
-		_changeText.Events.OnUpdate += (e, gt) =>
-		{
-			_changeText.Info.SetToCenter();
-			_changeText.Calculation();
-		};
 		_changeMission.Register(_changeText);
 	}
 
@@ -470,7 +465,7 @@ public class MissionContainer : UIContainerElement
 		}
 		else
 		{
-			_icon.Texture = null;
+			_icon.SetIconGroup(null);
 			_textScrollbar.WheelValue = 0f;
 			_descriptionContainer.ClearAllElements();
 		}
@@ -515,14 +510,14 @@ public class MissionContainer : UIContainerElement
 				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Unknown}',Color='126,126,126']";
 			}
 
-			_changeText.Info.SetToCenter();
-
 			_yes.Info.IsVisible = _no.Info.IsVisible = false;
+
+			_changeText.Calculation();
+			_changeText.Info.SetToCenter();
 		}
 		else
 		{
 			_changeText.Text = "[TextDrawer,Text='',Color='126,126,126']";
-			_changeText.Info.SetToCenter();
 			_yes.Info.IsVisible = _no.Info.IsVisible = false;
 		}
 	}

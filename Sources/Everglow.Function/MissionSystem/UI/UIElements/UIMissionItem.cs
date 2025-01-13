@@ -68,13 +68,11 @@ public class UIMissionItem : UIBlock
 		UITextPlus name = new UITextPlus(Mission.DisplayName);
 		name.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
 		name.StringDrawer.Init(name.Text);
-		name.Events.OnUpdate += (e, gt) =>
-		{
-			name.Info.SetToCenter();
-			name.Info.Left.SetValue((16f, 0f));
-			name.Calculation();
-		};
 		block.Register(name);
+
+		name.Info.SetToCenter();
+		name.Info.Left.SetValue((16f, 0f));
+		name.Calculation();
 	}
 
 	/// <summary>
