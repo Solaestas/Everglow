@@ -2,54 +2,52 @@ namespace Everglow.Commons.Utilities.ItemList.Weapons.Melee;
 
 public class ShortSwords : GlobalItem
 {
-    public static List<int> vanillaShortSwords;
-    public override void Unload()
-    {
-        vanillaShortSwords = null;
-    }
+	public static List<int> vanillaShortSwords;
 
-    public ShortSwords()
-    {
-        vanillaShortSwords = new List<int>
-        {
-            //铜短剑
-            ItemID.CopperShortsword,
+	public override void Unload()
+	{
+		vanillaShortSwords = null;
+	}
 
-            //锡短剑
-            ItemID.TinShortsword,
+	public ShortSwords()
+	{
+		vanillaShortSwords = new List<int>
+		{
+			// 铜短剑
+			ItemID.CopperShortsword,
 
-            //铁短剑
-            ItemID.IronShortsword,
+			// 锡短剑
+			ItemID.TinShortsword,
 
-            //铅短剑
-            ItemID.LeadShortsword,
+			// 铁短剑
+			ItemID.IronShortsword,
 
-            //银短剑
-            ItemID.SilverShortsword,
+			// 铅短剑
+			ItemID.LeadShortsword,
 
-            //钨短剑
-            ItemID.TungstenShortsword,
+			// 银短剑
+			ItemID.SilverShortsword,
 
-            //金短剑
-            ItemID.GoldShortsword,
+			// 钨短剑
+			ItemID.TungstenShortsword,
 
-            //铂金短剑
-            ItemID.PlatinumShortsword,
+			// 金短剑
+			ItemID.GoldShortsword,
 
-            //伞
-            ItemID.Umbrella,
-            
-            //悲剧雨伞
-            ItemID.TragicUmbrella,
+			// 铂金短剑
+			ItemID.PlatinumShortsword,
 
-            //标尺
-            ItemID.Ruler,
+			// 伞
+			ItemID.Umbrella,
 
-            //罗马短剑
-            ItemID.Gladius,
+			// 悲剧雨伞
+			ItemID.TragicUmbrella,
 
-            //星光
-            ItemID.PiercingStarlight,//其实不算,但也没地方放了
-        };
-    }
+			// 标尺
+			ItemID.Ruler,
+
+			// 罗马短剑
+			ItemID.Gladius,
+		};
+	}
 }

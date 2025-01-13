@@ -2,61 +2,61 @@ namespace Everglow.Commons.Utilities.ItemList.Weapons.Melee;
 
 public class Flails : GlobalItem
 {
-    public static List<int> vanillaFlails;
-    public override void Unload()
-    {
-        vanillaFlails = null;
-    }
+	public static List<int> vanillaFlails;
 
-    public Flails()
-    {
-        vanillaFlails = new List<int>
-        {
-            //链刀
-            ItemID.ChainKnife,
+	public override void Unload()
+	{
+		vanillaFlails = null;
+	}
 
-            //链锤
-            ItemID.Mace,
+	public Flails()
+	{
+		vanillaFlails = new List<int>
+		{
+			// 链刀
+			ItemID.ChainKnife,
 
-            //烈焰链锤
-            ItemID.FlamingMace,
+			// 链锤
+			ItemID.Mace,
 
-            //链球
-            ItemID.BallOHurt,
+			// 烈焰链锤
+			ItemID.FlamingMace,
 
-            //血肉之球
-            ItemID.TheMeatball,
+			// 链球
+			ItemID.BallOHurt,
 
-            //蓝月
-            ItemID.BlueMoon,
+			// 血肉之球
+			ItemID.TheMeatball,
 
-            //阳炎之怒
-            ItemID.Sunfury,
+			// 蓝月
+			ItemID.BlueMoon,
 
-            //锚
-            ItemID.Anchor,
-            
-            //致胜炮
-            ItemID.KOCannon,
+			// 阳炎之怒
+			ItemID.Sunfury,
 
-            //滴滴怪致残者
-            ItemID.DripplerFlail,
+			// 锚
+			ItemID.Anchor,
 
-            //铁链血滴子
-            ItemID.ChainGuillotines,
+			// 致胜炮
+			ItemID.KOCannon,
 
-            //太极连枷
-            ItemID.DaoofPow,
+			// 滴滴怪致残者
+			ItemID.DripplerFlail,
 
-            //花冠
-            ItemID.FlowerPow,
-            
-            //石巨人之拳
-            ItemID.GolemFist,
+			// 铁链血滴子
+			ItemID.ChainGuillotines,
 
-            //猪鲨链球
-            ItemID.Flairon,
+			// 太极连枷
+			ItemID.DaoofPow,
 
-        };
-    }
+			// 花冠
+			ItemID.FlowerPow,
+
+			// 石巨人之拳
+			ItemID.GolemFist,
+
+			// 猪鲨链球
+			ItemID.Flairon,
+		};
+	}
 }

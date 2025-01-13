@@ -1,78 +1,77 @@
-namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged;
+
+public class Consumables : GlobalItem
 {
-	public class Consumables : GlobalItem
+    public static List<int> vanillaConsumables;
+
+    public override void Unload()
     {
-        public static List<int> vanillaConsumables;
-        public override void Unload()
+        vanillaConsumables = null;
+    }
+
+    public Consumables()
+    {
+        vanillaConsumables = new List<int>
         {
-            vanillaConsumables = null;
-        }
+            // 纸飞机
+            ItemID.PaperAirplaneA,
 
-        public Consumables()
-        {
-            vanillaConsumables = new List<int>
-            {
-                //纸飞机
-                ItemID.PaperAirplaneA,
+            // 白纸飞机
+            ItemID.PaperAirplaneB,
 
-                //白纸飞机
-                ItemID.PaperAirplaneB,
+            // 手里剑
+            ItemID.Shuriken,
 
-                //手里剑
-                ItemID.Shuriken,
+            // 投刀
+            ItemID.ThrowingKnife,
 
-                //投刀
-                ItemID.ThrowingKnife,
+            // 毒刀
+            ItemID.PoisonedKnife,
 
-                //毒刀
-                ItemID.PoisonedKnife,
-                
-                //雪球
-                ItemID.Snowball,
-                
-                 //尖球
-                ItemID.SpikyBall,
+            // 雪球
+            ItemID.Snowball,
 
-                //骨头
-                ItemID.Bone,
+            // 尖球
+            ItemID.SpikyBall,
 
-                //臭蛋
-                ItemID.RottenEgg,
+            // 骨头
+            ItemID.Bone,
 
-                //星形茴香
-                ItemID.StarAnise,
+            // 臭蛋
+            ItemID.RottenEgg,
 
-                //莫洛托夫鸡尾酒
-                ItemID.MolotovCocktail,
+            // 星形茴香
+            ItemID.StarAnise,
 
-                //寒霜飞鱼
-                ItemID.FrostDaggerfish,
+            // 莫洛托夫鸡尾酒
+            ItemID.MolotovCocktail,
 
-                //标枪
-                ItemID.Javelin,
+            // 寒霜飞鱼
+            ItemID.FrostDaggerfish,
 
-                //骨头标枪
-                ItemID.BoneJavelin,
+            // 标枪
+            ItemID.Javelin,
 
-                //骨投刀
-                ItemID.BoneDagger,
+            // 骨头标枪
+            ItemID.BoneJavelin,
 
-                //手榴弹
-                ItemID.Grenade,
+            // 骨投刀
+            ItemID.BoneDagger,
 
-                //粘性手榴弹
-                ItemID.StickyGrenade,
+            // 手榴弹
+            ItemID.Grenade,
 
-                //弹力手榴弹
-                ItemID.BouncyGrenade,
+            // 粘性手榴弹
+            ItemID.StickyGrenade,
 
-                //蜜蜂手榴弹
-                ItemID.Beenade,
+            // 弹力手榴弹
+            ItemID.BouncyGrenade,
 
-                //快乐手榴弹
-                ItemID.PartyGirlGrenade,
+            // 蜜蜂手榴弹
+            ItemID.Beenade,
 
-            };
-        }
+            // 快乐手榴弹
+            ItemID.PartyGirlGrenade,
+        };
     }
 }

@@ -2,55 +2,58 @@ namespace Everglow.Commons.Utilities.ItemList.Weapons.Melee;
 
 public class OtherMeleeWeapons : GlobalItem
 {
-    public static List<int> vanillaOtherMeleeWeapons;
-    public override void Unload()
-    {
-        vanillaOtherMeleeWeapons = null;
-    }
+	public static List<int> vanillaOtherMeleeWeapons;
 
-    public OtherMeleeWeapons()
-    {
-        vanillaOtherMeleeWeapons = new List<int>
-        {
-            //泰拉魔刃
-            ItemID.Terragrim,
+	public override void Unload()
+	{
+		vanillaOtherMeleeWeapons = null;
+	}
 
-            //Arkhalis剑
-            ItemID.Arkhalis,
+	public OtherMeleeWeapons()
+	{
+		vanillaOtherMeleeWeapons = new List<int>
+		{
+			// 泰拉魔刃
+			ItemID.Terragrim,
 
-            //骑枪
-            ItemID.JoustingLance,
+			// Arkhalis剑
+			ItemID.Arkhalis,
 
-            //暗影焰刀
-            ItemID.ShadowFlameKnife,
+			// 骑枪
+			ItemID.JoustingLance,
 
-            //神圣骑枪
-            ItemID.HallowJoustingLance,
+			// 暗影焰刀
+			ItemID.ShadowFlameKnife,
 
-            //瞌睡章鱼
-            ItemID.MonkStaffT1,//😅😅😅
+			// 神圣骑枪
+			ItemID.HallowJoustingLance,
 
-            //腐化者之戟
-            ItemID.ScourgeoftheCorruptor,
+			// 瞌睡章鱼
+			ItemID.MonkStaffT1,
 
-            //暗影骑枪
-            ItemID.ShadowJoustingLance,
-            
-            //吸血鬼刀
-            ItemID.VampireKnives,
+			// 腐化者之戟
+			ItemID.ScourgeoftheCorruptor,
 
-            //天龙之怒
-            ItemID.MonkStaffT3,//😅😅😅
+			// 暗影骑枪
+			ItemID.ShadowJoustingLance,
 
-            //破晓之光
-            ItemID.DayBreak,
+			// 吸血鬼刀
+			ItemID.VampireKnives,
 
-            //日耀喷发剑
-            ItemID.SolarEruption,
+			// 星光
+			ItemID.PiercingStarlight,
 
-            //天顶剑
-            ItemID.Zenith,
+			// 天龙之怒
+			ItemID.MonkStaffT3,
 
-        };
-    }
+			// 破晓之光
+			ItemID.DayBreak,
+
+			// 日耀喷发剑
+			ItemID.SolarEruption,
+
+			// 天顶剑
+			ItemID.Zenith,
+		};
+	}
 }

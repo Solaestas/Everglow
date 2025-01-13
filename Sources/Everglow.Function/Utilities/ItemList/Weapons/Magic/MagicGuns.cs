@@ -1,53 +1,53 @@
-namespace Everglow.Commons.Utilities.ItemList.Weapons.Magic
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Magic;
+
+public class MagicGuns : GlobalItem
 {
-	public class MagicGuns : GlobalItem
-    {
-        public static List<int> vanillaMagicGuns;
-        public override void Unload()
-        {
-            vanillaMagicGuns = null;
-        }
+	public static List<int> vanillaMagicGuns;
 
-        public MagicGuns()
-        {
-            vanillaMagicGuns = new List<int>
-            {
-                //太空枪
-                ItemID.SpaceGun,
+	public override void Unload()
+	{
+		vanillaMagicGuns = null;
+	}
 
-                //蜜蜂枪
-                ItemID.BeeGun,
+	public MagicGuns()
+	{
+		vanillaMagicGuns = new List<int>()
+		{
+			// 太空枪
+			ItemID.SpaceGun,
 
-                //灰冲击枪
-                ItemID.ZapinatorGray,
+			// 蜜蜂枪
+			ItemID.BeeGun,
 
-                //激光步枪
-                ItemID.LaserRifle,
+			// 灰冲击枪
+			ItemID.ZapinatorGray,
 
-                //橙冲击枪
-                ItemID.ZapinatorOrange,
+			// 激光步枪
+			ItemID.LaserRifle,
 
-                //吹叶机
-                ItemID.LeafBlower,
+			// 橙冲击枪
+			ItemID.ZapinatorOrange,
 
-                //彩虹枪
-                ItemID.RainbowGun,
+			// 吹叶机
+			ItemID.LeafBlower,
 
-                //胡蜂枪
-                ItemID.WaspGun,
+			// 彩虹枪
+			ItemID.RainbowGun,
 
-                //高温射线枪
-                ItemID.HeatRay,
-                
-                //激光机枪
-                ItemID.LaserMachinegun,
-                
-                //充能爆破炮
-                ItemID.ChargedBlasterCannon,//这踏马是枪?
+			// 胡蜂枪
+			ItemID.WaspGun,
 
-                //泡泡枪
-                ItemID.BubbleGun,
-            };
-        }
-    }
+			// 高温射线枪
+			ItemID.HeatRay,
+
+			// 激光机枪
+			ItemID.LaserMachinegun,
+
+			// 充能爆破炮
+			ItemID.ChargedBlasterCannon,
+
+			// 泡泡枪
+			ItemID.BubbleGun,
+		};
+	}
 }

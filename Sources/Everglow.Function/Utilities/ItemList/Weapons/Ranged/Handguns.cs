@@ -1,38 +1,38 @@
-namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged;
+
+public class Handguns : GlobalItem
 {
-	public class Handguns : GlobalItem
-    {
-        public static List<int> vanillaHandguns;
-        public override void Unload()
-        {
-            vanillaHandguns = null;
-        }
+	public static List<int> vanillaHandguns;
 
-        public Handguns()
-        {
-            vanillaHandguns = new List<int>
-            {
-                //燧发枪
-                ItemID.FlintlockPistol,
+	public override void Unload()
+	{
+		vanillaHandguns = null;
+	}
 
-                //夺命枪
-                ItemID.TheUndertaker,
+	public Handguns()
+	{
+		vanillaHandguns = new List<int>()
+		{
+			// 燧发枪
+			ItemID.FlintlockPistol,
 
-                //左轮手枪
-                ItemID.Revolver,
+			// 夺命枪
+			ItemID.TheUndertaker,
 
-                //手枪
-                ItemID.Handgun,
+			// 左轮手枪
+			ItemID.Revolver,
 
-                //凤凰爆破枪
-                ItemID.PhoenixBlaster,
+			// 手枪
+			ItemID.Handgun,
 
-                //气喇叭
-                ItemID.PewMaticHorn,
+			// 凤凰爆破枪
+			ItemID.PhoenixBlaster,
 
-                //维纳斯万能枪
-                ItemID.VenusMagnum,
-            };
-        }
-    }
+			// 气喇叭
+			ItemID.PewMaticHorn,
+
+			// 维纳斯万能枪
+			ItemID.VenusMagnum,
+		};
+	}
 }

@@ -1,45 +1,44 @@
-namespace Everglow.Commons.Utilities.ItemList.Weapons.Summon
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Summon;
+
+public class Whips : GlobalItem
 {
-	public class Whips : GlobalItem
-    {
-        public static List<int> vanillaWhips;
-        public override void Unload()
-        {
-            vanillaWhips = null;
-        }
+	public static List<int> vanillaWhips;
 
-        public Whips()
-        {
-            vanillaWhips = new List<int>
-            {
-                //皮鞭
-                ItemID.BlandWhip,
+	public override void Unload()
+	{
+		vanillaWhips = null;
+	}
 
-                //荆鞭
-                ItemID.ThornWhip,
+	public Whips()
+	{
+		vanillaWhips = new List<int>()
+		{
+			// 皮鞭
+			ItemID.BlandWhip,
 
-                //骨鞭
-                ItemID.BoneWhip,
-                
-                //鞭炮
-                ItemID.FireWhip,
+			// 荆鞭
+			ItemID.ThornWhip,
 
-                //冷鞭
-                ItemID.CoolWhip,
+			// 脊柱骨鞭
+			ItemID.BoneWhip,
 
-                //郎迪达尔
-                ItemID.SwordWhip,
+			// 鞭炮
+			ItemID.FireWhip,
 
-                //黑暗收割者
-                ItemID.ScytheWhip,
+			// 冷鞭
+			ItemID.CoolWhip,
 
-                //晨星
-                ItemID.MaceWhip,
+			// 迪郎达尔
+			ItemID.SwordWhip,
 
-                //万花筒
-                ItemID.RainbowWhip,
+			// 暗黑收割
+			ItemID.ScytheWhip,
 
-            };
-        }
-    }
+			// 晨星
+			ItemID.MaceWhip,
+
+			// 万花筒
+			ItemID.RainbowWhip,
+		};
+	}
 }

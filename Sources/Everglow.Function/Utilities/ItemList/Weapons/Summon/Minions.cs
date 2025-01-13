@@ -1,81 +1,80 @@
-namespace Everglow.Commons.Utilities.ItemList.Weapons.Summon
-{ 
-	public class Minions : GlobalItem
-    {
-        public static List<int> vanillaMinions;
-        public override void Unload()
-        {
-            vanillaMinions = null;
-        }
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Summon;
 
-        public Minions()
-        {
-            vanillaMinions = new List<int>
-            {
-                //雀杖
-                ItemID.BabyBirdStaff,
+public class Minions : GlobalItem
+{
+	public static List<int> vanillaMinions;
 
-                //史莱姆法杖
-                ItemID.SlimeStaff,
+	public override void Unload()
+	{
+		vanillaMinions = null;
+	}
 
-                //小雪怪法杖
-                ItemID.FlinxStaff,
-                
-                //黄蜂法杖
-                ItemID.HornetStaff,
-                
-                //阿比盖尔的花
-                ItemID.AbigailsFlower,
+	public Minions()
+	{
+		vanillaMinions = new List<int>()
+		{
+			// 雀杖
+			ItemID.BabyBirdStaff,
 
-                //吸血鬼青蛙法杖
-                ItemID.VampireFrogStaff,
+			// 史莱姆法杖
+			ItemID.SlimeStaff,
 
-                //小鬼法杖
-                ItemID.ImpStaff,
+			// 小雪怪法杖
+			ItemID.FlinxStaff,
 
-                //刃杖
-                ItemID.Smolstar,
-                
-                //蜘蛛法杖
-                ItemID.SpiderStaff,
+			// 黄蜂法杖
+			ItemID.HornetStaff,
 
-                //海盗法杖
-                ItemID.PirateStaff,
+			// 阿比盖尔的花
+			ItemID.AbigailsFlower,
 
-                //血红法杖
-                ItemID.SanguineStaff,
+			// 吸血鬼青蛙法杖
+			ItemID.VampireFrogStaff,
 
-                //魔眼法杖
-                ItemID.OpticStaff,
-                
-                //致命球法杖
-                ItemID.DeadlySphereStaff,
+			// 小鬼法杖
+			ItemID.ImpStaff,
 
-                //矮人法杖
-                ItemID.PygmyStaff,
+			// 刃杖
+			ItemID.Smolstar,
 
-                //乌鸦法杖
-                ItemID.RavenStaff,
+			// 蜘蛛法杖
+			ItemID.SpiderStaff,
 
-                //沙漠虎杖
-                ItemID.StormTigerStaff,
+			// 海盗法杖
+			ItemID.PirateStaff,
 
-                //暴风雨法杖
-                ItemID.TempestStaff,
+			// 血红法杖
+			ItemID.SanguineStaff,
 
-                //泰拉棱镜
-                ItemID.EmpressBlade, 
-                
-                //外星法杖
-                ItemID.XenoStaff,
+			// 魔眼法杖
+			ItemID.OpticStaff,
 
-                //星尘细胞法杖
-                ItemID.StardustCellStaff,
+			// 致命球法杖
+			ItemID.DeadlySphereStaff,
 
-                //星尘之龙法杖
-                ItemID.StardustDragonStaff,
+			// 矮人法杖
+			ItemID.PygmyStaff,
 
-            };
-        }
-    }
+			// 乌鸦法杖
+			ItemID.RavenStaff,
+
+			// 沙漠虎杖
+			ItemID.StormTigerStaff,
+
+			// 暴风雨法杖
+			ItemID.TempestStaff,
+
+			// 泰拉棱镜
+			ItemID.EmpressBlade,
+
+			// 外星法杖
+			ItemID.XenoStaff,
+
+			// 星尘细胞法杖
+			ItemID.StardustCellStaff,
+
+			// 星尘之龙法杖
+			ItemID.StardustDragonStaff,
+		};
+	}
 }

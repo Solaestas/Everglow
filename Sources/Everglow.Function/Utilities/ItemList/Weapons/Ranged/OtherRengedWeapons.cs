@@ -1,72 +1,71 @@
-namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged;
+
+public class OtherRengedWeapons : GlobalItem
 {
-	public class OtherRengedWeapons : GlobalItem
-    {
-        public static List<int> vanillaOtherRengedWeapons;
-        public override void Unload()
-        {
-            vanillaOtherRengedWeapons = null;
-        }
+	public static List<int> vanillaOtherRengedWeapons;
 
-        public OtherRengedWeapons()
-        {
-            vanillaOtherRengedWeapons = new List<int>
-            {
-                //信号枪
-                ItemID.FlareGun,
+	public override void Unload()
+	{
+		vanillaOtherRengedWeapons = null;
+	}
 
-                //麦芽酒投掷器
-                ItemID.AleThrowingGlove,
+	public OtherRengedWeapons()
+	{
+		vanillaOtherRengedWeapons = new List<int>
+		{
+			// 信号枪
+			ItemID.FlareGun,
 
-                //吹管
-                ItemID.Blowpipe,
+			// 麦芽酒投掷器
+			ItemID.AleThrowingGlove,
 
-                //吹枪
-                ItemID.Blowgun,
+			// 吹管
+			ItemID.Blowpipe,
 
-                //雪球炮
-                ItemID.SnowballCannon,
+			// 吹枪
+			ItemID.Blowgun,
 
-                //彩弹枪
-                ItemID.PainterPaintballGun,
-                
-                //鱼叉枪
-                ItemID.Harpoon,
+			// 雪球炮
+			ItemID.SnowballCannon,
 
-                //300颗
-                ItemID.StarCannon,
+			// 彩弹枪
+			ItemID.PainterPaintballGun,
 
-                //毒液枪
-                ItemID.Toxikarp,
+			// 鱼叉枪
+			ItemID.Harpoon,
 
-                //飞镖手枪
-                ItemID.DartPistol,
+			// 300颗
+			ItemID.StarCannon,
 
-                //飞镖步枪
-                ItemID.DartRifle,
+			// 毒液枪
+			ItemID.Toxikarp,
 
-                //火焰喷射器
-                ItemID.Flamethrower,
+			// 飞镖手枪
+			ItemID.DartPistol,
 
-                //水虎鱼枪
-                ItemID.PiranhaGun,
+			// 飞镖步枪
+			ItemID.DartRifle,
 
-                //精灵熔炉
-                ItemID.ElfMelter,//确定不是拼错了？
+			// 火焰喷射器
+			ItemID.Flamethrower,
 
-                //超级300颗
-                ItemID.SuperStarCannon,
+			// 水虎鱼枪
+			ItemID.PiranhaGun,
 
-                //钉枪
-                ItemID.NailGun,
+			// 精灵熔炉
+			ItemID.ElfMelter,
 
-                //毒刺发射器
-                ItemID.Stynger,
+			// 超级300颗
+			ItemID.SuperStarCannon,
 
-                //杰克南瓜灯发射器
-                ItemID.JackOLanternLauncher,
+			// 钉枪
+			ItemID.NailGun,
 
-            };
-        }
-    }
+			// 毒刺发射器
+			ItemID.Stynger,
+
+			// 杰克南瓜灯发射器
+			ItemID.JackOLanternLauncher,
+		};
+	}
 }

@@ -2,76 +2,79 @@ namespace Everglow.Commons.Utilities.ItemList.Weapons.Melee;
 
 public class Yoyos : GlobalItem
 {
-    public static List<int> vanillaYoyos;
-    public override void Unload()
-    {
-        vanillaYoyos = null;
-    }
+	public static List<int> vanillaYoyos;
 
-    public Yoyos()
-    {
-        vanillaYoyos = new List<int>
-        {
-            //木悠悠球
-            ItemID.WoodYoyo,
+	public override void Unload()
+	{
+		vanillaYoyos = null;
+	}
 
-            //对打球
-            ItemID.Rally,
+	public Yoyos()
+	{
+		vanillaYoyos = new List<int>
+		{
+			// 木悠悠球
+			ItemID.WoodYoyo,
 
-            //抑郁球
-            ItemID.CorruptYoyo,
+			// 对打球
+			ItemID.Rally,
 
-            //血脉球
-            ItemID.CrimsonYoyo,
+			// 抑郁球
+			ItemID.CorruptYoyo,
 
-            //亚马逊球
-            ItemID.JungleYoyo,
+			// 血脉球
+			ItemID.CrimsonYoyo,
 
-            //代码1球
-            ItemID.Code1,
+			// 亚马逊球
+			ItemID.JungleYoyo,
 
-            //英勇球
-            ItemID.Valor,
+			// 代码1球
+			ItemID.Code1,
 
-            //喷流球
-            ItemID.Cascade,
-            
-            //好胜球
-            ItemID.FormatC,
+			// 英勇球
+			ItemID.Valor,
 
-            //渐变球
-            ItemID.Gradient,
+			// 喷流球
+			ItemID.Cascade,
 
-            //吉克球
-            ItemID.Chik,
+			// 蜂巢球
+			ItemID.HiveFive,
 
-            //狱火球
-            ItemID.HelFire,
+			// 好胜球
+			ItemID.FormatC,
 
-            //冰雪悠悠球
-            ItemID.Amarok,
-            
-            //代码2球
-            ItemID.Code2,
+			// 渐变球
+			ItemID.Gradient,
 
-            //叶列茨球
-            ItemID.Yelets,
+			// 吉克球
+			ItemID.Chik,
 
-            //Red的抛球
-            ItemID.RedsYoyo,
+			// 狱火球
+			ItemID.HelFire,
 
-            //女武神悠悠球
-            ItemID.ValkyrieYoyo,
+			// 冰雪悠悠球
+			ItemID.Amarok,
 
-            //克拉肯球
-            ItemID.Kraken,
+			// 代码2球
+			ItemID.Code2,
 
-            //克苏鲁之眼
-            ItemID.TheEyeOfCthulhu,
+			// 叶列茨球
+			ItemID.Yelets,
 
-            //泰拉悠悠球
-            ItemID.Terrarian,
+			// Red的抛球
+			ItemID.RedsYoyo,
 
-        };
-    }
+			// 女武神悠悠球
+			ItemID.ValkyrieYoyo,
+
+			// 克拉肯球
+			ItemID.Kraken,
+
+			// 克苏鲁之眼
+			ItemID.TheEyeOfCthulhu,
+
+			// 泰拉悠悠球
+			ItemID.Terrarian,
+		};
+	}
 }

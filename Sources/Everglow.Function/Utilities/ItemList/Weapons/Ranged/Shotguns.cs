@@ -1,35 +1,35 @@
-namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged;
+
+public class Shotguns : GlobalItem
 {
-	public class Shotguns : GlobalItem
-    {
-        public static List<int> vanillaShotguns;
-        public override void Unload()
-        {
-            vanillaShotguns = null;
-        }
+	public static List<int> vanillaShotguns;
 
-        public Shotguns()
-        {
-            vanillaShotguns = new List<int>
-            {
-                //三发猎枪
-                ItemID.Boomstick,
+	public override void Unload()
+	{
+		vanillaShotguns = null;
+	}
 
-                //四管霰弹枪
-                ItemID.QuadBarrelShotgun,
+	public Shotguns()
+	{
+		vanillaShotguns = new List<int>
+		{
+			// 三发猎枪
+			ItemID.Boomstick,
 
-                //霰弹枪
-                ItemID.Shotgun,
+			// 四管霰弹枪
+			ItemID.QuadBarrelShotgun,
 
-                //玛瑙爆破枪
-                ItemID.OnyxBlaster,
+			// 霰弹枪
+			ItemID.Shotgun,
 
-                //战术霰弹枪
-                ItemID.TacticalShotgun,
+			// 玛瑙爆破枪
+			ItemID.OnyxBlaster,
 
-                //外星霰弹枪
-                ItemID.Xenopopper,
-            };
-        }
-    }
+			// 战术霰弹枪
+			ItemID.TacticalShotgun,
+
+			// 外星霰弹枪
+			ItemID.Xenopopper,
+		};
+	}
 }

@@ -2,69 +2,70 @@ namespace Everglow.Commons.Utilities.ItemList.Weapons.Melee;
 
 public class Spears : GlobalItem
 {
-    public static List<int> vanillaSpears;
-    public override void Unload()
-    {
-        vanillaSpears = null;
-    }
+	public static List<int> vanillaSpears;
 
-    public Spears()
-    {
-        vanillaSpears = new List<int>
-        {
-            //长矛
-            ItemID.Spear,
+	public override void Unload()
+	{
+		vanillaSpears = null;
+	}
 
-            //三叉戟
-            ItemID.Trident,
+	public Spears()
+	{
+		vanillaSpears = new List<int>
+		{
+			// 长矛
+			ItemID.Spear,
 
-            //风暴长矛
-            ItemID.ThunderSpear,
+			// 三叉戟
+			ItemID.Trident,
 
-            //腐叉
-            ItemID.TheRottedFork,
+			// 风暴长矛
+			ItemID.ThunderSpear,
 
-            //剑鱼
-            ItemID.Swordfish,
+			// 腐叉
+			ItemID.TheRottedFork,
 
-            //暗黑长戟
-            ItemID.DarkLance,
+			// 剑鱼
+			ItemID.Swordfish,
 
-            //钴薙刀
-            ItemID.CobaltNaginata,
+			// 暗黑长枪
+			ItemID.DarkLance,
 
-            //钯金刺矛
-            ItemID.PalladiumPike,
-            
-            //秘银长戟
-            ItemID.MythrilHalberd,
+			// 钴薙刀
+			ItemID.CobaltNaginata,
 
-            //山铜长戟
-            ItemID.OrichalcumHalberd,
+			// 钯金刺矛
+			ItemID.PalladiumPike,
 
-            //精金关刀
-            ItemID.AdamantiteGlaive,
+			// 秘银长戟
+			ItemID.MythrilHalberd,
 
-            //钛金三叉戟
-            ItemID.TitaniumTrident,
+			// 山铜长戟
+			ItemID.OrichalcumHalberd,
 
-            //永恒之枪
-            ItemID.Gungnir,
-            
-            //恐怖关刀
-            ItemID.MonkStaffT2,//什么答辩名字（二阶和尚法杖）fxxk U re!
+			// 精金关刀
+			ItemID.AdamantiteGlaive,
 
-            //叶绿镋
-            ItemID.ChlorophytePartisan,
+			// 钛金三叉戟
+			ItemID.TitaniumTrident,
 
-            //蘑菇长矛
-            ItemID.MushroomSpear,
-            
-            //黑曜石剑鱼
-            ItemID.ObsidianSwordfish,
-            
-            //北极
-            ItemID.NorthPole,
-        };
-    }
+			// 永恒之枪
+			ItemID.Gungnir,
+
+			// 恐怖关刀
+			ItemID.MonkStaffT2,
+
+			// 叶绿镋
+			ItemID.ChlorophytePartisan,
+
+			// 蘑菇长矛
+			ItemID.MushroomSpear,
+
+			// 黑曜石剑鱼
+			ItemID.ObsidianSwordfish,
+
+			// 北极
+			ItemID.NorthPole,
+		};
+	}
 }

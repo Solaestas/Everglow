@@ -1,111 +1,110 @@
-namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged;
+
+public class Bows : GlobalItem
 {
-    public class Bows : GlobalItem
-    {
-        public static List<int> vanillaBows;
-        public override void Unload()
-        {
-            vanillaBows = null;
-        }
+	public static List<int> vanillaBows;
 
-        public Bows()
-        {
-            vanillaBows = new List<int>
-            {
-                //木弓
-                ItemID.WoodenBow,
+	public override void Unload()
+	{
+		vanillaBows = null;
+	}
 
-                //针叶木弓
-                ItemID.BorealWoodBow,
+	public Bows()
+	{
+		vanillaBows = new List<int>()
+		{
+			// 木弓
+			ItemID.WoodenBow,
 
-                //棕榈木弓
-                ItemID.PalmWoodBow,
+			// 针叶木弓
+			ItemID.BorealWoodBow,
 
-                //红木弓
-                ItemID.RichMahoganyBow,
+			// 棕榈木弓
+			ItemID.PalmWoodBow,
 
-                //乌木弓
-                ItemID.EbonwoodBow,
-                
-                //暗影木弓
-                ItemID.ShadewoodBow,
-                
-                 //珍珠木弓
-                ItemID.PearlwoodBow,
+			// 红木弓
+			ItemID.RichMahoganyBow,
 
-                //铜弓
-                ItemID.CopperBow,
+			// 乌木弓
+			ItemID.EbonwoodBow,
 
-                //锡弓
-                ItemID.TinBow,
+			// 暗影木弓
+			ItemID.ShadewoodBow,
 
-                //铁弓
-                ItemID.IronBow,
+			 // 珍珠木弓
+			ItemID.PearlwoodBow,
 
-                //铅弓
-                ItemID.LeadBow,
+			// 铜弓
+			ItemID.CopperBow,
 
-                //银弓
-                ItemID.SilverBow,
+			// 锡弓
+			ItemID.TinBow,
 
-                //钨弓
-                ItemID.TungstenBow,
+			// 铁弓
+			ItemID.IronBow,
 
-                //金弓
-                ItemID.GoldBow,
+			// 铅弓
+			ItemID.LeadBow,
 
-                //铂金弓
-                ItemID.PlatinumBow,
+			// 银弓
+			ItemID.SilverBow,
 
-                //恶魔弓
-                ItemID.DemonBow,
+			// 钨弓
+			ItemID.TungstenBow,
 
-                //肌腱弓
-                ItemID.TendonBow,
+			// 金弓
+			ItemID.GoldBow,
 
-                //血雨弓
-                ItemID.BloodRainBow,
+			// 铂金弓
+			ItemID.PlatinumBow,
 
-                //熔火之弓
-                ItemID.MoltenFury,
+			// 恶魔弓
+			ItemID.DemonBow,
 
-                //蜂膝弓
-                ItemID.BeesKnees,
+			// 肌腱弓
+			ItemID.TendonBow,
 
-                //地狱之翼弓
-                ItemID.HellwingBow,
+			// 血雨弓
+			ItemID.BloodRainBow,
 
-                //骨弓
-                ItemID.Marrow,
+			// 熔火之弓
+			ItemID.MoltenFury,
 
-                //冰霜弓
-                ItemID.IceBow,
+			// 蜂膝弓
+			ItemID.BeesKnees,
 
-                //代达罗斯风暴弓
-                ItemID.DaedalusStormbow,
+			// 地狱之翼弓
+			ItemID.HellwingBow,
 
-                //暗影焰弓
-                ItemID.ShadowFlameBow,
+			// 骨弓
+			ItemID.Marrow,
 
-                //幽灵凤凰
-                ItemID.DD2PhoenixBow,//😅
+			// 冰霜弓
+			ItemID.IceBow,
 
-                //脉冲弓
-                ItemID.PulseBow,
+			// 代达罗斯风暴弓
+			ItemID.DaedalusStormbow,
 
-                //空中祸害
-                ItemID.DD2BetsyBow,//😅
+			// 暗影焰弓
+			ItemID.ShadowFlameBow,
 
-                 //海啸
-                ItemID.Tsunami,
+			// 幽灵凤凰
+			ItemID.DD2PhoenixBow,
 
-                //日暮
-                ItemID.FairyQueenRangedItem,//😅😅
+			// 脉冲弓
+			ItemID.PulseBow,
 
-                //幻象
-                ItemID.Phantasm,
+			// 空中祸害
+			ItemID.DD2BetsyBow,
 
-            };
-        }
-    }
+			// 海啸
+			ItemID.Tsunami,
+
+			// 日暮
+			ItemID.FairyQueenRangedItem,
+
+			// 幻象
+			ItemID.Phantasm,
+		};
+	}
 }

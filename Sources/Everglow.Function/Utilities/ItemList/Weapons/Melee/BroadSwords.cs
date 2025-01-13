@@ -3,6 +3,7 @@ namespace Everglow.Commons.Utilities.ItemList.Weapons.Melee;
 public class BroadSwords : GlobalItem
 {
 	public static List<int> vanillaBroadSwords;
+
 	public override void Unload()
 	{
 		vanillaBroadSwords = null;
@@ -12,92 +13,92 @@ public class BroadSwords : GlobalItem
 	{
 		vanillaBroadSwords = new List<int>
 		{
-                //木剑
-                ItemID.WoodenSword,
+			// 木剑
+			ItemID.WoodenSword,
 
-                //针叶木剑
-                ItemID.BorealWoodSword,
+			// 针叶木剑
+			ItemID.BorealWoodSword,
 
-                //棕榈木剑
-                ItemID.PalmWoodSword,
+			// 棕榈木剑
+			ItemID.PalmWoodSword,
 
-                //红木剑
-                ItemID.RichMahoganySword,
+			// 红木剑
+			ItemID.RichMahoganySword,
 
-                //乌木剑
-                ItemID.EbonwoodSword,
-                
-                //暗影木剑
-                ItemID.ShadewoodSword,
-                
-                //珍珠木剑
-                ItemID.PearlwoodSword,
+			// 乌木剑
+			ItemID.EbonwoodSword,
 
-                //仙人掌剑
-                ItemID.CactusSword,
+			// 暗影木剑
+			ItemID.ShadewoodSword,
 
-                //铜阔剑
-                ItemID.CopperBroadsword,
+			// 珍珠木剑
+			ItemID.PearlwoodSword,
 
-                //锡阔剑
-                ItemID.TinBroadsword,
+			// 仙人掌剑
+			ItemID.CactusSword,
 
-                //铁阔剑
-                ItemID.IronBroadsword,
+			// 铜阔剑
+			ItemID.CopperBroadsword,
 
-                //铅阔剑
-                ItemID.LeadBroadsword,
+			// 锡阔剑
+			ItemID.TinBroadsword,
 
-                //银阔剑
-                ItemID.SilverBroadsword,
+			// 铁阔剑
+			ItemID.IronBroadsword,
 
-                //钨阔剑
-                ItemID.TungstenBroadsword,
+			// 铅阔剑
+			ItemID.LeadBroadsword,
 
-                //金阔剑
-                ItemID.GoldBroadsword,
+			// 银阔剑
+			ItemID.SilverBroadsword,
 
-                //铂金阔剑
-                ItemID.PlatinumBroadsword,
+			// 钨阔剑
+			ItemID.TungstenBroadsword,
 
-                //利刃手套
-                ItemID.BladedGlove,
+			// 金阔剑
+			ItemID.GoldBroadsword,
 
-                //僵尸手臂
-                ItemID.ZombieArm,
+			// 铂金阔剑
+			ItemID.PlatinumBroadsword,
 
-                //时尚剪刀
-                ItemID.StylistKilLaKillScissorsIWish,
+			// 利刃手套
+			ItemID.BladedGlove,
 
-                //芦苇管
-                ItemID.BreathingReed,
+			// 僵尸手臂
+			ItemID.ZombieArm,
 
-                //骨剑
-                ItemID.BoneSword,
+			// 时尚剪刀
+			ItemID.StylistKilLaKillScissorsIWish,
 
-                //糖棒剑
-                ItemID.CandyCaneSword,
+			// 芦苇管
+			ItemID.BreathingReed,
 
-                //武士刀
-                ItemID.Katana,
+			// 骨剑
+			ItemID.BoneSword,
 
-                //冰雪刃
-                ItemID.IceBlade,
+			// 糖棒剑
+			ItemID.CandyCaneSword,
 
-                //魔光剑
-                ItemID.LightsBane,
+			// 武士刀
+			ItemID.Katana,
 
-                //血腥屠刀
-                ItemID.BloodButcherer,
+			// 冰雪刃
+			ItemID.IceBlade,
 
-                //附魔剑
-                ItemID.EnchantedSword,
+			// 魔光剑
+			ItemID.LightsBane,
 
-                //异域弯刀
-                ItemID.DyeTradersScimitar,
+			// 血腥屠刀
+			ItemID.BloodButcherer,
 
-                //陨石光剑
-                ItemID.BluePhaseblade,
+			// 附魔剑
+			ItemID.EnchantedSword,
+
+			// 异域弯刀
+			ItemID.DyeTradersScimitar,
+
+			// 陨石光剑
+			ItemID.BluePhaseblade,
 
 			ItemID.GreenPhaseblade,
 
@@ -111,50 +112,50 @@ public class BroadSwords : GlobalItem
 
 			ItemID.YellowPhaseblade,
 
-                //养蜂人
-                ItemID.BeeKeeper,
+			// 养蜂人
+			ItemID.BeeKeeper,
 
-                //草剑
-                ItemID.BladeofGrass,
+			// 草剑
+			ItemID.BladeofGrass,
 
-                //炽焰巨剑
-                ItemID.FieryGreatsword,//Volcano
+			// 炽焰巨剑
+			ItemID.FieryGreatsword,
 
-                //猎鹰刃
-                ItemID.FalconBlade,
+			// 猎鹰刃
+			ItemID.FalconBlade,
 
-                //村正
-                ItemID.Muramasa,
+			// 村正
+			ItemID.Muramasa,
 
-                //永夜刃
-                ItemID.NightsEdge,
+			// 永夜刃
+			ItemID.NightsEdge,
 
-                //蝙蝠棍
-                ItemID.BatBat,
+			// 蝙蝠棍
+			ItemID.BatBat,
 
-                //触手钉锤
-                ItemID.TentacleSpike,
+			// 触手钉锤
+			ItemID.TentacleSpike,
 
-                //钴剑
-                ItemID.CobaltSword,
+			// 钴剑
+			ItemID.CobaltSword,
 
-                //钯金剑
-                ItemID.PalladiumSword,
-                
-                //秘银剑
-                ItemID.MythrilSword,
+			// 钯金剑
+			ItemID.PalladiumSword,
 
-                //山铜剑
-                ItemID.OrichalcumSword,
+			// 秘银剑
+			ItemID.MythrilSword,
 
-                //精金剑
-                ItemID.AdamantiteSword,
+			// 山铜剑
+			ItemID.OrichalcumSword,
 
-                //钛金剑
-                ItemID.TitaniumSword,
+			// 精金剑
+			ItemID.AdamantiteSword,
 
-                //晶光刃
-                ItemID.BluePhasesaber,
+			// 钛金剑
+			ItemID.TitaniumSword,
+
+			// 晶光刃
+			ItemID.BluePhasesaber,
 
 			ItemID.RedPhasesaber,
 
@@ -166,81 +167,83 @@ public class BroadSwords : GlobalItem
 
 			ItemID.YellowPhasesaber,
 
-                //精致手杖
-                ItemID.TaxCollectorsStickOfDoom,
-   
-                //拍拍手
-                ItemID.SlapHand,
+			// 精致手杖
+			ItemID.TaxCollectorsStickOfDoom,
 
-                //毁灭刃
-                ItemID.BreakerBlade,
+			// 拍拍手
+			ItemID.SlapHand,
 
-                //海盗弯刀
-                ItemID.Cutlass,
-                
-                //霜印剑
-                ItemID.Frostbrand,
-                
-                //光束剑
-                ItemID.BeamSword,
+			// 毁灭刃
+			ItemID.BreakerBlade,
 
-                //舌锋剑
-                ItemID.Bladetongue,
+			// 海盗弯刀
+			ItemID.Cutlass,
 
-                //臭虎爪
-                ItemID.FetidBaghnakhs,
+			// 霜印剑
+			ItemID.Frostbrand,
 
-                //火腿棍
-                ItemID.HamBat,
+			// 光束剑
+			ItemID.BeamSword,
 
-                //圣剑
-                ItemID.Excalibur,
+			// 舌锋剑
+			ItemID.Bladetongue,
 
-                //真圣剑
-                ItemID.TrueExcalibur,
+			// 臭虎爪
+			ItemID.FetidBaghnakhs,
 
-                //真永夜
-                ItemID.TrueNightsEdge,
+			// 火腿棍
+			ItemID.HamBat,
 
-                //叶绿军刀
-                ItemID.ChlorophyteSaber,
+			// 圣剑
+			ItemID.Excalibur,
 
-                //叶绿双刃刀
-                ItemID.ChlorophyteClaymore,
+			// 华夫饼烘烤模
+			ItemID.WaffleIron,
 
-                //变态刀
-                ItemID.PsychoKnife,
+			// 真圣剑
+			ItemID.TrueExcalibur,
 
-                //死神镰刀
-                ItemID.DeathSickle,
+			// 真永夜
+			ItemID.TrueNightsEdge,
 
-                //钥匙剑
-                ItemID.Keybrand,
+			// 叶绿军刀
+			ItemID.ChlorophyteSaber,
 
-                //无头骑士剑
-                ItemID.TheHorsemansBlade,
+			// 叶绿双刃刀
+			ItemID.ChlorophyteClaymore,
 
-                //圣诞树剑
-                ItemID.ChristmasTreeSword,
+			// 变态刀
+			ItemID.PsychoKnife,
 
-                //种子弯刀
-                ItemID.Seedler,
-                
-                //飞龙
-                ItemID.DD2SquireBetsySword,//无语
-                
-                //泰拉刃
-                ItemID.TerraBlade,
+			// 死神镰刀
+			ItemID.DeathSickle,
 
-                //波涌之刃
-                ItemID.InfluxWaver,
+			// 钥匙剑
+			ItemID.Keybrand,
 
-                //狂星之怒
-                ItemID.StarWrath,
+			// 无头骑士剑
+			ItemID.TheHorsemansBlade,
 
-                //彩虹猫之刃
-                ItemID.Meowmere,
+			// 圣诞树剑
+			ItemID.ChristmasTreeSword,
 
+			// 种子弯刀
+			ItemID.Seedler,
+
+			// 飞龙
+			ItemID.DD2SquireBetsySword,
+
+			// 泰拉刃
+			ItemID.TerraBlade,
+
+			// 波涌之刃
+			ItemID.InfluxWaver,
+
+			// 狂星之怒
+			ItemID.StarWrath,
+
+			// 彩虹猫之刃
+			ItemID.Meowmere,
 		};
 	}
 }

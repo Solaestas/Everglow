@@ -3,6 +3,7 @@ namespace Everglow.Commons.Utilities.ItemList.Weapons.Melee;
 public class Boomerangs : GlobalItem
 {
 	public static List<int> vanillaBoomerangs;
+
 	public override void Unload()
 	{
 		vanillaBoomerangs = null;
@@ -12,50 +13,53 @@ public class Boomerangs : GlobalItem
 	{
 		vanillaBoomerangs = new List<int>
 		{
-                //木回旋镖
-                ItemID.WoodenBoomerang,
+				// 木回旋镖
+				ItemID.WoodenBoomerang,
 
-                //附魔回旋镖
-                ItemID.EnchantedBoomerang,
+				// 附魔回旋镖
+				ItemID.EnchantedBoomerang,
 
-                //水果蛋糕旋刃
-                ItemID.FruitcakeChakram,
+				// 水果蛋糕旋刃
+				ItemID.FruitcakeChakram,
 
-                //血腥砍刀
-                ItemID.BloodyMachete,
+				// 血腥砍刀
+				ItemID.BloodyMachete,
 
-                //蘑菇回旋镖
-                ItemID.Shroomerang,
+				// 蘑菇回旋镖
+				ItemID.Shroomerang,
 
-                //冰雪回旋镖
-                ItemID.IceBoomerang,
+				// 冰雪回旋镖
+				ItemID.IceBoomerang,
 
-                //荆棘旋刃
-                ItemID.ThornChakram,
+				// 荆棘旋刃
+				ItemID.ThornChakram,
 
-                //电工妹扳手
-                ItemID.CombatWrench,
+				// 战斗扳手
+				ItemID.CombatWrench,
 
-                //冰雪回旋镖
-                ItemID.Flamarang,
-                
-                //飞刀
-                ItemID.FlyingKnife,
+				// 烈焰回旋镖
+				ItemID.Flamarang,
 
-                //美队盾
-                ItemID.BouncingShield,
+				// 三尖回旋镖
+				ItemID.Trimarang,
 
-                //光明飞盘
-                ItemID.LightDisc,
+				// 飞刀
+				ItemID.FlyingKnife,
 
-                //香蕉回旋镖
-                ItemID.Bananarang,
+				// 中士联盾
+				ItemID.BouncingShield,
 
-                //疯狂飞斧
-                ItemID.PossessedHatchet,
+				// 光辉飞盘
+				ItemID.LightDisc,
 
-                //帕拉丁之锤
-                ItemID.PaladinsHammer,
+				// 香蕉回旋镖
+				ItemID.Bananarang,
+
+				// 疯狂飞斧
+				ItemID.PossessedHatchet,
+
+				// 圣骑士锤
+				ItemID.PaladinsHammer,
 		};
 	}
 }

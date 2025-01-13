@@ -1,38 +1,41 @@
-namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged;
+
+public class Launchers : GlobalItem
 {
-	public class Launchers : GlobalItem
-    {
-        public static List<int> vanillaLaunchers;
-        public override void Unload()
-        {
-            vanillaLaunchers = null;
-        }
+	public static List<int> vanillaLaunchers;
 
-        public Launchers()
-        {
-            vanillaLaunchers = new List<int>
-            {
-                //榴弹发射器
-                ItemID.GrenadeLauncher,
+	public override void Unload()
+	{
+		vanillaLaunchers = null;
+	}
 
-                //感应雷发射器
-                ItemID.ProximityMineLauncher,
+	public Launchers()
+	{
+		vanillaLaunchers = new List<int>()
+		{
+			// 榴弹发射器
+			ItemID.GrenadeLauncher,
 
-                //火箭发射器
-                ItemID.RocketLauncher,
+			// 感应雷发射器
+			ItemID.ProximityMineLauncher,
 
-                //雪人炮
-                ItemID.SnowmanCannon,
-                
-                //喜庆弹射器
-                ItemID.FireworksLauncher,
+			// 火箭发射器
+			ItemID.RocketLauncher,
 
-                //电圈发射器
-                ItemID.ElectrosphereLauncher,
+			// 雪人炮
+			ItemID.SnowmanCannon,
 
-                //喜庆弹射器Mk2
-                ItemID.Celeb2,
-            };
-        }
-    }
+			// 喜庆弹射器
+			ItemID.FireworksLauncher,
+
+			// 电圈发射器
+			ItemID.ElectrosphereLauncher,
+
+			// 喜庆弹射器Mk2
+			ItemID.Celeb2,
+
+			// 尖桩发射器
+			ItemID.StakeLauncher,
+		};
+	}
 }

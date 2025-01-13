@@ -1,69 +1,65 @@
-namespace Everglow.Commons.Utilities.ItemList.Weapons.Magic
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Magic;
+
+public class OtherMagicWeapons : GlobalItem
 {
-	public class OtherMagicWeapons : GlobalItem
+	public static List<int> vanillaOtherMagicWeapons;
+
+	public override void Unload()
 	{
-		public static List<int> vanillaOtherMagicWeapons;
-		public override void Unload()
+		vanillaOtherMagicWeapons = null;
+	}
+
+	public OtherMagicWeapons()
+	{
+		vanillaOtherMagicWeapons = new List<int>()
 		{
-			vanillaOtherMagicWeapons = null;
-		}
+			// 魔法飞刀
+			ItemID.MagicDagger,
 
-		public OtherMagicWeapons()
-		{
-			vanillaOtherMagicWeapons = new List<int>
-			{
-                //魔法飞刀
-                ItemID.MagicDagger,
+			// 蛇发女妖头
+			ItemID.MedusaHead,
 
-                //蛇发女妖头
-                ItemID.MedusaHead,
+			// 神灯烈焰
+			ItemID.SpiritFlame,
 
-                //血荆棘
-                ItemID.SharpTears,
+			// 暗影焰妖娃
+			ItemID.ShadowFlameHexDoll,
 
-                //神灯烈焰
-                ItemID.SpiritFlame,
+			// 血荆棘
+			ItemID.SharpTears,
 
-                //暗影焰妖娃
-                ItemID.ShadowFlameHexDoll,
+			// 魔法竖琴
+			ItemID.MagicalHarp,
 
-                //魔法竖琴
-                ItemID.MagicalHarp,
+			// 毒气瓶
+			ItemID.ToxicFlask,
 
-                //毒气瓶
-                ItemID.ToxicFlask,
+			// 夜光
+			ItemID.FairyQueenMagicItem,
 
-                //星星吉他
-                ItemID.SparkleGuitar,
+			// 星星吉他
+			ItemID.SparkleGuitar,
 
-                //夜光
-                ItemID.FairyQueenMagicItem, //又一个答辩名字，差不多得了
-                
-                //星云奥秘
-                ItemID.NebulaArcanum,
+			// 星云奥秘
+			ItemID.NebulaArcanum,
 
-                //星云烈焰
-                ItemID.NebulaBlaze,
+			// 星云烈焰
+			ItemID.NebulaBlaze,
 
-                //终极棱镜
-                ItemID.LastPrism,
+			// 终极棱镜
+			ItemID.LastPrism,
 
-                # region 这些我不好说
-                /*
-                //血雨法杖
-                ItemID.CrimsonRod,
+			// 血雨法杖
+			ItemID.CrimsonRod,
 
-                //冰雪魔杖
-                ItemID.IceRod,
+			// 冰雪魔杖
+			ItemID.IceRod,
 
-                //爬藤怪法杖
-                ItemID.ClingerStaff,
+			// 爬藤怪法杖
+			ItemID.ClingerStaff,
 
-                //雨云魔杖
-                ItemID.NimbusRod,
-                */
-                #endregion
-            };
-		}
+			// 雨云魔杖
+			ItemID.NimbusRod,
+		};
 	}
 }
