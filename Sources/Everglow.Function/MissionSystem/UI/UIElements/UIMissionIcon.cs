@@ -61,6 +61,8 @@ public class UIMissionIcon : UIImage
 		prevBtn.Info.Height.SetValue(0, 0.3f);
 		prevBtn.Info.Left.SetValue(0, 1.1f);
 		prevBtn.Info.Top.SetValue(0, 0.1f);
+
+		prevBtn.PanelColor = MissionContainer.Instance.GetThemeColor(style: MissionContainer.ColorStyle.Light);
 		prevBtn.Events.OnLeftClick += e =>
 		{
 			if (!IconGroup.IsFirstIcon)
@@ -78,11 +80,11 @@ public class UIMissionIcon : UIImage
 		};
 		prevBtn.Events.OnMouseOut += e =>
 		{
-			prevBtn.PanelColor = Color.Brown;
+			prevBtn.PanelColor = MissionContainer.Instance.GetThemeColor(style: MissionContainer.ColorStyle.Light);
 		};
 		Register(prevBtn);
 
-		var prevIcon = new UIImage(ModAsset.ArrowUp.Value, Color.Brown);
+		var prevIcon = new UIImage(ModAsset.ArrowUp.Value, Color.White);
 		prevIcon.Info.Width.SetValue(0, 0.8f);
 		prevIcon.Info.Height.SetValue(0, 0.8f);
 		prevBtn.Register(prevIcon);
@@ -99,6 +101,8 @@ public class UIMissionIcon : UIImage
 		nextBtn.Info.Height.SetValue(0, 0.3f);
 		nextBtn.Info.Left.SetValue(0, 1.1f);
 		nextBtn.Info.Top.SetValue(0, 0.6f);
+
+		nextBtn.PanelColor = MissionContainer.Instance.GetThemeColor(style: MissionContainer.ColorStyle.Light);
 		nextBtn.Events.OnLeftClick += e =>
 		{
 			if (!IconGroup.IsLastIcon)
@@ -116,11 +120,11 @@ public class UIMissionIcon : UIImage
 		};
 		nextBtn.Events.OnMouseOut += e =>
 		{
-			nextBtn.PanelColor = Color.Brown;
+			nextBtn.PanelColor = MissionContainer.Instance.GetThemeColor(style: MissionContainer.ColorStyle.Light);
 		};
 		Register(nextBtn);
 
-		var nextIcon = new UIImage(ModAsset.ArrowDown.Value, Color.Brown);
+		var nextIcon = new UIImage(ModAsset.ArrowDown.Value, Color.White);
 		nextBtn.Register(nextIcon);
 		nextIcon.Info.Width.SetValue(0, 0.8f);
 		nextIcon.Info.Height.SetValue(0, 0.8f);
