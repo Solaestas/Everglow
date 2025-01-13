@@ -2,7 +2,7 @@ using Terraria.GameContent;
 
 namespace Everglow.Commons.MissionSystem.MissionIcons;
 
-public class NPCMissionIcon : IMissionIcon
+public class NPCMissionIcon : MissionIconBase
 {
 	private NPCMissionIcon()
 	{
@@ -11,9 +11,9 @@ public class NPCMissionIcon : IMissionIcon
 	private int nPCType;
 	private string tooltip;
 
-	public string Tooltip => tooltip;
+	public override string Tooltip => tooltip;
 
-	public void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle)
+	public override void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle)
 	{
 		var drawCenter = new Vector2(
 			destinationRectangle.X + destinationRectangle.Width / 2,
@@ -27,7 +27,9 @@ public class NPCMissionIcon : IMissionIcon
 		var texture = TextureAssets.Npc[nPCType]?.Value;
 		var frameRect = texture.Frame(verticalFrames: Main.npcFrameCount[nPCType], frameY: (int)(Main.time / 10) % Main.npcFrameCount[nPCType]);
 		var origin = new Vector2(texture.Width, texture.Height / Main.npcFrameCount[nPCType]) / 2;
-		spriteBatch.Draw(texture, drawCenter, frameRect, Color.White, 0, origin, 1f, SpriteEffects.None, 0);
+		var scale = GetTextureScale(destinationRectangle, frameRect);
+
+		spriteBatch.Draw(texture, drawCenter, frameRect, Color.White, 0, origin, scale, SpriteEffects.None, 0);
 	}
 
 	public static NPCMissionIcon Create(int nPCType, string tooltip = null)

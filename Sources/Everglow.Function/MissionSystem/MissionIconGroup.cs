@@ -5,18 +5,18 @@ public class MissionIconGroup
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MissionIconGroup"/> class.
 	/// </summary>
-	public MissionIconGroup(List<IMissionIcon> missionIcons)
+	public MissionIconGroup(List<MissionIconBase> missionIcons)
 	{
 		_iconDetails.AddRange(missionIcons);
 	}
 
-	private readonly List<IMissionIcon> _iconDetails = [];
+	private readonly List<MissionIconBase> _iconDetails = [];
 	private int _currentIndex;
 
 	/// <summary>
 	/// Gets the current icon.
 	/// </summary>
-	public IMissionIcon CurrentIcon
+	public MissionIconBase CurrentIcon
 	{
 		get
 		{
@@ -38,7 +38,7 @@ public class MissionIconGroup
 	/// Initializes a new instance of the <see cref="MissionIconGroup"/> class with a list of icons.
 	/// </summary>
 	/// <param name="icons">The initial list of icons.</param>
-	public MissionIconGroup(IEnumerable<IMissionIcon> icons)
+	public MissionIconGroup(IEnumerable<MissionIconBase> icons)
 	{
 		ArgumentNullException.ThrowIfNull(icons);
 
@@ -49,7 +49,7 @@ public class MissionIconGroup
 	/// Adds an icon to the group.
 	/// </summary>
 	/// <param name="icon">The icon to add.</param>
-	public void AddIcon(IMissionIcon icon)
+	public void AddIcon(MissionIconBase icon)
 	{
 		ArgumentNullException.ThrowIfNull(icon);
 
@@ -61,7 +61,7 @@ public class MissionIconGroup
 	/// </summary>
 	/// <param name="icon">The icon to remove.</param>
 	/// <returns>True if the icon was removed; otherwise, false.</returns>
-	public bool RemoveIcon(IMissionIcon icon)
+	public bool RemoveIcon(MissionIconBase icon)
 	{
 		ArgumentNullException.ThrowIfNull(icon);
 

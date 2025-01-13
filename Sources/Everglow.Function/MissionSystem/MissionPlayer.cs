@@ -72,19 +72,12 @@ public class MissionPlayer : ModPlayer
 				MissionManager.AddMission(killNPCMission, MissionManager.PoolType.Available);
 
 				killNPCMission = new KillNPCMission();
-				killNPCMission.SetInfo("Test5", "击杀12个史莱姆", "测试介绍: \n" + "[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
+				killNPCMission.SetInfo("Test5", "击杀克苏鲁之眼", "测试介绍: \n" + "[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
 				killNPCMission.DemandNPCs.AddRange([
 					KillNPCRequirement.Create(
 					[
-						NPCID.BlueSlime,
-						NPCID.IceSlime,
-						NPCID.SpikedJungleSlime,
-						NPCID.MotherSlime,
-					], 12, true),
-				KillNPCRequirement.Create(
-					[
-						NPCID.DemonEye,
-					], 3, true),
+						NPCID.EyeofCthulhu,
+					], 1, false)
 				]);
 				killNPCMission.RewardItems.AddRange([
 					new Item(ItemID.Zenith),
@@ -94,14 +87,11 @@ public class MissionPlayer : ModPlayer
 				MissionManager.AddMission(killNPCMission, MissionManager.PoolType.Available);
 
 				killNPCMission = new KillNPCMission();
-				killNPCMission.SetInfo("Test5", "击杀13个史莱姆", "测试介绍: \n" + "[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
+				killNPCMission.SetInfo("Test5", "击杀月亮领主", "测试介绍: \n" + "[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
 				killNPCMission.DemandNPCs.AddRange([
 					KillNPCRequirement.Create(
 					[
-						NPCID.BlueSlime,
-						NPCID.IceSlime,
-						NPCID.SpikedJungleSlime,
-						NPCID.MotherSlime,
+						NPCID.MoonLordHead
 					], 12, true),
 				KillNPCRequirement.Create(
 					[

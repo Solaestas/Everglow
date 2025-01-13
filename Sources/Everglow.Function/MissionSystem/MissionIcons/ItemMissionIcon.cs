@@ -2,7 +2,7 @@ using Terraria.GameContent;
 
 namespace Everglow.Commons.MissionSystem.MissionIcons;
 
-public class ItemMissionIcon : IMissionIcon
+public class ItemMissionIcon : MissionIconBase
 {
 	private ItemMissionIcon()
 	{
@@ -11,9 +11,9 @@ public class ItemMissionIcon : IMissionIcon
 	private int itemType;
 	private string tooltip;
 
-	public string Tooltip => tooltip;
+	public override string Tooltip => tooltip;
 
-	public void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle)
+	public override void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle)
 	{
 		var drawCenter = new Vector2(
 			destinationRectangle.X + destinationRectangle.Width / 2,
@@ -26,15 +26,16 @@ public class ItemMissionIcon : IMissionIcon
 
 		var texture = TextureAssets.Item[itemType].Value;
 
-		Rectangle? frameRect = null;
+		Rectangle frameRect = new Rectangle(0, 0, texture.Width, texture.Height);
 		var origin = texture.Size() / 2;
 		if (Main.itemAnimationsRegistered.Contains(itemType))
 		{
 			frameRect = Main.itemAnimations[itemType].GetFrame(texture);
-			origin = new Vector2(frameRect.Value.Width, frameRect.Value.Height) / 2;
+			origin = new Vector2(frameRect.Width, frameRect.Height) / 2;
 		}
+		var scale = GetTextureScale(destinationRectangle, frameRect);
 
-		spriteBatch.Draw(texture, drawCenter, frameRect, Color.White, 0, origin, 1f, SpriteEffects.None, 0);
+		spriteBatch.Draw(texture, drawCenter, frameRect, Color.White, 0, origin, scale, SpriteEffects.None, 0);
 	}
 
 	public static ItemMissionIcon Create(int itemType, string tooltip = null)

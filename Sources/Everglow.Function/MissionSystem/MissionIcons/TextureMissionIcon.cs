@@ -2,7 +2,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Commons.MissionSystem.MissionIcons;
 
-public class TextureMissionIcon : IMissionIcon
+public class TextureMissionIcon : MissionIconBase
 {
 	private TextureMissionIcon()
 	{
@@ -12,24 +12,25 @@ public class TextureMissionIcon : IMissionIcon
 	private Texture2D texture;
 	private string tooltip;
 
-	public string Tooltip => tooltip;
+	public override string Tooltip => tooltip;
 
-	public void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle)
+	public override void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle)
 	{
 		var drawCenter = new Vector2(
 			destinationRectangle.X + destinationRectangle.Width / 2,
 			destinationRectangle.Y + destinationRectangle.Height / 2);
 
-		Rectangle? frameRect = null;
+		Rectangle frameRect = new Rectangle(0, 0, texture.Width, texture.Height);
 		Vector2 origin = texture.Size() / 2;
 		if (animation != null)
 		{
 			frameRect = animation.GetFrame(texture);
 			animation.Update();
-			origin = new Vector2(frameRect.Value.Width, frameRect.Value.Height) / 2;
+			origin = new Vector2(frameRect.Width, frameRect.Height) / 2;
 		}
 
-		spriteBatch.Draw(texture, drawCenter, frameRect, Color.White, 0, origin, 1f, SpriteEffects.None, 0);
+		var scale = GetTextureScale(destinationRectangle, frameRect);
+		spriteBatch.Draw(texture, drawCenter, frameRect, Color.White, 0, origin, scale, SpriteEffects.None, 0);
 	}
 
 	public static TextureMissionIcon Create(Texture2D texture, string tooltip = null, DrawAnimationVertical animation = null)
