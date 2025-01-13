@@ -184,6 +184,9 @@ public class MissionContainer : UIContainerElement
 		_closeButton.BorderColor = GetThemeColor(ColorType.Light, ColorStyle.Normal);
 		_closeButton.Info.IsSensitive = true;
 		_closeButton.Events.OnLeftClick += e => Close();
+		_closeButton.Events.OnMouseHover += e => _closeButton.PanelColor = Color.Gray;
+		_closeButton.Events.OnMouseOver += e => _closeButton.PanelColor = Color.Gray;
+		_closeButton.Events.OnMouseOut += e => _closeButton.PanelColor = GetThemeColor();
 		_panel.Register(_closeButton);
 
 		_close = new UIImage(ModAsset.MissionClose.Value, Color.White);
