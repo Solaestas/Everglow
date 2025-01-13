@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Utilities;
+namespace Everglow.Food;
 
 public abstract class FoodIngredientItem : ModItem
 {
@@ -31,7 +31,7 @@ public abstract class FoodIngredientItem : ModItem
 			Item.NewItem(null, new Vector2(i, j) * 16 + new Vector2(8, -8), SlicedItemType, 1);
 			for (int t = 0; t < 12; t++)
 			{
-				Dust dust = Dust.NewDustDirect(new Vector2(i, j) * 16, 16, 16, SliceDustType);
+				var dust = Dust.NewDustDirect(new Vector2(i, j) * 16, 16, 16, SliceDustType);
 				dust.velocity.Y -= 3;
 			}
 		}
@@ -40,10 +40,7 @@ public abstract class FoodIngredientItem : ModItem
 
 	public static bool IsIngredient(int itemType)
 	{
-		List<int> vanillFoodType = new List<int>();
-		vanillFoodType.Add(ItemID.SpicyPepper);
-		vanillFoodType.Add(ItemID.BottledWater);
-		vanillFoodType.Add(ItemID.BottledHoney);
+		List<int> vanillFoodType = [ItemID.SpicyPepper, ItemID.BottledWater, ItemID.BottledHoney];
 		if (vanillFoodType.Contains(itemType))
 		{
 			return true;

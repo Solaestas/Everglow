@@ -1,5 +1,3 @@
-using Everglow.Commons.Utilities;
-
 namespace Everglow.Food.Items.Ingredients;
 
 public class Doubanjiang : FoodIngredientItem

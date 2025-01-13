@@ -9,7 +9,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
-using static Everglow.Commons.Utilities.FoodIngredientItem;
+using static Everglow.Food.FoodIngredientItem;
 using static Everglow.Food.FoodRecipes.FoodRecipes;
 using static Everglow.Food.UI.StoveSystemUI;
 
