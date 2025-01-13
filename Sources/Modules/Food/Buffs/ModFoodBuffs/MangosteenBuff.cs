@@ -1,4 +1,4 @@
-using Everglow.Food.ItemList.Weapons.Melee;
+using Everglow.Commons.Utilities.ItemList.Weapons.Melee;
 
 namespace Everglow.Food.Buffs.ModFoodBuffs;
 

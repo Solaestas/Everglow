@@ -1,17 +1,17 @@
-namespace Everglow.Food.ItemList.Weapons.Ranged
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged
 {
 	public class MachineGuns : GlobalItem
-    {
-        public static List<int> vanillaMachineGuns;
-        public override void Unload()
-        {
-            vanillaMachineGuns = null;
-        }
+	{
+		public static List<int> vanillaMachineGuns;
+		public override void Unload()
+		{
+			vanillaMachineGuns = null;
+		}
 
-        public MachineGuns()
-        {
-            vanillaMachineGuns = new List<int>
-            {
+		public MachineGuns()
+		{
+			vanillaMachineGuns = new List<int>
+			{
                 //迷你鲨
                 ItemID.Minishark,
 
@@ -35,7 +35,7 @@ namespace Everglow.Food.ItemList.Weapons.Ranged
 
                 //太空海豚机枪
                 ItemID.SDMG,
-            };
-        }
-    }
+			};
+		}
+	}
 }

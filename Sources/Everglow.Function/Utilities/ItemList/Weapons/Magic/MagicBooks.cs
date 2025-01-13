@@ -1,17 +1,17 @@
-namespace Everglow.Food.ItemList.Weapons.Magic
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Magic
 {
-    public class MagicBooks : GlobalItem
-    {
-        public static List<int> vanillaMagicBooks;
-        public override void Unload()
-        {
-            vanillaMagicBooks = null;
-        }
+	public class MagicBooks : GlobalItem
+	{
+		public static List<int> vanillaMagicBooks;
+		public override void Unload()
+		{
+			vanillaMagicBooks = null;
+		}
 
-        public MagicBooks()
-        {
-            vanillaMagicBooks = new List<int>
-            {
+		public MagicBooks()
+		{
+			vanillaMagicBooks = new List<int>
+			{
                 //水箭
                 ItemID.WaterBolt,
 
@@ -37,8 +37,8 @@ namespace Everglow.Food.ItemList.Weapons.Magic
                 ItemID.RazorbladeTyphoon,
 
                 //月耀
-                ItemID.LunarFlareBook, 
-            };
-        }
-    }
+                ItemID.LunarFlareBook,
+			};
+		}
+	}
 }

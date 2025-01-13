@@ -1,17 +1,17 @@
-namespace Everglow.Food.ItemList.Weapons.Magic
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Magic
 {
 	public class Wands : GlobalItem
-    {
-        public static List<int> vanillaWands;
-        public override void Unload()
-        {
-            vanillaWands = null;
-        }
+	{
+		public static List<int> vanillaWands;
+		public override void Unload()
+		{
+			vanillaWands = null;
+		}
 
-        public Wands()
-        {
-            vanillaWands = new List<int>
-            {
+		public Wands()
+		{
+			vanillaWands = new List<int>
+			{
                 //火花魔棒
                 ItemID.WandofSparking,
 
@@ -135,7 +135,7 @@ namespace Everglow.Food.ItemList.Weapons.Magic
                 //双足翼龙怒气
                 ItemID.ApprenticeStaffT3
 ,
-            };
-        }
-    }
+			};
+		}
+	}
 }

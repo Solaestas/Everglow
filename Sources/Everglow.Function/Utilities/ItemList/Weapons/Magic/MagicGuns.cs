@@ -1,4 +1,4 @@
-namespace Everglow.Food.ItemList.Weapons.Magic
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Magic
 {
 	public class MagicGuns : GlobalItem
     {

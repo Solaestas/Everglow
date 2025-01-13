@@ -1,4 +1,4 @@
-namespace Everglow.Food.ItemList.Weapons.Summon
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Summon
 {
 	public class Sentrys : GlobalItem
     {

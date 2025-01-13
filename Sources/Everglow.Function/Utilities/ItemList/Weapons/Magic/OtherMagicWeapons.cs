@@ -1,17 +1,17 @@
-namespace Everglow.Food.ItemList.Weapons.Magic
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Magic
 {
 	public class OtherMagicWeapons : GlobalItem
-    {
-        public static List<int> vanillaOtherMagicWeapons;
-        public override void Unload()
-        {
-            vanillaOtherMagicWeapons = null;
-        }
+	{
+		public static List<int> vanillaOtherMagicWeapons;
+		public override void Unload()
+		{
+			vanillaOtherMagicWeapons = null;
+		}
 
-        public OtherMagicWeapons()
-        {
-            vanillaOtherMagicWeapons = new List<int>
-            {
+		public OtherMagicWeapons()
+		{
+			vanillaOtherMagicWeapons = new List<int>
+			{
                 //魔法飞刀
                 ItemID.MagicDagger,
 
@@ -64,6 +64,6 @@ namespace Everglow.Food.ItemList.Weapons.Magic
                 */
                 #endregion
             };
-        }
-    }
+		}
+	}
 }

@@ -1,17 +1,17 @@
-namespace Everglow.Food.ItemList.Weapons.Melee
-{
-    public class Boomerangs : GlobalItem
-    {
-        public static List<int> vanillaBoomerangs;
-        public override void Unload()
-        {
-            vanillaBoomerangs = null;
-        }
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Melee;
 
-        public Boomerangs()
-        {
-            vanillaBoomerangs = new List<int>
-            {
+public class Boomerangs : GlobalItem
+{
+	public static List<int> vanillaBoomerangs;
+	public override void Unload()
+	{
+		vanillaBoomerangs = null;
+	}
+
+	public Boomerangs()
+	{
+		vanillaBoomerangs = new List<int>
+		{
                 //木回旋镖
                 ItemID.WoodenBoomerang,
 
@@ -56,7 +56,6 @@ namespace Everglow.Food.ItemList.Weapons.Melee
 
                 //帕拉丁之锤
                 ItemID.PaladinsHammer,
-            };
-        }
-    }
+		};
+	}
 }

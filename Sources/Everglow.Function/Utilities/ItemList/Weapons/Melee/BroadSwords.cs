@@ -1,17 +1,17 @@
-namespace Everglow.Food.ItemList.Weapons.Melee
-{
-	public class BroadSwords : GlobalItem
-    {
-        public static List<int> vanillaBroadSwords;
-        public override void Unload()
-        {
-            vanillaBroadSwords = null;
-        }
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Melee;
 
-        public BroadSwords()
-        {
-            vanillaBroadSwords = new List<int>
-            {
+public class BroadSwords : GlobalItem
+{
+	public static List<int> vanillaBroadSwords;
+	public override void Unload()
+	{
+		vanillaBroadSwords = null;
+	}
+
+	public BroadSwords()
+	{
+		vanillaBroadSwords = new List<int>
+		{
                 //木剑
                 ItemID.WoodenSword,
 
@@ -99,17 +99,17 @@ namespace Everglow.Food.ItemList.Weapons.Melee
                 //陨石光剑
                 ItemID.BluePhaseblade,
 
-                ItemID.GreenPhaseblade,
+			ItemID.GreenPhaseblade,
 
-                ItemID.OrangePhaseblade,
+			ItemID.OrangePhaseblade,
 
-                ItemID.PurplePhaseblade,
+			ItemID.PurplePhaseblade,
 
-                ItemID.RedPhaseblade,
+			ItemID.RedPhaseblade,
 
-                ItemID.WhitePhaseblade,
+			ItemID.WhitePhaseblade,
 
-                ItemID.YellowPhaseblade,
+			ItemID.YellowPhaseblade,
 
                 //养蜂人
                 ItemID.BeeKeeper,
@@ -156,15 +156,15 @@ namespace Everglow.Food.ItemList.Weapons.Melee
                 //晶光刃
                 ItemID.BluePhasesaber,
 
-                ItemID.RedPhasesaber,
+			ItemID.RedPhasesaber,
 
-                ItemID.GreenPhasesaber,
+			ItemID.GreenPhasesaber,
 
-                ItemID.PurplePhasesaber,
+			ItemID.PurplePhasesaber,
 
-                ItemID.WhitePhasesaber,
+			ItemID.WhitePhasesaber,
 
-                ItemID.YellowPhasesaber,
+			ItemID.YellowPhasesaber,
 
                 //精致手杖
                 ItemID.TaxCollectorsStickOfDoom,
@@ -241,7 +241,6 @@ namespace Everglow.Food.ItemList.Weapons.Melee
                 //彩虹猫之刃
                 ItemID.Meowmere,
 
-            };
-        }
-    }
+		};
+	}
 }

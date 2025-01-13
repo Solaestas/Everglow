@@ -1,17 +1,17 @@
-namespace Everglow.Food.ItemList.Weapons.Ranged
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged
 {
 	public class Repeaters : GlobalItem
-    {
-        public static List<int> vanillaRepeaters;
-        public override void Unload()
-        {
-            vanillaRepeaters = null;
-        }
+	{
+		public static List<int> vanillaRepeaters;
+		public override void Unload()
+		{
+			vanillaRepeaters = null;
+		}
 
-        public Repeaters()
-        {
-            vanillaRepeaters = new List<int>
-            {
+		public Repeaters()
+		{
+			vanillaRepeaters = new List<int>
+			{
                 //钴弩
                 ItemID.CobaltRepeater,
 
@@ -35,7 +35,7 @@ namespace Everglow.Food.ItemList.Weapons.Ranged
 
                 //叶绿弩
                 ItemID.ChlorophyteShotbow,
-            };
-        }
-    }
+			};
+		}
+	}
 }

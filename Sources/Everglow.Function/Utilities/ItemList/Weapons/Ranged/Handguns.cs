@@ -1,4 +1,4 @@
-namespace Everglow.Food.ItemList.Weapons.Ranged
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged
 {
 	public class Handguns : GlobalItem
     {

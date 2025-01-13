@@ -1,5 +1,5 @@
-namespace Everglow.Food.ItemList.Weapons.Summon
-{
+namespace Everglow.Commons.Utilities.ItemList.Weapons.Summon
+{ 
 	public class Minions : GlobalItem
     {
         public static List<int> vanillaMinions;
