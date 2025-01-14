@@ -3,11 +3,11 @@ using Terraria.UI;
 
 namespace Everglow.Food.UI;
 
-public class StoveSystemUI : GameInterfaceLayer
+public class StoveUIManager : GameInterfaceLayer
 {
 	public static List<PotUI> PotUIs = new List<PotUI>();
 
-	public StoveSystemUI(string name, InterfaceScaleType scaleType)
+	public StoveUIManager(string name, InterfaceScaleType scaleType)
 		: base(name, scaleType)
 	{
 	}

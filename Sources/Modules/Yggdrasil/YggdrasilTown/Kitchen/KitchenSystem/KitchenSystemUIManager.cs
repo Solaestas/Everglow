@@ -1,10 +1,10 @@
 using Everglow.Food.Items.ModFood;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 using ReLogic.Graphics;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.UI;
 using Terraria.UI.Chat;
+using static Everglow.Food.UI.StoveUIManager;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Kitchen.KitchenSystem;
 
@@ -832,7 +832,7 @@ public class KitchenSystemUI : GameInterfaceLayer
 	public static void Draw9Pieces(Vector2 anchorCenter, float width, float height, Color color, float alpha, Texture2D texture = default)
 	{
 		color *= 1 - alpha;
-		List<Vertex2D> bars = new List<Vertex2D>();
+		var bars = new List<Vertex2D>();
 
 		if (width > 10 && height > 10)
 		{
@@ -883,16 +883,5 @@ public class KitchenSystemUI : GameInterfaceLayer
 		}
 		Main.graphics.graphicsDevice.Textures[0] = texture;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
-	}
-
-	public static void AddRectangleBars(List<Vertex2D> bars, Vector2 posTopLeft, Vector2 posBottomRight, Vector2 coordTopLeft, Vector2 coordBottomRight, Color color)
-	{
-		bars.Add(posTopLeft, color, new Vector3(coordTopLeft, 0));
-		bars.Add(new Vector2(posBottomRight.X, posTopLeft.Y), color, new Vector3(coordBottomRight.X, coordTopLeft.Y, 0));
-		bars.Add(new Vector2(posTopLeft.X, posBottomRight.Y), color, new Vector3(coordTopLeft.X, coordBottomRight.Y, 0));
-
-		bars.Add(new Vector2(posBottomRight.X, posTopLeft.Y), color, new Vector3(coordBottomRight.X, coordTopLeft.Y, 0));
-		bars.Add(posBottomRight, color, new Vector3(coordBottomRight, 0));
-		bars.Add(new Vector2(posTopLeft.X, posBottomRight.Y), color, new Vector3(coordTopLeft.X, coordBottomRight.Y, 0));
 	}
 }

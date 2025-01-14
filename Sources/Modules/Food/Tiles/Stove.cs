@@ -84,7 +84,7 @@ public class Stove : ModTile, ITileFluentlyDrawn
 					{
 						CasseroleUI casseroleUI = new CasseroleUI(hitPoint);
 						bool checkSame = false;
-						foreach (var casserole in StoveSystemUI.PotUIs)
+						foreach (var casserole in StoveUIManager.PotUIs)
 						{
 							if (casserole.AnchorTilePos == hitPoint)
 							{
@@ -95,7 +95,7 @@ public class Stove : ModTile, ITileFluentlyDrawn
 						}
 						if (!checkSame)
 						{
-							StoveSystemUI.PotUIs.Add(casseroleUI);
+							StoveUIManager.PotUIs.Add(casseroleUI);
 						}
 						return false;
 					}
@@ -116,7 +116,7 @@ public class Stove : ModTile, ITileFluentlyDrawn
 						{
 							SteamBoxUI steamboxUI = new SteamBoxUI(hitPoint);
 							bool checkSame = false;
-							foreach (var casserole in StoveSystemUI.PotUIs)
+							foreach (var casserole in StoveUIManager.PotUIs)
 							{
 								if (casserole.AnchorTilePos == hitPoint)
 								{
@@ -127,7 +127,7 @@ public class Stove : ModTile, ITileFluentlyDrawn
 							}
 							if (!checkSame)
 							{
-								StoveSystemUI.PotUIs.Add(steamboxUI);
+								StoveUIManager.PotUIs.Add(steamboxUI);
 							}
 						}
 						break;
@@ -136,7 +136,7 @@ public class Stove : ModTile, ITileFluentlyDrawn
 					{
 						SteamBoxUI2 steamboxUI2 = new SteamBoxUI2(hitPoint);
 						bool checkSame = false;
-						foreach (var casserole in StoveSystemUI.PotUIs)
+						foreach (var casserole in StoveUIManager.PotUIs)
 						{
 							if (casserole.AnchorTilePos == hitPoint)
 							{
@@ -147,7 +147,7 @@ public class Stove : ModTile, ITileFluentlyDrawn
 						}
 						if (!checkSame)
 						{
-							StoveSystemUI.PotUIs.Add(steamboxUI2);
+							StoveUIManager.PotUIs.Add(steamboxUI2);
 						}
 
 						break;
@@ -359,7 +359,7 @@ public class StoveEntity : ModTileEntity
 
 	public PotUI GetPotUI(int x, int y)
 	{
-		foreach (var potUI in StoveSystemUI.PotUIs)
+		foreach (var potUI in StoveUIManager.PotUIs)
 		{
 			if (potUI.AnchorTilePos == new Point(x, y))
 			{

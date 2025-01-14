@@ -11,7 +11,7 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using static Everglow.Food.FoodIngredientItem;
 using static Everglow.Food.FoodRecipes.FoodRecipes;
-using static Everglow.Food.UI.StoveSystemUI;
+using static Everglow.Food.UI.StoveUIManager;
 
 namespace Everglow.Food.UI;
 

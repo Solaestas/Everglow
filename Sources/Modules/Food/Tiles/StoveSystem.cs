@@ -6,13 +6,13 @@ namespace Everglow.Food.Tiles;
 
 public class StoveSystem : ModSystem
 {
-	public StoveSystemUI StoveSystemUI;
+	public StoveUIManager StoveSystemUI;
 
 	public bool Active = true;
 
 	public override void Load()
 	{
-		StoveSystemUI = new StoveSystemUI("StoveSystemInterface", InterfaceScaleType.UI);
+		StoveSystemUI = new StoveUIManager("StoveSystemInterface", InterfaceScaleType.UI);
 	}
 
 	public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
