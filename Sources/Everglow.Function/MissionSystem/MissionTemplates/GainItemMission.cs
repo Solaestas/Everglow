@@ -33,9 +33,8 @@ public abstract class GainItemMission : MissionBase, IGainItemMission, IRewardIt
 	{
 		base.LoadData(tag);
 
-		LoadVanillaItemTextures(
-			DemandItems.SelectMany(x => x.Items)
-			.Concat(RewardItems.Select(x => x.type)));
+		(this as IGainItemMission).Load(tag);
+		(this as IRewardItemMission).Load(tag);
 	}
 
 	public override void SaveData(TagCompound tag)

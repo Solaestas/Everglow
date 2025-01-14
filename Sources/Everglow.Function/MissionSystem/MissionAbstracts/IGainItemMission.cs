@@ -1,3 +1,5 @@
+using Terraria.ModLoader.IO;
+
 namespace Everglow.Commons.MissionSystem.MissionAbstracts;
 
 /// <summary>
@@ -51,5 +53,10 @@ public interface IGainItemMission
 		}
 
 		return DemandItems.Select(x => x.Progress(inventory)).Average();
+	}
+
+	public void Load(TagCompound tag)
+	{
+		MissionBase.LoadVanillaItemTextures(DemandItems.SelectMany(x => x.Items));
 	}
 }

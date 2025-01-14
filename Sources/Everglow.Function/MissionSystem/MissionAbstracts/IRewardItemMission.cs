@@ -1,3 +1,5 @@
+using Terraria.ModLoader.IO;
+
 namespace Everglow.Commons.MissionSystem.MissionAbstracts;
 
 public interface IRewardItemMission
@@ -12,5 +14,10 @@ public interface IRewardItemMission
 		{
 			Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(SourceContext), item, item.stack);
 		}
+	}
+
+	public void Load(TagCompound tag)
+	{
+		MissionBase.LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
 }
