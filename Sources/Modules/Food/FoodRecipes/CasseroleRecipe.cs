@@ -24,7 +24,7 @@ public class CasseroleRecipe : FoodRecipes
 			// 麻婆豆腐
 			{
 				new CookingUnit(
-					ModContent.ItemType<Mapo_Tofu>(),
+					ModContent.ItemType<MapoTofu>(),
 					1,
 					[ModContent.ItemType<Doubanjiang>()],
 					[ModContent.ItemType<TofuCubes>()],

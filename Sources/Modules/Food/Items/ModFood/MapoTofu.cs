@@ -5,7 +5,7 @@ using Terraria.GameContent.Creative;
 
 namespace Everglow.Food.Items.ModFood;
 
-public class Mapo_Tofu : FoodBase
+public class MapoTofu : FoodBase
 {
 	public override FoodInfo FoodInfo
 	{
@@ -14,9 +14,9 @@ public class Mapo_Tofu : FoodBase
 			return new FoodInfo()
 			{
 				Satiety = 10,
-				BuffType = ModContent.BuffType<Mapo_TofuBuff>(),
+				BuffType = ModContent.BuffType<MapoTofuBuff>(),
 				BuffTime = new FoodDuration(4, 0, 0),
-				Name = "Mapo_TofuBuff",
+				Name = nameof(MapoTofuBuff),
 			};
 		}
 	}

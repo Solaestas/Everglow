@@ -1,17 +1,17 @@
 namespace Everglow.Commons.Utilities.ItemList.Weapons.Ranged;
 
-public class OtherRengedWeapons : GlobalItem
+public class OtherRangedWeapons : GlobalItem
 {
-	public static List<int> vanillaOtherRengedWeapons;
+	public static List<int> vanillaOtherRangedWeapons;
 
 	public override void Unload()
 	{
-		vanillaOtherRengedWeapons = null;
+		vanillaOtherRangedWeapons = null;
 	}
 
-	public OtherRengedWeapons()
+	public OtherRangedWeapons()
 	{
-		vanillaOtherRengedWeapons = new List<int>
+		vanillaOtherRangedWeapons = new List<int>
 		{
 			// 信号枪
 			ItemID.FlareGun,

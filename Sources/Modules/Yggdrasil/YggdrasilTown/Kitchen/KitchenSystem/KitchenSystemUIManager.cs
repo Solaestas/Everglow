@@ -794,7 +794,7 @@ public class KitchenSystemUI : GameInterfaceLayer
 		switch (Main.rand.Next(3))
 		{
 			case 0:
-				return new Vector3(ModContent.ItemType<Mapo_Tofu>(), 1800, 150);
+				return new Vector3(ModContent.ItemType<MapoTofu>(), 1800, 150);
 			case 1:
 				return new Vector3(ModContent.ItemType<YuxiangEggplant>(), 1800, 190);
 			case 2:

@@ -14,9 +14,9 @@ public class BoiledBullfrog : FoodBase
 			return new FoodInfo()
 			{
 				Satiety = 10,
-				BuffType = ModContent.BuffType<Mapo_TofuBuff>(),
+				BuffType = ModContent.BuffType<MapoTofuBuff>(),
 				BuffTime = new FoodDuration(4, 0, 0),
-				Name = "Mapo_TofuBuff",
+				Name = nameof(MapoTofuBuff),
 			};
 		}
 	}

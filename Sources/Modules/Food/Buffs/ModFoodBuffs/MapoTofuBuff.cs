@@ -1,6 +1,6 @@
 namespace Everglow.Food.Buffs.ModFoodBuffs;
 
-public class Mapo_TofuBuff : ModBuff
+public class MapoTofuBuff : ModBuff
 {
 	public override void SetStaticDefaults()
 	{
