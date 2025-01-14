@@ -46,17 +46,11 @@ public class GainItemRequirement
 		if (EnableIndividualCounter)
 		{
 			Counter += count;
-		}
-		else
-		{
-			return;
-		}
 
-		// Some times a lot of npc are killed in a shot time, then the kill counter might be increased
-		// too much before the mission is moved to completed pool. So we should fix the value
-		if (Counter > Requirement)
-		{
-			Counter = Requirement;
+			if (Counter > Requirement)
+			{
+				Counter = Requirement;
+			}
 		}
 	}
 

@@ -80,6 +80,8 @@ public class KillNPCRequirement
 	/// </remarks>
 	public float Progress => Math.Min(1f, Math.Max(0f, Counter / (float)Requirement));
 
+	public MissionCondition Condition { get; private set; }
+
 	/// <summary>
 	/// Create a new instance of <see cref="KillNPCRequirement"/> class if the input is valid.
 	/// </summary>
@@ -101,6 +103,12 @@ public class KillNPCRequirement
 		return new KillNPCRequirement(nPCs, requirement, enableIndividualCounter);
 	}
 
+	public KillNPCRequirement SetCondition(MissionCondition condition)
+	{
+		Condition = condition;
+		return this;
+	}
+
 	/// <summary>
 	/// Add count to Counter
 	/// <para/>This method should only be called when <see cref="EnableIndividualCounter"/> is <c>true</c>
@@ -108,20 +116,19 @@ public class KillNPCRequirement
 	/// <param name="count"></param>
 	public void Count(int count = 1)
 	{
-		if (EnableIndividualCounter)
-		{
-			Counter += count;
-		}
-		else
+		if (Condition != null && Condition.No)
 		{
 			return;
 		}
 
-		// Some times a lot of npc are killed in a shot time, then the kill counter might be increased
-		// too much before the mission is moved to completed pool. So we should fix the value
-		if (Counter > Requirement)
+		if (EnableIndividualCounter)
 		{
-			Counter = Requirement;
+			Counter += count;
+
+			if (Counter > Requirement)
+			{
+				Counter = Requirement;
+			}
 		}
 	}
 
