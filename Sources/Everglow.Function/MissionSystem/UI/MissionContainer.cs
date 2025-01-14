@@ -245,7 +245,7 @@ public class MissionContainer : UIContainerElement
 		{
 			if (SelectedItem != null && SelectedItem.Mission.PoolType == PoolType.Accepted)
 			{
-				if (SelectedItem.Mission.CheckFinish())
+				if (SelectedItem.Mission.CheckComplete())
 				{
 					SelectedItem.Mission.OnComplete();
 					ChangeSelectedItem(SelectedItem);
@@ -487,7 +487,7 @@ public class MissionContainer : UIContainerElement
 			}
 			else if (SelectedItem.Mission.PoolType == PoolType.Accepted)
 			{
-				if (SelectedItem.Mission.CheckFinish())
+				if (SelectedItem.Mission.CheckComplete())
 				{
 					_changeText.Text = ChangeButtonText.Commit;
 				}

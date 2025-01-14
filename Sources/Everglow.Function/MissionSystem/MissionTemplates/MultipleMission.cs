@@ -7,25 +7,13 @@ namespace Everglow.Commons.MissionSystem.MissionTemplates;
 /// Represent a mission which contains serveral sub missions
 /// </summary>
 [Obsolete("This mission template will cause a lot bug", true)]
-public class MultipleMission : MissionBase
+public abstract class MultipleMission : MissionBase
 {
-	private string name = string.Empty;
-	private string displayName = string.Empty;
-	private string description = string.Empty;
-	private long timeMax = -1;
 	private int currentIndex = 0;
 
-	public override string Name => name;
-
-	public override string DisplayName => displayName;
-
-	public override string Description => description;
-
 	public override float Progress => SubMissions.Count != 0
-		? SubMissions.Where(sm => sm.CheckFinish()).Count() / (float)SubMissions.Count
+		? SubMissions.Where(sm => sm.CheckComplete()).Count() / (float)SubMissions.Count
 		: 1;
-
-	public override long TimeMax => timeMax;
 
 	public override MissionIconGroup Icon => null;
 
@@ -35,37 +23,6 @@ public class MultipleMission : MissionBase
 
 	public MissionBase CurrentMission => SubMissions[currentIndex];
 
-	/// <summary>
-	/// Sets the basic information for the mission.
-	/// </summary>
-	/// <param name="name">The unique name of the mission.</param>
-	/// <param name="displayName">The display name of the mission.</param>
-	/// <param name="description">A brief description of the mission.</param>
-	/// <param name="timeMax">The maximum time allowed to complete the mission, in ticks. Use -1 for no time limit.</param>
-	/// <exception cref="ArgumentNullException">Thrown if any of the string parameters are null.</exception>
-	public void SetInfo(string name, string displayName, string description, long timeMax = -1)
-	{
-		if (string.IsNullOrWhiteSpace(name))
-		{
-			throw new ArgumentNullException(nameof(name), "Mission name cannot be null or empty.");
-		}
-
-		if (string.IsNullOrWhiteSpace(displayName))
-		{
-			throw new ArgumentNullException(nameof(displayName), "Mission display name cannot be null or empty.");
-		}
-
-		if (string.IsNullOrWhiteSpace(description))
-		{
-			throw new ArgumentNullException(nameof(description), "Mission description cannot be null or empty.");
-		}
-
-		this.name = name;
-		this.displayName = displayName;
-		this.description = description;
-		this.timeMax = timeMax;
-	}
-
 	public override void Update()
 	{
 		base.Update();
@@ -73,7 +30,7 @@ public class MultipleMission : MissionBase
 		// If current is not the last sub mission
 		if (currentIndex < SubMissions.Count - 1)
 		{
-			if (CurrentMission.CheckFinish())
+			if (CurrentMission.CheckComplete())
 			{
 				CurrentMission.PostComplete();
 				CurrentMission.PoolType = MissionManager.PoolType.Completed;
@@ -82,7 +39,7 @@ public class MultipleMission : MissionBase
 		}
 		else // If current is the last sub mission
 		{
-			if (CurrentMission.CheckFinish() && CurrentMission.PoolType != MissionManager.PoolType.Completed)
+			if (CurrentMission.CheckComplete() && CurrentMission.PoolType != MissionManager.PoolType.Completed)
 			{
 				CurrentMission.PostComplete();
 				CurrentMission.PoolType = MissionManager.PoolType.Completed;
@@ -97,10 +54,7 @@ public class MultipleMission : MissionBase
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);
-		tag.Add(nameof(TimeMax), TimeMax);
-		tag.Add(nameof(Name), Name);
-		tag.Add(nameof(DisplayName), DisplayName);
-		tag.Add(nameof(Description), Description);
+
 		tag.Add(nameof(CurrentIndex), currentIndex);
 
 		tag.Add(
@@ -118,10 +72,8 @@ public class MultipleMission : MissionBase
 
 	public override void LoadData(TagCompound tag)
 	{
-		tag.TryGet(nameof(TimeMax), out timeMax);
-		tag.TryGet(nameof(Name), out name);
-		tag.TryGet(nameof(DisplayName), out displayName);
-		tag.TryGet(nameof(Description), out description);
+		base.LoadData(tag);
+
 		tag.TryGet(nameof(CurrentIndex), out currentIndex);
 
 		SubMissions.Clear();

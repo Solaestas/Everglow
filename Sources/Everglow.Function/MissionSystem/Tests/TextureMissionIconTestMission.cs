@@ -1,30 +1,34 @@
 using Everglow.Commons.MissionSystem.MissionIcons;
 using Everglow.Commons.MissionSystem.MissionTemplates;
-using ReLogic.Content;
 
-namespace Everglow.Commons.MissionSystem.TestMissions;
+namespace Everglow.Commons.MissionSystem.Tests;
 
 public class TextureMissionIconTestMission : GainItemMission
 {
 	public override MissionIconGroup Icon => new MissionIconGroup([
 		TextureMissionIcon.Create(
-			Commons.ModAsset.BurningFrozenHeart.Value,
+			ModAsset.BurningFrozenHeart.Value,
 			animation: new(5, 7)),
 		NPCMissionIcon.Create(NPCID.BlueSlime),
 		ItemMissionIcon.Create(ItemID.LargeRuby),
 		]);
 
+	public override string Name => "TestMissionIconTest1";
+
+	public override string DisplayName => "测试TextureMissionIcon";
+
+	public override string Description => "测试介绍3";
+
+	public override MissionType MissionType => MissionType.MainStory;
+
+	public override List<GainItemRequirement> DemandItems => [GainItemRequirement.Create([ItemID.IronOre], 1000)];
+
+	public override List<Item> RewardItems => [new Item(ItemID.Zenith, 1000)];
+
 	public static TextureMissionIconTestMission Create()
 	{
 		LoadVanillaNPCTextures([NPCID.BlueSlime]);
 		LoadVanillaItemTextures([ItemID.LargeRuby]);
-		var mission = new TextureMissionIconTestMission();
-		mission.SetInfo("TestMissionIconTest1", "测试TextureMissionIcon", "测试介绍3");
-		mission.DemandItems.AddRange([
-			GainItemRequirement.Create([ItemID.IronOre], 1000)]);
-		mission.RewardItems.AddRange([
-			new Item(ItemID.Zenith, 1000)]);
-		mission.MissionType = MissionType.MainStory;
-		return mission;
+		return new TextureMissionIconTestMission();
 	}
 }

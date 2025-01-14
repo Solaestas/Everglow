@@ -211,19 +211,19 @@ public class MissionManager : ITagCompoundEntity
 		}
 
 		// 处理自动提交任务
-		_missionPools[PoolType.Accepted].Where(m => m.CheckFinish() && m.AutoComplete).ToList().ForEach(m => m.OnComplete());
+		_missionPools[PoolType.Accepted].Where(m => m.CheckComplete() && m.AutoComplete).ToList().ForEach(m => m.OnComplete());
 
 		// 检测可提交状态改变的任务，将状态改变为可提交的任务抛出信息
 		foreach (var m in _missionPools[PoolType.Accepted].ToList())
 		{
-			if (m.CheckFinish() != m.OldCheckFinish)
+			if (m.CheckComplete() != m.OldCheckComplete)
 			{
-				m.OldCheckFinish = m.CheckFinish();
+				m.OldCheckComplete = m.CheckComplete();
 
-				m.OnCheckFinishChange();
+				m.OnCheckCompleteChange();
 
 				// 由不可提交改变到可提交状态的任务, 发送消息提示
-				if (m.CheckFinish())
+				if (m.CheckComplete())
 				{
 					Main.NewText($"[{m.Name}]任务可以提交了", 250, 250, 150);
 				}

@@ -12,7 +12,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// <summary>
 	/// 用于进行内部标识的名字，作用类似 ID
 	/// </summary>
-	public abstract string Name { get; }
+	public virtual string Name => GetType().Name;
 
 	/// <summary>
 	/// 用于外部显示的名字
@@ -76,34 +76,34 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// <summary>
 	/// 任务类型
 	/// </summary>
-	public MissionType MissionType { get; set; }
+	public virtual MissionType MissionType => MissionType.None;
 
 	/// <summary>
 	/// 是否显示在任务列表中
 	/// </summary>
-	public bool IsVisible { get; set; } = true;
+	public virtual bool IsVisible { get; set; } = true;
 
 	/// <summary>
 	/// 是否由任务管理器自动检测完成并提交
 	/// </summary>
-	public bool AutoComplete { get; set; } = false;
+	public virtual bool AutoComplete => false;
 
 	/// <summary>
 	/// 检查任务是否完成
 	/// </summary>
 	/// <returns></returns>
-	public virtual bool CheckFinish() => Progress >= 1f;
+	public virtual bool CheckComplete() => Progress >= 1f;
 
 	/// <summary>
 	/// 任务可提交状态的旧状态
 	/// <para/>该属性不需要持久化，保证每次重新进入世界时都会发送信息
 	/// </summary>
-	public bool OldCheckFinish { get; internal set; } = false;
+	public bool OldCheckComplete { get; internal set; } = false;
 
 	/// <summary>
 	/// 任务可提交状态改变后HOOK
 	/// </summary>
-	public virtual void OnCheckFinishChange()
+	public virtual void OnCheckCompleteChange()
 	{
 		MissionManager.NeedRefresh = true;
 	}
@@ -203,10 +203,8 @@ public abstract class MissionBase : ITagCompoundEntity
 	public virtual void SaveData(TagCompound tag)
 	{
 		tag.Add(TimeSaveKey, Time);
-		tag.Add(nameof(MissionType), (int)MissionType);
 		tag.Add(nameof(SourceNPC), SourceNPC);
 		tag.Add(nameof(IsVisible), IsVisible);
-		tag.Add(nameof(AutoComplete), AutoComplete);
 	}
 
 	/// <summary>
@@ -220,11 +218,6 @@ public abstract class MissionBase : ITagCompoundEntity
 			Time = mt;
 		}
 
-		if (tag.TryGet<int>(nameof(MissionType), out var missionType))
-		{
-			MissionType = (MissionType)missionType;
-		}
-
 		if (tag.TryGet<int>(nameof(SourceNPC), out var sourceNPC))
 		{
 			SourceNPC = sourceNPC;
@@ -233,11 +226,6 @@ public abstract class MissionBase : ITagCompoundEntity
 		if (tag.TryGet<bool>(nameof(IsVisible), out var isVisible))
 		{
 			IsVisible = isVisible;
-		}
-
-		if (tag.TryGet<bool>(nameof(AutoComplete), out var autoComplete))
-		{
-			AutoComplete = autoComplete;
 		}
 	}
 

@@ -5,7 +5,8 @@ namespace Everglow.Commons.MissionSystem.MissionTemplates;
 /// <summary>
 /// Represents a mission where the player needs to arrive at the designated location.
 /// </summary>
-public class ReachTargetMission : MissionBase
+[Obsolete("This mission template will cause a lot bug", true)]
+public abstract class ReachTargetMission : MissionBase
 {
 	public class CheckPoint
 	{
@@ -22,21 +23,9 @@ public class ReachTargetMission : MissionBase
 		public void Check() => Checked = true;
 	}
 
-	private string _name = string.Empty;
-	private string _displayName = string.Empty;
-	private string _description = string.Empty;
-	private float _progress = 0f;
-	private long _timeMax = -1;
+	private float progress = 0f;
 
-	public override string Name => _name;
-
-	public override string DisplayName => _displayName;
-
-	public override string Description => _description;
-
-	public override float Progress => _progress;
-
-	public override long TimeMax => _timeMax;
+	public override float Progress => progress;
 
 	public override MissionIconGroup Icon => null;
 
@@ -65,37 +54,6 @@ public class ReachTargetMission : MissionBase
 	/// </summary>
 	private CheckPoint CurrentCheckPoint => CheckPoints[currentCheckPointIndex];
 
-	/// <summary>
-	/// Sets the basic information for the mission.
-	/// </summary>
-	/// <param name="name">The unique name of the mission.</param>
-	/// <param name="displayName">The display name of the mission.</param>
-	/// <param name="description">A brief description of the mission.</param>
-	/// <param name="timeMax">The maximum time allowed to complete the mission, in ticks. Use -1 for no time limit.</param>
-	/// <exception cref="ArgumentNullException">Thrown if any of the string parameters are null.</exception>
-	public void SetInfo(string name, string displayName, string description, long timeMax = -1)
-	{
-		if (string.IsNullOrWhiteSpace(name))
-		{
-			throw new ArgumentNullException(nameof(name), "Mission name cannot be null or empty.");
-		}
-
-		if (string.IsNullOrWhiteSpace(displayName))
-		{
-			throw new ArgumentNullException(nameof(displayName), "Mission display name cannot be null or empty.");
-		}
-
-		if (string.IsNullOrWhiteSpace(description))
-		{
-			throw new ArgumentNullException(nameof(description), "Mission description cannot be null or empty.");
-		}
-
-		_name = name;
-		_displayName = displayName;
-		_description = description;
-		_timeMax = timeMax;
-	}
-
 	public override void Update()
 	{
 		base.Update();
@@ -112,7 +70,7 @@ public class ReachTargetMission : MissionBase
 
 		if (CheckPoints.Count == 0) // The length of CheckPoints should more than 1
 		{
-			_progress = 1f;
+			progress = 1f;
 			return;
 		}
 
@@ -151,7 +109,7 @@ public class ReachTargetMission : MissionBase
 		}
 
 		DrawCheckPoints(pointsToDraw);
-		_progress = CheckPoints.Where(p => p.Checked).Count() / (float)CheckPoints.Count;
+		progress = CheckPoints.Where(p => p.Checked).Count() / (float)CheckPoints.Count;
 	}
 
 	public bool HasReached(Vector2 pos, Vector2 targetPos)

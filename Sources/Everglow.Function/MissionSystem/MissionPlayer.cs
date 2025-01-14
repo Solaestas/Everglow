@@ -1,8 +1,5 @@
-using Everglow.Commons.MissionSystem.MissionTemplates;
-using Everglow.Commons.MissionSystem.TestMissions;
+using Everglow.Commons.MissionSystem.Tests;
 using Terraria.ModLoader.IO;
-using static Everglow.Commons.MissionSystem.MissionTemplates.GainItemMission;
-using static Everglow.Commons.MissionSystem.MissionTemplates.KillNPCMission;
 
 namespace Everglow.Commons.MissionSystem;
 
@@ -18,92 +15,17 @@ public class MissionPlayer : ModPlayer
 			MissionManager.Clear();
 			if (!MissionManager.HasMission<MissionBase>())
 			{
-				var mission = new GainItemMission();
-				mission.SetInfo("Test1", "获取10个土块", "测试[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
-				mission.DemandItems.AddRange([
-					GainItemRequirement.Create([ItemID.DirtBlock], 10)]);
-				mission.RewardItems.AddRange([
-					new Item(ItemID.Wood, 10)]);
-				mission.IsVisible = false;
-				mission.AutoComplete = true;
-				mission.MissionType = MissionType.Daily;
-				MissionManager.AddMission(mission, MissionManager.PoolType.Accepted);
+				MissionManager.AddMission(new TestMission1(), MissionManager.PoolType.Accepted);
+				MissionManager.AddMission(new TestMission2(), MissionManager.PoolType.Accepted);
+				MissionManager.AddMission(
+					new TestMission3
+				{
+					SourceNPC = 1,
+				}, MissionManager.PoolType.Available);
+				MissionManager.AddMission(new TestMission4(), MissionManager.PoolType.Available);
+				MissionManager.AddMission(new TestMission5(), MissionManager.PoolType.Available);
 
-				mission = new GainItemMission();
-				mission.SetInfo("Test2", "获取10个木头", "测试介绍2\n" +
-					"[TimerIconDrawer,MissionName='Test2'] 剩余时间:[TimerStringDrawer,MissionName='Test2']", 30000);
-				mission.DemandItems.AddRange([
-					GainItemRequirement.Create([ItemID.Wood], 10)]);
-				mission.RewardItems.AddRange([
-					new Item(ItemID.IronOre, 10)]);
-				mission.MissionType = MissionType.Achievement;
-				MissionManager.AddMission(mission, MissionManager.PoolType.Accepted);
-
-				mission = new GainItemMission();
-				mission.SetInfo("Test3", "获取10个铁矿", "测试介绍3");
-				mission.DemandItems.AddRange([
-					GainItemRequirement.Create([ItemID.IronOre], 1000)]);
-				mission.RewardItems.AddRange([
-					new Item(ItemID.Zenith, 1000)]);
-				mission.MissionType = MissionType.MainStory;
-				mission.SourceNPC = 1;
-				MissionManager.AddMission(mission, MissionManager.PoolType.Available);
-
-				var killNPCMission = new KillNPCMission();
-				killNPCMission.SetInfo("Test4", "击杀10个史莱姆", "测试介绍: \n" + "[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
-				killNPCMission.DemandNPCs.AddRange([
-					KillNPCRequirement.Create(
-					[
-						NPCID.BlueSlime,
-						NPCID.IceSlime,
-						NPCID.SpikedJungleSlime,
-						NPCID.MotherSlime,
-					], 10, true),
-				KillNPCRequirement.Create(
-					[
-						NPCID.DemonEye,
-					], 3, true),
-				]);
-				killNPCMission.RewardItems.AddRange([
-					new Item(ItemID.Zenith),
-				new Item(ItemID.GoldAxe, 10),
-				]);
-				killNPCMission.MissionType = MissionType.SideStory;
-				MissionManager.AddMission(killNPCMission, MissionManager.PoolType.Available);
-
-				killNPCMission = new KillNPCMission();
-				killNPCMission.SetInfo("Test5", "击杀克苏鲁之眼", "测试介绍: \n" + "[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
-				killNPCMission.DemandNPCs.AddRange([
-					KillNPCRequirement.Create(
-					[
-						NPCID.EyeofCthulhu,
-					], 1, false)
-				]);
-				killNPCMission.RewardItems.AddRange([
-					new Item(ItemID.Zenith),
-				new Item(ItemID.GoldAxe, 10),
-				]);
-				killNPCMission.MissionType = MissionType.Challenge;
-				MissionManager.AddMission(killNPCMission, MissionManager.PoolType.Available);
-
-				killNPCMission = new KillNPCMission();
-				killNPCMission.SetInfo("Test5", "击杀月亮领主", "测试介绍: \n" + "[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
-				killNPCMission.DemandNPCs.AddRange([
-					KillNPCRequirement.Create(
-					[
-						NPCID.MoonLordHead
-					], 12, true),
-				KillNPCRequirement.Create(
-					[
-						NPCID.DemonEye,
-					], 3, true),
-				]);
-				killNPCMission.RewardItems.AddRange([
-					new Item(ItemID.Zenith),
-				new Item(ItemID.GoldAxe, 10),
-				]);
-				killNPCMission.MissionType = MissionType.Legendary;
-				MissionManager.AddMission(killNPCMission, MissionManager.PoolType.Available);
+				MissionManager.AddMission(new TestMission6(), MissionManager.PoolType.Available);
 
 				MissionManager.Instance.AddMission(TextureMissionIconTestMission.Create(), MissionManager.PoolType.Available);
 			}
