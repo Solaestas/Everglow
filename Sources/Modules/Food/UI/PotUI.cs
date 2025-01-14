@@ -450,6 +450,12 @@ public abstract class PotUI
 							player.HeldItem.stack--;
 							Ingredients[i] = player.HeldItem.type;
 						}
+						else if (Main.mouseLeft && Main.mouseLeftRelease
+							&& Main.mouseItem != null && Main.mouseItem.netID != 0)
+						{
+							Main.mouseItem.stack--;
+							Ingredients[i] = Main.mouseItem.type;
+						}
 						if (Maximized)
 						{
 							Main.instance.MouseText("[i:" + player.HeldItem.type + "] → [i:" + ModContent.ItemType<Casserole_Item>() + "]", ItemRarityID.White);
