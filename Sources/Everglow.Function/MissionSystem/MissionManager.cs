@@ -7,6 +7,8 @@ namespace Everglow.Commons.MissionSystem;
 
 public class MissionManager : ITagCompoundEntity
 {
+	public const int UpdateInterval = 60;
+
 	/// <summary>
 	/// 任务池类型
 	/// <list type="table">

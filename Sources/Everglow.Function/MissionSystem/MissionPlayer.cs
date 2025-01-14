@@ -19,9 +19,9 @@ public class MissionPlayer : ModPlayer
 				MissionManager.AddMission(new TestMission2(), MissionManager.PoolType.Accepted);
 				MissionManager.AddMission(
 					new TestMission3
-				{
-					SourceNPC = 1,
-				}, MissionManager.PoolType.Available);
+					{
+						SourceNPC = 1,
+					}, MissionManager.PoolType.Available);
 				MissionManager.AddMission(new TestMission4(), MissionManager.PoolType.Available);
 				MissionManager.AddMission(new TestMission5(), MissionManager.PoolType.Available);
 
@@ -37,7 +37,10 @@ public class MissionPlayer : ModPlayer
 	{
 		if (Player.whoAmI == Main.myPlayer)
 		{
-			MissionManager.Update();
+			if (Main.time % MissionManager.UpdateInterval == 0)
+			{
+				Task.Run(MissionManager.Update);
+			}
 		}
 	}
 

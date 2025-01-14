@@ -133,7 +133,7 @@ public abstract class MissionBase : ITagCompoundEntity
 		{
 			if (Time < TimeMax)
 			{
-				Time++;
+				Time += MissionManager.UpdateInterval;
 			}
 			else
 			{
