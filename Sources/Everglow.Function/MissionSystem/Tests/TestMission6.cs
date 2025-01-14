@@ -1,10 +1,11 @@
+using Everglow.Commons.MissionSystem.MissionAbstracts;
 using Everglow.Commons.MissionSystem.MissionTemplates;
 
 namespace Everglow.Commons.MissionSystem.Tests;
 
 public class TestMission6 : KillNPCMission
 {
-	public override List<KillNPCRequirement> DemandNPCs => [
+	public override List<KillNPCRequirement> DemandNPCs { get; init; } = [
 			KillNPCRequirement.Create(
 					[
 						NPCID.MoonLordHead

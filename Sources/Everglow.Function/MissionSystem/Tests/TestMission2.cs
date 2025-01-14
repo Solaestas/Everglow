@@ -1,3 +1,4 @@
+using Everglow.Commons.MissionSystem.MissionAbstracts;
 using Everglow.Commons.MissionSystem.MissionTemplates;
 
 namespace Everglow.Commons.MissionSystem.Tests;
