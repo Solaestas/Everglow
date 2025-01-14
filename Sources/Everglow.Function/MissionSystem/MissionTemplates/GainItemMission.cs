@@ -25,7 +25,7 @@ public abstract class GainItemMission : MissionBase, IGainItemMission, IRewardIt
 
 	public override void PostComplete()
 	{
-		(this as IGainItemMission).ConsumeItem(Main.LocalPlayer.inventory.ToList());
+		(this as IGainItemMission).ConsumeItem(Main.LocalPlayer.inventory);
 		(this as IRewardItemMission).GiveReward();
 	}
 
@@ -57,6 +57,6 @@ public abstract class GainItemMission : MissionBase, IGainItemMission, IRewardIt
 			return;
 		}
 
-		progress = (this as IGainItemMission).CalculateProgress(Main.LocalPlayer.inventory.ToList());
+		progress = (this as IGainItemMission).CalculateProgress(Main.LocalPlayer.inventory);
 	}
 }
