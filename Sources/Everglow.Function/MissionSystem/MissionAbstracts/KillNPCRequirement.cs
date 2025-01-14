@@ -1,3 +1,4 @@
+using MathNet.Numerics;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.MissionAbstracts;
@@ -85,16 +86,16 @@ public class KillNPCRequirement
 	/// <param name="nPCs">A list of NPC id. Must not be empty.</param>
 	/// <param name="requirement">The requirement value. Must be greater than 0.</param>
 	/// <returns>A new <see cref="KillNPCRequirement"/> instance if the input is valid; otherwise, returns <c>null</c>.</returns>
-	public static KillNPCRequirement Create(List<int> nPCs, int requirement, bool enableIndividualCounter)
+	public static KillNPCRequirement Create(List<int> nPCs, int requirement, bool enableIndividualCounter = false)
 	{
 		if (nPCs.Count == 0)
 		{
-			return null;
+			throw new InvalidParameterException();
 		}
 
 		if (requirement <= 0)
 		{
-			return null;
+			throw new InvalidParameterException();
 		}
 
 		return new KillNPCRequirement(nPCs, requirement, enableIndividualCounter);

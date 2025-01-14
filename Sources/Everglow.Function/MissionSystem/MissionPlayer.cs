@@ -71,4 +71,14 @@ public class MissionPlayer : ModPlayer
 			}
 		}
 	}
+
+	public override bool OnPickup(Item item)
+	{
+		if (Player.whoAmI == Main.myPlayer)
+		{
+			MissionManager.CountPick(item);
+		}
+
+		return true;
+	}
 }

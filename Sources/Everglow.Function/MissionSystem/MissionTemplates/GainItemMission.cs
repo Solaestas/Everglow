@@ -19,7 +19,7 @@ public abstract class GainItemMission : MissionBase, IGainItemMission, IRewardIt
 
 	public virtual bool Consume => false;
 
-	public abstract List<GainItemRequirement> DemandItems { get; }
+	public abstract List<GainItemRequirement> DemandItems { get; init; }
 
 	public abstract List<Item> RewardItems { get; }
 
@@ -40,6 +40,8 @@ public abstract class GainItemMission : MissionBase, IGainItemMission, IRewardIt
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);
+
+		(this as IGainItemMission).Save(tag);
 	}
 
 	public override void Update()

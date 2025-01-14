@@ -252,8 +252,7 @@ public class MissionManager : ITagCompoundEntity
 	/// <exception cref="InvalidParameterException"></exception>
 	public void CountKill(int type, int count = 1)
 	{
-		if (type < 0
-			|| count <= 0)
+		if (type < 0 || count <= 0)
 		{
 			throw new InvalidParameterException();
 		}
@@ -270,6 +269,22 @@ public class MissionManager : ITagCompoundEntity
 			if (m is IKillNPCMission km)
 			{
 				km.CountKill(type, count);
+			}
+		}
+	}
+
+	public void CountPick(Item item)
+	{
+		if(item.type < ItemID.None || item.stack <= 0)
+		{
+			throw new InvalidParameterException();
+		}
+
+		foreach(MissionBase m in _missionPools[PoolType.Accepted])
+		{
+			if(m is IGainItemMission gm)
+			{
+				gm.CountPick(item);
 			}
 		}
 	}

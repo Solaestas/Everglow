@@ -1,3 +1,4 @@
+using MathNet.Numerics;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.MissionAbstracts;
@@ -7,11 +8,15 @@ namespace Everglow.Commons.MissionSystem.MissionAbstracts;
 /// </summary>
 public class GainItemRequirement
 {
-	private GainItemRequirement(IEnumerable<int> items, int requirement)
+	private GainItemRequirement(IEnumerable<int> items, int requirement, bool enableIndividualCounter, int counter = 0)
 	{
 		Items = items.ToList();
 		Requirement = requirement;
+		EnableIndividualCounter = enableIndividualCounter;
+		this.counter = counter;
 	}
+
+	private int counter = 0;
 
 	/// <summary>
 	/// Item types
@@ -23,6 +28,38 @@ public class GainItemRequirement
 	/// </summary>
 	public int Requirement { get; init; }
 
+	public bool EnableIndividualCounter { get; init; }
+
+	public int Counter
+	{
+		get => counter;
+		private set => counter = value;
+	}
+
+	/// <summary>
+	/// Add count to Counter
+	/// <para/>This method should only be called when <see cref="EnableIndividualCounter"/> is <c>true</c>
+	/// </summary>
+	/// <param name="count"></param>
+	public void Count(int count = 1)
+	{
+		if (EnableIndividualCounter)
+		{
+			Counter += count;
+		}
+		else
+		{
+			return;
+		}
+
+		// Some times a lot of npc are killed in a shot time, then the kill counter might be increased
+		// too much before the mission is moved to completed pool. So we should fix the value
+		if (Counter > Requirement)
+		{
+			Counter = Requirement;
+		}
+	}
+
 	/// <summary>
 	/// Represents the progress towards fulfilling the item requirement.
 	/// </summary>
@@ -31,8 +68,9 @@ public class GainItemRequirement
 	/// <para/>
 	/// The returned value is clamped to the range [0, 1], ensuring that the progress is always represented as a percentage (0% to 100%).
 	/// </remarks>
-	public float Progress(IEnumerable<Item> inventory) =>
-		Math.Min(1f, Math.Max(0f, inventory.Where(x => Items.Contains(x.type)).Select(x => x.stack).Sum() / (float)Requirement));
+	public float Progress(IEnumerable<Item> inventory) => EnableIndividualCounter
+		? Math.Min(1f, Math.Max(0f, Counter / (float)Requirement))
+		: Math.Min(1f, Math.Max(0f, inventory.Where(x => Items.Contains(x.type)).Select(x => x.stack).Sum() / (float)Requirement));
 
 	/// <summary>
 	/// Create a new instance of <see cref="GainItemRequirement"/> class if the input is valid.
@@ -40,19 +78,19 @@ public class GainItemRequirement
 	/// <param name="items">A list of NPC id. Must not be empty.</param>
 	/// <param name="requirement">The requirement value. Must be greater than 0.</param>
 	/// <returns>A new <see cref="GainItemRequirement"/> instance if the input is valid; otherwise, returns <c>null</c>.</returns>
-	public static GainItemRequirement Create(List<int> items, int requirement)
+	public static GainItemRequirement Create(List<int> items, int requirement, bool enableIndividualCounter = false)
 	{
 		if (items.Count == 0)
 		{
-			return null;
+			throw new InvalidParameterException();
 		}
 
 		if (requirement <= 0)
 		{
-			return null;
+			throw new InvalidParameterException();
 		}
 
-		return new GainItemRequirement(items, requirement);
+		return new GainItemRequirement(items, requirement, enableIndividualCounter);
 	}
 
 	public class GainItemRequirementSerializer : TagSerializer<GainItemRequirement, TagCompound>
@@ -61,10 +99,14 @@ public class GainItemRequirement
 		{
 			[nameof(Items)] = value.Items,
 			[nameof(Requirement)] = value.Requirement,
+			[nameof(EnableIndividualCounter)] = value.EnableIndividualCounter,
+			[nameof(Counter)] = value.counter,
 		};
 
 		public override GainItemRequirement Deserialize(TagCompound tag) => new GainItemRequirement(
 			tag.GetList<int>(nameof(Items)),
-			tag.GetInt(nameof(Requirement)));
+			tag.GetInt(nameof(Requirement)),
+			tag.GetBool(nameof(EnableIndividualCounter)),
+			tag.GetInt(nameof(Counter)));
 	}
 }

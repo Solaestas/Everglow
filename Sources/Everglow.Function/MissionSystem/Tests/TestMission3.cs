@@ -5,7 +5,7 @@ namespace Everglow.Commons.MissionSystem.Tests;
 
 public class TestMission3 : GainItemMission
 {
-	public override List<GainItemRequirement> DemandItems => [
+	public override List<GainItemRequirement> DemandItems { get; init; } = [
 		GainItemRequirement.Create([ItemID.IronOre], 1000)];
 
 	public override List<Item> RewardItems => [

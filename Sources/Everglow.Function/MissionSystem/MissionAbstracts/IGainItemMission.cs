@@ -12,7 +12,23 @@ public interface IGainItemMission
 	/// </summary>
 	public abstract bool Consume { get; }
 
-	public abstract List<GainItemRequirement> DemandItems { get; }
+	public abstract List<GainItemRequirement> DemandItems { get; init; }
+
+	/// <summary>
+	/// Count kill for each demand group
+	/// </summary>
+	/// <param name="type">The type of NPC</param>
+	/// <param name="count">The count of kill. Default to 1.</param>
+	public void CountPick(Item item)
+	{
+		foreach (var kmDemand in DemandItems.Where(x => x.Items.Contains(item.type)))
+		{
+			if (kmDemand.EnableIndividualCounter)
+			{
+				kmDemand.Count(item.stack);
+			}
+		}
+	}
 
 	public void ConsumeItem(IEnumerable<Item> inventory)
 	{
@@ -57,6 +73,23 @@ public interface IGainItemMission
 
 	public void Load(TagCompound tag)
 	{
+		tag.TryGet<List<KillNPCRequirement>>(nameof(DemandItems), out var demandNPCs);
+		if (demandNPCs != null && demandNPCs.Count != 0)
+		{
+			foreach (var demand in DemandItems.Where(d => d.EnableIndividualCounter))
+			{
+				demand.Count(
+					demandNPCs
+						.Where(d => d.EnableIndividualCounter && d.NPCs.Intersect(demand.Items).Any())
+						.Sum(x => x.Counter));
+			}
+		}
+
 		MissionBase.LoadVanillaItemTextures(DemandItems.SelectMany(x => x.Items));
+	}
+
+	public void Save(TagCompound tag)
+	{
+		tag.Add(nameof(DemandItems), DemandItems);
 	}
 }
