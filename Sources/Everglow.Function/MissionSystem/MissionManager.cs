@@ -1,4 +1,4 @@
-using Everglow.Commons.MissionSystem.MissionTemplates;
+using Everglow.Commons.MissionSystem.MissionAbstracts;
 using MathNet.Numerics;
 using MonoMod.Utils;
 using Terraria.ModLoader.IO;
@@ -265,7 +265,7 @@ public class MissionManager : ITagCompoundEntity
 		// Update NPC kill mission
 		foreach (MissionBase m in _missionPools[PoolType.Accepted])
 		{
-			if (m is KillNPCMission km)
+			if (m is IKillNPCMission km)
 			{
 				km.CountKill(type, count);
 			}
