@@ -17,7 +17,9 @@ public class TestMission1 : GainItemMission
 
 	public override MissionType MissionType => MissionType.Daily;
 
-	public override bool IsVisible { get; set; } = true;
+	public override bool IsVisible { get; set; } = false;
 
 	public override bool AutoComplete => true;
+
+	public override bool SubmitItemsOnComplete => true;
 }

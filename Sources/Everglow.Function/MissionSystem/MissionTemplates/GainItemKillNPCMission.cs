@@ -21,7 +21,7 @@ public abstract class GainItemKillNPCMission : MissionBase, IGainItemMission, IK
 
 	public abstract List<GainItemRequirement> DemandItems { get; init; }
 
-	public bool Consume => false;
+	public bool SubmitItemsOnComplete => false;
 
 	public override void PostComplete()
 	{

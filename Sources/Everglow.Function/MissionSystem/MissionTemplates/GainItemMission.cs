@@ -17,7 +17,7 @@ public abstract class GainItemMission : MissionBase, IGainItemMission, IRewardIt
 				: 1)
 		]);
 
-	public virtual bool Consume => false;
+	public virtual bool SubmitItemsOnComplete => false;
 
 	public abstract List<GainItemRequirement> DemandItems { get; init; }
 

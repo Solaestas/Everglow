@@ -10,7 +10,7 @@ public interface IGainItemMission
 	/// <summary>
 	/// Determine if the demand items will be consumed on mission complete.
 	/// </summary>
-	public abstract bool Consume { get; }
+	public abstract bool SubmitItemsOnComplete { get; }
 
 	public abstract List<GainItemRequirement> DemandItems { get; init; }
 
@@ -32,7 +32,7 @@ public interface IGainItemMission
 
 	public void ConsumeItem(IEnumerable<Item> inventory)
 	{
-		if (Consume)
+		if (SubmitItemsOnComplete)
 		{
 			foreach (var item in DemandItems)
 			{
