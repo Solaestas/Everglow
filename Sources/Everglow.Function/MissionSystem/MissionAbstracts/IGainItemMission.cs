@@ -73,14 +73,14 @@ public interface IGainItemMission
 
 	public void Load(TagCompound tag)
 	{
-		tag.TryGet<List<KillNPCRequirement>>(nameof(DemandItems), out var demandNPCs);
+		tag.TryGet<List<GainItemRequirement>>(nameof(DemandItems), out var demandNPCs);
 		if (demandNPCs != null && demandNPCs.Count != 0)
 		{
 			foreach (var demand in DemandItems.Where(d => d.EnableIndividualCounter))
 			{
 				demand.Count(
 					demandNPCs
-						.Where(d => d.EnableIndividualCounter && d.NPCs.Intersect(demand.Items).Any())
+						.Where(d => d.EnableIndividualCounter && d.Items.Intersect(demand.Items).Any())
 						.Sum(x => x.Counter));
 			}
 		}
