@@ -6,53 +6,34 @@ namespace Everglow.Commons.MissionSystem.MissionAbstracts;
 /// <summary>
 /// A group of items which use the same requirement
 /// </summary>
-public class GainItemRequirement
+public class GainItemRequirement : ItemRequirement
 {
 	private GainItemRequirement(IEnumerable<int> items, int requirement, bool enableIndividualCounter, int counter = 0)
+		: base(items, requirement, counter)
 	{
-		Items = items.ToList();
-		Requirement = requirement;
 		EnableIndividualCounter = enableIndividualCounter;
-		this.counter = counter;
 	}
-
-	private int counter = 0;
-
-	/// <summary>
-	/// Item types
-	/// </summary>
-	public List<int> Items { get; init; }
-
-	/// <summary>
-	/// Gain count requirement
-	/// </summary>
-	public int Requirement { get; init; }
 
 	public bool EnableIndividualCounter { get; init; }
-
-	public int Counter
-	{
-		get => counter;
-		private set => counter = value;
-	}
 
 	/// <summary>
 	/// Add count to Counter
 	/// <para/>This method should only be called when <see cref="EnableIndividualCounter"/> is <c>true</c>
 	/// </summary>
 	/// <param name="count"></param>
-	public void Count(int count = 1)
+	public new void Count(int count = 1)
 	{
 		if (EnableIndividualCounter)
 		{
-			Counter += count;
-
-			if (Counter > Requirement)
-			{
-				Counter = Requirement;
-			}
+			base.Count(count);
+		}
+		else
+		{
+			throw new InvalidOperationException();
 		}
 	}
+
+	private new float Progress() => base.Progress();
 
 	/// <summary>
 	/// Represents the progress towards fulfilling the item requirement.
@@ -63,7 +44,7 @@ public class GainItemRequirement
 	/// The returned value is clamped to the range [0, 1], ensuring that the progress is always represented as a percentage (0% to 100%).
 	/// </remarks>
 	public float Progress(IEnumerable<Item> inventory) => EnableIndividualCounter
-		? Math.Min(1f, Math.Max(0f, Counter / (float)Requirement))
+		? Progress()
 		: Math.Min(1f, Math.Max(0f, inventory.Where(x => Items.Contains(x.type)).Select(x => x.stack).Sum() / (float)Requirement));
 
 	/// <summary>
