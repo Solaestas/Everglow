@@ -19,13 +19,13 @@ public class DarkSludge_Scene : ForegroundVFX
 
 	public override void Update()
 	{
-		if(Ins.VisualQuality.Low)
+		if (Ins.VisualQuality.Low)
 		{
 			Active = false;
 			SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
 			return;
 		}
-		if(MaxX == 0)
+		if (MaxX == 0)
 		{
 			MinX = originTile.X;
 			MaxX = originTile.X;
@@ -67,7 +67,7 @@ public class DarkSludge_Scene : ForegroundVFX
 				bars2.Add(Vector2.zeroVector, Color.Transparent, new Vector3(0, 0, 1));
 			}
 		}
-		for (int i = MinX; i <= MaxX; i++)
+		for (int i = MinX; i <= MaxX; i += 4)
 		{
 			Vector2 position = new Point(i, originTile.Y).ToVector2() * 16;
 			Color color = Lighting.GetColor(new Point(i, originTile.Y));
