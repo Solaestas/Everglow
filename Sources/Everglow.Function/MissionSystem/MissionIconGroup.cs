@@ -3,11 +3,21 @@ namespace Everglow.Commons.MissionSystem;
 public class MissionIconGroup
 {
 	/// <summary>
-	/// Initializes a new instance of the <see cref="MissionIconGroup"/> class.
+	/// Initializes a new instance of the <see cref="MissionIconGroup"/> class with icons.
 	/// </summary>
-	public MissionIconGroup(List<MissionIconBase> missionIcons)
+	/// <param name="icons">The initial list of icons.</param>
+	public MissionIconGroup(params MissionIconBase[] icons)
 	{
-		_iconDetails.AddRange(missionIcons);
+		_iconDetails.AddRange(icons);
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="MissionIconGroup"/> class with lists of icons.
+	/// </summary>
+	/// <param name="icons">The initial list of icons.</param>
+	public MissionIconGroup(params IEnumerable<MissionIconBase>[] icons)
+	{
+		_iconDetails.AddRange(icons.SelectMany(x => x));
 	}
 
 	private readonly List<MissionIconBase> _iconDetails = [];
@@ -32,17 +42,6 @@ public class MissionIconGroup
 
 			return _iconDetails[_currentIndex];
 		}
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="MissionIconGroup"/> class with a list of icons.
-	/// </summary>
-	/// <param name="icons">The initial list of icons.</param>
-	public MissionIconGroup(IEnumerable<MissionIconBase> icons)
-	{
-		ArgumentNullException.ThrowIfNull(icons);
-
-		_iconDetails.AddRange(icons);
 	}
 
 	/// <summary>

@@ -1,6 +1,5 @@
 using Everglow.Commons.MissionSystem.MissionAbstracts;
 using Everglow.Commons.MissionSystem.MissionIcons;
-using Terraria.GameContent;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.MissionTemplates;
@@ -11,9 +10,9 @@ public abstract class GainItemKillNPCMission : MissionBase, IGainItemMission, IK
 
 	public override float Progress => progress;
 
-	public override MissionIconGroup Icon => new MissionIconGroup([
-		TextureMissionIcon.Create(TextureAssets.MagicPixel.Value),
-		]);
+	public override MissionIconGroup Icon => new MissionIconGroup(
+		DemandGainItems.SelectMany(s => s.Items).Select(i => ItemMissionIcon.Create(i)),
+		DemandNPCs.SelectMany(s => s.NPCs).Select(i => NPCMissionIcon.Create(i)));
 
 	public abstract List<Item> RewardItems { get; }
 

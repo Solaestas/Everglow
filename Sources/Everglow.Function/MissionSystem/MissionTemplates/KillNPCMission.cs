@@ -9,9 +9,7 @@ public abstract class KillNPCMission : MissionBase, IKillNPCMission, IRewardItem
 	private float progress = 0f;
 
 	public override MissionIconGroup Icon => new MissionIconGroup(
-		[
-			NPCMissionIcon.Create(DemandNPCs.First()?.NPCs.First() ?? NPCID.BlueSlime)
-		]);
+		DemandNPCs.SelectMany(s => s.NPCs).Select(i => NPCMissionIcon.Create(i)));
 
 	public override float Progress => progress;
 

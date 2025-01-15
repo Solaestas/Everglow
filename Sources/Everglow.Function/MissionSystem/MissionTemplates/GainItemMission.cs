@@ -11,11 +11,7 @@ public abstract class GainItemMission : MissionBase, IGainItemMission, IRewardIt
 	public override float Progress => progress;
 
 	public override MissionIconGroup Icon => new MissionIconGroup(
-		[
-			ItemMissionIcon.Create(DemandGainItems.Count > 0
-				? DemandGainItems.First().Items.First()
-				: 1)
-		]);
+		DemandGainItems.SelectMany(s => s.Items).Select(i => ItemMissionIcon.Create(i)));
 
 	public virtual bool SubmitItemsOnComplete => false;
 

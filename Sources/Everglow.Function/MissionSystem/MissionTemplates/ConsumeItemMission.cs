@@ -11,11 +11,7 @@ public abstract class ConsumeItemMission : MissionBase, IConsumeItemMission, IRe
 	public override float Progress => progress;
 
 	public override MissionIconGroup Icon => new MissionIconGroup(
-	[
-		ItemMissionIcon.Create(DemandConsumeItems.Count > 0
-				? DemandConsumeItems.First().Items.First()
-				: 1)
-	]);
+		DemandConsumeItems.SelectMany(s => s.Items).Select(i => ItemMissionIcon.Create(i)));
 
 	public abstract List<ItemRequirement> DemandConsumeItems { get; init; }
 
