@@ -12,7 +12,7 @@ public interface IGainItemMission
 	/// </summary>
 	public abstract bool SubmitItemsOnComplete { get; }
 
-	public abstract List<GainItemRequirement> DemandItems { get; init; }
+	public abstract List<GainItemRequirement> DemandGainItems { get; init; }
 
 	/// <summary>
 	/// Count kill for each demand group
@@ -21,7 +21,7 @@ public interface IGainItemMission
 	/// <param name="count">The count of kill. Default to 1.</param>
 	public void CountPick(Item item)
 	{
-		foreach (var kmDemand in DemandItems.Where(x => x.Items.Contains(item.type)))
+		foreach (var kmDemand in DemandGainItems.Where(x => x.Items.Contains(item.type)))
 		{
 			if (kmDemand.EnableIndividualCounter)
 			{
@@ -34,7 +34,7 @@ public interface IGainItemMission
 	{
 		if (SubmitItemsOnComplete)
 		{
-			foreach (var item in DemandItems)
+			foreach (var item in DemandGainItems)
 			{
 				var stack = item.Requirement;
 
@@ -63,20 +63,20 @@ public interface IGainItemMission
 	public float CalculateProgress(IEnumerable<Item> inventory)
 	{
 
-		if (DemandItems.Count == 0 || DemandItems.Select(x => x.Requirement).Sum() == 0)
+		if (DemandGainItems.Count == 0 || DemandGainItems.Select(x => x.Requirement).Sum() == 0)
 		{
 			return 1f;
 		}
 
-		return DemandItems.Select(x => x.Progress(inventory)).Average();
+		return DemandGainItems.Select(x => x.Progress(inventory)).Average();
 	}
 
 	public void Load(TagCompound tag)
 	{
-		tag.TryGet<List<GainItemRequirement>>(nameof(DemandItems), out var demandNPCs);
+		tag.TryGet<List<GainItemRequirement>>(nameof(DemandGainItems), out var demandNPCs);
 		if (demandNPCs != null && demandNPCs.Count != 0)
 		{
-			foreach (var demand in DemandItems.Where(d => d.EnableIndividualCounter))
+			foreach (var demand in DemandGainItems.Where(d => d.EnableIndividualCounter))
 			{
 				demand.Count(
 					demandNPCs
@@ -85,11 +85,11 @@ public interface IGainItemMission
 			}
 		}
 
-		MissionBase.LoadVanillaItemTextures(DemandItems.SelectMany(x => x.Items));
+		MissionBase.LoadVanillaItemTextures(DemandGainItems.SelectMany(x => x.Items));
 	}
 
 	public void Save(TagCompound tag)
 	{
-		tag.Add(nameof(DemandItems), DemandItems);
+		tag.Add(nameof(DemandGainItems), DemandGainItems);
 	}
 }

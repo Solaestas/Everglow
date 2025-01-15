@@ -5,7 +5,7 @@ namespace Everglow.Commons.MissionSystem.Tests;
 
 public class TestMission7 : GainItemKillNPCMission
 {
-	public override List<GainItemRequirement> DemandItems { get; init; } = [
+	public override List<GainItemRequirement> DemandGainItems { get; init; } = [
 		GainItemRequirement.Create([ItemID.Wood], 10),
 		GainItemRequirement.Create([ItemID.DirtBlock], 10),
 	];

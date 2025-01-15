@@ -12,14 +12,14 @@ public abstract class GainItemMission : MissionBase, IGainItemMission, IRewardIt
 
 	public override MissionIconGroup Icon => new MissionIconGroup(
 		[
-			ItemMissionIcon.Create(DemandItems.Count > 0
-				? DemandItems.First().Items.First()
+			ItemMissionIcon.Create(DemandGainItems.Count > 0
+				? DemandGainItems.First().Items.First()
 				: 1)
 		]);
 
 	public virtual bool SubmitItemsOnComplete => false;
 
-	public abstract List<GainItemRequirement> DemandItems { get; init; }
+	public abstract List<GainItemRequirement> DemandGainItems { get; init; }
 
 	public abstract List<Item> RewardItems { get; }
 

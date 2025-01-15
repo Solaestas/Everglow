@@ -19,7 +19,7 @@ public abstract class GainItemKillNPCMission : MissionBase, IGainItemMission, IK
 
 	public abstract List<KillNPCRequirement> DemandNPCs { get; init; }
 
-	public abstract List<GainItemRequirement> DemandItems { get; init; }
+	public abstract List<GainItemRequirement> DemandGainItems { get; init; }
 
 	public bool SubmitItemsOnComplete => false;
 

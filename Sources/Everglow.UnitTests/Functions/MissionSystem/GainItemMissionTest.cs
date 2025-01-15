@@ -20,7 +20,7 @@ public class GainItemMissionTest
 		};
 
 		int testStack = 97;
-		mission.DemandItems.AddRange([
+		mission.DemandGainItems.AddRange([
 			GainItemRequirement.Create([ ItemID.DirtBlock], testStack),
 			]);
 
@@ -58,7 +58,7 @@ public class GainItemMissionTest
 			int testStack2 = (int)random.NextInt64(23, 61);
 			int testStack3 = (int)random.NextInt64(23, 61);
 
-			mission.DemandItems.AddRange([
+			mission.DemandGainItems.AddRange([
 				GainItemRequirement.Create([ ItemID.DirtBlock], testStack1),
 				GainItemRequirement.Create([ ItemID.Wood], testStack2),
 				GainItemRequirement.Create([ ItemID.IronOre], testStack3),
@@ -115,7 +115,7 @@ public class GainItemMissionTest
 			};
 
 			int testStack = (int)new Random().NextInt64(50, 200);
-			mission.DemandItems.AddRange([
+			mission.DemandGainItems.AddRange([
 				GainItemRequirement.Create([ ItemID.DirtBlock], testStack),
 				]);
 
