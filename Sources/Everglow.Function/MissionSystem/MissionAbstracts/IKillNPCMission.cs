@@ -9,7 +9,7 @@ public interface IKillNPCMission
 {
 	public abstract List<KillNPCRequirement> DemandNPCs { get; init; }
 
-	public float CalculateProgress()
+	public float CalculateProgress(IDictionary<int, int> nPCKillCounter)
 	{
 		if (DemandNPCs.Count == 0)
 		{
@@ -17,7 +17,7 @@ public interface IKillNPCMission
 		}
 
 		// The final progress is calculated as the average of the individual progress for each NPC type group
-		return DemandNPCs.Select(x => x.Progress).Average();
+		return DemandNPCs.Select(x => x.Progress(nPCKillCounter)).Average();
 	}
 
 	/// <summary>

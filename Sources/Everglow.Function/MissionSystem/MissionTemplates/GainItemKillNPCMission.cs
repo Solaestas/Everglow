@@ -43,7 +43,7 @@ public abstract class GainItemKillNPCMission : MissionBase, IGainItemMission, IK
 		}
 
 		var progress1 = (this as IGainItemMission).CalculateProgress(Main.LocalPlayer.inventory);
-		var progress2 = (this as IKillNPCMission).CalculateProgress();
+		var progress2 = (this as IKillNPCMission).CalculateProgress(MissionManager.Instance.NPCKillCounter);
 		progress = (progress1 + progress2) / 2f;
 	}
 
