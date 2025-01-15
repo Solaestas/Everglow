@@ -27,6 +27,7 @@ public class MissionPlayer : ModPlayer
 
 				MissionManager.AddMission(new TestMission6(), MissionManager.PoolType.Available);
 				MissionManager.AddMission(new TestMission7(), MissionManager.PoolType.Available);
+				MissionManager.AddMission(new TestMission8(), MissionManager.PoolType.Available);
 
 				MissionManager.Instance.AddMission(TextureMissionIconTestMission.Create(), MissionManager.PoolType.Available);
 			}
