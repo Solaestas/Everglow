@@ -282,9 +282,41 @@ public class MissionManager : ITagCompoundEntity
 
 		foreach(MissionBase m in _missionPools[PoolType.Accepted])
 		{
-			if(m is IGainItemMission gm)
+			if(m is IGainItemMission gim)
 			{
-				gm.CountPick(item);
+				gim.CountPick(item);
+			}
+		}
+	}
+
+	public void CountUse(Item item)
+	{
+		if(item.type < ItemID.None || item.stack <= 0)
+		{
+			throw new InvalidParameterException();
+		}
+
+		foreach(MissionBase m in _missionPools[PoolType.Accepted])
+		{
+			if(m is IUseItemMission uim)
+			{
+				uim.CountUse(item);
+			}
+		}
+	}
+
+	public void CountConsume(Item item)
+	{
+		if(item.type < ItemID.None || item.stack <= 0)
+		{
+			throw new InvalidParameterException();
+		}
+
+		foreach(MissionBase m in _missionPools[PoolType.Accepted])
+		{
+			if(m is IConsumeItemMission cim)
+			{
+				cim.CountConsume(item);
 			}
 		}
 	}
