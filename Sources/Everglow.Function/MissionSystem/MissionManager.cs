@@ -277,7 +277,7 @@ public class MissionManager : ITagCompoundEntity
 	{
 		if(item.type < ItemID.None || item.stack <= 0)
 		{
-			throw new InvalidParameterException();
+			return;
 		}
 
 		foreach(MissionBase m in _missionPools[PoolType.Accepted])
@@ -293,7 +293,7 @@ public class MissionManager : ITagCompoundEntity
 	{
 		if(item.type < ItemID.None || item.stack <= 0)
 		{
-			throw new InvalidParameterException();
+			return;
 		}
 
 		foreach(MissionBase m in _missionPools[PoolType.Accepted])
@@ -309,7 +309,7 @@ public class MissionManager : ITagCompoundEntity
 	{
 		if(item.type < ItemID.None || item.stack <= 0)
 		{
-			throw new InvalidParameterException();
+			return;
 		}
 
 		foreach(MissionBase m in _missionPools[PoolType.Accepted])
