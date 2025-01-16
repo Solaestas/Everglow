@@ -88,7 +88,7 @@ public class KillNPCRequirement
 	/// <param name="count"></param>
 	public void Count(int count = 1)
 	{
-		if (Condition != null && Condition.No)
+		if (Condition != null && Condition.IsFalse)
 		{
 			return;
 		}

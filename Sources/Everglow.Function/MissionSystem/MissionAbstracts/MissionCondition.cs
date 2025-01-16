@@ -2,9 +2,9 @@ namespace Everglow.Commons.MissionSystem.MissionAbstracts;
 
 public abstract class MissionCondition
 {
-	protected abstract bool Can { get; }
+	protected abstract bool GetCheck();
 
-	public bool Yes => Can;
+	public bool IsTrue => GetCheck();
 
-	public bool No => !Can;
+	public bool IsFalse => !GetCheck();
 }
