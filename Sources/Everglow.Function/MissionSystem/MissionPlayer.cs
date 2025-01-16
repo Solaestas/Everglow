@@ -38,10 +38,11 @@ public class MissionPlayer : ModPlayer
 	{
 		if (Player.whoAmI == Main.myPlayer)
 		{
-			if (Main.time % MissionManager.UpdateInterval == 0)
-			{
-				Task.Run(MissionManager.Update);
-			}
+			// if (Main.time % MissionManager.UpdateInterval == 0)
+			// {
+			//     Task.Run(MissionManager.Update);
+			// }
+			MissionManager.Update();
 		}
 	}
 
