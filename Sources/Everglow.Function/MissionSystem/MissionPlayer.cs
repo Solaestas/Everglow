@@ -57,18 +57,6 @@ public class MissionPlayer : ModPlayer
 		}
 	}
 
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
-		if (Player.whoAmI == Main.myPlayer)
-		{
-			// If player killed the target, then count this kill
-			if (!target.active)
-			{
-				MissionManager.CountKill(target.type);
-			}
-		}
-	}
-
 	public override bool OnPickup(Item item)
 	{
 		if (Player.whoAmI == Main.myPlayer)
