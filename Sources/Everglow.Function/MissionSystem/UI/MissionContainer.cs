@@ -183,7 +183,7 @@ public class MissionContainer : UIContainerElement
 		_closeButton.PanelColor = GetThemeColor();
 		_closeButton.BorderColor = GetThemeColor(ColorType.Light, ColorStyle.Normal);
 		_closeButton.Info.IsSensitive = true;
-		_closeButton.Events.OnLeftClick += e => Close();
+		_closeButton.Events.OnLeftDown += e => Close();
 		_closeButton.Events.OnMouseHover += e => _closeButton.PanelColor = Color.Gray;
 		_closeButton.Events.OnMouseOver += e => _closeButton.PanelColor = Color.Gray;
 		_closeButton.Events.OnMouseOut += e => _closeButton.PanelColor = GetThemeColor();
@@ -214,7 +214,7 @@ public class MissionContainer : UIContainerElement
 			((PositionStyle.Full - _description.Info.Top - _description.Info.Height) - _changeMission.Info.Height) / 2f);
 		_changeMission.Info.IsSensitive = true;
 		_changeMission.PanelColor = GetThemeColor();
-		_changeMission.Events.OnLeftClick += e =>
+		_changeMission.Events.OnLeftDown += e =>
 		{
 			if (SelectedItem != null)
 			{
@@ -241,7 +241,7 @@ public class MissionContainer : UIContainerElement
 			_yes.Info.Left.Pixel += 44f;
 			_yes.Calculation();
 		};
-		_yes.Events.OnLeftClick += e =>
+		_yes.Events.OnLeftDown += e =>
 		{
 			if (SelectedItem != null && SelectedItem.Mission.PoolType == PoolType.Accepted)
 			{
@@ -271,7 +271,7 @@ public class MissionContainer : UIContainerElement
 			_no.Info.Left.Pixel -= 44f;
 			_no.Calculation();
 		};
-		_no.Events.OnLeftClick += e =>
+		_no.Events.OnLeftDown += e =>
 		{
 			_yes.Info.IsVisible = _no.Info.IsVisible = false;
 		};
@@ -395,7 +395,7 @@ public class MissionContainer : UIContainerElement
 				element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [m]);
 
 				element.Info.Top.SetValue(top);
-				element.Events.OnLeftClick += e =>
+				element.Events.OnLeftDown += e =>
 				{
 					if (SelectedItem != e)
 					{

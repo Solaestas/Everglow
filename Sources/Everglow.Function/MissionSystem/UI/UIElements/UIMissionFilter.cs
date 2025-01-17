@@ -40,7 +40,7 @@ public class UIMissionFilter : UIBlock
 			statusFilterItem.Info.Height.SetValue(0, 1f);
 			statusFilterItem.Info.Left.SetValue(0, 1f / types.Length * index++);
 			statusFilterItem.Info.Top.SetValue(0, 0f);
-			statusFilterItem.Events.OnLeftClick += e =>
+			statusFilterItem.Events.OnLeftDown += e =>
 			{
 				ChangeStatus(type, e);
 			};

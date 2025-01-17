@@ -63,7 +63,7 @@ public class UIMissionIcon : UIImage
 		prevBtn.Info.Top.SetValue(0, 0.1f);
 
 		prevBtn.PanelColor = MissionContainer.Instance.GetThemeColor(style: MissionContainer.ColorStyle.Light);
-		prevBtn.Events.OnLeftClick += e =>
+		prevBtn.Events.OnLeftDown += e =>
 		{
 			if (!IconGroup.IsFirstIcon)
 			{
@@ -103,7 +103,7 @@ public class UIMissionIcon : UIImage
 		nextBtn.Info.Top.SetValue(0, 0.6f);
 
 		nextBtn.PanelColor = MissionContainer.Instance.GetThemeColor(style: MissionContainer.ColorStyle.Light);
-		nextBtn.Events.OnLeftClick += e =>
+		nextBtn.Events.OnLeftDown += e =>
 		{
 			if (!IconGroup.IsLastIcon)
 			{
