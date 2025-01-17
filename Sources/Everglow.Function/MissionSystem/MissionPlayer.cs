@@ -9,7 +9,7 @@ public class MissionPlayer : ModPlayer
 	{
 		if (Player.whoAmI == Main.myPlayer)
 		{
-			MissionManager.Clear();
+			// MissionManager.Clear();
 			if (!MissionManager.HasMission<MissionBase>())
 			{
 				MissionManager.AddMission(new TestMission1(), MissionManager.PoolType.Accepted);
@@ -28,14 +28,6 @@ public class MissionPlayer : ModPlayer
 
 				MissionManager.AddMission(TextureMissionIconTestMission.Create(), MissionManager.PoolType.Available);
 			}
-		}
-	}
-
-	public override void PostUpdate()
-	{
-		if (Player.whoAmI == Main.myPlayer)
-		{
-			MissionManager.Update();
 		}
 	}
 

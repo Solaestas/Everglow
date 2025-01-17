@@ -50,24 +50,37 @@ public static class MissionManager
 	/// <summary>
 	/// 任务池
 	/// </summary>
-	private static readonly Dictionary<PoolType, List<MissionBase>> _missionPools = [];
+	private static Dictionary<PoolType, List<MissionBase>> _missionPools;
 
 	/// <summary>
 	/// 历史杀怪计数
 	/// </summary>
-	public static Dictionary<int, int> NPCKillCounter { get; } = [];
+	public static Dictionary<int, int> NPCKillCounter { get; private set; }
 
 	/// <summary>
 	/// 任务列表是否需要更新
 	/// </summary>
 	public static bool NeedRefresh { get; set; } = false;
 
-	static MissionManager()
+	public static void Load()
 	{
+		_missionPools = [];
+		NPCKillCounter = [];
+
 		foreach (var missionPoolType in Enum.GetValues<PoolType>())
 		{
 			_missionPools.Add(missionPoolType, []);
 		}
+
+		Main.OnTickForInternalCodeOnly += Update;
+	}
+
+	public static void UnLoad()
+	{
+		_missionPools = null;
+		NPCKillCounter = null;
+
+		Main.OnTickForInternalCodeOnly -= Update;
 	}
 
 	/// <summary>
