@@ -17,7 +17,7 @@ namespace Everglow.Commons.UI.UIContainers.Mission.UIElements
 		public UITextVerticalScrollbar()
 		{
 			Info.Width.SetValue(2f, 0f);
-			_innerScale = new Vector2(4f, 30f);
+			_innerScale = new Vector2(6f, 30f);
 			AlwaysOnLight = true;
 
 			_topBar.ShowBorder = _bottomBar.ShowBorder = _inner.ShowBorder = (false, false, false, false);
