@@ -7,7 +7,7 @@ namespace Everglow.Commons.MissionSystem;
 
 public class MissionManager : ITagCompoundEntity
 {
-	public const int UpdateInterval = 60;
+	public const int UpdateInterval = 20;
 
 	/// <summary>
 	/// 任务池类型
@@ -206,6 +206,11 @@ public class MissionManager : ITagCompoundEntity
 	/// </summary>
 	public void Update()
 	{
+		if (Main.time % UpdateInterval != 0)
+		{
+			return;
+		}
+
 		// 更新所有任务
 		foreach (var pool in _missionPools.Values)
 		{
@@ -214,6 +219,9 @@ public class MissionManager : ITagCompoundEntity
 
 		// 处理自动提交任务
 		_missionPools[PoolType.Accepted].Where(m => m.CheckComplete() && m.AutoComplete).ToList().ForEach(m => m.OnComplete());
+
+		// 处理过期任务
+		_missionPools[PoolType.Accepted].Where(m => m.CheckExpire()).ToList().ForEach(m => m.OnExpire());
 
 		// 检测可提交状态改变的任务，将状态改变为可提交的任务抛出信息
 		foreach (var m in _missionPools[PoolType.Accepted].ToList())
@@ -275,14 +283,14 @@ public class MissionManager : ITagCompoundEntity
 
 	public void CountPick(Item item)
 	{
-		if(item.type < ItemID.None || item.stack <= 0)
+		if (item.type < ItemID.None || item.stack <= 0)
 		{
 			return;
 		}
 
-		foreach(MissionBase m in _missionPools[PoolType.Accepted])
+		foreach (MissionBase m in _missionPools[PoolType.Accepted])
 		{
-			if(m is IGainItemMission gim)
+			if (m is IGainItemMission gim)
 			{
 				gim.CountPick(item);
 			}
@@ -291,14 +299,14 @@ public class MissionManager : ITagCompoundEntity
 
 	public void CountUse(Item item)
 	{
-		if(item.type < ItemID.None || item.stack <= 0)
+		if (item.type < ItemID.None || item.stack <= 0)
 		{
 			return;
 		}
 
-		foreach(MissionBase m in _missionPools[PoolType.Accepted])
+		foreach (MissionBase m in _missionPools[PoolType.Accepted])
 		{
-			if(m is IUseItemMission uim)
+			if (m is IUseItemMission uim)
 			{
 				uim.CountUse(item);
 			}
@@ -307,14 +315,14 @@ public class MissionManager : ITagCompoundEntity
 
 	public void CountConsume(Item item)
 	{
-		if(item.type < ItemID.None || item.stack <= 0)
+		if (item.type < ItemID.None || item.stack <= 0)
 		{
 			return;
 		}
 
-		foreach(MissionBase m in _missionPools[PoolType.Accepted])
+		foreach (MissionBase m in _missionPools[PoolType.Accepted])
 		{
-			if(m is IConsumeItemMission cim)
+			if (m is IConsumeItemMission cim)
 			{
 				cim.CountConsume(item);
 			}

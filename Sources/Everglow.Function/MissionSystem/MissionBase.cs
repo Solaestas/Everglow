@@ -56,6 +56,11 @@ public abstract class MissionBase : ITagCompoundEntity
 	public virtual long TimeMax => -1;
 
 	/// <summary>
+	/// 是否启用计时器
+	/// </summary>
+	public bool EnableTime => TimeMax > 0;
+
+	/// <summary>
 	/// 任务计时器
 	/// <br>单位为帧</br>
 	/// </summary>
@@ -95,6 +100,12 @@ public abstract class MissionBase : ITagCompoundEntity
 	public virtual bool CheckComplete() => Progress >= 1f;
 
 	/// <summary>
+	/// 检查任务是否过期
+	/// </summary>
+	/// <returns></returns>
+	public virtual bool CheckExpire() => TimeMax > 0 ? Time >= TimeMax : false;
+
+	/// <summary>
 	/// 任务可提交状态的旧状态
 	/// <para/>该属性不需要持久化，保证每次重新进入世界时都会发送信息
 	/// </summary>
@@ -109,38 +120,38 @@ public abstract class MissionBase : ITagCompoundEntity
 	}
 
 	/// <summary>
-	/// 更新任务进度
-	/// </summary>
-	/// <param name="objs"></param>
-	public abstract void UpdateProgress(params object[] objs);
-
-	/// <summary>
 	/// 每帧更新
 	/// </summary>
 	/// <param name="gt"></param>
 	public virtual void Update()
 	{
-		CheckExpire();
+		UpdateTime();
+		UpdateProgress();
 	}
 
 	/// <summary>
 	/// 检查任务是否过期
 	/// <para/>重写该方法以扩展过期条件
 	/// </summary>
-	private void CheckExpire()
+	protected void UpdateTime()
 	{
-		if (PoolType == MissionManager.PoolType.Accepted && TimeMax > 0)
+		if (EnableTime)
 		{
-			if (Time < TimeMax)
+			Time += MissionManager.UpdateInterval;
+
+			if (Time > TimeMax)
 			{
-				Time += MissionManager.UpdateInterval;
-			}
-			else
-			{
-				Time = 0;
-				OnExpire();
+				Time = TimeMax;
 			}
 		}
+	}
+
+	/// <summary>
+	/// 更新任务进度
+	/// </summary>
+	/// <param name="objs"></param>
+	public virtual void UpdateProgress(params object[] objs)
+	{
 	}
 
 	/// <summary>

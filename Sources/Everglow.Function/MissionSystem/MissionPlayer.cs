@@ -5,7 +5,6 @@ namespace Everglow.Commons.MissionSystem;
 
 public class MissionPlayer : ModPlayer
 {
-	// public override bool CloneNewInstances => true;
 	public MissionManager MissionManager = new MissionManager();
 
 	public override void OnEnterWorld()
@@ -38,10 +37,6 @@ public class MissionPlayer : ModPlayer
 	{
 		if (Player.whoAmI == Main.myPlayer)
 		{
-			// if (Main.time % MissionManager.UpdateInterval == 0)
-			// {
-			//     Task.Run(MissionManager.Update);
-			// }
 			MissionManager.Update();
 		}
 	}

@@ -37,20 +37,8 @@ public abstract class ConsumeItemMission : MissionBase, IConsumeItemMission, IRe
 		(this as IConsumeItemMission).Save(tag);
 	}
 
-	public override void Update()
-	{
-		base.Update();
-
-		UpdateProgress();
-	}
-
 	public override void UpdateProgress(params object[] objs)
 	{
-		if (PoolType != MissionManager.PoolType.Accepted)
-		{
-			return;
-		}
-
 		progress = (this as IConsumeItemMission).CalculateProgress();
 	}
 }

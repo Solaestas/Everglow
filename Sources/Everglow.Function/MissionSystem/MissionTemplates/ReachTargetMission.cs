@@ -58,15 +58,12 @@ public abstract class ReachTargetMission : MissionBase
 	{
 		base.Update();
 
-		UpdateProgress(Main.LocalPlayer.position);
+		UpdateProgress();
 	}
 
 	public override void UpdateProgress(params object[] objs)
 	{
-		if (PoolType != MissionManager.PoolType.Accepted || objs[0] is not Vector2 playerPos)
-		{
-			return;
-		}
+		var playerPos = Main.LocalPlayer.position;
 
 		if (CheckPoints.Count == 0) // The length of CheckPoints should more than 1
 		{

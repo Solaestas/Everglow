@@ -40,20 +40,8 @@ public abstract class GainItemMission : MissionBase, IGainItemMission, IRewardIt
 		(this as IGainItemMission).Save(tag);
 	}
 
-	public override void Update()
-	{
-		base.Update();
-
-		UpdateProgress();
-	}
-
 	public override void UpdateProgress(params object[] objs)
 	{
-		if (PoolType != MissionManager.PoolType.Accepted)
-		{
-			return;
-		}
-
 		progress = (this as IGainItemMission).CalculateProgress(Main.LocalPlayer.inventory);
 	}
 }

@@ -22,20 +22,8 @@ public abstract class KillNPCMission : MissionBase, IKillNPCMission, IRewardItem
 		(this as IRewardItemMission).GiveReward();
 	}
 
-	public override void Update()
-	{
-		base.Update();
-
-		UpdateProgress();
-	}
-
 	public override void UpdateProgress(params object[] objs)
 	{
-		if (PoolType != MissionManager.PoolType.Accepted)
-		{
-			return;
-		}
-
 		progress = (this as IKillNPCMission).CalculateProgress(MissionManager.Instance.NPCKillCounter);
 	}
 

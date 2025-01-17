@@ -1,4 +1,3 @@
-using Terraria.GameContent;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.MissionTemplates;
@@ -88,6 +87,4 @@ public abstract class MultipleMission : MissionBase
 			}
 		}
 	}
-
-	public override void UpdateProgress(params object[] objs) => throw new NotImplementedException();
 }

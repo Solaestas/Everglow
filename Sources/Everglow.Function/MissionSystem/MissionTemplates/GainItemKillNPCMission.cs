@@ -28,20 +28,8 @@ public abstract class GainItemKillNPCMission : MissionBase, IGainItemMission, IK
 		(this as IRewardItemMission).GiveReward();
 	}
 
-	public override void Update()
-	{
-		base.Update();
-
-		UpdateProgress();
-	}
-
 	public override void UpdateProgress(params object[] objs)
 	{
-		if (PoolType != MissionManager.PoolType.Accepted)
-		{
-			return;
-		}
-
 		var progress1 = (this as IGainItemMission).CalculateProgress(Main.LocalPlayer.inventory);
 		var progress2 = (this as IKillNPCMission).CalculateProgress(MissionManager.Instance.NPCKillCounter);
 		progress = (progress1 + progress2) / 2f;
