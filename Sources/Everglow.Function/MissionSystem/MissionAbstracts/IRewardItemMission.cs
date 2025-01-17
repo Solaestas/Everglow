@@ -2,7 +2,7 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.MissionAbstracts;
 
-public interface IRewardItemMission : IMissionAbstract
+public interface IRewardItemMission : IMissionResultAbstract
 {
 	public List<Item> RewardItems { get; }
 
