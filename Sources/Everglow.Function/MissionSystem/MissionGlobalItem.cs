@@ -6,7 +6,7 @@ public class MissionGlobalItem : GlobalItem
 	{
 		if (player.whoAmI == Main.myPlayer)
 		{
-			MissionManager.Instance.CountUse(item);
+			MissionManager.CountUse(item);
 		}
 
 		return null;
@@ -16,7 +16,7 @@ public class MissionGlobalItem : GlobalItem
 	{
 		if (player.whoAmI == Main.myPlayer)
 		{
-			MissionManager.Instance.CountConsume(item);
+			MissionManager.CountConsume(item);
 		}
 	}
 }

@@ -24,7 +24,7 @@ public abstract class KillNPCMission : MissionBase, IKillNPCMission, IRewardItem
 
 	public override void UpdateProgress(params object[] objs)
 	{
-		progress = (this as IKillNPCMission).CalculateProgress(MissionManager.Instance.NPCKillCounter);
+		progress = (this as IKillNPCMission).CalculateProgress(MissionManager.NPCKillCounter);
 	}
 
 	public override void LoadData(TagCompound tag)

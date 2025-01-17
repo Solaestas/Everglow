@@ -224,7 +224,7 @@ public class MissionContainer : UIContainerElement
 				}
 				else if (SelectedItem.Mission.PoolType == PoolType.Available)
 				{
-					MissionManager.Instance.MoveMission(SelectedItem.Mission, PoolType.Available, PoolType.Accepted);
+					MissionManager.MoveMission(SelectedItem.Mission, PoolType.Available, PoolType.Accepted);
 					ChangeSelectedItem(SelectedItem);
 				}
 			}
@@ -253,7 +253,7 @@ public class MissionContainer : UIContainerElement
 				}
 				else
 				{
-					MissionManager.Instance.MoveMission(SelectedItem.Mission, PoolType.Accepted, PoolType.Failed);
+					MissionManager.MoveMission(SelectedItem.Mission, PoolType.Accepted, PoolType.Failed);
 					ChangeSelectedItem(SelectedItem);
 					_yes.Info.IsVisible = _no.Info.IsVisible = false;
 				}
@@ -416,7 +416,7 @@ public class MissionContainer : UIContainerElement
 		PositionStyle top = (2f, 0f);
 		if (_missionFilter.PoolType.HasValue)
 		{
-			var mp = MissionManager.Instance.GetMissionPool(_missionFilter.PoolType.Value);
+			var mp = MissionManager.GetMissionPool(_missionFilter.PoolType.Value);
 			top = IteratePool(elements, top, mp);
 		}
 		else
@@ -429,7 +429,7 @@ public class MissionContainer : UIContainerElement
 					continue;
 				}
 
-				var mp = MissionManager.Instance.GetMissionPool(type);
+				var mp = MissionManager.GetMissionPool(type);
 				top = IteratePool(elements, top, mp);
 			}
 		}

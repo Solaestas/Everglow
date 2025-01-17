@@ -5,8 +5,6 @@ namespace Everglow.Commons.MissionSystem;
 
 public class MissionPlayer : ModPlayer
 {
-	public MissionManager MissionManager = new MissionManager();
-
 	public override void OnEnterWorld()
 	{
 		if (Player.whoAmI == Main.myPlayer)
@@ -28,7 +26,7 @@ public class MissionPlayer : ModPlayer
 				MissionManager.AddMission(new TestMission7(), MissionManager.PoolType.Available);
 				MissionManager.AddMission(new TestMission8(), MissionManager.PoolType.Available);
 
-				MissionManager.Instance.AddMission(TextureMissionIconTestMission.Create(), MissionManager.PoolType.Available);
+				MissionManager.AddMission(TextureMissionIconTestMission.Create(), MissionManager.PoolType.Available);
 			}
 		}
 	}

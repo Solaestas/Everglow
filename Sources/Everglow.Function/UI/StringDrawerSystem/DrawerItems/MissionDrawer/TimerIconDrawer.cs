@@ -20,7 +20,7 @@ internal class TimerIconDrawer : DrawerItem
 	public override void Draw(SpriteBatch sb)
 	{
 		if (_mission == null)
-			_mission = MissionManager.Instance.GetMission(MissionName);
+			_mission = MissionManager.GetMission(MissionName);
 		if (_mission == null || _mission.TimeMax < 0)
 			return;
 		var scissorRectangle = sb.GraphicsDevice.ScissorRectangle;
@@ -84,7 +84,7 @@ internal class TimerIconDrawer : DrawerItem
 		MissionName = stringParameters.GetString("MissionName",
 			stringDrawer.DefaultParameters.GetString("MITMissionName", string.Empty));
 
-		_mission = MissionManager.Instance.GetMission(MissionName);
+		_mission = MissionManager.GetMission(MissionName);
 		Size += Size % 2;
 	}
 

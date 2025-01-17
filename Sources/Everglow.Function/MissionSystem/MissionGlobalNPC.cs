@@ -20,7 +20,7 @@ public class MissionGlobalNPC : GlobalNPC
 
 	public void ClientOnKill(NPC npc)
 	{
-		MissionManager.Instance.CountKill(npc.type);
+		MissionManager.CountKill(npc.type);
 
 		// TODO: The line is not used by mission manager currently.
 		OnNPCKill?.Invoke(npc);

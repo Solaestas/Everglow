@@ -165,7 +165,7 @@ public abstract class MissionBase : ITagCompoundEntity
 			return;
 		}
 
-		MissionManager.Instance.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Completed);
+		MissionManager.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Completed);
 
 		IsVisible = true;
 		MissionManager.NeedRefresh = true;
@@ -196,7 +196,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnExpire()
 	{
-		MissionManager.Instance.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Overdue);
+		MissionManager.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Overdue);
 	}
 
 	/// <summary>
@@ -204,7 +204,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnFail()
 	{
-		MissionManager.Instance.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Failed);
+		MissionManager.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Failed);
 	}
 
 	/// <summary>
