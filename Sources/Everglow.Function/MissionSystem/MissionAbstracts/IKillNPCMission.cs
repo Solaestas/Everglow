@@ -5,7 +5,7 @@ namespace Everglow.Commons.MissionSystem.MissionAbstracts;
 /// <summary>
 /// Represents a mission where the player needs to kill a specified NPC or a quantity of NPCs.
 /// </summary>
-public interface IKillNPCMission
+public interface IKillNPCMission : IMissionAbstract
 {
 	public abstract List<KillNPCRequirement> DemandNPCs { get; init; }
 

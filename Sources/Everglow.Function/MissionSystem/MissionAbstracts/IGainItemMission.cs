@@ -5,7 +5,7 @@ namespace Everglow.Commons.MissionSystem.MissionAbstracts;
 /// <summary>
 /// Represents a mission where the player needs to obtain a specified item or a quantity of items.
 /// </summary>
-public interface IGainItemMission
+public interface IGainItemMission : IMissionAbstract
 {
 	/// <summary>
 	/// Determine if the demand items will be consumed on mission complete.
@@ -62,7 +62,6 @@ public interface IGainItemMission
 	/// <returns></returns>
 	public float CalculateProgress(IEnumerable<Item> inventory)
 	{
-
 		if (DemandGainItems.Count == 0 || DemandGainItems.Select(x => x.Requirement).Sum() == 0)
 		{
 			return 1f;

@@ -1,3 +1,5 @@
+using Everglow.Commons.MissionSystem.MissionAbstracts;
+
 namespace Everglow.Commons.MissionSystem;
 
 public class MissionGlobalNPC : GlobalNPC
@@ -30,6 +32,13 @@ public class MissionGlobalNPC : GlobalNPC
 
 	public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		// TODO: Draws the exclamation mark on the NPC when they have a quest.
+		var types = MissionManager.GetMission<IKillNPCMission>(MissionManager.PoolType.Accepted).SelectMany(x => x.DemandNPCs).SelectMany(x => x.NPCs);
+		bool valid = types.Contains(npc.type);
+		if (valid)
+		{
+			Texture2D tex = ModAsset.ExclamationMark.Value;
+			float scale = (float)Math.Sin(Main.time * 0.08f) * 0.14f;
+			spriteBatch.Draw(tex, new Vector2(npc.Center.X - 2, npc.Center.Y - 40) - Main.screenPosition, new Rectangle(0, 0, 6, 24), Color.White, 0f, new Vector2(3, 12), 1f + scale, SpriteEffects.None, 0f);
+		}
 	}
 }

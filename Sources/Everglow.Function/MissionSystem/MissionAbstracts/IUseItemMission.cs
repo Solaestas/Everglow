@@ -2,7 +2,7 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.MissionAbstracts;
 
-public interface IUseItemMission
+public interface IUseItemMission : IMissionAbstract
 {
 	public abstract List<ItemRequirement> DemandUseItems { get; init; }
 

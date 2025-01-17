@@ -93,6 +93,24 @@ public static class MissionManager
 		where T : MissionBase => _missionPools[type].FindAll(m => m is T).ConvertAll(m => (T)m);
 
 	/// <summary>
+	/// 获取某个接口的所有任务
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="type"></param>
+	/// <returns></returns>
+	public static IEnumerable<T> GetMission<T>(PoolType type)
+		where T : IMissionAbstract
+	{
+		foreach(var i in _missionPools[type])
+		{
+			if(i is T t)
+			{
+				yield return t;
+			}
+		}
+	}
+
+	/// <summary>
 	/// 获取某个任务
 	/// </summary>
 	/// <param name="missionName">任务名字，或者说 ID</param>

@@ -2,7 +2,7 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.MissionAbstracts;
 
-public interface IConsumeItemMission
+public interface IConsumeItemMission : IMissionAbstract
 {
 	public abstract List<ItemRequirement> DemandConsumeItems { get; init; }
 
@@ -25,7 +25,6 @@ public interface IConsumeItemMission
 	/// <returns></returns>
 	public float CalculateProgress()
 	{
-
 		if (DemandConsumeItems.Count == 0 || DemandConsumeItems.Select(x => x.Requirement).Sum() == 0)
 		{
 			return 1f;
