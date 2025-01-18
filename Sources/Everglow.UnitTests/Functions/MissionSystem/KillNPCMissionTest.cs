@@ -1,29 +1,17 @@
-using Everglow.Commons.MissionSystem.MissionTemplates;
-using static Everglow.Commons.MissionSystem.MissionTemplates.KillNPCMission;
+using Everglow.Commons.MissionSystem.MissionAbstracts;
+using Everglow.UnitTests.Functions.MissionSystem.TestMissions;
 using Terraria.ID;
-using Terraria;
-using Everglow.Commons.MissionSystem;
 
 namespace Everglow.UnitTests.Functions.MissionSystem;
 
 [TestClass]
 public class KillNPCMissionTest
 {
-	public MissionManager MissionManager { get; set; }
-
-	[TestInitialize]
-	public void Initialize()
-	{
-		MissionManager = new MissionManager();
-	}
-
 	[TestMethod]
 	public void IndividualCounter_Should_BeCappedAtRequirement()
 	{
-		var killNPCMission = new KillNPCMission();
-		killNPCMission.SetInfo("Test4", "击杀10个史莱姆", "测试介绍: \n" + "[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']");
 		int reqCount = 10;
-		killNPCMission.DemandNPCs.AddRange([
+		var killNPCMission = new UnitTestKillNPCMission1([
 			KillNPCRequirement.Create(
 				[
 					NPCID.BlueSlime,
@@ -41,10 +29,8 @@ public class KillNPCMissionTest
 	[TestMethod]
 	public void IndividualProgress_Should_CalculateProperly()
 	{
-		var killNPCMission = new KillNPCMission();
-		killNPCMission.SetInfo("Test4", "击杀10个史莱姆", "123");
 		int reqCount = 10;
-		killNPCMission.DemandNPCs.AddRange([
+		var killNPCMission = new UnitTestKillNPCMission1([
 			KillNPCRequirement.Create(
 				[
 					NPCID.BlueSlime,
@@ -68,11 +54,8 @@ public class KillNPCMissionTest
 	[TestMethod]
 	public void IndividualCounter_Should_NotThrowInvalidOperationException_When_CountWithoutBeingEnabled()
 	{
-		var killNPCMission = new KillNPCMission();
-		killNPCMission.SetInfo("Test4", "击杀10个史莱姆", "123");
-
 		int reqCount = 10;
-		killNPCMission.DemandNPCs.AddRange([
+		var killNPCMission = new UnitTestKillNPCMission1([
 			KillNPCRequirement.Create(
 				[
 					NPCID.BlueSlime,

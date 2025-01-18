@@ -1,8 +1,7 @@
-using Everglow.Commons.MissionSystem;
-using Everglow.Commons.MissionSystem.MissionTemplates;
+using Everglow.Commons.MissionSystem.MissionAbstracts;
+using Everglow.UnitTests.Functions.MissionSystem.TestMissions;
 using Terraria;
 using Terraria.ID;
-using static Everglow.Commons.MissionSystem.MissionTemplates.GainItemMission;
 
 namespace Everglow.UnitTests.Functions.MissionSystem;
 
@@ -14,14 +13,9 @@ public class GainItemMissionTest
 	[TestMethod]
 	public void Progress_Should_CalculateCorrectly_When_TypeIsSingle()
 	{
-		var mission = new GainItemMission
-		{
-			PoolType = MissionManager.PoolType.Accepted,
-		};
-
 		int testStack = 97;
-		mission.DemandGainItems.AddRange([
-			GainItemRequirement.Create([ ItemID.DirtBlock], testStack),
+		var mission = new UnitTestGainItemMission1([
+			GainItemRequirement.Create([ItemID.DirtBlock], testStack),
 			]);
 
 		Assert.IsTrue(mission.Progress == 0f);
@@ -36,10 +30,9 @@ public class GainItemMissionTest
 					stack = stack,
 				},
 			};
-			mission.UpdateProgress(inventory);
 
 			var targetProgress = stack / (float)testStack;
-			Assert.IsTrue(mission.Progress == targetProgress);
+			Assert.IsTrue((mission as IGainItemMission).CalculateProgress(inventory) == targetProgress);
 		}
 	}
 
@@ -48,20 +41,16 @@ public class GainItemMissionTest
 	{
 		for (int i = 0; i < 30; i++)
 		{
-			var mission = new GainItemMission
-			{
-				PoolType = MissionManager.PoolType.Accepted,
-			};
 			var random = new Random();
 
 			int testStack1 = (int)random.NextInt64(23, 61);
 			int testStack2 = (int)random.NextInt64(23, 61);
 			int testStack3 = (int)random.NextInt64(23, 61);
 
-			mission.DemandGainItems.AddRange([
-				GainItemRequirement.Create([ ItemID.DirtBlock], testStack1),
-				GainItemRequirement.Create([ ItemID.Wood], testStack2),
-				GainItemRequirement.Create([ ItemID.IronOre], testStack3),
+			var mission = new UnitTestGainItemMission1([
+				GainItemRequirement.Create([ItemID.DirtBlock], testStack1),
+				GainItemRequirement.Create([ItemID.Wood], testStack2),
+				GainItemRequirement.Create([ItemID.IronOre], testStack3),
 			]);
 
 			Assert.IsTrue(mission.Progress == 0f);
@@ -90,14 +79,13 @@ public class GainItemMissionTest
 								stack = stack3,
 							},
 						};
-						mission.UpdateProgress(inventory);
 						List<float> floats = [
 							stack1 / (float)testStack1,
 							stack2 / (float)testStack2,
 							stack3 / (float)testStack3,
 						];
 
-						Assert.IsTrue(mission.Progress == floats.Average());
+						Assert.IsTrue((mission as IGainItemMission).CalculateProgress(inventory) == floats.Average());
 					}
 				}
 			}
@@ -109,13 +97,9 @@ public class GainItemMissionTest
 	{
 		for (int i = 0; i < 100; i++)
 		{
-			var mission = new GainItemMission
-			{
-				PoolType = MissionManager.PoolType.Accepted,
-			};
-
 			int testStack = (int)new Random().NextInt64(50, 200);
-			mission.DemandGainItems.AddRange([
+
+			var mission = new UnitTestGainItemMission1([
 				GainItemRequirement.Create([ ItemID.DirtBlock], testStack),
 				]);
 
@@ -131,9 +115,8 @@ public class GainItemMissionTest
 						stack = stack,
 					},
 				};
-				mission.UpdateProgress(inventory);
 
-				Assert.IsTrue(mission.Progress == 1f);
+				Assert.IsTrue((mission as IGainItemMission).CalculateProgress(inventory) == 1f);
 			}
 		}
 	}
@@ -141,41 +124,7 @@ public class GainItemMissionTest
 	[TestMethod]
 	public void Progress_Should_SetMax_When_DemandItemsIsEmpty()
 	{
-		var mission = new GainItemMission
-		{
-			PoolType = MissionManager.PoolType.Accepted,
-		};
-		Assert.IsTrue(mission.Progress == 0f);
-
-		mission.UpdateProgress(new List<Item>());
-		Assert.IsTrue(mission.Progress == 1f);
-	}
-
-	[TestMethod]
-	public void Progress_Should_RemainUnchanged_When_ParamIsNull()
-	{
-		var mission = new GainItemMission
-		{
-			PoolType = MissionManager.PoolType.Accepted,
-		};
-		Assert.IsTrue(mission.Progress == 0f);
-
-		mission.UpdateProgress();
-		Assert.IsTrue(mission.Progress == 0f);
-		Assert.IsFalse(mission.Progress == 1f);
-	}
-
-	[TestMethod]
-	public void Progress_Should_RemainUnchanged_When_StatusIsNotAccepted()
-	{
-		var mission = new GainItemMission
-		{
-			PoolType = MissionManager.PoolType.Available,
-		};
-		Assert.IsTrue(mission.Progress == 0f);
-
-		mission.UpdateProgress(new List<Item>());
-		Assert.IsTrue(mission.Progress == 0f);
-		Assert.IsFalse(mission.Progress == 1f);
+		var mission = new UnitTestGainItemMission1([]);
+		Assert.IsTrue((mission as IGainItemMission).CalculateProgress([]) == 1f);
 	}
 }
