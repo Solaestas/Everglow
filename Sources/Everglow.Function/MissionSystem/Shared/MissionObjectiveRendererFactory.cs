@@ -1,6 +1,8 @@
-using Everglow.Commons.MissionSystem.MissionAbstracts;
+using Everglow.Commons.MissionSystem.Abstracts;
+using Everglow.Commons.MissionSystem.Abstracts.Missions;
+using Everglow.Commons.MissionSystem.UI.UIElements.UIMissionObjectives;
 
-namespace Everglow.Commons.MissionSystem.UI.UIElements.UIMissionObjectives;
+namespace Everglow.Commons.MissionSystem.Shared;
 
 public static class MissionObjectiveRendererFactory
 {

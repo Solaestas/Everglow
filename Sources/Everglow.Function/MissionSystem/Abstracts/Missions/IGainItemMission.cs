@@ -1,6 +1,7 @@
+using Everglow.Commons.MissionSystem.Shared;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.MissionSystem.MissionAbstracts;
+namespace Everglow.Commons.MissionSystem.Abstracts.Missions;
 
 /// <summary>
 /// Represents a mission where the player needs to obtain a specified item or a quantity of items.

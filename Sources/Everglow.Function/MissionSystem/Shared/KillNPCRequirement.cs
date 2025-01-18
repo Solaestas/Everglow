@@ -1,7 +1,8 @@
+using Everglow.Commons.MissionSystem.Primitives;
 using MathNet.Numerics;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.MissionSystem.MissionAbstracts;
+namespace Everglow.Commons.MissionSystem.Shared;
 
 /// <summary>
 /// A group of npc which use the same requirement
@@ -48,7 +49,7 @@ public class KillNPCRequirement
 	/// <para/>
 	/// The returned value is clamped to the range [0, 1], ensuring that the progress is always represented as a percentage (0% to 100%).
 	/// </remarks>
-	public float Progress(IDictionary<int,int> nPCKillCounter) => EnableIndividualCounter
+	public float Progress(IDictionary<int, int> nPCKillCounter) => EnableIndividualCounter
 		? Math.Min(1f, Math.Max(0f, Counter / (float)Requirement))
 		: Math.Min(1f, Math.Max(0f, nPCKillCounter.Where(x => NPCs.Contains(x.Key)).Select(x => x.Value).Sum() / (float)Requirement));
 

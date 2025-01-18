@@ -1,6 +1,6 @@
 using Everglow.Commons.Utilities;
 
-namespace Everglow.Commons.MissionSystem.MissionTemplates;
+namespace Everglow.Commons.MissionSystem.Templates;
 
 /// <summary>
 /// Represents a mission where the player needs to arrive at the designated location.
@@ -117,7 +117,7 @@ public abstract class ReachTargetMission : MissionBase
 	public static void DrawCheckPoints(List<Vector2> points)
 	{
 		// TODO: Use VFXManager to draw the check points instead of using spriteBatch directly on purpose to optimize rendering
-		var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		var sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin();
 
@@ -125,7 +125,7 @@ public abstract class ReachTargetMission : MissionBase
 		foreach (var point in points)
 		{
 			Main.spriteBatch.Draw(
-				Commons.ModAsset.Point.Value,
+				ModAsset.Point.Value,
 				point - Main.screenPosition,
 				null,
 				new Color(0f, 1f, 0f, 0f),

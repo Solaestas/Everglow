@@ -9,7 +9,7 @@ using Terraria.Localization;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 
-namespace Everglow.Commons.MissionSystem.MissionTestNPC;
+namespace Everglow.Commons.MissionSystem.Tests.ExampleNPC;
 
 // [AutoloadHead] and NPC.townNPC are extremely important and absolutely both necessary for any Town NPC to work at all.
 [AutoloadHead]

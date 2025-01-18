@@ -1,4 +1,4 @@
-using Everglow.Commons.MissionSystem.MissionAbstracts;
+using Everglow.Commons.MissionSystem.Abstracts.Missions;
 
 namespace Everglow.Commons.MissionSystem;
 

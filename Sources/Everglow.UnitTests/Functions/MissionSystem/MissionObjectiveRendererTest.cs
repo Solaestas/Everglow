@@ -1,3 +1,4 @@
+using Everglow.Commons.MissionSystem.Shared;
 using Everglow.Commons.MissionSystem.UI.UIElements.UIMissionObjectives;
 using Everglow.UnitTests.Functions.MissionSystem.TestMissions;
 

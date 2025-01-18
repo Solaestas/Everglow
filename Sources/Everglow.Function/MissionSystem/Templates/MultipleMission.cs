@@ -1,6 +1,6 @@
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.MissionSystem.MissionTemplates;
+namespace Everglow.Commons.MissionSystem.Templates;
 
 /// <summary>
 /// Represent a mission which contains serveral sub missions

@@ -1,6 +1,6 @@
-using Everglow.Commons.MissionSystem.MissionAbstracts;
 using Everglow.Commons.MissionSystem.MissionIcons;
-using Everglow.Commons.MissionSystem.MissionTemplates;
+using Everglow.Commons.MissionSystem.Shared;
+using Everglow.Commons.MissionSystem.Templates;
 
 namespace Everglow.Commons.MissionSystem.Tests;
 

@@ -1,7 +1,7 @@
 using MathNet.Numerics;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.MissionSystem.MissionAbstracts;
+namespace Everglow.Commons.MissionSystem.Shared;
 
 /// <summary>
 /// A group of items which use the same requirement

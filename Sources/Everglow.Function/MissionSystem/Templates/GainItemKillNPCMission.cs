@@ -1,8 +1,9 @@
-using Everglow.Commons.MissionSystem.MissionAbstracts;
+using Everglow.Commons.MissionSystem.Abstracts.Missions;
 using Everglow.Commons.MissionSystem.MissionIcons;
+using Everglow.Commons.MissionSystem.Shared;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.MissionSystem.MissionTemplates;
+namespace Everglow.Commons.MissionSystem.Templates;
 
 public abstract class GainItemKillNPCMission : MissionBase, IGainItemMission, IKillNPCMission, IRewardItemMission
 {

@@ -1,4 +1,5 @@
-using Everglow.Commons.MissionSystem.MissionAbstracts;
+using Everglow.Commons.MissionSystem.Abstracts;
+using Everglow.Commons.MissionSystem.Abstracts.Missions;
 using MathNet.Numerics;
 using MonoMod.Utils;
 using Terraria.ModLoader.IO;

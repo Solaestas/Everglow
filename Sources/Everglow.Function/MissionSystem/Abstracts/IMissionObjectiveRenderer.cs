@@ -1,6 +1,6 @@
 ﻿using Everglow.Commons.UI.UIElements;
 
-namespace Everglow.Commons.MissionSystem.MissionAbstracts;
+namespace Everglow.Commons.MissionSystem.Abstracts;
 
 public interface IMissionObjectiveRenderer
 {

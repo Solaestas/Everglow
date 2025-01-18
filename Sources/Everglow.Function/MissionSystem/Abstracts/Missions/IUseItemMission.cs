@@ -1,6 +1,7 @@
+using Everglow.Commons.MissionSystem.Shared;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.MissionSystem.MissionAbstracts;
+namespace Everglow.Commons.MissionSystem.Abstracts.Missions;
 
 public interface IUseItemMission : IMissionObjectiveAbstract
 {

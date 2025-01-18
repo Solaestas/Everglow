@@ -1,6 +1,6 @@
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.MissionSystem.MissionAbstracts;
+namespace Everglow.Commons.MissionSystem.Abstracts.Missions;
 
 public interface IRewardItemMission : IMissionResultAbstract
 {

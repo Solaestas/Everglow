@@ -1,4 +1,5 @@
-using Everglow.Commons.MissionSystem.MissionAbstracts;
+using Everglow.Commons.MissionSystem.Abstracts;
+using Everglow.Commons.MissionSystem.Abstracts.Missions;
 using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.MissionSystem.UI.UIElements.UIMissionObjectives;
