@@ -1,4 +1,4 @@
-﻿using Everglow.Commons.MissionSystem.MissionAbstracts;
+using Everglow.Commons.MissionSystem.MissionAbstracts;
 using Everglow.Commons.MissionSystem.MissionTemplates;
 using Terraria;
 
@@ -6,6 +6,11 @@ namespace Everglow.UnitTests.Functions.MissionSystem.TestMissions;
 
 public class UnitTestKillNPCMission1 : KillNPCMission
 {
+	public UnitTestKillNPCMission1()
+	{
+		DemandNPCs = [];
+	}
+
 	public UnitTestKillNPCMission1(List<KillNPCRequirement> requires)
 	{
 		DemandNPCs = requires;

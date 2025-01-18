@@ -6,6 +6,11 @@ namespace Everglow.UnitTests.Functions.MissionSystem.TestMissions;
 
 public class UnitTestGainItemMission1 : GainItemMission
 {
+	public UnitTestGainItemMission1()
+	{
+		DemandGainItems = [];
+	}
+
 	public UnitTestGainItemMission1(List<GainItemRequirement> requires)
 	{
 		DemandGainItems = requires;
