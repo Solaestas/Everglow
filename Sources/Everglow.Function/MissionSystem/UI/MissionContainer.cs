@@ -1,4 +1,5 @@
 using Everglow.Commons.MissionSystem;
+using Everglow.Commons.MissionSystem.UI.UIElements;
 using Everglow.Commons.UI.UIContainers.Mission.UIElements;
 using Everglow.Commons.UI.UIElements;
 using static Everglow.Commons.MissionSystem.MissionManager;
@@ -37,7 +38,8 @@ public class MissionContainer : UIContainerElement
 
 	private UIBlock _panel;
 	private UIBlock _headshot;
-	private UIMissionFilter _missionFilter;
+	private UIMissionStatusFilter _missionFilter;
+	private UIMissionTypeFilter _missionTypeFilter;
 	private UIBlock _missionPanel;
 	private UIBlock _description;
 	private UIBlock _changeMission;
@@ -96,8 +98,8 @@ public class MissionContainer : UIContainerElement
 		};
 
 		_panel = new UIBlock();
-		_panel.Info.Width.SetValue(527f, 0f);
-		_panel.Info.Height.SetValue(369f, 0f);
+		_panel.Info.Width.SetValue(527f * 2, 0f);
+		_panel.Info.Height.SetValue(369f * 2, 0f);
 		_panel.PanelColor = GetThemeColor();
 		_panel.Info.SetToCenter();
 		_panel.CanDrag = true;
@@ -136,11 +138,7 @@ public class MissionContainer : UIContainerElement
 		_missionContainer.SetVerticalScrollbar(_missionScrollbar);
 		_panel.Register(_missionScrollbar);
 
-		_missionFilter = new UIMissionFilter();
-		_missionFilter.StatusFilterChanged += (_, type) =>
-		{
-			RefreshList();
-		};
+		_missionFilter = new UIMissionStatusFilter();
 		_panel.Register(_missionFilter);
 
 		_missionFilter.Info.Top.SetValue(_headshot.Info.Top - (16f, 0f));
@@ -148,12 +146,20 @@ public class MissionContainer : UIContainerElement
 		_missionFilter.Info.Width.SetValue(PositionStyle.Full - _description.Info.Left * 2f - _description.Info.Width - _missionScrollbar.Info.Width - (PositionStyle.Full - _missionScrollbar.Info.Width - _missionScrollbar.Info.Left) * 2f);
 		_missionFilter.Info.Height.SetValue(40f, 0f);
 		_missionFilter.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
-		_missionFilter.ShowBorder.BottomBorder = false;
 
-		_missionPanel.Info.Top.SetValue(_missionFilter.Info.Top + _missionFilter.Info.Height);
+		_missionTypeFilter = new UIMissionTypeFilter();
+		_panel.Register(_missionTypeFilter);
+
+		_missionTypeFilter.Info.Top.SetValue(_missionFilter.Info.Top + _missionFilter.Info.Height);
+		_missionTypeFilter.Info.Left.SetValue(_description.Info.Left * 2f + _description.Info.Width);
+		_missionTypeFilter.Info.Width.SetValue(PositionStyle.Full - _description.Info.Left * 2f - _description.Info.Width - _missionScrollbar.Info.Width - (PositionStyle.Full - _missionScrollbar.Info.Width - _missionScrollbar.Info.Left) * 2f);
+		_missionTypeFilter.Info.Height.SetValue(40f, 0f);
+		_missionTypeFilter.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
+
+		_missionPanel.Info.Top.SetValue(_missionTypeFilter.Info.Top + _missionTypeFilter.Info.Height);
 		_missionPanel.Info.Left.SetValue(_description.Info.Left * 2f + _description.Info.Width);
 		_missionPanel.Info.Width.SetValue(PositionStyle.Full - _description.Info.Left * 2f - _description.Info.Width - _missionScrollbar.Info.Width - (PositionStyle.Full - _missionScrollbar.Info.Width - _missionScrollbar.Info.Left) * 2f);
-		_missionPanel.Info.Height.SetValue(_panel.Info.Height - _missionFilter.Info.Height - (62f, 0f));
+		_missionPanel.Info.Height.SetValue(_panel.Info.Height - _missionFilter.Info.Height - _missionTypeFilter.Info.Height - (62f, 0f));
 		_missionPanel.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
 		_missionPanel.ShowBorder.TopBorder = false;
 
@@ -211,7 +217,7 @@ public class MissionContainer : UIContainerElement
 		_changeMission.Info.Height.SetValue(26f, 0f);
 		_changeMission.Info.Left.SetValue(_description.Info.Left + (_description.Info.Width - _changeMission.Info.Width) / 2f);
 		_changeMission.Info.Top.SetValue(_description.Info.Top + _description.Info.Height +
-			((PositionStyle.Full - _description.Info.Top - _description.Info.Height) - _changeMission.Info.Height) / 2f);
+			(PositionStyle.Full - _description.Info.Top - _description.Info.Height - _changeMission.Info.Height) / 2f);
 		_changeMission.Info.IsSensitive = true;
 		_changeMission.PanelColor = GetThemeColor();
 		_changeMission.Events.OnLeftDown += e =>
@@ -224,7 +230,7 @@ public class MissionContainer : UIContainerElement
 				}
 				else if (SelectedItem.Mission.PoolType == PoolType.Available)
 				{
-					MissionManager.MoveMission(SelectedItem.Mission, PoolType.Available, PoolType.Accepted);
+					MoveMission(SelectedItem.Mission, PoolType.Available, PoolType.Accepted);
 					ChangeSelectedItem(SelectedItem);
 				}
 			}
@@ -253,7 +259,7 @@ public class MissionContainer : UIContainerElement
 				}
 				else
 				{
-					MissionManager.MoveMission(SelectedItem.Mission, PoolType.Accepted, PoolType.Failed);
+					MoveMission(SelectedItem.Mission, PoolType.Accepted, PoolType.Failed);
 					ChangeSelectedItem(SelectedItem);
 					_yes.Info.IsVisible = _no.Info.IsVisible = false;
 				}
@@ -369,6 +375,12 @@ public class MissionContainer : UIContainerElement
 		{
 			foreach (var m in mp)
 			{
+				if (_missionTypeFilter.MissionType.HasValue
+					&& m.MissionType != _missionTypeFilter.MissionType)
+				{
+					continue;
+				}
+
 				if (!m.IsVisible)
 				{
 					continue;
@@ -416,7 +428,7 @@ public class MissionContainer : UIContainerElement
 		PositionStyle top = (2f, 0f);
 		if (_missionFilter.PoolType.HasValue)
 		{
-			var mp = MissionManager.GetMissionPool(_missionFilter.PoolType.Value);
+			var mp = GetMissionPool(_missionFilter.PoolType.Value);
 			top = IteratePool(elements, top, mp);
 		}
 		else
@@ -429,7 +441,7 @@ public class MissionContainer : UIContainerElement
 					continue;
 				}
 
-				var mp = MissionManager.GetMissionPool(type);
+				var mp = GetMissionPool(type);
 				top = IteratePool(elements, top, mp);
 			}
 		}
@@ -460,7 +472,7 @@ public class MissionContainer : UIContainerElement
 			_icon.SetIconGroup(SelectedItem.Mission.Icon);
 			_textScrollbar.WheelValue = 0f;
 
-			UITextPlus des = new UITextPlus(SelectedItem.Mission.Description);
+			var des = new UITextPlus(SelectedItem.Mission.Description);
 			des.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
 			des.StringDrawer.Init(des.Text);
 			_descriptionContainer.ClearAllElements();

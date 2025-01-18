@@ -1,53 +1,45 @@
+using Everglow.Commons.UI.UIContainers.Mission;
 using Everglow.Commons.UI.UIElements;
+using ReLogic.Graphics;
 using Terraria.GameContent;
 using static Everglow.Commons.MissionSystem.MissionManager;
-using ReLogic.Graphics;
 
-namespace Everglow.Commons.UI.UIContainers.Mission.UIElements;
+namespace Everglow.Commons.MissionSystem.UI.UIElements;
 
-/// <summary>
-/// The filter bar of mission panel
-/// </summary>
-public class UIMissionFilter : UIBlock
+public class UIMissionTypeFilter : UIBlock
 {
-	public event EventHandler<PoolType?> StatusFilterChanged;
-
 	private const string AllStatus = "All";
-	private BaseElement selectedStatusItem = null;
+	private BaseElement selectedTypeItem = null;
 	private string mouseText = string.Empty;
-	private PoolType? poolType = null;
+	private MissionType? missionType = null;
 
-	public PoolType? PoolType => poolType;
+	public MissionType? MissionType => missionType;
 
 	public override void OnInitialization()
 	{
-		base.OnInitialization();
-
-		var types = new List<PoolType?>() { null }
-			.Concat(Enum.GetValues<PoolType>()
-				.Select(x => (PoolType?)x))
+		var missionTypes = new List<MissionType?>() { null }
+			.Concat(Enum.GetValues<MissionType>()
+				.Select(x => (MissionType?)x))
 			.ToArray();
-
-		float width = MathF.Abs(Info.Width.Pixel) / types.Length;
-		int index = 0;
-
-		foreach (var type in types)
+		var width = MathF.Abs(Info.Width.Pixel) / missionTypes.Length;
+		var index = 0;
+		foreach (var type in missionTypes)
 		{
 			var statusFilterItem = new UIBlock();
 			ResetPanelColor(statusFilterItem);
 			statusFilterItem.Info.IsSensitive = true;
-			statusFilterItem.Info.Width.SetValue(0, 1f / types.Length);
+			statusFilterItem.Info.Width.SetValue(0, 1f / missionTypes.Length);
 			statusFilterItem.Info.Height.SetValue(0, 1f);
-			statusFilterItem.Info.Left.SetValue(0, 1f / types.Length * index++);
+			statusFilterItem.Info.Left.SetValue(0, 1f / missionTypes.Length * index++);
 			statusFilterItem.Info.Top.SetValue(0, 0f);
 			statusFilterItem.Events.OnLeftDown += e =>
 			{
-				ChangeStatus(type, e);
+				ChangeType(type, e);
 			};
 			statusFilterItem.Events.OnMouseHover += e =>
 			{
 				mouseText = type?.ToString() ?? AllStatus;
-				if (statusFilterItem != selectedStatusItem)
+				if (statusFilterItem != selectedTypeItem)
 				{
 					statusFilterItem.PanelColor = Color.Gray;
 				}
@@ -55,7 +47,7 @@ public class UIMissionFilter : UIBlock
 			statusFilterItem.Events.OnMouseOver += e =>
 			{
 				mouseText = type?.ToString() ?? AllStatus;
-				if (statusFilterItem != selectedStatusItem)
+				if (statusFilterItem != selectedTypeItem)
 				{
 					statusFilterItem.PanelColor = Color.Gray;
 				}
@@ -63,7 +55,7 @@ public class UIMissionFilter : UIBlock
 			statusFilterItem.Events.OnMouseOut += e =>
 			{
 				mouseText = string.Empty;
-				if (statusFilterItem != selectedStatusItem)
+				if (statusFilterItem != selectedTypeItem)
 				{
 					ResetPanelColor(e);
 				}
@@ -78,16 +70,36 @@ public class UIMissionFilter : UIBlock
 		UpdateBlockColor(ChildrenElements.First());
 	}
 
-	private static Texture2D IconPicker(PoolType? type) => type switch
+
+	public void ChangeType(MissionType? type, BaseElement e)
 	{
-		MissionSystem.MissionManager.PoolType.Accepted => ModAsset.MissionStatus_Accepted.Value,
-		MissionSystem.MissionManager.PoolType.Available => ModAsset.MissionStatus_Available.Value,
-		MissionSystem.MissionManager.PoolType.Completed => ModAsset.MissionStatus_Completed.Value,
-		MissionSystem.MissionManager.PoolType.Overdue => ModAsset.MissionStatus_Failed.Value,
-		MissionSystem.MissionManager.PoolType.Failed => ModAsset.MissionStatus_Failed.Value,
-		null => ModAsset.MissionStatus_All.Value,
-		_ => ModAsset.MissionStatus.Value,
-	};
+		UpdateBlockColor(e);
+
+		// Update mission list
+		missionType = type;
+		NeedRefresh = true;
+	}
+
+
+	private void UpdateBlockColor(BaseElement e)
+	{
+		if (e is not UIBlock block)
+		{
+			return;
+		}
+
+		// Reset appearance of selected item
+		if (selectedTypeItem != null)
+		{
+			ResetPanelColor(selectedTypeItem);
+			(selectedTypeItem as UIBlock).ShowBorder.BottomBorder = true;
+		}
+
+		// Change appearance of new selected item
+		selectedTypeItem = block;
+		block.PanelColor = MissionContainer.Instance.GetThemeColor(style: MissionContainer.ColorStyle.Dark);
+		block.ShowBorder.BottomBorder = false;
+	}
 
 	private static void ResetPanelColor(BaseElement e)
 	{
@@ -98,34 +110,17 @@ public class UIMissionFilter : UIBlock
 		block.PanelColor = MissionContainer.Instance.GetThemeColor(style: MissionContainer.ColorStyle.Light);
 	}
 
-	public void ChangeStatus(PoolType? type, BaseElement e)
+	private static Texture2D IconPicker(MissionType? type) => type switch
 	{
-		UpdateBlockColor(e);
-
-		// Update mission list
-		poolType = type;
-		StatusFilterChanged.Invoke(this, type);
-	}
-
-	private void UpdateBlockColor(BaseElement e)
-	{
-		if (e is not UIBlock block)
-		{
-			return;
-		}
-
-		// Reset appearance of selected item
-		if (selectedStatusItem != null)
-		{
-			ResetPanelColor(selectedStatusItem);
-			(selectedStatusItem as UIBlock).ShowBorder.BottomBorder = true;
-		}
-
-		// Change appearance of new selected item
-		selectedStatusItem = block;
-		block.PanelColor = MissionContainer.Instance.GetThemeColor(style: MissionContainer.ColorStyle.Dark);
-		block.ShowBorder.BottomBorder = false;
-	}
+		MissionSystem.MissionType.MainStory => ModAsset.MissionType_Yellow.Value,
+		MissionSystem.MissionType.SideStory => ModAsset.MissionType_Purple.Value,
+		MissionSystem.MissionType.Achievement => ModAsset.MissionType_White.Value,
+		MissionSystem.MissionType.Challenge => ModAsset.MissionType_Red.Value,
+		MissionSystem.MissionType.Daily => ModAsset.MissionType_Blue.Value,
+		MissionSystem.MissionType.Legendary => ModAsset.MissionType_Prism.Value,
+		null => ModAsset.MissionType_White.Value,
+		_ => ModAsset.MissionType_Grey.Value,
+	};
 
 	public override void Draw(SpriteBatch sb)
 	{
@@ -156,8 +151,8 @@ public class UIMissionFilter : UIBlock
 
 			var PanelColor = new Color(191, 106, 106);
 			Texture2D texture = ModAsset.Panel.Value;
-			Point textureSize = new Point(texture.Width, texture.Height);
-			Rectangle rectangle = new Rectangle((int)pos.X, (int)pos.Y, (int)textSize.X, (int)textSize.Y);
+			var textureSize = new Point(texture.Width, texture.Height);
+			var rectangle = new Rectangle((int)pos.X, (int)pos.Y, (int)textSize.X, (int)textSize.Y);
 
 			// Draw 4 corners
 			sb.Draw(texture, new Vector2(rectangle.X, rectangle.Y), new Rectangle(0, 0, 6, 6), PanelColor);
