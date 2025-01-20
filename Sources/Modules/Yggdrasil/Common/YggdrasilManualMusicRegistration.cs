@@ -9,6 +9,7 @@ public sealed class YggdrasilManualMusicRegistration : ILoadable
 		MusicLoader.AddMusic(mod, ModAsset.NewYggdrasilTownBGM_Path);
 		MusicLoader.AddMusic(mod, ModAsset.YggdrasilTownBGM_Path);
 		MusicLoader.AddMusic(mod, ModAsset.KingJellyBallBGM_Path);
+		MusicLoader.AddMusic(mod, ModAsset.SquamousShellBGM_Path);
 	}
 
 	public void Unload()

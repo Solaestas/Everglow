@@ -51,6 +51,15 @@ public class SquamousShell : ModNPC
 			NPC.lifeMax = 6130;
 			NPC.value = 81000;
 		}
+
+		if (!Main.dedServ)
+		{
+			Mod everglow = ModLoader.GetMod("Everglow");
+			if (everglow != null)
+			{
+				Music = MusicLoader.GetMusicSlot(everglow, ModAsset.SquamousShellBGM_Path);
+			}
+		}
 	}
 
 	public bool Flying = false;
