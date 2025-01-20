@@ -27,6 +27,8 @@ public class MissionPlayer : ModPlayer
 				MissionManager.AddMission(new TestMission6(), PoolType.Available);
 				MissionManager.AddMission(new TestMission7(), PoolType.Available);
 				MissionManager.AddMission(new TestMission8(), PoolType.Available);
+				MissionManager.AddMission(new TestTalkToNPCMission(), PoolType.Available);
+				MissionManager.AddMission(new TestGiveNPCItemMission(), PoolType.Available);
 
 				MissionManager.AddMission(TextureMissionIconTestMission.Create(), PoolType.Available);
 			}
