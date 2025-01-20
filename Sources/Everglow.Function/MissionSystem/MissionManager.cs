@@ -239,10 +239,7 @@ public static class MissionManager
 		}
 
 		// 更新所有任务
-		foreach (var pool in _missionPools.Values)
-		{
-			pool.ForEach(m => m.Update());
-		}
+		_missionPools[PoolType.Accepted].ForEach(m => m.Update());
 
 		// 处理自动提交任务
 		_missionPools[PoolType.Accepted].Where(m => m.CheckComplete() && m.AutoComplete).ToList().ForEach(m => m.OnComplete());
