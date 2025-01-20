@@ -1,6 +1,7 @@
+using Everglow.Commons.MissionSystem.Core;
 using Terraria.DataStructures;
 
-namespace Everglow.Commons.MissionSystem.MissionIcons;
+namespace Everglow.Commons.MissionSystem.Shared.Icons;
 
 public class TextureMissionIcon : MissionIconBase
 {
@@ -20,7 +21,7 @@ public class TextureMissionIcon : MissionIconBase
 			destinationRectangle.X + destinationRectangle.Width / 2,
 			destinationRectangle.Y + destinationRectangle.Height / 2);
 
-		Rectangle frameRect = new Rectangle(0, 0, texture.Width, texture.Height);
+		var frameRect = new Rectangle(0, 0, texture.Width, texture.Height);
 		Vector2 origin = texture.Size() / 2;
 		if (animation != null)
 		{

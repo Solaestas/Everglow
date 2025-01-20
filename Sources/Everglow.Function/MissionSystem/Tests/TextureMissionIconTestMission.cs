@@ -1,5 +1,7 @@
-using Everglow.Commons.MissionSystem.MissionIcons;
+using Everglow.Commons.MissionSystem.Core;
+using Everglow.Commons.MissionSystem.Enums;
 using Everglow.Commons.MissionSystem.Shared;
+using Everglow.Commons.MissionSystem.Shared.Icons;
 using Everglow.Commons.MissionSystem.Templates;
 
 namespace Everglow.Commons.MissionSystem.Tests;

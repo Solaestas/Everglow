@@ -1,12 +1,14 @@
+using Everglow.Commons.MissionSystem.Abstracts;
+using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Shared;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.MissionSystem.Abstracts.Missions;
+namespace Everglow.Commons.MissionSystem.Templates.Abstracts;
 
 /// <summary>
 /// Represents a mission where the player needs to kill a specified NPC or a quantity of NPCs.
 /// </summary>
-public interface IKillNPCMission : IMissionObjectiveAbstract
+public interface IKillNPCMission : IMissionObjective
 {
 	public abstract List<KillNPCRequirement> DemandNPCs { get; init; }
 

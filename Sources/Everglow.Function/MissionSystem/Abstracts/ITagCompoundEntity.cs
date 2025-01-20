@@ -1,6 +1,6 @@
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.MissionSystem;
+namespace Everglow.Commons.MissionSystem.Abstracts;
 
 public interface ITagCompoundEntity
 {

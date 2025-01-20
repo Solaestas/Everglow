@@ -1,3 +1,4 @@
+using Everglow.Commons.MissionSystem.Enums;
 using Everglow.Commons.MissionSystem.Shared;
 using Everglow.Commons.MissionSystem.Templates;
 

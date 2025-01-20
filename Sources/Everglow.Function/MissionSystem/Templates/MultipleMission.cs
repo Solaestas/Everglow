@@ -1,3 +1,5 @@
+using Everglow.Commons.MissionSystem.Core;
+using Everglow.Commons.MissionSystem.Enums;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.Templates;
@@ -32,16 +34,16 @@ public abstract class MultipleMission : MissionBase
 			if (CurrentMission.CheckComplete())
 			{
 				CurrentMission.PostComplete();
-				CurrentMission.PoolType = MissionManager.PoolType.Completed;
+				CurrentMission.PoolType = PoolType.Completed;
 				currentIndex++;
 			}
 		}
 		else // If current is the last sub mission
 		{
-			if (CurrentMission.CheckComplete() && CurrentMission.PoolType != MissionManager.PoolType.Completed)
+			if (CurrentMission.CheckComplete() && CurrentMission.PoolType != PoolType.Completed)
 			{
 				CurrentMission.PostComplete();
-				CurrentMission.PoolType = MissionManager.PoolType.Completed;
+				CurrentMission.PoolType = PoolType.Completed;
 			}
 		}
 

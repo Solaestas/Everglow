@@ -1,3 +1,4 @@
+using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.MissionSystem.Templates;

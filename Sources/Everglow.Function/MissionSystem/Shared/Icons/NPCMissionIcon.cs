@@ -1,6 +1,7 @@
+using Everglow.Commons.MissionSystem.Core;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.MissionSystem.MissionIcons;
+namespace Everglow.Commons.MissionSystem.Shared.Icons;
 
 public class NPCMissionIcon : MissionIconBase
 {

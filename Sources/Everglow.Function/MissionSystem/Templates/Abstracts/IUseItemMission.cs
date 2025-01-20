@@ -1,9 +1,11 @@
+using Everglow.Commons.MissionSystem.Abstracts;
+using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Shared;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.MissionSystem.Abstracts.Missions;
+namespace Everglow.Commons.MissionSystem.Templates.Abstracts;
 
-public interface IUseItemMission : IMissionObjectiveAbstract
+public interface IUseItemMission : IMissionObjective
 {
 	public abstract List<ItemRequirement> DemandUseItems { get; init; }
 

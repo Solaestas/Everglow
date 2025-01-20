@@ -1,6 +1,7 @@
-using Everglow.Commons.MissionSystem.Abstracts.Missions;
-using Everglow.Commons.MissionSystem.MissionIcons;
+using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Shared;
+using Everglow.Commons.MissionSystem.Shared.Icons;
+using Everglow.Commons.MissionSystem.Templates.Abstracts;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.Templates;

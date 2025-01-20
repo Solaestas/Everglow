@@ -1,12 +1,14 @@
+using Everglow.Commons.MissionSystem.Abstracts;
+using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Shared;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.MissionSystem.Abstracts.Missions;
+namespace Everglow.Commons.MissionSystem.Templates.Abstracts;
 
 /// <summary>
 /// Represents a mission where the player needs to obtain a specified item or a quantity of items.
 /// </summary>
-public interface IGainItemMission : IMissionObjectiveAbstract
+public interface IGainItemMission : IMissionObjective
 {
 	/// <summary>
 	/// Determine if the demand items will be consumed on mission complete.

@@ -1,3 +1,4 @@
+using Everglow.Commons.MissionSystem.Enums;
 using Everglow.Commons.UI.UIContainers.Mission;
 using Everglow.Commons.UI.UIElements;
 using ReLogic.Graphics;
@@ -81,11 +82,11 @@ public class UIMissionStatusFilter : UIBlock
 
 	private static Texture2D IconPicker(PoolType? type) => type switch
 	{
-		MissionManager.PoolType.Accepted => ModAsset.MissionStatus_Accepted.Value,
-		MissionManager.PoolType.Available => ModAsset.MissionStatus_Available.Value,
-		MissionManager.PoolType.Completed => ModAsset.MissionStatus_Completed.Value,
-		MissionManager.PoolType.Overdue => ModAsset.MissionStatus_Failed.Value,
-		MissionManager.PoolType.Failed => ModAsset.MissionStatus_Failed.Value,
+		Enums.PoolType.Accepted => ModAsset.MissionStatus_Accepted.Value,
+		Enums.PoolType.Available => ModAsset.MissionStatus_Available.Value,
+		Enums.PoolType.Completed => ModAsset.MissionStatus_Completed.Value,
+		Enums.PoolType.Overdue => ModAsset.MissionStatus_Failed.Value,
+		Enums.PoolType.Failed => ModAsset.MissionStatus_Failed.Value,
 		null => ModAsset.MissionStatus_All.Value,
 		_ => ModAsset.MissionStatus.Value,
 	};

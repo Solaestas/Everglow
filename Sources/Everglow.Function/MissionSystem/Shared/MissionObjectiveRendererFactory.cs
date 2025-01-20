@@ -1,5 +1,6 @@
 using Everglow.Commons.MissionSystem.Abstracts;
-using Everglow.Commons.MissionSystem.Abstracts.Missions;
+using Everglow.Commons.MissionSystem.Core;
+using Everglow.Commons.MissionSystem.Templates.Abstracts;
 using Everglow.Commons.MissionSystem.UI.UIElements.UIMissionObjectives;
 
 namespace Everglow.Commons.MissionSystem.Shared;
@@ -15,7 +16,7 @@ public static class MissionObjectiveRendererFactory
 	}
 
 	private static void RegisterRenderer<T>(IMissionObjectiveRenderer renderer)
-		where T : IMissionObjectiveAbstract
+		where T : IMissionObjective
 	{
 		renderers[typeof(T)] = renderer;
 	}

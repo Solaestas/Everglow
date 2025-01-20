@@ -1,4 +1,5 @@
-using Everglow.Commons.MissionSystem;
+using Everglow.Commons.MissionSystem.Core;
+using Everglow.Commons.MissionSystem.Enums;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Utilities;
 using Terraria.GameContent;

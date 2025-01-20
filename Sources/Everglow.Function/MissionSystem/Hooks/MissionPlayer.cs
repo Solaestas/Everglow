@@ -1,7 +1,9 @@
+using Everglow.Commons.MissionSystem.Core;
+using Everglow.Commons.MissionSystem.Enums;
 using Everglow.Commons.MissionSystem.Tests;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.MissionSystem;
+namespace Everglow.Commons.MissionSystem.Hooks;
 
 public class MissionPlayer : ModPlayer
 {
@@ -12,21 +14,21 @@ public class MissionPlayer : ModPlayer
 			// MissionManager.Clear();
 			if (!MissionManager.HasMission<MissionBase>())
 			{
-				MissionManager.AddMission(new TestMission1(), MissionManager.PoolType.Accepted);
-				MissionManager.AddMission(new TestMission2(), MissionManager.PoolType.Accepted);
+				MissionManager.AddMission(new TestMission1(), PoolType.Accepted);
+				MissionManager.AddMission(new TestMission2(), PoolType.Accepted);
 				MissionManager.AddMission(
 					new TestMission3
 					{
 						SourceNPC = 1,
-					}, MissionManager.PoolType.Available);
-				MissionManager.AddMission(new TestMission4(), MissionManager.PoolType.Available);
-				MissionManager.AddMission(new TestMission5(), MissionManager.PoolType.Available);
+					}, PoolType.Available);
+				MissionManager.AddMission(new TestMission4(), PoolType.Available);
+				MissionManager.AddMission(new TestMission5(), PoolType.Available);
 
-				MissionManager.AddMission(new TestMission6(), MissionManager.PoolType.Available);
-				MissionManager.AddMission(new TestMission7(), MissionManager.PoolType.Available);
-				MissionManager.AddMission(new TestMission8(), MissionManager.PoolType.Available);
+				MissionManager.AddMission(new TestMission6(), PoolType.Available);
+				MissionManager.AddMission(new TestMission7(), PoolType.Available);
+				MissionManager.AddMission(new TestMission8(), PoolType.Available);
 
-				MissionManager.AddMission(TextureMissionIconTestMission.Create(), MissionManager.PoolType.Available);
+				MissionManager.AddMission(TextureMissionIconTestMission.Create(), PoolType.Available);
 			}
 		}
 	}

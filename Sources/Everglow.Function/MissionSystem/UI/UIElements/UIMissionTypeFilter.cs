@@ -1,3 +1,4 @@
+using Everglow.Commons.MissionSystem.Enums;
 using Everglow.Commons.UI.UIContainers.Mission;
 using Everglow.Commons.UI.UIElements;
 using ReLogic.Graphics;
@@ -112,12 +113,12 @@ public class UIMissionTypeFilter : UIBlock
 
 	private static Texture2D IconPicker(MissionType? type) => type switch
 	{
-		MissionSystem.MissionType.MainStory => ModAsset.MissionType_Yellow.Value,
-		MissionSystem.MissionType.SideStory => ModAsset.MissionType_Purple.Value,
-		MissionSystem.MissionType.Achievement => ModAsset.MissionType_White.Value,
-		MissionSystem.MissionType.Challenge => ModAsset.MissionType_Red.Value,
-		MissionSystem.MissionType.Daily => ModAsset.MissionType_Blue.Value,
-		MissionSystem.MissionType.Legendary => ModAsset.MissionType_Prism.Value,
+		Enums.MissionType.MainStory => ModAsset.MissionType_Yellow.Value,
+		Enums.MissionType.SideStory => ModAsset.MissionType_Purple.Value,
+		Enums.MissionType.Achievement => ModAsset.MissionType_White.Value,
+		Enums.MissionType.Challenge => ModAsset.MissionType_Red.Value,
+		Enums.MissionType.Daily => ModAsset.MissionType_Blue.Value,
+		Enums.MissionType.Legendary => ModAsset.MissionType_Prism.Value,
 		null => ModAsset.MissionType_White.Value,
 		_ => ModAsset.MissionType_Grey.Value,
 	};

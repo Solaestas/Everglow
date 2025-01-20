@@ -1,4 +1,4 @@
-using Everglow.Commons.MissionSystem;
+using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.UI.UIContainers.Mission.UIElements;

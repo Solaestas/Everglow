@@ -1,4 +1,4 @@
-namespace Everglow.Commons.MissionSystem;
+namespace Everglow.Commons.MissionSystem.Hooks;
 
 public class MissionGlobalItem : GlobalItem
 {

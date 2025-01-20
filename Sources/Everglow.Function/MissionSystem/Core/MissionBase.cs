@@ -1,7 +1,9 @@
+using Everglow.Commons.MissionSystem.Abstracts;
+using Everglow.Commons.MissionSystem.Enums;
 using Everglow.Commons.UI.UIContainers.Mission.UIElements;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.MissionSystem;
+namespace Everglow.Commons.MissionSystem.Core;
 
 /// <summary>
 /// 任务基类
@@ -76,7 +78,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// <summary>
 	/// 任务所在的任务池类型
 	/// </summary>
-	public MissionManager.PoolType PoolType { get; set; }
+	public PoolType PoolType { get; set; }
 
 	/// <summary>
 	/// 任务类型
@@ -165,7 +167,7 @@ public abstract class MissionBase : ITagCompoundEntity
 			return;
 		}
 
-		MissionManager.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Completed);
+		MissionManager.MoveMission(this, PoolType.Accepted, PoolType.Completed);
 
 		IsVisible = true;
 		MissionManager.NeedRefresh = true;
@@ -196,7 +198,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnExpire()
 	{
-		MissionManager.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Overdue);
+		MissionManager.MoveMission(this, PoolType.Accepted, PoolType.Overdue);
 	}
 
 	/// <summary>
@@ -204,7 +206,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnFail()
 	{
-		MissionManager.MoveMission(this, MissionManager.PoolType.Accepted, MissionManager.PoolType.Failed);
+		MissionManager.MoveMission(this, PoolType.Accepted, PoolType.Failed);
 	}
 
 	/// <summary>
