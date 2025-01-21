@@ -56,7 +56,7 @@ public class StringDrawer : IDrawable
 	/// <summary>
 	/// 计算所有文本行的尺寸，结果存放于<see cref="lineSize"/>
 	/// </summary>
-	public void CalculationLineSize()
+	public void CalculateLineSize()
 	{
 		int line = 0;
 		lineSize.Clear();
@@ -151,7 +151,7 @@ public class StringDrawer : IDrawable
 				nowWidth = 0f;
 			}
 		}
-		CalculationLineSize();
+		CalculateLineSize();
 	}
 
 	public void Init(string initText)
@@ -166,8 +166,20 @@ public class StringDrawer : IDrawable
 		// TODO: 该行会清除所有事件处理器，应该被清理
 		PreDrawerItemAdded = null;
 
+		ParseText(initText);
+		CalculateLineSize();
+	}
+
+	/// <summary>
+	/// 解析源文本，生成绘制实例并加入<see cref="DrawerItems"/>
+	/// </summary>
+	/// <param name="initText"></param>
+	private void ParseText(string initText)
+	{
 		int line = 0;
-		Array.ForEach(initText.Split('\n'), text =>
+		var splitedText = initText.Split('\n');
+
+		Array.ForEach(splitedText, text =>
 		{
 			// tIndex: text index, 无需匹配的普通内容
 			// teIndex: text end index, 无需匹配的普通内容的结尾
@@ -177,25 +189,32 @@ public class StringDrawer : IDrawable
 			// pIndex: parameter index, 参数名
 			int tIndex = 0, teIndex = 0, dIndex = -1, sIndex = -1, nIndex = -1, pIndex = -1;
 
-			bool escActivable = false;
+			// 转义状态是否被激活，使用'/'作为转义符
+			bool escapeSequenceActivated = false;
+
 			StringParameters stringParameters = null;
 			string parameterName = string.Empty,
 				parameterValue = string.Empty,
 				drawerName = string.Empty;
 			for (int i = 0; i < text.Length;)
 			{
-				if (!escActivable && text[i] == '/')
+				// 当前字符为转义符'/'，激活转义状态
+				if (!escapeSequenceActivated && text[i] == '/')
 				{
-					escActivable = true;
+					escapeSequenceActivated = true;
 					i++;
 				}
 				else
 				{
-					if (escActivable)
+					// 转义状态若处于激活中，则进行转义处理
+					if (escapeSequenceActivated)
 					{
+						// 如果该字符'/'作为转义符使用，则删除该转义符
 						if (text[i] == '[' || text[i] == ']' || text[i] == '\'' || text[i] == '/' ||
 							text[i] == ',' || text[i] == '=')
 						{
+							// 删除转义符
+							// 注：该处删除了一个字符，等同于进行了i++
 							text = text.Remove(i - 1, 1);
 						}
 						else
@@ -203,12 +222,16 @@ public class StringDrawer : IDrawable
 							i++;
 						}
 
-						escActivable = false;
+						// 关闭转义状态
+						escapeSequenceActivated = false;
 					}
 					else
 					{
+						// 解析结构化字符串 [ \ ' , =
+						// 例：[ItemDrawer,Type='123',Stack='9999',StackColor='196,241,255']
 						if (text[i] == '[')
 						{
+							// 开始解析，初始化数据
 							nIndex = i;
 							dIndex = i;
 							teIndex = i;
@@ -219,26 +242,32 @@ public class StringDrawer : IDrawable
 						}
 						else if (text[i] == ']' && dIndex != -1)
 						{
+							// 结束解析
+							// 将结构化字符串之前的普通文本创建为TextDrawer
 							if (tIndex < teIndex)
 							{
 								var di = TextDrawer.Create(this, text[tIndex..teIndex], line);
 								PreDrawerItemAdded?.Invoke(di);
 								drawerItems.Add(di);
 							}
-							var d = DrawerItemLoader.Instance.GetDrawerItem(this, text[dIndex..(i + 1)], drawerName, stringParameters, line);
-							PreDrawerItemAdded?.Invoke(d);
-							drawerItems.Add(d);
+
+							// 将结构化字符串创建为对应DrawerItem
+							var drawerItem = DrawerItemLoader.Instance.GetDrawerItem(this, text[dIndex..(i + 1)], drawerName, stringParameters, line);
+							PreDrawerItemAdded?.Invoke(drawerItem);
+							drawerItems.Add(drawerItem);
+
+							// 重置数据
 							tIndex = i + 1;
 							dIndex = -1;
 							sIndex = -1;
 						}
 						else if (text[i] == '\'' && dIndex != -1)
 						{
-							if (sIndex == -1)
+							if (sIndex == -1) // 开始获取参数值
 							{
 								sIndex = i;
 							}
-							else
+							else // 结束获取参数值
 							{
 								parameterValue = text[(sIndex + 1)..i];
 								stringParameters[parameterName] = parameterValue;
@@ -247,6 +276,7 @@ public class StringDrawer : IDrawable
 						}
 						else if (text[i] == ',' && dIndex != -1)
 						{
+							// 获取绘制类名
 							if (nIndex == dIndex)
 							{
 								drawerName = text[(nIndex + 1)..i];
@@ -256,6 +286,7 @@ public class StringDrawer : IDrawable
 						}
 						else if (text[i] == '=')
 						{
+							// 获取参数名
 							if (pIndex != -1)
 							{
 								parameterName = text[(pIndex + 1)..i];
@@ -266,21 +297,24 @@ public class StringDrawer : IDrawable
 					}
 				}
 			}
+
 			if (tIndex != text.Length)
 			{
-				var di = TextDrawer.Create(this, text[tIndex..text.Length], line);
-				PreDrawerItemAdded?.Invoke(di);
-				drawerItems.Add(di);
+				// 将该行剩余的普通文本生成为TextDrawer
+				var td = TextDrawer.Create(this, text[tIndex..text.Length], line);
+				PreDrawerItemAdded?.Invoke(td);
+				drawerItems.Add(td);
 			}
-			if (string.IsNullOrEmpty(text))
+			else if (string.IsNullOrEmpty(text))
 			{
-				var di = TextDrawer.Create(this, text, line);
-				PreDrawerItemAdded?.Invoke(di);
-				drawerItems.Add(di);
+				// 如果该行是空的，就创建一个空绘制行
+				var td = TextDrawer.Create(this, text, line);
+				PreDrawerItemAdded?.Invoke(td);
+				drawerItems.Add(td);
 			}
+
 			line++;
 		});
-		CalculationLineSize();
 	}
 
 	public void Draw(SpriteBatch sb)
