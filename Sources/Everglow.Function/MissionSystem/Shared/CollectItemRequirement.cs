@@ -1,4 +1,3 @@
-using MathNet.Numerics;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.Shared;
@@ -6,9 +5,9 @@ namespace Everglow.Commons.MissionSystem.Shared;
 /// <summary>
 /// A group of items which use the same requirement
 /// </summary>
-public class GainItemRequirement : ItemRequirement
+public class CollectItemRequirement : CountItemRequirement
 {
-	private GainItemRequirement(IEnumerable<int> items, int requirement, bool enableIndividualCounter, int counter = 0)
+	private CollectItemRequirement(List<int> items, int requirement, bool enableIndividualCounter, int counter = 0)
 		: base(items, requirement, counter)
 	{
 		EnableIndividualCounter = enableIndividualCounter;
@@ -48,29 +47,29 @@ public class GainItemRequirement : ItemRequirement
 		: Math.Min(1f, Math.Max(0f, inventory.Where(x => Items.Contains(x.type)).Select(x => x.stack).Sum() / (float)Requirement));
 
 	/// <summary>
-	/// Create a new instance of <see cref="GainItemRequirement"/> class if the input is valid.
+	/// Create a new instance of <see cref="CollectItemRequirement"/> class if the input is valid.
 	/// </summary>
 	/// <param name="items">A list of NPC id. Must not be empty.</param>
 	/// <param name="requirement">The requirement value. Must be greater than 0.</param>
-	/// <returns>A new <see cref="GainItemRequirement"/> instance if the input is valid; otherwise, returns <c>null</c>.</returns>
-	public static GainItemRequirement Create(List<int> items, int requirement, bool enableIndividualCounter = false)
+	/// <returns>A new <see cref="CollectItemRequirement"/> instance if the input is valid; otherwise, returns <c>null</c>.</returns>
+	public static CollectItemRequirement Create(List<int> items, int requirement, bool enableIndividualCounter = false)
 	{
 		if (items.Count == 0)
 		{
-			throw new InvalidParameterException();
+			throw new InvalidDataException();
 		}
 
 		if (requirement <= 0)
 		{
-			throw new InvalidParameterException();
+			throw new InvalidDataException();
 		}
 
-		return new GainItemRequirement(items, requirement, enableIndividualCounter);
+		return new CollectItemRequirement(items, requirement, enableIndividualCounter);
 	}
 
-	public class GainItemRequirementSerializer : TagSerializer<GainItemRequirement, TagCompound>
+	public class CollectItemRequirementSerializer : TagSerializer<CollectItemRequirement, TagCompound>
 	{
-		public override TagCompound Serialize(GainItemRequirement value) => new TagCompound()
+		public override TagCompound Serialize(CollectItemRequirement value) => new TagCompound()
 		{
 			[nameof(Items)] = value.Items,
 			[nameof(Requirement)] = value.Requirement,
@@ -78,8 +77,8 @@ public class GainItemRequirement : ItemRequirement
 			[nameof(Counter)] = value.counter,
 		};
 
-		public override GainItemRequirement Deserialize(TagCompound tag) => new GainItemRequirement(
-			tag.GetList<int>(nameof(Items)),
+		public override CollectItemRequirement Deserialize(TagCompound tag) => new CollectItemRequirement(
+			tag.GetList<int>(nameof(Items)).ToList(),
 			tag.GetInt(nameof(Requirement)),
 			tag.GetBool(nameof(EnableIndividualCounter)),
 			tag.GetInt(nameof(Counter)));

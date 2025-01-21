@@ -11,7 +11,7 @@ public static class MissionObjectiveRendererFactory
 
 	static MissionObjectiveRendererFactory()
 	{
-		RegisterRenderer<IGainItemMission>(new UIGainItemMissionObjectiveRenderer());
+		RegisterRenderer<ICollectItemMission>(new UICollectItemMissionObjectiveRenderer());
 		RegisterRenderer<IKillNPCMission>(new UIKillNPCMissionObjectiveRenderer());
 	}
 

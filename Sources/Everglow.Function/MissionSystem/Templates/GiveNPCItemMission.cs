@@ -5,7 +5,7 @@ using Everglow.Commons.MissionSystem.Templates.Abstracts;
 
 namespace Everglow.Commons.MissionSystem.Templates;
 
-public abstract class GiveNPCItemMission : MissionBase, ITalkToNPCMission, IGainItemMission, IRewardItemMission
+public abstract class GiveNPCItemMission : MissionBase, ITalkToNPCMission, IGiveItemMission, IRewardItemMission
 {
 	public float progress = 0f;
 
@@ -15,7 +15,7 @@ public abstract class GiveNPCItemMission : MissionBase, ITalkToNPCMission, IGain
 
 	public bool SubmitItemsOnComplete => true;
 
-	public abstract List<GainItemRequirement> DemandGainItems { get; init; }
+	public abstract List<GiveItemRequirement> DemandGiveItems { get; init; }
 
 	public abstract int NPCType { get; }
 
@@ -31,7 +31,7 @@ public abstract class GiveNPCItemMission : MissionBase, ITalkToNPCMission, IGain
 	{
 		base.PostComplete();
 
-		(this as IGainItemMission).ConsumeItem(Main.LocalPlayer.inventory);
+		(this as IGiveItemMission).ConsumeItem(Main.LocalPlayer.inventory);
 		(this as ITalkToNPCMission).UpdateNPCText(CompleteText);
 		(this as IRewardItemMission).GiveReward();
 	}
@@ -39,7 +39,7 @@ public abstract class GiveNPCItemMission : MissionBase, ITalkToNPCMission, IGain
 	public override void UpdateProgress(params object[] objs)
 	{
 		var talkProgress = (this as ITalkToNPCMission).CalculateProgress();
-		var itemProgress = (this as IGainItemMission).CalculateProgress(Main.LocalPlayer.inventory);
+		var itemProgress = (this as IGiveItemMission).CalculateProgress(Main.LocalPlayer.inventory);
 
 		progress = talkProgress == 1f && itemProgress == 1f ? 1f : 0f;
 	}

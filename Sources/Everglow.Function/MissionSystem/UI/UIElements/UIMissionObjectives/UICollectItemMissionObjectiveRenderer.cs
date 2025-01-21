@@ -5,11 +5,11 @@ using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.MissionSystem.UI.UIElements.UIMissionObjectives;
 
-public class UIGainItemMissionObjectiveRenderer : IMissionObjectiveRenderer
+public class UICollectItemMissionObjectiveRenderer : IMissionObjectiveRenderer
 {
 	public BaseElement Parse(MissionBase mission)
 	{
-		var gainItemMission = (IGainItemMission)mission;
+		var collectItemMission = (ICollectItemMission)mission;
 		return new BaseElement();
 	}
 }

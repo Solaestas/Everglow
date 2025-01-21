@@ -1,5 +1,5 @@
-using Everglow.Commons.MissionSystem.Abstracts.Missions;
 using Everglow.Commons.MissionSystem.Shared;
+using Everglow.Commons.MissionSystem.Templates.Abstracts;
 using Everglow.UnitTests.Functions.MissionSystem.TestMissions;
 using Terraria;
 using Terraria.ID;
@@ -7,7 +7,7 @@ using Terraria.ID;
 namespace Everglow.UnitTests.Functions.MissionSystem;
 
 [TestClass]
-public class GainItemMissionTest
+public class CollectItemMissionTest
 {
 	public TestContext TestContext { get; set; } = default!;
 
@@ -15,8 +15,8 @@ public class GainItemMissionTest
 	public void Progress_Should_CalculateCorrectly_When_TypeIsSingle()
 	{
 		int testStack = 97;
-		var mission = new UnitTestGainItemMission1([
-			GainItemRequirement.Create([ItemID.DirtBlock], testStack),
+		var mission = new UnitTestCollectItemMission1([
+			CollectItemRequirement.Create([ItemID.DirtBlock], testStack),
 			]);
 
 		Assert.IsTrue(mission.Progress == 0f);
@@ -33,7 +33,7 @@ public class GainItemMissionTest
 			};
 
 			var targetProgress = stack / (float)testStack;
-			Assert.IsTrue((mission as IGainItemMission).CalculateProgress(inventory) == targetProgress);
+			Assert.IsTrue((mission as ICollectItemMission).CalculateProgress(inventory) == targetProgress);
 		}
 	}
 
@@ -48,10 +48,10 @@ public class GainItemMissionTest
 			int testStack2 = (int)random.NextInt64(23, 61);
 			int testStack3 = (int)random.NextInt64(23, 61);
 
-			var mission = new UnitTestGainItemMission1([
-				GainItemRequirement.Create([ItemID.DirtBlock], testStack1),
-				GainItemRequirement.Create([ItemID.Wood], testStack2),
-				GainItemRequirement.Create([ItemID.IronOre], testStack3),
+			var mission = new UnitTestCollectItemMission1([
+				CollectItemRequirement.Create([ItemID.DirtBlock], testStack1),
+				CollectItemRequirement.Create([ItemID.Wood], testStack2),
+				CollectItemRequirement.Create([ItemID.IronOre], testStack3),
 			]);
 
 			Assert.IsTrue(mission.Progress == 0f);
@@ -86,7 +86,7 @@ public class GainItemMissionTest
 							stack3 / (float)testStack3,
 						];
 
-						Assert.IsTrue((mission as IGainItemMission).CalculateProgress(inventory) == floats.Average());
+						Assert.IsTrue((mission as ICollectItemMission).CalculateProgress(inventory) == floats.Average());
 					}
 				}
 			}
@@ -100,8 +100,8 @@ public class GainItemMissionTest
 		{
 			int testStack = (int)new Random().NextInt64(50, 200);
 
-			var mission = new UnitTestGainItemMission1([
-				GainItemRequirement.Create([ ItemID.DirtBlock], testStack),
+			var mission = new UnitTestCollectItemMission1([
+				CollectItemRequirement.Create([ ItemID.DirtBlock], testStack),
 				]);
 
 			Assert.IsTrue(mission.Progress == 0f);
@@ -117,7 +117,7 @@ public class GainItemMissionTest
 					},
 				};
 
-				Assert.IsTrue((mission as IGainItemMission).CalculateProgress(inventory) == 1f);
+				Assert.IsTrue((mission as ICollectItemMission).CalculateProgress(inventory) == 1f);
 			}
 		}
 	}
@@ -125,7 +125,7 @@ public class GainItemMissionTest
 	[TestMethod]
 	public void Progress_Should_SetMax_When_DemandItemsIsEmpty()
 	{
-		var mission = new UnitTestGainItemMission1([]);
-		Assert.IsTrue((mission as IGainItemMission).CalculateProgress([]) == 1f);
+		var mission = new UnitTestCollectItemMission1([]);
+		Assert.IsTrue((mission as ICollectItemMission).CalculateProgress([]) == 1f);
 	}
 }

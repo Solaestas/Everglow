@@ -4,10 +4,10 @@ using Everglow.Commons.MissionSystem.Templates;
 
 namespace Everglow.Commons.MissionSystem.Tests;
 
-public class TestMission2 : GainItemMission
+public class TestMission2 : CollectItemMission
 {
-	public override List<GainItemRequirement> DemandGainItems { get; init; } = [
-		GainItemRequirement.Create([ItemID.Wood], 10)];
+	public override List<CollectItemRequirement> DemandCollectItems { get; init; } = [
+		CollectItemRequirement.Create([ItemID.Wood], 10)];
 
 	public override List<Item> RewardItems => [
 		new Item(ItemID.IronOre, 10)];

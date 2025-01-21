@@ -1,4 +1,4 @@
-namespace Everglow.Commons.MissionSystem.Primitives;
+namespace Everglow.Commons.MissionSystem.Core;
 
 public abstract class MissionCondition
 {

@@ -66,9 +66,9 @@ public static class MissionManager
 	public static IEnumerable<T> GetMission<T>(PoolType type)
 		where T : IMissionAbstract
 	{
-		foreach(var i in _missionPools[type])
+		foreach (var i in _missionPools[type])
 		{
-			if(i is T t)
+			if (i is T t)
 			{
 				yield return t;
 			}
@@ -278,7 +278,7 @@ public static class MissionManager
 
 		foreach (MissionBase m in _missionPools[PoolType.Accepted])
 		{
-			if (m is IGainItemMission gim)
+			if (m is ICollectItemMission gim)
 			{
 				gim.CountPick(item);
 			}

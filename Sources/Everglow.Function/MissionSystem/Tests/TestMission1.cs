@@ -4,10 +4,10 @@ using Everglow.Commons.MissionSystem.Templates;
 
 namespace Everglow.Commons.MissionSystem.Tests;
 
-public class TestMission1 : GainItemMission
+public class TestMission1 : CollectItemMission
 {
-	public override List<GainItemRequirement> DemandGainItems { get; init; } = [
-		GainItemRequirement.Create([ItemID.DirtBlock], 10, true)];
+	public override List<CollectItemRequirement> DemandCollectItems { get; init; } = [
+		CollectItemRequirement.Create([ItemID.DirtBlock], 10, true)];
 
 	public override List<Item> RewardItems => [
 		new Item(ItemID.Wood, 10)];
@@ -21,6 +21,4 @@ public class TestMission1 : GainItemMission
 	public override bool IsVisible { get; set; } = false;
 
 	public override bool AutoComplete => true;
-
-	public override bool SubmitItemsOnComplete => true;
 }

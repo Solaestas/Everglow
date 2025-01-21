@@ -4,19 +4,19 @@ using Terraria;
 
 namespace Everglow.UnitTests.Functions.MissionSystem.TestMissions;
 
-public class UnitTestKillNPCMission1 : KillNPCMission
+public class UnitTestCollectItemMission1 : CollectItemMission
 {
-	public UnitTestKillNPCMission1()
+	public UnitTestCollectItemMission1()
 	{
-		DemandNPCs = [];
+		DemandCollectItems = [];
 	}
 
-	public UnitTestKillNPCMission1(List<KillNPCRequirement> requires)
+	public UnitTestCollectItemMission1(List<CollectItemRequirement> requires)
 	{
-		DemandNPCs = requires;
+		DemandCollectItems = requires;
 	}
 
-	public override List<KillNPCRequirement> DemandNPCs { get; init; }
+	public override List<CollectItemRequirement> DemandCollectItems { get; init; }
 
 	public override List<Item> RewardItems => [];
 

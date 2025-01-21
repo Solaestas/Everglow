@@ -12,18 +12,18 @@ public class MissionObjectiveRendererTest
 	{
 		// Contain Test
 		Assert.IsTrue(MissionObjectiveRendererFactory
-			.GetRenderer(new UnitTestGainItemMission1())
-			.Any(x => x.GetType() == typeof(UIGainItemMissionObjectiveRenderer)));
+			.GetRenderer(new UnitTestCollectItemMission1())
+			.Any(x => x.GetType() == typeof(UICollectItemMissionObjectiveRenderer)));
 		Assert.IsTrue(MissionObjectiveRendererFactory
 			.GetRenderer(new UnitTestKillNPCMission1())
 			.Any(x => x.GetType() == typeof(UIKillNPCMissionObjectiveRenderer)));
 
 		// Dosen't Contain Test
 		Assert.IsFalse(MissionObjectiveRendererFactory
-			.GetRenderer(new UnitTestGainItemMission1())
+			.GetRenderer(new UnitTestCollectItemMission1())
 			.Any(x => x.GetType() == typeof(UIKillNPCMissionObjectiveRenderer)));
 		Assert.IsFalse(MissionObjectiveRendererFactory
 			.GetRenderer(new UnitTestKillNPCMission1())
-			.Any(x => x.GetType() == typeof(UIGainItemMissionObjectiveRenderer)));
+			.Any(x => x.GetType() == typeof(UICollectItemMissionObjectiveRenderer)));
 	}
 }

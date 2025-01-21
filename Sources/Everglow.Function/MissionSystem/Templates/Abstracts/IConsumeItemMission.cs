@@ -7,7 +7,7 @@ namespace Everglow.Commons.MissionSystem.Templates.Abstracts;
 
 public interface IConsumeItemMission : IMissionObjective
 {
-	public abstract List<ItemRequirement> DemandConsumeItems { get; init; }
+	public abstract List<CountItemRequirement> DemandConsumeItems { get; init; }
 
 	/// <summary>
 	/// Count kill for each demand group
@@ -38,7 +38,7 @@ public interface IConsumeItemMission : IMissionObjective
 
 	public void Load(TagCompound tag)
 	{
-		tag.TryGet<List<ItemRequirement>>(nameof(DemandConsumeItems), out var demandNPCs);
+		tag.TryGet<List<CountItemRequirement>>(nameof(DemandConsumeItems), out var demandNPCs);
 		if (demandNPCs != null && demandNPCs.Count != 0)
 		{
 			foreach (var demand in DemandConsumeItems)

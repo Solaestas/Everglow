@@ -9,8 +9,8 @@ public class TestGiveNPCItemMission : GiveNPCItemMission
 
 	public override string Description => "提交10个土块给向导";
 
-	public override List<GainItemRequirement> DemandGainItems { get; init; } = [
-		GainItemRequirement.Create([ItemID.DirtBlock], 10)];
+	public override List<GiveItemRequirement> DemandGiveItems { get; init; } = [
+		GiveItemRequirement.Create([ItemID.DirtBlock], 10)];
 
 	public override List<Item> RewardItems => [new Item(ItemID.BloodbathDye, 10)];
 

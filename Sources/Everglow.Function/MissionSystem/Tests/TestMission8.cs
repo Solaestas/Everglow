@@ -6,8 +6,8 @@ namespace Everglow.Commons.MissionSystem.Tests;
 
 internal class TestMission8 : ConsumeItemMission
 {
-	public override List<ItemRequirement> DemandConsumeItems { get; init; } = [
-		ItemRequirement.Create([ItemID.BattlePotion], 10)];
+	public override List<CountItemRequirement> DemandConsumeItems { get; init; } = [
+		CountItemRequirement.Create([ItemID.BattlePotion], 10)];
 
 	public override List<Item> RewardItems => [
 		new Item(ItemID.Wood, 10)];

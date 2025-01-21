@@ -1,5 +1,4 @@
-using Everglow.Commons.MissionSystem.Primitives;
-using MathNet.Numerics;
+using Everglow.Commons.MissionSystem.Core;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.Shared;
@@ -65,12 +64,12 @@ public class KillNPCRequirement
 	{
 		if (nPCs.Count == 0)
 		{
-			throw new InvalidParameterException();
+			throw new InvalidDataException();
 		}
 
 		if (requirement <= 0)
 		{
-			throw new InvalidParameterException();
+			throw new InvalidDataException();
 		}
 
 		return new KillNPCRequirement(nPCs, requirement, enableIndividualCounter);

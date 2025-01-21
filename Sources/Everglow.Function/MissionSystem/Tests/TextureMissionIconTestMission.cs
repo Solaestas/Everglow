@@ -6,7 +6,7 @@ using Everglow.Commons.MissionSystem.Templates;
 
 namespace Everglow.Commons.MissionSystem.Tests;
 
-public class TextureMissionIconTestMission : GainItemMission
+public class TextureMissionIconTestMission : CollectItemMission
 {
 	public override MissionIconGroup Icon => new MissionIconGroup([
 		TextureMissionIcon.Create(
@@ -24,7 +24,7 @@ public class TextureMissionIconTestMission : GainItemMission
 
 	public override MissionType MissionType => MissionType.MainStory;
 
-	public override List<GainItemRequirement> DemandGainItems { get; init; } = [GainItemRequirement.Create([ItemID.IronOre], 1000)];
+	public override List<CollectItemRequirement> DemandCollectItems { get; init; } = [CollectItemRequirement.Create([ItemID.IronOre], 1000)];
 
 	public override List<Item> RewardItems => [new Item(ItemID.Zenith, 1000)];
 
