@@ -42,6 +42,15 @@ public class TextDrawer : DrawerItem
 			Font.MeasureString(text, Scale, CharacterSpacing, 0, FontSystemEffect, EffectAmount).X,
 			Font.LineHeight * text.ReplaceLineEndings().Split(Environment.NewLine).Length);
 
+	/// <summary>
+	/// Wrap text width specific width.
+	/// </summary>
+	/// <param name="index"></param>
+	/// <param name="drawerItems"></param>
+	/// <param name="line"></param>
+	/// <param name="width"></param>
+	/// <param name="originWidth"></param>
+	/// <returns></returns>
 	public override float WordWrap(ref int index, List<DrawerItem> drawerItems, ref int line, float width, float originWidth)
 	{
 		if (width < GetTextSize(Text[0].ToString()).X)
@@ -55,26 +64,54 @@ public class TextDrawer : DrawerItem
 		int endIndex = text.Length - 1;
 		int middle;
 		int startIndex = 0, oIndex = 0;
+
 		while (true)
 		{
 			middle = (startIndex + endIndex) / 2;
 			Vector2 size = GetTextSize(text[oIndex..(middle + 1)]);
+
 			if (size.X == width)
 			{
-				if (oIndex == 0)
+				if (IsEnglishWordBoundary(text, middle))
 				{
-					Text = text[oIndex..(middle + 1)];
-					width = originWidth;
+					if (oIndex == 0)
+					{
+						Text = text[oIndex..(middle + 1)];
+						width = originWidth;
+					}
+					else
+					{
+						var item = Decomposition(text[oIndex..(middle + 1)], drawerItems, index);
+						item.Line = ++line;
+						drawerItems.Insert(++index, item);
+					}
+					oIndex = middle + 1;
+					startIndex = oIndex;
+					endIndex = text.Length - 1;
 				}
 				else
 				{
-					var item = Decomposition(text[oIndex..(middle + 1)], drawerItems, index);
-					item.Line = ++line;
-					drawerItems.Insert(++index, item);
+					middle = FindPreviousEnglishWordBoundary(text, middle);
+					if (middle < oIndex)
+					{
+						middle = oIndex;
+					}
+
+					if (oIndex == 0)
+					{
+						Text = text[oIndex..(middle + 1)];
+						width = originWidth;
+					}
+					else
+					{
+						var item = Decomposition(text[oIndex..(middle + 1)], drawerItems, index);
+						item.Line = ++line;
+						drawerItems.Insert(++index, item);
+					}
+					oIndex = middle + 1;
+					startIndex = oIndex;
+					endIndex = text.Length - 1;
 				}
-				oIndex = middle + 1;
-				startIndex = oIndex;
-				endIndex = text.Length - 1;
 			}
 			else if (size.X < width)
 			{
@@ -87,25 +124,104 @@ public class TextDrawer : DrawerItem
 
 			if (startIndex > endIndex)
 			{
-				if (oIndex == 0)
+				if (IsEnglishWordBoundary(text, startIndex))
 				{
-					Text = text[oIndex..startIndex];
-					width = originWidth;
+					if (oIndex == 0)
+					{
+						Text = text[oIndex..startIndex];
+						width = originWidth;
+					}
+					else
+					{
+						var item = Decomposition(text[oIndex..startIndex], drawerItems, index);
+						item.Line = ++line;
+						drawerItems.Insert(++index, item);
+					}
+					oIndex = startIndex;
+					endIndex = text.Length - 1;
+
+					if (startIndex >= text.Length)
+					{
+						return originWidth - drawerItems[index].GetSize().X;
+					}
 				}
 				else
 				{
-					var item = Decomposition(text[oIndex..startIndex], drawerItems, index);
-					item.Line = ++line;
-					drawerItems.Insert(++index, item);
-				}
-				oIndex = startIndex;
-				endIndex = text.Length - 1;
-				if (startIndex >= text.Length)
-				{
-					return originWidth - drawerItems[index].GetSize().X;
+					startIndex = FindPreviousEnglishWordBoundary(text, startIndex);
+					if (startIndex < oIndex)
+					{
+						startIndex = oIndex;
+					}
+
+					if (oIndex == 0)
+					{
+						Text = text[oIndex..startIndex];
+						width = originWidth;
+					}
+					else
+					{
+						var item = Decomposition(text[oIndex..startIndex], drawerItems, index);
+						item.Line = ++line;
+						drawerItems.Insert(++index, item);
+					}
+					oIndex = startIndex;
+					endIndex = text.Length - 1;
+
+					if (startIndex >= text.Length)
+					{
+						return originWidth - drawerItems[index].GetSize().X;
+					}
 				}
 			}
 		}
+	}
+
+	/// <summary>
+	/// Helper method to check if a position is an English word boundary
+	/// </summary>
+	/// <param name="text"></param>
+	/// <param name="index"></param>
+	/// <returns></returns>
+	private bool IsEnglishWordBoundary(string text, int index)
+	{
+		if (index <= 0 || index >= text.Length)
+			return true;
+
+		char prevChar = text[index - 1];
+		char currentChar = text[index];
+
+		// Check if the current position is a space or punctuation
+		return char.IsWhiteSpace(currentChar) || char.IsPunctuation(currentChar) ||
+			   (IsEnglishCharacter(prevChar) && !IsEnglishCharacter(currentChar)) ||
+			   (!IsEnglishCharacter(prevChar) && IsEnglishCharacter(currentChar));
+	}
+
+	/// <summary>
+	/// Helper method to find the previous English word boundary
+	/// </summary>
+	/// <param name="text"></param>
+	/// <param name="index"></param>
+	/// <returns></returns>
+	private int FindPreviousEnglishWordBoundary(string text, int index)
+	{
+		for (int i = index; i >= 0; i--)
+		{
+			if (IsEnglishWordBoundary(text, i))
+			{
+				return i;
+			}
+		}
+		return 0;
+	}
+
+	/// <summary>
+	/// Helper method to check if a character is an English letter
+	/// </summary>
+	/// <param name="c"></param>
+	/// <returns></returns>
+	private bool IsEnglishCharacter(char c)
+	{
+		return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 	}
 
 	public virtual TextDrawer Decomposition(string text, List<DrawerItem> drawerItems, int index)
