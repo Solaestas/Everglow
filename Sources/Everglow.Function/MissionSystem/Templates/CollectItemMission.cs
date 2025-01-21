@@ -24,6 +24,16 @@ public abstract class CollectItemMission : MissionBase, ICollectItemMission, IRe
 		(this as IRewardItemMission).GiveReward();
 	}
 
+	public override void UpdateProgress(params object[] objs)
+	{
+		progress = (this as ICollectItemMission).CalculateProgress(Main.LocalPlayer.inventory);
+	}
+
+	public override string GetObjectives()
+	{
+		return (this as ICollectItemMission).GetObjectivesString(Main.LocalPlayer.inventory);
+	}
+
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);
@@ -37,10 +47,5 @@ public abstract class CollectItemMission : MissionBase, ICollectItemMission, IRe
 		base.SaveData(tag);
 
 		(this as ICollectItemMission).Save(tag);
-	}
-
-	public override void UpdateProgress(params object[] objs)
-	{
-		progress = (this as ICollectItemMission).CalculateProgress(Main.LocalPlayer.inventory);
 	}
 }

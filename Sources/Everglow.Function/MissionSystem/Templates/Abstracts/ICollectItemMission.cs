@@ -1,3 +1,4 @@
+using System.Text;
 using Everglow.Commons.MissionSystem.Abstracts;
 using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Shared;
@@ -63,5 +64,25 @@ public interface ICollectItemMission : IMissionObjective
 	public void Save(TagCompound tag)
 	{
 		tag.Add(nameof(DemandCollectItems), DemandCollectItems);
+	}
+
+	public string GetObjectivesString(IEnumerable<Item> inventory)
+	{
+		var objectives = new StringBuilder();
+
+		foreach (var demand in DemandCollectItems)
+		{
+			if (demand.Items.Count > 1)
+			{
+				var itemString = string.Join(' ', demand.Items.ConvertAll(i => $"[ItemDrawer,Type='{i}']"));
+				objectives.Append($"收集{itemString}合计{demand.Requirement}个\n");
+			}
+			else
+			{
+				objectives.Append($"收集[ItemDrawer,Type='{demand.Items.First()}']{demand.Requirement}个\n");
+			}
+		}
+
+		return objectives.ToString();
 	}
 }

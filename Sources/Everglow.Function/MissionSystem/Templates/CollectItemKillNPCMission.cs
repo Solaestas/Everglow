@@ -34,6 +34,14 @@ public abstract class CollectItemKillNPCMission : MissionBase, ICollectItemMissi
 		progress = (progress1 + progress2) / 2f;
 	}
 
+	public override string GetObjectives()
+	{
+		var objectives = string.Empty;
+		objectives += (this as ICollectItemMission).GetObjectivesString(Main.LocalPlayer.inventory);
+		objectives += (this as IKillNPCMission).GetObjectivesString();
+		return objectives;
+	}
+
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);

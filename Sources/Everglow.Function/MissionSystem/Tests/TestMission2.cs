@@ -14,9 +14,6 @@ public class TestMission2 : CollectItemMission
 
 	public override string DisplayName => "获取10个木头";
 
-	public override string Description => "测试介绍2\n" +
-					$"[TimerIconDrawer,MissionName='{Name}'] 剩余时间:[TimerStringDrawer,MissionName='{Name}']";
-
 	public override MissionType MissionType => MissionType.Achievement;
 
 	public override long TimeMax => 30000;

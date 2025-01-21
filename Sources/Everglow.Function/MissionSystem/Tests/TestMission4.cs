@@ -27,7 +27,5 @@ public class TestMission4 : KillNPCMission
 
 	public override string DisplayName => "击杀10个史莱姆";
 
-	public override string Description => "测试介绍: \n" + "[ItemDrawer,Type='2',Stack='9-11',StackColor='196,241,255']";
-
 	public override MissionType MissionType => MissionType.SideStory;
 }

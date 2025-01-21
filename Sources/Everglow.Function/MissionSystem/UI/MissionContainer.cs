@@ -109,7 +109,7 @@ public class MissionContainer : UIContainerElement
 		_headshot = new UIBlock();
 		_headshot.Info.Width.SetValue(82f, 0f);
 		_headshot.Info.Height.SetValue(82f, 0f);
-		_headshot.Info.Left.SetValue(90f, 0f);
+		_headshot.Info.Left.SetValue(180f, 0f);
 		_headshot.Info.Top.SetValue(54f, 0f);
 		_headshot.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
 		_panel.Register(_headshot);

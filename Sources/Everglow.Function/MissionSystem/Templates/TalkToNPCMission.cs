@@ -29,4 +29,9 @@ public abstract class TalkToNPCMission : MissionBase, ITalkToNPCMission, IReward
 	{
 		progress = (this as ITalkToNPCMission).CalculateProgress();
 	}
+
+	public override string GetObjectives()
+	{
+		return (this as ITalkToNPCMission).GetObjectivesString();
+	}
 }

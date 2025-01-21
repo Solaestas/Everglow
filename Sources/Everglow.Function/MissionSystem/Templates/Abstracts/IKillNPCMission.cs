@@ -1,3 +1,4 @@
+using System.Text;
 using Everglow.Commons.MissionSystem.Abstracts;
 using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Shared;
@@ -59,5 +60,32 @@ public interface IKillNPCMission : IMissionObjective
 	public void Save(TagCompound tag)
 	{
 		tag.Add(nameof(DemandNPCs), DemandNPCs);
+	}
+
+	public string GetObjectivesString()
+	{
+		var objectives = new StringBuilder();
+
+		foreach (var demand in DemandNPCs)
+		{
+			if (demand.NPCs.Count > 1)
+			{
+				var npcString = string.Join(' ', demand.NPCs.ConvertAll(npcType =>
+				{
+					var npc = new NPC();
+					npc.SetDefaults(npcType);
+					return npc.TypeName;
+				}));
+				objectives.Append($"击杀 {npcString} 合计{demand.Requirement}个\n");
+			}
+			else
+			{
+				var npc = new NPC();
+				npc.SetDefaults(demand.NPCs.First());
+				objectives.Append($"击杀 {npc.TypeName} {demand.Requirement}个\n");
+			}
+		}
+
+		return objectives.ToString();
 	}
 }

@@ -25,6 +25,4 @@ public class TestMission7 : CollectItemKillNPCMission
 	new Item(ItemID.Zenith, 10)];
 
 	public override string DisplayName => "测试复合任务";
-
-	public override string Description => "XXXXXXXXXXXXXXXXXXXXXXXXX";
 }

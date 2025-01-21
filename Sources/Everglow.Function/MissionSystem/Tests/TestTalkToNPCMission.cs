@@ -10,7 +10,5 @@ public class TestTalkToNPCMission : TalkToNPCMission
 
 	public override string DisplayName => "测试对话NPC";
 
-	public override string Description => "和向导对话";
-
 	public override List<Item> RewardItems => [new Item(ItemID.GoldOre, 10)];
 }

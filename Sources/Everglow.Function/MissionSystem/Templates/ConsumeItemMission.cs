@@ -24,6 +24,16 @@ public abstract class ConsumeItemMission : MissionBase, IConsumeItemMission, IRe
 		(this as IRewardItemMission).GiveReward();
 	}
 
+	public override void UpdateProgress(params object[] objs)
+	{
+		progress = (this as IConsumeItemMission).CalculateProgress();
+	}
+
+	public override string GetObjectives()
+	{
+		return (this as IConsumeItemMission).GetObjectivesString();
+	}
+
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);
@@ -37,10 +47,5 @@ public abstract class ConsumeItemMission : MissionBase, IConsumeItemMission, IRe
 		base.SaveData(tag);
 
 		(this as IConsumeItemMission).Save(tag);
-	}
-
-	public override void UpdateProgress(params object[] objs)
-	{
-		progress = (this as IConsumeItemMission).CalculateProgress();
 	}
 }

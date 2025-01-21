@@ -23,4 +23,12 @@ public interface ITalkToNPCMission : IMissionObjective
 	{
 		Main.npcChatText = text;
 	}
+
+	public string GetObjectivesString()
+	{
+		var npc = new NPC();
+		npc.SetDefaults(NPCType);
+
+		return $"和{npc.TypeName}对话";
+	}
 }

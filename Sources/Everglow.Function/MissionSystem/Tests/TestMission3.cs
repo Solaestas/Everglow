@@ -14,8 +14,6 @@ public class TestMission3 : CollectItemMission
 
 	public override string DisplayName => "获取10个铁矿";
 
-	public override string Description => "测试介绍3";
-
 	public override MissionType MissionType => MissionType.MainStory;
 
 	public static TestMission3 Create() => new TestMission3();

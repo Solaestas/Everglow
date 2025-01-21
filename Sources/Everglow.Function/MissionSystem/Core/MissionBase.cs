@@ -24,7 +24,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// <summary>
 	/// 任务介绍
 	/// </summary>
-	public abstract string Description { get; }
+	public virtual string Description => GetObjectives();
 
 	/// <summary>
 	/// 任务来源NPC
@@ -208,6 +208,8 @@ public abstract class MissionBase : ITagCompoundEntity
 	{
 		MissionManager.MoveMission(this, PoolType.Accepted, PoolType.Failed);
 	}
+
+	public abstract string GetObjectives();
 
 	/// <summary>
 	/// 保存任务

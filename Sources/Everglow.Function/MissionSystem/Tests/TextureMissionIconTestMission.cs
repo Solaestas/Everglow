@@ -20,8 +20,6 @@ public class TextureMissionIconTestMission : CollectItemMission
 
 	public override string DisplayName => "测试TextureMissionIcon";
 
-	public override string Description => "测试介绍3";
-
 	public override MissionType MissionType => MissionType.MainStory;
 
 	public override List<CollectItemRequirement> DemandCollectItems { get; init; } = [CollectItemRequirement.Create([ItemID.IronOre], 1000)];
