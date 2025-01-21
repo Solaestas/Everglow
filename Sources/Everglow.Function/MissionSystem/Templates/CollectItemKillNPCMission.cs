@@ -34,12 +34,10 @@ public abstract class CollectItemKillNPCMission : MissionBase, ICollectItemMissi
 		progress = (progress1 + progress2) / 2f;
 	}
 
-	public override string GetObjectives()
+	public override IEnumerable<string> GetObjectives()
 	{
-		var objectives = string.Empty;
-		objectives += (this as ICollectItemMission).GetObjectivesString(Main.LocalPlayer.inventory);
-		objectives += (this as IKillNPCMission).GetObjectivesString();
-		return objectives;
+		return (this as ICollectItemMission).GetObjectivesString(Main.LocalPlayer.inventory)
+			.Concat((this as IKillNPCMission).GetObjectivesString(MissionManager.NPCKillCounter));
 	}
 
 	public override void LoadData(TagCompound tag)

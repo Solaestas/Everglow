@@ -60,23 +60,24 @@ public interface IUseItemMission : IMissionObjective
 		tag.Add(nameof(DemandUseItems), DemandUseItems);
 	}
 
-	public string GetObjectivesString()
+	public IEnumerable<string> GetObjectivesString()
 	{
-		var objectives = new StringBuilder();
+		var objectives = new List<string>();
 
 		foreach (var demand in DemandUseItems)
 		{
+			var progress = $"({demand.Counter}/{demand.Requirement})";
 			if (demand.Items.Count > 1)
 			{
 				var itemString = string.Join(' ', demand.Items.ConvertAll(i => $"[ItemDrawer,Type='{i}']"));
-				objectives.Append($"使用{itemString}合计{demand.Requirement}次\n");
+				objectives.Add($"使用{itemString}合计{demand.Requirement}次 {progress}\n");
 			}
 			else
 			{
-				objectives.Append($"使用[ItemDrawer,Type='{demand.Items.First()}']{demand.Requirement}次\n");
+				objectives.Add($"使用[ItemDrawer,Type='{demand.Items.First()}']{demand.Requirement}次 {progress}\n");
 			}
 		}
 
-		return objectives.ToString();
+		return objectives;
 	}
 }

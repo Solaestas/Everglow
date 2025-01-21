@@ -1,6 +1,7 @@
 using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Enums;
 using Everglow.Commons.MissionSystem.UI.UIElements;
+using Everglow.Commons.UI.StringDrawerSystem;
 using Everglow.Commons.UI.UIContainers.Mission.UIElements;
 using Everglow.Commons.UI.UIElements;
 using static Everglow.Commons.MissionSystem.MissionManager;
@@ -478,6 +479,7 @@ public class MissionContainer : UIContainerElement
 			des.StringDrawer.Init(des.Text);
 			_descriptionContainer.ClearAllElements();
 			_descriptionContainer.AddElement(des);
+			des.StringDrawer.SetWordWrap(_descriptionContainer.HitBox.Width - _textScrollbar.InnerScale.X);
 		}
 		else
 		{

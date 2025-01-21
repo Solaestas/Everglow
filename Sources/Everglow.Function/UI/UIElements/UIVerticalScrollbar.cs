@@ -19,6 +19,8 @@ namespace Everglow.Commons.UI.UIElements
 		public virtual float TopMin => 10f * Scale;
 		public virtual float TopMax => 10f * Scale;
 
+		public virtual Vector2 InnerScale => _innerScale;
+
 		public BaseElement BindElement;
 		protected bool _isMouseDown = false;
 

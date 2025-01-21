@@ -1,4 +1,3 @@
-using System.Text;
 using Everglow.Commons.MissionSystem.Abstracts;
 using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Shared;
@@ -62,30 +61,34 @@ public interface IKillNPCMission : IMissionObjective
 		tag.Add(nameof(DemandNPCs), DemandNPCs);
 	}
 
-	public string GetObjectivesString()
+	public IEnumerable<string> GetObjectivesString(IDictionary<int, int> nPCKillCounter)
 	{
-		var objectives = new StringBuilder();
+		var objectives = new List<string>();
 
 		foreach (var demand in DemandNPCs)
 		{
+			string progress = demand.EnableIndividualCounter
+				? $"({demand.Counter}/{demand.Requirement})"
+				: $"({nPCKillCounter.Where((pair) => demand.NPCs.Contains(pair.Key)).Sum(pair => pair.Value)}/{demand.Requirement})";
+
 			if (demand.NPCs.Count > 1)
 			{
-				var npcString = string.Join(' ', demand.NPCs.ConvertAll(npcType =>
+				var npcString = string.Join(',', demand.NPCs.ConvertAll(npcType =>
 				{
 					var npc = new NPC();
 					npc.SetDefaults(npcType);
 					return npc.TypeName;
 				}));
-				objectives.Append($"击杀 {npcString} 合计{demand.Requirement}个\n");
+				objectives.Add($"击杀 {npcString} 合计{demand.Requirement}个 {progress}\n");
 			}
 			else
 			{
 				var npc = new NPC();
 				npc.SetDefaults(demand.NPCs.First());
-				objectives.Append($"击杀 {npc.TypeName} {demand.Requirement}个\n");
+				objectives.Add($"击杀 {npc.TypeName} {demand.Requirement}个 {progress}\n");
 			}
 		}
 
-		return objectives.ToString();
+		return objectives;
 	}
 }

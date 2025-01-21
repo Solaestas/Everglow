@@ -29,6 +29,6 @@ public interface ITalkToNPCMission : IMissionObjective
 		var npc = new NPC();
 		npc.SetDefaults(NPCType);
 
-		return $"和{npc.TypeName}对话";
+		return $"和{npc.TypeName}对话\n";
 	}
 }

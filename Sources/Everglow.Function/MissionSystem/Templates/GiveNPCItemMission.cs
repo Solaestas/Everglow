@@ -44,9 +44,9 @@ public abstract class GiveNPCItemMission : MissionBase, ITalkToNPCMission, IGive
 		progress = talkProgress == 1f && itemProgress == 1f ? 1f : 0f;
 	}
 
-	public override string GetObjectives()
+	public override IEnumerable<string> GetObjectives()
 	{
-		return (this as ITalkToNPCMission).GetObjectivesString()
-			+ (this as IGiveItemMission).GetObjectivesString(Main.LocalPlayer.inventory);
+		return new List<string>() { (this as ITalkToNPCMission).GetObjectivesString() }
+			.Concat((this as IGiveItemMission).GetObjectivesString(Main.LocalPlayer.inventory));
 	}
 }

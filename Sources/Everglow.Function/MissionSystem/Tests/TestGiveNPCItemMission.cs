@@ -7,8 +7,6 @@ public class TestGiveNPCItemMission : GiveNPCItemMission
 {
 	public override string DisplayName => "测试提交NPC物品";
 
-	public override string Description => "提交10个土块给向导";
-
 	public override List<GiveItemRequirement> DemandGiveItems { get; init; } = [
 		GiveItemRequirement.Create([ItemID.DirtBlock], 10)];
 

@@ -1,5 +1,5 @@
 namespace Everglow.Commons.MissionSystem.Abstracts;
 
-public interface IMissionResult : IMissionAbstract
+public interface IMissionReward : IMissionAbstract
 {
 }

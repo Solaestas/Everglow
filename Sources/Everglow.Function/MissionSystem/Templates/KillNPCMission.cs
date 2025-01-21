@@ -29,9 +29,9 @@ public abstract class KillNPCMission : MissionBase, IKillNPCMission, IRewardItem
 		progress = (this as IKillNPCMission).CalculateProgress(MissionManager.NPCKillCounter);
 	}
 
-	public override string GetObjectives()
+	public override IEnumerable<string> GetObjectives()
 	{
-		return (this as IKillNPCMission).GetObjectivesString();
+		return (this as IKillNPCMission).GetObjectivesString(MissionManager.NPCKillCounter);
 	}
 
 	public override void LoadData(TagCompound tag)

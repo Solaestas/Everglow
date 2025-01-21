@@ -59,23 +59,24 @@ public interface IConsumeItemMission : IMissionObjective
 		tag.Add(nameof(DemandConsumeItems), DemandConsumeItems);
 	}
 
-	public string GetObjectivesString()
+	public IEnumerable<string> GetObjectivesString()
 	{
-		var objectives = new StringBuilder();
+		var objectives = new List<string>();
 
 		foreach (var demand in DemandConsumeItems)
 		{
+			var progress = $"({demand.Counter}/{demand.Requirement})";
 			if (demand.Items.Count > 1)
 			{
 				var itemString = string.Join(' ', demand.Items.ConvertAll(i => $"[ItemDrawer,Type='{i}']"));
-				objectives.Append($"消耗{itemString}合计{demand.Requirement}个\n");
+				objectives.Add($"消耗{itemString}合计{demand.Requirement}个 {progress}\n");
 			}
 			else
 			{
-				objectives.Append($"消耗[ItemDrawer,Type='{demand.Items.First()}']{demand.Requirement}个\n");
+				objectives.Add($"消耗[ItemDrawer,Type='{demand.Items.First()}']{demand.Requirement}个 {progress}\n");
 			}
 		}
 
-		return objectives.ToString();
+		return objectives;
 	}
 }

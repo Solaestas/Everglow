@@ -45,23 +45,24 @@ public interface IGiveItemMission : IMissionObjective
 		}
 	}
 
-	public string GetObjectivesString(IEnumerable<Item> inventory)
+	public IEnumerable<string> GetObjectivesString(IEnumerable<Item> inventory)
 	{
-		var objectives = new StringBuilder();
+		var objectives = new List<string>();
 
 		foreach (var demand in DemandGiveItems)
 		{
+			var progress = $"({inventory.Where(i => demand.Items.Contains(i.type)).Sum(i => i.stack)}/{demand.Requirement})";
 			if (demand.Items.Count > 1)
 			{
 				var itemString = string.Join(' ', demand.Items.ConvertAll(i => $"[ItemDrawer,Type='{i}']"));
-				objectives.Append($"提交{itemString}合计{demand.Requirement}个\n");
+				objectives.Add($"提交{itemString}合计{demand.Requirement}个 {progress}\n");
 			}
 			else
 			{
-				objectives.Append($"提交[ItemDrawer,Type='{demand.Items.First()}']{demand.Requirement}个\n");
+				objectives.Add($"提交[ItemDrawer,Type='{demand.Items.First()}']{demand.Requirement}个 {progress}\n");
 			}
 		}
 
-		return objectives.ToString();
+		return objectives;
 	}
 }

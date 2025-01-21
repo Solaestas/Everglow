@@ -4,7 +4,7 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.Templates.Abstracts;
 
-public interface IRewardItemMission : IMissionResult
+public interface IRewardItemMission : IMissionReward
 {
 	public List<Item> RewardItems { get; }
 
@@ -22,4 +22,6 @@ public interface IRewardItemMission : IMissionResult
 	{
 		MissionBase.LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
+
+	public string GetRewardString() => string.Join(' ', RewardItems.ConvertAll(i => $"[ItemDrawer,Type='{i.type}',Stack='{i.stack}',StackColor='196,241,255']"));
 }

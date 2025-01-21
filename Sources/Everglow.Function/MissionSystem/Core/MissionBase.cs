@@ -1,5 +1,7 @@
+using System.Text;
 using Everglow.Commons.MissionSystem.Abstracts;
 using Everglow.Commons.MissionSystem.Enums;
+using Everglow.Commons.MissionSystem.Templates.Abstracts;
 using Everglow.Commons.UI.UIContainers.Mission.UIElements;
 using Terraria.ModLoader.IO;
 
@@ -24,7 +26,33 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// <summary>
 	/// 任务介绍
 	/// </summary>
-	public virtual string Description => GetObjectives();
+	public virtual string Description
+	{
+		get
+		{
+			var description = new StringBuilder();
+
+			// Time limit
+			if (TimeMax > 0)
+			{
+				description.Append(GetTime() + "\n");
+			}
+
+			// Objectives
+			description.Append("任务目标：\n");
+			int index = 1;
+			foreach(var objective in GetObjectives())
+			{
+				description.Append($"{index++}. " + objective);
+			}
+
+			// Rewards
+			description.Append("\n任务奖励：\n");
+			description.Append(GetRewards());
+
+			return description.ToString();
+		}
+	}
 
 	/// <summary>
 	/// 任务来源NPC
@@ -209,7 +237,11 @@ public abstract class MissionBase : ITagCompoundEntity
 		MissionManager.MoveMission(this, PoolType.Accepted, PoolType.Failed);
 	}
 
-	public abstract string GetObjectives();
+	public abstract IEnumerable<string> GetObjectives();
+
+	public virtual string GetRewards() => (this as IRewardItemMission)?.GetRewardString() ?? string.Empty;
+
+	public string GetTime() => $"[TimerIconDrawer,MissionName='{Name}'] 剩余时间:[TimerStringDrawer,MissionName='{Name}']\n";
 
 	/// <summary>
 	/// 保存任务

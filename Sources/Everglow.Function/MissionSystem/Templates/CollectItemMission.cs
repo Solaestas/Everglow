@@ -29,7 +29,7 @@ public abstract class CollectItemMission : MissionBase, ICollectItemMission, IRe
 		progress = (this as ICollectItemMission).CalculateProgress(Main.LocalPlayer.inventory);
 	}
 
-	public override string GetObjectives()
+	public override IEnumerable<string> GetObjectives()
 	{
 		return (this as ICollectItemMission).GetObjectivesString(Main.LocalPlayer.inventory);
 	}

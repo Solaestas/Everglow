@@ -1,4 +1,3 @@
-using System.Text;
 using Everglow.Commons.MissionSystem.Abstracts;
 using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Shared;
@@ -66,23 +65,29 @@ public interface ICollectItemMission : IMissionObjective
 		tag.Add(nameof(DemandCollectItems), DemandCollectItems);
 	}
 
-	public string GetObjectivesString(IEnumerable<Item> inventory)
+	public IEnumerable<string> GetObjectivesString(IEnumerable<Item> inventory)
 	{
-		var objectives = new StringBuilder();
+		var objectives = new List<string>();
 
 		foreach (var demand in DemandCollectItems)
 		{
+			string progress = demand.EnableIndividualCounter
+				? $"({demand.Counter}/{demand.Requirement})"
+				: $"({inventory.Where(i => demand.Items.Contains(i.type)).Sum(i => i.stack)}/{demand.Requirement})";
+			var verb = demand.EnableIndividualCounter
+				? "获取"
+				: "拥有";
 			if (demand.Items.Count > 1)
 			{
 				var itemString = string.Join(' ', demand.Items.ConvertAll(i => $"[ItemDrawer,Type='{i}']"));
-				objectives.Append($"收集{itemString}合计{demand.Requirement}个\n");
+				objectives.Add($"{verb}{itemString}合计{demand.Requirement}个 {progress}\n");
 			}
 			else
 			{
-				objectives.Append($"收集[ItemDrawer,Type='{demand.Items.First()}']{demand.Requirement}个\n");
+				objectives.Add($"{verb}[ItemDrawer,Type='{demand.Items.First()}']{demand.Requirement}个 {progress}\n");
 			}
 		}
 
-		return objectives.ToString();
+		return objectives;
 	}
 }

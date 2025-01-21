@@ -112,9 +112,9 @@ public class StringDrawer : IDrawable
 	}
 
 	/// <summary>
-	/// 修改文字的间距
+	/// 设置单行宽度，超过则自动换行
 	/// </summary>
-	/// <param name="wrapWidth">文字的间距</param>
+	/// <param name="wrapWidth">行宽</param>
 	public void SetWordWrap(float wrapWidth)
 	{
 		if (drawerItems.Count == 0)

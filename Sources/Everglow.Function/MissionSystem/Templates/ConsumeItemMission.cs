@@ -29,7 +29,7 @@ public abstract class ConsumeItemMission : MissionBase, IConsumeItemMission, IRe
 		progress = (this as IConsumeItemMission).CalculateProgress();
 	}
 
-	public override string GetObjectives()
+	public override IEnumerable<string> GetObjectives()
 	{
 		return (this as IConsumeItemMission).GetObjectivesString();
 	}
