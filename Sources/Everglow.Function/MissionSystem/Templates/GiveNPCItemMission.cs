@@ -2,6 +2,7 @@ using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Shared;
 using Everglow.Commons.MissionSystem.Shared.Icons;
 using Everglow.Commons.MissionSystem.Templates.Abstracts;
+using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.Templates;
 
@@ -48,5 +49,12 @@ public abstract class GiveNPCItemMission : MissionBase, ITalkToNPCMission, IGive
 	{
 		return new List<string>() { (this as ITalkToNPCMission).GetObjectivesString() }
 			.Concat((this as IGiveItemMission).GetObjectivesString(Main.LocalPlayer.inventory));
+	}
+
+	public override void LoadData(TagCompound tag)
+	{
+		base.LoadData(tag);
+
+		(this as IRewardItemMission).Load(tag);
 	}
 }

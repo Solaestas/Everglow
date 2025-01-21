@@ -30,7 +30,7 @@ public class MissionPlayer : ModPlayer
 				MissionManager.AddMission(new TestTalkToNPCMission(), PoolType.Available);
 				MissionManager.AddMission(new TestGiveNPCItemMission(), PoolType.Available);
 
-				MissionManager.AddMission(TextureMissionIconTestMission.Create(), PoolType.Available);
+				MissionManager.AddMission(new TextureMissionIconTestMission(), PoolType.Available);
 			}
 		}
 	}

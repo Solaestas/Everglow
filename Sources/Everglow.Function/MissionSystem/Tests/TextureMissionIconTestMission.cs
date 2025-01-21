@@ -3,6 +3,7 @@ using Everglow.Commons.MissionSystem.Enums;
 using Everglow.Commons.MissionSystem.Shared;
 using Everglow.Commons.MissionSystem.Shared.Icons;
 using Everglow.Commons.MissionSystem.Templates;
+using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.Tests;
 
@@ -26,10 +27,10 @@ public class TextureMissionIconTestMission : CollectItemMission
 
 	public override List<Item> RewardItems => [new Item(ItemID.Zenith, 1000)];
 
-	public static TextureMissionIconTestMission Create()
+	public override void LoadData(TagCompound tag)
 	{
+		base.LoadData(tag);
 		LoadVanillaNPCTextures([NPCID.BlueSlime]);
 		LoadVanillaItemTextures([ItemID.LargeRuby]);
-		return new TextureMissionIconTestMission();
 	}
 }

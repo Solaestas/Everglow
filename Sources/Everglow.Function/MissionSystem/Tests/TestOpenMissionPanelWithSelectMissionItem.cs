@@ -14,7 +14,7 @@ public class TestOpenMissionPanelWithSelectMissionItem : ModItem
 
 	public override bool? UseItem(Player player)
 	{
-		MissionContainer.Instance.ShowWithMission(TextureMissionIconTestMission.Create().Name);
+		MissionContainer.Instance.ShowWithMission(new TextureMissionIconTestMission().Name);
 		return true;
 	}
 }

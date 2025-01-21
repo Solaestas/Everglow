@@ -1,6 +1,7 @@
 using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Shared.Icons;
 using Everglow.Commons.MissionSystem.Templates.Abstracts;
+using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.Templates;
 
@@ -33,5 +34,12 @@ public abstract class TalkToNPCMission : MissionBase, ITalkToNPCMission, IReward
 	public override IEnumerable<string> GetObjectives()
 	{
 		return [(this as ITalkToNPCMission).GetObjectivesString()];
+	}
+
+	public override void LoadData(TagCompound tag)
+	{
+		base.LoadData(tag);
+
+		(this as IRewardItemMission).Load(tag);
 	}
 }
