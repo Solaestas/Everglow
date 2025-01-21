@@ -1,6 +1,7 @@
 using System.Text;
 using Everglow.Commons.MissionSystem.Abstracts;
 using Everglow.Commons.MissionSystem.Shared;
+using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 
 namespace Everglow.Commons.MissionSystem.Templates.Abstracts;
 
@@ -54,12 +55,12 @@ public interface IGiveItemMission : IMissionObjective
 			var progress = $"({inventory.Where(i => demand.Items.Contains(i.type)).Sum(i => i.stack)}/{demand.Requirement})";
 			if (demand.Items.Count > 1)
 			{
-				var itemString = string.Join(' ', demand.Items.ConvertAll(i => $"[ItemDrawer,Type='{i}']"));
+				var itemString = string.Join(' ', demand.Items.ConvertAll(i => ItemDrawer.Create(i)));
 				objectives.Add($"提交{itemString}合计{demand.Requirement}个 {progress}\n");
 			}
 			else
 			{
-				objectives.Add($"提交[ItemDrawer,Type='{demand.Items.First()}']{demand.Requirement}个 {progress}\n");
+				objectives.Add($"提交{ItemDrawer.Create(demand.Items.First())}{demand.Requirement}个 {progress}\n");
 			}
 		}
 

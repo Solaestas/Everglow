@@ -1,5 +1,6 @@
 using Everglow.Commons.MissionSystem.Abstracts;
 using Everglow.Commons.MissionSystem.Core;
+using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.Templates.Abstracts;
@@ -23,5 +24,5 @@ public interface IRewardItemMission : IMissionReward
 		MissionBase.LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
 
-	public string GetRewardString() => string.Join(' ', RewardItems.ConvertAll(i => $"[ItemDrawer,Type='{i.type}',Stack='{i.stack}',StackColor='196,241,255']"));
+	public string GetRewardString() => string.Join(' ', RewardItems.ConvertAll(i => ItemDrawer.Create(i.type, i.stack, new Color(196, 241, 255))));
 }

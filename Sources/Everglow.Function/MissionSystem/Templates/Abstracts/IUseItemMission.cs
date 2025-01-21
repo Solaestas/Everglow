@@ -2,6 +2,7 @@ using System.Text;
 using Everglow.Commons.MissionSystem.Abstracts;
 using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Shared;
+using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MissionSystem.Templates.Abstracts;
@@ -69,12 +70,12 @@ public interface IUseItemMission : IMissionObjective
 			var progress = $"({demand.Counter}/{demand.Requirement})";
 			if (demand.Items.Count > 1)
 			{
-				var itemString = string.Join(' ', demand.Items.ConvertAll(i => $"[ItemDrawer,Type='{i}']"));
+				var itemString = string.Join(' ', demand.Items.ConvertAll(i => ItemDrawer.Create(i)));
 				objectives.Add($"使用{itemString}合计{demand.Requirement}次 {progress}\n");
 			}
 			else
 			{
-				objectives.Add($"使用[ItemDrawer,Type='{demand.Items.First()}']{demand.Requirement}次 {progress}\n");
+				objectives.Add($"使用{ItemDrawer.Create(demand.Items.First())}{demand.Requirement}次 {progress}\n");
 			}
 		}
 

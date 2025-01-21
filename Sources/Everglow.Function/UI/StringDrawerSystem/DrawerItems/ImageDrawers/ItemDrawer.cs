@@ -1,9 +1,10 @@
+using System.Text;
 using FontStashSharp;
 using Terraria.GameContent;
 
 namespace Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 
-internal class ItemDrawer : DrawerItem
+public class ItemDrawer : DrawerItem
 {
 	public int ItemType;
 
@@ -71,5 +72,49 @@ internal class ItemDrawer : DrawerItem
 		Line++;
 		line++;
 		return originWidth - GetSize().X;
+	}
+
+	/// <summary>
+	/// Create the structured string of <see cref="ItemDrawer"/>
+	/// </summary>
+	/// <param name="type">Item type</param>
+	/// <param name="stack">Item stack</param>
+	/// <param name="stackColor">Stack font color</param>
+	/// <param name="stackFontSize">Stack font size</param>
+	/// <returns>Structured string</returns>
+	public static string Create(int type, int? stack = null, Color? stackColor = null, int? stackFontSize = null)
+	{
+		if(type <= 0)
+		{
+			return null;
+		}
+
+		if(stack.HasValue && stack < 0)
+		{
+			return null;
+		}
+
+		if (stackFontSize.HasValue && stackFontSize <= 0)
+		{
+			return null;
+		}
+
+		var sb = new StringBuilder();
+		sb.Append('[');
+		sb.Append($"{nameof(ItemDrawer)},Type='{type}'");
+		if(stack != null)
+		{
+			sb.Append($",Stack='{stack}'");
+		}
+		if(stackColor != null)
+		{
+			sb.Append($",StackColor='{stackColor.Value.R},{stackColor.Value.G},{stackColor.Value.B},{stackColor.Value.A}'");
+		}
+		if(stackFontSize != null)
+		{
+			sb.Append($",StackFontSize='{stackFontSize}'");
+		}
+		sb.Append(']');
+		return sb.ToString();
 	}
 }
