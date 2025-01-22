@@ -31,7 +31,10 @@ public class MissionContainer : UIContainerElement
 			ResolutionFactor = size.X / BaseResolutionWidth;
 			ChildrenElements.Clear();
 			OnInitialization();
+			if (!Main.gameMenu)
+			{
 			RefreshList();
+			}
 		};
 
 		ResolutionFactor = Main.LastLoadedResolution.X / BaseResolutionWidth;
