@@ -1,6 +1,7 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Yggdrasil.Common.Elevator.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
@@ -36,8 +37,8 @@ public abstract class Caterpillar : ModNPC
 	public override void SetDefaults()
 	{
 		NPCID.Sets.DontDoHardmodeScaling[Type] = true;
-		NPC.width = 400;
-		NPC.height = 400;
+		NPC.width = GetBoundingBox().X;
+		NPC.height = GetBoundingBox().Y;
 
 		NPC.lifeMax = 16000;
 		NPC.aiStyle = -1;
@@ -140,6 +141,8 @@ public abstract class Caterpillar : ModNPC
 			Segments.Add(segment);
 		}
 		NPC.velocity *= 0;
+		NPC.width = GetBoundingBox().Width;
+		NPC.height = GetBoundingBox().Height;
 		Toughness = MaxToughness;
 		_caterpillarCoroutine.StartCoroutine(new Coroutine(Falling()));
 	}
@@ -165,8 +168,8 @@ public abstract class Caterpillar : ModNPC
 
 		UpdateBuffVFX();
 		Vector2 v0 = NPC.Center;
-		NPC.width = 400;
-		NPC.height = 400;
+		NPC.width = GetBoundingBox().Width;
+		NPC.height = GetBoundingBox().Height;
 		NPC.Center = v0;
 		for (int moveStep = 0; moveStep < AnimationSpeed; moveStep++)
 		{
@@ -873,8 +876,8 @@ public abstract class Caterpillar : ModNPC
 	public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
 	{
 		Vector2 v0 = NPC.Center;
-		NPC.width = 400;
-		NPC.height = 400;
+		NPC.width = GetBoundingBox().Width;
+		NPC.height = GetBoundingBox().Height;
 		NPC.Center = v0;
 		HitTimer += (int)Math.Min(hit.Knockback * 5f + 10, 30);
 		HitTimer = Math.Min(HitTimer, 30);
@@ -902,8 +905,8 @@ public abstract class Caterpillar : ModNPC
 	public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
 	{
 		Vector2 v0 = NPC.Center;
-		NPC.width = 400;
-		NPC.height = 400;
+		NPC.width = GetBoundingBox().Width;
+		NPC.height = GetBoundingBox().Height;
 		NPC.Center = v0;
 		HitTimer += (int)Math.Min(hit.Knockback * 5f + 10, 30);
 		HitTimer = Math.Min(HitTimer, 30);
