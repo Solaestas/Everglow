@@ -1,4 +1,3 @@
-using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Enums;
 using Everglow.Commons.MissionSystem.UI.UIElements;
 using Everglow.Commons.UI;
@@ -33,7 +32,7 @@ public class MissionContainer : UIContainerElement
 			OnInitialization();
 			if (!Main.gameMenu)
 			{
-			RefreshList();
+				RefreshList();
 			}
 		};
 
@@ -322,81 +321,55 @@ public class MissionContainer : UIContainerElement
 	/// </summary>
 	public void RefreshList()
 	{
-		PositionStyle IteratePool(List<BaseElement> elements, PositionStyle top, List<MissionBase> mp)
+		// 筛选任务状态，获得初始列表
+		var missions = _missionFilter.PoolType.HasValue
+			? GetMissionPool(_missionFilter.PoolType.Value)
+			: Enum.GetValues<PoolType>().Select(GetMissionPool).SelectMany(x => x);
+
+		// 筛选来源NPC
+		if (nPCMode) // NPC模式，去掉非对应NPC的未接取任务
 		{
-			foreach (var m in mp)
-			{
-				if (_missionTypeFilter.MissionType.HasValue
-					&& m.MissionType != _missionTypeFilter.MissionType)
-				{
-					continue;
-				}
-
-				if (!m.IsVisible)
-				{
-					continue;
-				}
-
-				// NPC模式，去掉非对应NPC的
-				if (nPCMode)
-				{
-					if (sourceNPC != m.SourceNPC)
-					{
-						continue;
-					}
-				}
-				else // 全局模式，去掉未接取中有来源NPC的
-				{
-					if (m.PoolType is PoolType.Available && m.SourceNPC >= 0)
-					{
-						continue;
-					}
-				}
-
-				BaseElement element;
-
-				element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [m]);
-
-				element.Info.Top.SetValue(top);
-				element.Events.OnLeftDown += e =>
-				{
-					if (SelectedItem != e)
-					{
-						ChangeSelectedItem((UIMissionItem)e);
-					}
-				};
-
-				elements.Add(element);
-
-				top += element.Info.Height;
-				top.Pixel += 2f;
-			}
-
-			return top;
+			missions = missions.Where(m => m.PoolType is not PoolType.Available && m.SourceNPC == sourceNPC);
+		}
+		else // 全局模式，去掉有来源NPC的未接取任务
+		{
+			missions = missions.Where(m => !(m.PoolType is PoolType.Available && m.SourceNPC >= 0));
 		}
 
+		// 筛选任务类型
+		if (_missionTypeFilter.MissionType.HasValue)
+		{
+			missions = missions.Where(m => m.MissionType == _missionTypeFilter.MissionType);
+		}
+
+		// 生成任务UI元素
 		List<BaseElement> elements = [];
-		PositionStyle top = (2f, 0f);
-		if (_missionFilter.PoolType.HasValue)
+		const int ElementSpacing = 2;
+		PositionStyle top = (ElementSpacing, 0f);
+		foreach (var m in missions.ToList())
 		{
-			var mp = GetMissionPool(_missionFilter.PoolType.Value);
-			top = IteratePool(elements, top, mp);
-		}
-		else
-		{
-			foreach (var type in Enum.GetValues<PoolType>())
+			if (!m.IsVisible)
 			{
-				// NPC模式，只看未接取的
-				if (nPCMode && type is not PoolType.Available)
-				{
-					continue;
-				}
-
-				var mp = GetMissionPool(type);
-				top = IteratePool(elements, top, mp);
+				continue;
 			}
+
+			var element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [m]);
+			element.Info.Top.SetValue(top);
+			element.Events.OnLeftDown += e =>
+			{
+				if (SelectedItem != e)
+				{
+					ChangeSelectedItem((UIMissionItem)e);
+				}
+			};
+
+			elements.Add(element);
+
+			top += element.Info.Height;
+			top.Pixel += ElementSpacing;
 		}
 
+		// 刷新UI
 		ChangeSelectedItem(null);
 		_missionContainer.ClearAllElements();
 		_missionContainer.AddElements(elements);
