@@ -1,3 +1,5 @@
+using System.Text;
+using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Enums;
 using Everglow.Commons.UI.UIContainers.Mission.UIElements;
 using Everglow.Commons.UI.UIElements;
@@ -126,10 +128,42 @@ public class UIMissionDetail : BaseElement
 	{
 		if (missionItem != null)
 		{
-			_icon.SetIconGroup(missionItem.Mission.Icon);
+			MissionBase mission = missionItem.Mission;
+			_icon.SetIconGroup(mission.Icon);
 			_textScrollbar.WheelValue = 0f;
 
-			var des = new UITextPlus(missionItem.Mission.Description);
+			var desText = new StringBuilder();
+
+			// Time limit
+			if (mission.TimeMax > 0)
+			{
+				desText.Append(mission.GetTime() + "\n");
+			}
+
+			// Description
+			desText.Append("描述：\n");
+			if (string.IsNullOrWhiteSpace(mission.Description))
+			{
+				desText.Append("无\n");
+			}
+			else
+			{
+				desText.Append(mission.Description + "\n");
+			}
+
+			// Objectives
+			desText.Append("\n目标：\n");
+			int index = 1;
+			foreach (var objective in mission.GetObjectives())
+			{
+				desText.Append($"{index++}. " + objective);
+			}
+
+			// Rewards
+			desText.Append("\n奖励：\n");
+			desText.Append(mission.GetRewards());
+
+			var des = new UITextPlus(desText.ToString());
 			des.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
 			des.StringDrawer.Init(des.Text);
 			_descriptionContainer.ClearAllElements();

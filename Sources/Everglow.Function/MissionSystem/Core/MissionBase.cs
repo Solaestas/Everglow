@@ -1,4 +1,3 @@
-using System.Text;
 using Everglow.Commons.MissionSystem.Abstracts;
 using Everglow.Commons.MissionSystem.Enums;
 using Everglow.Commons.MissionSystem.Templates.Abstracts;
@@ -26,33 +25,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// <summary>
 	/// 任务介绍
 	/// </summary>
-	public virtual string Description
-	{
-		get
-		{
-			var description = new StringBuilder();
-
-			// Time limit
-			if (TimeMax > 0)
-			{
-				description.Append(GetTime() + "\n");
-			}
-
-			// Objectives
-			description.Append("任务目标：\n");
-			int index = 1;
-			foreach(var objective in GetObjectives())
-			{
-				description.Append($"{index++}. " + objective);
-			}
-
-			// Rewards
-			description.Append("\n任务奖励：\n");
-			description.Append(GetRewards());
-
-			return description.ToString();
-		}
-	}
+	public virtual string Description { get; } = string.Empty;
 
 	/// <summary>
 	/// 任务来源NPC
