@@ -1,4 +1,4 @@
-using Everglow.Commons.UI.UIContainers.Mission;
+using Everglow.Commons.MissionSystem.UI;
 
 namespace Everglow.Commons.MissionSystem.Tests;
 

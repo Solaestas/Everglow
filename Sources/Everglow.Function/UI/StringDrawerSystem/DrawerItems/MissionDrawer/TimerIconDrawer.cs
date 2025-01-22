@@ -1,6 +1,6 @@
 using Everglow.Commons.MissionSystem;
 using Everglow.Commons.MissionSystem.Core;
-using Everglow.Commons.UI.UIContainers.Mission;
+using Everglow.Commons.MissionSystem.UI;
 using Terraria.GameContent;
 
 namespace Everglow.Commons.UI.StringDrawerSystem.DrawerItems.MissionDrawer;

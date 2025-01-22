@@ -1,5 +1,4 @@
 using Everglow.Commons.MissionSystem.Enums;
-using Everglow.Commons.UI.UIContainers.Mission;
 using Everglow.Commons.UI.UIElements;
 using ReLogic.Graphics;
 using Terraria.GameContent;

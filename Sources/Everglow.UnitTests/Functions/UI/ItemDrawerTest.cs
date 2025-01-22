@@ -1,11 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
-using Terraria;
-using Terraria.ID;
 
 namespace Everglow.UnitTests.Functions.UI;
 

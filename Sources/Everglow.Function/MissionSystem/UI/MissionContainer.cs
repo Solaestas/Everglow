@@ -1,15 +1,42 @@
 using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.MissionSystem.Enums;
 using Everglow.Commons.MissionSystem.UI.UIElements;
-using Everglow.Commons.UI.StringDrawerSystem;
+using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIContainers.Mission.UIElements;
 using Everglow.Commons.UI.UIElements;
 using static Everglow.Commons.MissionSystem.MissionManager;
 
-namespace Everglow.Commons.UI.UIContainers.Mission;
+namespace Everglow.Commons.MissionSystem.UI;
 
 public class MissionContainer : UIContainerElement
 {
+	public const int BaseResolutionWidth = 1200;
+	public const int PanelWidth = 600;
+	public const int PanelHeight = 400;
+
+	public MissionContainer()
+	{
+		// 在进入世界时关闭UI
+		Player.Hooks.OnEnterWorld += p =>
+		{
+			if (p.whoAmI == Main.myPlayer)
+			{
+				Close();
+			}
+		};
+
+		// 自适应分辨率
+		Main.OnResolutionChanged += (size) =>
+		{
+			ResolutionFactor = size.X / BaseResolutionWidth;
+			ChildrenElements.Clear();
+			OnInitialization();
+			RefreshList();
+		};
+
+		ResolutionFactor = Main.LastLoadedResolution.X / BaseResolutionWidth;
+	}
+
 	public class ChangeButtonText
 	{
 		public const string Failed = "失败";
@@ -38,26 +65,23 @@ public class MissionContainer : UIContainerElement
 
 	public static MissionContainer Instance => (MissionContainer)UISystem.EverglowUISystem.Elements[typeof(MissionContainer).FullName];
 
+	private float ResolutionFactor { get; set; }
+
 	private UIBlock _panel;
-	private UIBlock _headshot;
+
+	private UIMissionDetail _missionDetail;
+
 	private UIMissionStatusFilter _missionFilter;
 	private UIMissionTypeFilter _missionTypeFilter;
+
 	private UIBlock _missionPanel;
-	private UIBlock _description;
-	private UIBlock _changeMission;
-	private UIMissionItem _mission;
 	private UIMissionVerticalScrollbar _missionScrollbar;
-	private UITextVerticalScrollbar _textScrollbar;
-	private UIBlock _closeButton;
-	private UIBlock _maximizeButton;
 	private UIContainerPanel _missionContainer;
+
+	private UIBlock _closeButton;
 	private UIImage _close;
+	private UIBlock _maximizeButton;
 	private UIImage _maximization;
-	private UIMissionIcon _icon;
-	private UIContainerPanel _descriptionContainer;
-	private UITextPlus _changeText;
-	private UITextPlus _yes;
-	private UITextPlus _no;
 
 	private bool nPCMode = false;
 	private int sourceNPC = 0;
@@ -90,43 +114,56 @@ public class MissionContainer : UIContainerElement
 	{
 		base.OnInitialization();
 
-		// 在进入世界时关闭UI
-		Player.Hooks.OnEnterWorld += p =>
-		{
-			if (p.whoAmI == Main.myPlayer)
-			{
-				Close();
-			}
-		};
+		float width = PanelWidth * ResolutionFactor;
+		float height = PanelHeight * ResolutionFactor;
 
 		_panel = new UIBlock();
-		_panel.Info.Width.SetValue(527f * 2, 0f);
-		_panel.Info.Height.SetValue(369f * 2, 0f);
+		_panel.Info.Width.SetValue(width, 0f);
+		_panel.Info.Height.SetValue(height, 0f);
 		_panel.PanelColor = GetThemeColor();
 		_panel.Info.SetToCenter();
 		_panel.CanDrag = true;
 		Register(_panel);
 
-		_headshot = new UIBlock();
-		_headshot.Info.Width.SetValue(82f, 0f);
-		_headshot.Info.Height.SetValue(82f, 0f);
-		_headshot.Info.Left.SetValue(180f, 0f);
-		_headshot.Info.Top.SetValue(54f, 0f);
-		_headshot.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
-		_panel.Register(_headshot);
-
-		_icon = new UIMissionIcon(null, Color.White);
-		_icon.Info.Width.SetFull();
-		_icon.Info.Height.SetFull();
-		_headshot.Register(_icon);
-
-		_description = new UIBlock();
-		_description.Info.Left.SetValue(38f, 0f);
-		_description.Info.Top.SetValue(_headshot.Info.Top + _headshot.Info.Height + (20f, 0f));
-		_description.Info.Width.SetValue(_headshot.Info.Left * 2f + _headshot.Info.Width - _description.Info.Left * 2f);
-		_description.Info.Height.SetValue(PositionStyle.Full - _description.Info.Top - (66f, 0f));
-		_description.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
-		_panel.Register(_description);
+		_missionDetail = new UIMissionDetail();
+		_missionDetail.Info.Left.SetValue(width * 0.06f, 0f);
+		_missionDetail.Info.Top.SetValue(height * 0.09f, 0f);
+		_missionDetail.Info.Width.SetValue(width * 0.38f, 0f);
+		_missionDetail.Info.Height.SetValue(height * 0.9f, 0f);
+		_missionDetail.OnClickChange += (_, _) =>
+		{
+			if (SelectedItem != null)
+			{
+				if (SelectedItem.Mission.PoolType == PoolType.Accepted)
+				{
+					_missionDetail.ShowYesNo();
+				}
+				else if (SelectedItem.Mission.PoolType == PoolType.Available)
+				{
+					MoveMission(SelectedItem.Mission, PoolType.Available, PoolType.Accepted);
+					ChangeSelectedItem(SelectedItem);
+				}
+			}
+		};
+		_missionDetail.OnClickYes += (_, _) =>
+		{
+			if (SelectedItem != null && SelectedItem.Mission.PoolType == PoolType.Accepted)
+			{
+				if (SelectedItem.Mission.CheckComplete())
+				{
+					SelectedItem.Mission.OnComplete();
+					ChangeSelectedItem(SelectedItem);
+					_missionDetail.HideYesNo();
+				}
+				else
+				{
+					MoveMission(SelectedItem.Mission, PoolType.Accepted, PoolType.Failed);
+					ChangeSelectedItem(SelectedItem);
+					_missionDetail.HideYesNo();
+				}
+			}
+		};
+		_panel.Register(_missionDetail);
 
 		_missionPanel = new UIBlock();
 		_panel.Register(_missionPanel);
@@ -143,9 +180,9 @@ public class MissionContainer : UIContainerElement
 		_missionFilter = new UIMissionStatusFilter();
 		_panel.Register(_missionFilter);
 
-		_missionFilter.Info.Top.SetValue(_headshot.Info.Top - (16f, 0f));
-		_missionFilter.Info.Left.SetValue(_description.Info.Left * 2f + _description.Info.Width);
-		_missionFilter.Info.Width.SetValue(PositionStyle.Full - _description.Info.Left * 2f - _description.Info.Width - _missionScrollbar.Info.Width - (PositionStyle.Full - _missionScrollbar.Info.Width - _missionScrollbar.Info.Left) * 2f);
+		_missionFilter.Info.Top.SetValue(_missionDetail.Info.Top);
+		_missionFilter.Info.Left.SetValue(_missionDetail.Info.Left * 2f + _missionDetail.Info.Width);
+		_missionFilter.Info.Width.SetValue(PositionStyle.Full - _missionDetail.Info.Left * 2f - _missionDetail.Info.Width - _missionScrollbar.Info.Width - (PositionStyle.Full - _missionScrollbar.Info.Width - _missionScrollbar.Info.Left) * 2f);
 		_missionFilter.Info.Height.SetValue(40f, 0f);
 		_missionFilter.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
 
@@ -153,35 +190,20 @@ public class MissionContainer : UIContainerElement
 		_panel.Register(_missionTypeFilter);
 
 		_missionTypeFilter.Info.Top.SetValue(_missionFilter.Info.Top + _missionFilter.Info.Height);
-		_missionTypeFilter.Info.Left.SetValue(_description.Info.Left * 2f + _description.Info.Width);
-		_missionTypeFilter.Info.Width.SetValue(PositionStyle.Full - _description.Info.Left * 2f - _description.Info.Width - _missionScrollbar.Info.Width - (PositionStyle.Full - _missionScrollbar.Info.Width - _missionScrollbar.Info.Left) * 2f);
+		_missionTypeFilter.Info.Left.SetValue(_missionDetail.Info.Left * 2f + _missionDetail.Info.Width);
+		_missionTypeFilter.Info.Width.SetValue(PositionStyle.Full - _missionDetail.Info.Left * 2f - _missionDetail.Info.Width - _missionScrollbar.Info.Width - (PositionStyle.Full - _missionScrollbar.Info.Width - _missionScrollbar.Info.Left) * 2f);
 		_missionTypeFilter.Info.Height.SetValue(40f, 0f);
 		_missionTypeFilter.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
 
 		_missionPanel.Info.Top.SetValue(_missionTypeFilter.Info.Top + _missionTypeFilter.Info.Height);
-		_missionPanel.Info.Left.SetValue(_description.Info.Left * 2f + _description.Info.Width);
-		_missionPanel.Info.Width.SetValue(PositionStyle.Full - _description.Info.Left * 2f - _description.Info.Width - _missionScrollbar.Info.Width - (PositionStyle.Full - _missionScrollbar.Info.Width - _missionScrollbar.Info.Left) * 2f);
-		_missionPanel.Info.Height.SetValue(_panel.Info.Height - _missionFilter.Info.Height - _missionTypeFilter.Info.Height - (62f, 0f));
+		_missionPanel.Info.Left.SetValue(_missionDetail.Info.Left * 2f + _missionDetail.Info.Width);
+		_missionPanel.Info.Width.SetValue(PositionStyle.Full - _missionDetail.Info.Left * 2f - _missionDetail.Info.Width - _missionScrollbar.Info.Width - (PositionStyle.Full - _missionScrollbar.Info.Width - _missionScrollbar.Info.Left) * 2f);
+		_missionPanel.Info.Height.SetValue(_panel.Info.Height - _missionFilter.Info.Height - _missionTypeFilter.Info.Height - _panel.Info.Height * 0.15f);
 		_missionPanel.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
 		_missionPanel.ShowBorder.TopBorder = false;
 
 		_missionScrollbar.Info.Height.SetValue(_missionPanel.Info.Height);
 		_missionScrollbar.Info.Top.SetValue(_missionPanel.Info.Top);
-
-		_textScrollbar = new UITextVerticalScrollbar();
-		_textScrollbar.Info.Height.SetValue(-16f, 1f);
-		_textScrollbar.Info.SetToCenter();
-		_textScrollbar.Info.Left.SetValue(-8f, 1f);
-		_description.Register(_textScrollbar);
-
-		_descriptionContainer = new UIContainerPanel();
-		_descriptionContainer.Info.Width.SetValue(PositionStyle.Full - _textScrollbar.Info.Width -
-			(PositionStyle.Full - _textScrollbar.Info.Left - _textScrollbar.Info.Width) * 3f);
-		_descriptionContainer.Info.Height.SetValue(_textScrollbar.Info.Height);
-		_descriptionContainer.Info.Left.SetValue(PositionStyle.Full - _textScrollbar.Info.Left - _textScrollbar.Info.Width);
-		_descriptionContainer.Info.Top.SetValue(_textScrollbar.Info.Top);
-		_descriptionContainer.SetVerticalScrollbar(_textScrollbar);
-		_description.Register(_descriptionContainer);
 
 		_closeButton = new UIBlock();
 		_closeButton.Info.Width.SetValue(36f, 0f);
@@ -213,82 +235,6 @@ public class MissionContainer : UIContainerElement
 		// _maximization = new UIImage(ModAsset.MissionMaximization.Value, Color.White);
 		// _maximization.Info.SetToCenter();
 		// _maximizeButton.Register(_maximization);
-
-		_changeMission = new UIBlock();
-		_changeMission.Info.Width.SetValue(48f, 0f);
-		_changeMission.Info.Height.SetValue(26f, 0f);
-		_changeMission.Info.Left.SetValue(_description.Info.Left + (_description.Info.Width - _changeMission.Info.Width) / 2f);
-		_changeMission.Info.Top.SetValue(_description.Info.Top + _description.Info.Height +
-			(PositionStyle.Full - _description.Info.Top - _description.Info.Height - _changeMission.Info.Height) / 2f);
-		_changeMission.Info.IsSensitive = true;
-		_changeMission.PanelColor = GetThemeColor();
-		_changeMission.Events.OnLeftDown += e =>
-		{
-			if (SelectedItem != null)
-			{
-				if (SelectedItem.Mission.PoolType == PoolType.Accepted)
-				{
-					_yes.Info.IsVisible = _no.Info.IsVisible = true;
-				}
-				else if (SelectedItem.Mission.PoolType == PoolType.Available)
-				{
-					MoveMission(SelectedItem.Mission, PoolType.Available, PoolType.Accepted);
-					ChangeSelectedItem(SelectedItem);
-				}
-			}
-		};
-		_panel.Register(_changeMission);
-
-		_yes = new UITextPlus(ChangeButtonText.Yes);
-		_yes.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
-		_yes.StringDrawer.Init(_yes.Text);
-		_yes.Info.IsVisible = false;
-		_yes.Events.OnUpdate += (e, gt) =>
-		{
-			_yes.Info.SetToCenter();
-			_yes.Info.Left.Pixel += 44f;
-			_yes.Calculation();
-		};
-		_yes.Events.OnLeftDown += e =>
-		{
-			if (SelectedItem != null && SelectedItem.Mission.PoolType == PoolType.Accepted)
-			{
-				if (SelectedItem.Mission.CheckComplete())
-				{
-					SelectedItem.Mission.OnComplete();
-					ChangeSelectedItem(SelectedItem);
-					_yes.Info.IsVisible = _no.Info.IsVisible = false;
-				}
-				else
-				{
-					MoveMission(SelectedItem.Mission, PoolType.Accepted, PoolType.Failed);
-					ChangeSelectedItem(SelectedItem);
-					_yes.Info.IsVisible = _no.Info.IsVisible = false;
-				}
-			}
-		};
-		_changeMission.Register(_yes);
-
-		_no = new UITextPlus(ChangeButtonText.No);
-		_no.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
-		_no.StringDrawer.Init(_no.Text);
-		_no.Info.IsVisible = false;
-		_no.Events.OnUpdate += (e, gt) =>
-		{
-			_no.Info.SetToCenter();
-			_no.Info.Left.Pixel -= 44f;
-			_no.Calculation();
-		};
-		_no.Events.OnLeftDown += e =>
-		{
-			_yes.Info.IsVisible = _no.Info.IsVisible = false;
-		};
-		_changeMission.Register(_no);
-
-		_changeText = new UITextPlus(string.Empty);
-		_changeText.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
-		_changeText.StringDrawer.Init(_changeText.Text);
-		_changeMission.Register(_changeText);
 	}
 
 	public override void Update(GameTime gt)
@@ -467,76 +413,7 @@ public class MissionContainer : UIContainerElement
 		oldSelectedItem?.OnUnselected();
 		SelectedItem?.OnSelected();
 
-		UpdateChangeButton();
-
-		if (SelectedItem != null)
-		{
-			_icon.SetIconGroup(SelectedItem.Mission.Icon);
-			_textScrollbar.WheelValue = 0f;
-
-			var des = new UITextPlus(SelectedItem.Mission.Description);
-			des.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
-			des.StringDrawer.Init(des.Text);
-			_descriptionContainer.ClearAllElements();
-			_descriptionContainer.AddElement(des);
-			des.StringDrawer.SetWordWrap(_descriptionContainer.HitBox.Width - _textScrollbar.InnerScale.X);
-		}
-		else
-		{
-			_icon.SetIconGroup(null);
-			_textScrollbar.WheelValue = 0f;
-			_descriptionContainer.ClearAllElements();
-		}
-	}
-
-	/// <summary>
-	/// 更新按钮的状态
-	/// </summary>
-	public void UpdateChangeButton()
-	{
-		if (SelectedItem != null)
-		{
-			if (SelectedItem.Mission.PoolType == PoolType.Available)
-			{
-				_changeText.Text = ChangeButtonText.Accept;
-			}
-			else if (SelectedItem.Mission.PoolType == PoolType.Accepted)
-			{
-				if (SelectedItem.Mission.CheckComplete())
-				{
-					_changeText.Text = ChangeButtonText.Commit;
-				}
-				else
-				{
-					_changeText.Text = ChangeButtonText.Cancel;
-				}
-			}
-			else if (SelectedItem.Mission.PoolType == PoolType.Completed)
-			{
-				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Completed}',Color='126,126,126']";
-			}
-			else if (SelectedItem.Mission.PoolType == PoolType.Overdue)
-			{
-				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Overdue}',Color='126,126,126']";
-			}
-			else if (SelectedItem.Mission.PoolType == PoolType.Failed)
-			{
-				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Failed}',Color='126,126,126']";
-			}
-			else
-			{
-				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Unknown}',Color='126,126,126']";
-			}
-
-			_yes.Info.IsVisible = _no.Info.IsVisible = false;
-
-			_changeText.Calculation();
-			_changeText.Info.SetToCenter();
-		}
-		else
-		{
-			_changeText.Text = "[TextDrawer,Text='',Color='126,126,126']";
-			_yes.Info.IsVisible = _no.Info.IsVisible = false;
-		}
+		_missionDetail.UpdateChangeButton();
+		_missionDetail.SetMissionDetail(item);
 	}
 }

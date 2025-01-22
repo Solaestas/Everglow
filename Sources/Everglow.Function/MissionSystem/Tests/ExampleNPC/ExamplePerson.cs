@@ -1,4 +1,4 @@
-using Everglow.Commons.UI.UIContainers.Mission;
+using Everglow.Commons.MissionSystem.UI;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
