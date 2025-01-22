@@ -3,19 +3,21 @@ using Everglow.Commons.MissionSystem.UI.UIElements;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIContainers.Mission.UIElements;
 using Everglow.Commons.UI.UIElements;
+using Microsoft.CodeAnalysis;
 using static Everglow.Commons.MissionSystem.MissionManager;
 
 namespace Everglow.Commons.MissionSystem.UI;
 
 public class MissionContainer : UIContainerElement
 {
-	public const int BaseResolutionWidth = 1200;
+	public const int BaseResolutionX = 1200;
+	public const int BaseResolutionY = 675;
 	public const int PanelWidth = 600;
 	public const int PanelHeight = 400;
 
 	public MissionContainer()
 	{
-		// 在进入世界时关闭UI
+		// Close mission panel on enter world
 		Player.Hooks.OnEnterWorld += p =>
 		{
 			if (p.whoAmI == Main.myPlayer)
@@ -24,10 +26,18 @@ public class MissionContainer : UIContainerElement
 			}
 		};
 
-		// 自适应分辨率
-		Main.OnResolutionChanged += (size) =>
+		// Update resolution factor and refresh ui on resolution changed
+		Main.OnResolutionChanged += (resolution) =>
 		{
-			ResolutionFactor = size.X / BaseResolutionWidth;
+			if(resolution.X / resolution.Y > 16f / 9f)
+			{
+				ResolutionFactor = resolution.Y / BaseResolutionY;
+			}
+			else
+			{
+				ResolutionFactor = resolution.X / BaseResolutionX;
+			}
+
 			ChildrenElements.Clear();
 			OnInitialization();
 			if (!Main.gameMenu)
@@ -36,7 +46,15 @@ public class MissionContainer : UIContainerElement
 			}
 		};
 
-		ResolutionFactor = Main.LastLoadedResolution.X / BaseResolutionWidth;
+		// Initial resolution factor
+		if (Main.LastLoadedResolution.X / Main.LastLoadedResolution.Y > 16f / 9f)
+		{
+			ResolutionFactor = Main.LastLoadedResolution.Y / BaseResolutionY;
+		}
+		else
+		{
+			ResolutionFactor = Main.LastLoadedResolution.X / BaseResolutionX;
+		}
 	}
 
 	public class ChangeButtonText
