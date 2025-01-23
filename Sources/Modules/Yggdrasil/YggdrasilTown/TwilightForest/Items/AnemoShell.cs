@@ -234,7 +234,11 @@ namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Items
 
 		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
 		{
-			if ((!InEffect || !NeedDraw) && !Main.gamePaused)
+			if (!InEffect)
+			{
+				return;
+			}
+			if (!NeedDraw && !Main.gamePaused)
 			{
 				return;
 			}
