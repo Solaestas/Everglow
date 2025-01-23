@@ -15,7 +15,7 @@ public class TelescopicPlatformBeta : TelescopicPlatform
 		BodyRect = new Rectangle(0, 0, 80, 38);
 		PillarFrontRect = new Rectangle(0, 56, 40, 42);
 		PillarBackRect = new Rectangle(40, 56, 40, 42);
-		Item.SetShopValues(ItemRarityColor.LightRed4, Item.buyPrice(silver: 280000));
+		Item.SetShopValues(ItemRarityColor.LightRed4, Item.buyPrice(copper: 280000));
 		base.SetDefaults();
 	}
 }
