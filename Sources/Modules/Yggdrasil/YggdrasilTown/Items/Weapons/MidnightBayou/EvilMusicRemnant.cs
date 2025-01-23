@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.MidnightBayou;
@@ -6,28 +7,24 @@ public class EvilMusicRemnant : ModItem
 {
 	public override void SetDefaults()
 	{
-		Item.width = 38;
-		Item.height = 52;
+		Item.width = 46;
+		Item.height = 44;
 
-		Item.DamageType = DamageClass.Magic;
-		Item.damage = 8;
-		Item.knockBack = 0.7f;
-		Item.mana = 6;
+		Item.DamageType = DamageClass.Summon;
+		Item.damage = 25;
+		Item.knockBack = 1.1f;
 
-		Item.rare = ItemRarityID.Blue;
-		Item.value = 27000;
+		Item.rare = ItemRarityID.Green;
+		Item.value = 14000;
 
 		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.useAnimation = 2;
-		Item.useTime = 2;
+		Item.useAnimation = Item.useTime = 21;
 		Item.UseSound = SoundID.Item1;
-		Item.autoReuse = false;
-		Item.channel = true;
+		Item.autoReuse = true;
 		Item.noMelee = true;
-		Item.noUseGraphic = true;
 
-		Item.shoot = ProjectileID.DirtBall;
-		Item.shootSpeed = 8;
+		Item.shoot = ModContent.ProjectileType<EvilMusicRemnant_Projectile>();
+		Item.shootSpeed = 6;
 	}
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
