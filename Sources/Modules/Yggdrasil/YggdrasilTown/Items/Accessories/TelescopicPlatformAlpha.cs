@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Terraria.Enums;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 
@@ -19,6 +15,7 @@ public class TelescopicPlatformAlpha : TelescopicPlatform
 		BodyRect = new Rectangle(0, 0, 80, 38);
 		PillarFrontRect = new Rectangle(0, 56, 40, 42);
 		PillarBackRect = new Rectangle(40, 56, 40, 42);
+		Item.SetShopValues(ItemRarityColor.Orange3, Item.buyPrice(silver: 30000));
 		base.SetDefaults();
 	}
 }
