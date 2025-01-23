@@ -138,6 +138,20 @@ float4 Burst(PSInput input) : COLOR0
 	return float4(float3(v, v, v), 1.0) * input.Color * mainTex;
 }
 
+float4 UniverseWorm(PSInput input) : COlOR0
+{
+	float4 mainColor = tex2D(uImage, input.Texcoord.xy);
+	float4 black = float4(0, 0, 0, 1);
+	
+	float2 texCoord = input.Texcoord.xy;
+	texCoord.y /= 200;
+	float4 heatColor = tex2D(uHeatMapSampler, texCoord * 0.01);
+
+	float4 resultColor = lerp(black, heatColor, mainColor.r / 0.02);
+	resultColor = lerp(resultColor, float4(heatColor.xyz, 0), mainColor.r);
+	return resultColor;
+}
+
 technique Technique1
 {
 	pass Projectile
@@ -145,9 +159,14 @@ technique Technique1
 		PixelShader = compile ps_3_0 Projectile();
 	}
 
-
 	pass Burst
 	{
 		PixelShader = compile ps_3_0 Burst();
+	}
+
+	pass Worm
+	{
+		PixelShader = compile ps_3_0 UniverseWorm();
+
 	}
 }

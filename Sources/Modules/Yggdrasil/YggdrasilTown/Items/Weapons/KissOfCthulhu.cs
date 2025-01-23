@@ -25,13 +25,13 @@ public class KissOfCthulhu : ModItem
 		Item.value = Item.buyPrice(gold: 1, silver: 70);
 
 		Item.shoot = ProjectileID.Bullet;
-		Item.shootSpeed = 12;
+		Item.shootSpeed = 6;
 		Item.useAmmo = AmmoID.Bullet;
 	}
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		position += new Vector2((Item.width - 40) * Item.scale, 0).RotatedBy(velocity.ToRotation());
+		position += new Vector2((Item.width - 50) * Item.scale, 0).RotatedBy(velocity.ToRotation());
 
 		// Shoot 2-4 normal bullet once
 		int projNum = Main.rand.Next(2, 5);
