@@ -25,7 +25,7 @@ public class KissOfCthulhu : ModItem
 		Item.value = Item.buyPrice(gold: 1, silver: 70);
 
 		Item.shoot = ProjectileID.Bullet;
-		Item.shootSpeed = 6;
+		Item.shootSpeed = 12;
 		Item.useAmmo = AmmoID.Bullet;
 	}
 
@@ -46,6 +46,7 @@ public class KissOfCthulhu : ModItem
 		if (Main.rand.NextBool(3))
 		{
 			Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<KissOfCthulhu_Projectile>(), 1, knockback, player.whoAmI);
+			SoundEngine.PlaySound(new SoundStyle(ModAsset.KissOfCthulhu_Shoot_Mod));
 		}
 
 		return false;

@@ -83,7 +83,10 @@ public class KissOfCthulhu_Projectile_Tentacle : ModProjectile
 
 	private void ActiveProjectile()
 	{
-		SoundEngine.PlaySound(SoundID.Item103);
+		if (HasNotHitTargetOrTile)
+		{
+			SoundEngine.PlaySound(SoundID.Item103);
+		}
 		HasNotHitTargetOrTile = false;
 		Projectile.velocity = Vector2.Zero;
 	}

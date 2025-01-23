@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.ElementDebuff;
+using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
@@ -37,6 +38,7 @@ public class KissOfCthulhu_Projectile : ModProjectile
 		{
 			Dust.NewDust(Projectile.Center, 10, 10, DustID.Shadowflame, Projectile.velocity.X, Projectile.velocity.Y);
 		}
+		SoundEngine.PlaySound(SoundID.NPCDeath1);
 	}
 
 	public override bool PreDraw(ref Color lightColor)
