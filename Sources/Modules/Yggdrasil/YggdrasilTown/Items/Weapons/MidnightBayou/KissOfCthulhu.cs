@@ -2,7 +2,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.MidnightBayou;
 
 public class KissOfCthulhu : ModItem
 {

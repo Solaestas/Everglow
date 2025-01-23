@@ -1,9 +1,8 @@
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.MidnightBayou;
 
-public class BronzeLotusLamp : ModItem
+public class EvilMusicRemnant : ModItem
 {
 	public override void SetDefaults()
 	{
@@ -18,7 +17,7 @@ public class BronzeLotusLamp : ModItem
 		Item.rare = ItemRarityID.Blue;
 		Item.value = 27000;
 
-		Item.useStyle = ItemUseStyleID.Swing;
+		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.useAnimation = 2;
 		Item.useTime = 2;
 		Item.UseSound = SoundID.Item1;
@@ -27,7 +26,7 @@ public class BronzeLotusLamp : ModItem
 		Item.noMelee = true;
 		Item.noUseGraphic = true;
 
-		Item.shoot = ModContent.ProjectileType<BronzeLotusLamp_weapon>();
+		Item.shoot = ProjectileID.DirtBall;
 		Item.shootSpeed = 8;
 	}
 

@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.MidnightBayou;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
