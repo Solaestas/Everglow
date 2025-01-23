@@ -46,7 +46,7 @@ public class KissOfCthulhu : ModItem
 		if (Main.rand.NextBool(3))
 		{
 			Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<KissOfCthulhu_Projectile>(), 1, knockback, player.whoAmI);
-			SoundEngine.PlaySound(new SoundStyle(ModAsset.KissOfCthulhu_Shoot_Mod));
+			SoundEngine.PlaySound(new SoundStyle(ModAsset.KissOfCthulhu_Shoot_Mod), player.Center);
 		}
 
 		return false;

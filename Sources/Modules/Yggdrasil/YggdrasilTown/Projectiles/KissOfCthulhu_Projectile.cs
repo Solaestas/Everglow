@@ -38,7 +38,7 @@ public class KissOfCthulhu_Projectile : ModProjectile
 		{
 			Dust.NewDust(Projectile.Center, 10, 10, DustID.Shadowflame, Projectile.velocity.X, Projectile.velocity.Y);
 		}
-		SoundEngine.PlaySound(SoundID.NPCDeath1);
+		SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
 	}
 
 	public override bool PreDraw(ref Color lightColor)
