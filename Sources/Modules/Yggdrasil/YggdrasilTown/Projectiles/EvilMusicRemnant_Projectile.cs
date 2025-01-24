@@ -20,8 +20,6 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 		Projectile.friendly = true;
 		Projectile.hostile = false;
 		Projectile.timeLeft = 300;
-
-		TargetWhoAmI = -1;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -46,6 +44,8 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 				Projectile.height = 24;
 				break;
 		}
+
+		TargetWhoAmI = -1;
 	}
 
 	private string ProjectileTexture { get; set; } = ModAsset.EvilMusicRemnant_Projectile1_Mod;
