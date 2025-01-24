@@ -68,4 +68,11 @@ public static class PlayerUtils
 
 		return player;
 	}
+
+	/// <summary>
+	/// Calculate <see cref="Player.slotsMinions"/> manually, should only be used in <see cref="ModItem.Shoot(Player, Terraria.DataStructures.EntitySource_ItemUse_WithAmmo, Vector2, Vector2, int, int, float)"/>
+	/// </summary>
+	/// <param name="player"></param>
+	/// <returns></returns>
+	public static float GetSlotsMinions(this Player player) => Main.projectile.Where(x => x.owner == player.whoAmI && x.active && x.minion).Sum(x => x.minionSlots);
 }

@@ -29,10 +29,12 @@ public class EvilMusicRemnant : ModItem
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		var projNum = (int)(player.maxMinions - player.slotsMinions) + 2;
+		// Player.slotsMinions remain 0 here, so we can only calculate it manually
+		var projNum = (int)(player.maxMinions - player.GetSlotsMinions()) + 2;
 		for (int i = 0; i < projNum; i++)
 		{
-			Projectile.NewProjectile(source, position + velocity, velocity.RotatedBy(Main.rand.NextFloat(-1, 1)), type, damage, knockback, player.whoAmI);
+			var projectile = Projectile.NewProjectileDirect(source, position + velocity, velocity.RotatedBy(Main.rand.NextFloat(-1, 1)), type, damage, knockback, player.whoAmI);
+			projectile.originalDamage = Item.damage;
 		}
 
 		return false;

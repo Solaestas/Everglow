@@ -45,7 +45,9 @@ public class ActivatedJellyGland : ModItem
 		position = (Main.MouseWorld - player.Center).Length() <= SummonDistance
 			? Main.MouseWorld
 			: player.Center + (Main.MouseWorld - player.Center).NormalizeSafe() * SummonDistance;
-		int summonAmount = Math.Min(MaxMinionAmount, player.maxMinions - player.numMinions);
+
+		// Player.slotsMinions remain 0 here, so we can only calculate it manually
+		int summonAmount = Math.Min(MaxMinionAmount, (int)(player.maxMinions - player.GetSlotsMinions()));
 		if (summonAmount == 1)
 		{
 			Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, velocity, type, damage, knockback, Owner: player.whoAmI, ai0: player.ownedProjectileCounts[type] + 1);

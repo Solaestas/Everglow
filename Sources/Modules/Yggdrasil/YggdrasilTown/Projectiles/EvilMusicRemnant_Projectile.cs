@@ -80,7 +80,6 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 	{
 		var texture = ModContent.Request<Texture2D>(ProjectileTexture).Value;
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, Color.White, 0, texture.Size() / 2, 1, SpriteEffects.None, 0);
-		;
 		return false;
 	}
 
@@ -94,35 +93,26 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 
 	public void SummonMinion()
 	{
-		var minionIndex = 0;
 		var owner = Main.player[Projectile.owner];
 		var minionProjType = ModContent.ProjectileType<EvilMusicRemnant_Minion>();
 
 		if (owner.maxMinions <= owner.slotsMinions)
 		{
-			if (owner.ownedProjectileCounts[minionProjType] < 0)
+			if (owner.ownedProjectileCounts[minionProjType] <= 0)
 			{
 				return;
 			}
 			else
 			{
-				var lastMinion = Main.projectile.Where(x => x.type == minionProjType && x.active).Last();
-				if (lastMinion != null)
+				var queryMinions = Main.projectile.Where(x => x.type == minionProjType && x.active);
+				if (queryMinions.Any())
 				{
-					lastMinion.Kill();
+					queryMinions.Last().Kill();
 				}
 			}
 		}
 
-		var index = Projectile.NewProjectile(
-			Projectile.GetSource_FromAI(),
-			Projectile.Center,
-			Vector2.Zero,
-			minionProjType,
-			Projectile.damage,
-			Projectile.knockBack,
-			Projectile.owner,
-			owner.ownedProjectileCounts[minionProjType] + 1);
+		var index = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, minionProjType, Projectile.damage, Projectile.knockBack, Projectile.owner, owner.ownedProjectileCounts[minionProjType] + 1);
 		owner.AddBuff(ModContent.BuffType<Buffs.EvilMusicRemnant>(), 30);
 	}
 }

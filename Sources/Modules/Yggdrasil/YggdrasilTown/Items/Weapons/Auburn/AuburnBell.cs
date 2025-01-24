@@ -48,7 +48,7 @@ public class AuburnBell : ModItem
 			return false;
 		}
 
-		player.AddBuff(ModContent.BuffType<Buffs.AuburnBell>(), 18000);
+		player.AddBuff(ModContent.BuffType<Buffs.AuburnBell>(), 2);
 		int p = Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, player.ownedProjectileCounts[type] + 1);
 		if (Main.projectile.IndexInRange(p))
 		{

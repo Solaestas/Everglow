@@ -123,7 +123,7 @@ public class AuburnBellMinion : ModProjectile
 	{
 		if (CheckOwnerActive())
 		{
-			Owner.AddBuff(ModContent.BuffType<AuburnBell>(), 3600);
+			Owner.AddBuff(ModContent.BuffType<AuburnBell>(), 2);
 			Projectile.timeLeft = 2;
 		}
 
