@@ -4,6 +4,14 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class EvilMusicRemnant_Projectile : ModProjectile
 {
+	public const int SearchDistance = 200;
+
+	public int TargetWhoAmI
+	{
+		get => (int)Projectile.ai[0];
+		set => Projectile.ai[0] = value;
+	}
+
 	public override void SetDefaults()
 	{
 		Projectile.width = 18;
@@ -12,6 +20,8 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 		Projectile.friendly = true;
 		Projectile.hostile = false;
 		Projectile.timeLeft = 300;
+
+		TargetWhoAmI = -1;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -42,6 +52,30 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 
 	public override string Texture => ProjectileTexture;
 
+	public override void AI()
+	{
+		if (TargetWhoAmI < 0)
+		{
+			TargetWhoAmI = ProjectileUtils.FindTarget(Projectile.Center, SearchDistance);
+			if (TargetWhoAmI >= 0)
+			{
+				Projectile.netUpdate = true;
+			}
+		}
+		else
+		{
+			if (!ProjectileUtils.MinionCheckTargetActive(TargetWhoAmI))
+			{
+				TargetWhoAmI = -1;
+				return;
+			}
+
+			var target = Main.npc[TargetWhoAmI];
+			var directionToTarget = (target.Center - Projectile.Center).NormalizeSafe();
+			Projectile.velocity = MathUtils.Lerp(0.05f, Projectile.velocity, directionToTarget * 6);
+		}
+	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		var texture = ModContent.Request<Texture2D>(ProjectileTexture).Value;
@@ -54,7 +88,41 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 	{
 		if (!target.active && !target.friendly && !target.townNPC)
 		{
-			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilMusicRemnant_Minion>(), Projectile.damage, Projectile.knockBack);
+			SummonMinion();
 		}
+	}
+
+	public void SummonMinion()
+	{
+		var minionIndex = 0;
+		var owner = Main.player[Projectile.owner];
+		var minionProjType = ModContent.ProjectileType<EvilMusicRemnant_Minion>();
+
+		if (owner.maxMinions <= owner.slotsMinions)
+		{
+			if (owner.ownedProjectileCounts[minionProjType] < 0)
+			{
+				return;
+			}
+			else
+			{
+				var lastMinion = Main.projectile.Where(x => x.type == minionProjType && x.active).Last();
+				if (lastMinion != null)
+				{
+					lastMinion.Kill();
+				}
+			}
+		}
+
+		var index = Projectile.NewProjectile(
+			Projectile.GetSource_FromAI(),
+			Projectile.Center,
+			Vector2.Zero,
+			minionProjType,
+			Projectile.damage,
+			Projectile.knockBack,
+			Projectile.owner,
+			owner.ownedProjectileCounts[minionProjType] + 1);
+		owner.AddBuff(ModContent.BuffType<Buffs.EvilMusicRemnant>(), 30);
 	}
 }

@@ -6,9 +6,15 @@ public class NervousImpairmentDebuff : ElementDebuff
 		: base(ElementDebuffType.NervousImpairment, ModAsset.StarSlash, Color.LightSeaGreen)
 	{
 		BuildUpMax = 1000;
-		DurationMax = 60;
-		DotDamage = 2;
-		ProcDamage = 200;
+		DurationMax = 720;
+		DotDamage = 25;
+		ProcDamage = 0;
+	}
+
+	public override void OnProc(NPC npc)
+	{
+		base.OnProc(npc);
+		npc.AddBuff(BuffID.Confused, 720);
 	}
 
 	public override void Draw(SpriteBatch spriteBatch) => throw new NotImplementedException();

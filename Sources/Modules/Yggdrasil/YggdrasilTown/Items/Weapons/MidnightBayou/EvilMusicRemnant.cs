@@ -29,6 +29,12 @@ public class EvilMusicRemnant : ModItem
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		return base.Shoot(player, source, position, velocity, type, damage, knockback);
+		var projNum = (int)(player.maxMinions - player.slotsMinions) + 2;
+		for (int i = 0; i < projNum; i++)
+		{
+			Projectile.NewProjectile(source, position + velocity, velocity.RotatedBy(Main.rand.NextFloat(-1, 1)), type, damage, knockback, player.whoAmI);
+		}
+
+		return false;
 	}
 }

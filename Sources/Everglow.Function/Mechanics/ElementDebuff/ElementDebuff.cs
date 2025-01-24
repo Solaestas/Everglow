@@ -132,21 +132,26 @@ public abstract class ElementDebuff
 		{
 			if (BuildUp >= BuildUpMax)
 			{
-				Proc = true;
-				BuildUp = 0;
-				Duration = DurationMax;
-
-				if (npc.dontTakeDamage || npc.life <= 0)
-				{
-					return;
-				}
-
-				npc.life -= ProcDamage;
-				if (npc.life <= 0)
-				{
-					npc.life = 1;
-				}
+				OnProc(npc);
 			}
+		}
+	}
+
+	public virtual void OnProc(NPC npc)
+	{
+		Proc = true;
+		BuildUp = 0;
+		Duration = DurationMax;
+
+		if (npc.dontTakeDamage || npc.life <= 0)
+		{
+			return;
+		}
+
+		npc.life -= ProcDamage;
+		if (npc.life <= 0)
+		{
+			npc.life = 1;
 		}
 	}
 
