@@ -28,8 +28,7 @@ public class KissOfCthulhu_Projectile : ModProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		target.GetGlobalNPC<ElementDebuffGlobalNPC>().ElementDebuffs[ElementDebuffType.Necrosis].AddBuildUp(100);
-		Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<KissOfCthulhu_Projectile_Tentacle>(), 12, 0.5f);
+		target.GetGlobalNPC<ElementDebuffGlobalNPC>().ElementDebuffs[ElementDebuffType.Corrosion].AddBuildUp(400);
 	}
 
 	public override void OnKill(int timeLeft)

@@ -153,6 +153,12 @@ public abstract class ElementDebuff
 		{
 			npc.life = 1;
 		}
+
+		PostProc(npc);
+	}
+
+	public virtual void PostProc(NPC npc)
+	{
 	}
 
 	/// <summary>

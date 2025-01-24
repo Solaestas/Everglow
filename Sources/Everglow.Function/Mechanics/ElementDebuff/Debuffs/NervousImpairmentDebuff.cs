@@ -11,9 +11,8 @@ public class NervousImpairmentDebuff : ElementDebuff
 		ProcDamage = 0;
 	}
 
-	public override void OnProc(NPC npc)
+	public override void PostProc(NPC npc)
 	{
-		base.OnProc(npc);
 		npc.AddBuff(BuffID.Confused, 720);
 	}
 

@@ -1,23 +1,26 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Commons.Mechanics.ElementDebuff;
+using Everglow.Commons.Utilities;
+using Everglow.Commons.Vertex;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+namespace Everglow.Commons.Mechanics.ElementDebuff.Projectiles;
 
-public class KissOfCthulhu_Projectile_Tentacle : ModProjectile
+public class Corrosion_Projectile : ModProjectile
 {
 	public const int ActiveTimerMax = 120;
 
 	private bool HasNotHitTargetOrTile { get; set; } = true;
 
+	private int TargetWhoAmI => (int)Projectile.ai[0];
+
 	private int ActiveTimer
 	{
-		get => (int)Projectile.ai[0];
-		set => Projectile.ai[0] = value;
+		get => (int)Projectile.ai[1];
+		set => Projectile.ai[1] = value;
 	}
 
-	public override string Texture => Commons.ModAsset.Point_Mod;
+	public override string Texture => ModAsset.Point_Mod;
 
 	public override void SetDefaults()
 	{
@@ -49,6 +52,11 @@ public class KissOfCthulhu_Projectile_Tentacle : ModProjectile
 
 	public override void AI()
 	{
+		if (Main.npc[TargetWhoAmI] is not null && Main.npc[TargetWhoAmI].active)
+		{
+			Projectile.Center = Main.npc[TargetWhoAmI].Center;
+		}
+
 		if (HasNotHitTargetOrTile)
 		{
 			Dust.NewDust(Projectile.Center, 1, 1, DustID.Shadowflame, Projectile.velocity.X, Projectile.velocity.Y);
@@ -78,7 +86,7 @@ public class KissOfCthulhu_Projectile_Tentacle : ModProjectile
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		ActiveProjectile();
-		target.GetGlobalNPC<ElementDebuffGlobalNPC>().ElementDebuffs[ElementDebuffType.Necrosis].AddBuildUp(100);
+		target.GetGlobalNPC<ElementDebuffGlobalNPC>().ElementDebuffs[ElementDebuffType.Corrosion].AddBuildUp(100);
 	}
 
 	private void ActiveProjectile()
@@ -97,7 +105,7 @@ public class KissOfCthulhu_Projectile_Tentacle : ModProjectile
 		{
 			foreach (Vector2 v0 in tentacle.oldPos)
 			{
-				Rectangle rectangle = new Rectangle((int)(Projectile.Center + v0).X - 4, (int)(Projectile.Center + v0).Y - 4, 8, 8);
+				var rectangle = new Rectangle((int)(Projectile.Center + v0).X - 4, (int)(Projectile.Center + v0).Y - 4, 8, 8);
 				if (targetHitbox.Intersects(rectangle))
 				{
 					return true;
@@ -132,7 +140,7 @@ public class KissOfCthulhu_Projectile_Tentacle : ModProjectile
 			vertices.Add(Projectile.Center + offset2 - Main.screenPosition, drawColor, new Vector3(i / size, 0f, 0f));
 		}
 
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Point.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Point.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
 
 		return false;
@@ -204,17 +212,17 @@ public class KissOfCthulhu_Projectile_Tentacle : ModProjectile
 			}
 		}
 
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		Effect effect = Commons.ModAsset.Trailing.Value;
+		Effect effect = ModAsset.Trailing.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.CurrentTechnique.Passes[0].Apply();
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.KissOfCthulhu_Tentacle.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Corrosion_Projectile.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (vertices.Count > 3)
 		{
@@ -260,7 +268,7 @@ public class KissOfCthulhu_Projectile_Tentacle : ModProjectile
 				}
 				for (int x = tentacle.oldPos.Count - 1; x >= 0; x--)
 				{
-					float value = Math.Max(0, ((coilValue - 0.01f) - x) / coilValue);
+					float value = Math.Max(0, (coilValue - 0.01f - x) / coilValue);
 					tentacle.oldPos[x] -= tentacle.oldPos[0] * value;
 				}
 			}
@@ -276,7 +284,7 @@ public class KissOfCthulhu_Projectile_Tentacle : ModProjectile
 			}
 			for (int x = tentacle.oldPos.Count - 1; x >= 0; x--)
 			{
-				float value = Math.Max(0, ((coilValue - 0.01f) - x) / coilValue);
+				float value = Math.Max(0, (coilValue - 0.01f - x) / coilValue);
 				tentacle.oldPos[x] -= tentacle.oldPos[0] * value;
 			}
 		}
