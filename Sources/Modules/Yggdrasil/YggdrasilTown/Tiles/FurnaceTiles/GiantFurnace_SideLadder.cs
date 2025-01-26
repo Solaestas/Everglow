@@ -7,7 +7,69 @@ public class GiantFurnace_SideLadder : BackgroundVFX
 {
 	public override void Update()
 	{
-		base.Update();
+		if (originTile.X > 0 && originTile.X < Main.maxTilesX)
+		{
+			if (originTile.Y > 0 && originTile.Y < Main.maxTilesY)
+			{
+				Tile tile = Main.tile[originTile.X, originTile.Y];
+				if (tile != null)
+				{
+					if (TileLoader.GetTile(tile.TileType) is ISceneTile)
+					{
+						if (tile.TileType == originType)
+						{
+							if (!tile.HasTile)
+							{
+								Active = false;
+								SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+								return;
+							}
+						}
+						else
+						{
+							Active = false;
+							SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+							return;
+						}
+					}
+					else
+					{
+						Active = false;
+						SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+						return;
+					}
+				}
+				else
+				{
+					Active = false;
+					SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+					return;
+				}
+			}
+			else
+			{
+				Active = false;
+				SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+				return;
+			}
+		}
+		else
+		{
+			Active = false;
+			SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+			return;
+		}
+		Vector2 checkPos = position;
+		if (VFXManager.InScreen(checkPos, 1500))
+		{
+			Visible = true;
+		}
+		else
+		{
+			Active = false;
+			SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+			return;
+		}
 	}
 
 	public override void OnSpawn()
