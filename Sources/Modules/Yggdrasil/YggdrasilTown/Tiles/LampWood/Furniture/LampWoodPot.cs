@@ -26,14 +26,17 @@ public class LampWoodPot : ModTile, ITileFluentlyDrawn
 
 		AddMapEntry(new Color(82, 76, 118));
 	}
+
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
 		num = 6;
 	}
+
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
 		yield break;
 	}
+
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
@@ -43,6 +46,7 @@ public class LampWoodPot : ModTile, ITileFluentlyDrawn
 		}
 		return true;
 	}
+
 	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		var tile = Main.tile[pos];
@@ -55,13 +59,14 @@ public class LampWoodPot : ModTile, ITileFluentlyDrawn
 		{
 			DrawCenterPos = drawCenterPos,
 			SpriteBatch = spriteBatch,
-			TileDrawing = tileDrawing
+			TileDrawing = tileDrawing,
 		};
 
 		DrawShrubPiece(Frame(0), 0.05f, SwayHitboxPos(0), PaintPos(0), drawInfo);
 		DrawShrubPiece(Frame(22), 0.03f, new Point(pos.X, pos.Y - 1), new Point(pos.X, pos.Y - 1), drawInfo);
 		DrawShrubPiece(Frame(44), 0.04f, new Point(pos.X + 1, pos.Y - 1), new Point(pos.X + 1, pos.Y - 1), drawInfo);
 	}
+
 	/// <summary>
 	/// 绘制灌木的一个小Piece
 	/// </summary>
@@ -76,7 +81,9 @@ public class LampWoodPot : ModTile, ITileFluentlyDrawn
 
 		// 回声涂料
 		if (!TileDrawing.IsVisible(tile))
+		{
 			return;
+		}
 
 		int paint = Main.tile[paintPos].TileColor;
 		int textureStyle = 255;
@@ -85,7 +92,9 @@ public class LampWoodPot : ModTile, ITileFluentlyDrawn
 
 		float windCycle = 0;
 		if (tileDrawing.InAPlaceWithWind(tilePos.X, tilePos.Y, 1, 1))
+		{
 			windCycle = tileDrawing.GetWindCycle(tilePos.X, tilePos.Y, tileDrawing._sunflowerWindCounter);
+		}
 
 		int totalPushTime = 80;
 		float pushForcePerFrame = 1.26f;
@@ -103,6 +112,7 @@ public class LampWoodPot : ModTile, ITileFluentlyDrawn
 		spriteBatch.Draw(tex, drawCenterPos + new Vector2(0, 6), frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
 		spriteBatch.Draw(tex, drawCenterPos + new Vector2(0, 6), frame, new Color(0.25f, 0.25f, 0.1f, 0), rotation, origin, 1f, tileSpriteEffect, 0f);
 	}
+
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)
 	{
 		switch (Main.rand.Next(7))
@@ -289,6 +299,7 @@ public class LampWoodPot : ModTile, ITileFluentlyDrawn
 		Gore.NewGore(WorldGen.GetItemSource_FromTileBreak(i, j), new Vector2(i * 16, j * 16), new Vector2(0, Main.rand.NextFloat(0f, 3f)).RotatedByRandom(MathHelper.TwoPi), ModContent.Find<ModGore>("Everglow/LampWoodPot_gore2").Type, 1);
 		base.KillMultiTile(i, j, frameX, frameY);
 	}
+
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
 	{
 		noItem = true;

@@ -1,10 +1,9 @@
 using Everglow.Commons.VFX.Scene;
-using SubworldLibrary;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
 [Pipeline(typeof(WCSPipeline))]
-public class Union_Y_Stairs_Front : ForegroundVFX
+public class GiantFurnace_MiddleFence : ForegroundVFX
 {
 	public override void Update()
 	{
@@ -13,15 +12,15 @@ public class Union_Y_Stairs_Front : ForegroundVFX
 
 	public override void OnSpawn()
 	{
-		texture = ModAsset.Union_Y_Stairs_Front.Value;
+		texture = ModAsset.GiantFurnace_MiddleFence.Value;
 	}
 
 	public override void Draw()
 	{
 		Ins.Batch.BindTexture<Vertex2D>(texture);
-		List<Vertex2D> bars = new List<Vertex2D>();
-		float width = 38;
-		float height = 25;
+		var bars = new List<Vertex2D>();
+		float width = 22;
+		float height = 3;
 		for (int i = 0; i < width; i++)
 		{
 			for (int j = 0; j < height; j++)

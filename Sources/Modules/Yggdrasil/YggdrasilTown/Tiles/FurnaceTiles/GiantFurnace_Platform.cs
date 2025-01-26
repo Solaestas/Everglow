@@ -1,10 +1,9 @@
 using Everglow.Commons.VFX.Scene;
-using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
-public class BoneAndPlatform_tile : ModTile, ISceneTile
+public class GiantFurnace_Platform : ModTile, ISceneTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -20,9 +19,9 @@ public class BoneAndPlatform_tile : ModTile, ISceneTile
 		TileID.Sets.DisableSmartCursor[Type] = true;
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
-		AddMapEntry(new Color(0, 14, 175));
-
-		DustType = DustID.DynastyWood;
+		AddMapEntry(new Color(84, 84, 84));
+		MinPick = 1000000;
+		DustType = DustID.Iron;
 		AdjTiles = new int[] { TileID.Platforms };
 
 		// Placement
@@ -35,20 +34,15 @@ public class BoneAndPlatform_tile : ModTile, ISceneTile
 		TileObjectData.newTile.UsesCustomCanPlace = false;
 		TileObjectData.newTile.LavaDeath = true;
 		TileObjectData.addTile(Type);
-
-		LocalizedText name = CreateMapEntryName();
-		AddMapEntry(new Color(69, 36, 78), name);
 	}
 
 	public void AddScene(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
-		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
+		if (tile.TileFrameX == 648 && tile.TileFrameY == 144)
 		{
-			BoneAndPlatform_background scene = new BoneAndPlatform_background { position = new Vector2(i, j - 14) * 16, Active = true, originTile = new Point(i, j), originType = ModContent.TileType<BoneAndPlatform_tile>() };
+			var scene = new GiantFurnace_SideLadder { position = new Vector2(i, j) * 16 + new Vector2(-16, -4), Active = true, originTile = new Point(i, j), originType = Type };
 			Ins.VFXManager.Add(scene);
-			BoneAndPlatform_foreground scene2 = new BoneAndPlatform_foreground { position = new Vector2(i, j - 14) * 16, Active = true, originTile = new Point(i, j), originType = ModContent.TileType<BoneAndPlatform_tile>() };
-			Ins.VFXManager.Add(scene2);
 		}
 	}
 
@@ -56,4 +50,8 @@ public class BoneAndPlatform_tile : ModTile, ISceneTile
 	{
 		return false;
 	}
+
+	public override bool CanExplode(int i, int j) => false;
+
+	public override bool CanKillTile(int i, int j, ref bool blockDamaged) => false;
 }
