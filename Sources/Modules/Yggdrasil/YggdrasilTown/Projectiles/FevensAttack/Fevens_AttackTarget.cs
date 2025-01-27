@@ -1,7 +1,7 @@
 using Everglow.Commons.DataStructures;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.FevensAttack;
 
 public class Fevens_AttackTarget : ModProjectile
 {
@@ -50,8 +50,8 @@ public class Fevens_AttackTarget : ModProjectile
 		dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(Projectile.ai[1], Projectile.ai[2]));
 		dissolve.CurrentTechnique.Passes[0].Apply();
 
-		var TexMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		Main.spriteBatch.Draw(TexMain, Projectile.Center, null, lightColor, Projectile.rotation, TexMain.Size() / 2f, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
+		Main.spriteBatch.Draw(texMain, Projectile.Center, null, lightColor, Projectile.rotation, texMain.Size() / 2f, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 		return false;

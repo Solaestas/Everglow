@@ -2,7 +2,7 @@ using Everglow.Commons.DataStructures;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.FevensAttack;
 
 public class Fevens_AttackProj0 : ModProjectile
 {
@@ -110,7 +110,7 @@ public class Fevens_AttackProj0 : ModProjectile
 
 	public void DrawTrail(Color light)
 	{
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float drawC = 1f;

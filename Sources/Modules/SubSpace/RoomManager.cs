@@ -8,7 +8,7 @@ public class RoomManager
 	/// <summary>
 	/// 向内深入一层房间
 	/// </summary>
-	public static void EnterNextLevelRoom(Point point, string mapPath = "")
+	public static void EnterNextLevelRoom(Point point, string mapPath = "", int mapIOAnchorX = 5, int mapIOAnchorY = 5, Point modifiedSpawnPos = default)
 	{
 		// 如果已经在房间里了,向下一层
 		if (SubworldSystem.IsActive<RoomWorld>())
@@ -22,7 +22,11 @@ public class RoomManager
 			{
 				// 没有给定的地图数据直接搓一个木制空洞
 				WoodenBoxRoomGenPass.MapIOPathOfNewRoom = mapPath;
-				WoodenBoxRoomGenPass.BuildWoodenRoom();
+				WoodenBoxRoomGenPass.AnchorForMapIO = new Point(mapIOAnchorX, mapIOAnchorY);
+				if (modifiedSpawnPos != default)
+				{
+					WoodenBoxRoomGenPass.ModifedSpawnPos = modifiedSpawnPos;
+				}
 			}
 		}
 
@@ -39,6 +43,11 @@ public class RoomManager
 				RoomWorld.OriginalWorld = null;
 			}
 			WoodenBoxRoomGenPass.MapIOPathOfNewRoom = mapPath;
+			if (modifiedSpawnPos != default)
+			{
+				WoodenBoxRoomGenPass.ModifedSpawnPos = modifiedSpawnPos;
+			}
+			WoodenBoxRoomGenPass.AnchorForMapIO = new Point(mapIOAnchorX, mapIOAnchorY);
 			RoomWorld.AnchorWorldCoordinate = point;
 			RoomWorld.LayerDepth = 1;
 			SubworldSystem.Enter<RoomWorld>();

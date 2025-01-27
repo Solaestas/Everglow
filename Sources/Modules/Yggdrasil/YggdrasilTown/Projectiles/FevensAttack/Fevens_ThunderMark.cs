@@ -1,9 +1,8 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using log4net.Core;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.FevensAttack;
 
 public class Fevens_ThunderMark : ModProjectile
 {
@@ -51,7 +50,7 @@ public class Fevens_ThunderMark : ModProjectile
 		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, texMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float mulColor2 = 1f;
@@ -59,10 +58,10 @@ public class Fevens_ThunderMark : ModProjectile
 		{
 			mulColor2 = (150 - Projectile.timeLeft) / 30f;
 		}
-		Color drawColor = new Color(1f, 0f, 0f, 0f);
+		var drawColor = new Color(1f, 0f, 0f, 0f);
 		float timeValue = (float)Main.time * 0.03f;
-		List<Vertex2D> powerCircleLarge = new List<Vertex2D>();
-		List<Vertex2D> powerCircleLarge_Dark = new List<Vertex2D>();
+		var powerCircleLarge = new List<Vertex2D>();
+		var powerCircleLarge_Dark = new List<Vertex2D>();
 		for (int i = 0; i <= 50; i++)
 		{
 			Vector2 radius = new Vector2(Projectile.timeLeft + 60).RotatedBy(i / 50f * MathHelper.TwoPi) * 0.5f;

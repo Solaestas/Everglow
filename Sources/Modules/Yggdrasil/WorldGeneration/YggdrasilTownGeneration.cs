@@ -816,22 +816,22 @@ public class YggdrasilTownGeneration
 			}
 		}
 		BuildTangledSubmine();
-		QuickBuild(430, Main.maxTilesY - 400, ModAsset.YggdrasilTown_Town_Path);
+		QuickBuild(430, Main.maxTilesY - 400, ModAsset.MapIOs_707x258YggTown_Path);
 
 		// fill ebonwood wall as piers below town ground.
-		for (int i = 0; i < 501; i += 6)
-		{
-			for (int j = 0; j < 100; j++)
-			{
-				int x = 430 + i;
-				int y = Main.maxTilesY - 400 + 91 + j;
-				Tile tile = SafeGetTile(x, y);
-				if (!tile.HasTile && tile.wall <= 0)
-				{
-					tile.wall = WallID.Ebonwood;
-				}
-			}
-		}
+		//for (int i = 0; i < 501; i += 6)
+		//{
+		//	for (int j = 0; j < 100; j++)
+		//	{
+		//		int x = 430 + i;
+		//		int y = Main.maxTilesY - 400 + 91 + j;
+		//		Tile tile = SafeGetTile(x, y);
+		//		if (!tile.HasTile && tile.wall <= 0)
+		//		{
+		//			tile.wall = WallID.Ebonwood;
+		//		}
+		//	}
+		//}
 
 		// cable tunnel
 		int tunnelLeftX = 1000;

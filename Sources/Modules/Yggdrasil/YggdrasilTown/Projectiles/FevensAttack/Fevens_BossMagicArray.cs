@@ -2,7 +2,7 @@ using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.FevensAttack;
 
 internal class Fevens_MagicArray : ModProjectile
 {
@@ -54,9 +54,22 @@ internal class Fevens_MagicArray : ModProjectile
 		Projectile.Center = Projectile.Center * 0.7f + (npc.Center + new Vector2(npc.spriteDirection * 2, -12 * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
 		Projectile.spriteDirection = npc.spriteDirection;
 		Projectile.velocity *= 0;
-		if (timer < 30)
+
+		var fevens_Boss = npc.ModNPC as Fevens_Boss;
+		if (fevens_Boss.Phase == 2)
 		{
-			timer++;
+			timer--;
+			if (timer < 0)
+			{
+				Projectile.Kill();
+			}
+		}
+		else
+		{
+			if (timer < 30)
+			{
+				timer++;
+			}
 		}
 	}
 

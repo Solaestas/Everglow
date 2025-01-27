@@ -1,4 +1,5 @@
 using Everglow.Commons.VFX.Scene;
+using Everglow.SubSpace;
 using Everglow.SubSpace.Tiles;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
@@ -55,6 +56,9 @@ public class MarbleGate : RoomDoorTile, ISceneTile
 
 	public override bool RightClick(int i, int j)
 	{
-		return base.RightClick(i, j);
+		Tile tile = Main.tile[i, j];
+		Point point = new Point(i - tile.TileFrameX / 18, j - tile.TileFrameY / 18);
+		RoomManager.EnterNextLevelRoom(point, ModAsset.HallOfUnion_Path, 30, 140, new Point(60, 190));
+		return false;
 	}
 }

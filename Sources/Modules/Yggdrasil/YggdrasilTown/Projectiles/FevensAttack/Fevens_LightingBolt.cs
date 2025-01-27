@@ -3,7 +3,7 @@ using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.FevensAttack;
 
 public class Fevens_LightingBolt : ModProjectile
 {
@@ -48,7 +48,7 @@ public class Fevens_LightingBolt : ModProjectile
 			width *= 0.15f;
 		}
 		Vector2 hitCenter = Projectile.Center + new Vector2(0, -1000);
-		List<Vector2> flowPosList = new List<Vector2>();
+		var flowPosList = new List<Vector2>();
 		Vector2 flowPos = Projectile.Center;
 		Vector2 flowVelocity = Vector2.Normalize(hitCenter - Projectile.Center).RotatedBy(MathF.Sin(timeValue + Projectile.whoAmI) * 0.5f) * 4;
 		if (Projectile.hostile)
@@ -73,7 +73,7 @@ public class Fevens_LightingBolt : ModProjectile
 						flowVelocity = flowVelocity.RotatedBy(MathF.Sin(timeValue * 2.2f + Projectile.whoAmI + i) * 0.4f);
 						flowVelocity = flowVelocity.RotatedBy(MathF.Sin(timeValue * 1.07f + Projectile.whoAmI + i * 0.5f) * 0.3f);
 						flowVelocity = flowVelocity.RotatedBy(MathF.Sin(timeValue * 0.48f + Projectile.whoAmI + i * 0.15f) * 0.2f);
-						if(Projectile.timeLeft > 25)
+						if (Projectile.timeLeft > 25)
 						{
 							Lighting.AddLight(flowPos, new Vector3(0.7f, 1f, 1f) * width / 4f);
 						}
@@ -112,8 +112,8 @@ public class Fevens_LightingBolt : ModProjectile
 		drawColor = Color.Lerp(drawColor, drawColor2, 1 - MathF.Pow(Projectile.timeLeft / 120f, 1f / 3));
 		Color drawColor_dark = new Color(1f, 1f, 1f, 1f) * mulColor;
 
-		List<Vertex2D> powerFlow = new List<Vertex2D>();
-		List<Vertex2D> powerFlow_dark = new List<Vertex2D>();
+		var powerFlow = new List<Vertex2D>();
+		var powerFlow_dark = new List<Vertex2D>();
 		if (flowPosList.Count > 2)
 		{
 			for (int i = 0; i < flowPosList.Count - 1; i++)
@@ -132,7 +132,7 @@ public class Fevens_LightingBolt : ModProjectile
 					drawColor = new Color(1f, 1f, 1f, 0);
 					mulColor2 = 3f;
 				}
-				Vector2 normal = Utils.SafeNormalize(flowPosList[i] - flowPosList[i + 1], Vector2.One);
+				Vector2 normal = (flowPosList[i] - flowPosList[i + 1]).SafeNormalize(Vector2.One);
 				float coeWidth = 1;
 				if (i > flowPosList.Count - 40)
 				{
@@ -146,12 +146,12 @@ public class Fevens_LightingBolt : ModProjectile
 			}
 		}
 
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float lightValue = 0.5f + MathF.Sin(Projectile.timeLeft * 0.4f);
 		lightValue *= 2;
-		if(Projectile.timeLeft > 27)
+		if (Projectile.timeLeft > 27)
 		{
 			lightValue = 5;
 		}
@@ -174,7 +174,7 @@ public class Fevens_LightingBolt : ModProjectile
 
 		float dark = Projectile.timeLeft / 30f;
 		Color drawStarColor = drawColor;
-		if(Projectile.timeLeft > 25)
+		if (Projectile.timeLeft > 25)
 		{
 			drawStarColor = new Color(1f, 1f, 1f, 0);
 		}
@@ -200,7 +200,7 @@ public class Fevens_LightingBolt : ModProjectile
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, drawStarColor, MathF.Sin(Projectile.whoAmI + Projectile.position.Y) * 6, light.Size() / 2f, new Vector2(1f, dark * dark) * 4.05f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, light.Width / 2, light.Height), drawStarColor, MathF.Sin(Projectile.type * 0.4f + Projectile.whoAmI) * 6, light.Size() / 2f, new Vector2(1f, dark * dark) * 4.05f, SpriteEffects.None, 0);
 
-		if(Projectile.timeLeft > 25)
+		if (Projectile.timeLeft > 25)
 		{
 			Lighting.AddLight(Projectile.Center, new Vector3(0.7f, 1f, 1f) * 15);
 		}

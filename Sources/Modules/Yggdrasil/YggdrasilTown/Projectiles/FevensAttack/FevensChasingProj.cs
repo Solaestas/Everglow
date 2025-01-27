@@ -1,12 +1,11 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.FevensAttack;
 
-public class FevensChasingProj1 : ModProjectile, IWarpProjectile
+public class FevensChasingProj : ModProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
 	{
@@ -58,10 +57,10 @@ public class FevensChasingProj1 : ModProjectile, IWarpProjectile
 		}
 
 		TimeToKill--;
-		if (TimeToKill < -Projectile.ai[0])
+		if (TimeToKill < 0)
 		{
 			Vector2 toTargetPos = TargetPosition - Projectile.Center - Projectile.velocity;
-			if(toTargetPos.Length() > 20)
+			if (toTargetPos.Length() > 20)
 			{
 				float speed = 7;
 				Projectile.velocity = Vector2.Normalize(toTargetPos) * 0.05f * speed + Projectile.velocity * 0.95f;
@@ -147,7 +146,6 @@ public class FevensChasingProj1 : ModProjectile, IWarpProjectile
 
 			trueLength++;
 		}
-
 		var c0 = new Color(colorValue0, 0, colorValue0 * colorValue0 * 0.3f, 0);
 
 		var bars = new List<Vertex2D>();
@@ -192,7 +190,6 @@ public class FevensChasingProj1 : ModProjectile, IWarpProjectile
 			{
 				width *= i / 4f;
 			}
-
 
 			if (Projectile.oldPos[i] == Vector2.Zero)
 			{
