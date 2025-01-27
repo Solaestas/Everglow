@@ -1,5 +1,6 @@
 using Everglow.Commons.VFX.Scene;
-using SubworldLibrary;
+using Everglow.SubSpace;
+using Everglow.Yggdrasil.WorldGeneration;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
@@ -9,6 +10,34 @@ public class MarbleGate_BackgroundTile : BackgroundVFX
 	public override void Update()
 	{
 		base.Update();
+		if (Main.MouseWorld.X > position.X && Main.MouseWorld.X < position.X + 112)
+		{
+			if (Main.MouseWorld.Y > position.Y && Main.MouseWorld.Y < position.Y + 128)
+			{
+				Main.instance.MouseText("Rightclick to Enter Union.");
+				if (Main.mouseRight && Main.mouseRightRelease)
+				{
+					int i = Main.MouseWorld.ToTileCoordinates().X;
+					int j = Main.MouseWorld.ToTileCoordinates().Y;
+					for (int x = -8; x < 9; x++)
+					{
+						for (int y = -8; y < 9; y++)
+						{
+							Tile tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+							if (tile.TileType == ModContent.TileType<MarbleGate>())
+							{
+								i += x;
+								j += y;
+								x = 100;
+								break;
+							}
+						}
+					}
+					Point point = new Point(i, j);
+					RoomManager.EnterNextLevelRoom(point + new Point(3, 6), ModAsset.HallOfUnion_Path, 30, 140, new Point(60, 190));
+				}
+			}
+		}
 	}
 
 	public override void OnSpawn()

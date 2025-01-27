@@ -1132,27 +1132,31 @@ public class YggdrasilWorldGeneration : ModSystem
 			for (int y = -radiusI; y <= radiusI; y++)
 			{
 				Tile tile = SafeGetTile(center + new Vector2(x, y));
+				Tile tileUp = SafeGetTile(center + new Vector2(x, y - 1));
 				float aValue = PerlinPixelR[Math.Abs((x + x0CoordPerlin) % 1024), Math.Abs((y + y0CoordPerlin) % 1024)] / 255f;
-				if (new Vector2(x, y).Length() <= radius - aValue * noiseSize)
+				if (!TileID.Sets.BasicChest[tile.TileType] && !TileID.Sets.BasicChest[tileUp.TileType])
 				{
-					if (force)
+					if (new Vector2(x, y).Length() <= radius - aValue * noiseSize)
 					{
-						if (type == -1)
+						if (force)
 						{
-							tile.ClearEverything();
+							if (type == -1)
+							{
+								tile.ClearEverything();
+							}
+							else
+							{
+								tile.TileType = (ushort)type;
+								tile.HasTile = true;
+							}
 						}
 						else
 						{
-							tile.TileType = (ushort)type;
-							tile.HasTile = true;
-						}
-					}
-					else
-					{
-						if (!tile.HasTile)
-						{
-							tile.TileType = (ushort)type;
-							tile.HasTile = true;
+							if (!tile.HasTile)
+							{
+								tile.TileType = (ushort)type;
+								tile.HasTile = true;
+							}
 						}
 					}
 				}

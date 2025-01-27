@@ -67,26 +67,27 @@ public class DarkSludge_Scene : ForegroundVFX
 				bars2.Add(Vector2.zeroVector, Color.Transparent, new Vector3(0, 0, 1));
 			}
 		}
-		for (int i = MinX; i <= MaxX; i += 4)
+		int coeDistance = 12;
+		for (int i = MinX; i <= MaxX; i += coeDistance)
 		{
 			Vector2 position = new Point(i, originTile.Y).ToVector2() * 16;
 			Color color = Lighting.GetColor(new Point(i, originTile.Y));
 			for (int x = 0; x < 4; x++)
 			{
-				bars.Add(position + new Vector2(0 + x * 4, NoiseWave(x * 4 + i * 16) * 12), color, new Vector3(0, 0, 1));
-				bars.Add(position + new Vector2(4 + x * 4, NoiseWave(x * 4 + 4 + i * 16) * 12), color, new Vector3(0, 0, 1));
+				bars.Add(position + new Vector2(0 + x * 4 * coeDistance, NoiseWave(x * 4 * coeDistance + i * 16) * 12), color, new Vector3(0, 0, 1));
+				bars.Add(position + new Vector2(4 * coeDistance + x * 4 * coeDistance, NoiseWave(x * 4 * coeDistance + 4 * coeDistance + i * 16) * 12), color, new Vector3(0, 0, 1));
 
-				bars.Add(position + new Vector2(0 + x * 4, NoiseWave(x * 4 + i * 16) * 12 + 4), color, new Vector3(0, 0.4f, 1));
-				bars.Add(position + new Vector2(4 + x * 4, NoiseWave(x * 4 + 4 + i * 16) * 12 + 4), color, new Vector3(0, 0.4f, 1));
+				bars.Add(position + new Vector2(0 + x * 4 * coeDistance, NoiseWave(x * 4 * coeDistance + i * 16) * 12 + 4), color, new Vector3(0, 0.4f, 1));
+				bars.Add(position + new Vector2(4 * coeDistance + x * 4 * coeDistance, NoiseWave(x * 4 * coeDistance + 4 * coeDistance + i * 16) * 12 + 4), color, new Vector3(0, 0.4f, 1));
 			}
 
 			for (int x = 0; x < 4; x++)
 			{
-				bars2.Add(position + new Vector2(0 + x * 4, NoiseWave(x * 4 + i * 16) * 12 + 4), color, new Vector3(0, 0.4f, 1));
-				bars2.Add(position + new Vector2(4 + x * 4, NoiseWave(x * 4 + 4 + i * 16) * 12 + 4), color, new Vector3(0, 0.4f, 1));
+				bars2.Add(position + new Vector2(0 + x * 4 * coeDistance, NoiseWave(x * 4 * coeDistance + i * 16) * 12 + 4), color, new Vector3(0, 0.4f, 1));
+				bars2.Add(position + new Vector2(4 * coeDistance + x * 4 * coeDistance, NoiseWave(x * 4 * coeDistance + 4 * coeDistance + i * 16) * 12 + 4), color, new Vector3(0, 0.4f, 1));
 
-				bars2.Add(position + new Vector2(0 + x * 4, 16), color, new Vector3(0, 1f, 1));
-				bars2.Add(position + new Vector2(4 + x * 4, 16), color, new Vector3(0, 1f, 1));
+				bars2.Add(position + new Vector2(0 + x * 4 * coeDistance, 16), color, new Vector3(0, 1f, 1));
+				bars2.Add(position + new Vector2(4 * coeDistance + x * 4 * coeDistance, 16), color, new Vector3(0, 1f, 1));
 			}
 		}
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);

@@ -1,5 +1,7 @@
 using System.Reflection;
 using Everglow.Commons.Coroutines;
+using Everglow.Commons.DataStructures;
+using Everglow.Commons.Utilities;
 using ReLogic.Graphics;
 using Terraria.GameContent;
 using Terraria.UI.Chat;
@@ -196,6 +198,7 @@ public class BiomeLabel : ModSystem
 		for (int i = 0; i < time; i++)
 		{
 			duration = i;
+			SpriteBatchState spriteBatchState = spriteBatch.GetState().Value;
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, spriteBatch.transformMatrix);
 			int drawY = Height * (int)(i / (time / 120f));
@@ -219,7 +222,7 @@ public class BiomeLabel : ModSystem
 			spriteBatch.DrawString(FontAssets.MouseText.Value, biomedata.Name, new Vector2(Main.screenWidth / 2f, screenCoordY - 20), Color.White * alpha, 0, new Vector2(stringSize.X * 0.5f, 0), 1f, SpriteEffects.None, 0);
 			spriteBatch.Draw(biomeIcon, new Vector2(Main.screenWidth / 2f - 29 * mulWidth - 37, screenCoordY - 4), null, Color.White * alpha, 0, biomeIcon.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 			spriteBatch.End();
-			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
+			spriteBatch.Begin(spriteBatchState);
 			if (i == time - 1)
 			{
 				duration = -1;

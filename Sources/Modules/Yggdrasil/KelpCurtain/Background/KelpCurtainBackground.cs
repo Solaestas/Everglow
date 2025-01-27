@@ -60,8 +60,7 @@ public class KelpCurtainBackground : ModSystem
 	/// <returns></returns>
 	public static bool BiomeActive()
 	{
-
-		if (Main.screenPosition.Y > 148000 && Main.screenPosition.Y < 170700)
+		if (Main.screenPosition.Y > 268320 && Main.screenPosition.Y < 302000)
 		{
 			if (SubworldSystem.IsActive<YggdrasilWorld>())
 				return true;
@@ -77,11 +76,11 @@ public class KelpCurtainBackground : ModSystem
 		var texC1 = ModAsset.KelpCurtainMiddle.Value;
 		var texC2 = ModAsset.KelpCurtainFar.Value;
 
-		BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f), baseColor, 148000, 173375, true, true);
-		BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texC2.Size(), 0.10f), baseColor, 148000, 173375, false, false);
-		BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texC1.Size(), 0.15f), baseColor, 148000, 173375, false, false);
-		BackgroundManager.QuickDrawBG(texC0, GetDrawRect(texC1.Size(), 0.25f), baseColor, 148000, 173375, false, false);
-		BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f), baseColor, 148000, 173375, false, false);
+		BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f), baseColor, 268320, 302000, true, true);
+		BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texC2.Size(), 0.10f), baseColor, 268320, 302000, false, false);
+		BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texC1.Size(), 0.15f), baseColor, 268320, 302000, false, false);
+		BackgroundManager.QuickDrawBG(texC0, GetDrawRect(texC1.Size(), 0.25f), baseColor, 268320, 302000, false, false);
+		BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f), baseColor, 268320, 302000, false, false);
 	}
 	/// <summary>
 	/// 获取绘制矩形
