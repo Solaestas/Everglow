@@ -53,7 +53,6 @@ public class JellyBallDaifuku : ModItem
 	{
 		CreateRecipe(1)
 			.AddIngredient(ModContent.ItemType<JellyBallCube>(), 60)
-			.AddIngredient(ModContent.ItemType<CrystalNucleusOfJellyKing>(), 1)
 			.AddTile(TileID.WorkBenches)
 			.Register();
 	}

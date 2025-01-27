@@ -34,7 +34,7 @@ public class MarbleGate_BackgroundTile : BackgroundVFX
 						}
 					}
 					Point point = new Point(i, j);
-					RoomManager.EnterNextLevelRoom(point + new Point(3, 6), ModAsset.HallOfUnion_Path, 30, 140, new Point(60, 190));
+					RoomManager.EnterNextLevelRoom(point + new Point(3, 6), ModAsset.HallOfUnion237x110_Path, 30, 110, new Point(60, 192));
 				}
 			}
 		}

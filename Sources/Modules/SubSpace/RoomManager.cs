@@ -50,6 +50,7 @@ public class RoomManager
 			WoodenBoxRoomGenPass.AnchorForMapIO = new Point(mapIOAnchorX, mapIOAnchorY);
 			RoomWorld.AnchorWorldCoordinate = point;
 			RoomWorld.LayerDepth = 1;
+			RoomWorld.SpawnPos = modifiedSpawnPos;
 			SubworldSystem.Enter<RoomWorld>();
 		}
 	}
