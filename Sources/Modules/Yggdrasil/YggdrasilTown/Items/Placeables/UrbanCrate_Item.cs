@@ -7,7 +7,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables
 {
-	public class UrbanBox_Item : ModItem
+	public class UrbanCrate_Item : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
