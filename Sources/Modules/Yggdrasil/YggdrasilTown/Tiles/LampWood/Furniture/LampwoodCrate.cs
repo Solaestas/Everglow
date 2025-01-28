@@ -4,7 +4,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 
-public class LampwoodBox : ModTile
+public class LampwoodCrate : ModTile
 {
 	public override void SetStaticDefaults()
 	{

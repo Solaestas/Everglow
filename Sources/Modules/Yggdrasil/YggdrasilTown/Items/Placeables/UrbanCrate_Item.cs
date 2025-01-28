@@ -1,13 +1,13 @@
+using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles.Furnitures;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
 namespace ExampleMod.Content.Items.Consumables
 {
-
-	public class LampwoodBox_Item : ModItem
+	public class UrbanCrate_Item : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
@@ -16,7 +16,7 @@ namespace ExampleMod.Content.Items.Consumables
 
 		public override void SetDefaults()
 		{
-			Item.DefaultToPlaceableTile(ModContent.TileType<LampwoodBox>());
+			Item.DefaultToPlaceableTile(ModContent.TileType<UrbanCrate>());
 			Item.width = 12;
 			Item.height = 12;
 			Item.rare = ItemRarityID.Orange;

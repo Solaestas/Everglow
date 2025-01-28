@@ -4,7 +4,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles.Furnitures;
 
-public class TwilightBox : ModTile
+public class TwilightCrate : ModTile
 {
 	public override void SetStaticDefaults()
 	{

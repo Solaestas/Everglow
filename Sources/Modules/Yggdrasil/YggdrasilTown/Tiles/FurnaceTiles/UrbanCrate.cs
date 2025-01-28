@@ -6,7 +6,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
-public class UrbanBox : ModTile
+public class UrbanCrate : ModTile
 {
 	public override void SetStaticDefaults()
 	{
