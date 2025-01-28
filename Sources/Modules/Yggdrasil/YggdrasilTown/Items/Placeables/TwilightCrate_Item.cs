@@ -5,7 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles.Furnitures;
 
-namespace ExampleMod.Content.Items.Consumables
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables
 {
 	public class TwilightCrate_Item : ModItem
 	{

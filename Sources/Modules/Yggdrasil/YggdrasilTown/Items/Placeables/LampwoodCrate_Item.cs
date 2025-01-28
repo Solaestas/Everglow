@@ -4,7 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 
-namespace ExampleMod.Content.Items.Consumables
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables
 {
 
 	public class LampwoodCrate_Item : ModItem

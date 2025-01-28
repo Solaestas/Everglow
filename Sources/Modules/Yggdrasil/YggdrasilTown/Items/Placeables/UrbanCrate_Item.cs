@@ -5,9 +5,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
-namespace ExampleMod.Content.Items.Consumables
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables
 {
-	public class UrbanCrate_Item : ModItem
+	public class UrbanBox_Item : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
@@ -16,7 +16,7 @@ namespace ExampleMod.Content.Items.Consumables
 
 		public override void SetDefaults()
 		{
-			Item.DefaultToPlaceableTile(ModContent.TileType<UrbanCrate>());
+			Item.DefaultToPlaceableTile(ModContent.TileType<UrbanBox>());
 			Item.width = 12;
 			Item.height = 12;
 			Item.rare = ItemRarityID.Orange;
