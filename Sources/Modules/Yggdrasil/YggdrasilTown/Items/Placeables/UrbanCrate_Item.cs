@@ -16,7 +16,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables
 
 		public override void SetDefaults()
 		{
-			Item.DefaultToPlaceableTile(ModContent.TileType<UrbanBox>());
+			Item.DefaultToPlaceableTile(ModContent.TileType<UrbanCrate>());
 			Item.width = 12;
 			Item.height = 12;
 			Item.rare = ItemRarityID.Orange;
