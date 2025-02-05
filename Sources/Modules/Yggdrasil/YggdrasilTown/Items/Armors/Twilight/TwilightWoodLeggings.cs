@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts.TwilightForest;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Twilight;
 

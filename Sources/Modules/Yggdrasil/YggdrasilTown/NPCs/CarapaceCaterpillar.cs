@@ -1,4 +1,5 @@
 using Everglow.Commons.Coroutines;
+using Everglow.Yggdrasil.Common.NPCs;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;

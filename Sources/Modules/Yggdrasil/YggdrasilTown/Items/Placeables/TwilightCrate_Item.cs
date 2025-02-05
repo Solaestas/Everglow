@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles.Furnitures;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest.Furnitures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables
 {

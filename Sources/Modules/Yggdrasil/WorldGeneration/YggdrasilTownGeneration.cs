@@ -3,16 +3,15 @@ using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.Common.Blocks;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Tools;
+using Everglow.Yggdrasil.YggdrasilTown.Items.TwilightForest;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
-using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Items;
-using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles;
-using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Walls;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
-
+using Everglow.Yggdrasil.YggdrasilTown.Walls.TwilightForest;
 using Terraria.Utilities;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
