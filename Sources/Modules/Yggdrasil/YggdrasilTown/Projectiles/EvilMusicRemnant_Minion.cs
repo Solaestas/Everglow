@@ -311,22 +311,73 @@ public class EvilMusicRemnant_Minion : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		var texture = ModContent.Request<Texture2D>(Texture).Value;
-		var drawColor = Color.White * SpawnProgress * 0.8f;
+		var skullTexture = ModAsset.EvilMusicRemnant_Minion_Skull.Value;
+		var chinTexture = ModAsset.EvilMusicRemnant_Minion_Chin.Value;
+		var glowTexture = ModAsset.EvilMusicRemnant_Minion_Glow.Value;
+		var drawColor = Color.White * SpawnProgress * 0.7f;
+		var scaleFactor = 0.3f;
+		var scale = Projectile.scale * scaleFactor;
 
-		float rotation;
-		SpriteEffects spriteEffect;
+		float skullRotation;
+		SpriteEffects skullSpriteEffect;
 		if (Projectile.direction < 0)
 		{
-			rotation = Projectile.velocity.ToRotation() - MathF.PI;
-			spriteEffect = SpriteEffects.None;
+			skullRotation = Projectile.velocity.ToRotation() - MathF.PI;
+			skullSpriteEffect = SpriteEffects.FlipHorizontally;
 		}
 		else
 		{
-			rotation = Projectile.velocity.ToRotation();
-			spriteEffect = SpriteEffects.FlipHorizontally;
+			skullRotation = Projectile.velocity.ToRotation();
+			skullSpriteEffect = SpriteEffects.None;
 		}
-		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, drawColor, rotation, texture.Size() / 2, Projectile.scale * 0.6f, spriteEffect, 0);
+
+		// Skull
+		var skullPosition = Projectile.Center - Main.screenPosition;
+		var skullOrigin = skullTexture.Size() / 2;
+		Main.spriteBatch.Draw(skullTexture, Projectile.Center - Main.screenPosition, null, drawColor, skullRotation, skullOrigin, scale, skullSpriteEffect, 0);
+
+		// Glow
+		var glowPositionOffset = new Vector2(25 * Projectile.direction, 6).RotatedBy(skullRotation) * scaleFactor;
+		var glowPosition = skullPosition + glowPositionOffset;
+		var glowColor = drawColor * 1.2f * MathF.Sin((float)Main.timeForVisualEffects * 0.06f);
+		Main.spriteBatch.Draw(glowTexture, glowPosition, null, glowColor, skullRotation, glowTexture.Size() / 2, scale, skullSpriteEffect, 0);
+
+		// Chin
+		var chinPositionOffset = new Vector2(-12 * Projectile.direction, 26).RotatedBy(skullRotation) * scaleFactor;
+		var chinPosition = skullPosition + chinPositionOffset;
+		var chinOrigin = new Vector2(0, 0);
+		var chinRotation = skullRotation + 0.2f * MathF.Sin((float)Main.timeForVisualEffects * 0.6f) * Projectile.direction;
+		var chinSpriteEffect = SpriteEffects.None;
+		if (Projectile.direction < 0)
+		{
+			chinOrigin = new Vector2(chinTexture.Width, 0);
+			chinSpriteEffect = SpriteEffects.FlipHorizontally;
+		}
+		Main.spriteBatch.Draw(chinTexture, chinPosition, null, drawColor, chinRotation, chinOrigin, scale, chinSpriteEffect, 0);
+
+		DrawShield(Main.spriteBatch);
 		return false;
+	}
+
+	private void DrawShield(SpriteBatch spriteBatch)
+	{
+		var shieldTexture = ModAsset.EvilMusicRemnant_Shield_Color.Value;
+		var colorProgress = MathF.Pow(SpawnProgress, 4);
+		var shieldColor = new Color(colorProgress, colorProgress, colorProgress, 0);
+		var scaleFactor = 0.9f + 0.1f * MathF.Sin((float)Main.timeForVisualEffects * 0.05f);
+
+		var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+		var effect = ModAsset.EvilMusicRemnant_Shield.Value;
+		effect.Parameters["uHeatMap"].SetValue(ModAsset.EvilMusicRemnant_Shield_Heat.Value);
+		effect.Parameters["uNoiseMap"].SetValue(Commons.ModAsset.Noise_burn.Value);
+		effect.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects * 0.005f);
+		effect.CurrentTechnique.Passes[0].Apply();
+
+		spriteBatch.Draw(shieldTexture, Projectile.Center - Main.screenPosition, null, shieldColor, 0, shieldTexture.Size() / 2, 0.05f * scaleFactor, SpriteEffects.None, 0);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 	}
 }
