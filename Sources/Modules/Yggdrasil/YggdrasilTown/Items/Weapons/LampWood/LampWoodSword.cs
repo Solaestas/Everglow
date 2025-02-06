@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 using Terraria.Audio;
 using Terraria.DataStructures;
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.LampWood;

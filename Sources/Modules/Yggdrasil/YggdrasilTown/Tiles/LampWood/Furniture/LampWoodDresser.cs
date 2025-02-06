@@ -178,7 +178,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture
 				}
 				if (player.cursorItemIconText == defaultName)
 				{
-					player.cursorItemIconID = ModContent.ItemType<Items.LampWood.Furniture.LampWoodDresser>();
+					player.cursorItemIconID = ModContent.ItemType<Items.Placeables.Furniture.LampWood.LampWoodDresser>();
 					player.cursorItemIconText = "";
 				}
 			}

@@ -89,6 +89,6 @@ public class TwilightEucalyptusChair : ModTile
 
 	public override void MouseOver(int i, int j)
 	{
-		FurnitureUtils.ChairMouseOver<Items.Placeables.Furnitures.TwilightForest.TwilightEucalyptusChair>(i, j);
+		FurnitureUtils.ChairMouseOver<Items.Placeables.Furniture.TwilightForest.TwilightEucalyptusChair>(i, j);
 	}
 }

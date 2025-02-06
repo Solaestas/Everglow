@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.Furnace;
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
@@ -61,6 +62,6 @@ public class HeatproofBed : ModTile
 	}
 
 	public override void MouseOver(int i, int j) {
-		FurnitureUtils.BedMouseOver<Everglow.Yggdrasil.YggdrasilTown.Items.Furnace.Furnitures.HeatproofBed_item>(i, j);
+		FurnitureUtils.BedMouseOver<HeatproofBed_item>(i, j);
 	}
 }

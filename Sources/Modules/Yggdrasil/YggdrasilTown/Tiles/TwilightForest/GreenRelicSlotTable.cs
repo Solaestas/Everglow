@@ -1,6 +1,6 @@
 using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts.TwilightForest;
-using Everglow.Yggdrasil.YggdrasilTown.Items.TwilightForest;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
 using Terraria.Audio;
 using Terraria.ObjectData;
 

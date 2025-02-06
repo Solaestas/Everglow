@@ -1,7 +1,7 @@
 using Everglow.Commons.VFX.Scene;
 using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Everglow.Yggdrasil.YggdrasilTown.Items.TwilightForest;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Tools.Developer;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest;

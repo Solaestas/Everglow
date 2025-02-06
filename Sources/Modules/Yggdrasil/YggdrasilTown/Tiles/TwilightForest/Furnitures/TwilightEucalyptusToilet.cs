@@ -116,7 +116,7 @@ public class TwilightEucalyptusToilet : ModTile
 
 		player.noThrow = 2;
 		player.cursorItemIconEnabled = true;
-		player.cursorItemIconID = ModContent.ItemType<Items.Placeables.Furnitures.TwilightForest.TwilightEucalyptusToilet>();
+		player.cursorItemIconID = ModContent.ItemType<Items.Placeables.Furniture.TwilightForest.TwilightEucalyptusToilet>();
 
 		if (Main.tile[i, j].TileFrameX / 18 < 1)
 		{

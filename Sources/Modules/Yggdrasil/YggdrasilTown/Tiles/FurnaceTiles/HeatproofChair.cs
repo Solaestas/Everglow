@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.Furnace;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
@@ -81,6 +82,6 @@ public class HeatproofChair : ModTile
 	}
 
 	public override void MouseOver(int i, int j) {
-		FurnitureUtils.ChairMouseOver<Everglow.Yggdrasil.YggdrasilTown.Items.Furnace.Furnitures.HeatproofChair_item>(i, j);
+		FurnitureUtils.ChairMouseOver<HeatproofChair_item>(i, j);
 	}
 }

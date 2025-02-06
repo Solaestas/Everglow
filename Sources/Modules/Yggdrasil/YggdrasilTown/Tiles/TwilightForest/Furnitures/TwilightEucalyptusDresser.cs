@@ -99,7 +99,7 @@ public class TwilightEucalyptusDresser : ModTile
 			}
 			if (player.cursorItemIconText == defaultName)
 			{
-				player.cursorItemIconID = ModContent.ItemType<Items.Placeables.Furnitures.TwilightForest.TwilightEucalyptusDresser>();
+				player.cursorItemIconID = ModContent.ItemType<Items.Placeables.Furniture.TwilightForest.TwilightEucalyptusDresser>();
 				player.cursorItemIconText = "";
 			}
 		}

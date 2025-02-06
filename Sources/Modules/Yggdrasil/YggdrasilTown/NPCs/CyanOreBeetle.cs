@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Ores;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
@@ -176,6 +177,6 @@ public class CyanOreBeetle : ModNPC
 
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.CyanVine.CyanVineOre>(), 1, 1, 2));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CyanVineOre>(), 1, 1, 2));
 	}
 }

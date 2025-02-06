@@ -60,6 +60,6 @@ public class TwilightEucalyptusSofa_Type2 : ModTile
 
 	public override void MouseOver(int i, int j)
 	{
-		FurnitureUtils.SofaMouseOver<Items.Placeables.Furnitures.TwilightForest.TwilightEucalyptusSofa_Type2>(i, j);
+		FurnitureUtils.SofaMouseOver<Items.Placeables.Furniture.TwilightForest.TwilightEucalyptusSofa_Type2>(i, j);
 	}
 }

@@ -2,7 +2,7 @@ using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts.TwilightForest;
-using Everglow.Yggdrasil.YggdrasilTown.Items.TwilightForest;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 

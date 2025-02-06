@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.Furnace;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
@@ -25,7 +26,7 @@ public class HeatproofDoor : ModTile
 		DustType = ModContent.DustType<Heatproof_Furniture_Dust>(); // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.OpenDoor };
 		// Tiles usually drop their corresponding item automatically, but RegisterItemDrop is needed here since the ExampleDoor item places ExampleDoorClosed, not this tile.
-		RegisterItemDrop(ModContent.ItemType<Everglow.Yggdrasil.YggdrasilTown.Items.Furnace.Furnitures.HeatproofDoor_item>(), 0);
+		RegisterItemDrop(ModContent.ItemType<HeatproofDoor_item>(), 0);
 		TileID.Sets.CloseDoorID[Type] = ModContent.TileType<HeatproofDoorClosed>();
 
 		// Names
@@ -87,6 +88,6 @@ public class HeatproofDoor : ModTile
 		Player player = Main.LocalPlayer;
 		player.noThrow = 2;
 		player.cursorItemIconEnabled = true;
-		player.cursorItemIconID = ModContent.ItemType<Everglow.Yggdrasil.YggdrasilTown.Items.Furnace.Furnitures.HeatproofDoor_item>();
+		player.cursorItemIconID = ModContent.ItemType<HeatproofDoor_item>();
 	}
 }

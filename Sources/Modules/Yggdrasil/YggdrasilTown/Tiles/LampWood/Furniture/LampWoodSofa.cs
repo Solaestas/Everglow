@@ -60,6 +60,6 @@ public class LampWoodSofa : ModTile
 
 	public override void MouseOver(int i, int j)
 	{
-		FurnitureUtils.SofaMouseOver<Items.LampWood.Furniture.LampWoodSofa>(i, j);
+		FurnitureUtils.SofaMouseOver<Items.Placeables.Furniture.LampWood.LampWoodSofa>(i, j);
 	}
 }

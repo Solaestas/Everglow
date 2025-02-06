@@ -26,7 +26,7 @@ public class TwilightEucalyptusDoor : ModTile
 		DustType = ModContent.DustType<TwilightEucalyptusWoodDust>(); // You should set a kind of dust manually.
 		AdjTiles = new int[] { TileID.OpenDoor };
 		// Tiles usually drop their corresponding item automatically, but RegisterItemDrop is needed here since the ExampleDoor item places ExampleDoorClosed, not this tile.
-		RegisterItemDrop(ModContent.ItemType<Items.Placeables.Furnitures.TwilightForest.TwilightEucalyptusDoor>(), 0);
+		RegisterItemDrop(ModContent.ItemType<Items.Placeables.Furniture.TwilightForest.TwilightEucalyptusDoor>(), 0);
 		TileID.Sets.CloseDoorID[Type] = ModContent.TileType<TwilightEucalyptusDoorClosed>();
 
 		// Names
@@ -91,6 +91,6 @@ public class TwilightEucalyptusDoor : ModTile
 		Player player = Main.LocalPlayer;
 		player.noThrow = 2;
 		player.cursorItemIconEnabled = true;
-		player.cursorItemIconID = ModContent.ItemType<Items.Placeables.Furnitures.TwilightForest.TwilightEucalyptusDoor>();
+		player.cursorItemIconID = ModContent.ItemType<Items.Placeables.Furniture.TwilightForest.TwilightEucalyptusDoor>();
 	}
 }

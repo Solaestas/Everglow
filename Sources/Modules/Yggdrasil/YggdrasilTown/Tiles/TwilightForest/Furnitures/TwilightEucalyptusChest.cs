@@ -38,7 +38,7 @@ public class TwilightEucalyptusChest : ModTile
 
 		// Style 1 is ExampleChest when locked. We want that tile style to drop the ExampleChest item as well. Use the Chest Lock item to lock this chest.
 		// No item places ExampleChest in the locked style, so the automatically determined item drop is unknown, this is why RegisterItemDrop is necessary in this situation. 
-		RegisterItemDrop(ModContent.ItemType<Items.Placeables.Furnitures.TwilightForest.TwilightEucalyptusChest>(), 1);
+		RegisterItemDrop(ModContent.ItemType<Items.Placeables.Furniture.TwilightForest.TwilightEucalyptusChest>(), 1);
 		// Sometimes mods remove content, such as tile styles, or tiles accidentally get corrupted. We can, if desired, register a fallback item for any tile style that doesn't have an automatically determined item drop. This is done by omitting the tileStyles parameter.
 		RegisterItemDrop(ItemID.Chest);
 
@@ -150,7 +150,7 @@ public class TwilightEucalyptusChest : ModTile
 			player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
 			if (player.cursorItemIconText == defaultName)
 			{
-				player.cursorItemIconID = ModContent.ItemType<Items.Placeables.Furnitures.TwilightForest.TwilightEucalyptusChest>();
+				player.cursorItemIconID = ModContent.ItemType<Items.Placeables.Furniture.TwilightForest.TwilightEucalyptusChest>();
 				if (Main.tile[left, top].TileFrameX / 36 == 1)
 				{
 					// player.cursorItemIconID = ModContent.ItemType<>();

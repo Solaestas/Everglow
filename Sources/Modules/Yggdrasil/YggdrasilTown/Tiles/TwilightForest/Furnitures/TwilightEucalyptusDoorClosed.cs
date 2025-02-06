@@ -48,6 +48,6 @@ public class TwilightEucalyptusDoorClosed : ModTile
 		Player player = Main.LocalPlayer;
 		player.noThrow = 2;
 		player.cursorItemIconEnabled = true;
-		player.cursorItemIconID = ModContent.ItemType<Items.Placeables.Furnitures.TwilightForest.TwilightEucalyptusDoor>();
+		player.cursorItemIconID = ModContent.ItemType<Items.Placeables.Furniture.TwilightForest.TwilightEucalyptusDoor>();
 	}
 }

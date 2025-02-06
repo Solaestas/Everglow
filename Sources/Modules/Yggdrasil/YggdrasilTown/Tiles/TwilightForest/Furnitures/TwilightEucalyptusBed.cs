@@ -68,6 +68,6 @@ public class TwilightEucalyptusBed : ModTile
 
 	public override void MouseOver(int i, int j)
 	{
-		FurnitureUtils.BedMouseOver<Items.Placeables.Furnitures.TwilightForest.TwilightEucalyptusBed>(i, j);
+		FurnitureUtils.BedMouseOver<Items.Placeables.Furniture.TwilightForest.TwilightEucalyptusBed>(i, j);
 	}
 }
