@@ -1,7 +1,7 @@
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Tools;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Fishing.FishingRods;
 
 public class ThermostatRod : ModItem
 {
