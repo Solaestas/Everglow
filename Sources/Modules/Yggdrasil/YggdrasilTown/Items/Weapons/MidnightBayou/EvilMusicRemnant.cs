@@ -9,6 +9,7 @@ public class EvilMusicRemnant : ModItem
 	{
 		Item.width = 46;
 		Item.height = 44;
+		Item.scale = 0.8f;
 
 		Item.DamageType = DamageClass.Summon;
 		Item.damage = 25;
@@ -19,7 +20,7 @@ public class EvilMusicRemnant : ModItem
 
 		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.useAnimation = Item.useTime = 21;
-		Item.UseSound = SoundID.Item1;
+		Item.UseSound = SoundID.Item26;
 		Item.autoReuse = true;
 		Item.noMelee = true;
 
@@ -39,4 +40,14 @@ public class EvilMusicRemnant : ModItem
 
 		return false;
 	}
+
+	public override void HoldItem(Player player)
+	{
+		if (player.controlUseItem)
+		{
+			player.SetArmToFitMousePosition(0.1f);
+		}
+	}
+
+	public override Vector2? HoldoutOffset() => new Vector2(6, -3);
 }
