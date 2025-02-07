@@ -12,4 +12,9 @@ public class BurnDebuff : ElementDebuff
 	}
 
 	public override void Draw(SpriteBatch spriteBatch) => throw new NotImplementedException();
+
+	public override void PostProc(NPC npc)
+	{
+		npc.AddBuff(BuffID.OnFire3, 1200);
+	}
 }
