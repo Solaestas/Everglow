@@ -1,6 +1,7 @@
 using Everglow.Commons.Mechanics.ElementDebuff;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
-using Terraria.DataStructures;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 
@@ -44,7 +45,7 @@ public class IstafelsSunfireGrasp : ModItem
 	{
 		public const float ElementDebuffBuildUpRate = 2f;
 		public const int FireBallBuildUpMax = 200;
-		public const int FireBallCooldown = 9000;
+		public const int FireBallCooldown = 600;
 
 		public const int SkillCooldown = 3600;
 		public const int SkillDuration = 1200;
@@ -57,7 +58,7 @@ public class IstafelsSunfireGrasp : ModItem
 
 		public int FireBallBuildUp { get; set; }
 
-		public IstafelsSunfireGrasp_Projectile FireBallProj { get; private set; }
+		public IstafelsSunfireGrasp_FireBall FireBallProj { get; private set; }
 
 		public override void ResetEffects()
 		{
@@ -84,6 +85,9 @@ public class IstafelsSunfireGrasp : ModItem
 			Skill();
 		}
 
+		/// <summary>
+		/// The skill of <see cref="IstafelsSunfireGrasp"/>
+		/// </summary>
 		private void Skill()
 		{
 			// If the target is currently receiving flame debuffs, all debuffs currently placed on that enemy
@@ -98,12 +102,20 @@ public class IstafelsSunfireGrasp : ModItem
 				if (HasFlameDebuff(npc))
 				{
 					ApplyFlameDebuffDamage(npc);
+
+					// Generate skill VFX
+					Projectile.NewProjectile(Player.GetSource_FromAI(), npc.Center, Vector2.Zero, ModContent.ProjectileType<IstafelsSunfireGrasp_SkillVFX>(), 0, 0, Player.whoAmI, npc.whoAmI, Math.Max(npc.width, npc.height));
 				}
 			}
 
+			// Add skill buff and cooldown debuff
 			Player.AddBuff(ModContent.BuffType<IstafelsSunfireGraspSkillCooldown>(), SkillCooldown);
 			Player.AddBuff(ModContent.BuffType<IstafelsSunfireGraspSkillBuff>(), SkillDuration);
 
+			// Play sound effect
+			SoundEngine.PlaySound(SoundID.Item130, Player.Center);
+
+			// Update symbol
 			SkillEnable = false;
 		}
 
@@ -116,22 +128,24 @@ public class IstafelsSunfireGrasp : ModItem
 
 				if (!Player.HasBuff<IstafelsSunfireGraspFireBallCooldown>())
 				{
-					if (FireBallProj == null)
+					if (FireBallProj == null || !FireBallProj.Projectile.active)
 					{
-						var proj = Projectile.NewProjectileDirect(Player.GetSource_FromAI(), Player.Center, Player.velocity, ModContent.ProjectileType<IstafelsSunfireGrasp_Projectile>(), 0, 0.4f, Player.whoAmI);
-						FireBallProj = (IstafelsSunfireGrasp_Projectile)proj.ModProjectile;
+						var proj = Projectile.NewProjectileDirect(Player.GetSource_FromAI(), Player.Center, Player.velocity, ModContent.ProjectileType<IstafelsSunfireGrasp_FireBall>(), 1, 1.2f, Player.whoAmI);
+						Player.AddBuff(ModContent.BuffType<IstafelsSunfireGraspFireBallBuff>(), 2);
+						FireBallProj = (IstafelsSunfireGrasp_FireBall)proj.ModProjectile;
 					}
 
 					FireBallBuildUp += damageDone;
+					FireBallProj.BuildUpProgress = Math.Clamp(FireBallBuildUp / (float)FireBallBuildUpMax, 0f, 1f);
 					if (FireBallBuildUp > FireBallBuildUpMax)
 					{
-						ShootProjectile(target);
+						ShootFireBall(target);
 					}
 				}
 			}
 		}
 
-		public void ShootProjectile(NPC target)
+		public void ShootFireBall(NPC target)
 		{
 			FireBallBuildUp = 0;
 			Player.AddBuff(ModContent.BuffType<IstafelsSunfireGraspFireBallCooldown>(), FireBallCooldown);
@@ -146,7 +160,7 @@ public class IstafelsSunfireGrasp : ModItem
 			{
 				if (HasFlameDebuff(target))
 				{
-					modifiers.FinalDamage.Multiplicative += SkillDamageBonus;
+					modifiers.FinalDamage.Additive += SkillDamageBonus;
 				}
 			}
 		}
@@ -162,7 +176,7 @@ public class IstafelsSunfireGrasp : ModItem
 			var vanillaDotDamage = target.GetVanillaDotDamage(BuffUtils.VanillaFlameDebuffs);
 
 			var charredIndex = target.FindBuffIndex(ModContent.BuffType<Charred>());
-			var charredDamage = charredIndex >= 0 ? target.buffTime[charredIndex] * Charred.DotDamage : 0;
+			var charredDamage = charredIndex >= 0 ? target.buffTime[charredIndex] * Charred.LifeRegenReductionFromDot : 0;
 
 			var totalDamage = vanillaDotDamage + charredDamage;
 
@@ -171,68 +185,6 @@ public class IstafelsSunfireGrasp : ModItem
 			{
 				target.life = 1;
 			}
-		}
-	}
-
-	public class IstafelsSunfireGrasp_Projectile : ModProjectile
-	{
-		public const int ProjectileVelocity = 16;
-
-		public override void SetDefaults()
-		{
-			Projectile.friendly = true;
-			Projectile.hostile = true;
-
-			Projectile.timeLeft = 300;
-
-			Projectile.tileCollide = true;
-			Projectile.penetrate = -1;
-			Projectile.ignoreWater = true;
-
-			Projectile.localNPCHitCooldown = 10;
-			Projectile.DamageType = DamageClass.Magic;
-		}
-
-		public override bool OnTileCollide(Vector2 oldVelocity)
-		{
-			if (Projectile.velocity.X != oldVelocity.X)
-			{
-				Projectile.velocity.X = -oldVelocity.X;
-			}
-
-			if (Projectile.velocity.Y != oldVelocity.Y)
-			{
-				Projectile.velocity.Y = -oldVelocity.Y;
-			}
-
-			Projectile.velocity *= 0.69f;
-			return false;
-		}
-
-		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
-		{
-			modifiers.FinalDamage += 25;
-		}
-
-		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-		{
-			const int BuffDuration = 960;
-			target.AddBuff(ModContent.BuffType<Charred>(), BuffDuration);
-		}
-
-		public override void AI()
-		{
-			Projectile.velocity.Y += 0.2f;
-			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-			if (Projectile.velocity.Y > 16f)
-			{
-				Projectile.velocity.Y = 16f;
-			}
-		}
-
-		public void Active(NPC target)
-		{
-			Projectile.velocity = (target.Center - Main.player[Projectile.owner].Center).NormalizeSafe() * ProjectileVelocity;
 		}
 	}
 }

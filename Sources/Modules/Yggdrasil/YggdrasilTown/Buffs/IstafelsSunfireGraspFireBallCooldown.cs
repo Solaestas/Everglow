@@ -6,6 +6,6 @@ public class IstafelsSunfireGraspFireBallCooldown : ModBuff
 	{
 		Main.pvpBuff[Type] = false;
 		Main.buffNoSave[Type] = false;
-		Main.debuff[Type] = false;
+		Main.debuff[Type] = true;
 	}
 }
