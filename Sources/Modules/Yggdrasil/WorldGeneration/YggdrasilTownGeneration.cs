@@ -815,7 +815,7 @@ public class YggdrasilTownGeneration
 			}
 		}
 		BuildTangledSubmine();
-		QuickBuild(230, Main.maxTilesY - 480, ModAsset.MapIOs_707x258YggTown_Path);
+		QuickBuild(230, Main.maxTilesY - 480, ModAsset.MapIOs_706x275YggdrasilTown_Path);
 
 		// fill ebonwood wall as piers below town ground.
 		// for (int i = 0; i < 501; i += 6)

@@ -15,7 +15,7 @@ public class GiantFurnace : ShapeDataTile, ISceneTile
 		DustType = DustID.Iron;
 		TotalWidth = 47;
 		TotalHeight = 60;
-
+		MinPick = int.MaxValue;
 		Main.tileSolid[Type] = false;
 		Main.tileFrameImportant[Type] = true;
 		Main.tileLighted[Type] = true;
@@ -137,4 +137,8 @@ public class GiantFurnace : ShapeDataTile, ISceneTile
 			}
 		}
 	}
+
+	public override bool CanExplode(int i, int j) => false;
+
+	public override bool CanKillTile(int i, int j, ref bool blockDamaged) => false;
 }

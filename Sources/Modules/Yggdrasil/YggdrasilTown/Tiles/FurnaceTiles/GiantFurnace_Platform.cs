@@ -36,6 +36,13 @@ public class GiantFurnace_Platform : ModTile, ISceneTile
 		TileObjectData.addTile(Type);
 	}
 
+	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
+	{
+		resetFrame = false;
+		noBreak = true;
+		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+	}
+
 	public void AddScene(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
