@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.Furnace;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
@@ -46,6 +47,6 @@ public class HeatproofDoorClosed : ModTile
 		Player player = Main.LocalPlayer;
 		player.noThrow = 2;
 		player.cursorItemIconEnabled = true;
-		player.cursorItemIconID = ModContent.ItemType<Everglow.Yggdrasil.YggdrasilTown.Items.Furnace.Furnitures.HeatproofDoor_item>();
+		player.cursorItemIconID = ModContent.ItemType<HeatproofDoor_item>();
 	}
 }

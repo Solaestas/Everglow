@@ -268,4 +268,13 @@ public static class NPCUtils
 			global.ElementDebuffs[type].SetElementResistance(elementResistance.Value);
 		}
 	}
+
+	public static int GetVanillaDotDamage(this NPC npc, IEnumerable<int> buffTypes)
+	{
+		return buffTypes
+			.Where(npc.HasBuff)
+			.Where(type => BuffUtils.VanillaDotDebuffDamageOnNPC.TryGetValue(type, out int _))
+			.Select(type => npc.buffTime[npc.FindBuffIndex(type)] * BuffUtils.VanillaDotDebuffDamageOnNPC[type])
+			.Sum();
+	}
 }

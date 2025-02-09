@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.Furnace;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
@@ -105,7 +106,7 @@ public class HeatproofToilet : ModTile
 
 		player.noThrow = 2;
 		player.cursorItemIconEnabled = true;
-		player.cursorItemIconID = ModContent.ItemType<Everglow.Yggdrasil.YggdrasilTown.Items.Furnace.Furnitures.HeatproofToilet_item>();
+		player.cursorItemIconID = ModContent.ItemType<HeatproofToilet_item>();
 
 		if (Main.tile[i, j].TileFrameX / 18 < 1) {
 			player.cursorItemIconReversed = true;

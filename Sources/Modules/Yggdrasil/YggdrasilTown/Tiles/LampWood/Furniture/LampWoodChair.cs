@@ -106,7 +106,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture
 
 			player.noThrow = 2;
 			player.cursorItemIconEnabled = true;
-			player.cursorItemIconID = ModContent.ItemType<Items.LampWood.Furniture.LampWoodChair>();
+			player.cursorItemIconID = ModContent.ItemType<Items.Placeables.Furniture.LampWood.LampWoodChair>();
 
 			if (Main.tile[i, j].TileFrameX / 18 < 1)
 			{

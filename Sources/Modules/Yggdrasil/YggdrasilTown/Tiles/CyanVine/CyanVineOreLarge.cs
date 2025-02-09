@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Ores;
 using Terraria.Audio;
 using Terraria.ObjectData;
 
@@ -54,7 +55,7 @@ public class CyanVineOreLarge : ModTile
 
 		for (int d = 0; d < Times; d++)
 		{
-			Item.NewItem(null, i * 16 + Main.rand.Next(94) - 16, j * 16 + Main.rand.Next(64) - 48, 16, 16, ModContent.ItemType<Items.CyanVine.CyanVineOre>());
+			Item.NewItem(null, i * 16 + Main.rand.Next(94) - 16, j * 16 + Main.rand.Next(64) - 48, 16, 16, ModContent.ItemType<CyanVineOre>());
 		}
 		Times = 13;
 		if (ThisTile.TileFrameX > 108)

@@ -11,8 +11,8 @@ public class FragmentsOfWreckage : ModItem
 	public override void SetDefaults()
 	{
 		Item.accessory = true;
-		Item.width = 28;
-		Item.height = 20;
+		Item.width = 34;
+		Item.height = 30;
 
 		Item.rare = ItemRarityID.Green;
 		Item.value = Item.buyPrice(platinum: 0, gold: 1);

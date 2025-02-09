@@ -1,5 +1,7 @@
 using Everglow.Commons.Coroutines;
+using Everglow.Yggdrasil.Common.NPCs;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.PermanentBoosters;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
@@ -285,6 +287,6 @@ public class LampFruitBorer : Caterpillar
 
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.LampBorerHoney>(), 1, 1, 1));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<LampBorerHoney>(), 1, 1, 1));
 	}
 }

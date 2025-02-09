@@ -1,5 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.LampWood;
 

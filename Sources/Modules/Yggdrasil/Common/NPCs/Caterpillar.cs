@@ -1,12 +1,9 @@
 using Everglow.Commons.Coroutines;
-using Everglow.Yggdrasil.Common.Elevator.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
+namespace Everglow.Yggdrasil.Common.NPCs;
 
 public abstract class Caterpillar : ModNPC
 {
@@ -32,7 +29,7 @@ public abstract class Caterpillar : ModNPC
 	public List<Segment> Segments = new List<Segment>();
 	public override void SetStaticDefaults()
 	{
-		
+
 	}
 	public override void SetDefaults()
 	{
@@ -125,7 +122,7 @@ public abstract class Caterpillar : ModNPC
 		}
 		for (int i = 0; i < SegmentCount; i++)
 		{
-			Segment segment = new Segment();
+			var segment = new Segment();
 			segment.Style = 1;
 			if (i == 0)
 			{
@@ -401,7 +398,7 @@ public abstract class Caterpillar : ModNPC
 				{
 					Segment segment = Segments[i];
 					int middleIndex = SegmentCount / 2;
-					segment.SelfPosition += (segment.SelfPosition - Segments[middleIndex].SelfPosition) - (segment.SelfPosition - Segments[middleIndex].SelfPosition).RotatedBy(Omega);
+					segment.SelfPosition += segment.SelfPosition - Segments[middleIndex].SelfPosition - (segment.SelfPosition - Segments[middleIndex].SelfPosition).RotatedBy(Omega);
 
 					//调整角度
 					if (i > 0 && i < Segments.Count - 1)
@@ -443,7 +440,7 @@ public abstract class Caterpillar : ModNPC
 	{
 		Crawl_1 = true;
 		float tValue = 0;
-		Vector2 toHead = Vector2.Normalize(Segments[Segments.Count - 1].SelfPosition - Segments[0].SelfPosition);
+		var toHead = Vector2.Normalize(Segments[Segments.Count - 1].SelfPosition - Segments[0].SelfPosition);
 		//随机决定拱起程度
 		float curveValue = Main.rand.NextFloat(1.7f, 3.3f);
 		for (int t = 0; t < 60; t++)
@@ -631,7 +628,7 @@ public abstract class Caterpillar : ModNPC
 		}
 		Crawl_1 = true;
 		float tValue = 0;
-		Vector2 toHead = Vector2.Normalize(Segments[Segments.Count - 1].SelfPosition - Segments[0].SelfPosition);
+		var toHead = Vector2.Normalize(Segments[Segments.Count - 1].SelfPosition - Segments[0].SelfPosition);
 		for (int t = 0; t < 60; t++)
 		{
 			if (Toughness <= 0)
@@ -752,7 +749,7 @@ public abstract class Caterpillar : ModNPC
 			spriteBatch.Draw(texture, drawPos, drawRectangle, drawColor, Segments[i].Normal.ToRotation() + MathHelper.PiOver2, origin, 1f, spriteEffect, 0);
 			if (HitTimer > 0)
 			{
-				Color hitColor = new Color(drawColor.R / 255f, 0, 0, HitTimer / 30f);
+				var hitColor = new Color(drawColor.R / 255f, 0, 0, HitTimer / 30f);
 				spriteBatch.Draw(texture, drawPos, drawRectangle, hitColor, Segments[i].Normal.ToRotation() + MathHelper.PiOver2, origin, 1f, spriteEffect, 0);
 			}
 		}
@@ -767,12 +764,12 @@ public abstract class Caterpillar : ModNPC
 				{
 					spriteEffect = SpriteEffects.FlipVertically;
 				}
-				Vector2 origin = new Vector2(drawRectangle.Width, drawRectangle.Height / 2f);
+				var origin = new Vector2(drawRectangle.Width, drawRectangle.Height / 2f);
 				Vector2 offset = Segments[i].Normal.RotatedBy(MathHelper.PiOver2) * drawRectangle.Width / 3f;
 				spriteBatch.Draw(texture, drawPos + offset, drawRectangle, drawColor, Segments[i].Normal.ToRotation() + MathHelper.PiOver2, origin, 1f, spriteEffect, 0);
 				if (HitTimer > 0)
 				{
-					Color hitColor = new Color(drawColor.R / 255f, 0, 0, HitTimer / 30f);
+					var hitColor = new Color(drawColor.R / 255f, 0, 0, HitTimer / 30f);
 					spriteBatch.Draw(texture, drawPos + offset, drawRectangle, hitColor, Segments[i].Normal.ToRotation() + MathHelper.PiOver2, origin, 1f, spriteEffect, 0);
 				}
 			}
@@ -792,7 +789,7 @@ public abstract class Caterpillar : ModNPC
 			Segment segment = Segments[i];
 			int x = (int)(NPC.Center.X + segment.SelfPosition.X - 20);
 			int y = (int)(NPC.Center.Y + segment.SelfPosition.Y - 20);
-			Rectangle rectangle = new Rectangle(x, y, 40, 40);
+			var rectangle = new Rectangle(x, y, 40, 40);
 
 			if (Rectangle.Intersect(rectangle, target.Hitbox) != Rectangle.emptyRectangle)
 			{
@@ -815,7 +812,7 @@ public abstract class Caterpillar : ModNPC
 				Segment segment = Segments[i];
 				int x = (int)(NPC.Center.X + segment.SelfPosition.X - SegmentHitBoxSize / 2);
 				int y = (int)(NPC.Center.Y + segment.SelfPosition.Y - SegmentHitBoxSize / 2);
-				Rectangle rectangle = new Rectangle(x, y, SegmentHitBoxSize, SegmentHitBoxSize);
+				var rectangle = new Rectangle(x, y, SegmentHitBoxSize, SegmentHitBoxSize);
 
 				if (projectile.Colliding(projectile.Hitbox, rectangle) && NPC.immune[projectile.owner] == 0 && projectile.friendly)
 				{
@@ -845,7 +842,7 @@ public abstract class Caterpillar : ModNPC
 			Segment segment = Segments[i];
 			int x = (int)(NPC.Center.X + segment.SelfPosition.X - SegmentHitBoxSize / 2);
 			int y = (int)(NPC.Center.Y + segment.SelfPosition.Y - SegmentHitBoxSize / 2);
-			Rectangle rectangle = new Rectangle(x, y, SegmentHitBoxSize, SegmentHitBoxSize);
+			var rectangle = new Rectangle(x, y, SegmentHitBoxSize, SegmentHitBoxSize);
 
 			if (Rectangle.Intersect(meleeAttackHitbox, rectangle) != Rectangle.emptyRectangle)
 			{
@@ -979,7 +976,7 @@ public abstract class Caterpillar : ModNPC
 		}
 		if (NPC.poisoned && Main.rand.NextBool(30))
 		{
-			Dust dust = Dust.NewDustDirect(NPC.Center, 0, 0, DustID.Poisoned, 0f, 0f, 120, default, 0.2f);
+			var dust = Dust.NewDustDirect(NPC.Center, 0, 0, DustID.Poisoned, 0f, 0f, 120, default, 0.2f);
 			dust.noGravity = true;
 			dust.fadeIn = 1.9f;
 			dust.position = RedistributionInMyShape() - new Vector2(4);
@@ -987,14 +984,14 @@ public abstract class Caterpillar : ModNPC
 		}
 		if (NPC.venom && Main.rand.NextBool(10))
 		{
-			Dust dust2 = Dust.NewDustDirect(NPC.Center, 0, 0, 171, 0f, 0f, 100, default, 0.5f);
+			var dust2 = Dust.NewDustDirect(NPC.Center, 0, 0, 171, 0f, 0f, 100, default, 0.5f);
 			dust2.noGravity = true;
 			dust2.fadeIn = 1.5f;
 			dust2.position = RedistributionInMyShape() - new Vector2(4);
 		}
 		if (NPC.shadowFlame && Main.rand.Next(5) < 4)
 		{
-			Dust dust3 = Dust.NewDustDirect(NPC.Center, 0, 0, 27, 0, 0, 180, default, 1.95f);
+			var dust3 = Dust.NewDustDirect(NPC.Center, 0, 0, 27, 0, 0, 180, default, 1.95f);
 			dust3.noGravity = true;
 			dust3.velocity *= 0.75f;
 			dust3.velocity.X *= 0.75f;
@@ -1010,7 +1007,7 @@ public abstract class Caterpillar : ModNPC
 		{
 			if (Main.rand.Next(4) < 3)
 			{
-				Dust dust4 = Dust.NewDustDirect(NPC.Center, 0, 0, 6, 0, 0, 100, default, 3.5f);
+				var dust4 = Dust.NewDustDirect(NPC.Center, 0, 0, 6, 0, 0, 100, default, 3.5f);
 				dust4.noGravity = true;
 				dust4.velocity *= 1.8f;
 				dust4.velocity.Y -= 0.5f;
@@ -1027,7 +1024,7 @@ public abstract class Caterpillar : ModNPC
 		{
 			if (Main.rand.Next(4) < 3)
 			{
-				Dust dust5 = Dust.NewDustDirect(NPC.Center, 0, 0, 6, 0, 0, 100, default, 3.5f);
+				var dust5 = Dust.NewDustDirect(NPC.Center, 0, 0, 6, 0, 0, 100, default, 3.5f);
 				dust5.noGravity = true;
 				dust5.velocity *= 1.8f;
 				dust5.velocity.Y -= 0.5f;
@@ -1045,7 +1042,7 @@ public abstract class Caterpillar : ModNPC
 		{
 			if (Main.rand.Next(4) < 3)
 			{
-				Dust dust6 = Dust.NewDustDirect(NPC.Center, 0, 0, 158, 0, 0, 100, default, 3.5f);
+				var dust6 = Dust.NewDustDirect(NPC.Center, 0, 0, 158, 0, 0, 100, default, 3.5f);
 				dust6.noGravity = true;
 				dust6.velocity *= 2.8f;
 				dust6.velocity.Y -= 0.5f;
@@ -1064,7 +1061,7 @@ public abstract class Caterpillar : ModNPC
 		{
 			if (Main.rand.Next(4) < 3)
 			{
-				Dust dust7 = Dust.NewDustDirect(NPC.Center, 0, 0, 55, 0, 0, 100, default, 3.5f);
+				var dust7 = Dust.NewDustDirect(NPC.Center, 0, 0, 55, 0, 0, 100, default, 3.5f);
 				dust7.noGravity = true;
 				dust7.velocity *= 2.8f;
 				dust7.velocity.Y -= 1.5f;
@@ -1081,10 +1078,10 @@ public abstract class Caterpillar : ModNPC
 		if (NPC.oiled && !Main.rand.NextBool(3))
 		{
 			int num = 175;
-			Color newColor = new Color(0, 0, 0, 250);
+			var newColor = new Color(0, 0, 0, 250);
 			if (Main.rand.NextBool(2))
 			{
-				Dust dust8 = Dust.NewDustDirect(NPC.Center, 0, 0, 4, 0f, 0f, num, newColor, 1.4f);
+				var dust8 = Dust.NewDustDirect(NPC.Center, 0, 0, 4, 0f, 0f, num, newColor, 1.4f);
 				if (Main.rand.NextBool(2))
 					dust8.alpha += 25;
 
@@ -1101,7 +1098,7 @@ public abstract class Caterpillar : ModNPC
 
 		if (NPC.dryadWard && NPC.velocity.X != 0f && Main.rand.NextBool(4))
 		{
-			Dust dust9 = Dust.NewDustDirect(NPC.Center, 0, 0, 163, 0, 0, 100, default, 1.5f);
+			var dust9 = Dust.NewDustDirect(NPC.Center, 0, 0, 163, 0, 0, 100, default, 1.5f);
 			dust9.noGravity = true;
 			dust9.noLight = true;
 			dust9.velocity *= 0f;
@@ -1110,7 +1107,7 @@ public abstract class Caterpillar : ModNPC
 
 		if (NPC.dryadBane && Main.rand.NextBool(4))
 		{
-			Dust dust10 = Dust.NewDustDirect(NPC.Center, 0, 0, DustID.PoisonStaff, 0, 0, 100, default, 1.5f);
+			var dust10 = Dust.NewDustDirect(NPC.Center, 0, 0, DustID.PoisonStaff, 0, 0, 100, default, 1.5f);
 			dust10.noGravity = true;
 			dust10.velocity *= new Vector2(Main.rand.NextFloat() * 4f - 2f, 0f);
 			dust10.noLight = true;
@@ -1119,10 +1116,10 @@ public abstract class Caterpillar : ModNPC
 
 		if (NPC.loveStruck && Main.rand.NextBool(5))
 		{
-			Vector2 vector2 = new Vector2(Main.rand.Next(-10, 11), Main.rand.Next(-10, 11));
+			var vector2 = new Vector2(Main.rand.Next(-10, 11), Main.rand.Next(-10, 11));
 			vector2.Normalize();
 			vector2.X *= 0.66f;
-			int num2 = Gore.NewGore(NPC.Center, vector2 * Main.rand.Next(3, 6) * 0.33f, 331, (float)Main.rand.Next(40, 121) * 0.01f);
+			int num2 = Gore.NewGore(NPC.Center, vector2 * Main.rand.Next(3, 6) * 0.33f, 331, Main.rand.Next(40, 121) * 0.01f);
 			Main.gore[num2].sticky = false;
 			Main.gore[num2].velocity *= 0.4f;
 			Main.gore[num2].velocity.Y -= 0.6f;
@@ -1131,12 +1128,12 @@ public abstract class Caterpillar : ModNPC
 
 		if (NPC.stinky && Main.rand.NextBool(5))
 		{
-			Vector2 vector3 = new Vector2(Main.rand.Next(-10, 11), Main.rand.Next(-10, 11));
+			var vector3 = new Vector2(Main.rand.Next(-10, 11), Main.rand.Next(-10, 11));
 			vector3.Normalize();
 			vector3.X *= 0.66f;
 			vector3.Y = Math.Abs(vector3.Y);
 			Vector2 vector4 = vector3 * Main.rand.Next(3, 5) * 0.25f;
-			Dust dust11 = Dust.NewDustDirect(NPC.Center, 0, 0, DustID.FartInAJar, vector4.X, vector4.Y * 0.5f, 100, default, 1.5f);
+			var dust11 = Dust.NewDustDirect(NPC.Center, 0, 0, DustID.FartInAJar, vector4.X, vector4.Y * 0.5f, 100, default, 1.5f);
 			dust11.velocity *= 0.1f;
 			dust11.velocity.Y -= 0.5f;
 			dust11.position = RedistributionInMyShape() - new Vector2(4);
@@ -1146,7 +1143,7 @@ public abstract class Caterpillar : ModNPC
 		{
 			if (Main.rand.NextBool(2))
 			{
-				Dust dust12 = Dust.NewDustDirect(NPC.Center, 0, 0, 211, 0f, 0f, 50, default, 0.8f);
+				var dust12 = Dust.NewDustDirect(NPC.Center, 0, 0, 211, 0f, 0f, 50, default, 0.8f);
 				if (Main.rand.NextBool(2))
 					dust12.alpha += 25;
 
@@ -1160,7 +1157,7 @@ public abstract class Caterpillar : ModNPC
 			}
 			else
 			{
-				Dust dust13 = Dust.NewDustDirect(NPC.Center, 0, 0, 211, 0f, 0f, 50, default, 1.1f);
+				var dust13 = Dust.NewDustDirect(NPC.Center, 0, 0, 211, 0f, 0f, 50, default, 1.1f);
 				if (Main.rand.NextBool(2))
 					dust13.alpha += 25;
 
@@ -1178,10 +1175,10 @@ public abstract class Caterpillar : ModNPC
 		if (NPC.drippingSlime && !Main.rand.NextBool(4))
 		{
 			int num3 = 175;
-			Color newColor2 = new Color(0, 80, 255, 100);
+			var newColor2 = new Color(0, 80, 255, 100);
 			if (Main.rand.NextBool(2))
 			{
-				Dust dust14 = Dust.NewDustDirect(NPC.Center, 0, 0, 4, 0f, 0f, num3, newColor2, 1.4f);
+				var dust14 = Dust.NewDustDirect(NPC.Center, 0, 0, 4, 0f, 0f, num3, newColor2, 1.4f);
 				if (Main.rand.NextBool(2))
 					dust14.alpha += 25;
 
@@ -1200,7 +1197,7 @@ public abstract class Caterpillar : ModNPC
 			int num4 = 150;
 			if (Main.rand.NextBool(2))
 			{
-				Dust dust15 = Dust.NewDustDirect(NPC.Center, 0, 0, 243, 0f, 0f, num4);
+				var dust15 = Dust.NewDustDirect(NPC.Center, 0, 0, 243, 0f, 0f, num4);
 				if (Main.rand.NextBool(2))
 					dust15.alpha += 25;
 
@@ -1218,7 +1215,7 @@ public abstract class Caterpillar : ModNPC
 		{
 			if (Main.rand.Next(4) < 3)
 			{
-				Dust dust16 = Dust.NewDustDirect(NPC.Center, 0, 0, 135, 0, 0, 100, default, 3.5f);
+				var dust16 = Dust.NewDustDirect(NPC.Center, 0, 0, 135, 0, 0, 100, default, 3.5f);
 				dust16.noGravity = true;
 				dust16.velocity *= 1.8f;
 				dust16.velocity.Y -= 0.5f;
@@ -1237,7 +1234,7 @@ public abstract class Caterpillar : ModNPC
 		{
 			if (Main.rand.Next(4) < 3)
 			{
-				Dust dust17 = Dust.NewDustDirect(NPC.Center, 0, 0, 135, 0, 0, 100, default, 3.5f);
+				var dust17 = Dust.NewDustDirect(NPC.Center, 0, 0, 135, 0, 0, 100, default, 3.5f);
 				dust17.noGravity = true;
 				dust17.velocity *= 1.8f;
 				dust17.velocity.Y -= 0.5f;
@@ -1256,7 +1253,7 @@ public abstract class Caterpillar : ModNPC
 		{
 			if (Main.rand.Next(4) < 3)
 			{
-				Dust dust18 = Dust.NewDustDirect(NPC.Center, 0, 0, 75, 0, 0, 100, default, 3.5f);
+				var dust18 = Dust.NewDustDirect(NPC.Center, 0, 0, 75, 0, 0, 100, default, 3.5f);
 				dust18.noGravity = true;
 				dust18.velocity *= 1.8f;
 				dust18.velocity.Y -= 0.5f;
@@ -1319,7 +1316,7 @@ public abstract class Caterpillar : ModNPC
 		for (int i = 0; i < Segments.Count; i++)
 		{
 			Segment segment = Segments[i];
-			Point pos = (segment.SelfPosition + NPC.Center).ToPoint();
+			var pos = (segment.SelfPosition + NPC.Center).ToPoint();
 			if (pos.X - 20 < minX)
 			{
 				minX = pos.X - 20;

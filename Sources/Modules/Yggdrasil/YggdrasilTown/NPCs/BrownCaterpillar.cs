@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.Common.NPCs;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;

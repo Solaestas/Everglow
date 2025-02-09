@@ -1,5 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Everglow.Yggdrasil.YggdrasilTown.Items.LampWood.Furniture;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.LampWood;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
 using Terraria.ObjectData;

@@ -1,6 +1,6 @@
 using Everglow.Commons.CustomTiles;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Everglow.Yggdrasil.YggdrasilTown.Items;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;

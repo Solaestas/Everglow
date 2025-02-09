@@ -1,5 +1,7 @@
 using Everglow.Commons.Coroutines;
+using Everglow.Yggdrasil.Common.NPCs;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
@@ -285,6 +287,6 @@ public class BarkSpicyCaterpillar : Caterpillar
 
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.CaterpillarJuice>(), 1, 1, 2));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CaterpillarJuice>(), 1, 1, 2));
 	}
 }

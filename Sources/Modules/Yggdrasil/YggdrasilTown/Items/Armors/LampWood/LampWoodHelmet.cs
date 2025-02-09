@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.LampWood;

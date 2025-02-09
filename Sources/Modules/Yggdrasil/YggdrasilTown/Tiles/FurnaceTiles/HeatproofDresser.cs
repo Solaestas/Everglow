@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.Furnace;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
@@ -88,7 +89,7 @@ public class HeatproofDresser : ModTile
 				player.cursorItemIconText = defaultName;
 			}
 			if (player.cursorItemIconText == defaultName) {
-				player.cursorItemIconID = ModContent.ItemType<Everglow.Yggdrasil.YggdrasilTown.Items.Furnace.Furnitures.HeatproofDresser_item>();
+				player.cursorItemIconID = ModContent.ItemType<HeatproofDresser_item>();
 				player.cursorItemIconText = "";
 			}
 		}

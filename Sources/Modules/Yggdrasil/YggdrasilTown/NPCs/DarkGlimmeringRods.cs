@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
@@ -73,8 +74,8 @@ public class DarkGlimmeringRods : ModNPC
 	}
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.AuburnRodSkeleton>(), 24, 1));
-		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.RodWing>(), 1, 3, 6));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<AuburnRodSkeleton>(), 24, 1));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<RodWing>(), 1, 3, 6));
 	}
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{

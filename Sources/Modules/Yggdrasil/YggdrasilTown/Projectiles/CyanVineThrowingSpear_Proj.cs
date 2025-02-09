@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.CyanVine;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -58,7 +59,7 @@ public class CyanVineThrowingSpear_Proj : ModProjectile
 			Projectile.damage = (int)(Projectile.damage * (Power / 30f + 1));
 			SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 		}
-		if (player.HeldItem.type != ModContent.ItemType<Items.CyanVine.CyanVineThrowingSpear>())
+		if (player.HeldItem.type != ModContent.ItemType<CyanVineThrowingSpear>())
 		{
 			Projectile.active = false;
 		}

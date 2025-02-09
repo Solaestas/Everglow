@@ -1,6 +1,6 @@
 using Everglow.Commons.TileHelper;
 using Everglow.Commons.VFX.Scene;
-using Everglow.Yggdrasil.YggdrasilTown.Items.Furnace;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Tools.Developer;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ObjectData;

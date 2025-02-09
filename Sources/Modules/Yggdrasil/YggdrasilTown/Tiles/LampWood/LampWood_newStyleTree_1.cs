@@ -1,7 +1,7 @@
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Everglow.Yggdrasil.YggdrasilTown.Items;
-using Everglow.Yggdrasil.YggdrasilTown.Items.LampWood;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 using Everglow.Yggdrasil.YggdrasilTown.NPCs;
 using Terraria.GameContent.Drawing;
 
