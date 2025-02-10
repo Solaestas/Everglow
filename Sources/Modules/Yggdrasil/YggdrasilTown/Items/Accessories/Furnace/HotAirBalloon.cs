@@ -58,9 +58,12 @@ internal class HotAirBalloonPlayer : ModPlayer
 			}
 
 			// Draw dust
-			for (int i = 0; i < 2; i++)
+			if(Main.rand.NextBool(1))
 			{
-				Dust.NewDust(Player.position, Player.width, Player.height, DustID.Torch);
+				Dust dust = Dust.NewDustDirect(Player.position - new Vector2(2), Player.width + 4, Player.height + 4, DustID.Torch, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default(Color), 1.6f);
+				dust.noGravity = true;
+				dust.velocity *= 1.8f;
+				dust.velocity.Y -= 0.5f;
 			}
 		}
 	}
