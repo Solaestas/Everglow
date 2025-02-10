@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Mechanics.ElementDebuff;
+namespace Everglow.Commons.Mechanics.ElementalDebuff;
 
 /// <summary>
 /// Element debuff types. (For more details, please go to <a href="https://prts.wiki/w/%E5%85%83%E7%B4%A0">Arknights Wiki</a>)
@@ -9,7 +9,7 @@ namespace Everglow.Commons.Mechanics.ElementDebuff;
 ///     <item>Necrosis</item>
 /// </list>
 /// </summary>
-public enum ElementDebuffType
+public enum ElementalDebuffType
 {
 	NervousImpairment,
 	Corrosion,

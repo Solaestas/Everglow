@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.ElementDebuff;
+using Everglow.Commons.Mechanics.ElementalDebuff;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Terraria.Audio;
@@ -124,7 +124,7 @@ public class IstafelsSunfireGrasp : ModItem
 			if (IstafelsSunfireGraspEnable
 			   && hit.DamageType == DamageClass.Magic)
 			{
-				target.GetGlobalNPC<ElementDebuffGlobalNPC>().ElementDebuffs[ElementDebuffType.Burn].AddBuildUp((int)(damageDone * ElementDebuffBuildUpRate));
+				target.AddElementalDebuffBuildUp(Player, ElementalDebuffType.Burn, (int)(damageDone * ElementDebuffBuildUpRate));
 
 				if (!Player.HasBuff<IstafelsSunfireGraspFireBallCooldown>())
 				{

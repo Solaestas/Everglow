@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.ElementDebuff;
+using Everglow.Commons.Mechanics.ElementalDebuff;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 
@@ -36,7 +36,7 @@ public class FurnaceIronGloves : ModItem
 			if (FurnaceIronGlovesEnable
 				&& hit.DamageType == DamageClass.Magic)
 			{
-				target.GetGlobalNPC<ElementDebuffGlobalNPC>().ElementDebuffs[ElementDebuffType.Burn].AddBuildUp((int)(damageDone * ElementDebuffBuildUpRate));
+				target.AddElementalDebuffBuildUp(Player, ElementalDebuffType.Burn, (int)(damageDone * ElementDebuffBuildUpRate));
 			}
 		}
 	}

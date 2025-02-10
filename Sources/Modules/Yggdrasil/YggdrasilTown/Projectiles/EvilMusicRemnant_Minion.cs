@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.ElementDebuff;
+using Everglow.Commons.Mechanics.ElementalDebuff;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 
@@ -306,7 +306,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		target.GetGlobalNPC<ElementDebuffGlobalNPC>().ElementDebuffs[ElementDebuffType.NervousImpairment].AddBuildUp(125);
+		target.AddElementalDebuffBuildUp(Main.player[Projectile.owner], ElementalDebuffType.NervousImpairment, 125);
 	}
 
 	public override bool PreDraw(ref Color lightColor)

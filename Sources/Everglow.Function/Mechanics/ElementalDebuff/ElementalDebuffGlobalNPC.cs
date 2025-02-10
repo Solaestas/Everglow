@@ -2,37 +2,46 @@ using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
 using Everglow.Commons.Utilities;
 
-namespace Everglow.Commons.Mechanics.ElementDebuff;
+namespace Everglow.Commons.Mechanics.ElementalDebuff;
 
-public partial class ElementDebuffGlobalNPC : GlobalNPC
+public partial class ElementalDebuffGlobalNPC : GlobalNPC
 {
-	private Dictionary<ElementDebuffType, ElementDebuff> elementDebuffs = [];
+	private Dictionary<ElementalDebuffType, ElementalDebuff> elementalDebuffs = [];
 
-	public IReadOnlyDictionary<ElementDebuffType, ElementDebuff> ElementDebuffs => elementDebuffs.AsReadOnly();
+	public IReadOnlyDictionary<ElementalDebuffType, ElementalDebuff> ElementalDebuffs => elementalDebuffs.AsReadOnly();
 
 	public override bool InstancePerEntity => true;
 
 	public override void SetDefaults(NPC entity)
 	{
-		foreach (var elementType in ElementDebuffRegistry.GetAllTypes())
+		foreach (var elementType in ElementalDebuffRegistry.GetAllTypes())
 		{
-			elementDebuffs.Add(elementType, ElementDebuffRegistry.CreateDebuff(elementType));
+			elementalDebuffs.Add(elementType, ElementalDebuffRegistry.CreateDebuff(elementType)
+				.SetInfo(ElementalDebuffInfoRegistry.GetInfo(entity.type, elementType)));
 		}
 	}
 
 	public override void UpdateLifeRegen(NPC npc, ref int damage)
 	{
-		foreach (var element in elementDebuffs)
+		foreach (var element in elementalDebuffs)
 		{
-			element.Value.ApplyDotDamage(npc);
+			element.Value.ApplyDot(npc);
+		}
+	}
+
+	public override void ResetEffects(NPC npc)
+	{
+		foreach (var element in elementalDebuffs)
+		{
+			element.Value.ResetEffects();
 		}
 	}
 
 	public override void AI(NPC npc)
 	{
-		foreach (var element in elementDebuffs)
+		foreach (var element in elementalDebuffs)
 		{
-			element.Value.UpdateBuildUp(npc);
+			element.Value.Update(npc);
 		}
 	}
 
@@ -45,9 +54,9 @@ public partial class ElementDebuffGlobalNPC : GlobalNPC
 		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, default, default, null, Main.GameViewMatrix.TransformationMatrix);
 
 		// Draw element debuff icons and VFXs
-		int activeElementDebuffCount = elementDebuffs.Where(x => x.Value.Proc || x.Value.HasBuildUp).Count();
+		int activeElementDebuffCount = elementalDebuffs.Where(x => x.Value.Proc || x.Value.HasBuildUp).Count();
 		int drawedElementDebuffCount = 0;
-		foreach (var (elementType, element) in elementDebuffs)
+		foreach (var (elementType, element) in elementalDebuffs)
 		{
 			if (!element.Proc && !element.HasBuildUp)
 			{
@@ -59,7 +68,7 @@ public partial class ElementDebuffGlobalNPC : GlobalNPC
 			var backgroundColor = Color.Lerp(element.Color, lightColor, 0.5f);
 
 			var drawPosition = npc.Center - Main.screenPosition;
-			drawPosition += new Vector2(0, -npc.height / 2 * 1.4f).RotatedBy(MathHelper.TwoPi * ((activeElementDebuffCount - 1) / 2f - drawedElementDebuffCount) / Enum.GetValues<ElementDebuffType>().Length);
+			drawPosition += new Vector2(0, -npc.height / 2 * 1.4f).RotatedBy(MathHelper.TwoPi * ((activeElementDebuffCount - 1) / 2f - drawedElementDebuffCount) / Enum.GetValues<ElementalDebuffType>().Length);
 
 			var scale = 0.1f * npc.height / 100;
 			if (scale < 0.05f)
