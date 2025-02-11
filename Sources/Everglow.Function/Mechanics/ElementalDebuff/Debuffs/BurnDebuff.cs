@@ -6,7 +6,7 @@ public class BurnDebuff : ElementalDebuff
 		: base(ElementalDebuffType.Burn, ModAsset.StarSlash, Color.Orange)
 	{
 		BuildUpMax = 1000;
-		DurationMax = 60;
+		DurationMax = 720;
 		DotDamage = 2;
 		ProcDamage = 200;
 	}

@@ -14,6 +14,7 @@ public class PlayerPenetrationTest : ModItem
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
-		player.GetModPlayer<ElementalDebuffPlayer>().ElementPenetration += 0.1f;
+		player.GetElementalPenetration(ElementalDebuffType.Generic) += 0.1f;
+		player.GetElementalPenetration(ElementalDebuffType.Burn) += 0.05f;
 	}
 }

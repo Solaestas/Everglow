@@ -27,6 +27,12 @@ public abstract class ElementalDebuff
 	private StatModifier elementalResistanceStatModifier;
 
 	/// <summary>
+	/// Use this to manage <see cref="ElementalResistanceCurrent"/>. Same to the usage of <see cref="Player.GetDamage{T}()"></see>
+	/// </summary>
+	/// <returns></returns>
+	public ref StatModifier ElementalResistanceStatModifier => ref elementalResistanceStatModifier;
+
+	/// <summary>
 	/// The type of element debuff
 	/// </summary>
 	public ElementalDebuffType Type { get; init; }
@@ -239,12 +245,6 @@ public abstract class ElementalDebuff
 
 		return this;
 	}
-
-	/// <summary>
-	/// Use this to manage <see cref="ElementalResistanceCurrent"/>. Same to the usage of <see cref="Player.GetDamage{T}()"></see>
-	/// </summary>
-	/// <returns></returns>
-	public ref StatModifier GetElementalResistance() => ref elementalResistanceStatModifier;
 
 	/// <summary>
 	/// Reset all stat

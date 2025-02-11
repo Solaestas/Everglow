@@ -12,9 +12,20 @@ public static class ElementalDebuffExtensions
 	/// <param name="penentration"></param>
 	public static bool AddElementalDebuffBuildUp(this NPC npc, Player source, ElementalDebuffType type, int buildUp, float penentration = 0)
 	{
+		// Calculate player's elemental penetration
 		if (source != null)
 		{
-			penentration += source.GetModPlayer<ElementalDebuffPlayer>().ElementPenetration;
+			var typePene = source.GetElementalPenetration(type).ApplyTo(1f) - 1f;
+			if (typePene > 0)
+			{
+				penentration += typePene;
+			}
+
+			var genericPene = source.GetElementalPenetration(type).ApplyTo(1f) - 1f;
+			if (genericPene > 0)
+			{
+				penentration += genericPene;
+			}
 		}
 
 		return AddElementalDebuffBuildUp(npc, type, buildUp, penentration);
@@ -50,8 +61,12 @@ public static class ElementalDebuffExtensions
 	/// <param name="npc"></param>
 	/// <param name="type"></param>
 	/// <returns></returns>
-	public static ElementalDebuff GetElementalDebuff(this NPC npc, ElementalDebuffType type)
-	{
-		return npc.GetGlobalNPC<ElementalDebuffGlobalNPC>().ElementalDebuffs[type];
-	}
+	public static ElementalDebuff GetElementalDebuff(this NPC npc, ElementalDebuffType type) =>
+		npc.GetGlobalNPC<ElementalDebuffGlobalNPC>().ElementalDebuffs[type];
+
+	public static ref StatModifier GetElementalResistance(this NPC npc, ElementalDebuffType type) =>
+		ref npc.GetElementalDebuff(type).ElementalResistanceStatModifier;
+
+	public static ref StatModifier GetElementalPenetration(this Player player, ElementalDebuffType type) =>
+		ref player.GetModPlayer<ElementalDebuffPlayer>().ElementalPenetration[type];
 }

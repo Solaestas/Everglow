@@ -11,7 +11,7 @@ public class ElementalResistanceReductionDebuffTest : ModBuff
 
 	public override void Update(NPC npc, ref int buffIndex)
 	{
-		npc.GetElementalDebuff(ElementalDebuffType.Burn).GetElementalResistance().Base += 0.1f;
-		npc.GetElementalDebuff(ElementalDebuffType.Burn).GetElementalResistance() += 0.05f;
+		npc.GetElementalResistance(ElementalDebuffType.Burn).Base += 0.1f;
+		npc.GetElementalResistance(ElementalDebuffType.Burn) += 0.05f;
 	}
 }

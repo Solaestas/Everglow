@@ -11,6 +11,11 @@ namespace Everglow.Commons.Mechanics.ElementalDebuff;
 /// </summary>
 public enum ElementalDebuffType
 {
+	/// <summary>
+	/// Used to apply bonus for all elemental debuff type. Not registered in <see cref="ElementalDebuffRegistry"/> and other registeries.
+	/// </summary>
+	Generic,
+
 	NervousImpairment,
 	Corrosion,
 	Burn,
