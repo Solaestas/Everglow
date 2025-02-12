@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.ElementDebuff;
+using Everglow.Commons.Mechanics.ElementalDebuff;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -28,7 +28,7 @@ public class KissOfCthulhu_Projectile : ModProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		target.GetGlobalNPC<ElementDebuffGlobalNPC>().ElementDebuffs[ElementDebuffType.Corrosion].AddBuildUp(400);
+		target.AddElementalDebuffBuildUp(Main.player[Projectile.owner], ElementalDebuffType.Corrosion, 400);
 	}
 
 	public override void OnKill(int timeLeft)

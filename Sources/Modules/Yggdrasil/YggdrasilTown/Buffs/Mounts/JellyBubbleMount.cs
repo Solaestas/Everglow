@@ -1,6 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Items.Mounts;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Buffs;
+namespace Everglow.Yggdrasil.YggdrasilTown.Buffs.Mounts;
 
 public class JellyBubbleMount : ModBuff
 {

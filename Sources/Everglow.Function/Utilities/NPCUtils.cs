@@ -1,5 +1,4 @@
 using System.Reflection;
-using Everglow.Commons.Mechanics.ElementDebuff;
 
 namespace Everglow.Commons.Utilities;
 
@@ -221,52 +220,6 @@ public static class NPCUtils
 			return false;
 		}
 		return true;
-	}
-
-	/// <summary>
-	/// Set element debuff custom value in the global npc, or the values will be default.
-	/// <para/>Global NPC is created per instance, so this method should not be called in <see cref="ModNPC.SetDefaults"/>
-	/// <para/>Recommend to call it in <see cref="ModNPC.OnSpawn(Terraria.DataStructures.IEntitySource)"/>
-	/// </summary>
-	/// <param name="npc"></param>
-	/// <param name="type"></param>
-	/// <param name="buildUpMax"></param>
-	/// <param name="durationMax"></param>
-	/// <param name="dotDamage"></param>
-	/// <param name="procDamage"></param>
-	/// <param name="elementResistance"></param>
-	public static void SetElementDebuff(this NPC npc, ElementDebuffType type, int? buildUpMax = null, int? durationMax = null, int? dotDamage = null, int? procDamage = null, float? elementResistance = null)
-	{
-		var global = npc.GetGlobalNPC<ElementDebuffGlobalNPC>();
-		if (global == null)
-		{
-			return;
-		}
-
-		if (buildUpMax != null)
-		{
-			global.ElementDebuffs[type].SetBuildUpMax(buildUpMax.Value);
-		}
-
-		if (durationMax != null)
-		{
-			global.ElementDebuffs[type].SetDurationMax(durationMax.Value);
-		}
-
-		if (dotDamage != null)
-		{
-			global.ElementDebuffs[type].SetDotDamage(dotDamage.Value);
-		}
-
-		if (procDamage != null)
-		{
-			global.ElementDebuffs[type].SetProcDamage(procDamage.Value);
-		}
-
-		if (elementResistance != null)
-		{
-			global.ElementDebuffs[type].SetElementResistance(elementResistance.Value);
-		}
 	}
 
 	public static int GetVanillaDotDamage(this NPC npc, IEnumerable<int> buffTypes)

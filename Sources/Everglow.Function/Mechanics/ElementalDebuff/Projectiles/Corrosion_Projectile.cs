@@ -4,7 +4,7 @@ using Everglow.Commons.Vertex;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Commons.Mechanics.ElementDebuff.Projectiles;
+namespace Everglow.Commons.Mechanics.ElementalDebuff.Projectiles;
 
 public class Corrosion_Projectile : ModProjectile
 {
@@ -86,7 +86,7 @@ public class Corrosion_Projectile : ModProjectile
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		ActiveProjectile();
-		target.GetGlobalNPC<ElementDebuffGlobalNPC>().ElementDebuffs[ElementDebuffType.Corrosion].AddBuildUp(100);
+		target.AddElementalDebuffBuildUp(ElementalDebuffType.Corrosion, 100);
 	}
 
 	private void ActiveProjectile()

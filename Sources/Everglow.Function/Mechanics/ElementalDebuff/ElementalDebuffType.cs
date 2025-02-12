@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Mechanics.ElementDebuff;
+namespace Everglow.Commons.Mechanics.ElementalDebuff;
 
 /// <summary>
 /// Element debuff types. (For more details, please go to <a href="https://prts.wiki/w/%E5%85%83%E7%B4%A0">Arknights Wiki</a>)
@@ -9,10 +9,19 @@ namespace Everglow.Commons.Mechanics.ElementDebuff;
 ///     <item>Necrosis</item>
 /// </list>
 /// </summary>
-public enum ElementDebuffType
+public enum ElementalDebuffType
 {
+	/// <summary>
+	/// Used to apply bonus for all elemental debuff type. Not registered in <see cref="ElementalDebuffRegistry"/> and other registeries.
+	/// </summary>
+	Generic,
+
 	NervousImpairment,
 	Corrosion,
 	Burn,
 	Necrosis,
+
+	BloodRot,
+	Frost,
+	Salination,
 }
