@@ -10,7 +10,7 @@ public class BadrProj : ModProjectile
 
 	public override void SetStaticDefaults()
 	{
-		Main.projFrames[Projectile.type] = 4;
+		Main.projFrames[Projectile.type] = 5;
 		Main.projPet[Projectile.type] = true;
 		ProjectileID.Sets.LightPet[Projectile.type] = true;
 	}
