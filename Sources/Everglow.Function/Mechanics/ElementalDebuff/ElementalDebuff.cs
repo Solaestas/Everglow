@@ -4,11 +4,9 @@ namespace Everglow.Commons.Mechanics.ElementalDebuff;
 
 public abstract class ElementalDebuff
 {
-	public ElementalDebuff(ElementalDebuffType type, Asset<Texture2D> icon, Color color)
+	public ElementalDebuff(ElementalDebuffType type)
 	{
 		Type = type;
-		Icon = icon;
-		Color = color;
 
 		BuildUp = 0;
 		BuildUpMax = 1000;
@@ -40,12 +38,12 @@ public abstract class ElementalDebuff
 	/// <summary>
 	/// The icon of element debuff
 	/// </summary>
-	public Asset<Texture2D> Icon { get; init; }
+	public abstract Asset<Texture2D> Texture { get; }
 
 	/// <summary>
 	/// The background color of element debuff in-game icon
 	/// </summary>
-	public Color Color { get; init; }
+	public abstract Color Color { get; }
 
 	/// <summary>
 	/// The element debuff build-up, use <see cref="AddBuildUp"/> to edit this property.
@@ -144,6 +142,8 @@ public abstract class ElementalDebuff
 		{
 			Duration--;
 
+			UpdateProc(npc);
+
 			if (Duration <= 0)
 			{
 				Duration = 0;
@@ -184,6 +184,14 @@ public abstract class ElementalDebuff
 	/// </summary>
 	/// <param name="npc"></param>
 	public virtual void PostProc(NPC npc)
+	{
+	}
+
+	/// <summary>
+	/// Custom effects during proc
+	/// </summary>
+	/// <param name="npc"></param>
+	public virtual void UpdateProc(NPC npc)
 	{
 	}
 

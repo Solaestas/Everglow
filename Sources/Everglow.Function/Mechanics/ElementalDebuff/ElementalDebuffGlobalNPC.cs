@@ -63,8 +63,8 @@ public partial class ElementalDebuffGlobalNPC : GlobalNPC
 				continue;
 			}
 
-			var buildUpColor = Color.Lerp(Color.White, lightColor, 0.5f);
-			var durationColor = Color.Lerp(Color.Gray, lightColor, 0.5f);
+			var buildUpColor = Color.Lerp(Color.White, lightColor, 0.3f);
+			var durationColor = Color.Lerp(Color.Gray, lightColor, 0.3f);
 			var backgroundColor = Color.Lerp(element.Color, lightColor, 0.5f);
 
 			var drawPosition = npc.Center - Main.screenPosition;
@@ -79,12 +79,12 @@ public partial class ElementalDebuffGlobalNPC : GlobalNPC
 			// Draw element debuff icons and VFXs
 			if (element.Proc)
 			{
-				ValueBarHelper.DrawCircleValueBar(spriteBatch, drawPosition, element.Duration / (float)element.DurationMax, durationColor, backgroundColor, scale, element.Icon.Value);
+				ValueBarHelper.DrawCircleValueBar(spriteBatch, drawPosition, element.Duration / (float)element.DurationMax, durationColor, backgroundColor, scale, element.Texture.Value);
 				drawedElementDebuffCount++;
 			}
 			else if (element.HasBuildUp)
 			{
-				ValueBarHelper.DrawCircleValueBar(spriteBatch, drawPosition, element.BuildUp / (float)element.BuildUpMax, buildUpColor, backgroundColor, scale, element.Icon.Value);
+				ValueBarHelper.DrawCircleValueBar(spriteBatch, drawPosition, element.BuildUp / (float)element.BuildUpMax, buildUpColor, backgroundColor, scale, element.Texture.Value);
 				drawedElementDebuffCount++;
 			}
 		}

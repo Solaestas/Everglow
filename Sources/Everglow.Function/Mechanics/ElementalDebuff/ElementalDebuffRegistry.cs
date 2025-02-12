@@ -12,6 +12,9 @@ public static class ElementalDebuffRegistry
 		Register(ElementalDebuffType.Corrosion, () => new CorrosionDebuff());
 		Register(ElementalDebuffType.Burn, () => new BurnDebuff());
 		Register(ElementalDebuffType.Necrosis, () => new NecrosisDebuff());
+		Register(ElementalDebuffType.BloodRot, () => new BloodRotDebuff());
+		Register(ElementalDebuffType.Frost, () => new FrostDebuff());
+		Register(ElementalDebuffType.Salination, () => new SalinationDebuff());
 	}
 
 	public static void Register(ElementalDebuffType type, Func<ElementalDebuff> factory)
