@@ -1,9 +1,10 @@
 using Terraria.DataStructures;
+using Terraria.Enums;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
-public class FurnaceLavaLamp_V : ModTile
+public class Ishta_per_The_Venus_painting : ModTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -14,39 +15,36 @@ public class FurnaceLavaLamp_V : ModTile
 		Main.tileWaterDeath[Type] = false;
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
-		TileObjectData.newTile.Origin = new(0, 0);
-		TileObjectData.newTile.Height = 5;
+		TileObjectData.newTile.Height = 1;
 		TileObjectData.newTile.Width = 1;
-
-		TileObjectData.newTile.CoordinateHeights = new int[5];
+		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.None, 0, 0);
+		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
+		TileObjectData.newTile.CoordinateHeights = new int[12];
 		Array.Fill(TileObjectData.newTile.CoordinateHeights, 16);
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = false;
-		TileObjectData.newTile.Origin = new Point16(1, 0);
 
 		TileObjectData.addTile(Type);
-		DustType = DustID.Lava;
-		AddMapEntry(new Color(255, 51, 48));
-	}
-
-	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
-	{
-		r = 1f;
-		g = 0.5f;
-		b = 0.1f;
-		base.ModifyLight(i, j, ref r, ref g, ref b);
+		DustType = DustID.WoodFurniture;
+		AddMapEntry(new Color(96, 96, 96));
 	}
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Tile tile = Main.tile[i, j];
 		var zero = new Vector2(Main.offScreenRange);
-
 		if (Main.drawToScreen)
 		{
 			zero = Vector2.Zero;
 		}
 		var texture = ModContent.Request<Texture2D>(Texture).Value;
-		spriteBatch.Draw(texture, new Vector2(i, j) * 16 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX + 18, tile.TileFrameY, 16, 16), new Color(1f, 0.3f, 0.1f, 0), 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
+		for (int x = 0; x < 6; x++)
+		{
+			for (int y = 0; y < 8; y++)
+			{
+				int h = i + x - 5;
+				int v = j + y - 7;
+				spriteBatch.Draw(texture, new Vector2(h, v) * 16 - Main.screenPosition + zero, new Rectangle(x * 18, y * 18, 16, 16), Lighting.GetColor(h, v), 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
+			}
+		}
 	}
 }
