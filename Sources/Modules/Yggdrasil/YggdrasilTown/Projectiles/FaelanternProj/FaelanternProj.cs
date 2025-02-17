@@ -32,11 +32,6 @@ public class FaelanternProj : ModProjectile
 		//Projectile.hide = true;
 	}
 
-
-
-
-
-
 	public void Suicide()
 	{
 		int tileX = (int)Projectile.Center.X / 16;
@@ -82,8 +77,8 @@ public class FaelanternProj : ModProjectile
 		if (timer == 10)
 		{
 			FaelanternSkeleton.Skeleton.UpdateWorldTransform();
-			Vector2 pos = new Vector2(FaelanternSkeleton.Skeleton.FindBone("bone6").WorldX, FaelanternSkeleton.Skeleton.FindBone("bone6").WorldY); 
-		    Fae = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), pos, Vector2.Zero, ModContent.ProjectileType<Fae>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+			Vector2 pos = new Vector2(FaelanternSkeleton.Skeleton.FindBone("bone6").WorldX, FaelanternSkeleton.Skeleton.FindBone("bone6").WorldY);
+			Fae = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), pos, Vector2.Zero, ModContent.ProjectileType<Fae>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 			Fae.ai[0] = Projectile.whoAmI;
 			Fae.ai[1] = -1;
 		}
@@ -111,7 +106,7 @@ public class FaelanternProj : ModProjectile
 					velocity = newVelocity,
 					Active = true,
 					Visible = true,
-					position = Projectile.Center + new Vector2(0, 25f).RotatedByRandom(MathHelper.PiOver2 ),
+					position = Projectile.Center + new Vector2(0, 25f).RotatedByRandom(MathHelper.PiOver2),
 					maxTime = Main.rand.Next(25, 32),
 					scale = Main.rand.NextFloat(25f, 50f),
 					rotation = Main.rand.NextFloat(6.283f),
@@ -149,7 +144,7 @@ public class FaelanternProj : ModProjectile
 			{
 				NPC Target = Main.npc[target];
 
-				int direction =1;
+				int direction = 1;
 				if (Target.Center.X > Projectile.Center.X)
 				{
 					direction = -1;
@@ -199,7 +194,7 @@ public class FaelanternProj : ModProjectile
 	public IEnumerator<ICoroutineInstruction> NextAttack()
 	{
 		Player Owner = Main.player[Projectile.owner];
-		float Searchdis = 500f;
+		float Searchdis = 1000f;
 		int charmtarget = -1;
 		int attacktarget = -1;
 		bool charm = false;
@@ -211,7 +206,7 @@ public class FaelanternProj : ModProjectile
 			{
 				if (npc != null && npc.CanBeChasedBy() && Projectile.Distance(npc.Center) < Searchdis)
 				{
-					if (WorldUtils.Find(npc.Center.ToTileCoordinates(), Searches.Chain(new Searches.Down(8), _cachedConditions_notNull ), out var _))
+					if (WorldUtils.Find(npc.Center.ToTileCoordinates(), Searches.Chain(new Searches.Down(8), _cachedConditions_notNull), out var _))
 					{
 						attacktarget = npc.whoAmI;
 						charmindex--;
@@ -230,7 +225,7 @@ public class FaelanternProj : ModProjectile
 				{
 					if (npc != null && npc.CanBeChasedBy())
 					{
-						if (Owner.Distance(npc.Center) < Searchdis)
+						if (Owner.Distance(npc.Center) < Searchdis*0.75f)
 						{
 							if (npc.buffImmune[BuffID.Confused] || npc.HasBuff(BuffID.Confused))
 							{
@@ -258,11 +253,23 @@ public class FaelanternProj : ModProjectile
 		{
 			_coroutineManager.StartCoroutine(new Coroutine(Idle()));
 		}
-
-
-
 		yield break;
 	}
+
+	private Vector2[] eyepos =
+	{
+		new Vector2(4, 42),
+		new Vector2(7, 44),
+		new Vector2(15, 46),
+		new Vector2(16, 30),
+		new Vector2(20, 28),
+		new Vector2(25, 18),
+		new Vector2(24, 48),
+		new Vector2(25, 32),
+		new Vector2(32, 38),
+	};
+
+	private int[] closetimer = new int[9];
 
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -292,14 +299,23 @@ public class FaelanternProj : ModProjectile
 		NaiveExecuter executer = new NaiveExecuter();
 		executer.Execute(cmdList, Main.graphics.graphicsDevice);
 
-		if (timer >= 60)
+		if (timer >= 120)
 		{
-			//Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, Projectile.Center-Main.screenPosition, new Rectangle(0, 0, 1, 1), new Color(0.13f, 0.976f, 0.977f), 0f, Vector2.Zero, 100f, SpriteEffects.None, 0);
-			//	ion, sourceRec, Color.White, Projectile.rotation, origin, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			for (int i = 0; i < eyepos.Length; i++)
+			{
+				if (closetimer[i] > 0)
+				{
+					closetimer[i]--;
+				}
+				else
+				{
+					closetimer[i] = Main.rand.NextBool(300) ? 20 : 0;
+				}
 
-
+				Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, Projectile.Center - Main.screenPosition + eyepos[i], new Rectangle(0, 0, 1, 1), new Color(0.13f, 0.976f, 0.977f, 0.25f), 0f, Vector2.Zero, (closetimer[i] > 0) ? 0f : (i == 1 || i == 4) ? 2f : 1f, SpriteEffects.None, 0);
+				Lighting.AddLight(Projectile.Center + eyepos[i], 0.05f, 0.249f, 0.25f);
+			}
 		}
 		return false;
 	}
-
 }

@@ -53,12 +53,13 @@ public class Faelanternbranch : ModProjectile
 		}
 		return true;
 	}
-	int direction;
+
+	private int direction;
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		direction = (int)Projectile.ai[0];
 	}
-
 
 	public override void AI()
 	{
@@ -98,6 +99,7 @@ public class Faelanternbranch : ModProjectile
 			Ins.VFXManager.Add(somg);
 		}
 		Suicide();
+		Lighting.AddLight(Projectile.Center, 0.1f, 0.5f, 0.5f);
 		return;
 	}
 
@@ -107,12 +109,13 @@ public class Faelanternbranch : ModProjectile
 		Vector2 pos = Projectile.position - Main.screenPosition;
 		float factor = MathHelper.Clamp((45f - Projectile.timeLeft) / 10f, 0, 1);
 		Main.spriteBatch.Draw(ModAsset.Faelanternbranchpit.Value, pos + (direction == 1 ? size : new Vector2(size.X,  size.Y)), new Rectangle(0, 0, Projectile.width, Projectile.height), lightColor * factor, 0f,  size , 1f, direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
-
 		if (Projectile.timeLeft < 35f)
 		{
+
 			float scale = MathHelper.Clamp((35 - Projectile.timeLeft) / 5f, 0, 1);
 
 			Main.spriteBatch.Draw(ModAsset.Faelanternbranch.Value, pos + (direction == 1 ? size : new Vector2(size.X* scale,  size.Y)), new Rectangle(0, 0, Projectile.width, Projectile.height), lightColor, 0f, size , scale, direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
+			Main.spriteBatch.Draw(ModAsset.Faelanternbranchglow.Value, pos + (direction == 1 ? size : new Vector2(size.X * scale, size.Y)), new Rectangle(0, 0, Projectile.width, Projectile.height), Color.White, 0f, size, scale, direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
 		}
 		return false;
 
