@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Buffs.Mounts;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Mounts;
@@ -30,7 +31,7 @@ public class JellyBubble : ModMount
 		MountData.constantJump = false;
 
 		// Misc
-		MountData.buff = ModContent.BuffType<Buffs.JellyBubbleMount>();
+		MountData.buff = ModContent.BuffType<JellyBubbleMount>();
 
 		// Visual Effects
 		MountData.spawnDust = ModContent.DustType<Dusts.JellyBallGel>();

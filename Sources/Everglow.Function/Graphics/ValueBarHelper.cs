@@ -56,7 +56,7 @@ public class ValueBarHelper
 	{
 		spriteBatch.Draw(ModAsset.White.Value, position, null, Color.White, 0, Vector2.Zero, 0, SpriteEffects.None, 0);
 
-		var frameColor = new Color(0.05f, 0.05f, 0.08f, 0.9f);
+		var frameColor = new Color(0.05f, 0.05f, 0.08f, 0.6f);
 		var frameInnerColor = new Color(0.15f, 0.25f, 0.38f, 0.4f);
 		if(centerIcon is not null)
 		{
@@ -70,7 +70,7 @@ public class ValueBarHelper
 		Vector2 radius = new Vector2(0, 100) * scale;
 		Vector2 frameRadiusOffset = new Vector2(0, 40) * scale;
 		Vector2 frameInnerRadiusOffset = frameRadiusOffset * 0.3f;
-		Vector2 progressRadiusOffset = frameRadiusOffset * 0.7f;
+		Vector2 progressRadiusOffset = frameRadiusOffset * 0.5f;
 		Vector2 progressInnerRadiusOffset = frameRadiusOffset * 0.3f;
 
 		// Draw frame
@@ -95,8 +95,8 @@ public class ValueBarHelper
 		if (centerIcon is not null)
 		{
 			var circleRadius = (radius - progressInnerRadiusOffset).Length();
-			var iconScale = circleRadius * 2 * 0.8f / centerIcon.Width;
-			var iconColor = new Color(1f, 1f, 1f, 0f);
+			var iconScale = circleRadius * 2 * 0.95f / centerIcon.Width;
+			var iconColor = new Color(1f, 1f, 1f, 0.5f);
 			spriteBatch.Draw(centerIcon, position, null, iconColor, 0, centerIcon.Size() / 2, iconScale, SpriteEffects.None, 0);
 		}
 	}

@@ -20,4 +20,8 @@ public enum ElementalDebuffType
 	Corrosion,
 	Burn,
 	Necrosis,
+
+	BloodRot,
+	Frost,
+	Salination,
 }
