@@ -3,7 +3,7 @@ using SubworldLibrary;
 
 namespace Everglow.SubSpace;
 
-public class GetOutOfTheRoom : ISidebarElementBase
+public class GetOutOfTheRoom : ISidebarElement
 {
 	public Texture2D Icon => ModAsset.GetOutOfTheRoom.Value;
 

@@ -1,4 +1,5 @@
 using Everglow.Commons.MissionSystem;
+using Everglow.Commons.MissionSystem.Core;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.TextDrawers;
 using FontStashSharp;
 
@@ -36,7 +37,7 @@ internal class TimerStringDrawer : TextDrawer
 		TimerStyle = stringParameters.GetInt("TimerStyle",
 			stringDrawer.DefaultParameters.GetInt("MSTTimerStyle", 0));
 
-		_mission = MissionManager.Instance.GetMission(MissionName);
+		_mission = MissionManager.GetMission(MissionName);
 	}
 
 	public override void Draw(SpriteBatch sb)

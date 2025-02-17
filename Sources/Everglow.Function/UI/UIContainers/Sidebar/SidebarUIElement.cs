@@ -3,7 +3,7 @@ using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.UI.UIContainers.Sidebar
 {
-	public delegate void HandleTigger(SidebarUIElement quickElement);
+	public delegate void HandleTrigger(SidebarUIElement quickElement);
 
 	public abstract class SidebarUIElement : BaseElement
 	{
@@ -14,11 +14,11 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 
 		public Vector2 Center = Vector2.Zero;
 
-		public event HandleTigger OnTigger;
+		public event HandleTrigger OnTrigger;
 
 		public int WaitTime { get; set; } = 30;
 
-		public ISidebarElementBase BaseInfo { get; private set; }
+		public ISidebarElement BaseInfo { get; private set; }
 
 		public bool IsMoveing => _waitTime >= WaitTime;
 
@@ -66,7 +66,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 			_mouseDown = false;
 			if (!IsMoveing)
 			{
-				OnTigger?.Invoke(this);
+				OnTrigger?.Invoke(this);
 			}
 		}
 
@@ -133,10 +133,10 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 				return true;
 		}
 
-		public void SetInfo(ISidebarElementBase sidebarElement)
+		public void SetInfo(ISidebarElement sidebarElement)
 		{
 			BaseInfo = sidebarElement;
-			OnTigger += element =>
+			OnTrigger += element =>
 			{
 				sidebarElement.Invoke();
 			};
