@@ -46,7 +46,6 @@ public class FurnaceTrapDoor_VFX : Visual
 				OpenTrapDoor(tileX, tileY);
 			}
 		}
-
 	}
 
 	public override void Draw()
