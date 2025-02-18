@@ -13,10 +13,11 @@ using Spine;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria;
 using static Everglow.Yggdrasil.YggdrasilTown.NPCs.RockElemental;
+using Everglow.Commons.Weapons;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.FaelanternProj;
 
-public class Fae : ModProjectile
+public class Fae : TrailingProjectile
 {
 	public override void SetStaticDefaults()
 	{
@@ -32,7 +33,8 @@ public class Fae : ModProjectile
 
 	public int state = (int)State.Idle;
 
-	public override void SetDefaults()
+
+	public override void SetDef()
 	{
 		Projectile.width = 20;
 		Projectile.height = 24;
@@ -43,12 +45,16 @@ public class Fae : ModProjectile
 		Projectile.timeLeft = 45;
 		Projectile.penetrate = -1;
 		Projectile.DamageType = DamageClass.Summon;
-	}
+		Projectile.gfxOffY = 7;
 
-
-	public bool Findtile(int tileX, int tileY)
-	{
-		return Main.tile[tileX, tileY] == null || !WorldGen.SolidTile2(tileX, tileY);
+		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
+		TrailColor = new Color(0.13f, 0.976f, 0.977f,0f);
+		TrailWidth = 5f;
+		SelfLuminous = true;
+		TrailTexture = Commons.ModAsset.Trail_2_black.Value;
+		TrailTextureBlack = Commons.ModAsset.Trail_2_black.Value;
+		TrailShader = Commons.ModAsset.Trailing.Value;
 	}
 
 	public override bool? CanDamage()
@@ -70,7 +76,7 @@ public class Fae : ModProjectile
 
 	public override void AI()
 	{
-		Lighting.AddLight(Projectile.Center,0.13f, 0.976f, 0.977f);
+		Lighting.AddLight(Projectile.Center, 0.13f, 0.976f, 0.977f);
 		owner = Main.projectile[(int)Projectile.ai[0]];
 		if (owner == null || !owner.active || owner.type != ModContent.ProjectileType<FaelanternProj>())
 		{
@@ -104,7 +110,7 @@ public class Fae : ModProjectile
 					break;
 				}
 		}
-		return;
+		base.AI();
 	}
 
 	public void Idle()
@@ -169,7 +175,7 @@ public class Fae : ModProjectile
 			{
 				if (Projectile.Distance(npc.Center) <= 150)
 				{
-					npc.AddBuff(BuffID.Confused, 600);
+					npc.AddBuff(BuffID.Confused, 300);
 				}
 			}
 		}
@@ -182,20 +188,23 @@ public class Fae : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		//Texture2D Light = ModAsset.FixCoinLight3.Value;
+		TrailColor = new Color(0.13f, 0.976f, 0.977f,0f);
+		TrailWidth = 10f;
+		SelfLuminous = true;
+		TrailTexture = Commons.ModAsset.Trail_2_thick.Value;
+		TrailTextureBlack = Commons.ModAsset.Trail_2_black.Value;
+		TrailShader = Commons.ModAsset.Trailing.Value;
+		DrawTrail();
 
 		Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
 		var origin = new Vector2(tex.Width / 2, tex.Height / 2);
 		Rectangle sourceRec = tex.Frame(1, 2, 0, Projectile.frame % 2);
 
-
-		var c = new Color(55, 125, 255, 0);
-		//Main.spriteBatch.Draw(Light, pos - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c * 0.2f, Projectile.rotation, Light.Size() / 2, Projectile.scale * scale, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, sourceRec, Color.White, Projectile.rotation, origin, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-
-
+		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition + new Vector2(0f, 12f), sourceRec, Color.White, 0f, origin, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		return false;
 	}
+
+	public override void DrawTrailDark() => base.DrawTrailDark();
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
