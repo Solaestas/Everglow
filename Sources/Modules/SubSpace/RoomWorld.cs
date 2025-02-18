@@ -57,24 +57,12 @@ public class RoomWorld : Subworld
 
 	public override bool ShouldSave => false;
 
+	public static Point OldSpawnPos = default;
+
 	public static Point SpawnPos = default;
 
 	public override void OnEnter()
 	{
-		if(SpawnPos != default)
-		{
-			if (SpawnPos != new Point(-5, -5))
-			{
-				if (SpawnPos.X is > 5 and < 295 && SpawnPos.Y is > 5 and < 295)
-				{
-					Main.spawnTileX = SpawnPos.X;
-					Main.spawnTileY = SpawnPos.Y;
-				}
-			}
-			Main.LocalPlayer.Center = SpawnPos.ToWorldCoordinates();
-			SpawnPos = default;
-		}
-		Main.NewText(Main.spawnTileX);
 	}
 
 	public override void OnExit()

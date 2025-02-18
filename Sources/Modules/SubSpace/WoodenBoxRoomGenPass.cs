@@ -24,12 +24,27 @@ public class WoodenBoxRoomGenPass : GenPass
 	{
 		Main.statusText = "Test";
 		BuildWoodenRoom();
+		if (RoomWorld.SpawnPos != default)
+		{
+			if (RoomWorld.SpawnPos != new Point(-5, -5))
+			{
+				if (RoomWorld.SpawnPos.X is > 5 and < 295 && RoomWorld.SpawnPos.Y is > 5 and < 295)
+				{
+					RoomWorld.OldSpawnPos.X = Main.spawnTileX;
+					RoomWorld.OldSpawnPos.Y = Main.spawnTileY;
+					Main.spawnTileX = RoomWorld.SpawnPos.X;
+					Main.spawnTileY = RoomWorld.SpawnPos.Y;
+				}
+			}
+			Main.LocalPlayer.Center = RoomWorld.SpawnPos.ToWorldCoordinates();
+			RoomWorld.SpawnPos = default;
+		}
 	}
 
 	/// <summary>
 	/// 建造一个木制世界房间
 	/// </summary>
-	public static void BuildWoodenRoom(int mapIOAnchorX = 5, int mapIOAnchorY = 5)
+	public static void BuildWoodenRoom()
 	{
 		// 如果没有记录就开一个新房间
 		if (!ReadWorldSave())
