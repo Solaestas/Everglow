@@ -9,6 +9,7 @@ using Terraria.Audio;
 using Everglow.Commons.Skeleton2D.Renderer.DrawCommands;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.WorldBuilding;
+using Spine;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.GameContent;
 

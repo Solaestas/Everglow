@@ -14,6 +14,7 @@ using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria;
 using static Everglow.Yggdrasil.YggdrasilTown.NPCs.RockElemental;
 using Everglow.Commons.Weapons;
+using Humanizer;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.FaelanternProj;
 
@@ -171,6 +172,7 @@ public class Fae : TrailingProjectile
 		Projectile.velocity = Vector2.Lerp(Projectile.velocity, new Vector2(-(float)Math.Sin(0.05f * timer), -(float)Math.Cos(0.04f * timer) / 3f), 0.1f);
 		if (i == 30)
 		{
+			Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<FaeCharmRing>(), Projectile.damage / 2, 0f, Projectile.owner, 10);
 			foreach (NPC npc in Main.npc)
 			{
 				if (Projectile.Distance(npc.Center) <= 150)
