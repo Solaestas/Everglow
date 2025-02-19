@@ -39,7 +39,7 @@ public class FurnaceTrapDoor_VFX : Visual
 				}
 			}
 		}
-		if (timer > maxTime - 30)
+		if (timer > maxTime - 50)
 		{
 			if(Open)
 			{
