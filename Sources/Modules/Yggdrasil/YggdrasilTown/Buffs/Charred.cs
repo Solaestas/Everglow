@@ -4,7 +4,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Buffs;
 
 public class Charred : ModBuff
 {
-	public const int DefenseReduction = 25;
+	public const float DefenseReduction = 0.11f;
 	public const int LifeRegenReductionFromDot = 36;
 
 	public override void SetStaticDefaults()
@@ -16,7 +16,7 @@ public class Charred : ModBuff
 
 	public override void Update(NPC npc, ref int buffIndex)
 	{
-		npc.defense -= DefenseReduction;
+		npc.defense = (int)((1 - DefenseReduction) * npc.defense);
 		if (npc.defense < 0)
 		{
 			npc.defense = 0;
@@ -35,7 +35,7 @@ public class Charred : ModBuff
 
 	public override void Update(Player player, ref int buffIndex)
 	{
-		player.statDefense -= DefenseReduction;
+		player.statDefense *= 1 - DefenseReduction;
 		player.lifeRegen -= LifeRegenReductionFromDot;
 
 		if (Main.rand.NextBool(4))

@@ -1,25 +1,51 @@
+using Everglow.Commons.Weapons;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-public class IstafelsSunfireGrasp_FireBall : ModProjectile
+public class IstafelsSunfireGrasp_FireBall : TrailingProjectile
 {
 	public override string Texture => Commons.ModAsset.Point_Mod;
 
-	public const int ProjectileVelocity = 8;
-	public const int ProjectileVelocityYMax = 16;
+	public const int ProjectileVelocity = 4;
+	public const int SubProjectileVelocity = 12;
+	private const float InitialScale = 0.5f;
+	public const int TimeLeftMax = 600;
+
 	public const int BuffDuration = 960;
 	public const int ContactDamage = 25;
-	public const int TimeLeftMax = 600;
-	private const float InitialScale = 0.2f;
+	public const int BuildUpMax = 200;
 
+	/// <summary>
+	/// If the projectile has been actived by <see cref="IstafelsSunfireGrasp"/>.
+	/// </summary>
 	public bool Actived { get; set; } = false;
 
-	public float BuildUpProgress { get; set; } = 0f;
+	/// <summary>
+	/// The build-up value of projectile, capped at <see cref="BuildUpMax"/>.
+	/// </summary>
+	public int BuildUp { get; set; } = 0;
+
+	/// <summary>
+	/// The build-up value of projectile, bewteen 0 and 1.
+	/// </summary>
+	public float BuildUpProgress => Math.Clamp(BuildUp / (float)BuildUpMax, 0f, 1f);
+
+	/// <summary>
+	/// Chase target.
+	/// </summary>
+	public int TargetWhoAmI
+	{
+		get => (int)Projectile.ai[0];
+		set => Projectile.ai[0] = value;
+	}
 
 	public override void SetDefaults()
 	{
+		base.SetDefaults();
+
 		Projectile.width = 40;
 		Projectile.height = 40;
 
@@ -36,6 +62,11 @@ public class IstafelsSunfireGrasp_FireBall : ModProjectile
 
 		Projectile.localNPCHitCooldown = 10;
 		Projectile.usesLocalNPCImmunity = true;
+
+		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
+		TrailColor = new Color(1f, 0.3f, 0f, 0);
+		SelfLuminous = false;
+		TargetWhoAmI = -1;
 	}
 
 	public override bool? CanCutTiles() => true;
@@ -59,10 +90,16 @@ public class IstafelsSunfireGrasp_FireBall : ModProjectile
 		ShootScoria();
 	}
 
+	/// <summary>
+	/// Explode then shoot scoria. Only called when killed by tile colliding and npc colliding.
+	/// </summary>
 	private void ShootScoria()
 	{
-		// Shoot scoria on kill
-		var scoriaProjCount = Main.rand.Next(5, 7);
+		// Shoot explosion
+		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<IstafelsSunfireGrasp_Explosion>(), 200, Projectile.knockBack, Projectile.owner);
+
+		// Shoot scoria
+		var scoriaProjCount = Main.rand.Next(8, 10);
 		for (int i = 0; i < scoriaProjCount; i++)
 		{
 			var velocity = Projectile.velocity * 0.6f + Vector2.UnitX.RotatedBy(Main.rand.NextFloat(MathHelper.TwoPi)) * 4f;
@@ -72,54 +109,116 @@ public class IstafelsSunfireGrasp_FireBall : ModProjectile
 
 	public override void AI()
 	{
-		Lighting.AddLight(Projectile.Center, 1f, 0.8f, 0f);
+		// Trailing proj ai
+		Timer++;
 
+		Lighting.AddLight(Projectile.Center, 1f, 0.8f, 0f);
 		if (Actived)
 		{
-			// Simulate gravity
-			Projectile.velocity.Y += 0.2f;
-			if (Projectile.velocity.Y > ProjectileVelocityYMax)
+			Projectile.rotation += Projectile.velocity.X * 0.04f;
+
+			if (TargetWhoAmI < 0)
 			{
-				Projectile.velocity.Y = ProjectileVelocityYMax;
+				TargetWhoAmI = ProjectileUtils.FindTarget(Projectile.Center, 300);
+				return;
+			}
+
+			// Generate dusts
+			if (Main.rand.NextBool(6))
+			{
+				Dust.NewDustDirect(
+					Projectile.position + new Vector2(Projectile.width, Projectile.height) * (1 - BuildUpProgress) / 2,
+					(int)(Projectile.width * BuildUpProgress),
+					(int)(Projectile.height * BuildUpProgress),
+					DustID.RedTorch,
+					Projectile.velocity.X,
+					Projectile.velocity.Y,
+					Scale: 1.2f);
+			}
+
+			// Chase target
+			var target = Main.npc[TargetWhoAmI];
+			if (target.active)
+			{
+				var distance = target.Center - Projectile.Center;
+				Projectile.velocity = distance.NormalizeSafe() * ProjectileVelocity;
+			}
+			else
+			{
+				TargetWhoAmI = -1;
 			}
 		}
 		else
 		{
-			// Keep projectile active
-			Projectile.timeLeft = TimeLeftMax;
-
-			// Following player
 			var owner = Main.player[Projectile.owner];
-			var destination = owner.Center + new Vector2(-30 * owner.direction, -50 * owner.gravDir);
-			var movement = destination - Projectile.Center;
-			if (movement.Length() < ProjectileVelocity)
-			{
-				Projectile.velocity = movement;
-			}
-			else
-			{
-				Projectile.velocity = movement.NormalizeSafe() * ProjectileVelocity;
-			}
 
 			// Update life time
 			if (owner.HasBuff<IstafelsSunfireGraspFireBallBuff>())
 			{
 				owner.AddBuff(ModContent.BuffType<IstafelsSunfireGraspFireBallBuff>(), 2);
+				Projectile.timeLeft = TimeLeftMax;
 			}
 			else
 			{
 				Projectile.Kill();
+				return;
+			}
+
+			// Chase player
+			var destination = owner.Center + new Vector2(-30 * owner.direction, -50 * owner.gravDir);
+			var movement = destination - Projectile.Center;
+			if (movement.Length() < ProjectileVelocity * 3)
+			{
+				Projectile.velocity = movement;
+			}
+			else
+			{
+				Projectile.velocity = movement.NormalizeSafe() * ProjectileVelocity * 3;
+			}
+
+			if (BuildUpProgress > 0.5f)
+			{
+				// Generate dusts
+				if (Main.rand.NextBool(6))
+				{
+					Dust.NewDustDirect(
+						Projectile.position + new Vector2(Projectile.width, Projectile.height) * (1 - BuildUpProgress) / 2,
+						(int)(Projectile.width * BuildUpProgress),
+						(int)(Projectile.height * BuildUpProgress),
+						DustID.RedTorch,
+						Projectile.velocity.X,
+						Projectile.velocity.Y,
+						Scale: 1.2f);
+				}
+
+				// Shoot projectile to target
+				if (Timer % 120 == 0)
+				{
+					var target = ProjectileUtils.FindTarget(Projectile.Center, 2000);
+					if (target >= 0)
+					{
+						var direction = (Main.npc[target].Center - Projectile.Center).NormalizeSafe();
+						Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, direction * SubProjectileVelocity, ProjectileID.ImpFireball, 50, 0.4f, Projectile.owner);
+					}
+				}
 			}
 		}
 	}
 
+	/// <summary>
+	/// Active projectile
+	/// </summary>
+	/// <param name="target"></param>
 	public void Active(NPC target)
 	{
-		// Shoot projectile towards the target
-		Projectile.velocity = (target.Center - Main.player[Projectile.owner].Center).NormalizeSafe() * ProjectileVelocity;
-
-		// Active the projectile
 		Actived = true;
+
+		// Shoot projectile towards the target
+		TargetWhoAmI = target.whoAmI;
+		Projectile.netUpdate = true;
+		Projectile.velocity = (target.Center - Projectile.Center).NormalizeSafe() * ProjectileVelocity;
+
+		// Update misc infos
 		Projectile.friendly = true;
 		Projectile.tileCollide = true;
 		Projectile.penetrate = 1;
@@ -127,6 +226,8 @@ public class IstafelsSunfireGrasp_FireBall : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
+		DrawTrail();
+
 		var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -135,10 +236,18 @@ public class IstafelsSunfireGrasp_FireBall : ModProjectile
 		effect.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects * 0.05f);
 		effect.CurrentTechnique.Passes[0].Apply();
 
-		var texture = Commons.ModAsset.Point.Value;
-		var drawColor = new Color(1f, 1f, 1f, 0f);
-		var drawScale = 0.3f * MathHelper.Lerp(InitialScale, 1f, BuildUpProgress);
-		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, drawColor, Projectile.rotation, texture.Size() / 2, drawScale, SpriteEffects.None, 0);
+		var drawPos = Projectile.Center - Main.screenPosition;
+		var drawScale = MathHelper.Lerp(InitialScale, 1f, BuildUpProgress);
+		var drawSize = Projectile.width / 2 * drawScale;
+		var vertices = new List<Vertex2D>
+		{
+			{ drawPos + new Vector2(-1, -1).RotatedBy(Projectile.rotation) * drawSize, Color.White, new(0, 0, 0) },
+			{ drawPos + new Vector2(1, -1).RotatedBy(Projectile.rotation) * drawSize, Color.White, new(1, 0, 0) },
+			{ drawPos + new Vector2(-1, 1).RotatedBy(Projectile.rotation) * drawSize, Color.White, new(0, 1, 0) },
+			{ drawPos + new Vector2(1, 1).RotatedBy(Projectile.rotation) * drawSize, Color.White, new(1, 1, 0) },
+		};
+
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);

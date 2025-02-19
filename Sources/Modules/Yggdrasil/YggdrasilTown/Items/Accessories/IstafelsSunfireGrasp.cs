@@ -7,6 +7,9 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 
 public class IstafelsSunfireGrasp : ModItem
 {
+	public const float MagicDamageBonus = 0.11f;
+	public const float MagicCritBonus = 5f;
+
 	public override void SetStaticDefaults()
 	{
 		Item.SetNameOverride("Istafel's Sunfire Grasp");
@@ -30,7 +33,8 @@ public class IstafelsSunfireGrasp : ModItem
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
-		player.GetDamage<MagicDamageClass>() += 0.2f;
+		player.GetDamage<MagicDamageClass>() += MagicDamageBonus;
+		player.GetCritChance<MagicDamageClass>() += MagicCritBonus;
 		player.GetModPlayer<IstafelsSunfireGraspPlayer>().IstafelsSunfireGraspEnable = true;
 
 		if (player.whoAmI == Main.myPlayer
@@ -44,7 +48,6 @@ public class IstafelsSunfireGrasp : ModItem
 	public class IstafelsSunfireGraspPlayer : ModPlayer
 	{
 		public const float ElementDebuffBuildUpRate = 2f;
-		public const int FireBallBuildUpMax = 200;
 		public const int FireBallCooldown = 600;
 
 		public const int SkillCooldown = 3600;
@@ -56,15 +59,16 @@ public class IstafelsSunfireGrasp : ModItem
 
 		public bool SkillEnable { get; set; } = false;
 
-		public int FireBallBuildUp { get; set; }
-
 		public IstafelsSunfireGrasp_FireBall FireBallProj { get; private set; }
 
 		public override void ResetEffects()
 		{
 			if (!IstafelsSunfireGraspEnable)
 			{
-				FireBallBuildUp = 0;
+				if(FireBallProj != null)
+				{
+					FireBallProj.BuildUp = 0;
+				}
 			}
 
 			IstafelsSunfireGraspEnable = false;
@@ -72,12 +76,9 @@ public class IstafelsSunfireGrasp : ModItem
 
 		public override void PostUpdateMiscEffects()
 		{
-			if (Player.HasBuff<IstafelsSunfireGraspSkillCooldown>())
-			{
-				return;
-			}
-
-			if (!SkillEnable)
+			// Handle skill trigger
+			if (Player.HasBuff<IstafelsSunfireGraspSkillCooldown>()
+				|| !SkillEnable)
 			{
 				return;
 			}
@@ -121,37 +122,38 @@ public class IstafelsSunfireGrasp : ModItem
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			if (IstafelsSunfireGraspEnable
-			   && hit.DamageType == DamageClass.Magic)
+			if (IstafelsSunfireGraspEnable && hit.DamageType == DamageClass.Magic)
 			{
 				target.AddElementalDebuffBuildUp(Player, ElementalDebuffType.Burn, (int)(damageDone * ElementDebuffBuildUpRate));
 
-				if (!Player.HasBuff<IstafelsSunfireGraspFireBallCooldown>())
-				{
-					if (FireBallProj == null || !FireBallProj.Projectile.active)
-					{
-						var proj = Projectile.NewProjectileDirect(Player.GetSource_FromAI(), Player.Center, Player.velocity, ModContent.ProjectileType<IstafelsSunfireGrasp_FireBall>(), 1, 1.2f, Player.whoAmI);
-						Player.AddBuff(ModContent.BuffType<IstafelsSunfireGraspFireBallBuff>(), 2);
-						FireBallProj = (IstafelsSunfireGrasp_FireBall)proj.ModProjectile;
-					}
-
-					FireBallBuildUp += damageDone;
-					FireBallProj.BuildUpProgress = Math.Clamp(FireBallBuildUp / (float)FireBallBuildUpMax, 0f, 1f);
-					if (FireBallBuildUp > FireBallBuildUpMax)
-					{
-						ShootFireBall(target);
-					}
-				}
+				ManageFireBall(target, damageDone);
 			}
 		}
 
-		public void ShootFireBall(NPC target)
+		private void ManageFireBall(NPC target, int damageDone)
 		{
-			FireBallBuildUp = 0;
-			Player.AddBuff(ModContent.BuffType<IstafelsSunfireGraspFireBallCooldown>(), FireBallCooldown);
+			if (!Player.HasBuff<IstafelsSunfireGraspFireBallCooldown>())
+			{
+				// If don't have fire ball, create one
+				if (FireBallProj == null || !FireBallProj.Projectile.active)
+				{
+					var proj = Projectile.NewProjectileDirect(Player.GetSource_FromAI(), Player.Center, Player.velocity, ModContent.ProjectileType<IstafelsSunfireGrasp_FireBall>(), 1, 1.2f, Player.whoAmI);
+					Player.AddBuff(ModContent.BuffType<IstafelsSunfireGraspFireBallBuff>(), 2);
+					FireBallProj = (IstafelsSunfireGrasp_FireBall)proj.ModProjectile;
+				}
 
-			FireBallProj.Active(target);
-			FireBallProj = null;
+				// Add build-up
+				FireBallProj.BuildUp += damageDone;
+
+				// If build-up is max, shoot fire ball
+				if (FireBallProj.BuildUp > IstafelsSunfireGrasp_FireBall.BuildUpMax)
+				{
+					Player.AddBuff(ModContent.BuffType<IstafelsSunfireGraspFireBallCooldown>(), FireBallCooldown);
+
+					FireBallProj.Active(target);
+					FireBallProj = null;
+				}
+			}
 		}
 
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)

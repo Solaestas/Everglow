@@ -31,6 +31,7 @@ public class IstafelsSunfireGrasp_SkillVFX : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
+		var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
@@ -49,6 +50,9 @@ public class IstafelsSunfireGrasp_SkillVFX : ModProjectile
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = texture;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 
 		return false;
 	}
