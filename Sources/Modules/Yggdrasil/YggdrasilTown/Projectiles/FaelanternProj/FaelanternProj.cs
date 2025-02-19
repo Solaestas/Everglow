@@ -72,7 +72,7 @@ public class FaelanternProj : ModProjectile
 	public override void AI()
 	{
 		FaelanternSkeleton.AnimationState.Apply(FaelanternSkeleton.Skeleton);
-
+		Projectile.timeLeft++;
 		timer++;
 		if (timer == 10)
 		{
