@@ -1,6 +1,7 @@
 using Everglow.Commons.Weapons.CrossBow;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+
 public class RockSpikeBallista_Proj : CrossBowProjectile
 {
 	public override void SetDef()
@@ -8,6 +9,7 @@ public class RockSpikeBallista_Proj : CrossBowProjectile
 		CrossBowTexture = ModAsset.RockSpikeBallista_Proj.Value;
 		ChordTexture = ModAsset.RockSpikeBallista_Proj_Chord.Value;
 	}
+
 	public override void DrawChord(SpriteBatch spriteBatch, Color lightColor)
 	{
 		if (ChordTexture == null)
@@ -38,7 +40,6 @@ public class RockSpikeBallista_Proj : CrossBowProjectile
 		downChordTail = downChordTail.RotatedBy(Projectile.rotation);
 		sliderHead = sliderHead.RotatedBy(Projectile.rotation);
 		sliderTail = sliderTail.RotatedBy(Projectile.rotation);
-
 
 		Vector2 upChord = upChordHead - upChordTail;
 		Vector2 slider = sliderHead - sliderTail;

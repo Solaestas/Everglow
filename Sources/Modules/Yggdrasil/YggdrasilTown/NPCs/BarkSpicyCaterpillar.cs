@@ -1,18 +1,19 @@
 using Everglow.Commons.Coroutines;
+using Everglow.Yggdrasil.Common.NPCs;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
+
 [NoGameModeScale]
 public class BarkSpicyCaterpillar : Caterpillar
 {
 	public override void SetDefaults()
 	{
-		
 		base.SetDefaults();
 
-		
 		SegmentBehavioralSize = 10;
 		SegmentHitBoxSize = 30;
 		SegmentCount = 10;
@@ -21,26 +22,27 @@ public class BarkSpicyCaterpillar : Caterpillar
 		NPC.lifeMax = 16;
 		NPC.damage = 6;
 		NPC.value = 3;
-		if(Main.expertMode)
+		if (Main.expertMode)
 		{
 			NPC.knockBackResist = -0.08f;
 			NPC.lifeMax = 30;
 			NPC.damage = 8;
 			NPC.value = 7;
 		}
-		if(Main.masterMode)
+		if (Main.masterMode)
 		{
 			NPC.knockBackResist = -0.04f;
 			NPC.lifeMax = 42;
 			NPC.damage = 11;
 			NPC.value = 10;
 		}
-
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		base.OnSpawn(source);
 	}
+
 	public override Rectangle GetDrawFrame(int Style)
 	{
 		Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
@@ -59,17 +61,23 @@ public class BarkSpicyCaterpillar : Caterpillar
 		}
 		return base.GetDrawFrame(Style);
 	}
+
 	public override void SetStaticDefaults()
 	{
 		NPCSpawnManager.RegisterNPC(Type);
 	}
+
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
 		YggdrasilTownBiome YggdrasilTownBiome = ModContent.GetInstance<YggdrasilTownBiome>();
 		if (!YggdrasilTownBiome.IsBiomeActive(Main.LocalPlayer))
+		{
 			return 0f;
+		}
+
 		return 8f;
 	}
+
 	public override IEnumerator<ICoroutineInstruction> CrawlingII()
 	{
 		Crawl_2 = true;
@@ -79,17 +87,18 @@ public class BarkSpicyCaterpillar : Caterpillar
 		{
 			toTail = Vector2.Normalize(Segments[0].SelfPosition - Segments[Segments.Count - 1].SelfPosition);
 		}
-		//从头部开始拉开虫体
+
+		// 从头部开始拉开虫体
 		for (int t = 0; t < 60; t++)
 		{
-			//被打破防了,掉下去,终止此协程
+			// 被打破防了,掉下去,终止此协程
 			if (Toughness <= 0)
 			{
 				Crawl_2 = false;
 				yield break;
 			}
-			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
-			Segment head = Segments[0];//头
+			AnyAliveCoroutineTimer = 0; // 在所有可能活着的协程的执行里面都归零
+			Segment head = Segments[0]; // 头
 			head.SelfPosition += toTail * 2f * (SegmentCount * SegmentBehavioralSize / 300f);
 			toTail = toTail.RotatedBy(-0.029f / (SegmentCount / 10f) * MathF.Sin(t / 60f * MathF.PI * head.SelfDirection));
 			head.Normal = toTail.RotatedBy(MathHelper.PiOver2);
@@ -123,17 +132,18 @@ public class BarkSpicyCaterpillar : Caterpillar
 			}
 			yield return new SkipThisFrame();
 		}
-		//头部寻找落点
+
+		// 头部寻找落点
 		while (GetNormalOfTiles(Segments[0].SelfPosition + NPC.Center) == Vector2.zeroVector)
 		{
-			//被打破防了,掉下去,终止此协程
+			// 被打破防了,掉下去,终止此协程
 			if (Toughness <= 0)
 			{
 				Crawl_2 = false;
 				yield break;
 			}
-			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
-			Segment head = Segments[0];//头
+			AnyAliveCoroutineTimer = 0; // 在所有可能活着的协程的执行里面都归零
+			Segment head = Segments[0]; // 头
 			toTail += toTail.RotatedBy(-MathHelper.PiOver2 * head.SelfDirection) * 0.02f;
 			toTail = Vector2.Normalize(toTail);
 			head.SelfPosition += toTail * 2 * (SegmentCount / 10f);
@@ -165,7 +175,8 @@ public class BarkSpicyCaterpillar : Caterpillar
 				segment.Normal = Vector2.Normalize(direction);
 				Segments[i] = segment;
 			}
-			//如果整条虫都被头带上天了,在重力作用下滑落
+
+			// 如果整条虫都被头带上天了,在重力作用下滑落
 			if (shouldFall)
 			{
 				Crawl_2 = false;
@@ -176,14 +187,16 @@ public class BarkSpicyCaterpillar : Caterpillar
 		}
 		AdjustPosition();
 		Crawl_2 = false;
-		//平坦程度
+
+		// 平坦程度
 		float LineValue = 0;
 		for (int i = 1; i < Segments.Count; i++)
 		{
 			LineValue += (Segments[i].Normal - Segments[i - 1].Normal).Length();
 		}
-		//蠕虫只会在比较平坦的时候休息,1/10的几率休息5~50秒
-		if(!Main.dayTime)
+
+		// 蠕虫只会在比较平坦的时候休息,1/10的几率休息5~50秒
+		if (!Main.dayTime)
 		{
 			Vector2 direction = GetNormalOfTiles(Segments[Segments.Count / 2].SelfPosition + NPC.Center).RotatedBy(MathHelper.PiOver2 * Segments[Segments.Count / 2].SelfDirection);
 			if (direction.X < -0.1f && NPC.Center.X < Main.screenPosition.X + Main.screenWidth / 2f - 400)
@@ -207,6 +220,7 @@ public class BarkSpicyCaterpillar : Caterpillar
 			_caterpillarCoroutine.StartCoroutine(new Coroutine(Crawling()));
 		}
 	}
+
 	/// <summary>
 	/// 休息,夜晚离开
 	/// </summary>
@@ -221,13 +235,14 @@ public class BarkSpicyCaterpillar : Caterpillar
 				_caterpillarCoroutine.StartCoroutine(new Coroutine(Crawling()));
 				yield break;
 			}
-			//夜晚离开
+
+			// 夜晚离开
 			if (!Main.dayTime)
 			{
 				_caterpillarCoroutine.StartCoroutine(new Coroutine(Crawling()));
 				yield break;
 			}
-			AnyAliveCoroutineTimer = 0;//在所有可能活着的协程的执行里面都归零
+			AnyAliveCoroutineTimer = 0; // 在所有可能活着的协程的执行里面都归零
 			yield return new SkipThisFrame();
 		}
 		if (!Crawl_1)
@@ -242,6 +257,7 @@ public class BarkSpicyCaterpillar : Caterpillar
 			}
 		}
 	}
+
 	public override bool PreKill()
 	{
 		for (int j = 0; j < Segments.Count; j++)
@@ -268,8 +284,9 @@ public class BarkSpicyCaterpillar : Caterpillar
 		}
 		return base.PreKill();
 	}
+
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.CaterpillarJuice>(), 1, 1, 2));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CaterpillarJuice>(), 1, 1, 2));
 	}
 }

@@ -1,4 +1,3 @@
-using Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Buffs;

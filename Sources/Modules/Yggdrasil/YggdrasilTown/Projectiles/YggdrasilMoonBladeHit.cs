@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -19,11 +20,13 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 		Projectile.extraUpdates = 6;
 		Projectile.DamageType = DamageClass.Magic;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		SoundEngine.PlaySound(SoundID.Shatter, Projectile.Center);
 		GenerateSpark(140);
 	}
+
 	public void GenerateSpark(int Frequency)
 	{
 		for (int g = 0; g < Frequency; g++)
@@ -38,17 +41,21 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 				maxTime = Main.rand.Next(37, 145) * Projectile.ai[0] / 10f,
 				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 17.0f)) * Projectile.ai[0] / 10f,
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f) }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f) },
 			};
 			Ins.VFXManager.Add(spark);
 		}
 	}
+
 	public override void AI()
 	{
 		Projectile.velocity *= 0;
 		if (Projectile.timeLeft <= 199)
+		{
 			Projectile.friendly = false;
+		}
 	}
+
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		bool bool0 = (targetHitbox.TopLeft() - projHitbox.Center()).Length() < 9 * Projectile.ai[0];
@@ -57,6 +64,7 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 		bool bool3 = (targetHitbox.BottomRight() - projHitbox.Center()).Length() < 9 * Projectile.ai[0];
 		return bool0 || bool1 || bool2 || bool3;
 	}
+
 	private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -75,6 +83,7 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}
+
 	public override void PostDraw(Color lightColor)
 	{
 		Texture2D shadow = Commons.ModAsset.Point.Value;
@@ -83,6 +92,7 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 		Color c = new Color(81, 81, 255, 0);
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, c * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark, SpriteEffects.None, 0);
 
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect dissolve = ModAsset.SandDissolve.Value;
@@ -96,31 +106,35 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 		dissolve.CurrentTechnique.Passes[0].Apply();
 		DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 24 * Projectile.ai[0], c, Projectile.Center, Commons.ModAsset.Trail_0.Value);
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D shadow = Commons.ModAsset.Point_black.Value;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Color c = new Color(0f, 1f, 0.7f, 0f);
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, shadow.Size() / 2f, 0.2f * Projectile.ai[0], SpriteEffects.None, 0);
-		Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
-
-		if(Projectile.hostile)
+		Texture2D light = Commons.ModAsset.StarSlash.Value;
+		Texture2D light_black = Commons.ModAsset.StarSlash_black.Value;
+		if (Projectile.hostile)
 		{
-			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0, light.Size() / 2f, new Vector2(1f, dark * dark * 0.4f) * Projectile.ai[0] * 0.04f, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f, light.Size() / 2f, new Vector2(0.5f, dark * 0.4f) * Projectile.ai[0] * 0.04f, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, Projectile.ai[1] + 1.57f, light.Size() / 2f, new Vector2(1f, dark * dark * 0.2f) * Projectile.ai[0] * 0.2f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0, light.Size() / 2f, new Vector2(dark * dark * 0.4f, 1f) * Projectile.ai[0] * 0.04f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f, light.Size() / 2f, new Vector2(dark * 0.4f, 0.5f) * Projectile.ai[0] * 0.04f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, Projectile.ai[1], light.Size() / 2f, new Vector2(dark * dark * 0.2f, 0.5f) * Projectile.ai[0] * 0.2f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light_black, Projectile.Center - Main.screenPosition, null, Color.White * 0.5f, Projectile.ai[1], light.Size() / 2f, new Vector2(dark * dark * 0.18f, 0.5f) * Projectile.ai[0] * 0.2f, SpriteEffects.None, 0);
 		}
 		else
 		{
-			dark = Math.Max((Projectile.timeLeft) / 200f, 0);
-			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0, light.Size() / 2f, new Vector2(1f, dark * dark * 0.4f) * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f, light.Size() / 2f, new Vector2(0.5f, dark * 0.4f) * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, Projectile.ai[1] + 1.57f, light.Size() / 2f, new Vector2(1f, dark * dark * 0.2f) * Projectile.ai[0] * 0.4f, SpriteEffects.None, 0);
+			dark = Math.Max(Projectile.timeLeft / 200f, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0, light.Size() / 2f, new Vector2(dark * dark * 0.4f, 1f) * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f, light.Size() / 2f, new Vector2(dark * 0.4f, 0.5f) * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, Projectile.ai[1], light.Size() / 2f, new Vector2(dark * dark * 0.2f, 0.5f) * Projectile.ai[0] * 0.4f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(light_black, Projectile.Center - Main.screenPosition, null, Color.White * 0.7f, Projectile.ai[1], light.Size() / 2f, new Vector2(dark * dark * 0.18f, 0.5f) * Projectile.ai[0] * 0.2f, SpriteEffects.None, 0);
 		}
 		return false;
 	}
+
 	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -137,23 +151,28 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), c0, new Vector3(0, 1, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), c0, new Vector3(0, 0, 0)));
 		if (circle.Count > 2)
+		{
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+		}
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
+		{
 			colorV *= Projectile.ai[0] / 10f;
-		Texture2D t = Commons.ModAsset.Trail_6.Value;
+		}
 
+		Texture2D t = Commons.ModAsset.Trail_10.Value;
 
 		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 12f * Projectile.ai[0], 12 * (1 - value) * Projectile.ai[0], new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
+
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		target.AddBuff(BuffID.Bleeding, 360);
 		target.AddBuff(BuffID.BrokenArmor, 360);
 	}
 }
-

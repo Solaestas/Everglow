@@ -1,20 +1,29 @@
 using System.Reflection;
 using SubworldLibrary;
 using Terraria.WorldBuilding;
+
 namespace Everglow.Yggdrasil;
+
 internal class YggdrasilWorld : Subworld
 {
 	public static bool InYggdrasil => SubworldSystem.IsActive<YggdrasilWorld>();
+
 	public static float YggdrasilTimer = 0;
 	public Vector2 StoneCageOfChallengesCenter = Vector2.zeroVector;
+
 	public override int Width => 2000;
+
 	public override int Height => 21000;
+
 	public override bool NormalUpdates => true;
-	public override bool ShouldSave => false;//Only in debug mode,when published,turn true.
+
+	public override bool ShouldSave => true; // Only in debug mode,when published,turn true.
+
 	public override List<GenPass> Tasks => new List<GenPass>()
 	{
-		new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass()
+		new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass(),
 	};
+
 	public override void OnEnter()
 	{
 		SubworldSystem.hideUnderworld = true;
@@ -24,19 +33,21 @@ internal class YggdrasilWorld : Subworld
 		{
 			for (int y = 20; y < Main.maxTilesY - 20; y++)
 			{
-
 			}
 		}
 	}
+
 	public override void OnLoad()
 	{
 		Main.worldSurface = Main.maxTilesY - 100;
 		Main.rockLayer = Main.maxTilesY - 50;
 	}
+
 	public override void Load()
 	{
 		On_WorldGen.setWorldSize += WorldGen_setWorldSize;
 	}
+
 	private static void WorldGen_setWorldSize(On_WorldGen.orig_setWorldSize orig)
 	{
 		int fixedwidth = ((Main.maxTilesX - 1) / 200 + 1) * 200;
@@ -51,7 +62,8 @@ internal class YggdrasilWorld : Subworld
 			Main.mapMaxX = Main.maxTilesX;
 			Main.mapMaxY = Main.maxTilesY;
 
-			Main.instance.mapTarget = new RenderTarget2D[(Main.maxTilesX / Main.textureMaxWidth) + 1,
+			Main.instance.mapTarget = new RenderTarget2D[
+				(Main.maxTilesX / Main.textureMaxWidth) + 1,
 				(Main.maxTilesY / Main.textureMaxHeight) + 1];
 			Main.mapWasContentLost = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
 			Main.initMap = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
@@ -66,16 +78,23 @@ internal class YggdrasilWorld : Subworld
 		Main.maxSectionsY = (Main.maxTilesY - 1) / 150 + 1;
 	}
 }
-class YggdrasilWorldSystem : ModSystem
+
+public class YggdrasilWorldSystem : ModSystem
 {
 	public override void PostUpdateEverything()
 	{
 		if (YggdrasilWorld.InYggdrasil)
 		{
 			YggdrasilWorld.YggdrasilTimer++;
+			if(Main.bloodMoon)
+			{
+				Main.bloodMoon = false;
+			}
+			if(Main.slimeRain)
+			{
+				Main.slimeRain = false;
+			}
 		}
 		base.PostUpdateEverything();
 	}
 }
-
-

@@ -29,6 +29,18 @@ public class RoomWorld : Subworld
 
 	public override int Height => 300;
 
+	public override int ReturnDestination
+	{
+		get
+		{
+			if (OriginalWorld == null)
+			{
+				return -1; // 或者处理其他情况
+			}
+			return SubworldSystem.GetIndex(OriginalWorld.FullName);
+		}
+	}
+
 	public override bool NormalUpdates => true;
 
 	public override void OnLoad()
@@ -45,9 +57,12 @@ public class RoomWorld : Subworld
 
 	public override bool ShouldSave => false;
 
+	public static Point OldSpawnPos = default;
+
+	public static Point SpawnPos = default;
+
 	public override void OnEnter()
 	{
-		base.OnEnter();
 	}
 
 	public override void OnExit()
