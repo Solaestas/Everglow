@@ -27,17 +27,16 @@ public class RoomManager
 				{
 					WoodenBoxRoomGenPass.ModifedSpawnPos = modifiedSpawnPos;
 				}
-                // 如果不在房间里就进入1层房间
-                // 没有给定的地图数据直接搓一个木制空洞,有的话手动挂delegate
-                WoodenBoxRoomGenPass.RoomGen += roomGen;
-                WoodenBoxRoomGenPass.BuildWoodenRoom();
-            }
-        }
 
+				// 如果不在房间里就进入1层房间
+				// 没有给定的地图数据直接搓一个木制空洞,有的话手动挂delegate
+				WoodenBoxRoomGenPass.RoomGen += roomGen;
+				WoodenBoxRoomGenPass.BuildWoodenRoom();
+			}
+		}
 
-
-        // 如果不在房间里就进入1层房间
-        else
+		// 如果不在房间里就进入1层房间
+		else
 		{
 			// 保存原世界
 			if (SubworldSystem.Current != null)
@@ -191,16 +190,17 @@ public class RoomWorldTile : GlobalTile
 				return false;
 			}
 		}
-		//if(RoomWorld.OriginalWorld is not null)
-		//{
-		//	Main.NewText(RoomWorld.OriginalWorld);
-		//	Main.NewText(SubworldSystem.GetIndex(RoomWorld.OriginalWorld.FullName), Color.Yellow);
-		//}
 
-		//if (SubworldSystem.Current is not null)
-		//{
-		//	Main.NewText(SubworldSystem.CurrentPath, Color.Pink);
-		//}
+		// if(RoomWorld.OriginalWorld is not null)
+		// {
+		// Main.NewText(RoomWorld.OriginalWorld);
+		// Main.NewText(SubworldSystem.GetIndex(RoomWorld.OriginalWorld.FullName), Color.Yellow);
+		// }
+
+		// if (SubworldSystem.Current is not null)
+		// {
+		// Main.NewText(SubworldSystem.CurrentPath, Color.Pink);
+		// }
 		return base.CanKillTile(i, j, type, ref blockDamaged);
 	}
 }

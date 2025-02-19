@@ -20,7 +20,6 @@ public class WoodenBoxRoomGenPass : GenPass
 
 	public static Point AnchorForMapIO = new Point(-5, -5);
 
-
 	public static Action RoomGen;
 
 	public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
@@ -52,20 +51,7 @@ public class WoodenBoxRoomGenPass : GenPass
 		// 如果没有记录就开一个新房间
 		if (!ReadWorldSave())
 		{
-            // 如果没有预设的房间就搓一个房间
-            if (RoomGen == default)
-            {
-                BuildWoodenSquareRoom();
-            }
-
-            // 有的话就启用
-            else
-            {
-                RoomGen();
-                RoomGen = default;
-            }
-            if (MapIOPathOfNewRoom == string.Empty)
-			// 如果没有预设的房间就搓一个房间
+			if (MapIOPathOfNewRoom == string.Empty)
 			{
 				// 获取对应层级的世界材料
 				GetLayerMaterial();
@@ -95,14 +81,25 @@ public class WoodenBoxRoomGenPass : GenPass
 			{
 				QuickBuildInside();
 				MapIOPathOfNewRoom = string.Empty;
-				if(ModifedSpawnPos != new Point(-5, -5))
+				if (ModifedSpawnPos != new Point(-5, -5))
 				{
-					if(ModifedSpawnPos.X is > 5 and < 295 && ModifedSpawnPos.Y is > 5 and < 295)
+					if (ModifedSpawnPos.X is > 5 and < 295 && ModifedSpawnPos.Y is > 5 and < 295)
 					{
 						Main.spawnTileX = ModifedSpawnPos.X;
 						Main.spawnTileY = ModifedSpawnPos.Y;
 					}
 				}
+			}
+			// 如果没有预设的房间就搓一个房间
+			if (RoomGen == default)
+			{
+				// BuildWoodenSquareRoom();
+			}
+			// 有的话就启用
+			else
+			{
+				RoomGen();
+				RoomGen = default;
 			}
 		}
 	}
@@ -149,18 +146,15 @@ public class WoodenBoxRoomGenPass : GenPass
 				(x, y) = (AnchorForMapIO.X, AnchorForMapIO.Y);
 			}
 		}
-		var mapIO = new MapIO(x, y);
-
-		mapIO.Read(ModIns.Mod.GetFileStream(MapIOPathOfNewRoom));
 
 		// 用木头填满世界
-		for (int x = 20; x < Main.maxTilesX - 20; x++)
+		for (int x0 = 20; x0 < Main.maxTilesX - 20; x0++)
 		{
-			for (int y = 20; y < Main.maxTilesY - 20; y++)
+			for (int y0 = 20; y0 < Main.maxTilesY - 20; y0++)
 			{
-				Tile tile = Main.tile[x, y];
+				Tile tile = Main.tile[x0, y0];
 				tile.wall = (ushort)RoomWallType;
-				if (!(Math.Abs(x - Main.maxTilesX / 2) < 10 && Math.Abs(y - Main.maxTilesY / 2) < 10))
+				if (!(Math.Abs(x0 - Main.maxTilesX / 2) < 10 && Math.Abs(y0 - Main.maxTilesY / 2) < 10))
 				{
 					tile.TileType = (ushort)RoomTileType;
 					tile.HasTile = true;
@@ -170,6 +164,12 @@ public class WoodenBoxRoomGenPass : GenPass
 					tile.HasTile = false;
 				}
 			}
+		}
+		var mapIO = new MapIO(x, y);
+
+		if (MapIOPathOfNewRoom is not null && MapIOPathOfNewRoom != string.Empty)
+		{
+			mapIO.Read(ModIns.Mod.GetFileStream(MapIOPathOfNewRoom));
 		}
 	}
 

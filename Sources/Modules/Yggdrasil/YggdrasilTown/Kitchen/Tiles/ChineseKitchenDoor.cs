@@ -8,7 +8,6 @@ public class ChineseKitchenDoor : RoomDoorTile
 {
 	public void BuildChineseStyleKitchenGen()
 	{
-		WoodenBoxRoomGenPass.BuildWoodenSquareRoom();
 		var mapIO = new MapIO(5, 5);
 
 		mapIO.Read(ModIns.Mod.GetFileStream("Yggdrasil/YggdrasilTown/Kitchen/MapIOs/ChineseStyleKitchen_Whole.mapio"));
@@ -25,7 +24,7 @@ public class ChineseKitchenDoor : RoomDoorTile
 	{
 		Tile tile = Main.tile[i, j];
 		Point point = new Point(i - tile.TileFrameX / 18, j - tile.TileFrameY / 18);
-		RoomManager.EnterNextLevelRoom(point, BuildChineseStyleKitchenGen);
+		RoomManager.EnterNextLevelRoom(point, default, default, default, default, BuildChineseStyleKitchenGen);
 		return false;
 	}
 }
