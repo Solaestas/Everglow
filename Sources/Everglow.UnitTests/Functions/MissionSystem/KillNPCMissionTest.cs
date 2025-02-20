@@ -1,4 +1,4 @@
-using Everglow.Commons.MissionSystem.Shared;
+using Everglow.Commons.Mechanics.MissionSystem.Shared;
 using Everglow.UnitTests.Functions.MissionSystem.TestMissions;
 using Terraria.ID;
 
