@@ -12,7 +12,10 @@ public class BadrBuff : ModBuff
 
 	public override void Update(Player player, ref int buffIndex)
 	{
-		player.buffTime[buffIndex] = 18000;
+		// + 3% pick speed
+		player.pickSpeed += 0.03f;
+
+		player.buffTime[buffIndex] = 2;
 
 		bool petProjectileNotSpawned = player.ownedProjectileCounts[ModContent.ProjectileType<BadrProj>()] <= 0;
 		if (petProjectileNotSpawned && player.whoAmI == Main.myPlayer)

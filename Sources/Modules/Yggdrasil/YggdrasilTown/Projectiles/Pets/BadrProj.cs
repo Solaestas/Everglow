@@ -4,6 +4,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Pets;
 
 public class BadrProj : ModProjectile
 {
+	public const float LightingStrength = 0.65f;
+
 	public Player Owner => Main.player[Projectile.owner];
 
 	public ref float Time => ref Projectile.ai[0];
@@ -38,7 +40,7 @@ public class BadrProj : ModProjectile
 		Projectile.spriteDirection = Owner.direction;
 
 		// Emit light.
-		Lighting.AddLight(Projectile.Center, Color.White.ToVector3() * 2.5f);
+		Lighting.AddLight(Projectile.Center, new Vector3(1f, 0.8f, 0.4f) * LightingStrength);
 
 		Time++;
 	}
