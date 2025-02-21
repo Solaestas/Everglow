@@ -1,3 +1,5 @@
+using Everglow.Food.FoodUtilities;
+
 namespace Everglow.Food;
 
 public abstract class FoodIngredientItem : ModItem
@@ -40,8 +42,7 @@ public abstract class FoodIngredientItem : ModItem
 
 	public static bool IsIngredient(int itemType)
 	{
-		List<int> vanillFoodType = [ItemID.SpicyPepper, ItemID.BottledWater, ItemID.BottledHoney];
-		if (vanillFoodType.Contains(itemType))
+		if (FoodUtils.VanillaFood.Contains(itemType))
 		{
 			return true;
 		}
