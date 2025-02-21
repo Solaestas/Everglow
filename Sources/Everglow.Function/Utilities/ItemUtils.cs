@@ -1,6 +1,6 @@
 namespace Everglow.Commons.Utilities;
 
-public class ItemUtils
+public static partial class ItemUtils
 {
 	public static float GetPrefixDamage(int prefixType)
 	{
@@ -48,62 +48,4 @@ public class ItemUtils
 			_ => 1f,
 		};
 	}
-
-	public static List<int> VanillaDuck => RecipeGroup.recipeGroups[RecipeGroupID.Ducks].ValidItems.ToList();
-
-	public static List<int> VanillaButterfly => RecipeGroup.recipeGroups[RecipeGroupID.Butterflies].ValidItems.ToList();
-
-	public static List<int> VanillaFruit => RecipeGroup.recipeGroups[RecipeGroupID.Fruit].ValidItems.Concat([ItemID.Grapes]).ToList();
-
-	public static List<int> VanillaTurtle => RecipeGroup.recipeGroups[RecipeGroupID.Turtles].ValidItems.ToList();
-
-	public static List<int> VanillaBug => RecipeGroup.recipeGroups[RecipeGroupID.Bugs].ValidItems.ToList();
-
-	public static List<int> VanillaSquirrel => RecipeGroup.recipeGroups[RecipeGroupID.Squirrels].ValidItems.ToList();
-
-	public static List<int> VanillaDragonfly => RecipeGroup.recipeGroups[RecipeGroupID.Dragonflies].ValidItems.ToList();
-
-	public static List<int> VanillaSnail => RecipeGroup.recipeGroups[RecipeGroupID.Snails].ValidItems.ToList();
-
-	public static List<int> VanillaFirefly => RecipeGroup.recipeGroups[RecipeGroupID.Fireflies].ValidItems.ToList();
-
-	public static List<int> VanillaScorpion => RecipeGroup.recipeGroups[RecipeGroupID.Scorpions].ValidItems.ToList();
-
-	public static List<int> VanillaParrot => RecipeGroup.recipeGroups[RecipeGroupID.Cockatiels].ValidItems.Concat(RecipeGroup.recipeGroups[RecipeGroupID.Macaws].ValidItems).ToList();
-
-	public static List<int> VanillaBird => RecipeGroup.recipeGroups[RecipeGroupID.Birds].ValidItems.Concat(VanillaParrot).ToList();
-
-	public static List<int> VanillaQuestFish => Main.anglerQuestItemNetIDs.ToList();
-
-	public static List<int> VanillaSpecialFish => [
-		ItemID.ArmoredCavefish,
-		ItemID.ChaosFish,
-		ItemID.CrimsonTigerfish,
-		ItemID.Damselfish,
-		ItemID.DoubleCod,
-		ItemID.Ebonkoi,
-		ItemID.FlarefinKoi,
-		ItemID.FrostMinnow,
-		ItemID.Hemopiranha,
-		ItemID.Honeyfin,
-		ItemID.NeonTetra,
-		ItemID.Obsidifish,
-		ItemID.PrincessFish,
-		ItemID.Prismite,
-		ItemID.SpecularFish,
-		ItemID.Stinkfish,
-		ItemID.VariegatedLardfish,
-		];
-
-	public static List<int> VanillaNormalFish => [
-		ItemID.AtlanticCod,
-		ItemID.Bass,
-		ItemID.Flounder,
-		ItemID.RedSnapper,
-		ItemID.Salmon,
-		ItemID.Trout,
-		ItemID.Tuna,
-		];
-
-	public static List<int> VanillaFish => VanillaQuestFish.Concat(VanillaSpecialFish).Concat(VanillaNormalFish).ToList();
 }

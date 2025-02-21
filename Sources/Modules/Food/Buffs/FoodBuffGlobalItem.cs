@@ -1,4 +1,4 @@
-using Everglow.Commons.Utilities.ItemList.Weapons.Ranged;
+using Everglow.Commons.Utilities;
 using Terraria.DataStructures;
 
 namespace Everglow.Food.Buffs;
@@ -19,7 +19,7 @@ public class FoodBuffGlobalItem : GlobalItem
 		}
 		if (player.GetModPlayer<FoodBuffModPlayer>().StarfruitBuff)
 		{
-			if (Shotguns.vanillaShotguns.Contains(item.type))
+			if (ItemUtils.Ranged.Shotguns.Contains(item.type))
 			{
 				Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(5)) * (1f - Main.rand.NextFloat(0.1f));
 				if (item.type == ItemID.Xenopopper)
@@ -39,7 +39,7 @@ public class FoodBuffGlobalItem : GlobalItem
 		}
 		if (player.GetModPlayer<FoodBuffModPlayer>().FriedEggBuff)
 		{
-			if (Consumables.vanillaConsumables.Contains(item.type))
+			if (ItemUtils.Ranged.Consumables.Contains(item.type))
 			{
 				Projectile.NewProjectile(source, position, 1.5f * velocity, type, damage, knockback, player.whoAmI, 0);
 				return false;
@@ -47,7 +47,7 @@ public class FoodBuffGlobalItem : GlobalItem
 		}
 		if (player.GetModPlayer<FoodBuffModPlayer>().NachosBuff)
 		{
-			if (Launchers.vanillaLaunchers.Contains(item.type))
+			if (ItemUtils.Ranged.Launchers.Contains(item.type))
 			{
 				Projectile.NewProjectile(source, position, velocity, type, (int)1.04f * damage, 1.04f * knockback, player.whoAmI, 0);
 				return false;
