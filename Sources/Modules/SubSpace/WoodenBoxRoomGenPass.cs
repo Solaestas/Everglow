@@ -20,6 +20,8 @@ public class WoodenBoxRoomGenPass : GenPass
 
 	public static Point AnchorForMapIO = new Point(-5, -5);
 
+	public static Action RoomGen;
+
 	public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 	{
 		Main.statusText = "Test";
@@ -49,7 +51,6 @@ public class WoodenBoxRoomGenPass : GenPass
 		// 如果没有记录就开一个新房间
 		if (!ReadWorldSave())
 		{
-			// 如果没有预设的房间就搓一个房间
 			if (MapIOPathOfNewRoom == string.Empty)
 			{
 				// 获取对应层级的世界材料
@@ -80,14 +81,25 @@ public class WoodenBoxRoomGenPass : GenPass
 			{
 				QuickBuildInside();
 				MapIOPathOfNewRoom = string.Empty;
-				if(ModifedSpawnPos != new Point(-5, -5))
+				if (ModifedSpawnPos != new Point(-5, -5))
 				{
-					if(ModifedSpawnPos.X is > 5 and < 295 && ModifedSpawnPos.Y is > 5 and < 295)
+					if (ModifedSpawnPos.X is > 5 and < 295 && ModifedSpawnPos.Y is > 5 and < 295)
 					{
 						Main.spawnTileX = ModifedSpawnPos.X;
 						Main.spawnTileY = ModifedSpawnPos.Y;
 					}
 				}
+			}
+			// 如果没有预设的房间就搓一个房间
+			if (RoomGen == default)
+			{
+				// BuildWoodenSquareRoom();
+			}
+			// 有的话就启用
+			else
+			{
+				RoomGen();
+				RoomGen = default;
 			}
 		}
 	}
@@ -134,15 +146,30 @@ public class WoodenBoxRoomGenPass : GenPass
 				(x, y) = (AnchorForMapIO.X, AnchorForMapIO.Y);
 			}
 		}
+
+		// 用木头填满世界
+		for (int x0 = 20; x0 < Main.maxTilesX - 20; x0++)
+		{
+			for (int y0 = 20; y0 < Main.maxTilesY - 20; y0++)
+			{
+				Tile tile = Main.tile[x0, y0];
+				tile.wall = (ushort)RoomWallType;
+				if (!(Math.Abs(x0 - Main.maxTilesX / 2) < 10 && Math.Abs(y0 - Main.maxTilesY / 2) < 10))
+				{
+					tile.TileType = (ushort)RoomTileType;
+					tile.HasTile = true;
+				}
+				else
+				{
+					tile.HasTile = false;
+				}
+			}
+		}
 		var mapIO = new MapIO(x, y);
 
-		mapIO.Read(ModIns.Mod.GetFileStream(MapIOPathOfNewRoom));
-
-		var it = mapIO.GetEnumerator();
-		while (it.MoveNext())
+		if (MapIOPathOfNewRoom is not null && MapIOPathOfNewRoom != string.Empty)
 		{
-			WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
-			WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
+			mapIO.Read(ModIns.Mod.GetFileStream(MapIOPathOfNewRoom));
 		}
 	}
 

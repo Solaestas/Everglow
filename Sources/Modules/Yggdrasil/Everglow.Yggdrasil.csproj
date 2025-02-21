@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
                 <ProjectReference Include="..\CagedDomain\Everglow.CagedDomain.csproj" />
+                <ProjectReference Include="..\Food\Everglow.Food.csproj" />
                 <ProjectReference Include="..\SubSpace\Everglow.SubSpace.csproj" />
   </ItemGroup>
   <ItemGroup>

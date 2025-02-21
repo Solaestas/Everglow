@@ -8,7 +8,7 @@ public class RoomManager
 	/// <summary>
 	/// 向内深入一层房间
 	/// </summary>
-	public static void EnterNextLevelRoom(Point point, string mapPath = "", int mapIOAnchorX = 5, int mapIOAnchorY = 5, Point modifiedSpawnPos = default)
+	public static void EnterNextLevelRoom(Point point, string mapPath = "", int mapIOAnchorX = 5, int mapIOAnchorY = 5, Point modifiedSpawnPos = default, Action roomGen = default)
 	{
 		// 如果已经在房间里了,向下一层
 		if (SubworldSystem.IsActive<RoomWorld>())
@@ -27,6 +27,11 @@ public class RoomManager
 				{
 					WoodenBoxRoomGenPass.ModifedSpawnPos = modifiedSpawnPos;
 				}
+
+				// 如果不在房间里就进入1层房间
+				// 没有给定的地图数据直接搓一个木制空洞,有的话手动挂delegate
+				WoodenBoxRoomGenPass.RoomGen += roomGen;
+				WoodenBoxRoomGenPass.BuildWoodenRoom();
 			}
 		}
 
@@ -48,6 +53,7 @@ public class RoomManager
 				WoodenBoxRoomGenPass.ModifedSpawnPos = modifiedSpawnPos;
 			}
 			WoodenBoxRoomGenPass.AnchorForMapIO = new Point(mapIOAnchorX, mapIOAnchorY);
+			WoodenBoxRoomGenPass.RoomGen += roomGen;
 			RoomWorld.AnchorWorldCoordinate = point;
 			RoomWorld.LayerDepth = 1;
 			RoomWorld.SpawnPos = modifiedSpawnPos;
@@ -184,16 +190,17 @@ public class RoomWorldTile : GlobalTile
 				return false;
 			}
 		}
-		//if(RoomWorld.OriginalWorld is not null)
-		//{
-		//	Main.NewText(RoomWorld.OriginalWorld);
-		//	Main.NewText(SubworldSystem.GetIndex(RoomWorld.OriginalWorld.FullName), Color.Yellow);
-		//}
 
-		//if (SubworldSystem.Current is not null)
-		//{
-		//	Main.NewText(SubworldSystem.CurrentPath, Color.Pink);
-		//}
+		// if(RoomWorld.OriginalWorld is not null)
+		// {
+		// Main.NewText(RoomWorld.OriginalWorld);
+		// Main.NewText(SubworldSystem.GetIndex(RoomWorld.OriginalWorld.FullName), Color.Yellow);
+		// }
+
+		// if (SubworldSystem.Current is not null)
+		// {
+		// Main.NewText(SubworldSystem.CurrentPath, Color.Pink);
+		// }
 		return base.CanKillTile(i, j, type, ref blockDamaged);
 	}
 }
