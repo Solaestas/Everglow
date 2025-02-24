@@ -33,6 +33,8 @@ public class Fevens_Wing_Slash_Down : ModProjectile, IWarpProjectile
 		Projectile.localNPCHitCooldown = 60;
 		Projectile.timeLeft = 120;
 		Projectile.extraUpdates = 2;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
+		ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 180000;
 	}
 
 	public override bool PreAI()

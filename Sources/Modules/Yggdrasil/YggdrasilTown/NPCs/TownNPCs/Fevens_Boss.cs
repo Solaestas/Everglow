@@ -11,7 +11,7 @@ public class Fevens_Boss : ModNPC
 	private bool canDespawn = false;
 
 	/// <summary>
-	/// 0 default; 1 hold magic array; 2 attack1; 3 attack2; 4 stand; 5 attack3; 6 attack4(Raise blade);7 attack5(Raise blade, no wing);8 defense
+	/// 0 default; 1 hold magic array; 2 attack1; 3 attack2; 4 stand; 5 attack3; 6 attack4(Raise blade);7 attack5(Raise blade, no wing);8 defense; 9(Raise blade 2)
 	/// </summary>
 	public int State;
 
@@ -43,17 +43,17 @@ public class Fevens_Boss : ModNPC
 		NPC.friendly = false;
 		NPC.aiStyle = -1;
 
-		NPC.lifeMax = 25000;
-		NPC.life = 25000;
+		NPC.lifeMax = 88000;
+		NPC.life = 88000;
 		if (Main.expertMode)
 		{
-			NPC.lifeMax = 37500;
-			NPC.life = 37500;
+			NPC.lifeMax = 112000;
+			NPC.life = 112000;
 		}
 		if (Main.masterMode)
 		{
-			NPC.lifeMax = 45000;
-			NPC.life = 45000;
+			NPC.lifeMax = 144000;
+			NPC.life = 144000;
 		}
 		NPC.boss = true;
 		NPC.localAI[0] = 0;
@@ -70,6 +70,7 @@ public class Fevens_Boss : ModNPC
 
 	public override void AI()
 	{
+		NPC.TargetClosest();
 		Player player = Main.player[NPC.target];
 		_fevensCoroutine.Update();
 		if (!player.active || player.dead)
@@ -383,14 +384,14 @@ public class Fevens_Boss : ModNPC
 		State = 5;
 		for (int t = 0; t < 20; t++)
 		{
-			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), attackPos, Vector2.zeroVector, ModContent.ProjectileType<Fevens_Slash>(), 30, 2, default, 2);
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), attackPos, Vector2.zeroVector, ModContent.ProjectileType<Fevens_Slash>(), 60, 2, default, 2);
 			NPC.position = attackPos + new Vector2(Main.rand.NextFloat(-270, 270), Main.rand.NextFloat(-90, 90));
 			NPC.spriteDirection *= -1;
 			NPC.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
 			if (t % 2 == 0)
 			{
 				Vector2 startPos = new Vector2(0, Main.rand.NextFloat(45, 200)).RotatedByRandom(MathHelper.TwoPi);
-				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), attackPos + startPos * 3, -startPos.RotatedByRandom(0.4f), ModContent.ProjectileType<Fevens_Wing_Slash>(), 30, 2, default, 2);
+				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), attackPos + startPos * 3, -startPos.RotatedByRandom(0.4f), ModContent.ProjectileType<Fevens_Wing_Slash>(), 60, 2, default, 2);
 			}
 
 			yield return new SkipThisFrame();
@@ -402,16 +403,16 @@ public class Fevens_Boss : ModNPC
 		for (int i = 0; i < 8; i++)
 		{
 			Vector2 startPos = new Vector2(0, -120).RotatedBy(Main.time + i / 8d * MathHelper.TwoPi);
-			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), nextPos + startPos, -startPos.RotatedBy(MathHelper.PiOver4 / 2) * 0.4f, ModContent.ProjectileType<Fevens_Wing_Slash>(), 30, 2, default, 2);
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), nextPos + startPos, -startPos.RotatedBy(MathHelper.PiOver4 / 2) * 0.4f, ModContent.ProjectileType<Fevens_Wing_Slash>(), 60, 2, default, 2);
 		}
 		yield return new WaitForFrames(4);
 		for (int i = 0; i < 4; i++)
 		{
 			Vector2 startPos = new Vector2(-720, -675).RotatedBy(-i * 0.5f);
-			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), nextPos + startPos, -startPos * 0.2f, ModContent.ProjectileType<Fevens_Wing_Slash>(), 30, 2, default, 2);
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), nextPos + startPos, -startPos * 0.2f, ModContent.ProjectileType<Fevens_Wing_Slash>(), 60, 2, default, 2);
 
 			startPos = new Vector2(720, -675).RotatedBy(i * 0.5f);
-			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), nextPos + startPos, -startPos * 0.2f, ModContent.ProjectileType<Fevens_Wing_Slash>(), 30, 2, default, 2);
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), nextPos + startPos, -startPos * 0.2f, ModContent.ProjectileType<Fevens_Wing_Slash>(), 60, 2, default, 2);
 			yield return new WaitForFrames(2);
 		}
 		NPC.Center = nextPos;
@@ -442,20 +443,37 @@ public class Fevens_Boss : ModNPC
 		NPC.direction = attackDirection;
 		NPC.spriteDirection = attackDirection;
 		NPC.Center = attackPos + new Vector2(attackDirection * 220, 0);
+
+		State = 9;
+		yield return new WaitForFrames(20);
 		Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<Fevens_TaijutsuSlash>(), 130, 2, default, 1.25f, MathHelper.PiOver4 * -attackDirection, 0.45f);
 		p0.direction = -attackDirection;
 		p0.extraUpdates = 6;
 
-		yield return new WaitForFrames(20);
+		State = 4;
+		yield return new WaitForFrames(10);
+		State = 6;
+		yield return new WaitForFrames(10);
 		NPC.position.X += -attackDirection * 120;
 		NPC.position.Y += 48;
 		Projectile p1 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<Fevens_TaijutsuSlash>(), 144, 2, default, 1.25f, MathHelper.PiOver4 * -attackDirection, -0.45f);
 		p1.direction = -attackDirection;
 		p1.extraUpdates = 6;
-		yield return new WaitForFrames(20);
+
+		State = 4;
+		yield return new WaitForFrames(10);
+		if(attackDirection == -1)
+		{
+			State = 6;
+		}
+		else
+		{
+			State = 9;
+		}
+		yield return new WaitForFrames(10);
 
 		Vector2 towardPlayer = Vector2.Normalize(player.Center - NPC.Center) * 4.3f;
-		Projectile p2 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, towardPlayer, ModContent.ProjectileType<Fevens_TaijutsuSlash_Round>(), 30, 20, default, 0.75f, MathHelper.PiOver4 * -attackDirection, -0.45f);
+		Projectile p2 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, towardPlayer, ModContent.ProjectileType<Fevens_TaijutsuSlash_Round>(), 24, 20, default, 0.75f, MathHelper.PiOver4 * -attackDirection, -0.45f);
 		p2.spriteDirection = -attackDirection;
 		p2.extraUpdates = 5;
 		NPC.dontTakeDamage = true;
@@ -496,7 +514,7 @@ public class Fevens_Boss : ModNPC
 		NPC.spriteDirection = attackDirection;
 		NPC.Center = attackPos + new Vector2(attackDirection * 400, -340);
 		float dir = (-new Vector2(attackDirection * 400, -340)).ToRotation();
-		Projectile array = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<Fevens_MagicLaserArray>(), 30, 20, default, 0.08f, dir);
+		Projectile array = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<Fevens_MagicLaserArray>(), 80, 20, default, 0.08f, dir);
 
 		yield return new WaitForFrames(50);
 		Vector2 firstPos = NPC.Center;
@@ -518,6 +536,7 @@ public class Fevens_Boss : ModNPC
 			yield return new WaitForFrames(4);
 		}
 		yield return new WaitForFrames(50);
+		State = 7;
 		for (int t = 0; t < 16; t++)
 		{
 			Vector2 destination = firstPos + firstDirection * 200 * t;
@@ -542,7 +561,7 @@ public class Fevens_Boss : ModNPC
 			for (int h = 0; h < 4; h++)
 			{
 				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), destination, Vector2.zeroVector, ModContent.ProjectileType<Fevens_Slash>(), 30, 2, default, 2);
-				yield return new WaitForFrames(1);
+				yield return new SkipThisFrame();
 			}
 		}
 		NPC.alpha = 0;
@@ -577,7 +596,7 @@ public class Fevens_Boss : ModNPC
 			if (t != 0)
 			{
 				Vector2 startPos = NPC.Center + new Vector2(t * 230 + Math.Sign(t) * 100 + attackDirection * -100, -600);
-				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), startPos, new Vector2(0, 100), ModContent.ProjectileType<Fevens_Wing_Slash_Down>(), 30, 2, default, MathF.Abs(t) * 20 + 40);
+				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), startPos, new Vector2(0, 100), ModContent.ProjectileType<Fevens_Wing_Slash_Down>(), 60, 2, default, MathF.Abs(t) * 20 + 40);
 			}
 		}
 		State = 3;
@@ -643,7 +662,7 @@ public class Fevens_Boss : ModNPC
 			}
 			Vector2 toTarget = player.Center - NPC.Center;
 			NPC.rotation = toTarget.ToRotation();
-			if(NPC.spriteDirection == 1)
+			if (NPC.spriteDirection == 1)
 			{
 				NPC.rotation = toTarget.ToRotation() + MathHelper.Pi;
 			}
@@ -655,7 +674,7 @@ public class Fevens_Boss : ModNPC
 					Fevens_EnchantingSmash fES = p0.ModProjectile as Fevens_EnchantingSmash;
 					if (fES != null)
 					{
-						if(p0.timeLeft <= 5)
+						if (p0.timeLeft <= 5)
 						{
 							NPC.Center = fES.EndPosition;
 						}
@@ -678,16 +697,37 @@ public class Fevens_Boss : ModNPC
 		NPC.velocity *= 0;
 		Vector2 attackPos = player.Center;
 		int attackDirection = 1;
+		int oldDefense = NPC.defense;
+		NPC.defense = 880;
 		if (Main.rand.NextBool())
 		{
 			attackDirection = -1;
 		}
 		NPC.direction = attackDirection;
 		NPC.spriteDirection = attackDirection;
-		NPC.Center = attackPos + new Vector2(attackDirection * 220, -200);
+		NPC.Center = attackPos + new Vector2(attackDirection * 220, 0);
 		State = 8;
-
+		for (int t = 0; t < 4; t++)
+		{
+			Vector2 shootVel = new Vector2(12, -6).RotatedBy(t / 4f);
+			Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, shootVel, ModContent.ProjectileType<Fevens_Wing_Fly>(), 10, 2, default, t);
+			p0.spriteDirection = -1;
+		}
+		for (int t = 0; t < 4; t++)
+		{
+			Vector2 shootVel = new Vector2(-12, -6).RotatedBy(-t / 4f);
+			Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, shootVel, ModContent.ProjectileType<Fevens_Wing_Fly>(), 10, 2, default, t + 4);
+		}
 		yield return new WaitForFrames(60);
+		int lightingCount = 8;
+		for (int j = 0; j < 8; j++)
+		{
+			Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2((j - lightingCount / 2 + 0.5f) * 360, Main.rand.NextFloat(-30, 30) + 240), Vector2.zeroVector, ModContent.ProjectileType<Fevens_ThunderMarkShortTiming>(), 80, 1f, -1, 0);
+		}
+		yield return new WaitForFrames(110);
+		NPC.defense = oldDefense;
+		State = 4;
+		yield return new WaitForFrames(30);
 		_fevensCoroutine.StartCoroutine(new Coroutine(ChooseAttack()));
 
 		yield return new SkipThisFrame();
@@ -821,7 +861,8 @@ public class Fevens_Boss : ModNPC
 		}
 		if (Phase == 2)
 		{
-			switch (Main.rand.Next(5))
+
+			switch (Main.rand.Next(6))
 			{
 				case 0:
 					_fevensCoroutine.StartCoroutine(new Coroutine(SlashAttack2_Down()));
@@ -837,6 +878,9 @@ public class Fevens_Boss : ModNPC
 					break;
 				case 4:
 					_fevensCoroutine.StartCoroutine(new Coroutine(SlashAttack0()));
+					break;
+				case 5:
+					_fevensCoroutine.StartCoroutine(new Coroutine(PretentToDefense()));
 					break;
 				default:
 					_fevensCoroutine.StartCoroutine(new Coroutine(MagicAttack1()));
@@ -1008,8 +1052,26 @@ public class Fevens_Boss : ModNPC
 		if (State == 6 || State == 7)
 		{
 			Texture2D knifeFevens = ModAsset.Fevens_Attack4.Value;
+			Texture2D knifeFevensGlow = ModAsset.Fevens_Attack4_glow.Value;
 			Rectangle frame = new Rectangle(0, 0, knifeFevens.Width, knifeFevens.Height);
 			spriteBatch.Draw(knifeFevens, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			spriteBatch.Draw(knifeFevensGlow, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, new Color(255, 255, 255, 0), NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+		}
+
+		if (State == 8)
+		{
+			Texture2D shieldFevens = ModAsset.Fevens_Defence.Value;
+			Rectangle frame = new Rectangle(0, 0, shieldFevens.Width, shieldFevens.Height);
+			spriteBatch.Draw(shieldFevens, NPC.Center - Main.screenPosition + new Vector2(0, -4), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+		}
+
+		if (State == 9 || State == 10)
+		{
+			Texture2D knifeFevens = ModAsset.Fevens_Attack3.Value;
+			Texture2D knifeFevensGlow = ModAsset.Fevens_Attack3_glow.Value;
+			Rectangle frame = new Rectangle(0, 0, knifeFevens.Width, knifeFevens.Height);
+			spriteBatch.Draw(knifeFevens, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			spriteBatch.Draw(knifeFevensGlow, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, new Color(255, 255, 255, 0), NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		}
 		return false;
 	}

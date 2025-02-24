@@ -22,6 +22,8 @@ public class Fevens_Slash : ModProjectile, IWarpProjectile_warpStyle2
 
 		Projectile.localNPCHitCooldown = 60;
 		Projectile.usesLocalNPCImmunity = true;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
+		ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 180000;
 	}
 
 	public List<Vector3> OldPosSpace = new List<Vector3>();

@@ -58,8 +58,9 @@ public class Fevens_EnchantingSmash : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
+		var toTarget = new Vector2(1, 0).RotatedBy(Projectile.rotation);
 		var timeValue = (float)Main.time * 0.04f;
-		DrawStar(Projectile.Center - Main.screenPosition);
+		DrawStar(Projectile.Center + toTarget * 40 - Main.screenPosition);
 		Texture2D wingTarget = ModAsset.Fevens_WingTarget.Value;
 		Vector2 drawPos = EndPosition - Main.screenPosition;
 		Color targetColor = new Color(0.4f, 0.05f, 0.7f, 0);
@@ -72,8 +73,7 @@ public class Fevens_EnchantingSmash : ModProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		var toTarget = new Vector2(1, 0).RotatedBy(Projectile.rotation);
-		var checkPos = Projectile.Center;
+		var checkPos = Projectile.Center + toTarget * 40;
 		var normal = toTarget.RotatedBy(MathHelper.PiOver2) * 15;
 		var drawColor = new Color(0.2f, 0f, 0.4f, 0);
 		var drawDark = new Color(0.4f, 0.3f, 0.3f, 0.8f);
