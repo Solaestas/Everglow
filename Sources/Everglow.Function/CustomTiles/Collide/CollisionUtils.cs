@@ -358,8 +358,8 @@ public static class CollisionUtils
 			double totalRad = 0;
 			for (int i = 0; i < lines2.Length; i++)
 			{
-				Vector2 side1 = lines2[j] - lines1[i];
-				Vector2 side2 = lines2[(j + 1) % lines2.Length] - lines1[i];
+				Vector2 side1 = lines1[i] - lines2[j];
+				Vector2 side2 = lines1[(i + 1) % lines1.Length] - lines2[j];
 				double cosTheta = Vector2.Dot(side1, side2) / (side2.Length() * side1.Length());
 				double rad = Math.Acos(cosTheta);
 				totalRad += rad;

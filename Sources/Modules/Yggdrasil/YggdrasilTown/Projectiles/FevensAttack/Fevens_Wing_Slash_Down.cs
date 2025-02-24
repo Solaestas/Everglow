@@ -1,18 +1,22 @@
 using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities.BuffHelpers;
+using Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.FevensAttack;
 
-public class Fevens_Wing_Slash : ModProjectile, IWarpProjectile
+public class Fevens_Wing_Slash_Down : ModProjectile, IWarpProjectile
 {
 	public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 
 	private Vector2 startCenter;
+	public bool HitTile = false;
 
 	public override void OnSpawn(IEntitySource source)
 	{
+		Projectile.timeLeft = (int)Projectile.ai[0] + 121;
 		startCenter = Projectile.Center;
 	}
 
@@ -57,13 +61,94 @@ public class Fevens_Wing_Slash : ModProjectile, IWarpProjectile
 		return base.ShouldUpdatePosition();
 	}
 
+	public void SmashEffect()
+	{
+		Projectile.timeLeft = 70;
+		Projectile.extraUpdates = 1;
+		Vector2 checkPos = Projectile.position;
+		int count = 0;
+		while (Collision.SolidCollision(checkPos, Projectile.width, Projectile.height))
+		{
+			count++;
+			if (count > 100)
+			{
+				break;
+			}
+			checkPos.Y -= 10;
+		}
+		Projectile.position = checkPos + new Vector2(0, -60);
+		for (int g = 0; g < 16; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(15f, 42f)).RotatedBy(Main.rand.NextFloat(-1.57f, 1.57f));
+			Vector2 pos = Projectile.Center + new Vector2(0, 100) - newVelocity * 1;
+			var somg = new Fevens_WingSmash
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = pos,
+				maxTime = Main.rand.Next(25, 68),
+				scale = Main.rand.NextFloat(10f, 50f),
+				ai = new float[] { 0, 0 },
+			};
+			Ins.VFXManager.Add(somg);
+		}
+	}
+
+	public void Enpower()
+	{
+		Projectile.velocity = new Vector2(0, 100);
+	}
+
 	public override void AI()
 	{
-		Projectile.velocity *= 0.85f;
+		if (Projectile.timeLeft > 120)
+		{
+			return;
+		}
+		if (Projectile.timeLeft == 120)
+		{
+			Enpower();
+		}
+		if (!HitTile)
+		{
+			if (Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height))
+			{
+				SmashEffect();
+				HitTile = true;
+			}
+		}
+		else
+		{
+			Projectile.velocity *= 0;
+		}
+		if(Projectile.timeLeft == 40)
+		{
+			Vector2 backPos = Vector2.zeroVector;
+			foreach(NPC npc in Main.npc)
+			{
+				if(npc != null && npc.active && npc.type == ModContent.NPCType<Fevens_Boss>())
+				{
+					if((npc.Center - Projectile.Center).Length() < 3000)
+					{
+						backPos = npc.Center;
+					}
+				}
+			}
+			if(backPos != Vector2.zeroVector)
+			{
+				Vector2 vel = (backPos - Projectile.Center) * 0.2f;
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, vel, ModContent.ProjectileType<Fevens_Wing_Slash>(), 30, 2, default, 2);
+			}
+		}
 	}
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
+		if (Projectile.timeLeft > 120)
+		{
+			return false;
+		}
 		if (CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, startCenter, startCenter * 0.4f + Projectile.Center * 0.6f, 2) && Projectile.timeLeft > 30)
 		{
 			return true;
@@ -80,20 +165,60 @@ public class Fevens_Wing_Slash : ModProjectile, IWarpProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
+		if (Projectile.timeLeft > 120)
+		{
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+			Vector2 start = Projectile.Center + new Vector2(0, -400);
+			Vector2 end = start;
+			int count = 0;
+			while (!Collision.SolidCollision(end, 4, 4))
+			{
+				count++;
+				if (count > 1000)
+				{
+					break;
+				}
+				end.Y += 10;
+			}
+			var predictColor = new Color(0f, 0.001f, 0.6f, 0f);
+			var linePredict = new List<Vertex2D>
+			{
+				new Vertex2D(start + new Vector2(-10, 0) - Main.screenPosition, predictColor, new Vector3(0.4f, 0.5f, 0)),
+				new Vertex2D(start + new Vector2(10, 0) - Main.screenPosition, predictColor, new Vector3(0.6f, 0.5f, 0)),
+				new Vertex2D(end + new Vector2(-10, 0) - Main.screenPosition, predictColor, new Vector3(0.4f, 0.5f, 0)),
+				new Vertex2D(end + new Vector2(10, 0) - Main.screenPosition, predictColor, new Vector3(0.6f, 0.5f, 0)),
+			};
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StarSlash.Value;
+			if (linePredict.Count > 3)
+			{
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, linePredict.ToArray(), 0, linePredict.Count - 2);
+			}
+
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin(sBS);
+			return false;
+		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float value0 = (120 - Projectile.timeLeft) / 120f;
 		float value1 = MathF.Pow(value0, 0.5f);
 		float width = (1 - MathF.Cos(value1 * 2f * MathF.PI)) * 18f;
-		Vector2 normalizedVelocity = Projectile.velocity.SafeNormalize(Vector2.zeroVector);
+		Vector2 normalizedVelocity = new Vector2(0, 1);
 		Vector2 normalize = normalizedVelocity.RotatedBy(Math.PI / 2d) * width;
 		Color shadow = Color.White * 0.4f;
+		float endCoordY = 1f;
+		if (HitTile)
+		{
+			endCoordY = 0.5f;
+		}
 		var bars = new List<Vertex2D>
 		{
 			new Vertex2D(startCenter + normalize - Main.screenPosition, shadow, new Vector3(0, 0, 0)),
 			new Vertex2D(startCenter - normalize - Main.screenPosition, shadow, new Vector3(0, 1, 0)),
-			new Vertex2D(Projectile.Center + normalize - Main.screenPosition, shadow, new Vector3(1, 0, 0)),
-			new Vertex2D(Projectile.Center - normalize - Main.screenPosition, shadow, new Vector3(1, 1, 0)),
+			new Vertex2D(Projectile.Center + normalize - Main.screenPosition, shadow, new Vector3(endCoordY, 0, 0)),
+			new Vertex2D(Projectile.Center - normalize - Main.screenPosition, shadow, new Vector3(endCoordY, 1, 0)),
 		};
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StabbingProjectileShade.Value;
 		if (bars.Count > 3)
@@ -101,19 +226,20 @@ public class Fevens_Wing_Slash : ModProjectile, IWarpProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
 		Color light = Color.Lerp(new Color(1f, 1f, 1f, 0), new Color(0f, 0.3f, 1f, 0), value0 * 3) * width;
+		if (value0 > 0.5f)
+		{
+			light = Color.Lerp(light, new Color(0f, 0.02f, 0.2f, 0), value0 * 3) * width;
+		}
 		light *= width / 10f;
-		normalize *= width * width / 450f;
+		normalize *= width * width / 45f;
 		bars = new List<Vertex2D>()
 		{
 			new Vertex2D(startCenter + normalize - Main.screenPosition, light, new Vector3(0, 0, 0)),
 			new Vertex2D(startCenter - normalize - Main.screenPosition, light, new Vector3(0, 1, 0)),
-			new Vertex2D(Projectile.Center + normalize - Main.screenPosition, light, new Vector3(1, 0, 0)),
-			new Vertex2D(Projectile.Center - normalize - Main.screenPosition, light, new Vector3(1, 1, 0)),
+			new Vertex2D(Projectile.Center + normalize - Main.screenPosition, light, new Vector3(endCoordY, 0, 0)),
+			new Vertex2D(Projectile.Center - normalize - Main.screenPosition, light, new Vector3(endCoordY, 1, 0)),
 		};
-		Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Textures_Star.Value;
-
-		// Draw Twice to make the color more vivid.
 		if (bars.Count > 3)
 		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -124,9 +250,12 @@ public class Fevens_Wing_Slash : ModProjectile, IWarpProjectile
 		return false;
 	}
 
-
 	public void DrawWarp(VFXBatch sb)
 	{
+		if (Projectile.timeLeft > 120)
+		{
+			return;
+		}
 		float time = (float)(Main.time * 0.03);
 		float value0 = (120 - Projectile.timeLeft) / 120f;
 		float value1 = MathF.Pow(value0, 0.5f);

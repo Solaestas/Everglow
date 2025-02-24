@@ -4,9 +4,9 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.FevensAttack;
 
-public class Fevens_Slash : ModProjectile, IWarpProjectile_warpStyle2
+public class Fevens_TaijutsuSlash : ModProjectile, IWarpProjectile_warpStyle2
 {
-	public override string Texture => Commons.ModAsset.Empty_Mod;
+	public override string Texture => ModAsset.FevensTaijutsu_Mod;
 
 	public override void SetDefaults()
 	{
@@ -32,12 +32,11 @@ public class Fevens_Slash : ModProjectile, IWarpProjectile_warpStyle2
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		Vector2 v0 = new Vector2(0, Main.rand.NextFloat(2, 3)).RotatedByRandom(6.283);
-		RotatedAxis = new Vector3(v0.X, -8, v0.Y);
-		v0 = new Vector2(0, Main.rand.NextFloat(90, 150)).RotatedByRandom(6.283) * Projectile.ai[0];
-		SpacePos = new Vector3(v0.X, Main.rand.NextFloat(-5, 5), v0.Y);
-		SpacePos = RodriguesRotate(SpacePos, RotatedAxis, Main.rand.NextFloat(6.283f));
-		Omega = 0.7f;
+		RotatedAxis = new Vector3(0, 0, 5);
+		Vector2 v0 = new Vector2(0, -270) * Projectile.ai[0];
+		SpacePos = new Vector3(v0, 0);
+		SpacePos = RodriguesRotate(SpacePos, RotatedAxis, Projectile.ai[1]);
+		Omega = Projectile.ai[2];
 	}
 
 	public override bool PreAI()
@@ -58,6 +57,11 @@ public class Fevens_Slash : ModProjectile, IWarpProjectile_warpStyle2
 	{
 		OldPosSpace.Add(SpacePos);
 		Vector3 delta0 = SpacePos;
+		if (Projectile.direction == -1)
+		{
+			Omega *= Projectile.direction;
+			Projectile.direction = 1;
+		}
 		SpacePos = RodriguesRotate(SpacePos, RotatedAxis, Omega);
 		delta0 = SpacePos - delta0;
 		Omega *= 0.9f;
@@ -76,7 +80,7 @@ public class Fevens_Slash : ModProjectile, IWarpProjectile_warpStyle2
 	{
 		for (int i = 0; i < SmoothTrail.Count - 4; i += 4)
 		{
-			var rectangle = new Rectangle((int)(SmoothTrail[i].X - 10 + Projectile.Center.X), (int)(SmoothTrail[i].Y - 10 + Projectile.Center.Y), 20, 20);
+			var rectangle = new Rectangle((int)(SmoothTrail[i].X * 0.5f - 80 + Projectile.Center.X), (int)(SmoothTrail[i].Y * 0.5f - 80 + Projectile.Center.Y), 160, 160);
 			if (Rectangle.Intersect(rectangle, targetHitbox) != Rectangle.emptyRectangle && Projectile.timeLeft > 30)
 			{
 				Projectile.damage /= 2;
@@ -93,7 +97,7 @@ public class Fevens_Slash : ModProjectile, IWarpProjectile_warpStyle2
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
-		target.AddBuff(ModContent.BuffType<ShortImmune12>(), 10);
+		target.AddBuff(ModContent.BuffType<ShortImmune12>(), 15);
 		base.OnHitPlayer(target, info);
 	}
 
@@ -116,7 +120,7 @@ public class Fevens_Slash : ModProjectile, IWarpProjectile_warpStyle2
 		float value0 = (120 - Projectile.timeLeft) / 120f;
 		float value1 = MathF.Pow(value0, 0.3f);
 		value1 = MathF.Sin(value1 * MathF.PI);
-		float width = value1 * 70f;
+		float width = 96f;
 
 		var scales = new List<Vector2>();
 		var SmoothTrailProjectile = new List<Vector2>();
@@ -153,10 +157,10 @@ public class Fevens_Slash : ModProjectile, IWarpProjectile_warpStyle2
 		for (int i = 0; i < SmoothTrail.Count; i++)
 		{
 			Vector2 drawPos = Projectile.Center - Main.screenPosition;
-			bars.Add(SmoothTrail[i] + drawPos, drawColor, new Vector3(0.5f, i / (float)(SmoothTrail.Count - 1), 0));
-			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor, new Vector3(0.44f, i / (float)(SmoothTrail.Count - 1), 0));
+			bars.Add(SmoothTrail[i] + drawPos, drawColor, new Vector3(i / (float)(SmoothTrail.Count - 1), 0, 0));
+			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor, new Vector3(i / (float)(SmoothTrail.Count - 1), 1, 0));
 		}
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StarSlash_black.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Melee_Black.Value;
 		if (bars.Count > 3)
 		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -167,10 +171,10 @@ public class Fevens_Slash : ModProjectile, IWarpProjectile_warpStyle2
 		for (int i = 0; i < SmoothTrail.Count; i++)
 		{
 			Vector2 drawPos = Projectile.Center - Main.screenPosition;
-			bars.Add(SmoothTrail[i] + drawPos, drawColor, new Vector3(0.5f, i / (float)(SmoothTrail.Count - 1), 0));
-			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor, new Vector3(0.44f, i / (float)(SmoothTrail.Count - 1), 0));
+			bars.Add(SmoothTrail[i] + drawPos, drawColor, new Vector3(i / (float)(SmoothTrail.Count - 1), 0, 0));
+			bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor, new Vector3(i / (float)(SmoothTrail.Count - 1), 1, 0));
 		}
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StarSlash.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Melee.Value;
 		if (bars.Count > 3)
 		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -184,19 +188,45 @@ public class Fevens_Slash : ModProjectile, IWarpProjectile_warpStyle2
 			{
 				Vector2 drawPos = Projectile.Center - Main.screenPosition;
 				Lighting.AddLight(SmoothTrail[i] + drawPos + Main.screenPosition, new Vector3(0.4f, 0.1f, 0.9f) * (value1 - 0.5f));
-				bars.Add(SmoothTrail[i] + drawPos, drawColor, new Vector3(0.5f, i / (float)(SmoothTrail.Count - 1), 0));
-				bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor, new Vector3(0.24f, i / (float)(SmoothTrail.Count - 1), 0));
+				bars.Add(SmoothTrail[i] + drawPos, drawColor, new Vector3(i / (float)(SmoothTrail.Count - 1), 0, 0));
+				bars.Add(SmoothTrail[i] * (1f - width / 100f) + drawPos, drawColor, new Vector3(i / (float)(SmoothTrail.Count - 1), 1, 0));
 			}
-			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StarSlash.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Melee.Value;
 			if (bars.Count > 3)
 			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			}
 		}
-
+		DrawWeapon();
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 		return false;
+	}
+
+	public void DrawWeapon()
+	{
+		float scaleValue = 1f;
+		Vector2 spaceCenter = Projection2D(OldPosSpace[^1], Vector2.zeroVector, 500, out scaleValue) + Projectile.Center;
+		Vector2 normalize = (spaceCenter - Projectile.Center).RotatedBy(MathHelper.PiOver2) * 0.5f;
+		Vector2 middleCenter = (spaceCenter + Projectile.Center) * 0.5f;
+		var lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
+		var glowColor = Color.White;
+		if (Omega < 0.1f)
+		{
+			glowColor *= Omega / 0.1f;
+		}
+		var bars = new List<Vertex2D>
+		{
+			new Vertex2D(spaceCenter - Main.screenPosition, glowColor, new Vector3(1, 0, 0)),
+			new Vertex2D(middleCenter + normalize - Main.screenPosition, glowColor, new Vector3(1, 1, 0)),
+			new Vertex2D(middleCenter - normalize - Main.screenPosition, glowColor, new Vector3(0, 0, 0)),
+			new Vertex2D(Projectile.Center - Main.screenPosition, glowColor, new Vector3(0, 1, 0)),
+		};
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.FevensTaijutsu.Value;
+		if (bars.Count > 3)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
 	}
 
 	public void DrawWarp(VFXBatch spriteBatch)
