@@ -1,6 +1,6 @@
-namespace Everglow.Commons.Mechanics.MissionSystem.Core;
+namespace Everglow.Commons.Mechanics.MissionSystem.Primitives;
 
-public abstract class MissionCondition
+public abstract class MissionConditionBase
 {
 	protected abstract bool GetCheck();
 

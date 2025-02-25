@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.MissionSystem.Core;
+using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Everglow.Commons.Mechanics.MissionSystem.UI;
 using Everglow.Commons.UI.UIElements;
 

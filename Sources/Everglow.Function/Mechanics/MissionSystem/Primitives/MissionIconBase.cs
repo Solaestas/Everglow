@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Mechanics.MissionSystem.Core;
+namespace Everglow.Commons.Mechanics.MissionSystem.Primitives;
 
 public abstract class MissionIconBase
 {

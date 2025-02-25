@@ -1,11 +1,10 @@
-using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.Mechanics.MissionSystem.Hooks;
 using MathNet.Numerics;
 
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.MissionSystem;
+namespace Everglow.Commons.Mechanics.MissionSystem.Core;
 
 public static class MissionManager
 {

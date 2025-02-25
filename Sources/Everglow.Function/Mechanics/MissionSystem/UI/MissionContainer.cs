@@ -2,7 +2,7 @@ using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
-using static Everglow.Commons.Mechanics.MissionSystem.MissionManager;
+using static Everglow.Commons.Mechanics.MissionSystem.Core.MissionManager;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI;
 

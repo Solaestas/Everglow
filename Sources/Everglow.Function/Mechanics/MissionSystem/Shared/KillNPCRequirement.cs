@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
+using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Shared;
@@ -52,7 +53,7 @@ public class KillNPCRequirement
 		? Math.Min(1f, Math.Max(0f, Counter / (float)Requirement))
 		: Math.Min(1f, Math.Max(0f, nPCKillCounter.Where(x => NPCs.Contains(x.Key)).Select(x => x.Value).Sum() / (float)Requirement));
 
-	public MissionCondition Condition { get; private set; }
+	public MissionConditionBase Condition { get; private set; }
 
 	/// <summary>
 	/// Create a new instance of <see cref="KillNPCRequirement"/> class if the input is valid.
@@ -75,7 +76,7 @@ public class KillNPCRequirement
 		return new KillNPCRequirement(nPCs, requirement, enableIndividualCounter);
 	}
 
-	public KillNPCRequirement SetCondition(MissionCondition condition)
+	public KillNPCRequirement SetCondition(MissionConditionBase condition)
 	{
 		Condition = condition;
 		return this;

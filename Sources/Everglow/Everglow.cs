@@ -2,7 +2,7 @@ using System.Reflection;
 using Everglow.Commons;
 using Everglow.Commons.Hooks;
 using Everglow.Commons.Interfaces;
-using Everglow.Commons.Mechanics.MissionSystem;
+using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Modules;
 using Everglow.Commons.Network.PacketHandle;
 using Everglow.Commons.ObjectPool;

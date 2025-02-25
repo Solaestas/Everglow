@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
+using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Tests;
 

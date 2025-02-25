@@ -3,7 +3,7 @@ using Everglow.Commons.Mechanics.MissionSystem.UI;
 using Everglow.Commons.UI.UIElements;
 using ReLogic.Graphics;
 using Terraria.GameContent;
-using static Everglow.Commons.Mechanics.MissionSystem.MissionManager;
+using static Everglow.Commons.Mechanics.MissionSystem.Core.MissionManager;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 
