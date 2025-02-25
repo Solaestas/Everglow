@@ -478,6 +478,7 @@ public class Fevens_Boss : ModNPC
 		p2.extraUpdates = 5;
 		NPC.dontTakeDamage = true;
 		NPC.alpha = 255;
+		State = 4;
 		for (int t = 0; t < 120; t++)
 		{
 			NPC.rotation += 0.7f;
@@ -493,6 +494,7 @@ public class Fevens_Boss : ModNPC
 			}
 			yield return new SkipThisFrame();
 		}
+		NPC.dontTakeDamage = false;
 		NPC.rotation = 0;
 		State = 4;
 		_fevensCoroutine.StartCoroutine(new Coroutine(ChooseAttack()));
