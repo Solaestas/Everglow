@@ -1,14 +1,17 @@
-using Everglow.Commons.Mechanics.MissionSystem;
-
 namespace Everglow.Commons.Mechanics.MissionSystem.Hooks;
 
 public class MissionGlobalItem : GlobalItem
 {
+	[Obsolete("This method is yet unfinished, don't use it.", false)]
+	public static event Action<Item> OnUseItemEvent;
+
+	public static event Action<Item> OnConsumeItemEvent;
+
 	public override bool? UseItem(Item item, Player player)
 	{
 		if (player.whoAmI == Main.myPlayer)
 		{
-			MissionManager.CountUse(item);
+			OnUseItemEvent?.Invoke(item);
 		}
 
 		return null;
@@ -18,7 +21,7 @@ public class MissionGlobalItem : GlobalItem
 	{
 		if (player.whoAmI == Main.myPlayer)
 		{
-			MissionManager.CountConsume(item);
+			OnConsumeItemEvent?.Invoke(item);
 		}
 	}
 }

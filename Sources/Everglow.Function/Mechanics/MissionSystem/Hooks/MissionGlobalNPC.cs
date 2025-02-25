@@ -1,6 +1,5 @@
-using Everglow.Commons.Mechanics.MissionSystem;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
-using Everglow.Commons.Mechanics.MissionSystem.Templates.Abstracts;
+using Everglow.Commons.Mechanics.MissionSystem.Objectives;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Hooks;
 
@@ -34,7 +33,8 @@ public class MissionGlobalNPC : GlobalNPC
 
 	public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		var types = MissionManager.GetMission<IKillNPCMission>(PoolType.Accepted).SelectMany(x => x.DemandNPCs).SelectMany(x => x.NPCs);
+		var types = MissionManager.GetMissionPool(PoolType.Accepted).SelectMany(x => x.Objectives.AllObjectives)
+			.SelectMany(x => x is KillNPCObjective kO ? kO.DemandNPCs.SelectMany(y => y.NPCs) : []);
 		bool valid = types.Contains(npc.type);
 		if (valid)
 		{

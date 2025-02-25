@@ -1,5 +1,0 @@
-namespace Everglow.Commons.Mechanics.MissionSystem.Abstracts;
-
-public interface IMissionObjective : IMissionAbstract
-{
-}

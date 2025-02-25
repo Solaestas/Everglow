@@ -2,12 +2,11 @@ using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
-using Microsoft.CodeAnalysis;
 using static Everglow.Commons.Mechanics.MissionSystem.MissionManager;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI;
 
-public class MissionContainer : UIContainerElement
+public class MissionContainer : UIContainerElement, ILoadable
 {
 	public const int BaseResolutionX = 1200;
 	public const int BaseResolutionY = 675;
@@ -16,34 +15,8 @@ public class MissionContainer : UIContainerElement
 
 	public MissionContainer()
 	{
-		// Close mission panel on enter world
-		Player.Hooks.OnEnterWorld += p =>
-		{
-			if (p.whoAmI == Main.myPlayer)
-			{
-				Close();
-			}
-		};
-
-		// Update resolution factor and refresh ui on resolution changed
-		Main.OnResolutionChanged += (resolution) =>
-		{
-			if (resolution.X / resolution.Y > 16f / 9f)
-			{
-				ResolutionFactor = resolution.Y / BaseResolutionY;
-			}
-			else
-			{
-				ResolutionFactor = resolution.X / BaseResolutionX;
-			}
-
-			ChildrenElements.Clear();
-			OnInitialization();
-			if (!Main.gameMenu)
-			{
-				RefreshList();
-			}
-		};
+		Player.Hooks.OnEnterWorld += OnEnterWorld_Close;
+		Main.OnResolutionChanged += OnResolutionChanged_Adapt;
 
 		// Initial resolution factor
 		if (Main.LastLoadedResolution.X / Main.LastLoadedResolution.Y > 16f / 9f)
@@ -54,6 +27,51 @@ public class MissionContainer : UIContainerElement
 		{
 			ResolutionFactor = Main.LastLoadedResolution.X / BaseResolutionX;
 		}
+	}
+
+	/// <summary>
+	/// Close mission panel on enter world
+	/// </summary>
+	/// <param name="player"></param>
+	private void OnEnterWorld_Close(Player player)
+	{
+		if (player.whoAmI == Main.myPlayer)
+		{
+			Close();
+		}
+	}
+
+	/// <summary>
+	/// Update resolution factor and refresh ui on resolution changed
+	/// </summary>
+	/// <param name="resolution"></param>
+	private void OnResolutionChanged_Adapt(Vector2 resolution)
+	{
+		if (resolution.X / resolution.Y > 16f / 9f)
+		{
+			ResolutionFactor = resolution.Y / BaseResolutionY;
+		}
+		else
+		{
+			ResolutionFactor = resolution.X / BaseResolutionX;
+		}
+
+		ChildrenElements.Clear();
+		OnInitialization();
+		if (!Main.gameMenu)
+		{
+			RefreshList();
+		}
+	}
+
+	public void Load(Mod mod)
+	{
+	}
+
+	public void Unload()
+	{
+		Player.Hooks.OnEnterWorld -= OnEnterWorld_Close;
+		Main.OnResolutionChanged -= OnResolutionChanged_Adapt;
 	}
 
 	public enum ColorType
@@ -219,7 +237,7 @@ public class MissionContainer : UIContainerElement
 		_closeButton.PanelColor = GetThemeColor();
 		_closeButton.BorderColor = GetThemeColor(ColorType.Light, ColorStyle.Normal);
 		_closeButton.Info.IsSensitive = true;
-		_closeButton.Events.OnLeftDown += e => Close();
+		_closeButton.Events.OnLeftDown += e => base.Close();
 		_closeButton.Events.OnMouseHover += e => _closeButton.PanelColor = Color.Gray;
 		_closeButton.Events.OnMouseOver += e => _closeButton.PanelColor = Color.Gray;
 		_closeButton.Events.OnMouseOut += e => _closeButton.PanelColor = GetThemeColor();
@@ -373,10 +391,19 @@ public class MissionContainer : UIContainerElement
 			top.Pixel += ElementSpacing;
 		}
 
-		// 刷新UI
-		ChangeSelectedItem(null);
 		_missionContainer.ClearAllElements();
 		_missionContainer.AddElements(elements);
+
+		// 重新选取之前选择的任务
+		if (SelectedItem != null && elements.Count != 0)
+		{
+			var target = elements.ConvertAll(x => x as UIMissionItem).Where(e => e.Mission.Name == SelectedItem.Mission.Name).First();
+			ChangeSelectedItem(target);
+		}
+		else
+		{
+			ChangeSelectedItem(null);
+		}
 	}
 
 	/// <summary>

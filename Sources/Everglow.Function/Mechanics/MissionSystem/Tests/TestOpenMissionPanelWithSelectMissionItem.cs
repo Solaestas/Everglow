@@ -8,13 +8,13 @@ public class TestOpenMissionPanelWithSelectMissionItem : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.useTime = Item.useAnimation = 20;
+		Item.useStyle = ItemUseStyleID.Swing;
+		Item.noUseGraphic = true;
 	}
 
 	public override bool? UseItem(Player player)
 	{
-		MissionContainer.Instance.ShowWithMission(new TextureMissionIconTestMission().Name);
+		MissionContainer.Instance.ShowWithMission(new OpenPanelMissionTest().Name);
 		return true;
 	}
 }

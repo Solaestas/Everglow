@@ -166,10 +166,9 @@ public class UIMissionDetail : BaseElement
 
 			// Objectives
 			desText.Append("\n目标：\n");
-			int index = 1;
 			foreach (var objective in mission.GetObjectives())
 			{
-				desText.Append($"{index++}. " + objective);
+				desText.Append(objective);
 			}
 
 			// Rewards

@@ -1,8 +1,7 @@
-using Everglow.Commons.Mechanics.MissionSystem;
 using Everglow.Commons.Mechanics.MissionSystem.Abstracts;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
-using Everglow.Commons.Mechanics.MissionSystem.Templates.Abstracts;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
+using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Core;
@@ -13,6 +12,14 @@ namespace Everglow.Commons.Mechanics.MissionSystem.Core;
 /// </summary>
 public abstract class MissionBase : ITagCompoundEntity
 {
+	protected MissionBase()
+	{
+		Icon = new MissionIconGroup();
+		Objectives = new MissionObjectiveData();
+		RewardItems = [];
+		Time = 0;
+	}
+
 	/// <summary>
 	/// 用于进行内部标识的名字，作用类似 ID
 	/// </summary>
@@ -37,7 +44,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// 任务图标
 	/// <br>!为null时不显示</br>
 	/// </summary>
-	public abstract MissionIconGroup Icon { get; }
+	public virtual MissionIconGroup Icon { get; }
 
 	/// <summary>
 	/// 绑定的UI显示
@@ -47,9 +54,19 @@ public abstract class MissionBase : ITagCompoundEntity
 	public virtual Type BindingUIItem => typeof(UIMissionItem);
 
 	/// <summary>
+	/// 任务目标数据
+	/// </summary>
+	public MissionObjectiveData Objectives { get; set; }
+
+	/// <summary>
+	/// 当前任务目标
+	/// </summary>
+	public MissionObjectiveBase CurrentObjective { get; set; }
+
+	/// <summary>
 	/// 任务进度，最大应为 1f
 	/// </summary>
-	public abstract float Progress { get; }
+	public virtual float Progress => Objectives.AllObjectives.Count > 0 ? Objectives.AllObjectives.Average(o => o.Progress) : 1f;
 
 	/// <summary>
 	/// 任务时限
@@ -68,19 +85,36 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// 任务计时器
 	/// <br>单位为帧</br>
 	/// </summary>
-	public virtual long Time
-	{
-		get;
-		set;
-	}
-	= 0;
-
-	public const string TimeSaveKey = "MissionTime";
+	public virtual long Time { get; set; }
 
 	/// <summary>
-	/// 任务所在的任务池类型
+	/// 任务计时器存储键
 	/// </summary>
-	public PoolType PoolType { get; set; }
+	public const string TimeSaveKey = "MissionTime";
+
+	private PoolType poolType;
+
+	/// <summary>
+	/// Mission status, managed by <see cref="MissionManager"/>.
+	/// <para/>Should only be changed in <see cref="MissionManager"/> to keep the sync to its pool collection.
+	/// </summary>
+	public PoolType PoolType
+	{
+		get => poolType;
+		set
+		{
+			if (value == PoolType.Accepted)
+			{
+				Activate();
+			}
+			else
+			{
+				Deactivate();
+			}
+
+			poolType = value;
+		}
+	}
 
 	/// <summary>
 	/// 任务类型
@@ -116,6 +150,16 @@ public abstract class MissionBase : ITagCompoundEntity
 	public bool OldCheckComplete { get; internal set; } = false;
 
 	/// <summary>
+	/// 任务奖励物品
+	/// </summary>
+	public virtual List<Item> RewardItems { get; }
+
+	/// <summary>
+	/// 任务奖励物品来源
+	/// </summary>
+	public static string RewardItemsSourceContext => "Everglow.MissionSystem";
+
+	/// <summary>
 	/// 任务可提交状态改变后HOOK
 	/// </summary>
 	public virtual void OnCheckCompleteChange()
@@ -130,7 +174,20 @@ public abstract class MissionBase : ITagCompoundEntity
 	public virtual void Update()
 	{
 		UpdateTime();
-		UpdateProgress();
+
+		// Manage objectives. If the mission is finished but not completed, skip this step.
+		if (CurrentObjective is not null
+			&& !CurrentObjective.Completed
+			&& CurrentObjective.CheckCompletion())
+		{
+			CurrentObjective.Complete();
+			CurrentObjective.Deactivate();
+
+			CurrentObjective = CurrentObjective.Next;
+			CurrentObjective?.Activate(this);
+
+			Main.NewText($"[{Name}]任务当前目标已完成", 250, 250, 150);
+		}
 	}
 
 	/// <summary>
@@ -148,14 +205,6 @@ public abstract class MissionBase : ITagCompoundEntity
 				Time = TimeMax;
 			}
 		}
-	}
-
-	/// <summary>
-	/// 更新任务进度
-	/// </summary>
-	/// <param name="objs"></param>
-	public virtual void UpdateProgress(params object[] objs)
-	{
 	}
 
 	/// <summary>
@@ -183,16 +232,17 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// 任务完成 <see cref="OnComplete"/> 前HOOK.
 	/// </summary>
 	/// <returns></returns>
-	public virtual bool PreComplete()
-	{
-		return true;
-	}
+	public virtual bool PreComplete() => true;
 
 	/// <summary>
 	/// 任务完成 <see cref="OnComplete"/> 后HOOK.
 	/// </summary>
 	public virtual void PostComplete()
 	{
+		foreach (var item in RewardItems)
+		{
+			Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(RewardItemsSourceContext), item, item.stack);
+		}
 	}
 
 	/// <summary>
@@ -211,11 +261,62 @@ public abstract class MissionBase : ITagCompoundEntity
 		MissionManager.MoveMission(this, PoolType.Accepted, PoolType.Failed);
 	}
 
-	public abstract IEnumerable<string> GetObjectives();
+	/// <summary>
+	/// 任务接取时
+	/// </summary>
+	public virtual void Activate()
+	{
+		CurrentObjective = Objectives.First;
 
-	public virtual string GetRewards() => (this as IRewardItemMission)?.GetRewardString() ?? string.Empty;
+		CurrentObjective?.Activate(this);
+	}
 
-	public string GetTime() => $"[TimerIconDrawer,MissionName='{Name}'] 剩余时间:[TimerStringDrawer,MissionName='{Name}']\n";
+	/// <summary>
+	/// 任务取消接取时
+	/// </summary>
+	public virtual void Deactivate()
+	{
+		CurrentObjective?.Deactivate();
+	}
+
+	public virtual void Reset()
+	{
+		foreach (var o in Objectives.AllObjectives)
+		{
+			o.ResetProgress();
+		}
+	}
+
+	public virtual IEnumerable<string> GetObjectives()
+	{
+		var lines = new List<string>();
+
+		foreach (var o in Objectives.AllObjectives)
+		{
+			var tempLines = new List<string>();
+			o.GetObjectivesText(tempLines);
+			int index = 1;
+			for (int i = 0; i < tempLines.Count; i++)
+			{
+				if (o.Completed)
+				{
+					tempLines[i] = $"[TextDrawer,Text='(已完成)',Color='100,100,100,255']" + " " + tempLines[i];
+				}
+
+				tempLines[i] = $"{o.ObjectiveID + 1}.{index++} " + tempLines[i];
+			}
+
+			lines.AddRange(tempLines);
+		}
+
+		return lines;
+	}
+
+	public virtual string GetRewards() => string.Join(' ', RewardItems.ConvertAll(i => ItemDrawer.Create(i.type, i.stack, new Color(196, 241, 255))));
+
+	public string GetTime() => EnableTime
+		? $"[TimerIconDrawer,MissionName='{Name}'] 剩余时间:[TimerStringDrawer,MissionName='{Name}']\n"
+		: string.Empty;
 
 	/// <summary>
 	/// 保存任务
@@ -226,6 +327,15 @@ public abstract class MissionBase : ITagCompoundEntity
 		tag.Add(TimeSaveKey, Time);
 		tag.Add(nameof(SourceNPC), SourceNPC);
 		tag.Add(nameof(IsVisible), IsVisible);
+
+		var oTags = new List<TagCompound>();
+		foreach (var o in Objectives.AllObjectives)
+		{
+			var ot = new TagCompound();
+			o.SaveData(ot);
+			oTags.Add(ot);
+		}
+		tag.Add(nameof(Objectives), oTags);
 	}
 
 	/// <summary>
@@ -248,6 +358,16 @@ public abstract class MissionBase : ITagCompoundEntity
 		{
 			IsVisible = isVisible;
 		}
+
+		if (tag.TryGet<IList<TagCompound>>(nameof(Objectives), out var oTags))
+		{
+			foreach (var o in Objectives.AllObjectives)
+			{
+				o.LoadData(oTags[o.ObjectiveID]);
+			}
+		}
+
+		LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
 
 	/// <summary>

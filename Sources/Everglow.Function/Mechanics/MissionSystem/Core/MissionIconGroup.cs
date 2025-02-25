@@ -2,6 +2,10 @@ namespace Everglow.Commons.Mechanics.MissionSystem.Core;
 
 public class MissionIconGroup
 {
+	public MissionIconGroup()
+	{
+	}
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MissionIconGroup"/> class with icons.
 	/// </summary>
@@ -48,11 +52,18 @@ public class MissionIconGroup
 	/// Adds an icon to the group.
 	/// </summary>
 	/// <param name="icon">The icon to add.</param>
-	public void AddIcon(MissionIconBase icon)
+	public void Add(params MissionIconBase[] icon)
 	{
 		ArgumentNullException.ThrowIfNull(icon);
 
-		_iconDetails.Add(icon);
+		_iconDetails.AddRange(icon);
+	}
+
+	public void AddRange(IEnumerable<MissionIconBase> icons)
+	{
+		ArgumentNullException.ThrowIfNull(icons);
+
+		_iconDetails.AddRange(icons);
 	}
 
 	/// <summary>
@@ -60,7 +71,7 @@ public class MissionIconGroup
 	/// </summary>
 	/// <param name="icon">The icon to remove.</param>
 	/// <returns>True if the icon was removed; otherwise, false.</returns>
-	public bool RemoveIcon(MissionIconBase icon)
+	public bool Remove(MissionIconBase icon)
 	{
 		ArgumentNullException.ThrowIfNull(icon);
 

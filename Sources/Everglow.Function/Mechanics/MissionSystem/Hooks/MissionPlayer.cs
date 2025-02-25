@@ -7,30 +7,24 @@ namespace Everglow.Commons.Mechanics.MissionSystem.Hooks;
 
 public class MissionPlayer : ModPlayer
 {
+	public static event Action<int> OnKillNPCEvent;
+
+	public static event Action<Item> OnPickupEvent;
+
+	private MissionManager.MissionManagerInfo missionInfo;
+
 	public override void OnEnterWorld()
 	{
 		if (Player.whoAmI == Main.myPlayer)
 		{
-			// MissionManager.Clear();
+			MissionManager.OnEnterWorld(missionInfo);
+
 			if (!MissionManager.HasMission<MissionBase>())
 			{
-				MissionManager.AddMission(new TestMission1(), PoolType.Accepted);
-				MissionManager.AddMission(new TestMission2(), PoolType.Accepted);
-				MissionManager.AddMission(
-					new TestMission3
-					{
-						SourceNPC = 1,
-					}, PoolType.Available);
-				MissionManager.AddMission(new TestMission4(), PoolType.Available);
-				MissionManager.AddMission(new TestMission5(), PoolType.Available);
-
-				MissionManager.AddMission(new TestMission6(), PoolType.Available);
-				MissionManager.AddMission(new TestMission7(), PoolType.Available);
-				MissionManager.AddMission(new TestMission8(), PoolType.Available);
-				MissionManager.AddMission(new TestTalkToNPCMission(), PoolType.Available);
-				MissionManager.AddMission(new TestGiveNPCItemMission(), PoolType.Available);
-
-				MissionManager.AddMission(new TextureMissionIconTestMission(), PoolType.Available);
+				MissionManager.AddMission(new KillNPCMissionTest(), PoolType.Available);
+				MissionManager.AddMission(new ParallelMissionTest(), PoolType.Available);
+				MissionManager.AddMission(new MissionObjectivesTest(), PoolType.Available);
+				MissionManager.AddMission(new OpenPanelMissionTest(), PoolType.Available);
 			}
 		}
 	}
@@ -47,7 +41,7 @@ public class MissionPlayer : ModPlayer
 	{
 		if (Player.whoAmI == Main.myPlayer)
 		{
-			MissionManager.LoadData(tag);
+			missionInfo = MissionManager.LoadData(tag);
 		}
 	}
 
@@ -55,7 +49,7 @@ public class MissionPlayer : ModPlayer
 	{
 		if (Player.whoAmI == Main.myPlayer)
 		{
-			MissionManager.CountPick(item);
+			OnPickupEvent?.Invoke(item);
 		}
 
 		return true;
@@ -68,7 +62,7 @@ public class MissionPlayer : ModPlayer
 			// If player killed the target, then count this kill
 			if (!target.active)
 			{
-				MissionManager.CountKill(target.type);
+				OnKillNPCEvent?.Invoke(target.type);
 			}
 		}
 	}
