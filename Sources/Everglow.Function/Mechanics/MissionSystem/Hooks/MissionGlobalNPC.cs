@@ -34,14 +34,53 @@ public class MissionGlobalNPC : GlobalNPC
 
 	public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		var types = MissionManager.GetMissionPool(PoolType.Accepted).SelectMany(x => x.Objectives.AllObjectives)
-			.SelectMany(x => x is KillNPCObjective kO ? kO.DemandNPCs.SelectMany(y => y.NPCs) : []);
+		var types = GetMissionNPCTypes();
 		bool valid = types.Contains(npc.type);
 		if (valid)
 		{
 			Texture2D tex = ModAsset.ExclamationMark.Value;
 			float scale = (float)Math.Sin(Main.time * 0.08f) * 0.14f;
 			spriteBatch.Draw(tex, new Vector2(npc.Center.X - 2, npc.Center.Y - 40) - Main.screenPosition, new Rectangle(0, 0, 6, 24), Color.White, 0f, new Vector2(3, 12), 1f + scale, SpriteEffects.None, 0f);
+		}
+	}
+
+	public static IEnumerable<int> GetMissionNPCTypes()
+	{
+		var missions = MissionManager.GetMissionPool(PoolType.Accepted);
+
+		// Flatten all objectives recursively and filter for KillNPCObjective
+		return missions
+			.SelectMany(mission => FlattenObjectives(mission.Objectives.AllObjectives))
+			.OfType<KillNPCObjective>()
+			.SelectMany(killObjective => killObjective.DemandNPCs.SelectMany(demand => demand.NPCs));
+	}
+
+	/// <summary>
+	/// Recursively flattens a collection of objectives, including nested objectives in ParallelObjective and BranchingObjective.
+	/// </summary>
+	private static IEnumerable<MissionObjectiveBase> FlattenObjectives(IEnumerable<MissionObjectiveBase> objectives)
+	{
+		foreach (var objective in objectives)
+		{
+			// Handle nested objectives in ParallelObjective and BranchingObjective
+			if (objective is ParallelObjective parallelObjective)
+			{
+				foreach (var nestedObjective in FlattenObjectives(parallelObjective.Objectives))
+				{
+					yield return nestedObjective;
+				}
+			}
+			else if (objective is BranchingObjective branchingObjective)
+			{
+				foreach (var nestedObjective in FlattenObjectives(branchingObjective.Objectives))
+				{
+					yield return nestedObjective;
+				}
+			}
+			else
+			{
+				yield return objective;
+			}
 		}
 	}
 }
