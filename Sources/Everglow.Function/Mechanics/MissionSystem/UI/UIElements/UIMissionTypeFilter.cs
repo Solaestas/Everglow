@@ -1,8 +1,5 @@
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
-using Everglow.Commons.Mechanics.MissionSystem.UI;
 using Everglow.Commons.UI.UIElements;
-using ReLogic.Graphics;
-using Terraria.GameContent;
 using static Everglow.Commons.Mechanics.MissionSystem.Core.MissionManager;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
@@ -11,7 +8,6 @@ public class UIMissionTypeFilter : UIBlock
 {
 	private const string AllStatus = "All";
 	private BaseElement selectedTypeItem = null;
-	private string mouseText = string.Empty;
 	private MissionType? missionType = null;
 
 	public MissionType? MissionType => missionType;
@@ -39,7 +35,7 @@ public class UIMissionTypeFilter : UIBlock
 			};
 			statusFilterItem.Events.OnMouseHover += e =>
 			{
-				mouseText = type?.ToString() ?? AllStatus;
+				MissionContainer.Instance.MouseText = type?.ToString() ?? AllStatus;
 				if (statusFilterItem != selectedTypeItem)
 				{
 					statusFilterItem.PanelColor = Color.Gray;
@@ -47,7 +43,7 @@ public class UIMissionTypeFilter : UIBlock
 			};
 			statusFilterItem.Events.OnMouseOver += e =>
 			{
-				mouseText = type?.ToString() ?? AllStatus;
+				MissionContainer.Instance.MouseText = type?.ToString() ?? AllStatus;
 				if (statusFilterItem != selectedTypeItem)
 				{
 					statusFilterItem.PanelColor = Color.Gray;
@@ -55,7 +51,7 @@ public class UIMissionTypeFilter : UIBlock
 			};
 			statusFilterItem.Events.OnMouseOut += e =>
 			{
-				mouseText = string.Empty;
+				MissionContainer.Instance.MouseText = string.Empty;
 				if (statusFilterItem != selectedTypeItem)
 				{
 					ResetPanelColor(e);
@@ -122,56 +118,4 @@ public class UIMissionTypeFilter : UIBlock
 		null => ModAsset.MissionType_White.Value,
 		_ => ModAsset.MissionType_Grey.Value,
 	};
-
-	public override void Draw(SpriteBatch sb)
-	{
-		base.Draw(sb);
-
-		// Draw filter item tooltip
-		if (!string.IsNullOrEmpty(mouseText))
-		{
-			var pos = Main.MouseScreen + new Vector2(10f, 18f);
-			var textSize = FontAssets.MouseText.Value.MeasureString(mouseText);
-
-			if (pos.X + textSize.X > Main.screenWidth)
-			{
-				pos.X = Main.screenWidth - textSize.X;
-			}
-			if (pos.Y + textSize.Y > Main.screenHeight)
-			{
-				pos.Y = Main.screenHeight - textSize.Y;
-			}
-			if (pos.X < 0)
-			{
-				pos.X = 0;
-			}
-			if (pos.Y < 0)
-			{
-				pos.Y = 0;
-			}
-
-			var PanelColor = new Color(191, 106, 106);
-			Texture2D texture = ModAsset.Panel.Value;
-			var textureSize = new Point(texture.Width, texture.Height);
-			var rectangle = new Rectangle((int)pos.X, (int)pos.Y, (int)textSize.X, (int)textSize.Y);
-
-			// Draw 4 corners
-			sb.Draw(texture, new Vector2(rectangle.X, rectangle.Y), new Rectangle(0, 0, 6, 6), PanelColor);
-			sb.Draw(texture, new Vector2(rectangle.X + rectangle.Width - 6, rectangle.Y), new Rectangle(textureSize.X - 6, 0, 6, 6), PanelColor);
-			sb.Draw(texture, new Vector2(rectangle.X, rectangle.Y + rectangle.Height - 6), new Rectangle(0, textureSize.Y - 6, 6, 6), PanelColor);
-			sb.Draw(texture, new Vector2(rectangle.X + rectangle.Width - 6, rectangle.Y + rectangle.Height - 6), new Rectangle(textureSize.X - 6, textureSize.Y - 6, 6, 6), PanelColor);
-
-			// Draw main part
-			sb.Draw(texture, new Rectangle(rectangle.X + 6, rectangle.Y, rectangle.Width - 12, 6), new Rectangle(6, 0, textureSize.X - 12, 6), PanelColor);
-			sb.Draw(texture, new Rectangle(rectangle.X + 6, rectangle.Y + rectangle.Height - 6, rectangle.Width - 12, 6), new Rectangle(6, textureSize.Y - 6, textureSize.X - 12, 6), PanelColor);
-			sb.Draw(texture, new Rectangle(rectangle.X, rectangle.Y + 6, 6, rectangle.Height - 12), new Rectangle(0, 6, 6, textureSize.Y - 12), PanelColor);
-			sb.Draw(texture, new Rectangle(rectangle.X + rectangle.Width - 6, rectangle.Y + 6, 6, rectangle.Height - 12), new Rectangle(textureSize.X - 6, 6, 6, textureSize.Y - 12), PanelColor);
-			sb.Draw(texture, new Rectangle(rectangle.X + 6, rectangle.Y + 6, rectangle.Width - 12, rectangle.Height - 12), new Rectangle(6, 6, textureSize.X - 12, textureSize.Y - 12), PanelColor);
-
-			// Draw text
-			sb.DrawString(FontAssets.MouseText.Value, mouseText, pos + new Vector2(0f, 5f), Color.Cyan);
-
-			mouseText = string.Empty;
-		}
-	}
 }

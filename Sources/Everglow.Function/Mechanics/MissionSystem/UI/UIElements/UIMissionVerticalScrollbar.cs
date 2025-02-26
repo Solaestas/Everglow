@@ -1,4 +1,3 @@
-using Everglow.Commons.Mechanics.MissionSystem.UI;
 using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements

@@ -45,6 +45,7 @@ public class UIMissionDetail : BaseElement
 		_headshot.Info.Height.SetValue(headshotSize);
 		_headshot.Info.Left.SetValue((Info.Width - _headshot.Info.Width) / 2);
 		_headshot.PanelColor = Instance.GetThemeColor(ColorType.Dark, ColorStyle.Dark);
+		_headshot.ShowBorder = (false, false, false, false);
 		Register(_headshot);
 
 		_icon = new UIMissionIcon(null, Color.White);
@@ -57,6 +58,7 @@ public class UIMissionDetail : BaseElement
 		_description.Info.Width.SetFull();
 		_description.Info.Height.SetValue(PositionStyle.Full - _description.Info.Top - Info.Height * 0.15f);
 		_description.PanelColor = Instance.GetThemeColor(ColorType.Dark, ColorStyle.Dark);
+		_description.ShowBorder = (false, false, false, false);
 		Register(_description);
 
 		_textScrollbar = new UITextVerticalScrollbar();

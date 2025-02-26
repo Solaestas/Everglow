@@ -2,6 +2,8 @@ using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
+using ReLogic.Graphics;
+using Terraria.GameContent;
 using static Everglow.Commons.Mechanics.MissionSystem.Core.MissionManager;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI;
@@ -89,26 +91,35 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 	public static MissionContainer Instance => (MissionContainer)UISystem.EverglowUISystem.Elements[typeof(MissionContainer).FullName];
 
-	private float ResolutionFactor { get; set; }
+	private float ResolutionFactor
+	{
+		get => resolutionFactor;
+		set
+		{
+			resolutionFactor = Math.Max(value, 1.1f);
+		}
+	}
+
+	public string MouseText { get; set; } = string.Empty;
 
 	private UIBlock _panel;
 
 	private UIMissionDetail _missionDetail;
 
+	private UIBlock _missionListContainer;
+	private UIBlock _missionListContent;
+	private UIContainerPanel _missionList;
+
+	private UIMissionVerticalScrollbar _missionScrollbar;
 	private UIMissionStatusFilter _missionFilter;
 	private UIMissionTypeFilter _missionTypeFilter;
 
-	private UIBlock _missionPanel;
-	private UIMissionVerticalScrollbar _missionScrollbar;
-	private UIContainerPanel _missionContainer;
-
 	private UIBlock _closeButton;
 	private UIImage _close;
-	private UIBlock _maximizeButton;
-	private UIImage _maximization;
 
 	private bool nPCMode = false;
 	private int sourceNPC = 0;
+	private float resolutionFactor;
 
 	/// <summary>
 	/// 选中的任务
@@ -149,53 +160,71 @@ public class MissionContainer : UIContainerElement, ILoadable
 		_panel.CanDrag = true;
 		Register(_panel);
 
+		PositionStyle top = new(height * 0.08f, 0f);
+		PositionStyle left = new(width * 0.06f, 0f);
+
+		float detailWidthRatio = 0.38f;
+
+		// Mission list container
+		_missionListContainer = new UIBlock();
+		_missionListContainer.Info.Top.SetValue(top);
+		_missionListContainer.Info.Left.SetValue(left);
+		_missionListContainer.Info.Width.SetValue(PositionStyle.Full - left * 3f - (width * detailWidthRatio, 0));
+		_missionListContainer.Info.Height.SetValue(_panel.Info.Height * (1f - 0.15f));
+		_missionListContainer.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
+		_missionListContainer.ShowBorder = (false, false, false, false);
+		_panel.Register(_missionListContainer);
+
+		// Mission details
 		_missionDetail = new UIMissionDetail();
-		_missionDetail.Info.Left.SetValue(width * 0.06f, 0f);
-		_missionDetail.Info.Top.SetValue(height * 0.09f, 0f);
-		_missionDetail.Info.Width.SetValue(width * 0.38f, 0f);
+		_missionDetail.Info.Left.SetValue(left * 2f + _missionListContainer.Info.Width);
+		_missionDetail.Info.Top.SetValue(top);
+		_missionDetail.Info.Width.SetValue(width * detailWidthRatio, 0f);
 		_missionDetail.Info.Height.SetValue(height * 0.9f, 0f);
 		_panel.Register(_missionDetail);
 
-		_missionPanel = new UIBlock();
-		_panel.Register(_missionPanel);
-
-		_missionContainer = new UIContainerPanel();
-		_missionContainer.Info.SetMargin(0f);
-		_missionPanel.Register(_missionContainer);
-
-		_missionScrollbar = new UIMissionVerticalScrollbar();
-		_missionScrollbar.Info.Left.SetValue(PositionStyle.Full - _missionScrollbar.Info.Width - (10f, 0f));
-		_missionContainer.SetVerticalScrollbar(_missionScrollbar);
-		_panel.Register(_missionScrollbar);
-
+		// Mission list status filter
 		_missionFilter = new UIMissionStatusFilter();
-		_panel.Register(_missionFilter);
-
-		_missionFilter.Info.Top.SetValue(_missionDetail.Info.Top);
-		_missionFilter.Info.Left.SetValue(_missionDetail.Info.Left * 2f + _missionDetail.Info.Width);
-		_missionFilter.Info.Width.SetValue(PositionStyle.Full - _missionDetail.Info.Left * 2f - _missionDetail.Info.Width - _missionScrollbar.Info.Width - (PositionStyle.Full - _missionScrollbar.Info.Width - _missionScrollbar.Info.Left) * 2f);
+		_missionFilter.Info.Left.SetValue(0);
+		_missionFilter.Info.Width.SetValue(PositionStyle.Full);
 		_missionFilter.Info.Height.SetValue(40f, 0f);
 		_missionFilter.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
+		_missionFilter.ShowBorder = (false, false, false, false);
+		_missionListContainer.Register(_missionFilter);
 
+		// Mission list type filter
 		_missionTypeFilter = new UIMissionTypeFilter();
-		_panel.Register(_missionTypeFilter);
-
-		_missionTypeFilter.Info.Top.SetValue(_missionFilter.Info.Top + _missionFilter.Info.Height);
-		_missionTypeFilter.Info.Left.SetValue(_missionDetail.Info.Left * 2f + _missionDetail.Info.Width);
-		_missionTypeFilter.Info.Width.SetValue(PositionStyle.Full - _missionDetail.Info.Left * 2f - _missionDetail.Info.Width - _missionScrollbar.Info.Width - (PositionStyle.Full - _missionScrollbar.Info.Width - _missionScrollbar.Info.Left) * 2f);
+		_missionTypeFilter.Info.Top.SetValue(_missionFilter.Info.Height);
+		_missionTypeFilter.Info.Left.SetValue(0);
+		_missionTypeFilter.Info.Width.SetValue(PositionStyle.Full);
 		_missionTypeFilter.Info.Height.SetValue(40f, 0f);
 		_missionTypeFilter.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
+		_missionTypeFilter.ShowBorder = (false, false, false, false);
+		_missionListContainer.Register(_missionTypeFilter);
 
-		_missionPanel.Info.Top.SetValue(_missionTypeFilter.Info.Top + _missionTypeFilter.Info.Height);
-		_missionPanel.Info.Left.SetValue(_missionDetail.Info.Left * 2f + _missionDetail.Info.Width);
-		_missionPanel.Info.Width.SetValue(PositionStyle.Full - _missionDetail.Info.Left * 2f - _missionDetail.Info.Width - _missionScrollbar.Info.Width - (PositionStyle.Full - _missionScrollbar.Info.Width - _missionScrollbar.Info.Left) * 2f);
-		_missionPanel.Info.Height.SetValue(_panel.Info.Height - _missionFilter.Info.Height - _missionTypeFilter.Info.Height - _panel.Info.Height * 0.15f);
-		_missionPanel.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
-		_missionPanel.ShowBorder.TopBorder = false;
+		// Mission list content
+		_missionListContent = new UIBlock();
+		_missionListContent.Info.Width.SetValue(PositionStyle.Full);
+		_missionListContent.Info.Height.SetValue(PositionStyle.Full - _missionFilter.Info.Height - _missionTypeFilter.Info.Height);
+		_missionListContent.Info.Top.SetValue(_missionFilter.Info.Height + _missionTypeFilter.Info.Height);
+		_missionListContent.PanelColor = GetThemeColor(ColorType.Dark, ColorStyle.Dark);
+		_missionListContent.ShowBorder = (false, false, false, false);
+		_missionListContainer.Register(_missionListContent);
 
-		_missionScrollbar.Info.Height.SetValue(_missionPanel.Info.Height);
-		_missionScrollbar.Info.Top.SetValue(_missionPanel.Info.Top);
+		// Mission list
+		_missionList = new UIContainerPanel();
+		_missionListContent.Register(_missionList);
 
+		// Mission list scrollbar
+		_missionScrollbar = new UIMissionVerticalScrollbar();
+		_missionScrollbar.Info.Left.SetValue(PositionStyle.Full - _missionScrollbar.Info.Width - (10f, 0f));
+		_missionScrollbar.Info.Height.SetValue(PositionStyle.Full - (20, 0f));
+		_missionList.SetVerticalScrollbar(_missionScrollbar);
+		_missionListContent.Register(_missionScrollbar);
+
+		_missionList.Info.Width.SetValue(_missionScrollbar.Info.Left);
+
+		// Close button
 		_closeButton = new UIBlock();
 		_closeButton.Info.Width.SetValue(36f, 0f);
 		_closeButton.Info.Height.SetValue(22f, 0f);
@@ -204,28 +233,23 @@ public class MissionContainer : UIContainerElement, ILoadable
 		_closeButton.PanelColor = GetThemeColor();
 		_closeButton.BorderColor = GetThemeColor(ColorType.Light, ColorStyle.Normal);
 		_closeButton.Info.IsSensitive = true;
-		_closeButton.Events.OnLeftDown += e => base.Close();
-		_closeButton.Events.OnMouseHover += e => _closeButton.PanelColor = Color.Gray;
+		_closeButton.Events.OnLeftDown += e => Close();
+		_closeButton.Events.OnMouseHover += e =>
+		{
+			MouseText = "Close";
+			_closeButton.PanelColor = Color.Gray;
+		};
 		_closeButton.Events.OnMouseOver += e => _closeButton.PanelColor = Color.Gray;
-		_closeButton.Events.OnMouseOut += e => _closeButton.PanelColor = GetThemeColor();
+		_closeButton.Events.OnMouseOut += e =>
+		{
+			MouseText = string.Empty;
+			_closeButton.PanelColor = GetThemeColor();
+		};
 		_panel.Register(_closeButton);
 
 		_close = new UIImage(ModAsset.MissionClose.Value, Color.White);
 		_close.Info.SetToCenter();
 		_closeButton.Register(_close);
-
-		// _maximizeButton = new UIBlock();
-		// _maximizeButton.Info.Width.SetValue(_closeButton.Info.Width);
-		// _maximizeButton.Info.Height.SetValue(_closeButton.Info.Height);
-		// _maximizeButton.Info.Left.SetValue(_closeButton.Info.Left - _maximizeButton.Info.Width - (2f, 0f));
-		// _maximizeButton.Info.Top.SetValue(_closeButton.Info.Top);
-		// _maximizeButton.PanelColor = GetThemeColor();
-		// _maximizeButton.BorderColor = GetThemeColor(ColorType.Light, ColorStyle.Normal);
-		// _panel.Register(_maximizeButton);
-
-		// _maximization = new UIImage(ModAsset.MissionMaximization.Value, Color.White);
-		// _maximization.Info.SetToCenter();
-		// _maximizeButton.Register(_maximization);
 	}
 
 	public override void Update(GameTime gt)
@@ -277,11 +301,14 @@ public class MissionContainer : UIContainerElement, ILoadable
 			nPCMode = false;
 		}
 
-		// 调用基类的 Show 方法
-		base.Show(args);
+		ChildrenElements.Clear();
+		OnInitialization();
 
 		// 刷新任务列表
 		RefreshList();
+
+		// 调用基类的 Show 方法
+		base.Show(args);
 	}
 
 	/// <summary>
@@ -292,7 +319,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 	{
 		Show();
 
-		foreach (var e in _missionContainer.Elements)
+		foreach (var e in _missionList.Elements)
 		{
 			if (e is UIMissionItem missionItem)
 			{
@@ -358,8 +385,8 @@ public class MissionContainer : UIContainerElement, ILoadable
 			top.Pixel += ElementSpacing;
 		}
 
-		_missionContainer.ClearAllElements();
-		_missionContainer.AddElements(elements);
+		_missionList.ClearAllElements();
+		_missionList.AddElements(elements);
 
 		// 重新选取之前选择的任务
 		if (SelectedItem != null && elements.Count != 0)
@@ -389,5 +416,57 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 		_missionDetail.UpdateChangeButton();
 		_missionDetail.SetMissionDetail(item);
+	}
+
+	public override void Draw(SpriteBatch sb)
+	{
+		base.Draw(sb);
+
+		// Draw filter item tooltip
+		if (!string.IsNullOrEmpty(MouseText))
+		{
+			var pos = Main.MouseScreen + new Vector2(10f, 18f);
+			var textSize = FontAssets.MouseText.Value.MeasureString(MouseText);
+
+			if (pos.X + textSize.X > Main.screenWidth)
+			{
+				pos.X = Main.screenWidth - textSize.X;
+			}
+			if (pos.Y + textSize.Y > Main.screenHeight)
+			{
+				pos.Y = Main.screenHeight - textSize.Y;
+			}
+			if (pos.X < 0)
+			{
+				pos.X = 0;
+			}
+			if (pos.Y < 0)
+			{
+				pos.Y = 0;
+			}
+
+			var PanelColor = new Color(191, 106, 106);
+			Texture2D texture = ModAsset.Panel.Value;
+			var textureSize = new Point(texture.Width, texture.Height);
+			var rectangle = new Rectangle((int)pos.X, (int)pos.Y, (int)textSize.X, (int)textSize.Y);
+
+			// Draw 4 corners
+			sb.Draw(texture, new Vector2(rectangle.X, rectangle.Y), new Rectangle(0, 0, 6, 6), PanelColor);
+			sb.Draw(texture, new Vector2(rectangle.X + rectangle.Width - 6, rectangle.Y), new Rectangle(textureSize.X - 6, 0, 6, 6), PanelColor);
+			sb.Draw(texture, new Vector2(rectangle.X, rectangle.Y + rectangle.Height - 6), new Rectangle(0, textureSize.Y - 6, 6, 6), PanelColor);
+			sb.Draw(texture, new Vector2(rectangle.X + rectangle.Width - 6, rectangle.Y + rectangle.Height - 6), new Rectangle(textureSize.X - 6, textureSize.Y - 6, 6, 6), PanelColor);
+
+			// Draw main part
+			sb.Draw(texture, new Rectangle(rectangle.X + 6, rectangle.Y, rectangle.Width - 12, 6), new Rectangle(6, 0, textureSize.X - 12, 6), PanelColor);
+			sb.Draw(texture, new Rectangle(rectangle.X + 6, rectangle.Y + rectangle.Height - 6, rectangle.Width - 12, 6), new Rectangle(6, textureSize.Y - 6, textureSize.X - 12, 6), PanelColor);
+			sb.Draw(texture, new Rectangle(rectangle.X, rectangle.Y + 6, 6, rectangle.Height - 12), new Rectangle(0, 6, 6, textureSize.Y - 12), PanelColor);
+			sb.Draw(texture, new Rectangle(rectangle.X + rectangle.Width - 6, rectangle.Y + 6, 6, rectangle.Height - 12), new Rectangle(textureSize.X - 6, 6, 6, textureSize.Y - 12), PanelColor);
+			sb.Draw(texture, new Rectangle(rectangle.X + 6, rectangle.Y + 6, rectangle.Width - 12, rectangle.Height - 12), new Rectangle(6, 6, textureSize.X - 12, textureSize.Y - 12), PanelColor);
+
+			// Draw text
+			sb.DrawString(FontAssets.MouseText.Value, MouseText, pos + new Vector2(0f, 5f), Color.Cyan);
+
+			MouseText = string.Empty;
+		}
 	}
 }
