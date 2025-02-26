@@ -61,7 +61,6 @@ public class MissionObjectiveData
 	/// </summary>
 	/// <param name="branches"></param>
 	/// <returns></returns>
-	[Obsolete("This method is yet unfinished, don't use it.", true)]
 	public MissionObjectiveData AddBranches(params MissionObjectiveData[] branches)
 	{
 		foreach (var builder in branches)

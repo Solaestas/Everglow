@@ -30,6 +30,13 @@ public abstract class MissionObjectiveBase : ITagCompoundEntity
 	}
 
 	/// <summary>
+	/// Update inside the objective
+	/// </summary>
+	public virtual void Update()
+	{
+	}
+
+	/// <summary>
 	/// Complete the objective.
 	/// </summary>
 	public virtual void Complete()

@@ -177,17 +177,21 @@ public abstract class MissionBase : ITagCompoundEntity
 		UpdateTime();
 
 		// Manage objectives. If the mission is finished but not completed, skip this step.
-		if (CurrentObjective is not null
-			&& !CurrentObjective.Completed
-			&& CurrentObjective.CheckCompletion())
+		if (CurrentObjective is not null)
 		{
-			CurrentObjective.Complete();
-			CurrentObjective.Deactivate();
+			CurrentObjective.Update();
 
-			CurrentObjective = CurrentObjective.Next;
-			CurrentObjective?.Activate(this);
+			if (!CurrentObjective.Completed
+			&& CurrentObjective.CheckCompletion())
+			{
+				CurrentObjective.Complete();
+				CurrentObjective.Deactivate();
 
-			Main.NewText($"[{Name}]任务当前目标已完成", 250, 250, 150);
+				CurrentObjective = CurrentObjective.Next;
+				CurrentObjective?.Activate(this);
+
+				Main.NewText($"[{Name}]任务当前目标已完成", 250, 250, 150);
+			}
 		}
 	}
 
@@ -329,8 +333,13 @@ public abstract class MissionBase : ITagCompoundEntity
 		tag.Add(nameof(SourceNPC), SourceNPC);
 		tag.Add(nameof(IsVisible), IsVisible);
 
+		SaveObjectives(tag, Objectives.AllObjectives);
+	}
+
+	public static void SaveObjectives(TagCompound tag, IEnumerable<MissionObjectiveBase> objectives)
+	{
 		var oTags = new List<TagCompound>();
-		foreach (var o in Objectives.AllObjectives)
+		foreach (var o in objectives)
 		{
 			var ot = new TagCompound();
 			o.SaveData(ot);
@@ -360,15 +369,25 @@ public abstract class MissionBase : ITagCompoundEntity
 			IsVisible = isVisible;
 		}
 
+		LoadObjectives(tag, Objectives.AllObjectives);
+
+		LoadVanillaItemTextures(RewardItems.Select(x => x.type));
+	}
+
+	public static void LoadObjectives(TagCompound tag, IEnumerable<MissionObjectiveBase> objectives)
+	{
 		if (tag.TryGet<IList<TagCompound>>(nameof(Objectives), out var oTags))
 		{
-			foreach (var o in Objectives.AllObjectives)
+			foreach (var o in objectives)
 			{
+				if (oTags.Count <= o.ObjectiveID)
+				{
+					break;
+				}
+
 				o.LoadData(oTags[o.ObjectiveID]);
 			}
 		}
-
-		LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
 
 	/// <summary>

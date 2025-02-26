@@ -7,6 +7,8 @@ public class ParallelObjective : MissionObjectiveBase
 {
 	private IEnumerable<MissionObjectiveBase> _objectives;
 
+	public IEnumerable<MissionObjectiveBase> Objectives => _objectives;
+
 	public ParallelObjective()
 	{
 	}
@@ -23,6 +25,14 @@ public class ParallelObjective : MissionObjectiveBase
 		foreach (var item in _objectives)
 		{
 			item.OnInitialize();
+		}
+	}
+
+	public override void Update()
+	{
+		if (_objectives.Any(o => o is ParallelObjective or BranchingObjective))
+		{
+			throw new InvalidDataException("Parallel objective or branching objective should not nest in itself or other.");
 		}
 	}
 
@@ -76,17 +86,11 @@ public class ParallelObjective : MissionObjectiveBase
 
 	public override void LoadData(TagCompound tag)
 	{
-		foreach (var objective in _objectives)
-		{
-			objective.LoadData(tag);
-		}
+		MissionBase.LoadObjectives(tag, Objectives);
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
-		foreach (var objective in _objectives)
-		{
-			objective.SaveData(tag);
-		}
+		MissionBase.SaveObjectives(tag, Objectives);
 	}
 }
