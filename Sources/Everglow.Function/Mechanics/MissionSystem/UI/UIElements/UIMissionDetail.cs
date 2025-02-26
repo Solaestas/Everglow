@@ -1,7 +1,6 @@
 using System.Text;
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
-using Everglow.Commons.Mechanics.MissionSystem.UI;
 using Everglow.Commons.UI.UIElements;
 using static Everglow.Commons.Mechanics.MissionSystem.UI.MissionContainer;
 
@@ -9,12 +8,6 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 
 public class UIMissionDetail : BaseElement
 {
-	public event EventHandler OnClickChange;
-
-	public event EventHandler OnClickYes;
-
-	public event EventHandler OnClickNo;
-
 	private UIBlock _headshot;
 	private UIMissionIcon _icon;
 
@@ -88,10 +81,7 @@ public class UIMissionDetail : BaseElement
 			(PositionStyle.Full - _description.Info.Top - _description.Info.Height - _changeMission.Info.Height) / 2f);
 		_changeMission.Info.IsSensitive = true;
 		_changeMission.PanelColor = Instance.GetThemeColor();
-		_changeMission.Events.OnLeftDown += e =>
-		{
-			OnClickChange.Invoke(this, null);
-		};
+		_changeMission.Events.OnLeftDown += OnClickChange;
 		Register(_changeMission);
 
 		_yes = new UITextPlus(ChangeButtonText.Yes);
@@ -104,10 +94,7 @@ public class UIMissionDetail : BaseElement
 			_yes.Info.Left.Pixel += 44f;
 			_yes.Calculation();
 		};
-		_yes.Events.OnLeftDown += e =>
-		{
-			OnClickYes.Invoke(this, null);
-		};
+		_yes.Events.OnLeftDown += OnClickYes;
 		_changeMission.Register(_yes);
 
 		_no = new UITextPlus(ChangeButtonText.No);
@@ -120,10 +107,7 @@ public class UIMissionDetail : BaseElement
 			_no.Info.Left.Pixel -= 44f;
 			_no.Calculation();
 		};
-		_no.Events.OnLeftDown += e =>
-		{
-			HideYesNo();
-		};
+		_no.Events.OnLeftDown += OnClickNo;
 		_changeMission.Register(_no);
 
 		_changeText = new UITextPlus(string.Empty);
@@ -189,6 +173,54 @@ public class UIMissionDetail : BaseElement
 			_descriptionContainer.ClearAllElements();
 		}
 	}
+
+	/// <summary>
+	/// Base operations for mission
+	/// </summary>
+	/// <param name="e"></param>
+	public void OnClickChange(BaseElement e)
+	{
+		if (SelectedItem == null)
+		{
+			return;
+		}
+
+		if (SelectedItem.Mission.PoolType == PoolType.Accepted) // Accepted missions
+		{
+			if (SelectedItem.Mission.CheckComplete()) // Completed
+			{
+				// Commit the mission
+				SelectedItem.Mission.OnComplete();
+				MissionManager.NeedRefresh = true;
+			}
+			else // Incompleted
+			{
+				// Discard the mission (Second confirmation)
+				ShowYesNo();
+			}
+		}
+		else if (SelectedItem.Mission.PoolType == PoolType.Available) // Available missions
+		{
+			// Accept the mission
+			MissionManager.MoveMission(SelectedItem.Mission, PoolType.Available, PoolType.Accepted);
+			MissionManager.NeedRefresh = true;
+		}
+	}
+
+	public void OnClickYes(BaseElement e)
+	{
+		if (SelectedItem != null
+			&& SelectedItem.Mission.PoolType == PoolType.Accepted
+			&& !SelectedItem.Mission.CheckComplete())
+		{
+			MissionManager.MoveMission(SelectedItem.Mission, PoolType.Accepted, PoolType.Failed);
+			MissionManager.NeedRefresh = true;
+		}
+
+		HideYesNo();
+	}
+
+	public void OnClickNo(BaseElement e) => HideYesNo();
 
 	public void ShowYesNo()
 	{

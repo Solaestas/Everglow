@@ -154,39 +154,6 @@ public class MissionContainer : UIContainerElement, ILoadable
 		_missionDetail.Info.Top.SetValue(height * 0.09f, 0f);
 		_missionDetail.Info.Width.SetValue(width * 0.38f, 0f);
 		_missionDetail.Info.Height.SetValue(height * 0.9f, 0f);
-		_missionDetail.OnClickChange += (_, _) =>
-		{
-			if (SelectedItem != null)
-			{
-				if (SelectedItem.Mission.PoolType == PoolType.Accepted)
-				{
-					_missionDetail.ShowYesNo();
-				}
-				else if (SelectedItem.Mission.PoolType == PoolType.Available)
-				{
-					MoveMission(SelectedItem.Mission, PoolType.Available, PoolType.Accepted);
-					ChangeSelectedItem(SelectedItem);
-				}
-			}
-		};
-		_missionDetail.OnClickYes += (_, _) =>
-		{
-			if (SelectedItem != null && SelectedItem.Mission.PoolType == PoolType.Accepted)
-			{
-				if (SelectedItem.Mission.CheckComplete())
-				{
-					SelectedItem.Mission.OnComplete();
-					ChangeSelectedItem(SelectedItem);
-					_missionDetail.HideYesNo();
-				}
-				else
-				{
-					MoveMission(SelectedItem.Mission, PoolType.Accepted, PoolType.Failed);
-					ChangeSelectedItem(SelectedItem);
-					_missionDetail.HideYesNo();
-				}
-			}
-		};
 		_panel.Register(_missionDetail);
 
 		_missionPanel = new UIBlock();
