@@ -17,6 +17,7 @@ public class BranchingObjective : MissionObjectiveBase
 
 	public IEnumerable<MissionObjectiveBase> Objectives { get; }
 
+	// TODO: This progress calculation is bad
 	public override float Progress => Objectives.Max(x => x.Progress);
 
 	public override void OnInitialize()
@@ -73,9 +74,34 @@ public class BranchingObjective : MissionObjectiveBase
 
 	public override void GetObjectivesText(List<string> lines)
 	{
+		var index = 1;
 		foreach (var objective in Objectives)
 		{
-			objective.GetObjectivesText(lines);
+			var tempLines = new List<string>();
+			objective.GetObjectivesText(tempLines);
+
+			for (int i = 0; i < tempLines.Count; i++)
+			{
+				if (Completed)
+				{
+					if(objective.Next == Next)
+					{
+						tempLines[i] = $"[TextDrawer,Text='(Branch {index})',Color='100,255,100,255']" + " " + tempLines[i];
+					}
+					else
+					{
+						tempLines[i] = $"[TextDrawer,Text='(Branch {index})',Color='100,100,100,255']" + " " + tempLines[i];
+					}
+				}
+				else
+				{
+					tempLines[i] = $"[TextDrawer,Text='(Branch {index})',Color='100,180,120,255']" + " " + tempLines[i];
+				}
+			}
+
+			lines.AddRange(tempLines);
+
+			index++;
 		}
 	}
 

@@ -8,6 +8,15 @@ namespace Everglow.Commons.Mechanics.MissionSystem.Objectives;
 
 public class ConsumeItemObjective : MissionObjectiveBase
 {
+	public ConsumeItemObjective()
+	{
+	}
+
+	public ConsumeItemObjective(List<CountItemRequirement> requirements)
+	{
+		DemandConsumeItems = requirements;
+	}
+
 	public List<CountItemRequirement> DemandConsumeItems { get; } = [];
 
 	public override float Progress => DemandConsumeItems.Count != 0 && DemandConsumeItems.All(i => i.Requirement != 0)

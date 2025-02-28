@@ -63,10 +63,10 @@ public class MissionObjectiveData
 	/// <returns></returns>
 	public MissionObjectiveData AddBranches(params MissionObjectiveData[] branches)
 	{
-		foreach (var builder in branches)
-		{
-			CombineWith(builder);
-		}
+		//foreach (var builder in branches)
+		//{
+		//	CombineWith(builder);
+		//}
 
 		var branchingObjective = new BranchingObjective(branches.Select(t => t.First).ToArray());
 

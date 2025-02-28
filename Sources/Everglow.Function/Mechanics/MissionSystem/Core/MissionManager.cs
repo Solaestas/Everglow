@@ -263,6 +263,7 @@ public static class MissionManager
 	/// </summary>
 	public static void Clear()
 	{
+		ClearAllEvents(null);
 		NPCKillCounter.Clear();
 		foreach (var (_, missionPool) in _missionPools)
 		{
@@ -330,8 +331,11 @@ public static class MissionManager
 		foreach (var (poolType, missionPool) in _missionPools)
 		{
 			missionPool.Clear();
-			if (tag.TryGet<IList<string>>($"Everglow.MissionManage.{poolType}.Type", out var mt) &&
-				tag.TryGet<IList<TagCompound>>($"Everglow.MissionManage.{poolType}.Missions", out var m))
+
+			string poolTypeKey = $"Everglow.MissionManage.{poolType}.Type";
+			string poolMissionKey = $"Everglow.MissionManage.{poolType}.Missions";
+			if (tag.TryGet<IList<string>>(poolTypeKey, out var mt) &&
+				tag.TryGet<IList<TagCompound>>(poolMissionKey, out var m))
 			{
 				for (int j = 0; j < mt.Count; j++)
 				{
@@ -352,7 +356,7 @@ public static class MissionManager
 	/// <param name="poolData"></param>
 	public static void OnEnterWorld(MissionManagerInfo info)
 	{
-		ClearAllEvents(Main.LocalPlayer);
+		ClearAllEvents(null);
 		Clear();
 
 		if (info != null)

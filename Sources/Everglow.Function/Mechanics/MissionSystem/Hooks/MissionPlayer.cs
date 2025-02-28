@@ -19,13 +19,16 @@ public class MissionPlayer : ModPlayer
 		{
 			MissionManager.OnEnterWorld(missionInfo);
 
+#if DEBUG
 			if (!MissionManager.HasMission<MissionBase>())
 			{
 				MissionManager.AddMission(new KillNPCMissionTest(), PoolType.Available);
 				MissionManager.AddMission(new ParallelMissionTest(), PoolType.Available);
 				MissionManager.AddMission(new MissionObjectivesTest(), PoolType.Available);
 				MissionManager.AddMission(new OpenPanelMissionTest(), PoolType.Available);
+				MissionManager.AddMission(new BranchingMissionTest(), PoolType.Available);
 			}
+#endif
 		}
 	}
 
@@ -59,11 +62,16 @@ public class MissionPlayer : ModPlayer
 	{
 		if (Player.whoAmI == Main.myPlayer)
 		{
-			// If player killed the target, then count this kill
+			// If player killed this npc
 			if (!target.active)
 			{
 				OnKillNPCEvent?.Invoke(target.type);
 			}
 		}
+	}
+
+	public override void OnConsumeAmmo(Item weapon, Item ammo)
+	{
+		MissionGlobalItem.InvokeOnConsumeItemEvent(ammo, Player);
 	}
 }

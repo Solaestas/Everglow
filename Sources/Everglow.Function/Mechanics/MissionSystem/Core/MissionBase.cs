@@ -9,8 +9,10 @@ namespace Everglow.Commons.Mechanics.MissionSystem.Core;
 
 /// <summary>
 /// 任务基类
-/// <br>!继承后必须保证存在一个无参构造函数</br>
 /// </summary>
+/// <remarks>
+/// NOTE: 继承后必须保证存在一个无参构造函数
+/// </remarks>
 public abstract class MissionBase : ITagCompoundEntity
 {
 	protected MissionBase()
@@ -67,7 +69,26 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// <summary>
 	/// 任务进度，最大应为 1f
 	/// </summary>
-	public virtual float Progress => Objectives.AllObjectives.Count > 0 ? Objectives.AllObjectives.Average(o => o.Progress) : 1f;
+	public virtual float Progress
+	{
+		get
+		{
+			if (Objectives.AllObjectives.Count <= 0)
+			{
+				return 1f;
+			}
+
+			float progress = 0f;
+			int oCount = 0;
+			for (MissionObjectiveBase j = Objectives.First; j != null; j = j.Next)
+			{
+				progress += j.Progress;
+				oCount++;
+			}
+
+			return progress / oCount;
+		}
+	}
 
 	/// <summary>
 	/// 任务时限
@@ -93,12 +114,20 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// </summary>
 	public const string TimeSaveKey = "MissionTime";
 
+	/// <summary>
+	/// Mission status.
+	/// </summary>
+	/// <remarks>
+	/// Use property <see cref="PoolType"/> rather than this field directly.
+	/// </remarks>
 	private PoolType poolType;
 
 	/// <summary>
 	/// Mission status, managed by <see cref="MissionManager"/>.
-	/// <para/>Should only be changed in <see cref="MissionManager"/> to keep the sync to its pool collection.
 	/// </summary>
+	/// <remarks>
+	/// Should only be changed in <see cref="MissionManager"/> to keep the mission syncing to its pool collection.
+	/// </remarks>
 	public PoolType PoolType
 	{
 		get => poolType;
@@ -136,7 +165,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// 检查任务是否完成
 	/// </summary>
 	/// <returns></returns>
-	public virtual bool CheckComplete() => Progress >= 1f;
+	public virtual bool CheckComplete() => Progress >= 1f && CurrentObjective == null;
 
 	/// <summary>
 	/// 检查任务是否过期
@@ -191,6 +220,7 @@ public abstract class MissionBase : ITagCompoundEntity
 				CurrentObjective?.Activate(this);
 
 				Main.NewText($"[{Name}]任务当前目标已完成", 250, 250, 150);
+				MissionManager.NeedRefresh = true;
 			}
 		}
 	}
@@ -295,12 +325,13 @@ public abstract class MissionBase : ITagCompoundEntity
 	public virtual IEnumerable<string> GetObjectives()
 	{
 		var lines = new List<string>();
-
-		foreach (var o in Objectives.AllObjectives)
+		var mainIndex = 1;
+		for (MissionObjectiveBase j = Objectives.First; j != null; j = j.Next)
 		{
+			MissionObjectiveBase o = j;
 			var tempLines = new List<string>();
 			o.GetObjectivesText(tempLines);
-			int index = 1;
+			int subIndex = 1;
 			for (int i = 0; i < tempLines.Count; i++)
 			{
 				if (o.Completed)
@@ -308,10 +339,11 @@ public abstract class MissionBase : ITagCompoundEntity
 					tempLines[i] = $"[TextDrawer,Text='(已完成)',Color='100,100,100,255']" + " " + tempLines[i];
 				}
 
-				tempLines[i] = $"{o.ObjectiveID + 1}.{index++} " + tempLines[i];
+				tempLines[i] = $"{mainIndex}.{subIndex++} " + tempLines[i];
 			}
 
 			lines.AddRange(tempLines);
+			mainIndex++;
 		}
 
 		return lines;

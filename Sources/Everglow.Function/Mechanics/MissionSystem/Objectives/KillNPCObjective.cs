@@ -7,6 +7,15 @@ namespace Everglow.Commons.Mechanics.MissionSystem.Objectives;
 
 public class KillNPCObjective : MissionObjectiveBase
 {
+	public KillNPCObjective()
+	{
+	}
+
+	public KillNPCObjective(List<KillNPCRequirement> requirements)
+	{
+		DemandNPCs = requirements;
+	}
+
 	public List<KillNPCRequirement> DemandNPCs { get; } = [];
 
 	public override void OnInitialize()
