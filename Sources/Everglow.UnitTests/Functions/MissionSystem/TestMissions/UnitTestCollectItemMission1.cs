@@ -1,5 +1,5 @@
-using Everglow.Commons.MissionSystem.Shared;
-using Everglow.Commons.MissionSystem.Templates;
+using Everglow.Commons.Mechanics.MissionSystem.Shared;
+using Everglow.Commons.Mechanics.MissionSystem.Templates;
 using Terraria;
 
 namespace Everglow.UnitTests.Functions.MissionSystem.TestMissions;

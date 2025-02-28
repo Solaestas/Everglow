@@ -1,5 +1,5 @@
-using Everglow.Commons.MissionSystem.Shared;
-using Everglow.Commons.MissionSystem.UI.UIElements.UIMissionObjectives;
+using Everglow.Commons.Mechanics.MissionSystem.Shared;
+using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.UIMissionObjectives;
 using Everglow.UnitTests.Functions.MissionSystem.TestMissions;
 
 namespace Everglow.UnitTests.Functions.MissionSystem;
