@@ -69,7 +69,7 @@ public class ScarpasScissors : ModItem
 			modifiers.CritDamage += 2f;
 		}
 
-		public sealed override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if (!target.active)
 			{
