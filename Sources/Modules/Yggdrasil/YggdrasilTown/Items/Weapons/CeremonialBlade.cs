@@ -1,3 +1,6 @@
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Weapons;
+using Terraria.DataStructures;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
 public class CeremonialBlade : ModItem
@@ -11,13 +14,23 @@ public class CeremonialBlade : ModItem
 		Item.damage = 27;
 		Item.knockBack = 3;
 
-		Item.useStyle = ItemUseStyleID.Swing;
+		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.UseSound = SoundID.Item1;
 		Item.useTime = Item.useAnimation = 28;
 		Item.autoReuse = true;
-		Item.useTurn = true;
+		Item.noUseGraphic = true;
+		Item.noMelee = true;
 
 		Item.rare = ItemRarityID.Orange;
 		Item.value = Item.buyPrice(gold: 3);
+
+		Item.shoot = ModContent.ProjectileType<CeremonialBladeProj>();
+	}
+
+	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+	{
+		Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
+
+		return false;
 	}
 }
