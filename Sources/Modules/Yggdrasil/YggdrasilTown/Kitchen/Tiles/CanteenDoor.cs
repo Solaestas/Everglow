@@ -10,7 +10,7 @@ public class CanteenDoor : RoomDoorTile
 	{
 		var mapIO = new MapIO(12, 120);
 
-		mapIO.Read(ModIns.Mod.GetFileStream(ModAsset.MapIOs_273x66ClubAndRestaurant_Path));
+		mapIO.Read(ModIns.Mod.GetFileStream(ModAsset.MapIOs_273x66KitchenRestaurant_Path));
 
 		var it = mapIO.GetEnumerator();
 		while (it.MoveNext())

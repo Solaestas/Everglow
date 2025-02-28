@@ -5,6 +5,7 @@ using Everglow.Food.UI;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 
@@ -17,6 +18,7 @@ public class Stove : ModTile, ITileFluentlyDrawn
 		// Properties
 		Main.tileFrameImportant[Type] = true;
 		Main.tileLavaDeath[Type] = true;
+		TileID.Sets.HasOutlines[Type] = true;
 		TileID.Sets.DisableSmartCursor[Type] = true;
 
 		DustType = DustID.LifeCrystal;
@@ -43,6 +45,11 @@ public class Stove : ModTile, ITileFluentlyDrawn
 		TileObjectData.addTile(Type);
 
 		AddMapEntry(new Color(127, 2, 0));
+	}
+
+	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
+	{
+		return true;
 	}
 
 	public override bool RightClick(int i, int j)
@@ -157,7 +164,6 @@ public class Stove : ModTile, ITileFluentlyDrawn
 						break;
 					}
 			}
-
 		}
 		FurnitureUtils.LightHitwire(i, j, Type, 2, 3);
 		return base.RightClick(i, j);
@@ -170,7 +176,13 @@ public class Stove : ModTile, ITileFluentlyDrawn
 
 	public override void MouseOver(int i, int j)
 	{
-
+		Item item = Main.LocalPlayer.HeldItem;
+		if (item.type == ModContent.ItemType<Casserole_Item>() || item.type == ModContent.ItemType<SteamBox_Item>())
+		{
+			Main.instance.MouseText("[i:" + item.type + "]");
+			return;
+		}
+		Main.instance.MouseText("[i:" + ModContent.ItemType<Stove_Item>() + "]");
 	}
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
@@ -204,7 +216,7 @@ public class Stove : ModTile, ITileFluentlyDrawn
 			float xx = Utils.RandomInt(ref randSeed, -10, 11) * 0.25f;
 			float yy = Utils.RandomInt(ref randSeed, -10, 1) * 0.25f;
 
-			spriteBatch.Draw(flameTexture, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + yy + k * 0.2f - 6) + zero, new Rectangle(frameX, frameY + 18, width, height), color, 0f, default, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(flameTexture, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + yy + k * 0.2f - 2) + zero, new Rectangle(frameX, frameY + 18, width, height), color, 0f, default, 1f, SpriteEffects.None, 0f);
 		}
 		Lighting.AddLight(new Point(i, j).ToWorldCoordinates(), new Vector3(0.8f, 0.6f, 0.8f));
 		if (!Main.gamePaused)
@@ -224,12 +236,12 @@ public class Stove : ModTile, ITileFluentlyDrawn
 		if (stoveEneity != null)
 		{
 			Texture2D pot = ModAsset.StoveAtlas.Value;
-			Vector2 offset = new Vector2(8, 13);
+			Vector2 offset = new Vector2(8, 25);
 			switch (stoveEneity.PotState)
 			{
 				case 1:
 					{
-						Rectangle frame = new Rectangle(2, 2, 56, 26);
+						Rectangle frame = new Rectangle(2, 2, 28, 14);
 						spriteBatch.Draw(pot, pos.ToWorldCoordinates() - Main.screenPosition + offset, frame, Lighting.GetColor(pos), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
 						break;
 					}
@@ -254,8 +266,8 @@ public class Stove : ModTile, ITileFluentlyDrawn
 			{
 				return;
 			}
-			Rectangle flame = new Rectangle(2, 36, 24, 10);
-			offset = new Vector2(8, 25);
+			Rectangle flame = new Rectangle(30, 40, 16, 6);
+			offset = new Vector2(8, 31);
 			spriteBatch.Draw(pot, pos.ToWorldCoordinates() - Main.screenPosition + offset, flame, new Color(0.5f, 0.5f, 0.5f, 0), 0, flame.Size() * 0.5f, 1, SpriteEffects.None, 0);
 		}
 	}

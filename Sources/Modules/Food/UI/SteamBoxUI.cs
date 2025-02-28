@@ -1,10 +1,5 @@
-using Everglow.Food.Items.Ingredients;
-using Everglow.Food.Items.ModFood;
-using static Everglow.Food.FoodRecipes.FoodRecipes;
-using Everglow.Food.UI;
-using static Everglow.Food.UI.PotUI;
 using Everglow.Food.FoodRecipes;
-using System.Linq;
+using static Everglow.Food.FoodRecipes.FoodRecipes;
 
 namespace Everglow.Food.UI;
 
@@ -17,7 +12,6 @@ public class SteamBoxUI : PotUI
 	public Vector2 PanelPos4 = new Vector2(60, -100);
 
 	public static CookingUnitWithOrder XiaoLongBao;
-
 
 	public SteamBoxUI(Point anchorTilePos)
 		: base(anchorTilePos)
@@ -116,7 +110,6 @@ public class SteamBoxUI : PotUI
 		Main.spriteBatch.Draw(casserole, drawPos, null, Color.White, 0, casserole.Size() * 0.5f, 2, SpriteEffects.None, 0);
 	}
 
-
 	public bool CanCookWithOrder(CookingUnitWithOrder cookingUnitwithorder)
 	{
 		for (int index = 0; index < cookingUnitwithorder.Ingredients.Length; index++)
@@ -133,10 +126,6 @@ public class SteamBoxUI : PotUI
 	{
 		List<int[]> ingredientsCopy = [.. cookingUnit.Ingredients];
 		List<int> CopyInUI = Ingredients.ToList();
-		for (int i = 0; i < ingredientsCopy.Count(); i++)
-		{
-			Main.NewText(ingredientsCopy[i][0]);
-		}
 
 		foreach (int type in Ingredients)
 		{
@@ -171,7 +160,6 @@ public class SteamBoxUI : PotUI
 
 	public Tuple<int, int> CheckCuisineType()
 	{
-
 		foreach (var cookingUnitwithorder in PotMenuWithOrder)
 		{
 			if (CanCookWithOrder(cookingUnitwithorder))

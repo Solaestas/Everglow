@@ -1,6 +1,4 @@
 using Everglow.Food.FoodRecipes;
-using Everglow.Food.Items.Ingredients;
-using Everglow.Food.Items.ModFood;
 using static Everglow.Food.FoodRecipes.FoodRecipes;
 
 namespace Everglow.Food.UI;
@@ -117,7 +115,6 @@ public class CasseroleUI : PotUI
 		Texture2D casserole = ModAsset.CasseroleUIPanel.Value;
 		Main.spriteBatch.Draw(casserole, drawPos, null, Color.White, 0, casserole.Size() * 0.5f, 2, SpriteEffects.None, 0);
 	}
-	
 
 	public bool CanCookWithOrder(CookingUnitWithOrder cookingUnitwithorder)
 	{
@@ -135,10 +132,10 @@ public class CasseroleUI : PotUI
 	{
 		List<int[]> ingredientsCopy = [.. cookingUnit.Ingredients];
 		List<int> CopyInUI = Ingredients.ToList();
-		for (int i = 0; i < ingredientsCopy.Count(); i++)
-		{
-			Main.NewText(ingredientsCopy[i][0]);
-		}
+		//for (int i = 0; i < ingredientsCopy.Count(); i++)
+		//{
+		//	Main.NewText(ingredientsCopy[i][0]);
+		//}
 
 		foreach (int type in Ingredients)
 		{
@@ -173,7 +170,6 @@ public class CasseroleUI : PotUI
 
 	public Tuple<int, int> CheckCuisineType()
 	{
-
 		foreach (var cookingUnitwithorder in PotMenuWithOrder)
 		{
 			if (CanCookWithOrder(cookingUnitwithorder))

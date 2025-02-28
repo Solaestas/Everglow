@@ -1,13 +1,9 @@
-using System;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
 using Everglow.Food.Items.Cookers;
 using Everglow.Food.Tiles;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.UI;
 using static Everglow.Food.FoodIngredientItem;
 using static Everglow.Food.FoodRecipes.FoodRecipes;
@@ -75,6 +71,7 @@ public abstract class PotUI
 	/// The cooking cuisine
 	/// </summary>
 	public int CuisineType = -1;
+
 	/// <summary>
 	/// The number of the cooking cuisine
 	/// </summary>
@@ -82,6 +79,7 @@ public abstract class PotUI
 
 	public static List<CookingUnit> PotMenu = new List<CookingUnit>();
 	public static List<CookingUnitWithOrder> PotMenuWithOrder = new List<CookingUnitWithOrder>();
+
 	public PotUI(Point anchorTilePos)
 	{
 		AnchorTilePos = anchorTilePos;
@@ -114,11 +112,11 @@ public abstract class PotUI
 
 		if (Maximized)
 		{
-			drawPos += new Vector2(10 * Main.GameViewMatrix.Zoom.X, -40 * Main.GameViewMatrix.Zoom.Y - 80);
+			drawPos += new Vector2(10 * Main.GameViewMatrix.Zoom.X, -40 * Main.GameViewMatrix.Zoom.Y - 60);
 		}
 		else
 		{
-			drawPos += new Vector2(10 * Main.GameViewMatrix.Zoom.X, -20 * Main.GameViewMatrix.Zoom.Y - 80);
+			drawPos += new Vector2(10 * Main.GameViewMatrix.Zoom.X, -20 * Main.GameViewMatrix.Zoom.Y - 60);
 		}
 		return drawPos;
 	}
@@ -581,5 +579,4 @@ public abstract class PotUI
 	{
 		Maximized = !Maximized;
 	}
-
 }

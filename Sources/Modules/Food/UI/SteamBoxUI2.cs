@@ -1,9 +1,5 @@
-using Everglow.Food.Items.Ingredients;
-using Everglow.Food.Items.ModFood;
-using static Everglow.Food.FoodRecipes.FoodRecipes;
-using Everglow.Food.UI;
 using Everglow.Food.FoodRecipes;
-
+using static Everglow.Food.FoodRecipes.FoodRecipes;
 
 namespace Everglow.Food.UI;
 
@@ -14,9 +10,6 @@ public class SteamBoxUI2 : PotUI
 	public Vector2 PanelPos2 = new Vector2(104, -88);
 	public Vector2 PanelPos3 = new Vector2(140, -50);
 	public Vector2 PanelPos4 = new Vector2(60, -100);
-
-
-
 
 	public SteamBoxUI2(Point anchorTilePos)
 		: base(anchorTilePos)
@@ -72,7 +65,6 @@ public class SteamBoxUI2 : PotUI
 				IngredientsSlotPos[i + 6] = new Vector2(i - 2.5f, -0.9f) * 50;
 			}
 			IngredientsSlotPos[12] = new Vector2(0, 1.2f) * 50;
-
 		}
 		else
 		{
@@ -125,7 +117,6 @@ public class SteamBoxUI2 : PotUI
 		Main.spriteBatch.Draw(casserole, drawPos, null, Color.White, 0, casserole.Size() * 0.5f, 2, SpriteEffects.None, 0);
 	}
 
-
 	public bool CanCookWithOrder(CookingUnitWithOrder cookingUnitwithorder)
 	{
 		for (int index = 0; index < cookingUnitwithorder.Ingredients.Length; index++)
@@ -142,10 +133,6 @@ public class SteamBoxUI2 : PotUI
 	{
 		List<int[]> ingredientsCopy = [.. cookingUnit.Ingredients];
 		List<int> CopyInUI = Ingredients.ToList();
-		for (int i = 0; i < ingredientsCopy.Count(); i++)
-		{
-			Main.NewText(ingredientsCopy[i][0]);
-		}
 
 		foreach (int type in Ingredients)
 		{
@@ -180,7 +167,6 @@ public class SteamBoxUI2 : PotUI
 
 	public Tuple<int, int> CheckCuisineType()
 	{
-
 		foreach (var cookingUnitwithorder in PotMenuWithOrder)
 		{
 			if (CanCookWithOrder(cookingUnitwithorder))
