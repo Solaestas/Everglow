@@ -5,7 +5,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class EyeOfAnabiosis_Matrix : ModProjectile
 {
-	public override string Texture => Commons.ModAsset.EmptyBuff_Mod;
+	public override string Texture => Commons.ModAsset.Point_Mod;
 
 	private Player Owner => Main.player[Projectile.owner];
 
