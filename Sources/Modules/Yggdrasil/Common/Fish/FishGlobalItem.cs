@@ -197,7 +197,7 @@ public class FishGlobalItem : GlobalItem
 			var font = FontAssets.MouseText.Value;
 			string hint = "Right click to hook";
 			Vector2 size = font.MeasureString(hint);
-			spriteBatch.DrawString(font, hint, basePos - size / 2 - new Vector2(0, item.height / 2 + 20), Color.Gold);
+			// spriteBatch.DrawString(font, hint, basePos - size / 2 - new Vector2(0, item.height / 2 + 20), Color.Gold);
 		}
 		base.PostDrawInWorld(item, spriteBatch, lightColor, alphaColor, rotation, scale, whoAmI);
 	}
