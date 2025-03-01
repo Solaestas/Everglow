@@ -9,7 +9,7 @@ public class FishGlobalItem : GlobalItem
 	/// <summary>
 	/// 是否可以被钩取
 	/// </summary>
-	public bool Fishable = true;
+	public bool Fishable = false;
 
 	/// <summary>
 	/// 在水面上漂流的速度
@@ -167,7 +167,7 @@ public class FishGlobalItem : GlobalItem
 		if (liquid > 0)
 		{
 			float percent = liquid / 255f;
-			float liqY = percent * 16f + itemPos.Y;
+			float liqY = percent * 16f + itemPos.Y * 16f;
 			float delta = item.Center.Y - liqY;
 			if (delta < 0)
 			{
@@ -189,11 +189,8 @@ public class FishGlobalItem : GlobalItem
 		Vector2 basePos = item.Center - Main.screenPosition;
 		if (Hookable)
 		{
-			Texture2D tex = Commons.ModAsset.White.Value;
-			spriteBatch.Draw(tex, new Rectangle((int)basePos.X - item.width / 2 - 30, (int)basePos.Y - 4, 24, 8), Color.White);
-			spriteBatch.Draw(tex, new Rectangle((int)basePos.X + item.width / 2 + 6, (int)basePos.Y - 4, 24, 8), Color.White);
-			spriteBatch.Draw(tex, new Rectangle((int)basePos.X - 4, (int)basePos.Y - item.height / 2 - 30, 8, 24), Color.White);
-			spriteBatch.Draw(tex, new Rectangle((int)basePos.X - 4, (int)basePos.Y + item.height / 2 + 6, 8, 24), Color.White);
+			Texture2D icon = ModAsset.HookItemIcon.Value;
+			spriteBatch.Draw(icon, new Rectangle((int)basePos.X - item.width / 2 - 4, (int)basePos.Y - item.width / 2 - 4, item.width + 8, item.width + 8), Color.White);
 		}
 		if (Hovered && Hookable)
 		{

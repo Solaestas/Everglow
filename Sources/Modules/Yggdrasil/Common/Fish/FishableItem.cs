@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace Everglow.Yggdrasil.Common.Fish;
 
+/// <summary>
+/// 生成一个可以被钓鱼的物品
+/// </summary>
+/// <param name="item">物品 id</param>
+/// <param name="liquid">物品会在什么液体上生成</param>
+/// <param name="chance">物品每帧的生成概率</param>
 public class FishableItem(int item, int liquid, float chance)
 {
 	public int Item = item;

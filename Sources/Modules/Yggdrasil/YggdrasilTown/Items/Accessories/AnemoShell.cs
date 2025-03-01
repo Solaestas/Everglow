@@ -1,6 +1,7 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
 using Everglow.Commons.Interfaces;
+using Everglow.Yggdrasil.Common.Fish;
 using Terraria.DataStructures;
 using Terraria.Enums;
 
