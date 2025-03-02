@@ -9,6 +9,11 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories
 {
 	public class AnemoShell : ModItem
 	{
+		public override void SetStaticDefaults()
+		{
+			FishSystem.RegisterFish(ModContent.GetInstance<YggdrasilTownBiome>(), new(Type, LiquidID.Water, 0.5f));
+		}
+
 		public override void SetDefaults()
 		{
 			Item.DefaultToAccessory(28, 22);

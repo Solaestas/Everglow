@@ -40,7 +40,7 @@ public class FishSystem : ModSystem
 		return toSpawn;
 	}
 
-	public void CheckSpawn(Player player, Point point, List<FishableItem> toSpawn)
+	public bool CheckSpawn(Player player, Point point, List<FishableItem> toSpawn)
 	{
 		Tile tile = Main.tile[point];
 		List<FishableItem> spawned = [];
@@ -66,6 +66,42 @@ public class FishSystem : ModSystem
 		{
 			toSpawn.Remove(item);
 		}
+		return toSpawn.Count == 0;
+	}
+
+	public void SpawnInRect(Rectangle rect, Player player, List<FishableItem> toSpawn)
+	{
+		int right = rect.X + rect.Width;
+		int bottom = rect.Y + rect.Height;
+		for (int x = rect.X; x <= right; x++)
+		{
+			for (int y = rect.Y; y <= bottom; y++)
+			{
+				Point point = new Point(x, y);
+				bool canSpawn = true;
+				for (int nx = -3; nx <= 3; nx++)
+				{
+					Point np = point + new Point(nx, 0);
+					Tile tile = Main.tile[np];
+					if (tile.LiquidAmount <= 26)
+					{
+						canSpawn = false;
+						break;
+					}
+				}
+				if (canSpawn)
+				{
+					if (CheckSpawn(player, point, toSpawn))
+					{
+						break;
+					}
+				}
+			}
+			if (toSpawn.Count == 0)
+			{
+				break;
+			}
+		}
 	}
 
 	public void SpawnAroundPlayer(Player player)
@@ -73,27 +109,20 @@ public class FishSystem : ModSystem
 		var toSpawn = ShouldSpawnFish(player);
 
 		// 在刷怪区域的左右两侧生成，上下不生成
-		int startX = -84;
-		int endX = -74;
-		int startY = -47;
-		int endY = 47;
+		Point playerPoint = player.Center.ToTileCoordinates();
+		Rectangle rect1 = new Rectangle(playerPoint.X - 84, playerPoint.Y - 47, 20, 94);
+		Rectangle rect2 = new Rectangle(playerPoint.X + 64, playerPoint.Y - 47, 20, 94);
 
-		for (int x = startX; x <= endX; x++)
+		float first = Main.rand.NextFloat(1);
+		if (first < .5f)
 		{
-			for (int y = startY; y <= endY; y++)
-			{
-				Point point = player.Center.ToTileCoordinates() + new Point(x, y);
-				CheckSpawn(player, point, toSpawn);
-			}
+			SpawnInRect(rect1, player, toSpawn);
+			SpawnInRect(rect2, player, toSpawn);
 		}
-
-		for (int x = -endX; x <= -startX; x++)
+		else
 		{
-			for (int y = startY; y <= endY; y++)
-			{
-				Point point = player.Center.ToTileCoordinates() + new Point(x, y);
-				CheckSpawn(player, point, toSpawn);
-			}
+			SpawnInRect(rect2, player, toSpawn);
+			SpawnInRect(rect1, player, toSpawn);
 		}
 	}
 
