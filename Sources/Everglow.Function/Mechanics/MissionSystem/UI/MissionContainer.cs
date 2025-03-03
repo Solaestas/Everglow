@@ -389,10 +389,10 @@ public class MissionContainer : UIContainerElement, ILoadable
 		_missionList.AddElements(elements);
 
 		// 重新选取之前选择的任务
-		if (SelectedItem != null && elements.Count != 0)
+		var filteredList = elements.ConvertAll(x => x as UIMissionItem).Where(e => e.Mission.Name == SelectedItem.Mission.Name);
+		if (SelectedItem != null && filteredList.Any())
 		{
-			var target = elements.ConvertAll(x => x as UIMissionItem).Where(e => e.Mission.Name == SelectedItem.Mission.Name).First();
-			ChangeSelectedItem(target);
+			ChangeSelectedItem(filteredList.First());
 		}
 		else
 		{
