@@ -226,7 +226,7 @@ public static class MissionManager
 			return;
 		}
 
-		if (Main.time % UpdateInterval != 0)
+		if (Main.timeForVisualEffects % UpdateInterval != 0)
 		{
 			return;
 		}
@@ -235,10 +235,20 @@ public static class MissionManager
 		AcceptedMissionPool.ForEach(m => m.Update());
 
 		// 处理自动提交任务
-		AcceptedMissionPool.Where(m => m.CheckComplete() && m.AutoComplete).ToList().ForEach(m => m.OnComplete());
+		var autoCommitMissions = AcceptedMissionPool.Where(m => m.CheckComplete() && m.AutoComplete).ToList();
+		if (autoCommitMissions.Count > 0)
+		{
+			autoCommitMissions.ForEach(m => m.OnComplete());
+			NeedRefresh = true;
+		}
 
 		// 处理过期任务
-		AcceptedMissionPool.Where(m => m.CheckExpire()).ToList().ForEach(m => m.OnExpire());
+		var expiredMissions = AcceptedMissionPool.Where(m => m.CheckExpire()).ToList();
+		if (expiredMissions.Count > 0)
+		{
+			expiredMissions.ForEach(m => m.OnExpire());
+			NeedRefresh = true;
+		}
 
 		// 检测可提交状态改变的任务，将状态改变为可提交的任务抛出信息
 		foreach (var m in AcceptedMissionPool.ToList())
