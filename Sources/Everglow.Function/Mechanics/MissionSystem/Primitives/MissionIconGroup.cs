@@ -1,3 +1,5 @@
+using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
+
 namespace Everglow.Commons.Mechanics.MissionSystem.Primitives;
 
 public class MissionIconGroup
@@ -27,6 +29,8 @@ public class MissionIconGroup
 	private readonly List<MissionIconBase> _iconDetails = [];
 	private int _currentIndex;
 
+	public MissionIconBase DefaultIcon => TextureMissionIcon.Create(ModAsset.Point.Value);
+
 	/// <summary>
 	/// Gets the current icon.
 	/// </summary>
@@ -36,17 +40,23 @@ public class MissionIconGroup
 		{
 			if (_iconDetails.Count == 0)
 			{
+				return DefaultIcon;
 				throw new InvalidOperationException("No icons are available in the group.");
 			}
 
 			if (_currentIndex < 0 || _currentIndex >= _iconDetails.Count)
 			{
+				return DefaultIcon;
 				throw new InvalidOperationException("Current index is out of bounds.");
 			}
 
 			return _iconDetails[_currentIndex];
 		}
 	}
+
+	public IReadOnlyList<MissionIconBase> Icons => _iconDetails;
+
+	public int CurrentIndex => _currentIndex;
 
 	/// <summary>
 	/// Adds an icon to the group.
@@ -76,15 +86,6 @@ public class MissionIconGroup
 		ArgumentNullException.ThrowIfNull(icon);
 
 		return _iconDetails.Remove(icon);
-	}
-
-	/// <summary>
-	/// Draws the current icon at the specified position.
-	/// </summary>
-	/// <param name="position">The position to draw the icon.</param>
-	public void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle)
-	{
-		CurrentIcon.Draw(spriteBatch, destinationRectangle);
 	}
 
 	/// <summary>

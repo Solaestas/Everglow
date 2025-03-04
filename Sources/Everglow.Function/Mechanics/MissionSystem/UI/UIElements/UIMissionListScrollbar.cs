@@ -2,7 +2,7 @@ using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements
 {
-	internal class UIMissionVerticalScrollbar : UIVerticalScrollbar
+	internal class UIMissionListScrollbar : UIVerticalScrollbar
 	{
 		public override float Scale => 1f;
 
@@ -13,13 +13,14 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements
 		private UIBlock _bar = new UIBlock();
 		private UIBlock _inner = new UIBlock();
 
-		public UIMissionVerticalScrollbar()
+		public UIMissionListScrollbar()
 		{
 			Info.Width.SetValue(8f, 0f);
-			_innerScale = new Vector2(12f, 46f);
+			_innerScale = new Vector2(12f, 46f) * MissionContainer.Scale;
 			AlwaysOnLight = true;
 			_bar.PanelColor = MissionContainer.Instance.GetThemeColor(MissionContainer.ColorType.Dark, MissionContainer.ColorStyle.Dark);
 			_inner.PanelColor = MissionContainer.Instance.GetThemeColor();
+			_inner.ShowBorder = (false, false, false, false);
 		}
 
 		public override void Update(GameTime gt)
@@ -68,8 +69,8 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements
 
 		protected override void DrawSelf(SpriteBatch sb)
 		{
-			_bar.Info.TotalHitBox = Info.TotalHitBox;
-			_bar.Draw(sb);
+			_inner.Info.TotalHitBox = _bar.Info.TotalHitBox = Info.TotalHitBox;
+			// _bar.Draw(sb);
 
 			var innerHeight = _innerScale.Y;
 			float height = Info.TotalSize.Y - TopMax - TopMin - innerHeight;
@@ -79,7 +80,7 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements
 				(int)(Info.TotalLocation.Y + top),
 				(int)_innerScale.X,
 				(int)_innerScale.Y);
-			_inner.Draw(sb);
+			//_inner.Draw(sb);
 		}
 	}
 }

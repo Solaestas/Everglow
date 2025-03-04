@@ -2,6 +2,7 @@ using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Objectives;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
 using Everglow.Commons.Mechanics.MissionSystem.Shared;
+using Everglow.Commons.Mechanics.MissionSystem.Enums;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Tests;
 
@@ -37,4 +38,6 @@ public class MissionObjectivesTest : MissionBase
 	}
 
 	public override string DisplayName => nameof(MissionObjectivesTest);
+
+	public override MissionType MissionType => MissionType.SideStory;
 }

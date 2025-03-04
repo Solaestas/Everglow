@@ -14,7 +14,7 @@ public class ItemMissionIcon : MissionIconBase
 
 	public override string Tooltip => tooltip;
 
-	public override void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle)
+	public override void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle, Color color)
 	{
 		var drawCenter = new Vector2(
 			destinationRectangle.X + destinationRectangle.Width / 2,
@@ -36,7 +36,7 @@ public class ItemMissionIcon : MissionIconBase
 		}
 		var scale = GetTextureScale(destinationRectangle, frameRect);
 
-		spriteBatch.Draw(texture, drawCenter, frameRect, Color.White, 0, origin, scale, SpriteEffects.None, 0);
+		spriteBatch.Draw(texture, drawCenter, frameRect, color, 0, origin, scale, SpriteEffects.None, 0);
 	}
 
 	public static ItemMissionIcon Create(int itemType, string tooltip = null)

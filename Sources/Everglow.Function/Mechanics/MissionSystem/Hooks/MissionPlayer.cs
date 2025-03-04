@@ -27,6 +27,13 @@ public class MissionPlayer : ModPlayer
 				MissionManager.AddMission(new MissionObjectivesTest(), PoolType.Available);
 				MissionManager.AddMission(new OpenPanelMissionTest(), PoolType.Available);
 				MissionManager.AddMission(new BranchingMissionTest(), PoolType.Available);
+				MissionManager.AddMission(new NoneMission1(), PoolType.Available);
+				MissionManager.AddMission(new NoneMission2(), PoolType.Available);
+				MissionManager.AddMission(new NoneMission3(), PoolType.Available);
+				MissionManager.AddMission(new NoneMission4(), PoolType.Available);
+				MissionManager.AddMission(new NoneMission5(), PoolType.Available);
+				MissionManager.AddMission(new NoneMission6(), PoolType.Available);
+				MissionManager.AddMission(new MissionTimerTest(), PoolType.Available);
 			}
 #endif
 		}

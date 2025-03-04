@@ -4,7 +4,9 @@ public abstract class MissionIconBase
 {
 	public virtual string Tooltip { get; }
 
-	public abstract void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle);
+	public void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle) => Draw(spriteBatch, destinationRectangle, Color.White);
+
+	public abstract void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle, Color color);
 
 	public static float GetTextureScale(Rectangle destinationRect, Rectangle frameRect)
 	{

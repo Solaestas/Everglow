@@ -6,14 +6,21 @@ using static Everglow.Commons.Mechanics.MissionSystem.UI.MissionContainer;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 
-public class UIMissionDetail : BaseElement
+public class UIMissionDetail : UIBlock
 {
-	private UIBlock _headshot;
 	private UIMissionIcon _icon;
 
 	private UIBlock _description;
 	private UIContainerPanel _descriptionContainer;
-	private UITextVerticalScrollbar _textScrollbar;
+	private UITextVerticalScrollbar _descriptionTextScrollbar;
+
+	private UIBlock _objective;
+	private UIContainerPanel _objectiveContainer;
+	private UITextVerticalScrollbar _objectiveTextScrollbar;
+
+	private UIBlock _reward;
+	private UIContainerPanel _rewardContainer;
+	private UITextVerticalScrollbar _rewardTextScrollbar;
 
 	private UIBlock _changeMission;
 	private UITextPlus _changeText;
@@ -37,52 +44,102 @@ public class UIMissionDetail : BaseElement
 
 	public override void OnInitialization()
 	{
+		var scale = Scale;
+
 		base.OnInitialization();
 
-		var headshotSize = Info.Width * 0.4f;
-		_headshot = new UIBlock();
-		_headshot.Info.Width.SetValue(headshotSize);
-		_headshot.Info.Height.SetValue(headshotSize);
-		_headshot.Info.Left.SetValue((Info.Width - _headshot.Info.Width) / 2);
-		_headshot.PanelColor = Instance.GetThemeColor(ColorType.Dark, ColorStyle.Dark);
-		_headshot.ShowBorder = (false, false, false, false);
-		Register(_headshot);
+		// Headshot
+		_icon = new UIMissionIcon(null);
+		_icon.Info.Width.SetValue(480 * scale);
+		_icon.Info.Height.SetValue(256 * scale);
+		_icon.Info.Left.SetValue((Info.Width - _icon.Info.Width) / 2);
+		_icon.Info.Top.SetValue(18 * scale);
+		Register(_icon);
 
-		_icon = new UIMissionIcon(null, Color.White);
-		_icon.Info.Width.SetFull();
-		_icon.Info.Height.SetFull();
-		_headshot.Register(_icon);
+		var infoColor = new Color(0.2f, 0.2f, 0.2f, 0.005f);
 
+		// Description
 		_description = new UIBlock();
-		_description.Info.Top.SetValue(_headshot.Info.Top + _headshot.Info.Height + Info.Height * 0.05f);
-		_description.Info.Width.SetFull();
-		_description.Info.Height.SetValue(PositionStyle.Full - _description.Info.Top - Info.Height * 0.15f);
-		_description.PanelColor = Instance.GetThemeColor(ColorType.Dark, ColorStyle.Dark);
-		_description.ShowBorder = (false, false, false, false);
+		_description.Info.Width.SetValue(210 * scale);
+		_description.Info.Height.SetValue(384 * scale);
+		_description.Info.Left.SetValue(20 * scale);
+		_description.Info.Top.SetValue(314 * scale);
+		_description.PanelColor = infoColor;
+		_description.BorderColor = Color.Gray;
 		Register(_description);
 
-		_textScrollbar = new UITextVerticalScrollbar();
-		_textScrollbar.Info.Height.SetValue(-16f, 1f);
-		_textScrollbar.Info.SetToCenter();
-		_textScrollbar.Info.Left.SetValue(-8f, 1f);
-		_description.Register(_textScrollbar);
+		_descriptionTextScrollbar = new UITextVerticalScrollbar();
+		_descriptionTextScrollbar.Info.Height.SetValue(-16f, 1f);
+		_descriptionTextScrollbar.Info.SetToCenter();
+		_descriptionTextScrollbar.Info.Left.SetValue(-8f, 1f);
+		_description.Register(_descriptionTextScrollbar);
 
 		_descriptionContainer = new UIContainerPanel();
-		_descriptionContainer.Info.Width.SetValue(PositionStyle.Full - _textScrollbar.Info.Width - (PositionStyle.Full - _textScrollbar.Info.Left - _textScrollbar.Info.Width) * 3f);
-		_descriptionContainer.Info.Height.SetValue(_textScrollbar.Info.Height);
-		_descriptionContainer.Info.Left.SetValue(PositionStyle.Full - _textScrollbar.Info.Left - _textScrollbar.Info.Width);
-		_descriptionContainer.Info.Top.SetValue(_textScrollbar.Info.Top);
-		_descriptionContainer.SetVerticalScrollbar(_textScrollbar);
+		_descriptionContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
+		_descriptionContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
+		_descriptionContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
+		_descriptionContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
+		_descriptionContainer.SetVerticalScrollbar(_descriptionTextScrollbar);
 		_description.Register(_descriptionContainer);
 
+		// Objective
+		_objective = new UIBlock();
+		_objective = new UIBlock();
+		_objective.Info.Width.SetValue(210 * scale);
+		_objective.Info.Height.SetValue(384 * scale);
+		_objective.Info.Left.SetValue((20 + 210 + 20) * scale);
+		_objective.Info.Top.SetValue(_description.Info.Top);
+		_objective.PanelColor = infoColor;
+		_objective.BorderColor = Color.Gray;
+		Register(_objective);
+
+		_objectiveTextScrollbar = new UITextVerticalScrollbar();
+		_objectiveTextScrollbar.Info.Height.SetValue(-16f, 1f);
+		_objectiveTextScrollbar.Info.SetToCenter();
+		_objectiveTextScrollbar.Info.Left.SetValue(-8f, 1f);
+		_objective.Register(_objectiveTextScrollbar);
+
+		_objectiveContainer = new UIContainerPanel();
+		_objectiveContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
+		_objectiveContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
+		_objectiveContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
+		_objectiveContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
+		_objectiveContainer.SetVerticalScrollbar(_objectiveTextScrollbar);
+		_objective.Register(_objectiveContainer);
+
+		// Reward
+		_reward = new UIBlock();
+		_reward = new UIBlock();
+		_reward.Info.Width.SetValue(210 * scale);
+		_reward.Info.Height.SetValue(284 * scale);
+		_reward.Info.Left.SetValue((20 + 210 + 20 + 210 + 20) * scale);
+		_reward.Info.Top.SetValue(_description.Info.Top);
+		_reward.PanelColor = infoColor;
+		_reward.BorderColor = Color.Gray;
+		Register(_reward);
+
+		_rewardTextScrollbar = new UITextVerticalScrollbar();
+		_rewardTextScrollbar.Info.Height.SetValue(-16f, 1f);
+		_rewardTextScrollbar.Info.SetToCenter();
+		_rewardTextScrollbar.Info.Left.SetValue(-8f, 1f);
+		_reward.Register(_rewardTextScrollbar);
+
+		_rewardContainer = new UIContainerPanel();
+		_rewardContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
+		_rewardContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
+		_rewardContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
+		_rewardContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
+		_rewardContainer.SetVerticalScrollbar(_rewardTextScrollbar);
+		_reward.Register(_rewardContainer);
+
+		// Button
 		_changeMission = new UIBlock();
-		_changeMission.Info.Width.SetValue(Info.Width * 0.18f);
-		_changeMission.Info.Height.SetValue(Info.Height * 0.07f);
-		_changeMission.Info.Left.SetValue(_description.Info.Left + (_description.Info.Width - _changeMission.Info.Width) / 2f);
-		_changeMission.Info.Top.SetValue(_description.Info.Top + _description.Info.Height +
-			(PositionStyle.Full - _description.Info.Top - _description.Info.Height - _changeMission.Info.Height) / 2f);
+		_changeMission.Info.Width.SetValue(80 * scale);
+		_changeMission.Info.Height.SetValue(40 * scale);
+		_changeMission.Info.Left.SetValue((20 + 210 + 20 + 210 + 20 + 105 - 40) * scale);
+		_changeMission.Info.Top.SetValue((314 + 284 + 30) * scale);
 		_changeMission.Info.IsSensitive = true;
-		_changeMission.PanelColor = Instance.GetThemeColor();
+		_changeMission.PanelColor = new Color(0.2f, 0.2f, 0.2f, 0.005f);
 		_changeMission.Events.OnLeftDown += OnClickChange;
 		Register(_changeMission);
 
@@ -129,7 +186,7 @@ public class UIMissionDetail : BaseElement
 		{
 			MissionBase mission = missionItem.Mission;
 			_icon.SetIconGroup(mission.Icon);
-			_textScrollbar.WheelValue = 0f;
+			_descriptionTextScrollbar.WheelValue = 0f;
 
 			var desText = new StringBuilder();
 
@@ -149,30 +206,49 @@ public class UIMissionDetail : BaseElement
 			{
 				desText.Append(mission.Description + "\n");
 			}
-
-			// Objectives
-			desText.Append("\n目标：\n");
-			foreach (var objective in mission.GetObjectives())
-			{
-				desText.Append(objective);
-			}
-
-			// Rewards
-			desText.Append("\n奖励：\n");
-			desText.Append(mission.GetRewards());
-
 			var des = new UITextPlus(desText.ToString());
 			des.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
 			des.StringDrawer.Init(des.Text);
 			_descriptionContainer.ClearAllElements();
 			_descriptionContainer.AddElement(des);
-			des.StringDrawer.SetWordWrap(_descriptionContainer.HitBox.Width - _textScrollbar.InnerScale.X);
+			des.StringDrawer.SetWordWrap(_descriptionContainer.HitBox.Width - _descriptionTextScrollbar.InnerScale.X);
+
+			// Objectives
+			var objText = new StringBuilder();
+			objText.Append("目标：\n");
+			foreach (var objective in mission.GetObjectives())
+			{
+				objText.Append(objective);
+			}
+			var obj = new UITextPlus(objText.ToString());
+			obj.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
+			obj.StringDrawer.Init(obj.Text);
+			_objectiveContainer.ClearAllElements();
+			_objectiveContainer.AddElement(obj);
+			obj.StringDrawer.SetWordWrap(_objectiveContainer.HitBox.Width - _objectiveTextScrollbar.InnerScale.X);
+
+			// Rewards
+			var rewText = new StringBuilder();
+			rewText.Append("奖励：\n");
+			rewText.Append(mission.GetRewards());
+			var rew = new UITextPlus(rewText.ToString());
+			rew.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
+			rew.StringDrawer.Init(rew.Text);
+			_rewardContainer.ClearAllElements();
+			_rewardContainer.AddElement(rew);
+			rew.StringDrawer.SetWordWrap(_rewardContainer.HitBox.Width - _rewardTextScrollbar.InnerScale.X);
 		}
 		else
 		{
 			_icon.SetIconGroup(null);
-			_textScrollbar.WheelValue = 0f;
+			_descriptionTextScrollbar.WheelValue = 0f;
 			_descriptionContainer.ClearAllElements();
+
+			_objectiveTextScrollbar.WheelValue = 0f;
+			_objectiveContainer.ClearAllElements();
+
+			_rewardTextScrollbar.WheelValue = 0f;
+			_rewardContainer.ClearAllElements();
 		}
 	}
 

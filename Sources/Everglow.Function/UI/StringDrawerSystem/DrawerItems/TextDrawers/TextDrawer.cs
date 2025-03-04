@@ -53,6 +53,11 @@ public class TextDrawer : DrawerItem
 	/// <returns></returns>
 	public override float WordWrap(ref int index, List<DrawerItem> drawerItems, ref int line, float width, float originWidth)
 	{
+		if (string.IsNullOrWhiteSpace(Text))
+		{
+			return 0f;
+		}
+
 		if (width < GetTextSize(Text[0].ToString()).X)
 		{
 			width = originWidth;

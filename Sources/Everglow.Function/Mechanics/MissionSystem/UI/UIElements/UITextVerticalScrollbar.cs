@@ -1,4 +1,3 @@
-using Everglow.Commons.Mechanics.MissionSystem.UI;
 using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements
@@ -11,9 +10,20 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements
 
 		public override float TopMin => 4f * Scale;
 
-		private UIBlock _topBar = new UIBlock();
-		private UIBlock _bottomBar = new UIBlock();
-		private UIBlock _inner = new UIBlock();
+		/// <summary>
+		/// 上下箭头
+		/// </summary>
+		private UIBlock _scrollbarArrow = new UIBlock();
+
+		/// <summary>
+		/// 轨道
+		/// </summary>
+		private UIBlock _scrollbarTrack = new UIBlock();
+
+		/// <summary>
+		/// 滑块
+		/// </summary>
+		private UIBlock _scrollbarThumb = new UIBlock();
 
 		public UITextVerticalScrollbar()
 		{
@@ -21,10 +31,10 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements
 			_innerScale = new Vector2(6f, 30f);
 			AlwaysOnLight = true;
 
-			_topBar.ShowBorder = _bottomBar.ShowBorder = _inner.ShowBorder = (false, false, false, false);
-			_topBar.PanelColor = MissionContainer.Instance.GetThemeColor(MissionContainer.ColorType.Light, MissionContainer.ColorStyle.Dark);
-			_bottomBar.PanelColor = _topBar.PanelColor;
-			_inner.PanelColor = _topBar.PanelColor;
+			_scrollbarArrow.ShowBorder = _scrollbarTrack.ShowBorder = _scrollbarThumb.ShowBorder = (false, false, false, false);
+			_scrollbarArrow.PanelColor = Color.Transparent;
+			_scrollbarTrack.PanelColor = Color.Transparent;
+			_scrollbarThumb.PanelColor = Color.Transparent;
 
 			var mask = new UIBlock();
 			mask.Info.Width.SetValue(4f, 0f);
@@ -33,7 +43,7 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements
 			mask.Info.SetToCenter();
 			mask.Info.Top.SetValue(1f, 0f);
 			mask.ShowBorder = (false, false, false, false);
-			mask.PanelColor = _topBar.PanelColor;
+			mask.PanelColor = _scrollbarArrow.PanelColor;
 			Register(mask);
 
 			mask = new UIBlock();
@@ -43,8 +53,13 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements
 			mask.Info.SetToCenter();
 			mask.Info.Top.SetValue(-2f, 1f);
 			mask.ShowBorder = (false, false, false, false);
-			mask.PanelColor = _topBar.PanelColor;
+			mask.PanelColor = _scrollbarArrow.PanelColor;
 			Register(mask);
+		}
+
+		public override void OnInitialization()
+		{
+			base.OnInitialization();
 		}
 
 		public override void Update(GameTime gt)
@@ -93,25 +108,27 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements
 
 		protected override void DrawSelf(SpriteBatch sb)
 		{
-			_topBar.Info.TotalHitBox = _bottomBar.Info.TotalHitBox = Info.TotalHitBox;
+			_scrollbarArrow.Info.TotalHitBox = _scrollbarTrack.Info.TotalHitBox = Info.TotalHitBox;
 
 			var innerHeight = _innerScale.Y;
 			float height = Info.TotalSize.Y - TopMax - TopMin - innerHeight;
 			var top = TopMin + height * WheelValue;
-			_inner.Info.TotalHitBox = new Rectangle(
+			_scrollbarThumb.Info.TotalHitBox = new Rectangle(
 				(int)(Info.TotalLocation.X - (UIScrollbarInnerTexture.Width * _innerScale.X - Info.TotalSize.X) / 2f),
 				(int)(Info.TotalLocation.Y + top),
 				(int)_innerScale.X,
 				(int)_innerScale.Y);
-			_topBar.Info.TotalHitBox.Height = Math.Max(2, _inner.Info.TotalHitBox.Y - Info.TotalHitBox.Y - 1);
-			_bottomBar.Info.TotalHitBox.Y = Math.Max(
-				_bottomBar.Info.TotalHitBox.Bottom - Info.TotalHitBox.Height - 2,
-				_inner.Info.TotalHitBox.Bottom + 1);
-			_bottomBar.Info.TotalHitBox.Height = Math.Max(2, Info.TotalHitBox.Bottom - _bottomBar.Info.TotalHitBox.Y);
+			_scrollbarArrow.Info.TotalHitBox.Height = Math.Max(2, _scrollbarThumb.Info.TotalHitBox.Y - Info.TotalHitBox.Y - 1);
+			_scrollbarTrack.Info.TotalHitBox.Y = Math.Max(
+				_scrollbarTrack.Info.TotalHitBox.Bottom - Info.TotalHitBox.Height - 2,
+				_scrollbarThumb.Info.TotalHitBox.Bottom + 1);
+			_scrollbarTrack.Info.TotalHitBox.Height = Math.Max(2, Info.TotalHitBox.Bottom - _scrollbarTrack.Info.TotalHitBox.Y);
 
-			_topBar.Draw(sb);
-			_bottomBar.Draw(sb);
-			_inner.Draw(sb);
+			var trackTexture = ModAsset.MissionSideRollingGroove.Value;
+			var trackScale = new Vector2(1, Info.TotalHitBox.Height / (float)trackTexture.Height);
+			Main.spriteBatch.Draw(trackTexture, Info.TotalHitBox.Center.ToVector2(), null, Color.White, 0, trackTexture.Size() / 2, trackScale, SpriteEffects.None, 0);
+			var thumbTexture = ModAsset.MissionSideRollingBlock.Value;
+			Main.spriteBatch.Draw(thumbTexture, _scrollbarThumb.Info.TotalHitBox, Color.White);
 		}
 	}
 }

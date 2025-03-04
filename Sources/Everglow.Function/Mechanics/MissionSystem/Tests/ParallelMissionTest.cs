@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
+using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.Mechanics.MissionSystem.Objectives;
 using Everglow.Commons.Mechanics.MissionSystem.Shared;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
@@ -61,4 +62,6 @@ public class ParallelMissionTest : MissionBase
 	}
 
 	public override string DisplayName => nameof(ParallelMissionTest);
+
+	public override MissionType MissionType => MissionType.Legendary;
 }
