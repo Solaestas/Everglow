@@ -1,5 +1,6 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
+using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Vertex;
 
@@ -55,6 +56,9 @@ public class UIMissionList : UIBlock
 		{
 			missions = missions.Where(m => m.MissionType == missionType);
 		}
+
+		// 排序
+		missions = missions.Order(MissionComparer.Instance);
 
 		// 生成任务UI元素
 		List<BaseElement> elements = [];
