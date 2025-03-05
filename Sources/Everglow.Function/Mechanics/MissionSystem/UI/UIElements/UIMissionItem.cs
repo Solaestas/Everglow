@@ -64,14 +64,24 @@ public class UIMissionItem : UIBlock
 		block.Register(statusBar);
 
 		// 任务名称
-		var font = FontManager.FusionPixel12.GetFont(block.Info.Height.Pixel - block.Info.TopMargin.Pixel - block.Info.BottomMargin.Pixel - 2f);
+		var nameContainer = new UIBlock();
+		nameContainer.Info.Width.SetValue(220 * scale);
+		nameContainer.Info.Height.SetFull();
+		nameContainer.Info.SetToCenter();
+		nameContainer.Info.Left.SetValue(0, 0.2f);
+		nameContainer.Info.HiddenOverflow = true;
+		nameContainer.PanelColor = Color.Transparent;
+		nameContainer.BorderWidth = 0;
+		block.Register(nameContainer);
+
+		var font = FontManager.FusionPixel12.GetFont(40f * scale);
 		var name = new UITextPlus(Mission.DisplayName);
-		name.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
+		name.StringDrawer.DefaultParameters.SetParameter("FontSize", 36f * scale);
 		name.StringDrawer.Init(name.Text);
-		block.Register(name);
+		nameContainer.Register(name);
 
 		name.Info.SetToCenter();
-		name.Info.Left.SetValue(0, 0.2f);
+		name.Info.Left.SetEmpty();
 		name.Calculation();
 	}
 

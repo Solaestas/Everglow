@@ -6,13 +6,15 @@ public abstract class MissionIconBase
 
 	public void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle) => Draw(spriteBatch, destinationRectangle, Color.White);
 
-	public abstract void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle, Color color);
+	public void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle, Color color) => Draw(spriteBatch, destinationRectangle, color, 1f);
 
-	public static float GetTextureScale(Rectangle destinationRect, Rectangle frameRect)
+	public abstract void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle, Color color, float baseScale);
+
+	public static float GetTextureScale(Rectangle destinationRect, Rectangle frameRect, float baseScale = 1f)
 	{
 		var scale = frameRect.Width > frameRect.Height
-			? destinationRect.Width / (float)frameRect.Width
-			: destinationRect.Height / (float)frameRect.Height;
+			? destinationRect.Width / (frameRect.Width * baseScale)
+			: destinationRect.Height / (frameRect.Height * baseScale);
 		return scale > 1f ? 1f : scale;
 	}
 }

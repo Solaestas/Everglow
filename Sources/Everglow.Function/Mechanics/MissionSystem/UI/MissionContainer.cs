@@ -178,7 +178,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 		// Mission details
 		_missionDetail = new UIMissionDetail();
-		_missionDetail.Info.Left.SetValue(615 * ResolutionFactor);
+		_missionDetail.Info.Left.SetValue(608 * ResolutionFactor);
 		_missionDetail.Info.Top.SetValue(46 * ResolutionFactor);
 		_missionDetail.Info.Width.SetValue(710 * ResolutionFactor, 0f);
 		_missionDetail.Info.Height.SetValue(724 * ResolutionFactor, 0f);

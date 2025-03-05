@@ -15,7 +15,7 @@ public class TextureMissionIcon : MissionIconBase
 
 	public override string Tooltip => tooltip;
 
-	public override void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle, Color color)
+	public override void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle, Color color, float baseScale)
 	{
 		var drawCenter = new Vector2(
 			destinationRectangle.X + destinationRectangle.Width / 2,
@@ -29,8 +29,8 @@ public class TextureMissionIcon : MissionIconBase
 			animation.Update();
 			origin = new Vector2(frameRect.Width, frameRect.Height) / 2;
 		}
+		var scale = GetTextureScale(destinationRectangle, frameRect, baseScale) * baseScale;
 
-		var scale = GetTextureScale(destinationRectangle, frameRect);
 		spriteBatch.Draw(texture, drawCenter, frameRect, color, 0, origin, scale, SpriteEffects.None, 0);
 	}
 

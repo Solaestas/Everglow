@@ -9,6 +9,10 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 public class UIMissionDetail : UIBlock
 {
 	private UIMissionIcon _icon;
+	private UIBlock _tree;
+	private UIImage _treeIcon;
+	private UIBlock _timer;
+	private UIImage _timerIcon;
 
 	private UIBlock _description;
 	private UIContainerPanel _descriptionContainer;
@@ -50,11 +54,51 @@ public class UIMissionDetail : UIBlock
 
 		// Headshot
 		_icon = new UIMissionIcon(null);
-		_icon.Info.Width.SetValue(480 * scale);
+		_icon.Info.Width.SetValue(420 * scale);
 		_icon.Info.Height.SetValue(256 * scale);
 		_icon.Info.Left.SetValue((Info.Width - _icon.Info.Width) / 2);
 		_icon.Info.Top.SetValue(18 * scale);
 		Register(_icon);
+
+		// Tree
+		_tree = new UIBlock();
+		_tree.Info.Width.SetValue(81 * scale);
+		_tree.Info.Height.SetValue(162 * scale);
+		_tree.Info.Left.SetValue(36 * scale);
+		_tree.Info.Top.SetValue(60 * scale);
+		_tree.Info.SetMargin(0);
+		_tree.PanelColor = Color.Transparent;
+		_tree.BorderWidth = 0;
+		_tree.Info.IsSensitive = true;
+		_tree.Events.OnMouseHover += e => Instance.MouseText = "Mission Tree";
+		Register(_tree);
+
+		_treeIcon = new UIImage(ModAsset.ToMissionTreeSurface.Value, Color.White);
+		_treeIcon.Info.Width = _tree.Info.Width;
+		_treeIcon.Info.Height = _tree.Info.Height;
+		_treeIcon.Events.OnMouseHover += e => _treeIcon.Color = new Color(1f, 1f, 1f, 0f);
+		_treeIcon.Events.OnMouseOut += e => _treeIcon.Color = Color.White;
+		_tree.Register(_treeIcon);
+
+		// Timer
+		_timer = new UIBlock();
+		_timer.Info.Width.SetValue(73 * scale);
+		_timer.Info.Height.SetValue(71 * scale);
+		_timer.Info.Left.SetValue(600 * scale);
+		_timer.Info.Top.SetValue(110 * scale);
+		_timer.Info.SetMargin(0);
+		_timer.PanelColor = Color.Transparent;
+		_timer.BorderWidth = 0;
+		_timer.Info.IsSensitive = true;
+		_timer.Events.OnMouseHover += e => Instance.MouseText = "Mission Timer";
+		Register(_timer);
+
+		_timerIcon = new UIImage(ModAsset.ToClockSurface.Value, Color.White);
+		_timerIcon.Info.Width = _timer.Info.Width;
+		_timerIcon.Info.Height = _timer.Info.Height;
+		_timerIcon.Events.OnMouseHover += e => _timerIcon.Color = new Color(1f, 1f, 1f, 0f);
+		_timerIcon.Events.OnMouseOut += e => _timerIcon.Color = Color.White;
+		_timer.Register(_timerIcon);
 
 		var infoColor = new Color(0.2f, 0.2f, 0.2f, 0.005f);
 
