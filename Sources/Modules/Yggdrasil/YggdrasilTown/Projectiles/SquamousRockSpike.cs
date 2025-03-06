@@ -1,7 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using SteelSeries.GameSense;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -77,7 +76,7 @@ public class SquamousRockSpike : ModProjectile
 			}
 			Projectile.velocity *= 0f;
 		}
-		if(Projectile.timeLeft > 3550)
+		if (Projectile.timeLeft > 3550)
 		{
 			ConcentratingDust(1);
 		}
@@ -171,6 +170,10 @@ public class SquamousRockSpike : ModProjectile
 		{
 			return false;
 		}
+		var textureShade = ModAsset.SquamousRockSpike_Shade.Value;
+		var textureBloom = ModAsset.SquamousRockSpike_Glow.Value;
+		Main.spriteBatch.Draw(textureShade, Projectile.Center - Main.screenPosition, null, Color.White, Projectile.rotation, textureShade.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(textureBloom, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, textureBloom.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		float timerProj = 3600 - Projectile.timeLeft;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
@@ -324,8 +327,9 @@ public class SquamousRockSpike : ModProjectile
 		dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(Projectile.ai[1], Projectile.ai[2]));
 		dissolve.CurrentTechnique.Passes[0].Apply();
 
-		var TexMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		Main.spriteBatch.Draw(TexMain, Projectile.Center, null, lightColor, Projectile.rotation, TexMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
+		Main.spriteBatch.Draw(texMain, Projectile.Center, null, lightColor, Projectile.rotation, texMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 		return false;

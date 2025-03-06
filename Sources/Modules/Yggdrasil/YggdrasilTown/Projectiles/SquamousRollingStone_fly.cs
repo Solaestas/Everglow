@@ -5,10 +5,12 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
-public class SquamousRollingStone : ModProjectile
+public class SquamousRollingStone_fly : ModProjectile
 {
 	public int StartDirection = 0;
 	public int StopTimer = 0;
+
+	public override string Texture => ModAsset.SquamousRollingStone_Mod;
 
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -41,7 +43,7 @@ public class SquamousRollingStone : ModProjectile
 
 	public override void AI()
 	{
-		if(Projectile.scale < 0.5)
+		if (Projectile.scale < 0.5)
 		{
 			return;
 		}
@@ -60,11 +62,11 @@ public class SquamousRollingStone : ModProjectile
 		{
 			StopTimer = 0;
 		}
-		if(Projectile.timeLeft == 59)
+		if (Projectile.timeLeft == 59)
 		{
 			SoundEngine.PlaySound(new SoundStyle(ModAsset.SquamousShell_RockExplosion_Mod), Projectile.Center);
 		}
-		if(Projectile.timeLeft == 30)
+		if (Projectile.timeLeft == 30)
 		{
 			var explosion = new RollingRockExplosion
 			{
@@ -79,7 +81,10 @@ public class SquamousRollingStone : ModProjectile
 			};
 			Ins.VFXManager.Add(explosion);
 		}
-		Projectile.velocity.X += StartDirection * 0.04f;
+		if(Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height + 10))
+		{
+			Projectile.velocity.X *= 0.9f;
+		}
 		Projectile.velocity.Y += 0.2f;
 		Projectile.rotation += Projectile.velocity.X * 0.01f;
 	}
