@@ -68,7 +68,7 @@ namespace Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers
 				stringDrawer.DefaultParameters.GetRectangle("ImgSourceRectangle"));
 		}
 
-		public override float WordWrap(ref int index, List<DrawerItem> drawerItems, ref int line, float width, float originWidth)
+		public override float WordWrap(ref int index, List<DrawerItem> drawerItems, ref int line, float width, float originWidth, int? maxLine = null)
 		{
 			Line++;
 			line++;

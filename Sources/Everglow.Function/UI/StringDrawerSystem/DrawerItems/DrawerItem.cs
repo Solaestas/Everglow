@@ -42,7 +42,7 @@ public abstract class DrawerItem : IDrawable
 		ResetAnimation();
 	}
 
-	public abstract float WordWrap(ref int index, List<DrawerItem> drawerItems, ref int line, float width, float originWidth);
+	public abstract float WordWrap(ref int index, List<DrawerItem> drawerItems, ref int line, float width, float maxLineWidth, int? maxLineCount = null);
 
 	public virtual void PostCalculationLineSize(int line, ref Vector2 size)
 	{

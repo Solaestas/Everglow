@@ -1,3 +1,4 @@
+using Everglow.Commons.Utilities;
 using FontStashSharp;
 
 namespace Everglow.Commons.UI.StringDrawerSystem.DrawerItems.TextDrawers;
@@ -43,190 +44,113 @@ public class TextDrawer : DrawerItem
 			Font.LineHeight * text.ReplaceLineEndings().Split(Environment.NewLine).Length);
 
 	/// <summary>
-	/// Wrap text width specific width.
+	/// Wrap text to fit content with specified width constraint.
 	/// </summary>
-	/// <param name="index"></param>
-	/// <param name="drawerItems"></param>
-	/// <param name="line"></param>
-	/// <param name="width"></param>
-	/// <param name="originWidth"></param>
-	/// <returns></returns>
-	public override float WordWrap(ref int index, List<DrawerItem> drawerItems, ref int line, float width, float originWidth)
+	/// <param name="index">Drawer item index</param>
+	/// <param name="drawerItems">Drawer item list</param>
+	/// <param name="line">Line index</param>
+	/// <param name="width">Remaining line width</param>
+	/// <param name="maxLineWidth">Maximum allowed width for any line</param>
+	/// <param name="maxLineCount">Optional maximum number of allowed lines</param>
+	/// <returns>Remaining available width in last line after processing</returns>
+	public override float WordWrap(ref int index, List<DrawerItem> drawerItems, ref int line, float width, float maxLineWidth, int? maxLineCount = null)
 	{
-		if (string.IsNullOrWhiteSpace(Text))
+		// Line limit
+		if (maxLineCount.HasValue && (index >= maxLineCount || line >= maxLineCount))
 		{
-			return 0f;
+			return 0;
 		}
 
-		if (width < GetTextSize(Text[0].ToString()).X)
+		// Handle empty text case
+		if (string.IsNullOrEmpty(Text))
 		{
-			width = originWidth;
+			return 0;
+		}
+
+		// Ensure there's enough space for at least the first character.
+		var firstCharWidth = GetTextSize(Text[0].ToString()).X;
+		if (maxLineWidth < firstCharWidth)
+		{
+			return 0;
+		}
+
+		// If the remaining line width is less than the width of first charactor, move to the next line.
+		if (width < firstCharWidth)
+		{
+			width = maxLineWidth;
 			Line++;
 			line++;
 		}
 
-		string text = Text;
-		int endIndex = text.Length - 1;
-		int middle;
-		int startIndex = 0, oIndex = 0;
+		// =================================== Core Logic ================================ //
+		string initialText = Text; // Preserve the original text for processing.
+		int currentSegmentStart = 0; // Starting index for the current segment of text being processed.
 
-		while (true)
+		int safetyCounter = initialText.Length * 2; // Infinite loop prevention
+		while (safetyCounter-- > 0 && currentSegmentStart < initialText.Length)
 		{
-			middle = (startIndex + endIndex) / 2;
-			Vector2 size = GetTextSize(text[oIndex..(middle + 1)]);
-
-			if (size.X == width)
+			// Part 1: Find maximum fitting segment
+			// ====================================
+			var bestEndIndex = -1;
+			for (int i = currentSegmentStart; i < initialText.Length; i++)
 			{
-				if (IsEnglishWordBoundary(text, middle))
+				Vector2 segmentSize = GetTextSize(initialText[currentSegmentStart..(i + 1)]);
+				if (segmentSize.X < width)
 				{
-					if (oIndex == 0)
-					{
-						Text = text[oIndex..(middle + 1)];
-						width = originWidth;
-					}
-					else
-					{
-						var item = Decomposition(text[oIndex..(middle + 1)], drawerItems, index);
-						item.Line = ++line;
-						drawerItems.Insert(++index, item);
-					}
-					oIndex = middle + 1;
-					startIndex = oIndex;
-					endIndex = text.Length - 1;
+					bestEndIndex = i;
 				}
-				else
+				else if (segmentSize.X > width)
 				{
-					middle = FindPreviousEnglishWordBoundary(text, middle);
-					if (middle < oIndex)
-					{
-						middle = oIndex;
-					}
-
-					if (oIndex == 0)
-					{
-						Text = text[oIndex..(middle + 1)];
-						width = originWidth;
-					}
-					else
-					{
-						var item = Decomposition(text[oIndex..(middle + 1)], drawerItems, index);
-						item.Line = ++line;
-						drawerItems.Insert(++index, item);
-					}
-					oIndex = middle + 1;
-					startIndex = oIndex;
-					endIndex = text.Length - 1;
+					break;
 				}
 			}
-			else if (size.X < width)
+
+			if (bestEndIndex == -1)
 			{
-				startIndex = middle + 1;
+				return 0;
+			}
+
+			// Part 2: Validate split boundaries.
+			// ==================================
+			if (!TextUtils.IsSplitBoundary(initialText, bestEndIndex))
+			{
+				var naturalBreakIndex = TextUtils.FindPreviousSplitBoundary(initialText, bestEndIndex);
+
+				// If the draw length of english word is more than max line width, then line break will be enforced.
+				bestEndIndex = naturalBreakIndex >= currentSegmentStart
+					? naturalBreakIndex // Use natural line break index
+					: bestEndIndex; // Force line break
+			}
+
+			// Part 3: Content segmentation.
+			// =============================
+			string segment = initialText[currentSegmentStart..(bestEndIndex + 1)];
+			if (currentSegmentStart == 0)
+			{
+				// Handle primary text segment.
+				Text = segment;
+				width = maxLineWidth;
 			}
 			else
 			{
-				endIndex = middle - 1;
+				// Create a new drawer item for the splited segments.
+				var item = Decomposition(segment, drawerItems, index);
+				item.Line = ++line;
+				drawerItems.Insert(++index, item);
 			}
 
-			if (startIndex > endIndex)
+			// Update processing state.
+			currentSegmentStart = bestEndIndex + 1;
+
+			// Completion check
+			// ================
+			if (currentSegmentStart >= initialText.Length)
 			{
-				if (IsEnglishWordBoundary(text, startIndex))
-				{
-					if (oIndex == 0)
-					{
-						Text = text[oIndex..startIndex];
-						width = originWidth;
-					}
-					else
-					{
-						var item = Decomposition(text[oIndex..startIndex], drawerItems, index);
-						item.Line = ++line;
-						drawerItems.Insert(++index, item);
-					}
-					oIndex = startIndex;
-					endIndex = text.Length - 1;
-
-					if (startIndex >= text.Length)
-					{
-						return originWidth - drawerItems[index].GetSize().X;
-					}
-				}
-				else
-				{
-					startIndex = FindPreviousEnglishWordBoundary(text, startIndex);
-					if (startIndex < oIndex)
-					{
-						startIndex = oIndex;
-					}
-
-					if (oIndex == 0)
-					{
-						Text = text[oIndex..startIndex];
-						width = originWidth;
-					}
-					else
-					{
-						var item = Decomposition(text[oIndex..startIndex], drawerItems, index);
-						item.Line = ++line;
-						drawerItems.Insert(++index, item);
-					}
-					oIndex = startIndex;
-					endIndex = text.Length - 1;
-
-					if (startIndex >= text.Length)
-					{
-						return originWidth - drawerItems[index].GetSize().X;
-					}
-				}
+				return maxLineWidth - drawerItems[index].GetSize().X;
 			}
 		}
-	}
 
-	/// <summary>
-	/// Helper method to check if a position is an English word boundary
-	/// </summary>
-	/// <param name="text"></param>
-	/// <param name="index"></param>
-	/// <returns></returns>
-	private bool IsEnglishWordBoundary(string text, int index)
-	{
-		if (index <= 0 || index >= text.Length)
-			return true;
-
-		char prevChar = text[index - 1];
-		char currentChar = text[index];
-
-		// Check if the current position is a space or punctuation
-		return char.IsWhiteSpace(currentChar) || char.IsPunctuation(currentChar) ||
-			   (IsEnglishCharacter(prevChar) && !IsEnglishCharacter(currentChar)) ||
-			   (!IsEnglishCharacter(prevChar) && IsEnglishCharacter(currentChar));
-	}
-
-	/// <summary>
-	/// Helper method to find the previous English word boundary
-	/// </summary>
-	/// <param name="text"></param>
-	/// <param name="index"></param>
-	/// <returns></returns>
-	private int FindPreviousEnglishWordBoundary(string text, int index)
-	{
-		for (int i = index; i >= 0; i--)
-		{
-			if (IsEnglishWordBoundary(text, i))
-			{
-				return i;
-			}
-		}
-		return 0;
-	}
-
-	/// <summary>
-	/// Helper method to check if a character is an English letter
-	/// </summary>
-	/// <param name="c"></param>
-	/// <returns></returns>
-	private bool IsEnglishCharacter(char c)
-	{
-		return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+		return 0; // Fallback return (safety counter exhausted)
 	}
 
 	public virtual TextDrawer Decomposition(string text, List<DrawerItem> drawerItems, int index)
