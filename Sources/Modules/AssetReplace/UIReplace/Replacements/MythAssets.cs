@@ -1,8 +1,8 @@
-using Everglow.Commons.AssetReplace.UIReplace.Core;
+using Everglow.AssetReplace.UIReplace.Core;
 using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.AssetReplace.UIReplace.Replacements;
+namespace Everglow.AssetReplace.UIReplace.Replacements;
 
 internal class MythAssets
 {
@@ -14,7 +14,10 @@ internal class MythAssets
 	public void LoadTextures()
 	{
 		for (int i = 2; i <= 18; i++)
+		{
 			InventoryBacks[i - 1] = UIReplaceModule.GetTexture($"UISkinMyth/Inventory/Inventory_Back{i}");
+		}
+
 		InventoryBacks[0] = UIReplaceModule.GetTexture($"UISkinMyth/Inventory/Inventory_BackX");
 
 		ClassicBar.LoadTextures("UISkinMyth");

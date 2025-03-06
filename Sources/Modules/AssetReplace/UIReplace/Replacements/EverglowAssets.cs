@@ -1,8 +1,8 @@
-using Everglow.Commons.AssetReplace.UIReplace.Core;
+using Everglow.AssetReplace.UIReplace.Core;
 using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.AssetReplace.UIReplace.Replacements;
+namespace Everglow.AssetReplace.UIReplace.Replacements;
 
 internal class EverglowAssets
 {
@@ -16,7 +16,10 @@ internal class EverglowAssets
 		for (int i = 0; i <= 18; i++)
 		{
 			if (i is 1)
+			{
 				continue;
+			}
+
 			InventoryBacks[i] = UIReplaceModule.GetTexture($"UISkinEverglow/Inventory/Inventory_Back{i}");
 		}
 		ClassicBar.LoadTextures("UISkinEverglow");

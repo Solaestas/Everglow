@@ -1,8 +1,8 @@
-using Everglow.Commons.AssetReplace.UIReplace.Core;
+using Everglow.AssetReplace.UIReplace.Core;
 using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.AssetReplace.UIReplace.Replacements;
+namespace Everglow.AssetReplace.UIReplace.Replacements;
 
 public class TerrariaAssets
 {
@@ -52,7 +52,6 @@ public class TerrariaAssets
 		FancyBar.StarC = Main.Assets.Request<Texture2D>(str + "Star_C", mode);
 		FancyBar.StarSingle = Main.Assets.Request<Texture2D>(str + "Star_Single", mode);
 		FancyBar.StarFill = Main.Assets.Request<Texture2D>(str + "Star_Fill", mode);
-
 
 		str = "Images/UI/PlayerResourceSets/HorizontalBars/";
 		HorizontalBar.HpFill = Main.Assets.Request<Texture2D>(str + "HP_Fill", mode);

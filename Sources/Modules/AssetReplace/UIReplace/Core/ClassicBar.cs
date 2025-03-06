@@ -1,7 +1,6 @@
 using ReLogic.Content;
-using Terraria.GameContent;
 
-namespace Everglow.Commons.AssetReplace.UIReplace.Core;
+namespace Everglow.AssetReplace.UIReplace.Core;
 
 public class ClassicBar
 {

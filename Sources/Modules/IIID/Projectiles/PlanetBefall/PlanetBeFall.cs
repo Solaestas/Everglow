@@ -95,7 +95,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			Player player = Main.player[Projectile.owner];
 			target = new Vector2(Projectile.ai[0], Projectile.ai[1]);
 
-			if ((Projectile.Center - target).Length() < 10)
+			if ((Projectile.Center - target).Length() < 1000)
 			{
 				Projectile.Kill();
 			}

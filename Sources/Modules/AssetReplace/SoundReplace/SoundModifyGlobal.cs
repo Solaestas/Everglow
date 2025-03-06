@@ -1,4 +1,3 @@
-using Everglow.Commons.AssetReplace;
 using Terraria.Audio;
 using Terraria.UI;
 

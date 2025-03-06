@@ -1,11 +1,10 @@
 using System.Reflection;
-using Everglow.Commons.AssetReplace.UIReplace.Replacements;
-using Everglow.Commons.FeatureFlags;
+using Everglow.AssetReplace.UIReplace.Replacements;
 using Everglow.Commons.Modules;
 using ReLogic.Content;
 using Terraria.GameContent.UI.ResourceSets;
 
-namespace Everglow.Commons.AssetReplace.UIReplace.Core;
+namespace Everglow.AssetReplace.UIReplace.Core;
 
 public class UIReplaceModule : IModule
 {
@@ -28,13 +27,17 @@ public class UIReplaceModule : IModule
 	public static Asset<Texture2D> GetTexture(string path) =>
 		ModContent.Request<Texture2D>("Everglow/AssetReplace/Resources/" + path, AssetRequestMode.ImmediateLoad);
 
-	public static Asset<T> LoadVanillaAsset<T>(string assetName) where T : class =>
+	public static Asset<T> LoadVanillaAsset<T>(string assetName)
+		where T : class
+		=>
 		Main.Assets.Request<T>(assetName, AssetRequestMode.ImmediateLoad);
 
 	public void Load()
 	{
 		if (Main.netMode == NetmodeID.Server)
+		{
 			return;
+		}
 
 		TerrariaAssets.LoadTextures();
 		EternalAssets.LoadTextures();
@@ -63,6 +66,7 @@ public class UIReplaceModule : IModule
 			case TextureReplaceMode.Everglow:
 				EverglowAssets.Apply();
 				break;
+
 			// 有人直接改config配置文件？
 			default:
 				DefaultAssets.Apply();
@@ -73,7 +77,9 @@ public class UIReplaceModule : IModule
 	public void Unload()
 	{
 		if (Main.netMode == NetmodeID.Server)
+		{
 			return;
+		}
 
 		ReplaceTextures(TextureReplaceMode.Terraria);
 		TerrariaAssets.Apply();

@@ -1,8 +1,6 @@
-using System.Reflection;
 using ReLogic.Content;
-using Terraria.GameContent.UI.ResourceSets;
 
-namespace Everglow.Commons.AssetReplace.UIReplace.Core;
+namespace Everglow.AssetReplace.UIReplace.Core;
 
 public class HorizontalBar
 {

@@ -1,8 +1,8 @@
-using Everglow.Commons.AssetReplace.UIReplace.Core;
+using Everglow.AssetReplace.UIReplace.Core;
 using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.AssetReplace.UIReplace.Replacements;
+namespace Everglow.AssetReplace.UIReplace.Replacements;
 
 internal class DefaultAssets
 {
@@ -16,13 +16,16 @@ internal class DefaultAssets
 		for (int i = 1; i <= 17; i++)
 		{
 			if (i is 16)
+			{
 				continue;
+			}
+
 			InventoryBacks[i - 1] = UIReplaceModule.GetTexture($"UISkinDefault/Inventory/Inventory_Back{i}");
 		}
 
-		//ClassicBar.LoadTextures("UISkinMyth");
-		//FancyBar.LoadTextures("UISkinMyth");
-		//HorizontalBar.LoadTextures("UISkinMyth");
+		// ClassicBar.LoadTextures("UISkinMyth");
+		// FancyBar.LoadTextures("UISkinMyth");
+		// HorizontalBar.LoadTextures("UISkinMyth");
 	}
 
 	public void Apply()
@@ -49,8 +52,9 @@ internal class DefaultAssets
 		UIReplaceModule.TerrariaAssets.ClassicBar.ReplaceTextures();
 		UIReplaceModule.TerrariaAssets.FancyBar.ReplaceTextures();
 		UIReplaceModule.TerrariaAssets.HorizontalBar.ReplaceTextures();
-		//ClassicBar.ReplaceTextures();
-		//FancyBar.ReplaceTextures();
-		//HorizontalBar.ReplaceTextures();
+
+		// ClassicBar.ReplaceTextures();
+		// FancyBar.ReplaceTextures();
+		// HorizontalBar.ReplaceTextures();
 	}
 }

@@ -1,8 +1,8 @@
-using Everglow.Commons.AssetReplace.UIReplace.Core;
+using Everglow.AssetReplace.UIReplace.Core;
 using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.AssetReplace.UIReplace.Replacements;
+namespace Everglow.AssetReplace.UIReplace.Replacements;
 
 internal class EternalAssets
 {
@@ -11,7 +11,9 @@ internal class EternalAssets
 	public void LoadTextures()
 	{
 		for (int i = 0; i <= 4; i++)
+		{
 			InventoryBacks[i] = UIReplaceModule.GetTexture($"UISkinEternal/Inventory/ItemSlot_{i}");
+		}
 	}
 
 	public void Apply()

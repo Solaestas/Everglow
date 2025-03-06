@@ -1,7 +1,7 @@
 using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.AssetReplace.UIReplace.Core;
+namespace Everglow.AssetReplace.UIReplace.Core;
 
 // Most code from Example Mod. In "VanillaLifeOverlay" and "VanillaManaOverlay"
 internal class VanillaResourceOverlay : ModResourceOverlay

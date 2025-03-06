@@ -1,13 +1,14 @@
 using System.Text;
 using Terraria.Audio;
 using Terraria.ModLoader.Core;
-using Hook = Everglow.Commons.AssetReplace.IModifyItemPickSound;
+using Hook = Everglow.AssetReplace.IModifyItemPickSound;
 
-namespace Everglow.Commons.AssetReplace
+namespace Everglow.AssetReplace
 {
 	public interface IModifyItemPickSound
 	{
 		public static readonly GlobalHookList<GlobalItem> Hook = ItemLoader.AddModHook(GlobalHookList<GlobalItem>.Create(e => (e as Hook).ModifyItemPickSound));
+
 		/// <summary>
 		/// 用于替换掉从物品槽拿起/放下物品的音效（不会在服务器运行）
 		/// </summary>
@@ -20,7 +21,9 @@ namespace Everglow.Commons.AssetReplace
 		/// </param>
 		/// <param name="customSound"> <seealso cref="SoundStyle"/> 音效实例</param>
 		/// <param name="playOriginalSound">是否播放原版音效</param>
-		virtual void ModifyItemPickSound(Item item, int context, bool putIn, ref SoundStyle? customSound, ref bool playOriginalSound) { }
+		virtual void ModifyItemPickSound(Item item, int context, bool putIn, ref SoundStyle? customSound, ref bool playOriginalSound)
+		{
+		}
 
 		/// <summary>
 		/// 给 <seealso cref="ModItem"/> 添加自定义音效的快捷方法
@@ -59,7 +62,7 @@ namespace Everglow.Commons.AssetReplace
 				using var stream = ModIns.Mod.GetFileStream(path);
 				using var streamReader = new StreamReader(stream, Encoding.UTF8);
 
-				string lastLine = "";
+				string lastLine = string.Empty;
 				string fileContents = streamReader.ReadLine();
 
 				while (fileContents is not null)
@@ -68,6 +71,7 @@ namespace Everglow.Commons.AssetReplace
 					{
 						ids.Add(id);
 					}
+
 					// 星号表示从A到B的范围
 					else if (int.TryParse(lastLine, out int lastID) && fileContents == "*")
 					{
