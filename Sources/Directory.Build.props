@@ -1,42 +1,35 @@
 <Project>
-	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<PlatformTarget>AnyCPU</PlatformTarget>
-		<LangVersion>preview</LangVersion>
-		<NoWarn>$(NoWarn);CS0436</NoWarn>
-		<Modules>AssetReplace;CagedDomain;EternalResolve;Example;Food;IIID;MEAC;Minortopography;Myth;Ocean;Plant;PlantAndFarm;SpellAndSkull;SubSpace;Yggdrasil;ZY</Modules>
-		<DefineConstants>$(DefineConstants);$(Modules)</DefineConstants>
-		<EnableModBuilder>false</EnableModBuilder>
-		<EnablePathGenerator>true</EnablePathGenerator>
-		<CompileEffect>true</CompileEffect>
-		<NotCopyLocal>true</NotCopyLocal>
-	</PropertyGroup>
-	<ItemGroup>
-		<AdditionalFiles Include="**\*.json" Pack="true" ModPath="%(Identity)" />
-	</ItemGroup>
-	<ItemGroup>
-		<AdditionalFiles Include="**\*.atlas" Pack="true" ModPath="%(Identity)" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Solaestas.tModLoader.ModBuilder"
-						  Version="1.5.11" />
-		<PackageReference Include="StyleCop.Analyzers.Unstable"
-						  Version="1.2.0.556">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<Publicize Include="ReLogic" />
-		<Publicize Include="MonoMod.RuntimeDetour" />
-		<Publicize Include="MonoMod.Utils" />
-		<AdditionalFiles Include="**\*.obj;**\*.bmp;**\*.mapio"
-						 Pack="true"
-						 ModPath="%(Identity)"
-						 Exclude="bin\**\*;obj\**\*" />
-		<AdditionalFiles Include="$(MSBuildThisFileFullPath)"
-						 Pack="false"
-						 Visible="false" />
-	</ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>preview</LangVersion>
+    <NoWarn>$(NoWarn);CS0436</NoWarn>
+    <Modules>
+    </Modules>
+    <DefineConstants>$(DefineConstants);$(Modules)</DefineConstants>
+    <EnableModBuilder>false</EnableModBuilder>
+    <EnablePathGenerator>true</EnablePathGenerator>
+    <CompileEffect>true</CompileEffect>
+    <NotCopyLocal>true</NotCopyLocal>
+  </PropertyGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="**\*.json" Pack="true" ModPath="%(Identity)" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="**\*.atlas" Pack="true" ModPath="%(Identity)" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.5.11" />
+    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <Publicize Include="ReLogic" />
+    <Publicize Include="MonoMod.RuntimeDetour" />
+    <Publicize Include="MonoMod.Utils" />
+    <AdditionalFiles Include="**\*.obj;**\*.bmp;**\*.mapio" Pack="true" ModPath="%(Identity)" Exclude="bin\**\*;obj\**\*" />
+    <AdditionalFiles Include="$(MSBuildThisFileFullPath)" Pack="false" Visible="false" />
+  </ItemGroup>
 </Project>

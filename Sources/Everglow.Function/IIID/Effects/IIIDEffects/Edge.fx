@@ -1,30 +1,45 @@
 sampler uImage0 : register(s0);
 
+int RenderTargetSize;
+
+int EdgeNumber;
+//float4 Range1[];
+//float4 Range2[];
+//float4 EdgeColor[];
+
 float4 edge(float2 coords : TEXCOORD0) : COLOR0
 {
-	float4 color = float4(0.0, 0.0, 0.0, 0.0);
-    if (any(color))
+    //Range1 = Range1[EdgeNumber];
+   // Range1 = Range2[EdgeNumber];
+   // EdgeColor = EdgeColor[EdgeNumber];
+    float4 color = tex2D(uImage0, coords);
+    if (color.a != 0)
         return color;
-    // è·å–æ¯ä¸ªåƒç´ çš„æ­£ç¡®å¤§å°
-    float dx = 1 / 500;
-    float dy = 1 / 500;
+    // »ñÈ¡Ã¿¸öÏñËØµÄÕıÈ·´óĞ¡
+    float dx = 2;
+    float dy = 2;
     bool flag = false;
-    // å¯¹å‘¨å›´8æ ¼è¿›è¡Œåˆ¤å®š
+    // ¶ÔÖÜÎ§8¸ñ½øĞĞÅĞ¶¨
     for (int i = -1; i <= 1; i++)
     {
         for (int j = -1; j <= 1; j++)
         {
-            float4 c = tex2D(uImage0, coords + float2(dx * i, dy * j));
-            // å¦‚æœä»»ä½•ä¸€ä¸ªåƒç´ æœ‰é¢œè‰²
+            float4 c = tex2D(uImage0, (coords * 1280 + float2(dx * i, dy * j)) / 1280);
+            // Èç¹ûÈÎºÎÒ»¸öÏñËØÓĞÑÕÉ«
             if (any(c))
             {
-                // ä¸çŸ¥é“ä¸ºå•¥ï¼Œè¿™é‡Œç›´æ¥returnä¼šè¢«ç¼–è¯‘å™¨å®‰æ’ï¼Œæ‰€ä»¥åªèƒ½æ‰“æ ‡è®°äº†
-                flag = true;
+                if (c.r + c.b + c.g >= 1.5)
+                {
+                    return float4(0.3, 0.05, 0, 1);
+
+                }
+                else
+                {
+                    return float4(0, 0, 0, 1);
+                }
             }
         }
     }
-    if (flag)
-        return float4(0, 0, 0, 1);
     return color;
 }
 
@@ -32,6 +47,6 @@ technique Technique1
 {
     pass Edge
     {
-        PixelShader = compile ps_2_0 edge();
+        PixelShader = compile ps_3_0 edge();
     }
 }

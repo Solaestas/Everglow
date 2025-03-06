@@ -10,7 +10,6 @@ using Terraria.GameContent;
 
 namespace Everglow.IIID.Projectiles.PlanetBefall
 {
-
 	public class PlanetBeFall : IIIDProj
 	{
 		public Vector2 target;
@@ -20,14 +19,14 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 		public override void SetDef()
 		{
 			model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
-			IIIDTexture = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture").Value;
-			NormalTexture = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture").Value;
+			IIIDTexture = ModAsset.PlanetBeFallTexture.Value;
+			NormalTexture = ModAsset.PlanetBeFallTexture.Value;
 			MaterialTexture = TextureAssets.MagicPixel.Value;
-			EmissionTexture = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallEmission").Value;
+			EmissionTexture = ModAsset.PlanetBeFallEmission.Value;
 			bloom = new BloomParams
 			{
 				BlurIntensity = 1.0f,
-				BlurRadius = 1.0f
+				BlurRadius = 1.0f,
 			};
 			artParameters = new ArtParameters
 			{
@@ -40,7 +39,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 				FieldOfView = MathF.PI / 3f,
 				AspectRatio = 1.0f,
 				ZNear = 1f,
-				ZFar = 1200f
+				ZFar = 1200f,
 			};
 		}
 
@@ -48,18 +47,18 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 		{
 			var t = new Vector3(5, -50, 5000 - s);
 			return
-				 Matrix.CreateScale((float)1000 / RenderTargetSize)
+				 Matrix.CreateScale(1000F / RenderTargetSize)
 				* Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
 				* Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
 				* Matrix.CreateTranslation(t)
-				* Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0) * rate,
-									 new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 500) * rate,
-									 new Vector3(0, -1, 0) * rate)
+				* Matrix.CreateLookAt(
+					new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0) * rate,
+					new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 500) * rate,
+					new Vector3(0, -1, 0) * rate)
 				* Main.GameViewMatrix.ZoomMatrix
 				* Matrix.CreateTranslation(new Vector3(-Main.GameViewMatrix.TransformationMatrix.M41, -Main.GameViewMatrix.TransformationMatrix.M42, 0));
-			;
-
 		}
+
 		public override void OnSpawn(IEntitySource source)
 		{
 			Player player = Main.player[Projectile.owner];
@@ -90,6 +89,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 
 			base.OnSpawn(source);
 		}
+
 		public override void AI()
 		{
 			Player player = Main.player[Projectile.owner];
@@ -110,7 +110,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 					position = Projectile.Center + newVelocity * 22 + new Vector2(0, Main.rand.NextFloat(0f, 200f)).RotatedByRandom(MathHelper.TwoPi) - Projectile.velocity * 5 + new Vector2(0, -100),
 					maxTime = Main.rand.Next(160, 250),
 					scale = Main.rand.NextFloat(30f, 146f),
-					ai = new float[] { 0, 0 }
+					ai = new float[] { 0, 0 },
 				};
 				Ins.VFXManager.Add(somg);
 				if (Projectile.velocity.Length() < 12.5f)
@@ -118,51 +118,53 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 					Projectile.velocity *= 1.1f;
 				}
 				if (s < 3500)
+				{
 					s = MathHelper.Lerp(s, 3500, 0.05f);
+				}
 			}
 			player.heldProj = Projectile.whoAmI;
 		}
 
 		public override void OnKill(int timeLeft)
 		{
-
 			Player player = Main.player[Projectile.owner];
 			PlanetBeFallScreenMovePlayer PlanetBeFallScreenMovePlayer = player.GetModPlayer<PlanetBeFallScreenMovePlayer>();
 			PlanetBeFallScreenMovePlayer.PlanetBeFallAnimation = false;
 			PlanetBeFallScreenMovePlayer.proj = null;
 			PlanetBeFallScreenMovePlayer.AnimationTimer = 0;
 
-			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - new Vector2(0, 100), Vector2.zeroVector, ModContent.ProjectileType<PlanetBefallExplosion>(), (int)(Projectile.damage * (100) / 100f), Projectile.knockBack * 0.4f, Projectile.owner, 60);
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - new Vector2(0, 100), Vector2.zeroVector, ModContent.ProjectileType<PlanetBefallExplosion>(), (int)(Projectile.damage * 100 / 100f), Projectile.knockBack * 0.4f, Projectile.owner, 60);
 			SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, player.Center);
 			ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 150).RotatedByRandom(6.283);
 			base.OnKill(timeLeft);
 		}
 
-		//public ObjReader.Model model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
-
+		// public ObjReader.Model model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
 		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 		{
-			//overPlayers.Add(index);
+			// overPlayers.Add(index);
 		}
-		float s = 0;
+
+		private float s = 0;
 
 		public class TestProjModelSystem : ModSystem
 		{
 			public override void OnModLoad()
 			{
-				//PlanetBeFall.model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
-				//PlanetBeFall.NormalMap = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture");
+				// PlanetBeFall.model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
+				// PlanetBeFall.NormalMap = ModContent.Request<Texture2D>("Everglow/IIID/Projectiles/PlanetBefall/PlanetBeFallTexture");
 				base.OnModLoad();
 			}
-
 		}
+
 		public class PlanetBeFallScreenMovePlayer : ModPlayer
 		{
 			public int AnimationTimer = 0;
 			public bool PlanetBeFallAnimation = false;
 			public Projectile proj;
-			const float MaxTime = 135;
+			private const float MaxTime = 135;
+
 			public override void ModifyScreenPosition()
 			{
 				Vector2 target;
@@ -176,7 +178,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 							Player.immune = true;
 							Player.immuneTime = 60;
 							AnimationTimer += 1;
-							float Value = (1 - MathF.Cos((AnimationTimer) * MathF.PI / 45)) / 2f;
+							float Value = (1 - MathF.Cos(AnimationTimer * MathF.PI / 45)) / 2f;
 							if (AnimationTimer >= 45 && AnimationTimer < 90)
 							{
 								Value = 1;
@@ -192,7 +194,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 								PlanetBeFallAnimation = false;
 							}
 
-							Main.screenPosition = (Value).Lerp(Main.screenPosition, target);
+							Main.screenPosition = Value.Lerp(Main.screenPosition, target);
 						}
 					}
 				}
