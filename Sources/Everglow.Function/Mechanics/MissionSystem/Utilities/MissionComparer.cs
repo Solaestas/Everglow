@@ -9,7 +9,11 @@ public class MissionComparer : IComparer<MissionBase>
 
 	public int Compare(MissionBase x, MissionBase y)
 	{
-		if (x.MissionType != y.MissionType)
+		if (x.PoolType != y.PoolType)
+		{
+			return x.PoolType - y.PoolType;
+		}
+		else if (x.MissionType != y.MissionType)
 		{
 			if (x.MissionType is MissionType.None)
 			{
