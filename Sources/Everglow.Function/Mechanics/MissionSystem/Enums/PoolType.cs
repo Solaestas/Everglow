@@ -1,4 +1,4 @@
-﻿namespace Everglow.Commons.Mechanics.MissionSystem.Enums;
+namespace Everglow.Commons.Mechanics.MissionSystem.Enums;
 
 /// <summary>
 /// 任务池类型
@@ -23,9 +23,9 @@ public enum PoolType
 	Available,
 
 	/// <summary>
-	/// 任务完成且已领取奖励的任务池
+	/// 任务失败的任务池
 	/// </summary>
-	Completed,
+	Failed,
 
 	/// <summary>
 	/// 逾期未完成的任务池
@@ -33,7 +33,7 @@ public enum PoolType
 	Overdue,
 
 	/// <summary>
-	/// 任务失败的任务池
+	/// 任务完成且已领取奖励的任务池
 	/// </summary>
-	Failed,
+	Completed,
 }
