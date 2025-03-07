@@ -1,12 +1,10 @@
-using Everglow.Commons.Vertex;
-using Everglow.Commons.MEAC;
-using Terraria.GameContent;
-using Everglow.Commons.Utilities;
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.Utilities;
+using Everglow.Commons.Vertex;
 
-namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
+namespace Everglow.MEAC.PlanetBeFall.Projectiles.NonIIIDProj.PlanetBefallArray
 {
-	public class PlanetBefallArray : ModProjectile //,IBloomProjectile
+	public class PlanetBefallArray : ModProjectile // ,IBloomProjectile
 	{
 		public override void SetDefaults()
 		{
@@ -19,10 +17,12 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			Projectile.DamageType = DamageClass.Magic;
 			Projectile.tileCollide = false;
 		}
+
 		internal float Timer = 0;
 		internal float alpha = 1;
 		public float BloomIntensity = 1;
 		public int PlanetBeFallProj;
+
 		public override void AI()
 		{
 			Player player = Main.player[Projectile.owner];
@@ -30,36 +30,40 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			float f = 0.025f;
 			if (Timer < 40)
 			{
-				Timer = MathHelper.Lerp(Timer, 20,f);
+				Timer = MathHelper.Lerp(Timer, 20, f);
 			}
 			if (Projectile.timeLeft < 150)
 			{
 				alpha *= 0.95f;
 			}
-			
+
 			if (!Main.projectile[PlanetBeFallProj].active)
 			{
 				Projectile.ai[0]++;
 				BloomIntensity = MathF.Sin(Projectile.ai[0] / (5 * MathF.PI)) / 3f + 1;
 			}
 		}
+
 		public override void OnKill(int timeLeft)
 		{
 			BloomIntensity = 0;
 			base.OnKill(timeLeft);
 		}
+
 		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 		{
 			overPlayers.Add(index);
 		}
+
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Projectile.hide = false;
-			
+
 			DrawMagicArray();
-			
+
 			return false;
 		}
+
 		public void DrawBloom()
 		{
 			Color c = Color.White;
@@ -78,7 +82,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			float timeValue = Projectile.timeLeft / 300f;
 			Vector2 drawCenter = Projectile.Center - Main.screenPosition + new Vector2(0, -100);
 			float mulGeoColor = MathF.Sin(MathF.Pow(Math.Clamp(1.4f - timeValue, 0, 1), 5f) * MathHelper.Pi);
-			if(mulGeoColor < 0)
+			if (mulGeoColor < 0)
 			{
 				mulGeoColor = 0;
 			}
@@ -87,7 +91,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			Main.spriteBatch.Draw(GeoElement, drawCenter, null, geoColor, 0, GeoElement.Size() / 2f, scaleGeo, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(GeoElement_glow, drawCenter, null, geoColor * 0.2f, 0, GeoElement_glow.Size() / 2f, scaleGeo, SpriteEffects.None, 0);
 
-			SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+			SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			float mulOutSideCircleColor = MathF.Sin(MathF.Pow(Math.Clamp(1.4f - timeValue, 0, 1), 8f) * MathHelper.Pi);
@@ -96,7 +100,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 
 			DrawTexCircle(610, 120, Color.White * alpha, drawCenter, ModAsset.PlantBeFallOut_black.Value, Timer * 0.1f);
 			DrawTexCircle(610, 120, outideCircleColor, drawCenter, PlantBeFallOut, Timer * 0.1f);
-			for (int radious = 450;radious < 620;radious += 50)
+			for (int radious = 450; radious < 620; radious += 50)
 			{
 				float mulCircleColor = MathF.Sin(MathF.Pow(Math.Clamp(2.1f - radious / 800f - timeValue, 0, 1), 24f) * MathHelper.Pi);
 				Color circleColor = new Color(0.9f, 0.6f, 0.1f, 0f) * mulCircleColor * 0.5f;
@@ -106,7 +110,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 			float mulInsideCircleColor = MathF.Sin(MathF.Pow(Math.Clamp(1.4f - timeValue, 0, 1), 10f) * MathHelper.Pi);
 			float mulInsideCircleColorBlack = MathF.Sin(MathF.Pow(Math.Clamp(1.35f - timeValue, 0, 1), 3f) * MathHelper.Pi);
 			Color insideCircleColor = new Color(0.9f, 0.4f, 0.1f, 0f) * mulInsideCircleColor * 2f * alpha;
-			List<Vertex2D> barsInside = new List<Vertex2D>();
+			var barsInside = new List<Vertex2D>();
 			float range = 550;
 			Vector2 Point1 = drawCenter + new Vector2(range).RotatedBy(Math.PI * 0);
 			Vector2 Point2 = drawCenter + new Vector2(range).RotatedBy(Math.PI * 1 / 2d);
@@ -151,7 +155,7 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 
 		private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			for (int h = 0; h < radious / 2; h++)
 			{
 				circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
@@ -167,7 +171,5 @@ namespace Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 4);
 			}
 		}
-
-
 	}
 }

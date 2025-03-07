@@ -1,7 +1,5 @@
-using ReLogic.Content;
-using Terraria.GameContent;
+namespace Everglow.MEAC.PlanetBeFall.Buffs;
 
-namespace Everglow.IIID.Buffs;
 public class Petrification : ModBuff
 {
 	public override void SetStaticDefaults()
@@ -10,16 +8,19 @@ public class Petrification : ModBuff
 		Main.pvpBuff[Type] = true;
 		Main.buffNoSave[Type] = true;
 	}
+
 	public override void Update(NPC npc, ref int buffIndex)
 	{
 		base.Update(npc, ref buffIndex);
 	}
 }
+
 public class PetrificationNPC : GlobalNPC
 {
 	public override void UpdateLifeRegen(NPC npc, ref int damage)
 	{
 	}
+
 	public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		if (npc.HasBuff(ModContent.BuffType<Petrification>()))
@@ -27,7 +28,7 @@ public class PetrificationNPC : GlobalNPC
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			Effect frozenEff = ModAsset.PetrificationNPC.Value;
-		 	frozenEff.Parameters["uImageSize"].SetValue(Main.npcFrameCount[npc.type]);
+			frozenEff.Parameters["uImageSize"].SetValue(Main.npcFrameCount[npc.type]);
 			frozenEff.Parameters["uHeatMap"].SetValue(ModAsset.PetrificationColor.Value);
 			frozenEff.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_crack_dense.Value);
 			frozenEff.Parameters["drawColor"].SetValue(drawColor.ToVector4());
@@ -35,6 +36,7 @@ public class PetrificationNPC : GlobalNPC
 		}
 		return base.PreDraw(npc, spriteBatch, screenPos, drawColor);
 	}
+
 	public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		if (npc.HasBuff(ModContent.BuffType<Petrification>()))
@@ -44,6 +46,7 @@ public class PetrificationNPC : GlobalNPC
 		}
 		base.PostDraw(npc, spriteBatch, screenPos, drawColor);
 	}
+
 	public override void FindFrame(NPC npc, int frameHeight)
 	{
 		if (npc.HasBuff(ModContent.BuffType<Petrification>()))
@@ -52,23 +55,22 @@ public class PetrificationNPC : GlobalNPC
 		}
 		base.FindFrame(npc, frameHeight);
 	}
+
 	public override bool PreAI(NPC npc)
 	{
-
 		if (npc.HasBuff(ModContent.BuffType<Petrification>()))
 		{
 			npc.velocity *= 0;
 			return false;
 		}
 		else
-		{ 
-			return base.PreAI(npc); 
+		{
+			return base.PreAI(npc);
 		}
 	}
 
 	public override void AI(NPC npc)
 	{
-
 		if (npc.HasBuff(ModContent.BuffType<Petrification>()))
 		{
 			npc.velocity *= 0;
@@ -76,7 +78,7 @@ public class PetrificationNPC : GlobalNPC
 		}
 		else
 		{
-		    base.AI(npc);
+			base.AI(npc);
 		}
 	}
 }

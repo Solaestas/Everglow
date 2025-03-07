@@ -1,16 +1,16 @@
 using Everglow.Commons.IIID;
 using Everglow.Commons.Utilities;
-using Everglow.IIID.Projectiles.NonIIIDProj.GoldenCrack;
-using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallArray;
-using Everglow.IIID.Projectiles.NonIIIDProj.PlanetBefallExplosion;
-using Everglow.IIID.VFXs;
+using Everglow.MEAC.PlanetBeFall.Projectiles.NonIIIDProj.GoldenCrack;
+using Everglow.MEAC.PlanetBeFall.Projectiles.NonIIIDProj.PlanetBefallArray;
+using Everglow.MEAC.PlanetBeFall.Projectiles.NonIIIDProj.PlanetBefallExplosion;
+using Everglow.MEAC.PlanetBeFall.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 
-namespace Everglow.IIID.Projectiles.PlanetBefall
+namespace Everglow.MEAC.PlanetBeFall.Projectiles.PlanetBefall
 {
-	public class PlanetBeFall : IIIDProj
+	public class PlanetBeFall_Proj : IIIDProj
 	{
 		public Vector2 target;
 		public Vector2 spawnposition;
@@ -18,7 +18,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 
 		public override void SetDef()
 		{
-			model = ObjReader.LoadFile("Everglow/IIID/Projectiles/PlanetBefall/PlanetBefall.obj");
+			model = ObjReader.LoadFile(ModAsset.PlanetBeFallModel_Mod);
 			IIIDTexture = ModAsset.PlanetBeFallTexture.Value;
 			NormalTexture = ModAsset.PlanetBeFallTexture.Value;
 			MaterialTexture = TextureAssets.MagicPixel.Value;
@@ -77,7 +77,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 
 			for (int i = 0; i < 16; i++)
 			{
-				Vector2 v = new Vector2(0.001f, 0);
+				var v = new Vector2(0.001f, 0);
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, v.RotatedBy(Math.PI * i / 8).RotatedByRandom(Math.PI * i / 100), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
 			}
 
@@ -95,7 +95,7 @@ namespace Everglow.IIID.Projectiles.PlanetBefall
 			Player player = Main.player[Projectile.owner];
 			target = new Vector2(Projectile.ai[0], Projectile.ai[1]);
 
-			if ((Projectile.Center - target).Length() < 1000)
+			if ((Projectile.Center - target).Length() < 10)
 			{
 				Projectile.Kill();
 			}

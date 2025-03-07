@@ -3,15 +3,16 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
 
-namespace Everglow.IIID.VFXs;
-public class PlanetBeFallFirePipeline : Pipeline
+namespace Everglow.MEAC.PlanetBeFall.VFXs;
+
+public class Spark_RockCrackPipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModAsset.PlanetBeFallFire;
-		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
-		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.PlanetBeFallColor.Value);
+		effect = ModAsset.Spark_RockCrack;
+		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.Spark_RockCrack_Heatmap.Value);
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
@@ -30,10 +31,12 @@ public class PlanetBeFallFirePipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
-[Pipeline(typeof(PlanetBeFallFirePipeline), typeof(BloomPipeline))]
-public class PlanetBeFallFireDust : Visual
+
+[Pipeline(typeof(Spark_RockCrackPipeline), typeof(BloomPipeline))]
+public class Spark_RockCrackDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public Vector2 position;
 	public Vector2 velocity;
 	public float[] ai;
@@ -41,9 +44,15 @@ public class PlanetBeFallFireDust : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-	public PlanetBeFallFireDust() { }
+	public bool noGravity;
+
+	public Spark_RockCrackDust()
+	{
+	}
+
 	public override void Update()
 	{
+		ai[1] *= 0.99f;
 		position += velocity;
 		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
 		{
@@ -53,37 +62,44 @@ public class PlanetBeFallFireDust : Visual
 		{
 			timer = maxTime;
 		}
-		velocity *= 0.9f;
-		velocity += new Vector2(Main.windSpeedCurrent * 0.1f, -0.1f);
-		if (scale < 160)
+		velocity *= 0.98f;
+		scale *= 0.96f;
+		if (maxTime - timer < 50)
 		{
-			scale += 2f;
+			scale *= 0.9f;
 		}
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+			return;
+		}
 		velocity = velocity.RotatedBy(ai[1]);
 		if (Collision.SolidCollision(position, 0, 0))
 		{
-			timer++;
+			velocity *= -0.2f;
+			timer += 10;
+		}
+		if (scale < 0.5f)
+		{
+			timer += 20;
 		}
 		float pocession = 1 - timer / maxTime;
-		float c = pocession * scale * 0.02f;
-		Lighting.AddLight(position, c*10,c*10 , 0);
+		float c = pocession * scale * 0.1f;
+		Lighting.AddLight(position, c * 0.66f, c * 0.49f, 0.09f * c);
 	}
 
 	public override void Draw()
 	{
-		float pocession = timer / maxTime;
-		float timeValue = (float)(Main.time * 0.002);
-		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
-		List<Vertex2D> bars = new List<Vertex2D>()
+		float pocession = ai[0] / 3f + 1 / 6f;
+		Vector2 toCorner = new Vector2(0, scale * 0.2f).RotatedBy(velocity.ToRotation() - MathHelper.PiOver2);
+		var bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + toCorner,new Color(0, 0,pocession,  0.1f), new Vector3(ai[0],timeValue,0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 1, pocession,  0.1f), new Vector3(ai[0], timeValue + 0.4f, 0)),
+			new Vertex2D(position + toCorner + velocity * 6, new Color(0, 0, pocession, 0.0f), new Vector3(0)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5) + velocity * 6, new Color(0, 1, pocession, 0.0f), new Vector3(0)),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0 ,pocession,  0.1f), new Vector3(ai[0] + 0.4f, timeValue, 0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession, 0.1f), new Vector3(ai[0] + 0.4f, timeValue + 0.4f, 0))
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5), new Color(1, 0, pocession, 0.0f), new Vector3(0)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1), new Color(1, 1, pocession, 0.0f), new Vector3(0)),
 		};
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
