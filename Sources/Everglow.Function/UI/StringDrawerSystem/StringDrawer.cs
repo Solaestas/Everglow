@@ -112,10 +112,11 @@ public class StringDrawer : IDrawable
 	}
 
 	/// <summary>
-	/// 设置单行宽度，超过则自动换行
+	/// Set word wrap
 	/// </summary>
-	/// <param name="wrapWidth">行宽</param>
-	public void SetWordWrap(float wrapWidth)
+	/// <param name="maxLineWidth"></param>
+	/// <param name="maxLineWidth"></param>
+	public void SetWordWrap(float maxLineWidth, int? maxLineCount = null)
 	{
 		if (drawerItems.Count == 0)
 		{
@@ -123,7 +124,7 @@ public class StringDrawer : IDrawable
 		}
 
 		int addLine = 0, nowLine = 0;
-		float width = wrapWidth;
+		float width = maxLineWidth;
 		float nowWidth = 0f;
 		for (int i = 0; i < drawerItems.Count; i++)
 		{
@@ -132,7 +133,7 @@ public class StringDrawer : IDrawable
 			{
 				nowLine = item.Line;
 				nowWidth = 0f;
-				width = wrapWidth;
+				width = maxLineWidth;
 			}
 			item.Line += addLine;
 			float itemLength = item.GetSize().X;
@@ -140,13 +141,13 @@ public class StringDrawer : IDrawable
 			if (nowWidth == width)
 			{
 				nowWidth = 0f;
-				width = wrapWidth;
+				width = maxLineWidth;
 			}
 			else if (nowWidth > width)
 			{
 				int line = item.Line, lineCache = line;
 				width = item.WordWrap(ref i, drawerItems, ref line,
-					width - nowWidth + itemLength, wrapWidth);
+					width - nowWidth + itemLength, maxLineWidth, maxLineCount - nowLine + 1);
 				addLine += line - lineCache;
 				nowWidth = 0f;
 			}

@@ -90,7 +90,7 @@ internal class TimerIconDrawer : DrawerItem
 		Size += Size % 2;
 	}
 
-	public override float WordWrap(ref int index, List<DrawerItem> drawerItems, ref int line, float width, float originWidth)
+	public override float WordWrap(ref int index, List<DrawerItem> drawerItems, ref int line, float width, float originWidth, int? maxLine = null)
 	{
 		Line++;
 		line++;

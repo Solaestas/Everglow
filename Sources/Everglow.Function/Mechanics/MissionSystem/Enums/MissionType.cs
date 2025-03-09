@@ -22,14 +22,14 @@ public enum MissionType
 	SideStory,
 
 	/// <summary>
-	/// 成就任务 - 白
+	/// 传说任务 - 彩
 	/// </summary>
-	Achievement,
+	Legendary,
 
 	/// <summary>
-	/// 挑战任务 - 红
+	/// 成就任务 - 绿
 	/// </summary>
-	Challenge,
+	Achievement,
 
 	/// <summary>
 	/// 日常任务 - 蓝
@@ -37,7 +37,7 @@ public enum MissionType
 	Daily,
 
 	/// <summary>
-	/// 传说任务 - 彩
+	/// 挑战任务 - 红
 	/// </summary>
-	Legendary,
+	Challenge,
 }
