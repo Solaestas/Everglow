@@ -754,14 +754,26 @@ public class BaseElement : IDrawable
 		}
 
 		if (ChildrenElements.Count > 0)
-			ChildrenElements.ForEach(child =>
+		{
+			BaseElement child;
+			List<BaseElement> childrens;
+			for (int i = ChildrenElements.Count - 1; i >= 0; i--)
 			{
+				child = ChildrenElements[i];
 				if (child != null && child.IsVisible)
-					elements.AddRange(child.GetElementsContainsPoint(point));
-			});
+				{
+					childrens = child.GetElementsContainsPoint(point);
+					elements.AddRange(childrens);
+					if (childrens.Count > 0 && child.Info.InteractiveMask)
+						break;
+				}
+			}
+		}
 
 		if (elements.Count == 0 && contains && Info.CanBeInteract && !elements.Contains(this))
+		{
 			elements.Add(this);
+		}
 		return elements;
 	}
 
