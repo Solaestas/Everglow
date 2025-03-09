@@ -1,4 +1,4 @@
-﻿sampler2D uImage : register(s0);
+sampler2D uImage : register(s0);
 texture uNoise;
 sampler uNoiseSampler =
 sampler_state
@@ -59,4 +59,8 @@ technique Technique1
         VertexShader = compile vs_3_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 PixelShaderFunction();
     }
+	pass OnlyPixel
+	{
+		PixelShader = compile ps_3_0 PixelShaderFunction();
+	}
 }

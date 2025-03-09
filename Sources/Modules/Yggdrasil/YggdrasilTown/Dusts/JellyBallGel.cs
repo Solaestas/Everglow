@@ -6,6 +6,7 @@ public class JellyBallGel : ModDust
 	{
 		return base.Update(dust);
 	}
+
 	public override Color? GetAlpha(Dust dust, Color lightColor)
 	{
 		return lightColor * 0.5f;

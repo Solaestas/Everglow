@@ -1,7 +1,7 @@
-using Terraria.IO;
 using Terraria.ObjectData;
 
 namespace Everglow.SubSpace.Tiles;
+
 public abstract class RoomDoorExitTile : ModTile
 {
 	public override void SetStaticDefaults()
@@ -16,12 +16,13 @@ public abstract class RoomDoorExitTile : ModTile
 			16,
 			16,
 			16,
-			16
+			16,
 		};
 		TileObjectData.addTile(Type);
 		AddMapEntry(new Color(86, 62, 44));
 		base.SetStaticDefaults();
 	}
+
 	public override bool RightClick(int i, int j)
 	{
 		RoomManager.ExitALevelOfRoom();

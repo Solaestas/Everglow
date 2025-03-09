@@ -4,7 +4,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class VitalizedRocksProj_Explosion : ModProjectile
 {
-	public override string Texture => "Everglow/Yggdrasil/YggdrasilTown/Projectiles/CyanVineStaff_proj";
+	public override string Texture => Commons.ModAsset.Empty_Mod;
 
 	public override void SetDefaults()
 	{

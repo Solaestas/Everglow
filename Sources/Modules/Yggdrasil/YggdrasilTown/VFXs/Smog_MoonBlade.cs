@@ -1,4 +1,5 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
+
 public class Smog_MoonBladePipeline : Pipeline
 {
 	public override void Load()
@@ -7,6 +8,7 @@ public class Smog_MoonBladePipeline : Pipeline
 		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
 		effect.Value.Parameters["uPowder"].SetValue(Commons.ModAsset.Noise_Sand.Value);
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
@@ -19,18 +21,22 @@ public class Smog_MoonBladePipeline : Pipeline
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
+
 	public override void EndRender()
 	{
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(Smog_MoonBladePipeline))]
 public class Smog_MoonBladeDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public Vector2 position;
 	public Vector2 velocity;
 	public float[] ai;
+
 	/// <summary>
 	/// ai[0]x相位
 	/// ai[1]角速度
@@ -40,7 +46,11 @@ public class Smog_MoonBladeDust : Visual
 	public float timer;
 	public float maxTime;
 	public float scale;
-	public Smog_MoonBladeDust() { }
+
+	public Smog_MoonBladeDust()
+	{
+	}
+
 	public override void Update()
 	{
 		position += velocity;
@@ -48,10 +58,16 @@ public class Smog_MoonBladeDust : Visual
 
 		oldPos.Add(position);
 		if (oldPos.Count > 15)
+		{
 			oldPos.RemoveAt(0);
+		}
+
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		velocity = velocity.RotatedBy(ai[1]);
 		float pocession = 1 - timer / maxTime;
 		float c = pocession * scale * 0.01f;
@@ -64,7 +80,10 @@ public class Smog_MoonBladeDust : Visual
 		float timeValue = timer / maxTime;
 		int len = pos.Length;
 		if (len <= 2)
+		{
 			return;
+		}
+
 		var bars = new Vertex2D[len * 2 - 1];
 		for (int i = 1; i < len; i++)
 		{
@@ -88,9 +107,11 @@ public class Smog_MoonBladeDust : Visual
 public class Smog_MoonBladeWave : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public Vector2 position;
 	public Vector2 velocity;
 	public float[] ai;
+
 	/// <summary>
 	/// ai[0]x相位
 	/// ai[1]角速度
@@ -99,14 +120,21 @@ public class Smog_MoonBladeWave : Visual
 	public float timer;
 	public float maxTime;
 	public float radius;
-	public Smog_MoonBladeWave() { }
+
+	public Smog_MoonBladeWave()
+	{
+	}
+
 	public override void Update()
 	{
 		position += velocity;
 		radius += ai[1] * ((maxTime - timer) / maxTime);
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		float delC = ai[2] * 0.05f * (float)Math.Sin((maxTime - timer) / maxTime * Math.PI);
 		Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.015f * delC, 0, 0.45f * delC);
 	}
@@ -116,7 +144,10 @@ public class Smog_MoonBladeWave : Visual
 		float timeValue = timer / maxTime;
 		int len = (int)(radius / 3f);
 		if (len <= 2)
+		{
 			return;
+		}
+
 		var bars = new Vertex2D[len * 2 + 2];
 		for (int i = 0; i < len + 1; i++)
 		{

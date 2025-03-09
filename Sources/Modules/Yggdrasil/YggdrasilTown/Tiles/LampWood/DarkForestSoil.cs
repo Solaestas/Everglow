@@ -1,5 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Everglow.Yggdrasil.YggdrasilTown.TwilightForest.Tiles;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 

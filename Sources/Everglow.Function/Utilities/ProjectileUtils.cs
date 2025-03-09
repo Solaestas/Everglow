@@ -16,6 +16,56 @@ public static class ProjectileUtils
 		return IsSafeInTheWorld(projectile.TopLeft) && IsSafeInTheWorld(projectile.TopRight) && IsSafeInTheWorld(projectile.BottomLeft) && IsSafeInTheWorld(projectile.BottomRight);
 	}
 
+	/// <summary>
+	/// Find closest target by given position.
+	/// </summary>
+	/// <param name="fromWhere"></param>
+	/// <returns></returns>
+	public static int FindTarget(Vector2 fromWhere, int searchDistance)
+	{
+		int target = -1;
+		float minDis = searchDistance;
+		foreach (NPC npc in Main.npc)
+		{
+			if (npc != null && npc.active)
+			{
+				if (npc.CanBeChasedBy() && !npc.dontTakeDamage && npc.life > 0)
+				{
+					float dis = (npc.Center - fromWhere).Length() - npc.Hitbox.Size().Length() * 0.5f;
+					if (dis < minDis)
+					{
+						minDis = dis;
+						target = npc.whoAmI;
+					}
+				}
+			}
+		}
+
+		return target;
+	}
+
+	/// <summary>
+	/// Check if target is active
+	/// </summary>
+	/// <returns>
+	/// active: true | inactive: false
+	/// </returns>
+	public static bool MinionCheckTargetActive(int targetWhoAmI)
+	{
+		if (targetWhoAmI < 0)
+		{
+			return false;
+		}
+
+		NPC target = Main.npc[targetWhoAmI];
+		if (!target.active || target.dontTakeDamage || !target.CanBeChasedBy() || target.friendly)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
 	public static bool IsSafeInTheWorld(Vector2 position)
 	{
 		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
@@ -28,6 +78,7 @@ public static class ProjectileUtils
 		}
 		return true;
 	}
+
 	public abstract class StickNPCProjectile : ModProjectile
 	{
 		/// <summary>

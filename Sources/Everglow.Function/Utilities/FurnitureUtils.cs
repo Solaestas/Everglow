@@ -10,8 +10,6 @@ namespace Everglow.Commons.Utilities;
 
 public static class FurnitureUtils
 {
-	#region Swingable Object Drawing
-
 	public static void BannerFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		int top = pos.Y - Main.tile[pos].TileFrameY / 18;
@@ -48,7 +46,9 @@ public static class FurnitureUtils
 		var tileData = TileObjectData.GetTileData(tile.type, 0);
 
 		if (!TileDrawing.IsVisible(tile) || tileData is null)
+		{
 			return;
+		}
 
 		// 油漆
 		Texture2D tex = tileDrawing.GetTileDrawTexture(tile, pos.X, pos.Y);
@@ -63,6 +63,7 @@ public static class FurnitureUtils
 		int sizeY = tileData.Height;
 
 		int offsetY = tileData.DrawYOffset;
+
 		// 锤子是这样的
 		if (WorldGen.IsBelowANonHammeredPlatform(topTileX, topTileY))
 		{
@@ -71,7 +72,9 @@ public static class FurnitureUtils
 
 		float windCycle = 0;
 		if (tileDrawing.InAPlaceWithWind(topLeft.X, topLeft.Y, sizeX, sizeY))
+		{
 			windCycle = tileDrawing.GetWindCycle(topTileX, topTileY, tileDrawing._sunflowerWindCounter);
+		}
 
 		// 普通源码罢了
 		int totalPushTime = 60;
@@ -93,11 +96,14 @@ public static class FurnitureUtils
 		// heightStrength是用于旗帜类物块的，根据高度来决定该格物块的摇曳力度
 		float heightStrength = (pos.Y - topLeft.Y + 1) / (float)sizeY;
 		if (heightStrength == 0f)
+		{
 			heightStrength = 0.1f;
+		}
 
 		// 计算绘制坐标和origin，原版代码
 		Vector2 tileCoordPos = pos.ToWorldCoordinates(0, 0) - screenPosition;
 		tileCoordPos += offset;
+
 		// 用于旗帜
 		float swayCorrection = Math.Abs(windCycle) * swayOffset * heightStrength;
 		Vector2 finalOrigin = center - tileCoordPos;
@@ -105,7 +111,10 @@ public static class FurnitureUtils
 
 		// 旋转角度
 		if (swayOffset == 0f)
+		{
 			heightStrength = 1f;
+		}
+
 		float rotation = -windCycle * swayStrength * heightStrength;
 
 		// 绘制
@@ -113,7 +122,9 @@ public static class FurnitureUtils
 
 		// 有火的话绘制火
 		if (TileLoader.GetTile(tile.type) is not ITileFlameData tileFlame)
+		{
 			return;
+		}
 
 		TileDrawing.TileFlameData tileFlameData = tileFlame.GetTileFlameData(pos.X, pos.Y, tile.type, tileFrameY);
 		ulong seed = tileFlameData.flameSeed is 0 ? Main.TileFrameSeed ^ (ulong)(((long)pos.X << 32) | (uint)pos.Y) : tileFlameData.flameSeed;
@@ -131,7 +142,9 @@ public static class FurnitureUtils
 		var tileData = TileObjectData.GetTileData(tileTopLeft.type, 0);
 
 		if (tileData is null)
+		{
 			return;
+		}
 
 		int bottomTileX = topLeft.X + tileData.Origin.X;
 		int bottomTileY = topLeft.Y + tileData.Origin.Y;
@@ -140,14 +153,15 @@ public static class FurnitureUtils
 
 		float windCycle = 0;
 		if (tileDrawing.InAPlaceWithWind(topLeft.X, topLeft.Y, sizeX, sizeY))
+		{
 			windCycle = tileDrawing.GetWindCycle(bottomTileX, bottomTileY, tileDrawing._sunflowerWindCounter);
+		}
 
 		// 原版灌木并不考虑推力
 		// int totalPushTime = 60;
 		// float pushForcePerFrame = 1.26f;
 		// float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(topLeft.X, topLeft.Y, sizeX, sizeY, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
 		// windCycle += highestWindGridPushComplex;
-
 		Vector2 center = topLeft.ToWorldCoordinates(16f * sizeX * 0.5f, 16f * sizeY) - screenPosition;
 		float num = 0.15f;
 		ushort type = Main.tile[topLeft].type;
@@ -158,14 +172,18 @@ public static class FurnitureUtils
 			{
 				Tile tile = Main.tile[i, j];
 				if (tile.type != type || !TileDrawing.IsVisible(tile))
+				{
 					continue;
+				}
 
 				short tileFrameX = tile.frameX;
 				short tileFrameY = tile.frameY;
 
 				float heightStrength = 1f - (j - topLeft.Y + 1) / (float)sizeY;
 				if (heightStrength == 0f)
+				{
 					heightStrength = 0.1f;
+				}
 
 				tileDrawing.GetTileDrawData(i, j, tile, type, ref tileFrameX, ref tileFrameY, out var tileWidth, out var tileHeight, out var tileTop, out var halfBrickHeight, out var addFrX, out var addFrY, out var tileSpriteEffect, out var _, out var _, out var _);
 
@@ -181,13 +199,13 @@ public static class FurnitureUtils
 				{
 					spriteBatch.Draw(tileDrawTexture, center + new Vector2(0f, swayCorrection), new Rectangle(tileFrameX, tileFrameY, tileWidth, tileHeight - halfBrickHeight), tileLight, windCycle * num * heightStrength, origin, 1f, tileSpriteEffect, 0f);
 					if (glowmask != null)
+					{
 						spriteBatch.Draw(glowmask, center + new Vector2(0f, swayCorrection), new Rectangle(tileFrameX, tileFrameY, tileWidth, tileHeight - halfBrickHeight), Color.White, windCycle * num * heightStrength, origin, 1f, tileSpriteEffect, 0f);
+					}
 				}
 			}
 		}
 	}
-
-	#endregion
 
 	public static bool BedRightClick(int i, int j)
 	{
@@ -197,7 +215,10 @@ public static class FurnitureUtils
 		int spawnY = j + 2;
 
 		if (tile.TileFrameY % 38 != 0)
+		{
 			spawnY--;
+		}
+
 		if (!Player.IsHoveringOverABottomSideOfABed(i, j))
 		{ // This assumes your bed is 4x2 with 2x2 sections. You have to write your own code here otherwise
 			if (player.IsWithinSnappngRangeToTile(i, j, PlayerSleepingHelper.BedSleepingMaxDistance))
@@ -265,14 +286,18 @@ public static class FurnitureUtils
 		Player player = Main.LocalPlayer;
 
 		if (!player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance))
+		{
 			return;
+		}
 
 		player.noThrow = 2;
 		player.cursorItemIconEnabled = true;
 		player.cursorItemIconID = ModContent.ItemType<T>();
 
 		if (Main.tile[i, j].TileFrameX / 18 < 1)
+		{
 			player.cursorItemIconReversed = true;
+		}
 	}
 
 	public static bool ChestRightClick(int i, int j)
@@ -283,10 +308,14 @@ public static class FurnitureUtils
 		int left = i;
 		int top = j;
 		if (tile.TileFrameX % 36 != 0)
+		{
 			left--;
+		}
 
 		if (tile.TileFrameY != 0)
+		{
 			top--;
+		}
 
 		player.CloseSign();
 		player.SetTalkNPC(-1);
@@ -354,14 +383,21 @@ public static class FurnitureUtils
 		int left = i;
 		int top = j;
 		if (tile.TileFrameX % 36 != 0)
+		{
 			left--;
+		}
 
 		if (tile.TileFrameY != 0)
+		{
 			top--;
+		}
+
 		int chest = Chest.FindChest(left, top);
 		player.cursorItemIconID = -1;
 		if (chest < 0)
+		{
 			player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
+		}
 		else
 		{
 			player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : chestName;
@@ -394,28 +430,41 @@ public static class FurnitureUtils
 		string text = "AM";
 		double time = Main.time;
 		if (!Main.dayTime)
+		{
 			time += 54000.0;
+		}
 
 		time = time / 86400.0 * 24.0;
 		time = time - 7.5 - 12.0;
 		if (time < 0.0)
+		{
 			time += 24.0;
+		}
 
 		if (time >= 12.0)
+		{
 			text = "PM";
+		}
 
 		int intTime = (int)time;
 		double deltaTime = time - intTime;
 		deltaTime = (int)(deltaTime * 60.0);
 		string text2 = string.Concat(deltaTime);
 		if (deltaTime < 10.0)
+		{
 			text2 = "0" + text2;
+		}
 
 		if (intTime > 12)
+		{
 			intTime -= 12;
+		}
 
 		if (intTime == 0)
+		{
 			intTime = 12;
+		}
+
 		Main.NewText($"Time: {intTime}:{text2} {text}", 255, 240, 20);
 		return true;
 	}
@@ -518,16 +567,23 @@ public static class FurnitureUtils
 		int top = Player.tileTargetY;
 		left -= tile.TileFrameX % 54 / 18;
 		if (tile.TileFrameY % 36 != 0)
+		{
 			top--;
+		}
+
 		int chestIndex = Chest.FindChest(left, top);
 		player.cursorItemIconID = -1;
 		if (chestIndex < 0)
+		{
 			player.cursorItemIconText = Language.GetTextValue("LegacyDresserType.0");
+		}
 		else
 		{
 			string defaultName = TileLoader.DefaultContainerName(tile.TileType, left, top); // This gets the ContainerName text for the currently selected language
 			if (player.cursorItemIconText == defaultName)
+			{
 				player.cursorItemIconText = Main.chest[chestIndex].name;
+			}
 			else
 			{
 				player.cursorItemIconText = chestName;
@@ -556,15 +612,22 @@ public static class FurnitureUtils
 		int top = Player.tileTargetY;
 		left -= tile.TileFrameX % 54 / 18;
 		if (tile.TileFrameY % 36 != 0)
+		{
 			top--;
+		}
+
 		int chest = Chest.FindChest(left, top);
 		player.cursorItemIconID = -1;
 		if (chest < 0)
+		{
 			player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
+		}
 		else
 		{
 			if (Main.chest[chest].name != string.Empty)
+			{
 				player.cursorItemIconText = Main.chest[chest].name;
+			}
 			else
 			{
 				player.cursorItemIconText = chestName;
@@ -603,18 +666,22 @@ public static class FurnitureUtils
 		Player player = Main.LocalPlayer;
 
 		if (!player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance))
+		{
 			return;
+		}
 
 		player.noThrow = 2;
 		player.cursorItemIconEnabled = true;
 		player.cursorItemIconID = ModContent.ItemType<T>();
 
 		if (Main.tile[i, j].TileFrameX / 18 < 1)
+		{
 			player.cursorItemIconReversed = true;
+		}
 	}
 
 	/// <summary>
-	///触发电线信号(正常的StyleHorizontal物块)
+	/// 触发电线信号(正常的StyleHorizontal物块)
 	/// </summary>
 	/// <param name="i"></param>
 	/// <param name="j"></param>
@@ -634,9 +701,12 @@ public static class FurnitureUtils
 			{
 				tile = Main.tile[m, n];
 				if (!tile.HasTile)
+				{
 					continue;
+				}
+
 				if (tile.TileType == type)
-				{		
+				{
 					if (tile.TileFrameX < coordinateX * tileX)
 					{
 						tile = Main.tile[m, n];
@@ -651,17 +721,20 @@ public static class FurnitureUtils
 			}
 		}
 		if (!Wiring.running)
+		{
 			return;
+		}
+
 		for (int k = 0; k < tileX; k++)
 		{
 			for (int l = 0; l < tileY; l++)
 			{
-				//安全化处理
+				// 安全化处理
 				if (x + k > 0 && x + k < Main.maxTilesX)
 				{
 					if (y + l > 0 && y + l < Main.maxTilesY)
 					{
-						//异形MultiTile检测
+						// 异形MultiTile检测
 						if (Main.tile[x + k, y + l].TileType == type)
 						{
 							Wiring.SkipWire(x + k, y + l);
@@ -671,8 +744,9 @@ public static class FurnitureUtils
 			}
 		}
 	}
+
 	/// <summary>
-	///触发电线信号(特例StyleVertical物块)
+	/// 触发电线信号(特例StyleVertical物块)
 	/// </summary>
 	/// <param name="i"></param>
 	/// <param name="j"></param>
@@ -692,7 +766,10 @@ public static class FurnitureUtils
 			{
 				tile = Main.tile[m, n];
 				if (!tile.HasTile)
+				{
 					continue;
+				}
+
 				if (tile.TileType == type)
 				{
 					if (tile.TileFrameY < coordinateY * tileY)
@@ -709,17 +786,20 @@ public static class FurnitureUtils
 			}
 		}
 		if (!Wiring.running)
+		{
 			return;
+		}
+
 		for (int k = 0; k < tileX; k++)
 		{
 			for (int l = 0; l < tileY; l++)
 			{
-				//安全化处理
-				if(x + k > 0 && x + k < Main.maxTilesX)
+				// 安全化处理
+				if (x + k > 0 && x + k < Main.maxTilesX)
 				{
 					if (y + l > 0 && y + l < Main.maxTilesY)
 					{
-						//异形MultiTile检测
+						// 异形MultiTile检测
 						if (Main.tile[x + k, y + l].TileType == type)
 						{
 							Wiring.SkipWire(x + k, y + l);
@@ -730,6 +810,7 @@ public static class FurnitureUtils
 		}
 	}
 }
+
 /// <summary>
 /// 桌物品模板
 /// </summary>
@@ -749,6 +830,7 @@ public abstract class TableItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 椅物品模板
 /// </summary>
@@ -768,6 +850,7 @@ public abstract class ChairItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 工作台物品模板
 /// </summary>
@@ -787,6 +870,7 @@ public abstract class WorkBenchItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 吊灯物品模板
 /// </summary>
@@ -806,6 +890,7 @@ public abstract class ChandelierItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 蜡烛物品模板
 /// </summary>
@@ -825,6 +910,7 @@ public abstract class CandleItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 烛台物品模板
 /// </summary>
@@ -844,6 +930,7 @@ public abstract class CandelabraItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 灯物品模板
 /// </summary>
@@ -863,6 +950,7 @@ public abstract class LampItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 灯笼物品模板
 /// </summary>
@@ -882,6 +970,7 @@ public abstract class LanternItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 沙发物品模板
 /// </summary>
@@ -901,6 +990,7 @@ public abstract class SofaItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 床物品模板
 /// </summary>
@@ -920,6 +1010,7 @@ public abstract class BedItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 马桶物品模板
 /// </summary>
@@ -939,6 +1030,7 @@ public abstract class ToiletItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 平台物品模板
 /// </summary>
@@ -958,6 +1050,7 @@ public abstract class PlatformItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 书架物品模板
 /// </summary>
@@ -977,6 +1070,7 @@ public abstract class BookcaseItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 水盆物品模板
 /// </summary>
@@ -996,6 +1090,7 @@ public abstract class SinkItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 箱子物品模板
 /// </summary>
@@ -1015,6 +1110,7 @@ public abstract class ChestItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 浴缸物品模板
 /// </summary>
@@ -1034,6 +1130,7 @@ public abstract class BathtubItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 钢琴物品模板
 /// </summary>
@@ -1053,6 +1150,7 @@ public abstract class PianoItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 钟物品模板
 /// </summary>
@@ -1071,7 +1169,50 @@ public abstract class ClockItem : ModItem
 		Item.maxStack = Item.CommonMaxStack;
 		Item.useAnimation = 14;
 	}
+
+	public static float GetHourHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if (!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 43200 * MathHelper.TwoPi);
+	}
+
+	public static float GetMinuteHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if (!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 3600 * MathHelper.TwoPi);
+	}
+
+	public static float GetSecondHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if (!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 60 * MathHelper.TwoPi);
+	}
 }
+
 /// <summary>
 /// 梳妆台物品模板
 /// </summary>
@@ -1091,6 +1232,7 @@ public abstract class DresserItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
+
 /// <summary>
 /// 门物品模板
 /// </summary>
@@ -1110,4 +1252,3 @@ public abstract class DoorItem : ModItem
 		Item.useAnimation = 14;
 	}
 }
-

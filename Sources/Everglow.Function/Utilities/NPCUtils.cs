@@ -35,7 +35,7 @@ public class NoGameModeScale : GlobalNPC
 	}
 }
 
-public class NPCUtils
+public static class NPCUtils
 {
 	public static void TryCloseDoor(NPC npc)
 	{
@@ -161,6 +161,7 @@ public class NPCUtils
 			{
 				Vector2 bottom = default;
 				npc.SitDown(npc.Center.ToTileCoordinates(), out npc.direction, out bottom);
+				Main.NewText(bottom);
 				npc.spriteDirection = npc.direction;
 				npc.velocity *= 0;
 				return true;
@@ -219,5 +220,14 @@ public class NPCUtils
 			return false;
 		}
 		return true;
+	}
+
+	public static int GetVanillaDotDamage(this NPC npc, IEnumerable<int> buffTypes)
+	{
+		return buffTypes
+			.Where(npc.HasBuff)
+			.Where(type => BuffUtils.VanillaDotDebuffDamageOnNPC.TryGetValue(type, out int _))
+			.Select(type => npc.buffTime[npc.FindBuffIndex(type)] * BuffUtils.VanillaDotDebuffDamageOnNPC[type])
+			.Sum();
 	}
 }
