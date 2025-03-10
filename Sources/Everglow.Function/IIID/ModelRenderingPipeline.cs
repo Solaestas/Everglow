@@ -166,10 +166,10 @@ namespace Everglow.Commons.IIID
 
 			ShadingPass();
 
-			// BloomPass();
-			// ToneMappingPass();
-			// ConcaveEdgePass();
-			// FinalBlend();
+			BloomPass();
+			ToneMappingPass();
+			//ConcaveEdgePass();  //这两个调试用，别动
+			//FinalBlend();      //这两个调试用，别动
 			if (artParams.EnablePixelArt)
 			{
 				PixelArt();
