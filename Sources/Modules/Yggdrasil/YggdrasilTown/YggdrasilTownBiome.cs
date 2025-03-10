@@ -1,4 +1,6 @@
-using Everglow.Yggdrasil.Common;
+using Everglow.Yggdrasil.WorldGeneration;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles;
+using SubworldLibrary;
 
 namespace Everglow.Yggdrasil.YggdrasilTown;
 
@@ -25,7 +27,62 @@ public class YggdrasilTownBiome : ModBiome
 
 	public override bool IsBiomeActive(Player player)
 	{
-		return Background.YggdrasilTownBackground.BiomeActive();
+		return BiomeActive();
+	}
+
+	public static bool CheckedBiomeCenter = false;
+
+	public static Vector2 BiomeCenter = Vector2.zeroVector;
+
+	/// <summary>
+	/// 地形中心
+	/// </summary>
+	public static Vector2 GetBiomeCenter()
+	{
+		if (!CheckedBiomeCenter)
+		{
+			for (int x = 20; x < Main.maxTilesX - 20; x++)
+			{
+				for (int y = Main.maxTilesY - 1000; y < Main.maxTilesY - 20; y++)
+				{
+					Tile tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+					if (tile.TileType == ModContent.TileType<YggdrasilCommonBlock>())
+					{
+						if (tile.TileFrameX == 0)
+						{
+							if (tile.TileFrameY == 0)
+							{
+								CheckedBiomeCenter = true;
+								return new Point(x, y).ToWorldCoordinates();
+							}
+						}
+					}
+				}
+			}
+			CheckedBiomeCenter = true;
+		}
+		else if (BiomeCenter == Vector2.zeroVector)
+		{
+			return new Vector2(Main.maxTilesX / 2f * 16, (Main.maxTilesY - 1000) * 16);
+		}
+		return Vector2.zeroVector;
+	}
+
+	/// <summary>
+	/// 判定是否开启地形
+	/// </summary>
+	/// <returns></returns>
+	public static bool BiomeActive()
+	{
+		BiomeCenter = GetBiomeCenter();
+		if (Main.screenPosition.Y > (BiomeCenter.Y - 18000))
+		{
+			if (SubworldSystem.IsActive<YggdrasilWorld>())
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public override void OnInBiome(Player player)

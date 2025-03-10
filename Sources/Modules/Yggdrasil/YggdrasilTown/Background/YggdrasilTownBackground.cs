@@ -11,7 +11,7 @@ public class YggdrasilTownBackground : ModSystem
 	/// <summary>
 	/// 地形中心
 	/// </summary>
-	public static Vector2 BiomeCenter => new Vector2(Main.maxTilesX / 2f * 16, (Main.maxTilesY - 1000) * 16);
+	public static Vector2 BackgroundAnchoredCenter => YggdrasilTownBiome.BiomeCenter;
 
 	/// <summary>
 	/// Origin Pylon
@@ -65,8 +65,10 @@ public class YggdrasilTownBackground : ModSystem
 	public override void PostUpdateEverything()// 开启地下背景
 	{
 		const float increase = 0.02f;
-		if (BiomeActive() && Main.BackgroundEnabled)
+		//Main.NewText(YggdrasilTownBiome.BiomeActive());
+		if (YggdrasilTownBiome.BiomeActive() && Main.BackgroundEnabled)
 		{
+			YggdrasilEnvironmentLightManager.LightingScene = YggdrasilScene.YggdrasilTown;
 			if (BackgroundAlpha < 1)
 			{
 				BackgroundAlpha += increase;
@@ -92,23 +94,6 @@ public class YggdrasilTownBackground : ModSystem
 	}
 
 	/// <summary>
-	/// 判定是否开启地形
-	/// </summary>
-	/// <returns></returns>
-	public static bool BiomeActive()
-	{
-		if (Main.screenPosition.Y > (BiomeCenter.Y - 18000))
-		{
-			if (SubworldSystem.IsActive<YggdrasilWorld>())
-			{
-				YggdrasilEnvironmentLightManager.LightingScene = YggdrasilScene.YggdrasilTown;
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/// <summary>
 	/// 绘制天穹城镇背景
 	/// </summary>
 	/// <param name="baseColor"></param>
@@ -117,7 +102,7 @@ public class YggdrasilTownBackground : ModSystem
 		var texSky = ModAsset.YggdrasilTownBackgroundSky.Value;
 
 		// 旧背景
-		BackgroundManager.QuickDrawBG(texSky, float.PositiveInfinity, BiomeCenter, baseColor, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 16000));
+		BackgroundManager.QuickDrawBG(texSky, float.PositiveInfinity, BackgroundAnchoredCenter, baseColor, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 16000));
 
 		DrawYggdrasilTown_Town(baseColor);
 		DrawMidnightBayou(baseColor);
@@ -157,8 +142,8 @@ public class YggdrasilTownBackground : ModSystem
 			var bayouFar = ModAsset.Town_Far.Value;
 			Vector2 correction = OriginPylonCenter;
 
-			BackgroundManager.QuickDrawBG(bayouFar, 15f, correction, baseColor * BackgroundAlphaYggdrasilTown, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 18000), false, true);
-			BackgroundManager.QuickDrawBG(bayouClose, 6f, correction + new Vector2(0, 1000), baseColor * BackgroundAlphaYggdrasilTown, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 18000), false, true);
+			BackgroundManager.QuickDrawBG(bayouFar, 15f, correction, baseColor * BackgroundAlphaYggdrasilTown, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 18000), false, true);
+			BackgroundManager.QuickDrawBG(bayouClose, 6f, correction + new Vector2(0, 1000), baseColor * BackgroundAlphaYggdrasilTown, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 18000), false, true);
 		}
 	}
 
@@ -196,11 +181,11 @@ public class YggdrasilTownBackground : ModSystem
 			var bayouSky = ModAsset.MidnightBayou_Sky.Value;
 			Vector2 correction = OriginPylonCenter;
 
-			BackgroundManager.QuickDrawBG(bayouSky, float.PositiveInfinity, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 18000), false, true);
-			BackgroundManager.QuickDrawBG(bayouMiddle2, 80f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 18000), false, true);
-			BackgroundManager.QuickDrawBG(bayouMiddle1, 20f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 18000), false, true);
-			BackgroundManager.QuickDrawBG(bayouMiddle0, 10f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 18000), false, true);
-			BackgroundManager.QuickDrawBG(bayouClose, 6f, correction + new Vector2(0, 3000), baseColor * BackgroundAlphaMidnightBayou, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 18000), false, true);
+			BackgroundManager.QuickDrawBG(bayouSky, float.PositiveInfinity, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 18000), false, true);
+			BackgroundManager.QuickDrawBG(bayouMiddle2, 80f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 18000), false, true);
+			BackgroundManager.QuickDrawBG(bayouMiddle1, 20f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 18000), false, true);
+			BackgroundManager.QuickDrawBG(bayouMiddle0, 10f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 18000), false, true);
+			BackgroundManager.QuickDrawBG(bayouClose, 6f, correction + new Vector2(0, 3000), baseColor * BackgroundAlphaMidnightBayou, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 18000), false, true);
 		}
 	}
 
@@ -285,11 +270,11 @@ public class YggdrasilTownBackground : ModSystem
 					var stoneFar = ModAsset.StoneCageOfChallengesFar.Value;
 					var stoneSky = ModAsset.StoneCageOfChallengesSky.Value;
 
-					BackgroundManager.QuickDrawBG(stoneSky, float.PositiveInfinity, backgroundCenter + new Vector2(0, -1800), baseColor * BackgroundAlphaCage, (int)(BiomeCenter.Y - 25600), (int)(BiomeCenter.Y + 8000), true, true);
-					BackgroundManager.QuickDrawBG(stoneFar, 30, backgroundCenter + new Vector2(0, -9000), baseColor * BackgroundAlphaCage, (int)(BiomeCenter.Y - 25600), (int)(BiomeCenter.Y + 8000), true, true);
-					BackgroundManager.QuickDrawBG(stoneMiddle, 20, backgroundCenter + new Vector2(0, -4800), baseColor * BackgroundAlphaCage, (int)(BiomeCenter.Y - 25600), (int)(BiomeCenter.Y + 8000), true, true);
-					BackgroundManager.QuickDrawBG(stoneClose, 12, backgroundCenter + new Vector2(0, -1800), baseColor * BackgroundAlphaCage, (int)(BiomeCenter.Y - 25600), (int)(BiomeCenter.Y + 8000), true, true);
-					BackgroundManager.QuickDrawBG(stoneClose2, 3, backgroundCenter + new Vector2(0, 100), baseColor * BackgroundAlphaCage, (int)(BiomeCenter.Y - 25600), (int)(BiomeCenter.Y + 8000), true, true);
+					BackgroundManager.QuickDrawBG(stoneSky, float.PositiveInfinity, backgroundCenter + new Vector2(0, -1800), baseColor * BackgroundAlphaCage, (int)(BackgroundAnchoredCenter.Y - 25600), (int)(BackgroundAnchoredCenter.Y + 8000), true, true);
+					BackgroundManager.QuickDrawBG(stoneFar, 30, backgroundCenter + new Vector2(0, -9000), baseColor * BackgroundAlphaCage, (int)(BackgroundAnchoredCenter.Y - 25600), (int)(BackgroundAnchoredCenter.Y + 8000), true, true);
+					BackgroundManager.QuickDrawBG(stoneMiddle, 20, backgroundCenter + new Vector2(0, -4800), baseColor * BackgroundAlphaCage, (int)(BackgroundAnchoredCenter.Y - 25600), (int)(BackgroundAnchoredCenter.Y + 8000), true, true);
+					BackgroundManager.QuickDrawBG(stoneClose, 12, backgroundCenter + new Vector2(0, -1800), baseColor * BackgroundAlphaCage, (int)(BackgroundAnchoredCenter.Y - 25600), (int)(BackgroundAnchoredCenter.Y + 8000), true, true);
+					BackgroundManager.QuickDrawBG(stoneClose2, 3, backgroundCenter + new Vector2(0, 100), baseColor * BackgroundAlphaCage, (int)(BackgroundAnchoredCenter.Y - 25600), (int)(BackgroundAnchoredCenter.Y + 8000), true, true);
 				}
 			}
 		}
@@ -343,10 +328,10 @@ public class YggdrasilTownBackground : ModSystem
 			var lampSky = ModAsset.LampWoodSky.Value;
 			Vector2 correction = new Vector2(0, LampWoodCenterY - 4000);
 
-			BackgroundManager.QuickDrawBG(lampSky, float.PositiveInfinity, correction, baseColor * BackgroundAlphaLampWood, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
-			BackgroundManager.QuickDrawBG(lampFar, 20f, correction, baseColor * BackgroundAlphaLampWood, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
-			BackgroundManager.QuickDrawBG(lampMiddle, 10f, correction, baseColor * BackgroundAlphaLampWood, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
-			BackgroundManager.QuickDrawBG(lampClose, 6f, correction + new Vector2(0, 6000), baseColor * BackgroundAlphaLampWood, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), false, true);
+			BackgroundManager.QuickDrawBG(lampSky, float.PositiveInfinity, correction, baseColor * BackgroundAlphaLampWood, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 8000), false, true);
+			BackgroundManager.QuickDrawBG(lampFar, 20f, correction, baseColor * BackgroundAlphaLampWood, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 8000), false, true);
+			BackgroundManager.QuickDrawBG(lampMiddle, 10f, correction, baseColor * BackgroundAlphaLampWood, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 8000), false, true);
+			BackgroundManager.QuickDrawBG(lampClose, 6f, correction + new Vector2(0, 6000), baseColor * BackgroundAlphaLampWood, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 8000), false, true);
 		}
 	}
 
@@ -383,12 +368,12 @@ public class YggdrasilTownBackground : ModSystem
 			var twilightMiddleFar = ModAsset.TwilightMiddleFar.Value;
 			var twilightFar = ModAsset.TwilightFar.Value;
 			var twilightSky = ModAsset.TwilightSky.Value;
-			BackgroundManager.QuickDrawBG(twilightSky, float.PositiveInfinity, BiomeCenter, baseColor * BackgroundAlphaTwilight, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-			BackgroundManager.QuickDrawBG(twilightFar, 40, BiomeCenter, baseColor * BackgroundAlphaTwilight, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-			BackgroundManager.QuickDrawBG(twilightMiddleFar, 30, BiomeCenter, baseColor * BackgroundAlphaTwilight, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-			BackgroundManager.QuickDrawBG(twilightMiddle, 16, BiomeCenter, baseColor * BackgroundAlphaTwilight, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-			BackgroundManager.QuickDrawBG(twilightMiddleClose, 10, BiomeCenter, baseColor * BackgroundAlphaTwilight, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
-			BackgroundManager.QuickDrawBG(twilightClose, 5, BiomeCenter, baseColor * BackgroundAlphaTwilight, (int)(BiomeCenter.Y - 20600), (int)(BiomeCenter.Y + 8000), true, true);
+			BackgroundManager.QuickDrawBG(twilightSky, float.PositiveInfinity, BackgroundAnchoredCenter, baseColor * BackgroundAlphaTwilight, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 8000), true, true);
+			BackgroundManager.QuickDrawBG(twilightFar, 40, BackgroundAnchoredCenter, baseColor * BackgroundAlphaTwilight, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 8000), true, true);
+			BackgroundManager.QuickDrawBG(twilightMiddleFar, 30, BackgroundAnchoredCenter, baseColor * BackgroundAlphaTwilight, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 8000), true, true);
+			BackgroundManager.QuickDrawBG(twilightMiddle, 16, BackgroundAnchoredCenter, baseColor * BackgroundAlphaTwilight, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 8000), true, true);
+			BackgroundManager.QuickDrawBG(twilightMiddleClose, 10, BackgroundAnchoredCenter, baseColor * BackgroundAlphaTwilight, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 8000), true, true);
+			BackgroundManager.QuickDrawBG(twilightClose, 5, BackgroundAnchoredCenter, baseColor * BackgroundAlphaTwilight, (int)(BackgroundAnchoredCenter.Y - 20600), (int)(BackgroundAnchoredCenter.Y + 8000), true, true);
 		}
 	}
 
