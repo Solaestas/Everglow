@@ -320,6 +320,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 	public void RefreshList()
 	{
 		_missionListBlock.RefreshList(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue, nPCMode, sourceNPC);
+		_panelBackground.SetSpectrumColor(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue);
 
 		// 重新选取之前选择的任务
 		var filteredList = _missionListBlock.MissionItems.Where(e => e.Mission.Name == SelectedItem.Mission.Name);
