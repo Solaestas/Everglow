@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
+using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
 using ReLogic.Graphics;
@@ -110,6 +111,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 	private UIImage _panelCover;
 
 	private UIMissionDetail _missionDetail;
+	private UIMissionDetailMask _missionDetailMask;
 
 	private UIMissionList _missionListBlock;
 
@@ -185,6 +187,19 @@ public class MissionContainer : UIContainerElement, ILoadable
 		_missionDetail.PanelColor = Color.Transparent;
 		_missionDetail.BorderWidth = 0;
 		_panel.Register(_missionDetail);
+
+		// Mission detail mask
+		_missionDetailMask = new UIMissionDetailMask();
+		_missionDetailMask.Info.Left.SetValue(608 * ResolutionFactor);
+		_missionDetailMask.Info.Top.SetValue(46 * ResolutionFactor);
+		_missionDetailMask.Info.Width.SetValue(710 * ResolutionFactor, 0f);
+		_missionDetailMask.Info.Height.SetValue(724 * ResolutionFactor, 0f);
+		_missionDetailMask.BorderWidth = 0;
+		_missionDetailMask.Info.InteractiveMask = true;
+		_missionDetailMask.Info.IsVisible = false;
+		_panel.Register(_missionDetailMask);
+
+		_missionDetail.SetMask(_missionDetailMask);
 
 		// Mission list
 		_missionListBlock = new UIMissionList();

@@ -4,7 +4,7 @@ using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.UI.UIElements;
 using static Everglow.Commons.Mechanics.MissionSystem.UI.MissionContainer;
 
-namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
+namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
 
 public class UIMissionDetail : UIBlock
 {
@@ -31,6 +31,8 @@ public class UIMissionDetail : UIBlock
 	private UITextPlus _yes;
 	private UITextPlus _no;
 
+	private UIMissionDetailMask _mask;
+
 	public UIMissionItem SelectedItem => Instance.SelectedItem;
 
 	public class ChangeButtonText
@@ -44,6 +46,11 @@ public class UIMissionDetail : UIBlock
 		public const string Unknown = "未知";
 		public const string Yes = "是";
 		public const string No = "否";
+	}
+
+	internal void SetMask(UIMissionDetailMask mask)
+	{
+		_mask = mask;
 	}
 
 	public override void OnInitialization()
@@ -71,6 +78,10 @@ public class UIMissionDetail : UIBlock
 		_tree.BorderWidth = 0;
 		_tree.Info.IsSensitive = true;
 		_tree.Events.OnMouseHover += e => Instance.MouseText = "Mission Tree";
+		_tree.Events.OnLeftClick += e =>
+		{
+			_mask.Show<UIMissionTree>(SelectedItem?.Mission);
+		};
 		Register(_tree);
 
 		_treeIcon = new UIImage(ModAsset.ToMissionTreeSurface.Value, Color.White);
@@ -91,6 +102,10 @@ public class UIMissionDetail : UIBlock
 		_timer.BorderWidth = 0;
 		_timer.Info.IsSensitive = true;
 		_timer.Events.OnMouseHover += e => Instance.MouseText = "Mission Timer";
+		_timer.Events.OnLeftClick += e =>
+		{
+			_mask.Show<UIMissionObjectiveTimer>(SelectedItem?.Mission);
+		};
 		Register(_timer);
 
 		_timerIcon = new UIImage(ModAsset.ToClockSurface.Value, Color.White);
@@ -224,10 +239,31 @@ public class UIMissionDetail : UIBlock
 		base.Update(gt);
 	}
 
+	public void HideMissionDetailMask() => _mask.Info.IsVisible = false;
+
+	public void ResetMissionDetail()
+	{
+		HideMissionDetailMask();
+
+		_icon.SetIconGroup(null);
+		_descriptionTextScrollbar.WheelValue = 0f;
+		_descriptionContainer.ClearAllElements();
+
+		_objectiveTextScrollbar.WheelValue = 0f;
+		_objectiveContainer.ClearAllElements();
+
+		_rewardTextScrollbar.WheelValue = 0f;
+		_rewardContainer.ClearAllElements();
+	}
+
 	public void SetMissionDetail(UIMissionItem missionItem)
 	{
+		ResetMissionDetail();
+
 		if (missionItem != null)
 		{
+			HideMissionDetailMask();
+
 			MissionBase mission = missionItem.Mission;
 			_icon.SetIconGroup(mission.Icon);
 			_descriptionTextScrollbar.WheelValue = 0f;
@@ -253,7 +289,6 @@ public class UIMissionDetail : UIBlock
 			var des = new UITextPlus(desText.ToString());
 			des.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
 			des.StringDrawer.Init(des.Text);
-			_descriptionContainer.ClearAllElements();
 			_descriptionContainer.AddElement(des);
 			des.StringDrawer.SetWordWrap(_descriptionContainer.HitBox.Width - _descriptionTextScrollbar.InnerScale.X);
 
@@ -267,7 +302,6 @@ public class UIMissionDetail : UIBlock
 			var obj = new UITextPlus(objText.ToString());
 			obj.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
 			obj.StringDrawer.Init(obj.Text);
-			_objectiveContainer.ClearAllElements();
 			_objectiveContainer.AddElement(obj);
 			obj.StringDrawer.SetWordWrap(_objectiveContainer.HitBox.Width - _objectiveTextScrollbar.InnerScale.X);
 
@@ -278,21 +312,8 @@ public class UIMissionDetail : UIBlock
 			var rew = new UITextPlus(rewText.ToString());
 			rew.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
 			rew.StringDrawer.Init(rew.Text);
-			_rewardContainer.ClearAllElements();
 			_rewardContainer.AddElement(rew);
 			rew.StringDrawer.SetWordWrap(_rewardContainer.HitBox.Width - _rewardTextScrollbar.InnerScale.X);
-		}
-		else
-		{
-			_icon.SetIconGroup(null);
-			_descriptionTextScrollbar.WheelValue = 0f;
-			_descriptionContainer.ClearAllElements();
-
-			_objectiveTextScrollbar.WheelValue = 0f;
-			_objectiveContainer.ClearAllElements();
-
-			_rewardTextScrollbar.WheelValue = 0f;
-			_rewardContainer.ClearAllElements();
 		}
 	}
 
