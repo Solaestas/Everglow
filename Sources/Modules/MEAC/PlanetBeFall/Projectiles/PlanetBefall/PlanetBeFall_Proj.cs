@@ -178,14 +178,14 @@ namespace Everglow.MEAC.PlanetBeFall.Projectiles.PlanetBefall
 							Player.immune = true;
 							Player.immuneTime = 60;
 							AnimationTimer += 1;
-							float Value = (1 - MathF.Cos(AnimationTimer * MathF.PI / 45)) / 2f;
+							float value = (1 - MathF.Cos(AnimationTimer * MathF.PI / 45)) / 2f;
 							if (AnimationTimer >= 45 && AnimationTimer < 90)
 							{
-								Value = 1;
+								value = 1;
 							}
 							if (AnimationTimer >= 90)
 							{
-								Value = (1 + MathF.Cos((AnimationTimer - 90) * MathF.PI / 45)) / 2f;
+								value = (1 + MathF.Cos((AnimationTimer - 90) * MathF.PI / 45)) / 2f;
 							}
 
 							if (AnimationTimer >= MaxTime)
@@ -194,7 +194,7 @@ namespace Everglow.MEAC.PlanetBeFall.Projectiles.PlanetBefall
 								PlanetBeFallAnimation = false;
 							}
 
-							Main.screenPosition = Value.Lerp(Main.screenPosition, target);
+							Main.screenPosition = value.Lerp(Main.screenPosition, target);
 						}
 					}
 				}
