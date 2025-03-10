@@ -1,5 +1,5 @@
-using Everglow.IIID.Projectiles.PlanetBefall;
 using Everglow.MEAC.NonTrueMeleeProj;
+using Everglow.MEAC.PlanetBeFall.Projectiles.PlanetBefall;
 using Everglow.MEAC.Projectiles;
 using ReLogic.Graphics;
 using Terraria.GameContent;
@@ -36,7 +36,7 @@ public class VortexVanquisherItem : ModItem
 		position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
 		Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f;
 		Texture2D vortexE = ModAsset.Post_png.Value;
-		Texture2D vortexQ = ModAsset.PlanetBeFall.Value;
+		Texture2D vortexQ = ModAsset.SkillQ.Value;
 		if (!Main.gamePaused)
 		{
 			if (coolTimeForE > 0)
@@ -92,7 +92,7 @@ public class VortexVanquisherItem : ModItem
 					{
 						coolTimeForQ = 10;
 					}
-					Projectile PlanetBeFall = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), /*Main.MouseWorld*/new Vector2(player.Center.X, Main.MouseWorld.Y - 1500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), Item.damage * 27, Item.knockBack * 10, player.whoAmI);
+					Projectile PlanetBeFall = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), /*Main.MouseWorld*/new Vector2(player.Center.X, Main.MouseWorld.Y - 1500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall_Proj>(), Item.damage * 27, Item.knockBack * 10, player.whoAmI);
 				}
 				if (player.altFunctionUse != 2)
 				{
