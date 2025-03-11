@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using Everglow.Commons.FeatureFlags;
 using Terraria.GameContent;
 using Terraria.UI.Chat;
 
@@ -14,12 +13,12 @@ public class ItemTooltipGlobal : GlobalItem
 		currentYOffset = 0;
 		globalYOffset = 0;
 
-		if (ModContent.GetInstance<EverglowClientConfig>().TextureReplace == TextureReplaceMode.Terraria)
+		if (ModContent.GetInstance<AssetReplaceConfig>().TextureReplace == TextureReplaceMode.Terraria)
 			return base.PreDrawTooltip(item, lines, ref x, ref y);
 
 		// 原版代码
 		Vector2 zero = Vector2.Zero;
-		bool yoyoLogo = lines.Any(l => l.Name == "OneDropLogo");
+		bool yoyoLogo = lines.Any(l => l.Name == "OneDropLogo");	
 		List<DrawableTooltipLine> drawableLines = lines.Select((x, i) => new DrawableTooltipLine(x, i, 0, 0, Color.White)).ToList();
 		for (int j = 0; j < drawableLines.Count; j++)
 		{
@@ -100,7 +99,7 @@ public class ItemTooltipGlobal : GlobalItem
 
 	public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
 	{
-		if (ModContent.GetInstance<EverglowClientConfig>().TextureReplace != TextureReplaceMode.Terraria)
+		if (ModContent.GetInstance<AssetReplaceConfig>().TextureReplace != TextureReplaceMode.Terraria)
 		{
 			// 对于除了名字以外每一行，调整每行的y偏移，没有开悬停文本框的话名字也会显示在贴图下方，不然很怪
 			if (line.Name != "ItemName" || line.Mod != "Terraria" || !Main.SettingsEnabled_OpaqueBoxBehindTooltips)
