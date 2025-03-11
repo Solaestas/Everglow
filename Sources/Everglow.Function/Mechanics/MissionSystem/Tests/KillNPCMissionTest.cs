@@ -1,8 +1,8 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.Mechanics.MissionSystem.Objectives;
-using Everglow.Commons.Mechanics.MissionSystem.Shared;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
+using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Tests;
 
@@ -10,22 +10,10 @@ public class KillNPCMissionTest : MissionBase
 {
 	public KillNPCMissionTest()
 	{
-		var objective = new KillNPCObjective();
-		objective.DemandNPCs.AddRange([
-			KillNPCRequirement.Create(
-				[
-					NPCID.BlueSlime,
-					NPCID.IceSlime,
-					NPCID.SpikedJungleSlime,
-					NPCID.MotherSlime,
-				], 10, true),
-			KillNPCRequirement.Create(
-				[
-					NPCID.DemonEye,
-				], 3, true)]);
+		var objective = new KillNPCObjective(KillNPCRequirement.Create([NPCID.CursedSkull, NPCID.DemonEye], 10, true));
 		Objectives.Add(objective);
 
-		Icon.AddRange(objective.DemandNPCs.SelectMany(s => s.NPCs).Select(i => NPCMissionIcon.Create(i)));
+		Icon.AddRange(objective.DemandNPC.NPCs.Select(i => NPCMissionIcon.Create(i)));
 
 		RewardItems.Add(new(ItemID.DirtBlock, 10));
 	}

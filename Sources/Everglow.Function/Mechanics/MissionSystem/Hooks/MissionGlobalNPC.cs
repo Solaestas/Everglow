@@ -53,7 +53,7 @@ public class MissionGlobalNPC : GlobalNPC
 		return missions
 			.SelectMany(mission => FlattenObjectives(mission.Objectives.AllObjectives))
 			.OfType<KillNPCObjective>()
-			.SelectMany(killObjective => killObjective.DemandNPCs.SelectMany(demand => demand.NPCs));
+			.SelectMany(killObjective => killObjective.DemandNPC.NPCs);
 	}
 
 	/// <summary>

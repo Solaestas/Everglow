@@ -1,6 +1,4 @@
-using Everglow.Commons.Mechanics.MissionSystem.Primitives;
-
-namespace Everglow.Commons.Mechanics.MissionSystem.Shared;
+namespace Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
 
 public class GiveItemRequirement : ItemRequirementBase
 {
@@ -21,8 +19,8 @@ public class GiveItemRequirement : ItemRequirementBase
 	/// </summary>
 	public override int Requirement { get; init; }
 
-	public float Progress(IEnumerable<Item> inventory) =>
-		Math.Min(1f, Math.Max(0f, inventory.Where(x => Items.Contains(x.type)).Select(x => x.stack).Sum() / (float)Requirement));
+	public float Progress(IEnumerable<Item> inventory) => Requirement != 0
+		? Math.Clamp(inventory.Where(x => Items.Contains(x.type)).Select(x => x.stack).Sum() / (float)Requirement, 0, 1f) : 1f;
 
 	public static GiveItemRequirement Create(List<int> items, int requirement)
 	{

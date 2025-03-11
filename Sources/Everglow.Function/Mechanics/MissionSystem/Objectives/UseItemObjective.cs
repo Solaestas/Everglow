@@ -1,6 +1,6 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Hooks;
-using Everglow.Commons.Mechanics.MissionSystem.Shared;
+using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Terraria.ModLoader.IO;
 

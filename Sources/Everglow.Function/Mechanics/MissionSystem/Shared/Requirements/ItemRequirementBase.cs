@@ -1,4 +1,6 @@
-namespace Everglow.Commons.Mechanics.MissionSystem.Primitives;
+using Everglow.Commons.Mechanics.MissionSystem.Abstracts;
+
+namespace Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
 
 public abstract class ItemRequirementBase
 {

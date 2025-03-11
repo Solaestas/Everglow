@@ -4,9 +4,24 @@ namespace Everglow.Commons.Mechanics.MissionSystem.Objectives;
 
 public class TalkNPCObjective : MissionObjectiveBase
 {
-	public int NPCType { get; }
+	public TalkNPCObjective()
+	{
+	}
 
-	public string NPCText { get; }
+	public TalkNPCObjective(int type, string text)
+	{
+		if (type < 0)
+		{
+			throw new InvalidDataException("NPC type must more than 1.");
+		}
+
+		NPCType = type;
+		NPCText = text;
+	}
+
+	public int NPCType { get; set; }
+
+	public string NPCText { get; set; }
 
 	public override void OnInitialize()
 	{

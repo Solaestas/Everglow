@@ -16,15 +16,15 @@ public class UIMissionDetail : UIBlock
 
 	private UIBlock _description;
 	private UIContainerPanel _descriptionContainer;
-	private UITextVerticalScrollbar _descriptionTextScrollbar;
+	private UIMissionTextVerticalScrollbar _descriptionTextScrollbar;
 
 	private UIBlock _objective;
 	private UIContainerPanel _objectiveContainer;
-	private UITextVerticalScrollbar _objectiveTextScrollbar;
+	private UIMissionTextVerticalScrollbar _objectiveTextScrollbar;
 
 	private UIBlock _reward;
 	private UIContainerPanel _rewardContainer;
-	private UITextVerticalScrollbar _rewardTextScrollbar;
+	private UIMissionTextVerticalScrollbar _rewardTextScrollbar;
 
 	private UIBlock _changeMission;
 	private UITextPlus _changeText;
@@ -127,7 +127,7 @@ public class UIMissionDetail : UIBlock
 		_description.BorderColor = Color.Gray;
 		Register(_description);
 
-		_descriptionTextScrollbar = new UITextVerticalScrollbar();
+		_descriptionTextScrollbar = new UIMissionTextVerticalScrollbar();
 		_descriptionTextScrollbar.Info.Height.SetValue(-16f, 1f);
 		_descriptionTextScrollbar.Info.SetToCenter();
 		_descriptionTextScrollbar.Info.Left.SetValue(-8f, 1f);
@@ -152,7 +152,7 @@ public class UIMissionDetail : UIBlock
 		_objective.BorderColor = Color.Gray;
 		Register(_objective);
 
-		_objectiveTextScrollbar = new UITextVerticalScrollbar();
+		_objectiveTextScrollbar = new UIMissionTextVerticalScrollbar();
 		_objectiveTextScrollbar.Info.Height.SetValue(-16f, 1f);
 		_objectiveTextScrollbar.Info.SetToCenter();
 		_objectiveTextScrollbar.Info.Left.SetValue(-8f, 1f);
@@ -177,7 +177,7 @@ public class UIMissionDetail : UIBlock
 		_reward.BorderColor = Color.Gray;
 		Register(_reward);
 
-		_rewardTextScrollbar = new UITextVerticalScrollbar();
+		_rewardTextScrollbar = new UIMissionTextVerticalScrollbar();
 		_rewardTextScrollbar.Info.Height.SetValue(-16f, 1f);
 		_rewardTextScrollbar.Info.SetToCenter();
 		_rewardTextScrollbar.Info.Left.SetValue(-8f, 1f);

@@ -1,7 +1,6 @@
-using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.MissionSystem.Shared;
+namespace Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
 
 public class CountItemRequirement : ItemRequirementBase
 {
@@ -39,7 +38,7 @@ public class CountItemRequirement : ItemRequirementBase
 		}
 	}
 
-	public float Progress() => Math.Min(1f, Math.Max(0f, Counter / (float)Requirement));
+	public float Progress() => Requirement != 0 ? Math.Clamp(Counter / (float)Requirement, 0f, 1f) : 1f;
 
 	public static CountItemRequirement Create(List<int> items, int requirement)
 	{

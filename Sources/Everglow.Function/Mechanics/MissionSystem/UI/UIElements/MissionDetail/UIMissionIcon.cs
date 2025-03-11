@@ -1,7 +1,7 @@
 using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Everglow.Commons.UI.UIElements;
 
-namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
+namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
 
 public class UIMissionIcon : UIBlock
 {
@@ -186,11 +186,11 @@ public class UIMissionIcon : UIBlock
 
 				float drawColorV = (1 - lerpValue) * 0.6f + 0.4f;
 				float alpha = (1 - lerpValue) * 0.7f + 0.3f;
-				Color drawColor = new Color(drawColorV, drawColorV, drawColorV, alpha);
+				var drawColor = new Color(drawColorV, drawColorV, drawColorV, alpha);
 
 				float bgCV = lerpValue * 0.04f + 0.2f;
 				float bgA = (1 - lerpValue) * 0.2f + 0.6f;
-				Color bgC = new Color(bgCV, bgCV, bgCV, bgA);
+				var bgC = new Color(bgCV, bgCV, bgCV, bgA);
 
 				offsetX += HitBox.Width / 2 - width;
 				offsetY += HitBox.Height / 2 - width;

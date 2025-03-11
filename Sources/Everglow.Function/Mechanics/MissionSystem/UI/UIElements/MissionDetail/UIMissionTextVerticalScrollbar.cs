@@ -1,8 +1,8 @@
 using Everglow.Commons.UI.UIElements;
 
-namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements
+namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail
 {
-	internal class UITextVerticalScrollbar : UIVerticalScrollbar
+	internal class UIMissionTextVerticalScrollbar : UIVerticalScrollbar
 	{
 		public override float Scale => 1f;
 
@@ -25,7 +25,7 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements
 		/// </summary>
 		private UIBlock _scrollbarThumb = new UIBlock();
 
-		public UITextVerticalScrollbar()
+		public UIMissionTextVerticalScrollbar()
 		{
 			Info.Width.SetValue(2f, 0f);
 			_innerScale = new Vector2(6f, 30f);

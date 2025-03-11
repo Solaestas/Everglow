@@ -1,6 +1,6 @@
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.MissionSystem.Shared;
+namespace Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
 
 /// <summary>
 /// A group of items which use the same requirement
@@ -42,9 +42,11 @@ public class CollectItemRequirement : CountItemRequirement
 	/// <para/>
 	/// The returned value is clamped to the range [0, 1], ensuring that the progress is always represented as a percentage (0% to 100%).
 	/// </remarks>
-	public float Progress(IEnumerable<Item> inventory) => EnableIndividualCounter
-		? Progress()
-		: Math.Min(1f, Math.Max(0f, inventory.Where(x => Items.Contains(x.type)).Select(x => x.stack).Sum() / (float)Requirement));
+	public float Progress(IEnumerable<Item> inventory) => Requirement != 0
+		? EnableIndividualCounter
+			? Progress()
+			: Math.Clamp(inventory.Where(x => Items.Contains(x.type)).Select(x => x.stack).Sum() / (float)Requirement, 0f, 1f)
+		: 1f;
 
 	/// <summary>
 	/// Create a new instance of <see cref="CollectItemRequirement"/> class if the input is valid.
