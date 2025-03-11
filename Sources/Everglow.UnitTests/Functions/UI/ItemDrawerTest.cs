@@ -17,7 +17,7 @@ public class ItemDrawerTest
 		str = ItemDrawer.Create(1, 2, new Microsoft.Xna.Framework.Color(1, 1, 1));
 		Assert.AreEqual("[ItemDrawer,Type='1',Stack='2',StackColor='1,1,1,255']", str);
 
-		str = ItemDrawer.Create(1, 2, new Microsoft.Xna.Framework.Color(1, 1, 1), 10);
+		str = ItemDrawer.Create(1, 2, new Microsoft.Xna.Framework.Color(1, 1, 1), 30);
 		Assert.AreEqual("[ItemDrawer,Type='1',Stack='2',StackColor='1,1,1,255',StackFontSize='30']", str);
 	}
 }
