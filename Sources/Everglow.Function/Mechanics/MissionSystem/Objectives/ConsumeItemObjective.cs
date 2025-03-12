@@ -1,6 +1,7 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Hooks;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
+using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Terraria.ModLoader.IO;
 
@@ -24,7 +25,7 @@ public class ConsumeItemObjective : MissionObjectiveBase
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
-		MissionBase.LoadVanillaItemTextures(DemandConsumeItem.Items);
+		AssetUtils.LoadVanillaItemTextures(DemandConsumeItem.Items);
 	}
 
 	public override bool CheckCompletion() => DemandConsumeItem.Counter >= DemandConsumeItem.Requirement;
@@ -63,6 +64,7 @@ public class ConsumeItemObjective : MissionObjectiveBase
 
 	public override void LoadData(TagCompound tag)
 	{
+		base.LoadData(tag);
 		tag.TryGet<CountItemRequirement>(nameof(DemandConsumeItem), out var demandNPC);
 		if (demandNPC != null && demandNPC.Counter > 0)
 		{
@@ -72,6 +74,7 @@ public class ConsumeItemObjective : MissionObjectiveBase
 
 	public override void SaveData(TagCompound tag)
 	{
+		base.SaveData(tag);
 		tag.Add(nameof(DemandConsumeItem), DemandConsumeItem);
 	}
 }

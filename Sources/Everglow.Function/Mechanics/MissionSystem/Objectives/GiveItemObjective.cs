@@ -1,5 +1,6 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
+using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Objectives;
@@ -20,7 +21,7 @@ public class GiveItemObjective : MissionObjectiveBase
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
-		MissionBase.LoadVanillaItemTextures(DemandGiveItem.Items);
+		AssetUtils.LoadVanillaItemTextures(DemandGiveItem.Items);
 	}
 
 	public override float Progress => DemandGiveItem.Progress(Main.LocalPlayer.inventory);

@@ -119,11 +119,15 @@ public class BranchingObjective : MissionObjectiveBase
 
 	public override void LoadData(TagCompound tag)
 	{
+		base.LoadData(tag);
+
 		MissionBase.LoadObjectives(tag, Objectives);
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
+		base.SaveData(tag);
+
 		MissionBase.SaveObjectives(tag, Objectives);
 	}
 }

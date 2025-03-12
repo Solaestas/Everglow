@@ -1,6 +1,7 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Hooks;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
+using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Objectives;
@@ -21,7 +22,7 @@ public class GlobalKillNPCObjective : MissionObjectiveBase
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
-		MissionBase.LoadVanillaNPCTextures(DemandNPC.NPCs);
+		AssetUtils.LoadVanillaNPCTextures(DemandNPC.NPCs);
 	}
 
 	public override bool CheckCompletion() => DemandNPC.Counter >= DemandNPC.Requirement;
@@ -74,6 +75,7 @@ public class GlobalKillNPCObjective : MissionObjectiveBase
 
 	public override void LoadData(TagCompound tag)
 	{
+		base.LoadData(tag);
 		tag.TryGet<KillNPCRequirement>(nameof(DemandNPC), out var demandNPC);
 		if (DemandNPC.EnableIndividualCounter)
 		{
@@ -86,6 +88,7 @@ public class GlobalKillNPCObjective : MissionObjectiveBase
 
 	public override void SaveData(TagCompound tag)
 	{
+		base.SaveData(tag);
 		tag.Add(nameof(DemandNPC), DemandNPC);
 	}
 }

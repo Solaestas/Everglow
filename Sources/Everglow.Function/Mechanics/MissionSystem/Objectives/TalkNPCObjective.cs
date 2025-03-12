@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
+using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Objectives;
 
@@ -26,7 +27,7 @@ public class TalkNPCObjective : MissionObjectiveBase
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
-		MissionBase.LoadVanillaNPCTextures([NPCType]);
+		AssetUtils.LoadVanillaNPCTextures([NPCType]);
 	}
 
 	public override float Progress => Main.LocalPlayer.talkNPC != -1 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType ? 1f : 0f;

@@ -1,6 +1,7 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Hooks;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
+using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Terraria.ModLoader.IO;
 
@@ -24,7 +25,7 @@ public class GlobalCollectItemObjective : MissionObjectiveBase
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
-		MissionBase.LoadVanillaItemTextures(DemandCollectItem.Items);
+		AssetUtils.LoadVanillaItemTextures(DemandCollectItem.Items);
 	}
 
 	public override bool CheckCompletion() => throw new NotImplementedException();
@@ -70,6 +71,7 @@ public class GlobalCollectItemObjective : MissionObjectiveBase
 
 	public override void LoadData(TagCompound tag)
 	{
+		base.LoadData(tag);
 		tag.TryGet<CollectItemRequirement>(nameof(DemandCollectItem), out var demandCollectItem);
 		if (DemandCollectItem.EnableIndividualCounter)
 		{
@@ -82,6 +84,7 @@ public class GlobalCollectItemObjective : MissionObjectiveBase
 
 	public override void SaveData(TagCompound tag)
 	{
+		base.SaveData(tag);
 		tag.Add(nameof(DemandCollectItem), DemandCollectItem);
 	}
 }

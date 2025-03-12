@@ -2,6 +2,7 @@ using Everglow.Commons.Mechanics.MissionSystem.Abstracts;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
+using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Terraria.ModLoader.IO;
 
@@ -403,7 +404,7 @@ public abstract class MissionBase : ITagCompoundEntity
 
 		LoadObjectives(tag, Objectives.AllObjectives);
 
-		LoadVanillaItemTextures(RewardItems.Select(x => x.type));
+		AssetUtils.LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
 
 	public static void LoadObjectives(TagCompound tag, IEnumerable<MissionObjectiveBase> objectives)
@@ -419,32 +420,6 @@ public abstract class MissionBase : ITagCompoundEntity
 
 				o.LoadData(oTags[o.ObjectiveID]);
 			}
-		}
-	}
-
-	/// <summary>
-	/// Load not-loaded textures for vanilla items
-	/// </summary>
-	/// <param name="types"></param>
-	public static void LoadVanillaItemTextures(IEnumerable<int> types)
-	{
-		foreach (var type in types.Distinct().Where(t => t <= ItemID.Count))
-		{
-			// The Main.LoadItem function will skip the loaded items
-			Main.instance.LoadItem(type);
-		}
-	}
-
-	/// <summary>
-	/// Load not-loaded textures for vanilla NPCs
-	/// </summary>
-	/// <param name="types"></param>
-	public static void LoadVanillaNPCTextures(IEnumerable<int> types)
-	{
-		foreach (var type in types.Distinct().Where(t => t <= NPCID.Count))
-		{
-			// The Main.LoadItem function will skip the loaded items
-			Main.instance.LoadNPC(type);
 		}
 	}
 }

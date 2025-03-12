@@ -1,6 +1,7 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Hooks;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
+using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Terraria.ModLoader.IO;
 
@@ -18,7 +19,7 @@ public class UseItemObjective : MissionObjectiveBase
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
-		MissionBase.LoadVanillaItemTextures(DemandUseItems.SelectMany(x => x.Items));
+		AssetUtils.LoadVanillaItemTextures(DemandUseItems.SelectMany(x => x.Items));
 	}
 
 	public override bool CheckCompletion() => DemandUseItems.All(i => i.Counter >= i.Requirement);
@@ -60,6 +61,7 @@ public class UseItemObjective : MissionObjectiveBase
 
 	public override void LoadData(TagCompound tag)
 	{
+		base.LoadData(tag);
 		tag.TryGet<List<CountItemRequirement>>(nameof(DemandUseItems), out var demandNPCs);
 		if (demandNPCs != null && demandNPCs.Count != 0)
 		{
@@ -75,6 +77,7 @@ public class UseItemObjective : MissionObjectiveBase
 
 	public override void SaveData(TagCompound tag)
 	{
+		base.SaveData(tag);
 		tag.Add(nameof(DemandUseItems), DemandUseItems);
 	}
 }
