@@ -55,7 +55,7 @@ public class KillNPCRequirement
 			: Math.Min(1f, Math.Max(0f, nPCKillCounter.Where(x => NPCs.Contains(x.Key)).Select(x => x.Value).Sum() / (float)Requirement))
 		: 1f;
 
-	public MissionConditionBase Condition { get; private set; }
+	public MissionConditionBase Condition { get; set; }
 
 	/// <summary>
 	/// Create a new instance of <see cref="KillNPCRequirement"/> class if the input is valid.
@@ -78,18 +78,12 @@ public class KillNPCRequirement
 		return new KillNPCRequirement(nPCs, requirement, enableIndividualCounter);
 	}
 
-	public KillNPCRequirement SetCondition(MissionConditionBase condition)
-	{
-		Condition = condition;
-		return this;
-	}
-
 	/// <summary>
 	/// Add count to Counter
 	/// <para/>This method should only be called when <see cref="EnableIndividualCounter"/> is <c>true</c>
 	/// </summary>
 	/// <param name="count"></param>
-	public void Count(int count = 1)
+	public void Count(NPC npc)
 	{
 		if (Condition != null && Condition.IsFalse)
 		{
@@ -98,12 +92,26 @@ public class KillNPCRequirement
 
 		if (EnableIndividualCounter)
 		{
-			Counter += count;
+			if (!NPCs.Contains(npc.type))
+			{
+				return;
+			}
+
+			Counter++;
 
 			if (Counter > Requirement)
 			{
 				Counter = Requirement;
 			}
+		}
+	}
+
+	public void SetInitialCount(int count)
+	{
+		Counter = count;
+		if (Counter > Requirement)
+		{
+			Counter = Requirement;
 		}
 	}
 

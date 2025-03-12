@@ -7,7 +7,7 @@ namespace Everglow.Commons.Mechanics.MissionSystem.Hooks;
 
 public class MissionPlayer : ModPlayer
 {
-	public static event Action<int> OnKillNPCEvent;
+	public static event Action<NPC> OnKillNPCEvent;
 
 	public static event Action<Item> OnPickupEvent;
 
@@ -73,7 +73,7 @@ public class MissionPlayer : ModPlayer
 			// If player killed this npc
 			if (!target.active)
 			{
-				OnKillNPCEvent?.Invoke(target.type);
+				OnKillNPCEvent?.Invoke(target);
 			}
 		}
 	}

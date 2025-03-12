@@ -284,20 +284,19 @@ public static class MissionManager
 	/// <summary>
 	/// 记录杀怪
 	/// </summary>
-	/// <param name="type">NPC类型</param>
-	/// <param name="count">击杀数量，默认为1</param>
-	/// <exception cref="InvalidParameterException"></exception>
-	public static void MissionPlayer_OnKillNPC_CountKill(int type)
+	/// <param name="npc">被击杀的NPC</param>
+	/// <exception cref="InvalidParameterException">参数为空或npc类型错误</exception>
+	public static void MissionPlayer_OnKillNPC_CountKill(NPC npc)
 	{
-		if (type < 0)
+		if (npc is null || npc.type < NPCID.None)
 		{
 			throw new InvalidParameterException();
 		}
 
 		// Update NPC kill history
-		if (!NPCKillCounter.TryAdd(type, 1))
+		if (!NPCKillCounter.TryAdd(npc.type, 1))
 		{
-			NPCKillCounter[type]++;
+			NPCKillCounter[npc.type]++;
 		}
 	}
 
@@ -349,7 +348,8 @@ public static class MissionManager
 			{
 				for (int j = 0; j < mt.Count; j++)
 				{
-					var mission = (MissionBase)Activator.CreateInstance(Ins.ModuleManager.Types.First(t => t.FullName == mt[j]));
+					var type = Ins.ModuleManager.Types.FirstOrDefault(t => t.FullName == mt[j]);
+					var mission = Activator.CreateInstance(type) as MissionBase;
 					mission.LoadData(m[j]);
 					missionPool.Add(mission);
 					mission.PoolType = poolType;
@@ -385,9 +385,12 @@ public static class MissionManager
 
 		public static MissionManagerInfo Create()
 		{
-			var info = new MissionManagerInfo();
-			info.NPCKillCounter = MissionManager.NPCKillCounter.ToDictionary();
-			info.MissionPools = [];
+			var info = new MissionManagerInfo
+			{
+				NPCKillCounter = MissionManager.NPCKillCounter.ToDictionary(),
+				MissionPools = [],
+			};
+
 			foreach (var (type, pool) in _missionPools)
 			{
 				info.MissionPools.Add(type, pool.ToList());

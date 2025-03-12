@@ -65,14 +65,11 @@ public class KillNPCObjective : MissionObjectiveBase
 	/// <summary>
 	/// Count kill for each demand group
 	/// </summary>
-	/// <param name="type">The type of NPC</param>
+	/// <param name="npc">The type of NPC</param>
 	/// <param name="count">The count of kill. Default to 1.</param>
-	public void MissionPlayer_OnKillNPC(int type)
+	public void MissionPlayer_OnKillNPC(NPC npc)
 	{
-		if (DemandNPC.EnableIndividualCounter && DemandNPC.NPCs.Contains(type))
-		{
-			DemandNPC.Count(1);
-		}
+		DemandNPC.Count(npc);
 	}
 
 	public override void LoadData(TagCompound tag)
@@ -82,7 +79,7 @@ public class KillNPCObjective : MissionObjectiveBase
 		{
 			if (demandNPC != null && demandNPC.Counter > 0)
 			{
-				DemandNPC.Count(demandNPC.Counter);
+				DemandNPC.SetInitialCount(demandNPC.Counter);
 			}
 		}
 	}

@@ -9,7 +9,7 @@ public class MissionGlobalNPC : GlobalNPC
 	/// <summary>
 	/// On kill hook for multiplayer missions
 	/// </summary>
-	public static event Action<NPC> OnNPCKill;
+	public static event Action<NPC> OnKillNPCEvent;
 
 	public override void OnKill(NPC npc)
 	{

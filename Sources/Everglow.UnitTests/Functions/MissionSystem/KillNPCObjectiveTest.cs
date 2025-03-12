@@ -1,5 +1,6 @@
 using Everglow.Commons.Mechanics.MissionSystem.Objectives;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
+using Terraria;
 using Terraria.ID;
 
 namespace Everglow.UnitTests.Functions.MissionSystem;
@@ -20,7 +21,12 @@ public class KillNPCObjectiveTest
 					NPCID.MotherSlime,
 				], reqCount, true));
 
-			objective.DemandNPC.Count(reqCount * 10);
+			for (int i = 0; i < reqCount * 10; i++)
+			{
+				var npc = new NPC();
+				npc.type = NPCID.BlueSlime;
+				objective.DemandNPC.Count(npc);
+			}
 			Assert.IsTrue(objective.DemandNPC.Counter == reqCount);
 		}
 	}
@@ -42,11 +48,39 @@ public class KillNPCObjectiveTest
 			for (int count = 0; count <= reqCount; count++)
 			{
 				Assert.IsTrue(killNPCMission.Progress == count / (float)reqCount);
-				killNPCMission.DemandNPC.Count();
+				var npc = new NPC();
+				npc.type = NPCID.BlueSlime;
+				killNPCMission.DemandNPC.Count(npc);
 			}
 
 			Assert.IsTrue(killNPCMission.Progress == 1f);
 		}
+	}
+
+	[TestMethod]
+	public void IndividualCounter_Should_NotCount_When_NPCTypeIsInvalid()
+	{
+		int reqCount = 10;
+		var req = KillNPCRequirement.Create(
+			[
+				NPCID.BlueSlime,
+				NPCID.IceSlime,
+				NPCID.SpikedJungleSlime,
+				NPCID.MotherSlime,
+			], reqCount, false);
+
+		var npc = new NPC
+		{
+			type = NPCID.Zombie,
+		};
+		req.Count(npc);
+
+		npc = new NPC
+		{
+			type = NPCID.MoonLordCore,
+		};
+		req.Count(npc);
+		Assert.IsTrue(req.Counter == 0);
 	}
 
 	[TestMethod]
@@ -61,8 +95,9 @@ public class KillNPCObjectiveTest
 					NPCID.SpikedJungleSlime,
 					NPCID.MotherSlime,
 				], reqCount, false));
-
-		killNPCMission.DemandNPC.Count();
+		var npc = new NPC();
+		npc.type = NPCID.BlueSlime;
+		killNPCMission.DemandNPC.Count(npc);
 		Assert.IsTrue(true);
 	}
 
