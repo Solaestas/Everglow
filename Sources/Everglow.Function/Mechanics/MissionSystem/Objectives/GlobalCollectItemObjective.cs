@@ -6,13 +6,13 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Objectives;
 
-public class CollectItemObjective : MissionObjectiveBase
+public class GlobalCollectItemObjective : MissionObjectiveBase
 {
-	public CollectItemObjective()
+	public GlobalCollectItemObjective()
 	{
 	}
 
-	public CollectItemObjective(CollectItemRequirement requirement)
+	public GlobalCollectItemObjective(CollectItemRequirement requirement)
 	{
 		DemandCollectItem = requirement;
 	}

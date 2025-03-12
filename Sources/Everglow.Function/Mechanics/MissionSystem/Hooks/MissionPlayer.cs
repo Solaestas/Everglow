@@ -11,6 +11,8 @@ public class MissionPlayer : ModPlayer
 
 	public static event Action<Item> OnPickupEvent;
 
+	public static event Action<Item> GlobalOnPickupEvent;
+
 	private MissionManager.MissionManagerInfo missionInfo;
 
 	public override void OnEnterWorld()
@@ -62,6 +64,8 @@ public class MissionPlayer : ModPlayer
 		{
 			OnPickupEvent?.Invoke(item);
 		}
+
+		GlobalOnPickupEvent?.Invoke(item);
 
 		return true;
 	}
