@@ -39,11 +39,16 @@ public class YggdrasilTownBiome : ModBiome
 	/// </summary>
 	public static Vector2 GetBiomeCenter()
 	{
+		if(!SubworldSystem.IsActive<YggdrasilWorld>())
+		{
+			CheckedBiomeCenter = false;
+			return Vector2.zeroVector;
+		}
 		if (!CheckedBiomeCenter)
 		{
 			for (int x = 20; x < Main.maxTilesX - 20; x++)
 			{
-				for (int y = Main.maxTilesY - 1000; y < Main.maxTilesY - 20; y++)
+				for (int y = Main.maxTilesY - 2000; y < Main.maxTilesY - 20; y++)
 				{
 					Tile tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
 					if (tile.TileType == ModContent.TileType<YggdrasilCommonBlock>())
@@ -65,7 +70,7 @@ public class YggdrasilTownBiome : ModBiome
 		{
 			return new Vector2(Main.maxTilesX / 2f * 16, (Main.maxTilesY - 1000) * 16);
 		}
-		return Vector2.zeroVector;
+		return new Vector2(Main.maxTilesX / 2f * 16, (Main.maxTilesY - 1000) * 16);
 	}
 
 	/// <summary>
@@ -74,7 +79,10 @@ public class YggdrasilTownBiome : ModBiome
 	/// <returns></returns>
 	public static bool BiomeActive()
 	{
-		BiomeCenter = GetBiomeCenter();
+		if (BiomeCenter == Vector2.zeroVector)
+		{
+			BiomeCenter = GetBiomeCenter();
+		}
 		if (Main.screenPosition.Y > (BiomeCenter.Y - 18000))
 		{
 			if (SubworldSystem.IsActive<YggdrasilWorld>())

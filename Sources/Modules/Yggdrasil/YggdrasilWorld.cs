@@ -1,4 +1,5 @@
 using System.Reflection;
+using Everglow.Yggdrasil.YggdrasilTown;
 using SubworldLibrary;
 using Terraria.WorldBuilding;
 
@@ -35,6 +36,7 @@ internal class YggdrasilWorld : Subworld
 			{
 			}
 		}
+		YggdrasilTownBiome.CheckedBiomeCenter = false;
 	}
 
 	public override void OnLoad()

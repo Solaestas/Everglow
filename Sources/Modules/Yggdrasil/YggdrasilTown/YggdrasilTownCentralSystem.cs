@@ -1,16 +1,30 @@
+using Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 using SubworldLibrary;
 
 namespace Everglow.Yggdrasil.YggdrasilTown;
 
 public class YggdrasilTownCentralSystem : ModSystem
 {
-	public static Rectangle TownArea;
+	public static Rectangle TownArea => new Rectangle(TownTopLeftWorldCoord.ToTileCoordinates().X, TownTopLeftWorldCoord.ToTileCoordinates().Y, 706, 275);
+
+	public static Vector2 TownTopLeftWorldCoord => YggdrasilTownBiome.BiomeCenter - new Vector2(257, 191) * 16;
+
+	public float TownSurfaceWorldCoordY => TownTopLeftWorldCoord.Y + 1600;
+
+	public static Vector2 TownPos(Vector2 position_Orig)
+	{
+		return position_Orig - TownTopLeftWorldCoord;
+	}
 
 	public override void OnWorldLoad()
 	{
-		if (SubworldSystem.Current is YggdrasilWorld)
+		if(SubworldSystem.Current is YggdrasilWorld)
 		{
-			TownArea = new Rectangle(430, Main.maxTilesY - 400, 501, 91);
+			if (NPC.CountNPCS(ModContent.NPCType<Guard_of_YggdrasilTown>()) <= 0)
+			{
+				Point spawnPos = YggdrasilTownBiome.BiomeCenter.ToTileCoordinates();
+				NPC.NewNPC(WorldGen.GetNPCSource_TileBreak(spawnPos.X, spawnPos.Y), spawnPos.X, spawnPos.Y, ModContent.NPCType<Guard_of_YggdrasilTown>());
+			}
 		}
 		base.OnWorldLoad();
 	}

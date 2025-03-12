@@ -1,4 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
+using SubworldLibrary;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
@@ -31,5 +33,17 @@ public class YggdrasilCommonBlock : ModTile
 		DustType = ModContent.DustType<UnionMarblePost_Dust_Khaki>();
 		MinPick = int.MaxValue;
 		AddMapEntry(new Color(96, 96, 96));
+	}
+
+	public override void RandomUpdate(int i, int j)
+	{
+		if (SubworldSystem.Current is YggdrasilWorld)
+		{
+			if (NPC.CountNPCS(ModContent.NPCType<Guard_of_YggdrasilTown>()) <= 0)
+			{
+				Point spawnPos = YggdrasilTownBiome.BiomeCenter.ToTileCoordinates();
+				NPC.NewNPC(WorldGen.GetNPCSource_TileBreak(spawnPos.X, spawnPos.Y), spawnPos.X, spawnPos.Y, ModContent.NPCType<Guard_of_YggdrasilTown>());
+			}
+		}
 	}
 }

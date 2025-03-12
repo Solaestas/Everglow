@@ -38,6 +38,8 @@ public class Guard_of_YggdrasilTown : ModNPC
 	public Projectile FistProjectile = null;
 	public Vector2 LockCenter = Vector2.Zero;
 
+	public Vector2 AnchorForBehaviorPos => YggdrasilTownCentralSystem.TownTopLeftWorldCoord + new Vector2(10639, 2462);
+
 	public override string HeadTexture => ModAsset.Guard_of_YggdrasilTown_Head_Mod;
 
 	public override void SetStaticDefaults()
@@ -197,7 +199,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 				if (MathF.Abs(distance.X) < 120 && MathF.Abs(distance.Y) < 120)
 				{
 					float angle = MathF.Atan2(distance.Y, distance.X);
-					if (angle < MathF.PI / 4 && angle > -MathF.PI * 2 / 9 || angle > MathF.PI * 3 / 4 || angle < -MathF.PI * 7 / 9)
+					if ((angle < MathF.PI / 4 && angle > -MathF.PI * 2 / 9) || angle > MathF.PI * 3 / 4 || angle < -MathF.PI * 7 / 9)
 					{
 						return true;
 					}
@@ -219,7 +221,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 				if (MathF.Abs(distance.X) < 120 && MathF.Abs(distance.Y) < 120 && distance.Length() < minDis)
 				{
 					float angle = MathF.Atan2(distance.Y, distance.X);
-					if (angle < MathF.PI / 4 && angle > -MathF.PI * 2 / 9 || angle > MathF.PI * 3 / 4 || angle < -MathF.PI * 7 / 9)
+					if ((angle < MathF.PI / 4 && angle > -MathF.PI * 2 / 9) || angle > MathF.PI * 3 / 4 || angle < -MathF.PI * 7 / 9)
 					{
 						minDis = distance.Length();
 						nearestDir = distance;
@@ -273,10 +275,27 @@ public class Guard_of_YggdrasilTown : ModNPC
 		return direction;
 	}
 
+	public void CheckInSuitableArea()
+	{
+		bool safe = false;
+		if (YggdrasilTownCentralSystem.TownPos(NPC.Center).X is > 9904 and < 11286)
+		{
+			if (YggdrasilTownCentralSystem.TownPos(NPC.Center).Y is > 2171 and < 2850)
+			{
+				safe = true;
+			}
+		}
+		if (!safe)
+		{
+			NPC.Center = AnchorForBehaviorPos;
+		}
+	}
+
 	public IEnumerator<ICoroutineInstruction> AI_Main()
 	{
 		while (true)
 		{
+			CheckInSuitableArea();
 			CheckSlimy();
 			aiMainCount++;
 			if (AICoroutines.Count > 0 && Idle)
