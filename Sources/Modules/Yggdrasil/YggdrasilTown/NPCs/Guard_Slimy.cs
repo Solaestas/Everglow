@@ -74,7 +74,7 @@ public class Guard_Slimy : ModNPC
 		}
 		NPC owner = Main.npc[MyYggdrasilTownGuardWhoAmI];
 		Guard_of_YggdrasilTown goYT = owner.ModNPC as Guard_of_YggdrasilTown;
-		if (goYT == null)
+		if (!owner.active || goYT == null || goYT.MySlimyWhoAmI != NPC.whoAmI)
 		{
 			NPC.active = false;
 			return;

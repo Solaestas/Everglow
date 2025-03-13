@@ -7,7 +7,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
-public class YggdrasilCommonBlock : ModTile
+public class YggdrasilCommandBlock : ModTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -39,11 +39,7 @@ public class YggdrasilCommonBlock : ModTile
 	{
 		if (SubworldSystem.Current is YggdrasilWorld)
 		{
-			if (NPC.CountNPCS(ModContent.NPCType<Guard_of_YggdrasilTown>()) <= 0)
-			{
-				Point spawnPos = YggdrasilTownBiome.BiomeCenter.ToTileCoordinates();
-				NPC.NewNPC(WorldGen.GetNPCSource_TileBreak(spawnPos.X, spawnPos.Y), spawnPos.X, spawnPos.Y, ModContent.NPCType<Guard_of_YggdrasilTown>());
-			}
+			YggdrasilTownCentralSystem.CheckNPC(ModContent.NPCType<Guard_of_YggdrasilTown>());
 		}
 	}
 }

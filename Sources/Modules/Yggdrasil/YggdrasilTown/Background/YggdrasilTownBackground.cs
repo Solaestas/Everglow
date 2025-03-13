@@ -77,6 +77,10 @@ public class YggdrasilTownBackground : ModSystem
 				return true;
 			}
 		}
+		if (YggdrasilTownCentralSystem.InYggdrasilTown(Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f))
+		{
+			return true;
+		}
 		return false;
 	}
 
@@ -130,7 +134,7 @@ public class YggdrasilTownBackground : ModSystem
 
 	public void DrawYggdrasilTown_Town(Color baseColor)
 	{
-		if (YggdrasilTownCentralSystem.InYggdrasilTown(Main.LocalPlayer.Center))
+		if (YggdrasilTownCentralSystem.InYggdrasilTown(Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f))
 		{
 			if (BackgroundAlphaYggdrasilTown < 1f)
 			{
@@ -158,9 +162,16 @@ public class YggdrasilTownBackground : ModSystem
 			var bayouClose = ModAsset.Town_Close.Value;
 			var bayouFar = ModAsset.Town_Far.Value;
 			Vector2 correction = OriginPylonCenter;
-
-			BackgroundManager.QuickDrawBG(bayouFar, 15f, correction, baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
-			BackgroundManager.QuickDrawBG(bayouClose, 6f, correction + new Vector2(0, 1000), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+			if (!YggdrasilTownCentralSystem.InCanteen_YggdrasilTown() && !YggdrasilTownCentralSystem.InUnion_YggdrasilTown() && !YggdrasilTownCentralSystem.InPlayerRoom_YggdrasilTown())
+			{
+				BackgroundManager.QuickDrawBG(bayouFar, 15f, correction, baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+				BackgroundManager.QuickDrawBG(bayouClose, 6f, correction + new Vector2(0, 1000), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+			}
+			else
+			{
+				BackgroundManager.QuickDrawBG(bayouFar, 15f, new Vector2(0, 2000), baseColor * BackgroundAlphaYggdrasilTown, 0, 30000, false, true);
+				BackgroundManager.QuickDrawBG(bayouClose, 6f, new Vector2(0, 3000), baseColor * BackgroundAlphaYggdrasilTown, 0, 30000, false, true);
+			}
 		}
 	}
 

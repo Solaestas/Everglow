@@ -1,6 +1,8 @@
+using Everglow.Commons.TileHelper;
 using Everglow.Commons.VFX.Scene;
 using Everglow.SubSpace;
 using Everglow.Yggdrasil.WorldGeneration;
+using Everglow.Yggdrasil.YggdrasilTown.Kitchen.Tiles;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
@@ -34,8 +36,42 @@ public class MarbleGate_BackgroundTile : BackgroundVFX
 						}
 					}
 					Point point = new Point(i, j);
-					RoomManager.EnterNextLevelRoom(point + new Point(3, 6), ModAsset.HallOfUnion237x110_Path, 30, 110, new Point(60, 192));
+					RoomManager.EnterNextLevelRoom(point + new Point(3, 6), new Point(60, 192), BuildUnionGen);
 				}
+			}
+		}
+	}
+
+	public void BuildUnionGen()
+	{
+		var mapIO = new MapIO(30, 110);
+
+		mapIO.Read(ModIns.Mod.GetFileStream(ModAsset.HallOfUnion237x110_Path));
+
+		var it = mapIO.GetEnumerator();
+		while (it.MoveNext())
+		{
+			WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
+			WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
+		}
+		for (int x = 20; x < 22; x++)
+		{
+			for (int y = 20; y < 23; y++)
+			{
+				Tile tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+				tile.wall = 1;
+				ushort typeChange = (ushort)ModContent.TileType<UnionCommandBlock>();
+				if (y == 22)
+				{
+					typeChange = 0;
+				}
+				else
+				{
+					tile.TileFrameX = (short)((x - 20) * 18);
+					tile.TileFrameY = (short)((y - 20) * 18);
+				}
+				tile.TileType = typeChange;
+				tile.HasTile = true;
 			}
 		}
 	}

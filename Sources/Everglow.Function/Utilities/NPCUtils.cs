@@ -1,4 +1,5 @@
 using System.Reflection;
+using Everglow.Commons.CustomTiles.Collide;
 
 namespace Everglow.Commons.Utilities;
 
@@ -185,7 +186,7 @@ public static class NPCUtils
 		int empty = 0;
 		for (int y = 0; y < 4; y++)
 		{
-			if (!Collision.SolidCollision(npc.Bottom + new Vector2(npc.direction * 15, y * 16), 2, 2))
+			if (!TileCollisionUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 15, y * 16)))
 			{
 				empty++;
 			}

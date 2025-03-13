@@ -51,7 +51,7 @@ public class YggdrasilTownBiome : ModBiome
 				for (int y = Main.maxTilesY - 2000; y < Main.maxTilesY - 20; y++)
 				{
 					Tile tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
-					if (tile.TileType == ModContent.TileType<YggdrasilCommonBlock>())
+					if (tile.TileType == ModContent.TileType<YggdrasilCommandBlock>())
 					{
 						if (tile.TileFrameX == 0)
 						{
@@ -68,9 +68,9 @@ public class YggdrasilTownBiome : ModBiome
 		}
 		else if (BiomeCenter == Vector2.zeroVector)
 		{
-			return new Vector2(Main.maxTilesX / 2f * 16, (Main.maxTilesY - 1000) * 16);
+			return new Vector2(487, 20711).ToWorldCoordinates();
 		}
-		return new Vector2(Main.maxTilesX / 2f * 16, (Main.maxTilesY - 1000) * 16);
+		return new Vector2(487, 20711).ToWorldCoordinates();
 	}
 
 	/// <summary>
@@ -79,6 +79,18 @@ public class YggdrasilTownBiome : ModBiome
 	/// <returns></returns>
 	public static bool BiomeActive()
 	{
+		if(YggdrasilTownCentralSystem.InCanteen_YggdrasilTown())
+		{
+			return true;
+		}
+		if (YggdrasilTownCentralSystem.InUnion_YggdrasilTown())
+		{
+			return true;
+		}
+		if (YggdrasilTownCentralSystem.InPlayerRoom_YggdrasilTown())
+		{
+			return true;
+		}
 		if (BiomeCenter == Vector2.zeroVector)
 		{
 			BiomeCenter = GetBiomeCenter();

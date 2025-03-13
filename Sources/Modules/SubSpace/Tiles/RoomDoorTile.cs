@@ -39,7 +39,7 @@ public abstract class RoomDoorTile : ModTile
 	{
 		Tile tile = Main.tile[i, j];
 		Point point = new Point(i - tile.TileFrameX / 18, j - tile.TileFrameY / 18);
-		RoomManager.EnterNextLevelRoom(point, default, default, default, default, WoodenRoomGen);
+		RoomManager.EnterNextLevelRoom(point, default, WoodenRoomGen);
 		return base.RightClick(i, j);
 	}
 

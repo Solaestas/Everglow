@@ -24,7 +24,7 @@ public class ChineseKitchenDoor : RoomDoorTile
 	{
 		Tile tile = Main.tile[i, j];
 		Point point = new Point(i - tile.TileFrameX / 18, j - tile.TileFrameY / 18);
-		RoomManager.EnterNextLevelRoom(point, default, default, default, default, BuildChineseStyleKitchenGen);
+		RoomManager.EnterNextLevelRoom(point, default, BuildChineseStyleKitchenGen);
 		return false;
 	}
 }

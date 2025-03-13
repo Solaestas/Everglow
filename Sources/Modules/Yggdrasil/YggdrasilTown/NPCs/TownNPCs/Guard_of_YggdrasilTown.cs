@@ -63,7 +63,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 		NPC.knockBackResist = 0;
 
 		NPCHappiness NH = NPC.Happiness;
-		NH.SetBiomeAffection<ForestBiome>((AffectionLevel)50);
+		NH.SetBiomeAffection<YggdrasilTownBiome>((AffectionLevel)50);
 		NH.SetBiomeAffection<SnowBiome>((AffectionLevel)70);
 		NH.SetBiomeAffection<CrimsonBiome>((AffectionLevel)90);
 		NH.SetBiomeAffection<CorruptionBiome>((AffectionLevel)90);
@@ -147,6 +147,13 @@ public class Guard_of_YggdrasilTown : ModNPC
 			NPC.aiStyle = -1;
 			NPC.ai[0] = 0;
 		}
+	}
+
+	public override bool CheckConditions(int left, int right, int top, int bottom)
+	{
+		int score = ((right - left) * (bottom - top)) / 2;
+
+		return score > float.PositiveInfinity;
 	}
 
 	/// <summary>
@@ -278,6 +285,11 @@ public class Guard_of_YggdrasilTown : ModNPC
 	public void CheckInSuitableArea()
 	{
 		bool safe = false;
+		var homePoint = AnchorForBehaviorPos.ToTileCoordinates();
+		NPC.homeless = false;
+		NPC.homeTileX = homePoint.X + 4;
+		NPC.homeTileY = homePoint.Y;
+
 		if (YggdrasilTownCentralSystem.TownPos(NPC.Center).X is > 9904 and < 11286)
 		{
 			if (YggdrasilTownCentralSystem.TownPos(NPC.Center).Y is > 2171 and < 2850)
@@ -291,12 +303,28 @@ public class Guard_of_YggdrasilTown : ModNPC
 		}
 	}
 
+	public void CheckDuplicatedSelf()
+	{
+		foreach (NPC npc in Main.npc)
+		{
+			if (npc != null && npc.type == Type && npc.active && npc != NPC)
+			{
+				npc.active = false;
+			}
+			if (NPC.CountNPCS(Type) <= 1)
+			{
+				break;
+			}
+		}
+	}
+
 	public IEnumerator<ICoroutineInstruction> AI_Main()
 	{
 		while (true)
 		{
 			CheckInSuitableArea();
 			CheckSlimy();
+			CheckDuplicatedSelf();
 			aiMainCount++;
 			if (AICoroutines.Count > 0 && Idle)
 			{

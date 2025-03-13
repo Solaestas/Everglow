@@ -222,10 +222,35 @@ public class CanteenMaid : ModNPC
 		return false;
 	}
 
+	public Point AnchorForBehaviorPos => new Point(146, 148);
+
+	public void CheckInSuitableArea()
+	{
+		bool safe = false;
+		var homePoint = AnchorForBehaviorPos;
+		NPC.homeless = false;
+		NPC.homeTileX = homePoint.X;
+		NPC.homeTileY = homePoint.Y;
+
+		var npcTilePos = NPC.Center.ToTileCoordinates();
+		if (npcTilePos.X is > 100 and < 200)
+		{
+			if (npcTilePos.Y is > 100 and < 200)
+			{
+				safe = true;
+			}
+		}
+		if (!safe)
+		{
+			NPC.Center = homePoint.ToWorldCoordinates() + new Vector2(0, 48);
+		}
+	}
+
 	public IEnumerator<ICoroutineInstruction> AI_Main()
 	{
 		while (true)
 		{
+			CheckInSuitableArea();
 			aiMainCount++;
 			if (AICoroutines.Count > 0 && Idle)
 			{
