@@ -15,5 +15,5 @@ public class NecrosisDebuff : ElementalDebuff
 
 	public override Asset<Texture2D> Texture => ModAsset.Necrosis;
 
-	public override Color Color => Color.Gray;
+	public override Color Color => new Color(0.1f, 0.1f, 0.1f, 1f);
 }
