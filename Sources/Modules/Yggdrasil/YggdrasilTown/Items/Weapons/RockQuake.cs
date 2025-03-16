@@ -16,7 +16,7 @@ public class RockQuake : ModItem
 		Item.height = 48;
 
 		Item.DamageType = DamageClass.Magic;
-		Item.damage = 34;
+		Item.damage = 16;
 		Item.knockBack = 0.5f;
 		Item.mana = 7;
 

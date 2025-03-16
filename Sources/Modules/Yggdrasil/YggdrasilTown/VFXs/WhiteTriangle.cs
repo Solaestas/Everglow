@@ -13,20 +13,20 @@ public class WhiteTriangle : Visual
 	public float scale;
 	public float rotation;
 
-	public WhiteTriangle()
-	{
-	}
-
 	public override void Update()
 	{
 		position += velocity;
 		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
 		{
 			timer = maxTime;
+			Active = false;
+			return;
 		}
 		if (position.Y <= 320 || position.Y >= Main.maxTilesY * 16 - 320)
 		{
 			timer = maxTime;
+			Active = false;
+			return;
 		}
 		velocity *= 0.99f;
 		velocity += new Vector2(0, Main.rand.NextFloat(0.04f)).RotatedByRandom(6.283);
@@ -40,6 +40,7 @@ public class WhiteTriangle : Visual
 		if (timer > maxTime)
 		{
 			Active = false;
+			return;
 		}
 
 		if (Collision.SolidCollision(position, 0, 0))
