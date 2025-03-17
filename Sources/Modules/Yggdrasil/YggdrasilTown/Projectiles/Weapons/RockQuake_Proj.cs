@@ -114,7 +114,7 @@ public class RockQuake_Proj : ModProjectile, IWarpProjectile_warpStyle2
 	{
 		if (StartHit != default && EndHit != default)
 		{
-			if (CollisionUtils.Intersect(target.Hitbox.Left(), target.Hitbox.Right(), target.Hitbox.Height, StartHit, EndHit, 30) && Projectile.timeLeft > 30)
+			if (CollisionUtils.Intersect(target.Hitbox.Left(), target.Hitbox.Right(), target.Hitbox.Height, StartHit, EndHit, 120) && Projectile.timeLeft > 30)
 			{
 				modifiers.FinalDamage *= 3;
 			}
@@ -130,6 +130,10 @@ public class RockQuake_Proj : ModProjectile, IWarpProjectile_warpStyle2
 		if (EndPos != default)
 		{
 			if (CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, Projectile.Center, EndPos, 30) && Projectile.timeLeft > 30)
+			{
+				return true;
+			}
+			if (CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, StartHit, EndHit, 120) && Projectile.timeLeft > 30)
 			{
 				return true;
 			}

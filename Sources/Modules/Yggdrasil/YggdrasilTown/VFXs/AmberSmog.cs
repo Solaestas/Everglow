@@ -79,6 +79,7 @@ public class AmberSmogDust : Visual
 		if (timer > maxTime)
 		{
 			Active = false;
+			return;
 		}
 
 		velocity = velocity.RotatedBy(ai[1]);
