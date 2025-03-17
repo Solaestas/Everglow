@@ -1,6 +1,3 @@
-using Everglow.Commons.Weapons.Gyroscopes;
-using Everglow.Yggdrasil.YggdrasilTown.Buffs;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.FaelanternProj;
 using Terraria.DataStructures;
 
@@ -36,14 +33,14 @@ public class MidwinterNightmare : ModItem
 		int tileY = (int)(Main.mouseY + Main.screenPosition.Y) / 16;
 		if (player.gravDir == -1f)
 		{
-			tileY = (int)(Main.screenPosition.Y + (float)Main.screenHeight - (float)Main.mouseY) / 16;
+			tileY = (int)(Main.screenPosition.Y + Main.screenHeight - Main.mouseY) / 16;
 		}
 
 		do
 		{
 			tileY -= 3;
-		} while (WorldGen.SolidTile2(tileX, tileY)|| WorldGen.SolidTile2(tileX, tileY+1) || WorldGen.SolidTile2(tileX, tileY + 2));
-
+		}
+		while (WorldGen.SolidTile2(tileX, tileY) || WorldGen.SolidTile2(tileX, tileY + 1) || WorldGen.SolidTile2(tileX, tileY + 2));
 
 		for (; tileY < Main.maxTilesY - 10
 			&& (Main.tile[tileX, tileY + 3] == null || Main.tile[tileX - 1, tileY + 3] == null || Main.tile[tileX - 1, tileY + 3] == null
@@ -55,8 +52,7 @@ public class MidwinterNightmare : ModItem
 		int p = Projectile.NewProjectile(source, pos, Vector2.Zero, type, damage, knockback, player.whoAmI);
 		Main.projectile[p].originalDamage = damage;
 		player.UpdateMaxTurrets();
-		
+
 		return false;
 	}
-
 }

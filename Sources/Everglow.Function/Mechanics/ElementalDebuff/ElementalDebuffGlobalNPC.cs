@@ -73,7 +73,7 @@ public partial class ElementalDebuffGlobalNPC : GlobalNPC
 				{
 					ValueBarHelper.DrawBreakOutEffect(spriteBatch, drawPosition, breakingTime, buffBarScale);
 				}
-				ValueBarHelper.DrawCircleValueBar(spriteBatch, drawPosition, element.Duration / (float)element.DurationMax, durationColor, backgroundColor, buffBarScale, element.Texture.Value);
+				ValueBarHelper.DrawCircleValueBar(spriteBatch, drawPosition, 1 - element.Duration / (float)element.DurationMax, durationColor, backgroundColor, buffBarScale, element.Texture.Value);
 				drawedElementDebuffCount++;
 			}
 			else if (element.HasBuildUp)
