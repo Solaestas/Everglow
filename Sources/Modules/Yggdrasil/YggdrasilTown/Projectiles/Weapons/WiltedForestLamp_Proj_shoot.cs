@@ -1,6 +1,8 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Weapons;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using Terraria;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Weapons;
@@ -274,5 +276,14 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 	{
 	}
 
-	public override void KillMainStructure() => base.KillMainStructure();
+	public override void KillMainStructure()
+	{
+		for (int i = 0; i < 18; i++)
+		{
+			Dust dust = Dust.NewDustDirect(Projectile.Center, 2, 2, ModContent.DustType<LeafMagic>(), Projectile.velocity.X, Projectile.velocity.Y);
+			dust.velocity = Projectile.velocity.RotateRandom(0.4) * Main.rand.NextFloat(0.7f, 1.1f);
+			dust.scale = Main.rand.NextFloat(0.3f, 1.1f);
+		}
+		base.KillMainStructure();
+	}
 }

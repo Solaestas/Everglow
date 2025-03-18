@@ -19,10 +19,14 @@ public class BloodFlame_dark : Visual
 		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
 		{
 			timer = maxTime;
+			Active = false;
+			return;
 		}
 		if (position.Y <= 320 || position.Y >= Main.maxTilesY * 16 - 320)
 		{
 			timer = maxTime;
+			Active = false;
+			return;
 		}
 		velocity *= MathF.Pow(1 - timer / maxTime, 5f);
 		velocity += new Vector2(0, ai[2]).RotatedBy(ai[1]);
@@ -31,6 +35,7 @@ public class BloodFlame_dark : Visual
 		if (timer > maxTime)
 		{
 			Active = false;
+			return;
 		}
 		rotation += ai[1];
 		Lighting.AddLight(position, scale * 0.03f, 0, 0);
