@@ -1,6 +1,6 @@
 using Terraria.ID;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Items.KelpSnake;
+namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons.KelpSnake;
 
 public class AcroporaSpear : ModItem
 {

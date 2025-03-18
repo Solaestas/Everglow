@@ -1,5 +1,5 @@
 using Everglow.Yggdrasil.KelpCurtain.Tiles;
-namespace Everglow.Yggdrasil.KelpCurtain.Items;
+namespace Everglow.Yggdrasil.KelpCurtain.Items.Tools.Developer;
 
 public class KelpMoss_largeCreate : ModItem
 {

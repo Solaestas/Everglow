@@ -1,4 +1,4 @@
-namespace Everglow.Yggdrasil.KelpCurtain.Items;
+namespace Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 
 public class OldMoss : ModItem
 {

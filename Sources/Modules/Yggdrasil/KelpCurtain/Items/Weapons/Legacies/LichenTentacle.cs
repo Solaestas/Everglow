@@ -1,7 +1,7 @@
 using Everglow.Commons.Weapons.Whips;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Items.Legacies;
+namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons.Legacies;
 
 public class LichenTentacle : WhipItem
 {

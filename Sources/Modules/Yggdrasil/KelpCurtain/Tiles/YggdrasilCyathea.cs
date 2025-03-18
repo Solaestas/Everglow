@@ -1,5 +1,6 @@
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.KelpCurtain.Gores;
+using Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles;
 
@@ -23,7 +24,7 @@ public class YggdrasilCyathea : ModTile
 	}
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		yield return new Item(ModContent.ItemType<Items.YggdrasilCyatheaWood>());
+		yield return new Item(ModContent.ItemType<YggdrasilCyatheaWood>());
 	}
 	public override bool CanDrop(int i, int j)
 	{

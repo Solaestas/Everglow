@@ -8,7 +8,7 @@ using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.FaelanternProj;
 
 public class FaeCharmRing : ModProjectile, IWarpProjectile
 {
@@ -65,9 +65,9 @@ public class FaeCharmRing : ModProjectile, IWarpProjectile
 
 	public override void PostDraw(Color lightColor)
 	{
-		Vector4 light = lightColor.ToVector4();
+		var light = lightColor.ToVector4();
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 

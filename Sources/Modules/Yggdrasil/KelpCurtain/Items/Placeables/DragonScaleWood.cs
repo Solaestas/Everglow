@@ -1,6 +1,6 @@
 using Terraria.ID;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Items;
+namespace Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 
 public class DragonScaleWood : ModItem
 {

@@ -1,10 +1,11 @@
-﻿namespace Everglow.Yggdrasil.KelpCurtain.Items;
+namespace Everglow.Yggdrasil.KelpCurtain.Items.Placeables.Walls;
 
 public class DragonScaleWoodWall : ModItem
 {
 	public override void SetStaticDefaults()
 	{
 	}
+
 	public override void SetDefaults()
 	{
 		Item.width = 24;
@@ -16,8 +17,9 @@ public class DragonScaleWoodWall : ModItem
 		Item.useTime = 7;
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.consumable = true;
-		Item.createWall = ModContent.WallType<Walls.DragonScaleWoodWall>();
+		Item.createWall = ModContent.WallType<KelpCurtain.Walls.DragonScaleWoodWall>();
 	}
+
 	public override void AddRecipes()
 	{
 		CreateRecipe(4)

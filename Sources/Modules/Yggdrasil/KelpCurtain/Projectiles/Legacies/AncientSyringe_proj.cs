@@ -1,6 +1,6 @@
 using Everglow.Commons.Weapons;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
-using Everglow.Yggdrasil.KelpCurtain.Items.Legacies;
+using Everglow.Yggdrasil.KelpCurtain.Items.Weapons.Legacies;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Terraria.DataStructures;
 

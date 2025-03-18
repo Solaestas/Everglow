@@ -1,7 +1,7 @@
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Items.Legacies;
+namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons.Legacies;
 
 public class BacterialAgent : ModItem
 {

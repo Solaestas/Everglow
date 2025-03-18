@@ -1,7 +1,7 @@
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Items.Legacies;
+namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons.Legacies;
 
 public class AncientSyringe : ModItem
 {
@@ -26,10 +26,10 @@ public class AncientSyringe : ModItem
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
 		if (player.ownedProjectileCounts[type] == 0)
-		{	
+		{
 			if (Main.myPlayer == player.whoAmI)
 			{
-				Projectile p0 = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, type, player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
+				var p0 = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, type, player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
 				Vector2 mouseToPlayer = Main.MouseWorld - player.MountedCenter;
 				mouseToPlayer = Vector2.Normalize(mouseToPlayer);
 				p0.rotation = mouseToPlayer.ToRotation() + MathHelper.PiOver4;
