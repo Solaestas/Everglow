@@ -244,24 +244,31 @@ float4 PS_Forward_Lit(PSInput input, out float4 emissionTarget : SV_Target1,
 	float3 V = normalize(uCameraPosition - input.WorldPos);
 	float3 H = normalize(L + V);
 
-	float NdotH = max(0, dot(N, H));
-	float NdotL = max(0, dot(N, L));
-	float NdotV = max(0, dot(N, V));
-	float LdotV = max(0, dot(L, V));
+    float NdotH = max(0.001, dot(N, H));
+	float NdotL = max(0.001, dot(N, L));
+	float NdotV = max(0.001, dot(N, V));
+	float LdotV = max(0.001, dot(L, V));
 	float HdotV = saturate(dot(H, V));
 	
 	float roughness = 0.3; //clamp(materialParams.r, 0.002, 1.0);
 	float metallic = saturate(materialParams.g);
 	float alpha = Sq(roughness);
 	
-	float3 baseF0 = 0.04;
+	float3 baseF0 = 0.4;
 	float3 f0 = lerp(baseF0, albedo.xyz, metallic);
 	
 	float Vis = V_SmithGGXCorrelated(NdotL, NdotV, alpha);
 	float3 Ls = D_GGX(NdotH, alpha) * Vis * F_Schlick_S(f0, HdotV);
 	float3 Ld = (1.0 - metallic) * albedo.xyz * INV_PI; //DiffuseGGX(albedo.xyz, NdotV, NdotL, NdotH, LdotV, 1.0);
 	float3 Lit = (Ls + Ld) * NdotL * uLightIntensity;
-	return float4(Lit, albedo.a);
+    if (length(float4(Lit, albedo.a)) > length(emissionTarget))
+    {
+        return float4(Lit, albedo.a);
+    }
+    else
+    {
+        return emissionTarget;
+    }
 }
 
 

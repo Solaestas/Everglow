@@ -1,136 +1,56 @@
-锘縮ampler uImage0 : register(s0);
-sampler uDepthImage : register(s1);
+sampler uImage0 : register(s0);
 
-float uBias;
-float2 uInvImageSize;
-float4 _EdgeColor;
-float4 _ZBufferParams;
+int RenderTargetSize;
 
-const float Gx[9] =
+int _PixelSize;
+float _PixelRatio;
+float2 _PixelScale;
+
+float4 Quad(float2 uv, float RenderTargetSize, float pixelRatio)
 {
-	-1, 0, 1,
-    -2, 0, 2,
-    -1, 0, 1
-};
-
-const float Gy[9] =
-{
-	-1, -2, -1,
-    0, 0, 0,
-    1, 2, 1
-};
-
-const float Dx[9] = { -1, 0, 1, -1, 0, 1, -1, 0, 1 };
-const float Dy[9] = { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
-
-float3 unpack_normal(float3 unpackedNormal)
-{
-	return normalize(unpackedNormal * 2 - 1);
+    float uvX = ceil(uv.x * RenderTargetSize) / RenderTargetSize;
+    float uvY = ceil(uv.y * RenderTargetSize) / RenderTargetSize;
+    half2 coord = half2(uvX, uvY);
+    return tex2D(uImage0, coord);
 }
 
-float Linear01Depth(float z)
+float4 PS_BlendBloom(float2 coords : TEXCOORD0) : COLOR0
 {
-	return 1.0 / (_ZBufferParams.x * z + _ZBufferParams.y);
-}
+   /* float3 rgb = (0,0,0);
+    int n=0;
+    // 对周围8格进行判定
+    for (int i = -10; i <= 10; i++)
+    {
+        for (int j = -10; j <= 10; j++)
+        {
+            float4 c = tex2D(uImage0, (coords * 1000 + float2(i, j))/1000);
+            if (any(c))
+            {
+                rgb = rgb + c.xyz;
+                n++;
+            }
+        }
+    }
+    if (n == 0)
+    {
+        return (0, 0, 0, 0);
 
-float LinearEyeDepth(float z)
-{
-	return 1.0 / (_ZBufferParams.z * z + _ZBufferParams.w);
-}
-
-float4 DownSample_Naive(float2 coords : TEXCOORD0) : COLOR0
-{
-	float dx = uInvImageSize.x * 0.5;
-	float dy = uInvImageSize.y * 0.5;
-	float4 topRight = tex2D(uImage0, coords + float2(dx, -dy));
-	float4 topLeft = tex2D(uImage0, coords + float2(-dx, -dy));
-	float4 botRight = tex2D(uImage0, coords + float2(dx, dy));
-	float4 botLeft = tex2D(uImage0, coords + float2(-dx, dy));
-	float4 c = (topRight + topLeft + botRight + botLeft) * 0.25;
-	return c;
-}
-
-float4 Edge_HighLight_Inner(float2 coords : TEXCOORD0) : COLOR0
-{
-	float dx = uInvImageSize.x;
-	float dy = uInvImageSize.y;
-	float4 top = tex2D(uImage0, coords + float2(0, -dy));
-	float4 bot = tex2D(uImage0, coords + float2(0, dy));
-	float4 right = tex2D(uImage0, coords + float2(dx, 0));
-	float4 left = tex2D(uImage0, coords + float2(-dx, 0));
-	float4 self = tex2D(uImage0, coords);
-	
-	float2 edge = 0;
-	for (int i = 0; i < 9; i++)
-	{
-		float z = Linear01Depth(1 - tex2D(uDepthImage, coords + float2(Dx[i] * dx, Dy[i] * dy)).w);
-		edge.x += Gx[i] * z;
-		edge.y += Gy[i] * z;
-	}
-	float strength = length(edge);
-	
-	// Normal Edge
-	if (strength > uBias)
-	{
-		return float4(self.rgb * lerp(0.5, 0.1, strength), 1);
-	}
-	
-	float4 topD = tex2D(uDepthImage, coords + float2(0, -dy));
-	float4 botD = tex2D(uDepthImage, coords + float2(0, dy));
-	float4 rightD = tex2D(uDepthImage, coords + float2(dx, 0));
-	float4 leftD = tex2D(uDepthImage, coords + float2(-dx, 0));
-	float4 selfD = tex2D(uDepthImage, coords);
-	
-	// Concave Edge
-	float HDiff = max(0, dot(unpack_normal(leftD.xyz), unpack_normal(rightD.xyz)));
-	float VDiff = max(0, dot(unpack_normal(topD.xyz), unpack_normal(botD.xyz)));
-	if (HDiff < 0.95
-		|| VDiff < 0.95)
-	{
-		return float4(self.rgb * lerp(0.5, 0.3, HDiff * VDiff), 1);
-	}
-	//if (abs((topD.w + botD.w + rightD.w + leftD.w) * 0.25 - selfD.w) > uBias)
-	//{
-	//	return float4(self.rgb * 0.5, 1);
-	//}
-	return self;
+    }
+    else
+    {
+        return float4(rgb / n,1);
+    }
+*/
+    //float4 color = Quad(i.uv,_PixelSize,_PixelRatio);
+    float4 color = Quad(coords, RenderTargetSize/2, _PixelRatio);
+    return color;
 }
 
 
-float4 Edge_HighLight_Outer(float2 coords : TEXCOORD0) : COLOR0
+technique Technique1
 {
-	float dx = uInvImageSize.x;
-	float dy = uInvImageSize.y;
-	float4 top = tex2D(uImage0, coords + float2(0, -dy));
-	float4 bot = tex2D(uImage0, coords + float2(0, dy));
-	float4 right = tex2D(uImage0, coords + float2(dx, 0));
-	float4 left = tex2D(uImage0, coords + float2(-dx, 0));
-	float4 self = tex2D(uImage0, coords);
-	
-	if (self.a != 0)
-	{
-		return self;
-	}
-	
-	if (top.a != 0 || bot.a != 0 || right.a != 0 || left.a != 0)
-	{
-		return _EdgeColor;
-	}
-	return self;
-}
-
-technique PixelArt
-{
-	pass DownSample_Naive
-	{
-		PixelShader = compile ps_2_0 DownSample_Naive();
-	}
-	pass Edge_HighLight_Inner
-	{
-		PixelShader = compile ps_3_0 Edge_HighLight_Inner();
-	}
-	pass Edge_HighLight_Outer
-	{
-		PixelShader = compile ps_3_0 Edge_HighLight_Outer();
-	}
+    pass Blend
+    {
+        PixelShader = compile ps_3_0 PS_BlendBloom();
+    }
 }
