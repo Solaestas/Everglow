@@ -38,7 +38,7 @@ public class Heart_VFX_spin : Visual
 	{
 		Ins.Batch.BindTexture<Vertex2D>(ModAsset.Heart_VFX.Value);
 		float pocession = 1 - timer / maxTime;
-		float timeValue = (float)(Main.time * 0.24 + ai[0]);
+		float timeValue = Math.Clamp((1 - pocession) * 8, 0, 5);
 		float frameCount = 6;
 		float frameY = (int)timeValue % frameCount;
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
@@ -51,8 +51,7 @@ public class Heart_VFX_spin : Visual
 		{
 			drawColor = Color.Lerp(color, Color.Transparent, 1 - pocession / 0.2f);
 		}
-		Vector4 drawColorEffectedByEnvironment = drawColor.ToVector4() * Lighting.GetColor(position.ToTileCoordinates()).ToVector4();
-		drawColor = new Color(drawColorEffectedByEnvironment.X, drawColorEffectedByEnvironment.Y, drawColorEffectedByEnvironment.Z, drawColorEffectedByEnvironment.W);
+
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
 			new Vertex2D(position + toCorner, drawColor, new Vector3(0, frameY / frameCount, 0)),

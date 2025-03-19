@@ -5,6 +5,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 public class EvilMusicRemnant_Projectile : ModProjectile
 {
 	public const int SearchDistance = 200;
+	public Vector2 ClickCenter;
+	public int MaxTime = 600;
 
 	public int TargetWhoAmI
 	{
@@ -14,34 +16,39 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 
 	public override void SetDefaults()
 	{
-		Projectile.width = 18;
-		Projectile.height = 24;
+		Projectile.width = 26;
+		Projectile.height = 26;
 
 		Projectile.friendly = true;
 		Projectile.hostile = false;
-		Projectile.timeLeft = 300;
+		Projectile.timeLeft = MaxTime;
 	}
 
 	public override void OnSpawn(IEntitySource source)
 	{
 		// Select random texture
-		var num = Main.rand.Next(3);
+		Projectile.timeLeft += Main.rand.Next(-30, 30);
+		ClickCenter = Main.MouseWorld;
+		var num = Main.rand.Next(6);
 		switch (num)
 		{
 			case 1:
 				ProjectileTexture = ModAsset.EvilMusicRemnant_Projectile2_Mod;
-				Projectile.width = 18;
-				Projectile.height = 24;
 				break;
 			case 2:
 				ProjectileTexture = ModAsset.EvilMusicRemnant_Projectile3_Mod;
-				Projectile.width = 10;
-				Projectile.height = 22;
+				break;
+			case 3:
+				ProjectileTexture = ModAsset.EvilMusicRemnant_Projectile4_Mod;
+				break;
+			case 4:
+				ProjectileTexture = ModAsset.EvilMusicRemnant_Projectile5_Mod;
+				break;
+			case 5:
+				ProjectileTexture = ModAsset.EvilMusicRemnant_Projectile6_Mod;
 				break;
 			default:
 				ProjectileTexture = ModAsset.EvilMusicRemnant_Projectile1_Mod;
-				Projectile.width = 22;
-				Projectile.height = 24;
 				break;
 		}
 
@@ -61,6 +68,14 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 			{
 				Projectile.netUpdate = true;
 			}
+			else if(Projectile.timeLeft < MaxTime - 30)
+			{
+				var ellipses = new Vector2(0, 80).RotatedBy(Projectile.whoAmI * MathHelper.TwoPi * 3f / 7f + Main.time * 0.04f);
+				ellipses.Y *= 0.15f;
+				var targetPos = ClickCenter + ellipses;
+				var directionToTarget = (targetPos - Projectile.Center - Projectile.velocity).NormalizeSafe();
+				Projectile.velocity = MathUtils.Lerp(0.05f, Projectile.velocity, directionToTarget * 6);
+			}
 		}
 		else
 		{
@@ -71,15 +86,26 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 			}
 
 			var target = Main.npc[TargetWhoAmI];
-			var directionToTarget = (target.Center - Projectile.Center).NormalizeSafe();
+			var directionToTarget = (target.Center - Projectile.Center - Projectile.velocity).NormalizeSafe();
 			Projectile.velocity = MathUtils.Lerp(0.05f, Projectile.velocity, directionToTarget * 6);
 		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
+		float fade = 1f;
+		if (Projectile.timeLeft < 60f)
+		{
+			fade = Projectile.timeLeft / 60f;
+		}
 		var texture = ModContent.Request<Texture2D>(ProjectileTexture).Value;
-		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, Color.White, 0, texture.Size() / 2, 1, SpriteEffects.None, 0);
+		float tremorValue = MathF.Sin(Projectile.timeLeft * 0.1f) * 0.3f + 1f;
+		for (int i = 0; i < 6; i++)
+		{
+			var termorPos = new Vector2(2, 0).RotatedBy(i / 6f * MathHelper.TwoPi);
+			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + termorPos, null, new Color(153, 110, 255, 255) * 0.45f * fade, 0, texture.Size() / 2, tremorValue, SpriteEffects.None, 0);
+		}
+		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, new Color(74, 23, 124, 255) * fade, 0, texture.Size() / 2, tremorValue, SpriteEffects.None, 0);
 		return false;
 	}
 

@@ -361,23 +361,23 @@ public class EvilMusicRemnant_Minion : ModProjectile
 
 	private void DrawShield(SpriteBatch spriteBatch)
 	{
-		var shieldTexture = ModAsset.EvilMusicRemnant_Shield_Color.Value;
-		var colorProgress = MathF.Pow(SpawnProgress, 4);
-		var shieldColor = new Color(colorProgress, colorProgress, colorProgress, 0);
-		var scaleFactor = 0.9f + 0.1f * MathF.Sin((float)Main.timeForVisualEffects * 0.05f);
+		//var shieldTexture = ModAsset.EvilMusicRemnant_Shield_Color.Value;
+		//var colorProgress = MathF.Pow(SpawnProgress, 4);
+		//var shieldColor = new Color(colorProgress, colorProgress, colorProgress, 0);
+		//var scaleFactor = 0.9f + 0.1f * MathF.Sin((float)Main.timeForVisualEffects * 0.05f);
 
-		var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		//var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		//Main.spriteBatch.End();
+		//Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		var effect = ModAsset.EvilMusicRemnant_Shield.Value;
-		effect.Parameters["uHeatMap"].SetValue(ModAsset.EvilMusicRemnant_Shield_Heat.Value);
-		effect.Parameters["uNoiseMap"].SetValue(Commons.ModAsset.Noise_burn.Value);
-		effect.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects * 0.005f);
-		effect.CurrentTechnique.Passes[0].Apply();
+		//var effect = ModAsset.EvilMusicRemnant_Shield.Value;
+		//effect.Parameters["uHeatMap"].SetValue(ModAsset.EvilMusicRemnant_Shield_Heat.Value);
+		//effect.Parameters["uNoiseMap"].SetValue(Commons.ModAsset.Noise_burn.Value);
+		//effect.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects * 0.005f);
+		//effect.CurrentTechnique.Passes[0].Apply();
 
-		spriteBatch.Draw(shieldTexture, Projectile.Center - Main.screenPosition, null, shieldColor, 0, shieldTexture.Size() / 2, 0.05f * scaleFactor, SpriteEffects.None, 0);
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(sBS);
+		//spriteBatch.Draw(shieldTexture, Projectile.Center - Main.screenPosition, null, shieldColor, 0, shieldTexture.Size() / 2, 0.05f * scaleFactor, SpriteEffects.None, 0);
+		//Main.spriteBatch.End();
+		//Main.spriteBatch.Begin(sBS);
 	}
 }

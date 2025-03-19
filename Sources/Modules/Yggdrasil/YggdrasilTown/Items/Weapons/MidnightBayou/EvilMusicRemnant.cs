@@ -37,7 +37,7 @@ public class EvilMusicRemnant : ModItem
 			var projectile = Projectile.NewProjectileDirect(source, position + velocity, velocity.RotatedBy(Main.rand.NextFloat(-1, 1)), type, damage, knockback, player.whoAmI);
 			projectile.originalDamage = Item.damage;
 		}
-
+		Projectile.NewProjectileDirect(source, Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<EvilMusicRemnant_Note_Mark>(), 0, 0, player.whoAmI);
 		return false;
 	}
 

@@ -38,6 +38,14 @@ public class BloodySwamp : ModItem
 
 	public override bool CanUseItem(Player player)
 	{
+		if (player.altFunctionUse == 2)
+		{
+			Item.mana = 40;
+		}
+		else
+		{
+			Item.mana = 6;
+		}
 		return base.CanUseItem(player);
 	}
 
@@ -45,11 +53,11 @@ public class BloodySwamp : ModItem
 	{
 		if (player.altFunctionUse != 2)
 		{
-			Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
+			Projectile.NewProjectile(source, position + velocity * 6, velocity, type, damage, knockback, player.whoAmI);
 		}
 		else
 		{
-			Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<BloodySwamp_shoot_area>(), damage, knockback, player.whoAmI);
+			Projectile.NewProjectile(source, position + velocity * 6, velocity * 2f, ModContent.ProjectileType<BloodySwamp_shoot_area>(), damage, knockback, player.whoAmI);
 		}
 		return false;
 	}
