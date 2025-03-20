@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -55,12 +56,15 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 		TargetWhoAmI = -1;
 	}
 
+	public bool BehideProj = true;
+
 	private string ProjectileTexture { get; set; } = ModAsset.EvilMusicRemnant_Projectile1_Mod;
 
 	public override string Texture => ProjectileTexture;
 
 	public override void AI()
 	{
+		CheckClickCenter();
 		if (TargetWhoAmI < 0)
 		{
 			TargetWhoAmI = ProjectileUtils.FindTarget(Projectile.Center, SearchDistance);
@@ -68,13 +72,33 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 			{
 				Projectile.netUpdate = true;
 			}
-			else if(Projectile.timeLeft < MaxTime - 30)
+			else if (Projectile.timeLeft < MaxTime - 30)
 			{
-				var ellipses = new Vector2(0, 80).RotatedBy(Projectile.whoAmI * MathHelper.TwoPi * 3f / 7f + Main.time * 0.04f);
-				ellipses.Y *= 0.15f;
-				var targetPos = ClickCenter + ellipses;
-				var directionToTarget = (targetPos - Projectile.Center - Projectile.velocity).NormalizeSafe();
-				Projectile.velocity = MathUtils.Lerp(0.05f, Projectile.velocity, directionToTarget * 6);
+				if (ClickCenter != Vector2.zeroVector)
+				{
+					var ellipses = new Vector2(0, 80).RotatedBy(Projectile.whoAmI + Main.time * 0.04f);
+					ellipses.Y *= 0.15f;
+					var targetPos = ClickCenter + ellipses;
+					var directionToTarget = (targetPos - Projectile.Center - Projectile.velocity).NormalizeSafe();
+					Projectile.velocity = MathUtils.Lerp(0.05f, Projectile.velocity, directionToTarget * 6);
+					if (Projectile.velocity.X < 0)
+					{
+						BehideProj = false;
+					}
+					else
+					{
+						BehideProj = true;
+					}
+					Projectile.hide = true;
+					if (Projectile.timeLeft < 240)
+					{
+						Projectile.timeLeft = Main.rand.Next(240, 270);
+					}
+				}
+				else
+				{
+					Projectile.hide = false;
+				}
 			}
 		}
 		else
@@ -91,6 +115,41 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 		}
 	}
 
+	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+	{
+		if (BehideProj)
+		{
+			behindProjectiles.Add(index);
+		}
+		else
+		{
+			overPlayers.Add(index);
+		}
+		base.DrawBehind(index, behindNPCsAndTiles, behindNPCs, behindProjectiles, overPlayers, overWiresUI);
+	}
+
+	public void CheckClickCenter()
+	{
+		float closest = 20000;
+		Vector2 minDisPos = Vector2.zeroVector;
+		foreach (var proj in Main.projectile)
+		{
+			if (proj != null && proj.active)
+			{
+				if (proj.type == ModContent.ProjectileType<EvilMusicRemnant_Note_Mark>())
+				{
+					float distance = (proj.Center - Projectile.Center).Length();
+					if (distance < closest)
+					{
+						closest = distance;
+						minDisPos = proj.Center;
+					}
+				}
+			}
+		}
+		ClickCenter = minDisPos;
+	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		float fade = 1f;
@@ -99,7 +158,7 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 			fade = Projectile.timeLeft / 60f;
 		}
 		var texture = ModContent.Request<Texture2D>(ProjectileTexture).Value;
-		float tremorValue = MathF.Sin(Projectile.timeLeft * 0.1f) * 0.3f + 1f;
+		float tremorValue = MathF.Sin(Projectile.timeLeft * 0.1f + Projectile.whoAmI) * 0.3f + 1f;
 		for (int i = 0; i < 6; i++)
 		{
 			var termorPos = new Vector2(2, 0).RotatedBy(i / 6f * MathHelper.TwoPi);
@@ -140,5 +199,26 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 
 		var index = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, minionProjType, Projectile.damage, Projectile.knockBack, Projectile.owner, owner.ownedProjectileCounts[minionProjType] + 1);
 		owner.AddBuff(ModContent.BuffType<Buffs.EvilMusicRemnant>(), 30);
+	}
+
+	public override void OnKill(int timeLeft)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			float size = Main.rand.NextFloat(0.1f, 0.96f);
+			var noteFlame = new EvilMusicRemnant_FlameDust
+			{
+				Velocity = new Vector2(0, Main.rand.NextFloat(0.3f, 1f)).RotatedByRandom(MathHelper.TwoPi) * 0.8f,
+				Active = true,
+				Visible = true,
+				Position = Projectile.Center,
+				MaxTime = Main.rand.Next(54, 86),
+				Scale = 14f * size,
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				Frame = Main.rand.Next(3),
+				ai = [Main.rand.NextFloat(-0.8f, 0.8f)],
+			};
+			Ins.VFXManager.Add(noteFlame);
+		}
 	}
 }

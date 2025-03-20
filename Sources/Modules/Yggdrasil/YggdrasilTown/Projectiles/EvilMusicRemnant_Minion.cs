@@ -17,6 +17,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		Patrol,
 		Chase,
 		Attack,
+		FlameAttack,
 	}
 
 	private const int TimeLeftMax = 300;
@@ -28,9 +29,16 @@ public class EvilMusicRemnant_Minion : ModProjectile
 	private const int KillTime = 30;
 	private const int DashDistance = 200;
 	private const int DashCooldown = 60;
+	private const int FlameCooldown = 150;
+
+	private int flameTime = -1;
+	private int flameCooling = -1;
 
 	private Vector2 dashStartPos;
 	private Vector2 dashEndPos;
+	private Vector2 flameTargetPos;
+
+	private Queue<Vector2> oldEyeGlow = new Queue<Vector2>();
 
 	public Minion_MainState MainState { get; set; } = Minion_MainState.Spawn;
 
@@ -69,8 +77,8 @@ public class EvilMusicRemnant_Minion : ModProjectile
 
 	public override void SetDefaults()
 	{
-		Projectile.width = 48;
-		Projectile.height = 56;
+		Projectile.width = 50;
+		Projectile.height = 50;
 
 		Projectile.aiStyle = -1;
 		Projectile.penetrate = -1;
@@ -118,10 +126,30 @@ public class EvilMusicRemnant_Minion : ModProjectile
 				ActionState = Minion_ActionState.Patrol;
 				TargetWhoAmI = -1;
 			}
+			flameTime = -1;
 		}
 		else if (MainState == Minion_MainState.Action)
 		{
 			Action();
+		}
+		else
+		{
+			flameTime = -1;
+		}
+
+		float skullRotation;
+		if (Projectile.direction < 0)
+		{
+			skullRotation = Projectile.velocity.ToRotation() - MathF.PI;
+		}
+		else
+		{
+			skullRotation = Projectile.velocity.ToRotation();
+		}
+		oldEyeGlow.Enqueue(Projectile.Center + new Vector2(12 * Projectile.direction, 3).RotatedBy(skullRotation));
+		if (oldEyeGlow.Count > 15)
+		{
+			oldEyeGlow.Dequeue();
 		}
 	}
 
@@ -133,8 +161,6 @@ public class EvilMusicRemnant_Minion : ModProjectile
 			Dust.NewDust(Projectile.Center, 1, 1, DustID.Shadowflame, 0, 0);
 		}
 	}
-
-	#region AI
 
 	private void UpdateLifeCycle()
 	{
@@ -164,7 +190,8 @@ public class EvilMusicRemnant_Minion : ModProjectile
 
 			// Teleport to
 			TeleportCooldown = MaxTeleportCooldown;
-			Projectile.position = Owner.MountedCenter + new Vector2((10 - MinionIndex * 30) * Owner.direction, -40 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f - MinionIndex) * 35f);
+			oldEyeGlow = new Queue<Vector2>();
+			Projectile.position = Owner.MountedCenter + new Vector2((10 - MinionIndex * 30) * Owner.direction, -40 + MathF.Sin((float)Main.time * 0.04f - MinionIndex) * 35f);
 		}
 	}
 
@@ -195,7 +222,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		for (int i = 0; i < 4; i++)
 		{
 			float size = Main.rand.NextFloat(0.1f, 0.96f);
-			var lotusFlame = new CyanLotusFlameDust
+			var noteFlame = new EvilMusicRemnant_FlameDust
 			{
 				Velocity = new Vector2(0, Main.rand.NextFloat(0.3f, 1f)).RotatedByRandom(MathHelper.TwoPi) * 0.8f,
 				Active = true,
@@ -207,12 +234,13 @@ public class EvilMusicRemnant_Minion : ModProjectile
 				Frame = Main.rand.Next(3),
 				ai = [Main.rand.NextFloat(-0.8f, 0.8f)],
 			};
-			Ins.VFXManager.Add(lotusFlame);
+			Ins.VFXManager.Add(noteFlame);
 		}
 	}
 
 	private void Action()
 	{
+		flameCooling--;
 		// If has target, check target active
 		if (TargetWhoAmI >= 0 && !ProjectileUtils.MinionCheckTargetActive(TargetWhoAmI))
 		{
@@ -231,13 +259,14 @@ public class EvilMusicRemnant_Minion : ModProjectile
 				ActionState = Minion_ActionState.Chase;
 				Projectile.netUpdate = true;
 			}
+			flameTime = -1;
 		}
 
 		// Switch action state
 		if (ActionState == Minion_ActionState.Chase) // Phase: Chase
 		{
 			MoveTo(Target.Center);
-
+			flameTime = -1;
 			Timer++;
 			Vector2 distanceToTarget = Target.Center - Projectile.Center;
 			if (distanceToTarget.Length() <= DashDistance && Timer >= DashCooldown)
@@ -246,6 +275,13 @@ public class EvilMusicRemnant_Minion : ModProjectile
 				dashStartPos = Projectile.Center;
 				dashEndPos = Target.Center + distanceToTarget.NormalizeSafe() * (DashDistance - distanceToTarget.Length() + MinionIndex);
 				ActionState = Minion_ActionState.Attack;
+			}
+			else if (distanceToTarget.Length() <= DashDistance * 2 && flameCooling <= 0)
+			{
+				Timer = 0;
+				flameTargetPos = Target.Center;
+				Projectile.velocity = (Target.Center - Projectile.Center).NormalizeSafe();
+				ActionState = Minion_ActionState.FlameAttack;
 			}
 		}
 		else if (ActionState == Minion_ActionState.Attack) // Phase: Attack
@@ -261,6 +297,42 @@ public class EvilMusicRemnant_Minion : ModProjectile
 				ActionState = Minion_ActionState.Chase;
 			}
 		}
+		else if (ActionState == Minion_ActionState.FlameAttack) // Phase: Attack
+		{
+			flameTime = Timer;
+			var flameProgress = Timer / 100f;
+			if (Projectile.velocity.Length() > 0.001f)
+			{
+				Projectile.velocity *= 0.1f;
+			}
+			if (flameProgress is > 0.12f and < 0.9f)
+			{
+				if (Timer % 5 == 0)
+				{
+					float skullRotation;
+					if (Projectile.direction < 0)
+					{
+						skullRotation = Projectile.velocity.ToRotation() - MathF.PI;
+					}
+					else
+					{
+						skullRotation = Projectile.velocity.ToRotation();
+					}
+					Vector2 startCenter = Projectile.Center + new Vector2(6 * Projectile.direction, 20).RotatedBy(skullRotation);
+					Vector2 targetCenter = flameTargetPos;
+					Vector2 vel = (targetCenter - startCenter).NormalizeSafe() * 12f;
+					Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), startCenter, vel, ModContent.ProjectileType<EvilMusicRemnant_Minion_Flame>(), (int)(Projectile.damage * 0.16f), Projectile.knockBack, Projectile.owner, 20);
+				}
+			}
+			Timer++;
+			if (Timer == 100)
+			{
+				flameTime = -1;
+				Timer = 0;
+				flameCooling = FlameCooldown;
+				ActionState = Minion_ActionState.Chase;
+			}
+		}
 		else // Phase: Patrol
 		{
 			Vector2 aim;
@@ -270,14 +342,14 @@ public class EvilMusicRemnant_Minion : ModProjectile
 				aim = Owner.MountedCenter
 					+ new Vector2(
 						x: (10 - MinionIndex * 30 + MinionIndex * 10) * Owner.direction,
-						y: -50 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f - MinionIndex) * 35f);
+						y: -50 + MathF.Sin((float)Main.time * 0.04f - MinionIndex) * 35f);
 			}
 			else
 			{
 				aim = Owner.MountedCenter
 					+ new Vector2(
-						x: Owner.direction * (MathF.Cos((float)Main.timeForVisualEffects * 0.02f) * 60f - MinionIndex * 30),
-						y: Owner.height + MathF.Sin((float)Main.timeForVisualEffects * 0.04f) * 30f);
+						x: Owner.direction * (MathF.Cos((float)Main.time * 0.02f) * 60f - MinionIndex * 30),
+						y: Owner.height + MathF.Sin((float)Main.time * 0.04f) * 30f);
 			}
 
 			MoveTo(aim);
@@ -290,7 +362,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 
 		Vector2 toAim = aim - Projectile.Center - Projectile.velocity;
 
-		float timeValue = (float)(Main.timeForVisualEffects * 0.012f);
+		float timeValue = (float)(Main.time * 0.012f);
 		Vector2 aimPosition = aim +
 			new Vector2(
 				80f * MathF.Sin(timeValue * 2f + Projectile.whoAmI) * Math.Clamp(Projectile.velocity.X, 1, MinionIndex + 1),
@@ -302,8 +374,6 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		}
 	}
 
-	#endregion
-
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddElementalDebuffBuildUp(Main.player[Projectile.owner], ElementalDebuffType.NervousImpairment, 125);
@@ -311,11 +381,28 @@ public class EvilMusicRemnant_Minion : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
+		var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+		var drawColor = lightColor * SpawnProgress * 0.7f;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		Effect dissolve = Commons.ModAsset.DissolveWithLight.Value;
+		float dissolveDuration = SpawnProgress;
+		dissolve.Parameters["uTransform"].SetValue(model * projection);
+		dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
+		dissolve.Parameters["duration"].SetValue(dissolveDuration);
+		dissolve.Parameters["uLightColor"].SetValue(drawColor.ToVector4());
+		dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0f, 0f, 0f, 1f));
+		dissolve.Parameters["uNoiseSize"].SetValue(2f);
+		dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(Projectile.ai[1], Projectile.ai[2]));
+		dissolve.CurrentTechnique.Passes[0].Apply();
+
 		var skullTexture = ModAsset.EvilMusicRemnant_Minion_Skull.Value;
 		var chinTexture = ModAsset.EvilMusicRemnant_Minion_Chin.Value;
 		var glowTexture = ModAsset.EvilMusicRemnant_Minion_Glow.Value;
-		var drawColor = Color.White * SpawnProgress * 0.7f;
-		var scaleFactor = 0.3f;
+		var scaleFactor = 1f;
 		var scale = Projectile.scale * scaleFactor;
 
 		float skullRotation;
@@ -337,16 +424,19 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		Main.spriteBatch.Draw(skullTexture, Projectile.Center - Main.screenPosition, null, drawColor, skullRotation, skullOrigin, scale, skullSpriteEffect, 0);
 
 		// Glow
-		var glowPositionOffset = new Vector2(25 * Projectile.direction, 6).RotatedBy(skullRotation) * scaleFactor;
-		var glowPosition = skullPosition + glowPositionOffset;
-		var glowColor = drawColor * 1.2f * MathF.Sin((float)Main.timeForVisualEffects * 0.06f);
+		var glowPosition = skullPosition;
+		var glowColor = new Color(1f, 1f, 1f, 0) * 0.6f * (MathF.Sin((float)Main.time * 0.06f + Projectile.whoAmI) + 1f);
 		Main.spriteBatch.Draw(glowTexture, glowPosition, null, glowColor, skullRotation, glowTexture.Size() / 2, scale, skullSpriteEffect, 0);
 
 		// Chin
-		var chinPositionOffset = new Vector2(-12 * Projectile.direction, 26).RotatedBy(skullRotation) * scaleFactor;
+		var chinPositionOffset = new Vector2(-6 * Projectile.direction, 20).RotatedBy(skullRotation) * scaleFactor;
 		var chinPosition = skullPosition + chinPositionOffset;
 		var chinOrigin = new Vector2(0, 0);
-		var chinRotation = skullRotation + 0.2f * MathF.Sin((float)Main.timeForVisualEffects * 0.6f) * Projectile.direction;
+		var chinRotation = skullRotation + 0.2f * MathF.Sin((float)Main.time * 0.6f + Projectile.whoAmI) * Projectile.direction;
+		if (flameTime > 0)
+		{
+			chinRotation = skullRotation + (1 - flameTime / 150f) * Projectile.direction;
+		}
 		var chinSpriteEffect = SpriteEffects.None;
 		if (Projectile.direction < 0)
 		{
@@ -354,30 +444,48 @@ public class EvilMusicRemnant_Minion : ModProjectile
 			chinSpriteEffect = SpriteEffects.FlipHorizontally;
 		}
 		Main.spriteBatch.Draw(chinTexture, chinPosition, null, drawColor, chinRotation, chinOrigin, scale, chinSpriteEffect, 0);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 
-		DrawShield(Main.spriteBatch);
+		DrawTrace(Main.spriteBatch);
 		return false;
 	}
 
-	private void DrawShield(SpriteBatch spriteBatch)
+	private void DrawTrace(SpriteBatch spriteBatch)
 	{
-		//var shieldTexture = ModAsset.EvilMusicRemnant_Shield_Color.Value;
-		//var colorProgress = MathF.Pow(SpawnProgress, 4);
-		//var shieldColor = new Color(colorProgress, colorProgress, colorProgress, 0);
-		//var scaleFactor = 0.9f + 0.1f * MathF.Sin((float)Main.timeForVisualEffects * 0.05f);
+		var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		//var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
-		//Main.spriteBatch.End();
-		//Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Effect effect = Commons.ModAsset.Trailing.Value;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.CurrentTechnique.Passes[0].Apply();
+		var trailColor = new Color(44, 2, 185, 0);
+		var oldGlowPos = oldEyeGlow.ToArray();
+		for (int k = 0; k < 3; k++)
+		{
+			List<Vertex2D> bars = new List<Vertex2D>();
+			var vectorWidth = new Vector2(30f, 0).RotatedBy(k / 3f * MathHelper.TwoPi);
+			for (int i = 0; i < oldGlowPos.Count(); i++)
+			{
+				float width = 0f;
+				if (oldGlowPos.Count() > 1)
+				{
+					width = i / (float)(oldGlowPos.Count() - 1);
+				}
+				bars.Add(oldGlowPos[i] + vectorWidth, trailColor, new Vector3(i / 40f, 0f, width));
+				bars.Add(oldGlowPos[i], trailColor, new Vector3(i / 40f, 0.5f, width));
+			}
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_8.Value;
+			if (bars.Count > 3)
+			{
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			}
+		}
 
-		//var effect = ModAsset.EvilMusicRemnant_Shield.Value;
-		//effect.Parameters["uHeatMap"].SetValue(ModAsset.EvilMusicRemnant_Shield_Heat.Value);
-		//effect.Parameters["uNoiseMap"].SetValue(Commons.ModAsset.Noise_burn.Value);
-		//effect.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects * 0.005f);
-		//effect.CurrentTechnique.Passes[0].Apply();
-
-		//spriteBatch.Draw(shieldTexture, Projectile.Center - Main.screenPosition, null, shieldColor, 0, shieldTexture.Size() / 2, 0.05f * scaleFactor, SpriteEffects.None, 0);
-		//Main.spriteBatch.End();
-		//Main.spriteBatch.Begin(sBS);
+		spriteBatch.End();
+		spriteBatch.Begin(sBS);
 	}
 }

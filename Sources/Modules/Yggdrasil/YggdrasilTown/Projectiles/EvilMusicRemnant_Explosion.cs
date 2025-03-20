@@ -39,7 +39,7 @@ public class EvilMusicRemnant_Explosion : ModProjectile
 		for (int i = 0; i < 40; i++)
 		{
 			float size = Main.rand.NextFloat(0.1f, 0.96f);
-			var lotusFlame = new CyanLotusFlameDust
+			var noteFlame = new EvilMusicRemnant_FlameDust
 			{
 				Velocity = new Vector2(0, Main.rand.NextFloat(0.3f, 1f)).RotatedByRandom(MathHelper.TwoPi) * 1.2f,
 				Active = true,
@@ -51,7 +51,7 @@ public class EvilMusicRemnant_Explosion : ModProjectile
 				Frame = Main.rand.Next(3),
 				ai = [Main.rand.NextFloat(-0.8f, 0.8f)],
 			};
-			Ins.VFXManager.Add(lotusFlame);
+			Ins.VFXManager.Add(noteFlame);
 		}
 	}
 }
