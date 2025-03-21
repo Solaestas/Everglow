@@ -1,3 +1,5 @@
+using Terraria.GameContent.Events;
+
 namespace Everglow.Commons.Utilities;
 
 public static class PlayerUtils
@@ -70,4 +72,42 @@ public static class PlayerUtils
 	/// <param name="player"></param>
 	/// <returns></returns>
 	public static float GetSlotsMinions(this Player player) => Main.projectile.Where(x => x.owner == player.whoAmI && x.active && x.minion).Sum(x => x.minionSlots);
+
+	/// <summary>
+	/// Check if the player is in pillar zone
+	/// </summary>
+	/// <param name="player"></param>
+	/// <returns></returns>
+	public static bool InCelestialPillarZone(this Player player) => player.ZoneTowerStardust || player.ZoneTowerSolar || player.ZoneTowerVortex || player.ZoneTowerNebula;
+
+	/// <summary>
+	/// Check if the player is in event
+	/// </summary>
+	/// <param name="player"></param>
+	/// <param name="checkBloodMoon"></param>
+	/// <returns></returns>
+	public static bool AnyEvent(this Player player, bool checkBloodMoon = false)
+	{
+		if (Main.invasionType > InvasionID.None && Main.invasionProgressNearInvasion)
+		{
+			return true;
+		}
+		if (player.InCelestialPillarZone())
+		{
+			return true;
+		}
+		if (DD2Event.Ongoing && player.ZoneOldOneArmy)
+		{
+			return true;
+		}
+		if ((player.ZoneOverworldHeight || player.ZoneSkyHeight) && (Main.eclipse || Main.pumpkinMoon || Main.snowMoon))
+		{
+			return true;
+		}
+		if ((player.ZoneOverworldHeight || player.ZoneSkyHeight) && Main.bloodMoon && checkBloodMoon)
+		{
+			return true;
+		}
+		return false;
+	}
 }
