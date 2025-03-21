@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.ElementalDebuff;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.FevensAttack;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 
@@ -18,6 +19,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		Chase,
 		Attack,
 		FlameAttack,
+		Kill,
 	}
 
 	private const int TimeLeftMax = 300;
@@ -29,7 +31,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 	private const int KillTime = 30;
 	private const int DashDistance = 200;
 	private const int DashCooldown = 60;
-	private const int FlameCooldown = 150;
+	private const int FlameCooldown = 900;
 
 	private int flameTime = -1;
 	private int flameCooling = -1;
@@ -37,6 +39,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 	private Vector2 dashStartPos;
 	private Vector2 dashEndPos;
 	private Vector2 flameTargetPos;
+	private Vector2 killEndPos;
 
 	private Queue<Vector2> oldEyeGlow = new Queue<Vector2>();
 
@@ -59,6 +62,12 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		get { return (int)Projectile.ai[2]; }
 		set { Projectile.ai[2] = value; }
 	}
+
+	public bool ExplosionCommand = false;
+
+	public int ExplosionTime = 120;
+
+	public int TotalTime = 0;
 
 	private int TeleportCooldown { get; set; }
 
@@ -89,7 +98,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 
 		Projectile.DamageType = DamageClass.Summon;
 		Projectile.minion = true;
-		Projectile.minionSlots = 1;
+		Projectile.minionSlots = 0;
 
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 30;
@@ -97,6 +106,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		Projectile.netImportant = true;
 
 		TargetWhoAmI = -1;
+		TotalTime = 0;
 	}
 
 	public override bool MinionContactDamage() => true;
@@ -108,8 +118,75 @@ public class EvilMusicRemnant_Minion : ModProjectile
 
 	public override void AI()
 	{
+		TotalTime++;
 		UpdateLifeCycle();
-
+		float skullRotation;
+		if (Projectile.direction < 0)
+		{
+			skullRotation = Projectile.rotation - MathF.PI;
+		}
+		else
+		{
+			skullRotation = Projectile.rotation;
+		}
+		oldEyeGlow.Enqueue(Projectile.Center + new Vector2(12 * Projectile.direction, 3).RotatedBy(skullRotation));
+		if (oldEyeGlow.Count > 15)
+		{
+			oldEyeGlow.Dequeue();
+		}
+		if (ExplosionCommand)
+		{
+			Projectile.minionSlots = 0;
+			ActionState = Minion_ActionState.Kill;
+			if (ExplosionTime >= 119)
+			{
+				float closest = 20000;
+				Vector2 minDisPos = Vector2.zeroVector;
+				foreach (var proj in Main.projectile)
+				{
+					if (proj != null && proj.active)
+					{
+						if (proj.type == ModContent.ProjectileType<EvilMusicRemnant_Note_Mark>())
+						{
+							float distance = (proj.Center - Projectile.Center).Length();
+							if (distance < closest)
+							{
+								closest = distance;
+								minDisPos = proj.Center;
+							}
+						}
+					}
+				}
+				killEndPos = minDisPos;
+				if (Target != null && Target.active)
+				{
+					killEndPos = Target.Center;
+				}
+				if (killEndPos == Vector2.zeroVector)
+				{
+					killEndPos = Owner.Center;
+				}
+			}
+			ExplosionTime--;
+			if (ExplosionTime > 100)
+			{
+				Projectile.rotation += (120 - ExplosionTime) / 40f;
+			}
+			else
+			{
+				Projectile.rotation += 0.5f;
+			}
+			if (ExplosionTime < 115)
+			{
+				var toTarget = (killEndPos - Projectile.Center - Projectile.velocity).NormalizeSafe() * 24;
+				Projectile.velocity = Projectile.velocity * 0.9f + toTarget * 0.1f;
+				if (ExplosionTime <= 0 || (killEndPos - Projectile.Center).Length() < 30)
+				{
+					Projectile.Kill();
+				}
+			}
+			return;
+		}
 		LimitDistanceFromOwner();
 
 		if (MainState == Minion_MainState.Spawn)
@@ -130,26 +207,28 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		}
 		else if (MainState == Minion_MainState.Action)
 		{
+			if(!ExplosionCommand)
+			{
+				Projectile.minionSlots = 0;
+			}
+			else
+			{
+				Projectile.minionSlots = 0;
+			}
 			Action();
 		}
 		else
 		{
+			Projectile.minionSlots = 0;
 			flameTime = -1;
 		}
+	}
 
-		float skullRotation;
-		if (Projectile.direction < 0)
+	public void GetRotation()
+	{
+		if(!ExplosionCommand)
 		{
-			skullRotation = Projectile.velocity.ToRotation() - MathF.PI;
-		}
-		else
-		{
-			skullRotation = Projectile.velocity.ToRotation();
-		}
-		oldEyeGlow.Enqueue(Projectile.Center + new Vector2(12 * Projectile.direction, 3).RotatedBy(skullRotation));
-		if (oldEyeGlow.Count > 15)
-		{
-			oldEyeGlow.Dequeue();
+			Projectile.rotation = Projectile.velocity.ToRotation();
 		}
 	}
 
@@ -240,6 +319,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 
 	private void Action()
 	{
+		GetRotation();
 		flameCooling--;
 		// If has target, check target active
 		if (TargetWhoAmI >= 0 && !ProjectileUtils.MinionCheckTargetActive(TargetWhoAmI))
@@ -253,6 +333,10 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		if (TargetWhoAmI < 0)
 		{
 			var targetWhoAmI = ProjectileUtils.FindTarget(Projectile.Center, SearchDistance);
+			if(Owner.HasMinionAttackTargetNPC)
+			{
+				targetWhoAmI = Owner.MinionAttackTargetNPC;
+			}
 			if (targetWhoAmI >= 0)
 			{
 				TargetWhoAmI = targetWhoAmI;
@@ -312,16 +396,16 @@ public class EvilMusicRemnant_Minion : ModProjectile
 					float skullRotation;
 					if (Projectile.direction < 0)
 					{
-						skullRotation = Projectile.velocity.ToRotation() - MathF.PI;
+						skullRotation = Projectile.rotation - MathF.PI;
 					}
 					else
 					{
-						skullRotation = Projectile.velocity.ToRotation();
+						skullRotation = Projectile.rotation;
 					}
 					Vector2 startCenter = Projectile.Center + new Vector2(6 * Projectile.direction, 20).RotatedBy(skullRotation);
 					Vector2 targetCenter = flameTargetPos;
 					Vector2 vel = (targetCenter - startCenter).NormalizeSafe() * 12f;
-					Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), startCenter, vel, ModContent.ProjectileType<EvilMusicRemnant_Minion_Flame>(), (int)(Projectile.damage * 0.16f), Projectile.knockBack, Projectile.owner, 20);
+					Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), startCenter, vel, ModContent.ProjectileType<EvilMusicRemnant_Minion_Flame>(), (int)(Projectile.damage * 0.32f), Projectile.knockBack, Projectile.owner, 20);
 				}
 			}
 			Timer++;
@@ -409,12 +493,12 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		SpriteEffects skullSpriteEffect;
 		if (Projectile.direction < 0)
 		{
-			skullRotation = Projectile.velocity.ToRotation() - MathF.PI;
+			skullRotation = Projectile.rotation - MathF.PI;
 			skullSpriteEffect = SpriteEffects.FlipHorizontally;
 		}
 		else
 		{
-			skullRotation = Projectile.velocity.ToRotation();
+			skullRotation = Projectile.rotation;
 			skullSpriteEffect = SpriteEffects.None;
 		}
 
@@ -423,11 +507,6 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		var skullOrigin = skullTexture.Size() / 2;
 		Main.spriteBatch.Draw(skullTexture, Projectile.Center - Main.screenPosition, null, drawColor, skullRotation, skullOrigin, scale, skullSpriteEffect, 0);
 
-		// Glow
-		var glowPosition = skullPosition;
-		var glowColor = new Color(1f, 1f, 1f, 0) * 0.6f * (MathF.Sin((float)Main.time * 0.06f + Projectile.whoAmI) + 1f);
-		Main.spriteBatch.Draw(glowTexture, glowPosition, null, glowColor, skullRotation, glowTexture.Size() / 2, scale, skullSpriteEffect, 0);
-
 		// Chin
 		var chinPositionOffset = new Vector2(-6 * Projectile.direction, 20).RotatedBy(skullRotation) * scaleFactor;
 		var chinPosition = skullPosition + chinPositionOffset;
@@ -435,7 +514,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		var chinRotation = skullRotation + 0.2f * MathF.Sin((float)Main.time * 0.6f + Projectile.whoAmI) * Projectile.direction;
 		if (flameTime > 0)
 		{
-			chinRotation = skullRotation + (1 - flameTime / 150f) * Projectile.direction;
+			chinRotation = skullRotation + (1 - flameTime / 100f) * Projectile.direction;
 		}
 		var chinSpriteEffect = SpriteEffects.None;
 		if (Projectile.direction < 0)
@@ -447,6 +526,10 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 
+		// Glow
+		var glowPosition = skullPosition;
+		var glowColor = new Color(1f, 1f, 1f, 0) * 0.6f * (MathF.Sin((float)Main.time * 0.06f + Projectile.whoAmI) + 2f) * dissolveDuration;
+		Main.spriteBatch.Draw(glowTexture, glowPosition, null, glowColor, skullRotation, glowTexture.Size() / 2, scale, skullSpriteEffect, 0);
 		DrawTrace(Main.spriteBatch);
 		return false;
 	}

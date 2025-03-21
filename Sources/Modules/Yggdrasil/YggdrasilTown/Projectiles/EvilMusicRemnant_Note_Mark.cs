@@ -277,34 +277,9 @@ public class EvilMusicRemnant_Note_Mark : ModProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if (!target.active && !target.friendly && !target.townNPC)
-		{
-			SummonMinion();
-		}
 	}
 
 	public void SummonMinion()
 	{
-		var owner = Main.player[Projectile.owner];
-		var minionProjType = ModContent.ProjectileType<EvilMusicRemnant_Minion>();
-
-		if (owner.maxMinions <= owner.slotsMinions)
-		{
-			if (owner.ownedProjectileCounts[minionProjType] <= 0)
-			{
-				return;
-			}
-			else
-			{
-				var queryMinions = Main.projectile.Where(x => x.type == minionProjType && x.active);
-				if (queryMinions.Any())
-				{
-					queryMinions.Last().Kill();
-				}
-			}
-		}
-
-		var index = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, minionProjType, Projectile.damage, Projectile.knockBack, Projectile.owner, owner.ownedProjectileCounts[minionProjType] + 1);
-		owner.AddBuff(ModContent.BuffType<Buffs.EvilMusicRemnant>(), 30);
 	}
 }

@@ -64,6 +64,7 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 
 	public override void AI()
 	{
+		var owner = Main.player[Projectile.owner];
 		CheckClickCenter();
 		if (TargetWhoAmI < 0)
 		{
@@ -90,7 +91,7 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 						BehideProj = true;
 					}
 					Projectile.hide = true;
-					if (Projectile.timeLeft < 240)
+					if (Projectile.timeLeft < 240 && Projectile.timeLeft > 60 && owner.ownedProjectileCounts[Type] <= 30)
 					{
 						Projectile.timeLeft = Main.rand.Next(240, 270);
 					}
@@ -180,24 +181,59 @@ public class EvilMusicRemnant_Projectile : ModProjectile
 	{
 		var owner = Main.player[Projectile.owner];
 		var minionProjType = ModContent.ProjectileType<EvilMusicRemnant_Minion>();
-
-		if (owner.maxMinions <= owner.slotsMinions)
+		for (int x = 0; x < owner.ownedProjectileCounts[minionProjType]; x++)
 		{
-			if (owner.ownedProjectileCounts[minionProjType] <= 0)
+			float ownerRealMinions = owner.slotsMinions;
+			foreach (Projectile proj in Main.projectile)
 			{
-				return;
-			}
-			else
-			{
-				var queryMinions = Main.projectile.Where(x => x.type == minionProjType && x.active);
-				if (queryMinions.Any())
+				if (proj != null && proj.active)
 				{
-					queryMinions.Last().Kill();
+					if (proj.type == minionProjType && proj.minionSlots == 0)
+					{
+						EvilMusicRemnant_Minion eMRM = proj.ModProjectile as EvilMusicRemnant_Minion;
+						if (eMRM != null && !eMRM.ExplosionCommand)
+						{
+							ownerRealMinions++;
+						}
+					}
+				}
+			}
+			if (owner.maxMinions <= ownerRealMinions)
+			{
+				if (owner.ownedProjectileCounts[minionProjType] <= 0)
+				{
+					return;
+				}
+				else
+				{
+					var queryMinions = Main.projectile.Where(x => x.type == minionProjType && x.active);
+					int maxTotalTime = 0;
+					if (queryMinions.Any())
+					{
+						EvilMusicRemnant_Minion eMRM_Kill = default;
+						foreach (Projectile proj in queryMinions)
+						{
+							EvilMusicRemnant_Minion eMRM;
+							eMRM = proj.ModProjectile as EvilMusicRemnant_Minion;
+							if (eMRM != null && !eMRM.ExplosionCommand)
+							{
+								if (eMRM.TotalTime > maxTotalTime)
+								{
+									maxTotalTime = eMRM.TotalTime;
+									eMRM_Kill = eMRM;
+								}
+							}
+						}
+						if (eMRM_Kill != null && eMRM_Kill != default)
+						{
+							eMRM_Kill.ExplosionCommand = true;
+						}
+					}
 				}
 			}
 		}
 
-		var index = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, minionProjType, Projectile.damage, Projectile.knockBack, Projectile.owner, owner.ownedProjectileCounts[minionProjType] + 1);
+		var index = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, minionProjType, Projectile.damage / 2, Projectile.knockBack, Projectile.owner, owner.ownedProjectileCounts[minionProjType] + 1);
 		owner.AddBuff(ModContent.BuffType<Buffs.EvilMusicRemnant>(), 30);
 	}
 
