@@ -32,27 +32,33 @@ public static class MissionManager
 
 	public static void Load()
 	{
-		_missionPools = [];
-		NPCKillCounter = [];
-
-		foreach (var missionPoolType in Enum.GetValues<PoolType>())
+		if (!Main.dedServ)
 		{
-			_missionPools.Add(missionPoolType, []);
-		}
+			_missionPools = [];
+			NPCKillCounter = [];
 
-		Main.OnTickForInternalCodeOnly += Update;
-		Player.Hooks.OnEnterWorld += ClearAllEvents;
-		MissionPlayer.OnKillNPCEvent += MissionPlayer_OnKillNPC_CountKill;
+			foreach (var missionPoolType in Enum.GetValues<PoolType>())
+			{
+				_missionPools.Add(missionPoolType, []);
+			}
+
+			Main.OnTickForInternalCodeOnly += Update;
+			Player.Hooks.OnEnterWorld += ClearAllEvents;
+			MissionPlayer.OnKillNPCEvent += MissionPlayer_OnKillNPC_CountKill;
+		}
 	}
 
 	public static void UnLoad()
 	{
-		_missionPools = null;
-		NPCKillCounter = null;
+		if (!Main.dedServ)
+		{
+			_missionPools = null;
+			NPCKillCounter = null;
 
-		Main.OnTickForInternalCodeOnly -= Update;
-		Player.Hooks.OnEnterWorld -= ClearAllEvents;
-		MissionPlayer.OnKillNPCEvent -= MissionPlayer_OnKillNPC_CountKill;
+			Main.OnTickForInternalCodeOnly -= Update;
+			Player.Hooks.OnEnterWorld -= ClearAllEvents;
+			MissionPlayer.OnKillNPCEvent -= MissionPlayer_OnKillNPC_CountKill;
+		}
 	}
 
 	public static void ClearAllEvents(Player player)
