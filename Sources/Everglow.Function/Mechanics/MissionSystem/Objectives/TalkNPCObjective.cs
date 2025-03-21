@@ -11,13 +11,13 @@ public class TalkNPCObjective : MissionObjectiveBase
 
 	public TalkNPCObjective(int type, string text)
 	{
-		if (type < 0)
-		{
-			throw new InvalidDataException("NPC type must more than 1.");
-		}
+		NPCType = type > NPCID.None
+			? type
+			: throw new InvalidDataException($"NPC type should more than 1.");
 
-		NPCType = type;
-		NPCText = text;
+		NPCText = !string.IsNullOrEmpty(text)
+			? text
+			: throw new ArgumentNullException("Argument 'text' should not be empty!");
 	}
 
 	public int NPCType { get; set; }
@@ -30,11 +30,11 @@ public class TalkNPCObjective : MissionObjectiveBase
 		AssetUtils.LoadVanillaNPCTextures([NPCType]);
 	}
 
-	public override float Progress => Main.LocalPlayer.talkNPC != -1 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType ? 1f : 0f;
+	public override float Progress => Main.LocalPlayer.talkNPC >= 0 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType ? 1f : 0f;
 
 	public override bool CheckCompletion()
 	{
-		if (Main.LocalPlayer.talkNPC != -1 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType)
+		if (Main.LocalPlayer.talkNPC >= 0 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType)
 		{
 			UpdateNPCText(NPCText);
 			return true;

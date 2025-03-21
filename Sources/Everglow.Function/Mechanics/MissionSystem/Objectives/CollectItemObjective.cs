@@ -28,7 +28,7 @@ public class CollectItemObjective : MissionObjectiveBase
 		AssetUtils.LoadVanillaItemTextures(DemandCollectItem.Items);
 	}
 
-	public override bool CheckCompletion() => throw new NotImplementedException();
+	public override bool CheckCompletion() => Progress >= 1f;
 
 	public override void GetObjectivesText(List<string> lines)
 	{
