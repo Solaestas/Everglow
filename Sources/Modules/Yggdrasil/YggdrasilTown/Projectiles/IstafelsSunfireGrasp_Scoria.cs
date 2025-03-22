@@ -116,7 +116,8 @@ public class IstafelsSunfireGrasp_Scoria : ModProjectile
 
 			if (Main.rand.NextBool(10))
 			{
-				Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.RedTorch, Projectile.velocity.X, Projectile.velocity.Y, Scale: 1.2f);
+				Dust d0 = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.RedTorch, Projectile.velocity.X, Projectile.velocity.Y, Scale: 1.2f);
+				d0.noGravity = true;
 			}
 		}
 		else
@@ -156,13 +157,14 @@ public class IstafelsSunfireGrasp_Scoria : ModProjectile
 			}
 
 			// Generate dusts before scoria cooled.
-			if(Projectile.timeLeft > CooledTimeLeft)
+			if (Projectile.timeLeft > CooledTimeLeft)
 			{
 				foreach (var nodePos in NodesLeft.Concat(NodesRight).Where(x => x != Vector2.Zero))
 				{
 					if (Main.rand.NextBool(800))
 					{
-						Dust.NewDustDirect(nodePos, 2, 2, DustID.RedTorch, Projectile.velocity.X, Projectile.velocity.Y, Scale: 1.2f);
+						Dust d0 = Dust.NewDustDirect(nodePos, 2, 2, DustID.RedTorch, Projectile.velocity.X, Projectile.velocity.Y, Scale: 1.2f);
+						d0.noGravity = true;
 					}
 				}
 			}
@@ -237,11 +239,13 @@ public class IstafelsSunfireGrasp_Scoria : ModProjectile
 			for (int i = 0; i < 40; i++)
 			{
 				var offset = new Vector2(Main.rand.NextFloat(16), 0).RotatedBy(Main.rand.NextFloat() * MathHelper.TwoPi);
-				Dust.NewDust(Projectile.Center + offset, 4, 4, DustID.LavaMoss, Scale: 1.4f);
+				Dust d0 = Dust.NewDustDirect(Projectile.Center + offset, 4, 4, DustID.LavaMoss, Scale: 1.4f);
+				d0.noGravity = true;
 			}
 			for (int i = 0; i < 20; i++)
 			{
-				Dust.NewDust(Projectile.Center, Projectile.width / 2, Projectile.height / 2, DustID.Torch, Scale: 1.2f);
+				Dust d0 = Dust.NewDustDirect(Projectile.Center, Projectile.width / 2, Projectile.height / 2, DustID.Torch, Scale: 1.2f);
+				d0.noGravity = true;
 			}
 		}
 
@@ -263,9 +267,11 @@ public class IstafelsSunfireGrasp_Scoria : ModProjectile
 	{
 		foreach (var pos in NodesLeft.Concat(NodesRight))
 		{
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 2; i++)
 			{
-				Dust.NewDust(pos, Projectile.width, Projectile.height, DustID.Stone, Projectile.velocity.X, Projectile.velocity.Y, Scale: 1f);
+				Dust d0 = Dust.NewDustDirect(pos, 0, 0, DustID.Wraith, Projectile.velocity.X, Projectile.velocity.Y, Scale: 1f);
+				d0.noGravity = true;
+				d0.velocity = d0.velocity.RotatedByRandom(MathHelper.TwoPi);
 			}
 		}
 	}
@@ -358,7 +364,6 @@ public class IstafelsSunfireGrasp_Scoria : ModProjectile
 		// {
 		// 	Main.spriteBatch.Draw(point, node - Main.screenPosition, null, drawColor2, 0f, point.Size() / 2, 0.05f, SpriteEffects.None, 0);
 		// }
-
 		return false;
 	}
 

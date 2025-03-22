@@ -3,6 +3,7 @@ using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Commons.Weapons;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs.IstafelsEffects;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -118,7 +119,7 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 		Lighting.AddLight(Projectile.Center, 1.8f, 0.8f, 0f);
 		if (Actived)
 		{
-			Projectile.rotation += Projectile.velocity.X * 0.04f;
+			Projectile.rotation += Projectile.velocity.X * 0.01f;
 
 			if (TargetWhoAmI < 0)
 			{
@@ -190,28 +191,34 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 			if (BuildUpProgress > 0.5f)
 			{
 				// Generate dusts
+				// This lava drop look also well.
+				// But I have a better idea.
 				if (Main.rand.NextBool(26))
 				{
-					var randomInHitBox = Projectile.position + new Vector2(Main.rand.NextFloat(Projectile.width), Main.rand.NextFloat(Projectile.height * 0.5f, Projectile.height));
-					var generatePos = Vector2.Lerp(randomInHitBox, Projectile.Center, 0.75f);
-					Gore gore = Gore.NewGoreDirect(generatePos, Projectile.velocity, GoreID.LavaDrip);
-					gore.frame = 7;
-					gore.scale = Main.rand.NextFloat(0.4f, 1.2f);
-					gore.velocity.X *= 0.1f;
-					gore.velocity.Y = 0;
-					gore.velocity += Projectile.velocity;
-					gore.position -= gore.AABBRectangle.Size() * 0.5f;
+					// var randomInHitBox = Projectile.position + new Vector2(Main.rand.NextFloat(Projectile.width), Main.rand.NextFloat(Projectile.height * 0.5f, Projectile.height));
+					// var generatePos = Vector2.Lerp(randomInHitBox, Projectile.Center, 0.75f);
+					// Gore gore = Gore.NewGoreDirect(generatePos, Projectile.velocity, GoreID.LavaDrip);
+					// gore.frame = 7;
+					// gore.scale = Main.rand.NextFloat(0.4f, 1.2f);
+					// gore.velocity.X *= 0.1f;
+					// gore.velocity.Y = 0;
+					// gore.velocity += Projectile.velocity;
+					// gore.position -= gore.AABBRectangle.Size() * 0.5f;
+					Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, ModContent.DustType<IstafelsSunfireDrop_glimmer>());
+					dust.customData = Projectile;
+					dust.velocity = new Vector2(0, 1).RotatedByRandom(0.4f);
 				}
 
 				// Shoot projectile to target
-				if (Timer % 120 == 0)
+				
+			}
+			if (Timer % 120 == 0)
+			{
+				var target = ProjectileUtils.FindTarget(Projectile.Center, 2000);
+				if (target >= 0 && Collision.CanHit(Main.npc[target], Projectile))
 				{
-					var target = ProjectileUtils.FindTarget(Projectile.Center, 2000);
-					if (target >= 0)
-					{
-						var direction = (Main.npc[target].Center - Projectile.Center).NormalizeSafe();
-						Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, direction * SubProjectileVelocity, ProjectileID.ImpFireball, 50, 0.4f, Projectile.owner);
-					}
+					var direction = (Main.npc[target].Center - Projectile.Center).NormalizeSafe();
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, direction * SubProjectileVelocity, ModContent.ProjectileType<IstafelsSunfireGrasp_Sub_FireBall>(), 50, 0.4f, Projectile.owner);
 				}
 			}
 		}
@@ -359,18 +366,8 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 
 	public override void OnKill(int timeLeft)
 	{
-		SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
-
-		// Draw dusts on kill
-		for (int i = 0; i < 40; i++)
-		{
-			var offset = new Vector2(Main.rand.NextFloat(16), 0).RotatedBy(Main.rand.NextFloat() * MathHelper.TwoPi);
-			Dust.NewDust(Projectile.Center + offset, 4, 4, DustID.LavaMoss, Scale: 1.4f);
-		}
-		for (int i = 0; i < 20; i++)
-		{
-			Dust.NewDust(Projectile.Center, Projectile.width / 2, Projectile.height / 2, DustID.Torch, Scale: 1.2f);
-		}
+		SoundEngine.PlaySound(SoundID.DD2_GoblinBomb, Projectile.Center);
+		ShakerManager.AddShaker(Projectile.Center, Vector2.One.RotatedByRandom(MathHelper.Pi), 60, 12f, 200, 0.9f, 0.8f, 600);
 	}
 
 	public new void DrawWarp(VFXBatch spriteBatch)

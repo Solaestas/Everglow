@@ -33,6 +33,20 @@ public class IstafelsSunfireGrasp : ModItem
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
+		// Test Code
+		// if(Main.mouseLeft && Main.mouseLeftRelease)
+		// {
+		// // Shoot explosion
+		// Projectile.NewProjectile(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<IstafelsSunfireGrasp_Explosion>(), 200, 1f, player.whoAmI);
+
+		// // Shoot scoria
+		// var scoriaProjCount = Main.rand.Next(8, 10);
+		// for (int i = 0; i < scoriaProjCount; i++)
+		// {
+		// var velocity = player.velocity * 0.6f + Vector2.UnitX.RotatedBy(Main.rand.NextFloat(MathHelper.TwoPi)) * 4f;
+		// Projectile.NewProjectile(Item.GetSource_FromAI(), Main.MouseWorld, velocity, ModContent.ProjectileType<IstafelsSunfireGrasp_Scoria>(), 1, 1.1f, player.whoAmI);
+		// }
+		// }
 		player.GetDamage<MagicDamageClass>() += MagicDamageBonus;
 		player.GetCritChance<MagicDamageClass>() += MagicCritBonus;
 		player.GetModPlayer<IstafelsSunfireGraspPlayer>().IstafelsSunfireGraspEnable = true;
@@ -65,7 +79,7 @@ public class IstafelsSunfireGrasp : ModItem
 		{
 			if (!IstafelsSunfireGraspEnable)
 			{
-				if(FireBallProj != null)
+				if (FireBallProj != null)
 				{
 					FireBallProj.BuildUp = 0;
 				}
@@ -143,7 +157,7 @@ public class IstafelsSunfireGrasp : ModItem
 				}
 
 				// Add build-up
-				FireBallProj.BuildUp += damageDone;
+				FireBallProj.BuildUp += damageDone / 3;
 
 				// If build-up is max, shoot fire ball
 				if (FireBallProj.BuildUp > IstafelsSunfireGrasp_FireBall.BuildUpMax)

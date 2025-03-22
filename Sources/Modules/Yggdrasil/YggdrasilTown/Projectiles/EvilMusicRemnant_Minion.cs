@@ -1,5 +1,4 @@
 using Everglow.Commons.Mechanics.ElementalDebuff;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles.FevensAttack;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 
@@ -140,27 +139,31 @@ public class EvilMusicRemnant_Minion : ModProjectile
 			ActionState = Minion_ActionState.Kill;
 			if (ExplosionTime >= 119)
 			{
-				float closest = 20000;
-				Vector2 minDisPos = Vector2.zeroVector;
-				foreach (var proj in Main.projectile)
+				if (Target != null && Target.active && !Target.friendly && !Target.dontTakeDamage)
 				{
-					if (proj != null && proj.active)
+					killEndPos = Target.Center;
+				}
+
+				if (killEndPos == Vector2.zeroVector)
+				{
+					float closest = 20000;
+					Vector2 minDisPos = Vector2.zeroVector;
+					foreach (var proj in Main.projectile)
 					{
-						if (proj.type == ModContent.ProjectileType<EvilMusicRemnant_Note_Mark>())
+						if (proj != null && proj.active)
 						{
-							float distance = (proj.Center - Projectile.Center).Length();
-							if (distance < closest)
+							if (proj.type == ModContent.ProjectileType<EvilMusicRemnant_Note_Mark>())
 							{
-								closest = distance;
-								minDisPos = proj.Center;
+								float distance = (proj.Center - Projectile.Center).Length();
+								if (distance < closest)
+								{
+									closest = distance;
+									minDisPos = proj.Center;
+								}
 							}
 						}
 					}
-				}
-				killEndPos = minDisPos;
-				if (Target != null && Target.active)
-				{
-					killEndPos = Target.Center;
+					killEndPos = minDisPos;
 				}
 				if (killEndPos == Vector2.zeroVector)
 				{
@@ -180,6 +183,12 @@ public class EvilMusicRemnant_Minion : ModProjectile
 			{
 				var toTarget = (killEndPos - Projectile.Center - Projectile.velocity).NormalizeSafe() * 24;
 				Projectile.velocity = Projectile.velocity * 0.9f + toTarget * 0.1f;
+
+				// if(toTarget.X <= -23)
+				// {
+				// Main.NewText(killEndPos);
+				// Main.NewText(Projectile.Center, Color.Teal);
+				// }
 				if (ExplosionTime <= 0 || (killEndPos - Projectile.Center).Length() < 30)
 				{
 					Projectile.Kill();
@@ -207,7 +216,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		}
 		else if (MainState == Minion_MainState.Action)
 		{
-			if(!ExplosionCommand)
+			if (!ExplosionCommand)
 			{
 				Projectile.minionSlots = 0;
 			}
@@ -226,7 +235,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 
 	public void GetRotation()
 	{
-		if(!ExplosionCommand)
+		if (!ExplosionCommand)
 		{
 			Projectile.rotation = Projectile.velocity.ToRotation();
 		}
@@ -321,6 +330,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 	{
 		GetRotation();
 		flameCooling--;
+
 		// If has target, check target active
 		if (TargetWhoAmI >= 0 && !ProjectileUtils.MinionCheckTargetActive(TargetWhoAmI))
 		{
@@ -333,7 +343,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 		if (TargetWhoAmI < 0)
 		{
 			var targetWhoAmI = ProjectileUtils.FindTarget(Projectile.Center, SearchDistance);
-			if(Owner.HasMinionAttackTargetNPC)
+			if (Owner.HasMinionAttackTargetNPC)
 			{
 				targetWhoAmI = Owner.MinionAttackTargetNPC;
 			}

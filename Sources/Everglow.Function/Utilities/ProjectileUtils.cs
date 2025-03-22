@@ -29,7 +29,7 @@ public static class ProjectileUtils
 		{
 			if (npc != null && npc.active)
 			{
-				if (npc.CanBeChasedBy() && !npc.dontTakeDamage && npc.life > 0)
+				if (npc.CanBeChasedBy() && !npc.dontTakeDamage && npc.life > 0 && !npc.friendly)
 				{
 					float dis = (npc.Center - fromWhere).Length() - npc.Hitbox.Size().Length() * 0.5f;
 					if (dis < minDis)
