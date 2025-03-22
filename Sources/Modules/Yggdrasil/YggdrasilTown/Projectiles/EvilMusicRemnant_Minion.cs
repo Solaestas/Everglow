@@ -435,7 +435,6 @@ public class EvilMusicRemnant_Minion : ModProjectile
 						x: Owner.direction * (MathF.Cos((float)Main.time * 0.02f) * 60f - MinionIndex * 30),
 						y: Owner.height + MathF.Sin((float)Main.time * 0.04f) * 30f);
 			}
-
 			MoveTo(aim);
 		}
 	}
