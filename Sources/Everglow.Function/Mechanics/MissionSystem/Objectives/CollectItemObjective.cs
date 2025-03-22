@@ -1,6 +1,7 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Hooks;
-using Everglow.Commons.Mechanics.MissionSystem.Shared;
+using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
+using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Terraria.ModLoader.IO;
 
@@ -8,39 +9,41 @@ namespace Everglow.Commons.Mechanics.MissionSystem.Objectives;
 
 public class CollectItemObjective : MissionObjectiveBase
 {
-	public List<CollectItemRequirement> DemandCollectItems { get; } = [];
+	public CollectItemObjective()
+	{
+	}
 
-	public override float Progress => DemandCollectItems.Count != 0 && DemandCollectItems.All(x => x.Requirement != 0)
-		? DemandCollectItems.Select(x => x.Progress(Main.LocalPlayer.inventory)).Average()
-		: 1f;
+	public CollectItemObjective(CollectItemRequirement requirement)
+	{
+		DemandCollectItem = requirement;
+	}
+
+	public CollectItemRequirement DemandCollectItem { get; set; }
+
+	public override float Progress => DemandCollectItem.Progress(Main.LocalPlayer.inventory);
 
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
-		MissionBase.LoadVanillaItemTextures(DemandCollectItems.SelectMany(x => x.Items));
+		AssetUtils.LoadVanillaItemTextures(DemandCollectItem.Items);
 	}
 
-	public override bool CheckCompletion() => throw new NotImplementedException();
+	public override bool CheckCompletion() => Progress >= 1f;
 
 	public override void GetObjectivesText(List<string> lines)
 	{
-		foreach (var demand in DemandCollectItems)
+		string progress = DemandCollectItem.EnableIndividualCounter
+			? $"({DemandCollectItem.Counter}/{DemandCollectItem.Requirement})"
+			: $"({Main.LocalPlayer.inventory.Where(i => DemandCollectItem.Items.Contains(i.type)).Sum(i => i.stack)}/{DemandCollectItem.Requirement})";
+		var verbString = DemandCollectItem.EnableIndividualCounter ? "获取" : "拥有";
+		if (DemandCollectItem.Items.Count > 1)
 		{
-			string progress = demand.EnableIndividualCounter
-				? $"({demand.Counter}/{demand.Requirement})"
-				: $"({Main.LocalPlayer.inventory.Where(i => demand.Items.Contains(i.type)).Sum(i => i.stack)}/{demand.Requirement})";
-			var verb = demand.EnableIndividualCounter
-				? "获取"
-				: "拥有";
-			if (demand.Items.Count > 1)
-			{
-				var itemString = string.Join(' ', demand.Items.ConvertAll(i => ItemDrawer.Create(i)));
-				lines.Add($"{verb}{itemString}合计{demand.Requirement}个 {progress}\n");
-			}
-			else
-			{
-				lines.Add($"{verb}{ItemDrawer.Create(demand.Items.First())}{demand.Requirement}个 {progress}\n");
-			}
+			var itemString = string.Join(' ', DemandCollectItem.Items.ConvertAll(i => ItemDrawer.Create(i)));
+			lines.Add($"{verbString}{itemString}合计{DemandCollectItem.Requirement}个 {progress}\n");
+		}
+		else
+		{
+			lines.Add($"{verbString}{ItemDrawer.Create(DemandCollectItem.Items.First())}{DemandCollectItem.Requirement}个 {progress}\n");
 		}
 	}
 
@@ -50,42 +53,39 @@ public class CollectItemObjective : MissionObjectiveBase
 	/// <param name="item"></param>
 	public void MissionPlayer_OnPickUp(Item item)
 	{
-		foreach (var kmDemand in DemandCollectItems.Where(x => x.Items.Contains(item.type)))
+		if (DemandCollectItem.Items.Contains(item.type) && DemandCollectItem.EnableIndividualCounter)
 		{
-			if (kmDemand.EnableIndividualCounter)
-			{
-				kmDemand.Count(item.stack);
-			}
+			DemandCollectItem.Count(item.stack);
 		}
 	}
 
 	public override void Activate(MissionBase sourceMission)
 	{
-		MissionPlayer.OnPickupEvent += MissionPlayer_OnPickUp;
+		MissionPlayer.GlobalOnPickupEvent += MissionPlayer_OnPickUp;
 	}
 
 	public override void Deactivate()
 	{
-		MissionPlayer.OnPickupEvent -= MissionPlayer_OnPickUp;
+		MissionPlayer.GlobalOnPickupEvent -= MissionPlayer_OnPickUp;
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
-		tag.TryGet<List<CollectItemRequirement>>(nameof(DemandCollectItems), out var demandNPCs);
-		if (demandNPCs != null && demandNPCs.Count != 0)
+		base.LoadData(tag);
+
+		tag.TryGet<CollectItemRequirement>(nameof(DemandCollectItem), out var demandCollectItem);
+		if (DemandCollectItem.EnableIndividualCounter)
 		{
-			foreach (var demand in DemandCollectItems.Where(d => d.EnableIndividualCounter))
+			if (demandCollectItem != null && demandCollectItem.Counter > 0)
 			{
-				demand.Count(
-					demandNPCs
-						.Where(d => d.EnableIndividualCounter && d.Items.Intersect(demand.Items).Any())
-						.Sum(x => x.Counter));
+				DemandCollectItem.Count(demandCollectItem.Counter);
 			}
 		}
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
-		tag.Add(nameof(DemandCollectItems), DemandCollectItems);
+		base.SaveData(tag);
+		tag.Add(nameof(DemandCollectItem), DemandCollectItem);
 	}
 }

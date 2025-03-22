@@ -47,7 +47,9 @@ public class BranchingObjective : MissionObjectiveBase
 
 	public override void Complete()
 	{
-		Objectives.First(o => o.CheckCompletion()).Complete();
+		var completed = Objectives.First(o => o.CheckCompletion());
+		Next = completed.Next;
+		completed.Complete();
 
 		base.Complete();
 	}
@@ -84,7 +86,7 @@ public class BranchingObjective : MissionObjectiveBase
 			{
 				if (Completed)
 				{
-					if(objective.Next == Next)
+					if (objective.Next == Next)
 					{
 						tempLines[i] = $"[TextDrawer,Text='(Branch {index})',Color='100,255,100,255']" + " " + tempLines[i];
 					}
@@ -117,11 +119,15 @@ public class BranchingObjective : MissionObjectiveBase
 
 	public override void LoadData(TagCompound tag)
 	{
+		base.LoadData(tag);
+
 		MissionBase.LoadObjectives(tag, Objectives);
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
+		base.SaveData(tag);
+
 		MissionBase.SaveObjectives(tag, Objectives);
 	}
 }

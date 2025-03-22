@@ -9,6 +9,7 @@ namespace Everglow.Commons.UI.UIElements
 		public UIContainerElement()
 		{
 			Info.IsVisible = false;
+			Info.InteractiveMask = true;
 		}
 
 		public override void OnInitialization()

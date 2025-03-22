@@ -9,7 +9,7 @@ public class MissionGlobalNPC : GlobalNPC
 	/// <summary>
 	/// On kill hook for multiplayer missions
 	/// </summary>
-	public static event Action<NPC> OnNPCKill;
+	public static event Action<NPC> GlobalOnKillNPCEvent;
 
 	public override void OnKill(NPC npc)
 	{
@@ -25,12 +25,12 @@ public class MissionGlobalNPC : GlobalNPC
 
 	public void ClientOnKill(NPC npc)
 	{
-		// TODO: Count kill for all player
+		GlobalOnKillNPCEvent?.Invoke(npc);
 	}
 
 	public void ServerOnKill(NPC npc)
 	{
-		// TODO: Send packet to client to sync the kill of npc.
+		GlobalOnKillNPCEvent?.Invoke(npc);
 	}
 
 	public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -53,7 +53,7 @@ public class MissionGlobalNPC : GlobalNPC
 		return missions
 			.SelectMany(mission => FlattenObjectives(mission.Objectives.AllObjectives))
 			.OfType<KillNPCObjective>()
-			.SelectMany(killObjective => killObjective.DemandNPCs.SelectMany(demand => demand.NPCs));
+			.SelectMany(killObjective => killObjective.DemandNPC.NPCs);
 	}
 
 	/// <summary>

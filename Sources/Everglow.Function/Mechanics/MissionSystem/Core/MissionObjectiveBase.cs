@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.MissionSystem.Abstracts;
+using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Core;
@@ -18,6 +19,8 @@ public abstract class MissionObjectiveBase : ITagCompoundEntity
 	/// </summary>
 	public List<Item> RewardItems { get; } = [];
 
+	public bool HasGivenRewardItems { get; private set; } = false;
+
 	public abstract bool CheckCompletion();
 
 	/// <summary>
@@ -26,7 +29,7 @@ public abstract class MissionObjectiveBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnInitialize()
 	{
-		MissionBase.LoadVanillaItemTextures(RewardItems.Select(x => x.type));
+		AssetUtils.LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
 
 	/// <summary>
@@ -43,9 +46,14 @@ public abstract class MissionObjectiveBase : ITagCompoundEntity
 	{
 		if (!Completed)
 		{
-			foreach (var item in RewardItems)
+			if (!HasGivenRewardItems)
 			{
-				Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(MissionBase.RewardItemsSourceContext), item, item.stack);
+				foreach (var item in RewardItems)
+				{
+					Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(MissionBase.RewardItemsSourceContext), item, item.stack);
+				}
+
+				HasGivenRewardItems = true;
 			}
 
 			Completed = true;
@@ -66,9 +74,14 @@ public abstract class MissionObjectiveBase : ITagCompoundEntity
 
 	public virtual void LoadData(TagCompound tag)
 	{
+		if(tag.TryGet<bool>(nameof(HasGivenRewardItems), out var hasGiven))
+		{
+			HasGivenRewardItems = hasGiven;
+		}
 	}
 
 	public virtual void SaveData(TagCompound tag)
 	{
+		tag.Add(nameof(HasGivenRewardItems), HasGivenRewardItems);
 	}
 }

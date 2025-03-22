@@ -4,7 +4,7 @@ namespace Everglow.Commons.Mechanics.MissionSystem.Tests;
 
 public class TestOpenMissionPanelWithSelectMissionItem : ModItem
 {
-	public override string Texture => ModAsset.ArrowDown_Mod;
+	public override string Texture => ModAsset.Point_Mod;
 
 	public override void SetDefaults()
 	{

@@ -2,6 +2,7 @@ using Everglow.Commons.Mechanics.MissionSystem.Abstracts;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
+using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Terraria.ModLoader.IO;
 
@@ -15,6 +16,16 @@ namespace Everglow.Commons.Mechanics.MissionSystem.Core;
 /// </remarks>
 public abstract class MissionBase : ITagCompoundEntity
 {
+	/// <summary>
+	/// 任务计时器存储键
+	/// </summary>
+	public const string TimeSaveKey = "MissionTime";
+
+	/// <summary>
+	/// 任务奖励物品来源
+	/// </summary>
+	public const string RewardItemsSourceContext = "Everglow.MissionSystem";
+
 	protected MissionBase()
 	{
 		Icon = new MissionIconGroup();
@@ -110,11 +121,6 @@ public abstract class MissionBase : ITagCompoundEntity
 	public virtual long Time { get; set; }
 
 	/// <summary>
-	/// 任务计时器存储键
-	/// </summary>
-	public const string TimeSaveKey = "MissionTime";
-
-	/// <summary>
 	/// Mission status.
 	/// </summary>
 	/// <remarks>
@@ -152,6 +158,11 @@ public abstract class MissionBase : ITagCompoundEntity
 	public virtual MissionType MissionType => MissionType.None;
 
 	/// <summary>
+	/// 任务奖励物品
+	/// </summary>
+	public virtual List<Item> RewardItems { get; init; }
+
+	/// <summary>
 	/// 是否显示在任务列表中
 	/// </summary>
 	public virtual bool IsVisible { get; set; } = true;
@@ -160,6 +171,12 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// 是否由任务管理器自动检测完成并提交
 	/// </summary>
 	public virtual bool AutoComplete => false;
+
+	/// <summary>
+	/// 任务可提交状态的旧状态
+	/// <para/>该属性不需要持久化，保证每次重新进入世界时都会发送信息
+	/// </summary>
+	public bool OldCheckComplete { get; internal set; } = false;
 
 	/// <summary>
 	/// 检查任务是否完成
@@ -172,22 +189,6 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// </summary>
 	/// <returns></returns>
 	public virtual bool CheckExpire() => TimeMax > 0 ? Time >= TimeMax : false;
-
-	/// <summary>
-	/// 任务可提交状态的旧状态
-	/// <para/>该属性不需要持久化，保证每次重新进入世界时都会发送信息
-	/// </summary>
-	public bool OldCheckComplete { get; internal set; } = false;
-
-	/// <summary>
-	/// 任务奖励物品
-	/// </summary>
-	public virtual List<Item> RewardItems { get; }
-
-	/// <summary>
-	/// 任务奖励物品来源
-	/// </summary>
-	public static string RewardItemsSourceContext => "Everglow.MissionSystem";
 
 	/// <summary>
 	/// 任务可提交状态改变后HOOK
@@ -314,6 +315,9 @@ public abstract class MissionBase : ITagCompoundEntity
 		CurrentObjective?.Deactivate();
 	}
 
+	/// <summary>
+	/// 重置任务进度
+	/// </summary>
 	public virtual void Reset()
 	{
 		foreach (var o in Objectives.AllObjectives)
@@ -322,6 +326,10 @@ public abstract class MissionBase : ITagCompoundEntity
 		}
 	}
 
+	/// <summary>
+	/// 获取任务目标文本
+	/// </summary>
+	/// <returns></returns>
 	public virtual IEnumerable<string> GetObjectives()
 	{
 		var lines = new List<string>();
@@ -349,8 +357,16 @@ public abstract class MissionBase : ITagCompoundEntity
 		return lines;
 	}
 
+	/// <summary>
+	/// 获取奖励文本
+	/// </summary>
+	/// <returns></returns>
 	public virtual string GetRewards() => string.Join(' ', RewardItems.ConvertAll(i => ItemDrawer.Create(i.type, i.stack, new Color(196, 241, 255))));
 
+	/// <summary>
+	/// 获取时间文本
+	/// </summary>
+	/// <returns></returns>
 	public string GetTime() => EnableTime
 		? $"[TimerIconDrawer,MissionName='{Name}'] 剩余时间:[TimerStringDrawer,MissionName='{Name}']\n"
 		: string.Empty;
@@ -368,6 +384,11 @@ public abstract class MissionBase : ITagCompoundEntity
 		SaveObjectives(tag, Objectives.AllObjectives);
 	}
 
+	/// <summary>
+	/// 保存任务目标
+	/// </summary>
+	/// <param name="tag"></param>
+	/// <param name="objectives"></param>
 	public static void SaveObjectives(TagCompound tag, IEnumerable<MissionObjectiveBase> objectives)
 	{
 		var oTags = new List<TagCompound>();
@@ -403,9 +424,14 @@ public abstract class MissionBase : ITagCompoundEntity
 
 		LoadObjectives(tag, Objectives.AllObjectives);
 
-		LoadVanillaItemTextures(RewardItems.Select(x => x.type));
+		AssetUtils.LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
 
+	/// <summary>
+	/// 加载任务目标
+	/// </summary>
+	/// <param name="tag"></param>
+	/// <param name="objectives"></param>
 	public static void LoadObjectives(TagCompound tag, IEnumerable<MissionObjectiveBase> objectives)
 	{
 		if (tag.TryGet<IList<TagCompound>>(nameof(Objectives), out var oTags))
@@ -419,32 +445,6 @@ public abstract class MissionBase : ITagCompoundEntity
 
 				o.LoadData(oTags[o.ObjectiveID]);
 			}
-		}
-	}
-
-	/// <summary>
-	/// Load not-loaded textures for vanilla items
-	/// </summary>
-	/// <param name="types"></param>
-	public static void LoadVanillaItemTextures(IEnumerable<int> types)
-	{
-		foreach (var type in types.Distinct().Where(t => t <= ItemID.Count))
-		{
-			// The Main.LoadItem function will skip the loaded items
-			Main.instance.LoadItem(type);
-		}
-	}
-
-	/// <summary>
-	/// Load not-loaded textures for vanilla NPCs
-	/// </summary>
-	/// <param name="types"></param>
-	public static void LoadVanillaNPCTextures(IEnumerable<int> types)
-	{
-		foreach (var type in types.Distinct().Where(t => t <= NPCID.Count))
-		{
-			// The Main.LoadItem function will skip the loaded items
-			Main.instance.LoadNPC(type);
 		}
 	}
 }

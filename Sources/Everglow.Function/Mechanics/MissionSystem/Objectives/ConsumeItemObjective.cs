@@ -1,6 +1,7 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Hooks;
-using Everglow.Commons.Mechanics.MissionSystem.Shared;
+using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
+using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Terraria.ModLoader.IO;
 
@@ -12,39 +13,34 @@ public class ConsumeItemObjective : MissionObjectiveBase
 	{
 	}
 
-	public ConsumeItemObjective(List<CountItemRequirement> requirements)
+	public ConsumeItemObjective(CountItemRequirement requirement)
 	{
-		DemandConsumeItems = requirements;
+		DemandConsumeItem = requirement;
 	}
 
-	public List<CountItemRequirement> DemandConsumeItems { get; } = [];
+	public CountItemRequirement DemandConsumeItem { get; set; }
 
-	public override float Progress => DemandConsumeItems.Count != 0 && DemandConsumeItems.All(i => i.Requirement != 0)
-	? DemandConsumeItems.Average(i => i.Progress())
-	: 1f;
+	public override float Progress => DemandConsumeItem.Progress();
 
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
-		MissionBase.LoadVanillaItemTextures(DemandConsumeItems.SelectMany(x => x.Items));
+		AssetUtils.LoadVanillaItemTextures(DemandConsumeItem.Items);
 	}
 
-	public override bool CheckCompletion() => DemandConsumeItems.All(i => i.Counter >= i.Requirement);
+	public override bool CheckCompletion() => DemandConsumeItem.Counter >= DemandConsumeItem.Requirement;
 
 	public override void GetObjectivesText(List<string> lines)
 	{
-		foreach (var demand in DemandConsumeItems)
+		var progress = $"({DemandConsumeItem.Counter}/{DemandConsumeItem.Requirement})";
+		if (DemandConsumeItem.Items.Count > 1)
 		{
-			var progress = $"({demand.Counter}/{demand.Requirement})";
-			if (demand.Items.Count > 1)
-			{
-				var itemString = string.Join(' ', demand.Items.ConvertAll(i => ItemDrawer.Create(i)));
-				lines.Add($"消耗{itemString}合计{demand.Requirement}个 {progress}\n");
-			}
-			else
-			{
-				lines.Add($"消耗{ItemDrawer.Create(demand.Items.First())}{demand.Requirement}个 {progress}\n");
-			}
+			var itemString = string.Join(' ', DemandConsumeItem.Items.ConvertAll(i => ItemDrawer.Create(i)));
+			lines.Add($"消耗{itemString}合计{DemandConsumeItem.Requirement}个 {progress}\n");
+		}
+		else
+		{
+			lines.Add($"消耗{ItemDrawer.Create(DemandConsumeItem.Items.First())}{DemandConsumeItem.Requirement}个 {progress}\n");
 		}
 	}
 
@@ -60,29 +56,25 @@ public class ConsumeItemObjective : MissionObjectiveBase
 
 	private void MissionGlobalItem_OnConsumeItem(Item item)
 	{
-		foreach (var di in DemandConsumeItems.Where(x => x.Items.Contains(item.type)))
+		if (DemandConsumeItem.Items.Contains(item.type))
 		{
-			di.Count();
+			DemandConsumeItem.Count();
 		}
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
-		tag.TryGet<List<CountItemRequirement>>(nameof(DemandConsumeItems), out var demandNPCs);
-		if (demandNPCs != null && demandNPCs.Count != 0)
+		base.LoadData(tag);
+		tag.TryGet<CountItemRequirement>(nameof(DemandConsumeItem), out var demandNPC);
+		if (demandNPC != null && demandNPC.Counter > 0)
 		{
-			foreach (var demand in DemandConsumeItems)
-			{
-				demand.Count(
-					demandNPCs
-						.Where(d => d.Items.Intersect(demand.Items).Any())
-						.Sum(x => x.Counter));
-			}
+			DemandConsumeItem.Count(demandNPC.Counter);
 		}
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
-		tag.Add(nameof(DemandConsumeItems), DemandConsumeItems);
+		base.SaveData(tag);
+		tag.Add(nameof(DemandConsumeItem), DemandConsumeItem);
 	}
 }

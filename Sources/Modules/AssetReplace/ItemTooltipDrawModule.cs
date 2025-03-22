@@ -1,6 +1,5 @@
 using System.Reflection;
-using Everglow.Commons.AssetReplace.UIReplace.Core;
-using Everglow.Commons.FeatureFlags;
+using Everglow.AssetReplace.UIReplace.Core;
 using Everglow.Commons.Modules;
 using MonoMod.Cil;
 using Terraria.GameContent;
@@ -49,7 +48,7 @@ public class ItemTooltipDrawModule : IModule
 		c.EmitDelegate<Func<bool, bool>>((returnValue) => {
 			if (IsFakeItem)
 				return returnValue;
-			return ModContent.GetInstance<EverglowClientConfig>().TextureReplace == TextureReplaceMode.Terraria && returnValue;
+			return ModContent.GetInstance<AssetReplaceConfig>().TextureReplace == TextureReplaceMode.Terraria && returnValue;
 		});
 	}
 

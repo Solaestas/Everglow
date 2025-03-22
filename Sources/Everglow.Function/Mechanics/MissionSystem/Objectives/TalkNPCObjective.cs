@@ -1,24 +1,40 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
+using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Objectives;
 
 public class TalkNPCObjective : MissionObjectiveBase
 {
-	public int NPCType { get; }
+	public TalkNPCObjective()
+	{
+	}
 
-	public string NPCText { get; }
+	public TalkNPCObjective(int type, string text)
+	{
+		NPCType = type > NPCID.None
+			? type
+			: throw new InvalidDataException($"NPC type should more than 1.");
+
+		NPCText = !string.IsNullOrEmpty(text)
+			? text
+			: throw new ArgumentNullException("Argument 'text' should not be empty!");
+	}
+
+	public int NPCType { get; set; }
+
+	public string NPCText { get; set; }
 
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
-		MissionBase.LoadVanillaNPCTextures([NPCType]);
+		AssetUtils.LoadVanillaNPCTextures([NPCType]);
 	}
 
-	public override float Progress => Main.LocalPlayer.talkNPC != -1 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType ? 1f : 0f;
+	public override float Progress => Main.LocalPlayer.talkNPC >= 0 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType ? 1f : 0f;
 
 	public override bool CheckCompletion()
 	{
-		if (Main.LocalPlayer.talkNPC != -1 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType)
+		if (Main.LocalPlayer.talkNPC >= 0 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType)
 		{
 			UpdateNPCText(NPCText);
 			return true;

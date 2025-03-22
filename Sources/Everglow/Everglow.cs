@@ -2,7 +2,6 @@ using System.Reflection;
 using Everglow.Commons;
 using Everglow.Commons.Hooks;
 using Everglow.Commons.Interfaces;
-using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Modules;
 using Everglow.Commons.Network.PacketHandle;
 using Everglow.Commons.ObjectPool;
@@ -28,7 +27,6 @@ public class Everglow : Mod
 		AddServices();
 		AddContents();
 		ShakeTreeTweak.Load();
-		MissionManager.Load();
 		m_packetResolver = new PacketResolver(this);
 	}
 
@@ -101,7 +99,6 @@ public class Everglow : Mod
 		m_packetResolver = null;
 		ModIns.Mod = null;
 		Ins.Clear();
-		MissionManager.UnLoad();
 	}
 
 	public override void HandlePacket(BinaryReader reader, int whoAmI)

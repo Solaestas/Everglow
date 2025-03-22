@@ -7,9 +7,11 @@ namespace Everglow.Commons.Mechanics.MissionSystem.Hooks;
 
 public class MissionPlayer : ModPlayer
 {
-	public static event Action<int> OnKillNPCEvent;
+	public static event Action<NPC> OnKillNPCEvent;
 
 	public static event Action<Item> OnPickupEvent;
+
+	public static event Action<Item> GlobalOnPickupEvent;
 
 	private MissionManager.MissionManagerInfo missionInfo;
 
@@ -27,6 +29,14 @@ public class MissionPlayer : ModPlayer
 				MissionManager.AddMission(new MissionObjectivesTest(), PoolType.Available);
 				MissionManager.AddMission(new OpenPanelMissionTest(), PoolType.Available);
 				MissionManager.AddMission(new BranchingMissionTest(), PoolType.Available);
+				MissionManager.AddMission(new NoneMission1(), PoolType.Available);
+				MissionManager.AddMission(new NoneMission2(), PoolType.Available);
+				MissionManager.AddMission(new NoneMission3(), PoolType.Available);
+				MissionManager.AddMission(new NoneMission4(), PoolType.Available);
+				MissionManager.AddMission(new NoneMission5(), PoolType.Available);
+				MissionManager.AddMission(new NoneMission6(), PoolType.Available);
+				MissionManager.AddMission(new MissionTimerTest(), PoolType.Available);
+				MissionManager.AddMission(new MissionIconTest(), PoolType.Available);
 			}
 #endif
 		}
@@ -55,6 +65,8 @@ public class MissionPlayer : ModPlayer
 			OnPickupEvent?.Invoke(item);
 		}
 
+		GlobalOnPickupEvent?.Invoke(item);
+
 		return true;
 	}
 
@@ -65,7 +77,7 @@ public class MissionPlayer : ModPlayer
 			// If player killed this npc
 			if (!target.active)
 			{
-				OnKillNPCEvent?.Invoke(target.type);
+				OnKillNPCEvent?.Invoke(target);
 			}
 		}
 	}

@@ -12,9 +12,24 @@ public class ItemMissionIcon : MissionIconBase
 	private int itemType;
 	private string tooltip;
 
-	public override string Tooltip => tooltip;
+	public override string Tooltip
+	{
+		get
+		{
+			if (string.IsNullOrWhiteSpace(tooltip))
+			{
+				var item = new Item();
+				item.SetDefaults(itemType);
+				return item.Name;
+			}
+			else
+			{
+				return tooltip;
+			}
+		}
+	}
 
-	public override void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle)
+	public override void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle, Color color, float baseScale)
 	{
 		var drawCenter = new Vector2(
 			destinationRectangle.X + destinationRectangle.Width / 2,
@@ -34,9 +49,9 @@ public class ItemMissionIcon : MissionIconBase
 			frameRect = Main.itemAnimations[itemType].GetFrame(texture);
 			origin = new Vector2(frameRect.Width, frameRect.Height) / 2;
 		}
-		var scale = GetTextureScale(destinationRectangle, frameRect);
+		var scale = GetTextureScale(destinationRectangle, frameRect, baseScale);
 
-		spriteBatch.Draw(texture, drawCenter, frameRect, Color.White, 0, origin, scale, SpriteEffects.None, 0);
+		spriteBatch.Draw(texture, drawCenter, frameRect, color, 0, origin, scale, SpriteEffects.None, 0);
 	}
 
 	public static ItemMissionIcon Create(int itemType, string tooltip = null)

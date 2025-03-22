@@ -32,27 +32,33 @@ public static class MissionManager
 
 	public static void Load()
 	{
-		_missionPools = [];
-		NPCKillCounter = [];
-
-		foreach (var missionPoolType in Enum.GetValues<PoolType>())
+		if (!Main.dedServ)
 		{
-			_missionPools.Add(missionPoolType, []);
-		}
+			_missionPools = [];
+			NPCKillCounter = [];
 
-		Main.OnTickForInternalCodeOnly += Update;
-		Player.Hooks.OnEnterWorld += ClearAllEvents;
-		MissionPlayer.OnKillNPCEvent += MissionPlayer_OnKillNPC_CountKill;
+			foreach (var missionPoolType in Enum.GetValues<PoolType>())
+			{
+				_missionPools.Add(missionPoolType, []);
+			}
+
+			Main.OnTickForInternalCodeOnly += Update;
+			Player.Hooks.OnEnterWorld += ClearAllEvents;
+			MissionPlayer.OnKillNPCEvent += MissionPlayer_OnKillNPC_CountKill;
+		}
 	}
 
 	public static void UnLoad()
 	{
-		_missionPools = null;
-		NPCKillCounter = null;
+		if (!Main.dedServ)
+		{
+			_missionPools = null;
+			NPCKillCounter = null;
 
-		Main.OnTickForInternalCodeOnly -= Update;
-		Player.Hooks.OnEnterWorld -= ClearAllEvents;
-		MissionPlayer.OnKillNPCEvent -= MissionPlayer_OnKillNPC_CountKill;
+			Main.OnTickForInternalCodeOnly -= Update;
+			Player.Hooks.OnEnterWorld -= ClearAllEvents;
+			MissionPlayer.OnKillNPCEvent -= MissionPlayer_OnKillNPC_CountKill;
+		}
 	}
 
 	public static void ClearAllEvents(Player player)
@@ -226,7 +232,7 @@ public static class MissionManager
 			return;
 		}
 
-		if (Main.time % UpdateInterval != 0)
+		if (Main.timeForVisualEffects % UpdateInterval != 0)
 		{
 			return;
 		}
@@ -235,10 +241,20 @@ public static class MissionManager
 		AcceptedMissionPool.ForEach(m => m.Update());
 
 		// 处理自动提交任务
-		AcceptedMissionPool.Where(m => m.CheckComplete() && m.AutoComplete).ToList().ForEach(m => m.OnComplete());
+		var autoCommitMissions = AcceptedMissionPool.Where(m => m.CheckComplete() && m.AutoComplete).ToList();
+		if (autoCommitMissions.Count > 0)
+		{
+			autoCommitMissions.ForEach(m => m.OnComplete());
+			NeedRefresh = true;
+		}
 
 		// 处理过期任务
-		AcceptedMissionPool.Where(m => m.CheckExpire()).ToList().ForEach(m => m.OnExpire());
+		var expiredMissions = AcceptedMissionPool.Where(m => m.CheckExpire()).ToList();
+		if (expiredMissions.Count > 0)
+		{
+			expiredMissions.ForEach(m => m.OnExpire());
+			NeedRefresh = true;
+		}
 
 		// 检测可提交状态改变的任务，将状态改变为可提交的任务抛出信息
 		foreach (var m in AcceptedMissionPool.ToList())
@@ -274,20 +290,19 @@ public static class MissionManager
 	/// <summary>
 	/// 记录杀怪
 	/// </summary>
-	/// <param name="type">NPC类型</param>
-	/// <param name="count">击杀数量，默认为1</param>
-	/// <exception cref="InvalidParameterException"></exception>
-	public static void MissionPlayer_OnKillNPC_CountKill(int type)
+	/// <param name="npc">被击杀的NPC</param>
+	/// <exception cref="InvalidParameterException">参数为空或npc类型错误</exception>
+	public static void MissionPlayer_OnKillNPC_CountKill(NPC npc)
 	{
-		if (type < 0)
+		if (npc is null || npc.type < NPCID.None)
 		{
 			throw new InvalidParameterException();
 		}
 
 		// Update NPC kill history
-		if (!NPCKillCounter.TryAdd(type, 1))
+		if (!NPCKillCounter.TryAdd(npc.type, 1))
 		{
-			NPCKillCounter[type]++;
+			NPCKillCounter[npc.type]++;
 		}
 	}
 
@@ -339,7 +354,8 @@ public static class MissionManager
 			{
 				for (int j = 0; j < mt.Count; j++)
 				{
-					var mission = (MissionBase)Activator.CreateInstance(Ins.ModuleManager.Types.First(t => t.FullName == mt[j]));
+					var type = Ins.ModuleManager.Types.FirstOrDefault(t => t.FullName == mt[j]);
+					var mission = Activator.CreateInstance(type) as MissionBase;
 					mission.LoadData(m[j]);
 					missionPool.Add(mission);
 					mission.PoolType = poolType;
@@ -375,9 +391,12 @@ public static class MissionManager
 
 		public static MissionManagerInfo Create()
 		{
-			var info = new MissionManagerInfo();
-			info.NPCKillCounter = MissionManager.NPCKillCounter.ToDictionary();
-			info.MissionPools = [];
+			var info = new MissionManagerInfo
+			{
+				NPCKillCounter = MissionManager.NPCKillCounter.ToDictionary(),
+				MissionPools = [],
+			};
+
 			foreach (var (type, pool) in _missionPools)
 			{
 				info.MissionPools.Add(type, pool.ToList());
