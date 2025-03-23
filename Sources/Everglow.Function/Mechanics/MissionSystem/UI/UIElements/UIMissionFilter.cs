@@ -1,6 +1,9 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.UI.UIElements;
+using Everglow.Commons.Utilities;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 
@@ -14,16 +17,20 @@ public class UIMissionFilter : BaseElement
 	private Vector2? _outerMouseDownPosition;
 	private float _outerMouseClickRotation;
 	private bool _outerHeld;
+	private bool _outerHover;
 	private int _outerClickTimer;
 	private float? _outerClickTargetRotation;
+	private float? _outerHoverTargetRotation;
 
 	// Inner ring rotation state
 	private float _innerRotation;
 	private Vector2? _innerMouseDownPosition;
 	private float _innerMouseClickRotation;
 	private bool _innerHeld;
+	private bool _innerHover;
 	private int _innerClickTimer;
 	private float? _innerClickTargetRotation;
+	private float? _innerHoverTargetRotation;
 
 	/// <summary>
 	/// Available pool type selections (null represents "All" option)
@@ -46,8 +53,6 @@ public class UIMissionFilter : BaseElement
 	public MissionType? MissionTypeValue { get; private set; }
 
 	private float MouseRotation => HitBox.Center.ToVector2().AngleTo(Main.MouseScreen);
-
-	#region Statics
 
 	private static MissionType? RotationToMissionType(float rotation)
 	{
@@ -140,8 +145,6 @@ public class UIMissionFilter : BaseElement
 		return currentRotation + diff;
 	}
 
-	#endregion
-
 	public override void OnInitialization()
 	{
 		base.OnInitialization();
@@ -167,6 +170,35 @@ public class UIMissionFilter : BaseElement
 		var mouseClicking = Main.mouseLeft && !Main.mouseLeftRelease;
 		var distanceToCenter = Main.MouseScreen.Distance(HitBox.Center.ToVector2());
 
+		// Check mouse hover rotation
+		if (DistanceWithinOuterRing(distanceToCenter) && !Main.mouseLeft)
+		{
+			_outerHover = true;
+			var clickedMissionType = RotationToMissionType(MathHelper.Pi - MouseRotation + _outerRotation);
+			_outerHoverTargetRotation = MissionTypeToRotation(clickedMissionType);
+
+			// TODO: Change this curosr text.
+			MissionContainer.Instance.MouseText = "Mission Type";
+		}
+		else
+		{
+			_outerHover = false;
+			_outerHoverTargetRotation = null;
+		}
+		if (DistanceWithinInnerRing(distanceToCenter) && !Main.mouseLeft)
+		{
+			_innerHover = true;
+			var clickedPoolType = RotationToPoolType(MathHelper.Pi - MouseRotation + _innerRotation);
+			_innerHoverTargetRotation = PoolTypeToRotation(clickedPoolType);
+
+			// TODO: Change this curosr text.
+			MissionContainer.Instance.MouseText = "Pool Type";
+		}
+		else
+		{
+			_innerHover = false;
+			_innerHoverTargetRotation = null;
+		}
 		if (((DistanceWithinOuterRing(distanceToCenter) && mouseClicking) || _outerHeld) && !_innerHeld)
 		{
 			OuterOnHover();
@@ -328,10 +360,31 @@ public class UIMissionFilter : BaseElement
 		var typeTexture = ModAsset.MissionClassificationMarbleRing.Value;
 		sb.Draw(typeTexture, drawPos, null, Color.White, _outerRotation, typeTexture.Size() / 2, scale, SpriteEffects.None, 0);
 
+		SpriteBatchState sBS = GraphicsUtils.GetState(sb).Value;
+		sb.End();
+		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+		Effect goldShader = ModAsset.GoldenReflection.Value;
+		goldShader.Parameters["sv_Pos_Y"].SetValue(drawPos.Y);
+		goldShader.Parameters["uSize"].SetValue(0.006f);
+		goldShader.Parameters["uHeatMap"].SetValue(ModAsset.GoldenHue.Value);
+		goldShader.CurrentTechnique.Passes[0].Apply();
 		var typeGlow = ModAsset.GoldRingTexture.Value;
 		sb.Draw(typeGlow, drawPos, null, Color.White, _outerRotation, typeGlow.Size() / 2, scale, SpriteEffects.None, 0);
+		sb.End();
+		sb.Begin(sBS);
 
 		var statusFilter = ModAsset.MissionDurationMarbleRing.Value;
 		sb.Draw(statusFilter, drawPos, null, Color.White, _innerRotation, statusFilter.Size() / 2, scale, SpriteEffects.None, 0);
+
+		if (_innerHoverTargetRotation != null)
+		{
+			var statusFilter_Selected = ModAsset.MissionDurationMarbleRing_Seleted.Value;
+			sb.Draw(statusFilter_Selected, drawPos, null, Color.White, _innerRotation - _innerHoverTargetRotation.Value, statusFilter_Selected.Size() / 2, scale, SpriteEffects.None, 0);
+		}
+		if (_outerHoverTargetRotation != null)
+		{
+			var typeTexture_Selected = ModAsset.MissionClassificationMarbleRing_Selected.Value;
+			sb.Draw(typeTexture_Selected, drawPos, null, Color.White, _outerRotation - _outerHoverTargetRotation.Value, typeTexture_Selected.Size() / 2, scale, SpriteEffects.None, 0);
+		}
 	}
 }

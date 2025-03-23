@@ -2,6 +2,7 @@ using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
+using Microsoft.CodeAnalysis;
 using ReLogic.Graphics;
 using Terraria.GameContent;
 using static Everglow.Commons.Mechanics.MissionSystem.Core.MissionManager;
@@ -49,13 +50,22 @@ public class MissionContainer : UIContainerElement, ILoadable
 	/// <param name="resolution"></param>
 	private void OnResolutionChanged_Adapt(Vector2 resolution)
 	{
-		if (resolution.X / resolution.Y > 16f / 9f)
+		// if (resolution.X / resolution.Y > 16f / 9f)
+		// {
+		// ResolutionFactor = resolution.Y / BaseResolutionY;
+		// }
+		// else
+		// {
+		// ResolutionFactor = resolution.X / BaseResolutionX;
+		// }
+		ResolutionFactor = 1;
+		if (resolution.X < PanelWidth)
 		{
-			ResolutionFactor = resolution.Y / BaseResolutionY;
+			ResolutionFactor = resolution.X / PanelWidth;
 		}
-		else
+		if (resolution.Y < PanelHeight * ResolutionFactor)
 		{
-			ResolutionFactor = resolution.X / BaseResolutionX;
+			ResolutionFactor *= resolution.Y / PanelHeight;
 		}
 
 		ChildrenElements.Clear();
@@ -150,6 +160,18 @@ public class MissionContainer : UIContainerElement, ILoadable
 	public override void OnInitialization()
 	{
 		base.OnInitialization();
+
+		// Initialized ResolutionFactor.
+		ResolutionFactor = 1;
+		Vector2 resolution = new Vector2(Main.screenWidth, Main.screenHeight);
+		if (resolution.X < PanelWidth)
+		{
+			ResolutionFactor = resolution.X / PanelWidth;
+		}
+		if (resolution.Y < PanelHeight * ResolutionFactor)
+		{
+			ResolutionFactor *= resolution.Y / PanelHeight;
+		}
 
 		float width = PanelWidth * ResolutionFactor;
 		float height = PanelHeight * ResolutionFactor;
