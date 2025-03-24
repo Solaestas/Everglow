@@ -161,14 +161,17 @@ public class YggdrasilTownBackground : ModSystem
 		{
 			var bayouClose = ModAsset.Town_Close.Value;
 			var bayouFar = ModAsset.Town_Far.Value;
+			var bayouSky = ModAsset.Town_Sky.Value;
 			Vector2 correction = OriginPylonCenter;
 			if (!YggdrasilTownCentralSystem.InCanteen_YggdrasilTown() && !YggdrasilTownCentralSystem.InUnion_YggdrasilTown() && !YggdrasilTownCentralSystem.InPlayerRoom_YggdrasilTown())
 			{
+				BackgroundManager.QuickDrawBG(bayouSky, float.PositiveInfinity, correction, baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 				BackgroundManager.QuickDrawBG(bayouFar, 15f, correction, baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 				BackgroundManager.QuickDrawBG(bayouClose, 6f, correction + new Vector2(0, 1000), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 			}
 			else
 			{
+				BackgroundManager.QuickDrawBG(bayouSky, float.PositiveInfinity, new Vector2(0, 2000), baseColor * BackgroundAlphaYggdrasilTown, 0, 30000, false, true);
 				BackgroundManager.QuickDrawBG(bayouFar, 15f, new Vector2(0, 2000), baseColor * BackgroundAlphaYggdrasilTown, 0, 30000, false, true);
 				BackgroundManager.QuickDrawBG(bayouClose, 6f, new Vector2(0, 3000), baseColor * BackgroundAlphaYggdrasilTown, 0, 30000, false, true);
 			}
