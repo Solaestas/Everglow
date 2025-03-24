@@ -3,7 +3,6 @@ using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Utilities;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 
@@ -17,7 +16,6 @@ public class UIMissionFilter : BaseElement
 	private Vector2? _outerMouseDownPosition;
 	private float _outerMouseClickRotation;
 	private bool _outerHeld;
-	private bool _outerHover;
 	private int _outerClickTimer;
 	private float? _outerClickTargetRotation;
 	private float? _outerHoverTargetRotation;
@@ -27,7 +25,6 @@ public class UIMissionFilter : BaseElement
 	private Vector2? _innerMouseDownPosition;
 	private float _innerMouseClickRotation;
 	private bool _innerHeld;
-	private bool _innerHover;
 	private int _innerClickTimer;
 	private float? _innerClickTargetRotation;
 	private float? _innerHoverTargetRotation;
@@ -159,101 +156,96 @@ public class UIMissionFilter : BaseElement
 
 	private void Events_OnMouseHover(BaseElement baseElement)
 	{
-		if (!(Main.mouseLeft && !Main.mouseLeftRelease))
+		// Reset held state when mouse is not clicking
+		var mouseLeftClicking = Main.mouseLeft && !Main.mouseLeftRelease;
+		if (!mouseLeftClicking)
 		{
 			_innerHeld = false;
 			_outerHeld = false;
 		}
 
-		var scale = MissionContainer.Scale;
-
-		var mouseClicking = Main.mouseLeft && !Main.mouseLeftRelease;
 		var distanceToCenter = Main.MouseScreen.Distance(HitBox.Center.ToVector2());
 
-		// Check mouse hover rotation
-		if (DistanceWithinOuterRing(distanceToCenter) && !Main.mouseLeft)
+		// Outer ring hover logic: show mission type text and highlight the selected mission type
+		if (DistanceWithinOuterRing(distanceToCenter))
 		{
-			_outerHover = true;
-			var clickedMissionType = RotationToMissionType(MathHelper.Pi - MouseRotation + _outerRotation);
-			_outerHoverTargetRotation = MissionTypeToRotation(clickedMissionType);
-
-			// TODO: Change this curosr text.
-			MissionContainer.Instance.MouseText = "Mission Type";
+			var hoverMissionType = RotationToMissionType(MathHelper.Pi - MouseRotation + _outerRotation);
+			_outerHoverTargetRotation = MissionTypeToRotation(hoverMissionType);
+			MissionContainer.Instance.MouseText = hoverMissionType?.ToString() ?? "All";
 		}
 		else
 		{
-			_outerHover = false;
 			_outerHoverTargetRotation = null;
 		}
-		if (DistanceWithinInnerRing(distanceToCenter) && !Main.mouseLeft)
-		{
-			_innerHover = true;
-			var clickedPoolType = RotationToPoolType(MathHelper.Pi - MouseRotation + _innerRotation);
-			_innerHoverTargetRotation = PoolTypeToRotation(clickedPoolType);
 
-			// TODO: Change this curosr text.
-			MissionContainer.Instance.MouseText = "Pool Type";
+		// Inner ring hover logic: show mission type text and highlight the selected mission type
+		if (DistanceWithinInnerRing(distanceToCenter))
+		{
+			var hoverPoolType = RotationToPoolType(MathHelper.Pi - MouseRotation + _innerRotation);
+			_innerHoverTargetRotation = PoolTypeToRotation(hoverPoolType);
+			MissionContainer.Instance.MouseText = hoverPoolType?.ToString() ?? "All";
 		}
 		else
 		{
-			_innerHover = false;
 			_innerHoverTargetRotation = null;
 		}
-		if (((DistanceWithinOuterRing(distanceToCenter) && mouseClicking) || _outerHeld) && !_innerHeld)
+
+		// Outer ring held logic
+		if (((DistanceWithinOuterRing(distanceToCenter) && mouseLeftClicking) || _outerHeld) && !_innerHeld)
 		{
-			OuterOnHover();
+			RotateRingWithMouse(ref _outerMouseDownPosition, ref _outerMouseClickRotation, ref _outerRotation, ref _outerHeld);
 		}
 		else
 		{
-			OuterOnOut();
+			// Outer on release
+			ResetHeldState(ref _outerMouseDownPosition);
 		}
 
-		if (((DistanceWithinInnerRing(distanceToCenter) && mouseClicking) || _innerHeld) && !_outerHeld)
+		// Inner ring held logic
+		if (((DistanceWithinInnerRing(distanceToCenter) && mouseLeftClicking) || _innerHeld) && !_outerHeld)
 		{
-			InnerOnHover();
+			RotateRingWithMouse(ref _innerMouseDownPosition, ref _innerMouseClickRotation, ref _innerRotation, ref _innerHeld);
 		}
 		else
 		{
-			InnerOnOut();
+			// Inner on release
+			ResetHeldState(ref _innerMouseDownPosition);
 		}
 	}
 
-	private void OuterOnOut()
+	/// <summary>
+	/// Clear the ring mouse held state when released.
+	/// </summary>
+	/// <param name="mouseDownPosition"></param>
+	private void ResetHeldState(ref Vector2? mouseDownPosition)
 	{
-		_outerMouseDownPosition = null;
+		mouseDownPosition = null;
 	}
 
-	private void InnerOnOut()
+	/// <summary>
+	/// Rotate the ring with mouse movement when held.
+	/// </summary>
+	/// <param name="mouseDownPosition"></param>
+	/// <param name="mouseClickRotation"></param>
+	/// <param name="rotation"></param>
+	/// <param name="held"></param>
+	private void RotateRingWithMouse(ref Vector2? mouseDownPosition, ref float mouseClickRotation, ref float rotation, ref bool held)
 	{
-		_innerMouseDownPosition = null;
-	}
-
-	private void OuterOnHover()
-	{
-		if (_outerMouseDownPosition == null)
+		if (mouseDownPosition == null)
 		{
-			_outerMouseDownPosition = Main.MouseScreen;
-			_outerMouseClickRotation = _outerRotation;
-			_outerHeld = true;
+			mouseDownPosition = Main.MouseScreen;
+			mouseClickRotation = rotation;
+			held = true;
 		}
 
-		var enterAngle = HitBox.Center.ToVector2().AngleTo(_outerMouseDownPosition.Value);
-		_outerRotation = _outerMouseClickRotation + MouseRotation - enterAngle;
+		var enterAngle = HitBox.Center.ToVector2().AngleTo(mouseDownPosition.Value);
+		rotation = mouseClickRotation + MouseRotation - enterAngle;
 	}
 
-	private void InnerOnHover()
-	{
-		if (_innerMouseDownPosition == null)
-		{
-			_innerMouseDownPosition = Main.MouseScreen;
-			_innerMouseClickRotation = _innerRotation;
-			_innerHeld = true;
-		}
-
-		var enterAngle = HitBox.Center.ToVector2().AngleTo(_innerMouseDownPosition.Value);
-		_innerRotation = _innerMouseClickRotation + MouseRotation - enterAngle;
-	}
-
+	/// <summary>
+	/// Rotate the outer ring to the target rotation.
+	/// </summary>
+	/// <param name="rotation"></param>
 	private void OuterRotatedTo(float rotation)
 	{
 		var rotationDiff = GetNaturalRotation(rotation, _outerRotation);
@@ -268,6 +260,10 @@ public class UIMissionFilter : BaseElement
 		}
 	}
 
+	/// <summary>
+	/// Rotate the inner ring to the target rotation.
+	/// </summary>
+	/// <param name="rotation"></param>
 	private void InnerRotatedTo(float rotation)
 	{
 		var rotationDiff = GetNaturalRotation(rotation, _innerRotation);
@@ -303,6 +299,9 @@ public class UIMissionFilter : BaseElement
 		ManageAutoRotation();
 	}
 
+	/// <summary>
+	/// Manage auto-rotation of two rings. The auto-rotation is consist of two part: click-to-select and fix rotation.
+	/// </summary>
 	private void ManageAutoRotation()
 	{
 		// Inner spin
@@ -362,7 +361,9 @@ public class UIMissionFilter : BaseElement
 
 		SpriteBatchState sBS = GraphicsUtils.GetState(sb).Value;
 		sb.End();
-		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+		sb.Begin(sBS);
+		sb.sortMode = SpriteSortMode.Immediate;
+		sb.blendState = BlendState.AlphaBlend;
 		Effect goldShader = ModAsset.GoldenReflection.Value;
 		goldShader.Parameters["sv_Pos_Y"].SetValue(drawPos.Y);
 		goldShader.Parameters["uSize"].SetValue(0.006f);
