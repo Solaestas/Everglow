@@ -166,30 +166,6 @@ public class UIMissionFilter : BaseElement
 
 		var distanceToCenter = Main.MouseScreen.Distance(HitBox.Center.ToVector2());
 
-		// Outer ring hover logic: show mission type text and highlight the selected mission type
-		if (DistanceWithinOuterRing(distanceToCenter))
-		{
-			var hoverMissionType = RotationToMissionType(MathHelper.Pi - MouseRotation + _outerRotation);
-			_outerHoverTargetRotation = MissionTypeToRotation(hoverMissionType);
-			MissionContainer.Instance.MouseText = hoverMissionType?.ToString() ?? "All";
-		}
-		else
-		{
-			_outerHoverTargetRotation = null;
-		}
-
-		// Inner ring hover logic: show mission type text and highlight the selected mission type
-		if (DistanceWithinInnerRing(distanceToCenter))
-		{
-			var hoverPoolType = RotationToPoolType(MathHelper.Pi - MouseRotation + _innerRotation);
-			_innerHoverTargetRotation = PoolTypeToRotation(hoverPoolType);
-			MissionContainer.Instance.MouseText = hoverPoolType?.ToString() ?? "All";
-		}
-		else
-		{
-			_innerHoverTargetRotation = null;
-		}
-
 		// Outer ring held logic
 		if (((DistanceWithinOuterRing(distanceToCenter) && mouseLeftClicking) || _outerHeld) && !_innerHeld)
 		{
@@ -297,6 +273,32 @@ public class UIMissionFilter : BaseElement
 		}
 
 		ManageAutoRotation();
+
+		var distanceToCenter = Main.MouseScreen.Distance(HitBox.Center.ToVector2());
+
+		// Outer ring hover logic: show mission type text and highlight the selected mission type
+		if (DistanceWithinOuterRing(distanceToCenter))
+		{
+			var hoverMissionType = RotationToMissionType(MathHelper.Pi - MouseRotation + _outerRotation);
+			_outerHoverTargetRotation = MissionTypeToRotation(hoverMissionType);
+			MissionContainer.Instance.MouseText = hoverMissionType?.ToString() ?? "All";
+		}
+		else
+		{
+			_outerHoverTargetRotation = null;
+		}
+
+		// Inner ring hover logic: show mission type text and highlight the selected mission type
+		if (DistanceWithinInnerRing(distanceToCenter))
+		{
+			var hoverPoolType = RotationToPoolType(MathHelper.Pi - MouseRotation + _innerRotation);
+			_innerHoverTargetRotation = PoolTypeToRotation(hoverPoolType);
+			MissionContainer.Instance.MouseText = hoverPoolType?.ToString() ?? "All";
+		}
+		else
+		{
+			_innerHoverTargetRotation = null;
+		}
 	}
 
 	/// <summary>
