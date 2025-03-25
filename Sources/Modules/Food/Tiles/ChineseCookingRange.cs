@@ -162,11 +162,11 @@ public class ChineseCookingRange : ModTile, ITileFluentlyDrawn
 		var tile = Main.tile[i, j];
 		int frameX = tile.TileFrameX;
 		int frameY = tile.TileFrameY;
-		if (frameX % 72 == 0 && frameY == 0)
+		if (frameX % 36 == 0 && frameY == 0)
 		{
 			TileFluentDrawManager.AddFluentPoint(this, i, j);
 		}
-		if (frameX < 72 || frameY < 72)
+		if (frameX < 72 || frameY < 36 || frameX > 108)
 		{
 			return;
 		}
@@ -176,9 +176,21 @@ public class ChineseCookingRange : ModTile, ITileFluentlyDrawn
 		{
 			zero = Vector2.Zero;
 		}
+		ulong randSeed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i); // Don't remove any casts.
+		var color = new Color(1f, 1f, 1f, 0.6f) * 0.5f;
+		int width = 16;
+		int height = 16;
 
+		Texture2D flameTexture = ModAsset.ChineseCookingRange.Value;
+		for (int k = 0; k < 7; k++)
+		{
+			float xx = Utils.RandomInt(ref randSeed, -10, 11) * 0.25f;
+			float yy = Utils.RandomInt(ref randSeed, -10, 1) * 0.25f;
 
+			spriteBatch.Draw(flameTexture,new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + yy + k * 0.2f) + zero, new Rectangle(frameX, frameY + 72, width, height),color, 0f, default, 1f, SpriteEffects.None, 0f);
+		}
 		Lighting.AddLight(new Point(i, j).ToWorldCoordinates(), new Vector3(0.8f, 0.6f, 0.8f));
+
 		if (!Main.gamePaused)
 		{
 			if (Main.rand.NextBool(8))
@@ -196,7 +208,7 @@ public class ChineseCookingRange : ModTile, ITileFluentlyDrawn
 		if (chineseCookingRangeEntity != null)
 		{
 			Texture2D pot = ModAsset.StoveAtlas.Value;
-			Vector2 offset = new Vector2(8, 25);
+			Vector2 offset = new Vector2(6, 24);
 			switch (chineseCookingRangeEntity.PotState)
 			{
 				case 1:
@@ -220,8 +232,8 @@ public class ChineseCookingRange : ModTile, ITileFluentlyDrawn
 			{
 				return;
 			}
-			Rectangle flame = new Rectangle(30, 40, 16, 6);
-			offset = new Vector2(8, 31);
+			Rectangle flame = new Rectangle(48, 32, 12, 14);
+			offset = new Vector2(12, 44);
 			spriteBatch.Draw(pot, pos.ToWorldCoordinates() - Main.screenPosition + offset, flame, new Color(0.5f, 0.5f, 0.5f, 0), 0, flame.Size() * 0.5f, 1, SpriteEffects.None, 0);
 		}
 	}
