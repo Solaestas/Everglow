@@ -8,7 +8,7 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 
 public class UIMissionList : UIBlock
 {
-	private MissionListContainer _missionList;
+	private MissionListContent _missionList;
 	private UIMissionListScrollbar _missionScrollbar;
 
 	public List<UIMissionItem> MissionItems => _missionList.Elements.ConvertAll(x => x as UIMissionItem);
@@ -18,7 +18,7 @@ public class UIMissionList : UIBlock
 		Info.SetMargin(0);
 
 		// Mission list
-		_missionList = new MissionListContainer();
+		_missionList = new MissionListContent();
 		Register(_missionList);
 
 		// Mission list scrollbar
@@ -92,14 +92,14 @@ public class UIMissionList : UIBlock
 		_missionList.AddElements(elements);
 	}
 
-	public class MissionListContainer : UIContainerPanel
+	private class MissionListContent : UIContainerPanel
 	{
 		public override void Draw(SpriteBatch sb)
 		{
 			base.Draw(sb);
 			var texture = ModAsset.MirrorChain.Value;
 
-			// Left
+			// Draw mirrior chains (Left. Move with mission items synchronously)
 			var vertices = new List<Vertex2D>();
 			{
 				float scale = MissionContainer.Scale;
@@ -133,7 +133,7 @@ public class UIMissionList : UIBlock
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
 
-			// Right
+			// Draw mirrior chains (Right. Used as scrollbar)
 			vertices = new List<Vertex2D>();
 			{
 				float scale = MissionContainer.Scale;
@@ -160,7 +160,5 @@ public class UIMissionList : UIBlock
 			}
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
 		}
-
-		protected override void DrawChildren(SpriteBatch sb) => base.DrawChildren(sb);
 	}
 }

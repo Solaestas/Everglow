@@ -57,11 +57,6 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail
 			Register(mask);
 		}
 
-		public override void OnInitialization()
-		{
-			base.OnInitialization();
-		}
-
 		public override void Update(GameTime gt)
 		{
 			ChildrenElements.ForEach(child =>

@@ -11,25 +11,74 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI;
 
 public class MissionContainer : UIContainerElement, ILoadable
 {
-	public const int BaseResolutionX = 2880;
-	public const int BaseResolutionY = 1800;
+	public static MissionContainer Instance => (MissionContainer)UISystem.EverglowUISystem.Elements[typeof(MissionContainer).FullName];
+
+	/// <summary>
+	/// Scale factor for all UI elements in the mission system
+	/// </summary>
+	public static float Scale => Instance.ResolutionFactor;
+
 	public const int PanelWidth = 1360;
 	public const int PanelHeight = 800;
 
+	// ==================== UI elements ==================== //
+	private UIBlock _panel;
+	private UIMissionBackground _panelBackground;
+	private UIBlock _panelCoverContainer;
+	private UIImage _panelCover;
+
+	private UIMissionDetail _missionDetail;
+	private UIMissionDetailMask _missionDetailMask;
+
+	private UIMissionList _missionList;
+	private UIMissionFilter _missionFilter;
+
+	private UIBlock _close;
+
+	// ==================== Private data fields ==================== //
+	private bool nPCMode = false;
+	private int sourceNPC = 0;
+	private float resolutionFactor;
+
+	/// <summary>
+	/// The factor used to scale the UI elements inside the mission system.
+	/// </summary>
+	public float ResolutionFactor
+	{
+		get => resolutionFactor;
+		private set
+		{
+			resolutionFactor = Math.Max(value, 0.5f);
+		}
+	}
+
+	/// <summary>
+	/// Mouse text for tooltip
+	/// </summary>
+	public string MouseText { get; set; } = string.Empty;
+
+	/// <summary>
+	/// UI instance of the selected mission.
+	/// <para/>Use <see cref="ChangeSelectedItem(UIMissionItem)"/> to change this value.
+	/// <para/>If <c>null</c>, no mission item is selected.
+	/// </summary>
+	public UIMissionItem SelectedItem { get; private set; }
+
 	public MissionContainer()
+	{
+		UpdateResolutionFactor(new Vector2(Main.screenWidth, Main.screenHeight));
+	}
+
+	public void Load(Mod mod)
 	{
 		Player.Hooks.OnEnterWorld += OnEnterWorld_Close;
 		Main.OnResolutionChanged += OnResolutionChanged_Adapt;
+	}
 
-		// Initial resolution factor
-		if (Main.LastLoadedResolution.X / Main.LastLoadedResolution.Y > 16f / 9f)
-		{
-			ResolutionFactor = Main.LastLoadedResolution.Y / BaseResolutionY;
-		}
-		else
-		{
-			ResolutionFactor = Main.LastLoadedResolution.X / BaseResolutionX;
-		}
+	public void Unload()
+	{
+		Player.Hooks.OnEnterWorld -= OnEnterWorld_Close;
+		Main.OnResolutionChanged -= OnResolutionChanged_Adapt;
 	}
 
 	/// <summary>
@@ -40,7 +89,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 	{
 		if (player.whoAmI == Main.myPlayer)
 		{
-			Close();
+			Close(new Vector2(Main.screenWidth, Main.screenHeight));
 		}
 	}
 
@@ -50,23 +99,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 	/// <param name="resolution"></param>
 	private void OnResolutionChanged_Adapt(Vector2 resolution)
 	{
-		// if (resolution.X / resolution.Y > 16f / 9f)
-		// {
-		// ResolutionFactor = resolution.Y / BaseResolutionY;
-		// }
-		// else
-		// {
-		// ResolutionFactor = resolution.X / BaseResolutionX;
-		// }
-		ResolutionFactor = 1;
-		if (resolution.X < PanelWidth)
-		{
-			ResolutionFactor = resolution.X / PanelWidth;
-		}
-		if (resolution.Y < PanelHeight * ResolutionFactor)
-		{
-			ResolutionFactor *= resolution.Y / PanelHeight;
-		}
+		UpdateResolutionFactor(resolution);
 
 		ChildrenElements.Clear();
 		OnInitialization();
@@ -76,102 +109,22 @@ public class MissionContainer : UIContainerElement, ILoadable
 		}
 	}
 
-	public void Load(Mod mod)
+	private void UpdateResolutionFactor(Vector2 resolution)
 	{
-	}
-
-	public void Unload()
-	{
-		Player.Hooks.OnEnterWorld -= OnEnterWorld_Close;
-		Main.OnResolutionChanged -= OnResolutionChanged_Adapt;
-	}
-
-	public enum ColorType
-	{
-		Dark,
-		Light,
-	}
-
-	public enum ColorStyle
-	{
-		Dark,
-		Normal,
-		Light,
-	}
-
-	public static float Scale => Instance.ResolutionFactor;
-
-	public static MissionContainer Instance => (MissionContainer)UISystem.EverglowUISystem.Elements[typeof(MissionContainer).FullName];
-
-	public float ResolutionFactor
-	{
-		get => resolutionFactor;
-		private set
+		if (resolution.X / resolution.Y > 16f / 9f)
 		{
-			resolutionFactor = Math.Max(value, 0.5f);
+			ResolutionFactor = resolution.Y / PanelHeight;
 		}
-	}
-
-	public string MouseText { get; set; } = string.Empty;
-
-	private UIBlock _panel;
-	private UIMissionBackground _panelBackground;
-
-	private UIBlock _panelCoverContainer;
-	private UIImage _panelCover;
-
-	private UIMissionDetail _missionDetail;
-	private UIMissionDetailMask _missionDetailMask;
-
-	private UIMissionList _missionListBlock;
-
-	private UIMissionFilter _missionFilter;
-
-	private UIBlock _closeButton;
-
-	private bool nPCMode = false;
-	private int sourceNPC = 0;
-	private float resolutionFactor;
-
-	/// <summary>
-	/// 选中的任务
-	/// <para/>注: 请通过<see cref="ChangeSelectedItem(UIMissionItem)"/>来修改此属性
-	/// </summary>
-	public UIMissionItem SelectedItem { get; private set; }
-
-	public Color GetThemeColor(ColorType type = ColorType.Dark, ColorStyle style = ColorStyle.Normal)
-	{
-		Color color = type switch
+		else
 		{
-			ColorType.Light => new Color(196, 241, 255),
-			_ => new Color(68, 53, 51),
-		};
-		float factor = style switch
-		{
-			ColorStyle.Dark => 0.66f,
-			ColorStyle.Light => 1.7f,
-			_ => 1f,
-		};
-		color *= factor;
-		color.A = 255;
-		return color;
+			ResolutionFactor = resolution.X / PanelWidth;
+		}
+		ResolutionFactor *= 0.5f;
 	}
 
 	public override void OnInitialization()
 	{
 		base.OnInitialization();
-
-		// Initialized ResolutionFactor.
-		ResolutionFactor = 1;
-		Vector2 resolution = new Vector2(Main.screenWidth, Main.screenHeight);
-		if (resolution.X < PanelWidth)
-		{
-			ResolutionFactor = resolution.X / PanelWidth;
-		}
-		if (resolution.Y < PanelHeight * ResolutionFactor)
-		{
-			ResolutionFactor *= resolution.Y / PanelHeight;
-		}
 
 		float width = PanelWidth * ResolutionFactor;
 		float height = PanelHeight * ResolutionFactor;
@@ -224,37 +177,37 @@ public class MissionContainer : UIContainerElement, ILoadable
 		_missionDetail.SetMask(_missionDetailMask);
 
 		// Mission list
-		_missionListBlock = new UIMissionList();
-		_missionListBlock.Info.Top.SetValue(410f * ResolutionFactor, 0);
-		_missionListBlock.Info.Left.SetValue(80f * ResolutionFactor, 0);
-		_missionListBlock.Info.Width.SetValue(384f * ResolutionFactor, 0f);
-		_missionListBlock.Info.Height.SetValue(360f * ResolutionFactor, 0f);
-		_missionListBlock.PanelColor = Color.Transparent;
-		_missionListBlock.BorderWidth = 0;
-		_panel.Register(_missionListBlock);
+		_missionList = new UIMissionList();
+		_missionList.Info.Top.SetValue(410f * ResolutionFactor, 0);
+		_missionList.Info.Left.SetValue(80f * ResolutionFactor, 0);
+		_missionList.Info.Width.SetValue(384f * ResolutionFactor, 0f);
+		_missionList.Info.Height.SetValue(360f * ResolutionFactor, 0f);
+		_missionList.PanelColor = Color.Transparent;
+		_missionList.BorderWidth = 0;
+		_panel.Register(_missionList);
 
 		// Close button
-		_closeButton = new UIBlock();
-		_closeButton.Info.Width.SetValue(88 * Scale);
-		_closeButton.Info.Height.SetValue(38 * Scale);
-		_closeButton.Info.Left.SetValue(PositionStyle.Full - _closeButton.Info.Width + (1, 0));
-		_closeButton.PanelColor = Color.Transparent;
-		_closeButton.BorderColor = Color.Transparent;
-		_closeButton.Info.IsSensitive = true;
-		_closeButton.Info.SetMargin(0);
-		_closeButton.Events.OnLeftDown += e => Close();
-		_closeButton.Events.OnMouseHover += e =>
+		_close = new UIBlock();
+		_close.Info.Width.SetValue(88 * Scale);
+		_close.Info.Height.SetValue(38 * Scale);
+		_close.Info.Left.SetValue(PositionStyle.Full - _close.Info.Width + (1, 0));
+		_close.PanelColor = Color.Transparent;
+		_close.BorderColor = Color.Transparent;
+		_close.Info.IsSensitive = true;
+		_close.Info.SetMargin(0);
+		_close.Events.OnLeftDown += e => Close();
+		_close.Events.OnMouseHover += e =>
 		{
 			MouseText = "Close";
-			_closeButton.PanelColor = Color.Gray;
+			_close.PanelColor = Color.Gray;
 		};
-		_closeButton.Events.OnMouseOver += e => _closeButton.PanelColor = Color.Gray;
-		_closeButton.Events.OnMouseOut += e =>
+		_close.Events.OnMouseOver += e => _close.PanelColor = Color.Gray;
+		_close.Events.OnMouseOut += e =>
 		{
 			MouseText = string.Empty;
-			_closeButton.PanelColor = GetThemeColor();
+			_close.PanelColor = Color.Transparent;
 		};
-		_panel.Register(_closeButton);
+		_panel.Register(_close);
 
 		// Cover image
 		_panelCoverContainer = new UIBlock();
@@ -278,6 +231,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 	{
 		base.Update(gt);
 
+		// Auto refresh mission list
 		if (NeedRefresh)
 		{
 			RefreshList();
@@ -302,34 +256,35 @@ public class MissionContainer : UIContainerElement, ILoadable
 	/// </exception>
 	public override void Show(params object[] args)
 	{
-		// 检查参数数量是否足够
-		if (args.Length == 1)
+		// Open mission panel in different mode based on the arguments.
+		if (args.Length == 1) // Open NPC mission panel
 		{
-			// 使用模式匹配提取并转换参数
+			// Take the first argument as the NPC mode.
 			if (args[0] is int npcSource)
 			{
-				// 设置 NPC 模式和来源 NPC
+				// Set NPC mode and source NPC.
 				nPCMode = true;
 				sourceNPC = npcSource;
 			}
 			else
 			{
-				// 如果参数类型不正确，抛出异常
+				// Throw an exception if the argument type is incorrect.
 				throw new ArgumentException("Invalid argument types. Expected: nPCMode (bool) and nPCSource (int).");
 			}
 		}
-		else
+		else // Open global mission panel
 		{
 			nPCMode = false;
 		}
 
+		// Clear the children elements and reinitialize the mission panel.
 		ChildrenElements.Clear();
 		OnInitialization();
 
-		// 刷新任务列表
+		// Refresh the mission list.
 		RefreshList();
 
-		// 调用基类的 Show 方法
+		// Display the mission panel.
 		base.Show(args);
 	}
 
@@ -341,7 +296,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 	{
 		Show();
 
-		foreach (var missionItem in _missionListBlock.MissionItems)
+		foreach (var missionItem in _missionList.MissionItems)
 		{
 			if (missionItem.Mission.Name == missionName)
 			{
@@ -356,11 +311,11 @@ public class MissionContainer : UIContainerElement, ILoadable
 	/// </summary>
 	public void RefreshList()
 	{
-		_missionListBlock.RefreshList(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue, nPCMode, sourceNPC);
+		_missionList.RefreshList(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue, nPCMode, sourceNPC);
 		_panelBackground.SetSpectrumColor(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue);
 
-		// 重新选取之前选择的任务
-		var filteredList = _missionListBlock.MissionItems.Where(e => e.Mission.Name == SelectedItem.Mission.Name);
+		// Re-select the selected mission item
+		var filteredList = _missionList.MissionItems.Where(e => e.Mission.Name == SelectedItem.Mission.Name);
 		if (SelectedItem != null && filteredList.Any())
 		{
 			ChangeSelectedItem(filteredList.First());
@@ -393,7 +348,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 	{
 		base.Draw(sb);
 
-		// Draw filter item tooltip
+		// Draw tooltip
 		if (!string.IsNullOrEmpty(MouseText))
 		{
 			var pos = Main.MouseScreen + new Vector2(10f, 18f);

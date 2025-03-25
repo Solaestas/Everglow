@@ -2,7 +2,6 @@ using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
-using Everglow.Commons.Utilities;
 using Terraria.GameContent;
 using UIImage = Everglow.Commons.UI.UIElements.UIImage;
 
@@ -20,7 +19,7 @@ public class UIMissionItem : UIBlock
 	public UIMissionItem(MissionBase missionBase)
 	{
 		Mission = missionBase;
-		PanelColor = MissionContainer.Instance.GetThemeColor();
+		PanelColor = Color.Transparent;
 		BorderWidth = 0;
 
 		var scale = MissionContainer.Scale;
@@ -54,13 +53,11 @@ public class UIMissionItem : UIBlock
 		block.Register(_background);
 
 		// 任务进度
-		var statusBar = new UIMissionStatus(GetMissionStatus(Mission));
+		var statusBar = new UIImage(GetMissionStatus(Mission), Color.White);
 		statusBar.Info.Top.SetValue(19f * scale, 0);
 		statusBar.Info.Left.SetValue(291f * scale, 0);
 		statusBar.Info.Width.SetValue(12 * scale, 0);
 		statusBar.Info.Height.SetValue(32 * scale, 0);
-		statusBar.Progress = Mission.Progress;
-		statusBar.Status = Mission.PoolType;
 		block.Register(statusBar);
 
 		// 任务名称
@@ -83,68 +80,6 @@ public class UIMissionItem : UIBlock
 		name.Info.SetToCenter();
 		name.Info.Left.SetEmpty();
 		name.Calculation();
-	}
-
-	public override void OnInitialization()
-	{
-		base.OnInitialization();
-
-		//PanelColor = MissionContainer.Instance.GetThemeColor();
-		//BorderWidth = 0;
-
-		//var scale = MissionContainer.Scale;
-
-		//// 初始化UI信息
-		//Info.Width.SetValue(320f * scale, 0f);
-		//Info.Height.SetValue(60f * scale, 0f);
-		//Info.SetToCenter();
-		//Info.SetMargin(0);
-		//Info.IsSensitive = true;
-
-		//// 鼠标悬停时改变颜色
-		//Events.OnMouseHover += OnMouseOver;
-		//Events.OnMouseOver += OnMouseOver;
-		//Events.OnMouseOut += OnMouseLeave;
-
-		//// 任务项容器
-		//block = new UIBlock();
-		//block.Info.Width.SetFull();
-		//block.Info.Height.SetFull();
-		//block.BorderWidth = 0;
-		//block.PanelColor = Color.Transparent;
-		//block.Info.SetMargin(0);
-		//Register(block);
-
-		//// 任务项背景
-		//var _background = new UIImage(GetBackground(Mission), Color.White);
-		//_background.Info.Width.SetFull();
-		//_background.Info.Height.SetFull();
-		//_background.Style = UIImage.CalculationStyle.None;
-		//block.Register(_background);
-
-		//// 任务进度
-		//var statusBar = new UIMissionStatus();
-		//statusBar.Info.Top.SetValue(19f * scale, 0);
-		//statusBar.Info.Left.SetValue(291f * scale, 0);
-		//statusBar.Info.Width.SetValue(12 * scale, 0);
-		//statusBar.Info.Height.SetValue(32 * scale, 0);
-		//statusBar.Events.OnUpdate += (e, gt) =>
-		//{
-		//	statusBar.Progress = Mission.Progress;
-		//	statusBar.Status = Mission.PoolType;
-		//};
-		//block.Register(statusBar);
-
-		//// 任务名称
-		//var font = FontManager.FusionPixel12.GetFont(block.Info.Height.Pixel - block.Info.TopMargin.Pixel - block.Info.BottomMargin.Pixel - 2f);
-		//var name = new UITextPlus(Mission.DisplayName);
-		//name.StringDrawer.DefaultParameters.SetParameter("FontSize", 20f);
-		//name.StringDrawer.Init(name.Text);
-		//block.Register(name);
-
-		//name.Info.SetToCenter();
-		//name.Info.Left.SetValue(0, 0.2f);
-		//name.Calculation();
 	}
 
 	private static Texture2D GetBackground(MissionBase mission) => mission.MissionType switch
@@ -201,7 +136,7 @@ public class UIMissionItem : UIBlock
 	/// </summary>
 	public void OnSelected()
 	{
-		PanelColor = MissionContainer.Instance.GetThemeColor(MissionContainer.ColorType.Dark, MissionContainer.ColorStyle.Light);
+		PanelColor = Color.White;
 	}
 
 	/// <summary>
@@ -210,12 +145,7 @@ public class UIMissionItem : UIBlock
 	/// </summary>
 	public void OnUnselected()
 	{
-		PanelColor = MissionContainer.Instance.GetThemeColor(MissionContainer.ColorType.Dark, MissionContainer.ColorStyle.Normal);
-	}
-
-	public override void Update(GameTime gt)
-	{
-		base.Update(gt);
+		PanelColor = Color.Transparent;
 	}
 
 	protected override void DrawChildren(SpriteBatch sb)
@@ -237,27 +167,5 @@ public class UIMissionItem : UIBlock
 		var offset = (int)(45 * MissionContainer.Scale);
 		var dest = new Rectangle(HitBox.X + offset, HitBox.Y, (int)((HitBox.Width - offset) * progress), HitBox.Height);
 		Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, dest, new Color(0.5f, colorValue * 0.5f, colorValue * 0.5f, 0.1f));
-	}
-
-	private class UIMissionStatus : UIImage
-	{
-		public float Progress { get; set; }
-
-		public PoolType Status { get; set; }
-
-		public UIMissionStatus(Texture2D texture)
-			: base(texture, Color.White)
-		{
-		}
-
-		public override void Draw(SpriteBatch sb)
-		{
-			base.Draw(sb);
-		}
-
-		protected override void DrawChildren(SpriteBatch sb)
-		{
-			base.DrawChildren(sb);
-		}
 	}
 }

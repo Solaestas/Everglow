@@ -8,6 +8,10 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
 
 public class UIMissionDetail : UIBlock
 {
+	private static UIMissionItem SelectedItem => Instance.SelectedItem;
+
+	private static float FontSize => 30f * Instance.ResolutionFactor;
+
 	private UIMissionIcon _icon;
 	private UIBlock _tree;
 	private UIImage _treeIcon;
@@ -32,10 +36,6 @@ public class UIMissionDetail : UIBlock
 	private UITextPlus _no;
 
 	private UIMissionDetailMask _mask;
-
-	public UIMissionItem SelectedItem => Instance.SelectedItem;
-
-	private float fontSizeValue => 30f * Instance.ResolutionFactor;
 
 	public class ChangeButtonText
 	{
@@ -205,7 +205,7 @@ public class UIMissionDetail : UIBlock
 		Register(_changeMission);
 
 		_yes = new UITextPlus(ChangeButtonText.Yes);
-		_yes.StringDrawer.DefaultParameters.SetParameter("FontSize",  fontSizeValue);
+		_yes.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
 		_yes.StringDrawer.Init(_yes.Text);
 		_yes.Info.IsVisible = false;
 		_yes.Events.OnUpdate += (e, gt) =>
@@ -218,7 +218,7 @@ public class UIMissionDetail : UIBlock
 		_changeMission.Register(_yes);
 
 		_no = new UITextPlus(ChangeButtonText.No);
-		_no.StringDrawer.DefaultParameters.SetParameter("FontSize",  fontSizeValue);
+		_no.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
 		_no.StringDrawer.Init(_no.Text);
 		_no.Info.IsVisible = false;
 		_no.Events.OnUpdate += (e, gt) =>
@@ -231,14 +231,9 @@ public class UIMissionDetail : UIBlock
 		_changeMission.Register(_no);
 
 		_changeText = new UITextPlus(string.Empty);
-		_changeText.StringDrawer.DefaultParameters.SetParameter("FontSize",  fontSizeValue);
+		_changeText.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
 		_changeText.StringDrawer.Init(_changeText.Text);
 		_changeMission.Register(_changeText);
-	}
-
-	public override void Update(GameTime gt)
-	{
-		base.Update(gt);
 	}
 
 	public void HideMissionDetailMask() => _mask.Info.IsVisible = false;
@@ -289,7 +284,7 @@ public class UIMissionDetail : UIBlock
 				desText.Append(mission.Description + "\n");
 			}
 			var des = new UITextPlus(desText.ToString());
-			des.StringDrawer.DefaultParameters.SetParameter("FontSize",  fontSizeValue);
+			des.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
 			des.StringDrawer.Init(des.Text);
 			_descriptionContainer.AddElement(des);
 			des.StringDrawer.SetWordWrap(_descriptionContainer.HitBox.Width - _descriptionTextScrollbar.InnerScale.X);
@@ -302,7 +297,7 @@ public class UIMissionDetail : UIBlock
 				objText.Append(objective);
 			}
 			var obj = new UITextPlus(objText.ToString());
-			obj.StringDrawer.DefaultParameters.SetParameter("FontSize",  fontSizeValue);
+			obj.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
 			obj.StringDrawer.Init(obj.Text);
 			_objectiveContainer.AddElement(obj);
 			obj.StringDrawer.SetWordWrap(_objectiveContainer.HitBox.Width - _objectiveTextScrollbar.InnerScale.X);
@@ -312,7 +307,7 @@ public class UIMissionDetail : UIBlock
 			rewText.Append("奖励：\n");
 			rewText.Append(mission.GetRewards());
 			var rew = new UITextPlus(rewText.ToString());
-			rew.StringDrawer.DefaultParameters.SetParameter("FontSize",  fontSizeValue);
+			rew.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
 			rew.StringDrawer.Init(rew.Text);
 			_rewardContainer.AddElement(rew);
 			rew.StringDrawer.SetWordWrap(_rewardContainer.HitBox.Width - _rewardTextScrollbar.InnerScale.X);

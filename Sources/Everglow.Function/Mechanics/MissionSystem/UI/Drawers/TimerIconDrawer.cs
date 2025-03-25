@@ -76,9 +76,7 @@ internal class TimerIconDrawer : DrawerItem
 		Color = stringParameters.GetColor("Color",
 			stringDrawer.DefaultParameters.GetColor(
 				"MITColor",
-				MissionContainer.Instance.GetThemeColor(
-				MissionContainer.ColorType.Light,
-				MissionContainer.ColorStyle.Normal)));
+				Color.White));
 		Size = stringParameters.GetInt("Size",
 			stringDrawer.DefaultParameters.GetInt("MITSize", 18));
 		Thickness = stringParameters.GetInt("Thickness",

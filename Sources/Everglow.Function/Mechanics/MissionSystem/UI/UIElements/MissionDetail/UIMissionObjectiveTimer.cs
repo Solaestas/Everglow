@@ -60,8 +60,6 @@ public class UIMissionObjectiveTimer : UIMissionDetailMaskContentBase
 		var clockCenter = HitBox.Center.ToVector2();
 		sb.Draw(clockTexture, clockCenter, null, Color.White, rotation: 0, clockTexture.Size() / 2, scale, SpriteEffects.None, 0);
 
-
-
 		// Clock progress
 		var progressRadius = ClockRadius * scale;
 		var clockCenterOffset = new Vector2(0, ClockCenterOffset) * scale;

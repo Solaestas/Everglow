@@ -124,11 +124,9 @@ public class UIMissionIcon : UIBlock
 
 	public class UIMissionCarousel : BaseElement
 	{
-		private int Padding => 144;
-
-		private int MaxWidth => 128;
-
-		private int MinWidth => 64;
+		private const int Padding = 144;
+		private const int MaxWidth = 128;
+		private const int MinWidth = 64;
 
 		private float globalMotionOffset = 0;
 

@@ -51,6 +51,7 @@ public class UIMissionFilter : BaseElement
 
 	private float MouseRotation => HitBox.Center.ToVector2().AngleTo(Main.MouseScreen);
 
+	#region Static methods
 	private static MissionType? RotationToMissionType(float rotation)
 	{
 		var unit = MathHelper.TwoPi / MissionTypeList.Count;
@@ -107,6 +108,13 @@ public class UIMissionFilter : BaseElement
 		return rotationDiff;
 	}
 
+	/// <summary>
+	/// Calculate the nearest snap rotation based on the current rotation and the count of options.
+	/// </summary>
+	/// <param name="currentRotation"></param>
+	/// <param name="optionCount"></param>
+	/// <returns></returns>
+	/// <exception cref="InvalidDataException"></exception>
 	private static float CalculateNearestSnapRotation(float currentRotation, float optionCount)
 	{
 		if (optionCount <= 0)
@@ -142,6 +150,8 @@ public class UIMissionFilter : BaseElement
 		return currentRotation + diff;
 	}
 
+	#endregion
+
 	public override void OnInitialization()
 	{
 		base.OnInitialization();
@@ -151,10 +161,61 @@ public class UIMissionFilter : BaseElement
 		Info.Width.SetValue(350 * scale);
 		Info.Height.SetValue(350 * scale);
 
-		Events.OnMouseHover += Events_OnMouseHover;
+		Events.OnMouseHover += ManageHeldLogic;
 	}
 
-	private void Events_OnMouseHover(BaseElement baseElement)
+	public override void Update(GameTime gt)
+	{
+		// Update mission type
+		var missionType = RotationToMissionType(_outerRotation);
+		if (MissionTypeValue != missionType)
+		{
+			MissionTypeValue = missionType;
+			MissionManager.NeedRefresh = true;
+		}
+
+		// Update pool type
+		var poolType = RotationToPoolType(_innerRotation);
+		if (PoolTypeValue != poolType)
+		{
+			PoolTypeValue = poolType;
+			MissionManager.NeedRefresh = true;
+		}
+
+		ManageAutoRotation();
+
+		var distanceToCenter = Main.MouseScreen.Distance(HitBox.Center.ToVector2());
+
+		// Outer ring hover logic: show mission type text and highlight the selected mission type
+		if (DistanceWithinOuterRing(distanceToCenter))
+		{
+			var hoverMissionType = RotationToMissionType(MathHelper.Pi - MouseRotation + _outerRotation);
+			_outerHoverTargetRotation = MissionTypeToRotation(hoverMissionType);
+			MissionContainer.Instance.MouseText = hoverMissionType?.ToString() ?? "All";
+		}
+		else
+		{
+			_outerHoverTargetRotation = null;
+		}
+
+		// Inner ring hover logic: show mission type text and highlight the selected mission type
+		if (DistanceWithinInnerRing(distanceToCenter))
+		{
+			var hoverPoolType = RotationToPoolType(MathHelper.Pi - MouseRotation + _innerRotation);
+			_innerHoverTargetRotation = PoolTypeToRotation(hoverPoolType);
+			MissionContainer.Instance.MouseText = hoverPoolType?.ToString() ?? "All";
+		}
+		else
+		{
+			_innerHoverTargetRotation = null;
+		}
+	}
+
+	/// <summary>
+	/// Manage the ring held logic: rotate the inner and outer ring with mouse movement when held.
+	/// </summary>
+	/// <param name="baseElement"></param>
+	private void ManageHeldLogic(BaseElement baseElement)
 	{
 		// Reset held state when mouse is not clicking
 		var mouseLeftClicking = Main.mouseLeft && !Main.mouseLeftRelease;
@@ -219,90 +280,27 @@ public class UIMissionFilter : BaseElement
 	}
 
 	/// <summary>
-	/// Rotate the outer ring to the target rotation.
+	/// Rotate the ring to the target rotation.
 	/// </summary>
-	/// <param name="rotation"></param>
-	private void OuterRotatedTo(float rotation)
+	/// <param name="targetRotation"></param>
+	/// <param name="currentRotation"></param>
+	private void RotateRingTo(float targetRotation, ref float currentRotation)
 	{
-		var rotationDiff = GetNaturalRotation(rotation, _outerRotation);
+		var rotationDiff = GetNaturalRotation(targetRotation, currentRotation);
 
 		if (MathF.Abs(rotationDiff) > RotationSnapThreshold)
 		{
-			_outerRotation += rotationDiff / 10;
+			currentRotation += rotationDiff / 10;
 		}
 		else
 		{
-			_outerRotation += rotationDiff;
+			currentRotation += rotationDiff;
 		}
 	}
 
 	/// <summary>
-	/// Rotate the inner ring to the target rotation.
-	/// </summary>
-	/// <param name="rotation"></param>
-	private void InnerRotatedTo(float rotation)
-	{
-		var rotationDiff = GetNaturalRotation(rotation, _innerRotation);
-
-		if (MathF.Abs(rotationDiff) > RotationSnapThreshold)
-		{
-			_innerRotation += rotationDiff / 10;
-		}
-		else
-		{
-			_innerRotation += rotationDiff;
-		}
-	}
-
-	public override void Update(GameTime gt)
-	{
-		// Update mission type
-		var missionType = RotationToMissionType(_outerRotation);
-		if (MissionTypeValue != missionType)
-		{
-			MissionTypeValue = missionType;
-			MissionManager.NeedRefresh = true;
-		}
-
-		// Update pool type
-		var poolType = RotationToPoolType(_innerRotation);
-		if (PoolTypeValue != poolType)
-		{
-			PoolTypeValue = poolType;
-			MissionManager.NeedRefresh = true;
-		}
-
-		ManageAutoRotation();
-
-		var distanceToCenter = Main.MouseScreen.Distance(HitBox.Center.ToVector2());
-
-		// Outer ring hover logic: show mission type text and highlight the selected mission type
-		if (DistanceWithinOuterRing(distanceToCenter))
-		{
-			var hoverMissionType = RotationToMissionType(MathHelper.Pi - MouseRotation + _outerRotation);
-			_outerHoverTargetRotation = MissionTypeToRotation(hoverMissionType);
-			MissionContainer.Instance.MouseText = hoverMissionType?.ToString() ?? "All";
-		}
-		else
-		{
-			_outerHoverTargetRotation = null;
-		}
-
-		// Inner ring hover logic: show mission type text and highlight the selected mission type
-		if (DistanceWithinInnerRing(distanceToCenter))
-		{
-			var hoverPoolType = RotationToPoolType(MathHelper.Pi - MouseRotation + _innerRotation);
-			_innerHoverTargetRotation = PoolTypeToRotation(hoverPoolType);
-			MissionContainer.Instance.MouseText = hoverPoolType?.ToString() ?? "All";
-		}
-		else
-		{
-			_innerHoverTargetRotation = null;
-		}
-	}
-
-	/// <summary>
-	/// Manage auto-rotation of two rings. The auto-rotation is consist of two part: click-to-select and fix rotation.
+	/// Manage auto-rotation of two rings.
+	/// <para/>The auto-rotation is consist of two part: click-to-select and fix rotation.
 	/// </summary>
 	private void ManageAutoRotation()
 	{
@@ -325,7 +323,7 @@ public class UIMissionFilter : BaseElement
 			// If there's no click target rotation, then fix the rotation to nearest snap.
 			_innerClickTargetRotation ??= CalculateNearestSnapRotation(_innerRotation, PoolTypeList.Count);
 
-			InnerRotatedTo(_innerClickTargetRotation.Value);
+			RotateRingTo(_innerClickTargetRotation.Value, ref _innerRotation);
 		}
 
 		// Outer spin
@@ -347,7 +345,7 @@ public class UIMissionFilter : BaseElement
 			// If there's no click target rotation, then fix the rotation to nearest snap.
 			_outerClickTargetRotation ??= CalculateNearestSnapRotation(_outerRotation, MissionTypeList.Count);
 
-			OuterRotatedTo(_outerClickTargetRotation.Value);
+			RotateRingTo(_outerClickTargetRotation.Value, ref _outerRotation);
 		}
 	}
 

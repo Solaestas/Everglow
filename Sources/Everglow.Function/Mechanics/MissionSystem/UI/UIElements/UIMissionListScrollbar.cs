@@ -18,8 +18,8 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements
 			Info.Width.SetValue(8f, 0f);
 			_innerScale = new Vector2(12f, 46f) * MissionContainer.Scale;
 			AlwaysOnLight = true;
-			_bar.PanelColor = MissionContainer.Instance.GetThemeColor(MissionContainer.ColorType.Dark, MissionContainer.ColorStyle.Dark);
-			_inner.PanelColor = MissionContainer.Instance.GetThemeColor();
+			_bar.PanelColor = Color.Transparent;
+			_inner.PanelColor = Color.Transparent;
 			_inner.ShowBorder = (false, false, false, false);
 		}
 

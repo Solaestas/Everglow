@@ -37,6 +37,7 @@ public class MissionPlayer : ModPlayer
 				MissionManager.AddMission(new NoneMission6(), PoolType.Available);
 				MissionManager.AddMission(new MissionTimerTest(), PoolType.Available);
 				MissionManager.AddMission(new MissionIconTest(), PoolType.Available);
+				MissionManager.AddMission(new GiveNPCMissionTest(), PoolType.Available);
 			}
 #endif
 		}
