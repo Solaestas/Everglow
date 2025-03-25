@@ -1,4 +1,6 @@
 using Everglow.Food.FoodRecipes;
+using Everglow.Food.Items.Cookers;
+using Everglow.Food.Tiles;
 using static Everglow.Food.FoodRecipes.FoodRecipes;
 
 namespace Everglow.Food.UI;
@@ -175,5 +177,36 @@ public class SteamBoxUI : PotUI
 			}
 		}
 		return new Tuple<int, int>(-1, -1);
+	}
+
+
+	public override void Remove()
+	{
+		ChineseCookingRangeEntity ChineseCookingRangeEntity;
+		ChineseCookingRange.TryGetStoveEntityAs(AnchorTilePos.X, AnchorTilePos.Y, out ChineseCookingRangeEntity);
+		switch (ChineseCookingRangeEntity.PotState)
+		{
+			case 1:
+				{
+					Item.NewItem(null, AnchorTilePos.ToWorldCoordinates(), ModContent.ItemType<SteamBox_Item>(), 1);
+					break;
+				}
+			case 2:
+				{
+					Item.NewItem(null, AnchorTilePos.ToWorldCoordinates(), ModContent.ItemType<SteamBox_Item>(), 2);
+					break;
+				}
+			default:
+				{
+					break;
+				}
+		}
+		if (ChineseCookingRangeEntity != null)
+		{
+			ChineseCookingRangeEntity.PotState = 0;
+		}
+		ClearPot();
+
+		Open = false;
 	}
 }

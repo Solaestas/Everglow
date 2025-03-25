@@ -57,7 +57,8 @@ public class ChineseCookingRange : ModTile, ITileFluentlyDrawn
 	{
 		var tile = Main.tile[i, j];
 		ChineseCookingRangeEntity chineseCookingRangeEntity;
-		Point hitPoint = new Point(i - (tile.TileFrameX % 36) / 18, j - tile.TileFrameY / 18);
+		Point hitPoint = new Point(i - (tile.TileFrameX % 72) / 18, j - tile.TileFrameY / 18);
+		Main.NewText(hitPoint.Y);
 		TryGetStoveEntityAs(hitPoint.X, hitPoint.Y, out chineseCookingRangeEntity);
 		if (chineseCookingRangeEntity != null)
 		{
@@ -162,7 +163,7 @@ public class ChineseCookingRange : ModTile, ITileFluentlyDrawn
 		var tile = Main.tile[i, j];
 		int frameX = tile.TileFrameX;
 		int frameY = tile.TileFrameY;
-		if (frameX % 36 == 0 && frameY == 0)
+		if (frameX % 72 == 0 && frameY == 0)
 		{
 			TileFluentDrawManager.AddFluentPoint(this, i, j);
 		}
@@ -208,18 +209,19 @@ public class ChineseCookingRange : ModTile, ITileFluentlyDrawn
 		if (chineseCookingRangeEntity != null)
 		{
 			Texture2D pot = ModAsset.StoveAtlas.Value;
-			Vector2 offset = new Vector2(6, 24);
+			Vector2 offset = new Vector2(9, 19);
 			switch (chineseCookingRangeEntity.PotState)
 			{
 				case 1:
 					{
-						Rectangle frame = new Rectangle(2, 2, 28, 14);
+						Rectangle frame = new Rectangle(36, 6, 26, 6);
 						spriteBatch.Draw(pot, pos.ToWorldCoordinates() - Main.screenPosition + offset, frame, Lighting.GetColor(pos), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
 						break;
 					}
 				case 2:
 					{
-						Rectangle frame = new Rectangle(6, 51, 48, 28);
+						offset = new Vector2(9, 16);
+						Rectangle frame = new Rectangle(70, 0, 26, 12);
 						spriteBatch.Draw(pot, pos.ToWorldCoordinates() - Main.screenPosition + offset, frame, Lighting.GetColor(pos), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
 						break;
 					}
@@ -247,7 +249,7 @@ public class ChineseCookingRange : ModTile, ITileFluentlyDrawn
 			TryGetStoveEntityAs(i, j, out chineseCookingRangeEntity);
 			if (chineseCookingRangeEntity == null)
 			{
-				TileEntity.PlaceEntityNet(i, j, ModContent.TileEntityType<StoveEntity>());
+				TileEntity.PlaceEntityNet(i, j, ModContent.TileEntityType<ChineseCookingRangeEntity>());
 				TryGetStoveEntityAs(i, j, out chineseCookingRangeEntity);
 			}
 			base.NearbyEffects(i, j, closer);
@@ -284,7 +286,7 @@ public class ChineseCookingRangeEntity : ModTileEntity
 	public override bool IsTileValidForEntity(int x, int y)
 	{
 		var tile = Main.tile[x, y];
-		if (tile.HasTile && tile.TileType == ModContent.TileType<Stove>())
+		if (tile.HasTile && tile.TileType == ModContent.TileType<ChineseCookingRange>())
 		{
 			MyPotUI = GetPotUI(x, y);
 			if (MyPotUI != null)

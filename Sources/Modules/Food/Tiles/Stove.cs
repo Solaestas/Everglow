@@ -57,6 +57,7 @@ public class Stove : ModTile, ITileFluentlyDrawn
 		var tile = Main.tile[i, j];
 		StoveEntity stoveEneity;
 		Point hitPoint = new Point(i - (tile.TileFrameX % 36) / 18, j - tile.TileFrameY / 18);
+		Main.NewText(hitPoint.Y);
 		TryGetStoveEntityAs(hitPoint.X, hitPoint.Y, out stoveEneity);
 		if (stoveEneity != null)
 		{
@@ -105,59 +106,6 @@ public class Stove : ModTile, ITileFluentlyDrawn
 							StoveUIManager.PotUIs.Add(casseroleUI);
 						}
 						return false;
-					}
-				case 2:
-					{
-						Item item = Main.LocalPlayer.HeldItem;
-						if (item.type == ModContent.ItemType<SteamBox_Item>())
-						{
-							item.stack--;
-							if (item.stack <= 0)
-							{
-								item.active = false;
-							}
-							stoveEneity.PotState = 3;
-							return false;
-						}
-						else
-						{
-							SteamBoxUI steamboxUI = new SteamBoxUI(hitPoint);
-							bool checkSame = false;
-							foreach (var casserole in StoveUIManager.PotUIs)
-							{
-								if (casserole.AnchorTilePos == hitPoint)
-								{
-									checkSame = true;
-									casserole.Open = !casserole.Open;
-									break;
-								}
-							}
-							if (!checkSame)
-							{
-								StoveUIManager.PotUIs.Add(steamboxUI);
-							}
-						}
-						break;
-					}
-				case 3:
-					{
-						SteamBoxUI2 steamboxUI2 = new SteamBoxUI2(hitPoint);
-						bool checkSame = false;
-						foreach (var casserole in StoveUIManager.PotUIs)
-						{
-							if (casserole.AnchorTilePos == hitPoint)
-							{
-								checkSame = true;
-								casserole.Open = !casserole.Open;
-								break;
-							}
-						}
-						if (!checkSame)
-						{
-							StoveUIManager.PotUIs.Add(steamboxUI2);
-						}
-
-						break;
 					}
 				default:
 					{
@@ -242,18 +190,6 @@ public class Stove : ModTile, ITileFluentlyDrawn
 				case 1:
 					{
 						Rectangle frame = new Rectangle(2, 2, 28, 14);
-						spriteBatch.Draw(pot, pos.ToWorldCoordinates() - Main.screenPosition + offset, frame, Lighting.GetColor(pos), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
-						break;
-					}
-				case 2:
-					{
-						Rectangle frame = new Rectangle(6, 51, 48, 14);
-						spriteBatch.Draw(pot, pos.ToWorldCoordinates() - Main.screenPosition + offset, frame, Lighting.GetColor(pos), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
-						break;
-					}
-				case 3:
-					{
-						Rectangle frame = new Rectangle(6, 51, 48, 28);
 						spriteBatch.Draw(pot, pos.ToWorldCoordinates() - Main.screenPosition + offset, frame, Lighting.GetColor(pos), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
 						break;
 					}
