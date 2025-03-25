@@ -67,12 +67,13 @@ public class MissionContainer : UIContainerElement, ILoadable
 	public MissionContainer()
 	{
 		UpdateResolutionFactor(new Vector2(Main.screenWidth, Main.screenHeight));
+
+		Player.Hooks.OnEnterWorld += OnEnterWorld_Close;
+		Main.OnResolutionChanged += OnResolutionChanged_Adapt;
 	}
 
 	public void Load(Mod mod)
 	{
-		Player.Hooks.OnEnterWorld += OnEnterWorld_Close;
-		Main.OnResolutionChanged += OnResolutionChanged_Adapt;
 	}
 
 	public void Unload()
@@ -119,7 +120,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 		{
 			ResolutionFactor = resolution.X / PanelWidth;
 		}
-		ResolutionFactor *= 0.5f;
+		ResolutionFactor *= 0.6f;
 	}
 
 	public override void OnInitialization()
