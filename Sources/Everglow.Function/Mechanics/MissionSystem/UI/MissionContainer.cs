@@ -2,6 +2,7 @@ using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
+using Everglow.Commons.Utilities;
 using Microsoft.CodeAnalysis;
 using ReLogic.Graphics;
 using Terraria.GameContent;
@@ -66,7 +67,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 	public MissionContainer()
 	{
-		UpdateResolutionFactor(new Vector2(Main.screenWidth, Main.screenHeight));
+		UpdateResolutionFactor(ScreenUtils.CurrentResolution);
 
 		Player.Hooks.OnEnterWorld += OnEnterWorld_Close;
 		Main.OnResolutionChanged += OnResolutionChanged_Adapt;
@@ -90,7 +91,9 @@ public class MissionContainer : UIContainerElement, ILoadable
 	{
 		if (player.whoAmI == Main.myPlayer)
 		{
-			Close(new Vector2(Main.screenWidth, Main.screenHeight));
+			Close();
+			UpdateResolutionFactor(ScreenUtils.CurrentResolution);
+			RefreshMissionContainer();
 		}
 	}
 
@@ -101,15 +104,13 @@ public class MissionContainer : UIContainerElement, ILoadable
 	private void OnResolutionChanged_Adapt(Vector2 resolution)
 	{
 		UpdateResolutionFactor(resolution);
-
-		ChildrenElements.Clear();
-		OnInitialization();
-		if (!Main.gameMenu)
-		{
-			RefreshList();
-		}
+		RefreshMissionContainer();
 	}
 
+	/// <summary>
+	/// Update resolution factor and refresh ui
+	/// </summary>
+	/// <param name="resolution"></param>
 	private void UpdateResolutionFactor(Vector2 resolution)
 	{
 		if (resolution.X / resolution.Y > 16f / 9f)
@@ -120,7 +121,17 @@ public class MissionContainer : UIContainerElement, ILoadable
 		{
 			ResolutionFactor = resolution.X / PanelWidth;
 		}
-		ResolutionFactor *= 0.6f;
+		ResolutionFactor *= 0.55f;
+	}
+
+	private void RefreshMissionContainer()
+	{
+		ChildrenElements.Clear();
+		OnInitialization();
+		if (!Main.gameMenu)
+		{
+			RefreshList();
+		}
 	}
 
 	public override void OnInitialization()
@@ -150,8 +161,8 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 		// Mission filter
 		_missionFilter = new UIMissionFilter();
-		_missionFilter.Info.Top.SetValue(35 * Scale);
-		_missionFilter.Info.Left.SetValue(95 * Scale);
+		_missionFilter.Info.Top.SetValue(35 * ResolutionFactor);
+		_missionFilter.Info.Left.SetValue(95 * ResolutionFactor);
 		_panel.Register(_missionFilter);
 
 		// Mission details
@@ -189,8 +200,8 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 		// Close button
 		_close = new UIBlock();
-		_close.Info.Width.SetValue(88 * Scale);
-		_close.Info.Height.SetValue(38 * Scale);
+		_close.Info.Width.SetValue(88 * ResolutionFactor);
+		_close.Info.Height.SetValue(38 * ResolutionFactor);
 		_close.Info.Left.SetValue(PositionStyle.Full - _close.Info.Width + (1, 0));
 		_close.PanelColor = Color.Transparent;
 		_close.BorderColor = Color.Transparent;
@@ -278,12 +289,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 			nPCMode = false;
 		}
 
-		// Clear the children elements and reinitialize the mission panel.
-		ChildrenElements.Clear();
-		OnInitialization();
-
-		// Refresh the mission list.
-		RefreshList();
+		RefreshMissionContainer();
 
 		// Display the mission panel.
 		base.Show(args);
