@@ -14,6 +14,10 @@ public class MissionContainer : UIContainerElement, ILoadable
 {
 	public static MissionContainer Instance => (MissionContainer)UISystem.EverglowUISystem.Elements[typeof(MissionContainer).FullName];
 
+	public static UIMissionDetailSubContent DetailSub => Instance._missionDetailSubContent;
+
+	public static UIMissionDetailTipContent DetailTip => Instance._missionDetailTip;
+
 	/// <summary>
 	/// Scale factor for all UI elements in the mission system
 	/// </summary>
@@ -29,7 +33,8 @@ public class MissionContainer : UIContainerElement, ILoadable
 	private UIImage _panelCover;
 
 	private UIMissionDetail _missionDetail;
-	private UIMissionDetailMask _missionDetailMask;
+	private UIMissionDetailSubContent _missionDetailSubContent;
+	private UIMissionDetailTipContent _missionDetailTip;
 
 	private UIMissionList _missionList;
 	private UIMissionFilter _missionFilter;
@@ -176,17 +181,26 @@ public class MissionContainer : UIContainerElement, ILoadable
 		_panel.Register(_missionDetail);
 
 		// Mission detail mask
-		_missionDetailMask = new UIMissionDetailMask();
-		_missionDetailMask.Info.Left.SetValue(608 * ResolutionFactor);
-		_missionDetailMask.Info.Top.SetValue(46 * ResolutionFactor);
-		_missionDetailMask.Info.Width.SetValue(710 * ResolutionFactor, 0f);
-		_missionDetailMask.Info.Height.SetValue(724 * ResolutionFactor, 0f);
-		_missionDetailMask.BorderWidth = 0;
-		_missionDetailMask.Info.InteractiveMask = true;
-		_missionDetailMask.Info.IsVisible = false;
-		_panel.Register(_missionDetailMask);
+		_missionDetailSubContent = new UIMissionDetailSubContent();
+		_missionDetailSubContent.Info.Left.SetValue(608 * ResolutionFactor);
+		_missionDetailSubContent.Info.Top.SetValue(46 * ResolutionFactor);
+		_missionDetailSubContent.Info.Width.SetValue(710 * ResolutionFactor, 0f);
+		_missionDetailSubContent.Info.Height.SetValue(724 * ResolutionFactor, 0f);
+		_missionDetailSubContent.BorderWidth = 0;
+		_missionDetailSubContent.Info.InteractiveMask = true;
+		_missionDetailSubContent.Info.IsVisible = false;
+		_panel.Register(_missionDetailSubContent);
 
-		_missionDetail.SetMask(_missionDetailMask);
+		// Mission detail tip
+		_missionDetailTip = new UIMissionDetailTipContent();
+		_missionDetailTip.Info.Left.SetValue(608 * ResolutionFactor);
+		_missionDetailTip.Info.Top.SetValue(46 * ResolutionFactor);
+		_missionDetailTip.Info.Width.SetValue(710 * ResolutionFactor, 0f);
+		_missionDetailTip.Info.Height.SetValue(724 * ResolutionFactor, 0f);
+		_missionDetailTip.BorderWidth = 0;
+		_missionDetailTip.Info.InteractiveMask = true;
+		_missionDetailTip.Info.IsVisible = false;
+		_panel.Register(_missionDetailTip);
 
 		// Mission list
 		_missionList = new UIMissionList();

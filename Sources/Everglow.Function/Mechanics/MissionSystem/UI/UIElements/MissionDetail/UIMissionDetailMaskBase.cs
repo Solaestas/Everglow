@@ -3,12 +3,13 @@ using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
 
-public class UIMissionDetailMask : UIBlock
+public abstract class UIMissionDetailMaskBase<TMask> : UIBlock
+	where TMask : UIMissionDetailMaskBase<TMask>, new()
 {
 	private static readonly Color DefaultColor = new Color(0f, 0f, 0f, 0.8f);
 
 	private UIBlock _container;
-	private UIMissionDetailMaskContentBase _content;
+	private UIMissionDetailMaskContentBase<TMask> _content;
 
 	public override void OnInitialization()
 	{
@@ -25,7 +26,7 @@ public class UIMissionDetailMask : UIBlock
 		Register(_container);
 	}
 
-	private void Show(UIMissionDetailMaskContentBase content)
+	private void Show(UIMissionDetailMaskContentBase<TMask> content)
 	{
 		Info.IsVisible = true;
 
@@ -36,10 +37,10 @@ public class UIMissionDetailMask : UIBlock
 		PanelColor = _content.BackgroundColor ?? DefaultColor;
 	}
 
-	public void Show<T>(MissionBase mission)
-		where T : UIMissionDetailMaskContentBase, new()
+	public void Show<TContent>(MissionBase mission)
+		where TContent : UIMissionDetailMaskContentBase<TMask>, new()
 	{
-		var content = new T();
+		var content = new TContent();
 		content.SetMission(mission);
 		Show(content);
 	}
@@ -54,38 +55,5 @@ public class UIMissionDetailMask : UIBlock
 		_content = null;
 
 		PanelColor = DefaultColor;
-	}
-
-	public abstract class UIMissionDetailMaskContentBase : UIBlock
-	{
-		protected MissionBase _mission;
-
-		public event Action HideMask;
-
-		public virtual Color? BackgroundColor => null;
-
-		public override void OnInitialization()
-		{
-			Info.Width.SetFull();
-			Info.Height.SetFull();
-			Info.SetMargin(0);
-			PanelColor = Color.Transparent;
-			BorderWidth = 0;
-		}
-
-		protected void Hide(BaseElement _)
-		{
-			HideMask?.Invoke();
-		}
-
-		public virtual void SetMission(MissionBase mission)
-		{
-			_mission = mission;
-		}
-
-		public virtual void Reset()
-		{
-			_mission = null;
-		}
 	}
 }

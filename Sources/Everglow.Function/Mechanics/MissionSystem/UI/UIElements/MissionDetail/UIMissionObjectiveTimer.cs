@@ -1,11 +1,10 @@
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Vertex;
 using Terraria.GameContent;
-using static Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail.UIMissionDetailMask;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
 
-public class UIMissionObjectiveTimer : UIMissionDetailMaskContentBase
+public class UIMissionObjectiveTimer : UIMissionDetailMaskContentBase<UIMissionDetailSubContent>
 {
 	private const int ProgressVerticesCount = 180;
 	private const int ClockRadius = 64;

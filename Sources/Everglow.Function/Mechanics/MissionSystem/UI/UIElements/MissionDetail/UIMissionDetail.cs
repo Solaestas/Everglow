@@ -35,8 +35,6 @@ public class UIMissionDetail : UIBlock
 	private UITextPlus _yes;
 	private UITextPlus _no;
 
-	private UIMissionDetailMask _mask;
-
 	public class ChangeButtonText
 	{
 		public const string Failed = "失败";
@@ -48,11 +46,6 @@ public class UIMissionDetail : UIBlock
 		public const string Unknown = "未知";
 		public const string Yes = "是";
 		public const string No = "否";
-	}
-
-	internal void SetMask(UIMissionDetailMask mask)
-	{
-		_mask = mask;
 	}
 
 	public override void OnInitialization()
@@ -82,7 +75,7 @@ public class UIMissionDetail : UIBlock
 		_tree.Events.OnMouseHover += e => Instance.MouseText = "Mission Tree";
 		_tree.Events.OnLeftClick += e =>
 		{
-			_mask.Show<UIMissionTree>(SelectedItem?.Mission);
+			DetailSub.Show<UIMissionTree>(SelectedItem?.Mission);
 		};
 		Register(_tree);
 
@@ -106,7 +99,7 @@ public class UIMissionDetail : UIBlock
 		_timer.Events.OnMouseHover += e => Instance.MouseText = "Mission Timer";
 		_timer.Events.OnLeftClick += e =>
 		{
-			_mask.Show<UIMissionObjectiveTimer>(SelectedItem?.Mission);
+			DetailSub.Show<UIMissionObjectiveTimer>(SelectedItem?.Mission);
 		};
 		Register(_timer);
 
@@ -116,6 +109,29 @@ public class UIMissionDetail : UIBlock
 		_timerIcon.Events.OnMouseHover += e => _timerIcon.Color = new Color(1f, 1f, 1f, 0f);
 		_timerIcon.Events.OnMouseOut += e => _timerIcon.Color = Color.White;
 		_timer.Register(_timerIcon);
+
+		var test = new UIBlock();
+		test.Info.Width.SetValue(73 * scale);
+		test.Info.Height.SetValue(71 * scale);
+		test.Info.Left.SetValue(600 * scale);
+		test.Info.Top.SetValue(210 * scale);
+		test.Info.SetMargin(0);
+		test.PanelColor = Color.Transparent;
+		test.BorderWidth = 0;
+		test.Info.IsSensitive = true;
+		test.Events.OnMouseHover += e => Instance.MouseText = "Test";
+		test.Events.OnLeftClick += e =>
+		{
+			DetailTip.Show<UIMissionOperationTip>(SelectedItem?.Mission);
+		};
+		Register(test);
+
+		var testIcon = new UIImage(ModAsset.Point.Value, Color.White);
+		testIcon.Info.Width = test.Info.Width;
+		testIcon.Info.Height = test.Info.Height;
+		testIcon.Events.OnMouseHover += e => testIcon.Color = new Color(1f, 1f, 1f, 0f);
+		testIcon.Events.OnMouseOut += e => testIcon.Color = Color.White;
+		test.Register(testIcon);
 
 		var infoColor = new Color(0.2f, 0.2f, 0.2f, 0.005f);
 
@@ -236,11 +252,11 @@ public class UIMissionDetail : UIBlock
 		_changeMission.Register(_changeText);
 	}
 
-	public void HideMissionDetailMask() => _mask.Info.IsVisible = false;
+	public static void HideMissionSubContent() => DetailSub.Info.IsVisible = false;
 
 	public void ResetMissionDetail()
 	{
-		HideMissionDetailMask();
+		HideMissionSubContent();
 
 		_icon.SetIconGroup(null);
 		_descriptionTextScrollbar.WheelValue = 0f;
@@ -259,7 +275,7 @@ public class UIMissionDetail : UIBlock
 
 		if (missionItem != null)
 		{
-			HideMissionDetailMask();
+			HideMissionSubContent();
 
 			MissionBase mission = missionItem.Mission;
 			_icon.SetIconGroup(mission.Icon);

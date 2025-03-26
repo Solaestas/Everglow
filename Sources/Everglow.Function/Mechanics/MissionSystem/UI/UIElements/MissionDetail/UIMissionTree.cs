@@ -1,9 +1,8 @@
 using Everglow.Commons.UI.UIElements;
-using static Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail.UIMissionDetailMask;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
 
-public class UIMissionTree : UIMissionDetailMaskContentBase
+public class UIMissionTree : UIMissionDetailMaskContentBase<UIMissionDetailSubContent>
 {
 	private UIBlock _back;
 	private UIImage _backIcon;
