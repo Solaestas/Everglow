@@ -5,6 +5,9 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
 
 public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDetailTipContent>
 {
+	private static readonly Color ButtonInitialColor = new Color(0.0f, 0.0f, 0.0f, 0.1f);
+	private static readonly Color ButtonHoverColor = new Color(0f, 0f, 0f, 0.5f);
+
 	public enum TipType
 	{
 		Information,
@@ -63,7 +66,7 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 		_tip.Info.Height.SetValue(120 * scale);
 		_tip.Info.Top.SetValue(30 * scale);
 		_tip.Info.Left.SetValue(30 * scale);
-		_tip.PanelColor = new Color(0f, 0f, 0f, 0.5f);
+		_tip.PanelColor = ButtonHoverColor;
 		_tip.Info.SetMargin(0);
 		_tip.Info.HiddenOverflow = true;
 		_main.Register(_tip);
@@ -86,14 +89,14 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 			_yes.Info.Top.SetValue(170 * scale);
 			_yes.Info.SetMargin(0);
 			_yes.Info.IsSensitive = true;
-			_yes.PanelColor = Color.Transparent;
+			_yes.PanelColor = ButtonInitialColor;
 			_yes.Events.OnLeftClick += e =>
 			{
 				_yesAction?.Invoke(_mission);
 				Hide(e);
 			};
-			_yes.Events.OnMouseHover += e => _yes.PanelColor = new Color(0f, 0f, 0f, 0.5f);
-			_yes.Events.OnMouseOut += e => _yes.PanelColor = Color.Transparent;
+			_yes.Events.OnMouseHover += e => _yes.PanelColor = ButtonHoverColor;
+			_yes.Events.OnMouseOut += e => _yes.PanelColor = ButtonInitialColor;
 			_main.Register(_yes);
 
 			_yesText = new UITextPlus(_yesTextStr ?? "OK");
@@ -109,10 +112,10 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 			_no.Info.Top.SetValue(170 * scale);
 			_no.Info.SetMargin(0);
 			_no.Info.IsSensitive = true;
-			_no.PanelColor = Color.Transparent;
+			_no.PanelColor = ButtonInitialColor;
 			_no.Events.OnLeftClick += Hide;
-			_no.Events.OnMouseHover += e => _no.PanelColor = new Color(0f, 0f, 0f, 0.5f);
-			_no.Events.OnMouseOut += e => _no.PanelColor = Color.Transparent;
+			_no.Events.OnMouseHover += e => _no.PanelColor = ButtonHoverColor;
+			_no.Events.OnMouseOut += e => _no.PanelColor = ButtonInitialColor;
 			_main.Register(_no);
 
 			_noText = new UITextPlus(_noTextStr ?? "NO");
@@ -130,14 +133,14 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 			_yes.Info.Top.SetValue(170 * scale);
 			_yes.Info.SetMargin(0);
 			_yes.Info.IsSensitive = true;
-			_yes.PanelColor = Color.Transparent;
+			_yes.PanelColor = ButtonInitialColor;
 			_yes.Events.OnLeftClick += e =>
 			{
 				_yesAction?.Invoke(_mission);
 				Hide(e);
 			};
-			_yes.Events.OnMouseHover += e => _yes.PanelColor = new Color(0f, 0f, 0f, 0.5f);
-			_yes.Events.OnMouseOut += e => _yes.PanelColor = Color.Transparent;
+			_yes.Events.OnMouseHover += e => _yes.PanelColor = ButtonHoverColor;
+			_yes.Events.OnMouseOut += e => _yes.PanelColor = ButtonInitialColor;
 			_main.Register(_yes);
 
 			_yesText = new UITextPlus(_yesTextStr ?? "OK");

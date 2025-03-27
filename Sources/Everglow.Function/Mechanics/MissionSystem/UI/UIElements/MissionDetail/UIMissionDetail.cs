@@ -8,6 +8,11 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
 
 public class UIMissionDetail : UIBlock
 {
+	private static readonly Color ComponentColor = new Color(0.2f, 0.2f, 0.2f, 0.005f);
+	private static readonly Color ChangeButtonHoverColor = new Color(0.0f, 0.0f, 0.0f, 0.3f);
+	private static readonly Color MaskButtonColor = Color.White;
+	private static readonly Color MaskButtonHoverColor = new Color(1f, 1f, 1f, 0f);
+
 	private static UIMissionItem SelectedItem => Instance.SelectedItem;
 
 	private static float FontSize => 30f * Instance.ResolutionFactor;
@@ -80,8 +85,8 @@ public class UIMissionDetail : UIBlock
 		_treeIcon = new UIImage(ModAsset.ToMissionTreeSurface.Value, Color.White);
 		_treeIcon.Info.Width = _tree.Info.Width;
 		_treeIcon.Info.Height = _tree.Info.Height;
-		_treeIcon.Events.OnMouseHover += e => _treeIcon.Color = new Color(1f, 1f, 1f, 0f);
-		_treeIcon.Events.OnMouseOut += e => _treeIcon.Color = Color.White;
+		_treeIcon.Events.OnMouseHover += e => _treeIcon.Color = MaskButtonHoverColor;
+		_treeIcon.Events.OnMouseOut += e => _treeIcon.Color = MaskButtonColor;
 		_tree.Register(_treeIcon);
 
 		// Timer
@@ -104,11 +109,9 @@ public class UIMissionDetail : UIBlock
 		_timerIcon = new UIImage(ModAsset.ToClockSurface.Value, Color.White);
 		_timerIcon.Info.Width = _timer.Info.Width;
 		_timerIcon.Info.Height = _timer.Info.Height;
-		_timerIcon.Events.OnMouseHover += e => _timerIcon.Color = new Color(1f, 1f, 1f, 0f);
-		_timerIcon.Events.OnMouseOut += e => _timerIcon.Color = Color.White;
+		_timerIcon.Events.OnMouseHover += e => _timerIcon.Color = MaskButtonHoverColor;
+		_timerIcon.Events.OnMouseOut += e => _timerIcon.Color = MaskButtonColor;
 		_timer.Register(_timerIcon);
-
-		var infoColor = new Color(0.2f, 0.2f, 0.2f, 0.005f);
 
 		// Description
 		_description = new UIBlock();
@@ -116,7 +119,7 @@ public class UIMissionDetail : UIBlock
 		_description.Info.Height.SetValue(384 * scale);
 		_description.Info.Left.SetValue(20 * scale);
 		_description.Info.Top.SetValue(314 * scale);
-		_description.PanelColor = infoColor;
+		_description.PanelColor = ComponentColor;
 		_description.BorderColor = Color.Gray;
 		Register(_description);
 
@@ -141,7 +144,7 @@ public class UIMissionDetail : UIBlock
 		_objective.Info.Height.SetValue(384 * scale);
 		_objective.Info.Left.SetValue((20 + 210 + 20) * scale);
 		_objective.Info.Top.SetValue(_description.Info.Top);
-		_objective.PanelColor = infoColor;
+		_objective.PanelColor = ComponentColor;
 		_objective.BorderColor = Color.Gray;
 		Register(_objective);
 
@@ -166,7 +169,7 @@ public class UIMissionDetail : UIBlock
 		_reward.Info.Height.SetValue(284 * scale);
 		_reward.Info.Left.SetValue((20 + 210 + 20 + 210 + 20) * scale);
 		_reward.Info.Top.SetValue(_description.Info.Top);
-		_reward.PanelColor = infoColor;
+		_reward.PanelColor = ComponentColor;
 		_reward.BorderColor = Color.Gray;
 		Register(_reward);
 
@@ -191,8 +194,18 @@ public class UIMissionDetail : UIBlock
 		_changeMission.Info.Left.SetValue((20 + 210 + 20 + 210 + 20 + 105 - 40) * scale);
 		_changeMission.Info.Top.SetValue((314 + 284 + 30) * scale);
 		_changeMission.Info.IsSensitive = true;
-		_changeMission.PanelColor = new Color(0.2f, 0.2f, 0.2f, 0.005f);
+		_changeMission.PanelColor = ComponentColor;
 		_changeMission.Events.OnLeftDown += OnClickChange;
+		_changeMission.Events.OnMouseHover += e =>
+		{
+			if (SelectedItem != null
+				&& SelectedItem.Mission.PoolType != PoolType.Overdue
+				&& SelectedItem.Mission.PoolType != PoolType.Failed)
+			{
+				_changeMission.PanelColor = ChangeButtonHoverColor;
+			}
+		};
+		_changeMission.Events.OnMouseOut += e => _changeMission.PanelColor = ComponentColor;
 		Register(_changeMission);
 
 		_changeText = new UITextPlus(string.Empty);
