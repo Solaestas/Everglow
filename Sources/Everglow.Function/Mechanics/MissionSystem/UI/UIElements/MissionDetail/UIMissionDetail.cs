@@ -32,8 +32,6 @@ public class UIMissionDetail : UIBlock
 
 	private UIBlock _changeMission;
 	private UITextPlus _changeText;
-	private UITextPlus _yes;
-	private UITextPlus _no;
 
 	public class ChangeButtonText
 	{
@@ -109,29 +107,6 @@ public class UIMissionDetail : UIBlock
 		_timerIcon.Events.OnMouseHover += e => _timerIcon.Color = new Color(1f, 1f, 1f, 0f);
 		_timerIcon.Events.OnMouseOut += e => _timerIcon.Color = Color.White;
 		_timer.Register(_timerIcon);
-
-		var test = new UIBlock();
-		test.Info.Width.SetValue(73 * scale);
-		test.Info.Height.SetValue(71 * scale);
-		test.Info.Left.SetValue(600 * scale);
-		test.Info.Top.SetValue(210 * scale);
-		test.Info.SetMargin(0);
-		test.PanelColor = Color.Transparent;
-		test.BorderWidth = 0;
-		test.Info.IsSensitive = true;
-		test.Events.OnMouseHover += e => Instance.MouseText = "Test";
-		test.Events.OnLeftClick += e =>
-		{
-			DetailTip.Show<UIMissionOperationTip>(SelectedItem?.Mission);
-		};
-		Register(test);
-
-		var testIcon = new UIImage(ModAsset.Point.Value, Color.White);
-		testIcon.Info.Width = test.Info.Width;
-		testIcon.Info.Height = test.Info.Height;
-		testIcon.Events.OnMouseHover += e => testIcon.Color = new Color(1f, 1f, 1f, 0f);
-		testIcon.Events.OnMouseOut += e => testIcon.Color = Color.White;
-		test.Register(testIcon);
 
 		var infoColor = new Color(0.2f, 0.2f, 0.2f, 0.005f);
 
@@ -219,32 +194,6 @@ public class UIMissionDetail : UIBlock
 		_changeMission.PanelColor = new Color(0.2f, 0.2f, 0.2f, 0.005f);
 		_changeMission.Events.OnLeftDown += OnClickChange;
 		Register(_changeMission);
-
-		_yes = new UITextPlus(ChangeButtonText.Yes);
-		_yes.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
-		_yes.StringDrawer.Init(_yes.Text);
-		_yes.Info.IsVisible = false;
-		_yes.Events.OnUpdate += (e, gt) =>
-		{
-			_yes.Info.SetToCenter();
-			_yes.Info.Left.Pixel += 44f;
-			_yes.Calculation();
-		};
-		_yes.Events.OnLeftDown += OnClickYes;
-		_changeMission.Register(_yes);
-
-		_no = new UITextPlus(ChangeButtonText.No);
-		_no.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
-		_no.StringDrawer.Init(_no.Text);
-		_no.Info.IsVisible = false;
-		_no.Events.OnUpdate += (e, gt) =>
-		{
-			_no.Info.SetToCenter();
-			_no.Info.Left.Pixel -= 44f;
-			_no.Calculation();
-		};
-		_no.Events.OnLeftDown += OnClickNo;
-		_changeMission.Register(_no);
 
 		_changeText = new UITextPlus(string.Empty);
 		_changeText.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
@@ -352,7 +301,7 @@ public class UIMissionDetail : UIBlock
 			else // Incompleted
 			{
 				// Discard the mission (Second confirmation)
-				ShowYesNo();
+				DetailTip.Show(new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Confirmation, "是否放弃任务", DiscardMission, "是", "否"));
 			}
 		}
 		else if (SelectedItem.Mission.PoolType == PoolType.Available) // Available missions
@@ -363,7 +312,7 @@ public class UIMissionDetail : UIBlock
 		}
 	}
 
-	public void OnClickYes(BaseElement e)
+	public static void DiscardMission(MissionBase m)
 	{
 		if (SelectedItem != null
 			&& SelectedItem.Mission.PoolType == PoolType.Accepted
@@ -372,20 +321,6 @@ public class UIMissionDetail : UIBlock
 			MissionManager.MoveMission(SelectedItem.Mission, PoolType.Accepted, PoolType.Failed);
 			MissionManager.NeedRefresh = true;
 		}
-
-		HideYesNo();
-	}
-
-	public void OnClickNo(BaseElement e) => HideYesNo();
-
-	public void ShowYesNo()
-	{
-		_yes.Info.IsVisible = _no.Info.IsVisible = true;
-	}
-
-	public void HideYesNo()
-	{
-		_yes.Info.IsVisible = _no.Info.IsVisible = false;
 	}
 
 	/// <summary>
@@ -427,15 +362,12 @@ public class UIMissionDetail : UIBlock
 				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Unknown}',Color='126,126,126']";
 			}
 
-			_yes.Info.IsVisible = _no.Info.IsVisible = false;
-
 			_changeText.Calculation();
 			_changeText.Info.SetToCenter();
 		}
 		else
 		{
 			_changeText.Text = "[TextDrawer,Text='',Color='126,126,126']";
-			_yes.Info.IsVisible = _no.Info.IsVisible = false;
 		}
 	}
 }

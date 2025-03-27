@@ -26,7 +26,7 @@ public abstract class UIMissionDetailMaskBase<TMask> : UIBlock
 		Register(_container);
 	}
 
-	private void Show(UIMissionDetailMaskContentBase<TMask> content)
+	public void Show(UIMissionDetailMaskContentBase<TMask> content)
 	{
 		Info.IsVisible = true;
 
