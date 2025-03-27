@@ -34,7 +34,7 @@ public class UIMissionList : UIBlock
 	/// <summary>
 	/// 刷新任务列表
 	/// </summary>
-	public void RefreshList(PoolType? poolType, MissionType? missionType, bool nPCMode, int sourceNPC)
+	public void RefreshList(PoolType? poolType, MissionType? missionType, int sourceNPC)
 	{
 		// 筛选任务状态，获得初始列表
 		var missions = poolType.HasValue
@@ -42,13 +42,13 @@ public class UIMissionList : UIBlock
 			: Enum.GetValues<PoolType>().Select(MissionManager.GetMissionPool).SelectMany(x => x);
 
 		// 筛选来源NPC
-		if (nPCMode) // NPC模式，去掉非对应NPC的未接取任务
+		if (sourceNPC > NPCID.None) // NPC模式，去掉非对应NPC的任务
 		{
-			missions = missions.Where(m => m.PoolType is not PoolType.Available && m.SourceNPC == sourceNPC);
+			missions = missions.Where(m => m.SourceNPC == sourceNPC);
 		}
 		else // 全局模式，去掉有来源NPC的未接取任务
 		{
-			missions = missions.Where(m => !(m.PoolType is PoolType.Available && m.SourceNPC >= 0));
+			missions = missions.Where(m => !(m.PoolType is PoolType.Available && m.SourceNPC >= NPCID.None));
 		}
 
 		// 筛选任务类型

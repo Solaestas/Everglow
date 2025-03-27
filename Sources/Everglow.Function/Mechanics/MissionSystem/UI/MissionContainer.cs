@@ -38,12 +38,11 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 	private UIMissionList _missionList;
 	private UIMissionFilter _missionFilter;
+	private UIMissionSourceHeadshot _missionSourceHeadshot;
 
 	private UIBlock _close;
 
 	// ==================== Private data fields ==================== //
-	private bool nPCMode = false;
-	private int sourceNPC = 0;
 	private float resolutionFactor;
 
 	/// <summary>
@@ -131,8 +130,10 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 	private void RefreshMissionContainer()
 	{
+		var sourceNPC = _missionSourceHeadshot?.SourceNPC ?? NPCID.None;
 		ChildrenElements.Clear();
 		OnInitialization();
+		_missionSourceHeadshot.SourceNPC = sourceNPC;
 		if (!Main.gameMenu)
 		{
 			RefreshList();
@@ -169,6 +170,12 @@ public class MissionContainer : UIContainerElement, ILoadable
 		_missionFilter.Info.Top.SetValue(35 * ResolutionFactor);
 		_missionFilter.Info.Left.SetValue(95 * ResolutionFactor);
 		_panel.Register(_missionFilter);
+
+		// Mission source headshot
+		_missionSourceHeadshot = new UIMissionSourceHeadshot();
+		_missionSourceHeadshot.Info.Top.SetValue((210 - 40) * ResolutionFactor);
+		_missionSourceHeadshot.Info.Left.SetValue((270 - 40) * ResolutionFactor);
+		_panel.Register(_missionSourceHeadshot);
 
 		// Mission details
 		_missionDetail = new UIMissionDetail();
@@ -289,8 +296,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 			if (args[0] is int npcSource)
 			{
 				// Set NPC mode and source NPC.
-				nPCMode = true;
-				sourceNPC = npcSource;
+				_missionSourceHeadshot.SourceNPC = npcSource;
 			}
 			else
 			{
@@ -300,7 +306,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 		}
 		else // Open global mission panel
 		{
-			nPCMode = false;
+			_missionSourceHeadshot.SourceNPC = NPCID.None;
 		}
 
 		RefreshMissionContainer();
@@ -332,7 +338,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 	/// </summary>
 	public void RefreshList()
 	{
-		_missionList.RefreshList(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue, nPCMode, sourceNPC);
+		_missionList.RefreshList(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue, _missionSourceHeadshot.SourceNPC);
 		_panelBackground.SetSpectrumColor(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue);
 
 		// Re-select the selected mission item
