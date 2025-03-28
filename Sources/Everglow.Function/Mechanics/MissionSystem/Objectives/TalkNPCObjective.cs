@@ -30,22 +30,15 @@ public class TalkNPCObjective : MissionObjectiveBase
 		AssetUtils.LoadVanillaNPCTextures([NPCType]);
 	}
 
-	public override float Progress => Main.LocalPlayer.talkNPC >= 0 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType ? 1f : 0f;
+	public override float Progress => Main.LocalPlayer.talkNPC >= NPCID.None && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType ? 1f : 0f;
 
-	public override bool CheckCompletion()
+	public override bool CheckCompletion() => Main.LocalPlayer.talkNPC >= NPCID.None && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType;
+
+	public override void Complete()
 	{
-		if (Main.LocalPlayer.talkNPC >= 0 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType)
-		{
-			UpdateNPCText(NPCText);
-			return true;
-		}
+		base.Complete();
 
-		return false;
-	}
-
-	private static void UpdateNPCText(string text)
-	{
-		Main.npcChatText = text;
+		Main.npcChatText = NPCText;
 	}
 
 	public override void GetObjectivesText(List<string> lines)

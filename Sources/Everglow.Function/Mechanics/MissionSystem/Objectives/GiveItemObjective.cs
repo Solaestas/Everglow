@@ -11,22 +11,64 @@ public class GiveItemObjective : MissionObjectiveBase
 	{
 	}
 
-	public GiveItemObjective(GiveItemRequirement requirement)
+	public GiveItemObjective(GiveItemRequirement requirement, int npcType)
 	{
 		DemandGiveItem = requirement;
+		NPCType = npcType >= NPCID.None
+			? npcType
+			: throw new InvalidDataException($"NPC type should more than 0.");
+
+		StartText = "请给我一些东西。";
+
+		EndText = "谢谢你！";
 	}
 
+	public GiveItemObjective(GiveItemRequirement requirement, int npcType, string startText, string endText)
+	{
+		DemandGiveItem = requirement;
+		NPCType = npcType >= NPCID.None
+			? npcType
+			: throw new InvalidDataException($"NPC type should more than 0.");
+
+		StartText = !string.IsNullOrEmpty(startText)
+			? startText
+			: throw new ArgumentNullException("Argument 'text' should not be empty!");
+
+		EndText = !string.IsNullOrEmpty(endText)
+			? endText
+			: throw new ArgumentNullException("Argument 'text' should not be empty!");
+	}
+
+	public int NPCType { get; set; }
+
+	public string StartText { get; set; }
+
+	public string EndText { get; set; }
+
 	public GiveItemRequirement DemandGiveItem { get; set; }
+
+	public override float Progress => DemandGiveItem.Progress(Main.LocalPlayer.inventory);
+
+	public bool IsTalkingToNPC => NPCType == NPCID.None || (NPCType > NPCID.None && Main.LocalPlayer.talkNPC >= NPCID.None && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType);
 
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
 		AssetUtils.LoadVanillaItemTextures(DemandGiveItem.Items);
+		AssetUtils.LoadVanillaNPCTextures([NPCType]);
 	}
 
-	public override float Progress => DemandGiveItem.Progress(Main.LocalPlayer.inventory);
+	public override bool CheckCompletion() => IsTalkingToNPC && DemandGiveItem.Progress(Main.LocalPlayer.inventory) >= 1f;
 
-	public override bool CheckCompletion() => DemandGiveItem.Progress(Main.LocalPlayer.inventory) >= 1f;
+	public override void Update()
+	{
+		base.Update();
+
+		if (IsTalkingToNPC)
+		{
+			Main.npcChatText = StartText;
+		}
+	}
 
 	/// <summary>
 	/// Remove required items from player inventory.
@@ -58,20 +100,28 @@ public class GiveItemObjective : MissionObjectiveBase
 			RemoveItem(Main.LocalPlayer.inventory);
 		}
 
+		if (IsTalkingToNPC)
+		{
+			Main.npcChatText = EndText;
+		}
+
 		base.Complete();
 	}
 
 	public override void GetObjectivesText(List<string> lines)
 	{
+		var npc = new NPC();
+		npc.SetDefaults(NPCType);
+
 		var progress = $"({Main.LocalPlayer.inventory.Where(i => DemandGiveItem.Items.Contains(i.type)).Sum(i => i.stack)}/{DemandGiveItem.Requirement})";
 		if (DemandGiveItem.Items.Count > 1)
 		{
 			var itemString = string.Join(' ', DemandGiveItem.Items.ConvertAll(i => ItemDrawer.Create(i)));
-			lines.Add($"提交{itemString}合计{DemandGiveItem.Requirement}个 {progress}\n");
+			lines.Add($"向{npc.TypeName}提交{itemString}合计{DemandGiveItem.Requirement}个 {progress}\n");
 		}
 		else
 		{
-			lines.Add($"提交{ItemDrawer.Create(DemandGiveItem.Items.First())}{DemandGiveItem.Requirement}个 {progress}\n");
+			lines.Add($"向{npc.TypeName}提交{ItemDrawer.Create(DemandGiveItem.Items.First())}{DemandGiveItem.Requirement}个 {progress}\n");
 		}
 	}
 }
