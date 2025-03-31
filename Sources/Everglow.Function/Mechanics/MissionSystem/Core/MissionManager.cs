@@ -106,22 +106,42 @@ public static class MissionManager
 	}
 
 	/// <summary>
-	/// 检查任务池内是否包含某个任务类型
+	/// Checks if a mission exists by type
 	/// </summary>
-	/// <typeparam name="T">任务类型</typeparam>
-	/// <param name="type">任务池类型</param>
-	/// <returns></returns>
-	public static bool HasMission<T>(PoolType type = PoolType.Available)
-		where T : MissionBase => _missionPools[type].Find(m => m is T) != null;
+	public static bool HasMission<T>(PoolType? type = null)
+		where T : MissionBase =>
+		HasMission(m => m is T, type);
 
 	/// <summary>
-	/// 检查任务池内是否包含某个任务
+	/// Checks if a mission exists by name
 	/// </summary>
-	/// <param name="missionName">任务名字，或者说 ID</param>
-	/// <param name="type">任务池类型</param>
-	/// <returns></returns>
-	public static bool HasMission(string missionName, PoolType type) =>
-		_missionPools[type].Find(m => m.Name == missionName) != null;
+	public static bool HasMission(string missionName, PoolType? type = null) =>
+		HasMission(m => m.Name == missionName, type);
+
+	/// <summary>
+	/// Internal implementation for mission checking
+	/// </summary>
+	private static bool HasMission(Func<MissionBase, bool> predicate, PoolType? type = null)
+	{
+		if (type.HasValue)
+		{
+			return _missionPools.TryGetValue(type.Value, out var missions)
+				? missions.Any(predicate)
+				: false;
+		}
+		else
+		{
+			foreach (var pool in _missionPools.Values)
+			{
+				if (pool.Any(predicate))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+	}
 
 	/// <summary>
 	/// 向任务池中添加任务
@@ -140,37 +160,73 @@ public static class MissionManager
 	}
 
 	/// <summary>
-	/// 移除任务池内某个任务类型
+	/// 移除任务池内指定条件的所有任务
 	/// </summary>
 	/// <typeparam name="T">任务类型</typeparam>
 	/// <param name="type">任务池类型</param>
 	/// <returns></returns>
-	public static int RemoveMissions<T>(PoolType type, Func<MissionBase, bool> predicate = default)
-		where T : MissionBase
+	private static bool RemoveMission(Func<MissionBase, bool> predicate, PoolType? type = null)
 	{
-		foreach (var m in _missionPools[type].Where(predicate))
+		if (type.HasValue)
 		{
-			m.Deactivate();
-		}
+			var missions = _missionPools[type.Value];
+			foreach (var m in missions.Where(predicate))
+			{
+				m.Deactivate();
+			}
 
-		return _missionPools[type].RemoveAll(m => m is T && predicate(m));
+			var removed = missions.RemoveAll(m => predicate(m));
+
+			if (removed > 0)
+			{
+				NeedRefresh = true;
+			}
+
+			return removed > 0;
+		}
+		else
+		{
+			var removed = 0;
+			foreach (var pool in _missionPools.Values)
+			{
+				foreach (var m in pool.Where(predicate))
+				{
+					m.Deactivate();
+				}
+
+				removed += pool.RemoveAll(m => predicate(m));
+			}
+
+			if (removed > 0)
+			{
+				NeedRefresh = true;
+			}
+
+			return removed > 0;
+		}
+	}
+
+	/// <summary>
+	/// 移除任务池内某个任务名的任务
+	/// </summary>
+	/// <param name="missionName">任务名字，或者说 ID</param>
+	/// <param name="type">任务池类型</param>
+	/// <returns></returns>
+	public static bool RemoveMission(string missionName, PoolType? type = null)
+	{
+		return RemoveMission(m => m.Name == missionName, type);
 	}
 
 	/// <summary>
 	/// 移除任务池内某个任务
 	/// </summary>
-	/// <param name="missionName">任务名字，或者说 ID</param>
-	/// <param name="type">任务池类型</param>
+	/// <param name="mission"></param>
+	/// <param name="type"></param>
 	/// <returns></returns>
-	public static bool RemoveMission(string missionName, PoolType type)
+	public static bool RemoveMission<T>(PoolType? type = null)
+		where T : MissionBase
 	{
-		return RemoveMission(_missionPools[type].Find(m => m.Name == missionName), type);
-	}
-
-	public static bool RemoveMission(MissionBase mission, PoolType type)
-	{
-		mission.Deactivate();
-		return _missionPools[type].Remove(mission);
+		return RemoveMission(m => m is T, type);
 	}
 
 	/// <summary>
