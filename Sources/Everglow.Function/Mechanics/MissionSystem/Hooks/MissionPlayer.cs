@@ -15,48 +15,46 @@ public class MissionPlayer : ModPlayer
 
 	private MissionManager.MissionManagerInfo missionInfo;
 
+	private bool initialMissionInfoLoaded = false;
+
 	public override void OnEnterWorld()
 	{
-		if (Player.whoAmI == Main.myPlayer)
+		if (!initialMissionInfoLoaded) // Prevent load being called when on enter world is called by subworldlibrary
 		{
-			MissionManager.OnEnterWorld(missionInfo);
+			MissionManager.LoadPlayerInfo(missionInfo);
+			initialMissionInfoLoaded = true;
+		}
 
 #if DEBUG
-			if (!MissionManager.HasMission<MissionBase>())
-			{
-				MissionManager.AddMission(new KillNPCMissionTest(), PoolType.Available);
-				MissionManager.AddMission(new ParallelMissionTest(), PoolType.Available);
-				MissionManager.AddMission(new MissionObjectivesTest(), PoolType.Available);
-				MissionManager.AddMission(new OpenPanelMissionTest(), PoolType.Available);
-				MissionManager.AddMission(new BranchingMissionTest(), PoolType.Available);
-				MissionManager.AddMission(new NoneMission1(), PoolType.Available);
-				MissionManager.AddMission(new NoneMission2(), PoolType.Available);
-				MissionManager.AddMission(new NoneMission3(), PoolType.Available);
-				MissionManager.AddMission(new NoneMission4(), PoolType.Available);
-				MissionManager.AddMission(new NoneMission5(), PoolType.Available);
-				MissionManager.AddMission(new NoneMission6(), PoolType.Available);
-				MissionManager.AddMission(new MissionTimerTest(), PoolType.Available);
-				MissionManager.AddMission(new MissionIconTest(), PoolType.Available);
-				MissionManager.AddMission(new GiveItemMissionTest(), PoolType.Available);
-			}
-#endif
+		if (!MissionManager.HasMission<MissionBase>())
+		{
+			MissionManager.AddMission(new KillNPCMissionTest(), PoolType.Available);
+			MissionManager.AddMission(new ParallelMissionTest(), PoolType.Available);
+			MissionManager.AddMission(new MissionObjectivesTest(), PoolType.Available);
+			MissionManager.AddMission(new OpenPanelMissionTest(), PoolType.Available);
+			MissionManager.AddMission(new BranchingMissionTest(), PoolType.Available);
+			MissionManager.AddMission(new NoneMission1(), PoolType.Available);
+			MissionManager.AddMission(new NoneMission2(), PoolType.Available);
+			MissionManager.AddMission(new NoneMission3(), PoolType.Available);
+			MissionManager.AddMission(new NoneMission4(), PoolType.Available);
+			MissionManager.AddMission(new NoneMission5(), PoolType.Available);
+			MissionManager.AddMission(new NoneMission6(), PoolType.Available);
+			MissionManager.AddMission(new MissionTimerTest(), PoolType.Available);
+			MissionManager.AddMission(new MissionIconTest(), PoolType.Available);
+			MissionManager.AddMission(new GiveItemMissionTest(), PoolType.Available);
 		}
+#endif
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
-		if (Player.whoAmI == Main.myPlayer)
-		{
-			MissionManager.SaveData(tag);
-		}
+		MissionManager.SaveData(tag);
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
-		if (Player.whoAmI == Main.myPlayer)
-		{
-			missionInfo = MissionManager.LoadData(tag);
-		}
+		missionInfo = MissionManager.LoadData(tag);
+		initialMissionInfoLoaded = false;
 	}
 
 	public override bool OnPickup(Item item)

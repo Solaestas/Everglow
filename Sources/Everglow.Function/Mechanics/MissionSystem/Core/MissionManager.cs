@@ -150,12 +150,17 @@ public static class MissionManager
 	/// <param name="type">任务池类型</param>
 	public static void AddMission(MissionBase mission, PoolType type)
 	{
-		_missionPools[type].Add(mission);
-		mission.PoolType = type;
-
-		if (type == PoolType.Accepted)
+		if (!HasMission(mission.Name))
 		{
-			mission.Activate();
+			_missionPools[type].Add(mission);
+			mission.PoolType = type;
+
+			Main.NewText($"新的任务任务已添加[{mission.DisplayName}]", 250, 250, 150);
+
+			if (type == PoolType.Accepted)
+			{
+				mission.Activate();
+			}
 		}
 	}
 
@@ -426,7 +431,7 @@ public static class MissionManager
 	/// Initialize mission manager with player mission pool data
 	/// </summary>
 	/// <param name="poolData"></param>
-	public static void OnEnterWorld(MissionManagerInfo info)
+	public static void LoadPlayerInfo(MissionManagerInfo info)
 	{
 		ClearAllEvents(null);
 		Clear();
@@ -445,17 +450,22 @@ public static class MissionManager
 
 		public Dictionary<PoolType, List<MissionBase>> MissionPools { get; private set; }
 
+		public MissionManagerInfo()
+		{
+			NPCKillCounter = [];
+			MissionPools = [];
+		}
+
 		public static MissionManagerInfo Create()
 		{
 			var info = new MissionManagerInfo
 			{
-				NPCKillCounter = MissionManager.NPCKillCounter.ToDictionary(),
-				MissionPools = [],
+				NPCKillCounter = MissionManager.NPCKillCounter.ToDictionary(), // Create a copy of the kill counter.
 			};
 
 			foreach (var (type, pool) in _missionPools)
 			{
-				info.MissionPools.Add(type, pool.ToList());
+				info.MissionPools.Add(type, [.. pool]);
 			}
 
 			return info;
