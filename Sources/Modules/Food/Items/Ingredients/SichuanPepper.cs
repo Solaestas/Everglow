@@ -4,6 +4,6 @@ public class SichuanPepper : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(92);
+		DefaultAsIngredient(50);
 	}
 }

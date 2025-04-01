@@ -4,6 +4,6 @@ public class FrogMeat : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(550);
+		DefaultAsIngredient(200);
 	}
 }

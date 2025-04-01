@@ -6,7 +6,7 @@ public class Garlic : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(18);
+		DefaultAsIngredient(10);
 		SlicedItemType = ModContent.ItemType<MincedGarlic>();
 		SliceDustType = ModContent.DustType<GarlicDust>();
 	}

@@ -6,7 +6,7 @@ public class Poultry : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(211);
+		DefaultAsIngredient(500);
 		SlicedItemType = ModContent.ItemType<ChoppedPoultry>();
 		SliceDustType = ModContent.DustType<PoultryDust>();
 	}

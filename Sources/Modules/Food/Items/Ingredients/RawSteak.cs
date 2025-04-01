@@ -6,7 +6,7 @@ public class RawSteak : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(352);
+		DefaultAsIngredient(500);
 		SlicedItemType = ModContent.ItemType<GroundMeat>();
 		SliceDustType = ModContent.DustType<SteakDust>();
 	}

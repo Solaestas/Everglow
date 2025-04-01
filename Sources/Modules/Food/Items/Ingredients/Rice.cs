@@ -4,6 +4,6 @@ public class Rice : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(2);
+		DefaultAsIngredient(5);
 	}
 }

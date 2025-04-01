@@ -6,6 +6,6 @@ public class CucumberPieces : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(200);
+		DefaultAsIngredient(10);
 	}
 }

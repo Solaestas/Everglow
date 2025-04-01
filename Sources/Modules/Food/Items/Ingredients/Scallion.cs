@@ -6,7 +6,7 @@ public class Scallion : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(6);
+		DefaultAsIngredient(10);
 		SlicedItemType = ModContent.ItemType<ChoppedScallion>();
 		SliceDustType = ModContent.DustType<ScallionDust>();
 	}

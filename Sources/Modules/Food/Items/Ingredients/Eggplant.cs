@@ -6,7 +6,7 @@ public class Eggplant : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(70);
+		DefaultAsIngredient(100);
 		SlicedItemType = ModContent.ItemType<EggplantCubes>();
 		SliceDustType = ModContent.DustType<EggplantDust>();
 	}

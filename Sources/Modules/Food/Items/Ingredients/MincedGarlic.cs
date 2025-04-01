@@ -4,6 +4,6 @@ public class MincedGarlic : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(1);
+		DefaultAsIngredient(10);
 	}
 }

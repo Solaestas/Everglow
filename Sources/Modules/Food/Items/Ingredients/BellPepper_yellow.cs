@@ -6,6 +6,6 @@ public class BellPepper_yellow : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(200);
+		DefaultAsIngredient(100);
 	}
 }

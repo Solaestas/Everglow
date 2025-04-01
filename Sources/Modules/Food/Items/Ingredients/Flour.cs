@@ -6,6 +6,6 @@ public class Flour : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(50);
+		DefaultAsIngredient(75);
 	}
 }

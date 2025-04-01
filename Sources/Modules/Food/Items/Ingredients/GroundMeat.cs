@@ -4,6 +4,6 @@ public class GroundMeat : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(143);
+		DefaultAsIngredient(200);
 	}
 }

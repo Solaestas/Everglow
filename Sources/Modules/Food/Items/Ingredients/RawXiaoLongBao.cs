@@ -7,7 +7,7 @@ public class RawXiaoLongBao : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(352);
+		DefaultAsIngredient(50);
 		SlicedItemType = ModContent.ItemType<GroundMeat>();
 		SliceDustType = ModContent.DustType<SteakDust>();
 	}

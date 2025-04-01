@@ -4,6 +4,6 @@ public class RawEgg : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(12);
+		DefaultAsIngredient(10);
 	}
 }

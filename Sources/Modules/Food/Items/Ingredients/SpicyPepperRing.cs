@@ -4,6 +4,6 @@ public class SpicyPepperRing : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(1);
+		DefaultAsIngredient(10);
 	}
 }

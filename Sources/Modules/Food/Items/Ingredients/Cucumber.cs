@@ -6,6 +6,9 @@ public class Cucumber : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(200);
+		DefaultAsIngredient(100);
+		SlicedItemType = ModContent.ItemType<CucumberPieces>();
+		SliceDustType = ModContent.DustType<CucumberDust>();
+		
 	}
 }

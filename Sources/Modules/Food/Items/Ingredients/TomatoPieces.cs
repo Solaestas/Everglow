@@ -4,6 +4,6 @@ public class TomatoPieces : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(4);
+		DefaultAsIngredient(10);
 	}
 }

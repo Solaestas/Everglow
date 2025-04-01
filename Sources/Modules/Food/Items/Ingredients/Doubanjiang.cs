@@ -4,6 +4,6 @@ public class Doubanjiang : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(150);
+		DefaultAsIngredient(1000);
 	}
 }

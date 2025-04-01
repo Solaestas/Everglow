@@ -6,6 +6,6 @@ public class Radish : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(211);
+		DefaultAsIngredient(100);
 	}
 }

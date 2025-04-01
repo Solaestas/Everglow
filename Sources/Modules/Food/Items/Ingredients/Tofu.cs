@@ -6,7 +6,7 @@ public class Tofu : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(9);
+		DefaultAsIngredient(100);
 		SlicedItemType = ModContent.ItemType<TofuCubes>();
 		SliceDustType = ModContent.DustType<TofuDust>();
 	}

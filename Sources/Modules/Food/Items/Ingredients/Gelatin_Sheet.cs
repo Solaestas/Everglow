@@ -4,6 +4,6 @@ public class Gelatin_Sheet : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(340);
+		DefaultAsIngredient(300);
 	}
 }

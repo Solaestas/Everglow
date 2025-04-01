@@ -6,6 +6,6 @@ public class Broccoli : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(200);
+		DefaultAsIngredient(00);
 	}
 }

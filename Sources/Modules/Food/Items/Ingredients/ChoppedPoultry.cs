@@ -6,6 +6,6 @@ public class ChoppedPoultry : FoodIngredientItem
 {
 	public override void SetDefaults()
 	{
-		DefaultAsIngredient(230);
+		DefaultAsIngredient(200);
 	}
 }
