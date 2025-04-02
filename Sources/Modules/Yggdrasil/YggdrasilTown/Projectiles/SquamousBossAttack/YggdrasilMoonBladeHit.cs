@@ -3,7 +3,7 @@ using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.SquamousBossAttack;
 
 public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 {
@@ -38,7 +38,7 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
-				maxTime = Main.rand.Next(37, 145) * Projectile.ai[0] / 10f,
+				maxTime = Main.rand.Next(20, 37) * Projectile.ai[0] / 10f,
 				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 17.0f)) * Projectile.ai[0] / 10f,
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f) },
@@ -86,35 +86,35 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 
 	public override void PostDraw(Color lightColor)
 	{
-		Texture2D shadow = Commons.ModAsset.Point.Value;
-		float timeValue = (200 - Projectile.timeLeft) / 200f;
-		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Color c = new Color(81, 81, 255, 0);
-		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, c * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark, SpriteEffects.None, 0);
+		//Texture2D shadow = Commons.ModAsset.Point.Value;
+		//float timeValue = (200 - Projectile.timeLeft) / 200f;
+		//float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
+		//var c = new Color(81, 81, 255, 0);
+		//Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, c * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark, SpriteEffects.None, 0);
 
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect dissolve = ModAsset.SandDissolve.Value;
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		dissolve.Parameters["uTransform"].SetValue(model * projection);
-		dissolve.Parameters["uNoiseSize"].SetValue(4f);
-		dissolve.Parameters["uNoiseXY"].SetValue(Vector2.zeroVector);
-		dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_Sand.Value);
-		dissolve.Parameters["duration"].SetValue(MathF.Pow(1f - timeValue, 5));
-		dissolve.CurrentTechnique.Passes[0].Apply();
-		DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 24 * Projectile.ai[0], c, Projectile.Center, Commons.ModAsset.Trail_0.Value);
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(sBS);
+		//SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
+		//Main.spriteBatch.End();
+		//Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		//Effect dissolve = ModAsset.SandDissolve.Value;
+		//var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		//var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		//dissolve.Parameters["uTransform"].SetValue(model * projection);
+		//dissolve.Parameters["uNoiseSize"].SetValue(4f);
+		//dissolve.Parameters["uNoiseXY"].SetValue(Vector2.zeroVector);
+		//dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_Sand.Value);
+		//dissolve.Parameters["duration"].SetValue(MathF.Pow(1f - timeValue, 5));
+		//dissolve.CurrentTechnique.Passes[0].Apply();
+		//DrawTexCircle(MathF.Sqrt(timeValue) * 12 * Projectile.ai[0], 24 * Projectile.ai[0], c, Projectile.Center, Commons.ModAsset.Trail_0.Value);
+		//Main.spriteBatch.End();
+		//Main.spriteBatch.Begin(sBS);
 	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D shadow = Commons.ModAsset.Point_black.Value;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Color c = new Color(0f, 1f, 0.7f, 0f);
-		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, shadow.Size() / 2f, 0.2f * Projectile.ai[0], SpriteEffects.None, 0);
+		var c = new Color(0f, 1f, 0.7f, 0f);
+		//Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, shadow.Size() / 2f, 0.2f * Projectile.ai[0], SpriteEffects.None, 0);
 		Texture2D light = Commons.ModAsset.StarSlash.Value;
 		Texture2D light_black = Commons.ModAsset.StarSlash_black.Value;
 		if (Projectile.hostile)

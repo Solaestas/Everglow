@@ -70,7 +70,7 @@ public class StoneJavelinProjectile : ModProjectile
 		for (int i = 0; i < 20; i++)
 		{
 			// Create a new dust
-			Dust dust = Dust.NewDustDirect(usePos, Projectile.width, Projectile.height, DustID.Tin);
+			var dust = Dust.NewDustDirect(usePos, Projectile.width, Projectile.height, DustID.Tin);
 			dust.position = (dust.position + Projectile.Center) / 2f;
 			dust.velocity += rotationVector * 2f;
 			dust.velocity *= 0.5f;

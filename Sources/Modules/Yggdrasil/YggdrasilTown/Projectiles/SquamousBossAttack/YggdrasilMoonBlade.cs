@@ -1,7 +1,7 @@
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.SquamousBossAttack;
 
 public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 {
@@ -57,7 +57,7 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 		}
 		if (Projectile.timeLeft < 260)
 		{
-			Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 20f;
+			Projectile.velocity = Vector2.Normalize(Projectile.velocity) * Projectile.ai[2];
 		}
 		Lighting.AddLight(Projectile.Center, 0.14f, 0.47f, 0.97f);
 		Vector2 newVelocity = Projectile.velocity + new Vector2(0, Main.rand.NextFloat(1.0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
@@ -87,12 +87,12 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float timeValue = (float)Main.timeForVisualEffects * 0.002f + Projectile.whoAmI;
-		List<Vertex2D> bars = new List<Vertex2D>();
+		var bars = new List<Vertex2D>();
 		for (int x = -20; x <= maxLength; x++)
 		{
 			Vector2 v0 = startVelocity.RotatedBy(x / 20f * Projectile.ai[1]) * 90f;
 			Vector2 pos = Projectile.Center + v0 - Main.screenPosition - startVelocity * 40f;
-			bars.Add(pos, new Color(81, 81, 255, 0), new Vector3(0.2f + timeValue, x / 12f + Projectile.whoAmI * 0.5f, 0));
+			bars.Add(pos, new Color(0, 24, 255, 0), new Vector3(0.2f + timeValue, x / 12f + Projectile.whoAmI * 0.5f, 0));
 			bars.Add(pos - startVelocity * 80f * (2 - Math.Abs(x) / 20f) * colorValue, Color.Transparent, new Vector3(0 + timeValue, x / 12f + Projectile.whoAmI * 0.5f, 0));
 		}
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
@@ -104,7 +104,7 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 		{
 			Vector2 v0 = startVelocity.RotatedBy(x / 20f * Projectile.ai[1]) * 90f;
 			Vector2 pos = Projectile.Center + v0 - Main.screenPosition - startVelocity * 40f;
-			bars.Add(pos, new Color(33, 232, 255, 0) * colorValue, new Vector3(0, 0.5f, 0));
+			bars.Add(pos, new Color(0, 255, 60, 0) * colorValue, new Vector3(0, 0.5f, 0));
 			bars.Add(pos - startVelocity * 80f * (1 - Math.Abs(x) / 20f), new Color(100, 30, 255, 0) * 0.5f * colorValue, new Vector3(0, 0, 0));
 		}
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
@@ -122,7 +122,7 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 		}
 		float timeValue = (float)Main.timeForVisualEffects * 0.003f + Projectile.whoAmI * 0.3f;
 		float redValue = startVelocity.ToRotation() / MathHelper.TwoPi;
-		List<Vertex2D> bars = new List<Vertex2D>();
+		var bars = new List<Vertex2D>();
 		for (int x = -20; x <= maxLength; x++)
 		{
 			Vector2 v0 = startVelocity.RotatedBy(x / 20f * Projectile.ai[1]) * 90f;
@@ -140,7 +140,7 @@ public class YggdrasilMoonBlade : ModProjectile, IWarpProjectile
 
 	public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
 	{
-		if(Main.expertMode)
+		if (Main.expertMode)
 		{
 			target.AddBuff(BuffID.BrokenArmor, 180);
 		}
