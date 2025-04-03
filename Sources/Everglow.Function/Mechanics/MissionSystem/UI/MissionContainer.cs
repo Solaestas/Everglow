@@ -18,6 +18,10 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 	public static UIMissionDetailTipContent DetailTip => Instance._missionDetailTip;
 
+	public static UIMissionList List => Instance._missionList;
+
+	public static UIMissionBackground Background => Instance._panelBackground;
+
 	/// <summary>
 	/// Scale factor for all UI elements in the mission system
 	/// </summary>

@@ -1,7 +1,9 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
+using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
+using Everglow.Commons.Vertex;
 using Terraria.GameContent;
 using UIImage = Everglow.Commons.UI.UIElements.UIImage;
 
@@ -150,6 +152,21 @@ public class UIMissionItem : UIBlock
 
 	protected override void DrawChildren(SpriteBatch sb)
 	{
+		var width = 15 * MissionContainer.Scale;
+		var y1 = 12 * MissionContainer.Scale;
+		var y2 = 36 * MissionContainer.Scale;
+		var startColor = MissionColorUtils.GetMissionTypeColor(Mission.MissionType) * 0.4f;
+		var endColor = Color.Transparent;
+		var vertices = new List<Vertex2D>();
+		{
+			vertices.Add(new Vector2(HitBox.X, HitBox.Y), endColor, new(0, 0, 0));
+			vertices.Add(new Vector2(HitBox.X, HitBox.Y + HitBox.Height), endColor, new(0, 0, 0));
+			vertices.Add(new Vector2(HitBox.X - width, HitBox.Y + y1), startColor, new(0, 0, 0));
+			vertices.Add(new Vector2(HitBox.X - width, HitBox.Y + y2), startColor, new(0, 0, 0));
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+
 		base.DrawChildren(sb);
 
 		DrawTimerProgress();

@@ -8,7 +8,7 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 
 public class UIMissionList : UIBlock
 {
-	private MissionListContent _missionList;
+	private UIContainerPanel _missionList;
 	private UIMissionListScrollbar _missionScrollbar;
 
 	public List<UIMissionItem> MissionItems => _missionList.Elements.ConvertAll(x => x as UIMissionItem);
@@ -18,7 +18,8 @@ public class UIMissionList : UIBlock
 		Info.SetMargin(0);
 
 		// Mission list
-		_missionList = new MissionListContent();
+		_missionList = new UIContainerPanel();
+		_missionList.Events.OnUpdate += (e, gt) => MissionContainer.Background?.SetChainValue(_missionList.VerticalScrollDistance);
 		Register(_missionList);
 
 		// Mission list scrollbar
@@ -90,75 +91,5 @@ public class UIMissionList : UIBlock
 
 		_missionList.ClearAllElements();
 		_missionList.AddElements(elements);
-	}
-
-	private class MissionListContent : UIContainerPanel
-	{
-		public override void Draw(SpriteBatch sb)
-		{
-			base.Draw(sb);
-			var texture = ModAsset.MirrorChain.Value;
-
-			// Draw mirrior chains (Left. Move with mission items synchronously)
-			var vertices = new List<Vertex2D>();
-			{
-				float scale = MissionContainer.Scale;
-				float width = 7 * scale;
-				float height = 70 * scale;
-
-				float startX = HitBox.X + 5 * scale;
-				float endX = startX + width;
-
-				float startY = HitBox.Y - 2 * scale;
-				float endY = startY + height * (5 + 0.078f * scale);
-
-				float startTexCoordY = 0 - 0.0285f * scale;
-				float endTexCoordY = 5 + 0.078f * scale;
-
-				float resourceOffset = 0.23f;
-				startTexCoordY -= resourceOffset;
-				endTexCoordY -= resourceOffset;
-
-				float scrollOffset = -VerticalScrollDistance / height;
-				startTexCoordY += scrollOffset;
-				endTexCoordY += scrollOffset;
-
-				vertices.Add(new Vector2(startX, startY), Color.White, new(0, startTexCoordY, 0));
-				vertices.Add(new Vector2(endX, startY), Color.White, new(1, startTexCoordY, 0));
-				vertices.Add(new Vector2(startX, endY), Color.White, new(0, endTexCoordY, 0));
-				vertices.Add(new Vector2(endX, endY), Color.White, new(1, endTexCoordY, 0));
-			}
-
-			Main.graphics.GraphicsDevice.Textures[0] = texture;
-			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
-
-			// Draw mirrior chains (Right. Used as scrollbar)
-			vertices = new List<Vertex2D>();
-			{
-				float scale = MissionContainer.Scale;
-				float width = 7 * scale;
-				float height = 70 * scale;
-
-				float startX = HitBox.X + HitBox.Width;
-				float endX = startX + width;
-
-				float startY = HitBox.Y - 2 * scale;
-				float endY = startY + height * (5 + 0.078f * scale);
-
-				float startTexCoordY = 0 - 2 * scale / height;
-				float endTexCoordY = 5 + 0.078f * scale;
-
-				float scrollOffset = -HitBox.Height * UIVerticalScrollbar.WheelValue / height;
-				startTexCoordY += scrollOffset;
-				endTexCoordY += scrollOffset;
-
-				vertices.Add(new Vector2(startX, startY), Color.White, new(0, startTexCoordY, 0));
-				vertices.Add(new Vector2(endX, startY), Color.White, new(1, startTexCoordY, 0));
-				vertices.Add(new Vector2(startX, endY), Color.White, new(0, endTexCoordY, 0));
-				vertices.Add(new Vector2(endX, endY), Color.White, new(1, endTexCoordY, 0));
-			}
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
-		}
 	}
 }
