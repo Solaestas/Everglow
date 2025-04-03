@@ -17,7 +17,10 @@ public class ItemGlowManager : GlobalItem
 
 	public override void Load()
 	{
-		ModIns.OnPostSetupContent += LoadGlowMasks;
+		if(!Main.dedServ)
+		{
+			ModIns.OnPostSetupContent += LoadGlowMasks;
+		}
 	}
 
 	public static void LoadGlowMasks()
