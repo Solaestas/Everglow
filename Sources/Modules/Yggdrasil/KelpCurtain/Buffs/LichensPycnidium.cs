@@ -17,6 +17,7 @@ public class LichensPycnidium : ModProjectile
 		Projectile.timeLeft = 200;
 		base.SetDefaults();
 	}
+
 	public struct SubLichen
 	{
 		public float rotation;
@@ -27,10 +28,12 @@ public class LichensPycnidium : ModProjectile
 		public float scale;
 		public bool active;
 	}
+
 	public List<SubLichen> Lichens;
+
 	public void AddLichens(float rot, NPC attach, float ai0)
 	{
-		SubLichen subLichen = new SubLichen();
+		SubLichen subLichen = default(SubLichen);
 		subLichen.rotation = rot;
 		subLichen.attachTarget = attach;
 		subLichen.maturity = 0;
@@ -40,12 +43,14 @@ public class LichensPycnidium : ModProjectile
 		subLichen.active = true;
 		Lichens.Add(subLichen);
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		Lichens = new List<SubLichen>();
 
 		base.OnSpawn(source);
 	}
+
 	public SubLichen UpdateLichen(SubLichen lichen)
 	{
 		float rotValue = 0.4f * MathF.Sin(lichen.ai0 * 95f + lichen.attachTarget.whoAmI + (float)Main.time * 0.03f);
@@ -73,16 +78,17 @@ public class LichensPycnidium : ModProjectile
 		lichen.scale = value * value * 0.5f;
 		return lichen;
 	}
+
 	public override void AI()
 	{
-		for(int t = 0;t < Lichens.Count;t++)
+		for (int t = 0; t < Lichens.Count; t++)
 		{
 			if (Lichens[t].attachTarget == null || Lichens[t].attachTarget.active == false)
 			{
 				Lichens.RemoveAt(t);
 				continue;
 			}
-			if(!Lichens[t].active)
+			if (!Lichens[t].active)
 			{
 				Lichens.RemoveAt(t);
 				continue;
@@ -99,18 +105,21 @@ public class LichensPycnidium : ModProjectile
 		Projectile.Center = Main.player[Projectile.owner].Center;
 		base.AI();
 	}
+
 	public void Explode(SubLichen lichen)
 	{
-		if(lichen.active)
+		if (lichen.active)
 		{
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), lichen.attachPos + lichen.attachTarget.Center, Vector2.zeroVector, ModContent.ProjectileType<Pycnidium_explosion>(), 12, Projectile.knockBack * 4f, Projectile.owner, 30);
 		}
 	}
+
 	public SubLichen SetRotation(SubLichen lichen, float value)
 	{
 		lichen.rotation = value;
 		return lichen;
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D texture = ModAsset.LichensPycnidium.Value;
@@ -172,7 +181,7 @@ public class LichensPycnidium : ModProjectile
 				}
 				bars.Add(new Vertex2D(joints[t] + velLeft * width * mulWid - Main.screenPosition, Color.Lerp(c0, color, t / (float)joints.Count), new Vector3(0, 0.7f, 0)));
 				bars.Add(new Vertex2D(joints[t] - velLeft * width * mulWid - Main.screenPosition, Color.Lerp(c0, color, t / (float)joints.Count), new Vector3(0, 0.3f, 0)));
-				if(t == joints.Count - 1)
+				if (t == joints.Count - 1)
 				{
 					bars.Add(new Vertex2D(joints[t] + velLeft * width * mulWid - Main.screenPosition, Color.Transparent, new Vector3(0, 0.7f, 0)));
 					bars.Add(new Vertex2D(joints[t] - velLeft * width * mulWid - Main.screenPosition, Color.Transparent, new Vector3(0, 0.3f, 0)));
@@ -190,6 +199,7 @@ public class LichensPycnidium : ModProjectile
 		Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
 		return false;
 	}
+
 	public void DrawShell(VFXBatch batch)
 	{
 		foreach (var lichen in Lichens)
@@ -217,13 +227,18 @@ public class LichensPycnidium : ModProjectile
 		}
 	}
 }
+
 internal class LichensPycnidiumManager : ILoadable
 {
 	public void Load(Mod mod)
 	{
-		var hookManager = Ins.HookManager;
-		hookManager.AddHook(CodeLayer.PostDrawProjectiles, DrawLichensPycnidium);
+		if (!Main.dedServ)
+		{
+			var hookManager = Ins.HookManager;
+			hookManager.AddHook(CodeLayer.PostDrawProjectiles, DrawLichensPycnidium);
+		}
 	}
+
 	private void DrawLichensPycnidium()
 	{
 		float timeValue = (float)(Main.timeForVisualEffects * 0.008f);
@@ -252,8 +267,8 @@ internal class LichensPycnidiumManager : ILoadable
 		}
 		Ins.Batch.End();
 	}
+
 	public void Unload()
 	{
-
 	}
 }
