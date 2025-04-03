@@ -12,6 +12,7 @@ public class ItemTooltipDrawModule : IModule
 	{
 		Code = GetType().Assembly;
 	}
+
 	public string Name => "Tooltip Drawing Modify";
 
 	public Assembly Code { get; }
@@ -21,6 +22,7 @@ public class ItemTooltipDrawModule : IModule
 	public void Load()
 	{
 		IL_Main.MouseText_DrawItemTooltip += PatchTooltipDrawing;
+
 		// For "fake item"
 		// Why not use "On_Main.MouseText_DrawItemTooltip"? Because that will cause a "Common Language Runtime Detected..." error
 		On_Main.DrawPendingMouseText += On_Main_MouseTextInner;
@@ -44,10 +46,17 @@ public class ItemTooltipDrawModule : IModule
 	{
 		var c = new ILCursor(il);
 		if (!c.TryGotoNext(MoveType.After, i => i.MatchLdsfld<Main>(nameof(Main.SettingsEnabled_OpaqueBoxBehindTooltips))))
+		{
 			return;
-		c.EmitDelegate<Func<bool, bool>>((returnValue) => {
+		}
+
+		c.EmitDelegate<Func<bool, bool>>((returnValue) =>
+		{
 			if (IsFakeItem)
+			{
 				return returnValue;
+			}
+
 			return ModContent.GetInstance<AssetReplaceConfig>().TextureReplace == TextureReplaceMode.Terraria && returnValue;
 		});
 	}
@@ -60,6 +69,5 @@ public class ItemTooltipDrawModule : IModule
 
 	public void Unload()
 	{
-
 	}
 }

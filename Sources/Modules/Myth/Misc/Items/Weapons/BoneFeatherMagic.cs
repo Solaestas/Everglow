@@ -1,5 +1,4 @@
 using Everglow.Myth.Misc.Projectiles.Weapon.Magic.BoneFeatherMagic;
-using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FreezeFeatherMagic;
 using Everglow.SpellAndSkull.GlobalItems;
 using Everglow.SpellAndSkull.Items;
 using Terraria.Audio;
@@ -10,14 +9,15 @@ namespace Everglow.Myth.Misc.Items.Weapons;
 
 public class BoneFeatherMagic : SpellTomeItem
 {
-	//骨羽会插在怪物身上10s
-	//每一根骨羽会增加下次攻击7%的伤害上不封顶
-	//增伤会消耗骨羽
-	//骨羽自身的攻击只会消耗附着1s以上的骨羽
+	// 骨羽会插在怪物身上10s
+	// 每一根骨羽会增加下次攻击7%的伤害上不封顶
+	// 增伤会消耗骨羽
+	// 骨羽自身的攻击只会消耗附着1s以上的骨羽
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
+
 	public override void SetDefaults()
 	{
 		Item.damage = 40;
@@ -40,9 +40,10 @@ public class BoneFeatherMagic : SpellTomeItem
 		DecorativeProjectileTypes.Add(ModContent.ProjectileType<BoneFeatherMagicBook>());
 		DecorativeProjectileTypes.Add(ModContent.ProjectileType<BoneFeatherMagicArray>());
 	}
+
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		if (player.GetModPlayer<MagicBookPlayer> ().MagicBookLevel == 1)
+		if (player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
 		{
 			return false;
 		}

@@ -1,62 +1,63 @@
 namespace Everglow.Food.ItemList.Weapons.Melee
 {
-    public class Boomerangs : GlobalItem
-    {
-        public static List<int> vanillaBoomerangs;
-        public override void Unload()
-        {
-            vanillaBoomerangs = null;
-        }
+	public class Boomerangs : GlobalItem
+	{
+		public static List<int> vanillaBoomerangs;
 
-        public Boomerangs()
-        {
-            vanillaBoomerangs = new List<int>
-            {
-                //木回旋镖
+		public override void Unload()
+		{
+			vanillaBoomerangs = null;
+		}
+
+		public Boomerangs()
+		{
+			vanillaBoomerangs = new List<int>
+			{
+                // 木回旋镖
                 ItemID.WoodenBoomerang,
 
-                //附魔回旋镖
+                // 附魔回旋镖
                 ItemID.EnchantedBoomerang,
 
-                //水果蛋糕旋刃
+                // 水果蛋糕旋刃
                 ItemID.FruitcakeChakram,
 
-                //血腥砍刀
+                // 血腥砍刀
                 ItemID.BloodyMachete,
 
-                //蘑菇回旋镖
+                // 蘑菇回旋镖
                 ItemID.Shroomerang,
 
-                //冰雪回旋镖
+                // 冰雪回旋镖
                 ItemID.IceBoomerang,
 
-                //荆棘旋刃
+                // 荆棘旋刃
                 ItemID.ThornChakram,
 
-                //电工妹扳手
+                // 电工妹扳手
                 ItemID.CombatWrench,
 
-                //冰雪回旋镖
+                // 冰雪回旋镖
                 ItemID.Flamarang,
-                
-                //飞刀
+
+                // 飞刀
                 ItemID.FlyingKnife,
 
-                //美队盾
+                // 美队盾
                 ItemID.BouncingShield,
 
-                //光明飞盘
+                // 光明飞盘
                 ItemID.LightDisc,
 
-                //香蕉回旋镖
+                // 香蕉回旋镖
                 ItemID.Bananarang,
 
-                //疯狂飞斧
+                // 疯狂飞斧
                 ItemID.PossessedHatchet,
 
-                //帕拉丁之锤
+                // 帕拉丁之锤
                 ItemID.PaladinsHammer,
-            };
-        }
-    }
+			};
+		}
+	}
 }

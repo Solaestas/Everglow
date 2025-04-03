@@ -1,4 +1,5 @@
 using ReLogic.Content;
+using Terraria;
 using Terraria.GameContent;
 
 namespace Everglow.Commons;
@@ -58,6 +59,7 @@ public class ItemGlowManager : GlobalItem
 		{
 			item.glowMask = index;
 		}
+		base.SetDefaults(item);
 	}
 
 	public override void Unload()

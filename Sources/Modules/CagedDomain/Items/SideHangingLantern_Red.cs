@@ -2,6 +2,11 @@ namespace Everglow.CagedDomain.Items;
 
 public class SideHangingLantern_Red : ModItem
 {
+	public override void SetStaticDefaults()
+	{
+		Item.ResearchUnlockCount = 100;
+	}
+
 	public override void SetDefaults()
 	{
 		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.SideHangingLantern_Red>());

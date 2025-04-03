@@ -1,14 +1,16 @@
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.Utilities;
+
 namespace Everglow.Commons.TileHelper;
+
 public class ShakeTreeTweak
 {
 	public abstract class FruitPickerTool : ModItem
 	{
 		public override bool CanUseItem(Player player)
 		{
-			//标记命中树的坐标,掉落物产生后瞬间清除
+			// 标记命中树的坐标,掉落物产生后瞬间清除
 			_shakeTreeCoord = new Point((int)(Main.MouseWorld.X / 16f), (int)(Main.MouseWorld.Y / 16f));
 			if (Main.SmartCursorIsUsed)
 			{
@@ -16,6 +18,7 @@ public class ShakeTreeTweak
 			}
 			return base.CanUseItem(player);
 		}
+
 		public override bool? UseItem(Player player)
 		{
 			return base.UseItem(player);
@@ -27,7 +30,9 @@ public class ShakeTreeTweak
 		public override void OnSpawn(Item item, IEntitySource source)
 		{
 			if (_isShakingTree && source is EntitySource_ShakeTree)
+			{
 				_hasItemDropped = true;
+			}
 		}
 	}
 
@@ -39,7 +44,7 @@ public class ShakeTreeTweak
 	{
 		On_WorldGen.ShakeTree += (orig, i, j) =>
 		{
-			if(_shakeTreeCoord != new Point(i, j))
+			if (_shakeTreeCoord != new Point(i, j))
 			{
 				orig(i, j);
 			}
@@ -65,11 +70,15 @@ public class ShakeTreeTweak
 			_isShakingTree = false;
 
 			if (WorldGen.numTreeShakes == WorldGen.maxTreeShakes || _hasItemDropped || treeShaken)
+			{
 				return;
+			}
 
 			TreeTypes treeType = WorldGen.GetTreeType(Main.tile[x, y].type);
 			if (treeType == TreeTypes.None)
+			{
 				return;
+			}
 
 			y--;
 			while (y > 10 && Main.tile[x, y].active() && TileID.Sets.IsShakeable[Main.tile[x, y].type])
@@ -79,13 +88,18 @@ public class ShakeTreeTweak
 
 			y++;
 			if (!WorldGen.IsTileALeafyTreeTop(x, y) || Collision.SolidTiles(x - 2, x + 2, y - 2, y + 2))
+			{
 				return;
+			}
 
 			int fruit = GetShakeTreeFruit(treeType);
 			if (fruit > -1)
+			{
 				Item.NewItem(WorldGen.GetItemSource_FromTreeShake(x, y), x * 16, y * 16, 16, 16, fruit);
+			}
 		};
 	}
+
 	public static int GetShakeTreeFruit(TreeTypes treeType)
 	{
 		switch (treeType)

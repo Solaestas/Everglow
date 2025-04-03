@@ -1,45 +1,45 @@
 namespace Everglow.Food.ItemList.Weapons.Summon
 {
 	public class Whips : GlobalItem
-    {
-        public static List<int> vanillaWhips;
-        public override void Unload()
-        {
-            vanillaWhips = null;
-        }
+	{
+		public static List<int> vanillaWhips;
 
-        public Whips()
-        {
-            vanillaWhips = new List<int>
-            {
-                //皮鞭
+		public override void Unload()
+		{
+			vanillaWhips = null;
+		}
+
+		public Whips()
+		{
+			vanillaWhips = new List<int>
+			{
+                // 皮鞭
                 ItemID.BlandWhip,
 
-                //荆鞭
+                // 荆鞭
                 ItemID.ThornWhip,
 
-                //骨鞭
+                // 骨鞭
                 ItemID.BoneWhip,
-                
-                //鞭炮
+
+                // 鞭炮
                 ItemID.FireWhip,
 
-                //冷鞭
+                // 冷鞭
                 ItemID.CoolWhip,
 
-                //郎迪达尔
+                // 郎迪达尔
                 ItemID.SwordWhip,
 
-                //黑暗收割者
+                // 黑暗收割者
                 ItemID.ScytheWhip,
 
-                //晨星
+                // 晨星
                 ItemID.MaceWhip,
 
-                //万花筒
+                // 万花筒
                 ItemID.RainbowWhip,
-
-            };
-        }
-    }
+			};
+		}
+	}
 }
