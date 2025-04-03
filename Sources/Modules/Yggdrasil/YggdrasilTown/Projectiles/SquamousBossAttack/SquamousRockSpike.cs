@@ -177,7 +177,14 @@ public class SquamousRockSpike : ModProjectile
 		{
 			Dust.NewDust(Projectile.Center - Projectile.velocity * 2 - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone_dark>(), 0f, 0f, 0, default, 0.7f);
 		}
-		GenerateSmog(8);
+		for (int x = 0; x < 8; x++)
+		{
+			Dust d0 = Dust.NewDustDirect(Projectile.Bottom - new Vector2(4, -4), 0, 0, ModContent.DustType<SquamousShellWingDust>());
+			d0.velocity = new Vector2(0, 12).RotatedByRandom(MathHelper.TwoPi) + new Vector2(0, -8);
+			d0.noGravity = false;
+			d0.scale *= Main.rand.NextFloat(1.3f);
+		}
+		GenerateSmog(4);
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolume(0.4f), Projectile.Center);
 		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<SquamousRockExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 10);
 	}
@@ -350,6 +357,18 @@ public class SquamousRockSpike : ModProjectile
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
+
+		if (Projectile.timeLeft < 3520)
+		{
+			float fade = 1f;
+			if (Projectile.timeLeft > 3500)
+			{
+				fade = (3520 - Projectile.timeLeft) / 20f;
+			}
+			var texGlow = ModAsset.SquamousRockSpike_glow_crack.Value;
+			float breathValue = 0.8f + 0.2f * MathF.Sin((float)Main.timeForVisualEffects * 0.24f + Projectile.whoAmI);
+			Main.spriteBatch.Draw(texGlow, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, breathValue) * breathValue * fade, Projectile.rotation, texGlow.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+		}
 		return false;
 	}
 

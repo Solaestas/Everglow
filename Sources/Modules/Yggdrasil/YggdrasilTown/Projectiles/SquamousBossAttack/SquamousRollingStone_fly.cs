@@ -147,15 +147,26 @@ public class SquamousRollingStone_fly : ModProjectile
 		{
 			Dust.NewDust(Projectile.Center - Projectile.velocity * 2 - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone>(), 0f, 0f, 0, default, 0.7f);
 		}
+		for (int x = 0; x < 40; x++)
+		{
+			Dust d0 = Dust.NewDustDirect(Projectile.Bottom - new Vector2(4, -4), 0, 0, ModContent.DustType<SquamousShellWingDust>());
+			d0.velocity = new Vector2(0, Main.rand.NextFloat(12, 30)).RotatedByRandom(MathHelper.TwoPi) * Projectile.scale;
+			if (d0.velocity.Y > 5f)
+			{
+				d0.velocity.Y *= -1;
+			}
+			d0.noGravity = false;
+			d0.scale *= Main.rand.NextFloat(1.3f);
+		}
 		GenerateSmog(8);
-		int scaleDamage = 3;
+		int scaleDamage = 2;
 		if(Main.expertMode)
 		{
-			scaleDamage = 5;
+			scaleDamage = 3;
 		}
 		if(Main.masterMode)
 		{
-			scaleDamage = 7;
+			scaleDamage = 3;
 		}
 		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<SquamousRockExplosion>(), Projectile.damage * scaleDamage, Projectile.knockBack, Projectile.owner, 42 * Projectile.scale);
 		ShakerManager.AddShaker(Projectile.Center, Vector2.One.RotatedByRandom(MathHelper.Pi), 120 * Projectile.scale, 20f, 120, 0.9f, 0.8f, 150);

@@ -120,6 +120,13 @@ public class SquamousRockSpike_Falling : ModProjectile
 		{
 			Dust.NewDust(Projectile.Center - Projectile.velocity * 2 - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone_dark>(), 0f, 0f, 0, default, 0.7f);
 		}
+		for (int x = 0; x <= 30; x++)
+		{
+			Dust d0 = Dust.NewDustDirect(Projectile.Bottom + new Vector2((x - 15) * 4 - 4, -4), 0, 0, ModContent.DustType<SquamousShellWingDust>());
+			d0.velocity.Y = -(MathF.Cos(((x - 15) / 15f) * MathHelper.Pi) + 1) * 8;
+			d0.velocity.Y *= Main.rand.NextFloat(0.75f, 1.2f);
+			d0.noGravity = false;
+		}
 		GenerateSmog();
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolume(0.4f), Projectile.Center);
 		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<SquamousRockExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 8);
@@ -135,6 +142,9 @@ public class SquamousRockSpike_Falling : ModProjectile
 		Main.spriteBatch.Draw(textureBloom, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, textureBloom.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+		var textureGlow = ModAsset.SquamousRockSpike_Falling_glow.Value;
+		float breathValue = 0.5f + 0.5f * MathF.Sin((float)Main.timeForVisualEffects * 0.24f + Projectile.whoAmI);
+		Main.spriteBatch.Draw(textureGlow, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, breathValue) * breathValue, Projectile.rotation, textureGlow.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		return false;
 	}
 

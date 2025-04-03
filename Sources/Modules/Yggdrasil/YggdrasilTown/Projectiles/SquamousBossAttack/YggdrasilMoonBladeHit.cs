@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -24,7 +25,14 @@ public class YggdrasilMoonBladeHit : ModProjectile, IWarpProjectile
 	public override void OnSpawn(IEntitySource source)
 	{
 		SoundEngine.PlaySound(SoundID.Shatter, Projectile.Center);
-		GenerateSpark(140);
+		for (int x = 0; x < 40; x++)
+		{
+			Dust d0 = Dust.NewDustDirect(Projectile.Bottom - new Vector2(4, -4), 0, 0, ModContent.DustType<SquamousShellWingDust>());
+			d0.velocity = new Vector2(0, Main.rand.NextFloat(12, 30)).RotatedByRandom(MathHelper.TwoPi);
+			d0.noGravity = true;
+			d0.scale *= Main.rand.NextFloat(1.3f);
+		}
+		GenerateSpark(30);
 	}
 
 	public void GenerateSpark(int Frequency)

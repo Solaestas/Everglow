@@ -88,6 +88,10 @@ public class SquamousRockProj_small : ModProjectile
 		{
 			Dust.NewDust(Projectile.Center - Projectile.velocity * 2 - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone>(), 0f, 0f, 0, default, 0.7f);
 		}
+		Dust d0 = Dust.NewDustDirect(Projectile.Bottom - new Vector2(4, -4), 0, 0, ModContent.DustType<SquamousShellWingDust>());
+		d0.velocity = new Vector2(0, 4).RotatedByRandom(MathHelper.TwoPi) + new Vector2(0, -6);
+		d0.noGravity = false;
+		d0.scale *= Main.rand.NextFloat(1f);
 		SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
 		GenerateSmog(4);
 	}
@@ -104,6 +108,9 @@ public class SquamousRockProj_small : ModProjectile
 			var bloom = ModAsset.SquamousRockProj_small_bloom.Value;
 			Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, lightColor, Projectile.rotation, texMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(bloom, Projectile.Center - Main.screenPosition - Projectile.velocity, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, bloom.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+			var textureGlow = ModAsset.SquamousRockProj_small_glow.Value;
+			float breathValue = 0.5f + 0.5f * MathF.Sin((float)Main.timeForVisualEffects * 0.24f + Projectile.whoAmI);
+			Main.spriteBatch.Draw(textureGlow, Projectile.Center - Main.screenPosition - Projectile.velocity, null, new Color(1f, 1f, 1f, breathValue) * breathValue, Projectile.rotation, textureGlow.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 			return false;
 		}
 	}

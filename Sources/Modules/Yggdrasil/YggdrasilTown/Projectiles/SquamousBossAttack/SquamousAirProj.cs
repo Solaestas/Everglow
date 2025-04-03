@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -49,6 +50,18 @@ public class SquamousAirProj : ModProjectile
 		}
 
 		TimeTokill--;
+		float chaseValue = 0.04f;
+		float maxSpeed = 4f;
+		if (Main.expertMode)
+		{
+			chaseValue = 0.09f;
+			maxSpeed = 8f;
+		}
+		if(Main.masterMode)
+		{
+			chaseValue = 0.13f;
+			maxSpeed = 12f;
+		}
 		if (TimeTokill < 0)
 		{
 			if (Projectile.timeLeft > 3480)
@@ -58,7 +71,7 @@ public class SquamousAirProj : ModProjectile
 					float timeValue = (Projectile.timeLeft - 3480) / 120f;
 					Vector2 aimVel = player.Center + player.velocity - Projectile.Center - Projectile.velocity;
 					aimVel = Vector2.Normalize(aimVel);
-					Projectile.velocity = Projectile.velocity * 0.9f + aimVel * 0.1f * (1 - timeValue) * 8f;
+					Projectile.velocity = Projectile.velocity * (1 - chaseValue) + aimVel * chaseValue * (1 - timeValue) * maxSpeed;
 				}
 			}
 			Projectile.velocity.Y += 0.05f;
@@ -129,7 +142,11 @@ public class SquamousAirProj : ModProjectile
 	{
 		TimeTokill = 60;
 		Projectile.velocity = Projectile.oldVelocity;
-		GenerateSmog(8);
+		GenerateSmog(1);
+		Dust d0 = Dust.NewDustDirect(Projectile.Bottom - new Vector2(4, -4), 0, 0, ModContent.DustType<SquamousShellWingDust>());
+		d0.velocity = new Vector2(0, 4).RotatedByRandom(MathHelper.TwoPi) + new Vector2(0, -6);
+		d0.noGravity = false;
+		d0.scale *= Main.rand.NextFloat(1f);
 		SoundEngine.PlaySound(SoundID.Item98.WithVolume(Main.rand.NextFloat(0.14f, 0.22f)).WithPitchOffset(Main.rand.NextFloat(0.7f, 0.9f)), Projectile.Center);
 	}
 

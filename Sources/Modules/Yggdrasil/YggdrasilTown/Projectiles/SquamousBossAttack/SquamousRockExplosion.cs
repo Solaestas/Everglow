@@ -41,7 +41,7 @@ public class SquamousRockExplosion : ModProjectile, IWarpProjectile
 				dust.velocity = new Vector2(0, Main.rand.NextFloat(0f, 2f * Projectile.ai[0])).RotatedByRandom(MathHelper.TwoPi);
 			}
 		}
-		Lighting.AddLight(Projectile.Center, new Vector3(0.05f, 0.07f, 1f) * 6);
+		Lighting.AddLight(Projectile.Center, new Vector3(0.05f, 0.07f, 1f) * Projectile.timeLeft / 60f);
 	}
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
