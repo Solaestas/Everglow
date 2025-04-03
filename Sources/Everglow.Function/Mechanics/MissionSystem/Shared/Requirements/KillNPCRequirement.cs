@@ -85,7 +85,7 @@ public class KillNPCRequirement
 	/// <param name="count"></param>
 	public void Count(NPC npc)
 	{
-		if (Condition != null && Condition.IsFalse)
+		if (Condition != null && Condition.Check(Main.LocalPlayer, npc))
 		{
 			return;
 		}
