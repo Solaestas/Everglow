@@ -25,7 +25,7 @@ public class KillNPCObjective : MissionObjectiveBase
 		AssetUtils.LoadVanillaNPCTextures(DemandNPC.NPCs);
 	}
 
-	public override bool CheckCompletion() => DemandNPC.Counter >= DemandNPC.Requirement;
+	public override bool CheckCompletion() => Progress >= 1f;
 
 	public override float Progress => DemandNPC.Progress(MissionManager.NPCKillCounter);
 
