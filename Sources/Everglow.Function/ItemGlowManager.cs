@@ -58,9 +58,12 @@ public class ItemGlowManager : GlobalItem
 
 	public override void SetDefaults(Item item)
 	{
-		if (glowMapping.TryGetValue(item.type, out var index))
+		if (!Main.dedServ)
 		{
-			item.glowMask = index;
+			if (glowMapping.TryGetValue(item.type, out var index))
+			{
+				item.glowMask = index;
+			}
 		}
 		base.SetDefaults(item);
 	}

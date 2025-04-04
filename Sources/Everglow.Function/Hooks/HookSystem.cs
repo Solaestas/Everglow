@@ -36,20 +36,23 @@ public class HookSystem : ModSystem
 
 	public override void Load()
 	{
-		On_Main.DrawDust += Main_DrawDust;
-		On_Main.DrawProjectiles += Main_DrawProjectiles;
-		On_Main.DrawNPCs += Main_DrawNPCs;
-		On_LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
-		On_WorldGen.playWorldCallBack += WorldGen_playWorldCallBack;
+		if(!Main.dedServ)
+		{
+			On_Main.DrawDust += Main_DrawDust;
+			On_Main.DrawProjectiles += Main_DrawProjectiles;
+			On_Main.DrawNPCs += Main_DrawNPCs;
+			On_LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
+			On_WorldGen.playWorldCallBack += WorldGen_playWorldCallBack;
 
-		On_WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
-		On_Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
-		On_WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
-		On_Main.DrawBG += Main_DrawBG;
-		On_Main.DrawBackground += Main_DrawBackground;
-		On_Main.DoDraw_WallsTilesNPCs += Main_DoDraw_WallsTilesNPCs;
-		On_FilterManager.EndCapture += On_FilterManager_EndCapture;
-		Main.OnResolutionChanged += Main_OnResolutionChanged;
+			On_WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
+			On_Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
+			On_WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
+			On_Main.DrawBG += Main_DrawBG;
+			On_Main.DrawBackground += Main_DrawBackground;
+			On_Main.DoDraw_WallsTilesNPCs += Main_DoDraw_WallsTilesNPCs;
+			On_FilterManager.EndCapture += On_FilterManager_EndCapture;
+			Main.OnResolutionChanged += Main_OnResolutionChanged;
+		}
 	}
 
 	private void On_FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
