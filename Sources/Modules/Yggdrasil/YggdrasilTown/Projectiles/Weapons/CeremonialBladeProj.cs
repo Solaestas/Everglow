@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -57,18 +58,26 @@ public class CeremonialBladeProj : ModProjectile
 
 	// Variables to keep track of during runtime
 	private ref float InitialAngle => ref Projectile.ai[1]; // Angle aimed in (with constraints)
+
 	private ref float Timer => ref Projectile.ai[2]; // Timer to keep track of progression of each stage
+
 	private ref float Progress => ref Projectile.localAI[1]; // Position of sword relative to initial angle
+
 	private ref float Size => ref Projectile.localAI[2]; // Size of sword
 
 	// We define timing functions for each stage, taking into account melee attack speed
 	// Note that you can change this to suit the need of your projectile
-	private float prepTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
-	private float execTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
-	private float hideTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
+	private float PrepTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
+
+	private float ExecTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
+
+	private float HideTime => 12f / Owner.GetTotalAttackSpeed(Projectile.DamageType);
 
 	public override string Texture => ModAsset.CeremonialBlade_Mod; // Use texture of item as projectile texture
+
 	private Player Owner => Main.player[Projectile.owner];
+
+	public Queue<Vector2> OldRotScales = new Queue<Vector2>();
 
 	public override void SetStaticDefaults()
 	{
@@ -121,7 +130,7 @@ public class CeremonialBladeProj : ModProjectile
 
 	public override void SendExtraAI(BinaryWriter writer)
 	{
-		// Projectile.spriteDirection for this projectile is derived from the mouse position of the owner in OnSpawn, as such it needs to be synced. spriteDirection is not one of the fields automatically synced over the network. All Projectile.ai slots are used already, so we will sync it manually. 
+		// Projectile.spriteDirection for this projectile is derived from the mouse position of the owner in OnSpawn, as such it needs to be synced. spriteDirection is not one of the fields automatically synced over the network. All Projectile.ai slots are used already, so we will sync it manually.
 		writer.Write((sbyte)Projectile.spriteDirection);
 	}
 
@@ -183,9 +192,77 @@ public class CeremonialBladeProj : ModProjectile
 			effects = SpriteEffects.FlipHorizontally;
 		}
 
+		var drawPos = Projectile.Center - Main.screenPosition;
 		Texture2D texture = TextureAssets.Projectile[Type].Value;
+		Main.spriteBatch.Draw(texture, drawPos, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
 
-		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
+		// Draw a special visual effect.
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+		List<Vertex2D> bladeEffect_Body_Dark = new List<Vertex2D>();
+		List<Vertex2D> bladeEffect_Body = new List<Vertex2D>();
+		List<Vertex2D> bladeEffect_Edge = new List<Vertex2D>();
+		var oldPara = OldRotScales.ToArray();
+		var normal = new Vector2(24 * Projectile.spriteDirection, -29) * 2;
+		float phase = 0.5f;
+		for (int i = 0; i < oldPara.Length; i++)
+		{
+			var edge = normal.RotatedBy(oldPara[i].X + rotationOffset) * oldPara[i].Y;
+			var drawColor = lightColor;
+			var darkColor = Color.White;
+			drawColor.A = 0;
+			float coordY = (i / 30f - Projectile.timeLeft / 90f) + phase;
+			if (i == oldPara.Length - 1)
+			{
+				drawColor *= 0;
+				darkColor *= 0;
+			}
+			if (i < oldPara.Length - 4)
+			{
+				float fade = (i - (oldPara.Length - 8)) / 4f;
+				fade = Math.Max(fade, 0);
+				drawColor *= fade;
+				darkColor *= fade;
+			}
+			if (i < oldPara.Length - 8)
+			{
+				drawColor *= 0;
+				darkColor *= 0;
+			}
+			float colorValue = MathF.Cos(Projectile.localAI[1] + MathF.PI);
+			drawColor *= 1 - Projectile.Opacity;
+			darkColor *= 1 - Projectile.Opacity;
+			drawColor *= colorValue;
+			darkColor *= colorValue;
+			bladeEffect_Edge.Add(drawPos + edge, drawColor, new Vector3(0.5f, coordY, 0));
+			bladeEffect_Edge.Add(drawPos + edge * 0.3f, drawColor * 0.1f, new Vector3(Math.Clamp(0.5f - Projectile.localAI[1] * 0.1f, 0, 0.5f), coordY, 0));
+
+			bladeEffect_Body_Dark.Add(drawPos + edge, darkColor, new Vector3(0.5f, coordY, 0));
+			bladeEffect_Body_Dark.Add(drawPos + edge * 0.3f, darkColor * 0f, new Vector3(0, coordY, 0));
+
+			bladeEffect_Body.Add(drawPos + edge, drawColor * 0.6f * colorValue, new Vector3(0.5f, coordY, 0));
+			bladeEffect_Body.Add(drawPos + edge * 0.3f, drawColor * 0.0f, new Vector3(0, coordY, 0));
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_flame_2_black.Value;
+		if (bladeEffect_Body_Dark.Count > 0)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bladeEffect_Body_Dark.ToArray(), 0, bladeEffect_Body_Dark.Count - 2);
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_flame_2.Value;
+		if (bladeEffect_Body.Count > 0)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bladeEffect_Body.ToArray(), 0, bladeEffect_Body.Count - 2);
+		}
+
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StarSlash.Value;
+		if (bladeEffect_Edge.Count > 0)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bladeEffect_Edge.ToArray(), 0, bladeEffect_Edge.Count - 2);
+		}
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 
 		// Since we are doing a custom draw, prevent it from normally drawing
 		return false;
@@ -212,7 +289,10 @@ public class CeremonialBladeProj : ModProjectile
 	public override bool? CanDamage()
 	{
 		if (CurrentStage == AttackStage.Prepare)
+		{
 			return false;
+		}
+
 		return base.CanDamage();
 	}
 
@@ -223,13 +303,18 @@ public class CeremonialBladeProj : ModProjectile
 
 		// If the NPC is hit by the spin attack, increase knockback slightly
 		if (CurrentAttack == AttackType.Spin)
+		{
 			modifiers.Knockback += 1;
+		}
 	}
 
 	// Function to easily set projectile and arm position
 	public void SetSwordPosition()
 	{
-		Projectile.rotation = InitialAngle + Projectile.spriteDirection * Progress; // Set projectile rotation
+		float newRot = InitialAngle + Projectile.spriteDirection * Progress;
+		float omega = MathF.Abs(Projectile.rotation - newRot);
+		Projectile.Opacity = 1 - 3 * omega;
+		Projectile.rotation = newRot; // Set projectile rotation
 
 		// Set composite arm allows you to set the rotation of the arm and stretch of the front and back arms independently
 		Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathHelper.ToRadians(90f)); // set arm position (90 degree offset since arm starts lowered)
@@ -239,16 +324,23 @@ public class CeremonialBladeProj : ModProjectile
 		Projectile.Center = armPosition; // Set projectile to arm position
 		Projectile.scale = Size * 1.2f * Owner.GetAdjustedItemScale(Owner.HeldItem); // Slightly scale up the projectile and also take into account melee size modifiers
 
+		// Record old rotations and scales.
+		OldRotScales.Enqueue(new Vector2(Projectile.rotation, Projectile.scale));
+		if (OldRotScales.Count > 90)
+		{
+			OldRotScales.Dequeue();
+		}
+
 		Owner.heldProj = Projectile.whoAmI; // set held projectile to this projectile
 	}
 
 	// Function facilitating the taking out of the sword
 	private void PrepareStrike()
 	{
-		Progress = WINDUP * SWINGRANGE * (1f - Timer / prepTime); // Calculates rotation from initial angle
-		Size = MathHelper.SmoothStep(0, 1, Timer / prepTime); // Make sword slowly increase in size as we prepare to strike until it reaches max
+		Progress = WINDUP * SWINGRANGE * (1f - Timer / PrepTime); // Calculates rotation from initial angle
+		Size = MathHelper.SmoothStep(0, 1, Timer / PrepTime); // Make sword slowly increase in size as we prepare to strike until it reaches max
 
-		if (Timer >= prepTime)
+		if (Timer >= PrepTime)
 		{
 			SoundEngine.PlaySound(SoundID.Item1); // Play sword sound here since playing it on spawn is too early
 			CurrentStage = AttackStage.Execute; // If attack is over prep time, we go to next stage
@@ -260,24 +352,24 @@ public class CeremonialBladeProj : ModProjectile
 	{
 		if (CurrentAttack == AttackType.Swing)
 		{
-			Progress = MathHelper.SmoothStep(0, SWINGRANGE, (1f - UNWIND) * Timer / execTime);
+			Progress = MathHelper.SmoothStep(0, SWINGRANGE, (1f - UNWIND) * Timer / ExecTime);
 
-			if (Timer >= execTime)
+			if (Timer >= ExecTime)
 			{
 				CurrentStage = AttackStage.Unwind;
 			}
 		}
 		else
 		{
-			Progress = MathHelper.SmoothStep(0, SPINRANGE, (1f - UNWIND / 2) * Timer / (execTime * SPINTIME));
+			Progress = MathHelper.SmoothStep(0, SPINRANGE, (1f - UNWIND / 2) * Timer / (ExecTime * SPINTIME));
 
-			if (Timer == (int)(execTime * SPINTIME * 3 / 4))
+			if (Timer == (int)(ExecTime * SPINTIME * 3 / 4))
 			{
 				SoundEngine.PlaySound(SoundID.Item1); // Play sword sound again
 				Projectile.ResetLocalNPCHitImmunity(); // Reset the local npc hit immunity for second half of spin
 			}
 
-			if (Timer >= execTime * SPINTIME)
+			if (Timer >= ExecTime * SPINTIME)
 			{
 				CurrentStage = AttackStage.Unwind;
 			}
@@ -289,20 +381,20 @@ public class CeremonialBladeProj : ModProjectile
 	{
 		if (CurrentAttack == AttackType.Swing)
 		{
-			Progress = MathHelper.SmoothStep(0, SWINGRANGE, 1f - UNWIND + UNWIND * Timer / hideTime);
-			Size = 1f - MathHelper.SmoothStep(0, 1, Timer / hideTime); // Make sword slowly decrease in size as we end the swing to make a smooth hiding animation
+			Progress = MathHelper.SmoothStep(0, SWINGRANGE, 1f - UNWIND + UNWIND * Timer / HideTime);
+			Size = 1f - MathHelper.SmoothStep(0, 1, Timer / HideTime); // Make sword slowly decrease in size as we end the swing to make a smooth hiding animation
 
-			if (Timer >= hideTime)
+			if (Timer >= HideTime)
 			{
 				Projectile.Kill();
 			}
 		}
 		else
 		{
-			Progress = MathHelper.SmoothStep(0, SPINRANGE, 1f - UNWIND / 2 + UNWIND / 2 * Timer / (hideTime * SPINTIME / 2));
-			Size = 1f - MathHelper.SmoothStep(0, 1, Timer / (hideTime * SPINTIME / 2));
+			Progress = MathHelper.SmoothStep(0, SPINRANGE, 1f - UNWIND / 2 + UNWIND / 2 * Timer / (HideTime * SPINTIME / 2));
+			Size = 1f - MathHelper.SmoothStep(0, 1, Timer / (HideTime * SPINTIME / 2));
 
-			if (Timer >= hideTime * SPINTIME / 2)
+			if (Timer >= HideTime * SPINTIME / 2)
 			{
 				Projectile.Kill();
 			}
