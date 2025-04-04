@@ -54,13 +54,13 @@ public class SquamousAirProj : ModProjectile
 		float maxSpeed = 4f;
 		if (Main.expertMode)
 		{
-			chaseValue = 0.09f;
+			chaseValue = 0.06f;
 			maxSpeed = 8f;
 		}
 		if(Main.masterMode)
 		{
-			chaseValue = 0.13f;
-			maxSpeed = 12f;
+			chaseValue = 0.07f;
+			maxSpeed = 9f;
 		}
 		if (TimeTokill < 0)
 		{
