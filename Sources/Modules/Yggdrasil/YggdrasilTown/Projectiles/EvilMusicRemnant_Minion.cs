@@ -70,7 +70,7 @@ public class EvilMusicRemnant_Minion : ModProjectile
 
 	private int TeleportCooldown { get; set; }
 
-	public NPC Target => Main.npc[TargetWhoAmI];
+	public NPC Target => TargetWhoAmI is >= 0 and < 200 ? Main.npc[TargetWhoAmI] : null;
 
 	public float SpawnProgress => MathF.Min(1f, (TimeLeftMax - Projectile.timeLeft) / (float)SpawnDuration);
 

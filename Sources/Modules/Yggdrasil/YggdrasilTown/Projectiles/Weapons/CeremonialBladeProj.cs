@@ -1,11 +1,12 @@
 using Everglow.Commons.DataStructures;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Weapons;
 
-public class CeremonialBladeProj : ModProjectile
+public class CeremonialBladeProj : ModProjectile, IWarpProjectile_warpStyle2
 {
 	// We define some constants that determine the swing range of the sword
 	// Not that we use multipliers here since that simplifies the amount of tweaks for these interactions
@@ -239,10 +240,10 @@ public class CeremonialBladeProj : ModProjectile
 			bladeEffect_Edge.Add(drawPos + edge, drawColor, new Vector3(0.5f, coordY, 0));
 			bladeEffect_Edge.Add(drawPos + edge * 0.3f, drawColor * 0.1f, new Vector3(Math.Clamp(0.5f - Projectile.localAI[1] * 0.1f, 0, 0.5f), coordY, 0));
 
-			bladeEffect_Body_Dark.Add(drawPos + edge, darkColor, new Vector3(0.5f, coordY, 0));
+			bladeEffect_Body_Dark.Add(drawPos + edge, darkColor, new Vector3(2f, coordY, 0));
 			bladeEffect_Body_Dark.Add(drawPos + edge * 0.3f, darkColor * 0f, new Vector3(0, coordY, 0));
 
-			bladeEffect_Body.Add(drawPos + edge, drawColor * 0.6f * colorValue, new Vector3(0.5f, coordY, 0));
+			bladeEffect_Body.Add(drawPos + edge, drawColor * 0.6f * colorValue, new Vector3(2f, coordY, 0));
 			bladeEffect_Body.Add(drawPos + edge * 0.3f, drawColor * 0.0f, new Vector3(0, coordY, 0));
 		}
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_flame_2_black.Value;
@@ -266,6 +267,56 @@ public class CeremonialBladeProj : ModProjectile
 
 		// Since we are doing a custom draw, prevent it from normally drawing
 		return false;
+	}
+
+	public void DrawWarp(VFXBatch batch)
+	{
+		List<Vertex2D> bladeEffect_Warp = new List<Vertex2D>();
+		var drawPos = Projectile.Center - Main.screenPosition;
+		var oldPara = OldRotScales.ToArray();
+		var normal = new Vector2(24 * Projectile.spriteDirection, -29) * 2;
+		float phase = 0.5f;
+		float rotationOffset;
+		if (Projectile.spriteDirection > 0)
+		{
+			rotationOffset = MathHelper.ToRadians(45f);
+		}
+		else
+		{
+			rotationOffset = MathHelper.ToRadians(135f);
+		}
+		for (int i = 0; i < oldPara.Length; i++)
+		{
+			var edge = normal.RotatedBy(oldPara[i].X + rotationOffset) * oldPara[i].Y;
+			var dir = edge.NormalizeSafe() * 0.5f + new Vector2(0.5f);
+			float coordY = (i / 30f - Projectile.timeLeft / 90f) + phase;
+			float strength = 1f;
+			if (i == oldPara.Length - 1)
+			{
+				strength *= 0;
+			}
+			if (i < oldPara.Length - 4)
+			{
+				float fade = (i - (oldPara.Length - 8)) / 4f;
+				fade = Math.Max(fade, 0);
+				strength *= fade;
+			}
+			if (i < oldPara.Length - 8)
+			{
+				strength *= 0;
+			}
+			float colorValue = MathF.Cos(Projectile.localAI[1] + MathF.PI);
+			strength *= (1 - Projectile.Opacity) * colorValue * 0.6f;
+			Color colorWarp = new Color(dir.X, dir.Y, strength, 1);
+			Color colorWarpFade = new Color(dir.X, dir.Y, strength * 0.1f, 1);
+			bladeEffect_Warp.Add(drawPos + edge, colorWarp, new Vector3(0.5f, coordY, 1));
+			bladeEffect_Warp.Add(drawPos + edge * 0.3f, colorWarpFade, new Vector3(0, coordY, 1));
+		}
+		if (bladeEffect_Warp.Count > 3)
+		{
+			Main.graphics.graphicsDevice.RasterizerState = RasterizerState.CullNone;
+			batch.Draw(Commons.ModAsset.Noise_flame_2.Value, bladeEffect_Warp, PrimitiveType.TriangleStrip);
+		}
 	}
 
 	// Find the start and end of the sword and use a line collider to check for collision with enemies
@@ -313,7 +364,7 @@ public class CeremonialBladeProj : ModProjectile
 	{
 		float newRot = InitialAngle + Projectile.spriteDirection * Progress;
 		float omega = MathF.Abs(Projectile.rotation - newRot);
-		Projectile.Opacity = 1 - 3 * omega;
+		Projectile.Opacity = 1 - 2.4f * omega;
 		Projectile.rotation = newRot; // Set projectile rotation
 
 		// Set composite arm allows you to set the rotation of the arm and stretch of the front and back arms independently

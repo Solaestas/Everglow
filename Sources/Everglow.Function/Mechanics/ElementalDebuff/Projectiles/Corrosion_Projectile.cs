@@ -124,25 +124,50 @@ public class Corrosion_Projectile : ModProjectile
 	{
 		DrawTentacles(lightColor);
 
+		float timer = 300 - Projectile.timeLeft;
 		var drawColor = new Color(0.4f, 0f, 1f, 0);
-		var drawColor2 = new Color(0.4f, 0f, 1f, 0);
-		var scaleX = 1f;
-		var scaleY = 1f;
+		float fade = 1f;
+		if (timer < 10)
+		{
+			fade *= timer / 10f;
+		}
+		if(Projectile.timeLeft < 60)
+		{
+			fade *= Projectile.timeLeft / 60f;
+		}
+		var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 		var vertices = new List<Vertex2D>();
-
+		var vertices_dark = new List<Vertex2D>();
+		float timeValue = (float)Main.time * 0.003f;
 		float size = 50f * Projectile.scale;
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i <= size; i++)
 		{
-			var offset1 = new Vector2((i - size / 2) * scaleX, size / 2 * scaleY).RotatedBy(Projectile.rotation);
-			vertices.Add(Projectile.Center + offset1 - Main.screenPosition, drawColor, new Vector3(i / size, 1f, 0f));
-			var offset2 = new Vector2((i - size / 2) * scaleX, -size / 2 * scaleY).RotatedBy(Projectile.rotation);
-			vertices.Add(Projectile.Center + offset2 - Main.screenPosition, drawColor, new Vector3(i / size, 0f, 0f));
+			float value = i / size;
+			var offset = new Vector2(0, size * 2).RotatedBy(value * MathHelper.TwoPi);
+			vertices.Add(Projectile.Center + offset - Main.screenPosition, drawColor * 0, new Vector3(value, timeValue, 0f));
+			vertices.Add(Projectile.Center - Main.screenPosition, drawColor * fade, new Vector3(value, timeValue + 0.25f, 0f));
+
+			vertices_dark.Add(Projectile.Center + offset - Main.screenPosition, drawColor * 0, new Vector3(value, timeValue, 0f));
+			vertices_dark.Add(Projectile.Center - Main.screenPosition, Color.White * fade, new Vector3(value, timeValue + 0.25f, 0f));
 		}
 
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Point.Value;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
-
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Noise_hiveCyber_black.Value;
+		if(vertices_dark.Count > 2)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices_dark.ToArray(), 0, vertices_dark.Count - 2);
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices_dark.ToArray(), 0, vertices_dark.Count - 2);
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices_dark.ToArray(), 0, vertices_dark.Count - 2);
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Noise_hiveCyber.Value;
+		if (vertices.Count > 2)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+		}
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 		return false;
 	}
 
