@@ -40,8 +40,8 @@ public class MissionGlobalNPC : GlobalNPC
 		if (valid)
 		{
 			Texture2D tex = ModAsset.ExclamationMark.Value;
-			float scale = (float)Math.Sin(Main.time * 0.08f) * 0.14f;
-			spriteBatch.Draw(tex, new Vector2(npc.Center.X - 2, npc.Center.Y - 40) - Main.screenPosition, new Rectangle(0, 0, 6, 24), Color.White, 0f, new Vector2(3, 12), 1f + scale, SpriteEffects.None, 0f);
+			float scale = (1f + (float)Math.Sin(Main.time * 0.16f) * 0.14f) * 0.16f;
+			spriteBatch.Draw(tex, new Vector2(npc.Center.X, npc.Center.Y - 36) - Main.screenPosition, null, Color.White, 0f, tex.Size() / 2, scale, SpriteEffects.None, 0f);
 		}
 	}
 
