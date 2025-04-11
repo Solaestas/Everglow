@@ -39,9 +39,10 @@ public class MissionGlobalNPC : GlobalNPC
 		bool valid = types.Contains(npc.type);
 		if (valid)
 		{
-			Texture2D tex = ModAsset.ExclamationMark.Value;
-			float scale = (1f + (float)Math.Sin(Main.time * 0.16f) * 0.14f) * 0.16f;
-			spriteBatch.Draw(tex, new Vector2(npc.Center.X, npc.Center.Y - 36) - Main.screenPosition, null, Color.White, 0f, tex.Size() / 2, scale, SpriteEffects.None, 0f);
+			Texture2D tex = ModAsset.MissionExclamationMark.Value;
+			float scale = (1f + (float)Math.Sin(Main.time * 0.24f) * 0.14f) * 0.16f;
+			Color color = new Color(1f, 0.7f, 0.5f, 1f);
+			spriteBatch.Draw(tex, new Vector2(npc.Center.X, npc.Center.Y - 36) - Main.screenPosition, null, color, 0f, tex.Size() / 2, scale, SpriteEffects.None, 0f);
 		}
 	}
 
