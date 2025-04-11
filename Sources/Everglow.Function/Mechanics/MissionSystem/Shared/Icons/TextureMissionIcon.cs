@@ -9,7 +9,7 @@ public class TextureMissionIcon : MissionIconBase
 	{
 	}
 
-	private DrawAnimationVertical animation = null;
+	private DrawAnimation animation = null;
 	private Texture2D texture;
 	private string tooltip;
 

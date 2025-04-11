@@ -1,6 +1,7 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.Mechanics.MissionSystem.Objectives;
+using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
 
@@ -17,6 +18,10 @@ public class KillNPCMissionTest : MissionBase
 
 		RewardItems.Add(new(ItemID.DirtBlock, 10));
 	}
+
+	public override MissionSourceBase Source => MissionSourceTest1.Instance;
+
+	public override MissionSourceBase SubSource => MissionSourceTest2.Instance;
 
 	public override string DisplayName => nameof(KillNPCMissionTest);
 

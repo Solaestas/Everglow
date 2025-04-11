@@ -1,6 +1,7 @@
 using Everglow.Commons.Mechanics.MissionSystem.Abstracts;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.Mechanics.MissionSystem.Primitives;
+using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
@@ -28,7 +29,10 @@ public abstract class MissionBase : ITagCompoundEntity
 
 	protected MissionBase()
 	{
+		// Initial icons
 		Icon = new MissionIconGroup();
+		Icon?.Add(MissionSourceIcon.Create(Source, SubSource));
+
 		Objectives = new MissionObjectiveData();
 		RewardItems = [];
 		Time = 0;
@@ -50,9 +54,14 @@ public abstract class MissionBase : ITagCompoundEntity
 	public virtual string Description { get; } = string.Empty;
 
 	/// <summary>
-	/// 任务来源NPC
+	/// 任务来源
 	/// </summary>
-	public virtual int SourceNPC { get; set; } = -1;
+	public virtual MissionSourceBase Source { get; private set; } = MissionSourceBase.Default;
+
+	/// <summary>
+	/// 次级任务来源
+	/// </summary>
+	public virtual MissionSourceBase SubSource { get; private set; } = null;
 
 	/// <summary>
 	/// 任务图标
@@ -378,7 +387,6 @@ public abstract class MissionBase : ITagCompoundEntity
 	public virtual void SaveData(TagCompound tag)
 	{
 		tag.Add(TimeSaveKey, Time);
-		tag.Add(nameof(SourceNPC), SourceNPC);
 		tag.Add(nameof(IsVisible), IsVisible);
 
 		SaveObjectives(tag, Objectives.AllObjectives);
@@ -410,11 +418,6 @@ public abstract class MissionBase : ITagCompoundEntity
 		if (tag.TryGet<long>(TimeSaveKey, out var mt))
 		{
 			Time = mt;
-		}
-
-		if (tag.TryGet<int>(nameof(SourceNPC), out var sourceNPC))
-		{
-			SourceNPC = sourceNPC;
 		}
 
 		if (tag.TryGet<bool>(nameof(IsVisible), out var isVisible))

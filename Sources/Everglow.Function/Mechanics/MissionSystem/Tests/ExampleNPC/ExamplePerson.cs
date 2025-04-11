@@ -286,7 +286,7 @@ public class ExamplePerson : ModNPC
 		else
 		{
 			// Open mission panel
-			MissionContainer.Instance.Show(1);
+			MissionContainer.Instance.Show(MissionSourceTest1.Instance);
 		}
 	}
 

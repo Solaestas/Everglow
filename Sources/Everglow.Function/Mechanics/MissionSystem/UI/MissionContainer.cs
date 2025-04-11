@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
 using Everglow.Commons.UI;
@@ -42,7 +43,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 	private UIMissionList _missionList;
 	private UIMissionFilter _missionFilter;
-	private UIMissionSourceHeadshot _missionSourceHeadshot;
+	private UIMissionSource _missionSourceHeadshot;
 
 	private UIBlock _close;
 
@@ -134,10 +135,10 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 	private void RefreshMissionContainer()
 	{
-		var sourceNPC = _missionSourceHeadshot?.SourceNPC ?? NPCID.None;
+		var source = _missionSourceHeadshot?.Source;
 		ChildrenElements.Clear();
 		OnInitialization();
-		_missionSourceHeadshot.SourceNPC = sourceNPC;
+		_missionSourceHeadshot.Source = source;
 		if (!Main.gameMenu)
 		{
 			RefreshList();
@@ -176,7 +177,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 		_panel.Register(_missionFilter);
 
 		// Mission source headshot
-		_missionSourceHeadshot = new UIMissionSourceHeadshot();
+		_missionSourceHeadshot = new UIMissionSource();
 		_missionSourceHeadshot.Info.Top.SetValue((210 - 40) * ResolutionFactor);
 		_missionSourceHeadshot.Info.Left.SetValue((270 - 40) * ResolutionFactor);
 		_panel.Register(_missionSourceHeadshot);
@@ -297,10 +298,10 @@ public class MissionContainer : UIContainerElement, ILoadable
 		if (args.Length == 1) // Open NPC mission panel
 		{
 			// Take the first argument as the NPC mode.
-			if (args[0] is int npcSource)
+			if (args[0] is MissionSourceBase source)
 			{
 				// Set NPC mode and source NPC.
-				_missionSourceHeadshot.SourceNPC = npcSource;
+				_missionSourceHeadshot.Source = source;
 			}
 			else
 			{
@@ -310,7 +311,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 		}
 		else // Open global mission panel
 		{
-			_missionSourceHeadshot.SourceNPC = NPCID.None;
+			_missionSourceHeadshot.Source = null;
 		}
 
 		RefreshMissionContainer();
@@ -342,7 +343,7 @@ public class MissionContainer : UIContainerElement, ILoadable
 	/// </summary>
 	public void RefreshList()
 	{
-		_missionList.RefreshList(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue, _missionSourceHeadshot.SourceNPC);
+		_missionList.RefreshList(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue, _missionSourceHeadshot.Source);
 		_panelBackground.SetSpectrumColor(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue);
 
 		// Re-select the selected mission item
