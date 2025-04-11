@@ -148,14 +148,17 @@ public static class MissionManager
 	/// </summary>
 	/// <param name="mission">任务</param>
 	/// <param name="type">任务池类型</param>
-	public static void AddMission(MissionBase mission, PoolType type)
+	public static void AddMission(MissionBase mission, PoolType type, bool showText = true)
 	{
 		if (!HasMission(mission.Name))
 		{
 			_missionPools[type].Add(mission);
 			mission.PoolType = type;
 
-			Main.NewText($"新的任务任务已添加[{mission.DisplayName}]", 250, 250, 150);
+			if (showText)
+			{
+				Main.NewText($"新的任务任务已添加[{mission.DisplayName}]", 250, 250, 150);
+			}
 
 			if (type == PoolType.Accepted)
 			{
@@ -217,10 +220,8 @@ public static class MissionManager
 	/// <param name="missionName">任务名字，或者说 ID</param>
 	/// <param name="type">任务池类型</param>
 	/// <returns></returns>
-	public static bool RemoveMission(string missionName, PoolType? type = null)
-	{
-		return RemoveMission(m => m.Name == missionName, type);
-	}
+	public static bool RemoveMission(string missionName, PoolType? type = null) =>
+		RemoveMission(m => m.Name == missionName, type);
 
 	/// <summary>
 	/// 移除任务池内某个任务
@@ -229,10 +230,8 @@ public static class MissionManager
 	/// <param name="type"></param>
 	/// <returns></returns>
 	public static bool RemoveMission<T>(PoolType? type = null)
-		where T : MissionBase
-	{
-		return RemoveMission(m => m is T, type);
-	}
+		where T : MissionBase =>
+		RemoveMission(m => m is T, type);
 
 	/// <summary>
 	/// 将某个任务从目前任务池移到另一个
