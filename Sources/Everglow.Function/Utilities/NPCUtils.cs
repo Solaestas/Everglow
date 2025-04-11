@@ -4,7 +4,7 @@ using Everglow.Commons.CustomTiles.Collide;
 namespace Everglow.Commons.Utilities;
 
 /// <summary>
-/// 此特征可以免去由于模式改变而引起的基础数值被tml篡改
+/// This Attribute can ignore game-mode-based NPC scale.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public class NoGameModeScaleAttribute : Attribute
@@ -14,7 +14,7 @@ public class NoGameModeScaleAttribute : Attribute
 public class NoGameModeScale : GlobalNPC
 {
 	/// <summary>
-	/// 拒绝由于模式改变而引起的基础数值被tml篡改
+	/// Rejection of base value tampering by vanilla due to mode change.
 	/// </summary>
 	/// <param name="numPlayers"></param>
 	/// <param name="balance"></param>
@@ -162,7 +162,6 @@ public static class NPCUtils
 			{
 				Vector2 bottom = default;
 				npc.SitDown(npc.Center.ToTileCoordinates(), out npc.direction, out bottom);
-				Main.NewText(bottom);
 				npc.spriteDirection = npc.direction;
 				npc.velocity *= 0;
 				return true;
@@ -186,7 +185,7 @@ public static class NPCUtils
 		int empty = 0;
 		for (int y = 0; y < 4; y++)
 		{
-			if (!TileCollisionUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 15, y * 16)))
+			if (!TileCollisionUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 15, y * 16)) && !Collision.SolidCollision(npc.BottomLeft + new Vector2(npc.direction * 15, y * 16),npc.width, npc.height))
 			{
 				empty++;
 			}
