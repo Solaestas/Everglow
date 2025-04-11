@@ -55,7 +55,7 @@ public class KillNPCRequirement
 			: Math.Min(1f, Math.Max(0f, nPCKillCounter.Where(x => NPCs.Contains(x.Key)).Select(x => x.Value).Sum() / (float)Requirement))
 		: 1f;
 
-	public MissionConditionBase Condition { get; set; }
+	public KillNPCMissionConditionBase Condition { get; set; }
 
 	/// <summary>
 	/// Create a new instance of <see cref="KillNPCRequirement"/> class if the input is valid.
