@@ -25,12 +25,30 @@ public class YggdrasilTownCentralSystem : ModSystem
 		if (SubworldSystem.Current is YggdrasilWorld)
 		{
 			CheckNPC(ModContent.NPCType<Guard_of_YggdrasilTown>());
+			CheckNPC(ModContent.NPCType<TeahouseLady>());
 		}
-		if(InCanteen_YggdrasilTown())
+		if (InCanteen_YggdrasilTown())
 		{
 			CheckNPC(ModContent.NPCType<CanteenMaid>());
 		}
 		base.OnWorldLoad();
+	}
+
+	public override void PostUpdateNPCs()
+	{
+		if(Main.time == 0)
+		{
+			if (SubworldSystem.Current is YggdrasilWorld)
+			{
+				CheckNPC(ModContent.NPCType<Guard_of_YggdrasilTown>());
+				CheckNPC(ModContent.NPCType<TeahouseLady>());
+			}
+			if (InCanteen_YggdrasilTown())
+			{
+				CheckNPC(ModContent.NPCType<CanteenMaid>());
+			}
+		}
+		base.PostUpdateNPCs();
 	}
 
 	public static void CheckNPC(int type)
@@ -44,7 +62,7 @@ public class YggdrasilTownCentralSystem : ModSystem
 			}
 			else if (NPC.CountNPCS(type) >= 2)
 			{
-				foreach(NPC npc in Main.npc)
+				foreach (NPC npc in Main.npc)
 				{
 					if(npc != null && npc.type == type && npc.active)
 					{

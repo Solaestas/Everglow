@@ -1,6 +1,7 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using SubworldLibrary;
 using Terraria.DataStructures;
 using Terraria.GameContent.Personalities;
 using Terraria.Localization;
@@ -16,10 +17,22 @@ public class Guard_of_YggdrasilTown : ModNPC
 
 	public CoroutineManager _townNPCBehaviorCoroutine = new CoroutineManager();
 	public CoroutineManager _townNPCGeneralCoroutine = new CoroutineManager();
-	public Queue<Coroutine> AICoroutines = new Queue<Coroutine>();
+	public Queue<Coroutine> BehaviorsCoroutines = new Queue<Coroutine>();
 	public bool Idle = true;
 	public bool Talking = false;
 	public bool Sit = false;
+	public int ThreatenTarget = -1;
+	public int FrameHeight = 56;
+
+	/// <summary>
+	/// A scalars for the total threaten value;
+	/// </summary>
+	public float TotalThreaten = 0f;
+
+	/// <summary>
+	/// A vector2 for total threaten direction;
+	/// </summary>
+	public Vector2 TotalThreatenDirection = Vector2.zeroVector;
 
 	/// <summary>
 	/// 0 means non-attacking, while 1 means attack style 0, 2 means style 1.
@@ -38,7 +51,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 	public Projectile FistProjectile = null;
 	public Vector2 LockCenter = Vector2.Zero;
 
-	public Vector2 AnchorForBehaviorPos => YggdrasilTownCentralSystem.TownTopLeftWorldCoord + new Vector2(10639, 2462);
+	public Point AnchorForBehaviorPos => YggdrasilTownCentralSystem.TownTopLeftWorldCoord.ToTileCoordinates() + new Point(665, 154);
 
 	public override string HeadTexture => ModAsset.Guard_of_YggdrasilTown_Head_Mod;
 
@@ -81,7 +94,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		_townNPCGeneralCoroutine.StartCoroutine(new Coroutine(AI_Main()));
+		_townNPCGeneralCoroutine.StartCoroutine(new Coroutine(BehaviorControl()));
 		base.OnSpawn(source);
 	}
 
@@ -93,31 +106,48 @@ public class Guard_of_YggdrasilTown : ModNPC
 
 	public override void AI()
 	{
-		Idle = true;
 		_townNPCBehaviorCoroutine.Update();
 		_townNPCGeneralCoroutine.Update();
 		if (!Talking)
 		{
-			if (Main.rand.NextBool(120) && AICoroutines.Count <= 1)
+			CheckDangers();
+			if (BehaviorsCoroutines.Count <= 0)
 			{
-				AICoroutines.Enqueue(new Coroutine(Walk(Main.rand.Next(60, 900))));
-			}
-			if (Main.rand.NextBool(120) && AICoroutines.Count <= 1)
-			{
-				AICoroutines.Enqueue(new Coroutine(Stand(Main.rand.Next(60, 900))));
-			}
-			if ((int)(Main.time * 0.1f) % 6 == 0)
-			{
-				if (AICoroutines.Count <= 1)
+				Idle = true;
+				if (Peace())
 				{
-					if (CanAttack0())
+					if (Sit)
 					{
-						AICoroutines.Enqueue(new Coroutine(Attack0()));
+						BehaviorsCoroutines.Enqueue(new Coroutine(SitDown(Main.rand.Next(60, 90))));
 					}
-					if (CanAttack1())
+					else
 					{
-						AICoroutines.Enqueue(new Coroutine(Attack1()));
+						if (Main.rand.NextBool())
+						{
+							BehaviorsCoroutines.Enqueue(new Coroutine(Stand(Main.rand.Next(60, 90))));
+						}
+						else
+						{
+							BehaviorsCoroutines.Enqueue(new Coroutine(Walk(Main.rand.Next(60, 900))));
+						}
 					}
+				}
+				else if (CanEscape())
+				{
+					Sit = false;
+					if (TotalThreaten < 1 && Main.rand.NextBool(2))
+					{
+						TryAttack();
+					}
+					else
+					{
+						BehaviorsCoroutines.Enqueue(new Coroutine(Walk(Main.rand.Next(60, 90))));
+					}
+				}
+				else
+				{
+					Sit = false;
+					TryAttack();
 				}
 			}
 		}
@@ -131,8 +161,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 
 		if (aiMainCount == 0)
 		{
-			Idle = true;
-			_townNPCGeneralCoroutine.StartCoroutine(new Coroutine(AI_Main()));
+			_townNPCGeneralCoroutine.StartCoroutine(new Coroutine(BehaviorControl()));
 		}
 
 		// ai[0] = 5 is a magic number represent to a sitting town npc.
@@ -146,6 +175,94 @@ public class Guard_of_YggdrasilTown : ModNPC
 		{
 			NPC.aiStyle = -1;
 			NPC.ai[0] = 0;
+		}
+	}
+
+	/// <summary>
+	/// Analysis surrounding threaten sources.
+	/// </summary>
+	public void CheckDangers()
+	{
+		ThreatenTarget = -1;
+		TotalThreatenDirection = Vector2.zeroVector;
+		TotalThreaten = 0f;
+		float minDis = 300;
+		foreach (var npc in Main.npc)
+		{
+			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy && !npc.CountsAsACritter && npc != NPC)
+			{
+				Vector2 distance = npc.Center - NPC.Center;
+				if (distance.Length() < 300 && npc.damage > 0)
+				{
+					TotalThreatenDirection += (-distance.NormalizeSafe() / (distance.Length() + 1)) * 1f * npc.damage;
+					TotalThreaten += (-distance.NormalizeSafe() / (distance.Length() + 1)).Length() * 1f * npc.damage;
+					if (distance.Length() < minDis)
+					{
+						minDis = distance.Length();
+						ThreatenTarget = npc.whoAmI;
+					}
+				}
+			}
+		}
+	}
+
+	public bool Peace()
+	{
+		if (TotalThreaten > 0.005)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	public bool CanEscape()
+	{
+		// Main.NewText(TotalThreaten);
+		// Main.NewText(MathF.Abs(TotalThreatenDirection.X), Color.Red);
+		if(!CanContinueWalk(NPC))
+		{
+			return false;
+		}
+		if (TotalThreaten > MathF.Abs(TotalThreatenDirection.X) * 3f)
+		{
+			return false;
+		}
+		var npcTilePos = NPC.Center.ToTileCoordinates();
+		if (npcTilePos.X < AnchorForBehaviorPos.X - 54 && TotalThreatenDirection.X < 0)
+		{
+			return false;
+		}
+		if (npcTilePos.X > AnchorForBehaviorPos.X + 54 && TotalThreatenDirection.X > 0)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	public void TryAttack()
+	{
+		float index = Main.rand.NextFloat(100);
+		if (index < 75)
+		{
+			if (CanAttack0())
+			{
+				BehaviorsCoroutines.Enqueue(new Coroutine(Attack0()));
+			}
+			else if (CanAttack1())
+			{
+				BehaviorsCoroutines.Enqueue(new Coroutine(Attack1()));
+			}
+		}
+		else
+		{
+			if (CanAttack1())
+			{
+				BehaviorsCoroutines.Enqueue(new Coroutine(Attack1()));
+			}
+			else if (CanAttack0())
+			{
+				BehaviorsCoroutines.Enqueue(new Coroutine(Attack0()));
+			}
 		}
 	}
 
@@ -194,7 +311,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 		{
 			return false;
 		}
-		if (AICoroutines.Count > 1)
+		if (BehaviorsCoroutines.Count > 1)
 		{
 			return false;
 		}
@@ -245,7 +362,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 		{
 			return false;
 		}
-		if (AICoroutines.Count > 1)
+		if (BehaviorsCoroutines.Count > 1)
 		{
 			return false;
 		}
@@ -285,7 +402,12 @@ public class Guard_of_YggdrasilTown : ModNPC
 	public void CheckInSuitableArea()
 	{
 		bool safe = false;
-		var homePoint = AnchorForBehaviorPos.ToTileCoordinates();
+		if (SubworldSystem.Current is not YggdrasilWorld)
+		{
+			NPC.active = false;
+			return;
+		}
+		var homePoint = AnchorForBehaviorPos;
 		NPC.homeless = false;
 		NPC.homeTileX = homePoint.X + 4;
 		NPC.homeTileY = homePoint.Y;
@@ -299,7 +421,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 		}
 		if (!safe)
 		{
-			NPC.Center = AnchorForBehaviorPos;
+			NPC.Center = AnchorForBehaviorPos.ToWorldCoordinates();
 		}
 	}
 
@@ -318,7 +440,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 		}
 	}
 
-	public IEnumerator<ICoroutineInstruction> AI_Main()
+	public IEnumerator<ICoroutineInstruction> BehaviorControl()
 	{
 		while (true)
 		{
@@ -326,10 +448,9 @@ public class Guard_of_YggdrasilTown : ModNPC
 			CheckSlimy();
 			CheckDuplicatedSelf();
 			aiMainCount++;
-			if (AICoroutines.Count > 0 && Idle)
+			if (BehaviorsCoroutines.Count > 0 && Idle)
 			{
-				_townNPCBehaviorCoroutine.StartCoroutine(AICoroutines.First());
-				Sit = false;
+				_townNPCBehaviorCoroutine.StartCoroutine(BehaviorsCoroutines.First());
 				Idle = false;
 			}
 			if (Attack0Cooling > 0)
@@ -348,24 +469,117 @@ public class Guard_of_YggdrasilTown : ModNPC
 		}
 	}
 
+	/// <summary>
+	/// Sitting silently; Inheritable
+	/// </summary>
+	/// <param name="time"></param>
+	/// <returns></returns>
+	public IEnumerator<ICoroutineInstruction> SitDown(int time)
+	{
+		Sit = true;
+		for (int t = 0; t < time; t++)
+		{
+			NPC.frame = new Rectangle(0, 560, 48, 56);
+			NPC.velocity.X = 0;
+			NPC.spriteDirection = NPC.direction;
+			if (!Peace())
+			{
+				if (TotalThreatenDirection.X > 0)
+				{
+					NPC.direction = 1;
+				}
+				else
+				{
+					NPC.direction = -1;
+				}
+				break;
+			}
+			yield return new SkipThisFrame();
+		}
+		Sit = false;
+		EndAIPiece();
+	}
+
+	/// <summary>
+	/// Standing silently; Inheritable
+	/// </summary>
+	/// <param name="time"></param>
+	/// <returns></returns>
+	public IEnumerator<ICoroutineInstruction> Stand(int time)
+	{
+		TextureStyle = 0;
+		for (int t = 0; t < time; t++)
+		{
+			NPC.spriteDirection = NPC.direction;
+			NPC.frame = new Rectangle(0, 616, 48, FrameHeight);
+			NPC.velocity.X = 0;
+			NPC.spriteDirection = NPC.direction;
+			if (!Peace())
+			{
+				if (TotalThreatenDirection.X > 0)
+				{
+					NPC.direction = 1;
+				}
+				else
+				{
+					NPC.direction = -1;
+				}
+				break;
+			}
+			yield return new SkipThisFrame();
+		}
+		EndAIPiece();
+	}
+
+	/// <summary>
+	/// Walking, include escape under duress, jump in front of a protruding tile, door opening(closing), check chair for sitting; Inheritable
+	/// </summary>
+	/// <param name="time"></param>
+	/// <returns></returns>
 	public IEnumerator<ICoroutineInstruction> Walk(int time)
 	{
 		TextureStyle = 0;
 		NPC.direction = ChooseDirection(NPC);
 		for (int t = 0; t < time; t++)
 		{
+			// Too far from home will trigger teleportation.
+			var npcTilePos = NPC.Center.ToTileCoordinates();
+			if (npcTilePos.X < AnchorForBehaviorPos.X - 54)
+			{
+				NPC.direction = 1;
+			}
+			if (npcTilePos.X > AnchorForBehaviorPos.X + 54)
+			{
+				NPC.direction = -1;
+			}
+			if (TotalThreatenDirection.X > 0)
+			{
+				NPC.direction = 1;
+			}
+			if (TotalThreatenDirection.X < 0)
+			{
+				NPC.direction = -1;
+			}
 			NPC.spriteDirection = NPC.direction;
-			NPC.velocity.X = NPC.direction * 1.2f;
-			Idle = false;
+			float speed = 1.2f;
+			if (TotalThreatenDirection.Length() > 0.5f)
+			{
+				speed += TotalThreatenDirection.Length() - 0.5f;
+			}
+			if (!CanEscape())
+			{
+				break;
+			}
+			NPC.velocity.X = NPC.direction * speed;
 			NPC.frameCounter += Math.Abs(NPC.velocity.X);
 			if (NPC.frameCounter > 4)
 			{
-				NPC.frame.Y += 56;
+				NPC.frame.Y += FrameHeight;
 				NPC.frameCounter = 0;
 			}
-			if (NPC.frame.Y > 13 * 56)
+			if (NPC.frame.Y > 9 * FrameHeight)
 			{
-				NPC.frame.Y = 56;
+				NPC.frame.Y = FrameHeight;
 			}
 			if (!CanContinueWalk(NPC))
 			{
@@ -375,16 +589,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 			{
 				break;
 			}
-			if (CanAttack0())
-			{
-				AICoroutines.Enqueue(new Coroutine(Attack0()));
-				break;
-			}
-			if (CanAttack1())
-			{
-				AICoroutines.Enqueue(new Coroutine(Attack1()));
-				break;
-			}
+
 			if (Main.rand.NextBool(24))
 			{
 				if (CheckSit(NPC))
@@ -401,10 +606,14 @@ public class Guard_of_YggdrasilTown : ModNPC
 		EndAIPiece();
 	}
 
+	/// <summary>
+	/// Spear
+	/// </summary>
+	/// <returns></returns>
 	public IEnumerator<ICoroutineInstruction> Attack0()
 	{
 		TextureStyle = 1;
-		Attack0Cooling = 300;
+		Attack0Cooling = 26;
 		Vector2 distance = ChooseAttack0Direction();
 		if (distance.X == 0 && distance.Y == 0)
 		{
@@ -421,8 +630,6 @@ public class Guard_of_YggdrasilTown : ModNPC
 			NPC.spriteDirection = NPC.direction;
 			NPC.velocity *= 0;
 			NPC.frameCounter++;
-
-			Idle = false;
 			if (NPC.frame.Y == 124)
 			{
 				if (NPC.frameCounter == 7)
@@ -459,21 +666,32 @@ public class Guard_of_YggdrasilTown : ModNPC
 		EndAIPiece();
 	}
 
+	/// <summary>
+	/// punch
+	/// </summary>
+	/// <returns></returns>
 	public IEnumerator<ICoroutineInstruction> Attack1()
 	{
 		TextureStyle = 2;
-		Attack1Cooling = 240;
+		Attack1Cooling = 1;
 		int direction = ChooseAttack1Direction();
 		NPC.direction = direction;
 		NPC.spriteDirection = direction;
-		var proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction, 0), ModContent.ProjectileType<Guard_Attack_Fist>(), NPC.damage, 2, Main.myPlayer, NPC.whoAmI);
-		FistProjectile = proj;
-		for (int t = 0; t < 30; t++)
+		NPC.frame = new Rectangle(0, 0, 46, 46);
+		for (int t = 0; t < 12; t++)
 		{
+			if(t == 4)
+			{
+				var proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction, 0), ModContent.ProjectileType<Guard_Attack_Fist>(), NPC.damage, 2, Main.myPlayer, NPC.whoAmI);
+				NPC.frame = new Rectangle(0, 46, 46, 46);
+			}
+			if (t == 8)
+			{
+				NPC.frame = new Rectangle(0, 92, 46, 46);
+			}
 			NPC.direction = direction;
 			NPC.spriteDirection = NPC.direction;
 			NPC.velocity *= 0;
-			Idle = false;
 			yield return new SkipThisFrame();
 		}
 		FistProjectile = null;
@@ -482,33 +700,9 @@ public class Guard_of_YggdrasilTown : ModNPC
 		EndAIPiece();
 	}
 
-	public IEnumerator<ICoroutineInstruction> Stand(int time)
-	{
-		TextureStyle = 0;
-		for (int t = 0; t < time; t++)
-		{
-			NPC.spriteDirection = NPC.direction;
-			NPC.frame = new Rectangle(0, 0, 40, 56);
-			NPC.velocity.X = 0;
-			Idle = false;
-			if (CanAttack0())
-			{
-				AICoroutines.Enqueue(new Coroutine(Attack0()));
-				break;
-			}
-			if (CanAttack1())
-			{
-				AICoroutines.Enqueue(new Coroutine(Attack1()));
-				break;
-			}
-			yield return new SkipThisFrame();
-		}
-		EndAIPiece();
-	}
-
 	public void EndAIPiece()
 	{
-		AICoroutines.Dequeue();
+		BehaviorsCoroutines.Dequeue();
 		Idle = true;
 	}
 
@@ -669,7 +863,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 		}
 		else if (TextureStyle == 2)
 		{
-			Texture2D texMain = ModAsset.Guard_of_YggdrasilTown.Value;
+			Texture2D texMain = ModAsset.Guard_of_YggdrasilTown_Punch.Value;
 			Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		}
 

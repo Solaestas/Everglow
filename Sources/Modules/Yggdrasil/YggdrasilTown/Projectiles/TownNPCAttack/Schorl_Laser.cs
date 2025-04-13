@@ -255,6 +255,21 @@ public class Schorl_Laser : ModProjectile
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
+		if(Timer > 50)
+		{
+			Texture2D slash = Commons.ModAsset.StarSlash.Value;
+			float value = 1f;
+			if (Projectile.timeLeft < 10f)
+			{
+				value *= Projectile.timeLeft / 10f;
+			}
+			if(Timer < 60)
+			{
+				value *= (Timer - 50) / 10f;
+			}
+			Main.spriteBatch.Draw(slash, Projectile.Center - Main.screenPosition, null, new Color(0.8f, 0.4f, 0.2f, 0) * value, MathHelper.Pi / 2f, slash.Size() * 0.5f, new Vector2(value * 3f, 1f + value * 0.4f) * 0.6f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(slash, Projectile.Center - Main.screenPosition, null, new Color(0.8f, 0.5f, 0.2f, 0) * value, 0, slash.Size() * 0.5f, new Vector2(value * 2.4f, 0.75f + value * 0.3f) * 0.6f, SpriteEffects.None, 0);
+		}
 		return false;
 	}
 }

@@ -1,5 +1,4 @@
 using System.Reflection;
-using Everglow.Commons.CustomTiles.Collide;
 
 namespace Everglow.Commons.Utilities;
 
@@ -183,9 +182,11 @@ public static class NPCUtils
 			return true;
 		}
 		int empty = 0;
-		for (int y = 0; y < 4; y++)
+
+		// This check was from 2 tile over NPC's bottom to 3 tiles below.
+		for (int y = -2; y < 4; y++)
 		{
-			if (!TileCollisionUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 15, y * 16)) && !Collision.SolidCollision(npc.BottomLeft + new Vector2(npc.direction * 15, y * 16),npc.width, npc.height))
+			if (!TileCollisionUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 15, y * 16)) && !Collision.SolidCollision(npc.BottomLeft + new Vector2(npc.direction * 15, y * 16), npc.width, npc.height))
 			{
 				empty++;
 			}
@@ -194,11 +195,29 @@ public static class NPCUtils
 				break;
 			}
 		}
-		if (empty >= 3)
+		if (empty >= 5)
 		{
-			return false;
+			empty = 0;
+
+			// To stop a walking NPC, a groove at lease 2 tiles is necessary.
+			for (int y = -2; y < 4; y++)
+			{
+				if (!TileCollisionUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 30, y * 16)) && !Collision.SolidCollision(npc.BottomLeft + new Vector2(npc.direction * 30, y * 16), npc.width, npc.height))
+				{
+					empty++;
+				}
+				else
+				{
+					break;
+				}
+			}
+			if (empty >= 5)
+			{
+				return false;
+			}
 		}
 
+		// Jumping limit was 6 tiles.(Only for normal NPC)
 		int obstructionHeight = 0;
 		for (int y = 1; y < 6; y++)
 		{
@@ -213,7 +232,7 @@ public static class NPCUtils
 		}
 		else if (checkTile.IsHalfBlock)
 		{
-			npc.velocity.Y = -2.5f;
+			npc.velocity.Y = -0.5f;
 		}
 		if (obstructionHeight >= 5)
 		{

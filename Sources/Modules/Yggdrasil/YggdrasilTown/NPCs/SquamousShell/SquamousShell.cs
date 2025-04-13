@@ -337,13 +337,7 @@ public class SquamousShell : ModNPC
 			{
 				NPC.velocity *= 0.98f;
 			}
-			foreach (var player in Main.player)
-			{
-				if (Rectangle.Intersect(NPC.Hitbox, player.Hitbox) != Rectangle.emptyRectangle)
-				{
-					player.velocity += new Vector2(NPC.velocity.X * 0.7f, -6f) * 0.5f;
-				}
-			}
+
 			NPC.rotation = (float)GetVector2Rot(GetRotationVec());
 			yield return new SkipThisFrame();
 		}
@@ -374,6 +368,12 @@ public class SquamousShell : ModNPC
 		}
 		NPC.position.X += newDirection * 20;
 		_coroutineManager.StartCoroutine(new Coroutine(NextAttack()));
+	}
+
+	private IEnumerator<ICoroutineInstruction> RushHitPlayerFly(Player player, Vector2 velocityHit)
+	{
+		player.velocity += velocityHit;
+		yield return new SkipThisFrame();
 	}
 
 	/// <summary>
@@ -1714,6 +1714,7 @@ public class SquamousShell : ModNPC
 		{
 			modifiers.FinalDamage *= 1.5f;
 			target.position += new Vector2(NPC.velocity.X * 0.7f, -6f) * 5;
+			_coroutineManager.StartCoroutine(new Coroutine(RushHitPlayerFly(target, new Vector2(NPC.velocity.X * 0.7f, -6f) * 1.5f)));
 		}
 		if (Smashing)
 		{

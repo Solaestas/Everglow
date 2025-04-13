@@ -19,6 +19,7 @@ public class Schorl_Explosion : ModProjectile
 		Projectile.penetrate = -1;
 		Projectile.width = 10;
 		Projectile.height = 10;
+		Projectile.extraUpdates = 8;
 		Projectile.aiStyle = -1;
 	}
 
@@ -73,6 +74,14 @@ public class Schorl_Explosion : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
+		float timeValue = (120 - Projectile.timeLeft) / 120f;
+		float dark = MathF.Pow(timeValue, 0.5f);
+		Color c = new Color(2f * (1 - timeValue), 1.6f * (1 - timeValue) * (1 - timeValue), 0, 0f);
+		Texture2D light = Commons.ModAsset.StarSlash.Value;
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, light.Width / 2, light.Height), c, MathF.Sin(Projectile.whoAmI - Projectile.position.X) * 6 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * 2.62f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, light.Width / 2, light.Height), c, MathF.Sin(Projectile.whoAmI) * 6 + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * 2.62f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, MathF.Sin(Projectile.whoAmI + Projectile.position.Y) * 6 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * 2.62f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, new Rectangle(0, 0, light.Width / 2, light.Height), c, MathF.Sin(Projectile.type * 0.4f + Projectile.whoAmI) * 6 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * 2.62f, SpriteEffects.None, 0);
 		return false;
 	}
 }

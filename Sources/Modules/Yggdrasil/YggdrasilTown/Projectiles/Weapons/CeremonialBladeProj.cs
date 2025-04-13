@@ -393,7 +393,6 @@ public class CeremonialBladeProj : ModProjectile, IWarpProjectile_warpStyle2
 
 		if (Timer >= PrepTime)
 		{
-			SoundEngine.PlaySound(SoundID.Item1); // Play sword sound here since playing it on spawn is too early
 			CurrentStage = AttackStage.Execute; // If attack is over prep time, we go to next stage
 		}
 	}
@@ -414,7 +413,7 @@ public class CeremonialBladeProj : ModProjectile, IWarpProjectile_warpStyle2
 		{
 			Progress = MathHelper.SmoothStep(0, SPINRANGE, (1f - UNWIND / 2) * Timer / (ExecTime * SPINTIME));
 
-			if (Timer == (int)(ExecTime * SPINTIME * 3 / 4))
+			if (Timer == (int)(ExecTime * SPINTIME * 3.5f / 4))
 			{
 				SoundEngine.PlaySound(SoundID.Item1); // Play sword sound again
 				Projectile.ResetLocalNPCHitImmunity(); // Reset the local npc hit immunity for second half of spin

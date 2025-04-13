@@ -13,11 +13,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 // Schorl, The Teahouse Lady
 public class TeahouseLady : ModNPC
 {
-	private bool canDespawn = false;
-	private int aiMainCount = 0;
-
 	/// <summary>
-	/// Control specific behaviors.
+	/// Control specific behaviors; Control by _townNPCGeneralCoroutine.
 	/// </summary>
 	public CoroutineManager _townNPCBehaviorCoroutine = new CoroutineManager();
 
@@ -25,10 +22,14 @@ public class TeahouseLady : ModNPC
 	/// Manage behavior pool.
 	/// </summary>
 	public CoroutineManager _townNPCGeneralCoroutine = new CoroutineManager();
+
+	/// <summary>
+	/// Behaviors pool, waiting for _townNPCBehaviorCoroutine to execute.
+	/// </summary>
 	public Queue<Coroutine> BehaviorsCoroutines = new Queue<Coroutine>();
-	public bool Idle = true;
 	public bool Talking = false;
 	public bool Sit = false;
+	public bool Idle = true;
 	public bool Attacking0 = false;
 	public int FrameHeight = 56;
 	public int Attack0Target = -1;
@@ -44,6 +45,10 @@ public class TeahouseLady : ModNPC
 	/// A vector2 for total threaten direction;
 	/// </summary>
 	public Vector2 TotalThreatenDirection = Vector2.zeroVector;
+
+	public Point AnchorForBehaviorPos => YggdrasilTownCentralSystem.TownTopLeftWorldCoord.ToTileCoordinates() + new Point(405, 157);
+
+	private int aiMainCount = 0;
 
 	public override string HeadTexture => ModAsset.TeahouseLady_Head_Mod;
 
@@ -103,21 +108,30 @@ public class TeahouseLady : ModNPC
 		if (!Talking)
 		{
 			CheckDangers();
-			if (BehaviorsCoroutines.Count <= 1)
+			if (BehaviorsCoroutines.Count <= 0)
 			{
+				Idle = true;
 				if (Peace())
 				{
-					if (Main.rand.NextBool())
+					if (Sit)
 					{
-						BehaviorsCoroutines.Enqueue(new Coroutine(Stand(Main.rand.Next(60, 90))));
+						BehaviorsCoroutines.Enqueue(new Coroutine(SitDown(Main.rand.Next(60, 90))));
 					}
 					else
 					{
-						BehaviorsCoroutines.Enqueue(new Coroutine(Walk(Main.rand.Next(60, 90))));
+						if (Main.rand.NextBool())
+						{
+							BehaviorsCoroutines.Enqueue(new Coroutine(Stand(Main.rand.Next(60, 90))));
+						}
+						else
+						{
+							BehaviorsCoroutines.Enqueue(new Coroutine(Walk(Main.rand.Next(60, 900))));
+						}
 					}
 				}
 				else if (CanEscape())
 				{
+					Sit = false;
 					if (TotalThreaten < 1 && Main.rand.NextBool(2))
 					{
 						TryAttack();
@@ -129,6 +143,7 @@ public class TeahouseLady : ModNPC
 				}
 				else
 				{
+					Sit = false;
 					TryAttack();
 				}
 			}
@@ -143,7 +158,6 @@ public class TeahouseLady : ModNPC
 
 		if (aiMainCount == 0)
 		{
-			Idle = true;
 			_townNPCGeneralCoroutine.StartCoroutine(new Coroutine(BehaviorControl()));
 		}
 
@@ -161,78 +175,6 @@ public class TeahouseLady : ModNPC
 		}
 	}
 
-	public void TryAttack()
-	{
-		float index = Main.rand.NextFloat(100);
-		if (index < 75)
-		{
-			if (CanAttack0())
-			{
-				BehaviorsCoroutines.Enqueue(new Coroutine(Attack0()));
-			}
-			else if (CanAttack1())
-			{
-				BehaviorsCoroutines.Enqueue(new Coroutine(Attack1()));
-			}
-		}
-		else
-		{
-			if (CanAttack1())
-			{
-				BehaviorsCoroutines.Enqueue(new Coroutine(Attack1()));
-			}
-			else if (CanAttack0())
-			{
-				BehaviorsCoroutines.Enqueue(new Coroutine(Attack0()));
-			}
-		}
-	}
-
-	public void CheckDangers()
-	{
-		ThreatenTarget = -1;
-		TotalThreatenDirection = Vector2.zeroVector;
-		TotalThreaten = 0f;
-		float minDis = 300;
-		foreach (var npc in Main.npc)
-		{
-			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy && !npc.CountsAsACritter && npc != NPC)
-			{
-				Vector2 distance = npc.Center - NPC.Center;
-				if (distance.Length() < 300 && npc.damage > 0)
-				{
-					TotalThreatenDirection += (-distance.NormalizeSafe() / (distance.Length() + 1)) * 1f * npc.damage;
-					TotalThreaten += (-distance.NormalizeSafe() / (distance.Length() + 1)).Length() * 1f * npc.damage;
-					if (distance.Length() < minDis)
-					{
-						minDis = distance.Length();
-						ThreatenTarget = npc.whoAmI;
-					}
-				}
-			}
-		}
-	}
-
-	public bool CheckTalkingPlayer()
-	{
-		for (int j = 0; j < 255; j++)
-		{
-			if (Main.player[j].active && Main.player[j].talkNPC == NPC.whoAmI)
-			{
-				if (Main.player[j].position.X + Main.player[j].width / 2 < NPC.position.X + NPC.width / 2)
-				{
-					NPC.direction = -1;
-				}
-				else
-				{
-					NPC.direction = 1;
-				}
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public bool Peace()
 	{
 		if (TotalThreaten > 0.005)
@@ -244,7 +186,22 @@ public class TeahouseLady : ModNPC
 
 	public bool CanEscape()
 	{
-		if (TotalThreaten > 0.1f && MathF.Abs(TotalThreatenDirection.X) < 0.05f)
+		// Main.NewText(TotalThreaten);
+		// Main.NewText(MathF.Abs(TotalThreatenDirection.X), Color.Red);
+		if (!CanContinueWalk(NPC))
+		{
+			return false;
+		}
+		if (TotalThreaten > MathF.Abs(TotalThreatenDirection.X) * 3f)
+		{
+			return false;
+		}
+		var npcTilePos = NPC.Center.ToTileCoordinates();
+		if (npcTilePos.X < AnchorForBehaviorPos.X - 90 && TotalThreatenDirection.X < 0)
+		{
+			return false;
+		}
+		if (npcTilePos.X > AnchorForBehaviorPos.X + 90 && TotalThreatenDirection.X > 0)
 		{
 			return false;
 		}
@@ -315,7 +272,130 @@ public class TeahouseLady : ModNPC
 		return false;
 	}
 
-	public Point AnchorForBehaviorPos => YggdrasilTownCentralSystem.TownTopLeftWorldCoord.ToTileCoordinates() + new Point(405, 157);
+	public bool CheckTalkingPlayer()
+	{
+		for (int j = 0; j < 255; j++)
+		{
+			if (Main.player[j].active && Main.player[j].talkNPC == NPC.whoAmI)
+			{
+				if (Main.player[j].position.X + Main.player[j].width / 2 < NPC.position.X + NPC.width / 2)
+				{
+					NPC.direction = -1;
+				}
+				else
+				{
+					NPC.direction = 1;
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public bool CanHitNPCLine(NPC target)
+	{
+		bool canHit = true;
+		var toTarget = target.Center - NPC.Center;
+		float distance = toTarget.Length() / 6f;
+		if (distance < 2)
+		{
+			return true;
+		}
+		var step = toTarget.NormalizeSafe() * 6f;
+		var checkPos = NPC.Center;
+		for (int i = 0; i < distance; i++)
+		{
+			checkPos += step;
+			if (Collision.SolidCollision(checkPos - new Vector2(8), 16, 16))
+			{
+				canHit = false;
+				break;
+			}
+		}
+		return canHit;
+	}
+
+	public void CheckDuplicatedSelf()
+	{
+		foreach (NPC npc in Main.npc)
+		{
+			if (npc != null && npc.type == Type && npc.active && npc != NPC)
+			{
+				npc.active = false;
+			}
+			if (NPC.CountNPCS(Type) <= 1)
+			{
+				break;
+			}
+		}
+	}
+
+	public void TryAttack()
+	{
+		float index = Main.rand.NextFloat(100);
+		if (ThreatenTarget is >= 0 and < 200)
+		{
+			NPC npc = Main.npc[ThreatenTarget];
+			if (npc != null && npc.active)
+			{
+				// Total damage calculate.
+				if (npc.life > 300)
+				{
+					index = 100;
+				}
+			}
+		}
+		if (index < 75)
+		{
+			if (CanAttack0())
+			{
+				BehaviorsCoroutines.Enqueue(new Coroutine(Attack0()));
+			}
+			else if (CanAttack1())
+			{
+				BehaviorsCoroutines.Enqueue(new Coroutine(Attack1()));
+			}
+		}
+		else
+		{
+			if (CanAttack1())
+			{
+				BehaviorsCoroutines.Enqueue(new Coroutine(Attack1()));
+			}
+			else if (CanAttack0())
+			{
+				BehaviorsCoroutines.Enqueue(new Coroutine(Attack0()));
+			}
+		}
+	}
+
+	/// <summary>
+	/// Analysis surrounding threaten sources.
+	/// </summary>
+	public void CheckDangers()
+	{
+		ThreatenTarget = -1;
+		TotalThreatenDirection = Vector2.zeroVector;
+		TotalThreaten = 0f;
+		float minDis = 300;
+		foreach (var npc in Main.npc)
+		{
+			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy && !npc.CountsAsACritter && npc != NPC)
+			{
+				Vector2 distance = npc.Center - NPC.Center;
+				if (distance.Length() < 300 && npc.damage > 0)
+				{
+					TotalThreatenDirection += (-distance.NormalizeSafe() / (distance.Length() + 1)) * 1f * npc.damage;
+					TotalThreaten += (-distance.NormalizeSafe() / (distance.Length() + 1)).Length() * 1f * npc.damage;
+					if (distance.Length() < minDis)
+					{
+						minDis = distance.Length();
+						ThreatenTarget = npc.whoAmI;
+					}
+				}
+			}
+		}
+	}
 
 	public void CheckInSuitableArea()
 	{
@@ -348,17 +428,27 @@ public class TeahouseLady : ModNPC
 		NPC.Center = AnchorForBehaviorPos.ToWorldCoordinates() + new Vector2(0, 48);
 	}
 
+	public void EndAIPiece()
+	{
+		Idle = true;
+		BehaviorsCoroutines.Dequeue();
+	}
+
+	/// <summary>
+	/// None-Inheritable
+	/// </summary>
+	/// <returns></returns>
 	public IEnumerator<ICoroutineInstruction> BehaviorControl()
 	{
 		while (true)
 		{
 			CheckInSuitableArea();
+			CheckDuplicatedSelf();
 			aiMainCount++;
 			if (BehaviorsCoroutines.Count > 0 && Idle)
 			{
-				_townNPCBehaviorCoroutine.StartCoroutine(BehaviorsCoroutines.First());
-				Sit = false;
 				Idle = false;
+				_townNPCBehaviorCoroutine.StartCoroutine(BehaviorsCoroutines.First());
 			}
 			if (aiMainCount >= 2)
 			{
@@ -368,11 +458,87 @@ public class TeahouseLady : ModNPC
 		}
 	}
 
+	/// <summary>
+	/// Sitting silently; Inheritable
+	/// </summary>
+	/// <param name="time"></param>
+	/// <returns></returns>
+	public IEnumerator<ICoroutineInstruction> SitDown(int time)
+	{
+		Sit = true;
+		for (int t = 0; t < time; t++)
+		{
+			NPC.frame = new Rectangle(0, 560, 48, 56);
+			NPC.velocity.X = 0;
+			NPC.spriteDirection = NPC.direction;
+			if (!Peace())
+			{
+				if (TotalThreatenDirection.X > 0)
+				{
+					NPC.direction = 1;
+				}
+				else
+				{
+					NPC.direction = -1;
+				}
+				break;
+			}
+			yield return new SkipThisFrame();
+		}
+		Sit = false;
+		EndAIPiece();
+	}
+
+	/// <summary>
+	/// Standing silently; Inheritable
+	/// </summary>
+	/// <param name="time"></param>
+	/// <returns></returns>
+	public IEnumerator<ICoroutineInstruction> Stand(int time)
+	{
+		for (int t = 0; t < time; t++)
+		{
+			NPC.spriteDirection = NPC.direction;
+			NPC.frame = new Rectangle(0, 616, 48, FrameHeight);
+			NPC.velocity.X = 0;
+			NPC.spriteDirection = NPC.direction;
+			if (!Peace())
+			{
+				if (TotalThreatenDirection.X > 0)
+				{
+					NPC.direction = 1;
+				}
+				else
+				{
+					NPC.direction = -1;
+				}
+				break;
+			}
+			yield return new SkipThisFrame();
+		}
+		EndAIPiece();
+	}
+
+	/// <summary>
+	/// Walking, include escape under duress, jump in front of a protruding tile, door opening(closing), check chair for sitting; Inheritable
+	/// </summary>
+	/// <param name="time"></param>
+	/// <returns></returns>
 	public IEnumerator<ICoroutineInstruction> Walk(int time)
 	{
 		NPC.direction = ChooseDirection(NPC);
 		for (int t = 0; t < time; t++)
 		{
+			// Too far from home will trigger teleportation.
+			var npcTilePos = NPC.Center.ToTileCoordinates();
+			if (npcTilePos.X < AnchorForBehaviorPos.X - 90)
+			{
+				NPC.direction = 1;
+			}
+			if (npcTilePos.X > AnchorForBehaviorPos.X + 90)
+			{
+				NPC.direction = -1;
+			}
 			if (TotalThreatenDirection.X > 0)
 			{
 				NPC.direction = 1;
@@ -392,7 +558,6 @@ public class TeahouseLady : ModNPC
 				break;
 			}
 			NPC.velocity.X = NPC.direction * speed;
-			Idle = false;
 			NPC.frameCounter += Math.Abs(NPC.velocity.X);
 			if (NPC.frameCounter > 4)
 			{
@@ -411,7 +576,8 @@ public class TeahouseLady : ModNPC
 			{
 				break;
 			}
-			if (Main.rand.NextBool(240))
+
+			if (Main.rand.NextBool(24))
 			{
 				if (CheckSit(NPC))
 				{
@@ -428,7 +594,7 @@ public class TeahouseLady : ModNPC
 	}
 
 	/// <summary>
-	/// Laser
+	/// Laser; None-Inheritable
 	/// </summary>
 	/// <returns></returns>
 	public IEnumerator<ICoroutineInstruction> Attack0()
@@ -448,6 +614,7 @@ public class TeahouseLady : ModNPC
 		Attacking0 = true;
 		for (int t = 0; t < 180; t++)
 		{
+			NPC.frame = new Rectangle(0, 672, 48, FrameHeight);
 			Vector2 toTarget = target.Center - NPC.Center;
 			if (toTarget.X > 0)
 			{
@@ -475,6 +642,10 @@ public class TeahouseLady : ModNPC
 		EndAIPiece();
 	}
 
+	/// <summary>
+	/// Explosion; None-Inheritable
+	/// </summary>
+	/// <returns></returns>
 	public IEnumerator<ICoroutineInstruction> Attack1()
 	{
 		if (Attack1Target == -1)
@@ -506,7 +677,6 @@ public class TeahouseLady : ModNPC
 			}
 			NPC.spriteDirection = NPC.direction;
 			NPC.velocity *= 0;
-			Idle = false;
 			if (target == null || !target.active)
 			{
 				break;
@@ -519,65 +689,47 @@ public class TeahouseLady : ModNPC
 		EndAIPiece();
 	}
 
-	public IEnumerator<ICoroutineInstruction> Stand(int time)
-	{
-		for (int t = 0; t < time; t++)
-		{
-			NPC.spriteDirection = NPC.direction;
-			NPC.frame = new Rectangle(0, 616, 48, FrameHeight);
-			NPC.velocity.X = 0;
-			Idle = false;
-			NPC.spriteDirection = NPC.direction;
-			if (!Peace())
-			{
-				if (TotalThreatenDirection.X > 0)
-				{
-					NPC.direction = 1;
-				}
-				else
-				{
-					NPC.direction = -1;
-				}
-				BehaviorsCoroutines.Enqueue(new Coroutine(Walk(60)));
-				break;
-			}
-			yield return new SkipThisFrame();
-		}
-		EndAIPiece();
-	}
-
-	public bool CanHitNPCLine(NPC target)
-	{
-		bool canHit = true;
-		var toTarget = target.Center - NPC.Center;
-		float distance = toTarget.Length() / 6f;
-		if (distance < 2)
-		{
-			return true;
-		}
-		var step = toTarget.NormalizeSafe() * 6f;
-		var checkPos = NPC.Center;
-		for (int i = 0; i < distance; i++)
-		{
-			checkPos += step;
-			if (Collision.SolidCollision(checkPos - new Vector2(8), 16, 16))
-			{
-				canHit = false;
-				break;
-			}
-		}
-		return canHit;
-	}
-
-	public void EndAIPiece()
-	{
-		BehaviorsCoroutines.Dequeue();
-		Idle = true;
-	}
-
 	public override bool CanChat()
 	{
 		return true;
+	}
+
+	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+	{
+		Texture2D texMain = ModAsset.TeahouseLady.Value;
+		Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height + 6) * 0.5f;
+		Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+
+		if (Attacking0)
+		{
+			Rectangle armFrame = new Rectangle(0, 730, 8, 18);
+			if (NPC.spriteDirection == 1)
+			{
+				armFrame = new Rectangle(10, 730, 8, 18);
+			}
+			if (Attack0Target is >= 0 and < 200)
+			{
+				NPC target = Main.npc[Attack0Target];
+
+				// float rotationAttack = (Main.MouseWorld - NPC.Center).ToRotationSafe() - MathHelper.PiOver2;
+				float rotationAttack = (target.Center - NPC.Center).ToRotationSafe() - MathHelper.PiOver2;
+				Main.spriteBatch.Draw(texMain, drawPos + new Vector2(0, -2), armFrame, drawColor, rotationAttack, new Vector2(4, 4), NPC.scale, SpriteEffects.None, 0);
+
+				// Texture2D mark = ModAsset.Schorl_Mark.Value;
+				// Main.EntitySpriteDraw(mark, target.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), target.rotation, mark.Size() * 0.5f, target.scale, SpriteEffects.None, 0);
+			}
+		}
+
+		// Point checkPoint = (NPC.Bottom + new Vector2(8 * NPC.direction, 8)).ToTileCoordinates() + new Point(NPC.direction, -1);
+		// Tile tile = Main.tile[checkPoint];
+		// Texture2D block = Commons.ModAsset.TileBlock.Value;
+		// Main.spriteBatch.Draw(block, checkPoint.ToWorldCoordinates() - Main.screenPosition, null, new Color(1f, 0f, 0f, 0.5f), 0, block.Size() * 0.5f, 1, SpriteEffects.None, 0);
+		return false;
+	}
+
+	public override bool CheckActive()
+	{
+		return false;
 	}
 
 	public override string GetChat()
@@ -608,58 +760,6 @@ public class TeahouseLady : ModNPC
 
 	public override void FindFrame(int frameHeight)
 	{
-		if (Idle)
-		{
-			if (Sit)
-			{
-				NPC.frame.Y = 560;
-			}
-			else
-			{
-				NPC.frame.Y = 0;
-			}
-		}
-		if (Attacking0)
-		{
-			NPC.frame.Y = 672;
-		}
 		base.FindFrame(frameHeight);
-	}
-
-	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-	{
-		Texture2D texMain = ModAsset.TeahouseLady.Value;
-		Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height + 8) * 0.5f;
-		Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-
-		if (Attacking0)
-		{
-			Rectangle armFrame = new Rectangle(0, 730, 8, 18);
-			if (NPC.spriteDirection == 1)
-			{
-				armFrame = new Rectangle(10, 730, 8, 18);
-			}
-			if (Attack0Target is >= 0 and < 200)
-			{
-				NPC target = Main.npc[Attack0Target];
-
-				// float rotationAttack = (Main.MouseWorld - NPC.Center).ToRotationSafe() - MathHelper.PiOver2;
-				float rotationAttack = (target.Center - NPC.Center).ToRotationSafe() - MathHelper.PiOver2;
-				Main.spriteBatch.Draw(texMain, drawPos + new Vector2(0, 0), armFrame, drawColor, rotationAttack, new Vector2(4, 4), NPC.scale, SpriteEffects.None, 0);
-				//Texture2D mark = ModAsset.Schorl_Mark.Value;
-				//Main.EntitySpriteDraw(mark, target.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), target.rotation, mark.Size() * 0.5f, target.scale, SpriteEffects.None, 0);
-			}
-		}
-
-		// Point checkPoint = (NPC.Bottom + new Vector2(8 * NPC.direction, 8)).ToTileCoordinates() + new Point(NPC.direction, -1);
-		// Tile tile = Main.tile[checkPoint];
-		// Texture2D block = Commons.ModAsset.TileBlock.Value;
-		// Main.spriteBatch.Draw(block, checkPoint.ToWorldCoordinates() - Main.screenPosition, null, new Color(1f, 0f, 0f, 0.5f), 0, block.Size() * 0.5f, 1, SpriteEffects.None, 0);
-		return false;
-	}
-
-	public override bool CheckActive()
-	{
-		return canDespawn;
 	}
 }
