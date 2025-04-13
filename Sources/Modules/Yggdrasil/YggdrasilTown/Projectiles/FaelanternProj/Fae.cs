@@ -22,7 +22,7 @@ public class Fae : TrailingProjectile
 {
 	public override void SetStaticDefaults()
 	{
-		Main.projFrames[Projectile.type] = 2;
+		Main.projFrames[Projectile.type] = 7;
 	}
 
 	public enum State
@@ -37,8 +37,8 @@ public class Fae : TrailingProjectile
 
 	public override void SetDef()
 	{
-		Projectile.width = 20;
-		Projectile.height = 24;
+		Projectile.width = 26;
+		Projectile.height = 26;
 		Projectile.netImportant = true;
 		Projectile.friendly = true;
 		Projectile.ignoreWater = true;
@@ -86,7 +86,7 @@ public class Fae : TrailingProjectile
 
 
 		timer++;
-		if (timer % 4 == 0)
+		if (timer % 3 == 0)
 		{
 			Projectile.frame++;
 		}
@@ -201,9 +201,9 @@ public class Fae : TrailingProjectile
 		float factor = MathHelper.Clamp(timer / 60f, 0f, 1f);
 		Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
 		var origin = new Vector2(tex.Width / 2, tex.Height / 2);
-		Rectangle sourceRec = tex.Frame(1, 2, 0, Projectile.frame % 2);
+		Rectangle sourceRec = tex.Frame(1, 7, 0, Projectile.frame % 7);
 
-		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition + new Vector2(0f, 12f), sourceRec, Color.White, 0f, origin, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition + new Vector2(0f, 70f), sourceRec, Color.White, 0f, origin, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		return false;
 	}
 
