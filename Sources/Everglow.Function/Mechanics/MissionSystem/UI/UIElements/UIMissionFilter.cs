@@ -51,7 +51,6 @@ public class UIMissionFilter : BaseElement
 
 	private float MouseRotation => HitBox.Center.ToVector2().AngleTo(Main.MouseScreen);
 
-	#region Static methods
 	private static MissionType? RotationToMissionType(float rotation)
 	{
 		var unit = MathHelper.TwoPi / MissionTypeList.Count;
@@ -60,11 +59,42 @@ public class UIMissionFilter : BaseElement
 		return MissionTypeList[index];
 	}
 
+	private static MissionType? RotationToMissionTypeCheckGemMisalignment(float rotation)
+	{
+		var unit = MathHelper.TwoPi / MissionTypeList.Count;
+		var standard = ((rotation % MathHelper.TwoPi) + MathHelper.TwoPi) % MathHelper.TwoPi;
+		var index = (int)Math.Round(standard / unit) % MissionTypeList.Count;
+		float angularMisalignment = MathF.Abs((standard + unit * 0.5f) % unit - unit * 0.5f);
+
+		// TODO: A new kind of MissionType, only trigger when laser can't pass a gem in the turntable.
+		// PoolType as well.
+		if (angularMisalignment > 0.05f)
+		{
+			index = 1;
+		}
+		return MissionTypeList[index];
+	}
+
 	private static PoolType? RotationToPoolType(float rotation)
 	{
 		var unit = MathHelper.TwoPi / PoolTypeList.Count;
 		var standard = ((rotation % MathHelper.TwoPi) + MathHelper.TwoPi) % MathHelper.TwoPi;
 		var index = (int)Math.Round(standard / unit) % PoolTypeList.Count;
+		return PoolTypeList[index];
+	}
+
+	private static PoolType? RotationToPoolTypeCheckGemMisalignment(float rotation)
+	{
+		var unit = MathHelper.TwoPi / PoolTypeList.Count;
+		var standard = ((rotation % MathHelper.TwoPi) + MathHelper.TwoPi) % MathHelper.TwoPi;
+		var index = (int)Math.Round(standard / unit) % PoolTypeList.Count;
+		float angularMisalignment = MathF.Abs((standard + unit * 0.5f) % unit - unit * 0.5f);
+
+		// TODO: A new kind of PoolType, only trigger when laser can't pass a gem in the turntable.
+		// if (angularMisalignment > 0.05f)
+		// {
+		// index = 1;
+		// }
 		return PoolTypeList[index];
 	}
 
@@ -150,8 +180,6 @@ public class UIMissionFilter : BaseElement
 		return currentRotation + diff;
 	}
 
-	#endregion
-
 	public override void OnInitialization()
 	{
 		base.OnInitialization();
@@ -167,7 +195,7 @@ public class UIMissionFilter : BaseElement
 	public override void Update(GameTime gt)
 	{
 		// Update mission type
-		var missionType = RotationToMissionType(_outerRotation);
+		var missionType = RotationToMissionTypeCheckGemMisalignment(_outerRotation);
 		if (MissionTypeValue != missionType)
 		{
 			MissionTypeValue = missionType;
