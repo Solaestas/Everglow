@@ -25,7 +25,7 @@ public class FaelanternProj : ModProjectile
 		Projectile.friendly = true;
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = false;
-		Projectile.timeLeft = 36000;
+		Projectile.timeLeft = 360000;
 		Projectile.penetrate = -1;
 		Projectile.sentry = true;
 		Projectile.DamageType = DamageClass.Summon;
@@ -71,8 +71,8 @@ public class FaelanternProj : ModProjectile
 	Projectile Fae;
 	public override void AI()
 	{
+		
 		FaelanternSkeleton.AnimationState.Apply(FaelanternSkeleton.Skeleton);
-		Projectile.timeLeft++;
 		timer++;
 		if (timer == 10)
 		{
@@ -89,6 +89,7 @@ public class FaelanternProj : ModProjectile
 		FaelanternSkeleton.Skeleton.FindBone("root").ScaleX = 1;
 		Projectile.velocity = Vector2.zeroVector;
 		Suicide();
+		Main.NewText(Projectile.timeLeft);
 		return;
 	}
 
