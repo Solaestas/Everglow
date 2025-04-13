@@ -3,14 +3,12 @@ using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.SquamousBossAttack;
 
-public class SquamousRollingStone_fly : ModProjectile
+public class SquamousRollingStone : ModProjectile
 {
 	public int StartDirection = 0;
 	public int StopTimer = 0;
-
-	public override string Texture => ModAsset.SquamousRollingStone_Mod;
 
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -66,6 +64,7 @@ public class SquamousRollingStone_fly : ModProjectile
 		{
 			SoundEngine.PlaySound(new SoundStyle(ModAsset.SquamousShell_RockExplosion_Mod), Projectile.Center);
 		}
+
 		if (Projectile.timeLeft == 30)
 		{
 			var explosion = new RollingRockExplosion
@@ -75,18 +74,15 @@ public class SquamousRollingStone_fly : ModProjectile
 				Visible = true,
 				position = Projectile.Center,
 				maxTime = 240f,
-				scale = Main.rand.NextFloat(920f, 980f),
+				scale = Main.rand.NextFloat(940f, 1000f) * Projectile.scale,
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f) },
 			};
 			Ins.VFXManager.Add(explosion);
 		}
-		if(Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height + 10))
-		{
-			Projectile.velocity.X *= 0.9f;
-		}
+		Projectile.velocity.X += StartDirection * 0.04f;
 		Projectile.velocity.Y += 0.2f;
-		Projectile.rotation += Projectile.velocity.X * 0.01f;
+		Projectile.rotation += Projectile.velocity.X * 0.01f / MathF.Pow(Projectile.scale + 1f, 1f);
 	}
 
 	public void GenerateSmogAtBottom(int Frequency)
@@ -143,8 +139,28 @@ public class SquamousRollingStone_fly : ModProjectile
 		{
 			Dust.NewDust(Projectile.Center - Projectile.velocity * 2 - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone>(), 0f, 0f, 0, default, 0.7f);
 		}
+		for (int x = 0; x < 40; x++)
+		{
+			Dust d0 = Dust.NewDustDirect(Projectile.Bottom - new Vector2(4, -4), 0, 0, ModContent.DustType<SquamousShellWingDust>());
+			d0.velocity = new Vector2(0, Main.rand.NextFloat(12, 30)).RotatedByRandom(MathHelper.TwoPi) * Projectile.scale;
+			if(d0.velocity.Y > 5f)
+			{
+				d0.velocity.Y *= -1;
+			}
+			d0.noGravity = false;
+			d0.scale *= Main.rand.NextFloat(1.3f);
+		}
 		GenerateSmog(8);
-		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<SquamousRockExplosion>(), Projectile.damage * 3, Projectile.knockBack, Projectile.owner, 40);
+		int scaleDamage = 2;
+		if (Main.expertMode)
+		{
+			scaleDamage = 3;
+		}
+		if (Main.masterMode)
+		{
+			scaleDamage = 3;
+		}
+		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<SquamousRockExplosion>(), Projectile.damage * scaleDamage, Projectile.knockBack, Projectile.owner, 40);
 		ShakerManager.AddShaker(Projectile.Center, Vector2.One.RotatedByRandom(MathHelper.Pi), 120, 20f, 120, 0.9f, 0.8f, 150);
 	}
 
@@ -152,7 +168,7 @@ public class SquamousRollingStone_fly : ModProjectile
 	{
 		for (int g = 0; g < Frequency / 2 + 1; g++)
 		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi) * Projectile.scale;
 			var somg = new RockSmogDust
 			{
 				velocity = newVelocity,
@@ -168,7 +184,7 @@ public class SquamousRollingStone_fly : ModProjectile
 		}
 		for (int g = 0; g < Frequency * 10; g++)
 		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(25f, 46f)).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(25f, 46f)).RotatedByRandom(MathHelper.TwoPi) * Projectile.scale;
 			var somg = new RockSmog_ConeDust
 			{
 				velocity = newVelocity,
@@ -182,7 +198,7 @@ public class SquamousRollingStone_fly : ModProjectile
 			};
 			Ins.VFXManager.Add(somg);
 		}
-		for (int g = 0; g < Frequency * 20; g++)
+		for (int g = 0; g < Frequency * 20 * Projectile.scale; g++)
 		{
 			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1.0f, 34f)).RotatedByRandom(MathHelper.TwoPi);
 			var spark = new Spark_MoonBladeDust
@@ -191,8 +207,8 @@ public class SquamousRollingStone_fly : ModProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
-				maxTime = Main.rand.Next(70, 125),
-				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(9f, 47.0f)),
+				maxTime = Main.rand.Next(70, 125) * (Projectile.scale + 1f) / 2f,
+				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(9f, 47.0f)) * Projectile.scale,
 				rotation = Main.rand.NextFloat(6.283f),
 				noGravity = true,
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f) },

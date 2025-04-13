@@ -1,10 +1,9 @@
 using System.Reflection;
-using Everglow.Commons.CustomTiles.Collide;
 
 namespace Everglow.Commons.Utilities;
 
 /// <summary>
-/// 此特征可以免去由于模式改变而引起的基础数值被tml篡改
+/// This Attribute can ignore game-mode-based NPC scale.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public class NoGameModeScaleAttribute : Attribute
@@ -14,7 +13,7 @@ public class NoGameModeScaleAttribute : Attribute
 public class NoGameModeScale : GlobalNPC
 {
 	/// <summary>
-	/// 拒绝由于模式改变而引起的基础数值被tml篡改
+	/// Rejection of base value tampering by vanilla due to mode change.
 	/// </summary>
 	/// <param name="numPlayers"></param>
 	/// <param name="balance"></param>
@@ -162,7 +161,6 @@ public static class NPCUtils
 			{
 				Vector2 bottom = default;
 				npc.SitDown(npc.Center.ToTileCoordinates(), out npc.direction, out bottom);
-				Main.NewText(bottom);
 				npc.spriteDirection = npc.direction;
 				npc.velocity *= 0;
 				return true;
@@ -184,9 +182,11 @@ public static class NPCUtils
 			return true;
 		}
 		int empty = 0;
-		for (int y = 0; y < 4; y++)
+
+		// This check was from 2 tile over NPC's bottom to 3 tiles below.
+		for (int y = -2; y < 4; y++)
 		{
-			if (!TileCollisionUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 15, y * 16)))
+			if (!TileCollisionUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 15, y * 16)) && !Collision.SolidCollision(npc.BottomLeft + new Vector2(npc.direction * 15, y * 16), npc.width, npc.height))
 			{
 				empty++;
 			}
@@ -195,11 +195,29 @@ public static class NPCUtils
 				break;
 			}
 		}
-		if (empty >= 3)
+		if (empty >= 5)
 		{
-			return false;
+			empty = 0;
+
+			// To stop a walking NPC, a groove at lease 2 tiles is necessary.
+			for (int y = -2; y < 4; y++)
+			{
+				if (!TileCollisionUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 30, y * 16)) && !Collision.SolidCollision(npc.BottomLeft + new Vector2(npc.direction * 30, y * 16), npc.width, npc.height))
+				{
+					empty++;
+				}
+				else
+				{
+					break;
+				}
+			}
+			if (empty >= 5)
+			{
+				return false;
+			}
 		}
 
+		// Jumping limit was 6 tiles.(Only for normal NPC)
 		int obstructionHeight = 0;
 		for (int y = 1; y < 6; y++)
 		{
@@ -214,7 +232,7 @@ public static class NPCUtils
 		}
 		else if (checkTile.IsHalfBlock)
 		{
-			npc.velocity.Y = -2.5f;
+			npc.velocity.Y = -0.5f;
 		}
 		if (obstructionHeight >= 5)
 		{

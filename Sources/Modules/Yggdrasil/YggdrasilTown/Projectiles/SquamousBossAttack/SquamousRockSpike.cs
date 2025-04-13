@@ -4,7 +4,7 @@ using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.SquamousBossAttack;
 
 public class SquamousRockSpike : ModProjectile
 {
@@ -28,6 +28,14 @@ public class SquamousRockSpike : ModProjectile
 	public override void OnSpawn(IEntitySource source)
 	{
 		Target = (int)Projectile.ai[0];
+		if(Main.expertMode)
+		{
+			Projectile.extraUpdates = 1;
+		}
+		if (Main.masterMode)
+		{
+			Projectile.extraUpdates = 3;
+		}
 	}
 
 	public override void AI()
@@ -54,15 +62,25 @@ public class SquamousRockSpike : ModProjectile
 			if (Projectile.timeLeft >= 3520)
 			{
 				Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-				Projectile.velocity = Projectile.velocity * 0.3f + Utils.SafeNormalize(player.Center - Projectile.Center, Vector2.zeroVector) * 0.4f;
+				Projectile.velocity = Projectile.velocity * 0.3f + (player.Center - Projectile.Center).SafeNormalize(Vector2.zeroVector) * 0.4f;
 			}
 			else
 			{
 				if (Projectile.timeLeft < 3500)
 				{
-					if (Projectile.velocity.Length() < 10f)
+					Projectile.extraUpdates = 0;
+					float maxSpeed = 10f;
+					if(Main.expertMode)
 					{
-						Projectile.velocity *= 10f / Projectile.velocity.Length();
+						maxSpeed = 12f;
+					}
+					if(Main.masterMode)
+					{
+						maxSpeed = 20f;
+					}
+					if (Projectile.velocity.Length() < maxSpeed)
+					{
+						Projectile.velocity *= maxSpeed / Projectile.velocity.Length();
 					}
 				}
 			}
@@ -120,7 +138,7 @@ public class SquamousRockSpike : ModProjectile
 
 	public void ConcentratingDust(int Frequency)
 	{
-		for (int g = 0; g < Frequency * 10; g++)
+		for (int g = 0; g < Frequency * 3; g++)
 		{
 			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1f, 2f)).RotatedByRandom(MathHelper.TwoPi);
 			var somg = new Rock_Concentrating_dust
@@ -159,7 +177,14 @@ public class SquamousRockSpike : ModProjectile
 		{
 			Dust.NewDust(Projectile.Center - Projectile.velocity * 2 - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone_dark>(), 0f, 0f, 0, default, 0.7f);
 		}
-		GenerateSmog(8);
+		for (int x = 0; x < 8; x++)
+		{
+			Dust d0 = Dust.NewDustDirect(Projectile.Bottom - new Vector2(4, -4), 0, 0, ModContent.DustType<SquamousShellWingDust>());
+			d0.velocity = new Vector2(0, 12).RotatedByRandom(MathHelper.TwoPi) + new Vector2(0, -8);
+			d0.noGravity = false;
+			d0.scale *= Main.rand.NextFloat(1.3f);
+		}
+		GenerateSmog(4);
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolume(0.4f), Projectile.Center);
 		Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<SquamousRockExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 10);
 	}
@@ -174,7 +199,7 @@ public class SquamousRockSpike : ModProjectile
 		var textureBloom = ModAsset.SquamousRockSpike_Glow.Value;
 		Main.spriteBatch.Draw(textureShade, Projectile.Center - Main.screenPosition, null, Color.White, Projectile.rotation, textureShade.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(textureBloom, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, textureBloom.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		float timerProj = 3600 - Projectile.timeLeft;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
@@ -198,7 +223,7 @@ public class SquamousRockSpike : ModProjectile
 
 			for (int r = 0; r < 6; r++)
 			{
-				List<Vertex2D> flows = new List<Vertex2D>();
+				var flows = new List<Vertex2D>();
 				for (int i = 0; i <= 20; i++)
 				{
 					Vector2 thisJoint = new Vector2(0, i * 10).RotatedBy(GetFlowEffectRotation(i, r));
@@ -217,7 +242,7 @@ public class SquamousRockSpike : ModProjectile
 						fade *= Math.Clamp((70 - timerProj) / 20f, 0, 1);
 					}
 
-					Color drawColor = new Color(1f, 1f, 1f, 1);
+					var drawColor = new Color(1f, 1f, 1f, 1);
 					flows.Add(drawCenter + thisJoint - normalWidth, drawColor * fade, new Vector3(i * 0.07f + timeValue + r * 0.2f + addTimeValue, 0, drawWidth));
 					flows.Add(drawCenter + thisJoint + normalWidth, drawColor * fade, new Vector3(i * 0.07f + timeValue + r * 0.2f + addTimeValue, 1, drawWidth));
 				}
@@ -226,7 +251,7 @@ public class SquamousRockSpike : ModProjectile
 			}
 			for (int r = 0; r < 6; r++)
 			{
-				List<Vertex2D> flows = new List<Vertex2D>();
+				var flows = new List<Vertex2D>();
 				for (int i = 0; i <= 20; i++)
 				{
 					Vector2 thisJoint = new Vector2(0, i * 6).RotatedBy(GetFlowEffectRotation(i * 0.5f, r) + MathHelper.Pi / 6f);
@@ -245,7 +270,7 @@ public class SquamousRockSpike : ModProjectile
 						fade *= Math.Clamp((70 - timerProj) / 20f, 0, 1);
 					}
 
-					Color drawColor = new Color(1f, 1f, 1f, 1);
+					var drawColor = new Color(1f, 1f, 1f, 1);
 					flows.Add(drawCenter + thisJoint - normalWidth, drawColor * fade, new Vector3(i * 0.035f + timeValue + r * 0.2f + addTimeValue, 0, drawWidth));
 					flows.Add(drawCenter + thisJoint + normalWidth, drawColor * fade, new Vector3(i * 0.035f + timeValue + r * 0.2f + addTimeValue, 1, drawWidth));
 				}
@@ -255,7 +280,7 @@ public class SquamousRockSpike : ModProjectile
 
 			for (int r = 0; r < 6; r++)
 			{
-				List<Vertex2D> flows = new List<Vertex2D>();
+				var flows = new List<Vertex2D>();
 				for (int i = 0; i <= 20; i++)
 				{
 					Vector2 thisJoint = new Vector2(0, i * 10).RotatedBy(GetFlowEffectRotation(i, r));
@@ -274,7 +299,7 @@ public class SquamousRockSpike : ModProjectile
 						fade *= Math.Clamp((70 - timerProj) / 20f, 0, 1);
 					}
 
-					Color drawColor = new Color(0.4f, 0.3f, 0.3f, 0);
+					var drawColor = new Color(0.4f, 0.3f, 0.3f, 0);
 					flows.Add(drawCenter + thisJoint - normalWidth, drawColor * fade, new Vector3(i * 0.07f + timeValue + r * 0.2f + addTimeValue, 0, drawWidth));
 					flows.Add(drawCenter + thisJoint + normalWidth, drawColor * fade, new Vector3(i * 0.07f + timeValue + r * 0.2f + addTimeValue, 1, drawWidth));
 				}
@@ -283,7 +308,7 @@ public class SquamousRockSpike : ModProjectile
 			}
 			for (int r = 0; r < 6; r++)
 			{
-				List<Vertex2D> flows = new List<Vertex2D>();
+				var flows = new List<Vertex2D>();
 				for (int i = 0; i <= 20; i++)
 				{
 					Vector2 thisJoint = new Vector2(0, i * 6).RotatedBy(GetFlowEffectRotation(i * 0.5f, r) + MathHelper.Pi / 6f);
@@ -302,7 +327,7 @@ public class SquamousRockSpike : ModProjectile
 						fade *= Math.Clamp((70 - timerProj) / 20f, 0, 1);
 					}
 
-					Color drawColor = new Color(0.4f, 0.3f, 0.3f, 0);
+					var drawColor = new Color(0.4f, 0.3f, 0.3f, 0);
 					flows.Add(drawCenter + thisJoint - normalWidth, drawColor * fade, new Vector3(i * 0.035f + timeValue + r * 0.2f + addTimeValue, 0, drawWidth));
 					flows.Add(drawCenter + thisJoint + normalWidth, drawColor * fade, new Vector3(i * 0.035f + timeValue + r * 0.2f + addTimeValue, 1, drawWidth));
 				}
@@ -332,6 +357,18 @@ public class SquamousRockSpike : ModProjectile
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
+
+		if (Projectile.timeLeft < 3520)
+		{
+			float fade = 1f;
+			if (Projectile.timeLeft > 3500)
+			{
+				fade = (3520 - Projectile.timeLeft) / 20f;
+			}
+			var texGlow = ModAsset.SquamousRockSpike_glow_crack.Value;
+			float breathValue = 0.8f + 0.2f * MathF.Sin((float)Main.timeForVisualEffects * 0.24f + Projectile.whoAmI);
+			Main.spriteBatch.Draw(texGlow, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, breathValue) * breathValue * fade, Projectile.rotation, texGlow.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+		}
 		return false;
 	}
 
@@ -345,7 +382,7 @@ public class SquamousRockSpike : ModProjectile
 
 	public override void PostDraw(Color lightColor)
 	{
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		DrawTrail_dark(lightColor);

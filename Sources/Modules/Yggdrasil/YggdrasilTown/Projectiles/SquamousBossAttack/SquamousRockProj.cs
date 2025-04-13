@@ -1,8 +1,9 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.SquamousBossAttack;
 
 public class SquamousRockProj : ModProjectile
 {
@@ -101,8 +102,15 @@ public class SquamousRockProj : ModProjectile
 		Projectile.velocity = Projectile.oldVelocity;
 		for (int x = 0; x < 16; x++)
 		{
-			Dust dust = Dust.NewDustDirect(Projectile.position - Projectile.velocity - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.9f, 2.1f));
+			var dust = Dust.NewDustDirect(Projectile.position - Projectile.velocity - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<SquamousShellStone>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.9f, 2.1f));
 			dust.velocity = new Vector2(0, Main.rand.NextFloat(0f, 6f)).RotatedByRandom(MathHelper.TwoPi);
+		}
+		for (int x = 0; x < 3; x++)
+		{
+			Dust d0 = Dust.NewDustDirect(Projectile.Bottom - new Vector2(4, -4), 0, 0, ModContent.DustType<SquamousShellWingDust>());
+			d0.velocity = new Vector2(0, 6).RotatedByRandom(MathHelper.TwoPi) + new Vector2(0, -8);
+			d0.noGravity = false;
+			d0.scale *= Main.rand.NextFloat(1.3f);
 		}
 		SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
 		GenerateSmog(8);
@@ -116,16 +124,26 @@ public class SquamousRockProj : ModProjectile
 		}
 		else
 		{
-			var TexMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
-			Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, lightColor, Projectile.rotation, TexMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+			var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var bloom = ModAsset.SquamousRockProj_bloom.Value;
+			Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(bloom, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, bloom.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+			var textureGlow = ModAsset.SquamousRockProj_glow.Value;
+			float breathValue = 0.5f + 0.5f * MathF.Sin((float)Main.timeForVisualEffects * 0.24f + Projectile.whoAmI);
+			Main.spriteBatch.Draw(textureGlow, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, breathValue) * breathValue, Projectile.rotation, textureGlow.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 			return false;
 		}
 	}
 
 	public override void PostDraw(Color lightColor)
 	{
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		DrawTrail_dark(lightColor);
 		DrawTrail(lightColor);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 	}
 
 	public void DrawTrail(Color light)
@@ -166,8 +184,8 @@ public class SquamousRockProj : ModProjectile
 
 			var factor = i / (float)trueL;
 			var color = Color.Lerp(new Color(drawC * light.R / 255f * 0.3f, drawC * light.G / 255f * 0.2f, drawC * light.B / 255f * 0.1f, 0), new Color(0, 0, 0, 0), factor);
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10) - Main.screenPosition, color, new Vector3(1, 0, 0)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10) - Main.screenPosition, color, new Vector3(1, 1, 0)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(Projectile.width / 2f) - Main.screenPosition, color, new Vector3(1, 0, 0)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(Projectile.width / 2f) - Main.screenPosition, color, new Vector3(1, 1, 0)));
 		}
 		if (bars.Count > 2)
 		{
@@ -213,8 +231,8 @@ public class SquamousRockProj : ModProjectile
 
 			var factor = i / (float)trueL;
 			var color = Color.Lerp(new Color(drawC * light.R / 255f, drawC * light.G / 255f, drawC * light.B / 255f, drawC), new Color(0, 0, 0, 0), factor);
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10) - Main.screenPosition, color, new Vector3(1, 0, 0)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10) - Main.screenPosition, color, new Vector3(1, 1, 0)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(Projectile.width / 2f) - Main.screenPosition, color, new Vector3(1, 0, 0)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(Projectile.width / 2f) - Main.screenPosition, color, new Vector3(1, 1, 0)));
 		}
 		if (bars.Count > 2)
 		{

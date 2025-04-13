@@ -37,15 +37,15 @@ public class KissOfCthulhu : ModItem
 		int projNum = Main.rand.Next(2, 5);
 		for (int i = 0; i < projNum; i++)
 		{
-			var projVelocity = velocity.RotatedBy((projNum / 2f - i) / 3f);
-			Projectile.NewProjectile(source, position, projVelocity, type, damage, knockback, player.whoAmI);
+			var projVelocity = velocity.RotatedBy((projNum / 2f - i) / 8f);
+			Projectile.NewProjectile(source, position + velocity * 2, projVelocity, type, damage, knockback, player.whoAmI);
 		}
 		SoundEngine.PlaySound(SoundID.Item38);
 
 		// The weapon has 1/3 chance to shoot a special projectile
 		if (Main.rand.NextBool(3))
 		{
-			Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<KissOfCthulhu_Projectile>(), 1, knockback, player.whoAmI);
+			Projectile.NewProjectile(source, position + velocity * 2, velocity * 2.2f, ModContent.ProjectileType<KissOfCthulhu_Projectile>(), 1, knockback, player.whoAmI);
 			SoundEngine.PlaySound(new SoundStyle(ModAsset.KissOfCthulhu_Shoot_Mod), player.Center);
 		}
 

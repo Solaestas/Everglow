@@ -1,9 +1,8 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using SteelSeries.GameSense;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.SquamousBossAttack;
 
 public class SquamousDashEffect : ModProjectile, IWarpProjectile_warpStyle2
 {
@@ -47,7 +46,7 @@ public class SquamousDashEffect : ModProjectile, IWarpProjectile_warpStyle2
 		NPC owner = Main.npc[NPCOwner];
 		Projectile.Center = owner.Center;
 		float speed = Math.Abs(owner.velocity.X);
-		if(speed > 4)
+		if (speed > 4)
 		{
 			for (int g = 0; g < 2; g++)
 			{
@@ -128,8 +127,8 @@ public class SquamousDashEffect : ModProjectile, IWarpProjectile_warpStyle2
 		Vector2 checkPos = Projectile.Center + new Vector2(npcDir * 160f, 76);
 		Color drawColor = new Color(0.25f, 0.75f, 0.67f, 0) * power;
 		Color drawColorDark = Color.White * power;
-		List<Vertex2D> bars = new List<Vertex2D>();
-		List<Vertex2D> barsDark = new List<Vertex2D>();
+		var bars = new List<Vertex2D>();
+		var barsDark = new List<Vertex2D>();
 		for (int t = 0; t <= 40; t++)
 		{
 			float height = t / 40f;
@@ -197,7 +196,7 @@ public class SquamousDashEffect : ModProjectile, IWarpProjectile_warpStyle2
 		}
 		Vector2 checkPos = Projectile.Center + new Vector2(npcDir * 160f, 76);
 		Color drawColor = new Color(1f, 1f, 1f, 1f) * power;
-		List<Vertex2D> bars = new List<Vertex2D>();
+		var bars = new List<Vertex2D>();
 		for (int t = 0; t <= 40; t++)
 		{
 			float height = t / 40f;

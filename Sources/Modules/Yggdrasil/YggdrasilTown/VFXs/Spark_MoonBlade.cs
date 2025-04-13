@@ -64,7 +64,7 @@ public class Spark_MoonBladeDust : Visual
 		velocity *= 0.98f;
 		if (!noGravity)
 		{
-			velocity += new Vector2(Main.windSpeedCurrent * 0.4f, 0.6f);
+			velocity += new Vector2(0, 0.6f);
 		}
 
 		scale *= 0.995f;
