@@ -13,14 +13,14 @@ public class GlobalCollectItemObjective : MissionObjectiveBase
 	{
 	}
 
-	public GlobalCollectItemObjective(CollectItemRequirement requirement)
+	public GlobalCollectItemObjective(CountItemRequirement requirement)
 	{
 		DemandCollectItem = requirement;
 	}
 
-	public CollectItemRequirement DemandCollectItem { get; set; }
+	public CountItemRequirement DemandCollectItem { get; set; }
 
-	public override float Progress => DemandCollectItem.Progress(Main.LocalPlayer.inventory);
+	public override float Progress => DemandCollectItem.Progress(Main.LocalPlayer);
 
 	public override void OnInitialize()
 	{
@@ -72,7 +72,7 @@ public class GlobalCollectItemObjective : MissionObjectiveBase
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);
-		tag.TryGet<CollectItemRequirement>(nameof(DemandCollectItem), out var demandCollectItem);
+		tag.TryGet<CountItemRequirement>(nameof(DemandCollectItem), out var demandCollectItem);
 		if (DemandCollectItem.EnableIndividualCounter)
 		{
 			if (demandCollectItem != null && demandCollectItem.Counter > 0)

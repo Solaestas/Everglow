@@ -20,7 +20,7 @@ public class ConsumeItemObjective : MissionObjectiveBase
 
 	public CountItemRequirement DemandConsumeItem { get; set; }
 
-	public override float Progress => DemandConsumeItem.Progress();
+	public override float Progress => DemandConsumeItem.Progress(Main.LocalPlayer);
 
 	public override void OnInitialize()
 	{
@@ -65,10 +65,10 @@ public class ConsumeItemObjective : MissionObjectiveBase
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);
-		tag.TryGet<CountItemRequirement>(nameof(DemandConsumeItem), out var demandNPC);
-		if (demandNPC != null && demandNPC.Counter > 0)
+		tag.TryGet<CountItemRequirement>(nameof(DemandConsumeItem), out var demandConsumeItem);
+		if (demandConsumeItem != null && demandConsumeItem.Counter > 0)
 		{
-			DemandConsumeItem.Count(demandNPC.Counter);
+			DemandConsumeItem.Count(demandConsumeItem.Counter);
 		}
 	}
 

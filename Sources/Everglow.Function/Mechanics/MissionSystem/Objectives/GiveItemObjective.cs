@@ -11,7 +11,7 @@ public class GiveItemObjective : MissionObjectiveBase
 	{
 	}
 
-	public GiveItemObjective(GiveItemRequirement requirement, int npcType)
+	public GiveItemObjective(ItemRequirement requirement, int npcType)
 	{
 		DemandGiveItem = requirement;
 		NPCType = npcType >= NPCID.None
@@ -23,7 +23,7 @@ public class GiveItemObjective : MissionObjectiveBase
 		EndText = "谢谢你！";
 	}
 
-	public GiveItemObjective(GiveItemRequirement requirement, int npcType, string startText, string endText)
+	public GiveItemObjective(ItemRequirement requirement, int npcType, string startText, string endText)
 	{
 		DemandGiveItem = requirement;
 		NPCType = npcType >= NPCID.None
@@ -45,9 +45,9 @@ public class GiveItemObjective : MissionObjectiveBase
 
 	public string EndText { get; set; }
 
-	public GiveItemRequirement DemandGiveItem { get; set; }
+	public ItemRequirement DemandGiveItem { get; set; }
 
-	public override float Progress => DemandGiveItem.Progress(Main.LocalPlayer.inventory);
+	public override float Progress => DemandGiveItem.Progress(Main.LocalPlayer);
 
 	public bool IsTalkingToNPC => NPCType == NPCID.None || (NPCType > NPCID.None && Main.LocalPlayer.talkNPC >= NPCID.None && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType);
 
@@ -58,7 +58,7 @@ public class GiveItemObjective : MissionObjectiveBase
 		AssetUtils.LoadVanillaNPCTextures([NPCType]);
 	}
 
-	public override bool CheckCompletion() => IsTalkingToNPC && DemandGiveItem.Progress(Main.LocalPlayer.inventory) >= 1f;
+	public override bool CheckCompletion() => IsTalkingToNPC && DemandGiveItem.Progress(Main.LocalPlayer) >= 1f;
 
 	public override void Update()
 	{

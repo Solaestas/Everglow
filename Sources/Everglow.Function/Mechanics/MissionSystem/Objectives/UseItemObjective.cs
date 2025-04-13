@@ -13,7 +13,7 @@ public class UseItemObjective : MissionObjectiveBase
 	public List<CountItemRequirement> DemandUseItems { get; } = [];
 
 	public override float Progress => DemandUseItems.Count != 0 && DemandUseItems.All(i => i.Requirement != 0)
-		? DemandUseItems.Average(i => i.Progress())
+		? DemandUseItems.Average(i => i.Progress(Main.LocalPlayer))
 		: 1f;
 
 	public override void OnInitialize()
@@ -53,9 +53,9 @@ public class UseItemObjective : MissionObjectiveBase
 
 	private void MissionGlobalItem_OnUseItem(Item item)
 	{
-		foreach (var di in DemandUseItems.Where(x => x.Items.Contains(item.type)))
+		foreach (var dI in DemandUseItems.Where(x => x.Items.Contains(item.type)))
 		{
-			di.Count();
+			dI.Count();
 		}
 	}
 

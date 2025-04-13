@@ -17,22 +17,26 @@ public class CollectItemObjectiveTest
 		for (int i = 0; i < 100; i++)
 		{
 			int testStack = random.Next(30, 120);
-			var objective = new CollectItemObjective(CollectItemRequirement.Create([ItemID.DirtBlock], testStack));
+			var objective = new CollectItemObjective(CountItemRequirement.Create([ItemID.DirtBlock], testStack));
 
-			Assert.IsTrue(objective.DemandCollectItem.Progress() == 0f);
+			var player = new Player();
+			player.inventory = [];
+
+			Assert.IsTrue(objective.DemandCollectItem.Progress(player) == 0f);
 
 			for (int stack = 0; stack <= testStack; stack++)
 			{
-				List<Item> inventory =
+				player.inventory =
 				[
-					new Item(){
+					new Item()
+					{
 						type = ItemID.DirtBlock,
 						stack = stack,
 					}
 				];
 
 				var targetProgress = stack / (float)testStack;
-				var actualProgress = objective.DemandCollectItem.Progress(inventory);
+				var actualProgress = objective.DemandCollectItem.Progress(player);
 				Assert.IsTrue(actualProgress == targetProgress);
 			}
 		}
@@ -52,9 +56,12 @@ public class CollectItemObjectiveTest
 
 			int type3 = ItemID.IronOre;
 
-			var mission = new CollectItemObjective(CollectItemRequirement.Create([type1, type2, type3], testStack1));
+			var mission = new CollectItemObjective(CountItemRequirement.Create([type1, type2, type3], testStack1));
 
-			Assert.IsTrue(mission.DemandCollectItem.Progress() == 0f);
+			var player = new Player();
+			player.inventory = [];
+
+			Assert.IsTrue(mission.DemandCollectItem.Progress(player) == 0f);
 
 			for (int stack1 = 0; stack1 <= testStack1; stack1++)
 			{
@@ -62,7 +69,7 @@ public class CollectItemObjectiveTest
 				{
 					for (int stack3 = 0; stack3 <= testStack1; stack3++)
 					{
-						List<Item> inventory =
+						player.inventory =
 						[
 							new Item()
 							{
@@ -81,7 +88,7 @@ public class CollectItemObjectiveTest
 							},
 						];
 						var targetProgress = Math.Clamp((stack1 + stack2 + stack3) / (float)testStack1, 0f, 1f);
-						var acturalProgress = mission.DemandCollectItem.Progress(inventory);
+						var acturalProgress = mission.DemandCollectItem.Progress(player);
 						Assert.IsTrue(acturalProgress == targetProgress);
 					}
 				}
@@ -97,22 +104,25 @@ public class CollectItemObjectiveTest
 			int testStack = (int)new Random().NextInt64(50, 200);
 
 			var objective = new CollectItemObjective(
-				CollectItemRequirement.Create([ItemID.DirtBlock], testStack));
+				CountItemRequirement.Create([ItemID.DirtBlock], testStack));
 
-			Assert.IsTrue(objective.DemandCollectItem.Progress() == 0f);
+			var player = new Player();
+			player.inventory = [];
+
+			Assert.IsTrue(objective.DemandCollectItem.Progress(player) == 0f);
 
 			for (int stack = testStack; stack <= 2 * testStack; stack++)
 			{
-				var inventory = new List<Item>()
-				{
+				player.inventory =
+				[
 					new Item()
 					{
 						type = ItemID.DirtBlock,
 						stack = stack,
 					},
-				};
+				];
 
-				Assert.IsTrue(objective.DemandCollectItem.Progress(inventory) == 1f);
+				Assert.IsTrue(objective.DemandCollectItem.Progress(player) == 1f);
 			}
 		}
 	}
@@ -120,14 +130,22 @@ public class CollectItemObjectiveTest
 	[TestMethod]
 	public void CreateRequirement_Should_ThrowInvalidDataException_When_ParamIsEmpty()
 	{
-		Assert.ThrowsException<InvalidDataException>(() =>
+		Assert.ThrowsException<InvalidDataException>((Action)(() =>
 		{
-			CollectItemRequirement.Create([], 1);
-		});
+			CountItemRequirement.Create([], 1);
+		}));
 
-		Assert.ThrowsException<InvalidDataException>(() =>
+		Assert.ThrowsException<InvalidDataException>((Action)(() =>
 		{
-			CollectItemRequirement.Create([ItemID.DirtBlock], 0);
-		});
+			CountItemRequirement.Create([ItemID.DirtBlock], 0);
+		}));
+	}
+
+	[TestMethod]
+	public void Test_CreatePlayerInstanceInUnitTest()
+	{
+		var player = new Player();
+		player.inventory = new Item[59];
+		TestContext.WriteLine("Inventory Size: " + player.inventory.Length.ToString());
 	}
 }
