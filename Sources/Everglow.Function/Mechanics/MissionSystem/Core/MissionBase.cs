@@ -29,10 +29,6 @@ public abstract class MissionBase : ITagCompoundEntity
 
 	protected MissionBase()
 	{
-		// Initial icons
-		Icon = new MissionIconGroup();
-		Icon?.Add(MissionSourceIcon.Create(Source, SubSource));
-
 		Objectives = new MissionObjectiveData();
 		RewardItems = [];
 		Time = 0;
@@ -67,7 +63,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// 任务图标
 	/// <br>!为null时不显示</br>
 	/// </summary>
-	public virtual MissionIconGroup Icon { get; }
+	public virtual MissionIconGroup Icon => GetIcons(new());
 
 	/// <summary>
 	/// 绑定的UI显示
@@ -333,6 +329,17 @@ public abstract class MissionBase : ITagCompoundEntity
 		{
 			o.ResetProgress();
 		}
+	}
+
+	public virtual MissionIconGroup GetIcons(MissionIconGroup iconGroup)
+	{
+		iconGroup.Add(MissionSourceIcon.Create(Source, SubSource));
+		for(var i = Objectives.First; i != null; i = i.Next)
+		{
+			i.GetObjectivesIcon(iconGroup);
+		}
+
+		return iconGroup;
 	}
 
 	/// <summary>

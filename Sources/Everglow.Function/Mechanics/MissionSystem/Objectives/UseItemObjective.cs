@@ -1,5 +1,7 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Hooks;
+using Everglow.Commons.Mechanics.MissionSystem.Primitives;
+using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
 using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
@@ -23,6 +25,14 @@ public class UseItemObjective : MissionObjectiveBase
 	}
 
 	public override bool CheckCompletion() => DemandUseItems.All(i => i.Counter >= i.Requirement);
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+	{
+		foreach (var item in DemandUseItems.SelectMany(x => x.Items))
+		{
+			iconGroup.Add(ItemMissionIcon.Create(item, new Item(item).Name));
+		}
+	}
 
 	public override void GetObjectivesText(List<string> lines)
 	{

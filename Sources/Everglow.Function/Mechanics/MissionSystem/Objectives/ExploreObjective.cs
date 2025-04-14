@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
+using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Terraria.GameContent.Personalities;
 using Terraria.ModLoader.IO;
 
@@ -40,6 +41,10 @@ public class ExploreObjective : MissionObjectiveBase
 		{
 			distanceMoved += Main.LocalPlayer.velocity.Length();
 		}
+	}
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+	{
 	}
 
 	public override void GetObjectivesText(List<string> lines)

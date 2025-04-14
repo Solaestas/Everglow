@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
+using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Objectives;
@@ -72,6 +73,21 @@ public class BranchingObjective : MissionObjectiveBase
 			objective.Deactivate();
 		}
 		base.Deactivate();
+	}
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+	{
+		if (Next == null)
+		{
+			foreach (var objective in Objectives)
+			{
+				objective.GetObjectivesIcon(iconGroup);
+			}
+		}
+		else
+		{
+			Next.GetObjectivesIcon(iconGroup);
+		}
 	}
 
 	public override void GetObjectivesText(List<string> lines)

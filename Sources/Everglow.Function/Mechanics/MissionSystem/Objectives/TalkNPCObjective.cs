@@ -1,4 +1,6 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
+using Everglow.Commons.Mechanics.MissionSystem.Primitives;
+using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
 using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Objectives;
@@ -39,6 +41,13 @@ public class TalkNPCObjective : MissionObjectiveBase
 		base.Complete();
 
 		Main.npcChatText = NPCText;
+	}
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+	{
+		var npc = new NPC();
+		new NPC().SetDefaults(NPCType);
+		iconGroup.Add(NPCMissionIcon.Create(NPCType, npc.TypeName));
 	}
 
 	public override void GetObjectivesText(List<string> lines)

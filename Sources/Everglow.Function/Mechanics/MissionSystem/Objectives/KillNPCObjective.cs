@@ -1,5 +1,7 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Hooks;
+using Everglow.Commons.Mechanics.MissionSystem.Primitives;
+using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
 using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Terraria.ModLoader.IO;
@@ -28,6 +30,16 @@ public class KillNPCObjective : MissionObjectiveBase
 	public override bool CheckCompletion() => Progress >= 1f;
 
 	public override float Progress => DemandNPC.Progress(MissionManager.NPCKillCounter);
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+	{
+		foreach (var npcType in DemandNPC.NPCs)
+		{
+			var npc = new NPC();
+			npc.SetDefaults(npcType);
+			iconGroup.Add(NPCMissionIcon.Create(npcType, npc.TypeName));
+		}
+	}
 
 	public override void GetObjectivesText(List<string> lines)
 	{

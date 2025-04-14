@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.MissionSystem.Abstracts;
+using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Terraria.ModLoader.IO;
 
@@ -70,11 +71,13 @@ public abstract class MissionObjectiveBase : ITagCompoundEntity
 	{
 	}
 
+	public abstract void GetObjectivesIcon(MissionIconGroup iconGroup);
+
 	public abstract void GetObjectivesText(List<string> lines);
 
 	public virtual void LoadData(TagCompound tag)
 	{
-		if(tag.TryGet<bool>(nameof(HasGivenRewardItems), out var hasGiven))
+		if (tag.TryGet<bool>(nameof(HasGivenRewardItems), out var hasGiven))
 		{
 			HasGivenRewardItems = hasGiven;
 		}

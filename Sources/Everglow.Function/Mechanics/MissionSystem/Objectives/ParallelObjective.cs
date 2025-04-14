@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
+using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Objectives;
@@ -47,6 +48,14 @@ public class ParallelObjective : MissionObjectiveBase
 	}
 
 	public override bool CheckCompletion() => _objectives.All(o => o.CheckCompletion());
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+	{
+		foreach (var objective in _objectives)
+		{
+			objective.GetObjectivesIcon(iconGroup);
+		}
+	}
 
 	public override void GetObjectivesText(List<string> lines)
 	{
