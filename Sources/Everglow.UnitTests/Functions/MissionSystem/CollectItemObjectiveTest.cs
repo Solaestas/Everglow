@@ -17,7 +17,7 @@ public class CollectItemObjectiveTest
 		for (int i = 0; i < 100; i++)
 		{
 			int testStack = random.Next(30, 120);
-			var objective = new CollectItemObjective(CountItemRequirement.Create([ItemID.DirtBlock], testStack));
+			var objective = new CollectItemObjective(CountItemRequirement.Create([ItemID.DirtBlock], testStack, false));
 
 			var player = new Player();
 			player.inventory = [];
@@ -56,7 +56,7 @@ public class CollectItemObjectiveTest
 
 			int type3 = ItemID.IronOre;
 
-			var mission = new CollectItemObjective(CountItemRequirement.Create([type1, type2, type3], testStack1));
+			var mission = new CollectItemObjective(CountItemRequirement.Create([type1, type2, type3], testStack1, false));
 
 			var player = new Player();
 			player.inventory = [];
@@ -104,7 +104,7 @@ public class CollectItemObjectiveTest
 			int testStack = (int)new Random().NextInt64(50, 200);
 
 			var objective = new CollectItemObjective(
-				CountItemRequirement.Create([ItemID.DirtBlock], testStack));
+				CountItemRequirement.Create([ItemID.DirtBlock], testStack, false));
 
 			var player = new Player();
 			player.inventory = [];
