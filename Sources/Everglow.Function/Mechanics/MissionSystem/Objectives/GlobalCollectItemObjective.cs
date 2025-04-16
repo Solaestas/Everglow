@@ -1,8 +1,8 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Hooks;
 using Everglow.Commons.Mechanics.MissionSystem.Primitives;
+using Everglow.Commons.Mechanics.MissionSystem.Shared;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
-using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
 using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Terraria.ModLoader.IO;
@@ -15,14 +15,29 @@ public class GlobalCollectItemObjective : MissionObjectiveBase
 	{
 	}
 
-	public GlobalCollectItemObjective(CountItemRequirement requirement)
+	public GlobalCollectItemObjective(ItemRequirement requirement, bool enableIndividualCounter = true)
 	{
 		DemandCollectItem = requirement;
+		EnableIndividualCounter = enableIndividualCounter;
 	}
 
-	public CountItemRequirement DemandCollectItem { get; set; }
+	public ItemRequirement DemandCollectItem { get; set; }
 
-	public override float Progress => DemandCollectItem.Progress(Main.LocalPlayer);
+	public ProgressCounter Counter { get; private set; } = new();
+
+	public bool EnableIndividualCounter { get; set; } = false;
+
+	public override float Progress => CalculateProgress(Main.LocalPlayer);
+
+	/// <summary>
+	/// Calculate the progress of the objective.
+	/// <para/> This method is created for unit tests, so it is not recommended to use it in other places.
+	/// </summary>
+	/// <param name="player"></param>
+	/// <returns></returns>
+	public float CalculateProgress(Player player) => EnableIndividualCounter
+		? DemandCollectItem.GetCounterProgress(Counter)
+		: DemandCollectItem.GetInventoryProgress(player.inventory);
 
 	public override void OnInitialize()
 	{
@@ -30,7 +45,7 @@ public class GlobalCollectItemObjective : MissionObjectiveBase
 		AssetUtils.LoadVanillaItemTextures(DemandCollectItem.Items);
 	}
 
-	public override bool CheckCompletion() => throw new NotImplementedException();
+	public override bool CheckCompletion() => Progress >= 1f;
 
 	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 	{
@@ -42,10 +57,10 @@ public class GlobalCollectItemObjective : MissionObjectiveBase
 
 	public override void GetObjectivesText(List<string> lines)
 	{
-		string progress = DemandCollectItem.EnableIndividualCounter
-			? $"({DemandCollectItem.Counter}/{DemandCollectItem.Requirement})"
+		string progress = EnableIndividualCounter
+			? $"({Counter}/{DemandCollectItem.Requirement})"
 			: $"({Main.LocalPlayer.inventory.Where(i => DemandCollectItem.Items.Contains(i.type)).Sum(i => i.stack)}/{DemandCollectItem.Requirement})";
-		var verbString = DemandCollectItem.EnableIndividualCounter ? "获取" : "拥有";
+		var verbString = EnableIndividualCounter ? "获取" : "拥有";
 		if (DemandCollectItem.Items.Count > 1)
 		{
 			var itemString = string.Join(' ', DemandCollectItem.Items.ConvertAll(i => ItemDrawer.Create(i)));
@@ -63,9 +78,9 @@ public class GlobalCollectItemObjective : MissionObjectiveBase
 	/// <param name="item"></param>
 	public void MissionPlayer_OnPickUp(Item item)
 	{
-		if (DemandCollectItem.Items.Contains(item.type) && DemandCollectItem.EnableIndividualCounter)
+		if (DemandCollectItem.Items.Contains(item.type) && EnableIndividualCounter)
 		{
-			DemandCollectItem.Count(item.stack);
+			Counter.Count(item.stack);
 		}
 	}
 
@@ -82,19 +97,17 @@ public class GlobalCollectItemObjective : MissionObjectiveBase
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);
-		tag.TryGet<CountItemRequirement>(nameof(DemandCollectItem), out var demandCollectItem);
-		if (DemandCollectItem.EnableIndividualCounter)
+
+		if (tag.TryGet<ProgressCounter>(nameof(Counter), out var counter))
 		{
-			if (demandCollectItem != null && demandCollectItem.Counter > 0)
-			{
-				DemandCollectItem.Count(demandCollectItem.Counter);
-			}
+			Counter = counter;
 		}
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);
-		tag.Add(nameof(DemandCollectItem), DemandCollectItem);
+
+		tag.Add(nameof(Counter), Counter);
 	}
 }

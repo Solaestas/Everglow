@@ -2,7 +2,7 @@ using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Objectives;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
-using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
+using Everglow.Commons.Mechanics.MissionSystem.Shared;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Tests;
 
@@ -18,7 +18,7 @@ public class MissionObjectivesTest : MissionBase
 				NPCID.MotherSlime,
 			], 10, true));
 
-		var objective2 = new ConsumeItemObjective(CountItemRequirement.Create([ItemID.SpikyBall], 10));
+		var objective2 = new ConsumeItemObjective(new ItemRequirement([ItemID.SpikyBall], 10));
 
 		Objectives.Add(objective1);
 		Objectives.Add(objective2);

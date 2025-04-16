@@ -2,8 +2,8 @@ using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.Mechanics.MissionSystem.Objectives;
 using Everglow.Commons.Mechanics.MissionSystem.Primitives;
+using Everglow.Commons.Mechanics.MissionSystem.Shared;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
-using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Tests;
 

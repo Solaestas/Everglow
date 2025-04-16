@@ -2,7 +2,7 @@ using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
+namespace Everglow.Commons.Mechanics.MissionSystem.Shared;
 
 /// <summary>
 /// A group of npc which use the same requirement

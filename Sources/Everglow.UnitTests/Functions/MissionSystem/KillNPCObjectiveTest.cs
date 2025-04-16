@@ -1,5 +1,5 @@
 using Everglow.Commons.Mechanics.MissionSystem.Objectives;
-using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
+using Everglow.Commons.Mechanics.MissionSystem.Shared;
 using Terraria;
 using Terraria.ID;
 

@@ -1,8 +1,8 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Hooks;
 using Everglow.Commons.Mechanics.MissionSystem.Primitives;
+using Everglow.Commons.Mechanics.MissionSystem.Shared;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
-using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
 using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Terraria.ModLoader.IO;
@@ -15,14 +15,16 @@ public class ConsumeItemObjective : MissionObjectiveBase
 	{
 	}
 
-	public ConsumeItemObjective(CountItemRequirement requirement)
+	public ConsumeItemObjective(ItemRequirement requirement)
 	{
 		DemandConsumeItem = requirement;
 	}
 
-	public CountItemRequirement DemandConsumeItem { get; set; }
+	public ItemRequirement DemandConsumeItem { get; set; }
 
-	public override float Progress => DemandConsumeItem.Progress(Main.LocalPlayer);
+	public ProgressCounter Counter { get; private set; } = new();
+
+	public override float Progress => DemandConsumeItem.GetCounterProgress(Counter);
 
 	public override void OnInitialize()
 	{
@@ -30,7 +32,7 @@ public class ConsumeItemObjective : MissionObjectiveBase
 		AssetUtils.LoadVanillaItemTextures(DemandConsumeItem.Items);
 	}
 
-	public override bool CheckCompletion() => DemandConsumeItem.Counter >= DemandConsumeItem.Requirement;
+	public override bool CheckCompletion() => Counter.Value >= DemandConsumeItem.Requirement;
 
 	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 	{
@@ -42,7 +44,7 @@ public class ConsumeItemObjective : MissionObjectiveBase
 
 	public override void GetObjectivesText(List<string> lines)
 	{
-		var progress = $"({DemandConsumeItem.Counter}/{DemandConsumeItem.Requirement})";
+		var progress = $"({Counter.Value}/{DemandConsumeItem.Requirement})";
 		if (DemandConsumeItem.Items.Count > 1)
 		{
 			var itemString = string.Join(' ', DemandConsumeItem.Items.ConvertAll(i => ItemDrawer.Create(i)));
@@ -68,23 +70,22 @@ public class ConsumeItemObjective : MissionObjectiveBase
 	{
 		if (DemandConsumeItem.Items.Contains(item.type))
 		{
-			DemandConsumeItem.Count();
+			Counter.Count();
 		}
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);
-		tag.TryGet<CountItemRequirement>(nameof(DemandConsumeItem), out var demandConsumeItem);
-		if (demandConsumeItem != null && demandConsumeItem.Counter > 0)
+		if (tag.TryGet<ProgressCounter>(nameof(Counter), out var counter))
 		{
-			DemandConsumeItem.Count(demandConsumeItem.Counter);
+			Counter = counter;
 		}
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);
-		tag.Add(nameof(DemandConsumeItem), DemandConsumeItem);
+		tag.Add(nameof(Counter), Counter);
 	}
 }

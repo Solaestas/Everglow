@@ -1,7 +1,7 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Primitives;
+using Everglow.Commons.Mechanics.MissionSystem.Shared;
 using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
-using Everglow.Commons.Mechanics.MissionSystem.Shared.Requirements;
 using Everglow.Commons.Mechanics.MissionSystem.Utilities;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 
@@ -49,7 +49,7 @@ public class GiveItemObjective : MissionObjectiveBase
 
 	public ItemRequirement DemandGiveItem { get; set; }
 
-	public override float Progress => DemandGiveItem.Progress(Main.LocalPlayer);
+	public override float Progress => DemandGiveItem.GetInventoryProgress(Main.LocalPlayer.inventory);
 
 	public bool IsTalkingToNPC => NPCType == NPCID.None || (NPCType > NPCID.None && Main.LocalPlayer.talkNPC >= NPCID.None && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType);
 
@@ -60,7 +60,7 @@ public class GiveItemObjective : MissionObjectiveBase
 		AssetUtils.LoadVanillaNPCTextures([NPCType]);
 	}
 
-	public override bool CheckCompletion() => IsTalkingToNPC && DemandGiveItem.Progress(Main.LocalPlayer) >= 1f;
+	public override bool CheckCompletion() => IsTalkingToNPC && DemandGiveItem.GetInventoryProgress(Main.LocalPlayer.inventory) >= 1f;
 
 	public override void Update()
 	{
@@ -112,6 +112,10 @@ public class GiveItemObjective : MissionObjectiveBase
 
 	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 	{
+		var npc = new NPC();
+		npc.SetDefaults(NPCType);
+		iconGroup.Add(NPCMissionIcon.Create(NPCType, npc.TypeName));
+
 		foreach (var item in DemandGiveItem.Items)
 		{
 			iconGroup.Add(ItemMissionIcon.Create(item, new Item(item).Name));
