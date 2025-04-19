@@ -64,10 +64,30 @@ public class UIMissionBackground : UIBlock
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin();
 
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Trail_1.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
 		float laserColorScale = 0.35f;
+
+		// dark reflect effect.
+		Texture2D reflectBeam2250_dark = ModAsset.Laser_Reflect22_50_black.Value;
+		{
+			Color drawColor = Color.Lerp(PoolTypeColor, MissionTypeColor, MathF.Sin((float)Main.timeForVisualEffects * 0.1f) * 0.2f + 0.8f);
+			drawColor.R = drawColor.G = drawColor.B = drawColor.A;
+			sb.Draw(reflectBeam2250_dark, chainCenter + new Vector2(-5, 0) * scale, null, drawColor, MathHelper.PiOver4, reflectBeam2250_dark.Size() / 2, scale * 0.4f, SpriteEffects.None, 0);
+			sb.Draw(reflectBeam2250_dark, chainCenter + new Vector2(-5, 0.5f) * scale, null, drawColor, -MathHelper.PiOver2, reflectBeam2250_dark.Size() / 2, scale * 0.4f, SpriteEffects.FlipHorizontally, 0);
+
+			drawColor = Color.Lerp(MissionTypeColor, PoolTypeColor, MathF.Sin((float)Main.timeForVisualEffects * 0.1f) * 0.2f + 0.8f);
+			drawColor.R = drawColor.G = drawColor.B = drawColor.A;
+			sb.Draw(reflectBeam2250_dark, chainCenter + new Vector2(-6, 0) * scale + new Vector2(224, 0).RotatedBy(-MathHelper.PiOver4) * scale, null, drawColor, -MathHelper.PiOver4 * 3, reflectBeam2250_dark.Size() / 2, scale * 0.3f, SpriteEffects.None, 0);
+			sb.Draw(reflectBeam2250_dark, chainCenter + new Vector2(-6, 0) * scale + new Vector2(224, 0).RotatedBy(-MathHelper.PiOver4) * scale, null, drawColor, MathHelper.PiOver2, reflectBeam2250_dark.Size() / 2, scale * 0.3f, SpriteEffects.FlipHorizontally, 0);
+		}
+		Texture2D reflectBeam4500_dark = ModAsset.Laser_Reflect45_00_black.Value;
+		{
+			Color drawColor = MissionTypeColor;
+			drawColor.R = drawColor.G = drawColor.B = drawColor.A;
+			sb.Draw(reflectBeam4500_dark, glassBrickPos + new Vector2(-2, -1) * scale, null, drawColor, MathHelper.Pi, reflectBeam4500_dark.Size() / 2, scale * 0.2f, SpriteEffects.FlipHorizontally, 0);
+			sb.Draw(reflectBeam4500_dark, glassBrickPos + new Vector2(-2, -0.5f) * scale, null, drawColor, -MathHelper.PiOver2, reflectBeam4500_dark.Size() / 2, scale * 0.2f, SpriteEffects.None, 0);
+		}
 
 		// Prism to first layer of turntable(marble ring).
 		var texCoordOffset = (float)Main.timeForVisualEffects * -0.02f;
@@ -79,6 +99,7 @@ public class UIMissionBackground : UIBlock
 
 			var texCoordX = 0;
 
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Trail_1.Value;
 			var vertices = new List<Vertex2D>();
 			vertices.Add(spectrumPos + new Vector2(0, radius) * scale, spectrumColor, new(0 + texCoordOffset, 0, 0));
 			vertices.Add(spectrumPos + new Vector2(0, -radius) * scale, spectrumColor, new(0 + texCoordOffset, 1, 0));
@@ -89,15 +110,38 @@ public class UIMissionBackground : UIBlock
 
 		// First layer of turntable to 2nd layer of turntable.The laser duplicated in this stage.
 		{
+			var spectrumColor_m_dark = MissionTypeColor * laserColorScale;
+			var spectrumColor_i_dark = InitialColor * laserColorScale;
+			spectrumColor_m_dark.R = spectrumColor_m_dark.G = spectrumColor_m_dark.B = spectrumColor_m_dark.A;
+			spectrumColor_i_dark.R = spectrumColor_i_dark.G = spectrumColor_i_dark.B = spectrumColor_i_dark.A;
+
 			var spectrumColor_m = MissionTypeColor * laserColorScale;
 			var spectrumColor_i = InitialColor * laserColorScale;
+			spectrumColor_m.A = 0;
+			spectrumColor_i.A = 0;
+
 			var spectrumPos = laserPrismPos + new Vector2(60, 0) * scale;
 			var radius = 8;
 			var length = 60;
 
 			var texCoordX = 0;
 
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Trail_1_black.Value;
 			var vertices = new List<Vertex2D>();
+			vertices.Add(spectrumPos + new Vector2(0, radius) * scale, spectrumColor_m_dark, new(0 + texCoordOffset, 0, 0));
+			vertices.Add(spectrumPos + new Vector2(0, -0) * scale, spectrumColor_m_dark, new(0 + texCoordOffset, 0.5f, 0));
+			vertices.Add(spectrumPos + new Vector2(length, radius) * scale, spectrumColor_m_dark, new(texCoordX + texCoordOffset, 0, 0));
+			vertices.Add(spectrumPos + new Vector2(length, -0) * scale, spectrumColor_m_dark, new(texCoordX + texCoordOffset, 0.5f, 0));
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+
+			vertices = new List<Vertex2D>();
+			vertices.Add(spectrumPos + new Vector2(0, 0) * scale, spectrumColor_i_dark, new(0 + texCoordOffset, 0.5f, 0));
+			vertices.Add(spectrumPos + new Vector2(0, -radius) * scale, spectrumColor_i_dark, new(0 + texCoordOffset, 1, 0));
+			vertices.Add(spectrumPos + new Vector2(length, 0) * scale, spectrumColor_i_dark, new(texCoordX + texCoordOffset, 0.5f, 0));
+			vertices.Add(spectrumPos + new Vector2(length, -radius) * scale, spectrumColor_i_dark, new(texCoordX + texCoordOffset, 1, 0));
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Trail_1.Value;
 			vertices.Add(spectrumPos + new Vector2(0, radius) * scale, spectrumColor_m, new(0 + texCoordOffset, 0, 0));
 			vertices.Add(spectrumPos + new Vector2(0, -0) * scale, spectrumColor_m, new(0 + texCoordOffset, 0.5f, 0));
 			vertices.Add(spectrumPos + new Vector2(length, radius) * scale, spectrumColor_m, new(texCoordX + texCoordOffset, 0, 0));
@@ -114,8 +158,15 @@ public class UIMissionBackground : UIBlock
 
 		// 2nd layer of turntable to center of turntable.
 		{
+			var spectrumColor_m_dark = MissionTypeColor * laserColorScale;
+			var spectrumColor_p_dark = PoolTypeColor * laserColorScale;
+			spectrumColor_m_dark.R = spectrumColor_m_dark.G = spectrumColor_m_dark.B = spectrumColor_m_dark.A;
+			spectrumColor_p_dark.R = spectrumColor_p_dark.G = spectrumColor_p_dark.B = spectrumColor_p_dark.A;
+
 			var spectrumColor_m = MissionTypeColor * laserColorScale;
 			var spectrumColor_p = PoolTypeColor * laserColorScale;
+			spectrumColor_m.A = 0;
+			spectrumColor_p.A = 0;
 
 			var spectrumPos = laserPrismPos + new Vector2(120, 0) * scale;
 			var radius = 8;
@@ -123,7 +174,23 @@ public class UIMissionBackground : UIBlock
 
 			var texCoordX = 0;
 
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Trail_1_black.Value;
 			var vertices = new List<Vertex2D>();
+			vertices.Add(spectrumPos + new Vector2(0, radius) * scale, spectrumColor_m_dark, new(0 + texCoordOffset, 0, 0));
+			vertices.Add(spectrumPos + new Vector2(0, -0) * scale, spectrumColor_m_dark, new(0 + texCoordOffset, 0.5f, 0));
+			vertices.Add(spectrumPos + new Vector2(length, radius) * scale, spectrumColor_m_dark, new(texCoordX + texCoordOffset, 0, 0));
+			vertices.Add(spectrumPos + new Vector2(length, -0) * scale, spectrumColor_m_dark, new(texCoordX + texCoordOffset, 0.5f, 0));
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+
+			vertices = new List<Vertex2D>();
+			vertices.Add(spectrumPos + new Vector2(0, 0) * scale, spectrumColor_p_dark, new(0 + texCoordOffset, 0.5f, 0));
+			vertices.Add(spectrumPos + new Vector2(0, -radius) * scale, spectrumColor_p_dark, new(0 + texCoordOffset, 1, 0));
+			vertices.Add(spectrumPos + new Vector2(length, 0) * scale, spectrumColor_p_dark, new(texCoordX + texCoordOffset, 0.5f, 0));
+			vertices.Add(spectrumPos + new Vector2(length, -radius) * scale, spectrumColor_p_dark, new(texCoordX + texCoordOffset, 1, 0));
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Trail_1.Value;
+			vertices = new List<Vertex2D>();
 			vertices.Add(spectrumPos + new Vector2(0, radius) * scale, spectrumColor_m, new(0 + texCoordOffset, 0, 0));
 			vertices.Add(spectrumPos + new Vector2(0, -0) * scale, spectrumColor_m, new(0 + texCoordOffset, 0.5f, 0));
 			vertices.Add(spectrumPos + new Vector2(length, radius) * scale, spectrumColor_m, new(texCoordX + texCoordOffset, 0, 0));
@@ -140,8 +207,15 @@ public class UIMissionBackground : UIBlock
 
 		// Center of turntable to topright reflector.
 		{
+			var spectrumColor_m_dark = MissionTypeColor * laserColorScale;
+			var spectrumColor_p_dark = PoolTypeColor * laserColorScale;
+			spectrumColor_m_dark.R = spectrumColor_m_dark.G = spectrumColor_m_dark.B = spectrumColor_m_dark.A;
+			spectrumColor_p_dark.R = spectrumColor_p_dark.G = spectrumColor_p_dark.B = spectrumColor_p_dark.A;
+
 			var spectrumColor_m = MissionTypeColor * laserColorScale;
 			var spectrumColor_p = PoolTypeColor * laserColorScale;
+			spectrumColor_m.A = 0;
+			spectrumColor_p.A = 0;
 
 			var spectrumPos = chainCenter + new Vector2(-5, 0) * scale;
 			var radius = 8;
@@ -149,7 +223,23 @@ public class UIMissionBackground : UIBlock
 
 			var texCoordX = 0;
 
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Trail_1_black.Value;
 			var vertices = new List<Vertex2D>()
+	            .Add(spectrumPos + new Vector2(0, radius).RotatedBy(-MathHelper.PiOver4) * scale, spectrumColor_m_dark, new(0 + texCoordOffset, 0, 0))
+	            .Add(spectrumPos + new Vector2(0, -0).RotatedBy(-MathHelper.PiOver4) * scale, spectrumColor_m_dark, new(0 + texCoordOffset, 0.5f, 0))
+             	.Add(spectrumPos + new Vector2(length, radius).RotatedBy(-MathHelper.PiOver4) * scale, spectrumColor_m_dark, new(texCoordX + texCoordOffset, 0, 0))
+	            .Add(spectrumPos + new Vector2(length, -0).RotatedBy(-MathHelper.PiOver4) * scale, spectrumColor_m_dark, new(texCoordX + texCoordOffset, 0.5f, 0));
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+
+			vertices = new List<Vertex2D>()
+				.Add(spectrumPos + new Vector2(0, 0).RotatedBy(-MathHelper.PiOver4) * scale, spectrumColor_p_dark, new(0 + texCoordOffset, 0.5f, 0))
+				.Add(spectrumPos + new Vector2(0, -radius).RotatedBy(-MathHelper.PiOver4) * scale, spectrumColor_p_dark, new(0 + texCoordOffset, 1, 0))
+				.Add(spectrumPos + new Vector2(length, 0).RotatedBy(-MathHelper.PiOver4) * scale, spectrumColor_p_dark, new(texCoordX + texCoordOffset, 0.5f, 0))
+				.Add(spectrumPos + new Vector2(length, -radius).RotatedBy(-MathHelper.PiOver4) * scale, spectrumColor_p_dark, new(texCoordX + texCoordOffset, 1, 0));
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Trail_1.Value;
+			vertices = new List<Vertex2D>()
 				.Add(spectrumPos + new Vector2(0, radius).RotatedBy(-MathHelper.PiOver4) * scale, spectrumColor_m, new(0 + texCoordOffset, 0, 0))
 				.Add(spectrumPos + new Vector2(0, -0).RotatedBy(-MathHelper.PiOver4) * scale, spectrumColor_m, new(0 + texCoordOffset, 0.5f, 0))
 				.Add(spectrumPos + new Vector2(length, radius).RotatedBy(-MathHelper.PiOver4) * scale, spectrumColor_m, new(texCoordX + texCoordOffset, 0, 0))
@@ -166,8 +256,15 @@ public class UIMissionBackground : UIBlock
 
 		// Topright reflector to mission message board.
 		{
+			var spectrumColor_m_dark = MissionTypeColor * laserColorScale;
+			var spectrumColor_p_dark = PoolTypeColor * laserColorScale;
+			spectrumColor_m_dark.R = spectrumColor_m_dark.G = spectrumColor_m_dark.B = spectrumColor_m_dark.A;
+			spectrumColor_p_dark.R = spectrumColor_p_dark.G = spectrumColor_p_dark.B = spectrumColor_p_dark.A;
+
 			var spectrumColor_m = MissionTypeColor * laserColorScale;
 			var spectrumColor_p = PoolTypeColor * laserColorScale;
+			spectrumColor_m.A = 0;
+			spectrumColor_p.A = 0;
 
 			var spectrumPos = chainCenter + new Vector2(-6, 0) * scale + new Vector2(224, 0).RotatedBy(-MathHelper.PiOver4) * scale;
 			var radius = 8;
@@ -175,7 +272,23 @@ public class UIMissionBackground : UIBlock
 
 			var texCoordX = 0;
 
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Trail_1_black.Value;
 			var vertices = new List<Vertex2D>()
+	            .Add(spectrumPos + new Vector2(0, radius) * scale, spectrumColor_m_dark, new(0 + texCoordOffset, 0, 0))
+            	.Add(spectrumPos + new Vector2(0, -0) * scale, spectrumColor_m_dark, new(0 + texCoordOffset, 0.5f, 0))
+            	.Add(spectrumPos + new Vector2(length, radius) * scale, spectrumColor_m_dark, new(texCoordX + texCoordOffset, 0, 0))
+            	.Add(spectrumPos + new Vector2(length, -0) * scale, spectrumColor_m_dark, new(texCoordX + texCoordOffset, 0.5f, 0));
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+
+			vertices = new List<Vertex2D>()
+				.Add(spectrumPos + new Vector2(0, 0) * scale, spectrumColor_p_dark, new(0 + texCoordOffset, 0.5f, 0))
+				.Add(spectrumPos + new Vector2(0, -radius) * scale, spectrumColor_p_dark, new(0 + texCoordOffset, 1, 0))
+				.Add(spectrumPos + new Vector2(length, 0) * scale, spectrumColor_p_dark, new(texCoordX + texCoordOffset, 0.5f, 0))
+				.Add(spectrumPos + new Vector2(length, -radius) * scale, spectrumColor_p_dark, new(texCoordX + texCoordOffset, 1, 0));
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Trail.Value;
+			vertices = new List<Vertex2D>()
 				.Add(spectrumPos + new Vector2(0, radius) * scale, spectrumColor_m, new(0 + texCoordOffset, 0, 0))
 				.Add(spectrumPos + new Vector2(0, -0) * scale, spectrumColor_m, new(0 + texCoordOffset, 0.5f, 0))
 				.Add(spectrumPos + new Vector2(length, radius) * scale, spectrumColor_m, new(texCoordX + texCoordOffset, 0, 0))
@@ -192,8 +305,15 @@ public class UIMissionBackground : UIBlock
 
 		// Refractor to mission stack.
 		{
+			var spectrumColor_m_dark = MissionTypeColor * laserColorScale;
+			var spectrumColor_p_dark = PoolTypeColor * laserColorScale;
+			spectrumColor_m_dark.R = spectrumColor_m_dark.G = spectrumColor_m_dark.B = spectrumColor_m_dark.A;
+			spectrumColor_p_dark.R = spectrumColor_p_dark.G = spectrumColor_p_dark.B = spectrumColor_p_dark.A;
+
 			var spectrumColor_m = MissionTypeColor * laserColorScale;
 			var spectrumColor_p = PoolTypeColor * laserColorScale;
+			spectrumColor_m.A = 0;
+			spectrumColor_p.A = 0;
 
 			var spectrumPos = glassBrickPos + new Vector2(-2, -1) * scale;
 			var radius = 8;
@@ -201,7 +321,23 @@ public class UIMissionBackground : UIBlock
 
 			var texCoordX = 0;
 
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Trail_1_black.Value;
 			var vertices = new List<Vertex2D>()
+            	.Add(spectrumPos + new Vector2(0, 0) * scale, spectrumColor_m_dark, new(0 + texCoordOffset, 0.5f, 0))
+             	.Add(spectrumPos + new Vector2(-radius, 0) * scale, spectrumColor_m_dark, new(0 + texCoordOffset, 1, 0))
+               	.Add(spectrumPos + new Vector2(0, length) * scale, spectrumColor_m_dark, new(texCoordX + texCoordOffset, 0.5f, 0))
+              	.Add(spectrumPos + new Vector2(-radius, length) * scale, spectrumColor_m_dark, new(texCoordX + texCoordOffset, 1, 0));
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+
+			vertices = new List<Vertex2D>()
+				.Add(spectrumPos + new Vector2(radius, 0) * scale, spectrumColor_p_dark, new(0 + texCoordOffset, 0, 0))
+				.Add(spectrumPos + new Vector2(-0, 0) * scale, spectrumColor_p_dark, new(0 + texCoordOffset, 0.5f, 0))
+				.Add(spectrumPos + new Vector2(radius, length) * scale, spectrumColor_p_dark, new(texCoordX + texCoordOffset, 0, 0))
+				.Add(spectrumPos + new Vector2(-0, length) * scale, spectrumColor_p_dark, new(texCoordX + texCoordOffset, 0.5f, 0));
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+
+			Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Trail_1.Value;
+			vertices = new List<Vertex2D>()
 				.Add(spectrumPos + new Vector2(0, 0) * scale, spectrumColor_m, new(0 + texCoordOffset, 0.5f, 0))
 				.Add(spectrumPos + new Vector2(-radius, 0) * scale, spectrumColor_m, new(0 + texCoordOffset, 1, 0))
 				.Add(spectrumPos + new Vector2(0, length) * scale, spectrumColor_m, new(texCoordX + texCoordOffset, 0.5f, 0))
