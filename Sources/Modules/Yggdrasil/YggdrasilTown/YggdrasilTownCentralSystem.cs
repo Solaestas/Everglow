@@ -42,6 +42,7 @@ public class YggdrasilTownCentralSystem : ModSystem
 			{
 				CheckNPC(ModContent.NPCType<Guard_of_YggdrasilTown>());
 				CheckNPC(ModContent.NPCType<TeahouseLady>());
+				CheckNPC(ModContent.NPCType<InnKeeper>());
 			}
 			if (InCanteen_YggdrasilTown())
 			{

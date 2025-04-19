@@ -219,7 +219,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 	{
 		// Main.NewText(TotalThreaten);
 		// Main.NewText(MathF.Abs(TotalThreatenDirection.X), Color.Red);
-		if(!CanContinueWalk(NPC))
+		if (!CanContinueWalk(NPC))
 		{
 			return false;
 		}
@@ -404,7 +404,6 @@ public class Guard_of_YggdrasilTown : ModNPC
 		bool safe = false;
 		if (SubworldSystem.Current is not YggdrasilWorld)
 		{
-			NPC.active = false;
 			return;
 		}
 		var homePoint = AnchorForBehaviorPos;
@@ -680,7 +679,7 @@ public class Guard_of_YggdrasilTown : ModNPC
 		NPC.frame = new Rectangle(0, 0, 46, 46);
 		for (int t = 0; t < 12; t++)
 		{
-			if(t == 4)
+			if (t == 4)
 			{
 				var proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(direction, 0), ModContent.ProjectileType<Guard_Attack_Fist>(), NPC.damage, 2, Main.myPlayer, NPC.whoAmI);
 				NPC.frame = new Rectangle(0, 46, 46, 46);

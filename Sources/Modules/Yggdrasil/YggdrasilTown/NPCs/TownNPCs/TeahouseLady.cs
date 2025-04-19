@@ -30,10 +30,6 @@ public class TeahouseLady : ModNPC
 	public bool Talking = false;
 	public bool Sit = false;
 	public bool Idle = true;
-	public bool Attacking0 = false;
-	public int FrameHeight = 56;
-	public int Attack0Target = -1;
-	public int Attack1Target = -1;
 	public int ThreatenTarget = -1;
 
 	/// <summary>
@@ -46,9 +42,17 @@ public class TeahouseLady : ModNPC
 	/// </summary>
 	public Vector2 TotalThreatenDirection = Vector2.zeroVector;
 
+	/// <summary>
+	/// HomePos, force attach his or her home to this coordinate.
+	/// </summary>
 	public Point AnchorForBehaviorPos => YggdrasilTownCentralSystem.TownTopLeftWorldCoord.ToTileCoordinates() + new Point(405, 157);
 
 	private int aiMainCount = 0;
+
+	public bool Attacking0 = false;
+	public int FrameHeight = 56;
+	public int Attack0Target = -1;
+	public int Attack1Target = -1;
 
 	public override string HeadTexture => ModAsset.TeahouseLady_Head_Mod;
 
@@ -206,70 +210,6 @@ public class TeahouseLady : ModNPC
 			return false;
 		}
 		return true;
-	}
-
-	public bool CanAttack0()
-	{
-		float minDis = 1000;
-		Attack0Target = -1;
-		foreach (var npc in Main.npc)
-		{
-			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy && !npc.CountsAsACritter && npc != NPC)
-			{
-				Vector2 distance = npc.Center - NPC.Center;
-				if (distance.Length() < minDis && CanHitNPCLine(npc))
-				{
-					minDis = distance.Length();
-					if (npc.Center.X > NPC.Center.X)
-					{
-						NPC.direction = 1;
-					}
-					else
-					{
-						NPC.direction = -1;
-					}
-					NPC.spriteDirection = NPC.direction;
-					Attack0Target = npc.whoAmI;
-				}
-			}
-		}
-		if (Attack0Target != -1)
-		{
-			return true;
-		}
-		return false;
-	}
-
-	public bool CanAttack1()
-	{
-		float minDis = 450;
-		Attack1Target = -1;
-		foreach (var npc in Main.npc)
-		{
-			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy && !npc.CountsAsACritter && npc != NPC)
-			{
-				Vector2 distance = npc.Center - NPC.Center;
-				if (distance.Length() < minDis)
-				{
-					minDis = distance.Length();
-					if (npc.Center.X > NPC.Center.X)
-					{
-						NPC.direction = 1;
-					}
-					else
-					{
-						NPC.direction = -1;
-					}
-					NPC.spriteDirection = NPC.direction;
-					Attack1Target = npc.whoAmI;
-				}
-			}
-		}
-		if (Attack1Target != -1)
-		{
-			return true;
-		}
-		return false;
 	}
 
 	public bool CheckTalkingPlayer()
@@ -593,6 +533,101 @@ public class TeahouseLady : ModNPC
 		EndAIPiece();
 	}
 
+	public override bool CheckActive()
+	{
+		return false;
+	}
+
+	public override bool CanChat()
+	{
+		return true;
+	}
+
+	public override string GetChat()
+	{
+		Talking = true;
+		return base.GetChat();
+	}
+
+	public override void SetChatButtons(ref string button, ref string button2)
+	{
+		// TODO Hjson
+		if (Language.ActiveCulture.Name == "zh-Hans")
+		{
+			button = Language.GetTextValue("挑战");
+			button2 = Language.GetTextValue("帮助");
+		}
+		else
+		{
+			button = Language.GetTextValue("Challenge");
+			button2 = Language.GetTextValue("Help");
+		}
+	}
+
+	public bool CanAttack0()
+	{
+		float minDis = 1000;
+		Attack0Target = -1;
+		foreach (var npc in Main.npc)
+		{
+			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy && !npc.CountsAsACritter && npc != NPC)
+			{
+				Vector2 distance = npc.Center - NPC.Center;
+				if (distance.Length() < minDis && CanHitNPCLine(npc))
+				{
+					minDis = distance.Length();
+					if (npc.Center.X > NPC.Center.X)
+					{
+						NPC.direction = 1;
+					}
+					else
+					{
+						NPC.direction = -1;
+					}
+					NPC.spriteDirection = NPC.direction;
+					Attack0Target = npc.whoAmI;
+				}
+			}
+		}
+		if (Attack0Target != -1)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	public bool CanAttack1()
+	{
+		float minDis = 450;
+		Attack1Target = -1;
+		foreach (var npc in Main.npc)
+		{
+			if (!npc.friendly && !npc.dontTakeDamage && npc.active && npc.life > 0 && npc.type != NPCID.TargetDummy && !npc.CountsAsACritter && npc != NPC)
+			{
+				Vector2 distance = npc.Center - NPC.Center;
+				if (distance.Length() < minDis)
+				{
+					minDis = distance.Length();
+					if (npc.Center.X > NPC.Center.X)
+					{
+						NPC.direction = 1;
+					}
+					else
+					{
+						NPC.direction = -1;
+					}
+					NPC.spriteDirection = NPC.direction;
+					Attack1Target = npc.whoAmI;
+				}
+			}
+		}
+		if (Attack1Target != -1)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	/// <summary>
 	/// Laser; None-Inheritable
 	/// </summary>
@@ -689,11 +724,6 @@ public class TeahouseLady : ModNPC
 		EndAIPiece();
 	}
 
-	public override bool CanChat()
-	{
-		return true;
-	}
-
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		Texture2D texMain = ModAsset.TeahouseLady.Value;
@@ -725,37 +755,6 @@ public class TeahouseLady : ModNPC
 		// Texture2D block = Commons.ModAsset.TileBlock.Value;
 		// Main.spriteBatch.Draw(block, checkPoint.ToWorldCoordinates() - Main.screenPosition, null, new Color(1f, 0f, 0f, 0.5f), 0, block.Size() * 0.5f, 1, SpriteEffects.None, 0);
 		return false;
-	}
-
-	public override bool CheckActive()
-	{
-		return false;
-	}
-
-	public override string GetChat()
-	{
-		Talking = true;
-
-		return base.GetChat();
-	}
-
-	public override void SetChatButtons(ref string button, ref string button2)
-	{
-		// TODO Hjson
-		if (Language.ActiveCulture.Name == "zh-Hans")
-		{
-			button = Language.GetTextValue("挑战");
-			button2 = Language.GetTextValue("帮助");
-		}
-		else
-		{
-			button = Language.GetTextValue("Challenge");
-			button2 = Language.GetTextValue("Help");
-		}
-	}
-
-	public override void OnChatButtonClicked(bool firstButton, ref string shopName)
-	{
 	}
 
 	public override void FindFrame(int frameHeight)
