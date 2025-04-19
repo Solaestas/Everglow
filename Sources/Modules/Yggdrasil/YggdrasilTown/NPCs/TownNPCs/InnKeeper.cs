@@ -16,11 +16,12 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 
 	public override void SetDefaults()
 	{
+		base.SetDefaults();
 		StandFrame = new Rectangle(0, 0, 48, 56);
+		SitFrame = new Rectangle(0, 448, 48, 56);
 		NPC.frame = StandFrame;
 		FrameHeight = 56;
 		Attacking0 = false;
-		base.SetDefaults();
 	}
 
 	public override void TryAttack()

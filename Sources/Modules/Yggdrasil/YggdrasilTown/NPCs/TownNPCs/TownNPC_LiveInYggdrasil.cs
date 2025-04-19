@@ -1,6 +1,4 @@
 using Everglow.Commons.Coroutines;
-using Humanizer;
-using MathNet.Numerics;
 using SubworldLibrary;
 using Terraria.DataStructures;
 using static Everglow.Commons.Utilities.NPCUtils;
@@ -40,6 +38,8 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 	public Vector2 TotalThreatenDirection = Vector2.zeroVector;
 
 	public Rectangle StandFrame = new Rectangle(0, 0, 10, 10);
+
+	public Rectangle SitFrame = new Rectangle(0, 0, 10, 10);
 
 	/// <summary>
 	/// HomePos, force attach his or her home to this coordinate.
@@ -177,7 +177,7 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 			NPC.frame = StandFrame;
 			return false;
 		}
-		if(!SafeAndInSuitable())
+		if (!SafeAndInSuitable())
 		{
 			return false;
 		}
@@ -186,7 +186,7 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 
 	public virtual bool SafeAndInSuitable()
 	{
-		if(SubworldSystem.Current is not YggdrasilWorld)
+		if (SubworldSystem.Current is not YggdrasilWorld)
 		{
 			return true;
 		}
@@ -377,7 +377,7 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 		Sit = true;
 		for (int t = 0; t < time; t++)
 		{
-			NPC.frame = new Rectangle(0, 616, 48, FrameHeight);
+			NPC.frame = SitFrame;
 			NPC.velocity.X = 0;
 			NPC.spriteDirection = NPC.direction;
 			if (!Peace())

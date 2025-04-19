@@ -19,6 +19,7 @@ public class Resturateur : TownNPC_LiveInYggdrasil
 	public override void SetDefaults()
 	{
 		StandFrame = new Rectangle(0, 0, 32, 56);
+		SitFrame = new Rectangle(0, 784, 32, 56);
 		NPC.frame = StandFrame;
 		FrameHeight = 56;
 
@@ -27,11 +28,11 @@ public class Resturateur : TownNPC_LiveInYggdrasil
 
 	public override void CheckInSuitableArea()
 	{
-		if (SubworldSystem.Current is not YggdrasilWorld)
+		if (!YggdrasilTownCentralSystem.InCanteen_YggdrasilTown())
 		{
 			return;
 		}
-		AnchorForBehaviorPos = new Point(180, 148);
+		AnchorForBehaviorPos = new Point(220, 150);
 		bool safe = false;
 		var homePoint = AnchorForBehaviorPos;
 		NPC.homeless = false;
@@ -189,7 +190,7 @@ public class Resturateur : TownNPC_LiveInYggdrasil
 
 	public override void CheckWalkBound()
 	{
-		if (SubworldSystem.Current is not YggdrasilWorld)
+		if (!YggdrasilTownCentralSystem.InCanteen_YggdrasilTown())
 		{
 			return;
 		}
@@ -209,13 +210,13 @@ public class Resturateur : TownNPC_LiveInYggdrasil
 		if(!Attacking)
 		{
 			Texture2D texMain = ModAsset.Resturateur.Value;
-			Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height + 8) * 0.5f;
+			Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height) * 0.5f;
 			Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		}
 		else
 		{
 			Texture2D texMain = ModAsset.Resturateur_Attack.Value;
-			Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height + 8) * 0.5f;
+			Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height) * 0.5f;
 			Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, NPC.rotation, texMain.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		}
 		return false;

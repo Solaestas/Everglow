@@ -47,6 +47,7 @@ public class YggdrasilTownCentralSystem : ModSystem
 			if (InCanteen_YggdrasilTown())
 			{
 				CheckNPC(ModContent.NPCType<CanteenMaid>());
+				CheckNPC(ModContent.NPCType<Resturateur>());
 			}
 		}
 		base.PostUpdateNPCs();
