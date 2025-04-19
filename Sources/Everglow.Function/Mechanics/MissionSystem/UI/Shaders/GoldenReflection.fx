@@ -33,11 +33,11 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
 	float deltaY = abs((input.Pos.y - sv_Pos_Y) * uSize);
 	if (colorBase.r > 0.5)
 	{
-		return tex2D(uHeatMapSampler, float2(deltaY, 0.25));
+		return tex2D(uHeatMapSampler, float2(deltaY, 0.75));
 	}
 	if (colorBase.r < 0.5)
 	{
-		return tex2D(uHeatMapSampler, float2(deltaY, 0.75));
+		return tex2D(uHeatMapSampler, float2(deltaY, 0.25));
 	}
     return float4(0, 0, 0, 0);
 }
