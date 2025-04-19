@@ -1,13 +1,12 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
-using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.MissionSystem.Shared;
+namespace Everglow.Commons.Mechanics.MissionSystem.Primitives;
 
 /// <summary>
 /// A group of npc which use the same requirement
 /// </summary>
-public class KillNPCRequirement
+public sealed class KillNPCRequirement
 {
 	private KillNPCRequirement(IEnumerable<int> nPCs, int requirement, bool enableIndividualCounter, int counter = 0)
 	{

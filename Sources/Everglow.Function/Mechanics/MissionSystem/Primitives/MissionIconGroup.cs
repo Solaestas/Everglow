@@ -2,7 +2,7 @@ using Everglow.Commons.Mechanics.MissionSystem.Shared.Icons;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Primitives;
 
-public class MissionIconGroup
+public sealed class MissionIconGroup
 {
 	public MissionIconGroup()
 	{

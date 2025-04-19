@@ -1,6 +1,6 @@
-namespace Everglow.Commons.Mechanics.MissionSystem.Shared;
+namespace Everglow.Commons.Mechanics.MissionSystem.Primitives;
 
-public class ItemRequirement
+public sealed class ItemRequirement
 {
 	public ItemRequirement(List<int> items, int requirement)
 	{

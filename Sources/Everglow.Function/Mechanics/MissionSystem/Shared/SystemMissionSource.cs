@@ -2,7 +2,7 @@ using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Shared;
 
-public class SystemMissionSource : MissionSourceBase
+public sealed class SystemMissionSource : MissionSourceBase
 {
 	internal SystemMissionSource()
 	{

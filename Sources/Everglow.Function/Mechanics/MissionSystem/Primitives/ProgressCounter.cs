@@ -1,8 +1,8 @@
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.MissionSystem.Shared;
+namespace Everglow.Commons.Mechanics.MissionSystem.Primitives;
 
-public class ProgressCounter
+public sealed class ProgressCounter
 {
 	public int Value { get; private set; }
 
