@@ -32,6 +32,17 @@ public class UIMissionList : UIBlock
 		_missionList.Info.Width.SetValue(_missionScrollbar.Info.Left);
 	}
 
+	public override void Update(GameTime gt)
+	{
+		base.Update(gt);
+
+		if (_missionList is not null)
+		{
+			_missionList.Info.IsHidden = MissionContainer.SpectrumBlocked;
+			_missionList.Info.IsVisible = !MissionContainer.SpectrumBlocked;
+		}
+	}
+
 	/// <summary>
 	/// 刷新任务列表
 	/// </summary>

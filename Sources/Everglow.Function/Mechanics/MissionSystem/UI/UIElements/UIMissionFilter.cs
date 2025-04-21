@@ -53,6 +53,8 @@ public class UIMissionFilter : BaseElement
 	/// </summary>
 	public MissionType? MissionTypeValue { get; private set; }
 
+	public bool SpectrumBlocked { get; set; } = true;
+
 	private float MouseRotation => HitBox.Center.ToVector2().AngleTo(Main.MouseScreen);
 
 	private float MouseHoldDisplacementLimitForAutoRotation => 10 * MissionContainer.Scale;
@@ -73,12 +75,6 @@ public class UIMissionFilter : BaseElement
 		float angularMisalignment = MathF.Abs((standard + unit * 0.5f) % unit - unit * 0.5f);
 		_outerRotationMisaligment = angularMisalignment;
 
-		// TODO: A new kind of MissionType, only trigger when laser can't pass a gem in the turntable.
-		// PoolType as well.
-		if (angularMisalignment > 0.05f)
-		{
-			index = 1;
-		}
 		return MissionTypeList[index];
 	}
 
@@ -98,11 +94,6 @@ public class UIMissionFilter : BaseElement
 		float angularMisalignment = MathF.Abs((standard + unit * 0.5f) % unit - unit * 0.5f);
 		_innerRotationMisaligment = angularMisalignment;
 
-		// TODO: A new kind of PoolType, only trigger when laser can't pass a gem in the turntable.
-		if (angularMisalignment > 0.05f)
-		{
-			index = 1;
-		}
 		return PoolTypeList[index];
 	}
 
@@ -217,6 +208,8 @@ public class UIMissionFilter : BaseElement
 			PoolTypeValue = poolType;
 			MissionManager.NeedRefresh = true;
 		}
+
+		SpectrumBlocked = _outerRotationMisaligment > 0.05f || _innerRotationMisaligment > 0.05f;
 
 		ManageAutoRotation();
 

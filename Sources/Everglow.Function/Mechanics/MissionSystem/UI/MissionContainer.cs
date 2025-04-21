@@ -23,6 +23,8 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 	public static UIMissionBackground Background => Instance._panelBackground;
 
+	public static bool SpectrumBlocked => Instance._missionFilter.SpectrumBlocked;
+
 	/// <summary>
 	/// Scale factor for all UI elements in the mission system
 	/// </summary>
