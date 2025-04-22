@@ -124,13 +124,15 @@ public class MissionContainer : UIContainerElement, ILoadable
 	/// <param name="resolution"></param>
 	private void UpdateResolutionFactor(Vector2 resolution)
 	{
-		if(resolution.X > PanelWidth && resolution.Y > PanelHeight)
+		resolution *= 0.6f;
+
+		if (resolution.X > PanelWidth && resolution.Y > PanelHeight)
 		{
 			ResolutionFactor = 1;
 		}
 		else
 		{
-			if (resolution.X / resolution.Y > 16f / 9f)
+			if (resolution.X / resolution.Y > PanelWidth / (float)PanelHeight)
 			{
 				ResolutionFactor = resolution.Y / PanelHeight;
 			}
@@ -138,7 +140,6 @@ public class MissionContainer : UIContainerElement, ILoadable
 			{
 				ResolutionFactor = resolution.X / PanelWidth;
 			}
-			ResolutionFactor *= 0.55f;
 		}
 	}
 
