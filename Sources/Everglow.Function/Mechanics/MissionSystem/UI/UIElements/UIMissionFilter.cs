@@ -53,7 +53,9 @@ public class UIMissionFilter : BaseElement
 	/// </summary>
 	public MissionType? MissionTypeValue { get; private set; }
 
-	public bool SpectrumBlocked { get; set; } = true;
+	public bool SpectrumBlockedAtInner => _innerRotationMisaligment > 0.05f;
+
+	public bool SpectrumBlockedAtOuter => _outerRotationMisaligment > 0.05f;
 
 	private float MouseRotation => HitBox.Center.ToVector2().AngleTo(Main.MouseScreen);
 
@@ -208,8 +210,6 @@ public class UIMissionFilter : BaseElement
 			PoolTypeValue = poolType;
 			MissionManager.NeedRefresh = true;
 		}
-
-		SpectrumBlocked = _outerRotationMisaligment > 0.05f || _innerRotationMisaligment > 0.05f;
 
 		ManageAutoRotation();
 
@@ -435,7 +435,7 @@ public class UIMissionFilter : BaseElement
 		var statusFilter_Gem_select = ModAsset.MissionDurationMarbleRing_GemstonesSelected.Value;
 		point = new Vector2(-94.5f, 0).RotatedBy(-_innerRotation) * scale;
 		frame = new Rectangle((int)(point.X - 20 + 114.5), (int)(point.Y - 20 + 114.5), 40, 40);
-		if(!blockedAtInner)
+		if (!blockedAtInner)
 		{
 			sb.Draw(statusFilter_Gem_select, drawPos + new Vector2(-94.5f, 0), frame, new Color(1f, 1f, 1f, 0) * innerGlowFade, _innerRotation, frame.Size() / 2, scale, SpriteEffects.None, 0);
 		}

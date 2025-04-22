@@ -66,15 +66,15 @@ public class UIMissionBackground : UIBlock
 
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
-		float laserColorScale = 0.35f;
+		const float laserColorScale = 0.35f;
 
-		// TODO: Try to finished the 2 bools below.
-		bool blockedAtOuter = false;
-		bool blockedAtInner = true;
+		bool blockedAtOuter = MissionContainer.Filter.SpectrumBlockedAtOuter;
+		bool blockedAtInner = MissionContainer.Filter.SpectrumBlockedAtInner;
 		if (blockedAtOuter)
 		{
 			blockedAtInner = true;
 		}
+
 		// dark reflect effect.
 		if(!blockedAtInner)
 		{
@@ -97,23 +97,6 @@ public class UIMissionBackground : UIBlock
 				sb.Draw(reflectBeam4500_dark, glassBrickPos + new Vector2(-2, -1) * scale, null, drawColor, MathHelper.Pi, reflectBeam4500_dark.Size() / 2, scale * 0.2f, SpriteEffects.FlipHorizontally, 0);
 				sb.Draw(reflectBeam4500_dark, glassBrickPos + new Vector2(-2, -0.5f) * scale, null, drawColor, -MathHelper.PiOver2, reflectBeam4500_dark.Size() / 2, scale * 0.2f, SpriteEffects.None, 0);
 			}
-		}
-		if (blockedAtOuter)
-		{
-			Texture2D star = ModAsset.StarSlash.Value;
-			Color drawColor = InitialColor;
-			sb.Draw(star, laserPrismPos + new Vector2(50, 0) * scale, new Rectangle(0, 0, 256, 128), drawColor, -MathHelper.Pi / 2f, star.Size() / 2, scale * 0.6f, SpriteEffects.FlipHorizontally, 0);
-		}
-		if (blockedAtInner && !blockedAtOuter)
-		{
-			Texture2D star_black = ModAsset.StarSlash_black.Value;
-			Color drawColor = MissionTypeColor;
-			drawColor.R = drawColor.G = drawColor.B = drawColor.A;
-			sb.Draw(star_black, laserPrismPos + new Vector2(105, 0) * scale, new Rectangle(0, 0, 256, 128), drawColor, -MathHelper.Pi / 2f, star_black.Size() / 2, scale * 0.6f, SpriteEffects.FlipHorizontally, 0);
-			Texture2D star = ModAsset.StarSlash.Value;
-			drawColor = MissionTypeColor;
-			drawColor.A = 0;
-			sb.Draw(star, laserPrismPos + new Vector2(105, 0) * scale, new Rectangle(0, 0, 256, 128), drawColor, -MathHelper.Pi / 2f, star.Size() / 2, scale * 0.6f, SpriteEffects.FlipHorizontally, 0);
 		}
 
 		// Prism to first layer of turntable(marble ring).
@@ -387,6 +370,27 @@ public class UIMissionBackground : UIBlock
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
+
+		// Draw outer ring blocking vfx
+		if (blockedAtOuter)
+		{
+			Texture2D star = ModAsset.StarSlash.Value;
+			Color drawColor = InitialColor;
+			sb.Draw(star, laserPrismPos + new Vector2(50, 0) * scale, new Rectangle(0, 0, 256, 128), drawColor, -MathHelper.Pi / 2f, star.Size() / 2, scale * 0.6f, SpriteEffects.FlipHorizontally, 0);
+		}
+
+		// Draw inner ring blocking vfx
+		if (blockedAtInner && !blockedAtOuter)
+		{
+			Texture2D star_black = ModAsset.StarSlash_black.Value;
+			Color drawColor = MissionTypeColor;
+			drawColor.R = drawColor.G = drawColor.B = drawColor.A;
+			sb.Draw(star_black, laserPrismPos + new Vector2(105, 0) * scale, new Rectangle(0, 0, 256, 128), drawColor, -MathHelper.Pi / 2f, star_black.Size() / 2, scale * 0.6f, SpriteEffects.FlipHorizontally, 0);
+			Texture2D star = ModAsset.StarSlash.Value;
+			drawColor = MissionTypeColor;
+			drawColor.A = 0;
+			sb.Draw(star, laserPrismPos + new Vector2(105, 0) * scale, new Rectangle(0, 0, 256, 128), drawColor, -MathHelper.Pi / 2f, star.Size() / 2, scale * 0.6f, SpriteEffects.FlipHorizontally, 0);
+		}
 
 		if (!blockedAtInner)
 		{

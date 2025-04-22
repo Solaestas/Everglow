@@ -38,8 +38,9 @@ public class UIMissionList : UIBlock
 
 		if (_missionList is not null)
 		{
-			_missionList.Info.IsHidden = MissionContainer.SpectrumBlocked;
-			_missionList.Info.IsVisible = !MissionContainer.SpectrumBlocked;
+			var hideList = MissionContainer.Filter.SpectrumBlockedAtInner || MissionContainer.Filter.SpectrumBlockedAtOuter;
+			_missionList.Info.IsHidden = hideList;
+			_missionList.Info.IsVisible = !hideList;
 		}
 	}
 
