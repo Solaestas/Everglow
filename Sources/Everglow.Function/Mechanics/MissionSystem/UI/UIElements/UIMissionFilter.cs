@@ -341,7 +341,8 @@ public class UIMissionFilter : BaseElement
 		}
 		else
 		{
-			if (_innerDispalcement.Length() < MouseHoldDisplacementLimitForAutoRotation && _innerDispalcement.Length() != 0)
+			// TODO: _innerDispalcement will reset to Vector2.zero when resolution change. This caused the filter rotated.
+			if (_innerDispalcement.Length() < MouseHoldDisplacementLimitForAutoRotation/* && _innerDispalcement.Length() != 0*/)
 			{
 				var clickedPoolType = RotationToPoolType(MathHelper.Pi - MouseRotation + _innerRotation);
 				_innerClickTargetRotation = PoolTypeToRotation(clickedPoolType);
@@ -363,7 +364,8 @@ public class UIMissionFilter : BaseElement
 		}
 		else
 		{
-			if (_outerDispalcement.Length() < MouseHoldDisplacementLimitForAutoRotation && _outerDispalcement.Length() != 0)
+			// TODO: _outerDispalcement will reset to Vector2.zero when resolution change. This caused the filter rotated.
+			if (_outerDispalcement.Length() < MouseHoldDisplacementLimitForAutoRotation/* && _outerDispalcement.Length() != 0*/)
 			{
 				var clickedMissionType = RotationToMissionType(MathHelper.Pi - MouseRotation + _outerRotation);
 				_outerClickTargetRotation = MissionTypeToRotation(clickedMissionType);
