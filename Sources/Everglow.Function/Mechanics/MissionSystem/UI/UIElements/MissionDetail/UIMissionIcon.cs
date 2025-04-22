@@ -1,5 +1,6 @@
 using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Everglow.Commons.UI.UIElements;
+using static Everglow.Commons.Mechanics.MissionSystem.UI.MissionContainer;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
 
@@ -14,10 +15,7 @@ public class UIMissionIcon : UIBlock
 	private UIBlock nextBtn;
 	private MissionIconGroup iconGroup;
 
-	public MissionIconGroup IconGroup
-	{
-		get => iconGroup;
-	}
+	public MissionIconGroup IconGroup => iconGroup;
 
 	public UIMissionIcon(MissionIconGroup iconGroup)
 	{
@@ -59,11 +57,7 @@ public class UIMissionIcon : UIBlock
 		Info.SetMargin(0);
 		Info.IsSensitive = true;
 
-		var scale = MissionContainer.Scale;
-
 		carousel = new UIMissionCarousel();
-		carousel.Info.Width.SetFull();
-		carousel.Info.Height.SetFull();
 		carousel.Info.HiddenOverflow = true;
 		Register(carousel);
 
@@ -72,10 +66,6 @@ public class UIMissionIcon : UIBlock
 		prevBtn.Info.IsHidden = true;
 		prevBtn.Info.IsVisible = false;
 		prevBtn.Info.IsSensitive = true;
-		prevBtn.Info.Width.SetValue(ButtonSize * scale);
-		prevBtn.Info.Height.SetValue(ButtonSize * scale);
-		prevBtn.Info.Left.SetValue(ButtonLeftRight * scale);
-		prevBtn.Info.Top.SetValue(ButtonTop * scale);
 		prevBtn.PanelColor = Color.Transparent;
 		prevBtn.BorderWidth = 0;
 		prevBtn.Events.OnLeftDown += e =>
@@ -99,10 +89,6 @@ public class UIMissionIcon : UIBlock
 		nextBtn.Info.IsHidden = true;
 		nextBtn.Info.IsVisible = false;
 		nextBtn.Info.IsSensitive = true;
-		nextBtn.Info.Width.SetValue(ButtonSize * scale);
-		nextBtn.Info.Height.SetValue(ButtonSize * scale);
-		nextBtn.Info.Left.SetValue(Info.Width.Pixel - ButtonLeftRight * scale - ButtonSize * scale);
-		nextBtn.Info.Top.SetValue(ButtonTop * scale);
 		nextBtn.PanelColor = Color.Transparent;
 		nextBtn.BorderWidth = 0;
 		nextBtn.Events.OnLeftDown += e =>
@@ -120,6 +106,24 @@ public class UIMissionIcon : UIBlock
 		nextIcon.Info.SetToCenter();
 		nextIcon.Events.OnMouseHover += e => nextIcon.Color = IconGroup.IsLastIcon ? Color.White : new Color(1f, 1f, 1f, 0f);
 		nextIcon.Events.OnMouseOut += e => nextIcon.Color = Color.White;
+	}
+
+	public override void Calculation()
+	{
+		base.Calculation();
+
+		carousel.Info.Width.SetFull();
+		carousel.Info.Height.SetFull();
+
+		prevBtn.Info.Width.SetValue(ButtonSize * Scale);
+		prevBtn.Info.Height.SetValue(ButtonSize * Scale);
+		prevBtn.Info.Left.SetValue(ButtonLeftRight * Scale);
+		prevBtn.Info.Top.SetValue(ButtonTop * Scale);
+
+		nextBtn.Info.Width.SetValue(ButtonSize * Scale);
+		nextBtn.Info.Height.SetValue(ButtonSize * Scale);
+		nextBtn.Info.Left.SetValue(Info.Width.Pixel - ButtonLeftRight * Scale - ButtonSize * Scale);
+		nextBtn.Info.Top.SetValue(ButtonTop * Scale);
 	}
 
 	public class UIMissionCarousel : BaseElement

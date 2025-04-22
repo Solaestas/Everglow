@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.MissionSystem.Abstracts;
 using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
@@ -11,7 +12,7 @@ using static Everglow.Commons.Mechanics.MissionSystem.Core.MissionManager;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI;
 
-public class MissionContainer : UIContainerElement, ILoadable
+public class MissionContainer : UIContainerElement
 {
 	public static MissionContainer Instance => (MissionContainer)UISystem.EverglowUISystem.Elements[typeof(MissionContainer).FullName];
 
@@ -84,10 +85,6 @@ public class MissionContainer : UIContainerElement, ILoadable
 		Main.OnResolutionChanged += OnResolutionChanged_Adapt;
 	}
 
-	public void Load(Mod mod)
-	{
-	}
-
 	public void Unload()
 	{
 		Player.Hooks.OnEnterWorld -= OnEnterWorld_Close;
@@ -115,7 +112,6 @@ public class MissionContainer : UIContainerElement, ILoadable
 	private void OnResolutionChanged_Adapt(Vector2 resolution)
 	{
 		UpdateResolutionFactor(resolution);
-		RefreshMissionContainer();
 	}
 
 	/// <summary>
@@ -145,10 +141,6 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 	private void RefreshMissionContainer()
 	{
-		var source = _missionSourceHeadshot?.Source;
-		ChildrenElements.Clear();
-		OnInitialization();
-		_missionSourceHeadshot.Source = source;
 		if (!Main.gameMenu)
 		{
 			RefreshList();
@@ -159,21 +151,13 @@ public class MissionContainer : UIContainerElement, ILoadable
 	{
 		base.OnInitialization();
 
-		float width = PanelWidth * ResolutionFactor;
-		float height = PanelHeight * ResolutionFactor;
-
 		_panel = new UIBlock();
-		_panel.Info.Width.SetValue(width, 0f);
-		_panel.Info.Height.SetValue(height, 0f);
 		_panel.PanelColor = Color.Transparent;
-		_panel.Info.SetToCenter();
 		_panel.CanDrag = true;
 		Register(_panel);
 
 		// Background image
 		_panelBackground = new UIMissionBackground();
-		_panelBackground.Info.Width.SetFull();
-		_panelBackground.Info.Height.SetFull();
 		_panelBackground.Info.HiddenOverflow = true;
 		_panelBackground.Info.SetMargin(0);
 		_panelBackground.Info.CanBeInteract = false;
@@ -182,32 +166,20 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 		// Mission filter
 		_missionFilter = new UIMissionFilter();
-		_missionFilter.Info.Top.SetValue(35 * ResolutionFactor);
-		_missionFilter.Info.Left.SetValue(95 * ResolutionFactor);
 		_panel.Register(_missionFilter);
 
 		// Mission source headshot
 		_missionSourceHeadshot = new UIMissionSource();
-		_missionSourceHeadshot.Info.Top.SetValue((210 - 40) * ResolutionFactor);
-		_missionSourceHeadshot.Info.Left.SetValue((270 - 40) * ResolutionFactor);
 		_panel.Register(_missionSourceHeadshot);
 
 		// Mission details
 		_missionDetail = new UIMissionDetail();
-		_missionDetail.Info.Left.SetValue(608 * ResolutionFactor);
-		_missionDetail.Info.Top.SetValue(46 * ResolutionFactor);
-		_missionDetail.Info.Width.SetValue(710 * ResolutionFactor, 0f);
-		_missionDetail.Info.Height.SetValue(724 * ResolutionFactor, 0f);
 		_missionDetail.PanelColor = Color.Transparent;
 		_missionDetail.BorderWidth = 0;
 		_panel.Register(_missionDetail);
 
 		// Mission detail mask
 		_missionDetailSubContent = new UIMissionDetailSubContent();
-		_missionDetailSubContent.Info.Left.SetValue(608 * ResolutionFactor);
-		_missionDetailSubContent.Info.Top.SetValue(46 * ResolutionFactor);
-		_missionDetailSubContent.Info.Width.SetValue(710 * ResolutionFactor, 0f);
-		_missionDetailSubContent.Info.Height.SetValue(724 * ResolutionFactor, 0f);
 		_missionDetailSubContent.BorderWidth = 0;
 		_missionDetailSubContent.Info.InteractiveMask = true;
 		_missionDetailSubContent.Info.IsVisible = false;
@@ -215,10 +187,6 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 		// Mission detail tip
 		_missionDetailTip = new UIMissionDetailTipContent();
-		_missionDetailTip.Info.Left.SetValue(608 * ResolutionFactor);
-		_missionDetailTip.Info.Top.SetValue(46 * ResolutionFactor);
-		_missionDetailTip.Info.Width.SetValue(710 * ResolutionFactor, 0f);
-		_missionDetailTip.Info.Height.SetValue(724 * ResolutionFactor, 0f);
 		_missionDetailTip.BorderWidth = 0;
 		_missionDetailTip.Info.InteractiveMask = true;
 		_missionDetailTip.Info.IsVisible = false;
@@ -226,19 +194,12 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 		// Mission list
 		_missionList = new UIMissionList();
-		_missionList.Info.Top.SetValue(410f * ResolutionFactor, 0);
-		_missionList.Info.Left.SetValue(80f * ResolutionFactor, 0);
-		_missionList.Info.Width.SetValue(384f * ResolutionFactor, 0f);
-		_missionList.Info.Height.SetValue(360f * ResolutionFactor, 0f);
 		_missionList.PanelColor = Color.Transparent;
 		_missionList.BorderWidth = 0;
 		_panel.Register(_missionList);
 
 		// Close button
 		_close = new UIBlock();
-		_close.Info.Width.SetValue(88 * ResolutionFactor);
-		_close.Info.Height.SetValue(38 * ResolutionFactor);
-		_close.Info.Left.SetValue(PositionStyle.Full - _close.Info.Width + (1, 0));
 		_close.PanelColor = Color.Transparent;
 		_close.BorderColor = Color.Transparent;
 		_close.Info.IsSensitive = true;
@@ -259,8 +220,6 @@ public class MissionContainer : UIContainerElement, ILoadable
 
 		// Cover image
 		_panelCoverContainer = new UIBlock();
-		_panelCoverContainer.Info.Width.SetFull();
-		_panelCoverContainer.Info.Height.SetFull();
 		_panelCoverContainer.Info.HiddenOverflow = true;
 		_panelCoverContainer.Info.SetMargin(0);
 		_panelCoverContainer.Info.CanBeInteract = false;
@@ -269,10 +228,59 @@ public class MissionContainer : UIContainerElement, ILoadable
 		_panel.Register(_panelCoverContainer);
 
 		_panelCover = new UIImage(ModAsset.MissionBoardCoverLayer.Value, Color.White);
-		_panelCover.Info.Width.SetFull();
-		_panelCover.Info.Height.SetFull();
 		_panelCover.Info.CanBeInteract = false;
 		_panelCoverContainer.Register(_panelCover);
+	}
+
+	public override void Calculation()
+	{
+		base.Calculation();
+
+		float width = PanelWidth * ResolutionFactor;
+		float height = PanelHeight * ResolutionFactor;
+
+		_panel.Info.Width.SetValue(width, 0f);
+		_panel.Info.Height.SetValue(height, 0f);
+		_panel.Info.SetToCenter();
+
+		_panelBackground.Info.Width.SetFull();
+		_panelBackground.Info.Height.SetFull();
+
+		_missionFilter.Info.Top.SetValue(35 * ResolutionFactor);
+		_missionFilter.Info.Left.SetValue(95 * ResolutionFactor);
+
+		_missionSourceHeadshot.Info.Top.SetValue((210 - 40) * ResolutionFactor);
+		_missionSourceHeadshot.Info.Left.SetValue((270 - 40) * ResolutionFactor);
+
+		_missionDetail.Info.Left.SetValue(608 * ResolutionFactor);
+		_missionDetail.Info.Top.SetValue(46 * ResolutionFactor);
+		_missionDetail.Info.Width.SetValue(710 * ResolutionFactor, 0f);
+		_missionDetail.Info.Height.SetValue(724 * ResolutionFactor, 0f);
+
+		_missionDetailSubContent.Info.Left.SetValue(608 * ResolutionFactor);
+		_missionDetailSubContent.Info.Top.SetValue(46 * ResolutionFactor);
+		_missionDetailSubContent.Info.Width.SetValue(710 * ResolutionFactor, 0f);
+		_missionDetailSubContent.Info.Height.SetValue(724 * ResolutionFactor, 0f);
+
+		_missionDetailTip.Info.Left.SetValue(608 * ResolutionFactor);
+		_missionDetailTip.Info.Top.SetValue(46 * ResolutionFactor);
+		_missionDetailTip.Info.Width.SetValue(710 * ResolutionFactor, 0f);
+		_missionDetailTip.Info.Height.SetValue(724 * ResolutionFactor, 0f);
+
+		_missionList.Info.Top.SetValue(410f * ResolutionFactor, 0);
+		_missionList.Info.Left.SetValue(80f * ResolutionFactor, 0);
+		_missionList.Info.Width.SetValue(384f * ResolutionFactor, 0f);
+		_missionList.Info.Height.SetValue(360f * ResolutionFactor, 0f);
+
+		_close.Info.Width.SetValue(88 * ResolutionFactor);
+		_close.Info.Height.SetValue(38 * ResolutionFactor);
+		_close.Info.Left.SetValue(PositionStyle.Full - _close.Info.Width + (1, 0));
+
+		_panelCoverContainer.Info.Width.SetFull();
+		_panelCoverContainer.Info.Height.SetFull();
+
+		_panelCover.Info.Width.SetFull();
+		_panelCover.Info.Height.SetFull();
 	}
 
 	public override void Update(GameTime gt)

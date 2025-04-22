@@ -12,9 +12,9 @@ public class UIMissionSource : BaseElement
 {
 	public MissionSourceBase Source { get; set; } = null;
 
-	public override void OnInitialization()
+	public override void Calculation()
 	{
-		base.OnInitialization();
+		base.Calculation();
 
 		Info.Width.SetValue(80 * MissionContainer.Scale);
 		Info.Height.SetValue(80 * MissionContainer.Scale);

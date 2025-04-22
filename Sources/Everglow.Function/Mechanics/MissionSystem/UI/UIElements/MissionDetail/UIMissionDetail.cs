@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
@@ -38,6 +39,8 @@ public class UIMissionDetail : UIBlock
 	private UIBlock _changeMission;
 	private UITextPlus _changeText;
 
+	private float oldScale;
+
 	public class ChangeButtonText
 	{
 		public const string Failed = "失败";
@@ -53,24 +56,14 @@ public class UIMissionDetail : UIBlock
 
 	public override void OnInitialization()
 	{
-		var scale = Scale;
-
 		base.OnInitialization();
 
 		// Headshot
 		_icon = new UIMissionIcon(null);
-		_icon.Info.Width.SetValue(420 * scale);
-		_icon.Info.Height.SetValue(256 * scale);
-		_icon.Info.Left.SetValue((Info.Width - _icon.Info.Width) / 2);
-		_icon.Info.Top.SetValue(18 * scale);
 		Register(_icon);
 
 		// Tree
 		_tree = new UIBlock();
-		_tree.Info.Width.SetValue(81 * scale);
-		_tree.Info.Height.SetValue(162 * scale);
-		_tree.Info.Left.SetValue(36 * scale);
-		_tree.Info.Top.SetValue(60 * scale);
 		_tree.Info.SetMargin(0);
 		_tree.PanelColor = Color.Transparent;
 		_tree.BorderWidth = 0;
@@ -83,18 +76,12 @@ public class UIMissionDetail : UIBlock
 		Register(_tree);
 
 		_treeIcon = new UIImage(ModAsset.ToMissionTreeSurface.Value, Color.White);
-		_treeIcon.Info.Width = _tree.Info.Width;
-		_treeIcon.Info.Height = _tree.Info.Height;
 		_treeIcon.Events.OnMouseHover += e => _treeIcon.Color = MaskButtonHoverColor;
 		_treeIcon.Events.OnMouseOut += e => _treeIcon.Color = MaskButtonColor;
 		_tree.Register(_treeIcon);
 
 		// Timer
 		_timer = new UIBlock();
-		_timer.Info.Width.SetValue(73 * scale);
-		_timer.Info.Height.SetValue(71 * scale);
-		_timer.Info.Left.SetValue(600 * scale);
-		_timer.Info.Top.SetValue(110 * scale);
 		_timer.Info.SetMargin(0);
 		_timer.PanelColor = Color.Transparent;
 		_timer.BorderWidth = 0;
@@ -107,92 +94,51 @@ public class UIMissionDetail : UIBlock
 		Register(_timer);
 
 		_timerIcon = new UIImage(ModAsset.ToClockSurface.Value, Color.White);
-		_timerIcon.Info.Width = _timer.Info.Width;
-		_timerIcon.Info.Height = _timer.Info.Height;
 		_timerIcon.Events.OnMouseHover += e => _timerIcon.Color = MaskButtonHoverColor;
 		_timerIcon.Events.OnMouseOut += e => _timerIcon.Color = MaskButtonColor;
 		_timer.Register(_timerIcon);
 
 		// Description
 		_description = new UIBlock();
-		_description.Info.Width.SetValue(210 * scale);
-		_description.Info.Height.SetValue(384 * scale);
-		_description.Info.Left.SetValue(20 * scale);
-		_description.Info.Top.SetValue(314 * scale);
 		_description.PanelColor = ComponentColor;
 		_description.BorderColor = Color.Gray;
 		Register(_description);
 
 		_descriptionTextScrollbar = new UIMissionTextVerticalScrollbar();
-		_descriptionTextScrollbar.Info.Height.SetValue(-16f, 1f);
-		_descriptionTextScrollbar.Info.SetToCenter();
-		_descriptionTextScrollbar.Info.Left.SetValue(-8f, 1f);
 		_description.Register(_descriptionTextScrollbar);
 
 		_descriptionContainer = new UIContainerPanel();
-		_descriptionContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
-		_descriptionContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
-		_descriptionContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
-		_descriptionContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
 		_descriptionContainer.SetVerticalScrollbar(_descriptionTextScrollbar);
 		_description.Register(_descriptionContainer);
 
 		// Objective
 		_objective = new UIBlock();
-		_objective = new UIBlock();
-		_objective.Info.Width.SetValue(210 * scale);
-		_objective.Info.Height.SetValue(384 * scale);
-		_objective.Info.Left.SetValue((20 + 210 + 20) * scale);
-		_objective.Info.Top.SetValue(_description.Info.Top);
 		_objective.PanelColor = ComponentColor;
 		_objective.BorderColor = Color.Gray;
 		Register(_objective);
 
 		_objectiveTextScrollbar = new UIMissionTextVerticalScrollbar();
-		_objectiveTextScrollbar.Info.Height.SetValue(-16f, 1f);
-		_objectiveTextScrollbar.Info.SetToCenter();
-		_objectiveTextScrollbar.Info.Left.SetValue(-8f, 1f);
 		_objective.Register(_objectiveTextScrollbar);
 
 		_objectiveContainer = new UIContainerPanel();
-		_objectiveContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
-		_objectiveContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
-		_objectiveContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
-		_objectiveContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
 		_objectiveContainer.SetVerticalScrollbar(_objectiveTextScrollbar);
 		_objective.Register(_objectiveContainer);
 
 		// Reward
 		_reward = new UIBlock();
-		_reward = new UIBlock();
-		_reward.Info.Width.SetValue(210 * scale);
-		_reward.Info.Height.SetValue(284 * scale);
-		_reward.Info.Left.SetValue((20 + 210 + 20 + 210 + 20) * scale);
-		_reward.Info.Top.SetValue(_description.Info.Top);
 		_reward.PanelColor = ComponentColor;
 		_reward.BorderColor = Color.Gray;
 		Register(_reward);
 
 		_rewardTextScrollbar = new UIMissionTextVerticalScrollbar();
-		_rewardTextScrollbar.Info.Height.SetValue(-16f, 1f);
-		_rewardTextScrollbar.Info.SetToCenter();
-		_rewardTextScrollbar.Info.Left.SetValue(-8f, 1f);
 		_reward.Register(_rewardTextScrollbar);
 
 		_rewardContainer = new UIContainerPanel();
-		_rewardContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
-		_rewardContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
-		_rewardContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
-		_rewardContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
 		_rewardContainer.SetVerticalScrollbar(_rewardTextScrollbar);
 		_reward.Register(_rewardContainer);
 
 		// Button
 		_changeMission = new UIBlock();
-		_changeMission.Info.Width.SetValue(80 * scale);
-		_changeMission.Info.Height.SetValue(40 * scale);
-		_changeMission.Info.Left.SetValue((20 + 210 + 20 + 210 + 20 + 105 - 40) * scale);
-		_changeMission.Info.Top.SetValue((314 + 284 + 30) * scale);
 		_changeMission.Info.IsSensitive = true;
 		_changeMission.PanelColor = ComponentColor;
 		_changeMission.Events.OnLeftDown += OnClickChange;
@@ -214,6 +160,90 @@ public class UIMissionDetail : UIBlock
 		_changeMission.Register(_changeText);
 	}
 
+	public override void Calculation()
+	{
+		base.Calculation();
+
+		_icon.Info.Width.SetValue(420 * Scale);
+		_icon.Info.Height.SetValue(256 * Scale);
+		_icon.Info.Left.SetValue((Info.Width - _icon.Info.Width) / 2);
+		_icon.Info.Top.SetValue(18 * Scale);
+
+		_tree.Info.Width.SetValue(81 * Scale);
+		_tree.Info.Height.SetValue(162 * Scale);
+		_tree.Info.Left.SetValue(36 * Scale);
+		_tree.Info.Top.SetValue(60 * Scale);
+
+		_treeIcon.Info.Width = _tree.Info.Width;
+		_treeIcon.Info.Height = _tree.Info.Height;
+
+		_timer.Info.Width.SetValue(73 * Scale);
+		_timer.Info.Height.SetValue(71 * Scale);
+		_timer.Info.Left.SetValue(600 * Scale);
+		_timer.Info.Top.SetValue(110 * Scale);
+
+		_timerIcon.Info.Width = _timer.Info.Width;
+		_timerIcon.Info.Height = _timer.Info.Height;
+
+		_description.Info.Width.SetValue(210 * Scale);
+		_description.Info.Height.SetValue(384 * Scale);
+		_description.Info.Left.SetValue(20 * Scale);
+		_description.Info.Top.SetValue(314 * Scale);
+
+		_descriptionTextScrollbar.Info.Height.SetValue(-16f, 1f);
+		_descriptionTextScrollbar.Info.SetToCenter();
+		_descriptionTextScrollbar.Info.Left.SetValue(-8f, 1f);
+
+		_descriptionContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
+		_descriptionContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
+		_descriptionContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
+		_descriptionContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
+
+		_objectiveContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
+		_objectiveContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
+		_objectiveContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
+		_objectiveContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
+
+		_objective.Info.Width.SetValue(210 * Scale);
+		_objective.Info.Height.SetValue(384 * Scale);
+		_objective.Info.Left.SetValue((20 + 210 + 20) * Scale);
+		_objective.Info.Top.SetValue(_description.Info.Top);
+
+		_objectiveTextScrollbar.Info.Height.SetValue(-16f, 1f);
+		_objectiveTextScrollbar.Info.SetToCenter();
+		_objectiveTextScrollbar.Info.Left.SetValue(-8f, 1f);
+
+		_reward.Info.Width.SetValue(210 * Scale);
+		_reward.Info.Height.SetValue(284 * Scale);
+		_reward.Info.Left.SetValue((20 + 210 + 20 + 210 + 20) * Scale);
+		_reward.Info.Top.SetValue(_description.Info.Top);
+
+		_rewardTextScrollbar.Info.Height.SetValue(-16f, 1f);
+		_rewardTextScrollbar.Info.SetToCenter();
+		_rewardTextScrollbar.Info.Left.SetValue(-8f, 1f);
+
+		_rewardContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
+		_rewardContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
+		_rewardContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
+		_rewardContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
+
+		_changeMission.Info.Width.SetValue(80 * Scale);
+		_changeMission.Info.Height.SetValue(40 * Scale);
+		_changeMission.Info.Left.SetValue((20 + 210 + 20 + 210 + 20 + 105 - 40) * Scale);
+		_changeMission.Info.Top.SetValue((314 + 284 + 30) * Scale);
+
+		if(oldScale != Scale)
+		{
+			oldScale = Scale;
+
+			if(SelectedItem != null)
+			{
+				ResetTexts();
+				SetTexts(SelectedItem.Mission);
+			}
+		}
+	}
+
 	public static void HideMissionSubContent() => DetailSub.Info.IsVisible = false;
 
 	public void ResetMissionDetail()
@@ -221,14 +251,7 @@ public class UIMissionDetail : UIBlock
 		HideMissionSubContent();
 
 		_icon.SetIconGroup(null);
-		_descriptionTextScrollbar.WheelValue = 0f;
-		_descriptionContainer.ClearAllElements();
-
-		_objectiveTextScrollbar.WheelValue = 0f;
-		_objectiveContainer.ClearAllElements();
-
-		_rewardTextScrollbar.WheelValue = 0f;
-		_rewardContainer.ClearAllElements();
+		ResetTexts();
 	}
 
 	public void SetMissionDetail(UIMissionItem missionItem)
@@ -243,53 +266,70 @@ public class UIMissionDetail : UIBlock
 			_icon.SetIconGroup(mission.Icon);
 			_descriptionTextScrollbar.WheelValue = 0f;
 
-			var desText = new StringBuilder();
-
-			// Time limit
-			if (mission.TimeMax > 0)
-			{
-				desText.Append(mission.GetTime() + "\n");
-			}
-
-			// Description
-			desText.Append("描述：\n");
-			if (string.IsNullOrWhiteSpace(mission.Description))
-			{
-				desText.Append("无\n");
-			}
-			else
-			{
-				desText.Append(mission.Description + "\n");
-			}
-			var des = new UITextPlus(desText.ToString());
-			des.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
-			des.StringDrawer.Init(des.Text);
-			_descriptionContainer.AddElement(des);
-			des.StringDrawer.SetWordWrap(_descriptionContainer.HitBox.Width - _descriptionTextScrollbar.InnerScale.X);
-
-			// Objectives
-			var objText = new StringBuilder();
-			objText.Append("目标：\n");
-			foreach (var objective in mission.GetObjectives())
-			{
-				objText.Append(objective);
-			}
-			var obj = new UITextPlus(objText.ToString());
-			obj.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
-			obj.StringDrawer.Init(obj.Text);
-			_objectiveContainer.AddElement(obj);
-			obj.StringDrawer.SetWordWrap(_objectiveContainer.HitBox.Width - _objectiveTextScrollbar.InnerScale.X);
-
-			// Rewards
-			var rewText = new StringBuilder();
-			rewText.Append("奖励：\n");
-			rewText.Append(mission.GetRewards());
-			var rew = new UITextPlus(rewText.ToString());
-			rew.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
-			rew.StringDrawer.Init(rew.Text);
-			_rewardContainer.AddElement(rew);
-			rew.StringDrawer.SetWordWrap(_rewardContainer.HitBox.Width - _rewardTextScrollbar.InnerScale.X);
+			SetTexts(mission);
 		}
+	}
+
+	public void SetTexts(MissionBase mission)
+	{
+		var desText = new StringBuilder();
+
+		// Time limit
+		if (mission.TimeMax > 0)
+		{
+			desText.Append(mission.GetTime() + "\n");
+		}
+
+		// Description
+		desText.Append("描述：\n");
+		if (string.IsNullOrWhiteSpace(mission.Description))
+		{
+			desText.Append("无\n");
+		}
+		else
+		{
+			desText.Append(mission.Description + "\n");
+		}
+		var des = new UITextPlus(desText.ToString());
+		des.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
+		des.StringDrawer.Init(des.Text);
+		_descriptionContainer.AddElement(des);
+		des.StringDrawer.SetWordWrap(_descriptionContainer.HitBox.Width - _descriptionTextScrollbar.InnerScale.X);
+
+		// Objectives
+		var objText = new StringBuilder();
+		objText.Append("目标：\n");
+		foreach (var objective in mission.GetObjectives())
+		{
+			objText.Append(objective);
+		}
+		var obj = new UITextPlus(objText.ToString());
+		obj.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
+		obj.StringDrawer.Init(obj.Text);
+		_objectiveContainer.AddElement(obj);
+		obj.StringDrawer.SetWordWrap(_objectiveContainer.HitBox.Width - _objectiveTextScrollbar.InnerScale.X);
+
+		// Rewards
+		var rewText = new StringBuilder();
+		rewText.Append("奖励：\n");
+		rewText.Append(mission.GetRewards());
+		var rew = new UITextPlus(rewText.ToString());
+		rew.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
+		rew.StringDrawer.Init(rew.Text);
+		_rewardContainer.AddElement(rew);
+		rew.StringDrawer.SetWordWrap(_rewardContainer.HitBox.Width - _rewardTextScrollbar.InnerScale.X);
+	}
+
+	private void ResetTexts()
+	{
+		_descriptionTextScrollbar.WheelValue = 0f;
+		_descriptionContainer.ClearAllElements();
+
+		_objectiveTextScrollbar.WheelValue = 0f;
+		_objectiveContainer.ClearAllElements();
+
+		_rewardTextScrollbar.WheelValue = 0f;
+		_rewardContainer.ClearAllElements();
 	}
 
 	/// <summary>

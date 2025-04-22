@@ -185,12 +185,17 @@ public class UIMissionFilter : BaseElement
 	{
 		base.OnInitialization();
 
+		Events.OnMouseHover += ManageHeldLogic;
+	}
+
+	public override void Calculation()
+	{
+		base.Calculation();
+
 		var scale = MissionContainer.Scale;
 
 		Info.Width.SetValue(350 * scale);
 		Info.Height.SetValue(350 * scale);
-
-		Events.OnMouseHover += ManageHeldLogic;
 	}
 
 	public override void Update(GameTime gt)

@@ -6,6 +6,7 @@ using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Vertex;
 using Terraria.GameContent;
 using UIImage = Everglow.Commons.UI.UIElements.UIImage;
+using static Everglow.Commons.Mechanics.MissionSystem.UI.MissionContainer;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 
@@ -15,6 +16,12 @@ namespace Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 public class UIMissionItem : UIBlock
 {
 	private UIBlock block;
+	private UIImage _background;
+	private UIImage statusBar;
+	private UIBlock nameContainer;
+	private UITextPlus name;
+
+	private float oldScale;
 
 	public MissionBase Mission { get; private set; }
 
@@ -24,12 +31,10 @@ public class UIMissionItem : UIBlock
 		PanelColor = Color.Transparent;
 		BorderWidth = 0;
 
-		var scale = MissionContainer.Scale;
-
 		// 初始化UI信息
-		Info.Width.SetValue(320f * scale, 0f);
-		Info.Height.SetValue(60f * scale, 0f);
-		Info.SetToCenter();
+		Info.Width.SetValue(320f * Scale, 0f);
+		Info.Height.SetValue(60f * Scale, 0f);
+		Info.Left.SetValue(100 * Scale);
 		Info.SetMargin(0);
 		Info.IsSensitive = true;
 
@@ -48,23 +53,23 @@ public class UIMissionItem : UIBlock
 		Register(block);
 
 		// 任务项背景
-		var _background = new UIImage(GetBackground(Mission), Color.White);
+		_background = new UIImage(GetBackground(Mission), Color.White);
 		_background.Info.Width.SetFull();
 		_background.Info.Height.SetFull();
 		_background.Style = UIImage.CalculationStyle.None;
 		block.Register(_background);
 
 		// 任务进度
-		var statusBar = new UIImage(GetMissionStatus(Mission), Color.White);
-		statusBar.Info.Top.SetValue(19f * scale, 0);
-		statusBar.Info.Left.SetValue(291f * scale, 0);
-		statusBar.Info.Width.SetValue(12 * scale, 0);
-		statusBar.Info.Height.SetValue(32 * scale, 0);
+		statusBar = new UIImage(GetMissionStatus(Mission), Color.White);
+		statusBar.Info.Top.SetValue(19f * Scale, 0);
+		statusBar.Info.Left.SetValue(291f * Scale, 0);
+		statusBar.Info.Width.SetValue(12 * Scale, 0);
+		statusBar.Info.Height.SetValue(32 * Scale, 0);
 		block.Register(statusBar);
 
 		// 任务名称
-		var nameContainer = new UIBlock();
-		nameContainer.Info.Width.SetValue(220 * scale);
+		nameContainer = new UIBlock();
+		nameContainer.Info.Width.SetValue(220 * Scale);
 		nameContainer.Info.Height.SetFull();
 		nameContainer.Info.SetToCenter();
 		nameContainer.Info.Left.SetValue(0, 0.2f);
@@ -73,15 +78,49 @@ public class UIMissionItem : UIBlock
 		nameContainer.BorderWidth = 0;
 		block.Register(nameContainer);
 
-		var font = FontManager.FusionPixel12.GetFont(40f * scale);
-		var name = new UITextPlus(Mission.DisplayName);
-		name.StringDrawer.DefaultParameters.SetParameter("FontSize", 36f * scale);
+		var font = FontManager.FusionPixel12.GetFont(40f * Scale);
+		name = new UITextPlus(Mission.DisplayName);
+		name.StringDrawer.DefaultParameters.SetParameter("FontSize", 36f * Scale);
 		name.StringDrawer.Init(name.Text);
 		nameContainer.Register(name);
 
 		name.Info.SetToCenter();
 		name.Info.Left.SetEmpty();
 		name.Calculation();
+	}
+
+	public override void Calculation()
+	{
+		base.Calculation();
+
+		Info.Width.SetValue(320f * Scale, 0f);
+		Info.Height.SetValue(60f * Scale, 0f);
+		Info.Left.SetValue(20 * Scale);
+
+		statusBar.Info.Top.SetValue(19f * Scale, 0);
+		statusBar.Info.Left.SetValue(291f * Scale, 0);
+		statusBar.Info.Width.SetValue(12 * Scale, 0);
+		statusBar.Info.Height.SetValue(32 * Scale, 0);
+
+		nameContainer.Info.Width.SetValue(220 * Scale);
+		nameContainer.Info.Height.SetFull();
+		nameContainer.Info.SetToCenter();
+		nameContainer.Info.Left.SetValue(0, 0.2f);
+
+		if(oldScale != Scale)
+		{
+			oldScale = Scale;
+
+			nameContainer.ChildrenElements.RemoveAll(m => m is UITextPlus);
+			name = new UITextPlus(Mission.DisplayName);
+			name.StringDrawer.DefaultParameters.SetParameter("FontSize", 36f * Scale);
+			name.StringDrawer.Init(name.Text);
+			nameContainer.Register(name);
+
+			name.Info.SetToCenter();
+			name.Info.Left.SetEmpty();
+			name.Calculation();
+		}
 	}
 
 	private static Texture2D GetBackground(MissionBase mission) => mission.MissionType switch
