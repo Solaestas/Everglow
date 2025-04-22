@@ -1,4 +1,3 @@
-using Everglow.Commons.Mechanics.MissionSystem.Abstracts;
 using Everglow.Commons.Mechanics.MissionSystem.Primitives;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements;
 using Everglow.Commons.Mechanics.MissionSystem.UI.UIElements.MissionDetail;
@@ -81,13 +80,13 @@ public class MissionContainer : UIContainerElement
 	{
 		UpdateResolutionFactor(ScreenUtils.CurrentResolution);
 
-		Player.Hooks.OnEnterWorld += OnEnterWorld_Close;
+		Player.Hooks.OnEnterWorld += OnEnterWorld;
 		Main.OnResolutionChanged += OnResolutionChanged_Adapt;
 	}
 
 	public void Unload()
 	{
-		Player.Hooks.OnEnterWorld -= OnEnterWorld_Close;
+		Player.Hooks.OnEnterWorld -= OnEnterWorld;
 		Main.OnResolutionChanged -= OnResolutionChanged_Adapt;
 	}
 
@@ -95,13 +94,14 @@ public class MissionContainer : UIContainerElement
 	/// Close mission panel on enter world
 	/// </summary>
 	/// <param name="player"></param>
-	private void OnEnterWorld_Close(Player player)
+	private void OnEnterWorld(Player player)
 	{
 		if (player.whoAmI == Main.myPlayer)
 		{
 			Close();
 			UpdateResolutionFactor(ScreenUtils.CurrentResolution);
 			RefreshMissionContainer();
+			_panel.Info.SetToCenter();
 		}
 	}
 
@@ -112,6 +112,7 @@ public class MissionContainer : UIContainerElement
 	private void OnResolutionChanged_Adapt(Vector2 resolution)
 	{
 		UpdateResolutionFactor(resolution);
+		_panel.Info.SetToCenter();
 	}
 
 	/// <summary>
@@ -154,6 +155,7 @@ public class MissionContainer : UIContainerElement
 		_panel = new UIBlock();
 		_panel.PanelColor = Color.Transparent;
 		_panel.CanDrag = true;
+		_panel.Info.SetToCenter();
 		Register(_panel);
 
 		// Background image
@@ -241,7 +243,6 @@ public class MissionContainer : UIContainerElement
 
 		_panel.Info.Width.SetValue(width, 0f);
 		_panel.Info.Height.SetValue(height, 0f);
-		_panel.Info.SetToCenter();
 
 		_panelBackground.Info.Width.SetFull();
 		_panelBackground.Info.Height.SetFull();

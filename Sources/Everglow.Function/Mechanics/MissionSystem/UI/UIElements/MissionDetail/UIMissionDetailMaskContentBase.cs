@@ -8,7 +8,7 @@ public abstract class UIMissionDetailMaskContentBase<TMask> : UIBlock
 {
 	protected MissionBase _mission;
 
-	public event Action HideMask;
+	public event Action<BaseElement> HideMask;
 
 	public virtual Color? BackgroundColor => null;
 
@@ -23,7 +23,7 @@ public abstract class UIMissionDetailMaskContentBase<TMask> : UIBlock
 
 	protected void Hide(BaseElement _)
 	{
-		HideMask?.Invoke();
+		HideMask?.Invoke(this);
 	}
 
 	public virtual void SetMission(MissionBase mission)

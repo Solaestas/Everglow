@@ -45,13 +45,18 @@ public abstract class UIMissionDetailMaskBase<TMask> : UIBlock
 		Show(content);
 	}
 
-	private void Hide()
+	private void Hide(BaseElement element)
 	{
 		Info.IsVisible = false;
 
-		_container.Remove(_content);
-		_content.HideMask -= Hide;
-		_content.Reset();
+		if(element is not UIMissionDetailMaskContentBase<TMask> content)
+		{
+			throw new InvalidOperationException("Invalid call.");
+		}
+
+		_container.Remove(content);
+		content.HideMask -= Hide;
+		content.Reset();
 		_content = null;
 
 		PanelColor = DefaultColor;
