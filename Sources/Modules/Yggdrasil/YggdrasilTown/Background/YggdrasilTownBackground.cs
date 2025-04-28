@@ -164,7 +164,7 @@ public class YggdrasilTownBackground : ModSystem
 			var townFar = ModAsset.Town_Far.Value;
 			var townSky = ModAsset.Town_Sky.Value;
 			Vector2 correction = OriginPylonCenter;
-			if (!YggdrasilTownCentralSystem.InCanteen_YggdrasilTown() && !YggdrasilTownCentralSystem.InUnion_YggdrasilTown() && !YggdrasilTownCentralSystem.InPlayerRoom_YggdrasilTown())
+			if (!YggdrasilTownCentralSystem.InCanteen_YggdrasilTown() && !YggdrasilTownCentralSystem.InUnion_YggdrasilTown() && !YggdrasilTownCentralSystem.InPlayerRoom_YggdrasilTown() && !YggdrasilTownCentralSystem.InArena_YggdrasilTown())
 			{
 				BackgroundManager.QuickDrawBG(townSky, float.PositiveInfinity, correction, baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 				BackgroundManager.QuickDrawBG(townFar, 15f, correction, baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);

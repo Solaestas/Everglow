@@ -21,7 +21,7 @@ public class Betty_Apple : TrailingProjectile
 		Projectile.tileCollide = true;
 		Projectile.penetrate = 1;
 		Projectile.timeLeft = 600;
-
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
 		TrailColor = new Color(0.9f, 0.9f, 0.9f, 0f);

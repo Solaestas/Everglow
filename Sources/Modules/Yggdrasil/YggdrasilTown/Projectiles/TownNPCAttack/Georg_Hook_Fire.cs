@@ -4,7 +4,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.TownNPCAttack;
 
-public class Georg_Hook : ModProjectile
+public class Georg_Hook_Fire : ModProjectile
 {
 	public NPC Owner;
 

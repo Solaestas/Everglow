@@ -20,6 +20,7 @@ public class Betty_Fork : ModProjectile
 		Projectile.tileCollide = true;
 		Projectile.penetrate = 1;
 		Projectile.timeLeft = 600;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
 	}
 
 	public override void AI()

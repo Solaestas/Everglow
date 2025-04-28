@@ -5,9 +5,9 @@ using SubworldLibrary;
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 
 [AutoloadHead]
-public class Resturateur : TownNPC_LiveInYggdrasil
+public class Restauranteur : TownNPC_LiveInYggdrasil
 {
-	public override string HeadTexture => ModAsset.Resturateur_Head_Mod;
+	public override string HeadTexture => ModAsset.Restauranteur_Head_Mod;
 
 	public bool Attacking = false;
 
@@ -209,13 +209,13 @@ public class Resturateur : TownNPC_LiveInYggdrasil
 	{
 		if(!Attacking)
 		{
-			Texture2D texMain = ModAsset.Resturateur.Value;
+			Texture2D texMain = ModAsset.Restauranteur.Value;
 			Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height) * 0.5f;
 			Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		}
 		else
 		{
-			Texture2D texMain = ModAsset.Resturateur_Attack.Value;
+			Texture2D texMain = ModAsset.Restauranteur_Attack.Value;
 			Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height) * 0.5f;
 			Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, NPC.rotation, texMain.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		}

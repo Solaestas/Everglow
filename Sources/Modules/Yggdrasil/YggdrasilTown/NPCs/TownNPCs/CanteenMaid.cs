@@ -270,7 +270,7 @@ public class CanteenMaid : TownNPC_LiveInYggdrasil
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		Texture2D texMain = ModAsset.CanteenMaid_walk.Value;
+		Texture2D texMain = ModAsset.CanteenMaid.Value;
 		Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height + 4) * 0.5f;
 		if (AttackTimer > 0)
 		{

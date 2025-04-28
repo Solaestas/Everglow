@@ -1,6 +1,9 @@
 using Everglow.Commons.Coroutines;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs.Arena;
 using SubworldLibrary;
 using Terraria.DataStructures;
+using Terraria.Localization;
 using static Everglow.Commons.Utilities.NPCUtils;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
@@ -24,6 +27,12 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 	public bool Talking = false;
 	public bool Sit = false;
 	public bool Idle = true;
+	public bool ChallengeClicked = false;
+
+	/// <summary>
+	/// True when fighting in arena, and behave as boss if true.
+	/// </summary>
+	public bool ArenaFighting = false;
 	public int ThreatenTarget = -1;
 	public int FrameHeight = 56;
 
@@ -71,6 +80,11 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 	public override void OnSpawn(IEntitySource source)
 	{
 		_townNPCGeneralCoroutine.StartCoroutine(new Coroutine(BehaviorControl()));
+		CheckInArena();
+		if (ArenaFighting)
+		{
+			SetDefaultsToArena();
+		}
 		base.OnSpawn(source);
 	}
 
@@ -84,6 +98,17 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 	{
 		_townNPCBehaviorCoroutine.Update();
 		_townNPCGeneralCoroutine.Update();
+		if (ArenaFighting && StartFighting)
+		{
+			BossAI();
+			return;
+		}
+		if (ArenaFighting && !StartFighting)
+		{
+			NPC.velocity *= 0;
+			NPC.frame = StandFrame;
+			return;
+		}
 		if (!Talking)
 		{
 			CheckDangers();
@@ -332,6 +357,15 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 		}
 	}
 
+	public virtual void CheckInArena()
+	{
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			ArenaFighting = true;
+			return;
+		}
+	}
+
 	public virtual void TeleportHome()
 	{
 		NPC.Center = AnchorForBehaviorPos.ToWorldCoordinates() + new Vector2(0, 48);
@@ -525,20 +559,504 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 
 	public override bool CanChat()
 	{
-		return true;
+		return !YggdrasilTownCentralSystem.InArena_YggdrasilTown();
 	}
 
 	public override string GetChat()
 	{
 		Talking = true;
+		ChallengeClicked = false;
+		YggdrasilTownCentralSystem.FightingRequestPlayerNPCType = new Point(-1, -1);
 		return base.GetChat();
+	}
+
+	public override void SetChatButtons(ref string button, ref string button2)
+	{
+		if (!ChallengeClicked)
+		{
+			button = Language.GetTextValue("Challenge");
+		}
+		else
+		{
+			button = Language.GetTextValue("Fight Now");
+		}
+
+		button2 = Language.GetTextValue("Help");
+	}
+
+	public override void OnChatButtonClicked(bool firstButton, ref string shopName)
+	{
+		if (firstButton && ChallengeClicked)
+		{
+			YggdrasilTownCentralSystem.TryEnterArena();
+		}
+		if (firstButton && !ChallengeClicked)
+		{
+			ChallengeClicked = true;
+			YggdrasilTownCentralSystem.FightingRequestPlayerNPCType = new Point(Main.myPlayer, Type);
+		}
 	}
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		Texture2D texMain = ModAsset.Resturateur.Value;
+		Texture2D texMain = ModAsset.Restauranteur.Value;
 		Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height + 8) * 0.5f;
 		Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		return false;
+	}
+
+	// -------Below is Boss Part-----------Below is Boss Part-----------Below is Boss Part-----------Below is Boss Part-----------Below is Boss Part-----------Below is Boss Part-----------Below is Boss Part-----------
+	public struct BossTag(string name = default, int value = default, string display = default)
+	{
+		public bool Enable = false;
+		public string Name = name;
+		public string DisplayContents = display;
+		public int Value = value;
+		public List<string> FatherTags;
+		public List<string> ConflictTags;
+		public int IconType = -1;
+		public Color IconColor = Color.White;
+	}
+
+	public List<BossTag> MyBossTags = new List<BossTag>();
+
+	public float BossMovingSpeed = 1f;
+
+	public float Resilience = 0;
+
+	public float ResilienceMax = 100;
+
+	public float SkillPower = 0;
+
+	public float SkillPowerMax = 100;
+
+	public bool StartFighting = false;
+
+	public int LifeRegenPerS = 0;
+
+	public int LifeTimer = 0;
+
+	public int HitPlayerCount;
+
+	public int BossTimer;
+
+	public bool Gridlock = false;
+
+	public bool ImmuneLower300 = false;
+
+	public bool ImmuneUpper300 = false;
+
+	public bool ContentTag(string name)
+	{
+		foreach (var tag in MyBossTags)
+		{
+			if (tag.Name == name)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public virtual void SetDefaultsToArena()
+	{
+		NPC.townNPC = false;
+		NPC.friendly = false;
+		NPC.boss = true;
+		NPC.width = 18;
+		NPC.height = 40;
+		NPC.aiStyle = -1;
+		NPC.damage = 100;
+		NPC.defense = 100;
+		NPC.lifeMax = 5000;
+		NPC.life = NPC.lifeMax;
+		NPC.damage = 50;
+		NPC.HitSound = SoundID.NPCHit1;
+		NPC.DeathSound = SoundID.NPCDeath6;
+		NPC.knockBackResist = 0.5f;
+		BossMovingSpeed = 1f;
+		StartFighting = false;
+		LifeRegenPerS = 0;
+		LifeTimer = 0;
+		ImmuneLower300 = false;
+		ImmuneUpper300 = false;
+		Gridlock = false;
+		SkillPower = SkillPowerMax;
+		HitPlayerCount = 0;
+		InitializeBossTags();
+	}
+
+	public virtual void InitializeBossTags()
+	{
+		var bossTags = new List<BossTag>
+		{
+			new BossTag("PlayerDamageReduce10", 10, "Decrease your damage by 10%, same effects stacked.") { IconType = 1 },
+			new BossTag("PlayerDamageReduce20", 10, "Decrease your damage by 20%, same effects stacked.") { IconType = 1 },
+			new BossTag("PlayerDamageReduce30", 30, "Decrease your damage by 30%, same effects stacked.") { IconType = 1 },
+
+			new BossTag("BossDamagePlus30", 10, "Increase his damage by 30%, same effects stacked.") { IconType = 0 },
+			new BossTag("BossDamagePlus50", 10, "Increase his damage by 50%, same effects stacked.") { IconType = 0 },
+			new BossTag("BossDamagePlus120", 30, "Increase his damage by 120%, same effects stacked.") { IconType = 0 },
+
+			new BossTag("FastMoving50", 10, "Increase his moving speed by 50%, same effects stacked.") { IconType = 3 },
+			new BossTag("FastMoving150", 20, "Increase his moving speed by 150%, same effects stacked.") { IconType = 3 },
+			new BossTag("FastMoving250", 30, "Increase his moving speed by 250%, same effects stacked.") { IconType = 3 },
+
+			new BossTag("BanHealthPotion", 30, "Prohibit the use of life-restoring potions.") { IconType = 4, ConflictTags = new List<string>() { "HalfHealthPotion" } },
+			new BossTag("HalfHealthPotion", 10, "Halves the effect of life-restoring potions.") { IconType = 5, ConflictTags = new List<string>() { "BanHealthPotion" } },
+
+			new BossTag("BossDefIncrease20", 10, "Increase his defense by 20, same effects stacked.") { IconType = 6 },
+			new BossTag("BossDefIncrease40", 20, "Increase his defense by 40, same effects stacked.") { IconType = 6 },
+			new BossTag("BossDefIncrease60", 30, "Increase his defense by 60, same effects stacked.") { IconType = 6 },
+
+			new BossTag("PlayerDefenseReduce20", 10, "Decrease your defense by 20, same effects stacked.") { IconType = 7 },
+			new BossTag("PlayerDefenseReduce30", 20, "Decrease your defense by 30, same effects stacked.") { IconType = 7 },
+
+			new BossTag("BossLifeIncrease50", 10, "Increase his max life by 50%, same effects stacked.") { IconType = 8 },
+			new BossTag("BossLifeIncrease150", 20, "Increase his max life by 150%, same effects stacked.") { IconType = 8 },
+			new BossTag("BossLifeIncrease250", 30, "Increase his max life by 250%, same effects stacked.") { IconType = 8 },
+
+			new BossTag("LifeRegeneration20", 10, "His life will regenerate by 20 per second, same effects stacked.") { IconType = 9 },
+			new BossTag("LifeRegeneration30", 20, "His life will regenerate by 30 per second, same effects stacked.") { IconType = 9 },
+
+			new BossTag("DisableCreate", 10, "Prohibition of the creation and destruction of tiles.") { IconType = 10 },
+			new BossTag("DisableKnockBack", 10, "He immunes knockback.") { IconType = 11 },
+
+			new BossTag("PlayerLifeReduce25", 10, "Decrease your max life by 25%, same effects stacked.") { IconType = 12 },
+			new BossTag("PlayerLifeReduce50", 20, "Decrease your max life by 50%, same effects stacked.") { IconType = 12 },
+
+			new BossTag("BossImmuneIn300Distance", 30, "He will immune all damage at a distance of less than 300") { IconType = 13, ConflictTags = new List<string>() { "BossImmuneOff300Distance" } },
+			new BossTag("BossImmuneOff300Distance", 30, "He will immune all damage at a distance of more than 300") { IconType = 14, ConflictTags = new List<string>() { "BossImmuneIn300Distance" } },
+			new BossTag("10Inventory", 10, "You can only carry a maximum of 10 items in your backpack.") { IconType = 15 },
+			new BossTag("15Hits", 10, "Forced death from 15 injuries") { IconType = 16, ConflictTags = new List<string>() { "5Hits" } },
+			new BossTag("5Hits", 30, "Forced death from 5 injuries.") { IconType = 17, ConflictTags = new List<string>() { "15Hits" } },
+
+			new BossTag("180Seconds", 10, "Limit 180 seconds.") { IconType = 18, ConflictTags = new List<string>() { "90Seconds" } },
+			new BossTag("90Seconds", 30, "Limit 90 seconds.") { IconType = 18, ConflictTags = new List<string>() { "180Seconds" } },
+
+			new BossTag("FasterAttack50", 20, "Increase his attack speed by 50%") { IconType = 21 },
+			new BossTag("FasterAttack100", 30, "Increase his attack speed by 100%") { IconType = 21 },
+		};
+		MyBossTags.AddRange(bossTags);
+	}
+
+	public virtual void EnableBossTag(int index)
+	{
+		if (index >= MyBossTags.Count)
+		{
+			return;
+		}
+		BossTag[] oldTags = MyBossTags.ToArray();
+		MyBossTags.Clear();
+		BossTag targetTag = oldTags[index];
+		targetTag.Enable = true;
+		for (int i = 0; i < oldTags.Length; i++)
+		{
+			if (targetTag.ConflictTags is not null && targetTag.ConflictTags.Contains(oldTags[i].Name))
+			{
+				oldTags[i].Enable = false;
+			}
+		}
+		for (int i = 0; i < oldTags.Length; i++)
+		{
+			if (i == index)
+			{
+				MyBossTags.Add(targetTag);
+			}
+			else
+			{
+				MyBossTags.Add(oldTags[i]);
+			}
+		}
+	}
+
+	public virtual void DisableBossTag(int index)
+	{
+		if (index >= MyBossTags.Count)
+		{
+			return;
+		}
+		BossTag[] oldTags = MyBossTags.ToArray();
+		MyBossTags.Clear();
+		BossTag targetTag = oldTags[index];
+		targetTag.Enable = false;
+		for (int i = 0; i < oldTags.Length; i++)
+		{
+			if (i == index)
+			{
+				MyBossTags.Add(targetTag);
+			}
+			else
+			{
+				MyBossTags.Add(oldTags[i]);
+			}
+		}
+	}
+
+	public virtual void ApplyBossTags()
+	{
+		foreach (var tag in MyBossTags)
+		{
+			int origDamage = NPC.damage;
+			if (tag.Name == "BossDamagePlus30" && tag.Enable)
+			{
+				NPC.damage += (int)(origDamage * 0.3);
+			}
+			if (tag.Name == "BossDamagePlus50" && tag.Enable)
+			{
+				NPC.damage += (int)(origDamage * 0.5);
+			}
+			if (tag.Name == "BossDamagePlus120" && tag.Enable)
+			{
+				NPC.damage += (int)(origDamage * 0.5);
+			}
+			if (tag.Name == "FastMoving50" && tag.Enable)
+			{
+				BossMovingSpeed += 0.5f;
+			}
+			if (tag.Name == "FastMoving150" && tag.Enable)
+			{
+				BossMovingSpeed += 1.5f;
+			}
+			if (tag.Name == "FastMoving250" && tag.Enable)
+			{
+				BossMovingSpeed += 2.5f;
+			}
+			if (tag.Name == "BossDefIncrease20" && tag.Enable)
+			{
+				NPC.defense += 20;
+			}
+			if (tag.Name == "BossDefIncrease40" && tag.Enable)
+			{
+				NPC.defense += 40;
+			}
+			if (tag.Name == "BossDefIncrease60" && tag.Enable)
+			{
+				NPC.defense += 60;
+			}
+			int origLifeMax = NPC.lifeMax;
+			if (tag.Name == "BossLifeIncrease50" && tag.Enable)
+			{
+				NPC.lifeMax += (int)(origLifeMax * 0.5f);
+			}
+			if (tag.Name == "BossLifeIncrease150" && tag.Enable)
+			{
+				NPC.lifeMax += (int)(origLifeMax * 1.5f);
+			}
+			if (tag.Name == "BossLifeIncrease250" && tag.Enable)
+			{
+				NPC.lifeMax += (int)(origLifeMax * 2.5f);
+			}
+			if (tag.Name == "LifeRegeneration20" && tag.Enable)
+			{
+				LifeRegenPerS += 20;
+			}
+			if (tag.Name == "LifeRegeneration30" && tag.Enable)
+			{
+				LifeRegenPerS += 30;
+			}
+			if (tag.Name == "BossImmuneIn300Distance" && tag.Enable)
+			{
+				ImmuneLower300 = true;
+			}
+			if (tag.Name == "BossImmuneOff300Distance" && tag.Enable)
+			{
+				ImmuneUpper300 = true;
+			}
+			if (tag.Name == "DisableKnockBack" && tag.Enable)
+			{
+				NPC.knockBackResist = 0;
+			}
+			if (tag.Name == "DisableKnockBack" && tag.Enable)
+			{
+				NPC.knockBackResist = 0;
+			}
+		}
+	}
+
+	public virtual void StarFighting()
+	{
+		ApplyBossTags();
+		NPC.life = NPC.lifeMax;
+		BossTimer = 0;
+		StartFighting = true;
+	}
+
+	public virtual void BossAI()
+	{
+		NPC.TargetClosest(false);
+		if (StartFighting)
+		{
+			BossTimer++;
+			LifeTimer++;
+			if (LifeTimer % 6 == 0)
+			{
+				if (NPC.life < NPC.lifeMax)
+				{
+					NPC.life += LifeRegenPerS / 10;
+				}
+				else
+				{
+					NPC.life = NPC.lifeMax;
+				}
+			}
+			Player target = Main.player[NPC.target];
+			Vector2 distance = target.Center - NPC.Center;
+			if (ImmuneLower300)
+			{
+				if (distance.Length() < 300)
+				{
+					NPC.dontTakeDamage = true;
+				}
+				else
+				{
+					NPC.dontTakeDamage = false;
+				}
+			}
+
+			if (ImmuneUpper300)
+			{
+				if (distance.Length() > 300)
+				{
+					NPC.dontTakeDamage = true;
+				}
+				else
+				{
+					NPC.dontTakeDamage = false;
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Walking, include escape under duress, jump in front of a protruding tile, door opening(closing), check chair for sitting; Inheritable
+	/// </summary>
+	/// <param name="time"></param>
+	/// <returns></returns>
+	public virtual IEnumerator<ICoroutineInstruction> BossWalk(int time)
+	{
+		for (int t = 0; t < time; t++)
+		{
+			// Too far from home will trigger teleportation.
+			bool safe = false;
+			if (NPC.target >= 0)
+			{
+				safe = true;
+			}
+			if (!safe)
+			{
+				EndAIPiece();
+				yield break;
+			}
+			Player player = Main.player[NPC.target];
+			if (NPC.Center.X < player.Center.X - 10)
+			{
+				NPC.direction = 1;
+			}
+			if (NPC.Center.X > player.Center.X + 10)
+			{
+				NPC.direction = -1;
+			}
+			NPC.spriteDirection = NPC.direction;
+			float speed = 1.8f * BossMovingSpeed;
+			WalkFrame();
+			NPC.velocity.X = NPC.direction * speed;
+
+			if (BossToPlayerDistanceLowerThan(200))
+			{
+				break;
+			}
+			if (Resilience <= 0)
+			{
+				break;
+			}
+			TryOpenDoor(NPC);
+			TryCloseDoor(NPC);
+			yield return new SkipThisFrame();
+		}
+		NPC.velocity.X *= 0;
+		EndAIPiece();
+	}
+
+	public virtual IEnumerator<ICoroutineInstruction> StopAndGridlock(int time)
+	{
+		float oldKnockBackR = NPC.knockBackResist;
+		NPC.velocity *= 0f;
+		for (int t = 0; t < time; t++)
+		{
+			NPC.knockBackResist = 0;
+			NPC.frame = StandFrame;
+			NPC.velocity *= 0.9f;
+			float value = t / (float)time;
+			Resilience = (MathF.Sin((value - 0.5f) * MathHelper.Pi) + 1) * ResilienceMax;
+			yield return new SkipThisFrame();
+		}
+		Resilience = ResilienceMax;
+		NPC.velocity.X *= 0;
+		NPC.knockBackResist = oldKnockBackR;
+		EndAIPiece();
+	}
+
+	public override void HitEffect(NPC.HitInfo hit)
+	{
+		if(YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			Resilience -= hit.Knockback;
+		}
+		base.HitEffect(hit);
+	}
+
+	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
+	{
+		HitPlayerCount++;
+		base.OnHitPlayer(target, hurtInfo);
+	}
+
+	public virtual bool BossToPlayerDistanceLowerThan(float value)
+	{
+		if (NPC.target < 0)
+		{
+			return false;
+		}
+		Player player = Main.player[NPC.target];
+		if ((NPC.Center - player.Center).Length() < value)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	public override void OnKill()
+	{
+		if(YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			var sIB = new SuccessIconBackground
+			{
+				Active = true,
+				Visible = true,
+				Timer = 0,
+			};
+			Ins.VFXManager.Add(sIB);
+			var aSet = new ArenaSettlement
+			{
+				Active = true,
+				Visible = true,
+				Timer = 0,
+			};
+			Ins.VFXManager.Add(aSet);
+		}
+		base.OnKill();
+	}
+
+	public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
+	{
+		if(YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			float value = Math.Clamp(Resilience / ResilienceMax, 0, 1);
+			Texture2D bar = Commons.ModAsset.TileBlock.Value;
+			var drawPos = position - Main.screenPosition + new Vector2(0, -20 * scale);
+			Main.spriteBatch.Draw(bar, drawPos, null, Color.Gray, 0, bar.Size() * 0.5f, new Vector2(3, 0.5f) * scale, SpriteEffects.None, 0);
+		}
+		return base.DrawHealthBar(hbPosition, ref scale, ref position);
 	}
 }

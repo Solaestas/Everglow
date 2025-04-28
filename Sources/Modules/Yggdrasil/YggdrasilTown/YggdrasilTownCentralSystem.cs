@@ -20,6 +20,21 @@ public class YggdrasilTownCentralSystem : ModSystem
 		return position_Orig - TownTopLeftWorldCoord;
 	}
 
+	public static List<int> YggdrasilTownNPCList => new List<int>() { ModContent.NPCType<InnKeeper>(), ModContent.NPCType<TeahouseLady>(), ModContent.NPCType<Guard_of_YggdrasilTown>() };
+
+	public static List<int> CanteenNPCList => new List<int>() { ModContent.NPCType<CanteenMaid>(), ModContent.NPCType<Restauranteur>() };
+
+	public static List<int> UnionNPCList => new List<int>() { ModContent.NPCType<Howard_Warden>() };
+
+	/// <summary>
+	/// X refer player.whoAmI; Y refer NPC.type; this will summon a NPC in corresponding type while enter the arena.
+	/// </summary>
+	public static Point FightingRequestPlayerNPCType = new Point(-1, -1);
+
+	public static bool ResetedArena = true;
+
+	public static int ArenaScore;
+
 	public override void OnWorldLoad()
 	{
 		if (SubworldSystem.Current is YggdrasilWorld)
@@ -36,19 +51,25 @@ public class YggdrasilTownCentralSystem : ModSystem
 
 	public override void PostUpdateNPCs()
 	{
-		if(Main.time == 0)
+		if (Main.time == 0)
 		{
 			if (SubworldSystem.Current is YggdrasilWorld)
 			{
-				CheckNPC(ModContent.NPCType<Guard_of_YggdrasilTown>());
-				CheckNPC(ModContent.NPCType<TeahouseLady>());
-				CheckNPC(ModContent.NPCType<InnKeeper>());
+				foreach (var type in YggdrasilTownNPCList)
+				{
+					CheckNPC(type);
+				}
 			}
 			if (InCanteen_YggdrasilTown())
 			{
 				CheckNPC(ModContent.NPCType<CanteenMaid>());
-				CheckNPC(ModContent.NPCType<Resturateur>());
+				CheckNPC(ModContent.NPCType<Restauranteur>());
 			}
+		}
+		if (InArena_YggdrasilTown() && !ResetedArena)
+		{
+			RoadSignPost_ToArenaVFX.BuildArenaGen();
+			ResetedArena = true;
 		}
 		base.PostUpdateNPCs();
 	}
@@ -66,11 +87,11 @@ public class YggdrasilTownCentralSystem : ModSystem
 			{
 				foreach (NPC npc in Main.npc)
 				{
-					if(npc != null && npc.type == type && npc.active)
+					if (npc != null && npc.type == type && npc.active)
 					{
 						npc.active = false;
 					}
-					if(NPC.CountNPCS(type) <= 1)
+					if (NPC.CountNPCS(type) <= 1)
 					{
 						break;
 					}
@@ -86,7 +107,7 @@ public class YggdrasilTownCentralSystem : ModSystem
 
 	public static bool InYggdrasilTown(Point tileCoordiante)
 	{
-		if(InCanteen_YggdrasilTown() || InUnion_YggdrasilTown() || InPlayerRoom_YggdrasilTown())
+		if (InCanteen_YggdrasilTown() || InUnion_YggdrasilTown() || InPlayerRoom_YggdrasilTown() || InArena_YggdrasilTown())
 		{
 			return true;
 		}
@@ -124,8 +145,191 @@ public class YggdrasilTownCentralSystem : ModSystem
 		return false;
 	}
 
+	public static bool InArena_YggdrasilTown()
+	{
+		if (SubworldSystem.Current is RoomWorld)
+		{
+			return YggdrasilWorldGeneration.SafeGetTile(20, 20).TileType == ModContent.TileType<ArenaCommandBlock>();
+		}
+		return false;
+	}
+
+	public static void TryEnterArena()
+	{
+		if (FightingRequestPlayerNPCType.X >= 0 && FightingRequestPlayerNPCType.Y >= 0)
+		{
+			int i = 595;
+			int j = 20674;
+			for (int x = -8; x < 9; x++)
+			{
+				for (int y = -8; y < 9; y++)
+				{
+					Tile tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+					if (tile.TileType == ModContent.TileType<RoadSignPost_ToArena>())
+					{
+						if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
+						{
+							i += x;
+							j += y;
+							x = 100;
+							break;
+						}
+					}
+				}
+			}
+			Point point = new Point(i, j);
+			RoomManager.EnterNextLevelRoom(point, new Point(60, 144), RoadSignPost_ToArenaVFX.BuildArenaGen);
+			ResetedArena = false;
+		}
+	}
+
 	public static Vector2 GetTownCoord(Vector2 worldCoordiante)
 	{
 		return worldCoordiante - new Point(430, Main.maxTilesY - 400).ToWorldCoordinates();
+	}
+}
+
+public class ArenaPlayer : ModPlayer
+{
+	public NPC TargetBoss = null;
+
+	public bool StartFighting = false;
+
+	public List<TownNPC_LiveInYggdrasil.BossTag> Tags = new List<TownNPC_LiveInYggdrasil.BossTag>();
+
+	public float DamageReduce = 0f;
+
+	public bool MouseInTagUIPanel = false;
+
+	public override void PostUpdateEquips()
+	{
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			DamageReduce = 1f;
+			if (TargetBoss == null || !TargetBoss.active)
+			{
+				foreach (var npc in Main.npc)
+				{
+					if (npc != null && npc.active && npc.ModNPC is TownNPC_LiveInYggdrasil)
+					{
+						TargetBoss = npc;
+						break;
+					}
+				}
+			}
+			if (TargetBoss != null)
+			{
+				TownNPC_LiveInYggdrasil tNLIY = TargetBoss.ModNPC as TownNPC_LiveInYggdrasil;
+				if (tNLIY != null)
+				{
+					Tags = tNLIY.MyBossTags;
+					if (!tNLIY.StartFighting)
+					{
+						Player.statLife = Player.statLifeMax2;
+					}
+				}
+			}
+			if (Tags is not null)
+			{
+				int origLife = Player.statLifeMax;
+				foreach (var tag in Tags)
+				{
+					if (tag.Name == "PlayerDamageReduce10" && tag.Enable)
+					{
+						DamageReduce -= 0.1f;
+					}
+					if (tag.Name == "PlayerDamageReduce20" && tag.Enable)
+					{
+						DamageReduce -= 0.2f;
+					}
+					if (tag.Name == "PlayerDamageReduce30" && tag.Enable)
+					{
+						DamageReduce -= 0.3f;
+					}
+
+					if (tag.Name == "PlayerDefenseReduce20" && tag.Enable)
+					{
+						Player.statDefense -= 20;
+					}
+					if (tag.Name == "PlayerDefenseReduce30" && tag.Enable)
+					{
+						Player.statDefense -= 30;
+					}
+
+					if (tag.Name == "PlayerLifeReduce25" && tag.Enable)
+					{
+						Player.statLifeMax2 -= (int)(origLife * 0.25f);
+					}
+					if (tag.Name == "PlayerLifeReduce50" && tag.Enable)
+					{
+						Player.statLifeMax2 -= (int)(origLife * 0.5f);
+					}
+				}
+				Player.GetDamage(DamageClass.Generic) *= DamageReduce;
+			}
+		}
+		base.PostUpdateEquips();
+	}
+
+	public override void GetHealLife(Item item, bool quickHeal, ref int healValue)
+	{
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			if (Tags is not null)
+			{
+				foreach (var tag in Tags)
+				{
+					if (tag.Name == "HalfHealthPotion" && tag.Enable)
+					{
+						healValue /= 2;
+					}
+					if (tag.Name == "BanHealthPotion" && tag.Enable)
+					{
+						healValue *= 0;
+
+						// Main.NewText(item.healLife);
+					}
+				}
+			}
+		}
+
+		base.GetHealLife(item, quickHeal, ref healValue);
+	}
+
+	public override bool CanUseItem(Item item)
+	{
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			if (Tags is not null)
+			{
+				foreach (var tag in Tags)
+				{
+					if (tag.Name == "BanHealthPotion" && tag.Enable)
+					{
+						if (item.healLife > 0)
+						{
+							return false;
+						}
+					}
+					if (tag.Name == "DisableCreate" && tag.Enable)
+					{
+						if (item.pick > 0)
+						{
+							return false;
+						}
+						if (item.createTile >= 0 || item.createWall >= 0)
+						{
+							return false;
+						}
+					}
+				}
+			}
+			if(MouseInTagUIPanel)
+			{
+				MouseInTagUIPanel = false;
+				return false;
+			}
+		}
+		return base.CanUseItem(item);
 	}
 }

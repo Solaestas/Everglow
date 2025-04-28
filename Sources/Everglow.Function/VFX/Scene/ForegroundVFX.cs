@@ -14,6 +14,7 @@ public abstract class ForegroundVFX : Visual
 	public Point originTile;
 	public int originType;
 	public int direction = 1;
+	public int OutScreenDistanceMax = 500;
 
 	public override void OnSpawn()
 	{
@@ -74,7 +75,7 @@ public abstract class ForegroundVFX : Visual
 			return;
 		}
 		Vector2 checkPos = position;
-		if (VFXManager.InScreen(checkPos, 500))
+		if (VFXManager.InScreen(checkPos, OutScreenDistanceMax))
 		{
 			Visible = true;
 		}

@@ -96,9 +96,9 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 			NPC.frame.Y += FrameHeight;
 			NPC.frameCounter = 0;
 		}
-		if (NPC.frame.Y > 7 * FrameHeight)
+		if (NPC.frame.Y > 8 * FrameHeight)
 		{
-			NPC.frame.Y = 0;
+			NPC.frame.Y = FrameHeight;
 		}
 	}
 
@@ -206,6 +206,85 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 		{
 			NPC.velocity.X *= 0;
 			Attacking0 = true;
+			yield return new SkipThisFrame();
+		}
+		Attacking0 = false;
+		EndAIPiece();
+	}
+
+	public override void InitializeBossTags()
+	{
+		base.InitializeBossTags();
+		var bossTags = new List<BossTag>
+		{
+			new BossTag("BurningHook", 20, "Hook become flaming hook.") { IconType = 2 },
+			new BossTag("ThunderHook", 20, "Hook attack with thunderbolt.") { IconType = 2 },
+		};
+		MyBossTags.AddRange(bossTags);
+
+	}
+
+	public override void StarFighting() => base.StarFighting();
+
+	public override void BossAI()
+	{
+		base.BossAI();
+		bool safe = false;
+		if (NPC.target >= 0)
+		{
+			safe = true;
+		}
+		if (!safe)
+		{
+			return;
+		}
+		if (BehaviorsCoroutines.Count <= 0)
+		{
+			Idle = true;
+			if (!BossToPlayerDistanceLowerThan(200))
+			{
+				BehaviorsCoroutines.Enqueue(new Coroutine(BossWalk(60)));
+			}
+			else
+			{
+				BehaviorsCoroutines.Enqueue(new Coroutine(BossAttack_Hook()));
+			}
+		}
+	}
+
+	public IEnumerator<ICoroutineInstruction> BossAttack_Hook()
+	{
+		bool safe = false;
+		if (NPC.target >= 0)
+		{
+			safe = true;
+		}
+		if (!safe)
+		{
+			EndAIPiece();
+			yield break;
+		}
+		Player target = Main.player[NPC.target];
+		if (target.Center.X > NPC.Center.X)
+		{
+			NPC.direction = 1;
+		}
+		if (target.Center.X < NPC.Center.X)
+		{
+			NPC.direction = -1;
+		}
+		NPC.spriteDirection = NPC.direction;
+		Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, (target.Center - NPC.Center).NormalizeSafe(), ModContent.ProjectileType<Georg_Hook>(), 100, 4, Main.myPlayer, NPC.whoAmI);
+		p0.friendly = false;
+		p0.hostile = true;
+		for (int t = 0; t < 100; t++)
+		{
+			NPC.velocity.X *= 0;
+			Attacking0 = true;
+			if (Resilience <= 0)
+			{
+				break;
+			}
 			yield return new SkipThisFrame();
 		}
 		Attacking0 = false;

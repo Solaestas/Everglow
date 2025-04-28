@@ -17,7 +17,7 @@ public class MarbleGate_BackgroundTile : BackgroundVFX
 			if (Main.MouseWorld.Y > position.Y && Main.MouseWorld.Y < position.Y + 128)
 			{
 				Main.instance.MouseText("Rightclick to Enter Union.");
-				if (Main.mouseRight && Main.mouseRightRelease)
+				if (Main.mouseRight && Main.mouseRightRelease && !Main.mapFullscreen)
 				{
 					int i = Main.MouseWorld.ToTileCoordinates().X;
 					int j = Main.MouseWorld.ToTileCoordinates().Y;
