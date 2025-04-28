@@ -6,7 +6,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>preview</LangVersion>
     <NoWarn>$(NoWarn);CS0436</NoWarn>
-    <Modules>AssetReplace;CagedDomain;EternalResolve;Example;Food;MEAC;Minortopography;Myth;Ocean;Plant;PlantAndFarm;SpellAndSkull;SubSpace;Yggdrasil;ZY</Modules>
+    <Modules>
+    </Modules>
     <DefineConstants>$(DefineConstants);$(Modules)</DefineConstants>
     <EnableModBuilder>false</EnableModBuilder>
     <EnablePathGenerator>true</EnablePathGenerator>

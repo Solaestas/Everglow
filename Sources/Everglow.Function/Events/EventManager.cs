@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 
@@ -10,9 +5,9 @@ namespace Everglow.Commons.Events
 {
 	public class EventManager : ModSystem
 	{
-		const string LayerName = "Everglow/ModEvent";
-		static List<ModEvent> actives = new();
-		static LegacyGameInterfaceLayer Layer_HasInvasion = new(LayerName, delegate
+		private const string LayerName = "Everglow/ModEvent";
+		private static List<ModEvent> actives = new();
+		private static LegacyGameInterfaceLayer layer_HasInvasion = new(LayerName, delegate
 		{
 			foreach (ModEvent e in actives)
 			{
@@ -26,7 +21,8 @@ namespace Everglow.Commons.Events
 			Main.DrawInvasionProgress();
 			return true;
 		});
-		static LegacyGameInterfaceLayer Layer_NoInvasion = new(LayerName, delegate
+
+		private static LegacyGameInterfaceLayer layer_NoInvasion = new(LayerName, delegate
 		{
 			foreach (ModEvent e in actives)
 			{
@@ -39,14 +35,17 @@ namespace Everglow.Commons.Events
 			}
 			return true;
 		});
+
 		private static void ReSortActives()
 		{
 			actives.Sort((e1, e2) => -e1.SortRank.CompareTo(e2.SortRank));
 		}
+
 		internal static void Register(ModEvent e)
 		{
 			ModTypeLookup<ModEvent>.Register(e);
 		}
+
 		public static bool Activate(ModEvent e, params object[] args)
 		{
 			if (e.CanActivate(args))
@@ -59,11 +58,14 @@ namespace Everglow.Commons.Events
 			}
 			return false;
 		}
-		public static bool Activate<T>(params object[] args) where T : ModEvent
+
+		public static bool Activate<T>(params object[] args)
+			where T : ModEvent
 		{
 			ModEvent e;
 			return (e = ModContent.GetInstance<T>()) is not null && Activate(e, args);
 		}
+
 		public static bool Deactivate(ModEvent e, params object[] args)
 		{
 			if (e.CanDeactivate(args))
@@ -78,7 +80,9 @@ namespace Everglow.Commons.Events
 			}
 			return false;
 		}
-		public static bool Deactivate<T>(params object[] args) where T : ModEvent
+
+		public static bool Deactivate<T>(params object[] args)
+			where T : ModEvent
 		{
 			ModEvent e;
 			return (e = ModContent.GetInstance<T>()) is not null && Deactivate(e, args);
@@ -90,22 +94,26 @@ namespace Everglow.Commons.Events
 			{
 				e.Update();
 			}
+			base.PostUpdateEverything();
 		}
+
 		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
 		{
 			int index = layers.FindIndex(layer => layer.Name == "Vanilla: Invasion Progress Bars");
 			if (index != -1)
 			{
-				layers.RemoveAt(index);
-				layers.Insert(index, Layer_HasInvasion);
+				//layers.RemoveAt(index);
+				//layers.Insert(index, layer_HasInvasion);
 				return;
 			}
 			index = layers.FindIndex(layer => layer.Name == "Vanilla: Map / Minimap");
 			if (index != -1)
 			{
-				layers.Insert(index, Layer_NoInvasion);
+				//layers.Insert(index, layer_NoInvasion);
 			}
+			base.ModifyInterfaceLayers(layers);
 		}
+
 		public override void SaveWorldData(TagCompound tag)
 		{
 			foreach (ModEvent e in ModContent.GetContent<ModEvent>())
@@ -128,7 +136,9 @@ namespace Everglow.Commons.Events
 				}
 				tag[$"{nameof(actives)}_{i}.Tag"] = subtag;
 			}
+			base.SaveWorldData(tag);
 		}
+
 		public override void LoadWorldData(TagCompound tag)
 		{
 			foreach (ModEvent e in ModContent.GetContent<ModEvent>())
@@ -161,6 +171,7 @@ namespace Everglow.Commons.Events
 				}
 				ReSortActives();
 			}
+			base.LoadWorldData(tag);
 		}
 	}
 }
