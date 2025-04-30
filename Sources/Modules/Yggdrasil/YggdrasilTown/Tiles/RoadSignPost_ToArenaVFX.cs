@@ -2,6 +2,7 @@ using Everglow.Commons.VFX.Scene;
 using Everglow.SubSpace;
 using Everglow.SubSpace.Tiles;
 using Everglow.Yggdrasil.WorldGeneration;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
@@ -68,6 +69,20 @@ public class RoadSignPost_ToArenaVFX : ForegroundVFX
 				tile.HasTile = true;
 			}
 		}
+		for (int x = 20; x < Main.maxTilesX - 20; x++)
+		{
+			int y1 = 170;
+			int y2 = 185;
+
+			Tile tile1 = YggdrasilWorldGeneration.SafeGetTile(x, y1);
+			tile1.TileType = (ushort)ModContent.TileType<LampWoodPlatform>();
+			tile1.HasTile = true;
+
+			Tile tile2 = YggdrasilWorldGeneration.SafeGetTile(x, y2);
+			tile2.TileType = (ushort)ModContent.TileType<LampWoodPlatform>();
+			tile2.HasTile = true;
+		}
+
 		for (int x = 20; x < 22; x++)
 		{
 			for (int y = 20; y < 23; y++)

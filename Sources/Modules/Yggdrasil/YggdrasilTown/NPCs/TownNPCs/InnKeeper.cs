@@ -90,6 +90,8 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 
 	public override void WalkFrame()
 	{
+		NPC.frame.Width = 48;
+		NPC.frame.Height = FrameHeight;
 		NPC.frameCounter += Math.Abs(NPC.velocity.X);
 		if (NPC.frameCounter > 4)
 		{
@@ -131,17 +133,23 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		if (!Attacking0)
+		if (!Attacking0 && !KnockOut)
 		{
 			Texture2D texMain = ModAsset.InnKeeper.Value;
 			Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height) * 0.5f;
 			Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		}
-		else
+		else if (Attacking0 && !KnockOut)
 		{
 			Texture2D texMain = ModAsset.InnKeeper_Attack.Value;
 			Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, -8);
 			Main.spriteBatch.Draw(texMain, drawPos, null, drawColor, NPC.rotation, texMain.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+		}
+		else
+		{
+			Texture2D texMain = ModAsset.Innkeeper_KnockOut.Value;
+			Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, -8);
+			Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		}
 		return false;
 	}
@@ -217,18 +225,41 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 		base.InitializeBossTags();
 		var bossTags = new List<BossTag>
 		{
-			new BossTag("BurningHook", 20, "Hook become flaming hook.") { IconType = 2 },
-			new BossTag("ThunderHook", 20, "Hook attack with thunderbolt.") { IconType = 2 },
+			new BossTag("BurningHammer", 50, "Hammer become flaming hammer.") { IconType = 2 },
+			new BossTag("ThunderHook", 50, "Hook attack with thunderbolt.") { IconType = 2 },
 		};
 		MyBossTags.AddRange(bossTags);
-
 	}
 
-	public override void StarFighting() => base.StarFighting();
+	public bool BurningHammer = false;
+
+	public bool ThunderHook = false;
+
+	public override void ApplyBossTags()
+	{
+		base.ApplyBossTags();
+		BurningHammer = false;
+		ThunderHook = false;
+		foreach (var tag in MyBossTags)
+		{
+			if (tag.Name == "ThunderHook" && tag.Enable)
+			{
+				ThunderHook = true;
+			}
+			if (tag.Name == "BurningHammer" && tag.Enable)
+			{
+				BurningHammer = true;
+			}
+		}
+	}
 
 	public override void BossAI()
 	{
 		base.BossAI();
+		if (KnockOut)
+		{
+			return;
+		}
 		bool safe = false;
 		if (NPC.target >= 0)
 		{
@@ -238,12 +269,35 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 		{
 			return;
 		}
+		Player player = Main.player[NPC.target];
 		if (BehaviorsCoroutines.Count <= 0)
 		{
 			Idle = true;
+
 			if (!BossToPlayerDistanceLowerThan(200))
 			{
-				BehaviorsCoroutines.Enqueue(new Coroutine(BossWalk(60)));
+				if (player.Center.Y < NPC.Center.Y - 200 || player.Center.Y > NPC.Center.Y + 200)
+				{
+					BehaviorsCoroutines.Enqueue(new Coroutine(BossAttack_JumpAndHit()));
+				}
+				else
+				{
+					if (Main.rand.NextBool(2))
+					{
+						if (Main.rand.NextBool(2))
+						{
+							BehaviorsCoroutines.Enqueue(new Coroutine(BossAttack_FlyHammer()));
+						}
+						else
+						{
+							BehaviorsCoroutines.Enqueue(new Coroutine(BossAttack_JumpAndHit()));
+						}
+					}
+					else
+					{
+						BehaviorsCoroutines.Enqueue(new Coroutine(BossWalk(60)));
+					}
+				}
 			}
 			else
 			{
@@ -277,7 +331,7 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 		Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, (target.Center - NPC.Center).NormalizeSafe(), ModContent.ProjectileType<Georg_Hook>(), 100, 4, Main.myPlayer, NPC.whoAmI);
 		p0.friendly = false;
 		p0.hostile = true;
-		for (int t = 0; t < 100; t++)
+		for (int t = 0; t < 100 / AttackSpeed; t++)
 		{
 			NPC.velocity.X *= 0;
 			Attacking0 = true;
@@ -289,5 +343,166 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 		}
 		Attacking0 = false;
 		EndAIPiece();
+	}
+
+	public IEnumerator<ICoroutineInstruction> BossAttack_JumpAndHit()
+	{
+		NPC.noGravity = true;
+		bool safe = false;
+		if (NPC.target >= 0)
+		{
+			safe = true;
+		}
+		if (!safe)
+		{
+			EndAIPiece();
+			yield break;
+		}
+		Player target = Main.player[NPC.target];
+		var targetPos = target.Bottom;
+		if (targetPos.X > NPC.Center.X)
+		{
+			NPC.direction = 1;
+		}
+		if (targetPos.X < NPC.Center.X)
+		{
+			NPC.direction = -1;
+		}
+		NPC.spriteDirection = NPC.direction;
+		NPC.velocity.Y = -20;
+
+		// Ascend
+		Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, (targetPos - NPC.Center).NormalizeSafe(), ModContent.ProjectileType<Georg_Hammer_JumpHit>(), 100, 4, Main.myPlayer, NPC.whoAmI);
+		for (int t = 0; t < 30; t++)
+		{
+			float velX = (targetPos - NPC.Center).X / 30f;
+			NPC.velocity.X = velX;
+			NPC.velocity.Y += 20 / 30f;
+			if (Resilience <= 0)
+			{
+				break;
+			}
+			yield return new SkipThisFrame();
+		}
+		var startPos = NPC.Center;
+
+		for (int i = 0; i < 500; i++)
+		{
+			if (!Collision.SolidCollision(targetPos + new Vector2(-10), 20, 20) && !TileCollisionUtils.PlatformCollision(targetPos))
+			{
+				targetPos.Y += 2;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		// Descend
+		float maxTime = 6;
+		for (int t = 0; t < maxTime; t++)
+		{
+			float value = (MathF.Sin((t / maxTime - 0.5f) * MathHelper.Pi) + 1) * 0.5f;
+			NPC.Center = Vector2.Lerp(startPos, targetPos, value);
+			if (Resilience <= 0)
+			{
+				break;
+			}
+			yield return new SkipThisFrame();
+		}
+
+		for (int i = 0; i < 100; i++)
+		{
+			if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height) || TileCollisionUtils.PlatformCollision(NPC.position, NPC.width, NPC.height))
+			{
+				NPC.position.Y -= 2;
+			}
+			else
+			{
+				break;
+			}
+		}
+		for (int t = 0; t < 30; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
+		NPC.noGravity = false;
+		EndAIPiece();
+	}
+
+	public IEnumerator<ICoroutineInstruction> BossAttack_FlyHammer()
+	{
+		for (int t = 0; t <= 120; t++)
+		{
+			bool safe = false;
+			if (NPC.target >= 0)
+			{
+				safe = true;
+			}
+			if (!safe)
+			{
+				EndAIPiece();
+				yield break;
+			}
+			Player target = Main.player[NPC.target];
+			if (target.Center.X > NPC.Center.X)
+			{
+				NPC.direction = 1;
+			}
+			if (target.Center.X < NPC.Center.X)
+			{
+				NPC.direction = -1;
+			}
+			NPC.spriteDirection = NPC.direction;
+			float speed = 1.8f * BossMovingSpeed;
+			WalkFrame();
+			NPC.velocity.X = NPC.direction * speed;
+			if (!Collision.SolidCollision(NPC.Bottom - new Vector2(20, 0), 40, 20))
+			{
+				NPC.velocity.Y += 0.5f;
+			}
+			if (t % (20 / AttackSpeed) == 0)
+			{
+				Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, (target.Center - NPC.Center).NormalizeSafe(), ModContent.ProjectileType<Georg_Fly_Hammer>(), 100, 4, Main.myPlayer, NPC.whoAmI);
+			}
+			if (BossToPlayerDistanceLowerThan(100))
+			{
+				break;
+			}
+			if (Resilience <= 0)
+			{
+				break;
+			}
+			yield return new SkipThisFrame();
+		}
+		NPC.velocity.X *= 0;
+		EndAIPiece();
+	}
+
+	public override void KnockOutFrame()
+	{
+		if (KnockOutTimer is >= 0 and < 5)
+		{
+			NPC.frame = new Rectangle(0, 0, 68, 60);
+		}
+		if (KnockOutTimer is >= 5 and < 10)
+		{
+			NPC.frame = new Rectangle(0, 60, 68, 60);
+		}
+		if (KnockOutTimer is >= 10 and < 15)
+		{
+			NPC.frame = new Rectangle(0, 120, 68, 60);
+		}
+		if (KnockOutTimer is >= 15)
+		{
+			NPC.frame = new Rectangle(0, 180, 68, 60);
+		}
+		base.KnockOutFrame();
+	}
+
+	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+	{
+		base.PostDraw(spriteBatch, screenPos, drawColor);
 	}
 }

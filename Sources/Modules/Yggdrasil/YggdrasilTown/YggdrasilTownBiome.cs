@@ -91,6 +91,10 @@ public class YggdrasilTownBiome : ModBiome
 		{
 			return true;
 		}
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			return true;
+		}
 		if (BiomeCenter == Vector2.zeroVector)
 		{
 			BiomeCenter = GetBiomeCenter();
@@ -108,6 +112,7 @@ public class YggdrasilTownBiome : ModBiome
 	public override void OnInBiome(Player player)
 	{
 		Main.raining = false;
+		Main.bloodMoon = false;
 		base.OnInBiome(player);
 	}
 }

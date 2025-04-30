@@ -86,7 +86,30 @@ public class NPCBossTagsSystem : ForegroundVFX
 			var tNLIY = TargetBoss.ModNPC as TownNPC_LiveInYggdrasil;
 			if (tNLIY != null)
 			{
-				tNLIY.EnableBossTag(t);
+				if (Tags[t].ConflictTags == null || Tags[t].ConflictTags.Count <= 0)
+				{
+					tNLIY.EnableBossTag(t);
+				}
+				else
+				{
+					int thisScore = Tags[t].Value;
+					bool shouldAdd = true;
+					foreach (var checkTag in Tags)
+					{
+						if(Tags[t].ConflictTags.Contains(checkTag.Name))
+						{
+							if(checkTag.Value > thisScore)
+							{
+								shouldAdd = false;
+								break;
+							}
+						}
+					}
+					if(shouldAdd)
+					{
+						tNLIY.EnableBossTag(t);
+					}
+				}
 			}
 			yield return new SkipThisFrame();
 		}
@@ -136,14 +159,42 @@ public class NPCBossTagsSystem : ForegroundVFX
 			}
 		}
 		int rowCount = (int)MathF.Sqrt(tagCount) + 1;
-		var topLeftPos = position + new Vector2(-rowCount * 80 / 2 + 40 + 16, -rowCount * 80 - 120 + 40 + 16);
+		var topLeftPos = position + new Vector2(-rowCount * 80 / 2 + 40 + 16, -rowCount * 80 - 200 + 40 + 16);
 		Ins.Batch.BindTexture<Vertex2D>(texture);
+
+		var tNLIY = TargetBoss.ModNPC as TownNPC_LiveInYggdrasil;
+		if (tNLIY != null)
+		{
+			if (!tNLIY.StartedFight)
+			{
+				foreach (var tag in Tags)
+				{
+					if (tag.Enable && tag.Name == "RemoveTopPlatform")
+					{
+						DrawRemovingPlatformEffect(tag.Name);
+					}
+					if (tag.Enable && tag.Name == "RemoveBottomPlatform")
+					{
+						DrawRemovingPlatformEffect(tag.Name);
+					}
+					if (tag.Enable && tag.Name == "RemoveLeftPlatform")
+					{
+						DrawRemovingPlatformEffect(tag.Name);
+					}
+					if (tag.Enable && tag.Name == "RemoveRightPlatform")
+					{
+						DrawRemovingPlatformEffect(tag.Name);
+					}
+				}
+			}
+		}
+			
 
 		// Background Panel.
 		var backGroundColor = new Color(10, 10, 10, 200);
-		var backgroundPos = topLeftPos - new Vector2(40);
+		var backgroundPos = topLeftPos - new Vector2(40, 40);
 		int backgroundWidth = rowCount * 80;
-		int backgroundHeight = rowCount * 80 + 80;
+		int backgroundHeight = rowCount * 80 + 160;
 		var blackBackground = new List<Vertex2D>()
 		{
 			 new Vertex2D(backgroundPos, backGroundColor, new Vector3(0, 0, 0)),
@@ -251,7 +302,6 @@ public class NPCBossTagsSystem : ForegroundVFX
 				drawColor = Color.Lerp(drawColor, new Color(255, 220, 125, 0), 0.5f);
 				if (Main.mouseLeft && Main.mouseLeftRelease)
 				{
-					var tNLIY = TargetBoss.ModNPC as TownNPC_LiveInYggdrasil;
 					if (tNLIY != null)
 					{
 						if (tag.Enable)
@@ -294,11 +344,10 @@ public class NPCBossTagsSystem : ForegroundVFX
 				Main.instance.MouseText("Start fighting");
 				if (Main.mouseLeft && Main.mouseLeftRelease)
 				{
-					var tNLIY = TargetBoss.ModNPC as TownNPC_LiveInYggdrasil;
 					if (tNLIY != null)
 					{
 						StartFighting = true;
-						tNLIY.StarFighting();
+						tNLIY.StartFighting();
 					}
 				}
 			}
@@ -435,6 +484,66 @@ public class NPCBossTagsSystem : ForegroundVFX
 			scoreDraw.Add(drawPos + new Vector2(-numberSize.X, numberSize.Y) * 0.5f, scoreColor, new Vector3((numberTopLeft + new Vector2(0, numberSize.Y)) / texture.Size(), 0));
 			scoreDraw.Add(drawPos + numberSize * 0.5f, scoreColor, new Vector3((numberTopLeft + numberSize) / texture.Size(), 0));
 			Ins.Batch.Draw(scoreDraw, PrimitiveType.TriangleStrip);
+		}
+	}
+
+	public void DrawRemovingPlatformEffect(string type)
+	{
+		if(type == "RemoveBottomPlatform" || type == "RemoveTopPlatform")
+		{
+			float left = 0;
+			float right = Main.maxTilesX * 16;
+			float posY = 170 * 16;
+			if (type == "RemoveBottomPlatform")
+			{
+				posY = 185 * 16;
+			}
+			float height = 16;
+			float valueTime = (float)Main.timeForVisualEffects * 0.09f;
+			valueTime = (MathF.Sin(valueTime) + 1) * 0.5f;
+			Color drawColor = Color.Lerp(new Color(1f, 0, 0, 0), new Color(0, 0, 0, 0), valueTime);
+			List<Vertex2D> removePlatform = new List<Vertex2D>();
+			removePlatform.Add(new Vector2(left, posY), drawColor, new Vector3(0, 0, 0));
+			removePlatform.Add(new Vector2(right, posY), drawColor, new Vector3(0, 0, 0));
+
+			removePlatform.Add(new Vector2(left, posY + height), drawColor, new Vector3(0, 0, 0));
+			removePlatform.Add(new Vector2(right, posY + height), drawColor, new Vector3(0, 0, 0));
+			Ins.Batch.Draw(removePlatform, PrimitiveType.TriangleStrip);
+		}
+
+		if (type == "RemoveLeftPlatform" || type == "RemoveRightPlatform")
+		{
+			float left = 0;
+			if (type == "RemoveRightPlatform")
+			{
+				left = Main.maxTilesX * 16 / 2;
+			}
+			float right = Main.maxTilesX * 16;
+			if(type == "RemoveLeftPlatform")
+			{
+				right = Main.maxTilesX * 16 / 2;
+			}
+			float posY = 170 * 16;
+			float height = 16;
+			float valueTime = (float)Main.timeForVisualEffects * 0.09f;
+			valueTime = (MathF.Sin(valueTime) + 1) * 0.5f;
+			Color drawColor = Color.Lerp(new Color(1f, 0, 0, 0), new Color(0, 0, 0, 0), valueTime);
+			List<Vertex2D> removePlatform = new List<Vertex2D>();
+			removePlatform.Add(new Vector2(left, posY), drawColor, new Vector3(0, 0, 0));
+			removePlatform.Add(new Vector2(right, posY), drawColor, new Vector3(0, 0, 0));
+
+			removePlatform.Add(new Vector2(left, posY + height), drawColor, new Vector3(0, 0, 0));
+			removePlatform.Add(new Vector2(right, posY + height), drawColor, new Vector3(0, 0, 0));
+			Ins.Batch.Draw(removePlatform, PrimitiveType.TriangleStrip);
+
+			posY = 185 * 16;
+			removePlatform = new List<Vertex2D>();
+			removePlatform.Add(new Vector2(left, posY), drawColor, new Vector3(0, 0, 0));
+			removePlatform.Add(new Vector2(right, posY), drawColor, new Vector3(0, 0, 0));
+
+			removePlatform.Add(new Vector2(left, posY + height), drawColor, new Vector3(0, 0, 0));
+			removePlatform.Add(new Vector2(right, posY + height), drawColor, new Vector3(0, 0, 0));
+			Ins.Batch.Draw(removePlatform, PrimitiveType.TriangleStrip);
 		}
 	}
 

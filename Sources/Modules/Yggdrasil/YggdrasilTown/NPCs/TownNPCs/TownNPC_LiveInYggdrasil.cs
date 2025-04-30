@@ -1,5 +1,6 @@
 using Everglow.Commons.Coroutines;
-using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs.Arena;
 using SubworldLibrary;
 using Terraria.DataStructures;
@@ -98,12 +99,12 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 	{
 		_townNPCBehaviorCoroutine.Update();
 		_townNPCGeneralCoroutine.Update();
-		if (ArenaFighting && StartFighting)
+		if (ArenaFighting && StartedFight)
 		{
 			BossAI();
 			return;
 		}
-		if (ArenaFighting && !StartFighting)
+		if (ArenaFighting && !StartedFight)
 		{
 			NPC.velocity *= 0;
 			NPC.frame = StandFrame;
@@ -630,7 +631,9 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 
 	public float SkillPowerMax = 100;
 
-	public bool StartFighting = false;
+	public float AttackSpeed = 1f;
+
+	public bool StartedFight = false;
 
 	public int LifeRegenPerS = 0;
 
@@ -640,11 +643,23 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 
 	public int BossTimer;
 
-	public bool Gridlock = false;
+	/// <summary>
+	/// Timer for hit effect(White or Red light).
+	/// </summary>
+	public int HitEffectTimer = 0;
+
+	/// <summary>
+	/// Timer for knock out animation.
+	/// </summary>
+	public int KnockOutTimer = 0;
+
+	public bool KnockOut = false;
 
 	public bool ImmuneLower300 = false;
 
 	public bool ImmuneUpper300 = false;
+
+	public bool DisableKnockBack = false;
 
 	public bool ContentTag(string name)
 	{
@@ -673,16 +688,21 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 		NPC.damage = 50;
 		NPC.HitSound = SoundID.NPCHit1;
 		NPC.DeathSound = SoundID.NPCDeath6;
-		NPC.knockBackResist = 0.5f;
+		NPC.knockBackResist = 1f;
 		BossMovingSpeed = 1f;
-		StartFighting = false;
+		StartedFight = false;
 		LifeRegenPerS = 0;
 		LifeTimer = 0;
 		ImmuneLower300 = false;
 		ImmuneUpper300 = false;
-		Gridlock = false;
+		KnockOut = false;
 		SkillPower = SkillPowerMax;
+		ResilienceMax = 100;
+		Resilience = ResilienceMax;
 		HitPlayerCount = 0;
+		AttackSpeed = 1f;
+		HitEffectTimer = 0;
+		KnockOutTimer = 0;
 		InitializeBossTags();
 	}
 
@@ -698,9 +718,9 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 			new BossTag("BossDamagePlus50", 10, "Increase his damage by 50%, same effects stacked.") { IconType = 0 },
 			new BossTag("BossDamagePlus120", 30, "Increase his damage by 120%, same effects stacked.") { IconType = 0 },
 
-			new BossTag("FastMoving50", 10, "Increase his moving speed by 50%, same effects stacked.") { IconType = 3 },
-			new BossTag("FastMoving150", 20, "Increase his moving speed by 150%, same effects stacked.") { IconType = 3 },
-			new BossTag("FastMoving250", 30, "Increase his moving speed by 250%, same effects stacked.") { IconType = 3 },
+			new BossTag("FastMoving20", 10, "Increase his moving speed by 20%, same effects stacked.") { IconType = 3 },
+			new BossTag("FastMoving50", 20, "Increase his moving speed by 50%, same effects stacked.") { IconType = 3 },
+			new BossTag("FastMoving100", 30, "Increase his moving speed by 100%, same effects stacked.") { IconType = 3 },
 
 			new BossTag("BanHealthPotion", 30, "Prohibit the use of life-restoring potions.") { IconType = 4, ConflictTags = new List<string>() { "HalfHealthPotion" } },
 			new BossTag("HalfHealthPotion", 10, "Halves the effect of life-restoring potions.") { IconType = 5, ConflictTags = new List<string>() { "BanHealthPotion" } },
@@ -734,8 +754,13 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 			new BossTag("180Seconds", 10, "Limit 180 seconds.") { IconType = 18, ConflictTags = new List<string>() { "90Seconds" } },
 			new BossTag("90Seconds", 30, "Limit 90 seconds.") { IconType = 18, ConflictTags = new List<string>() { "180Seconds" } },
 
-			new BossTag("FasterAttack50", 20, "Increase his attack speed by 50%") { IconType = 21 },
-			new BossTag("FasterAttack100", 30, "Increase his attack speed by 100%") { IconType = 21 },
+			new BossTag("FasterAttack100", 20, "Increase his attack speed by 100%, same effects stacked.") { IconType = 21 },
+			new BossTag("FasterAttack200", 30, "Increase his attack speed by 200%, same effects stacked.") { IconType = 21 },
+
+			new BossTag("RemoveTopPlatform", 20, "Remove the top layer of platforms.") { IconType = 33, ConflictTags = new List<string>() { "RemoveBottomPlatform", "RemoveLeftPlatform", "RemoveRightPlatform" } },
+			new BossTag("RemoveBottomPlatform", 20, "Remove the bottom layer of platforms.") { IconType = 34, ConflictTags = new List<string>() { "RemoveTopPlatform", "RemoveLeftPlatform", "RemoveRightPlatform" } },
+			new BossTag("RemoveLeftPlatform", 20, "Remove the left side of both layers of platforms.") { IconType = 35, ConflictTags = new List<string>() { "RemoveTopPlatform", "RemoveBottomPlatform", "RemoveRightPlatform" } },
+			new BossTag("RemoveRightPlatform", 20, "Remove the right side of both layers of platforms.") { IconType = 36, ConflictTags = new List<string>() { "RemoveTopPlatform", "RemoveLeftPlatform", "RemoveBottomPlatform" } },
 		};
 		MyBossTags.AddRange(bossTags);
 	}
@@ -810,17 +835,17 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 			{
 				NPC.damage += (int)(origDamage * 0.5);
 			}
+			if (tag.Name == "FastMoving20" && tag.Enable)
+			{
+				BossMovingSpeed += 0.2f;
+			}
 			if (tag.Name == "FastMoving50" && tag.Enable)
 			{
 				BossMovingSpeed += 0.5f;
 			}
-			if (tag.Name == "FastMoving150" && tag.Enable)
+			if (tag.Name == "FastMoving100" && tag.Enable)
 			{
-				BossMovingSpeed += 1.5f;
-			}
-			if (tag.Name == "FastMoving250" && tag.Enable)
-			{
-				BossMovingSpeed += 2.5f;
+				BossMovingSpeed += 1.0f;
 			}
 			if (tag.Name == "BossDefIncrease20" && tag.Enable)
 			{
@@ -865,30 +890,101 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 			}
 			if (tag.Name == "DisableKnockBack" && tag.Enable)
 			{
-				NPC.knockBackResist = 0;
+				DisableKnockBack = true;
 			}
-			if (tag.Name == "DisableKnockBack" && tag.Enable)
+			if (tag.Name == "FasterAttack100" && tag.Enable)
 			{
-				NPC.knockBackResist = 0;
+				AttackSpeed += 1;
+			}
+			if (tag.Name == "FasterAttack200" && tag.Enable)
+			{
+				AttackSpeed += 2;
+			}
+			if (tag.Name == "RemoveTopPlatform" && tag.Enable)
+			{
+				int y = 170;
+				for (int x = 20; x < Main.maxTilesX - 20; x++)
+				{
+					var tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+					tile.TileType = 0;
+					tile.HasTile = false;
+				}
+			}
+			if (tag.Name == "RemoveBottomPlatform" && tag.Enable)
+			{
+				int y = 185;
+				for (int x = 20; x < Main.maxTilesX - 20; x++)
+				{
+					var tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+					tile.TileType = 0;
+					tile.HasTile = false;
+				}
+			}
+			if (tag.Name == "RemoveLeftPlatform" && tag.Enable)
+			{
+				int y = 170;
+				for (int x = 20; x < Main.maxTilesX / 2; x++)
+				{
+					var tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+					tile.TileType = 0;
+					tile.HasTile = false;
+				}
+				y = 185;
+				for (int x = 20; x < Main.maxTilesX / 2; x++)
+				{
+					var tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+					tile.TileType = 0;
+					tile.HasTile = false;
+				}
+			}
+			if (tag.Name == "RemoveRightPlatform" && tag.Enable)
+			{
+				int y = 170;
+				for (int x = Main.maxTilesX / 2; x < Main.maxTilesX - 20; x++)
+				{
+					var tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+					tile.TileType = 0;
+					tile.HasTile = false;
+				}
+				y = 185;
+				for (int x = Main.maxTilesX / 2; x < Main.maxTilesX - 20; x++)
+				{
+					var tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+					tile.TileType = 0;
+					tile.HasTile = false;
+				}
 			}
 		}
 	}
 
-	public virtual void StarFighting()
+	public virtual void StartFighting()
 	{
 		ApplyBossTags();
 		NPC.life = NPC.lifeMax;
 		BossTimer = 0;
-		StartFighting = true;
+		StartedFight = true;
+		NPCBossValueBar nBVB = new NPCBossValueBar();
+		nBVB.Active = true;
+		nBVB.Visible = true;
+		nBVB.TargetBoss = NPC;
+		Ins.VFXManager.Add(nBVB);
 	}
 
 	public virtual void BossAI()
 	{
 		NPC.TargetClosest(false);
-		if (StartFighting)
+		if (StartedFight)
 		{
 			BossTimer++;
 			LifeTimer++;
+			if (HitEffectTimer > 0)
+			{
+				HitEffectTimer--;
+			}
+			else
+			{
+				HitEffectTimer = 0;
+			}
 			if (LifeTimer % 6 == 0)
 			{
 				if (NPC.life < NPC.lifeMax)
@@ -902,34 +998,47 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 			}
 			Player target = Main.player[NPC.target];
 			Vector2 distance = target.Center - NPC.Center;
-			if (ImmuneLower300)
+			NPC.dontTakeDamage = false;
+			if (!KnockOut)
 			{
-				if (distance.Length() < 300)
+				if (ImmuneLower300)
 				{
-					NPC.dontTakeDamage = true;
+					if (distance.Length() < 300)
+					{
+						NPC.dontTakeDamage = true;
+					}
 				}
-				else
-				{
-					NPC.dontTakeDamage = false;
-				}
-			}
 
-			if (ImmuneUpper300)
-			{
-				if (distance.Length() > 300)
+				if (ImmuneUpper300)
 				{
-					NPC.dontTakeDamage = true;
-				}
-				else
-				{
-					NPC.dontTakeDamage = false;
+					if (distance.Length() > 300)
+					{
+						NPC.dontTakeDamage = true;
+					}
 				}
 			}
+			if (BehaviorsCoroutines.Count <= 0)
+			{
+				Idle = true;
+				if (Resilience <= 0)
+				{
+					Resilience = 0;
+					BehaviorsCoroutines.Enqueue(new Coroutine(StopAndKnockOut(600)));
+				}
+			}
+		}
+		if (NPC.life != NPC.lifeMax && !NPC.dontTakeDamage)
+		{
+			ShouldDrawHealthBar = true;
+		}
+		else
+		{
+			ShouldDrawHealthBar = false;
 		}
 	}
 
 	/// <summary>
-	/// Walking, include escape under duress, jump in front of a protruding tile, door opening(closing), check chair for sitting; Inheritable
+	/// Walk, chase target player at most condition.
 	/// </summary>
 	/// <param name="time"></param>
 	/// <returns></returns>
@@ -961,7 +1070,10 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 			float speed = 1.8f * BossMovingSpeed;
 			WalkFrame();
 			NPC.velocity.X = NPC.direction * speed;
-
+			if (!Collision.SolidCollision(NPC.Bottom - new Vector2(20, 0), 40, 20))
+			{
+				NPC.velocity.Y += 0.5f;
+			}
 			if (BossToPlayerDistanceLowerThan(200))
 			{
 				break;
@@ -978,31 +1090,87 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 		EndAIPiece();
 	}
 
-	public virtual IEnumerator<ICoroutineInstruction> StopAndGridlock(int time)
+	/// <summary>
+	/// When resilience lower or equal to 0, boss will be knocked out and start a recovery period. During this period, boss can not attack or chase any player.
+	/// </summary>
+	/// <param name="time"></param>
+	/// <returns></returns>
+	public virtual IEnumerator<ICoroutineInstruction> StopAndKnockOut(int time)
 	{
-		float oldKnockBackR = NPC.knockBackResist;
+		KnockOut = true;
+		NPC.knockBackResist = 1;
 		NPC.velocity *= 0f;
+		int oldDamage = NPC.damage;
+		KnockOutTimer = 0;
 		for (int t = 0; t < time; t++)
 		{
-			NPC.knockBackResist = 0;
-			NPC.frame = StandFrame;
-			NPC.velocity *= 0.9f;
+			if (t <= 60)
+			{
+				KnockOutTimer++;
+			}
+			KnockOutFrame();
+			if (!Collision.SolidCollision(NPC.Bottom - new Vector2(20, 0), 40, 20))
+			{
+				NPC.velocity.Y += 0.5f;
+			}
+			NPC.velocity.X *= 0.9f;
 			float value = t / (float)time;
-			Resilience = (MathF.Sin((value - 0.5f) * MathHelper.Pi) + 1) * ResilienceMax;
+			Resilience = (MathF.Sin((value - 0.5f) * MathHelper.Pi) + 1) * ResilienceMax * 0.5f;
+			NPC.damage = 0;
+			if (t >= time - 60)
+			{
+				KnockOutTimer--;
+			}
 			yield return new SkipThisFrame();
 		}
+		KnockOutTimer = 0;
 		Resilience = ResilienceMax;
 		NPC.velocity.X *= 0;
-		NPC.knockBackResist = oldKnockBackR;
+		NPC.knockBackResist = 1;
+		NPC.damage = oldDamage;
+		KnockOut = false;
 		EndAIPiece();
+	}
+
+	public virtual void KnockOutFrame()
+	{
+	}
+
+	public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers)
+	{
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			if (!KnockOut)
+			{
+				Resilience -= item.knockBack;
+			}
+			if (DisableKnockBack && !KnockOut)
+			{
+				modifiers.Knockback *= 0;
+			}
+		}
+		base.ModifyHitByItem(player, item, ref modifiers);
+	}
+
+	public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
+	{
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			if (!KnockOut)
+			{
+				Resilience -= projectile.knockBack;
+			}
+			if (DisableKnockBack && !KnockOut)
+			{
+				modifiers.Knockback *= 0;
+			}
+		}
+		base.ModifyHitByProjectile(projectile, ref modifiers);
 	}
 
 	public override void HitEffect(NPC.HitInfo hit)
 	{
-		if(YggdrasilTownCentralSystem.InArena_YggdrasilTown())
-		{
-			Resilience -= hit.Knockback;
-		}
+		HitEffectTimer = 10;
 		base.HitEffect(hit);
 	}
 
@@ -1028,7 +1196,7 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 
 	public override void OnKill()
 	{
-		if(YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
 		{
 			var sIB = new SuccessIconBackground
 			{
@@ -1048,15 +1216,45 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 		base.OnKill();
 	}
 
+	public Vector2 HealthBarPos = Vector2.Zero;
+
+	public float HealthBarScale = 1f;
+
+	public bool ShouldDrawHealthBar = false;
+
 	public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
 	{
-		if(YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
 		{
-			float value = Math.Clamp(Resilience / ResilienceMax, 0, 1);
-			Texture2D bar = Commons.ModAsset.TileBlock.Value;
-			var drawPos = position - Main.screenPosition + new Vector2(0, -20 * scale);
-			Main.spriteBatch.Draw(bar, drawPos, null, Color.Gray, 0, bar.Size() * 0.5f, new Vector2(3, 0.5f) * scale, SpriteEffects.None, 0);
+			HealthBarPos = position;
+			HealthBarScale = scale;
 		}
-		return base.DrawHealthBar(hbPosition, ref scale, ref position);
+		return true;
+	}
+
+	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+	{
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
+			spriteBatch.End();
+			spriteBatch.Begin(sBS);
+			spriteBatch.sortMode = SpriteSortMode.Immediate;
+			spriteBatch.blendState = BlendState.AlphaBlend;
+			Effect hitShader = ModAsset.TownNPCHitEffect.Value;
+			hitShader.CurrentTechnique.Passes[0].Apply();
+			var hitColor = Color.White;
+			if (KnockOut)
+			{
+				hitColor = Color.Red;
+			}
+			hitColor *= HitEffectTimer / 10f;
+
+			PreDraw(spriteBatch, screenPos, hitColor);
+
+			spriteBatch.End();
+			spriteBatch.Begin(sBS);
+		}
+		base.PostDraw(spriteBatch, screenPos, drawColor);
 	}
 }

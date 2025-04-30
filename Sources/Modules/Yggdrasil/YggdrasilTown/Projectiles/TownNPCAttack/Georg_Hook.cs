@@ -1,5 +1,6 @@
-using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.TownNPCAttack;
@@ -19,6 +20,10 @@ public class Georg_Hook : ModProjectile
 	public float StandardRange = 360;
 
 	public float RotatedValue = 0f;
+
+	public int ExtraSpeed = 0;
+
+	public bool LightingboltEnchanted;
 
 	public Vector2 HookSurfacePos = Vector2.zeroVector;
 
@@ -59,8 +64,27 @@ public class Georg_Hook : ModProjectile
 		{
 			Projectile.active = false;
 		}
-		//Projectile.velocity = new Vector2(0, 1).RotatedByRandom(MathHelper.Pi);
-		//Projectile.damage = 60;
+		var tNLIY = Owner.ModNPC as TownNPC_LiveInYggdrasil;
+		if (tNLIY == null)
+		{
+			return;
+		}
+		var iKeeper = Owner.ModNPC as InnKeeper;
+		if (iKeeper == null)
+		{
+			return;
+		}
+		ExtraSpeed = 0;
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			if (tNLIY.ArenaFighting)
+			{
+				ExtraSpeed = (int)tNLIY.AttackSpeed;
+			}
+		}
+		LightingboltEnchanted = iKeeper.ThunderHook;
+
+		Projectile.extraUpdates = ExtraSpeed - 1;
 		Projectile.velocity = Projectile.velocity.NormalizeSafe();
 		Projectile.direction = 1;
 		if (Projectile.velocity.X < 0)
@@ -183,6 +207,13 @@ public class Georg_Hook : ModProjectile
 		if (OldHookPos.Count > 20)
 		{
 			OldHookPos.Dequeue();
+		}
+		if (LightingboltEnchanted)
+		{
+			if (Timer == 40)
+			{
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Owner.Center, Vector2.Zero, ModContent.ProjectileType<Georg_Hook_Thunder_Release>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 0.6f);
+			}
 		}
 	}
 
@@ -421,11 +452,12 @@ public class Georg_Hook : ModProjectile
 			}
 			float factor = i / (float)smoothTrail.Count * mulFac;
 			float width = TrailWidthFunction(1 - factor);
+
 			float timeValue = (float)Main.time * 0.06f;
 
 			Vector2 drawPos = smoothTrail[i] + Projectile.Center;
 			Color drawC = Color.White * 0.8f;
-			if(i == 1)
+			if (i == 1)
 			{
 				drawC *= 0;
 			}
@@ -441,6 +473,30 @@ public class Georg_Hook : ModProjectile
 			drawC.R = (byte)(lightC.R * drawC.R / 255f);
 			drawC.G = (byte)(lightC.G * drawC.G / 255f);
 			drawC.B = (byte)(lightC.B * drawC.B / 255f);
+			if (LightingboltEnchanted)
+			{
+				drawC = Color.Lerp(new Color(0.05f, 0.1f, 0.6f, 0), new Color(0.7f, 0.9f, 1f, 0), factor);
+				Lighting.AddLight(drawPos, drawC.ToVector3() * width * 0.5f);
+				if (!Main.gamePaused && i > 1)
+				{
+					if (Main.rand.Next(1000) < (smoothTrail[i] - smoothTrail[i - 1]).Length())
+					{
+						float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(8f, 18f));
+						Vector2 afterVelocity = (smoothTrail[i] - smoothTrail[i - 1]).NormalizeSafe() * 15;
+						var electric = new ElectricCurrent
+						{
+							velocity = afterVelocity,
+							Active = true,
+							Visible = true,
+							position = smoothTrail[i] + Projectile.Center - afterVelocity * 3,
+							maxTime = 10,
+							scale = size,
+							ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size, 0 },
+						};
+						Ins.VFXManager.Add(electric);
+					}
+				}
+			}
 			if (i == 1)
 			{
 				drawC *= 0;
@@ -453,9 +509,9 @@ public class Georg_Hook : ModProjectile
 			bars6.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
 		}
 
-		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS.SortMode, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect effect = Commons.ModAsset.Trailing.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
@@ -480,6 +536,10 @@ public class Georg_Hook : ModProjectile
 		}
 
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_8.Value;
+		if (LightingboltEnchanted)
+		{
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_17.Value;
+		}
 		if (bars4.Count > 3)
 		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars4.ToArray(), 0, bars4.Count - 2);

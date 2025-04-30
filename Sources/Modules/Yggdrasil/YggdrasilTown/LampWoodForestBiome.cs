@@ -33,6 +33,7 @@ public class LampWoodForest : ModBiome
 	public override void OnInBiome(Player player)
 	{
 		Main.raining = false;
+		Main.bloodMoon = false;
 		base.OnInBiome(player);
 	}
 }

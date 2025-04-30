@@ -223,7 +223,7 @@ public class ArenaPlayer : ModPlayer
 				if (tNLIY != null)
 				{
 					Tags = tNLIY.MyBossTags;
-					if (!tNLIY.StartFighting)
+					if (!tNLIY.StartedFight)
 					{
 						Player.statLife = Player.statLifeMax2;
 					}
