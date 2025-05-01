@@ -444,7 +444,7 @@ public class SkeletonRenderer
 				Vertex2D drawVertex = new Vertex2D(
 					position + DrawOffset,
 					lightColor,
-					new Vector3(uvs[v], uvs[v + 1], 0));
+					new Vector3(uvs[v], uvs[v + 1],0) * Main.GameViewMatrix.ZoomMatrix.M11);
 				renderVertices.Add(drawVertex);
 			}
 
