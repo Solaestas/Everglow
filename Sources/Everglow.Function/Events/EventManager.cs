@@ -6,10 +6,14 @@ namespace Everglow.Commons.Events
 	public class EventManager : ModSystem
 	{
 		private const string LayerName = "Everglow/ModEvent";
-		private static List<ModEvent> actives = new();
-		private static LegacyGameInterfaceLayer layer_HasInvasion = new(LayerName, delegate
+		private const string VanillaInvasionLayerName = "Vanilla: Invasion Progress Bars";
+		private const string VanillaMinimapLayerName = "Vanilla: Map / Minimap";
+
+		private static List<ModEvent> Actives = [];
+
+		private static LegacyGameInterfaceLayer Layer_HasInvasion = new(LayerName, delegate
 		{
-			foreach (ModEvent e in actives)
+			foreach (ModEvent e in Actives)
 			{
 				if (e.IsBackground)
 				{
@@ -22,9 +26,9 @@ namespace Everglow.Commons.Events
 			return true;
 		});
 
-		private static LegacyGameInterfaceLayer layer_NoInvasion = new(LayerName, delegate
+		private static LegacyGameInterfaceLayer Layer_NoInvasion = new(LayerName, delegate
 		{
-			foreach (ModEvent e in actives)
+			foreach (ModEvent e in Actives)
 			{
 				if (e.IsBackground)
 				{
@@ -38,7 +42,7 @@ namespace Everglow.Commons.Events
 
 		private static void ReSortActives()
 		{
-			actives.Sort((e1, e2) => -e1.SortRank.CompareTo(e2.SortRank));
+			Actives.Sort((e1, e2) => -e1.SortRank.CompareTo(e2.SortRank));
 		}
 
 		internal static void Register(ModEvent e)
@@ -50,7 +54,7 @@ namespace Everglow.Commons.Events
 		{
 			if (e.CanActivate(args))
 			{
-				actives.Add(e);
+				Actives.Add(e);
 				ReSortActives();
 				e.Active = true;
 				e.OnActivate(args);
@@ -70,7 +74,7 @@ namespace Everglow.Commons.Events
 		{
 			if (e.CanDeactivate(args))
 			{
-				if (actives.Remove(e))
+				if (Actives.Remove(e))
 				{
 					e.Active = false;
 					e.OnDeactivate(args);
@@ -90,28 +94,26 @@ namespace Everglow.Commons.Events
 
 		public override void PostUpdateEverything()
 		{
-			foreach (ModEvent e in actives)
+			foreach (ModEvent e in Actives)
 			{
 				e.Update();
 			}
-			base.PostUpdateEverything();
 		}
 
 		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
 		{
-			int index = layers.FindIndex(layer => layer.Name == "Vanilla: Invasion Progress Bars");
-			if (index != -1)
+			int index = layers.FindIndex(layer => layer.Name == VanillaInvasionLayerName);
+			if (index != -1 && Actives.Count != 0)
 			{
-				//layers.RemoveAt(index);
-				//layers.Insert(index, layer_HasInvasion);
+				layers.RemoveAt(index);
+				layers.Insert(index, Layer_HasInvasion);
 				return;
 			}
-			index = layers.FindIndex(layer => layer.Name == "Vanilla: Map / Minimap");
-			if (index != -1)
+			index = layers.FindIndex(layer => layer.Name == VanillaMinimapLayerName);
+			if (index != -1 && Actives.Count != 0)
 			{
-				//layers.Insert(index, layer_NoInvasion);
+				layers.Insert(index, Layer_NoInvasion);
 			}
-			base.ModifyInterfaceLayers(layers);
 		}
 
 		public override void SaveWorldData(TagCompound tag)
@@ -122,21 +124,20 @@ namespace Everglow.Commons.Events
 				e.SaveData(subtag);
 				tag[e.FullName] = subtag;
 			}
-			int Count = actives.Count;
+			int Count = Actives.Count;
 			tag[nameof(Count)] = Count;
 			for (int i = 0; i < Count; i++)
 			{
-				ModEvent e = actives[i];
-				tag[$"{nameof(actives)}_{i}.FullName"] = e.FullName;
-				tag[$"{nameof(actives)}_{i}.DefName"] = e.DefName;
+				ModEvent e = Actives[i];
+				tag[$"{nameof(Actives)}_{i}.FullName"] = e.FullName;
+				tag[$"{nameof(Actives)}_{i}.DefName"] = e.DefName;
 				TagCompound subtag = new();
 				if (ModContent.TryFind(e.FullName, out ModEvent oe) && oe != e)
 				{
 					e.SaveData(subtag);
 				}
-				tag[$"{nameof(actives)}_{i}.Tag"] = subtag;
+				tag[$"{nameof(Actives)}_{i}.Tag"] = subtag;
 			}
-			base.SaveWorldData(tag);
 		}
 
 		public override void LoadWorldData(TagCompound tag)
@@ -153,25 +154,24 @@ namespace Everglow.Commons.Events
 			{
 				for (int i = 0; i < Count; i++)
 				{
-					if (tag.TryGet($"{nameof(actives)}_{i}.FullName", out string fullName) && tag.TryGet($"{nameof(actives)}_{i}.DefName", out string defName))
+					if (tag.TryGet($"{nameof(Actives)}_{i}.FullName", out string fullName) && tag.TryGet($"{nameof(Actives)}_{i}.DefName", out string defName))
 					{
 						if (ModContent.TryFind(fullName, out ModEvent e))
 						{
 							if (e.FullName != defName)
 							{
 								e = e.Clone();
-								tag.TryGet($"{nameof(actives)}_{i}.Tag", out TagCompound subtag);
+								tag.TryGet($"{nameof(Actives)}_{i}.Tag", out TagCompound subtag);
 								subtag ??= new();
 								e.LoadData(defName, subtag);
 							}
 							e.Active = true;
-							actives.Add(e);
+							Actives.Add(e);
 						}
 					}
 				}
 				ReSortActives();
 			}
-			base.LoadWorldData(tag);
 		}
 	}
 }
