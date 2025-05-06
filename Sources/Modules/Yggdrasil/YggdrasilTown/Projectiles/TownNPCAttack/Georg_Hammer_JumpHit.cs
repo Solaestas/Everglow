@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs.TownNPCAttack;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -10,6 +11,8 @@ public class Georg_Hammer_JumpHit : ModProjectile
 	public NPC Owner;
 
 	public int Timer;
+
+	public bool FireEnchanted = false;
 
 	public Vector2 HitPos = Vector2.Zero;
 
@@ -48,6 +51,18 @@ public class Georg_Hammer_JumpHit : ModProjectile
 		{
 			Projectile.active = false;
 		}
+		var tNLIY = Owner.ModNPC as TownNPC_LiveInYggdrasil;
+		if (tNLIY == null)
+		{
+			return;
+		}
+		var iKeeper = Owner.ModNPC as InnKeeper;
+		if (iKeeper == null)
+		{
+			return;
+		}
+		Projectile.extraUpdates = (int)(tNLIY.AttackSpeed - 1);
+		FireEnchanted = iKeeper.BurningHammer;
 	}
 
 	public override bool ShouldUpdatePosition() => false;
@@ -97,28 +112,54 @@ public class Georg_Hammer_JumpHit : ModProjectile
 			{
 				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(15f, 70f)).RotatedBy(Main.rand.NextFloat(MathHelper.TwoPi));
 				Vector2 pos = HitPos - newVelocity * 1;
-				var somg = new Georg_Hammer_JumpHit_Smog
+				if(FireEnchanted)
 				{
-					velocity = newVelocity,
-					Active = true,
-					Visible = true,
-					position = pos,
-					maxTime = Main.rand.Next(55, 148),
-					scale = Main.rand.NextFloat(10f, 60f),
-					ai = new float[] { 0, 0 },
-				};
-				Ins.VFXManager.Add(somg);
+					var somg = new Georg_Hammer_JumpHit_Smog_Fire
+					{
+						velocity = newVelocity,
+						Active = true,
+						Visible = true,
+						position = pos,
+						maxTime = Main.rand.Next(55, 148),
+						scale = Main.rand.NextFloat(10f, 60f),
+						ai = new float[] { 0, 0 },
+					};
+					Ins.VFXManager.Add(somg);
+				}
+				else
+				{
+					var somg = new Georg_Hammer_JumpHit_Smog
+					{
+						velocity = newVelocity,
+						Active = true,
+						Visible = true,
+						position = pos,
+						maxTime = Main.rand.Next(55, 148),
+						scale = Main.rand.NextFloat(10f, 60f),
+						ai = new float[] { 0, 0 },
+					};
+					Ins.VFXManager.Add(somg);
+				}
 			}
-			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), HitPos, Vector2.Zero, ModContent.ProjectileType<Georg_Hammer_JumpHitExplosion>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 10);
+			if (FireEnchanted)
+			{
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), HitPos, Vector2.Zero, ModContent.ProjectileType<Georg_Hammer_JumpHitExplosion_Fire>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 10);
+			}
+			else
+			{
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), HitPos, Vector2.Zero, ModContent.ProjectileType<Georg_Hammer_JumpHitExplosion>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 10);
+			}
 			ShakerManager.AddShaker(Projectile.Center, Vector2.One.RotatedByRandom(MathHelper.Pi), 80, 20f, 120, 0.9f, 0.8f, 150);
 			SoundEngine.PlaySound(SoundID.DD2_GoblinBomb, Projectile.Center);
 		}
-
-		if (Timer >= 40 && Timer % 4 == 0)
+		if(FireEnchanted)
 		{
-			float value = Timer - 40;
-			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), HitPos + new Vector2(value * 80, 20), Vector2.Zero, ModContent.ProjectileType<Georg_Hammer_Flame>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 0.6f);
-			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), HitPos + new Vector2(value * -80, 20), Vector2.Zero, ModContent.ProjectileType<Georg_Hammer_Flame>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 0.6f);
+			if (Timer >= 40 && Timer % 4 == 0)
+			{
+				float value = Timer - 40;
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), HitPos + new Vector2(value * 80, 20), Vector2.Zero, ModContent.ProjectileType<Georg_Hammer_Flame>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 0.6f);
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), HitPos + new Vector2(value * -80, 20), Vector2.Zero, ModContent.ProjectileType<Georg_Hammer_Flame>(), Projectile.damage, Projectile.knockBack, Main.myPlayer, 0.6f);
+			}
 		}
 	}
 
@@ -177,6 +218,7 @@ public class Georg_Hammer_JumpHit : ModProjectile
 			{
 				fadeT = 0;
 			}
+
 			var projectileCenterDraw = Projectile.Center;
 			var counterOldCenter = OldProjectileCenters.ToArray();
 
@@ -185,7 +227,12 @@ public class Georg_Hammer_JumpHit : ModProjectile
 			{
 				projectileCenterDraw = counterOldCenter.ToArray()[Math.Clamp(indexOldCenter, 0, OldProjectileCenters.Count - 1)];
 			}
-
+			if (!FireEnchanted)
+			{
+				fadeT *= 0.2f;
+				bloomColor = Lighting.GetColor((new Vector2(0, 60).RotatedBy(r * Projectile.spriteDirection) + projectileCenterDraw).ToTileCoordinates());
+				bloomColor.A = 0;
+			}
 			// Texture2D tileB = Commons.ModAsset.TileBlock.Value;
 			// Main.spriteBatch.Draw(tileB, projectileCenterDraw - Main.screenPosition,null,Color.Red,0, tileB.Size() * 0.5f, 0.5f,SpriteEffects.None,0);
 			indexOldCenter++;
@@ -271,28 +318,33 @@ public class Georg_Hammer_JumpHit : ModProjectile
 			hammerScale = 0;
 		}
 
-		if (Timer >= 26 && Timer < 29)
+		if(FireEnchanted)
 		{
-			hammerFrame = new Rectangle(44, 30, 42, 40);
-		}
-		if (Timer >= 29 && Timer < 46)
-		{
-			hammerFrame = new Rectangle(88, 30, 42, 40);
-		}
-		if (Timer >= 46 && Timer < 50)
-		{
-			hammerFrame = new Rectangle(44, 30, 42, 40);
+			if (Timer >= 26 && Timer < 29)
+			{
+				hammerFrame = new Rectangle(44, 30, 42, 40);
+			}
+			if (Timer >= 29 && Timer < 46)
+			{
+				hammerFrame = new Rectangle(88, 30, 42, 40);
+			}
+			if (Timer >= 46 && Timer < 50)
+			{
+				hammerFrame = new Rectangle(44, 30, 42, 40);
+			}
 		}
 		Main.spriteBatch.Draw(tex, Projectile.Center + new Vector2(0, -14).RotatedBy(hammerRot) - Main.screenPosition, hammerFrame, lightColor, hammerRot, new Vector2(21, 40), Projectile.scale * hammerScale, SpriteEffects.None, 0);
-
-		Rectangle hammerGlow = hammerFrame;
-		hammerGlow.Y += 42;
-		float glowColor = 1f;
-		if (Timer > 34)
+		if (FireEnchanted)
 		{
-			glowColor = Math.Max((44 - Timer) / 20f, 0);
+			Rectangle hammerGlow = hammerFrame;
+			hammerGlow.Y += 42;
+			float glowColor = 1f;
+			if (Timer > 34)
+			{
+				glowColor = Math.Max((44 - Timer) / 20f, 0);
+			}
+			Main.spriteBatch.Draw(tex, Projectile.Center + new Vector2(0, -14).RotatedBy(hammerRot) - Main.screenPosition, hammerGlow, new Color(1f, 1f, 1f, 0) * glowColor, hammerRot, new Vector2(21, 40), Projectile.scale * hammerScale, SpriteEffects.None, 0);
 		}
-		Main.spriteBatch.Draw(tex, Projectile.Center + new Vector2(0, -14).RotatedBy(hammerRot) - Main.screenPosition, hammerGlow, new Color(1f, 1f, 1f, 0) * glowColor, hammerRot, new Vector2(21, 40), Projectile.scale * hammerScale, SpriteEffects.None, 0);
 		return false;
 	}
 }

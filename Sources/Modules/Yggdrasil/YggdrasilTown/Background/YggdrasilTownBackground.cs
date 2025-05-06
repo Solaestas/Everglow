@@ -177,6 +177,11 @@ public class YggdrasilTownBackground : ModSystem
 				BackgroundManager.QuickDrawBG(townFar, 15f, correction + new Vector2(0, 2000), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 				BackgroundManager.QuickDrawBG(townMiddle, 6f, correction + new Vector2(0, 3800), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 				BackgroundManager.QuickDrawBG(townClose, 3f, correction + new Vector2(0, 3800), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+				if(YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+				{
+					var arenaClose = ModAsset.ArenaBackground.Value;
+					BackgroundManager.QuickDrawBG(arenaClose, 1.5f, correction + new Vector2(3150, 3754), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+				}
 			}
 		}
 	}

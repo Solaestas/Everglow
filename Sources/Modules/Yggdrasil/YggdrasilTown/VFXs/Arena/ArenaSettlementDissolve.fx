@@ -42,13 +42,17 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
 	float4 colorNoise = tex2D(uNoiseSampler, input.Texcoord.xy * uScale);
 	float4 color = tex2D(uImage, input.Texcoord.xy);
 	float light = colorNoise.r;
+	if (!any(color))
+	{
+		return float4(0, 0, 0, 0);
+	}
 	if (input.Texcoord.z > light + 0.2)
 	{
-		return color;
+		return color * input.Color;
 	}
     if (input.Texcoord.z > light)
     {
-		return color * input.Color;
+		return float4(0.7, 0, 0, 0.5);
 	}
     return float4(0, 0, 0, 0);
 }

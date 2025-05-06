@@ -54,7 +54,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     float colorFinal = color * colorLine;
     float light = clamp(colorFinal.r - input.Texcoord.z, 0, 1);
 	float4 flame = tex2D(uImage, float2(light, input.Color.r)) * 1.2;
-    flame.a *= input.Color.a;
+	flame *= float4(input.Color.gba, 0);
     return flame;
 }
 technique Technique1

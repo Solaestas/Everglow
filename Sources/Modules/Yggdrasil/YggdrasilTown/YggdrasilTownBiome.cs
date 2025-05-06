@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using SubworldLibrary;
@@ -6,7 +7,24 @@ namespace Everglow.Yggdrasil.YggdrasilTown;
 
 public class YggdrasilTownBiome : ModBiome
 {
-	public override int Music => !Main.dayTime ? Common.YggdrasilContent.QuickMusic("NewYggdrasilTownBGM") : Common.YggdrasilContent.QuickMusic("YggdrasilTownBGM");
+	public override int Music => YggdrasilContent.QuickMusic(ModAsset.NewYggdrasilTownBGM_Path);
+
+	public int GetMusic()
+	{
+		Mod everglow = ModLoader.GetMod("Everglow");
+		if (everglow != null)
+		{
+			if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+			{
+				return MusicLoader.GetMusicSlot(everglow, ModAsset.Arena_BGM_Path);
+			}
+			return !Main.dayTime ? MusicLoader.GetMusicSlot(everglow, ModAsset.NewYggdrasilTownBGM_Path) : MusicLoader.GetMusicSlot(everglow, ModAsset.YggdrasilTownBGM_Path);
+		}
+		else
+		{
+			return 0;
+		}
+	}
 
 	public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 

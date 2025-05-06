@@ -1,10 +1,11 @@
+using Everglow.Yggdrasil.Common;
 using SubworldLibrary;
 
 namespace Everglow.Yggdrasil.YggdrasilTown;
 
 public class TwilightForsetAndRelic : ModBiome
 {
-	public override int Music => !Main.dayTime ? Common.YggdrasilContent.QuickMusic("NewYggdrasilTownBGM") : Common.YggdrasilContent.QuickMusic("YggdrasilTownBGM");
+	public override int Music => YggdrasilContent.QuickMusic(ModAsset.NewYggdrasilTownBGM_Path);
 
 	public override SceneEffectPriority Priority => SceneEffectPriority.BossMedium;
 

@@ -2,7 +2,7 @@ using System;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs.Arena;
 
-[Pipeline(typeof(ArenaMessagePipeline))]
+[Pipeline(typeof(ArenaMessageBackgroundPipeline))]
 public class SuccessIconBackground : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PreDrawFilter;
@@ -26,7 +26,7 @@ public class SuccessIconBackground : Visual
 		{
 			pocession = 1;
 		}
-		var drawColor = new Color(1f, 1f, 0, 1f);
+		var drawColor = new Color(0f, 0.25f, 0, 0f);
 		float timeValue = (float)(Main.time * 0.002);
 		List<Vertex2D> bars = new List<Vertex2D>();
 		bars.Add(new Vector2(0), drawColor, new Vector3(0, 0, pocession));

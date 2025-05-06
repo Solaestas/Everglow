@@ -256,6 +256,13 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 	public override void BossAI()
 	{
 		base.BossAI();
+		if (Fail)
+		{
+			NPC.velocity *= 0;
+			NPC.dontTakeDamage = true;
+			NPC.damage = 0;
+			return;
+		}
 		if (KnockOut)
 		{
 			return;
@@ -368,16 +375,25 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 		{
 			NPC.direction = -1;
 		}
+		int fire = 0;
+		if(BurningHammer)
+		{
+			fire = 1;
+		}
+		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), targetPos, Vector2.zeroVector, ModContent.ProjectileType<Georg_Hammer_Target>(), 0, 0, target.whoAmI, fire);
+		NPC.velocity *= 0;
+		yield return new WaitForFrames(12);
 		NPC.spriteDirection = NPC.direction;
-		NPC.velocity.Y = -20;
+		NPC.velocity.Y = -20 * AttackSpeed;
 
 		// Ascend
 		Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, (targetPos - NPC.Center).NormalizeSafe(), ModContent.ProjectileType<Georg_Hammer_JumpHit>(), 100, 4, Main.myPlayer, NPC.whoAmI);
-		for (int t = 0; t < 30; t++)
+		float maxTimeAttack = (int)(30f / AttackSpeed);
+		for (int t = 0; t < maxTimeAttack; t++)
 		{
-			float velX = (targetPos - NPC.Center).X / 30f;
+			float velX = (targetPos - NPC.Center).X / maxTimeAttack;
 			NPC.velocity.X = velX;
-			NPC.velocity.Y += 20 / 30f;
+			NPC.velocity.Y += 2 / 3f * AttackSpeed * AttackSpeed;
 			if (Resilience <= 0)
 			{
 				break;
@@ -399,7 +415,7 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 		}
 
 		// Descend
-		float maxTime = 6;
+		float maxTime = (int)(6f / AttackSpeed);
 		for (int t = 0; t < maxTime; t++)
 		{
 			float value = (MathF.Sin((t / maxTime - 0.5f) * MathHelper.Pi) + 1) * 0.5f;
@@ -410,7 +426,7 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 			}
 			yield return new SkipThisFrame();
 		}
-
+		NPC.Center = targetPos;
 		for (int i = 0; i < 100; i++)
 		{
 			if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height) || TileCollisionUtils.PlatformCollision(NPC.position, NPC.width, NPC.height))

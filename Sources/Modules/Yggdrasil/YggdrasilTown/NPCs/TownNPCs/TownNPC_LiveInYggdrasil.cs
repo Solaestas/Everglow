@@ -643,6 +643,10 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 
 	public int BossTimer;
 
+	public int FailTime = -1;
+
+	public int FinishTime = -1;
+
 	/// <summary>
 	/// Timer for hit effect(White or Red light).
 	/// </summary>
@@ -652,6 +656,8 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 	/// Timer for knock out animation.
 	/// </summary>
 	public int KnockOutTimer = 0;
+
+	public bool Fail = false;
 
 	public bool KnockOut = false;
 
@@ -689,8 +695,12 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 		NPC.HitSound = SoundID.NPCHit1;
 		NPC.DeathSound = SoundID.NPCDeath6;
 		NPC.knockBackResist = 1f;
+		NPC.dontTakeDamage = true;
+		Music = Common.YggdrasilContent.QuickMusic(ModAsset.Arena_BGM_Path);
+		FailTime = -1;
 		BossMovingSpeed = 1f;
 		StartedFight = false;
+		Fail = false;
 		LifeRegenPerS = 0;
 		LifeTimer = 0;
 		ImmuneLower300 = false;
@@ -954,6 +964,14 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 					tile.HasTile = false;
 				}
 			}
+			if(tag.Name == "180Seconds" && tag.Enable)
+			{
+				FailTime = 10800;
+			}
+			if (tag.Name == "90Seconds" && tag.Enable)
+			{
+				FailTime = 5400;
+			}
 		}
 	}
 
@@ -961,6 +979,7 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 	{
 		ApplyBossTags();
 		NPC.life = NPC.lifeMax;
+		NPC.dontTakeDamage = false;
 		BossTimer = 0;
 		StartedFight = true;
 		NPCBossValueBar nBVB = new NPCBossValueBar();
@@ -977,6 +996,18 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 		{
 			BossTimer++;
 			LifeTimer++;
+			if (Fail)
+			{
+				NPC.velocity *= 0;
+				NPC.dontTakeDamage = true;
+				NPC.damage = 0;
+				return;
+			}
+			if (FailTime > 0 && BossTimer > FailTime && !Fail)
+			{
+				Fail = true;
+				PopFailVFX();
+			}
 			if (HitEffectTimer > 0)
 			{
 				HitEffectTimer--;
@@ -1198,22 +1229,47 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 	{
 		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
 		{
-			var sIB = new SuccessIconBackground
-			{
-				Active = true,
-				Visible = true,
-				Timer = 0,
-			};
-			Ins.VFXManager.Add(sIB);
-			var aSet = new ArenaSettlement
-			{
-				Active = true,
-				Visible = true,
-				Timer = 0,
-			};
-			Ins.VFXManager.Add(aSet);
+			PopSuccessVFX();
 		}
 		base.OnKill();
+	}
+
+	public void PopSuccessVFX()
+	{
+		var sIB = new SuccessIconBackground
+		{
+			Active = true,
+			Visible = true,
+			Timer = 0,
+		};
+		Ins.VFXManager.Add(sIB);
+		var aSet = new ArenaSettlement
+		{
+			Active = true,
+			Visible = true,
+			Timer = 0,
+			State = 0,
+		};
+		Ins.VFXManager.Add(aSet);
+	}
+
+	public void PopFailVFX()
+	{
+		var fIB = new FailIconBackground
+		{
+			Active = true,
+			Visible = true,
+			Timer = 0,
+		};
+		Ins.VFXManager.Add(fIB);
+		var aSet = new ArenaSettlement
+		{
+			Active = true,
+			Visible = true,
+			Timer = 0,
+			State = 1,
+		};
+		Ins.VFXManager.Add(aSet);
 	}
 
 	public Vector2 HealthBarPos = Vector2.Zero;

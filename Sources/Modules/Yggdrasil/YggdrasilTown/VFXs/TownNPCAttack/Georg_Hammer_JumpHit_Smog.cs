@@ -68,7 +68,10 @@ public class Georg_Hammer_JumpHit_Smog : Visual
 		{
 			Vector2 normal = oldPos[i] - oldPos[i - 1];
 			normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
-			var lightColorWithPos = new Color(MathF.Pow(fx, 0.6f), 1f, 1f, 1f);
+			var lightColor = Lighting.GetColor(oldPos[i].ToTileCoordinates()) * 0.2f;
+
+			// Not a bug, but a shader color setting.
+			var lightColorWithPos = new Color(MathF.Pow(fx, 0.6f), lightColor.R / 255f, lightColor.G / 255f, lightColor.B / 255f);
 			float width = (float)Math.Sin(MathF.Pow((i - 1) / (float)(len - 2), 0.2f) * Math.PI);
 			bars.Add(oldPos[i] + normal * scale, lightColorWithPos, new Vector3(0, (i + 15 - len) / 75f + timer / 15000f, fx - width * 0.4f));
 			bars.Add(oldPos[i] - normal * scale, lightColorWithPos, new Vector3(1, (i + 15 - len) / 75f + timer / 15000f, fx - width * 0.4f));
@@ -77,7 +80,7 @@ public class Georg_Hammer_JumpHit_Smog : Visual
 		{
 			for (int i = 1; i < 3; i++)
 			{
-				var lightColorWithPos = new Color(1f, 1f, 1f, 0);
+				var lightColorWithPos = new Color(1f, 1f, 1f, 0f);
 				bars.Add(position, lightColorWithPos, new Vector3(0, (i + 15 - len) / 75f + timer / 15000f, fx));
 				bars.Add(position, lightColorWithPos, new Vector3(1, (i + 15 - len) / 75f + timer / 15000f, fx));
 			}
