@@ -29,7 +29,7 @@ public class MythContent
 	/// <returns> </returns>
 	public static int QuickMusic(string path)
 	{
-		return MusicLoader.GetMusicSlot(ModIns.Mod, "Myth/Musics/" + path);
+		return MusicLoader.GetMusicSlot(ModIns.Mod, "Myth/Music/" + path);
 	}
 
 	/// <summary>
