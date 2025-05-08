@@ -1,3 +1,4 @@
+using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 
@@ -22,7 +23,20 @@ namespace Everglow.Commons.Events
 				e.Draw(Main.spriteBatch);
 				return true;
 			}
+
+			var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin();
+
 			Main.DrawInvasionProgress();
+			if (Main.HealthBarDrawSettings != 0)
+			{
+				Main.BigBossProgressBar.Draw(Main.spriteBatch);
+			}
+
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin(sBS);
+
 			return true;
 		});
 
@@ -103,14 +117,14 @@ namespace Everglow.Commons.Events
 		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
 		{
 			int index = layers.FindIndex(layer => layer.Name == VanillaInvasionLayerName);
-			if (index != -1 && Actives.Count != 0)
+			if (index != -1)
 			{
 				layers.RemoveAt(index);
 				layers.Insert(index, Layer_HasInvasion);
 				return;
 			}
 			index = layers.FindIndex(layer => layer.Name == VanillaMinimapLayerName);
-			if (index != -1 && Actives.Count != 0)
+			if (index != -1)
 			{
 				layers.Insert(index, Layer_NoInvasion);
 			}
