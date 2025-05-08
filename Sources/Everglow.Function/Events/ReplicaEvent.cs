@@ -1,16 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using rail;
 using ReLogic.Content;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
-using Terraria.UI;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Everglow.Commons.Events
 {
@@ -24,23 +15,27 @@ namespace Everglow.Commons.Events
 		/// 进度点数
 		/// </summary>
 		public int Progress;
+
 		/// <summary>
 		/// 最大进度点数
 		/// </summary>
 		public int ProgressMax;
 		public float ProgressAlpha;
 		public int Timer;
+
 		/// <summary>
 		/// 事件波数
 		/// 如果没有波数区分,此值至0
 		/// </summary>
 		public int Wave;
-		protected bool InnerActive;
+		protected bool innerActive;
+
 		/// <summary>
 		/// 事件图标,一般为32*32大小
 		/// </summary>
-		protected string EventIcon;
-		private Texture2D Icon;
+		protected string eventIcon;
+		private Texture2D icon;
+
 		/// <summary>
 		/// 修改显示
 		/// </summary>
@@ -48,19 +43,21 @@ namespace Everglow.Commons.Events
 		/// <param name="c">背景板颜色</param>
 		public virtual void ModifyInvasionProgress(ref string text, ref Color c)
 		{
-
 		}
+
 		public override void OnActivate(params object[] args)
 		{
-			InnerActive = true;
+			innerActive = true;
 		}
+
 		public override void OnDeactivate(params object[] args)
 		{
-			InnerActive = false;
+			innerActive = false;
 		}
+
 		public override void Draw(SpriteBatch sprite)
 		{
-			if (InnerActive)
+			if (innerActive)
 			{
 				Timer = 160;
 			}
@@ -75,9 +72,9 @@ namespace Everglow.Commons.Events
 				return;
 			}
 			float num = 0.5f + ProgressAlpha * 0.5f;
-			string text = "";
+			string text = string.Empty;
 			Color c = Color.White;
-			Texture2D value = Icon ??= ModContent.Request<Texture2D>(EventIcon, AssetRequestMode.ImmediateLoad).Value;
+			Texture2D value = icon ??= ModContent.Request<Texture2D>(eventIcon, AssetRequestMode.ImmediateLoad).Value;
 			ModifyInvasionProgress(ref text, ref c);
 			Vector2 texturescale = new(25.6f / value.Width, 25.6f / value.Height);
 			texturescale *= num;
@@ -148,19 +145,21 @@ namespace Everglow.Commons.Events
 			Main.spriteBatch.Draw(value, r3.Left() + Vector2.UnitX * num * 8f, null, Color.White * ProgressAlpha, 0f, new Vector2(0f, value.Height / 2), texturescale, SpriteEffects.None, 0f);
 			Utils.DrawBorderString(Main.spriteBatch, text, r3.Right() + Vector2.UnitX * num * -22f, Color.White * ProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
 		}
+
 		public override void SaveData(TagCompound tag)
 		{
 			tag[nameof(Progress)] = Progress;
 			tag[nameof(ProgressMax)] = ProgressMax;
 			tag[nameof(Wave)] = Wave;
-			tag[nameof(InnerActive)] = InnerActive;
+			tag[nameof(innerActive)] = innerActive;
 		}
+
 		public override void LoadData(string defName, TagCompound tag)
 		{
 			tag.TryGet(nameof(Progress), out Progress);
 			tag.TryGet(nameof(ProgressMax), out ProgressMax);
 			tag.TryGet(nameof(Wave), out Wave);
-			tag.TryGet(nameof(InnerActive),out InnerActive);
+			tag.TryGet(nameof(innerActive), out innerActive);
 		}
 	}
 }
