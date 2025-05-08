@@ -2,190 +2,195 @@ using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 
-namespace Everglow.Commons.Events
+namespace Everglow.Commons.Events;
+
+public class EventManager : ModSystem
 {
-	public class EventManager : ModSystem
+	private const string LayerName = "Everglow/ModEvent";
+	private const string VanillaInvasionLayerName = "Vanilla: Invasion Progress Bars";
+	private const string VanillaMinimapLayerName = "Vanilla: Map / Minimap";
+
+	private static List<ModEvent> actives = [];
+
+	private static LegacyGameInterfaceLayer layer_HasInvasion = new(LayerName, delegate
 	{
-		private const string LayerName = "Everglow/ModEvent";
-		private const string VanillaInvasionLayerName = "Vanilla: Invasion Progress Bars";
-		private const string VanillaMinimapLayerName = "Vanilla: Map / Minimap";
-
-		private static List<ModEvent> Actives = [];
-
-		private static LegacyGameInterfaceLayer Layer_HasInvasion = new(LayerName, delegate
+		if (!DrawInvasionProgress_Everglow())
 		{
-			foreach (ModEvent e in Actives)
-			{
-				if (e.IsBackground)
-				{
-					continue;
-				}
-				e.Draw(Main.spriteBatch);
-				return true;
-			}
-
-			var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
-			Main.spriteBatch.End();
-			Main.spriteBatch.Begin();
-
-			Main.DrawInvasionProgress();
-			if (Main.HealthBarDrawSettings != 0)
-			{
-				Main.BigBossProgressBar.Draw(Main.spriteBatch);
-			}
-
-			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(sBS);
-
-			return true;
-		});
-
-		private static LegacyGameInterfaceLayer Layer_NoInvasion = new(LayerName, delegate
-		{
-			foreach (ModEvent e in Actives)
-			{
-				if (e.IsBackground)
-				{
-					continue;
-				}
-				e.Draw(Main.spriteBatch);
-				return true;
-			}
-			return true;
-		});
-
-		private static void ReSortActives()
-		{
-			Actives.Sort((e1, e2) => -e1.SortRank.CompareTo(e2.SortRank));
+			DrawInvasionProgress_Vanilla();
 		}
 
-		internal static void Register(ModEvent e)
+		return true;
+	});
+
+	private static LegacyGameInterfaceLayer layer_NoInvasion = new(LayerName, delegate
+	{
+		DrawInvasionProgress_Everglow();
+
+		return true;
+	});
+
+	private static bool DrawInvasionProgress_Everglow()
+	{
+		foreach (ModEvent e in actives)
 		{
-			ModTypeLookup<ModEvent>.Register(e);
+			if (e.IsBackground)
+			{
+				continue;
+			}
+			e.Draw(Main.spriteBatch);
+			return true;
 		}
 
-		public static bool Activate(ModEvent e, params object[] args)
+		return false;
+	}
+
+	private static void DrawInvasionProgress_Vanilla()
+	{
+		var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin();
+
+		Main.DrawInvasionProgress();
+		if (Main.HealthBarDrawSettings != 0)
 		{
-			if (e.CanActivate(args))
+			Main.BigBossProgressBar.Draw(Main.spriteBatch);
+		}
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
+	}
+
+	private static void ReSortActives()
+	{
+		actives.Sort((e1, e2) => -e1.SortRank.CompareTo(e2.SortRank));
+	}
+
+	internal static void Register(ModEvent e)
+	{
+		ModTypeLookup<ModEvent>.Register(e);
+	}
+
+	public static bool Activate(ModEvent e, params object[] args)
+	{
+		if (e.CanActivate(args))
+		{
+			actives.Add(e);
+			ReSortActives();
+			e.Active = true;
+			e.OnActivate(args);
+			return true;
+		}
+		return false;
+	}
+
+	public static bool Activate<T>(params object[] args)
+		where T : ModEvent
+	{
+		ModEvent e;
+		return (e = ModContent.GetInstance<T>()) is not null && Activate(e, args);
+	}
+
+	public static bool Deactivate(ModEvent e, params object[] args)
+	{
+		if (e.CanDeactivate(args))
+		{
+			if (actives.Remove(e))
 			{
-				Actives.Add(e);
-				ReSortActives();
-				e.Active = true;
-				e.OnActivate(args);
+				e.Active = false;
+				e.OnDeactivate(args);
 				return true;
 			}
 			return false;
 		}
+		return false;
+	}
 
-		public static bool Activate<T>(params object[] args)
-			where T : ModEvent
+	public static bool Deactivate<T>(params object[] args)
+		where T : ModEvent
+	{
+		ModEvent e;
+		return (e = ModContent.GetInstance<T>()) is not null && Deactivate(e, args);
+	}
+
+	public override void PostUpdateEverything()
+	{
+		foreach (ModEvent e in actives)
 		{
-			ModEvent e;
-			return (e = ModContent.GetInstance<T>()) is not null && Activate(e, args);
+			e.Update();
 		}
+	}
 
-		public static bool Deactivate(ModEvent e, params object[] args)
+	public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+	{
+		int index = layers.FindIndex(layer => layer.Name == VanillaInvasionLayerName);
+		if (index != -1)
 		{
-			if (e.CanDeactivate(args))
-			{
-				if (Actives.Remove(e))
-				{
-					e.Active = false;
-					e.OnDeactivate(args);
-					return true;
-				}
-				return false;
-			}
-			return false;
+			layers.RemoveAt(index);
+			layers.Insert(index, layer_HasInvasion);
+			return;
 		}
-
-		public static bool Deactivate<T>(params object[] args)
-			where T : ModEvent
+		index = layers.FindIndex(layer => layer.Name == VanillaMinimapLayerName);
+		if (index != -1)
 		{
-			ModEvent e;
-			return (e = ModContent.GetInstance<T>()) is not null && Deactivate(e, args);
+			layers.Insert(index, layer_NoInvasion);
 		}
+	}
 
-		public override void PostUpdateEverything()
+	public override void SaveWorldData(TagCompound tag)
+	{
+		foreach (ModEvent e in ModContent.GetContent<ModEvent>())
 		{
-			foreach (ModEvent e in Actives)
-			{
-				e.Update();
-			}
+			TagCompound subtag = new();
+			e.SaveData(subtag);
+			tag[e.FullName] = subtag;
 		}
-
-		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+		int Count = actives.Count;
+		tag[nameof(Count)] = Count;
+		for (int i = 0; i < Count; i++)
 		{
-			int index = layers.FindIndex(layer => layer.Name == VanillaInvasionLayerName);
-			if (index != -1)
+			ModEvent e = actives[i];
+			tag[$"{nameof(actives)}_{i}.FullName"] = e.FullName;
+			tag[$"{nameof(actives)}_{i}.DefName"] = e.DefName;
+			TagCompound subtag = new();
+			if (ModContent.TryFind(e.FullName, out ModEvent oe) && oe != e)
 			{
-				layers.RemoveAt(index);
-				layers.Insert(index, Layer_HasInvasion);
-				return;
-			}
-			index = layers.FindIndex(layer => layer.Name == VanillaMinimapLayerName);
-			if (index != -1)
-			{
-				layers.Insert(index, Layer_NoInvasion);
-			}
-		}
-
-		public override void SaveWorldData(TagCompound tag)
-		{
-			foreach (ModEvent e in ModContent.GetContent<ModEvent>())
-			{
-				TagCompound subtag = new();
 				e.SaveData(subtag);
-				tag[e.FullName] = subtag;
 			}
-			int Count = Actives.Count;
-			tag[nameof(Count)] = Count;
+			tag[$"{nameof(actives)}_{i}.Tag"] = subtag;
+		}
+	}
+
+	public override void LoadWorldData(TagCompound tag)
+	{
+		foreach (ModEvent e in ModContent.GetContent<ModEvent>())
+		{
+			if (tag.TryGet(e.FullName, out TagCompound subtag))
+			{
+				e.LoadData(e.FullName, subtag);
+			}
+		}
+		int Count;
+		if (tag.TryGet(nameof(Count), out Count) && Count > 0)
+		{
 			for (int i = 0; i < Count; i++)
 			{
-				ModEvent e = Actives[i];
-				tag[$"{nameof(Actives)}_{i}.FullName"] = e.FullName;
-				tag[$"{nameof(Actives)}_{i}.DefName"] = e.DefName;
-				TagCompound subtag = new();
-				if (ModContent.TryFind(e.FullName, out ModEvent oe) && oe != e)
+				if (tag.TryGet($"{nameof(actives)}_{i}.FullName", out string fullName) && tag.TryGet($"{nameof(actives)}_{i}.DefName", out string defName))
 				{
-					e.SaveData(subtag);
-				}
-				tag[$"{nameof(Actives)}_{i}.Tag"] = subtag;
-			}
-		}
-
-		public override void LoadWorldData(TagCompound tag)
-		{
-			foreach (ModEvent e in ModContent.GetContent<ModEvent>())
-			{
-				if (tag.TryGet(e.FullName, out TagCompound subtag))
-				{
-					e.LoadData(e.FullName, subtag);
-				}
-			}
-			int Count;
-			if (tag.TryGet(nameof(Count), out Count) && Count > 0)
-			{
-				for (int i = 0; i < Count; i++)
-				{
-					if (tag.TryGet($"{nameof(Actives)}_{i}.FullName", out string fullName) && tag.TryGet($"{nameof(Actives)}_{i}.DefName", out string defName))
+					if (ModContent.TryFind(fullName, out ModEvent e))
 					{
-						if (ModContent.TryFind(fullName, out ModEvent e))
+						if (e.FullName != defName)
 						{
-							if (e.FullName != defName)
-							{
-								e = e.Clone();
-								tag.TryGet($"{nameof(Actives)}_{i}.Tag", out TagCompound subtag);
-								subtag ??= new();
-								e.LoadData(defName, subtag);
-							}
-							e.Active = true;
-							Actives.Add(e);
+							e = e.Clone();
+							tag.TryGet($"{nameof(actives)}_{i}.Tag", out TagCompound subtag);
+							subtag ??= new();
+							e.LoadData(defName, subtag);
 						}
+						e.Active = true;
+						actives.Add(e);
 					}
 				}
-				ReSortActives();
 			}
+			ReSortActives();
 		}
 	}
 }
