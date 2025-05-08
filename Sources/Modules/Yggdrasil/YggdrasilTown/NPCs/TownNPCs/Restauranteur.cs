@@ -11,6 +11,8 @@ public class Restauranteur : TownNPC_LiveInYggdrasil
 
 	public bool Attacking = false;
 
+	public bool CanDespawn = false;
+
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 15;
@@ -30,8 +32,10 @@ public class Restauranteur : TownNPC_LiveInYggdrasil
 	{
 		if (!YggdrasilTownCentralSystem.InCanteen_YggdrasilTown())
 		{
+			CanDespawn = true;
 			return;
 		}
+		CanDespawn = false;
 		AnchorForBehaviorPos = new Point(220, 150);
 		bool safe = false;
 		var homePoint = AnchorForBehaviorPos;
@@ -52,6 +56,10 @@ public class Restauranteur : TownNPC_LiveInYggdrasil
 			TeleportHome();
 		}
 	}
+
+	public override bool NeedSaving() => CanDespawn;
+
+	public override bool CheckActive() => CanDespawn;
 
 	public override void TryAttack()
 	{

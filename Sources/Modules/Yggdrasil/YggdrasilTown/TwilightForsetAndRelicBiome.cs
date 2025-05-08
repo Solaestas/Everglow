@@ -37,7 +37,16 @@ public class TwilightForsetAndRelic : ModBiome
 
 	public override void OnInBiome(Player player)
 	{
-		Main.raining = false;
+		if (Main.maxRaining > 0)
+		{
+			Main.maxRaining = 0;
+			Main.StopRain();
+			Main.raining = false;
+		}
+		if (Main.slimeRain)
+		{
+			Main.StopSlimeRain();
+		}
 		Main.bloodMoon = false;
 		base.OnInBiome(player);
 	}

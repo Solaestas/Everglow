@@ -1,3 +1,9 @@
+using Everglow.SubSpace;
+using Everglow.Yggdrasil.WorldGeneration;
+using Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
+using Terraria.DataStructures;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs.Arena;
 
 [Pipeline(typeof(ArenaSettlementPipeline))]
@@ -9,18 +15,77 @@ public class ArenaSettlement : Visual
 
 	public Texture2D Texture = ModAsset.SettlementIconsAtlas.Value;
 
+	public NPC BossNPC;
+
+	public int NPCType = -1;
+
+	public bool ShouldKill = false;
+
 	/// <summary>
 	/// 0: Success;1: Fail;2: Tie
 	/// </summary>
 	public int State;
 
+	public override void OnSpawn()
+	{
+		base.OnSpawn();
+	}
+
 	public override void Update()
 	{
-		if (!YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		if (NPCType == -1)
+		{
+			if (BossNPC != null)
+			{
+				NPCType = BossNPC.type;
+			}
+			else
+			{
+				NPCType = -1;
+			}
+		}
+		if (!YggdrasilTownCentralSystem.InArena_YggdrasilTown() || NPCType == -1)
 		{
 			Active = false;
+			return;
 		}
-		Timer++;
+
+		if(State == 1 && !ShouldKill)
+		{
+			foreach (Player player in Main.player)
+			{
+				if (player != null && player.active)
+				{
+					player.KillMe(PlayerDeathReason.ByNPC(BossNPC.whoAmI), 99999999, -1);
+					player.dead = true;
+					player.respawnTimer = 9 * 60;
+				}
+			}
+		}
+
+		if (ShouldKill)
+		{
+			if (Timer > 0)
+			{
+				Timer -= 10;
+			}
+			else
+			{
+				Timer = 0;
+				Active = false;
+			}
+		}
+		else
+		{
+			if (Timer <= 120)
+			{
+				Timer++;
+			}
+			else
+			{
+				Timer = 120;
+			}
+		}
 		base.Update();
 	}
 
@@ -57,6 +122,10 @@ public class ArenaSettlement : Visual
 		if (MouseInArea(returnPos - returnSize * 0.5f, returnSize))
 		{
 			returnColor = new Color(0.2f, 0.2f, 0.2f, 1f);
+			if (Main.mouseLeft && Main.mouseLeftRelease)
+			{
+				SendBack();
+			}
 		}
 		bars = new List<Vertex2D>();
 		bars.Add(returnPos - returnSize * 0.5f, returnColor, new Vector3(returnCoord.X / Texture.Width, returnCoord.Y / Texture.Height, pocession));
@@ -73,6 +142,10 @@ public class ArenaSettlement : Visual
 		if (MouseInArea(retryPos - retrySize * 0.5f, retrySize))
 		{
 			retryColor = new Color(0.2f, 0.2f, 0.2f, 1f);
+			if (Main.mouseLeft && Main.mouseLeftRelease)
+			{
+				Retry();
+			}
 		}
 		bars = new List<Vertex2D>();
 		bars.Add(retryPos - retrySize * 0.5f, retryColor, new Vector3(retryCoord.X / Texture.Width, retryCoord.Y / Texture.Height, pocession));
@@ -156,6 +229,47 @@ public class ArenaSettlement : Visual
 				Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 			}
 		}
+	}
+
+	public void Retry()
+	{
+		if (BossNPC != null && BossNPC.active)
+		{
+			BossNPC.position = new Point(180, 194).ToWorldCoordinates();
+			TownNPC_LiveInYggdrasil tNLIY = BossNPC.ModNPC as TownNPC_LiveInYggdrasil;
+			if (tNLIY != null)
+			{
+				tNLIY.SetDefaultsToArena();
+			}
+			foreach(Player player in Main.player)
+			{
+				if(player != null)
+				{
+					player.respawnTimer = 0;
+					player.position = new Point(60, 144).ToWorldCoordinates();
+				}
+			}
+			for (int x = 20; x < Main.maxTilesX - 20; x++)
+			{
+				int y1 = 170;
+				int y2 = 185;
+
+				Tile tile1 = YggdrasilWorldGeneration.SafeGetTile(x, y1);
+				tile1.TileType = (ushort)ModContent.TileType<LampWoodPlatform>();
+				tile1.HasTile = true;
+
+				Tile tile2 = YggdrasilWorldGeneration.SafeGetTile(x, y2);
+				tile2.TileType = (ushort)ModContent.TileType<LampWoodPlatform>();
+				tile2.HasTile = true;
+			}
+		}
+		ShouldKill = true;
+	}
+
+	public void SendBack()
+	{
+		RoomManager.ExitALevelOfRoom();
+		ShouldKill = true;
 	}
 
 	public bool MouseInArea(Vector2 drawPos, Vector2 size)

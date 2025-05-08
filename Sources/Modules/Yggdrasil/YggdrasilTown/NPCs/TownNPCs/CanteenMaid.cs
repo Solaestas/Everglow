@@ -8,6 +8,8 @@ public class CanteenMaid : TownNPC_LiveInYggdrasil
 {
 	public int AttackTimer = -1;
 
+	public bool CanDespawn = false;
+
 	public Vector2 AttackVelocity = Vector2.zeroVector;
 
 	public override string HeadTexture => ModAsset.CanteenMaid_Head_Mod;
@@ -41,6 +43,7 @@ public class CanteenMaid : TownNPC_LiveInYggdrasil
 
 	public override void WalkFrame()
 	{
+		NPC.frame.Height = FrameHeight;
 		NPC.frameCounter += Math.Abs(NPC.velocity.X);
 		if (NPC.frameCounter > 4)
 		{
@@ -245,8 +248,10 @@ public class CanteenMaid : TownNPC_LiveInYggdrasil
 	{
 		if (!YggdrasilTownCentralSystem.InCanteen_YggdrasilTown())
 		{
+			CanDespawn = true;
 			return;
 		}
+		CanDespawn = false;
 		AnchorForBehaviorPos = new Point(146, 150);
 		bool safe = false;
 		var homePoint = AnchorForBehaviorPos;
@@ -267,6 +272,10 @@ public class CanteenMaid : TownNPC_LiveInYggdrasil
 			NPC.Center = homePoint.ToWorldCoordinates() + new Vector2(0, 48);
 		}
 	}
+
+	public override bool NeedSaving() => CanDespawn;
+
+	public override bool CheckActive() => CanDespawn;
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{

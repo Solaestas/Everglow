@@ -52,7 +52,7 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 	public Rectangle SitFrame = new Rectangle(0, 0, 10, 10);
 
 	/// <summary>
-	/// HomePos, force attach his or her home to this coordinate.
+	/// HomePos, force attach competitor or her home to this coordinate.
 	/// </summary>
 	public Point AnchorForBehaviorPos = YggdrasilTownCentralSystem.TownTopLeftWorldCoord.ToTileCoordinates();
 
@@ -639,6 +639,8 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 
 	public int LifeTimer = 0;
 
+	public int MaxHitPlayerCount = -1;
+
 	public int HitPlayerCount;
 
 	public int BossTimer;
@@ -682,8 +684,9 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 	public virtual void SetDefaultsToArena()
 	{
 		NPC.townNPC = false;
-		NPC.friendly = false;
+		NPC.friendly = true;
 		NPC.boss = true;
+		NPC.dontTakeDamage = true;
 		NPC.width = 18;
 		NPC.height = 40;
 		NPC.aiStyle = -1;
@@ -694,60 +697,64 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 		NPC.damage = 50;
 		NPC.HitSound = SoundID.NPCHit1;
 		NPC.DeathSound = SoundID.NPCDeath6;
-		NPC.knockBackResist = 1f;
-		NPC.dontTakeDamage = true;
 		Music = Common.YggdrasilContent.QuickMusic(ModAsset.Arena_BGM_Path);
+
+		NPC.knockBackResist = 1f;
+
 		FailTime = -1;
-		BossMovingSpeed = 1f;
-		StartedFight = false;
-		Fail = false;
 		LifeRegenPerS = 0;
 		LifeTimer = 0;
+		HitPlayerCount = 0;
+		HitEffectTimer = 0;
+		KnockOutTimer = 0;
+
+		SkillPower = SkillPowerMax;
+		ResilienceMax = 100;
+		BossMovingSpeed = 1f;
+		AttackSpeed = 1f;
+		Resilience = ResilienceMax;
+
+		StartedFight = false;
 		ImmuneLower300 = false;
 		ImmuneUpper300 = false;
 		KnockOut = false;
-		SkillPower = SkillPowerMax;
-		ResilienceMax = 100;
-		Resilience = ResilienceMax;
-		HitPlayerCount = 0;
-		AttackSpeed = 1f;
-		HitEffectTimer = 0;
-		KnockOutTimer = 0;
+		Fail = false;
 		InitializeBossTags();
 	}
 
 	public virtual void InitializeBossTags()
 	{
+		MyBossTags = new List<BossTag>();
 		var bossTags = new List<BossTag>
 		{
 			new BossTag("PlayerDamageReduce10", 10, "Decrease your damage by 10%, same effects stacked.") { IconType = 1 },
 			new BossTag("PlayerDamageReduce20", 10, "Decrease your damage by 20%, same effects stacked.") { IconType = 1 },
 			new BossTag("PlayerDamageReduce30", 30, "Decrease your damage by 30%, same effects stacked.") { IconType = 1 },
 
-			new BossTag("BossDamagePlus30", 10, "Increase his damage by 30%, same effects stacked.") { IconType = 0 },
-			new BossTag("BossDamagePlus50", 10, "Increase his damage by 50%, same effects stacked.") { IconType = 0 },
-			new BossTag("BossDamagePlus120", 30, "Increase his damage by 120%, same effects stacked.") { IconType = 0 },
+			new BossTag("BossDamagePlus30", 10, "Increase competitor damage by 30%, same effects stacked.") { IconType = 0 },
+			new BossTag("BossDamagePlus50", 10, "Increase competitor damage by 50%, same effects stacked.") { IconType = 0 },
+			new BossTag("BossDamagePlus120", 30, "Increase competitor damage by 120%, same effects stacked.") { IconType = 0 },
 
-			new BossTag("FastMoving20", 10, "Increase his moving speed by 20%, same effects stacked.") { IconType = 3 },
-			new BossTag("FastMoving50", 20, "Increase his moving speed by 50%, same effects stacked.") { IconType = 3 },
-			new BossTag("FastMoving100", 30, "Increase his moving speed by 100%, same effects stacked.") { IconType = 3 },
+			new BossTag("FastMoving20", 10, "Increase competitor moving speed by 20%, same effects stacked.") { IconType = 3 },
+			new BossTag("FastMoving50", 20, "Increase competitor moving speed by 50%, same effects stacked.") { IconType = 3 },
+			new BossTag("FastMoving100", 30, "Increase competitor moving speed by 100%, same effects stacked.") { IconType = 3 },
 
 			new BossTag("BanHealthPotion", 30, "Prohibit the use of life-restoring potions.") { IconType = 4, ConflictTags = new List<string>() { "HalfHealthPotion" } },
 			new BossTag("HalfHealthPotion", 10, "Halves the effect of life-restoring potions.") { IconType = 5, ConflictTags = new List<string>() { "BanHealthPotion" } },
 
-			new BossTag("BossDefIncrease20", 10, "Increase his defense by 20, same effects stacked.") { IconType = 6 },
-			new BossTag("BossDefIncrease40", 20, "Increase his defense by 40, same effects stacked.") { IconType = 6 },
-			new BossTag("BossDefIncrease60", 30, "Increase his defense by 60, same effects stacked.") { IconType = 6 },
+			new BossTag("BossDefIncrease20", 10, "Increase competitor defense by 20, same effects stacked.") { IconType = 6 },
+			new BossTag("BossDefIncrease40", 20, "Increase competitor defense by 40, same effects stacked.") { IconType = 6 },
+			new BossTag("BossDefIncrease60", 30, "Increase competitor defense by 60, same effects stacked.") { IconType = 6 },
 
 			new BossTag("PlayerDefenseReduce20", 10, "Decrease your defense by 20, same effects stacked.") { IconType = 7 },
 			new BossTag("PlayerDefenseReduce30", 20, "Decrease your defense by 30, same effects stacked.") { IconType = 7 },
 
-			new BossTag("BossLifeIncrease50", 10, "Increase his max life by 50%, same effects stacked.") { IconType = 8 },
-			new BossTag("BossLifeIncrease150", 20, "Increase his max life by 150%, same effects stacked.") { IconType = 8 },
-			new BossTag("BossLifeIncrease250", 30, "Increase his max life by 250%, same effects stacked.") { IconType = 8 },
+			new BossTag("BossLifeIncrease50", 10, "Increase competitor max life by 50%, same effects stacked.") { IconType = 8 },
+			new BossTag("BossLifeIncrease150", 20, "Increase competitor max life by 150%, same effects stacked.") { IconType = 8 },
+			new BossTag("BossLifeIncrease250", 30, "Increase competitor max life by 250%, same effects stacked.") { IconType = 8 },
 
-			new BossTag("LifeRegeneration20", 10, "His life will regenerate by 20 per second, same effects stacked.") { IconType = 9 },
-			new BossTag("LifeRegeneration30", 20, "His life will regenerate by 30 per second, same effects stacked.") { IconType = 9 },
+			new BossTag("LifeRegeneration20", 10, "Competitor life will regenerate by 20 per second, same effects stacked.") { IconType = 9 },
+			new BossTag("LifeRegeneration30", 20, "Competitor life will regenerate by 30 per second, same effects stacked.") { IconType = 9 },
 
 			new BossTag("DisableCreate", 10, "Prohibition of the creation and destruction of tiles.") { IconType = 10 },
 			new BossTag("DisableKnockBack", 10, "He immunes knockback.") { IconType = 11 },
@@ -757,15 +764,18 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 
 			new BossTag("BossImmuneIn300Distance", 30, "He will immune all damage at a distance of less than 300") { IconType = 13, ConflictTags = new List<string>() { "BossImmuneOff300Distance" } },
 			new BossTag("BossImmuneOff300Distance", 30, "He will immune all damage at a distance of more than 300") { IconType = 14, ConflictTags = new List<string>() { "BossImmuneIn300Distance" } },
-			new BossTag("10Inventory", 10, "You can only carry a maximum of 10 items in your backpack.") { IconType = 15 },
+
+			new BossTag("3Inventory", 20, "You can only carry a maximum of 3 items in your backpack.") { IconType = 15, ConflictTags = new List<string>() { "4Accessories" } },
+			new BossTag("4Accessories", 20, "You can only carry a maximum of 4 items in your accessories slots.") { IconType = 38, ConflictTags = new List<string>() { "3Inventory" } },
+
 			new BossTag("15Hits", 10, "Forced death from 15 injuries") { IconType = 16, ConflictTags = new List<string>() { "5Hits" } },
 			new BossTag("5Hits", 30, "Forced death from 5 injuries.") { IconType = 17, ConflictTags = new List<string>() { "15Hits" } },
 
 			new BossTag("180Seconds", 10, "Limit 180 seconds.") { IconType = 18, ConflictTags = new List<string>() { "90Seconds" } },
 			new BossTag("90Seconds", 30, "Limit 90 seconds.") { IconType = 18, ConflictTags = new List<string>() { "180Seconds" } },
 
-			new BossTag("FasterAttack100", 20, "Increase his attack speed by 100%, same effects stacked.") { IconType = 21 },
-			new BossTag("FasterAttack200", 30, "Increase his attack speed by 200%, same effects stacked.") { IconType = 21 },
+			new BossTag("FasterAttack100", 20, "Increase competitor attack speed by 100%, same effects stacked.") { IconType = 21 },
+			new BossTag("FasterAttack200", 30, "Increase competitor attack speed by 200%, same effects stacked.") { IconType = 21 },
 
 			new BossTag("RemoveTopPlatform", 20, "Remove the top layer of platforms.") { IconType = 33, ConflictTags = new List<string>() { "RemoveBottomPlatform", "RemoveLeftPlatform", "RemoveRightPlatform" } },
 			new BossTag("RemoveBottomPlatform", 20, "Remove the bottom layer of platforms.") { IconType = 34, ConflictTags = new List<string>() { "RemoveTopPlatform", "RemoveLeftPlatform", "RemoveRightPlatform" } },
@@ -964,13 +974,21 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 					tile.HasTile = false;
 				}
 			}
-			if(tag.Name == "180Seconds" && tag.Enable)
+			if (tag.Name == "180Seconds" && tag.Enable)
 			{
 				FailTime = 10800;
 			}
 			if (tag.Name == "90Seconds" && tag.Enable)
 			{
 				FailTime = 5400;
+			}
+			if (tag.Name == "15Hits" && tag.Enable)
+			{
+				MaxHitPlayerCount = 15;
+			}
+			if (tag.Name == "5Hits" && tag.Enable)
+			{
+				MaxHitPlayerCount = 5;
 			}
 		}
 	}
@@ -980,6 +998,7 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 		ApplyBossTags();
 		NPC.life = NPC.lifeMax;
 		NPC.dontTakeDamage = false;
+		NPC.friendly = false;
 		BossTimer = 0;
 		StartedFight = true;
 		NPCBossValueBar nBVB = new NPCBossValueBar();
@@ -994,7 +1013,10 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 		NPC.TargetClosest(false);
 		if (StartedFight)
 		{
-			BossTimer++;
+			if(!Fail)
+			{
+				BossTimer++;
+			}
 			LifeTimer++;
 			if (Fail)
 			{
@@ -1003,9 +1025,8 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 				NPC.damage = 0;
 				return;
 			}
-			if (FailTime > 0 && BossTimer > FailTime && !Fail)
+			if (((FailTime > 0 && BossTimer > FailTime) || (HitPlayerCount >= MaxHitPlayerCount && MaxHitPlayerCount > 0)) && !Fail)
 			{
-				Fail = true;
 				PopFailVFX();
 			}
 			if (HitEffectTimer > 0)
@@ -1236,11 +1257,13 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 
 	public void PopSuccessVFX()
 	{
-		var sIB = new SuccessIconBackground
+		var sIB = new SettlementBackground
 		{
 			Active = true,
 			Visible = true,
 			Timer = 0,
+			State = 0,
+			BossNPC = NPC,
 		};
 		Ins.VFXManager.Add(sIB);
 		var aSet = new ArenaSettlement
@@ -1249,27 +1272,35 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 			Visible = true,
 			Timer = 0,
 			State = 0,
+			BossNPC = NPC,
 		};
 		Ins.VFXManager.Add(aSet);
 	}
 
 	public void PopFailVFX()
 	{
-		var fIB = new FailIconBackground
+		if(!Fail)
 		{
-			Active = true,
-			Visible = true,
-			Timer = 0,
-		};
-		Ins.VFXManager.Add(fIB);
-		var aSet = new ArenaSettlement
-		{
-			Active = true,
-			Visible = true,
-			Timer = 0,
-			State = 1,
-		};
-		Ins.VFXManager.Add(aSet);
+			var fIB = new SettlementBackground
+			{
+				Active = true,
+				Visible = true,
+				Timer = 0,
+				State = 1,
+				BossNPC = NPC,
+			};
+			Ins.VFXManager.Add(fIB);
+			var aSet = new ArenaSettlement
+			{
+				Active = true,
+				Visible = true,
+				Timer = 0,
+				State = 1,
+				BossNPC = NPC,
+			};
+			Ins.VFXManager.Add(aSet);
+			Fail = true;
+		}
 	}
 
 	public Vector2 HealthBarPos = Vector2.Zero;

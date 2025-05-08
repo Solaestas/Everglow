@@ -79,6 +79,13 @@ public class NPCBossTagsSystem : ForegroundVFX
 		Score = totalScore;
 		VisualScore = (float)Utils.Lerp(VisualScore, Score, 0.8f);
 		YggdrasilTownCentralSystem.ArenaScore = (int)Score;
+		if (StartFighting)
+		{
+			if (!tNLIY.StartedFight)
+			{
+				StartFighting = false;
+			}
+		}
 		base.Update();
 	}
 
@@ -188,6 +195,18 @@ public class NPCBossTagsSystem : ForegroundVFX
 					if (tag.Enable && tag.Name == "RemoveRightPlatform")
 					{
 						DrawRemovingPlatformEffect(tag.Name);
+					}
+					if (tag.Enable && tag.Name == "180Seconds")
+					{
+						tNLIY.FailTime = 10800;
+						tNLIY.BossTimer = 0;
+						DrawTimeBar();
+					}
+					if (tag.Enable && tag.Name == "90Seconds")
+					{
+						tNLIY.FailTime = 5400;
+						tNLIY.BossTimer = 0;
+						DrawTimeBar();
 					}
 				}
 				if (tag.Enable && tag.Name == "180Seconds")
@@ -427,75 +446,6 @@ public class NPCBossTagsSystem : ForegroundVFX
 		int offSetX = 18;
 		int vScore = (int)VisualScore;
 		DrawNumber(vScore, scorePos + new Vector2(0 + offSetX, -40), 1f, scoreColor);
-		//List<Vertex2D> scoreDraw = new List<Vertex2D>();
-		//if (vScore.ToString().Length == 1)
-		//{
-		//	Vector2 numberTopLeft = new Vector2(2 + 52 * (vScore % 10), 254);
-		//	int numberOffsetY = -40;
-		//	Vector2 drawPos = scorePos + new Vector2(0 + offSetX, numberOffsetY);
-		//	scoreDraw = new List<Vertex2D>();
-		//	scoreDraw.Add(drawPos - numberSize * 0.5f, scoreColor, new Vector3(numberTopLeft / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + new Vector2(numberSize.X, -numberSize.Y) * 0.5f, scoreColor, new Vector3((numberTopLeft + new Vector2(numberSize.X, 0)) / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + new Vector2(-numberSize.X, numberSize.Y) * 0.5f, scoreColor, new Vector3((numberTopLeft + new Vector2(0, numberSize.Y)) / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + numberSize * 0.5f, scoreColor, new Vector3((numberTopLeft + numberSize) / texture.Size(), 0));
-		//	Ins.Batch.Draw(scoreDraw, PrimitiveType.TriangleStrip);
-		//}
-		//if (vScore.ToString().Length == 2)
-		//{
-		//	int firstNumber = vScore % 10;
-		//	int secondNumber = ((vScore - firstNumber) % 100) / 10;
-		//	Vector2 numberTopLeft = new Vector2(2 + 52 * firstNumber, 254);
-		//	int numberOffsetY = -40;
-		//	Vector2 drawPos = scorePos + new Vector2(27 + offSetX, numberOffsetY);
-		//	scoreDraw = new List<Vertex2D>();
-		//	scoreDraw.Add(drawPos - numberSize * 0.5f, scoreColor, new Vector3(numberTopLeft / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + new Vector2(numberSize.X, -numberSize.Y) * 0.5f, scoreColor, new Vector3((numberTopLeft + new Vector2(numberSize.X, 0)) / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + new Vector2(-numberSize.X, numberSize.Y) * 0.5f, scoreColor, new Vector3((numberTopLeft + new Vector2(0, numberSize.Y)) / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + numberSize * 0.5f, scoreColor, new Vector3((numberTopLeft + numberSize) / texture.Size(), 0));
-		//	Ins.Batch.Draw(scoreDraw, PrimitiveType.TriangleStrip);
-
-		//	numberTopLeft = new Vector2(2 + 52 * secondNumber, 254);
-		//	drawPos = scorePos + new Vector2(-27 + offSetX, numberOffsetY);
-		//	scoreDraw = new List<Vertex2D>();
-		//	scoreDraw.Add(drawPos - numberSize * 0.5f, scoreColor, new Vector3(numberTopLeft / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + new Vector2(numberSize.X, -numberSize.Y) * 0.5f, scoreColor, new Vector3((numberTopLeft + new Vector2(numberSize.X, 0)) / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + new Vector2(-numberSize.X, numberSize.Y) * 0.5f, scoreColor, new Vector3((numberTopLeft + new Vector2(0, numberSize.Y)) / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + numberSize * 0.5f, scoreColor, new Vector3((numberTopLeft + numberSize) / texture.Size(), 0));
-		//	Ins.Batch.Draw(scoreDraw, PrimitiveType.TriangleStrip);
-		//}
-		//if (vScore.ToString().Length == 3)
-		//{
-		//	int firstNumber = vScore % 10;
-		//	int secondNumber = ((vScore - firstNumber) % 100) / 10;
-		//	int thirdNumber = (vScore - secondNumber * 10 - firstNumber) / 100;
-		//	Vector2 numberTopLeft = new Vector2(2 + 52 * firstNumber, 254);
-		//	int numberOffsetY = -40;
-		//	Vector2 drawPos = scorePos + new Vector2(54 + offSetX, numberOffsetY);
-		//	scoreDraw = new List<Vertex2D>();
-		//	scoreDraw.Add(drawPos - numberSize * 0.5f, scoreColor, new Vector3(numberTopLeft / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + new Vector2(numberSize.X, -numberSize.Y) * 0.5f, scoreColor, new Vector3((numberTopLeft + new Vector2(numberSize.X, 0)) / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + new Vector2(-numberSize.X, numberSize.Y) * 0.5f, scoreColor, new Vector3((numberTopLeft + new Vector2(0, numberSize.Y)) / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + numberSize * 0.5f, scoreColor, new Vector3((numberTopLeft + numberSize) / texture.Size(), 0));
-		//	Ins.Batch.Draw(scoreDraw, PrimitiveType.TriangleStrip);
-
-		//	numberTopLeft = new Vector2(2 + 52 * secondNumber, 254);
-		//	drawPos = scorePos + new Vector2(0 + offSetX, numberOffsetY);
-		//	scoreDraw = new List<Vertex2D>();
-		//	scoreDraw.Add(drawPos - numberSize * 0.5f, scoreColor, new Vector3(numberTopLeft / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + new Vector2(numberSize.X, -numberSize.Y) * 0.5f, scoreColor, new Vector3((numberTopLeft + new Vector2(numberSize.X, 0)) / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + new Vector2(-numberSize.X, numberSize.Y) * 0.5f, scoreColor, new Vector3((numberTopLeft + new Vector2(0, numberSize.Y)) / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + numberSize * 0.5f, scoreColor, new Vector3((numberTopLeft + numberSize) / texture.Size(), 0));
-		//	Ins.Batch.Draw(scoreDraw, PrimitiveType.TriangleStrip);
-
-		//	numberTopLeft = new Vector2(2 + 52 * thirdNumber, 254);
-		//	drawPos = scorePos + new Vector2(-54 + offSetX, numberOffsetY);
-		//	scoreDraw = new List<Vertex2D>();
-		//	scoreDraw.Add(drawPos - numberSize * 0.5f, scoreColor, new Vector3(numberTopLeft / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + new Vector2(numberSize.X, -numberSize.Y) * 0.5f, scoreColor, new Vector3((numberTopLeft + new Vector2(numberSize.X, 0)) / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + new Vector2(-numberSize.X, numberSize.Y) * 0.5f, scoreColor, new Vector3((numberTopLeft + new Vector2(0, numberSize.Y)) / texture.Size(), 0));
-		//	scoreDraw.Add(drawPos + numberSize * 0.5f, scoreColor, new Vector3((numberTopLeft + numberSize) / texture.Size(), 0));
-		//	Ins.Batch.Draw(scoreDraw, PrimitiveType.TriangleStrip);
-		//}
 	}
 
 	public void DrawNumber(int number, Vector2 centerPos, float size, Color color)
@@ -714,11 +664,50 @@ public class NPCBossTagsSystem : ForegroundVFX
 		}
 		RemainTime = Math.Max(0, tNLIY.FailTime - tNLIY.BossTimer);
 		var timePos = Main.screenPosition + new Vector2(Main.screenWidth / 2, 260);
-		DrawNumber((int)(RemainTime / 60), timePos, 1, new Color(1f, 1f, 1f, 1f));
+		DrawNumber(RemainTime / 60, timePos, 1, new Color(1f, 1f, 1f, 1f));
 	}
 
 	public bool CanStart()
 	{
+		if (Main.netMode != NetmodeID.Server)
+		{
+			foreach (var tag in Tags)
+			{
+				if (tag.Enable && tag.Name == "3Inventory")
+				{
+					Player player = Main.LocalPlayer;
+					int itemCount = 0;
+					foreach (var item in player.inventory)
+					{
+						if (item.active)
+						{
+							itemCount++;
+						}
+					}
+					if (itemCount > 3)
+					{
+						return false;
+					}
+				}
+				if (tag.Enable && tag.Name == "4Accessories")
+				{
+					Player player = Main.LocalPlayer;
+					int itemCount = 0;
+					for (int i = 3; i < 9; i++)
+					{
+						Item item = player.armor[i];
+						if (item.active)
+						{
+							itemCount++;
+						}
+					}
+					if (itemCount > 4)
+					{
+						return false;
+					}
+				}
+			}
+		}
 		return true;
 	}
 

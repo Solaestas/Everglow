@@ -9,6 +9,8 @@ public class Georg_Hammer_Flame : ModProjectile
 
 	public int Timer;
 
+	public float StartBottom = 0;
+
 	public override string Texture => Commons.ModAsset.Empty_Mod;
 
 	public override void SetDefaults()
@@ -22,8 +24,8 @@ public class Georg_Hammer_Flame : ModProjectile
 		Projectile.tileCollide = false;
 		Projectile.hostile = true;
 		Projectile.penetrate = -1;
-		Projectile.width = 10;
-		Projectile.height = 10;
+		Projectile.width = 30;
+		Projectile.height = 210;
 		Projectile.aiStyle = -1;
 	}
 
@@ -36,9 +38,13 @@ public class Georg_Hammer_Flame : ModProjectile
 			Projectile.direction = -1;
 		}
 		Projectile.spriteDirection = Projectile.direction;
+		Projectile.Bottom = Projectile.Center;
+		StartBottom = Projectile.Bottom.Y;
 	}
 
 	public override bool ShouldUpdatePosition() => false;
+
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => base.Colliding(projHitbox, targetHitbox);
 
 	public override void AI()
 	{
@@ -60,6 +66,11 @@ public class Georg_Hammer_Flame : ModProjectile
 				ai = new float[] { Projectile.Bottom.X, Main.rand.NextFloat(-0.8f, 0.8f) },
 			};
 			Ins.VFXManager.Add(flame);
+		}
+		if(Projectile.height > 0)
+		{
+			Projectile.height--;
+			Projectile.Bottom = new Vector2(Projectile.Bottom.X, StartBottom);
 		}
 	}
 

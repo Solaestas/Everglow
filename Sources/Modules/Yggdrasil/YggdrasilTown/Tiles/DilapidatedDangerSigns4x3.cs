@@ -1,4 +1,3 @@
-using System;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
@@ -19,13 +18,14 @@ public class DilapidatedDangerSigns4x3 : ModTile
 		{
 			16,
 			16,
-			18
+			18,
 		};
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.addTile(Type);
 		AddMapEntry(new Color(68, 48, 33));
 	}
+
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		return base.PreDraw(i, j, spriteBatch);

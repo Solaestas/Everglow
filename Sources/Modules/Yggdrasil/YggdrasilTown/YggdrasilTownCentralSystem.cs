@@ -2,8 +2,10 @@ using Everglow.SubSpace;
 using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Kitchen.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.PlayerArena;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using SubworldLibrary;
+using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown;
 
@@ -64,6 +66,10 @@ public class YggdrasilTownCentralSystem : ModSystem
 			{
 				CheckNPC(ModContent.NPCType<CanteenMaid>());
 				CheckNPC(ModContent.NPCType<Restauranteur>());
+			}
+			if (InUnion_YggdrasilTown())
+			{
+				CheckNPC(ModContent.NPCType<Howard_Warden>());
 			}
 		}
 		if (InArena_YggdrasilTown() && !ResetedArena)
@@ -201,6 +207,42 @@ public class ArenaPlayer : ModPlayer
 
 	public bool MouseInTagUIPanel = false;
 
+	public int ShieldCooling = 0;
+
+	public override void OnRespawn()
+	{
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			ResetNPC();
+		}
+		base.OnRespawn();
+	}
+
+	public void ResetNPC()
+	{
+		TargetBoss = null;
+		foreach (var npc in Main.npc)
+		{
+			if (npc != null && npc.active && npc.ModNPC is TownNPC_LiveInYggdrasil)
+			{
+				TargetBoss = npc;
+				break;
+			}
+		}
+		if (TargetBoss != null)
+		{
+			TownNPC_LiveInYggdrasil tNLIY = TargetBoss.ModNPC as TownNPC_LiveInYggdrasil;
+			if (tNLIY != null)
+			{
+				Tags = tNLIY.MyBossTags;
+				if (!tNLIY.StartedFight)
+				{
+					Player.statLife = Player.statLifeMax2;
+				}
+			}
+		}
+	}
+
 	public override void PostUpdateEquips()
 	{
 		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
@@ -267,6 +309,19 @@ public class ArenaPlayer : ModPlayer
 				}
 				Player.GetDamage(DamageClass.Generic) *= DamageReduce;
 			}
+			if(ShieldCooling <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<PlayerDefence>()] <= 0)
+			{
+				ShieldCooling = 0;
+				if (Player.controlDown && Player.velocity.Y <= 0.05f && Collision.SolidCollision(Player.BottomLeft, Player.width, 16))
+				{
+					ShieldCooling = 60;
+					Projectile.NewProjectileDirect(Player.GetSource_FromAI(), Player.Center, Vector2.zeroVector, ModContent.ProjectileType<PlayerDefence>(), 0, 0, Player.whoAmI);
+				}
+			}
+			else
+			{
+				ShieldCooling--;
+			}
 		}
 		base.PostUpdateEquips();
 	}
@@ -311,25 +366,95 @@ public class ArenaPlayer : ModPlayer
 							return false;
 						}
 					}
+					if (tag.Name == "BanHealthPotion" && tag.Enable)
+					{
+						if (item.healLife > 0)
+						{
+							return false;
+						}
+					}
 					if (tag.Name == "DisableCreate" && tag.Enable)
 					{
 						if (item.pick > 0)
 						{
 							return false;
 						}
-						if (item.createTile >= 0 || item.createWall >= 0)
+						if (item.createTile >= TileID.Dirt || item.createWall >= 0)
 						{
 							return false;
 						}
 					}
 				}
 			}
-			if(MouseInTagUIPanel)
+			if (MouseInTagUIPanel)
 			{
 				MouseInTagUIPanel = false;
 				return false;
 			}
 		}
 		return base.CanUseItem(item);
+	}
+
+	public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+	{
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			if (TargetBoss != null && TargetBoss.active)
+			{
+				TownNPC_LiveInYggdrasil tNLIY = TargetBoss.ModNPC as TownNPC_LiveInYggdrasil;
+				if(tNLIY != null)
+				{
+					tNLIY.PopFailVFX();
+				}
+			}
+		}
+		base.Kill(damage, hitDirection, pvp, damageSource);
+	}
+
+	public bool Dodge;
+
+	public override bool FreeDodge(Player.HurtInfo info)
+	{
+		if (Dodge)
+		{
+			Dodge = false;
+			return true;
+		}
+		return base.FreeDodge(info);
+	}
+
+	public void PreHurt(ref Player.HurtInfo info)
+	{
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		{
+			if (Player.ownedProjectileCounts[ModContent.ProjectileType<PlayerDefence>()] > 0)
+			{
+				Player.immuneTime = 60;
+				foreach (var proj in Main.projectile)
+				{
+					if (proj != null && proj.active && proj.owner == Player.whoAmI && proj.type == ModContent.ProjectileType<PlayerDefence>())
+					{
+						proj.Kill();
+						break;
+					}
+				}
+				Dodge = true;
+				Player.immune = true;
+				Player.immuneTime = 30;
+				Player.noKnockback = true;
+				CombatText.NewText(new Rectangle((int)Player.Center.X - 10, (int)Player.Center.Y - 10, 20, 20), Color.White, "Block!");
+			}
+		}
+	}
+
+	public override void ModifyHurt(ref Player.HurtModifiers modifiers)
+	{
+		modifiers.ModifyHurtInfo += new Player.HurtModifiers.HurtInfoModifier(this.PreHurt);
+		if (Dodge)
+		{
+			modifiers.DisableDust();
+			modifiers.DisableSound();
+		}
+		base.ModifyHurt(ref modifiers);
 	}
 }
