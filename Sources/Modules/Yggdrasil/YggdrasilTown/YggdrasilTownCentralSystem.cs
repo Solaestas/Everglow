@@ -4,7 +4,9 @@ using Everglow.Yggdrasil.YggdrasilTown.Kitchen.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.PlayerArena;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
+using Microsoft.Xna.Framework.Graphics;
 using SubworldLibrary;
+using Terraria;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown;
@@ -312,8 +314,11 @@ public class ArenaPlayer : ModPlayer
 			if(ShieldCooling <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<PlayerDefence>()] <= 0)
 			{
 				ShieldCooling = 0;
-				if (Player.controlDown && Player.velocity.Y <= 0.05f && Collision.SolidCollision(Player.BottomLeft, Player.width, 16))
+				var tile = YggdrasilWorldGeneration.SafeGetTile((Player.Bottom + new Vector2(0, 16)).ToTileCoordinates());
+				if (Player.controlDown && Player.velocity.Y <= 0.05f && Collision.SolidCollision(Player.BottomLeft, Player.width, 16) && tile.TileType == ModContent.TileType<ShieldTile>() && tile.TileFrameX == 0 && tile.TileFrameY == 0)
 				{
+					tile.TileFrameX = 342;
+					tile.TileFrameY = 36;
 					ShieldCooling = 60;
 					Projectile.NewProjectileDirect(Player.GetSource_FromAI(), Player.Center, Vector2.zeroVector, ModContent.ProjectileType<PlayerDefence>(), 0, 0, Player.whoAmI);
 				}

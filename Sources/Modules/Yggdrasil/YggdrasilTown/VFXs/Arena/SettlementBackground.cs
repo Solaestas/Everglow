@@ -23,6 +23,17 @@ public class SettlementBackground : Visual
 
 	public override void Update()
 	{
+		if(BossNPC == null || !BossNPC.active)
+		{
+			foreach (var npc in Main.npc)
+			{
+				if (npc != null && npc.active && npc.ModNPC is TownNPC_LiveInYggdrasil)
+				{
+					BossNPC = npc;
+					break;
+				}
+			}
+		}
 		if (NPCType == -1)
 		{
 			if (BossNPC != null)
@@ -45,7 +56,7 @@ public class SettlementBackground : Visual
 			Active = false;
 			return;
 		}
-		if(!tNLIY.StartedFight)
+		if(!tNLIY.StartedFight && BossNPC.active)
 		{
 			ShouldKill = true;
 		}

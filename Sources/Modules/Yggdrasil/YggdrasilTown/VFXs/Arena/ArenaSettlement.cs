@@ -233,6 +233,19 @@ public class ArenaSettlement : Visual
 
 	public void Retry()
 	{
+		if(BossNPC == null || !BossNPC.active)
+		{
+			if(NPCType != -1)
+			{
+				NPC npc = NPC.NewNPCDirect(WorldGen.GetItemSource_FromTileBreak(180, 194), 180 * 16, 194 * 16, NPCType);
+				BossNPC = npc;
+			}
+			else
+			{
+				CombatText.NewText(Main.LocalPlayer.Hitbox, Color.White, "Null NPCType Exception!");
+				return;
+			}
+		}
 		if (BossNPC != null && BossNPC.active)
 		{
 			BossNPC.position = new Point(180, 194).ToWorldCoordinates();

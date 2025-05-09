@@ -73,6 +73,7 @@ public class RoadSignPost_ToArenaVFX : ForegroundVFX
 		{
 			int y1 = 170;
 			int y2 = 185;
+			int y3 = 201;
 
 			Tile tile1 = YggdrasilWorldGeneration.SafeGetTile(x, y1);
 			tile1.TileType = (ushort)ModContent.TileType<LampWoodPlatform>();
@@ -81,6 +82,10 @@ public class RoadSignPost_ToArenaVFX : ForegroundVFX
 			Tile tile2 = YggdrasilWorldGeneration.SafeGetTile(x, y2);
 			tile2.TileType = (ushort)ModContent.TileType<LampWoodPlatform>();
 			tile2.HasTile = true;
+
+			Tile tile3 = YggdrasilWorldGeneration.SafeGetTile(x, y3);
+			tile3.TileType = (ushort)ModContent.TileType<ShieldTile>();
+			tile3.HasTile = true;
 		}
 
 		for (int x = 20; x < 22; x++)
