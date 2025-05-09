@@ -1,5 +1,6 @@
 using Everglow.Yggdrasil.KelpCurtain.Gores;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
@@ -23,7 +24,7 @@ public class LampWood_Tree : ModTile
 	}
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		yield return new Item(ModContent.ItemType<Items.LampWood.LampWood_Wood>());
+		yield return new Item(ModContent.ItemType<LampWood_Wood>());
 	}
 	public override bool CanDrop(int i, int j)
 	{

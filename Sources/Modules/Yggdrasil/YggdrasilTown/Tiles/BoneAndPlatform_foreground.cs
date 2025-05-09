@@ -1,7 +1,7 @@
 using Everglow.Commons.VFX.Scene;
-using SubworldLibrary;
 
-namespace Everglow.Yggdrasil.Common;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+
 [Pipeline(typeof(WCSPipeline))]
 public class BoneAndPlatform_foreground : ForegroundVFX
 {

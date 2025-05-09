@@ -1,5 +1,4 @@
 using Everglow.Commons.VFX.Scene;
-using Everglow.Yggdrasil.Common;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
@@ -40,6 +39,7 @@ public class BoneAndPlatform_tile : ModTile, ISceneTile
 		LocalizedText name = CreateMapEntryName();
 		AddMapEntry(new Color(69, 36, 78), name);
 	}
+
 	public void AddScene(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
@@ -47,10 +47,11 @@ public class BoneAndPlatform_tile : ModTile, ISceneTile
 		{
 			BoneAndPlatform_background scene = new BoneAndPlatform_background { position = new Vector2(i, j - 14) * 16, Active = true, originTile = new Point(i, j), originType = ModContent.TileType<BoneAndPlatform_tile>() };
 			Ins.VFXManager.Add(scene);
-			BoneAndPlatform_foreground scene2 = new BoneAndPlatform_foreground { position = new Vector2(i, j - 14) * 16, Active = true, originTile = new Point(i, j), originType = ModContent.TileType<BoneAndPlatform_tile>()};
+			BoneAndPlatform_foreground scene2 = new BoneAndPlatform_foreground { position = new Vector2(i, j - 14) * 16, Active = true, originTile = new Point(i, j), originType = ModContent.TileType<BoneAndPlatform_tile>() };
 			Ins.VFXManager.Add(scene2);
 		}
 	}
+
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		return false;

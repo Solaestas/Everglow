@@ -7,6 +7,7 @@ public class SquamousShellSeal : ModTile
 {
 	public int ReSpawnTimer = 0;
 	public int DissolveTimer = 0;
+
 	public override void SetStaticDefaults()
 	{
 		Main.tileFrameImportant[Type] = true;
@@ -27,26 +28,30 @@ public class SquamousShellSeal : ModTile
 			16,
 			16,
 			16,
-			16
+			16,
 		};
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.addTile(Type);
 		AddMapEntry(new Color(79, 76, 75));
 	}
+
 	public override bool CanExplode(int i, int j)
 	{
 		return false;
 	}
+
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
 		num = 0;
 		base.NumDust(i, j, fail, ref num);
 	}
+
 	public override bool CanKillTile(int i, int j, ref bool blockDamaged)
 	{
 		return false;
 	}
+
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		Tile tile = Main.tile[i, j];
@@ -55,7 +60,9 @@ public class SquamousShellSeal : ModTile
 			Color lightColor = Lighting.GetColor(i + 10, j + 5);
 			var zero = new Vector2(Main.offScreenRange);
 			if (Main.drawToScreen)
+			{
 				zero = Vector2.Zero;
+			}
 
 			Texture2D deadS = ModAsset.DeadSquamousShell.Value;
 			Texture2D frontSeal = ModAsset.SquamousShellSeal_front.Value;
@@ -97,7 +104,7 @@ public class SquamousShellSeal : ModTile
 				int backValue = 60 - DissolveTimer;
 				Rectangle backSealRect = new Rectangle(0, backValue * 152, 342, 152);
 				Rectangle frontSealRect = new Rectangle(0, frontValue * 152, 342, 152);
-				if(backValue < 7)
+				if (backValue < 7)
 				{
 					spriteBatch.Draw(backSeal, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(8), backSealRect, lightColor, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
 				}
@@ -122,14 +129,17 @@ public class SquamousShellSeal : ModTile
 		}
 		return false;
 	}
+
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
 		base.NearbyEffects(i, j, closer);
 	}
+
 	public override void MouseOver(int i, int j)
 	{
 		base.MouseOver(i, j);
 	}
+
 	public override bool RightClick(int i, int j)
 	{
 		if (ReSpawnTimer <= 0)

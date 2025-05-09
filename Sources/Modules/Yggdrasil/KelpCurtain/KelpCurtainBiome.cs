@@ -7,7 +7,7 @@ namespace Everglow.Yggdrasil.KelpCurtain;
 
 public class KelpCurtainBiome : ModBiome
 {
-	public override int Music => !Main.dayTime ? YggdrasilContent.QuickMusic("KelpCurtainBGM") : YggdrasilContent.QuickMusic("OldKelpCurtainBGM");
+	public override int Music => YggdrasilContent.QuickMusic(ModAsset.KelpCurtainBGM_Path);
 	public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 	public override string BestiaryIcon => "Everglow/Yggdrasil/KelpCurtain/KelpCurtainIcon";
 	public override string BackgroundPath => base.BackgroundPath;

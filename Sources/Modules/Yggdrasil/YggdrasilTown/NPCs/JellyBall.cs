@@ -1,7 +1,10 @@
 using Everglow.Commons.CustomTiles;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.Localization;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 
@@ -125,6 +128,22 @@ public class JellyBall : ModNPC
 								if (v0.Length() < 60)
 								{
 									NPC.velocity += Vector2.Normalize(v0) * 0.25f;
+								}
+							}
+							if (npc.type == ModContent.NPCType<GiantJellyBall>())
+							{
+								Vector2 v0 = NPC.Center - npc.Center;
+								if (v0.Length() < 120)
+								{
+									NPC.velocity += Vector2.Normalize(v0) * 0.25f;
+								}
+							}
+							if (npc.type == ModContent.NPCType<KingJellyBall.KingJellyBall>())
+							{
+								Vector2 v0 = NPC.Center - npc.Center;
+								if (v0.Length() < 450)
+								{
+									NPC.velocity += Vector2.Normalize(v0) * 0.45f;
 								}
 							}
 						}
@@ -304,6 +323,37 @@ public class JellyBall : ModNPC
 
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		// TODO 掉落物
+		npcLoot.Add(ItemDropRule.ByCondition(new JellyBallNoneDerivativeCondition(), ModContent.ItemType<JellyBallCube>(), 1, 1, 2));
+	}
+}
+
+internal class JellyBallNoneDerivativeCondition : IItemDropRuleCondition
+{
+	public bool CanDrop(DropAttemptInfo info)
+	{
+		if (info.npc.type == ModContent.NPCType<JellyBall>() || info.npc.type == ModContent.NPCType<GiantJellyBall>())
+		{
+			if (info.npc.ai[1] != 127)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public bool CanShowItemDropInUI()
+	{
+		return false;
+	}
+
+	public string GetConditionDescription()
+	{
+		string desc = "None boss summoned jelly ball";
+		if (Language.ActiveCulture.Name == "zh-Hans")
+		{
+			desc = "非boss召唤的球冻";
+		}
+
+		return desc;
 	}
 }

@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.SquamousBossAttack;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 
