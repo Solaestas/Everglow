@@ -1,15 +1,14 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.FevensAttack;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using SubworldLibrary;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 
 [AutoloadHead]
-public class Fevens_Boss : ModNPC
+public class Fevens : TownNPC_LiveInYggdrasil
 {
-	private bool canDespawn = false;
-
 	/// <summary>
 	/// 0 default; 1 hold magic array; 2 attack1; 3 attack2; 4 stand; 5 attack3; 6 attack4(Raise blade);7 attack5(Raise blade, no wing);8 defense; 9(Raise blade 2)
 	/// </summary>
@@ -17,12 +16,218 @@ public class Fevens_Boss : ModNPC
 
 	public int Phase;
 
-	public override string Texture => ModAsset.Fevens_Boss_Mod;
+	public override string Texture => ModAsset.Fevens_Walk_Mod;
 
 	public override string HeadTexture => ModAsset.Fevens_Head_Boss_Mod;
 
+	public override void SetStaticDefaults()
+	{
+		Main.npcFrameCount[NPC.type] = 10;
+	}
+
 	public override void SetDefaults()
 	{
+		base.SetDefaults();
+		StandFrame = new Rectangle(0, 0, 48, 70);
+		SitFrame = new Rectangle(0, 630, 48, 70);
+		NPC.frame = StandFrame;
+		FrameHeight = 70;
+	}
+
+	public override void TryAttack()
+	{
+		float minDis = 100;
+		float minDis2 = 400;
+		if (ThreatenTarget >= 0 && ThreatenTarget < 200)
+		{
+			NPC npc = Main.npc[ThreatenTarget];
+			Vector2 distance = npc.Center - NPC.Center;
+			for (int i = 0; i < 8; i++)
+			{
+				Vector2 checkPos = npc.Center;
+				switch (i)
+				{
+					case 0:
+						checkPos = npc.TopLeft;
+						break;
+					case 1:
+						checkPos = npc.Top;
+						break;
+					case 2:
+						checkPos = npc.TopRight;
+						break;
+					case 3:
+						checkPos = npc.Left;
+						break;
+					case 4:
+						checkPos = npc.Right;
+						break;
+					case 5:
+						checkPos = npc.BottomLeft;
+						break;
+					case 6:
+						checkPos = npc.Bottom;
+						break;
+					case 7:
+						checkPos = npc.BottomRight;
+						break;
+				}
+				if ((checkPos - NPC.Center).Length() < distance.Length())
+				{
+					distance = checkPos - NPC.Center;
+				}
+			}
+			if (Main.rand.NextFloat(TotalThreaten) > 0.3f)
+			{
+				if (distance.Length() < minDis2)
+				{
+					BehaviorsCoroutines.Enqueue(new Coroutine(Attack2()));
+					return;
+				}
+			}
+			if (distance.Length() < minDis)
+			{
+				BehaviorsCoroutines.Enqueue(new Coroutine(Attack()));
+				return;
+			}
+			else if (distance.Length() < minDis2)
+			{
+				BehaviorsCoroutines.Enqueue(new Coroutine(Attack2()));
+				return;
+			}
+		}
+	}
+	
+	public IEnumerator<ICoroutineInstruction> Attack()
+	{
+		bool safe = false;
+		if (ThreatenTarget is >= 0 and < 200)
+		{
+			safe = true;
+		}
+		if (!safe)
+		{
+			EndAIPiece();
+			yield break;
+		}
+		NPC target = Main.npc[ThreatenTarget];
+		if (target.Center.X > NPC.Center.X)
+		{
+			NPC.direction = 1;
+		}
+		if (target.Center.X < NPC.Center.X)
+		{
+			NPC.direction = -1;
+		}
+		NPC.spriteDirection = NPC.direction;
+		//Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(-NPC.direction, 0), ModContent.ProjectileType<Georg_Hammer>(), 150, 4, Main.myPlayer, NPC.whoAmI);
+		for (int t = 0; t < 60; t++)
+		{
+			NPC.velocity.X *= 0;
+			//Attacking0 = true;
+			yield return new SkipThisFrame();
+		}
+		//Attacking0 = false;
+		EndAIPiece();
+	}
+
+	public IEnumerator<ICoroutineInstruction> Attack2()
+	{
+		bool safe = false;
+		if (ThreatenTarget is >= 0 and < 200)
+		{
+			safe = true;
+		}
+		if (!safe)
+		{
+			EndAIPiece();
+			yield break;
+		}
+		NPC target = Main.npc[ThreatenTarget];
+		if (target.Center.X > NPC.Center.X)
+		{
+			NPC.direction = 1;
+		}
+		if (target.Center.X < NPC.Center.X)
+		{
+			NPC.direction = -1;
+		}
+		NPC.spriteDirection = NPC.direction;
+		//Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, (target.Center - NPC.Center).NormalizeSafe(), ModContent.ProjectileType<Georg_Hook>(), 100, 4, Main.myPlayer, NPC.whoAmI);
+		for (int t = 0; t < 100; t++)
+		{
+			NPC.velocity.X *= 0;
+			//Attacking0 = true;
+			yield return new SkipThisFrame();
+		}
+		//Attacking0 = false;
+		EndAIPiece();
+	}
+
+	public override void WalkFrame()
+	{
+		NPC.frame.Width = 48;
+		NPC.frame.Height = FrameHeight;
+		NPC.frameCounter += Math.Abs(NPC.velocity.X);
+		if (NPC.frameCounter > 4)
+		{
+			NPC.frame.Y += FrameHeight;
+			NPC.frameCounter = 0;
+		}
+		if (NPC.frame.Y > 8 * FrameHeight)
+		{
+			NPC.frame.Y = FrameHeight;
+		}
+	}
+
+	public override void CheckInSuitableArea()
+	{
+		if (SubworldSystem.Current is not YggdrasilWorld)
+		{
+			return;
+		}
+		AnchorForBehaviorPos = YggdrasilTownCentralSystem.TownTopLeftWorldCoord.ToTileCoordinates() + new Point(116, 158);
+		bool safe = false;
+		var homePoint = AnchorForBehaviorPos;
+		NPC.homeless = false;
+		NPC.homeTileX = homePoint.X;
+		NPC.homeTileY = homePoint.Y;
+
+		var npcTilePos = NPC.Center.ToTileCoordinates();
+		if (npcTilePos.X > AnchorForBehaviorPos.X - 100 && npcTilePos.X < AnchorForBehaviorPos.X + 100)
+		{
+			if (npcTilePos.Y > AnchorForBehaviorPos.Y - 20 && npcTilePos.Y < AnchorForBehaviorPos.Y + 20)
+			{
+				safe = true;
+			}
+		}
+		if (!safe)
+		{
+			TeleportHome();
+		}
+	}
+
+	public override void AI()
+	{
+		base.AI();
+	}
+
+	public override void BossAI()
+	{
+		base.BossAI();
+		NPC.TargetClosest();
+		Player player = Main.player[NPC.target];
+		_fevensCoroutine.Update();
+		if (!player.active || player.dead)
+		{
+			NPC.active = false;
+		}
+		NPC.damage = 40;
+	}
+
+	public override void SetDefaultsToArena()
+	{
+		base.SetDefaultsToArena();
 		NPC.width = 26;
 		NPC.height = 36;
 		NPC.aiStyle = 7;
@@ -35,10 +240,6 @@ public class Fevens_Boss : ModNPC
 		NPC.boss = true;
 		NPC.knockBackResist = 0;
 		NPC.noTileCollide = true;
-	}
-
-	public override void OnSpawn(IEntitySource source)
-	{
 		Phase = 0;
 		NPC.friendly = false;
 		NPC.aiStyle = -1;
@@ -63,34 +264,17 @@ public class Fevens_Boss : ModNPC
 		StartToBeABoss();
 	}
 
-	public override bool CheckActive()
-	{
-		return canDespawn;
-	}
-
-	public override void AI()
-	{
-		NPC.TargetClosest();
-		Player player = Main.player[NPC.target];
-		_fevensCoroutine.Update();
-		if (!player.active || player.dead)
-		{
-			NPC.active = false;
-		}
-		NPC.damage = 40;
-	}
-
 	private CoroutineManager _fevensCoroutine = new CoroutineManager();
 
 	public void StartToBeABoss()
 	{
 		NPC.TargetClosest(true);
-		_fevensCoroutine.StartCoroutine(new Coroutine(StartFighting()));
+		_fevensCoroutine.StartCoroutine(new Coroutine(StartFighting2()));
 
 		// Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<fevensSword_following>(), 0, 0f, -1, NPC.whoAmI);
 	}
 
-	private IEnumerator<ICoroutineInstruction> StartFighting()
+	private IEnumerator<ICoroutineInstruction> StartFighting2()
 	{
 		Player player = Main.player[NPC.target];
 		int dirChoose = 1;
@@ -462,7 +646,7 @@ public class Fevens_Boss : ModNPC
 
 		State = 4;
 		yield return new WaitForFrames(10);
-		if(attackDirection == -1)
+		if (attackDirection == -1)
 		{
 			State = 6;
 		}
@@ -863,7 +1047,6 @@ public class Fevens_Boss : ModNPC
 		}
 		if (Phase == 2)
 		{
-
 			switch (Main.rand.Next(6))
 			{
 				case 0:
@@ -894,75 +1077,78 @@ public class Fevens_Boss : ModNPC
 
 	public override void FindFrame(int frameHeight)
 	{
-		if (State == 1)
+		if(YggdrasilTownCentralSystem.InArena_YggdrasilTown())
 		{
-			if (NPC.frame.Width != 132)
+			if (State == 1)
 			{
-				NPC.frame.Y = 0;
-				NPC.frame.X = 0;
-				NPC.frame.Width = 132;
-				NPC.frame.Height = 120;
-			}
-			NPC.frameCounter++;
-			if (NPC.frameCounter >= 5)
-			{
-				NPC.frame.Y += 120;
-				NPC.frame.X = 0;
-				NPC.frame.Width = 132;
-				NPC.frame.Height = 120;
-				if (NPC.frame.Y > 480)
+				if (NPC.frame.Width != 132)
 				{
 					NPC.frame.Y = 0;
+					NPC.frame.X = 0;
+					NPC.frame.Width = 132;
+					NPC.frame.Height = 120;
 				}
-				NPC.frameCounter = 0;
+				NPC.frameCounter++;
+				if (NPC.frameCounter >= 5)
+				{
+					NPC.frame.Y += 120;
+					NPC.frame.X = 0;
+					NPC.frame.Width = 132;
+					NPC.frame.Height = 120;
+					if (NPC.frame.Y > 480)
+					{
+						NPC.frame.Y = 0;
+					}
+					NPC.frameCounter = 0;
+				}
 			}
-		}
 
-		if (State == 2)
-		{
-			if (NPC.frame.Width != 38)
+			if (State == 2)
 			{
-				NPC.frame.Y = 0;
-				NPC.frame.X = 0;
-				NPC.frame.Width = 38;
-				NPC.frame.Height = 58;
-			}
-			NPC.frameCounter++;
-			if (NPC.frameCounter >= 3)
-			{
-				NPC.frame.Y += 58;
-				NPC.frame.X = 0;
-				NPC.frame.Width = 38;
-				NPC.frame.Height = 58;
-				if (NPC.frame.Y > 174)
+				if (NPC.frame.Width != 38)
 				{
 					NPC.frame.Y = 0;
+					NPC.frame.X = 0;
+					NPC.frame.Width = 38;
+					NPC.frame.Height = 58;
 				}
-				NPC.frameCounter = 0;
+				NPC.frameCounter++;
+				if (NPC.frameCounter >= 3)
+				{
+					NPC.frame.Y += 58;
+					NPC.frame.X = 0;
+					NPC.frame.Width = 38;
+					NPC.frame.Height = 58;
+					if (NPC.frame.Y > 174)
+					{
+						NPC.frame.Y = 0;
+					}
+					NPC.frameCounter = 0;
+				}
 			}
-		}
 
-		if (State == 3)
-		{
-			if (NPC.frame.Width != 38)
+			if (State == 3)
 			{
-				NPC.frame.Y = 0;
-				NPC.frame.X = 0;
-				NPC.frame.Width = 38;
-				NPC.frame.Height = 58;
-			}
-			NPC.frameCounter++;
-			if (NPC.frameCounter >= 2)
-			{
-				NPC.frame.Y += 58;
-				NPC.frame.X = 0;
-				NPC.frame.Width = 38;
-				NPC.frame.Height = 58;
-				if (NPC.frame.Y > 522)
+				if (NPC.frame.Width != 38)
 				{
 					NPC.frame.Y = 0;
+					NPC.frame.X = 0;
+					NPC.frame.Width = 38;
+					NPC.frame.Height = 58;
 				}
-				NPC.frameCounter = 0;
+				NPC.frameCounter++;
+				if (NPC.frameCounter >= 2)
+				{
+					NPC.frame.Y += 58;
+					NPC.frame.X = 0;
+					NPC.frame.Width = 38;
+					NPC.frame.Height = 58;
+					if (NPC.frame.Y > 522)
+					{
+						NPC.frame.Y = 0;
+					}
+					NPC.frameCounter = 0;
+				}
 			}
 		}
 		base.FindFrame(frameHeight);
@@ -970,110 +1156,116 @@ public class Fevens_Boss : ModNPC
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		drawColor *= (255 - NPC.alpha) / 255f;
-		if (State == 0)
+		Texture2D texMain = ModAsset.Fevens_Walk.Value;
+		Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, -13);
+		Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
 		{
-			return true;
-		}
-		if (Phase == 2)
-		{
-			if (State == 4 || State == 6)
+			drawColor *= (255 - NPC.alpha) / 255f;
+			if (State == 0)
 			{
-				Texture2D wing = ModAsset.Fevens_Wing.Value;
-				Texture2D wingFlame = ModAsset.Fevens_Wing_Flame.Value;
-				float standardRot = NPC.rotation - MathHelper.PiOver4 * 3;
-				for (int i = 0; i < 4; i++)
+				return true;
+			}
+			if (Phase == 2)
+			{
+				if (State == 4 || State == 6)
 				{
-					Vector2 offset = new Vector2(0, 0);
-					float duration = MathF.Pow(1 - NPC.localAI[0] / 60f, 0.3f);
-					float rotationWing = standardRot + duration * (1 - i * 0.24f) * 2.2f;
-					float wingSize = 0.8f;
-					if (NPC.spriteDirection == -1)
+					Texture2D wing = ModAsset.Fevens_Wing.Value;
+					Texture2D wingFlame = ModAsset.Fevens_Wing_Flame.Value;
+					float standardRot = NPC.rotation - MathHelper.PiOver4 * 3;
+					for (int i = 0; i < 4; i++)
 					{
-						offset = new Vector2(-10, 0).RotatedBy(NPC.rotation);
-						wingSize = 1f;
+						Vector2 offset = new Vector2(0, 0);
+						float duration = MathF.Pow(1 - NPC.localAI[0] / 60f, 0.3f);
+						float rotationWing = standardRot + duration * (1 - i * 0.24f) * 2.2f;
+						float wingSize = 0.8f;
+						if (NPC.spriteDirection == -1)
+						{
+							offset = new Vector2(-10, 0).RotatedBy(NPC.rotation);
+							wingSize = 1f;
+						}
+						int frameIndex = (int)(Main.time * 0.17 + i * 5) % 7;
+						Rectangle frameWing = new Rectangle(0, frameIndex * 40, 40, 40);
+
+						spriteBatch.Draw(wing, NPC.Center - Main.screenPosition + offset, frameWing, drawColor, rotationWing, new Vector2(40), NPC.scale * (1 - i * 0.1f) * wingSize, SpriteEffects.None, 0);
+						spriteBatch.Draw(wingFlame, NPC.Center - Main.screenPosition + offset, frameWing, new Color(1f, 1f, 1f, 0), rotationWing, new Vector2(40), NPC.scale * (1 - i * 0.1f) * wingSize, SpriteEffects.None, 0);
 					}
-					int frameIndex = (int)(Main.time * 0.17 + i * 5) % 7;
-					Rectangle frameWing = new Rectangle(0, frameIndex * 40, 40, 40);
 
-					spriteBatch.Draw(wing, NPC.Center - Main.screenPosition + offset, frameWing, drawColor, rotationWing, new Vector2(40), NPC.scale * (1 - i * 0.1f) * wingSize, SpriteEffects.None, 0);
-					spriteBatch.Draw(wingFlame, NPC.Center - Main.screenPosition + offset, frameWing, new Color(1f, 1f, 1f, 0), rotationWing, new Vector2(40), NPC.scale * (1 - i * 0.1f) * wingSize, SpriteEffects.None, 0);
-				}
-
-				standardRot = NPC.rotation - MathHelper.PiOver4;
-				for (int i = 0; i < 4; i++)
-				{
-					Vector2 offset = new Vector2(10, 0).RotatedBy(NPC.rotation);
-					float duration = MathF.Pow(1 - NPC.localAI[0] / 60f, 0.3f);
-					float rotationWing = standardRot - duration * (1 - i * 0.24f) * 2f - 0.2f;
-					float wingSize = 1f;
-					if (NPC.spriteDirection == -1)
+					standardRot = NPC.rotation - MathHelper.PiOver4;
+					for (int i = 0; i < 4; i++)
 					{
-						offset = new Vector2(0);
-						wingSize = 0.8f;
+						Vector2 offset = new Vector2(10, 0).RotatedBy(NPC.rotation);
+						float duration = MathF.Pow(1 - NPC.localAI[0] / 60f, 0.3f);
+						float rotationWing = standardRot - duration * (1 - i * 0.24f) * 2f - 0.2f;
+						float wingSize = 1f;
+						if (NPC.spriteDirection == -1)
+						{
+							offset = new Vector2(0);
+							wingSize = 0.8f;
+						}
+						int frameIndex = (int)(Main.time * 0.17 + i * 5 + 3) % 7;
+						Rectangle frameWing = new Rectangle(0, frameIndex * 40, 40, 40);
+						spriteBatch.Draw(wing, NPC.Center - Main.screenPosition + offset, frameWing, drawColor, rotationWing, new Vector2(40, 0), NPC.scale * (1 - i * 0.1f) * wingSize, SpriteEffects.FlipVertically, 0);
+						spriteBatch.Draw(wingFlame, NPC.Center - Main.screenPosition + offset, frameWing, new Color(1f, 1f, 1f, 0), rotationWing, new Vector2(40, 0), NPC.scale * (1 - i * 0.1f) * wingSize, SpriteEffects.FlipVertically, 0);
 					}
-					int frameIndex = (int)(Main.time * 0.17 + i * 5 + 3) % 7;
-					Rectangle frameWing = new Rectangle(0, frameIndex * 40, 40, 40);
-					spriteBatch.Draw(wing, NPC.Center - Main.screenPosition + offset, frameWing, drawColor, rotationWing, new Vector2(40, 0), NPC.scale * (1 - i * 0.1f) * wingSize, SpriteEffects.FlipVertically, 0);
-					spriteBatch.Draw(wingFlame, NPC.Center - Main.screenPosition + offset, frameWing, new Color(1f, 1f, 1f, 0), rotationWing, new Vector2(40, 0), NPC.scale * (1 - i * 0.1f) * wingSize, SpriteEffects.FlipVertically, 0);
 				}
 			}
-		}
-		if (State == 1)
-		{
-			Rectangle frame = NPC.frame;
-			Texture2D sorcererFevens = ModAsset.Fevens_Boss_MagicArray.Value;
-			spriteBatch.Draw(sorcererFevens, NPC.Center - Main.screenPosition + new Vector2(0, -30), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-		}
-
-		if (State == 2 || State == 3)
-		{
-			Rectangle frame = NPC.frame;
-			Texture2D sorcererFevens = ModAsset.Fevens_Attack0.Value;
-			if (State == 3)
+			if (State == 1)
 			{
-				sorcererFevens = ModAsset.Fevens_Attack1.Value;
+				Rectangle frame = NPC.frame;
+				Texture2D sorcererFevens = ModAsset.Fevens_Boss_MagicArray.Value;
+				spriteBatch.Draw(sorcererFevens, NPC.Center - Main.screenPosition + new Vector2(0, -30), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 			}
-			spriteBatch.Draw(sorcererFevens, NPC.Center - Main.screenPosition + new Vector2(0, 0), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-		}
 
-		if (State == 4)
-		{
-			Texture2D standFevens = ModAsset.Fevens_Boss.Value;
-			Rectangle frame = new Rectangle(0, 0, standFevens.Width, standFevens.Height);
-			spriteBatch.Draw(standFevens, NPC.Center - Main.screenPosition + new Vector2(0, 0), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-		}
+			if (State == 2 || State == 3)
+			{
+				Rectangle frame = NPC.frame;
+				Texture2D sorcererFevens = ModAsset.Fevens_Attack0.Value;
+				if (State == 3)
+				{
+					sorcererFevens = ModAsset.Fevens_Attack1.Value;
+				}
+				spriteBatch.Draw(sorcererFevens, NPC.Center - Main.screenPosition + new Vector2(0, 0), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			}
 
-		if (State == 5)
-		{
-			Texture2D knifeFevens = ModAsset.Fevens_Attack2.Value;
-			Rectangle frame = new Rectangle(0, 0, knifeFevens.Width, knifeFevens.Height);
-			spriteBatch.Draw(knifeFevens, NPC.Center - Main.screenPosition + new Vector2(0, 0), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-		}
+			if (State == 4)
+			{
+				Texture2D standFevens = ModAsset.Fevens.Value;
+				Rectangle frame = new Rectangle(0, 0, standFevens.Width, standFevens.Height);
+				spriteBatch.Draw(standFevens, NPC.Center - Main.screenPosition + new Vector2(0, 0), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			}
 
-		if (State == 6 || State == 7)
-		{
-			Texture2D knifeFevens = ModAsset.Fevens_Attack4.Value;
-			Texture2D knifeFevensGlow = ModAsset.Fevens_Attack4_glow.Value;
-			Rectangle frame = new Rectangle(0, 0, knifeFevens.Width, knifeFevens.Height);
-			spriteBatch.Draw(knifeFevens, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-			spriteBatch.Draw(knifeFevensGlow, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, new Color(255, 255, 255, 0), NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-		}
+			if (State == 5)
+			{
+				Texture2D knifeFevens = ModAsset.Fevens_Attack2.Value;
+				Rectangle frame = new Rectangle(0, 0, knifeFevens.Width, knifeFevens.Height);
+				spriteBatch.Draw(knifeFevens, NPC.Center - Main.screenPosition + new Vector2(0, 0), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			}
 
-		if (State == 8)
-		{
-			Texture2D shieldFevens = ModAsset.Fevens_Defence.Value;
-			Rectangle frame = new Rectangle(0, 0, shieldFevens.Width, shieldFevens.Height);
-			spriteBatch.Draw(shieldFevens, NPC.Center - Main.screenPosition + new Vector2(0, -4), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-		}
+			if (State == 6 || State == 7)
+			{
+				Texture2D knifeFevens = ModAsset.Fevens_Attack4.Value;
+				Texture2D knifeFevensGlow = ModAsset.Fevens_Attack4_glow.Value;
+				Rectangle frame = new Rectangle(0, 0, knifeFevens.Width, knifeFevens.Height);
+				spriteBatch.Draw(knifeFevens, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+				spriteBatch.Draw(knifeFevensGlow, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, new Color(255, 255, 255, 0), NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			}
 
-		if (State == 9 || State == 10)
-		{
-			Texture2D knifeFevens = ModAsset.Fevens_Attack3.Value;
-			Texture2D knifeFevensGlow = ModAsset.Fevens_Attack3_glow.Value;
-			Rectangle frame = new Rectangle(0, 0, knifeFevens.Width, knifeFevens.Height);
-			spriteBatch.Draw(knifeFevens, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-			spriteBatch.Draw(knifeFevensGlow, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, new Color(255, 255, 255, 0), NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			if (State == 8)
+			{
+				Texture2D shieldFevens = ModAsset.Fevens_Defence.Value;
+				Rectangle frame = new Rectangle(0, 0, shieldFevens.Width, shieldFevens.Height);
+				spriteBatch.Draw(shieldFevens, NPC.Center - Main.screenPosition + new Vector2(0, -4), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			}
+
+			if (State == 9 || State == 10)
+			{
+				Texture2D knifeFevens = ModAsset.Fevens_Attack3.Value;
+				Texture2D knifeFevensGlow = ModAsset.Fevens_Attack3_glow.Value;
+				Rectangle frame = new Rectangle(0, 0, knifeFevens.Width, knifeFevens.Height);
+				spriteBatch.Draw(knifeFevens, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+				spriteBatch.Draw(knifeFevensGlow, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, new Color(255, 255, 255, 0), NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			}
 		}
 		return false;
 	}

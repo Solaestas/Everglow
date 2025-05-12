@@ -124,20 +124,20 @@ public class Fevens_Wing_Slash_Down : ModProjectile, IWarpProjectile
 		{
 			Projectile.velocity *= 0;
 		}
-		if(Projectile.timeLeft == 40)
+		if (Projectile.timeLeft == 40)
 		{
 			Vector2 backPos = Vector2.zeroVector;
-			foreach(NPC npc in Main.npc)
+			foreach (NPC npc in Main.npc)
 			{
-				if(npc != null && npc.active && npc.type == ModContent.NPCType<Fevens_Boss>())
+				if (npc != null && npc.active && npc.type == ModContent.NPCType<Fevens>())
 				{
-					if((npc.Center - Projectile.Center).Length() < 3000)
+					if ((npc.Center - Projectile.Center).Length() < 3000)
 					{
 						backPos = npc.Center;
 					}
 				}
 			}
-			if(backPos != Vector2.zeroVector)
+			if (backPos != Vector2.zeroVector)
 			{
 				Vector2 vel = (backPos - Projectile.Center) * 0.2f;
 				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, vel, ModContent.ProjectileType<Fevens_Wing_Slash>(), 30, 2, default, 2);

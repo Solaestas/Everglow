@@ -1,4 +1,5 @@
 using Everglow.Commons.VFX.Scene;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
@@ -13,7 +14,7 @@ public class StoneBridgeTile : ModTile, ISceneTile
 		Main.tileWaterDeath[Type] = false;
 		Main.tileBlendAll[Type] = false;
 		Main.tileBlockLight[Type] = true;
-		DustType = DustID.Stone;
+		DustType = ModContent.DustType<StoneBridgeDust>();
 		MinPick = int.MaxValue;
 		AddMapEntry(new Color(64, 64, 61));
 	}

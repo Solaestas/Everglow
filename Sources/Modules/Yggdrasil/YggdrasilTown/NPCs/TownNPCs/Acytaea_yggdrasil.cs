@@ -1039,7 +1039,7 @@ public class Acytaea_yggdrasil : ModNPC
 
 		if (State == 4)
 		{
-			Texture2D standFevens = ModAsset.Fevens_Boss.Value;
+			Texture2D standFevens = ModAsset.Fevens.Value;
 			Rectangle frame = new Rectangle(0, 0, standFevens.Width, standFevens.Height);
 			spriteBatch.Draw(standFevens, NPC.Center - Main.screenPosition + new Vector2(0, 0), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		}

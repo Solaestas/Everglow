@@ -18,7 +18,7 @@ public class MissionCounter : ShapeDataTile
 		Main.tileFrameImportant[Type] = true;
 		Main.tileLighted[Type] = true;
 		Main.tileNoAttach[Type] = false;
-		Main.tileBlendAll[Type] = true;
+		Main.tileBlendAll[Type] = false;
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Width = 22;

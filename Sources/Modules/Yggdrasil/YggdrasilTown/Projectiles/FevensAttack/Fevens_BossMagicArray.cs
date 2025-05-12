@@ -55,7 +55,7 @@ internal class Fevens_MagicArray : ModProjectile
 		Projectile.spriteDirection = npc.spriteDirection;
 		Projectile.velocity *= 0;
 
-		var fevens_Boss = npc.ModNPC as Fevens_Boss;
+		var fevens_Boss = npc.ModNPC as Fevens;
 		if (fevens_Boss.Phase == 2)
 		{
 			timer--;
@@ -78,7 +78,7 @@ internal class Fevens_MagicArray : ModProjectile
 		float maxDistance = 600;
 		foreach (var npc in Main.npc)
 		{
-			if (npc != null && npc.active && npc.type == ModContent.NPCType<Fevens_Boss>())
+			if (npc != null && npc.active && npc.type == ModContent.NPCType<Fevens>())
 			{
 				float distance = (npc.Center - Projectile.Center).Length();
 				if (distance < maxDistance)

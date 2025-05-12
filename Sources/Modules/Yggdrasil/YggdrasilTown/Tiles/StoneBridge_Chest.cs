@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -28,7 +29,7 @@ public class StoneBridge_Chest : ModTile
 		TileID.Sets.FriendlyFairyCanLureTo[Type] = true;
 		TileID.Sets.GeneralPlacementTiles[Type] = false;
 
-		DustType = DustID.Dirt; // You should set a kind of dust manually.
+		DustType = ModContent.DustType<StoneBridgeDust>();
 		AdjTiles = new int[] { TileID.Containers };
 
 		// Other tiles with just one map entry use CreateMapEntryName() to use the default translationkey, "MapEntry"

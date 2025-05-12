@@ -1,4 +1,4 @@
-﻿namespace Everglow.CagedDomain.Items;
+namespace Everglow.CagedDomain.Items;
 
 public class WhiteLotusBonsai : ModItem
 {
@@ -17,10 +17,12 @@ public class WhiteLotusBonsai : ModItem
 		Item.useTime = 10;
 		Item.useAnimation = 10;
 	}
+
 	public override bool? UseItem(Player player)
 	{
 		return base.UseItem(player);
 	}
+
 	public override void HoldItem(Player player)
 	{
 		Item.placeStyle = Math.Max(player.direction, 0);

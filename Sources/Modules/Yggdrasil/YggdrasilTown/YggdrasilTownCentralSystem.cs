@@ -24,7 +24,7 @@ public class YggdrasilTownCentralSystem : ModSystem
 		return position_Orig - TownTopLeftWorldCoord;
 	}
 
-	public static List<int> YggdrasilTownNPCList => new List<int>() { ModContent.NPCType<InnKeeper>(), ModContent.NPCType<TeahouseLady>(), ModContent.NPCType<Guard_of_YggdrasilTown>() };
+	public static List<int> YggdrasilTownNPCList => new List<int>() { ModContent.NPCType<InnKeeper>(), ModContent.NPCType<TeahouseLady>(), ModContent.NPCType<Guard_of_YggdrasilTown>(), ModContent.NPCType<Fevens>() };
 
 	public static List<int> CanteenNPCList => new List<int>() { ModContent.NPCType<CanteenMaid>(), ModContent.NPCType<Restauranteur>() };
 

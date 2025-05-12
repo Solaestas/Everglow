@@ -53,7 +53,7 @@ public class Fevens_Wing_Fly : ModProjectile
 			{
 				if (npc != null && npc.active)
 				{
-					if (npc.type == ModContent.NPCType<Fevens_Boss>())
+					if (npc.type == ModContent.NPCType<Fevens>())
 					{
 						TargetPos = npc.Center + new Vector2(-200 - Projectile.ai[0] * 100, -500 + Projectile.ai[0] * 100);
 						if (Projectile.ai[0] >= 4)
@@ -118,7 +118,7 @@ public class Fevens_Wing_Fly : ModProjectile
 			{
 				if (npc != null && npc.active)
 				{
-					if (npc.type == ModContent.NPCType<Fevens_Boss>())
+					if (npc.type == ModContent.NPCType<Fevens>())
 					{
 						Target = npc.target;
 						if (npc.target != -1)
@@ -207,7 +207,7 @@ public class Fevens_Wing_Fly : ModProjectile
 				{
 					if (npc != null && npc.active)
 					{
-						if (npc.type == ModContent.NPCType<Fevens_Boss>())
+						if (npc.type == ModContent.NPCType<Fevens>())
 						{
 							Target = npc.target;
 							TargetPos = npc.Center;
