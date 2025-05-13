@@ -1,9 +1,9 @@
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
-public class FurnaceEmergencyLamp : ModTile
+public class FurnaceLavaLamp_V : ModTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -15,10 +15,10 @@ public class FurnaceEmergencyLamp : ModTile
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
 		TileObjectData.newTile.Origin = new(0, 0);
-		TileObjectData.newTile.Height = 2;
-		TileObjectData.newTile.Width = 3;
+		TileObjectData.newTile.Height = 5;
+		TileObjectData.newTile.Width = 1;
 
-		TileObjectData.newTile.CoordinateHeights = new int[2];
+		TileObjectData.newTile.CoordinateHeights = new int[5];
 		Array.Fill(TileObjectData.newTile.CoordinateHeights, 16);
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = false;
@@ -40,13 +40,13 @@ public class FurnaceEmergencyLamp : ModTile
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		Tile tile = Main.tile[i, j];
-		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+		var zero = new Vector2(Main.offScreenRange);
 
 		if (Main.drawToScreen)
 		{
 			zero = Vector2.Zero;
 		}
 		var texture = ModContent.Request<Texture2D>(Texture).Value;
-		spriteBatch.Draw(texture, new Vector2(i, j) * 16 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + 36, 16, 16), new Color(1f, 0.3f, 0.1f, 0), 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
+		spriteBatch.Draw(texture, new Vector2(i, j) * 16 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX + 18, tile.TileFrameY, 16, 16), new Color(1f, 0.3f, 0.1f, 0), 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
 	}
 }

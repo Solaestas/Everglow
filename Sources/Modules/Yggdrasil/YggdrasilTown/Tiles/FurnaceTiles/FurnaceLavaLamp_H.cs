@@ -1,7 +1,7 @@
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
 public class FurnaceLavaLamp_H : ModTile
 {

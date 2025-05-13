@@ -15,9 +15,15 @@ namespace Everglow.Yggdrasil.YggdrasilTown;
 
 public class YggdrasilTownFurnaceSystem : ModSystem
 {
+	public static Player CurrentPlayer;
+
 	public static int CurrentScore = 0;
 
-	public static Player CurrentPlayer;
+	public static int CurrentEnergy = 0;
+
+	public static int EnergtMax = 100000;
+
+	public static int SwitchPlayerCooling = 0;
 
 	public override void PostUpdateEverything()
 	{
@@ -29,6 +35,26 @@ public class YggdrasilTownFurnaceSystem : ModSystem
 		{
 			FurnacePlayer fPlayer = CurrentPlayer.GetModPlayer<FurnacePlayer>();
 			CurrentScore = fPlayer.FurnaceScore;
+		}
+		if(CurrentEnergy >= 1000)
+		{
+			CurrentEnergy--;
+		}
+		else
+		{
+			CurrentEnergy = 75000;
+		}
+		if (CurrentEnergy > EnergtMax)
+		{
+			CurrentEnergy = EnergtMax;
+		}
+		if(SwitchPlayerCooling > 0)
+		{
+			SwitchPlayerCooling--;
+		}
+		else
+		{
+			SwitchPlayerCooling = 0;
 		}
 		base.PostUpdateEverything();
 	}

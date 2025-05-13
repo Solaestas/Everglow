@@ -1,6 +1,7 @@
-namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.Furnace;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 
-[AutoloadEquip(EquipType.Balloon)]
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.Furnace;
 public class HotAirBalloon : ModItem
 {
 	public const int JumpSpeedBoost = 2;
@@ -33,6 +34,7 @@ public class HotAirBalloon : ModItem
 		// 3. Enable Fire Dust VFX
 		// =======================
 		player.GetModPlayer<HotAirBalloonPlayer>().HotAirBalloonEnable = true;
+		Lighting.AddLight(player.Center + new Vector2(20 * player.direction, -30), new Vector3(0.7f, 0.35f, 0));
 	}
 }
 
@@ -58,7 +60,7 @@ internal class HotAirBalloonPlayer : ModPlayer
 			}
 
 			// Draw dust
-			if(Main.rand.NextBool(1))
+			if (Main.rand.NextBool(1))
 			{
 				Dust dust = Dust.NewDustDirect(Player.position - new Vector2(2), Player.width + 4, Player.height + 4, DustID.Torch, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default(Color), 1.6f);
 				dust.noGravity = true;
@@ -66,5 +68,40 @@ internal class HotAirBalloonPlayer : ModPlayer
 				dust.velocity.Y -= 0.5f;
 			}
 		}
+	}
+
+	public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
+	{
+		Main.NewText(drawInfo.drawPlayer.balloon);
+		if (HotAirBalloonEnable && drawInfo.drawPlayer.balloon <= 0)
+		{
+			DrawData item;
+			DrawData item_glow;
+			Texture2D ballonTexture = ModAsset.HotAirBalloon_Balloon.Value;
+
+			int num = (Main.hasFocus && (!Main.ingameOptionsWindow || !Main.autoPause)) ? (DateTime.Now.Millisecond % 800 / 200) : 0;
+			Vector2 vector = Main.OffsetsPlayerOffhand[drawInfo.drawPlayer.bodyFrame.Y / 56];
+			if (drawInfo.drawPlayer.direction != 1)
+			{
+				vector.X = drawInfo.drawPlayer.width - vector.X;
+			}
+
+			if (drawInfo.drawPlayer.gravDir != 1f)
+			{
+				vector.Y -= drawInfo.drawPlayer.height;
+			}
+
+			Vector2 vector2 = new Vector2(0f, 8f) + new Vector2((drawInfo.drawPlayer.direction - 1) * 2, 6f);
+			Vector2 vector3 = drawInfo.Position - Main.screenPosition + vector * new Vector2(1f, drawInfo.drawPlayer.gravDir) + new Vector2(0f, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height) + vector2;
+			vector3 = vector3.Floor();
+			SpriteEffects sEffect = drawInfo.drawPlayer.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+			item = new DrawData(ballonTexture, vector3, new Rectangle(0, ballonTexture.Height / 4 * num, ballonTexture.Width / 2, ballonTexture.Height / 4), drawInfo.colorArmorBody, drawInfo.drawPlayer.bodyRotation, new Vector2(26 + drawInfo.drawPlayer.direction * 4, 28f + drawInfo.drawPlayer.gravDir * 6f), 1f, sEffect);
+			item.shader = drawInfo.cBalloon;
+			item_glow = new DrawData(ballonTexture, vector3, new Rectangle(ballonTexture.Width / 2, ballonTexture.Height / 4 * num, ballonTexture.Width / 2, ballonTexture.Height / 4), new Color(1f, 1f, 1f, 0), drawInfo.drawPlayer.bodyRotation, new Vector2(26 + drawInfo.drawPlayer.direction * 4, 28f + drawInfo.drawPlayer.gravDir * 6f), 1f, sEffect);
+			item_glow.shader = drawInfo.cBalloon;
+			drawInfo.DrawDataCache.Add(item);
+			drawInfo.DrawDataCache.Add(item_glow);
+		}
+		base.DrawEffects(drawInfo, ref r, ref g, ref b, ref a, ref fullBright);
 	}
 }

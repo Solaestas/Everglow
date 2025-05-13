@@ -1,9 +1,8 @@
-using Everglow.Commons.DataStructures;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
 public class FurnaceCopperGear_Large : ModTile
 {
@@ -52,7 +51,7 @@ public class FurnaceCopperGear_Large : ModTile
 		}
 		Vector2 drawPos = new Point(i, j).ToWorldCoordinates() - Main.screenPosition + offsetScreen;
 		int style = tile.TileFrameX / 18;
-		Rectangle frame = new Rectangle(style * 48, 0, 48, 48);
+		var frame = new Rectangle(style * 48, 0, 48, 48);
 		float timeValue = (float)Main.time / 100f + MathF.Sin(i + j) * 6;
 		int rotDir = (int)(((i + j) % 2 - 0.5f) * 2);
 

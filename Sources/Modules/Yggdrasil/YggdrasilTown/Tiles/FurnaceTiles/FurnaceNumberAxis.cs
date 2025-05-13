@@ -137,6 +137,16 @@ public class FurnaceNumberAxis : BackgroundVFX
 			bars.Add(topLeft, GetColor(topLeft), new Vector3(frameXY / texture.Size(), 0));
 			bars.Add(bottomRight, GetColor(bottomRight), new Vector3(new Vector2(frameXY.X + frameSize.X, frameXY.Y + frameSize.Y) / texture.Size(), 0));
 			bars.Add(bottomLeft, GetColor(bottomLeft), new Vector3(new Vector2(frameXY.X, frameXY.Y + frameSize.Y) / texture.Size(), 0));
+
+			frameXY = new Vector2(36, value * frameSize.Y);
+			float reflectValue = 2f;
+			bars.Add(topLeft, GetColor(topLeft) * reflectValue, new Vector3(frameXY / texture.Size(), 0));
+			bars.Add(topRight, GetColor(topRight) * reflectValue, new Vector3(new Vector2(frameXY.X + frameSize.X, frameXY.Y) / texture.Size(), 0));
+			bars.Add(bottomRight, GetColor(bottomRight) * reflectValue, new Vector3(new Vector2(frameXY.X + frameSize.X, frameXY.Y + frameSize.Y) / texture.Size(), 0));
+
+			bars.Add(topLeft, GetColor(topLeft) * reflectValue, new Vector3(frameXY / texture.Size(), 0));
+			bars.Add(bottomRight, GetColor(bottomRight) * reflectValue, new Vector3(new Vector2(frameXY.X + frameSize.X, frameXY.Y + frameSize.Y) / texture.Size(), 0));
+			bars.Add(bottomLeft, GetColor(bottomLeft) * reflectValue, new Vector3(new Vector2(frameXY.X, frameXY.Y + frameSize.Y) / texture.Size(), 0));
 		}
 
 		if (bars.Count <= 0)

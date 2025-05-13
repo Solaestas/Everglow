@@ -262,27 +262,7 @@ public class MeltingInputBox : ModTile
 			Chest chest = Main.chest[chestIndex];
 			if(chest.frame == 0)
 			{
-				int totalValue = 0;
-				foreach(var item in chest.item)
-				{
-					if(item != null)
-					{
-						float itemValue = 1 + item.value / (100 + MathF.Sqrt(item.value * 10));
-						int rare = Math.Min(10, item.rare);
-						float rareValue = 6f - (rare - 10) * (rare - 10) / 20f;
-						int value = (int)(rareValue * itemValue * item.stack);
-						//if(item.stack > 0)
-						//{
-						//	Main.NewText(rareValue, Color.Yellow);
-						//	Main.NewText(itemValue, Color.Red);
-						//	Main.NewText(item.stack, Color.Green);
-						//}
-						totalValue += value;
-						item.stack = 0;
-					}
-				}
-				FurnacePlayer fPlayer = player.GetModPlayer<FurnacePlayer>();
-				fPlayer.FurnaceScore += totalValue;
+				
 			}
 			string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY); // This gets the ContainerName text for the currently selected language
 			player.cursorItemIconText = chest.name.Length > 0 ? chest.name : defaultName;

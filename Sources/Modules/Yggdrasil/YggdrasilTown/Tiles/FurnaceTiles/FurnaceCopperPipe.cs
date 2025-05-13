@@ -1,4 +1,4 @@
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
 public class FurnaceCopperPipe : ModTile
 {

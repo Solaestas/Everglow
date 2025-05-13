@@ -1,4 +1,6 @@
 
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 
 public class FurnaceCopperPipe_Large_Item : ModItem
@@ -7,7 +9,7 @@ public class FurnaceCopperPipe_Large_Item : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.FurnaceCopperPipe_Large_V>());
+		Item.DefaultToPlaceableTile(ModContent.TileType<FurnaceCopperPipe_Large_V>());
 		Item.width = 16;
 		Item.height = 16;
 	}
@@ -21,12 +23,12 @@ public class FurnaceCopperPipe_Large_Item : ModItem
 		}
 		if(State == 0)
 		{
-			Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.FurnaceCopperPipe_Large_H>());
+			Item.DefaultToPlaceableTile(ModContent.TileType<FurnaceCopperPipe_Large_H>());
 			Item.placeStyle = 3;
 		}
 		else if(State == 1)
 		{
-			Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.FurnaceCopperPipe_Large_V>());
+			Item.DefaultToPlaceableTile(ModContent.TileType<FurnaceCopperPipe_Large_V>());
 			Item.placeStyle = 3;
 		}
 	}

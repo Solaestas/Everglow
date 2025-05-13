@@ -8,8 +8,10 @@ using Everglow.Yggdrasil.YggdrasilTown.Walls;
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
 [Pipeline(typeof(WCSPipeline_PointWrap))]
-public class RoadSignPost_ToArenaVFX : ForegroundVFX
+public class RoadSignPost_ToArenaVFX : BackgroundVFX
 {
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawTiles;
+
 	public override void Update()
 	{
 		base.Update();

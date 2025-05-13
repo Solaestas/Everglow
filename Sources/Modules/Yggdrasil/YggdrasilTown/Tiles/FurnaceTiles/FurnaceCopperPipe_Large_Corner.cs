@@ -2,7 +2,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
 public class FurnaceCopperPipe_Large_Corner : ModTile
 {
@@ -34,7 +34,7 @@ public class FurnaceCopperPipe_Large_Corner : ModTile
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
 	{
 		var tile = Main.tile[i, j];
-		Point center = new Point(i - (tile.TileFrameX % 54) / 18 + 1, j - (tile.TileFrameY % 54) / 18 + 1);
+		var center = new Point(i - tile.TileFrameX % 54 / 18 + 1, j - tile.TileFrameY % 54 / 18 + 1);
 		int style = -1;
 
 		var upTile = Main.tile[center + new Point(0, -2)];
@@ -49,7 +49,6 @@ public class FurnaceCopperPipe_Large_Corner : ModTile
 			var downOrigin = center + new Point(-1, 2);
 			SetFrameStyleH(rightOrigin, false);
 			SetFrameStyleV(downOrigin, false);
-
 		}
 		if (ConnectLeft(leftTile) == 18 && ConnectDown(downTile) == 0)
 		{
@@ -135,7 +134,7 @@ public class FurnaceCopperPipe_Large_Corner : ModTile
 	{
 		var tile = Main.tile[topLeft];
 		int style;
-		if(leftToCorner)
+		if (leftToCorner)
 		{
 			int origStyle = tile.TileFrameX / 54;
 			style = 1;

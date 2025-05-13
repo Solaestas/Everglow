@@ -2,14 +2,14 @@ using Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 
-public class SteamBoiler_Item : ModItem
+public class FloorScaleForPlayers_Item : ModItem
 {
 	public int State = 0;
 
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<SteamBoiler>());
-		Item.width = 36;
-		Item.height = 28;
+		Item.DefaultToPlaceableTile(ModContent.TileType<FloorScaleForPlayers>());
+		Item.width = 34;
+		Item.height = 20;
 	}
 }

@@ -2,7 +2,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
 public class FurnaceCopperPipe_Large_V : ModTile
 {
@@ -34,7 +34,7 @@ public class FurnaceCopperPipe_Large_V : ModTile
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
 	{
 		var tile = Main.tile[i, j];
-		Point topLeft = new Point(i - (tile.TileFrameX % 36) / 18, j - tile.TileFrameY / 18);
+		var topLeft = new Point(i - tile.TileFrameX % 36 / 18, j - tile.TileFrameY / 18);
 		int style = 3;
 
 		var upTile = Main.tile[topLeft + new Point(0, -1)];
@@ -85,7 +85,7 @@ public class FurnaceCopperPipe_Large_V : ModTile
 	{
 		if (tile.TileType == ModContent.TileType<FurnaceCopperPipe_Large_Corner>())
 		{
-			return (tile.TileFrameX == 0 && tile.TileFrameY == 36) || (tile.TileFrameX == 72 && tile.TileFrameY == 36);
+			return tile.TileFrameX == 0 && tile.TileFrameY == 36 || tile.TileFrameX == 72 && tile.TileFrameY == 36;
 		}
 		return tile.TileType == Type && tile.TileFrameX % 36 == 0 && tile.TileFrameY == 36;
 	}
@@ -94,7 +94,7 @@ public class FurnaceCopperPipe_Large_V : ModTile
 	{
 		if (tile.TileType == ModContent.TileType<FurnaceCopperPipe_Large_Corner>())
 		{
-			return (tile.TileFrameX == 108 && tile.TileFrameY == 0) || (tile.TileFrameX == 180 && tile.TileFrameY == 0);
+			return tile.TileFrameX == 108 && tile.TileFrameY == 0 || tile.TileFrameX == 180 && tile.TileFrameY == 0;
 		}
 		return tile.TileType == Type && tile.TileFrameX % 36 == 0 && tile.TileFrameY == 0;
 	}
@@ -102,7 +102,7 @@ public class FurnaceCopperPipe_Large_V : ModTile
 	public void SetFrame(int style, Point topLeft)
 	{
 		var tile = Main.tile[topLeft];
-		if(tile.TileType == Type)
+		if (tile.TileType == Type)
 		{
 			for (int x = 0; x < 2; x++)
 			{

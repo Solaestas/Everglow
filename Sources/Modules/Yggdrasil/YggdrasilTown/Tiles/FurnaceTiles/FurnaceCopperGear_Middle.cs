@@ -2,7 +2,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
 public class FurnaceCopperGear_Middle : ModTile
 {
@@ -51,7 +51,7 @@ public class FurnaceCopperGear_Middle : ModTile
 		}
 		Vector2 drawPos = new Point(i, j).ToWorldCoordinates() - Main.screenPosition + offsetScreen;
 		int style = tile.TileFrameX / 18;
-		Rectangle frame = new Rectangle(style * 32, 0, 32, 32);
+		var frame = new Rectangle(style * 32, 0, 32, 32);
 		float timeValue = (float)Main.time / 60f + MathF.Sin(i + j) * 6;
 		int rotDir = (int)(((i + j) % 2 - 0.5f) * 2);
 		spriteBatch.Draw(texture, drawPos, frame, Lighting.GetColor(i, j), timeValue * rotDir, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);

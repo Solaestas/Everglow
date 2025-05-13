@@ -1,3 +1,5 @@
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 
 public class FurnaceLavaLamp_Item : ModItem
@@ -6,7 +8,7 @@ public class FurnaceLavaLamp_Item : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.FurnaceLavaLamp_H>());
+		Item.DefaultToPlaceableTile(ModContent.TileType<FurnaceLavaLamp_H>());
 		Item.width = 16;
 		Item.height = 16;
 	}
@@ -20,11 +22,11 @@ public class FurnaceLavaLamp_Item : ModItem
 		}
 		if (State == 0)
 		{
-			Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.FurnaceLavaLamp_H>());
+			Item.DefaultToPlaceableTile(ModContent.TileType<FurnaceLavaLamp_H>());
 		}
 		else if (State == 1)
 		{
-			Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.FurnaceLavaLamp_V>());
+			Item.DefaultToPlaceableTile(ModContent.TileType<FurnaceLavaLamp_V>());
 		}
 	}
 }
