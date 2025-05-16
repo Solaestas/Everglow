@@ -1,7 +1,6 @@
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.Furnace;
-[AutoloadEquip(EquipType.Balloon)]
 public class HotAirBalloon : ModItem
 {
 	public const int JumpSpeedBoost = 2;
