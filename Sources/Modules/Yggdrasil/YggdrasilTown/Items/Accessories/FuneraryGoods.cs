@@ -8,8 +8,8 @@ public class FuneraryGoods : ModItem
 	public override void SetDefaults()
 	{
 		Item.accessory = true;
-		Item.width = 28;
-		Item.height = 20;
+		Item.width = 18;
+		Item.height = 22;
 
 		Item.value = Item.buyPrice(platinum: 0, gold: 1);
 		Item.rare = ItemRarityID.Blue;

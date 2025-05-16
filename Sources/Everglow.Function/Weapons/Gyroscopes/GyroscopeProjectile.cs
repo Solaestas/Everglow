@@ -1,5 +1,6 @@
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Weapons.Whips;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Commons.Weapons.Gyroscopes;
@@ -314,6 +315,7 @@ public abstract class GyroscopeProjectile : ModProjectile
 								Power = MaxPower;
 							}
 							WhipCoolingsForProjectileWhoAmI.Add((proj.whoAmI, 10));
+							SoundEngine.PlaySound(SoundID.DrumTomHigh, Projectile.Center);
 							WhipSpark(36);
 							return;
 						}

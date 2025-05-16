@@ -5,6 +5,7 @@
   <ItemGroup>
                 <ProjectReference Include="..\CagedDomain\Everglow.CagedDomain.csproj" />
                 <ProjectReference Include="..\Food\Everglow.Food.csproj" />
+                <ProjectReference Include="..\SpellAndSkull\Everglow.SpellAndSkull.csproj" />
                 <ProjectReference Include="..\SubSpace\Everglow.SubSpace.csproj" />
   </ItemGroup>
   <ItemGroup>

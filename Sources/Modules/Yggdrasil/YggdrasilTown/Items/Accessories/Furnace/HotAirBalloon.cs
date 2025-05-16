@@ -1,7 +1,7 @@
 using Terraria.DataStructures;
-using Terraria.GameContent;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.Furnace;
+[AutoloadEquip(EquipType.Balloon)]
 public class HotAirBalloon : ModItem
 {
 	public const int JumpSpeedBoost = 2;
@@ -72,7 +72,6 @@ internal class HotAirBalloonPlayer : ModPlayer
 
 	public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
 	{
-		Main.NewText(drawInfo.drawPlayer.balloon);
 		if (HotAirBalloonEnable && drawInfo.drawPlayer.balloon <= 0)
 		{
 			DrawData item;
