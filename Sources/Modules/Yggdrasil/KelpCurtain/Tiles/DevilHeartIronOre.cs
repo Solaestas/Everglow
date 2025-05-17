@@ -1,28 +1,21 @@
-namespace Everglow.Yggdrasil.Common.Blocks;
+using Everglow.Yggdrasil.KelpCurtain.Dusts;
 
-public class YggdrasilGrayRock : ModTile
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles;
+
+public class DevilHeartIronOre : ModTile
 {
-	public override void PostSetDefaults()
+	public override void SetStaticDefaults()
 	{
 		Main.tileSolid[Type] = true;
-		Main.tileMerge[Type][(ushort)ModContent.TileType<YggdrasilTown.Tiles.StoneScaleWood>()] = true;
-		Main.tileMerge[(ushort)ModContent.TileType<YggdrasilTown.Tiles.StoneScaleWood>()][Type] = true;
+		Main.tileMergeDirt[Type] = false;
+		Main.tileMerge[Type][(ushort)ModContent.TileType<JadeizedBone>()] = true;
+		Main.tileMerge[(ushort)ModContent.TileType<JadeizedBone>()][Type] = true;
+		Main.tileBlockLight[Type] = false;
 
-		Main.tileMerge[Type][(ushort)ModContent.TileType<YggdrasilTown.Tiles.LampWood.DarkForestSoil>()] = true;
-		Main.tileMerge[(ushort)ModContent.TileType<YggdrasilTown.Tiles.LampWood.DarkForestSoil>()][Type] = true;
-
-		Main.tileMerge[Type][(ushort)ModContent.TileType<YggdrasilTown.Tiles.LampWood.DarkForestGrass>()] = true;
-		Main.tileMerge[(ushort)ModContent.TileType<YggdrasilTown.Tiles.LampWood.DarkForestGrass>()][Type] = true;
-
-		Main.tileMergeDirt[Type] = true;
-		Main.tileBlockLight[Type] = true;
-
-		TileID.Sets.ChecksForMerge[(ushort)ModContent.TileType<YggdrasilTown.Tiles.LampWood.DarkForestSoil>()] = true;
-
-		DustType = DustID.BorealWood;
-		MinPick = 180;
-		HitSound = SoundID.Dig;
-		AddMapEntry(new Color(96, 97, 99));
+		TileID.Sets.ChecksForMerge[(ushort)ModContent.TileType<JadeizedBone>()] = true;
+		DustType = ModContent.DustType<DevilHeartIronDust>();
+		MinPick = 110;
+		AddMapEntry(new Color(124, 17, 30));
 	}
 
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
@@ -128,7 +121,7 @@ public class YggdrasilGrayRock : ModTile
 			down = -1;
 			right = -1;
 		}
-		int dirtType = ModContent.TileType<YggdrasilTown.Tiles.LampWood.DarkForestSoil>();
+		int dirtType = ModContent.TileType<JadeizedBone>();
 
 		// WorldGen.TileMergeAttempt(Type, ModContent.TileType<YggdrasilTown.Tiles.LampWood.DarkForestSoil>(), ref up, ref down, ref left, ref right, ref upLeft, ref upRight, ref downLeft, ref downRight);
 		int randomCase;
