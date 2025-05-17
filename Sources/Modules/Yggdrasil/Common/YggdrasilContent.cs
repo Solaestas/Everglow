@@ -13,12 +13,15 @@ public class YggdrasilContent
 	{
 		Mod everglow = ModLoader.GetMod("Everglow");
 		if (everglow != null)
-			return MusicLoader.GetMusicSlot(everglow, "Yggdrasil/Musics/" + path);
+		{
+			return MusicLoader.GetMusicSlot(everglow, path);
+		}
 		else
 		{
 			return 0;
 		}
 	}
+
 	/// <summary>
 	/// 对于天穹模块专用的Glowmask获取
 	/// </summary>

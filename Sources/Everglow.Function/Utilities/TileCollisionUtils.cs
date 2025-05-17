@@ -10,7 +10,37 @@ public static class TileCollisionUtils
 		}
 		Vector2 coord = checkPoint / 16f;
 		Tile tile = Main.tile[(int)coord.X, (int)coord.Y];
-		return TileID.Sets.Platforms[tile.TileType] || Collision.SolidCollision(checkPoint, 0, 0);
+		return TileID.Sets.Platforms[tile.TileType] || TileID.Sets.IgnoredByNpcStepUp[tile.TileType] || Collision.SolidCollision(checkPoint, 0, 0);
+	}
+
+	public static bool PlatformCollision(Vector2 checkPoint, float width = 0, float height = 0)
+	{
+		if (checkPoint.X < 320 || checkPoint.X > Main.maxTilesX * 16 || checkPoint.Y < 320 || checkPoint.Y > Main.maxTilesY * 16)
+		{
+			return false;
+		}
+		Vector2 coord = checkPoint / 16f;
+		bool hasPlatform = false;
+		for (int i = 0; i < width / 16 + 1; i++)
+		{
+			for (int j = 0; j < height / 16 + 1; j++)
+			{
+				Tile tile = Main.tile[(int)coord.X + i, (int)coord.Y + j];
+				if (tile.HasTile)
+				{
+					if (TileID.Sets.Platforms[tile.TileType] || TileID.Sets.IgnoredByNpcStepUp[tile.TileType])
+					{
+						hasPlatform = true;
+						break;
+					}
+				}
+			}
+			if (hasPlatform)
+			{
+				break;
+			}
+		}
+		return hasPlatform || Collision.SolidCollision(checkPoint, (int)width, (int)height);
 	}
 
 	public static bool CanPlaceMultiAtTopTowardsUpRight(int i, int j, int width, int height)

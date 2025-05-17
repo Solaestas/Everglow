@@ -13,11 +13,11 @@ public class GradientColor
 
 	public Color GetColor(float position)
 	{
-		if (position < 0 || position < colorList[0].Item2)
+		if (position <= 0 || position < colorList[0].Item2)
 		{
 			return colorList[0].Item1;
 		}
-		else if (position > 1 || position > colorList[colorList.Count - 1].Item2)
+		else if (position >= 1 || position > colorList[colorList.Count - 1].Item2)
 		{
 			return colorList[colorList.Count - 1].Item1;
 		}
@@ -25,7 +25,7 @@ public class GradientColor
 		{
 			for (int i = 0; i < colorList.Count - 1; i++)
 			{
-				if (position > colorList[i].Item2 && position < colorList[i + 1].Item2)
+				if (position >= colorList[i].Item2 && position < colorList[i + 1].Item2)
 				{
 					float lerpValue = (position - colorList[i].Item2) / (colorList[i + 1].Item2 - colorList[i].Item2);
 					return Color.Lerp(colorList[i].Item1, colorList[i + 1].Item1, lerpValue);
