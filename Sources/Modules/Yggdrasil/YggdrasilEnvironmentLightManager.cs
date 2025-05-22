@@ -38,7 +38,7 @@ public class YggdrasilEnvironmentLightManager : ModSystem
 		{ YggdrasilScene.LampWoodForest, new LightScene(new Vector3(0.1f, 0.1f, 0.2f), 0.1f) },
 		{ YggdrasilScene.TwilightForest, new LightScene(new Vector3(1f, 238 / 255f, 188 / 255f), 0.1f) },
 		{ YggdrasilScene.ChallengerJail, new LightScene(new Vector3(0.1f, 0.1f, 0.2f), 0f) },
-		{ YggdrasilScene.KelpCurtain, new LightScene(/*new Vector3(1f, 238 / 255f, 188 / 255f)*/Vector3.zero, 0.9f) },
+		{ YggdrasilScene.KelpCurtain, new LightScene(new Vector3(1f, 238 / 255f, 188 / 255f), 0.9f) },
 	};
 
 	public override void PostUpdateEverything()

@@ -24,6 +24,15 @@ public abstract class GyroscopeProjectile : ModProjectile
 
 	public int SummonBuffType;
 
+	public int FlyHitCooling = 0;
+
+	public int FlyHitCoolingMax = 120;
+
+	/// <summary>
+	/// When take off for a targer strike, this set true. When touch down, turned false.
+	/// </summary>
+	public bool FlyingMode = false;
+
 	/// <summary>
 	/// Item1 : Projectile WhoAMI; Item2 : Cooling Timer
 	/// </summary>
@@ -96,10 +105,29 @@ public abstract class GyroscopeProjectile : ModProjectile
 			ApproachMyOwner();
 		}
 		CheckWhipHit();
+
+		// Power = 600;
 		Power -= 0.5f;
 		if (Power < 1)
 		{
 			Projectile.Kill();
+		}
+		if (FlyHitCooling > 0)
+		{
+			FlyHitCooling--;
+		}
+		else
+		{
+			FlyHitCooling = 0;
+		}
+		CheckTooTar();
+	}
+
+	public virtual void CheckTooTar()
+	{
+		if ((Projectile.Center - Owner.Center).Length() > 2000 || Projectile.Center.Y > Owner.Center.Y + 800)
+		{
+			Projectile.Center = Owner.Center;
 		}
 	}
 
@@ -202,68 +230,51 @@ public abstract class GyroscopeProjectile : ModProjectile
 			EnemyTarget = -1;
 			return;
 		}
-		if ((npc.Center - Projectile.Center).Y < -120)
+		if ((npc.Center - Projectile.Center).Y < -300)
 		{
 			EnemyTarget = -1;
 			return;
 		}
 
 		// oscillate over target.
-		Vector2 targetPos = npc.Center + new Vector2(120 * MathF.Sin((float)Main.time * 0.05f + Projectile.whoAmI), 0);
-		if (!TileCollisionUtils.PlatformCollision(targetPos))
+		if (!FlyingMode)
 		{
-			int count = 0;
-			while (!TileCollisionUtils.PlatformCollision(targetPos))
+			Vector2 targetProjectToSurface = npc.Center + new Vector2(120 * MathF.Sin((float)Main.time * 0.05f + Projectile.whoAmI), 0);
+			if (!TileCollisionUtils.PlatformCollision(targetProjectToSurface))
 			{
-				count++;
-				targetPos.Y += 8;
-				if (count > 40)
+				int count = 0;
+				while (!TileCollisionUtils.PlatformCollision(targetProjectToSurface))
 				{
-					break;
-				}
-			}
-		}
-		if (TileCollisionUtils.PlatformCollision(targetPos))
-		{
-			int count = 0;
-			while (TileCollisionUtils.PlatformCollision(targetPos))
-			{
-				count++;
-				targetPos.Y -= 8;
-				if (count > 40)
-				{
-					break;
-				}
-			}
-		}
-		Vector2 toTarget = targetPos - Projectile.velocity - Projectile.Center;
-		if (toTarget.Length() > 1)
-		{
-			toTarget = Vector2.Normalize(toTarget);
-			Projectile.velocity.X += toTarget.X * 0.5f;
-			if (Projectile.velocity.Length() > MaxSpeed())
-			{
-				Projectile.velocity = Vector2.Normalize(Projectile.velocity) * MaxSpeed();
-			}
-			if (!TileCollisionUtils.PlatformCollision(Projectile.Bottom))
-			{
-				Projectile.velocity.Y += 0.5f;
-			}
-			else
-			{
-				for (int i = 0; i < 100; i++)
-				{
-					if (TileCollisionUtils.PlatformCollision(Projectile.Bottom))
-					{
-						Projectile.position.Y -= 1;
-						Power -= 0.2f;
-					}
-					else
+					count++;
+					targetProjectToSurface.Y += 8;
+					if (count > 40)
 					{
 						break;
 					}
 				}
-				BottomSpark(2);
+			}
+			if (TileCollisionUtils.PlatformCollision(targetProjectToSurface))
+			{
+				int count = 0;
+				while (TileCollisionUtils.PlatformCollision(targetProjectToSurface))
+				{
+					count++;
+					targetProjectToSurface.Y -= 8;
+					if (count > 40)
+					{
+						break;
+					}
+				}
+			}
+			Vector2 toTarget = targetProjectToSurface - Projectile.velocity - Projectile.Center;
+			if (toTarget.Length() > 1)
+			{
+				toTarget = Vector2.Normalize(toTarget);
+				Projectile.velocity.X += toTarget.X * 0.5f;
+				if (Projectile.velocity.Length() > MaxSpeed())
+				{
+					Projectile.velocity = Vector2.Normalize(Projectile.velocity) * MaxSpeed();
+				}
 			}
 			if (Power > 400)
 			{
@@ -272,7 +283,83 @@ public abstract class GyroscopeProjectile : ModProjectile
 					Projectile.velocity.Y += -2;
 				}
 			}
+			if (CanFlyHit(npc))
+			{
+				float timePredict = 8; // MathF.Sqrt(MathF.Abs(npc.Center.X - Projectile.Center.X)) * 2;
+				Vector2 targetPos = npc.Center + npc.velocity * timePredict;
+
+				// Main.NewText(timePredict);
+				// Calculate a parabola.
+				float distanceX = MathF.Abs(targetPos.X - Projectile.Center.X);
+				float velX = MathF.Sqrt(distanceX) / 2;
+				if (targetPos.X < Projectile.Center.X)
+				{
+					velX *= -1;
+				}
+				float velY = -2 * MathF.Abs(velX);
+				float timeToHit = distanceX / MathF.Abs(velX);
+				var takeOffVel = new Vector2(velX, velY);
+				Projectile.velocity = takeOffVel;
+				Projectile.position += Projectile.velocity;
+				FlyingMode = true;
+				FlyHitCooling = FlyHitCoolingMax;
+
+				// Dust dust = Dust.NewDustDirect(targetPos, 0, 0, DustID.LastPrism);
+				// dust.velocity *= 0;
+				// dust.noGravity = true;
+				// dust.scale = 3;
+			}
 		}
+
+		if (!TileCollisionUtils.PlatformCollision(Projectile.position, Projectile.width, Projectile.height))
+		{
+			Projectile.velocity.Y += 0.5f;
+		}
+		else
+		{
+			FlyingMode = false;
+			for (int i = 0; i < 100; i++)
+			{
+				if (TileCollisionUtils.PlatformCollision(Projectile.position, Projectile.width, Projectile.height))
+				{
+					Projectile.position.Y -= 1;
+					Power -= 0.2f;
+				}
+				else
+				{
+					break;
+				}
+			}
+			BottomSpark(2);
+		}
+	}
+
+	public bool CanFlyHit(NPC target)
+	{
+		if (FlyHitCooling == 0)
+		{
+			if (TileCollisionUtils.PlatformCollision(Projectile.position, Projectile.width, Projectile.height + 16))
+			{
+				var checkPos = target.Center;
+				float deltaY = checkPos.Y - Projectile.Center.Y;
+				float deltaXOld = checkPos.X - (Projectile.Center.X - Projectile.velocity.X);
+				float deltaX = checkPos.X - Projectile.Center.X;
+				float deltaXNew = checkPos.X - (Projectile.Center.X + Projectile.velocity.X);
+				float slope = Math.Abs(deltaY + Math.Abs(deltaX));
+				float slopeOld = Math.Abs(deltaY + Math.Abs(deltaXOld));
+				float slopeNew = Math.Abs(deltaY + Math.Abs(deltaXNew));
+
+				// When the slope closest to 45 degree, take off.
+				if (deltaY < -10 && deltaY > -200)
+				{
+					if (slope < slopeNew && slope < slopeOld)
+					{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	/// <summary>

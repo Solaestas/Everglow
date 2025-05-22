@@ -10,9 +10,9 @@ public class LampWoodForest : ModBiome
 
 	public override string BestiaryIcon => "Everglow/Yggdrasil/YggdrasilTown/YggdrasilTownIcon";
 
-	public override string BackgroundPath => "Everglow/" + ModAsset.LampWood_MapBackground_Path;
+	public override string BackgroundPath => ModAsset.LampWood_MapBackground_Mod;
 
-	public override string MapBackground => "Everglow/" + ModAsset.LampWood_MapBackground_Path;
+	public override string MapBackground => ModAsset.LampWood_MapBackground_Mod;
 
 	public override ModWaterStyle WaterStyle => ModContent.GetInstance<Water.YggdrasilTownWaterStyle>();
 

@@ -21,8 +21,7 @@ public class KelpCurtainBackground : ModSystem
 
 	public override void PostUpdatePlayers()
 	{
-		var KelpCurtainBiome = new KelpCurtainBiome();
-		ZoneKelp = KelpCurtainBiome.IsBiomeActive(Main.LocalPlayer);
+		ZoneKelp = Main.LocalPlayer.InModBiome<KelpCurtainBiome>();
 	}
 
 	public float alpha = 0f;
@@ -30,7 +29,7 @@ public class KelpCurtainBackground : ModSystem
 	public override void PostUpdateEverything()// 开启地下背景
 	{
 		const float increase = 0.02f;
-		if (BiomeActive() && Main.BackgroundEnabled)
+		if (Main.LocalPlayer.InModBiome<KelpCurtainBiome>() && Main.BackgroundEnabled)
 		{
 			if (alpha < 1)
 			{
@@ -56,22 +55,6 @@ public class KelpCurtainBackground : ModSystem
 		}
 	}
 
-	/// <summary>
-	/// 判定是否开启地形
-	/// </summary>
-	/// <returns></returns>
-	public static bool BiomeActive()
-	{
-		if (Main.screenPosition.Y > 268320 && Main.screenPosition.Y < 302000)
-		{
-			if (SubworldSystem.IsActive<YggdrasilWorld>())
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
 	private void DrawFarBG(Color baseColor)
 	{
 		var texSky = ModAsset.KelpCurtainSky.Value;
@@ -79,12 +62,13 @@ public class KelpCurtainBackground : ModSystem
 		var texC0 = ModAsset.KelpCurtainMiddleClose.Value;
 		var texC1 = ModAsset.KelpCurtainMiddle.Value;
 		var texC2 = ModAsset.KelpCurtainFar.Value;
-
-		BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f), baseColor, 268320, 302000, true, true);
-		BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texC2.Size(), 0.10f), baseColor, 268320, 302000, false, false);
-		BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texC1.Size(), 0.15f), baseColor, 268320, 302000, false, false);
-		BackgroundManager.QuickDrawBG(texC0, GetDrawRect(texC1.Size(), 0.25f), baseColor, 268320, 302000, false, false);
-		BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f), baseColor, 268320, 302000, false, false);
+		int minY = (int)(Main.maxTilesY * 0.72f * 16);
+		int maxY = (int)(Main.maxTilesY * 0.9f * 16);
+		BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f), baseColor, minY, maxY, true, true);
+		BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texC2.Size(), 0.10f), baseColor, minY, maxY, false, false);
+		BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texC1.Size(), 0.15f), baseColor, minY, maxY, false, false);
+		BackgroundManager.QuickDrawBG(texC0, GetDrawRect(texC1.Size(), 0.25f), baseColor, minY, maxY, false, false);
+		BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f), baseColor, minY, maxY, false, false);
 	}
 
 	/// <summary>

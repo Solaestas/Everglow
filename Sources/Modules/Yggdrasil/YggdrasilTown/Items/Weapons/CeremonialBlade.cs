@@ -21,7 +21,7 @@ public class CeremonialBlade : ModItem
 		Item.noUseGraphic = true;
 		Item.noMelee = true;
 
-		Item.rare = ItemRarityID.Orange;
+		Item.rare = ItemRarityID.Blue;
 		Item.value = Item.buyPrice(gold: 3);
 
 		Item.shoot = ModContent.ProjectileType<CeremonialBladeProj>();

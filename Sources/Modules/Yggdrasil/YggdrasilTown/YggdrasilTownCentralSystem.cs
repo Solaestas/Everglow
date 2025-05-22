@@ -162,6 +162,20 @@ public class YggdrasilTownCentralSystem : ModSystem
 		return false;
 	}
 
+	public static bool InFurnace_YggdrasilTown()
+	{
+		if(Main.dedServ)
+		{
+			return false;
+		}
+		var tileCoordiante = Main.LocalPlayer.Center.ToTileCoordinates();
+		if (SubworldSystem.Current is YggdrasilWorld)
+		{
+			return tileCoordiante.X >= TownArea.X && tileCoordiante.X <= TownArea.X + TownArea.Width && tileCoordiante.Y >= TownArea.Y + TownArea.Height / 2 && tileCoordiante.Y <= TownArea.Y + TownArea.Height;
+		}
+		return false;
+	}
+
 	public static void TryEnterArena()
 	{
 		if (FightingRequestPlayerNPCType.X >= 0 && FightingRequestPlayerNPCType.Y >= 0)

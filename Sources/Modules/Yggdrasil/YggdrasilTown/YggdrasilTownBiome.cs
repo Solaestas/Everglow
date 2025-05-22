@@ -7,7 +7,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown;
 
 public class YggdrasilTownBiome : ModBiome
 {
-	public override int Music => YggdrasilContent.QuickMusic(ModAsset.NewYggdrasilTownBGM_Path);
+	public override int Music => GetMusic();
 
 	public int GetMusic()
 	{
@@ -17,6 +17,10 @@ public class YggdrasilTownBiome : ModBiome
 			if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
 			{
 				return MusicLoader.GetMusicSlot(everglow, ModAsset.Arena_BGM_Path);
+			}
+			if (YggdrasilTownCentralSystem.InFurnace_YggdrasilTown())
+			{
+				return MusicLoader.GetMusicSlot(everglow, ModAsset.FurnaceArea_BGM_Path);
 			}
 			return !Main.dayTime ? MusicLoader.GetMusicSlot(everglow, ModAsset.NewYggdrasilTownBGM_Path) : MusicLoader.GetMusicSlot(everglow, ModAsset.YggdrasilTownBGM_Path);
 		}

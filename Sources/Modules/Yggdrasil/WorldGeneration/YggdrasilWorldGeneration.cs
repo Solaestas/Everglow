@@ -8,7 +8,9 @@ using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 using Terraria.IO;
+using Terraria.Utilities;
 using Terraria.WorldBuilding;
+using static Everglow.Yggdrasil.WorldGeneration.KelpCurtainGeneration;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilTownGeneration;
 
 namespace Everglow.Yggdrasil.WorldGeneration;
@@ -25,12 +27,12 @@ public class YggdrasilWorldGeneration : ModSystem
 		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
 			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildtheTreeWorld");
-			BuildtheTreeWorld();
+			TotalInitialize();
 			Main.spawnTileX = 1400;
 			Main.spawnTileY = 20630;
 			BuildYggdrasilTown();
 
-			// BuildKelpCurtain();
+			BuildKelpCurtain();
 			EndGenPass();
 			Main.statusText = string.Empty;
 		}
@@ -57,6 +59,23 @@ public class YggdrasilWorldGeneration : ModSystem
 	public static int[,] GlobalPerlinPixelB = new int[1024, 1024];
 	public static int[,] GlobalPerlinPixel2 = new int[1024, 1024];
 	public static int[,] GlobalCellPixel = new int[1024, 1024];
+
+	public static int[,] PerlinPixelR = new int[1024, 1024];
+	public static int[,] PerlinPixelG = new int[1024, 1024];
+	public static int[,] PerlinPixelB = new int[1024, 1024];
+	public static int[,] PerlinPixel2 = new int[1024, 1024];
+	public static int[,] CellPixel = new int[1024, 1024];
+
+	public static UnifiedRandom GenRand = new UnifiedRandom();
+
+	/// <summary>
+	/// 总初始化
+	/// </summary>
+	public static void TotalInitialize()
+	{
+		GenRand = WorldGen.genRand;
+		FillPerlinPixel();
+	}
 
 	/// <summary>
 	/// 噪声信息获取
@@ -1296,7 +1315,7 @@ public class YggdrasilWorldGeneration : ModSystem
 							{
 								if (tile.TileType != 21 && SafeGetTile(x + a, y + b - 1).TileType != 21)
 								{
-									tile.WallType = (ushort)ModContent.WallType<YggdrasilDirtWall>();
+									tile.WallType = (ushort)ModContent.WallType<MossProneSandSoilWall>();
 								}
 							}
 							break;
@@ -1403,22 +1422,5 @@ public class YggdrasilWorldGeneration : ModSystem
 				}
 			}
 		});
-	}
-
-	/// <summary>
-	/// 建造天穹树
-	/// </summary>
-	public static void BuildtheTreeWorld()
-	{
-		// Main.statusText = "YggdrasilStart";
-		// ShapeTile("Tree.bmp", 0, 0, 1);
-		// Main.statusText = "YggdrasilWall";
-		// ShapeTile("TreeWall.bmp", 0, 0, 2);
-		// SmoothTile();
-
-		// Main.statusText = "YggdrasilTown";
-		// ShapeTile("Tree.bmp", 0, 0, 3);
-		// Main.statusText = "YggdrasilOre";
-		// ShapeTile("Tree.bmp", 0, 0, 4);
 	}
 }

@@ -13,7 +13,6 @@ using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 using Everglow.Yggdrasil.YggdrasilTown.Walls.TwilightForest;
-using Terraria.Utilities;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
 namespace Everglow.Yggdrasil.WorldGeneration;
@@ -61,14 +60,11 @@ public class YggdrasilTownGeneration
 		BuildJellyBallHotbed();
 	}
 
-	public static int[,] PerlinPixelR = new int[1024, 1024];
-	public static int[,] PerlinPixelG = new int[1024, 1024];
-	public static int[,] PerlinPixelB = new int[1024, 1024];
-	public static int[,] PerlinPixel2 = new int[1024, 1024];
-	public static int[,] CellPixel = new int[1024, 1024];
 	public static int AzureGrottoCenterX;
 	public static Vector2 TwilightRelicCenter = new Vector2(1050, 20000);
-	public static UnifiedRandom GenRand = new UnifiedRandom();
+
+	public static Vector2 LifeLampWoodRootPos => new Vector2(Main.maxTilesX - 100, Main.maxTilesY - 560);
+
 	public static List<YggdrasilTownStreetElement> StreetConstructorsSheet;
 	public static List<YggdrasilTownStreetElement> InDoorChineseStyleHangingSheet;
 	public static List<int> TwilightBonusList;
@@ -80,7 +76,6 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void Initialize()
 	{
-		GenRand = WorldGen.genRand;
 		AzureGrottoCenterX = GenRand.Next(-100, 100) + 600;
 		FillPerlinPixel();
 		StreetConstructorsSheet = new List<YggdrasilTownStreetElement>()
@@ -150,65 +145,6 @@ public class YggdrasilTownGeneration
 			ItemID.Amethyst,
 			ItemID.Emerald,
 		};
-	}
-
-	/// <summary>
-	/// 噪声信息获取
-	/// </summary>
-	public static void FillPerlinPixel()
-	{
-		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_II_rgb.bmp");
-		Vector2 perlinCoordCenter = new Vector2(GenRand.NextFloat(0f, 1f), GenRand.NextFloat(0f, 1f));
-		imageData.ProcessPixelRows(accessor =>
-		{
-			for (int y = 0; y < accessor.Height; y++)
-			{
-				int newY = (int)(accessor.Height * perlinCoordCenter.Y + y) % accessor.Height;
-				var pixelRow = accessor.GetRowSpan(newY);
-				for (int x = 0; x < pixelRow.Length; x++)
-				{
-					int newX = (int)(accessor.Width * perlinCoordCenter.X + x) % accessor.Width;
-					ref var pixel = ref pixelRow[newX];
-					PerlinPixelR[x, y] = pixel.R;
-					PerlinPixelG[x, y] = pixel.G;
-					PerlinPixelB[x, y] = pixel.B;
-				}
-			}
-		});
-
-		imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_perlin.bmp");
-		perlinCoordCenter = new Vector2(GenRand.NextFloat(0f, 1f), GenRand.NextFloat(0f, 1f));
-		imageData.ProcessPixelRows(accessor =>
-		{
-			for (int y = 0; y < accessor.Height; y++)
-			{
-				int newY = (int)(accessor.Height * perlinCoordCenter.Y + y) % accessor.Height;
-				var pixelRow = accessor.GetRowSpan(newY);
-				for (int x = 0; x < pixelRow.Length; x++)
-				{
-					int newX = (int)(accessor.Width * perlinCoordCenter.X + x) % accessor.Width;
-					ref var pixel = ref pixelRow[newX];
-					PerlinPixel2[x, y] = pixel.R;
-				}
-			}
-		});
-
-		imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_cell.bmp");
-		perlinCoordCenter = new Vector2(GenRand.NextFloat(0f, 1f), GenRand.NextFloat(0f, 1f));
-		imageData.ProcessPixelRows(accessor =>
-		{
-			for (int y = 0; y < accessor.Height; y++)
-			{
-				int newY = (int)(accessor.Height * perlinCoordCenter.Y + y) % accessor.Height;
-				var pixelRow = accessor.GetRowSpan(newY);
-				for (int x = 0; x < pixelRow.Length; x++)
-				{
-					int newX = (int)(accessor.Width * perlinCoordCenter.X + x) % accessor.Width;
-					ref var pixel = ref pixelRow[newX];
-					CellPixel[x, y] = pixel.R;
-				}
-			}
-		});
 	}
 
 	/// <summary>
@@ -1573,35 +1509,6 @@ public class YggdrasilTownGeneration
 	}
 
 	/// <summary>
-	/// 隐天玄壁
-	/// </summary>
-	public static void BuildDuskfallBarrier()
-	{
-		int centerY = 10700;
-		int coordX = GenRand.Next(1024);
-		int coordY = GenRand.Next(150, 612);
-		for (int x = 0; x < 1200; x++)
-		{
-			for (int y = -150; y < 150; y++)
-			{
-				float thick = (x - 600) * (x - 600) / 2400f + 30f;
-				thick += PerlinPixelR[(x + coordX) % 1024, (y + coordY) % 1024] / 25f;
-				if (Math.Abs(y) < thick)
-				{
-					Tile tile = SafeGetTile(x, y + centerY);
-					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
-					tile.HasTile = true;
-				}
-				if (Math.Abs(y) < thick - 4)
-				{
-					Tile tile = SafeGetTile(x, y + centerY);
-					tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
-				}
-			}
-		}
-	}
-
-	/// <summary>
 	/// 挑战者石牢
 	/// </summary>
 	public static void BuildStoneCageOfChallenges()
@@ -1639,6 +1546,10 @@ public class YggdrasilTownGeneration
 				{
 					Tile tile = SafeGetTile(x, y);
 					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+					if (aValue + bValue < 0.75f)
+					{
+						tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+					}
 					tile.HasTile = true;
 				}
 			}
@@ -1748,7 +1659,7 @@ public class YggdrasilTownGeneration
 	public static void BuildTwilightLand()
 	{
 		int upBound = Main.maxTilesY - 1700;
-		int bottomBound = Main.maxTilesY - 660;
+		int bottomBound = Main.maxTilesY - 960;
 		int count = 0;
 		List<Vector2> twilightCellPoses = new List<Vector2>();
 
@@ -1783,14 +1694,14 @@ public class YggdrasilTownGeneration
 		{
 			int x = GenRand.Next(20, Main.maxTilesX - 19);
 			int y = GenRand.Next(upBound, bottomBound);
-			if (true)
+			if ((new Vector2(x, y) - LifeLampWoodRootPos).Length() > 300 && (new Vector2(x, y) - TwilightRelicCenter).Length() > 300)
 			{
 				Vector2 basePos = new Vector2(x, y);
 				bool canBuild = true;
 				foreach (Vector2 v in TwilightBubbleCenters)
 				{
 					// 空出中心并且与另外一个点保持距离
-					if ((basePos - v).Length() < 420 || (basePos - TwilightRelicCenter).Length() < 780)
+					if ((basePos - v).Length() < 420)
 					{
 						canBuild = false;
 						break;
@@ -1870,7 +1781,7 @@ public class YggdrasilTownGeneration
 							for (int v = 0; v < 4; v++)
 							{
 								var tile = SafeGetTile((int)posCell.X + h, (int)posCell.Y - 2 + v);
-								if(!tile.HasTile)
+								if (!tile.HasTile)
 								{
 									tile.TileType = (ushort)ModContent.TileType<TwilightGrassBlock>();
 									tile.HasTile = true;
