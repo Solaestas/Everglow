@@ -63,6 +63,10 @@ public class FlameDust0 : Visual
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
 		var drawColor = new Color(1f, 1f, 1f, 1f);
 		var postOffsetPos = position + MyOwner.Center - startPos;
+		if (ai[1] == 1)
+		{
+			postOffsetPos = position;
+		}
 		var bars = new List<Vertex2D>()
 		{
 			new Vertex2D(postOffsetPos + toCorner, drawColor, new Vector3(frameX, frameY / frameCount, 0)),
