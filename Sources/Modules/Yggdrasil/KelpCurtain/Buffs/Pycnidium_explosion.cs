@@ -1,9 +1,8 @@
-using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
+namespace Everglow.Yggdrasil.KelpCurtain.Buffs;
 
 public class Pycnidium_explosion : ModProjectile, IWarpProjectile
 {
@@ -122,9 +121,9 @@ public class Pycnidium_explosion : ModProjectile, IWarpProjectile
 		Texture2D shadow = Commons.ModAsset.Textures_Star.Value;
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Color c = new Color(0.7f * MathF.Sqrt(1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 0.3f * (1 - timeValue), 0f);
+		var c = new Color(0.7f * MathF.Sqrt(1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 0.3f * (1 - timeValue), 0f);
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, c * dark, 0, shadow.Size() / 2f, 0.4f * dark, SpriteEffects.None, 0);
-		Color cDark = new Color(0, 0, 0, 1f - timeValue);
+		var cDark = new Color(0, 0, 0, 1f - timeValue);
 		DrawTexCircle(MathF.Sqrt(timeValue) * 40, 70 * (1 - timeValue), cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
 		DrawTexCircle(MathF.Sqrt(timeValue) * 40, 20 * (1 - timeValue), c * 0.4f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
 	}
@@ -132,7 +131,7 @@ public class Pycnidium_explosion : ModProjectile, IWarpProjectile
 	{
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
-		Color c = new Color(0.7f * MathF.Sqrt(1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 0.3f * (1 - timeValue), 0f);
+		var c = new Color(0.7f * MathF.Sqrt(1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 0.3f * (1 - timeValue), 0f);
 
 		Texture2D light = Commons.ModAsset.Textures_Star.Value;
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * 0.4f, SpriteEffects.None, 0);

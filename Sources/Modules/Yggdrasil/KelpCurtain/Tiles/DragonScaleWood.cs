@@ -1,3 +1,5 @@
+using Everglow.Yggdrasil.KelpCurtain.Dusts;
+
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles;
 
 public class DragonScaleWood : ModTile
@@ -11,14 +13,9 @@ public class DragonScaleWood : ModTile
 		Main.tileMerge[Type][TileID.Stone] = true;
 		Main.tileMerge[TileID.Stone][Type] = true;
 		Main.ugBackTransition = 1000;
-		DustType = DustID.BorealWood;
+		DustType = ModContent.DustType<DragonScaleWoodDust>();
 		MinPick = 300;
 		HitSound = SoundID.Dig;
 		AddMapEntry(new Color(86, 62, 44));
 	}
-	public override bool CanExplode(int i, int j)
-	{
-		return false;
-	}
-
 }

@@ -1,4 +1,6 @@
+using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.CyanVine;
 using Terraria.Audio;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 
 public class CyanVineThrowingSpear_Proj : ModProjectile
@@ -13,14 +15,19 @@ public class CyanVineThrowingSpear_Proj : ModProjectile
 		Projectile.timeLeft = 1500;
 		Projectile.aiStyle = -1;
 	}
+
 	internal bool Shot = false;
 	internal int Power = 0;
+
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
 		int PlayerDir = -1;
 		if (Main.MouseWorld.X > player.Center.X)
+		{
 			PlayerDir = 1;
+		}
+
 		if (Shot)
 		{
 			Projectile.tileCollide = true;
@@ -36,7 +43,9 @@ public class CyanVineThrowingSpear_Proj : ModProjectile
 			Projectile.Center = player.MountedCenter + Projectile.velocity.RotatedBy(Math.PI * -0.5) * 20 * PlayerDir - Projectile.velocity * (Power / 3f - 54) + new Vector2(0, 6 * player.gravDir);
 			Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
 			if (Power < 100)
+			{
 				Power += 1;
+			}
 
 			player.heldProj = Projectile.whoAmI;
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation + 0.337f * PlayerDir + (float)(Math.PI * 0.25 + Math.PI * 0.6 * PlayerDir - (Power / 80d + 0.2) * PlayerDir));
@@ -50,21 +59,21 @@ public class CyanVineThrowingSpear_Proj : ModProjectile
 			Projectile.damage = (int)(Projectile.damage * (Power / 30f + 1));
 			SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 		}
-		if (player.HeldItem.type != ModContent.ItemType<Items.CyanVine.CyanVineThrowingSpear>())
+		if (player.HeldItem.type != ModContent.ItemType<CyanVineThrowingSpear>())
 		{
 			Projectile.active = false;
 		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D tex = ModAsset.CyanVineThrowingSpear_Proj.Value;
 		Texture2D flag = ModAsset.CyanVineThrowingSpear_flag.Value;
 
-
 		Vector2 redKnotPos = Projectile.Center - Main.screenPosition - Utils.SafeNormalize(Projectile.velocity, Vector2.zeroVector) * 40;
 		Player player = Main.player[Projectile.owner];
 
-		if(!Shot)
+		if (!Shot)
 		{
 			Main.spriteBatch.Draw(flag, redKnotPos, null, lightColor, 0, new Vector2(4, 0), Projectile.scale, SpriteEffects.None, 0);
 		}
@@ -77,6 +86,7 @@ public class CyanVineThrowingSpear_Proj : ModProjectile
 		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition - Utils.SafeNormalize(Projectile.velocity, Vector2.zeroVector) * 40, null, lightColor, Projectile.rotation + 0.337f, tex.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		return false;
 	}
+
 	public override void OnKill(int timeLeft)
 	{
 		for (int x = 0; x < 16; x++)
@@ -96,4 +106,3 @@ public class CyanVineThrowingSpear_Proj : ModProjectile
 		Gore.NewGore(null, Projectile.Center + vF, vF, ModContent.Find<ModGore>("Everglow/CyanVineOre" + Main.rand.Next(11, 13).ToString()).Type, 1f);
 	}
 }
-

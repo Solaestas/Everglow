@@ -1,5 +1,5 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Yggdrasil.YggdrasilTown.Items.SquamousShell;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria;
 using Terraria.Audio;

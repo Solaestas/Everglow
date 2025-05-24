@@ -1,4 +1,4 @@
-﻿sampler uScreenBuffer : register(s0);
+sampler uScreenBuffer : register(s0);
 sampler2D uImage0 : register(s1);
 
 // Shlick 菲涅尔项近似公式中的F0
@@ -52,7 +52,7 @@ PSInput VertexShaderFunction(VSInput input)
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
-    float4 normalColor = tex2D(uImage0, input.Texcoord.xy);
+	float4 normalColor = tex2D(uImage0, input.Texcoord.xy);
     if (!any(normalColor))
         return normalColor;
     float3 N = normalize(normalColor.xyz - float3(0.5, 0.5, 0.5));
@@ -67,7 +67,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     float3 fresnel = uFresnelF0 + (1.0 - uFresnelF0) * pow(1.0 - NdotV, 5);
     float3 sceneHDR = pow(tex2D(uScreenBuffer, move_world_pos).rgb, 2.2);
     float3 hdr = sceneHDR * uKs * fresnel;
-    return float4(pow(hdr, 1 / 2.2), 1.0) * input.Color;
+	return float4(pow(hdr, 1 / 2.2), 1.0) * input.Color;
 }
 
 technique Technique1

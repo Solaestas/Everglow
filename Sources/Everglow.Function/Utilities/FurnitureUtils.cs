@@ -121,10 +121,10 @@ public static class FurnitureUtils
 		spriteBatch.Draw(tex, finalDrawPos, rectangle, tileLight, rotation, finalOrigin, 1f, SpriteEffects.None, 0f);
 
 		// 有火的话绘制火
-		//if (TileLoader.GetTile(tile.type) is not ITileFlameData tileFlame)
-		//{
-		//	return;
-		//}
+		if (TileLoader.GetTile(tile.type) is not ITileFlameData tileFlame)
+		{
+			return;
+		}
 
 		//TileDrawing.TileFlameData tileFlameData = tileFlame.GetTileFlameData(pos.X, pos.Y, tile.type, tileFrameY);
 		//ulong seed = tileFlameData.flameSeed is 0 ? Main.TileFrameSeed ^ (ulong)(((long)pos.X << 32) | (uint)pos.Y) : tileFlameData.flameSeed;
@@ -1168,6 +1168,48 @@ public abstract class ClockItem : ModItem
 		Item.value = 300;
 		Item.maxStack = Item.CommonMaxStack;
 		Item.useAnimation = 14;
+	}
+
+	public static float GetHourHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if (!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 43200 * MathHelper.TwoPi);
+	}
+
+	public static float GetMinuteHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if (!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 3600 * MathHelper.TwoPi);
+	}
+
+	public static float GetSecondHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if (!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 60 * MathHelper.TwoPi);
 	}
 }
 
