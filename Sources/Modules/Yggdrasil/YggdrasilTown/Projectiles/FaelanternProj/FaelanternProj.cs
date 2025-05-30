@@ -89,7 +89,6 @@ public class FaelanternProj : ModProjectile
 		FaelanternSkeleton.Skeleton.FindBone("root").ScaleX = 1;
 		Projectile.velocity = Vector2.zeroVector;
 		Suicide();
-		Main.NewText(Projectile.timeLeft);
 		return;
 	}
 
