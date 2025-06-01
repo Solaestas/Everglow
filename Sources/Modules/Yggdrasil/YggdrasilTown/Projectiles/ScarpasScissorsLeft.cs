@@ -6,5 +6,5 @@ public class ScarpasScissorsLeft : ScarpasScissorsCutProj
 
 	public override string Texture => ModAsset.ScarpasScissorsLeft_Mod;
 
-	protected override Vector2 TextureOrigin => new Vector2(22.5f, 32.5f);
+	protected override Vector2 TextureOrigin => new Vector2(17.5f, 23.5f);
 }
