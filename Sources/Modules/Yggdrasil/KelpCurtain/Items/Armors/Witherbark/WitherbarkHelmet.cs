@@ -41,7 +41,7 @@ public class WitherbarkHelmet : ModItem
 
 		if (player.ownedProjectileCounts[ModContent.ProjectileType<WitherbarkMinion>()] <= 0)
 		{
-			Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, ModContent.ProjectileType<WitherbarkMinion>(), 100, 0f, player.whoAmI);
+			Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, ModContent.ProjectileType<WitherbarkMinion>(), WitherbarkMinion.Minion_ContactDamage, WitherbarkMinion.Minion_Knockback, player.whoAmI);
 		}
 	}
 }
