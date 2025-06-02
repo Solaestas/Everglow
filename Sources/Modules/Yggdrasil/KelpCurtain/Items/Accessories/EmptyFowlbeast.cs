@@ -43,7 +43,7 @@ public class EmptyFowlbeast : ModItem
 			if (Enable && proj.minion)
 			{
 				// Apply additional magic damage equal to 7% of player max mana to the target when hit by a minion projectile.
-				int damageAmount = (int)(0.7f * Player.statManaMax2);
+				int damageAmount = (int)(0.07f * Player.statManaMax2);
 				Player.ApplyDamageToNPC(target, damageAmount, 0, 0, damageType: DamageClass.Magic);
 			}
 		}
