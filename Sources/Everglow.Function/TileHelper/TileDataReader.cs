@@ -32,7 +32,7 @@ public class TileDataReader : ModItem
 		}
 
 		// Right click to enable resident tile reader effect.
-		if (Main.mouseRight && Main.mouseRightRelease)
+		if (Main.mouseRight && Main.mouseRightRelease && !Main.mapFullscreen)
 		{
 			EnableResidentEffect = !EnableResidentEffect;
 			CombatText.NewText(player.Hitbox, Color.White, (EnableResidentEffect ? "Enable" : "Disable") + "everlasting tile reading effect.");
@@ -101,14 +101,11 @@ public class TileDataReaderSystem : Visual
 		int i = FixPoint.X;
 		int j = FixPoint.Y;
 		Player player = Main.LocalPlayer;
-		if (i < 20 || i > Main.maxTilesX - 20)
+		if (i < 20 || i > Main.maxTilesX - 20 || j < 20 || j > Main.maxTilesY - 20)
 		{
-			if (j < 20 || j > Main.maxTilesY - 20)
-			{
-				Active = false;
-				OwnerPlayerWhoAmI.Remove(player.whoAmI);
-				return;
-			}
+			Active = false;
+			OwnerPlayerWhoAmI.Remove(player.whoAmI);
+			return;
 		}
 		Tile tile = Main.tile[i, j];
 		Ins.Batch.BindTexture<Vertex2D>(Texture);
@@ -120,13 +117,10 @@ public class TileDataReaderSystem : Visual
 			drawColor = Color.Gray;
 		}
 		DrawBlockBound(i, j, drawColor);
-		if (ContinueTiles.Count < 512)
+		Color drawContinueColor = new Color(0.12f, 0.24f, 0.4f, 0);
+		foreach (Point point in ContinueTiles)
 		{
-			Color drawContinueColor = new Color(0.12f, 0.24f, 0.4f, 0);
-			foreach (Point point in ContinueTiles)
-			{
-				DrawBlockBound(point.X, point.Y, drawContinueColor);
-			}
+			DrawBlockBound(point.X, point.Y, drawContinueColor);
 		}
 		string datas = GetDatas(i, j);
 		Main.instance.MouseText(datas, colorType);
@@ -173,6 +167,34 @@ public class TileDataReaderSystem : Visual
 		}
 	}
 
+	public int GetSearchDepth(int i, int j)
+	{
+		return Math.Abs(OldTilePos.X - i) + Math.Abs(OldTilePos.Y - j);
+	}
+
+	public int GetSearchValue(int i, int j)
+	{
+		if (i < 20 || i > Main.maxTilesX - 20)
+		{
+			return int.MaxValue;
+		}
+		if (j < 20 || j > Main.maxTilesY - 20)
+		{
+			return int.MaxValue;
+		}
+		int value = GetSearchDepth(i, j);
+		if (ContinueTiles.Contains(new Point(i, j)) || !Main.tile[i, j].HasTile)
+		{
+			value = int.MaxValue;
+		}
+		return value;
+	}
+
+	public int GetSearchValue(Point point)
+	{
+		return GetSearchValue(point.X, point.Y);
+	}
+
 	public void CheckTileContinue(int i, int j)
 	{
 		Tile tile = SafeGetTile(i, j);
@@ -183,21 +205,61 @@ public class TileDataReaderSystem : Visual
 		if (ContinueTiles.Count < 512)
 		{
 			CheckHasTileAndAddToContinueTile(i, j);
-			switch ((i + j) % 2)
+			var leftPoint = new Point(i - 1, j);
+			int lengthLeft = GetSearchValue(leftPoint);
+
+			var checkPoint = leftPoint;
+			var checkLength = lengthLeft;
+			var rightPoint = new Point(i + 1, j);
+			int lengthRight = GetSearchValue(rightPoint);
+			if (lengthRight < checkLength)
 			{
-				case 0:
-					CheckHasTileAndAddToContinueTile(i, j - 1);
-					CheckHasTileAndAddToContinueTile(i, j + 1);
-					CheckHasTileAndAddToContinueTile(i - 1, j);
-					CheckHasTileAndAddToContinueTile(i + 1, j);
-					break;
-				case 1:
-					CheckHasTileAndAddToContinueTile(i, j - 1);
-					CheckHasTileAndAddToContinueTile(i, j + 1);
-					CheckHasTileAndAddToContinueTile(i + 1, j);
-					CheckHasTileAndAddToContinueTile(i - 1, j);
-					break;
+				checkLength = lengthRight;
+				checkPoint = rightPoint;
 			}
+			var topPoint = new Point(i, j - 1);
+			int lengthTop = GetSearchValue(topPoint);
+			if (lengthTop < checkLength)
+			{
+				checkLength = lengthTop;
+				checkPoint = topPoint;
+			}
+			var bottomPoint = new Point(i, j + 1);
+			int lengthBottom = GetSearchValue(bottomPoint);
+			if (lengthBottom < checkLength)
+			{
+				checkLength = lengthBottom;
+				checkPoint = bottomPoint;
+			}
+
+			var topRightPoint = new Point(i + 1, j - 1);
+			int lengthTopRight = GetSearchValue(topRightPoint);
+			if (lengthTopRight < checkLength)
+			{
+				checkLength = lengthTopRight;
+				checkPoint = topRightPoint;
+			}
+			var topLeftPoint = new Point(i - 1, j - 1);
+			int lengthTopLeft = GetSearchValue(topLeftPoint);
+			if (lengthTopLeft < checkLength)
+			{
+				checkLength = lengthTopLeft;
+				checkPoint = topLeftPoint;
+			}
+			var bottomLeftPoint = new Point(i - 1, j + 1);
+			int lengthBottomLeft = GetSearchValue(bottomPoint);
+			if (lengthBottomLeft < checkLength)
+			{
+				checkLength = lengthBottomLeft;
+				checkPoint = bottomLeftPoint;
+			}
+			var bottomRightPoint = new Point(i + 1, j + 1);
+			int lengthBottomRight = GetSearchValue(bottomRightPoint);
+			if (lengthBottomRight < checkLength)
+			{
+				checkPoint = bottomRightPoint;
+			}
+			CheckHasTileAndAddToContinueTile(checkPoint.X, checkPoint.Y);
 		}
 	}
 

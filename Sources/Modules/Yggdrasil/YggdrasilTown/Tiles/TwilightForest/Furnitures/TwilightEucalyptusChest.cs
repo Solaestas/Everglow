@@ -61,6 +61,12 @@ public class TwilightEucalyptusChest : ModTile
 		TileObjectData.addTile(Type);
 	}
 
+	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
+	{
+		noBreak = true;
+		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+	}
+
 	public override ushort GetMapOption(int i, int j)
 	{
 		return (ushort)(Main.tile[i, j].TileFrameX / 36);

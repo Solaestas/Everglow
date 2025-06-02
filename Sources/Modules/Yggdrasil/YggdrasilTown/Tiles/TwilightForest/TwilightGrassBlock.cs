@@ -1,6 +1,7 @@
 using Everglow.Commons.VFX.Scene;
 using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Tools.Developer;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
@@ -18,6 +19,11 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 		HitSound = SoundID.Dig;
 
 		AddMapEntry(new Color(39, 155, 170));
+	}
+
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
+	{
+		yield return new Item(ModContent.ItemType<DarkForestSoil_Item>());
 	}
 
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)

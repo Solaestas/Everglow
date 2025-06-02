@@ -43,12 +43,24 @@ public class YggdrasilTownCentralSystem : ModSystem
 	{
 		if (SubworldSystem.Current is YggdrasilWorld)
 		{
-			CheckNPC(ModContent.NPCType<Guard_of_YggdrasilTown>());
-			CheckNPC(ModContent.NPCType<TeahouseLady>());
+			foreach (var type in YggdrasilTownNPCList)
+			{
+				CheckNPC(type);
+			}
 		}
 		if (InCanteen_YggdrasilTown())
 		{
-			CheckNPC(ModContent.NPCType<CanteenMaid>());
+			foreach (var type in CanteenNPCList)
+			{
+				CheckNPC(type);
+			}
+		}
+		if (InUnion_YggdrasilTown())
+		{
+			foreach (var type in UnionNPCList)
+			{
+				CheckNPC(type);
+			}
 		}
 		base.OnWorldLoad();
 	}
@@ -66,12 +78,17 @@ public class YggdrasilTownCentralSystem : ModSystem
 			}
 			if (InCanteen_YggdrasilTown())
 			{
-				CheckNPC(ModContent.NPCType<CanteenMaid>());
-				CheckNPC(ModContent.NPCType<Restauranteur>());
+				foreach (var type in CanteenNPCList)
+				{
+					CheckNPC(type);
+				}
 			}
 			if (InUnion_YggdrasilTown())
 			{
-				CheckNPC(ModContent.NPCType<Howard_Warden>());
+				foreach (var type in UnionNPCList)
+				{
+					CheckNPC(type);
+				}
 			}
 		}
 		if (InArena_YggdrasilTown() && !ResetedArena)

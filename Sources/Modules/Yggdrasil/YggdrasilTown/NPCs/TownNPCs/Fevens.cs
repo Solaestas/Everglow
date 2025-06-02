@@ -34,6 +34,8 @@ public class Fevens : TownNPC_LiveInYggdrasil
 		FrameHeight = 70;
 	}
 
+	public override void OnSpawn(IEntitySource source) => base.OnSpawn(source);
+
 	public override void TryAttack()
 	{
 		float minDis = 100;
@@ -97,7 +99,7 @@ public class Fevens : TownNPC_LiveInYggdrasil
 			}
 		}
 	}
-	
+
 	public IEnumerator<ICoroutineInstruction> Attack()
 	{
 		bool safe = false;
@@ -120,14 +122,17 @@ public class Fevens : TownNPC_LiveInYggdrasil
 			NPC.direction = -1;
 		}
 		NPC.spriteDirection = NPC.direction;
-		//Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(-NPC.direction, 0), ModContent.ProjectileType<Georg_Hammer>(), 150, 4, Main.myPlayer, NPC.whoAmI);
+
+		// Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(-NPC.direction, 0), ModContent.ProjectileType<Georg_Hammer>(), 150, 4, Main.myPlayer, NPC.whoAmI);
 		for (int t = 0; t < 60; t++)
 		{
 			NPC.velocity.X *= 0;
-			//Attacking0 = true;
+
+			// Attacking0 = true;
 			yield return new SkipThisFrame();
 		}
-		//Attacking0 = false;
+
+		// Attacking0 = false;
 		EndAIPiece();
 	}
 
@@ -153,14 +158,17 @@ public class Fevens : TownNPC_LiveInYggdrasil
 			NPC.direction = -1;
 		}
 		NPC.spriteDirection = NPC.direction;
-		//Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, (target.Center - NPC.Center).NormalizeSafe(), ModContent.ProjectileType<Georg_Hook>(), 100, 4, Main.myPlayer, NPC.whoAmI);
+
+		// Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, (target.Center - NPC.Center).NormalizeSafe(), ModContent.ProjectileType<Georg_Hook>(), 100, 4, Main.myPlayer, NPC.whoAmI);
 		for (int t = 0; t < 100; t++)
 		{
 			NPC.velocity.X *= 0;
-			//Attacking0 = true;
+
+			// Attacking0 = true;
 			yield return new SkipThisFrame();
 		}
-		//Attacking0 = false;
+
+		// Attacking0 = false;
 		EndAIPiece();
 	}
 
@@ -212,17 +220,48 @@ public class Fevens : TownNPC_LiveInYggdrasil
 		base.AI();
 	}
 
+	public override IEnumerator<ICoroutineInstruction> BehaviorControl() => base.BehaviorControl();
+
 	public override void BossAI()
 	{
 		base.BossAI();
-		NPC.TargetClosest();
-		Player player = Main.player[NPC.target];
+
+		// NPC.TargetClosest();
+		// Player player = Main.player[NPC.target];
+		// _fevensCoroutine.Update();
+		// if (!player.active || player.dead)
+		// {
+		// NPC.active = false;
+		// }
+		// NPC.damage = 40;
 		_fevensCoroutine.Update();
-		if (!player.active || player.dead)
+		if (Fail)
 		{
-			NPC.active = false;
+			NPC.velocity *= 0;
+			NPC.dontTakeDamage = true;
+			NPC.damage = 0;
+			return;
 		}
-		NPC.damage = 40;
+		if (KnockOut)
+		{
+			return;
+		}
+		bool safe = false;
+		if (NPC.target >= 0)
+		{
+			safe = true;
+		}
+		if (!safe)
+		{
+			return;
+		}
+		Player player = Main.player[NPC.target];
+		if (BehaviorsCoroutines.Count <= 0)
+		{
+			Idle = true;
+
+			ChooseAttack();
+		}
 	}
 
 	public override void SetDefaultsToArena()
@@ -264,14 +303,24 @@ public class Fevens : TownNPC_LiveInYggdrasil
 		StartToBeABoss();
 	}
 
+	public override void ApplyBossTags()
+	{
+		base.ApplyBossTags();
+	}
+
 	private CoroutineManager _fevensCoroutine = new CoroutineManager();
 
 	public void StartToBeABoss()
 	{
 		NPC.TargetClosest(true);
-		_fevensCoroutine.StartCoroutine(new Coroutine(StartFighting2()));
 
 		// Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<fevensSword_following>(), 0, 0f, -1, NPC.whoAmI);
+	}
+
+	public override void StartFighting()
+	{
+		base.StartFighting();
+		_fevensCoroutine.StartCoroutine(new Coroutine(StartFighting2()));
 	}
 
 	private IEnumerator<ICoroutineInstruction> StartFighting2()
@@ -336,12 +385,24 @@ public class Fevens : TownNPC_LiveInYggdrasil
 			Projectile targetP = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), player.Center, Vector2.zeroVector, ModContent.ProjectileType<Fevens_AttackTarget>(), 0, 0f, -1, NPC.whoAmI);
 			targetP.spriteDirection = player.direction * -1;
 			State = 2;
-			yield return new WaitForFrames(12);
+			for (int t = 0; t < 12; t++)
+			{
+				NPC.velocity *= 0;
+				yield return new SkipThisFrame();
+			}
 			State = 1;
-			yield return new WaitForFrames(8);
+			for (int t = 0; t < 8; t++)
+			{
+				NPC.velocity *= 0;
+				yield return new SkipThisFrame();
+			}
 		}
 		State = 3;
-		yield return new WaitForFrames(20);
+		for (int t = 0; t < 20; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		for (int i = 0; i < 12; i++)
 		{
 			Vector2 vel = new Vector2(0, 9).RotatedBy(MathHelper.TwoPi / 12f * i);
@@ -389,7 +450,11 @@ public class Fevens : TownNPC_LiveInYggdrasil
 			{
 				Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), player.Center + new Vector2((j - lightingCount / 2 + 0.5f) * 360 + offsetX + Main.rand.NextFloat(-10, 10), Main.rand.NextFloat(-30, 30) + 200), Vector2.zeroVector, ModContent.ProjectileType<Fevens_ThunderMark>(), (int)(NPC.damage * 1.1f), 1f, -1, 0);
 			}
-			yield return new WaitForFrames(60);
+			for (int t = 0; t < 60; t++)
+			{
+				NPC.velocity *= 0;
+				yield return new SkipThisFrame();
+			}
 		}
 		_fevensCoroutine.StartCoroutine(new Coroutine(ChooseAttack()));
 		yield return new SkipThisFrame();
@@ -426,13 +491,24 @@ public class Fevens : TownNPC_LiveInYggdrasil
 			Projectile targetP = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), player.Center, Vector2.zeroVector, ModContent.ProjectileType<Fevens_AttackTarget>(), 0, 0f, -1, NPC.whoAmI);
 			targetP.spriteDirection = player.direction * -1;
 			targetP.timeLeft += 120;
-			State = 2;
-			yield return new WaitForFrames(12);
+			for (int t = 0; t < 12; t++)
+			{
+				NPC.velocity *= 0;
+				yield return new SkipThisFrame();
+			}
 			State = 1;
-			yield return new WaitForFrames(8);
+			for (int t = 0; t < 8; t++)
+			{
+				NPC.velocity *= 0;
+				yield return new SkipThisFrame();
+			}
 		}
 		State = 3;
-		yield return new WaitForFrames(20);
+		for (int t = 0; t < 20; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		for (int i = 0; i < 12; i++)
 		{
 			Vector2 vel = new Vector2(0, 9).RotatedBy(MathHelper.TwoPi / 12f * i);
@@ -474,7 +550,11 @@ public class Fevens : TownNPC_LiveInYggdrasil
 			yield return new WaitForFrames(1);
 		}
 		State = 3;
-		yield return new WaitForFrames(20);
+		for (int t = 0; t < 20; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		for (int i = 0; i < 12; i++)
 		{
 			Vector2 vel2 = new Vector2(0, 9).RotatedBy(MathHelper.TwoPi / 12f * i);
@@ -520,7 +600,11 @@ public class Fevens : TownNPC_LiveInYggdrasil
 				targetP.spriteDirection = player.direction * -1;
 				targetP.timeLeft += 120;
 			}
-			yield return new WaitForFrames(30);
+			for (int t = 0; t < 30; t++)
+			{
+				NPC.velocity *= 0;
+				yield return new SkipThisFrame();
+			}
 		}
 		_fevensCoroutine.StartCoroutine(new Coroutine(ChooseAttack()));
 		yield return new SkipThisFrame();
@@ -562,9 +646,17 @@ public class Fevens : TownNPC_LiveInYggdrasil
 		NPC.velocity *= 0;
 		Vector2 attackPos = player.Center;
 		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), attackPos, Vector2.zeroVector, ModContent.ProjectileType<Fevens_Slash_Target>(), 0, 2, default, 2);
-		yield return new WaitForFrames(20);
+		for (int t = 0; t < 20; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<Fevens_Slash_Shine>(), 0, 2, default, 2);
-		yield return new WaitForFrames(10);
+		for (int t = 0; t < 10; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		State = 5;
 		for (int t = 0; t < 20; t++)
 		{
@@ -583,7 +675,11 @@ public class Fevens : TownNPC_LiveInYggdrasil
 		NPC.alpha = 255;
 		Vector2 nextPos = player.Center + new Vector2(0, -320).RotatedByRandom(0.5f);
 		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), nextPos, Vector2.zeroVector, ModContent.ProjectileType<Fevens_WingTarget>(), 0, 2, default, 2);
-		yield return new WaitForFrames(20);
+		for (int t = 0; t < 20; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		for (int i = 0; i < 8; i++)
 		{
 			Vector2 startPos = new Vector2(0, -120).RotatedBy(Main.time + i / 8d * MathHelper.TwoPi);
@@ -608,7 +704,11 @@ public class Fevens : TownNPC_LiveInYggdrasil
 		}
 		State = 4;
 
-		yield return new WaitForFrames(30);
+		for (int t = 0; t < 30; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		_fevensCoroutine.StartCoroutine(new Coroutine(ChooseAttack()));
 
 		yield return new SkipThisFrame();
@@ -629,15 +729,27 @@ public class Fevens : TownNPC_LiveInYggdrasil
 		NPC.Center = attackPos + new Vector2(attackDirection * 220, 0);
 
 		State = 9;
-		yield return new WaitForFrames(20);
+		for (int t = 0; t < 20; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<Fevens_TaijutsuSlash>(), 130, 2, default, 1.25f, MathHelper.PiOver4 * -attackDirection, 0.45f);
 		p0.direction = -attackDirection;
 		p0.extraUpdates = 6;
 
 		State = 4;
-		yield return new WaitForFrames(10);
+		for (int t = 0; t < 10; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		State = 6;
-		yield return new WaitForFrames(10);
+		for (int t = 0; t < 10; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		NPC.position.X += -attackDirection * 120;
 		NPC.position.Y += 48;
 		Projectile p1 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<Fevens_TaijutsuSlash>(), 144, 2, default, 1.25f, MathHelper.PiOver4 * -attackDirection, -0.45f);
@@ -645,7 +757,11 @@ public class Fevens : TownNPC_LiveInYggdrasil
 		p1.extraUpdates = 6;
 
 		State = 4;
-		yield return new WaitForFrames(10);
+		for (int t = 0; t < 10; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		if (attackDirection == -1)
 		{
 			State = 6;
@@ -654,7 +770,11 @@ public class Fevens : TownNPC_LiveInYggdrasil
 		{
 			State = 9;
 		}
-		yield return new WaitForFrames(10);
+		for (int t = 0; t < 10; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 
 		Vector2 towardPlayer = Vector2.Normalize(player.Center - NPC.Center) * 4.3f;
 		Projectile p2 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, towardPlayer, ModContent.ProjectileType<Fevens_TaijutsuSlash_Round>(), 24, 20, default, 0.75f, MathHelper.PiOver4 * -attackDirection, -0.45f);
@@ -701,8 +821,11 @@ public class Fevens : TownNPC_LiveInYggdrasil
 		NPC.Center = attackPos + new Vector2(attackDirection * 400, -340);
 		float dir = (-new Vector2(attackDirection * 400, -340)).ToRotation();
 		Projectile array = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<Fevens_MagicLaserArray>(), 80, 20, default, 0.08f, dir);
-
-		yield return new WaitForFrames(50);
+		for (int t = 0; t < 50; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		Vector2 firstPos = NPC.Center;
 		Vector2 firstDirection = Vector2.Normalize(player.Center - NPC.Center);
 		Vector2 firstNormal = firstDirection.RotatedBy(MathHelper.PiOver2);
@@ -721,7 +844,11 @@ public class Fevens : TownNPC_LiveInYggdrasil
 			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), destination, Vector2.zeroVector, ModContent.ProjectileType<Fevens_TaijutsuSlash_Target>(), 0, 2, default, 2);
 			yield return new WaitForFrames(4);
 		}
-		yield return new WaitForFrames(50);
+		for (int t = 0; t < 50; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		State = 7;
 		for (int t = 0; t < 16; t++)
 		{
@@ -772,7 +899,11 @@ public class Fevens : TownNPC_LiveInYggdrasil
 		NPC.spriteDirection = attackDirection;
 		NPC.Center = attackPos + new Vector2(attackDirection * 220, -200);
 		State = 7;
-		yield return new WaitForFrames(15);
+		for (int t = 0; t < 15; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<Fevens_TaijutsuSlash_Down>(), 130, 2, default, 1.25f, 3.5f * attackDirection);
 		p0.spriteDirection = -attackDirection;
 		p0.extraUpdates = 6;
@@ -818,10 +949,18 @@ public class Fevens : TownNPC_LiveInYggdrasil
 			}
 			yield return new SkipThisFrame();
 		}
-		yield return new WaitForFrames(30);
+		for (int t = 0; t < 30; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		State = 4;
 		NPC.rotation = 0;
-		yield return new WaitForFrames(30);
+		for (int t = 0; t < 30; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		_fevensCoroutine.StartCoroutine(new Coroutine(ChooseAttack()));
 
 		yield return new SkipThisFrame();
@@ -838,6 +977,7 @@ public class Fevens : TownNPC_LiveInYggdrasil
 		NPC.rotation = 0;
 		for (int t = 0; t < 150; t++)
 		{
+			NPC.velocity *= 0;
 			if (NPC.Center.X > player.Center.X)
 			{
 				NPC.spriteDirection = 1;
@@ -871,7 +1011,11 @@ public class Fevens : TownNPC_LiveInYggdrasil
 			yield return new SkipThisFrame();
 		}
 		NPC.rotation = 0;
-		yield return new WaitForFrames(60);
+		for (int t = 0; t < 60; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		_fevensCoroutine.StartCoroutine(new Coroutine(ChooseAttack()));
 
 		yield return new SkipThisFrame();
@@ -904,16 +1048,28 @@ public class Fevens : TownNPC_LiveInYggdrasil
 			Vector2 shootVel = new Vector2(-12, -6).RotatedBy(-t / 4f);
 			Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, shootVel, ModContent.ProjectileType<Fevens_Wing_Fly>(), 10, 2, default, t + 4);
 		}
-		yield return new WaitForFrames(60);
+		for (int t = 0; t < 60; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		int lightingCount = 8;
 		for (int j = 0; j < 8; j++)
 		{
 			Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2((j - lightingCount / 2 + 0.5f) * 360, Main.rand.NextFloat(-30, 30) + 240), Vector2.zeroVector, ModContent.ProjectileType<Fevens_ThunderMarkShortTiming>(), 80, 1f, -1, 0);
 		}
-		yield return new WaitForFrames(110);
+		for (int t = 0; t < 110; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		NPC.defense = oldDefense;
 		State = 4;
-		yield return new WaitForFrames(30);
+		for (int t = 0; t < 30; t++)
+		{
+			NPC.velocity *= 0;
+			yield return new SkipThisFrame();
+		}
 		_fevensCoroutine.StartCoroutine(new Coroutine(ChooseAttack()));
 
 		yield return new SkipThisFrame();
@@ -1077,7 +1233,7 @@ public class Fevens : TownNPC_LiveInYggdrasil
 
 	public override void FindFrame(int frameHeight)
 	{
-		if(YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
 		{
 			if (State == 1)
 			{
@@ -1156,9 +1312,6 @@ public class Fevens : TownNPC_LiveInYggdrasil
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		Texture2D texMain = ModAsset.Fevens_Walk.Value;
-		Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, -13);
-		Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
 		{
 			drawColor *= (255 - NPC.alpha) / 255f;
@@ -1188,7 +1341,7 @@ public class Fevens : TownNPC_LiveInYggdrasil
 						Rectangle frameWing = new Rectangle(0, frameIndex * 40, 40, 40);
 
 						spriteBatch.Draw(wing, NPC.Center - Main.screenPosition + offset, frameWing, drawColor, rotationWing, new Vector2(40), NPC.scale * (1 - i * 0.1f) * wingSize, SpriteEffects.None, 0);
-						spriteBatch.Draw(wingFlame, NPC.Center - Main.screenPosition + offset, frameWing, new Color(1f, 1f, 1f, 0), rotationWing, new Vector2(40), NPC.scale * (1 - i * 0.1f) * wingSize, SpriteEffects.None, 0);
+						spriteBatch.Draw(wingFlame, NPC.Center - Main.screenPosition + offset, frameWing, new Color(0f, 1f, 1f, 0), rotationWing, new Vector2(40), NPC.scale * (1 - i * 0.1f) * wingSize, SpriteEffects.None, 0);
 					}
 
 					standardRot = NPC.rotation - MathHelper.PiOver4;
@@ -1206,7 +1359,7 @@ public class Fevens : TownNPC_LiveInYggdrasil
 						int frameIndex = (int)(Main.time * 0.17 + i * 5 + 3) % 7;
 						Rectangle frameWing = new Rectangle(0, frameIndex * 40, 40, 40);
 						spriteBatch.Draw(wing, NPC.Center - Main.screenPosition + offset, frameWing, drawColor, rotationWing, new Vector2(40, 0), NPC.scale * (1 - i * 0.1f) * wingSize, SpriteEffects.FlipVertically, 0);
-						spriteBatch.Draw(wingFlame, NPC.Center - Main.screenPosition + offset, frameWing, new Color(1f, 1f, 1f, 0), rotationWing, new Vector2(40, 0), NPC.scale * (1 - i * 0.1f) * wingSize, SpriteEffects.FlipVertically, 0);
+						spriteBatch.Draw(wingFlame, NPC.Center - Main.screenPosition + offset, frameWing, new Color(0f, 1f, 1f, 0), rotationWing, new Vector2(40, 0), NPC.scale * (1 - i * 0.1f) * wingSize, SpriteEffects.FlipVertically, 0);
 					}
 				}
 			}
@@ -1248,7 +1401,7 @@ public class Fevens : TownNPC_LiveInYggdrasil
 				Texture2D knifeFevensGlow = ModAsset.Fevens_Attack4_glow.Value;
 				Rectangle frame = new Rectangle(0, 0, knifeFevens.Width, knifeFevens.Height);
 				spriteBatch.Draw(knifeFevens, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-				spriteBatch.Draw(knifeFevensGlow, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, new Color(255, 255, 255, 0), NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+				spriteBatch.Draw(knifeFevensGlow, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, new Color(0.4f, 0, 0.6f, 0), NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 			}
 
 			if (State == 8)
@@ -1266,6 +1419,12 @@ public class Fevens : TownNPC_LiveInYggdrasil
 				spriteBatch.Draw(knifeFevens, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, drawColor, NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 				spriteBatch.Draw(knifeFevensGlow, NPC.Center - Main.screenPosition + new Vector2(30 * NPC.spriteDirection, -4), frame, new Color(255, 255, 255, 0), NPC.rotation, frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 			}
+		}
+		else
+		{
+			Texture2D texMain = ModAsset.Fevens_Walk.Value;
+			Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, -13);
+			Main.spriteBatch.Draw(texMain, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		}
 		return false;
 	}

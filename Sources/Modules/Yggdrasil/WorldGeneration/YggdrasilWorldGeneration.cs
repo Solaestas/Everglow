@@ -1,12 +1,13 @@
 using Everglow.Commons.TileHelper;
+using Everglow.Yggdrasil.Common.Elevator.Tiles;
 using Everglow.Yggdrasil.CorruptWormHive.Tiles;
 using Everglow.Yggdrasil.HurricaneMaze.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Walls;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
-using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
+using ReLogic.Utilities;
 using Terraria.IO;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
@@ -232,13 +233,7 @@ public class YggdrasilWorldGeneration : ModSystem
 		{
 			for (int y = y0; y <= y1; y += 1)
 			{
-				Tile tile = Main.tile[x, y];
-				Tile tileUp = Main.tile[x, y - 1];
-				if (tile.TileType == TileID.Containers || tile.TileType == ModContent.TileType<LampWood_Chest>())
-				{
-					continue;
-				}
-				if (tileUp.TileType == TileID.Containers || tileUp.TileType == ModContent.TileType<LampWood_Chest>())
+				if (!ChestSafe(x, y))
 				{
 					continue;
 				}
@@ -264,8 +259,11 @@ public class YggdrasilWorldGeneration : ModSystem
 			for (int y = y0; y <= y1; y += 1)
 			{
 				Tile tile = SafeGetTile(x, y);
-				tile.TileType = (ushort)type;
-				tile.HasTile = true;
+				if (ChestSafe(x, y))
+				{
+					tile.TileType = (ushort)type;
+					tile.HasTile = true;
+				}
 			}
 		}
 		if (smooth)
@@ -331,7 +329,10 @@ public class YggdrasilWorldGeneration : ModSystem
 			for (int y = y0; y <= y1; y += 1)
 			{
 				Tile tile = SafeGetTile(x, y);
-				tile.HasTile = false;
+				if (ChestSafe(x, y))
+				{
+					tile.HasTile = false;
+				}
 			}
 		}
 		SmoothTile(x0, y0, x1, y1);
@@ -1037,28 +1038,31 @@ public class YggdrasilWorldGeneration : ModSystem
 				Tile tile = SafeGetTile(center + new Vector2(x, y));
 				if (new Vector2(x, y).Length() <= radius)
 				{
-					if (force)
+					if (ChestSafe(center + new Vector2(x, y)))
 					{
-						if (type == -2)
+						if (force)
 						{
-							tile.ClearEverything();
-						}
-						else if (type == -1)
-						{
-							tile.HasTile = false;
+							if (type == -2)
+							{
+								tile.ClearEverything();
+							}
+							else if (type == -1)
+							{
+								tile.HasTile = false;
+							}
+							else
+							{
+								tile.TileType = (ushort)type;
+								tile.HasTile = true;
+							}
 						}
 						else
 						{
-							tile.TileType = (ushort)type;
-							tile.HasTile = true;
-						}
-					}
-					else
-					{
-						if (!tile.HasTile)
-						{
-							tile.TileType = (ushort)type;
-							tile.HasTile = true;
+							if (!tile.HasTile)
+							{
+								tile.TileType = (ushort)type;
+								tile.HasTile = true;
+							}
 						}
 					}
 				}
@@ -1151,9 +1155,8 @@ public class YggdrasilWorldGeneration : ModSystem
 			for (int y = -radiusI; y <= radiusI; y++)
 			{
 				Tile tile = SafeGetTile(center + new Vector2(x, y));
-				Tile tileUp = SafeGetTile(center + new Vector2(x, y - 1));
 				float aValue = PerlinPixelR[Math.Abs((x + x0CoordPerlin) % 1024), Math.Abs((y + y0CoordPerlin) % 1024)] / 255f;
-				if (!TileID.Sets.BasicChest[tile.TileType] && !TileID.Sets.BasicChest[tileUp.TileType])
+				if (ChestSafe(center + new Vector2(x, y)))
 				{
 					if (new Vector2(x, y).Length() <= radius - aValue * noiseSize)
 					{
@@ -1422,5 +1425,154 @@ public class YggdrasilWorldGeneration : ModSystem
 				}
 			}
 		});
+	}
+
+	/// <summary>
+	/// Digtunnel, mimic from WorldGen vanilla.
+	/// </summary>
+	/// <param name="X"></param>
+	/// <param name="Y"></param>
+	/// <param name="xDir"></param>
+	/// <param name="yDir"></param>
+	/// <param name="Steps"></param>
+	/// <param name="Size"></param>
+	/// <param name="Wet"></param>
+	/// <returns></returns>
+	public static Vector2D DigTunnel(double x, double y, double xDir, double yDir, int steps, int size, bool wet = false)
+	{
+		double startX = x;
+		double startY = y;
+		try
+		{
+			double xVel = 0.0;
+			double yVel = 0.0;
+			double checkSize = size;
+			startX = Utils.Clamp(startX, checkSize + 1.0, Main.maxTilesX - checkSize - 1.0);
+			startY = Utils.Clamp(startY, checkSize + 1.0, Main.maxTilesY - checkSize - 1.0);
+			for (int i = 0; i < steps; i++)
+			{
+				for (int j = (int)(startX - checkSize); j <= startX + checkSize; j++)
+				{
+					for (int k = (int)(startY - checkSize); k <= startY + checkSize; k++)
+					{
+						if (Math.Abs(j - startX) + Math.Abs(k - startY) < checkSize * (1.0 + GenRand.Next(-10, 11) * 0.005) && j >= 0 && j < Main.maxTilesX && k >= 0 && k < Main.maxTilesY)
+						{
+							if (ChestSafe(j, k))
+							{
+								Main.tile[j, k].active(active: false);
+								if (wet)
+								{
+									Main.tile[j, k].liquid = byte.MaxValue;
+								}
+							}
+						}
+					}
+				}
+
+				checkSize += GenRand.Next(-50, 51) * 0.03;
+				if (checkSize < size * 0.6)
+				{
+					checkSize = size * 0.6;
+				}
+
+				if (checkSize > size * 2)
+				{
+					checkSize = size * 2;
+				}
+
+				xVel += GenRand.Next(-20, 21) * 0.01;
+				yVel += GenRand.Next(-20, 21) * 0.01;
+				if (xVel < -1.0)
+				{
+					xVel = -1.0;
+				}
+
+				if (xVel > 1.0)
+				{
+					xVel = 1.0;
+				}
+
+				if (yVel < -1.0)
+				{
+					yVel = -1.0;
+				}
+
+				if (yVel > 1.0)
+				{
+					yVel = 1.0;
+				}
+
+				startX += (xDir + xVel) * 0.6;
+				startY += (yDir + yVel) * 0.6;
+			}
+		}
+		catch
+		{
+		}
+
+		return new Vector2D(startX, startY);
+	}
+
+	/// <summary>
+	/// Return true when the given point can be killed safely(without chest).
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static bool ChestSafe(int x, int y)
+	{
+		Tile tile = SafeGetTile(x, y);
+		Tile tileUp = SafeGetTile(x, y - 1);
+		if (!TileID.Sets.BasicChest[tile.TileType] && !TileID.Sets.BasicChest[tileUp.TileType])
+		{
+			return true;
+		}
+		return false;
+	}
+
+	/// <summary>
+	/// Return true when the given point can be killed safely(without chest).
+	/// </summary>
+	/// <param name="center"></param>
+	/// <returns></returns>
+	public static bool ChestSafe(Vector2 center)
+	{
+		return ChestSafe((int)center.X, (int)center.Y);
+	}
+
+	/// <summary>
+	/// Return true when no chest in given aren(include one row above).
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="width"></param>
+	/// <param name="height"></param>
+	/// <returns></returns>
+	public static bool ChestSafeArea(int x, int y, int width, int height)
+	{
+		for (int x0 = x; x0 <= x + width; x0++)
+		{
+			for (int y0 = y; y0 <= y + height; y0++)
+			{
+				Tile tile = SafeGetTile(x, y);
+				Tile tileUp = SafeGetTile(x, y - 1);
+				if (TileID.Sets.BasicChest[tile.TileType] || TileID.Sets.BasicChest[tileUp.TileType])
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/// <summary>
+	/// Return true when no chest in given aren(include one row above).
+	/// </summary>
+	/// <param name="center"></param>
+	/// <param name="size"></param>
+	/// <returns></returns>
+	public static bool ChestSafeArea(Vector2 center, Vector2 size)
+	{
+		return ChestSafeArea((int)center.X, (int)center.Y, (int)size.X, (int)size.Y);
 	}
 }

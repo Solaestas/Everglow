@@ -36,6 +36,13 @@ public class LampWood_Chest : ModTile
 
 		AddMapEntry(new Color(85, 72, 126));
 	}
+
+	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
+	{
+		noBreak = true;
+		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+	}
+
 	public override ushort GetMapOption(int i, int j)
 	{
 		return (ushort)(Main.tile[i, j].TileFrameX / 36);
@@ -52,24 +59,34 @@ public class LampWood_Chest : ModTile
 		int top = j;
 		Tile tile = Main.tile[i, j];
 		if (tile.TileFrameX % 36 != 0)
+		{
 			left--;
+		}
 
 		if (tile.TileFrameY != 0)
+		{
 			top--;
+		}
 
 		int chest = Chest.FindChest(left, top);
 		if (chest < 0)
+		{
 			return Language.GetTextValue("LegacyChestType.0");
+		}
 
-		if (Main.chest[chest].name == "")
+		if (Main.chest[chest].name == string.Empty)
+		{
 			return name;
+		}
 
 		return name + ": " + Main.chest[chest].name;
 	}
+
 	public override bool RightClick(int i, int j)
 	{
 		return FurnitureUtils.ChestRightClick(i, j);
 	}
+
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		Color lightColor = Lighting.GetColor(i, j);
@@ -77,7 +94,10 @@ public class LampWood_Chest : ModTile
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 
 		if (Main.drawToScreen)
+		{
 			zero = Vector2.Zero;
+		}
+
 		spriteBatch.Draw(ModAsset.LampWood_Chest_crystal.Value, new Vector2(i, j) * 16 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), lightColor * 2.5f, 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
 	}
 }

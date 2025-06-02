@@ -2,7 +2,10 @@ using Everglow.CagedDomain.Tiles;
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.Common.Blocks;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Fishing.FishingRods;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Pets;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.TwilightForest;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Tools;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Tools.Developer;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
@@ -260,9 +263,11 @@ public class YggdrasilTownGeneration
 			{
 				point.X += 100;
 			}
+			List<Vector2> oldPoints = new List<Vector2>();
 			for (int step = 0; step < 400; step++)
 			{
 				point += velocity;
+				oldPoints.Add(point);
 				if (SafeGetTile((int)(point + velocity * 30).X, (int)(point + velocity).Y).HasTile)
 				{
 					point -= velocity;
@@ -284,11 +289,11 @@ public class YggdrasilTownGeneration
 				if (step > 50)
 				{
 					Vector2 point2 = point - velocity * 24 + velocity.RotatedBy(GenRand.NextFloat(MathHelper.TwoPi)) * 16;
-					WorldGen.digTunnel(point2.X, point2.Y, GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, (int)(radious * 1.1f)), GenRand.Next(3, (int)(radious * 0.14f)));
+					DigTunnel(point2.X, point2.Y, GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, (int)(radious * 1.1f)), GenRand.Next(3, (int)(radious * 0.14f)));
 					if (radious < 60)
 					{
 						point2 = point - velocity * 24 + velocity.RotatedBy(GenRand.NextFloat(MathHelper.TwoPi)) * 6;
-						WorldGen.digTunnel(point2.X, point2.Y, GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, (int)(radious * 2.4f)), GenRand.Next(3, (int)(radious * 0.14f)));
+						DigTunnel(point2.X, point2.Y, GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, (int)(radious * 2.4f)), GenRand.Next(3, (int)(radious * 0.14f)));
 					}
 				}
 
@@ -313,6 +318,18 @@ public class YggdrasilTownGeneration
 							tile.HasTile = true;
 						}
 					}
+				}
+			}
+			for (int a = 0; a < oldPoints.Count; a++)
+			{
+				MinerizationCyanOreCircle(oldPoints[a], radious);
+				if(a % 10 == 0)
+				{
+					int leftX = (int)(oldPoints[a].X - radious);
+					int rightX = (int)(oldPoints[a].X + radious);
+					int upY = (int)(oldPoints[a].Y - radious);
+					int downY = (int)(oldPoints[a].Y + radious);
+					SmoothTile(leftX, upY, rightX, downY);
 				}
 			}
 		}
@@ -486,15 +503,15 @@ public class YggdrasilTownGeneration
 		float area = (downY - upY) * (rightX - leftX) / 180000f;
 		for (int x = 0; x < 110 * area; x++)
 		{
-			WorldGen.digTunnel(GenRand.NextFloat(leftX, rightX), GenRand.NextFloat(upY, downY), GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, 72), GenRand.Next(3, 7));
+			DigTunnel(GenRand.NextFloat(leftX, rightX), GenRand.NextFloat(upY, downY), GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, 72), GenRand.Next(3, 7));
 		}
 		for (int x = 0; x < 30 * area; x++)
 		{
-			WorldGen.digTunnel(GenRand.NextFloat(leftX, rightX), GenRand.NextFloat(upY, downY), GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, 72), GenRand.Next(3, 7));
+			DigTunnel(GenRand.NextFloat(leftX, rightX), GenRand.NextFloat(upY, downY), GenRand.NextFloat(-1, 1), GenRand.NextFloat(0, 1), GenRand.Next(27, 72), GenRand.Next(3, 7));
 		}
 		for (int x = 0; x < 30 * area; x++)
 		{
-			WorldGen.digTunnel(GenRand.NextFloat(leftX, rightX), GenRand.NextFloat(upY, downY), GenRand.NextFloat(-1, 1), GenRand.NextFloat(-1, 1), GenRand.Next(81, 144), GenRand.Next(8, 12));
+			DigTunnel(GenRand.NextFloat(leftX, rightX), GenRand.NextFloat(upY, downY), GenRand.NextFloat(-1, 1), GenRand.NextFloat(-1, 1), GenRand.Next(81, 144), GenRand.Next(8, 12));
 		}
 		for (int x = leftX; x < rightX; x++)
 		{
@@ -582,6 +599,131 @@ public class YggdrasilTownGeneration
 						if (tileUp.LiquidAmount <= 0 && tileDown.LiquidAmount <= 0 && tileLeft.LiquidAmount <= 0 && tileRight.LiquidAmount <= 0)
 						{
 							WorldGen.TileRunner(x, y, GenRand.NextFloat(2f, 6f), GenRand.Next(4, 18), ModContent.TileType<CyanVineStone>());
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// 青缎矿化圆
+	/// </summary>
+	/// <param name="center"></param>
+	/// <param name="range"></param>
+	public static void MinerizationCyanOreCircle(Vector2 center, float range)
+	{
+		int leftX = (int)(center.X - range);
+		int rightX = (int)(center.X + range);
+		int upY = (int)(center.Y - range);
+		int downY = (int)(center.Y + range);
+		for (int x = leftX; x < rightX; x++)
+		{
+			for (int y = upY; y < downY; y++)
+			{
+				if ((center - new Vector2(x, y)).Length() <= range)
+				{
+					Tile tile = SafeGetTile(x, y);
+					Tile tileUp = SafeGetTile(x, y - 1);
+					Tile tileUp1 = SafeGetTile(x - 1, y - 1);
+					Tile tileUp2 = SafeGetTile(x - 2, y - 1);
+					Tile tileUp3 = SafeGetTile(x - 3, y - 1);
+					Tile tileUp4 = SafeGetTile(x - 4, y - 1);
+					Tile tileLeft1 = SafeGetTile(x - 1, y);
+					Tile tileLeft2 = SafeGetTile(x - 2, y);
+					Tile tileLeft3 = SafeGetTile(x - 3, y);
+					Tile tileLeft4 = SafeGetTile(x - 4, y);
+					if (tile.LiquidAmount > 0 || tileUp.LiquidAmount > 0 || tileUp1.LiquidAmount > 0 || tileUp2.LiquidAmount > 0 || tileUp3.LiquidAmount > 0 || tileUp4.LiquidAmount > 0 || tileLeft1.LiquidAmount > 0 || tileLeft1.LiquidAmount > 0 || tileLeft2.LiquidAmount > 0 || tileLeft3.LiquidAmount > 0 || tileLeft4.LiquidAmount > 0)
+					{
+						continue;
+					}
+					if (tileLeft1.HasTile && tileLeft2.HasTile && tileLeft3.HasTile && tileLeft4.HasTile && tile.HasTile && !tileUp.HasTile && !tileUp4.HasTile)
+					{
+						if (tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft3.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft4.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
+						{
+							if (GenRand.NextBool(3))
+							{
+								if(TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(x - 4, y, 5, 3))
+								{
+									PlaceLargeCyanVineOre(x - 4, y - 3);
+								}
+							}
+						}
+					}
+					if (tileLeft1.HasTile && tileLeft2.HasTile && tile.HasTile && !tileUp2.HasTile)
+					{
+						if (tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
+						{
+							if (GenRand.NextBool(12))
+							{
+								if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(x - 2, y + 1, 4, 3))
+								{
+									PlaceMiddleCyanVineOre(x - 2, y - 2);
+								}
+							}
+						}
+					}
+					if (tileLeft1.HasTile && tileLeft2.HasTile && tile.HasTile && !tileUp1.HasTile)
+					{
+						if (tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
+						{
+							if (GenRand.NextBool(12))
+							{
+								if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(x - 2, y, 3, 2))
+								{
+									PlaceSmallCyanVineOre(x - 2, y - 2);
+								}
+							}
+						}
+					}
+					if (!tileLeft1.HasTile && tileUp.HasTile && tileUp1.HasTile && tileUp2.HasTile)
+					{
+						if (tileUp1.TileType == ModContent.TileType<StoneScaleWood>() && tileUp2.TileType == ModContent.TileType<StoneScaleWood>() && tileUp.TileType == ModContent.TileType<StoneScaleWood>())
+						{
+							if (GenRand.NextBool(6))
+							{
+								if (TileCollisionUtils.CanPlaceMultiBenethTowardsDownRight(x - 2, y - 1, 3, 2))
+								{
+									PlaceSmallUpCyanVineOre(x - 2, y);
+								}
+							}
+						}
+					}
+					if (!tile.HasTile && !tileLeft4.HasTile && tileUp.HasTile && tileUp1.HasTile && tileUp2.HasTile && tileUp3.HasTile && tileUp4.HasTile)
+					{
+						if (tileUp1.TileType == ModContent.TileType<StoneScaleWood>() && tileUp2.TileType == ModContent.TileType<StoneScaleWood>() && tileUp.TileType == ModContent.TileType<StoneScaleWood>())
+						{
+							if (GenRand.NextBool(3))
+							{
+								if (TileCollisionUtils.CanPlaceMultiBenethTowardsDownRight(x - 4, y - 1, 5, 3))
+								{
+									PlaceLargeUpCyanVineOre(x - 4, y);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		for (int x = leftX; x < rightX; x++)
+		{
+			for (int y = upY; y < downY; y++)
+			{
+				if ((center - new Vector2(x, y)).Length() <= range)
+				{
+					if (GenRand.NextBool(3000))
+					{
+						Tile tile = SafeGetTile(x, y);
+						Tile tileUp = SafeGetTile(x, y - 1);
+						Tile tileDown = SafeGetTile(x, y + 1);
+						Tile tileLeft = SafeGetTile(x - 1, y);
+						Tile tileRight = SafeGetTile(x + 1, y);
+						if (tile.HasTile && tile.TileType == ModContent.TileType<StoneScaleWood>())
+						{
+							if (tileUp.LiquidAmount <= 0 && tileDown.LiquidAmount <= 0 && tileLeft.LiquidAmount <= 0 && tileRight.LiquidAmount <= 0)
+							{
+								WorldGen.TileRunner(x, y, GenRand.NextFloat(2f, 6f), GenRand.Next(4, 18), ModContent.TileType<CyanVineStone>());
+							}
 						}
 					}
 				}
@@ -1430,6 +1572,24 @@ public class YggdrasilTownGeneration
 	}
 
 	/// <summary>
+	/// Fill all twilight chest by given area if exist.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="width"></param>
+	/// <param name="height"></param>
+	public static void FillTwilightChestXYWH(int x, int y, int width, int height)
+	{
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				WorldGenMisc.TryFillChest(x + i, y + j, TwilightNormalChestContents());
+			}
+		}
+	}
+
+	/// <summary>
 	/// 创建一个生命灯树
 	/// </summary>
 	/// <param name="trunkPoints"></param>
@@ -1658,8 +1818,8 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildTwilightLand()
 	{
-		int upBound = Main.maxTilesY - 1700;
-		int bottomBound = Main.maxTilesY - 960;
+		int upBound = Main.maxTilesY - 1900;
+		int bottomBound = Main.maxTilesY - 760;
 		int count = 0;
 		List<Vector2> twilightCellPoses = new List<Vector2>();
 
@@ -1794,11 +1954,11 @@ public class YggdrasilTownGeneration
 				// 圆壳结构下面穿破
 				for (int j = 0; j < 4; j++)
 				{
-					WorldGen.digTunnel(basePos.X, basePos.Y - range * 0.74f - j * 0.09f, GenRand.NextFloat(-0.2f, 0.2f), -1, GenRand.Next(127, 143), GenRand.Next(5, 8));
+					DigTunnel(basePos.X, basePos.Y - range * 0.74f - j * 0.09f, GenRand.NextFloat(-0.2f, 0.2f), -1, GenRand.Next(127, 143), GenRand.Next(5, 8));
 				}
 				for (int j = 0; j < 6; j++)
 				{
-					WorldGen.digTunnel(basePos.X, basePos.Y + range * 0.44f + j * 0.09f, GenRand.NextFloat(-0.5f, 0.5f), 1, GenRand.Next(127, 143), GenRand.Next(5, 8));
+					DigTunnel(basePos.X, basePos.Y + range * 0.44f + j * 0.09f, GenRand.NextFloat(-0.5f, 0.5f), 1, GenRand.Next(127, 143), GenRand.Next(5, 8));
 				}
 
 				// 种树
@@ -2232,13 +2392,17 @@ public class YggdrasilTownGeneration
 			{
 				canBuild = false;
 			}
+			if (!ChestSafeArea(x, y - roomHeight, roomWidth, roomHeight))
+			{
+				canBuild = false;
+			}
 		}
 		bool leftwall = SafeGetTile(x, y - roomHeight).wall == ModContent.WallType<StoneDragonScaleWoodWall>();
 		bool rightwall = SafeGetTile(x + roomWidth, y - roomHeight).wall == ModContent.WallType<StoneDragonScaleWoodWall>();
 		if (canBuild)
 		{
 			QuickBuild(x, y - roomHeight, mapIOPath);
-			FillLampWoodChestXYWH(x, y - roomHeight, roomWidth, roomHeight);
+			FillTwilightChestXYWH(x, y - roomHeight, roomWidth, roomHeight);
 			if (leftwall)
 			{
 				for (int i = x; i <= x + halfWidth; i++)
@@ -2284,8 +2448,11 @@ public class YggdrasilTownGeneration
 						}
 						else
 						{
-							tile2.TileType = 124;
-							tile2.HasTile = true;
+							if (ChestSafe(i, y + j))
+							{
+								tile2.TileType = 124;
+								tile2.HasTile = true;
+							}
 						}
 						if (j >= maxHeight)
 						{
@@ -2302,8 +2469,11 @@ public class YggdrasilTownGeneration
 									}
 									else
 									{
-										tile3.TileType = (ushort)ModContent.TileType<TwilightEucalyptusWood>();
-										tile3.HasTile = true;
+										if (ChestSafe(i + h, y + j))
+										{
+											tile3.TileType = (ushort)ModContent.TileType<TwilightEucalyptusWood>();
+											tile3.HasTile = true;
+										}
 									}
 								}
 							}
@@ -2318,8 +2488,11 @@ public class YggdrasilTownGeneration
 									}
 									else
 									{
-										tile3.TileType = (ushort)ModContent.TileType<TwilightEucalyptusWood>();
-										tile3.HasTile = true;
+										if (ChestSafe(i - h, y + j))
+										{
+											tile3.TileType = (ushort)ModContent.TileType<TwilightEucalyptusWood>();
+											tile3.HasTile = true;
+										}
 									}
 								}
 							}
@@ -3597,6 +3770,90 @@ public class YggdrasilTownGeneration
 				break;
 			case 6:
 				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<ConcealSpell>(), 1));
+				break;
+		}
+
+		// 金币
+		if (WorldGen.genRand.NextBool(5))
+		{
+			chestContents.Add(new Item(setDefaultsToType: ItemID.GoldCoin, WorldGen.genRand.Next(1, 3)));
+		}
+
+		// 绳子
+		chestContents.Add(new Item(setDefaultsToType: ItemID.Rope, WorldGen.genRand.Next(70, 151)));
+
+		// 药水
+		int potionType = 1;
+		switch (WorldGen.genRand.Next(5))
+		{
+			case 0:
+				potionType = ItemID.WarmthPotion;
+				break;
+			case 1:
+				potionType = ItemID.GillsPotion;
+				break;
+			case 2:
+				potionType = ItemID.WaterWalkingPotion;
+				break;
+			case 3:
+				potionType = ItemID.SpelunkerPotion;
+				break;
+			case 4:
+				potionType = ItemID.MiningPotion;
+				break;
+		}
+		chestContents.Add(new Item(setDefaultsToType: potionType, WorldGen.genRand.Next(1, 4)));
+
+		// 荧光棒
+		if (WorldGen.genRand.NextBool(2))
+		{
+			if (WorldGen.genRand.NextBool(5))
+			{
+				chestContents.Add(new Item(setDefaultsToType: ItemID.StickyGlowstick, WorldGen.genRand.Next(20, 61)));
+			}
+			else
+			{
+				chestContents.Add(new Item(setDefaultsToType: ItemID.Glowstick, WorldGen.genRand.Next(20, 61)));
+			}
+		}
+		return chestContents;
+	}
+
+	/// <summary>
+	/// Generate a list of item to fill a twilight cell room chest.
+	/// </summary>
+	/// <returns></returns>
+	public static List<Item> TwilightNormalChestContents()
+	{
+		List<Item> chestContents = new List<Item>();
+		int mainItem = WorldGen.genRand.Next(8);
+
+		// 尽可能出现不同奖励
+		switch (mainItem)
+		{
+			case 0:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<LampWoodSeed>(), 1));
+				break;
+			case 1:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<RecoveryBand>(), 1));
+				break;
+			case 2:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<GlowstickLauncher>(), 1));
+				break;
+			case 3:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<NightfireStaff>(), 1));
+				break;
+			case 4:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<MidwinterNightmare>(), 1));
+				break;
+			case 5:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<HexaCrystalStaff>(), 1));
+				break;
+			case 6:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<TwilightCrystalMill_Item>(), 1));
+				break;
+			case 7:
+				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<TwilightRod>(), 1));
 				break;
 		}
 

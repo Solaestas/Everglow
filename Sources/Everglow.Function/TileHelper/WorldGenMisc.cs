@@ -54,6 +54,21 @@ public class WorldGenMisc
 				}
 			}
 		}
+		//int cIndex = Chest.FindChest(x, y);
+		//if (cIndex >= 0)
+		//{
+		//	Chest chest = Main.chest[cIndex];
+		//	if (chest != null)
+		//	{
+		//		if (chest.x == x && chest.y + 1 == y)
+		//		{
+		//			for (int t = 0; t < itemList.Count; t++)
+		//			{
+		//				chest.item[t] = itemList[t];
+		//			}
+		//		}
+		//	}
+		//}
 	}
 
 	/// <summary>

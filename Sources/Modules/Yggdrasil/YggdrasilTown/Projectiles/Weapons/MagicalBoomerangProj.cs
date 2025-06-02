@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.KelpCurtain.VFXs;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Weapons;
@@ -117,7 +117,7 @@ public class MagicalBoomerangProj : ModProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if(!Returning)
+		if (!Returning)
 		{
 			Returning = true;
 		}
