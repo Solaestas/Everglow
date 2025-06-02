@@ -47,7 +47,7 @@ public class MossyMolluscsHelmet : ModItem
 
 		public override bool CanConsumeAmmo(Item weapon, Item ammo)
 		{
-			return Main.rand.NextFloat() >= 0.15f; // 15% chance to not consume ammo when using ranged weapons while wearing the Molluscs armor set.
+			return Enabled ? Main.rand.NextFloat() >= 0.15f : true; // 15% chance to not consume ammo when using ranged weapons while wearing the Molluscs armor set.
 		}
 	}
 }

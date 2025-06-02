@@ -42,7 +42,7 @@ public class HardenedWitherbarkHeart : ModItem
 
 		public override void UpdateEquips()
 		{
-			if(!Player.HasBuff<FractureDebuff>() && Enable)
+			if (!Player.HasBuff<FractureDebuff>() && Enable)
 			{
 				Player.AddBuff(ModContent.BuffType<HardenedSkinBuff>(), 2);
 			}
@@ -50,14 +50,17 @@ public class HardenedWitherbarkHeart : ModItem
 
 		public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
 		{
-			if (Player.HasBuff<FractureDebuff>())
+			if (Enable)
 			{
-				modifiers.FinalDamage.Additive += 0.5f; // Increase damage taken by 50% when player has Fracture debuff.
-			}
-			else
-			{
-				Player.AddBuff(ModContent.BuffType<FractureDebuff>(), CooldownDuration);
-				modifiers.FinalDamage.Additive -= 0.9f; // Decrease damage taken by 90% when player does not have Fracture debuff.
+				if (Player.HasBuff<FractureDebuff>())
+				{
+					modifiers.FinalDamage.Additive += 0.5f; // Increase damage taken by 50% when player has Fracture debuff.
+				}
+				else
+				{
+					Player.AddBuff(ModContent.BuffType<FractureDebuff>(), CooldownDuration);
+					modifiers.FinalDamage.Additive -= 0.9f; // Decrease damage taken by 90% when player does not have Fracture debuff.
+				}
 			}
 		}
 	}
