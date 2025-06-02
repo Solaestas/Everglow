@@ -19,16 +19,8 @@ public class RadialCarapace : ModItem
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
-		if (player.wet)
-		{
-			// Increase movement speed by 35%, when player is currently in water.
-			player.moveSpeed += 0.35f;
-		}
-		else
-		{
-			// Increase defense by 4 and decrease movement speed by 5%, when player is not in water.
-			player.statDefense += 4;
-			player.moveSpeed -= 0.05f;
-		}
+		player.statDefense += 4; // Increase defense by 4.
+		player.moveSpeed -= 0.05f; // Decrease movement speed by 5%.
+		player.GetModPlayer<KelpCurtainPlayer>().RadialCarapace = true; // Increase max speed and acceleration by 35% when player is currently in water.
 	}
 }

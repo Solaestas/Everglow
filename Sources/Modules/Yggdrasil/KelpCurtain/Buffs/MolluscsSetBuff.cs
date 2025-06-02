@@ -9,11 +9,7 @@ public class MolluscsSetBuff : ModBuff
 
 	public override void Update(Player player, ref int buffIndex)
 	{
-		player.breathEffectiveness += 1f; // Increases breath time by 100%.
-
-		if (player.wet)
-		{
-			player.moveSpeed += 0.35f; // Increases movement speed by 35% when the player is currently in water.
-		}
+		player.breathEffectiveness += 1f; // Increase breath time by 100%.
+		player.GetModPlayer<KelpCurtainPlayer>().MolluscsSetBuff = true; // Increase max speed and acceleration by 30% when the player is currently in water.
 	}
 }

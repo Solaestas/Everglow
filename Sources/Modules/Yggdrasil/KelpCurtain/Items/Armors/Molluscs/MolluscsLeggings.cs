@@ -23,10 +23,7 @@ public class MolluscsLeggings : ModItem
 	{
 		player.moveSpeed += 0.08f; // Increases movement speed by 5%.
 
-		// Increases movement speed by 35% when the player is  currently in water.
-		if (player.wet)
-		{
-			player.moveSpeed += 0.35f;
-		}
+		// Increases max speed and acceleration by 35% when the player is currently in water.
+		player.GetModPlayer<KelpCurtainPlayer>().MolluscsLeggings = true;
 	}
 }

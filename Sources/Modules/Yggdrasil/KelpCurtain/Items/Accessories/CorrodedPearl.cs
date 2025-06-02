@@ -19,9 +19,6 @@ public class CorrodedPearl : ModItem
 	{
 		player.GetDamage<SummonDamageClass>() += 0.05f;
 		player.breathEffectiveness += 0.5f;
-		if (player.wet)
-		{
-			player.moveSpeed += 0.1f;
-		}
+		player.GetModPlayer<KelpCurtainPlayer>().CorrodedPearl = true; // Increase max speed and acceleration by 20% when player is currently in water.
 	}
 }
