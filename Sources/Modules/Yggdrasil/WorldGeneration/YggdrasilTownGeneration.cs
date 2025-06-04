@@ -61,6 +61,9 @@ public class YggdrasilTownGeneration
 
 		Main.statusText = "Growing Jelly Ball Hotbed...";
 		BuildJellyBallHotbed();
+
+		Main.statusText = "Smoothing Yggdrasil Town...";
+		SmoothYggdrasilTown();
 	}
 
 	public static int AzureGrottoCenterX;
@@ -329,7 +332,7 @@ public class YggdrasilTownGeneration
 					int rightX = (int)(oldPoints[a].X + radious);
 					int upY = (int)(oldPoints[a].Y - radious);
 					int downY = (int)(oldPoints[a].Y + radious);
-					SmoothTile(leftX, upY, rightX, downY);
+					//SmoothTile(leftX, upY, rightX, downY);
 				}
 			}
 		}
@@ -488,7 +491,7 @@ public class YggdrasilTownGeneration
 		Minerization(40, Main.maxTilesY - 700, 280, Main.maxTilesY - 360);
 		Minerization(280, Main.maxTilesY - 500, 350, Main.maxTilesY - 360);
 		Minerization(40, Main.maxTilesY - 360, 1100, Main.maxTilesY - 50);
-		SmoothTile(40, Main.maxTilesY - 700, 1100, Main.maxTilesY - 50);
+		//SmoothTile(40, Main.maxTilesY - 700, 1100, Main.maxTilesY - 50);
 	}
 
 	/// <summary>
@@ -1147,7 +1150,7 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
-		SmoothTile(leftBound, upBound, rightBound, bottomBound);
+		//SmoothTile(leftBound, upBound, rightBound, bottomBound);
 		string mapIOPath = ModAsset.HotbedObervatory_66x44_Path;
 		QuickBuild(rightBound - 100, (int)Center.Y, mapIOPath);
 
@@ -1328,8 +1331,8 @@ public class YggdrasilTownGeneration
 				}
 
 				// 平坦化
-				SmoothTile(startX - 10, checkY - 30, endX + 10, checkY - 25);
-				SmoothTile(startX - 10, checkY + 25, endX + 10, checkY + 30);
+				//SmoothTile(startX - 10, checkY - 30, endX + 10, checkY - 25);
+				//SmoothTile(startX - 10, checkY + 25, endX + 10, checkY + 30);
 
 				// 房子
 				int countCell = 0;
@@ -2325,6 +2328,14 @@ public class YggdrasilTownGeneration
 				}
 			}
 		}
+	}
+
+	/// <summary>
+	/// Smooth whole stratum.
+	/// </summary>
+	public static void SmoothYggdrasilTown()
+	{
+		SmoothTile(0, (int)(Main.maxTilesY * 0.9), Main.maxTilesX, Main.maxTilesY);
 	}
 
 	/// <summary>

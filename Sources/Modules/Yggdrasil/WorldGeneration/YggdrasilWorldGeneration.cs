@@ -1,5 +1,4 @@
 using Everglow.Commons.TileHelper;
-using Everglow.Yggdrasil.Common.Elevator.Tiles;
 using Everglow.Yggdrasil.CorruptWormHive.Tiles;
 using Everglow.Yggdrasil.HurricaneMaze.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Tiles;
@@ -66,6 +65,11 @@ public class YggdrasilWorldGeneration : ModSystem
 	public static int[,] PerlinPixelB = new int[1024, 1024];
 	public static int[,] PerlinPixel2 = new int[1024, 1024];
 	public static int[,] CellPixel = new int[1024, 1024];
+
+	/// <summary>
+	/// When put some MapIO or other pieces of buildings, exclude them from being smoothened.
+	/// </summary>
+	public static List<Rectangle> ShouldNotSmoothAreas = new List<Rectangle>();
 
 	public static UnifiedRandom GenRand = new UnifiedRandom();
 
@@ -237,7 +241,11 @@ public class YggdrasilWorldGeneration : ModSystem
 				{
 					continue;
 				}
-				Tile.SmoothSlope(x, y, false);
+				if (!CanLegallySmooth(x, y))
+				{
+					continue;
+				}
+				Tile.SmoothSlope(x, y, false, false);
 				WorldGen.TileFrame(x, y, true, false);
 				WorldGen.SquareWallFrame(x, y, true);
 			}
@@ -365,12 +373,14 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// <param name="x"></param>
 	/// <param name="y"></param>
 	/// <param name="Path"></param>
-	public static void QuickBuild(int x, int y, string Path)
+	public static void QuickBuild(int x, int y, string Path, bool stopSmooth = true)
 	{
 		var mapIO = new MapIO(x, y);
-
 		mapIO.Read(ModIns.Mod.GetFileStream(Path));
-
+		if (stopSmooth)
+		{
+			ShouldNotSmoothAreas.Add(new Rectangle(x, y, mapIO.width, mapIO.height));
+		}
 		var it = mapIO.GetEnumerator();
 		while (it.MoveNext())
 		{
@@ -1528,6 +1538,24 @@ public class YggdrasilWorldGeneration : ModSystem
 			return true;
 		}
 		return false;
+	}
+
+	/// <summary>
+	/// Return true when the given point do not contained by any rectangles in ShouldNotSmoothAreas.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static bool CanLegallySmooth(int x, int y)
+	{
+		foreach (Rectangle rectangle in ShouldNotSmoothAreas)
+		{
+			if (rectangle.Contains(x, y))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/// <summary>

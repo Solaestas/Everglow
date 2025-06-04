@@ -53,8 +53,10 @@ public class TileDataReaderSystem : Visual
 	public Point FixPoint;
 	public static List<int> OwnerPlayerWhoAmI = new List<int>();
 	public List<Point> ContinueTiles = new List<Point>();
+	public List<Point> CheckLiquidTiles = new List<Point>();
 	public Point OldTilePos = new Point(0, 0);
 	public bool EverLasting = false;
+	public int MaxContinueCount = 625;
 
 	public override void OnSpawn()
 	{
@@ -117,10 +119,21 @@ public class TileDataReaderSystem : Visual
 			drawColor = Color.Gray;
 		}
 		DrawBlockBound(i, j, drawColor);
-		Color drawContinueColor = new Color(0.12f, 0.24f, 0.4f, 0);
-		foreach (Point point in ContinueTiles)
+		if (ContinueTiles.Count < MaxContinueCount)
 		{
-			DrawBlockBound(point.X, point.Y, drawContinueColor);
+			Color drawContinueColor = new Color(0.12f, 0.24f, 0.4f, 0);
+			foreach (Point point in ContinueTiles)
+			{
+				DrawBlockBound(point.X, point.Y, drawContinueColor);
+			}
+		}
+		if (CheckLiquidTiles.Count < MaxContinueCount)
+		{
+			Color drawContinueColor = new Color(0.0f, 0.0f, 0.6f, 0);
+			foreach (Point point in CheckLiquidTiles)
+			{
+				DrawBlockBound(point.X, point.Y, drawContinueColor);
+			}
 		}
 		string datas = GetDatas(i, j);
 		Main.instance.MouseText(datas, colorType);
@@ -136,22 +149,81 @@ public class TileDataReaderSystem : Visual
 		if (tile.HasTile)
 		{
 			datas += "\nFrame : [" + tile.TileFrameX + ", " + tile.TileFrameY + "]";
-			if (ContinueTiles.Count < 512)
+			if (ContinueTiles.Count < MaxContinueCount)
 			{
 				datas += "\nContinue Tiles : " + ContinueTiles.Count;
 			}
 		}
+		if (!tile.HasTile)
+		{
+			datas += "\nCan Fill Liquid Blocks: " + CheckLiquidTiles.Count;
+		}
+
+		// datas += "\nSlope: " + tile.Slope;
+		datas += "\nColliding: " + Collision.IsWorldPointSolid(Main.MouseWorld);
 		return datas;
 	}
 
 	/// <summary>
-	/// When there is an isolated tile area(<=512 tiles), you can check the number of continue tiles.
+	/// When there is an isolated tile area(<=MaxContinueCount tiles), you can check the number of continue tiles.
 	/// </summary>
 	/// <returns></returns>
 	public void UpdateContinueTiles(int i, int j)
 	{
 		ContinueTiles = new List<Point>();
+		CheckLiquidTiles = new List<Point>();
 		CheckTileContinue(i, j);
+		CheckCanFillLiquidContinue(i, j);
+	}
+
+	public void CheckHasNoTileAndAddToCanFillLiquideTile(int i, int j)
+	{
+		Tile tile = SafeGetTile(i, j);
+		if (!Collision.IsWorldPointSolid(new Point(i, j).ToWorldCoordinates(), true))
+		{
+			if (!CheckLiquidTiles.Contains(new Point(i, j)) && CheckLiquidTiles.Count < MaxContinueCount)
+			{
+				CheckLiquidTiles.Add(new Point(i, j));
+				CheckCanFillLiquidContinue(i, j);
+			}
+		}
+	}
+
+	public void CheckCanFillLiquidContinue(int i, int j)
+	{
+		Tile tile = SafeGetTile(i, j);
+		if (Collision.IsWorldPointSolid(new Point(i, j).ToWorldCoordinates(), true))
+		{
+			return;
+		}
+		if (CheckLiquidTiles.Count < MaxContinueCount)
+		{
+			// CheckHasTileAndAddToContinueTile(i, j);
+			List<Point> checkPoints = new List<Point>();
+			var leftPoint = new Point(i - 1, j);
+			EnlistNewCheckLiquidPoint(checkPoints, leftPoint);
+			var rightPoint = new Point(i + 1, j);
+			EnlistNewCheckLiquidPoint(checkPoints, rightPoint);
+
+			var bottomPoint = new Point(i, j + 1);
+			EnlistNewCheckLiquidPoint(checkPoints, bottomPoint);
+
+			var bottomLeftPoint = new Point(i - 1, j + 1);
+			if (!Collision.IsWorldPointSolid(bottomPoint.ToWorldCoordinates(), true) || !Collision.IsWorldPointSolid(leftPoint.ToWorldCoordinates(), true))
+			{
+				EnlistNewCheckLiquidPoint(checkPoints, bottomLeftPoint);
+			}
+			var bottomRightPoint = new Point(i + 1, j + 1);
+			if (!Collision.IsWorldPointSolid(bottomPoint.ToWorldCoordinates(), true) || !Collision.IsWorldPointSolid(rightPoint.ToWorldCoordinates(), true))
+			{
+				EnlistNewCheckLiquidPoint(checkPoints, bottomRightPoint);
+			}
+			for (int t = 0; t < checkPoints.Count; t++)
+			{
+				var pointC = checkPoints[t];
+				CheckHasNoTileAndAddToCanFillLiquideTile(pointC.X, pointC.Y);
+			}
+		}
 	}
 
 	public void CheckHasTileAndAddToContinueTile(int i, int j)
@@ -159,7 +231,7 @@ public class TileDataReaderSystem : Visual
 		Tile tile = SafeGetTile(i, j);
 		if (tile.HasTile)
 		{
-			if (!ContinueTiles.Contains(new Point(i, j)) && ContinueTiles.Count < 512)
+			if (!ContinueTiles.Contains(new Point(i, j)) && ContinueTiles.Count < MaxContinueCount)
 			{
 				ContinueTiles.Add(new Point(i, j));
 				CheckTileContinue(i, j);
@@ -167,12 +239,114 @@ public class TileDataReaderSystem : Visual
 		}
 	}
 
+	public void CheckTileContinue(int i, int j)
+	{
+		Tile tile = SafeGetTile(i, j);
+		if (!tile.HasTile)
+		{
+			return;
+		}
+		if (ContinueTiles.Count < MaxContinueCount)
+		{
+			// CheckHasTileAndAddToContinueTile(i, j);
+			List<Point> checkPoints = new List<Point>();
+			var leftPoint = new Point(i - 1, j);
+			EnlistNewCheckCountinuePoint(checkPoints, leftPoint);
+			var rightPoint = new Point(i + 1, j);
+			EnlistNewCheckCountinuePoint(checkPoints, rightPoint);
+			var topPoint = new Point(i, j - 1);
+			EnlistNewCheckCountinuePoint(checkPoints, topPoint);
+			var bottomPoint = new Point(i, j + 1);
+			EnlistNewCheckCountinuePoint(checkPoints, bottomPoint);
+
+			var topRightPoint = new Point(i + 1, j - 1);
+			if (Main.tile[topPoint].HasTile || Main.tile[rightPoint].HasTile)
+			{
+				EnlistNewCheckCountinuePoint(checkPoints, topRightPoint);
+			}
+			var topLeftPoint = new Point(i - 1, j - 1);
+			if (Main.tile[topPoint].HasTile || Main.tile[leftPoint].HasTile)
+			{
+				EnlistNewCheckCountinuePoint(checkPoints, topLeftPoint);
+			}
+			var bottomLeftPoint = new Point(i - 1, j + 1);
+			if (Main.tile[bottomPoint].HasTile || Main.tile[leftPoint].HasTile)
+			{
+				EnlistNewCheckCountinuePoint(checkPoints, bottomLeftPoint);
+			}
+			var bottomRightPoint = new Point(i + 1, j + 1);
+			if (Main.tile[bottomPoint].HasTile || Main.tile[rightPoint].HasTile)
+			{
+				EnlistNewCheckCountinuePoint(checkPoints, bottomRightPoint);
+			}
+			for (int t = 0; t < checkPoints.Count; t++)
+			{
+				var pointC = checkPoints[t];
+				CheckHasTileAndAddToContinueTile(pointC.X, pointC.Y);
+			}
+		}
+	}
+
+	public void EnlistNewCheckCountinuePoint(List<Point> checkPoints, Point point)
+	{
+		if (checkPoints.Count == 0)
+		{
+			checkPoints.Add(point);
+			return;
+		}
+		int length = GetSearchValue(point);
+		List<Point> newCheck = new List<Point>();
+		bool added = false;
+		for (int i = 0; i < checkPoints.Count; i++)
+		{
+			if (!added && length < GetSearchValue(checkPoints[i]))
+			{
+				newCheck.Add(point);
+				added = true;
+			}
+			newCheck.Add(checkPoints[i]);
+		}
+		if (!added)
+		{
+			newCheck.Add(point);
+		}
+		checkPoints.Clear();
+		checkPoints.AddRange(newCheck);
+	}
+
+	public void EnlistNewCheckLiquidPoint(List<Point> checkPoints, Point point)
+	{
+		if (checkPoints.Count == 0)
+		{
+			checkPoints.Add(point);
+			return;
+		}
+		int length = GetSearchValue(point, true);
+		List<Point> newCheck = new List<Point>();
+		bool added = false;
+		for (int i = 0; i < checkPoints.Count; i++)
+		{
+			if (!added && length < GetSearchValue(checkPoints[i], true))
+			{
+				newCheck.Add(point);
+				added = true;
+			}
+			newCheck.Add(checkPoints[i]);
+		}
+		if (!added)
+		{
+			newCheck.Add(point);
+		}
+		checkPoints.Clear();
+		checkPoints.AddRange(newCheck);
+	}
+
 	public int GetSearchDepth(int i, int j)
 	{
 		return Math.Abs(OldTilePos.X - i) + Math.Abs(OldTilePos.Y - j);
 	}
 
-	public int GetSearchValue(int i, int j)
+	public int GetSearchValue(int i, int j, bool checkLiquid = false)
 	{
 		if (i < 20 || i > Main.maxTilesX - 20)
 		{
@@ -183,84 +357,34 @@ public class TileDataReaderSystem : Visual
 			return int.MaxValue;
 		}
 		int value = GetSearchDepth(i, j);
-		if (ContinueTiles.Contains(new Point(i, j)) || !Main.tile[i, j].HasTile)
+		if (!checkLiquid)
 		{
-			value = int.MaxValue;
+			if (ContinueTiles.Contains(new Point(i, j)))
+			{
+				return int.MaxValue;
+			}
+			if (!Main.tile[i, j].HasTile)
+			{
+				return int.MaxValue - 1;
+			}
+		}
+		else
+		{
+			if (CheckLiquidTiles.Contains(new Point(i, j)))
+			{
+				return int.MaxValue;
+			}
+			if (Collision.IsWorldPointSolid(new Point(i, j).ToWorldCoordinates(), true))
+			{
+				return int.MaxValue - 1;
+			}
 		}
 		return value;
 	}
 
-	public int GetSearchValue(Point point)
+	public int GetSearchValue(Point point, bool checkLiquid = false)
 	{
-		return GetSearchValue(point.X, point.Y);
-	}
-
-	public void CheckTileContinue(int i, int j)
-	{
-		Tile tile = SafeGetTile(i, j);
-		if (!tile.HasTile)
-		{
-			return;
-		}
-		if (ContinueTiles.Count < 512)
-		{
-			CheckHasTileAndAddToContinueTile(i, j);
-			var leftPoint = new Point(i - 1, j);
-			int lengthLeft = GetSearchValue(leftPoint);
-
-			var checkPoint = leftPoint;
-			var checkLength = lengthLeft;
-			var rightPoint = new Point(i + 1, j);
-			int lengthRight = GetSearchValue(rightPoint);
-			if (lengthRight < checkLength)
-			{
-				checkLength = lengthRight;
-				checkPoint = rightPoint;
-			}
-			var topPoint = new Point(i, j - 1);
-			int lengthTop = GetSearchValue(topPoint);
-			if (lengthTop < checkLength)
-			{
-				checkLength = lengthTop;
-				checkPoint = topPoint;
-			}
-			var bottomPoint = new Point(i, j + 1);
-			int lengthBottom = GetSearchValue(bottomPoint);
-			if (lengthBottom < checkLength)
-			{
-				checkLength = lengthBottom;
-				checkPoint = bottomPoint;
-			}
-
-			var topRightPoint = new Point(i + 1, j - 1);
-			int lengthTopRight = GetSearchValue(topRightPoint);
-			if (lengthTopRight < checkLength)
-			{
-				checkLength = lengthTopRight;
-				checkPoint = topRightPoint;
-			}
-			var topLeftPoint = new Point(i - 1, j - 1);
-			int lengthTopLeft = GetSearchValue(topLeftPoint);
-			if (lengthTopLeft < checkLength)
-			{
-				checkLength = lengthTopLeft;
-				checkPoint = topLeftPoint;
-			}
-			var bottomLeftPoint = new Point(i - 1, j + 1);
-			int lengthBottomLeft = GetSearchValue(bottomPoint);
-			if (lengthBottomLeft < checkLength)
-			{
-				checkLength = lengthBottomLeft;
-				checkPoint = bottomLeftPoint;
-			}
-			var bottomRightPoint = new Point(i + 1, j + 1);
-			int lengthBottomRight = GetSearchValue(bottomRightPoint);
-			if (lengthBottomRight < checkLength)
-			{
-				checkPoint = bottomRightPoint;
-			}
-			CheckHasTileAndAddToContinueTile(checkPoint.X, checkPoint.Y);
-		}
+		return GetSearchValue(point.X, point.Y, checkLiquid);
 	}
 
 	public void DrawBlockBound(int i, int j, Color color)
