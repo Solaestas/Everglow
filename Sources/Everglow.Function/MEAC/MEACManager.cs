@@ -138,8 +138,8 @@ internal class MEACManager : ILoadable
             graphicsDevice.Textures[1] = Main.screenTargetSwap;
             graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            ScreenWarp.CurrentTechnique.Passes[0].Apply();
-            ScreenWarp.Parameters["strength"].SetValue(0.025f);//扭曲程度
+			ScreenWarp.Parameters["strength"].SetValue(0.025f);//扭曲程度
+			ScreenWarp.CurrentTechnique.Passes[0].Apply();
             Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
             Main.spriteBatch.End();
         }
@@ -154,8 +154,8 @@ internal class MEACManager : ILoadable
 			graphicsDevice.Textures[1] = Main.screenTargetSwap;
 			graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+			ScreenWarp.Parameters["strength"].SetValue(0.25f);//扭曲程度
 			ScreenWarp.CurrentTechnique.Passes[1].Apply();
-			ScreenWarp.Parameters["strength"].SetValue(0.025f);//扭曲程度
 			Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
 			Main.spriteBatch.End();
 		}
