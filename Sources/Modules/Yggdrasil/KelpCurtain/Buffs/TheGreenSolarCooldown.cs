@@ -1,6 +1,6 @@
 namespace Everglow.Yggdrasil.KelpCurtain.Buffs;
 
-public class SunstoneCooldown : ModBuff
+public class TheGreenSolarCooldown : ModBuff
 {
 	public override string Texture => Commons.ModAsset.DebuffTemplate_Mod;
 
