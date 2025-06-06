@@ -20,6 +20,18 @@ public class JellyBallGelSplash : Visual
 
 	public override void Update()
 	{
+		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
+		{
+			timer = maxTime;
+			Active = false;
+			return;
+		}
+		if (position.Y <= 320 || position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			timer = maxTime;
+			Active = false;
+			return;
+		}
 		position += velocity * 0.001f;
 		oldPos.Add(position);
 		if (oldPos.Count > 15)

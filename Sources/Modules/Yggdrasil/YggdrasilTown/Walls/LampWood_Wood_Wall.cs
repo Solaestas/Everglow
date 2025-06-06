@@ -8,6 +8,7 @@ public class LampWood_Wood_Wall : ModWall
 		DustType = DustID.WoodFurniture;
 		AddMapEntry(new Color(27, 38, 31));
 	}
+
 	public override bool CanExplode(int i, int j)
 	{
 		return false;

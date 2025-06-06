@@ -1,4 +1,4 @@
-﻿sampler2D uImage : register(s0);
+sampler2D uImage : register(s0);
 texture uNoise;
 sampler uNoiseSampler =
 sampler_state
@@ -41,22 +41,15 @@ PSInput VertexShaderFunction(VSInput input)
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
-    float4 color = tex2D(uNoiseSampler, float2(input.Texcoord.x, input.Texcoord.y + input.Color.g));
-    float4 colorFlame = tex2D(uImage, input.Texcoord.xy);
+	float4 color = tex2D(uNoiseSampler, float2(input.Texcoord.x, input.Texcoord.y + input.Color.g));
+	float4 colorFlame = tex2D(uImage, input.Texcoord.xy);
     
-    float valueD = input.Color.r + input.Texcoord.z * 0.5f;
-    float4 smog = float4(0, 0, 0, max(color.r / valueD * 3 - valueD - 1.5, 0));
-    float4 flame = tex2D(uImage, float2((1 - color.r) / (1 - valueD), 0.5));
-    smog.a *= input.Color.a;
-    flame.a *= input.Color.a;
-    if (!any(color))
-        return float4(0, 0, 0, 0);
-    if (color.r >= valueD)
-        return flame;
-    else
-        return smog;
+	float4 flame = tex2D(uImage, float2(1 - color.r, input.Texcoord.z));
+	flame.a *= input.Color.a;
+	if (color.r < 1 - input.Color.a)
+		return float4(0, 0, 0, 0);
+	return flame;
 }
-
 technique Technique1
 {
     pass Test

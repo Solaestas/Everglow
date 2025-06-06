@@ -159,24 +159,24 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	public virtual void RemoveAllRope(int i, int j)
 	{
 		// 移除受绳
-		RemoveRopeStardAt(i, j);
+		RemoveRopeEndAt(i, j);
 
 		// 移除发绳
 		foreach (Point point in RopeHeadAndTail.Keys)
 		{
 			if (RopeHeadAndTail[point] == new Point(i, j))
 			{
-				RemoveRopeStardAt(point.X, point.Y);
+				RemoveRopeEndAt(point.X, point.Y);
 			}
 		}
 	}
 
 	/// <summary>
-	/// 移除此坐标所接受的绳
+	/// Remove all ropes ending at this point.
 	/// </summary>
 	/// <param name="i"></param>
 	/// <param name="j"></param>
-	public virtual void RemoveRopeStardAt(int i, int j)
+	public virtual void RemoveRopeEndAt(int i, int j)
 	{
 		if (RopesOfAllThisTileInTheWorld.ContainsKey(new Point(i, j)))
 		{
@@ -193,13 +193,14 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	}
 
 	/// <summary>
-	/// 靠近时根据TE挂绳
+	/// Connect rope by TileEntity information.
 	/// </summary>
 	/// <param name="i"></param>
 	/// <param name="j"></param>
 	/// <param name="closer"></param>
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
+		// connect rope start
 		if (!RopesOfAllThisTileInTheWorld.ContainsKey(new Point(i, j)))
 		{
 			CableEneity cableEneity;
@@ -208,12 +209,43 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 			{
 				AddRope(i, j, i + cableEneity.ToTail.X, j + cableEneity.ToTail.Y);
 			}
+
+			// Only use for Cable Car
+			// FindAndConnectRopeNearBy(i, j, 3);
 		}
 		base.NearbyEffects(i, j, closer);
 	}
 
+	public void FindAndConnectRopeNearBy(int i, int j, int maxStep = 100)
+	{
+		if (maxStep <= 0)
+		{
+			return;
+		}
+		Tile tile = Main.tile[i, j];
+		for (int x = -125; x < 126; x++)
+		{
+			for (int y = -125; y < 126; y++)
+			{
+				CableEneity cableEneity;
+				int pointX = Math.Clamp(i + x, 20, Main.maxTilesX - 20);
+				int pointY = Math.Clamp(j + y, 20, Main.maxTilesY - 20);
+				Tile newTile = Main.tile[pointX, pointY];
+				if (newTile.TileType == tile.TileType)
+				{
+					TryGetCableEntityAs(pointX, pointY, out cableEneity);
+					if (cableEneity != null)
+					{
+						AddRope(pointX, pointY, pointX + cableEneity.ToTail.X, pointY + cableEneity.ToTail.Y);
+					}
+					FindAndConnectRopeNearBy(pointX, pointY, maxStep - 1);
+				}
+			}
+		}
+	}
+
 	/// <summary>
-	/// 掐掉绳子的视觉效果
+	/// Visual effect when cutting the rope.
 	/// </summary>
 	/// <param name="rope"></param>
 	public virtual void RemoveRopeEffect(Rope rope)
@@ -312,7 +344,6 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		// TileFluentDrawManager.AddFluentPoint(this, i, j);
 		return base.PreDraw(i, j, spriteBatch);
 	}
 
@@ -337,12 +368,21 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		{
 			DrawCable(rope, pos, spriteBatch, tileDrawing);
 		}
+
+		// foreach (Point point in RopeHeadAndTail.Keys)
+		// {
+		// if (RopeHeadAndTail[point] == pos)
+		// {
+		// RopesOfAllThisTileInTheWorld.TryGetValue(point, out rope);
+		// DrawCable(rope, point, spriteBatch, tileDrawing);
+		// }
+		// }
 	}
 
 	public string BulbTexturePath;
 
 	/// <summary>
-	/// 绘制挂绳,只要有挂物必须完全重写
+	/// Draw cable.While rope with hanging unit(such as light bulb), this method must be overrided.
 	/// </summary>
 	/// <param name="rope"></param>
 	/// <param name="pos"></param>
@@ -444,6 +484,19 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		{
 			MouseOverPoint.Remove(Main.LocalPlayer);
 		}
+	}
+
+	public void CreateACableTile(int i0, int j0, int i1, int j1, int style = 0)
+	{
+		var tile0 = Main.tile[Math.Clamp(i0, 20, Main.maxTilesX - 20), Math.Clamp(j0, 20, Main.maxTilesY - 20)];
+		var tile1 = Main.tile[Math.Clamp(i1, 20, Main.maxTilesX - 20), Math.Clamp(j1, 20, Main.maxTilesY - 20)];
+		tile1.TileType = tile0.TileType = Type;
+		tile1.HasTile = tile0.HasTile = true;
+		int styleX = style % 4;
+		int styleY = (style - styleX) / 4;
+		tile1.TileFrameX = tile0.TileFrameX = (short)(18 * styleX);
+		tile1.TileFrameY = tile0.TileFrameY = (short)(18 * styleY);
+		AddRope(i0, j0, i1, j1);
 	}
 }
 
@@ -765,17 +818,38 @@ public class CableTileUpdate : ModSystem
 	/// </summary>
 	public static MassSpringSystem CableTileMassSpringSystem = new MassSpringSystem();
 	public static EulerSolver CableTileEulerSolver = new EulerSolver(8);
+	public static PBDSolver CableTilePBDSolver = new PBDSolver(8);
 
 	public override void PostUpdateEverything()
 	{
 		CableTileMassSpringSystem = new MassSpringSystem();
-		foreach(var cableTile in TileLoader.tiles.OfType<CableTile>())
+		foreach (var cableTile in TileLoader.tiles.OfType<CableTile>())
 		{
-			foreach(var rope in cableTile.RopesOfAllThisTileInTheWorld.Values)
+			foreach (var rope in cableTile.RopesOfAllThisTileInTheWorld.Values)
 			{
 				CableTileMassSpringSystem.AddMassSpringMesh(rope);
 			}
 		}
 		CableTileEulerSolver.Step(CableTileMassSpringSystem, 1);
+	}
+
+	public override void OnWorldLoad()
+	{
+		foreach (var cableTile in TileLoader.tiles.OfType<CableTile>())
+		{
+			cableTile.RopesOfAllThisTileInTheWorld.Clear();
+			cableTile.RopeHeadAndTail.Clear();
+		}
+		base.OnWorldLoad();
+	}
+
+	public override void OnWorldUnload()
+	{
+		foreach (var cableTile in TileLoader.tiles.OfType<CableTile>())
+		{
+			cableTile.RopesOfAllThisTileInTheWorld.Clear();
+			cableTile.RopeHeadAndTail.Clear();
+		}
+		base.OnWorldUnload();
 	}
 }

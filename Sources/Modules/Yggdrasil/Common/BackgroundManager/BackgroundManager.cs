@@ -18,8 +18,8 @@ public class BackgroundManager
 
 	public class BoardBackground : WorldBackground
 	{
-		public bool XClamp = false;
-		public bool YClamp = true;
+		public bool xClamp = false;
+		public bool yClamp = true;
 	}
 
 	public class PointBackground : WorldBackground
@@ -37,24 +37,40 @@ public class BackgroundManager
 		}
 	}
 
-	public static void QuickDrawBG(Texture2D tex, Rectangle drawArea, Color baseColor, int Ymin, int Ymax, bool Xclamp = false, bool Yclamp = true)
+	public static void QuickDrawBG(Texture2D tex, float depth, Vector2 anchorWorldPos, Color baseColor, int yWorldCoordMin, int yWorldCoordMax, bool xClamp = false, bool yClamp = true)
+	{
+		QuickDrawBG(tex, GetDrawFrame(tex, depth, anchorWorldPos), baseColor, yWorldCoordMin, yWorldCoordMax, false, true);
+	}
+
+	/// <summary>
+	/// Draw a texture in the background layer.
+	/// Auto rasterize the area that out of yWorldCoord Clamp (yWorldCoordMin, yWorldCoordMax).
+	/// </summary>
+	/// <param name="tex"></param>
+	/// <param name="drawFrame"></param>
+	/// <param name="baseColor"></param>
+	/// <param name="yWorldCoordMin"></param>
+	/// <param name="yWorldCoordMax"></param>
+	/// <param name="xClamp"></param>
+	/// <param name="yClamp"></param>
+	public static void QuickDrawBG(Texture2D tex, Rectangle drawFrame, Color baseColor, int yWorldCoordMin, int yWorldCoordMax, bool xClamp = false, bool yClamp = true)
 	{
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 		Effect bgW = ModAsset.BackgroundXWarp.Value;
-		if (Xclamp && Yclamp)
+		if (xClamp && yClamp)
 		{
 			bgW = ModAsset.BackgroundXYClamp.Value;
 		}
 
-		if (Xclamp && !Yclamp)
+		if (xClamp && !yClamp)
 		{
 			bgW = ModAsset.BackgroundYWarp.Value;
 		}
 
-		if (!Xclamp && !Yclamp)
+		if (!xClamp && !yClamp)
 		{
 			bgW = ModAsset.BackgroundXYWarp.Value;
 		}
@@ -70,30 +86,30 @@ public class BackgroundManager
 		bgW.CurrentTechnique.Passes[0].Apply();
 
 		// 处理掉超出地图界限的部分
-		int DrawMaxY = Main.screenHeight;
-		int DrawMinY = 0;
-		float YSqueezeValueUp = 0f;
-		float YSqueezeValueDown = 1f;
-		if (Main.screenPosition.Y + Main.screenHeight > Ymax)
+		int drawMaxY = Main.screenHeight;
+		int drawMinY = 0;
+		float yClampValueUp = 0f;
+		float yClampValueDown = 1f;
+		if (Main.screenPosition.Y + Main.screenHeight > yWorldCoordMax)
 		{
-			DrawMaxY = Ymax - (int)Main.screenPosition.Y;
-			YSqueezeValueDown = (float)DrawMaxY / Main.screenHeight;
+			drawMaxY = yWorldCoordMax - (int)Main.screenPosition.Y;
+			yClampValueDown = (float)drawMaxY / Main.screenHeight;
 		}
-		if (Main.screenPosition.Y < Ymin)
+		if (Main.screenPosition.Y < yWorldCoordMin)
 		{
-			DrawMinY = Ymin - (int)Main.screenPosition.Y;
-			YSqueezeValueUp = DrawMinY / (float)Main.screenHeight;
+			drawMinY = yWorldCoordMin - (int)Main.screenPosition.Y;
+			yClampValueUp = drawMinY / (float)Main.screenHeight;
 		}
 
 		var CloseII = new List<Vertex2D>
 		{
-			new Vertex2D(new Vector2(0, DrawMinY), baseColor, new Vector3(drawArea.X / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueUp) / tex.Height, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth, DrawMinY), baseColor, new Vector3((drawArea.X + drawArea.Width) / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueUp) / tex.Height, 0)),
-			new Vertex2D(new Vector2(0, DrawMaxY), baseColor, new Vector3(drawArea.X / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueDown) / tex.Height, 0)),
+			new Vertex2D(new Vector2(0, drawMinY), baseColor, new Vector3(drawFrame.X / (float)tex.Width, (drawFrame.Y + drawFrame.Height * yClampValueUp) / tex.Height, 0)),
+			new Vertex2D(new Vector2(Main.screenWidth, drawMinY), baseColor, new Vector3((drawFrame.X + drawFrame.Width) / (float)tex.Width, (drawFrame.Y + drawFrame.Height * yClampValueUp) / tex.Height, 0)),
+			new Vertex2D(new Vector2(0, drawMaxY), baseColor, new Vector3(drawFrame.X / (float)tex.Width, (drawFrame.Y + drawFrame.Height * yClampValueDown) / tex.Height, 0)),
 
-			new Vertex2D(new Vector2(0, DrawMaxY), baseColor, new Vector3(drawArea.X / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueDown) / tex.Height, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth, DrawMinY), baseColor, new Vector3((drawArea.X + drawArea.Width) / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueUp) / tex.Height, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth, DrawMaxY), baseColor, new Vector3((drawArea.X + drawArea.Width) / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueDown) / tex.Height, 0)),
+			new Vertex2D(new Vector2(0, drawMaxY), baseColor, new Vector3(drawFrame.X / (float)tex.Width, (drawFrame.Y + drawFrame.Height * yClampValueDown) / tex.Height, 0)),
+			new Vertex2D(new Vector2(Main.screenWidth, drawMinY), baseColor, new Vector3((drawFrame.X + drawFrame.Width) / (float)tex.Width, (drawFrame.Y + drawFrame.Height * yClampValueUp) / tex.Height, 0)),
+			new Vertex2D(new Vector2(Main.screenWidth, drawMaxY), baseColor, new Vector3((drawFrame.X + drawFrame.Width) / (float)tex.Width, (drawFrame.Y + drawFrame.Height * yClampValueDown) / tex.Height, 0)),
 		};
 		if (CloseII.Count > 2)
 		{
@@ -105,18 +121,40 @@ public class BackgroundManager
 		Main.spriteBatch.Begin(sBS);
 	}
 
-	public static void DrawWaterfallInBackground(Vector2 biomeCenter, float moveStep, Vector2 positionToTextureCenter, float Width, float Height, Color baseColor, int Ymin, int Ymax, Vector2 textureSize = default(Vector2), bool Xclamp = false, bool Yclamp = true)
+	/// <summary>
+	/// Get the draw frame of texture by screenPos, depth(1 , ∞) and anchor world pos.
+	/// </summary>
+	/// <param name="texSize"></param>
+	/// <param name="MoveStep"></param>
+	/// <returns></returns>
+	public static Rectangle GetDrawFrame(Texture2D texture, float depth, Vector2 anchorWorldPos)
+	{
+		float depthValue = 1 / depth;
+		Vector2 texSize = texture.Size();
+		Vector2 sampleTopleft = Vector2.Zero;
+		Vector2 sampleCenter = sampleTopleft + texSize / 2;
+		var screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
+		Vector2 drawCenter = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
+		Vector2 deltaPos = drawCenter - anchorWorldPos;
+		deltaPos *= depthValue;
+		int rectangleX = (int)(sampleCenter.X - screenSize.X / 2f + deltaPos.X);
+		int rectangleY = (int)(sampleCenter.Y - screenSize.Y / 2f + deltaPos.Y);
+
+		return new Rectangle(rectangleX, rectangleY, (int)screenSize.X, (int)screenSize.Y);
+	}
+
+	public static void DrawWaterfallInBackground(Vector2 biomeCenter, float moveStep, Vector2 positionToTextureCenter, float Width, float Height, Color baseColor, int yWorldCoordMin, int yWorldCoordMax, Vector2 textureSize = default(Vector2), bool xClamp = false, bool yClamp = true)
 	{
 		Vector2 HalfScreenSize = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
 		Vector2 ScreenCenter = Main.screenPosition + HalfScreenSize;
 		Vector2 deltaPos = ScreenCenter - biomeCenter;
 		deltaPos *= moveStep;
 		Vector2 DrawCenter = HalfScreenSize - deltaPos + positionToTextureCenter;
-		if (Xclamp)
+		if (xClamp)
 		{
-			if (Yclamp)
+			if (yClamp)
 			{
-				DrawWaterfall(DrawCenter, Width, Height, baseColor, Ymin, Ymax);
+				DrawWaterfall(DrawCenter, Width, Height, baseColor, yWorldCoordMin, yWorldCoordMax);
 			}
 			else
 			{
@@ -127,7 +165,7 @@ public class BackgroundManager
 				}
 				while (dCenter.Y >= -Height && dCenter.Y <= Main.screenHeight + 160)
 				{
-					DrawWaterfall(dCenter, Width, Height, baseColor, Ymin, Ymax);
+					DrawWaterfall(dCenter, Width, Height, baseColor, yWorldCoordMin, yWorldCoordMax);
 					dCenter.Y -= textureSize.Y;
 				}
 
@@ -143,12 +181,12 @@ public class BackgroundManager
 				}
 				while (dCenter.Y >= -Height && dCenter.Y <= Main.screenHeight + 160)
 				{
-					DrawWaterfall(dCenter, Width, Height, baseColor, Ymin, Ymax);
+					DrawWaterfall(dCenter, Width, Height, baseColor, yWorldCoordMin, yWorldCoordMax);
 					dCenter.Y += textureSize.Y;
 				}
 			}
 		}
-		else if (Yclamp)
+		else if (yClamp)
 		{
 			Vector2 dCenter = DrawCenter;
 			while (dCenter.X > Main.screenWidth + Width)
@@ -157,7 +195,7 @@ public class BackgroundManager
 			}
 			while (dCenter.X >= -Width && dCenter.X <= Main.screenWidth + Width)
 			{
-				DrawWaterfall(dCenter, Width, Height, baseColor, Ymin, Ymax);
+				DrawWaterfall(dCenter, Width, Height, baseColor, yWorldCoordMin, yWorldCoordMax);
 				dCenter.X -= textureSize.X;
 			}
 			dCenter = DrawCenter;
@@ -172,7 +210,7 @@ public class BackgroundManager
 			}
 			while (dCenter.X >= -Width && dCenter.X <= Main.screenWidth + Width)
 			{
-				DrawWaterfall(dCenter, Width, Height, baseColor, Ymin, Ymax);
+				DrawWaterfall(dCenter, Width, Height, baseColor, yWorldCoordMin, yWorldCoordMax);
 				dCenter.X += textureSize.X;
 			}
 		}
@@ -192,7 +230,7 @@ public class BackgroundManager
 				}
 				while (ddCenter.Y >= -Height && ddCenter.Y <= Main.screenHeight + 160)
 				{
-					DrawWaterfall(ddCenter, Width, Height, baseColor, Ymin, Ymax);
+					DrawWaterfall(ddCenter, Width, Height, baseColor, yWorldCoordMin, yWorldCoordMax);
 					ddCenter.Y -= textureSize.Y;
 				}
 				ddCenter = dCenter;
@@ -208,7 +246,7 @@ public class BackgroundManager
 				while (ddCenter.Y >= -Height && ddCenter.Y <= Main.screenHeight + 160)
 				{
 					ddCenter.Y += textureSize.Y;
-					DrawWaterfall(ddCenter, Width, Height, baseColor, Ymin, Ymax);
+					DrawWaterfall(ddCenter, Width, Height, baseColor, yWorldCoordMin, yWorldCoordMax);
 				}
 				dCenter.X -= textureSize.X;
 			}
@@ -231,7 +269,7 @@ public class BackgroundManager
 				}
 				while (ddCenter.Y >= -Height && ddCenter.Y <= Main.screenHeight + 160)
 				{
-					DrawWaterfall(ddCenter, Width, Height, baseColor, Ymin, Ymax);
+					DrawWaterfall(ddCenter, Width, Height, baseColor, yWorldCoordMin, yWorldCoordMax);
 					ddCenter.Y -= textureSize.Y;
 				}
 				ddCenter = dCenter;
@@ -247,14 +285,14 @@ public class BackgroundManager
 				while (ddCenter.Y >= -Height && ddCenter.Y <= Main.screenHeight + 160)
 				{
 					ddCenter.Y += textureSize.Y;
-					DrawWaterfall(ddCenter, Width, Height, baseColor, Ymin, Ymax);
+					DrawWaterfall(ddCenter, Width, Height, baseColor, yWorldCoordMin, yWorldCoordMax);
 				}
 				dCenter.X += textureSize.X;
 			}
 		}
 	}
 
-	public static void DrawWaterfall(Vector2 drawCenter, float width, float height, Color baseColor, int Ymin, int Ymax)
+	public static void DrawWaterfall(Vector2 drawCenter, float width, float height, Color baseColor, int yWorldCoordMin, int yWorldCoordMax)
 	{
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -280,7 +318,7 @@ public class BackgroundManager
 			}
 
 			float WorldYCoordinate = drawCenter.Y + y + Main.screenPosition.Y;
-			if (WorldYCoordinate > Ymax || WorldYCoordinate < Ymin)
+			if (WorldYCoordinate > yWorldCoordMax || WorldYCoordinate < yWorldCoordMin)
 			{
 				ColorAlpha *= 0;
 			}
@@ -305,7 +343,7 @@ public class BackgroundManager
 			}
 
 			float WorldYCoordinate = drawCenter.Y + y + Main.screenPosition.Y;
-			if (WorldYCoordinate > Ymax || WorldYCoordinate < Ymin)
+			if (WorldYCoordinate > yWorldCoordMax || WorldYCoordinate < yWorldCoordMin)
 			{
 				ColorAlpha *= 0;
 			}

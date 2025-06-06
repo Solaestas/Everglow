@@ -5,7 +5,7 @@ namespace Everglow.Yggdrasil.HurricaneMaze;
 
 public class HurricaneMazeBiome : ModBiome
 {
-	public override int Music => !Main.dayTime ? YggdrasilContent.QuickMusic("HurricaneMazeBGM") : YggdrasilContent.QuickMusic("OldHurricaneMazeBGM");
+	public override int Music => 0;
 	public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 	public override string BestiaryIcon => "Everglow/Yggdrasil/HurricaneMaze/HurricaneMazeIcon";
 	public override string BackgroundPath => base.BackgroundPath;
