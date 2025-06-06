@@ -1,15 +1,11 @@
-using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
-using Terraria;
 using Terraria.Audio;
 using Terraria.Localization;
-using static Steamworks.SteamUser;
 
 namespace Everglow.Myth.TheFirefly.NPCs.Bosses;
 
 public class EvilPack : ModNPC
 {
-	public ulong SteamID64 = GetSteamID().m_SteamID;
 	public List<string> devPlayerNames = PlayerUtils.GetDevPlayerNames();
 
 	public override void SetStaticDefaults()
@@ -102,7 +98,7 @@ public class EvilPack : ModNPC
 						}
 					}
 
-					
+
 					NPC.ai[2] += 1;
 				}
 			}

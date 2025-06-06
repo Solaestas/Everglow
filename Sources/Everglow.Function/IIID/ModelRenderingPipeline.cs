@@ -35,7 +35,9 @@ namespace Everglow.Commons.IIID
 		private RenderTarget2D[] blurRenderTargets;
 
 		private const int MAX_BLUR_LEVELS = 5;
-		private int renderTargetSize = Math.Max(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width) / 2;
+		private int renderTargetSize = Main.dedServ
+			? 0
+			: Math.Max(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width) / 2;
 
 		// private RenderTarget2D m_albedoTarget;
 		// private RenderTarget2D m_normalTarget;
@@ -71,36 +73,40 @@ namespace Everglow.Commons.IIID
 			m_pixelArt = ModAsset.PixelArt;
 			m_edge = ModAsset.Edge;
 
-			Main.OnResolutionChanged += Main_OnResolutionChanged;
-			Ins.MainThread.AddTask(() =>
+			if (!Main.dedServ)
 			{
-				fakeScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, renderTargetSize, renderTargetSize, false,
-					SurfaceFormat.HdrBlendable, DepthFormat.Depth24Stencil8, 1, RenderTargetUsage.PreserveContents);
-				fakeScreenTargetSwap = new RenderTarget2D(Main.graphics.GraphicsDevice, renderTargetSize, renderTargetSize, false,
-					SurfaceFormat.HdrBlendable, DepthFormat.None, 1, RenderTargetUsage.PreserveContents);
-				emissionTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, renderTargetSize, renderTargetSize, false,
-					SurfaceFormat.HdrBlendable, DepthFormat.None, 1, RenderTargetUsage.PreserveContents);
-				depthTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, renderTargetSize, renderTargetSize, false,
-					SurfaceFormat.Vector4, DepthFormat.None, 1, RenderTargetUsage.PreserveContents);
-
-				blurRenderTargets = new RenderTarget2D[MAX_BLUR_LEVELS];
-				for (int i = 0; i < MAX_BLUR_LEVELS; i++)
+				Main.OnResolutionChanged += Main_OnResolutionChanged;
+				Ins.MainThread.AddTask(() =>
 				{
-					blurRenderTargets[i] = new RenderTarget2D(Main.graphics.GraphicsDevice, renderTargetSize >> i,
-						renderTargetSize >> i, false, SurfaceFormat.HdrBlendable, DepthFormat.None,
+					fakeScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, renderTargetSize, renderTargetSize, false,
+						SurfaceFormat.HdrBlendable, DepthFormat.Depth24Stencil8, 1, RenderTargetUsage.PreserveContents);
+					fakeScreenTargetSwap = new RenderTarget2D(Main.graphics.GraphicsDevice, renderTargetSize, renderTargetSize, false,
+						SurfaceFormat.HdrBlendable, DepthFormat.None, 1, RenderTargetUsage.PreserveContents);
+					emissionTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, renderTargetSize, renderTargetSize, false,
+						SurfaceFormat.HdrBlendable, DepthFormat.None, 1, RenderTargetUsage.PreserveContents);
+					depthTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, renderTargetSize, renderTargetSize, false,
+						SurfaceFormat.Vector4, DepthFormat.None, 1, RenderTargetUsage.PreserveContents);
+
+					blurRenderTargets = new RenderTarget2D[MAX_BLUR_LEVELS];
+					for (int i = 0; i < MAX_BLUR_LEVELS; i++)
+					{
+						blurRenderTargets[i] = new RenderTarget2D(Main.graphics.GraphicsDevice, renderTargetSize >> i,
+							renderTargetSize >> i, false, SurfaceFormat.HdrBlendable, DepthFormat.None,
+							1, RenderTargetUsage.PreserveContents);
+					}
+
+					bloomTargetSwap1 = new RenderTarget2D(Main.graphics.GraphicsDevice, renderTargetSize >> 1,
+						renderTargetSize >> 1, false,
+						SurfaceFormat.HdrBlendable, DepthFormat.None,
 						1, RenderTargetUsage.PreserveContents);
-				}
 
-				bloomTargetSwap1 = new RenderTarget2D(Main.graphics.GraphicsDevice, renderTargetSize >> 1,
-					renderTargetSize >> 1, false,
-					SurfaceFormat.HdrBlendable, DepthFormat.None,
-					1, RenderTargetUsage.PreserveContents);
+					bloomTargetSwap = new RenderTarget2D(Main.graphics.GraphicsDevice, renderTargetSize >> (MAX_BLUR_LEVELS - 1),
+						renderTargetSize >> (MAX_BLUR_LEVELS - 1), false,
+						SurfaceFormat.HdrBlendable, DepthFormat.None,
+						1, RenderTargetUsage.PreserveContents);
+				});
+			}
 
-				bloomTargetSwap = new RenderTarget2D(Main.graphics.GraphicsDevice, renderTargetSize >> (MAX_BLUR_LEVELS - 1),
-					renderTargetSize >> (MAX_BLUR_LEVELS - 1), false,
-					SurfaceFormat.HdrBlendable, DepthFormat.None,
-					1, RenderTargetUsage.PreserveContents);
-			});
 			models = new List<ModelEntity>();
 			base.OnModLoad();
 		}
