@@ -8,6 +8,7 @@ public class TheGreenSolarBuff : ModBuff
 
 	public override void SetStaticDefaults()
 	{
+		Main.debuff[Type] = true;
 		Main.buffNoTimeDisplay[Type] = true;
 	}
 
