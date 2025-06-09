@@ -256,7 +256,7 @@ public class YggdrasilTownBackground : ModSystem
 					}
 					if (yWorld.StoneCageOfChallengesCenter == Vector2.zeroVector)
 					{
-						yWorld.StoneCageOfChallengesCenter = new Vector2(Main.maxTilesX * 16 / 2, Main.maxTilesY - 9000);
+						yWorld.StoneCageOfChallengesCenter = new Vector2(Main.maxTilesX / 2, Main.maxTilesY - 1900) * 16;
 					}
 				}
 				Vector2 screenCenter = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f;

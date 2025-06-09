@@ -7,6 +7,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 using ReLogic.Utilities;
+using Terraria;
 using Terraria.IO;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
@@ -72,6 +73,8 @@ public class YggdrasilWorldGeneration : ModSystem
 	public static List<Rectangle> ShouldNotSmoothAreas = new List<Rectangle>();
 
 	public static UnifiedRandom GenRand = new UnifiedRandom();
+
+	private static Point fillLiquidPos;
 
 	/// <summary>
 	/// 总初始化
@@ -1448,7 +1451,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// <param name="Size"></param>
 	/// <param name="Wet"></param>
 	/// <returns></returns>
-	public static Vector2D DigTunnel(double x, double y, double xDir, double yDir, int steps, int size, bool wet = false)
+	public static Vector2D DigTunnel(double x, double y, double xDir, double yDir, int steps, int size, bool wet = false, int wallType = -1)
 	{
 		double startX = x;
 		double startY = y;
@@ -1467,13 +1470,121 @@ public class YggdrasilWorldGeneration : ModSystem
 					{
 						if (Math.Abs(j - startX) + Math.Abs(k - startY) < checkSize * (1.0 + GenRand.Next(-10, 11) * 0.005) && j >= 0 && j < Main.maxTilesX && k >= 0 && k < Main.maxTilesY)
 						{
+							Tile tile = SafeGetTile(j, k);
 							if (ChestSafe(j, k))
 							{
-								Main.tile[j, k].active(active: false);
+								tile.active(active: false);
 								if (wet)
 								{
-									Main.tile[j, k].liquid = byte.MaxValue;
+									tile.liquid = byte.MaxValue;
 								}
+								if (wallType != -1)
+								{
+									tile.wall = (ushort)wallType;
+								}
+							}
+						}
+					}
+				}
+
+				checkSize += GenRand.Next(-50, 51) * 0.03;
+				if (checkSize < size * 0.6)
+				{
+					checkSize = size * 0.6;
+				}
+
+				if (checkSize > size * 2)
+				{
+					checkSize = size * 2;
+				}
+
+				xVel += GenRand.Next(-20, 21) * 0.01;
+				yVel += GenRand.Next(-20, 21) * 0.01;
+				if (xVel < -1.0)
+				{
+					xVel = -1.0;
+				}
+
+				if (xVel > 1.0)
+				{
+					xVel = 1.0;
+				}
+
+				if (yVel < -1.0)
+				{
+					yVel = -1.0;
+				}
+
+				if (yVel > 1.0)
+				{
+					yVel = 1.0;
+				}
+
+				startX += (xDir + xVel) * 0.6;
+				startY += (yDir + yVel) * 0.6;
+			}
+		}
+		catch
+		{
+		}
+
+		return new Vector2D(startX, startY);
+	}
+
+	/// <summary>
+	/// Digtunnel, only dig in request type of tile, mimic from WorldGen vanilla.
+	/// </summary>
+	/// <param name="X"></param>
+	/// <param name="Y"></param>
+	/// <param name="xDir"></param>
+	/// <param name="yDir"></param>
+	/// <param name="Steps"></param>
+	/// <param name="Size"></param>
+	/// <param name="Wet"></param>
+	/// <returns></returns>
+	public static Vector2D DigTunnelInRequsetTiles(double x, double y, double xDir, double yDir, int steps, int size, int type, bool wet = false, int wallType = -1)
+	{
+		double startX = x;
+		double startY = y;
+		try
+		{
+			double xVel = 0.0;
+			double yVel = 0.0;
+			double checkSize = size;
+			startX = Utils.Clamp(startX, checkSize + 1.0, Main.maxTilesX - checkSize - 1.0);
+			startY = Utils.Clamp(startY, checkSize + 1.0, Main.maxTilesY - checkSize - 1.0);
+			for (int i = 0; i < steps; i++)
+			{
+				for (int j = (int)(startX - checkSize); j <= startX + checkSize; j++)
+				{
+					for (int k = (int)(startY - checkSize); k <= startY + checkSize; k++)
+					{
+						if (Math.Abs(j - startX) + Math.Abs(k - startY) < checkSize * (1.0 + GenRand.Next(-10, 11) * 0.005) && j >= 0 && j < Main.maxTilesX && k >= 0 && k < Main.maxTilesY)
+						{
+							Tile tile = SafeGetTile(j, k);
+							if (ChestSafe(j, k))
+							{
+								if(tile.TileType == type)
+								{
+									tile.active(active: false);
+									if (wet)
+									{
+										tile.liquid = byte.MaxValue;
+									}
+									if(wallType != -1)
+									{
+										tile.wall = (ushort)wallType;
+									}
+								}
+								else
+								{
+									return new Vector2D(startX, startY);
+								}
+							}
+							Tile tileSafe = SafeGetTile((int)(j + (xVel + xDir) * 3), (int)(k + (yVel + yDir) * 3));
+							if(tile.TileType != type)
+							{
+								return new Vector2D(startX, startY);
 							}
 						}
 					}
@@ -1602,5 +1713,59 @@ public class YggdrasilWorldGeneration : ModSystem
 	public static bool ChestSafeArea(Vector2 center, Vector2 size)
 	{
 		return ChestSafeArea((int)center.X, (int)center.Y, (int)size.X, (int)size.Y);
+	}
+
+	private static readonly (int, int)[] directionsLiquid =
+	{
+		(1, 0),
+		(0, 1),
+		(-1, 0),
+	};
+
+	/// <summary>
+	/// Fill water or other liquid below center.center : in tile coord.
+	/// </summary>
+	/// <param name="center"></param>
+	/// <param name="type"></param>
+	public static void FillLiquid(Vector2 center, int type = 0, int maxCount = 900)
+	{
+		Queue<Point> queueChecked = new Queue<Point>();
+
+		// 将起始点加入队列
+		queueChecked.Enqueue(center.ToPoint());
+		List<Point> visited = new List<Point>();
+
+		while (queueChecked.Count > 0)
+		{
+			var tilePos = queueChecked.Dequeue();
+
+			foreach (var (dx, dy) in directionsLiquid)
+			{
+				int checkX = tilePos.X + dx;
+				int checkY = tilePos.Y + dy;
+				Point point = new Point(checkX, checkY);
+
+				// 检查边界和障碍物
+				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
+					!Collision.IsWorldPointSolid(point.ToWorldCoordinates()) && !visited.Contains(point))
+				{
+					queueChecked.Enqueue(point);
+					visited.Add(point);
+				}
+			}
+			if (queueChecked.Count > maxCount || visited.Count > maxCount)
+			{
+				break;
+			}
+		}
+		if (visited.Count < maxCount)
+		{
+			foreach (var pos in visited)
+			{
+				Tile tile = SafeGetTile(pos);
+				tile.LiquidType = 0;
+				tile.LiquidAmount = 255;
+			}
+		}
 	}
 }

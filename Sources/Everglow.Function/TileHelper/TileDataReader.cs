@@ -110,7 +110,6 @@ public class TileDataReaderSystem : Visual
 			return;
 		}
 		Tile tile = Main.tile[i, j];
-		Ins.Batch.BindTexture<Vertex2D>(Texture);
 		int colorType = ItemRarityID.White;
 		Color drawColor = Color.White;
 		if (!tile.HasTile)
@@ -172,219 +171,103 @@ public class TileDataReaderSystem : Visual
 	{
 		ContinueTiles = new List<Point>();
 		CheckLiquidTiles = new List<Point>();
-		CheckTileContinue(i, j);
-		CheckCanFillLiquidContinue(i, j);
+		BFSContinueTile(i, j);
+		BFSFillLiquid(i, j);
 	}
 
-	public void CheckHasNoTileAndAddToCanFillLiquideTile(int i, int j)
+	private static readonly (int, int)[] directions =
 	{
-		Tile tile = SafeGetTile(i, j);
-		if (!Collision.IsWorldPointSolid(new Point(i, j).ToWorldCoordinates(), true))
-		{
-			if (!CheckLiquidTiles.Contains(new Point(i, j)) && CheckLiquidTiles.Count < MaxContinueCount)
-			{
-				CheckLiquidTiles.Add(new Point(i, j));
-				CheckCanFillLiquidContinue(i, j);
-			}
-		}
+		(0, 1),
+		(1, 0),
+		(0, -1),
+		(-1, 0),
+	};
+
+	private static readonly (int, int)[] directionsLiquid =
+	{
+		(1, 0),
+		(0, 1),
+		(-1, 0),
+	};
+
+	public void BFSContinueTile(int i, int j)
+	{
+		BFSContinueTile(new Point(i, j));
 	}
 
-	public void CheckCanFillLiquidContinue(int i, int j)
+	public void BFSContinueTile(Point checkPoint)
 	{
-		Tile tile = SafeGetTile(i, j);
-		if (Collision.IsWorldPointSolid(new Point(i, j).ToWorldCoordinates(), true))
-		{
-			return;
-		}
-		if (CheckLiquidTiles.Count < MaxContinueCount)
-		{
-			// CheckHasTileAndAddToContinueTile(i, j);
-			List<Point> checkPoints = new List<Point>();
-			var leftPoint = new Point(i - 1, j);
-			EnlistNewCheckLiquidPoint(checkPoints, leftPoint);
-			var rightPoint = new Point(i + 1, j);
-			EnlistNewCheckLiquidPoint(checkPoints, rightPoint);
+		Queue<Point> queueChecked = new Queue<Point>();
 
-			var bottomPoint = new Point(i, j + 1);
-			EnlistNewCheckLiquidPoint(checkPoints, bottomPoint);
+		// 将起始点加入队列
+		queueChecked.Enqueue(checkPoint);
+		List<Point> visited = new List<Point>();
 
-			var bottomLeftPoint = new Point(i - 1, j + 1);
-			if (!Collision.IsWorldPointSolid(bottomPoint.ToWorldCoordinates(), true) || !Collision.IsWorldPointSolid(leftPoint.ToWorldCoordinates(), true))
+		while (queueChecked.Count > 0)
+		{
+			var tilePos = queueChecked.Dequeue();
+
+			foreach (var (dx, dy) in directions)
 			{
-				EnlistNewCheckLiquidPoint(checkPoints, bottomLeftPoint);
+				int checkX = tilePos.X + dx;
+				int checkY = tilePos.Y + dy;
+				Point point = new Point(checkX, checkY);
+				Tile tile = SafeGetTile(checkX, checkY);
+
+				// 检查边界和障碍物
+				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
+					tile.HasTile && !visited.Contains(point))
+				{
+					queueChecked.Enqueue(point);
+					visited.Add(point);
+				}
 			}
-			var bottomRightPoint = new Point(i + 1, j + 1);
-			if (!Collision.IsWorldPointSolid(bottomPoint.ToWorldCoordinates(), true) || !Collision.IsWorldPointSolid(rightPoint.ToWorldCoordinates(), true))
+			if (queueChecked.Count > MaxContinueCount || visited.Count > MaxContinueCount)
 			{
-				EnlistNewCheckLiquidPoint(checkPoints, bottomRightPoint);
-			}
-			for (int t = 0; t < checkPoints.Count; t++)
-			{
-				var pointC = checkPoints[t];
-				CheckHasNoTileAndAddToCanFillLiquideTile(pointC.X, pointC.Y);
+				break;
 			}
 		}
+		ContinueTiles = visited;
 	}
 
-	public void CheckHasTileAndAddToContinueTile(int i, int j)
+	public void BFSFillLiquid(int i, int j)
 	{
-		Tile tile = SafeGetTile(i, j);
-		if (tile.HasTile)
-		{
-			if (!ContinueTiles.Contains(new Point(i, j)) && ContinueTiles.Count < MaxContinueCount)
-			{
-				ContinueTiles.Add(new Point(i, j));
-				CheckTileContinue(i, j);
-			}
-		}
+		BFSFillLiquid(new Point(i, j));
 	}
 
-	public void CheckTileContinue(int i, int j)
+	public void BFSFillLiquid(Point checkPoint)
 	{
-		Tile tile = SafeGetTile(i, j);
-		if (!tile.HasTile)
-		{
-			return;
-		}
-		if (ContinueTiles.Count < MaxContinueCount)
-		{
-			// CheckHasTileAndAddToContinueTile(i, j);
-			List<Point> checkPoints = new List<Point>();
-			var leftPoint = new Point(i - 1, j);
-			EnlistNewCheckCountinuePoint(checkPoints, leftPoint);
-			var rightPoint = new Point(i + 1, j);
-			EnlistNewCheckCountinuePoint(checkPoints, rightPoint);
-			var topPoint = new Point(i, j - 1);
-			EnlistNewCheckCountinuePoint(checkPoints, topPoint);
-			var bottomPoint = new Point(i, j + 1);
-			EnlistNewCheckCountinuePoint(checkPoints, bottomPoint);
+		Queue<Point> queueChecked = new Queue<Point>();
 
-			var topRightPoint = new Point(i + 1, j - 1);
-			if (Main.tile[topPoint].HasTile || Main.tile[rightPoint].HasTile)
-			{
-				EnlistNewCheckCountinuePoint(checkPoints, topRightPoint);
-			}
-			var topLeftPoint = new Point(i - 1, j - 1);
-			if (Main.tile[topPoint].HasTile || Main.tile[leftPoint].HasTile)
-			{
-				EnlistNewCheckCountinuePoint(checkPoints, topLeftPoint);
-			}
-			var bottomLeftPoint = new Point(i - 1, j + 1);
-			if (Main.tile[bottomPoint].HasTile || Main.tile[leftPoint].HasTile)
-			{
-				EnlistNewCheckCountinuePoint(checkPoints, bottomLeftPoint);
-			}
-			var bottomRightPoint = new Point(i + 1, j + 1);
-			if (Main.tile[bottomPoint].HasTile || Main.tile[rightPoint].HasTile)
-			{
-				EnlistNewCheckCountinuePoint(checkPoints, bottomRightPoint);
-			}
-			for (int t = 0; t < checkPoints.Count; t++)
-			{
-				var pointC = checkPoints[t];
-				CheckHasTileAndAddToContinueTile(pointC.X, pointC.Y);
-			}
-		}
-	}
+		// 将起始点加入队列
+		queueChecked.Enqueue(checkPoint);
+		List<Point> visited = new List<Point>();
 
-	public void EnlistNewCheckCountinuePoint(List<Point> checkPoints, Point point)
-	{
-		if (checkPoints.Count == 0)
+		while (queueChecked.Count > 0)
 		{
-			checkPoints.Add(point);
-			return;
-		}
-		int length = GetSearchValue(point);
-		List<Point> newCheck = new List<Point>();
-		bool added = false;
-		for (int i = 0; i < checkPoints.Count; i++)
-		{
-			if (!added && length < GetSearchValue(checkPoints[i]))
-			{
-				newCheck.Add(point);
-				added = true;
-			}
-			newCheck.Add(checkPoints[i]);
-		}
-		if (!added)
-		{
-			newCheck.Add(point);
-		}
-		checkPoints.Clear();
-		checkPoints.AddRange(newCheck);
-	}
+			var tilePos = queueChecked.Dequeue();
 
-	public void EnlistNewCheckLiquidPoint(List<Point> checkPoints, Point point)
-	{
-		if (checkPoints.Count == 0)
-		{
-			checkPoints.Add(point);
-			return;
-		}
-		int length = GetSearchValue(point, true);
-		List<Point> newCheck = new List<Point>();
-		bool added = false;
-		for (int i = 0; i < checkPoints.Count; i++)
-		{
-			if (!added && length < GetSearchValue(checkPoints[i], true))
+			foreach (var (dx, dy) in directionsLiquid)
 			{
-				newCheck.Add(point);
-				added = true;
-			}
-			newCheck.Add(checkPoints[i]);
-		}
-		if (!added)
-		{
-			newCheck.Add(point);
-		}
-		checkPoints.Clear();
-		checkPoints.AddRange(newCheck);
-	}
+				int checkX = tilePos.X + dx;
+				int checkY = tilePos.Y + dy;
+				Point point = new Point(checkX, checkY);
+				Tile tile = SafeGetTile(checkX, checkY);
 
-	public int GetSearchDepth(int i, int j)
-	{
-		return Math.Abs(OldTilePos.X - i) + Math.Abs(OldTilePos.Y - j);
-	}
-
-	public int GetSearchValue(int i, int j, bool checkLiquid = false)
-	{
-		if (i < 20 || i > Main.maxTilesX - 20)
-		{
-			return int.MaxValue;
-		}
-		if (j < 20 || j > Main.maxTilesY - 20)
-		{
-			return int.MaxValue;
-		}
-		int value = GetSearchDepth(i, j);
-		if (!checkLiquid)
-		{
-			if (ContinueTiles.Contains(new Point(i, j)))
-			{
-				return int.MaxValue;
+				// 检查边界和障碍物
+				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
+					!Collision.IsWorldPointSolid(point.ToWorldCoordinates()) && !visited.Contains(point))
+				{
+					queueChecked.Enqueue(point);
+					visited.Add(point);
+				}
 			}
-			if (!Main.tile[i, j].HasTile)
+			if (queueChecked.Count > MaxContinueCount || visited.Count > MaxContinueCount)
 			{
-				return int.MaxValue - 1;
+				break;
 			}
 		}
-		else
-		{
-			if (CheckLiquidTiles.Contains(new Point(i, j)))
-			{
-				return int.MaxValue;
-			}
-			if (Collision.IsWorldPointSolid(new Point(i, j).ToWorldCoordinates(), true))
-			{
-				return int.MaxValue - 1;
-			}
-		}
-		return value;
-	}
-
-	public int GetSearchValue(Point point, bool checkLiquid = false)
-	{
-		return GetSearchValue(point.X, point.Y, checkLiquid);
+		CheckLiquidTiles = visited;
 	}
 
 	public void DrawBlockBound(int i, int j, Color color)
@@ -401,7 +284,7 @@ public class TileDataReaderSystem : Visual
 			new Vertex2D(pos + new Vector2(16), color, new Vector3(1, 1, 0)),
 		};
 
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(Texture, bars, PrimitiveType.TriangleList);
 	}
 
 	public static Tile SafeGetTile(int i, int j)
