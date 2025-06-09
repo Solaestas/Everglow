@@ -1,4 +1,7 @@
+using System;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors.Ruin;
@@ -60,6 +63,21 @@ public class RuinMask : ModItem
 					Player.AddBuff(ModContent.BuffType<RuinSetCooldown>(), 120 * 60);
 				}
 			}
+		}
+
+		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
+		{
+			// TODO : Bug, the layer of glow is under head.
+			if (RuinSetEnable)
+			{
+				Vector2 helmetOffset = drawInfo.helmetOffset;
+				Vector2 pos = helmetOffset + new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect;
+				pos += new Vector2(30 * MathF.Sin((float)Main.timeForVisualEffects * 0.05f), 0);
+				DrawData item = new DrawData(ModAsset.RuinMask_Head_glow.Value, pos, drawInfo.drawPlayer.bodyFrame, new Color(1f, 1f, 1f, 0), drawInfo.drawPlayer.headRotation, drawInfo.headVect, 1f, drawInfo.playerEffect, 0.5f);
+				item.shader = drawInfo.cHead;
+				drawInfo.DrawDataCache.Add(item);
+			}
+			base.DrawEffects(drawInfo, ref r, ref g, ref b, ref a, ref fullBright);
 		}
 	}
 }
