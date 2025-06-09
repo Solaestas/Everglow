@@ -55,10 +55,10 @@ public class TheGreenSolar : ModItem
 
 				Player.lifeRegenTime = 0; // Disable natural life regeneration
 
-				// Amend Player life to 0, before heal Player.
+				// Amend player life to 0, before heal player.
 				Player.statLife = Math.Max(Player.statLife, 0);
 
-				// Heal Player every second.
+				// Heal player every second.
 				if (Main.timeForVisualEffects % 60 == 0)
 				{
 					Player.Heal(BuffHealPerSecond);
@@ -74,6 +74,7 @@ public class TheGreenSolar : ModItem
 		{
 			if (TheGreenSolarBuffActive)
 			{
+				// Add OnFire debuff to nearby NPCs.
 				foreach (var npc in Main.ActiveNPCs)
 				{
 					if (!npc.friendly
@@ -84,6 +85,17 @@ public class TheGreenSolar : ModItem
 					{
 						npc.AddBuff(BuffID.OnFire, OnFireDuration);
 					}
+				}
+
+				// Dispel the buff if player's life is greater than or equal to DispelBuffLife.
+				var targetLife = Math.Min(Player.statLifeMax2, DispelBuffLife); // The field 'Player.statLifeMax2' must be referenced upon all update.
+				if (Player.statLife >= targetLife)
+				{
+					Player.ClearBuff(ModContent.BuffType<TheGreenSolarBuff>());
+				}
+				else
+				{
+					Player.AddBuff(ModContent.BuffType<TheGreenSolarBuff>(), 2);
 				}
 			}
 		}
