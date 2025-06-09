@@ -1,8 +1,6 @@
-using System;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
-using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.GameContent.Creative;
+using Terraria.Graphics.Shaders;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors.Ruin;
 
@@ -53,7 +51,7 @@ public class RuinMask : ModItem
 			RuinSetEnable = false;
 		}
 
-		public override void UpdateEquips()
+		public override void PostUpdate()
 		{
 			if (RuinSetEnable)
 			{
@@ -62,22 +60,99 @@ public class RuinMask : ModItem
 					Player.AddBuff(ModContent.BuffType<RuinSetBuff>(), 30 * 60);
 					Player.AddBuff(ModContent.BuffType<RuinSetCooldown>(), 120 * 60);
 				}
+
+				// Constraint for vanities, accessories and miscs effects that can change player visible equipments.
+				EquipLoader.idToSlot.TryGetValue(ModContent.ItemType<RuinMask>(), out var headSlot);
+				EquipLoader.idToSlot.TryGetValue(ModContent.ItemType<RuinMagicRobe>(), out var bodySlot);
+				EquipLoader.idToSlot.TryGetValue(ModContent.ItemType<RuinLeggings>(), out var legsSlot);
+				if (Player.face == -1
+					&& Player.head == headSlot[EquipType.Head]
+					&& Player.body == bodySlot[EquipType.Body]
+					&& Player.legs == legsSlot[EquipType.Legs])
+				{
+					GenerateEyeGlowDust();
+				}
 			}
 		}
 
-		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
+		/// <summary>
+		/// Generate dusts as eye glow. Same as vanilla accessory <see cref="ItemID.Yoraiz0rDarkness"/>.
+		/// <para/> This method is copied from <see cref="Player.Yoraiz0rEye"/> with some modifications.
+		/// </summary>
+		private void GenerateEyeGlowDust()
 		{
-			// TODO : Bug, the layer of glow is under head.
-			if (RuinSetEnable)
+			var generalOffset = new Vector2(0, 2);
+			var dustMaskOffset = new Vector2(-1.5f, 1.5f);
+			Vector2 vector = generalOffset + dustMaskOffset; // vanillaOffset
+			vector *= Player.Directions;
+
+			Vector2 vector2 = new Vector2(Player.width / 2, Player.height / 2) + vector + (Player.MountedCenter - Player.Center);
+			Player.sitting.GetSittingOffsetInfo(Player, out var posOffset, out var seatAdjustment);
+			vector2 += posOffset + new Vector2(0f, seatAdjustment);
+
+			if (Player.mount.Active && Player.mount.Type == 52)
 			{
-				Vector2 helmetOffset = drawInfo.helmetOffset;
-				Vector2 pos = helmetOffset + new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect;
-				pos += new Vector2(30 * MathF.Sin((float)Main.timeForVisualEffects * 0.05f), 0);
-				DrawData item = new DrawData(ModAsset.RuinMask_Head_glow.Value, pos, drawInfo.drawPlayer.bodyFrame, new Color(1f, 1f, 1f, 0), drawInfo.drawPlayer.headRotation, drawInfo.headVect, 1f, drawInfo.playerEffect, 0.5f);
-				item.shader = drawInfo.cHead;
-				drawInfo.DrawDataCache.Add(item);
+				vector2.X += 14f * (float)Player.direction;
+				vector2.Y -= 2f * Player.gravDir;
 			}
-			base.DrawEffects(drawInfo, ref r, ref g, ref b, ref a, ref fullBright);
+
+			float y = -11.5f * Player.gravDir;
+			Vector2 vector3 = new Vector2(3 * Player.direction - ((Player.direction == 1) ? 1 : 0), y) + Vector2.UnitY * Player.gfxOffY + vector2;
+			Vector2 vector4 = new Vector2(3 * Player.shadowDirection[1] - ((Player.direction == 1) ? 1 : 0), y) + vector2;
+			Vector2 vector5 = Vector2.Zero;
+			if (Player.mount.Active && Player.mount.Cart)
+			{
+				int num2 = Math.Sign(Player.velocity.X);
+				if (num2 == 0)
+				{
+					num2 = Player.direction;
+				}
+
+				vector5 = new Vector2(MathHelper.Lerp(0f, -8f, Player.fullRotation / ((float)Math.PI / 4f)), MathHelper.Lerp(0f, 2f, Math.Abs(Player.fullRotation / ((float)Math.PI / 4f)))).RotatedBy(Player.fullRotation);
+				if (num2 == Math.Sign(Player.fullRotation))
+				{
+					vector5 *= MathHelper.Lerp(1f, 0.6f, Math.Abs(Player.fullRotation / ((float)Math.PI / 4f)));
+				}
+			}
+
+			if (Player.fullRotation != 0f)
+			{
+				vector3 = vector3.RotatedBy(Player.fullRotation, Player.fullRotationOrigin);
+				vector4 = vector4.RotatedBy(Player.fullRotation, Player.fullRotationOrigin);
+			}
+
+			float num3 = 0f;
+			Vector2 vector6 = Player.position + vector3 + vector5;
+			Vector2 vector7 = Player.oldPosition + vector4 + vector5;
+			vector7.Y -= num3 / 2f;
+			vector6.Y -= num3 / 2f;
+
+			DelegateMethods.v3_1 = Main.hslToRgb(Main.rgbToHsl(Player.eyeColor).X, 1f, 0.5f).ToVector3() * 0.5f * 1f;
+			if (Player.velocity != Vector2.Zero)
+			{
+				Utils.PlotTileLine(Player.Center, Player.Center + Player.velocity * 2f, 4f, DelegateMethods.CastLightOpen);
+			}
+			else
+			{
+				Utils.PlotTileLine(Player.Left, Player.Right, 4f, DelegateMethods.CastLightOpen);
+			}
+
+			int dustCount = (int)Vector2.Distance(vector6, vector7) / 3 + 1;
+			if (Vector2.Distance(vector6, vector7) % 3f != 0f)
+			{
+				dustCount++;
+			}
+
+			// Generate dusts.
+			for (int i = 1; i <= dustCount; i++)
+			{
+				Dust obj = Main.dust[Dust.NewDust(Player.Center, 0, 0, DustID.TheDestroyer)];
+				obj.position = Vector2.Lerp(vector7, vector6, i / (float)dustCount);
+				obj.noGravity = true;
+				obj.velocity = Vector2.Zero;
+				obj.scale = 0.8f;
+				obj.shader = GameShaders.Armor.GetSecondaryShader(Player.cYorai, Player);
+			}
 		}
 	}
 }
