@@ -326,7 +326,7 @@ public class AcroporaSpear_proj : MeleeProj
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
 		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrailFade", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value; // MeleeTrailFade should be moved to Everglow.Function -> MEAC -> Effects, instead of Modules -> MEAC -> Effects, or find another way. ~Setnour6
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);

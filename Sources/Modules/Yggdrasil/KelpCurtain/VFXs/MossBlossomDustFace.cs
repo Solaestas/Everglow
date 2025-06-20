@@ -29,7 +29,6 @@ public class MossBlossomDustFace : Visual
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.MossBlossomDustFace.Value);
 		float frameCount = 6;
 		float frameY = Frame;
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
@@ -44,6 +43,6 @@ public class MossBlossomDustFace : Visual
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), drawColor, new Vector3(1, frameY / frameCount, 0)),
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1), drawColor, new Vector3(1, (frameY + 1) / frameCount, 0)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.MossBlossomDustFace.Value, bars, PrimitiveType.TriangleList);
 	}
 }

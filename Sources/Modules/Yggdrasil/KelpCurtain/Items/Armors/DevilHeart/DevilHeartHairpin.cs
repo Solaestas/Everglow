@@ -8,6 +8,7 @@ public class DevilHeartHairpin : ModItem
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+		ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = true;
 	}
 
 	public override void SetDefaults()
