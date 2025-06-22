@@ -26,6 +26,7 @@ public class WoodlandWraithStaff : ModItem
 		Item.value = Item.buyPrice(gold: 1);
 
 		Item.shoot = ModContent.ProjectileType<WoodlandWraithStaff_FungiBall>();
+		Item.shootSpeed = 12f;
 	}
 
 	public override void ModifyManaCost(Player player, ref float reduce, ref float mult)
@@ -34,6 +35,7 @@ public class WoodlandWraithStaff : ModItem
 		{
 			mult *= RightManaCost / (float)LeftManaCost; // Right click mana cost.
 		}
+		base.ModifyManaCost(player, ref reduce, ref mult);
 	}
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

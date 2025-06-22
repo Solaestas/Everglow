@@ -2,8 +2,6 @@ namespace Everglow.Yggdrasil.KelpCurtain.Buffs;
 
 public class RuinSetBuff : ModBuff
 {
-	public override string Texture => Commons.ModAsset.BuffTemplate_Mod;
-
 	public override void SetStaticDefaults()
 	{
 		Main.persistentBuff[Type] = true;
