@@ -6,6 +6,8 @@ namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 
 public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 {
+	public const float GlowTime = 90;
+
 	public override void SetDef()
 	{
 		TrailColor = new Color(0.4f, 0.0f, 0.0f, 0f);
@@ -13,6 +15,9 @@ public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 		TrailTexture = Commons.ModAsset.Trail_8.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_8_black.Value;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
+
+		Projectile.width = 14;
+		Projectile.height = 30;
 	}
 
 	public override void AI()
@@ -59,7 +64,8 @@ public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 	public override void DrawSelf()
 	{
 		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, Lighting.GetColor(Projectile.Center.ToTileCoordinates()), Projectile.velocity.ToRotation() - MathHelper.PiOver2, texMain.Size() / 2f, 0.6f, SpriteEffects.None, 0);
+		var color = Color.Lerp(Color.White, Lighting.GetColor(Projectile.Center.ToTileCoordinates()), MathF.Sqrt(Timer / GlowTime));
+		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, color, Projectile.velocity.ToRotation() - MathHelper.PiOver2, texMain.Size() / 2f, 0.6f, SpriteEffects.None, 0);
 	}
 
 	public override void DrawTrail() => base.DrawTrail();

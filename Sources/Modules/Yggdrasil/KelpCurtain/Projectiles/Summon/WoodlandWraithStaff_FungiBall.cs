@@ -1,46 +1,98 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
+using Everglow.Yggdrasil.KelpCurtain.Items.Armors.Ruin;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Everglow.Yggdrasil.WorldGeneration;
+using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 
 public class WoodlandWraithStaff_FungiBall : ModProjectile
 {
+	public enum States
+	{
+		FlyAround,
+		Mycelume,
+		Attack,
+	}
+
+	public enum AttackCases
+	{
+		Dash,
+		RedLiquid,
+	}
+
+	public const float DashAttackDamageMultiplier = 2.4f;
+	public const float AggroRange = 450f;
+	public const float ChaseRange = 600f;
+	public const int MyceliumAmountMax = 256;
+	private const int PredictMyceliumPosCheckDistance = 30;
+
 	private Player Owner => Main.player[Projectile.owner];
 
-	public NPC Target;
+	private bool OwnerBuffed => Owner.GetModPlayer<RuinMask.RuinSetPlayer>().RuinSetBuffActive;
 
-	public List<Point> ContinueTiles = new List<Point>();
+	private int TargetWhoAmI
+	{
+		get => (int)Projectile.ai[0];
+		set => Projectile.ai[0] = value;
+	}
+
+	public NPC Target
+	{
+		get
+		{
+			if (Owner.HasMinionAttackTargetNPC && ProjectileUtils.MinionCheckTargetActive(Owner.MinionAttackTargetNPC))
+			{
+				return Main.npc[Owner.MinionAttackTargetNPC];
+			}
+			else if (ProjectileUtils.MinionCheckTargetActive(TargetWhoAmI))
+			{
+				return Main.npc[TargetWhoAmI];
+			}
+			else
+			{
+				return null;
+			}
+		}
+	}
+
+	public States State
+	{
+		get => (States)(int)Projectile.ai[1];
+
+		set => Projectile.ai[1] = (float)value;
+	}
+
+	public AttackCases AttackCase
+	{
+		get => (AttackCases)(int)Projectile.ai[2];
+
+		set => Projectile.ai[2] = (float)value;
+	}
+
+	public ref float AttackTimer => ref Projectile.localAI[0];
+
+	public ref float PlayerStopTimer => ref Projectile.localAI[1];
+
+	public ref float MyceliumKillTimer => ref Projectile.localAI[2];
+
+	public List<Point> ContinueTiles = [];
 
 	public int MyceliumAmount = 0;
 
-	public int PlayerStopTimer = 0;
+	public Point RootTileCoord = Point.Zero;
 
-	public int MyceliumKillTimer = 0;
-
-	public Point RootTileCoord = new Point(0, 0);
-
-	public Vector2 PredictMyceliumPos = new Vector2(0, 0);
+	/// <summary>
+	/// The position where the mycelium will be predicted to be placed.
+	/// <para/> Defaults to <see cref="Vector2.Zero"/>.
+	/// </summary>
+	public Vector2 PredictMyceliumPos = Vector2.Zero;
 
 	public bool ReachPredictPos = false;
 
-	public int DashTimer = 0;
-
-	/// <summary>
-	/// 0: Fly Around;1: Mycelume;2: Attack0;3: Attack1
-	/// </summary>
-	public int State = 0;
-
-	/// <summary>
-	/// 0: Dash;1: Red Liquid
-	/// </summary>
-	public int AttackCase = 0;
-
-	public bool OwnerInMyceliumNet;
-
-	public Vector2 PlayerStopPos = new Vector2(0, 0);
+	public Vector2 PlayerStopPos = Vector2.Zero;
 
 	public float PlayerStartMoveDistance = 0;
 
@@ -52,7 +104,9 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
 		ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
+
 		ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
+		ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
 	}
 
 	public override void SetDefaults()
@@ -72,125 +126,126 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 
 	public override void AI()
 	{
-		if (Owner.active)
+		if (Owner.active && Owner.HasBuff<WoodlandWraithStaffBuff>())
 		{
 			Owner.AddBuff(ModContent.BuffType<WoodlandWraithStaffBuff>(), 2);
 			Projectile.timeLeft = 2;
 		}
-		FindEnemy();
+
+		UpdateTarget();
+
 		CheckState();
 		switch (State)
 		{
-			case 0:
+			case States.FlyAround:
 				{
 					FlyAroundOwner();
 					break;
 				}
-			case 1:
+			case States.Mycelume:
 				{
 					StopAndBecomeMycelium();
 					break;
 				}
-			case 2:
+			case States.Attack:
 				{
-					StrikeEnemy();
-					break;
-				}
-			case 3:
-				{
-					StrikeEnemy();
+					AttackEnemy();
 					break;
 				}
 		}
 	}
 
-	public override bool? CanHitNPC(NPC target)
-	{
-		if (DashTimer > 0 && AttackCase == 0)
-		{
-			return base.CanHitNPC(target);
-		}
-		else
-		{
-			return false;
-		}
-	}
+	public override bool? CanHitNPC(NPC target) => AttackTimer > 0 && AttackCase == AttackCases.Dash ? base.CanHitNPC(target) : false;
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		if(DashTimer > 0 && AttackCase == 0)
+		// Deals 240% damage when using dash attack.
+		if (AttackTimer > 0 && AttackCase == AttackCases.Dash)
 		{
 			modifiers.FinalDamage *= 2.4f;
 		}
-		base.ModifyHitNPC(target, ref modifiers);
+	}
+
+	public void UpdateTarget()
+	{
+		// Search for target if no target or too far away.
+		if (Target == null || Vector2.Distance(Target.Center, Owner.Center) > ChaseRange)
+		{
+			TargetWhoAmI = ProjectileUtils.FindTarget(Projectile.Center, AggroRange);
+		}
 	}
 
 	public void CheckState()
 	{
-		if (State == 0)
+		if (State == States.FlyAround)
 		{
-			if (Owner.velocity.Length() < 0.05f)
+			if (Owner.IsStandingStillForSpecialEffects)
 			{
 				PlayerStopTimer++;
 				if (PlayerStopTimer > 120)
 				{
 					PlayerStopPos = Owner.Center;
 					SetMyceliumPos();
-					State = 1;
+					State = States.Mycelume;
 				}
 			}
 			else
 			{
 				PlayerStopTimer = 0;
 			}
+
 			if (MyceliumKillTimer > 0)
 			{
 				MyceliumKillTimer--;
 			}
 			else
 			{
-				ContinueTiles = new List<Point>();
+				ContinueTiles = [];
 				MyceliumKillTimer = 0;
 			}
+
 			if (Target != null)
 			{
-				State = 2;
+				State = States.Attack;
 			}
 		}
-		if (State == 1)
+
+		if (State == States.Mycelume)
 		{
 			MyceliumKillTimer = 60;
 			PlayerStartMoveDistance = (Owner.Center - PlayerStopPos).Length();
-			var PlayerToProj = (Owner.Center - Projectile.Center).Length();
-			if (PlayerStartMoveDistance > 200 && PlayerToProj > 200)
+			var playerToProj = (Owner.Center - Projectile.Center).Length();
+			if (PlayerStartMoveDistance > 200 && playerToProj > 200)
 			{
-				State = 0;
+				State = States.FlyAround;
 				MyceliumAmount = 0;
 				ReachPredictPos = false;
 			}
+
 			if (Target != null)
 			{
-				State = 2;
+				State = States.Attack;
 				MyceliumAmount = 0;
 				ReachPredictPos = false;
 			}
 		}
-		if(State == 2)
+
+		if (State == States.Attack)
 		{
-			StrikeEnemy();
 			if (MyceliumKillTimer > 0)
 			{
 				MyceliumKillTimer--;
 			}
 			else
 			{
-				ContinueTiles = new List<Point>();
+				ContinueTiles = [];
 				MyceliumKillTimer = 0;
 			}
-			if (Target == null || !Target.active)
+
+			if (Target == null)
 			{
 				PlayerStopTimer = 0;
-				State = 0;
+				State = States.FlyAround;
 			}
 		}
 	}
@@ -208,39 +263,29 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 		Projectile.rotation *= 0.995f;
 	}
 
-	public void FindEnemy()
+	public void AttackEnemy()
 	{
-		Target = Projectile.FindTargetWithinRange(800);
-	}
-
-	public void StrikeEnemy()
-	{
-		if(Target == null)
-		{
-			FindEnemy();
-			return;
-		}
 		float rot = (float)(Projectile.whoAmI + Main.time * 0.03);
 		float distanceHit = 100;
-		if (AttackCase == 1)
+		if (AttackCase == AttackCases.RedLiquid)
 		{
 			distanceHit = 200;
 			rot = (float)(Projectile.whoAmI + Main.time * 0.01);
 		}
 		var targetPos = Target.Center + new Vector2(distanceHit, 0).RotatedBy(rot);
 		int count = 0;
-		while(Collision.IsWorldPointSolid(targetPos))
+		while (Collision.IsWorldPointSolid(targetPos))
 		{
 			rot += 1f;
 			targetPos = Target.Center + new Vector2(distanceHit, 0).RotatedBy(rot);
 			count++;
-			if(count > 20)
+			if (count > 20)
 			{
 				break;
 			}
 		}
 		var toTarget = targetPos - Projectile.Center;
-		if(DashTimer == 0)
+		if (AttackTimer == 0)
 		{
 			if (toTarget.Length() > 16)
 			{
@@ -249,31 +294,31 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 			else
 			{
 				Projectile.velocity *= 0.6f;
-				if(Projectile.velocity.Length() < 1f)
+				if (Projectile.velocity.Length() < 1f)
 				{
-					DashTimer = 90;
+					AttackTimer = 90;
 				}
 			}
 		}
-		if (DashTimer > 0)
+		if (AttackTimer > 0)
 		{
-			DashTimer--;
-			if(DashTimer == 89)
+			AttackTimer--;
+			if (AttackTimer == 89)
 			{
-				if (AttackCase == 0)
+				if (AttackCase == AttackCases.Dash)
 				{
 					Projectile.velocity = (Target.Center - Projectile.Center).NormalizeSafe() * 24f;
 					Omega = Main.rand.NextFloat(-0.3f, 0.3f);
 				}
-				if (AttackCase == 1)
+				if (AttackCase == AttackCases.RedLiquid)
 				{
 					Projectile.velocity *= 0;
 				}
 			}
-			if(AttackCase == 0)
+			if (AttackCase == AttackCases.Dash)
 			{
 				Projectile.velocity *= 0.95f;
-				if (DashTimer < 78)
+				if (AttackTimer < 78)
 				{
 					if (Collision.IsWorldPointSolid(Projectile.Center + new Vector2(Projectile.velocity.X, 0)))
 					{
@@ -289,14 +334,13 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 				Projectile.rotation += Omega;
 				Omega *= 0.98f;
 			}
-			if (AttackCase == 1)
+			if (AttackCase == AttackCases.RedLiquid)
 			{
-				// Not actually dash, but shoot liquid.
-				if (DashTimer > 30)
+				if (AttackTimer > 30)
 				{
-					DashTimer = 30;
+					AttackTimer = 30;
 				}
-				if (DashTimer % 6 == 3)
+				if (AttackTimer % 6 == 3)
 				{
 					Vector2 shootTargetVel = Target.Center - Projectile.Center;
 					float distance = MathF.Abs(shootTargetVel.X);
@@ -304,49 +348,51 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 					int step = (int)(distance / 15);
 					float deltaY = 0.5f * 0.5f * step * step;
 					shootTargetVel.Y -= deltaY / step;
-					Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),Projectile.Center,shootTargetVel,ModContent.ProjectileType<WoodlandWraithStaff_BloodStream>(),Projectile.damage,Projectile.knockBack * 0.3f, Projectile.owner);
+					Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, shootTargetVel, ModContent.ProjectileType<WoodlandWraithStaff_BloodStream>(), Projectile.damage, Projectile.knockBack * 0.3f, Projectile.owner);
+					SoundEngine.PlaySound(SoundID.Item21, Projectile.Center);
 				}
 			}
-			if (DashTimer == 0)
+			if (AttackTimer == 0)
 			{
-				AttackCase = Main.rand.Next(2);
+				AttackCase = AttackCase.NextEnum();
 			}
 		}
 		else
 		{
-			DashTimer = 0;
+			AttackTimer = 0;
 		}
 	}
 
 	public void SetMyceliumPos()
 	{
-		int index = 0;
 		ReachPredictPos = false;
-		foreach (var proj in Main.projectile)
-		{
-			if (proj != null && proj.active && proj != Projectile && proj.type == Projectile.type && proj.owner == Projectile.owner)
-			{
-				if (proj.whoAmI < Projectile.whoAmI)
-				{
-					index++;
-				}
-			}
-		}
-		float posAddX = (index % 2 - 0.5f) * 2 * (index / 2f + (index % 2) / 2f);
-		PredictMyceliumPos = Owner.Center + new Vector2(240 * posAddX * Owner.direction, 0);
+
+		// The index of this minion in collection of minions with same type and owner, from 0 to n.
+		int minionIndex = Main.projectile
+			.Where(proj =>
+				proj != null
+				&& proj.active
+				&& proj != Projectile
+				&& proj.type == Projectile.type
+				&& proj.owner == Projectile.owner
+				&& proj.whoAmI < Projectile.whoAmI)
+			.Count();
+
+		float posOffsetX = 480 * (minionIndex % 2 - 0.5f) * (minionIndex / 2f + (minionIndex % 2) / 2f);
+		PredictMyceliumPos = Owner.Center + Vector2.UnitX * Owner.direction * posOffsetX;
 	}
 
 	public void StopAndBecomeMycelium()
 	{
-		if (!ReachPredictPos && PredictMyceliumPos != new Vector2(0))
+		if (PredictMyceliumPos != Vector2.Zero && !ReachPredictPos)
 		{
 			Vector2 toPredictMycelium = (PredictMyceliumPos - Projectile.Center).NormalizeSafe() * 6f;
 			Projectile.velocity = Projectile.velocity * 0.9f + toPredictMycelium * 0.1f;
-			if ((Projectile.Center - PredictMyceliumPos).Length() < 30)
-			{
-				ReachPredictPos = true;
-			}
+
+			// Check if the projectile is close enough to the predicted mycelium position.
+			ReachPredictPos = (Projectile.Center - PredictMyceliumPos).Length() < PredictMyceliumPosCheckDistance;
 		}
+
 		if (ReachPredictPos)
 		{
 			if (Collision.IsWorldPointSolid(Projectile.Center))
@@ -371,12 +417,12 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 					};
 					Ins.VFXManager.Add(dustVFX);
 				}
-				if (MyceliumAmount < 256)
+				if (MyceliumAmount < MyceliumAmountMax)
 				{
 					MyceliumAmount += 10;
-					if (MyceliumAmount >= 256)
+					if (MyceliumAmount >= MyceliumAmountMax)
 					{
-						MyceliumAmount = 256;
+						MyceliumAmount = MyceliumAmountMax;
 					}
 					BFSContinueTile(RootTileCoord);
 				}
@@ -401,24 +447,41 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 				Dust dust = Dust.NewDustDirect(Owner.BottomLeft, Owner.width, 15, ModContent.DustType<WoodlandWraithStaff_Spore>());
 				dust.velocity *= 0.2f;
 			}
-			OwnerInMyceliumNet = true;
-		}
-		else
-		{
-			OwnerInMyceliumNet = false;
+
+			Owner.AddBuff(ModContent.BuffType<WoodlandWraithStaffMyceliumBuff>(), 2);
 		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		var texture = ModContent.Request<Texture2D>(Texture).Value;
-		float fadeColor = 1 - MyceliumKillTimer / 60f;
-		if (MyceliumAmount <= 0 || State != 1)
+		// Draw self when not mycelume.
+		if (MyceliumAmount <= 0 || State != States.Mycelume)
 		{
-			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0);
+			var texture = ModContent.Request<Texture2D>(Texture).Value;
+			texture = ModAsset.WoodlandWraithStaff_FungiBall_Trail.Value;
+			var mainStrength = 0.45f + 0.15f * MathF.Sin((float)Main.timeForVisualEffects * 0.02f);
+			var mainColor = Color.Lerp(lightColor, Color.White, mainStrength);
+			if (!Main.IsItDay()) // Mix purple in night time.
+			{
+				mainColor = Color.Lerp(mainColor, Color.MediumPurple, mainStrength);
+			}
+			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, mainColor, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0);
+
+			// Draw blood glow.
+			var texGlow = ModAsset.WoodlandWraithStaff_FungiBall_BloodGlow.Value;
+			var glowStrength = 0.7f + 0.1f * MathF.Sin((float)Main.timeForVisualEffects * 0.08f);
+			if (OwnerBuffed)
+			{
+				glowStrength = 0.9f + 0.1f * MathF.Sin((float)Main.timeForVisualEffects * 0.04f);
+			}
+			var glowColor = Color.Lerp(lightColor, Color.White, glowStrength);
+			Main.spriteBatch.Draw(texGlow, Projectile.Center - Main.screenPosition, null, glowColor, Projectile.velocity.ToRotation() - MathHelper.PiOver2, texGlow.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		}
+
+		// Draw mycelium cover.
+		float fadeColor = 1 - MyceliumKillTimer / 60f;
 		float enhance = 0.5f;
-		List<Vertex2D> bars = new List<Vertex2D>();
+		List<Vertex2D> bars = [];
 		foreach (var pos in ContinueTiles)
 		{
 			DrawSide(bars, pos);
@@ -516,7 +579,7 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 		}
 	}
 
-	public void BFSContinueTile(Point checkPoint)
+	private void BFSContinueTile(Point checkPoint)
 	{
 		ContinueTiles = new List<Point>();
 		int maxContinueCount = MyceliumAmount;

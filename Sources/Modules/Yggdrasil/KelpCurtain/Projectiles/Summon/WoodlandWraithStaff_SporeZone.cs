@@ -1,5 +1,4 @@
 using Everglow.Commons.DataStructures;
-using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 

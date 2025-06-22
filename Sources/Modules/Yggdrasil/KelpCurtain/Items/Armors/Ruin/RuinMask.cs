@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
+using Everglow.Yggdrasil.KelpCurtain.Items.Weapons.Ruin;
 using Terraria.GameContent.Creative;
 using Terraria.Graphics.Shaders;
 
@@ -42,6 +43,9 @@ public class RuinMask : ModItem
 
 	public class RuinSetPlayer : ModPlayer
 	{
+		public const int BuffDuration = 30 * 60;
+		public const int CooldownDuration = 120 * 60;
+
 		public bool RuinSetEnable { get; set; } = false;
 
 		public bool RuinSetBuffActive => RuinSetEnable && Player.HasBuff<RuinSetBuff>();
@@ -51,14 +55,24 @@ public class RuinMask : ModItem
 			RuinSetEnable = false;
 		}
 
+		public override void FrameEffects()
+		{
+			if (RuinSetEnable && Player.HeldItem.type == ModContent.ItemType<WoodlandWraithStaff>())
+			{
+				Player.armorEffectDrawShadow = true;
+				Player.armorEffectDrawOutlines = Player.HasBuff<RuinSetBuff>();
+			}
+		}
+
 		public override void PostUpdate()
 		{
 			if (RuinSetEnable)
 			{
-				if (MouseUtils.MouseMiddle.IsClicked && Player.HasBuff<RuinSetCooldown>())
+				// TODO: Replace set effect hotkey with the one in config.
+				if (MouseUtils.MouseMiddle.IsClicked && !Player.HasBuff<RuinSetCooldown>())
 				{
-					Player.AddBuff(ModContent.BuffType<RuinSetBuff>(), 30 * 60);
-					Player.AddBuff(ModContent.BuffType<RuinSetCooldown>(), 120 * 60);
+					Player.AddBuff(ModContent.BuffType<RuinSetBuff>(), BuffDuration);
+					Player.AddBuff(ModContent.BuffType<RuinSetCooldown>(), CooldownDuration);
 				}
 
 				// Constraint for vanities, accessories and miscs effects that can change player visible equipments.

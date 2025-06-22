@@ -54,7 +54,7 @@ public class MyceliumTiles : Visual
 		if(!Wither)
 		{
 			timer = 0;
-			if (FungiBall.State != 1 || !FungiBall.Projectile.active)
+			if (FungiBall.State != WoodlandWraithStaff_FungiBall.States.Mycelume || !FungiBall.Projectile.active)
 			{
 				Wither = true;
 				timer = maxTime - KillTimer;
