@@ -106,7 +106,6 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 		ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
 
 		ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
-		ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
 	}
 
 	public override void SetDefaults()
