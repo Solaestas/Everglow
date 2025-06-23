@@ -1,3 +1,4 @@
+using Everglow.Commons.CustomTiles;
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
@@ -24,6 +25,8 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 	}
 
 	public const float DashAttackDamageMultiplier = 2.4f;
+	public const float CritChanceToTargetInSporeZone = 0.12f;
+	public const float DamangeBonusToTargetInSporeZone = 0.7f;
 	public const float AggroRange = 450f;
 	public const float ChaseRange = 600f;
 	public const int MyceliumAmountMax = 256;
@@ -159,9 +162,15 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		// Deals 240% damage when using dash attack.
-		if (AttackTimer > 0 && AttackCase == AttackCases.Dash)
+		modifiers.FinalDamage *= DashAttackDamageMultiplier;
+
+		// Has a chance to crit when target is in mycelium.
+		if (target.GetGlobalNPC<YggdrasilGlobalNPC>().InSporeZone)
 		{
-			modifiers.FinalDamage *= 2.4f;
+			if (Main.rand.Next() < CritChanceToTargetInSporeZone)
+			{
+				modifiers.SetCrit();
+			}
 		}
 	}
 
@@ -515,7 +524,7 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_forceField_medium.Value;
-			Main.graphics.GraphicsDevice.Textures[1] = Commons.ModAsset.Noise_cell.Value;
+			//Main.graphics.GraphicsDevice.Textures[1] = Commons.ModAsset.Noise_cell.Value;
 			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 

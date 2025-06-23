@@ -29,9 +29,19 @@ public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 		}
 	}
 
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		base.ModifyHitNPC(target, ref modifiers);
+
+		if (target.GetGlobalNPC<YggdrasilGlobalNPC>().InSporeZone)
+		{
+			modifiers.FinalDamage += WoodlandWraithStaff_FungiBall.DamangeBonusToTargetInSporeZone;
+		}
+	}
+
 	public override void KillMainStructure()
 	{
-		for (int k = 0;k < 6;k++)
+		for (int k = 0; k < 6; k++)
 		{
 			float mulScale = Main.rand.NextFloat(6f, 20f);
 			var blood = new BloodDrop
