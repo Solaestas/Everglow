@@ -39,15 +39,6 @@ public class WoodlandWraithStaff_SporeZone : ModProjectile
 		{
 			Range = RangeMax;
 		}
-
-		// Enable InSporeZone effect for NPCs within range
-		foreach (var npc in Main.ActiveNPCs)
-		{
-			if (Vector2.Distance(Projectile.Center, npc.Center) < Range)
-			{
-				npc.GetGlobalNPC<YggdrasilGlobalNPC>().InSporeZone = true;
-			}
-		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)

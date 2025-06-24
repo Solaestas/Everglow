@@ -32,8 +32,19 @@ public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		base.ModifyHitNPC(target, ref modifiers);
-
-		if (target.GetGlobalNPC<YggdrasilGlobalNPC>().InSporeZone)
+		bool sporeZone = false;
+		foreach (var proj in Main.projectile)
+		{
+			if (proj != null && proj.active && proj.type == ModContent.ProjectileType<WoodlandWraithStaff_SporeZone>() && proj.owner == Projectile.owner)
+			{
+				WoodlandWraithStaff_SporeZone wWSSZ = proj.ModProjectile as WoodlandWraithStaff_SporeZone;
+				if (Vector2.Distance(proj.Center, target.Center) < wWSSZ.Range)
+				{
+					sporeZone = true;
+				}
+			}
+		}
+		if (sporeZone)
 		{
 			modifiers.FinalDamage += WoodlandWraithStaff_FungiBall.DamangeBonusToTargetInSporeZone;
 		}

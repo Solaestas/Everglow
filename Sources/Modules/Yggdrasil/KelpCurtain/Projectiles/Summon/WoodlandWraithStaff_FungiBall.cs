@@ -5,6 +5,7 @@ using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.KelpCurtain.Items.Armors.Ruin;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Everglow.Yggdrasil.WorldGeneration;
+using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
@@ -164,10 +165,24 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 		// Deals 240% damage when using dash attack.
 		modifiers.FinalDamage *= DashAttackDamageMultiplier;
 
-		// Has a chance to crit when target is in mycelium.
-		if (target.GetGlobalNPC<YggdrasilGlobalNPC>().InSporeZone)
+		// Has a chance to crit when target is in spore zone.
+		bool sporeZone = false;
+		foreach(var proj in Main.projectile)
 		{
-			if (Main.rand.Next() < CritChanceToTargetInSporeZone)
+			if(proj != null && proj.active && proj.type == ModContent.ProjectileType<WoodlandWraithStaff_SporeZone>() && proj.owner == Projectile.owner)
+			{
+				WoodlandWraithStaff_SporeZone wWSSZ = proj.ModProjectile as WoodlandWraithStaff_SporeZone;
+				if (Vector2.Distance(proj.Center, target.Center) < wWSSZ.Range)
+				{
+					sporeZone = true;
+				}
+			}
+		}
+		if(sporeZone)
+		{
+			// Summon proj will not do a crit except for setting it manually.
+			// So, we only set crit in this case.
+			if (Main.rand.Next() < CritChanceToTargetInSporeZone + Projectile._crit / 100f)
 			{
 				modifiers.SetCrit();
 			}
@@ -326,7 +341,7 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 			if (AttackCase == AttackCases.Dash)
 			{
 				Projectile.velocity *= 0.95f;
-				if (AttackTimer < 78)
+				if (AttackTimer < 86)
 				{
 					if (Collision.IsWorldPointSolid(Projectile.Center + new Vector2(Projectile.velocity.X, 0)))
 					{
@@ -362,7 +377,14 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 			}
 			if (AttackTimer == 0)
 			{
-				AttackCase = AttackCase.NextEnum();
+				if(!Main.rand.NextBool(4))
+				{
+					AttackCase = AttackCases.Dash;
+				}
+				else
+				{
+					AttackCase = AttackCases.RedLiquid;
+				}
 			}
 		}
 		else
