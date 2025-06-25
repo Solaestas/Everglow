@@ -10,6 +10,7 @@ public class WoodlandWraithStaff : ModItem
 	public const int LeftManaCost = 10;
 	public const int RightManaCost = 20;
 	public const float SpecialProjectileSpeed = 15f;
+
 	public override void SetStaticDefaults()
 	{
 		Item.staff[Type] = true;
@@ -56,7 +57,7 @@ public class WoodlandWraithStaff : ModItem
 				return false;
 			}
 			Vector2 summonVec = Main.MouseWorld - player.Center;
-			if(summonVec.Length() > 150)
+			if (summonVec.Length() > 150)
 			{
 				summonVec = summonVec.NormalizeSafe() * 150f;
 			}
