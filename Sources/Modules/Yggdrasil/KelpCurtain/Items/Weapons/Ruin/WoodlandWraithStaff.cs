@@ -10,6 +10,10 @@ public class WoodlandWraithStaff : ModItem
 	public const int LeftManaCost = 10;
 	public const int RightManaCost = 20;
 	public const float SpecialProjectileSpeed = 15f;
+	public override void SetStaticDefaults()
+	{
+		Item.staff[Type] = true;
+	}
 
 	public override void SetDefaults()
 	{
@@ -33,7 +37,12 @@ public class WoodlandWraithStaff : ModItem
 	{
 		if (player.altFunctionUse == 2)
 		{
+			Item.useStyle = ItemUseStyleID.Shoot;
 			mult *= RightManaCost / (float)LeftManaCost; // Right click mana cost.
+		}
+		else
+		{
+			Item.useStyle = ItemUseStyleID.Swing;
 		}
 	}
 
@@ -46,16 +55,20 @@ public class WoodlandWraithStaff : ModItem
 			{
 				return false;
 			}
-
+			Vector2 summonVec = Main.MouseWorld - player.Center;
+			if(summonVec.Length() > 150)
+			{
+				summonVec = summonVec.NormalizeSafe() * 150f;
+			}
 			player.AddBuff(ModContent.BuffType<WoodlandWraithStaffBuff>(), 2);
-			Projectile.NewProjectile(source, Main.MouseWorld, velocity, type, damage, knockback, player.whoAmI);
+			Projectile.NewProjectile(source, player.Center + summonVec, velocity, type, damage, knockback, player.whoAmI);
 			SoundEngine.PlaySound(SoundID.Item44, position);
 		}
 		else
 		{
 			// Right click: Shoot a white projectile that can create a domain, where the attack of item's minions will be enhanced.
 			Vector2 initialVelo = Vector2.Normalize(Main.MouseWorld - player.Center) * SpecialProjectileSpeed;
-			Projectile.NewProjectile(source, position, initialVelo, ModContent.ProjectileType<WoodlandWraithStaff_SporeBeam>(), damage, knockback, player.whoAmI, 0f, 0f);
+			Projectile.NewProjectile(source, position + velocity * 3, initialVelo, ModContent.ProjectileType<WoodlandWraithStaff_SporeBeam>(), damage, knockback, player.whoAmI, 0f, 0f);
 			SoundEngine.PlaySound(SoundID.Item20, position);
 		}
 

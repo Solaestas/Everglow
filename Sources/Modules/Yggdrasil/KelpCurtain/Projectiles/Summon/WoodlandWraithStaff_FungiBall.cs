@@ -1,11 +1,9 @@
-using Everglow.Commons.CustomTiles;
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.KelpCurtain.Items.Armors.Ruin;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Everglow.Yggdrasil.WorldGeneration;
-using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
@@ -32,6 +30,7 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 	public const float ChaseRange = 600f;
 	public const int MyceliumAmountMax = 256;
 	private const int PredictMyceliumPosCheckDistance = 30;
+	public const int MaxTrail = 12;
 
 	private Player Owner => Main.player[Projectile.owner];
 
@@ -102,6 +101,30 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 
 	public float Omega = 0;
 
+	public Queue<Vector2> OldPos = new Queue<Vector2>();
+
+	public List<Projectile> SporeZones = new List<Projectile>();
+
+	public float ZoneSporeFade(Vector2 checkPos)
+	{
+		float maxFade = 0;
+		foreach (var proj in SporeZones)
+		{
+			if (proj != null && proj.active && proj.type == ModContent.ProjectileType<WoodlandWraithStaff_SporeZone>() && proj.owner == Projectile.owner)
+			{
+				WoodlandWraithStaff_SporeZone wWSSZ = proj.ModProjectile as WoodlandWraithStaff_SporeZone;
+				if (Vector2.Distance(proj.Center, checkPos) < wWSSZ.Range)
+				{
+					if(Math.Min(proj.timeLeft / 60f, 1f) > maxFade)
+					{
+						maxFade = Math.Min(proj.timeLeft / 60f, 1f);
+					}
+				}
+			}
+		}
+		return maxFade;
+	}
+
 	public override void SetStaticDefaults()
 	{
 		Main.projFrames[Projectile.type] = 1;
@@ -156,6 +179,19 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 					break;
 				}
 		}
+		if (State != States.Attack)
+		{
+			OldPos = new Queue<Vector2>();
+			Projectile.extraUpdates = 0;
+		}
+		SporeZones = new List<Projectile>();
+		foreach (var proj in Main.projectile)
+		{
+			if (proj != null && proj.active && proj.type == ModContent.ProjectileType<WoodlandWraithStaff_SporeZone>() && proj.owner == Projectile.owner)
+			{
+				SporeZones.Add(proj);
+			}
+		}
 	}
 
 	public override bool? CanHitNPC(NPC target) => AttackTimer > 0 && AttackCase == AttackCases.Dash ? base.CanHitNPC(target) : false;
@@ -167,9 +203,9 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 
 		// Has a chance to crit when target is in spore zone.
 		bool sporeZone = false;
-		foreach(var proj in Main.projectile)
+		foreach (var proj in Main.projectile)
 		{
-			if(proj != null && proj.active && proj.type == ModContent.ProjectileType<WoodlandWraithStaff_SporeZone>() && proj.owner == Projectile.owner)
+			if (proj != null && proj.active && proj.type == ModContent.ProjectileType<WoodlandWraithStaff_SporeZone>() && proj.owner == Projectile.owner)
 			{
 				WoodlandWraithStaff_SporeZone wWSSZ = proj.ModProjectile as WoodlandWraithStaff_SporeZone;
 				if (Vector2.Distance(proj.Center, target.Center) < wWSSZ.Range)
@@ -178,7 +214,7 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 				}
 			}
 		}
-		if(sporeZone)
+		if (sporeZone)
 		{
 			// Summon proj will not do a crit except for setting it manually.
 			// So, we only set crit in this case.
@@ -187,6 +223,11 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 				modifiers.SetCrit();
 			}
 		}
+		if (AttackTimer > 50)
+		{
+			AttackTimer = 50;
+		}
+		Projectile.velocity *= 0.5f;
 	}
 
 	public void UpdateTarget()
@@ -310,9 +351,10 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 		var toTarget = targetPos - Projectile.Center;
 		if (AttackTimer == 0)
 		{
+			Projectile.extraUpdates = 0;
 			if (toTarget.Length() > 16)
 			{
-				Projectile.velocity = Projectile.velocity * 0.96f + toTarget.NormalizeSafe() * 0.04f * 16;
+				Projectile.velocity = Projectile.velocity * 0.9f + toTarget.NormalizeSafe() * 0.1f * 16;
 			}
 			else
 			{
@@ -328,6 +370,8 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 			AttackTimer--;
 			if (AttackTimer == 89)
 			{
+				Projectile.extraUpdates = 3;
+				OldPos = new Queue<Vector2>();
 				if (AttackCase == AttackCases.Dash)
 				{
 					Projectile.velocity = (Target.Center - Projectile.Center).NormalizeSafe() * 24f;
@@ -340,6 +384,27 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 			}
 			if (AttackCase == AttackCases.Dash)
 			{
+				if (AttackTimer <= 89 && AttackTimer > 30)
+				{
+					OldPos.Enqueue(Projectile.Center);
+					Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4) + new Vector2(0, Main.rand.NextFloat(2f, 8f)).RotatedByRandom(MathHelper.TwoPi), 0, 0, ModContent.DustType<WoodlandWraithStaff_Spore2>());
+					dust.velocity = Projectile.velocity * Main.rand.NextFloat(0.3f, 0.7f);
+					dust.scale = Main.rand.NextFloat(0.3f, 0.7f);
+				}
+				if (OldPos.Count > MaxTrail)
+				{
+					OldPos.Dequeue();
+				}
+				if (AttackTimer <= 30)
+				{
+					OldPos = new Queue<Vector2>();
+					if (AttackTimer > 10)
+					{
+						AttackTimer = 9;
+						Projectile.velocity *= 0.4f;
+						Projectile.extraUpdates = 0;
+					}
+				}
 				Projectile.velocity *= 0.95f;
 				if (AttackTimer < 86)
 				{
@@ -359,6 +424,7 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 			}
 			if (AttackCase == AttackCases.RedLiquid)
 			{
+				Projectile.extraUpdates = 0;
 				if (AttackTimer > 30)
 				{
 					AttackTimer = 30;
@@ -377,7 +443,7 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 			}
 			if (AttackTimer == 0)
 			{
-				if(!Main.rand.NextBool(4))
+				if (!Main.rand.NextBool(4))
 				{
 					AttackCase = AttackCases.Dash;
 				}
@@ -446,6 +512,12 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 						ai = new float[] { 0, 0, 0 },
 					};
 					Ins.VFXManager.Add(dustVFX);
+					for (int k = 0; k < 30; k++)
+					{
+						Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<WoodlandWraithStaff_Spore2>());
+						dust.velocity = new Vector2(0, Main.rand.NextFloat(2f, 3f)).RotatedByRandom(MathHelper.TwoPi);
+						dust.scale = Main.rand.NextFloat(0.3f, 0.7f);
+					}
 				}
 				if (MyceliumAmount < MyceliumAmountMax)
 				{
@@ -487,8 +559,28 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 		// Draw self when not mycelume.
 		if (MyceliumAmount <= 0 || State != States.Mycelume)
 		{
+			var texBloom = ModAsset.WoodlandWraithStaff_FungiBall_bloom.Value;
+			if (ZoneSporeFade(Projectile.Center) > 0)
+			{
+				float cValue = 0.75f + 0.15f * MathF.Sin((float)Main.time * 0.05f + Projectile.whoAmI);
+				Main.spriteBatch.Draw(texBloom, Projectile.Center - Main.screenPosition, null, new Color(cValue, cValue, cValue, 0), Projectile.rotation, texBloom.Size() / 2, Projectile.scale, SpriteEffects.None, 0);
+			}
 			var texture = ModContent.Request<Texture2D>(Texture).Value;
-			texture = ModAsset.WoodlandWraithStaff_FungiBall_Trail.Value;
+			if (OldPos.Count > 0)
+			{
+				var drawPoses = OldPos.ToArray();
+				for (int t = 0; t < drawPoses.Length; t++)
+				{
+					var drawColor = lightColor;
+					drawColor *= t / (float)drawPoses.Length;
+					drawColor.A = 0;
+					if (AttackTimer < 50)
+					{
+						drawColor *= (AttackTimer - 30) / 20f;
+					}
+					Main.spriteBatch.Draw(texture, drawPoses[t] - Main.screenPosition, null, drawColor, Projectile.rotation, texture.Size() / 2, Projectile.scale, SpriteEffects.None, 0);
+				}
+			}
 			var mainStrength = 0.45f + 0.15f * MathF.Sin((float)Main.timeForVisualEffects * 0.02f);
 			var mainColor = Color.Lerp(lightColor, Color.White, mainStrength);
 			if (!Main.IsItDay()) // Mix purple in night time.
@@ -505,7 +597,12 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 				glowStrength = 0.9f + 0.1f * MathF.Sin((float)Main.timeForVisualEffects * 0.04f);
 			}
 			var glowColor = Color.Lerp(lightColor, Color.White, glowStrength);
-			Main.spriteBatch.Draw(texGlow, Projectile.Center - Main.screenPosition, null, glowColor, Projectile.velocity.ToRotation() - MathHelper.PiOver2, texGlow.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(texGlow, Projectile.Center - Main.screenPosition, null, glowColor, Projectile.rotation, texGlow.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+			if (ZoneSporeFade(Projectile.Center) > 0)
+			{
+				var texGlow_bloom = ModAsset.WoodlandWraithStaff_FungiBall_BloodGlow_bloom.Value;
+				Main.spriteBatch.Draw(texGlow_bloom, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0f), Projectile.rotation, texGlow_bloom.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+			}
 		}
 
 		// Draw mycelium cover.
@@ -527,6 +624,12 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 			var color2 = Lighting.GetColor(p2.ToTileCoordinates()) * enhance;
 			var color3 = Lighting.GetColor(p3.ToTileCoordinates()) * enhance;
 
+			Color powerfulColor = new Color(0.1f, 0.0f, 0.4f, 0);
+			color0 = Color.Lerp(color0, powerfulColor, 0.3f * ZoneSporeFade(p0));
+			color1 = Color.Lerp(color1, powerfulColor, 0.3f * ZoneSporeFade(p1));
+			color2 = Color.Lerp(color2, powerfulColor, 0.3f * ZoneSporeFade(p2));
+			color3 = Color.Lerp(color3, powerfulColor, 0.3f * ZoneSporeFade(p3));
+
 			color0.A = 0;
 			color1.A = 0;
 			color2.A = 0;
@@ -546,7 +649,8 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_forceField_medium.Value;
-			//Main.graphics.GraphicsDevice.Textures[1] = Commons.ModAsset.Noise_cell.Value;
+
+			// Main.graphics.GraphicsDevice.Textures[1] = Commons.ModAsset.Noise_cell.Value;
 			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
@@ -592,6 +696,11 @@ public class WoodlandWraithStaff_FungiBall : ModProjectile
 				var color1 = Lighting.GetColor(p1.ToTileCoordinates()) * enhance;
 				var color2 = Lighting.GetColor(p2.ToTileCoordinates()) * enhance;
 				var color3 = Lighting.GetColor(p3.ToTileCoordinates()) * enhance;
+				Color powerfulColor = new Color(0.4f, 0.3f, 0.6f, 0) * enhance;
+				color0 = Color.Lerp(color0, powerfulColor, 0.4f * ZoneSporeFade(p0));
+				color1 = Color.Lerp(color1, powerfulColor, 0.4f * ZoneSporeFade(p1));
+				color2 = Color.Lerp(color2, powerfulColor, 0.4f * ZoneSporeFade(p2));
+				color3 = Color.Lerp(color3, powerfulColor, 0.4f * ZoneSporeFade(p3));
 
 				color0.A = 0;
 				color1.A = 0;

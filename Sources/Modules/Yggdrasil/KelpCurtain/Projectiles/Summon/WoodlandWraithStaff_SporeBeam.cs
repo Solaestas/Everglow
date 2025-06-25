@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Weapons;
+using Everglow.Yggdrasil.KelpCurtain.Dusts;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 
@@ -12,6 +13,8 @@ public class WoodlandWraithStaff_SporeBeam : TrailingProjectile
 		TrailTexture = Commons.ModAsset.Trail_8.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_8_black.Value;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
+		Projectile.width = 6;
+		Projectile.height = 6;
 	}
 
 	public override void AI()
@@ -21,16 +24,39 @@ public class WoodlandWraithStaff_SporeBeam : TrailingProjectile
 		{
 			Projectile.velocity.Y += 0.15f;
 		}
+		Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4) + new Vector2(0, Main.rand.NextFloat(2f, 8f)).RotatedByRandom(MathHelper.TwoPi), 0, 0, ModContent.DustType<WoodlandWraithStaff_Spore2>());
+		dust.velocity = Projectile.velocity * Main.rand.NextFloat(0.3f, 0.7f);
+		dust.scale = Main.rand.NextFloat(0.3f, 0.7f);
+		if (TimeTokill > 0 && TimeTokill < 17)
+		{
+			Projectile.friendly = false;
+		}
+	}
+
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+	{
+		if (TimeTokill >= 17)
+		{
+			return (targetHitbox.Center() - Projectile.Center).Length() < 300;
+		}
+		return base.Colliding(projHitbox, targetHitbox);
 	}
 
 	public override void KillMainStructure()
 	{
 		// TODO: Dust Effect
-		for (int k = 0; k < 6; k++)
+		for (int k = 0; k < 60; k++)
 		{
+			Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<WoodlandWraithStaff_Spore2>());
+			dust.velocity = new Vector2(0, Main.rand.Next(3, 15)).RotatedByRandom(MathHelper.TwoPi);
 		}
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<WoodlandWraithStaff_SporeZone>(), Projectile.damage, 0, Projectile.owner);
-		base.KillMainStructure();
+		Projectile.velocity = Projectile.oldVelocity;
+		if (TimeTokill < 0)
+		{
+			Explosion();
+		}
+		TimeTokill = ProjectileID.Sets.TrailCacheLength[Projectile.type];
 	}
 
 	public override bool PreDraw(ref Color lightColor)

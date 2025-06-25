@@ -1,4 +1,6 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.KelpCurtain.Dusts;
+using Everglow.Yggdrasil.KelpCurtain.VFXs;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 
@@ -39,6 +41,39 @@ public class WoodlandWraithStaff_SporeZone : ModProjectile
 		{
 			Range = RangeMax;
 		}
+		for (int t = 0; t < Range / 150; t++)
+		{
+			Vector2 posAdd = new Vector2(0, Range).RotatedByRandom(MathHelper.TwoPi);
+			if(Main.rand.NextBool(3))
+			{
+				Vector2 vel = posAdd.NormalizeSafe() * 0.3f;
+				if (Main.rand.NextBool())
+				{
+					vel *= -1;
+				}
+				var dustVFX4 = new SporeRingDust
+				{
+					velocity = vel,
+					Active = true,
+					Visible = true,
+					position = posAdd + Projectile.Center,
+					maxTime = 80,
+					scale = Main.rand.NextFloat(16, 24),
+					rotation = vel.ToRotation() - MathHelper.PiOver4 * 3,
+					ai = new float[] { 0, 0, 0 },
+				};
+				Ins.VFXManager.Add(dustVFX4);
+			}
+
+			Dust dust = Dust.NewDustDirect(Projectile.Center + posAdd - new Vector2(4), 0, 0, ModContent.DustType<WoodlandWraithStaff_Spore2>());
+			dust.velocity = posAdd.NormalizeSafe() * 0.3f;
+			if (Main.rand.NextBool())
+			{
+				dust.velocity *= -1;
+			}
+			dust.scale = 0.6f;
+		}
+		Lighting.AddLight(Projectile.Center, new Vector3(220, 220, 239) / 300f);
 	}
 
 	public override bool PreDraw(ref Color lightColor)
@@ -51,18 +86,6 @@ public class WoodlandWraithStaff_SporeZone : ModProjectile
 
 		for (int i = 0; i <= 100; i++)
 		{
-			var colorTile = Lighting.GetColor((drawPos + new Vector2(Range + 40, 0).RotatedBy(i / 100f * MathHelper.TwoPi) + Main.screenPosition).ToTileCoordinates());
-			var ringColor = Color.Lerp(drawColor, colorTile, 0.95f);
-			if (Projectile.timeLeft < 60)
-			{
-				ringColor *= Projectile.timeLeft / 60f;
-			}
-			ringColor.A = 0;
-			bars.Add(drawPos + new Vector2(Range + 40, 0).RotatedBy(i / 100f * MathHelper.TwoPi), ringColor * 0, new Vector3(i / 100f * 4f, timeValue, 0));
-			bars.Add(drawPos + new Vector2(Range + 20, 0).RotatedBy(i / 100f * MathHelper.TwoPi), ringColor, new Vector3(i / 100f * 4f, 0.05f + timeValue, 0));
-		}
-		for (int i = 0; i <= 100; i++)
-		{
 			var colorTile = Lighting.GetColor((drawPos + new Vector2(Range + 20, 0).RotatedBy(i / 100f * MathHelper.TwoPi) + Main.screenPosition).ToTileCoordinates());
 			var ringColor = Color.Lerp(drawColor, colorTile, 0.95f);
 			if (Projectile.timeLeft < 60)
@@ -70,21 +93,33 @@ public class WoodlandWraithStaff_SporeZone : ModProjectile
 				ringColor *= Projectile.timeLeft / 60f;
 			}
 			ringColor.A = 0;
-			bars.Add(drawPos + new Vector2(Range + 20, 0).RotatedBy(i / 100f * MathHelper.TwoPi), ringColor, new Vector3(i / 100f * 4f, 0.05f + timeValue, 0));
-			bars.Add(drawPos + new Vector2(Range, 0).RotatedBy(i / 100f * MathHelper.TwoPi), ringColor * 0, new Vector3(i / 100f * 4f, timeValue, 0));
+			bars.Add(drawPos + new Vector2(Range + 20, 0).RotatedBy(i / 100f * MathHelper.TwoPi), ringColor * 0, new Vector3(i / 100f * 4f, timeValue, 0));
+			bars.Add(drawPos + new Vector2(Range, 0).RotatedBy(i / 100f * MathHelper.TwoPi), ringColor, new Vector3(i / 100f * 4f, 0.05f + timeValue, 0));
+		}
+		for (int i = 0; i <= 100; i++)
+		{
+			var colorTile = Lighting.GetColor((drawPos + new Vector2(Range, 0).RotatedBy(i / 100f * MathHelper.TwoPi) + Main.screenPosition).ToTileCoordinates());
+			var ringColor = Color.Lerp(drawColor, colorTile, 0.95f);
+			if (Projectile.timeLeft < 60)
+			{
+				ringColor *= Projectile.timeLeft / 60f;
+			}
+			ringColor.A = 0;
+			bars.Add(drawPos + new Vector2(Range, 0).RotatedBy(i / 100f * MathHelper.TwoPi), ringColor, new Vector3(i / 100f * 4f, 0.05f + timeValue, 0));
+			bars.Add(drawPos + new Vector2(Range - 20, 0).RotatedBy(i / 100f * MathHelper.TwoPi), ringColor * 0, new Vector3(i / 100f * 4f, timeValue, 0));
 		}
 
 		for (int i = 0; i <= 100; i++)
 		{
-			var colorTile = Lighting.GetColor((drawPos + new Vector2(Range + 30, 0).RotatedBy(i / 100f * MathHelper.TwoPi) + Main.screenPosition).ToTileCoordinates());
+			var colorTile = Lighting.GetColor((drawPos + new Vector2(Range + 10, 0).RotatedBy(i / 100f * MathHelper.TwoPi) + Main.screenPosition).ToTileCoordinates());
 			var ringColor = Color.Lerp(drawColor, colorTile, 0.8f);
 			if (Projectile.timeLeft < 60)
 			{
 				ringColor *= Projectile.timeLeft / 60f;
 			}
 			ringColor.A = 0;
-			barsCenter.Add(drawPos + new Vector2(Range + 30, 0).RotatedBy(i / 100f * MathHelper.TwoPi), ringColor, new Vector3(i / 100f * 4f, 0, 0));
-			barsCenter.Add(drawPos + new Vector2(Range + 10, 0).RotatedBy(i / 100f * MathHelper.TwoPi), ringColor, new Vector3(i / 100f * 4f, 1, 0));
+			barsCenter.Add(drawPos + new Vector2(Range + 10, 0).RotatedBy(i / 100f * MathHelper.TwoPi), ringColor, new Vector3(i / 100f * 4f, 0, 0));
+			barsCenter.Add(drawPos + new Vector2(Range - 10, 0).RotatedBy(i / 100f * MathHelper.TwoPi), ringColor, new Vector3(i / 100f * 4f, 1, 0));
 		}
 		if (bars.Count > 0)
 		{
@@ -99,6 +134,14 @@ public class WoodlandWraithStaff_SporeZone : ModProjectile
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(sBS);
 		}
+		Texture2D bloom = Commons.ModAsset.SwirlPoint.Value;
+		var bloomColor = drawColor * 0.6f;
+		bloomColor.A = 0;
+		if (Projectile.timeLeft < 60)
+		{
+			bloomColor *= Projectile.timeLeft / 60f;
+		}
+		Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, null, bloomColor, timeValue * 90 + Projectile.whoAmI, bloom.Size() * 0.5f, Range / 600f + 0.5f, SpriteEffects.None);
 		return false;
 	}
 }

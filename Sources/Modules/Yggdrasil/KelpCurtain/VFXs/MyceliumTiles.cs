@@ -24,6 +24,8 @@ public class MyceliumTiles : Visual
 
 	public List<Point> ContinueTiles = new List<Point>();
 
+	public List<Projectile>SporeZones = new List<Projectile>();
+
 	public override void OnSpawn()
 	{
 		base.OnSpawn();
@@ -47,17 +49,25 @@ public class MyceliumTiles : Visual
 			ContinueTiles = new List<Point>();
 			BFSContinueTile(RootPos);
 		}
-		if(FungiBall == null)
+		if (FungiBall == null)
 		{
 			Active = false;
 		}
-		if(!Wither)
+		if (!Wither)
 		{
 			timer = 0;
 			if (FungiBall.State != WoodlandWraithStaff_FungiBall.States.Mycelume || !FungiBall.Projectile.active)
 			{
 				Wither = true;
 				timer = maxTime - KillTimer;
+			}
+		}
+		SporeZones = new List<Projectile>();
+		foreach (var proj in Main.projectile)
+		{
+			if (proj != null && proj.active && proj.type == ModContent.ProjectileType<WoodlandWraithStaff_SporeZone>() && proj.owner == LockProjectile.owner)
+			{
+				SporeZones.Add(proj);
 			}
 		}
 	}
@@ -71,6 +81,26 @@ public class MyceliumTiles : Visual
 				DrawTilePiece(point);
 			}
 		}
+	}
+
+	public float ZoneSporeFade(Vector2 checkPos)
+	{
+		float maxFade = 0;
+		foreach (var proj in SporeZones)
+		{
+			if (proj != null && proj.active && proj.type == ModContent.ProjectileType<WoodlandWraithStaff_SporeZone>() && proj.owner == LockProjectile.owner)
+			{
+				WoodlandWraithStaff_SporeZone wWSSZ = proj.ModProjectile as WoodlandWraithStaff_SporeZone;
+				if (Vector2.Distance(proj.Center, checkPos) < wWSSZ.Range)
+				{
+					if (Math.Min(proj.timeLeft / 60f, 1f) > maxFade)
+					{
+						maxFade = Math.Min(proj.timeLeft / 60f, 1f);
+					}
+				}
+			}
+		}
+		return maxFade;
 	}
 
 	public void DrawTilePiece(Point pos)
@@ -98,10 +128,15 @@ public class MyceliumTiles : Visual
 		color1 *= 0.6f;
 		color2 *= 0.6f;
 		color3 *= 0.6f;
+		Color powerfulColor = new Color(0.1f, 0.0f, 0.4f, 0);
+		color0 = Color.Lerp(color0, powerfulColor, ZoneSporeFade(pos0) * 0.3f);
+		color1 = Color.Lerp(color1, powerfulColor, ZoneSporeFade(pos1) * 0.3f);
+		color2 = Color.Lerp(color2, powerfulColor, ZoneSporeFade(pos2) * 0.3f);
+		color3 = Color.Lerp(color3, powerfulColor, ZoneSporeFade(pos3) * 0.3f);
 		float coord2Z = 0;
 		if (timer > maxTime - KillTimer)
 		{
-			coord2Z = (timer - maxTime + KillTimer) / (float)KillTimer;
+			coord2Z = (timer - maxTime + KillTimer) / KillTimer;
 		}
 		bars.Add(new Vertex2DMycelium(pos0, color0, new Vector3(GetRotVec((addPos.ToVector2() + new Vector2(0.5f, 0.5f)) * size, rotation), zValue), new Vector3(tile.TileFrameX / (float)texTile.Width, tile.TileFrameY / (float)texTile.Height, coord2Z)));
 		bars.Add(new Vertex2DMycelium(pos1, color1, new Vector3(GetRotVec((addPos.ToVector2() + new Vector2(-0.5f, 0.5f)) * size, rotation), zValue), new Vector3((tile.TileFrameX + 16) / (float)texTile.Width, tile.TileFrameY / (float)texTile.Height, coord2Z)));
