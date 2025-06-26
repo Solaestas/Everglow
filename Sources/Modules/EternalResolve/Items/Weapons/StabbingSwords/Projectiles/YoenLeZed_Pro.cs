@@ -48,7 +48,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public void GenerateVFX(int Frequency)
 		{
-			float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
+			float mulVelocity = Main.rand.NextFloat(0.25f, 0.5f);
 			for (int g = 0; g < Frequency; g++)
 			{
 				float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(8f, 16f));
