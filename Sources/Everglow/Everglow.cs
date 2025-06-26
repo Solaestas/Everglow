@@ -1,9 +1,6 @@
 using System.Reflection;
 using Everglow.Commons;
 using Everglow.Commons.Hooks;
-
-
-// using Everglow.Commons.Hooks;
 using Everglow.Commons.Interfaces;
 using Everglow.Commons.Modules;
 using Everglow.Commons.Network.PacketHandle;
@@ -35,13 +32,16 @@ public class Everglow : Mod
 	{
 		Ins.Begin();
 		Ins.Add(Logger);
-		Ins.Add(Main.instance.GraphicsDevice);
-		Ins.Add(Main.spriteBatch);
+		if(!Main.dedServ)
+		{
+			Ins.Add(Main.instance.GraphicsDevice);
+			Ins.Add(Main.spriteBatch);
+		}
 		Ins.Add<IVisualQualityController, VisualQualityController>();
 		Ins.Add<ModuleManager>();
 		Ins.Add<IHookManager, HookManager>();
 		Ins.Add<IMainThreadContext, MainThreadContext>();
-		if (Main.netMode != NetmodeID.Server)
+		if (!Main.dedServ)
 		{
 			Ins.Add<RenderTargetPool>();
 			Ins.Add<IVFXManager, VFXManager>();
