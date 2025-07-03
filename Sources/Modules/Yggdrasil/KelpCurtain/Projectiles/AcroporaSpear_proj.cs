@@ -293,11 +293,11 @@ public class AcroporaSpear_proj : MeleeProj
 	public override void DrawTrail(Color color)
 	{
 		base.DrawTrail(color);
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
+		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{
-			SmoothTrail.Add(SmoothTrailX[x]);
+			SmoothTrail.Add(smoothTrail_current[x]);
 		}
 		if (trailVecs.Count != 0)
 			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);

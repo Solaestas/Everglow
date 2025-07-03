@@ -1,16 +1,18 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Commons.Weapons;
+using Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
+using Everglow.Yggdrasil.KelpCurtain.VFXs;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using log4net.Core;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
+namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
 
-public class WoodlandWraithStaff_BloodStream : TrailingProjectile
+public class DevilHeartStaff_proj_II : TrailingProjectile
 {
-	public const float GlowTime = 90;
-
 	public override void SetDef()
 	{
-		TrailColor = new Color(0.4f, 0.0f, 0.0f, 0f);
+		TrailColor = new Color(0.85f, 0.75f, 0.65f, 0f);
 		TrailWidth = 12f;
 		TrailTexture = Commons.ModAsset.Trail_8.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_8_black.Value;
@@ -23,10 +25,6 @@ public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 	public override void AI()
 	{
 		base.AI();
-		if (TimeTokill < 0)
-		{
-			Projectile.velocity.Y += 0.5f;
-		}
 	}
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
@@ -37,7 +35,7 @@ public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 		{
 			if (proj != null && proj.active && proj.type == ModContent.ProjectileType<WoodlandWraithStaff_SporeZone>() && proj.owner == Projectile.owner)
 			{
-				WoodlandWraithStaff_SporeZone wWSSZ = proj.ModProjectile as WoodlandWraithStaff_SporeZone;
+				var wWSSZ = proj.ModProjectile as WoodlandWraithStaff_SporeZone;
 				if (Vector2.Distance(proj.Center, target.Center) < wWSSZ.Range)
 				{
 					sporeZone = true;
@@ -52,21 +50,21 @@ public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 
 	public override void KillMainStructure()
 	{
-		for (int k = 0; k < 6; k++)
+		for (int i = 0; i < 12; i++)
 		{
-			float mulScale = Main.rand.NextFloat(6f, 20f);
-			var blood = new BloodDrop
+			Vector2 vel = new Vector2(0, Main.rand.NextFloat(5.6f, 8.4f)).RotatedByRandom(MathHelper.TwoPi);
+			var dust = new DevilHeart_Spark
 			{
-				velocity = new Vector2(0, Main.rand.NextFloat(3, 6)).RotatedByRandom(MathHelper.TwoPi),
+				velocity = vel,
 				Active = true,
 				Visible = true,
 				position = Projectile.Center,
-				maxTime = Main.rand.Next(82, 164),
-				scale = mulScale,
+				maxTime = Main.rand.Next(60, 120),
+				scale = Main.rand.NextFloat(1f, 2f),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) },
+				ai = new float[] { Main.rand.NextFloat(4.0f, 10.93f) },
 			};
-			Ins.VFXManager.Add(blood);
+			Ins.VFXManager.Add(dust);
 		}
 		base.KillMainStructure();
 	}
@@ -85,7 +83,7 @@ public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 	public override void DrawSelf()
 	{
 		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		var color = Color.Lerp(Color.White, Lighting.GetColor(Projectile.Center.ToTileCoordinates()), MathF.Sqrt(Timer / GlowTime));
+		var color = new Color(225, 68, 223, 0);
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, color, Projectile.velocity.ToRotation() - MathHelper.PiOver2, texMain.Size() / 2f, 0.6f, SpriteEffects.None, 0);
 	}
 
@@ -93,7 +91,7 @@ public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 
 	public override void DrawTrailDark()
 	{
-		List<Vector2> unSmoothPos = new List<Vector2>();
+		var unSmoothPos = new List<Vector2>();
 		for (int i = 0; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
@@ -138,7 +136,7 @@ public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
 			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
 		}
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect effect = TrailShader;

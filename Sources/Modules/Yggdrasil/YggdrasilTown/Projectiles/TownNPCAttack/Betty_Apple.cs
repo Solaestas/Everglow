@@ -152,11 +152,11 @@ public class Betty_Apple : TrailingProjectile
 
 			unSmoothPos.Add(Projectile.oldPos[i]);
 		}
-		List<Vector2> smoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
 		var smoothTrail = new List<Vector2>();
-		for (int x = 0; x < smoothTrailX.Count - 1; x++)
+		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{
-			smoothTrail.Add(smoothTrailX[x]);
+			smoothTrail.Add(smoothTrail_current[x]);
 		}
 		if (unSmoothPos.Count != 0)
 		{
@@ -233,11 +233,11 @@ public class Betty_Apple : TrailingProjectile
 
 			unSmoothPos.Add(Projectile.oldPos[i]);
 		}
-		List<Vector2> smoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
 		var smoothTrail = new List<Vector2>();
-		for (int x = 0; x < smoothTrailX.Count - 1; x++)
+		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{
-			smoothTrail.Add(smoothTrailX[x]);
+			smoothTrail.Add(smoothTrail_current[x]);
 		}
 		if (unSmoothPos.Count != 0)
 		{

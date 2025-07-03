@@ -263,14 +263,14 @@ public class TrueDeathSickle_Blade : ModProjectile, IWarpProjectile_warpStyle2, 
 		}
 
 		List<float> scalesSmooth = new List<float>();
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(SmoothTrailProjectile.ToList()); // 平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(SmoothTrailProjectile.ToList()); // 平滑
 		List<Vector2> Smoothscales = GraphicsUtils.CatmullRom(scales.ToList()); // 平滑
 		SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < SmoothTrailX.Count; x++)
+		for (int x = 0; x < smoothTrail_current.Count; x++)
 		{
-			float value2 = x / (float)SmoothTrailX.Count;
+			float value2 = x / (float)smoothTrail_current.Count;
 			scalesSmooth.Add(Smoothscales[Math.Clamp((int)value2, 0, Smoothscales.Count - 1)].X);
-			SmoothTrail.Add(SmoothTrailX[x]);
+			SmoothTrail.Add(smoothTrail_current[x]);
 		}
 
 		int length = SmoothTrail.Count;

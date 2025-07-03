@@ -1,167 +1,99 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.Graphics;
 using Everglow.Commons.Weapons;
-using Everglow.Yggdrasil.YggdrasilTown.Dusts.TownNPCAttack;
-using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using Everglow.Yggdrasil.YggdrasilTown.VFXs.TownNPCAttack;
-using Terraria.Audio;
-using Terraria.DataStructures;
+using Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
+using Everglow.Yggdrasil.KelpCurtain.VFXs;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.TownNPCAttack;
+namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
 
-public class Betty_Watermelon : TrailingProjectile
+public class DevilHeartStaff_proj : TrailingProjectile
 {
 	public override void SetDef()
 	{
-		Projectile.width = 28;
-		Projectile.height = 28;
-		Projectile.aiStyle = -1;
-		Projectile.friendly = true;
-		Projectile.hostile = false;
-		Projectile.ignoreWater = false;
-		Projectile.tileCollide = true;
-		Projectile.penetrate = 1;
-		Projectile.timeLeft = 600;
-		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
-		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
-		TrailColor = new Color(0.9f, 0.9f, 0.9f, 0f);
-		TrailWidth = 60f;
-		SelfLuminous = false;
-		TrailTexture = Commons.ModAsset.Trail_10.Value;
-		TrailTextureBlack = Commons.ModAsset.Trail_10_black.Value;
-		TrailShader = Commons.ModAsset.Trailing.Value;
+		TrailColor = new Color(0.85f, 0.75f, 0.65f, 0f);
+		TrailWidth = 12f;
+		TrailTexture = Commons.ModAsset.Trail_8.Value;
+		TrailTextureBlack = Commons.ModAsset.Trail_8_black.Value;
+		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
+
+		Projectile.width = 20;
+		Projectile.height = 20;
+		ProjTrailColor.colorList.Add((new Color(203, 73, 229, 0), 0));
+		ProjTrailColor.colorList.Add((new Color(95, 99, 226, 0), 0.4f));
+		ProjTrailColor.colorList.Add((new Color(206, 187, 165, 0), 0.8f));
+		ProjTrailColor.colorList.Add((new Color(104, 104, 104, 0), 1f));
 	}
+
+	public GradientColor ProjTrailColor = new();
 
 	public override void AI()
 	{
-		if (TimeTokill < 0)
+		base.AI();
+	}
+
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		base.ModifyHitNPC(target, ref modifiers);
+		bool sporeZone = false;
+		foreach (var proj in Main.projectile)
 		{
-			if (Projectile.velocity.Y <= 21)
+			if (proj != null && proj.active && proj.type == ModContent.ProjectileType<WoodlandWraithStaff_SporeZone>() && proj.owner == Projectile.owner)
 			{
-				Projectile.velocity.Y += 0.6f;
-			}
-			if (Projectile.timeLeft % 6 == 0)
-			{
-				Projectile.frame++;
-				if (Projectile.frame > 11)
+				var wWSSZ = proj.ModProjectile as WoodlandWraithStaff_SporeZone;
+				if (Vector2.Distance(proj.Center, target.Center) < wWSSZ.Range)
 				{
-					Projectile.frame = 0;
+					sporeZone = true;
 				}
 			}
 		}
-		Timer++;
-		Projectile.rotation += Projectile.ai[0];
-		if (TimeTokill >= 0 && TimeTokill <= 2)
+		if (sporeZone)
 		{
-			Projectile.Kill();
+			modifiers.FinalDamage += WoodlandWraithStaff_FungiBall.DamangeBonusToTargetInSporeZone;
 		}
-		Projectile.velocity *= 0.99f;
-		TimeTokill--;
-		if (TimeTokill < 0)
-		{
-		}
-		else
-		{
-			Projectile.velocity *= 0f;
-			return;
-		}
-	}
-
-	public override void OnSpawn(IEntitySource source)
-	{
-		Projectile.frame = Main.rand.Next(12);
-		Projectile.rotation = Main.rand.NextFloat(6.283f);
-		Projectile.ai[0] = Main.rand.NextFloat(-0.15f, 0.15f);
 	}
 
 	public override void KillMainStructure()
 	{
-		for (int x = 0; x < 48; x++)
+		for (int i = 0; i < 12; i++)
 		{
-			var d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Betty_Watermelon_Mesocarp_Dust>());
-			d.velocity = new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 8f).RotatedByRandom(6.283);
-			d.scale = Main.rand.NextFloat(0.8f, 1.8f);
-			d.velocity -= Projectile.velocity.RotatedByRandom(MathHelper.PiOver2) * Main.rand.NextFloat() * 0.6f;
-			d.position += d.velocity;
-		}
-		for (int x = 0; x < 6; x++)
-		{
-			var d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Betty_Watermelon_Skin_Dust>());
-			d.velocity = new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 3.6f).RotatedByRandom(6.283);
-			d.scale = Main.rand.NextFloat(0.8f, 2f);
-			if(d.frame.Y == 0)
+			Vector2 vel = new Vector2(0, Main.rand.NextFloat(5.6f, 8.4f)).RotatedByRandom(MathHelper.TwoPi);
+			var dust = new DevilHeart_Spark
 			{
-				d.scale *= 0.5f;
-			}
-			d.velocity -= Projectile.velocity.RotatedByRandom(MathHelper.PiOver2) * Main.rand.NextFloat() * 0.3f;
-			d.position += d.velocity;
-		}
-		for (int j = 0; j < 4; j++)
-		{
-			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
-			int type = ModContent.Find<ModGore>("Everglow/Betty_Watermelon_Gore" + Main.rand.Next(4)).Type;
-			Gore gore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.Center, v0, type, Projectile.scale);
-			gore.velocity *= 0.3f;
-			gore.scale = Main.rand.NextFloat(0.8f, 1.2f);
-			gore.velocity -= Projectile.velocity.RotatedByRandom(MathHelper.PiOver2) * Main.rand.NextFloat() * 0.1f;
-		}
-		for (int j = 0; j < 4; j++)
-		{
-			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
-			int type = ModContent.Find<ModGore>("Everglow/Betty_Watermelon_Gore" + Main.rand.Next(4, 7)).Type;
-			Gore gore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.Center, v0, type, Projectile.scale);
-			gore.velocity *= 0.3f;
-			gore.scale = Main.rand.NextFloat(0.8f, 1.2f);
-			gore.velocity -= Projectile.velocity.RotatedByRandom(MathHelper.PiOver2) * Main.rand.NextFloat() * 0.1f;
-		}
-		for (int j = 0; j < 12; j++)
-		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 8f)).RotatedByRandom(MathHelper.TwoPi);
-			var somg = new BettyWatermelonDust
-			{
-				velocity = newVelocity,
+				velocity = vel,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
-				maxTime = Main.rand.Next(60, 75),
-				scale = Main.rand.NextFloat(50f, 155f),
+				position = Projectile.Center,
+				maxTime = Main.rand.Next(60, 120),
+				scale = Main.rand.NextFloat(3f, 5f),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+				ai = new float[] { Main.rand.NextFloat(4.0f, 10.93f) },
 			};
-			Ins.VFXManager.Add(somg);
+			Ins.VFXManager.Add(dust);
 		}
-		SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, Projectile.Center);
 		base.KillMainStructure();
-	}
-
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
-		if (Projectile.penetrate == 1)
-		{
-			KillMainStructure();
-		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		float value = (Projectile.timeLeft - 540) / 60f;
-		TrailColor = new Color(1, 0.3f, 1, 0f) * value * Projectile.ai[2];
 		DrawTrailDark();
 		DrawTrail();
 		if (TimeTokill <= 0)
 		{
-			Texture2D texture = ModAsset.Betty_Watermelon.Value;
-			Vector2 drawCenter = Projectile.Center - Main.screenPosition;
-			lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
-			Rectangle frame = new Rectangle(0, 48 * Projectile.frame, 48, 48);
-			Main.EntitySpriteDraw(texture, drawCenter, frame, lightColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+			DrawSelf();
 		}
 		return false;
 	}
 
+	public override void DrawSelf()
+	{
+		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
+		var color = new Color(225, 68, 223, 0);
+		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, color, Projectile.velocity.ToRotation() - MathHelper.PiOver2, texMain.Size() / 2f, 0.6f, SpriteEffects.None, 0);
+	}
+
 	public override void DrawTrail()
 	{
-		var unSmoothPos = new List<Vector2>();
+		List<Vector2> unSmoothPos = new List<Vector2>();
 		for (int i = 0; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
@@ -186,7 +118,7 @@ public class Betty_Watermelon : TrailingProjectile
 		var bars = new List<Vertex2D>();
 		var bars2 = new List<Vertex2D>();
 		var bars3 = new List<Vertex2D>();
-		for (int i = SmoothTrail.Count - 1; i > 0; --i)
+		for (int i = 1; i < SmoothTrail.Count; ++i)
 		{
 			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
 			if (mulFac > 1f)
@@ -198,11 +130,8 @@ public class Betty_Watermelon : TrailingProjectile
 			float timeValue = (float)Main.time * 0.06f;
 
 			Vector2 drawPos = SmoothTrail[i] + halfSize;
-			Color drawC = new Color(0.02f, 0.67f, 0.45f, 0) * 0.3f;
-			Color lightC = Lighting.GetColor((drawPos / 16f).ToPoint());
-			drawC.R = (byte)(lightC.R * drawC.R / 255f);
-			drawC.G = (byte)(lightC.G * drawC.G / 255f);
-			drawC.B = (byte)(lightC.B * drawC.B / 255f);
+			Color drawC = ProjTrailColor.GetColor(i / (float)SmoothTrail.Count);
+			factor *= 1.5f;
 			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
 			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
 			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 0, width)));
@@ -210,9 +139,9 @@ public class Betty_Watermelon : TrailingProjectile
 			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
 			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
 		}
-		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect effect = TrailShader;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
@@ -279,7 +208,8 @@ public class Betty_Watermelon : TrailingProjectile
 			float timeValue = (float)Main.time * 0.06f;
 
 			Vector2 drawPos = SmoothTrail[i] + halfSize;
-			Color drawC = Color.White * 0.4f;
+			Color drawC = Color.White;
+			factor *= 1.5f;
 			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
 			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
 			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 0, width)));
@@ -316,6 +246,4 @@ public class Betty_Watermelon : TrailingProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
-
-	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => base.Colliding(projHitbox, targetHitbox);
 }

@@ -229,7 +229,7 @@ internal class LichensPycnidiumManager : ILoadable
 		Ins.Batch.Begin(BlendState.NonPremultiplied, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		Effect sphere = ModAsset.Pycnidium_SpherePerspective.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
 		sphere.Parameters["uTransform"].SetValue(model * projection);
 		sphere.Parameters["circleCenter"].SetValue(new Vector3(0, 0, 2));
