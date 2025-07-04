@@ -29,27 +29,28 @@ public class DevilHeartStaff_proj : TrailingProjectile
 	public override void AI()
 	{
 		base.AI();
+		if(Main.rand.NextBool(4))
+		{
+			Vector2 vel = new Vector2(0, Main.rand.NextFloat(0.6f, 1.4f)).RotatedByRandom(MathHelper.TwoPi) + Projectile.velocity;
+			var dust = new DevilHeart_Spark
+			{
+				velocity = vel,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center,
+				maxTime = Main.rand.Next(60, 90),
+				scale = Main.rand.NextFloat(3f, 5f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(4.0f, 10.93f) },
+			};
+			Ins.VFXManager.Add(dust);
+		}
 	}
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		base.ModifyHitNPC(target, ref modifiers);
-		bool sporeZone = false;
-		foreach (var proj in Main.projectile)
-		{
-			if (proj != null && proj.active && proj.type == ModContent.ProjectileType<WoodlandWraithStaff_SporeZone>() && proj.owner == Projectile.owner)
-			{
-				var wWSSZ = proj.ModProjectile as WoodlandWraithStaff_SporeZone;
-				if (Vector2.Distance(proj.Center, target.Center) < wWSSZ.Range)
-				{
-					sporeZone = true;
-				}
-			}
-		}
-		if (sporeZone)
-		{
-			modifiers.FinalDamage += WoodlandWraithStaff_FungiBall.DamangeBonusToTargetInSporeZone;
-		}
+		target.AddBuff(BuffID.ChaosState, 120);
 	}
 
 	public override void KillMainStructure()

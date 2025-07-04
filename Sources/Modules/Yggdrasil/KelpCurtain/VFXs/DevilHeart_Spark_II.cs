@@ -3,9 +3,9 @@ using Everglow.Commons.Graphics;
 namespace Everglow.Yggdrasil.KelpCurtain.VFXs;
 
 [Pipeline(typeof(WCSPipeline))]
-public class DevilHeart_Spark : Visual
+public class DevilHeart_Spark_II : Visual
 {
-	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawProjectiles;
 
 	public Vector2 position;
 	public Vector2 velocity;
@@ -26,7 +26,11 @@ public class DevilHeart_Spark : Visual
 			trails.Dequeue();
 		}
 		position += velocity;
-		velocity *= 0.8f;
+		velocity *= 0.9f;
+		velocity = velocity.RotatedBy(ai[1] * 0.05f);
+		ai[1] += ai[2];
+		ai[2] *= 0.95f;
+		ai[1] *= 0.95f;
 		scale = ai[0] * (1 - MathF.Sin(timer / maxTime * MathF.PI * 0.5f));
 		timer++;
 		if (timer > maxTime)
@@ -44,7 +48,7 @@ public class DevilHeart_Spark : Visual
 			dHSparkColor.colorList.Add((new Color(24, 24, 24, 50), 1));
 		}
 		float timeLeftValue = timer / maxTime;
-		var lightColor = new Color(221, 155, 255, 250);//dHSparkColor.GetColor(timeLeftValue);
+		var lightColor = new Color(221, 155, 255, 250);
 		if(dHSparkColor.colorList.Count > 0)
 		{
 			lightColor = dHSparkColor.GetColor(timeLeftValue);
@@ -71,7 +75,7 @@ public class DevilHeart_Spark : Visual
 		{
 			float size = i / (float)trails.Count;
 			float timeLeftValue = timer / maxTime;
-			var lightColor = new Color(221, 155, 255, 250);//dHSparkColor.GetColor(timeLeftValue);
+			var lightColor = new Color(221, 155, 255, 250);
 			if (dHSparkColor.colorList.Count > 0)
 			{
 				lightColor = dHSparkColor.GetColor(timeLeftValue);

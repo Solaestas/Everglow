@@ -41,7 +41,7 @@ public class DevilHeartStaff : ModItem
 		UseItemCount++;
 		if (UseItemCount >= 7)
 		{
-			Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<DevilHeartStaff_proj_II>(), damage, knockback, player.whoAmI);
+			Projectile.NewProjectileDirect(source, position, velocity * 2.2f, ModContent.ProjectileType<DevilHeartStaff_proj_II>(), (int)(damage * 2.5), knockback, player.whoAmI);
 			UseItemCount = 0;
 			return false;
 		}

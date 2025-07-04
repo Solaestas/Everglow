@@ -1,11 +1,9 @@
-using ReLogic.Peripherals.RGB.SteelSeries;
-
-namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
+namespace Everglow.Yggdrasil.KelpCurtain.VFXs;
 
 [Pipeline(typeof(WCSPipeline))]
-public class Heart_VFX : Visual
+public class BoneHeart_VFX : Visual
 {
-	public override CodeLayer DrawLayer => CodeLayer.PostDrawProjectiles;
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
 	public Vector2 position;
 	public Vector2 velocity;
@@ -43,7 +41,7 @@ public class Heart_VFX : Visual
 		float frameY = (int)timeValue % frameCount;
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
 		Color drawColor = color;
-		if(pocession < 0.8f)
+		if (pocession < 0.8f)
 		{
 			drawColor = Color.Lerp(drawColor, color, (pocession - 0.2f) / 0.6f);
 		}
@@ -52,7 +50,7 @@ public class Heart_VFX : Visual
 			drawColor = Color.Lerp(color, Color.Transparent, 1 - pocession / 0.2f);
 		}
 
-		List<Vertex2D> bars = new List<Vertex2D>()
+		var bars = new List<Vertex2D>()
 		{
 			new Vertex2D(position + toCorner, drawColor, new Vector3(0, frameY / frameCount, 0)),
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), drawColor, new Vector3(1, frameY / frameCount, 0)),
@@ -62,6 +60,6 @@ public class Heart_VFX : Visual
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), drawColor, new Vector3(1, frameY / frameCount, 0)),
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1), drawColor, new Vector3(1, (frameY + 1) / frameCount, 0)),
 		};
-		Ins.Batch.Draw(ModAsset.Heart_VFX.Value, bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.BoneHeart_VFX.Value, bars, PrimitiveType.TriangleList);
 	}
 }
