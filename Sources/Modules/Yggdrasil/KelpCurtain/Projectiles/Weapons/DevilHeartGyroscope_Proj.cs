@@ -2,6 +2,7 @@ using Everglow.Commons.Weapons.Gyroscopes;
 using Everglow.Commons.Weapons.Whips;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
 
@@ -10,6 +11,8 @@ namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
 /// </summary>
 public class DevilHeartGyroscope_Proj : GyroscopeProjectile
 {
+	public int BloodPower = 0;
+
 	public override void SetDefaults()
 	{
 		Projectile.friendly = true;
@@ -25,6 +28,7 @@ public class DevilHeartGyroscope_Proj : GyroscopeProjectile
 		Projectile.localNPCHitCooldown = 12;
 		Projectile.minionSlots = 1;
 		Projectile.minion = true;
+		BloodPower = 0;
 		SummonBuffType = ModContent.BuffType<DevilHeartGyroscopeBuff>();
 	}
 
@@ -34,17 +38,22 @@ public class DevilHeartGyroscope_Proj : GyroscopeProjectile
 	/// <param name="count"></param>
 	public override void BottomSpark(int count = 1)
 	{
+		float mulScale = 0.8f;
+		if (BloodPower >= 120)
+		{
+			mulScale = 1f;
+		}
 		for (int i = 0; i < count; ++i)
 		{
-			Vector2 vel = new Vector2(0, Main.rand.NextFloat(0.6f, 1.4f)).RotatedByRandom(MathHelper.TwoPi) + Projectile.velocity;
-			var dust = new DevilHeart_Spark
+			Vector2 vel = new Vector2(0, Main.rand.NextFloat(0.6f, 1.4f)).RotatedByRandom(MathHelper.TwoPi) + Projectile.velocity - new Vector2(0, 2);
+			var dust = new DevilHeart_Spark_gyroscope
 			{
 				velocity = vel,
 				Active = true,
 				Visible = true,
 				position = Projectile.Bottom,
-				maxTime = Main.rand.Next(60, 90),
-				scale = Main.rand.NextFloat(3f, 5f),
+				maxTime = Main.rand.Next(60, 90) * mulScale,
+				scale = Main.rand.NextFloat(3f, 5f) * mulScale,
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(4.0f, 10.93f) },
 			};
@@ -85,7 +94,13 @@ public class DevilHeartGyroscope_Proj : GyroscopeProjectile
 							}
 							WhipCoolingsForProjectileWhoAmI.Add((proj.whoAmI, 10));
 							KillingSpark(36);
-							Item.NewItem(Projectile.GetSource_FromAI(), Projectile.Hitbox, new Item(ItemID.Heart));
+							if (BloodPower >= 120)
+							{
+								HitSpark();
+								BloodPower = 0;
+								Item.NewItem(Projectile.GetSource_FromAI(), Projectile.Hitbox, new Item(ItemID.Heart));
+								Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<DevilHeartGyroscope_Proj_Hit>(), 0, 0, Projectile.owner);
+							}
 							return;
 						}
 					}
@@ -146,6 +161,12 @@ public class DevilHeartGyroscope_Proj : GyroscopeProjectile
 		}
 	}
 
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		BloodPower += hit.Damage;
+		base.OnHitNPC(target, hit, damageDone);
+	}
+
 	/// <summary>
 	/// If rightclick to cancel the summon buff, remove projectile.
 	/// </summary>
@@ -204,10 +225,18 @@ public class DevilHeartGyroscope_Proj : GyroscopeProjectile
 
 	public override void KillingSpark(int count = 20)
 	{
+		if (BloodPower >= 120)
+		{
+			count += 27;
+		}
 		for (int i = 0; i < count; ++i)
 		{
-			Vector2 vel = new Vector2(0, Main.rand.NextFloat(0.6f, 1.4f)).RotatedByRandom(MathHelper.TwoPi) + Projectile.velocity;
-			var dust = new DevilHeart_Spark
+			Vector2 vel = new Vector2(0, Main.rand.NextFloat(6.6f, 9.6f)).RotatedByRandom(MathHelper.TwoPi);
+			if (BloodPower >= 120)
+			{
+				vel *= 2.4f;
+			}
+			var dust = new DevilHeart_Spark_gyroscope
 			{
 				velocity = vel,
 				Active = true,
@@ -222,10 +251,34 @@ public class DevilHeartGyroscope_Proj : GyroscopeProjectile
 		}
 	}
 
+	public void HitSpark()
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			float rotSpeed = 0;
+			Vector2 vel = new Vector2(0, Main.rand.NextFloat(-6, -4)).RotatedByRandom(0.9);
+			var dustVFX = new Heart_VFX
+			{
+				omega = rotSpeed,
+				beta = -rotSpeed * 0.05f,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center,
+				velocity = vel,
+				maxTime = vel.Length() * 12,
+				scale = 9f,
+				color = Color.Lerp(Color.Red, Color.White, (vel.Length() - 3) / 2f),
+				ai = new float[] { Main.rand.NextFloat(1f, 8f) },
+			};
+			Ins.VFXManager.Add(dustVFX);
+		}
+	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D texture = ModAsset.DevilHeartGyroscope_Proj.Value;
 		Texture2D textureBloom = ModAsset.DevilHeartGyroscope_bloom.Value;
+		Texture2D textureGlow = ModAsset.DevilHeartGyroscope_Proj_glow.Value;
 		var frame = new Rectangle(0, 32 * Projectile.frame, 32, 32);
 		if (Projectile.frame >= 4)
 		{
@@ -242,12 +295,13 @@ public class DevilHeartGyroscope_Proj : GyroscopeProjectile
 		if (whipCooling > 0)
 		{
 			float value = whipCooling / 10f;
-			Main.spriteBatch.Draw(textureBloom, Projectile.Bottom - Main.screenPosition, null, new Color(value, value, value, 0), Projectile.rotation, new Vector2(64, 64), Projectile.scale, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(textureBloom, Projectile.Bottom - Main.screenPosition, null, new Color(value, value, value, 0), Projectile.rotation, new Vector2(64, 80), Projectile.scale, SpriteEffects.None, 0);
 		}
 		Main.spriteBatch.Draw(texture, Projectile.Bottom - Main.screenPosition, frame, lightColor, Projectile.rotation, new Vector2(frame.Width * 0.5f, frame.Height), Projectile.scale, SpriteEffects.None, 0);
+		Vector2 randomVec = new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(MathHelper.TwoPi);
 		if (Power > 500)
 		{
-			Main.spriteBatch.Draw(texture, Projectile.Bottom - Main.screenPosition + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(MathHelper.TwoPi), frame, lightColor * 0.5f, Projectile.rotation, new Vector2(frame.Width * 0.5f, frame.Height), Projectile.scale, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(texture, Projectile.Bottom - Main.screenPosition + randomVec, frame, lightColor * 0.5f, Projectile.rotation, new Vector2(frame.Width * 0.5f, frame.Height), Projectile.scale, SpriteEffects.None, 0);
 		}
 		if (Owner != null)
 		{
@@ -255,6 +309,15 @@ public class DevilHeartGyroscope_Proj : GyroscopeProjectile
 			if (gyroscopePlayer != null && gyroscopePlayer.EnablePowerBarUI)
 			{
 				DrawPowerBar();
+			}
+		}
+		if (BloodPower >= 120)
+		{
+			BloodPower = 120;
+			Main.spriteBatch.Draw(textureGlow, Projectile.Bottom - Main.screenPosition, frame, new Color(1f, 1f, 1f, 0), Projectile.rotation, new Vector2(frame.Width * 0.5f, frame.Height), Projectile.scale, SpriteEffects.None, 0);
+			if (Power > 500)
+			{
+				Main.spriteBatch.Draw(textureGlow, Projectile.Bottom - Main.screenPosition + randomVec, frame, new Color(1f, 1f, 1f, 0) * 0.5f, Projectile.rotation, new Vector2(frame.Width * 0.5f, frame.Height), Projectile.scale, SpriteEffects.None, 0);
 			}
 		}
 		return false;

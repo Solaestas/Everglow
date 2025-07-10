@@ -3,7 +3,7 @@ using Everglow.Commons.Graphics;
 namespace Everglow.Yggdrasil.KelpCurtain.VFXs;
 
 [Pipeline(typeof(WCSPipeline))]
-public class DevilHeart_Spark : Visual
+public class DevilHeart_Spark_gyroscope : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
@@ -49,7 +49,7 @@ public class DevilHeart_Spark : Visual
 		{
 			lightColor = dHSparkColor.GetColor(timeLeftValue);
 		}
-		Lighting.AddLight(position, lightColor.ToVector3() * scale * 0.1f);
+		Lighting.AddLight(position, lightColor.ToVector3() * scale * 0.002f);
 	}
 
 	public override void Draw()
@@ -71,7 +71,7 @@ public class DevilHeart_Spark : Visual
 		{
 			float size = i / (float)trails.Count;
 			float timeLeftValue = timer / maxTime;
-			var lightColor = new Color(221, 155, 255, 250);//dHSparkColor.GetColor(timeLeftValue);
+			var lightColor = new Color(221, 155, 255, 250);
 			if (dHSparkColor.colorList.Count > 0)
 			{
 				lightColor = dHSparkColor.GetColor(timeLeftValue);

@@ -33,8 +33,8 @@ public class DevilHeartStaff_proj_Kill : ModProjectile
 		var color = new Color(255, 255, 255, 0);
 		Texture2D star = Commons.ModAsset.StarSlash.Value;
 		float width = 3f * Projectile.timeLeft / 60f;
-		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition - Projectile.velocity, null, color, MathHelper.PiOver2 + Projectile.rotation, star.Size() / 2f, new Vector2(width, 1.8f), SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition - Projectile.velocity, null, color, Projectile.rotation, star.Size() / 2f, new Vector2(width, 1.1f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, color, MathHelper.PiOver2 + Projectile.rotation, star.Size() / 2f, new Vector2(width, 1.8f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, color, Projectile.rotation, star.Size() / 2f, new Vector2(width, 1.1f), SpriteEffects.None, 0);
 		return false;
 	}
 
