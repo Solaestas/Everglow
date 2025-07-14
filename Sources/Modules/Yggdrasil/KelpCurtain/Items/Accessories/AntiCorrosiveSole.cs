@@ -4,14 +4,12 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Accessories;
 
 public class AntiCorrosiveSole : ModItem
 {
-	public override string Texture => Commons.ModAsset.Point_Mod;
-
 	public override void SetDefaults()
 	{
 		Item.SetNameOverride("Anti-corrosive Sole");
 
-		Item.width = 20;
-		Item.height = 20;
+		Item.width = 28;
+		Item.height = 38;
 
 		Item.accessory = true;
 

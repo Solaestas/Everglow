@@ -4,12 +4,10 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 
 public class GreenThornBallLauncher : ModItem
 {
-	public override string Texture => ModAsset.GlowstickLauncher_Mod;
-
 	public override void SetDefaults()
 	{
-		Item.width = 28;
-		Item.height = 28;
+		Item.width = 60;
+		Item.height = 36;
 
 		Item.DamageType = DamageClass.Ranged;
 		Item.damage = 25;
@@ -27,11 +25,12 @@ public class GreenThornBallLauncher : ModItem
 
 		Item.useAmmo = AmmoID.Bullet;
 		Item.shoot = ProjectileID.Bullet;
-		Item.shootSpeed = 8f;
+		Item.shootSpeed = 12f;
 	}
 
 	public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
 	{
 		type = ModContent.ProjectileType<GreenThornLauncher_Proj>();
+		position += velocity * 4;
 	}
 }

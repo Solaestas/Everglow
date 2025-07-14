@@ -6,12 +6,10 @@ public class LivingWoodplate : ModItem
 {
 	public const int BuffDuration = 30 * 60;
 
-	public override string Texture => Commons.ModAsset.White_Mod;
-
 	public override void SetDefaults()
 	{
-		Item.width = 20;
-		Item.height = 20;
+		Item.width = 32;
+		Item.height = 22;
 
 		Item.accessory = true;
 		Item.defense = 4;

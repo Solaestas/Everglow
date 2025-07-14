@@ -2,8 +2,6 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Accessories;
 
 public class CorrodedPearl : ModItem
 {
-	public override string Texture => Commons.ModAsset.Point_Mod;
-
 	public override void SetDefaults()
 	{
 		Item.width = 20;

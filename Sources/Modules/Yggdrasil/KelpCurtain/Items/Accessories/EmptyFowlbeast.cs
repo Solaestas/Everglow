@@ -2,12 +2,10 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Accessories;
 
 public class EmptyFowlbeast : ModItem
 {
-	public override string Texture => Commons.ModAsset.White_Mod;
-
 	public override void SetDefaults()
 	{
-		Item.width = 20;
-		Item.height = 20;
+		Item.width = 34;
+		Item.height = 44;
 
 		Item.accessory = true;
 
