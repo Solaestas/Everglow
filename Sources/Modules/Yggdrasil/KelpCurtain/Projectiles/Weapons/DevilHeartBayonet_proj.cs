@@ -2,27 +2,28 @@ using Everglow.Commons.Weapons.StabbingSwords;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
 
-public class DevilHeartBayonet_proj_stab : StabbingProjectile_Stab
+public class DevilHeartBayonet_proj : StabbingProjectile
 {
-	public float Power = 0;
+	public const int HealAmountOnStaminaDepleted = 5;
 
 	public override void SetDefaults()
 	{
 		base.SetDefaults();
 
 		Color = new Color(255, 107, 171);
-		TradeShade = 0.7f;
+		TradeLength = 4;
+		TradeShade = 0.3f;
 		Shade = 0.2f;
-		FadeShade = 0.44f;
+		FadeShade = 0.64f;
 		FadeScale = 1;
 		TradeLightColorValue = 1f;
 		FadeLightColorValue = 0.4f;
-		MaxLength = 0.70f;
+		MaxLength = 1.05f;
 		DrawWidth = 0.4f;
 	}
 
 	public override void OnStaminaDepleted(Player player)
 	{
-		player.Heal(5);
+		player.Heal(HealAmountOnStaminaDepleted);
 	}
 }
