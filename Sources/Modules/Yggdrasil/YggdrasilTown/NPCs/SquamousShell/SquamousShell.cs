@@ -95,12 +95,15 @@ public class SquamousShell : ModNPC
 		NPC.velocity.Y = 2f;
 		_coroutineManager.StartCoroutine(new Coroutine(Landing()));
 		var data = Mod.GetFileBytes(ModAsset.monsterj_Path);
-		if (SquamousShellSkeleton == null)
+		if(!Main.dedServ)
 		{
-			var json = Mod.GetFileBytes(ModAsset.monsterj_Path);
-			var atlas = Mod.GetFileBytes(ModAsset.monstera_Path);
-			SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(atlas, json, ModAsset.monster.Value);
-			SquamousShellSkeleton.AnimationState.SetAnimation(0, "walk4", true);
+			if (SquamousShellSkeleton == null)
+			{
+				var json = Mod.GetFileBytes(ModAsset.monsterj_Path);
+				var atlas = Mod.GetFileBytes(ModAsset.monstera_Path);
+				SquamousShellSkeleton = Skeleton2DReader.ReadSkeleton(atlas, json, ModAsset.monster.Value);
+				SquamousShellSkeleton.AnimationState.SetAnimation(0, "walk4", true);
+			}
 		}
 	}
 
@@ -108,7 +111,11 @@ public class SquamousShell : ModNPC
 
 	public override void AI()
 	{
-		SquamousShellSkeleton.AnimationState.Apply(SquamousShellSkeleton.Skeleton);
+		if (!Main.dedServ)
+		{
+			SquamousShellSkeleton.AnimationState.Apply(SquamousShellSkeleton.Skeleton);
+		}
+
 		NPC.localAI[0] += 1;
 		NPC.TargetClosest(false);
 		Player player = Main.player[NPC.target];

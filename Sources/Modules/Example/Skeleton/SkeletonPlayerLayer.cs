@@ -16,18 +16,21 @@ public class SkeletonPlayerLayer : PlayerDrawLayer
 
 	public override void Load()
 	{
-		var json = Mod.GetFileBytes("Example/Skeleton/Animations/raptor-pro.json");
-		var atlas = Mod.GetFileBytes("Example/Skeleton/Animations/raptor-pro.atlas");
-		skeleton2D = Skeleton2DReader.ReadSkeleton(atlas, json, ModAsset.raptorqqq.Value);
-
-		skeleton2D.AnimationState.SetAnimation(0, "walk", true);
-		skeleton2D.AnimationState.AddAnimation(0, "jump", false, 2);
-		skeleton2D.AnimationState.AddAnimation(0, "roar", true, 0);
-		Main.QueueMainThreadAction(() =>
+		if (!Main.dedServ)
 		{
-			debugRenderer = new Commons.Skeleton2D.Renderer.SkeletonDebugRenderer();
-			skeletonRenderer = new Commons.Skeleton2D.Renderer.SkeletonRenderer();
-		});
+			var json = Mod.GetFileBytes("Example/Skeleton/Animations/raptor-pro.json");
+			var atlas = Mod.GetFileBytes("Example/Skeleton/Animations/raptor-pro.atlas");
+			skeleton2D = Skeleton2DReader.ReadSkeleton(atlas, json, ModAsset.raptorqqq.Value);
+
+			skeleton2D.AnimationState.SetAnimation(0, "walk", true);
+			skeleton2D.AnimationState.AddAnimation(0, "jump", false, 2);
+			skeleton2D.AnimationState.AddAnimation(0, "roar", true, 0);
+			Main.QueueMainThreadAction(() =>
+			{
+				debugRenderer = new Commons.Skeleton2D.Renderer.SkeletonDebugRenderer();
+				skeletonRenderer = new Commons.Skeleton2D.Renderer.SkeletonRenderer();
+			});
+		}
 	}
 
 	public override Position GetDefaultPosition()

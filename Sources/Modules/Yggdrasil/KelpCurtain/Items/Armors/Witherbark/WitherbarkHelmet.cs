@@ -10,6 +10,7 @@ public class WitherbarkHelmet : ModItem
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+		ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = false;
 	}
 
 	public override void SetDefaults()
@@ -41,7 +42,7 @@ public class WitherbarkHelmet : ModItem
 
 		if (player.ownedProjectileCounts[ModContent.ProjectileType<WitherbarkMinion>()] <= 0)
 		{
-			Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, ModContent.ProjectileType<WitherbarkMinion>(), 100, 0f, player.whoAmI);
+			Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, ModContent.ProjectileType<WitherbarkMinion>(), WitherbarkMinion.Minion_ContactDamage, WitherbarkMinion.Minion_Knockback, player.whoAmI);
 		}
 	}
 }

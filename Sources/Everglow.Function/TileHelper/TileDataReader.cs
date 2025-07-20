@@ -32,7 +32,7 @@ public class TileDataReader : ModItem
 		}
 
 		// Right click to enable resident tile reader effect.
-		if (Main.mouseRight && Main.mouseRightRelease)
+		if (Main.mouseRight && Main.mouseRightRelease && !Main.mapFullscreen)
 		{
 			EnableResidentEffect = !EnableResidentEffect;
 			CombatText.NewText(player.Hitbox, Color.White, (EnableResidentEffect ? "Enable" : "Disable") + "everlasting tile reading effect.");
@@ -53,8 +53,10 @@ public class TileDataReaderSystem : Visual
 	public Point FixPoint;
 	public static List<int> OwnerPlayerWhoAmI = new List<int>();
 	public List<Point> ContinueTiles = new List<Point>();
+	public List<Point> CheckLiquidTiles = new List<Point>();
 	public Point OldTilePos = new Point(0, 0);
 	public bool EverLasting = false;
+	public int MaxContinueCount = 625;
 
 	public override void OnSpawn()
 	{
@@ -101,17 +103,13 @@ public class TileDataReaderSystem : Visual
 		int i = FixPoint.X;
 		int j = FixPoint.Y;
 		Player player = Main.LocalPlayer;
-		if (i < 20 || i > Main.maxTilesX - 20)
+		if (i < 20 || i > Main.maxTilesX - 20 || j < 20 || j > Main.maxTilesY - 20)
 		{
-			if (j < 20 || j > Main.maxTilesY - 20)
-			{
-				Active = false;
-				OwnerPlayerWhoAmI.Remove(player.whoAmI);
-				return;
-			}
+			Active = false;
+			OwnerPlayerWhoAmI.Remove(player.whoAmI);
+			return;
 		}
 		Tile tile = Main.tile[i, j];
-		Ins.Batch.BindTexture<Vertex2D>(Texture);
 		int colorType = ItemRarityID.White;
 		Color drawColor = Color.White;
 		if (!tile.HasTile)
@@ -120,10 +118,18 @@ public class TileDataReaderSystem : Visual
 			drawColor = Color.Gray;
 		}
 		DrawBlockBound(i, j, drawColor);
-		if (ContinueTiles.Count < 512)
+		if (ContinueTiles.Count < MaxContinueCount)
 		{
 			Color drawContinueColor = new Color(0.12f, 0.24f, 0.4f, 0);
 			foreach (Point point in ContinueTiles)
+			{
+				DrawBlockBound(point.X, point.Y, drawContinueColor);
+			}
+		}
+		if (CheckLiquidTiles.Count < MaxContinueCount)
+		{
+			Color drawContinueColor = new Color(0.0f, 0.0f, 0.6f, 0);
+			foreach (Point point in CheckLiquidTiles)
 			{
 				DrawBlockBound(point.X, point.Y, drawContinueColor);
 			}
@@ -142,63 +148,126 @@ public class TileDataReaderSystem : Visual
 		if (tile.HasTile)
 		{
 			datas += "\nFrame : [" + tile.TileFrameX + ", " + tile.TileFrameY + "]";
-			if (ContinueTiles.Count < 512)
+			if (ContinueTiles.Count < MaxContinueCount)
 			{
 				datas += "\nContinue Tiles : " + ContinueTiles.Count;
 			}
 		}
+		if (!tile.HasTile)
+		{
+			datas += "\nCan Fill Liquid Blocks: " + CheckLiquidTiles.Count;
+		}
+
+		// datas += "\nSlope: " + tile.Slope;
+		datas += "\nColliding: " + Collision.IsWorldPointSolid(Main.MouseWorld);
 		return datas;
 	}
 
 	/// <summary>
-	/// When there is an isolated tile area(<=512 tiles), you can check the number of continue tiles.
+	/// When there is an isolated tile area(<=MaxContinueCount tiles), you can check the number of continue tiles.
 	/// </summary>
 	/// <returns></returns>
 	public void UpdateContinueTiles(int i, int j)
 	{
 		ContinueTiles = new List<Point>();
-		CheckTileContinue(i, j);
+		CheckLiquidTiles = new List<Point>();
+		BFSContinueTile(i, j);
+		BFSFillLiquid(i, j);
 	}
 
-	public void CheckHasTileAndAddToContinueTile(int i, int j)
+	private static readonly (int, int)[] directions =
 	{
-		Tile tile = SafeGetTile(i, j);
-		if (tile.HasTile)
-		{
-			if (!ContinueTiles.Contains(new Point(i, j)) && ContinueTiles.Count < 512)
-			{
-				ContinueTiles.Add(new Point(i, j));
-				CheckTileContinue(i, j);
-			}
-		}
+		(0, 1),
+		(1, 0),
+		(0, -1),
+		(-1, 0),
+	};
+
+	private static readonly (int, int)[] directionsLiquid =
+	{
+		(1, 0),
+		(0, 1),
+		(-1, 0),
+	};
+
+	public void BFSContinueTile(int i, int j)
+	{
+		BFSContinueTile(new Point(i, j));
 	}
 
-	public void CheckTileContinue(int i, int j)
+	public void BFSContinueTile(Point checkPoint)
 	{
-		Tile tile = SafeGetTile(i, j);
-		if (!tile.HasTile)
+		Queue<Point> queueChecked = new Queue<Point>();
+
+		// 将起始点加入队列
+		queueChecked.Enqueue(checkPoint);
+		List<Point> visited = new List<Point>();
+
+		while (queueChecked.Count > 0)
 		{
-			return;
-		}
-		if (ContinueTiles.Count < 512)
-		{
-			CheckHasTileAndAddToContinueTile(i, j);
-			switch ((i + j) % 2)
+			var tilePos = queueChecked.Dequeue();
+
+			foreach (var (dx, dy) in directions)
 			{
-				case 0:
-					CheckHasTileAndAddToContinueTile(i, j - 1);
-					CheckHasTileAndAddToContinueTile(i, j + 1);
-					CheckHasTileAndAddToContinueTile(i - 1, j);
-					CheckHasTileAndAddToContinueTile(i + 1, j);
-					break;
-				case 1:
-					CheckHasTileAndAddToContinueTile(i, j - 1);
-					CheckHasTileAndAddToContinueTile(i, j + 1);
-					CheckHasTileAndAddToContinueTile(i + 1, j);
-					CheckHasTileAndAddToContinueTile(i - 1, j);
-					break;
+				int checkX = tilePos.X + dx;
+				int checkY = tilePos.Y + dy;
+				Point point = new Point(checkX, checkY);
+				Tile tile = SafeGetTile(checkX, checkY);
+
+				// 检查边界和障碍物
+				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
+					tile.HasTile && !visited.Contains(point))
+				{
+					queueChecked.Enqueue(point);
+					visited.Add(point);
+				}
+			}
+			if (queueChecked.Count > MaxContinueCount || visited.Count > MaxContinueCount)
+			{
+				break;
 			}
 		}
+		ContinueTiles = visited;
+	}
+
+	public void BFSFillLiquid(int i, int j)
+	{
+		BFSFillLiquid(new Point(i, j));
+	}
+
+	public void BFSFillLiquid(Point checkPoint)
+	{
+		Queue<Point> queueChecked = new Queue<Point>();
+
+		// 将起始点加入队列
+		queueChecked.Enqueue(checkPoint);
+		List<Point> visited = new List<Point>();
+
+		while (queueChecked.Count > 0)
+		{
+			var tilePos = queueChecked.Dequeue();
+
+			foreach (var (dx, dy) in directionsLiquid)
+			{
+				int checkX = tilePos.X + dx;
+				int checkY = tilePos.Y + dy;
+				Point point = new Point(checkX, checkY);
+				Tile tile = SafeGetTile(checkX, checkY);
+
+				// 检查边界和障碍物
+				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
+					!Collision.IsWorldPointSolid(point.ToWorldCoordinates()) && !visited.Contains(point))
+				{
+					queueChecked.Enqueue(point);
+					visited.Add(point);
+				}
+			}
+			if (queueChecked.Count > MaxContinueCount || visited.Count > MaxContinueCount)
+			{
+				break;
+			}
+		}
+		CheckLiquidTiles = visited;
 	}
 
 	public void DrawBlockBound(int i, int j, Color color)
@@ -215,7 +284,7 @@ public class TileDataReaderSystem : Visual
 			new Vertex2D(pos + new Vector2(16), color, new Vector3(1, 1, 0)),
 		};
 
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(Texture, bars, PrimitiveType.TriangleList);
 	}
 
 	public static Tile SafeGetTile(int i, int j)

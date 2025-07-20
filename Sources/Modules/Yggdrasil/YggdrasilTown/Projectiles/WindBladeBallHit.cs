@@ -86,7 +86,7 @@ public class WindBladeBallHit : ModProjectile
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect dissolve = ModAsset.SandDissolve.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		dissolve.Parameters["uTransform"].SetValue(model * projection);
 		dissolve.Parameters["uNoiseSize"].SetValue(4f);
 		dissolve.Parameters["uNoiseXY"].SetValue(Vector2.zeroVector);

@@ -21,22 +21,19 @@ public static class ProjectileUtils
 	/// </summary>
 	/// <param name="fromWhere"></param>
 	/// <returns></returns>
-	public static int FindTarget(Vector2 fromWhere, int searchDistance)
+	public static int FindTarget(Vector2 fromWhere, float searchDistance)
 	{
 		int target = -1;
 		float minDis = searchDistance;
-		foreach (NPC npc in Main.npc)
+		foreach (NPC npc in Main.ActiveNPCs)
 		{
-			if (npc != null && npc.active)
+			if (npc.CanBeChasedBy() && !npc.dontTakeDamage && npc.life > 0 && !npc.friendly)
 			{
-				if (npc.CanBeChasedBy() && !npc.dontTakeDamage && npc.life > 0 && !npc.friendly)
+				float dis = (npc.Center - fromWhere).Length() - npc.Hitbox.Size().Length() * 0.5f;
+				if (dis < minDis)
 				{
-					float dis = (npc.Center - fromWhere).Length() - npc.Hitbox.Size().Length() * 0.5f;
-					if (dis < minDis)
-					{
-						minDis = dis;
-						target = npc.whoAmI;
-					}
+					minDis = dis;
+					target = npc.whoAmI;
 				}
 			}
 		}
@@ -52,7 +49,7 @@ public static class ProjectileUtils
 	/// </returns>
 	public static bool MinionCheckTargetActive(int targetWhoAmI)
 	{
-		if (targetWhoAmI < 0)
+		if (targetWhoAmI < 0 || targetWhoAmI >= Main.npc.Length)
 		{
 			return false;
 		}

@@ -15,7 +15,7 @@ public abstract class ScarpasScissorsCutProj : ScarpasScissorsProjBase
 	private const float RotationOffsetBackArm = 0.8f;
 
 	// Draw
-	private const float DistanceToArmPosition = 18f;
+	private const float DistanceToArmPosition = 15f;
 	private const float AnimationRotationMax = 0.5f;
 	private const float AnimationRotationOffset = 0.04f;
 	private const float AnimationTimePowerClosing = 16f;
@@ -64,8 +64,8 @@ public abstract class ScarpasScissorsCutProj : ScarpasScissorsProjBase
 
 	public override void SetDefaults()
 	{
-		Projectile.width = 44;
-		Projectile.height = 44;
+		Projectile.width = 32;
+		Projectile.height = 32;
 
 		Projectile.timeLeft = 10000;
 		Projectile.penetrate = -1;

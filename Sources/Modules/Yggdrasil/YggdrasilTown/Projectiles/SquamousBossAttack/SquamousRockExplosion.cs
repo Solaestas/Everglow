@@ -77,13 +77,13 @@ public class SquamousRockExplosion : ModProjectile, IWarpProjectile
 	{
 		var light = lightColor.ToVector4();
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
-		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 8 * (1 - timeValue) * Projectile.ai[0], lightColor * (1 - timeValue) * 0.75f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_black.Value);
-		DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 8 * (1 - timeValue) * Projectile.ai[0], new Color(0.32f * light.X, 0.18f * light.Y, 0.24f * light.Z, 0f) * (1 - timeValue), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(sBS);
+		//SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
+		//Main.spriteBatch.End();
+		//Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		//DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 8 * (1 - timeValue) * Projectile.ai[0], lightColor * (1 - timeValue) * 0.75f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_black.Value);
+		//DrawTexCircle(MathF.Sqrt(timeValue) * 24 * Projectile.ai[0], 8 * (1 - timeValue) * Projectile.ai[0], new Color(0.32f * light.X, 0.18f * light.Y, 0.24f * light.Z, 0f) * (1 - timeValue), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
+		//Main.spriteBatch.End();
+		//Main.spriteBatch.Begin(sBS);
 	}
 
 	public void GenerateSmog(int Frequency)

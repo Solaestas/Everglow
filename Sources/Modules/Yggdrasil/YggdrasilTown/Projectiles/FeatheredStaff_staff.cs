@@ -6,6 +6,16 @@ public class FeatheredStaff_staff : ModProjectile
 
 	private Player Owner => Main.player[Projectile.owner];
 
+	private Vector2 OwnerMouseWorld
+	{
+		get => new Vector2(Projectile.ai[0], Projectile.ai[1]);
+		set
+		{
+			Projectile.ai[0] = value.X;
+			Projectile.ai[1] = value.Y;
+		}
+	}
+
 	public override void SetDefaults()
 	{
 		Projectile.width = 36;
@@ -22,7 +32,14 @@ public class FeatheredStaff_staff : ModProjectile
 		Owner.heldProj = Projectile.whoAmI;
 		Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathF.PI * 0.75f);
 
-		Vector2 MouseToPlayer = Main.MouseWorld - Owner.MountedCenter;
+		// Sync mouse position with server
+		if (Main.myPlayer == Projectile.owner && Main.MouseWorld != OwnerMouseWorld)
+		{
+			OwnerMouseWorld = Main.MouseWorld;
+			Projectile.netUpdate = true;
+		}
+
+		Vector2 MouseToPlayer = OwnerMouseWorld - Owner.MountedCenter;
 		MouseToPlayer = Vector2.Normalize(MouseToPlayer);
 		if (Owner.controlUseItem)
 		{

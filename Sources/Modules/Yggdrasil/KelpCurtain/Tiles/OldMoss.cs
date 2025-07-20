@@ -11,11 +11,11 @@ public class OldMoss : ModTile
 		Main.tileMergeDirt[Type] = true;
 		Main.tileBlendAll[Type] = true;
 		Main.tileBlockLight[Type] = true;
+		Main.tileNoSunLight[Type] = true;
 		Main.tileMerge[Type][ModContent.TileType<DragonScaleWood>()] = true;
 		Main.tileMerge[Type][ModContent.TileType<MossProneSandSoil>()] = true;
 		Main.tileMerge[Type][TileID.Stone] = true;
 		Main.tileMerge[TileID.Stone][Type] = true;
-		//Main.ugBackTransition = 1000;
 		DustType = DustType = ModContent.DustType<OldMossDust>();
 		MinPick = 50;
 		HitSound = SoundID.Dig;

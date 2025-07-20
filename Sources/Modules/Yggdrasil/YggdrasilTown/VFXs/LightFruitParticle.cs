@@ -24,7 +24,7 @@ public class LightFruitParticlePipeline : Pipeline
 		// Model matrix
 		// 1. translate according to the screen position
 		// 2. transform with the game view matrix
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) *
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) *
 			Main.GameViewMatrix.TransformationMatrix;
 
 		// Get the transform matrix

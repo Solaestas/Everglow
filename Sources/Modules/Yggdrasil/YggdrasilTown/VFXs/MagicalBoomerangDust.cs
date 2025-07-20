@@ -1,4 +1,4 @@
-namespace Everglow.Yggdrasil.KelpCurtain.VFXs;
+namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
 [Pipeline(typeof(WCSPipeline))]
 public class MagicalBoomerangDust : Visual
@@ -38,16 +38,15 @@ public class MagicalBoomerangDust : Visual
 		position += velocity;
 		velocity *= 0.9f;
 		Frame = (int)(timer / maxTime * 3f);
-		Lighting.AddLight(position, new Vector3(0.05f, 0.3f, 1f));
+		Lighting.AddLight(position, new Vector3(0f, 0.3f, 0.7f) * scale / 8f);
 	}
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.MagicalBoomerangDust.Value);
 		float frameCount = 3;
 		float frameY = Frame;
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
-		Color drawColor = new Color(1f, 1f, 1f, 0);
+		var drawColor = new Color(1f, 1f, 1f, 0);
 		var bars = new List<Vertex2D>()
 		{
 			new Vertex2D(position + toCorner, drawColor, new Vector3(0, frameY / frameCount, 0)),
@@ -58,6 +57,6 @@ public class MagicalBoomerangDust : Visual
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), drawColor, new Vector3(1, frameY / frameCount, 0)),
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1), drawColor, new Vector3(1, (frameY + 1) / frameCount, 0)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.MagicalBoomerangDust.Value, bars, PrimitiveType.TriangleList);
 	}
 }

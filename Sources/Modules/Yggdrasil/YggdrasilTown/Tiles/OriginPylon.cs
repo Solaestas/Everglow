@@ -213,7 +213,7 @@ public class OriginalPylon_VFX : BackgroundVFX
 			Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.Default, SamplerState.PointWrap, RasterizerState.CullNone);
 			Effect effect = VFXManager.DefaultEffect.Value;
 			effect.Parameters["uTransform"].SetValue(
-				Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) *
+				Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) *
 				Main.GameViewMatrix.TransformationMatrix *
 				Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
 			effect.CurrentTechnique.Passes[0].Apply();

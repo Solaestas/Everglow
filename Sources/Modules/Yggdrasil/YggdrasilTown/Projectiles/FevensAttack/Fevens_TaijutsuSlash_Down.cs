@@ -203,16 +203,16 @@ public class Fevens_TaijutsuSlash_Down : ModProjectile, IWarpProjectile_warpStyl
 		}
 
 		var scalesSmooth = new List<float>();
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(SmoothTrailProjectile.ToList()); // 平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(SmoothTrailProjectile.ToList()); // 平滑
 		List<Vector2> Smoothscales = GraphicsUtils.CatmullRom(scales.ToList()); // 平滑
 		List<Vector2> SmoothFallings = GraphicsUtils.CatmullRom(smoothFallingPos.ToList());
 		SmoothTrail = new List<Vector2>();
 		SmoothFallingPos = new List<Vector2>();
-		for (int x = 0; x < SmoothTrailX.Count; x++)
+		for (int x = 0; x < smoothTrail_current.Count; x++)
 		{
-			float value2 = x / (float)SmoothTrailX.Count;
+			float value2 = x / (float)smoothTrail_current.Count;
 			scalesSmooth.Add(Smoothscales[Math.Clamp((int)value2, 0, Smoothscales.Count - 1)].X);
-			SmoothTrail.Add(SmoothTrailX[x]);
+			SmoothTrail.Add(smoothTrail_current[x]);
 			SmoothFallingPos.Add(SmoothFallings[Math.Clamp(x, 0, SmoothFallings.Count - 1)]);
 		}
 

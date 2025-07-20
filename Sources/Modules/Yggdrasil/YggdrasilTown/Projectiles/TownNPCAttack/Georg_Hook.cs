@@ -225,11 +225,11 @@ public class Georg_Hook : ModProjectile
 		}
 		if (Timer >= 40 && Timer <= 80)
 		{
-			List<Vector2> smoothTrailX = GraphicsUtils.CatmullRom(OldHookPos); // 平滑
+			List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(OldHookPos); // 平滑
 			var smoothTrail = new List<Vector2>();
-			for (int x = 0; x < smoothTrailX.Count - 1; x++)
+			for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 			{
-				smoothTrail.Add(smoothTrailX[x]);
+				smoothTrail.Add(smoothTrail_current[x]);
 			}
 			if (OldHookPos.Count != 0)
 			{
@@ -425,11 +425,11 @@ public class Georg_Hook : ModProjectile
 
 	public void DrawTrail()
 	{
-		List<Vector2> smoothTrailX = GraphicsUtils.CatmullRom(OldHookPos); // 平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(OldHookPos); // 平滑
 		var smoothTrail = new List<Vector2>();
-		for (int x = 0; x < smoothTrailX.Count - 1; x++)
+		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{
-			smoothTrail.Add(smoothTrailX[x]);
+			smoothTrail.Add(smoothTrail_current[x]);
 		}
 		if (OldHookPos.Count != 0)
 		{
