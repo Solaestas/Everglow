@@ -9,6 +9,21 @@ public class ShellMolluscsBreastPlate : ModItem
 	public const int BuffDuration = 25 * 60; // 10 seconds in frames
 	public const int CooldownDuration = 40 * 60; // 35 seconds in frames
 
+	// The equip texture name for the alternate equip texture.
+	private const string AltTextureName = "Blue";
+	public const string AltTextureKey = nameof(ShellMolluscsBreastPlate) + AltTextureName;
+
+	public override void Load()
+	{
+		if (Main.dedServ)
+		{
+			return;
+		}
+
+		// Add a special equip texture by providing a custom name reference instead of an item reference
+		EquipLoader.AddEquipTexture(Mod, $"{Texture}_{AltTextureName}_{EquipType.Body}", EquipType.Body, this, AltTextureKey);
+	}
+
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

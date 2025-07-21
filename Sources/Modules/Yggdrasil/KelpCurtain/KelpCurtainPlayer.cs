@@ -1,3 +1,5 @@
+using Everglow.Yggdrasil.KelpCurtain.Items.Armors.Molluscs;
+
 namespace Everglow.Yggdrasil.KelpCurtain;
 
 public class KelpCurtainPlayer : ModPlayer
@@ -16,6 +18,15 @@ public class KelpCurtainPlayer : ModPlayer
 		MolluscsSetBuff = false;
 		RadialCarapace = false;
 		CorrodedPearl = false;
+	}
+
+	public override void FrameEffects()
+	{
+		if(Player.head == EquipLoader.GetEquipSlot(Mod, nameof(MossyMolluscsHelmet), EquipType.Head)
+			&& Player.body == EquipLoader.GetEquipSlot(Mod, nameof(ShellMolluscsBreastPlate), EquipType.Body))
+		{
+			Player.body = EquipLoader.GetEquipSlot(Mod, ShellMolluscsBreastPlate.AltTextureKey, EquipType.Body);
+		}
 	}
 
 	public override void UpdateEquips()
