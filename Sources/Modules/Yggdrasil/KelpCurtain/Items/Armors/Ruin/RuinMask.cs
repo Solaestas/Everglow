@@ -1,6 +1,9 @@
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.Items.Weapons.Ruin;
+using Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
+using Terraria.Audio;
 using Terraria.GameContent.Creative;
+using Terraria.GameInput;
 using Terraria.Graphics.Shaders;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors.Ruin;
@@ -46,46 +49,84 @@ public class RuinMask : ModItem
 		public const int BuffDuration = 30 * 60;
 		public const int CooldownDuration = 120 * 60;
 
+		// behind -> front -> behind -> front -> behind = 5 * 15 frames
+		public const int AnimationDuration = 75;
+		public const int AnimationSwingInterval = 30;
+
 		public bool RuinSetEnable { get; set; } = false;
 
 		public bool RuinSetBuffActive => RuinSetEnable && Player.HasBuff<RuinSetBuff>();
 
+		public int RuinSetBuffTimer { get; set; }
+
 		public override void ResetEffects()
 		{
+			if (!RuinSetEnable)
+			{
+				RuinSetBuffTimer = 0;
+				Player.ClearBuff(ModContent.BuffType<RuinSetBuff>());
+			}
+
 			RuinSetEnable = false;
 		}
 
 		public override void FrameEffects()
 		{
-			if (RuinSetEnable && Player.HeldItem.type == ModContent.ItemType<WoodlandWraithStaff>())
+			if (RuinSetEnable)
 			{
-				Player.armorEffectDrawShadow = true;
-				Player.armorEffectDrawOutlines = Player.HasBuff<RuinSetBuff>();
+				if (Player.HeldItem.type == ModContent.ItemType<WoodlandWraithStaff>())
+				{
+					Player.armorEffectDrawShadow = true;
+					Player.armorEffectDrawOutlines = Player.HasBuff<RuinSetBuff>();
+				}
+
+				if (RuinSetBuffTimer > 0)
+				{
+					Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Player.direction * MathF.Cos(RuinSetBuffTimer / (float)AnimationSwingInterval * MathHelper.TwoPi) + MathHelper.Pi);
+				}
 			}
 		}
 
-		public override void PostUpdate()
+		public override void ProcessTriggers(TriggersSet triggersSet)
 		{
-			if (RuinSetEnable)
+			if (MouseUtils.MouseMiddle.IsClicked)
 			{
-				// TODO: Replace set effect hotkey with the one in config.
-				if (MouseUtils.MouseMiddle.IsClicked && !Player.HasBuff<RuinSetCooldown>())
+				if (RuinSetEnable
+					&& Player.HeldItem.type == ModContent.ItemType<WoodlandWraithStaff>()
+					&& !Player.HasBuff<RuinSetCooldown>())
 				{
-					Player.AddBuff(ModContent.BuffType<RuinSetBuff>(), BuffDuration);
-					Player.AddBuff(ModContent.BuffType<RuinSetCooldown>(), CooldownDuration);
+					if (Player.whoAmI == Main.myPlayer)
+					{
+						Player.AddBuff(ModContent.BuffType<RuinSetBuff>(), BuffDuration);
+						Player.AddBuff(ModContent.BuffType<RuinSetCooldown>(), CooldownDuration);
+						RuinSetBuffTimer = AnimationDuration;
+						Projectile.NewProjectile(Player.GetSource_FromAI(), Player.Center, Player.velocity, ModContent.ProjectileType<WoodlandWraithStaff_SetAnimation>(), 0, 0, Player.whoAmI);
+					}
+				}
+			}
+
+			if (RuinSetBuffTimer > 0)
+			{
+				if (RuinSetBuffTimer % AnimationSwingInterval == AnimationSwingInterval / 2)
+				{
+					SoundEngine.PlaySound(SoundID.Item20, Player.Center);
 				}
 
-				// Constraint for vanities, accessories and miscs effects that can change player visible equipments.
-				EquipLoader.idToSlot.TryGetValue(ModContent.ItemType<RuinMask>(), out var headSlot);
-				EquipLoader.idToSlot.TryGetValue(ModContent.ItemType<RuinMagicRobe>(), out var bodySlot);
-				EquipLoader.idToSlot.TryGetValue(ModContent.ItemType<RuinLeggings>(), out var legsSlot);
-				if (Player.face == -1
-					&& Player.head == headSlot[EquipType.Head]
-					&& Player.body == bodySlot[EquipType.Body]
-					&& Player.legs == legsSlot[EquipType.Legs])
-				{
-					GenerateEyeGlowDust();
-				}
+				RuinSetBuffTimer--;
+			}
+		}
+
+		public override bool CanUseItem(Item item) => RuinSetEnable ? RuinSetBuffTimer <= 0 : true;
+
+		public override void PostUpdate()
+		{
+			// Constraint for vanities, accessories and miscs effects that can change player visible equipments.
+			if (Player.face == -1
+				&& Player.head == EquipLoader.GetEquipSlot(Mod, nameof(RuinMask), EquipType.Head)
+				&& Player.body == EquipLoader.GetEquipSlot(Mod, nameof(RuinMagicRobe), EquipType.Body)
+				&& Player.legs == EquipLoader.GetEquipSlot(Mod, nameof(RuinLeggings), EquipType.Legs))
+			{
+				GenerateEyeGlowDust();
 			}
 		}
 
