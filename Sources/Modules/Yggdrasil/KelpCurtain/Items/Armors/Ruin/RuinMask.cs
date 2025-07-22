@@ -95,9 +95,14 @@ public class RuinMask : ModItem
 		/// </summary>
 		private void GenerateEyeGlowDust()
 		{
-			var generalOffset = new Vector2(0, 2);
-			var dustMaskOffset = new Vector2(-1.5f, 1.5f);
-			Vector2 vector = generalOffset + dustMaskOffset; // vanillaOffset
+			int offsetsPlayerHeadgearIndex = Player.bodyFrame.Y / 56;
+			if (offsetsPlayerHeadgearIndex >= Main.OffsetsPlayerHeadgear.Length)
+			{
+				offsetsPlayerHeadgearIndex = 0;
+			}
+			var frameOffset = Main.OffsetsPlayerHeadgear[offsetsPlayerHeadgearIndex];
+			var dustMaskOffset = new Vector2(-1f, 1.5f);
+			Vector2 vector = frameOffset + dustMaskOffset;
 			vector *= Player.Directions;
 
 			Vector2 vector2 = new Vector2(Player.width / 2, Player.height / 2) + vector + (Player.MountedCenter - Player.Center);
