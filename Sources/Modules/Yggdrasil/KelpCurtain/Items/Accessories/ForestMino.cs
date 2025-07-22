@@ -1,4 +1,4 @@
-namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors;
+namespace Everglow.Yggdrasil.KelpCurtain.Items.Accessories;
 
 public class ForestMino : ModItem
 {
@@ -11,6 +11,8 @@ public class ForestMino : ModItem
 		Item.rare = ItemRarityID.Green;
 
 		Item.defense = 4;
+
+		Item.accessory = true;
 	}
 
 	public override void UpdateEquip(Player player)
