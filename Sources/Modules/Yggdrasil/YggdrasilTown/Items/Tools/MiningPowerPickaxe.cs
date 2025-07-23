@@ -102,6 +102,14 @@ public class MiningPowerPickaxe : ModItem
 			Color.LimeGreen.G / 255f * (0.9f + ChargeProgress * 0.2f),
 			Color.LimeGreen.B / 255f)
 			* (0.9f + 0.1f * MathF.Sin((float)Main.timeForVisualEffects * 0.04f));
+		var sBS = GraphicsUtils.GetState(spriteBatch).Value;
+		spriteBatch.End();
+		spriteBatch.Begin(sBS);
+
+		spriteBatch.transformMatrix = Main.GameViewMatrix.ZoomMatrix;
 		spriteBatch.DrawString(FontAssets.MouseText.Value, ChargeProgressText, drawPos, textColor, 0, new Vector2(stringSize.X * 0.5f, -stringSize.Y * 0.5f), 1f, SpriteEffects.None, 0);
+
+		spriteBatch.End();
+		spriteBatch.Begin(sBS);
 	}
 }
