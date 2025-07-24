@@ -40,6 +40,12 @@ public class OriginPylon : ModTile, ISceneTile
 		MinPick = int.MaxValue;
 	}
 
+	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
+	{
+		noBreak = true;
+		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+	}
+
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{
 		Tile tile = Main.tile[i, j];

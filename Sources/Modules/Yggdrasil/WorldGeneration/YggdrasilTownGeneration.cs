@@ -67,7 +67,7 @@ public class YggdrasilTownGeneration
 		SmoothYggdrasilTown();
 	}
 
-	public static int AzureGrottoCenterX;
+	//public static int AzureGrottoCenterX;
 	public static Vector2 TwilightRelicCenter = new Vector2(1050, 20000);
 
 	public static Vector2 LifeLampWoodRootPos => new Vector2(Main.maxTilesX - 100, Main.maxTilesY - 560);
@@ -83,55 +83,56 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void Initialize()
 	{
-		AzureGrottoCenterX = GenRand.Next(-100, 100) + 600;
 		FillPerlinPixel();
-		StreetConstructorsSheet = new List<YggdrasilTownStreetElement>()
 		{
-			new Lamppost(),
-			new Bench(),
-			new Crate(),
-			new ThreeCrate(),
-			new FolkHouseofChineseStyle(),
-			new FolkHouseofWoodStoneStruture(),
-			new FolkHouseofWoodStruture(),
-			new TwoStoriedFolkHouse(),
-			new SmithyType(),
-		};
-		InDoorChineseStyleHangingSheet = new List<YggdrasilTownStreetElement>()
-		{
-			new BambooChandelier(),
-			new CrystalChandelier(),
-			new CylinderChandelierGroup(),
-			new DynasticChandelier(),
-			new EvilChandelier(),
-			new GoldenChandelier(),
-			new GraniteChandelier(),
-			new GreenDungeonChandelier(),
-			new HexagonalCeilingChandelier(),
-			new MetalChandelier(),
-			new PalmChandelier(),
-			new RichMahoganyChandelier(),
+			// StreetConstructorsSheet = new List<YggdrasilTownStreetElement>()
+			// {
+			// new Lamppost(),
+			// new Bench(),
+			// new Crate(),
+			// new ThreeCrate(),
+			// new FolkHouseofChineseStyle(),
+			// new FolkHouseofWoodStoneStruture(),
+			// new FolkHouseofWoodStruture(),
+			// new TwoStoriedFolkHouse(),
+			// new SmithyType(),
+			// };
+			// InDoorChineseStyleHangingSheet = new List<YggdrasilTownStreetElement>()
+			// {
+			// new BambooChandelier(),
+			// new CrystalChandelier(),
+			// new CylinderChandelierGroup(),
+			// new DynasticChandelier(),
+			// new EvilChandelier(),
+			// new GoldenChandelier(),
+			// new GraniteChandelier(),
+			// new GreenDungeonChandelier(),
+			// new HexagonalCeilingChandelier(),
+			// new MetalChandelier(),
+			// new PalmChandelier(),
+			// new RichMahoganyChandelier(),
 
-			new DiscoBall(),
+			// new DiscoBall(),
 
-			new FireflyBottle(),
-			new LavaFlyBottle(),
-			new LightningBugBottle(),
-			new SoulBottle(),
+			// new FireflyBottle(),
+			// new LavaFlyBottle(),
+			// new LightningBugBottle(),
+			// new SoulBottle(),
 
-			new BambooLantern(),
-			new BowlLantern(),
-			new ChineseLantern(),
-			new DynasticLantern(),
-			new FleshLantern(),
-			new GlassLantern(),
-			new LivingWoodLantern(),
-			new MetalLantern(),
-			new SpellLantern(),
-			new BurningBowl(),
-			new PlantBowl(),
-			new EmptyAnchoredTop(),
-		};
+			// new BambooLantern(),
+			// new BowlLantern(),
+			// new ChineseLantern(),
+			// new DynasticLantern(),
+			// new FleshLantern(),
+			// new GlassLantern(),
+			// new LivingWoodLantern(),
+			// new MetalLantern(),
+			// new SpellLantern(),
+			// new BurningBowl(),
+			// new PlantBowl(),
+			// new EmptyAnchoredTop(),
+			// };
+		}// Expired codes.
 		TwilightBonusList = new List<int>
 		{
 			ModContent.ItemType<BloodTearCrystalCrown>(),
@@ -349,7 +350,6 @@ public class YggdrasilTownGeneration
 		Point center = new Point(1400, Main.maxTilesY - 360);
 		int radious = 300;
 
-		// 沼泽本体
 		for (int x = (int)(center.X - radious * 1.5); x < (int)(center.X + radious * 1.5); x++)
 		{
 			for (int y = center.Y - radious; y < center.Y - 60; y++)
@@ -375,115 +375,115 @@ public class YggdrasilTownGeneration
 	}
 
 	/// <summary>
-	/// 靛琉璃海
+	/// 靛琉璃海, Expired
 	/// </summary>
 	public static void BuildAzureGrotto()
 	{
-		int startX = AzureGrottoCenterX;
-		int bottomY = 11000;
-		while (!SafeGetTile(startX, bottomY).HasTile)
-		{
-			bottomY++;
-			if (bottomY > 11900)
-			{
-				break;
-			}
-		}
-		int height = GenRand.Next(270, 321);
-		int maxWidth = GenRand.Next(960, 981);
-		int y0CoordPerlin = GenRand.Next(1024);
-		int y1CoordPerlin = GenRand.Next(1024);
+		//int startX = AzureGrottoCenterX;
+		//int bottomY = 11000;
+		//while (!SafeGetTile(startX, bottomY).HasTile)
+		//{
+		//	bottomY++;
+		//	if (bottomY > 11900)
+		//	{
+		//		break;
+		//	}
+		//}
+		//int height = GenRand.Next(270, 321);
+		//int maxWidth = GenRand.Next(960, 981);
+		//int y0CoordPerlin = GenRand.Next(1024);
+		//int y1CoordPerlin = GenRand.Next(1024);
 
-		for (int y = -30; y < height; y++)
-		{
-			float heightValue = y / (float)height;
-			int width = (int)(Math.Pow(2, 8 * (heightValue - 0.9)) / 4d * maxWidth) + 25;
-			for (int x = -width; x <= width; x++)
-			{
-				float thickValue = PerlinPixelG[(int)(x * 0.9f + maxWidth * 1f) % 1024, y0CoordPerlin] * 0.2f;
-				float thickValueUp = PerlinPixelG[(int)(x * 0.9f + maxWidth * 1f) % 1024, y1CoordPerlin] * 0.08f;
-				float mulThickValue = 1;
-				if (maxWidth * 0.4377f - Math.Abs(x) < 30)
-				{
-					mulThickValue = (maxWidth * 0.4377f - Math.Abs(x)) / 60f;
-					mulThickValue = MathF.Sin(mulThickValue * MathF.PI);
-				}
-				thickValue *= mulThickValue;
-				thickValue = Math.Max(thickValue, 6);
-				thickValueUp *= mulThickValue;
-				thickValueUp = Math.Max(thickValueUp, 4);
-				if (x <= -width + 8 || x >= width - 8)
-				{
-					if ((startX - 600) * x > 0)
-					{
-						int y1 = (int)-thickValueUp;
-						while (true)
-						{
-							y1++;
-							if (y1 > bottomY + 500)
-							{
-								break;
-							}
-							int finalX = x + startX;
-							int finalY = bottomY - y + y1;
-							Tile tile = SafeGetTile(finalX, finalY);
-							if (!tile.HasTile)
-							{
-								tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
-								tile.HasTile = true;
-								if ((x <= -width + 12 && x >= -width + 3) || (x >= width - 12 && x <= width - 3))
-								{
-									tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
-								}
-								if (y1 > 0)
-								{
-									tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
-								}
-							}
-							else if (SafeGetTile(finalX, finalY + 5).HasTile)
-							{
-								for (int y2 = 0; y2 < 6; y2++)
-								{
-									Tile tile2 = SafeGetTile(finalX, finalY + y2);
-									tile2.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
-								}
-								break;
-							}
-						}
-					}
-					else
-					{
-						for (int y1 = (int)-thickValueUp; y1 < thickValue; y1++)
-						{
-							int finalX = x + startX;
-							int finalY = bottomY - y + y1;
-							Tile tile = SafeGetTile(finalX, finalY);
-							if (!tile.HasTile)
-							{
-								tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
-								tile.HasTile = true;
-								if ((x <= -width + 12 && x >= -width + 3) || (x >= width - 12 && x <= width - 3))
-								{
-									tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
-								}
-								if (y1 > 0 && y1 < thickValue - 4)
-								{
-									tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
-								}
-							}
-						}
-					}
-				}
-				else
-				{
-					int finalX = x + startX;
-					int finalY = bottomY - y;
-					Tile tile = SafeGetTile(finalX, finalY);
-					tile.LiquidType = LiquidID.Water;
-					tile.LiquidAmount = 255;
-				}
-			}
-		}
+		//for (int y = -30; y < height; y++)
+		//{
+		//	float heightValue = y / (float)height;
+		//	int width = (int)(Math.Pow(2, 8 * (heightValue - 0.9)) / 4d * maxWidth) + 25;
+		//	for (int x = -width; x <= width; x++)
+		//	{
+		//		float thickValue = PerlinPixelG[(int)(x * 0.9f + maxWidth * 1f) % 1024, y0CoordPerlin] * 0.2f;
+		//		float thickValueUp = PerlinPixelG[(int)(x * 0.9f + maxWidth * 1f) % 1024, y1CoordPerlin] * 0.08f;
+		//		float mulThickValue = 1;
+		//		if (maxWidth * 0.4377f - Math.Abs(x) < 30)
+		//		{
+		//			mulThickValue = (maxWidth * 0.4377f - Math.Abs(x)) / 60f;
+		//			mulThickValue = MathF.Sin(mulThickValue * MathF.PI);
+		//		}
+		//		thickValue *= mulThickValue;
+		//		thickValue = Math.Max(thickValue, 6);
+		//		thickValueUp *= mulThickValue;
+		//		thickValueUp = Math.Max(thickValueUp, 4);
+		//		if (x <= -width + 8 || x >= width - 8)
+		//		{
+		//			if ((startX - 600) * x > 0)
+		//			{
+		//				int y1 = (int)-thickValueUp;
+		//				while (true)
+		//				{
+		//					y1++;
+		//					if (y1 > bottomY + 500)
+		//					{
+		//						break;
+		//					}
+		//					int finalX = x + startX;
+		//					int finalY = bottomY - y + y1;
+		//					Tile tile = SafeGetTile(finalX, finalY);
+		//					if (!tile.HasTile)
+		//					{
+		//						tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+		//						tile.HasTile = true;
+		//						if ((x <= -width + 12 && x >= -width + 3) || (x >= width - 12 && x <= width - 3))
+		//						{
+		//							tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+		//						}
+		//						if (y1 > 0)
+		//						{
+		//							tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+		//						}
+		//					}
+		//					else if (SafeGetTile(finalX, finalY + 5).HasTile)
+		//					{
+		//						for (int y2 = 0; y2 < 6; y2++)
+		//						{
+		//							Tile tile2 = SafeGetTile(finalX, finalY + y2);
+		//							tile2.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+		//						}
+		//						break;
+		//					}
+		//				}
+		//			}
+		//			else
+		//			{
+		//				for (int y1 = (int)-thickValueUp; y1 < thickValue; y1++)
+		//				{
+		//					int finalX = x + startX;
+		//					int finalY = bottomY - y + y1;
+		//					Tile tile = SafeGetTile(finalX, finalY);
+		//					if (!tile.HasTile)
+		//					{
+		//						tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
+		//						tile.HasTile = true;
+		//						if ((x <= -width + 12 && x >= -width + 3) || (x >= width - 12 && x <= width - 3))
+		//						{
+		//							tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+		//						}
+		//						if (y1 > 0 && y1 < thickValue - 4)
+		//						{
+		//							tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+		//						}
+		//					}
+		//				}
+		//			}
+		//		}
+		//		else
+		//		{
+		//			int finalX = x + startX;
+		//			int finalY = bottomY - y;
+		//			Tile tile = SafeGetTile(finalX, finalY);
+		//			tile.LiquidType = LiquidID.Water;
+		//			tile.LiquidAmount = 255;
+		//		}
+		//	}
+		//}
 	}
 
 	/// <summary>
@@ -811,7 +811,7 @@ public class YggdrasilTownGeneration
 								return new Vector2D(startX, startY);
 							}
 						}
-						if(!(j >= 20 && j < Main.maxTilesX - 20 && k >= 20 && k < Main.maxTilesY - 20))
+						if (!(j >= 20 && j < Main.maxTilesX - 20 && k >= 20 && k < Main.maxTilesY - 20))
 						{
 							return new Vector2D(startX, startY);
 						}
@@ -863,97 +863,97 @@ public class YggdrasilTownGeneration
 	}
 
 	/// <summary>
-	/// 石化古道
+	/// 石化古道, Expired
 	/// </summary>
 	public static void BuildFossilizedMineRoad()
 	{
-		int deltaX = 120;
-		if (AzureGrottoCenterX > 600)
-		{
-			deltaX = -120;
-		}
-		int step = Math.Sign(deltaX);
-		int startX = 600 + deltaX;
-		int startY = 11632;
-		while (SafeGetTile(startX, startY + 1).TileType == TileID.GrayBrick)
-		{
-			startX += step;
-		}
-		int lengthX = GenRand.Next(140, 152);
-		for (int x0 = 0; x0 < lengthX; x0++)
-		{
-			KillRectangleAreaOfTile(x0 * step + startX, startY - 17, x0 * step + startX, startY);
-			PlaceRectangleAreaOfBlock(x0 * step + startX, startY + 1, x0 * step + startX, startY + 3, TileID.GrayBrick, false);
-		}
-		int continueEmpty = 0;
-		float radius = 5f;
-		Vector2 velocity = new Vector2(step, 0);
-		Vector2 position = new Vector2(startX + lengthX * step, startY - radius);
-		int times = 0;
-		int coordY = GenRand.Next(1024);
-		int rotatedTimes = 0;
-		int noRotatedTimes = 0;
-		while (continueEmpty < 15)
-		{
-			times++;
-			velocity = Vector2.Normalize(velocity);
-			position += velocity;
-			int x = (int)position.X;
-			int y = (int)position.Y;
-			for (int x0 = -10; x0 <= 10; x0++)
-			{
-				for (int y0 = -10; y0 <= 10; y0++)
-				{
-					if (new Vector2(x0, y0).Length() < radius)
-					{
-						Tile tile = SafeGetTile(x0 + x, y0 + y);
-						tile.HasTile = false;
-					}
-				}
-			}
-			if (rotatedTimes > 0)
-			{
-				rotatedTimes--;
-				velocity = velocity.RotatedBy(step * Math.PI / 40d);
-				noRotatedTimes = 0;
-			}
-			else
-			{
-				rotatedTimes = 0;
-				Vector2 probePos = position + velocity * 50;
-				if ((!SafeGetTile((int)probePos.X, (int)probePos.Y).HasTile && position.Y > 11451) || probePos.X > 1200 || probePos.X < 0)
-				{
-					rotatedTimes = 40;
-					step *= -1;
-					continue;
-				}
-				velocity = velocity.RotatedBy((PerlinPixelG[times % 1024, coordY] - 127.5) * 0.0002);
-				velocity.Y -= 0.015f;
-				noRotatedTimes++;
-				if (noRotatedTimes > Math.Max(80 + 11540 - position.Y, 80))
-				{
-					if (GenRand.NextBool(60))
-					{
-						rotatedTimes = 40;
-						step *= -1;
-					}
-				}
-				velocity.X *= 1.12f;
-			}
-			Vector2 probePosII = position + velocity * 5;
-			if (SafeGetTile((int)probePosII.X, (int)probePosII.Y).TileType != ModContent.TileType<StoneScaleWood>() && y < 11451)
-			{
-				continueEmpty++;
-			}
-			else
-			{
-				continueEmpty = 0;
-			}
-			if (times > 8000)
-			{
-				break;
-			}
-		}
+		//int deltaX = 120;
+		//if (AzureGrottoCenterX > 600)
+		//{
+		//	deltaX = -120;
+		//}
+		//int step = Math.Sign(deltaX);
+		//int startX = 600 + deltaX;
+		//int startY = 11632;
+		//while (SafeGetTile(startX, startY + 1).TileType == TileID.GrayBrick)
+		//{
+		//	startX += step;
+		//}
+		//int lengthX = GenRand.Next(140, 152);
+		//for (int x0 = 0; x0 < lengthX; x0++)
+		//{
+		//	KillRectangleAreaOfTile(x0 * step + startX, startY - 17, x0 * step + startX, startY);
+		//	PlaceRectangleAreaOfBlock(x0 * step + startX, startY + 1, x0 * step + startX, startY + 3, TileID.GrayBrick, false);
+		//}
+		//int continueEmpty = 0;
+		//float radius = 5f;
+		//Vector2 velocity = new Vector2(step, 0);
+		//Vector2 position = new Vector2(startX + lengthX * step, startY - radius);
+		//int times = 0;
+		//int coordY = GenRand.Next(1024);
+		//int rotatedTimes = 0;
+		//int noRotatedTimes = 0;
+		//while (continueEmpty < 15)
+		//{
+		//	times++;
+		//	velocity = Vector2.Normalize(velocity);
+		//	position += velocity;
+		//	int x = (int)position.X;
+		//	int y = (int)position.Y;
+		//	for (int x0 = -10; x0 <= 10; x0++)
+		//	{
+		//		for (int y0 = -10; y0 <= 10; y0++)
+		//		{
+		//			if (new Vector2(x0, y0).Length() < radius)
+		//			{
+		//				Tile tile = SafeGetTile(x0 + x, y0 + y);
+		//				tile.HasTile = false;
+		//			}
+		//		}
+		//	}
+		//	if (rotatedTimes > 0)
+		//	{
+		//		rotatedTimes--;
+		//		velocity = velocity.RotatedBy(step * Math.PI / 40d);
+		//		noRotatedTimes = 0;
+		//	}
+		//	else
+		//	{
+		//		rotatedTimes = 0;
+		//		Vector2 probePos = position + velocity * 50;
+		//		if ((!SafeGetTile((int)probePos.X, (int)probePos.Y).HasTile && position.Y > 11451) || probePos.X > 1200 || probePos.X < 0)
+		//		{
+		//			rotatedTimes = 40;
+		//			step *= -1;
+		//			continue;
+		//		}
+		//		velocity = velocity.RotatedBy((PerlinPixelG[times % 1024, coordY] - 127.5) * 0.0002);
+		//		velocity.Y -= 0.015f;
+		//		noRotatedTimes++;
+		//		if (noRotatedTimes > Math.Max(80 + 11540 - position.Y, 80))
+		//		{
+		//			if (GenRand.NextBool(60))
+		//			{
+		//				rotatedTimes = 40;
+		//				step *= -1;
+		//			}
+		//		}
+		//		velocity.X *= 1.12f;
+		//	}
+		//	Vector2 probePosII = position + velocity * 5;
+		//	if (SafeGetTile((int)probePosII.X, (int)probePosII.Y).TileType != ModContent.TileType<StoneScaleWood>() && y < 11451)
+		//	{
+		//		continueEmpty++;
+		//	}
+		//	else
+		//	{
+		//		continueEmpty = 0;
+		//	}
+		//	if (times > 8000)
+		//	{
+		//		break;
+		//	}
+		//}
 	}
 
 	/// <summary>
@@ -1053,35 +1053,35 @@ public class YggdrasilTownGeneration
 		KillRectangleAreaOfTile(1180, Main.maxTilesY - 400, 1240, Main.maxTilesY - 370);
 
 		// first cable joint
-		//WorldGenMisc.PlaceRope(930, Main.maxTilesY - 326, 1000, Main.maxTilesY - 339, ModContent.TileType<CableCarJoint>());
-		//Tile firstJoint = SafeGetTile(1000, Main.maxTilesY - 339);
-		//firstJoint.TileFrameX = 0;
-		//for (int j = 1; j < 100; j++)
-		//{
-		//	Tile tile = SafeGetTile(1000, Main.maxTilesY - 339 + j);
-		//	if (tile.HasTile)
-		//	{
-		//		break;
-		//	}
-		//	else
-		//	{
-		//		tile.TileType = TileID.WoodenBeam;
-		//		tile.HasTile = true;
-		//	}
-		//}
-		//for (int j = 1; j < 100; j++)
-		//{
-		//	Tile tile = SafeGetTile(930, Main.maxTilesY - 326 + j);
-		//	if (tile.HasTile)
-		//	{
-		//		break;
-		//	}
-		//	else
-		//	{
-		//		tile.TileType = TileID.WoodenBeam;
-		//		tile.HasTile = true;
-		//	}
-		//}
+		// WorldGenMisc.PlaceRope(930, Main.maxTilesY - 326, 1000, Main.maxTilesY - 339, ModContent.TileType<CableCarJoint>());
+		// Tile firstJoint = SafeGetTile(1000, Main.maxTilesY - 339);
+		// firstJoint.TileFrameX = 0;
+		// for (int j = 1; j < 100; j++)
+		// {
+		// Tile tile = SafeGetTile(1000, Main.maxTilesY - 339 + j);
+		// if (tile.HasTile)
+		// {
+		// break;
+		// }
+		// else
+		// {
+		// tile.TileType = TileID.WoodenBeam;
+		// tile.HasTile = true;
+		// }
+		// }
+		// for (int j = 1; j < 100; j++)
+		// {
+		// Tile tile = SafeGetTile(930, Main.maxTilesY - 326 + j);
+		// if (tile.HasTile)
+		// {
+		// break;
+		// }
+		// else
+		// {
+		// tile.TileType = TileID.WoodenBeam;
+		// tile.HasTile = true;
+		// }
+		// }
 
 		// Cable car telpher
 		// int lastPosX = 0;

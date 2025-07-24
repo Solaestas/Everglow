@@ -143,13 +143,19 @@ public class KelpCurtainGeneration
 	public static void BuildTunnelTo2ndStratum()
 	{
 		var checkPos = (FindSquamousShellTopLeft() + new Point(250, 5)).ToVector2();
-		var checkVel = new Vector2(6, -3);
+		var checkVel = new Vector2(6, 0);
 		float radius = 7f;
-		for (int t = 0; t < 40; t++)
+		for (int t = 0; t < 20; t++)
 		{
-			CircleTile(checkPos, radius, -1, true);
+			CircleTile(checkPos, radius + GenRand.NextFloat(-1.5f, 1.5f), -1, true);
+			checkPos += checkVel;
+		}
+		checkVel = new Vector2(0, -7);
+		radius = 24f;
+		for (int t = 0; t < 30; t++)
+		{
+			CircleTile(checkPos, radius + GenRand.NextFloat(-3.5f, 3.5f), -1, true);
 			radius += 0.2f;
-			checkVel += new Vector2(0, -0.3f);
 			checkPos += checkVel;
 		}
 	}

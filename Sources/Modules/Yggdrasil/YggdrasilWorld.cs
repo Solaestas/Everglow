@@ -28,14 +28,13 @@ internal class YggdrasilWorld : Subworld
 	public override void OnEnter()
 	{
 		SubworldSystem.hideUnderworld = true;
-		SubworldSystem.noReturn = true;
 		YggdrasilTimer = 0;
-		for (int x = 20; x < Main.maxTilesX - 20; x++)
-		{
-			for (int y = 20; y < Main.maxTilesY - 20; y++)
-			{
-			}
-		}
+		//for (int x = 20; x < Main.maxTilesX - 20; x++)
+		//{
+		//	for (int y = 20; y < Main.maxTilesY - 20; y++)
+		//	{
+		//	}
+		//}
 		YggdrasilTownBiome.CheckedBiomeCenter = false;
 	}
 
