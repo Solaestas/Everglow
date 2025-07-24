@@ -1,9 +1,8 @@
+using Everglow.Commons.Graphics;
+using ReLogic.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.UI.Chat;
-using ReLogic.Graphics;
-using Everglow.Commons.Graphics;
-using Everglow.Yggdrasil.KelpCurtain.Projectiles.Ranged;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 
@@ -34,7 +33,7 @@ public class RazorbeakBow : ModItem
 
 		Item.useAmmo = AmmoID.Arrow;
 		Item.consumeAmmoOnFirstShotOnly = true;
-		Item.shoot = ModContent.ProjectileType<RazorbeakArrow>();
+		Item.shoot = ProjectileID.WoodenArrowFriendly;
 		Item.shootSpeed = 12f;
 
 		Item.rare = ItemRarityID.Green;
@@ -53,11 +52,6 @@ public class RazorbeakBow : ModItem
 	public override void HoldItem(Player player)
 	{
 		Item.reuseDelay = (int)(BaseDelay * UseTimeMultiplier(player));
-	}
-
-	public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
-	{
-		type = ModContent.ProjectileType<RazorbeakArrow>();
 	}
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -80,7 +74,9 @@ public class RazorbeakBow : ModItem
 			}
 		}
 
-		Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, modPlayer.GroupIndex);
+		var proj = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
+		proj.GetGlobalProjectile<RazorbeakGlobalProjectile>().ShotByRazorbeakBow = true;
+		proj.GetGlobalProjectile<RazorbeakGlobalProjectile>().GroupIndex = modPlayer.GroupIndex;
 		return false;
 	}
 
@@ -123,33 +119,89 @@ public class RazorbeakBow : ModItem
 			spriteBatch.Begin(sBS);
 		}
 	}
-}
 
-public class RazorbeakBowPlayer : ModPlayer
-{
-	public const int RazorbeakBowEffectMaxStack = 8;
-	public const int RazorbeakBowEffectDuration = 180;
-	public const int RazorbeakBowEffectHitRequirement = 3;
-	public const float RazorbeakBowAttackSpeedBonusPerStack = 0.25f;
-
-	public int RazorbeakBowEffectStack { get; set; } = 0;
-
-	public int RazorbeakBowTimer { get; set; } = 0;
-
-	public int GroupIndex { get; set; } = 0;
-
-	public Dictionary<int, (int Count, bool Done)> RazorbeakHitInfo { get; } = [];
-
-	public override void PostUpdate()
+	public class RazorbeakBowPlayer : ModPlayer
 	{
-		// Reset attack speed bonus if the player stop hitting targets for 3 seconds.
-		if (RazorbeakBowTimer <= 0)
+		public const int RazorbeakBowEffectMaxStack = 8;
+		public const int RazorbeakBowEffectDuration = 180;
+		public const int RazorbeakBowEffectHitRequirement = 3;
+		public const float RazorbeakBowAttackSpeedBonusPerStack = 0.25f;
+
+		public int RazorbeakBowEffectStack { get; set; } = 0;
+
+		public int RazorbeakBowTimer { get; set; } = 0;
+
+		public int GroupIndex { get; set; } = 0;
+
+		public Dictionary<int, (int Count, bool Done)> RazorbeakHitInfo { get; } = [];
+
+		public override void PostUpdate()
 		{
-			RazorbeakBowEffectStack = 0;
+			// Reset attack speed bonus if the player stop hitting targets for 3 seconds.
+			if (RazorbeakBowTimer <= 0)
+			{
+				RazorbeakBowEffectStack = 0;
+			}
+			else
+			{
+				RazorbeakBowTimer--;
+			}
 		}
-		else
+	}
+
+	public class RazorbeakGlobalProjectile : GlobalProjectile
+	{
+		public override bool InstancePerEntity => true;
+
+		public bool ShotByRazorbeakBow { get; set; } = false;
+
+		public int GroupIndex { get; set; }
+
+		public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			RazorbeakBowTimer--;
+			if (ShotByRazorbeakBow)
+			{
+				var owner = Main.player[projectile.owner];
+				var modPlayer = owner.GetModPlayer<RazorbeakBowPlayer>();
+
+				// Reset hit effect timer.
+				modPlayer.RazorbeakBowTimer = RazorbeakBowPlayer.RazorbeakBowEffectDuration;
+
+				// Process effect counter.
+				if (modPlayer.RazorbeakHitInfo.TryGetValue(GroupIndex, out var value))
+				{
+					var count = value.Count + 1;
+					if (count < RazorbeakBowPlayer.RazorbeakBowEffectHitRequirement)
+					{
+						modPlayer.RazorbeakHitInfo[GroupIndex] = (count, value.Done);
+					}
+					else
+					{
+						modPlayer.RazorbeakBowEffectStack = Math.Min(modPlayer.RazorbeakBowEffectStack + 1, RazorbeakBowPlayer.RazorbeakBowEffectMaxStack);
+						modPlayer.RazorbeakHitInfo.Remove(GroupIndex); // Remove element immediately ensuring stack won't triggered twice by a single group.
+					}
+				}
+			}
+		}
+
+		public override void OnKill(Projectile projectile, int timeLeft)
+		{
+			if (ShotByRazorbeakBow)
+			{
+				// Remove the group index from the player's RazorbeakHitInfo if no other arrows of the same group are active.
+				var modPlayer = Main.player[projectile.owner].GetModPlayer<RazorbeakBowPlayer>();
+				if (!Main.projectile.Where(proj =>
+						proj.active
+						&& proj.owner == projectile.owner
+						&& proj.type == projectile.type
+						&& proj.whoAmI != projectile.whoAmI)
+					.Any(p => p.GetGlobalProjectile<RazorbeakGlobalProjectile>().GroupIndex == GroupIndex)
+						&& modPlayer.RazorbeakHitInfo.TryGetValue(GroupIndex, out var hitInfo)
+						&& hitInfo.Done)
+				{
+					modPlayer.RazorbeakHitInfo.Remove(GroupIndex);
+				}
+			}
 		}
 	}
 }
