@@ -4,7 +4,6 @@ namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
 
 public class CyatheaArrow_proj : ModProjectile
 {
-
 	public override void SetDefaults()
 	{
 		Projectile.width = 18;
