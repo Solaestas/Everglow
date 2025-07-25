@@ -34,9 +34,8 @@ public class WoodlandWraithStaff_SetAnimation : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		var timer = Owner.GetModPlayer<RuinMask.RuinSetPlayer>().RuinSetBuffTimer;
-
-		var armRot = Owner.direction * MathF.Cos(timer / (float)RuinMask.RuinSetPlayer.AnimationSwingInterval * MathHelper.TwoPi) + MathHelper.Pi;
+		var timeProgress = Owner.GetModPlayer<RuinMask.RuinSetPlayer>().RuinSetBuffTimer / (float)RuinMask.RuinSetPlayer.AnimationSwingInterval;
+		var armRot = Owner.direction * MathF.Cos(timeProgress * MathHelper.TwoPi) * 0.8f + MathHelper.Pi;
 		Vector2 armPosition = Owner.GetFrontHandPosition(Player.CompositeArmStretchAmount.Full, armRot);
 		armPosition.Y += Owner.gfxOffY;
 
@@ -45,13 +44,12 @@ public class WoodlandWraithStaff_SetAnimation : ModProjectile
 		armPosition = Owner.Center + gravDirAdaption;
 
 		var texture = ModAsset.WoodlandWraithStaff.Value;
-		var weaponSourceRect = new Rectangle(0, 0, texture.Width, (int)(texture.Height * 0.8f)); // Cut texture to hide behind player's arm.
 		var weaponColor = Lighting.GetColor(armPosition.ToTileCoordinates());
 		var weaponRot = Owner.gravDir * armRot + MathHelper.Pi + MathHelper.PiOver4 - Owner.gravDir * MathHelper.PiOver2;
 		var weaponOrigin = new Vector2(texture.Width * 0.1f, texture.Height * 0.9f);
-		var weaponScale = Owner.GetAdjustedItemScale(Owner.HeldItem) * Owner.HeldItem.scale;
-
-		Main.spriteBatch.Draw(texture, armPosition - Main.screenPosition, weaponSourceRect, weaponColor, weaponRot, weaponOrigin, weaponScale, SpriteEffects.None, 0);
+		var perspectiveScale = MathF.Sin(timeProgress * MathHelper.TwoPi) / MathHelper.Pi * 0.4f + 1;
+		var weaponScale = Owner.GetAdjustedItemScale(Owner.HeldItem) * Owner.HeldItem.scale * perspectiveScale;
+		Main.spriteBatch.Draw(texture, armPosition - Main.screenPosition, null, weaponColor, weaponRot, weaponOrigin, weaponScale, SpriteEffects.None, 0);
 
 		var handGlow = Commons.ModAsset.Point.Value;
 		var glowScale = 0.3f + 0.05f * MathF.Sin((float)Main.timeForVisualEffects * 0.4f);
