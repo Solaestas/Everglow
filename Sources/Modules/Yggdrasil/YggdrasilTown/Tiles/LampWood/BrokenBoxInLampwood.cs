@@ -3,7 +3,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
-public class BrokenBoxInLampwood : ModTile
+public class BrokenBoxInLampWood : ModTile
 {
 	public override void SetStaticDefaults()
 	{

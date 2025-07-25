@@ -2,7 +2,6 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
 
 public class TwilightCrystal : ModItem
 {
-	//TODO:暮木
 	public override void SetDefaults()
 	{
 		Item.width = 16;

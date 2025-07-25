@@ -4,7 +4,6 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 
 public class TwilightEucalyptusWood_Item : ModItem
 {
-	// TODO:暮木
 	public override void SetDefaults()
 	{
 		Item.DefaultToPlaceableTile(ModContent.TileType<TwilightEucalyptusWood>());

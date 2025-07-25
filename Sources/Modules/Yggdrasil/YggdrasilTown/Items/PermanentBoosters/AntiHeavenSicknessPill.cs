@@ -92,7 +92,7 @@ public class AntiHeavenSicknessPillPlayer : ModPlayer
 		ModPacket packet = Mod.GetPacket();
 
 		// TODO: Add netcode
-		// packet.Write((byte)Everglow.); // Need a 
+		// packet.Write((byte)Everglow.); // Need a
 		// packet.Write((byte)Player.whoAmI);
 		// packet.Write((byte)antiHeavenSicknessPills);
 		// packet.Send(toWho, fromWho);

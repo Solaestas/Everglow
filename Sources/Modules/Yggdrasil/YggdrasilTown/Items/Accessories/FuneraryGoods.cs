@@ -38,10 +38,7 @@ public class FuneraryGoodsPlayer : ModPlayer
 		{
 			if (Main.rand.NextFloat() <= FuneraryGoods.EffectChance)
 			{
-				var manaCanHeal = Player.statManaMax2 - Player.statMana;
-				var manaHealValue = manaCanHeal > FuneraryGoods.ManaRecovery ? FuneraryGoods.ManaRecovery : manaCanHeal;
-				Player.statMana += manaHealValue;
-				CombatText.NewText(Player.getRect(), CombatText.HealMana, FuneraryGoods.ManaRecovery, dramatic: true, dot: false);
+				Player.HealMana(FuneraryGoods.ManaRecovery);
 			}
 		}
 	}

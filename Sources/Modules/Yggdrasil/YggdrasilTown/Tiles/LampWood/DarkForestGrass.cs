@@ -195,7 +195,7 @@ public class DarkForestGrass : ModTile, ISceneTile
 				case 22:
 					if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 2))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 3, 2, ModContent.TileType<BrokenBoxInLampwood>(), 54 * Main.rand.Next(2));
+						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 3, 2, ModContent.TileType<BrokenBoxInLampWood>(), 54 * Main.rand.Next(2));
 					}
 					break;
 				case 23:

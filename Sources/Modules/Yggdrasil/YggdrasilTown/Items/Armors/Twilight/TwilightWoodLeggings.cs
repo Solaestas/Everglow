@@ -1,4 +1,3 @@
-using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 

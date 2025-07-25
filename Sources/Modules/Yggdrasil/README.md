@@ -1,11 +1,11 @@
 ### Yggdrasil Levels 天穹树分层:
- - Yggdrasil Town 天穹镇 <-- Currently working on
- - Kelp Curtain 苍苔帘幕
+ - Yggdrasil Town 天穹镇 
+ - Kelp Curtain 苍苔帘幕 <-- Currently working on
  - Corrupt Worm Hive 蛆败之穴
  - Hurricane Maze 飓风迷宫
  - Green Core 苍翠核心
- - ??? 梦境之森
- - ??? 失雾花海
+ - Dreamland Forest 梦境之森
+ - Flower Sea of Mirage 失雾花海
  - City Of Magic Flute 魔笛诡都
- - ??? 极光湖
- - ??? 星空罗盘
+ - Aurora Lake 极光湖
+ - Yggdrasil Tip 星空罗盘

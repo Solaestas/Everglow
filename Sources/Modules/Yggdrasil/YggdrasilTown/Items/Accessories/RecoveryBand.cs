@@ -38,15 +38,8 @@ public class RecoveryBandPlayer : ModPlayer
 	{
 		if (RecoveryBandEnable && info.Damage >= RecoveryBand.EffectTriggerDamageMin)
 		{
-			var lifeCanHeal = Player.statLifeMax2 - Player.statLife;
-			var lifeHealValue = lifeCanHeal > RecoveryBand.LifeRecovery ? RecoveryBand.LifeRecovery : lifeCanHeal;
-			Player.statLife += lifeHealValue;
-			CombatText.NewText(Player.getRect(), CombatText.HealLife, RecoveryBand.LifeRecovery, dramatic: true, dot: false);
-
-			var manaCanHeal = Player.statManaMax2 - Player.statMana;
-			var manaHealValue = manaCanHeal > RecoveryBand.ManaRecovery ? RecoveryBand.ManaRecovery : manaCanHeal;
-			Player.statMana += manaHealValue;
-			CombatText.NewText(Player.getRect(), CombatText.HealMana, RecoveryBand.ManaRecovery, dramatic: true, dot: false);
+			Player.HealLife(RecoveryBand.LifeRecovery);
+			Player.HealMana(RecoveryBand.ManaRecovery);
 		}
 	}
 }

@@ -206,12 +206,10 @@ public abstract class ScarpasScissorsCutProj : ScarpasScissorsProjBase
 	{
 		base.OnHitNPC(target, hit, damageDone);
 
-		// TODO: Display visual effects on crit
 		if (hit.Crit)
 		{
 			for (int i = 0; i < 10; i++)
 			{
-				// Dust.NewDust(target.Center - new Vector2(2, 2), 4, 4, DustID.BloodWater, Scale: 1.0f);
 				Ins.VFXManager.Add(new BloodDrop()
 				{
 					Active = true,

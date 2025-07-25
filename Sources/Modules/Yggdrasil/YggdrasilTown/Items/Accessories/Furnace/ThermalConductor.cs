@@ -66,13 +66,7 @@ internal class ThermalConductorPlayer : ModPlayer
 				}
 
 				// Heal Mana
-				Player.statMana = Player.statMana + ThermalConductor.ManaHeal > Player.statManaMax2 ?
-						Player.statManaMax2 :
-						Player.statMana + ThermalConductor.ManaHeal;
-
-				// Show mana heal number
-				var manaHealColor = new Color(0, 100, 255);
-				CombatText.NewText(Player.getRect(), manaHealColor, ThermalConductor.ManaHeal, dramatic: true, dot: false);
+				Player.HealMana(ThermalConductor.ManaHeal);
 
 				// Add Debuff
 				Player.AddBuff(BuffID.CursedInferno, ThermalConductor.DebuffDuration);

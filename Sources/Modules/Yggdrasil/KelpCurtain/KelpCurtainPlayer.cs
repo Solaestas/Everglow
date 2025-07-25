@@ -4,12 +4,24 @@ namespace Everglow.Yggdrasil.KelpCurtain;
 
 public class KelpCurtainPlayer : ModPlayer
 {
+	/// <summary>
+	/// <see cref="Items.Armors.Molluscs.MolluscsLeggings"/>
+	/// </summary>
 	public bool MolluscsLeggings { get; set; }
 
+	/// <summary>
+	/// Set buff symbol of <see cref="Items.Armors.Molluscs.MolluscsLeggings"/>.
+	/// </summary>
 	public bool MolluscsSetBuff { get; set; }
 
+	/// <summary>
+	/// <see cref="Items.Accessories.RadialCarapace"/>
+	/// </summary>
 	public bool RadialCarapace { get; set; }
 
+	/// <summary>
+	/// <see cref="Items.Accessories.CorrodedPearl"/>
+	/// </summary>
 	public bool CorrodedPearl { get; set; }
 
 	public override void ResetEffects()

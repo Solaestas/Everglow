@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
 
@@ -42,7 +43,7 @@ public class AuburnHoodie : ModItem
 	public override void AddRecipes()
 	{
 		Recipe recipe = CreateRecipe();
-		//recipe.AddIngredient<LampWood_Wood>(30);
+		recipe.AddIngredient<LampWood_Wood>(30);
 		recipe.AddTile(TileID.WorkBenches);
 		recipe.Register();
 	}
@@ -67,7 +68,7 @@ public class AuburnArmorSetPlayer : ModPlayer
 		// TODO: add hotkey
 		var ArmorSetBonusHotKey = new
 		{
-			JustPressed = false
+			JustPressed = false,
 		};
 
 		if (Main.myPlayer != Player.whoAmI || !ArmorSetBonusHotKey.JustPressed)

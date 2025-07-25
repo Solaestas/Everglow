@@ -355,15 +355,6 @@ public class IstafelsSunfireGrasp_Scoria : ModProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 
-		// TODO: Delete test code
-		// var point = Commons.ModAsset.Point.Value;
-		// var drawColor2 = new Color(0f, 1f, 0f, 0f);
-		// Main.spriteBatch.Draw(point, Projectile.Center - Main.screenPosition, null, drawColor2, 0f, point.Size() / 2, 0.1f, SpriteEffects.None, 0);
-		// var nodes = GraphicsUtils.CatmullRom(NodesLeft).AsEnumerable().Reverse().Concat(GraphicsUtils.CatmullRom(NodesRight)).Distinct();
-		// foreach (var node in nodes)
-		// {
-		// 	Main.spriteBatch.Draw(point, node - Main.screenPosition, null, drawColor2, 0f, point.Size() / 2, 0.05f, SpriteEffects.None, 0);
-		// }
 		return false;
 	}
 

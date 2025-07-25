@@ -67,6 +67,58 @@ public static class PlayerUtils
 	}
 
 	/// <summary>
+	/// Heal life then show life text.
+	/// </summary>
+	/// <param name="player"></param>
+	/// <param name="life"></param>
+	public static void HealLife(this Player player, int life, bool showActualHeal = false)
+	{
+		int lifeCanHeal = player.statLifeMax2 - player.statLife;
+		if (lifeCanHeal <= 0)
+		{
+			return;
+		}
+
+		int lifeToHeal = lifeCanHeal >= life ? life : lifeCanHeal;
+		player.statLife += lifeToHeal;
+
+		if (showActualHeal)
+		{
+			CombatText.NewText(player.getRect(), CombatText.HealLife, lifeToHeal, dramatic: true, dot: false);
+		}
+		else
+		{
+			CombatText.NewText(player.getRect(), CombatText.HealLife, life, dramatic: true, dot: false);
+		}
+	}
+
+	/// <summary>
+	/// Heal mana then show mana text.
+	/// </summary>
+	/// <param name="player"></param>
+	/// <param name="mana"></param>
+	public static void HealMana(this Player player, int mana, bool showActualHeal = false)
+	{
+		int manaCanHeal = player.statManaMax2 - player.statMana;
+		if (manaCanHeal <= 0)
+		{
+			return;
+		}
+
+		int manaToHeal = manaCanHeal >= mana ? mana : manaCanHeal;
+		player.statMana += manaToHeal;
+
+		if (showActualHeal)
+		{
+			CombatText.NewText(player.getRect(), CombatText.HealMana, manaToHeal, dramatic: true, dot: false);
+		}
+		else
+		{
+			CombatText.NewText(player.getRect(), CombatText.HealMana, mana, dramatic: true, dot: false);
+		}
+	}
+
+	/// <summary>
 	/// Calculate <see cref="Player.slotsMinions"/> manually, should only be used in <see cref="ModItem.Shoot(Player, Terraria.DataStructures.EntitySource_ItemUse_WithAmmo, Vector2, Vector2, int, int, float)"/>
 	/// </summary>
 	/// <param name="player"></param>

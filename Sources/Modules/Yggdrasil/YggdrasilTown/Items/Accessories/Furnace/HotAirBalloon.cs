@@ -1,6 +1,7 @@
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.Furnace;
+
 public class HotAirBalloon : ModItem
 {
 	public const int JumpSpeedBoost = 2;
@@ -100,6 +101,5 @@ internal class HotAirBalloonPlayer : ModPlayer
 			drawInfo.DrawDataCache.Add(item);
 			drawInfo.DrawDataCache.Add(item_glow);
 		}
-		base.DrawEffects(drawInfo, ref r, ref g, ref b, ref a, ref fullBright);
 	}
 }

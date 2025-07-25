@@ -2,7 +2,6 @@ using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 
-// TODO: Replace sprite
 public class LargeCrystalShowTable_Blue_Item : ModItem
 {
 	public override void SetDefaults()
