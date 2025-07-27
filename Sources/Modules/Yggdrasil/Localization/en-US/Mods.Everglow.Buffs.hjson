@@ -1,0 +1,8 @@
+DevilHeartSetBuff: {
+	DisplayName: Devil Heart Overcharge
+	Description: 
+	'''
+	Stop regenerate mana and reduce defense
+	But gain magic damage and critical strike chance bonus, also minion slot
+	'''
+}

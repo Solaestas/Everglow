@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Ores;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;

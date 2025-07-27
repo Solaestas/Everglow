@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;

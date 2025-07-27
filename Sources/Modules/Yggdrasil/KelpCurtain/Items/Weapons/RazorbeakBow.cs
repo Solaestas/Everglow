@@ -3,14 +3,17 @@ using ReLogic.Graphics;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.Localization;
 using Terraria.UI.Chat;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 
-public class RazorbeakBow : ModItem
+public class RazorbeakBow : ModItem, ILocalizedModType
 {
 	public const int BaseDelay = 30;
 	public const int ProjectileCountPerUse = 3;
+
+	public override string LocalizationCategory => LocalizationUtils.Categories.RangedWeapons;
 
 	public override void SetDefaults()
 	{

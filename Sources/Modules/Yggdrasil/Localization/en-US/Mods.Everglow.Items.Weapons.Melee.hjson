@@ -1,0 +1,9 @@
+RodSpear: {
+	DisplayName: Rod Spear
+	Tooltip: It can fly like a living Rod.
+}
+
+DevilHeartBayonet: {
+	DisplayName: "Devil Heart Bayonet",
+	Tooltip: Heals [?] health when stamina is exhausted
+}

@@ -1,9 +1,8 @@
-using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using SubworldLibrary;
 
-namespace Everglow.Yggdrasil.YggdrasilTown;
+namespace Everglow.Yggdrasil.YggdrasilTown.Biomes;
 
 public class YggdrasilTownBiome : ModBiome
 {
@@ -11,18 +10,17 @@ public class YggdrasilTownBiome : ModBiome
 
 	public int GetMusic()
 	{
-		Mod everglow = ModLoader.GetMod("Everglow");
-		if (everglow != null)
+		if (Mod != null)
 		{
 			if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
 			{
-				return MusicLoader.GetMusicSlot(everglow, ModAsset.Arena_BGM_Path);
+				return MusicLoader.GetMusicSlot(Mod, ModAsset.Arena_BGM_Path);
 			}
 			if (YggdrasilTownCentralSystem.InFurnace_YggdrasilTown())
 			{
-				return MusicLoader.GetMusicSlot(everglow, ModAsset.FurnaceArea_BGM_Path);
+				return MusicLoader.GetMusicSlot(Mod, ModAsset.FurnaceArea_BGM_Path);
 			}
-			return !Main.dayTime ? MusicLoader.GetMusicSlot(everglow, ModAsset.NewYggdrasilTownBGM_Path) : MusicLoader.GetMusicSlot(everglow, ModAsset.YggdrasilTownBGM_Path);
+			return !Main.dayTime ? MusicLoader.GetMusicSlot(Mod, ModAsset.NewYggdrasilTownBGM_Path) : MusicLoader.GetMusicSlot(Mod, ModAsset.YggdrasilTownBGM_Path);
 		}
 		else
 		{
@@ -32,11 +30,11 @@ public class YggdrasilTownBiome : ModBiome
 
 	public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 
-	public override string BestiaryIcon => "Everglow/Yggdrasil/YggdrasilTown/YggdrasilTownIcon";
+	public override string BestiaryIcon => ModAsset.YggdrasilTownIcon_Mod;
 
-	public override string BackgroundPath => "Everglow/Yggdrasil/YggdrasilTown/Backgrounds/YggdrasilTown_MapBackground";
+	public override string BackgroundPath => ModAsset.YggdrasilTown_MapBackground_Mod;
 
-	public override string MapBackground => "Everglow/Yggdrasil/YggdrasilTown/Backgrounds/YggdrasilTown_MapBackground";
+	public override string MapBackground => ModAsset.YggdrasilTown_MapBackground_Mod;
 
 	public override ModWaterStyle WaterStyle => ModContent.GetInstance<Water.YggdrasilTownWaterStyle>();
 
@@ -121,7 +119,7 @@ public class YggdrasilTownBiome : ModBiome
 		{
 			BiomeCenter = GetBiomeCenter();
 		}
-		if (Main.screenPosition.Y > (BiomeCenter.Y - 18000))
+		if (Main.screenPosition.Y > BiomeCenter.Y - 18000)
 		{
 			if (SubworldSystem.IsActive<YggdrasilWorld>())
 			{

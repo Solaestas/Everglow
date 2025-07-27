@@ -1,6 +1,7 @@
 using System.Data;
 using Everglow.Commons.CustomTiles;
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.SquamousShell;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.RockElemental;

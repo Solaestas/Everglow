@@ -1,5 +1,5 @@
 using System.Reflection;
-using Everglow.Yggdrasil.YggdrasilTown;
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using SubworldLibrary;
 using Terraria.WorldBuilding;
 

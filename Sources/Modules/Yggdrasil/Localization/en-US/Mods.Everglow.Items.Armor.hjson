@@ -1,0 +1,38 @@
+DevilHeartHairpin: {
+	DisplayName: Devil Heart Hairpin
+	Tooltip: 5% increased magic damage and 5% increased magic critical strike chance
+	SetBonus: 
+		'''
+		10% decreased mana cost
+		8% increased magic damage
+		Press the set bonus hotkey to gain [Devil Heart Overload] buff for 10 seconds
+		During this time, you cannot naturally regenerate mana and your defense is reduced by 15%
+		But you gain +6% magic damage and critical strike chance, +1 max minions.
+		Has a 35 second cooldown.
+		'''
+}
+
+DevilHeartHelmet: {
+	DisplayName: Devil Heart Helmet
+	Tooltip: 4% increased summon damage and +1 max minions
+	SetBonus: 
+		'''
+		8% increased summon damage
+		15% increased whip attack speed
+		+1 max minions
+		Press the set bonus hotkey to gain [Devil Heart Overload] buff for 10 seconds
+		During this time, you cannot naturally regenerate mana and your defense is reduced by 15%
+		But you gain +6% magic damage and critical strike chance, +1 max minions
+		Has a 35 second cooldown
+		'''
+}
+
+DevilHeartLightBreastPlate: {
+	DisplayName: Devil Heart Light Breast Plate
+	Tooltip: 6% increased magic and summon damage, +60 max mana
+}
+
+DevilHeartLeggings: {
+	DisplayName: Devil Heart Leggings
+	Tooltip: 10% increased movement speed
+}

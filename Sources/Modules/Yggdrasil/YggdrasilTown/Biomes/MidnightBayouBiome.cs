@@ -1,19 +1,19 @@
 using Everglow.Yggdrasil.Common;
 using SubworldLibrary;
 
-namespace Everglow.Yggdrasil.YggdrasilTown;
+namespace Everglow.Yggdrasil.YggdrasilTown.Biomes;
 
-public class TwilightForsetAndRelic : ModBiome
+public class MidnightBayouBiome : ModBiome
 {
 	public override int Music => YggdrasilContent.QuickMusic(ModAsset.NewYggdrasilTownBGM_Path);
 
 	public override SceneEffectPriority Priority => SceneEffectPriority.BossMedium;
 
-	public override string BestiaryIcon => "Everglow/Yggdrasil/YggdrasilTown/YggdrasilTownIcon";
+	public override string BestiaryIcon => ModAsset.YggdrasilTownIcon_Mod;
 
-	public override string BackgroundPath => "Everglow/" + ModAsset.LampWood_MapBackground_Path;
+	public override string BackgroundPath => ModAsset.MidnightBayou_MapBackground_Mod;
 
-	public override string MapBackground => "Everglow/" + ModAsset.LampWood_MapBackground_Path;
+	public override string MapBackground => ModAsset.MidnightBayou_MapBackground_Mod;
 
 	public override ModWaterStyle WaterStyle => ModContent.GetInstance<Water.YggdrasilTownWaterStyle>();
 
@@ -32,7 +32,7 @@ public class TwilightForsetAndRelic : ModBiome
 		{
 			return false;
 		}
-		return (new Point(Main.maxTilesX / 2, 20000).ToWorldCoordinates() - (Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f)).Length() < 5000;
+		return (new Point(1395, Main.maxTilesY - 405).ToWorldCoordinates() - (Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f)).Length() < 5000;
 	}
 
 	public override void OnInBiome(Player player)

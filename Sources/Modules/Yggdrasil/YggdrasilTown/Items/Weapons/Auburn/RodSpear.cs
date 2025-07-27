@@ -1,7 +1,9 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.Auburn;
 
-public class RodSpear : ModItem
+public class RodSpear : ModItem, ILocalizedModType
 {
+	public override string LocalizationCategory => LocalizationUtils.Categories.MeleeWeapons;
+
 	public override void SetDefaults()
 	{
 		Item.width = 50;

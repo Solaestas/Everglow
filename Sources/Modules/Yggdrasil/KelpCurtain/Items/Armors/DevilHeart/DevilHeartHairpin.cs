@@ -3,8 +3,10 @@ using Terraria.GameContent.Creative;
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors.DevilHeart;
 
 [AutoloadEquip(EquipType.Head)]
-public class DevilHeartHairpin : ModItem
+public class DevilHeartHairpin : ModItem, ILocalizedModType
 {
+	public override string LocalizationCategory => LocalizationUtils.Categories.Armor;
+
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
@@ -37,5 +39,6 @@ public class DevilHeartHairpin : ModItem
 	{
 		player.manaCost -= 0.1f; // Reduces mana cost by 10%
 		player.GetDamage<MagicDamageClass>() += 0.08f; // Increases magic damage by 8%
+		player.setBonus = this.GetLocalizedValue(LocalizationUtils.LocalizationKeys.SetBonus);
 	}
 }

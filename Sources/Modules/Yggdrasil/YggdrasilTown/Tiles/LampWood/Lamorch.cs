@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;

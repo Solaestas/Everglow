@@ -1,0 +1,35 @@
+DevilHeartHairpin: {
+	DisplayName: 魔心发簪
+	Tooltip: +5%魔法伤害，+5%魔法暴击
+	SetBonus:
+		'''
+		-10%魔力消耗，+8%魔法伤害
+		按下套装效果快捷键获得魔心过载效果，持续10秒
+		持续时间内无法自然再生魔力且-15%防御
+		但+6%魔力伤害与暴击、+1召唤栏
+		冷却35秒
+		'''
+}
+
+DevilHeartHelmet: {
+	DisplayName: 魔心笼盔
+	Tooltip: +4%召唤伤害，+1召唤栏
+	SetBonus:
+		'''
+		+8%召唤伤害，+15%鞭子攻速，+1召唤栏
+		按下套装效果快捷键获得魔心过载效果，持续10秒
+		持续时间内无法自然再生魔力且-15%防御
+		但+6%魔力伤害与暴击、+1召唤栏
+		冷却35秒
+		'''
+}
+
+DevilHeartLightBreastPlate: {
+	DisplayName: 魔心轻甲
+	Tooltip: +60魔力，+6%魔法与召唤伤害
+}
+
+DevilHeartLeggings: {
+	DisplayName: 魔心靴
+	Tooltip: +10%移动速度
+}

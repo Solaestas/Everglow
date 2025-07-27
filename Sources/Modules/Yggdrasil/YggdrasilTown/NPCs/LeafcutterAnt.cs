@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;

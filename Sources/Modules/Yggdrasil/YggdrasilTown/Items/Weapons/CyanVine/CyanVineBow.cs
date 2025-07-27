@@ -4,8 +4,10 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.CyanVine;
 
-public class CyanVineBow : ModItem
+public class CyanVineBow : ModItem, ILocalizedModType
 {
+	public override string LocalizationCategory => LocalizationUtils.Categories.RangedWeapons;
+
 	public override void SetDefaults()
 	{
 		Item.width = 20;

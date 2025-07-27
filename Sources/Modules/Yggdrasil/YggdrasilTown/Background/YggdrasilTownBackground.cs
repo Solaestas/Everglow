@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.Common.BackgroundManager;
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using SubworldLibrary;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;

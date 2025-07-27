@@ -4,8 +4,10 @@ using Terraria.GameContent.Creative;
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors.DevilHeart;
 
 [AutoloadEquip(EquipType.Body)]
-public class DevilHeartLightBreastPlate : ModItem
+public class DevilHeartLightBreastPlate : ModItem, ILocalizedModType
 {
+	public override string LocalizationCategory => LocalizationUtils.Categories.Armor;
+
 	public const int BuffDuration = 10 * 60; // 10 seconds in frames
 	public const int CooldownDuration = 35 * 60; // 35 seconds in frames
 

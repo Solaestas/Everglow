@@ -5,8 +5,10 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 
-public class MossySpell : SpellTomeItem// TODO:附苔
+public class MossySpell : SpellTomeItem, ILocalizedModType
 {
+	public override string LocalizationCategory => LocalizationUtils.Categories.MagicWeapons;
+
 	public override void SetDefaults()
 	{
 		Item.damage = 13;
@@ -69,16 +71,5 @@ public class MossySpell : SpellTomeItem// TODO:附苔
 		}
 		Projectile.NewProjectileDirect(source, Main.MouseWorld, new Vector2(Main.rand.NextFloat(-0.13f, 0.13f), 2f), type, damage, knockback, player.whoAmI);
 		return false;
-	}
-
-	public override void HoldItem(Player player)
-	{
-		// if (player.ownedProjectileCounts[ModContent.ProjectileType<DreamWeaverBall>()] < 1 && player.GetModPlayer<SpellAndSkull.GlobalItems.MagicBookPlayer>().MagicBookLevel > 0)
-		// {
-		// var p0 = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center + new Vector2(0, 300), Vector2.zeroVector, ModContent.ProjectileType<DreamWeaverBall>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
-		// p0.CritChance = player.GetWeaponCrit(player.HeldItem);
-		// p0.scale = 0;
-		// }
-		base.HoldItem(player);
 	}
 }

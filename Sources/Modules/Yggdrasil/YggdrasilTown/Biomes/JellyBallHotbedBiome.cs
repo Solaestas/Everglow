@@ -1,14 +1,14 @@
 using Everglow.Yggdrasil.Common;
 
-namespace Everglow.Yggdrasil.YggdrasilTown;
+namespace Everglow.Yggdrasil.YggdrasilTown.Biomes;
 
-public class FurnaceAreaBiome : ModBiome
+public class JellyBallHotbedBiome : ModBiome
 {
-	public override int Music => YggdrasilContent.QuickMusic(ModAsset.FurnaceArea_BGM_Path);
+	public override int Music => YggdrasilContent.QuickMusic(ModAsset.JellyBallHotbed_BGM_Path);
 
 	public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 
-	public override string BestiaryIcon => ModAsset.FurnaceAreaIcon_Mod;
+	public override string BestiaryIcon => ModAsset.JellyBallHotbedIcon_Mod;
 
 	public override string BackgroundPath => ModAsset.YggdrasilTown_MapBackground_Mod;
 
@@ -25,7 +25,7 @@ public class FurnaceAreaBiome : ModBiome
 
 	public override bool IsBiomeActive(Player player)
 	{
-		return YggdrasilTownCentralSystem.InFurnace_YggdrasilTown();
+		return ModContent.GetInstance<YggdrasilBiomeTileCounter>().JellyBallSecretionCount > 150;
 	}
 
 	public override void OnInBiome(Player player)

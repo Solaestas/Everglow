@@ -1,4 +1,5 @@
 using Everglow.Commons.CustomTiles;
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;

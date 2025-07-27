@@ -1,5 +1,6 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Yggdrasil.Common.NPCs;
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Items.PermanentBoosters;
 using Terraria.DataStructures;

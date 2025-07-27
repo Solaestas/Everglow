@@ -1,0 +1,4 @@
+RazorbeakBow: {
+	DisplayName: 尖喙弓
+	Tooltip: 单次射出3支箭, 单次射出的箭全部击中敌人时，提升攻击速度
+}

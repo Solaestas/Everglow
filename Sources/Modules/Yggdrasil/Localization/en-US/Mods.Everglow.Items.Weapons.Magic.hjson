@@ -1,0 +1,17 @@
+CyanAmberStaff: {
+	DisplayName: Cyan Amber Staff
+}
+
+FeatheredStaff: {
+	DisplayName: Feathered Staff
+	Tooltip: Enchanted glimmering feather fins.
+}
+
+MossySpell: {
+	DisplayName: Mossy Spell
+	Tooltip: 
+	'''
+	Drop a barrage shaped like moss downward at the mouse position
+	25% chance to inflict Poisoned for 5 seconds
+	'''
+}

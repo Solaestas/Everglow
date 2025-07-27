@@ -1,5 +1,6 @@
 using Everglow.SubSpace;
 using Everglow.Yggdrasil.WorldGeneration;
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Kitchen.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.PlayerArena;

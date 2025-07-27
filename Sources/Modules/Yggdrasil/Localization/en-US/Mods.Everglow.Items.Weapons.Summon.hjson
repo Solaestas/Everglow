@@ -1,0 +1,13 @@
+AuburnBell: {
+	DisplayName: Auburn Bell
+	Tooltip: Summon little Auburn Rods to fight with you.
+}
+
+GreenVineWhip: {
+	DisplayName: Green Vine Whip
+	Tooltip: 
+	'''
+	25% chance to inflict Poisoned for 5 seconds
+	Adds a "Moss Cover" buff to the player for 5 seconds when hitting enemies
+	'''
+}

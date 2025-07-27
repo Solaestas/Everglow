@@ -63,31 +63,6 @@ Mods: {
 			}
 		}
 
-		Items: {
-			AuburnBell: {
-				DisplayName: Auburn Bell
-				Tooltip: Summon little Auburn Rods to fight with you.
-			}
-
-			FeatheredStaff: {
-				DisplayName: Feathered Staff
-				Tooltip: Enchanted glimmering feather fins.
-			}
-
-			RodSpear: {
-				DisplayName: Rod Spear
-				Tooltip: It can fly like a living Rod.
-			}
-
-			CyanAmberStaff: {
-				DisplayName: Cyan Amber Staff
-			}
-
-			CyanVineBow: {
-				DisplayName: Cyan Vine Bow
-			}
-		}
-
 		# Projectile display names mainly show in chat when a player dies from it.
 		Projectiles: {
 			ExamplePetProjectile.DisplayName: "{$Mods.ExampleMod.Common.PaperAirplane}"
@@ -97,13 +72,6 @@ Mods: {
 			ExamplePetBuff: {
 				DisplayName: "{$Mods.ExampleMod.Common.PaperAirplane}"
 				Description: '''"Let this pet be an example to you!"'''
-			}
-		}
-
-		Biomes: {
-			YggdrasilTownBiome: {
-				DisplayName: Yggdrasil Town
-				TownNPCDialogueName: the Yggdrasil Town
 			}
 		}
 	}

@@ -1,11 +1,12 @@
 using Everglow.Commons.Weapons.Whips;
-using Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 
-public class GreenVineWhip : WhipItem
+public class GreenVineWhip : WhipItem, ILocalizedModType
 {
+	public override string LocalizationCategory => LocalizationUtils.Categories.SummonWeapons;
+
 	public override void SetDef()
 	{
 		Item.width = 40;

@@ -3,8 +3,10 @@ using Terraria.GameContent.Creative;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.Auburn;
 
-public class AuburnBell : ModItem
+public class AuburnBell : ModItem, ILocalizedModType
 {
+	override public string LocalizationCategory => LocalizationUtils.Categories.SummonWeapons;
+
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

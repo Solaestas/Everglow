@@ -1,0 +1,8 @@
+GreenVineWhip: {
+	DisplayName: 青蔓鞭
+	Tooltip: 
+	'''
+	25%造成中毒5秒
+	命中敌人时，给予玩家5秒“苔藓附层”
+	'''
+}

@@ -1,0 +1,8 @@
+DevilHeartSetBuff: {
+	DisplayName: 魔心过载
+	Description: 
+	'''
+	停止自然魔力再生并降低防御
+	但获得魔法伤害与暴击加成，同时增加召唤栏
+	'''
+}

@@ -1,0 +1,8 @@
+CyanVineBow: {
+	DisplayName: Cyan Vine Bow
+}
+
+RazorbeakBow: {
+	DisplayName: Razorbeak Bow
+	Tooltip: Shoots 3 arrows at once, and increases attack speed when all arrows hit enemies at once
+}

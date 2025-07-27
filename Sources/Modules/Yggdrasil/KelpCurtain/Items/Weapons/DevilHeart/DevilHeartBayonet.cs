@@ -3,8 +3,10 @@ using Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons.DevilHeart;
 
-public class DevilHeartBayonet : StabbingSwordItem
+public class DevilHeartBayonet : StabbingSwordItem, ILocalizedModType
 {
+	public override string LocalizationCategory => LocalizationUtils.Categories.MeleeWeapons;
+
 	public override void SetDefaults()
 	{
 		Item.damage = 22;
