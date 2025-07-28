@@ -31,13 +31,6 @@ public class GeyserAirBudsEntity : ModTileEntity
 		if (currentFrame == -1)
 		{
 			currentFrame = StartFrame;
-
-			// 我不知道为什么NetPlace之后会莫名其妙在左上一格的位置多Place一个，很诡异
-			if (Main.tile[Position].TileFrameX != 18 || Main.tile[Position].TileFrameY != 18)
-			{
-				Kill(Position.X, Position.Y);
-				return;
-			}
 		}
 		switch (state)
 		{

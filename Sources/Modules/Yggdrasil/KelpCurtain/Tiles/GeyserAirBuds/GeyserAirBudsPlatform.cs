@@ -265,4 +265,10 @@ public class GeyserAirBudsPlatform : ModTile, ITileFluentlyDrawn
 	{
 		return false;
 	}
+
+	public override void KillMultiTile(int i, int j, int frameX, int frameY)
+	{
+		ModContent.GetInstance<GeyserAirBudsEntity>().Kill(i, j);
+		Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 48, 32, ModContent.ItemType<GeyserAirBudsItem>());
+	}
 }
