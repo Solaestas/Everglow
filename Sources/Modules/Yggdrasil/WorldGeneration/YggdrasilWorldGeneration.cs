@@ -7,7 +7,6 @@ using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 using ReLogic.Utilities;
-using Terraria;
 using Terraria.IO;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
@@ -147,6 +146,84 @@ public class YggdrasilWorldGeneration : ModSystem
 	public static void EndGenPass()
 	{
 		Main.statusText = "Finished";
+	}
+
+	/// <summary>
+	/// smoothTopValue: 0 is absolute smooth, 1 is max rough.
+	/// </summary>
+	/// <param name="center"></param>
+	/// <param name="radius"></param>
+	/// <param name="height"></param>
+	/// <param name="type"></param>
+	/// <param name="smoothTopValue"></param>
+	/// <param name="topThick"></param>
+	public static void GenerateStalactite(Vector2 center, float radius, float height, int type, float smoothTopValue = 0.25f, float topThick = 4)
+	{
+		int cX = (int)center.X;
+		int cY = (int)center.Y;
+		int heightLimit = CheckSpaceDown(cX, cY);
+		bool hitBottom = false;
+		Main.NewText(heightLimit);
+		if (heightLimit < height)
+		{
+			height = heightLimit;
+		}
+		if (heightLimit < height * 1.85f)
+		{
+			hitBottom = true;
+		}
+		for (int i = -(int)radius; i <= radius; i++)
+		{
+			for (int j = 0; j <= height; j++)
+			{
+				float xValue = i / radius;
+				float yValue = j / height;
+				float cosX = MathF.Cos(xValue * MathHelper.PiOver2);
+				float minCosX = Math.Min(cosX, 1 - Math.Abs(xValue));
+				float limit = MathF.Pow(minCosX, 2);
+				if (yValue < limit)
+				{
+					Tile tile = SafeGetTile(i + cX, j + cY);
+					tile.TileType = (ushort)type;
+					tile.HasTile = true;
+				}
+			}
+		}
+		if (hitBottom)
+		{
+			for (int i = -(int)radius; i <= radius; i++)
+			{
+				for (int j = 0; j <= height; j++)
+				{
+					float xValue = i / radius;
+					float yValue = j / height;
+					float cosX = MathF.Cos(xValue * MathHelper.PiOver2);
+					float minCosX = Math.Min(cosX, 1 - Math.Abs(xValue));
+					float limit = MathF.Pow(minCosX, 1);
+					if (yValue < limit)
+					{
+						Tile tile = SafeGetTile(i + cX, cY + heightLimit - j);
+						tile.TileType = (ushort)type;
+						tile.HasTile = true;
+					}
+				}
+			}
+		}
+		for (int i = -(int)radius; i <= radius; i++)
+		{
+			for (int j = 0; j <= topThick + 3; j++)
+			{
+				int x = i + cX;
+				int y = cY - j;
+				float value = j / topThick + (PerlinPixelR[Math.Abs(x) % 1024, Math.Abs(y) % 1024] - 128) / 64f * smoothTopValue;
+				if (value < 1)
+				{
+					Tile tile = SafeGetTile(x, y);
+					tile.TileType = (ushort)type;
+					tile.HasTile = true;
+				}
+			}
+		}
 	}
 
 	public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type, int startX = 0, int startY = 0)
@@ -1564,14 +1641,14 @@ public class YggdrasilWorldGeneration : ModSystem
 							Tile tile = SafeGetTile(j, k);
 							if (ChestSafe(j, k))
 							{
-								if(tile.TileType == type)
+								if (tile.TileType == type)
 								{
 									tile.active(active: false);
 									if (wet)
 									{
 										tile.liquid = byte.MaxValue;
 									}
-									if(wallType != -1)
+									if (wallType != -1)
 									{
 										tile.wall = (ushort)wallType;
 									}
@@ -1582,7 +1659,7 @@ public class YggdrasilWorldGeneration : ModSystem
 								}
 							}
 							Tile tileSafe = SafeGetTile((int)(j + (xVel + xDir) * 3), (int)(k + (yVel + yDir) * 3));
-							if(tile.TileType != type)
+							if (tile.TileType != type)
 							{
 								return new Vector2D(startX, startY);
 							}
