@@ -4,7 +4,7 @@ using Everglow.Commons.Graphics;
 using Everglow.Commons.Weapons;
 using Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
+namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Magic;
 
 public class MossySpellArray : NoTextureProjectile, IWarpProjectile
 {
@@ -16,7 +16,7 @@ public class MossySpellArray : NoTextureProjectile, IWarpProjectile
 		Projectile.hostile = false;
 		Projectile.penetrate = -1;
 		Projectile.timeLeft = 10000;
-		Projectile.DamageType = DamageClass.Summon;
+		Projectile.DamageType = DamageClass.Magic;
 		Projectile.tileCollide = false;
 		LeafFade.colorList.Add((new Color(0.7f, 1f, 0.2f, 0), 0));
 		LeafFade.colorList.Add((new Color(0.6f, 1f, 0.4f, 0), 0.5f));

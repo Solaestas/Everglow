@@ -1,6 +1,6 @@
 using Everglow.Commons.Weapons.Gyroscopes;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
-using Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
+using Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons.DevilHeart;

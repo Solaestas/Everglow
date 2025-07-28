@@ -1,7 +1,6 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Commons.Mechanics.ElementalDebuff;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
+namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 
 public class DevilHeartGyroscope_Proj_Hit : ModProjectile
 {
@@ -30,7 +29,7 @@ public class DevilHeartGyroscope_Proj_Hit : ModProjectile
 		var drawColor = new Color(220, 20, 239, 0);
 		float range = (1 - timeValue) * 150;
 		var drawPos = Projectile.Center - Main.screenPosition;
-		List<Vertex2D> bars = new List<Vertex2D>();
+		var bars = new List<Vertex2D>();
 		for (int i = 0; i <= 100; i++)
 		{
 			var ringColor = drawColor;
@@ -39,7 +38,7 @@ public class DevilHeartGyroscope_Proj_Hit : ModProjectile
 		}
 		if (bars.Count > 0)
 		{
-			SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+			SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_16.Value;

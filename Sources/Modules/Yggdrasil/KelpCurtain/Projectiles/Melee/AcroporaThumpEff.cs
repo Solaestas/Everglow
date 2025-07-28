@@ -1,9 +1,4 @@
-using Everglow.Commons.Utilities;
-using Everglow.Commons.Vertex;
-using Everglow.Yggdrasil.Common;
-using Steamworks;
-
-namespace Everglow.Yggdrasil.KelpCurtain.Projectiles;
+namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Melee;
 
 public class AcroporaThumpEff : ModProjectile
 {
@@ -26,16 +21,21 @@ public class AcroporaThumpEff : ModProjectile
 		ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 100;
 		oldPos = new Vector2[35];
 	}
-	Vector2[] oldPos = new Vector2[35];
-	Vector2 vec = Vector2.Zero;
+
+	private Vector2[] oldPos = new Vector2[35];
+
+	private Vector2 vec = Vector2.Zero;
+
 	public override void AI()
 	{
-		Lighting.AddLight(Projectile.Center + Projectile.velocity * (40 - base.Projectile.timeLeft) * 0.2f, 0.24f, 0.36f, 0f);
+		Lighting.AddLight(Projectile.Center + Projectile.velocity * (40 - Projectile.timeLeft) * 0.2f, 0.24f, 0.36f, 0f);
 		Player player = Main.player[Projectile.owner];
 		if (Projectile.ai[0] == 0)
 		{
 			if (Projectile.timeLeft > 20)
+			{
 				vec = player.Center + (40f - Projectile.timeLeft) * Projectile.velocity * 0.2f;
+			}
 			Projectile.Center = vec;
 		}
 		else
@@ -47,13 +47,18 @@ public class AcroporaThumpEff : ModProjectile
 		{
 			Projectile.rotation = Projectile.velocity.ToRotation();
 			for (int i = oldPos.Length - 1; i > 0; --i)
+			{
 				oldPos[i] = oldPos[i - 1];
+			}
 			oldPos[0] = (40 - Projectile.timeLeft) * Projectile.velocity;
 		}
 		if (Projectile.timeLeft < 20)
+		{
 			Projectile.friendly = false;
+		}
 		Projectile.position += Projectile.velocity * 6;
 	}
+
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 	{
 		overPlayers.Add(index);
@@ -74,7 +79,9 @@ public class AcroporaThumpEff : ModProjectile
 		for (int i = 1; i < oldPos.Length; ++i)
 		{
 			if (oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
 			else
 			{
 				OldPoses.Add(oldPos[i]);
@@ -90,10 +97,15 @@ public class AcroporaThumpEff : ModProjectile
 			var w = MathHelper.SmoothStep(1.14514f, 0f, factor);
 			float width = MathHelper.SmoothStep(0, 60, Math.Min(1, factor * 3f)) * Projectile.scale;
 			if (i > SmoothPos.Count * 0.75f)
+			{
 				width *= (i - SmoothPos.Count) / (float)SmoothPos.Count;
+			}
+
 			float k1 = 1;
 			if (Projectile.timeLeft < 20)
-				k1 = (float)Projectile.timeLeft / 20f;
+			{
+				k1 = Projectile.timeLeft / 20f;
+			}
 			if (Projectile.timeLeft < 38)
 			{
 				if (Projectile.velocity.X < 0)
@@ -112,7 +124,6 @@ public class AcroporaThumpEff : ModProjectile
 				barsII.Add(new Vertex2D(vec + SmoothPos[i] + normalDir * width * 2, Color.White, new Vector3((float)Math.Sqrt(factor), 1, w)));
 				barsII.Add(new Vertex2D(vec + SmoothPos[i] + normalDir * -width * 2, Color.White, new Vector3((float)Math.Sqrt(factor), 0, w)));
 			}
-
 		}
 		Texture2D t0 = ModAsset.AcroporaSpear.Value;
 		Color c0 = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16));
@@ -121,17 +132,18 @@ public class AcroporaThumpEff : ModProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * (base.Projectile.ai[0] == 0 ? Main.GameViewMatrix.ZoomMatrix : Main.Transform);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * (Projectile.ai[0] == 0 ? Main.GameViewMatrix.ZoomMatrix : Main.Transform);
 		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.texShade.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Acropora_TexShade.Value;
 		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.Acropora_Color.Value);
 		MeleeTrail.CurrentTechnique.Passes[0].Apply();
 		if (bars.Count >= 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone);
@@ -140,7 +152,9 @@ public class AcroporaThumpEff : ModProjectile
 		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.Acropora_Color.Value);
 		MeleeTrail.CurrentTechnique.Passes[0].Apply();
 		if (bars.Count >= 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
@@ -149,18 +163,17 @@ public class AcroporaThumpEff : ModProjectile
 		MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrailFade", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		float k0 = (40 - Projectile.timeLeft) / 40f;
-		MeleeTrail.Parameters["FadeValue"].SetValue(MathUtils.Sqrt(k0 * 1.2f));
-		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.texBlood.Value;
+		MeleeTrail.Parameters["FadeValue"].SetValue((k0 * 1.2f).Sqrt());
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Acropora_TexBlood.Value;
 		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.Acropora_Color.Value);
 		MeleeTrail.CurrentTechnique.Passes[0].Apply();
 		if (bars.Count >= 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, barsII.ToArray(), 0, bars.Count - 2);
+		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
-
 	}
-
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{

@@ -1,6 +1,6 @@
 using Terraria.Audio;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
+namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Ranged;
 
 public class CyatheaArrow_spike : ModProjectile
 {

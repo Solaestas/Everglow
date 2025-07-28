@@ -2,7 +2,7 @@ using Everglow.Commons.Weapons.Whips;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
+namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 
 public class GreenVineWhip_proj : WhipProjectile
 {

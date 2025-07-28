@@ -3,7 +3,7 @@ using Everglow.Commons.Weapons.Whips;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
+namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 
 /// <summary>
 /// Non-air summon projectile.

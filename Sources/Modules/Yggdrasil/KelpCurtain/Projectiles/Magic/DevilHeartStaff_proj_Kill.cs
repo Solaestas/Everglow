@@ -1,6 +1,6 @@
 using Everglow.Commons.Mechanics.ElementalDebuff;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
+namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Magic;
 
 public class DevilHeartStaff_proj_Kill : ModProjectile
 {

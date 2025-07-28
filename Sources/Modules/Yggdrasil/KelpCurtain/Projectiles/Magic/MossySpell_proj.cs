@@ -1,7 +1,7 @@
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
+namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Magic;
 
 public class MossySpell_proj : ModProjectile
 {

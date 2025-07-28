@@ -2,7 +2,7 @@ using Everglow.SpellAndSkull.Projectiles;
 using Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 using Terraria.DataStructures;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
+namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Magic;
 
 public class MossySpellBook : MagicBookProjectile
 {
@@ -10,6 +10,8 @@ public class MossySpellBook : MagicBookProjectile
 
 	public override void SetDef()
 	{
+		Projectile.DamageType = DamageClass.Magic;
+
 		DustType = DustID.WaterCandle;
 		ItemType = ModContent.ItemType<MossySpell>();
 

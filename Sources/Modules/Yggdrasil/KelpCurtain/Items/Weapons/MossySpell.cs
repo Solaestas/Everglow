@@ -1,5 +1,5 @@
 using Everglow.SpellAndSkull.Items;
-using Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
+using Everglow.Yggdrasil.KelpCurtain.Projectiles.Magic;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Terraria.DataStructures;
 

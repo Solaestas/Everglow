@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.KelpCurtain.Projectiles.Melee;
 using Terraria.ID;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons.KelpSnake;
@@ -29,7 +30,7 @@ public class AcroporaSpear : ModItem
 			if (Main.myPlayer == player.whoAmI)
 			{
 				if (player.altFunctionUse != 2)
-					Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.AcroporaSpear_proj>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
+					Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<AcroporaSpear_proj>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
 				else//右键
 				{
 				}

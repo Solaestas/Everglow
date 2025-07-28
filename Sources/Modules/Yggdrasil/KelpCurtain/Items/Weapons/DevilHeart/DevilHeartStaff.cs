@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
+using Everglow.Yggdrasil.KelpCurtain.Projectiles.Magic;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Weapons;
 using Terraria.DataStructures;
 

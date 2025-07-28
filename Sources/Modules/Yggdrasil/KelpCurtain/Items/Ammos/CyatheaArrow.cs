@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
+using Everglow.Yggdrasil.KelpCurtain.Projectiles.Ranged;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Ammos;
 

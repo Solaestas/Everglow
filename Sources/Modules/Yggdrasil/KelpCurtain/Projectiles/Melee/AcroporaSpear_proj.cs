@@ -1,7 +1,6 @@
 using Terraria.Audio;
-using Everglow.Yggdrasil.Common;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Projectiles;
+namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Melee;
 
 public class AcroporaSpear_proj : MeleeProj
 {
@@ -20,7 +19,7 @@ public class AcroporaSpear_proj : MeleeProj
 	}
 	public override string TrailColorTex()
 	{
-		return "Everglow/Yggdrasil/KelpCurtain/Projectiles/Acropora_Color";
+		return ModAsset.Acropora_Color_Mod;
 	}
 	public override float TrailAlpha(float factor)
 	{
@@ -333,7 +332,7 @@ public class AcroporaSpear_proj : MeleeProj
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Acropora_RedColor.Value;
 		float k0 = timer / 80f + 0.3f;
 		MeleeTrail.Parameters["FadeValue"].SetValue(MathF.Sqrt(k0 * 1.2f));
-		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.texBlood.Value);
+		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.Acropora_TexBlood.Value);
 		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
