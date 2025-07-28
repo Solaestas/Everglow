@@ -1,4 +1,5 @@
 using Everglow.Commons.TileHelper;
+using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 using Everglow.Yggdrasil.WorldGeneration;
 using Terraria.DataStructures;
@@ -11,9 +12,10 @@ public class GeyserAirBuds : ModTile, ITileFluentlyDrawn // 继承ITileFluentlyD
 {
 	public override void SetStaticDefaults()
 	{
-		MinPick = 350;
+		MinPick = 150;
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
+		Main.tileCut[Type] = false;
 		RegisterItemDrop(ModContent.ItemType<GeyserAirBudsItem>(), 1);
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
@@ -24,9 +26,58 @@ public class GeyserAirBuds : ModTile, ITileFluentlyDrawn // 继承ITileFluentlyD
 		TileObjectData.newSubTile.AnchorBottom = new(Terraria.Enums.AnchorType.SolidTile, 3, 0);
 		TileObjectData.newTile.HookPostPlaceMyPlayer = ModContent.GetInstance<GeyserAirBudsEntity>().Generic_HookPostPlaceMyPlayer;
 		TileObjectData.addTile(Type);
+		DustType = ModContent.DustType<GeyserBudDust_Blue>();
 		AnimationFrameHeight = 96;
-
 		AddMapEntry(new Color(89, 177, 255));
+	}
+
+	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
+	{
+		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+	}
+
+	public override bool CreateDust(int i, int j, ref int type)
+	{
+		return true;
+	}
+
+	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+	{
+		Tile tile = Main.tile[i, j];
+		if (tile.TileFrameX == 0 && tile.TileFrameY == 0 && !tile.HasTile)
+		{
+			Vector2 center = new Point(i, j).ToWorldCoordinates() + new Vector2(8);
+			for (int k = 0; k < 60; k++)
+			{
+				Vector2 pos = new Vector2(0, MathF.Sqrt(Main.rand.NextFloat()) * 100);
+				if (pos.Y > 50)
+				{
+					pos.Y = Main.rand.NextFloat(-50, 50);
+				}
+				pos -= new Vector2(4);
+				int type = ModContent.DustType<GeyserBudDust_Blue>();
+				if (Main.rand.NextBool(8))
+				{
+					type = ModContent.DustType<GeyserBudDust_Red>();
+				}
+				Dust.NewDust(pos + center, 0, 0, type);
+			}
+		}
+	}
+
+	public override void PlaceInWorld(int i, int j, Item item)
+	{
+		Tile tile = Main.tile[i, j];
+		if (tile.TileFrameX == 0 && tile.TileFrameY == 18)
+		{
+			ModTileEntity.PlaceEntityNet(i + 1, j, ModContent.TileEntityType<GeyserAirBudsEntity>());
+			TileEntity.ByPosition.TryGetValue(new Point16(i + 1, j), out TileEntity entity);
+			if (entity is GeyserAirBudsEntity geyser)
+			{
+				geyser.StartFrame = 6;
+			}
+		}
+		base.PlaceInWorld(i, j, item);
 	}
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
@@ -78,7 +129,10 @@ public class GeyserAirBuds : ModTile, ITileFluentlyDrawn // 继承ITileFluentlyD
 		var drawCenterPos = pos.ToWorldCoordinates(autoAddY: 16) - screenPosition;
 
 		ushort type = tile.TileType;
-
+		if (type != Type)
+		{
+			return;
+		}
 		// 回声涂料
 		if (!TileDrawing.IsVisible(tile))
 		{

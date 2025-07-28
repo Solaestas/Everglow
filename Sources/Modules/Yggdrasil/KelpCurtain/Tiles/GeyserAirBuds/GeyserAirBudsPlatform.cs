@@ -1,4 +1,5 @@
 using Everglow.Commons.TileHelper;
+using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
 using Everglow.Yggdrasil.WorldGeneration;
@@ -12,7 +13,7 @@ public class GeyserAirBudsPlatform : ModTile, ITileFluentlyDrawn
 {
 	public override void SetStaticDefaults()
 	{
-		Main.tileCut[Type] = true;
+		MinPick = 150;
 		Main.tileFrameImportant[Type] = true;
 		Main.tileSolidTop[Type] = true;
 		Main.tileNoAttach[Type] = true;
@@ -28,9 +29,39 @@ public class GeyserAirBudsPlatform : ModTile, ITileFluentlyDrawn
 		TileObjectData.newTile.Origin = new Point16(0, 1);
 		TileObjectData.newTile.AnchorBottom = new(Terraria.Enums.AnchorType.SolidTile, 2, 0);
 		TileObjectData.addTile(Type);
+		DustType = ModContent.DustType<GeyserBudDust_Blue>();
 		AnimationFrameHeight = 96;
 
 		AddMapEntry(new Color(110, 239, 48));
+	}
+
+	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
+	{
+		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+	}
+
+	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+	{
+		Tile tile = Main.tile[i, j];
+		if (tile.TileFrameX == 0 && tile.TileFrameY == 0 && !tile.HasTile)
+		{
+			Vector2 center = new Point(i, j).ToWorldCoordinates() + new Vector2(8);
+			for (int k = 0; k < 60; k++)
+			{
+				Vector2 pos = new Vector2(0, MathF.Sqrt(Main.rand.NextFloat()) * 100);
+				if (pos.Y > 50)
+				{
+					pos.Y = Main.rand.NextFloat(-50, 50);
+				}
+				pos -= new Vector2(4);
+				int type = ModContent.DustType<GeyserBudDust_Blue>();
+				if (Main.rand.NextBool(8))
+				{
+					type = ModContent.DustType<GeyserBudDust_Red>();
+				}
+				Dust.NewDust(pos + center, 0, 0, type);
+			}
+		}
 	}
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
@@ -44,7 +75,7 @@ public class GeyserAirBudsPlatform : ModTile, ITileFluentlyDrawn
 			startY * 16,
 			2 * 16,
 			32);
-		if(tile.TileType != Type)
+		if (tile.TileType != Type)
 		{
 			return false;
 		}
@@ -76,6 +107,10 @@ public class GeyserAirBudsPlatform : ModTile, ITileFluentlyDrawn
 		var drawCenterPos = pos.ToWorldCoordinates(autoAddY: 16) - screenPosition;
 
 		ushort type = tile.TileType;
+		if (type != Type)
+		{
+			return;
+		}
 
 		// 回声涂料
 		if (!TileDrawing.IsVisible(tile))
