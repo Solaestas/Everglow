@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
@@ -14,15 +15,30 @@ public class GeyserAirBudsEntity : ModTileEntity
 
 	private GeyserState state = GeyserState.Blooming; // 当前状态
 	public int RestTimer = 0; // 冷却计时器
-	private int currentFrame = 0; // 当前帧
+	public int StartFrame = 0; // 开始帧
+	private int currentFrame = -1; // 当前帧
 	private int frameCounter = 0; // 帧计时器
 	private const int CoolTimer = 900; // 冷却时间
-	private const int FrameTimer = 12; // 帧间隔
+	private const int FrameTimer = 6; // 帧间隔
 	private const int AllFrames = 10; // 总帧数
 	private const int BloomMaxFrame = 6; // 收花收到尽头
 
 	public override void Update()
 	{
+		Dust dust = Dust.NewDustDirect(Position.ToWorldCoordinates() - new Vector2(4), 0, 0, ModContent.DustType<GeyserBudDust_Red>());
+		dust.velocity *= 0;
+		dust.noGravity = true;
+		if (currentFrame == -1)
+		{
+			currentFrame = StartFrame;
+
+			// 我不知道为什么NetPlace之后会莫名其妙在左上一格的位置多Place一个，很诡异
+			if (Main.tile[Position].TileFrameX != 18 || Main.tile[Position].TileFrameY != 18)
+			{
+				Kill(Position.X, Position.Y);
+				return;
+			}
+		}
 		switch (state)
 		{
 			case GeyserState.Blooming:
@@ -31,8 +47,9 @@ public class GeyserAirBudsEntity : ModTileEntity
 				{
 					frameCounter = 0;
 					currentFrame++;
-					if (currentFrame == BloomMaxFrame)
+					if (currentFrame >= BloomMaxFrame)
 					{
+						currentFrame = BloomMaxFrame;
 						state = GeyserState.Resting;
 					}
 				}

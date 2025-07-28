@@ -6,24 +6,32 @@ public class GeyserAirBudsItem : ModItem
 {
 	public override void SetDefaults()
 	{
-		Item.width = 16;
-		Item.height = 16;
-		Item.maxStack = Item.CommonMaxStack;
-		Item.useTurn = true;
-		Item.autoReuse = true;
-		Item.useAnimation = 15;
-		Item.useTime = 15;
-		Item.useStyle = ItemUseStyleID.Swing;
-		Item.consumable = true;
+		Item.DefaultToPlaceableTile(ModContent.TileType<GeyserAirBuds_placePreview>());
 		Item.value = Item.sellPrice(0, 0, 1, 0);
 		Item.rare = ItemRarityID.White;
-		Item.createTile = ModContent.TileType<GeyserAirBudsPlatform>();
-
-		Item.DefaultToPlaceableTile(ModContent.TileType<GeyserAirBudsPlatform>());
+		Item.width = 16;
+		Item.height = 16;
 	}
+
+	public override bool CanUseItem(Player player)
+	{
+		Item.createTile = ModContent.TileType<GeyserAirBuds>();
+		return base.CanUseItem(player);
+	}
+
+	public override bool? UseItem(Player player) => base.UseItem(player);
 
 	public override void HoldItem(Player player)
 	{
+		if (Main.mouseLeft)
+		{
+			Item.createTile = ModContent.TileType<GeyserAirBuds>();
+			Main.placementPreview = false;
+		}
+		else
+		{
+			Item.createTile = ModContent.TileType<GeyserAirBuds_placePreview>();
+		}
 		Main.placementPreview = true;
 	}
 }
