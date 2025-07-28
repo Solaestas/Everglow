@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.KelpCurtain.Items.Armors.Molluscs;
+using static Terraria.Player;
 
 namespace Everglow.Yggdrasil.KelpCurtain;
 
@@ -34,7 +35,7 @@ public class KelpCurtainPlayer : ModPlayer
 
 	public override void FrameEffects()
 	{
-		if(Player.head == EquipLoader.GetEquipSlot(Mod, nameof(MossyMolluscsHelmet), EquipType.Head)
+		if (Player.head == EquipLoader.GetEquipSlot(Mod, nameof(MossyMolluscsHelmet), EquipType.Head)
 			&& Player.body == EquipLoader.GetEquipSlot(Mod, nameof(ShellMolluscsBreastPlate), EquipType.Body))
 		{
 			Player.body = EquipLoader.GetEquipSlot(Mod, ShellMolluscsBreastPlate.AltTextureKey, EquipType.Body);

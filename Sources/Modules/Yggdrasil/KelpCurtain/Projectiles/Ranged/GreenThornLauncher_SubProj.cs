@@ -16,7 +16,7 @@ public class GreenThornLauncher_SubProj : ModProjectile
 
 		Projectile.DamageType = DamageClass.Ranged;
 		Projectile.friendly = true;
-		Projectile.penetrate = 1;
+		Projectile.penetrate = 2;
 		Projectile.timeLeft = 300;
 		Projectile.tileCollide = true;
 	}
@@ -30,6 +30,24 @@ public class GreenThornLauncher_SubProj : ModProjectile
 			Projectile.frame = (Projectile.frame + 1) % Main.projFrames[Projectile.type];
 		}
 		Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+
+		if (Main.rand.NextBool(2))
+		{
+			var dust = Dust.NewDustPerfect(Projectile.Center, DustID.GrassBlades);
+			dust.velocity = -Projectile.velocity * 0.2f;
+			dust.scale = Main.rand.NextFloat(0.8f, 1.2f);
+			dust.noGravity = true;
+			dust.fadeIn = 1.3f;
+		}
+
+		if (Main.rand.NextBool(5))
+		{
+			var dust = Dust.NewDustPerfect(Projectile.Center, DustID.GemEmerald);
+			dust.velocity = -Projectile.velocity * 0.1f;
+			dust.scale = 1.3f;
+			dust.noGravity = true;
+			dust.fadeIn = 1.6f;
+		}
 	}
 
 	public override void OnKill(int timeLeft)

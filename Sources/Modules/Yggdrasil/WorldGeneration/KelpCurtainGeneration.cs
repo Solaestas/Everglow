@@ -1,6 +1,7 @@
 using Everglow.Yggdrasil.KelpCurtain;
 using Everglow.Yggdrasil.KelpCurtain.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Walls;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
@@ -9,7 +10,7 @@ namespace Everglow.Yggdrasil.WorldGeneration;
 public class KelpCurtainGeneration
 {
 	public static void BuildKelpCurtain()
-	{
+	{                                                                                                                                                                                                                                                                                                                      
 		Initialize();
 		Main.statusText = "Kelp Curtain Bark Cliff...";
 
@@ -156,6 +157,13 @@ public class KelpCurtainGeneration
 		{
 			CircleTile(checkPos, radius + GenRand.NextFloat(-3.5f, 3.5f), -1, true);
 			radius += 0.2f;
+			checkPos += checkVel;
+		}
+		checkPos += new Vector2(-120, 210);
+		checkVel = new Vector2(12, 0);
+		for (int t = 0; t < 13; t++)
+		{
+			GenerateStalactite(checkPos + new Vector2(0, 10), 6, Main.rand.NextFloat(24, 30), ModContent.TileType<StoneScaleWood>());
 			checkPos += checkVel;
 		}
 	}
