@@ -25,9 +25,6 @@ public class GeyserAirBudsEntity : ModTileEntity
 
 	public override void Update()
 	{
-		Dust dust = Dust.NewDustDirect(Position.ToWorldCoordinates() - new Vector2(4), 0, 0, ModContent.DustType<GeyserBudDust_Red>());
-		dust.velocity *= 0;
-		dust.noGravity = true;
 		if (currentFrame == -1)
 		{
 			currentFrame = StartFrame;

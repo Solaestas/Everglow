@@ -1,23 +1,16 @@
-using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Terraria.DataStructures;
+using Everglow.Yggdrasil.KelpCurtain.Dusts;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles;
 
-public class FurnacePlatingTile : ModTile
+public class GreenCourtBrick : ModTile
 {
 	public override void SetStaticDefaults()
 	{
 		Main.tileSolid[Type] = true;
-		Main.tileMergeDirt[Type] = false;
-
-		Main.tileBlendAll[Type] = true;
+		Main.tileMergeDirt[Type] = true;
 		Main.tileBlockLight[Type] = true;
-		Main.tileShine2[Type] = false;
-
-		DustType = ModContent.DustType<FurnacePlatingDust>();
-		HitSound = default;
-
-		AddMapEntry(new Color(116, 97, 97));
+		DustType = ModContent.DustType<GreenCourtBrickDust>();
+		AddMapEntry(new Color(94, 101, 101));
 	}
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
@@ -36,7 +29,7 @@ public class FurnacePlatingTile : ModTile
 		if (!Ins.VisualQuality.High)
 		{
 			Vector2 drawPos = new Point(i, j).ToWorldCoordinates() - Main.screenPosition + offsetScreen;
-			Rectangle frame = new Rectangle(2 + (i % 15) * 16, 182 + (j % 15) * 16, 16, 16);
+			Rectangle frame = new Rectangle((i % 12) * 16, 180 + (j % 12) * 16, 16, 16);
 			spriteBatch.Draw(texture, drawPos, frame, Lighting.GetColor(i, j), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
 			Rectangle frameSide = new Rectangle(tile.TileFrameX, tile.TileFrameY + 90, 16, 16);
 			spriteBatch.Draw(texture, drawPos, frameSide, Lighting.GetColor(i, j), 0, frameSide.Size() * 0.5f, 1, SpriteEffects.None, 0);
@@ -49,7 +42,7 @@ public class FurnacePlatingTile : ModTile
 			{
 				for (int y = 0; y < 3; y++)
 				{
-					Rectangle frame = new Rectangle(2 + (i % 15) * 16 + x * 6, 182 + (j % 15) * 16 + y * 6, 6, 6);
+					Rectangle frame = new Rectangle((i % 12) * 16 + x * 6, 180 + (j % 12) * 16 + y * 6, 6, 6);
 					Vector2 offset = new Vector2(x, y) * 6;
 					if (x == 2)
 					{
@@ -71,5 +64,4 @@ public class FurnacePlatingTile : ModTile
 
 		return false;
 	}
-
 }
