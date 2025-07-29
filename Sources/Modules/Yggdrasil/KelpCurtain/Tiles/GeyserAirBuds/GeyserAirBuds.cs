@@ -24,7 +24,9 @@ public class GeyserAirBuds : ModTile, ITileFluentlyDrawn // 继承ITileFluentlyD
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.newTile.Origin = new Point16(0, 1);
 		TileObjectData.newSubTile.AnchorBottom = new(Terraria.Enums.AnchorType.SolidTile, 3, 0);
-		TileObjectData.newTile.HookPostPlaceMyPlayer = ModContent.GetInstance<GeyserAirBudsEntity>().Generic_HookPostPlaceMyPlayer;
+
+		// 这个和 PlaceInWorld重复了，所以有两个tileEntity
+		// TileObjectData.newTile.HookPostPlaceMyPlayer = ModContent.GetInstance<GeyserAirBudsEntity>().Generic_HookPostPlaceMyPlayer;
 		TileObjectData.addTile(Type);
 		DustType = ModContent.DustType<GeyserBudDust_Blue>();
 		AnimationFrameHeight = 96;
