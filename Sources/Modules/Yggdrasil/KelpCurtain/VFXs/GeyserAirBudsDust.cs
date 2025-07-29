@@ -41,13 +41,13 @@ public class GeyserAirBudsDust : Visual
 		{
 			Active = false;
 		}
-		Lighting.AddLight(position, 0, scale * 0.06f, scale * 0.08f);
+		Lighting.AddLight(position, scale * 0.06f, scale * 0.04f, scale * 0.18f);
 	}
 
 	public override void Draw()
 	{
 		var toCorner = new Vector2(0, scale);
-		var lightColor = new Color(0f, 0.6f, 0.8f, 0.5f);
+		var lightColor = new Color(0f, 0.18f, 0.12f, 1f);
 		Ins.Batch.BindTexture<Vertex2D>(ModAsset.BloodFlame_noise.Value);
 		var bars = new List<Vertex2D>();
 		for (int i = 0; i < trails.Count; i++)

@@ -2,7 +2,6 @@ using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
-using Everglow.Yggdrasil.WorldGeneration;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;
@@ -100,7 +99,6 @@ public class GeyserAirBudsPlatform : ModTile, ITileFluentlyDrawn
 		return false;
 	}
 
-
 	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		var tile = Main.tile[pos];
@@ -145,6 +143,16 @@ public class GeyserAirBudsPlatform : ModTile, ITileFluentlyDrawn
 		int frameYOffset = 0;
 		Rectangle frame = new Rectangle(0, frameYOffset, 96, AnimationFrameHeight);
 		spriteBatch.Draw(tex, drawCenterPos + new Vector2(8, 6), frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
+		Lighting.AddLight(pos.ToWorldCoordinates() + new Vector2(8, 6), 0.21f, 0.45f, 0.32f);
+		Lighting.AddLight(pos.ToWorldCoordinates() + new Vector2(-8, 6), 0.21f, 0.45f, 0.32f);
+		if(!Main.gamePaused && Main.rand.NextBool(21))
+		{
+			Vector2 dustPos = pos.ToWorldCoordinates() + new Vector2(8, -20) - new Vector2(4);
+			Dust d = Dust.NewDustDirect(dustPos, 0, 0, ModContent.DustType<GeyserBudPollen>());
+			d.customData = dustPos.X;
+			d.position.X += Main.rand.NextFloat(-10, 10);
+			d.velocity.Y = -1.5f;
+		}
 	}
 
 	/*public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)

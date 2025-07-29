@@ -57,16 +57,6 @@ public class GeyserAirBudsSmog : Visual
 			return;
 		}
 		velocity *= 0.9f;
-
-		if (position.X < Main.maxTilesX * 16 - 320 && position.X > 320)
-		{
-			if (position.Y < Main.maxTilesY * 16 - 320 && position.Y > 320)
-			{
-				if (Collision.SolidCollision(position, 0, 0))
-				{
-				}
-			}
-		}
 		if (scale < 160)
 		{
 			scale += 2f;
@@ -79,6 +69,8 @@ public class GeyserAirBudsSmog : Visual
 		}
 
 		velocity = velocity.RotatedBy(ai[1]);
+		float pocession = 1 - timer / maxTime;
+		Lighting.AddLight(position, new Vector3(0.2f, 0.1f, 1f) * pocession);
 	}
 
 	public override void Draw()

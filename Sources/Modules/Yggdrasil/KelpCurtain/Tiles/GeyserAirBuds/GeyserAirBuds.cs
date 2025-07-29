@@ -166,13 +166,18 @@ public class GeyserAirBuds : ModTile, ITileFluentlyDrawn // 继承ITileFluentlyD
 		var tileSpriteEffect = SpriteEffects.None;
 
 		int frameYOffset = 0;
-
+		float frameValue = 0;
 		if (TileEntity.ByPosition.TryGetValue(new Point16(pos.X + 1, pos.Y), out TileEntity entity) && entity is GeyserAirBudsEntity geyser)
 		{
 			frameYOffset = geyser.GetFrame() * AnimationFrameHeight; // 获取状态帧
+			frameValue = (geyser.GetFrame() - 6) / 11f;
 		}
 		Rectangle frame = new Rectangle(0, frameYOffset, 96, AnimationFrameHeight);
 		spriteBatch.Draw(tex, drawCenterPos + new Vector2(8, 6), frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
+		float lerpValue = MathF.Pow(frameValue, 0.25f);
+		Vector3 lightColor = Vector3.Lerp(new Vector3(0.21f, 0.15f, 0.52f), new Vector3(0.21f, 0.45f, 0.32f), lerpValue);
+		Lighting.AddLight(pos.ToWorldCoordinates() + new Vector2(8, 6), lightColor);
+		Lighting.AddLight(pos.ToWorldCoordinates() + new Vector2(-8, 6), lightColor);
 	}
 
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)

@@ -177,19 +177,21 @@ public class KelpCurtainGeneration
 			tile.HasTile = true;
 		}
 		PlaceFrameImportantTiles((int)checkPos.X, (int)checkPos.Y, 2, 2, ModContent.TileType<GeyserAirBudsPlatform>());
-		for (int t = 1; t < 13; t++)
+		for (int t = 1; t < 16; t++)
 		{
-			Vector2 addPos = new Vector2((t % 2 - 0.5f) * 20, -t * 30 + 10);
+			Vector2 addPos = new Vector2((t % 2 - 0.5f) * 30 + 10 + Main.rand.NextFloat(-3, 3), -t * 24 + 10);
 			Vector2 topPos = checkPos + addPos;
 			GenerateStalactite(topPos, 6, Main.rand.NextFloat(12, 16), ModContent.TileType<OldMoss>());
 			topPos.Y -= 10;
-			int deltaYTop = CheckSpaceDown((int)checkPos.X, (int)checkPos.Y);
+			int deltaYTop = CheckSpaceDown((int)topPos.X, (int)topPos.Y);
 			topPos.Y += deltaYTop - 2;
 			for (int x = (int)(topPos.X - 1); x <= (int)(topPos.X + 2); x++)
 			{
-				var tile = SafeGetTile(x, (int)(checkPos.Y + 2));
+				var tile = SafeGetTile(x, (int)(topPos.Y + 2));
+				tile.ClearEverything();
 				tile.TileType = (ushort)ModContent.TileType<OldMoss>();
 				tile.HasTile = true;
+				tile.Slope = SlopeType.Solid;
 			}
 			PlaceFrameImportantTiles((int)topPos.X, (int)topPos.Y, 2, 2, ModContent.TileType<GeyserAirBudsPlatform>());
 		}
