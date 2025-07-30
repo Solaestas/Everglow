@@ -1,5 +1,4 @@
 using Everglow.Commons.Vertex;
-using SteelSeries.GameSense;
 
 namespace Everglow.Commons.Graphics;
 
@@ -129,15 +128,16 @@ public class ValueBarHelper
 	/// <param name="radiusOffset"></param>
 	/// <param name="progress"></param>
 	/// <param name="totalVertexCount"></param>
-	public static void DrawCircle(SpriteBatch spriteBatch, Vector2 position, Color color, Vector2 radius, Vector2 radiusOffset, float progress, int totalVertexCount = 180)
+	public static void DrawCircle(SpriteBatch spriteBatch, Vector2 position, Color color, Vector2 radius, Vector2 radiusOffset, float progress, bool clockwise = true, int totalVertexCount = 180)
 	{
 		int circleVertexCount = (int)(totalVertexCount * progress);
 		List<Vertex2D> lineShadowVertices = [];
+		float clockwiseFactor = clockwise ? 1 : -1;
 		for (int i = 0; i <= circleVertexCount; i++)
 		{
 			var rotation = MathF.PI * 2 * i / totalVertexCount;
-			lineShadowVertices.Add(position - (radius - radiusOffset).RotatedBy(rotation), color, new Vector3(1, 0, 0));
-			lineShadowVertices.Add(position - (radius + radiusOffset).RotatedBy(rotation), color, new Vector3(1, 0, 0));
+			lineShadowVertices.Add(position - (radius - radiusOffset).RotatedBy(clockwiseFactor * rotation), color, new Vector3(1, 0, 0));
+			lineShadowVertices.Add(position - (radius + radiusOffset).RotatedBy(clockwiseFactor * rotation), color, new Vector3(1, 0, 0));
 		}
 
 		spriteBatch.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, lineShadowVertices.ToArray(), 0, lineShadowVertices.Count - 2);

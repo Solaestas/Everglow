@@ -1,4 +1,6 @@
+using Everglow.Commons.Mechanics.Cooldown;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
+using Everglow.Yggdrasil.KelpCurtain.Cooldowns;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors.DevilHeart;
@@ -43,10 +45,10 @@ public class DevilHeartLightBreastPlate : ModItem, ILocalizedModType
 	public override void UpdateArmorSet(Player player)
 	{
 		// TODO: Replace mouse click with a hotkey or a more suitable trigger
-		if (MouseUtils.MouseMiddle.IsClicked && !player.HasBuff<DevilHeartSetCooldown>())
+		if (MouseUtils.MouseMiddle.IsClicked && !player.HasCooldown<DevilHeartSetCooldown>())
 		{
 			player.AddBuff(ModContent.BuffType<DevilHeartSetBuff>(), BuffDuration);
-			player.AddBuff(ModContent.BuffType<DevilHeartSetCooldown>(), CooldownDuration);
+			player.AddCooldown(DevilHeartSetCooldown.ID, CooldownDuration);
 		}
 	}
 }

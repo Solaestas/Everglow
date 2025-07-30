@@ -1,0 +1,4 @@
+TestCooldown: {
+	DisplayName: Test Cooldown
+	Tooltip: This is a test cooldown for demonstration purposes.
+}

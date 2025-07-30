@@ -1,41 +1,23 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
-using Terraria.DataStructures;
 
 namespace Everglow.Commons.Utilities;
 
+[Obsolete]
 public class ValueBuffSystem : ModSystem
 {
 	public struct NPCValueBuff
 	{
-		/// <summary>
-		/// 
-		/// </summary>
 		public int Target { get; set; }
 
-		/// <summary>
-		/// 
-		/// </summary>
 		public int Type { get; set; }
 
-		/// <summary>
-		/// 
-		/// </summary>
 		public int Value { get; set; }
 
-		/// <summary>
-		/// 
-		/// </summary>
 		public int ValueMax { get; set; }
 
-		/// <summary>
-		/// 
-		/// </summary>
 		public bool BreakOut { get; set; }
 
-		/// <summary>
-		/// If the value buff is active
-		/// </summary>
 		public bool Active { get; set; }
 	}
 
