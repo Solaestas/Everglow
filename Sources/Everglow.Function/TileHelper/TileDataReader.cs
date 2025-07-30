@@ -147,6 +147,7 @@ public class TileDataReaderSystem : Visual
 		datas += "\nType :" + tile.TileType;
 		if (tile.HasTile)
 		{
+			datas += " " + TileID.Search.GetName(tile.TileType);
 			datas += "\nFrame : [" + tile.TileFrameX + ", " + tile.TileFrameY + "]";
 			if (ContinueTiles.Count < MaxContinueCount)
 			{
