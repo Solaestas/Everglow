@@ -1,5 +1,4 @@
 using Terraria.Localization;
-using Terraria.ModLoader.IO;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.PermanentBoosters;
 
@@ -8,7 +7,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.PermanentBoosters;
 /// </summary>
 public class SquamousCore : ModItem
 {
-	public static readonly int LifePerCore = 30;
+	public static readonly int SquamousCoreMax = 1;
+	public static readonly int SquamousCoreLife = 30;
 
 	public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(30, 1);
 
@@ -34,75 +34,5 @@ public class SquamousCore : ModItem
 		return true;
 	}
 
-	public override bool? UseItem(Player player)
-	{
-		// Moving the SquamousCoreCount check from CanUseItem to here allows this example fruit to still "be used" like Life Fruit can be
-		// when at the max allowed, but it will just play the animation and not affect the player's max life
-		if (player.GetModPlayer<SquamousCorePlayer>().SquamousCoreCount >= 1)
-		{
-			// Returning null will make the item not be consumed
-			return null;
-		}
-
-		// This method handles permanently increasing the player's max health and displaying the green heal text
-		player.UseHealthMaxIncreasingItem(LifePerCore);
-
-		// This field tracks how many of the example fruit have been consumed
-		player.GetModPlayer<SquamousCorePlayer>().SquamousCoreCount++;
-
-		return true;
-	}
-}
-
-public class SquamousCorePlayer : ModPlayer
-{
-	public int SquamousCoreCount;
-
-	public override void ModifyMaxStats(out StatModifier health, out StatModifier mana)
-	{
-		health = StatModifier.Default;
-		health.Base = SquamousCore.LifePerCore * SquamousCoreCount;
-		mana = StatModifier.Default;
-	}
-
-	public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
-	{
-		ModPacket packet = Mod.GetPacket();
-		packet.Write(MessageID.PlayerLifeMana);
-		packet.Write((byte)Player.whoAmI);
-		packet.Write((byte)SquamousCoreCount);
-		packet.Send(toWho, fromWho);
-	}
-
-	// Called in ExampleMod.Networking.cs
-	public void ReceivePlayerSync(BinaryReader reader)
-	{
-		SquamousCoreCount = reader.ReadByte();
-	}
-
-	public override void CopyClientState(ModPlayer targetCopy)
-	{
-		var clone = (SquamousCorePlayer)targetCopy;
-		clone.SquamousCoreCount = SquamousCoreCount;
-	}
-
-	public override void SendClientChanges(ModPlayer clientPlayer)
-	{
-		var clone = (SquamousCorePlayer)clientPlayer;
-
-		if (SquamousCoreCount != clone.SquamousCoreCount)
-		{
-			SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
-		}
-	}
-
-	public override void SaveData(TagCompound tag)
-	{
-		tag["squamousCore"] = SquamousCoreCount;
-	}
-
-	public override void LoadData(TagCompound tag)
-	{
-		SquamousCoreCount = tag.GetInt("squamousCore");
-	}
+	public override bool? UseItem(Player player) => player.GetModPlayer<YggdrasilPlayer>().UseSquamousCore();
 }

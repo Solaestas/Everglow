@@ -1,4 +1,6 @@
 using System.Reflection;
+using Everglow.Yggdrasil.KelpCurtain.Items.PermanentBoosters;
+using Everglow.Yggdrasil.YggdrasilTown.Items.PermanentBoosters;
 using SubworldLibrary;
 using Terraria.ModLoader.IO;
 
@@ -7,19 +9,24 @@ namespace Everglow.Yggdrasil;
 public class YggdrasilPlayer : ModPlayer
 {
 	/// <summary>
-	/// 6*30
+	/// <see cref="AntiHeavenSicknessPill"/>
 	/// </summary>
-	public int ConsumedCongealedBloodExtractive { get; private set; }
+	public int ConsumedAntiHeavenSicknessPill { get; set; }
 
 	/// <summary>
-	/// 3*40
+	/// <see cref="JadeFruit"/>"/>
 	/// </summary>
-	public int ConsumedJadeGlazeFruit { get; private set; }
+	public int ConsumedJadeGlazeFruit { get; set; }
 
 	/// <summary>
-	/// 60*2
+	/// <see cref="LampBorerHoney"/>
 	/// </summary>
-	public int ConsumedStarPollen { get; private set; }
+	public int ConsumedLampBorerHoney { get; set; }
+
+	/// <summary>
+	/// <see cref="SquamousCore"/>
+	/// </summary>
+	public int ConsumedSquamousCore { get; set; }
 
 	public override bool CloneNewInstances => true;
 
@@ -30,30 +37,84 @@ public class YggdrasilPlayer : ModPlayer
 
 	public static void Hook_ResetMaxStatsToVanilla(Action<Player> orig, Player player)
 	{
-		int lifeFix1 = 0, lifeFix2 = 0, manaFix1 = 0; // , manaFix2 = 0;
+		int lifeFix1 = 0, lifeFix2 = 0, lifeFix3 = 0, lifeFix4 = 0, manaFix1 = 0;
 		if (player.TryGetModPlayer(out YggdrasilPlayer modPlayer))
 		{
-			lifeFix1 = modPlayer.ConsumedCongealedBloodExtractive;
-			lifeFix2 = modPlayer.ConsumedJadeGlazeFruit;
-			manaFix1 = modPlayer.ConsumedStarPollen;
+			lifeFix1 = AntiHeavenSicknessPill.LifeBonusTable.Take(modPlayer.ConsumedAntiHeavenSicknessPill).Sum(p => p.Value);
+			lifeFix2 = modPlayer.ConsumedJadeGlazeFruit * JadeFruit.LifePerJadeFruit;
+			lifeFix3 = modPlayer.ConsumedSquamousCore * SquamousCore.SquamousCoreLife;
+			lifeFix4 = modPlayer.ConsumedLampBorerHoney * LampBorerHoney.LifePerHoney;
 		}
 		if (SubworldSystem.IsActive<YggdrasilWorld>())
 		{
-			player.statLifeMax = 100 + player.ConsumedLifeCrystals * 4 + player.ConsumedLifeFruit * 1 + lifeFix1 * 30 + lifeFix2 * 40;
+			player.statLifeMax = 100 + player.ConsumedLifeCrystals * 4 + player.ConsumedLifeFruit * 1 + lifeFix1 + lifeFix2 + lifeFix3 + lifeFix4;
 			player.statManaMax = 20 + player.ConsumedManaCrystals * 4 + manaFix1 * 2;
 		}
 		else
 		{
-			player.statLifeMax = 100 + player.ConsumedLifeCrystals * 20 + player.ConsumedLifeFruit * 5 + lifeFix1 * 6 + lifeFix2 * 8;
-			player.statManaMax = 20 + player.ConsumedManaCrystals * 20 + (int)(manaFix1 * 0.4);
+			orig(player);
+			player.statLifeMax += lifeFix1 + lifeFix2 + lifeFix3 + lifeFix4;
+			player.statManaMax += (int)(manaFix1 * 0.4f);
 		}
 	}
 
-	public bool UseCongealedBloodExtractive()
+	public override bool CanUseItem(Item item)
 	{
-		if (ConsumedCongealedBloodExtractive < 6)
+		if (item.type == ModContent.ItemType<AntiHeavenSicknessPill>())
 		{
-			ConsumedCongealedBloodExtractive++;
+			return ConsumedAntiHeavenSicknessPill < AntiHeavenSicknessPill.AntiHeavenSicknessPillMax;
+		}
+		else if (item.type == ModContent.ItemType<JadeFruit>())
+		{
+			return ConsumedJadeGlazeFruit < JadeFruit.MaxJadeFruits;
+		}
+		else if (item.type == ModContent.ItemType<LampBorerHoney>())
+		{
+			return ConsumedLampBorerHoney < LampBorerHoney.MaxUse;
+		}
+		else if (item.type == ModContent.ItemType<SquamousCore>())
+		{
+			return ConsumedSquamousCore < SquamousCore.SquamousCoreMax;
+		}
+
+		return base.CanUseItem(item);
+	}
+
+	public override void SaveData(TagCompound tag)
+	{
+		tag[nameof(ConsumedAntiHeavenSicknessPill)] = ConsumedAntiHeavenSicknessPill;
+		tag[nameof(ConsumedJadeGlazeFruit)] = ConsumedJadeGlazeFruit;
+		tag[nameof(ConsumedSquamousCore)] = ConsumedSquamousCore;
+		tag[nameof(ConsumedLampBorerHoney)] = ConsumedLampBorerHoney;
+	}
+
+	public override void LoadData(TagCompound tag)
+	{
+		if (tag.TryGet(nameof(ConsumedAntiHeavenSicknessPill), out int life1))
+		{
+			ConsumedAntiHeavenSicknessPill = life1;
+		}
+		if (tag.TryGet(nameof(ConsumedJadeGlazeFruit), out int life2))
+		{
+			ConsumedJadeGlazeFruit = life2;
+		}
+		if (tag.TryGet(nameof(ConsumedSquamousCore), out int mana1))
+		{
+			ConsumedSquamousCore = mana1;
+		}
+		if (tag.TryGet(nameof(ConsumedLampBorerHoney), out int honey))
+		{
+			ConsumedLampBorerHoney = honey;
+		}
+	}
+
+	#region Permanent Boosters Set Methods
+
+	public bool UseAntiHeavenSicknessPill()
+	{
+		if (ConsumedAntiHeavenSicknessPill < AntiHeavenSicknessPill.AntiHeavenSicknessPillMax)
+		{
+			ConsumedAntiHeavenSicknessPill++;
 			return true;
 		}
 		return false;
@@ -61,7 +122,7 @@ public class YggdrasilPlayer : ModPlayer
 
 	public bool UseJadeGlazeFruit()
 	{
-		if (ConsumedJadeGlazeFruit < 3)
+		if (ConsumedJadeGlazeFruit < JadeFruit.MaxJadeFruits)
 		{
 			ConsumedJadeGlazeFruit++;
 			return true;
@@ -69,50 +130,56 @@ public class YggdrasilPlayer : ModPlayer
 		return false;
 	}
 
-	public bool UseStarPollen()
+	public bool UseSquamousCore()
 	{
-		if (ConsumedStarPollen < 60)
+		if (ConsumedSquamousCore < SquamousCore.SquamousCoreMax)
 		{
-			ConsumedStarPollen++;
+			ConsumedSquamousCore++;
 			return true;
 		}
 		return false;
 	}
 
-	public override void SaveData(TagCompound tag)
+	public bool UseLampBorerHoney()
 	{
-		tag[nameof(ConsumedCongealedBloodExtractive)] = ConsumedCongealedBloodExtractive;
-		tag[nameof(ConsumedJadeGlazeFruit)] = ConsumedJadeGlazeFruit;
-		tag[nameof(ConsumedStarPollen)] = ConsumedStarPollen;
+		if (ConsumedLampBorerHoney < LampBorerHoney.MaxUse)
+		{
+			ConsumedLampBorerHoney++;
+			return true;
+		}
+		return false;
 	}
 
-	public override void LoadData(TagCompound tag)
-	{
-		if (tag.TryGet(nameof(ConsumedCongealedBloodExtractive), out int life1))
-		{
-			ConsumedCongealedBloodExtractive = life1;
-		}
-		if (tag.TryGet(nameof(ConsumedJadeGlazeFruit), out int life2))
-		{
-			ConsumedJadeGlazeFruit = life2;
-		}
-		if (tag.TryGet(nameof(ConsumedStarPollen), out int mana1))
-		{
-			ConsumedStarPollen = mana1;
-		}
-	}
+	#endregion
 
-	public override bool CanUseItem(Item item)
-	{
-		switch (item.type)
-		{
-			case ItemID.LifeCrystal:
-				return Player.consumedLifeCrystals < 30;
-			case ItemID.LifeFruit:
-				return Player.consumedLifeFruit < 20;
-			case ItemID.ManaCrystal:
-				return Player.consumedManaCrystals < 20;
-		}
-		return base.CanUseItem(item);
-	}
+	// public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+	// {
+	// 	ModPacket packet = Mod.GetPacket();
+	// 	packet.Write(MessageID.PlayerLifeMana);
+	// 	packet.Write((byte)Player.whoAmI);
+	// 	packet.Write((byte)ConsumedLampBorerHoney);
+	// 	packet.Send(toWho, fromWho);
+	// }
+
+	// // Called in ExampleMod.Networking.cs
+	// public void ReceivePlayerSync(BinaryReader reader)
+	// {
+	// 	ConsumedLampBorerHoney = reader.ReadByte();
+	// }
+
+	// public override void CopyClientState(ModPlayer targetCopy)
+	// {
+	// 	var clone = (YggdrasilPlayer)targetCopy;
+	// 	clone.ConsumedLampBorerHoney = ConsumedLampBorerHoney;
+	// }
+
+	// public override void SendClientChanges(ModPlayer clientPlayer)
+	// {
+	// 	var clone = (YggdrasilPlayer)clientPlayer;
+
+	// 	if (ConsumedLampBorerHoney != clone.ConsumedLampBorerHoney)
+	// 	{
+	// 		SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
+	// 	}
+	// }
 }
