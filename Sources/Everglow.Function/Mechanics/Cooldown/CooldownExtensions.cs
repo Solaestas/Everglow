@@ -7,14 +7,9 @@ public static class CooldownExtensions
 		if (!player.HasCooldown(id) || overwrite)
 		{
 			var modP = player.GetModPlayer<CooldownPlayer>();
-
-			Type cdBaseT = CooldownRegistry.nameToType[id];
-			var cdBase = Activator.CreateInstance(cdBaseT) as CooldownBase;
-			var instance = new CooldownInstance(player, cdBase, timeToAdd);
-			cdBase.Instance = instance;
-
+			var instance = new CooldownInstance(player, id, timeToAdd);
 			modP.cooldowns[id] = instance;
-			modP.SyncCooldown(Main.dedServ, instance);
+			modP.SyncCooldownAddition(Main.dedServ, instance);
 		}
 	}
 
@@ -26,4 +21,13 @@ public static class CooldownExtensions
 
 	public static bool HasCooldown<TCooldownBase>(this Player player) =>
 		HasCooldown(player, cd => cd is TCooldownBase);
+
+	public static void ClearCooldown(this Player player, string id)
+	{
+		var mp = player.GetModPlayer<CooldownPlayer>();
+		if (mp.cooldowns.Remove(id))
+		{
+			mp.SyncCooldownRemoval(Main.dedServ, [id]);
+		}
+	}
 }
