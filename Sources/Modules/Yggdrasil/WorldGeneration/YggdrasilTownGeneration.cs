@@ -1293,7 +1293,7 @@ public class YggdrasilTownGeneration
 				float r = a - b * MathF.Sin(toCenter.ToRotation());
 				toCenter.Y /= 1.2f;
 				float valueNoise = PerlinPixelG[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
-				float valueNoiseWall = CellPixel[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
+				float valueNoiseWall = CellPixel[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 512, (int)(toCenter.Length() * 0.7f) % 512] / 255f;
 				float valueNoiseWallWood = PerlinPixelR[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
 				float clearRange = 90f;
 				float boundThick = 60f;

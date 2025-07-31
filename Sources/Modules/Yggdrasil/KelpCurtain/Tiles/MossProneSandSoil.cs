@@ -10,6 +10,7 @@ public class MossProneSandSoil : ModTile
 		Main.tileMergeDirt[Type] = true;
 		Main.tileBlendAll[Type] = true;
 		Main.tileBlockLight[Type] = true;
+		Main.tileNoSunLight[Type] = true;
 		Main.tileMerge[Type][ModContent.TileType<DragonScaleWood>()] = true;
 		Main.tileMerge[Type][ModContent.TileType<OldMoss>()] = true;
 		Main.tileMerge[Type][TileID.Stone] = true;

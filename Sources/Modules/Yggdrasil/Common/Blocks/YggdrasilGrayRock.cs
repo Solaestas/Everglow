@@ -5,6 +5,7 @@ public class YggdrasilGrayRock : ModTile
 	public override void PostSetDefaults()
 	{
 		Main.tileSolid[Type] = true;
+		Main.tileNoSunLight[Type] = true;
 		Main.tileMerge[Type][(ushort)ModContent.TileType<YggdrasilTown.Tiles.StoneScaleWood>()] = true;
 		Main.tileMerge[(ushort)ModContent.TileType<YggdrasilTown.Tiles.StoneScaleWood>()][Type] = true;
 

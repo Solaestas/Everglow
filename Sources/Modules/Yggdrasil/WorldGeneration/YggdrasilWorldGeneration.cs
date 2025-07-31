@@ -54,17 +54,78 @@ public class YggdrasilWorldGeneration : ModSystem
 
 	public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) => tasks.Add(new MainWorldPylonRelicGenPass_Yggdrasil());
 
-	public static int[,] GlobalPerlinPixelR = new int[1024, 1024];
-	public static int[,] GlobalPerlinPixelG = new int[1024, 1024];
-	public static int[,] GlobalPerlinPixelB = new int[1024, 1024];
-	public static int[,] GlobalPerlinPixel2 = new int[1024, 1024];
-	public static int[,] GlobalCellPixel = new int[1024, 1024];
-
 	public static int[,] PerlinPixelR = new int[1024, 1024];
 	public static int[,] PerlinPixelG = new int[1024, 1024];
 	public static int[,] PerlinPixelB = new int[1024, 1024];
 	public static int[,] PerlinPixel2 = new int[1024, 1024];
-	public static int[,] CellPixel = new int[1024, 1024];
+	public static int[,] CellPixel = new int[512, 512];
+	public static int[,] MeltingPixel = new int[256, 256];
+
+	/// <summary>
+	/// A float value based on the texture;0.0f~1.0f.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static float GetPerlinPixelR(float x, float y)
+	{
+		return PerlinPixelR[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 256f;
+	}
+
+	/// <summary>
+	/// A float value based on the texture;0.0f~1.0f.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static float GetPerlinPixeG(float x, float y)
+	{
+		return PerlinPixelG[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 256f;
+	}
+
+	/// <summary>
+	/// A float value based on the texture;0.0f~1.0f.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static float GetPerlinPixelB(float x, float y)
+	{
+		return PerlinPixelB[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 256f;
+	}
+
+	/// <summary>
+	/// A float value based on the texture;0.0f~1.0f.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static float GetPerlinPixel2(float x, float y)
+	{
+		return PerlinPixel2[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 256f;
+	}
+
+	/// <summary>
+	/// A float value based on the texture;0.0f~1.0f.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static float GetCellPixel(float x, float y)
+	{
+		return CellPixel[(int)Math.Abs(x) % 512, (int)Math.Abs(y) % 512] / 256f;
+	}
+
+	/// <summary>
+	/// A float value based on the texture;0.0f~1.0f.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static float GetMeltingPixel(float x, float y)
+	{
+		return MeltingPixel[(int)Math.Abs(x) % 256, (int)Math.Abs(y) % 256] / 256f;
+	}
 
 	/// <summary>
 	/// When put some MapIO or other pieces of buildings, exclude them from being smoothened.
@@ -72,8 +133,6 @@ public class YggdrasilWorldGeneration : ModSystem
 	public static List<Rectangle> ShouldNotSmoothAreas = new List<Rectangle>();
 
 	public static UnifiedRandom GenRand = new UnifiedRandom();
-
-	private static Point fillLiquidPos;
 
 	/// <summary>
 	/// 总初始化
@@ -141,6 +200,23 @@ public class YggdrasilWorldGeneration : ModSystem
 				}
 			}
 		});
+
+		imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_melting.bmp");
+		perlinCoordCenter = new Vector2(GenRand.NextFloat(0f, 1f), GenRand.NextFloat(0f, 1f));
+		imageData.ProcessPixelRows(accessor =>
+		{
+			for (int y = 0; y < accessor.Height; y++)
+			{
+				int newY = (int)(accessor.Height * perlinCoordCenter.Y + y) % accessor.Height;
+				var pixelRow = accessor.GetRowSpan(newY);
+				for (int x = 0; x < pixelRow.Length; x++)
+				{
+					int newX = (int)(accessor.Width * perlinCoordCenter.X + x) % accessor.Width;
+					ref var pixel = ref pixelRow[newX];
+					MeltingPixel[x, y] = pixel.R;
+				}
+			}
+		});
 	}
 
 	public static void EndGenPass()
@@ -163,7 +239,6 @@ public class YggdrasilWorldGeneration : ModSystem
 		int cY = (int)center.Y;
 		int heightLimit = CheckSpaceDown(cX, cY);
 		bool hitBottom = false;
-		Main.NewText(heightLimit);
 		if (heightLimit < height)
 		{
 			height = heightLimit;
@@ -654,26 +729,26 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// Return the tile-embedded-depth by the given point.
+	/// Return the tile-embedded-depth by the given point, a float value, but 1 tile's length = 1.0f.
 	/// </summary>
 	/// <returns></returns>
-	public static int EmbeddingDepth(int x, int y, int maxRange = 4)
+	public static float EmbeddingDepth(int x, int y, int maxRange = 4)
 	{
-		int depth = 0;
+		float minDepth = maxRange;
 		for (int i = -maxRange; i <= maxRange; i++)
 		{
 			for (int j = -maxRange; j <= maxRange; j++)
 			{
-				if (new Vector2(i, j).Length() <= maxRange)
+				if (!SafeGetTile(i + x, j + y).HasTile)
 				{
-					if (SafeGetTile(i + x, j + y).HasTile)
+					if (new Vector2(i, j).Length() <= minDepth)
 					{
-						depth++;
+						minDepth = new Vector2(i, j).Length();
 					}
 				}
 			}
 		}
-		return depth;
+		return minDepth;
 	}
 
 	/// <summary>
@@ -1150,8 +1225,19 @@ public class YggdrasilWorldGeneration : ModSystem
 						{
 							if (!tile.HasTile)
 							{
-								tile.TileType = (ushort)type;
-								tile.HasTile = true;
+								if (type == -2)
+								{
+									tile.ClearEverything();
+								}
+								else if (type == -1)
+								{
+									tile.HasTile = false;
+								}
+								else
+								{
+									tile.TileType = (ushort)type;
+									tile.HasTile = true;
+								}
 							}
 						}
 					}
