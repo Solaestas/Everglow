@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Cooldown.Tests;
+using Everglow.Commons.Netcode.Packets;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Cooldown;
@@ -10,17 +11,21 @@ public class CooldownPlayer : ModPlayer
 	/// <summary>
 	/// The <see cref="CooldownInstance"/>s of all <see cref="CooldownBase"/>s this player has active.
 	/// <br/> Only the cooldowns that are currently active will be stored here.
-	/// <br/> <see cref="CooldownExtensions.AddCooldown(Player, string, int, bool)"/>, <see cref="ClearBuff(int)"/>, and <see cref="DelBuff(int)"/> should be used to manipulate player buffs.
+	/// <br/> <see cref="CooldownExtensions.AddCooldown"/>, <see cref="CooldownExtensions.HasCooldown"/>, and <see cref="CooldownExtensions.ClearCooldown"/> should be used to manipulate player buffs.
 	/// </summary>
 	public Dictionary<string, CooldownInstance> cooldowns = [];
 
 	public override void OnEnterWorld()
 	{
 		// Testing code ===================================
-		//Player.AddCooldown(TestCooldown.ID, 60 * 50000);
-		//Player.AddCooldown(TestCooldown2.ID, 60 * 5000);
-		//Player.AddCooldown(TestCooldown3.ID, 60 * 500);
-		//Player.AddCooldown(TestCooldown4.ID, 60 * 50);
+		// Player.AddCooldown(TestCooldown.ID, 60 * 50000);
+		// Player.AddCooldown(TestCooldown2.ID, 60 * 5000);
+		// Player.AddCooldown(TestCooldown3.ID, 60 * 500);
+		// Player.AddCooldown(TestCooldown4.ID, 60 * 50);
+		foreach (var cd in cooldowns.Values)
+		{
+			SyncCooldownAddition(Main.dedServ, cd);
+		}
 	}
 
 	public override void PostUpdateMiscEffects()
@@ -47,63 +52,77 @@ public class CooldownPlayer : ModPlayer
 			cooldowns.Remove(key);
 		}
 
-		// TODO: Sync cooldown removal here
+		if (cooldowns.Count > 0)
+		{
+			SyncCooldownRemoval(Main.dedServ, expiredCooldowns);
+		}
+	}
+
+	public override void UpdateDead()
+	{
+		if (cooldowns.Count > 0)
+		{
+			var removedCooldowns = new List<string>();
+			foreach (var (key, cdInstance) in cooldowns)
+			{
+				if (cdInstance.cooldown.PersistentCooldown)
+				{
+					continue;
+				}
+
+				removedCooldowns.Add(key);
+			}
+
+			if (removedCooldowns.Count > 0)
+			{
+				foreach (var key in removedCooldowns)
+				{
+					cooldowns.Remove(key);
+				}
+
+				SyncCooldownFullUpdate(Main.dedServ);
+			}
+		}
 	}
 
 	public void SyncCooldownAddition(bool server, CooldownInstance cdInstance)
 	{
-		if (Main.netMode == NetmodeID.SinglePlayer)
-		{
-			return;
-		}
-
-		// TODO: Implement server sync logic
+		ModIns.PacketResolver.Send(new CooldownAdditionPacket(cdInstance), ignoreClient: server ? Player.whoAmI : -1);
 	}
 
 	public void SyncCooldownRemoval(bool server, IList<string> cooldownIDs)
 	{
-		if (Main.netMode == NetmodeID.SinglePlayer)
-		{
-			return;
-		}
+		ModIns.PacketResolver.Send(new CooldownRemovalPacket(cooldownIDs), ignoreClient: server ? Player.whoAmI : -1);
+	}
 
-		// TODO: Implement server sync logic
+	public void SyncCooldownFullUpdate(bool server)
+	{
+		ModIns.PacketResolver.Send(new CooldownFullUpdatePacket(cooldowns), ignoreClient: server ? Player.whoAmI : -1);
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
-		tag.TryGet<IList<TagCompound>>(PlayerDataCooldownsKey, out var list);
-		for (int i = 0; i < list.Count; i++)
+		var cooldownTag = tag.GetCompound(PlayerDataCooldownsKey);
+		var tagIterator = cooldownTag.GetEnumerator();
+		while (tagIterator.MoveNext())
 		{
-			var cdData = list[i];
-			if (!cdData.TryGet<string>(nameof(CooldownBase.ID), out var id))
+			var key = tagIterator.Current.Key;
+			var instance = CooldownInstance.Load(cooldownTag.GetCompound(key), key, Player);
+			if (instance is null)
 			{
 				continue;
 			}
 
-			var timeLeft = cdData.GetInt(nameof(CooldownInstance.timeLeft));
-			var timeMax = cdData.GetInt(nameof(CooldownInstance.timeMax));
-			cooldowns.Add(id, new CooldownInstance(Player, id, timeMax, timeLeft));
-	}
+			cooldowns.Add(instance.cooldown.TypeID, instance);
+		}
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
-		var list = new List<TagCompound>();
-		for (int i = 0; i < cooldowns.Count; i++)
+		var list = new TagCompound();
+		foreach (var (id, instance) in cooldowns.Where(cd => !cd.Value.cooldown.CooldownNoSave))
 		{
-			var cdInstance = cooldowns.ElementAt(i).Value;
-			if (cdInstance.cooldown.CooldownNoSave)
-			{
-				continue;
-			}
-
-			list.Add(new TagCompound
-			{
-				[nameof(cdInstance.cooldown.ID)] = cdInstance.cooldown.TypeID,
-				[nameof(cdInstance.timeLeft)] = cdInstance.timeLeft,
-				[nameof(cdInstance.timeMax)] = cdInstance.timeMax,
-			});
+			list.Add(id, instance.Save());
 		}
 
 		tag[PlayerDataCooldownsKey] = list;

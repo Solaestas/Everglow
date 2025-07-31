@@ -7,7 +7,7 @@ public static class CooldownExtensions
 		if (!player.HasCooldown(id) || overwrite)
 		{
 			var modP = player.GetModPlayer<CooldownPlayer>();
-			var instance = new CooldownInstance(player, id, timeToAdd);
+			var instance = new CooldownInstance(player, CooldownRegistry.GetNet(id), timeToAdd);
 			modP.cooldowns[id] = instance;
 			modP.SyncCooldownAddition(Main.dedServ, instance);
 		}

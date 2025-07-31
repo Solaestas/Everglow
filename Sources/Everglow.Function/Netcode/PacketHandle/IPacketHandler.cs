@@ -1,12 +1,12 @@
-namespace Everglow.Commons.Network.PacketHandle;
+namespace Everglow.Commons.Netcode.PacketHandle;
 
 /// <summary>
-/// ½ÓÊÕºÍ´¦ÀíÄ³¸öÀàĞÍµÄ·â°üµÄÂß¼­
+/// æ¥æ”¶å’Œå¤„ç†æŸä¸ªç±»å‹çš„å°åŒ…çš„é€»è¾‘
 /// </summary>
 public interface IPacketHandler
 {
 	/// <summary>
-	/// ½ÓÊÕµ½·â°üÒÔºóµÄÊµ¼ÊÂß¼­²¿·Ö
+	/// æ¥æ”¶åˆ°å°åŒ…ä»¥åçš„å®é™…é€»è¾‘éƒ¨åˆ†
 	/// </summary>
 	/// <param name="packet"></param>
 	/// <param name="whoAmI"></param>
@@ -14,7 +14,7 @@ public interface IPacketHandler
 }
 
 /// <summary>
-/// ÓÃÓÚÖ¸¶¨Ò»¸öIPacketHandlerĞèÒª´¦ÀíµÄIPacketÀàĞÍ£¬³õ²½ÈÏ¶¨Ò»¸öHandlerÖ»´¦ÀíÒ»ÖÖ·â°ü
+/// ç”¨äºæŒ‡å®šä¸€ä¸ªIPacketHandleréœ€è¦å¤„ç†çš„IPacketç±»å‹ï¼Œåˆæ­¥è®¤å®šä¸€ä¸ªHandleråªå¤„ç†ä¸€ç§å°åŒ…
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public class HandlePacketAttribute : Attribute

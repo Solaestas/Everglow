@@ -1,4 +1,4 @@
-﻿namespace Everglow.Commons.NetUtils;
+namespace Everglow.Commons.Netcode;
 
 public interface INetUpdate<T>
 {

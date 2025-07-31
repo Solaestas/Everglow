@@ -107,7 +107,7 @@ public class CooldownSystem : ModSystem
 		spriteBatch.End();
 		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
 		spriteBatch.GraphicsDevice.Textures[0] = ModAsset.White.Value;
-		var progress = mp.cooldowns[cooldownSlotOnPlayer].timeLeft / (float)mp.cooldowns[cooldownSlotOnPlayer].timeMax;
+		var progress = mp.cooldowns[cooldownSlotOnPlayer].Progress;
 		var progressPos = drawPosition + new Vector2(width / 2, height / 2);
 		var progressAlpha = cooldownAlpha[cooldownSlotOnPlayer];
 		progressAlpha += (1 - progressAlpha) * 0.5f;

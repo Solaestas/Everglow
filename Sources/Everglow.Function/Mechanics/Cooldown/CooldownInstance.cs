@@ -1,25 +1,47 @@
+using Terraria.ModLoader.IO;
+
 namespace Everglow.Commons.Mechanics.Cooldown;
 
 public sealed class CooldownInstance
 {
-	public CooldownInstance(Player player, string id, int timeMax, int timeLeft)
-	{
-		Type cdBaseT = CooldownRegistry.nameToType[id];
-		var cooldown = Activator.CreateInstance(cdBaseT) as CooldownBase;
-		cooldown.Instance = this;
+	private const string NetIDSaveKey = "netID";
+	private const string TimeMaxSaveKey = "timeMax";
+	private const string TimeLeftSaveKey = "timeLeft";
 
+	public CooldownInstance(Player player, CooldownNet cdN, int timeMax, int timeLeft)
+	{
+		this.netID = cdN.NetID;
 		this.player = player;
-		this.cooldown = cooldown;
 		this.timeMax = timeMax;
 		this.timeLeft = timeLeft;
+		SetCooldown(cdN);
 	}
 
-	public CooldownInstance(Player player, string id, int timeMax)
-		: this(player, id, timeMax, timeMax)
+	public CooldownInstance(Player player, CooldownNet cdN, int timeMax)
+		: this(player, cdN, timeMax, timeMax)
 	{
 	}
 
-	internal ushort netId;
+	public CooldownInstance(BinaryReader reader)
+	{
+		netID = reader.ReadUInt16();
+		player = Main.player[reader.ReadByte()];
+		timeMax = reader.ReadInt32();
+		timeLeft = reader.ReadInt32();
+
+		string id = CooldownRegistry.registry[netID].ID;
+		SetCooldown(CooldownRegistry.GetNet(id));
+	}
+
+	internal void SetCooldown(CooldownNet cdN)
+	{
+		Type cdBaseT = CooldownRegistry.nameToType[cdN.ID];
+		var cooldown = Activator.CreateInstance(cdBaseT) as CooldownBase;
+		cooldown.Instance = this;
+		this.cooldown = cooldown;
+	}
+
+	internal ushort netID;
 
 	public Player player;
 
@@ -27,7 +49,50 @@ public sealed class CooldownInstance
 
 	public int timeLeft;
 
-	public float Completion => timeMax != 0 ? timeLeft / (float)timeMax : 0;
+	public float Progress => timeMax != 0 ? Math.Clamp(timeLeft / (float)timeMax, 0f, 1f) : 0;
 
 	public CooldownBase cooldown;
+
+	internal TagCompound Save()
+	{
+		return new TagCompound
+		{
+			[NetIDSaveKey] = (int)netID,
+			[TimeMaxSaveKey] = timeMax,
+			[TimeLeftSaveKey] = timeLeft,
+		};
+	}
+
+	internal static CooldownInstance Load(TagCompound tag, string id, Player player)
+	{
+		if (!tag.TryGet<int>(NetIDSaveKey, out var netID))
+		{
+			return null;
+		}
+
+		var cdNet = CooldownRegistry.GetNet(id);
+		if (cdNet == null)
+		{
+			Ins.Logger.Warn($"Cooldown with ID '{id}' not found in CooldownRegistry. Skipping loading for this cooldown.");
+			return null;
+		}
+
+		if (cdNet.NetID != netID)
+		{
+			Ins.Logger.Warn($"Cooldown with ID '{id}' has mismatched netID. Expected {cdNet.NetID}, got {netID}. Skipping loading for this cooldown.");
+		}
+
+		var timeLeft = tag.GetInt(nameof(CooldownInstance.timeLeft));
+		var timeMax = tag.GetInt(nameof(CooldownInstance.timeMax));
+
+		return new CooldownInstance(player, cdNet, timeMax, timeLeft);
+	}
+
+	internal void Write(BinaryWriter writer)
+	{
+		writer.Write(netID);
+		writer.Write((byte)player.whoAmI);
+		writer.Write(timeMax);
+		writer.Write(timeLeft);
+	}
 }

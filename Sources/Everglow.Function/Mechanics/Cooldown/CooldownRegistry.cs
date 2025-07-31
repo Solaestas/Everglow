@@ -8,8 +8,6 @@ public class CooldownRegistry : ModSystem
 	public static Dictionary<string, Type> nameToType;
 	private static ushort nextNetID = 0;
 
-	public record CooldownNet(string ID, ushort NetID);
-
 	public override void Load()
 	{
 		registry = new CooldownNet[DefaultCooldownCapacity];
@@ -27,7 +25,6 @@ public class CooldownRegistry : ModSystem
 		nameToType?.Clear();
 		nameToType = null;
 	}
-
 
 	public override void PostSetupContent()
 	{

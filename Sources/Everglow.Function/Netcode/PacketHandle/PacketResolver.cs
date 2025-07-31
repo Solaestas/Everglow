@@ -1,10 +1,8 @@
-namespace Everglow.Commons.Network.PacketHandle;
-
 using System.Reflection;
-using Everglow.Commons;
 using Everglow.Commons.FeatureFlags;
-using Terraria.ID;
-using Packet_Id = Int32;
+using Packet_Id = System.Int32;
+
+namespace Everglow.Commons.Netcode.PacketHandle;
 
 /// <summary>
 /// 用于管理封包发送、接收的类
@@ -42,7 +40,10 @@ public class PacketResolver
 	{
 		// 单人模式不要有任何动作
 		if (Main.netMode == NetmodeID.SinglePlayer)
+		{
 			return;
+		}
+
 		var modPacket = GetPacket();
 		using (MemoryStream ms = new())
 		{
@@ -50,7 +51,9 @@ public class PacketResolver
 			int id = packetIDMapping[packet.GetType()];
 			packet.Send(bw);
 			if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
+			{
 				modPacket.Write(id);
+			}
 			else
 			{
 				modPacket.Write((byte)id);
@@ -58,6 +61,12 @@ public class PacketResolver
 			modPacket.Write(ms.GetBuffer(), 0, (int)ms.Position);
 			modPacket.Flush();
 		}
+
+		if (Main.netMode == NetmodeID.SinglePlayer)
+		{
+			return;
+		}
+
 		modPacket.Send(toClient, ignoreClient);
 	}
 
@@ -71,7 +80,9 @@ public class PacketResolver
 	{
 		var type = typeof(T);
 		if (packetIDMapping.ContainsKey(type))
+		{
 			return packetIDMapping[type];
+		}
 		throw new ArgumentException("不存在的Packet类型");
 	}
 
@@ -86,7 +97,9 @@ public class PacketResolver
 
 		// 首先读取封包ID
 		if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
+		{
 			packetID = reader.ReadInt32();
+		}
 		else
 		{
 			packetID = reader.ReadByte();
@@ -135,13 +148,17 @@ public class PacketResolver
 			{
 				Type packetType = handlePacket.PacketType;
 				if (!packetIDMapping.ContainsKey(packetType))
+				{
 					throw new InvalidOperationException("Unknown packet type");
+				}
 
 				// 获取封包类型的对应ID，并且将handler绑定上去
 				Packet_Id packetId = packetIDMapping[packetType];
 				var handler = Activator.CreateInstance(type) as IPacketHandler;
 				if (packetHandlers.ContainsKey(packetId))
+				{
 					packetHandlers[packetId].Add(handler);
+				}
 				else
 				{
 					packetHandlers.Add(packetId, new List<IPacketHandler> { handler });

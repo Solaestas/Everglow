@@ -3,12 +3,11 @@ using Everglow.Commons;
 using Everglow.Commons.Hooks;
 using Everglow.Commons.Interfaces;
 using Everglow.Commons.Modules;
-using Everglow.Commons.Network.PacketHandle;
+using Everglow.Commons.Netcode.PacketHandle;
 using Everglow.Commons.ObjectPool;
 using Everglow.Commons.TileHelper;
 using Everglow.Commons.VFX;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
@@ -16,8 +15,6 @@ namespace Everglow;
 
 public class Everglow : Mod
 {
-	private PacketResolver packetResolver;
-
 	public override void Load()
 	{
 		ModIns.Mod = this;
@@ -25,7 +22,7 @@ public class Everglow : Mod
 		AddServices();
 		AddContents();
 		ShakeTreeTweak.Load();
-		packetResolver = new PacketResolver(this);
+		ModIns.PacketResolver = new PacketResolver(this);
 	}
 
 	private void AddServices()
@@ -97,13 +94,10 @@ public class Everglow : Mod
 	public override void Unload()
 	{
 		ModIns.Unload();
-		packetResolver = null;
+		ModIns.PacketResolver = null;
 		ModIns.Mod = null;
 		Ins.Clear();
 	}
 
-	public override void HandlePacket(BinaryReader reader, int whoAmI)
-	{
-		packetResolver.Resolve(reader, whoAmI);
-	}
+	public override void HandlePacket(BinaryReader reader, int whoAmI) => ModIns.PacketResolver.Resolve(reader, whoAmI);
 }
