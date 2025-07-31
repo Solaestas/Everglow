@@ -64,11 +64,6 @@ namespace Everglow.Minortopography.GiantPinetree.Items
 
 		public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
 		{
-			ModPacket packet = Mod.GetPacket();
-			packet.Write((byte)MessageID.PlayerLifeMana);
-			packet.Write((byte)Player.whoAmI);
-			packet.Write((byte)PineNutCount);
-			packet.Send(toWho, fromWho);
 		}
 
 		// Called in ExampleMod.Networking.cs

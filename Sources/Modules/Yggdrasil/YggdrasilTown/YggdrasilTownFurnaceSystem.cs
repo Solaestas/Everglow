@@ -66,11 +66,11 @@ public class FurnacePlayer : ModPlayer
 
 	public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
 	{
-		ModPacket packet = Mod.GetPacket();
-		packet.Write(MessageID.PlayerLifeMana);
-		packet.Write((byte)Player.whoAmI);
-		packet.Write((byte)FurnaceScore);
-		packet.Send(toWho, fromWho);
+		//ModPacket packet = Mod.GetPacket();
+		//packet.Write(MessageID.PlayerLifeMana);
+		//packet.Write((byte)Player.whoAmI);
+		//packet.Write((byte)FurnaceScore);
+		//packet.Send(toWho, fromWho);
 	}
 
 	// Called in ExampleMod.Networking.cs

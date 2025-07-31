@@ -23,7 +23,7 @@ public class AntiHeavenSicknessPill : ModItem
 		Item.useTime = Item.useAnimation = 30;
 		Item.UseSound = SoundID.Item4;
 
-		Item.maxStack = 9999;
+		Item.maxStack = Item.CommonMaxStack;
 		Item.consumable = true;
 
 		Item.rare = ItemRarityID.Green;

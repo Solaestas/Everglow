@@ -28,11 +28,5 @@ public class SquamousCore : ModItem
 		Item.useStyle = ItemUseStyleID.EatFood;
 	}
 
-	public override bool CanUseItem(Player player)
-	{
-		// This check prevents this item from being used before vanilla health upgrades are maxed out.
-		return true;
-	}
-
 	public override bool? UseItem(Player player) => player.GetModPlayer<YggdrasilPlayer>().UseSquamousCore();
 }

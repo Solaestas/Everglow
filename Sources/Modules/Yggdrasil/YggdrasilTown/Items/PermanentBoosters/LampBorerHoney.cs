@@ -1,5 +1,4 @@
 using Terraria.Localization;
-using Terraria.ModLoader.IO;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.PermanentBoosters;
 
@@ -27,11 +26,6 @@ public class LampBorerHoney : ModItem
 		Item.value = 15000;
 		Item.maxStack = Item.CommonMaxStack;
 		Item.useStyle = ItemUseStyleID.EatFood;
-	}
-
-	public override bool CanUseItem(Player player)
-	{
-		return true;
 	}
 
 	public override bool? UseItem(Player player) => player.GetModPlayer<YggdrasilPlayer>().UseLampBorerHoney();
