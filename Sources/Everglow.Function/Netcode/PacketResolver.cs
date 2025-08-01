@@ -1,9 +1,11 @@
 using Everglow.Commons.FeatureFlags;
-using Packet_ID = int; // System.Int32;
+using Everglow.Commons.Netcode.Abstracts;
+using Everglow.Commons.Netcode.PacketHandle;
+using Packet_ID = System.Int32;
 
 #pragma warning disable SA1121 // Use built-in type alias
 
-namespace Everglow.Commons.Netcode.PacketHandle;
+namespace Everglow.Commons.Netcode;
 
 /// <summary>
 /// 用于管理封包发送、接收的类
