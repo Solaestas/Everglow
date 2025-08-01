@@ -1,4 +1,5 @@
 using System.Reflection;
+using Everglow.Commons.Mechanics.BiomesText;
 using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using SubworldLibrary;
 using Terraria.WorldBuilding;
@@ -82,12 +83,18 @@ internal class YggdrasilWorld : Subworld
 
 public class YggdrasilWorldSystem : ModSystem
 {
+	public override void PostUpdatePlayers()
+	{
+		ModContent.GetInstance<BiomeLabelSystem>().PlayerInVanillaWorld &= !YggdrasilWorld.InYggdrasil;
+	}
+
 	public override void PostUpdateEverything()
 	{
 		if (YggdrasilWorld.InYggdrasil)
 		{
 			YggdrasilWorld.YggdrasilTimer++;
-			if(Main.bloodMoon)
+
+			if (Main.bloodMoon)
 			{
 				Main.bloodMoon = false;
 			}
@@ -96,6 +103,5 @@ public class YggdrasilWorldSystem : ModSystem
 				Main.slimeRain = false;
 			}
 		}
-		base.PostUpdateEverything();
 	}
 }

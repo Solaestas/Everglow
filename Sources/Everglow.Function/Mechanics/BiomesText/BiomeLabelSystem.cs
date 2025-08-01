@@ -25,6 +25,12 @@ public class BiomeLabelSystem : ModSystem
 	public Dictionary<ModBiome, int> ActiveModBiomeCache = [];
 	public Dictionary<string, int> ActiveVanillaBiomeCache = [];
 	public Queue<(string, Texture2D)> DisplayBiomeQueue = [];
+	public bool PlayerInVanillaWorld = true;
+
+	public override void PreUpdatePlayers()
+	{
+		PlayerInVanillaWorld = true;
+	}
 
 	public override void PostSetupContent()
 	{
@@ -100,7 +106,7 @@ public class BiomeLabelSystem : ModSystem
 		if (BiomeKeys.Contains(key))
 		{
 			var biomeData = VanillaBiomeIndex[key];
-			if (biomeData.Condition(player))
+			if (biomeData.Condition(player) && PlayerInVanillaWorld)
 			{
 				if (ActiveVanillaBiomeCache[key] < timeLag)
 				{
