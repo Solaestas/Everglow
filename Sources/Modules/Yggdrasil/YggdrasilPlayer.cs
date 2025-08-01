@@ -1,5 +1,6 @@
 using System.Reflection;
 using Everglow.Yggdrasil.KelpCurtain.Items.PermanentBoosters;
+using Everglow.Yggdrasil.Netcode;
 using Everglow.Yggdrasil.YggdrasilTown.Items.PermanentBoosters;
 using SubworldLibrary;
 using Terraria.ModLoader.IO;
@@ -45,6 +46,7 @@ public class YggdrasilPlayer : ModPlayer
 			lifeFix3 = modPlayer.ConsumedSquamousCore * SquamousCore.SquamousCoreLife;
 			lifeFix4 = modPlayer.ConsumedLampBorerHoney * LampBorerHoney.LifePerHoney;
 		}
+
 		if (SubworldSystem.IsActive<YggdrasilWorld>())
 		{
 			player.statLifeMax = 100 + player.ConsumedLifeCrystals * 4 + player.ConsumedLifeFruit * 1 + lifeFix1 + lifeFix2 + lifeFix3 + lifeFix4;
@@ -152,34 +154,33 @@ public class YggdrasilPlayer : ModPlayer
 
 	#endregion
 
-	// public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
-	// {
-	// 	ModPacket packet = Mod.GetPacket();
-	// 	packet.Write(MessageID.PlayerLifeMana);
-	// 	packet.Write((byte)Player.whoAmI);
-	// 	packet.Write((byte)ConsumedLampBorerHoney);
-	// 	packet.Send(toWho, fromWho);
-	// }
+	public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+	{
+		ModIns.PacketResolver.Send(
+			new PermanentBoostPacket()
+		{
+			consumedAntiHeavenSicknessPill = ConsumedAntiHeavenSicknessPill,
+			consumedJadeGlazeFruit = ConsumedJadeGlazeFruit,
+			consumedSquamousCore = ConsumedSquamousCore,
+			consumedLampBorerHoney = ConsumedLampBorerHoney,
+		}, toWho, fromWho);
+	}
 
-	// // Called in ExampleMod.Networking.cs
-	// public void ReceivePlayerSync(BinaryReader reader)
-	// {
-	// 	ConsumedLampBorerHoney = reader.ReadByte();
-	// }
+	public override void CopyClientState(ModPlayer targetCopy)
+	{
+		var clone = (YggdrasilPlayer)targetCopy;
+		clone.ConsumedLampBorerHoney = ConsumedLampBorerHoney;
+		clone.ConsumedAntiHeavenSicknessPill = ConsumedAntiHeavenSicknessPill;
+		clone.ConsumedJadeGlazeFruit = ConsumedJadeGlazeFruit;
+		clone.ConsumedSquamousCore = ConsumedSquamousCore;
+	}
 
-	// public override void CopyClientState(ModPlayer targetCopy)
-	// {
-	// 	var clone = (YggdrasilPlayer)targetCopy;
-	// 	clone.ConsumedLampBorerHoney = ConsumedLampBorerHoney;
-	// }
-
-	// public override void SendClientChanges(ModPlayer clientPlayer)
-	// {
-	// 	var clone = (YggdrasilPlayer)clientPlayer;
-
-	// 	if (ConsumedLampBorerHoney != clone.ConsumedLampBorerHoney)
-	// 	{
-	// 		SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
-	// 	}
-	// }
+	public override void SendClientChanges(ModPlayer clientPlayer)
+	{
+		var clone = (YggdrasilPlayer)clientPlayer;
+		if (ConsumedLampBorerHoney != clone.ConsumedLampBorerHoney)
+		{
+			SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
+		}
+	}
 }
