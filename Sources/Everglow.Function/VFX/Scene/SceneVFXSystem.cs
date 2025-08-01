@@ -2,23 +2,26 @@ namespace Everglow.Commons.VFX.Scene;
 
 public class SceneVFXSystem : ModSystem
 {
-	public static Dictionary<(int, int), bool> TilePointHasScene = new Dictionary<(int, int), bool>();
-	internal Vector2 LastCheckScreenPosition = default(Vector2);
-	internal float MaxUpdateDistance = 500;
+	private static Dictionary<(int, int), bool> _tilePointHasScene = [];
 
-	public override void PostUpdateWorld()
+	public static Dictionary<(int X, int Y), bool> TilePointHasScene => _tilePointHasScene;
+
+	private Vector2 lastCheckScreenPosition = default;
+	private float maxUpdateDistance = 500;
+
+	public override void PreUpdateDusts()
 	{
-		Vector2 deltaScreenPos = LastCheckScreenPosition - Main.screenPosition;
-		if (deltaScreenPos.Length() > MaxUpdateDistance - 150)
+		Vector2 deltaScreenPos = lastCheckScreenPosition - Main.screenPosition;
+		if (deltaScreenPos.Length() > maxUpdateDistance - 150)
 		{
-			LastCheckScreenPosition = Main.screenPosition;
-			int startX = (int)((Main.screenPosition.X - MaxUpdateDistance) / 16f);
+			lastCheckScreenPosition = Main.screenPosition;
+			int startX = (int)((Main.screenPosition.X - maxUpdateDistance) / 16f);
 			startX = Math.Max(startX, 20);
-			int endX = (int)((Main.screenPosition.X + Main.screenWidth + MaxUpdateDistance) / 16f);
+			int endX = (int)((Main.screenPosition.X + Main.screenWidth + maxUpdateDistance) / 16f);
 			endX = Math.Min(endX, Main.maxTilesX - 20);
-			int startY = (int)((Main.screenPosition.Y - MaxUpdateDistance) / 16f);
+			int startY = (int)((Main.screenPosition.Y - maxUpdateDistance) / 16f);
 			startY = Math.Max(startY, 20);
-			int endY = (int)((Main.screenPosition.Y + Main.screenHeight + MaxUpdateDistance) / 16f);
+			int endY = (int)((Main.screenPosition.Y + Main.screenHeight + maxUpdateDistance) / 16f);
 			endY = Math.Min(endY, Main.maxTilesY - 20);
 			for (int x = startX; x < endX; x++)
 			{
@@ -43,28 +46,30 @@ public class SceneVFXSystem : ModSystem
 				}
 			}
 		}
-		base.PostUpdateWorld();
 	}
 
 	public override void OnWorldLoad()
 	{
-		TilePointHasScene = new Dictionary<(int, int), bool>();
-		base.OnWorldLoad();
+		_tilePointHasScene = [];
 	}
-}
 
-public class SceneTileBehavior : GlobalTile
-{
-	public override void PlaceInWorld(int i, int j, int type, Item item)
+	public override void OnWorldUnload()
 	{
-		Tile tile = Main.tile[i, j];
-		ISceneTile sceneTile = TileLoader.GetTile(tile.TileType) as ISceneTile;
-		if (sceneTile != null)
-		{
-			sceneTile.AddScene(i, j);
-			SceneVFXSystem.TilePointHasScene[(i, j)] = true;
-		}
+		_tilePointHasScene.Clear();
+		_tilePointHasScene = null;
+	}
 
-		base.PlaceInWorld(i, j, type, item);
+	public class SceneTileBehavior : GlobalTile
+	{
+		public override void PlaceInWorld(int i, int j, int type, Item item)
+		{
+			Tile tile = Main.tile[i, j];
+			ISceneTile sceneTile = TileLoader.GetTile(tile.TileType) as ISceneTile;
+			if (sceneTile != null)
+			{
+				sceneTile.AddScene(i, j);
+				SceneVFXSystem.TilePointHasScene[(i, j)] = true;
+			}
+		}
 	}
 }
