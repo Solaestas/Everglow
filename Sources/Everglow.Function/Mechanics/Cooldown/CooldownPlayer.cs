@@ -102,7 +102,17 @@ public class CooldownPlayer : ModPlayer
 
 	public override void LoadData(TagCompound tag)
 	{
-		var cooldownTag = tag.GetCompound(PlayerDataCooldownsKey);
+		TagCompound cooldownTag;
+		try
+		{
+			cooldownTag = tag.Get<TagCompound>(PlayerDataCooldownsKey);
+		}
+		catch (IOException)
+		{
+			Ins.Logger.Error($"Failed to load cooldowns for player {Player.name} because save type mismatch.");
+			cooldownTag = default;
+		}
+
 		var tagIterator = cooldownTag.GetEnumerator();
 		while (tagIterator.MoveNext())
 		{
