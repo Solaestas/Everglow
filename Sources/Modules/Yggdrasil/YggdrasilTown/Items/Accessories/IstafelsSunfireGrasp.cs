@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.Cooldown;
 using Everglow.Commons.Mechanics.ElementalDebuff;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
@@ -53,7 +54,7 @@ public class IstafelsSunfireGrasp : ModItem
 
 		if (player.whoAmI == Main.myPlayer
 			&& (Main.mouseMiddle && Main.mouseMiddleRelease)
-			&& !player.HasBuff<IstafelsSunfireGraspSkillCooldown>())
+			&& !player.HasCooldown<IstafelsSunfireGraspSkillCooldown>())
 		{
 			player.GetModPlayer<IstafelsSunfireGraspPlayer>().SkillEnable = true;
 		}
@@ -91,7 +92,7 @@ public class IstafelsSunfireGrasp : ModItem
 		public override void PostUpdateMiscEffects()
 		{
 			// Handle skill trigger
-			if (Player.HasBuff<IstafelsSunfireGraspSkillCooldown>()
+			if (Player.HasCooldown<IstafelsSunfireGraspSkillCooldown>()
 				|| !SkillEnable)
 			{
 				return;
@@ -124,7 +125,7 @@ public class IstafelsSunfireGrasp : ModItem
 			}
 
 			// Add skill buff and cooldown debuff
-			Player.AddBuff(ModContent.BuffType<IstafelsSunfireGraspSkillCooldown>(), SkillCooldown);
+			Player.AddCooldown(IstafelsSunfireGraspSkillCooldown.ID, SkillCooldown);
 			Player.AddBuff(ModContent.BuffType<IstafelsSunfireGraspSkillBuff>(), SkillDuration);
 
 			// Play sound effect
@@ -146,7 +147,7 @@ public class IstafelsSunfireGrasp : ModItem
 
 		private void ManageFireBall(NPC target, int damageDone)
 		{
-			if (!Player.HasBuff<IstafelsSunfireGraspFireBallCooldown>())
+			if (!Player.HasCooldown<IstafelsSunfireGraspFireBallCooldown>())
 			{
 				// If don't have fire ball, create one
 				if (FireBallProj == null || !FireBallProj.Projectile.active)
@@ -162,7 +163,7 @@ public class IstafelsSunfireGrasp : ModItem
 				// If build-up is max, shoot fire ball
 				if (FireBallProj.BuildUp > IstafelsSunfireGrasp_FireBall.BuildUpMax)
 				{
-					Player.AddBuff(ModContent.BuffType<IstafelsSunfireGraspFireBallCooldown>(), FireBallCooldown);
+					Player.AddCooldown(IstafelsSunfireGraspFireBallCooldown.ID, FireBallCooldown);
 
 					FireBallProj.Active(target);
 					FireBallProj = null;

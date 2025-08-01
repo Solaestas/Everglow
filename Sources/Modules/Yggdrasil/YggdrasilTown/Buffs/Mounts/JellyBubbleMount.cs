@@ -4,6 +4,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Buffs.Mounts;
 
 public class JellyBubbleMount : ModBuff
 {
+	public override string Texture => Commons.ModAsset.BuffTemplate_Mod;
+
 	public override void SetStaticDefaults()
 	{
 		Main.buffNoSave[Type] = true;

@@ -8,6 +8,8 @@ public class Plague : ModBuff
 	public const int SpreadedBuffDuration = 240;
 	public const int EnemySpreadLimit = 6;
 
+	public override string Texture => Commons.ModAsset.BuffTemplate_Mod;
+
 	public override void SetStaticDefaults()
 	{
 		Main.pvpBuff[Type] = true;

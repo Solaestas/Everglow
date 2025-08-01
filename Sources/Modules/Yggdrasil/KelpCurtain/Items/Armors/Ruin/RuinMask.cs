@@ -1,4 +1,6 @@
+using Everglow.Commons.Mechanics.Cooldown;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
+using Everglow.Yggdrasil.KelpCurtain.Cooldowns;
 using Everglow.Yggdrasil.KelpCurtain.Items.Weapons.Ruin;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 using Terraria.Audio;
@@ -93,12 +95,12 @@ public class RuinMask : ModItem
 			{
 				if (RuinSetEnable
 					&& Player.HeldItem.type == ModContent.ItemType<WoodlandWraithStaff>()
-					&& !Player.HasBuff<RuinSetCooldown>())
+					&& !Player.HasCooldown<RuinSetCooldown>())
 				{
 					if (Player.whoAmI == Main.myPlayer)
 					{
 						Player.AddBuff(ModContent.BuffType<RuinSetBuff>(), BuffDuration);
-						Player.AddBuff(ModContent.BuffType<RuinSetCooldown>(), CooldownDuration);
+						Player.AddCooldown(RuinSetCooldown.ID, CooldownDuration);
 						RuinSetBuffTimer = AnimationDuration;
 						Projectile.NewProjectile(Player.GetSource_FromAI(), Player.Center, Player.velocity, ModContent.ProjectileType<WoodlandWraithStaff_SetAnimation>(), 0, 0, Player.whoAmI);
 					}

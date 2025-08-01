@@ -1,4 +1,6 @@
+using Everglow.Commons.Mechanics.Cooldown;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
+using Everglow.Yggdrasil.KelpCurtain.Cooldowns;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Accessories;
@@ -104,11 +106,10 @@ public class TheGreenSolar : ModItem
 		{
 			if (TheGreenSolarEnable)
 			{
-				Player.ClearBuff(ModContent.BuffType<TheGreenSolarCooldown>());
-				if (!Player.HasBuff<TheGreenSolarCooldown>())
+				if (!Player.HasCooldown<TheGreenSolarCooldown>())
 				{
 					Player.AddBuff(ModContent.BuffType<TheGreenSolarBuff>(), 2);
-					Player.AddBuff(ModContent.BuffType<TheGreenSolarCooldown>(), CooldownDuration);
+					Player.AddCooldown(TheGreenSolarCooldown.ID, CooldownDuration);
 					return false;
 				}
 			}

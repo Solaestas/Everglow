@@ -1,4 +1,5 @@
-using Everglow.Yggdrasil.YggdrasilTown.Buffs;
+using Everglow.Commons.Mechanics.Cooldown;
+using Everglow.Yggdrasil.YggdrasilTown.Cooldowns;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.Furnace;
 
@@ -38,7 +39,7 @@ public class MelterGear : ModItem
 	}
 }
 
-internal class MelterGearPlayer : ModPlayer
+public class MelterGearPlayer : ModPlayer
 {
 	public bool MelterGearEnable = false;
 
@@ -59,12 +60,12 @@ internal class MelterGearPlayer : ModPlayer
 	{
 		if (MelterGearEnable)
 		{
-			if (target.onFire && !Player.HasBuff<MelterGearCooldown>())
+			if (target.onFire && !Player.HasCooldown<MelterGearCooldown>())
 			{
 				if (Main.rand.NextFloat() < MelterGear.PlayerBuffTriggerRate)
 				{
 					Player.AddBuff(BuffID.OnFire, MelterGear.BuffDuration);
-					Player.AddBuff(ModContent.BuffType<MelterGearCooldown>(), MelterGear.EffectCooldown);
+					Player.AddCooldown(MelterGearCooldown.ID, MelterGear.EffectCooldown);
 				}
 			}
 

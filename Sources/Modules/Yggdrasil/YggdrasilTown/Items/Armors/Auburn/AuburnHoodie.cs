@@ -1,4 +1,6 @@
+using Everglow.Commons.Mechanics.Cooldown;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
+using Everglow.Yggdrasil.YggdrasilTown.Cooldowns;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
@@ -77,11 +79,12 @@ public class AuburnArmorSetPlayer : ModPlayer
 		}
 
 		if (Player.HasBuff<AuburnSelfReinforcing>() ||
-			Player.HasBuff<AuburnSelfReinforcingCooldown>())
+			Player.HasCooldown<AuburnSelfReinforcingCooldown>())
 		{
 			return;
 		}
 
 		Player.AddBuff(ModContent.BuffType<AuburnSelfReinforcing>(), AuburnHoodie.BuffDuration);
+		Player.AddCooldown(AuburnSelfReinforcingCooldown.ID, AuburnHoodie.BuffCooldown);
 	}
 }

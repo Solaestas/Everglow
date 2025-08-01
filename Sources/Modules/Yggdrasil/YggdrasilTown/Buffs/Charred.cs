@@ -7,6 +7,8 @@ public class Charred : ModBuff
 	public const float DefenseReduction = 0.11f;
 	public const int LifeRegenReductionFromDot = 36;
 
+	public override string Texture => Commons.ModAsset.BuffTemplate_Mod;
+
 	public override void SetStaticDefaults()
 	{
 		Main.pvpBuff[Type] = true;
