@@ -111,7 +111,14 @@ public class BiomeLabel : ModSystem
 					ActiveModBiomeCache[modBiome]++;
 					if(ActiveModBiomeCache[modBiome] == timeLag)
 					{
-						NewActiveBiomeQueue.Enqueue(new BiomeData(modBiome.Name, ModContent.Request<Texture2D>(modBiome.BestiaryIcon, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value));
+						if (ModContent.HasAsset(modBiome.BestiaryIcon))
+						{
+							NewActiveBiomeQueue.Enqueue(new BiomeData(modBiome.Name, ModContent.Request<Texture2D>(modBiome.BestiaryIcon, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value));
+						}
+						else
+						{
+							NewActiveBiomeQueue.Enqueue(new BiomeData(modBiome.Name, ModAsset.Cavern.Value));
+						}
 					}			
 				}
 			}
