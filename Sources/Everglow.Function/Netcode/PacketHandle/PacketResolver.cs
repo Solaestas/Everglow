@@ -1,6 +1,7 @@
-using System.Reflection;
 using Everglow.Commons.FeatureFlags;
-using Packet_Id = System.Int32;
+using Packet_ID = int; // System.Int32;
+
+#pragma warning disable SA1121 // Use built-in type alias
 
 namespace Everglow.Commons.Netcode.PacketHandle;
 
@@ -10,10 +11,10 @@ namespace Everglow.Commons.Netcode.PacketHandle;
 public class PacketResolver
 {
 	private Mod _mod;
-	private Dictionary<Packet_Id, List<IPacketHandler>> packetHandlers;
-	private Dictionary<Type, Packet_Id> packetIDMapping;
-	private Dictionary<Packet_Id, Type> packetIDToTypeMapping;
-	private Packet_Id packetIDCounter;
+	private Dictionary<Packet_ID, List<IPacketHandler>> packetHandlerRegistry;
+	private Dictionary<Type, Packet_ID> packetIDMapping;
+	private Dictionary<Packet_ID, Type> packetIDToTypeMapping;
+	private Packet_ID packetIDCounter;
 
 	/// <summary>
 	/// 用于初始化所有需要监听的 Packet 类型和监听器
@@ -21,16 +22,32 @@ public class PacketResolver
 	public PacketResolver(Mod mod)
 	{
 		packetIDCounter = 0;
-		packetIDMapping = new Dictionary<Type, Packet_Id>();
-		packetIDToTypeMapping = new Dictionary<Packet_Id, Type>();
-		packetHandlers = new Dictionary<Packet_Id, List<IPacketHandler>>();
+		packetIDMapping = [];
+		packetIDToTypeMapping = [];
+		packetHandlerRegistry = [];
 
 		_mod = mod;
 		RegisterPackets();
 	}
 
 	/// <summary>
-	/// 发送一个封包数据的实例，并且指定发送方式
+	/// 查询某个封包类型对应的封包ID，如果不存在则返回-1
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <returns></returns>
+	public int QueryPacketID<T>()
+		where T : IPacket
+	{
+		var type = typeof(T);
+		if (packetIDMapping.TryGetValue(type, out int packetID))
+		{
+			return packetID;
+		}
+		throw new ArgumentException($"Packet type {type.Name} does not exist.");
+	}
+
+	/// <summary>
+	/// 向指定对象发送一个封包数据的实例 (单人模式下无动作)
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	/// <param name="packet"></param>
@@ -62,6 +79,7 @@ public class PacketResolver
 			modPacket.Flush();
 		}
 
+		// 二次检测，如果是单人模式则不发送
 		if (Main.netMode == NetmodeID.SinglePlayer)
 		{
 			return;
@@ -71,29 +89,13 @@ public class PacketResolver
 	}
 
 	/// <summary>
-	/// 查询某个封包类型对应的封包ID，如果不存在则返回-1
-	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	/// <returns></returns>
-	public int QueryPacketId<T>()
-		where T : IPacket
-	{
-		var type = typeof(T);
-		if (packetIDMapping.ContainsKey(type))
-		{
-			return packetIDMapping[type];
-		}
-		throw new ArgumentException("不存在的Packet类型");
-	}
-
-	/// <summary>
 	/// 处理封包
 	/// </summary>
 	/// <param name="reader"></param>
 	/// <param name="whoAmI"></param>
 	public void Resolve(BinaryReader reader, int whoAmI)
 	{
-		Packet_Id packetID;
+		Packet_ID packetID;
 
 		// 首先读取封包ID
 		if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
@@ -104,9 +106,9 @@ public class PacketResolver
 		{
 			packetID = reader.ReadByte();
 		}
-		if (!packetHandlers.ContainsKey(packetID))
+		if (!packetHandlerRegistry.TryGetValue(packetID, out List<IPacketHandler> registeredHandlers))
 		{
-			Ins.Logger.Warn("Received a packet without handler, automatically ignored");
+			Ins.Logger.Warn($"Received a packet [{packetID}] without handler, automatically ignored");
 			return;
 		}
 
@@ -115,21 +117,19 @@ public class PacketResolver
 		packet.Receive(reader, whoAmI);
 
 		// 让handler处理封包数据
-		foreach (var handler in packetHandlers[packetID])
+		foreach (var handler in registeredHandlers)
 		{
 			handler.Handle(packet, whoAmI);
 		}
 	}
 
 	/// <summary>
-	/// 注册所有IPacket类型和IPacketHandler
+	/// 注册所有<see cref="IPacket"/>和<see cref="IPacketHandler"/>的实现类型.
 	/// </summary>
-	private void RegisterPackets()// 命名改为首字母大写
+	private void RegisterPackets()
 	{
-		var assembly = Assembly.GetExecutingAssembly();
-		foreach (var type in assembly.GetTypes().Where(type =>
-			 !type.IsAbstract &&
-			 type.GetInterfaces().Contains(typeof(IPacket))))
+		var modTypes = Ins.ModuleManager.Types.Where(type => !type.IsAbstract);
+		foreach (var type in modTypes.Where(type => type.IsAssignableTo(typeof(IPacket))))
 		{
 			if (!packetIDMapping.ContainsKey(type))
 			{
@@ -139,29 +139,24 @@ public class PacketResolver
 			}
 		}
 
-		foreach (var type in assembly.GetTypes().Where(type =>
-			 !type.IsAbstract &&
-			 type.GetInterfaces().Contains(typeof(IPacketHandler))))
+		foreach (var type in modTypes.Where(type => type.IsAssignableTo(typeof(IPacketHandler))))
 		{
 			// 将 packet 和 PacketHandler 绑定
 			if (Attribute.GetCustomAttribute(type, typeof(HandlePacketAttribute)) is HandlePacketAttribute handlePacket)
 			{
-				Type packetType = handlePacket.PacketType;
-				if (!packetIDMapping.ContainsKey(packetType))
+				if (!packetIDMapping.TryGetValue(handlePacket.PacketType, out int packetID))
 				{
 					throw new InvalidOperationException("Unknown packet type");
 				}
 
-				// 获取封包类型的对应ID，并且将handler绑定上去
-				Packet_Id packetId = packetIDMapping[packetType];
 				var handler = Activator.CreateInstance(type) as IPacketHandler;
-				if (packetHandlers.ContainsKey(packetId))
+				if (packetHandlerRegistry.TryGetValue(packetID, out List<IPacketHandler> registeredHandlers))
 				{
-					packetHandlers[packetId].Add(handler);
+					registeredHandlers.Add(handler);
 				}
 				else
 				{
-					packetHandlers.Add(packetId, new List<IPacketHandler> { handler });
+					packetHandlerRegistry.Add(packetID, [handler]);
 				}
 			}
 			else
@@ -171,12 +166,11 @@ public class PacketResolver
 		}
 
 		// 如果有封包没有绑定任何handler就发出警告
-		foreach (var packetId in packetIDToTypeMapping)
+		foreach (var packetID in packetIDToTypeMapping)
 		{
-			if (!packetHandlers.ContainsKey(packetId.Key)
-				|| packetHandlers[packetId.Key].Count == 0)
+			if (!packetHandlerRegistry.TryGetValue(packetID.Key, out var registeredHandlers) || registeredHandlers.Count == 0)
 			{
-				Ins.Logger.Warn($"Packet {packetId.Value} does not have any handler binded");
+				Ins.Logger.Warn($"Packet {packetID.Value} does not have any handler binded");
 			}
 		}
 	}
@@ -186,3 +180,5 @@ public class PacketResolver
 		return _mod.GetPacket();
 	}
 }
+
+#pragma warning restore SA1121 // Use built-in type alias
