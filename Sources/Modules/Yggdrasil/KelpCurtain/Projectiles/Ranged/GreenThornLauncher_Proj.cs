@@ -74,6 +74,19 @@ public class GreenThornLauncher_Proj : ModProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
+		Projectile.Kill();
+	}
+
+	public override void OnKill(int timeLeft)
+	{
+		SoundEngine.PlaySound(SoundID.Grass, Projectile.Center);
+		for (int i = 0; i < 20; i++)
+		{
+			var dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.GrassBlades);
+			dust.noGravity = true;
+			dust.velocity *= 0.5f;
+			dust.scale = Main.rand.NextFloat(0.8f, 1.4f);
+		}
 		SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
 
 		// 爆炸草叶粒子
@@ -104,6 +117,17 @@ public class GreenThornLauncher_Proj : ModProjectile
 		}
 
 		float knockback = 1f;
+
+		foreach (NPC npc in Main.npc)
+		{
+			if (Projectile.Distance(npc.Center) <= 75)
+			{
+				Player owner = Main.player[Projectile.owner];
+
+				owner.ApplyDamageToNPC(npc,Projectile.damage,Projectile.knockBack,0);
+			}
+		}
+
 		if (Main.myPlayer == Projectile.owner)
 		{
 			var projNum = Main.rand.Next(2, 5);
@@ -112,18 +136,6 @@ public class GreenThornLauncher_Proj : ModProjectile
 				var projVelo = new Vector2(0, 10f).RotatedByRandom(MathHelper.TwoPi);
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, projVelo, ModContent.ProjectileType<GreenThornLauncher_SubProj>(), (int)(Projectile.damage * 0.4f), knockback, Projectile.owner);
 			}
-		}
-	}
-
-	public override void OnKill(int timeLeft)
-	{
-		SoundEngine.PlaySound(SoundID.Grass, Projectile.Center);
-		for (int i = 0; i < 20; i++)
-		{
-			var dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.GrassBlades);
-			dust.noGravity = true;
-			dust.velocity *= 0.5f;
-			dust.scale = Main.rand.NextFloat(0.8f, 1.4f);
 		}
 	}
 
