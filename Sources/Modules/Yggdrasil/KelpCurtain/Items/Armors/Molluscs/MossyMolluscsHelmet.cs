@@ -1,3 +1,5 @@
+using Everglow.Commons.Mechanics;
+using Everglow.Yggdrasil.Common;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors.Molluscs;
@@ -5,6 +7,8 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors.Molluscs;
 [AutoloadEquip(EquipType.Head)]
 public class MossyMolluscsHelmet : ModItem
 {
+	public const float SaveAmmoChance = 0.15f;
+
 	public override void SetStaticDefaults()
 	{
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
@@ -21,7 +25,7 @@ public class MossyMolluscsHelmet : ModItem
 
 	override public void UpdateEquip(Player player)
 	{
-		player.GetDamage<RangedDamageClass>() += 0.04f; // // Increases ranged damage by 4%.
+		player.GetDamage<RangedDamageClass>() += 0.04f; // Increases ranged damage by 4%.
 		player.GetCritChance<RangedDamageClass>() += 6; // Increase ranged critical chance by 6%.
 	}
 
@@ -33,21 +37,6 @@ public class MossyMolluscsHelmet : ModItem
 	public override void UpdateArmorSet(Player player)
 	{
 		player.armorPenetration += 3; // Increases armor penetration by 3.
-		player.GetModPlayer<MolluscsRangedSetPlayer>().Enabled = true; // 15% chance to not consume ammo
-	}
-
-	public class MolluscsRangedSetPlayer : ModPlayer
-	{
-		public bool Enabled { get; set; } = false;
-
-		public override void ResetEffects()
-		{
-			Enabled = false;
-		}
-
-		public override bool CanConsumeAmmo(Item weapon, Item ammo)
-		{
-			return Enabled ? Main.rand.NextFloat() >= 0.15f : true; // 15% chance to not consume ammo when using ranged weapons while wearing the Molluscs armor set.
-		}
+		player.GetModPlayer<EverglowPlayer>().ammoCost *= 1 - SaveAmmoChance;
 	}
 }

@@ -1,4 +1,3 @@
-using Everglow.Commons.Mechanics.Cooldown;
 using Everglow.Yggdrasil.YggdrasilTown.Cooldowns;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.Furnace;

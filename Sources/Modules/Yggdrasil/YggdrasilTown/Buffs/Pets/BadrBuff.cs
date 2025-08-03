@@ -13,7 +13,7 @@ public class BadrBuff : ModBuff
 	public override void Update(Player player, ref int buffIndex)
 	{
 		// + 3% pick speed
-		player.pickSpeed += 0.03f;
+		player.pickSpeed -= 0.03f;
 
 		player.buffTime[buffIndex] = 2;
 

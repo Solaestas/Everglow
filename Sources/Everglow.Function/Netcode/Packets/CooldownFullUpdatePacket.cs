@@ -50,7 +50,7 @@ public class CooldownFullUpdatePacket : IPacket
 	{
 		public void Handle(IPacket packet, int whoAmI)
 		{
-			var mp = Main.player[whoAmI].GetModPlayer<CooldownPlayer>();
+			var mp = Main.player[whoAmI].GetModPlayer<EverglowPlayer>();
 			var syncedCooldowns = (packet as CooldownFullUpdatePacket).syncedCooldowns;
 
 			HashSet<ushort> localIDs = [];

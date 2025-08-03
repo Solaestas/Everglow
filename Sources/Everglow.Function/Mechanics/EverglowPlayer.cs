@@ -1,23 +1,39 @@
-using Everglow.Commons.Mechanics.Cooldown.Tests;
-using Everglow.Commons.Netcode.Packets;
+using Everglow.Commons.Mechanics.Cooldown;
+using Everglow.Commons.Mechanics.ElementalDebuff;
+using Everglow.Commons.Utilities;
+using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.Cooldown;
+namespace Everglow.Commons;
 
-public class CooldownPlayer : ModPlayer
+public partial class EverglowPlayer : ModPlayer
 {
 	public const string PlayerDataCooldownsKey = "everglowCooldowns";
+
+	#region Fields
+
+	/// <summary>
+	/// The chance to consume mana on shoot. Multiply this value with the consume mana chance.
+	/// </summary>
+	public float ammoCost = 1f;
+
+	/// <summary>
+	/// Elemental penetration of each elemental debuff types.
+	/// </summary>
+	public readonly ElementalPenetrationInfo elementalPenetrationInfo = new();
 
 	/// <summary>
 	/// The <see cref="CooldownInstance"/>s of all <see cref="CooldownBase"/>s this player has active.
 	/// <br/> Only the cooldowns that are currently active will be stored here.
-	/// <br/> <see cref="CooldownExtensions.AddCooldown"/>, <see cref="CooldownExtensions.HasCooldown"/>, and <see cref="CooldownExtensions.ClearCooldown"/> should be used to manipulate player buffs.
+	/// <br/> <see cref="PlayerUtils.AddCooldown"/>, <see cref="PlayerUtils.HasCooldown"/>, and <see cref="PlayerUtils.ClearCooldown"/> should be used to manipulate player buffs.
 	/// </summary>
 	public Dictionary<string, CooldownInstance> cooldowns = [];
 
+	#endregion
+
 	public override void OnEnterWorld()
 	{
-		// Testing code ===================================
+		// =================== Testing code ===============
 		// Player.AddCooldown(TestCooldown.ID, 60 * 50000);
 		// Player.AddCooldown(TestCooldown2.ID, 60 * 5000);
 		// Player.AddCooldown(TestCooldown3.ID, 60 * 500);
@@ -28,8 +44,54 @@ public class CooldownPlayer : ModPlayer
 		}
 	}
 
+	public override void ResetEffects()
+	{
+		ammoCost = 1f;
+
+		elementalPenetrationInfo.ResetEffects();
+	}
+
+	public override void PreUpdate()
+	{
+		// Syncing mouse controls. Usage: Set listen flags to true, then wait for the next update to sync.
+		if (Main.myPlayer == Player.whoAmI)
+		{
+			mouseRight = PlayerInput.Triggers.Current.MouseRight;
+			mouseWorld = Main.MouseWorld;
+
+			if (listenMouseRight && mouseRight != oldMouseRight)
+			{
+				oldMouseRight = mouseRight;
+				syncMouseControls = true;
+				listenMouseRight = false;
+			}
+
+			if (listenMouseWorld && Vector2.Distance(mouseWorld, oldMouseWorld) > MousePositionSyncDiff)
+			{
+				oldMouseWorld = mouseWorld;
+				syncMouseControls = true;
+				listenMouseWorld = false;
+			}
+
+			if (listenMouseRotation && Math.Abs((mouseWorld - Player.MountedCenter).ToRotation() - (oldMouseWorld - Player.MountedCenter).ToRotation()) > MouseRotationSyncDiff)
+			{
+				oldMouseWorld = mouseWorld;
+				syncMouseControls = true;
+				listenMouseRotation = false;
+			}
+		}
+	}
+
 	public override void PostUpdateMiscEffects()
 	{
+		// Mouse controls
+		if (syncMouseControls && NetUtils.IsClient)
+		{
+			SyncMousePosition(Main.dedServ);
+			syncMouseControls = false;
+		}
+
+		// Cooldowns
 		var expiredCooldowns = new List<string>();
 		foreach (var (key, cdInstance) in cooldowns)
 		{
@@ -83,21 +145,6 @@ public class CooldownPlayer : ModPlayer
 				SyncCooldownFullUpdate(Main.dedServ);
 			}
 		}
-	}
-
-	public void SyncCooldownAddition(bool server, CooldownInstance cdInstance)
-	{
-		ModIns.PacketResolver.Send(new CooldownAdditionPacket(cdInstance), ignoreClient: server ? Player.whoAmI : -1);
-	}
-
-	public void SyncCooldownRemoval(bool server, IList<string> cooldownIDs)
-	{
-		ModIns.PacketResolver.Send(new CooldownRemovalPacket(cooldownIDs), ignoreClient: server ? Player.whoAmI : -1);
-	}
-
-	public void SyncCooldownFullUpdate(bool server)
-	{
-		ModIns.PacketResolver.Send(new CooldownFullUpdatePacket(cooldowns), ignoreClient: server ? Player.whoAmI : -1);
 	}
 
 	public override void LoadData(TagCompound tag)

@@ -1,14 +1,28 @@
 using System.Reflection;
+using Everglow.Commons.Mechanics;
+using Everglow.Yggdrasil.KelpCurtain.Buffs;
+using Everglow.Yggdrasil.KelpCurtain.Cooldowns;
+using Everglow.Yggdrasil.KelpCurtain.Items.Armors.DevilHeart;
 using Everglow.Yggdrasil.KelpCurtain.Items.PermanentBoosters;
+using Everglow.Yggdrasil.KelpCurtain.Items.Weapons.Ruin;
+using Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 using Everglow.Yggdrasil.Netcode;
+using Everglow.Yggdrasil.YggdrasilTown.Buffs;
+using Everglow.Yggdrasil.YggdrasilTown.Cooldowns;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Auburn;
 using Everglow.Yggdrasil.YggdrasilTown.Items.PermanentBoosters;
 using SubworldLibrary;
+using Terraria.GameInput;
 using Terraria.ModLoader.IO;
+using static Everglow.Yggdrasil.KelpCurtain.Items.Armors.Ruin.RuinMask;
+using static Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.IstafelsSunfireGrasp;
 
-namespace Everglow.Yggdrasil;
+namespace Everglow.Yggdrasil.Common;
 
 public class YggdrasilPlayer : ModPlayer
 {
+	#region Permanent Boosters
+
 	/// <summary>
 	/// <see cref="AntiHeavenSicknessPill"/>
 	/// </summary>
@@ -28,6 +42,64 @@ public class YggdrasilPlayer : ModPlayer
 	/// <see cref="SquamousCore"/>
 	/// </summary>
 	public int ConsumedSquamousCore { get; set; }
+
+	public bool UseAntiHeavenSicknessPill()
+	{
+		if (ConsumedAntiHeavenSicknessPill < AntiHeavenSicknessPill.AntiHeavenSicknessPillMax)
+		{
+			ConsumedAntiHeavenSicknessPill++;
+			return true;
+		}
+		return false;
+	}
+
+	public bool UseJadeGlazeFruit()
+	{
+		if (ConsumedJadeGlazeFruit < JadeFruit.MaxJadeFruits)
+		{
+			ConsumedJadeGlazeFruit++;
+			return true;
+		}
+		return false;
+	}
+
+	public bool UseSquamousCore()
+	{
+		if (ConsumedSquamousCore < SquamousCore.SquamousCoreMax)
+		{
+			ConsumedSquamousCore++;
+			return true;
+		}
+		return false;
+	}
+
+	public bool UseLampBorerHoney()
+	{
+		if (ConsumedLampBorerHoney < LampBorerHoney.MaxUse)
+		{
+			ConsumedLampBorerHoney++;
+			return true;
+		}
+		return false;
+	}
+
+	#endregion
+
+	#region Armors
+
+	public bool lightSeekerRangedSet = false;
+	public bool devilHeartSet = false;
+	public bool molluscsRangedSet = false;
+	public bool auburnSet = false;
+	public bool ruinSet = false;
+
+	#endregion
+
+	#region Accessories
+
+	public bool istafelsSunfireGrasp = false;
+
+	#endregion
 
 	public override bool CloneNewInstances => true;
 
@@ -57,6 +129,53 @@ public class YggdrasilPlayer : ModPlayer
 			orig(player);
 			player.statLifeMax += lifeFix1 + lifeFix2 + lifeFix3 + lifeFix4;
 			player.statManaMax += (int)(manaFix1 * 0.4f);
+		}
+	}
+
+	public override void ResetEffects()
+	{
+		lightSeekerRangedSet = false;
+		devilHeartSet = false;
+		molluscsRangedSet = false;
+		auburnSet = false;
+		ruinSet = false;
+
+		istafelsSunfireGrasp = false;
+	}
+
+	public override void ProcessTriggers(TriggersSet triggersSet)
+	{
+		if (EverglowKeyBinds.ArmorSetBonusHotKey.JustPressed)
+		{
+			if (devilHeartSet && !Player.HasCooldown<DevilHeartSetCooldown>())
+			{
+				Player.AddBuff(ModContent.BuffType<DevilHeartSetBuff>(), DevilHeartLightBreastPlate.BuffDuration);
+				Player.AddCooldown(DevilHeartSetCooldown.ID, DevilHeartLightBreastPlate.CooldownDuration);
+			}
+
+			if (auburnSet && !Player.HasCooldown<AuburnSelfReinforcingCooldown>())
+			{
+				Player.AddBuff(ModContent.BuffType<AuburnSelfReinforcing>(), AuburnHoodie.BuffDuration);
+				Player.AddCooldown(AuburnSelfReinforcingCooldown.ID, AuburnHoodie.BuffCooldown);
+			}
+
+			if (ruinSet
+				&& Player.HeldItem.type == ModContent.ItemType<WoodlandWraithStaff>()
+				&& !Player.HasCooldown<RuinSetCooldown>())
+			{
+				Player.AddBuff(ModContent.BuffType<RuinSetBuff>(), RuinSetPlayer.BuffDuration);
+				Player.AddCooldown(RuinSetCooldown.ID, RuinSetPlayer.CooldownDuration);
+				Player.GetModPlayer<RuinSetPlayer>().RuinSetBuffTimer = RuinSetPlayer.AnimationDuration;
+				Projectile.NewProjectile(Player.GetSource_FromAI(), Player.Center, Player.velocity, ModContent.ProjectileType<WoodlandWraithStaff_SetAnimation>(), 0, 0, Player.whoAmI);
+			}
+		}
+
+		if (EverglowKeyBinds.AccessorySkillKey.JustPressed)
+		{
+			if (istafelsSunfireGrasp && !Player.HasCooldown<IstafelsSunfireGraspSkillCooldown>())
+			{
+				Player.GetModPlayer<IstafelsSunfireGraspPlayer>().SkillEnable = true;
+			}
 		}
 	}
 
@@ -110,60 +229,16 @@ public class YggdrasilPlayer : ModPlayer
 		}
 	}
 
-	#region Permanent Boosters Set Methods
-
-	public bool UseAntiHeavenSicknessPill()
-	{
-		if (ConsumedAntiHeavenSicknessPill < AntiHeavenSicknessPill.AntiHeavenSicknessPillMax)
-		{
-			ConsumedAntiHeavenSicknessPill++;
-			return true;
-		}
-		return false;
-	}
-
-	public bool UseJadeGlazeFruit()
-	{
-		if (ConsumedJadeGlazeFruit < JadeFruit.MaxJadeFruits)
-		{
-			ConsumedJadeGlazeFruit++;
-			return true;
-		}
-		return false;
-	}
-
-	public bool UseSquamousCore()
-	{
-		if (ConsumedSquamousCore < SquamousCore.SquamousCoreMax)
-		{
-			ConsumedSquamousCore++;
-			return true;
-		}
-		return false;
-	}
-
-	public bool UseLampBorerHoney()
-	{
-		if (ConsumedLampBorerHoney < LampBorerHoney.MaxUse)
-		{
-			ConsumedLampBorerHoney++;
-			return true;
-		}
-		return false;
-	}
-
-	#endregion
-
 	public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
 	{
 		ModIns.PacketResolver.Send(
 			new PermanentBoostPacket()
-		{
-			consumedAntiHeavenSicknessPill = ConsumedAntiHeavenSicknessPill,
-			consumedJadeGlazeFruit = ConsumedJadeGlazeFruit,
-			consumedSquamousCore = ConsumedSquamousCore,
-			consumedLampBorerHoney = ConsumedLampBorerHoney,
-		}, toWho, fromWho);
+			{
+				consumedAntiHeavenSicknessPill = ConsumedAntiHeavenSicknessPill,
+				consumedJadeGlazeFruit = ConsumedJadeGlazeFruit,
+				consumedSquamousCore = ConsumedSquamousCore,
+				consumedLampBorerHoney = ConsumedLampBorerHoney,
+			}, toWho, fromWho);
 	}
 
 	public override void CopyClientState(ModPlayer targetCopy)

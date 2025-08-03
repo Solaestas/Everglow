@@ -1,3 +1,5 @@
+using Everglow.Commons.Mechanics.Cooldown;
+using Everglow.Commons.Mechanics.ElementalDebuff;
 using Terraria.GameContent.Events;
 
 namespace Everglow.Commons.Utilities;
@@ -50,6 +52,8 @@ public static class PlayerUtils
 		"青枫", "陌林", "京墨", "鸭子ceo",
 	];
 
+	#region Player Animation
+
 	/// <summary>
 	/// Sets the player's arm position to align with the mouse position, with an optional offset.
 	/// </summary>
@@ -65,6 +69,10 @@ public static class PlayerUtils
 
 		return player;
 	}
+
+	#endregion
+
+	#region Vanilla Stats
 
 	/// <summary>
 	/// Heal life then show life text.
@@ -162,4 +170,74 @@ public static class PlayerUtils
 		}
 		return false;
 	}
+
+	/// <summary>
+	/// Get global consume ammo chance of player.
+	/// </summary>
+	/// <param name="player"></param>
+	/// <returns></returns>
+	public static float GetConsumeAmmoChance(this Player player)
+	{
+		var cost = player.GetModPlayer<EverglowPlayer>().ammoCost;
+		if (player.ammoBox)
+		{
+			cost *= 0.8f;
+		}
+		if (player.ammoPotion)
+		{
+			cost *= 0.8f;
+		}
+		if (player.ammoCost80)
+		{
+			cost *= 0.8f;
+		}
+		if (player.ammoCost75)
+		{
+			cost *= 0.75f;
+		}
+
+		return cost;
+	}
+
+	#endregion
+
+	#region Cooldown
+
+	public static void AddCooldown(this Player player, string id, int timeToAdd, bool overwrite = true)
+	{
+		if (!player.HasCooldown(id) || overwrite)
+		{
+			var modP = player.GetModPlayer<EverglowPlayer>();
+			var instance = new CooldownInstance(player, CooldownRegistry.GetNet(id), timeToAdd);
+			modP.cooldowns[id] = instance;
+			modP.SyncCooldownAddition(Main.dedServ, instance);
+		}
+	}
+
+	public static bool HasCooldown(this Player player, Predicate<CooldownBase> predicate) =>
+		player.GetModPlayer<EverglowPlayer>().cooldowns.Any(cd => predicate(cd.Value.cooldown));
+
+	public static bool HasCooldown(this Player player, string id) =>
+		player.HasCooldown(cd => cd.TypeID == id);
+
+	public static bool HasCooldown<TCooldownBase>(this Player player) =>
+		player.HasCooldown(cd => cd is TCooldownBase);
+
+	public static void ClearCooldown(this Player player, string id)
+	{
+		var mp = player.GetModPlayer<EverglowPlayer>();
+		if (mp.cooldowns.Remove(id))
+		{
+			mp.SyncCooldownRemoval(Main.dedServ, [id]);
+		}
+	}
+
+	#endregion
+
+	#region Elemental Debuff
+
+	public static ref StatModifier GetElementalPenetration(this Player player, ElementalDebuffType type) =>
+		ref player.GetModPlayer<EverglowPlayer>().elementalPenetrationInfo[type];
+
+	#endregion
 }

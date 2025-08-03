@@ -1,5 +1,6 @@
 using Everglow.Commons.Netcode.Abstracts;
 using Everglow.Commons.Netcode.PacketHandle;
+using Everglow.Yggdrasil.Common;
 
 namespace Everglow.Yggdrasil.Netcode;
 

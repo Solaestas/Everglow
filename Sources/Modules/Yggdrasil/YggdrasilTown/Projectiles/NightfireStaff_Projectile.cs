@@ -34,6 +34,7 @@ public class NightfireStaff_Projectile : ModProjectile
 		Projectile.friendly = true;
 		Projectile.hostile = false;
 		Projectile.timeLeft = TimeLeftMax;
+		Projectile.magic = true;
 	}
 
 	public override void AI()

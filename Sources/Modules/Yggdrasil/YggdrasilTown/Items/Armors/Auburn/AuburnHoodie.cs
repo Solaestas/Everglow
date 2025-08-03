@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Cooldown;
+using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
 using Everglow.Yggdrasil.YggdrasilTown.Cooldowns;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
@@ -40,6 +40,7 @@ public class AuburnHoodie : ModItem
 	public override void UpdateArmorSet(Player player)
 	{
 		player.maxMinions += 1;
+		player.GetModPlayer<YggdrasilPlayer>().auburnSet = true;
 	}
 
 	public override void AddRecipes()
@@ -48,43 +49,5 @@ public class AuburnHoodie : ModItem
 		recipe.AddIngredient<LampWood_Wood>(30);
 		recipe.AddTile(TileID.WorkBenches);
 		recipe.Register();
-	}
-}
-
-public class AuburnArmorSetPlayer : ModPlayer
-{
-	public bool EnableAuburnArmorSet { get; set; } = false;
-
-	public override void ProcessTriggers(TriggersSet triggersSet)
-	{
-		if (EnableAuburnArmorSet)
-		{
-			return;
-		}
-
-		if (Player.dead)
-		{
-			return;
-		}
-
-		// TODO: add hotkey
-		var ArmorSetBonusHotKey = new
-		{
-			JustPressed = false,
-		};
-
-		if (Main.myPlayer != Player.whoAmI || !ArmorSetBonusHotKey.JustPressed)
-		{
-			return;
-		}
-
-		if (Player.HasBuff<AuburnSelfReinforcing>() ||
-			Player.HasCooldown<AuburnSelfReinforcingCooldown>())
-		{
-			return;
-		}
-
-		Player.AddBuff(ModContent.BuffType<AuburnSelfReinforcing>(), AuburnHoodie.BuffDuration);
-		Player.AddCooldown(AuburnSelfReinforcingCooldown.ID, AuburnHoodie.BuffCooldown);
 	}
 }

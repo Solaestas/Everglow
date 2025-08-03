@@ -1,4 +1,4 @@
-using System.Diagnostics;
+using Everglow.Yggdrasil.Common;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Armors.LightSeeker;
@@ -28,7 +28,8 @@ public class ExplorationHelmet : ModItem
 
 	public override void UpdateArmorSet(Player player)
 	{
-		player.GetModPlayer<LightSeekerPlayer>().LightSeekerHelmet = 1;
+		player.GetModPlayer<YggdrasilPlayer>().lightSeekerRangedSet = true;
+		player.GetModPlayer<EverglowPlayer>().ammoCost *= 1 - 0.1f; // +10% chancce not consume ammo
 		player.GetDamage(DamageClass.Ranged) += 0.05f;
 	}
 
@@ -38,19 +39,13 @@ public class ExplorationHelmet : ModItem
 
 		player.GetCritChance(DamageClass.Ranged) += 4f;
 	}
-
-	public override void AddRecipes()
-	{
-	}
 }
 
 public class LightSeekerGNPC : GlobalNPC
 {
 	public override Color? GetAlpha(NPC npc, Color drawColor)
 	{
-		Debug.Assert(Main.netMode != NetmodeID.Server);
-
-		if (Main.LocalPlayer.GetModPlayer<LightSeekerPlayer>().LightSeekerHelmet == 1)
+		if (NetUtils.NotServer && Main.LocalPlayer.GetModPlayer<YggdrasilPlayer>().lightSeekerRangedSet)
 		{
 			if (npc.CanBeChasedBy() && (npc.noTileCollide || Collision.CanHitLine(npc.Center, 1, 1, Main.LocalPlayer.Center, 1, 1)))
 			{
@@ -64,20 +59,5 @@ public class LightSeekerGNPC : GlobalNPC
 			}
 		}
 		return base.GetAlpha(npc, drawColor);
-	}
-}
-
-public class LightSeekerPlayer : ModPlayer
-{
-	public int LightSeekerHelmet = 0;
-
-	public override void ResetEffects()
-	{
-		LightSeekerHelmet = 0;
-	}
-
-	public override bool CanConsumeAmmo(Item weapon, Item ammo)
-	{
-		return base.CanConsumeAmmo(weapon, ammo) && (LightSeekerHelmet == 1 ? (!Main.rand.NextBool(10)) : true);
 	}
 }

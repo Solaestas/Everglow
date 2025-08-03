@@ -1,5 +1,5 @@
-using Everglow.Commons.Mechanics.Cooldown;
 using Everglow.Commons.Mechanics.ElementalDebuff;
+using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
 using Terraria.Audio;
@@ -34,30 +34,10 @@ public class IstafelsSunfireGrasp : ModItem
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
 	{
-		// Test Code
-		// if(Main.mouseLeft && Main.mouseLeftRelease)
-		// {
-		// // Shoot explosion
-		// Projectile.NewProjectile(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<IstafelsSunfireGrasp_Explosion>(), 200, 1f, player.whoAmI);
-
-		// // Shoot scoria
-		// var scoriaProjCount = Main.rand.Next(8, 10);
-		// for (int i = 0; i < scoriaProjCount; i++)
-		// {
-		// var velocity = player.velocity * 0.6f + Vector2.UnitX.RotatedBy(Main.rand.NextFloat(MathHelper.TwoPi)) * 4f;
-		// Projectile.NewProjectile(Item.GetSource_FromAI(), Main.MouseWorld, velocity, ModContent.ProjectileType<IstafelsSunfireGrasp_Scoria>(), 1, 1.1f, player.whoAmI);
-		// }
-		// }
 		player.GetDamage<MagicDamageClass>() += MagicDamageBonus;
 		player.GetCritChance<MagicDamageClass>() += MagicCritBonus;
 		player.GetModPlayer<IstafelsSunfireGraspPlayer>().IstafelsSunfireGraspEnable = true;
-
-		if (player.whoAmI == Main.myPlayer
-			&& (Main.mouseMiddle && Main.mouseMiddleRelease)
-			&& !player.HasCooldown<IstafelsSunfireGraspSkillCooldown>())
-		{
-			player.GetModPlayer<IstafelsSunfireGraspPlayer>().SkillEnable = true;
-		}
+		player.GetModPlayer<YggdrasilPlayer>().istafelsSunfireGrasp = true;
 	}
 
 	public class IstafelsSunfireGraspPlayer : ModPlayer
