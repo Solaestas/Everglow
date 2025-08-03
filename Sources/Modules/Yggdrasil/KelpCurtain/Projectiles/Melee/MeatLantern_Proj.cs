@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Melee;
@@ -69,7 +70,7 @@ public class MeatLantern_Proj : MeleeProj
 		Vector2 mainVectorI = drawVector.RotatedBy(theta * -Projectile.spriteDirection) * MathF.Cos(theta);
 		Vector2 mainVectorJ = drawVector.RotatedBy((theta - MathHelper.PiOver2) * -Projectile.spriteDirection) * MathF.Sin(theta);
 
-		if (attackType==1)
+		if (attackType == 1 || attackType == 3)
 		{
 			mainVectorI = drawVector.RotatedBy(theta * +Projectile.spriteDirection) * MathF.Cos(theta);
 			mainVectorJ = drawVector.RotatedBy((theta - MathHelper.PiOver2) * +Projectile.spriteDirection) * MathF.Sin(theta);
@@ -229,7 +230,16 @@ public class MeatLantern_Proj : MeleeProj
 				mainVec = Vector2Elipse(90, Projectile.rotation, -1.2f, 0, 1000);
 			}
 			if (timer > 80)
-				NextAttackType();
+			{
+				if (player.statLife <= player.statLifeMax2 * 0.5f)
+				{
+					NextAttackType();
+				}
+				else
+				{
+					End();
+				}
+			}
 			else if (timer > 1)
 			{
 				float BodyRotation = (float)Math.Sin((timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
@@ -242,12 +252,13 @@ public class MeatLantern_Proj : MeleeProj
 		}
 		if (attackType == 3)
 		{
+			float rot = -player.direction;
 			if (timer < 20)
 			{
 				useTrail = false;
 				LockPlayerDir(Player);
-				float targetRot = -MathHelper.PiOver2 + Player.direction * 1.2f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(60, targetRot, -1.2f), 0.15f);
+				float targetRot = -MathHelper.PiOver2 - Player.direction * 2.5f;
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(80, targetRot, 0, rot), 0.15f);
 				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
@@ -256,17 +267,26 @@ public class MeatLantern_Proj : MeleeProj
 				AttSound(new SoundStyle(
 			"Everglow/MEAC/Sounds/TrueMeleeSwing"));
 			}
-			if (timer % 10 == 8 && timer > 30)
-				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
-			if (timer > 20 && timer < 75)
+
+			if (timer > 20 && timer < 30)
 			{
-				Lighting.AddLight(Projectile.Center + mainVec, 0.36f, 0.06f, 0.06f);
+				Lighting.AddLight(Projectile.Center + mainVec, 0.36f, 0.36f, 0.24f);
 				isAttacking = true;
-				Projectile.rotation -= Projectile.spriteDirection * 0.4f;
-				mainVec = Vector2Elipse(90, Projectile.rotation, -1.2f, 0, 1000);
+				Projectile.rotation += Projectile.spriteDirection * 0.2f;
+				mainVec = Vector2Elipse(80, Projectile.rotation, 0, rot);
 			}
-			if (timer > 70)
+			if (timer > 60 && timer < 80)
+			{
+				Lighting.AddLight(Projectile.Center + mainVec, 0.36f, 0.36f, 0.24f);
+				isAttacking = true;
+				Projectile.rotation += Projectile.spriteDirection * 0.15f;
+				mainVec = Vector2Elipse(80, Projectile.rotation, 0, rot);
+			}
+			if (timer > 80)
+			{
 				NextAttackType();
+			}
+
 			else if (timer > 1)
 			{
 				float BodyRotation = (float)Math.Sin((timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
@@ -276,6 +296,12 @@ public class MeatLantern_Proj : MeleeProj
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
 				Tplayer.HeadRotation = -BodyRotation;
 			}
+		}
+		if (isAttacking)
+		{
+			Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + mainVec * Main.rand.NextFloat(0.3f, 1f), 40, 40, ModContent.DustType<MeatLanternDust>(), 0, 0, 0, default, Main.rand.NextFloat(0.5f, 1.5f));
+			d.velocity += player.velocity * 0.3f + Main.rand.NextVector2Unit() * 2;
+			d.noGravity = true;
 		}
 	}
 	public override void DrawTrail(Color color)
@@ -346,7 +372,23 @@ public class MeatLantern_Proj : MeleeProj
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Player player = Main.player[Projectile.owner];
-		player.HealLife(1);
+
+		if (attackType == 3)
+		{
+			player.HealLife(15);
+		}
+		else
+		{
+			player.HealLife(1);
+		}
+		for (int i = 0; i < 60; i++)
+		{
+			Vector2 v = Vector2.One.RotatedByRandom(MathF.PI * 2) * 2;
+			Dust d = Dust.NewDustDirect(target.Center + v*5, 40, 40, ModContent.DustType<MeatLanternDust>(), 0, 0, 0, default, Main.rand.NextFloat(0.5f, 1.5f));
+			d.velocity = target.velocity * 0.3f +v;
+			d.noGravity = true;
+		}
+
 	}
 }
 
