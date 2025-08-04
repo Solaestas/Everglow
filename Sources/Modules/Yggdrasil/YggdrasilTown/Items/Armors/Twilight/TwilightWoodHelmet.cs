@@ -35,23 +35,6 @@ public class TwilightWoodHelmet : ModItem
 	{
 		player.GetDamage(DamageClass.Ranged) += ArmorSetDamageBonus / 100f;
 		player.GetCritChance(DamageClass.Ranged) += ArmorSetCritChanceBonus;
-		player.GetModPlayer<TwilightWoodArmorSetPlayer>().EnableTwilightWoodArmorSet = true;
-	}
-}
-
-public class TwilightWoodArmorSetPlayer : ModPlayer
-{
-	public bool EnableTwilightWoodArmorSet { get; set; } = false;
-
-	public override bool CanConsumeAmmo(Item weapon, Item ammo)
-	{
-		if (EnableTwilightWoodArmorSet)
-		{
-			if (Main.rand.NextFloat() <= TwilightWoodHelmet.ArmorSetSaveAmmoChance / 100f)
-			{
-				return false;
-			}
-		}
-		return true;
+		player.GetModPlayer<EverglowPlayer>().ammoCost *= 1 - ArmorSetSaveAmmoChance / 100f;
 	}
 }

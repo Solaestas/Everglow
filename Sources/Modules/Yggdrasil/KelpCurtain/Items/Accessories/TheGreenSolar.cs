@@ -1,4 +1,3 @@
-using Everglow.Commons.Mechanics.Cooldown;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.Cooldowns;
 using Terraria.DataStructures;

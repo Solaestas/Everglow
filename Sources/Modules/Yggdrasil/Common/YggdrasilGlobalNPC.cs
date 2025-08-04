@@ -1,4 +1,4 @@
-namespace Everglow.Yggdrasil;
+namespace Everglow.Yggdrasil.Common;
 
 public class YggdrasilGlobalNPC : GlobalNPC
 {

@@ -1,3 +1,5 @@
+using Everglow.Yggdrasil.Common;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.PermanentBoosters;
 
 public class AntiHeavenSicknessPill : ModItem

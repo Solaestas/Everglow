@@ -26,7 +26,7 @@ public class CooldownSystem : ModSystem
 	public override void PostDrawInterface(SpriteBatch spriteBatch)
 	{
 		var p = Main.LocalPlayer;
-		var mp = Main.LocalPlayer.GetModPlayer<CooldownPlayer>();
+		var mp = Main.LocalPlayer.GetModPlayer<EverglowPlayer>();
 
 		bossNearby = Main.npc.Any(npc => npc.active && npc.boss);
 		UpdateAlpha();
@@ -58,13 +58,13 @@ public class CooldownSystem : ModSystem
 
 	public static void UpdateAlpha()
 	{
-		var toAdd = Main.LocalPlayer.GetModPlayer<CooldownPlayer>().cooldowns.Where(c => !cooldownAlpha.ContainsKey(c.Key)).Select(o => o.Key);
+		var toAdd = Main.LocalPlayer.GetModPlayer<EverglowPlayer>().cooldowns.Where(c => !cooldownAlpha.ContainsKey(c.Key)).Select(o => o.Key);
 		foreach (var key in toAdd)
 		{
 			cooldownAlpha[key] = DefaultCooldownAlpha;
 		}
 
-		var toDelete = cooldownAlpha.Where(c => !Main.LocalPlayer.GetModPlayer<CooldownPlayer>().cooldowns.ContainsKey(c.Key)).Select(o => o.Key);
+		var toDelete = cooldownAlpha.Where(c => !Main.LocalPlayer.GetModPlayer<EverglowPlayer>().cooldowns.ContainsKey(c.Key)).Select(o => o.Key);
 		foreach (var key in toDelete)
 		{
 			cooldownAlpha.Remove(key);
@@ -73,7 +73,7 @@ public class CooldownSystem : ModSystem
 
 	public static string DrawCooldownIcon(SpriteBatch spriteBatch, Player player, string hoveredCooldownIndex, string cooldownSlotOnPlayer, Point position, Point mousePosition)
 	{
-		var mp = player.GetModPlayer<CooldownPlayer>();
+		var mp = player.GetModPlayer<EverglowPlayer>();
 		if (!player.HasCooldown(cooldownSlotOnPlayer))
 		{
 			return hoveredCooldownIndex;

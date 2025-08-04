@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.Common;
 using Terraria.Localization;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.PermanentBoosters;

@@ -91,6 +91,25 @@ public class PacketResolver
 	}
 
 	/// <summary>
+	/// 向指定对象发送一个封包数据的实例
+	/// <br/> <see cref="Send(IPacket, Packet_ID, Packet_ID)"/>的封装版本，自动填充发送对象
+	/// </summary>
+	/// <param name="packet"></param>
+	/// <param name="fromServer"></param>
+	/// <param name="player"></param>
+	public void Send(IPacket packet, bool fromServer, Player player)
+	{
+		if (fromServer)
+		{
+			Send(packet, -1, player.whoAmI);
+		}
+		else
+		{
+			Send(packet);
+		}
+	}
+
+	/// <summary>
 	/// 处理封包
 	/// </summary>
 	/// <param name="reader"></param>

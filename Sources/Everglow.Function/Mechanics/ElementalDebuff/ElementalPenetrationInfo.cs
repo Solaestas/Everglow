@@ -1,10 +1,10 @@
 namespace Everglow.Commons.Mechanics.ElementalDebuff;
 
-public readonly struct ElementalPenetrationData
+public readonly struct ElementalPenetrationInfo
 {
 	private readonly StatModifier[] elementalPenetration;
 
-	public ElementalPenetrationData()
+	public ElementalPenetrationInfo()
 	{
 		var types = ElementalDebuffRegistry.GetAllTypes().ToList();
 		types.Insert(0, ElementalDebuffType.Generic);

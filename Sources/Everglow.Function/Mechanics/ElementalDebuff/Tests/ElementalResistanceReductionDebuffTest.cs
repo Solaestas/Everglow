@@ -1,3 +1,5 @@
+using Everglow.Commons.Utilities;
+
 namespace Everglow.Commons.Mechanics.ElementalDebuff.Tests;
 
 public class ElementalResistanceReductionDebuffTest : ModBuff
