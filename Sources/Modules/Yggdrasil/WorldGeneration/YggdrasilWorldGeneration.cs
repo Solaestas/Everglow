@@ -69,7 +69,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// <returns></returns>
 	public static float GetPerlinPixelR(float x, float y)
 	{
-		return PerlinPixelR[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 256f;
+		return PerlinPixelR[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 255f;
 	}
 
 	/// <summary>
@@ -80,7 +80,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// <returns></returns>
 	public static float GetPerlinPixeG(float x, float y)
 	{
-		return PerlinPixelG[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 256f;
+		return PerlinPixelG[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 255f;
 	}
 
 	/// <summary>
@@ -91,7 +91,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// <returns></returns>
 	public static float GetPerlinPixelB(float x, float y)
 	{
-		return PerlinPixelB[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 256f;
+		return PerlinPixelB[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 255f;
 	}
 
 	/// <summary>
@@ -102,7 +102,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// <returns></returns>
 	public static float GetPerlinPixel2(float x, float y)
 	{
-		return PerlinPixel2[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 256f;
+		return PerlinPixel2[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 255f;
 	}
 
 	/// <summary>
@@ -113,7 +113,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// <returns></returns>
 	public static float GetCellPixel(float x, float y)
 	{
-		return CellPixel[(int)Math.Abs(x) % 512, (int)Math.Abs(y) % 512] / 256f;
+		return CellPixel[(int)Math.Abs(x) % 512, (int)Math.Abs(y) % 512] / 255f;
 	}
 
 	/// <summary>
@@ -124,7 +124,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// <returns></returns>
 	public static float GetMeltingPixel(float x, float y)
 	{
-		return MeltingPixel[(int)Math.Abs(x) % 256, (int)Math.Abs(y) % 256] / 256f;
+		return MeltingPixel[(int)Math.Abs(x) % 256, (int)Math.Abs(y) % 256] / 255f;
 	}
 
 	/// <summary>

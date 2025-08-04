@@ -110,7 +110,7 @@ public class CooldownPlayer : ModPlayer
 		catch (IOException)
 		{
 			Ins.Logger.Error($"Failed to load cooldowns for player {Player.name} because save type mismatch.");
-			cooldownTag = default;
+			cooldownTag = new TagCompound();
 		}
 
 		var tagIterator = cooldownTag.GetEnumerator();

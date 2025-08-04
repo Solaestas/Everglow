@@ -27,6 +27,8 @@ public class KelpCurtainGeneration
 		BuildMossyCavesLow();
 		BuildMossyCavesHigh();
 		GreenTundra();
+		ScarletGarden();
+		MazeUnderLake();
 
 		// BuildRainValley();
 	}
@@ -240,6 +242,22 @@ public class KelpCurtainGeneration
 			}
 			PlaceFrameImportantTiles((int)topPos.X, (int)topPos.Y, 2, 2, ModContent.TileType<GeyserAirBudsPlatform>());
 		}
+	}
+
+	public static Point FindSquamousShellTopLeft()
+	{
+		for (int x = 500; x <= Main.maxTilesX - 500; x++)
+		{
+			for (int y = (int)(Main.maxTilesY * 0.89f); y <= (int)(Main.maxTilesY * 0.96f); y++)
+			{
+				Tile tile = SafeGetTile(x, y);
+				if (tile.TileType == ModContent.TileType<SquamousShellSeal>())
+				{
+					return new Point(x - tile.TileFrameX / 18, y - tile.TileFrameY / 18);
+				}
+			}
+		}
+		return new Point(0, 0);
 	}
 
 	/// <summary>
@@ -532,62 +550,6 @@ public class KelpCurtainGeneration
 		}
 	}
 
-	public static Point FindSquamousShellTopLeft()
-	{
-		for (int x = 500; x <= Main.maxTilesX - 500; x++)
-		{
-			for (int y = (int)(Main.maxTilesY * 0.89f); y <= (int)(Main.maxTilesY * 0.96f); y++)
-			{
-				Tile tile = SafeGetTile(x, y);
-				if (tile.TileType == ModContent.TileType<SquamousShellSeal>())
-				{
-					return new Point(x - tile.TileFrameX / 18, y - tile.TileFrameY / 18);
-				}
-			}
-		}
-		return new Point(0, 0);
-	}
-
-	/// <summary>
-	/// 森雨幽谷
-	/// </summary>
-	public static void BuildRainValley()
-	{
-		int startY = (int)(Main.maxTilesY * 0.85f);
-		int randY = GenRand.Next(512);
-		int randX = GenRand.Next(512);
-		while (startY < (int)(Main.maxTilesY * 0.89f))
-		{
-			startY++;
-			Tile tile = SafeGetTile(Main.maxTilesX / 2, startY);
-			if (tile.HasTile)
-			{
-				break;
-			}
-		}
-		startY -= 200;
-		for (int y = startY; y > (int)(Main.maxTilesY * 0.80f); y--)
-		{
-			for (int x = Main.maxTilesX / 2; x <= Main.maxTilesX - 20; x++)
-			{
-				int dense = PerlinPixelB[(x / 4 + randX) % 512, (y + randY) % 512];
-				if (dense > 160)
-				{
-					Tile tile = SafeGetTile(x, y);
-					tile.TileType = (ushort)ModContent.TileType<OldMoss>();
-					tile.HasTile = true;
-				}
-			}
-		}
-	}
-
-	/// <summary>
-	/// 刺苔庭园/朽木王庭
-	/// </summary>
-	public static void MattedMossCourt()
-	{
-	}
-
 	/// <summary>
 	/// 碧绿苔原
 	/// </summary>
@@ -631,6 +593,195 @@ public class KelpCurtainGeneration
 		}
 	}
 
+	/// <summary>
+	/// 森雨幽谷
+	/// </summary>
+	public static void BuildRainValley()
+	{
+		int startY = (int)(Main.maxTilesY * 0.85f);
+		int randY = GenRand.Next(512);
+		int randX = GenRand.Next(512);
+		while (startY < (int)(Main.maxTilesY * 0.89f))
+		{
+			startY++;
+			Tile tile = SafeGetTile(Main.maxTilesX / 2, startY);
+			if (tile.HasTile)
+			{
+				break;
+			}
+		}
+		startY -= 200;
+		for (int y = startY; y > (int)(Main.maxTilesY * 0.80f); y--)
+		{
+			for (int x = Main.maxTilesX / 2; x <= Main.maxTilesX - 20; x++)
+			{
+				int dense = PerlinPixelB[(x / 4 + randX) % 512, (y + randY) % 512];
+				if (dense > 160)
+				{
+					Tile tile = SafeGetTile(x, y);
+					tile.TileType = (ushort)ModContent.TileType<OldMoss>();
+					tile.HasTile = true;
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// 绯红花园
+	/// </summary>
+	public static void ScarletGarden()
+	{
+		int lakeSurfaceY = (int)(Main.maxTilesY * 0.88);
+		int lakeCenterX = (int)(Main.maxTilesX * 0.4);
+		lakeSurfaceY += CheckWaterSurfaceDown(lakeCenterX, lakeSurfaceY);
+		int xBoundLeft = (int)(Main.maxTilesX * 0.22f);
+		int xBoundRight = (int)(Main.maxTilesX * 0.4f);
+		for (int x = xBoundLeft; x < xBoundRight; x++)
+		{
+			int lakeBottomY = (int)(Main.maxTilesY * 0.88);
+			lakeBottomY += CheckSpaceDown(lakeCenterX, lakeBottomY);
+			float xLength = xBoundRight - xBoundLeft;
+			float height = (MathF.Sin((x - xBoundLeft) / xLength * MathHelper.TwoPi - MathHelper.PiOver2) + 1) * 465f;
+			float heightMax = lakeBottomY - lakeSurfaceY + GetPerlinPixeG(x, 15) * 16;
+			height = MathF.Min(heightMax, height);
+			for (int y = 0; y < height; y++)
+			{
+				var tile = SafeGetTile(x, lakeBottomY - y);
+				tile.TileType = (ushort)ModContent.TileType<DarkLakeBottomMud>();
+				tile.HasTile = true;
+			}
+		}
+	}
+
+	/// <summary>
+	/// 水下迷宫
+	/// </summary>
+	public static void MazeUnderLake()
+	{
+		int lakeSurfaceY = (int)(Main.maxTilesY * 0.88);
+		int lakeCenterX = (int)(Main.maxTilesX * 0.4);
+		lakeSurfaceY += CheckWaterSurfaceDown(lakeCenterX, lakeSurfaceY);
+		int xBoundLeft = (int)(Main.maxTilesX * 0.34f);
+		int xBoundRight = (int)(Main.maxTilesX * 0.64f);
+		lakeCenterX = (int)(Main.maxTilesX * 0.5);
+		int lakeBottomYHalfX = (int)(Main.maxTilesY * 0.88);
+		lakeBottomYHalfX += CheckSpaceDown(lakeCenterX, lakeBottomYHalfX);
+		float halfHeight = (lakeBottomYHalfX - lakeSurfaceY) * 0.6f;
+
+		// Random seed Points
+		int seedCount = 120;
+		Point size = new Point((int)(Main.maxTilesX * 0.3f), (int)(halfHeight / 0.6f));
+		List<(int X, int Y)> seeds = MazeUnderLake_GenerateRandomSeeds(size, seedCount);
+
+		for (int x = xBoundLeft; x < xBoundRight; x++)
+		{
+			halfHeight = (lakeBottomYHalfX - lakeSurfaceY) * 0.6f;
+			halfHeight += GetPerlinPixeG(x, 60) * 16f;
+			float thick = 10 + GetPerlinPixelB(x + 32, 140) * 8f;
+			if(x >= xBoundRight - 30)
+			{
+				float valueH = MathF.Pow((30 + x - xBoundRight) / 6f, 2);
+				halfHeight += valueH;
+				thick += valueH;
+			}
+			for (int y = 0; y < halfHeight; y++)
+			{
+				float value = 0;
+				if (y >= halfHeight - thick)
+				{
+					value += (thick - (halfHeight - y)) / (float)thick;
+				}
+				var tile = SafeGetTile(x, lakeBottomYHalfX - y);
+				if (MazeUnderLake_IsEdgePoint(x - xBoundLeft + 15, y + 30, seeds) || value >= 0.2f)
+				{
+					if(!tile.HasTile)
+					{
+						tile.TileType = (ushort)ModContent.TileType<DarkLakeBottomMud>();
+						tile.HasTile = true;
+					}
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// 生成随机种子点（确保在点阵范围内）
+	/// </summary>
+	public static List<(int X, int Y)> MazeUnderLake_GenerateRandomSeeds(Point size, int count)
+	{
+		List<(int X, int Y)> seeds = new List<(int X, int Y)>();
+		for (int j = 0; j < size.Y / 20f; j++)
+		{
+			for (int i = 0; i < size.X / 20f; i++)
+		    {
+				int x = (int)(i * 30) + GenRand.Next(-10, 10) + 10;
+				if(j % 2 == 0)
+				{
+					x += 15;
+				}
+				int y = (int)(j * 15 * MathF.Sqrt(3)) + GenRand.Next(-10, 10) + 10;
+				seeds.Add((x, y));
+			}
+		}
+		return seeds;
+	}
+
+	/// <summary>
+	/// 判断点是否为多边形边缘（与两个种子点距离相近）
+	/// </summary>
+	public static bool MazeUnderLake_IsEdgePoint(int x, int y, List<(int X, int Y)> seeds)
+	{
+		// 计算到所有种子点的距离平方（避免开方运算，提高效率）
+		List<(int SeedIndex, long DistanceSquared)> distances = new List<(int, long)>();
+
+		for (int i = 0; i < seeds.Count; i++)
+		{
+			long dx = x - seeds[i].X;
+			long dy = y - seeds[i].Y;
+			long distSq = dx * dx + dy * dy; // 距离平方
+			distances.Add((i, distSq));
+		}
+
+		// 排序获取最近的两个种子点
+		distances.Sort((a, b) => a.DistanceSquared.CompareTo(b.DistanceSquared));
+
+		// 如果最近两个种子点的距离差小于阈值，则视为边缘
+		// 阈值可调整：值越小边缘越细，值越大边缘越粗
+		double minDist = Math.Sqrt(distances[0].DistanceSquared);
+		double secondMinDist = Math.Sqrt(distances[1].DistanceSquared);
+		double edgeThreshold = 2.5; // 边缘检测阈值
+
+		return (secondMinDist - minDist) < edgeThreshold;
+	}
+
+	public static int CheckWaterSurfaceDown(int x, int y)
+	{
+		int count = 0;
+		int x0 = x;
+		int y0 = y;
+		if (y0 > Main.maxTilesY || y0 < 0)
+		{
+			return count;
+		}
+		while (!SafeGetTile(x0, y0).HasTile && SafeGetTile(x0, y0).LiquidAmount <= 0)
+		{
+			if (y0 > Main.maxTilesY)
+			{
+				break;
+			}
+			y0++;
+			count++;
+		}
+		return count;
+	}
+
+	/// <summary>
+	/// 刺苔庭园/朽木王庭
+	/// </summary>
+	public static void MattedMossCourt()
+	{
+	}
+
 	public static void DigGreenTundraTunnel(int x, int y, float width, Vector2 velocity, int depth)
 	{
 		if (depth >= 3)
@@ -654,27 +805,6 @@ public class KelpCurtainGeneration
 				return;
 			}
 		}
-	}
-
-	/// <summary>
-	/// 绯红花园
-	/// </summary>
-	public static void ScarletGarden()
-	{
-	}
-
-	/// <summary>
-	/// 水下迷宫
-	/// </summary>
-	public static void MazeUnderLake()
-	{
-	}
-
-	/// <summary>
-	/// 森雨幽谷
-	/// </summary>
-	public static void RainValley()
-	{
 	}
 
 	/// <summary>
