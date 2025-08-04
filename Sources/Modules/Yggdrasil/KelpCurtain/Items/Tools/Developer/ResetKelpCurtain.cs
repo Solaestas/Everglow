@@ -1,7 +1,6 @@
-using Everglow.Yggdrasil.KelpCurtain.Tiles;
 using Everglow.Yggdrasil.WorldGeneration;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Items.Developer;
+namespace Everglow.Yggdrasil.KelpCurtain.Items.Tools.Developer;
 
 public class ResetKelpCurtain : ModItem
 {
@@ -16,7 +15,7 @@ public class ResetKelpCurtain : ModItem
 		Item.useStyle = ItemUseStyleID.Swing;
 	}
 
-	public Point OldMousePos = default(Point);
+	public Point OldMousePos = default;
 
 	public override void HoldItem(Player player) => base.HoldItem(player);
 
@@ -36,6 +35,7 @@ public class ResetKelpCurtain : ModItem
 		// YggdrasilWorldGeneration.GenerateStalactite(Main.MouseWorld / 16f, 8, Main.rand.NextFloat(9, 42), ModContent.TileType<StoneScaleWood>());
 		return false;
 	}
+
 	public override bool? UseItem(Player player)
 	{
 		return base.UseItem(player);

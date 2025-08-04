@@ -14,8 +14,8 @@ public class MossCover : ModBuff
 	public override void Update(Player player, ref int buffIndex)
 	{
 		player.statDefense += 5;
+		player.buffImmune[ModContent.BuffType<CorrosiveDebuff>()] = true;
 		player.GetModPlayer<MossCoverPlayer>().HasMossCover = true;
-		base.Update(player, ref buffIndex);
 	}
 }
 
@@ -35,7 +35,6 @@ public class MossCoverPlayer : ModPlayer
 		if (HasMossCover)
 		{
 		}
-		base.PostUpdateBuffs();
 	}
 
 	public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
@@ -46,6 +45,5 @@ public class MossCoverPlayer : ModPlayer
 			g = BuffColor.G / 255f;
 			b = BuffColor.B / 255f;
 		}
-		base.DrawEffects(drawInfo, ref r, ref g, ref b, ref a, ref fullBright);
 	}
 }
