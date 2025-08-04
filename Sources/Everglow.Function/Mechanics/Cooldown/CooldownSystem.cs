@@ -1,6 +1,5 @@
 using Everglow.Commons.Graphics;
 using Everglow.Commons.Utilities;
-using Everglow.Commons.Vertex;
 using ReLogic.Graphics;
 using Terraria.GameContent;
 
@@ -8,7 +7,7 @@ namespace Everglow.Commons.Mechanics.Cooldown;
 
 public class CooldownSystem : ModSystem
 {
-	public const float DefaultCooldownAlpha = 0.4f;
+	public const float DefaultCooldownAlpha = 0.6f;
 
 	private static Dictionary<string, float> cooldownAlpha;
 	private static bool bossNearby = false;
@@ -79,6 +78,9 @@ public class CooldownSystem : ModSystem
 			return hoveredCooldownIndex;
 		}
 
+		var cooldownInstance = mp.cooldowns[cooldownSlotOnPlayer];
+		var cooldownBase = cooldownInstance.cooldown;
+
 		int width = 32, height = 32;
 		(int drawPosX, int drawPosY) = (position.X, position.Y);
 		Vector2 drawPosition = new Vector2(drawPosX, drawPosY);
@@ -86,37 +88,45 @@ public class CooldownSystem : ModSystem
 		Rectangle mouseRectangle = new Rectangle(drawPosX, drawPosY, width, height);
 		Color drawColor = bossNearby ? Color.White : Color.White * cooldownAlpha[cooldownSlotOnPlayer];
 
+		// Draw background
+		spriteBatch.Draw(ModAsset.Cooldown_Background.Value, drawPosition, drawColor);
+
 		// Draw icon
 		var sBS = GraphicsUtils.GetState(spriteBatch).Value;
-		spriteBatch.End();
-		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
-		var effect = ModAsset.Cooldown_IconShader.Value;
-		effect.Parameters["uCut"].SetValue(ModAsset.Cooldown_Cut.Value);
-		effect.Parameters["uBg"].SetValue(ModAsset.Cooldown_Background.Value);
-		effect.CurrentTechnique.Passes[0].Apply();
+		if (cooldownBase.EnableCutShader)
+		{
+			spriteBatch.End();
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
+			var effect = ModAsset.Cooldown_IconShader.Value;
+			effect.Parameters["uCut"].SetValue(ModAsset.Cooldown_Cut.Value);
+			// effect.Parameters["uBg"].SetValue(ModAsset.Cooldown_Background.Value);
+			effect.CurrentTechnique.Passes[0].Apply();
+		}
+		else
+		{
+			spriteBatch.End();
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
+		}
 
-		List<Vertex2D> vertices = [];
-		vertices.Add(drawPosition, drawColor, new(0, 0, 0));
-		vertices.Add(drawPosition + new Vector2(width, 0), drawColor, new(1, 0, 0));
-		vertices.Add(drawPosition + new Vector2(0, height), drawColor, new(0, 1, 0));
-		vertices.Add(drawPosition + new Vector2(width, height), drawColor, new(1, 1, 0));
-		Main.graphics.GraphicsDevice.Textures[0] = mp.cooldowns[cooldownSlotOnPlayer].cooldown.Texture;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+		var iconTexture = cooldownInstance.cooldown.Texture;
+		var iconPosition = drawPosition + new Vector2(width / 2, height / 2);
+		var iconScale = width / (float)Math.Max(iconTexture.Width, iconTexture.Height) * cooldownBase.TextureScale;
+		var iconOrigin = iconTexture.Size() / 2 + cooldownBase.TextureOffset;
+		spriteBatch.Draw(iconTexture, iconPosition, null, drawColor, 0, iconOrigin, iconScale, SpriteEffects.None, 0);
 
 		// Draw time progress circle
 		spriteBatch.End();
 		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
 		spriteBatch.GraphicsDevice.Textures[0] = ModAsset.White.Value;
-		var progress = mp.cooldowns[cooldownSlotOnPlayer].Progress;
+		var progress = cooldownInstance.Progress;
 		var progressPos = drawPosition + new Vector2(width / 2, height / 2);
 		var progressAlpha = cooldownAlpha[cooldownSlotOnPlayer];
 		progressAlpha += (1 - progressAlpha) * 0.5f;
-		var progressColor = Color.Lerp(Color.Green, Color.Red, progress) * progressAlpha * 0.6f;
+		var progressColor = Color.Lerp(cooldownBase.StartColor, cooldownBase.EndColor, 1f - progress) * progressAlpha * 0.6f;
 		var progressSize = new Vector2(0, 7);
 		ValueBarHelper.DrawCircle(spriteBatch, progressPos, progressColor, progressSize, progressSize, progress, clockwise: false);
 
 		// Draw progress cursor
-		// TODO: Enhance the progress cursor appearance
 		spriteBatch.Draw(ModAsset.White.Value, progressPos, null, drawColor, MathHelper.Pi - progress * MathHelper.TwoPi, Vector2.Zero, new Vector2(1 / 256f, 13 / 256f), SpriteEffects.None, 0);
 
 		spriteBatch.End();
@@ -126,7 +136,7 @@ public class CooldownSystem : ModSystem
 		spriteBatch.Draw(ModAsset.Cooldown_IconFrame.Value, drawPosition, null, drawColor, 0f, default, 1f, SpriteEffects.None, 0f);
 
 		// Draw time text
-		var cooldownTime = mp.cooldowns[cooldownSlotOnPlayer].timeLeft;
+		var cooldownTime = cooldownInstance.timeLeft;
 		if (cooldownTime > 2)
 		{
 			string text = Lang.LocalizedDuration(new TimeSpan(0, 0, cooldownTime / 60), abbreviated: true, showAllAvailableUnits: false);

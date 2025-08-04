@@ -8,5 +8,7 @@ public class MelterGearCooldown : CooldownBase
 
 	public override string TypeID => ID;
 
-	public override Texture2D Texture => Commons.ModAsset.BuffTemplate.Value; // TODO: No specific texture
+	public override Texture2D Texture => ModAsset.MelterGear.Value;
+
+	public override Vector2 TextureScale => base.TextureScale * 0.6f;
 }

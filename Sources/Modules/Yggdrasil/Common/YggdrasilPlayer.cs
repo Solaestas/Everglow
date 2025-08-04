@@ -3,6 +3,7 @@ using Everglow.Commons.Mechanics;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.Cooldowns;
 using Everglow.Yggdrasil.KelpCurtain.Items.Armors.DevilHeart;
+using Everglow.Yggdrasil.KelpCurtain.Items.Armors.Molluscs;
 using Everglow.Yggdrasil.KelpCurtain.Items.PermanentBoosters;
 using Everglow.Yggdrasil.KelpCurtain.Items.Weapons.Ruin;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
@@ -89,7 +90,7 @@ public class YggdrasilPlayer : ModPlayer
 
 	public bool lightSeekerRangedSet = false;
 	public bool devilHeartSet = false;
-	public bool molluscsRangedSet = false;
+	public bool molluscsSet = false;
 	public bool auburnSet = false;
 	public bool ruinSet = false;
 
@@ -136,7 +137,7 @@ public class YggdrasilPlayer : ModPlayer
 	{
 		lightSeekerRangedSet = false;
 		devilHeartSet = false;
-		molluscsRangedSet = false;
+		molluscsSet = false;
 		auburnSet = false;
 		ruinSet = false;
 
@@ -167,6 +168,12 @@ public class YggdrasilPlayer : ModPlayer
 				Player.AddCooldown(RuinSetCooldown.ID, RuinSetPlayer.CooldownDuration);
 				Player.GetModPlayer<RuinSetPlayer>().RuinSetBuffTimer = RuinSetPlayer.AnimationDuration;
 				Projectile.NewProjectile(Player.GetSource_FromAI(), Player.Center, Player.velocity, ModContent.ProjectileType<WoodlandWraithStaff_SetAnimation>(), 0, 0, Player.whoAmI);
+			}
+
+			if (molluscsSet && !Player.HasCooldown<MolluscsSetCooldown>())
+			{
+				Player.AddBuff(ModContent.BuffType<MolluscsSetBuff>(), ShellMolluscsBreastPlate.BuffDuration);
+				Player.AddCooldown(MolluscsSetCooldown.ID, ShellMolluscsBreastPlate.CooldownDuration);
 			}
 		}
 

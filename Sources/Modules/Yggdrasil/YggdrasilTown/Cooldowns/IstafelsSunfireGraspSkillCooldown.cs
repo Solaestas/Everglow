@@ -9,4 +9,6 @@ public class IstafelsSunfireGraspSkillCooldown : CooldownBase
 	public override string TypeID => ID;
 
 	public override Texture2D Texture => ModAsset.IstafelsSunfireGraspSkillBuff.Value;
+
+	public override bool EnableCutShader => true;
 }

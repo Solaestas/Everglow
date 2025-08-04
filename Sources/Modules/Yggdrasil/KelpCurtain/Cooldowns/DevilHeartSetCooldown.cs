@@ -8,5 +8,7 @@ public class DevilHeartSetCooldown : CooldownBase
 
 	public override string TypeID => ID;
 
-	public override Texture2D Texture => ModAsset.DevilHeartSetBuff.Value;
+	public override Texture2D Texture => ModAsset.DevilHeartHelmet.Value;
+
+	public override Vector2 TextureScale => base.TextureScale * 0.6f;
 }

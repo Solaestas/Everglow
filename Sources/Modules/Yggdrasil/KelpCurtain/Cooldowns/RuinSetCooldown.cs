@@ -9,4 +9,6 @@ public class RuinSetCooldown : CooldownBase
 	public override string TypeID => ID;
 
 	public override Texture2D Texture => ModAsset.RuinSetBuff.Value;
+
+	public override bool EnableCutShader => true;
 }

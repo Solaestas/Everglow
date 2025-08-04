@@ -46,12 +46,24 @@ public abstract class CooldownBase
 	#endregion
 
 	#region Display
+
 	public virtual string DisplayName => Language.GetTextValue($"{LocalizationCategory}.{TypeID}.{LocalizationDisplayNameKey}");
 
 	public virtual string Discription => Language.GetTextValue($"{LocalizationCategory}.{TypeID}.{LocalizationDescriptionKey}");
 
+	public virtual bool IsVisible => true;
+
 	public abstract Texture2D Texture { get; }
 
-	public virtual bool IsVisible => true;
+	public virtual bool EnableCutShader => false;
+
+	public virtual Vector2 TextureScale => Vector2.One;
+
+	public virtual Vector2 TextureOffset => Vector2.Zero;
+
+	public virtual Color StartColor => Color.Red;
+
+	public virtual Color EndColor => Color.Green;
+
 	#endregion
 }

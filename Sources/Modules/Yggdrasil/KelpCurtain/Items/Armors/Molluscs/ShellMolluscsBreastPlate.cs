@@ -1,5 +1,4 @@
-using Everglow.Yggdrasil.KelpCurtain.Buffs;
-using Everglow.Yggdrasil.KelpCurtain.Cooldowns;
+using Everglow.Yggdrasil.Common;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors.Molluscs;
@@ -52,11 +51,6 @@ public class ShellMolluscsBreastPlate : ModItem
 
 	public override void UpdateArmorSet(Player player)
 	{
-		// TODO: Replace mouse click with a hotkey or a more suitable trigger
-		if (MouseUtils.MouseMiddle.IsClicked && !player.HasCooldown<MolluscsSetCooldown>())
-		{
-			player.AddBuff(ModContent.BuffType<MolluscsSetBuff>(), BuffDuration);
-			player.AddCooldown(MolluscsSetCooldown.ID, CooldownDuration);
-		}
+		player.GetModPlayer<YggdrasilPlayer>().molluscsSet = true;
 	}
 }

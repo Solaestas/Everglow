@@ -8,5 +8,7 @@ public class AuburnSelfReinforcingCooldown : CooldownBase
 
 	public override string TypeID => ID;
 
-	public override Texture2D Texture => Commons.ModAsset.BuffTemplate.Value;
+	public override Texture2D Texture => ModAsset.AuburnHoodie.Value;
+
+	public override Vector2 TextureScale => base.TextureScale * 0.5f;
 }

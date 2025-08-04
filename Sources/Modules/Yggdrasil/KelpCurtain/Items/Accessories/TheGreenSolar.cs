@@ -38,7 +38,7 @@ public class TheGreenSolar : ModItem
 
 		public int Frame { get; set; } = 0;
 
-		public bool TheGreenSolarBuffActive => TheGreenSolarEnable && Player.HasBuff<TheGreenSolarBuff>();
+		public bool TheGreenSolarBuffActive => Player.HasBuff<TheGreenSolarBuff>();
 
 		public override void ResetEffects()
 		{
