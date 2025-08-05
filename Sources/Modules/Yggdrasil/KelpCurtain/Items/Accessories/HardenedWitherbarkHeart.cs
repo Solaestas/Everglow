@@ -9,8 +9,6 @@ public class HardenedWitherbarkHeart : ModItem
 	public const float DamageTakenIncrease = 0.5f; // 50% increase in damage taken when player has Fracture debuff.
 	public const float DamageTakenReduction = 0.9f; // 90% reduction in damage taken when player does not have Fracture debuff.
 
-	public override string Texture => Commons.ModAsset.White_Mod;
-
 	public override void SetDefaults()
 	{
 		Item.width = 20;

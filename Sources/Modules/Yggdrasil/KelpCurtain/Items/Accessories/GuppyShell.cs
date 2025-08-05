@@ -2,8 +2,6 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Accessories;
 
 public class GuppyShell : ModItem
 {
-	public override string Texture => Commons.ModAsset.White_Mod;
-
 	public override void SetDefaults()
 	{
 		Item.width = 20;

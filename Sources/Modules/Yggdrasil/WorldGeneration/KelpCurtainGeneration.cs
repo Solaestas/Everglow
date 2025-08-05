@@ -593,6 +593,31 @@ public class KelpCurtainGeneration
 		}
 	}
 
+	public static void DigGreenTundraTunnel(int x, int y, float width, Vector2 velocity, int depth)
+	{
+		if (depth >= 3)
+		{
+			return;
+		}
+		Vector2 checkPos = new Vector2(x, y);
+		Vector2 vel = velocity.NormalizeSafe() * 2.6f;
+		int maxStep = 400;
+		for (int t = 0; t < maxStep; t++)
+		{
+			CircleTile(checkPos, width, -1, true);
+			checkPos += vel;
+			vel = vel.RotatedBy((GetPerlinPixelR(checkPos.X, checkPos.Y) - 60f / 255f) * 0.06f);
+			if (!SafeGetTile(checkPos + vel.NormalizeSafe() * (width + 2)).HasTile && t < maxStep - 5 && t > 20)
+			{
+				maxStep = t + 4;
+			}
+			if (checkPos.Y < (int)(Main.maxTilesY * 0.875f) || checkPos.Y > (int)(Main.maxTilesY * 0.88f))
+			{
+				return;
+			}
+		}
+	}
+
 	/// <summary>
 	/// 森雨幽谷
 	/// </summary>
@@ -678,7 +703,7 @@ public class KelpCurtainGeneration
 			halfHeight = (lakeBottomYHalfX - lakeSurfaceY) * 0.6f;
 			halfHeight += GetPerlinPixeG(x, 60) * 16f;
 			float thick = 10 + GetPerlinPixelB(x + 32, 140) * 8f;
-			if(x >= xBoundRight - 30)
+			if (x >= xBoundRight - 30)
 			{
 				float valueH = MathF.Pow((30 + x - xBoundRight) / 6f, 2);
 				halfHeight += valueH;
@@ -691,10 +716,12 @@ public class KelpCurtainGeneration
 				{
 					value += (thick - (halfHeight - y)) / (float)thick;
 				}
+
+				// Exist a projection. SeedMap is not TileMap.
 				var tile = SafeGetTile(x, lakeBottomYHalfX - y);
 				if (MazeUnderLake_IsEdgePoint(x - xBoundLeft + 15, y + 30, seeds) || value >= 0.2f)
 				{
-					if(!tile.HasTile)
+					if (!tile.HasTile)
 					{
 						tile.TileType = (ushort)ModContent.TileType<DarkLakeBottomMud>();
 						tile.HasTile = true;
@@ -702,6 +729,20 @@ public class KelpCurtainGeneration
 				}
 			}
 		}
+		float middleSeedPosX = (xBoundRight - xBoundLeft) / 2f;
+		float minDis = 200;
+		Vector2 centerSeed = Vector2.zeroVector;
+		foreach (var seed in seeds)
+		{
+			Vector2 check = new Vector2(seed.X, seed.Y);
+			Vector2 toCenter = check - new Vector2(middleSeedPosX, 60);
+			if (toCenter.Length() < minDis)
+			{
+				minDis = toCenter.Length();
+				centerSeed = check;
+			}
+		}
+		CircleTile(new Vector2(xBoundLeft + centerSeed.X, lakeBottomYHalfX - centerSeed.Y), 10, ModContent.TileType<OldMoss>());
 	}
 
 	/// <summary>
@@ -713,9 +754,9 @@ public class KelpCurtainGeneration
 		for (int j = 0; j < size.Y / 20f; j++)
 		{
 			for (int i = 0; i < size.X / 20f; i++)
-		    {
-				int x = (int)(i * 30) + GenRand.Next(-10, 10) + 10;
-				if(j % 2 == 0)
+			{
+				int x = i * 30 + GenRand.Next(-10, 10) + 10;
+				if (j % 2 == 0)
 				{
 					x += 15;
 				}
@@ -780,31 +821,6 @@ public class KelpCurtainGeneration
 	/// </summary>
 	public static void MattedMossCourt()
 	{
-	}
-
-	public static void DigGreenTundraTunnel(int x, int y, float width, Vector2 velocity, int depth)
-	{
-		if (depth >= 3)
-		{
-			return;
-		}
-		Vector2 checkPos = new Vector2(x, y);
-		Vector2 vel = velocity.NormalizeSafe() * 2.6f;
-		int maxStep = 400;
-		for (int t = 0; t < maxStep; t++)
-		{
-			CircleTile(checkPos, width, -1, true);
-			checkPos += vel;
-			vel = vel.RotatedBy((GetPerlinPixelR(checkPos.X, checkPos.Y) - 60f / 255f) * 0.06f);
-			if (!SafeGetTile(checkPos + vel.NormalizeSafe() * (width + 2)).HasTile && t < maxStep - 5 && t > 20)
-			{
-				maxStep = t + 4;
-			}
-			if (checkPos.Y < (int)(Main.maxTilesY * 0.875f) || checkPos.Y > (int)(Main.maxTilesY * 0.88f))
-			{
-				return;
-			}
-		}
 	}
 
 	/// <summary>

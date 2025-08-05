@@ -2,8 +2,6 @@ namespace Everglow.Yggdrasil.KelpCurtain.Buffs;
 
 public class MolluscsSetBuff : ModBuff
 {
-	public override string Texture => Commons.ModAsset.BuffTemplate_Mod;
-
 	public override void SetStaticDefaults()
 	{
 		Main.buffNoSave[Type] = true;

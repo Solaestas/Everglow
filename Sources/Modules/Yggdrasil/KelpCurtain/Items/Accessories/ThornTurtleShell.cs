@@ -2,7 +2,6 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Accessories;
 
 public class ThornTurtleShell : ModItem
 {
-	public override string Texture => Commons.ModAsset.White_Mod;
 
 	public override void SetDefaults()
 	{
