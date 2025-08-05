@@ -3,6 +3,7 @@ using Everglow.Commons.Coroutines;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
 using ReLogic.Graphics;
+using SubworldLibrary;
 using Terraria.GameContent;
 using Terraria.UI.Chat;
 using static Everglow.Commons.Mechanics.BiomesText.VanillaBiomes;
@@ -11,33 +12,45 @@ namespace Everglow.Commons.Mechanics.BiomesText;
 
 public class BiomeLabelSystem : ModSystem
 {
-	public Texture2D Label => ModAsset.Textboard.Value;
-
-	public int Width => 324;
-
-	public int Height => 100;
+	public const int Height = 100;
+	public const int TimeLag = 50;
 
 	public int duration = -1;
-	public int timeLag = 50;
-	private CoroutineManager _coroutineManager = new();
+	private CoroutineManager _coroutineManager;
 
 	public List<ModBiome> TotalModBiomes;
-	public Dictionary<ModBiome, int> ActiveModBiomeCache = [];
-	public Dictionary<string, int> ActiveVanillaBiomeCache = [];
-	public Queue<(string, Texture2D)> DisplayBiomeQueue = [];
-	public bool PlayerInVanillaWorld = true;
+	public Dictionary<ModBiome, int> ActiveModBiomeCache;
+	public Dictionary<string, int> ActiveVanillaBiomeCache;
+	public Queue<(string, Texture2D)> DisplayBiomeQueue;
 
-	public override void PreUpdatePlayers()
+	public override void Load()
 	{
-		PlayerInVanillaWorld = true;
+		_coroutineManager = new();
+		ActiveModBiomeCache = [];
+		ActiveVanillaBiomeCache = [];
+		DisplayBiomeQueue = [];
+	}
+
+	public override void Unload()
+	{
+		_coroutineManager = null;
+
+		TotalModBiomes?.Clear();
+		TotalModBiomes = null;
+
+		ActiveModBiomeCache?.Clear();
+		ActiveModBiomeCache = null;
+
+		ActiveVanillaBiomeCache?.Clear();
+		ActiveVanillaBiomeCache = null;
+
+		DisplayBiomeQueue?.Clear();
+		DisplayBiomeQueue = null;
 	}
 
 	public override void PostSetupContent()
 	{
-		if (TotalModBiomes is null)
-		{
-			TotalModBiomes = (List<ModBiome>)typeof(BiomeLoader).GetField("list", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(LoaderManager.Get<BiomeLoader>());
-		}
+		TotalModBiomes ??= (List<ModBiome>)typeof(BiomeLoader).GetField("list", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(LoaderManager.Get<BiomeLoader>());
 	}
 
 	public override void OnWorldLoad()
@@ -60,10 +73,10 @@ public class BiomeLabelSystem : ModSystem
 		{
 			if (modBiome.IsBiomeActive(player))
 			{
-				if (ActiveModBiomeCache[modBiome] < timeLag)
+				if (ActiveModBiomeCache[modBiome] < TimeLag)
 				{
 					ActiveModBiomeCache[modBiome]++;
-					if (ActiveModBiomeCache[modBiome] == timeLag)
+					if (ActiveModBiomeCache[modBiome] == TimeLag)
 					{
 						DisplayBiomeQueue.Enqueue((modBiome.DisplayName.Value, ModContent.Request<Texture2D>(modBiome.BestiaryIcon, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value));
 					}
@@ -78,9 +91,12 @@ public class BiomeLabelSystem : ModSystem
 			}
 		}
 
-		foreach (var key in ActiveVanillaBiomeCache.Keys)
+		if (!SubworldSystem.AnyActive())
 		{
-			CheckNewActiveVanillaBiome(key, player);
+			foreach (var key in ActiveVanillaBiomeCache.Keys)
+			{
+				CheckNewActiveVanillaBiome(key, player);
+			}
 		}
 
 		if (DisplayBiomeQueue.Count > 4)
@@ -91,11 +107,11 @@ public class BiomeLabelSystem : ModSystem
 		{
 			if (DisplayBiomeQueue.Count > 1)
 			{
-				_coroutineManager.StartCoroutine(new Coroutine(DrawNewBiome(spriteBatch, DisplayBiomeQueue.Dequeue(), 60)));
+				_coroutineManager.StartCoroutine(new Coroutine(DrawBiomeLabel(spriteBatch, DisplayBiomeQueue.Dequeue(), 60)));
 			}
 			else if (DisplayBiomeQueue.Count > 0)
 			{
-				_coroutineManager.StartCoroutine(new Coroutine(DrawNewBiome(spriteBatch, DisplayBiomeQueue.Dequeue(), 240)));
+				_coroutineManager.StartCoroutine(new Coroutine(DrawBiomeLabel(spriteBatch, DisplayBiomeQueue.Dequeue(), 240)));
 			}
 		}
 		_coroutineManager.Update();
@@ -106,12 +122,12 @@ public class BiomeLabelSystem : ModSystem
 		if (BiomeKeys.Contains(key))
 		{
 			var biomeData = VanillaBiomeIndex[key];
-			if (biomeData.Condition(player) && PlayerInVanillaWorld)
+			if (biomeData.Condition(player))
 			{
-				if (ActiveVanillaBiomeCache[key] < timeLag)
+				if (ActiveVanillaBiomeCache[key] < TimeLag)
 				{
 					ActiveVanillaBiomeCache[key]++;
-					if (ActiveVanillaBiomeCache[key] == timeLag)
+					if (ActiveVanillaBiomeCache[key] == TimeLag)
 					{
 						DisplayBiomeQueue.Enqueue((biomeData.DisplayName, biomeData.Icon));
 					}
@@ -127,12 +143,9 @@ public class BiomeLabelSystem : ModSystem
 		}
 	}
 
-	/// <summary>
-	/// 落地
-	/// </summary>
-	/// <returns></returns>
-	private IEnumerator<ICoroutineInstruction> DrawNewBiome(SpriteBatch spriteBatch, (string DisplayName, Texture2D Icon) biomedata, int time = 120)
+	private IEnumerator<ICoroutineInstruction> DrawBiomeLabel(SpriteBatch spriteBatch, (string DisplayName, Texture2D Icon) biomedata, int time = 120)
 	{
+		Texture2D labelTexture = ModAsset.Textboard.Value;
 		Texture2D biomeIcon = biomedata.Icon;
 		Vector2 stringSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, biomedata.DisplayName, Vector2.One);
 		float mulWidth = 1f;
@@ -150,9 +163,9 @@ public class BiomeLabelSystem : ModSystem
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, spriteBatch.transformMatrix);
 			int drawY = Height * (int)(i / (time / 120f));
-			spriteBatch.Draw(Label, new Vector2(Main.screenWidth / 2f - 29 * mulWidth, screenCoordY), new Rectangle(0, drawY, 144, Height), Color.White, 0, new Vector2(144, 50), 1f, SpriteEffects.None, 0);
-			spriteBatch.Draw(Label, new Vector2(Main.screenWidth / 2f, screenCoordY), new Rectangle(144, drawY, 58, Height), Color.White, 0, new Vector2(29, 50), new Vector2(mulWidth, 1f), SpriteEffects.None, 0);
-			spriteBatch.Draw(Label, new Vector2(Main.screenWidth / 2f + 29 * mulWidth, screenCoordY), new Rectangle(202, drawY, 122, Height), Color.White, 0, new Vector2(0, 50), 1f, SpriteEffects.None, 0);
+			spriteBatch.Draw(labelTexture, new Vector2(Main.screenWidth / 2f - 29 * mulWidth, screenCoordY), new Rectangle(0, drawY, 144, Height), Color.White, 0, new Vector2(144, 50), 1f, SpriteEffects.None, 0);
+			spriteBatch.Draw(labelTexture, new Vector2(Main.screenWidth / 2f, screenCoordY), new Rectangle(144, drawY, 58, Height), Color.White, 0, new Vector2(29, 50), new Vector2(mulWidth, 1f), SpriteEffects.None, 0);
+			spriteBatch.Draw(labelTexture, new Vector2(Main.screenWidth / 2f + 29 * mulWidth, screenCoordY), new Rectangle(202, drawY, 122, Height), Color.White, 0, new Vector2(0, 50), 1f, SpriteEffects.None, 0);
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
 			Effect dissolve = ModAsset.Dissolve_BiomeLabel.Value;
