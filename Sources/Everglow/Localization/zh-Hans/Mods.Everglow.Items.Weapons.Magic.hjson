@@ -7,25 +7,11 @@ MossySpell: {
 	'''
 }
 
-AuburnBell: {
-	DisplayName: 金棕铃铛
-	Tooltip: 召唤小金棕飞棍为你作战
-}
-
 FeatheredStaff: {
 	DisplayName: 羽鳍杖
 	Tooltip: 发射三只附魔飞棍鳍
 }
 
-RodSpear: {
-	DisplayName: 飞棍矛
-	Tooltip: 可以像活着的飞棍一样飞行
-}
-
 CyanAmberStaff: {
 	DisplayName: 青缎整流杖
-}
-
-CyanVineBow: {
-	DisplayName: 青缎弓
 }

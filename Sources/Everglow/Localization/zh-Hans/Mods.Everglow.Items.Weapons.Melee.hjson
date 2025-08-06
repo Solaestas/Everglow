@@ -2,3 +2,8 @@ DevilHeartBayonet: {
 	DisplayName: "魔心刺剑",
 	Tooltip: "体力耗尽时治疗[?]点生命",
 }
+
+RodSpear: {
+	DisplayName: 飞棍矛
+	Tooltip: 可以像活着的飞棍一样飞行
+}

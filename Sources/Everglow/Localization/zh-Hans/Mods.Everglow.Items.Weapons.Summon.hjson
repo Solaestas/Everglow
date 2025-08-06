@@ -6,3 +6,8 @@ GreenVineWhip: {
 	命中敌人时，给予玩家5秒“苔藓附层”
 	'''
 }
+
+AuburnBell: {
+	DisplayName: 金棕铃铛
+	Tooltip: 召唤小金棕飞棍为你作战
+}
