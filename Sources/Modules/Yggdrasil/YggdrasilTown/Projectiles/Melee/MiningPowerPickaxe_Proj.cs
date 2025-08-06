@@ -7,284 +7,286 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee;
 
 public class MiningPowerPickaxe_Proj : ModProjectile
 {
-	private static Point16 MouseTileTargetCoord => new Point16(Player.tileTargetX, Player.tileTargetY);
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.MeleeProjectiles;
 
-	private static Tile MouseTileTarget => Framing.GetTileSafely(MouseTileTargetCoord);
+    private static Point16 MouseTileTargetCoord => new Point16(Player.tileTargetX, Player.tileTargetY);
 
-	public override string Texture => ModAsset.MiningPowerPickaxe_Mod;
+    private static Tile MouseTileTarget => Framing.GetTileSafely(MouseTileTargetCoord);
 
-	private Player Owner => Main.player[Projectile.owner];
+    public override string Texture => ModAsset.MiningPowerPickaxe_Mod;
 
-	private Vector2 OwnerMouseWorld
-	{
-		get => new Vector2(Projectile.ai[0], Projectile.ai[1]);
-		set
-		{
-			Projectile.ai[0] = value.X;
-			Projectile.ai[1] = value.Y;
-		}
-	}
+    private Player Owner => Main.player[Projectile.owner];
 
-	/// <summary>
-	/// The first pick tile target type. 
-	/// <para/>To help determining target tile type after the tile target is killed by vanilla picking code.
-	/// <para/> Passed from <see cref="MiningPowerPickaxe.Shoot(Player, EntitySource_ItemUse_WithAmmo, Vector2, Vector2, int, int, float)"/>.
-	/// </summary>
-	private int FirstTileTargetType => (int)Projectile.ai[2];
+    private Vector2 OwnerMouseWorld
+    {
+        get => new Vector2(Projectile.ai[0], Projectile.ai[1]);
+        set
+        {
+            Projectile.ai[0] = value.X;
+            Projectile.ai[1] = value.Y;
+        }
+    }
 
-	/// <summary>
-	/// A symbol to indicate this pick is first time to pick tiles.
-	/// <para/> Used to adapt vanilla picking code.
-	/// </summary>
-	private bool FirstPick { get; set; } = true;
+    /// <summary>
+    /// The first pick tile target type. 
+    /// <para/>To help determining target tile type after the tile target is killed by vanilla picking code.
+    /// <para/> Passed from <see cref="MiningPowerPickaxe.Shoot(Player, EntitySource_ItemUse_WithAmmo, Vector2, Vector2, int, int, float)"/>.
+    /// </summary>
+    private int FirstTileTargetType => (int)Projectile.ai[2];
 
-	/// <summary>
-	/// Tiles to be picked by chain-mining function.
-	/// </summary>
-	private List<Point16> TargetTiles { get; set; } = [];
+    /// <summary>
+    /// A symbol to indicate this pick is first time to pick tiles.
+    /// <para/> Used to adapt vanilla picking code.
+    /// </summary>
+    private bool FirstPick { get; set; } = true;
 
-	public override void SetDefaults()
-	{
-		Projectile.width = 56;
-		Projectile.height = 50;
+    /// <summary>
+    /// Tiles to be picked by chain-mining function.
+    /// </summary>
+    private List<Point16> TargetTiles { get; set; } = [];
 
-		Projectile.aiStyle = -1;
-		Projectile.timeLeft = 360000;
-		Projectile.tileCollide = false;
-		Projectile.DamageType = DamageClass.Melee;
-		Projectile.penetrate = -1;
-		Projectile.ignoreWater = true;
-		Projectile.friendly = true;
+    public override void SetDefaults()
+    {
+        Projectile.width = 56;
+        Projectile.height = 50;
 
-		Projectile.ownerHitCheck = true;
-		Projectile.usesLocalNPCImmunity = true;
-		Projectile.localNPCHitCooldown = -1;
-	}
+        Projectile.aiStyle = -1;
+        Projectile.timeLeft = 360000;
+        Projectile.tileCollide = false;
+        Projectile.DamageType = DamageClass.Melee;
+        Projectile.penetrate = -1;
+        Projectile.ignoreWater = true;
+        Projectile.friendly = true;
 
-	public override void AI()
-	{
-		Owner.heldProj = Projectile.whoAmI;
-		Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Owner.gravDir * Projectile.rotation - MathHelper.PiOver2 - 0.0f * MathHelper.PiOver4 * Owner.direction);
-		Owner.direction = (Main.MouseWorld - Owner.MountedCenter).X < 0 ? -1 : 1;
+        Projectile.ownerHitCheck = true;
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = -1;
+    }
 
-		// Sync mouse position with server
-		if (Main.myPlayer == Projectile.owner && Main.MouseWorld != OwnerMouseWorld)
-		{
-			OwnerMouseWorld = Main.MouseWorld;
-			Projectile.netUpdate = true;
-		}
+    public override void AI()
+    {
+        Owner.heldProj = Projectile.whoAmI;
+        Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Owner.gravDir * Projectile.rotation - MathHelper.PiOver2 - 0.0f * MathHelper.PiOver4 * Owner.direction);
+        Owner.direction = (Main.MouseWorld - Owner.MountedCenter).X < 0 ? -1 : 1;
 
-		if (Owner.controlUseItem && Owner.HeldItem.ModItem is MiningPowerPickaxe)
-		{
-			var mouseToPlayer = Vector2.Normalize(OwnerMouseWorld - Owner.MountedCenter);
-			Projectile.rotation = (float)(Math.Atan2(mouseToPlayer.Y, mouseToPlayer.X) + MathHelper.PiOver4 * 0.6f * Owner.direction * Owner.gravDir);
+        // Sync mouse position with server
+        if (Main.myPlayer == Projectile.owner && Main.MouseWorld != OwnerMouseWorld)
+        {
+            OwnerMouseWorld = Main.MouseWorld;
+            Projectile.netUpdate = true;
+        }
 
-			var mainOffset = Vector2.Normalize(mouseToPlayer) * 26f;
-			var shakeOffset = mainOffset.NormalizeSafe() * MathF.Sin((float)Main.timeForVisualEffects) * 0.5f;
-			Projectile.Center = Owner.MountedCenter + mainOffset + shakeOffset;
+        if (Owner.controlUseItem && Owner.HeldItem.ModItem is MiningPowerPickaxe)
+        {
+            var mouseToPlayer = Vector2.Normalize(OwnerMouseWorld - Owner.MountedCenter);
+            Projectile.rotation = (float)(Math.Atan2(mouseToPlayer.Y, mouseToPlayer.X) + MathHelper.PiOver4 * 0.6f * Owner.direction * Owner.gravDir);
 
-			Projectile.velocity = Vector2.Zero;
+            var mainOffset = Vector2.Normalize(mouseToPlayer) * 26f;
+            var shakeOffset = mainOffset.NormalizeSafe() * MathF.Sin((float)Main.timeForVisualEffects) * 0.5f;
+            Projectile.Center = Owner.MountedCenter + mainOffset + shakeOffset;
 
-			// Smoke dust from pickaxe body
-			if (Main.rand.NextBool(2))
-			{
-				var dustCenter = Projectile.Center + new Vector2(18, 10 * Owner.direction * Owner.gravDir).RotatedBy(Projectile.rotation);
-				Dust.NewDust(dustCenter - new Vector2(10, 10), 20, 20, DustID.IceTorch, Scale: 1.4f);
-			}
+            Projectile.velocity = Vector2.Zero;
 
-			// Flame dust from pickaxe drill
-			if (Main.rand.NextBool(20))
-			{
-				Dust.NewDustDirect(Projectile.Center - new Vector2(Projectile.width, Projectile.height) / 3, Projectile.width / 3, Projectile.height / 3, DustID.Smoke, 0, 0, newColor: new Color(0.4f, 0.4f, 0.4f), Scale: 1f);
-			}
+            // Smoke dust from pickaxe body
+            if (Main.rand.NextBool(2))
+            {
+                var dustCenter = Projectile.Center + new Vector2(18, 10 * Owner.direction * Owner.gravDir).RotatedBy(Projectile.rotation);
+                Dust.NewDust(dustCenter - new Vector2(10, 10), 20, 20, DustID.IceTorch, Scale: 1.4f);
+            }
 
-			if (Owner.itemTime == Owner.itemTimeMax - 1)
-			{
-				// The function code only runs on owner's client.
-				if (Projectile.owner == Main.myPlayer)
-				{
-					// Chain-mining function.
-					ChainMining(Owner);
+            // Flame dust from pickaxe drill
+            if (Main.rand.NextBool(20))
+            {
+                Dust.NewDustDirect(Projectile.Center - new Vector2(Projectile.width, Projectile.height) / 3, Projectile.width / 3, Projectile.height / 3, DustID.Smoke, 0, 0, newColor: new Color(0.4f, 0.4f, 0.4f), Scale: 1f);
+            }
 
-					// General pickaxe picking code.
-					if (FirstPick)
-					{
-						FirstPick = false;
+            if (Owner.itemTime == Owner.itemTimeMax - 1)
+            {
+                // The function code only runs on owner's client.
+                if (Projectile.owner == Main.myPlayer)
+                {
+                    // Chain-mining function.
+                    ChainMining(Owner);
 
-						SoundEngine.PlaySound(SoundID.Item23);
-					}
-					else
-					{
-						if (Owner.IsTargetTileInItemRange(Owner.HeldItem)
-							&& !(Main.tileHammer[MouseTileTarget.type] || Main.tileAxe[MouseTileTarget.type]))
-						{
-							Owner.PickTile(Player.tileTargetX, Player.tileTargetY, Pick);
-						}
+                    // General pickaxe picking code.
+                    if (FirstPick)
+                    {
+                        FirstPick = false;
 
-						SoundEngine.PlaySound(SoundID.Item22);
-					}
-				}
-			}
-			else if (Owner.itemTime == 0)
-			{
-				Owner.itemTime = Owner.itemTimeMax;
+                        SoundEngine.PlaySound(SoundID.Item23);
+                    }
+                    else
+                    {
+                        if (Owner.IsTargetTileInItemRange(Owner.HeldItem)
+                            && !(Main.tileHammer[MouseTileTarget.type] || Main.tileAxe[MouseTileTarget.type]))
+                        {
+                            Owner.PickTile(Player.tileTargetX, Player.tileTargetY, Pick);
+                        }
 
-			}
+                        SoundEngine.PlaySound(SoundID.Item22);
+                    }
+                }
+            }
+            else if (Owner.itemTime == 0)
+            {
+                Owner.itemTime = Owner.itemTimeMax;
 
-			Owner.direction = Projectile.Center.X < Owner.MountedCenter.X ? -1 : 1;
-		}
-		else
-		{
-			Projectile.Kill();
-		}
-	}
+            }
 
-	/// <summary>
-	/// Mining power pickaxe main function: Chain-mining.
-	/// 1. Search valid tiles linked to the clicked tile. (The tiles will be synced to all players' client.)
-	/// 2. If the target tiles are valid, pick the nearest [PickTileMax] tiles n by n from target tiles.
-	/// </summary>
-	/// <param name="player"></param>
-	private void ChainMining(Player player)
-	{
-		var pickaxeItem = player.HeldItem.ModItem as MiningPowerPickaxe;
-		if (pickaxeItem.Charge >= ChargeCost && !Main.SmartCursorIsUsed)
-		{
-			// If the mouse tile target is valid, fill the target tiles list.
-			if (TargetTiles.Count == 0
-				&& player.IsTargetTileInItemRange(pickaxeItem.Item)
-				&& (FirstPick || CheckTile(MouseTileTarget))
-				&& CheckPickPower(player, MouseTileTarget, MouseTileTargetCoord))
-			{
-				// Get all linked tiles (Order by distance to player).
-				TargetTiles = GetLinkedTiles(MouseTileTargetCoord, FirstPick ? FirstTileTargetType : MouseTileTarget.type, SearchTileMax, player);
-				TargetTiles.Remove(MouseTileTargetCoord);
+            Owner.direction = Projectile.Center.X < Owner.MountedCenter.X ? -1 : 1;
+        }
+        else
+        {
+            Projectile.Kill();
+        }
+    }
 
-				Projectile.netUpdate = true;
-			}
+    /// <summary>
+    /// Mining power pickaxe main function: Chain-mining.
+    /// 1. Search valid tiles linked to the clicked tile. (The tiles will be synced to all players' client.)
+    /// 2. If the target tiles are valid, pick the nearest [PickTileMax] tiles n by n from target tiles.
+    /// </summary>
+    /// <param name="player"></param>
+    private void ChainMining(Player player)
+    {
+        var pickaxeItem = player.HeldItem.ModItem as MiningPowerPickaxe;
+        if (pickaxeItem.Charge >= ChargeCost && !Main.SmartCursorIsUsed)
+        {
+            // If the mouse tile target is valid, fill the target tiles list.
+            if (TargetTiles.Count == 0
+                && player.IsTargetTileInItemRange(pickaxeItem.Item)
+                && (FirstPick || CheckTile(MouseTileTarget))
+                && CheckPickPower(player, MouseTileTarget, MouseTileTargetCoord))
+            {
+                // Get all linked tiles (Order by distance to player).
+                TargetTiles = GetLinkedTiles(MouseTileTargetCoord, FirstPick ? FirstTileTargetType : MouseTileTarget.type, SearchTileMax, player);
+                TargetTiles.Remove(MouseTileTargetCoord);
 
-			// Pick the nearest [PickTileMax] tiles from target tiles.
-			if (TargetTiles.Count != 0)
-			{
-				// Decrease charge
-				pickaxeItem.Charge = Math.Max(pickaxeItem.Charge - ChargeCost, 0);
+                Projectile.netUpdate = true;
+            }
 
-				foreach (var tile in TargetTiles.Take(PickTileMax))
-				{
-					player.PickTile(tile.X, tile.Y, Pick);
-				}
+            // Pick the nearest [PickTileMax] tiles from target tiles.
+            if (TargetTiles.Count != 0)
+            {
+                // Decrease charge
+                pickaxeItem.Charge = Math.Max(pickaxeItem.Charge - ChargeCost, 0);
 
-				// Remove picked tiles from target tiles.
-				if (TargetTiles.RemoveAll(p => !Main.tile[p].HasTile) > 0)
-				{
-					Projectile.netUpdate = true;
-				}
-			}
-		}
-	}
+                foreach (var tile in TargetTiles.Take(PickTileMax))
+                {
+                    player.PickTile(tile.X, tile.Y, Pick);
+                }
 
-	public override bool PreDraw(ref Color lightColor)
-	{
-		var texture = ModContent.Request<Texture2D>(Texture).Value;
-		var rotation = Projectile.rotation;
-		var effects = Owner.direction == 1 && Owner.gravDir == 1 || Owner.gravDir == -1 && Owner.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically;
-		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, rotation, texture.Size() * 0.5f, Projectile.scale, effects, 0f);
-		return false;
-	}
+                // Remove picked tiles from target tiles.
+                if (TargetTiles.RemoveAll(p => !Main.tile[p].HasTile) > 0)
+                {
+                    Projectile.netUpdate = true;
+                }
+            }
+        }
+    }
 
-	public override void PostDraw(Color lightColor)
-	{
-		// Draw signal over tile to represent they're selected.
-		if (TargetTiles.Count > 0)
-		{
-			foreach (var tile in TargetTiles)
-			{
-				var drawPos = tile.ToWorldCoordinates() - Main.screenPosition;
-				var texture = Commons.ModAsset.Point.Value;
-				Main.spriteBatch.Draw(texture, drawPos, null, new Color(1f, 1f, 1f, 0f), 0f, texture.Size() * 0.5f, 0.08f, SpriteEffects.None, 0f);
-			}
-		}
-	}
+    public override bool PreDraw(ref Color lightColor)
+    {
+        var texture = ModContent.Request<Texture2D>(Texture).Value;
+        var rotation = Projectile.rotation;
+        var effects = Owner.direction == 1 && Owner.gravDir == 1 || Owner.gravDir == -1 && Owner.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically;
+        Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, rotation, texture.Size() * 0.5f, Projectile.scale, effects, 0f);
+        return false;
+    }
 
-	public override void SendExtraAI(BinaryWriter writer)
-	{
-		// Send tiles data
-		writer.Write(TargetTiles.Count);
-		for (int i = 0; i < TargetTiles.Count; i++)
-		{
-			writer.Write(TargetTiles[i].X);
-			writer.Write(TargetTiles[i].Y);
-		}
-	}
+    public override void PostDraw(Color lightColor)
+    {
+        // Draw signal over tile to represent they're selected.
+        if (TargetTiles.Count > 0)
+        {
+            foreach (var tile in TargetTiles)
+            {
+                var drawPos = tile.ToWorldCoordinates() - Main.screenPosition;
+                var texture = Commons.ModAsset.Point.Value;
+                Main.spriteBatch.Draw(texture, drawPos, null, new Color(1f, 1f, 1f, 0f), 0f, texture.Size() * 0.5f, 0.08f, SpriteEffects.None, 0f);
+            }
+        }
+    }
 
-	public override void ReceiveExtraAI(BinaryReader reader)
-	{
-		// Read tiles data
-		int length = reader.ReadInt32();
-		for (int i = 0; i < length; i++)
-		{
-			var tileX = reader.ReadInt32();
-			var tileY = reader.ReadInt32();
-			TargetTiles[i] = new Point16(tileX, tileY);
-		}
-	}
+    public override void SendExtraAI(BinaryWriter writer)
+    {
+        // Send tiles data
+        writer.Write(TargetTiles.Count);
+        for (int i = 0; i < TargetTiles.Count; i++)
+        {
+            writer.Write(TargetTiles[i].X);
+            writer.Write(TargetTiles[i].Y);
+        }
+    }
 
-	private static List<Point16> GetLinkedTiles(Point16 clickedTilePos, int clickedTileType, int tileNumMax, Player player)
-	{
-		if (clickedTileType < 0)
-		{
-			return [];
-		}
+    public override void ReceiveExtraAI(BinaryReader reader)
+    {
+        // Read tiles data
+        int length = reader.ReadInt32();
+        for (int i = 0; i < length; i++)
+        {
+            var tileX = reader.ReadInt32();
+            var tileY = reader.ReadInt32();
+            TargetTiles[i] = new Point16(tileX, tileY);
+        }
+    }
 
-		// Search linked tiles
-		var result = new List<Point16>();
-		Queue<Point16> tileQueue = new();
-		tileQueue.Enqueue(clickedTilePos);
-		while (tileQueue.Count != 0)
-		{
-			var currentTile = tileQueue.Dequeue();
-			result.Add(currentTile);
+    private static List<Point16> GetLinkedTiles(Point16 clickedTilePos, int clickedTileType, int tileNumMax, Player player)
+    {
+        if (clickedTileType < 0)
+        {
+            return [];
+        }
 
-			if (result.Count > tileNumMax)
-			{
-				break;
-			}
+        // Search linked tiles
+        var result = new List<Point16>();
+        Queue<Point16> tileQueue = new();
+        tileQueue.Enqueue(clickedTilePos);
+        while (tileQueue.Count != 0)
+        {
+            var currentTile = tileQueue.Dequeue();
+            result.Add(currentTile);
 
-			// Search nearby tiles
-			for (int i = -1; i <= 1; i++)
-			{
-				for (int j = -1; j <= 1; j++)
-				{
-					var nearbyTilePos = new Point16(currentTile.X + i, currentTile.Y + j);
-					var nearbyTile = Framing.GetTileSafely(nearbyTilePos); // var nearbyTile = Main.tile[nearbyTilePos];
-					if (!CheckTilePos(nearbyTilePos) || !CheckTile(nearbyTile)
-						|| nearbyTile.type != clickedTileType
-						|| tileQueue.Any(t => t == nearbyTilePos)
-						|| result.Any(t => t == nearbyTilePos)
-						|| Vector2.Distance(nearbyTilePos.ToWorldCoordinates(), player.Center) > SearchTileRange)
-					{
-						continue;
-					}
+            if (result.Count > tileNumMax)
+            {
+                break;
+            }
 
-					tileQueue.Enqueue(nearbyTilePos);
-				}
-			}
-		}
+            // Search nearby tiles
+            for (int i = -1; i <= 1; i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    var nearbyTilePos = new Point16(currentTile.X + i, currentTile.Y + j);
+                    var nearbyTile = Framing.GetTileSafely(nearbyTilePos); // var nearbyTile = Main.tile[nearbyTilePos];
+                    if (!CheckTilePos(nearbyTilePos) || !CheckTile(nearbyTile)
+                        || nearbyTile.type != clickedTileType
+                        || tileQueue.Any(t => t == nearbyTilePos)
+                        || result.Any(t => t == nearbyTilePos)
+                        || Vector2.Distance(nearbyTilePos.ToWorldCoordinates(), player.Center) > SearchTileRange)
+                    {
+                        continue;
+                    }
 
-		return result
-			.Distinct()
-			.OrderBy(p => Vector2.Distance(p.ToWorldCoordinates(), player.Center))
-			.ToList();
-	}
+                    tileQueue.Enqueue(nearbyTilePos);
+                }
+            }
+        }
 
-	private static bool CheckTilePos(Point16 pos) =>
-		pos.X < Main.maxTilesX && pos.X >= 0 && pos.Y < Main.maxTilesY && pos.Y >= 0;
+        return result
+            .Distinct()
+            .OrderBy(p => Vector2.Distance(p.ToWorldCoordinates(), player.Center))
+            .ToList();
+    }
 
-	private static bool CheckTile(Tile tile) =>
-		tile != null
-		&& tile.HasTile
-		&& TileID.Sets.Ore[tile.type];
+    private static bool CheckTilePos(Point16 pos) =>
+        pos.X < Main.maxTilesX && pos.X >= 0 && pos.Y < Main.maxTilesY && pos.Y >= 0;
 
-	private static bool CheckPickPower(Player player, Tile tile, Point16 clickPos) =>
-		player.GetPickaxeDamage(clickPos.X, clickPos.Y, Pick, 0, tile) > 0;
+    private static bool CheckTile(Tile tile) =>
+        tile != null
+        && tile.HasTile
+        && TileID.Sets.Ore[tile.type];
+
+    private static bool CheckPickPower(Player player, Tile tile, Point16 clickPos) =>
+        player.GetPickaxeDamage(clickPos.X, clickPos.Y, Pick, 0, tile) > 0;
 }

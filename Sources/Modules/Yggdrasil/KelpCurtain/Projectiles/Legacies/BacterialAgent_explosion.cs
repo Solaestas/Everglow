@@ -8,6 +8,8 @@ namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 
 public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
 {
+	public override string LocalizationCategory => LocalizationUtils.Categories.MagicProjectiles;
+
 	public override string Texture => ModAsset.BacterialAgent_Proj_Mod;
 	public override void SetDefaults()
 	{

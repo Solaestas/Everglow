@@ -23,6 +23,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Tools
 
     internal class AmberFlowerHookProjectile : ModProjectile
     {
+		public override string LocalizationCategory => LocalizationUtils.Categories.MiscsProjectiles;
+
         private static Asset<Texture2D> chainTexture;
 
         public override void Load()

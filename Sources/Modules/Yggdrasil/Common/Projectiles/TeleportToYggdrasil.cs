@@ -6,7 +6,7 @@ namespace Everglow.Yggdrasil.Common.Projectiles;
 
 public class TeleportToYggdrasil : ModProjectile, IWarpProjectile
 {
-	public override string LocalizationCategory => LocalizationUtils.Categories.Miscs;
+	public override string LocalizationCategory => LocalizationUtils.Categories.MiscsProjectiles;
 
 	public override string Texture => Commons.ModAsset.Empty_Mod;
 

@@ -5,7 +5,7 @@ using Terraria.Localization;
 
 namespace Everglow.Commons.Localization;
 
-public class OutputLocalizationHjsonSystem : ModItem
+public class OutputLocalizationHjsonItem : ModItem
 {
 	public override string Texture => Commons.ModAsset.Point_Mod;
 
@@ -58,6 +58,7 @@ public class OutputLocalizationHjsonSystem : ModItem
 			var biomes = GetModBiomes();
 			var buffs = GetBuffs();
 			var cooldowns = GetCooldowns();
+			var projectiles = GetProjectiles();
 
 			foreach (var cultureName in cultures)
 			{
@@ -66,6 +67,7 @@ public class OutputLocalizationHjsonSystem : ModItem
 				ExportHjson.ExportCategoryFiles(biomes, cultureName);
 				ExportHjson.ExportCategoryFiles(buffs, cultureName);
 				ExportHjson.ExportCategoryFiles(cooldowns, cultureName);
+				ExportHjson.ExportCategoryFiles(projectiles, cultureName);
 			}
 		}
 
@@ -177,6 +179,50 @@ public class OutputLocalizationHjsonSystem : ModItem
 		{
 			keyToName[key].Add(cooldown.Name);
 		}
+
+		return keyToName;
+	}
+
+	public Dictionary<string, List<string>> GetProjectiles()
+	{
+		var itemNames = ProjectileID.Search.Names.Where(x => x.StartsWith(nameof(Everglow)));
+		var number = itemNames.Count();
+		int correct = 0;
+		int wrong = 0;
+
+		Dictionary<string, List<string>> keyToName = [];
+		foreach (var itemName in itemNames)
+		{
+			var id = ProjectileID.Search.GetId(itemName);
+			if (id == ProjectileID.None)
+			{
+				continue;
+			}
+
+			var item = new Projectile();
+			item.SetDefaults(id);
+
+			var category = item.ModProjectile.LocalizationCategory;
+			if (category == "Projectiles")
+			{
+				wrong++;
+				Console.WriteLine("Projectile 未分类：" + itemName);
+			}
+			else
+			{
+				correct++;
+				if (keyToName.TryGetValue(category, out var list))
+				{
+					list.Add(itemName);
+				}
+				else
+				{
+					keyToName[category] = [itemName];
+				}
+			}
+		}
+
+		Console.WriteLine($"ModProjectile: {correct}√ / {wrong}×");
 
 		return keyToName;
 	}

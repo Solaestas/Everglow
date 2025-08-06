@@ -61,6 +61,7 @@ public static class LocalizationUtils
 		public const string EnemyProjectiles = "Projectiles.Enemies";
 		public const string BossProjectiles = "Projectiles.Bosses";
 		public const string TownNPCProjectiles = "Projectiles.TownNPCs";
+		public const string MiscsProjectiles = "Projectiles.Miscs";
 	}
 
 	public class LocalizationKeys

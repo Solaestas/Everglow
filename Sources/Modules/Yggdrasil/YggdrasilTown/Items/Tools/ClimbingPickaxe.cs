@@ -20,7 +20,9 @@ public class ClimbingPickaxe : ModItem
 
 public class ClimbingPickaxeProjectile : ModProjectile
 {
-    public override string Texture => ModAsset.ClimbingPickaxe_Hook_Mod;
+	public override string LocalizationCategory => LocalizationUtils.Categories.MiscsProjectiles;
+
+	public override string Texture => ModAsset.ClimbingPickaxe_Hook_Mod;
 
     public override void SetDefaults()
     {

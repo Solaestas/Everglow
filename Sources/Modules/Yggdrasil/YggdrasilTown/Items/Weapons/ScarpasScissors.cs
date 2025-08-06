@@ -59,7 +59,7 @@ public class ScarpasScissors : ModItem
 
     public override bool AltFunctionUse(Player player) => true;
 
-    public class ScarpasScissorsProjBase : ModProjectile
+    public abstract class ScarpasScissorsProjBase : ModProjectile
     {
         public override string Texture => ModAsset.ScarpasScissors_Mod;
 

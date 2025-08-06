@@ -4,80 +4,82 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.TownNPCs.Fevens;
 
 public class Fevens_TaijutsuSlash_Target : ModProjectile
 {
-	public override string Texture => Commons.ModAsset.Empty_Mod;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.TownNPCProjectiles;
 
-	public override void SetDefaults()
-	{
-		Projectile.width = 30;
-		Projectile.height = 30;
-		Projectile.aiStyle = -1;
-		Projectile.hostile = false;
-		Projectile.tileCollide = false;
-		Projectile.DamageType = DamageClass.Melee;
-		Projectile.penetrate = -1;
-		Projectile.timeLeft = 120;
-		Projectile.extraUpdates = 3;
+    public override string Texture => Commons.ModAsset.Empty_Mod;
 
-		Projectile.localNPCHitCooldown = 60;
-		Projectile.usesLocalNPCImmunity = true;
-	}
+    public override void SetDefaults()
+    {
+        Projectile.width = 30;
+        Projectile.height = 30;
+        Projectile.aiStyle = -1;
+        Projectile.hostile = false;
+        Projectile.tileCollide = false;
+        Projectile.DamageType = DamageClass.Melee;
+        Projectile.penetrate = -1;
+        Projectile.timeLeft = 120;
+        Projectile.extraUpdates = 3;
 
-	public override void AI()
-	{
-	}
+        Projectile.localNPCHitCooldown = 60;
+        Projectile.usesLocalNPCImmunity = true;
+    }
 
-	public override bool PreDraw(ref Color lightColor)
-	{
-		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect dissolve = Commons.ModAsset.DissolveWithLight.Value;
-		float dissolveDuration = Projectile.timeLeft / 60f - 0.2f;
-		if (Projectile.timeLeft > 60)
-		{
-			dissolveDuration = 1.2f;
-		}
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		dissolve.Parameters["uTransform"].SetValue(model * projection);
-		dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_Sand.Value);
-		dissolve.Parameters["duration"].SetValue(dissolveDuration);
-		dissolve.Parameters["uLightColor"].SetValue(lightColor.ToVector4());
-		dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.2f, 0f, 0.9f, 1f));
-		dissolve.Parameters["uNoiseSize"].SetValue(60f);
-		dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(Projectile.ai[1], Projectile.ai[2]));
-		dissolve.CurrentTechnique.Passes[0].Apply();
+    public override void AI()
+    {
+    }
 
-		var drawColor = new Color(0.3f, 0.05f, 0.9f, 0);
-		Vector2 drawPos = Projectile.Center;
-		float timeLeftValue = (120 - Projectile.timeLeft) / 120f;
-		float addWidth = MathF.Pow(timeLeftValue, 2.5f) * 10;
+    public override bool PreDraw(ref Color lightColor)
+    {
+        SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+        Effect dissolve = Commons.ModAsset.DissolveWithLight.Value;
+        float dissolveDuration = Projectile.timeLeft / 60f - 0.2f;
+        if (Projectile.timeLeft > 60)
+        {
+            dissolveDuration = 1.2f;
+        }
+        var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+        var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
+        dissolve.Parameters["uTransform"].SetValue(model * projection);
+        dissolve.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_Sand.Value);
+        dissolve.Parameters["duration"].SetValue(dissolveDuration);
+        dissolve.Parameters["uLightColor"].SetValue(lightColor.ToVector4());
+        dissolve.Parameters["uDissolveColor"].SetValue(new Vector4(0.2f, 0f, 0.9f, 1f));
+        dissolve.Parameters["uNoiseSize"].SetValue(60f);
+        dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(Projectile.ai[1], Projectile.ai[2]));
+        dissolve.CurrentTechnique.Passes[0].Apply();
 
-		for (int i = 0; i < 2; i++)
-		{
-			float rotation = 0.21f;
-			if(i == 1)
-			{
-				rotation *= -1;
-			}
-			var bars = new List<Vertex2D>();
-			bars.Add(drawPos + new Vector2(-74, 0).RotatedBy(rotation), drawColor, new Vector3(0, 0.2f, 0));
-			bars.Add(drawPos + new Vector2(-74, 0).RotatedBy(rotation), drawColor, new Vector3(0, 0.5f, 0));
+        var drawColor = new Color(0.3f, 0.05f, 0.9f, 0);
+        Vector2 drawPos = Projectile.Center;
+        float timeLeftValue = (120 - Projectile.timeLeft) / 120f;
+        float addWidth = MathF.Pow(timeLeftValue, 2.5f) * 10;
 
-			bars.Add(drawPos + new Vector2(0, addWidth).RotatedBy(rotation), drawColor, new Vector3(0.5f, 0.2f, 0));
-			bars.Add(drawPos + new Vector2(0, -addWidth).RotatedBy(rotation), drawColor, new Vector3(0.5f, 0.5f, 0));
+        for (int i = 0; i < 2; i++)
+        {
+            float rotation = 0.21f;
+            if (i == 1)
+            {
+                rotation *= -1;
+            }
+            var bars = new List<Vertex2D>();
+            bars.Add(drawPos + new Vector2(-74, 0).RotatedBy(rotation), drawColor, new Vector3(0, 0.2f, 0));
+            bars.Add(drawPos + new Vector2(-74, 0).RotatedBy(rotation), drawColor, new Vector3(0, 0.5f, 0));
 
-			bars.Add(drawPos + new Vector2(74, 0).RotatedBy(rotation), drawColor, new Vector3(1, 0.2f, 0));
-			bars.Add(drawPos + new Vector2(74, 0).RotatedBy(rotation), drawColor, new Vector3(1, 0.5f, 0));
+            bars.Add(drawPos + new Vector2(0, addWidth).RotatedBy(rotation), drawColor, new Vector3(0.5f, 0.2f, 0));
+            bars.Add(drawPos + new Vector2(0, -addWidth).RotatedBy(rotation), drawColor, new Vector3(0.5f, 0.5f, 0));
 
-			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Textures_Star.Value;
-			if (bars.Count > 3)
-			{
-				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-			}
-		}
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(sBS);
-		return false;
-	}
+            bars.Add(drawPos + new Vector2(74, 0).RotatedBy(rotation), drawColor, new Vector3(1, 0.2f, 0));
+            bars.Add(drawPos + new Vector2(74, 0).RotatedBy(rotation), drawColor, new Vector3(1, 0.5f, 0));
+
+            Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Textures_Star.Value;
+            if (bars.Count > 3)
+            {
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+            }
+        }
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(sBS);
+        return false;
+    }
 }
