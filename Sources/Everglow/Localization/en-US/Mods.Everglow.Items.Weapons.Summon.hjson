@@ -5,9 +5,94 @@ AuburnBell: {
 
 GreenVineWhip: {
 	DisplayName: Green Vine Whip
-	Tooltip: 
-	'''
-	25% chance to inflict Poisoned for 5 seconds
-	Adds a "Moss Cover" buff to the player for 5 seconds when hitting enemies
-	'''
+	Tooltip:
+		'''
+		25% chance to inflict Poisoned for 5 seconds
+		Adds a "Moss Cover" buff to the player for 5 seconds when hitting enemies
+		'''
+}
+
+GrilledSquidTentacle: {
+	DisplayName: Grilled Squid Tentacle
+	Tooltip: ""
+}
+
+ToothStaff: {
+	DisplayName: Tooth Staff
+	Tooltip: ""
+}
+
+DarknessFan: {
+	DisplayName: Darkness Fan
+	Tooltip: ""
+}
+
+EvilChrysalis: {
+	DisplayName: Evil Chrysalis
+	Tooltip: ""
+}
+
+XmasWhip: {
+	DisplayName: Xmas Whip
+	Tooltip: ""
+}
+
+ActivatedJellyGland: {
+	DisplayName: Activated Jelly Gland
+	Tooltip: ""
+}
+
+MeltingSideGyroscope: {
+	DisplayName: Melting Side Gyroscope
+	Tooltip: ""
+}
+
+MidwinterNightmare: {
+	DisplayName: Midwinter Nightmare
+	Tooltip: ""
+}
+
+ThermoprobeStaff: {
+	DisplayName: Thermoprobe Staff
+	Tooltip: ""
+}
+
+WiltedForestLamp: {
+	DisplayName: Wilted Forest Lamp
+	Tooltip: ""
+}
+
+YggdrasilStoneGyroscope: {
+	DisplayName: Yggdrasil Stone Gyroscope
+	Tooltip: ""
+}
+
+DeadBeetleEgg: {
+	DisplayName: Dead Beetle Egg
+	Tooltip: ""
+}
+
+EvilMusicRemnant: {
+	DisplayName: Evil Music Remnant
+	Tooltip: ""
+}
+
+LegumeGyroscope: {
+	DisplayName: Legume Gyroscope
+	Tooltip: ""
+}
+
+WoodlandWraithStaff: {
+	DisplayName: Woodland Wraith Staff
+	Tooltip: ""
+}
+
+LichenTentacle: {
+	DisplayName: Lichen Tentacle
+	Tooltip: ""
+}
+
+DevilHeartGyroscope: {
+	DisplayName: Devil Heart Gyroscope
+	Tooltip: ""
 }

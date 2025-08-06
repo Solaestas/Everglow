@@ -1,7 +1,6 @@
 CanteenMaid: {
 	DisplayName: Betty, the Canteen Maid
 
-	# This is what displays during all of an NPC's happiness levels.
 	TownNPCMood: {
 		Content: I feel pretty fine right now.
 		NoHome: I would very much like a house, all the colorful monsters scare me.
@@ -20,4 +19,28 @@ CanteenMaid: {
 		LikeNPC_Princess: "{NPCName} is a princess? That is so cool!"
 		Princess_LovesNPC: "{NPCName} is so square. I love that about them!"
 	}
+}
+
+Fevens: {
+	DisplayName: Fevens
+}
+
+Guard_of_YggdrasilTown: {
+	DisplayName: Guard_of_ Yggdrasil Town
+}
+
+Howard_Warden: {
+	DisplayName: Howard_ Warden
+}
+
+InnKeeper: {
+	DisplayName: Inn Keeper
+}
+
+Restauranteur: {
+	DisplayName: Restauranteur
+}
+
+TeahouseLady: {
+	DisplayName: Teahouse Lady
 }

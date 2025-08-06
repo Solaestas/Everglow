@@ -1,7 +1,7 @@
 DevilHeartHairpin: {
 	DisplayName: Devil Heart Hairpin
 	Tooltip: 5% increased magic damage and 5% increased magic critical strike chance
-	SetBonus: 
+	SetBonus:
 		'''
 		10% decreased mana cost
 		8% increased magic damage
@@ -15,7 +15,7 @@ DevilHeartHairpin: {
 DevilHeartHelmet: {
 	DisplayName: Devil Heart Helmet
 	Tooltip: 4% increased summon damage and +1 max minions
-	SetBonus: 
+	SetBonus:
 		'''
 		8% increased summon damage
 		15% increased whip attack speed
@@ -35,4 +35,219 @@ DevilHeartLightBreastPlate: {
 DevilHeartLeggings: {
 	DisplayName: Devil Heart Leggings
 	Tooltip: 10% increased movement speed
+}
+
+FireflywoodBreastplate: {
+	DisplayName: Fireflywood Breastplate
+	Tooltip: ""
+}
+
+FireflywoodHelmet: {
+	DisplayName: Fireflywood Helmet
+	Tooltip: ""
+}
+
+FireflywoodLeggings: {
+	DisplayName: Fireflywood Leggings
+	Tooltip: ""
+}
+
+BlueflowerDress: {
+	DisplayName: Blueflower Dress
+	Tooltip: ""
+}
+
+ValiantBreastplate: {
+	DisplayName: Valiant Breastplate
+	Tooltip: ""
+}
+
+ValiantHelmet: {
+	DisplayName: Valiant Helmet
+	Tooltip: ""
+}
+
+ValiantLeggings: {
+	DisplayName: Valiant Leggings
+	Tooltip: ""
+}
+
+TwilightWoodBreastplate: {
+	DisplayName: Twilight Wood Breastplate
+	Tooltip: ""
+}
+
+TwilightWoodHelmet: {
+	DisplayName: Twilight Wood Helmet
+	Tooltip: ""
+}
+
+TwilightWoodLeggings: {
+	DisplayName: Twilight Wood Leggings
+	Tooltip: ""
+}
+
+ConventionalEquipment: {
+	DisplayName: Conventional Equipment
+	Tooltip: ""
+}
+
+SafetyHelmets: {
+	DisplayName: Safety Helmets
+	Tooltip: ""
+}
+
+StandardLeggings: {
+	DisplayName: Standard Leggings
+	Tooltip: ""
+}
+
+RockGreaves: {
+	DisplayName: Rock Greaves
+	Tooltip: ""
+}
+
+RockHelmet: {
+	DisplayName: Rock Helmet
+	Tooltip: ""
+}
+
+RockPlateMail: {
+	DisplayName: Rock Plate Mail
+	Tooltip: ""
+}
+
+ConcentratingJacket: {
+	DisplayName: Concentrating Jacket
+	Tooltip: ""
+}
+
+ExplorationHelmet: {
+	DisplayName: Exploration Helmet
+	Tooltip: ""
+}
+
+OvineHairpin: {
+	DisplayName: Ovine Hairpin
+	Tooltip: ""
+}
+
+ShadowlessBoots: {
+	DisplayName: Shadowless Boots
+	Tooltip: ""
+}
+
+LampWoodBreastplate: {
+	DisplayName: Lamp Wood Breastplate
+	Tooltip: ""
+}
+
+LampWoodHelmet: {
+	DisplayName: Lamp Wood Helmet
+	Tooltip: ""
+}
+
+LampWoodLeggings: {
+	DisplayName: Lamp Wood Leggings
+	Tooltip: ""
+}
+
+JellyBallBathingCap: {
+	DisplayName: Jelly Ball Bathing Cap
+	Tooltip: ""
+}
+
+CyanBreastplate: {
+	DisplayName: Cyan Breastplate
+	Tooltip: ""
+}
+
+CyanHeavylet: {
+	DisplayName: Cyan Heavylet
+	Tooltip: ""
+}
+
+CyanLeggings: {
+	DisplayName: Cyan Leggings
+	Tooltip: ""
+}
+
+CyanWarhelm: {
+	DisplayName: Cyan Warhelm
+	Tooltip: ""
+}
+
+BloodDrenchedRobe: {
+	DisplayName: Blood Drenched Robe
+	Tooltip: ""
+}
+
+BloodStainedVeil: {
+	DisplayName: Blood Stained Veil
+	Tooltip: ""
+}
+
+AuburnBoots: {
+	DisplayName: Auburn Boots
+	Tooltip: ""
+}
+
+AuburnBreastplate: {
+	DisplayName: Auburn Breastplate
+	Tooltip: ""
+}
+
+AuburnHoodie: {
+	DisplayName: Auburn Hoodie
+	Tooltip: ""
+}
+
+WitherbarkBreastPlate: {
+	DisplayName: Witherbark Breast Plate
+	Tooltip: ""
+}
+
+WitherbarkHelmet: {
+	DisplayName: Witherbark Helmet
+	Tooltip: ""
+}
+
+WitherbarkLeggings: {
+	DisplayName: Witherbark Leggings
+	Tooltip: ""
+}
+
+RuinLeggings: {
+	DisplayName: Ruin Leggings
+	Tooltip: ""
+}
+
+RuinMagicRobe: {
+	DisplayName: Ruin Magic Robe
+	Tooltip: ""
+}
+
+RuinMask: {
+	DisplayName: Ruin Mask
+	Tooltip: ""
+}
+
+MolluscsLeggings: {
+	DisplayName: Molluscs Leggings
+	Tooltip: ""
+}
+
+MossyMolluscsHelmet: {
+	DisplayName: Mossy Molluscs Helmet
+	Tooltip: ""
+}
+
+PearlMolluscsHelmet: {
+	DisplayName: Pearl Molluscs Helmet
+	Tooltip: ""
+}
+
+ShellMolluscsBreastPlate: {
+	DisplayName: Shell Molluscs Breast Plate
+	Tooltip: ""
 }

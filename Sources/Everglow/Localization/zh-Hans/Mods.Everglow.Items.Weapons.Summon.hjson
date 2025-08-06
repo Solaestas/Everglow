@@ -1,13 +1,98 @@
 GreenVineWhip: {
 	DisplayName: 青蔓鞭
-	Tooltip: 
-	'''
-	25%造成中毒5秒
-	命中敌人时，给予玩家5秒“苔藓附层”
-	'''
+	Tooltip:
+		'''
+		25%造成中毒5秒
+		命中敌人时，给予玩家5秒“苔藓附层”
+		'''
 }
 
 AuburnBell: {
 	DisplayName: 金棕铃铛
 	Tooltip: 召唤小金棕飞棍为你作战
+}
+
+GrilledSquidTentacle: {
+	DisplayName: Grilled Squid Tentacle
+	Tooltip: ""
+}
+
+ToothStaff: {
+	DisplayName: Tooth Staff
+	Tooltip: ""
+}
+
+DarknessFan: {
+	DisplayName: Darkness Fan
+	Tooltip: ""
+}
+
+EvilChrysalis: {
+	DisplayName: Evil Chrysalis
+	Tooltip: ""
+}
+
+XmasWhip: {
+	DisplayName: Xmas Whip
+	Tooltip: ""
+}
+
+ActivatedJellyGland: {
+	DisplayName: Activated Jelly Gland
+	Tooltip: ""
+}
+
+MeltingSideGyroscope: {
+	DisplayName: Melting Side Gyroscope
+	Tooltip: ""
+}
+
+MidwinterNightmare: {
+	DisplayName: Midwinter Nightmare
+	Tooltip: ""
+}
+
+ThermoprobeStaff: {
+	DisplayName: Thermoprobe Staff
+	Tooltip: ""
+}
+
+WiltedForestLamp: {
+	DisplayName: Wilted Forest Lamp
+	Tooltip: ""
+}
+
+YggdrasilStoneGyroscope: {
+	DisplayName: Yggdrasil Stone Gyroscope
+	Tooltip: ""
+}
+
+DeadBeetleEgg: {
+	DisplayName: Dead Beetle Egg
+	Tooltip: ""
+}
+
+EvilMusicRemnant: {
+	DisplayName: Evil Music Remnant
+	Tooltip: ""
+}
+
+LegumeGyroscope: {
+	DisplayName: Legume Gyroscope
+	Tooltip: ""
+}
+
+WoodlandWraithStaff: {
+	DisplayName: Woodland Wraith Staff
+	Tooltip: ""
+}
+
+LichenTentacle: {
+	DisplayName: Lichen Tentacle
+	Tooltip: ""
+}
+
+DevilHeartGyroscope: {
+	DisplayName: Devil Heart Gyroscope
+	Tooltip: ""
 }

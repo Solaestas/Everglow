@@ -2,3 +2,53 @@ YggdrasilTownBiome: {
 	DisplayName: 天穹镇
 	TownNPCDialogueName: 天穹镇
 }
+
+TuskBiome: {
+	DisplayName: Tusk Biome
+	TownNPCDialogueName: ""
+}
+
+TuskSurfaceBiome: {
+	DisplayName: Tusk Surface Biome
+	TownNPCDialogueName: ""
+}
+
+FireflyBiome: {
+	DisplayName: Firefly Biome
+	TownNPCDialogueName: ""
+}
+
+FurnaceAreaBiome: {
+	DisplayName: Furnace Area Biome
+	TownNPCDialogueName: ""
+}
+
+JellyBallHotbedBiome: {
+	DisplayName: Jelly Ball Hotbed Biome
+	TownNPCDialogueName: ""
+}
+
+LampWoodForest: {
+	DisplayName: Lamp Wood Forest
+	TownNPCDialogueName: ""
+}
+
+MidnightBayouBiome: {
+	DisplayName: Midnight Bayou Biome
+	TownNPCDialogueName: ""
+}
+
+TwilightForsetAndRelic: {
+	DisplayName: Twilight Forset And Relic
+	TownNPCDialogueName: ""
+}
+
+KelpCurtainBiome: {
+	DisplayName: Kelp Curtain Biome
+	TownNPCDialogueName: ""
+}
+
+HurricaneMazeBiome: {
+	DisplayName: Hurricane Maze Biome
+	TownNPCDialogueName: ""
+}

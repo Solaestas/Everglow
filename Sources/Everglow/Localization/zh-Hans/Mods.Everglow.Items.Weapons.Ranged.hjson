@@ -6,3 +6,283 @@ RazorbeakBow: {
 CyanVineBow: {
 	DisplayName: 青缎弓
 }
+
+IcedSpear: {
+	DisplayName: Iced Spear
+	Tooltip: ""
+}
+
+SpineGun: {
+	DisplayName: Spine Gun
+	Tooltip: ""
+}
+
+ToothBow: {
+	DisplayName: Tooth Bow
+	Tooltip: ""
+}
+
+PhosphorescenceGun: {
+	DisplayName: Phosphorescence Gun
+	Tooltip: ""
+}
+
+ShadowWingBow: {
+	DisplayName: Shadow Wing Bow
+	Tooltip: ""
+}
+
+CloudGun: {
+	DisplayName: Cloud Gun
+	Tooltip: ""
+}
+
+SilveralGun: {
+	DisplayName: Silveral Gun
+	Tooltip: ""
+}
+
+SilveralRifle: {
+	DisplayName: Silveral Rifle
+	Tooltip: ""
+}
+
+AmbiguousNight: {
+	DisplayName: Ambiguous Night
+	Tooltip: ""
+}
+
+AmethystSlingshot: {
+	DisplayName: Amethyst Slingshot
+	Tooltip: ""
+}
+
+BorealWoodSlingshot: {
+	DisplayName: Boreal Wood Slingshot
+	Tooltip: ""
+}
+
+CactusSlingShot: {
+	DisplayName: Cactus Sling Shot
+	Tooltip: ""
+}
+
+DiamondSlingshot: {
+	DisplayName: Diamond Slingshot
+	Tooltip: ""
+}
+
+EbonwoodSlingshot: {
+	DisplayName: Ebonwood Slingshot
+	Tooltip: ""
+}
+
+EmeraldSlingshot: {
+	DisplayName: Emerald Slingshot
+	Tooltip: ""
+}
+
+GelSlingshot: {
+	DisplayName: Gel Slingshot
+	Tooltip: ""
+}
+
+JungleSlingshot: {
+	DisplayName: Jungle Slingshot
+	Tooltip: ""
+}
+
+PalmWoodSlingshot: {
+	DisplayName: Palm Wood Slingshot
+	Tooltip: ""
+}
+
+PearlwoodSlingshot: {
+	DisplayName: Pearlwood Slingshot
+	Tooltip: ""
+}
+
+RichMahoganySlingshot: {
+	DisplayName: Rich Mahogany Slingshot
+	Tooltip: ""
+}
+
+RubySlingshot: {
+	DisplayName: Ruby Slingshot
+	Tooltip: ""
+}
+
+SapphireSlingshot: {
+	DisplayName: Sapphire Slingshot
+	Tooltip: ""
+}
+
+ShadewoodSlingShot: {
+	DisplayName: Shadewood Sling Shot
+	Tooltip: ""
+}
+
+StarSlingshot: {
+	DisplayName: Star Slingshot
+	Tooltip: ""
+}
+
+TopazSlingshot: {
+	DisplayName: Topaz Slingshot
+	Tooltip: ""
+}
+
+WoodSlingshot: {
+	DisplayName: Wood Slingshot
+	Tooltip: ""
+}
+
+CloudBall: {
+	DisplayName: Cloud Ball
+	Tooltip: ""
+}
+
+RampageShark: {
+	DisplayName: Rampage Shark
+	Tooltip: ""
+}
+
+TsunamiShark: {
+	DisplayName: Tsunami Shark
+	Tooltip: ""
+}
+
+ArmorPiercingBlaster: {
+	DisplayName: Armor Piercing Blaster
+	Tooltip: ""
+}
+
+Caltrop: {
+	DisplayName: Caltrop
+	Tooltip: ""
+}
+
+CeremonialRifle: {
+	DisplayName: Ceremonial Rifle
+	Tooltip: ""
+}
+
+GunOfAvarice: {
+	DisplayName: Gun Of Avarice
+	Tooltip: ""
+}
+
+Nehemoth: {
+	DisplayName: Nehemoth
+	Tooltip: ""
+}
+
+RustSlingshot: {
+	DisplayName: Rust Slingshot
+	Tooltip: ""
+}
+
+SevenShotGun: {
+	DisplayName: Seven Shot Gun
+	Tooltip: ""
+}
+
+StoneJavelin: {
+	DisplayName: Stone Javelin
+	Tooltip: ""
+}
+
+RockSpikeBallista: {
+	DisplayName: Rock Spike Ballista
+	Tooltip: ""
+}
+
+BrittleRockSlingshot: {
+	DisplayName: Brittle Rock Slingshot
+	Tooltip: ""
+}
+
+KissOfCthulhu: {
+	DisplayName: Kiss Of Cthulhu
+	Tooltip: ""
+}
+
+BowOfEnlightment: {
+	DisplayName: Bow Of Enlightment
+	Tooltip: ""
+}
+
+HandgunOfEnlightment: {
+	DisplayName: Handgun Of Enlightment
+	Tooltip: ""
+}
+
+LampWoodBow: {
+	DisplayName: Lamp Wood Bow
+	Tooltip: ""
+}
+
+CyanVineCrossBow: {
+	DisplayName: Cyan Vine Cross Bow
+	Tooltip: ""
+}
+
+CyanVineFlintlock: {
+	DisplayName: Cyan Vine Flintlock
+	Tooltip: ""
+}
+
+CyanVineThrowingSpear: {
+	DisplayName: Cyan Vine Throwing Spear
+	Tooltip: ""
+}
+
+CaterpillarJuiceArrow: {
+	DisplayName: Caterpillar Juice Arrow
+	Tooltip: ""
+}
+
+LightArrow: {
+	DisplayName: Light Arrow
+	Tooltip: ""
+}
+
+LightBullet: {
+	DisplayName: Light Bullet
+	Tooltip: ""
+}
+
+RockArrow: {
+	DisplayName: Rock Arrow
+	Tooltip: ""
+}
+
+GreenThornBallLauncher: {
+	DisplayName: Green Thorn Ball Launcher
+	Tooltip: ""
+}
+
+MossyCyatheaBow: {
+	DisplayName: Mossy Cyathea Bow
+	Tooltip: ""
+}
+
+DevilHeartBow: {
+	DisplayName: Devil Heart Bow
+	Tooltip: ""
+}
+
+DevilHeartGun: {
+	DisplayName: Devil Heart Gun
+	Tooltip: ""
+}
+
+CyatheaArrow: {
+	DisplayName: Cyathea Arrow
+	Tooltip: ""
+}
+
+TerraViewerHowitzer: {
+	DisplayName: Terra Viewer Howitzer
+	Tooltip: ""
+}

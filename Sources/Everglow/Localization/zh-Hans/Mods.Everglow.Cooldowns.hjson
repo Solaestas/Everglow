@@ -7,3 +7,53 @@ DevilHeartSetCooldown: {
 	DisplayName: 魔心过载冷却
 	Description: 冷却中...
 }
+
+TestCooldown2: {
+	DisplayName: Test Cooldown2
+	Description: ""
+}
+
+TestCooldown3: {
+	DisplayName: Test Cooldown3
+	Description: ""
+}
+
+TestCooldown4: {
+	DisplayName: Test Cooldown4
+	Description: ""
+}
+
+AuburnSelfReinforcingCooldown: {
+	DisplayName: Auburn Self Reinforcing Cooldown
+	Description: ""
+}
+
+MelterGearCooldown: {
+	DisplayName: Melter Gear Cooldown
+	Description: ""
+}
+
+IstafelsSunfireGraspFireBallCooldown: {
+	DisplayName: Istafels Sunfire Grasp Fire Ball Cooldown
+	Description: ""
+}
+
+IstafelsSunfireGraspSkillCooldown: {
+	DisplayName: Istafels Sunfire Grasp Skill Cooldown
+	Description: ""
+}
+
+MolluscsSetCooldown: {
+	DisplayName: Molluscs Set Cooldown
+	Description: ""
+}
+
+RuinSetCooldown: {
+	DisplayName: Ruin Set Cooldown
+	Description: ""
+}
+
+TheGreenSolarCooldown: {
+	DisplayName: The Green Solar Cooldown
+	Description: ""
+}

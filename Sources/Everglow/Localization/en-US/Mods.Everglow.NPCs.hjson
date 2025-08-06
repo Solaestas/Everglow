@@ -1,3 +1,211 @@
 GiantJellyBall: {
 	DisplayName: Giant Jelly Ball
 }
+
+RapierMaster_Boss: {
+	DisplayName: Rapier Master_ Boss
+}
+
+InfoRegisteryTestNPC: {
+	DisplayName: Info Registery TestNPC
+}
+
+BloodTusk: {
+	DisplayName: Blood Tusk
+}
+
+Living_Jawbone: {
+	DisplayName: Living_ Jawbone
+}
+
+GlowingHeal: {
+	DisplayName: Glowing Heal
+}
+
+BlackStarFruit: {
+	DisplayName: Black Star Fruit
+}
+
+CentipedeHead: {
+	DisplayName: Centipede Head
+}
+
+CentipedeBody: {
+	DisplayName: Centipede Body
+}
+
+CentipedeTail: {
+	DisplayName: Centipede Tail
+}
+
+Dendroid_normal: {
+	DisplayName: Dendroid_normal
+}
+
+FireflyPiranha: {
+	DisplayName: Firefly Piranha
+}
+
+FireflyPiranhaInfected: {
+	DisplayName: Firefly Piranha Infected
+}
+
+FireflyPiranhaInfected_small: {
+	DisplayName: Firefly Piranha Infected_small
+}
+
+FireflyPiranha_small: {
+	DisplayName: Firefly Piranha_small
+}
+
+GlowingFirefly: {
+	DisplayName: Glowing Firefly
+}
+
+LittleFireBulb: {
+	DisplayName: Little Fire Bulb
+}
+
+CorruptMoth: {
+	DisplayName: Corrupt Moth
+}
+
+EvilPack: {
+	DisplayName: Evil Pack
+}
+
+SummonedButterfly: {
+	DisplayName: Summoned Butterfly
+}
+
+ExplosiveLantern_growing: {
+	DisplayName: Explosive Lantern_growing
+}
+
+BloodLanternGhost: {
+	DisplayName: Blood Lantern Ghost
+}
+
+BombLantern: {
+	DisplayName: Bomb Lantern
+}
+
+CylindricalLantern: {
+	DisplayName: Cylindrical Lantern
+}
+
+FloatLantern: {
+	DisplayName: Float Lantern
+}
+
+RedPackBomber: {
+	DisplayName: Red Pack Bomber
+}
+
+LanternGhostKing: {
+	DisplayName: Lantern Ghost King
+}
+
+BlueCore: {
+	DisplayName: Blue Core
+}
+
+FlamingDashCore: {
+	DisplayName: Flaming Dash Core
+}
+
+GreenCore: {
+	DisplayName: Green Core
+}
+
+RedCore: {
+	DisplayName: Red Core
+}
+
+YellowCore: {
+	DisplayName: Yellow Core
+}
+
+Acytaea: {
+	DisplayName: Acytaea
+}
+
+Acytaea_Boss: {
+	DisplayName: Acytaea_ Boss
+}
+
+BarkSpicyCaterpillar: {
+	DisplayName: Bark Spicy Caterpillar
+}
+
+BrownCaterpillar: {
+	DisplayName: Brown Caterpillar
+}
+
+CarapaceCaterpillar: {
+	DisplayName: Carapace Caterpillar
+}
+
+CrimsonSpell: {
+	DisplayName: Crimson Spell
+}
+
+CyanOreBeetle: {
+	DisplayName: Cyan Ore Beetle
+}
+
+DarkGlimmeringRods: {
+	DisplayName: Dark Glimmering Rods
+}
+
+Guard_Slimy: {
+	DisplayName: Guard_ Slimy
+}
+
+JellyBall: {
+	DisplayName: Jelly Ball
+}
+
+LampFruitBorer: {
+	DisplayName: Lamp Fruit Borer
+}
+
+LeafcutterAnt: {
+	DisplayName: Leafcutter Ant
+}
+
+LightBulb: {
+	DisplayName: Light Bulb
+}
+
+RockElemental: {
+	DisplayName: Rock Elemental
+}
+
+ShadowstrikeCaterpillar: {
+	DisplayName: Shadowstrike Caterpillar
+}
+
+WhisperingGhost: {
+	DisplayName: Whispering Ghost
+}
+
+Acytaea_yggdrasil: {
+	DisplayName: Acytaea_yggdrasil
+}
+
+SquamousShell: {
+	DisplayName: Squamous Shell
+}
+
+KingJellyBall: {
+	DisplayName: King Jelly Ball
+}
+
+RiverSlug: {
+	DisplayName: River Slug
+}
+
+TestNPC: {
+	DisplayName: TestNPC
+}
