@@ -47,7 +47,7 @@ public static class LocalizationUtils
 		public const string SummonItems = "Items.SummonItems";
 		public const string TreasureBags = "Items.TreasureBags";
 
-		public const string MiscItems = "Items.Miscs";
+		public const string Miscs = "Items.Miscs";
 
 		// Projectiles
 		public const string MeleeProjectiles = "Projectiles.Melee";
