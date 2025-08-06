@@ -18,9 +18,11 @@ public class HandheldCircularSaw_Proj : ModProjectile
 		Projectile.friendly = true;
 		Projectile.ignoreWater = true;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 	}
+
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -46,7 +48,9 @@ public class HandheldCircularSaw_Proj : ModProjectile
 			Projectile.Kill();
 		}
 		if (Projectile.Center.X < player.MountedCenter.X)
+		{
 			player.direction = -1;
+		}
 		else
 		{
 			player.direction = 1;
@@ -54,27 +58,34 @@ public class HandheldCircularSaw_Proj : ModProjectile
 		GenerateOrangeSpark((int)FlameValue);
 		FlameValue *= 0.92f;
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return false;
 	}
+
 	public float FlameValue = 0;
+
 	public override void PostDraw(Color lightColor)
 	{
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
 		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		var texSaw = ModAsset.HandheldCircularSaw_Saw.Value;
+		var texSaw = ModAsset.HandheldCircularSaw_saw.Value;
 		Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 		SpriteEffects se = SpriteEffects.None;
 		if (player.direction == -1)
+		{
 			se = SpriteEffects.FlipVertically;
+		}
+
 		float rot0 = Projectile.rotation - (float)(Math.PI * 0.25) + MathF.PI * 0.25f * player.direction;
 		Vector2 projToPlayer = new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75);
 
 		Main.spriteBatch.Draw(texSaw, Projectile.Center - Main.screenPosition + projToPlayer * 0, new Rectangle(0, 0, 34, 34), drawColor, (float)Main.time * 0.75f, new Vector2(17), 1f, se, 0);
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - projToPlayer * 13, null, drawColor, rot0, texMain.Size() / 2f, 1f, se, 0);
 	}
+
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		return base.Colliding(projHitbox, targetHitbox);
@@ -85,6 +96,7 @@ public class HandheldCircularSaw_Proj : ModProjectile
 		FlameValue += 1f;
 		base.OnHitNPC(target, hit, damageDone);
 	}
+
 	public void GenerateOrangeSpark(int times)
 	{
 		Player player = Main.player[Projectile.owner];
@@ -103,7 +115,7 @@ public class HandheldCircularSaw_Proj : ModProjectile
 				maxTime = Main.rand.Next(7, 45),
 				scale = Main.rand.NextFloat(1f, Main.rand.NextFloat(4f, 7.0f)),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.08f) * player.direction }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.08f) * player.direction },
 			};
 			Ins.VFXManager.Add(spark);
 		}
