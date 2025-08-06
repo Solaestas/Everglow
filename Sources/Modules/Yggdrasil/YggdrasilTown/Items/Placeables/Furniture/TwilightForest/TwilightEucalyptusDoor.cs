@@ -1,3 +1,4 @@
+using Everglow.Commons.ItemAbstracts.Furniture;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest.Furnitures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.TwilightForest;

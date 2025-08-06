@@ -1,5 +1,5 @@
 using Everglow.Myth.Common;
-using Everglow.Myth.TheFirefly.Items;
+using Everglow.Myth.TheFirefly.Items.Materials;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 

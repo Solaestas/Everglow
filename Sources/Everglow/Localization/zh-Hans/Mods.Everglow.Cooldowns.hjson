@@ -1,0 +1,9 @@
+TestCooldown: {
+	DisplayName: 测试冷却
+	Tooltip: 测试用
+}
+
+DevilHeartSetCooldown: {
+	DisplayName: 魔心过载冷却
+	Description: 冷却中...
+}

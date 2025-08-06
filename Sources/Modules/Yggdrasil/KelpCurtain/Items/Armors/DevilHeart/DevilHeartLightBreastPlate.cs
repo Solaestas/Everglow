@@ -4,7 +4,7 @@ using Terraria.GameContent.Creative;
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors.DevilHeart;
 
 [AutoloadEquip(EquipType.Body)]
-public class DevilHeartLightBreastPlate : ModItem, ILocalizedModType
+public class DevilHeartLightBreastPlate : ModItem
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.Armor;
 

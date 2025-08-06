@@ -28,11 +28,6 @@ public class GlowstickLauncher : ModItem
 		Item.noMelee = true;
 		Item.channel = true;
 
-		Item.DamageType = DamageClass.Default;
-		Item.damage = 0;
-		Item.knockBack = 0;
-		Item.crit = 0;
-
 		Item.value = Item.buyPrice(gold: 1);
 		Item.rare = ItemRarityID.Blue;
 

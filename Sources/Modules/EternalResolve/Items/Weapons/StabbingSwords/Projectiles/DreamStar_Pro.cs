@@ -1,6 +1,6 @@
 using Everglow.Commons.Vertex;
 using Everglow.Commons.Weapons.StabbingSwords;
-using Everglow.EternalResolve.Items.Misc;
+using Everglow.EternalResolve.Items.Miscs;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles

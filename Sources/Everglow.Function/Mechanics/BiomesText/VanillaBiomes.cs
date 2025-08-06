@@ -107,7 +107,7 @@ public static class VanillaBiomes
 	{
 		public string Key { get; }
 
-		public string DisplayName => Language.GetTextValue($"Mods.Everglow.Function.Biomes.VanillaBiomes.{Key}");
+		public string DisplayName => Language.GetTextValue($"Mods.Everglow.Biomes.VanillaBiomes.{Key}");
 
 		public Func<Player, bool> Condition { get; }
 

@@ -3,7 +3,7 @@ using Terraria.GameContent.Creative;
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors.DevilHeart;
 
 [AutoloadEquip(EquipType.Head)]
-public class DevilHeartHelmet : ModItem, ILocalizedModType
+public class DevilHeartHelmet : ModItem
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.Armor;
 

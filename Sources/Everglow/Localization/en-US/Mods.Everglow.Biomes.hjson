@@ -1,0 +1,61 @@
+VanillaBiomes: {
+    // Surface biomes
+    Forest: Forest
+    Snow: Snow Biome
+    Desert: Desert
+    Corruption: The Corruption
+    Crimson: The Crimson
+    Jungle: Jungle
+    Hallow: The Hallow
+    Dungeon: Dungeon
+    Ocean: Ocean
+    Glowshroom: Glowing Mushroom Biome
+
+    // Underground biomes
+    Underground: Underground
+    UndergroundDesert: Underground Desert
+
+    // Cavern biomes
+    Cavern: Cavern
+    UndergroundCrimson: Underground Crimson
+    UndergroundCorruption: Underground Corruption
+    UndergroundHallow: Underground Hallow
+    UndergroundJungle: Underground Jungle
+    UndergroundSnow: Ice Biome
+    UndergroundGlowshroom: Underground Glowing Mushroom Biome
+
+    // Space and Underworld biomes
+    Space: Space
+    Underworld: The Underworld
+
+    // Mini-biomes
+    Granite: Granite Cave
+    Hive: Bee Hive
+    Marble: Marble Cave
+    LihzhardTemple: Jungle Temple
+    Meteor: Meteorite
+    Graveyard: Graveyard
+    Shimmer: Aether
+
+    // Micro-biomes
+    GemCave: Gem Cave
+
+    // Candles
+    WaterCandle: Water Candle
+    PeaceCandle: Peace Candle
+    ShadowCandle: Shadow Candle
+
+    // Weather and event
+    Rain: Rain
+    Sandstorm: Sandstorm
+    TowerNebula: Tower Nebula
+    TowerSolar: Tower Solar
+    TowerStardust: Tower Stardust
+    TowerVortex: Tower Vortex
+    OldOneArmy: Old One Army
+}
+
+YggdrasilTownBiome: {
+	DisplayName: Yggdrasil Town
+	TownNPCDialogueName: The Yggdrasil Town
+}

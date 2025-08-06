@@ -4,7 +4,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.CyanVine;
 
-public class CyanVineBow : ModItem, ILocalizedModType
+public class CyanVineBow : ModItem
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.RangedWeapons;
 

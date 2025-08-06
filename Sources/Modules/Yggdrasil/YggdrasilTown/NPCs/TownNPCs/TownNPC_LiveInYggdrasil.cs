@@ -58,6 +58,8 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 
 	private int aiMainCount = 0;
 
+	public override string LocalizationCategory => LocalizationUtils.Categories.TownNPCs;
+
 	public override void SetDefaults()
 	{
 		NPC.townNPC = true;

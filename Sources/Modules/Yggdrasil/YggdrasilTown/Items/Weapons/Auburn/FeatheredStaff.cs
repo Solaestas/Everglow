@@ -1,6 +1,6 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.Auburn;
 
-public class FeatheredStaff : ModItem, ILocalizedModType
+public class FeatheredStaff : ModItem
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.MagicWeapons;
 

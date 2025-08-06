@@ -17,7 +17,7 @@ public class SquamousShellRelic : ModTile
 
 	// Every relic has its own extra floating part, should be 50x50. Optional: Expand this sheet if you want to add more, stacked vertically
 	// If you do not go the optional way, and you extend from this class, you can override this to point to a different texture
-	public virtual string RelicTextureName => ModAsset.SquamousShellRelic_Mod;
+	public virtual string RelicTextureName => ModAsset.Tiles_SquamousShellRelic_Mod;
 
 	// All relics use the same pedestal texture, this one is copied from vanilla
 	public override string Texture => Commons.ModAsset.RelicPedestal_Mod;

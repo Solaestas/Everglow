@@ -3,7 +3,7 @@ using Everglow.Yggdrasil.KelpCurtain.Projectiles.Melee;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons.DevilHeart;
 
-public class DevilHeartBayonet : StabbingSwordItem, ILocalizedModType
+public class DevilHeartBayonet : StabbingSwordItem
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.MeleeWeapons;
 

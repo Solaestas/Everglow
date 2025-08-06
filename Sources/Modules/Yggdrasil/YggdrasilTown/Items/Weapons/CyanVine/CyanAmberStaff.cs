@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.CyanVine;
 
-public class CyanAmberStaff : ModItem, ILocalizedModType
+public class CyanAmberStaff : ModItem
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.MagicWeapons;
 

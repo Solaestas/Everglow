@@ -41,11 +41,13 @@ public static class LocalizationUtils
 		public const string Materials = "Items.Materials";
 		public const string Fishing = "Items.Fishing";
 		public const string Dyes = "Items.Dyes";
+		public const string PermanentBoosters = "Items.PermanentBoosters";
 
+		public const string Critters = "Items.Critters";
 		public const string SummonItems = "Items.SummonItems";
 		public const string TreasureBags = "Items.TreasureBags";
 
-		public const string MiscItems = "Items.Misc";
+		public const string MiscItems = "Items.Miscs";
 
 		// Projectiles
 		public const string MeleeProjectiles = "Projectiles.Melee";

@@ -3,7 +3,7 @@ using Terraria.GameContent.Creative;
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors.DevilHeart;
 
 [AutoloadEquip(EquipType.Legs)]
-public class DevilHeartLeggings : ModItem, ILocalizedModType
+public class DevilHeartLeggings : ModItem
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.Armor;
 

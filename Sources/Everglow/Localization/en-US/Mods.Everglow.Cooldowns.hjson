@@ -1,0 +1,9 @@
+TestCooldown: {
+	DisplayName: Test Cooldown
+	Tooltip: This is a test cooldown for demonstration purposes.
+}
+
+DevilHeartSetCooldown: {
+	DisplayName: Devil Heart Overcharge Cooldown
+	Description: Cooldown in progress...
+}

@@ -3,9 +3,9 @@ using Terraria.GameContent.Creative;
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors.DevilHeart;
 
 [AutoloadEquip(EquipType.Head)]
-public class DevilHeartHairpin : ModItem, ILocalizedModType
+public class DevilHeartHairpin : ModItem
 {
-	public override string LocalizationCategory => LocalizationUtils.Categories.Armor;
+	public override string LocalizationCategory => base.LocalizationCategory;
 
 	public override void SetStaticDefaults()
 	{

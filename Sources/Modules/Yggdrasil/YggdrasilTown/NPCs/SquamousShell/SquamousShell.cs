@@ -8,9 +8,10 @@ using Everglow.Commons.Skeleton2D.Renderer.DrawCommands;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.SquamousShell;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Rock;
-using Everglow.Yggdrasil.YggdrasilTown.Items.BossDrop;
+using Everglow.Yggdrasil.YggdrasilTown.Items.BossDrops;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.SquamousBossAttack;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.BossDrops;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -2048,9 +2049,9 @@ public class SquamousShell : ModNPC
 
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TreasureBag_SquamousShell>()));
-		npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<Relic_SquamousShell>()));
-		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Relic_SquamousShell>(), 10));
+		npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<SquamousShellTreasureBag>()));
+		npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<Items.BossDrops.SquamousShellRelic>()));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.BossDrops.SquamousShellRelic>(), 10));
 
 		var rule = new LeadingConditionRule(new Conditions.NotExpert());
 		rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<DragonScaleHammer>(), ModContent.ItemType<EyeOfAnabiosis>(), ModContent.ItemType<FlurryingBlades>(), ModContent.ItemType<RockSpikeBallista>(), ModContent.ItemType<DeadBeetleEgg>(), ModContent.ItemType<BlueyWings>()));

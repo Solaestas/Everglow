@@ -22,9 +22,6 @@ public class MysteriousTablet : ModItem
 		Item.rare = ItemRarityID.White;
 		Item.value = 0;
 
-		//Item.consumable = true;
-		//Item.maxStack = 9999;
-
 		Item.shoot = ModContent.ProjectileType<Projectiles.MysteriousTablet>();
 		Item.shootSpeed = 12;
 	}

@@ -2,7 +2,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheTusk.Items.Weapons;
 
-public class ToothBow : ModItem,ILocalizedModType
+public class ToothBow : ModItem
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.RangedWeapons;
 

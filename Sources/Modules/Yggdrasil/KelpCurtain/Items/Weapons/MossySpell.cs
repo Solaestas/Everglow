@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 
-public class MossySpell : SpellTomeItem, ILocalizedModType
+public class MossySpell : SpellTomeItem
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.MagicWeapons;
 

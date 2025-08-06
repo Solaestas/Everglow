@@ -1,3 +1,5 @@
+using Everglow.Commons.ItemAbstracts.Furniture;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.TwilightForest;
 
 public class TwilightEucalyptusSofa : SofaItem

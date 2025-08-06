@@ -3,7 +3,7 @@ using Terraria.GameContent.Creative;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.Auburn;
 
-public class AuburnBell : ModItem, ILocalizedModType
+public class AuburnBell : ModItem
 {
 	override public string LocalizationCategory => LocalizationUtils.Categories.SummonWeapons;
 

@@ -1,5 +1,5 @@
 using Everglow.Myth.TheFirefly.Buffs;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Everglow.Myth.TheFirefly.Items.Materials;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheFirefly.Items.Potions

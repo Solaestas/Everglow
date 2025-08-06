@@ -1,3 +1,4 @@
+using Everglow.Myth.TheFirefly.Items.Materials;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Myth.TheFirefly.Items.Armors

@@ -8,7 +8,7 @@ using Terraria.UI.Chat;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 
-public class RazorbeakBow : ModItem, ILocalizedModType
+public class RazorbeakBow : ModItem
 {
 	public const int BaseDelay = 30;
 	public const int ProjectileCountPerUse = 3;

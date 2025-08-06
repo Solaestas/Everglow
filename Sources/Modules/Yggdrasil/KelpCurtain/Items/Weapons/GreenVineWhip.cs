@@ -3,7 +3,7 @@ using Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 
-public class GreenVineWhip : WhipItem, ILocalizedModType
+public class GreenVineWhip : WhipItem
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.SummonWeapons;
 

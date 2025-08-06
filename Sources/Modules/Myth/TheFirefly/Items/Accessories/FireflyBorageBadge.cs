@@ -1,4 +1,4 @@
-using Everglow.Myth.TheFirefly.Items;
+using Everglow.Myth.TheFirefly.Items.Materials;
 using Everglow.Myth.TheFirefly.NPCs.Bosses;
 using Terraria.Localization;
 

@@ -8,6 +8,7 @@ public class SightOfTile : ModItem
 {
 	public override void SetDefaults()
 	{
+		Item.DamageType = DamageClass.Magic;
 		Item.damage = 0;
 		Item.width = 34;
 		Item.height = 34;

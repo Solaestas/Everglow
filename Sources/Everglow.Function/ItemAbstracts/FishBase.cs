@@ -1,7 +1,11 @@
+using Everglow.Commons.Utilities;
+
 namespace Everglow.Commons.ItemAbstracts;
 
 public abstract class FishBase : ModItem
 {
+	public override string LocalizationCategory => LocalizationUtils.Categories.Fishing;
+
 	public override void SetStaticDefaults()
 	{
 		Item.ResearchUnlockCount = 10;
