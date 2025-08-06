@@ -7,86 +7,88 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
 public class CeremonialRifle : ModItem
 {
-	public override void SetDefaults()
-	{
-		Item.width = 90;
-		Item.height = 20;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.RangedWeapons;
 
-		Item.DamageType = DamageClass.Ranged;
-		Item.damage = 39;
-		Item.knockBack = 6f;
-		Item.crit = 8;
+    public override void SetDefaults()
+    {
+        Item.width = 90;
+        Item.height = 20;
 
-		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.UseSound = SoundID.Item40;
-		Item.useTime = Item.useAnimation = 35;
-		Item.noMelee = true;
+        Item.DamageType = DamageClass.Ranged;
+        Item.damage = 39;
+        Item.knockBack = 6f;
+        Item.crit = 8;
 
-		Item.rare = ItemRarityID.Orange;
-		Item.value = Item.buyPrice(gold: 3);
+        Item.useStyle = ItemUseStyleID.Shoot;
+        Item.UseSound = SoundID.Item40;
+        Item.useTime = Item.useAnimation = 35;
+        Item.noMelee = true;
 
-		Item.useAmmo = AmmoID.Bullet;
-		Item.shoot = ProjectileID.Bullet;
-		Item.shootSpeed = 16;
-	}
+        Item.rare = ItemRarityID.Orange;
+        Item.value = Item.buyPrice(gold: 3);
 
-	public override void HoldItem(Player player)
-	{
-		player.GetModPlayer<CeremonialRiflePlayer>().HoldingCeremonyRifle = true;
-	}
+        Item.useAmmo = AmmoID.Bullet;
+        Item.shoot = ProjectileID.Bullet;
+        Item.shootSpeed = 16;
+    }
 
-	public class CeremonialRiflePlayer : ModPlayer
-	{
-		public const int CrossHairCountMax = 3;
-		public const float DamageMultiplication = 1.5f;
+    public override void HoldItem(Player player)
+    {
+        player.GetModPlayer<CeremonialRiflePlayer>().HoldingCeremonyRifle = true;
+    }
 
-		public bool HoldingCeremonyRifle { get; set; } = false;
+    public class CeremonialRiflePlayer : ModPlayer
+    {
+        public const int CrossHairCountMax = 3;
+        public const float DamageMultiplication = 1.5f;
 
-		public int CrossHairCount { get; set; } = 0;
+        public bool HoldingCeremonyRifle { get; set; } = false;
 
-		public override void ResetEffects()
-		{
-			if (Player.HeldItem.type != ModContent.ItemType<CeremonialRifle>())
-			{
-				HoldingCeremonyRifle = false;
-				CrossHairCount = 0;
-			}
-		}
+        public int CrossHairCount { get; set; } = 0;
 
-		public override void PostUpdate()
-		{
-			if (CrossHairCount > 0)
-			{
-				Player.AddBuff(ModContent.BuffType<CrossHair>(), 10);
-			}
-		}
+        public override void ResetEffects()
+        {
+            if (Player.HeldItem.type != ModContent.ItemType<CeremonialRifle>())
+            {
+                HoldingCeremonyRifle = false;
+                CrossHairCount = 0;
+            }
+        }
 
-		public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
-		{
-			if (CrossHairCount > 0)
-			{
-				modifiers.DisableCrit();
-				modifiers.FinalDamage *= DamageMultiplication;
-				CrossHairCount--;
-			}
-		}
+        public override void PostUpdate()
+        {
+            if (CrossHairCount > 0)
+            {
+                Player.AddBuff(ModContent.BuffType<CrossHair>(), 10);
+            }
+        }
 
-		public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
-		{
-			if (HoldingCeremonyRifle && hit.Crit)
-			{
-				CrossHairCount = CrossHairCountMax;
-			}
-		}
+        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
+        {
+            if (CrossHairCount > 0)
+            {
+                modifiers.DisableCrit();
+                modifiers.FinalDamage *= DamageMultiplication;
+                CrossHairCount--;
+            }
+        }
 
-		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
-		{
-			if (CrossHairCount <= 0)
-			{
-				return;
-			}
+        public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (HoldingCeremonyRifle && hit.Crit)
+            {
+                CrossHairCount = CrossHairCountMax;
+            }
+        }
 
-			Main.spriteBatch.DrawString(FontAssets.MouseText.Value, CrossHairCount.ToString(), Player.Bottom - Main.screenPosition, Color.White);
-		}
-	}
+        public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
+        {
+            if (CrossHairCount <= 0)
+            {
+                return;
+            }
+
+            Main.spriteBatch.DrawString(FontAssets.MouseText.Value, CrossHairCount.ToString(), Player.Bottom - Main.screenPosition, Color.White);
+        }
+    }
 }

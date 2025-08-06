@@ -4,34 +4,36 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons.DevilHeart;
 
 public class DevilHeartGun : ModItem
 {
-	public override void SetDefaults()
-	{
-		Item.height = 26;
-		Item.width = 42;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.RangedWeapons;
 
-		Item.damage = 13;
-		Item.DamageType = DamageClass.Ranged;
-		Item.crit = 4;
-		Item.knockBack = 0f;
+    public override void SetDefaults()
+    {
+        Item.height = 26;
+        Item.width = 42;
 
-		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.UseSound = SoundID.Item11;
-		Item.useTime = Item.useAnimation = 20;
-		Item.noMelee = true;
+        Item.damage = 13;
+        Item.DamageType = DamageClass.Ranged;
+        Item.crit = 4;
+        Item.knockBack = 0f;
 
-		Item.rare = ItemRarityID.Green;
-		Item.value = Item.buyPrice(0, 0, 50, 0);
+        Item.useStyle = ItemUseStyleID.Shoot;
+        Item.UseSound = SoundID.Item11;
+        Item.useTime = Item.useAnimation = 20;
+        Item.noMelee = true;
 
-		Item.useAmmo = AmmoID.Bullet;
-		Item.shoot = ProjectileID.Bullet;
-		Item.shootSpeed = 12f;
-	}
+        Item.rare = ItemRarityID.Green;
+        Item.value = Item.buyPrice(0, 0, 50, 0);
 
-	public override void HoldItem(Player player)
-	{
-		if (player.ItemTimeIsZero)
-		{
-			player.AddBuff(ModContent.BuffType<DevilHeartWeaponBuff>(), 2);
-		}
-	}
+        Item.useAmmo = AmmoID.Bullet;
+        Item.shoot = ProjectileID.Bullet;
+        Item.shootSpeed = 12f;
+    }
+
+    public override void HoldItem(Player player)
+    {
+        if (player.ItemTimeIsZero)
+        {
+            player.AddBuff(ModContent.BuffType<DevilHeartWeaponBuff>(), 2);
+        }
+    }
 }

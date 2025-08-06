@@ -5,60 +5,62 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
 public class TopaztHeadedSpear : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		ItemID.Sets.SkipsInitialUseSound[Item.type] = true;
-		ItemID.Sets.Spears[Item.type] = true;
-		Item.SetNameOverride("Amethyst-headed Spear");
-	}
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.MeleeWeapons;
 
-	public override void SetDefaults()
-	{
-		Item.DamageType = DamageClass.Melee;
-		Item.damage = 18;
-		Item.knockBack = 6f;
-		Item.noUseGraphic = true;
-		Item.noMelee = true;
+    public override void SetStaticDefaults()
+    {
+        ItemID.Sets.SkipsInitialUseSound[Item.type] = true;
+        ItemID.Sets.Spears[Item.type] = true;
+        Item.SetNameOverride("Amethyst-headed Spear");
+    }
 
-		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.useTime = 31;
-		Item.useAnimation = 31;
-		Item.UseSound = SoundID.Item71;
-		Item.autoReuse = true;
+    public override void SetDefaults()
+    {
+        Item.DamageType = DamageClass.Melee;
+        Item.damage = 18;
+        Item.knockBack = 6f;
+        Item.noUseGraphic = true;
+        Item.noMelee = true;
 
-		Item.shootSpeed = 3.7f;
-		Item.shoot = ModContent.ProjectileType<Projectiles.TopazHeadedSpear>();
+        Item.useStyle = ItemUseStyleID.Shoot;
+        Item.useTime = 31;
+        Item.useAnimation = 31;
+        Item.UseSound = SoundID.Item71;
+        Item.autoReuse = true;
 
-		Item.rare = ItemRarityID.Blue;
-		Item.value = Item.buyPrice(silver: 20);
-	}
+        Item.shootSpeed = 3.7f;
+        Item.shoot = ModContent.ProjectileType<Projectiles.TopazHeadedSpear>();
 
-	public override bool CanUseItem(Player player)
-	{
-		return player.ownedProjectileCounts[Item.shoot] < 1;
-	}
+        Item.rare = ItemRarityID.Blue;
+        Item.value = Item.buyPrice(silver: 20);
+    }
 
-	public override bool? UseItem(Player player)
-	{
-		if (!Main.dedServ && Item.UseSound.HasValue)
-		{
-			SoundEngine.PlaySound(Item.UseSound.Value, player.Center);
-		}
+    public override bool CanUseItem(Player player)
+    {
+        return player.ownedProjectileCounts[Item.shoot] < 1;
+    }
 
-		return null;
-	}
+    public override bool? UseItem(Player player)
+    {
+        if (!Main.dedServ && Item.UseSound.HasValue)
+        {
+            SoundEngine.PlaySound(Item.UseSound.Value, player.Center);
+        }
 
-	public override void AddRecipes()
-	{
-		CreateRecipe()
-			.AddIngredient(ItemID.Topaz, 10)
-			.AddIngredient(ModContent.ItemType<YggdrasilGrayRock_Item>(), 30)
-			.AddIngredient(ItemID.IronBar, 15)
-			.Register();
-		CreateRecipe()
-	        .AddIngredient(ItemID.Topaz, 10)
-	        .AddIngredient(ModContent.ItemType<YggdrasilGrayRock_Item>(), 30)
-	        .AddIngredient(ItemID.LeadBar, 15)
-	        .Register();
-	}
+        return null;
+    }
+
+    public override void AddRecipes()
+    {
+        CreateRecipe()
+            .AddIngredient(ItemID.Topaz, 10)
+            .AddIngredient(ModContent.ItemType<YggdrasilGrayRock_Item>(), 30)
+            .AddIngredient(ItemID.IronBar, 15)
+            .Register();
+        CreateRecipe()
+            .AddIngredient(ItemID.Topaz, 10)
+            .AddIngredient(ModContent.ItemType<YggdrasilGrayRock_Item>(), 30)
+            .AddIngredient(ItemID.LeadBar, 15)
+            .Register();
+    }
 }

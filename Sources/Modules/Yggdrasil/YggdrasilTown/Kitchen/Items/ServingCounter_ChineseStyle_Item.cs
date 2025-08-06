@@ -4,11 +4,13 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Kitchen.Items;
 
 public class ServingCounter_ChineseStyle_Item : ModItem
 {
-	public override void SetDefaults()
-	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<ServingCounter_ChineseStyle>());
-		Item.width = 24;
-		Item.height = 40;
-		Item.value = 1000;
-	}
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
+
+    public override void SetDefaults()
+    {
+        Item.DefaultToPlaceableTile(ModContent.TileType<ServingCounter_ChineseStyle>());
+        Item.width = 24;
+        Item.height = 40;
+        Item.value = 1000;
+    }
 }

@@ -2,25 +2,27 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Accessories;
 
 public class RadialCarapace : ModItem
 {
-	public override string Texture => Commons.ModAsset.White_Mod;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Accessories;
 
-	public override void SetDefaults()
-	{
-		Item.width = 20;
-		Item.height = 20;
+    public override string Texture => Commons.ModAsset.White_Mod;
 
-		Item.defense = 4;
+    public override void SetDefaults()
+    {
+        Item.width = 20;
+        Item.height = 20;
 
-		Item.accessory = true;
+        Item.defense = 4;
 
-		Item.value = Item.buyPrice(gold: 1);
-		Item.rare = ItemRarityID.Green;
-	}
+        Item.accessory = true;
 
-	public override void UpdateAccessory(Player player, bool hideVisual)
-	{
-		player.statDefense += 4; // Increase defense by 4.
-		player.moveSpeed -= 0.05f; // Decrease movement speed by 5%.
-		player.GetModPlayer<KelpCurtainPlayer>().RadialCarapace = true; // Increase max speed and acceleration by 35% when player is currently in water.
-	}
+        Item.value = Item.buyPrice(gold: 1);
+        Item.rare = ItemRarityID.Green;
+    }
+
+    public override void UpdateAccessory(Player player, bool hideVisual)
+    {
+        player.statDefense += 4; // Increase defense by 4.
+        player.moveSpeed -= 0.05f; // Decrease movement speed by 5%.
+        player.GetModPlayer<KelpCurtainPlayer>().RadialCarapace = true; // Increase max speed and acceleration by 35% when player is currently in water.
+    }
 }

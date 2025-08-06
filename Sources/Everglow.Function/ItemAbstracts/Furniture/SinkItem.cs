@@ -7,17 +7,19 @@ namespace Everglow.Commons.ItemAbstracts.Furniture;
 /// </summary>
 public abstract class SinkItem : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
 
-	public override void SetDefaults()
-	{
-		Item.width = 20;
-		Item.height = 20;
-		Item.value = 300;
-		Item.maxStack = Item.CommonMaxStack;
-		Item.useAnimation = 14;
-	}
+    public override void SetStaticDefaults()
+    {
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
+
+    public override void SetDefaults()
+    {
+        Item.width = 20;
+        Item.height = 20;
+        Item.value = 300;
+        Item.maxStack = Item.CommonMaxStack;
+        Item.useAnimation = 14;
+    }
 }

@@ -5,22 +5,24 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Pets;
 
 public class Badr : ModItem
 {
-	public override void SetDefaults()
-	{
-		Item.CloneDefaults(ItemID.WispinaBottle);
-		Item.UseSound = SoundID.Item83;
-		Item.shoot = ModContent.ProjectileType<BadrProj>();
-		Item.buffType = ModContent.BuffType<BadrBuff>();
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Pets;
 
-		Item.value = Item.sellPrice(gold: 5);
-		Item.rare = ItemRarityID.Orange;
-	}
+    public override void SetDefaults()
+    {
+        Item.CloneDefaults(ItemID.WispinaBottle);
+        Item.UseSound = SoundID.Item83;
+        Item.shoot = ModContent.ProjectileType<BadrProj>();
+        Item.buffType = ModContent.BuffType<BadrBuff>();
 
-	public override void UseStyle(Player player, Rectangle heldItemFrame)
-	{
-		if (player.whoAmI == Main.myPlayer && player.itemTime == 0)
-		{
-			player.AddBuff(Item.buffType, 2, true);
-		}
-	}
+        Item.value = Item.sellPrice(gold: 5);
+        Item.rare = ItemRarityID.Orange;
+    }
+
+    public override void UseStyle(Player player, Rectangle heldItemFrame)
+    {
+        if (player.whoAmI == Main.myPlayer && player.itemTime == 0)
+        {
+            player.AddBuff(Item.buffType, 2, true);
+        }
+    }
 }

@@ -2,94 +2,96 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Tools;
 
 public class FlappedHangGlider : ModItem
 {
-	public const float AccelerationX = 0.1f;
-	public const float VelocityXMAX = 10f;
-	public const float VelocityYMAX = 2f;
-	public const int DurabilityMax = 120;
-	public const int DurabilityRecoverCooldownMax = 45;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Tools;
 
-	public int Durability { get; private set; }
+    public const float AccelerationX = 0.1f;
+    public const float VelocityXMAX = 10f;
+    public const float VelocityYMAX = 2f;
+    public const int DurabilityMax = 120;
+    public const int DurabilityRecoverCooldownMax = 45;
 
-	public int DurabilityRecoverCooldown { get; private set; }
+    public int Durability { get; private set; }
 
-	public override void SetDefaults()
-	{
-		Item.width = 54;
-		Item.height = 28;
-		Item.scale = 1.4f;
+    public int DurabilityRecoverCooldown { get; private set; }
 
-		Item.holdStyle = ItemHoldStyleID.HoldUp;
-		Item.value = 0;
-		Item.rare = ItemRarityID.Gray;
+    public override void SetDefaults()
+    {
+        Item.width = 54;
+        Item.height = 28;
+        Item.scale = 1.4f;
 
-		Durability = DurabilityMax;
-		DurabilityRecoverCooldown = 0;
-	}
+        Item.holdStyle = ItemHoldStyleID.HoldUp;
+        Item.value = 0;
+        Item.rare = ItemRarityID.Gray;
 
-	public override void HoldItem(Player player)
-	{
-		// Check if player is on the ground
-		if (TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 2)))
-		{
-			if (DurabilityRecoverCooldown <= 0)
-			{
-				Durability = DurabilityMax;
-			}
-			else
-			{
-				DurabilityRecoverCooldown--;
-			}
-		}
+        Durability = DurabilityMax;
+        DurabilityRecoverCooldown = 0;
+    }
 
-		// Check hang glider durability
-		if (Durability < 0)
-		{
-			Item.holdStyle = ItemHoldStyleID.None;
-			return;
-		}
-		else
-		{
-			Item.holdStyle = ItemHoldStyleID.HoldUp;
-		}
+    public override void HoldItem(Player player)
+    {
+        // Check if player is on the ground
+        if (TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 2)))
+        {
+            if (DurabilityRecoverCooldown <= 0)
+            {
+                Durability = DurabilityMax;
+            }
+            else
+            {
+                DurabilityRecoverCooldown--;
+            }
+        }
 
-		if (player.pulley || player.controlDown)
-		{
-			return;
-		}
+        // Check hang glider durability
+        if (Durability < 0)
+        {
+            Item.holdStyle = ItemHoldStyleID.None;
+            return;
+        }
+        else
+        {
+            Item.holdStyle = ItemHoldStyleID.HoldUp;
+        }
 
-		// Manage velocity X
-		if (MathF.Abs(player.velocity.Y) > 0)
-		{
-			Durability--;
-			DurabilityRecoverCooldown = DurabilityRecoverCooldownMax;
-			var targetVelocityX = player.velocity.X + player.direction * AccelerationX;
-			if (MathF.Sign(targetVelocityX) != player.direction || MathF.Abs(targetVelocityX) <= VelocityXMAX)
-			{
-				player.velocity.X = targetVelocityX;
-			}
-		}
+        if (player.pulley || player.controlDown)
+        {
+            return;
+        }
 
-		// Manage velocity Y
-		if (player.gravDir == -1f)
-		{
-			if (player.velocity.Y < -VelocityYMAX)
-			{
-				player.velocity.Y = -VelocityYMAX;
-			}
-		}
-		else if (player.velocity.Y > VelocityYMAX)
-		{
-			player.velocity.Y = VelocityYMAX;
-		}
-	}
+        // Manage velocity X
+        if (MathF.Abs(player.velocity.Y) > 0)
+        {
+            Durability--;
+            DurabilityRecoverCooldown = DurabilityRecoverCooldownMax;
+            var targetVelocityX = player.velocity.X + player.direction * AccelerationX;
+            if (MathF.Sign(targetVelocityX) != player.direction || MathF.Abs(targetVelocityX) <= VelocityXMAX)
+            {
+                player.velocity.X = targetVelocityX;
+            }
+        }
 
-	public override void HoldStyle(Player player, Rectangle heldItemFrame)
-	{
-		if (!player.pulley)
-		{
-			player.itemRotation = player.direction * 0;
-			player.itemLocation.X = player.Center.X - 30 * player.direction;
-			player.itemLocation.Y = player.Center.Y + 0f;
-		}
-	}
+        // Manage velocity Y
+        if (player.gravDir == -1f)
+        {
+            if (player.velocity.Y < -VelocityYMAX)
+            {
+                player.velocity.Y = -VelocityYMAX;
+            }
+        }
+        else if (player.velocity.Y > VelocityYMAX)
+        {
+            player.velocity.Y = VelocityYMAX;
+        }
+    }
+
+    public override void HoldStyle(Player player, Rectangle heldItemFrame)
+    {
+        if (!player.pulley)
+        {
+            player.itemRotation = player.direction * 0;
+            player.itemLocation.X = player.Center.X - 30 * player.direction;
+            player.itemLocation.Y = player.Center.Y + 0f;
+        }
+    }
 }

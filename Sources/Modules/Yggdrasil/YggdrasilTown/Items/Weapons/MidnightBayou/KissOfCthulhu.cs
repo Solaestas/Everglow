@@ -6,53 +6,55 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.MidnightBayou;
 
 public class KissOfCthulhu : ModItem
 {
-	public override void SetDefaults()
-	{
-		Item.width = 94;
-		Item.height = 32;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.RangedWeapons;
 
-		Item.DamageType = DamageClass.Ranged;
-		Item.damage = 21;
-		Item.knockBack = 1.8f;
-		Item.crit = 4;
+    public override void SetDefaults()
+    {
+        Item.width = 94;
+        Item.height = 32;
 
-		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.useTime = Item.useAnimation = 22;
-		Item.autoReuse = false;
-		Item.noMelee = true;
+        Item.DamageType = DamageClass.Ranged;
+        Item.damage = 21;
+        Item.knockBack = 1.8f;
+        Item.crit = 4;
 
-		Item.rare = ItemRarityID.Green;
-		Item.value = Item.buyPrice(gold: 1, silver: 70);
+        Item.useStyle = ItemUseStyleID.Shoot;
+        Item.useTime = Item.useAnimation = 22;
+        Item.autoReuse = false;
+        Item.noMelee = true;
 
-		Item.shoot = ProjectileID.Bullet;
-		Item.shootSpeed = 12;
-		Item.useAmmo = AmmoID.Bullet;
-	}
+        Item.rare = ItemRarityID.Green;
+        Item.value = Item.buyPrice(gold: 1, silver: 70);
 
-	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-	{
-		position += new Vector2((Item.width - 50) * Item.scale, 0).RotatedBy(velocity.ToRotation());
+        Item.shoot = ProjectileID.Bullet;
+        Item.shootSpeed = 12;
+        Item.useAmmo = AmmoID.Bullet;
+    }
 
-		// Shoot 2-4 normal bullet once
-		int projNum = Main.rand.Next(2, 5);
-		for (int i = 0; i < projNum; i++)
-		{
-			var projVelocity = velocity.RotatedBy((projNum / 2f - i) / 8f);
-			Projectile.NewProjectile(source, position + velocity * 2, projVelocity, type, damage, knockback, player.whoAmI);
-		}
-		SoundEngine.PlaySound(SoundID.Item38);
+    public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+    {
+        position += new Vector2((Item.width - 50) * Item.scale, 0).RotatedBy(velocity.ToRotation());
 
-		// The weapon has 1/3 chance to shoot a special projectile
-		if (Main.rand.NextBool(3))
-		{
-			Projectile.NewProjectile(source, position + velocity * 2, velocity * 2.2f, ModContent.ProjectileType<KissOfCthulhu_Projectile>(), 1, knockback, player.whoAmI);
-			SoundEngine.PlaySound(new SoundStyle(ModAsset.KissOfCthulhu_Shoot_Mod), player.Center);
-		}
+        // Shoot 2-4 normal bullet once
+        int projNum = Main.rand.Next(2, 5);
+        for (int i = 0; i < projNum; i++)
+        {
+            var projVelocity = velocity.RotatedBy((projNum / 2f - i) / 8f);
+            Projectile.NewProjectile(source, position + velocity * 2, projVelocity, type, damage, knockback, player.whoAmI);
+        }
+        SoundEngine.PlaySound(SoundID.Item38);
 
-		return false;
-	}
+        // The weapon has 1/3 chance to shoot a special projectile
+        if (Main.rand.NextBool(3))
+        {
+            Projectile.NewProjectile(source, position + velocity * 2, velocity * 2.2f, ModContent.ProjectileType<KissOfCthulhu_Projectile>(), 1, knockback, player.whoAmI);
+            SoundEngine.PlaySound(new SoundStyle(ModAsset.KissOfCthulhu_Shoot_Mod), player.Center);
+        }
 
-	public override Vector2? HoldoutOffset() => new Vector2(-26, -2);
+        return false;
+    }
 
-	public override Vector2? HoldoutOrigin() => new Vector2(0, 0);
+    public override Vector2? HoldoutOffset() => new Vector2(-26, -2);
+
+    public override Vector2? HoldoutOrigin() => new Vector2(0, 0);
 }

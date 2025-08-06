@@ -4,38 +4,40 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.LightSeeker;
 
 public class BowOfEnlightment : ModItem
 {
-	public override void SetDefaults()
-	{
-		Item.width = 64;
-		Item.height = 78;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.RangedWeapons;
 
-		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.useAnimation = 29;
-		Item.useTime = 29;
-		Item.UseSound = SoundID.Item1;
-		Item.autoReuse = false;
-		Item.noUseGraphic = false;
-		Item.noMelee = true;
-		Item.channel = true;
+    public override void SetDefaults()
+    {
+        Item.width = 64;
+        Item.height = 78;
 
-		Item.damage = 10;
-		Item.DamageType = DamageClass.Ranged;
-		Item.crit = 4;
-		Item.knockBack = 0f;
+        Item.useStyle = ItemUseStyleID.Shoot;
+        Item.useAnimation = 29;
+        Item.useTime = 29;
+        Item.UseSound = SoundID.Item1;
+        Item.autoReuse = false;
+        Item.noUseGraphic = false;
+        Item.noMelee = true;
+        Item.channel = true;
 
-		Item.shoot = ProjectileID.WoodenArrowFriendly;
-		Item.shootSpeed = 12f;
-		Item.useAmmo = AmmoID.Arrow;
+        Item.damage = 10;
+        Item.DamageType = DamageClass.Ranged;
+        Item.crit = 4;
+        Item.knockBack = 0f;
 
-		Item.rare = ItemRarityID.Green;
-		Item.value = Item.buyPrice(silver: 5);
-	}
+        Item.shoot = ProjectileID.WoodenArrowFriendly;
+        Item.shootSpeed = 12f;
+        Item.useAmmo = AmmoID.Arrow;
 
-	public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
-	{
-		if (type == ProjectileID.WoodenArrowFriendly)
-		{
-			type = ModContent.ProjectileType<LightArrow>();
-		}
-	}
+        Item.rare = ItemRarityID.Green;
+        Item.value = Item.buyPrice(silver: 5);
+    }
+
+    public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+    {
+        if (type == ProjectileID.WoodenArrowFriendly)
+        {
+            type = ModContent.ProjectileType<LightArrow>();
+        }
+    }
 }

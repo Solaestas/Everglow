@@ -4,22 +4,24 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Accessories;
 
 public class AntiCorrosiveSole : ModItem
 {
-	public override void SetDefaults()
-	{
-		Item.SetNameOverride("Anti-corrosive Sole");
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Accessories;
 
-		Item.width = 28;
-		Item.height = 38;
+    public override void SetDefaults()
+    {
+        Item.SetNameOverride("Anti-corrosive Sole");
 
-		Item.accessory = true;
+        Item.width = 28;
+        Item.height = 38;
 
-		Item.value = Item.sellPrice(gold: 1);
-		Item.rare = ItemRarityID.Green;
-	}
+        Item.accessory = true;
 
-	public override void UpdateAccessory(Player player, bool hideVisual)
-	{
-		player.moveSpeed += 0.05f;
-		player.buffImmune[ModContent.BuffType<CorrosiveDebuff>()] = true;
-	}
+        Item.value = Item.sellPrice(gold: 1);
+        Item.rare = ItemRarityID.Green;
+    }
+
+    public override void UpdateAccessory(Player player, bool hideVisual)
+    {
+        player.moveSpeed += 0.05f;
+        player.buffImmune[ModContent.BuffType<CorrosiveDebuff>()] = true;
+    }
 }

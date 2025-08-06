@@ -2,22 +2,24 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Ammos;
 
 public class LightBullet : ModItem
 {
-	public override void SetDefaults()
-	{
-		Item.width = 16;
-		Item.height = 16;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.RangedWeapons;
 
-		Item.DamageType = DamageClass.Ranged;
-		Item.damage = 7;
-		Item.knockBack = 4;
+    public override void SetDefaults()
+    {
+        Item.width = 16;
+        Item.height = 16;
 
-		Item.rare = ItemRarityID.White;
-		Item.value = Item.buyPrice(copper: 3);
+        Item.DamageType = DamageClass.Ranged;
+        Item.damage = 7;
+        Item.knockBack = 4;
 
-		Item.ammo = AmmoID.Bullet;
-		Item.maxStack = Item.CommonMaxStack;
-		Item.consumable = true;
+        Item.rare = ItemRarityID.White;
+        Item.value = Item.buyPrice(copper: 3);
 
-		Item.shoot = ModContent.ProjectileType<Projectiles.LightBullet>();
-	}
+        Item.ammo = AmmoID.Bullet;
+        Item.maxStack = Item.CommonMaxStack;
+        Item.consumable = true;
+
+        Item.shoot = ModContent.ProjectileType<Projectiles.LightBullet>();
+    }
 }

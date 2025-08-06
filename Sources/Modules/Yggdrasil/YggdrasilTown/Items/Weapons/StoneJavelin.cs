@@ -4,30 +4,32 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
 public class StoneJavelin : ModItem
 {
-	public override void SetDefaults()
-	{
-		// Common Properties
-		Item.rare = ItemRarityID.White;
-		Item.value = Item.sellPrice(copper: 1);
-		Item.maxStack = Item.CommonMaxStack;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.RangedWeapons;
 
-		// Use Properties
-		Item.useStyle = ItemUseStyleID.Swing;
-		Item.useAnimation = Item.useTime = 18;
-		Item.UseSound = SoundID.Item1;
-		Item.autoReuse = true;
-		Item.consumable = true;
+    public override void SetDefaults()
+    {
+        // Common Properties
+        Item.rare = ItemRarityID.White;
+        Item.value = Item.sellPrice(copper: 1);
+        Item.maxStack = Item.CommonMaxStack;
 
-		// Weapon Properties
-		Item.DamageType = DamageClass.Ranged;
-		Item.damage = 10;
-		Item.knockBack = 5f;
-		Item.crit = 4;
-		Item.noUseGraphic = true;
-		Item.noMelee = true;
+        // Use Properties
+        Item.useStyle = ItemUseStyleID.Swing;
+        Item.useAnimation = Item.useTime = 18;
+        Item.UseSound = SoundID.Item1;
+        Item.autoReuse = true;
+        Item.consumable = true;
 
-		// Projectile Properties
-		Item.shootSpeed = 12f;
-		Item.shoot = ModContent.ProjectileType<StoneJavelinProjectile>();
-	}
+        // Weapon Properties
+        Item.DamageType = DamageClass.Ranged;
+        Item.damage = 10;
+        Item.knockBack = 5f;
+        Item.crit = 4;
+        Item.noUseGraphic = true;
+        Item.noMelee = true;
+
+        // Projectile Properties
+        Item.shootSpeed = 12f;
+        Item.shoot = ModContent.ProjectileType<StoneJavelinProjectile>();
+    }
 }

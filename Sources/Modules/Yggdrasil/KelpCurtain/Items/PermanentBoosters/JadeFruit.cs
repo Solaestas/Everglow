@@ -8,26 +8,28 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.PermanentBoosters;
 /// </summary>
 public class JadeFruit : ModItem
 {
-	public static readonly int MaxJadeFruits = 10;
-	public static readonly int LifePerJadeFruit = 5;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.PermanentBoosters;
 
-	public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MaxJadeFruits, LifePerJadeFruit);
+    public static readonly int MaxJadeFruits = 10;
+    public static readonly int LifePerJadeFruit = 5;
 
-	public override void SetStaticDefaults()
-	{
-		Item.ResearchUnlockCount = 12;
-	}
+    public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MaxJadeFruits, LifePerJadeFruit);
 
-	public override void SetDefaults()
-	{
-		Item.CloneDefaults(ItemID.LifeCrystal);
-		Item.width = 30;
-		Item.height = 34;
-		Item.rare = ItemRarityID.Blue;
-		Item.value = 15000;
-		Item.maxStack = Item.CommonMaxStack;
-		Item.useStyle = ItemUseStyleID.EatFood;
-	}
+    public override void SetStaticDefaults()
+    {
+        Item.ResearchUnlockCount = 12;
+    }
 
-	public override bool? UseItem(Player player) => player.GetModPlayer<YggdrasilPlayer>().UseJadeGlazeFruit();
+    public override void SetDefaults()
+    {
+        Item.CloneDefaults(ItemID.LifeCrystal);
+        Item.width = 30;
+        Item.height = 34;
+        Item.rare = ItemRarityID.Blue;
+        Item.value = 15000;
+        Item.maxStack = Item.CommonMaxStack;
+        Item.useStyle = ItemUseStyleID.EatFood;
+    }
+
+    public override bool? UseItem(Player player) => player.GetModPlayer<YggdrasilPlayer>().UseJadeGlazeFruit();
 }

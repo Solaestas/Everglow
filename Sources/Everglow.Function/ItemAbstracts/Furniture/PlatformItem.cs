@@ -7,17 +7,19 @@ namespace Everglow.Commons.ItemAbstracts.Furniture;
 /// </summary>
 public abstract class PlatformItem : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
 
-	public override void SetDefaults()
-	{
-		Item.width = 8;
-		Item.height = 10;
-		Item.value = 0;
-		Item.maxStack = Item.CommonMaxStack;
-		Item.useAnimation = 14;
-	}
+    public override void SetStaticDefaults()
+    {
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
+
+    public override void SetDefaults()
+    {
+        Item.width = 8;
+        Item.height = 10;
+        Item.value = 0;
+        Item.maxStack = Item.CommonMaxStack;
+        Item.useAnimation = 14;
+    }
 }

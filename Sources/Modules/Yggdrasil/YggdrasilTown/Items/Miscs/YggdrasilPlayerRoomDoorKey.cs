@@ -2,16 +2,18 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Miscs;
 
 public class YggdrasilPlayerRoomDoorKey : ModItem
 {
-	public override void SetDefaults()
-	{
-		Item.width = 28;
-		Item.height = 28;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Miscs;
 
-		Item.stack = Item.CommonMaxStack;
+    public override void SetDefaults()
+    {
+        Item.width = 28;
+        Item.height = 28;
 
-		Item.rare = ItemRarityID.White;
-		Item.value = 0;
-	}
+        Item.stack = Item.CommonMaxStack;
 
-	public override bool CanStackInWorld(Item source) => true;
+        Item.rare = ItemRarityID.White;
+        Item.value = 0;
+    }
+
+    public override bool CanStackInWorld(Item source) => true;
 }

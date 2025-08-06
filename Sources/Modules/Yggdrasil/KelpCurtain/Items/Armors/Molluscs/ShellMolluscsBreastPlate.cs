@@ -6,51 +6,53 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Armors.Molluscs;
 [AutoloadEquip(EquipType.Body)]
 public class ShellMolluscsBreastPlate : ModItem
 {
-	public const int BuffDuration = 25 * 60; // 10 seconds in frames
-	public const int CooldownDuration = 40 * 60; // 35 seconds in frames
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Armor;
 
-	// The equip texture name for the alternate equip texture.
-	private const string AltTextureName = "Blue";
-	public const string AltTextureKey = nameof(ShellMolluscsBreastPlate) + AltTextureName;
+    public const int BuffDuration = 25 * 60; // 10 seconds in frames
+    public const int CooldownDuration = 40 * 60; // 35 seconds in frames
 
-	public override void Load()
-	{
-		if (Main.dedServ)
-		{
-			return;
-		}
+    // The equip texture name for the alternate equip texture.
+    private const string AltTextureName = "Blue";
+    public const string AltTextureKey = nameof(ShellMolluscsBreastPlate) + AltTextureName;
 
-		// Add a special equip texture by providing a custom name reference instead of an item reference
-		EquipLoader.AddEquipTexture(Mod, $"{Texture}_{AltTextureName}_{EquipType.Body}", EquipType.Body, this, AltTextureKey);
-	}
+    public override void Load()
+    {
+        if (Main.dedServ)
+        {
+            return;
+        }
 
-	public override void SetStaticDefaults()
-	{
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+        // Add a special equip texture by providing a custom name reference instead of an item reference
+        EquipLoader.AddEquipTexture(Mod, $"{Texture}_{AltTextureName}_{EquipType.Body}", EquipType.Body, this, AltTextureKey);
+    }
 
-	public override void SetDefaults()
-	{
-		Item.width = 20;
-		Item.height = 20;
-		Item.value = Item.buyPrice(silver: 60);
-		Item.rare = ItemRarityID.Green;
-		Item.defense = 5;
-	}
+    public override void SetStaticDefaults()
+    {
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
 
-	override public void UpdateEquip(Player player)
-	{
-		player.GetCritChance<GenericDamageClass>() += 6; // Increase critical chance by 6%.
-	}
+    public override void SetDefaults()
+    {
+        Item.width = 20;
+        Item.height = 20;
+        Item.value = Item.buyPrice(silver: 60);
+        Item.rare = ItemRarityID.Green;
+        Item.defense = 5;
+    }
 
-	public override bool IsArmorSet(Item head, Item body, Item legs)
-	{
-		return (head.type == ModContent.ItemType<MossyMolluscsHelmet>() || head.type == ModContent.ItemType<PearlMolluscsHelmet>())
-			&& legs.type == ModContent.ItemType<MolluscsLeggings>();
-	}
+    override public void UpdateEquip(Player player)
+    {
+        player.GetCritChance<GenericDamageClass>() += 6; // Increase critical chance by 6%.
+    }
 
-	public override void UpdateArmorSet(Player player)
-	{
-		player.GetModPlayer<YggdrasilPlayer>().molluscsSet = true;
-	}
+    public override bool IsArmorSet(Item head, Item body, Item legs)
+    {
+        return (head.type == ModContent.ItemType<MossyMolluscsHelmet>() || head.type == ModContent.ItemType<PearlMolluscsHelmet>())
+            && legs.type == ModContent.ItemType<MolluscsLeggings>();
+    }
+
+    public override void UpdateArmorSet(Player player)
+    {
+        player.GetModPlayer<YggdrasilPlayer>().molluscsSet = true;
+    }
 }

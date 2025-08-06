@@ -4,62 +4,64 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Accessories;
 
 public class HardenedWitherbarkHeart : ModItem
 {
-	public const int CooldownDuration = 10 * 60; // 10 seconds in frames
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Accessories;
 
-	public const float DamageTakenIncrease = 0.5f; // 50% increase in damage taken when player has Fracture debuff.
-	public const float DamageTakenReduction = 0.9f; // 90% reduction in damage taken when player does not have Fracture debuff.
+    public const int CooldownDuration = 10 * 60; // 10 seconds in frames
 
-	public override void SetDefaults()
-	{
-		Item.width = 20;
-		Item.height = 20;
+    public const float DamageTakenIncrease = 0.5f; // 50% increase in damage taken when player has Fracture debuff.
+    public const float DamageTakenReduction = 0.9f; // 90% reduction in damage taken when player does not have Fracture debuff.
 
-		Item.defense = 10;
+    public override void SetDefaults()
+    {
+        Item.width = 20;
+        Item.height = 20;
 
-		Item.accessory = true;
+        Item.defense = 10;
 
-		Item.value = Item.buyPrice(gold: 2);
-		Item.rare = ItemRarityID.Orange;
-	}
+        Item.accessory = true;
 
-	public override void UpdateAccessory(Player player, bool hideVisual)
-	{
-		player.moveSpeed -= 0.1f; // Decrease movement speed by 10%.
-		player.accRunSpeed *= 1 - 0.4f; // Decrease run speed by 40%.
-		player.GetModPlayer<HardenedWitherbarkHeartPlayer>().Enable = true;
-	}
+        Item.value = Item.buyPrice(gold: 2);
+        Item.rare = ItemRarityID.Orange;
+    }
 
-	public class HardenedWitherbarkHeartPlayer : ModPlayer
-	{
-		public bool Enable { get; set; } = false;
+    public override void UpdateAccessory(Player player, bool hideVisual)
+    {
+        player.moveSpeed -= 0.1f; // Decrease movement speed by 10%.
+        player.accRunSpeed *= 1 - 0.4f; // Decrease run speed by 40%.
+        player.GetModPlayer<HardenedWitherbarkHeartPlayer>().Enable = true;
+    }
 
-		public override void ResetEffects()
-		{
-			Enable = false;
-		}
+    public class HardenedWitherbarkHeartPlayer : ModPlayer
+    {
+        public bool Enable { get; set; } = false;
 
-		public override void UpdateEquips()
-		{
-			if (!Player.HasBuff<FractureDebuff>() && Enable)
-			{
-				Player.AddBuff(ModContent.BuffType<HardenedSkinBuff>(), 2);
-			}
-		}
+        public override void ResetEffects()
+        {
+            Enable = false;
+        }
 
-		public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
-		{
-			if (Enable)
-			{
-				if (Player.HasBuff<FractureDebuff>())
-				{
-					modifiers.FinalDamage.Additive += 0.5f; // Increase damage taken by 50% when player has Fracture debuff.
-				}
-				else
-				{
-					Player.AddBuff(ModContent.BuffType<FractureDebuff>(), CooldownDuration);
-					modifiers.FinalDamage.Additive -= 0.9f; // Decrease damage taken by 90% when player does not have Fracture debuff.
-				}
-			}
-		}
-	}
+        public override void UpdateEquips()
+        {
+            if (!Player.HasBuff<FractureDebuff>() && Enable)
+            {
+                Player.AddBuff(ModContent.BuffType<HardenedSkinBuff>(), 2);
+            }
+        }
+
+        public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
+        {
+            if (Enable)
+            {
+                if (Player.HasBuff<FractureDebuff>())
+                {
+                    modifiers.FinalDamage.Additive += 0.5f; // Increase damage taken by 50% when player has Fracture debuff.
+                }
+                else
+                {
+                    Player.AddBuff(ModContent.BuffType<FractureDebuff>(), CooldownDuration);
+                    modifiers.FinalDamage.Additive -= 0.9f; // Decrease damage taken by 90% when player does not have Fracture debuff.
+                }
+            }
+        }
+    }
 }

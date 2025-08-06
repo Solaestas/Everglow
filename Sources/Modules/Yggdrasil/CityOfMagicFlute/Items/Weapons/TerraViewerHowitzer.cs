@@ -13,66 +13,68 @@ namespace Everglow.Yggdrasil.CityOfMagicFlute.Items.Weapons;
 /// </summary>
 public class TerraViewerHowitzer : ModItem
 {
-	public int ShootType = 0;
-	public int RightClickCooling = 180;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.RangedWeapons;
 
-	public override void SetDefaults()
-	{
-		Item.damage = 745;
-		Item.width = 84;
-		Item.height = 42;
-		Item.value = 45500;
-		Item.rare = ItemRarityID.Red;
-		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.DamageType = DamageClass.Ranged;
-		Item.noMelee = true;
-		Item.knockBack = 5;
-		Item.noUseGraphic = true;
-		Item.crit = 4;
-		Item.useAmmo = AmmoID.Bullet;
-		Item.shootSpeed = 27;
-		Item.shoot = ProjectileID.Bullet;
-		Item.autoReuse = true;
-		Item.useTime = 6;
-		Item.useAnimation = 6;
-	}
+    public int ShootType = 0;
+    public int RightClickCooling = 180;
 
-	public override bool AltFunctionUse(Player player)
-	{
-		return true;
-	}
+    public override void SetDefaults()
+    {
+        Item.damage = 745;
+        Item.width = 84;
+        Item.height = 42;
+        Item.value = 45500;
+        Item.rare = ItemRarityID.Red;
+        Item.useStyle = ItemUseStyleID.Shoot;
+        Item.DamageType = DamageClass.Ranged;
+        Item.noMelee = true;
+        Item.knockBack = 5;
+        Item.noUseGraphic = true;
+        Item.crit = 4;
+        Item.useAmmo = AmmoID.Bullet;
+        Item.shootSpeed = 27;
+        Item.shoot = ProjectileID.Bullet;
+        Item.autoReuse = true;
+        Item.useTime = 6;
+        Item.useAnimation = 6;
+    }
 
-	public override bool CanUseItem(Player player)
-	{
-		if (player.altFunctionUse == 2)
-		{
-			Projectile.NewProjectile(player.GetSource_ItemUse(Item), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<TerraViewerHowitzer_proj>(), 0, Item.knockBack, player.whoAmI);
-			return false;
-		}
-		return true;
-	}
+    public override bool AltFunctionUse(Player player)
+    {
+        return true;
+    }
 
-	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-	{
-		ShootType = type;
-		if (player.ownedProjectileCounts[ModContent.ProjectileType<TerraViewerHowitzer_proj>()] <= 0)
-		{
-			Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<TerraViewerHowitzer_proj>(), damage, knockback, player.whoAmI);
-		}
+    public override bool CanUseItem(Player player)
+    {
+        if (player.altFunctionUse == 2)
+        {
+            Projectile.NewProjectile(player.GetSource_ItemUse(Item), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<TerraViewerHowitzer_proj>(), 0, Item.knockBack, player.whoAmI);
+            return false;
+        }
+        return true;
+    }
 
-		return false;
-	}
+    public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+    {
+        ShootType = type;
+        if (player.ownedProjectileCounts[ModContent.ProjectileType<TerraViewerHowitzer_proj>()] <= 0)
+        {
+            Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<TerraViewerHowitzer_proj>(), damage, knockback, player.whoAmI);
+        }
 
-	public override void UpdateInventory(Player player)
-	{
-		if (RightClickCooling > 0)
-		{
-			RightClickCooling--;
-		}
-		else
-		{
-			RightClickCooling = 0;
-		}
-		base.UpdateInventory(player);
-	}
+        return false;
+    }
+
+    public override void UpdateInventory(Player player)
+    {
+        if (RightClickCooling > 0)
+        {
+            RightClickCooling--;
+        }
+        else
+        {
+            RightClickCooling = 0;
+        }
+        base.UpdateInventory(player);
+    }
 }

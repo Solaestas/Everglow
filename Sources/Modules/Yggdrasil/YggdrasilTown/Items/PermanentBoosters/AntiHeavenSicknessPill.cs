@@ -4,33 +4,35 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.PermanentBoosters;
 
 public class AntiHeavenSicknessPill : ModItem
 {
-	public const int AntiHeavenSicknessPillMax = 5;
-	public static readonly Dictionary<int, int> LifeBonusTable = new()
-	{
-		{ 1, 20 },
-		{ 2, 10 },
-		{ 3, 5 },
-		{ 4, 3 },
-		{ 5, 2 },
-	};
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.PermanentBoosters;
 
-	public override void SetDefaults()
-	{
-		Item.SetNameOverride("Anti-heaven Sickness Pill");
+    public const int AntiHeavenSicknessPillMax = 5;
+    public static readonly Dictionary<int, int> LifeBonusTable = new()
+    {
+        { 1, 20 },
+        { 2, 10 },
+        { 3, 5 },
+        { 4, 3 },
+        { 5, 2 },
+    };
 
-		Item.width = 18;
-		Item.height = 18;
+    public override void SetDefaults()
+    {
+        Item.SetNameOverride("Anti-heaven Sickness Pill");
 
-		Item.useStyle = ItemUseStyleID.DrinkLiquid;
-		Item.useTime = Item.useAnimation = 30;
-		Item.UseSound = SoundID.Item4;
+        Item.width = 18;
+        Item.height = 18;
 
-		Item.maxStack = Item.CommonMaxStack;
-		Item.consumable = true;
+        Item.useStyle = ItemUseStyleID.DrinkLiquid;
+        Item.useTime = Item.useAnimation = 30;
+        Item.UseSound = SoundID.Item4;
 
-		Item.rare = ItemRarityID.Green;
-		Item.value = Item.buyPrice(platinum: 0, gold: 2);
-	}
+        Item.maxStack = Item.CommonMaxStack;
+        Item.consumable = true;
 
-	public override bool? UseItem(Player player) => player.GetModPlayer<YggdrasilPlayer>().UseAntiHeavenSicknessPill();
+        Item.rare = ItemRarityID.Green;
+        Item.value = Item.buyPrice(platinum: 0, gold: 2);
+    }
+
+    public override bool? UseItem(Player player) => player.GetModPlayer<YggdrasilPlayer>().UseAntiHeavenSicknessPill();
 }

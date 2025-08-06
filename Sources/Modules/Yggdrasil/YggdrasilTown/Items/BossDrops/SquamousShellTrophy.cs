@@ -2,6 +2,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.BossDrops;
 
 public class SquamousShellTrophy : ModItem
 {
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
+
     public override void SetDefaults()
     {
         // Vanilla has many useful methods like these, use them! This substitutes setting Item.createTile and Item.placeStyle aswell as setting a few values that are common across all placeable items

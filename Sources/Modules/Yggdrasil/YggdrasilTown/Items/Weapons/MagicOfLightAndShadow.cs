@@ -5,49 +5,51 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
 public class MagicOfLightAndShadow : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		Item.staff[Type] = true;
-	}
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.MagicWeapons;
 
-	public override void SetDefaults()
-	{
-		Item.width = 48;
-		Item.height = 48;
+    public override void SetStaticDefaults()
+    {
+        Item.staff[Type] = true;
+    }
 
-		Item.DamageType = DamageClass.Magic;
-		Item.damage = 33;
-		Item.knockBack = 0.5f;
-		Item.mana = 9;
+    public override void SetDefaults()
+    {
+        Item.width = 48;
+        Item.height = 48;
 
-		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.UseSound = SoundID.Item20;
-		Item.useTime = Item.useAnimation = 17;
-		Item.noMelee = true;
-		Item.autoReuse = false;
-		Item.rare = ItemRarityID.Green;
-		Item.value = 14400;
+        Item.DamageType = DamageClass.Magic;
+        Item.damage = 33;
+        Item.knockBack = 0.5f;
+        Item.mana = 9;
 
-		Item.shoot = ModContent.ProjectileType<MagicOfLightAndShadow_Proj>();
-		Item.shootSpeed = 8;
-	}
+        Item.useStyle = ItemUseStyleID.Shoot;
+        Item.UseSound = SoundID.Item20;
+        Item.useTime = Item.useAnimation = 17;
+        Item.noMelee = true;
+        Item.autoReuse = false;
+        Item.rare = ItemRarityID.Green;
+        Item.value = 14400;
 
-	public override bool AltFunctionUse(Player player) => base.AltFunctionUse(player);
+        Item.shoot = ModContent.ProjectileType<MagicOfLightAndShadow_Proj>();
+        Item.shootSpeed = 8;
+    }
 
-	public override bool? UseItem(Player player) => base.UseItem(player);
+    public override bool AltFunctionUse(Player player) => base.AltFunctionUse(player);
 
-	public override bool CanUseItem(Player player)
-	{
-		if (player.ownedProjectileCounts[Item.shoot] >= 8)
-		{
-			return false;
-		}
-		return base.CanUseItem(player);
-	}
+    public override bool? UseItem(Player player) => base.UseItem(player);
 
-	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-	{
-		Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
-		return false;
-	}
+    public override bool CanUseItem(Player player)
+    {
+        if (player.ownedProjectileCounts[Item.shoot] >= 8)
+        {
+            return false;
+        }
+        return base.CanUseItem(player);
+    }
+
+    public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+    {
+        Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
+        return false;
+    }
 }

@@ -2,29 +2,31 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.LampWood;
 
 public class LampWoodBow : ModItem
 {
-	public override void SetDefaults()
-	{
-		Item.width = 64;
-		Item.height = 78;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.RangedWeapons;
 
-		Item.damage = 8;
-		Item.DamageType = DamageClass.Ranged;
-		Item.knockBack = 0;
+    public override void SetDefaults()
+    {
+        Item.width = 64;
+        Item.height = 78;
 
-		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.useTime = 29;
-		Item.useAnimation = 25;
-		Item.UseSound = SoundID.Item1;
-		Item.autoReuse = false;
-		Item.noUseGraphic = false;
-		Item.noMelee = true;
-		Item.channel = false;
+        Item.damage = 8;
+        Item.DamageType = DamageClass.Ranged;
+        Item.knockBack = 0;
 
-		Item.shoot = ProjectileID.WoodenArrowFriendly;
-		Item.shootSpeed = 12f;
-		Item.useAmmo = AmmoID.Arrow;
+        Item.useStyle = ItemUseStyleID.Shoot;
+        Item.useTime = 29;
+        Item.useAnimation = 25;
+        Item.UseSound = SoundID.Item1;
+        Item.autoReuse = false;
+        Item.noUseGraphic = false;
+        Item.noMelee = true;
+        Item.channel = false;
 
-		Item.rare = ItemRarityID.White;
-		Item.value = Item.buyPrice(silver: 1);
-	}
+        Item.shoot = ProjectileID.WoodenArrowFriendly;
+        Item.shootSpeed = 12f;
+        Item.useAmmo = AmmoID.Arrow;
+
+        Item.rare = ItemRarityID.White;
+        Item.value = Item.buyPrice(silver: 1);
+    }
 }

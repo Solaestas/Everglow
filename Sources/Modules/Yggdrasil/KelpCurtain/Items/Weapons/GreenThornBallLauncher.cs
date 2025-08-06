@@ -4,33 +4,35 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 
 public class GreenThornBallLauncher : ModItem
 {
-	public override void SetDefaults()
-	{
-		Item.width = 60;
-		Item.height = 36;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.RangedWeapons;
 
-		Item.DamageType = DamageClass.Ranged;
-		Item.damage = 25;
-		Item.knockBack = 5.5f;
-		Item.crit = 10;
+    public override void SetDefaults()
+    {
+        Item.width = 60;
+        Item.height = 36;
 
-		Item.useTime = Item.useAnimation = 35;
-		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.noMelee = true;
-		Item.UseSound = SoundID.Item108;
-		Item.autoReuse = true;
+        Item.DamageType = DamageClass.Ranged;
+        Item.damage = 25;
+        Item.knockBack = 5.5f;
+        Item.crit = 10;
 
-		Item.rare = ItemRarityID.Green;
-		Item.value = Item.buyPrice(silver: 80);
+        Item.useTime = Item.useAnimation = 35;
+        Item.useStyle = ItemUseStyleID.Shoot;
+        Item.noMelee = true;
+        Item.UseSound = SoundID.Item108;
+        Item.autoReuse = true;
 
-		Item.useAmmo = AmmoID.Bullet;
-		Item.shoot = ProjectileID.Bullet;
-		Item.shootSpeed = 12f;
-	}
+        Item.rare = ItemRarityID.Green;
+        Item.value = Item.buyPrice(silver: 80);
 
-	public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
-	{
-		type = ModContent.ProjectileType<GreenThornLauncher_Proj>();
-		position += velocity * 4;
-	}
+        Item.useAmmo = AmmoID.Bullet;
+        Item.shoot = ProjectileID.Bullet;
+        Item.shootSpeed = 12f;
+    }
+
+    public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+    {
+        type = ModContent.ProjectileType<GreenThornLauncher_Proj>();
+        position += velocity * 4;
+    }
 }

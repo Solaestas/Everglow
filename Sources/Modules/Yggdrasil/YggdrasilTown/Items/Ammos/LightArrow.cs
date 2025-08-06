@@ -2,22 +2,24 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Ammos;
 
 public class LightArrow : ModItem
 {
-	public override void SetDefaults()
-	{
-		Item.width = 18;
-		Item.height = 52;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.RangedWeapons;
 
-		Item.damage = 6;
-		Item.DamageType = DamageClass.Ranged;
-		Item.knockBack = 4f;
+    public override void SetDefaults()
+    {
+        Item.width = 18;
+        Item.height = 52;
 
-		Item.maxStack = Item.CommonMaxStack;
-		Item.consumable = true;
-		Item.ammo = AmmoID.Arrow;
+        Item.damage = 6;
+        Item.DamageType = DamageClass.Ranged;
+        Item.knockBack = 4f;
 
-		Item.rare = ItemRarityID.White;
-		Item.value = Item.buyPrice(copper: 3);
+        Item.maxStack = Item.CommonMaxStack;
+        Item.consumable = true;
+        Item.ammo = AmmoID.Arrow;
 
-		Item.shoot = ModContent.ProjectileType<Projectiles.LightArrow>();
-	}
+        Item.rare = ItemRarityID.White;
+        Item.value = Item.buyPrice(copper: 3);
+
+        Item.shoot = ModContent.ProjectileType<Projectiles.LightArrow>();
+    }
 }

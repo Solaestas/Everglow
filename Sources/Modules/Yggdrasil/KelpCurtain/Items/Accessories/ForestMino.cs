@@ -2,26 +2,28 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Accessories;
 
 public class ForestMino : ModItem
 {
-	public override void SetDefaults()
-	{
-		Item.width = 40;
-		Item.height = 48;
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Accessories;
 
-		Item.value = Item.sellPrice(gold: 2);
-		Item.rare = ItemRarityID.Green;
+    public override void SetDefaults()
+    {
+        Item.width = 40;
+        Item.height = 48;
 
-		Item.defense = 4;
+        Item.value = Item.sellPrice(gold: 2);
+        Item.rare = ItemRarityID.Green;
 
-		Item.accessory = true;
-	}
+        Item.defense = 4;
 
-	public override void UpdateEquip(Player player)
-	{
-		// When in the Kelp Curtain biome.
-		if (player.InModBiome<KelpCurtainBiome>())
-		{
-			player.moveSpeed += 0.25f; // Increases movement speed by 25%.
-			player.aggro -= 400; // Reduces aggro by 400.
-		}
-	}
+        Item.accessory = true;
+    }
+
+    public override void UpdateEquip(Player player)
+    {
+        // When in the Kelp Curtain biome.
+        if (player.InModBiome<KelpCurtainBiome>())
+        {
+            player.moveSpeed += 0.25f; // Increases movement speed by 25%.
+            player.aggro -= 400; // Reduces aggro by 400.
+        }
+    }
 }
