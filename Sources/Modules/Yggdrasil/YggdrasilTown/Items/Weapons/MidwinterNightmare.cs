@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles.FaelanternProj;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Summon.FaelanternProj;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;

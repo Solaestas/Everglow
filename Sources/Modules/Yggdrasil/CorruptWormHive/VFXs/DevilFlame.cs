@@ -26,7 +26,7 @@ internal class DevilFlamePipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModContent.Request<Effect>("Everglow/Yggdrasil/CorruptWormHive/VFXs/DevilFlame", AssetRequestMode.ImmediateLoad);
+		effect = ModContent.Request<Effect>(ModAsset.DevilFlame_Mod, AssetRequestMode.ImmediateLoad);
 	}
 
 	public override void BeginRender()

@@ -1,4 +1,4 @@
-namespace Everglow.Yggdrasil.YggdrasilTown.VFXs.TownNPCAttack;
+namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
 public class QuenchingBladeSmogPipeline : Pipeline
 {

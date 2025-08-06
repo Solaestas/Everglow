@@ -6,6 +6,8 @@ namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 
 public class LichenTentacle_proj : WhipProjectile
 {
+	public override string LocalizationCategory => LocalizationUtils.Categories.SummonProjectiles;
+
 	public override void SetDef()
 	{
 		DustType = ModContent.DustType<Dusts.LichenSlime>();

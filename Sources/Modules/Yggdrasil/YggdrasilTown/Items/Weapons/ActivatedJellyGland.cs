@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Summon;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Creative;
@@ -37,7 +38,7 @@ public class ActivatedJellyGland : ModItem
         Item.noMelee = true;
 
         Item.shootSpeed = 1;
-        Item.shoot = ModContent.ProjectileType<Projectiles.ActivatedJellyGlandMinion>();
+        Item.shoot = ModContent.ProjectileType<ActivatedJellyGlandMinion>();
     }
 
     public override bool CanUseItem(Player player) => (player.numMinions < player.maxMinions) && player.ownedProjectileCounts[Item.shoot] == 0;

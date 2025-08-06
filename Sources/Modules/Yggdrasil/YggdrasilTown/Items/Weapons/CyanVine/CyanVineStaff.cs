@@ -1,6 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.CyanVine;
 

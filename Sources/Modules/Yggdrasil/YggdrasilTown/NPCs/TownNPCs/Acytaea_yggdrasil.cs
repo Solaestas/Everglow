@@ -1,5 +1,5 @@
 using Everglow.Commons.Coroutines;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles.FevensAttack;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.TownNPCs.Fevens;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 

@@ -28,7 +28,7 @@ public class AmethystHeadedSpear : ModItem
         Item.autoReuse = true;
 
         Item.shootSpeed = 3.7f;
-        Item.shoot = ModContent.ProjectileType<Projectiles.AmethystHeadedSpear>();
+        Item.shoot = ModContent.ProjectileType<Projectiles.Melee.AmethystHeadedSpear>();
 
         Item.rare = ItemRarityID.Blue;
         Item.value = Item.buyPrice(silver: 20);

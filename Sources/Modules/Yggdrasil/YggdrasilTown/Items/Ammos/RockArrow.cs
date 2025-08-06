@@ -22,7 +22,7 @@ public class RockArrow : ModItem
         Item.knockBack = 2f;
         Item.value = Item.buyPrice(0, 0, 0, 75);
         Item.rare = ItemRarityID.Blue;
-        Item.shoot = ModContent.ProjectileType<Projectiles.RockArrow>();
+        Item.shoot = ModContent.ProjectileType<Projectiles.Ranged.RockArrow>();
 
         Item.ammo = AmmoID.Arrow;
     }

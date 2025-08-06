@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
@@ -27,7 +28,7 @@ public class FlurryingBlades : ModItem
         Item.value = 12400;
         Item.rare = ItemRarityID.Green;
         Item.autoReuse = true;
-        Item.shoot = ModContent.ProjectileType<Projectiles.YggdrasilSlashBall>();
+        Item.shoot = ModContent.ProjectileType<YggdrasilSlashBall>();
         Item.shootSpeed = 7;
         Item.crit = 16;
         Item.mana = 12;
@@ -39,7 +40,7 @@ public class FlurryingBlades : ModItem
         {
             float ai1 = Main.rand.NextFloat(0.7f, 1.4f);
             Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0.9f, ai1);
-            SoundEngine.PlaySound(new SoundStyle("Everglow/Yggdrasil/YggdrasilTown/Sounds/Knife").WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)).WithVolume(0.8f), player.Center);
+            SoundEngine.PlaySound(new SoundStyle(ModAsset.Knife_Mod).WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)).WithVolume(0.8f), player.Center);
         }
         return false;
     }

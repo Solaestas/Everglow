@@ -1,6 +1,6 @@
 using Everglow.Commons.Weapons.Gyroscopes;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Summon;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;

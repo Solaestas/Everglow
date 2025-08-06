@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Summon;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 
@@ -33,7 +34,7 @@ public class AuburnBell : ModItem
 		Item.noMelee = true;
 
 		Item.shootSpeed = 10f;
-		Item.shoot = ModContent.ProjectileType<Projectiles.AuburnBellMinion>();
+		Item.shoot = ModContent.ProjectileType<AuburnBellMinion>();
 	}
 
 	public override bool Shoot(

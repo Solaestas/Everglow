@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Ammos;
 
@@ -16,7 +17,7 @@ public class CyanVineBullet : ModItem
         Item.height = 16;
         Item.value = 50;
         Item.maxStack = Item.CommonMaxStack;
-        Item.shoot = ModContent.ProjectileType<Projectiles.CyanBullet>();
+        Item.shoot = ModContent.ProjectileType<CyanBullet>();
         Item.shootSpeed = 16f;
     }
 

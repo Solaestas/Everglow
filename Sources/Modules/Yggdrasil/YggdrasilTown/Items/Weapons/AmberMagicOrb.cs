@@ -25,7 +25,7 @@ public class AmberMagicOrb : ModItem
         Item.autoReuse = true;
         Item.noMelee = true;
 
-        Item.shoot = ModContent.ProjectileType<Projectiles.AmberMagicOrb>();
+        Item.shoot = ModContent.ProjectileType<Projectiles.Magic.AmberMagicOrb>();
         Item.shootSpeed = 12;
     }
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -33,7 +33,7 @@ public class AmberMagicOrb : ModItem
         if (player.ownedProjectileCounts[type] <= 0)
         {
             Projectile p0 = Projectile.NewProjectileDirect(source, position + velocity * 5, velocity, type, damage, knockback, player.whoAmI);
-            Projectiles.AmberMagicOrb amberMagicOrb = p0.ModProjectile as Projectiles.AmberMagicOrb;
+            var amberMagicOrb = p0.ModProjectile as Projectiles.Magic.AmberMagicOrb;
             if (amberMagicOrb != null)
             {
                 amberMagicOrb.ShootProj(velocity);
@@ -47,7 +47,7 @@ public class AmberMagicOrb : ModItem
                 {
                     if (proj.type == type)
                     {
-                        Projectiles.AmberMagicOrb amberMagicOrb = proj.ModProjectile as Projectiles.AmberMagicOrb;
+                        var amberMagicOrb = proj.ModProjectile as Projectiles.Magic.AmberMagicOrb;
                         if (amberMagicOrb != null)
                         {
                             amberMagicOrb.ShootProj(velocity);

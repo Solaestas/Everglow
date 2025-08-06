@@ -1,7 +1,8 @@
 using Everglow.Commons.Mechanics.ElementalDebuff;
 using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Cooldowns;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;

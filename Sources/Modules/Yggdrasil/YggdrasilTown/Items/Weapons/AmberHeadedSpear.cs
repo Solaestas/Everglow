@@ -28,7 +28,7 @@ public class AmberHeadedSpear : ModItem
         Item.autoReuse = true;
 
         Item.shootSpeed = 3.7f;
-        Item.shoot = ModContent.ProjectileType<Projectiles.AmberHeadedSpear>();
+        Item.shoot = ModContent.ProjectileType<Projectiles.Melee.AmberHeadedSpear>();
 
         Item.rare = ItemRarityID.Blue;
         Item.value = Item.buyPrice(silver: 20);

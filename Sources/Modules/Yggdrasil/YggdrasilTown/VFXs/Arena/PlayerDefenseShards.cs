@@ -1,4 +1,4 @@
-namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
+namespace Everglow.Yggdrasil.YggdrasilTown.VFXs.Arena;
 
 [Pipeline(typeof(WCSPipeline))]
 public class PlayerDefenseShards : Visual
@@ -54,9 +54,9 @@ public class PlayerDefenseShards : Visual
 			{
 				lightColor *= 0.4f;
 			}
-			Vector2 deltaY = new Vector2(0, -y * 2);
+			var deltaY = new Vector2(0, -y * 2);
 			lightColor *= 0.8f;
-			List<Vertex2D> bars = new List<Vertex2D>()
+			var bars = new List<Vertex2D>()
 			{
 				new Vertex2D(position + deltaY, lightColor, new Vector3(0, 0, 0)),
 				new Vertex2D(position + deltaY + toCorner.RotatedBy(Math.PI * 0.5 + rotation), lightColor, new Vector3(0, 1, 0)),

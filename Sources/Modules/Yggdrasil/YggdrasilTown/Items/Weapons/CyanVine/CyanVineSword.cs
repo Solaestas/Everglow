@@ -1,5 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -25,7 +26,7 @@ public class CyanVineSword : ModItem
         Item.noUseGraphic = true;
         Item.noMelee = true;
         Item.shootSpeed = 5f;
-        Item.shoot = ModContent.ProjectileType<Projectiles.CyanVineSword_Projectile>();
+        Item.shoot = ModContent.ProjectileType<CyanVineSword_Projectile>();
 
         Item.value = 3600;
     }

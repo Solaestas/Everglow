@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Weapons.Melee;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee;
 using ReLogic.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent;

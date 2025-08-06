@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.LightSeeker;
 

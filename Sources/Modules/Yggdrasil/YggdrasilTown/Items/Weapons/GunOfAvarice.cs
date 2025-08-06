@@ -1,5 +1,5 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;
 using ReLogic.Graphics;
 using Terraria.Audio;
 using Terraria.DataStructures;

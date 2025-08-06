@@ -1,5 +1,4 @@
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Magic;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Weapons;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons.DevilHeart;

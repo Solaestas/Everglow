@@ -25,7 +25,7 @@ public class RodSpear : ModItem
 		Item.value = ItemRarityID.Green;
 		Item.value = Item.buyPrice(silver: 20);
 
-		Item.shoot = ModContent.ProjectileType<Projectiles.RodSpear>();
+		Item.shoot = ModContent.ProjectileType<Projectiles.Melee.RodSpear>();
 		Item.shootSpeed = 12;
 	}
 }

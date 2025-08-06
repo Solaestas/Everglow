@@ -20,7 +20,7 @@ public class CaterpillarJuiceArrow : ModItem
         Item.rare = ItemRarityID.White;
         Item.value = Item.buyPrice(copper: 4);
 
-        Item.shoot = ModContent.ProjectileType<Projectiles.CaterpillarJuiceArrow>();
+        Item.shoot = ModContent.ProjectileType<Projectiles.Ranged.CaterpillarJuiceArrow>();
         Item.shootSpeed = 6f;
     }
 }

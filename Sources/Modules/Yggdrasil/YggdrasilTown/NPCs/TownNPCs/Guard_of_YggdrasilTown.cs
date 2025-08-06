@@ -1,6 +1,6 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.DataStructures;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.TownNPCs;
 using SubworldLibrary;
 using Terraria.DataStructures;
 using Terraria.GameContent.Personalities;

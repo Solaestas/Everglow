@@ -1,5 +1,5 @@
 using Everglow.Commons.Weapons.StabbingSwords;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Weapons;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 

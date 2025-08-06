@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.CorruptWormHive.Projectiles.TrueDeathSickle;
+using Everglow.Yggdrasil.CorruptWormHive.Projectiles.Melee.TrueDeathSickle;
 
 namespace Everglow.Yggdrasil.CorruptWormHive.Items.Weapons;
 

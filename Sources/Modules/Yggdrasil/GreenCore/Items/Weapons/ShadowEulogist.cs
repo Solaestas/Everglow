@@ -1,5 +1,6 @@
 using Everglow.Common.VFX.CommonVFXDusts;
 using Everglow.Commons.Graphics;
+using Everglow.Yggdrasil.GreenCore.Projectiles.Melee;
 using Terraria.Audio;
 using Terraria.DataStructures;
 

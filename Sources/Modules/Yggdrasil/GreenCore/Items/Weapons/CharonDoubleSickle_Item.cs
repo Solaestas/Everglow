@@ -1,3 +1,5 @@
+using Everglow.Yggdrasil.GreenCore.Projectiles.Melee;
+
 namespace Everglow.Yggdrasil.GreenCore.Items.Weapons;
 
 public class CharonDoubleSickle_Item : ModItem

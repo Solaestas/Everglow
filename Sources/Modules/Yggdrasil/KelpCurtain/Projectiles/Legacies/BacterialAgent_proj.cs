@@ -2,12 +2,13 @@ using Everglow.Commons.DataStructures;
 using Everglow.Commons.Weapons;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
-using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 
-public class BacterialAgent_proj : TrailingProjectile
+public class BacterialAgent_Proj : TrailingProjectile
 {
+	public override string LocalizationCategory => LocalizationUtils.Categories.MagicProjectiles;
+
 	public override void SetDef()
 	{
 		TrailColor = new Color(0.7f, 1f, 0.4f, 0);
@@ -117,7 +118,7 @@ public class BacterialAgent_proj : TrailingProjectile
 	}
 	public override void Explosion()
 	{
-		Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<BacterialAgent_explosion>(), Projectile.damage, Projectile.knockBack * 4f, Projectile.owner, 30);
+		Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<BacterialAgent_Explosion>(), Projectile.damage, Projectile.knockBack * 4f, Projectile.owner, 30);
 		p.rotation = Main.rand.NextFloat(6.283f);
 		base.Explosion();
 	}

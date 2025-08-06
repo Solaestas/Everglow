@@ -1,5 +1,5 @@
 using Everglow.Commons.Coroutines;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles.TownNPCAttack;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.TownNPCs;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 

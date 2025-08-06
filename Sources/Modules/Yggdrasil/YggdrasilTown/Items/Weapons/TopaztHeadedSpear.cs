@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.Common.Blocks;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
@@ -29,7 +30,7 @@ public class TopaztHeadedSpear : ModItem
         Item.autoReuse = true;
 
         Item.shootSpeed = 3.7f;
-        Item.shoot = ModContent.ProjectileType<Projectiles.TopazHeadedSpear>();
+        Item.shoot = ModContent.ProjectileType<TopazHeadedSpear>();
 
         Item.rare = ItemRarityID.Blue;
         Item.value = Item.buyPrice(silver: 20);

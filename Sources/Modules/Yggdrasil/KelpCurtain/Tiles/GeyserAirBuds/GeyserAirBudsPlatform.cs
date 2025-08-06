@@ -1,7 +1,7 @@
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
-using Everglow.Yggdrasil.KelpCurtain.Projectiles.Weapons;
+using Everglow.Yggdrasil.KelpCurtain.Projectiles.Miscs;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;

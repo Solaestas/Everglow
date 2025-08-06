@@ -28,6 +28,6 @@ public class Caltrop : ModItem
         Item.rare = ItemRarityID.White;
 
         Item.shootSpeed = 12;
-        Item.shoot = ModContent.ProjectileType<Projectiles.Caltrop>();
+        Item.shoot = ModContent.ProjectileType<Projectiles.Ranged.Caltrop>();
     }
 }

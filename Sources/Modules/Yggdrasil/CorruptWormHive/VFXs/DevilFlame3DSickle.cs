@@ -1,4 +1,4 @@
-using static Everglow.Yggdrasil.CorruptWormHive.Projectiles.TrueDeathSickle.TrueDeathSickle_Blade;
+using static Everglow.Yggdrasil.CorruptWormHive.Projectiles.Melee.TrueDeathSickle.TrueDeathSickle_Blade;
 
 namespace Everglow.Yggdrasil.CorruptWormHive.VFXs;
 

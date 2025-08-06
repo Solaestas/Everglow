@@ -1,6 +1,6 @@
 using Everglow.Commons.Mechanics.Cooldown;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Buffs;
+namespace Everglow.Yggdrasil.YggdrasilTown.Cooldowns;
 
 public class IstafelsSunfireGraspSkillCooldown : CooldownBase
 {

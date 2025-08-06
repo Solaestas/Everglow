@@ -20,6 +20,6 @@ public class LightBullet : ModItem
         Item.maxStack = Item.CommonMaxStack;
         Item.consumable = true;
 
-        Item.shoot = ModContent.ProjectileType<Projectiles.LightBullet>();
+        Item.shoot = ModContent.ProjectileType<Projectiles.Ranged.LightBullet>();
     }
 }

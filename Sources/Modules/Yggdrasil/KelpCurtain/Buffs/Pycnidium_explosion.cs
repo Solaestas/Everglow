@@ -6,7 +6,7 @@ namespace Everglow.Yggdrasil.KelpCurtain.Buffs;
 
 public class Pycnidium_explosion : ModProjectile, IWarpProjectile
 {
-	public override string Texture => "Everglow/Yggdrasil/KelpCurtain/Projectiles/Legacies/BacterialAgent_proj";
+	public override string Texture => ModAsset.BacterialAgent_Proj_Mod;
 	public override void SetDefaults()
 	{
 		Projectile.width = 120;

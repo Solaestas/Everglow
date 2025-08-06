@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Weapons;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;

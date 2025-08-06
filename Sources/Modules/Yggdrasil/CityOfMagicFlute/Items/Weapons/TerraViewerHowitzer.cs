@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.CityOfMagicFlute.Projectiles;
+using Everglow.Yggdrasil.CityOfMagicFlute.Projectiles.Ranged;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.CityOfMagicFlute.Items.Weapons;

@@ -23,7 +23,7 @@ public class LampWoodYoyo : ModItem
         Item.rare = ItemRarityID.White;
         Item.value = Item.buyPrice(silver: 5);
 
-        Item.shoot = ModContent.ProjectileType<Projectiles.LampWoodYoyo>();
+        Item.shoot = ModContent.ProjectileType<Projectiles.Melee.LampWoodYoyo>();
         Item.shootSpeed = 16f;
     }
 }

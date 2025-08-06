@@ -22,7 +22,7 @@ public class MysteriousTablet : ModItem
 		Item.rare = ItemRarityID.White;
 		Item.value = 0;
 
-		Item.shoot = ModContent.ProjectileType<Projectiles.MysteriousTablet>();
+		Item.shoot = ModContent.ProjectileType<Projectiles.Typeless.MysteriousTablet>();
 		Item.shootSpeed = 12;
 	}
 }

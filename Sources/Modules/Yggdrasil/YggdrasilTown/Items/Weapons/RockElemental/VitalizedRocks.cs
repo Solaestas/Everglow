@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.RockElemental;
@@ -26,7 +26,7 @@ public class VitalizedRocks : ModItem
         Item.autoReuse = true;
         Item.noMelee = true;
 
-        Item.shoot = ModContent.ProjectileType<Projectiles.AmberMagicOrb>();
+        Item.shoot = ModContent.ProjectileType<Projectiles.Magic.AmberMagicOrb>();
         Item.shootSpeed = 12;
     }
 

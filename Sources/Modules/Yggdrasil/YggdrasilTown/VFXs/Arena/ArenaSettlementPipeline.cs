@@ -1,4 +1,4 @@
-namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
+namespace Everglow.Yggdrasil.YggdrasilTown.VFXs.Arena;
 
 public class ArenaSettlementPipeline : Pipeline
 {

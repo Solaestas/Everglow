@@ -1,5 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;
 using Terraria;
 using Terraria.DataStructures;
 

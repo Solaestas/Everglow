@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 

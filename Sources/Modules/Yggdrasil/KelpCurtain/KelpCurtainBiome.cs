@@ -14,7 +14,7 @@ public class KelpCurtainBiome : ModBiome
 
 	public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 
-	public override string BestiaryIcon => "Everglow/Yggdrasil/KelpCurtain/KelpCurtainIcon";
+	public override string BestiaryIcon => ModAsset.KelpCurtainIcon_Mod;
 
 	public override string BackgroundPath => base.BackgroundPath;
 

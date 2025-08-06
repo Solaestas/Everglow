@@ -10,7 +10,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.SquamousShell;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Rock;
 using Everglow.Yggdrasil.YggdrasilTown.Items.BossDrops;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles.SquamousBossAttack;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Bosses.SquamousShell;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.BossDrops;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;

@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee;
 using Terraria.Audio;
 using Terraria.DataStructures;
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.LampWood;
@@ -23,7 +24,7 @@ public class LampWoodSword : ModItem
         Item.noUseGraphic = true;
         Item.noMelee = true;
         Item.shootSpeed = 5f;
-        Item.shoot = ModContent.ProjectileType<Projectiles.LampWoodSword_Projectile>();
+        Item.shoot = ModContent.ProjectileType<LampWoodSword_Projectile>();
 
         Item.value = 410;
     }

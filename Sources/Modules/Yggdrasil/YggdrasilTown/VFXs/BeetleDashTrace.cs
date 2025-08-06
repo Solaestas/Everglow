@@ -1,5 +1,5 @@
 using Everglow.Yggdrasil.Common.Elevator.Tiles;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Summon;
 using Spine;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;

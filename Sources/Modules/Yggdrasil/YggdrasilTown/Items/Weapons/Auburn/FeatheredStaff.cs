@@ -1,3 +1,5 @@
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;
+
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.Auburn;
 
 public class FeatheredStaff : ModItem
@@ -25,7 +27,7 @@ public class FeatheredStaff : ModItem
 		Item.knockBack = 3.25f;
 		Item.mana = 6;
 
-		Item.shoot = ModContent.ProjectileType<Projectiles.FeatheredStaff_staff>();
+		Item.shoot = ModContent.ProjectileType<FeatheredStaff_staff>();
 		Item.shootSpeed = 10;
 
 		Item.rare = ItemRarityID.Green;

@@ -6,9 +6,9 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 
-public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
+public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
 {
-	public override string Texture => "Everglow/Yggdrasil/KelpCurtain/Projectiles/Legacies/BacterialAgent_proj";
+	public override string Texture => ModAsset.BacterialAgent_Proj_Mod;
 	public override void SetDefaults()
 	{
 		Projectile.width = 120;
