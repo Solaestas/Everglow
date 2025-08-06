@@ -21,7 +21,7 @@ public class BacterialAgent : ModItem
         Item.DamageType = DamageClass.Magic;
         Item.noMelee = true;
         Item.noUseGraphic = true;
-        Item.shoot = ModContent.ProjectileType<BacterialAgent_Proj>();
+        Item.shoot = ModContent.ProjectileType<BacterialAgent_proj>();
         Item.shootSpeed = 12f;
         Item.value = Item.sellPrice(gold: 1);
     }

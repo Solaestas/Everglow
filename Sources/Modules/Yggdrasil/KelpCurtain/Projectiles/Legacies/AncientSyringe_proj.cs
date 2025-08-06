@@ -6,9 +6,9 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 
-public class AncientSyringe_Proj : HandholdProjectile
+public class AncientSyringe_proj : HandholdProjectile
 {
-	public override string LocalizationCategory =>  LocalizationUtils.Categories.MagicProjectiles;
+	public override string LocalizationCategory => LocalizationUtils.Categories.MagicProjectiles;
 
 	public override void SetDef()
 	{

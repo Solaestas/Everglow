@@ -3,7 +3,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 
-public class HandheldCircularSaw_Proj : ModProjectile
+public class HandheldCircularSaw_proj : ModProjectile
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.MagicProjectiles;
 
@@ -64,7 +64,7 @@ public class HandheldCircularSaw_Proj : ModProjectile
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
 		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		var texSaw = ModAsset.HandheldCircularSaw_Saw.Value;
+		var texSaw = ModAsset.HandheldCircularSaw_saw.Value;
 		Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 		SpriteEffects se = SpriteEffects.None;
 		if (player.direction == -1)
