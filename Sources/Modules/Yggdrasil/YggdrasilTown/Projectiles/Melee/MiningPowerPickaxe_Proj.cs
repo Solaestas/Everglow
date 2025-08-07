@@ -17,7 +17,7 @@ public class MiningPowerPickaxe_Proj : ModProjectile
 
 	private Player Owner => Main.player[Projectile.owner];
 
-	private Vector2 OwnerMouseWorld => Owner.GetModPlayer<EverglowPlayer>().mouseWorld;
+	private Vector2 OwnerMouseWorld => Owner.MouseWorld();
 
 	/// <summary>
 	/// The first pick tile target type. 
@@ -63,7 +63,7 @@ public class MiningPowerPickaxe_Proj : ModProjectile
 
 		if(NetUtils.IsClient && Main.myPlayer == Projectile.owner)
 		{
-			Owner.GetModPlayer<EverglowPlayer>().listenMouseWorld = true;
+			Owner.ListenMouseWorld();
 		}
 
 		if (Owner.controlUseItem && Owner.HeldItem.ModItem is MiningPowerPickaxe)
