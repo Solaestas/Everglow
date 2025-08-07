@@ -3,7 +3,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 
-public class HandheldCircularSaw_Proj : ModProjectile
+public class HandheldCircularSaw_proj : ModProjectile
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.MagicProjectiles;
 

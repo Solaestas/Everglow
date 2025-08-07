@@ -6,12 +6,11 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Legacies;
 
-public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
+public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.MagicProjectiles;
 
 	public override string Texture => ModAsset.BacterialAgent_proj_Mod;
-
 	public override void SetDefaults()
 	{
 		Projectile.width = 120;
@@ -27,12 +26,10 @@ public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
 		Projectile.localNPCHitCooldown = 20;
 		Projectile.DamageType = DamageClass.Magic;
 	}
-
 	public override void OnSpawn(IEntitySource source)
 	{
 		SoundEngine.PlaySound(SoundID.Shatter, Projectile.Center);
 	}
-
 	public void GenerateLiquid(int frequency)
 	{
 		for (int x = 0; x < frequency; x++)
@@ -46,7 +43,7 @@ public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
 				position = Projectile.Center,
 				maxTime = Main.rand.Next(12, 68),
 				scale = Main.rand.NextFloat(6f, 18f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(20.0f, 40.0f) },
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(20.0f, 40.0f) }
 			};
 			Ins.VFXManager.Add(splash);
 		}
@@ -63,12 +60,11 @@ public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
 				maxTime = Main.rand.Next(32, 164),
 				scale = mulScale,
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) },
+				ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
 			};
 			Ins.VFXManager.Add(blood);
 		}
 	}
-
 	public void GenerateSpark(int frequency)
 	{
 		for (int g = 0; g < frequency; g++)
@@ -83,12 +79,11 @@ public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
 				maxTime = Main.rand.Next(20, 85),
 				scale = Main.rand.NextFloat(0.4f, 1.8f),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(-0.005f, 0.005f) },
+				ai = new float[] { Main.rand.NextFloat(-0.005f, 0.005f) }
 			};
 			Ins.VFXManager.Add(smog);
 		}
 	}
-
 	public override void AI()
 	{
 		Projectile.velocity *= 0;
@@ -99,7 +94,6 @@ public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
 			Projectile.friendly = false;
 		}
 	}
-
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		bool bool0 = (targetHitbox.TopLeft() - projHitbox.Center()).Length() < 40;
@@ -110,7 +104,6 @@ public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
 
 		return bool0 || bool1 || bool2 || bool3 || bool4;
 	}
-
 	private static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -129,7 +122,6 @@ public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}
-
 	public override void PostDraw(Color lightColor)
 	{
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
@@ -147,7 +139,6 @@ public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
-
 	public override bool PreDraw(ref Color lightColor)
 	{
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
@@ -159,7 +150,6 @@ public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * 0.8f, SpriteEffects.None, 0);
 		return false;
 	}
-
 	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -168,6 +158,7 @@ public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
 		c0.R = 0;
 		for (int h = 0; h < radius / 2; h += 1)
 		{
+
 			c0.R = (byte)(h / radius * 2 * 255);
 			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / radius * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radius, 1, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radius, 0.5f, 0)));
@@ -177,11 +168,8 @@ public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), c0, new Vector3(0, 1, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), c0, new Vector3(0, 0.5f, 0)));
 		if (circle.Count > 2)
-		{
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
-		}
 	}
-
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
@@ -189,7 +177,6 @@ public class BacterialAgent_Explosion : ModProjectile, IWarpProjectile
 		Texture2D t = Commons.ModAsset.Trail.Value;
 		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 40f, 22 * (1 - value), new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
-
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(ModContent.BuffType<LichenInfected>(), 300);
