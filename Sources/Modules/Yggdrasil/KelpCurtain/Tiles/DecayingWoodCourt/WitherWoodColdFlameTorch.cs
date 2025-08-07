@@ -1,12 +1,14 @@
+using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Spine;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DecayingWoodCourt;
 
-public class Lamorch : ModTile
+public class WitherWoodColdFlameTorch : ModTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -22,7 +24,7 @@ public class Lamorch : ModTile
 		TileID.Sets.DisableSmartInteract[Type] = true;
 		TileID.Sets.Torch[Type] = true;
 
-		DustType = ModContent.DustType<LamorchDust>();
+		DustType = ModContent.DustType<WitherWoodTorchDust>();
 		AdjTiles = new int[] { TileID.Torches };
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
@@ -59,23 +61,6 @@ public class Lamorch : ModTile
 
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = Main.rand.Next(1, 3);
 
-	public override void NearbyEffects(int i, int j, bool closer)
-	{
-		Tile tile = Main.tile[i, j];
-		if (tile.TileFrameX < 54)
-		{
-			int frequency = 20;
-			if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4)) && Main.rand.NextBool(frequency))
-			{
-				Rectangle dustBox = Utils.CenteredRectangle(new Vector2(i * 16 + 8, j * 16 + 4), new Vector2(16, 16));
-				int numForDust = Dust.NewDust(dustBox.TopLeft(), dustBox.Width, dustBox.Height, ModContent.DustType<LamorchDust>(), 0f, 0f, 254, default, Main.rand.NextFloat(0.95f, 1.75f));
-				Dust obj = Main.dust[numForDust];
-				obj.velocity *= 0.4f;
-				Main.dust[numForDust].velocity.Y -= 0.4f;
-			}
-		}
-	}
-
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{
 		Tile tile = Main.tile[i, j];
@@ -83,20 +68,50 @@ public class Lamorch : ModTile
 		// If the torch is on
 		if (tile.TileFrameX < 66)
 		{
-			r = 1.5f;
-			g = 1.1f;
-			b = 0.3f;
+			r = 0.668f;
+			g = 0.088f;
+			b = 1.0f;
+		}
+	}
+
+	public override void AnimateTile(ref int frame, ref int frameCounter)
+	{
+		if (++frameCounter >= 4)
+		{
+			frameCounter = 0;
+			frame = ++frame % 8;
+		}
+	}
+
+	public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
+	{
+		frameYOffset = Main.tileFrame[type] * 36;
+	}
+
+	public override void NearbyEffects(int i, int j, bool closer)
+	{
+		Tile tile = Main.tile[i, j];
+		if (tile.TileFrameX < 54)
+		{
+			int frequency = 60;
+			if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4)) && Main.rand.NextBool(frequency))
+			{
+				Rectangle dustBox = Utils.CenteredRectangle(new Vector2(i * 16 + 8, j * 16 + 4) - new Vector2(0, 4), new Vector2(8, 8));
+				Dust dust = Dust.NewDustDirect(dustBox.TopLeft(), dustBox.Width, dustBox.Height, ModContent.DustType<WitherWoodTorchDust>(), 0f, 0f, 254, default, Main.rand.NextFloat(0.75f, 0.85f));
+				dust.velocity.X *= 0.1f;
+				dust.velocity.Y = -2.4f;
+			}
 		}
 	}
 
 	public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)
 	{
 		// This code slightly lowers the draw position if there is a solid tile above, so the flame doesn't overlap that tile. Terraria torches do this same logic.
-		offsetY = 0;
-
+		offsetY = -14;
+		height = 36;
 		if (WorldGen.SolidTile(i, j - 1))
 		{
-			offsetY = 4;
+			offsetY = -10;
 		}
 	}
 
@@ -110,11 +125,11 @@ public class Lamorch : ModTile
 		}
 
 		// The following code draws multiple flames on top our placed torch.
-		int offsetY = 0;
+		int offsetY = -14;
 
 		if (WorldGen.SolidTile(i, j - 1))
 		{
-			offsetY = 4;
+			offsetY = -10;
 		}
 
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -130,12 +145,16 @@ public class Lamorch : ModTile
 		int height = 20;
 		int frameX = tile.TileFrameX;
 		int frameY = tile.TileFrameY;
+		int addFrX = 0;
+		int addFrY = 0;
+		TileLoader.SetAnimationFrame(tile.TileType, i, j, ref addFrX, ref addFrY); // calculates the animation offsets
+		frameY += addFrY;
 		for (int k = 0; k < 7; k++)
 		{
 			float xx = Utils.RandomInt(ref randSeed, -10, 11) * 0.15f;
 			float yy = Utils.RandomInt(ref randSeed, -10, 1) * 0.35f;
 
-			spriteBatch.Draw(ModAsset.Lamorch_Flame.Value, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + offsetY + yy) + zero, new Rectangle(frameX, frameY, width, height), color, 0f, default, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(ModAsset.WitherWoodColdFlameTorch_Flame.Value, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + offsetY + yy) + zero, new Rectangle(frameX, frameY, width, height), color, 0f, default, 1f, SpriteEffects.None, 0f);
 		}
 	}
 }

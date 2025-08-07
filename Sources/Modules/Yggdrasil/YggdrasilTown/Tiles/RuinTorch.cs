@@ -2,7 +2,6 @@ using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
-using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
@@ -73,6 +72,23 @@ public class RuinTorch : ModTile
 		}
 	}
 
+	public override void NearbyEffects(int i, int j, bool closer)
+	{
+		Tile tile = Main.tile[i, j];
+		if (tile.TileFrameX < 54)
+		{
+			int frequency = 20;
+			if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4)) && Main.rand.NextBool(frequency))
+			{
+				Rectangle dustBox = Utils.CenteredRectangle(new Vector2(i * 16 + 8, j * 16 + 4), new Vector2(16, 16));
+				int numForDust = Dust.NewDust(dustBox.TopLeft(), dustBox.Width, dustBox.Height, ModContent.DustType<RuinTorchDust>(), 0f, 0f, 254, default, Main.rand.NextFloat(0.95f, 1.75f));
+				Dust obj = Main.dust[numForDust];
+				obj.velocity *= 0.4f;
+				Main.dust[numForDust].velocity.Y -= 0.4f;
+			}
+		}
+	}
+
 	public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)
 	{
 		// This code slightly lowers the draw position if there is a solid tile above, so the flame doesn't overlap that tile. Terraria torches do this same logic.
@@ -108,7 +124,7 @@ public class RuinTorch : ModTile
 			zero = Vector2.Zero;
 		}
 
-		ulong randSeed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (long)(uint)i); // Don't remove any casts.
+		ulong randSeed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i); // Don't remove any casts.
 		Color color = new Color(100, 100, 100, 60);
 		int width = 20;
 		int height = 20;

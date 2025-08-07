@@ -2,11 +2,11 @@ using Everglow.Commons.ItemAbstracts.Furniture;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Placeables.DecayingWoodCourt;
 
-public class WitherWoodBookcase : BookcaseItem
+public class WitherWoodDoor : DoorItem
 {
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<Everglow.Yggdrasil.KelpCurtain.Tiles.DecayingWoodCourt.WitherWoodBookcase>());
+		Item.DefaultToPlaceableTile(ModContent.TileType<Everglow.Yggdrasil.KelpCurtain.Tiles.DecayingWoodCourt.WitherWoodDoorClosed>());
 		base.SetDefaults();
 	}
 }
