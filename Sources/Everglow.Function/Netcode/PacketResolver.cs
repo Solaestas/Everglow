@@ -1,6 +1,7 @@
 using Everglow.Commons.FeatureFlags;
 using Everglow.Commons.Netcode.Abstracts;
 using Everglow.Commons.Netcode.PacketHandle;
+using Everglow.Commons.Utilities;
 using Packet_ID = System.Int32;
 
 #pragma warning disable SA1121 // Use built-in type alias
@@ -49,7 +50,8 @@ public class PacketResolver
 	}
 
 	/// <summary>
-	/// 向指定对象发送一个封包数据的实例 (单人模式下无动作)
+	/// 向指定对象发送一个封包数据的实例
+	/// <br/>除特殊情况外，请尽可能使用封装版本<see cref="Send(IPacket, bool, Player)"/>
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	/// <param name="packet"></param>
@@ -66,9 +68,18 @@ public class PacketResolver
 		var modPacket = GetPacket();
 		using (MemoryStream ms = new())
 		{
-			BinaryWriter bw = new(ms);
+			// 写入来源玩家ID
+			if (NetUtils.IsServer)
+			{
+				modPacket.Write(ignoreClient);
+			}
+			else
+			{
+				modPacket.Write(Main.myPlayer);
+			}
+
+			// 写入封包ID
 			int id = packetIDMapping[packet.GetType()];
-			packet.Send(bw);
 			if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
 			{
 				modPacket.Write(id);
@@ -77,6 +88,10 @@ public class PacketResolver
 			{
 				modPacket.Write((byte)id);
 			}
+
+			// 写入封包数据
+			BinaryWriter bw = new(ms);
+			packet.Send(bw);
 			modPacket.Write(ms.GetBuffer(), 0, (int)ms.Position);
 			modPacket.Flush();
 		}
@@ -114,11 +129,13 @@ public class PacketResolver
 	/// </summary>
 	/// <param name="reader"></param>
 	/// <param name="whoAmI"></param>
-	public void Resolve(BinaryReader reader, int whoAmI)
+	public void Resolve(BinaryReader reader, int _)
 	{
-		Packet_ID packetID;
+		// 读取来源玩家ID
+		var sourcePlayer = reader.ReadInt32();
 
-		// 首先读取封包ID
+		// 读取封包ID
+		Packet_ID packetID;
 		if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
 		{
 			packetID = reader.ReadInt32();
@@ -127,20 +144,21 @@ public class PacketResolver
 		{
 			packetID = reader.ReadByte();
 		}
+
 		if (!packetHandlerRegistry.TryGetValue(packetID, out List<IPacketHandler> registeredHandlers))
 		{
 			Ins.Logger.Warn($"Received a packet [{packetID}] without handler, automatically ignored");
 			return;
 		}
 
-		// 直接从reader里构造packet数据
+		// 读取封包数据
 		var packet = Activator.CreateInstance(packetIDToTypeMapping[packetID]) as IPacket;
-		packet.Receive(reader, whoAmI);
+		packet.Receive(reader, sourcePlayer);
 
-		// 让handler处理封包数据
+		// 调用Handlers处理封包数据
 		foreach (var handler in registeredHandlers)
 		{
-			handler.Handle(packet, whoAmI);
+			handler.Handle(packet, sourcePlayer);
 		}
 	}
 

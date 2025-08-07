@@ -52,6 +52,55 @@ public static class PlayerUtils
 		"青枫", "陌林", "京墨", "鸭子ceo",
 	];
 
+	#region Generic
+
+	public static EverglowPlayer Everglow(this Player player) =>
+		player.GetModPlayer<EverglowPlayer>();
+
+	/// <summary>
+	/// Get mouse position of player.
+	/// <br/>Tips: Call <see cref="ListenMouseWorld"/> or <see cref="ListenMouseRotation"/> on every frame if u wanna use this.
+	/// </summary>
+	/// <param name="player"></param>
+	/// <returns></returns>
+	public static Vector2 MouseWorld(this Player player) =>
+		player.Everglow().mouseWorld;
+
+	/// <summary>
+	/// Get mouse right of player
+	/// <br/>Tips: Call <see cref="ListenMouseRight"/> on every frame if u wanna use this.
+	/// </summary>
+	/// <param name="player"></param>
+	/// <returns></returns>
+	public static bool MouseRight(this Player player) =>
+		player.Everglow().mouseRight;
+
+	public static void ListenMouseWorld(this Player player)
+	{
+		if(Main.myPlayer == player.whoAmI)
+		{
+			player.Everglow().listenMouseWorld = true;
+		}
+	}
+
+	public static void ListenMouseRotation(this Player player)
+	{
+		if(Main.myPlayer == player.whoAmI)
+		{
+			player.Everglow().listenMouseRotation = true;
+		}
+	}
+
+	public static void ListenMouseRight(this Player player)
+	{
+		if (Main.myPlayer == player.whoAmI)
+		{
+			player.Everglow().listenMouseRight = true;
+		}
+	}
+
+	#endregion
+
 	#region Player Animation
 
 	/// <summary>

@@ -132,6 +132,7 @@ public class VitalizedRocksProj : ModProjectile
     {
         overPlayers.Add(index);
     }
+
     public override bool PreDraw(ref Color lightColor)
     {
         SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
@@ -163,6 +164,6 @@ public class VitalizedRocksProj : ModProjectile
     public void PlayerHeadToMouse()
     {
         Player player = Main.player[Projectile.owner];
-        player.headRotation = (Main.MouseWorld - player.Center).ToRotation();
+        player.headRotation = (player.MouseWorld() - player.Center).ToRotation();
     }
 }

@@ -1,6 +1,4 @@
-using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using Mono.Cecil;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;

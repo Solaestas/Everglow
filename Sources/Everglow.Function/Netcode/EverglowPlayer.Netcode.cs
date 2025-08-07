@@ -11,15 +11,15 @@ public partial class EverglowPlayer : ModPlayer
 	public const float MousePositionSyncDiff = 5f;
 	public const float MouseRotationSyncDiff = 0.15f;
 
-	public bool mouseRight = false;
+	internal bool mouseRight = false;
 	private bool oldMouseRight = false;
-	public Vector2 mouseWorld;
+	internal Vector2 mouseWorld;
 	private Vector2 oldMouseWorld;
 
-	public bool listenMouseRight = false;
-	public bool listenMouseWorld = false;
-	public bool listenMouseRotation = false;
-	public bool syncMouseControls = false;
+	internal bool listenMouseRight = false;
+	internal bool listenMouseWorld = false;
+	internal bool listenMouseRotation = false;
+	internal bool syncMouseControls = false;
 
 	public void SyncMousePosition(bool fromServer)
 	{
