@@ -78,7 +78,11 @@ public class BiomeLabelSystem : ModSystem
 					ActiveModBiomeCache[modBiome]++;
 					if (ActiveModBiomeCache[modBiome] == TimeLag)
 					{
-						DisplayBiomeQueue.Enqueue((modBiome.DisplayName.Value, ModContent.Request<Texture2D>(modBiome.BestiaryIcon, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value));
+						var biomeIcon = ModContent.HasAsset(modBiome.BestiaryIcon)
+							? ModContent.Request<Texture2D>(modBiome.BestiaryIcon, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value
+							: ModAsset.Cavern.Value;
+
+						DisplayBiomeQueue.Enqueue((modBiome.Name, biomeIcon));
 					}
 				}
 			}
