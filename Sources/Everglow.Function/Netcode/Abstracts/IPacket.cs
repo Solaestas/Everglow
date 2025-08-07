@@ -1,3 +1,5 @@
+using Everglow.Commons.Netcode.PacketHandle;
+
 namespace Everglow.Commons.Netcode.Abstracts;
 
 /// <summary>
@@ -6,13 +8,14 @@ namespace Everglow.Commons.Netcode.Abstracts;
 public interface IPacket
 {
 	/// <summary>
-	/// 封包发送时写入数据的逻辑部分，注意此时写入的数据开头已经包含了封包ID，所以不用重复写入
+	/// 封包发送时写入数据的部分，注意此时写入的数据开头已经包含了封包ID，所以不用重复写入
 	/// </summary>
 	/// <param name="writer"></param>
 	public void Send(BinaryWriter writer);
 
 	/// <summary>
-	/// 封包读取时读入数据的逻辑部分，注意此时已经读入了封包ID，所以不要重复读取
+	/// 封包读取时读入数据的部分，注意此时已经读入了封包ID，所以不要重复读取
+	/// <br/>注：详细处理部分请使用<see cref="IPacketHandler"/>来完成，此处仅用于读取包数据
 	/// </summary>
 	/// <param name="reader"></param>
 	/// <param name="whoAmI">the ID of whomever sent the packet (equivalent to the Main.myPlayer of the sender)</param>
