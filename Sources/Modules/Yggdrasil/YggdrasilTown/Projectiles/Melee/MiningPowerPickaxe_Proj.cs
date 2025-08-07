@@ -20,7 +20,7 @@ public class MiningPowerPickaxe_Proj : ModProjectile
 	private Vector2 OwnerMouseWorld => Owner.MouseWorld();
 
 	/// <summary>
-	/// The first pick tile target type. 
+	/// The first pick tile target type.
 	/// <para/>To help determining target tile type after the tile target is killed by vanilla picking code.
 	/// <para/> Passed from <see cref="MiningPowerPickaxe.Shoot(Player, EntitySource_ItemUse_WithAmmo, Vector2, Vector2, int, int, float)"/>.
 	/// </summary>
@@ -61,7 +61,7 @@ public class MiningPowerPickaxe_Proj : ModProjectile
 		Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Owner.gravDir * Projectile.rotation - MathHelper.PiOver2 - 0.0f * MathHelper.PiOver4 * Owner.direction);
 		Owner.direction = (OwnerMouseWorld - Owner.MountedCenter).X < 0 ? -1 : 1;
 
-		if(NetUtils.IsClient && Main.myPlayer == Projectile.owner)
+		if (NetUtils.IsClient && Main.myPlayer == Projectile.owner)
 		{
 			Owner.ListenMouseWorld();
 		}
@@ -120,7 +120,6 @@ public class MiningPowerPickaxe_Proj : ModProjectile
 			else if (Owner.itemTime == 0)
 			{
 				Owner.itemTime = Owner.itemTimeMax;
-
 			}
 
 			Owner.direction = Projectile.Center.X < Owner.MountedCenter.X ? -1 : 1;
@@ -179,7 +178,7 @@ public class MiningPowerPickaxe_Proj : ModProjectile
 	{
 		var texture = ModContent.Request<Texture2D>(Texture).Value;
 		var rotation = Projectile.rotation;
-		var effects = Owner.direction == 1 && Owner.gravDir == 1 || Owner.gravDir == -1 && Owner.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipVertically;
+		var effects = (Owner.direction == 1 && Owner.gravDir == 1) || (Owner.gravDir == -1 && Owner.direction == -1) ? SpriteEffects.None : SpriteEffects.FlipVertically;
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, rotation, texture.Size() * 0.5f, Projectile.scale, effects, 0f);
 		return false;
 	}
@@ -213,12 +212,14 @@ public class MiningPowerPickaxe_Proj : ModProjectile
 	{
 		// Read tiles data
 		int length = reader.ReadInt32();
+		var newTiles = new List<Point16>();
 		for (int i = 0; i < length; i++)
 		{
-			var tileX = reader.ReadInt32();
-			var tileY = reader.ReadInt32();
-			TargetTiles[i] = new Point16(tileX, tileY);
+			var tileX = reader.ReadUInt16();
+			var tileY = reader.ReadUInt16();
+			newTiles.Add(new Point16(tileX, tileY));
 		}
+		TargetTiles = newTiles;
 	}
 
 	private static List<Point16> GetLinkedTiles(Point16 clickedTilePos, int clickedTileType, int tileNumMax, Player player)

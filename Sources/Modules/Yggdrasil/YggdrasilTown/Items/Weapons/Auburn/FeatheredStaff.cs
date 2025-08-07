@@ -35,4 +35,6 @@ public class FeatheredStaff : ModItem
 	}
 
 	public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] == 0;
+
+	public override void HoldItem(Player player) => player.ListenMouseWorld();
 }

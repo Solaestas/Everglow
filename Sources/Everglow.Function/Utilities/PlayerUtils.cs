@@ -75,14 +75,29 @@ public static class PlayerUtils
 	public static bool MouseRight(this Player player) =>
 		player.Everglow().mouseRight;
 
-	public static void ListenMouseWorld(this Player player) =>
-		player.Everglow().listenMouseWorld = true;
+	public static void ListenMouseWorld(this Player player)
+	{
+		if(Main.myPlayer == player.whoAmI)
+		{
+			player.Everglow().listenMouseWorld = true;
+		}
+	}
 
-	public static void ListenMouseRotation(this Player player) =>
-		player.Everglow().listenMouseRotation = true;
+	public static void ListenMouseRotation(this Player player)
+	{
+		if(Main.myPlayer == player.whoAmI)
+		{
+			player.Everglow().listenMouseRotation = true;
+		}
+	}
 
-	public static void ListenMouseRight(this Player player) =>
-		player.Everglow().listenMouseRight = true;
+	public static void ListenMouseRight(this Player player)
+	{
+		if (Main.myPlayer == player.whoAmI)
+		{
+			player.Everglow().listenMouseRight = true;
+		}
+	}
 
 	#endregion
 
