@@ -5,6 +5,7 @@ using Spine;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;
+using static Terraria.ModLoader.Default.LegacyUnloadedTilesSystem;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DecayingWoodCourt;
 
@@ -113,6 +114,10 @@ public class WitherWoodColdFlameTorch : ModTile
 		{
 			offsetY = -10;
 		}
+		if(tileFrameX >= 22 && tileFrameX <= 44)
+		{
+			offsetY = -20;
+		}
 	}
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
@@ -130,6 +135,10 @@ public class WitherWoodColdFlameTorch : ModTile
 		if (WorldGen.SolidTile(i, j - 1))
 		{
 			offsetY = -10;
+		}
+		if (tile.TileFrameX >= 22 && tile.TileFrameX <= 44)
+		{
+			offsetY = -20;
 		}
 
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
