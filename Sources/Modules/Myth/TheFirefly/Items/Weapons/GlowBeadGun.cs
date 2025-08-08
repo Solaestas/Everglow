@@ -4,10 +4,10 @@ namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
 public class GlowBeadGun : ModItem
 {
+	public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.MagicWeapons;
 
 	public override void SetDefaults()
 	{
-		
 		Item.damage = 34;
 		Item.DamageType = DamageClass.Magic;
 		Item.mana = 4;
@@ -27,15 +27,17 @@ public class GlowBeadGun : ModItem
 		Item.shootSpeed = 8;
 	}
 
+	public override void HoldItem(Player player) => player.ListenMouseWorld();
+
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
 		if (player.ownedProjectileCounts[type] > 0)
 		{
-			foreach(Projectile projectile in Main.projectile)
+			foreach (Projectile projectile in Main.ActiveProjectiles)
 			{
 				if (player.ownedProjectileCounts[type] > 1)
 				{
-					if(projectile.type == type && projectile.owner == player.whoAmI)
+					if (projectile.type == type && projectile.owner == player.whoAmI)
 					{
 						projectile.Kill();
 					}
@@ -46,7 +48,7 @@ public class GlowBeadGun : ModItem
 				}
 			}
 			return false;
-		}		
+		}
 		return true;
 	}
 }

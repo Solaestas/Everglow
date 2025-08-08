@@ -1,10 +1,16 @@
+using System.Data;
 using Everglow.Commons.CustomTiles;
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.SquamousShell;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.RockElemental;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Enemies;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.WorldBuilding;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
@@ -110,8 +116,8 @@ public class RockElemental : ModNPC
 
 	private Vector2 targetVel;
 
-	private static Conditions.NotNull _cachedConditions_notNull = new Terraria.WorldBuilding.Conditions.NotNull();
-	private static Conditions.IsSolid _cachedConditions_solid = new Terraria.WorldBuilding.Conditions.IsSolid();
+	private static Terraria.WorldBuilding.Conditions.NotNull _cachedConditions_notNull = new Terraria.WorldBuilding.Conditions.NotNull();
+	private static Terraria.WorldBuilding.Conditions.IsSolid _cachedConditions_solid = new Terraria.WorldBuilding.Conditions.IsSolid();
 
 	public override void AI()
 	{
@@ -937,5 +943,6 @@ public class RockElemental : ModNPC
 
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
+		npcLoot.Add(ItemDropRule.OneFromOptions(1, ModContent.ItemType<BrittleRockSlingshot>(), ModContent.ItemType<HyperockSpear>(), ModContent.ItemType<VitalizedRocks>()));
 	}
 }

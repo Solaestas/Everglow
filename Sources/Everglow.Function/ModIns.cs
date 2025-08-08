@@ -1,8 +1,12 @@
+using Everglow.Commons.Netcode;
+
 namespace Everglow.Commons;
 
 public static class ModIns
 {
 	public static Mod Mod { get; set; }
+
+	public static PacketResolver PacketResolver { get; set; }
 
 	public static event Action OnPostSetupContent;
 

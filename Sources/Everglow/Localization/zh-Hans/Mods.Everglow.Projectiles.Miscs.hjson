@@ -1,0 +1,27 @@
+ThermostatBobber: {
+	DisplayName: Thermostat Bobber
+}
+
+TwilightRodBobber: {
+	DisplayName: Twilight Rod Bobber
+}
+
+PlayerDefence: {
+	DisplayName: Player Defence
+}
+
+AmberFlowerHookProjectile: {
+	DisplayName: Amber Flower Hook Projectile
+}
+
+ClimbingPickaxeProjectile: {
+	DisplayName: Climbing Pickaxe Projectile
+}
+
+GeyserAirBuds_Erupt: {
+	DisplayName: Geyser Air Buds_ Erupt
+}
+
+TeleportToYggdrasil: {
+	DisplayName: Teleport To Yggdrasil
+}

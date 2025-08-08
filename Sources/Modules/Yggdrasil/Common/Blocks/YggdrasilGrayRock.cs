@@ -1,7 +1,3 @@
-using System;
-using Terraria;
-using Terraria.GameContent.Tile_Entities;
-
 namespace Everglow.Yggdrasil.Common.Blocks;
 
 public class YggdrasilGrayRock : ModTile
@@ -9,6 +5,7 @@ public class YggdrasilGrayRock : ModTile
 	public override void PostSetDefaults()
 	{
 		Main.tileSolid[Type] = true;
+		Main.tileNoSunLight[Type] = true;
 		Main.tileMerge[Type][(ushort)ModContent.TileType<YggdrasilTown.Tiles.StoneScaleWood>()] = true;
 		Main.tileMerge[(ushort)ModContent.TileType<YggdrasilTown.Tiles.StoneScaleWood>()][Type] = true;
 
@@ -28,13 +25,10 @@ public class YggdrasilGrayRock : ModTile
 		HitSound = SoundID.Dig;
 		AddMapEntry(new Color(96, 97, 99));
 	}
-	public override void PostSetupTileMerge()
-	{
-		base.PostSetupTileMerge();
-	}
+
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
 	{
-		//bool flag = base.TileFrame(i, j, ref resetFrame, ref noBreak);
+		// bool flag = base.TileFrame(i, j, ref resetFrame, ref noBreak);
 		Tile tile = Main.tile[i, j];
 		int frameX = tile.frameX;
 		int frameY = tile.frameY;
@@ -58,43 +52,59 @@ public class YggdrasilGrayRock : ModTile
 		int downRight = -1;
 		if (tile4 != null && tile4.HasTile)
 		{
-			left = (Main.tileStone[tile4.type] ? 1 : tile4.type);
+			left = Main.tileStone[tile4.type] ? 1 : tile4.type;
 			if (tile4.slope() == 1 || tile4.slope() == 3)
+			{
 				left = -1;
+			}
 		}
 
 		if (tile5 != null && tile5.HasTile)
 		{
-			right = (Main.tileStone[tile5.type] ? 1 : tile5.type);
+			right = Main.tileStone[tile5.type] ? 1 : tile5.type;
 			if (tile5.slope() == 2 || tile5.slope() == 4)
+			{
 				right = -1;
+			}
 		}
 
 		if (tile2 != null && tile2.HasTile)
 		{
-			up = (Main.tileStone[tile2.type] ? 1 : tile2.type);
+			up = Main.tileStone[tile2.type] ? 1 : tile2.type;
 			if (tile2.slope() == 3 || tile2.slope() == 4)
+			{
 				up = -1;
+			}
 		}
 
 		if (tile3 != null && tile3.HasTile)
 		{
-			down = (Main.tileStone[tile3.type] ? 1 : tile3.type);
+			down = Main.tileStone[tile3.type] ? 1 : tile3.type;
 			if (tile3.slope() == 1 || tile3.slope() == 2)
+			{
 				down = -1;
+			}
 		}
 
 		if (tile8 != null && tile8.HasTile)
-			upLeft = (Main.tileStone[tile8.type] ? 1 : tile8.type);
+		{
+			upLeft = Main.tileStone[tile8.type] ? 1 : tile8.type;
+		}
 
 		if (tile9 != null && tile9.HasTile)
-			upRight = (Main.tileStone[tile9.type] ? 1 : tile9.type);
+		{
+			upRight = Main.tileStone[tile9.type] ? 1 : tile9.type;
+		}
 
 		if (tile6 != null && tile6.HasTile)
-			downLeft = (Main.tileStone[tile6.type] ? 1 : tile6.type);
+		{
+			downLeft = Main.tileStone[tile6.type] ? 1 : tile6.type;
+		}
 
 		if (tile7 != null && tile7.HasTile)
-			downRight = (Main.tileStone[tile7.type] ? 1 : tile7.type);
+		{
+			downRight = Main.tileStone[tile7.type] ? 1 : tile7.type;
+		}
 
 		if (tile.slope() == 2)
 		{
@@ -121,8 +131,7 @@ public class YggdrasilGrayRock : ModTile
 		}
 		int dirtType = ModContent.TileType<YggdrasilTown.Tiles.LampWood.DarkForestSoil>();
 
-		//WorldGen.TileMergeAttempt(Type, ModContent.TileType<YggdrasilTown.Tiles.LampWood.DarkForestSoil>(), ref up, ref down, ref left, ref right, ref upLeft, ref upRight, ref downLeft, ref downRight);
-
+		// WorldGen.TileMergeAttempt(Type, ModContent.TileType<YggdrasilTown.Tiles.LampWood.DarkForestSoil>(), ref up, ref down, ref left, ref right, ref upLeft, ref upRight, ref downLeft, ref downRight);
 		int randomCase;
 		if (resetFrame)
 		{
@@ -364,7 +373,8 @@ public class YggdrasilGrayRock : ModTile
 		}
 		return false;
 	}
-	public void GetFrameNormally(int i,int j, int randomCase, int up, int down, int left, int right, int upLeft, int upRight, int downLeft, int downRight)
+
+	public void GetFrameNormally(int i, int j, int randomCase, int up, int down, int left, int right, int upLeft, int upRight, int downLeft, int downRight)
 	{
 		Tile tile = Main.tile[i, j];
 		if (up == Type && down == Type && left == Type && right == Type)
@@ -731,6 +741,7 @@ public class YggdrasilGrayRock : ModTile
 			}
 		}
 	}
+
 	public bool IsNotMergeTargetAndSelf(int myType, int mergeType)
 	{
 		return myType != Type && myType != mergeType;

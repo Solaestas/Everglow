@@ -1,0 +1,83 @@
+AmberHeadedSpear: {
+	DisplayName: Amber Headed Spear
+}
+
+AmethystHeadedSpear: {
+	DisplayName: Amethyst Headed Spear
+}
+
+CeremonialBladeProj: {
+	DisplayName: Ceremonial Blade Proj
+}
+
+CyanVineShortsword_Proj: {
+	DisplayName: Cyan Vine Shortsword_ Proj
+}
+
+HyperockSpearProj: {
+	DisplayName: Hyperock Spear Proj
+}
+
+LampWoodYoyo: {
+	DisplayName: Lamp Wood Yoyo
+}
+
+MagicalBoomerangProj: {
+	DisplayName: Magical Boomerang Proj
+}
+
+MagicalBoomerangSubProj: {
+	DisplayName: Magical Boomerang Sub Proj
+}
+
+MiningPowerPickaxe_Proj: {
+	DisplayName: Mining Power Pickaxe_ Proj
+}
+
+QuenchingBladeProj_Smash: {
+	DisplayName: Quenching Blade Proj_ Smash
+}
+
+RodSpear: {
+	DisplayName: Rod Spear
+}
+
+TopazHeadedSpear: {
+	DisplayName: Topaz Headed Spear
+}
+
+TwilightEucalyptusBoomerangKnift_Projectile: {
+	DisplayName: Twilight Eucalyptus Boomerang Knift_ Projectile
+}
+
+AcroporaThumpEff: {
+	DisplayName: Acropora Thump Eff
+}
+
+CharonDoubleSickle: {
+	DisplayName: Charon Double Sickle
+}
+
+TrueDeathSickleHit: {
+	DisplayName: True Death Sickle Hit
+}
+
+TrueDeathSickleManager: {
+	DisplayName: True Death Sickle Manager
+}
+
+TrueDeathSickle_Blade: {
+	DisplayName: True Death Sickle_ Blade
+}
+
+TrueDeathSickle_MoonBlade: {
+	DisplayName: True Death Sickle_ Moon Blade
+}
+
+TrueDeathSickle_RightClick: {
+	DisplayName: True Death Sickle_ Right Click
+}
+
+TrueDeathSickle_SickleBack: {
+	DisplayName: True Death Sickle_ Sickle Back
+}

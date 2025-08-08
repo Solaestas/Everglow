@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
@@ -21,8 +22,8 @@ public class LeafcutterAnt : ModNPC
 		NPC.aiStyle = -1;
 		NPC.knockBackResist = 0.5f;
 		NPC.value = 100;
-		NPC.HitSound = SoundID.NPCHit4;
-		NPC.DeathSound = SoundID.NPCDeath4;
+		NPC.HitSound = SoundID.NPCHit1;
+		NPC.DeathSound = SoundID.NPCDeath1;
 		AIType = NPCID.WalkingAntlion;
 	}
 

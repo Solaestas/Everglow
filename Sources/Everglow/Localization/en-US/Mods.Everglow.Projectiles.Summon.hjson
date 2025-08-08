@@ -1,0 +1,99 @@
+ActivatedJellyGlandBeam: {
+	DisplayName: Activated Jelly Gland Beam
+}
+
+ActivatedJellyGlandExplosion: {
+	DisplayName: Activated Jelly Gland Explosion
+}
+
+ActivatedJellyGlandMinion: {
+	DisplayName: Activated Jelly Gland Minion
+}
+
+AuburnBellMinion: {
+	DisplayName: Auburn Bell Minion
+}
+
+DeadBeetleEgg_beetle: {
+	DisplayName: Dead Beetle Egg_beetle
+}
+
+DeadBeetleEgg_beetle_proj: {
+	DisplayName: Dead Beetle Egg_beetle_proj
+}
+
+DeadBeetleEgg_egg: {
+	DisplayName: Dead Beetle Egg_egg
+}
+
+EvilMusicRemnant_Explosion: {
+	DisplayName: Evil Music Remnant_ Explosion
+}
+
+EvilMusicRemnant_Minion: {
+	DisplayName: Evil Music Remnant_ Minion
+}
+
+EvilMusicRemnant_Minion_Flame: {
+	DisplayName: Evil Music Remnant_ Minion_ Flame
+}
+
+EvilMusicRemnant_Note_Mark: {
+	DisplayName: Evil Music Remnant_ Note_ Mark
+}
+
+EvilMusicRemnant_Projectile: {
+	DisplayName: Evil Music Remnant_ Projectile
+}
+
+Thermoprobe: {
+	DisplayName: Thermoprobe
+}
+
+Thermoprobe_Fireball: {
+	DisplayName: Thermoprobe_ Fireball
+}
+
+WiltedForestLamp_Proj: {
+	DisplayName: Wilted Forest Lamp_ Proj
+}
+
+FaeCharmRing: {
+	DisplayName: Fae Charm Ring
+}
+
+Faelanternbranch: {
+	DisplayName: Faelanternbranch
+}
+
+FaelanternProj: {
+	DisplayName: Faelantern Proj
+}
+
+DevilHeartGyroscope_Proj_Hit: {
+	DisplayName: Devil Heart Gyroscope_ Proj_ Hit
+}
+
+WitherbarkMinion: {
+	DisplayName: Witherbark Minion
+}
+
+WitherbarkMinion_Leaf: {
+	DisplayName: Witherbark Minion_ Leaf
+}
+
+WoodlandWraithStaff_FungiBall: {
+	DisplayName: Woodland Wraith Staff_ Fungi Ball
+}
+
+WoodlandWraithStaff_SetAnimation: {
+	DisplayName: Woodland Wraith Staff_ Set Animation
+}
+
+WoodlandWraithStaff_SporeZone: {
+	DisplayName: Woodland Wraith Staff_ Spore Zone
+}
+
+LichenTentacle_proj: {
+	DisplayName: Lichen Tentacle_proj
+}

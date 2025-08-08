@@ -4,6 +4,8 @@ namespace Everglow.Myth.TheTusk.Items.Weapons;
 
 public class ToothBow : ModItem
 {
+	public override string LocalizationCategory => LocalizationUtils.Categories.RangedWeapons;
+
 	public override void SetDefaults()
 	{
 		Item.width = 64;

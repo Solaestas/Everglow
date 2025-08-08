@@ -1,0 +1,64 @@
+DragonScaleHammer: {
+	DisplayName: Dragon Scale Hammer
+	Tooltip: ""
+}
+
+LampWoodHammer: {
+	DisplayName: Lamp Wood Hammer
+	Tooltip: ""
+}
+
+AmberFlowerHook: {
+	DisplayName: Amber Flower Hook
+	Tooltip: ""
+}
+
+ClimbingPickaxe: {
+	DisplayName: Climbing Pickaxe
+	Tooltip: ""
+}
+
+CyanVineAxe: {
+	DisplayName: Cyan Vine Axe
+	Tooltip: ""
+}
+
+CyanVineHammer: {
+	DisplayName: Cyan Vine Hammer
+	Tooltip: ""
+}
+
+CyanVinePickaxe: {
+	DisplayName: Cyan Vine Pickaxe
+	Tooltip: ""
+}
+
+FlappedHangGlider: {
+	DisplayName: Flapped Hang Glider
+	Tooltip: ""
+}
+
+GlowstickLauncher: {
+	DisplayName: Glowstick Launcher
+	Tooltip: ""
+}
+
+HangGlider: {
+	DisplayName: Hang Glider
+	Tooltip: ""
+}
+
+MiningPowerPickaxe: {
+	DisplayName: Mining Power Pickaxe
+	Tooltip: ""
+}
+
+OldPickaxe: {
+	DisplayName: Old Pickaxe
+	Tooltip: ""
+}
+
+OldPortableLamp: {
+	DisplayName: Old Portable Lamp
+	Tooltip: ""
+}

@@ -1,3 +1,5 @@
+using Everglow.Yggdrasil.KelpCurtain.Projectiles.Magic;
+
 namespace Everglow.Yggdrasil.KelpCurtain.Buffs;
 
 public class LichenInfected : ModBuff

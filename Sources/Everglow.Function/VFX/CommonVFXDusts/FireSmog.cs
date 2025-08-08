@@ -34,7 +34,7 @@ public class FireSmogDust : Visual
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawNPCs;
 	public Vector2 position;
 	public Vector2 velocity;
-	public float[] ai;
+	public float[] ai = new float[3];
 	public float timer;
 	public float maxTime;
 	public float scale;

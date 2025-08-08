@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Enemies;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 

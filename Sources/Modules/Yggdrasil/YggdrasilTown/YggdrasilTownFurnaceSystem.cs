@@ -1,0 +1,96 @@
+using Terraria.ModLoader.IO;
+
+namespace Everglow.Yggdrasil.YggdrasilTown;
+
+public class YggdrasilTownFurnaceSystem : ModSystem
+{
+	public static Player CurrentPlayer;
+
+	public static int CurrentScore = 0;
+
+	public static int CurrentEnergy = 0;
+
+	public static int EnergtMax = 100000;
+
+	public static int SwitchPlayerCooling = 0;
+
+	public override void PostUpdateEverything()
+	{
+		if(Main.netMode != NetmodeID.Server)
+		{
+			CurrentPlayer = Main.LocalPlayer;
+		}
+		if (CurrentPlayer != null)
+		{
+			FurnacePlayer fPlayer = CurrentPlayer.GetModPlayer<FurnacePlayer>();
+			CurrentScore = fPlayer.FurnaceScore;
+		}
+		if(CurrentEnergy >= 1000)
+		{
+			CurrentEnergy--;
+		}
+		else
+		{
+			CurrentEnergy = 75000;
+		}
+		if (CurrentEnergy > EnergtMax)
+		{
+			CurrentEnergy = EnergtMax;
+		}
+		if(SwitchPlayerCooling > 0)
+		{
+			SwitchPlayerCooling--;
+		}
+		else
+		{
+			SwitchPlayerCooling = 0;
+		}
+		base.PostUpdateEverything();
+	}
+}
+
+public class FurnacePlayer : ModPlayer
+{
+	public int FurnaceScore;
+
+	public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+	{
+		//ModPacket packet = Mod.GetPacket();
+		//packet.Write(MessageID.PlayerLifeMana);
+		//packet.Write((byte)Player.whoAmI);
+		//packet.Write((byte)FurnaceScore);
+		//packet.Send(toWho, fromWho);
+	}
+
+	// Called in ExampleMod.Networking.cs
+	public void ReceivePlayerSync(BinaryReader reader)
+	{
+		FurnaceScore = reader.ReadByte();
+	}
+
+	public override void CopyClientState(ModPlayer targetCopy)
+	{
+		var clone = (FurnacePlayer)targetCopy;
+		clone.FurnaceScore = FurnaceScore;
+	}
+
+	public override void SendClientChanges(ModPlayer clientPlayer)
+	{
+		var clone = (FurnacePlayer)clientPlayer;
+
+		if (FurnaceScore != clone.FurnaceScore)
+		{
+			SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
+		}
+	}
+
+	public override void SaveData(TagCompound tag)
+	{
+		tag["FurnaceScore"] = FurnaceScore;
+	}
+
+	public override void LoadData(TagCompound tag)
+	{
+		FurnaceScore = tag.GetInt("FurnaceScore");
+	}
+}
