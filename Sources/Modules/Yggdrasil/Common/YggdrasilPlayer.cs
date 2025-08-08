@@ -166,7 +166,6 @@ public class YggdrasilPlayer : ModPlayer
 			{
 				Player.AddBuff(ModContent.BuffType<RuinSetBuff>(), RuinSetPlayer.BuffDuration);
 				Player.AddCooldown(RuinSetCooldown.ID, RuinSetPlayer.CooldownDuration);
-				Player.GetModPlayer<RuinSetPlayer>().RuinSetBuffTimer = RuinSetPlayer.AnimationDuration;
 				Projectile.NewProjectile(Player.GetSource_FromAI(), Player.Center, Player.velocity, ModContent.ProjectileType<WoodlandWraithStaff_SetAnimation>(), 0, 0, Player.whoAmI);
 			}
 
