@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.Common.Blocks;
+using Everglow.Yggdrasil.Common.Items;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee;
 using Terraria.Audio;
 

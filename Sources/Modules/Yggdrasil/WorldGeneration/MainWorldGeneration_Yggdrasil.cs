@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.Common.Blocks;
+using Everglow.Yggdrasil.Common.Tiles;
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;

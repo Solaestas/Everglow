@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.Common.Blocks;
+using Everglow.Yggdrasil.Common.Tiles;
 using Everglow.Yggdrasil.KelpCurtain;
 using Everglow.Yggdrasil.KelpCurtain.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Tiles.GeyserAirBuds;

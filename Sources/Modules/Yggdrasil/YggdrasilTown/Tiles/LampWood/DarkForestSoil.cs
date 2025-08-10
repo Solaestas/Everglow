@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.Common.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest;
 
@@ -14,7 +15,7 @@ public class DarkForestSoil : ModTile
 		Main.tileBlockLight[Type] = true;
 		DustType = ModContent.DustType<DarkForestSoil_Dust>();
 		HitSound = SoundID.Dig;
-		TileID.Sets.ChecksForMerge[(ushort)ModContent.TileType<Common.Blocks.YggdrasilGrayRock>()] = true;
+		TileID.Sets.ChecksForMerge[(ushort)ModContent.TileType<YggdrasilGrayRock>()] = true;
 		AddMapEntry(new Color(63, 53, 62));
 	}
 	public override void RandomUpdate(int i, int j)

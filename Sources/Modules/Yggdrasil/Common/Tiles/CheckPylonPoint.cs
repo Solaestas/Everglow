@@ -2,7 +2,7 @@ using Everglow.Commons.DataStructures;
 using static Everglow.Yggdrasil.WorldGeneration.MainWorldGeneratioin_Yggdrasil;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
-namespace Everglow.Yggdrasil.Common.Blocks;
+namespace Everglow.Yggdrasil.Common.Tiles;
 
 public class CheckPylonPoint : ModItem
 {

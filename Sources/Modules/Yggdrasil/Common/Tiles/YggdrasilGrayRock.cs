@@ -1,4 +1,6 @@
-namespace Everglow.Yggdrasil.Common.Blocks;
+using Everglow.Yggdrasil.Common.Dusts;
+
+namespace Everglow.Yggdrasil.Common.Tiles;
 
 public class YggdrasilGrayRock : ModTile
 {
@@ -20,7 +22,7 @@ public class YggdrasilGrayRock : ModTile
 
 		TileID.Sets.ChecksForMerge[(ushort)ModContent.TileType<YggdrasilTown.Tiles.LampWood.DarkForestSoil>()] = true;
 
-		DustType = DustID.BorealWood;
+		DustType = ModContent.DustType<YggdrasilGrayRock_Dust>();
 		MinPick = 180;
 		HitSound = SoundID.Dig;
 		AddMapEntry(new Color(96, 97, 99));
@@ -32,7 +34,7 @@ public class YggdrasilGrayRock : ModTile
 		Tile tile = Main.tile[i, j];
 		int frameX = tile.frameX;
 		int frameY = tile.frameY;
-		Rectangle rectangle = new Rectangle(-1, -1, 0, 0);
+		var rectangle = new Rectangle(-1, -1, 0, 0);
 		int num = tile.TileType;
 		Tile tile2 = Main.tile[i, j - 1];
 		Tile tile3 = Main.tile[i, j + 1];

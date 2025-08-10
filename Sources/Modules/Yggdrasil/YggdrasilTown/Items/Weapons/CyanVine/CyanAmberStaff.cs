@@ -1,4 +1,4 @@
-using Everglow.Yggdrasil.Common.Blocks;
+using Everglow.Yggdrasil.Common.Items;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;
 using Terraria.DataStructures;
