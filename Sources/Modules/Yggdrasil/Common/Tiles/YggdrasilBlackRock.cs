@@ -28,6 +28,11 @@ public class YggdrasilBlackRock : ModTile
 		AddMapEntry(new Color(18, 18, 40));
 	}
 
+	public override bool CanExplode(int i, int j)
+	{
+		return false;
+	}
+
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
 	{
 		// bool flag = base.TileFrame(i, j, ref resetFrame, ref noBreak);
