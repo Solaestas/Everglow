@@ -11,5 +11,6 @@ public class DarkLakeBottomMud_Item : ModItem
 		Item.DefaultToPlaceableTile(ModContent.TileType<DarkLakeBottomMud>());
 		Item.width = 16;
 		Item.height = 16;
+
 	}
 }
