@@ -7,7 +7,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
 
-public class AlgeaCoveredChest : ModTile
+public class AlgaeCoveredChest : ModTile
 {
 	public override void SetStaticDefaults()
 	{

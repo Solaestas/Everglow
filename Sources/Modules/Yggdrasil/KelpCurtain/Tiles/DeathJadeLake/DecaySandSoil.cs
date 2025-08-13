@@ -10,6 +10,7 @@ public class DecaySandSoil : ModTile
 	{
 		Main.tileSolid[Type] = true;
 		Main.tileMergeDirt[Type] = true;
+		Main.tileNoSunLight[Type] = true;
 		Main.tileBlockLight[Type] = true;
 		DustType = ModContent.DustType<DecaySandSoil_Dust>();
 		AddMapEntry(new Color(92, 114, 99));

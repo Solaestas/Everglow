@@ -8,6 +8,7 @@ public class DevilHeartIronOre : ModTile
 	{
 		Main.tileSolid[Type] = true;
 		Main.tileMergeDirt[Type] = false;
+		Main.tileNoSunLight[Type] = true;
 		Main.tileMerge[Type][(ushort)ModContent.TileType<JadeizedBone>()] = true;
 		Main.tileMerge[(ushort)ModContent.TileType<JadeizedBone>()][Type] = true;
 		Main.tileBlockLight[Type] = false;

@@ -10,7 +10,7 @@ public class DarkLakeBottomMud : ModTile
 		Main.tileSolid[Type] = true;
 		Main.tileMergeDirt[Type] = true;
 		Main.tileBlockLight[Type] = true;
-
+		Main.tileNoSunLight[Type] = true;
 		DustType = DustType = ModContent.DustType<DarkLakeBottomMudDust>();
 		MinPick = 50;
 		HitSound = SoundID.Dig;

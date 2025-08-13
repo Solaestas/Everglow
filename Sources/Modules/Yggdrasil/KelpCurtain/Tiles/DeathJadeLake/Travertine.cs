@@ -9,6 +9,7 @@ public class Travertine : ModTile
 	{
 		Main.tileSolid[Type] = true;
 		Main.tileMergeDirt[Type] = true;
+		Main.tileNoSunLight[Type] = true;
 		Main.tileBlockLight[Type] = true;
 		DustType = ModContent.DustType<Travertine_Dust>();
 		AddMapEntry(new Color(29, 63, 46));
