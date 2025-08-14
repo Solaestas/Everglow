@@ -1,11 +1,10 @@
 using Everglow.Commons.TileHelper;
+using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.WorldGeneration;
-using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
-using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
@@ -16,8 +15,8 @@ public class JadeLakeRedAlgae : ModTile, ITileFluentlyDrawn
 	{
 		Main.tileFrameImportant[Type] = false;
 		Main.tileNoAttach[Type] = true;
-		Main.tileCut[Type] = false;
-
+		Main.tileCut[Type] = true;
+		Main.tileLavaDeath[Type] = true;
 		// TileObjectData assignment
 		// The TileID.Signs TileObjectData doesn't set StyleMultiplier to 5, so we will not be copying from it in this case
 		// Using Style1x1 as a base, we will create a TileObjectData with 5 alternate placements, each anchoring to a different anchor.
@@ -57,6 +56,32 @@ public class JadeLakeRedAlgae : ModTile, ITileFluentlyDrawn
 
 		AddMapEntry(new Color(168, 15, 45));
 		HitSound = SoundID.Grass;
+	}
+
+	public override void NearbyEffects(int i, int j, bool closer)
+	{
+		if (closer && Main.expertMode)
+		{
+			foreach (var player in Main.player)
+			{
+				if (player.Hitbox.Intersects(new Rectangle(i * 16 - 8, j * 16 - 8, 32, 32)))
+				{
+					player.velocity *= 0.9f;
+					player.AddBuff(ModContent.BuffType<RedAlgaeDebuff>(), 120);
+				}
+			}
+		}
+		base.NearbyEffects(i, j, closer);
+	}
+
+	public override void RandomUpdate(int i, int j)
+	{
+		var tile = Main.tile[i, j];
+		if (tile.LiquidAmount <= 0)
+		{
+			WorldGen.KillTile(i, j);
+			return;
+		}
 	}
 
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)

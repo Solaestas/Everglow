@@ -13,7 +13,7 @@ public class JadeLakeGreenAlgae : ModTile, ITileFluentlyDrawn
 		Main.tileFrameImportant[Type] = false;
 		Main.tileNoAttach[Type] = true;
 		Main.tileCut[Type] = true;
-
+		Main.tileLavaDeath[Type] = true;
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Height = 1;
 		TileObjectData.newTile.Width = 1;
@@ -52,11 +52,25 @@ public class JadeLakeGreenAlgae : ModTile, ITileFluentlyDrawn
 		base.NearbyEffects(i, j, closer);
 	}
 
-	public override bool CreateDust(int i, int j, ref int type) => base.CreateDust(i, j, ref type);
+	public override bool CreateDust(int i, int j, ref int type)
+	{
+		for (int k = 0; k < 2; k++)
+		{
+			Vector2 pos = new Point(i, j).ToWorldCoordinates();
+			Dust d = Dust.NewDustDirect(pos - new Vector2(6, 8) + new Vector2(4), 12, 16, type);
+			d.noGravity = true;
+		}
+		return false;
+	}
 
 	public override void RandomUpdate(int i, int j)
 	{
 		var tile = Main.tile[i, j];
+		if (tile.LiquidAmount <= 0)
+		{
+			WorldGen.KillTile(i, j);
+			return;
+		}
 		var tile2 = Main.tile[i, j - 1];
 
 		if (tile2.TileType != tile.TileType && !tile2.HasTile)

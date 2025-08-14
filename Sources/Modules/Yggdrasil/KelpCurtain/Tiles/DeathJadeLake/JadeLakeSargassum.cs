@@ -13,6 +13,7 @@ public class JadeLakeSargassum : ModTile, ITileFluentlyDrawn
 		Main.tileFrameImportant[Type] = false;
 		Main.tileNoAttach[Type] = true;
 		Main.tileCut[Type] = false;
+		Main.tileLavaDeath[Type] = true;
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Height = 1;
@@ -52,14 +53,28 @@ public class JadeLakeSargassum : ModTile, ITileFluentlyDrawn
 		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
 	}
 
-	public override bool CreateDust(int i, int j, ref int type) => base.CreateDust(i, j, ref type);
+	public override bool CreateDust(int i, int j, ref int type)
+	{
+		for (int k = 0; k < 2; k++)
+		{
+			Vector2 pos = new Point(i, j).ToWorldCoordinates();
+			Dust d = Dust.NewDustDirect(pos - new Vector2(20, 40) + new Vector2(4), 40, 50, type);
+			d.noGravity = true;
+		}
+		return false;
+	}
 
 	public override void RandomUpdate(int i, int j)
 	{
 		var tile = Main.tile[i, j];
+		if (tile.LiquidAmount <= 0)
+		{
+			WorldGen.KillTile(i, j);
+			return;
+		}
 		var tile2 = Main.tile[i, j - 1];
 
-		if (tile2.TileType != tile.TileType && !tile2.HasTile)
+		if (tile2.TileType != tile.TileType && !tile2.HasTile && tile2.LiquidAmount > 0)
 		{
 			int length = 0;
 			while (YggdrasilWorldGeneration.SafeGetTile(i, j + length).TileType == tile.TileType)

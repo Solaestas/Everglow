@@ -12,9 +12,8 @@ public class JadeLakeBloodVineAlgea : ModTile, ITileFluentlyDrawn
 	{
 		Main.tileFrameImportant[Type] = false;
 		Main.tileNoAttach[Type] = true;
-		Main.tileCut[Type] = true;
-
-		//TileID.Sets.TouchDamageDestroyTile[Type] = true;
+		Main.tileCut[Type] = false;
+		Main.tileLavaDeath[Type] = true;
 		TileID.Sets.TouchDamageImmediate[Type] = 30;
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
@@ -27,6 +26,44 @@ public class JadeLakeBloodVineAlgea : ModTile, ITileFluentlyDrawn
 
 		AddMapEntry(new Color(127, 36, 89));
 		HitSound = SoundID.Grass;
+	}
+
+	public override bool IsTileDangerous(int i, int j, Player player)
+	{
+		if (player.HasBuff(BuffID.Dangersense))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	public override void RandomUpdate(int i, int j)
+	{
+		var tile = Main.tile[i, j];
+		if (tile.LiquidAmount <= 0)
+		{
+			WorldGen.KillTile(i, j);
+			return;
+		}
+		var tile2 = Main.tile[i, j - 1];
+
+		if (tile2.TileType != tile.TileType && !tile2.HasTile && tile2.LiquidAmount > 0)
+		{
+			int length = 0;
+			while (YggdrasilWorldGeneration.SafeGetTile(i, j + length).TileType == tile.TileType)
+			{
+				length++;
+				if (length >= 134)
+				{
+					break;
+				}
+			}
+			if (length <= 133)
+			{
+				tile2.TileType = Type;
+				tile2.HasTile = true;
+			}
+		}
 	}
 
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)

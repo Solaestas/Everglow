@@ -264,4 +264,18 @@ public class YggdrasilPlayer : ModPlayer
 			SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
 		}
 	}
+
+	public void ModifyTouchDangrousTile()
+	{
+	}
+
+	public override void ModifyHurt(ref Player.HurtModifiers modifiers)
+	{
+		Collision.HurtTile hurtTile = Player.GetHurtTile();
+		if (hurtTile.type == ModContent.TileType<KelpCurtain.Tiles.DeathJadeLake.JadeLakeBloodVineAlgea>() && Player.HasBuff(ModContent.BuffType<RedAlgaeDebuff>()))
+		{
+			modifiers.FinalDamage *= 2.5f;
+		}
+		base.ModifyHurt(ref modifiers);
+	}
 }

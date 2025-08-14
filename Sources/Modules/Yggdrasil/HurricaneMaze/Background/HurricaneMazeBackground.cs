@@ -1,6 +1,5 @@
 using Everglow.Yggdrasil.Common.BackgroundManager;
 using SubworldLibrary;
-using Terraria.Graphics.Light;
 
 namespace Everglow.Yggdrasil.HurricaneMaze.Background;
 
@@ -8,6 +7,7 @@ public class HurricaneMazeBackground : ModSystem
 {
 	public Vector2 BiomeCenter = new Vector2(9000, 134000);
 	public bool ZoneKelp = false;
+
 	/// <summary>
 	/// 初始化
 	/// </summary>
@@ -24,8 +24,10 @@ public class HurricaneMazeBackground : ModSystem
 		var HurricaneMazeBiome = new HurricaneMazeBiome();
 		ZoneKelp = HurricaneMazeBiome.IsBiomeActive(Main.LocalPlayer);
 	}
+
 	public float alpha = 0f;
-	public override void PostUpdateEverything()//开启地下背景
+
+	public override void PostUpdateEverything()// 开启地下背景
 	{
 		const float increase = 0.02f;
 		if (BiomeActive() && Main.BackgroundEnabled)
@@ -39,7 +41,6 @@ public class HurricaneMazeBackground : ModSystem
 				alpha = 1;
 				Ins.HookManager.Disable(TerrariaFunction.DrawBackground);
 			}
-
 		}
 		else
 		{
@@ -54,17 +55,19 @@ public class HurricaneMazeBackground : ModSystem
 			Ins.HookManager.Enable(TerrariaFunction.DrawBackground);
 		}
 	}
+
 	/// <summary>
 	/// 判定是否开启地形
 	/// </summary>
 	/// <returns></returns>
 	public static bool BiomeActive()
 	{
-
 		if (Main.screenPosition.Y > 122000 && Main.screenPosition.Y < 148000)
 		{
 			if (SubworldSystem.IsActive<YggdrasilWorld>())
+			{
 				return true;
+			}
 		}
 		return false;
 	}
@@ -79,6 +82,7 @@ public class HurricaneMazeBackground : ModSystem
 		BackgroundManager.QuickDrawBG(texMiddle, GetDrawRect(texMiddle.Size(), 0.10f), baseColor, 122000, 150000, false, false);
 		BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f), baseColor, 122000, 150000, false, false);
 	}
+
 	/// <summary>
 	/// 获取绘制矩形
 	/// </summary>
@@ -105,7 +109,10 @@ public class HurricaneMazeBackground : ModSystem
 	private void DrawBackground()
 	{
 		if (alpha <= 0)
+		{
 			return;
+		}
+
 		Color baseColor = Color.White * alpha;
 		DrawFarBG(baseColor);
 	}
