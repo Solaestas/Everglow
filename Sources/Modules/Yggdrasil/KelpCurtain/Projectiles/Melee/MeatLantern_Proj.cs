@@ -15,10 +15,7 @@ public class MeatLantern_Proj : MeleeProj
 		AutoEnd = false;
 		CanLongLeftClick = true;
 	}
-	public override string TrailShapeTex()
-	{
-		return "Everglow/MEAC/Images/Melee";
-	}
+
 	public override string TrailColorTex()
 	{
 		return ModAsset.MeatLantern_Color_Mod;

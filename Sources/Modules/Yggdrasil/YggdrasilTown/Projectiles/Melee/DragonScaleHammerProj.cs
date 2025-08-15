@@ -13,25 +13,18 @@ public class DragonScaleHammerProj : MeleeProj
 		longHandle = true;
 		Projectile.scale *= 1.1f;
 	}
-	public override string TrailShapeTex()
-	{
-		return ModAsset.DragonScaleHammerProj_Melee_Mod;
-	}
-	public override string TrailColorTex()
-	{
-		return ModAsset.DragonScaleHammerProj_heatMap_Mod;
-	}
-	public override float TrailAlpha(float factor)
-	{
-		return base.TrailAlpha(factor) * 1.15f;
-	}
-	public override BlendState TrailBlendState()
-	{
-		return BlendState.NonPremultiplied;
-	}
+
+	public override string TrailShapeTex() => ModAsset.DragonScaleHammerProj_Melee_Mod;
+
+	public override string TrailColorTex() => ModAsset.DragonScaleHammerProj_heatMap_Mod;
+
+	public override float TrailAlpha(float factor) => base.TrailAlpha(factor) * 1.15f;
+
+	public override BlendState TrailBlendState() => BlendState.NonPremultiplied;
+
 	public override void DrawTrail(Color color)
 	{
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{

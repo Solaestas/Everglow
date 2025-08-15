@@ -1,17 +1,12 @@
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Magic;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;
-using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 
 public class GreenSungloStaff : ModItem
 {
-
 	public override void SetStaticDefaults()
 	{
 		Item.staff[Type] = true;
-		base.SetStaticDefaults();
 	}
 
 	public override void SetDefaults()
@@ -36,40 +31,28 @@ public class GreenSungloStaff : ModItem
 		Item.shootSpeed = 8;
 	}
 
-	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-	{
-		return true;
-	}
-
 	public override void HoldItem(Player player)
 	{
+		if (player.whoAmI != Main.myPlayer)
+		{
+			return;
+		}
+
 		player.ListenMouseWorld();
 
-		bool hasTarget = player.itemAnimation > 0;
-		foreach (Projectile proj in Main.projectile)
+		if (player.itemAnimation <= 0)
 		{
-			if (proj.active)
+			// Back
+			if (player.ownedProjectileCounts[ModContent.ProjectileType<GreenSungloShield_B>()] <= 0)
 			{
-				if (proj.owner == player.whoAmI)
-				{
-					if (proj.type == ModContent.ProjectileType<GreenSungloShield>())
-					{
-						GreenSungloShield p= proj.ModProjectile as GreenSungloShield;
-						if (p != null)
-						{
-							hasTarget = true;
-							break;
-						}
-					}
-				}
+				Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<GreenSungloShield_B>(), Item.damage, Item.knockBack, player.whoAmI);
+			}
+
+			// Front
+			if (player.ownedProjectileCounts[ModContent.ProjectileType<GreenSungloShield_A>()] <= 0)
+			{
+				Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<GreenSungloShield_A>(), 0, 0, player.whoAmI);
 			}
 		}
-		if (!hasTarget)
-		{
-			Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.zeroVector, ModContent.ProjectileType<GreenSungloShield>(), Item.damage, Item.knockBack, player.whoAmI);
-		}
-		base.HoldItem(player);
 	}
-
-	
 }
