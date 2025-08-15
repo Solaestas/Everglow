@@ -1,0 +1,15 @@
+BloodSpell: {
+	DisplayName: Blood Spell
+}
+
+LightSeed: {
+	DisplayName: Light Seed
+}
+
+RockElemental_Stonefragment: {
+	DisplayName: Rock Elemental_ Stonefragment
+}
+
+RockElemental_ThrowingStone: {
+	DisplayName: Rock Elemental_ Throwing Stone
+}

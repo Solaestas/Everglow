@@ -4,7 +4,7 @@ using Everglow.Commons.DataStructures;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.TheTusk.Items;
 using Everglow.Myth.TheTusk.Items.Accessories;
-using Everglow.Myth.TheTusk.Items.BossDrop;
+using Everglow.Myth.TheTusk.Items.BossDrops;
 using Everglow.Myth.TheTusk.Items.Weapons;
 using Everglow.Myth.TheTusk.Projectiles;
 using Terraria.DataStructures;

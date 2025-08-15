@@ -1,6 +1,6 @@
 namespace Everglow.Commons.Utilities;
 
-public class ItemUtils
+public static partial class ItemUtils
 {
 	public static float GetPrefixDamage(int prefixType)
 	{

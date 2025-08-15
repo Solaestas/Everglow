@@ -1,4 +1,6 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
@@ -53,7 +55,7 @@ public class DarkGlimmeringRods : ModNPC
 			TargetPos = player.Center;
 		}
 		NPC.velocity *= 0.97f;
-		NPC.rotation = MathF.Log(MathF.Abs(NPC.velocity.X + 1)) * 0.2f * NPC.direction * 0.05f + NPC.rotation * 0.95f;
+		NPC.rotation = MathF.Log(MathF.Abs(NPC.velocity.X) + 1) * 0.2f * NPC.direction * 0.05f + NPC.rotation * 0.95f;
 		Vector2 aimTarget = TargetPos + new Vector2(210f * MathF.Sin(timeValue * 2 + NPC.whoAmI) * NPC.scale, -50f + 30f * MathF.Sin(timeValue * 0.15f + NPC.whoAmI));
 		Vector2 toAim = aimTarget - NPC.Center - NPC.velocity;
 		if(toAim.Length() > 50)
@@ -73,8 +75,8 @@ public class DarkGlimmeringRods : ModNPC
 	}
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.AuburnRodSkeleton>(), 24, 1));
-		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.RodWing>(), 1, 3, 6));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<AuburnRodSkeleton>(), 24, 1));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<RodWing>(), 1, 3, 6));
 	}
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{

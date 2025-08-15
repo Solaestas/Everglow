@@ -158,23 +158,26 @@ public class FoodBuffModPlayer : ModPlayer
 			Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
 		if (RoastedDuckBuff)
 			Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
-		base.PostUpdateBuffs();
+
+		var mp = Player.GetModPlayer<EverglowPlayer>();
+		if (BananaBuff)
+		{
+			mp.ammoCost *= 1 - 0.05f;
+		}
+		if (BananaDaiquiriBuff)
+		{
+			mp.ammoCost *= 0;
+		}
+		if (BananaSplitBuff)
+		{
+			mp.ammoCost *= 1 - 0.05f;
+		}
 	}
+
 	public override void PostUpdate()
 	{
 		CriticalDamage += AddCritDamage;
 		base.PostUpdate();
-	}
-	public override bool CanConsumeAmmo(Item weapon, Item ammo)
-	{
-
-		if (BananaBuff && Main.rand.NextBool(20))
-			return false;
-		if (BananaDaiquiriBuff)
-			return false;
-		if (BananaSplitBuff && Main.rand.NextBool(10))
-			return false;
-		return true;
 	}
 
 	public override void ModifyHurt(ref Player.HurtModifiers modifiers)
@@ -204,7 +207,7 @@ public class FoodBuffModPlayer : ModPlayer
 			SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode);
 			//ScreenShaker Gsplayer = Player.GetModPlayer<ScreenShaker>();
 			//Gsplayer.FlyCamPosition = new Vector2(0, 150).RotatedByRandom(6.283);
-			ShakerManager.AddShaker(UndirectedShakerInfo.Create(Player.Center,150));
+			ShakerManager.AddShaker(UndirectedShakerInfo.Create(Player.Center, 150));
 
 			float k1 = Math.Clamp(Player.velocity.Length(), 1, 3);
 			float k2 = Math.Clamp(Player.velocity.Length(), 6, 10);

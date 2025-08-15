@@ -1,3 +1,4 @@
+using Everglow.Minortopography.GiantPinetree.Items.PermanentBoosters;
 using Terraria.Audio;
 using Terraria.ObjectData;
 
@@ -27,6 +28,6 @@ public class GiantPineCone_1 : ModTile
 	}
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		yield return new Item(ModContent.ItemType<Items.PineNut>(), Main.rand.Next(27, 54));
+		yield return new Item(ModContent.ItemType<PineNut>(), Main.rand.Next(27, 54));
 	}
 }

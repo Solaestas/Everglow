@@ -1,14 +1,18 @@
 using Everglow.Commons.Coroutines;
+using Everglow.Yggdrasil.Common.NPCs;
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
+
 public class CarapaceCaterpillar : Caterpillar
 {
 	public override void SetDefaults()
 	{
-		base.SetDefaults();	
+		base.SetDefaults();
 		SegmentBehavioralSize = 16;
 		SegmentHitBoxSize = 30;
 		SegmentCount = 10;
@@ -21,6 +25,7 @@ public class CarapaceCaterpillar : Caterpillar
 		NPC.HitSound = SoundID.NPCHit2;
 		NPC.DeathSound = SoundID.NPCDeath1;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		Segments = new List<Segment>();
@@ -54,6 +59,7 @@ public class CarapaceCaterpillar : Caterpillar
 		Toughness = MaxToughness;
 		_caterpillarCoroutine.StartCoroutine(new Coroutine(Falling()));
 	}
+
 	public override Rectangle GetDrawFrame(int Style)
 	{
 		Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
@@ -76,17 +82,23 @@ public class CarapaceCaterpillar : Caterpillar
 		}
 		return base.GetDrawFrame(Style);
 	}
+
 	public override void SetStaticDefaults()
 	{
 		NPCSpawnManager.RegisterNPC(Type);
 	}
+
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
 		YggdrasilTownBiome YggdrasilTownBiome = ModContent.GetInstance<YggdrasilTownBiome>();
 		if (!YggdrasilTownBiome.IsBiomeActive(Main.LocalPlayer))
+		{
 			return 0f;
+		}
+
 		return 8f;
 	}
+
 	public override void HitEffect(NPC.HitInfo hit)
 	{
 		for (int j = 0; j < Segments.Count; j++)
@@ -95,6 +107,7 @@ public class CarapaceCaterpillar : Caterpillar
 			Dust.NewDustDirect(pos - new Vector2(SegmentHitBoxSize / 2), SegmentHitBoxSize / 2, SegmentHitBoxSize / 2, ModContent.DustType<CrimsonBlood>());
 		}
 	}
+
 	public override bool PreKill()
 	{
 		for (int j = 0; j < Segments.Count; j++)
@@ -125,8 +138,9 @@ public class CarapaceCaterpillar : Caterpillar
 		}
 		return base.PreKill();
 	}
+
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.CaterpillarJuice>(), 1, 2, 4));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CaterpillarJuice>(), 1, 2, 4));
 	}
 }

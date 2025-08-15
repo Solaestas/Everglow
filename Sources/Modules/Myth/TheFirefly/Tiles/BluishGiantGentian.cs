@@ -1,7 +1,7 @@
 using Everglow.Commons.TileHelper;
 using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Gores;
-using Everglow.Myth.TheFirefly.Items;
+using Everglow.Myth.TheFirefly.Items.Materials;
 using Terraria.Audio;
 using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;

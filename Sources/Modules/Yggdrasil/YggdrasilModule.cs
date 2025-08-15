@@ -129,12 +129,12 @@ internal class YggdrasilModule : EverglowModule
 		{
 			return;
 		}
-		if (y > 10700)
+		if (y > Main.maxTilesY - 2100)
 		{
 			color = new Color(0, 0, 0);
 			return;
 		}
-		else if (y <= 10700 && y > 9600)
+		else if (y <= Main.maxTilesY - 2100 && y > Main.maxTilesY - 4200)
 		{
 			color = new Color(73, 99, 62);
 			return;
@@ -242,11 +242,11 @@ internal class YggdrasilModule : EverglowModule
 
 		Effect MeleeTrail = ModAsset.FlameTrail.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		MeleeTrail.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects * 0.007f);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Yggdrasil/CorruptWormHive/Projectiles/FlameLine", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>("Everglow/Yggdrasil/CorruptWormHive/Projectiles/DeathSickle_Color", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
+		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(ModAsset.DeathSickle_Color_Mod, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 		MeleeTrail.CurrentTechnique.Passes["Trail"].Apply();
 		bool flag = false;
 		foreach (Projectile proj in Main.projectile)
