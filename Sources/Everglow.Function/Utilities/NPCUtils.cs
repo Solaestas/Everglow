@@ -263,43 +263,15 @@ public static class NPCUtils
 	#region Elemental Debuff
 
 	/// <summary>
-	/// Add build-up to the specific elemental debuff instance of this NPC. This accounts for if NPC has resistance to this type of elemental debuff.
-	/// </summary>
-	/// <param name="npc"></param>
-	/// <param name="source"></param>
-	/// <param name="type"></param>
-	/// <param name="buildUp"></param>
-	/// <param name="penentration"></param>
-	public static bool AddElementalDebuffBuildUp(this NPC npc, Player source, ElementalDebuffType type, int buildUp, float penentration = 0)
-	{
-		// Calculate player's elemental penetration
-		if (source != null)
-		{
-			var typePene = source.GetElementalPenetration(type).ApplyTo(1f) - 1f;
-			if (typePene > 0)
-			{
-				penentration += typePene;
-			}
-
-			var genericPene = source.GetElementalPenetration(type).ApplyTo(1f) - 1f;
-			if (genericPene > 0)
-			{
-				penentration += genericPene;
-			}
-		}
-
-		return npc.AddElementalDebuffBuildUp(type, buildUp, penentration);
-	}
-
-	/// <summary>
-	/// Add build-up to the specific elemental debuff instance of this NPC. This accounts for if NPC has resistance to this type of elemental debuff.
+	/// Add build-up to the specific elemental debuff instance of this NPC.
+	/// <br/> This accounts for if NPC has resistance to this type of elemental debuff.
 	/// </summary>
 	/// <param name="npc"></param>
 	/// <param name="type"></param>
 	/// <param name="buildUp"></param>
 	/// <param name="penentration"></param>
 	/// <returns></returns>
-	public static bool AddElementalDebuffBuildUp(this NPC npc, ElementalDebuffType type, int buildUp, float penentration = 0)
+	internal static bool AddElementalDebuffBuildUp(this NPC npc, ElementalDebuffType type, int buildUp, float penentration = 0)
 	{
 		// Add to real target of the npc
 		if (npc.realLife == -1 || npc.realLife == npc.whoAmI)
@@ -314,6 +286,48 @@ public static class NPCUtils
 				: false;
 		}
 	}
+
+	/// <summary>
+	/// Add build-up to the specific elemental debuff instance of this NPC with the source of player.
+	/// <br/> This accounts for if NPC has resistance to this type of elemental debuff, also player's elemental penetration.
+	/// </summary>
+	/// <param name="npc"></param>
+	/// <param name="source"></param>
+	/// <param name="type"></param>
+	/// <param name="buildUp"></param>
+	/// <param name="additionalPenentration"></param>
+	public static bool AddElementalDebuffBuildUp(this NPC npc, Player source, ElementalDebuffType type, int buildUp, float additionalPenentration = 0)
+	{
+		// Calculate player's elemental penetration
+		if (source != null)
+		{
+			var typePene = source.GetElementalPenetration(type).ApplyTo(1f) - 1f;
+			if (typePene > 0)
+			{
+				additionalPenentration += typePene;
+			}
+
+			var genericPene = source.GetElementalPenetration(type).ApplyTo(1f) - 1f;
+			if (genericPene > 0)
+			{
+				additionalPenentration += genericPene;
+			}
+		}
+
+		return npc.AddElementalDebuffBuildUp(type, buildUp, additionalPenentration);
+	}
+
+	/// <summary>
+	/// Add build-up to the specific elemental debuff instance of this NPC with source of world/server.
+	/// <br/> This accounts for if NPC has resistance to this type of elemental debuff.
+	/// </summary>
+	/// <param name="npc"></param>
+	/// <param name="type"></param>
+	/// <param name="buildUp"></param>
+	/// <param name="additionalPenentration"></param>
+	/// <returns></returns>
+	public static bool AddElementalDebuffBuildUp_World(this NPC npc, ElementalDebuffType type, int buildUp, float additionalPenentration = 0) =>
+		AddElementalDebuffBuildUp(npc, type, buildUp, additionalPenentration);
 
 	/// <summary>
 	/// Get the specific elemental debuff instance of this NPC.

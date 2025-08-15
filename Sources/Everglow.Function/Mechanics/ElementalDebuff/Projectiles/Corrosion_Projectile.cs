@@ -9,6 +9,8 @@ namespace Everglow.Commons.Mechanics.ElementalDebuff.Projectiles;
 public class Corrosion_Projectile : ModProjectile
 {
 	public const int ActiveTimerMax = 120;
+	public const int ExistMax_Player = 4;
+	public const int ExistMax_Server = 20;
 
 	private bool HasNotHitTargetOrTile { get; set; } = true;
 
@@ -20,7 +22,7 @@ public class Corrosion_Projectile : ModProjectile
 		set => Projectile.ai[1] = value;
 	}
 
-	public override string Texture => ModAsset.Point_Mod;
+	public override string Texture => ModAsset.Empty_Mod;
 
 	public override void SetDefaults()
 	{
@@ -86,7 +88,14 @@ public class Corrosion_Projectile : ModProjectile
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		ActiveProjectile();
-		target.AddElementalDebuffBuildUp(ElementalDebuffType.Corrosion, 100);
+		if (Projectile.owner == -1)
+		{
+			target.AddElementalDebuffBuildUp(ElementalDebuffType.Corrosion, 100);
+		}
+		else
+		{
+			target.AddElementalDebuffBuildUp(Main.player[Projectile.owner], ElementalDebuffType.Corrosion, 100);
+		}
 	}
 
 	private void ActiveProjectile()
@@ -131,7 +140,7 @@ public class Corrosion_Projectile : ModProjectile
 		{
 			fade *= timer / 10f;
 		}
-		if(Projectile.timeLeft < 60)
+		if (Projectile.timeLeft < 60)
 		{
 			fade *= Projectile.timeLeft / 60f;
 		}
@@ -155,7 +164,7 @@ public class Corrosion_Projectile : ModProjectile
 		}
 
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Noise_hiveCyber_black.Value;
-		if(vertices_dark.Count > 2)
+		if (vertices_dark.Count > 2)
 		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices_dark.ToArray(), 0, vertices_dark.Count - 2);
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices_dark.ToArray(), 0, vertices_dark.Count - 2);

@@ -77,6 +77,12 @@ public abstract class ElementalDebuff
 	public bool Proc { get; protected set; }
 
 	/// <summary>
+	/// Determine which player procced this delement debuff.
+	/// <para/> Default to -1, and has value <see cref="NPC.lastInteraction"/> during proc state, <c>255</c> means no source player.
+	/// </summary>
+	public int ProccedBy { get; protected set; }
+
+	/// <summary>
 	/// The timer of element debuff proc state.
 	/// </summary>
 	public int Duration { get; protected set; }
@@ -148,6 +154,7 @@ public abstract class ElementalDebuff
 			{
 				Duration = 0;
 				Proc = false;
+				ProccedBy = -1;
 			}
 		}
 		else
@@ -166,6 +173,7 @@ public abstract class ElementalDebuff
 	public virtual void OnProc(NPC npc)
 	{
 		Proc = true;
+		ProccedBy = npc.lastInteraction;
 		BuildUp = 0;
 		Duration = DurationMax;
 
