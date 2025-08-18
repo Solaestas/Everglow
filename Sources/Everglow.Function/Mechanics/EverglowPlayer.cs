@@ -149,28 +149,30 @@ public partial class EverglowPlayer : ModPlayer
 
 	public override void LoadData(TagCompound tag)
 	{
-		TagCompound cooldownTag;
+		// Cooldowns
 		try
 		{
-			cooldownTag = tag.Get<TagCompound>(PlayerDataCooldownsKey);
-		}
-		catch (IOException)
+			if (tag.TryGet<TagCompound>(PlayerDataCooldownsKey, out var cooldownTag))
 		{
-			Ins.Logger.Error($"Failed to load cooldowns for player {Player.name} because save type mismatch.");
-			cooldownTag = [];
+				foreach (var (id, data) in cooldownTag)
+				{
+					if (data is not TagCompound tagData)
+					{
+						continue;
 		}
 
-		var tagIterator = cooldownTag.GetEnumerator();
-		while (tagIterator.MoveNext())
-		{
-			var key = tagIterator.Current.Key;
-			var instance = CooldownInstance.Load(cooldownTag.GetCompound(key), key, Player);
+					var instance = CooldownInstance.Load(tagData, id, Player);
 			if (instance is null)
 			{
 				continue;
 			}
 
 			cooldowns.Add(instance.cooldown.TypeID, instance);
+		}
+	}
+		}
+		catch (IOException)
+		{
 		}
 	}
 

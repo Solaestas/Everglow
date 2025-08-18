@@ -2,17 +2,23 @@ namespace Everglow.Commons.Mechanics.Cooldown;
 
 public class CooldownRegistry : ModSystem
 {
-	public const int DefaultCooldownCapacity = 256;
-	public static CooldownNet[] registry;
-	public static Dictionary<string, ushort> nameToNetID;
-	public static Dictionary<string, Type> nameToType;
-	private static ushort nextNetID = 0;
+	private const int DefaultCooldownCapacity = 256;
+
+	private static CooldownNet[] registry;
+	private static Dictionary<string, ushort> nameToNetID;
+	private static Dictionary<string, Type> nameToType;
+	private static ushort nextNetID;
+
+	public static IReadOnlyDictionary<string, Type> NameToType => nameToType;
+
+	public static IReadOnlyList<CooldownNet> Registry => registry;
 
 	public override void Load()
 	{
 		registry = new CooldownNet[DefaultCooldownCapacity];
 		nameToNetID = [];
 		nameToType = [];
+		nextNetID = 0;
 	}
 
 	public override void Unload()
@@ -24,6 +30,8 @@ public class CooldownRegistry : ModSystem
 
 		nameToType?.Clear();
 		nameToType = null;
+
+		nextNetID = 0;
 	}
 
 	public override void PostSetupContent()
