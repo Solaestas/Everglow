@@ -20,7 +20,7 @@ public partial class EverglowPlayer : ModPlayer
 	/// <summary>
 	/// Elemental penetration of each elemental debuff types.
 	/// </summary>
-	public readonly ElementalPenetrationInfo elementalPenetrationInfo = new();
+	public readonly ElementalPenetration elementalPenetration = new();
 
 	/// <summary>
 	/// The <see cref="CooldownInstance"/>s of all <see cref="CooldownBase"/>s this player has active.
@@ -48,7 +48,7 @@ public partial class EverglowPlayer : ModPlayer
 	{
 		ammoCost = 1f;
 
-		elementalPenetrationInfo.ResetEffects();
+		elementalPenetration.ResetEffects();
 	}
 
 	public override void PreUpdate()
@@ -153,23 +153,23 @@ public partial class EverglowPlayer : ModPlayer
 		try
 		{
 			if (tag.TryGet<TagCompound>(PlayerDataCooldownsKey, out var cooldownTag))
-		{
+			{
 				foreach (var (id, data) in cooldownTag)
 				{
 					if (data is not TagCompound tagData)
 					{
 						continue;
-		}
+					}
 
 					var instance = CooldownInstance.Load(tagData, id, Player);
-			if (instance is null)
-			{
-				continue;
-			}
+					if (instance is null)
+					{
+						continue;
+					}
 
-			cooldowns.Add(instance.cooldown.TypeID, instance);
-		}
-	}
+					cooldowns.Add(instance.cooldown.TypeID, instance);
+				}
+			}
 		}
 		catch (IOException)
 		{

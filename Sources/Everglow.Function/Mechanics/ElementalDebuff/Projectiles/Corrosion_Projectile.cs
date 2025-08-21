@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.Mechanics.ElementalDebuff.Debuffs;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Terraria.Audio;
@@ -90,11 +91,11 @@ public class Corrosion_Projectile : ModProjectile
 		ActiveProjectile();
 		if (Projectile.owner == -1)
 		{
-			target.AddElementalDebuffBuildUp(ElementalDebuffType.Corrosion, 100);
+			target.AddElementalDebuffBuildUp(CorrosionDebuff.ID, 100);
 		}
 		else
 		{
-			target.AddElementalDebuffBuildUp(Main.player[Projectile.owner], ElementalDebuffType.Corrosion, 100);
+			target.AddElementalDebuffBuildUp(Main.player[Projectile.owner], CorrosionDebuff.ID, 100);
 		}
 	}
 

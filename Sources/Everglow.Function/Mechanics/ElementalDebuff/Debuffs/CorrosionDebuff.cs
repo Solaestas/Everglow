@@ -3,18 +3,15 @@ using ReLogic.Content;
 
 namespace Everglow.Commons.Mechanics.ElementalDebuff.Debuffs;
 
-public class CorrosionDebuff : ElementalDebuff
+public class CorrosionDebuff : ElementalDebuffHandler
 {
 	public const int CorrosionProjectileDamage = 20;
 
-	public CorrosionDebuff()
-		: base(ElementalDebuffType.Corrosion)
-	{
-		BuildUpMax = 1000;
-		DurationMax = 720;
-		DotDamage = 2;
-		ProcDamage = 200;
-	}
+	public static new string ID => nameof(CorrosionDebuff);
+
+	public override string TypeID => ID;
+
+	public override int DotDamage { get; protected set; } = 2;
 
 	public override Asset<Texture2D> Texture => ModAsset.Corrosion;
 
@@ -22,14 +19,16 @@ public class CorrosionDebuff : ElementalDebuff
 
 	public override void PostProc(NPC npc)
 	{
-		var ownerIsServer = ProccedBy == 255;
-		var owner = ownerIsServer ? -1 : Main.myPlayer;
-		if (ProccedBy == Main.myPlayer)
+		var ownerIsServer = Instance.ProccedBy == 255;
+		var owner = ownerIsServer ? -1 : Instance.ProccedBy;
+
+		// Only genertae projectile on owner's client.
+		if (owner == Main.myPlayer)
 		{
 			Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, npc.velocity, ModContent.ProjectileType<Corrosion_Projectile>(), CorrosionProjectileDamage, 0.5f, owner, ai0: npc.whoAmI);
 		}
 
-		// Limit the number of Corrosion_Projectile exist of an owner
+		// Limit the number of Corrosion_Projectile exist of an owner.
 		var ownCorrosionProjs = Main.projectile
 			.Where(p => p.active
 			&& p.owner == owner

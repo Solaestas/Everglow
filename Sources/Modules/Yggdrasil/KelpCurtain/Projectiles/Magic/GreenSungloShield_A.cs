@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.ElementalDebuff;
+using Everglow.Commons.Mechanics.ElementalDebuff.Debuffs;
 using Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Magic;
@@ -43,7 +43,7 @@ public class GreenSungloShield_A : ModProjectile
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		target.AddElementalDebuffBuildUp(Main.player[Projectile.owner], ElementalDebuffType.Necrosis, Projectile.damage * 3);
+		target.AddElementalDebuffBuildUp(Main.player[Projectile.owner], NecrosisDebuff.ID, Projectile.damage * 3);
 		target.AddBuff(BuffID.Confused, 180);
 	}
 

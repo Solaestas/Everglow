@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.ElementalDebuff;
+using Everglow.Commons.Mechanics.ElementalDebuff.Debuffs;
 using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
 using Everglow.Yggdrasil.YggdrasilTown.Cooldowns;
@@ -122,7 +122,7 @@ public class IstafelsSunfireGrasp : ModItem
         {
             if (IstafelsSunfireGraspEnable && hit.DamageType == DamageClass.Magic)
             {
-                target.AddElementalDebuffBuildUp(Player, ElementalDebuffType.Burn, (int)(damageDone * ElementDebuffBuildUpRate));
+                target.AddElementalDebuffBuildUp(Player, BurnDebuff.ID, (int)(damageDone * ElementDebuffBuildUpRate));
 
                 ManageFireBall(target, damageDone);
             }

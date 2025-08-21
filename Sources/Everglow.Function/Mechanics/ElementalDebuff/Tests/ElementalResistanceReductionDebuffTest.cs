@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.ElementalDebuff.Debuffs;
 using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.ElementalDebuff.Tests;
@@ -13,7 +14,7 @@ public class ElementalResistanceReductionDebuffTest : ModBuff
 
 	public override void Update(NPC npc, ref int buffIndex)
 	{
-		npc.GetElementalResistance(ElementalDebuffType.Burn).Base += 0.1f;
-		npc.GetElementalResistance(ElementalDebuffType.Burn) += 0.05f;
+		npc.GetElementalResistance(BurnDebuff.ID).Base += 0.1f;
+		npc.GetElementalResistance(BurnDebuff.ID) += 0.05f;
 	}
 }

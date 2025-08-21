@@ -1,17 +1,12 @@
-﻿using ReLogic.Content;
+using ReLogic.Content;
 
 namespace Everglow.Commons.Mechanics.ElementalDebuff.Debuffs;
 
-public class BloodRotDebuff : ElementalDebuff
+public class BloodRotDebuff : ElementalDebuffHandler
 {
-	public BloodRotDebuff()
-		: base(ElementalDebuffType.BloodRot)
-	{
-		BuildUpMax = 1000;
-		DurationMax = 720;
-		DotDamage = 25;
-		ProcDamage = 0;
-	}
+	public static new string ID => nameof(BloodRotDebuff);
+
+	public override string TypeID => ID;
 
 	public override Asset<Texture2D> Texture => ModAsset.BloodRot;
 

@@ -1,5 +1,6 @@
 using System.Reflection;
 using Everglow.Commons.Mechanics.ElementalDebuff;
+using Everglow.Commons.Netcode.Packets;
 
 namespace Everglow.Commons.Utilities;
 
@@ -271,7 +272,7 @@ public static class NPCUtils
 	/// <param name="buildUp"></param>
 	/// <param name="penentration"></param>
 	/// <returns></returns>
-	internal static bool AddElementalDebuffBuildUp(this NPC npc, ElementalDebuffType type, int buildUp, float penentration = 0)
+	internal static bool AddElementalDebuffBuildUp(this NPC npc, string type, int buildUp, float penentration = 0)
 	{
 		// Add to real target of the npc
 		if (npc.realLife == -1 || npc.realLife == npc.whoAmI)
@@ -296,8 +297,13 @@ public static class NPCUtils
 	/// <param name="type"></param>
 	/// <param name="buildUp"></param>
 	/// <param name="additionalPenentration"></param>
-	public static bool AddElementalDebuffBuildUp(this NPC npc, Player source, ElementalDebuffType type, int buildUp, float additionalPenentration = 0)
+	public static bool AddElementalDebuffBuildUp(this NPC npc, Player source, string type, int buildUp, float additionalPenentration = 0)
 	{
+		if (NetUtils.IsClient && source.whoAmI == Main.myPlayer)
+		{
+			ModIns.PacketResolver.Send(new ElementalBuildUpPacket(npc.whoAmI, ElementalDebuffRegistry.NameToNetID[type], buildUp), false, source);
+		}
+
 		// Calculate player's elemental penetration
 		if (source != null)
 		{
@@ -307,7 +313,7 @@ public static class NPCUtils
 				additionalPenentration += typePene;
 			}
 
-			var genericPene = source.GetElementalPenetration(type).ApplyTo(1f) - 1f;
+			var genericPene = source.GetElementalPenetration().Generic.ApplyTo(1f) - 1f;
 			if (genericPene > 0)
 			{
 				additionalPenentration += genericPene;
@@ -326,8 +332,15 @@ public static class NPCUtils
 	/// <param name="buildUp"></param>
 	/// <param name="additionalPenentration"></param>
 	/// <returns></returns>
-	public static bool AddElementalDebuffBuildUp_World(this NPC npc, ElementalDebuffType type, int buildUp, float additionalPenentration = 0) =>
-		AddElementalDebuffBuildUp(npc, type, buildUp, additionalPenentration);
+	public static bool AddElementalDebuffBuildUp_World(this NPC npc, string type, int buildUp, float additionalPenentration = 0)
+	{
+		if (NetUtils.IsServer)
+		{
+			ModIns.PacketResolver.Send(new ElementalBuildUpPacket(npc.whoAmI, ElementalDebuffRegistry.NameToNetID[type], buildUp));
+		}
+
+		return AddElementalDebuffBuildUp(npc, type, buildUp, additionalPenentration);
+	}
 
 	/// <summary>
 	/// Get the specific elemental debuff instance of this NPC.
@@ -335,11 +348,11 @@ public static class NPCUtils
 	/// <param name="npc"></param>
 	/// <param name="type"></param>
 	/// <returns></returns>
-	public static ElementalDebuff GetElementalDebuff(this NPC npc, ElementalDebuffType type) =>
+	public static ElementalDebuffInstance GetElementalDebuff(this NPC npc, string type) =>
 		npc.GetGlobalNPC<ElementalDebuffGlobalNPC>().ElementalDebuffs[type];
 
-	public static ref StatModifier GetElementalResistance(this NPC npc, ElementalDebuffType type) =>
-		ref npc.GetElementalDebuff(type).ElementalResistanceStatModifier;
+	public static ref StatModifier GetElementalResistance(this NPC npc, string type) =>
+		ref npc.GetElementalDebuff(type).ElementalResistanceModifier;
 
 	#endregion
 }

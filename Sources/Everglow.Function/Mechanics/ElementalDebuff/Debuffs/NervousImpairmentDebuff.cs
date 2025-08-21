@@ -2,16 +2,11 @@ using ReLogic.Content;
 
 namespace Everglow.Commons.Mechanics.ElementalDebuff.Debuffs;
 
-public class NervousImpairmentDebuff : ElementalDebuff
+public class NervousImpairmentDebuff : ElementalDebuffHandler
 {
-	public NervousImpairmentDebuff()
-		: base(ElementalDebuffType.NervousImpairment)
-	{
-		BuildUpMax = 1000;
-		DurationMax = 720;
-		DotDamage = 25;
-		ProcDamage = 0;
-	}
+	public static new string ID => nameof(NervousImpairmentDebuff);
+
+	public override string TypeID => ID;
 
 	public override Asset<Texture2D> Texture => ModAsset.NervousImpairment;
 
