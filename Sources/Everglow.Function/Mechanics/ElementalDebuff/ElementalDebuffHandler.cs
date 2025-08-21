@@ -70,6 +70,21 @@ public abstract class ElementalDebuffHandler
 		return this;
 	}
 
+	public ElementalDebuffHandler SetGenericOverride(ElementalDebuffOverride overrideInfo)
+	{
+		if (overrideInfo == null)
+		{
+			return this;
+		}
+
+		if (overrideInfo.ElementalResistance.HasValue)
+		{
+			ElementalResistance = overrideInfo.ElementalResistance.Value;
+		}
+
+		return this;
+	}
+
 	/// <summary>
 	/// Custom effects before proc, and avoid proc.
 	/// </summary>

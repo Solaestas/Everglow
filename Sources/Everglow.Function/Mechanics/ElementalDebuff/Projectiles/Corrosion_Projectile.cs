@@ -91,7 +91,7 @@ public class Corrosion_Projectile : ModProjectile
 		ActiveProjectile();
 		if (Projectile.owner == -1)
 		{
-			target.AddElementalDebuffBuildUp(CorrosionDebuff.ID, 100);
+			target.AddElementalDebuffBuildUp_World(CorrosionDebuff.ID, 100);
 		}
 		else
 		{

@@ -14,7 +14,8 @@ public sealed class ElementalDebuffInstance
 		Type eDHandlerT = ElementalDebuffRegistry.NameToType[eDN.ID];
 		var handler = Activator.CreateInstance(eDHandlerT) as ElementalDebuffHandler;
 		handler.Instance = this;
-		handler.SetOverride(ElementalDebuffOverrideRegistry.GetOverride(npc, eDN.ID));
+		handler.SetOverride(ElementalDebuffOverrideRegistry.GetOverride(npc, eDN.ID))
+			.SetGenericOverride(ElementalDebuffOverrideRegistry.GetOverride(npc, ElementalDebuffHandler.Generic));
 		this.Handler = handler;
 	}
 
@@ -58,9 +59,11 @@ public sealed class ElementalDebuffInstance
 	/// </summary>
 	public bool Proc { get; private set; } = false;
 
+	public int LastInteraction { get; private set; } = -1;
+
 	/// <summary>
 	/// Determine which player procced this delement debuff.
-	/// <para/> Default to -1, and has value <see cref="NPC.lastInteraction"/> during proc state, <c>255</c> means no source player.
+	/// <para/> Default to -1, and has value <see cref="Entity.whoAmI"/> of <see cref="Player"/> during proc state, <c>255</c> is server.
 	/// </summary>
 	public int ProccedBy { get; private set; } = -1;
 
@@ -77,7 +80,7 @@ public sealed class ElementalDebuffInstance
 	/// <param name="buildUp">Build-up value</param>
 	/// <param name="elementPenetration">Element penetration. If penetration is less than 0, it will be count as 0.</param>
 	/// <returns></returns>
-	public bool AddBuildUp(int buildUp, float elementPenetration = 0)
+	public bool AddBuildUp(int buildUp, int sourcePlayer, float elementPenetration = 0)
 	{
 		if (Proc || buildUp <= 0)
 		{
@@ -101,7 +104,13 @@ public sealed class ElementalDebuffInstance
 				finElementResisitance = 1;
 			}
 
-			BuildUp += (int)(buildUp * (1 - finElementResisitance));
+			int addedBuildUp = (int)(buildUp * (1 - finElementResisitance));
+			BuildUp += addedBuildUp;
+			if (addedBuildUp > 0)
+			{
+				LastInteraction = sourcePlayer;
+			}
+
 			return true;
 		}
 	}
@@ -147,7 +156,7 @@ public sealed class ElementalDebuffInstance
 		}
 
 		Proc = true;
-		ProccedBy = npc.lastInteraction;
+		ProccedBy = LastInteraction;
 		BuildUp = 0;
 		TimeLeft = Handler.Duration;
 
@@ -205,9 +214,16 @@ public sealed class ElementalDebuffInstance
 
 	public void NetReceive(BinaryReader reader)
 	{
+		bool flag = Proc;
+
 		Proc = reader.ReadBoolean();
 		BuildUp = reader.ReadInt32();
 		TimeLeft = reader.ReadInt32();
+
+		if (!flag && Proc)
+		{
+			OnProc(NPC);
+		}
 	}
 
 	public static void EmptyNetReceive(BinaryReader reader)

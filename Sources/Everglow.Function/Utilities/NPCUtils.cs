@@ -269,21 +269,22 @@ public static class NPCUtils
 	/// </summary>
 	/// <param name="npc"></param>
 	/// <param name="type"></param>
+	/// <param name="owner"></param>
 	/// <param name="buildUp"></param>
 	/// <param name="penentration"></param>
 	/// <returns></returns>
-	internal static bool AddElementalDebuffBuildUp(this NPC npc, string type, int buildUp, float penentration = 0)
+	internal static bool AddElementalDebuffBuildUp(this NPC npc, string type, int owner, int buildUp, float penentration = 0)
 	{
 		// Add to real target of the npc
 		if (npc.realLife == -1 || npc.realLife == npc.whoAmI)
 		{
-			return npc.GetGlobalNPC<ElementalDebuffGlobalNPC>().ElementalDebuffs[type].AddBuildUp(buildUp, penentration);
+			return npc.GetGlobalNPC<ElementalDebuffGlobalNPC>().ElementalDebuffs[type].AddBuildUp(buildUp, owner, penentration);
 		}
 		else
 		{
 			var realLife = Main.npc[npc.realLife];
 			return realLife.active
-				? realLife.GetGlobalNPC<ElementalDebuffGlobalNPC>().ElementalDebuffs[type].AddBuildUp(buildUp, penentration)
+				? realLife.GetGlobalNPC<ElementalDebuffGlobalNPC>().ElementalDebuffs[type].AddBuildUp(buildUp, owner, penentration)
 				: false;
 		}
 	}
@@ -322,7 +323,7 @@ public static class NPCUtils
 			}
 		}
 
-		return npc.AddElementalDebuffBuildUp(type, buildUp, additionalPenentration);
+		return npc.AddElementalDebuffBuildUp(type, source.whoAmI, buildUp, additionalPenentration);
 	}
 
 	/// <summary>
@@ -341,7 +342,7 @@ public static class NPCUtils
 			ModIns.PacketResolver.Send(new ElementalBuildUpPacket(npc.whoAmI, ElementalDebuffRegistry.NameToNetID[type], buildUp));
 		}
 
-		return AddElementalDebuffBuildUp(npc, type, buildUp, additionalPenentration);
+		return npc.AddElementalDebuffBuildUp(type, 255, buildUp, additionalPenentration);
 	}
 
 	/// <summary>

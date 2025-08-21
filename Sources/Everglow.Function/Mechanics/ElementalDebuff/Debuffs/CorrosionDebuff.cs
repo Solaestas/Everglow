@@ -19,7 +19,7 @@ public class CorrosionDebuff : ElementalDebuffHandler
 
 	public override void PostProc(NPC npc)
 	{
-		var ownerIsServer = Instance.ProccedBy == 255;
+		var ownerIsServer = Instance.ProccedBy is 255 or -1;
 		var owner = ownerIsServer ? -1 : Instance.ProccedBy;
 
 		// Only genertae projectile on owner's client.
