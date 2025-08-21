@@ -11,10 +11,12 @@ public class GreenSungloShield_A : ModProjectile
 
 	public override void SetDefaults()
 	{
+		Projectile.DamageType = DamageClass.Magic;
+
 		Projectile.width = 32;
 		Projectile.height = 48;
 		Projectile.aiStyle = -1;
-		Projectile.friendly = false;
+		Projectile.friendly = true;
 		Projectile.hostile = false;
 		Projectile.tileCollide = false;
 		Projectile.timeLeft = 1200;

@@ -10,6 +10,7 @@ public class DevilHeartStaff_proj_Kill : ModProjectile
 
     public override void SetDefaults()
     {
+		Projectile.DamageType = DamageClass.Magic;
         Projectile.width = 240;
         Projectile.height = 240;
         Projectile.aiStyle = -1;
