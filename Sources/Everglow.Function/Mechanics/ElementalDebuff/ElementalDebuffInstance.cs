@@ -79,7 +79,6 @@ public sealed class ElementalDebuffInstance
 	/// <returns></returns>
 	public bool AddBuildUp(int buildUp, float elementPenetration = 0)
 	{
-		Console.WriteLine($"{ElementalResistance} {elementPenetration}");
 		if (Proc || buildUp <= 0)
 		{
 			return false;

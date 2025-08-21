@@ -304,6 +304,8 @@ public static class NPCUtils
 			ModIns.PacketResolver.Send(new ElementalBuildUpPacket(npc.whoAmI, ElementalDebuffRegistry.NameToNetID[type], buildUp), false, source);
 		}
 
+		npc.PlayerInteraction(source.whoAmI);
+
 		// Calculate player's elemental penetration
 		if (source != null)
 		{
