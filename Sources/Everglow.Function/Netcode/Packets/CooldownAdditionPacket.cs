@@ -33,7 +33,7 @@ public class CooldownAdditionPacket : IPacket
 		public void Handle(IPacket packet, int whoAmI)
 		{
 			var instance = ((CooldownAdditionPacket)packet).instance;
-			var id = CooldownRegistry.registry[instance.netID].ID;
+			var id = CooldownRegistry.Registry[instance.netID].ID;
 			Main.player[whoAmI].GetModPlayer<EverglowPlayer>().cooldowns[id] = instance;
 
 			Console.WriteLine($"Cooldown synced: {id} {instance.cooldown.DisplayName} {instance.timeLeft}/{instance.timeMax}");

@@ -45,13 +45,13 @@ public class GreenSungloStaff : ModItem
 			// Back
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<GreenSungloShield_B>()] <= 0)
 			{
-				Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<GreenSungloShield_B>(), Item.damage, Item.knockBack, player.whoAmI);
+				Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<GreenSungloShield_B>(), 0, 0, player.whoAmI);
 			}
 
 			// Front
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<GreenSungloShield_A>()] <= 0)
 			{
-				Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<GreenSungloShield_A>(), 0, 0, player.whoAmI);
+				Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<GreenSungloShield_A>(), Item.damage, Item.knockBack, player.whoAmI);
 			}
 		}
 	}

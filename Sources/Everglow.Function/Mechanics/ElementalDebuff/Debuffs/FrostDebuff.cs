@@ -2,16 +2,11 @@ using ReLogic.Content;
 
 namespace Everglow.Commons.Mechanics.ElementalDebuff.Debuffs;
 
-public class FrostDebuff : ElementalDebuff
+public class FrostDebuff : ElementalDebuffHandler
 {
-	public FrostDebuff()
-		: base(ElementalDebuffType.Frost)
-	{
-		BuildUpMax = 1000;
-		DurationMax = 720;
-		DotDamage = 25;
-		ProcDamage = 0;
-	}
+	public static new string ID => nameof(FrostDebuff);
+
+	public override string TypeID => ID;
 
 	public override Asset<Texture2D> Texture => ModAsset.Frost;
 

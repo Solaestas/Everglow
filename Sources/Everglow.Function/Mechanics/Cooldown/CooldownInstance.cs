@@ -29,13 +29,13 @@ public sealed class CooldownInstance
 		timeMax = reader.ReadInt32();
 		timeLeft = reader.ReadInt32();
 
-		string id = CooldownRegistry.registry[netID].ID;
+		string id = CooldownRegistry.Registry[netID].ID;
 		SetCooldown(CooldownRegistry.GetNet(id));
 	}
 
 	internal void SetCooldown(CooldownNet cdN)
 	{
-		Type cdBaseT = CooldownRegistry.nameToType[cdN.ID];
+		Type cdBaseT = CooldownRegistry.NameToType[cdN.ID];
 		var cooldown = Activator.CreateInstance(cdBaseT) as CooldownBase;
 		cooldown.Instance = this;
 		this.cooldown = cooldown;

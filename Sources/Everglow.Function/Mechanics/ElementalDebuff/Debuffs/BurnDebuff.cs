@@ -2,16 +2,11 @@ using ReLogic.Content;
 
 namespace Everglow.Commons.Mechanics.ElementalDebuff.Debuffs;
 
-public class BurnDebuff : ElementalDebuff
+public class BurnDebuff : ElementalDebuffHandler
 {
-	public BurnDebuff()
-		: base(ElementalDebuffType.Burn)
-	{
-		BuildUpMax = 1000;
-		DurationMax = 720;
-		DotDamage = 2;
-		ProcDamage = 200;
-	}
+	public static new string ID => nameof(BurnDebuff);
+
+	public override string TypeID => ID;
 
 	public override Asset<Texture2D> Texture => ModAsset.Burn;
 

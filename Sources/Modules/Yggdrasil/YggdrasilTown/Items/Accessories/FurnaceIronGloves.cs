@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.ElementalDebuff;
+using Everglow.Commons.Mechanics.ElementalDebuff.Debuffs;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 
@@ -17,11 +17,6 @@ public class FurnaceIronGloves : ModItem
         Item.value = Item.buyPrice(silver: 85);
     }
 
-    public override void UpdateAccessory(Player player, bool hideVisual)
-    {
-
-    }
-
     public class FurnaceIronGlovesPlayer : ModPlayer
     {
         public const float ElementDebuffBuildUpRate = 2f;
@@ -38,7 +33,7 @@ public class FurnaceIronGloves : ModItem
             if (FurnaceIronGlovesEnable
                 && hit.DamageType == DamageClass.Magic)
             {
-                target.AddElementalDebuffBuildUp(Player, ElementalDebuffType.Burn, (int)(damageDone * ElementDebuffBuildUpRate));
+                target.AddElementalDebuffBuildUp(Player, BurnDebuff.ID, (int)(damageDone * ElementDebuffBuildUpRate));
             }
         }
     }

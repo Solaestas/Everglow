@@ -24,7 +24,7 @@ public class CooldownRemovalPacket : IPacket
 		for (int i = 0; i < count; i++)
 		{
 			var netID = reader.ReadUInt16();
-			cooldownIDs.Add(CooldownRegistry.registry[netID].ID);
+			cooldownIDs.Add(CooldownRegistry.Registry[netID].ID);
 		}
 	}
 

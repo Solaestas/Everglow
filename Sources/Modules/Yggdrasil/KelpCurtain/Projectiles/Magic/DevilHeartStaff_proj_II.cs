@@ -15,6 +15,7 @@ public class DevilHeartStaff_proj_II : TrailingProjectile
 		TrailTextureBlack = Commons.ModAsset.Trail_8_black.Value;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
 
+		Projectile.DamageType = DamageClass.Magic;
 		Projectile.width = 20;
 		Projectile.height = 20;
 		ProjTrailColor.colorList.Add((new Color(203, 73, 229, 0), 0));

@@ -285,8 +285,11 @@ public static class PlayerUtils
 
 	#region Elemental Debuff
 
-	public static ref StatModifier GetElementalPenetration(this Player player, ElementalDebuffType type) =>
-		ref player.GetModPlayer<EverglowPlayer>().elementalPenetrationInfo[type];
+	public static ElementalPenetration GetElementalPenetration(this Player player) =>
+		player.GetModPlayer<EverglowPlayer>().elementalPenetration;
+
+	public static ref StatModifier GetElementalPenetration(this Player player, string type) =>
+		ref player.GetModPlayer<EverglowPlayer>().elementalPenetration[type];
 
 	#endregion
 }

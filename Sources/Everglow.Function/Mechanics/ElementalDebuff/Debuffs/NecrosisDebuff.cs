@@ -3,18 +3,19 @@ using ReLogic.Content;
 
 namespace Everglow.Commons.Mechanics.ElementalDebuff.Debuffs;
 
-public class NecrosisDebuff : ElementalDebuff
+public class NecrosisDebuff : ElementalDebuffHandler
 {
-	public NecrosisDebuff()
-		: base(ElementalDebuffType.Necrosis)
-	{
-		BuildUpMax = 1000;
-		DurationMax = 1200;
-		DotDamage = 2;
-		ProcDamage = 200;
-	}
+	public static new string ID => nameof(NecrosisDebuff);
 
-	public override void OnProc(NPC npc)
+	public override string TypeID => ID;
+
+	public override int Duration { get; protected set; } = 1200;
+
+	public override Asset<Texture2D> Texture => ModAsset.Necrosis;
+
+	public override Color Color => new Color(0.1f, 0.1f, 0.1f, 1f);
+
+	public override void PostProc(NPC npc)
 	{
 		for (int i = 0; i < 20; i++)
 		{
@@ -32,15 +33,5 @@ public class NecrosisDebuff : ElementalDebuff
 			};
 			Ins.VFXManager.Add(somg);
 		}
-		base.OnProc(npc);
 	}
-
-	public override void UpdateProc(NPC npc)
-	{
-		base.UpdateProc(npc);
-	}
-
-	public override Asset<Texture2D> Texture => ModAsset.Necrosis;
-
-	public override Color Color => new Color(0.1f, 0.1f, 0.1f, 1f);
 }

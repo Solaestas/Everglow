@@ -73,7 +73,7 @@ public class CooldownFullUpdatePacket : IPacket
 			{
 				bool existsInLocal = localIDs.Contains(netID);
 				bool existsInSynced = syncedIDs.Contains(netID);
-				string id = CooldownRegistry.registry[netID].ID;
+				string id = CooldownRegistry.Registry[netID].ID;
 
 				if (existsInLocal && !existsInSynced)
 				{

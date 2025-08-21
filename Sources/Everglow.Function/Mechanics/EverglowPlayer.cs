@@ -20,7 +20,7 @@ public partial class EverglowPlayer : ModPlayer
 	/// <summary>
 	/// Elemental penetration of each elemental debuff types.
 	/// </summary>
-	public readonly ElementalPenetrationInfo elementalPenetrationInfo = new();
+	public readonly ElementalPenetration elementalPenetration = new();
 
 	/// <summary>
 	/// The <see cref="CooldownInstance"/>s of all <see cref="CooldownBase"/>s this player has active.
@@ -48,7 +48,7 @@ public partial class EverglowPlayer : ModPlayer
 	{
 		ammoCost = 1f;
 
-		elementalPenetrationInfo.ResetEffects();
+		elementalPenetration.ResetEffects();
 	}
 
 	public override void PreUpdate()
@@ -149,28 +149,30 @@ public partial class EverglowPlayer : ModPlayer
 
 	public override void LoadData(TagCompound tag)
 	{
-		TagCompound cooldownTag;
+		// Cooldowns
 		try
 		{
-			cooldownTag = tag.Get<TagCompound>(PlayerDataCooldownsKey);
+			if (tag.TryGet<TagCompound>(PlayerDataCooldownsKey, out var cooldownTag))
+			{
+				foreach (var (id, data) in cooldownTag)
+				{
+					if (data is not TagCompound tagData)
+					{
+						continue;
+					}
+
+					var instance = CooldownInstance.Load(tagData, id, Player);
+					if (instance is null)
+					{
+						continue;
+					}
+
+					cooldowns.Add(instance.cooldown.TypeID, instance);
+				}
+			}
 		}
 		catch (IOException)
 		{
-			Ins.Logger.Error($"Failed to load cooldowns for player {Player.name} because save type mismatch.");
-			cooldownTag = [];
-		}
-
-		var tagIterator = cooldownTag.GetEnumerator();
-		while (tagIterator.MoveNext())
-		{
-			var key = tagIterator.Current.Key;
-			var instance = CooldownInstance.Load(cooldownTag.GetCompound(key), key, Player);
-			if (instance is null)
-			{
-				continue;
-			}
-
-			cooldowns.Add(instance.cooldown.TypeID, instance);
 		}
 	}
 
