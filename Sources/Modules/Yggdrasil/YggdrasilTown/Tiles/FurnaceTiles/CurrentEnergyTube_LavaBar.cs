@@ -81,7 +81,6 @@ public class CurrentEnergyTube_LavaBar : BackgroundVFX
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(texture);
 		var bars = new List<Vertex2D>();
 
 		// Lava post
@@ -135,6 +134,6 @@ public class CurrentEnergyTube_LavaBar : BackgroundVFX
 			bars.Add(position, Color.Transparent, new Vector3(0, 0, 0));
 			bars.Add(position, Color.Transparent, new Vector3(0, 0, 0));
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleList);
 	}
 }

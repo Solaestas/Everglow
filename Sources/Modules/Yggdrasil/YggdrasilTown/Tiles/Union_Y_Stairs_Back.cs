@@ -19,7 +19,6 @@ public class Union_Y_Stairs_Back : BackgroundVFX
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(texture);
 		List<Vertex2D> bars = new List<Vertex2D>();
 		float width = 38;
 		float height = 25;
@@ -52,6 +51,6 @@ public class Union_Y_Stairs_Back : BackgroundVFX
 			bars.Add(position, Color.Transparent, new Vector3(0, 0, 0));
 			bars.Add(position, Color.Transparent, new Vector3(0, 0, 0));
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleStrip);
 	}
 }

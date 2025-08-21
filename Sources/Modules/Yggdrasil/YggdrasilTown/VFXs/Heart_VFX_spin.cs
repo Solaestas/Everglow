@@ -36,7 +36,6 @@ public class Heart_VFX_spin : Visual
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.Heart_VFX.Value);
 		float pocession = 1 - timer / maxTime;
 		float timeValue = Math.Clamp((1 - pocession) * 8, 0, 5);
 		float frameCount = 6;
@@ -62,6 +61,6 @@ public class Heart_VFX_spin : Visual
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), drawColor, new Vector3(1, frameY / frameCount, 0)),
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1), drawColor, new Vector3(1, (frameY + 1) / frameCount, 0)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.Heart_VFX.Value, bars, PrimitiveType.TriangleList);
 	}
 }

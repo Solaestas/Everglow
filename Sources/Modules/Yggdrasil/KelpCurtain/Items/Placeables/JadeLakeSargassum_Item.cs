@@ -9,6 +9,6 @@ public class JadeLakeSargassum_Item : ModItem
 
     public override void SetDefaults()
     {
-        Item.DefaultToPlaceableTile(ModContent.TileType<JadeLakeBloodVineAlgea>());
+        Item.DefaultToPlaceableTile(ModContent.TileType<AgedGardenMagicArray>());
     }
 }

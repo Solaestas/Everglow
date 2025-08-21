@@ -68,10 +68,11 @@ public class ColorfulDreamDust : Visual
 	{
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
 		Color drawColor = new Color(0.1f, 0.2f, 0.3f, 0f);
-		//if (timer > maxTime - 20)
-		//{
-		//	drawColor *= (maxTime - timer) / 20f;
-		//}
+
+		// if (timer > maxTime - 20)
+		// {
+		// drawColor *= (maxTime - timer) / 20f;
+		// }
 		float timeValue = timer * 0.02f;
 		float max = 1f;
 		float min = 0f;

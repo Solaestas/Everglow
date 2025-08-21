@@ -15,9 +15,9 @@ public class DarkForestGrass : ModTile, ISceneTile
 		Main.tileBlockLight[Type] = true;
 		DustType = ModContent.DustType<DarkForestSoil_Dust>();
 		HitSound = SoundID.Dig;
-
 		AddMapEntry(new Color(71, 71, 145));
 	}
+
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
 		yield return new Item(ModContent.ItemType<DarkForestSoil_Item>());

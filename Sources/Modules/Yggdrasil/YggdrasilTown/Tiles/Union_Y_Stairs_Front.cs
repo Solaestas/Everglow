@@ -80,7 +80,6 @@ public class Union_Y_Stairs_Front : ForegroundVFX
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(texture);
 		List<Vertex2D> bars = new List<Vertex2D>();
 		float width = 38;
 		float height = 25;
@@ -113,6 +112,6 @@ public class Union_Y_Stairs_Front : ForegroundVFX
 			bars.Add(position, Color.Transparent, new Vector3(0, 0, 0));
 			bars.Add(position, Color.Transparent, new Vector3(0, 0, 0));
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleList);
 	}
 }

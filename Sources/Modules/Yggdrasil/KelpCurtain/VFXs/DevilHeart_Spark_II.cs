@@ -69,7 +69,6 @@ public class DevilHeart_Spark_II : Visual
 			dHSparkColor.colorList.Add((new Color(24, 24, 24, 50), 1));
 		}
 		var toCorner = new Vector2(0, scale);
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.DevilHeart_Spark.Value);
 		var bars = new List<Vertex2D>();
 		for (int i = 0; i < trails.Count; i++)
 		{
@@ -90,6 +89,6 @@ public class DevilHeart_Spark_II : Visual
 			bars.Add(pos + toCorner.RotatedBy(Math.PI * 0 + rotation) * size, lightColor, new Vector3(0, 1, 0));
 			bars.Add(pos + toCorner.RotatedBy(Math.PI * 1 + rotation) * size, lightColor, new Vector3(1, 0, 0));
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.DevilHeart_Spark.Value, bars, PrimitiveType.TriangleList);
 	}
 }

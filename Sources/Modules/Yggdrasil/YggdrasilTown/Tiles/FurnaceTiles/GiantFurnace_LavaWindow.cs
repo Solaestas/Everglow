@@ -17,7 +17,6 @@ public class GiantFurnace_LavaWindow : BackgroundVFX
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(texture);
 		var bars = new List<Vertex2D>();
 		Color drawColor = new Color(1f, 0.7f, 0.4f, 1f);
 		bars.Add(position + new Vector2(0, 0), drawColor, new Vector3(0, 0, 0));
@@ -33,6 +32,6 @@ public class GiantFurnace_LavaWindow : BackgroundVFX
 			bars.Add(position, Color.Transparent, new Vector3(0, 0, 0));
 			bars.Add(position, Color.Transparent, new Vector3(0, 0, 0));
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleStrip);
 	}
 }

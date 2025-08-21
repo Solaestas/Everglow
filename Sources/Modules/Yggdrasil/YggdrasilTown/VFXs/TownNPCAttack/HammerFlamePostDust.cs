@@ -47,7 +47,6 @@ public class HammerFlamePostDust : Visual
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.HammerFlamePostDust.Value);
 		float pocession = (MaxTime - Timer) / MaxTime - 0.3f;
 		Color flame;
 		if (pocession > 0.5f)
@@ -72,6 +71,6 @@ public class HammerFlamePostDust : Visual
 			new Vertex2D(Position + toCorner.RotatedBy(Math.PI * 1.5), flame, new Vector3(1, Frame * 9 / 27f, 1)),
 			new Vertex2D(Position + toCorner.RotatedBy(Math.PI * 1), flame, new Vector3(1, (Frame + 1) * 9 / 27f, 1)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(ModAsset.HammerFlamePostDust.Value, bars, PrimitiveType.TriangleStrip);
 	}
 }

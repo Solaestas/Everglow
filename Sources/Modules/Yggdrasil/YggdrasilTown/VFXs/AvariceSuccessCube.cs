@@ -45,7 +45,6 @@ public class AvariceSuccessCube : Visual
 	{
 		Vector2 toCorner = new Vector2(0, scale);
 		Color lightColor = new Color(0f, 0.6f, 0.8f, 0.5f);
-		Ins.Batch.BindTexture<Vertex2D>(Commons.ModAsset.TileBlock.Value);
 		List<Vertex2D> bars = new List<Vertex2D>();
 		bars.Add(position + toCorner.RotatedBy(Math.PI * 1 + rotation), lightColor, new Vector3(1, 0, 0));
 		bars.Add(position + toCorner.RotatedBy(Math.PI * 0.5 + rotation), lightColor, new Vector3(0, 0, 0));
@@ -54,6 +53,6 @@ public class AvariceSuccessCube : Visual
 		bars.Add(position + toCorner.RotatedBy(Math.PI * -0.5 + rotation), lightColor, new Vector3(1, 1, 0));
 		bars.Add(position + toCorner.RotatedBy(Math.PI * 0 + rotation), lightColor, new Vector3(0, 1, 0));
 		bars.Add(position + toCorner.RotatedBy(Math.PI * 1 + rotation), lightColor, new Vector3(1, 0, 0));
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(Commons.ModAsset.TileBlock.Value, bars, PrimitiveType.TriangleList);
 	}
 }

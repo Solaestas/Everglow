@@ -96,7 +96,6 @@ public class MarbleGate_BackgroundTile : BackgroundVFX
 		// Main.NewText(offsetMouse);
 		viewOffset.X %= 1;
 		viewOffset.Y %= 1;
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.MarbleGate_Background.Value);
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
 			new Vertex2D(position, Color.White, new Vector3(viewOffset, 0)),
@@ -105,8 +104,7 @@ public class MarbleGate_BackgroundTile : BackgroundVFX
 			new Vertex2D(position + new Vector2(0, texture.Height), Color.White, new Vector3(viewOffset + new Vector2(0, subBackgroundScale.Y), 0)),
 			new Vertex2D(position + new Vector2(texture.Width, texture.Height), Color.White, new Vector3(viewOffset + subBackgroundScale, 0)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
-		Ins.Batch.BindTexture<Vertex2D>(texture);
+		Ins.Batch.Draw(ModAsset.MarbleGate_Background.Value, bars, PrimitiveType.TriangleStrip);
 		bars = new List<Vertex2D>()
 		{
 			new Vertex2D(position, lightColor0, new Vector3(0, 0, 0)),
@@ -115,6 +113,6 @@ public class MarbleGate_BackgroundTile : BackgroundVFX
 			new Vertex2D(position + new Vector2(0, texture.Height), lightColor2, new Vector3(0, 1, 0)),
 			new Vertex2D(position + new Vector2(texture.Width, texture.Height), lightColor3, new Vector3(1, 1, 0)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleStrip);
 	}
 }

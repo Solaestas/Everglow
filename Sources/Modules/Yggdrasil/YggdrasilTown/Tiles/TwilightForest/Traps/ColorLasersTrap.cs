@@ -76,8 +76,6 @@ public class ColorLasersTrap : ForegroundVFX
 	{
 		var frame = new Rectangle(Style * 18, 0, 16, 16);
 
-		Ins.Batch.BindTexture<Vertex2D>(texture);
-
 		var point0 = new Vector2(-frame.Width * 0.5f, -frame.Height * 0.5f);
 		var point1 = new Vector2(frame.Width * 0.5f, -frame.Height * 0.5f);
 		var point2 = new Vector2(-frame.Width * 0.5f, frame.Height * 0.5f);
@@ -112,7 +110,7 @@ public class ColorLasersTrap : ForegroundVFX
 		bars.Add(position - normalUnit, laserColor, new Vector3(0, 152f / texture.Height, 0));
 		bars.Add(position - normalUnit + collisionUnit * length, laserColor, new Vector3(length / 24f, 152f / texture.Height, 0));
 
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleList);
 	}
 }
 

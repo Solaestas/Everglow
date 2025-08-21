@@ -12,6 +12,11 @@ internal class YggdrasilWorld : Subworld
 	public static float YggdrasilTimer = 0;
 	public Vector2 StoneCageOfChallengesCenter = Vector2.zeroVector;
 
+	/// <summary>
+	/// After feeding the Giant Ghost Claw Barnacle by the flesh of Vampire Carpet, players can enter the underwater treasury.
+	/// </summary>
+	public static bool CanEnterTheGiantGhoseClawBarnacle = false;
+
 	public override int Width => 2000;
 
 	public override int Height => 21000;
@@ -29,12 +34,6 @@ internal class YggdrasilWorld : Subworld
 	{
 		SubworldSystem.hideUnderworld = true;
 		YggdrasilTimer = 0;
-		//for (int x = 20; x < Main.maxTilesX - 20; x++)
-		//{
-		//	for (int y = 20; y < Main.maxTilesY - 20; y++)
-		//	{
-		//	}
-		//}
 		YggdrasilTownBiome.CheckedBiomeCenter = false;
 	}
 
@@ -92,7 +91,7 @@ public class YggdrasilWorldSystem : ModSystem
 			{
 				Main.bloodMoon = false;
 			}
-			if(Main.slimeRain)
+			if (Main.slimeRain)
 			{
 				Main.slimeRain = false;
 			}

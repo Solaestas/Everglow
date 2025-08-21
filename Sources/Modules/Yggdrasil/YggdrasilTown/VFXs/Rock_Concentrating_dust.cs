@@ -64,7 +64,6 @@ public class Rock_Concentrating_dust : Visual
 		Vector4 lightColor = Lighting.GetColor(position.ToTileCoordinates()).ToVector4();
 		Color drawColor = new Color(0.4f * lightColor.X, 0.3f * lightColor.X, 0.3f * lightColor.Y, lightColor.Z) * ((1 + MathF.Cos(ai[3])) * 0.2f + 0.4f);
 		drawColor.A = 255;
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.BloodFlame_noise.Value);
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int i = 0; i < trails.Count; i++)
 		{
@@ -78,6 +77,6 @@ public class Rock_Concentrating_dust : Visual
 			bars.Add(pos + toCorner.RotatedBy(Math.PI * 0 + rotation) * size, drawColor * size, new Vector3(0, 1, 0));
 			bars.Add(pos + toCorner.RotatedBy(Math.PI * 1 + rotation) * size, drawColor * size, new Vector3(1, 0, 0));
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.BloodFlame_noise.Value, bars, PrimitiveType.TriangleList);
 	}
 }

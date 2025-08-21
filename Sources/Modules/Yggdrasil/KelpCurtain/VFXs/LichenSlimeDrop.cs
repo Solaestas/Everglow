@@ -7,6 +7,7 @@ public class LichenSlimeDropPipeline : Pipeline
 		effect = ModAsset.LichenSlimeDrop;
 		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_LichenSlimeDrop.Value);
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
@@ -26,10 +27,12 @@ public class LichenSlimeDropPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(LichenSlimeDropPipeline))]
 public class LichenSlimeDrop : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public Vector2 position;
 	public Vector2 velocity;
 	public float[] ai;
@@ -37,7 +40,11 @@ public class LichenSlimeDrop : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-	public LichenSlimeDrop() { }
+
+	public LichenSlimeDrop()
+	{
+	}
+
 	public override void Update()
 	{
 		position += velocity;
@@ -54,7 +61,10 @@ public class LichenSlimeDrop : Visual
 		scale *= 0.98f;
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		if (Collision.SolidCollision(position, 0, 0))
 		{
 			velocity *= -0.2f;
@@ -78,11 +88,11 @@ public class LichenSlimeDrop : Visual
 		Color lightColor = Lighting.GetColor((int)(position.X / 16f), (int)(position.Y / 16f));
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + velocity + toCorner,lightColor, new Vector3(0, 0,pocession)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),lightColor, new Vector3(0, 1,pocession)),
+			new Vertex2D(position + velocity + toCorner, lightColor, new Vector3(0, 0, pocession)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), lightColor, new Vector3(0, 1, pocession)),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),lightColor, new Vector3(1, 0,pocession)),
-			new Vertex2D(position - velocity * ai[1] + toCorner.RotatedBy(Math.PI * 1),lightColor, new Vector3(1, 1,pocession))
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5), lightColor, new Vector3(1, 0, pocession)),
+			new Vertex2D(position - velocity * ai[1] + toCorner.RotatedBy(Math.PI * 1), lightColor, new Vector3(1, 1, pocession)),
 		};
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);

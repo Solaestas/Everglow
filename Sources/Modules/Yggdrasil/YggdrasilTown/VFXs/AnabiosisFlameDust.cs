@@ -44,7 +44,6 @@ public class AnabiosisFlameDust : Visual
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.AnabiosisFlameDust.Value);
 		float pocession = (MaxTime - Timer) / MaxTime - 0.3f;
 		Color flame;
 		if (pocession > 0.5f)
@@ -69,7 +68,7 @@ public class AnabiosisFlameDust : Visual
 			new Vertex2D(Position + toCorner.RotatedBy(Math.PI * 1.5), flame, new Vector3(1, Frame * 9 / 27f, 1)),
 			new Vertex2D(Position + toCorner.RotatedBy(Math.PI * 1), flame, new Vector3(1, (Frame + 1) * 9 / 27f, 1)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(ModAsset.AnabiosisFlameDust.Value, bars, PrimitiveType.TriangleStrip);
 	}
 }
 
@@ -117,7 +116,6 @@ public class AnabiosisFlameDust_OverPlayer : Visual
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.AnabiosisFlameDust.Value);
 		float pocession = (MaxTime - Timer) / MaxTime - 0.3f;
 		Color flame;
 		if (pocession > 0.5f)
@@ -142,6 +140,6 @@ public class AnabiosisFlameDust_OverPlayer : Visual
 			new Vertex2D(Position + toCorner.RotatedBy(Math.PI * 1.5), flame, new Vector3(1, Frame * 9 / 27f, 1)),
 			new Vertex2D(Position + toCorner.RotatedBy(Math.PI * 1), flame, new Vector3(1, (Frame + 1) * 9 / 27f, 1)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(ModAsset.AnabiosisFlameDust.Value, bars, PrimitiveType.TriangleStrip);
 	}
 }

@@ -38,8 +38,6 @@ public class FemaleLampLeaves_leaf : BackgroundVFX
 	public override void Draw()
 	{
 		Rectangle frame = new Rectangle(Style * 80, 0, 80, 140);
-
-		Ins.Batch.BindTexture<Vertex2D>(texture);
 		float frameY = 0f;
 		if (Style >= 6)
 		{
@@ -69,7 +67,7 @@ public class FemaleLampLeaves_leaf : BackgroundVFX
 			new Vertex2D(position + point3.RotatedBy(rotation) * scale, lightColor2, new Vector3((0 + Style) / 6f, frameY + 0.5f, 0)),
 			new Vertex2D(position + new Vector2(frame.Width, frame.Height).RotatedBy(rotation) * scale, lightColor3, new Vector3((1 + Style) / 6f, frameY + 0.5f, 0)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleStrip);
 	}
 }
 
@@ -118,8 +116,6 @@ public class FemaleLampLeaves_leaf_fore : ForegroundVFX
 	{
 		Rectangle frame = new Rectangle(Style * 80, 0, 80, 140);
 
-		Ins.Batch.BindTexture<Vertex2D>(texture);
-
 		// 镜像处理真是麻烦
 		Vector2 point2 = new Vector2(frame.Width, 0);
 		Vector2 point3 = new Vector2(0, frame.Height);
@@ -152,7 +148,7 @@ public class FemaleLampLeaves_leaf_fore : ForegroundVFX
 					new Vertex2D(position + dirH + dirV, lightColor2, new Vector3((0 + newStyle) / 6f, frameY, 0)),
 					new Vertex2D(position - dirH + dirV, lightColor3, new Vector3((1 + newStyle) / 6f, frameY, 0)),
 				};
-				Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+				Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleStrip);
 			}
 			else
 			{
@@ -184,7 +180,7 @@ public class FemaleLampLeaves_leaf_fore : ForegroundVFX
 					new Vertex2D(position - dirH + dirV, glowColor, new Vector3((1 + newStyle) / 2f, frameY + 0.25f, 0)),
 					new Vertex2D(position - dirH, glowColor, new Vector3((1 + newStyle) / 2f, frameY + 0.5f, 0)),
 				};
-				Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+				Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleList);
 			}
 		}
 		else
@@ -201,7 +197,7 @@ public class FemaleLampLeaves_leaf_fore : ForegroundVFX
 				new Vertex2D(position + point3.RotatedBy(rotation) * scale, lightColor2, new Vector3((0 + Style) / 6f, frameY + 0.25f, 0)),
 				new Vertex2D(position + new Vector2(frame.Width, frame.Height).RotatedBy(rotation) * scale, lightColor3, new Vector3((1 + Style) / 6f, frameY + 0.25f, 0)),
 			};
-			Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+			Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleStrip);
 		}
 	}
 }

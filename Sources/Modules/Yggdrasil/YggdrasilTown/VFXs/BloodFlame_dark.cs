@@ -45,7 +45,6 @@ public class BloodFlame_dark : Visual
 	{
 		Vector2 toCorner = new Vector2(0, scale);
 		Color lightColor = new Color(0.2f, 0, 0, 1f);
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.BloodFlame_noise.Value);
 
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
@@ -57,6 +56,6 @@ public class BloodFlame_dark : Visual
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0 + rotation), lightColor, new Vector3(0, 1, 0)),
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1 + rotation), lightColor, new Vector3(1, 0, 0)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.BloodFlame_noise.Value, bars, PrimitiveType.TriangleList);
 	}
 }

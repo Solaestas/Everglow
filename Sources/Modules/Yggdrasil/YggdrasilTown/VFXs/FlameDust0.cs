@@ -54,7 +54,6 @@ public class FlameDust0 : Visual
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.FlameDust0.Value);
 		float frameCount = 5;
 		float frameY = Frame;
 		float xCount = 3;
@@ -77,6 +76,6 @@ public class FlameDust0 : Visual
 			new Vertex2D(postOffsetPos + toCorner.RotatedBy(Math.PI * 0.5), drawColor, new Vector3(frameX + frameCoordWidth, frameY / frameCount, 0)),
 			new Vertex2D(postOffsetPos + toCorner.RotatedBy(Math.PI * 1), drawColor, new Vector3(frameX + frameCoordWidth, (frameY + 1) / frameCount, 0)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.FlameDust0.Value, bars, PrimitiveType.TriangleList);
 	}
 }

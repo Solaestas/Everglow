@@ -45,7 +45,7 @@ public class DevilHeart_Spark : Visual
 		}
 		float timeLeftValue = timer / maxTime;
 		var lightColor = new Color(221, 155, 255, 250);
-		if(dHSparkColor.colorList.Count > 0)
+		if (dHSparkColor.colorList.Count > 0)
 		{
 			lightColor = dHSparkColor.GetColor(timeLeftValue);
 		}
@@ -65,13 +65,12 @@ public class DevilHeart_Spark : Visual
 			dHSparkColor.colorList.Add((new Color(24, 24, 24, 50), 1));
 		}
 		var toCorner = new Vector2(0, scale);
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.DevilHeart_Spark.Value);
 		var bars = new List<Vertex2D>();
 		for (int i = 0; i < trails.Count; i++)
 		{
 			float size = i / (float)trails.Count;
 			float timeLeftValue = timer / maxTime;
-			var lightColor = new Color(221, 155, 255, 250);//dHSparkColor.GetColor(timeLeftValue);
+			var lightColor = new Color(221, 155, 255, 250); // dHSparkColor.GetColor(timeLeftValue);
 			if (dHSparkColor.colorList.Count > 0)
 			{
 				lightColor = dHSparkColor.GetColor(timeLeftValue);
@@ -86,6 +85,6 @@ public class DevilHeart_Spark : Visual
 			bars.Add(pos + toCorner.RotatedBy(Math.PI * 0 + rotation) * size, lightColor, new Vector3(0, 1, 0));
 			bars.Add(pos + toCorner.RotatedBy(Math.PI * 1 + rotation) * size, lightColor, new Vector3(1, 0, 0));
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.DevilHeart_Spark.Value, bars, PrimitiveType.TriangleList);
 	}
 }

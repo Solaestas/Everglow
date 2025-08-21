@@ -144,7 +144,6 @@ public class RoadSignPost_ToArenaVFX : BackgroundVFX
 		Color lightColor3 = Lighting.GetColor((int)(position.X + texture.Width) / 16, (int)(position.Y + texture.Height) / 16);
 
 		var drawPos = position + new Vector2(7);
-		Ins.Batch.BindTexture<Vertex2D>(texture);
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
 			new Vertex2D(drawPos + new Vector2(-texture.Width / 2f, 0), lightColor0, new Vector3(0, 0, 0)),
@@ -153,7 +152,7 @@ public class RoadSignPost_ToArenaVFX : BackgroundVFX
 			new Vertex2D(drawPos + new Vector2(-texture.Width / 2f, texture.Height / 2f), lightColor2, new Vector3(0, 0.5f, 0)),
 			new Vertex2D(drawPos + new Vector2(texture.Width / 2f, texture.Height / 2f), lightColor3, new Vector3(1, 0.5f, 0)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleStrip);
 
 		float startX = 20;
 		float startY = 4;
@@ -170,7 +169,7 @@ public class RoadSignPost_ToArenaVFX : BackgroundVFX
 					new Vertex2D(drawPos + new Vector2(0, texture.Height / 2f), emphasizeColor, new Vector3(0.5f, 1, 0)),
 					new Vertex2D(drawPos + new Vector2(texture.Width / 2f, texture.Height / 2f), emphasizeColor, new Vector3(1, 1, 0)),
 				};
-				Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+				Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleStrip);
 			}
 		}
 	}

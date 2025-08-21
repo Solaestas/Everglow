@@ -37,7 +37,6 @@ public class Leaf_VFX : Visual
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.Leaf_VFX.Value);
 		float pocession = 1 - timer / maxTime;
 		float timeValue = (float)(Main.time * 0.24 + ai[0]);
 		float frameCount = 8;
@@ -64,6 +63,6 @@ public class Leaf_VFX : Visual
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), drawColor, new Vector3(1, frameY / frameCount, 0)),
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1), drawColor, new Vector3(1, (frameY + 1) / frameCount, 0)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.Leaf_VFX.Value, bars, PrimitiveType.TriangleList);
 	}
 }

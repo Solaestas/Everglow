@@ -48,7 +48,6 @@ public class GeyserAirBudsDust : Visual
 	{
 		var toCorner = new Vector2(0, scale);
 		var lightColor = new Color(0f, 0.18f, 0.12f, 1f);
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.BloodFlame_noise.Value);
 		var bars = new List<Vertex2D>();
 		for (int i = 0; i < trails.Count; i++)
 		{
@@ -62,6 +61,6 @@ public class GeyserAirBudsDust : Visual
 			bars.Add(pos + toCorner.RotatedBy(Math.PI * 0 + rotation) * size, lightColor * size, new Vector3(0, 1, 0));
 			bars.Add(pos + toCorner.RotatedBy(Math.PI * 1 + rotation) * size, lightColor * size, new Vector3(1, 0, 0));
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.BloodFlame_noise.Value, bars, PrimitiveType.TriangleList);
 	}
 }

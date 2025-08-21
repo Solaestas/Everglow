@@ -32,7 +32,6 @@ public class Fevens_Bat_Small : Visual
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.Fevens_Bat.Value);
 		float pocession = 1 - timer / maxTime;
 		float timeValue = (float)(Main.time * 0.24 + ai[0]);
 		float frameCount = 4;
@@ -57,6 +56,6 @@ public class Fevens_Bat_Small : Visual
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), drawColor, new Vector3(1, frameY / frameCount, 0)),
 			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1), drawColor, new Vector3(1, (frameY + 1) / frameCount, 0)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.Fevens_Bat.Value, bars, PrimitiveType.TriangleList);
 	}
 }

@@ -182,7 +182,6 @@ public class OriginalPylon_VFX : BackgroundVFX
 			List<Vertex2D> bars = new List<Vertex2D>();
 			Color color0 = Color.White * 0.4f;
 			color0.A = 0;
-			Ins.Batch.BindTexture<Vertex2D>(ModAsset.OriginPylon_hang_glow.Value);
 			bars = new List<Vertex2D>()
 			{
 				new Vertex2D(new Vector2(i - 11, j - 8.3f) * 16, color0, new Vector3(0, 0, 0)),
@@ -190,12 +189,11 @@ public class OriginalPylon_VFX : BackgroundVFX
 				new Vertex2D(new Vector2(i - 11, j + 17) * 16, color0, new Vector3(0, 1, 0)),
 				new Vertex2D(new Vector2(i + 21, j + 17) * 16, color0, new Vector3(1, 1, 0)),
 			};
-			Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+			Ins.Batch.Draw(ModAsset.OriginPylon_hang_glow.Value, bars, PrimitiveType.TriangleStrip);
 
 			float timeValue = (float)(Main.time * 0.0004f);
 			Ins.Batch.End();
 			Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.Default, SamplerState.PointWrap, RasterizerState.CullNone);
-			Ins.Batch.BindTexture<Vertex2D>(Commons.ModAsset.Noise_perlin.Value);
 			List<Vertex2D> crack = new List<Vertex2D>();
 			for (int k = 0; k < 6; k++)
 			{
@@ -214,7 +212,7 @@ public class OriginalPylon_VFX : BackgroundVFX
 			Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.Default, SamplerState.PointWrap, RasterizerState.CullNone);
 			Effect noise = ModAsset.PurpleCrack.Value;
 			noise.CurrentTechnique.Passes["Test"].Apply();
-			Ins.Batch.Draw(crack, PrimitiveType.TriangleStrip);
+			Ins.Batch.Draw(Commons.ModAsset.Noise_perlin.Value, crack, PrimitiveType.TriangleStrip);
 			Ins.Batch.End();
 			Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.Default, SamplerState.PointWrap, RasterizerState.CullNone);
 			Effect effect = VFXManager.DefaultEffect.Value;
@@ -223,8 +221,6 @@ public class OriginalPylon_VFX : BackgroundVFX
 				Main.GameViewMatrix.TransformationMatrix *
 				Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
 			effect.CurrentTechnique.Passes[0].Apply();
-
-			Ins.Batch.BindTexture<Vertex2D>(ModAsset.OriginPylon_chain.Value);
 
 			List<Vertex2D> chain = new List<Vertex2D>();
 			for (int k = 0; k < 6; k++)
@@ -243,9 +239,8 @@ public class OriginalPylon_VFX : BackgroundVFX
 				chain.Add(pylonCenter + v0Left + v0Normal * 24, Color.Transparent, new Vector3(12, 0, 0));
 				chain.Add(pylonCenter - v0Left + v0Normal * 24, Color.Transparent, new Vector3(12, 1, 0));
 			}
-			Ins.Batch.Draw(chain, PrimitiveType.TriangleStrip);
+			Ins.Batch.Draw(ModAsset.OriginPylon_chain.Value, chain, PrimitiveType.TriangleStrip);
 
-			Ins.Batch.BindTexture<Vertex2D>(Commons.ModAsset.Noise_perlin.Value);
 			bars = new List<Vertex2D>()
 			{
 				new Vertex2D(new Vector2(i - 4, j + 9) * 16, color0 * 0.0f, new Vector3(0.1f, timeValue, 0)),
@@ -257,9 +252,8 @@ public class OriginalPylon_VFX : BackgroundVFX
 				new Vertex2D(new Vector2(i + 13, j + 9) * 16, color0 * 0.0f, new Vector3(0.5f, timeValue, 0)),
 				new Vertex2D(new Vector2(i + 13, j - 10) * 16, color0 * 0.0f, new Vector3(0.5f, timeValue, 0)),
 			};
-			Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+			Ins.Batch.Draw(Commons.ModAsset.Noise_perlin.Value, bars, PrimitiveType.TriangleStrip);
 
-			Ins.Batch.BindTexture<Vertex2D>(Commons.ModAsset.Noise_perlin.Value);
 			bars = new List<Vertex2D>()
 			{
 				new Vertex2D(new Vector2(i - 4, j + 9) * 16, color0 * 0.0f, new Vector3(0.1f, timeValue, 0)),
@@ -271,17 +265,16 @@ public class OriginalPylon_VFX : BackgroundVFX
 				new Vertex2D(new Vector2(i + 13, j + 9) * 16, color0 * 0.0f, new Vector3(0.5f, timeValue, 0)),
 				new Vertex2D(new Vector2(i + 13, j + 10) * 16, color0 * 0.0f, new Vector3(0.5f, timeValue, 0)),
 			};
-			Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+			Ins.Batch.Draw(Commons.ModAsset.Noise_perlin.Value, bars, PrimitiveType.TriangleStrip);
 
-			Ins.Batch.BindTexture<Vertex2D>(ModAsset.OriginPylon_hang.Value);
 			bars = new List<Vertex2D>()
-		{
-			new Vertex2D(new Vector2(i - 11, j - 8.3f) * 16, Color.White, new Vector3(0, 0, 0)),
-			new Vertex2D(new Vector2(i + 21, j - 8.3f) * 16, Color.White, new Vector3(1, 0, 0)),
-			new Vertex2D(new Vector2(i - 11, j + 17) * 16, Color.White, new Vector3(0, 1, 0)),
-			new Vertex2D(new Vector2(i + 21, j + 17) * 16, Color.White, new Vector3(1, 1, 0)),
-		};
-			Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+			{
+				new Vertex2D(new Vector2(i - 11, j - 8.3f) * 16, Color.White, new Vector3(0, 0, 0)),
+				new Vertex2D(new Vector2(i + 21, j - 8.3f) * 16, Color.White, new Vector3(1, 0, 0)),
+				new Vertex2D(new Vector2(i - 11, j + 17) * 16, Color.White, new Vector3(0, 1, 0)),
+				new Vertex2D(new Vector2(i + 21, j + 17) * 16, Color.White, new Vector3(1, 1, 0)),
+			};
+			Ins.Batch.Draw(ModAsset.OriginPylon_hang.Value, bars, PrimitiveType.TriangleStrip);
 		}
 	}
 }

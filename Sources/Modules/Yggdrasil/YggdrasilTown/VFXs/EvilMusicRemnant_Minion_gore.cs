@@ -110,7 +110,6 @@ public class EvilMusicRemnant_Minion_gore : Visual
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.EvilMusicRemnant_Minion_gore.Value);
 		float frameCount = 6;
 		float frameY = Style;
 		float dissolvePro = -0.4f;
@@ -132,6 +131,6 @@ public class EvilMusicRemnant_Minion_gore : Visual
 			new Vertex2D(Position + toCorner.RotatedBy(Math.PI * 0.5), drawColor, new Vector3(1, frameY / frameCount, dissolvePro)),
 			new Vertex2D(Position + toCorner.RotatedBy(Math.PI * 1), drawColor, new Vector3(1, (frameY + 1) / frameCount, dissolvePro)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.EvilMusicRemnant_Minion_gore.Value, bars, PrimitiveType.TriangleList);
 	}
 }

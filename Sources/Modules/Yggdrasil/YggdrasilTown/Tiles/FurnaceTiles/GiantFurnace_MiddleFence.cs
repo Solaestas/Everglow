@@ -17,7 +17,6 @@ public class GiantFurnace_MiddleFence : ForegroundVFX
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(texture);
 		var bars = new List<Vertex2D>();
 		float width = 22;
 		float height = 3;
@@ -50,6 +49,6 @@ public class GiantFurnace_MiddleFence : ForegroundVFX
 			bars.Add(position, Color.Transparent, new Vector3(0, 0, 0));
 			bars.Add(position, Color.Transparent, new Vector3(0, 0, 0));
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleList);
 	}
 }

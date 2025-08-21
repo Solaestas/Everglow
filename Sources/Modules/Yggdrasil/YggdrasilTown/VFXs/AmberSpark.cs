@@ -1,4 +1,5 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
+
 public class AmberSparkPipeline : Pipeline
 {
 	public override void Load()
@@ -6,6 +7,7 @@ public class AmberSparkPipeline : Pipeline
 		effect = ModAsset.AmberSpark;
 		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_AmberSpark.Value);
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
@@ -18,15 +20,18 @@ public class AmberSparkPipeline : Pipeline
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
+
 	public override void EndRender()
 	{
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(AmberSparkPipeline), typeof(BloomPipeline))]
 public class AmberSparkDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public Vector2 position;
 	public Vector2 velocity;
 	public float[] ai;
@@ -34,7 +39,11 @@ public class AmberSparkDust : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-	public AmberSparkDust() { }
+
+	public AmberSparkDust()
+	{
+	}
+
 	public override void Update()
 	{
 		position += velocity;
@@ -51,7 +60,10 @@ public class AmberSparkDust : Visual
 		scale *= 0.995f;
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		bool collide = false;
 		if (Collision.SolidCollision(position + new Vector2(velocity.X, 0), 0, 0))
 		{
@@ -87,11 +99,11 @@ public class AmberSparkDust : Visual
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + toCorner,new Color(0, 0,pocession, 0.0f), new Vector3(0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 1, pocession, 0.0f), new Vector3(0)),
+			new Vertex2D(position + toCorner, new Color(0, 0, pocession, 0.0f), new Vector3(0)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), new Color(0, 1, pocession, 0.0f), new Vector3(0)),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0 ,pocession, 0.0f), new Vector3(0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession, 0.0f), new Vector3(0))
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5), new Color(1, 0, pocession, 0.0f), new Vector3(0)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1), new Color(1, 1, pocession, 0.0f), new Vector3(0)),
 		};
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);

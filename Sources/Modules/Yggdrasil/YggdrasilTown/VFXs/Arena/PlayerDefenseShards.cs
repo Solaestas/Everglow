@@ -44,7 +44,6 @@ public class PlayerDefenseShards : Visual
 	{
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
 		Color lightColor = Color.White;
-		Ins.Batch.BindTexture<Vertex2D>(Terraria.GameContent.TextureAssets.MagicPixel.Value);
 
 		// lightColor = Color.Lerp(color2, color1, Math.Clamp((606 * 16 - position.X) / (8f * 16),0, 1));
 		int maxLength = 15;
@@ -62,7 +61,7 @@ public class PlayerDefenseShards : Visual
 				new Vertex2D(position + deltaY + toCorner.RotatedBy(Math.PI * 0.5 + rotation), lightColor, new Vector3(0, 1, 0)),
 				new Vertex2D(position + deltaY + toCorner.RotatedBy(Math.PI * 0 + rotation), lightColor, new Vector3(1, 0, 0)),
 			};
-			Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+			Ins.Batch.Draw(Terraria.GameContent.TextureAssets.MagicPixel.Value, bars, PrimitiveType.TriangleList);
 		}
 	}
 }

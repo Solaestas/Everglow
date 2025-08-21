@@ -5,8 +5,8 @@ public class JellyBallGelSplashPipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.JellyBallGelSplash;
-
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;

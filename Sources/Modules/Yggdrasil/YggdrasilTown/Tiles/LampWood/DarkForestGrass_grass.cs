@@ -75,11 +75,6 @@ public class DarkForestGrass_grass_fore : ForegroundVFX
 		//		return;
 		//	}
 		//}
-		Ins.Batch.BindTexture<Vertex2D>(texture);
-		if (Grass_FurPipeline.RenderStyle == 1)
-		{
-			Ins.Batch.BindTexture<Vertex2D>(ModAsset.DarkForestGrass_hardness.Value);
-		}
 		List<Vertex2D> bars = new List<Vertex2D>();
 		if (tile.Slope == SlopeType.Solid && !tile.halfBrick())
 		{
@@ -271,7 +266,7 @@ public class DarkForestGrass_grass_fore : ForegroundVFX
 				}
 			}
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleList);
 	}
 
 	public void AddDrawingFace(List<Vertex2D> bars, Vector2 direction, Vector2 position, float length = 1, Vector2 offset = default(Vector2))

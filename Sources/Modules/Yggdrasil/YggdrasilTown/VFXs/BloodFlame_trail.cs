@@ -50,7 +50,6 @@ public class BloodFlame_trail : Visual
 	{
 		Vector2 toCorner = new Vector2(0, scale);
 		Color lightColor = new Color(0.5f, 0, 0, 0.5f);
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.BloodFlame_noise.Value);
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int i = 0; i < trails.Count; i++)
 		{
@@ -64,6 +63,6 @@ public class BloodFlame_trail : Visual
 			bars.Add(pos + toCorner.RotatedBy(Math.PI * 0 + rotation) * size, lightColor * size, new Vector3(0, 1, 0));
 			bars.Add(pos + toCorner.RotatedBy(Math.PI * 1 + rotation) * size, lightColor * size, new Vector3(1, 0, 0));
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.BloodFlame_noise.Value, bars, PrimitiveType.TriangleList);
 	}
 }

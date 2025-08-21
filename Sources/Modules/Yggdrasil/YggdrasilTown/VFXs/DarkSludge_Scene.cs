@@ -56,7 +56,6 @@ public class DarkSludge_Scene : ForegroundVFX
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.DarkSludge_Liquid.Value);
 		List<Vertex2D> bars = [];
 		List<Vertex2D> bars2 = [];
 		if (MinX >= MaxX)
@@ -90,8 +89,8 @@ public class DarkSludge_Scene : ForegroundVFX
 				bars2.Add(position + new Vector2(4 * coeDistance + x * 4 * coeDistance, 16), color, new Vector3(0, 1f, 1));
 			}
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
-		Ins.Batch.Draw(bars2, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(ModAsset.DarkSludge_Liquid.Value, bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(ModAsset.DarkSludge_Liquid.Value, bars2, PrimitiveType.TriangleStrip);
 	}
 
 	public float NoiseWave(float x)

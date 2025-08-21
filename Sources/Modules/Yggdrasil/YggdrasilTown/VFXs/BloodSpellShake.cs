@@ -32,7 +32,6 @@ public class BloodSpellShake : Visual
 	public override void Draw()
 	{
 		Color lightColor = Color.Red;
-		Ins.Batch.BindTexture<Vertex2D>(Commons.ModAsset.Noise_cell.Value);
 		float timeValue = timer / maxTime;
 		float radiusScale = timeValue * scale;
 		List<Vertex2D> bars = new List<Vertex2D>();
@@ -42,6 +41,6 @@ public class BloodSpellShake : Visual
 			bars.Add(position + new Vector2(0, -(60 * timeValue + 30) * radius).RotatedBy(i / 60f * MathHelper.TwoPi + rotation), Color.Transparent, new Vector3(i / 60f, timeValue * 0.8f, 0));
 			bars.Add(position + new Vector2(0, -90 * radius).RotatedBy(i / 60f * MathHelper.TwoPi + rotation), lightColor, new Vector3(i / 60f, timeValue * 0.8f + 0.6f, 0));
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(Commons.ModAsset.Noise_cell.Value, bars, PrimitiveType.TriangleStrip);
 	}
 }

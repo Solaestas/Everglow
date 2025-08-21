@@ -28,7 +28,6 @@ public class Fevens_ArrowTrail : Visual
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.Fevens_ArrowTrail.Value);
 		float pocession = 1 - timer / maxTime;
 		Vector2 width = new Vector2(0, scale).RotatedBy(rotation);
 		Vector2 height = new Vector2(scale * 10, 0).RotatedBy(rotation);
@@ -51,6 +50,6 @@ public class Fevens_ArrowTrail : Visual
 			new Vertex2D(position + width - height, drawColor, new Vector3(1, 0, 0)),
 			new Vertex2D(position + width + height, drawColor, new Vector3(1, 1, 0)),
 		};
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.Fevens_ArrowTrail.Value, bars, PrimitiveType.TriangleList);
 	}
 }
