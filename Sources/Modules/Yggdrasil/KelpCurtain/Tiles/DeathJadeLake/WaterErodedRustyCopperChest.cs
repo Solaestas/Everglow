@@ -1,22 +1,24 @@
-using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
+using Everglow.Yggdrasil.KelpCurtain.Dusts;
+using Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.Furnace;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
 
-public class StoneBridge_Chest : ModTile
+public class WaterErodedRustyCopperChest : ModTile
 {
 	public override void SetStaticDefaults()
 	{
-		// Properties
 		Main.tileSpelunker[Type] = true;
 		Main.tileContainer[Type] = true;
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
+		Main.tileShine2[Type] = true;
+		Main.tileShine[Type] = 1200;
 		Main.tileOreFinderPriority[Type] = 500;
 		TileID.Sets.HasOutlines[Type] = true;
 		TileID.Sets.BasicChest[Type] = true;
@@ -25,24 +27,10 @@ public class StoneBridge_Chest : ModTile
 		TileID.Sets.InteractibleByNPCs[Type] = true;
 		TileID.Sets.IsAContainer[Type] = true;
 		TileID.Sets.FriendlyFairyCanLureTo[Type] = true;
-		TileID.Sets.GeneralPlacementTiles[Type] = false;
 
-		DustType = ModContent.DustType<StoneBridgeDust>();
+		DustType = ModContent.DustType<WaterErodedRustyCopperChestDust>();
 		AdjTiles = new int[] { TileID.Containers };
 
-		// Other tiles with just one map entry use CreateMapEntryName() to use the default translationkey, "MapEntry"
-		// Since ExampleChest needs multiple, we register our own MapEntry keys
-		AddMapEntry(new Color(200, 200, 200), this.GetLocalization("MapEntry0"), MapChestName);
-		AddMapEntry(new Color(0, 141, 63), this.GetLocalization("MapEntry1"), MapChestName);
-
-		// Style 1 is ExampleChest when locked. We want that tile style to drop the ExampleChest item as well. Use the Chest Lock item to lock this chest.
-		// No item places ExampleChest in the locked style, so the automatically determined item drop is unknown, this is why RegisterItemDrop is necessary in this situation.
-		RegisterItemDrop(ModContent.ItemType<StoneBridge_Chest_item>(), 1);
-
-		// Sometimes mods remove content, such as tile styles, or tiles accidentally get corrupted. We can, if desired, register a fallback item for any tile style that doesn't have an automatically determined item drop. This is done by omitting the tileStyles parameter.
-		// RegisterItemDrop(ItemID.Chest);
-
-		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
 		TileObjectData.newTile.Origin = new Point16(0, 1);
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
@@ -60,6 +48,7 @@ public class StoneBridge_Chest : ModTile
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
 		TileObjectData.addTile(Type);
+		AddMapEntry(new Color(127, 96, 104));
 	}
 
 	public override ushort GetMapOption(int i, int j)
@@ -112,12 +101,6 @@ public class StoneBridge_Chest : ModTile
 		num = 1;
 	}
 
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-		// We override KillMultiTile to handle additional logic other than the item drop. In this case, unregistering the Chest from the world
-		Chest.DestroyChest(i, j);
-	}
-
 	public override bool RightClick(int i, int j)
 	{
 		return FurnitureUtils.ChestRightClick(i, j);
@@ -151,7 +134,7 @@ public class StoneBridge_Chest : ModTile
 			player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
 			if (player.cursorItemIconText == defaultName)
 			{
-				player.cursorItemIconID = ModContent.ItemType<StoneBridge_Chest_item>();
+				player.cursorItemIconID = ModContent.ItemType<WaterErodedRustyCopperChest_Item>();
 				if (Main.tile[left, top].TileFrameX / 36 == 1)
 				{
 					// player.cursorItemIconID = ModContent.ItemType<>();
@@ -174,5 +157,10 @@ public class StoneBridge_Chest : ModTile
 			player.cursorItemIconEnabled = false;
 			player.cursorItemIconID = 0;
 		}
+	}
+
+	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+	{
+		base.PostDraw(i, j, spriteBatch);
 	}
 }

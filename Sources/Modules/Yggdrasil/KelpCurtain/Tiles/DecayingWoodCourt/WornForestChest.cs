@@ -1,4 +1,6 @@
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
+using Everglow.Yggdrasil.KelpCurtain.Items.Placeables.DecayingWoodCourt;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.Furnace;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
@@ -95,6 +97,58 @@ public class WornForestChest : ModTile
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
 		num = 1;
+	}
+	public override void MouseOver(int i, int j)
+	{
+		Player player = Main.LocalPlayer;
+		Tile tile = Main.tile[i, j];
+		int left = i;
+		int top = j;
+		if (tile.TileFrameX % 36 != 0)
+		{
+			left--;
+		}
+
+		if (tile.TileFrameY != 0)
+		{
+			top--;
+		}
+
+		int chest = Chest.FindChest(left, top);
+		player.cursorItemIconID = -1;
+		if (chest < 0)
+		{
+			player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
+		}
+		else
+		{
+			string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY); // This gets the ContainerName text for the currently selected language
+			player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
+			if (player.cursorItemIconText == defaultName)
+			{
+				player.cursorItemIconID = ModContent.ItemType<WornForestChest_Item>();
+				if (Main.tile[left, top].TileFrameX / 36 == 1)
+				{
+					// player.cursorItemIconID = ModContent.ItemType<>();
+				}
+
+				player.cursorItemIconText = string.Empty;
+			}
+		}
+
+		player.noThrow = 2;
+		player.cursorItemIconEnabled = true;
+	}
+
+	public override void MouseOverFar(int i, int j)
+	{
+		MouseOver(i, j);
+		Player player = Main.LocalPlayer;
+		if (player.cursorItemIconText == string.Empty)
+		{
+			player.cursorItemIconEnabled = false;
+			player.cursorItemIconID = 0;
+		}
 	}
 
 	public override bool RightClick(int i, int j)

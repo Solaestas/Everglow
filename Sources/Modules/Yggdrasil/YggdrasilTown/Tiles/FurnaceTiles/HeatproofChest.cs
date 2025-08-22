@@ -14,8 +14,6 @@ public class HeatproofChest : ModTile
 		// Properties
 		Main.tileSpelunker[Type] = true;
 		Main.tileContainer[Type] = true;
-		Main.tileShine2[Type] = true;
-		Main.tileShine[Type] = 1200;
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
 		Main.tileOreFinderPriority[Type] = 500;
@@ -37,18 +35,20 @@ public class HeatproofChest : ModTile
 		AddMapEntry(new Color(0, 141, 63), this.GetLocalization("MapEntry1"), MapChestName);
 
 		// Style 1 is ExampleChest when locked. We want that tile style to drop the ExampleChest item as well. Use the Chest Lock item to lock this chest.
-		// No item places ExampleChest in the locked style, so the automatically determined item drop is unknown, this is why RegisterItemDrop is necessary in this situation. 
+		// No item places ExampleChest in the locked style, so the automatically determined item drop is unknown, this is why RegisterItemDrop is necessary in this situation.
 		RegisterItemDrop(ModContent.ItemType<HeatproofChest_item>(), 1);
+
 		// Sometimes mods remove content, such as tile styles, or tiles accidentally get corrupted. We can, if desired, register a fallback item for any tile style that doesn't have an automatically determined item drop. This is done by omitting the tileStyles parameter.
 		// RegisterItemDrop(ItemID.Chest);
 
 		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
 		TileObjectData.newTile.Origin = new Point16(0, 1);
-		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16 };
+		TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
 		TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(Chest.FindEmptyChest, -1, 0, true);
 		TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(Chest.AfterPlacement_Hook, -1, 0, false);
-		TileObjectData.newTile.AnchorInvalidTiles = new int[] {
+		TileObjectData.newTile.AnchorInvalidTiles = new int[]
+		{
 			TileID.MagicalIceBlock,
 			TileID.Boulder,
 			TileID.BouncyBoulder,
@@ -98,7 +98,7 @@ public class HeatproofChest : ModTile
 			return Language.GetTextValue("LegacyChestType.0");
 		}
 
-		if (Main.chest[chest].name == "")
+		if (Main.chest[chest].name == string.Empty)
 		{
 			return name;
 		}
@@ -156,7 +156,7 @@ public class HeatproofChest : ModTile
 					// player.cursorItemIconID = ModContent.ItemType<>();
 				}
 
-				player.cursorItemIconText = "";
+				player.cursorItemIconText = string.Empty;
 			}
 		}
 
@@ -168,7 +168,7 @@ public class HeatproofChest : ModTile
 	{
 		MouseOver(i, j);
 		Player player = Main.LocalPlayer;
-		if (player.cursorItemIconText == "")
+		if (player.cursorItemIconText == string.Empty)
 		{
 			player.cursorItemIconEnabled = false;
 			player.cursorItemIconID = 0;
