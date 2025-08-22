@@ -7,7 +7,7 @@
 *.xnb
 
 # 忽略Test目录下的其他文件
-Sources/Commons/Function/Test/*.*
+Sources/Everglow.Function/Test/*.*
 
 # User-specific files
 *.rsuser
