@@ -2,9 +2,9 @@ using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 
-namespace Everglow.Commons.Events;
+namespace Everglow.Commons.Mechanics.Events;
 
-public class EventManager : ModSystem
+public class EventSystem : ModSystem
 {
 	private const string LayerName = "Everglow/ModEvent";
 	private const string VanillaInvasionLayerName = "Vanilla: Invasion Progress Bars";
@@ -46,7 +46,7 @@ public class EventManager : ModSystem
 
 	private static void DrawInvasionProgress_Vanilla()
 	{
-		var sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		var sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin();
 
