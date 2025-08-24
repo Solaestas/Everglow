@@ -2,11 +2,11 @@ using Everglow.Commons.TileHelper;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.ZY.Items;
+namespace Everglow.Commons.ZY;
 
 public class SightOfTile : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.MagicWeapons;
+    public override string LocalizationCategory => Utilities.LocalizationUtils.Categories.MagicWeapons;
 
     public override void SetDefaults()
     {
@@ -78,13 +78,13 @@ internal class SightOfTileUI : ModSystem
         {
             Size = 0f;
             AddCenter = Vector2.Zero;
-            this.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
-            this.contain = ModContent.Request<Texture2D>("Everglow/ZY/Items/InTile").Value;
+            this.texcoord = ModAsset.Wires_0.Value;
+            this.contain = ModAsset.InTile.Value;
         }
     }
 
-    private UICircle circle0 = new(0f, Vector2.Zero, ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value, ModContent.Request<Texture2D>("Everglow/ZY/Items/InTile").Value);
-    private UICircle circle1 = new(0f, Vector2.Zero, ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value, ModContent.Request<Texture2D>("Everglow/ZY/Items/OutTile").Value);
+    private UICircle circle0 = new(0f, Vector2.Zero, ModAsset.Wires_0.Value, ModAsset.InTile.Value);
+    private UICircle circle1 = new(0f, Vector2.Zero, ModAsset.Wires_0.Value, ModAsset.OutTile.Value);
     public Vector2 DrawCenter;
     private int animationTimer = 0;
     public bool EnableMapIOUI = false;
@@ -119,8 +119,8 @@ internal class SightOfTileUI : ModSystem
         }
         if (animationTimer > 0)
         {
-            circle0.contain = ModContent.Request<Texture2D>("Everglow/ZY/Items/InTile").Value;
-            circle1.contain = ModContent.Request<Texture2D>("Everglow/ZY/Items/OutTile").Value;
+            circle0.contain = ModAsset.InTile.Value;
+            circle1.contain = ModAsset.OutTile.Value;
             UpdateAndDraw(circle0, 0);
             UpdateAndDraw(circle1, 1);
         }
@@ -216,7 +216,7 @@ internal class SightOfTileUI : ModSystem
             {
                 count++;
                 Dx += 18;
-                Texture2D sqrt = ModContent.Request<Texture2D>("Everglow/ZY/Items/RectangleSmall").Value;
+                Texture2D sqrt = ModAsset.RectangleSmall.Value;
                 Vector2 DrawPos = DrawCenter + c0.AddCenter + new Vector2(Dx, Dy);
                 if (!new Rectangle(0, 0, Main.screenWidth, Main.screenHeight).Contains(new Rectangle((int)DrawPos.X - 9, (int)DrawPos.Y - 9, 18, 18)))
                 {
@@ -252,16 +252,16 @@ internal class SightOfTileUI : ModSystem
 
     public void CheckMouseOver(UICircle c0)
     {
-        if ((Main.MouseScreen - DrawCenter - c0.AddCenter).Length() < 20 && c0.texcoord != ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_1").Value)
+        if ((Main.MouseScreen - DrawCenter - c0.AddCenter).Length() < 20 && c0.texcoord != ModAsset.Wires_1.Value)
         {
             SoundEngine.PlaySound(SoundID.MenuClose);
             c0.Size = 1.2f;
-            c0.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_1").Value;
+            c0.texcoord = ModAsset.Wires_1.Value;
         }
-        if ((Main.MouseScreen - DrawCenter - c0.AddCenter).Length() >= 20 && c0.texcoord != ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value)
+        if ((Main.MouseScreen - DrawCenter - c0.AddCenter).Length() >= 20 && c0.texcoord != ModAsset.Wires_0.Value)
         {
             c0.Size = 1f;
-            c0.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
+            c0.texcoord = ModAsset.Wires_0.Value;
         }
     }
 
@@ -274,8 +274,8 @@ internal class SightOfTileUI : ModSystem
     public void OpenUI()
     {
         DrawCenter = Main.MouseScreen / Main.UIScale;
-        circle0.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
-        circle1.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
+        circle0.texcoord = ModAsset.Wires_0.Value;
+        circle1.texcoord = ModAsset.Wires_0.Value;
         InTile = false;
         OutTile = false;
         EnableMapIOUI = true;
@@ -283,8 +283,8 @@ internal class SightOfTileUI : ModSystem
 
     public void CloseUI()
     {
-        circle0.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
-        circle1.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
+        circle0.texcoord = ModAsset.Wires_0.Value;
+        circle1.texcoord = ModAsset.Wires_0.Value;
         EnableMapIOUI = false;
     }
 

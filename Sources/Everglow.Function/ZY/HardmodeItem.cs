@@ -1,7 +1,6 @@
-using Everglow.Commons;
 using Everglow.Commons.FeatureFlags;
 
-namespace Everglow.ZY.Items;
+namespace Everglow.Commons.ZY;
 
 internal class HardmodeItem : ModItem
 {

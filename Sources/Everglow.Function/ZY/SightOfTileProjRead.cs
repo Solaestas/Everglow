@@ -1,7 +1,8 @@
 using Everglow.Commons.TileHelper;
+using Everglow.Commons.Vertex;
 using Terraria.GameContent;
 
-namespace Everglow.ZY.Items;
+namespace Everglow.Commons.ZY;
 
 internal class SightOfTileProjRead : ModProjectile
 {
@@ -101,7 +102,7 @@ internal class SightOfTileProjRead : ModProjectile
 
 		Vdr = Vdr / Vdr.Length() * 7;
 
-		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(Vdr.Y, Vdr.X) - (Math.PI / 2d)));
+		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(Vdr.Y, Vdr.X) - Math.PI / 2d));
 		Texture2D t = ModContent.Request<Texture2D>("Everglow/ZY/Items/SightOfTileProjRead").Value;
 		Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 		SpriteEffects S = SpriteEffects.None;
@@ -114,11 +115,11 @@ internal class SightOfTileProjRead : ModProjectile
 			player.direction = 1;
 		}
 
-		Main.spriteBatch.Draw(t, player.MountedCenter - Main.screenPosition + (Vdr * 5f), null, color, (float)(Math.Atan2(Vdr.Y, Vdr.X) + (Math.PI / 4d)), t.Size() / 2f, Projectile.scale, S, 0f);
-		Vector2 ULInt = (new Vector2(left, up) * 16) + new Vector2(0);
-		Vector2 DRInt = (new Vector2(right, down) * 16) + new Vector2(0);
-		Vector2 DLInt = (new Vector2(left, down) * 16) + new Vector2(0);
-		Vector2 URInt = (new Vector2(right, up) * 16) + new Vector2(0);
+		Main.spriteBatch.Draw(t, player.MountedCenter - Main.screenPosition + Vdr * 5f, null, color, (float)(Math.Atan2(Vdr.Y, Vdr.X) + Math.PI / 4d), t.Size() / 2f, Projectile.scale, S, 0f);
+		Vector2 ULInt = new Vector2(left, up) * 16 + new Vector2(0);
+		Vector2 DRInt = new Vector2(right, down) * 16 + new Vector2(0);
+		Vector2 DLInt = new Vector2(left, down) * 16 + new Vector2(0);
+		Vector2 URInt = new Vector2(right, up) * 16 + new Vector2(0);
 
 		URInt.X += 16;
 		DLInt.Y += 16;
@@ -128,10 +129,10 @@ internal class SightOfTileProjRead : ModProjectile
 		URInt += new Vector2(-1, 1);
 		DLInt += new Vector2(1, -1);
 		DRInt += new Vector2(-1, -1);
-		DrawDoubleLine(player.MountedCenter - Main.screenPosition + (Vdr * 8f), ULInt - Main.screenPosition, new Color(40, 240, 255, 100), new Color(0, 0, 65, 0));
-		DrawDoubleLine(player.MountedCenter - Main.screenPosition + (Vdr * 8f), URInt - Main.screenPosition, new Color(40, 240, 255, 100), new Color(0, 0, 65, 0));
-		DrawDoubleLine(player.MountedCenter - Main.screenPosition + (Vdr * 8f), DLInt - Main.screenPosition, new Color(40, 240, 255, 100), new Color(0, 0, 65, 0));
-		DrawDoubleLine(player.MountedCenter - Main.screenPosition + (Vdr * 8f), DRInt - Main.screenPosition, new Color(40, 240, 255, 100), new Color(0, 0, 65, 0));
+		DrawDoubleLine(player.MountedCenter - Main.screenPosition + Vdr * 8f, ULInt - Main.screenPosition, new Color(40, 240, 255, 100), new Color(0, 0, 65, 0));
+		DrawDoubleLine(player.MountedCenter - Main.screenPosition + Vdr * 8f, URInt - Main.screenPosition, new Color(40, 240, 255, 100), new Color(0, 0, 65, 0));
+		DrawDoubleLine(player.MountedCenter - Main.screenPosition + Vdr * 8f, DLInt - Main.screenPosition, new Color(40, 240, 255, 100), new Color(0, 0, 65, 0));
+		DrawDoubleLine(player.MountedCenter - Main.screenPosition + Vdr * 8f, DRInt - Main.screenPosition, new Color(40, 240, 255, 100), new Color(0, 0, 65, 0));
 
 		DrawNinePiecesForTiles(left, right, up, down);
 
@@ -160,13 +161,13 @@ internal class SightOfTileProjRead : ModProjectile
 				int ScPosX = (int)Main.screenPosition.X;
 				int ScPosY = (int)Main.screenPosition.Y;
 				var source = new Rectangle(0, 0, 8, 8);
-				Main.spriteBatch.Draw(t, new Rectangle((LeftX * 16) - ScPosX, (UpY * 16) - ScPosY, 8, 8), source, GetTileColor(LeftX, UpY, baseColor));
+				Main.spriteBatch.Draw(t, new Rectangle(LeftX * 16 - ScPosX, UpY * 16 - ScPosY, 8, 8), source, GetTileColor(LeftX, UpY, baseColor));
 				source = new Rectangle(40, 0, 8, 8);
-				Main.spriteBatch.Draw(t, new Rectangle((LeftX * 16) - ScPosX + 8, (UpY * 16) - ScPosY, 8, 8), source, GetTileColor(LeftX, UpY, baseColor));
+				Main.spriteBatch.Draw(t, new Rectangle(LeftX * 16 - ScPosX + 8, UpY * 16 - ScPosY, 8, 8), source, GetTileColor(LeftX, UpY, baseColor));
 				source = new Rectangle(0, 40, 8, 8);
-				Main.spriteBatch.Draw(t, new Rectangle((LeftX * 16) - ScPosX, (UpY * 16) - ScPosY + 8, 8, 8), source, GetTileColor(LeftX, UpY, baseColor));
+				Main.spriteBatch.Draw(t, new Rectangle(LeftX * 16 - ScPosX, UpY * 16 - ScPosY + 8, 8, 8), source, GetTileColor(LeftX, UpY, baseColor));
 				source = new Rectangle(40, 40, 8, 8);
-				Main.spriteBatch.Draw(t, new Rectangle((LeftX * 16) - ScPosX + 8, (UpY * 16) - ScPosY + 8, 8, 8), source, GetTileColor(LeftX, UpY, baseColor));
+				Main.spriteBatch.Draw(t, new Rectangle(LeftX * 16 - ScPosX + 8, UpY * 16 - ScPosY + 8, 8, 8), source, GetTileColor(LeftX, UpY, baseColor));
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 				return;
@@ -187,8 +188,8 @@ internal class SightOfTileProjRead : ModProjectile
 					source.Y = 32;
 					source2.Y = 32;
 				}
-				Main.spriteBatch.Draw(t, new Rectangle((LeftX * 16) - ScPosX, (y * 16) - ScPosY, 8, 16), source, GetTileColor(LeftX, y, baseColor));
-				Main.spriteBatch.Draw(t, new Rectangle((LeftX * 16) - ScPosX + 8, (y * 16) - ScPosY, 8, 16), source2, GetTileColor(LeftX, y, baseColor));
+				Main.spriteBatch.Draw(t, new Rectangle(LeftX * 16 - ScPosX, y * 16 - ScPosY, 8, 16), source, GetTileColor(LeftX, y, baseColor));
+				Main.spriteBatch.Draw(t, new Rectangle(LeftX * 16 - ScPosX + 8, y * 16 - ScPosY, 8, 16), source2, GetTileColor(LeftX, y, baseColor));
 			}
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
@@ -212,8 +213,8 @@ internal class SightOfTileProjRead : ModProjectile
 					source.X = 32;
 					source2.X = 32;
 				}
-				Main.spriteBatch.Draw(t, new Rectangle((x * 16) - ScPosX, (UpY * 16) - ScPosY, 16, 8), source, GetTileColor(x, UpY, baseColor));
-				Main.spriteBatch.Draw(t, new Rectangle((x * 16) - ScPosX, (UpY * 16) - ScPosY + 8, 16, 8), source2, GetTileColor(x, UpY, baseColor));
+				Main.spriteBatch.Draw(t, new Rectangle(x * 16 - ScPosX, UpY * 16 - ScPosY, 16, 8), source, GetTileColor(x, UpY, baseColor));
+				Main.spriteBatch.Draw(t, new Rectangle(x * 16 - ScPosX, UpY * 16 - ScPosY + 8, 16, 8), source2, GetTileColor(x, UpY, baseColor));
 			}
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
@@ -247,7 +248,7 @@ internal class SightOfTileProjRead : ModProjectile
 					source.Y = 32;
 				}
 
-				Main.spriteBatch.Draw(t, new Rectangle((x * 16) - ScPosX, (y * 16) - ScPosY, 16, 16), source, GetTileColor(x, y, baseColor));
+				Main.spriteBatch.Draw(t, new Rectangle(x * 16 - ScPosX, y * 16 - ScPosY, 16, 16), source, GetTileColor(x, y, baseColor));
 			}
 		}
 		Main.spriteBatch.End();

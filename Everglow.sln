@@ -9,10 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.Core", "Sources\Ev
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.Function", "Sources\Everglow.Function\Everglow.Function.csproj", "{8DADB5DD-A1F2-4427-8CFD-47EF0C432410}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{49C8E04B-858D-4FAB-9345-03C9C3D1ED4E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.ZY", "Sources\Modules\ZY\Everglow.ZY.csproj", "{24834CB3-3CC4-4CD8-869B-457DD20E83ED}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.UnitTests", "Sources\Everglow.UnitTests\Everglow.UnitTests.csproj", "{40E0409E-F8BA-42C1-982C-C97000DE2518}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.Myth", "Sources\Modules\Myth\Everglow.Myth.csproj", "{3537398A-34CA-4BE8-89BB-AD9EE6B873B2}"
@@ -45,7 +41,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.SubSpace", "Source
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{87E92AC3-08E3-41E6-AADF-CF744CD941FC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		Sources\Directory.Build.props = Sources\Directory.Build.props
+		Sources\Directory.Build.targets = Sources\Directory.Build.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,10 +65,6 @@ Global
 		{8DADB5DD-A1F2-4427-8CFD-47EF0C432410}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DADB5DD-A1F2-4427-8CFD-47EF0C432410}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DADB5DD-A1F2-4427-8CFD-47EF0C432410}.Release|Any CPU.Build.0 = Release|Any CPU
-		{24834CB3-3CC4-4CD8-869B-457DD20E83ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{24834CB3-3CC4-4CD8-869B-457DD20E83ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{24834CB3-3CC4-4CD8-869B-457DD20E83ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{24834CB3-3CC4-4CD8-869B-457DD20E83ED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{40E0409E-F8BA-42C1-982C-C97000DE2518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{40E0409E-F8BA-42C1-982C-C97000DE2518}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40E0409E-F8BA-42C1-982C-C97000DE2518}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -146,7 +142,6 @@ Global
 		{22C04480-AA0F-49C9-80D9-2391B1572A26} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
 		{F24B50C1-414B-4026-858D-09CBA84794FA} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
 		{BF477059-FD57-4862-834B-64C74F9D5BAB} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
-		{87E92AC3-08E3-41E6-AADF-CF744CD941FC} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5A74DCF1-B2AD-4E60-813F-653D561E7E6A}
