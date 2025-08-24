@@ -1,8 +1,10 @@
 using System.Runtime.CompilerServices;
+using Everglow.Commons.CustomTiles;
 using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.CustomTiles.DataStructures;
+using Everglow.Commons.Utilities;
 
-namespace Everglow.Commons.CustomTiles.Collide;
+namespace Everglow.Commons.Utilities;
 
 public static class CollisionUtils
 {
@@ -31,6 +33,8 @@ public static class CollisionUtils
 		}
 		return new AABB(min, max - min);
 	}
+
+	public static AABB ToAABB(this Rectangle rectangle) => new(rectangle.TopLeft(), rectangle.Size());
 
 	/// <summary>
 	/// 判断两个AABB是否相交，边缘重叠视为相交
@@ -62,23 +66,6 @@ public static class CollisionUtils
 		return true;
 	}
 
-	public static bool Intersect(this Edge a, Edge b)
-	{
-		if (!a.ToAABB().Intersect(b.ToAABB()))
-			return false;
-		float factor = (b.end - b.begin).Cross(a.begin - b.begin);
-		float u = (a.end - a.begin).Cross(a.begin - b.begin);
-		float denom = (a.end - a.begin).Cross(b.end - b.begin);
-		if (Math.Abs(denom) < Epsilon)
-			return false;
-
-		factor /= denom;
-		u /= denom;
-		if (0 <= factor && factor <= 1 && 0 <= u && u <= 1)
-			return true;
-		return false;
-	}
-
 	public static bool Intersect(this Edge a, Edge b, out float factor)
 	{
 		if (!a.ToAABB().Intersect(b.ToAABB()))
@@ -86,34 +73,50 @@ public static class CollisionUtils
 			factor = 0;
 			return false;
 		}
+
 		factor = (b.end - b.begin).Cross(a.begin - b.begin);
 		float u = (a.end - a.begin).Cross(a.begin - b.begin);
 		float denom = (b.end - b.begin).Cross(a.end - a.begin);
 		if (Math.Abs(denom) < Epsilon)
+		{
 			return false;
+		}
 
 		factor /= denom;
 		u /= denom;
-		if (0 <= factor && factor <= 1 && 0 <= u && u <= 1)
-			return true;
-		return false;
+
+		return factor >= 0 && factor <= 1 && u >= 0 && u <= 1;
 	}
+
+	public static bool Intersect(this Edge a, Edge b) => Intersect(a, b, out _);
 
 	public static bool Intersect(this Edge line, AABB aabb)
 	{
 		if (aabb.Contain(line.begin) || aabb.Contain(line.end))
+		{
 			return true;
+		}
+
 		if (line.Intersect(new Edge(aabb.TopLeft, aabb.BottomRight)) || line.Intersect(new Edge(aabb.TopRight, aabb.BottomLeft)))
+		{
 			return true;
+		}
+
 		return false;
 	}
 
 	public static bool Intersect(this AABB aabb, Edge line)
 	{
 		if (aabb.Contain(line.begin) || aabb.Contain(line.end))
+		{
 			return true;
+		}
+
 		if (line.Intersect(new Edge(aabb.TopLeft, aabb.BottomRight)) || line.Intersect(new Edge(aabb.TopRight, aabb.BottomLeft)))
+		{
 			return true;
+		}
+
 		return false;
 	}
 
@@ -127,28 +130,40 @@ public static class CollisionUtils
 		{
 			it.Current = Direction.Top;
 			if (!it.MoveNext())
+			{
 				return true;
+			}
+
 			result = true;
 		}
 		if (new Edge(aabb.TopRight, aabb.BottomRight).Intersect(edge))
 		{
 			it.Current = Direction.Right;
 			if (!it.MoveNext())
+			{
 				return true;
+			}
+
 			result = true;
 		}
 		if (new Edge(aabb.BottomRight, aabb.BottomLeft).Intersect(edge))
 		{
 			it.Current = Direction.Bottom;
 			if (!it.MoveNext())
+			{
 				return true;
+			}
+
 			result = true;
 		}
 		if (new Edge(aabb.BottomLeft, aabb.TopLeft).Intersect(edge))
 		{
 			it.Current = Direction.Left;
 			if (!it.MoveNext())
+			{
 				return true;
+			}
+
 			result = true;
 		}
 		return result;
@@ -160,7 +175,9 @@ public static class CollisionUtils
 		if (or.X > aabb.Width / 2)
 		{
 			if (or.Y > aabb.Height / 2)
+			{
 				return or.Distance(aabb.size / 2) <= circle.radius;
+			}
 			else
 			{
 				return or.X - aabb.Width / 2 <= circle.radius;
@@ -192,7 +209,7 @@ public static class CollisionUtils
 						(true, true) => Direction.TopLeft,
 						(false, true) => Direction.TopRight,
 						(true, false) => Direction.BottomLeft,
-						(false, false) => Direction.BottomRight
+						(false, false) => Direction.BottomRight,
 					};
 				}
 				return result;
@@ -201,7 +218,10 @@ public static class CollisionUtils
 			{
 				result = or.X - aabb.Width / 2 <= circle.radius;
 				if (result)
+				{
 					dir = flipX ? Direction.Left : Direction.Right;
+				}
+
 				return result;
 			}
 		}
@@ -209,7 +229,10 @@ public static class CollisionUtils
 		{
 			result = or.Y - aabb.Height / 2 <= circle.radius;
 			if (result)
+			{
 				dir = flipY ? Direction.Top : Direction.Bottom;
+			}
+
 			return result;
 		}
 	}
@@ -217,6 +240,97 @@ public static class CollisionUtils
 	public static bool Intersect(float u0, float v0, float u1, float v1)
 	{
 		return !(u1 > v0 || v1 < u0);
+	}
+
+	/// <summary>
+	/// 两个斜矩形
+	/// </summary>
+	/// <param name="p1"></param>
+	/// <param name="p2"></param>
+	/// <param name="line1Width"></param>
+	/// <param name="p3"></param>
+	/// <param name="p4"></param>
+	/// <param name="line2Width"></param>
+	/// <returns></returns>
+	public static bool Intersect(Vector2 p1, Vector2 p2, float line1Width, Vector2 p3, Vector2 p4, float line2Width)
+	{
+		// 计算四边形的四条边
+		Vector2 width1 = (p2 - p1).SafeNormalize(Vector2.zeroVector).RotatedBy(MathHelper.PiOver2) * line1Width / 2f;
+		Vector2 width2 = (p4 - p3).SafeNormalize(Vector2.zeroVector).RotatedBy(MathHelper.PiOver2) * line2Width / 2f;
+		Vector2[] lines1 = { p1 - width1, p2 - width1, p2 + width1, p1 + width1 };
+		Vector2[] lines2 = { p3 - width2, p4 - width2, p4 + width2, p3 + width2 };
+
+		// 检查每条边是否与另一矩形相交
+		for (int i = 0; i < lines1.Length; i++)
+		{
+			for (int j = 0; j < lines2.Length; j++)
+			{
+				if (DoLinesIntersect(lines1[i], lines1[(i + 1) % lines1.Length], lines2[j], lines2[(j + 1) % lines2.Length]))
+				{
+					return true;
+				}
+			}
+		}
+
+		// 判定是否存在包含
+		for (int i = 0; i < lines1.Length; i++)
+		{
+			double totalRad = 0;
+			for (int j = 0; j < lines2.Length; j++)
+			{
+				Vector2 side1 = lines2[j] - lines1[i];
+				Vector2 side2 = lines2[(j + 1) % lines2.Length] - lines1[i];
+				double cosTheta = Vector2.Dot(side1, side2) / (side2.Length() * side1.Length());
+				double rad = Math.Acos(cosTheta);
+				totalRad += rad;
+			}
+			if (totalRad > 6.2831)
+			{
+				return true;
+			}
+		}
+		for (int j = 0; j < lines1.Length; j++)
+		{
+			double totalRad = 0;
+			for (int i = 0; i < lines2.Length; i++)
+			{
+				Vector2 side1 = lines1[i] - lines2[j];
+				Vector2 side2 = lines1[(i + 1) % lines1.Length] - lines2[j];
+				double cosTheta = Vector2.Dot(side1, side2) / (side2.Length() * side1.Length());
+				double rad = Math.Acos(cosTheta);
+				totalRad += rad;
+			}
+			if (totalRad > 6.2831)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/// <summary>
+	/// 两线相交
+	/// </summary>
+	/// <param name="p1"></param>
+	/// <param name="p2"></param>
+	/// <param name="p3"></param>
+	/// <param name="p4"></param>
+	/// <returns></returns>
+	public static bool DoLinesIntersect(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4)
+	{
+		float denominator = (p4.Y - p3.Y) * (p2.X - p1.X) - (p4.X - p3.X) * (p2.Y - p1.Y);
+		float numerator1 = (p4.X - p3.X) * (p1.Y - p3.Y) - (p4.Y - p3.Y) * (p1.X - p3.X);
+		float numerator2 = (p2.X - p1.X) * (p1.Y - p3.Y) - (p2.Y - p1.Y) * (p1.X - p3.X);
+
+		if (denominator == 0)
+		{
+			return numerator1 == 0 && numerator2 == 0;
+		}
+
+		float r = numerator1 / denominator;
+		float s = numerator2 / denominator;
+
+		return r >= 0 && r <= 1 && s >= 0 && s <= 1;
 	}
 
 	public static bool Contain(this AABB aabb, Vector2 position)
@@ -230,17 +344,23 @@ public static class CollisionUtils
 	public static float Distance(this Edge edge, Vector2 point)
 	{
 		if (edge.begin == edge.end)
+		{
 			return point.Distance(edge.begin);
+		}
 
 		Vector2 v = edge.end - edge.begin;
 		Vector2 w = point - edge.begin;
 		float c1 = Vector2.Dot(w, v);
 		if (c1 <= 0)
+		{
 			return point.Distance(edge.begin);
+		}
 
 		float c2 = Vector2.Dot(v, v);
 		if (c2 <= c1)
+		{
 			return point.Distance(edge.end);
+		}
 
 		return point.Distance(edge.begin + v * c1 / c2);
 	}
@@ -306,93 +426,106 @@ public static class CollisionUtils
 		return v;
 	}
 
-	public static AABB ToAABB(this Rectangle rectangle) => new(rectangle.TopLeft(), rectangle.Size());
-	/// <summary>
-	/// 两个斜矩形
-	/// </summary>
-	/// <param name="p1"></param>
-	/// <param name="p2"></param>
-	/// <param name="line1Width"></param>
-	/// <param name="p3"></param>
-	/// <param name="p4"></param>
-	/// <param name="line2Width"></param>
-	/// <returns></returns>
-	public static bool Intersect(Vector2 p1, Vector2 p2, float line1Width, Vector2 p3, Vector2 p4, float line2Width)
+	public static bool PointOnLine(Vector2 A, Vector2 d, Vector2 C)
 	{
-		// 计算四边形的四条边
-		Vector2 width1 = Utils.SafeNormalize(p2 - p1, Vector2.zeroVector).RotatedBy(MathHelper.PiOver2) * line1Width / 2f;
-		Vector2 width2 = Utils.SafeNormalize(p4 - p3, Vector2.zeroVector).RotatedBy(MathHelper.PiOver2) * line2Width / 2f;
-		Vector2[] lines1 = { p1 - width1, p2 - width1, p2 + width1, p1 + width1 };
-		Vector2[] lines2 = { p3 - width2, p4 - width2, p4 + width2, p3 + width2 };
+		return Math.Abs(Utilities.CollisionUtils.Cross(d, C - A)) < 1e-2;
+	}
 
-		// 检查每条边是否与另一矩形相交
-		for (int i = 0; i < lines1.Length; i++)
+	public static bool PointOnSegment(Vector2 A, Vector2 B, Vector2 C)
+	{
+		return Math.Abs(Utilities.CollisionUtils.Cross(B - A, C - A)) < 1e-2
+			&& Vector2.Dot(C - A, B - A) * Vector2.Dot(C - B, A - B) >= 0;
+	}
+
+	/// <summary>
+	/// 获取AB两动点形成线段和C点的连续碰撞结果，并返回时间
+	/// </summary>
+	/// <param name="A"></param>
+	/// <param name="vA"></param>
+	/// <param name="B"></param>
+	/// <param name="vB"></param>
+	/// <param name="C"></param>
+	/// <param name="vC"></param>
+	/// <param name="t"></param>
+	/// <returns></returns>
+	public static bool CCD_SegmentPoint(Vector2 A, Vector2 vA, Vector2 B, Vector2 vB,
+		Vector2 C, Vector2 vC, out float t)
+	{
+		static bool IsInValidTime(float t) => t < 0 || float.IsNaN(t) || float.IsInfinity(t);
+
+		Vector2 E0 = B - A;
+		Vector2 E1 = vB - vA;
+		Vector2 E2 = C - A;
+		Vector2 E3 = vC - vA;
+
+		// Vector2 a1 = E0.X * E2.Y + E0.X * E3.Y * t + E1.X * t * E2.Y + E1.X * E3.Y * t * t;
+		// Vector2 a2 = E0.Y * E2.X + E0.Y * E3.X * t + E1.Y * t * E2.X + E1.Y * E3.X * t * t;
+		double a = E1.X * E3.Y - E1.Y * E3.X;
+		double b = E0.X * E3.Y - E0.Y * E3.X + E1.X * E2.Y - E1.Y * E2.X;
+		double c = E0.X * E2.Y - E0.Y * E2.X;
+
+		if (Math.Abs(a) < 1e-4)
 		{
-			for (int j = 0; j < lines2.Length; j++)
+			t = (float)(-c / b);
+			if (IsInValidTime(t))
 			{
-				if (DoLinesIntersect(lines1[i], lines1[(i + 1) % lines1.Length], lines2[j], lines2[(j + 1) % lines2.Length]))
-				{
-					return true;
-				}
+				return false;
 			}
+
+			return PointOnSegment(A + vA * t, B + vB * t, C + vC * t);
 		}
-		//判定是否存在包含
-		for (int i = 0; i < lines1.Length; i++)
+
+		double det = b * b - 4 * a * c;
+
+		t = 0;
+
+		if (det < 0)
 		{
-			double totalRad = 0;
-			for (int j = 0; j < lines2.Length; j++)
+			return false;
+		}
+
+		double detSqrt = Math.Sqrt(det);
+		double q;
+		if (b < 0)
+		{
+			q = -.5 * (b - detSqrt);
+		}
+		else
+		{
+			q = -.5 * (b + detSqrt);
+		}
+
+		float t1 = (float)(q / a);
+		float t2 = (float)(c / q);
+
+		if (IsInValidTime(t1) && IsInValidTime(t2))
+		{
+			return false;
+		}
+		else if (t1 >= 0 && IsInValidTime(t2))
+		{
+			t = t1;
+			return PointOnSegment(A + vA * t, B + vB * t, C + vC * t);
+		}
+		else if (IsInValidTime(t1) && t2 >= 0)
+		{
+			t = t2;
+			return PointOnSegment(A + vA * t, B + vB * t, C + vC * t);
+		}
+		else if (t1 >= 0 && t2 >= 0)
+		{
+			if (t1 > t2)
 			{
-				Vector2 side1 = lines2[j] - lines1[i];
-				Vector2 side2 = lines2[(j + 1) % lines2.Length] - lines1[i];
-				double cosTheta = Vector2.Dot(side1, side2) / (side2.Length() * side1.Length());
-				double rad = Math.Acos(cosTheta);
-				totalRad += rad;
+				(t2, t1) = (t1, t2);
 			}
-			if(totalRad > 6.2831)
+			if (PointOnSegment(A + vA * t1, B + vB * t1, C + vC * t1))
 			{
+				t = t1;
 				return true;
 			}
-		}
-		for (int j = 0; j < lines1.Length; j++)
-		{
-			double totalRad = 0;
-			for (int i = 0; i < lines2.Length; i++)
-			{
-				Vector2 side1 = lines1[i] - lines2[j];
-				Vector2 side2 = lines1[(i + 1) % lines1.Length] - lines2[j];
-				double cosTheta = Vector2.Dot(side1, side2) / (side2.Length() * side1.Length());
-				double rad = Math.Acos(cosTheta);
-				totalRad += rad;
-			}
-			if (totalRad > 6.2831)
-			{
-				return true;
-			}
+			t = t2;
+			return PointOnSegment(A + vA * t, B + vB * t, C + vC * t);
 		}
 		return false;
-	}
-	/// <summary>
-	/// 两线相交
-	/// </summary>
-	/// <param name="p1"></param>
-	/// <param name="p2"></param>
-	/// <param name="p3"></param>
-	/// <param name="p4"></param>
-	/// <returns></returns>
-	public static bool DoLinesIntersect(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4)
-	{
-		float denominator = ((p4.Y - p3.Y) * (p2.X - p1.X)) - ((p4.X - p3.X) * (p2.Y - p1.Y));
-		float numerator1 = ((p4.X - p3.X) * (p1.Y - p3.Y)) - ((p4.Y - p3.Y) * (p1.X - p3.X));
-		float numerator2 = ((p2.X - p1.X) * (p1.Y - p3.Y)) - ((p2.Y - p1.Y) * (p1.X - p3.X));
-
-		if (denominator == 0)
-		{
-			return numerator1 == 0 && numerator2 == 0;
-		}
-
-		float r = numerator1 / denominator;
-		float s = numerator2 / denominator;
-
-		return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
 	}
 }

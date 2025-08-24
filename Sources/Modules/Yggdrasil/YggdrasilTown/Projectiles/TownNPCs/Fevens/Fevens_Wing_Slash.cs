@@ -1,4 +1,3 @@
-using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities.BuffHelpers;
 using Terraria.DataStructures;

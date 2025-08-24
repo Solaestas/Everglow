@@ -1,5 +1,4 @@
 using System.Net;
-using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
