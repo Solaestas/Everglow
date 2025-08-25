@@ -27,8 +27,8 @@ public class GreenSungloStaff : ModItem
 		Item.rare = ItemRarityID.Green;
 		Item.value = Item.sellPrice(0, 2, 0, 0);
 
-		Item.shoot = ModContent.ProjectileType<DevilHeartStaff_proj>();
-		Item.shootSpeed = 8;
+		Item.shoot = ModContent.ProjectileType<GreenSungloSpore>();
+		Item.shootSpeed = 15;
 	}
 
 	public override void HoldItem(Player player)
