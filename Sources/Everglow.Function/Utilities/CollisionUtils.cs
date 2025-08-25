@@ -22,7 +22,7 @@ public static class CollisionUtils
 		return new AABB(min, max - min);
 	}
 
-	public static AABB ToAABB(this Vertices vertices)
+	public static AABB ToAABB(this List<Vector2> vertices)
 	{
 		var min = new Vector2(float.MaxValue, float.MaxValue);
 		var max = new Vector2(float.MinValue, float.MinValue);
