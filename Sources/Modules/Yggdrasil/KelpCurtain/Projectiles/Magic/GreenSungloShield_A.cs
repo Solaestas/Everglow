@@ -44,7 +44,6 @@ public class GreenSungloShield_A : ModProjectile
 			{
 				timer = 157;
 			}
-
 		}
 		else
 		{
@@ -75,7 +74,6 @@ public class GreenSungloShield_A : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-
 		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -91,17 +89,14 @@ public class GreenSungloShield_A : ModProjectile
 		CirPosition = CirPosition - Main.screenPosition + new Vector2(0, Owner.gravDir);
 		var CirScale = new Vector2(0.3f, 0.4f);
 		var CirRotation = Owner.gravDir == 1 ? 0 : MathF.PI;
-		float process = timer / 157 ;
+		float process = timer / 157;
 		Main.spriteBatch.Draw(CirTexture, CirPosition, null, Color.White * process, CirRotation, new Vector2(CirTexture.Width / 2, CirTexture.Height), CirScale, SpriteEffects.None, 0);
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullClockwise, null, Main.GameViewMatrix.TransformationMatrix);
 
-
-
 		int a = 3;
 		int b = 2;
-		int d;
 		float Width = 15f;
 		float count = Math.Min(628, timer * 4);
 
@@ -133,7 +128,6 @@ public class GreenSungloShield_A : ModProjectile
 		thorns.Clear();
 		for (float i = 0; i <= count; i++)
 		{
-
 			Vector3 pos0 = new Vector3(MathF.Cos(a * (i + 1) * 0.01f - (float)Main.time * 0.025f), MathF.Sin(b * (i + 1) * 0.01f - (float)Main.time * 0.025f), MathF.Sin(a * (i + 1) * 0.01f - (float)Main.time * 0.025f)) * 25;
 			Vector3 pos = new Vector3(MathF.Cos(a * i * 0.01f - (float)Main.time * 0.025f), MathF.Sin(b * i * 0.01f - (float)Main.time * 0.025f), MathF.Sin(a * i * 0.01f - (float)Main.time * 0.025f)) * 25;
 			Vector3 pos2 = new Vector3(MathF.Cos(a * (i - 1) * 0.01f - (float)Main.time * 0.025f), MathF.Sin(b * (i - 1) * 0.01f - (float)Main.time * 0.025f), MathF.Sin(a * (i - 1) * 0.01f - (float)Main.time * 0.025f)) * 25;
@@ -153,7 +147,6 @@ public class GreenSungloShield_A : ModProjectile
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
 
 		return false;
 	}

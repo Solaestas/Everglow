@@ -20,8 +20,6 @@ public class GreenSungloSpore : TrailingProjectile
 		Projectile.height = 20;
 	}
 
-
-
 	public override void AI()
 	{
 		Projectile.velocity.Y += 0.25f;
@@ -35,7 +33,6 @@ public class GreenSungloSpore : TrailingProjectile
 		modifiers.HideCombatText();
 	}
 
-
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawTrailDark();
@@ -43,11 +40,10 @@ public class GreenSungloSpore : TrailingProjectile
 		if (TimeTokill <= 0)
 		{
 			var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
-			Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, lightColor, Projectile.velocity.ToRotation() + MathHelper.PiOver2*0.5f, texMain.Size() / 2f, 0.8f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, lightColor, Projectile.velocity.ToRotation() + MathHelper.PiOver2 * 0.5f, texMain.Size() / 2f, 0.8f, SpriteEffects.None, 0);
 		}
 		return false;
 	}
-
 
 	public override void DrawTrail()
 	{
