@@ -294,7 +294,7 @@ public class FaelanternProj : ModProjectile
         var cmdList = skeletonRenderer.Draw(FaelanternSkeleton);
 
         skeletonRenderer.UseEnvironmentLight = true;
-        if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SkeletonSight>())
+        if (Skeleton2D.ShowSkeleton)
         {
             cmdList.AddRange(skeletonDebugRenderer.Draw(FaelanternSkeleton));
         }
