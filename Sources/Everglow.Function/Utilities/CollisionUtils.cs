@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Everglow.Commons.CustomTiles;
 using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.CustomTiles.DataStructures;
@@ -9,11 +8,6 @@ namespace Everglow.Commons.Utilities;
 public static class CollisionUtils
 {
 	public const float Epsilon = 1e-4f;
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-	public static float Cross(this Vector2 a, Vector2 b) => a.X * b.Y - a.Y * b.X;
-
-	public static Vector2 Abs(this Vector2 v) => new(Math.Abs(v.X), Math.Abs(v.Y));
 
 	public static AABB ToAABB(this Edge line)
 	{
@@ -428,12 +422,12 @@ public static class CollisionUtils
 
 	public static bool PointOnLine(Vector2 A, Vector2 d, Vector2 C)
 	{
-		return Math.Abs(Utilities.CollisionUtils.Cross(d, C - A)) < 1e-2;
+		return Math.Abs(MathUtils.Cross(d, C - A)) < 1e-2;
 	}
 
 	public static bool PointOnSegment(Vector2 A, Vector2 B, Vector2 C)
 	{
-		return Math.Abs(Utilities.CollisionUtils.Cross(B - A, C - A)) < 1e-2
+		return Math.Abs(MathUtils.Cross(B - A, C - A)) < 1e-2
 			&& Vector2.Dot(C - A, B - A) * Vector2.Dot(C - B, A - B) >= 0;
 	}
 
