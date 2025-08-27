@@ -1,13 +1,13 @@
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Commons.ItemAbstracts.Furniture;
+namespace Everglow.Commons.Templates.Furniture;
 
 /// <summary>
-/// 钢琴物品模板
+/// 水盆物品模板
 /// </summary>
-public abstract class PianoItem : ModItem
+public abstract class SinkItem : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
+    public override string LocalizationCategory => Utilities.LocalizationUtils.Categories.Placeables;
 
     public override void SetStaticDefaults()
     {

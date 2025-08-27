@@ -1,13 +1,13 @@
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Commons.ItemAbstracts.Furniture;
+namespace Everglow.Commons.Templates.Furniture;
 
 /// <summary>
-/// 书架物品模板
+/// 箱子物品模板
 /// </summary>
-public abstract class BookcaseItem : ModItem
+public abstract class ChestItem : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
+    public override string LocalizationCategory => Utilities.LocalizationUtils.Categories.Placeables;
 
     public override void SetStaticDefaults()
     {
@@ -16,9 +16,9 @@ public abstract class BookcaseItem : ModItem
 
     public override void SetDefaults()
     {
-        Item.width = 20;
-        Item.height = 20;
-        Item.value = 300;
+        Item.width = 26;
+        Item.height = 22;
+        Item.value = 500;
         Item.maxStack = Item.CommonMaxStack;
         Item.useAnimation = 14;
     }

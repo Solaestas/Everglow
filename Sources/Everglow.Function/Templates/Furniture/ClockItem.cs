@@ -1,13 +1,13 @@
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Commons.ItemAbstracts.Furniture;
+namespace Everglow.Commons.Templates.Furniture;
 
 /// <summary>
 /// 钟物品模板
 /// </summary>
 public abstract class ClockItem : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
+    public override string LocalizationCategory => Utilities.LocalizationUtils.Categories.Placeables;
 
     public override void SetStaticDefaults()
     {

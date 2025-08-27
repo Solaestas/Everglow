@@ -1,4 +1,4 @@
-using Everglow.Commons.ItemAbstracts;
+using Everglow.Commons.Templates;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Fishing;
 

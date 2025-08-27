@@ -1,6 +1,6 @@
 using Everglow.Commons.Utilities;
 
-namespace Everglow.Commons.ItemAbstracts;
+namespace Everglow.Commons.Templates;
 
 public abstract class FishBase : ModItem
 {

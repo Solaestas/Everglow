@@ -1,6 +1,6 @@
 using Terraria.GameContent.Creative;
 using Everglow.Commons.Utilities;
-using Everglow.Commons.ItemAbstracts.Furniture;
+using Everglow.Commons.Templates.Furniture;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Placeables.DecayingWoodCourt;
 

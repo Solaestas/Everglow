@@ -1,13 +1,13 @@
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Commons.ItemAbstracts.Furniture;
+namespace Everglow.Commons.Templates.Furniture;
 
 /// <summary>
-/// 平台物品模板
+/// 吊灯物品模板
 /// </summary>
-public abstract class PlatformItem : ModItem
+public abstract class ChandelierItem : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
+    public override string LocalizationCategory => Utilities.LocalizationUtils.Categories.Placeables;
 
     public override void SetStaticDefaults()
     {
@@ -16,9 +16,9 @@ public abstract class PlatformItem : ModItem
 
     public override void SetDefaults()
     {
-        Item.width = 8;
-        Item.height = 10;
-        Item.value = 0;
+        Item.width = 26;
+        Item.height = 26;
+        Item.value = 3000;
         Item.maxStack = Item.CommonMaxStack;
         Item.useAnimation = 14;
     }

@@ -1,13 +1,13 @@
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Commons.ItemAbstracts.Furniture;
+namespace Everglow.Commons.Templates.Furniture;
 
 /// <summary>
-/// 沙发物品模板
+/// 烛台物品模板
 /// </summary>
-public abstract class SofaItem : ModItem
+public abstract class CandelabraItem : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
+    public override string LocalizationCategory => Utilities.LocalizationUtils.Categories.Placeables;
 
     public override void SetStaticDefaults()
     {
@@ -18,7 +18,7 @@ public abstract class SofaItem : ModItem
     {
         Item.width = 20;
         Item.height = 20;
-        Item.value = 300;
+        Item.value = 1500;
         Item.maxStack = Item.CommonMaxStack;
         Item.useAnimation = 14;
     }

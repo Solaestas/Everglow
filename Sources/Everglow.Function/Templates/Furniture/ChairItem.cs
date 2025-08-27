@@ -1,13 +1,13 @@
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Commons.ItemAbstracts.Furniture;
+namespace Everglow.Commons.Templates.Furniture;
 
 /// <summary>
-/// 浴缸物品模板
+/// 椅物品模板
 /// </summary>
-public abstract class BathtubItem : ModItem
+public abstract class ChairItem : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
+    public override string LocalizationCategory => Utilities.LocalizationUtils.Categories.Placeables;
 
     public override void SetStaticDefaults()
     {
@@ -16,9 +16,9 @@ public abstract class BathtubItem : ModItem
 
     public override void SetDefaults()
     {
-        Item.width = 20;
-        Item.height = 20;
-        Item.value = 300;
+        Item.width = 30;
+        Item.height = 12;
+        Item.value = 150;
         Item.maxStack = Item.CommonMaxStack;
         Item.useAnimation = 14;
     }

@@ -1,13 +1,13 @@
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Commons.ItemAbstracts.Furniture;
+namespace Everglow.Commons.Templates.Furniture;
 
 /// <summary>
-/// 灯物品模板
+/// 钢琴物品模板
 /// </summary>
-public abstract class LampItem : ModItem
+public abstract class PianoItem : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
+    public override string LocalizationCategory => Utilities.LocalizationUtils.Categories.Placeables;
 
     public override void SetStaticDefaults()
     {
@@ -16,9 +16,9 @@ public abstract class LampItem : ModItem
 
     public override void SetDefaults()
     {
-        Item.width = 10;
-        Item.height = 24;
-        Item.value = 500;
+        Item.width = 20;
+        Item.height = 20;
+        Item.value = 300;
         Item.maxStack = Item.CommonMaxStack;
         Item.useAnimation = 14;
     }
